@@ -1,0 +1,1368 @@
+{
+ "Chuẩn bị › JavaScript vững": {
+  "body": "React không phải một ngôn ngữ mới. Nó là thư viện JavaScript, nên phần lớn thứ bạn viết trong một component là JavaScript thuần: biến, hàm, mảng, object, module. Ai còn lúng túng với những thứ này sẽ nhầm \"lỗi React\" với \"lỗi JavaScript\" và mất rất nhiều thời gian debug sai chỗ.\n\n### Vì sao cần biết\nMọi mẫu code React hằng ngày đều dựa trên vài tính năng ES6+ cụ thể. Danh sách người dùng gọi từ API thì render bằng `map`; cập nhật state không sửa trực tiếp mà tạo bản sao bằng spread; lấy dữ liệu thì dùng `async/await`; chia file thì dùng `import/export`.\n\n### Ý chính\n- `const`/`let`, arrow function, template literal (`` `Xin chào ${ten}` ``).\n- Destructuring: rút trường theo tên từ object, theo vị trí từ mảng. React dùng khắp nơi (`const [count, setCount] = useState(0)`, `function Card({ title })`).\n- Spread `...`: sao chép nông object/mảng rồi sửa một phần.\n- Array method: `map` (biến đổi), `filter` (lọc), `find`, `reduce`, `some`/`every`. Chúng không làm thay đổi mảng gốc, đúng tinh thần của state bất biến.\n- So sánh theo tham chiếu: hai object cùng nội dung vẫn `!==` nhau. React so sánh state và dependency theo cách này.\n- Promise và `async/await`: gọi API, xử lý lỗi bằng `try/catch`.\n- ES module: `export default`, named export, `import`.\n- Optional chaining `?.` và nullish `??` để đọc dữ liệu có thể chưa có.\n\n```js\nconst bacSi = [\n  { ten: \"An\", khoa: \"Nội\", nhanDat: true },\n  { ten: \"Bình\", khoa: \"Nhi\", nhanDat: false },\n];\n\nconst { ten, khoa } = bacSi[0];\nconst danhSachTen = bacSi.filter(b => b.nhanDat).map(b => b.ten);\nconst capNhat = { ...bacSi[0], khoa: \"Tim mạch\" }; // bản sao, không sửa bản gốc\n```\n\n### Lỗi hay gặp\n- Dùng `push`, `sort`, `splice` trực tiếp lên mảng trong state, nên giao diện không cập nhật.\n- Nhầm `==` với `===`, hoặc tin rằng `{} === {}`.\n- Quên `await` nên nhận về Promise thay vì dữ liệu.\n- Hàm `function` và arrow function khác nhau ở `this`, nhưng trong component hàm bạn gần như không cần `this`.\n\n### Tự kiểm tra\n1. `[1,2,3].map(x => x * 2)` trả về gì, và mảng gốc có đổi không?\n2. Vì sao `const a = {x:1}; const b = {x:1}; a === b` là `false`?\n3. Viết một dòng tạo bản sao của object `user` với `age` tăng thêm 1.",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-0-0-slides",
+    "ten": "0.0 — Slide Mục 0: vì sao React, cài đặt, JSX và JavaScript bằng hình",
+    "nguon": "React · Mục 0",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-0-3-js-cho-react",
+    "ten": "0.3 — JavaScript bạn cần cho React (chạy thật trên danh sách bác sĩ)",
+    "nguon": "React · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-4-4-arrays-objects",
+    "ten": "4.4 — Mảng và object: dữ liệu thật",
+    "nguon": "Nền tảng Lập trình Web · Chương 4",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-5-3-async-await",
+    "ten": "5.3 — async/await: mã bất đồng bộ đọc từ trên xuống",
+    "nguon": "Nền tảng Lập trình Web · Chương 5",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/code-lab/javascript",
+    "ten": "JavaScript",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Chuẩn bị › TypeScript (nên có)": {
+  "body": "TypeScript là JavaScript cộng thêm hệ thống kiểu tĩnh. Bạn khai báo dữ liệu có hình dạng thế nào, trình biên dịch kiểm tra trước khi chạy. Trong React, đây là cách rẻ nhất để biết ngay rằng bạn truyền thiếu prop, gõ sai tên trường hay quên xử lý trường hợp `null`.\n\n### Vì sao cần biết\nHầu hết công ty tuyển React ngày nay dùng TypeScript. Template Vite `react-ts` đã cấu hình sẵn. Khi dự án lớn dần, kiểu là tài liệu sống: nhìn vào props của một component là biết nó cần gì.\n\n### Ý chính\n- Kiểu cơ bản: `string`, `number`, `boolean`, mảng `string[]`, union `\"loading\" | \"ok\" | \"error\"`.\n- `interface` hoặc `type` mô tả hình dạng object, ví dụ props của component.\n- Hook là hàm generic: `useState<string | null>(null)`.\n- Sự kiện có kiểu riêng, ví dụ `React.ChangeEvent<HTMLInputElement>`.\n- TypeScript chỉ kiểm tra lúc build. Khi chạy trên trình duyệt, kiểu đã bị xoá, nên không thay được việc kiểm tra dữ liệu từ API.\n\n```tsx\ntype TheBacSiProps = {\n  ten: string;\n  khoa: string;\n  nhanDat?: boolean; // prop tuỳ chọn\n};\n\nfunction TheBacSi({ ten, khoa, nhanDat = true }: TheBacSiProps) {\n  return <p>{ten} - {khoa} {nhanDat ? \"\" : \"(hết lịch)\"}</p>;\n}\n\n<TheBacSi ten=\"An\" khoa=\"Nội\" />;   // đúng\n<TheBacSi ten=\"An\" />;              // lỗi: thiếu khoa\n```\n\n### Lỗi hay gặp\n- Dùng `any` cho nhanh, làm mất toàn bộ lợi ích kiểm tra. Dùng `unknown` rồi thu hẹp kiểu.\n- Ép kiểu bằng `as` để \"im lặng\" trình biên dịch, thay vì sửa nguyên nhân.\n- Tin rằng dữ liệu API đúng kiểu khai báo chỉ vì đã gõ kiểu.\n\nBước này đánh dấu \"nên có\" chứ không bắt buộc ngay ngày đầu. Bạn có thể học React bằng JavaScript trước, nhưng nên làm quen kiểu sớm.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-0-8-bat-dau-tai-day",
+    "ten": "Bắt đầu tại đây (1/2) — TypeScript là gì, và vì sao nó ra đời",
+    "nguon": "TypeScript · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-1-2-props",
+    "ten": "1.2 — Props và kiểu TypeScript: truyền dữ liệu xuống, children, và props chỉ đọc",
+    "nguon": "React · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-12-1-components-props",
+    "ten": "12.1 — Component & props",
+    "nguon": "TypeScript · Chương 12",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-12-2-hooks",
+    "ten": "12.2 — Gõ kiểu hooks",
+    "nguon": "TypeScript · Chương 12",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/code-lab/typescript",
+    "ten": "TypeScript",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Chuẩn bị › CLI Tools — Vite": {
+  "body": "Muốn viết React bạn cần một công cụ biến code JSX/TypeScript thành thứ trình duyệt hiểu, và một dev server để xem kết quả khi sửa file. Công cụ phổ biến nhất hiện nay là Vite. Create React App từng là lựa chọn mặc định nhưng đã ngừng bảo trì, nên dự án mới nên bắt đầu bằng Vite.\n\n### Vì sao cần biết\nBước đầu của mọi dự án React thật là tạo khung, cài thư viện và chạy thử. Hiểu cấu trúc thư mục giúp bạn biết mình sửa gì ở đâu thay vì copy một template mà không hiểu.\n\n### Ý chính\nYêu cầu: Node.js bản LTS còn được hỗ trợ và npm đi kèm.\n\n```bash\nnpm create vite@latest phong-kham -- --template react-ts\ncd phong-kham\nnpm install\nnpm run dev      # mở http://localhost:5173\n```\n\nCác lệnh thường dùng trong `package.json`:\n- `npm run dev`: chạy dev server với HMR (cập nhật nóng, giữ state khi sửa code).\n- `npm run build`: build bản production vào thư mục `dist/`.\n- `npm run preview`: chạy thử bản build ở máy.\n\nChuỗi khởi động: `index.html` có thẻ `<div id=\"root\">` và nạp `src/main.tsx`; file này gọi `createRoot(...).render(<App />)`; `App.tsx` là component gốc.\n\n### Lỗi hay gặp\n- Cài sai phiên bản Node nên Vite báo lỗi khi khởi động.\n- Chạy `vite build` rồi tưởng kiểu đã được kiểm. Template thường chạy `tsc -b && vite build`, vì chính Vite không kiểm kiểu.\n- Đặt biến môi trường mà không có tiền tố `VITE_`, nên code ở trình duyệt không đọc được.\n\n### Tự kiểm tra\n1. Khác biệt giữa `npm run dev` và `npm run build` là gì?\n2. File nào là điểm vào để React gắn vào trang HTML?",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-0-0-slides",
+    "ten": "0.0 — Slide Mục 0: vì sao React, cài đặt, JSX và JavaScript bằng hình",
+    "nguon": "React · Mục 0",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-0-1-cai-dat",
+    "ten": "0.1 — Cài đặt với Vite và TypeScript (đo so với Create React App)",
+    "nguon": "React · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-1-5-node-npm",
+    "ten": "1.5 — Node & npm: chạy JS và cài thư viện",
+    "nguon": "Nền tảng Lập trình Web · Chương 1",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Chuẩn bị › Vite": {
+  "body": "Vite là công cụ build và dev server thế hệ mới cho frontend. Khi phát triển, nó không đóng gói toàn bộ ứng dụng trước, mà phục vụ từng module qua ES module gốc của trình duyệt. Vì vậy server khởi động gần như tức thì và thay đổi hiện lên gần như ngay (HMR).\n\n### Vì sao cần biết\nVite là mặc định cho React kiểu SPA hiện nay. Nó cũng là nền của Vitest, nên hiểu nó giúp bạn hiểu luôn môi trường test.\n\n### Ý chính\n- Dev: phục vụ module nguyên bản, chuyển đổi JSX/TS khi được yêu cầu.\n- Build production: dùng bundler để gộp, tách chunk, tối giản code.\n- Cấu hình ở `vite.config.ts`, thêm plugin như `@vitejs/plugin-react`.\n- Biến môi trường: chỉ biến bắt đầu bằng `VITE_` mới lộ ra code client, đọc qua `import.meta.env.VITE_TEN`. Mọi thứ lộ ra client đều công khai, nên đừng để khoá bí mật ở đó.\n- Có thể cấu hình proxy dev để gọi API cùng origin, tránh lỗi CORS khi phát triển.\n\n```ts\n// vite.config.ts\nimport { defineConfig } from \"vite\";\nimport react from \"@vitejs/plugin-react\";\n\nexport default defineConfig({\n  plugins: [react()],\n  server: { proxy: { \"/api\": \"http://localhost:3000\" } },\n});\n```\n\n### Lỗi hay gặp\n- Nhầm `process.env` (Node) với `import.meta.env` (Vite).\n- Thấy chạy tốt ở dev nhưng build lỗi vì dev không kiểm kiểu và không tối ưu chặt như build.\n- Triển khai SPA lên máy chủ tĩnh mà không cấu hình trả `index.html` cho đường dẫn con, nên F5 ở trang con bị 404.",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-0-1-cai-dat",
+    "ten": "0.1 — Cài đặt với Vite và TypeScript (đo so với Create React App)",
+    "nguon": "React · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-14-3-build-deploy",
+    "ten": "14.3 — Build và deploy: bỏ MSW, ngân sách bundle, header bảo mật, CSP, CI/CD",
+    "nguon": "React · Chương 14",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Component & Rendering › JSX & Functional Components": {
+  "body": "JSX là cú pháp trông như HTML nhưng nằm trong JavaScript. Thực chất nó là lời gọi hàm được viết gọn: `<h1 className=\"tieu-de\">Chào</h1>` được trình biên dịch chuyển thành lời gọi tạo một \"element\" mô tả thứ cần hiện. Component hàm (functional component) là hàm nhận `props` và trả về JSX.\n\n### Vì sao cần biết\nĐây là đơn vị cơ bản của mọi giao diện React. Giao diện chia thành cây component nhỏ, mỗi cái làm một việc, có thể tái sử dụng và kiểm thử riêng.\n\n### Ý chính\n- Tên component viết hoa chữ đầu (`TheBacSi`); thẻ viết thường là thẻ HTML.\n- Một component trả về một nút gốc: bọc bằng thẻ hoặc fragment `<>...</>`.\n- Dùng `{}` để chèn biểu thức JavaScript. Dùng `className`, `htmlFor`, và thuộc tính camelCase như `onClick`.\n- Props truyền từ cha xuống con, chỉ đọc.\n- Hiển thị danh sách bằng `map` kèm `key` ổn định.\n- Component nên \"thuần khiết\": cùng props thì cùng kết quả, không sửa dữ liệu bên ngoài trong lúc render.\n\n```tsx\ntype Props = { ten: string; khoa: string };\n\nfunction TheBacSi({ ten, khoa }: Props) {\n  return (\n    <li>\n      <strong>{ten}</strong> – {khoa}\n    </li>\n  );\n}\n\nfunction DanhSach({ ds }: { ds: Props[] }) {\n  return <ul>{ds.map(b => <TheBacSi key={b.ten} {...b} />)}</ul>;\n}\n```\n\n### Lỗi hay gặp\n- Dùng `class` thay vì `className`.\n- Viết `{ten: \"An\"}` trực tiếp trong JSX (object không phải con hợp lệ).\n- Định nghĩa component bên trong component khác, làm nó bị tạo lại mỗi lần render và mất state.\n- Dùng `key={index}` khi danh sách có thể đổi thứ tự.\n\n### Tự kiểm tra\n1. JSX được biến thành gì sau khi biên dịch?\n2. Vì sao tên component phải viết hoa chữ cái đầu?",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-1-0-slides",
+    "ten": "1.0 — Slide Chương 1: component và props bằng hình",
+    "nguon": "React · Chương 1",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-0-2-jsx",
+    "ten": "0.2 — JSX, giải thích cho rõ: nó thành gì và cái gì hiện lên màn hình",
+    "nguon": "React · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-1-1-component",
+    "ten": "1.1 — Component là hàm: đặt tên, mỗi file một component, và giữ cho thuần khiết",
+    "nguon": "React · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-1-3-danh-sach",
+    "ten": "1.3 — Hiển thị danh sách và key: map, key ổn định, và bug key={index}",
+    "nguon": "React · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/code-lab/react",
+    "ten": "React",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Component & Rendering › Component Lifecycle": {
+  "body": "Một component có vòng đời: được **gắn** (mount) vào trang, **cập nhật** (update) mỗi khi props hoặc state đổi, rồi bị **gỡ** (unmount). Ngày xưa class component có các phương thức `componentDidMount`, `componentDidUpdate`, `componentWillUnmount`. Với hàm và hook, bạn gom ba việc này vào `useEffect`.\n\n### Vì sao cần biết\nBạn cần biết khi nào việc gì chạy: gọi API lúc hiện màn hình, đăng ký sự kiện, hẹn giờ, và quan trọng nhất là dọn dẹp để không rò rỉ bộ nhớ hay chạy lặp.\n\n### Ý chính\n- Render (tính JSX) phải thuần, không gọi API trong thân hàm.\n- `useEffect(() => {...}, [])` chạy sau khi gắn; hàm trả về dùng để dọn khi gỡ.\n- Có dependency thì effect chạy lại khi chúng đổi, và dọn bản cũ trước khi chạy bản mới.\n- Hãy nghĩ theo \"đồng bộ với giá trị nào\", không nghĩ theo \"sự kiện vòng đời\".\n- Ở chế độ phát triển với `StrictMode`, React cố ý gắn, gỡ rồi gắn lại để lộ effect thiếu dọn dẹp. Đây là tính năng, không phải lỗi.\n\n```tsx\nuseEffect(() => {\n  const id = setInterval(() => console.log(\"tick\"), 1000);\n  return () => clearInterval(id); // dọn khi gỡ hoặc trước lần chạy lại\n}, []);\n```\n\n### Lỗi hay gặp\n- Quên hàm dọn dẹp nên timer, listener, kết nối cứ chồng chất.\n- Thấy effect chạy hai lần ở dev rồi tắt `StrictMode` thay vì sửa cho đúng.\n- Dùng effect để tính dữ liệu có thể tính ngay trong render.",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-4-0-slides",
+    "ten": "4.0 — Slide Chương 4: effect bằng hình",
+    "nguon": "React · Chương 4",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-4-1-use-effect",
+    "ten": "4.1 — useEffect, dependency và cleanup: khi nào chạy và vì sao Strict Mode chạy hai lần",
+    "nguon": "React · Chương 4",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-5-3-slot6-component-slides",
+    "ten": "5.3 — Học theo từng slide: Tất cả về Component (Slot 6)",
+    "nguon": "Front-End Web Development with React · Chương 5",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "FER202"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-5-3-chay-hai-lan-dev",
+    "ten": "5.3 — Vì sao effect chạy hai lần ở dev",
+    "nguon": "Next.js: The React Framework · Chương 5",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Component & Rendering › Props vs State": {
+  "body": "**Props** là dữ liệu cha truyền cho con, con chỉ được đọc. **State** là dữ liệu do chính component sở hữu và có thể đổi; mỗi lần đổi, React render lại component.\n\nHình dung component như một cái máy pha cà phê: props là loại hạt và lượng nước bạn đưa vào từ ngoài; state là trạng thái bên trong máy (đang pha, đã xong).\n\n### Vì sao cần biết\nQuyết định \"dữ liệu này là props, state hay tính ra được\" quyết định kiến trúc cả ứng dụng. Chọn sai thì sinh ra bug đồng bộ dữ liệu.\n\n### Ý chính\n- Props chảy một chiều từ trên xuống. Con muốn đổi dữ liệu của cha thì gọi hàm cha truyền xuống (callback).\n- Không sửa props. Không sửa state trực tiếp, hãy gọi hàm set.\n- Nếu hai component cần cùng dữ liệu, **nâng state lên** component cha chung gần nhất.\n- Cái gì tính được từ props/state khác thì đừng lưu thành state riêng, hãy tính trong render.\n- State là \"ảnh chụp\" cho mỗi lần render: trong một lần render, giá trị state không đổi.\n\n```tsx\nfunction Cha() {\n  const [dem, setDem] = useState(0);        // state của Cha\n  return <Con soLan={dem} onBam={() => setDem(d => d + 1)} />;\n}\nfunction Con({ soLan, onBam }: { soLan: number; onBam: () => void }) {\n  return <button onClick={onBam}>Đã bấm {soLan} lần</button>; // props: chỉ đọc\n}\n```\n\n### Lỗi hay gặp\n- Sao chép props vào state (`useState(props.x)`), sau đó props đổi mà state không đổi theo.\n- Lưu dữ liệu dẫn xuất (ví dụ `tongTien`) thành state riêng.\n- Đặt state quá sâu rồi phải truyền ngược lên bằng nhiều tầng.\n\n### Tự kiểm tra\n1. Con có được gán `props.x = 5` không? Vì sao?\n2. `tongTien = soLuong * gia`: nên là state hay tính trong render?",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-2-0-slides",
+    "ten": "2.0 — Slide Chương 2: state và sự kiện bằng hình",
+    "nguon": "React · Chương 2",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-1-2-props",
+    "ten": "1.2 — Props và kiểu TypeScript: truyền dữ liệu xuống, children, và props chỉ đọc",
+    "nguon": "React · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-2-1-use-state",
+    "ten": "2.1 — useState và render lại: ảnh chụp state, cập nhật theo hàm và batching",
+    "nguon": "React · Chương 2",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-2-4-dat-state",
+    "ten": "2.4 — State nên ở đâu: nâng state lên, một nguồn sự thật, state dẫn xuất",
+    "nguon": "React · Chương 2",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Component & Rendering › Conditional & List Rendering": {
+  "body": "Giao diện hiếm khi cố định: có dữ liệu thì hiện danh sách, đang tải thì hiện spinner, lỗi thì hiện thông báo. React không có cú pháp riêng cho việc này, bạn dùng JavaScript thông thường: `if`, toán tử ba ngôi, `&&`, và `map`.\n\n### Vì sao cần biết\nHầu như màn hình nào cũng có ít nhất một danh sách và một vài trạng thái có điều kiện (đang tải, lỗi, rỗng).\n\n### Ý chính\n- Điều kiện: `cond ? <A /> : <B />`, `cond && <A />`, hoặc `if` rồi `return` sớm.\n- Cẩn thận `&&` với số: `{soLuong && <X />}` khi `soLuong = 0` sẽ hiện chữ `0`. Hãy viết `soLuong > 0 && ...`.\n- Danh sách: `items.map(item => <Dong key={item.id} ... />)`. `key` phải duy nhất giữa các anh em và ổn định (id thật), không dùng chỉ số mảng khi danh sách có thể chèn, xoá hay đổi thứ tự.\n- Fragment `<>...</>` trả nhiều phần tử mà không thêm thẻ DOM.\n- Nên xử lý đủ bốn trạng thái: đang tải, lỗi, rỗng, có dữ liệu.\n\n```tsx\nfunction DanhSach({ ds, dangTai }: { ds: { id: number; ten: string }[]; dangTai: boolean }) {\n  if (dangTai) return <p>Đang tải...</p>;\n  if (ds.length === 0) return <p>Chưa có bác sĩ nào.</p>;\n  return <ul>{ds.map(b => <li key={b.id}>{b.ten}</li>)}</ul>;\n}\n```\n\n### Lỗi hay gặp\n- Quên `key` (React cảnh báo) hoặc dùng `key={Math.random()}`, làm mọi dòng bị tạo lại mỗi lần render.\n- `&&` với số 0 hoặc chuỗi rỗng.\n- Quên trường hợp danh sách rỗng.\n\n### Tự kiểm tra\nVì sao `key={index}` gây lỗi khi người dùng xoá phần tử ở giữa danh sách có ô nhập?",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-1-0-slides",
+    "ten": "1.0 — Slide Chương 1: component và props bằng hình",
+    "nguon": "React · Chương 1",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-1-3-danh-sach",
+    "ten": "1.3 — Hiển thị danh sách và key: map, key ổn định, và bug key={index}",
+    "nguon": "React · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-3-2-fragments-conditional",
+    "ten": "3.2 — Fragment & render có điều kiện",
+    "nguon": "Front-End Web Development with React · Chương 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "FER202"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-11-2-key-identity",
+    "ten": "11.2 — key và danh tính component: khi nào React giữ state, khi nào vứt đi",
+    "nguon": "React · Chương 11",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Component & Rendering › Composition & Render Props": {
+  "body": "Trong React, bạn tái sử dụng bằng cách **ghép** component, không phải kế thừa. Cách đơn giản nhất là prop `children`: component cha chừa chỗ trống, nơi dùng sẽ nhét nội dung vào. **Render props** là bước nâng cao: truyền một hàm mà component gọi để biết cần vẽ gì, nhờ vậy chia sẻ logic mà không áp đặt giao diện.\n\n### Vì sao cần biết\nHầu hết thư viện UI (hộp thoại, tab, menu) được xây bằng ghép. Hiểu `children` và composition giúp bạn tránh đống prop boolean (`showHeader`, `hasFooter`...) phình ra.\n\n### Ý chính\n- `children` là prop đặc biệt chứa mọi thứ nằm giữa thẻ mở và thẻ đóng.\n- Có thể truyền JSX qua prop có tên (`header={<Tieu />}`) để có nhiều \"khe\".\n- Render props: `<DanhSachTai render={(ds) => <Bang du={ds} />} />`. Hook tự viết hiện thay phần lớn nhu cầu này gọn hơn.\n- Compound component (`<Tabs><Tabs.List/><Tabs.Panel/></Tabs>`) chia sẻ state ngầm qua Context.\n\n```tsx\nfunction The({ tieuDe, children }: { tieuDe: string; children: React.ReactNode }) {\n  return (\n    <section className=\"the\">\n      <h3>{tieuDe}</h3>\n      {children}\n    </section>\n  );\n}\n\n<The tieuDe=\"Lịch hôm nay\">\n  <p>3 cuộc hẹn</p>\n</The>;\n```\n\n### Lỗi hay gặp\n- Thêm prop cờ cho mỗi biến thể thay vì để người dùng ghép nội dung.\n- Lạm dụng render props lồng nhau (\"callback hell\" của JSX), nên chuyển sang custom hook.",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-1-2-props",
+    "ten": "1.2 — Props và kiểu TypeScript: truyền dữ liệu xuống, children, và props chỉ đọc",
+    "nguon": "React · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-2-2-children-composition",
+    "ten": "2.2 — children & ghép",
+    "nguon": "Next.js: The React Framework · Chương 2",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-7-2-render-props",
+    "ten": "7.2 — Component tái dùng: children & render props",
+    "nguon": "Front-End Web Development with React · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "FER202"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-13-1-compound-headless",
+    "ten": "13.1 — Compound component, hook headless và prop \"as\" đa hình",
+    "nguon": "React · Chương 13",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Component & Rendering › Events": {
+  "body": "Bạn gắn xử lý sự kiện bằng prop camelCase: `onClick`, `onChange`, `onSubmit`. Giá trị là **một hàm**, không phải kết quả của lệnh gọi hàm. React bọc sự kiện gốc của trình duyệt thành đối tượng tổng hợp (synthetic event) có giao diện thống nhất giữa các trình duyệt.\n\n### Vì sao cần biết\nMọi tương tác của người dùng đều đi qua sự kiện. Sai ở đây dẫn tới lỗi kinh điển: hàm chạy ngay lúc render, hoặc trang tải lại khi gửi form.\n\n### Ý chính\n- `onClick={xuLy}` đúng; `onClick={xuLy()}` sai (gọi ngay khi render). Cần truyền tham số thì bọc: `onClick={() => xoa(id)}`.\n- Đối tượng sự kiện `e` có `e.target`, `e.preventDefault()`, `e.stopPropagation()`.\n- Sự kiện nổi bọt (bubble) từ phần tử con lên cha, giống DOM. React gắn listener ở gốc ứng dụng và phân phối lại (kiểu uỷ quyền sự kiện).\n- Với TypeScript, kiểu của sự kiện: `React.ChangeEvent<HTMLInputElement>`, `React.FormEvent<HTMLFormElement>`.\n- Trong `onSubmit` của form nhớ `e.preventDefault()` để không tải lại trang.\n\n```tsx\nfunction TimKiem() {\n  const [tuKhoa, setTuKhoa] = useState(\"\");\n  function khiGui(e: React.FormEvent) {\n    e.preventDefault();\n    console.log(\"Tìm:\", tuKhoa);\n  }\n  return (\n    <form onSubmit={khiGui}>\n      <input value={tuKhoa} onChange={e => setTuKhoa(e.target.value)} />\n      <button type=\"submit\">Tìm</button>\n    </form>\n  );\n}\n```\n\n### Lỗi hay gặp\n- Viết `onClick={handle()}`.\n- Quên `preventDefault` ở form.\n- Nhầm hàm `onChange` của React (kích hoạt mỗi lần gõ) với `change` của DOM gốc (chỉ khi mất focus).",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-2-0-slides",
+    "ten": "2.0 — Slide Chương 2: state và sự kiện bằng hình",
+    "nguon": "React · Chương 2",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-2-2-su-kien",
+    "ten": "2.2 — Xử lý sự kiện: truyền hàm, nổi bọt, preventDefault và kiểu sự kiện",
+    "nguon": "React · Chương 2",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-6-1-events-forms",
+    "ten": "6.1 — Event handler, synthetic event & form",
+    "nguon": "Front-End Web Development with React · Chương 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "FER202"
+   }
+  ]
+ },
+ "Component & Rendering › Components": {
+  "body": "Component là khối giao diện độc lập, có thể dùng lại. Mỗi component nhận dữ liệu vào (props), có thể giữ state riêng, và trả về JSX mô tả nó trông thế nào. Cả ứng dụng React là một cây component lồng nhau: `App` chứa `Header`, `DanhSach`, `Footer`; `DanhSach` chứa nhiều `TheBacSi`.\n\n### Vì sao cần biết\nTư duy \"chia giao diện thành component\" là kỹ năng cốt lõi. Chia tốt thì code dễ đọc, dễ test, ít lặp. Chia kém thì được một file khổng lồ hoặc hàng chục component chỉ đẩy prop qua lại.\n\n### Ý chính\n- Một component, một trách nhiệm rõ ràng. Mỗi file thường một component chính, tên file trùng tên component.\n- Cách chia: nhìn mock-up, khoanh từng hộp, đặt tên theo vai trò, và hộp nào lặp lại thì thành component.\n- Dữ liệu chảy xuống qua props; sự kiện đi lên qua callback.\n- State đặt ở component thấp nhất mà mọi nơi cần nó đều nằm bên dưới.\n- Component phải thuần khiết khi render: không đổi biến bên ngoài, không gọi API trong thân hàm.\n\n```tsx\nfunction Trang() {\n  return (\n    <main>\n      <TieuDe />\n      <DanhSachBacSi />\n    </main>\n  );\n}\n```\n\n### Lỗi hay gặp\n- Khai báo component bên trong component khác: mỗi lần cha render, con là một \"loại\" mới và bị mất state.\n- Component làm quá nhiều việc (gọi API, định dạng, vẽ giao diện, xử lý form).\n- Truyền cả object khổng lồ làm một prop khi con chỉ cần hai trường.",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-1-0-slides",
+    "ten": "1.0 — Slide Chương 1: component và props bằng hình",
+    "nguon": "React · Chương 1",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-1-1-component",
+    "ten": "1.1 — Component là hàm: đặt tên, mỗi file một component, và giữ cho thuần khiết",
+    "nguon": "React · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-1-4-chia-nho",
+    "ten": "1.4 — Tư duy theo component: từ mock-up tới cây component có test",
+    "nguon": "React · Chương 1",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Component & Rendering › Functional Components": {
+  "body": "Functional component là một hàm JavaScript nhận `props` và trả về JSX. Từ khi có Hooks (React 16.8), nó làm được mọi thứ class component làm, nên là cách viết chuẩn hiện nay. Tài liệu chính thức cũng viết bằng hàm.\n\n### Vì sao cần biết\nĐọc code React hiện đại, bạn sẽ gặp gần như toàn hàm. Class component chỉ còn ở code cũ, và Error Boundary (xử lý lỗi ở cây con) vẫn phải viết bằng class.\n\n### Ý chính\n- Cú pháp: `function A(props) { return <div/> }` hoặc `const A = (props) => <div/>`.\n- Destructure props ngay ở tham số: `function A({ ten, khoa })`.\n- State và effect dùng qua hook (`useState`, `useEffect`...), gọi ở đầu thân hàm.\n- Mỗi lần render là một lần gọi hàm; biến cục bộ bị tạo lại. Giá trị cần nhớ qua các lần render phải nằm trong state hoặc ref.\n- Hàm render phải thuần khiết, nên cùng props và state thì cho cùng JSX.\n\n```tsx\ntype Props = { ten: string; tuoi?: number };\n\nexport function HoSo({ ten, tuoi = 18 }: Props) {\n  const [daFollow, setDaFollow] = useState(false);\n  return (\n    <div>\n      <h2>{ten} ({tuoi})</h2>\n      <button onClick={() => setDaFollow(v => !v)}>\n        {daFollow ? \"Bỏ theo dõi\" : \"Theo dõi\"}\n      </button>\n    </div>\n  );\n}\n```\n\n### Lỗi hay gặp\n- Gọi hook trong `if`, vòng lặp hoặc hàm lồng (vi phạm quy tắc của Hook).\n- Tưởng biến `let` thường sẽ \"nhớ\" giá trị giữa các lần render.\n- Đặt tên component viết thường, nên React coi là thẻ HTML.",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-1-0-slides",
+    "ten": "1.0 — Slide Chương 1: component và props bằng hình",
+    "nguon": "React · Chương 1",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-1-1-component",
+    "ten": "1.1 — Component là hàm: đặt tên, mỗi file một component, và giữ cho thuần khiết",
+    "nguon": "React · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-1-2-props",
+    "ten": "1.2 — Props và kiểu TypeScript: truyền dữ liệu xuống, children, và props chỉ đọc",
+    "nguon": "React · Chương 1",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Component & Rendering › Rendering": {
+  "body": "Khi state hoặc props đổi, React **render** lại component: gọi hàm để lấy JSX mới. Sau đó nó so cây mô tả mới với cây cũ (quá trình **reconciliation**) và chỉ cập nhật phần DOM thật sự khác. Bước này gọi là **commit**.\n\n### Vì sao cần biết\nHiểu \"khi nào component render lại và vì sao\" là chìa khoá để sửa giao diện chậm và để không mắc các bug kiểu \"state chưa cập nhật\".\n\n### Ý chính\n- Ba bước: kích hoạt (state/props/context đổi) → render (chạy hàm, tính JSX) → commit (cập nhật DOM).\n- Render không có nghĩa là DOM đổi. Render lại mà JSX không đổi thì DOM giữ nguyên.\n- Component cha render lại thì mặc định các con cũng render lại, dù props không đổi. `React.memo` có thể bỏ qua khi props giống nhau (so bằng `Object.is`).\n- So khớp dựa vào kiểu phần tử và vị trí trong cây, cộng với `key` cho danh sách. Cùng kiểu, cùng vị trí thì giữ state; khác thì huỷ và tạo mới.\n- Cập nhật state được gom lô (batching); gọi `setState` không đổi biến ngay mà chỉ lên lịch lần render kế.\n- Ở dev, `StrictMode` render hai lần để lộ code không thuần.\n\n### Lỗi hay gặp\n- Tối ưu sớm bằng `memo`/`useMemo` khi chưa đo.\n- Tạo object hoặc hàm mới mỗi lần render rồi truyền cho component đã `memo`, làm `memo` vô dụng.\n- Đổi `key` mỗi lần render, buộc React huỷ và dựng lại cả cây con.\n\n### Tự kiểm tra\n1. Render khác commit ở điểm nào?\n2. Vì sao đổi `key` của một component lại làm mất state của nó?",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-11-0-slides",
+    "ten": "11.0 — Slide Chương 11: React bên trong bằng hình",
+    "nguon": "React · Chương 11",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-11-1-virtual-dom",
+    "ten": "11.1 — React cập nhật màn hình thế nào: element, render và commit, reconciliation, fiber",
+    "nguon": "React · Chương 11",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-2-1-use-state",
+    "ten": "2.1 — useState và render lại: ảnh chụp state, cập nhật theo hàm và batching",
+    "nguon": "React · Chương 2",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-7-3-vi-sao-render-lai",
+    "ten": "7.3 — Vì sao component render lại",
+    "nguon": "Next.js: The React Framework · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-7-1-reconciliation",
+    "ten": "7.1 — Reconciliation: React quyết cái gì đã đổi",
+    "nguon": "Next.js: The React Framework · Chương 7",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Component & Rendering › Lists and Keys": {
+  "body": "Để vẽ một danh sách, ta dùng `map` biến mảng dữ liệu thành mảng phần tử JSX. Mỗi phần tử cần một `key` để React biết phần tử nào là phần tử nào giữa hai lần render.\n\n### Vì sao cần biết\n`key` sai là nguồn bug khó thấy: ô nhập \"nhảy\" sang dòng khác khi xoá, animation giật, state lẫn lộn giữa các dòng.\n\n### Ý chính\n- `key` đặt trên phần tử ngoài cùng trong `map`, và phải **duy nhất giữa anh em**, không cần duy nhất toàn ứng dụng.\n- Dùng id từ dữ liệu (id từ CSDL). Không dùng `Math.random()`, vì mỗi lần render ra key mới nên toàn bộ dòng bị huỷ và dựng lại.\n- `key={index}` chỉ chấp nhận khi danh sách tĩnh, không bao giờ chèn, xoá hay sắp xếp lại.\n- `key` không được truyền xuống làm prop. Muốn dùng id trong con thì truyền thêm prop riêng.\n- Đổi `key` là cách chủ động \"reset\" một component: key mới thì React coi là component khác và tạo state mới.\n\n```tsx\n{benhNhan.map(bn => (\n  <HangBenhNhan key={bn.id} ten={bn.ten} id={bn.id} />\n))}\n```\n\n### Lỗi hay gặp\n- Đặt `key` ở phần tử con bên trong thay vì ở phần tử trả về trong `map`.\n- Hai dòng trùng key, nên một dòng không hiển thị hoặc cập nhật sai.\n- Dùng `index` rồi thấy giá trị ô nhập \"dính\" sai dòng sau khi xoá.",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-1-3-danh-sach",
+    "ten": "1.3 — Hiển thị danh sách và key: map, key ổn định, và bug key={index}",
+    "nguon": "React · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-11-2-key-identity",
+    "ten": "11.2 — key và danh tính component: khi nào React giữ state, khi nào vứt đi",
+    "nguon": "React · Chương 11",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-1-0-slides",
+    "ten": "1.0 — Slide Chương 1: component và props bằng hình",
+    "nguon": "React · Chương 1",
+    "kieu": "slide"
+   }
+  ]
+ },
+ "Component & Rendering › Refs": {
+  "body": "`useRef` trả về một object `{ current: ... }` tồn tại suốt vòng đời component. Thay đổi `ref.current` **không** gây render lại. Nó có hai công dụng chính: giữ tham chiếu tới một phần tử DOM (để focus, đo kích thước, cuộn) và lưu giá trị \"nhớ được\" nhưng không liên quan tới giao diện (id timer, giá trị trước đó).\n\n### Vì sao cần biết\nMột số việc không diễn đạt được bằng state và JSX: focus vào ô nhập, đọc chiều cao phần tử, tích hợp thư viện bên ngoài. Đó là lúc cần ref.\n\n### Ý chính\n- DOM: `const oRef = useRef<HTMLInputElement>(null);` rồi `<input ref={oRef} />`; sau commit, `oRef.current` là phần tử thật.\n- Giá trị: `const idTimer = useRef<number | null>(null)`.\n- Không đọc hay ghi `ref.current` trong lúc render (trừ khởi tạo), chỉ trong event handler hoặc effect.\n- Dữ liệu cần hiện lên màn hình phải ở trong state, không phải ref.\n- Input không kiểm soát (uncontrolled) dùng ref để đọc giá trị khi cần.\n- Đo kích thước trước khi vẽ lần đầu dùng `useLayoutEffect`.\n\n```tsx\nfunction OTimKiem() {\n  const oRef = useRef<HTMLInputElement>(null);\n  return (\n    <>\n      <input ref={oRef} />\n      <button onClick={() => oRef.current?.focus()}>Chọn ô</button>\n    </>\n  );\n}\n```\n\n### Lỗi hay gặp\n- Dùng ref làm state, rồi giao diện không cập nhật.\n- Đọc `ref.current` khi nó còn `null` (trước khi gắn).\n- Thao tác DOM thủ công thứ mà React đang quản lý (xoá/thêm nút con).",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-11-3-strict-mode-ref",
+    "ten": "11.3 — StrictMode, useRef, useLayoutEffect: chạy hai lần, ref, đo trước khi vẽ",
+    "nguon": "React · Chương 11",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-3-1-controlled",
+    "ten": "3.1 — Input kiểm soát và không kiểm soát: value/onChange, defaultValue, useRef",
+    "nguon": "React · Chương 3",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-6-1-useref",
+    "ten": "6.1 — useRef: giá trị sống qua các render",
+    "nguon": "Next.js: The React Framework · Chương 6",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Hooks › useState / useReducer": {
+  "body": "Cả hai hook đều cho component \"trí nhớ\". `useState` hợp với giá trị đơn giản và độc lập (một chuỗi, một số, một cờ). `useReducer` hợp khi state là một khối gồm nhiều phần liên quan, hoặc mỗi lần đổi phải qua logic phức tạp: bạn gom logic vào một hàm `reducer` và gửi \"hành động\" (action).\n\n### Vì sao cần biết\nChọn đúng hook giúp tránh nhiều `useState` rời rạc dễ mâu thuẫn (ví dụ `dangTai = true` nhưng `loi != null`).\n\n### Ý chính\n- `useState`: `const [x, setX] = useState(giaTriBanDau)`. Cập nhật theo giá trị cũ thì dùng dạng hàm: `setX(x => x + 1)`.\n- Với object và mảng, luôn tạo bản mới (spread, `map`, `filter`, `toSorted`), không sửa trực tiếp.\n- `useReducer`: `const [state, dispatch] = useReducer(reducer, khoiTao)`. Reducer là hàm thuần: `(state, action) => stateMoi`.\n- Reducer đặt ngoài component, dễ test và dễ suy luận các trạng thái hợp lệ.\n- Hai hook có thể chia sẻ qua Context khi cần cho nhiều component.\n\n```tsx\ntype Action = { type: \"them\"; ten: string } | { type: \"xoa\"; id: number };\ntype Muc = { id: number; ten: string };\n\nfunction reducer(ds: Muc[], a: Action): Muc[] {\n  switch (a.type) {\n    case \"them\": return [...ds, { id: Date.now(), ten: a.ten }];\n    case \"xoa\":  return ds.filter(m => m.id !== a.id);\n  }\n}\nconst [ds, dispatch] = useReducer(reducer, []);\ndispatch({ type: \"them\", ten: \"Khám tổng quát\" });\n```\n\n### Lỗi hay gặp\n- Sửa trực tiếp state (`ds.push(...)`), nên React không phát hiện thay đổi.\n- Viết `setX(x + 1)` ba lần liên tiếp và mong tăng 3 (đều dùng cùng giá trị cũ).\n- Làm việc không thuần (gọi API, `Date.now()`) trong reducer; nên truyền giá trị đó qua action.\n\n### Tự kiểm tra\nKhi nào bạn chuyển từ ba `useState` sang một `useReducer`?",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-2-0-slides",
+    "ten": "2.0 — Slide Chương 2: state và sự kiện bằng hình",
+    "nguon": "React · Chương 2",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-2-1-use-state",
+    "ten": "2.1 — useState và render lại: ảnh chụp state, cập nhật theo hàm và batching",
+    "nguon": "React · Chương 2",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-2-3-object-array",
+    "ten": "2.3 — Cập nhật object và mảng bất biến: Object.is, spread, toSorted và Immer",
+    "nguon": "React · Chương 2",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-5-2-reducer",
+    "ten": "5.2 — useReducer cho state phức tạp: hành động, reducer thuần và luồng đặt lịch bốn bước",
+    "nguon": "React · Chương 5",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-6-3-usereducer",
+    "ten": "6.3 — useReducer: chuyển trạng thái thành dữ liệu",
+    "nguon": "Next.js: The React Framework · Chương 6",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Hooks › useEffect": {
+  "body": "`useEffect` cho phép component **đồng bộ với một hệ thống bên ngoài** React: gọi API, đăng ký sự kiện trình duyệt, hẹn giờ, đổi tiêu đề trang, kết nối WebSocket. Effect chạy sau khi React đã vẽ xong giao diện.\n\n### Vì sao cần biết\nĐây là hook dễ dùng sai nhất. Dùng đúng chỗ thì gọn; dùng sai chỗ gây vòng lặp vô hạn, dữ liệu cũ, hoặc rò rỉ.\n\n### Ý chính\n- Cú pháp: `useEffect(() => { ...; return () => { dọn }; }, [dependencies])`.\n- Mảng dependency: `[]` chạy một lần sau khi gắn; có giá trị thì chạy lại khi chúng đổi; bỏ hẳn thì chạy sau mọi lần render.\n- Mọi giá trị phản ứng (props, state, biến dẫn xuất) dùng trong effect phải nằm trong mảng. Dùng lint `react-hooks/exhaustive-deps`.\n- Hàm dọn chạy trước lần chạy kế tiếp và khi gỡ component. Ví dụ huỷ `fetch` bằng `AbortController`, `removeEventListener`, `clearInterval`.\n- **Có thể bạn không cần effect:** tính từ props/state thì tính ngay trong render; phản ứng với hành động của người dùng thì làm trong event handler; reset state khi một giá trị đổi thì dùng `key`.\n- Object và hàm tạo trong thân component là tham chiếu mới mỗi render, làm effect chạy lại liên tục nếu đặt vào dependency.\n\n```tsx\nuseEffect(() => {\n  const ac = new AbortController();\n  fetch(`/api/bac-si/${id}`, { signal: ac.signal })\n    .then(r => r.json())\n    .then(setBacSi)\n    .catch(e => { if (e.name !== \"AbortError\") setLoi(e); });\n  return () => ac.abort(); // tránh \"cuộc đua\" khi id đổi nhanh\n}, [id]);\n```\n\n### Lỗi hay gặp\n- Gọi `setState` trong effect không có điều kiện dừng, sinh vòng lặp vô hạn.\n- Bỏ dependency để \"hết cảnh báo\", dẫn tới closure giữ giá trị cũ.\n- Dùng effect để lấy dữ liệu server trong dự án lớn, thay vì dùng thư viện như TanStack Query.",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-4-0-slides",
+    "ten": "4.0 — Slide Chương 4: effect bằng hình",
+    "nguon": "React · Chương 4",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-4-1-use-effect",
+    "ten": "4.1 — useEffect, dependency và cleanup: khi nào chạy và vì sao Strict Mode chạy hai lần",
+    "nguon": "React · Chương 4",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-4-2-khong-can",
+    "ten": "4.2 — Có thể bạn không cần effect: tính trong render, reset bằng key, làm trong handler",
+    "nguon": "React · Chương 4",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-4-3-vong-lap",
+    "ten": "4.3 — Vòng lặp vô hạn và closure cũ: dependency không ổn định và useEffectEvent",
+    "nguon": "React · Chương 4",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Hooks › useRef / useContext": {
+  "body": "Hai hook này đều giúp bạn tránh phải truyền mọi thứ qua props và state, nhưng theo hai cách khác nhau.\n\n**useRef** giữ một giá trị thay đổi được qua các lần render mà **không gây render lại**; còn dùng để trỏ vào phần tử DOM. **useContext** đọc giá trị do một `Provider` ở trên cây cung cấp, nên không cần truyền qua từng tầng component (\"prop drilling\").\n\n### Vì sao cần biết\n`useRef` là lối thoát khi cần thao tác DOM hoặc nhớ giá trị không liên quan giao diện. `useContext` là cách đơn giản nhất để chia sẻ dữ liệu \"toàn cục nhẹ\" như theme, ngôn ngữ, người dùng đăng nhập.\n\n### Ý chính\n- `ref.current` đổi thì không render. Dữ liệu cần hiển thị thì phải dùng state.\n- Context ba bước: `createContext` → bọc `<Ctx.Provider value={...}>` → `useContext(Ctx)` ở component con.\n- Khi `value` của Provider đổi, **mọi** component dùng context đó đều render lại. Vì vậy nên tách context thành nhiều cái nhỏ (cái hay đổi, cái ít đổi) và không đưa state thay đổi liên tục vào đó.\n- Nên đặt mặc định là `null` và viết một hook bọc ném lỗi rõ ràng khi dùng ngoài Provider.\n\n```tsx\nconst ThemeCtx = createContext<\"sang\" | \"toi\" | null>(null);\n\nfunction useTheme() {\n  const v = useContext(ThemeCtx);\n  if (v === null) throw new Error(\"useTheme phải nằm trong ThemeProvider\");\n  return v;\n}\n```\n\n### Lỗi hay gặp\n- Dùng Context cho state thay đổi nhiều lần mỗi giây, làm cả cây render lại.\n- Truyền object mới vào `value` mỗi lần render mà không ổn định.\n- Dùng `ref` để lưu dữ liệu hiển thị, nên UI không cập nhật.",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-11-3-strict-mode-ref",
+    "ten": "11.3 — StrictMode, useRef, useLayoutEffect: chạy hai lần, ref, đo trước khi vẽ",
+    "nguon": "React · Chương 11",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-5-1-context",
+    "ten": "5.1 — Context mà không render lại ồ ạt: Provider, hook báo lỗi, đo số lần render",
+    "nguon": "React · Chương 5",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-6-1-useref",
+    "ten": "6.1 — useRef: giá trị sống qua các render",
+    "nguon": "Next.js: The React Framework · Chương 6",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Hooks › useMemo / useCallback": {
+  "body": "`useMemo` ghi nhớ **kết quả** của một phép tính; `useCallback` ghi nhớ **chính hàm**. Cả hai chỉ tính lại khi dependency đổi. Mục đích là tránh tính toán nặng lặp lại, hoặc giữ tham chiếu ổn định để không phá `React.memo` và dependency của effect.\n\n### Vì sao cần biết\nBiết khi nào nên dùng và khi nào không. Dùng bừa làm code khó đọc mà chẳng nhanh hơn; thậm chí chậm hơn vì bản thân việc ghi nhớ cũng tốn công.\n\n### Ý chính\n- `const kq = useMemo(() => tinhNang(ds), [ds])`.\n- `const xuLy = useCallback(() => ..., [phuThuoc])`.\n- Hữu ích khi: phép tính thật sự nặng (đo bằng Profiler), hoặc truyền hàm/object cho con đã bọc `React.memo`, hoặc dùng làm dependency của `useEffect`.\n- Quy trình đúng: **đo trước** bằng React Profiler, tối ưu chỗ chậm, đo lại.\n- `React.memo` + `useCallback` chỉ có tác dụng khi dùng cùng nhau với props ổn định.\n- React Compiler (tính năng mới của hệ sinh thái React) có thể tự thêm phần ghi nhớ tương tự lúc build, nên ngày càng ít phải tay viết.\n\n### Lỗi hay gặp\n- Bọc mọi thứ bằng `useMemo`/`useCallback` ngay từ đầu.\n- Bỏ sót dependency nên hàm giữ giá trị cũ.\n- Dùng `useMemo` như đảm bảo ngữ nghĩa: nó chỉ là tối ưu, React có thể bỏ cache khi cần.\n\n### Tự kiểm tra\nVì sao `useCallback` không có tác dụng nếu component con không dùng `React.memo`?",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-8-0-slides",
+    "ten": "8.0 — Slide Chương 8: hiệu năng và khả năng tiếp cận bằng hình",
+    "nguon": "React · Chương 8",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-8-1-do",
+    "ten": "8.1 — Đo bằng React Profiler: 200 bác sĩ, một cú bấm, số đo thật",
+    "nguon": "React · Chương 8",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-8-2-memo",
+    "ten": "8.2 — memo, useMemo, useCallback — chỉ ở chỗ số đo bảo cần, và React Compiler",
+    "nguon": "React · Chương 8",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Hooks › Custom Hooks": {
+  "body": "Custom hook là một hàm bình thường có tên bắt đầu bằng `use`, bên trong gọi các hook khác. Nó cho phép trích logic có state (gọi API, debounce, đọc localStorage, lắng nghe kích thước cửa sổ) ra khỏi component để dùng lại.\n\n### Vì sao cần biết\nThay vì sao chép cùng cụm `useState` + `useEffect` ở nhiều nơi, bạn gói vào một hook. Component trở nên ngắn và chỉ lo giao diện.\n\n### Ý chính\n- Mỗi lần gọi custom hook, state bên trong là **riêng** cho lần gọi đó; hook chia sẻ logic, không chia sẻ state.\n- Tuân thủ quy tắc Hook: chỉ gọi ở cấp cao nhất của component hoặc hook khác, không gọi trong điều kiện hay vòng lặp.\n- Trả về giá trị hoặc cặp `[giaTri, hamDat]` tuỳ ngữ nghĩa.\n- Tên `use...` giúp linter kiểm tra quy tắc Hook cho bạn.\n- Test bằng `renderHook` của Testing Library.\n\n```tsx\nfunction useDebounce<T>(giaTri: T, troMs = 300): T {\n  const [giaTriTre, setGiaTriTre] = useState(giaTri);\n  useEffect(() => {\n    const id = setTimeout(() => setGiaTriTre(giaTri), troMs);\n    return () => clearTimeout(id);\n  }, [giaTri, troMs]);\n  return giaTriTre;\n}\n\n// dùng: const tuKhoaTre = useDebounce(tuKhoa, 400);\n```\n\n### Lỗi hay gặp\n- Nghĩ hai component dùng chung một hook thì dùng chung state.\n- Tạo hook \"cho có\" khi chỉ là một hàm thường không dùng hook nào.\n- Bọc luôn cả giao diện vào hook, nên hook thành \"component trá hình\".",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-4-4-custom-hook",
+    "ten": "4.4 — Hook tự viết: useDebounce, useLocalStorage, useTieuDeTrang và quy tắc hook",
+    "nguon": "React · Chương 4",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-13-2-hook-styling",
+    "ten": "13.2 — Custom hook tốt, và styling: CSS Modules hay Tailwind",
+    "nguon": "React · Chương 13",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-6-5-custom-hooks",
+    "ten": "6.5 — Hook tự viết: gói lại logic tái dùng",
+    "nguon": "Next.js: The React Framework · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-9-3-hook",
+    "ten": "9.3 — Test hook tự viết: renderHook, wrapper, hook TanStack Query và store",
+    "nguon": "React · Chương 9",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Hooks › High Order Components": {
+  "body": "Higher-Order Component (HOC) là một hàm nhận vào một component và trả về một component mới, thường bọc thêm logic hoặc props. Tên đặt theo mẫu `withTen`. Đây là mẫu từ thời class component, trước khi có Hooks, dùng để chia sẻ logic như xác thực, theo dõi, kết nối store.\n\n### Vì sao cần biết\nBạn sẽ gặp HOC trong code cũ và vài thư viện (ví dụ `connect` của Redux đời cũ, `withRouter` của React Router đời cũ). Trong code mới, custom hook thường gọn hơn.\n\n### Ý chính\n- HOC là hàm thuần: không sửa component gốc, mà bọc nó.\n- Phải truyền tiếp các props không liên quan xuống component bọc (`{...props}`).\n- Tạo HOC **bên ngoài** component, không tạo trong thân hàm render (nếu không, mỗi lần render ra một \"kiểu\" component mới và mất state).\n- Nhược điểm: lồng nhiều HOC khó đọc, xung đột tên prop, ref không tự chuyển tiếp.\n- Hook cho phép chia sẻ logic mà không thêm tầng bọc nào vào cây.\n\n```tsx\nfunction withDangNhap<P extends object>(Comp: React.ComponentType<P>) {\n  return function DaBaoVe(props: P) {\n    const daDangNhap = useDangNhap(); // một custom hook\n    if (!daDangNhap) return <p>Vui lòng đăng nhập.</p>;\n    return <Comp {...props} />;\n  };\n}\n\nconst TrangCaNhanBaoVe = withDangNhap(TrangCaNhan);\n```\n\n### Lỗi hay gặp\n- Tạo HOC bên trong `render`.\n- Quên truyền props xuống component gốc.\n- Dùng HOC cho thứ một hook làm gọn hơn nhiều.",
+  "lessons": [
+   {
+    "href": "/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-5-3-slot6-component-slides",
+    "ten": "5.3 — Học theo từng slide: Tất cả về Component (Slot 6)",
+    "nguon": "Front-End Web Development with React · Chương 5",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "FER202"
+   },
+   {
+    "href": "/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-q7-2-chua-quiz",
+    "ten": "Chữa quiz Chương 7 (2/2): container, HOC, Context, useParams, form setState — 7 câu FE thật",
+    "nguon": "Front-End Web Development with React · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "FER202"
+   }
+  ]
+ },
+ "Hooks › Hooks Best Practices": {
+  "body": "Hooks hoạt động nhờ React nhớ thứ tự các lần gọi hook trong mỗi component. Vì vậy có vài quy tắc cứng, và vài thói quen tốt giúp tránh bug khó chẩn đoán.\n\n### Vì sao cần biết\nVi phạm quy tắc cho ra lỗi lạ như \"Rendered more hooks than during the previous render\" hoặc dữ liệu cũ khó giải thích. Linter sẽ bắt hầu hết lỗi nếu bạn bật đúng plugin.\n\n### Ý chính\n- **Chỉ gọi hook ở cấp cao nhất** của component hoặc custom hook: không trong `if`, vòng lặp, hàm lồng, hay sau `return` sớm.\n- **Chỉ gọi hook từ component hàm hoặc custom hook** (hàm tên `use...`).\n- Dùng `eslint-plugin-react-hooks` (`rules-of-hooks`, `exhaustive-deps`) và nghe theo nó thay vì tắt.\n- Khai báo đủ dependency. Nếu thấy phải bỏ dependency mới chạy đúng, thường là dấu hiệu cần cấu trúc lại.\n- Ưu tiên state tối thiểu, tính phần còn lại trong render.\n- Dọn dẹp trong effect (timer, listener, huỷ request).\n- Cập nhật theo giá trị cũ dùng dạng hàm: `setN(n => n + 1)`.\n- Đặt tên custom hook rõ nghĩa, kiểm thử riêng.\n\n```tsx\n// SAI: hook bị gọi có điều kiện\nfunction A({ hien }: { hien: boolean }) {\n  if (hien) {\n    const [x] = useState(0); // lỗi quy tắc Hook\n  }\n  return null;\n}\n```\n\n### Lỗi hay gặp\n- Return sớm trước khi gọi hết các hook.\n- Tắt cảnh báo `exhaustive-deps` bằng comment.\n- Đồng bộ hai state với nhau bằng effect, thay vì giữ một nguồn sự thật.",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-4-4-custom-hook",
+    "ten": "4.4 — Hook tự viết: useDebounce, useLocalStorage, useTieuDeTrang và quy tắc hook",
+    "nguon": "React · Chương 4",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-4-3-vong-lap",
+    "ten": "4.3 — Vòng lặp vô hạn và closure cũ: dependency không ổn định và useEffectEvent",
+    "nguon": "React · Chương 4",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-4-2-khong-can",
+    "ten": "4.2 — Có thể bạn không cần effect: tính trong render, reset bằng key, làm trong handler",
+    "nguon": "React · Chương 4",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Hooks › Hooks": {
+  "body": "Hooks là các hàm đặc biệt (tên bắt đầu bằng `use`) cho phép component hàm \"móc vào\" tính năng của React: state, vòng đời, context, ref. Trước 2019, muốn có state bạn phải viết class; Hooks (React 16.8) đã thay đổi điều đó.\n\n### Vì sao cần biết\nHooks là cách viết React hiện đại. Hiểu bức tranh tổng thể giúp bạn biết cần hook nào cho việc nào.\n\n### Ý chính\n- **State:** `useState`, `useReducer`.\n- **Effect:** `useEffect` (đồng bộ với bên ngoài), `useLayoutEffect` (đo DOM trước khi vẽ).\n- **Chia sẻ dữ liệu:** `useContext`.\n- **Tham chiếu:** `useRef`.\n- **Hiệu năng:** `useMemo`, `useCallback`, `useTransition`, `useDeferredValue`.\n- **React 19:** `use`, `useActionState`, `useOptimistic`, `useFormStatus`.\n- **Tự viết:** gom logic dùng lại thành hook của riêng bạn.\n- Mọi hook phải tuân thủ cùng một quy tắc: gọi ở cấp cao nhất, cùng thứ tự mỗi lần render.\n\n```tsx\nfunction DongHo() {\n  const [gio, setGio] = useState(new Date());\n  useEffect(() => {\n    const id = setInterval(() => setGio(new Date()), 1000);\n    return () => clearInterval(id);\n  }, []);\n  return <p>{gio.toLocaleTimeString(\"vi-VN\")}</p>;\n}\n```\n\n### Lỗi hay gặp\n- Cố nhớ danh sách hook thay vì hiểu mỗi nhóm giải quyết vấn đề gì.\n- Dùng `useEffect` cho mọi việc, kể cả thứ không phải đồng bộ với hệ thống ngoài.",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-2-0-slides",
+    "ten": "2.0 — Slide Chương 2: state và sự kiện bằng hình",
+    "nguon": "React · Chương 2",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-2-1-use-state",
+    "ten": "2.1 — useState và render lại: ảnh chụp state, cập nhật theo hàm và batching",
+    "nguon": "React · Chương 2",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-4-1-use-effect",
+    "ten": "4.1 — useEffect, dependency và cleanup: khi nào chạy và vì sao Strict Mode chạy hai lần",
+    "nguon": "React · Chương 4",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-4-4-custom-hook",
+    "ten": "4.4 — Hook tự viết: useDebounce, useLocalStorage, useTieuDeTrang và quy tắc hook",
+    "nguon": "React · Chương 4",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Hooks › useState": {
+  "body": "`useState` thêm một mẩu state vào component: trả về cặp `[giaTri, hamDat]`. Gọi hàm đặt sẽ lên lịch một lần render mới với giá trị mới.\n\n### Vì sao cần biết\nĐây là hook bạn dùng nhiều nhất. Phần lớn bug state của người mới đến từ việc không hiểu \"state là ảnh chụp\" và \"cập nhật bất biến\".\n\n### Ý chính\n- `const [dem, setDem] = useState(0)`. Giá trị ban đầu chỉ dùng ở lần render đầu. Khởi tạo tốn kém thì truyền hàm: `useState(() => docLocalStorage())`.\n- **State là ảnh chụp:** trong một lần render, `dem` có giá trị cố định. `setDem(dem + 1)` gọi ba lần trong một handler vẫn chỉ tăng 1; muốn cộng dồn dùng `setDem(d => d + 1)`.\n- Cập nhật được gom lô (batching): nhiều lần `set` trong cùng sự kiện chỉ gây một lần render.\n- Với object và mảng, tạo bản sao: `setUser({ ...user, ten: \"Mai\" })`, `setDs(ds.filter(...))`. React so sánh bằng `Object.is`, nên sửa tại chỗ thì không thấy thay đổi.\n- Chọn state tối thiểu, và đừng lưu thứ tính được.\n\n```tsx\nconst [form, setForm] = useState({ ten: \"\", email: \"\" });\n\n<input\n  value={form.ten}\n  onChange={e => setForm(f => ({ ...f, ten: e.target.value }))}\n/>\n```\n\n### Lỗi hay gặp\n- `ds.push(x); setDs(ds)`: cùng tham chiếu nên không render lại.\n- Đọc state ngay sau `set` và mong thấy giá trị mới.\n- Khởi tạo state từ props rồi mong nó theo props.\n\n### Tự kiểm tra\nVì sao `setDem(dem + 1)` ba lần liên tiếp chỉ tăng 1?",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-2-0-slides",
+    "ten": "2.0 — Slide Chương 2: state và sự kiện bằng hình",
+    "nguon": "React · Chương 2",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-2-1-use-state",
+    "ten": "2.1 — useState và render lại: ảnh chụp state, cập nhật theo hàm và batching",
+    "nguon": "React · Chương 2",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-2-3-object-array",
+    "ten": "2.3 — Cập nhật object và mảng bất biến: Object.is, spread, toSorted và Immer",
+    "nguon": "React · Chương 2",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-3-2-state-la-anh-chup",
+    "ten": "3.2 — State là một ảnh chụp",
+    "nguon": "Next.js: The React Framework · Chương 3",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Hooks › useReducer": {
+  "body": "`useReducer` quản lý state bằng một **reducer**: hàm thuần nhận state hiện tại và một action, trả về state mới. Thay vì rải `setX` khắp nơi, component chỉ `dispatch` các hành động có tên, còn quy tắc chuyển trạng thái nằm ở một chỗ.\n\n### Vì sao cần biết\nKhi một luồng có nhiều bước và nhiều trạng thái liên quan (đặt lịch bốn bước, giỏ hàng, form nhiều phần), reducer giúp loại bỏ những tổ hợp state vô lý và dễ kiểm thử.\n\n### Ý chính\n- `const [state, dispatch] = useReducer(reducer, trangThaiBanDau)`.\n- Reducer phải **thuần**: không gọi API, không `Math.random`, không sửa state cũ.\n- Action thường là object có `type` (và dữ liệu đi kèm). Với TypeScript, dùng union có nhãn để `switch` được kiểm tra đầy đủ.\n- Dễ test: chỉ là hàm vào-ra.\n- Kết hợp Context để chia sẻ `state` và `dispatch` cho cả cây con.\n\n```tsx\ntype State = { buoc: 1 | 2 | 3; bacSiId: number | null };\ntype Action = { type: \"chonBacSi\"; id: number } | { type: \"quayLai\" };\n\nfunction reducer(s: State, a: Action): State {\n  switch (a.type) {\n    case \"chonBacSi\": return { buoc: 2, bacSiId: a.id };\n    case \"quayLai\":   return { ...s, buoc: 1 };\n  }\n}\n```\n\n### Lỗi hay gặp\n- Dùng `useReducer` cho một cờ boolean đơn giản (`useState` là đủ).\n- Mutate state trong reducer (`state.ds.push(...)`).\n- Nhét việc bất đồng bộ vào reducer.",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-5-2-reducer",
+    "ten": "5.2 — useReducer cho state phức tạp: hành động, reducer thuần và luồng đặt lịch bốn bước",
+    "nguon": "React · Chương 5",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-6-3-usereducer",
+    "ten": "6.3 — useReducer: chuyển trạng thái thành dữ liệu",
+    "nguon": "Next.js: The React Framework · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-5-0-slides",
+    "ten": "5.0 — Slide Chương 5: chia sẻ state bằng hình",
+    "nguon": "React · Chương 5",
+    "kieu": "slide"
+   }
+  ]
+ },
+ "Hooks › useContext": {
+  "body": "`useContext(MyContext)` đọc giá trị mà `Provider` gần nhất ở phía trên cây cung cấp. Nó giúp bạn tránh \"prop drilling\": truyền một prop qua nhiều tầng component chỉ vì tầng dưới cùng cần.\n\n### Vì sao cần biết\nDữ liệu dùng ở nhiều nơi nhưng ít đổi (theme, ngôn ngữ, người dùng hiện tại, cấu hình) là chỗ Context hợp nhất.\n\n### Ý chính\n- Tạo: `const Ctx = createContext<Kieu | null>(null)`.\n- Cung cấp: `<Ctx.Provider value={giaTri}>...</Ctx.Provider>` (React 19 cho phép dùng thẳng `<Ctx value={...}>`).\n- Đọc: `const v = useContext(Ctx)` ở bất kỳ con cháu nào.\n- Khi `value` thay đổi, mọi component đọc context đều render lại, dù chúng có `memo`. Vì vậy hãy giữ giá trị ổn định, tách context theo tần suất đổi.\n- Bọc `useContext` trong custom hook để báo lỗi rõ khi quên Provider.\n- Không phải công cụ quản lý state toàn cục thay thế mọi thứ; state đổi liên tục nhiều nơi nên cân nhắc Zustand hoặc tương tự.\n\n```tsx\nconst NguoiDungCtx = createContext<{ ten: string } | null>(null);\n\nfunction Goc() {\n  return (\n    <NguoiDungCtx.Provider value={{ ten: \"Mai\" }}>\n      <Trang />\n    </NguoiDungCtx.Provider>\n  );\n}\nfunction LoiChao() {\n  const nd = useContext(NguoiDungCtx);\n  return <p>Chào {nd?.ten}</p>;\n}\n```\n\n### Lỗi hay gặp\n- Truyền `value={{ ... }}` là object mới mỗi lần Provider render, làm mọi người dùng bị render lại.\n- Dùng component ngoài Provider rồi nhận `null`.",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-5-0-slides",
+    "ten": "5.0 — Slide Chương 5: chia sẻ state bằng hình",
+    "nguon": "React · Chương 5",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-5-1-context",
+    "ten": "5.1 — Context mà không render lại ồ ạt: Provider, hook báo lỗi, đo số lần render",
+    "nguon": "React · Chương 5",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-12-4-context-generics",
+    "ten": "12.4 — Context có kiểu & component generic",
+    "nguon": "TypeScript · Chương 12",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Hooks › useMemo": {
+  "body": "`useMemo(() => tinhToan(), [dep])` lưu lại kết quả của phép tính giữa các lần render và chỉ tính lại khi dependency đổi.\n\n### Vì sao cần biết\nHai tình huống chính: (1) phép tính thật sự nặng, lặp lại không cần thiết; (2) cần một object/mảng có tham chiếu ổn định để truyền cho component `memo` hay đặt vào dependency của effect.\n\n### Ý chính\n- Tính toán trong hàm phải thuần.\n- Dependency so sánh bằng `Object.is`.\n- Chỉ là tối ưu hiệu năng: bỏ `useMemo` đi thì ứng dụng vẫn phải đúng.\n- Cách làm đúng: mở React Profiler, đo, rồi mới tối ưu. Ví dụ lọc và sắp xếp 5.000 phần tử mỗi lần gõ phím có thể đáng ghi nhớ; một phép cộng thì không.\n- Cân nhắc cách khác trước: chuyển state xuống gần nơi dùng, hoặc ảo hoá danh sách dài.\n- React Compiler có thể tự động hoá phần lớn việc ghi nhớ này khi bạn bật nó.\n\n```tsx\nconst dsHienThi = useMemo(\n  () => bacSi.filter(b => b.ten.includes(tuKhoa)).sort(soSanhTen),\n  [bacSi, tuKhoa]\n);\n```\n\nLưu ý `sort` làm thay đổi mảng; trong code thật nên dùng `toSorted` hoặc sao chép trước khi sắp xếp.\n\n### Lỗi hay gặp\n- Dùng cho phép tính rẻ, nên mất nhiều hơn được.\n- Quên dependency, dẫn tới kết quả cũ.\n- Phụ thuộc vào object tạo mới mỗi render nên cache không bao giờ trúng.",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-8-1-do",
+    "ten": "8.1 — Đo bằng React Profiler: 200 bác sĩ, một cú bấm, số đo thật",
+    "nguon": "React · Chương 8",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-8-2-memo",
+    "ten": "8.2 — memo, useMemo, useCallback — chỉ ở chỗ số đo bảo cần, và React Compiler",
+    "nguon": "React · Chương 8",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-13-3-danh-sach-dai",
+    "ten": "13.3 — Danh sách dài: virtualize 5000 bác sĩ, đo trước và sau",
+    "nguon": "React · Chương 13",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Hooks › useCallback": {
+  "body": "`useCallback(fn, [dep])` trả về **cùng một tham chiếu hàm** giữa các lần render, miễn là dependency không đổi. Mỗi lần render, một hàm khai báo trong thân component là một hàm mới; `useCallback` giữ lại bản cũ.\n\n### Vì sao cần biết\nTham chiếu hàm ổn định có ý nghĩa khi: truyền hàm xuống component bọc `React.memo` (nếu không, `memo` luôn thấy props \"khác\"), hoặc đưa hàm vào dependency của `useEffect`.\n\n### Ý chính\n- `useCallback(fn, deps)` tương đương `useMemo(() => fn, deps)`.\n- Không giúp gì nếu con không `memo` và hàm không nằm trong dependency của hook nào.\n- Hàm được ghi nhớ giữ nguyên các giá trị tại thời điểm tạo (closure). Thiếu dependency thì hàm dùng giá trị cũ.\n- Cập nhật state theo giá trị cũ nhờ dạng hàm `setX(x => ...)` để giảm số dependency.\n- Với React 19 có tính năng `useEffectEvent` (đã ổn định ở bản mới) để tách phần \"sự kiện\" khỏi effect mà không phải đưa vào dependency; kiểm tra bản React bạn đang dùng.\n\n```tsx\nconst Dong = React.memo(function Dong({ bn, onXoa }: { bn: BenhNhan; onXoa: (id: number) => void }) {\n  return <li>{bn.ten} <button onClick={() => onXoa(bn.id)}>Xoá</button></li>;\n});\n\nfunction DanhSach({ ds }: { ds: BenhNhan[] }) {\n  const [list, setList] = useState(ds);\n  const xoa = useCallback((id: number) => setList(l => l.filter(b => b.id !== id)), []);\n  return <ul>{list.map(b => <Dong key={b.id} bn={b} onXoa={xoa} />)}</ul>;\n}\n```\n\n### Lỗi hay gặp\n- Dùng khắp nơi mà không đo.\n- Hàm bọc đúng nhưng prop khác (object/mảng tạo mới) vẫn làm `memo` hỏng.",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-8-2-memo",
+    "ten": "8.2 — memo, useMemo, useCallback — chỉ ở chỗ số đo bảo cần, và React Compiler",
+    "nguon": "React · Chương 8",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-4-3-vong-lap",
+    "ten": "4.3 — Vòng lặp vô hạn và closure cũ: dependency không ổn định và useEffectEvent",
+    "nguon": "React · Chương 4",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-8-1-do",
+    "ten": "8.1 — Đo bằng React Profiler: 200 bác sĩ, một cú bấm, số đo thật",
+    "nguon": "React · Chương 8",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Hooks › Creating Custom Hooks": {
+  "body": "Tạo một custom hook là việc **trích logic có dùng hook** ra thành hàm `use...` riêng. Quy trình thực tế: bạn thấy hai component có cùng cụm `useState` + `useEffect`, bạn cắt cụm đó ra, đặt tên theo điều nó làm, và trả về những gì component cần.\n\n### Vì sao cần biết\nCustom hook là công cụ chính để tái sử dụng logic trong React hiện đại, và là cách tổ chức code mà phỏng vấn viên hay hỏi.\n\n### Ý chính\n- Bắt đầu bằng `use`. Bên trong gọi hook khác hợp lệ.\n- Tham số là đầu vào (ví dụ `key` của localStorage), giá trị trả về là API cho component.\n- Mỗi lệnh gọi có state độc lập.\n- Cần dọn dẹp thì làm trong effect của hook, người dùng hook không phải nhớ.\n- Ví dụ điển hình: `useDebounce`, `useLocalStorage`, `useOnlineStatus`, `useMediaQuery`, `useTieuDeTrang`.\n- Test bằng `renderHook` và bọc `wrapper` khi hook cần Provider.\n\n```tsx\nfunction useLocalStorage<T>(khoa: string, ban_dau: T) {\n  const [giaTri, setGiaTri] = useState<T>(() => {\n    const raw = localStorage.getItem(khoa);\n    return raw ? (JSON.parse(raw) as T) : ban_dau;\n  });\n  useEffect(() => {\n    localStorage.setItem(khoa, JSON.stringify(giaTri));\n  }, [khoa, giaTri]);\n  return [giaTri, setGiaTri] as const;\n}\n```\n\n### Lỗi hay gặp\n- Trả về object mới mỗi lần mà người dùng đặt vào dependency, gây vòng lặp.\n- Quên xử lý `JSON.parse` lỗi hoặc môi trường không có `localStorage`.\n- Hook làm quá nhiều việc; hãy tách nhỏ.",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-4-4-custom-hook",
+    "ten": "4.4 — Hook tự viết: useDebounce, useLocalStorage, useTieuDeTrang và quy tắc hook",
+    "nguon": "React · Chương 4",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-9-3-hook",
+    "ten": "9.3 — Test hook tự viết: renderHook, wrapper, hook TanStack Query và store",
+    "nguon": "React · Chương 9",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-6-5-custom-hooks",
+    "ten": "6.5 — Hook tự viết: gói lại logic tái dùng",
+    "nguon": "Next.js: The React Framework · Chương 6",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "State Management › Context API": {
+  "body": "Context API là tính năng sẵn có của React để chia sẻ giá trị cho cả một nhánh cây component mà không phải truyền props qua từng tầng. Nó là lựa chọn đầu tiên cho state ít thay đổi dùng ở nhiều nơi: theme, ngôn ngữ, người dùng đăng nhập.\n\n### Vì sao cần biết\nNhiều ứng dụng không cần thư viện state nào ngoài Context. Biết giới hạn của nó giúp bạn quyết định đúng thời điểm chuyển sang giải pháp khác.\n\n### Ý chính\n- Ba bước: `createContext` → `Provider` với `value` → `useContext`.\n- Mọi component đọc context sẽ render lại khi `value` đổi. Context không có \"selector\" để chỉ đăng ký một phần giá trị.\n- Giảm render thừa bằng cách: tách thành nhiều context (dữ liệu hay đổi riêng), `useMemo` cho `value`, hoặc nâng nội dung dùng `children` để cây con không bị render lại khi Provider cập nhật.\n- Kết hợp `useReducer` để có \"mini Redux\" cho một khu vực.\n- Hợp: theme, auth, locale, cấu hình. Không hợp: danh sách lớn cập nhật liên tục, state cần chọn lọc theo từng phần.\n\n```tsx\nconst AuthCtx = createContext<{ user: string | null; dangXuat: () => void } | null>(null);\n\nexport function AuthProvider({ children }: { children: React.ReactNode }) {\n  const [user, setUser] = useState<string | null>(\"mai\");\n  const value = useMemo(() => ({ user, dangXuat: () => setUser(null) }), [user]);\n  return <AuthCtx.Provider value={value}>{children}</AuthCtx.Provider>;\n}\n```\n\n### Lỗi hay gặp\n- Đặt một context khổng lồ chứa mọi thứ, nên đổi một trường làm cả app render lại.\n- Dùng Context thay cho server state (dữ liệu từ API); công cụ như TanStack Query phù hợp hơn.",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-5-0-slides",
+    "ten": "5.0 — Slide Chương 5: chia sẻ state bằng hình",
+    "nguon": "React · Chương 5",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-5-1-context",
+    "ten": "5.1 — Context mà không render lại ồ ạt: Provider, hook báo lỗi, đo số lần render",
+    "nguon": "React · Chương 5",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-12-4-context-generics",
+    "ten": "12.4 — Context có kiểu & component generic",
+    "nguon": "TypeScript · Chương 12",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "State Management › Zustand": {
+  "body": "Zustand là thư viện state toàn cục rất nhỏ. Bạn tạo một **store** bên ngoài cây component bằng một hàm, rồi dùng nó ở bất kỳ component nào như một hook. Không cần Provider bọc ứng dụng, ít boilerplate.\n\n### Vì sao cần biết\nKhi nhiều component không có quan hệ cha con cần chung state (giỏ hàng, bộ lọc, người dùng), Zustand cho phép làm việc đó với rất ít code, và render lại chính xác hơn Context nhờ selector.\n\n### Ý chính\n- Store gồm state và các hàm hành động, tạo bằng `create`.\n- Component chọn đúng phần cần bằng **selector**: `useStore(s => s.dem)`. Chỉ khi phần đó đổi, component mới render lại.\n- Chọn nhiều trường một lần cần so sánh nông (ví dụ `useShallow`), nếu không selector trả object mới mỗi lần sẽ gây render thừa.\n- Middleware như `persist` lưu store vào localStorage.\n- Dùng được cả ngoài React (`useStore.getState()`).\n\n```ts\nimport { create } from \"zustand\";\n\ntype GioHang = {\n  soMon: number;\n  them: () => void;\n  xoaHet: () => void;\n};\n\nexport const useGioHang = create<GioHang>()((set) => ({\n  soMon: 0,\n  them: () => set((s) => ({ soMon: s.soMon + 1 })),\n  xoaHet: () => set({ soMon: 0 }),\n}));\n\n// trong component\nconst soMon = useGioHang((s) => s.soMon);\nconst them = useGioHang((s) => s.them);\n```\n\n### Lỗi hay gặp\n- Đọc cả store `const s = useGioHang()` nên mọi thay đổi đều render lại component.\n- Sửa trực tiếp state thay vì trả bản mới qua `set`.\n- Nhét dữ liệu từ server vào Zustand thay vì dùng thư viện cache như TanStack Query.",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-5-0-slides",
+    "ten": "5.0 — Slide Chương 5: chia sẻ state bằng hình",
+    "nguon": "React · Chương 5",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-5-3-zustand",
+    "ten": "5.3 — Zustand cho state toàn app: store, selector, useShallow và persist",
+    "nguon": "React · Chương 5",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-14-2-zustand",
+    "ten": "14.2 — State client toàn cục với Zustand",
+    "nguon": "Next.js: The React Framework · Chương 14",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "State Management › Redux Toolkit (RTK)": {
+  "body": "Redux là mô hình quản lý state theo một \"store\" duy nhất, thay đổi qua action và reducer. **Redux Toolkit (RTK)** là cách viết Redux chính thức hiện nay: bỏ phần lớn boilerplate cũ, tích hợp sẵn Immer (viết kiểu \"sửa trực tiếp\" nhưng thực chất tạo bản bất biến) và thunk. **RTK Query** thêm khả năng lấy dữ liệu và cache từ API.\n\n### Vì sao cần biết\nRedux vẫn rất phổ biến trong dự án doanh nghiệp và nhiều đề thi, tuyển dụng. Hiểu luồng một chiều của nó (UI → action → reducer → store → UI) giúp bạn đọc được code cũ và mới.\n\n### Ý chính\n- `configureStore({ reducer: {...} })` tạo store; bọc ứng dụng bằng `<Provider store={store}>`.\n- `createSlice({ name, initialState, reducers })` gom state, reducer và action vào một chỗ. Trong reducer được phép viết `state.dem += 1` nhờ Immer.\n- Component dùng `useSelector` để đọc và `useDispatch` để gửi action.\n- Việc bất đồng bộ: `createAsyncThunk`, hoặc dùng RTK Query với `createApi`.\n- Redux DevTools cho phép xem từng action và \"du hành thời gian\".\n\n```ts\nimport { configureStore, createSlice } from \"@reduxjs/toolkit\";\n\nconst demSlice = createSlice({\n  name: \"dem\",\n  initialState: { gia_tri: 0 },\n  reducers: {\n    tang: (state) => { state.gia_tri += 1; },\n  },\n});\n\nexport const { tang } = demSlice.actions;\nexport const store = configureStore({ reducer: { dem: demSlice.reducer } });\n```\n\n### Lỗi hay gặp\n- Nhét mọi state vào Redux, kể cả state cục bộ của một form.\n- Làm việc không thuần (gọi API, tạo id ngẫu nhiên) trong reducer.\n- Dùng Redux cho dữ liệu từ server rồi tự viết cache, trong khi RTK Query hay TanStack Query làm sẵn.",
+  "lessons": [
+   {
+    "href": "/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-12-3-slot16-redux-slides",
+    "ten": "12.3 — Học theo từng slide: Flux, Redux, Redux Toolkit & Thunk (Slot 16–17)",
+    "nguon": "Front-End Web Development with React · Chương 12",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "FER202"
+   },
+   {
+    "href": "/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-12-1-redux-toolkit",
+    "ten": "12.1 — Flux & Redux Toolkit",
+    "nguon": "Front-End Web Development with React · Chương 12",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "FER202"
+   },
+   {
+    "href": "/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-12-ex25-redux-thunk",
+    "ten": "Exercise 25 — Redux Thunk (async + logger)",
+    "nguon": "Front-End Web Development with React · Chương 12",
+    "kieu": "lab",
+    "academy": true,
+    "ma": "FER202"
+   }
+  ]
+ },
+ "State Management › Jotai / MobX": {
+  "body": "Hai thư viện này đi theo hai hướng khác Redux.\n\n**Jotai** chia state thành các **atom** nhỏ. Mỗi atom là một mẩu state độc lập, atom có thể được tính từ atom khác (derived atom). Component chỉ đăng ký những atom nó dùng, nên chỉ render lại khi đúng atom đó đổi.\n\n**MobX** theo hướng **reactive**: bạn đánh dấu dữ liệu là \"observable\"; component bọc bằng `observer` sẽ tự theo dõi những gì nó đọc khi render, và tự render lại khi các giá trị ấy đổi. Phong cách này gần với lập trình hướng đối tượng, gần với \"cứ sửa là giao diện tự cập nhật\".\n\n### Vì sao cần biết\nBiết các hướng khác nhau giúp bạn chọn công cụ khi dự án có đặc thù (nhiều state phái sinh, nhiều thực thể nối nhau) và hiểu được code của đội khác. Với đa số ứng dụng, Context + Zustand hoặc Redux Toolkit là đủ.\n\n### Ý chính\n- Jotai: nghĩ \"từ dưới lên\" bằng các mảnh nhỏ ghép lại; API gần với `useState`.\n- MobX: nghĩ theo \"đối tượng có thể quan sát\"; ít boilerplate nhưng cần hiểu cơ chế theo dõi tự động.\n- Cả hai đều tránh render thừa tốt hơn Context thô.\n\n```tsx\n// Jotai\nimport { atom, useAtom } from \"jotai\";\nconst demAtom = atom(0);\nfunction Nut() {\n  const [dem, setDem] = useAtom(demAtom);\n  return <button onClick={() => setDem(dem + 1)}>{dem}</button>;\n}\n```\n\n### Lỗi hay gặp\n- Trộn nhiều thư viện state trong một ứng dụng mà không có ranh giới rõ.\n- Với MobX: quên bọc component bằng `observer`, nên giao diện không cập nhật.\n\nHai thư viện này thuộc nhánh tuỳ chọn; kênh học hiện chưa có bài riêng cho chúng trên nền tảng."
+ },
+ "State Management › State Management": {
+  "body": "\"State management\" là câu hỏi: dữ liệu thay đổi theo thời gian nằm ở đâu, ai được đọc, ai được sửa. Nhiều ứng dụng phức tạp chỉ vì nhét mọi loại state vào cùng một chỗ.\n\n### Vì sao cần biết\nChọn đúng nơi đặt state quyết định ứng dụng dễ hay khó mở rộng. Công cụ chỉ là hệ quả của việc phân loại state đúng.\n\n### Ý chính\nPhân loại state trước khi chọn công cụ:\n- **State cục bộ của component** (ô nhập đang gõ, hộp thoại đang mở): `useState`, `useReducer`.\n- **State dùng chung của vài component gần nhau:** nâng lên component cha chung.\n- **State dùng toàn ứng dụng, ít đổi** (theme, người dùng): Context.\n- **State client toàn cục, đổi thường xuyên:** Zustand, Redux Toolkit, Jotai.\n- **State từ server** (dữ liệu API, cần cache, tải lại, đồng bộ): TanStack Query hoặc RTK Query. Đây không nên bị coi như state client.\n- **State trên URL** (bộ lọc, trang hiện tại, tab): lưu trong query string để F5 vẫn còn, chia sẻ được liên kết và nút Back chạy đúng.\n- **State dẫn xuất:** tính từ state khác trong render, không lưu.\n\nQuy tắc đơn giản: bắt đầu với `useState` ở nơi thấp nhất, chỉ nâng lên hoặc dùng công cụ lớn hơn khi thực sự đau.\n\n### Lỗi hay gặp\n- Đưa dữ liệu server vào store toàn cục rồi tự lo cache, làm mới, trạng thái tải.\n- Hai nguồn sự thật cho cùng một dữ liệu (một trong store, một trong state cục bộ).\n- Lưu bộ lọc trong state thay vì URL nên mất khi tải lại trang.\n\n### Tự kiểm tra\nMột danh sách bác sĩ lấy từ API và một ô tìm kiếm: mỗi thứ thuộc loại state nào?",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-5-0-slides",
+    "ten": "5.0 — Slide Chương 5: chia sẻ state bằng hình",
+    "nguon": "React · Chương 5",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-2-4-dat-state",
+    "ten": "2.4 — State nên ở đâu: nâng state lên, một nguồn sự thật, state dẫn xuất",
+    "nguon": "React · Chương 2",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-14-1-hai-loai-state",
+    "ten": "14.1 — Hai loại state (và cái sai khi trộn lẫn)",
+    "nguon": "Next.js: The React Framework · Chương 14",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-5-4-url-state",
+    "ten": "5.4 — URL là state: bộ lọc sống qua F5, link chia sẻ được và nút Back chạy đúng",
+    "nguon": "React · Chương 5",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-14-5-chon-cong-cu",
+    "ten": "14.5 — Chọn đúng công cụ cho từng mảnh state",
+    "nguon": "Next.js: The React Framework · Chương 14",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "State Management › Context": {
+  "body": "React Context là cách không cần thư viện ngoài để chia sẻ giá trị cho nhiều component trong một cây. Bạn tạo context, bọc phần cây cần dùng bằng Provider, và đọc bằng `useContext`.\n\n### Vì sao cần biết\nĐây là công cụ nhẹ nhất cho state ít thay đổi, dùng ở nhiều chỗ: theme sáng/tối, ngôn ngữ, người dùng đăng nhập.\n\n### Ý chính\n- Không cần cài thêm gì; là một phần của React.\n- Provider có thể lồng nhau; component dùng giá trị của Provider gần nhất phía trên.\n- Điểm yếu: khi `value` đổi, **mọi** component dùng context đều render lại. Context không tự có selector để chỉ nghe một phần.\n- Vì vậy nó phù hợp với dữ liệu ít đổi; dữ liệu đổi liên tục (toạ độ chuột, nội dung ô nhập, danh sách lớn) nên để chỗ khác hoặc dùng thư viện có selector.\n- Cách giảm ảnh hưởng: tách nhiều context nhỏ; ổn định `value` bằng `useMemo`; để `children` được truyền từ ngoài vào Provider.\n\n```tsx\nconst ThemeCtx = createContext<{ theme: \"sang\" | \"toi\"; doi: () => void } | null>(null);\n\nexport function ThemeProvider({ children }: { children: React.ReactNode }) {\n  const [theme, setTheme] = useState<\"sang\" | \"toi\">(\"sang\");\n  const value = useMemo(\n    () => ({ theme, doi: () => setTheme(t => (t === \"sang\" ? \"toi\" : \"sang\")) }),\n    [theme]\n  );\n  return <ThemeCtx.Provider value={value}>{children}</ThemeCtx.Provider>;\n}\n```\n\n### Lỗi hay gặp\n- Một context \"thần thánh\" chứa mọi thứ.\n- Quên bọc Provider rồi nhận `null` hoặc giá trị mặc định.\n- Dùng Context cho dữ liệu server thay vì thư viện cache.",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-5-0-slides",
+    "ten": "5.0 — Slide Chương 5: chia sẻ state bằng hình",
+    "nguon": "React · Chương 5",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-5-1-context",
+    "ten": "5.1 — Context mà không render lại ồ ạt: Provider, hook báo lỗi, đo số lần render",
+    "nguon": "React · Chương 5",
+    "kieu": "video"
+   }
+  ]
+ },
+ "State Management › Jotai": {
+  "body": "Jotai quản lý state theo mô hình **atom**: mỗi atom là một mẩu state nhỏ, độc lập, khai báo bên ngoài component. Component dùng atom nào thì chỉ đăng ký atom đó, nên khi atom khác thay đổi nó không phải render lại.\n\n### Vì sao cần biết\nAtom cho phép tách state rất mịn, và atom phái sinh (tính từ atom khác) giúp thay thế nhiều cụm `useMemo` + `useEffect` thủ công. API gần như `useState`, nên dễ học.\n\n### Ý chính\n- Atom gốc: `const tuoiAtom = atom(18)`.\n- Dùng: `const [tuoi, setTuoi] = useAtom(tuoiAtom)`; chỉ đọc: `useAtomValue`; chỉ ghi: `useSetAtom`.\n- Atom phái sinh: `const tuoiGapDoi = atom((get) => get(tuoiAtom) * 2)`; tự cập nhật khi atom nguồn đổi.\n- Atom có thể bất đồng bộ, kết hợp Suspense.\n- Không bắt buộc Provider (có thể dùng để tạo phạm vi store riêng).\n\n```tsx\nimport { atom, useAtom, useAtomValue } from \"jotai\";\n\nconst tuKhoaAtom = atom(\"\");\nconst tuKhoaVietHoaAtom = atom((get) => get(tuKhoaAtom).toUpperCase());\n\nfunction Tim() {\n  const [tk, setTk] = useAtom(tuKhoaAtom);\n  return <input value={tk} onChange={(e) => setTk(e.target.value)} />;\n}\nfunction HienThi() {\n  const v = useAtomValue(tuKhoaVietHoaAtom);\n  return <p>{v}</p>;\n}\n```\n\n### Lỗi hay gặp\n- Tạo atom bên trong component, nên mỗi lần render là một atom mới.\n- Chia quá mịn đến mức khó theo dõi luồng dữ liệu.\n\nTrên nền tảng hiện chưa có bài riêng về Jotai, nên mục này chỉ có phần giải thích ở đây."
+ },
+ "Routing › React Router": {
+  "body": "Một ứng dụng SPA chỉ có một trang HTML. **React Router** cho phép nó có nhiều \"trang\" ảo: nó đọc URL, quyết định component nào hiển thị, và cập nhật URL khi người dùng điều hướng mà không tải lại trình duyệt.\n\n### Vì sao cần biết\nHầu như mọi ứng dụng React thật đều có nhiều màn hình. URL cũng là một dạng state quan trọng: chia sẻ được, đánh dấu được, nút Back chạy đúng.\n\n### Ý chính\n- **Route** ánh xạ đường dẫn tới component: `/bac-si`, `/bac-si/:id`.\n- **Link/NavLink** thay cho `<a href>` để chuyển trang không tải lại (NavLink tự biết đang ở trang nào).\n- `useParams` đọc tham số đường dẫn (luôn là chuỗi, có thể thiếu); `useSearchParams` đọc và ghi query string; `useNavigate` điều hướng bằng code.\n- **Layout route** với `<Outlet />`: vẽ khung dùng chung (menu, header) một lần, ruột đổi theo route con.\n- Route lồng nhau, route index, trang 404 (`*`).\n- Bảo vệ trang cần đăng nhập bằng một layout route làm \"người gác cổng\".\n- Khi triển khai, máy chủ phải trả `index.html` cho mọi đường dẫn con, nếu không F5 ở trang con sẽ 404.\n\n```tsx\nimport { BrowserRouter, Routes, Route, Link, Outlet } from \"react-router\";\n\nfunction Khung() {\n  return (<><nav><Link to=\"/\">Trang chủ</Link></nav><Outlet /></>);\n}\n\n<BrowserRouter>\n  <Routes>\n    <Route element={<Khung />}>\n      <Route index element={<TrangChu />} />\n      <Route path=\"bac-si/:id\" element={<ChiTietBacSi />} />\n      <Route path=\"*\" element={<KhongTimThay />} />\n    </Route>\n  </Routes>\n</BrowserRouter>\n```\n\n### Lỗi hay gặp\n- Dùng `<a href>` nên trang tải lại và mất state.\n- Quên rằng `useParams` trả chuỗi, rồi so sánh với số.\n- Trộn nhiều phiên bản gói router trong cùng dự án.",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-7-0-slides",
+    "ten": "7.0 — Slide Chương 7: định tuyến và cấu trúc bằng hình",
+    "nguon": "React · Chương 7",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-7-1-router",
+    "ten": "7.1 — React Router căn bản: route, link, tham số — và những gì đã đổi từ bản 6",
+    "nguon": "React · Chương 7",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-7-2-layout",
+    "ten": "7.2 — Layout, route lồng nhau, lỗi theo route và trang cần đăng nhập",
+    "nguon": "React · Chương 7",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-7-5-du-an",
+    "ten": "7.5 — Tự dựng: bảy route, một layout, cổng đăng nhập và thư mục theo tính năng",
+    "nguon": "React · Chương 7",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Routing › Tanstack Router": {
+  "body": "TanStack Router là bộ định tuyến cho React tập trung vào **an toàn kiểu (type-safe) từ đầu đến cuối**. Đường dẫn, tham số đường dẫn và cả search params đều được suy ra kiểu từ khai báo route. Gõ sai đường dẫn trong `<Link to=\"...\">` hay thiếu tham số sẽ báo lỗi ngay khi biên dịch.\n\n### Vì sao cần biết\nNó là lựa chọn thay thế cho React Router khi bạn dùng TypeScript nặng, hoặc đã dùng TanStack Query và muốn tải dữ liệu theo route gắn chặt vào bộ nhớ đệm.\n\n### Ý chính\n- Route có thể khai báo bằng code hoặc theo file (file-based routing, có plugin sinh cây route).\n- Search params coi như state có kiểu, có thể kiểm bằng một schema.\n- Mỗi route có `loader` để tải dữ liệu trước khi hiện, tích hợp tốt với TanStack Query.\n- Hỗ trợ route lồng, layout, mã tách theo route (code splitting).\n- Cùng một họ với TanStack Query, TanStack Table, TanStack Form.\n\n```tsx\n// ví dụ route theo file (ý tưởng minh hoạ)\nimport { createFileRoute } from \"@tanstack/react-router\";\n\nexport const Route = createFileRoute(\"/bac-si/$id\")({\n  component: ChiTiet,\n});\n\nfunction ChiTiet() {\n  const { id } = Route.useParams(); // id có kiểu string, suy ra từ đường dẫn\n  return <h1>Bác sĩ {id}</h1>;\n}\n```\n\n### Lỗi hay gặp\n- Chuyển sang vì tính mới trong khi đội đã quen React Router và không cần type-safe mạnh.\n- Không đọc kỹ tài liệu phiên bản đang dùng vì API còn thay đổi theo thời gian.\n\nNền tảng chưa có bài riêng về TanStack Router; để đối chiếu khái niệm router nói chung hãy xem bài React Router."
+ },
+ "Routing › Routers": {
+  "body": "Router giải quyết một bài toán cụ thể: SPA chỉ có một trang HTML, nhưng người dùng muốn có nhiều \"trang\" với URL riêng, nút Back, liên kết chia sẻ được. Router đọc URL hiện tại, quyết định component nào hiện, và cập nhật URL (bằng History API) mà không tải lại trang.\n\n### Vì sao cần biết\nBiết router làm gì bên dưới giúp bạn chọn công cụ (React Router, TanStack Router, hoặc routing sẵn có của framework như Next.js) và debug các lỗi như F5 ra 404.\n\n### Ý chính\n- Định tuyến phía client: trình duyệt tải JS một lần, các lần chuyển trang chỉ đổi giao diện.\n- URL là state: đường dẫn, tham số, query string phản ánh trạng thái màn hình.\n- Route lồng nhau và layout dùng chung.\n- Điều hướng: liên kết khai báo (`Link`), điều hướng bằng code (`navigate`), `replace` thay vì `push` khi không muốn thêm vào lịch sử (ví dụ sau khi đăng nhập).\n- Máy chủ tĩnh phải cấu hình \"fallback về index.html\" cho mọi đường dẫn.\n- Nếu cần SEO, render phía máy chủ, tải dữ liệu theo route: cân nhắc framework như Next.js.\n\n### Lỗi hay gặp\n- Dùng thẻ `<a>` thường cho điều hướng nội bộ.\n- Quên cấu hình fallback khi deploy.\n- Lưu bộ lọc vào state thay vì URL nên mất khi tải lại.\n\n### Tự kiểm tra\nVì sao sau khi đăng nhập, nên dùng `replace` thay vì `push` khi chuyển tới trang chính?",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-7-0-slides",
+    "ten": "7.0 — Slide Chương 7: định tuyến và cấu trúc bằng hình",
+    "nguon": "React · Chương 7",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-7-1-router",
+    "ten": "7.1 — React Router căn bản: route, link, tham số — và những gì đã đổi từ bản 6",
+    "nguon": "React · Chương 7",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-5-4-url-state",
+    "ten": "5.4 — URL là state: bộ lọc sống qua F5, link chia sẻ được và nút Back chạy đúng",
+    "nguon": "React · Chương 5",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Routing › React Router v7": {
+  "body": "React Router v7 là phiên bản hợp nhất của React Router và Remix. Cùng một thư viện, bạn có thể dùng ở các cấp độ: chỉ khai báo route (như trước), thêm xử lý dữ liệu theo route (loader, action), hoặc dùng như một framework đầy đủ với render phía máy chủ.\n\n### Vì sao cần biết\nDự án React mới gặp React Router phần lớn qua phiên bản này. Hiểu khái niệm loader và action cho phép tách \"lấy dữ liệu\" và \"ghi dữ liệu\" khỏi component.\n\n### Ý chính\n- Gói chính là `react-router`; nhiều API mà bản cũ lấy từ `react-router-dom` nay lấy từ gói chính. Kiểm tra tài liệu phiên bản bạn cài và đừng trộn phiên bản.\n- **Declarative mode:** `BrowserRouter`, `Routes`, `Route`.\n- **Data mode:** `createBrowserRouter` với `loader` (lấy dữ liệu trước khi hiện route) và `action` (xử lý gửi form), đọc bằng `useLoaderData`.\n- `<Form>` gửi dữ liệu tới `action` mà không cần tự viết `onSubmit` và `fetch`.\n- `errorElement`/`ErrorBoundary` theo từng route: lỗi nằm trong khung của route đó chứ không làm trắng cả trang.\n- Hai route con cùng cấp có thể tải dữ liệu song song.\n\n```tsx\nimport { createBrowserRouter } from \"react-router\";\n\nconst router = createBrowserRouter([\n  {\n    path: \"/bac-si/:id\",\n    loader: async ({ params }) => {\n      const r = await fetch(`/api/bac-si/${params.id}`);\n      if (!r.ok) throw new Response(\"Không tìm thấy\", { status: 404 });\n      return r.json();\n    },\n    Component: ChiTietBacSi, // dùng useLoaderData() bên trong\n  },\n]);\n```\n\n### Lỗi hay gặp\n- Cài lẫn `react-router-dom` và `react-router` ở các phiên bản khác nhau.\n- Coi loader là nơi cho mọi thứ; dữ liệu cần cache phức tạp vẫn nên dùng TanStack Query.",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-7-0-slides",
+    "ten": "7.0 — Slide Chương 7: định tuyến và cấu trúc bằng hình",
+    "nguon": "React · Chương 7",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-7-1-router",
+    "ten": "7.1 — React Router căn bản: route, link, tham số — và những gì đã đổi từ bản 6",
+    "nguon": "React · Chương 7",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-7-2-layout",
+    "ten": "7.2 — Layout, route lồng nhau, lỗi theo route và trang cần đăng nhập",
+    "nguon": "React · Chương 7",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Viết CSS trong React › Tailwind CSS": {
+  "body": "Tailwind là framework CSS theo hướng **utility-first**: thay vì viết CSS riêng cho từng component, bạn ghép các lớp nhỏ, mỗi lớp làm một việc (`p-4`, `flex`, `text-lg`, `bg-blue-600`) ngay trong `className`. Công cụ quét mã nguồn của bạn và **chỉ sinh ra CSS cho những lớp thật sự xuất hiện**.\n\n### Vì sao cần biết\nĐây là cách style phổ biến nhất trong hệ sinh thái React hiện nay (shadcn/ui, nhiều template, Next.js). Bạn ít phải đặt tên class, ít chuyển qua lại giữa file, và CSS không phình theo số component.\n\n### Ý chính\n- Thang khoảng cách dựa trên đơn vị cố định (ví dụ `p-4` là 1rem), thang màu có sẵn, dễ giữ nhất quán.\n- Biến thể ghép bằng tiền tố: `hover:`, `focus:`, `md:` (responsive, mobile-first), `dark:`.\n- Vì công cụ **quét chuỗi nguyên văn**, không được ghép tên lớp lúc chạy: `` `bg-${mau}-500` `` sẽ không có CSS tương ứng. Hãy ghi đầy đủ tên lớp.\n- Gộp class có điều kiện bằng thư viện nhỏ như `clsx`, và dùng `tailwind-merge` để lớp xung đột (ví dụ hai `p-*`) được giải quyết đúng: lớp sau thắng.\n- Lặp lại nhiều thì tách thành component React, không phải tạo class tuỳ biến.\n\n```tsx\nfunction NutChinh({ children }: { children: React.ReactNode }) {\n  return (\n    <button className=\"rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 md:px-6\">\n      {children}\n    </button>\n  );\n}\n```\n\n### Lỗi hay gặp\n- Ghép tên lớp động nên CSS không được sinh.\n- Chuỗi class dài lặp ở nhiều nơi thay vì đóng gói vào component.\n- Quên rằng thứ tự viết class không quyết định lớp nào thắng khi xung đột.",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-13-2-hook-styling",
+    "ten": "13.2 — Custom hook tốt, và styling: CSS Modules hay Tailwind",
+    "nguon": "React · Chương 13",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/tailwind-css/learn?lessonSlug=tw-0-1-trinh-sinh",
+    "ten": "0.1 — Tailwind là một trình SINH, không phải một thư viện",
+    "nguon": "Tailwind CSS · Mục 0",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-13-2-tailwind-nen-tang",
+    "ten": "13.2 — Nền tảng Tailwind: utility, responsive, trạng thái",
+    "nguon": "Next.js: The React Framework · Chương 13",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-13-1-styling-va-tailwind",
+    "ten": "13.1 — Các cách style, và vì sao Tailwind",
+    "nguon": "Next.js: The React Framework · Chương 13",
+    "kieu": "video"
+   },
+   {
+    "href": "/code-lab/tailwind-css",
+    "ten": "Tailwind CSS",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Viết CSS trong React › CSS Modules": {
+  "body": "CSS Modules là cách viết CSS thông thường trong file `.module.css`, nhưng công cụ build **đổi tên class thành tên duy nhất** cho từng file. Nhờ đó class `.nut` ở component A không đụng class `.nut` ở component B.\n\n### Vì sao cần biết\nVấn đề kinh điển của CSS là tên class toàn cục dễ va chạm. CSS Modules giải quyết mà không cần học cú pháp mới, và Vite hay Next.js hỗ trợ sẵn.\n\n### Ý chính\n- Đặt tên file `Nut.module.css`, import như một object: `import styles from \"./Nut.module.css\"`.\n- Dùng: `className={styles.nut}`. Tên được băm thành dạng duy nhất khi build.\n- Nhiều class: `` className={`${styles.nut} ${styles.lon}`} `` hoặc dùng `clsx`.\n- Muốn class toàn cục trong module thì dùng `:global(...)`.\n- Vẫn là CSS thật: hỗ trợ selector, pseudo-class, media query, biến CSS.\n- Không có runtime; hiệu năng tốt.\n\n```css\n/* Nut.module.css */\n.nut { padding: 8px 16px; border-radius: 8px; background: #2563eb; color: white; }\n.nut:hover { background: #1d4ed8; }\n.lon { padding: 12px 24px; }\n```\n\n```tsx\nimport styles from \"./Nut.module.css\";\n\nexport function Nut({ lon }: { lon?: boolean }) {\n  return <button className={lon ? `${styles.nut} ${styles.lon}` : styles.nut}>Gửi</button>;\n}\n```\n\n### Lỗi hay gặp\n- Dùng tên class kiểu `nut-chinh` với dấu gạch ngang rồi truy cập `styles.nut-chinh` (phải viết `styles[\"nut-chinh\"]`, hoặc dùng camelCase).\n- Mong style trong module ảnh hưởng tới component con của người khác; phạm vi của module chỉ theo file.",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-13-2-hook-styling",
+    "ten": "13.2 — Custom hook tốt, và styling: CSS Modules hay Tailwind",
+    "nguon": "React · Chương 13",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-12-3-css-architecture",
+    "ten": "12.3 — Đặt tên và tổ chức CSS",
+    "nguon": "Nền tảng Lập trình Web · Chương 12",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-13-1-styling-va-tailwind",
+    "ten": "13.1 — Các cách style, và vì sao Tailwind",
+    "nguon": "Next.js: The React Framework · Chương 13",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Viết CSS trong React › Material UI / Chakra UI": {
+  "body": "Material UI (MUI) và Chakra UI là **thư viện component dựng sẵn**: nút, hộp thoại, bảng, form, menu đã có sẵn giao diện và hành vi (cả khả năng tiếp cận), bạn chỉ ghép lại và chỉnh theme.\n\n### Vì sao cần biết\nKhi cần ra sản phẩm nhanh, như công cụ nội bộ hay trang quản trị, chọn thư viện này tiết kiệm rất nhiều thời gian so với tự dựng từng thành phần.\n\n### Ý chính\n- MUI theo ngôn ngữ thiết kế Material của Google; Chakra có API style bằng props và nhấn mạnh khả năng tiếp cận.\n- Cả hai có hệ thống **theme**: khai báo màu, font, khoảng cách một chỗ để thống nhất.\n- Cân nhắc đánh đổi: nhanh và nhất quán, đổi lại khó tuỳ biến sâu theo thiết kế riêng và tăng kích thước bundle.\n- Thay đổi phiên bản lớn của từng thư viện có thể đổi API, nên luôn đọc tài liệu đúng phiên bản.\n- Lựa chọn ngược lại: headless/copy-paste (Radix, shadcn/ui) cho quyền kiểm soát lớn hơn.\n\n### Lỗi hay gặp\n- Ghi đè style bằng CSS tuỳ tiện thay vì qua theme, nên khó bảo trì.\n- Nhập cả thư viện nên bundle phình to; hãy import đúng thành phần.\n\nNền tảng chưa có bài học riêng về hai thư viện này; hãy xem tài liệu chính thức của từng thư viện cho API cụ thể."
+ },
+ "Viết CSS trong React › Panda CSS": {
+  "body": "Panda CSS là thư viện CSS-in-JS **chạy lúc build (zero-runtime)**: bạn viết style bằng hàm `css({...})` với object, công cụ sinh ra CSS tĩnh. Khác với các thư viện CSS-in-JS cũ (tính style lúc chạy trên trình duyệt), nó không tốn thêm chi phí ở runtime.\n\n### Vì sao cần biết\nNếu bạn thích viết style bằng TypeScript, muốn kiểm tra kiểu cho token thiết kế (màu, khoảng cách) nhưng vẫn muốn kiến trúc \"atomic CSS\" giống Tailwind, Panda là một lựa chọn.\n\n### Ý chính\n- Design token (màu, spacing, font) khai báo trong cấu hình, dùng với kiểu được gợi ý và kiểm tra.\n- Công cụ quét mã để sinh CSS, nên cũng cần viết giá trị tĩnh, dễ phân tích.\n- Hỗ trợ recipe (biến thể cho component) tương tự `cva`.\n- Tương thích với Server Components vì không cần runtime.\n- Nhánh tuỳ chọn; đa số dự án chọn Tailwind hoặc CSS Modules.\n\n```tsx\nimport { css } from \"../styled-system/css\";\n\nfunction The() {\n  return <div className={css({ padding: \"4\", borderRadius: \"md\", bg: \"gray.100\" })}>Nội dung</div>;\n}\n```\n\n(Đường dẫn import `styled-system` do Panda sinh trong dự án của bạn.)\n\n### Lỗi hay gặp\n- Ghép giá trị style động lúc chạy, trong khi công cụ cần giá trị tĩnh.\n- Quên chạy bước sinh (`panda codegen`) nên import không tồn tại.\n\nNền tảng hiện chưa có bài riêng về Panda CSS."
+ },
+ "Viết CSS trong React › Writing CSS": {
+  "body": "React không bắt buộc cách viết CSS nào. Bạn chọn một cách dựa trên đánh đổi: phạm vi style (toàn cục hay theo component), hiệu năng lúc chạy, trải nghiệm viết code, và quy mô đội.\n\n### Vì sao cần biết\nChọn sai cách ở đầu dự án rất đắt về sau. Biết các lựa chọn giúp bạn quyết định theo ngữ cảnh thay vì theo trào lưu.\n\n### Ý chính\n- **CSS thường + file toàn cục:** đơn giản nhất, dễ va chạm tên khi dự án lớn.\n- **CSS Modules:** CSS thật, phạm vi theo file, không runtime.\n- **Utility-first (Tailwind):** ghép class tiện ích, CSS không phình; chuỗi class dài trong JSX.\n- **CSS-in-JS runtime (styled-components, Emotion):** style động tiện nhưng tốn runtime và gây khó khăn với Server Components.\n- **CSS-in-JS build-time (Panda, vanilla-extract):** type-safe và không runtime.\n- **Thư viện component (MUI, Chakra, shadcn/ui):** có sẵn thành phần.\n- Dù chọn gì: dùng biến CSS cho theme (sáng/tối), đặt tên nhất quán, tôn trọng khả năng tiếp cận (focus rõ ràng, độ tương phản đủ).\n\n### Lỗi hay gặp\n- Trộn nhiều cách viết trong cùng một dự án mà không có quy ước.\n- Chỉnh style bằng `!important` để đè lên nhau thay vì sửa gốc xung đột.\n- Style inline cho mọi thứ rồi không dùng được `:hover`, media query.\n\n### Tự kiểm tra\nDự án của bạn cần dark mode, nhóm 3 người, muốn lên nhanh: bạn cân nhắc lựa chọn nào và vì sao?",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-13-2-hook-styling",
+    "ten": "13.2 — Custom hook tốt, và styling: CSS Modules hay Tailwind",
+    "nguon": "React · Chương 13",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-12-3-css-architecture",
+    "ten": "12.3 — Đặt tên và tổ chức CSS",
+    "nguon": "Nền tảng Lập trình Web · Chương 12",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-13-1-styling-va-tailwind",
+    "ten": "13.1 — Các cách style, và vì sao Tailwind",
+    "nguon": "Next.js: The React Framework · Chương 13",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/tailwind-css/learn?lessonSlug=tw-0-1-trinh-sinh",
+    "ten": "0.1 — Tailwind là một trình SINH, không phải một thư viện",
+    "nguon": "Tailwind CSS · Mục 0",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Component / Headless Libraries › shadcn/ui": {
+  "body": "shadcn/ui không phải một gói npm để cài rồi `import`. Nó là **bộ mã component bạn sao chép vào dự án của mình** qua một công cụ dòng lệnh. Sau đó file nằm trong repo của bạn, bạn sở hữu và sửa thoải mái. Bên trong, các component dựng trên primitive headless (Radix UI) và style bằng Tailwind CSS.\n\n### Vì sao cần biết\nĐây là lựa chọn rất phổ biến cho dự án React/Next.js mới: giao diện đẹp mặc định, truy cập được, nhưng không bị khoá vào API của thư viện, vì code là của bạn.\n\n### Ý chính\n- Khởi tạo và thêm component bằng CLI, ví dụ `npx shadcn@latest init`, rồi `npx shadcn@latest add button dialog`. File xuất hiện dưới thư mục như `components/ui/`.\n- Theme dùng biến CSS (màu, bán kính) nên đổi giao diện toàn bộ ở một chỗ, hỗ trợ dark mode.\n- Hàm tiện ích `cn()` kết hợp `clsx` (ghép class có điều kiện) và `tailwind-merge` (giải quyết class Tailwind xung đột).\n- Biến thể của component (kích thước, kiểu) khai báo bằng `class-variance-authority` (`cva`) dưới dạng ma trận dữ liệu thay vì chuỗi `if`.\n- Muốn đổi hành vi: sửa trực tiếp file đã sao chép. Muốn cập nhật bản mới: tự so sánh và gộp.\n\n```tsx\nimport { Button } from \"@/components/ui/button\";\n\nexport function Luu() {\n  return (\n    <Button variant=\"outline\" size=\"sm\" className=\"mt-4\">\n      Lưu thay đổi\n    </Button>\n  );\n}\n```\n\n### Lỗi hay gặp\n- Coi nó là thư viện, mong \"update\" tự động; thực tế bạn tự quản lý mã đã sao chép.\n- Truyền `className` mà quên `cn()`/`tailwind-merge`, nên lớp bạn thêm không thắng được lớp mặc định.\n- Cài thiếu thư viện nền (Tailwind, Radix) khi thêm tay file.",
+  "lessons": [
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-13-2-tailwind-nen-tang",
+    "ten": "13.2 — Nền tảng Tailwind: utility, responsive, trạng thái",
+    "nguon": "Next.js: The React Framework · Chương 13",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/tailwind-css/learn?lessonSlug=tw-4-4-bien-the-cva",
+    "ten": "4.4 — Biến thể: từ chuỗi if tới một ma trận KHAI BÁO",
+    "nguon": "Tailwind CSS · Chương 4",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/tailwind-css/learn?lessonSlug=tw-3-4-twmerge",
+    "ten": "3.4 — tailwind-merge khôi phục luật cái-sau-thắng",
+    "nguon": "Tailwind CSS · Chương 3",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Component / Headless Libraries › Radix UI / React Aria / Ark UI": {
+  "body": "Ba thư viện này đều thuộc nhóm **headless**: cung cấp hành vi và khả năng tiếp cận (bàn phím, focus, thuộc tính ARIA) của các thành phần phức tạp như Dialog, Dropdown, Tabs, Select, nhưng **không áp kiểu dáng**. Bạn tự quyết định giao diện bằng CSS, Tailwind hay bất cứ thứ gì.\n\n### Vì sao cần biết\nTự làm một dropdown hay hộp thoại đúng chuẩn tiếp cận (khoá focus, đóng bằng Esc, trả focus về nút gọi, đọc đúng bằng screen reader) rất khó. Headless library làm hộ phần khó đó.\n\n### Ý chính\n- **Radix UI:** bộ primitive dạng thành phần ghép (`Dialog.Root`, `Dialog.Trigger`, `Dialog.Content`...). Là nền của shadcn/ui.\n- **React Aria (Adobe):** cung cấp hook và component, tập trung sâu vào tiếp cận và tương tác đa nền tảng (chuột, cảm ứng, bàn phím).\n- **Ark UI:** từ đội Chakra, dựa trên state machine, hỗ trợ nhiều framework.\n- Khác nhau chủ yếu về API, độ bao phủ thành phần và triết lý; chọn theo thành phần cần dùng và sở thích của đội.\n- Kiểu dáng thường bám vào thuộc tính trạng thái như `data-state=\"open\"`.\n\n### Lỗi hay gặp\n- Quên rằng không có style mặc định nên \"không thấy gì\".\n- Tự thay đổi cấu trúc DOM mà phá thuộc tính ARIA.\n- Tự viết lại thành phần phức tạp thay vì dùng primitive đã được kiểm thử.",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-13-1-compound-headless",
+    "ten": "13.1 — Compound component, hook headless và prop \"as\" đa hình",
+    "nguon": "React · Chương 13",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-8-4-a11y",
+    "ten": "8.4 — Component dễ tiếp cận: HTML đúng nghĩa, bàn phím, ARIA và kiểm bằng axe",
+    "nguon": "React · Chương 8",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Component / Headless Libraries › Headless Components": {
+  "body": "Headless component là thành phần cung cấp **logic và hành vi** (trạng thái mở/đóng, điều hướng bằng bàn phím, quản lý focus, thuộc tính ARIA) nhưng **không render giao diện của riêng nó**. Bạn tự cung cấp phần nhìn thấy.\n\nHình dung một chiếc xe: headless giao cho bạn động cơ và hệ thống lái đã kiểm định, còn vỏ xe, màu sơn, nội thất do bạn tự chọn.\n\n### Vì sao cần biết\nGiao diện đổi theo thương hiệu rất thường xuyên, còn hành vi tiếp cận chuẩn thì ổn định. Tách hai thứ này giúp tái sử dụng hành vi và tự do thiết kế.\n\n### Ý chính\n- Hình thức phổ biến: **hook headless** (trả về state và props để bạn trải vào thẻ của mình), hoặc **compound component** (các phần ghép chia sẻ state qua Context).\n- Props kiểu `as`/`asChild` cho phép đổi thẻ gốc (ví dụ biến nút thành liên kết) mà giữ hành vi.\n- Dễ kết hợp với Tailwind, CSS Modules hay bất kỳ hệ style nào.\n- Đánh đổi: bạn phải tự viết phần style, nhưng bù lại không bị ràng buộc bởi giao diện dựng sẵn.\n\n```tsx\n// ý tưởng: hook headless trả về props để bạn tự gắn\nfunction useBatTat(ban_dau = false) {\n  const [bat, setBat] = useState(ban_dau);\n  const props = {\n    role: \"switch\",\n    \"aria-checked\": bat,\n    onClick: () => setBat(b => !b),\n  } as const;\n  return { bat, props };\n}\n```\n\n### Lỗi hay gặp\n- Quên thuộc tính ARIA cần thiết khi tự viết.\n- Làm hook headless quá nhiều tuỳ chọn thay vì để người dùng ghép.",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-13-1-compound-headless",
+    "ten": "13.1 — Compound component, hook headless và prop \"as\" đa hình",
+    "nguon": "React · Chương 13",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-8-4-a11y",
+    "ten": "8.4 — Component dễ tiếp cận: HTML đúng nghĩa, bàn phím, ARIA và kiểm bằng axe",
+    "nguon": "React · Chương 8",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Component / Headless Libraries › Radix UI": {
+  "body": "Radix UI (Radix Primitives) là bộ thành phần **không style** nhưng đã xử lý sẵn tiếp cận chuẩn WAI-ARIA: Dialog, Popover, Dropdown Menu, Tabs, Tooltip, Accordion, Select... Bạn lấy hành vi từ Radix và áp kiểu dáng của mình.\n\n### Vì sao cần biết\nRadix là nền móng của shadcn/ui và của rất nhiều hệ thống thiết kế nội bộ. Hiểu cách dùng giúp bạn xây thành phần chuẩn tiếp cận mà không phải tự lo focus, bàn phím.\n\n### Ý chính\n- Mỗi thành phần gồm nhiều phần ghép: `Root`, `Trigger`, `Portal`, `Overlay`, `Content`, `Title`, `Close`.\n- Tự xử lý: khoá focus trong hộp thoại, đóng khi nhấn Esc, trả focus về nút gọi, thuộc tính `role` và `aria-*`.\n- Trạng thái xuất hiện ở thuộc tính `data-state=\"open|closed\"` để bạn style và tạo hoạt ảnh.\n- `asChild` cho phép dùng thẻ của bạn thay vì thẻ mặc định, nhưng giữ hành vi.\n- Hỗ trợ cả chế độ có kiểm soát (`open` + `onOpenChange`) lẫn không kiểm soát.\n\n```tsx\nimport * as Dialog from \"@radix-ui/react-dialog\";\n\nexport function HopThoai() {\n  return (\n    <Dialog.Root>\n      <Dialog.Trigger>Mở</Dialog.Trigger>\n      <Dialog.Portal>\n        <Dialog.Overlay className=\"fixed inset-0 bg-black/40\" />\n        <Dialog.Content className=\"fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded bg-white p-6\">\n          <Dialog.Title>Xác nhận</Dialog.Title>\n          <Dialog.Close>Đóng</Dialog.Close>\n        </Dialog.Content>\n      </Dialog.Portal>\n    </Dialog.Root>\n  );\n}\n```\n\n### Lỗi hay gặp\n- Bỏ `Dialog.Title`, nên thiếu nhãn tiếp cận (Radix sẽ cảnh báo).\n- Không dùng `Portal` nên nội dung bị cắt bởi `overflow: hidden` của thẻ cha.",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-13-1-compound-headless",
+    "ten": "13.1 — Compound component, hook headless và prop \"as\" đa hình",
+    "nguon": "React · Chương 13",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-8-4-a11y",
+    "ten": "8.4 — Component dễ tiếp cận: HTML đúng nghĩa, bàn phím, ARIA và kiểm bằng axe",
+    "nguon": "React · Chương 8",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Component / Headless Libraries › React Aria": {
+  "body": "React Aria là bộ **hook** của Adobe giúp bạn tự xây thành phần giao diện đạt chuẩn tiếp cận mà không bị ràng buộc về kiểu dáng. Mỗi hook (ví dụ `useButton`, `useTextField`, `useDialog`) nhận cấu hình và trả về props cần gắn vào thẻ của bạn, cùng trạng thái. Họ cũng có bộ component dựng sẵn ở mức cao hơn (React Aria Components).\n\n### Vì sao cần biết\nDự án đòi hỏi tiếp cận nghiêm túc (chính phủ, giáo dục, sản phẩm quốc tế) cần xử lý chính xác cảm ứng, chuột, bàn phím, screen reader, đa ngôn ngữ. React Aria chú trọng đúng những phần đó.\n\n### Ý chính\n- Cách dùng hook: gọi hook, lấy props, trải vào phần tử của mình.\n- Xử lý đồng nhất tương tác trên nhiều thiết bị (press thay vì chỉ click), quản lý focus, hỗ trợ RTL và quốc tế hoá.\n- Chia thành lớp: hook hành vi, hook trạng thái (`react-stately`), và component hoàn chỉnh.\n- Nhẹ hơn thư viện component vì chỉ là logic; bạn lo giao diện.\n- Phù hợp khi muốn kiểm soát cao hơn Radix ở một số thành phần phức tạp (date picker, combobox).\n\n```tsx\nimport { useRef } from \"react\";\nimport { useButton } from \"react-aria\";\n\nfunction Nut(props: Parameters<typeof useButton>[0]) {\n  const ref = useRef<HTMLButtonElement>(null);\n  const { buttonProps } = useButton(props, ref);\n  return <button {...buttonProps} ref={ref}>{props.children}</button>;\n}\n```\n\n### Lỗi hay gặp\n- Quên `ref` khi hook cần, nên hành vi không gắn đúng phần tử.\n- Tự thêm `onClick` ghi đè `onPress`.\n\nNền tảng chưa có bài riêng về React Aria; bài về khả năng tiếp cận (a11y) trong React là nền tảng chung cần nắm trước.",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-8-4-a11y",
+    "ten": "8.4 — Component dễ tiếp cận: HTML đúng nghĩa, bàn phím, ARIA và kiểm bằng axe",
+    "nguon": "React · Chương 8",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-13-1-compound-headless",
+    "ten": "13.1 — Compound component, hook headless và prop \"as\" đa hình",
+    "nguon": "React · Chương 13",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Component / Headless Libraries › Ark UI": {
+  "body": "Ark UI là thư viện thành phần headless do đội đứng sau Chakra UI phát triển. Thành phần được xây trên các **state machine** (thư viện Zag.js) nên hành vi rất nhất quán, và dùng được với React, Vue, Solid.\n\n### Vì sao cần biết\nNó là một lựa chọn khác ngoài Radix cho các thành phần phức tạp như select, combobox, date picker, tabs. Hiểu nó giúp bạn so sánh khi chọn nền cho design system.\n\n### Ý chính\n- Cung cấp primitive không style, tiếp cận tốt, API ghép (Root, Trigger, Content...).\n- Trạng thái và hành vi chạy bằng state machine, nên dễ dự đoán và có thể kiểm thử.\n- Style qua thuộc tính `data-*` như `data-state`, kết hợp với Tailwind, Panda CSS hay CSS thường.\n- Là nền của Park UI và các thành phần mới của hệ sinh thái Chakra.\n- Tính chất đa framework hữu ích khi một công ty có nhiều dự án dùng framework khác nhau.\n\n### Lỗi hay gặp\n- Chọn thư viện chỉ vì mới mà không so sánh độ phủ thành phần với Radix.\n- Bỏ qua cấu trúc ghép bắt buộc nên thành phần không hoạt động.\n\nNền tảng hiện chưa có bài riêng về Ark UI. Nguyên tắc chung về thành phần headless, ghép thành phần và tiếp cận xem ở các bài liên quan.",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-13-1-compound-headless",
+    "ten": "13.1 — Compound component, hook headless và prop \"as\" đa hình",
+    "nguon": "React · Chương 13",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Component / Headless Libraries › Component Libraries": {
+  "body": "Component library cung cấp thành phần có **cả logic lẫn giao diện** dựng sẵn: nút, form, bảng, hộp thoại, điều hướng. Khác với headless (chỉ hành vi), bạn dùng được ngay mà gần như không phải style.\n\n### Vì sao cần biết\nChọn giữa \"dùng thư viện dựng sẵn\" và \"tự dựng từ headless\" là quyết định kiến trúc giao diện đầu tiên của nhiều dự án.\n\n### Ý chính\n- Ưu điểm: ra sản phẩm nhanh, giao diện nhất quán, đã được kiểm thử tiếp cận ở mức nhất định.\n- Nhược điểm: khó tuỳ biến sâu khác thiết kế gốc, bundle lớn hơn, phụ thuộc vào lộ trình phiên bản của thư viện.\n- Phù hợp: công cụ nội bộ, trang quản trị, MVP, đội ít người thiết kế.\n- Không phù hợp: sản phẩm có nhận diện thương hiệu riêng rất khác.\n- Có thể kết hợp: dùng thư viện cho phần quản trị, headless/tự dựng cho phần hướng khách hàng.\n- Tiêu chí chọn: độ phủ thành phần, tiếp cận, kích thước bundle, tuỳ biến theme, cộng đồng và tần suất bảo trì, hỗ trợ TypeScript.\n\n### Lỗi hay gặp\n- Ép thư viện làm khác hoàn toàn bản thiết kế, rồi ghi đè CSS khắp nơi.\n- Dùng nhiều thư viện giao diện cùng lúc nên xung đột style và phình bundle.\n\nNền tảng chưa có bài chung về chủ đề này."
+ },
+ "Component / Headless Libraries › Material UI (MUI)": {
+  "body": "MUI là thư viện component React phổ biến, cài đặt từ ngôn ngữ thiết kế Material Design của Google, có hàng trăm thành phần: nút, form, bảng dữ liệu, điều hướng, hộp thoại, biểu đồ... và hệ sinh thái rộng (MUI X cho bảng dữ liệu, date picker nâng cao).\n\n### Vì sao cần biết\nMUI rất phổ biến trong ứng dụng doanh nghiệp và trang quản trị, nên bạn sẽ gặp nó trong code thật.\n\n### Ý chính\n- Bọc ứng dụng bằng `ThemeProvider` với theme tuỳ biến (màu `palette`, `typography`, `spacing`).\n- Prop `sx` để chỉnh style nhanh theo theme; có cả `styled()` cho component tái sử dụng.\n- Có nhiều biến thể theo prop (`variant=\"contained\"`, `color=\"primary\"`, `size=\"small\"`).\n- Tài liệu phong phú, nhiều ví dụ.\n- Đánh đổi: giao diện mặc định có \"dáng Material\" dễ nhận ra; tuỳ biến khác hẳn tốn công; kích thước bundle cần quan tâm (import đúng thành phần).\n- Luôn đọc tài liệu của phiên bản bạn dùng, vì API và hệ thống style thay đổi qua các bản lớn.\n\n```tsx\nimport { Button, Stack } from \"@mui/material\";\n\nexport function HanhDong() {\n  return (\n    <Stack direction=\"row\" spacing={2}>\n      <Button variant=\"contained\">Lưu</Button>\n      <Button variant=\"outlined\" color=\"error\">Huỷ</Button>\n    </Stack>\n  );\n}\n```\n\n### Lỗi hay gặp\n- Ghi đè bằng CSS thường nên bị thứ tự ưu tiên của thư viện đè lại; hãy dùng theme hoặc `sx`.\n- Import cả gói thay vì từng thành phần.\n\nNền tảng chưa có bài học riêng về MUI."
+ },
+ "Component / Headless Libraries › Chakra UI": {
+  "body": "Chakra UI là thư viện component React nổi tiếng về **trải nghiệm lập trình viên** và **tiếp cận mặc định**. Bạn style trực tiếp bằng props (ví dụ khoảng cách, màu, kích thước) thay vì viết CSS riêng, và có hệ thống theme/token nhất quán.\n\n### Vì sao cần biết\nChakra từng là lựa chọn rất được ưa chuộng cho ứng dụng cần giao diện sạch và nhanh. Nó vẫn xuất hiện nhiều trong dự án đang chạy.\n\n### Ý chính\n- Style bằng props: ví dụ một khối với `p`, `bg`, `rounded`; hỗ trợ giá trị responsive và theo chế độ sáng/tối.\n- Thành phần phổ biến (Button, Modal/Dialog, Input, Menu, Tabs) có tiếp cận sẵn.\n- Theme token cho màu, font, bóng; hỗ trợ dark mode.\n- Các phiên bản lớn có thay đổi đáng kể về API và cách thiết lập; **luôn dùng tài liệu đúng phiên bản bạn cài**.\n- Ark UI, Park UI cùng hệ sinh thái cho hướng headless.\n\n### Lỗi hay gặp\n- Làm theo bài hướng dẫn của phiên bản cũ nên cú pháp không còn đúng.\n- Trộn lẫn style bằng props và CSS riêng, khó biết giá trị nào thắng.\n\nNền tảng chưa có bài riêng về Chakra UI."
+ },
+ "Component / Headless Libraries › TypeScript với React Patterns": {
+  "body": "Khi dùng TypeScript với React, có một số mẫu kiểu lặp đi lặp lại. Nắm chúng giúp bạn viết component an toàn mà không phải \"đấu\" với trình biên dịch.\n\n### Vì sao cần biết\nĐây là kiến thức bạn dùng hằng ngày ở công ty dùng React + TypeScript, và là chủ đề hay gặp ở phỏng vấn.\n\n### Ý chính\n- **Props:** dùng `type`/`interface`; prop tuỳ chọn `?`; `children: React.ReactNode`. Thường ưu tiên khai báo kiểu cho tham số hàm, không cần `React.FC`.\n- **Hook:** `useState<string | null>(null)` khi giá trị ban đầu không suy ra hết kiểu; `useRef<HTMLInputElement>(null)` cho DOM.\n- **Sự kiện:** `React.ChangeEvent<HTMLInputElement>`, `React.MouseEvent<HTMLButtonElement>`.\n- **Kế thừa props của thẻ HTML:** `React.ComponentProps<\"button\">` hoặc `React.ComponentPropsWithoutRef<\"input\">` để component bọc nhận mọi thuộc tính chuẩn.\n- **Union có nhãn (discriminated union)** cho props hoặc state theo biến thể, để kiểm tra đầy đủ các trường hợp.\n- **Context có kiểu:** `createContext<T | null>(null)` và hook ném lỗi nếu `null`.\n- **Component generic:** `function Danh<T>({ items, render }: { items: T[]; render: (x: T) => React.ReactNode })`.\n\n```tsx\ntype NutProps = React.ComponentProps<\"button\"> & { variant?: \"chinh\" | \"phu\" };\n\nfunction Nut({ variant = \"chinh\", ...rest }: NutProps) {\n  return <button data-variant={variant} {...rest} />;\n}\n\nfunction Danh<T extends { id: number }>({ items, render }: { items: T[]; render: (x: T) => React.ReactNode }) {\n  return <ul>{items.map(x => <li key={x.id}>{render(x)}</li>)}</ul>;\n}\n```\n\n### Lỗi hay gặp\n- Dùng `any` hoặc ép kiểu `as` để im lặng lỗi.\n- Quên xử lý `null` của state ban đầu.\n- Tin rằng dữ liệu từ API đúng kiểu đã khai báo, trong khi cần kiểm tra thật lúc chạy (ví dụ bằng Zod).\n\n### Tự kiểm tra\nKhi nào nên dùng union có nhãn thay vì nhiều prop tuỳ chọn?",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-12-1-components-props",
+    "ten": "12.1 — Component & props",
+    "nguon": "TypeScript · Chương 12",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-12-2-hooks",
+    "ten": "12.2 — Gõ kiểu hooks",
+    "nguon": "TypeScript · Chương 12",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-12-4-context-generics",
+    "ten": "12.4 — Context có kiểu & component generic",
+    "nguon": "TypeScript · Chương 12",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-1-2-props",
+    "ten": "1.2 — Props và kiểu TypeScript: truyền dữ liệu xuống, children, và props chỉ đọc",
+    "nguon": "React · Chương 1",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Testing › Vitest / Jest": {
+  "body": "Vitest và Jest là **test runner**: chương trình tìm file test, chạy từng `test(...)`/`it(...)`, so sánh kết quả với `expect(...)` và báo cáo đúng/sai. Dùng cho unit test và component test.\n\n### Vì sao cần biết\nTest tự động cho bạn tự tin sửa code mà không sợ vỡ chỗ khác. Ở công ty, PR thường phải qua CI chạy test.\n\n### Ý chính\n- Cấu trúc: `describe` nhóm test; `test`/`it` là từng ca; `expect(giaTri).toBe(...)`, `toEqual`, `toThrow`.\n- Hàm giả: `vi.fn()` (Vitest) hoặc `jest.fn()` (Jest); giả module để cô lập phần đang test.\n- Vitest dùng chung cấu hình với Vite, khởi động và chạy lại rất nhanh, API tương thích Jest phần lớn.\n- Jest trưởng thành, hệ sinh thái rộng, có sẵn coverage và snapshot.\n- Test component cần môi trường giả trình duyệt (`jsdom`) và thư viện Testing Library.\n- Ca test đặt tên mô tả hành vi, theo mẫu chuẩn bị – hành động – khẳng định.\n\n```ts\n// tinhTien.test.ts\nimport { describe, it, expect } from \"vitest\";\nimport { tinhTongTien } from \"./tinhTien\";\n\ndescribe(\"tinhTongTien\", () => {\n  it(\"cộng đúng và áp giảm giá\", () => {\n    expect(tinhTongTien([{ gia: 100, sl: 2 }], 0.1)).toBe(180);\n  });\n  it(\"giỏ rỗng thì bằng 0\", () => {\n    expect(tinhTongTien([], 0)).toBe(0);\n  });\n});\n```\n\n### Lỗi hay gặp\n- Test chi tiết cài đặt thay vì hành vi, nên refactor là vỡ test.\n- Test phụ thuộc thứ tự chạy hoặc thời gian thực.\n- Gọi API thật trong test thay vì giả.",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-9-0-slides",
+    "ten": "9.0 — Slide Chương 9: test React bằng hình",
+    "nguon": "React · Chương 9",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-9-1-testing-library",
+    "ten": "9.1 — Testing Library căn bản: hỏi theo vai trò, user-event, jest-dom",
+    "nguon": "React · Chương 9",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-0-2-cai-dat",
+    "ten": "0.3 — Cài đặt: Node 22, Vitest 5 và dự án LabFlow Lite",
+    "nguon": "Testing · Mục 0",
+    "kieu": "lab"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-19-2-unit-test-vitest",
+    "ten": "19.2 — Unit test với Vitest",
+    "nguon": "Next.js: The React Framework · Chương 19",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/code-lab/testing-practice",
+    "ten": "Testing — Luyện viết test, chấm bằng đột biến",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Testing › Playwright / Cypress": {
+  "body": "Playwright và Cypress là công cụ **kiểm thử end-to-end (E2E)**: mở trình duyệt thật, truy cập ứng dụng đang chạy, bấm và gõ như người dùng, rồi kiểm tra kết quả hiển thị. Chúng bắt lỗi ghép nối giữa giao diện, route, API và dữ liệu mà unit test không thấy.\n\n### Vì sao cần biết\nE2E là lưới an toàn cuối cho các luồng quan trọng (đăng nhập, đặt hàng, thanh toán). Nhưng chậm và dễ chập chờn hơn, nên chỉ nên dùng cho số ít luồng trọng yếu.\n\n### Ý chính\n- **Playwright:** chạy Chromium, Firefox, WebKit; chờ tự động phần tử sẵn sàng; chạy song song; có trình ghi và trace để debug.\n- **Cypress:** chạy trong trình duyệt với giao diện tương tác tiện lợi khi viết test; có hệ sinh thái riêng.\n- Tìm phần tử theo vai trò hoặc nhãn người dùng thấy, tránh phụ thuộc class CSS.\n- Test nên độc lập nhau, tự chuẩn bị dữ liệu, không dựa vào kết quả của test trước.\n- Tránh `sleep` cố định; dựa vào cơ chế chờ có điều kiện.\n- Chạy trong CI trên môi trường ổn định.\n\n```ts\nimport { test, expect } from \"@playwright/test\";\n\ntest(\"đăng nhập thành công\", async ({ page }) => {\n  await page.goto(\"http://localhost:5173/dang-nhap\");\n  await page.getByLabel(\"Email\").fill(\"mai@example.com\");\n  await page.getByLabel(\"Mật khẩu\").fill(\"matkhau-thu\");\n  await page.getByRole(\"button\", { name: \"Đăng nhập\" }).click();\n  await expect(page.getByRole(\"heading\", { name: \"Lịch hẹn\" })).toBeVisible();\n});\n```\n\n### Lỗi hay gặp\n- Quá nhiều test E2E nên chậm và dễ hỏng; kim tự tháp test khuyên ít E2E hơn unit.\n- Chọn phần tử bằng đường dẫn CSS dễ vỡ.\n- Test chạm dịch vụ thật, nên kết quả không ổn định.",
+  "lessons": [
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-7-1-playwright",
+    "ten": "7.1 — Playwright: test trình duyệt đầu tiên",
+    "nguon": "Testing · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-7-3-on-dinh",
+    "ten": "7.3 — Làm test e2e ổn định",
+    "nguon": "Testing · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-19-4-playwright-e2e",
+    "ten": "19.4 — Test end-to-end với Playwright",
+    "nguon": "Next.js: The React Framework · Chương 19",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Testing › Vitest": {
+  "body": "Vitest là test runner tương thích phần lớn API của Jest nhưng **chạy trên cùng nền với Vite**. Nó dùng lại cấu hình, plugin và cách biến đổi code của Vite, nên không phải cấu hình riêng để hiểu TypeScript, JSX hay alias đường dẫn. Kết quả: khởi động và chạy lại (chế độ watch) rất nhanh.\n\n### Vì sao cần biết\nNếu dự án dùng Vite, Vitest là lựa chọn tự nhiên, ít cấu hình nhất.\n\n### Ý chính\n- Cài đặt: `npm i -D vitest` (thêm `jsdom`, `@testing-library/react`, `@testing-library/jest-dom` để test component).\n- Thêm vào script: `\"test\": \"vitest\"`; chạy một lần: `vitest run`; độ phủ: `vitest run --coverage`.\n- Cấu hình trong `vite.config.ts`, mục `test`: `environment: \"jsdom\"`, `setupFiles` để nạp `jest-dom`, `globals: true` nếu muốn dùng `describe/it/expect` không cần import.\n- API: `vi.fn()`, `vi.mock()`, `vi.useFakeTimers()`, `vi.spyOn()`.\n- Chế độ watch chỉ chạy lại test liên quan tới file vừa đổi.\n\n```ts\n// vite.config.ts\nimport { defineConfig } from \"vitest/config\";\nimport react from \"@vitejs/plugin-react\";\n\nexport default defineConfig({\n  plugins: [react()],\n  test: {\n    environment: \"jsdom\",\n    setupFiles: \"./src/test/setup.ts\",\n  },\n});\n```\n\n```ts\n// src/test/setup.ts\nimport \"@testing-library/jest-dom/vitest\";\n```\n\n### Lỗi hay gặp\n- Quên đặt `environment: \"jsdom\"` nên `document is not defined`.\n- Quên dọn mock giữa các test, nên test ảnh hưởng nhau (dùng `vi.restoreAllMocks`).\n- Dùng phiên bản Node không đáp ứng yêu cầu của phiên bản Vitest bạn cài.",
+  "lessons": [
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-0-2-cai-dat",
+    "ten": "0.3 — Cài đặt: Node 22, Vitest 5 và dự án LabFlow Lite",
+    "nguon": "Testing · Mục 0",
+    "kieu": "lab"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-19-2-unit-test-vitest",
+    "ten": "19.2 — Unit test với Vitest",
+    "nguon": "Next.js: The React Framework · Chương 19",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-1-1-cau-truc",
+    "ten": "1.1 — Giải phẫu một test: chuẩn bị, hành động, khẳng định",
+    "nguon": "Testing · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-13-2-unit-tests",
+    "ten": "13.2 — Những unit test đầu tiên",
+    "nguon": "Nền tảng Lập trình Web · Chương 13",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Testing › Jest": {
+  "body": "Jest là test runner của JavaScript được dùng rộng rãi từ nhiều năm, đi kèm mọi thứ trong một gói: chạy test, `expect`, hàm giả (mock), snapshot, báo cáo độ phủ. Nó là mặc định của Create React App ngày trước, nên có rất nhiều dự án và tài liệu dùng Jest.\n\n### Vì sao cần biết\nNhiều dự án đang chạy vẫn dùng Jest, và nhiều bài tuyển dụng, đề thi nhắc tới nó. API Jest gần như giống Vitest, nên học một cái là dùng được cả hai.\n\n### Ý chính\n- Cấu trúc: `describe`, `test`/`it`, `expect(...).toBe/toEqual/toHaveBeenCalledWith`.\n- Mock: `jest.fn()`, `jest.mock(\"module\")`, `jest.spyOn(obj, \"method\")`; đồng hồ giả `jest.useFakeTimers()`.\n- Snapshot testing: so kết quả với ảnh chụp lưu trước; dùng tiết kiệm, vì dễ trở thành test ai cũng bấm \"cập nhật\".\n- Với TypeScript và JSX cần bước biến đổi (Babel hoặc `ts-jest`) và môi trường `jsdom` cho test component. Dự án dùng ES Module thuần có thể cần cấu hình thêm.\n- So với Vitest: Jest trưởng thành hơn; Vitest nhanh hơn và gần Vite hơn.\n\n```tsx\nimport { render, screen } from \"@testing-library/react\";\nimport userEvent from \"@testing-library/user-event\";\nimport { NutDem } from \"./NutDem\";\n\ntest(\"bấm tăng số đếm\", async () => {\n  render(<NutDem />);\n  await userEvent.click(screen.getByRole(\"button\", { name: /tăng/i }));\n  expect(screen.getByText(\"Đã bấm 1 lần\")).toBeInTheDocument();\n});\n```\n\n### Lỗi hay gặp\n- Lạm dụng snapshot cho cả cây component lớn.\n- Mock quá nhiều nên test chỉ kiểm tra chính các mock.\n- Quên môi trường `jsdom` khi test component.",
+  "lessons": [
+   {
+    "href": "/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-a2-1-testing",
+    "ten": "A2.1 — Jest & React Testing Library",
+    "nguon": "Front-End Web Development with React · Nâng cao A2 — Kiểm thử React",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "FER202"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-1-1-cau-truc",
+    "ten": "1.1 — Giải phẫu một test: chuẩn bị, hành động, khẳng định",
+    "nguon": "Testing · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-9-1-testing-library",
+    "ten": "9.1 — Testing Library căn bản: hỏi theo vai trò, user-event, jest-dom",
+    "nguon": "React · Chương 9",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Testing › react-testing-library": {
+  "body": "React Testing Library (RTL) giúp bạn test component **như người dùng dùng nó**: render, tìm phần tử theo thứ người dùng thấy (vai trò, nhãn, chữ), tương tác, rồi kiểm tra kết quả hiển thị. Nguyên tắc: test càng giống cách phần mềm được dùng thì càng đáng tin.\n\n### Vì sao cần biết\nTest dựa vào chi tiết cài đặt (tên state, hàm nội bộ) vỡ mỗi lần refactor dù hành vi không đổi. RTL tránh điều này bằng cách chỉ nhìn đầu ra mà người dùng thấy.\n\n### Ý chính\n- `render(<Comp />)` rồi dùng `screen` để truy vấn.\n- Ưu tiên truy vấn theo thứ tự: `getByRole` (kèm `name`) → `getByLabelText` → `getByText` → `getByTestId` là phương án cuối.\n- Ba nhóm: `getBy*` (phải có, nếu không thì ném lỗi), `queryBy*` (trả `null` khi không có, dùng cho kiểm tra vắng mặt), `findBy*` (chờ bất đồng bộ).\n- Tương tác bằng `@testing-library/user-event` (mô phỏng gõ, bấm đúng thứ tự sự kiện thật), không dùng `fireEvent` trừ khi cần.\n- Khẳng định bằng `jest-dom`: `toBeInTheDocument()`, `toBeDisabled()`, `toHaveTextContent()`.\n- Với API: giả lập tầng mạng (ví dụ MSW), kiểm tra đủ bốn trạng thái: đang tải, lỗi, rỗng, có dữ liệu.\n\n```tsx\nimport { render, screen } from \"@testing-library/react\";\nimport userEvent from \"@testing-library/user-event\";\n\ntest(\"lọc danh sách khi gõ\", async () => {\n  const user = userEvent.setup();\n  render(<DanhSachBacSi />);\n  await user.type(screen.getByRole(\"searchbox\", { name: /tìm/i }), \"An\");\n  expect(await screen.findByText(\"BS. An\")).toBeInTheDocument();\n  expect(screen.queryByText(\"BS. Bình\")).not.toBeInTheDocument();\n});\n```\n\n### Lỗi hay gặp\n- Dùng `getByTestId` cho mọi thứ nên bỏ qua kiểm tra tiếp cận.\n- Quên `await` với `user.*` hoặc `findBy*`.\n- Kiểm tra bằng `container.querySelector` thay vì truy vấn theo vai trò.\n\n### Tự kiểm tra\nKhi nào dùng `queryBy` thay vì `getBy`?",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-9-0-slides",
+    "ten": "9.0 — Slide Chương 9: test React bằng hình",
+    "nguon": "React · Chương 9",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-9-1-testing-library",
+    "ten": "9.1 — Testing Library căn bản: hỏi theo vai trò, user-event, jest-dom",
+    "nguon": "React · Chương 9",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-9-2-async",
+    "ten": "9.2 — Test giao diện bất đồng bộ và gọi API: findBy, MSW, bốn trạng thái, act, đồng hồ giả",
+    "nguon": "React · Chương 9",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-6-1-testing-library",
+    "ten": "6.1 — Testing Library: tìm phần tử theo thứ người dùng thấy",
+    "nguon": "Testing · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-19-3-react-testing-library",
+    "ten": "19.3 — Test component: test như người dùng",
+    "nguon": "Next.js: The React Framework · Chương 19",
+    "kieu": "bai-doc"
+   }
+  ]
+ }
+}

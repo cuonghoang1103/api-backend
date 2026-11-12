@@ -451,11 +451,19 @@ export interface RoadmapNodeT {
   id: number; stage: number; stageLabel: string; order: number; side: string; kind: string;
   title: string; subtitle: string | null; icon: string | null; description: string | null;
   linkType: string | null; linkRef: string | null; resources: ResourceItemT[] | null;
+  /** Chỗ học ngay trên web (bài học, slide, mô phỏng, Code Lab…). */
+  lessons: RoadmapLessonT[] | null;
+  /** Có bài đọc tự đủ — tải bằng roadmapApi.node khi mở bước. */
+  hasBody: boolean;
 }
+export type RoadmapLessonKind = 'slide' | 'video' | 'bai-doc' | 'quiz' | 'lab' | 'mo-phong' | 'code-lab' | 'trang';
+export interface RoadmapLessonT { href: string; ten: string; nguon?: string; kieu: RoadmapLessonKind; academy?: boolean; ma?: string }
+export interface RoadmapNodeBodyT { id: number; body: string | null; lessons: RoadmapLessonT[] | null; resources: ResourceItemT[] | null }
 export interface RoadmapStageT { stage: number; stageLabel: string; nodes: RoadmapNodeT[]; }
 export interface RoadmapListItemT {
   slug: string; title: string; type: string; description: string | null;
   icon: string | null; color: string | null; nodeCount: number;
+  stageCount: number; linkedCount: number; bodyCount: number; doneCount: number;
 }
 export interface RoadmapDetailT {
   slug: string; title: string; type: string; description: string | null; icon: string | null; color: string | null;
@@ -465,6 +473,7 @@ export interface RoadmapDetailT {
 export const roadmapApi = {
   list: () => api.get<{ data: { role: RoadmapListItemT[]; skill: RoadmapListItemT[] } }>('/roadmaps'),
   get: (slug: string) => api.get<{ data: RoadmapDetailT }>(`/roadmaps/${slug}`),
+  node: (slug: string, nodeId: number) => api.get<{ data: RoadmapNodeBodyT }>(`/roadmaps/${slug}/nodes/${nodeId}`),
   toggleDone: (nodeId: number) => api.post<{ data: { nodeId: number; done: boolean } }>(`/roadmaps/nodes/${nodeId}/done`),
 };
 

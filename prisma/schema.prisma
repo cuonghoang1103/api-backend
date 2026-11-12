@@ -8723,6 +8723,10 @@ model RoadmapNode {
   linkRef     String?  @map("link_ref") @db.VarChar(500) // track slug / roadmap slug / URL
   // Curated learning resources (roadmap.sh-style): [{ type, title, url, premium? }]
   resources   Json?
+  // Bài đọc tự đủ (Markdown, tiếng Việt) — trả riêng qua GET /roadmaps/:slug/nodes/:id, không đi trong cả lộ trình
+  body        String?  @db.Text
+  // Chỗ học ngay trên web: [{ href, ten, nguon?, kieu, academy?, ma? }] — xem src/services/roadmap.noiDung.ts
+  lessons     Json?
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 

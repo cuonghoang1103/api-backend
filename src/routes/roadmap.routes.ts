@@ -2,6 +2,7 @@
  * RoadMap routes — mounted at /api/v1/roadmaps.
  *   GET  /                      → list roadmaps grouped by type (public)
  *   GET  /:slug                 → full roadmap + user's done set (optional auth)
+ *   GET  /:slug/nodes/:nodeId   → bài đọc tự đủ + chỗ học trên web của một bước (public)
  *   POST /nodes/:nodeId/done    → toggle a node done (auth)
  */
 import { Router, type Request, type Response } from 'express';
@@ -11,9 +12,9 @@ import * as roadmap from '../services/roadmap.service.js';
 
 const router = Router();
 
-router.get('/', async (_req: Request, res: Response<ApiResponse>, next) => {
+router.get('/', optionalAuth, async (req: Request, res: Response<ApiResponse>, next) => {
   try {
-    res.json({ success: true, data: await roadmap.listRoadmaps() });
+    res.json({ success: true, data: await roadmap.listRoadmaps(req.user?.userId) });
   } catch (err) { next(err); }
 });
 
@@ -21,6 +22,12 @@ router.get('/', async (_req: Request, res: Response<ApiResponse>, next) => {
 router.post('/nodes/:nodeId/done', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
   try {
     res.json({ success: true, data: await roadmap.toggleDone(req.userId!, Number(req.params.nodeId)) });
+  } catch (err) { next(err); }
+});
+
+router.get('/:slug/nodes/:nodeId', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await roadmap.getNodeBody(req.params.slug, Number(req.params.nodeId)) });
   } catch (err) { next(err); }
 });
 

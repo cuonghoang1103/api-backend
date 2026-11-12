@@ -1,0 +1,1463 @@
+{
+ "Nền tảng Internet › Internet hoạt động thế nào": {
+  "body": "Internet là một mạng khổng lồ gồm hàng tỉ thiết bị nối với nhau, cùng nói một \"ngôn ngữ\" chung gọi là bộ giao thức TCP/IP. Khi bạn mở một trang web, máy bạn (client) gửi một yêu cầu tới một máy khác (server) ở xa, server xử lý rồi gửi trả nội dung. Giống như bạn gọi món ở quán: bạn nói món (request), bếp làm rồi mang ra (response).\n\n### Vì sao cần biết\nMọi lỗi \"web không tải được\", \"chậm\", \"bị chặn\" đều nằm ở một chặng nào đó của hành trình này. Biết hành trình thì mới biết đặt câu hỏi và mở đúng công cụ (tab Network của DevTools, `curl -v`) để tìm lỗi.\n\n### Ý chính\n- Bạn gõ URL, trình duyệt tách ra giao thức, tên miền, đường dẫn.\n- **DNS** đổi tên miền thành địa chỉ IP.\n- **TCP** mở kết nối tin cậy tới IP đó; **TLS** mã hoá kết nối nếu là HTTPS.\n- **HTTP** chở request và response qua kết nối ấy.\n- Trình duyệt nhận HTML, dựng trang, rồi xin thêm CSS, JS, ảnh bằng các request khác.\n- Dữ liệu được cắt thành các gói (packet), đi qua nhiều router, mỗi router chỉ biết chuyển gói tới chặng kế tiếp.\n\n### Lỗi hay gặp\n- Nghĩ \"Internet\" và \"web\" là một. Web chỉ là một dịch vụ chạy trên Internet (email, game online, gọi video cũng dùng Internet).\n- Quên rằng một trang web là hàng chục request chứ không phải một.",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-0-2-web-hoat-dong",
+    "ten": "0.2 — Web hoạt động thế nào, trong một bức tranh",
+    "nguon": "Nền tảng Lập trình Web · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-0-2-go-dia-chi",
+    "ten": "0.2 — Chuyện gì xảy ra khi bạn gõ một địa chỉ rồi Enter",
+    "nguon": "Networking for Developers · Mục 0",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/simulation?scenario=ip-journey",
+    "ten": "Một gói tin ra Internet — ARP, định tuyến và NAT",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   },
+   {
+    "href": "/simulation?scenario=tcp-handshake",
+    "ten": "TCP — bắt tay ba bước và bốn bước chia tay",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-0-0-slides",
+    "ten": "0.0 — Slide bài giảng: Mục 0 trong 11 slide",
+    "nguon": "Nền tảng Lập trình Web · Mục 0",
+    "kieu": "slide"
+   }
+  ]
+ },
+ "Nền tảng Internet › HTTP là gì": {
+  "body": "HTTP (HyperText Transfer Protocol) là \"ngữ pháp\" mà trình duyệt và server dùng để nói chuyện. Nó rất đơn giản: client gửi một **request** bằng chữ, server trả một **response** cũng bằng chữ. Mỗi request gồm một dòng đầu (method, đường dẫn), các header, và đôi khi có body.\n\n### Ý chính\n- **Method** nói request định làm gì: `GET` lấy dữ liệu, `POST` tạo mới/gửi dữ liệu, `PUT`/`PATCH` sửa, `DELETE` xoá. `GET` không nên làm thay đổi dữ liệu.\n- **Status code** cho biết kết quả: `2xx` thành công (200 OK, 201 Created), `3xx` chuyển hướng (301, 304), `4xx` lỗi do client (400, 401, 403, 404), `5xx` lỗi do server (500, 502, 503).\n- **Header** là thông tin đi kèm: `Content-Type`, `Authorization`, `Cache-Control`, `Cookie`...\n- **Phiên bản**: HTTP/1.1 xử lý tuần tự trên mỗi kết nối; HTTP/2 ghép nhiều request trên một kết nối; HTTP/3 chạy trên QUIC (dựa vào UDP) nên giảm chờ đợi khi mất gói.\n\n### Thử ngay\n```bash\ncurl -i https://example.com\n```\nCờ `-i` in cả status line và header của response để bạn đọc.\n\n### Lỗi hay gặp\n- Dùng `GET` để xoá/sửa dữ liệu, vì link có thể bị crawler hay trình duyệt tự gọi.\n- Lẫn `401` (chưa đăng nhập) với `403` (đã đăng nhập nhưng không có quyền).",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-6-0-slides",
+    "ten": "6.0 — Slide bài giảng: HTTP & API trong 12 slide",
+    "nguon": "Nền tảng Lập trình Web · Chương 6",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-6-2-http-methods",
+    "ten": "6.2 — HTTP method: request định làm gì",
+    "nguon": "Nền tảng Lập trình Web · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-6-3-status-codes",
+    "ten": "6.3 — Mã trạng thái: máy chủ trả lời gì",
+    "nguon": "Nền tảng Lập trình Web · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-7-2-http2",
+    "ten": "7.2 — HTTP/2: ghép kênh, HPACK và vì sao server push bị bỏ",
+    "nguon": "Networking for Developers · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-7-3-http3",
+    "ten": "7.3 — HTTP/3 trên QUIC",
+    "nguon": "Networking for Developers · Chương 7",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Nền tảng Internet › Tên miền (Domain) là gì": {
+  "body": "Tên miền (domain) là cái tên dễ nhớ như `cuongthai.com` thay cho địa chỉ IP khó nhớ. Một tên miền đọc từ phải sang trái: `com` là TLD (đuôi, top-level domain), `cuongthai` là tên bạn đăng ký, và phần phía trước (như `www`, `api`) là subdomain bạn tự tạo.\n\n### Cách có một tên miền\n1. Chọn nhà đăng ký (registrar) rồi thuê tên miền theo năm.\n2. Trỏ tên miền về nơi chứa web bằng cách khai **bản ghi DNS** (A trỏ về IP, CNAME trỏ về một tên khác) ở nơi quản lý DNS của bạn.\n3. Bật HTTPS (nhiều nền tảng hosting tự cấp chứng chỉ miễn phí).\n\n### Ý chính\n- Registrar giữ việc đăng ký; DNS provider giữ các bản ghi. Hai nơi này có thể khác nhau (ví dụ mua ở một nơi, quản lý DNS ở Cloudflare).\n- Thay đổi DNS có thể mất từ vài phút đến vài giờ mới lan ra khắp nơi vì cache theo TTL.\n- Tên miền gốc (apex, ví dụ `example.com`) thường không đặt CNAME được theo chuẩn; nhiều nhà cung cấp có kiểu bản ghi riêng (ALIAS/ANAME/CNAME flattening) để xử lý.\n\n### Lỗi hay gặp\n- Quên gia hạn nên tên miền hết hạn và web chết.\n- Sửa bản ghi ở sai nơi (trỏ nameserver sang Cloudflare nhưng lại sửa bản ghi ở registrar).",
+  "lessons": [
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-12-0-slides",
+    "ten": "12.0 — Slide Chương 12: từ tên miền tới HTTPS bằng hình",
+    "nguon": "Deploy lên VPS · Chương 12",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-12-1-ten-mien-dns",
+    "ten": "12.1 — Tên miền và DNS: ai giữ cái gì, và vì sao đổi IP rồi mà “chưa ăn”",
+    "nguon": "Deploy lên VPS · Chương 12",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-3-2-ban-ghi",
+    "ten": "3.2 — Các loại bản ghi lập trình viên đụng tới",
+    "nguon": "Networking for Developers · Chương 3",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/code-lab/domains-dns-tls",
+    "ten": "Domains, DNS & TLS",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Nền tảng Internet › Hosting là gì": {
+  "body": "Hosting là nơi đặt các file và chương trình của website để cả thế giới truy cập được 24/7. Hiểu đơn giản: web của bạn \"ở nhờ\" trên một máy tính luôn bật, luôn có mạng.\n\n### Các loại phổ biến\n- **Static hosting** (GitHub Pages, Netlify, Vercel, Cloudflare Pages): chỉ phục vụ file HTML/CSS/JS đã build sẵn. Rẻ hoặc miễn phí, nhanh, hợp với site React/Vite build ra thư mục tĩnh.\n- **PaaS** (Render, Railway, Vercel cho server): bạn đẩy code, nền tảng lo máy chủ, chạy cả backend.\n- **VPS**: một máy ảo bạn tự cài đặt và quản lý. Linh hoạt nhưng bạn tự lo bảo mật, cập nhật, backup.\n- **Shared hosting**: nhiều website dùng chung một máy, giá rẻ, ít quyền kiểm soát.\n- **Cloud** (AWS, GCP, Azure): thuê tài nguyên theo nhu cầu, rất linh hoạt nhưng phức tạp.\n\n### Chọn thế nào\nFrontend thuần (không có server riêng) thì static hosting là đủ. Cần backend và database thì PaaS cho người mới, VPS khi bạn muốn kiểm soát và tối ưu chi phí.\n\n### Lỗi hay gặp\n- Đưa app dùng routing phía client lên static host mà không cấu hình fallback về `index.html`, nên tải lại trang bị 404.\n- Đẩy khoá bí mật lên repo public khi deploy.",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-14-3-deploy",
+    "ten": "14.3 — Đưa lên hosting",
+    "nguon": "Nền tảng Lập trình Web · Chương 14",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-14-3-paas-vps-kubernetes",
+    "ten": "14.3 — Chọn nền tảng: VPS, PaaS, serverless hay Kubernetes, với giá thật",
+    "nguon": "Deploy lên VPS · Chương 14",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Nền tảng Internet › DNS hoạt động thế nào": {
+  "body": "DNS (Domain Name System) là \"danh bạ\" của Internet: đổi tên miền thành địa chỉ IP. Máy tính chỉ nói chuyện bằng IP, còn con người nhớ tên, nên DNS đứng giữa dịch giúp.\n\n### Hành trình một lần tra cứu\nTrình duyệt hỏi **resolver** (thường của nhà mạng hoặc 1.1.1.1, 8.8.8.8). Nếu chưa có trong cache, resolver hỏi lần lượt **root server**, rồi server của **TLD** (`.com`), rồi **authoritative server** của tên miền, nơi giữ câu trả lời thật. Kết quả được cache theo **TTL**.\n\n### Các bản ghi hay gặp\n- `A` / `AAAA`: tên miền trỏ về IPv4 / IPv6.\n- `CNAME`: bí danh, trỏ một tên sang một tên khác.\n- `MX`: máy chủ nhận email.\n- `TXT`: văn bản tuỳ ý, dùng để xác minh sở hữu và cấu hình email (SPF, DKIM).\n- `NS`: nameserver có thẩm quyền cho tên miền.\n\n### Thử ngay\n```bash\ndig example.com A\ndig +short example.com MX\n```\n\n### Lỗi hay gặp\n- Sửa bản ghi rồi tưởng đã \"lan\" ngay. Thực ra các resolver vẫn giữ bản cũ đến khi TTL hết, nên cần chờ. Hạ TTL xuống thấp từ trước khi chuyển hạ tầng.\n- Đặt CNAME ở tên miền gốc hoặc cùng tên với bản ghi khác.\n\n### Tự kiểm tra\n1. Vì sao đổi IP của server mà một số người vẫn vào server cũ?\n2. Khác nhau giữa recursive resolver và authoritative server là gì?",
+  "lessons": [
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-3-1-phan-giai",
+    "ten": "3.1 — Phân giải: stub, recursive resolver, root, TLD, authoritative",
+    "nguon": "Networking for Developers · Chương 3",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-3-2-ban-ghi",
+    "ten": "3.2 — Các loại bản ghi lập trình viên đụng tới",
+    "nguon": "Networking for Developers · Chương 3",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-3-3-ttl-cache",
+    "ten": "3.3 — TTL, cache và vì sao đổi DNS lại chậm",
+    "nguon": "Networking for Developers · Chương 3",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/code-lab/domains-dns-tls",
+    "ten": "Domains, DNS & TLS",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   },
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-12-1-ten-mien-dns",
+    "ten": "12.1 — Tên miền và DNS: ai giữ cái gì, và vì sao đổi IP rồi mà “chưa ăn”",
+    "nguon": "Deploy lên VPS · Chương 12",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Nền tảng Internet › Trình duyệt hoạt động thế nào": {
+  "body": "Trình duyệt biến một chuỗi chữ HTML/CSS/JS thành hình ảnh bạn thấy và tương tác được. Biết nó làm gì giúp bạn viết trang nhanh hơn và hiểu vì sao một thay đổi lại khiến trang \"giật\".\n\n### Các bước (critical rendering path)\n1. **Tải và parse HTML** thành cây **DOM** (cấu trúc trang).\n2. **Parse CSS** thành cây **CSSOM** (quy tắc kiểu dáng).\n3. Ghép DOM + CSSOM thành **render tree**, chỉ gồm các phần tử thực sự hiển thị.\n4. **Layout**: tính kích thước và vị trí từng phần tử.\n5. **Paint**: vẽ pixel (màu, chữ, ảnh, đổ bóng).\n6. **Composite**: ghép các lớp (layer) lại thành khung hình cuối, thường do GPU làm.\n\n### Ý chính\n- CSS chặn render: trình duyệt chờ CSS tải xong mới vẽ để tránh trang nhấp nháy sai kiểu.\n- JS không có `defer`/`async` chặn việc parse HTML vì script có thể sửa DOM.\n- Đổi kích thước/vị trí phần tử gây layout lại (tốn). Đổi màu chỉ cần paint lại. Animation bằng `transform` và `opacity` thường chỉ cần composite nên mượt hơn.\n\n### Công cụ\nTab **Performance** và **Network** của DevTools cho bạn thấy từng bước và request.\n\n### Lỗi hay gặp\n- Nhét script nặng vào `<head>` không có `defer`, khiến trang trắng lâu.\n- Đọc rồi ghi kích thước DOM xen kẽ trong vòng lặp, ép trình duyệt layout lại liên tục.\n\n### Tự kiểm tra\n1. DOM khác CSSOM ở điểm nào?\n2. Vì sao animation bằng `transform` mượt hơn animation bằng `left`?",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-0-2-web-hoat-dong",
+    "ten": "0.2 — Web hoạt động thế nào, trong một bức tranh",
+    "nguon": "Nền tảng Lập trình Web · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-0-2-go-dia-chi",
+    "ten": "0.2 — Chuyện gì xảy ra khi bạn gõ một địa chỉ rồi Enter",
+    "nguon": "Networking for Developers · Mục 0",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-4-5-dom-events",
+    "ten": "4.5 — DOM và sự kiện: làm trang tương tác",
+    "nguon": "Nền tảng Lập trình Web · Chương 4",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-5-1-event-loop",
+    "ten": "5.1 — Event loop: JS làm từng việc một thế nào",
+    "nguon": "Nền tảng Lập trình Web · Chương 5",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Nền tảng Internet › Deployment": {
+  "body": "Deployment là quy trình đưa ứng dụng từ máy bạn lên một nơi mà người dùng thật truy cập được. Nó gồm bốn việc: **build** (biến code nguồn thành bản chạy được), **tải lên** nơi hosting, **phục vụ** (chạy hoặc bắt đầu trả file), và **kiểm chứng** là nó chạy đúng.\n\n### Ý chính\n- Frontend thường build ra thư mục file tĩnh (`dist/` hoặc `build/`) đã được rút gọn và gắn mã băm vào tên file để cache an toàn.\n- Cấu hình khác nhau cho từng môi trường (dev, staging, production) nằm ở **biến môi trường**, không hard-code vào code và không commit khoá bí mật.\n- Biến bắt đầu bằng tiền tố công khai (như `VITE_` hay `NEXT_PUBLIC_`) bị nhúng vào bundle lúc build, nên ai cũng đọc được. Đừng để khoá bí mật ở đó.\n- Làm một lần `smoke test` sau deploy: mở trang chính, thử vài route, kiểm tra console không lỗi.\n- CI/CD tự động hoá chuỗi này mỗi khi bạn đẩy code (ví dụ GitHub Actions).\n\n### Lỗi hay gặp\n- Chạy tốt ở máy nhưng hỏng trên production vì thiếu biến môi trường hoặc phiên bản Node khác.\n- Tải lại một trang con bị 404 vì host chưa cấu hình fallback cho ứng dụng một trang (SPA).\n- Không có đường lui khi bản mới hỏng: hãy giữ khả năng quay lại bản trước.",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-14-0-slides",
+    "ten": "14.0 — Đưa lên mạng trong 12 slide",
+    "nguon": "Nền tảng Lập trình Web · Chương 14",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-14-1-build",
+    "ten": "14.1 — Bản dựng production thật ra làm gì",
+    "nguon": "Nền tảng Lập trình Web · Chương 14",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-14-3-deploy",
+    "ten": "14.3 — Đưa lên hosting",
+    "nguon": "Nền tảng Lập trình Web · Chương 14",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-0-1-bon-buoc",
+    "ten": "0.1 — Bốn bước, và bốn kiểu hỏng",
+    "nguon": "Deploy lên VPS · Mục 0",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-20-1-build-vs-start",
+    "ten": "20.1 — Deploy nghĩa là gì: build vs start",
+    "nguon": "Next.js: The React Framework · Chương 20",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Nền tảng Internet › GitHub Pages": {
+  "body": "GitHub Pages cho phép phục vụ website tĩnh trực tiếp từ một repository GitHub, miễn phí cho dự án công khai. Rất hợp để đưa portfolio, trang tài liệu hay demo React/Vite lên mạng.\n\n### Cách làm cơ bản\n1. Build dự án ra thư mục tĩnh (ví dụ `dist/`).\n2. Trong repo, vào **Settings → Pages** và chọn nguồn: một nhánh/thư mục, hoặc **GitHub Actions** (cách hiện đại, cho phép build tự động mỗi lần push).\n3. Địa chỉ mặc định có dạng `https://<tên-người-dùng>.github.io/<tên-repo>/`.\n\n### Ý chính\n- Site của repo nằm dưới một đường dẫn con (`/<tên-repo>/`), nên công cụ build cần cấu hình **base path** đúng (với Vite là `base: '/<tên-repo>/'`), nếu không CSS/JS sẽ 404.\n- Chỉ phục vụ file tĩnh: không chạy được backend Node/PHP.\n- Ứng dụng một trang với routing phía client khi tải lại trang con sẽ bị 404, thường xử lý bằng hash routing hoặc file `404.html` trỏ về `index.html`.\n- Có thể gắn tên miền riêng và GitHub tự cấp HTTPS.\n\n### Lỗi hay gặp\n- Để sai `base` nên trang trắng, console báo 404 các file asset.\n- Quên rằng repo public thì mã nguồn ai cũng đọc được, không để khoá bí mật trong đó.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-15-2-github-pages",
+    "ten": "15.2 — GitHub Pages: xuất bản portfolio React/Vite",
+    "nguon": "Git & GitHub · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-14-3-deploy",
+    "ten": "14.3 — Đưa lên hosting",
+    "nguon": "Nền tảng Lập trình Web · Chương 14",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Nền tảng Internet › Vercel": {
+  "body": "Vercel là nền tảng deploy tối ưu cho các framework JavaScript, nhất là Next.js (do chính Vercel phát triển). Bạn nối repo GitHub, mỗi lần push là Vercel tự build và deploy.\n\n### Điểm mạnh\n- **Preview deployment**: mỗi pull request có một URL riêng để xem thử trước khi merge.\n- **Production**: merge vào nhánh chính là bản mới lên domain chính.\n- Tự nhận ra framework và dùng cấu hình build hợp lý (Next.js, Vite, Astro...).\n- Có edge network/CDN, HTTPS tự động, và serverless/edge functions cho phần backend nhỏ.\n\n### Cách làm\nĐăng nhập, chọn **Add New Project**, import repo, kiểm tra lệnh build và thư mục output, khai **Environment Variables**, bấm Deploy.\n\n### Lưu ý\n- Gói miễn phí có giới hạn (băng thông, thời gian chạy function, mục đích sử dụng), hãy đọc kỹ bảng giá hiện hành trước khi dùng cho sản phẩm thương mại.\n- Biến môi trường có tiền tố công khai như `NEXT_PUBLIC_` bị nhúng vào bundle lúc build, nên đổi chúng cần build lại.\n- Serverless function có giới hạn thời gian chạy, không hợp với tiến trình chạy lâu hoặc kết nối giữ mãi.",
+  "lessons": [
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-14-3-paas-vps-kubernetes",
+    "ten": "14.3 — Chọn nền tảng: VPS, PaaS, serverless hay Kubernetes, với giá thật",
+    "nguon": "Deploy lên VPS · Chương 14",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-20-1-build-vs-start",
+    "ten": "20.1 — Deploy nghĩa là gì: build vs start",
+    "nguon": "Next.js: The React Framework · Chương 20",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-20-2-env-next-public",
+    "ten": "20.2 — Biến môi trường và bẫy NEXT_PUBLIC",
+    "nguon": "Next.js: The React Framework · Chương 20",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Nền tảng Internet › Cloudflare": {
+  "body": "Cloudflare nổi tiếng với mạng CDN toàn cầu đứng giữa người dùng và server của bạn: nó giữ bản sao nội dung tĩnh gần người dùng, chặn bớt tấn công DDoS và cấp HTTPS. Ngoài ra nó có **Pages** (host site tĩnh/full-stack), **Workers** (chạy code ở edge) và dịch vụ DNS.\n\n### Dùng để làm gì\n- Quản lý DNS cho tên miền, bật proxy để nhận CDN và bảo vệ.\n- Host site tĩnh bằng Pages, nối với repo Git để tự build.\n- Chạy logic nhỏ gần người dùng bằng Workers, lưu file bằng R2 (kho object).\n\n### Ý chính\n- **CDN** có hiệu quả khi response có header cache đúng (`Cache-Control`). Nội dung động hoặc có cookie thường không được cache mặc định.\n- Sau khi đổi file mà tên không đổi, bạn cần **purge cache** hoặc dùng tên file có mã băm để khỏi phục vụ bản cũ.\n- Cloudflare đứng giữa nên IP thật của người dùng nằm ở header như `CF-Connecting-IP`, không phải IP kết nối trực tiếp.\n\n### Lỗi hay gặp\n- Cache nhầm trang cá nhân hoá rồi người này thấy dữ liệu người kia.\n- Quên rằng server gốc vẫn bị lộ IP nếu không giới hạn chỉ nhận kết nối từ Cloudflare.",
+  "lessons": [
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-8-1-cdn",
+    "ten": "8.1 — CDN hoạt động thế nào: edge, origin và PoP",
+    "nguon": "Networking for Developers · Chương 8",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-8-2-cache-dung",
+    "ten": "8.2 — Khoá cache, TTL và xoá cache cho đúng",
+    "nguon": "Networking for Developers · Chương 8",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-12-4-cdn-tep-tinh",
+    "ten": "12.4 — CDN và tệp tĩnh: header cache, đổi tên khi đổi nội dung, và kho object",
+    "nguon": "Deploy lên VPS · Chương 12",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Nền tảng Internet › Netlify": {
+  "body": "Netlify là nền tảng host site tĩnh và JAMstack: nối repo Git, mỗi lần push là tự build và deploy, kèm CDN và HTTPS miễn phí. Rất nhanh để đưa một site React/Vue/Svelte lên mạng.\n\n### Tính năng đáng biết\n- **Deploy preview** cho từng pull request.\n- **Netlify Functions** (serverless) cho phần backend nhỏ, **Edge Functions** chạy gần người dùng.\n- **Forms**: nhận dữ liệu form HTML mà không cần tự viết backend.\n- **Redirects/Rewrites** khai báo trong file `_redirects` hoặc `netlify.toml`.\n\n### Ví dụ cấu hình\n```toml\n[build]\n  command = \"npm run build\"\n  publish = \"dist\"\n\n[[redirects]]\n  from = \"/*\"\n  to = \"/index.html\"\n  status = 200\n```\nQuy tắc chuyển hướng cuối cùng giải quyết lỗi 404 khi tải lại trang con của ứng dụng một trang (SPA).\n\n### Lỗi hay gặp\n- Sai thư mục `publish` nên deploy ra trang trống.\n- Dùng sai phiên bản Node so với máy local; hãy khai phiên bản Node cho build.",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-14-3-deploy",
+    "ten": "14.3 — Đưa lên hosting",
+    "nguon": "Nền tảng Lập trình Web · Chương 14",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-14-3-paas-vps-kubernetes",
+    "ten": "14.3 — Chọn nền tảng: VPS, PaaS, serverless hay Kubernetes, với giá thật",
+    "nguon": "Deploy lên VPS · Chương 14",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Nền tảng Internet › Railway": {
+  "body": "Railway là nền tảng deploy (PaaS) cho cả frontend lẫn backend. Điểm hay là bạn dựng nhanh một service Node/Python cùng database (Postgres, MySQL, Redis, MongoDB) trong một dự án, các service nối với nhau qua biến môi trường.\n\n### Cách dùng điển hình\n1. Nối repo GitHub hoặc deploy từ Dockerfile.\n2. Thêm một database từ giao diện, Railway sinh sẵn chuỗi kết nối vào biến môi trường.\n3. Khai biến môi trường cho service, lấy URL công khai cấp sẵn hoặc gắn tên miền riêng.\n\n### Ý chính\n- Backend chạy liên tục như một tiến trình thật, khác với serverless bị giới hạn thời gian.\n- Tính tiền theo mức dùng tài nguyên, có hạn mức dùng thử. Hãy đọc bảng giá hiện hành trước khi dùng thật.\n- Trước khi cho frontend gọi API, bật CORS đúng nguồn (origin) ở backend.\n\n### Lỗi hay gặp\n- Backend lắng nghe cố định một cổng thay vì cổng nền tảng cấp qua biến môi trường `PORT`.\n- Quên chạy migration database sau khi deploy.",
+  "lessons": [
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-14-3-paas-vps-kubernetes",
+    "ten": "14.3 — Chọn nền tảng: VPS, PaaS, serverless hay Kubernetes, với giá thật",
+    "nguon": "Deploy lên VPS · Chương 14",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Nền tảng Internet › Render": {
+  "body": "Render là nền tảng cloud đứng ở giữa \"dễ như Vercel\" và \"mạnh như VPS\": nó host site tĩnh, web service (Node, Python, Docker...), background worker, cron job và database.\n\n### Các loại dịch vụ\n- **Static Site**: host file tĩnh với CDN và HTTPS.\n- **Web Service**: chạy backend liên tục, có URL công khai.\n- **Background Worker / Cron Job**: việc chạy nền và việc theo lịch.\n- **PostgreSQL / Key Value**: cơ sở dữ liệu quản lý sẵn.\n- **Blueprint** (`render.yaml`): mô tả toàn bộ hạ tầng bằng file, đưa vào Git.\n\n### Lưu ý\n- Gói miễn phí của web service thường bị \"ngủ\" khi không có truy cập, nên request đầu tiên sau lúc nghỉ có thể chậm vài chục giây. Đọc chính sách hiện hành trước khi dùng để chạy sản phẩm.\n- Dữ liệu ghi vào ổ đĩa của dịch vụ có thể mất khi deploy lại nếu không gắn ổ bền (persistent disk); hãy lưu dữ liệu quan trọng ở database hoặc kho object.\n\n### Lỗi hay gặp\n- Lệnh start sai (backend không lắng nghe đúng `PORT`) nên deploy báo lỗi health check.",
+  "lessons": [
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-14-3-paas-vps-kubernetes",
+    "ten": "14.3 — Chọn nền tảng: VPS, PaaS, serverless hay Kubernetes, với giá thật",
+    "nguon": "Deploy lên VPS · Chương 14",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Nền tảng Internet › Claude Code": {
+  "body": "Claude Code là công cụ lập trình bằng AI của Anthropic chạy ngay trong terminal (và có thêm tiện ích cho IDE). Khác với chatbot, nó là một **agent**: đọc file trong dự án, chạy lệnh, sửa nhiều file và chạy test, vòng lặp cho đến khi xong việc.\n\n### Cách dùng cơ bản\nMở terminal trong thư mục dự án và chạy `claude`. Mô tả việc bằng ngôn ngữ tự nhiên, ví dụ \"tìm vì sao nút Đăng nhập không phản hồi và sửa\". Nó đề xuất thay đổi và xin phép trước khi ghi file hoặc chạy lệnh.\n\n### Ý chính\n- **Ngữ cảnh dự án**: file `CLAUDE.md` ở thư mục gốc chứa quy ước (lệnh build/test, phong cách code, điều cấm). Agent đọc nó mỗi phiên.\n- **Quyền**: bạn kiểm soát việc nó được tự làm những lệnh nào; mặc định hỏi trước các thao tác có thể gây thay đổi.\n- **Kết nối công cụ ngoài** bằng MCP (ví dụ trình duyệt, cơ sở dữ liệu, hệ thống ticket).\n- Chia việc nhỏ, yêu cầu có tiêu chí kiểm tra rõ (\"chạy `npm test` và báo kết quả\").\n\n### Thói quen tốt\n- Luôn **đọc diff** trước khi nhận thay đổi. Agent có thể làm sai nhưng viết rất tự tin.\n- Dùng Git: commit trước mỗi lượt việc để dễ quay lại.\n- Không dán khoá bí mật vào prompt hay commit file `.env`.\n\n### Tự kiểm tra\n1. Vì sao nên có `CLAUDE.md` thay vì nhắc lại quy ước mỗi lần?\n2. Bạn kiểm chứng thay đổi của agent bằng cách nào?"
+ },
+ "Nền tảng Internet › So sánh các công cụ AI coding": {
+  "body": "Công cụ AI cho lập trình chia làm vài nhóm, và cùng một người có thể dùng nhiều nhóm cho các việc khác nhau.\n\n### Các nhóm chính\n- **Chat** (ChatGPT, Claude, Gemini): hỏi đáp, giải thích lỗi, soạn đoạn code nhỏ. Bạn tự sao chép vào dự án.\n- **Gợi ý trong trình soạn thảo** (GitHub Copilot, v.v.): hoàn thành dòng/hàm khi gõ, tiện cho việc lặp lại.\n- **IDE có AI** (Cursor, Windsurf, và các IDE tương tự): chat nhìn thấy cả dự án, sửa nhiều file ngay trong trình soạn thảo.\n- **Agent trong terminal** (Claude Code và tương tự): tự đọc code, chạy lệnh, chạy test và lặp lại cho đến khi xong.\n\n### Tiêu chí so sánh\n- **Mức tự chủ**: chỉ gợi ý hay tự sửa và chạy lệnh.\n- **Ngữ cảnh**: thấy một file, vài file, hay cả dự án.\n- **Mô hình dùng**: do công cụ chọn hay bạn chọn được.\n- **Quyền riêng tư**: mã của bạn có được gửi đi đâu, có dùng để huấn luyện không, chính sách công ty cho phép gì.\n- **Chi phí**: gói thuê bao hay trả theo lượng dùng.\n\nTính năng và giá đổi rất nhanh, vì vậy hãy thử bản miễn phí hoặc dùng thử với một tác vụ thật của bạn trước khi chọn.\n\n### Lỗi hay gặp\n- Chọn công cụ theo quảng cáo thay vì thử trên đúng dự án của mình.\n- Dùng công cụ chưa được công ty duyệt cho mã nguồn nội bộ."
+ },
+ "Nền tảng Internet › How LLMs work": {
+  "body": "Mô hình ngôn ngữ lớn (LLM) là một mạng nơ-ron khổng lồ được huấn luyện để làm một việc đơn giản: **dự đoán token tiếp theo** của một đoạn văn. Lặp việc đó nhiều lần thì thành cả câu trả lời.\n\n### Các khái niệm cốt lõi\n- **Token**: đơn vị nhỏ model đọc, thường là một mảnh từ (không hẳn là một từ). Tiếng Việt thường tốn nhiều token hơn tiếng Anh cho cùng nội dung.\n- **Tokenization**: bước chia chữ thành token, rồi đổi mỗi token thành một con số.\n- **Transformer** và **attention**: cơ chế giúp mỗi token \"nhìn\" các token khác để quyết định cái nào liên quan, nên model hiểu được ngữ cảnh dài.\n- **Cửa sổ ngữ cảnh**: lượng token tối đa model xử lý trong một lượt (prompt cộng câu trả lời).\n- **Temperature**: tham số điều chỉnh độ ngẫu nhiên khi chọn token tiếp theo. Thấp thì ổn định, cao thì đa dạng.\n\n### Hệ quả cho người dùng\n- Model sinh chữ hợp lý, không phải tra cứu sự thật. Nó có thể **bịa** (hallucination) rất tự tin.\n- Nó không nhớ gì giữa các cuộc trò chuyện, trừ khi ứng dụng gửi lại lịch sử.\n- Kết quả có thể khác nhau giữa các lần chạy.\n- Thông tin đưa vào càng rõ ràng, đúng và gọn thì kết quả càng tốt.\n\n### Tự kiểm tra\n1. Token khác từ ở điểm nào?\n2. Vì sao câu trả lời của LLM cần được kiểm chứng?",
+  "lessons": [
+   {
+    "href": "/courses/gai401-generative-ai/learn?lessonSlug=gai401-4-1-transformer-attention",
+    "ten": "4.1 — Transformer & attention",
+    "nguon": "Generative AI · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "GAI401"
+   }
+  ]
+ },
+ "Nền tảng Internet › AI vs Traditional Coding": {
+  "body": "Hai cách làm việc khác nhau về cách bạn tạo ra code.\n\n### Code truyền thống\nBạn nghĩ ra giải pháp, tra tài liệu và Stack Overflow, tự gõ từng dòng, tự chạy và gỡ lỗi. Chậm hơn ở phần lặp lại, nhưng bạn hiểu từng dòng mình viết.\n\n### Code có AI hỗ trợ\nBạn mô tả ý định, AI sinh bản nháp, bạn đọc, sửa, chạy thử và kiểm tra. Nhanh với việc quen thuộc như boilerplate, chuyển đổi dữ liệu, test mẫu, giải thích code lạ, khám phá thư viện mới.\n\n### So sánh\n- **Tốc độ**: AI nhanh ở bản nháp đầu, nhưng thời gian đọc và kiểm tra vẫn là của bạn.\n- **Độ tin cậy**: AI có thể bịa hàm/thư viện không tồn tại hoặc viết code trông đúng mà sai logic hoặc không an toàn.\n- **Hiểu biết**: nếu bạn chấp nhận code mà không hiểu, bạn mất khả năng gỡ lỗi nó và không học được gì.\n- **Trách nhiệm**: bạn vẫn là người chịu trách nhiệm cho code được commit.\n\n### Khi nào dùng cái nào\nDùng AI cho việc rõ ràng, dễ kiểm tra. Tự làm (hoặc dùng AI chỉ để giải thích) khi đang học khái niệm mới, hoặc với phần lõi về bảo mật, thanh toán, dữ liệu nhạy cảm cần xem kỹ từng dòng."
+ },
+ "Nền tảng Internet › Tìm hiểu cơ bản về AI-assisted Coding": {
+  "body": "AI-assisted coding là viết phần mềm với một trợ lý AI cùng làm: bạn là người quyết định và chịu trách nhiệm, AI là công cụ tăng tốc.\n\n### Quy trình làm việc hiệu quả\n1. **Nêu rõ mục tiêu và ràng buộc**: ngôn ngữ, thư viện, quy ước, ví dụ đầu vào/đầu ra mong muốn.\n2. **Chia việc nhỏ**: một hàm, một component, một lỗi mỗi lượt.\n3. **Đọc kỹ kết quả** như đang review code của đồng nghiệp.\n4. **Chạy và kiểm thử**: viết test hoặc chạy thử thủ công. Đừng tin vì \"trông có vẻ đúng\".\n5. **Lặp lại**: đưa thông báo lỗi thật cho AI để sửa tiếp.\n\n### Hiểu giới hạn\n- AI có thể bịa API, tên hàm hay phiên bản gói không tồn tại. Hãy đối chiếu với tài liệu chính thức.\n- Nó không thấy hết hệ thống của bạn, chỉ thấy phần bạn đưa vào.\n- Code sinh ra có thể có lỗ hổng bảo mật (ví dụ ghép chuỗi vào câu SQL), cần rà soát.\n\n### Thói quen nên có\n- Commit thường xuyên để dễ quay lại.\n- Không dán khoá bí mật, dữ liệu khách hàng vào công cụ không được phép.\n- Dùng AI để học: nhờ nó giải thích, đừng chỉ nhờ nó làm hộ.\n\n### Tự kiểm tra\n1. Ba cách bạn kiểm chứng code do AI sinh?\n2. Điều gì bạn không bao giờ nên đưa vào prompt?"
+ },
+ "Nền tảng Internet › Prompting Techniques": {
+  "body": "Prompt là chỉ dẫn bạn đưa cho model. Prompt tốt không phải câu thần chú mà là một bản mô tả công việc rõ ràng.\n\n### Các kỹ thuật chính\n- **Nêu vai trò và bối cảnh**: \"Bạn là reviewer React; dự án dùng TypeScript và Tailwind\".\n- **Chỉ dẫn cụ thể**: nói rõ đầu ra mong muốn (định dạng, độ dài, ngôn ngữ) và điều cần tránh.\n- **Few-shot**: đưa vài ví dụ đầu vào/đầu ra mẫu để model bắt chước đúng kiểu.\n- **Chain-of-thought**: yêu cầu lập luận từng bước trước khi kết luận, hữu ích cho bài toán nhiều bước.\n- **System prompt**: chỉ dẫn nền cố định cho cả cuộc trò chuyện (vai trò, quy tắc), tách khỏi yêu cầu cụ thể của từng lượt.\n- **Chia nhỏ tác vụ phức tạp**: yêu cầu lập kế hoạch rồi làm từng phần, kiểm tra từng bước.\n\n### Ví dụ\nThay vì \"sửa lỗi này\", hãy viết:\n```\nComponent UserList trong file này không cập nhật khi props.users đổi.\nĐây là code và thông báo lỗi: <...>\nHãy tìm nguyên nhân, giải thích ngắn gọn, rồi đưa bản sửa nhỏ nhất.\nKhông đổi API của component.\n```\n\n### Lỗi hay gặp\n- Yêu cầu mơ hồ rồi trách model.\n- Nhồi một đống việc vào một prompt thay vì chia nhỏ.\n- Không đưa lỗi thật hoặc ví dụ dữ liệu, buộc model đoán.",
+  "lessons": [
+   {
+    "href": "/courses/gai401-generative-ai/learn?lessonSlug=gai401-ts-6-1",
+    "ten": "6.1 — Cơ bản về prompt và prompt vài mẫu",
+    "nguon": "Generative AI · Chương 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "GAI401"
+   },
+   {
+    "href": "/courses/gai401-generative-ai/learn?lessonSlug=gai401-ts-6-2",
+    "ten": "6.2 — Prompt suy luận: chuỗi suy nghĩ và tự nhất quán",
+    "nguon": "Generative AI · Chương 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "GAI401"
+   }
+  ]
+ },
+ "Nền tảng Internet › Trình duyệt xử lý mã như thế nào": {
+  "body": "Mở rộng từ bước \"Trình duyệt hoạt động thế nào\": ở đây ta nhìn riêng cách trình duyệt xử lý từng loại mã.\n\n### HTML thành DOM\nTrình duyệt đọc HTML từ trên xuống, dựng cây **DOM**. Khi gặp `<script>` thường (không `defer`/`async`) nó dừng parse để tải và chạy script, vì script có thể sửa DOM.\n\n### CSS thành CSSOM\nCSS được parse thành **CSSOM**. Việc tính kiểu của từng phần tử dựa trên **cascade** (thứ tự và độ ưu tiên), **kế thừa** và giá trị mặc định.\n\n### JavaScript trên luồng chính\nJS chạy trên **main thread**, cùng luồng với việc tính layout, paint và xử lý sự kiện. Vì vậy một đoạn JS chạy lâu làm trang \"đơ\": không bấm được, không cuộn mượt. JS đơn luồng nhưng dùng **event loop** để xử lý việc bất đồng bộ: gọi `fetch`, `setTimeout`, sự kiện... được đưa vào hàng đợi, chạy khi call stack trống.\n\n### Ý chính\n- `defer` tải song song và chạy sau khi parse xong HTML, giữ đúng thứ tự; `async` chạy ngay khi tải xong, không đảm bảo thứ tự.\n- Việc nặng nên chia nhỏ hoặc chuyển sang Web Worker để không chặn luồng chính.\n- Đổi DOM nhiều lần liên tiếp nên gom lại để giảm layout.\n\n### Lỗi hay gặp\n- Vòng lặp nặng làm treo giao diện.\n- Cho rằng `setTimeout(fn, 0)` chạy ngay lập tức; thực ra nó chỉ chạy sau khi call stack trống.",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-4-5-dom-events",
+    "ten": "4.5 — DOM và sự kiện: làm trang tương tác",
+    "nguon": "Nền tảng Lập trình Web · Chương 4",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-5-1-event-loop",
+    "ten": "5.1 — Event loop: JS làm từng việc một thế nào",
+    "nguon": "Nền tảng Lập trình Web · Chương 5",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-0-2-web-hoat-dong",
+    "ten": "0.2 — Web hoạt động thế nào, trong một bức tranh",
+    "nguon": "Nền tảng Lập trình Web · Mục 0",
+    "kieu": "video"
+   }
+  ]
+ },
+ "HTML › HTML — Nền tảng": {
+  "body": "HTML (HyperText Markup Language) là ngôn ngữ mô tả **cấu trúc và ý nghĩa** của một trang: đâu là tiêu đề, đoạn văn, danh sách, ảnh, liên kết, biểu mẫu. Nó không phải ngôn ngữ lập trình; nó là bộ khung mà CSS tô điểm và JavaScript làm cho tương tác.\n\n### Cấu trúc một trang\n```html\n<!doctype html>\n<html lang=\"vi\">\n  <head>\n    <meta charset=\"utf-8\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n    <title>Trang đầu tiên</title>\n  </head>\n  <body>\n    <h1>Xin chào</h1>\n    <p>Đây là <a href=\"https://example.com\">một liên kết</a>.</p>\n    <img src=\"anh.jpg\" alt=\"Mô tả ảnh\" />\n  </body>\n</html>\n```\n\n### Ý chính\n- **Phần tử** gồm thẻ mở, nội dung, thẻ đóng; thẻ có thể có **thuộc tính** (`href`, `src`, `alt`, `class`, `id`).\n- `<head>` chứa thông tin về trang (title, meta, link CSS); `<body>` chứa nội dung hiển thị.\n- Dùng một `<h1>` cho tiêu đề chính, các `<h2>`–`<h6>` theo thứ bậc, không chọn theo kích thước chữ.\n- Danh sách dùng `<ul>`/`<ol>`/`<li>`, dữ liệu dạng bảng dùng `<table>`, không dùng bảng để chia layout.\n- Luôn có `alt` cho ảnh có nghĩa, và `lang` ở `<html>`.\n\n### Lỗi hay gặp\n- Quên đóng thẻ hoặc lồng sai thứ tự.\n- Chọn thẻ theo hình dạng mong muốn (`<h3>` cho chữ nhỏ) thay vì theo ý nghĩa.\n\n### Tự kiểm tra\n1. `<head>` khác `<body>` ở đâu?\n2. Vì sao ảnh cần thuộc tính `alt`?",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-2-0-slides",
+    "ten": "2.0 — Slide bài giảng: HTML trong 12 slide",
+    "nguon": "Nền tảng Lập trình Web · Chương 2",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-2-1-html-basics",
+    "ten": "2.1 — HTML là gì: phần tử, thẻ, thuộc tính",
+    "nguon": "Nền tảng Lập trình Web · Chương 2",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-2-2-text-links-images",
+    "ten": "2.2 — Chữ, liên kết và ảnh",
+    "nguon": "Nền tảng Lập trình Web · Chương 2",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/web-design/learn?lessonSlug=wed201c-html",
+    "ten": "1.1 — Phần tử HTML & cấu trúc ngữ nghĩa",
+    "nguon": "Web Design · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "WED201c"
+   },
+   {
+    "href": "/code-lab/html-css",
+    "ten": "HTML & CSS",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "HTML › Viết HTML ngữ nghĩa (Semantic)": {
+  "body": "HTML ngữ nghĩa là chọn thẻ theo **ý nghĩa** của nội dung chứ không theo hình thức. `<nav>` nói \"đây là khối điều hướng\", `<button>` nói \"đây là thứ bấm được\", còn `<div>` chẳng nói gì.\n\n### Các thẻ cấu trúc chính\n- `<header>`: phần đầu trang hoặc đầu một khối.\n- `<nav>`: nhóm liên kết điều hướng chính.\n- `<main>`: nội dung chính của trang (chỉ một cái mỗi trang).\n- `<article>`: nội dung độc lập, tự đứng được (bài viết, thẻ sản phẩm).\n- `<section>`: một mục có chủ đề, thường kèm tiêu đề.\n- `<aside>`: nội dung phụ, liên quan gián tiếp.\n- `<footer>`: phần cuối trang hoặc khối.\n\n### Vì sao quan trọng\n- **Accessibility**: trình đọc màn hình dùng các thẻ này để người dùng nhảy nhanh tới `main` hay `nav`.\n- **SEO**: máy tìm kiếm hiểu cấu trúc trang tốt hơn.\n- **Dễ bảo trì**: đọc code HTML là hiểu bố cục.\n- Miễn phí hành vi: `<button>` tự có phím Enter/Space và focus bằng bàn phím; `<div onclick>` thì không.\n\n### Lỗi hay gặp\n- \"Divitis\": toàn `<div>` lồng nhau.\n- Dùng `<div>` hoặc `<span>` làm nút bấm rồi phải tự thêm role, tabindex, xử lý bàn phím.\n- Dùng `<section>` làm khối bao bọc chỉ để tạo kiểu, không có tiêu đề.",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-2-3-semantic-html",
+    "ten": "2.3 — HTML ngữ nghĩa: ý nghĩa trước trang trí",
+    "nguon": "Nền tảng Lập trình Web · Chương 2",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/web-design/learn?lessonSlug=wed201c-html",
+    "ten": "1.1 — Phần tử HTML & cấu trúc ngữ nghĩa",
+    "nguon": "Web Design · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "WED201c"
+   }
+  ]
+ },
+ "HTML › Form & Validation": {
+  "body": "Form là cách trang web nhận dữ liệu từ người dùng: đăng nhập, tìm kiếm, đăng ký, thanh toán. HTML có sẵn nhiều công cụ để dựng và kiểm tra form mà chưa cần JavaScript.\n\n### Thành phần chính\n```html\n<form action=\"/dang-ky\" method=\"post\">\n  <label for=\"email\">Email</label>\n  <input id=\"email\" name=\"email\" type=\"email\" required />\n\n  <label for=\"tuoi\">Tuổi</label>\n  <input id=\"tuoi\" name=\"tuoi\" type=\"number\" min=\"16\" max=\"100\" />\n\n  <button type=\"submit\">Đăng ký</button>\n</form>\n```\n\n### Ý chính\n- Mỗi ô nhập cần `<label>` gắn bằng `for`/`id`. Bấm nhãn là focus vào ô, và trình đọc màn hình đọc được tên ô.\n- `type` chọn bàn phím và cách kiểm tra phù hợp: `email`, `tel`, `number`, `date`, `password`, `checkbox`, `radio`.\n- **Validation sẵn có**: `required`, `min`, `max`, `minlength`, `maxlength`, `pattern`. Trình duyệt chặn gửi và hiện thông báo khi sai.\n- Thuộc tính `name` quyết định tên trường gửi lên server; thiếu `name` thì giá trị không được gửi.\n\n### Quan trọng về bảo mật\nKiểm tra phía client chỉ để người dùng thuận tiện, không thay được kiểm tra phía server: ai cũng có thể bỏ qua trình duyệt và gửi request thẳng.\n\n### Lỗi hay gặp\n- Dùng `placeholder` thay cho `<label>`.\n- Thông báo lỗi chỉ dựa vào màu đỏ, không có chữ.\n- Quên `type=\"button\"` cho nút không gửi form, nên nút vô tình submit form.",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-2-4-forms",
+    "ten": "2.4 — Biểu mẫu: cách web nhận dữ liệu",
+    "nguon": "Nền tảng Lập trình Web · Chương 2",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/web-design/learn?lessonSlug=wed201c-html-form",
+    "ten": "1.3 — Biểu mẫu: input, label & kiểm tra sẵn có",
+    "nguon": "Web Design · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "WED201c"
+   },
+   {
+    "href": "/courses/web-design/learn?lessonSlug=wed201c-events-validation",
+    "ten": "3.4 — Sự kiện & kiểm tra biểu mẫu bằng JavaScript",
+    "nguon": "Web Design · Chương 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "WED201c"
+   }
+  ]
+ },
+ "HTML › Accessibility (a11y)": {
+  "body": "Accessibility (a11y) là làm cho web dùng được với mọi người: người khiếm thị dùng trình đọc màn hình, người không dùng được chuột, người mù màu, người khiếm thính, người tạm thời bị hạn chế (tay cầm đồ, ánh nắng chói trên điện thoại). Đây cũng là yêu cầu pháp lý ở nhiều nơi, và làm tốt thì SEO và trải nghiệm chung cũng tốt hơn.\n\n### Nguyên tắc nền: dùng HTML đúng\nHTML ngữ nghĩa tự mang sẵn phần lớn khả năng tiếp cận: `<button>`, `<a>`, `<label>`, `<nav>`, tiêu đề đúng thứ bậc.\n\n### Ý chính\n- **Văn bản thay thế**: ảnh có nghĩa cần `alt` mô tả; ảnh trang trí dùng `alt=\"\"`.\n- **Bàn phím**: mọi thứ tương tác phải dùng được bằng Tab/Enter/Space, thứ tự Tab hợp lý, dấu focus nhìn thấy rõ.\n- **Độ tương phản màu**: WCAG AA yêu cầu tỉ lệ tối thiểu 4,5:1 cho chữ thường.\n- **Nhãn cho form**: mỗi ô nhập có `<label>`.\n- **ARIA** (`role`, `aria-label`, `aria-expanded`...) chỉ dùng khi HTML thuần không đủ, vì \"không có ARIA tốt hơn ARIA sai\".\n- Không truyền thông tin chỉ bằng màu sắc.\n\n### Cách kiểm tra\nThử dùng trang chỉ bằng phím Tab. Chạy Lighthouse hoặc axe trong DevTools. Thử một trình đọc màn hình (VoiceOver trên Mac, NVDA trên Windows).\n\n### Lỗi hay gặp\n- `<div onclick>` làm nút.\n- Bỏ `outline` của focus mà không thay bằng dấu hiệu khác.\n- Thêm ARIA sai khiến trình đọc màn hình đọc nhầm.\n\n### Tự kiểm tra\n1. Vì sao `<button>` tốt hơn `<div onclick>`?\n2. Khi nào mới nên thêm ARIA?",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-2-5-tables-media-a11y",
+    "ten": "2.5 — Bảng, media và khả năng tiếp cận",
+    "nguon": "Nền tảng Lập trình Web · Chương 2",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-8-4-a11y",
+    "ten": "8.4 — Component dễ tiếp cận: HTML đúng nghĩa, bàn phím, ARIA và kiểm bằng axe",
+    "nguon": "React · Chương 8",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/web-design/learn?lessonSlug=wed201c-a11y-xuat-ban",
+    "ten": "1.4 — Trợ năng, kiểm chuẩn & đưa lên mạng",
+    "nguon": "Web Design · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "WED201c"
+   }
+  ]
+ },
+ "HTML › SEO cơ bản": {
+  "body": "SEO (Search Engine Optimization) là làm cho máy tìm kiếm tìm thấy, hiểu và xếp hạng trang của bạn tốt hơn. Phần frontend lo chủ yếu là nền tảng kỹ thuật.\n\n### Ý chính\n- `<title>` riêng cho mỗi trang, rõ ràng và ngắn gọn, vì đây là dòng tiêu đề hiện trên kết quả tìm kiếm.\n- `<meta name=\"description\">` tóm tắt trang; không trực tiếp quyết định thứ hạng nhưng ảnh hưởng tới việc người dùng có bấm hay không.\n- Cấu trúc tiêu đề hợp lý, một `<h1>`, HTML ngữ nghĩa.\n- URL ngắn, dễ đọc; link nội bộ có chữ mô tả rõ ràng.\n- `robots.txt` và **sitemap.xml** giúp bot biết nên đi đâu.\n- **Dữ liệu có cấu trúc** (JSON-LD, schema.org) mô tả loại nội dung (bài viết, sản phẩm).\n- **Open Graph** (`og:title`, `og:image`) quyết định khung xem trước khi chia sẻ link.\n- Tốc độ và Core Web Vitals (LCP, INP, CLS) là yếu tố trải nghiệm.\n\n### Ví dụ\n```html\n<title>Học Flexbox từ số 0 | Tên site</title>\n<meta name=\"description\" content=\"Hướng dẫn Flexbox có ví dụ chạy được.\" />\n<link rel=\"canonical\" href=\"https://example.com/flexbox\" />\n```\n\n### Lỗi hay gặp\n- Ứng dụng render hoàn toàn bằng JavaScript phía client khiến bot thấy trang trống. Dùng render phía server hoặc tạo trang tĩnh khi nội dung cần lên tìm kiếm.\n- Mọi trang có cùng `title`.\n- Chặn nhầm cả site bằng `noindex` hoặc `Disallow: /` sau khi lên production.",
+  "lessons": [
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-17-3-seo",
+    "ten": "17.3 — SEO: được máy tìm kiếm tìm thấy",
+    "nguon": "Next.js: The React Framework · Chương 17",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "CSS › CSS — Nền tảng": {
+  "body": "CSS (Cascading Style Sheets) quyết định giao diện của HTML: màu sắc, chữ, khoảng cách, bố cục. Một quy tắc CSS gồm **selector** (chọn phần tử nào) và các **khai báo** (thuộc tính: giá trị).\n\n```css\n.card {\n  padding: 16px;\n  border: 1px solid #ddd;\n  border-radius: 8px;\n}\n.card:hover { box-shadow: 0 2px 8px rgb(0 0 0 / 0.15); }\n```\n\n### Các khái niệm cốt lõi\n- **Selector**: theo thẻ (`p`), class (`.card`), id (`#main`), thuộc tính, pseudo-class (`:hover`), kết hợp (con, cháu, anh em).\n- **Box model**: mỗi phần tử là một hộp gồm content, padding, border, margin. Đặt `box-sizing: border-box` để `width` đã tính cả padding và border.\n- **Cascade và specificity**: khi nhiều quy tắc cùng áp vào một phần tử thì độ cụ thể của selector, rồi thứ tự xuất hiện, quyết định quy tắc nào thắng. Inline style mạnh hơn id, id mạnh hơn class, class mạnh hơn thẻ.\n- **Kế thừa**: một số thuộc tính (như `color`, `font-family`) truyền xuống phần tử con.\n- **Đơn vị**: `px`, `rem` (theo cỡ chữ gốc), `em`, `%`, `vw/vh`.\n- **Flexbox và Grid** để dàn bố cục.\n\n### Lỗi hay gặp\n- Dùng `!important` để thắng specificity rồi không dập tắt được nữa.\n- Selector quá dài, lồng sâu nên khó ghi đè.\n- Nhầm `margin` (ngoài viền) với `padding` (trong viền).\n\n### Tự kiểm tra\n1. `box-sizing: border-box` thay đổi gì?\n2. `.a .b` và `.b.a` khác nhau thế nào?",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-3-0-slides",
+    "ten": "3.0 — Slide bài giảng: CSS trong 14 slide",
+    "nguon": "Nền tảng Lập trình Web · Chương 3",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-3-1-css-basics",
+    "ten": "3.1 — CSS là gì: bộ chọn, cascade, kế thừa",
+    "nguon": "Nền tảng Lập trình Web · Chương 3",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-3-2-box-model",
+    "ten": "3.2 — Mô hình hộp: mọi phần tử là một cái hộp",
+    "nguon": "Nền tảng Lập trình Web · Chương 3",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/web-design/learn?lessonSlug=wed201c-cascade",
+    "ten": "2.3 — Thứ tự tầng, độ ưu tiên & kế thừa",
+    "nguon": "Web Design · Chương 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "WED201c"
+   },
+   {
+    "href": "/code-lab/html-css",
+    "ten": "HTML & CSS",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "CSS › Dựng Layout": {
+  "body": "Có hai công cụ bố cục hiện đại chính, và chúng bổ sung cho nhau chứ không thay thế nhau.\n\n### Flexbox: bố cục một chiều\nXếp các phần tử thành hàng hoặc cột, căn chỉnh và chia khoảng trống. Hợp với thanh điều hướng, hàng nút, thẻ có nội dung căn giữa.\n```css\n.toolbar {\n  display: flex;\n  justify-content: space-between; /* dọc trục chính */\n  align-items: center;            /* dọc trục phụ */\n  gap: 12px;\n}\n```\n\n### Grid: bố cục hai chiều\nChia vùng thành hàng và cột cùng lúc. Hợp với khung trang, lưới thẻ, dashboard.\n```css\n.gallery {\n  display: grid;\n  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));\n  gap: 16px;\n}\n```\n\n### Chọn cái nào\n- Nội dung quyết định kích thước, xếp theo một đường thẳng: **Flexbox**.\n- Bạn vẽ trước khung hàng-cột rồi đặt nội dung vào: **Grid**.\n- Có thể lồng nhau: Grid cho khung trang, Flexbox bên trong từng ô.\n\n### Còn `position`\n`relative`, `absolute`, `fixed`, `sticky` dùng khi cần đặt chồng hay ghim phần tử (menu, badge, popup), không nên dùng để dàn layout chính. `float` ngày xưa dùng cho bố cục, nay chỉ còn để cho chữ bao quanh ảnh.\n\n### Lỗi hay gặp\n- Quên `display: flex` ở phần tử cha mà đặt `justify-content` ở con.\n- Nhầm trục chính và trục phụ khi `flex-direction: column`.",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-3-3-flexbox",
+    "ten": "3.3 — Flexbox: bố cục một chiều",
+    "nguon": "Nền tảng Lập trình Web · Chương 3",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-3-4-css-grid",
+    "ten": "3.4 — CSS Grid: bố cục hai chiều",
+    "nguon": "Nền tảng Lập trình Web · Chương 3",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/web-design/learn?lessonSlug=wed201c-flexbox-grid",
+    "ten": "2.2 — Bố cục với Flexbox & Grid",
+    "nguon": "Web Design · Chương 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "WED201c"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-12-1-position-stacking",
+    "ten": "12.1 — Position và ngữ cảnh xếp chồng",
+    "nguon": "Nền tảng Lập trình Web · Chương 12",
+    "kieu": "video"
+   }
+  ]
+ },
+ "CSS › Responsive Design": {
+  "body": "Responsive design là làm một trang hiển thị tốt trên mọi kích thước màn hình, từ điện thoại tới màn hình lớn, bằng một bộ mã duy nhất.\n\n### Ba trụ cột\n1. **Thẻ viewport** trong `<head>`, không có nó điện thoại sẽ hiển thị trang như màn hình rộng rồi thu nhỏ lại:\n```html\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n```\n2. **Bố cục linh hoạt**: dùng `%`, `fr`, `minmax()`, Flexbox/Grid thay vì độ rộng cố định.\n3. **Media query**: đổi kiểu theo điều kiện màn hình.\n```css\n.grid { display: grid; grid-template-columns: 1fr; gap: 16px; }\n@media (min-width: 768px) {\n  .grid { grid-template-columns: repeat(3, 1fr); }\n}\n```\n\n### Ý chính\n- **Mobile-first**: viết kiểu cho màn nhỏ trước rồi mở rộng dần bằng `min-width`. Code gọn hơn và điện thoại không phải tải kiểu thừa.\n- Breakpoint nên chọn theo lúc nội dung bắt đầu vỡ, không theo tên thiết bị.\n- Đơn vị `rem` cho chữ và khoảng cách để tôn trọng cỡ chữ người dùng chọn; `clamp()` cho cỡ chữ co giãn.\n- Ảnh: `max-width: 100%; height: auto`, và `srcset`/`<picture>` để tải ảnh phù hợp.\n- Vùng bấm đủ lớn (khoảng 44px) cho cảm ứng.\n\n### Lỗi hay gặp\n- Thiếu thẻ viewport.\n- Scroll ngang do phần tử có độ rộng cố định lớn hơn màn hình.\n- Chỉ thử trên cửa sổ thu nhỏ của máy tính mà không thử trên điện thoại thật.",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-3-5-responsive",
+    "ten": "3.5 — Thiết kế responsive: một trang, mọi màn hình",
+    "nguon": "Nền tảng Lập trình Web · Chương 3",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/web-design/learn?lessonSlug=wed201c-responsive",
+    "ten": "4.1 — Media query & mobile-first",
+    "nguon": "Web Design · Chương 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "WED201c"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-3-5b-wireframes",
+    "ten": "3.5b — Wireframe cho lập trình viên: vẽ trang trước khi code",
+    "nguon": "Nền tảng Lập trình Web · Chương 3",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "CSS › Antigravity": {
+  "body": "Với những hiệu ứng đơn giản (hover, hiện/ẩn, đổi màu), CSS `transition` và `@keyframes` đủ dùng. Khi cần chuỗi phức tạp (timeline nhiều bước, so le thời gian, hiệu ứng theo cuộn trang, chuyển động dựa vào vật lý), người ta dùng thư viện như **GSAP** hoặc **Motion (trước đây là Framer Motion)**.\n\n### Khi nào dùng thư viện\n- **GSAP**: thư viện animation thuần JavaScript, dùng được với bất kỳ framework nào hoặc không framework. Mạnh ở timeline, stagger và ScrollTrigger (animation gắn với cuộn trang).\n- **Motion / Framer Motion**: thư viện cho React, khai báo animation ngay trên component, hỗ trợ chuyển động khi component vào/ra, layout animation và cử chỉ (kéo, nhấn).\n\n### Nguyên tắc làm animation tốt\n- Ưu tiên animation `transform` và `opacity`; chúng thường chỉ cần bước composite nên mượt, còn đổi `width/top/left` gây layout lại.\n- Tôn trọng người dùng nhạy cảm với chuyển động bằng `@media (prefers-reduced-motion: reduce)`.\n- Chuyển động phải có mục đích: dẫn mắt, báo trạng thái, không chỉ để trang trí.\n- Thời lượng ngắn (khoảng 150–400ms cho phản hồi giao diện).\n\n### Ví dụ CSS nền tảng\n```css\n.card { transition: transform 200ms ease, box-shadow 200ms ease; }\n.card:hover { transform: translateY(-4px); }\n@media (prefers-reduced-motion: reduce) {\n  .card { transition: none; }\n}\n```\n\nHãy nắm vững transition và animation bằng CSS trước, rồi mới thêm thư viện khi thực sự cần.\n\n### Lỗi hay gặp\n- Nhồi hiệu ứng làm trang giật, nhất là trên điện thoại yếu.\n- Quên cách tắt hoặc giảm chuyển động cho người dùng cần.",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-12-2-transition-animation",
+    "ten": "12.2 — Chuyển cảnh và hoạt hình",
+    "nguon": "Nền tảng Lập trình Web · Chương 12",
+    "kieu": "video"
+   }
+  ]
+ },
+ "JavaScript › JavaScript — Nền tảng": {
+  "body": "JavaScript là ngôn ngữ lập trình của trình duyệt (và cả Node.js phía server). Nó biến trang tĩnh thành tương tác: phản hồi click, cập nhật nội dung, gọi API.\n\n### Các khái niệm nền tảng\n- **Biến**: `const` mặc định, `let` khi cần gán lại, tránh `var`.\n- **Kiểu dữ liệu**: number, string, boolean, `null`, `undefined`, object (kể cả mảng và hàm).\n- **Hàm**: khai báo hoặc arrow function `(a, b) => a + b`.\n- **Mảng và object**: dữ liệu thật hầu hết là danh sách các object. Các phương thức `map`, `filter`, `find`, `reduce` thay cho nhiều vòng lặp.\n- **Điều kiện và vòng lặp**: `if`, `switch`, `for`, `for...of`.\n- **ES modules**: `import`/`export` để tách mã thành nhiều file.\n- **Closure**: hàm nhớ được các biến ở nơi nó được tạo ra, dù được gọi ở nơi khác.\n\n```js\nconst users = [\n  { name: \"An\", age: 20 },\n  { name: \"Bình\", age: 17 },\n];\nconst adults = users.filter((u) => u.age >= 18).map((u) => u.name);\nconsole.log(adults); // [\"An\"]\n```\n\n### Lỗi hay gặp\n- So sánh bằng `==` gây ép kiểu bất ngờ; dùng `===`.\n- Nhầm `null` và `undefined`.\n- Đột biến (mutate) mảng/object đang dùng chung rồi sinh lỗi khó thấy.\n- Quên rằng `const` chỉ khoá việc gán lại biến chứ không khoá nội dung object.\n\n### Tự kiểm tra\n1. `map` khác `forEach` ở điểm nào?\n2. Closure là gì? Cho một ví dụ.",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-4-0-slides",
+    "ten": "4.0 — Slide bài giảng: cả chương trong 22 slide",
+    "nguon": "Nền tảng Lập trình Web · Chương 4",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-4-4-arrays-objects",
+    "ten": "4.4 — Mảng và object: dữ liệu thật",
+    "nguon": "Nền tảng Lập trình Web · Chương 4",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-11-1-closure",
+    "ten": "11.1 — Closure: hàm nhớ được nơi nó sinh ra",
+    "nguon": "Nền tảng Lập trình Web · Chương 11",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-5-5-es-modules",
+    "ten": "5.5 — ES module: tách mã thành nhiều tệp",
+    "nguon": "Nền tảng Lập trình Web · Chương 5",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/code-lab/javascript",
+    "ten": "JavaScript",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "JavaScript › Thao tác DOM": {
+  "body": "DOM (Document Object Model) là cách trình duyệt biểu diễn trang HTML thành một cây các đối tượng mà JavaScript đọc và sửa được. Thao tác DOM là cách bạn làm trang \"sống\".\n\n### Các thao tác cơ bản\n```js\nconst btn = document.querySelector(\"#them\");\nconst list = document.querySelector(\"ul\");\n\nbtn.addEventListener(\"click\", () => {\n  const li = document.createElement(\"li\");\n  li.textContent = \"Mục mới\";\n  list.append(li);\n});\n```\n- **Chọn phần tử**: `querySelector` (phần tử đầu tiên khớp), `querySelectorAll` (tất cả).\n- **Đọc/ghi nội dung**: `textContent` (an toàn), `innerHTML` (chèn HTML, cẩn thận với dữ liệu người dùng).\n- **Thuộc tính và class**: `setAttribute`, `el.classList.add/remove/toggle`.\n- **Tạo và xoá**: `createElement`, `append`, `remove`.\n\n### Sự kiện\n- `addEventListener(\"click\", handler)` lắng nghe sự kiện; đối tượng `event` cho biết `target`, phím bấm...\n- **Event delegation**: gắn một listener lên phần tử cha và dùng `event.target` để biết con nào được bấm. Hợp với danh sách động, tiết kiệm bộ nhớ.\n- `event.preventDefault()` chặn hành vi mặc định (như gửi form, theo link).\n\n### Lỗi hay gặp\n- Chọn phần tử khi nó chưa tồn tại (script chạy trước khi HTML tải xong); dùng `defer` hoặc đặt script cuối body.\n- Dùng `innerHTML` với dữ liệu người dùng nhập, tạo lỗ hổng XSS.\n- Gắn listener trong vòng lặp cho từng phần tử thay vì dùng delegation.",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-4-5-dom-events",
+    "ten": "4.5 — DOM và sự kiện: làm trang tương tác",
+    "nguon": "Nền tảng Lập trình Web · Chương 4",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/web-design/learn?lessonSlug=wed201c-dom",
+    "ten": "3.3 — DOM: tìm, sửa, tạo phần tử",
+    "nguon": "Web Design · Chương 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "WED201c"
+   },
+   {
+    "href": "/courses/web-design/learn?lessonSlug=wed201c-events-validation",
+    "ten": "3.4 — Sự kiện & kiểm tra biểu mẫu bằng JavaScript",
+    "nguon": "Web Design · Chương 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "WED201c"
+   }
+  ]
+ },
+ "JavaScript › Fetch API / Ajax (XHR)": {
+  "body": "Phần lớn ứng dụng web lấy dữ liệu từ server qua HTTP API. `fetch` là hàm có sẵn trong trình duyệt để làm việc đó, trả về một **Promise**.\n\n### Cách dùng với async/await\n```js\nasync function layNguoiDung(id) {\n  const res = await fetch(`/api/users/${id}`);\n  if (!res.ok) {\n    throw new Error(`Lỗi ${res.status}`);\n  }\n  return res.json();\n}\n\ntry {\n  const user = await layNguoiDung(1);\n  console.log(user.name);\n} catch (err) {\n  console.error(\"Không tải được:\", err.message);\n}\n```\n\n### Gửi dữ liệu\n```js\nawait fetch(\"/api/todos\", {\n  method: \"POST\",\n  headers: { \"Content-Type\": \"application/json\" },\n  body: JSON.stringify({ title: \"Học fetch\" }),\n});\n```\n\n### Ý chính\n- **`fetch` chỉ từ chối (reject) khi lỗi mạng**. Với phản hồi 404 hay 500, promise vẫn thành công; bạn phải kiểm tra `res.ok` hoặc `res.status`.\n- `res.json()` cũng trả Promise, nhớ `await`.\n- Xử lý ba trạng thái trong giao diện: đang tải, lỗi, có dữ liệu.\n- Gọi API từ domain khác bị ràng buộc bởi **CORS**: server phải cho phép origin của bạn.\n- Dùng `AbortController` để huỷ request khi không cần nữa.\n- `XMLHttpRequest` (XHR) là cách cũ làm cùng việc với callback; gọi chung là Ajax. Code mới nên dùng `fetch`.\n\n### Lỗi hay gặp\n- Quên `await` nên nhận Promise thay vì dữ liệu.\n- Không bắt lỗi nên giao diện đứng im.\n- Thiếu header `Content-Type` khi gửi JSON.\n\n### Tự kiểm tra\n1. Vì sao phải kiểm tra `res.ok`?\n2. Sự khác nhau giữa `.then()` và `async/await`?",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-5-0-slides",
+    "ten": "5.0 — Slide bài giảng: cả chương trong 15 slide",
+    "nguon": "Nền tảng Lập trình Web · Chương 5",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-5-2-promises",
+    "ten": "5.2 — Promise: giá trị đến sau",
+    "nguon": "Nền tảng Lập trình Web · Chương 5",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-5-3-async-await",
+    "ten": "5.3 — async/await: mã bất đồng bộ đọc từ trên xuống",
+    "nguon": "Nền tảng Lập trình Web · Chương 5",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-5-4-fetch-apis",
+    "ten": "5.4 — fetch: lấy dữ liệu từ API",
+    "nguon": "Nền tảng Lập trình Web · Chương 5",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-6-1-fetch",
+    "ten": "6.1 — Fetch trong effect, và vì sao đau đầu: MSW, cuộc đua đo thật, AbortController",
+    "nguon": "React · Chương 6",
+    "kieu": "video"
+   }
+  ]
+ },
+ "JavaScript › Web APIs": {
+  "body": "Web APIs là các chức năng trình duyệt cung cấp thêm cho JavaScript, không thuộc ngôn ngữ JavaScript nhưng bạn dùng hằng ngày. Chúng cho phép trang web làm những việc ngoài tính toán thuần: tương tác với trang, lưu dữ liệu, truy cập thiết bị.\n\n### Nhóm hay gặp\n- **DOM và sự kiện**: `document`, `addEventListener`.\n- **Mạng**: `fetch`, `WebSocket`, `EventSource` (server-sent events).\n- **Lưu trữ**: `localStorage` (lâu dài), `sessionStorage` (theo tab), `IndexedDB` (lớn, có cấu trúc), Cookie.\n- **Quan sát**: `IntersectionObserver` (phần tử vào/ra khung nhìn, dùng cho lazy-load, cuộn vô hạn), `ResizeObserver`, `MutationObserver`.\n- **Thiết bị**: `navigator.geolocation` (vị trí), `navigator.clipboard` (sao chép), `MediaDevices` (camera, micro). Nhiều API cần người dùng cho phép.\n- **Nền**: Web Workers (chạy JS ở luồng khác), Service Workers (cache, offline, thông báo đẩy).\n- **Đồ hoạ và media**: Canvas, Web Audio, `<video>`.\n\n### Ví dụ\n```js\nlocalStorage.setItem(\"theme\", \"dark\");\nconst theme = localStorage.getItem(\"theme\");\n\nconst obs = new IntersectionObserver((entries) => {\n  entries.forEach((e) => e.isIntersecting && console.log(\"đã hiện ra\"));\n});\nobs.observe(document.querySelector(\"#anh\"));\n```\n\n### Lưu ý\n- Nhiều API chỉ chạy trên **HTTPS**; kiểm tra bảng tương thích trên MDN trước khi dùng API mới.\n- `localStorage` chỉ lưu chuỗi và đọc được bằng JavaScript, nên không lưu token nhạy cảm ở đó nếu có thể tránh (dễ bị đánh cắp khi có XSS).",
+  "more": [
+   {
+    "type": "official",
+    "title": "Web APIs - MDN Web Docs",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/API"
+   }
+  ]
+ },
+ "Version Control › Git": {
+  "body": "Git là hệ thống quản lý phiên bản phân tán: ghi lại lịch sử mọi thay đổi của dự án để bạn quay lại, so sánh và làm việc song song mà không ghi đè lên nhau.\n\n### Mô hình ba vùng\nThư mục làm việc (file bạn sửa), **staging area** (những gì sẽ vào commit tiếp theo), và **repository** (lịch sử các commit). Vòng lặp hằng ngày:\n```bash\ngit status\ngit add src/App.jsx\ngit commit -m \"Thêm nút đăng nhập\"\n```\n\n### Nhánh và hợp nhất\n```bash\ngit switch -c feature/dang-nhap   # tạo và chuyển nhánh\ngit switch main\ngit merge feature/dang-nhap       # hợp nhất vào main\n```\nNhánh trong Git rất nhẹ, chỉ là một con trỏ tới commit. `merge` giữ nguyên lịch sử và thêm commit hợp nhất; `rebase` phát lại commit của bạn lên đỉnh nhánh đích để lịch sử thẳng hàng. Không rebase nhánh đã chia sẻ cho người khác.\n\n### Hoàn tác an toàn\n- `git restore <file>`: bỏ thay đổi chưa commit của một file.\n- `git revert <commit>`: tạo commit mới đảo ngược một commit cũ, an toàn trên nhánh chung.\n- `git reset`: dời con trỏ nhánh, nguy hiểm hơn nếu đã đẩy lên remote.\n- `git reflog`: tìm lại commit \"đã mất\".\n\n### Lỗi hay gặp\n- Commit file bí mật (`.env`) hoặc thư mục build; hãy dùng `.gitignore`.\n- Commit toàn bộ vào một cục với lời nhắn \"update\".\n- Giải quyết xung đột bằng cách xoá bừa các dấu `<<<<<<<` mà không đọc.",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-1-3-git",
+    "ten": "1.3 — Git: cỗ máy thời gian cho mã của bạn",
+    "nguon": "Nền tảng Lập trình Web · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-1-3-vong-lap-hang-ngay",
+    "ten": "1.3 — Vòng lặp hằng ngày: add, commit, diff — và add -p",
+    "nguon": "Git & GitHub · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-3-1-nhanh-la-gi",
+    "ten": "3.1 — Một nhánh là một file 41 byte",
+    "nguon": "Git & GitHub · Chương 3",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-3-4-rebase-vs-merge",
+    "ten": "3.4 — Rebase vs merge: phát lại thay vì nhập vào",
+    "nguon": "Git & GitHub · Chương 3",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/simulation?scenario=git-flow",
+    "ten": "Git — bốn vùng chứa và cái nhãn tên nhánh",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "Version Control › GitHub": {
+  "body": "GitHub là dịch vụ lưu repository Git trên mạng và là nơi cộng tác của phần lớn dự án phần mềm. Git là công cụ trên máy bạn; GitHub là \"kho chung\" cùng những tính năng làm việc nhóm bao quanh.\n\n### Những thứ bạn dùng hằng ngày\n- **Repository** trên remote (`origin`), `git push`/`git pull` để đồng bộ.\n- **Pull Request (PR)**: đề nghị gộp nhánh của bạn vào nhánh chính, kèm review, bình luận và kiểm tra tự động.\n- **Issues** và **Projects**: theo dõi lỗi, việc cần làm.\n- **Actions**: chạy kiểm tra, test, deploy tự động (CI/CD) khi có push hay PR.\n- **Pages**: host site tĩnh từ repo.\n- **Fork**: sao chép repo của người khác về tài khoản của bạn để đóng góp mã nguồn mở.\n\n### Quy trình PR điển hình\n1. Tạo nhánh từ `main`, code, commit.\n2. `git push -u origin ten-nhanh`.\n3. Mở PR, mô tả rõ thay đổi và cách kiểm thử.\n4. Nhận review, sửa, CI xanh, rồi merge.\n\n### Mẹo\n- Hồ sơ GitHub có profile README và repo ghim chính là một \"CV\" của lập trình viên.\n- Bảo vệ nhánh `main` (yêu cầu review và CI qua) để tránh đẩy thẳng.\n\n### Lỗi hay gặp\n- Đẩy khoá API lên repo, kể cả repo private. Nếu lỡ, thu hồi khoá ngay chứ không chỉ xoá commit.\n- PR quá lớn khiến không ai review nổi.",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-1-4-github",
+    "ten": "1.4 — GitHub: mã của bạn trên đám mây",
+    "nguon": "Nền tảng Lập trình Web · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-6-1-giai-phau-pr",
+    "ten": "6.1 — Giải phẫu một pull request thật sự được review",
+    "nguon": "Git & GitHub · Chương 6",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-11-1-issue-projects-gh",
+    "ten": "11.1 — Issue, Projects & CLI gh",
+    "nguon": "Git & GitHub · Chương 11",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-11-2-actions",
+    "ten": "11.2 — GitHub Actions: CI từ số 0",
+    "nguon": "Git & GitHub · Chương 11",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-15-1-ho-so-github",
+    "ten": "15.1 — Hồ sơ GitHub như một CV: profile README, repo ghim & README dự án",
+    "nguon": "Git & GitHub · Chương 15",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Version Control › GitLab": {
+  "body": "GitLab là nền tảng DevOps tương tự GitHub: lưu repo Git, review code bằng **Merge Request** (tương đương Pull Request), quản lý issue và có **CI/CD tích hợp sẵn** qua file `.gitlab-ci.yml`. Điểm khác đáng kể là bạn có thể **tự host** GitLab trên máy chủ của mình (bản Community), nên được nhiều doanh nghiệp và trường học chọn khi cần kiểm soát dữ liệu.\n\n### Khái niệm tương ứng\n- Repository và Group/Subgroup tổ chức dự án.\n- **Merge Request**, **Issues**, **Milestones**, **Labels**.\n- **Protected branches**: giới hạn ai được push hoặc merge vào nhánh quan trọng.\n- **CI/CD pipeline**: các `stages` và `jobs` chạy trên `runners`.\n\n### Ví dụ pipeline đơn giản\n```yaml\nstages: [test, build]\n\ntest:\n  stage: test\n  image: node:22\n  script:\n    - npm ci\n    - npm test\n\nbuild:\n  stage: build\n  image: node:22\n  script:\n    - npm ci\n    - npm run build\n  artifacts:\n    paths: [dist/]\n```\n\n### Ý chính\nQuy trình Git cơ bản (clone, branch, commit, push) y hệt; chỉ phần giao diện và tính năng cộng tác khác tên. Nếu đã quen GitHub, bạn chuyển sang GitLab rất nhanh.",
+  "lessons": [
+   {
+    "href": "/courses/software-development-project/learn?lessonSlug=swp391-1-3-gitlab-setup-du-an",
+    "ten": "1.3 — Dựng project GitLab: repo, thành viên, nhánh bảo vệ, label & milestone",
+    "nguon": "Software Development Project · Chương 1",
+    "kieu": "lab",
+    "academy": true,
+    "ma": "SWP391"
+   }
+  ]
+ },
+ "Version Control › Bitbucket": {
+  "body": "Bitbucket là dịch vụ lưu repository Git của Atlassian. Nó mạnh nhất khi công ty đã dùng **Jira** (theo dõi công việc) và **Confluence** (tài liệu), vì commit, nhánh và pull request được liên kết thẳng với ticket Jira.\n\n### Tính năng chính\n- Repository Git, **Pull Request** và review code.\n- **Bitbucket Pipelines**: CI/CD cấu hình bằng file `bitbucket-pipelines.yml`.\n- Phân quyền theo workspace/project/repository, quy tắc bảo vệ nhánh.\n- Tích hợp Jira: ghi mã ticket (ví dụ `PROJ-123`) vào tên nhánh hoặc commit để liên kết tự động.\n\n### Ví dụ pipeline tối giản\n```yaml\nimage: node:22\npipelines:\n  default:\n    - step:\n        name: Test\n        script:\n          - npm ci\n          - npm test\n```\n\n### Ý chính\nQuy trình Git bạn học (clone, branch, commit, push, PR) không đổi giữa GitHub, GitLab và Bitbucket. Chọn nền tảng theo hệ sinh thái công ty đang dùng chứ không phải vì khác biệt về Git."
+ },
+ "Version Control › Hệ thống Quản lý Phiên bản (Version Control)": {
+  "body": "Version control (quản lý phiên bản) là hệ thống ghi lại mọi thay đổi của mã nguồn theo thời gian: ai sửa gì, khi nào, vì sao. Hãy hình dung nó như nút \"hoàn tác\" không giới hạn, cộng thêm khả năng nhiều người làm trên cùng một dự án mà không ghi đè lên nhau.\n\n### Vì sao cần\n- **Quay lại** phiên bản chạy tốt khi sửa hỏng.\n- **Cộng tác**: nhiều người sửa song song rồi hợp nhất.\n- **Truy vết**: tìm ra commit nào gây lỗi và lý do thay đổi.\n- **Thử nghiệm an toàn** trên nhánh riêng mà không động tới bản chính.\n- **Nền tảng cho CI/CD**: mỗi lần đẩy code là một sự kiện để chạy kiểm tra và deploy.\n\n### Hai kiểu hệ thống\n- **Tập trung** (SVN): một máy chủ trung tâm giữ lịch sử.\n- **Phân tán** (Git, Mercurial): mỗi người có bản sao đầy đủ lịch sử, làm việc offline được. Git là chuẩn hiện nay.\n\n### Khái niệm cơ bản\nRepository, commit (một ảnh chụp có lời nhắn), nhánh (branch), hợp nhất (merge), remote.\n\n### Lỗi hay gặp\n- Coi việc đặt tên thư mục `final_v2_that_su_final` là quản lý phiên bản.\n- Commit file sinh tự động hay bí mật vào repo.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-0-5-bat-dau-tai-day",
+    "ten": "Bắt đầu tại đây (1/2) — Git và GitHub là gì, ra đời thế nào, và vì sao quan trọng với bạn",
+    "nguon": "Git & GitHub · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-0-2-van-de-git-giai-quyet",
+    "ten": "0.2 — Vấn đề Git giải quyết (và vì sao thư mục thì không)",
+    "nguon": "Git & GitHub · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-0-0-slides",
+    "ten": "0.0 — Slide Mục 0: bắt đầu với Git bằng hình",
+    "nguon": "Git & GitHub · Mục 0",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-1-2-commit-la-gi",
+    "ten": "1.2 — Một commit thật sự là gì: ảnh chụp, mã băm & commit cha",
+    "nguon": "Git & GitHub · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-1-3-git",
+    "ten": "1.3 — Git: cỗ máy thời gian cho mã của bạn",
+    "nguon": "Nền tảng Lập trình Web · Chương 1",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Package Managers › npm": {
+  "body": "npm (Node Package Manager) là trình quản lý gói mặc định đi kèm Node.js, và cũng là kho gói JavaScript lớn nhất. Nó giúp bạn cài thư viện, chạy script và chia sẻ code.\n\n### Khởi động\n```bash\nnpm init -y            # tạo package.json\nnpm install react      # cài và ghi vào dependencies\nnpm install -D vite    # cài vào devDependencies\nnpm run dev            # chạy script \"dev\" trong package.json\n```\n\n### Ý chính\n- **`package.json`** mô tả dự án: tên, `scripts`, `dependencies` (cần khi chạy), `devDependencies` (chỉ cần khi phát triển).\n- **`package-lock.json`** khoá chính xác phiên bản đã cài để mọi máy (và CI) ra cùng kết quả. Hãy commit file này.\n- **Semver** `MAJOR.MINOR.PATCH`: `^1.2.3` nhận bản `1.x.x` mới hơn; `~1.2.3` chỉ nhận bản vá `1.2.x`.\n- **`npm ci`** cài đúng theo lockfile, nhanh và ổn định, nên dùng trong CI.\n- **`node_modules/`** cực lớn và sinh tự động; đưa vào `.gitignore`.\n- `npx` chạy một gói mà không cần cài toàn cục.\n\n### Bảo mật\nGói bên thứ ba là bề mặt tấn công. Chạy `npm audit` để xem cảnh báo, cân nhắc trước khi thêm gói ít người dùng, và cẩn thận với script cài đặt của gói lạ.\n\n### Lỗi hay gặp\n- Xoá `package-lock.json` hoặc chạy `npm install` khác phiên bản Node giữa các máy.\n- Cài toàn cục (`-g`) thứ dự án cần mà không khai trong `package.json`.",
+  "lessons": [
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-4-1-package-json",
+    "ten": "4.1 — package.json và npm scripts",
+    "nguon": "Node.js · Chương 4",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-4-2-semver-lockfile",
+    "ten": "4.2 — Semver và lockfile",
+    "nguon": "Node.js · Chương 4",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-1-5-node-npm",
+    "ten": "1.5 — Node & npm: chạy JS và cài thư viện",
+    "nguon": "Nền tảng Lập trình Web · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/simulation?scenario=nodejs-semver",
+    "ten": "Semver và lockfile",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "Package Managers › pnpm": {
+  "body": "pnpm là trình quản lý gói thay thế npm, nổi bật nhờ cài nhanh và tiết kiệm ổ đĩa. Cùng dùng `package.json` và kho gói npm, nên chuyển đổi rất dễ.\n\n### Vì sao nó tiết kiệm\npnpm lưu mỗi phiên bản của một gói **một lần duy nhất** trong kho toàn cục (content-addressable store) rồi tạo liên kết cứng (hard link) vào `node_modules` của từng dự án. Mười dự án dùng cùng một phiên bản React thì chỉ tốn chỗ cho một bản.\n\n### Khác biệt đáng chú ý\n- `node_modules` có cấu trúc **không phẳng**: dự án chỉ truy cập được gói mà nó khai trong `package.json`. Điều này chặn lỗi \"dùng nhầm gói phụ thuộc gián tiếp\" (phantom dependency).\n- Hỗ trợ **workspaces** cho monorepo, và có lệnh lọc `--filter` để chạy lệnh trên từng gói.\n- Lockfile là `pnpm-lock.yaml`.\n\n### Lệnh tương ứng\n```bash\npnpm install        # npm install\npnpm add react      # npm install react\npnpm add -D vite    # npm install -D vite\npnpm dev            # npm run dev\n```\n\n### Lỗi hay gặp\n- Trộn lockfile của nhiều trình quản lý gói (có cả `package-lock.json` lẫn `pnpm-lock.yaml`).\n- Gói cũ dựa vào cấu trúc `node_modules` phẳng, bị lỗi trên pnpm; thường sửa bằng cách khai đúng dependency."
+ },
+ "Package Managers › yarn": {
+  "body": "Yarn là trình quản lý gói do Facebook (nay là Meta) tạo ra, ra đời để khắc phục các điểm yếu của npm thời đầu như cài chậm và kết quả không nhất quán. Nay npm đã cải thiện nhiều, nhưng Yarn vẫn được nhiều dự án dùng.\n\n### Hai thế hệ\n- **Yarn Classic (1.x)**: cách dùng quen thuộc với `yarn.lock` và `node_modules`.\n- **Yarn Berry (2+)**: viết lại, mặc định dùng **Plug'n'Play (PnP)**: không tạo `node_modules` mà ghi bảng tra cứu để Node tìm gói từ cache nén. Có thể tắt PnP để dùng `node_modules` như thường.\n\n### Tính năng đáng biết\n- **Workspaces** cho monorepo.\n- Cài **ổn định theo lockfile** và có chế độ offline cache.\n- Hệ thống plugin để mở rộng.\n\n### Lệnh tương ứng\n```bash\nyarn install\nyarn add react\nyarn add -D vite\nyarn dev\n```\n\n### Lưu ý\nChọn một trình quản lý gói cho cả dự án và ghi vào tài liệu/`packageManager` trong `package.json`; mọi người trong nhóm dùng cùng một công cụ để lockfile không bị lệch."
+ },
+ "Package Managers › Bun": {
+  "body": "Bun là một runtime JavaScript mới (viết bằng Zig, dùng engine JavaScriptCore của Safari) hướng tới tốc độ, gộp nhiều công cụ vào một chương trình: **runtime**, **trình quản lý gói**, **bundler** và **test runner**.\n\n### Dùng như trình quản lý gói\n```bash\nbun install        # thường nhanh hơn npm rõ rệt\nbun add react\nbun run dev\n```\nBun đọc `package.json` bình thường nên có thể dùng làm trình quản lý gói mà vẫn chạy dự án bằng Node.\n\n### Dùng như runtime\n```bash\nbun index.ts       # chạy trực tiếp TypeScript, không cần bước biên dịch riêng\nbun test           # test runner có sẵn\n```\n\n### Ý chính\n- Cố gắng tương thích với API của Node.js, nhưng chưa phải 100% mọi module; kiểm tra khi dự án dùng gói gốc (native) hoặc API ít phổ biến.\n- Lockfile hiện tại khác định dạng với npm/yarn/pnpm; đừng trộn lẫn.\n- Hệ sinh thái mới hơn Node.js, nên hãy cân nhắc độ ổn định cho dự án sản xuất lớn.\n\n### Khi nào dùng\nDự án mới, script tiện ích, hay khi muốn rút ngắn thời gian cài và chạy test. Với dự án cần tính ổn định tối đa, nhiều nhóm vẫn giữ Node.js làm runtime và chỉ dùng Bun cho vài việc."
+ },
+ "Chọn Framework › React": {
+  "body": "React là thư viện giao diện của Meta, xây dựng UI bằng các **component** nhỏ có thể tái sử dụng. Bạn mô tả giao diện nên trông như thế nào ứng với dữ liệu hiện tại, React lo việc cập nhật DOM cho khớp.\n\n### Khái niệm cốt lõi\n- **Component** là hàm trả về JSX (cú pháp giống HTML trong JavaScript).\n- **Props**: dữ liệu truyền từ component cha xuống con, chỉ đọc.\n- **State** (`useState`): dữ liệu của chính component; thay đổi state thì component render lại.\n- **Effect** (`useEffect`): chạy tác dụng phụ như gọi API, đăng ký sự kiện, và dọn dẹp khi xong.\n- **Hook** tự viết để dùng lại logic.\n\n```jsx\nimport { useState } from \"react\";\n\nfunction Dem() {\n  const [dem, setDem] = useState(0);\n  return (\n    <button onClick={() => setDem(dem + 1)}>\n      Đã bấm {dem} lần\n    </button>\n  );\n}\n```\n\n### Ý chính\n- Dữ liệu chảy một chiều, từ trên xuống.\n- Không sửa state trực tiếp; luôn tạo bản sao mới (mảng/object bất biến).\n- Danh sách cần `key` ổn định, không dùng chỉ số mảng nếu danh sách thay đổi thứ tự.\n- Hệ sinh thái lớn nhất: routing (React Router), dữ liệu (TanStack Query), form (React Hook Form), framework full-stack (Next.js).\n\n### Lỗi hay gặp\n- Sửa state trực tiếp (`state.push(x)`).\n- `useEffect` thiếu dependency hoặc gây vòng lặp vô hạn.\n- Dùng effect cho thứ có thể tính ngay trong lúc render.\n\n### Tự kiểm tra\n1. Khi nào component render lại?\n2. Vì sao cần `key` khi render danh sách?",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-0-0-slides",
+    "ten": "0.0 — Slide Mục 0: vì sao React, cài đặt, JSX và JavaScript bằng hình",
+    "nguon": "React · Mục 0",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-1-1-component",
+    "ten": "1.1 — Component là hàm: đặt tên, mỗi file một component, và giữ cho thuần khiết",
+    "nguon": "React · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-2-1-use-state",
+    "ten": "2.1 — useState và render lại: ảnh chụp state, cập nhật theo hàm và batching",
+    "nguon": "React · Chương 2",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-4-1-use-effect",
+    "ten": "4.1 — useEffect, dependency và cleanup: khi nào chạy và vì sao Strict Mode chạy hai lần",
+    "nguon": "React · Chương 4",
+    "kieu": "video"
+   },
+   {
+    "href": "/code-lab/react",
+    "ten": "React",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Chọn Framework › Vue.js": {
+  "body": "Vue là framework giao diện tiến bộ (progressive): dùng được từ việc nhúng vào một trang đến dựng cả ứng dụng lớn. Nổi tiếng dễ học, tài liệu tốt và hệ thống reactivity trực quan.\n\n### Cách viết\nMỗi component thường nằm trong một file `.vue` (Single-File Component) gồm template, script và style:\n```vue\n<script setup>\nimport { ref } from \"vue\";\nconst dem = ref(0);\n</script>\n\n<template>\n  <button @click=\"dem++\">Đã bấm {{ dem }} lần</button>\n</template>\n```\n\n### Ý chính\n- **Reactivity**: bọc dữ liệu bằng `ref`/`reactive`; thay đổi thì giao diện tự cập nhật, bạn không phải gọi hàm \"setState\".\n- **Composition API** (`<script setup>`) là cách viết hiện đại; **Options API** là cách cũ vẫn dùng được.\n- Cú pháp template: `v-if`, `v-for`, `v-model` (liên kết hai chiều với form), `@click`, `:thuoc-tinh`.\n- Hệ sinh thái chính thức: Vue Router, **Pinia** (quản lý state), Vite làm công cụ build, **Nuxt** cho SSR/full-stack.\n\n### So với React\nVue dùng template gần HTML và hệ thống reactivity tự theo dõi phụ thuộc; React dùng JSX và bạn tự quản lý việc cập nhật state tường minh hơn. Cả hai đều giải quyết cùng bài toán.",
+  "lessons": [
+   {
+    "href": "/code-lab/vue",
+    "ten": "Vue",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Chọn Framework › Angular": {
+  "body": "Angular là framework đầy đủ của Google, viết bằng TypeScript, đi kèm mọi thứ cần cho ứng dụng lớn: routing, form, HTTP client, công cụ CLI, kiểm thử. Vì \"pin sạc đầy đủ\" nên hợp với đội lớn và doanh nghiệp cần quy ước thống nhất.\n\n### Khái niệm chính\n- **Component**: gồm class TypeScript, template HTML và style.\n- **Dependency Injection (DI)**: framework tự cung cấp service cho nơi cần, giúp tách logic và dễ test.\n- **Service**: lớp chứa logic dùng chung (gọi API, trạng thái).\n- **Signals**: cơ chế reactivity mới, theo dõi giá trị và cập nhật giao diện chính xác.\n- **RxJS** và Observable: xử lý luồng dữ liệu bất đồng bộ (HTTP, sự kiện); Angular dùng nhiều trong HttpClient và Router.\n- **Angular CLI**: sinh component, chạy dev server, build, test (`ng new`, `ng serve`, `ng generate`).\n\n```ts\nimport { Component, signal } from \"@angular/core\";\n\n@Component({\n  selector: \"app-dem\",\n  standalone: true,\n  template: `<button (click)=\"dem.set(dem() + 1)\">Bấm {{ dem() }}</button>`,\n})\nexport class DemComponent {\n  dem = signal(0);\n}\n```\n\n### Lưu ý\n- Đường học dốc hơn React/Vue vì nhiều khái niệm (DI, decorator, RxJS), bù lại cấu trúc dự án rất nhất quán.\n- Cú pháp và API đổi theo phiên bản (nhất là sau khi có standalone components và signals); luôn đối chiếu tài liệu chính thức đúng phiên bản bạn dùng.",
+  "lessons": [
+   {
+    "href": "/code-lab/angular",
+    "ten": "Angular",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Chọn Framework › Svelte": {
+  "body": "Svelte đi theo hướng khác React và Vue: thay vì gửi thư viện chạy trong trình duyệt để tính toán thay đổi, nó là một **compiler** biến component thành mã JavaScript tối ưu ngay lúc build. Kết quả là gói nhỏ và ít việc phải làm khi chạy.\n\n### Ý chính\n- Không dùng virtual DOM; Svelte biết trước lúc biên dịch chỗ nào cần cập nhật nên sinh mã cập nhật đúng chỗ đó.\n- Viết gần như HTML/CSS/JS thuần trong file `.svelte`; CSS trong component tự giới hạn phạm vi.\n- Phiên bản 5 đưa ra **runes** (`$state`, `$derived`, `$effect`) để khai báo reactivity rõ ràng.\n- **SvelteKit** là framework full-stack chính thức: routing theo thư mục, SSR, server endpoints.\n\n```svelte\n<script>\n  let dem = $state(0);\n</script>\n\n<button onclick={() => dem++}>Đã bấm {dem} lần</button>\n```\n\n### So với React/Vue\nÍt code mẫu hơn, học nhanh. Đổi lại hệ sinh thái nhỏ hơn và ít vị trí tuyển dụng hơn.\n\n### Lưu ý\nCú pháp thay đổi giữa Svelte 4 và 5 (ví dụ `let` reactive ngầm đổi sang `$state`); khi đọc ví dụ cũ hãy kiểm tra phiên bản."
+ },
+ "Chọn Framework › Solid JS": {
+  "body": "Solid là thư viện giao diện có cú pháp JSX giống React nhưng cơ chế bên trong khác hẳn: nó dùng **reactivity chi tiết (fine-grained)** dựa trên *signal* và **không có virtual DOM**.\n\n### Điểm khác biệt chính\n- Component chỉ chạy **một lần** để dựng giao diện. Sau đó, từng biểu thức đọc signal được cập nhật riêng, không render lại cả component.\n- Vì vậy không có chuyện dependency array của `useEffect` hay closure cũ như React.\n\n```jsx\nimport { createSignal } from \"solid-js\";\n\nfunction Dem() {\n  const [dem, setDem] = createSignal(0);\n  return <button onClick={() => setDem(dem() + 1)}>Đã bấm {dem()} lần</button>;\n}\n```\nLưu ý `dem()` phải gọi như hàm để đọc giá trị, và đó là cách Solid theo dõi phụ thuộc.\n\n### Ý chính\n- API quen thuộc nếu bạn biết React: JSX, component, props.\n- Hiệu năng rất tốt trong các benchmark nhờ cập nhật chính xác.\n- **SolidStart** là framework full-stack (SSR, routing).\n- Hệ sinh thái nhỏ hơn React nhiều.\n\n### Lỗi hay gặp\n- Destructure props (làm mất tính phản ứng); hãy truy cập `props.x` hoặc dùng các helper của Solid.\n- Quên gọi signal như hàm."
+ },
+ "Chọn Framework › Qwik": {
+  "body": "Qwik tập trung giải quyết một vấn đề của framework hiện đại: để trang tương tác được, trình duyệt thường phải tải và chạy rất nhiều JavaScript (hydration). Qwik thay bằng **resumability**: server render HTML kèm thông tin trạng thái đã tuần tự hoá, trình duyệt \"tiếp tục\" từ đó thay vì chạy lại từ đầu.\n\n### Ý chính\n- Gần như **không chạy JS lúc tải trang**; mã chỉ được tải khi người dùng thực sự tương tác (ví dụ bấm vào nút).\n- Mã được chia thành mảnh rất nhỏ (lazy-load theo từng handler); ký hiệu `$` (như `onClick$`, `component$`) đánh dấu ranh giới để công cụ build tách mã.\n- Cú pháp JSX giống React, nên người biết React dễ làm quen.\n- **Qwik City** là lớp full-stack: routing theo thư mục, loader, action.\n\n```tsx\nimport { component$, useSignal } from \"@builder.io/qwik\";\n\nexport default component$(() => {\n  const dem = useSignal(0);\n  return <button onClick$={() => dem.value++}>Đã bấm {dem.value} lần</button>;\n});\n```\n\n### Khi hợp\nTrang cần tải nhanh nhất có thể trên mạng và thiết bị yếu (thương mại điện tử, nội dung). Đổi lại hệ sinh thái nhỏ và có những ràng buộc về cách viết (dữ liệu phải tuần tự hoá được)."
+ },
+ "Chọn Framework › Tanstack Start": {
+  "body": "TanStack Start là framework full-stack xây trên **TanStack Router**, thuộc hệ sinh thái TanStack (cùng gia đình với TanStack Query, Table, Form). Nó thêm vào router các khả năng của framework: render phía server (SSR), streaming, và hàm chạy trên server.\n\n### Ý chính\n- **Routing an toàn kiểu (type-safe)**: tham số đường dẫn, search params và loader đều được suy luận kiểu từ định nghĩa route, nên sai tên route hay thiếu tham số bị bắt ngay lúc biên dịch.\n- **Server functions**: viết hàm chạy trên server và gọi từ client như hàm thường, có kiểu đầy đủ.\n- **Loader** lấy dữ liệu theo route, kết hợp tự nhiên với TanStack Query để cache.\n- Không buộc vào một nền tảng triển khai cụ thể; có thể deploy lên nhiều nơi.\n\n### Khi hợp\nDự án React/TypeScript muốn kiểm soát chặt kiểu dữ liệu từ router tới server, và đã quen hệ sinh thái TanStack.\n\n### Lưu ý\nFramework còn mới so với Next.js, API và cách cấu hình có thể thay đổi theo phiên bản, nên luôn đọc tài liệu chính thức mới nhất trước khi bắt đầu."
+ },
+ "Chọn Framework › Chọn và học một Framework": {
+  "body": "Đến đây bạn đã biết HTML, CSS, JavaScript; việc tiếp theo là chọn **một** framework và đi sâu bằng cách làm dự án thật. Đừng chạy theo \"framework tốt nhất\"; cái quan trọng là hiểu rõ các khái niệm lặp lại ở mọi framework: component, props, state, routing, gọi API, quản lý form.\n\n### Cách chọn\n- **Muốn nhiều cơ hội việc làm và tài liệu**: React (cộng Next.js khi cần SSR/SEO) là lựa chọn phổ biến nhất.\n- **Muốn dễ học, tài liệu rõ**: Vue.\n- **Muốn khung đầy đủ, quy ước chặt, làm doanh nghiệp**: Angular.\n- **Quan tâm hiệu năng và code gọn**: Svelte, Solid.\n- Xem tin tuyển dụng ở nơi bạn muốn làm việc để biết họ dùng gì.\n\n### Cách học hiệu quả\n1. Học nền tảng JavaScript trước (closure, async, mảng/object, module).\n2. Làm một app nhỏ có đủ: danh sách, form, gọi API, trạng thái đang tải/lỗi, routing.\n3. Thêm TypeScript, test cơ bản, rồi deploy lên mạng.\n4. Sau khi vững một framework, học framework thứ hai sẽ nhanh vì nguyên lý tương tự.\n\n### Lỗi hay gặp\n- Nhảy giữa các framework mỗi tuần mà không hoàn thành dự án nào.\n- Học framework khi chưa vững JavaScript nên không phân biệt được lỗi của ngôn ngữ và lỗi của framework.",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-0-8-bat-dau-tai-day",
+    "ten": "Bắt đầu tại đây (1/2) — React là gì, ra đời thế nào, vì sao công ty vẫn tuyển",
+    "nguon": "React · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-7-4-sang-nextjs",
+    "ten": "7.4 — Từ React sang Next.js: khác gì, khi nào cần, và route của ta chuyển sang thế nào",
+    "nguon": "React · Chương 7",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-10-5-full-stack-picture",
+    "ten": "10.5 — Bức tranh full-stack, và điều tiếp theo",
+    "nguon": "Nền tảng Lập trình Web · Chương 10",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/code-lab/react",
+    "ten": "React",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Static Site Generators › VuePress": {
+  "body": "VuePress là trình tạo trang tĩnh (static site generator) dựa trên Vue, sinh ra chủ yếu để làm **trang tài liệu**. Bạn viết nội dung bằng Markdown, VuePress biên dịch thành các trang HTML tĩnh, có sẵn thanh điều hướng (navbar), sidebar và giao diện đọc tài liệu. Hình dung: bạn chỉ cần viết file `.md`, còn khung giao diện, định tuyến và tối ưu tải trang đã được lo sẵn.\n\n### Vì sao cần biết\n- Tài liệu dự án, blog kỹ thuật, trang hướng dẫn nội bộ thường dùng generator kiểu này vì rẻ, nhanh, host được ở bất kỳ nơi nào phục vụ file tĩnh (GitHub Pages, Netlify, Cloudflare Pages...).\n- Vì nền là Vue, bạn có thể nhúng component Vue ngay trong Markdown khi cần demo tương tác.\n\n### Ý chính\n- Mỗi file `.md` trong thư mục nguồn tương ứng một đường dẫn trang.\n- Cấu hình nằm trong thư mục `.vuepress/` (ví dụ `config.ts`): tiêu đề, theme, navbar, sidebar, bundler.\n- Theme mặc định đã có navbar, sidebar, chế độ sáng/tối; muốn nhiều tính năng hơn (tìm kiếm, phân tích...) thì thêm plugin.\n- Lệnh `dev` chạy server phát triển có hot reload; lệnh `build` xuất ra thư mục HTML tĩnh để deploy.\n\n```ts\n// docs/.vuepress/config.ts\nimport { defineUserConfig } from 'vuepress'\nimport { defaultTheme } from '@vuepress/theme-default'\nimport { viteBundler } from '@vuepress/bundler-vite'\n\nexport default defineUserConfig({\n  lang: 'vi-VN',\n  title: 'Tài liệu của tôi',\n  theme: defaultTheme({\n    navbar: [{ text: 'Hướng dẫn', link: '/guide/' }],\n  }),\n  bundler: viteBundler(),\n})\n```\n\n### Lưu ý khi chọn công cụ\nVuePress không phải lựa chọn duy nhất: VitePress (cùng hệ sinh thái Vue, nhẹ hơn) hay Docusaurus, Astro Starlight cũng làm tài liệu rất tốt. Với dự án mới, hãy so sánh theo nhu cầu (ngôn ngữ nền, plugin, cộng đồng) thay vì chọn theo tên.\n\n### Lỗi hay gặp\n- Trộn lẫn tài liệu VuePress 1 và 2: cấu hình, tên package và API khác nhau, hãy kiểm tra phiên bản bạn đang đọc.\n- Quên đặt `base` khi deploy vào đường dẫn con (ví dụ GitHub Pages dạng `/ten-repo/`), khiến CSS/JS 404.",
+  "more": [
+   {
+    "type": "official",
+    "title": "VuePress — Giới thiệu",
+    "url": "https://vuepress.vuejs.org/guide/introduction.html"
+   }
+  ]
+ },
+ "Mobile & Desktop Apps › React Native": {
+  "body": "React Native cho phép bạn viết app iOS và Android bằng JavaScript/TypeScript và React, nhưng giao diện hiển thị là **view native thật** của từng hệ điều hành chứ không phải một trang web đóng gói. Nếu đã biết React, bạn tái sử dụng gần như nguyên tư duy: component, props, state, hooks.\n\n### Vì sao cần biết\nMột đội web có thể ra app mobile mà không phải thuê riêng đội Swift/Kotlin; phần logic (gọi API, quản lý state, validate) dùng chung được. Rất nhiều app thương mại dùng React Native, và Expo giúp bạn bắt đầu mà không cần cài Xcode hay Android Studio ngay từ đầu.\n\n### Ý chính\n- Không có thẻ HTML: `View` thay `div`, `Text` thay `p`/`span`, `Image`, `ScrollView`, `FlatList` cho danh sách dài. **Mọi chữ phải nằm trong `Text`.**\n- Không có file CSS: dùng `StyleSheet.create` (object JS). Layout dùng Flexbox, nhưng mặc định `flexDirection` là `column` (web là `row`).\n- Sự kiện chạm dùng `Pressable`/`onPress`, không phải `onClick`.\n- Điều hướng giữa màn hình dùng thư viện (Expo Router hoặc React Navigation), không có URL/thẻ `a`.\n- Kiến trúc mới (New Architecture: JSI, Fabric, TurboModules) đã là mặc định ở các bản gần đây, thay cho \"bridge\" cũ.\n- Expo cung cấp bộ SDK (camera, thông báo, lưu trữ an toàn...), chạy thử ngay trên điện thoại thật bằng Expo Go.\n\n```jsx\nimport { useState } from 'react';\nimport { View, Text, Pressable, StyleSheet } from 'react-native';\n\nexport default function Counter() {\n  const [n, setN] = useState(0);\n  return (\n    <View style={styles.box}>\n      <Text>Đã bấm {n} lần</Text>\n      <Pressable onPress={() => setN(n + 1)}>\n        <Text style={styles.btn}>Bấm thử</Text>\n      </Pressable>\n    </View>\n  );\n}\nconst styles = StyleSheet.create({\n  box: { flex: 1, justifyContent: 'center', alignItems: 'center' },\n  btn: { color: 'blue', marginTop: 12 },\n});\n```\n\nBắt đầu: `npx create-expo-app@latest` rồi `npx expo start` và quét mã QR bằng Expo Go.\n\n### Lỗi hay gặp\n- Đặt chuỗi chữ trực tiếp trong `View` → lỗi \"Text strings must be rendered within a <Text>\".\n- Dùng `ScrollView` với danh sách hàng nghìn phần tử thay vì `FlatList` → giật, tốn RAM.\n- Nhúng khóa API thẳng vào app: file cài đặt có thể bị trích xuất; hãy qua một backend trung gian.\n- Quên kiểm tra cả iOS và Android: bóng đổ, font, bàn phím xử lý khác nhau.\n\n### Tự kiểm tra\n1. Vì sao `<Text>` bắt buộc, và nó tương ứng thẻ HTML nào?\n2. Khác biệt mặc định của Flexbox giữa web và React Native là gì?\n3. Khi nào bạn cần chuyển từ Expo managed sang tự viết native module?",
+  "lessons": [
+   {
+    "href": "/courses/multiplatform-mobile-app-development/learn?lessonSlug=mma301-gioi-thieu",
+    "ten": "0.1 — Giới thiệu MMA301 & bản đồ ứng dụng di động",
+    "nguon": "Multiplatform Mobile App Development · Mục 0",
+    "kieu": "video",
+    "academy": true,
+    "ma": "MMA301"
+   },
+   {
+    "href": "/courses/multiplatform-mobile-app-development/learn?lessonSlug=mma301-1-1-core-components",
+    "ten": "1.1 — Component cốt lõi & màn hình đầu tiên",
+    "nguon": "Multiplatform Mobile App Development · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "MMA301"
+   },
+   {
+    "href": "/courses/multiplatform-mobile-app-development/learn?lessonSlug=mma301-1-2-styling-flexbox",
+    "ten": "1.2 — Styling với StyleSheet & Flexbox",
+    "nguon": "Multiplatform Mobile App Development · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "MMA301"
+   },
+   {
+    "href": "/courses/multiplatform-mobile-app-development/learn?lessonSlug=mma301-2-1-navigation",
+    "ten": "2.1 — React Navigation & app nhiều màn hình",
+    "nguon": "Multiplatform Mobile App Development · Chương 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "MMA301"
+   },
+   {
+    "href": "/code-lab/react-native",
+    "ten": "React Native",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Mobile & Desktop Apps › Flutter": {
+  "body": "Flutter là bộ công cụ UI của Google dùng ngôn ngữ **Dart** để dựng app cho Android, iOS, web và desktop từ một codebase. Khác React Native (dùng view native), Flutter **tự vẽ từng pixel** bằng engine riêng, nên giao diện giống hệt nhau trên mọi nền tảng.\n\n### Vì sao cần biết\nFlutter được dùng rộng rãi cho app đa nền tảng, đặc biệt khi cần giao diện tùy biến nhiều và hiệu năng animation ổn định. Hot reload giúp thấy thay đổi gần như tức thì khi đang viết UI.\n\n### Ý chính\n- Mọi thứ là **widget**: chữ, nút, padding, cả màn hình. Giao diện là một cây widget mô tả trạng thái hiện tại (UI khai báo).\n- `StatelessWidget` không đổi sau khi dựng; `StatefulWidget` giữ state và gọi `setState` để dựng lại.\n- Bố cục bằng `Column`, `Row`, `Stack`, `Container`, `Padding`, `ListView`.\n- Dart có null-safety: biến chỉ nhận `null` khi kiểu có dấu `?`.\n- Cho state phức tạp dùng Provider, Riverpod hoặc Bloc; gọi API thường dùng `http` hoặc `dio`.\n\n```dart\nclass Counter extends StatefulWidget {\n  const Counter({super.key});\n  @override\n  State<Counter> createState() => _CounterState();\n}\n\nclass _CounterState extends State<Counter> {\n  int n = 0;\n  @override\n  Widget build(BuildContext context) {\n    return Column(children: [\n      Text('Đã bấm $n lần'),\n      ElevatedButton(\n        onPressed: () => setState(() => n++),\n        child: const Text('Bấm thử'),\n      ),\n    ]);\n  }\n}\n```\n\nTạo dự án: `flutter create ten_app`, chạy: `flutter run`.\n\n### Cho người học frontend web\nBạn cần học thêm Dart (khá giống Java/TypeScript) và cách tư duy bằng widget thay vì HTML/CSS. Đổi lại, bạn không phải lo khác biệt hiển thị giữa các trình duyệt hay hệ điều hành.\n\n### Lỗi hay gặp\n- Gọi `setState` sau khi widget đã bị hủy (đã rời màn hình) → lỗi; kiểm tra `mounted`.\n- Lồng `ListView` trong `Column` mà không giới hạn chiều cao → lỗi layout \"unbounded height\".\n- Dựng lại cả cây widget không cần thiết; tách widget nhỏ và dùng `const`.",
+  "lessons": [
+   {
+    "href": "/courses/prm393-mobile-programming/learn?lessonSlug=prm393-0-1-overview",
+    "ten": "Tổng quan: Di động với Flutter",
+    "nguon": "Mobile Programming · Course introduction",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRM393"
+   },
+   {
+    "href": "/courses/prm393-mobile-programming/learn?lessonSlug=prm393-1-1-dart-widgets",
+    "ten": "1.1 — Dart & cây widget",
+    "nguon": "Mobile Programming · Chapter 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRM393"
+   },
+   {
+    "href": "/courses/restaurant-reservation-app/learn?lessonSlug=int608-flutter-client",
+    "ten": "5.1 — Widget, state, lưu trữ an toàn & luồng đặt bàn",
+    "nguon": "Restaurant Reservation App · Mục 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "INT608"
+   },
+   {
+    "href": "/code-lab/flutter",
+    "ten": "Flutter",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Mobile & Desktop Apps › Ionic": {
+  "body": "Ionic là bộ UI giúp bạn dựng app mobile bằng công nghệ web (HTML, CSS, JavaScript) với Angular, React hoặc Vue. App được đóng gói thành app cài đặt được nhờ **Capacitor**, một lớp chạy web app trong WebView và cầu nối tới API native (camera, file, thông báo...).\n\n### Vì sao cần biết\nNếu bạn đã có web app hoặc đội chỉ có kỹ năng web, đây là đường ngắn nhất để đưa nó lên App Store/Google Play. Giao diện được Ionic làm giống phong cách từng nền tảng.\n\n### Ý chính\n- Ionic cung cấp component UI (nút, danh sách, tab, modal) có kiểu iOS và Android; Capacitor lo phần đóng gói và plugin native.\n- Quy trình: build web app, rồi `npx cap sync` để chép bản build vào dự án native (Android Studio/Xcode), mở ra chạy hoặc ký để phát hành.\n- Cần Xcode (macOS) để build iOS, Android Studio để build Android.\n\n```bash\nnpm install @capacitor/core @capacitor/cli\nnpx cap init\nnpx cap add android\nnpm run build && npx cap sync\nnpx cap open android\n```\n\n### Đánh đổi\nVì chạy trong WebView nên animation nặng hoặc danh sách rất lớn có thể không mượt bằng native hoặc Flutter. Bù lại bạn tái sử dụng tối đa mã và kỹ năng web, và có thể chạy luôn dưới dạng PWA.\n\n### Lỗi hay gặp\n- Quên `npx cap sync` sau khi build lại, nên app native vẫn chạy bản web cũ.\n- Dùng API chỉ có trên trình duyệt mà WebView hoặc quyền native không hỗ trợ; cần plugin Capacitor tương ứng và khai báo quyền.",
+  "more": [
+   {
+    "type": "official",
+    "title": "Capacitor — Tài liệu chính thức",
+    "url": "https://capacitorjs.com/docs"
+   }
+  ]
+ },
+ "Mobile & Desktop Apps › Electron": {
+  "body": "Electron cho phép đóng gói web app thành app desktop chạy trên Windows, macOS và Linux. Nó gói sẵn **Chromium** (để hiển thị giao diện web) và **Node.js** (để truy cập hệ thống file, tiến trình, hệ điều hành). Nhiều app quen thuộc như VS Code, Slack, Discord được xây bằng Electron.\n\n### Vì sao cần biết\nMột codebase web có thể thành app desktop có menu, khay hệ thống, thông báo, mở file cục bộ và tự cập nhật. Với đội frontend đó là đường nhanh nhất tới desktop mà không học C++, Swift hay C#.\n\n### Ý chính\n- **Main process** (Node.js): tạo cửa sổ, quản lý vòng đời app, truy cập hệ thống. Chỉ có một.\n- **Renderer process** (Chromium): chạy giao diện HTML/CSS/JS, mỗi cửa sổ một tiến trình.\n- **Preload script** + `contextBridge`: cầu nối an toàn, chỉ để lộ những hàm bạn chủ động cho phép từ main sang renderer qua IPC.\n- Mặc định nên giữ `contextIsolation: true` và không bật `nodeIntegration` trong renderer để mã web (nhất là nội dung từ ngoài) không chạm được Node.\n- Đóng gói bằng Electron Forge hoặc electron-builder; tự cập nhật bằng electron-updater hoặc dịch vụ tương đương.\n\n```js\nconst { app, BrowserWindow } = require('electron');\nconst path = require('path');\n\nfunction createWindow() {\n  const win = new BrowserWindow({\n    width: 1000,\n    height: 700,\n    webPreferences: { preload: path.join(__dirname, 'preload.js') },\n  });\n  win.loadFile('index.html');\n}\napp.whenReady().then(createWindow);\napp.on('window-all-closed', () => {\n  if (process.platform !== 'darwin') app.quit();\n});\n```\n\n### Lỗi hay gặp\n- Bật `nodeIntegration` rồi tải nội dung từ ngoài: một lỗ XSS thành chiếm quyền chạy lệnh trên máy người dùng.\n- Dung lượng cài đặt lớn và dùng nhiều RAM vì mỗi app mang theo một Chromium; cân nhắc Tauri nếu cần nhẹ.\n- Quên ký (code signing) và notarize trên macOS/Windows, khiến hệ điều hành cảnh báo khi cài.\n\n### Tự kiểm tra\n1. Main process và renderer process khác nhau ở điểm nào?\n2. Vì sao cần preload và `contextIsolation`?\n3. Khi nào bạn chọn Electron thay vì Tauri, và ngược lại?"
+ },
+ "Mobile & Desktop Apps › Tauri": {
+  "body": "Tauri là framework dựng app desktop (và từ Tauri 2 cả mobile) với giao diện web nhưng phần lõi viết bằng **Rust**. Khác Electron, Tauri không mang theo Chromium: nó dùng **WebView có sẵn của hệ điều hành** (WebView2 trên Windows, WKWebView trên macOS, WebKitGTK trên Linux), nên file cài đặt thường nhỏ hơn nhiều.\n\n### Vì sao cần biết\nKhi cần app nhẹ, khởi động nhanh, ít RAM, hoặc muốn mô hình bảo mật chặt, Tauri là lựa chọn thay thế đáng cân nhắc. Phần giao diện bạn dùng React, Vue, Svelte... như bình thường.\n\n### Ý chính\n- Frontend: bất kỳ framework web nào, build ra HTML/CSS/JS tĩnh.\n- Backend (core): Rust, xử lý file, hệ điều hành, tác vụ nặng.\n- Giao tiếp: frontend gọi Rust bằng `invoke`, Rust khai báo hàm bằng `#[tauri::command]`.\n- Bảo mật: mặc định chặn, bạn phải cấp quyền rõ ràng cho từng khả năng (hệ thống file, shell...) qua cấu hình capabilities/permissions.\n- Tạo dự án: `npm create tauri-app@latest`.\n\n```rust\n// src-tauri/src/lib.rs\n#[tauri::command]\nfn chao(ten: String) -> String {\n    format!(\"Xin chào, {ten}!\")\n}\n```\n\n```ts\nimport { invoke } from '@tauri-apps/api/core';\nconst loi = await invoke<string>('chao', { ten: 'Lan' });\n```\n\n### Đánh đổi so với Electron\n- Nhẹ hơn, nhưng WebView mỗi hệ điều hành hơi khác nhau, nên cần kiểm tra hiển thị trên từng nền tảng.\n- Cần học Rust nếu muốn viết logic native; chỉ làm UI thì ít phải đụng tới.\n- Hệ sinh thái nhỏ hơn Electron.\n\n### Lỗi hay gặp\n- Quên cấp quyền trong cấu hình nên lệnh gọi bị từ chối.\n- Giả định mọi tính năng CSS/JS mới đều chạy trên WebView cũ của máy người dùng.",
+  "more": [
+   {
+    "type": "official",
+    "title": "Tauri — Bắt đầu",
+    "url": "https://tauri.app/start/"
+   }
+  ]
+ },
+ "Mobile & Desktop Apps › Ứng dụng đa nền tảng": {
+  "body": "Phát triển đa nền tảng (cross-platform) là cách xây app cho nhiều hệ điều hành từ một codebase thay vì viết riêng cho từng nền tảng. Không có lựa chọn tốt nhất cho mọi trường hợp; bạn đang cân bằng giữa **tốc độ ra sản phẩm, chia sẻ mã, hiệu năng và độ \"native\"** của trải nghiệm.\n\n### Các hướng tiếp cận chính\n- **Native thuần** (Swift/Kotlin): hiệu năng và quyền truy cập API tốt nhất, nhưng gấp đôi công sức và hai đội.\n- **React Native**: viết JS/TS + React, hiển thị bằng view native thật; hợp đội đã biết React.\n- **Flutter**: Dart, tự vẽ giao diện bằng engine riêng; giao diện đồng nhất, animation mạnh.\n- **Hybrid web (Ionic + Capacitor)**: web app trong WebView; tái sử dụng tối đa mã web, đổi lại hiệu năng đồ họa nặng kém hơn.\n- **PWA**: web app cài được từ trình duyệt, không qua cửa hàng; hạn chế một số API trên iOS.\n- Desktop: **Electron** (Chromium + Node) hoặc **Tauri** (WebView hệ điều hành + Rust).\n\n### Cách chọn\nHỏi theo thứ tự: đội đang giỏi gì? App cần API native hiếm không (Bluetooth, AR, nền)? Yêu cầu hiệu năng/animation ra sao? Có cần ra cả web và desktop không? Cần mức giống native của từng nền tảng đến đâu?\n\n### Ý chính\n- \"Một codebase\" không có nghĩa 100% dùng chung; luôn còn phần riêng theo nền tảng (quyền, thông báo, cấu hình build, thiết kế theo chuẩn hệ điều hành).\n- Tách logic nghiệp vụ khỏi giao diện để tái dùng được kể cả khi đổi công nghệ UI.\n- Thử sớm trên máy thật của cả hai hệ điều hành, đừng chỉ dùng giả lập.\n\n### Lỗi hay gặp\n- Chọn công nghệ theo xu hướng mà không xét kỹ năng đội.\n- Bỏ qua chi phí phát hành: tài khoản developer, ký ứng dụng, duyệt cửa hàng (App Store/Google Play) vẫn phải làm ở mọi hướng.",
+  "lessons": [
+   {
+    "href": "/courses/multiplatform-mobile-app-development/learn?lessonSlug=mma301-gioi-thieu",
+    "ten": "0.1 — Giới thiệu MMA301 & bản đồ ứng dụng di động",
+    "nguon": "Multiplatform Mobile App Development · Mục 0",
+    "kieu": "video",
+    "academy": true,
+    "ma": "MMA301"
+   },
+   {
+    "href": "/courses/prm393-mobile-programming/learn?lessonSlug=prm393-0-1-overview",
+    "ten": "Tổng quan: Di động với Flutter",
+    "nguon": "Mobile Programming · Course introduction",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRM393"
+   },
+   {
+    "href": "/courses/restaurant-reservation-app/learn?lessonSlug=int608-tech-stack",
+    "ten": "0.3 — Tech stack & lý do chọn từng thứ",
+    "nguon": "Restaurant Reservation App · Mục 0",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "INT608"
+   },
+   {
+    "href": "/courses/gym-membership-app/learn?lessonSlug=int607-tech-stack",
+    "ten": "0.3 — Tech stack & lý do chọn từng thứ",
+    "nguon": "Gym Membership & Classes App · Mục 0",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "INT607"
+   }
+  ]
+ },
+ "Tiếp tục học › Data Structures & Algorithms": {
+  "body": "Cấu trúc dữ liệu và giải thuật (DSA) là cách tổ chức dữ liệu và các bước xử lý sao cho nhanh và tiết kiệm. Nghe có vẻ chỉ dành cho phỏng vấn, nhưng nó nằm sau nhiều chuyện frontend hằng ngày: render danh sách lớn, tìm kiếm, cache, cây DOM, quản lý state.\n\n### Vì sao cần biết\n- Chọn đúng cấu trúc giúp trang mượt: dùng `Map`/`Set` để tra cứu O(1) thay vì duyệt mảng mỗi lần.\n- Hiểu Big-O để biết khi nào vòng lặp lồng nhau sẽ làm treo giao diện với 10.000 phần tử.\n- DOM là cây, router lồng nhau là cây, phụ thuộc giữa module là đồ thị: duyệt và đệ quy xuất hiện thường xuyên.\n- Nhiều công ty frontend vẫn hỏi DSA ở vòng phỏng vấn.\n\n### Ý chính\n- **Big-O**: mô tả tốc độ tăng của thời gian/bộ nhớ theo kích thước đầu vào (O(1), O(log n), O(n), O(n log n), O(n²)).\n- Cấu trúc nền tảng: mảng, danh sách liên kết, ngăn xếp, hàng đợi, bảng băm, cây (BST, heap), đồ thị.\n- Giải thuật nền tảng: tìm kiếm nhị phân, sắp xếp, đệ quy, BFS/DFS, quy hoạch động.\n- Luyện bằng cách tự cài lại rồi giải bài có kiểm thử, thay vì chỉ đọc lời giải.\n\n```js\n// O(n²): includes duyệt mảng ở mỗi vòng\nconst unique1 = arr.filter((x, i) => arr.indexOf(x) === i);\n\n// O(n): Set tra cứu trung bình O(1)\nconst unique2 = [...new Set(arr)];\n```\n\n### Lỗi hay gặp\n- Học thuộc lời giải mà không hiểu vì sao đúng và độ phức tạp là bao nhiêu.\n- Tối ưu sớm: đo trước (Performance tab) rồi mới đổi cấu trúc dữ liệu.\n- Quên rằng hằng số cũng quan trọng với n nhỏ; mảng nhỏ thường nhanh hơn cấu trúc \"xịn\".",
+  "lessons": [
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-slide-csd2-1",
+    "ten": "0.B — 📑 Học theo từng slide · Nhập môn cấu trúc dữ liệu & giải thuật (0-IntroductionToDSA, slide 1–10)",
+    "nguon": "Data Structures and Algorithms · Mục 0",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-big-o",
+    "ten": "0.3 — Big-O: ngôn ngữ của hiệu năng",
+    "nguon": "Data Structures and Algorithms · Mục 0",
+    "kieu": "video",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/algorithms",
+    "ten": "Trực quan thuật toán",
+    "nguon": "Công cụ học trên web",
+    "kieu": "trang"
+   },
+   {
+    "href": "/simulation?scenario=hash-map",
+    "ten": "HashMap — tìm trong một triệu khoá mà không duyệt",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   },
+   {
+    "href": "/code-lab/data-structures-algorithms",
+    "ten": "Data Structures & Algorithms",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Tiếp tục học › Tiếp: Backend / Full Stack": {
+  "body": "Sau khi vững frontend, bước tự nhiên là hiểu phía sau giao diện: dữ liệu được lưu, xác thực và phục vụ thế nào. Full stack không có nghĩa là giỏi mọi thứ ngang nhau, mà là đủ hiểu cả hai phía để dựng một tính năng trọn vẹn và nói chuyện hiệu quả với đồng đội backend.\n\n### Vì sao cần biết\n- Bạn thiết kế giao diện tốt hơn khi hiểu API trả gì, lỗi ra sao, mất bao lâu.\n- Dựng được sản phẩm cá nhân từ đầu đến cuối, kể cả deploy.\n- Framework như Next.js đã trộn ranh giới server/client, nên kiến thức backend cơ bản gần như bắt buộc.\n\n### Ý chính: nên học gì tiếp\n- Một ngôn ngữ/runtime server: Node.js (dễ nhất nếu đã biết JavaScript), hoặc Python, Java, Go.\n- HTTP và REST: method, mã trạng thái, header, cookie, CORS.\n- Cơ sở dữ liệu: SQL căn bản (PostgreSQL), thiết kế bảng, quan hệ, chỉ mục; thêm ORM như Prisma.\n- Xác thực và phân quyền: session, JWT, OAuth, và các lỗi bảo mật phổ biến (XSS, CSRF, SQL injection).\n- Triển khai: Git, Docker, CI/CD, biến môi trường, reverse proxy.\n- Một dự án nhỏ trọn vẹn: ví dụ ứng dụng ghi chú có đăng nhập, lưu CSDL, deploy.\n\n### Lỗi hay gặp\n- Học tràn lan nhiều công nghệ cùng lúc; hãy chọn một đường (ví dụ Node + PostgreSQL) và làm tới khi chạy được.\n- Chỉ xem tutorial mà không tự dựng; kiến thức backend chỉ vào đầu khi bạn gặp lỗi thật.\n- Bỏ qua bảo mật cơ bản vì \"chỉ là dự án học\".",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-10-5-full-stack-picture",
+    "ten": "10.5 — Bức tranh full-stack, và điều tiếp theo",
+    "nguon": "Nền tảng Lập trình Web · Chương 10",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-0-1-gioi-thieu",
+    "ten": "0.1 — Về khoá học này & bản đồ toàn khoá",
+    "nguon": "Node.js · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-0-2-react-vs-nextjs",
+    "ten": "0.2 — React vs Next.js: mỗi cái là gì",
+    "nguon": "Next.js: The React Framework · Mục 0",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Tiếp tục học › AI-assisted coding cho Frontend": {
+  "body": "AI-assisted coding là dùng công cụ như Copilot, Cursor hay Claude Code để gợi ý, sinh và sửa mã. Nó đẩy nhanh việc lặp lại (component mẫu, test, chuyển đổi định dạng), nhưng bạn vẫn chịu trách nhiệm về đúng sai, bảo mật và trải nghiệm người dùng của mã cuối cùng.\n\n### Vì sao cần biết\nNgười hiểu nền tảng (HTML, CSS, JS, React, a11y) dùng AI nhanh gấp nhiều lần, vì biết hỏi đúng và nhìn ra chỗ sai. Người không hiểu thì chỉ nhận về mã trông hợp lý nhưng hỏng ngầm.\n\n### Ý chính\n- Giao việc nhỏ, rõ: mục tiêu, phiên bản framework, ràng buộc (TypeScript, Tailwind, không thêm thư viện), cách kiểm tra.\n- Cung cấp ngữ cảnh đúng: file liên quan, lỗi đầy đủ, hành vi mong đợi.\n- **Luôn đọc và chạy** mã sinh ra; ưu tiên có test, lint, type-check làm lưới an toàn.\n- Dùng AI để giải thích mã lạ, viết test, đổi tên, sinh dữ liệu mẫu, viết tài liệu.\n\n### Những thứ AI hay làm sai ở frontend\n- Dùng API cũ hoặc không tồn tại (hook, prop, gói bịa tên); kiểm tra tài liệu chính thức.\n- Bỏ qua khả năng truy cập (nhãn form, tương phản, điều khiển bằng bàn phím).\n- Mở lỗ bảo mật: `dangerouslySetInnerHTML` với dữ liệu người dùng, khóa API đặt ở client.\n- Giải quyết bề mặt: `useEffect` thừa, state trùng lặp, component quá lớn.\n\n### Lỗi hay gặp\n- Dán nguyên mã bí mật, token hoặc dữ liệu khách hàng vào prompt.\n- Chấp nhận thay đổi lớn một lần; hãy yêu cầu từng bước nhỏ và commit thường xuyên để dễ hoàn tác.\n- Phụ thuộc đến mức không còn hiểu code của chính mình.",
+  "lessons": [
+   {
+    "href": "/courses/swe202c-introduction-to-software-engineering/learn?lessonSlug=swe202c-1-2-genai",
+    "ten": "M1.2 — Generative AI xuyên SDLC",
+    "nguon": "Introduction to Software Engineering · Module 1 — SDLC & GenAI",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWE202c"
+   },
+   {
+    "href": "/courses/java-web-application-development/learn?lessonSlug=prj301-ai-prompt",
+    "ten": "10.1 — Prompt engineering cho công việc Java web",
+    "nguon": "Java Web Application Development · Chương 10",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRJ301"
+   },
+   {
+    "href": "/courses/gai401-generative-ai/learn?lessonSlug=gai401-ts-10-1",
+    "ten": "10.1 — Ảo giác và độ tin cậy",
+    "nguon": "Generative AI · Chương 10",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "GAI401"
+   }
+  ]
+ },
+ "Tiếp tục học › AI Provider": {
+  "body": "Nhà cung cấp AI (AI provider) là nơi bạn gọi mô hình ngôn ngữ lớn (LLM): Anthropic với Claude, Google với Gemini, OpenAI với dòng GPT, và nhiều bên khác. Riêng **GitHub Copilot** là một sản phẩm trợ lý trong editor; nó cho chọn nhiều mô hình từ các nhà cung cấp khác nhau chứ không phải một mô hình duy nhất. Cần phân biệt: *dùng AI trong editor* (Copilot, Cursor, Claude Code) khác với *gọi API để đưa AI vào sản phẩm của bạn*.\n\n### Vì sao cần biết\nChọn sai nhà cung cấp hoặc mô hình có thể làm chi phí tăng gấp nhiều lần, chậm, hoặc chất lượng không đạt. Danh sách mô hình và giá đổi liên tục, nên điều bền vững là biết **tiêu chí so sánh**.\n\n### Tiêu chí so sánh\n- **Chất lượng cho đúng việc của bạn**: sinh code, tóm tắt, trích xuất JSON, hội thoại; hãy thử trên dữ liệu thật thay vì tin bảng xếp hạng chung.\n- **Chi phí**: giá theo token vào và token ra khác nhau; hội thoại dài càng đắt vì mỗi lượt gửi lại toàn bộ ngữ cảnh.\n- **Độ trễ và streaming**: thời gian tới chữ đầu tiên quyết định cảm giác nhanh.\n- **Cửa sổ ngữ cảnh** và khả năng đọc ảnh, PDF, gọi công cụ (tool use), đầu ra có cấu trúc.\n- **Giới hạn tốc độ** (rate limit) và độ ổn định dịch vụ.\n- **Dữ liệu và quyền riêng tư**: dữ liệu có được dùng để huấn luyện không, lưu bao lâu, có phù hợp yêu cầu của công ty bạn không.\n- **Hệ sinh thái**: SDK, tài liệu, tích hợp IDE.\n\n### Cách làm thực tế\nTạo một bộ 10-20 tác vụ đại diện, chạy trên vài mô hình, so sánh chất lượng, thời gian, chi phí. Giấu nhà cung cấp phía sau một lớp trừu tượng nhỏ và để tên mô hình trong biến môi trường để dễ đổi.\n\n### Lỗi hay gặp\n- Chọn theo tên tuổi hoặc benchmark chung mà không thử trên bài toán của mình.\n- Gắn chặt vào API riêng của một bên, sau này khó chuyển.\n- Quên rằng mô hình lớn nhất không phải lúc nào cũng cần; việc đơn giản dùng mô hình nhỏ rẻ hơn nhiều.\n\n### Tự kiểm tra\n1. Ba tiêu chí nào bạn dùng để chọn mô hình cho tính năng chat hỗ trợ khách hàng?\n2. Vì sao hội thoại dài làm chi phí tăng nhanh?\n3. Copilot khác một mô hình như Claude hay Gemini ở điểm nào?",
+  "lessons": [
+   {
+    "href": "/courses/gai401-generative-ai/learn?lessonSlug=gai401-ts-9-1",
+    "ten": "9.1 — Benchmark và bảng xếp hạng",
+    "nguon": "Generative AI · Chương 9",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "GAI401"
+   },
+   {
+    "href": "/courses/multiplatform-mobile-app-development/learn?lessonSlug=mma301-5-1-gemini-ai",
+    "ten": "5.1 — Tích hợp Gemini AI",
+    "nguon": "Multiplatform Mobile App Development · Chương 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "MMA301"
+   }
+  ]
+ },
+ "Tiếp tục học › Code Reviews với AI": {
+  "body": "Code review là việc người khác đọc thay đổi của bạn trước khi gộp để bắt lỗi, cải thiện thiết kế và chia sẻ kiến thức. AI có thể làm người đọc đầu tiên: quét nhanh thay đổi, chỉ ra lỗi tiềm ẩn, lỗ hổng, mùi code và đề xuất cách sửa, trước khi người thật bỏ thời gian xem.\n\n### Vì sao cần biết\nHàng đợi PR dài là điểm nghẽn quen thuộc. Dùng AI đúng cách giúp phản hồi sớm và đều hơn, để người review tập trung vào những thứ máy khó đánh giá: thiết kế, ý đồ nghiệp vụ, ảnh hưởng tới phần còn lại của hệ thống.\n\n### Ý chính\n- **Công cụ tự động trước, AI sau**: linter, type-check, test và CI bắt được các lỗi chắc chắn; AI bổ sung phần cần phán đoán.\n- AI mạnh ở: lỗi logic thường gặp, thiếu xử lý lỗi hoặc trạng thái rỗng, rò rỉ trong `useEffect`, đặt tên khó hiểu, thiếu test, vấn đề truy cập, lỗ hổng như XSS.\n- AI yếu ở: yêu cầu nghiệp vụ không có trong diff, quyết định kiến trúc dài hạn, quy ước ngầm của đội.\n- Đưa đủ ngữ cảnh: mô tả PR, tiêu chí chấp nhận, quy ước dự án. Yêu cầu mức độ nghiêm trọng và lý do cho từng nhận xét.\n- **Người vẫn duyệt cuối**; AI đề xuất, không tự quyết định merge.\n\n```text\nHãy review diff dưới đây cho dự án React + TypeScript.\nTập trung: lỗi logic, xử lý lỗi/loading/rỗng, truy cập (a11y), bảo mật.\nVới mỗi vấn đề: file/dòng, mức độ (cao/vừa/thấp), lý do, gợi ý sửa.\nKhông nhận xét về định dạng (đã có Prettier).\n```\n\n### Lỗi hay gặp\n- Tin mọi nhận xét: AI có thể \"phát hiện\" lỗi không tồn tại hoặc bịa API; luôn kiểm chứng.\n- Nhận xét quá nhiều và vụn vặt gây nhiễu; giới hạn phạm vi và mức độ.\n- Gửi mã nhạy cảm tới dịch vụ ngoài mà chưa kiểm tra chính sách công ty.\n- Coi AI review thay thế review của người, làm mất cơ hội chia sẻ kiến thức trong đội.\n\n### Tự kiểm tra\n1. Loại lỗi nào nên để linter/test bắt thay vì AI?\n2. Bạn đưa những ngữ cảnh gì để nhận xét của AI sát thực tế hơn?\n3. Khi nào bạn bác bỏ một nhận xét của AI?",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-6-0-slides",
+    "ten": "6.0 — Slide Chương 6: vòng đời một pull request bằng hình",
+    "nguon": "Git & GitHub · Chương 6",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-6-2-review",
+    "ten": "6.2 — Review: cho và nhận phản hồi",
+    "nguon": "Git & GitHub · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-10-3-review",
+    "ten": "10.3 — Review test trong pull request",
+    "nguon": "Testing · Chương 10",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/gai401-generative-ai/learn?lessonSlug=gai401-ts-10-1",
+    "ten": "10.1 — Ảo giác và độ tin cậy",
+    "nguon": "Generative AI · Chương 10",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "GAI401"
+   }
+  ]
+ },
+ "Tiếp tục học › Implementing AI": {
+  "body": "Đưa AI vào sản phẩm web nghĩa là ứng dụng của bạn gọi một mô hình ngôn ngữ qua API để làm tìm kiếm thông minh, sinh nội dung, tóm tắt, trợ lý chat... Về kiến trúc, nhà cung cấp AI chỉ là một dịch vụ HTTP nữa mà backend của bạn gọi.\n\n### Vì sao cần biết\nĐây là kỹ năng đang được cần nhiều, nhưng sai lầm phổ biến (lộ khóa, chi phí vượt kiểm soát, giao diện đơ khi chờ) đều nằm ở phần tích hợp chứ không phải ở bản thân mô hình.\n\n### Ý chính\n- **Khóa API chỉ nằm ở server.** Trình duyệt gọi route của bạn (`/api/chat`), route đọc khóa từ biến môi trường rồi gọi nhà cung cấp. Không bao giờ đặt khóa trong `NEXT_PUBLIC_*` hay mã client.\n- **Streaming**: câu trả lời mất vài giây; đẩy từng đoạn về (SSE hoặc stream) để người dùng thấy chữ chạy ngay.\n- **Xử lý lỗi**: timeout, 429 (quá giới hạn), 5xx; thử lại có backoff, thông báo thân thiện, có phương án dự phòng (mô hình khác hoặc chức năng không dùng AI).\n- **Chặn lạm dụng**: xác thực người dùng, giới hạn số yêu cầu và token mỗi người/ngày, đặt trần chi phí.\n- **Mô hình không nhớ**: mỗi lượt phải gửi lại lịch sử, nên hội thoại dài đắt dần; cắt hoặc tóm tắt khi cần.\n- Coi nội dung do người dùng hoặc tài liệu đưa vào là dữ liệu không đáng tin (prompt injection), nhất là khi mô hình gọi được công cụ.\n- Yêu cầu đầu ra JSON theo schema và kiểm tra bằng zod trước khi dùng.\n\n```ts\n// app/api/chat/route.ts — chạy trên server\nexport async function POST(req: Request) {\n  const { question } = await req.json();\n  const r = await fetch('https://api.anthropic.com/v1/messages', {\n    method: 'POST',\n    headers: {\n      'x-api-key': process.env.ANTHROPIC_API_KEY!,\n      'anthropic-version': '2023-06-01',\n      'content-type': 'application/json',\n    },\n    body: JSON.stringify({\n      model: process.env.LLM_MODEL,\n      max_tokens: 1024,\n      messages: [{ role: 'user', content: question }],\n    }),\n  });\n  if (!r.ok) return Response.json({ error: 'AI tạm thời không khả dụng' }, { status: 502 });\n  const data = await r.json();\n  return Response.json({ answer: data.content[0].text });\n}\n```\n\n### Lỗi hay gặp\n- Gọi thẳng nhà cung cấp từ trình duyệt để \"cho nhanh\" → lộ khóa.\n- Không hiển thị trạng thái đang chờ, người dùng bấm gửi nhiều lần và tạo yêu cầu trùng.\n- Coi đầu ra AI là sự thật; hãy ghi rõ nội dung do AI sinh và cho người dùng sửa.\n\n### Tự kiểm tra\n1. Vì sao khóa API không được nằm trong bundle client?\n2. Streaming cải thiện trải nghiệm ra sao dù tổng thời gian không đổi?\n3. Bạn đặt những giới hạn nào để chi phí không vượt kiểm soát?",
+  "lessons": [
+   {
+    "href": "/courses/ai-study-assistant/learn?lessonSlug=int609-server-proxy",
+    "ten": "2.1 — Route Handlers & proxy LLM phía server",
+    "nguon": "AI Study Assistant · Mục 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "INT609"
+   },
+   {
+    "href": "/courses/ai-study-assistant/learn?lessonSlug=int609-chat-endpoint",
+    "ten": "4.2 — Endpoint chat, streaming & giữ key phía server",
+    "nguon": "AI Study Assistant · Mục 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "INT609"
+   },
+   {
+    "href": "/courses/ai-study-assistant/learn?lessonSlug=int609-chat-client",
+    "ten": "5.1 — Stream câu trả lời & hiển thị trích dẫn",
+    "nguon": "AI Study Assistant · Mục 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "INT609"
+   },
+   {
+    "href": "/simulation?scenario=ai-chat",
+    "ten": "Chat AI — đường đi của một câu trả lời",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   },
+   {
+    "href": "/courses/multiplatform-mobile-app-development/learn?lessonSlug=mma301-5-1-gemini-ai",
+    "ten": "5.1 — Tích hợp Gemini AI",
+    "nguon": "Multiplatform Mobile App Development · Chương 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "MMA301"
+   }
+  ]
+ },
+ "Tiếp tục học › Refactoring với AI": {
+  "body": "Refactoring là cải thiện cấu trúc mã **mà không đổi hành vi bên ngoài**: tách component, đổi tên cho rõ, loại bỏ trùng lặp, đơn giản hóa điều kiện. AI giúp làm nhanh những thay đổi cơ học và đề xuất cách tách, nhưng rủi ro lớn nhất là nó âm thầm đổi hành vi.\n\n### Vì sao cần biết\nMã frontend dễ phình: component 600 dòng, state trùng lặp, `useEffect` chồng chéo. Refactor định kỳ giữ cho dự án sửa được, và AI rút ngắn đáng kể thời gian nếu bạn có quy trình an toàn.\n\n### Ý chính\n- **Lưới an toàn trước**: có test (hoặc ít nhất vài test \"ghim hành vi\" cho code cũ), type-check và lint. Không test thì bạn chỉ có niềm tin.\n- **Từng bước nhỏ**: một loại thay đổi mỗi lần (đổi tên, rồi tách hàm, rồi tách component), chạy test sau mỗi bước, commit từng bước để hoàn tác dễ.\n- **Yêu cầu kế hoạch trước**: bảo AI liệt kê các bước và rủi ro, rồi bạn duyệt trước khi nó sửa.\n- **Đọc diff**: kiểm tra kỹ thứ tự `useEffect`, dependency array, key của danh sách, xử lý lỗi bị mất.\n- Ràng buộc rõ: \"giữ nguyên props công khai\", \"không thêm thư viện\", \"không đổi tên file ngoài phạm vi\".\n\n```text\nComponent UserTable.tsx dài 450 dòng. Đề xuất kế hoạch tách thành các\ncomponent nhỏ (không đổi hành vi, giữ nguyên props của UserTable).\nLiệt kê từng bước và rủi ro; CHƯA sửa mã. Sau khi tôi đồng ý mới làm bước 1.\n```\n\n### Lỗi hay gặp\n- Refactor cả lớp một lượt rồi mới chạy test; lỗi không biết từ đâu ra.\n- Để AI vừa refactor vừa thêm tính năng; hai việc phải tách commit riêng.\n- Đổi tên hàng loạt làm hỏng chuỗi/khóa dùng động (tên class CSS, khóa i18n) mà trình biên dịch không bắt được.\n- Tin rằng \"test vẫn xanh\" nghĩa là an toàn khi test quá ít.\n\n### Tự kiểm tra\n1. Vì sao cần có test trước khi nhờ AI refactor?\n2. Bạn chia một refactor lớn thành những bước nào?\n3. Những chỗ nào trong diff cần đọc kỹ nhất ở một component React?",
+  "lessons": [
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-10-2-code-cu",
+    "ten": "10.2 — Thêm test cho code cũ chưa có test",
+    "nguon": "Testing · Chương 10",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-10-1-tdd",
+    "ten": "10.1 — TDD trong thực tế: đỏ, xanh, refactor",
+    "nguon": "Testing · Chương 10",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-1-4-chia-nho",
+    "ten": "1.4 — Tư duy theo component: từ mock-up tới cây component có test",
+    "nguon": "React · Chương 1",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Tiếp tục học › AI Agents": {
+  "body": "AI agent là hệ thống để mô hình ngôn ngữ **tự quyết định bước tiếp theo trong một vòng lặp**: quan sát tình huống, suy nghĩ, gọi công cụ (đọc file, chạy lệnh, tìm kiếm, gọi API), đọc kết quả rồi lặp lại tới khi xong hoặc chạm giới hạn. Khác một lần gọi mô hình trả lời một câu, agent có thể thực hiện chuỗi hành động nhiều bước.\n\n### Vì sao cần biết\nCác công cụ như Claude Code, chế độ agent của Copilot hay Cursor đều chạy theo kiểu này: đọc codebase, sửa nhiều file, chạy test, đọc lỗi, sửa tiếp. Hiểu cơ chế giúp bạn giao việc đúng, đặt rào chắn đúng, và biết vì sao agent đôi khi lặp vòng hoặc làm sai.\n\n### Ý chính\n- **Vòng lặp lõi**: mô hình quyết định → hệ thống chạy công cụ → kết quả đưa lại cho mô hình → lặp. Mô hình báo xong bằng cách không gọi công cụ nữa.\n- **Thành phần**: mô hình, danh sách công cụ (mô tả rõ, tham số tối thiểu), trạng thái/bộ nhớ (lịch sử hội thoại), điều kiện dừng.\n- **Không phải việc nào cũng cần agent**: việc một bước rõ ràng thì gọi mô hình một lần là đủ, rẻ và dễ dự đoán hơn.\n- **Rào chắn**: giới hạn số vòng, chi phí, thời gian; công cụ chỉ có quyền tối thiểu (đọc-chỉ khi đủ); người duyệt trước các hành động khó hoàn tác (xóa, force push, deploy); chạy trong môi trường cô lập khi có thể.\n- **Rủi ro**: agent có thể lặp vô hạn, dùng sai công cụ, dồn lỗi qua nhiều bước, hoặc bị nội dung độc hại (trong README, issue, trang web) điều khiển (prompt injection).\n- Đánh giá agent phải xét cả chuỗi hành động, không chỉ câu trả lời cuối.\n\n### Áp dụng cho frontend\nGiao agent việc có tiêu chí kiểm chứng được: \"thêm trạng thái loading cho danh sách; `npm test` và `npm run build` phải xanh\". Cho nó tự chạy lint, type-check, test; bạn đọc diff cuối cùng.\n\n### Lỗi hay gặp\n- Giao việc mơ hồ, quá rộng; hãy chia nhỏ và nêu tiêu chí xong.\n- Cấp quyền rộng (token production, ghi vào mọi thư mục) cho tiện.\n- Bỏ qua việc theo dõi chi phí và số vòng của phiên chạy dài.\n\n### Tự kiểm tra\n1. Agent khác một lần gọi mô hình ở điểm nào?\n2. Bạn đặt những rào chắn nào trước khi cho agent chạy lệnh trên máy mình?\n3. Prompt injection tác động tới agent thế nào?",
+  "lessons": [
+   {
+    "href": "/courses/gai401-generative-ai/learn?lessonSlug=gai401-ts-7-3",
+    "ten": "7.3 — Tác tử LLM và dùng công cụ",
+    "nguon": "Generative AI · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "GAI401"
+   },
+   {
+    "href": "/courses/daa401-design-and-secure-ai-system/learn?lessonSlug=daa401-ts-5-3",
+    "ten": "5.3 — Bảo mật RAG, plugin và agent",
+    "nguon": "Design and Secure AI System · Chương 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DAA401"
+   }
+  ],
+  "more": [
+   {
+    "type": "article",
+    "title": "Anthropic — Building effective agents",
+    "url": "https://www.anthropic.com/engineering/building-effective-agents"
+   }
+  ]
+ },
+ "Tiếp tục học › MCP — Model Context Protocol": {
+  "body": "MCP (Model Context Protocol) là giao thức mở, do Anthropic giới thiệu cuối năm 2024, để **kết nối ứng dụng AI với công cụ và nguồn dữ liệu bên ngoài theo một chuẩn chung**. Trước đó mỗi ứng dụng phải tự viết tích hợp riêng cho từng công cụ; với MCP, một công cụ viết một server là nhiều ứng dụng AI dùng được. Người ta hay ví như \"cổng USB-C\" cho AI.\n\n### Vì sao cần biết\nTrợ lý code của bạn có thể đọc issue trên GitHub, điều khiển trình duyệt để kiểm thử giao diện, đọc thiết kế, truy vấn cơ sở dữ liệu... chỉ bằng cách cắm thêm MCP server. Với frontend, đây là cách đưa ngữ cảnh thật (thiết kế, trang đang chạy, tài liệu đúng phiên bản) cho AI thay vì để nó đoán.\n\n### Ý chính\n- **Kiến trúc client–server**: ứng dụng AI (Claude Code, một IDE...) chứa client; mỗi công cụ là một MCP server. Giao tiếp dùng JSON-RPC.\n- Server cung cấp ba loại khả năng: **tools** (hành động mô hình có thể gọi), **resources** (dữ liệu để đọc), **prompts** (mẫu prompt dựng sẵn).\n- **Transport**: stdio (server chạy cục bộ như tiến trình con) hoặc HTTP (server từ xa).\n- Client hỏi server danh sách công cụ lúc kết nối, rồi gọi qua giao thức thay vì mã cứng.\n- Tự viết server có SDK chính thức (TypeScript, Python...); kiểm tra bằng MCP Inspector.\n\n```json\n{\n  \"mcpServers\": {\n    \"playwright\": {\n      \"command\": \"npx\",\n      \"args\": [\"@playwright/mcp@latest\"]\n    }\n  }\n}\n```\n\n### An toàn\nMỗi MCP server là mã chạy với quyền của bạn và nội dung nó trả về là dữ liệu không đáng tin. Chỉ cài server từ nguồn tin cậy, cấp quyền tối thiểu (token chỉ đọc nếu đủ), xem xét kỹ các công cụ có thể ghi/xóa và yêu cầu xác nhận khi cần.\n\n### Lỗi hay gặp\n- Cắm quá nhiều server làm danh sách công cụ rối, tốn ngữ cảnh và mô hình chọn sai.\n- Đưa token toàn quyền cho server chỉ cần đọc.\n- Tin nội dung server trả về (issue, trang web) như chỉ dẫn, dẫn tới prompt injection.\n\n### Tự kiểm tra\n1. MCP giải quyết vấn đề gì so với việc mỗi app tự viết tích hợp?\n2. Phân biệt tool, resource và prompt trong MCP.\n3. Bạn kiểm soát rủi ro khi dùng một MCP server của bên thứ ba bằng cách nào?",
+  "more": [
+   {
+    "type": "official",
+    "title": "Model Context Protocol — Giới thiệu",
+    "url": "https://modelcontextprotocol.io/docs/getting-started/intro"
+   }
+  ]
+ },
+ "Tiếp tục học › Skills — Phát triển kỹ năng AI": {
+  "body": "Làm việc hiệu quả với AI là một kỹ năng có thể rèn: biết giao việc rõ ràng, cung cấp đúng ngữ cảnh, nhận xét kết quả và lặp lại. Phần lớn \"AI viết dở\" là do yêu cầu mơ hồ hoặc thiếu ngữ cảnh, không phải do công cụ.\n\n### Vì sao cần biết\nCùng một mô hình, người biết cách hỏi cho kết quả tốt hơn hẳn và ít tốn thời gian sửa hơn. Kỹ năng đánh giá đầu ra còn quan trọng hơn kỹ năng viết prompt, vì mô hình có thể trả lời rất tự tin nhưng sai.\n\n### Ý chính\n- **Một prompt tốt** nêu: vai trò/bối cảnh, nhiệm vụ cụ thể, ngữ cảnh (đoạn mã, lỗi, phiên bản), ràng buộc, định dạng đầu ra, tiêu chí xong.\n- **Tách chỉ dẫn khỏi dữ liệu** bằng dấu phân cách để mô hình không nhầm nội dung dán vào là lệnh.\n- **Đưa ví dụ** (few-shot) khi cần đúng một kiểu định dạng hay giọng văn.\n- **Yêu cầu suy luận có kiểm chứng** với bài khó: chia bước, nêu giả thuyết, cách kiểm tra.\n- **Lặp lại**: nếu kết quả sai, đừng chỉ nói \"sai rồi\"; chỉ ra sai ở đâu, thêm ngữ cảnh hoặc thu hẹp yêu cầu. Khi cuộc hội thoại đã lạc hướng, mở phiên mới với tóm tắt ngắn.\n- **Gỡ lỗi đầu ra AI**: chạy thật, đọc tài liệu chính thức để kiểm API, thử ca biên, hỏi lại \"vì sao\" để lộ giả định sai.\n- **Chọn việc hợp với AI**: việc lặp lại, có tiêu chí kiểm chứng; tự làm phần cần phán đoán.\n\n```text\nYếu:  \"sửa lỗi form đăng nhập\"\n\nTốt:  Dự án React 18 + TypeScript + react-hook-form.\n      Form đăng nhập hiện hiển thị lỗi cũ sau khi người dùng gõ lại.\n      Mã component: <dán mã>. Hành vi mong đợi: lỗi biến mất khi trường hợp lệ.\n      Giải thích nguyên nhân trước, rồi đề xuất sửa nhỏ nhất. Không thêm thư viện.\n```\n\n### Lỗi hay gặp\n- Yêu cầu quá chung, rồi chấp nhận kết quả đầu tiên.\n- Dán cả repo hoặc dữ liệu nhạy cảm vào prompt.\n- Phụ thuộc AI cho việc đang học; hãy tự làm trước, dùng AI để giải thích và kiểm tra.\n\n### Tự kiểm tra\n1. Viết lại một prompt mơ hồ của bạn theo cấu trúc trên.\n2. Bạn kiểm chứng một đoạn mã AI sinh ra bằng những cách nào?\n3. Khi nào nên mở phiên trò chuyện mới thay vì tiếp tục sửa?",
+  "lessons": [
+   {
+    "href": "/courses/gai401-generative-ai/learn?lessonSlug=gai401-ts-6-1",
+    "ten": "6.1 — Cơ bản về prompt và prompt vài mẫu",
+    "nguon": "Generative AI · Chương 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "GAI401"
+   },
+   {
+    "href": "/courses/gai401-generative-ai/learn?lessonSlug=gai401-ts-6-2",
+    "ten": "6.2 — Prompt suy luận: chuỗi suy nghĩ và tự nhất quán",
+    "nguon": "Generative AI · Chương 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "GAI401"
+   },
+   {
+    "href": "/courses/gai401-generative-ai/learn?lessonSlug=gai401-ts-6-3",
+    "ten": "6.3 — Prompt hệ thống, đầu ra có cấu trúc và gọi công cụ",
+    "nguon": "Generative AI · Chương 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "GAI401"
+   },
+   {
+    "href": "/courses/java-web-application-development/learn?lessonSlug=prj301-ai-prompt",
+    "ten": "10.1 — Prompt engineering cho công việc Java web",
+    "nguon": "Java Web Application Development · Chương 10",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRJ301"
+   }
+  ]
+ },
+ "Tiếp tục học › OpenAI SDK": {
+  "body": "OpenAI SDK là thư viện chính thức (JavaScript/TypeScript, Python) để gọi API của OpenAI: tạo văn bản, xây chatbot, sinh embedding, xử lý ảnh... Nó lo việc dựng request, xác thực, thử lại tự động và kiểu dữ liệu, nên bạn không phải tự viết `fetch` thô.\n\n### Vì sao cần biết\nRất nhiều tính năng AI trong web app (chat, tóm tắt, tìm kiếm ngữ nghĩa) bắt đầu từ vài dòng gọi SDK. Nhiều nhà cung cấp khác cũng hỗ trợ kiểu API tương thích, nên hiểu cách dùng ở đây hữu ích cho cả những dịch vụ khác.\n\n### Ý chính\n- Cài: `npm install openai`; khởi tạo client bằng khóa đọc từ biến môi trường.\n- **Chỉ dùng ở server** (route handler, API route, server action). Khóa mà lọt vào bundle trình duyệt là lộ, và bị lạm dụng sẽ tính tiền vào bạn.\n- Tên mô hình để trong cấu hình/biến môi trường vì danh sách mô hình thay đổi theo thời gian.\n- Hỗ trợ streaming (`stream: true`) để hiển thị chữ ngay khi mô hình sinh.\n- **Embeddings** biến văn bản thành vector để tìm kiếm theo nghĩa.\n- Tính phí theo token (vào + ra); đặt giới hạn token đầu ra, theo dõi mức dùng và chi phí.\n- **Rate limit**: gặp mã 429 thì chờ và thử lại có backoff (SDK có sẵn cơ chế tự thử lại cho một số lỗi tạm thời).\n\n```ts\nimport OpenAI from 'openai';\n\nconst client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });\n\nconst res = await client.responses.create({\n  model: process.env.OPENAI_MODEL!,\n  input: 'Tóm tắt đoạn sau trong 2 câu: ...',\n});\nconsole.log(res.output_text);\n```\n\nMuốn đầu ra có cấu trúc, yêu cầu JSON theo schema rồi kiểm tra bằng zod trước khi dùng kết quả.\n\n### Lỗi hay gặp\n- Đặt khóa trong biến `NEXT_PUBLIC_*` hoặc commit file `.env` lên Git.\n- Không giới hạn đầu vào của người dùng, để một người gọi hàng nghìn lần mỗi giờ.\n- Hard-code tên mô hình; khi mô hình bị ngừng hỗ trợ, tính năng hỏng.\n- Không xử lý lỗi mạng, timeout, 429 và 5xx, khiến giao diện treo.\n\n### Tự kiểm tra\n1. Vì sao không được gọi SDK trực tiếp từ trình duyệt với khóa của bạn?\n2. Chi phí được tính thế nào và bạn kiểm soát nó ra sao?\n3. Bạn xử lý lỗi 429 như thế nào?",
+  "lessons": [
+   {
+    "href": "/courses/ai-study-assistant/learn?lessonSlug=int609-server-proxy",
+    "ten": "2.1 — Route Handlers & proxy LLM phía server",
+    "nguon": "AI Study Assistant · Mục 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "INT609"
+   },
+   {
+    "href": "/courses/ai-recruitment-screening/learn?lessonSlug=int610-structured-core",
+    "ten": "4.1 — Ép LLM vào JSON schema đã kiểm",
+    "nguon": "AI Recruitment Screening · Mục 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "INT610"
+   },
+   {
+    "href": "/courses/ai-study-assistant/learn?lessonSlug=int609-chat-endpoint",
+    "ten": "4.2 — Endpoint chat, streaming & giữ key phía server",
+    "nguon": "AI Study Assistant · Mục 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "INT609"
+   }
+  ]
+ },
+ "Tiếp tục học › Applications": {
+  "body": "Khi đã vững nền tảng frontend, kỹ năng của bạn mở ra nhiều hướng thay vì chỉ trang web. Mục này tổng hợp các hướng mở rộng và cách chọn.\n\n### Các hướng chính\n- **Web app phức tạp**: dùng framework full-stack như Next.js với render phía server (SSR), tĩnh (SSG), tái tạo định kỳ (ISR) để cải thiện SEO và tốc độ tải; dữ liệu qua REST hoặc GraphQL; xác thực, tối ưu hiệu năng, kiểm thử.\n- **Ứng dụng di động**: React Native (tái dùng kỹ năng React), Flutter (Dart, tự vẽ giao diện), hoặc Ionic/Capacitor (web trong WebView).\n- **Ứng dụng desktop**: Electron (Chromium + Node.js, hệ sinh thái lớn) hoặc Tauri (WebView hệ điều hành + Rust, nhẹ hơn).\n- **PWA**: web app cài được, chạy offline, không qua cửa hàng ứng dụng.\n- **Mở rộng sang backend và AI**: tự dựng API, cơ sở dữ liệu, tính năng AI.\n\n### Ý chính\n- Điểm chung giữa các hướng: component, state, gọi API, xử lý lỗi và trạng thái chờ, kiểm thử. Đầu tư vào nền tảng này dùng được ở mọi nơi.\n- Chọn hướng theo mục tiêu (sản phẩm, công việc mong muốn) và kỹ năng sẵn có, rồi làm **một dự án hoàn chỉnh** thay vì thử mọi thứ.\n- Mỗi nền tảng có chi phí riêng: phát hành lên cửa hàng, ký ứng dụng, cập nhật, hỗ trợ nhiều phiên bản hệ điều hành.\n\n### Lỗi hay gặp\n- Nhảy sang công nghệ mới trước khi hoàn thành dự án đầu tiên.\n- Bỏ qua những gì khác biệt theo nền tảng (quyền, bàn phím ảo, cử chỉ, đường dẫn file).",
+  "lessons": [
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-17-1-bon-cach-render",
+    "ten": "17.1 — Bốn cách một trang được tạo ra (CSR, SSR, SSG, ISR)",
+    "nguon": "Next.js: The React Framework · Chương 17",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/multiplatform-mobile-app-development/learn?lessonSlug=mma301-gioi-thieu",
+    "ten": "0.1 — Giới thiệu MMA301 & bản đồ ứng dụng di động",
+    "nguon": "Multiplatform Mobile App Development · Mục 0",
+    "kieu": "video",
+    "academy": true,
+    "ma": "MMA301"
+   },
+   {
+    "href": "/courses/prm393-mobile-programming/learn?lessonSlug=prm393-0-1-overview",
+    "ten": "Tổng quan: Di động với Flutter",
+    "nguon": "Mobile Programming · Course introduction",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRM393"
+   }
+  ]
+ }
+}

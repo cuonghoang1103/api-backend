@@ -702,7 +702,7 @@ const BAN_VIET_TAY: SeedRoadmap[] = [
   // ─────────────────────────────── FRONTEND ───────────────────────────────
   {
     slug: 'frontend', title: 'Frontend', type: 'role', icon: 'Monitor', color: '#6366f1',
-    description: 'Lộ trình đầy đủ để trở thành lập trình viên Frontend — từ nền tảng Internet/HTML/CSS/JS đến framework, kiến trúc CSS, build tool, kiểm thử, bảo mật, SSR/GraphQL, PWA, hiệu năng và app di động/desktop. Bám sát cấu trúc roadmap.sh (25 nhóm chủ đề).',
+    description: 'Lộ trình đầy đủ để trở thành lập trình viên Frontend — từ nền tảng Internet/HTML/CSS/JS đến framework, kiến trúc CSS, build tool, kiểm thử, bảo mật, SSR/GraphQL, PWA, hiệu năng và app di động/desktop. Gồm 25 nhóm chủ đề.',
     stages: [
       { label: 'Nền tảng Internet', nodes: [
         { title: 'Internet hoạt động thế nào', kind: 'info', icon: 'Globe', description: 'TCP/IP, client-server, cách một request đi từ trình duyệt tới server rồi quay về.',
@@ -926,7 +926,7 @@ const BAN_VIET_TAY: SeedRoadmap[] = [
   // ─────────────────────────────── BACKEND ───────────────────────────────
   {
     slug: 'backend', title: 'Backend', type: 'role', icon: 'Server', color: '#10b981',
-    description: 'Lộ trình lập trình viên Backend đầy đủ theo cấu trúc roadmap.sh — nền tảng Internet, một ngôn ngữ, version control, database quan hệ & NoSQL, API, authentication, caching, testing, bảo mật, CI/CD, kiến trúc, container, web server, message broker, real-time, scaling và observability.',
+    description: 'Lộ trình lập trình viên Backend đầy đủ — nền tảng Internet, một ngôn ngữ, version control, database quan hệ & NoSQL, API, authentication, caching, testing, bảo mật, CI/CD, kiến trúc, container, web server, message broker, real-time, scaling và observability.',
     stages: [
       { label: 'Nền tảng Internet', nodes: [
         { title: 'Internet hoạt động thế nào', kind: 'info', icon: 'Globe', description: 'TCP/IP, client-server — request đi từ client tới server rồi quay về ra sao.',
@@ -1150,7 +1150,7 @@ const BAN_VIET_TAY: SeedRoadmap[] = [
   // ─────────────────────────────── DEVOPS ───────────────────────────────
   {
     slug: 'devops', title: 'DevOps', type: 'role', icon: 'Infinity', color: '#f59e0b',
-    description: 'Lộ trình DevOps đầy đủ theo roadmap.sh — ngôn ngữ script, hệ điều hành, terminal, version control, container, mạng & giao thức, cloud provider, serverless, provisioning (IaC), configuration management, CI/CD, log/giám sát hạ tầng, secret management, artifact, container orchestration, GitOps, service mesh và application monitoring.',
+    description: 'Lộ trình DevOps đầy đủ — ngôn ngữ script, hệ điều hành, terminal, version control, container, mạng & giao thức, cloud provider, serverless, provisioning (IaC), configuration management, CI/CD, log/giám sát hạ tầng, secret management, artifact, container orchestration, GitOps, service mesh và application monitoring.',
     stages: [
       { label: 'Ngôn ngữ Script', nodes: [
         { title: 'Chọn ngôn ngữ để tự động hoá', kind: 'info', description: 'Python/Go/Bash/JS — viết script, tool, CLI nội bộ.',
@@ -1368,7 +1368,7 @@ const BAN_VIET_TAY: SeedRoadmap[] = [
   // ─────────────────────────────── FULL STACK ───────────────────────────────
   {
     slug: 'fullstack', title: 'Full Stack', type: 'role', icon: 'Layers', color: '#8b5cf6',
-    description: 'Lộ trình Full Stack theo đúng thứ tự dự án thật (project-based, giống roadmap.sh) — từ trang tĩnh HTML/CSS/JS, React, Node.js CLI, PostgreSQL CRUD, RESTful API + JWT Auth + Redis, tới deploy AWS/Linux và tự động hoá CI/CD/Terraform. Mỗi giai đoạn có "checkpoint" — sản phẩm cụ thể để tự kiểm tra đã học đủ chưa.',
+    description: 'Lộ trình Full Stack theo đúng thứ tự dự án thật (học qua dự án) — từ trang tĩnh HTML/CSS/JS, React, Node.js CLI, PostgreSQL CRUD, RESTful API + JWT Auth + Redis, tới deploy AWS/Linux và tự động hoá CI/CD/Terraform. Mỗi giai đoạn có "checkpoint" — sản phẩm cụ thể để tự kiểm tra đã học đủ chưa.',
     stages: [
       { label: 'Frontend cơ bản', nodes: [
         { title: 'HTML, CSS & JavaScript', icon: 'FileCode', description: 'Nền tảng giao diện — xem chi tiết ở lộ trình Frontend.', link: cl('html-css'),
@@ -1724,7 +1724,7 @@ const BAN_VIET_TAY: SeedRoadmap[] = [
   // ─────────────────────────────── PYTHON ───────────────────────────────
   {
     slug: 'python', title: 'Python', type: 'skill', icon: 'Braces', color: '#3b82f6',
-    description: 'Lộ trình Python đầy đủ theo roadmap.sh — cú pháp cơ bản, cấu trúc dữ liệu & DSA, module & package manager, OOP, static typing, paradigm, concurrency, framework, code formatting và testing.',
+    description: 'Lộ trình Python đầy đủ — cú pháp cơ bản, cấu trúc dữ liệu & DSA, module & package manager, OOP, static typing, paradigm, concurrency, framework, code formatting và testing.',
     stages: [
       { label: 'Nền tảng', nodes: [
         { title: 'Cú pháp cơ bản', icon: 'Braces', description: 'Biến, kiểu dữ liệu, type casting, toán tử, if/for/while.', link: cl('python'),
@@ -1825,7 +1825,7 @@ const BAN_VIET_TAY: SeedRoadmap[] = [
   // ─────────────────────────────── REACT ───────────────────────────────
   {
     slug: 'react', title: 'React', type: 'skill', icon: 'Atom', color: '#06b6d4',
-    description: 'Lộ trình React đầy đủ theo roadmap.sh — CLI tool, component & JSX, hooks, state management, routing, viết CSS, thư viện component, testing, gọi API, form & validation, animation, error boundary/suspense, framework và mobile.',
+    description: 'Lộ trình React đầy đủ — CLI tool, component & JSX, hooks, state management, routing, viết CSS, thư viện component, testing, gọi API, form & validation, animation, error boundary/suspense, framework và mobile.',
     stages: [
       { label: 'Chuẩn bị', nodes: [
         { title: 'JavaScript vững', icon: 'Braces', description: 'ES6+, array method, promise/async, destructuring, module.', link: cl('javascript'),
@@ -1941,7 +1941,7 @@ const BAN_VIET_TAY: SeedRoadmap[] = [
   // ─────────────────────────────── NODE.JS ───────────────────────────────
   {
     slug: 'nodejs', title: 'Node.js', type: 'skill', icon: 'Hexagon', color: '#22c55e',
-    description: 'Lộ trình Node.js đầy đủ theo roadmap.sh — runtime & module, npm, error handling, async programming, working with files, CLI app, xây & gọi API, template engine, database, testing, logging, debugging và threads/streams.',
+    description: 'Lộ trình Node.js đầy đủ — runtime & module, npm, error handling, async programming, working with files, CLI app, xây & gọi API, template engine, database, testing, logging, debugging và threads/streams.',
     stages: [
       { label: 'Node.js Runtime', nodes: [
         { title: 'What is Node.js & Why use it', icon: 'Hexagon', description: 'Runtime JS chạy ngoài trình duyệt (V8 engine) — non-blocking I/O, hợp server & CLI tool.', link: cl('nodejs-express'),
@@ -2051,7 +2051,7 @@ const BAN_VIET_TAY: SeedRoadmap[] = [
   // ─────────────────────────────── SQL ───────────────────────────────
   {
     slug: 'sql', title: 'SQL', type: 'skill', icon: 'Database', color: '#a855f7',
-    description: 'Lộ trình SQL đầy đủ theo roadmap.sh — nền tảng RDBMS, DDL/DML, ràng buộc dữ liệu, JOIN & subquery, hàm nâng cao, view, index, transaction & bảo mật, tối ưu hiệu năng và SQL nâng cao (window function, CTE, recursive query).',
+    description: 'Lộ trình SQL đầy đủ — nền tảng RDBMS, DDL/DML, ràng buộc dữ liệu, JOIN & subquery, hàm nâng cao, view, index, transaction & bảo mật, tối ưu hiệu năng và SQL nâng cao (window function, CTE, recursive query).',
     stages: [
       { label: 'Nền tảng', nodes: [
         { title: 'Relational Databases là gì', icon: 'Database', description: 'Bảng, hàng, cột, khoá — mô hình dữ liệu quan hệ. SQL vs NoSQL: khi nào dùng cái nào.', link: cl('sql'),
@@ -2137,7 +2137,7 @@ const BAN_VIET_TAY: SeedRoadmap[] = [
   // ─────────────────────────── DSA ───────────────────────────
   {
     slug: 'dsa', title: 'Data Structures & Algorithms', type: 'skill', icon: 'Binary', color: '#ef4444',
-    description: 'Lộ trình DSA đầy đủ theo roadmap.sh — chọn ngôn ngữ, nền tảng lập trình, độ phức tạp thuật toán, cấu trúc dữ liệu cơ bản→nâng cao, sort/search, cây, đồ thị, kỹ thuật giải bài và nền tảng luyện tập. Luyện trực quan tại trang Algorithms (80 thuật toán) và bài tập Code Lab.',
+    description: 'Lộ trình DSA đầy đủ — chọn ngôn ngữ, nền tảng lập trình, độ phức tạp thuật toán, cấu trúc dữ liệu cơ bản→nâng cao, sort/search, cây, đồ thị, kỹ thuật giải bài và nền tảng luyện tập. Luyện trực quan tại trang Algorithms (80 thuật toán) và bài tập Code Lab.',
     stages: [
       { label: 'Nền tảng lập trình', nodes: [
         { title: 'Chọn 1 ngôn ngữ để luyện', kind: 'info', description: 'Python/Java/C++/JS/Go — cú pháp, control structure, function, OOP cơ bản của ngôn ngữ đó.',
@@ -2213,7 +2213,7 @@ const BAN_VIET_TAY: SeedRoadmap[] = [
   // ─────────────────────────────── TYPESCRIPT ───────────────────────────────
   {
     slug: 'typescript', title: 'TypeScript', type: 'skill', icon: 'Braces', color: '#3178c6',
-    description: 'Lộ trình TypeScript đầy đủ theo roadmap.sh — giới thiệu & cài đặt, hệ thống kiểu, type inference & compatibility, kết hợp kiểu, interface, type guard/narrowing, function & class, generics, utility types, kiểu nâng cao, module và hệ sinh thái.',
+    description: 'Lộ trình TypeScript đầy đủ — giới thiệu & cài đặt, hệ thống kiểu, type inference & compatibility, kết hợp kiểu, interface, type guard/narrowing, function & class, generics, utility types, kiểu nâng cao, module và hệ sinh thái.',
     stages: [
       { label: 'Giới thiệu', nodes: [
         { title: 'TypeScript vs JavaScript', icon: 'Braces', description: 'TS = JS + kiểu tĩnh, biên dịch (compile) xuống JS thuần để chạy.', link: cl('javascript'),
@@ -3373,7 +3373,7 @@ const BAN_VIET_TAY: SeedRoadmap[] = [
   // ─────────────────────────────── DATA SCIENTIST ───────────────────────────────
   {
     slug: 'data-scientist', title: 'Data Scientist', type: 'role', icon: 'Brain', color: '#0891b2',
-    description: 'Lộ trình Data Scientist đầy đủ theo roadmap.sh — Mathematics, Statistics, Econometrics, Coding (Python/SQL), Exploratory Data Analysis, Machine Learning, Deep Learning và MLOps.',
+    description: 'Lộ trình Data Scientist đầy đủ — Mathematics, Statistics, Econometrics, Coding (Python/SQL), Exploratory Data Analysis, Machine Learning, Deep Learning và MLOps.',
     stages: [
       { label: 'Mathematics', nodes: [
         { title: 'Linear Algebra & Calculus', icon: 'Binary', description: 'Vector/ma trận, đạo hàm — nền tảng toán cho mọi thuật toán ML.',

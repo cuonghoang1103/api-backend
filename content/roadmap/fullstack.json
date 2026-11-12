@@ -1,0 +1,648 @@
+{
+ "Frontend cơ bản › HTML, CSS & JavaScript": {
+  "body": "Mọi giao diện web, dù dựng bằng React hay Next.js, cuối cùng vẫn là ba thứ chạy trong trình duyệt: **HTML** mô tả cấu trúc và ý nghĩa của nội dung, **CSS** quyết định hình thức, **JavaScript** thêm hành vi. Hình dung một ngôi nhà: HTML là khung và tường, CSS là sơn và nội thất, JavaScript là hệ thống điện và công tắc.\n\n### Vì sao cần biết\nFramework chỉ là cách viết ba thứ này gọn hơn. Khi giao diện vỡ, form không gửi được hay trang bị đọc sai bởi trình đọc màn hình, bạn phải đọc được HTML/CSS thật sinh ra trong DevTools mới sửa nổi. Người làm full stack không biết nền này sẽ \"đoán mò\" mỗi khi framework làm điều bất ngờ.\n\n### Ý chính\n- **HTML ngữ nghĩa**: dùng `<header>`, `<nav>`, `<main>`, `<button>`, `<label>` đúng chỗ thay vì `<div>` khắp nơi; nó ảnh hưởng truy cập (accessibility), SEO và bàn phím.\n- **CSS**: hiểu box model (content, padding, border, margin), cách chọn phần tử (selector) và độ ưu tiên (specificity); bố cục hiện đại dùng Flexbox (một chiều) và Grid (hai chiều); responsive bằng media query.\n- **JavaScript**: biến, hàm, mảng/object, `async/await`, `fetch`; thao tác DOM để chọn phần tử, lắng nghe sự kiện, cập nhật giao diện.\n\n```html\n<button id=\"dem\">Bấm: 0</button>\n<script>\n  let n = 0;\n  const nut = document.querySelector('#dem');\n  nut.addEventListener('click', () => {\n    n += 1;\n    nut.textContent = `Bấm: ${n}`;\n  });\n</script>\n```\n\n### Lỗi hay gặp\n- Dùng `<div onclick>` thay cho `<button>`: mất focus bàn phím và hành vi mặc định.\n- Quên `box-sizing: border-box`, nên chiều rộng cộng thêm padding làm vỡ bố cục.\n- Chọn phần tử trước khi trang tải xong nên `querySelector` trả `null`.\n\n### Tự kiểm tra\n1. Khác nhau giữa `margin` và `padding`?\n2. Khi nào dùng Flexbox, khi nào dùng Grid?\n3. Vì sao nên gắn sự kiện bằng `addEventListener` thay vì viết thẳng `onclick` trong HTML?",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-2-0-slides",
+    "ten": "2.0 — Slide bài giảng: HTML trong 12 slide",
+    "nguon": "Nền tảng Lập trình Web · Chương 2",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-2-1-html-basics",
+    "ten": "2.1 — HTML là gì: phần tử, thẻ, thuộc tính",
+    "nguon": "Nền tảng Lập trình Web · Chương 2",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-3-0-slides",
+    "ten": "3.0 — Slide bài giảng: CSS trong 14 slide",
+    "nguon": "Nền tảng Lập trình Web · Chương 3",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-4-5-dom-events",
+    "ten": "4.5 — DOM và sự kiện: làm trang tương tác",
+    "nguon": "Nền tảng Lập trình Web · Chương 4",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/code-lab/html-css",
+    "ten": "HTML & CSS",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Frontend cơ bản › Checkpoint: Static Webpage → Interactivity": {
+  "body": "Đây là mốc kiểm tra đầu tiên: bạn có thể tự dựng một trang tĩnh từ đầu (HTML + CSS, không dùng framework) rồi thêm tương tác bằng JavaScript thuần hay chưa. Nếu làm được mà không phải chép từng dòng, nền tảng frontend của bạn đủ chắc để học React.\n\n### Một bài tập mẫu\nDựng trang \"danh sách việc cần làm\": tiêu đề, ô nhập, nút Thêm, danh sách bên dưới, mỗi mục có nút Xoá.\n\n### Tiêu chí tự chấm\n- HTML dùng đúng thẻ ngữ nghĩa (`form`, `label`, `button`, `ul/li`), có `lang` và `title`.\n- CSS bố cục bằng Flexbox hoặc Grid; xem được tốt ở màn hình điện thoại lẫn máy tính.\n- JS dùng `addEventListener`, tạo phần tử bằng `createElement` hoặc cập nhật `textContent`, kiểm tra ô rỗng trước khi thêm.\n- Dùng uỷ quyền sự kiện (một listener trên `ul` bắt cú bấm nút Xoá của mọi mục).\n- Dữ liệu còn nguyên sau khi tải lại trang nhờ `localStorage`.\n\n```js\nconst ds = document.querySelector('#ds');\nds.addEventListener('click', (e) => {\n  if (e.target.matches('button.xoa')) e.target.closest('li').remove();\n});\n```\n\n### Lỗi hay gặp\n- Gắn listener cho từng nút rồi quên gắn cho mục tạo sau đó.\n- Dùng `innerHTML` với chuỗi người dùng nhập, mở đường cho XSS; ưu tiên `textContent`.\n\nLàm xong và hiểu vì sao mỗi dòng cần có, bạn đã sẵn sàng chuyển sang quản lý thư viện và React.",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-4-5-dom-events",
+    "ten": "4.5 — DOM và sự kiện: làm trang tương tác",
+    "nguon": "Nền tảng Lập trình Web · Chương 4",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/web-design/learn?lessonSlug=wed201c-events-validation",
+    "ten": "3.4 — Sự kiện & kiểm tra biểu mẫu bằng JavaScript",
+    "nguon": "Web Design · Chương 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "WED201c"
+   },
+   {
+    "href": "/code-lab/javascript",
+    "ten": "JavaScript",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Công cụ & Framework › npm & External Packages": {
+  "body": "**npm** vừa là trình quản lý gói đi kèm Node.js, vừa là kho công khai chứa hàng triệu thư viện JavaScript. Thay vì tự viết mọi thứ, bạn khai báo \"dự án cần thư viện X\" và npm tải về, kèm cả các thư viện mà X phụ thuộc.\n\n### Vì sao cần biết\nMọi dự án React, Next.js hay Node đều bắt đầu bằng `npm install`. Hiểu npm giúp bạn tái lập dự án trên máy khác, tránh lỗi \"máy tôi chạy được\", và biết khi nào một thư viện lạ có thể nguy hiểm.\n\n### Ý chính\n- **`package.json`**: mô tả dự án, gồm `dependencies` (cần khi chạy), `devDependencies` (chỉ cần khi phát triển như linter, test) và `scripts` (lệnh tắt như `npm run dev`).\n- **`package-lock.json`**: ghi chính xác phiên bản đã cài, nên hãy commit nó; trên CI dùng `npm ci` để cài đúng theo lockfile.\n- **Semver** `MAJOR.MINOR.PATCH`: `^1.4.2` cho phép nâng lên `1.x.x` nhưng không sang `2.0.0`; `~1.4.2` chỉ nhận bản vá `1.4.x`.\n- **`node_modules/`** rất lớn và tái tạo được, nên đưa vào `.gitignore`.\n\n```bash\nnpm init -y\nnpm install dayjs            # thêm vào dependencies\nnpm install -D eslint        # thêm vào devDependencies\nnpm run build                # chạy script \"build\" trong package.json\nnpm ci                       # cài sạch theo lockfile (dùng trên CI)\n```\n\n### Lỗi hay gặp\n- Commit `node_modules` lên Git.\n- Xoá `package-lock.json` để \"sửa lỗi cài đặt\" rồi vô tình nâng phiên bản hàng loạt.\n- Cài gói bằng cách chép lệnh từ nguồn không rõ; hãy kiểm tra tên gói (typosquatting), số lượt tải và người duy trì.\n- Chạy `npm audit fix --force` mà không đọc, có thể kéo theo thay đổi phá vỡ.",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-1-5-node-npm",
+    "ten": "1.5 — Node & npm: chạy JS và cài thư viện",
+    "nguon": "Nền tảng Lập trình Web · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-4-1-package-json",
+    "ten": "4.1 — package.json và npm scripts",
+    "nguon": "Node.js · Chương 4",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-4-2-semver-lockfile",
+    "ten": "4.2 — Semver và lockfile",
+    "nguon": "Node.js · Chương 4",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-4-3-bao-mat-npm",
+    "ten": "4.3 — An toàn chuỗi cung ứng",
+    "nguon": "Node.js · Chương 4",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Công cụ & Framework › Git & GitHub": {
+  "body": "**Git** là hệ thống quản lý phiên bản: nó lưu lại lịch sử thay đổi của mã nguồn dưới dạng các **commit**, cho phép quay về bản cũ, thử nghiệm trên nhánh riêng và hợp nhất công việc của nhiều người. **GitHub** là dịch vụ lưu kho Git trên mạng, thêm pull request, issue và CI.\n\n### Vì sao cần biết\nMọi công ty phần mềm đều dùng Git. Không có nó, làm việc nhóm gần như không thể và một lần xoá nhầm file có thể mất cả ngày công.\n\n### Ý chính\n- Ba khu vực: thư mục làm việc, **staging** (`git add`), và lịch sử (`git commit`).\n- **Nhánh** (branch) là con trỏ nhẹ tới một commit; tạo nhánh cho mỗi tính năng để không đụng vào `main`.\n- **Remote** (`origin`) là bản kho trên GitHub; `git push` đẩy lên, `git pull` kéo về.\n- **Pull request**: đề nghị hợp nhất nhánh của bạn, để người khác review trước khi vào `main`.\n- `.gitignore` loại file không nên theo dõi như `node_modules`, `.env`.\n\n```bash\ngit clone https://github.com/<ban>/<repo>.git\ngit switch -c feature/dang-nhap\ngit add .\ngit commit -m \"feat: thêm form đăng nhập\"\ngit push -u origin feature/dang-nhap\n# mở Pull Request trên GitHub\n```\n\n### Lỗi hay gặp\n- Commit nhầm `.env` hay khoá bí mật; một khi đã lên lịch sử, coi như lộ và phải đổi khoá.\n- Làm thẳng trên `main`, rồi xung đột với đồng đội.\n- Gặp xung đột merge thì xoá bừa các dấu `<<<<<<<` mà không đọc nội dung hai phía.\n- Dùng `git push --force` lên nhánh chung.\n\n### Tự kiểm tra\n1. `git fetch` và `git pull` khác nhau thế nào?\n2. Vì sao nên commit nhỏ và có thông điệp rõ?",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-0-0-slides",
+    "ten": "0.0 — Slide Mục 0: bắt đầu với Git bằng hình",
+    "nguon": "Git & GitHub · Mục 0",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-1-3-vong-lap-hang-ngay",
+    "ten": "1.3 — Vòng lặp hằng ngày: add, commit, diff — và add -p",
+    "nguon": "Git & GitHub · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-3-1-nhanh-la-gi",
+    "ten": "3.1 — Một nhánh là một file 41 byte",
+    "nguon": "Git & GitHub · Chương 3",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-1-4-github",
+    "ten": "1.4 — GitHub: mã của bạn trên đám mây",
+    "nguon": "Nền tảng Lập trình Web · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-6-1-giai-phau-pr",
+    "ten": "6.1 — Giải phẫu một pull request thật sự được review",
+    "nguon": "Git & GitHub · Chương 6",
+    "kieu": "video"
+   },
+   {
+    "href": "/code-lab/git",
+    "ten": "Git",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Công cụ & Framework › React + Tailwind CSS": {
+  "body": "**React** là thư viện dựng giao diện từ các **component**: những hàm nhận dữ liệu đầu vào (props) và trả về mô tả giao diện (JSX). Khi dữ liệu (state) đổi, React tự cập nhật phần màn hình liên quan. **Tailwind CSS** là bộ lớp tiện ích (utility class) nhỏ, mỗi lớp làm một việc, ghép trực tiếp vào JSX để tạo kiểu mà không phải viết file CSS riêng.\n\n### Vì sao cần biết\nReact là công nghệ giao diện phổ biến nhất trong tuyển dụng, và là nền cho Next.js. Tailwind giúp dựng giao diện nhanh và nhất quán, rất hợp với tư duy component.\n\n### Ý chính\n- **Component** là hàm, tên viết hoa; **props** truyền từ cha xuống con, chỉ đọc.\n- **State** (`useState`) là dữ liệu nhớ giữa các lần render; đổi state thì component render lại. Không sửa trực tiếp state, luôn dùng hàm set.\n- **`useEffect`** để đồng bộ với thế giới bên ngoài (gọi API, đăng ký sự kiện), không dùng cho mọi thứ.\n- Hiển thị danh sách bằng `map` và luôn có `key` ổn định.\n- Tailwind: `flex`, `p-4`, `text-lg`, `hover:bg-blue-600`, tiền tố `md:` cho responsive.\n\n```jsx\nimport { useState } from 'react';\n\nexport function DemClick({ nhan }) {\n  const [n, setN] = useState(0);\n  return (\n    <button\n      className=\"rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700\"\n      onClick={() => setN(n + 1)}\n    >\n      {nhan}: {n}\n    </button>\n  );\n}\n```\n\n### Lỗi hay gặp\n- Gán `state.x = 1` thay vì `setState`, nên giao diện không cập nhật.\n- Dùng chỉ số mảng làm `key` cho danh sách có thể thêm/xoá/đổi chỗ.\n- Ghép tên lớp Tailwind bằng nối chuỗi (`\"bg-\" + mau`), khiến lớp không được sinh ra; hãy viết đủ tên lớp.\n- Lạm dụng `useEffect` cho thứ tính được ngay lúc render.\n\n### Tự kiểm tra\n1. Điều gì khiến một component render lại?\n2. Vì sao Tailwind không cho phép ghép tên lớp động tuỳ ý?",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-1-0-slides",
+    "ten": "1.0 — Slide Chương 1: component và props bằng hình",
+    "nguon": "React · Chương 1",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-2-1-use-state",
+    "ten": "2.1 — useState và render lại: ảnh chụp state, cập nhật theo hàm và batching",
+    "nguon": "React · Chương 2",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-13-2-tailwind-nen-tang",
+    "ten": "13.2 — Nền tảng Tailwind: utility, responsive, trạng thái",
+    "nguon": "Next.js: The React Framework · Chương 13",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/code-lab/react",
+    "ten": "React",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   },
+   {
+    "href": "/code-lab/tailwind-css",
+    "ten": "Tailwind CSS",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Công cụ & Framework › Checkpoint: Frontend App hoàn chỉnh": {
+  "body": "Mốc này kiểm tra bạn đã vượt qua mức \"làm theo video\" để tự dựng được một ứng dụng React nhiều màn hình, có dữ liệu thật chứ không chỉ một component demo.\n\n### Một ứng dụng mẫu\nỨng dụng quản lý ghi chú hoặc đặt lịch, tạm dùng dữ liệu giả từ file JSON hoặc API công khai, chưa cần backend của riêng bạn.\n\n### Tiêu chí tự chấm\n- Có ít nhất 3 màn hình dùng router (danh sách, chi tiết, form tạo mới).\n- Component chia hợp lý: mỗi component một trách nhiệm, props rõ ràng, không lặp mã.\n- State đặt đúng chỗ: state cục bộ trong component, state dùng chung nâng lên cha hoặc dùng context/store gọn.\n- Form có kiểm soát (controlled), hiện lỗi hợp lệ, trạng thái loading và lỗi khi gọi API.\n- Giao diện dùng Tailwind nhất quán, xem tốt trên điện thoại.\n- `npm run build` chạy sạch, không cảnh báo lỗi nghiêm trọng; có thể triển khai lên hosting tĩnh.\n\n### Lỗi hay gặp\n- Một component \"thần\" dài hàng trăm dòng làm đủ mọi việc.\n- Sao chép dữ liệu từ props vào state rồi quên đồng bộ.\n- Không xử lý trạng thái lỗi/đang tải nên giao diện trắng khi API chậm.\n\nKhi ứng dụng này chạy trơn, bạn đã có thứ để nối với backend ở các bước sau.",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-5-5-du-an",
+    "ten": "5.5 — Tự dựng: luồng đặt lịch bốn bước, store dùng chung và bộ lọc trên URL",
+    "nguon": "React · Chương 5",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-7-5-du-an",
+    "ten": "7.5 — Tự dựng: bảy route, một layout, cổng đăng nhập và thư mục theo tính năng",
+    "nguon": "React · Chương 7",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-10-4-tong-ket",
+    "ten": "10.4 — Build, deploy, checklist cả khoá và rubric tự chấm",
+    "nguon": "React · Chương 10",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Backend & Database › Node.js (CLI Apps)": {
+  "body": "**Node.js** cho phép chạy JavaScript ngoài trình duyệt, ngay trên máy hoặc server. Bên trong là engine V8 của Chrome cộng với libuv để xử lý I/O không chặn (đọc file, mạng) nhờ vòng lặp sự kiện. Học Node bằng một **ứng dụng dòng lệnh (CLI)** trước khi làm web server giúp bạn tập trung vào ngôn ngữ và thư viện chuẩn, chưa phải lo HTTP.\n\n### Vì sao cần biết\nBackend Node, công cụ build (Vite, ESLint) và script tự động hoá đều chạy trên Node. Hiểu runtime giúp bạn tránh lỗi kinh điển như chặn event loop.\n\n### Ý chính\n- Đọc tham số dòng lệnh qua `process.argv`; thoát với mã lỗi bằng `process.exit(1)`.\n- Làm việc với file bằng `node:fs/promises` và đường dẫn bằng `node:path` để chạy đúng trên mọi hệ điều hành.\n- Bất đồng bộ: dùng `async/await`; đừng dùng bản đồng bộ như `readFileSync` trong server xử lý nhiều yêu cầu.\n- Module: dự án mới nên dùng ES Modules (`\"type\": \"module\"` trong `package.json`).\n\n```js\n// ghi-chu.mjs   chạy: node ghi-chu.mjs them \"mua sữa\"\nimport { readFile, writeFile } from 'node:fs/promises';\n\nconst [lenh, ...phan] = process.argv.slice(2);\nconst tep = 'ghi-chu.json';\nconst ds = JSON.parse(await readFile(tep, 'utf8').catch(() => '[]'));\n\nif (lenh === 'them') {\n  ds.push(phan.join(' '));\n  await writeFile(tep, JSON.stringify(ds, null, 2));\n}\nconsole.log(ds);\n```\n\n### Lỗi hay gặp\n- Nối đường dẫn bằng chuỗi `'/'` thay vì `path.join`.\n- Quên `await` nên đọc ra `Promise` thay vì dữ liệu.\n- Không bắt lỗi (file không tồn tại) khiến chương trình sập với stack trace khó hiểu.",
+  "lessons": [
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-2-1-runtime-la-gi",
+    "ten": "2.1 — Node.js thật ra là cái gì",
+    "nguon": "Node.js · Chương 2",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-3-1-path-fs",
+    "ten": "3.1 — path và fs",
+    "nguon": "Node.js · Chương 3",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-1-5-module",
+    "ten": "1.5 — Module: CommonJS và ES Modules",
+    "nguon": "Node.js · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/code-lab/nodejs-practice",
+    "ten": "Node.js — Luyện từng bài, chấm ngay trong trình duyệt",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Backend & Database › PostgreSQL": {
+  "body": "**PostgreSQL** là hệ quản trị cơ sở dữ liệu quan hệ mã nguồn mở: dữ liệu nằm trong các **bảng** có cột và kiểu rõ ràng, liên kết với nhau bằng khoá, và bạn truy vấn bằng SQL. Nó nổi tiếng ở độ tin cậy, tuân thủ chuẩn và hỗ trợ tốt kiểu dữ liệu như JSONB.\n\n### Vì sao cần biết\nHầu hết ứng dụng thật cần lưu dữ liệu lâu dài và nhất quán: người dùng, đơn hàng, bài viết. Thiết kế schema tốt và truy vấn đúng quyết định app chạy nhanh hay chậm, dữ liệu sạch hay lỗi.\n\n### Ý chính\n- **Khoá chính** (`PRIMARY KEY`) định danh từng dòng; **khoá ngoại** (`FOREIGN KEY`) bảo đảm tham chiếu hợp lệ giữa bảng.\n- **Ràng buộc** (`NOT NULL`, `UNIQUE`, `CHECK`) để CSDL tự chặn dữ liệu sai thay vì tin vào code ứng dụng.\n- **JOIN** ghép dữ liệu nhiều bảng; **GROUP BY** gom và tính tổng hợp.\n- **Transaction**: gộp nhiều lệnh thành một khối \"được cả, hoặc không gì cả\" (ACID).\n- **Index** làm truy vấn theo cột nhanh hơn nhưng làm ghi chậm đi và tốn chỗ.\n\n```sql\nCREATE TABLE users (\n  id SERIAL PRIMARY KEY,\n  email TEXT NOT NULL UNIQUE\n);\nCREATE TABLE orders (\n  id SERIAL PRIMARY KEY,\n  user_id INT NOT NULL REFERENCES users(id),\n  total_vnd INT NOT NULL CHECK (total_vnd >= 0)\n);\n\nBEGIN;\nUPDATE accounts SET balance = balance - 100 WHERE id = 1;\nUPDATE accounts SET balance = balance + 100 WHERE id = 2;\nCOMMIT;\n```\n\n### Lỗi hay gặp\n- Nối chuỗi người dùng vào câu SQL (SQL injection); luôn dùng tham số hoá.\n- Quên điều kiện `WHERE` trong `UPDATE`/`DELETE` và sửa cả bảng.\n- Lưu tiền bằng số thực (`float`) nên sai số; dùng số nguyên hoặc `NUMERIC`.\n- Truy vấn trong vòng lặp ở code ứng dụng (vấn đề N+1).\n\n### Tự kiểm tra\n1. Khi nào cần transaction?\n2. `INNER JOIN` và `LEFT JOIN` khác nhau ở đâu?",
+  "lessons": [
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-3-1-khoa-chinh",
+    "ten": "3.1 — Khoá chính: danh tính của một dòng",
+    "nguon": "PostgreSQL · Chương 3",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-4-2-select-where",
+    "ten": "4.2 — SELECT & WHERE: lấy đúng những dòng bạn cần",
+    "nguon": "PostgreSQL · Chương 4",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-5-1-inner-join",
+    "ten": "5.1 — INNER JOIN: ráp các dòng lại với nhau",
+    "nguon": "PostgreSQL · Chương 5",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-11-1-giao-dich",
+    "ten": "11.1 — Giao dịch: được tất cả, hoặc không gì cả",
+    "nguon": "PostgreSQL · Chương 11",
+    "kieu": "video"
+   },
+   {
+    "href": "/code-lab/postgresql-practice",
+    "ten": "PostgreSQL — Luyện tập SQL chấm thật",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Backend & Database › Checkpoint: Simple CRUD App": {
+  "body": "Mốc này gom backend cơ bản lại: một API **CRUD** (Create, Read, Update, Delete) hoàn chỉnh, nối vào PostgreSQL thật chứ không lưu trong mảng bộ nhớ. Đây là hình mẫu của hàng nghìn ứng dụng ngoài đời.\n\n### Một dự án mẫu\nAPI ghi chú hoặc công việc cần làm, với bảng `notes(id, title, body, created_at)`.\n\n### Tiêu chí tự chấm\n- Đủ 5 tuyến: `GET /notes`, `GET /notes/:id`, `POST /notes`, `PATCH /notes/:id`, `DELETE /notes/:id`.\n- Mã trạng thái đúng: `201` khi tạo, `404` khi không thấy, `400/422` khi dữ liệu sai, `204` khi xoá.\n- Kiểm tra dữ liệu đầu vào bằng thư viện schema (ví dụ zod); không tin `req.body`.\n- Truy vấn dùng tham số hoá (`$1, $2`), dùng connection pool; không nối chuỗi SQL.\n- Có xử lý lỗi tập trung (middleware lỗi), không để lộ stack trace ra client.\n- Cấu hình (chuỗi kết nối) đọc từ biến môi trường, không viết cứng trong code.\n- Chạy thử đầy đủ bằng `curl` hoặc một client như Postman.\n\n```js\napp.post('/notes', async (req, res) => {\n  const { title, body } = NoteSchema.parse(req.body);\n  const { rows } = await pool.query(\n    'INSERT INTO notes (title, body) VALUES ($1, $2) RETURNING *',\n    [title, body],\n  );\n  res.status(201).json(rows[0]);\n});\n```\n\n### Lỗi hay gặp\n- Trả `200` cho mọi tình huống, kể cả lỗi.\n- Mở kết nối mới cho mỗi yêu cầu thay vì dùng pool.\n- Quên `await` trong route bất đồng bộ nên lỗi bị nuốt.",
+  "lessons": [
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-5-5-notes-api",
+    "ten": "5.5 — Ráp thành Notes API hoàn chỉnh",
+    "nguon": "Node.js · Chương 5",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-6-3-validate-schema",
+    "ten": "6.3 — Kiểm tra dữ liệu bằng lược đồ",
+    "nguon": "Node.js · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-7-3-crud-transaction",
+    "ten": "7.3 — CRUD, transaction, và đổi ruột Notes API sang PostgreSQL",
+    "nguon": "Node.js · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/code-lab/nodejs-express",
+    "ten": "Node.js (Express)",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "API & Bảo mật › RESTful APIs": {
+  "body": "**REST** là phong cách thiết kế API trên HTTP: mỗi thứ bạn quản lý là một **tài nguyên** có URL riêng, và bạn thao tác lên nó bằng các phương thức HTTP chuẩn. Client và server nói chuyện bằng JSON, và mỗi yêu cầu tự mang đủ thông tin để xử lý (stateless).\n\n### Vì sao cần biết\nAPI là chỗ frontend, mobile và dịch vụ khác gặp backend. API đặt tên rõ ràng, trả mã trạng thái đúng sẽ dễ dùng, dễ debug và khó vỡ khi thay đổi.\n\n### Ý chính\n- **URL là danh từ**, số nhiều: `/users`, `/users/42/orders`; hành động nằm ở phương thức, không ở URL (tránh `/getUser`).\n- **Phương thức**: `GET` đọc, `POST` tạo, `PUT` thay thế toàn bộ, `PATCH` sửa một phần, `DELETE` xoá. `GET`, `PUT`, `DELETE` là idempotent (gọi lặp cho cùng kết quả), `POST` thì không.\n- **Mã trạng thái**: `200` OK, `201` Created, `204` No Content, `400/422` dữ liệu sai, `401` chưa xác thực, `403` không đủ quyền, `404` không thấy, `409` xung đột, `500` lỗi server.\n- **Phân trang và lọc** qua query string: `/posts?page=2&limit=20&sort=-created_at`.\n- **Versioning**: đặt phiên bản như `/api/v1/...` để sau này đổi hợp đồng mà không phá client cũ.\n\n```http\nPOST /api/v1/users HTTP/1.1\nContent-Type: application/json\n\n{\"email\":\"an@example.com\",\"name\":\"An\"}\n\nHTTP/1.1 201 Created\nLocation: /api/v1/users/42\n```\n\n### Lỗi hay gặp\n- Dùng `POST` cho mọi thứ, hoặc trả `200` kèm `{\"error\": ...}`.\n- Trả lỗi mỗi nơi một dạng; hãy thống nhất định dạng lỗi.\n- Đổi tên trường trong phản hồi mà không báo, làm vỡ client.\n\n### Tự kiểm tra\n1. Vì sao `PUT` idempotent còn `POST` thì không?\n2. `401` và `403` khác nhau thế nào?",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-6-0-slides",
+    "ten": "6.0 — Slide bài giảng: HTTP & API trong 12 slide",
+    "nguon": "Nền tảng Lập trình Web · Chương 6",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-1-1-tai-nguyen",
+    "ten": "1.1 — Mô hình hoá tài nguyên, không phải hành động",
+    "nguon": "API & System Design · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-1-2-phuong-thuc",
+    "ten": "1.2 — Phương thức và cam kết của chúng: safe, idempotent, PUT và PATCH",
+    "nguon": "API & System Design · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-1-3-status",
+    "ten": "1.3 — Mã trạng thái có ý nghĩa: 201, 400 và 422, 401 và 403, 404 và 410, 409",
+    "nguon": "API & System Design · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/code-lab/rest-apis",
+    "ten": "REST APIs",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "API & Bảo mật › JWT Auth": {
+  "body": "**JWT** (JSON Web Token) là một chuỗi gồm ba phần `header.payload.signature`, mã hoá base64url. Sau khi đăng nhập đúng, server ký một token chứa thông tin như `sub` (id người dùng) và `exp` (hạn dùng). Client gửi lại token ở mỗi yêu cầu (`Authorization: Bearer <token>`), server chỉ cần kiểm chữ ký là biết token có thật và còn hạn, không phải tra phiên trong CSDL. Đó là ý nghĩa của \"stateless\".\n\n### Vì sao cần biết\nĐăng nhập là thứ gần như app nào cũng có, và làm sai là mất dữ liệu người dùng. JWT phổ biến cho SPA và mobile, nhưng cũng bị dùng sai rất nhiều.\n\n### Ý chính\n- **Payload chỉ được mã hoá base64, không phải bí mật**: ai cũng đọc được, nên không nhét mật khẩu hay dữ liệu nhạy cảm vào.\n- **Chữ ký** chứng minh token không bị sửa; phải kiểm tra thuật toán mong đợi (đừng chấp nhận `alg: none`).\n- **Access token sống ngắn** (vài phút), kèm **refresh token** sống dài để lấy access token mới; refresh token nên xoay vòng và có thể thu hồi.\n- Nơi lưu ở trình duyệt: cookie `HttpOnly` + `Secure` + `SameSite` an toàn hơn `localStorage` trước XSS.\n- Mật khẩu phải băm bằng thuật toán chậm có muối (bcrypt, argon2), không bao giờ lưu thô.\n\n```js\nimport jwt from 'jsonwebtoken';\n\nconst token = jwt.sign({ sub: user.id }, process.env.JWT_SECRET, { expiresIn: '15m' });\n// kiểm tra\nconst payload = jwt.verify(token, process.env.JWT_SECRET, { algorithms: ['HS256'] });\n```\n\n### Lỗi hay gặp\n- Token sống hàng tháng nên khi bị đánh cắp thì không thu hồi được.\n- Khoá ký ngắn, đoán được, hoặc commit lên Git.\n- Quên kiểm tra `exp` hay `aud`, hoặc tin dữ liệu trong payload mà chưa verify chữ ký.\n\n### Tự kiểm tra\n1. Vì sao cần cả access token lẫn refresh token?\n2. Điều gì xảy ra nếu bạn lưu JWT ở `localStorage` và trang có lỗ hổng XSS?",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-7-0-slides",
+    "ten": "7.0 — Slide bài giảng: xác thực & bảo mật trong 12 slide",
+    "nguon": "Nền tảng Lập trình Web · Chương 7",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-7-3-jwt",
+    "ten": "7.3 — JWT: token tự chứng minh",
+    "nguon": "Nền tảng Lập trình Web · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/authentication/learn?lessonSlug=auth-4-1-giai-ma-bang-tay",
+    "ten": "4.1 — Tự tay giải mã một cái",
+    "nguon": "Authentication · Chương 4",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-8-2-jwt-access-refresh",
+    "ten": "8.2 — JWT, refresh token và xoay vòng",
+    "nguon": "Node.js · Chương 8",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/simulation?scenario=auth",
+    "ten": "Xác thực — Đăng nhập & JWT",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "API & Bảo mật › Redis": {
+  "body": "**Redis** là kho dữ liệu key-value chạy chủ yếu trong RAM, nên đọc/ghi cực nhanh (cỡ micro đến mili giây). Nó không thay PostgreSQL mà đứng cạnh: Postgres giữ dữ liệu gốc bền vững, Redis giữ bản sao nóng hoặc dữ liệu tạm cần tốc độ.\n\n### Vì sao cần biết\nKhi traffic tăng, truy vấn lặp đi lặp lại làm database quá tải. Một lớp cache đặt đúng chỗ giảm tải và rút thời gian phản hồi đáng kể. Redis còn dùng cho session, giới hạn tần suất (rate limit), hàng đợi và bảng xếp hạng.\n\n### Ý chính\n- Kiểu dữ liệu: string, hash, list, set, sorted set (bảng xếp hạng)...\n- **TTL**: cho khoá một thời gian sống bằng `EXPIRE`/`SET ... EX`; hết hạn thì tự biến mất.\n- **Cache-aside**: đọc cache trước; trượt thì đọc DB, ghi vào cache kèm TTL, rồi trả kết quả. Khi dữ liệu đổi phải xoá hoặc cập nhật cache.\n- `INCR` là thao tác nguyên tử, tiện cho bộ đếm và rate limit.\n- Dữ liệu trong Redis mặc định có thể mất khi khởi động lại nếu chưa bật lưu bền (RDB/AOF), nên đừng coi nó là nơi duy nhất giữ dữ liệu quan trọng.\n\n```js\nasync function layUser(id) {\n  const khoa = `user:${id}`;\n  const dem = await redis.get(khoa);\n  if (dem) return JSON.parse(dem);\n  const { rows } = await pool.query('SELECT * FROM users WHERE id = $1', [id]);\n  await redis.set(khoa, JSON.stringify(rows[0]), { EX: 60 });\n  return rows[0];\n}\n```\n\n### Lỗi hay gặp\n- Quên đặt TTL nên cache phình mãi và dữ liệu cũ tồn tại vô hạn.\n- Không xoá cache khi cập nhật DB, nên người dùng thấy dữ liệu lỗi thời.\n- Dùng lệnh nặng như `KEYS *` trên production; hãy dùng `SCAN`.\n- Nhiều yêu cầu cùng trượt cache một lúc ập vào DB (cache stampede).",
+  "lessons": [
+   {
+    "href": "/courses/redis/learn?lessonSlug=rd-0-1-van-de",
+    "ten": "0.1 — Redis giải quyết gì",
+    "nguon": "Redis · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/redis/learn?lessonSlug=rd-0-3-nam-phut",
+    "ten": "0.3 — Năm phút đầu tiên của bạn",
+    "nguon": "Redis · Mục 0",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/redis/learn?lessonSlug=rd-2-2-het-han",
+    "ten": "2.2 — Hết hạn thật sự hoạt động ra sao",
+    "nguon": "Redis · Chương 2",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-12-2-cache-aside",
+    "ten": "12.2 — Cache-aside: khuôn mẫu và bốn lần nó phản chủ",
+    "nguon": "Node.js · Chương 12",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/code-lab/redis",
+    "ten": "Redis",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "API & Bảo mật › Checkpoint: Complete App": {
+  "body": "Mốc này là lần đầu bạn ghép cả bốn mảnh: giao diện (React), API (Node), dữ liệu (PostgreSQL) và hạ tầng phụ (đăng nhập JWT, cache Redis) thành một sản phẩm chạy được từ đầu đến cuối. Mục đích là nhìn thấy cả luồng một yêu cầu đi qua các tầng.\n\n### Luồng cần chạy được\nNgười dùng đăng ký/đăng nhập, nhận token, vào danh sách dữ liệu của riêng mình, tạo/sửa/xoá, và danh sách đọc nhiều được cache.\n\n### Tiêu chí tự chấm\n- Frontend gọi API thật, hiện trạng thái đang tải và lỗi; token lưu và gửi đúng cách.\n- Backend xác thực mọi tuyến cần bảo vệ; người dùng A không đọc được dữ liệu của B (kiểm tra quyền sở hữu).\n- Mật khẩu băm; không có bí mật trong code hay lịch sử Git.\n- CORS cấu hình đúng nguồn gốc, không mở `*` cho API có đăng nhập.\n- Cache có TTL và bị xoá khi dữ liệu đổi.\n- Có tệp `.env.example` mô tả biến môi trường; README hướng dẫn chạy từ máy trống.\n\n### Lỗi hay gặp\n- Lỗi CORS ở trình duyệt nhưng gọi bằng `curl` thì được; nguyên nhân là cấu hình header phía server, không phải lỗi code frontend.\n- Chỉ kiểm tra quyền ở giao diện (ẩn nút) mà API vẫn mở.\n- \"Chạy trên máy tôi\" nhưng thiếu hướng dẫn cài đặt, nên người khác không chạy được.\n\nKhi dự án này chạy trơn trên máy bạn, bước tiếp theo là đưa nó lên một server thật.",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-10-5-full-stack-picture",
+    "ten": "10.5 — Bức tranh full-stack, và điều tiếp theo",
+    "nguon": "Nền tảng Lập trình Web · Chương 10",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-14-2-api-that",
+    "ten": "14.2 — API thật: hết giờ, thử lại, mất mạng, idempotency, báo lỗi, biến môi trường Vite",
+    "nguon": "React · Chương 14",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Triển khai › Linux Basics": {
+  "body": "Hầu hết server chạy Linux, và bạn sẽ điều khiển chúng qua **dòng lệnh** (shell, thường là bash) từ xa bằng SSH. Biết vài chục lệnh cốt lõi là đủ để làm việc thoải mái.\n\n### Vì sao cần biết\nKhi deploy, bạn phải cài phần mềm, đọc log, sửa quyền file, xem vì sao tiến trình chết, tất cả trên một máy không có giao diện đồ hoạ.\n\n### Ý chính\n- **Điều hướng và file**: `pwd`, `ls -la`, `cd`, `cp`, `mv`, `rm`, `mkdir`, `cat`, `less`, `tail -f`.\n- **Tìm kiếm và lọc**: `grep`, `find`, và đường ống `|` nối đầu ra lệnh này vào đầu vào lệnh kia.\n- **Quyền**: mỗi file có chủ sở hữu, nhóm và quyền đọc/ghi/chạy (`rwx`); đổi bằng `chmod`, `chown`. Chạy lệnh quản trị bằng `sudo` thay vì đăng nhập root.\n- **Tiến trình**: `ps aux`, `top`, `kill`; dịch vụ nền quản lý bằng `systemctl`, log xem bằng `journalctl`.\n- **Mạng và từ xa**: `ssh`, `scp`/`rsync`, `curl`.\n\n```bash\nssh deploy@203.0.113.10\ntail -n 100 -f /var/log/nginx/error.log\nps aux | grep node\nsudo systemctl status myapp\ndf -h && free -m          # xem đĩa và RAM\n```\n\n### Lỗi hay gặp\n- `rm -rf` với biến rỗng hoặc đường dẫn sai có thể xoá cả thư mục quan trọng; kiểm tra kỹ trước khi chạy.\n- `chmod 777` để \"cho chạy được\" mở toang quyền cho mọi người.\n- Chạy ứng dụng bằng root nên một lỗ hổng cũng trao toàn quyền máy chủ.\n- Đĩa đầy vì log không xoay vòng, làm ứng dụng và database ngừng ghi.",
+  "lessons": [
+   {
+    "href": "/courses/linux-bash/learn?lessonSlug=lnx-0-0-slides",
+    "ten": "0.0 — Slide Mục 0: Linux, shell và cách học, bằng hình",
+    "nguon": "Linux & Bash · Mục 0",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/linux-bash/learn?lessonSlug=lnx-1-1-dau-nhac-ba-lenh",
+    "ten": "1.1 — Dấu nhắc, và ba lệnh đầu tiên của bạn",
+    "nguon": "Linux & Bash · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/linux-bash/learn?lessonSlug=lnx-4-1-mo-hinh-quyen",
+    "ten": "4.1 — Mô hình quyền, và rwx nghĩa là gì trên một thư mục",
+    "nguon": "Linux & Bash · Chương 4",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/linux-bash/learn?lessonSlug=lnx-5-1-tien-trinh-la-gi",
+    "ten": "5.1 — Tiến trình là gì, và nhìn vào nó bằng cách nào",
+    "nguon": "Linux & Bash · Chương 5",
+    "kieu": "video"
+   },
+   {
+    "href": "/code-lab/linux-bash",
+    "ten": "Linux & Bash",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Triển khai › AWS cơ bản (EC2/S3/VPC/Route53)": {
+  "body": "**AWS** (Amazon Web Services) cho thuê hạ tầng theo nhu cầu. Bốn dịch vụ nền tảng nhất để chạy một ứng dụng web: **EC2** (máy chủ ảo), **S3** (lưu file dạng object), **VPC** (mạng riêng ảo) và **Route 53** (DNS).\n\n### Vì sao cần biết\nNhiều công ty chạy trên AWS, và các nhà cung cấp khác (GCP, Azure, VPS thường) có khái niệm tương đương. Hiểu bốn thứ này là đủ để đưa một ứng dụng lên mạng một cách bài bản.\n\n### Ý chính\n- **EC2**: chọn loại instance (CPU/RAM), image hệ điều hành (AMI), cặp khoá SSH. **Security group** là tường lửa theo instance: mặc định chặn hết vào, bạn chỉ mở cổng cần thiết (22 cho SSH từ IP của bạn, 80/443 cho web).\n- **S3**: lưu file trong **bucket** theo khoá (key); rất bền, tính tiền theo dung lượng và lượt truy cập. Mặc định riêng tư; cấp quyền bằng IAM hoặc URL ký sẵn, không mở công khai nếu không cần.\n- **VPC**: mạng riêng chia thành **subnet** (dải CIDR như `10.0.1.0/24`). Subnet công khai có đường ra Internet Gateway; tài nguyên nhạy cảm như database nên nằm subnet riêng.\n- **Route 53**: trỏ tên miền về IP hay dịch vụ bằng bản ghi A/AAAA/CNAME; chú ý TTL khi đổi bản ghi.\n- **IAM**: cấp quyền tối thiểu cần thiết; không dùng khoá root cho công việc hằng ngày.\n\n```bash\n# kết nối vào EC2 bằng khoá riêng\nchmod 400 khoa.pem\nssh -i khoa.pem ubuntu@<dia-chi-public>\n```\n\n### Lỗi hay gặp\n- Mở bucket S3 hoặc cổng database ra toàn Internet.\n- Commit khoá truy cập AWS lên GitHub, nơi bot quét ra chỉ sau vài phút.\n- Quên tắt instance thử nghiệm nên hoá đơn phát sinh; hãy đặt cảnh báo ngân sách.\n\nLưu ý: nội dung web hiện chưa có bài thực hành riêng cho AWS; các bài gắn kèm dạy khái niệm compute, lưu trữ, mạng và DNS làm nền.",
+  "lessons": [
+   {
+    "href": "/courses/prc392c-cloud-computing/learn?lessonSlug=prc392c-1-1-compute",
+    "ten": "1.1 — Compute: EC2 & Lambda",
+    "nguon": "Cloud Computing · Chapter 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRC392c"
+   },
+   {
+    "href": "/courses/prc392c-cloud-computing/learn?lessonSlug=prc392c-2-1-storage",
+    "ten": "2.1 — Lưu trữ: S3 & EBS",
+    "nguon": "Cloud Computing · Chapter 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRC392c"
+   },
+   {
+    "href": "/courses/prc392c-cloud-computing/learn?lessonSlug=prc392c-4-1-network-architecture",
+    "ten": "4.1 — Mạng & thiết kế well-architected",
+    "nguon": "Cloud Computing · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRC392c"
+   },
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-2-1-ipv4-cidr",
+    "ten": "2.1 — IPv4, CIDR và chia subnet bằng tay",
+    "nguon": "Networking for Developers · Chương 2",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-3-2-ban-ghi",
+    "ten": "3.2 — Các loại bản ghi lập trình viên đụng tới",
+    "nguon": "Networking for Developers · Chương 3",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Triển khai › Docker": {
+  "body": "**Docker** đóng gói ứng dụng cùng toàn bộ thứ nó cần (runtime, thư viện, cấu hình) thành một **image**; chạy image đó ra **container** hoạt động giống nhau trên máy bạn, máy đồng nghiệp và server. Container không phải máy ảo đầy đủ: nó dùng chung nhân hệ điều hành của máy chủ nên nhẹ và khởi động nhanh.\n\n### Vì sao cần biết\nDocker xoá lỗi \"máy tôi chạy được\" và là đơn vị triển khai chuẩn của backend hiện đại. Hầu hết pipeline CI/CD đều build image rồi đưa lên server.\n\n### Ý chính\n- **Image** là bản đóng gói bất biến, xây từ các lớp (layer); **container** là một lần chạy của image.\n- **Dockerfile** là công thức build. Thứ tự lệnh quyết định cache: đặt phần ít đổi (cài dependency) lên trước, mã nguồn xuống sau.\n- **Multi-stage build** để ảnh cuối nhỏ: stage build có đủ công cụ, stage chạy chỉ giữ kết quả.\n- Dữ liệu cần giữ phải nằm trong **volume**, vì filesystem của container mất khi xoá container.\n- **Docker Compose** khai báo nhiều dịch vụ (app, Postgres, Redis) trong một file và khởi động bằng một lệnh.\n\n```dockerfile\nFROM node:22-alpine\nWORKDIR /app\nCOPY package*.json ./\nRUN npm ci --omit=dev\nCOPY . .\nUSER node\nCMD [\"node\", \"server.js\"]\n```\n\n```bash\ndocker build -t myapp .\ndocker run -p 3000:3000 --env-file .env myapp\ndocker compose up -d\n```\n\n### Lỗi hay gặp\n- Nhét bí mật vào image (`COPY .env`) hoặc quên `.dockerignore` nên ảnh chứa `node_modules` và `.git`.\n- Cơ sở dữ liệu chạy trong container mà không gắn volume, xoá container là mất dữ liệu.\n- Chạy tiến trình bằng root trong container.\n- Dùng tag `latest` nên không biết đang chạy phiên bản nào.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-0-0-slides",
+    "ten": "0.0 — Slide Mục 0: Docker từ đầu, bằng hình",
+    "nguon": "Docker · Mục 0",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-1-1-container-la-gi",
+    "ten": "1.1 — Container thật ra được làm bằng gì",
+    "nguon": "Docker · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-4-1-dockerfile-dau-tien",
+    "ten": "4.1 — Dockerfile đầu tiên, và ngữ cảnh dựng",
+    "nguon": "Docker · Chương 4",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-9-1-file-dau-tien",
+    "ten": "9.1 — File compose đầu tiên của bạn",
+    "nguon": "Docker · Chương 9",
+    "kieu": "video"
+   },
+   {
+    "href": "/code-lab/docker",
+    "ten": "Docker",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Triển khai › Checkpoint: Deployment": {
+  "body": "Mốc này đánh dấu lúc ứng dụng thôi chỉ sống ở `localhost`: nó chạy trên một server công khai, có tên miền riêng và HTTPS, ai cũng truy cập được.\n\n### Các mảnh cần có\n- Một server (VPS hoặc EC2) đã được cứng hoá cơ bản: đăng nhập SSH bằng khoá, tắt đăng nhập mật khẩu, tường lửa chỉ mở 22/80/443.\n- Ứng dụng chạy bằng Docker hoặc dịch vụ systemd, tự khởi động lại khi máy khởi động lại.\n- Một **reverse proxy** (như Nginx) nhận yêu cầu cổng 80/443 rồi chuyển vào ứng dụng, và giữ chứng chỉ **TLS**.\n- **Tên miền** trỏ về IP server bằng bản ghi A; chứng chỉ miễn phí cấp qua Let's Encrypt và tự gia hạn.\n- Biến môi trường và bí mật nằm trên server, không nằm trong repo.\n\n### Tiêu chí tự chấm\n- Truy cập `https://ten-mien-cua-ban` thấy ứng dụng, trình duyệt không báo lỗi chứng chỉ.\n- `http://` tự chuyển sang `https://`.\n- Khởi động lại server, ứng dụng và database tự lên lại.\n- Có cách deploy lặp lại được (một script hoặc lệnh), và biết cách quay về bản trước.\n- Có sao lưu database và đã thử khôi phục.\n\n```bash\ncurl -I https://ten-mien-cua-ban      # kỳ vọng HTTP/2 200\ncurl -I http://ten-mien-cua-ban       # kỳ vọng 301 sang https\n```\n\n### Lỗi hay gặp\n- Đổi DNS rồi tưởng sai vì \"chưa ăn\": bản ghi cũ còn lưu theo TTL.\n- Cổng database mở ra Internet.\n- Chứng chỉ hết hạn vì không có gia hạn tự động.",
+  "lessons": [
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-0-1-bon-buoc",
+    "ten": "0.1 — Bốn bước, và bốn kiểu hỏng",
+    "nguon": "Deploy lên VPS · Mục 0",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-12-1-ten-mien-dns",
+    "ten": "12.1 — Tên miền và DNS: ai giữ cái gì, và vì sao đổi IP rồi mà “chưa ăn”",
+    "nguon": "Deploy lên VPS · Chương 12",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-12-2-reverse-proxy-tls",
+    "ten": "12.2 — Reverse proxy và HTTPS: chứng chỉ từ ACME, gia hạn mãi mãi",
+    "nguon": "Deploy lên VPS · Chương 12",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-15-1-may-ten-mien-https",
+    "ten": "15.1 — Ngày 1: từ một máy trần tới trang “sắp ra mắt” qua HTTPS",
+    "nguon": "Deploy lên VPS · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/code-lab/deploy-vps",
+    "ten": "Deploy: Docker on a VPS",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Tự động hoá & Hạ tầng › GitHub Actions (CI/CD)": {
+  "body": "**GitHub Actions** chạy các quy trình tự động (workflow) khi có sự kiện trên kho, như push hay mở pull request. Dùng nó để lập **CI** (mỗi lần đẩy code thì tự cài, kiểm tra kiểu, chạy test, build) và **CD** (tự đưa bản đã kiểm tra lên server).\n\n### Vì sao cần biết\nCI bắt lỗi trước khi vào nhánh chính, giúp cả nhóm tự tin sửa code. CD biến việc deploy thủ công dễ sai thành quy trình lặp lại được.\n\n### Ý chính\n- Workflow là file YAML trong `.github/workflows/`. Có **trigger** (`on:`), các **job** chạy trên runner, mỗi job gồm các **step**.\n- Dùng action có sẵn: `actions/checkout`, `actions/setup-node`; nên ghim phiên bản.\n- **Secrets** (khoá SSH, token) lưu ở cài đặt kho và gọi bằng `${{ secrets.TEN }}`, không bao giờ viết thẳng vào file.\n- **Cache** thư mục cài đặt để chạy nhanh hơn; `needs:` để job sau chờ job trước.\n- Bảo vệ nhánh `main`: bắt buộc CI xanh và có review mới được merge.\n\n```yaml\nname: CI\non:\n  pull_request:\n  push:\n    branches: [main]\njobs:\n  kiem-tra:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-node@v4\n        with: { node-version: 22, cache: npm }\n      - run: npm ci\n      - run: npx tsc --noEmit\n      - run: npm test\n```\n\n### Lỗi hay gặp\n- In bí mật ra log hoặc đưa vào workflow chạy từ pull request của người lạ.\n- Deploy tự động ngay khi push mà không có bước kiểm tra, nên bản hỏng lên thẳng production.\n- Hai workflow cùng deploy một lúc gây đua nhau; hãy dùng `concurrency` để xếp hàng.\n- Test chập chờn (flaky) làm cả nhóm quen với việc bỏ qua CI đỏ.",
+  "lessons": [
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-0-0-slides",
+    "ten": "0.0 — Slide Mục 0: CI thật ra giải quyết vấn đề gì",
+    "nguon": "GitHub Actions · Mục 0",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-0-3-doc-mot-workflow",
+    "ten": "0.3 — Đọc một workflow THẬT, từng dòng một",
+    "nguon": "GitHub Actions · Mục 0",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-15-1-ci-cho-pr",
+    "ten": "15.1 — CI cho pull request: bốn job, một Postgres thật, một check bắt buộc",
+    "nguon": "GitHub Actions · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-15-3-deploy-an-toan",
+    "ten": "15.3 — Deploy an toàn: environment, SSH, khoá, smoke test, tự quay lui",
+    "nguon": "GitHub Actions · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/code-lab/github-actions",
+    "ten": "GitHub Actions CI/CD",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Tự động hoá & Hạ tầng › Ansible / Monit": {
+  "body": "Khi server chạy thật, tiến trình sẽ có lúc chết (hết bộ nhớ, lỗi chưa gặp). Hai công cụ ở đây giải hai bài toán khác nhau.\n\n### Ansible\n**Ansible** là công cụ quản lý cấu hình: bạn viết một **playbook** (file YAML) mô tả trạng thái mong muốn của server như \"gói nginx đã cài, file cấu hình này có mặt, dịch vụ đang chạy\", rồi Ansible kết nối SSH tới một hay nhiều máy và đưa chúng về trạng thái đó. Nó không cần cài agent trên máy đích. Điểm mạnh là tính **idempotent**: chạy lại nhiều lần vẫn cho cùng kết quả, chỉ sửa thứ chưa đúng.\n\n```yaml\n- hosts: web\n  become: true\n  tasks:\n    - name: Cài nginx\n      ansible.builtin.apt:\n        name: nginx\n        state: present\n        update_cache: true\n    - name: Bật nginx\n      ansible.builtin.service:\n        name: nginx\n        state: started\n        enabled: true\n```\n\n### Monit\n**Monit** là trình giám sát nhẹ: định kỳ kiểm tra tiến trình, CPU, RAM, đĩa, cổng mạng và có thể tự khởi động lại dịch vụ hay gửi cảnh báo khi vi phạm điều kiện. Ngày nay nhiều đội dùng `Restart=` của systemd hoặc `restart: unless-stopped` của Docker cho việc tự hồi phục cơ bản, và chỉ dùng Monit khi cần kiểm tra sâu hơn.\n\n### Lỗi hay gặp\n- Chạy playbook thẳng lên production mà không thử bằng `--check` trước.\n- Playbook dùng lệnh `shell` thay cho module chuẩn nên mất tính idempotent.\n- Tự khởi động lại vô hạn một tiến trình lỗi cấu hình, che mất sự cố thật; cần giới hạn số lần thử và có cảnh báo.\n\nLưu ý: web chưa có bài dạy riêng về Ansible hay Monit; hai bài gắn kèm dạy cách tự hồi phục bằng systemd và Docker.",
+  "lessons": [
+   {
+    "href": "/courses/linux-bash/learn?lessonSlug=lnx-11-1-systemd-unit",
+    "ten": "11.1 — Unit của systemd: chạy ứng dụng của bạn như một dịch vụ",
+    "nguon": "Linux & Bash · Chương 11",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-11-1-restart",
+    "ten": "11.1 — Chính sách restart và sống sót qua khởi động lại",
+    "nguon": "Docker · Chương 11",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Tự động hoá & Hạ tầng › Terraform (Infrastructure as Code)": {
+  "body": "**Infrastructure as Code (IaC)** là việc khai báo hạ tầng (máy chủ, mạng, database, DNS) bằng file mã thay vì bấm chuột trên giao diện quản trị. **Terraform** là công cụ IaC phổ biến, dùng ngôn ngữ khai báo HCL và làm việc được với AWS, GCP, Azure, Cloudflare cùng nhiều nhà cung cấp khác qua các **provider**.\n\n### Vì sao cần biết\nHạ tầng dựng bằng tay khó lặp lại và không ai nhớ đã bấm những gì. Với mã, bạn đưa hạ tầng vào Git, review như code, dựng lại môi trường staging giống production chỉ bằng một lệnh.\n\n### Ý chính\n- Bạn mô tả **trạng thái mong muốn**; Terraform so với **state** (bản ghi những gì nó đang quản lý) và tính ra kế hoạch thay đổi.\n- Vòng làm việc: `terraform init` (tải provider), `terraform plan` (xem trước thay đổi), `terraform apply` (thực hiện), `terraform destroy` (gỡ).\n- **State** chứa thông tin nhạy cảm và là nguồn sự thật; nên lưu ở nơi chung, có khoá (ví dụ S3 kèm khoá) thay vì trên laptop.\n- Dùng **biến** và **module** để tái sử dụng, tách cấu hình theo môi trường.\n\n```hcl\nterraform {\n  required_providers {\n    aws = { source = \"hashicorp/aws\" }\n  }\n}\n\nresource \"aws_instance\" \"web\" {\n  ami           = var.ami_id\n  instance_type = \"t3.micro\"\n  tags = { Name = \"web-1\" }\n}\n```\n\n### Lỗi hay gặp\n- Luôn đọc kỹ `plan` trước khi `apply`; một thay đổi nhỏ có thể làm Terraform xoá và tạo lại tài nguyên (mất dữ liệu).\n- Commit file state hoặc bí mật lên Git.\n- Sửa tay tài nguyên trên console rồi để cấu hình và thực tế lệch nhau (drift).\n- Hai người cùng `apply` một lúc khi không có khoá state.",
+  "more": [
+   {
+    "type": "official",
+    "title": "Terraform - Get Started (HashiCorp Developer)",
+    "url": "https://developer.hashicorp.com/terraform/tutorials"
+   }
+  ]
+ },
+ "Tự động hoá & Hạ tầng › Checkpoint: CI/CD & Monitoring": {
+  "body": "Mốc cuối khép lại vòng đời full stack: code được đẩy lên thì **tự động** kiểm tra và triển khai, và khi chạy thật thì bạn **biết** khi có chuyện trước khi người dùng báo.\n\n### Các mảnh cần có\n- **CI** trên mọi pull request: cài, kiểm tra kiểu, lint, test, build; nhánh `main` bắt buộc CI xanh.\n- **CD**: sau khi hợp nhất, workflow build image, đưa lên registry, rồi server kéo bản mới và khởi động; có kiểm tra sức khoẻ (health check) sau deploy và đường lùi về bản trước.\n- **Log có cấu trúc** (JSON) kèm mã định danh yêu cầu để lần theo một lượt gọi.\n- **Giám sát từ bên ngoài**: một dịch vụ ping địa chỉ công khai định kỳ; kiểm tra bên trong không thấy được lỗi DNS, chứng chỉ hết hạn hay proxy hỏng.\n- **Cảnh báo** chỉ cho điều cần người xử lý ngay (site sập, đĩa đầy dần, tỷ lệ lỗi tăng), gửi qua email hoặc chat.\n\n### Tiêu chí tự chấm\n- Đẩy một thay đổi nhỏ lên `main` và thấy nó tự lên production mà không cần SSH tay.\n- Cố ý làm hỏng test và thấy CI chặn.\n- Tắt thử ứng dụng và nhận được cảnh báo trong vài phút.\n- Biết cách lùi về bản trước và đã thử một lần.\n\n```bash\n# endpoint sức khoẻ tối thiểu để giám sát\ncurl -fsS https://ten-mien-cua-ban/health || echo \"DOWN\"\n```\n\n### Lỗi hay gặp\n- Quá nhiều cảnh báo nên cả nhóm tắt tiếng hết; mỗi cảnh báo phải có người và hành động rõ ràng.\n- Chỉ cảnh báo khi đĩa đạt ngưỡng cứng (90%), trong khi đã đầy dần nhiều giờ; nên cảnh báo theo xu hướng.\n- Health check luôn trả `200` dù database đã chết.",
+  "lessons": [
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-15-4-van-hanh-pipeline",
+    "ten": "15.4 — Vận hành pipeline: CI đỏ, test chập chờn, chi phí, dọn dẹp, câu hỏi phỏng vấn",
+    "nguon": "GitHub Actions · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-9-4-bao-dong",
+    "ten": "9.4 — Báo động theo XU HƯỚNG, không theo ngưỡng",
+    "nguon": "Deploy lên VPS · Chương 9",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/observability-monitoring/learn?lessonSlug=obs-8-5-kiem-tu-ben-ngoai",
+    "ten": "8.5 — Kiểm từ bên ngoài, chỗ người dùng đứng",
+    "nguon": "Observability & Monitoring (Node.js trên VPS) · Chương 8",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/observability-monitoring/learn?lessonSlug=obs-9-1-loi-hua-danh-thuc",
+    "ten": "9.1 — Một cảnh báo là lời hứa sẽ đánh thức ai đó",
+    "nguon": "Observability & Monitoring (Node.js trên VPS) · Chương 9",
+    "kieu": "video"
+   },
+   {
+    "href": "/code-lab/observability-monitoring",
+    "ten": "Observability & Monitoring",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ }
+}

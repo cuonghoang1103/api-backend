@@ -1,0 +1,763 @@
+{
+ "Nền tảng › Quality Assurance là gì & QA Mindset": {
+  "body": "Quality Assurance (QA) là tập hợp hoạt động nhằm **phòng ngừa lỗi** và bảo đảm quy trình làm phần mềm tạo ra sản phẩm đạt chất lượng. Hãy hình dung một nhà hàng: kiểm thử (testing) là nếm món trước khi bưng ra, còn QA là việc xây quy trình bếp sạch, công thức rõ ràng và nguyên liệu kiểm tra từ đầu vào để món ăn ít khi hỏng ngay từ đầu.\n\n### Vì sao cần biết\nSửa một lỗi ở giai đoạn yêu cầu rẻ hơn rất nhiều so với sửa sau khi đã phát hành. QA mindset giúp bạn hỏi \"điều này có thể sai ở đâu?\" ngay từ lúc đọc yêu cầu, thay vì chỉ chờ code xong mới đi tìm bug.\n\n### Ý chính\n- **QA** (đảm bảo chất lượng, hướng quy trình), **QC** (kiểm soát chất lượng, hướng sản phẩm) và **Testing** (một hoạt động của QC) là ba khái niệm khác nhau nhưng liên quan.\n- Chất lượng là trách nhiệm của cả đội: developer viết unit test, BA làm rõ yêu cầu, PO định nghĩa tiêu chí chấp nhận, tester đào sâu rủi ro.\n- Testing chỉ chứng minh **có** lỗi, không chứng minh **hết** lỗi; không thể test mọi tổ hợp nên phải chọn theo rủi ro.\n- Tư duy tốt của QA: tò mò, hoài nghi có phương pháp, đặt mình vào vị trí người dùng, giao tiếp rõ ràng và không đổ lỗi.\n\n### Lỗi hay gặp\n- Coi QA là \"người gác cổng cuối cùng\" nên developer chủ quan.\n- Chỉ kiểm tra đường đi đẹp (happy path) mà bỏ qua dữ liệu sai, mạng chập chờn, quyền hạn.\n- Báo bug theo kiểu chê người thay vì mô tả sự việc và cách tái hiện.\n\n### Tự kiểm tra\n1. Khác biệt giữa QA, QC và testing là gì?\n2. Vì sao \"không tìm thấy bug\" không có nghĩa là phần mềm không có bug?",
+  "lessons": [
+   {
+    "href": "/courses/software-testing/learn?lessonSlug=swt301-fundamentals-principles",
+    "ten": "1.1 — Kiểm thử là gì? Định nghĩa, mục tiêu, testing vs debugging",
+    "nguon": "Software Testing · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWT301"
+   },
+   {
+    "href": "/courses/software-testing/learn?lessonSlug=swt301-why-testing-necessary",
+    "ten": "1.2 — Vì sao cần kiểm thử? Error, defect, failure & nguyên nhân gốc",
+    "nguon": "Software Testing · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWT301"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-0-8-bat-dau-tai-day",
+    "ten": "Bắt đầu tại đây (1/2) — Kiểm thử là gì, ra đời thế nào, và vì sao nó quan trọng với bạn",
+    "nguon": "Testing · Mục 0",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-0-9-bat-dau-khi-khong-co",
+    "ten": "Bắt đầu tại đây (2/2) — Khi không có test: sự cố thật, và cách học để không bỏ cuộc",
+    "nguon": "Testing · Mục 0",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Nền tảng › Test Oracles & Test Prioritization": {
+  "body": "**Test oracle** là cơ chế để quyết định một kết quả là đúng hay sai: yêu cầu, đặc tả, hành vi của phiên bản trước, sản phẩm tương tự, tính toán độc lập hay kinh nghiệm của chuyên gia. Không có oracle thì bạn chỉ \"chạy\" chứ không thật sự \"kiểm thử\". **Test prioritization** là xếp thứ tự chạy test để lỗi nghiêm trọng lộ ra sớm nhất khi thời gian có hạn.\n\n### Vì sao cần biết\nThời gian test hầu như luôn thiếu. Biết test nào quan trọng nhất (thanh toán, đăng nhập, dữ liệu người dùng) giúp bạn dùng thời gian vào chỗ có rủi ro cao thay vì test đều tay.\n\n### Ý chính\n- Oracle có thể là đặc tả, ví dụ trong user story, công thức tính độc lập, hệ thống cũ (khi migration), hoặc tài liệu chuẩn như RFC.\n- Khi không có oracle rõ ràng (\"oracle problem\"), phải dùng heuristic: nhất quán với chức năng tương tự, với tài liệu, với kỳ vọng hợp lý của người dùng.\n- Ưu tiên theo **rủi ro** = xác suất lỗi × mức ảnh hưởng, cộng thêm tần suất sử dụng và vùng code vừa thay đổi.\n- Quy tắc thực dụng: chạy trước các test nghiệp vụ cốt lõi và vùng vừa sửa, để test hiếm dùng hoặc ít ảnh hưởng đến sau.\n\n### Lỗi hay gặp\n- Dùng chính output của code làm \"kết quả mong đợi\" (copy kết quả hiện tại rồi coi là đúng).\n- Xếp ưu tiên theo cảm tính hoặc theo thứ tự tài liệu, không theo rủi ro.",
+  "lessons": [
+   {
+    "href": "/courses/software-testing/learn?lessonSlug=swt301-risk-based-testing",
+    "ten": "7.5 — Rủi ro & kiểm thử: rủi ro sản phẩm vs dự án, mức rủi ro, risk-based testing",
+    "nguon": "Software Testing · Chương 7",
+    "kieu": "lab",
+    "academy": true,
+    "ma": "SWT301"
+   },
+   {
+    "href": "/courses/software-testing/learn?lessonSlug=swt301-seven-principles",
+    "ten": "1.3 — Bảy nguyên tắc kiểm thử",
+    "nguon": "Software Testing · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWT301"
+   },
+   {
+    "href": "/courses/software-testing/learn?lessonSlug=swt301-test-plan-risk",
+    "ten": "7.2 — Lập kế hoạch & ước lượng test: test plan, chiến lược, entry/exit, lịch thực thi, công sức",
+    "nguon": "Software Testing · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWT301"
+   }
+  ]
+ },
+ "Nền tảng › White/Gray/Black Box Testing": {
+  "body": "Ba cách nhìn vào phần mềm khi kiểm thử: **black box** (chỉ nhìn đầu vào và đầu ra), **white box** (biết cấu trúc code bên trong) và **gray box** (biết một phần). Giống như kiểm tra một chiếc máy giặt: black box là bấm nút xem nó giặt có sạch không; white box là mở nắp xem mạch điện và motor; gray box là bạn biết sơ đồ nhưng vẫn chủ yếu thao tác từ ngoài.\n\n### Vì sao cần biết\nChọn sai góc nhìn là tốn công mà vẫn sót lỗi. Black box bắt lỗi nghiệp vụ và yêu cầu; white box bắt nhánh code chưa được chạy; gray box rất hợp với test API hoặc kiểm tra dữ liệu trong database sau thao tác trên giao diện.\n\n### Ý chính\n- **Black box** (dựa trên đặc tả): equivalence partitioning, boundary value analysis, decision table, state transition, use case. Không cần biết ngôn ngữ lập trình.\n- **White box** (dựa trên cấu trúc): đo độ phủ câu lệnh (statement), nhánh (decision/branch), điều kiện. Thường do developer hoặc QA có nền tảng code thực hiện, ở mức unit.\n- **Gray box**: biết kiến trúc, schema database, API; thiết kế test từ bên ngoài nhưng chọn dữ liệu thông minh hơn nhờ hiểu bên trong.\n- Hai cách nhìn bổ sung nhau chứ không thay thế nhau: white box không phát hiện được chức năng bị **thiếu**.\n\n### Ví dụ\n```js\nfunction discount(total, isMember) {\n  if (total >= 100) return isMember ? 0.2 : 0.1;\n  return 0;\n}\n```\nBlack box: thử total = 99, 100, 101 với isMember true/false. White box: bảo đảm mọi nhánh `if` và toán tử `?:` đều được chạy ít nhất một lần.\n\n### Lỗi hay gặp\n- Nghĩ 100% độ phủ code nghĩa là hết lỗi.\n- Black box chỉ thử vài giá trị tùy hứng, không dùng kỹ thuật chọn dữ liệu.\n\n### Tự kiểm tra\n1. Khi nào bạn chọn white box thay vì black box?\n2. Test API bằng Postman khi bạn biết schema DB thuộc loại nào?",
+  "lessons": [
+   {
+    "href": "/courses/software-testing/learn?lessonSlug=swt301-test-technique-categories",
+    "ten": "4.1 — Phân loại kỹ thuật test: black-box, white-box, dựa kinh nghiệm",
+    "nguon": "Software Testing · Chương 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWT301"
+   },
+   {
+    "href": "/courses/software-testing/learn?lessonSlug=swt301-whitebox-coverage",
+    "ten": "5.1 — Kiểm thử white-box: coverage, statement & decision coverage",
+    "nguon": "Software Testing · Chương 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWT301"
+   },
+   {
+    "href": "/courses/software-testing/learn?lessonSlug=swt301-blackbox-ep-bva",
+    "ten": "4.2 — Phân vùng tương đương (EP): phân vùng hợp lệ & không hợp lệ, độ phủ EP",
+    "nguon": "Software Testing · Chương 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWT301"
+   },
+   {
+    "href": "/courses/software-testing/learn?lessonSlug=swt301-test-types",
+    "ten": "2.4 — Các loại test: chức năng, phi chức năng, white-box & liên quan thay đổi",
+    "nguon": "Software Testing · Chương 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWT301"
+   },
+   {
+    "href": "/code-lab/swt301-practice",
+    "ten": "SWT301 — Luyện tập",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Nền tảng › Một ngôn ngữ (JS/Python)": {
+  "body": "Để viết **automation script** bạn cần ít nhất một ngôn ngữ lập trình. Hai lựa chọn phổ biến nhất cho QA là **JavaScript/TypeScript** (hợp với test web, Playwright, Cypress, Jest/Vitest) và **Python** (cú pháp gọn, pytest, Selenium, requests cho test API). Chọn một ngôn ngữ, học chắc và dùng nó cho đến khi viết được test thật.\n\n### Vì sao cần biết\nTest thủ công không scale: mỗi lần release phải test lại hàng trăm case. Script giúp chạy regression lặp lại, đo kết quả nhất quán và tích hợp vào CI. Cũng nhờ biết code, bạn đọc được lỗi trong log, hiểu bug do đâu và trao đổi với developer chính xác hơn.\n\n### Ý chính (mức tối thiểu cần nắm)\n- Biến, kiểu dữ liệu, điều kiện, vòng lặp, hàm.\n- Mảng/list và object/dict để xử lý dữ liệu test.\n- Xử lý lỗi (`try/catch`, `try/except`) và đọc file JSON/CSV.\n- Bất đồng bộ (`async/await` trong JS) khi gọi API hoặc điều khiển trình duyệt.\n- Cài thư viện bằng npm hoặc pip, tổ chức dự án thành module.\n\n### Ví dụ\n```python\ndef is_valid_age(age):\n    return isinstance(age, int) and 18 <= age <= 60\n\ndef test_is_valid_age():\n    assert is_valid_age(18)\n    assert not is_valid_age(17)\n    assert not is_valid_age(\"30\")\n```\nChạy bằng `pytest`. Bản JS tương đương dùng `expect(isValidAge(18)).toBe(true)`.\n\n### Lỗi hay gặp\n- Học quá nhiều ngôn ngữ cùng lúc, không ngôn ngữ nào đủ sâu.\n- Chỉ học cú pháp mà không viết test thật cho một ứng dụng.\n- Viết script dài, trùng lặp, không tách hàm dùng lại.\n\n### Tự kiểm tra\n1. Bạn sẽ chọn JS hay Python cho dự án của mình và vì sao?\n2. Một test tốt có thể thất bại vì những lý do nào ngoài bug?",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-4-1-variables-types",
+    "ten": "4.1 — Biến, kiểu dữ liệu và console",
+    "nguon": "Nền tảng Lập trình Web · Chương 4",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-4-3-functions",
+    "ten": "4.3 — Hàm: logic dùng lại được",
+    "nguon": "Nền tảng Lập trình Web · Chương 4",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/code-lab/python",
+    "ten": "Python",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Nền tảng › Test Strategy và Test Policy": {
+  "body": "**Test Policy** là tài liệu cấp tổ chức, nói công ty hiểu \"kiểm thử\" là gì, mục tiêu chất lượng, vai trò của QA và cách đo hiệu quả. **Test Strategy** là cách tiếp cận chung ở cấp tổ chức hoặc sản phẩm: kiểm thử những mức nào, dùng kỹ thuật nào, tự động hóa ở đâu, tiêu chí vào và ra, quản lý rủi ro ra sao. Từ đó mới có **Test Plan** cho từng dự án cụ thể.\n\n### Vì sao cần biết\nKhông có chiến lược, mỗi người test theo thói quen riêng, thiếu nhất quán và lãng phí. Phỏng vấn QA cũng thường hỏi sự khác biệt giữa các tài liệu này.\n\n### Ý chính\n- Thứ bậc: Policy (vì sao, tổ chức) → Strategy (cách chung) → Test Plan (dự án) → test case.\n- Strategy thường gồm: các cấp test, loại test, mức tự động hóa, môi trường, công cụ, quản lý defect, tiêu chí chấp nhận.\n- Chiến lược chọn theo rủi ro và loại dự án (Agile khác Waterfall).\n- Là tài liệu sống: cần cập nhật khi sản phẩm hoặc đội thay đổi.\n\n### Lỗi hay gặp\n- Viết tài liệu dài rồi không ai đọc.\n- Chép mẫu có sẵn mà không điều chỉnh theo bối cảnh.",
+  "lessons": [
+   {
+    "href": "/courses/software-testing/learn?lessonSlug=swt301-test-plan-risk",
+    "ten": "7.2 — Lập kế hoạch & ước lượng test: test plan, chiến lược, entry/exit, lịch thực thi, công sức",
+    "nguon": "Software Testing · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWT301"
+   },
+   {
+    "href": "/courses/software-testing/learn?lessonSlug=swt301-test-organisation",
+    "ten": "7.1 — Tổ chức kiểm thử: tính độc lập, test manager & tester",
+    "nguon": "Software Testing · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWT301"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-11-1-ke-hoach",
+    "ten": "11.1 — Lập chiến lược test",
+    "nguon": "Testing · Chương 11",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Nền tảng › Test Estimation": {
+  "body": "**Test Estimation** là ước lượng công sức, thời gian và nguồn lực cho hoạt động kiểm thử. Ước lượng tốt giúp lên lịch thực tế và cảnh báo sớm khi thời gian không đủ.\n\n### Vì sao cần biết\nNếu đội cam kết thời gian test quá ít, chất lượng sẽ bị cắt đầu tiên. Ngược lại, ước lượng quá rộng làm chậm release. Bạn cần giải thích được con số bằng căn cứ.\n\n### Ý chính\n- Kỹ thuật dựa trên **số liệu**: dựa dữ liệu các dự án trước (số test case, tốc độ chạy, tỉ lệ lỗi).\n- Kỹ thuật dựa trên **chuyên gia**: Planning Poker, Wideband Delphi, ước lượng ba điểm (lạc quan, thông thường, bi quan).\n- Chia công việc thành phần nhỏ (WBS): thiết kế test, chuẩn bị dữ liệu, chạy, báo lỗi, test lại, hồi quy.\n- Các yếu tố ảnh hưởng: độ phức tạp, chất lượng code, mức rủi ro, độ ổn định yêu cầu, kinh nghiệm đội, công cụ.\n- Luôn chừa dự phòng cho vòng sửa lỗi và test lại.\n\n### Lỗi hay gặp\n- Quên tính thời gian test lại và regression.\n- Dùng một con số duy nhất thay vì khoảng giá trị kèm giả định.",
+  "lessons": [
+   {
+    "href": "/courses/software-testing/learn?lessonSlug=swt301-test-plan-risk",
+    "ten": "7.2 — Lập kế hoạch & ước lượng test: test plan, chiến lược, entry/exit, lịch thực thi, công sức",
+    "nguon": "Software Testing · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWT301"
+   },
+   {
+    "href": "/courses/software-testing/learn?lessonSlug=swt301-agile-risk-estimation",
+    "ten": "9.7 — Rủi ro chất lượng, ước lượng công sức test, kỹ thuật và công cụ kiểm thử Agile",
+    "nguon": "Software Testing · Chương 9",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWT301"
+   }
+  ]
+ },
+ "Nền tảng › Test Environment Management": {
+  "body": "**Test Environment Management** là việc dựng, cấu hình, cập nhật và bảo trì các môi trường chạy test (dev, QA/test, staging, pre-production) sao cho ổn định và gần với production. Môi trường sai khiến bug \"chỉ xảy ra trên máy tôi\" hoặc test pass trên staging nhưng hỏng trên production.\n\n### Vì sao cần biết\nNhiều lần test thất bại không phải do code mà do môi trường: thiếu dữ liệu, sai phiên bản, service phụ thuộc chưa chạy, cấu hình khác nhau.\n\n### Ý chính\n- Môi trường cần cô lập: người này test không làm hỏng dữ liệu của người kia.\n- Cấu hình bằng mã (Docker, Docker Compose, script) để dựng lại nhanh và giống nhau.\n- Quản lý phiên bản build đang được triển khai ở mỗi môi trường.\n- Dịch vụ bên thứ ba (thanh toán, email) dùng sandbox hoặc mock, không gọi thật.\n- Dữ liệu nhạy cảm phải được che hoặc ẩn danh khi sao chép từ production.\n\n### Lỗi hay gặp\n- Staging khác production về cấu hình, kích thước dữ liệu hoặc phiên bản dependency.\n- Nhiều đội dùng chung một môi trường nên giẫm chân nhau.",
+  "lessons": [
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-14-1-staging-preview",
+    "ten": "14.1 — Dev, staging và production: một ảnh, nhiều cấu hình, và cờ tính năng",
+    "nguon": "Deploy lên VPS · Chương 14",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-4-2-docker-db",
+    "ten": "4.2 — Postgres dùng một lần cho test: Docker Compose, tmpfs và schema mới mỗi lần",
+    "nguon": "Testing · Chương 4",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Nền tảng › Test Data Management": {
+  "body": "**Test Data Management (TDM)** là việc tạo, duy trì và bảo vệ dữ liệu kiểm thử đủ phong phú, thực tế và an toàn. Dữ liệu tốt quyết định test có phát hiện được lỗi hay không: thiếu trường hợp biên thì bug nằm im.\n\n### Vì sao cần biết\nTest chạy lặp lại cần dữ liệu ổn định; test độc lập cần dữ liệu không đụng nhau; test hiệu năng cần khối lượng lớn; và luật bảo mật cấm dùng dữ liệu thật của người dùng một cách tùy tiện.\n\n### Ý chính\n- Nguồn dữ liệu: tạo thủ công, sinh tự động (factory, faker), sao chép từ production rồi che dữ liệu nhạy cảm (masking/anonymization), dữ liệu seed.\n- Mỗi test nên tự chuẩn bị dữ liệu và dọn dẹp, không phụ thuộc thứ tự chạy.\n- Dữ liệu cần bao phủ giá trị hợp lệ, không hợp lệ, biên, rỗng, ký tự đặc biệt, Unicode.\n- Giữ dữ liệu test đồng bộ theo phiên bản schema (migration).\n\n### Lỗi hay gặp\n- Test phụ thuộc dữ liệu đã có sẵn trong database nên hỏng khi dữ liệu đổi.\n- Dùng email hoặc số điện thoại thật của người dùng trong môi trường test.",
+  "lessons": [
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-4-4-co-lap",
+    "ten": "4.4 — Cô lập: transaction, xoá bảng và dữ liệu mẫu",
+    "nguon": "Testing · Chương 4",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-2-4-ngau-nhien",
+    "ten": "2.4 — Ngẫu nhiên, mã định danh và tính bất định: đo một test chập chờn, rồi làm nó lặp lại được",
+    "nguon": "Testing · Chương 2",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/software-testing/learn?lessonSlug=swt301-lab2-template-worked",
+    "ten": "L2.8 — Template Unit Test Case + sheet mẫu (JNAP001B, countCharacters)",
+    "nguon": "Software Testing · Lab 2 — Component (unit) test: white-box",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWT301"
+   }
+  ]
+ },
+ "Nền tảng › Software Quality Metrics": {
+  "body": "**Software Quality Metrics** là các chỉ số đo hiệu quả của hoạt động chất lượng. Số đo giúp ra quyết định dựa trên dữ liệu: có nên phát hành chưa, test đã đủ chưa, quy trình có đang cải thiện không.\n\n### Vì sao cần biết\nKhông đo thì không biết chất lượng tốt lên hay xấu đi. Nhưng đo sai cũng nguy hiểm: một con số bị ép đạt sẽ bị \"chơi\" và mất ý nghĩa.\n\n### Ý chính\n- **Defect Detection Percentage (DDP)** = lỗi tìm được trước phát hành / (lỗi tìm được trước + lỗi khách hàng gặp sau).\n- **Defect density**: số lỗi trên mỗi đơn vị kích thước (ví dụ trên 1.000 dòng code hoặc trên mỗi chức năng).\n- **Test coverage**: độ phủ yêu cầu và độ phủ code; **pass rate**, **tiến độ thực thi test**.\n- **Escaped defects** (lỗi lọt ra production), **MTTR** (thời gian trung bình khắc phục).\n- Số đo có ý nghĩa khi đi cùng ngữ cảnh và xu hướng theo thời gian.\n\n### Lỗi hay gặp\n- Đo năng suất tester bằng số bug báo, khiến người ta báo nhiều bug vụn.\n- Cho rằng coverage 100% đồng nghĩa chất lượng cao.",
+  "lessons": [
+   {
+    "href": "/courses/software-testing/learn?lessonSlug=swt301-bug-lifecycle",
+    "ten": "7.6 — Quản lý defect: báo cáo defect, severity vs priority, vòng đời, số đo",
+    "nguon": "Software Testing · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWT301"
+   },
+   {
+    "href": "/courses/software-testing/learn?lessonSlug=swt301-test-monitoring-control",
+    "ten": "7.3 — Giám sát & kiểm soát test: số đo, báo cáo tiến độ và báo cáo tổng kết",
+    "nguon": "Software Testing · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWT301"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-8-1-do-phu",
+    "ten": "8.1 — Độ phủ: đo được gì và không đo được gì",
+    "nguon": "Testing · Chương 8",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-8-2-mutation",
+    "ten": "8.2 — Mutation testing: kiểm tra chính bộ test",
+    "nguon": "Testing · Chương 8",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Nền tảng › Ajax (Asynchronous JavaScript and XML)": {
+  "body": "**Ajax** là kỹ thuật để trang web gửi và nhận dữ liệu nền với server mà không phải tải lại cả trang. Ngày nay cách làm phổ biến là `fetch()` (hoặc thư viện như axios) trao đổi JSON, tuy tên gọi vẫn là Ajax dù ít ai còn dùng XML. Ví dụ: gõ vào ô tìm kiếm và thấy gợi ý hiện ra ngay, bấm \"thích\" mà trang không nhấp nháy.\n\n### Vì sao QA cần hiểu\nAjax khiến giao diện thay đổi **không đi kèm điều hướng trang**. Test viên phải biết khi nào dữ liệu đã tải xong, lỗi mạng hiển thị thế nào, và vì sao script test thường hỏng vì chờ chưa đủ.\n\n### Ý chính\n- Lời gọi **bất đồng bộ**: giao diện vẫn hoạt động trong lúc chờ phản hồi, nên có trạng thái loading, thành công, lỗi.\n- Quan sát bằng tab **Network** của DevTools: xem URL, method, status code, payload, thời gian.\n- Các tình huống cần test: phản hồi chậm, timeout, mất mạng, lỗi 4xx/5xx, dữ liệu rỗng, bấm nhiều lần (double submit), phản hồi về sai thứ tự (race condition).\n- Trong automation, chờ theo điều kiện (phần tử xuất hiện, request kết thúc), không dùng `sleep` cố định.\n\n### Ví dụ\n```js\nconst res = await fetch('/api/items?q=ao');\nif (!res.ok) throw new Error('HTTP ' + res.status);\nconst items = await res.json();\n```\n\n### Lỗi hay gặp\n- Giả định dữ liệu đã có ngay sau khi bấm nút nên test chập chờn.\n- Quên kiểm tra thông báo lỗi khi API trả 500 hoặc mạng rớt.\n\n### Tự kiểm tra\n1. Vì sao `sleep(2000)` là cách chờ tồi trong test giao diện?\n2. Bạn mô phỏng mạng chậm trong DevTools bằng cách nào?",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-5-4-fetch-apis",
+    "ten": "5.4 — fetch: lấy dữ liệu từ API",
+    "nguon": "Nền tảng Lập trình Web · Chương 5",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-5-3-async-await",
+    "ten": "5.3 — async/await: mã bất đồng bộ đọc từ trên xuống",
+    "nguon": "Nền tảng Lập trình Web · Chương 5",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-6-3-api-gia",
+    "ten": "6.3 — Component có gọi API: MSW và các trạng thái người dùng thấy",
+    "nguon": "Testing · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-7-3-on-dinh",
+    "ten": "7.3 — Làm test e2e ổn định",
+    "nguon": "Testing · Chương 7",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Nền tảng › Caching": {
+  "body": "**Caching** là lưu tạm bản sao dữ liệu ở nơi gần người dùng hơn để lần sau lấy nhanh hơn, thay vì tính hoặc tải lại từ đầu. Giống như để chai nước trong tủ lạnh thay vì chạy ra cửa hàng mỗi lần khát. Cache nằm ở nhiều tầng: trình duyệt, CDN, reverse proxy, ứng dụng (Redis, bộ nhớ) và database.\n\n### Vì sao QA cần hiểu\nCache giúp web nhanh nhưng cũng là nguồn bug quen thuộc: người dùng thấy dữ liệu cũ, vừa sửa xong mà trang vẫn hiện bản trước, mỗi người thấy một kết quả khác nhau, hoặc cache làm lộ dữ liệu cá nhân cho người khác.\n\n### Ý chính\n- **Trình duyệt**: điều khiển qua header `Cache-Control` (ví dụ `max-age=3600`, `no-store`, `no-cache`), `ETag` và `Last-Modified`. Khi dùng `ETag`, trình duyệt hỏi lại server và nhận **304 Not Modified** nếu chưa đổi.\n- **CDN**: lưu bản sao ở các điểm gần người dùng; muốn cập nhật phải xóa (purge) hoặc đổi tên file (file có mã băm trong tên).\n- **Cache phía server** (Redis): lưu kết quả truy vấn tốn kém; cần chiến lược hết hạn (TTL) và vô hiệu hóa khi dữ liệu đổi.\n- Hai khó khăn kinh điển: biết khi nào cache **hết hạn** và tránh dữ liệu cũ (stale data).\n\n### Cách kiểm thử\n- Mở DevTools, tab Network: xem status (200 từ cache, 304), cột Size ghi \"disk cache\" hay \"memory cache\", và header phản hồi.\n- So sánh tải bình thường với hard reload (Ctrl+Shift+R) và cửa sổ ẩn danh.\n- Sau khi deploy bản mới, kiểm tra người dùng có nhận file JS/CSS mới không.\n- Thử dữ liệu thay đổi: sửa rồi xem trang khác có phản ánh ngay không.\n- Với nội dung riêng tư, bảo đảm không bị cache dùng chung (`Cache-Control: private` hoặc `no-store`).\n\n### Lỗi hay gặp\n- Test trên máy của mình mà quên rằng cache đang che bug.\n- Quên rằng CDN hay proxy có thể ghi đè header cache của ứng dụng.\n- Cache dữ liệu theo người dùng bằng khóa chung nên người này thấy dữ liệu của người kia.\n\n### Tự kiểm tra\n1. `no-cache` và `no-store` khác nhau thế nào?\n2. Vì sao đổi tên file khi nội dung đổi lại là kỹ thuật hay?",
+  "lessons": [
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-9-1-cache",
+    "ten": "9.1 — Cache HTTP cho API: Cache-Control, ETag và 304",
+    "nguon": "API & System Design · Chương 9",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-7-4-header-quan-trong",
+    "ten": "7.4 — Các header đổi hành vi: cache, nén, CORS, bảo mật",
+    "nguon": "Networking for Developers · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-8-2-cache-dung",
+    "ten": "8.2 — Khoá cache, TTL và xoá cache cho đúng",
+    "nguon": "Networking for Developers · Chương 8",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/simulation?scenario=cache-layers",
+    "ten": "Tầng đệm — dữ liệu lấy ra từ đâu",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "Nền tảng › SPA, PWA & JAMStack": {
+  "body": "Ba thuật ngữ mô tả cách dựng một web app hiện đại. **SPA** (Single Page Application) chỉ tải một trang HTML ban đầu, rồi JavaScript vẽ lại giao diện và đổi \"trang\" mà không tải lại toàn bộ (React, Vue, Angular). **PWA** (Progressive Web App) là web app có thể cài lên thiết bị, chạy offline một phần và gửi thông báo nhờ service worker. **JAMStack** (JavaScript, API, Markup) là kiến trúc dùng trang tĩnh dựng sẵn, phân phối qua CDN và gọi API khi cần.\n\n### Vì sao QA cần hiểu\nMỗi mô hình sinh ra loại lỗi riêng. SPA hay gặp lỗi nút Back, URL không khớp trạng thái, chia sẻ liên kết sâu, SEO. PWA có thêm cache offline, cập nhật phiên bản, quyền thông báo. JAMStack phụ thuộc build tĩnh và API bên ngoài.\n\n### Ý chính\n- SPA: kiểm tra routing phía client, F5 trên đường dẫn sâu, lịch sử trình duyệt, tiêu đề trang và tình trạng tải ban đầu chậm.\n- PWA: thử khi mất mạng, khi có phiên bản mới (người dùng có bị kẹt bản cũ do cache không), cài đặt trên di động, các quyền (notification).\n- JAMStack: nội dung chỉ cập nhật sau khi build lại; kiểm tra lúc build lỗi, liên kết gãy, hình ảnh.\n- Đo hiệu năng bằng Lighthouse (có mục PWA, hiệu năng, accessibility).\n\n### Lỗi hay gặp\n- Cho rằng đã test đường dẫn `/` là đủ, trong khi vào thẳng `/orders/12` bị lỗi 404.\n- Quên rằng service worker cũ vẫn phục vụ bản cache sau khi deploy."
+ },
+ "Nền tảng › Client-Side Rendering vs Server-Side Rendering": {
+  "body": "**Client-Side Rendering (CSR)** là trình duyệt tải JavaScript, rồi chính trình duyệt dựng HTML. **Server-Side Rendering (SSR)** là server dựng sẵn HTML cho từng request rồi gửi xuống. Ngoài ra còn có SSG (dựng sẵn lúc build) và ISR (dựng lại định kỳ).\n\n### Vì sao QA cần hiểu\nCách render ảnh hưởng đến tốc độ hiển thị đầu tiên, SEO (công cụ tìm kiếm đọc HTML dễ hơn), trải nghiệm khi JavaScript chậm hoặc lỗi, và cả cách viết test: với CSR cần chờ JS chạy xong mới thấy nội dung.\n\n### Ý chính\n- CSR: HTML ban đầu gần như rỗng; người dùng thấy trang trắng hoặc skeleton trước khi nội dung xuất hiện. Tốt cho ứng dụng tương tác, nhưng khởi đầu chậm và SEO khó hơn.\n- SSR: nội dung có ngay trong HTML nên hiển thị đầu nhanh và tốt cho SEO; đổi lại tải server nhiều hơn.\n- Với SSR có bước **hydration**: JS gắn sự kiện vào HTML có sẵn; lỗi hydration mismatch là loại bug đặc trưng.\n- Cách thử nhanh: \"View Source\" (HTML do server gửi) so với \"Inspect\" (DOM sau khi JS chạy); tắt JavaScript xem nội dung còn gì.\n- Thử trên mạng chậm và CPU yếu bằng throttling của DevTools.\n\n### Lỗi hay gặp\n- Chỉ kiểm tra bằng DOM cuối nên không phát hiện nội dung SEO không có trong HTML ban đầu.\n- Dữ liệu cá nhân bị render phía server rồi cache dùng chung.",
+  "lessons": [
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-17-1-bon-cach-render",
+    "ten": "17.1 — Bốn cách một trang được tạo ra (CSR, SSR, SSG, ISR)",
+    "nguon": "Next.js: The React Framework · Chương 17",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-14-4-performance",
+    "ten": "14.4 — Đo hiệu năng",
+    "nguon": "Nền tảng Lập trình Web · Chương 14",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Nền tảng › Responsive vs Adaptive Design": {
+  "body": "**Responsive design** dùng CSS linh hoạt (lưới, đơn vị tương đối, media query) để một bố cục tự co giãn mượt theo mọi kích thước màn hình. **Adaptive design** chuẩn bị vài bố cục cố định cho từng khoảng kích thước và chọn bố cục phù hợp theo breakpoint.\n\n### Vì sao QA cần hiểu\nNgười dùng truy cập bằng điện thoại, máy tính bảng, laptop, màn hình rộng, xoay ngang dọc. Bố cục vỡ ở một kích thước là lỗi thật dù chức năng vẫn đúng.\n\n### Ý chính\n- Responsive: thay đổi liên tục, nên cần thử nhiều kích thước, đặc biệt **xung quanh breakpoint** (ví dụ 767/768 px).\n- Adaptive: chỉ có vài trạng thái, nên cần thử đủ từng bố cục và vùng giữa chúng.\n- Kiểm tra: chữ bị cắt, nút đè lên nhau, thanh cuộn ngang, hình bị méo, menu hamburger, vùng chạm đủ lớn (khoảng 44 px), zoom, xoay màn hình.\n- Công cụ: chế độ thiết bị trong DevTools, BrowserStack/thiết bị thật, Playwright với viewport và device emulation.\n\n### Lỗi hay gặp\n- Chỉ test trên emulator, bỏ qua thiết bị thật (bàn phím ảo, thanh địa chỉ co giãn).\n- Quên kiểm tra khi người dùng tăng cỡ chữ hệ thống.",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-3-5-responsive",
+    "ten": "3.5 — Thiết kế responsive: một trang, mọi màn hình",
+    "nguon": "Nền tảng Lập trình Web · Chương 3",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-7-4-da-trinh-duyet",
+    "ten": "7.4 — Nhiều trình duyệt, thiết bị và kiểm tra hình ảnh",
+    "nguon": "Testing · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/web-design/learn?lessonSlug=wed201c-responsive",
+    "ten": "4.1 — Media query & mobile-first",
+    "nguon": "Web Design · Chương 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "WED201c"
+   }
+  ]
+ },
+ "Nền tảng › Version Control System": {
+  "body": "**Version Control System (VCS)** ghi lại lịch sử thay đổi của mã nguồn, cho phép nhiều người làm việc song song và quay về bản cũ khi cần. Giống như Google Docs có lịch sử chỉnh sửa, nhưng dành cho dự án với hàng ngàn file và có khả năng tách nhánh rồi gộp lại.\n\n### Vì sao QA cần hiểu\nTest script cũng là code. Bạn cần lưu, review và chia sẻ chúng; biết bản nào của ứng dụng đang được test; và tìm ra commit nào làm hỏng một chức năng.\n\n### Ý chính\n- Hai loại: **tập trung** (SVN) và **phân tán** (Git). Git là chuẩn hiện nay: mỗi người có toàn bộ lịch sử trong máy.\n- Khái niệm cốt lõi: repository, commit, branch, merge, tag, remote.\n- Lợi ích cho QA: truy vết thay đổi, so sánh hai bản, khôi phục khi lỡ xóa, chạy test tự động trên mỗi commit.\n- Commit nhỏ, lời nhắn rõ ràng giúp sau này tìm lỗi dễ hơn.\n\n### Lỗi hay gặp\n- Đặt tên file kiểu `test_final_v2_moi.xlsx` thay vì dùng version control.\n- Commit cả mật khẩu hoặc file nhạy cảm vào repo.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-0-5-bat-dau-tai-day",
+    "ten": "Bắt đầu tại đây (1/2) — Git và GitHub là gì, ra đời thế nào, và vì sao quan trọng với bạn",
+    "nguon": "Git & GitHub · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-0-2-van-de-git-giai-quyet",
+    "ten": "0.2 — Vấn đề Git giải quyết (và vì sao thư mục thì không)",
+    "nguon": "Git & GitHub · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-0-0-slides",
+    "ten": "0.0 — Slide Mục 0: bắt đầu với Git bằng hình",
+    "nguon": "Git & GitHub · Mục 0",
+    "kieu": "slide"
+   }
+  ]
+ },
+ "Nền tảng › Git": {
+  "body": "**Git** là hệ thống quản lý phiên bản phân tán phổ biến nhất. Với QA, mục tiêu là đủ thuần thục để lưu test script, làm việc trên nhánh riêng và gửi thay đổi qua pull request.\n\n### Vì sao cần biết\nHầu hết dự án automation nằm trong Git, và pipeline CI chạy test mỗi khi có commit hoặc pull request. Không biết Git thì rất khó cộng tác với developer.\n\n### Ý chính (các lệnh cơ bản)\n- `git clone <url>`: tải repository về máy.\n- `git status`, `git diff`: xem thay đổi hiện tại.\n- `git add <file>` rồi `git commit -m \"mô tả\"`: ghi lại một ảnh chụp thay đổi.\n- `git push` / `git pull`: gửi lên hoặc kéo về từ remote (`git fetch` chỉ tải mà chưa gộp).\n- `git branch`, `git switch -c ten-nhanh`: tạo và chuyển nhánh.\n- `git merge` hoặc `git rebase`: đưa thay đổi từ nhánh này vào nhánh khác.\n- `git stash`: cất tạm thay đổi chưa commit để chuyển việc khác.\n\n### Ví dụ quy trình hằng ngày\n```bash\ngit switch -c test/login-regression\n# viết test...\ngit add tests/login.spec.ts\ngit commit -m \"Thêm test đăng nhập sai mật khẩu\"\ngit push -u origin test/login-regression\n```\nSau đó mở pull request để đồng đội review.\n\n### Lỗi hay gặp\n- Làm việc trực tiếp trên `main` rồi bị xung đột.\n- Dùng `git add .` mà vô tình thêm file không mong muốn (nên có `.gitignore`).\n- Dùng `git push --force` trên nhánh dùng chung.\n- Không đọc dấu xung đột `<<<<<<<` khi merge mà sửa bừa.\n\n### Tự kiểm tra\n1. `fetch` và `pull` khác nhau thế nào?\n2. Khi nào nên dùng `revert` thay vì `reset`?",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-1-0-slides",
+    "ten": "1.0 — Slide Chương 1: mô hình Git bằng hình",
+    "nguon": "Git & GitHub · Chương 1",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-1-3-vong-lap-hang-ngay",
+    "ten": "1.3 — Vòng lặp hằng ngày: add, commit, diff — và add -p",
+    "nguon": "Git & GitHub · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-3-4-rebase-vs-merge",
+    "ten": "3.4 — Rebase vs merge: phát lại thay vì nhập vào",
+    "nguon": "Git & GitHub · Chương 3",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-4-5-stash",
+    "ten": "4.5 — git stash: cất việc lại mà không cần commit",
+    "nguon": "Git & GitHub · Chương 4",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/code-lab/git",
+    "ten": "Git",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Nền tảng › Repo Hosting Services": {
+  "body": "**Repo hosting service** là dịch vụ đám mây lưu Git repository và thêm các tính năng cộng tác: pull request/merge request, code review, issue tracker, CI/CD, phân quyền. Phổ biến nhất là GitHub, GitLab và Bitbucket.\n\n### Vì sao cần biết\nRepo hosting là nơi đội chia sẻ code, review thay đổi và chạy pipeline kiểm thử tự động. QA thường dùng nó để lưu script automation, theo dõi issue và xem kết quả CI.\n\n### Ý chính\n- Cùng nền tảng Git nhưng khác hệ sinh thái: GitHub mạnh về cộng đồng mã nguồn mở và GitHub Actions; GitLab tích hợp sẵn CI/CD và DevOps; Bitbucket gắn chặt với Jira và Confluence của Atlassian.\n- Tính năng cần dùng: bảo vệ nhánh (yêu cầu review và check CI đạt mới được merge), template pull request, webhook, secrets cho pipeline.\n- Chọn theo thực tế: công ty đã dùng nền tảng nào thì dùng nền tảng đó.\n\n### Lỗi hay gặp\n- Để repo công khai nhưng chứa khóa API hoặc mật khẩu.\n- Cho phép merge thẳng vào nhánh chính mà không có check bắt buộc.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-11-1-issue-projects-gh",
+    "ten": "11.1 — Issue, Projects & CLI gh",
+    "nguon": "Git & GitHub · Chương 11",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-6-1-giai-phau-pr",
+    "ten": "6.1 — Giải phẫu một pull request thật sự được review",
+    "nguon": "Git & GitHub · Chương 6",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-1-4-github",
+    "ten": "1.4 — GitHub: mã của bạn trên đám mây",
+    "nguon": "Nền tảng Lập trình Web · Chương 1",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Nền tảng › GitHub": {
+  "body": "**GitHub** là dịch vụ lưu Git repository lớn nhất, nơi bạn lưu test script, mở pull request, review code và chạy CI bằng GitHub Actions. Với QA, đây là nơi công việc automation \"sống\" và được kiểm chứng tự động.\n\n### Vì sao cần biết\nPhần lớn đội làm sản phẩm và nhiều đội test dùng GitHub. Hiểu pull request và Actions giúp bạn đưa test vào quy trình chung thay vì chạy riêng trên máy cá nhân.\n\n### Ý chính\n- **Pull request (PR)**: đề nghị gộp nhánh của bạn vào nhánh chính; đồng đội review, bình luận, yêu cầu sửa. PR tốt nhỏ, có mô tả rõ lý do và cách kiểm tra.\n- **Issues**: theo dõi bug và công việc; có thể gắn nhãn, người phụ trách, liên kết với PR bằng `Fixes #12`.\n- **GitHub Actions**: workflow YAML chạy test khi push hoặc mở PR.\n- **Branch protection**: bắt buộc review và check CI đạt trước khi merge.\n- **Secrets**: nơi lưu token, mật khẩu cho pipeline, không ghi vào code.\n\n### Ví dụ workflow tối thiểu\n```yaml\nname: tests\non: [pull_request]\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-node@v4\n        with: { node-version: 22 }\n      - run: npm ci\n      - run: npm test\n```\n\n### Lỗi hay gặp\n- Commit khóa bí mật vào repo (xóa khỏi file mới vẫn còn trong lịch sử).\n- Check CI không bắt buộc nên ai cũng bỏ qua khi test đỏ.\n- PR quá lớn khiến không ai review kỹ.\n\n### Tự kiểm tra\n1. Làm sao ép mọi PR phải qua test trước khi merge?\n2. Vì sao không ghi mật khẩu thẳng vào file workflow?",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-6-1-giai-phau-pr",
+    "ten": "6.1 — Giải phẫu một pull request thật sự được review",
+    "nguon": "Git & GitHub · Chương 6",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-6-4-bao-ve-nhanh",
+    "ten": "6.4 — Bảo vệ nhánh, CODEOWNERS & kiểm tra bắt buộc",
+    "nguon": "Git & GitHub · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-9-1-github-actions",
+    "ten": "9.1 — Chạy test trong GitHub Actions",
+    "nguon": "Testing · Chương 9",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-11-2-actions",
+    "ten": "11.2 — GitHub Actions: CI từ số 0",
+    "nguon": "Git & GitHub · Chương 11",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Nền tảng › Bitbucket": {
+  "body": "**Bitbucket** là dịch vụ lưu Git repository của Atlassian, đặc biệt hợp khi đội đã dùng **Jira** và **Confluence**. Commit, nhánh và pull request có thể liên kết thẳng với ticket Jira, nhờ vậy QA nhìn một ticket là thấy code nào đã sửa và kết quả build.\n\n### Ý chính\n- **Bitbucket Pipelines**: CI/CD cấu hình bằng file `bitbucket-pipelines.yml` đặt trong repo.\n- Đặt mã ticket Jira vào tên nhánh hoặc commit (ví dụ `PROJ-123`) để tự động liên kết.\n- Có thể yêu cầu số người duyệt và build thành công trước khi merge.\n\n### Ví dụ\n```yaml\npipelines:\n  default:\n    - step:\n        name: Chạy test\n        image: node:22\n        script:\n          - npm ci\n          - npm test\n```\n\n### Lỗi hay gặp\n- Quên đặt mã ticket nên mất liên kết giữa code và yêu cầu.\n- Pipeline chạy trên image không khớp phiên bản local nên test kết quả khác nhau."
+ },
+ "Nền tảng › GitLab": {
+  "body": "**GitLab** cung cấp trong một nền tảng: Git repository, **GitLab CI/CD**, container registry, quét bảo mật, quản lý issue và merge request. Nhiều doanh nghiệp tự triển khai (self-managed) vì muốn giữ mã nguồn trong hạ tầng riêng.\n\n### Ý chính\n- Pipeline cấu hình bằng `.gitlab-ci.yml`, chia thành các **stage** (build, test, deploy) gồm nhiều **job**.\n- **Merge Request (MR)** tương đương pull request của GitHub.\n- Có thể lưu báo cáo test (JUnit XML) và hiển thị kết quả ngay trong MR.\n- Runner là máy thực thi job; cần biết job chạy trên runner nào khi debug.\n\n### Ví dụ\n```yaml\nstages: [test]\nunit-test:\n  stage: test\n  image: node:22\n  script:\n    - npm ci\n    - npm test\n  artifacts:\n    when: always\n    reports:\n      junit: report.xml\n```\n\n### Lỗi hay gặp\n- Job pass trên máy nhưng fail trên runner do khác phiên bản hoặc thiếu biến môi trường.\n- Không lưu artifact (log, ảnh chụp màn hình) nên khó điều tra test fail.",
+  "lessons": [
+   {
+    "href": "/courses/software-development-project/learn?lessonSlug=swp391-1-3-gitlab-setup-du-an",
+    "ten": "1.3 — Dựng project GitLab: repo, thành viên, nhánh bảo vệ, label & milestone",
+    "nguon": "Software Development Project · Chương 1",
+    "kieu": "lab",
+    "academy": true,
+    "ma": "SWP391"
+   }
+  ]
+ },
+ "Nền tảng › Học các nguyên lý cơ bản (Learn the Fundamentals)": {
+  "body": "Trước khi dùng công cụ, bạn cần nắm những khái niệm nền mà mọi QA đều dùng chung.\n\n### Ý chính\n- **Error, defect, failure**: người mắc *lỗi sai* (error), gây ra *khiếm khuyết* trong code (defect/bug), và khi chạy sẽ biểu hiện thành *hỏng hóc* (failure) với người dùng.\n- **STLC (Software Testing Life Cycle)**: phân tích yêu cầu → lập kế hoạch test → thiết kế test case → chuẩn bị môi trường → thực thi → báo cáo và đóng chu trình.\n- **Bug life cycle**: New → Assigned → In Progress → Fixed → Retest → Closed (hoặc Reopened, Rejected, Deferred). Tên trạng thái khác nhau theo công cụ.\n- **Severity** là mức nghiêm trọng về kỹ thuật; **priority** là mức khẩn cấp về nghiệp vụ. Một lỗi chính tả trên trang chủ có severity thấp nhưng priority có thể cao.\n- **Bảy nguyên tắc kiểm thử**: testing cho thấy lỗi tồn tại, không thể test mọi thứ, test sớm, lỗi tụ lại một chỗ, nghịch lý thuốc trừ sâu, test phụ thuộc ngữ cảnh, ảo tưởng \"không lỗi\".\n- Phân biệt **verification** (làm đúng cách) và **validation** (làm đúng thứ).\n\n### Lỗi hay gặp\n- Nhầm severity với priority.\n- Báo bug mà thiếu bước tái hiện, kết quả thực tế và kết quả mong đợi.",
+  "lessons": [
+   {
+    "href": "/courses/software-testing/learn?lessonSlug=swt301-fundamentals-principles",
+    "ten": "1.1 — Kiểm thử là gì? Định nghĩa, mục tiêu, testing vs debugging",
+    "nguon": "Software Testing · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWT301"
+   },
+   {
+    "href": "/courses/software-testing/learn?lessonSlug=swt301-test-process",
+    "ten": "1.4 — Quy trình kiểm thử: 7 nhóm hoạt động, sản phẩm & truy vết",
+    "nguon": "Software Testing · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWT301"
+   },
+   {
+    "href": "/courses/software-testing/learn?lessonSlug=swt301-bug-lifecycle",
+    "ten": "7.6 — Quản lý defect: báo cáo defect, severity vs priority, vòng đời, số đo",
+    "nguon": "Software Testing · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWT301"
+   },
+   {
+    "href": "/courses/software-testing/learn?lessonSlug=swt301-seven-principles",
+    "ten": "1.3 — Bảy nguyên tắc kiểm thử",
+    "nguon": "Software Testing · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWT301"
+   }
+  ]
+ },
+ "SDLC Delivery Model › Agile / Scrum / Kanban": {
+  "body": "**Agile** là cách làm phần mềm theo vòng lặp ngắn, giao từng phần nhỏ chạy được, nhận phản hồi liên tục và sẵn sàng đổi hướng. **Scrum** và **Kanban** là hai khung làm việc Agile phổ biến nhất: Scrum chia thời gian thành các **sprint** cố định, còn Kanban để công việc chảy liên tục trên bảng.\n\n### Vì sao QA cần hiểu\nTrong Agile, QA không đứng ở cuối chuỗi để \"chặn\" bản phát hành. QA tham gia từ lúc làm rõ yêu cầu, viết tiêu chí chấp nhận, test song song với phát triển và tự động hóa regression trong từng sprint.\n\n### Ý chính\n- **Scrum**: vai trò (Product Owner, Scrum Master, Developers gồm cả tester), sự kiện (Sprint Planning, Daily Scrum, Sprint Review, Sprint Retrospective) và sản phẩm (Product Backlog, Sprint Backlog, Increment).\n- **Kanban**: bảng cột (To Do, In Progress, Review, Done), giới hạn **WIP** (work in progress) để tránh làm dở quá nhiều việc cùng lúc.\n- QA trong Agile: tham gia refinement để hỏi \"làm sao biết là xong?\", viết acceptance criteria, test ngay khi story hoàn thành, tránh dồn test vào cuối sprint (\"mini-waterfall\").\n- **Definition of Done** nên bao gồm test: code review, unit test, test chức năng, không còn bug nghiêm trọng.\n- Thực hành Agile thành công dựa vào cộng tác và phản hồi nhanh, không phải lễ nghi họp.\n\n### Lỗi hay gặp\n- Dev xong ngày cuối sprint, QA không còn thời gian test.\n- Story quá lớn, tiêu chí chấp nhận mơ hồ nên không ai biết \"xong\" là gì.\n- Họp đủ nghi thức nhưng retro không dẫn tới thay đổi nào.\n\n### Tự kiểm tra\n1. Khác biệt chính giữa sprint trong Scrum và luồng liên tục trong Kanban?\n2. Nếu story chưa test xong khi sprint kết thúc, bạn xử lý thế nào?",
+  "lessons": [
+   {
+    "href": "/courses/software-testing/learn?lessonSlug=swt301-agile-quadrants",
+    "ten": "9.1 — Nền tảng Agile: Tuyên ngôn, cả đội cùng làm, phản hồi sớm",
+    "nguon": "Software Testing · Chương 9",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWT301"
+   }
+  ]
+ },
+ "SDLC Delivery Model › Waterfall / V-Model": {
+  "body": "**Waterfall** và **V-Model** là những mô hình tuần tự: làm xong giai đoạn này mới sang giai đoạn kế tiếp (yêu cầu, thiết kế, lập trình, kiểm thử, triển khai). Chúng vẫn xuất hiện ở dự án có hợp đồng và phạm vi cố định, hoặc lĩnh vực quy định chặt như y tế, hàng không, ô tô.\n\n### Ý chính\n- Ưu điểm: tài liệu đầy đủ, mốc rõ ràng, dễ kiểm soát hợp đồng.\n- Nhược điểm: phản hồi muộn, thay đổi yêu cầu tốn kém, lỗi phát hiện ở cuối.\n- V-Model bổ sung: mỗi giai đoạn phát triển có một giai đoạn kiểm thử tương ứng được **lập kế hoạch sớm**.\n- QA ở mô hình này phải đọc kỹ tài liệu yêu cầu và thiết kế, viết test plan và test case chi tiết từ trước khi có sản phẩm.\n\n### Lỗi hay gặp\n- Chỉ bắt đầu test khi toàn bộ code đã xong rồi phát hiện lỗi yêu cầu quá muộn.",
+  "lessons": [
+   {
+    "href": "/courses/introduction-to-software-engineering/learn?lessonSlug=swe201c-waterfall",
+    "ten": "2.1 — Waterfall, V-model & incremental",
+    "nguon": "Introduction to Software Engineering · Chương 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWE201c"
+   },
+   {
+    "href": "/courses/software-testing/learn?lessonSlug=swt301-sdlc-models",
+    "ten": "2.1 — Các mô hình vòng đời phát triển & kiểm thử tốt",
+    "nguon": "Software Testing · Chương 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWT301"
+   }
+  ]
+ },
+ "SDLC Delivery Model › Quản lý dự án với Assembla": {
+  "body": "**Assembla** là nền tảng quản lý dự án gồm hệ thống version control (Git, SVN), quản lý task, wiki và theo dõi thời gian. Với QA, điểm cần nắm là cách ghi nhận bug dưới dạng ticket, gắn liên kết với commit và theo dõi trạng thái xử lý.\n\n### Ý chính\n- Tạo ticket có tiêu đề rõ, bước tái hiện, kết quả mong đợi và thực tế, đính kèm ảnh hoặc log.\n- Liên kết ticket với commit để biết thay đổi nào sửa lỗi nào.\n- Tận dụng bảng công việc kiểu Kanban hoặc Scrum để theo dõi tiến độ.\n\n### Lưu ý\nDù dùng công cụ nào, nguyên tắc quản lý công việc không đổi: một ticket một vấn đề, trạng thái cập nhật kịp thời và có người chịu trách nhiệm."
+ },
+ "SDLC Delivery Model › Quản lý dự án với YouTrack": {
+  "body": "**YouTrack** là công cụ theo dõi issue và quản lý dự án của JetBrains, hỗ trợ bảng Agile (Scrum, Kanban), tìm kiếm bằng ngôn ngữ truy vấn riêng, báo cáo và theo dõi thời gian.\n\n### Ý chính\n- Ticket có thể gắn trường tùy chỉnh (mức nghiêm trọng, môi trường, phiên bản).\n- Tìm kiếm mạnh: ví dụ lọc bug chưa xử lý của một người hoặc một phiên bản.\n- Bảng Agile cho phép theo dõi sprint và biểu đồ burndown.\n- Có thể tạo workflow và quy tắc tự động khi đổi trạng thái.\n\n### Lưu ý\nCách viết một bug report tốt (tái hiện được, rõ ràng, một vấn đề một ticket) là kỹ năng giữ nguyên dù đổi công cụ."
+ },
+ "SDLC Delivery Model › Quản lý dự án với Trello": {
+  "body": "**Trello** dùng mô hình bảng Kanban: mỗi bảng có các **list** (cột) chứa các **card** (thẻ), kéo thả để đổi trạng thái. Hợp cho đội nhỏ hoặc dự án đơn giản.\n\n### Ý chính\n- Cột thường dùng: Backlog, To Do, In Progress, Testing, Done.\n- Mỗi card có mô tả, checklist, nhãn, hạn chót, người phụ trách và tệp đính kèm.\n- Với QA: có thể dùng cột riêng cho \"Cần test\" và \"Bug\", gắn nhãn mức độ nghiêm trọng.\n- Power-Up và tự động hóa (Butler) giúp tự chuyển card hoặc nhắc hạn.\n\n### Lỗi hay gặp\n- Cột \"In Progress\" quá nhiều thẻ, mất ý nghĩa của giới hạn WIP.\n- Thẻ bug thiếu thông tin tái hiện."
+ },
+ "SDLC Delivery Model › Mô hình V (V-Model)": {
+  "body": "**V-Model** là mở rộng của Waterfall, vẽ như chữ V: nhánh trái đi xuống là các giai đoạn phát triển (yêu cầu, thiết kế hệ thống, thiết kế chi tiết, lập trình), nhánh phải đi lên là các cấp kiểm thử tương ứng. Điểm mấu chốt: mỗi giai đoạn phát triển có một cấp kiểm thử \"đối ứng\" và kế hoạch test được viết ngay từ giai đoạn đó.\n\n### Cặp tương ứng\n- Yêu cầu nghiệp vụ ↔ **kiểm thử chấp nhận** (acceptance testing).\n- Đặc tả/ thiết kế hệ thống ↔ **kiểm thử hệ thống** (system testing).\n- Thiết kế kiến trúc ↔ **kiểm thử tích hợp** (integration testing).\n- Thiết kế chi tiết/code ↔ **kiểm thử đơn vị/thành phần** (unit/component testing).\n\n### Vì sao cần biết\nMô hình giúp hiểu rằng kiểm thử bắt đầu từ sớm: khi đọc yêu cầu ta đã chuẩn bị test chấp nhận, nên lỗi yêu cầu được phát hiện sớm hơn. Đồng thời nó giải thích vì sao đề thi và tài liệu ISTQB nói nhiều về các **cấp** kiểm thử.\n\n### Ý chính\n- **Verification** (kiểm tra xây đúng theo đặc tả) diễn ra ở nhánh trái qua review; **validation** (xây đúng nhu cầu) ở nhánh phải qua test.\n- Ưu điểm: kỷ luật, mục tiêu test rõ, truy vết yêu cầu tới test.\n- Nhược điểm: cứng nhắc, khó đổi yêu cầu, sản phẩm chạy được xuất hiện muộn.\n\n### Lỗi hay gặp\n- Hiểu nhầm V-Model là \"test chỉ ở cuối\". Thực ra thiết kế test diễn ra song song từ đầu.\n\n### Tự kiểm tra\n1. Test chấp nhận đối ứng với giai đoạn nào ở nhánh trái?\n2. Vì sao lập kế hoạch test sớm giúp phát hiện lỗi yêu cầu?",
+  "lessons": [
+   {
+    "href": "/courses/software-testing/learn?lessonSlug=swt301-sdlc-models",
+    "ten": "2.1 — Các mô hình vòng đời phát triển & kiểm thử tốt",
+    "nguon": "Software Testing · Chương 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWT301"
+   },
+   {
+    "href": "/courses/software-testing/learn?lessonSlug=swt301-ch2-slides-2023",
+    "ten": "2.7 — Bổ sung từ bộ slide 2023: V-model, chi phí lỗi, quy trình component test",
+    "nguon": "Software Testing · Chương 2",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "SWT301"
+   },
+   {
+    "href": "/courses/introduction-to-software-engineering/learn?lessonSlug=swe201c-waterfall",
+    "ten": "2.1 — Waterfall, V-model & incremental",
+    "nguon": "Introduction to Software Engineering · Chương 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWE201c"
+   }
+  ]
+ },
+ "SDLC Delivery Model › Mô hình Waterfall": {
+  "body": "**Waterfall** (thác nước) là mô hình tuyến tính: yêu cầu → thiết kế → lập trình → kiểm thử → triển khai → bảo trì. Mỗi giai đoạn hoàn tất, được duyệt rồi mới sang giai đoạn sau, như nước chảy xuống bậc thang mà không chảy ngược.\n\n### Vì sao cần biết\nDù Agile phổ biến hơn, Waterfall vẫn gặp ở hợp đồng phạm vi cố định, hệ thống có quy định chặt, hoặc khi yêu cầu rất ổn định. Hiểu nó giúp bạn làm việc được trong những bối cảnh đó và hiểu vì sao Agile ra đời.\n\n### Ý chính\n- Mỗi giai đoạn có sản phẩm đầu ra rõ (tài liệu yêu cầu, thiết kế, mã, báo cáo test).\n- Kiểm thử tập trung ở giai đoạn sau khi lập trình xong, nên QA cần test plan và test case chi tiết viết sẵn từ tài liệu.\n- Ưu điểm: dễ quản lý, mốc rõ, tài liệu đầy đủ, hợp tác với hợp đồng.\n- Nhược điểm: phản hồi muộn, thay đổi tốn kém, rủi ro dồn về cuối, khách hàng chỉ thấy sản phẩm khi đã xong.\n- Chi phí sửa lỗi tăng mạnh theo giai đoạn phát hiện: lỗi yêu cầu bị phát hiện ở giai đoạn test hoặc production đắt hơn nhiều so với khi đang review yêu cầu.\n\n### Lỗi hay gặp\n- Dồn toàn bộ test vào cuối rồi bị cắt thời gian khi dự án trễ.\n- Bỏ qua việc review tài liệu yêu cầu, thiết kế (kiểm thử tĩnh), trong khi đó là cách rẻ nhất để bắt lỗi.\n\n### Tự kiểm tra\n1. Vì sao lỗi tìm ra muộn tốn kém hơn?\n2. Trong Waterfall, QA nên làm gì trước khi có code?",
+  "lessons": [
+   {
+    "href": "/courses/introduction-to-software-engineering/learn?lessonSlug=swe201c-waterfall",
+    "ten": "2.1 — Waterfall, V-model & incremental",
+    "nguon": "Introduction to Software Engineering · Chương 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWE201c"
+   },
+   {
+    "href": "/courses/software-testing/learn?lessonSlug=swt301-sdlc-models",
+    "ten": "2.1 — Các mô hình vòng đời phát triển & kiểm thử tốt",
+    "nguon": "Software Testing · Chương 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWT301"
+   },
+   {
+    "href": "/courses/introduction-to-software-engineering/learn?lessonSlug=swe201c-sdlc",
+    "ten": "1.1 — Vòng đời phát triển phần mềm",
+    "nguon": "Introduction to Software Engineering · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWE201c"
+   }
+  ]
+ },
+ "SDLC Delivery Model › Mô hình Agile": {
+  "body": "**Agile** là triết lý phát triển dựa trên Tuyên ngôn Agile (2001) với bốn giá trị: **cá nhân và tương tác** hơn quy trình và công cụ; **phần mềm chạy được** hơn tài liệu đầy đủ; **hợp tác với khách hàng** hơn đàm phán hợp đồng; **phản hồi thay đổi** hơn bám theo kế hoạch. Vế sau vẫn có giá trị, chỉ là vế trước được ưu tiên hơn.\n\n### Vì sao cần biết\nHầu hết đội phần mềm hiện nay làm việc theo Agile ở mức nào đó. QA cần biết cách làm việc khi yêu cầu thay đổi liên tục và thời gian test chỉ vài ngày trong một vòng lặp.\n\n### Ý chính\n- Giao hàng theo **vòng lặp ngắn** (1–4 tuần), mỗi vòng ra một bản chạy được.\n- Yêu cầu viết dạng **user story** cùng tiêu chí chấp nhận; được làm rõ liên tục.\n- Phản hồi sớm từ khách hàng; chấp nhận thay đổi.\n- Kiểm thử diễn ra liên tục, **cả đội chịu trách nhiệm chất lượng**; tự động hóa regression là điều kiện sống còn.\n- Các khung Agile cụ thể: Scrum, Kanban, XP.\n\n### Lỗi hay gặp\n- Hiểu Agile là \"không cần tài liệu, không cần kế hoạch\".\n- Làm Scrum đúng lễ nghi nhưng vẫn giao hàng theo kiểu thác nước.\n\n### Tự kiểm tra\n1. Nêu bốn giá trị của Agile bằng lời của bạn.\n2. QA đóng góp gì trong buổi làm rõ story?",
+  "lessons": [
+   {
+    "href": "/courses/introduction-to-software-engineering/learn?lessonSlug=swe201c-agile",
+    "ten": "3.1 — Agile Manifesto & tư duy",
+    "nguon": "Introduction to Software Engineering · Chương 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWE201c"
+   },
+   {
+    "href": "/courses/software-testing/learn?lessonSlug=swt301-agile-quadrants",
+    "ten": "9.1 — Nền tảng Agile: Tuyên ngôn, cả đội cùng làm, phản hồi sớm",
+    "nguon": "Software Testing · Chương 9",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWT301"
+   },
+   {
+    "href": "/courses/software-testing/learn?lessonSlug=swt301-agile-user-stories-ci",
+    "ten": "9.3 — Cùng viết user story, retrospective và tích hợp liên tục",
+    "nguon": "Software Testing · Chương 9",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWT301"
+   }
+  ]
+ },
+ "SDLC Delivery Model › Kanban": {
+  "body": "**Kanban** quản lý luồng công việc bằng bảng trực quan và giới hạn **WIP** (work in progress): mỗi cột chỉ được chứa tối đa một số thẻ nhất định. Mục tiêu là làm công việc chảy đều, phát hiện chỗ nghẽn và hoàn thành việc dở trước khi nhận việc mới.\n\n### Ý chính\n- Cột phổ biến: Backlog → In Progress → Review/Testing → Done. Có thể thêm cột Blocked.\n- **Giới hạn WIP** buộc đội xử lý nghẽn (ví dụ cột Testing đầy thì dev giúp test thay vì lấy thêm việc mới).\n- Số đo: **lead time** (từ yêu cầu tới hoàn thành), **cycle time** (từ bắt đầu làm tới xong), thông lượng.\n- Không có sprint cố định; phù hợp việc bảo trì, hỗ trợ, nhu cầu thay đổi liên tục.\n\n### Lỗi hay gặp\n- Có bảng Kanban nhưng không đặt WIP limit nên chỉ là to-do list đẹp hơn.\n- Thẻ nằm lâu ở cột Testing mà không ai để ý.",
+  "lessons": [
+   {
+    "href": "/courses/introduction-to-software-engineering/learn?lessonSlug=swe201c-kanban",
+    "ten": "5.1 — Bảng, giới hạn WIP & luồng liên tục",
+    "nguon": "Introduction to Software Engineering · Chương 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWE201c"
+   }
+  ]
+ },
+ "SDLC Delivery Model › Scrum": {
+  "body": "**Scrum** là khung Agile có cấu trúc: công việc chia thành các **sprint** cố định (thường 1–4 tuần), cuối mỗi sprint có một bản tăng trưởng (Increment) chạy được.\n\n### Vì sao QA cần hiểu\nThời gian test trong sprint rất ngắn, nên QA phải tham gia từ đầu, chuẩn bị test song song với phát triển và tự động hóa phần lặp lại.\n\n### Ý chính\n- **Vai trò**: Product Owner (quyết định giá trị và thứ tự ưu tiên backlog), Scrum Master (giúp đội làm đúng Scrum, gỡ trở ngại), Developers (cả đội xây sản phẩm, bao gồm kiểm thử).\n- **Sự kiện**: Sprint Planning (chọn việc cho sprint), Daily Scrum (15 phút đồng bộ), Sprint Review (trình bày sản phẩm), Sprint Retrospective (cải tiến cách làm).\n- **Sản phẩm (artifact)**: Product Backlog, Sprint Backlog, Increment; mỗi cái có cam kết: Product Goal, Sprint Goal, Definition of Done.\n- QA đóng góp: làm rõ tiêu chí chấp nhận khi refinement, góp ý ước lượng, test ngay khi story xong, giữ **Definition of Done** có bước kiểm thử.\n\n### Lỗi hay gặp\n- Story chuyển sang \"Done\" khi chưa test.\n- Retro nêu vấn đề nhưng không có hành động cụ thể và người chịu trách nhiệm.\n- Thêm việc giữa sprint mà không đánh đổi.\n\n### Tự kiểm tra\n1. Daily Scrum dành cho ai và để làm gì?\n2. Vì sao Definition of Done quan trọng với QA?",
+  "lessons": [
+   {
+    "href": "/courses/introduction-to-software-engineering/learn?lessonSlug=swe201c-scrum-xp",
+    "ten": "4.1 — Scrum: vai trò, sprint & các buổi họp",
+    "nguon": "Introduction to Software Engineering · Chương 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWE201c"
+   },
+   {
+    "href": "/courses/software-testing/learn?lessonSlug=swt301-agile-xp-scrum-kanban",
+    "ten": "9.2 — Các cách tiếp cận Agile: thực hành chung, XP, Scrum và Kanban",
+    "nguon": "Software Testing · Chương 9",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWT301"
+   }
+  ]
+ },
+ "SDLC Delivery Model › Extreme Programming (XP)": {
+  "body": "**Extreme Programming (XP)** là phương pháp Agile tập trung vào thực hành kỹ thuật để giữ chất lượng khi thay đổi liên tục.\n\n### Ý chính\n- **Pair programming**: hai người cùng làm trên một máy, một người viết, một người xem xét.\n- **TDD**: viết test trước rồi mới viết code.\n- **Continuous integration**: tích hợp và chạy test thường xuyên.\n- **Refactoring**: cải thiện cấu trúc code mà không đổi hành vi, an toàn nhờ bộ test.\n- **Small releases**, **collective code ownership**, **coding standards**, **simple design**.\n- Với QA: XP biến kiểm thử thành việc của cả đội, nhưng vẫn cần tester để nghĩ về rủi ro và các tình huống mà developer ít nghĩ tới.\n\n### Lỗi hay gặp\n- Áp dụng nửa vời, ví dụ có CI nhưng không có test đủ tin cậy.",
+  "lessons": [
+   {
+    "href": "/courses/software-testing/learn?lessonSlug=swt301-agile-xp-scrum-kanban",
+    "ten": "9.2 — Các cách tiếp cận Agile: thực hành chung, XP, Scrum và Kanban",
+    "nguon": "Software Testing · Chương 9",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWT301"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-10-1-tdd",
+    "ten": "10.1 — TDD trong thực tế: đỏ, xanh, refactor",
+    "nguon": "Testing · Chương 10",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "SDLC Delivery Model › SAFe (Scaled Agile Framework)": {
+  "body": "**SAFe (Scaled Agile Framework)** là khung mở rộng Agile cho tổ chức lớn có nhiều đội làm cùng một sản phẩm. Nó đưa thêm các tầng điều phối như Agile Release Train (nhóm nhiều đội cùng nhịp), Program Increment (khoảng 8–12 tuần) và buổi lập kế hoạch chung.\n\n### Ý chính\n- Mục tiêu: căn chỉnh nhiều đội về chiến lược, phụ thuộc và lịch phát hành.\n- QA ở quy mô này phải xử lý kiểm thử tích hợp giữa nhiều đội, môi trường dùng chung và lịch release lớn.\n- Cần tự động hóa mạnh và quản lý phụ thuộc rõ ràng để không thành nút thắt.\n\n### Lưu ý\nĐây là khung nặng quy trình, chỉ hợp tổ chức lớn; nhiều đội nhỏ không cần dùng."
+ },
+ "SDLC Delivery Model › Phát triển hướng kiểm thử (TDD)": {
+  "body": "**TDD (Test-Driven Development)** là phương pháp viết **test trước, code sau** theo vòng lặp ngắn: **Red** (viết test thất bại), **Green** (viết code ít nhất để test qua), **Refactor** (dọn code, giữ test xanh). Giống như vẽ bản vẽ kiểm tra trước khi đúc chi tiết: bạn biết rõ thế nào là đúng trước khi làm.\n\n### Vì sao cần biết\nTDD ép bạn nghĩ về hành vi mong muốn và các trường hợp biên trước khi code, kết quả là thiết kế dễ test hơn và có sẵn lưới an toàn khi refactor. QA hiểu TDD giúp đánh giá và phối hợp tốt hơn với developer, nhất là khi review unit test.\n\n### Ý chính\n- Mỗi vòng chỉ làm một hành vi nhỏ; test phải **thất bại đúng lý do** trước khi code (chứng minh test thật sự kiểm tra được).\n- Giữ test nhanh, độc lập, dễ đọc: Arrange – Act – Assert.\n- Refactor chỉ khi test xanh.\n- TDD không thay thế các tầng test khác (tích hợp, end-to-end) và không đảm bảo hết lỗi.\n\n### Ví dụ (JavaScript, Vitest/Jest)\n```js\n// 1. RED\ntest('giảm 10% khi đơn từ 100', () => {\n  expect(price(100)).toBe(90);\n});\n// 2. GREEN\nfunction price(total) { return total >= 100 ? total * 0.9 : total; }\n// 3. REFACTOR: đặt tên hằng, tách hàm... rồi chạy lại test\n```\n\n### Lỗi hay gặp\n- Viết test sau rồi gọi đó là TDD; test chỉ mô tả lại code hiện có.\n- Test quá bám vào cách cài đặt nên refactor là hỏng.\n- Bỏ bước refactor làm code tích tụ nợ.\n\n### Tự kiểm tra\n1. Vì sao test phải thấy đỏ trước khi viết code?\n2. TDD khác ATDD ở điểm nào?",
+  "lessons": [
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-10-1-tdd",
+    "ten": "10.1 — TDD trong thực tế: đỏ, xanh, refactor",
+    "nguon": "Testing · Chương 10",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-1-1-cau-truc",
+    "ten": "1.1 — Giải phẫu một test: chuẩn bị, hành động, khẳng định",
+    "nguon": "Testing · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-10-5-lab-tdd-code-cu",
+    "ten": "Lab 10 — Tính năng viết test trước, code cũ được ghim, refactor an toàn: từ 1/8 tới 8/8",
+    "nguon": "Testing · Chương 10",
+    "kieu": "lab"
+   },
+   {
+    "href": "/courses/software-testing/learn?lessonSlug=swt301-tdd-bdd",
+    "ten": "9.6 — Phương pháp kiểm thử Agile: TDD, ATDD, BDD, test pyramid và testing quadrants",
+    "nguon": "Software Testing · Chương 9",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWT301"
+   },
+   {
+    "href": "/code-lab/testing-practice",
+    "ten": "Testing — Luyện viết test, chấm bằng đột biến",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "SDLC Delivery Model › Mô hình Spiral": {
+  "body": "**Mô hình Spiral** (xoắn ốc) kết hợp lặp và thác nước, nhấn mạnh **phân tích rủi ro**. Dự án đi qua nhiều vòng xoắn; mỗi vòng gồm: xác định mục tiêu, phân tích và giảm thiểu rủi ro (có thể làm prototype), phát triển và kiểm thử, rồi lên kế hoạch cho vòng tiếp theo.\n\n### Ý chính\n- Hợp với dự án lớn, rủi ro cao, yêu cầu chưa rõ.\n- Chi phí quản lý và đánh giá rủi ro cao nên ít dùng cho dự án nhỏ.\n- Với QA: kiểm thử có mặt ở mỗi vòng; ưu tiên test các rủi ro đã xác định.",
+  "lessons": [
+   {
+    "href": "/courses/introduction-to-software-engineering/learn?lessonSlug=swe201c-spiral-rup-prototype",
+    "ten": "2.2 — Spiral, RUP & Prototyping",
+    "nguon": "Introduction to Software Engineering · Chương 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWE201c"
+   },
+   {
+    "href": "/courses/software-testing/learn?lessonSlug=swt301-sdlc-models",
+    "ten": "2.1 — Các mô hình vòng đời phát triển & kiểm thử tốt",
+    "nguon": "Software Testing · Chương 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWT301"
+   }
+  ]
+ }
+}

@@ -2400,17 +2400,7 @@
   ]
  },
  "Bảo mật › Kerberos Authentication": {
-  "body": "Kerberos là giao thức xác thực tập trung dựa trên **vé (ticket)**: người dùng xác thực một lần với máy chủ trung tâm (KDC), nhận vé, rồi dùng vé đó để truy cập nhiều dịch vụ mà không gửi mật khẩu qua mạng. Nó là nền của Active Directory.\n\nTrong MongoDB, Kerberos dùng cơ chế **GSSAPI**, chỉ có ở bản Enterprise/Atlas. Hợp khi công ty đã có Active Directory hoặc realm Kerberos và muốn đăng nhập một lần (SSO) cho công cụ quản trị, BI, dịch vụ nội bộ.\n\nCác thành phần: principal của dịch vụ `mongodb/host@REALM`, **keytab** chứa khoá của dịch vụ, biến môi trường `KRB5_KTNAME`; người dùng được tạo ở database `$external`, tên dạng `user@REALM`. DNS và đồng bộ đồng hồ giữa các máy là yêu cầu: lệch giờ quá vài phút là xác thực thất bại.\n\n```bash\nmongosh --host db.corp.local --authenticationMechanism=GSSAPI \\\n  --authenticationDatabase='$external' --username alice@CORP.LOCAL\n```\n\n### Lỗi hay gặp\n- Lệch đồng hồ hoặc DNS ngược sai: lỗi xác thực khó hiểu.\n- Quên đặt quyền đọc keytab cho tiến trình `mongod`.",
-  "lessons": [
-   {
-    "href": "/courses/cac301-cryptography-and-applied-cryptography/learn?lessonSlug=cac301-ts-8-1",
-    "ten": "Giao thức xác thực và thiết lập khoá; Kerberos",
-    "nguon": "Cryptography and Applied Cryptography · Chương 8",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "CAC301"
-   }
-  ]
+  "body": "Kerberos là giao thức xác thực tập trung dựa trên **vé (ticket)**: người dùng xác thực một lần với máy chủ trung tâm (KDC), nhận vé, rồi dùng vé đó để truy cập nhiều dịch vụ mà không gửi mật khẩu qua mạng. Nó là nền của Active Directory.\n\nTrong MongoDB, Kerberos dùng cơ chế **GSSAPI**, chỉ có ở bản Enterprise/Atlas. Hợp khi công ty đã có Active Directory hoặc realm Kerberos và muốn đăng nhập một lần (SSO) cho công cụ quản trị, BI, dịch vụ nội bộ.\n\nCác thành phần: principal của dịch vụ `mongodb/host@REALM`, **keytab** chứa khoá của dịch vụ, biến môi trường `KRB5_KTNAME`; người dùng được tạo ở database `$external`, tên dạng `user@REALM`. DNS và đồng bộ đồng hồ giữa các máy là yêu cầu: lệch giờ quá vài phút là xác thực thất bại.\n\n```bash\nmongosh --host db.corp.local --authenticationMechanism=GSSAPI \\\n  --authenticationDatabase='$external' --username alice@CORP.LOCAL\n```\n\n### Lỗi hay gặp\n- Lệch đồng hồ hoặc DNS ngược sai: lỗi xác thực khó hiểu.\n- Quên đặt quyền đọc keytab cho tiến trình `mongod`."
  },
  "Bảo mật › Xác thực LDAP Proxy (LDAP Proxy Authentication)": {
   "body": "MongoDB (bản Enterprise/Atlas) xác thực người dùng qua **LDAP**: thay vì lưu mật khẩu trong MongoDB, nó chuyển yêu cầu sang máy chủ LDAP (như Active Directory hoặc OpenLDAP) của tổ chức.\n\nCơ chế mà client dùng là **PLAIN** (SASL PLAIN): mật khẩu đi dưới dạng chưa mã hoá đến `mongod`, nên **bắt buộc dùng TLS** cho cả kết nối client lẫn kết nối từ MongoDB đến LDAP (LDAPS hoặc StartTLS). Có hai cách ghép: qua dịch vụ trung gian `saslauthd`, hoặc LDAP gốc tích hợp ngay trong `mongod`.\n\nNgoài xác thực, có thể ánh xạ **nhóm LDAP thành role** MongoDB, để quản lý quyền theo nhóm của công ty.\n\n```yaml\nsecurity:\n  authorization: enabled\n  ldap:\n    servers: \"ldaps.corp.local\"\n    transportSecurity: tls\n    userToDNMapping: '[{ match: \"(.+)\", ldapQuery: \"ou=Users,dc=corp,dc=local??sub?(uid={0})\" }]'\nsetParameter:\n  authenticationMechanisms: PLAIN\n```\n\n### Lỗi hay gặp\n- Không bật TLS: mật khẩu bị lộ trên đường truyền.\n- Mỗi lần đăng nhập đều gọi LDAP: LDAP chậm hoặc rớt là cả cụm không đăng nhập được, cần dự phòng."

@@ -1240,14 +1240,6 @@
     "kieu": "video"
    },
    {
-    "href": "/courses/cac301-cryptography-and-applied-cryptography/learn?lessonSlug=cac301-ts-6-4",
-    "ten": "Băm mật khẩu và dẫn xuất khoá: PBKDF2, bcrypt, Argon2, HKDF",
-    "nguon": "Cryptography and Applied Cryptography · Chương 6",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "CAC301"
-   },
-   {
     "href": "/simulation?scenario=password-hashing",
     "ten": "Băm mật khẩu — muối và sự chậm chạp",
     "nguon": "Xưởng mô phỏng",

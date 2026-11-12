@@ -1,0 +1,1141 @@
+{
+ "Các loại phân tích dữ liệu › Descriptive & Diagnostic Analytics": {
+  "body": "**Descriptive analytics** trả lời câu hỏi *chuyện gì đã xảy ra?* — tổng hợp dữ liệu lịch sử thành những con số dễ đọc: doanh thu tháng này, số đơn theo khu vực, tỷ lệ khách quay lại. **Diagnostic analytics** đi một bước sâu hơn và hỏi *vì sao nó xảy ra?* — tách số tổng thành các phần nhỏ để tìm nguyên nhân.\n\nVí dụ: báo cáo cho thấy doanh thu quý 3 giảm 12% (descriptive). Bạn chia theo khu vực, kênh bán và nhóm sản phẩm, thấy phần lớn mức giảm đến từ một kênh quảng cáo bị cắt ngân sách (diagnostic).\n\n### Ý chính\n- Descriptive: tổng, trung bình, tỷ lệ, biểu đồ, dashboard — mô tả, chưa giải thích.\n- Diagnostic: chia nhỏ (drill-down), so sánh giữa các nhóm hoặc giữa các kỳ, tìm tương quan, rồi kiểm chứng giả thuyết nguyên nhân.\n- Hai loại này chiếm phần lớn công việc hằng ngày của một data analyst.\n\n### Lỗi hay gặp\nNhầm tương quan với nguyên nhân: hai chỉ số cùng tăng chưa có nghĩa cái này gây ra cái kia.",
+  "lessons": [
+   {
+    "href": "/courses/dta301-data-analysis/learn?lessonSlug=dta301-1-1-what-is-da",
+    "ten": "1.1 — Phân tích dữ liệu là gì?",
+    "nguon": "Data Analysis · Chapter 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DTA301"
+   },
+   {
+    "href": "/courses/aba201c-ai-and-big-data-analytics-for-communications/learn?lessonSlug=aba201c-ts-2-3",
+    "ten": "2.3 — Từ dữ liệu đến quyết định: đường ống dữ liệu, cấp độ phân tích và vai trò trong đội",
+    "nguon": "AI and Big Data Analytics for Communications · Chương 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "ABA201c"
+   },
+   {
+    "href": "/courses/itb302c-business-intelligence-bi/learn?lessonSlug=itb302c-7-1-advanced-analytics",
+    "ten": "7.1 — Phân tích nâng cao",
+    "nguon": "Business Intelligence (BI) · Chapter 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "ITB302c"
+   }
+  ]
+ },
+ "Các loại phân tích dữ liệu › Predictive & Prescriptive Analytics": {
+  "body": "**Predictive analytics** dùng dữ liệu quá khứ để ước lượng điều *có thể* xảy ra: khách nào sắp rời bỏ dịch vụ, doanh số tháng sau khoảng bao nhiêu. **Prescriptive analytics** đi xa hơn nữa: với dự báo và các ràng buộc đã biết, *nên làm gì* để đạt kết quả tốt nhất — chẳng hạn chia ngân sách quảng cáo cho các kênh sao cho lợi nhuận kỳ vọng cao nhất.\n\nCó thể hình dung như dự báo thời tiết. Dự báo mưa là predictive; khuyên bạn mang áo mưa, hoặc dời buổi dã ngoại sang ngày khác, là prescriptive.\n\n### Vì sao cần biết\nDoanh nghiệp không chỉ muốn biết quá khứ; họ cần kế hoạch cho tháng sau. Analyst hiểu hai cấp độ này sẽ biết khi nào một câu hỏi vượt ra ngoài báo cáo thường lệ, cần đến mô hình thống kê hoặc bài toán tối ưu.\n\n### Ý chính\n- Predictive: hồi quy, phân loại, chuỗi thời gian. Kết quả là một ước lượng kèm mức bất định, không phải lời hứa.\n- Prescriptive: tối ưu hoá (ví dụ quy hoạch tuyến tính), mô phỏng, phân tích what-if để chọn hành động.\n- Prescriptive cần predictive làm đầu vào, và predictive cần descriptive để hiểu dữ liệu trước.\n- Mô hình chỉ tốt bằng dữ liệu nuôi nó: dữ liệu bẩn hoặc lệch thì dự báo cũng lệch.\n\n### Lỗi hay gặp\n- Nhảy thẳng vào mô hình phức tạp khi chưa mô tả và làm sạch dữ liệu.\n- Coi một con số dự báo là chắc chắn, bỏ qua khoảng sai số.\n- Đánh giá mô hình trên chính dữ liệu đã dùng để huấn luyện, nên trông rất đẹp mà thực tế kém.\n\n### Tự kiểm tra\n1. Dự báo số khách tháng sau và quyết định thuê thêm bao nhiêu nhân viên: câu nào là predictive, câu nào là prescriptive?\n2. Vì sao prescriptive analytics cần có ràng buộc (ngân sách, công suất)?",
+  "lessons": [
+   {
+    "href": "/courses/bda201-business-data-analytics/learn?lessonSlug=bda201-1-1-overview-analytics",
+    "ten": "1.1 — Phân tích mô tả, dự báo & kê đơn",
+    "nguon": "Business Data Analytics · Chapter 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "BDA201"
+   },
+   {
+    "href": "/courses/itb302c-business-intelligence-bi/learn?lessonSlug=itb302c-7-1-advanced-analytics",
+    "ten": "7.1 — Phân tích nâng cao",
+    "nguon": "Business Intelligence (BI) · Chapter 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "ITB302c"
+   },
+   {
+    "href": "/courses/iba201-introduction-to-business-analytics/learn?lessonSlug=iba201-1-1-three-types",
+    "ten": "1.1 — Business analytics là gì? 3 loại phân tích",
+    "nguon": "Introduction to Business Analytics · Chapter 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "IBA201"
+   }
+  ]
+ },
+ "Các loại phân tích dữ liệu › Các loại Data Analytics": {
+  "body": "Phân tích dữ liệu thường được chia thành bốn cấp độ, đi từ dễ đến khó và từ ít giá trị tức thời đến nhiều giá trị hơn:\n\n1. **Descriptive** — chuyện gì đã xảy ra?\n2. **Diagnostic** — vì sao nó xảy ra?\n3. **Predictive** — điều gì có thể xảy ra tiếp theo?\n4. **Prescriptive** — nên làm gì?\n\nHãy nghĩ đến một cửa hàng trà sữa. Báo cáo doanh thu tuần là descriptive. Phát hiện doanh thu giảm vì hai cửa hàng gần trường nghỉ hè là diagnostic. Ước lượng doanh thu tuần tới từ lịch sử và lịch học là predictive. Quyết định giảm ca làm ở hai cửa hàng đó và dồn khuyến mãi sang cửa hàng khu văn phòng là prescriptive.\n\n### Vì sao cần biết\nBiết mình đang ở cấp nào giúp chọn công cụ đúng. Descriptive thường chỉ cần Excel hoặc SQL cộng biểu đồ. Diagnostic cần so sánh nhóm và kiểm định. Predictive cần mô hình thống kê hoặc học máy. Prescriptive cần tối ưu hoá hoặc mô phỏng. Nhiều dự án thất bại vì làm mô hình dự báo khi doanh nghiệp còn chưa có báo cáo đáng tin ở cấp descriptive.\n\n### Ý chính\n- Bốn cấp xếp chồng lên nhau: cấp sau dựa vào dữ liệu và hiểu biết của cấp trước.\n- Phần lớn công việc analyst mới vào nghề nằm ở hai cấp đầu.\n- Mỗi cấp trả lời một loại câu hỏi khác nhau; cùng một bộ dữ liệu có thể phục vụ cả bốn.\n- Quy trình chung: đặt câu hỏi, thu thập, làm sạch, phân tích, truyền đạt kết quả.\n\n### Lỗi hay gặp\n- Gọi mọi thứ là \"AI\" hoặc \"dự báo\" trong khi thực chất chỉ là báo cáo tổng hợp.\n- Bỏ qua câu hỏi kinh doanh: chọn kỹ thuật trước rồi mới đi tìm vấn đề.\n\n### Tự kiểm tra\n1. Cho ví dụ một câu hỏi thuộc mỗi cấp trong lĩnh vực bạn quan tâm.\n2. Vì sao không nên bắt đầu dự án bằng mô hình dự báo?",
+  "lessons": [
+   {
+    "href": "/courses/iba201-introduction-to-business-analytics/learn?lessonSlug=iba201-1-1-three-types",
+    "ten": "1.1 — Business analytics là gì? 3 loại phân tích",
+    "nguon": "Introduction to Business Analytics · Chapter 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "IBA201"
+   },
+   {
+    "href": "/courses/bda201-business-data-analytics/learn?lessonSlug=bda201-1-1-overview-analytics",
+    "ten": "1.1 — Phân tích mô tả, dự báo & kê đơn",
+    "nguon": "Business Data Analytics · Chapter 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "BDA201"
+   },
+   {
+    "href": "/courses/dta301-data-analysis/learn?lessonSlug=dta301-1-1-what-is-da",
+    "ten": "1.1 — Phân tích dữ liệu là gì?",
+    "nguon": "Data Analysis · Chapter 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DTA301"
+   },
+   {
+    "href": "/courses/aba201c-ai-and-big-data-analytics-for-communications/learn?lessonSlug=aba201c-ts-2-3",
+    "ten": "2.3 — Từ dữ liệu đến quyết định: đường ống dữ liệu, cấp độ phân tích và vai trò trong đội",
+    "nguon": "AI and Big Data Analytics for Communications · Chương 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "ABA201c"
+   },
+   {
+    "href": "/courses/itb302c-business-intelligence-bi/learn?lessonSlug=itb302c-7-1-advanced-analytics",
+    "ten": "7.1 — Phân tích nâng cao",
+    "nguon": "Business Intelligence (BI) · Chapter 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "ITB302c"
+   }
+  ]
+ },
+ "Các loại phân tích dữ liệu › Descriptive Analytics": {
+  "body": "**Descriptive analytics** là việc gom dữ liệu lịch sử lại thành vài con số và biểu đồ để mọi người nhìn thấy \"bức tranh hiện tại\" — chưa giải thích, chưa dự đoán, chỉ mô tả cho đúng và đủ.\n\nCác công cụ chính là những chỉ số tổng hợp: **tổng** (SUM), **số đếm** (COUNT), **trung bình** (AVERAGE), **trung vị**, **tỷ lệ phần trăm** và **tỷ lệ tăng trưởng** so với kỳ trước. Kết quả thường được trình bày dưới dạng bảng, biểu đồ cột/đường hoặc dashboard.\n\n### Vì sao cần biết\nMọi phân tích khác đều đứng trên nền này. Một báo cáo doanh thu theo tháng, số đơn theo khu vực, tỷ lệ hoàn trả theo nhóm sản phẩm đều là descriptive. Nếu những con số nền sai hoặc định nghĩa chỉ số mỗi nơi một kiểu, mọi phân tích phía sau đều lệch theo.\n\n### Ý chính\n- Chọn đúng **mức tổng hợp**: theo ngày, tuần, tháng? theo cửa hàng hay theo khu vực?\n- Định nghĩa chỉ số rõ ràng (ví dụ \"khách hàng hoạt động\" là mua trong 30 hay 90 ngày) và ghi lại.\n- Dùng trung vị cạnh trung bình khi dữ liệu có giá trị cực lớn.\n- So sánh có nghĩa: với kỳ trước, cùng kỳ năm trước, hoặc với mục tiêu — con số đứng một mình ít thông tin.\n- Biểu đồ phải trung thực: trục bắt đầu hợp lý, nhãn rõ.\n\n### Ví dụ nhỏ\n```sql\nSELECT region, COUNT(*) AS so_don, SUM(amount) AS doanh_thu, AVG(amount) AS don_trung_binh\nFROM orders\nWHERE order_date >= DATE '2026-01-01'\nGROUP BY region\nORDER BY doanh_thu DESC;\n```\n\n### Lỗi hay gặp\n- Lấy trung bình của các tỷ lệ thay vì tính lại tỷ lệ từ tổng tử số và tổng mẫu số.\n- Gộp dữ liệu quá thô nên che mất sự khác biệt giữa các nhóm.\n- Dashboard nhồi quá nhiều chỉ số, người xem không biết nhìn đâu.\n\n### Tự kiểm tra\n1. Vì sao cần ghi lại định nghĩa của từng chỉ số?\n2. Khi nào trung vị mô tả dữ liệu tốt hơn trung bình?",
+  "lessons": [
+   {
+    "href": "/courses/bda201-business-data-analytics/learn?lessonSlug=bda201-flm-b010",
+    "ten": "📑 Buổi 10 — 4. Descriptive analytics",
+    "nguon": "Business Data Analytics · FLM 4 · Descriptive analytics (buổi 10–1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "BDA201"
+   },
+   {
+    "href": "/courses/aba201c-ai-and-big-data-analytics-for-communications/learn?lessonSlug=aba201c-3-1-descriptive",
+    "ten": "3.1 — Phân tích mô tả & trực quan hoá",
+    "nguon": "AI and Big Data Analytics for Communications · Chapter 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "ABA201c"
+   },
+   {
+    "href": "/courses/bda201-business-data-analytics/learn?lessonSlug=bda201-3-1-descriptive-stats-viz",
+    "ten": "3.1 — Thống kê mô tả & trực quan hoá dữ liệu",
+    "nguon": "Business Data Analytics · Chapter 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "BDA201"
+   },
+   {
+    "href": "/courses/iba201-introduction-to-business-analytics/learn?lessonSlug=iba201-4-1-descriptive-statistics",
+    "ten": "4.1 — Thống kê mô tả cơ bản",
+    "nguon": "Introduction to Business Analytics · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "IBA201"
+   }
+  ]
+ },
+ "Các loại phân tích dữ liệu › Diagnostic Analytics": {
+  "body": "**Diagnostic analytics** tìm lời giải cho câu hỏi *vì sao*. Khi một chỉ số đột ngột thay đổi, analyst không dừng ở việc báo \"doanh thu giảm\" mà phải chỉ ra phần nào của doanh thu giảm và có lý do gì đáng tin.\n\nBa kỹ thuật thường dùng:\n- **Drill-down / chia nhỏ**: tách số tổng theo thời gian, khu vực, kênh, nhóm khách, sản phẩm cho đến khi thấy phần nào \"kéo\" kết quả đi.\n- **So sánh**: giữa các nhóm (khách mới và khách cũ), giữa các kỳ (tuần này và tuần trước), hoặc giữa thực tế và kế hoạch (phân tích độ lệch — variance analysis).\n- **Tìm mối liên hệ**: tương quan giữa các biến, trình tự sự kiện (sự kiện nào xảy ra trước khi chỉ số đổi).\n\n### Ví dụ\nTỷ lệ huỷ đơn tăng từ 4% lên 7%. Chia theo phương thức thanh toán, bạn thấy tỷ lệ chỉ tăng ở thanh toán qua ví điện tử. Đối chiếu với nhật ký hệ thống, lỗi thanh toán bắt đầu đúng ngày bản cập nhật ứng dụng được phát hành. Đó là chuỗi lập luận chẩn đoán điển hình.\n\n### Ý chính\n- Bắt đầu từ giả thuyết có thể kiểm chứng, đừng lục dữ liệu vô định hướng.\n- Một nguyên nhân rất hay bị bỏ sót là thay đổi **cơ cấu** (mix): tổng giảm không phải vì mỗi nhóm tệ đi mà vì tỷ trọng nhóm có giá trị thấp tăng lên (nghịch lý Simpson).\n- Tương quan chỉ gợi ý; muốn khẳng định nguyên nhân cần thử nghiệm có đối chứng hoặc bằng chứng bổ sung.\n\n### Lỗi hay gặp\n- Dừng ở nguyên nhân đầu tiên nghe hợp lý.\n- Chia nhỏ quá nhiều chiều cho đến khi \"tìm ra\" thứ gì đó chỉ do ngẫu nhiên (nhiều phép so sánh thì dễ thấy mẫu hình giả).\n- Không kiểm tra chất lượng dữ liệu: đôi khi \"sụt giảm\" chỉ do lỗi ghi nhận.\n\n### Tự kiểm tra\n1. Doanh thu tổng giảm nhưng doanh thu từng khu vực đều tăng — điều gì có thể xảy ra?\n2. Vì sao tương quan chưa đủ để kết luận nguyên nhân?",
+  "lessons": [
+   {
+    "href": "/courses/aba201c-ai-and-big-data-analytics-for-communications/learn?lessonSlug=aba201c-ts-2-3",
+    "ten": "2.3 — Từ dữ liệu đến quyết định: đường ống dữ liệu, cấp độ phân tích và vai trò trong đội",
+    "nguon": "AI and Big Data Analytics for Communications · Chương 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "ABA201c"
+   },
+   {
+    "href": "/courses/dta301-data-analysis/learn?lessonSlug=dta301-4-1-eda",
+    "ten": "4.1 — Khám phá dữ liệu (EDA)",
+    "nguon": "Data Analysis · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DTA301"
+   },
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-ts-4-2",
+    "ten": "4.2 — Quan hệ giữa các biến: so sánh nhóm, tương quan và nghịch lý Simpson",
+    "nguon": "Data Science · Chương 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSI201"
+   },
+   {
+    "href": "/courses/itb302c-business-intelligence-bi/learn?lessonSlug=itb302c-7-1-advanced-analytics",
+    "ten": "7.1 — Phân tích nâng cao",
+    "nguon": "Business Intelligence (BI) · Chapter 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "ITB302c"
+   }
+  ]
+ },
+ "Các loại phân tích dữ liệu › Predictive Analytics": {
+  "body": "**Predictive analytics** dùng dữ liệu đã có để ước lượng giá trị hoặc kết quả chưa biết. Có hai nhóm bài toán chính: **hồi quy** (dự đoán một con số, như doanh thu tháng sau) và **phân loại** (dự đoán một nhãn, như khách có rời bỏ hay không). Dữ liệu theo thời gian thì dùng **dự báo chuỗi thời gian** (xu hướng, mùa vụ).\n\nMô hình đơn giản nhất là hồi quy tuyến tính: `y = a + b·x`. Ví dụ doanh số theo chi phí quảng cáo — hệ số `b` cho biết mỗi đồng quảng cáo thêm đi kèm bao nhiêu doanh số tăng thêm, trong phạm vi dữ liệu đã thấy.\n\n### Quy trình cơ bản\n1. Xác định biến cần dự đoán và các biến đầu vào.\n2. Chia dữ liệu thành tập huấn luyện và tập kiểm tra.\n3. Khớp mô hình trên tập huấn luyện.\n4. Đánh giá trên tập kiểm tra bằng chỉ số phù hợp (R², RMSE cho hồi quy; precision, recall cho phân loại).\n5. Diễn giải và nói rõ độ bất định.\n\n```python\nfrom sklearn.linear_model import LinearRegression\nfrom sklearn.model_selection import train_test_split\nX_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=0.2, random_state=42)\nmodel = LinearRegression().fit(X_tr, y_tr)\nprint(model.score(X_te, y_te))   # R² trên dữ liệu chưa thấy\n```\n\n### Ý chính\n- Dự báo luôn đi kèm sai số; trình bày khoảng thay vì một con số duy nhất khi có thể.\n- Mô hình đơn giản, giải thích được thường thắng mô hình phức tạp trong công việc thực tế.\n- Quá khớp (overfitting): mô hình học thuộc nhiễu của tập huấn luyện nên kém trên dữ liệu mới.\n\n### Lỗi hay gặp\n- Rò rỉ dữ liệu: đưa vào biến đầu vào thông tin chỉ có sau khi sự việc đã xảy ra.\n- Ngoại suy xa ngoài phạm vi dữ liệu đã quan sát.\n- Chia ngẫu nhiên dữ liệu chuỗi thời gian, khiến mô hình \"nhìn thấy tương lai\".\n\n### Tự kiểm tra\n1. R² = 0,8 trên tập huấn luyện nhưng 0,3 trên tập kiểm tra cho thấy điều gì?\n2. Bài toán \"khách nào sẽ rời bỏ\" là hồi quy hay phân loại?",
+  "lessons": [
+   {
+    "href": "/courses/bda201-business-data-analytics/learn?lessonSlug=bda201-flm-b022",
+    "ten": "📑 Buổi 22 — 8. Regression for business prediction",
+    "nguon": "Business Data Analytics · FLM 8 · Regression for business predicti",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "BDA201"
+   },
+   {
+    "href": "/courses/iba201-introduction-to-business-analytics/learn?lessonSlug=iba201-6-1-simple-regression",
+    "ten": "6.1 — Nhập môn phân tích dự đoán: hồi quy đơn giản",
+    "nguon": "Introduction to Business Analytics · Chapter 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "IBA201"
+   },
+   {
+    "href": "/courses/bda201-business-data-analytics/learn?lessonSlug=bda201-7-1-forecasting-regression",
+    "ten": "7.1 — Phân tích dự báo cơ bản: hồi quy & phân khúc khách hàng",
+    "nguon": "Business Data Analytics · Chapter 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "BDA201"
+   },
+   {
+    "href": "/courses/dtm301-data-mining-and-predictive-analytics/learn?lessonSlug=dtm301-4-1-regression-forecasting",
+    "ten": "4.1 — Hồi quy & dự báo",
+    "nguon": "Data Mining and Predictive Analytics · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DTM301"
+   },
+   {
+    "href": "/courses/aba201c-ai-and-big-data-analytics-for-communications/learn?lessonSlug=aba201c-ts-7-1",
+    "ten": "7.1 — Hồi quy tuyến tính: doanh số đi theo chi phí quảng cáo (và vì sao đó chưa phải nhân quả)",
+    "nguon": "AI and Big Data Analytics for Communications · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "ABA201c"
+   }
+  ]
+ },
+ "Các loại phân tích dữ liệu › Prescriptive Analytics": {
+  "body": "**Prescriptive analytics** không dừng ở \"chuyện gì sẽ xảy ra\" mà trả lời *nên chọn hành động nào*. Nó kết hợp dự báo với **tối ưu hoá** và **mô phỏng** để đề xuất quyết định tốt nhất trong các ràng buộc có thật.\n\nMột bài toán tối ưu có ba phần:\n- **Biến quyết định**: thứ bạn được chọn (số sản phẩm A và B sản xuất mỗi tuần).\n- **Hàm mục tiêu**: thứ cần cực đại hoặc cực tiểu (lợi nhuận, chi phí).\n- **Ràng buộc**: giới hạn thực tế (giờ máy, nguyên liệu, ngân sách).\n\n### Ví dụ\nXưởng làm hai loại bàn. Bàn A lãi 3 triệu và cần 2 giờ máy; bàn B lãi 4 triệu và cần 3 giờ máy; tuần có 120 giờ máy. Tối đa hoá `3A + 4B` với `2A + 3B ≤ 120`. Bài toán cỡ này giải được bằng Solver của Excel hoặc một thư viện quy hoạch tuyến tính; kết quả là con số cụ thể cho A và B, không chỉ là \"dự báo\".\n\n### Phân tích what-if\nKhi chưa cần tối ưu đầy đủ, analyst vẫn có thể hỏi \"nếu... thì sao?\": nếu giá tăng 5% thì lợi nhuận đổi thế nào? Excel có Goal Seek, Data Table, Scenario Manager cho việc này. Mô phỏng (ví dụ Monte Carlo) cho thấy phân bố kết quả khi các đầu vào bất định.\n\n### Ý chính\n- Chất lượng khuyến nghị phụ thuộc vào việc mô hình hoá đúng ràng buộc và mục tiêu của doanh nghiệp.\n- Kiểm tra độ nhạy: đáp án có đổi nhiều khi giả định đổi nhẹ không?\n- Khuyến nghị cuối cùng vẫn cần con người cân nhắc những yếu tố mô hình không có.\n\n### Lỗi hay gặp\n- Bỏ sót một ràng buộc quan trọng nên \"đáp án tối ưu\" không áp dụng được.\n- Tối ưu một chỉ số duy nhất và vô tình làm hỏng chỉ số khác (giảm chi phí nhưng chất lượng tụt).\n\n### Tự kiểm tra\n1. Nêu biến quyết định, hàm mục tiêu và ràng buộc cho bài toán chia ngân sách quảng cáo.\n2. Phân tích độ nhạy trả lời câu hỏi nào?",
+  "lessons": [
+   {
+    "href": "/courses/bda201-business-data-analytics/learn?lessonSlug=bda201-flm-b049",
+    "ten": "📑 Buổi 49 — 17. Linear optimization for business decisions",
+    "nguon": "Business Data Analytics · FLM 17 · Linear optimization for busines",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "BDA201"
+   },
+   {
+    "href": "/courses/iba201-introduction-to-business-analytics/learn?lessonSlug=iba201-7-1-what-if-optimization",
+    "ten": "7.1 — Phân tích what-if & tối ưu cơ bản",
+    "nguon": "Introduction to Business Analytics · Chapter 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "IBA201"
+   },
+   {
+    "href": "/courses/bda201-business-data-analytics/learn?lessonSlug=bda201-1-1-overview-analytics",
+    "ten": "1.1 — Phân tích mô tả, dự báo & kê đơn",
+    "nguon": "Business Data Analytics · Chapter 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "BDA201"
+   }
+  ]
+ },
+ "Excel › Hàm cơ bản (VLOOKUP/IF/SUM)": {
+  "body": "Excel vẫn là công cụ phân tích đầu tiên của rất nhiều analyst. Ba nhóm hàm nên nắm chắc ngay từ đầu:\n\n**Tổng hợp**: `SUM`, `AVERAGE`, `COUNT` (đếm ô có số), `COUNTA` (đếm ô không trống), `MIN`, `MAX`. Biến thể có điều kiện `SUMIF`, `COUNTIF`, `SUMIFS`, `COUNTIFS` cho phép hỏi \"tổng doanh thu của khu vực Bắc\".\n\n**Logic**: `IF(điều_kiện; nếu_đúng; nếu_sai)`. Kết hợp `AND`, `OR` để xét nhiều điều kiện.\n\n**Tra cứu**: `VLOOKUP(giá_trị_cần_tìm; vùng_bảng; số_cột; 0)` tìm một giá trị ở cột đầu của bảng rồi lấy giá trị cùng dòng ở cột thứ n. Tham số cuối `0` (hoặc `FALSE`) bắt buộc khớp chính xác. `XLOOKUP` trong Excel mới linh hoạt hơn.\n\n```\n=IF(C2>=1000000; \"Lớn\"; \"Nhỏ\")\n=SUMIFS(D:D; B:B; \"Bắc\"; C:C; \">=2026-01-01\")\n=VLOOKUP(A2; BangGia!A:C; 3; 0)\n```\n\n(Dấu phân cách đối số là `;` hay `,` tuỳ cài đặt vùng của máy bạn.)\n\n### Vì sao cần biết\nCác hàm này nằm trong hầu hết phép tính hằng ngày: ghép bảng giá vào đơn hàng, gắn nhãn khách theo ngưỡng chi tiêu, tổng hợp theo điều kiện.\n\n### Ý chính\n- Hiểu **tham chiếu tương đối và tuyệt đối** (`$A$1`) trước khi kéo công thức xuống dòng.\n- `VLOOKUP` chỉ tìm sang phải; cột tra cứu phải ở bên trái cột kết quả.\n- Dùng bảng (Table) hoặc vùng có tên để công thức dễ đọc và không vỡ khi thêm dữ liệu.\n\n### Lỗi hay gặp\n- Quên tham số khớp chính xác, `VLOOKUP` trả kết quả sai mà không báo lỗi.\n- Khoảng trắng thừa làm tra cứu thất bại (`#N/A`): xử lý bằng `TRIM`.\n- Số lưu dưới dạng chữ nên `SUM` bỏ sót.\n\n### Tự kiểm tra\n1. Khác biệt giữa `COUNT` và `COUNTA`?\n2. Vì sao `VLOOKUP` có thể trả giá trị sai khi bỏ tham số cuối?",
+  "lessons": [
+   {
+    "href": "/courses/bcp201-business-computing/learn?lessonSlug=bcp201-3-1-excel-basics",
+    "ten": "3.1 — Bảng tính Excel cơ bản",
+    "nguon": "Business Computing · Chapter 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "BCP201"
+   },
+   {
+    "href": "/courses/bcp201-business-computing/learn?lessonSlug=bcp201-4-1-excel-advanced",
+    "ten": "4.1 — Excel nâng cao: VLOOKUP, PivotTable & what-if",
+    "nguon": "Business Computing · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "BCP201"
+   },
+   {
+    "href": "/courses/bda201-business-data-analytics/learn?lessonSlug=bda201-4-1-excel-pivot",
+    "ten": "4.1 — Excel nâng cao & PivotTable cho phân tích",
+    "nguon": "Business Data Analytics · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "BDA201"
+   }
+  ]
+ },
+ "Excel › Pivot Tables & Charting": {
+  "body": "**PivotTable** tổng hợp một bảng dữ liệu dài thành bảng tóm tắt chỉ bằng thao tác kéo thả, không cần viết công thức. Bạn chọn trường nào làm **hàng**, trường nào làm **cột**, trường nào để **tính** (tổng, đếm, trung bình), và có thể thêm **bộ lọc** hoặc **slicer** để xem theo từng lát cắt.\n\nVí dụ từ bảng 10.000 dòng đơn hàng, kéo `Khu vực` vào hàng, `Quý` vào cột, `Doanh thu` vào giá trị: sau vài giây có bảng doanh thu theo khu vực và quý. **PivotChart** vẽ biểu đồ từ chính bảng đó.\n\n### Mẹo dùng\n- Dữ liệu nguồn nên sạch và có dòng tiêu đề, không dòng trống, không ô gộp.\n- Gom nhóm ngày theo tháng, quý, năm bằng chức năng Group.\n- Dùng \"Show Values As\" để hiện phần trăm của tổng hoặc thay đổi so với kỳ trước.\n- Khi dữ liệu nguồn đổi, nhớ bấm Refresh.\n\n### Lỗi hay gặp\nQuên cập nhật vùng nguồn sau khi thêm dòng (dùng Table giúp vùng tự mở rộng), và nhầm giữa \"đếm\" và \"tổng\" cho cột số.",
+  "lessons": [
+   {
+    "href": "/courses/bda201-business-data-analytics/learn?lessonSlug=bda201-4-1-excel-pivot",
+    "ten": "4.1 — Excel nâng cao & PivotTable cho phân tích",
+    "nguon": "Business Data Analytics · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "BDA201"
+   },
+   {
+    "href": "/courses/bcp201-business-computing/learn?lessonSlug=bcp201-4-1-excel-advanced",
+    "ten": "4.1 — Excel nâng cao: VLOOKUP, PivotTable & what-if",
+    "nguon": "Business Computing · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "BCP201"
+   },
+   {
+    "href": "/courses/iba201-introduction-to-business-analytics/learn?lessonSlug=iba201-5-1-visualization-spreadsheets",
+    "ten": "5.1 — Trực quan hoá dữ liệu & bảng tính",
+    "nguon": "Introduction to Business Analytics · Chapter 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "IBA201"
+   }
+  ]
+ },
+ "Excel › Phân tích & Báo cáo bằng Excel": {
+  "body": "Phân tích bằng Excel là chuỗi việc có thứ tự, không phải một công thức đơn lẻ. Hãy làm theo quy trình sau với bất kỳ bộ dữ liệu nào:\n\n1. **Đặt câu hỏi**: báo cáo này phục vụ quyết định gì? Ai đọc?\n2. **Nhập và kiểm tra dữ liệu**: dùng Data > From Text/CSV hoặc Power Query để nạp, kiểm kiểu dữ liệu, ô trống, bản ghi trùng.\n3. **Làm sạch**: `TRIM`, chuẩn hoá chữ hoa/thường, đổi chữ thành số, xoá trùng (Remove Duplicates).\n4. **Tính toán**: cột phụ bằng `IF`, `VLOOKUP/XLOOKUP`, `SUMIFS`.\n5. **Tổng hợp**: PivotTable theo các chiều cần thiết.\n6. **Trực quan hoá**: chọn biểu đồ hợp loại dữ liệu (đường cho xu hướng, cột cho so sánh, phân tán cho quan hệ hai biến).\n7. **Trình bày**: một trang tóm tắt gồm kết luận đầu tiên, vài biểu đồ then chốt, ghi chú giả định.\n\n### Vì sao cần biết\nTrong công việc thật, kết quả quan trọng không kém con số: người đọc cần thấy ngay \"vậy thì sao\". Một bảng tính tốt có sheet dữ liệu gốc không sửa tay, sheet tính toán và sheet báo cáo tách riêng, để người khác kiểm lại được.\n\n### Ý chính\n- Giữ dữ liệu gốc nguyên vẹn; mọi biến đổi nằm ở sheet khác hoặc trong Power Query.\n- Định dạng có điều kiện giúp làm nổi bật ngoại lệ.\n- Ghi rõ nguồn, ngày cập nhật và định nghĩa chỉ số ngay trên báo cáo.\n- Khi bảng tính lớn dần và phải lặp lại thường xuyên, cân nhắc chuyển sang SQL hoặc Python.\n\n### Lỗi hay gặp\n- Gõ đè số liệu bằng tay trong công thức, sau này không ai biết vì sao.\n- Biểu đồ nhiều màu nhưng không có tiêu đề nói điều cần rút ra.\n- Công thức tham chiếu vùng cố định, thêm dữ liệu thì bị bỏ sót.\n\n### Tự kiểm tra\n1. Vì sao nên tách sheet dữ liệu gốc khỏi sheet báo cáo?\n2. Biểu đồ nào hợp để hiển thị doanh thu theo tháng trong hai năm?",
+  "lessons": [
+   {
+    "href": "/courses/bda201-business-data-analytics/learn?lessonSlug=bda201-4-1-excel-pivot",
+    "ten": "4.1 — Excel nâng cao & PivotTable cho phân tích",
+    "nguon": "Business Data Analytics · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "BDA201"
+   },
+   {
+    "href": "/courses/iba201-introduction-to-business-analytics/learn?lessonSlug=iba201-5-1-visualization-spreadsheets",
+    "ten": "5.1 — Trực quan hoá dữ liệu & bảng tính",
+    "nguon": "Introduction to Business Analytics · Chapter 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "IBA201"
+   },
+   {
+    "href": "/courses/eda301-data-analysis/learn?lessonSlug=eda301-8-1-tools-business-reporting",
+    "ten": "8.1 — Công cụ (Excel/Python/R) & báo cáo phân tích cho kinh doanh",
+    "nguon": "Data analysis · Chapter 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "EDA301"
+   },
+   {
+    "href": "/courses/dta301-data-analysis/learn?lessonSlug=dta301-8-1-report-decision",
+    "ten": "8.1 — Báo cáo & ra quyết định",
+    "nguon": "Data Analysis · Chapter 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DTA301"
+   }
+  ]
+ },
+ "Excel › Hàm IF và ứng dụng lồng ghép": {
+  "body": "Hàm `IF` cho bảng tính khả năng \"rẽ nhánh\": nếu điều kiện đúng thì trả giá trị này, sai thì trả giá trị khác. Cú pháp: `IF(điều_kiện; giá_trị_nếu_đúng; giá_trị_nếu_sai)`.\n\n```\n=IF(B2>=5000000; \"VIP\"; \"Thường\")\n```\n\nKhi có nhiều mức, bạn **lồng** các `IF` vào nhau, hoặc dùng `IFS` (Excel 2019 trở lên) cho dễ đọc:\n\n```\n=IF(B2>=10000000; \"Vàng\"; IF(B2>=5000000; \"Bạc\"; \"Đồng\"))\n=IFS(B2>=10000000; \"Vàng\"; B2>=5000000; \"Bạc\"; TRUE; \"Đồng\")\n```\n\nĐể xét nhiều điều kiện cùng lúc, kết hợp với `AND` (tất cả đúng) và `OR` (ít nhất một đúng):\n\n```\n=IF(AND(C2=\"Hà Nội\"; D2>=3); \"Ưu tiên\"; \"Bình thường\")\n```\n\n### Vì sao cần biết\n`IF` là nền tảng của việc phân loại dữ liệu: gắn nhãn khách hàng theo ngưỡng chi tiêu, đánh dấu đơn hàng trễ hạn, chuyển điểm số thành xếp loại. Cột nhãn tạo bằng `IF` thường là đầu vào cho PivotTable.\n\n### Ý chính\n- Thứ tự điều kiện quan trọng: Excel dừng ở điều kiện đúng đầu tiên, nên xếp ngưỡng từ cao xuống thấp (hoặc ngược lại, nhưng nhất quán).\n- Chữ trong công thức nằm trong dấu nháy kép; số thì không.\n- So sánh chữ trong Excel không phân biệt hoa thường.\n- Có thể kết hợp `IFERROR(công_thức; giá_trị_thay_thế)` để bắt lỗi như `#N/A`, `#DIV/0!`.\n\n### Lỗi hay gặp\n- Lồng quá nhiều tầng làm công thức khó đọc, khó sửa; hãy chuyển sang `IFS`, bảng tra cứu hoặc cột phụ.\n- Quên xử lý ô trống: `B2>=5000000` với ô trống coi như 0 nên rơi vào nhánh \"sai\".\n- So sánh số lưu dưới dạng chữ nên kết quả bất ngờ.\n\n### Tự kiểm tra\n1. Viết công thức xếp loại A (từ 8 trở lên), B (từ 6,5), C (dưới 6,5) cho điểm ở ô B2.\n2. Khi nào nên thay chuỗi `IF` lồng nhau bằng bảng tra cứu?",
+  "lessons": [
+   {
+    "href": "/courses/bcp201-business-computing/learn?lessonSlug=bcp201-3-1-excel-basics",
+    "ten": "3.1 — Bảng tính Excel cơ bản",
+    "nguon": "Business Computing · Chapter 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "BCP201"
+   }
+  ]
+ },
+ "Excel › Hàm DATEDIF": {
+  "body": "`DATEDIF(ngày_bắt_đầu; ngày_kết_thúc; đơn_vị)` tính khoảng cách giữa hai ngày theo năm, tháng hoặc ngày đầy đủ. Đơn vị là một chuỗi:\n\n- `\"Y\"`: số năm tròn\n- `\"M\"`: số tháng tròn\n- `\"D\"`: số ngày\n- `\"YM\"`: số tháng lẻ sau khi bỏ các năm tròn\n- `\"MD\"`: số ngày lẻ sau khi bỏ các tháng tròn (nên tránh, kết quả có thể sai)\n\n```\n=DATEDIF(B2; TODAY(); \"Y\")            // tuổi hoặc thâm niên (năm)\n=DATEDIF(B2; C2; \"M\")                 // số tháng giữa hai ngày\n```\n\nDùng cho tính tuổi khách hàng, thâm niên nhân viên, thời gian từ đơn đầu đến đơn gần nhất. Hàm không có trong danh sách gợi ý của Excel nhưng vẫn chạy; ngày bắt đầu phải nhỏ hơn hoặc bằng ngày kết thúc, nếu không trả `#NUM!`. Nếu chỉ cần số ngày, trừ trực tiếp `C2-B2` là đủ.",
+  "more": [
+   {
+    "type": "official",
+    "title": "Microsoft Support — Hàm DATEDIF",
+    "url": "https://support.microsoft.com/en-us/office/datedif-function-25dba1a4-2812-480b-84dd-8b32a451b35c"
+   }
+  ]
+ },
+ "Excel › Hàm VLOOKUP / HLOOKUP": {
+  "body": "`VLOOKUP` và `HLOOKUP` là cách kinh điển để **ghép thông tin từ bảng khác** vào bảng đang làm việc: bạn có mã sản phẩm trong bảng đơn hàng, cần lấy tên và đơn giá từ bảng danh mục.\n\n**VLOOKUP** (V = vertical, tìm theo cột):\n```\n=VLOOKUP(giá_trị_cần_tìm; vùng_bảng; số_thứ_tự_cột; khớp)\n=VLOOKUP(A2; DanhMuc!A:C; 3; 0)\n```\nExcel tìm `A2` ở **cột đầu tiên** của vùng bảng, rồi trả giá trị ở cột thứ 3 của cùng dòng. Tham số cuối `0` (FALSE) nghĩa là khớp chính xác; `1` (TRUE) là khớp gần đúng và đòi hỏi cột đầu đã sắp tăng dần.\n\n**HLOOKUP** (H = horizontal) làm điều tương tự nhưng tìm ở **dòng đầu tiên** và trả giá trị ở dòng thứ n phía dưới — dùng khi bảng tra cứu nằm ngang.\n\n### Vì sao cần biết\nGhép bảng là việc lặp lại hằng ngày: gắn khu vực theo mã tỉnh, đơn giá theo mã hàng, mức thuế theo bậc thu nhập. Hiểu `VLOOKUP` cũng giúp bạn hiểu phép **JOIN** trong SQL và `merge` trong pandas.\n\n### Ý chính\n- Khoá tra cứu phải nằm ở cột bên **trái nhất** của vùng bảng.\n- Dùng `$` cố định vùng bảng khi kéo công thức: `$A$2:$C$500`.\n- Bọc `IFERROR(...; \"Không có\")` để xử lý khoá không tìm thấy.\n- `XLOOKUP` (Excel 365 và 2021) khắc phục các hạn chế: tìm theo hướng nào cũng được, mặc định khớp chính xác, không phụ thuộc số thứ tự cột. `INDEX` kết hợp `MATCH` là lựa chọn tương tự trên phiên bản cũ.\n\n### Lỗi hay gặp\n- Quên `0` và nhận kết quả sai thầm lặng.\n- Khoá có khoảng trắng thừa hoặc khác kiểu (số và chữ) nên báo `#N/A` dù nhìn giống hệt nhau.\n- Chèn thêm cột vào bảng tra cứu làm số thứ tự cột bị lệch.\n- Khoá trùng trong bảng tra cứu: `VLOOKUP` chỉ trả dòng khớp đầu tiên.\n\n### Tự kiểm tra\n1. Vì sao `VLOOKUP` không thể lấy cột nằm bên trái cột khoá?\n2. `#N/A` thường do những nguyên nhân nào?",
+  "lessons": [
+   {
+    "href": "/courses/bcp201-business-computing/learn?lessonSlug=bcp201-4-1-excel-advanced",
+    "ten": "4.1 — Excel nâng cao: VLOOKUP, PivotTable & what-if",
+    "nguon": "Business Computing · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "BCP201"
+   },
+   {
+    "href": "/courses/bda201-business-data-analytics/learn?lessonSlug=bda201-4-1-excel-pivot",
+    "ten": "4.1 — Excel nâng cao & PivotTable cho phân tích",
+    "nguon": "Business Data Analytics · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "BDA201"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "Microsoft Support — Hàm VLOOKUP",
+    "url": "https://support.microsoft.com/en-us/office/vlookup-function-0bbc8083-26fe-4963-8ab8-93a18ad188a1"
+   }
+  ]
+ },
+ "Excel › Hàm REPLACE / SUBSTITUTE": {
+  "body": "Hai hàm này đều thay một phần của chuỗi bằng chuỗi khác, nhưng chọn phần cần thay theo hai cách:\n\n- `REPLACE(chuỗi; vị_trí_bắt_đầu; số_ký_tự; chuỗi_mới)` thay theo **vị trí**.\n- `SUBSTITUTE(chuỗi; chuỗi_cũ; chuỗi_mới; [lần_thứ])` thay theo **nội dung**, có phân biệt hoa thường; bỏ tham số cuối thì thay mọi lần xuất hiện.\n\n```\n=REPLACE(\"0901234567\"; 1; 1; \"+84\")          // +84901234567\n=SUBSTITUTE(\"1.250.000\"; \".\"; \"\")              // 1250000\n=SUBSTITUTE(A2; CHAR(160); \" \")                // đổi khoảng trắng không ngắt thành dấu cách thường\n```\n\nDùng `SUBSTITUTE` để chuẩn hoá số điện thoại, bỏ dấu phân cách hàng nghìn trước khi chuyển chữ thành số, hoặc xoá ký tự lạ. Dùng `REPLACE` khi bạn biết chắc ký tự nằm ở vị trí cố định (đổi đầu số, che một đoạn mã).\n\nMẹo: sau khi bỏ dấu `.`, bọc `VALUE(...)` để biến kết quả thành số thật."
+ },
+ "Excel › Hàm UPPER / LOWER / PROPER": {
+  "body": "Ba hàm đổi kiểu chữ giúp dữ liệu văn bản đồng nhất để so sánh, nhóm và tra cứu cho đúng:\n\n- `UPPER(A2)`: viết hoa toàn bộ — thường dùng cho mã (sku, mã tỉnh).\n- `LOWER(A2)`: viết thường toàn bộ — chuẩn cho email.\n- `PROPER(A2)`: viết hoa chữ cái đầu mỗi từ — dùng cho họ tên.\n\n```\n=PROPER(TRIM(A2))      // \"  nguyễn   văn an \" -> \"Nguyễn Văn An\"\n=LOWER(B2)             // \"An.Nguyen@Mail.com\" -> \"an.nguyen@mail.com\"\n```\n\nLưu ý: `PROPER` viết hoa sau bất kỳ ký tự không phải chữ nào, nên \"o'neil\" thành \"O'Neil\" còn \"ba's\" thành \"Ba'S\"; kiểm lại các tên đặc biệt. Thói quen tốt là kết hợp với `TRIM` để vừa đồng nhất chữ hoa/thường vừa bỏ khoảng trắng thừa. Trong Python tương ứng là `str.upper()`, `.lower()`, `.title()`."
+ },
+ "Excel › Hàm CONCAT / TEXTJOIN": {
+  "body": "Khi cần ghép nhiều ô thành một chuỗi (họ + tên, địa chỉ từ nhiều cột), dùng:\n\n- `CONCAT(ô1; ô2; ...)`: nối các ô hoặc cả vùng, thay thế `CONCATENATE` cũ.\n- `TEXTJOIN(dấu_phân_cách; bỏ_qua_ô_trống; ô1; ...)`: nối có dấu phân cách và tuỳ chọn bỏ qua ô trống. Có từ Excel 2019.\n- Toán tử `&` vẫn dùng được: `=A2&\" \"&B2`.\n\n```\n=CONCAT(A2; \" \"; B2)\n=TEXTJOIN(\", \"; TRUE; C2:F2)     // \"12 Lê Lợi, Quận 1, TP.HCM\" (bỏ qua ô trống)\n=A2&\"-\"&TEXT(B2; \"000\")           // mã ghép: \"SP-007\"\n```\n\n`TEXTJOIN` tiện nhất cho địa chỉ vì ô trống không để lại dấu phẩy thừa. Khi nối số hoặc ngày, dùng `TEXT(giá_trị; định_dạng)` để kiểm soát cách hiển thị, vì nối trực tiếp một ngày sẽ ra số seri. Trong Power Query hoặc pandas, nối cột làm tương tự bằng toán tử cộng chuỗi hoặc `str.cat`."
+ },
+ "Excel › Hàm TRIM": {
+  "body": "`TRIM(chuỗi)` xoá khoảng trắng ở đầu và cuối chuỗi, đồng thời rút các khoảng trắng liên tiếp giữa các từ về đúng một dấu cách. Đây là bước làm sạch đầu tiên cho dữ liệu nhập tay hoặc xuất từ hệ thống khác.\n\n```\n=TRIM(\"   Hà   Nội  \")      // \"Hà Nội\"\n=TRIM(SUBSTITUTE(A2; CHAR(160); \" \"))\n```\n\nVì sao quan trọng: `\"Hà Nội\"` và `\"Hà Nội \"` (thừa một dấu cách) trông giống hệt nhưng là hai giá trị khác nhau — làm `VLOOKUP` báo `#N/A`, PivotTable tách thành hai nhóm, `COUNTIF` đếm thiếu.\n\nHạn chế cần biết: `TRIM` không bỏ **khoảng trắng không ngắt** (mã ký tự 160, hay xuất hiện khi sao chép từ web), nên hãy `SUBSTITUTE` nó thành dấu cách thường trước, như dòng thứ hai ở trên. Sau khi làm sạch bằng công thức, sao chép và dán dạng giá trị (Paste Values) để thay cột gốc. Trong pandas tương ứng là `df[\"col\"].str.strip()`.",
+  "more": [
+   {
+    "type": "official",
+    "title": "Microsoft Support — Hàm TRIM",
+    "url": "https://support.microsoft.com/en-us/office/trim-function-410388fa-c5df-49c6-b16c-9e5630b479f9"
+   }
+  ]
+ },
+ "Excel › Hàm AVERAGE, COUNT, SUM": {
+  "body": "Bốn hàm này là nền móng của mọi bảng tổng hợp:\n\n- `SUM(vùng)`: tổng các số.\n- `AVERAGE(vùng)`: trung bình cộng của các ô có số.\n- `COUNT(vùng)`: đếm số ô **chứa số**.\n- `COUNTA(vùng)`: đếm số ô **không trống** (cả chữ lẫn số).\n\n```\n=SUM(D2:D500)\n=AVERAGE(D2:D500)\n=COUNT(D2:D500)        // số đơn có giá trị tiền\n=COUNTA(A2:A500)       // số dòng có mã đơn\n```\n\nKhác biệt giữa `COUNT` và `COUNTA` hay bị quên: nếu cột tiền có vài ô lỡ lưu thành chữ, `COUNT` sẽ đếm ít hơn `COUNTA` — một dấu hiệu rất hay để phát hiện dữ liệu bẩn.\n\nPhiên bản có điều kiện: `SUMIF/SUMIFS`, `AVERAGEIF/AVERAGEIFS`, `COUNTIF/COUNTIFS`.\n\n```\n=SUMIFS(D:D; B:B; \"Bắc\")                 // tổng doanh thu khu vực Bắc\n=COUNTIFS(B:B; \"Bắc\"; D:D; \">1000000\")   // số đơn trên 1 triệu ở khu vực Bắc\n```\n\n### Vì sao cần biết\nĐây là các phép \"mô tả\" quen thuộc nhất: tổng doanh thu, số đơn, giá trị đơn trung bình.\n\n### Ý chính\n- Các hàm bỏ qua ô trống và ô chữ khi tính `SUM` và `AVERAGE`, nhưng ô chứa `0` thì vẫn được tính vào trung bình.\n- Dùng vùng cả cột (`D:D`) tiện nhưng chậm với bảng rất lớn; vùng Table tự mở rộng là lựa chọn tốt.\n- Trung bình dễ bị kéo bởi giá trị lớn bất thường; so với trung vị (`MEDIAN`) khi cần.\n\n### Lỗi hay gặp\n- Số lưu dưới dạng chữ (có dấu nháy đơn ẩn, hoặc dấu chấm phân cách sai) nên bị bỏ qua.\n- Ô tổng phụ nằm lẫn trong vùng làm `SUM` tính trùng.\n- Nhầm `AVERAGE` của một cột tỷ lệ với tỷ lệ thực của tổng.\n\n### Tự kiểm tra\n1. Cột có 100 dòng, 92 ô là số, 8 ô trống: `COUNT` và `COUNTA` trả bao nhiêu?\n2. Vì sao một ô `0` khác với ô trống khi tính `AVERAGE`?",
+  "lessons": [
+   {
+    "href": "/courses/bcp201-business-computing/learn?lessonSlug=bcp201-3-1-excel-basics",
+    "ten": "3.1 — Bảng tính Excel cơ bản",
+    "nguon": "Business Computing · Chapter 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "BCP201"
+   },
+   {
+    "href": "/courses/bda201-business-data-analytics/learn?lessonSlug=bda201-4-1-excel-pivot",
+    "ten": "4.1 — Excel nâng cao & PivotTable cho phân tích",
+    "nguon": "Business Data Analytics · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "BDA201"
+   }
+  ]
+ },
+ "Excel › Hàm MIN / MAX trong Excel": {
+  "body": "`MIN(vùng)` trả giá trị nhỏ nhất và `MAX(vùng)` trả giá trị lớn nhất trong vùng. Chúng cho bạn \"hai đầu mút\" của dữ liệu — nhìn thoáng qua đã biết khoảng giá trị và phát hiện bất thường.\n\n```\n=MIN(D2:D500)           // đơn nhỏ nhất\n=MAX(D2:D500)           // đơn lớn nhất\n=MAX(D2:D500)-MIN(D2:D500)   // khoảng biến thiên (range)\n=MAXIFS(D:D; B:B; \"Bắc\")     // lớn nhất có điều kiện (Excel 2019 trở lên)\n```\n\n### Vì sao cần biết\n- Kiểm tra nhanh chất lượng: giá bán nhỏ nhất là âm hoặc tuổi lớn nhất là 250 chắc chắn là lỗi nhập liệu.\n- Xác định ranh giới để chọn thang trục biểu đồ hay ngưỡng phân nhóm.\n- Tính khoảng biến thiên, thước đo độ phân tán đơn giản nhất.\n\n### Ý chính\n- Hai hàm bỏ qua ô trống và chữ; nếu vùng không có số nào thì trả `0`.\n- Muốn biết giá trị lớn thứ hai, thứ ba dùng `LARGE(vùng; k)` và `SMALL(vùng; k)`.\n- Muốn tìm **ai** đạt giá trị đó, kết hợp với `INDEX/MATCH` hoặc `XLOOKUP`.\n- Có biến thể có điều kiện `MINIFS` và `MAXIFS`.\n\n### Lỗi hay gặp\n- Một giá trị ngoại lai làm `MAX` mất ý nghĩa mô tả; hãy xem thêm phân vị hoặc trung vị.\n- Ngày lưu dạng chữ nên `MIN/MAX` không nhận diện đúng.\n\n### Tự kiểm tra\n1. Làm sao biết đơn hàng lớn nhất thuộc khách nào?\n2. `MAX` và `MIN` cho gợi ý gì về chất lượng dữ liệu?"
+ },
+ "Ngôn ngữ lập trình › Python (Pandas)": {
+  "body": "**pandas** là thư viện Python quen thuộc nhất của người làm dữ liệu. Nó cho bạn `DataFrame` — một bảng có nhãn cột và nhãn dòng, giống một sheet Excel nhưng xử lý được hàng triệu dòng bằng vài dòng lệnh, và mọi bước đều viết lại được, chạy lại được.\n\n```python\nimport pandas as pd\n\ndf = pd.read_csv(\"orders.csv\", parse_dates=[\"order_date\"])\ndf.head()                          # xem vài dòng đầu\ndf.info()                          # kiểu dữ liệu, số ô trống\ndf.describe()                      # thống kê mô tả cột số\n\nbig = df[df[\"amount\"] > 1_000_000]            # lọc dòng\nby_region = df.groupby(\"region\")[\"amount\"].sum().sort_values(ascending=False)\n```\n\n### Vì sao cần biết\nHầu hết công việc analyst có thể quy về vài thao tác: đọc dữ liệu, lọc, tạo cột mới, nhóm và tổng hợp, ghép bảng, vẽ. pandas làm tất cả, và kết nối trơn tru với matplotlib, seaborn, scikit-learn, Jupyter.\n\n### Ý chính\n- **Series** là một cột; **DataFrame** là bảng nhiều cột.\n- Chọn dữ liệu: `df[\"cột\"]`, `df.loc[dòng, cột]` theo nhãn, `df.iloc[...]` theo vị trí, lọc bằng điều kiện logic.\n- Tư duy vector hoá: viết `df[\"a\"] * df[\"b\"]` thay vì vòng lặp từng dòng.\n- `groupby` rồi `agg` tương đương PivotTable hay `GROUP BY` trong SQL; `merge` tương đương `JOIN`.\n- Luôn kiểm tra kiểu dữ liệu sau khi đọc (`df.dtypes`): ngày và số hay bị đọc thành chuỗi.\n\n### Lỗi hay gặp\n- Dùng `df[df.a > 1][df.b < 2][\"c\"] = 0` (chuỗi lập chỉ mục) và bị cảnh báo `SettingWithCopy`; hãy dùng `df.loc[điều_kiện, \"c\"] = 0`.\n- Quên rằng nhiều thao tác trả về bản sao mới, không sửa tại chỗ.\n- Đọc cả tệp rất lớn vào bộ nhớ trong khi chỉ cần vài cột (`usecols`).\n\n### Tự kiểm tra\n1. Viết một dòng pandas tính doanh thu trung bình theo tháng từ cột `order_date` và `amount`.\n2. `loc` và `iloc` khác nhau thế nào?",
+  "lessons": [
+   {
+    "href": "/courses/pba301-python-for-business-analytics/learn?lessonSlug=pba301-3-1-pandas",
+    "ten": "3.1 — pandas: Series/DataFrame, đọc/ghi dữ liệu",
+    "nguon": "Python for Business Analytics · Chapter 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PBA301"
+   },
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-2-1-python-numpy-pandas",
+    "ten": "2.1 — Python cho DS (numpy & pandas)",
+    "nguon": "Data Science · Chapter 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSI201"
+   },
+   {
+    "href": "/courses/bcp201-business-computing/learn?lessonSlug=bcp201-flm-b019",
+    "ten": "📑 Buổi 19 — 7. Data Selection & Indexing Techniques (Pandas II)",
+    "nguon": "Business Computing · FLM 7 · Data Selection & Indexing Techni",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "BCP201"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "pandas — 10 minutes to pandas",
+    "url": "https://pandas.pydata.org/docs/user_guide/10min.html"
+   }
+  ]
+ },
+ "Ngôn ngữ lập trình › R (Dplyr/Ggplot2)": {
+  "body": "**R** là ngôn ngữ sinh ra cho thống kê, rất mạnh trong nghiên cứu học thuật, y sinh và khảo sát. Hai gói bạn sẽ gặp nhiều nhất trong hệ sinh thái **tidyverse**:\n\n- **dplyr**: \"ngữ pháp\" xử lý bảng bằng các động từ `filter`, `select`, `mutate`, `group_by`, `summarise`, `arrange`, nối với nhau bằng toán tử ống `|>` (hoặc `%>%`).\n- **ggplot2**: \"ngữ pháp đồ hoạ\" — dựng biểu đồ bằng cách chồng các lớp: dữ liệu, ánh xạ thẩm mỹ (`aes`), hình học (`geom_*`).\n\n```r\nlibrary(dplyr); library(ggplot2)\n\norders |>\n  filter(amount > 0) |>\n  group_by(region) |>\n  summarise(doanh_thu = sum(amount), so_don = n()) |>\n  ggplot(aes(x = reorder(region, doanh_thu), y = doanh_thu)) +\n  geom_col() + coord_flip()\n```\n\nChọn R khi công việc nghiêng về thống kê chuyên sâu hoặc biểu đồ chất lượng xuất bản; chọn Python khi cần tích hợp vào hệ thống phần mềm. Kiến thức nền (nhóm, lọc, ghép bảng) giống nhau ở cả hai, nên học một thì sang cái kia rất nhanh.",
+  "lessons": [
+   {
+    "href": "/courses/eda301-data-analysis/learn?lessonSlug=eda301-8-1-tools-business-reporting",
+    "ten": "8.1 — Công cụ (Excel/Python/R) & báo cáo phân tích cho kinh doanh",
+    "nguon": "Data analysis · Chapter 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "EDA301"
+   }
+  ],
+  "more": [
+   {
+    "type": "course",
+    "title": "R for Data Science (2e) — Hadley Wickham, Mine Çetinkaya-Rundel, Garrett Grolemund",
+    "url": "https://r4ds.hadley.nz/"
+   }
+  ]
+ },
+ "Ngôn ngữ lập trình › SQL cho phân tích": {
+  "body": "**SQL** là ngôn ngữ để hỏi cơ sở dữ liệu. Dữ liệu của doanh nghiệp hầu như luôn nằm trong database, nên SQL là kỹ năng analyst dùng hằng ngày: lấy đúng phần dữ liệu cần và tổng hợp ngay tại nguồn thay vì kéo cả triệu dòng về máy.\n\nBốn khối cần thạo:\n\n```sql\n-- 1. Lọc và chọn cột\nSELECT order_id, customer_id, amount FROM orders WHERE order_date >= '2026-01-01';\n\n-- 2. Ghép bảng\nSELECT c.segment, o.amount\nFROM orders o JOIN customers c ON c.id = o.customer_id;\n\n-- 3. Tổng hợp theo nhóm\nSELECT c.segment, COUNT(*) AS so_don, SUM(o.amount) AS doanh_thu\nFROM orders o JOIN customers c ON c.id = o.customer_id\nGROUP BY c.segment HAVING SUM(o.amount) > 0;\n\n-- 4. Hàm cửa sổ: xếp hạng và so với kỳ trước\nSELECT month, revenue,\n       revenue - LAG(revenue) OVER (ORDER BY month) AS thay_doi\nFROM monthly_revenue;\n```\n\n### Vì sao cần biết\nMọi dashboard và báo cáo đều bắt đầu từ một truy vấn. Analyst giỏi SQL tự lấy dữ liệu mà không phải chờ người khác xuất tệp, và viết được những phép tính phức tạp như tỷ lệ giữ chân, phễu chuyển đổi, doanh thu luỹ kế.\n\n### Ý chính\n- Thứ tự thực thi logic: `FROM/JOIN` → `WHERE` → `GROUP BY` → `HAVING` → `SELECT` → `ORDER BY`. `WHERE` lọc dòng trước khi nhóm, `HAVING` lọc nhóm sau khi tổng hợp.\n- `LEFT JOIN` giữ các dòng không khớp; dùng khi hỏi \"khách nào chưa mua gì\".\n- **CTE** (`WITH ... AS`) chia truy vấn dài thành các bước dễ đọc.\n- **Hàm cửa sổ** (`ROW_NUMBER`, `RANK`, `LAG`, `SUM() OVER`) tổng hợp mà không gộp dòng.\n\n### Lỗi hay gặp\n- **Fan-out**: join bảng một-nhiều rồi `SUM` một cột của bảng \"một\" làm số bị nhân lên.\n- `COUNT(*)` khác `COUNT(cột)`: cái sau bỏ qua `NULL`.\n- Quên rằng `NULL = NULL` không đúng; dùng `IS NULL`.\n- `NOT IN` gặp `NULL` trong danh sách sẽ không trả dòng nào.\n\n### Tự kiểm tra\n1. Khác biệt giữa `WHERE` và `HAVING`?\n2. Viết truy vấn tìm khách hàng chưa có đơn nào.",
+  "lessons": [
+   {
+    "href": "/courses/bda201-business-data-analytics/learn?lessonSlug=bda201-5-1-sql-queries",
+    "ten": "5.1 — Truy vấn dữ liệu kinh doanh bằng SQL",
+    "nguon": "Business Data Analytics · Chapter 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "BDA201"
+   },
+   {
+    "href": "/courses/tbi301c-technology-for-bi-analysts/learn?lessonSlug=tbi301c-4-1-sql-for-bi",
+    "ten": "4.1 — SQL cho phân tích BI",
+    "nguon": "Technology for BI Analysts · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "TBI301c"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-6-2-group-by",
+    "ten": "6.2 — GROUP BY: một tóm tắt cho mỗi nhóm",
+    "nguon": "PostgreSQL · Chương 6",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-8-1-window-la-gi",
+    "ten": "8.1 — Hàm cửa sổ là gì: tổng hợp mà không gộp dòng",
+    "nguon": "PostgreSQL · Chương 8",
+    "kieu": "video"
+   },
+   {
+    "href": "/code-lab/postgresql-practice",
+    "ten": "PostgreSQL — Luyện tập SQL chấm thật",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Ngôn ngữ lập trình › Jupyter Notebook": {
+  "body": "**Jupyter Notebook** là môi trường tương tác nơi code, kết quả, biểu đồ và ghi chú chữ nằm xen kẽ trong cùng một tài liệu. Bạn chạy từng **ô** (cell) một, thấy kết quả ngay bên dưới, rồi điều chỉnh — rất hợp cho khám phá dữ liệu và kể lại quá trình phân tích.\n\nCó hai loại ô chính: ô **code** (Python, R...) và ô **Markdown** (viết tiêu đề, giải thích, công thức). Phím tắt hữu ích: `Shift+Enter` chạy ô, `A`/`B` chèn ô phía trên/dưới (ở chế độ lệnh), `M` chuyển sang Markdown.\n\nCách khởi động: `pip install jupyterlab` rồi `jupyter lab`, hoặc dùng sẵn trong VS Code, Google Colab.\n\nCạm bẫy lớn nhất là **trạng thái ẩn**: bạn chạy ô theo thứ tự lộn xộn, biến cũ vẫn nằm trong bộ nhớ nên notebook \"chạy được\" trên máy bạn nhưng người khác chạy lại từ đầu thì lỗi. Thói quen tốt: thỉnh thoảng chọn *Restart & Run All* để kiểm tra notebook chạy lại sạch từ trên xuống dưới.",
+  "lessons": [
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-ts-11-1",
+    "ten": "11.1 — Notebook tái lập được: trạng thái ẩn, seed và cấu trúc dự án",
+    "nguon": "Data Science · Chương 11",
+    "kieu": "lab",
+    "academy": true,
+    "ma": "DSI201"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "Jupyter Notebook — tài liệu chính thức",
+    "url": "https://jupyter-notebook.readthedocs.io/en/stable/notebook.html"
+   }
+  ]
+ },
+ "Ngôn ngữ lập trình › Python cho phân tích dữ liệu (Pandas)": {
+  "body": "Sau khi biết đọc dữ liệu vào `DataFrame`, bước tiếp theo là dùng pandas như một công cụ phân tích thật sự: chọn, biến đổi, tổng hợp và ghép. Bài này tập trung vào bộ thao tác trả lời được câu hỏi kinh doanh.\n\n```python\nimport pandas as pd\ndf = pd.read_csv(\"orders.csv\", parse_dates=[\"order_date\"])\n\n# Tạo cột mới và lọc\ndf[\"thang\"] = df[\"order_date\"].dt.to_period(\"M\")\ndf[\"doanh_thu_rong\"] = df[\"amount\"] - df[\"discount\"]\nvip = df.loc[df[\"doanh_thu_rong\"] > 5_000_000, [\"customer_id\", \"doanh_thu_rong\"]]\n\n# Tổng hợp theo nhóm (giống PivotTable / GROUP BY)\ntom_tat = (df.groupby([\"thang\", \"region\"])\n             .agg(so_don=(\"order_id\", \"count\"),\n                  doanh_thu=(\"doanh_thu_rong\", \"sum\"))\n             .reset_index())\n\n# Ghép bảng (giống JOIN)\nkhach = pd.read_csv(\"customers.csv\")\ndf = df.merge(khach, on=\"customer_id\", how=\"left\")\n\n# Bảng pivot\npivot = df.pivot_table(index=\"region\", columns=\"thang\",\n                       values=\"doanh_thu_rong\", aggfunc=\"sum\")\n```\n\n### Vì sao cần biết\nĐây là \"bộ tứ\" analyst dùng liên tục: tạo cột, lọc, `groupby`, `merge`. Thành thạo chúng nghĩa là biến được hầu hết câu hỏi kinh doanh thành vài dòng code lặp lại được.\n\n### Ý chính\n- `groupby(...).agg(tên=(\"cột\", \"hàm\"))` cho tên cột kết quả rõ ràng.\n- `merge(how=\"left\")` giữ mọi dòng bảng trái; luôn kiểm số dòng trước và sau khi ghép để phát hiện nhân dòng ngoài ý muốn.\n- Dùng `.dt` cho ngày giờ, `.str` cho chuỗi.\n- Chuỗi phương thức xuống dòng trong ngoặc tròn giúp code dễ đọc.\n\n### Lỗi hay gặp\n- `merge` trên khoá trùng làm số dòng tăng vọt.\n- Dùng vòng lặp `for` qua từng dòng khi một phép vector hoá làm được nhanh hơn hàng chục lần.\n- Quên `reset_index()` nên `groupby` trả cột nhóm nằm trong chỉ mục.\n\n### Tự kiểm tra\n1. Làm sao kiểm tra `merge` có làm tăng số dòng ngoài ý muốn?\n2. `pivot_table` và `groupby` khác nhau ở đâu?",
+  "lessons": [
+   {
+    "href": "/courses/bcp201-business-computing/learn?lessonSlug=bcp201-flm-b028",
+    "ten": "📑 Buổi 28 — 10. Descriptive Analytics & Aggregation (Pandas V)",
+    "nguon": "Business Computing · FLM 10 · Descriptive Analytics & Aggrega",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "BCP201"
+   },
+   {
+    "href": "/courses/pba301-python-for-business-analytics/learn?lessonSlug=pba301-3-1-pandas",
+    "ten": "3.1 — pandas: Series/DataFrame, đọc/ghi dữ liệu",
+    "nguon": "Python for Business Analytics · Chapter 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PBA301"
+   },
+   {
+    "href": "/courses/pba301-python-for-business-analytics/learn?lessonSlug=pba301-4-1-cleaning",
+    "ten": "4.1 — Làm sạch & biến đổi dữ liệu",
+    "nguon": "Python for Business Analytics · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PBA301"
+   },
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-ts-4-2",
+    "ten": "4.2 — Quan hệ giữa các biến: so sánh nhóm, tương quan và nghịch lý Simpson",
+    "nguon": "Data Science · Chương 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSI201"
+   }
+  ]
+ },
+ "Ngôn ngữ lập trình › Học ngôn ngữ lập trình (Python)": {
+  "body": "Trước khi dùng pandas, bạn cần nắm ngôn ngữ nền: **Python**. Không cần học hết, chỉ cần đủ vững những khái niệm sẽ gặp trong mọi đoạn code phân tích.\n\n### Phần cần thạo\n- **Biến và kiểu dữ liệu**: số nguyên, số thực, chuỗi, boolean; f-string để ghép chữ (`f\"Doanh thu: {tong:,}\"`).\n- **Cấu trúc dữ liệu**: `list` (danh sách có thứ tự), `dict` (cặp khoá-giá trị), `tuple`, `set`.\n- **Điều khiển luồng**: `if/elif/else`, vòng lặp `for`, `while`, và **list comprehension**.\n- **Hàm**: `def`, tham số, giá trị trả về — để gom đoạn code dùng lại.\n- **Tệp và module**: đọc/ghi tệp, `import`, dùng thư viện ngoài.\n- **Lỗi**: đọc thông báo lỗi và `try/except`.\n\n```python\ndon_hang = [{\"id\": 1, \"tien\": 250_000}, {\"id\": 2, \"tien\": 1_800_000}]\n\ndef tong_tien(ds):\n    return sum(d[\"tien\"] for d in ds)\n\nlon = [d[\"id\"] for d in don_hang if d[\"tien\"] > 1_000_000]\nprint(tong_tien(don_hang), lon)    # 2050000 [2]\n```\n\n### Vì sao cần biết\nHiểu `dict`, `list` và hàm thì code pandas mới \"đọc ra nghĩa\", gỡ lỗi được, và viết được các bước làm sạch tuỳ biến thay vì chép mẫu.\n\n### Lỗi hay gặp\n- Thụt lề sai (Python dùng thụt lề để chia khối).\n- Sửa list trong lúc đang lặp qua nó.\n- Tham số mặc định có thể thay đổi (`def f(x=[])`) giữ trạng thái giữa các lần gọi.\n- Chép code mà không chạy thử từng bước.\n\n### Tự kiểm tra\n1. Khi nào dùng `dict` thay vì `list`?\n2. Viết list comprehension lấy bình phương các số chẵn trong `[1..10]`.",
+  "lessons": [
+   {
+    "href": "/courses/prp201c-python-programming/learn?lessonSlug=prp201c-1-1-basics",
+    "ten": "1.1 — Python cơ bản: biến, kiểu, nhập/xuất",
+    "nguon": "Python programming · Chapter 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRP201c"
+   },
+   {
+    "href": "/courses/prp201c-python-programming/learn?lessonSlug=prp201c-2-1-control-flow",
+    "ten": "2.1 — Điều khiển luồng: if, for, while",
+    "nguon": "Python programming · Chapter 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRP201c"
+   },
+   {
+    "href": "/courses/prp201c-python-programming/learn?lessonSlug=prp201c-3-1-data-structures",
+    "ten": "3.1 — Cấu trúc dữ liệu: list, tuple, dict, set",
+    "nguon": "Python programming · Chapter 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRP201c"
+   },
+   {
+    "href": "/courses/prp201c-python-programming/learn?lessonSlug=prp201c-4-1-functions-files",
+    "ten": "4.1 — Hàm, module & file",
+    "nguon": "Python programming · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRP201c"
+   },
+   {
+    "href": "/code-lab/python",
+    "ten": "Python",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Ngôn ngữ lập trình › R cho phân tích dữ liệu (Dplyr)": {
+  "body": "**dplyr** biến việc xử lý bảng thành một chuỗi động từ dễ đọc như một câu: lấy bảng, lọc, nhóm, tóm tắt. Mỗi động từ nhận một bảng và trả một bảng, nên nối nhau bằng toán tử ống `|>`.\n\nCác động từ cốt lõi:\n- `filter()` chọn dòng theo điều kiện\n- `select()` chọn cột\n- `mutate()` tạo hoặc sửa cột\n- `arrange()` sắp xếp\n- `group_by()` + `summarise()` tổng hợp theo nhóm\n- `left_join()`, `inner_join()` ghép bảng\n\n```r\nlibrary(dplyr)\n\nket_qua <- orders |>\n  filter(status == \"paid\") |>\n  mutate(thang = format(order_date, \"%Y-%m\"),\n         net = amount - discount) |>\n  group_by(thang, region) |>\n  summarise(doanh_thu = sum(net),\n            gia_tri_tb = mean(net),\n            so_don = n(),\n            .groups = \"drop\") |>\n  arrange(desc(doanh_thu))\n```\n\n### Vì sao cần biết\nCú pháp động từ khiến đoạn phân tích đọc gần như văn xuôi, nên đồng nghiệp xem lại dễ. Cách nghĩ này (lọc, nhóm, tóm tắt) giống `GROUP BY` của SQL và `groupby` của pandas.\n\n### Ý chính\n- Thứ tự viết là thứ tự thực hiện, từ trên xuống.\n- `summarise()` thu gọn mỗi nhóm thành một dòng, `mutate()` giữ nguyên số dòng.\n- Dữ liệu \"tidy\" (mỗi biến một cột, mỗi quan sát một dòng) là dạng dplyr và ggplot2 làm việc tốt nhất; gói **tidyr** (`pivot_longer`, `pivot_wider`) giúp đưa dữ liệu về dạng này.\n- `ggplot2` nối tiếp được từ kết quả của dplyr để vẽ biểu đồ.\n\n### Lỗi hay gặp\n- Quên `ungroup()` hoặc `.groups = \"drop\"` nên bảng vẫn còn nhóm và các phép sau cho kết quả khác dự kiến.\n- Giá trị `NA` làm `sum()`/`mean()` trả `NA`; thêm `na.rm = TRUE` khi hợp lý.\n- Nhầm `=` (gán đối số) và `==` (so sánh) trong `filter()`.\n\n### Tự kiểm tra\n1. `mutate()` và `summarise()` khác nhau thế nào?\n2. Vì sao dữ liệu tidy giúp dplyr và ggplot2 dễ dùng hơn?",
+  "lessons": [
+   {
+    "href": "/courses/eda301-data-analysis/learn?lessonSlug=eda301-8-1-tools-business-reporting",
+    "ten": "8.1 — Công cụ (Excel/Python/R) & báo cáo phân tích cho kinh doanh",
+    "nguon": "Data analysis · Chapter 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "EDA301"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "dplyr — Getting started",
+    "url": "https://dplyr.tidyverse.org/articles/dplyr.html"
+   }
+  ]
+ },
+ "Ngôn ngữ lập trình › Python & Pandas — Thay thế cho R": {
+  "body": "Nếu bạn muốn một ngôn ngữ dùng được cả trong phân tích lẫn khi cần viết script tự động, gọi API hay làm việc với kỹ sư phần mềm, **Python cộng pandas** là con đường thực dụng. Cộng đồng rất lớn, nhiều tài liệu tiếng Việt, và nối thẳng sang học máy (scikit-learn), trực quan hoá (matplotlib, seaborn, plotly) và dashboard (Streamlit).\n\nLộ trình gợi ý:\n1. Python cơ bản đủ dùng: biến, `list`, `dict`, hàm, vòng lặp.\n2. `numpy` cho tính toán trên mảng (nhanh, vector hoá).\n3. `pandas`: `DataFrame`, lọc, `groupby`, `merge`, xử lý giá trị thiếu.\n4. Trực quan hoá, rồi thống kê và mô hình.\n\n```python\nimport pandas as pd\ndf = pd.read_csv(\"orders.csv\")\nprint(df.groupby(\"region\")[\"amount\"].agg([\"count\", \"sum\", \"mean\"]))\n```\n\nChỉ chọn nhánh này nếu bạn sẽ làm trong môi trường doanh nghiệp công nghệ hoặc muốn mở rộng sang kỹ thuật dữ liệu và học máy. Nếu công việc thiên về thống kê học thuật hoặc khảo sát, nhánh R cũng hoàn toàn hợp lý. Quan trọng là chọn một nhánh và học đến nơi đến chốn, vì các khái niệm (nhóm, lọc, ghép bảng) chuyển giao sang nhau rất dễ.",
+  "lessons": [
+   {
+    "href": "/courses/pba301-python-for-business-analytics/learn?lessonSlug=pba301-3-1-pandas",
+    "ten": "3.1 — pandas: Series/DataFrame, đọc/ghi dữ liệu",
+    "nguon": "Python for Business Analytics · Chapter 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PBA301"
+   },
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-2-1-python-numpy-pandas",
+    "ten": "2.1 — Python cho DS (numpy & pandas)",
+    "nguon": "Data Science · Chapter 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSI201"
+   },
+   {
+    "href": "/code-lab/python",
+    "ten": "Python",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Ngôn ngữ lập trình › R & Dplyr — Thay thế cho Python": {
+  "body": "Nếu công việc của bạn nghiêng về **thống kê** (kiểm định, mô hình hồi quy, thiết kế khảo sát) hoặc cần biểu đồ đẹp đạt chuẩn xuất bản, **R cộng tidyverse** là lựa chọn rất mạnh. R có sẵn các mô hình thống kê trong lõi ngôn ngữ (`lm`, `glm`, `t.test`) và hàng nghìn gói chuyên ngành trên CRAN.\n\nLộ trình gợi ý:\n1. Cài R và RStudio; làm quen vector, `data.frame`, hàm.\n2. `dplyr` và `tidyr` để xử lý bảng.\n3. `ggplot2` để vẽ.\n4. `lm()`, `t.test()`, `summary()` cho thống kê cơ bản; R Markdown/Quarto để viết báo cáo có thể chạy lại.\n\n```r\nlibrary(dplyr)\nfit <- lm(doanh_thu ~ chi_phi_qc, data = tuan)\nsummary(fit)          # hệ số, R², p-value\n```\n\nĐiểm yếu cần biết: R ít phổ biến hơn Python khi triển khai vào hệ thống sản xuất. Điểm mạnh: viết một phân tích thống kê hoàn chỉnh có thể chỉ cần vài dòng. Như nhánh Python, hãy chọn một và học sâu — các khái niệm về nhóm, lọc, ghép bảng chuyển sang nhau gần như nguyên vẹn.",
+  "lessons": [
+   {
+    "href": "/courses/eda301-data-analysis/learn?lessonSlug=eda301-8-1-tools-business-reporting",
+    "ten": "8.1 — Công cụ (Excel/Python/R) & báo cáo phân tích cho kinh doanh",
+    "nguon": "Data analysis · Chapter 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "EDA301"
+   }
+  ],
+  "more": [
+   {
+    "type": "course",
+    "title": "R for Data Science (2e)",
+    "url": "https://r4ds.hadley.nz/"
+   }
+  ]
+ },
+ "Ngôn ngữ lập trình › Học một ngôn ngữ lập trình": {
+  "body": "Công cụ như Excel đủ cho nhiều việc, nhưng khi dữ liệu lớn, việc lặp lại hằng tuần, hay cần xử lý phức tạp, bạn cần **một ngôn ngữ lập trình**. Lý do: code viết lại được và chạy lại được, kiểm tra được, chia sẻ được và xử lý được khối lượng mà bảng tính không kham nổi.\n\n### Chọn gì?\n- **Python**: phổ biến nhất, dễ đọc, hệ sinh thái rộng (pandas, scikit-learn, matplotlib). Là lựa chọn mặc định nếu chưa có lý do khác.\n- **R**: mạnh về thống kê và đồ hoạ, được dùng nhiều trong học thuật, y tế, khảo sát.\n- **SQL** không thay thế được hai ngôn ngữ trên nhưng là kỹ năng bắt buộc đi kèm, vì dữ liệu nằm trong database.\n\n### Học sao cho hiệu quả\n1. Chọn **một** ngôn ngữ và dùng nó cho đến khi tự viết được một phân tích trọn vẹn: đọc dữ liệu, làm sạch, tóm tắt, vẽ biểu đồ.\n2. Học qua một dự án nhỏ thật (phân tích chi tiêu cá nhân, dữ liệu mở của thành phố) thay vì chỉ xem video.\n3. Tự gõ code, đọc thông báo lỗi, và hỏi \"vì sao ra kết quả này\".\n4. Dùng Git để lưu lại tiến trình.\n\n### Lỗi hay gặp\n- Nhảy giữa nhiều ngôn ngữ vì sợ chọn sai; thực tế khái niệm chuyển giao rất tốt.\n- Học cú pháp mà không bao giờ làm dự án.\n- Chép code mà không hiểu từng dòng làm gì.\n\n### Tự kiểm tra\n1. Bạn sẽ chọn ngôn ngữ nào cho mục tiêu của mình, và vì sao?\n2. Một phân tích \"trọn vẹn\" gồm những bước nào?",
+  "lessons": [
+   {
+    "href": "/courses/prp201c-python-programming/learn?lessonSlug=prp201c-1-1-basics",
+    "ten": "1.1 — Python cơ bản: biến, kiểu, nhập/xuất",
+    "nguon": "Python programming · Chapter 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRP201c"
+   },
+   {
+    "href": "/courses/prp201c-python-programming/learn?lessonSlug=prp201c-3-1-data-structures",
+    "ten": "3.1 — Cấu trúc dữ liệu: list, tuple, dict, set",
+    "nguon": "Python programming · Chapter 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRP201c"
+   },
+   {
+    "href": "/courses/pba301-python-for-business-analytics/learn?lessonSlug=pba301-1-1-python-basics",
+    "ten": "1.1 — Python cơ bản cho phân tích kinh doanh",
+    "nguon": "Python for Business Analytics · Chapter 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PBA301"
+   },
+   {
+    "href": "/code-lab/python",
+    "ten": "Python",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Ngôn ngữ lập trình › Thư viện thao tác dữ liệu": {
+  "body": "Hai thư viện thống trị việc thao tác bảng dữ liệu: **pandas** trong Python và **dplyr** trong R. Dù khác cú pháp, chúng cùng một tập thao tác, và đó mới là điều cần học thuộc lòng:\n\n| Việc cần làm | pandas | dplyr |\n|---|---|---|\n| Đọc tệp | `pd.read_csv` | `readr::read_csv` |\n| Lọc dòng | `df[df.a > 1]` | `filter(a > 1)` |\n| Chọn cột | `df[[\"a\",\"b\"]]` | `select(a, b)` |\n| Tạo cột | `df[\"c\"] = ...` | `mutate(c = ...)` |\n| Nhóm và tóm tắt | `df.groupby(\"g\").agg(...)` | `group_by(g) \\|> summarise(...)` |\n| Sắp xếp | `sort_values` | `arrange` |\n| Ghép bảng | `merge` | `left_join` |\n\n```python\nimport pandas as pd\nr = (pd.read_csv(\"orders.csv\")\n       .query(\"amount > 0\")\n       .groupby(\"region\", as_index=False)\n       .agg(doanh_thu=(\"amount\", \"sum\")))\n```\n\n### Vì sao cần biết\nPhần lớn thời gian của một dự án phân tích thường nằm ở khâu chuẩn bị dữ liệu. Thành thạo thư viện thao tác dữ liệu quyết định tốc độ và độ tin cậy của cả quy trình.\n\n### Ý chính\n- Học theo **thao tác** (lọc, nhóm, ghép, xoay bảng), không học thuộc từng hàm.\n- Viết thành chuỗi các bước, mỗi bước một việc, để dễ đọc và gỡ lỗi.\n- Sau mỗi bước quan trọng, kiểm số dòng và vài dòng mẫu.\n- Dữ liệu tidy giúp mọi thao tác trơn tru hơn.\n\n### Lỗi hay gặp\n- Ghép bảng trên khoá không duy nhất làm số dòng phình ra.\n- Sửa dữ liệu gốc thay vì tạo bản mới, nên không truy vết được.\n- Hàm trả bản sao nhưng quên gán lại kết quả.\n\n### Tự kiểm tra\n1. Viết lại một truy vấn `GROUP BY` của SQL bằng pandas hoặc dplyr.\n2. Vì sao nên kiểm số dòng sau mỗi lần ghép bảng?",
+  "lessons": [
+   {
+    "href": "/courses/pba301-python-for-business-analytics/learn?lessonSlug=pba301-3-1-pandas",
+    "ten": "3.1 — pandas: Series/DataFrame, đọc/ghi dữ liệu",
+    "nguon": "Python for Business Analytics · Chapter 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PBA301"
+   },
+   {
+    "href": "/courses/pba301-python-for-business-analytics/learn?lessonSlug=pba301-4-1-cleaning",
+    "ten": "4.1 — Làm sạch & biến đổi dữ liệu",
+    "nguon": "Python for Business Analytics · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PBA301"
+   },
+   {
+    "href": "/courses/bcp201-business-computing/learn?lessonSlug=bcp201-flm-b025",
+    "ten": "📑 Buổi 25 — 9. Data Quality Management & Wrangling (Pandas IV)",
+    "nguon": "Business Computing · FLM 9 · Data Quality Management & Wrangl",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "BCP201"
+   },
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-ts-4-2",
+    "ten": "4.2 — Quan hệ giữa các biến: so sánh nhóm, tương quan và nghịch lý Simpson",
+    "nguon": "Data Science · Chương 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSI201"
+   }
+  ]
+ },
+ "Thu thập & Làm sạch Dữ liệu › Data Collection (CSV/API/DB/Web Scraping)": {
+  "body": "Dữ liệu không tự nhiên xuất hiện trong bảng sạch sẽ. Bước đầu tiên của mọi phân tích là **lấy được dữ liệu**, và nguồn thực tế thường rơi vào bốn nhóm:\n\n- **Tệp** (CSV, Excel, JSON): xuất từ hệ thống khác hoặc do đồng nghiệp gửi. Đơn giản nhất, nhưng dễ sai ở mã hoá, dấu phân cách, định dạng ngày.\n- **API**: dịch vụ trả dữ liệu theo yêu cầu (thời tiết, mạng xã hội, tỷ giá). Có cấu trúc, cập nhật được, thường giới hạn tần suất gọi.\n- **Cơ sở dữ liệu**: nguồn chính của doanh nghiệp, truy vấn bằng SQL.\n- **Web scraping**: trích dữ liệu từ trang web khi không có API; cần tuân thủ điều khoản và quy tắc của trang.\n\n### Cách chọn và dùng\nHãy hỏi trước: dữ liệu này có chính thức không, cập nhật bao lâu một lần, ai chịu trách nhiệm, có quyền dùng không? Ưu tiên nguồn có cấu trúc và có tài liệu (API, database) hơn scraping.\n\n```python\nimport pandas as pd, requests, sqlite3\n\ndf_tep  = pd.read_csv(\"orders.csv\")\ndf_api  = pd.DataFrame(requests.get(\"https://api.example.com/rates\", timeout=10).json())\ndf_db   = pd.read_sql_query(\"SELECT * FROM orders WHERE amount > 0\", sqlite3.connect(\"shop.db\"))\n```\n\n### Ý chính\n- Ghi lại **nguồn, thời điểm lấy, và phiên bản** dữ liệu để kết quả tái lập được.\n- Giữ bản dữ liệu thô nguyên vẹn; mọi chỉnh sửa làm trên bản sao.\n- Dữ liệu cá nhân cần được xử lý theo quy định về quyền riêng tư (chỉ lấy phần cần thiết, ẩn danh khi có thể).\n- Kiểm tra nhanh ngay sau khi nạp: số dòng, số cột, kiểu dữ liệu, giá trị trống.\n\n### Lỗi hay gặp\n- Tin dữ liệu tức thì mà không hỏi nguồn gốc và định nghĩa từng cột.\n- Ghi đè tệp gốc sau khi làm sạch.\n- Quên giới hạn tần suất của API rồi bị chặn.\n\n### Tự kiểm tra\n1. Bạn sẽ ưu tiên nguồn nào khi cùng một dữ liệu có cả API lẫn trang web để scrape, và vì sao?\n2. Nên ghi chú những gì về một bộ dữ liệu vừa thu thập?",
+  "lessons": [
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-ts-2-1",
+    "ten": "2.1 — Đọc tệp: CSV, JSON và các định dạng khác mà không sai âm thầm",
+    "nguon": "Data Science · Chương 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSI201"
+   },
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-ts-2-2",
+    "ten": "2.2 — API web: JSON, phân trang và làm phẳng dữ liệu lồng nhau",
+    "nguon": "Data Science · Chương 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSI201"
+   },
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-ts-2-3",
+    "ten": "2.3 — Cơ sở dữ liệu SQL: để CSDL làm việc ghép bảng và tổng hợp",
+    "nguon": "Data Science · Chương 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSI201"
+   },
+   {
+    "href": "/courses/dta301-data-analysis/learn?lessonSlug=dta301-2-1-collect-clean",
+    "ten": "2.1 — Thu thập & làm sạch dữ liệu",
+    "nguon": "Data Analysis · Chapter 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DTA301"
+   },
+   {
+    "href": "/courses/dsp391m-data-science-capstone-project/learn?lessonSlug=dsp391m-2-1-data",
+    "ten": "Giai đoạn 2 — Thu thập & hiểu dữ liệu",
+    "nguon": "Data Science - Capstone Project · Phase 2 — Data collection",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSP391m"
+   }
+  ]
+ },
+ "Thu thập & Làm sạch Dữ liệu › Handling Missing Data & Duplicates": {
+  "body": "**Giá trị thiếu** và **bản ghi trùng** là hai vấn đề phổ biến nhất của dữ liệu thực. Cả hai đều âm thầm làm sai kết quả nếu không xử lý.\n\nVới giá trị thiếu, trước tiên hãy hỏi *vì sao thiếu*: do lỗi nhập liệu, do khách không muốn khai báo, hay do trường đó không áp dụng? Rồi chọn cách xử lý: **xoá dòng** (khi thiếu ít và ngẫu nhiên), **điền** bằng trung bình, trung vị, hoặc giá trị phổ biến nhất, hoặc **giữ nguyên** và đánh dấu \"không rõ\" khi bản thân việc thiếu có ý nghĩa.\n\n```python\ndf.isna().sum()                                    # đếm thiếu theo cột\ndf[\"income\"] = df[\"income\"].fillna(df[\"income\"].median())\ndf = df.dropna(subset=[\"customer_id\"])             # khoá không được thiếu\ndf = df.drop_duplicates(subset=[\"order_id\"])       # bỏ dòng trùng theo khoá\n```\n\nĐiều quan trọng: ghi lại số dòng trước và sau mỗi bước, để biết mình đã loại bỏ hay sửa bao nhiêu.",
+  "lessons": [
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-ts-3-2",
+    "ten": "3.2 — Kiểu dữ liệu, bản ghi trùng và giá trị thiếu",
+    "nguon": "Data Science · Chương 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSI201"
+   },
+   {
+    "href": "/courses/pba301-python-for-business-analytics/learn?lessonSlug=pba301-4-1-cleaning",
+    "ten": "4.1 — Làm sạch & biến đổi dữ liệu",
+    "nguon": "Python for Business Analytics · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PBA301"
+   },
+   {
+    "href": "/courses/bcp201-business-computing/learn?lessonSlug=bcp201-flm-b025",
+    "ten": "📑 Buổi 25 — 9. Data Quality Management & Wrangling (Pandas IV)",
+    "nguon": "Business Computing · FLM 9 · Data Quality Management & Wrangl",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "BCP201"
+   },
+   {
+    "href": "/courses/aba201c-ai-and-big-data-analytics-for-communications/learn?lessonSlug=aba201c-ts-1-3",
+    "ten": "1.3 — Chất lượng dữ liệu và ghép nguồn bằng pandas",
+    "nguon": "AI and Big Data Analytics for Communications · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "ABA201c"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "pandas — Working with missing data",
+    "url": "https://pandas.pydata.org/docs/user_guide/missing_data.html"
+   }
+  ]
+ },
+ "Thu thập & Làm sạch Dữ liệu › Finding Outliers & Data Transformation": {
+  "body": "**Ngoại lai (outlier)** là điểm dữ liệu nằm xa phần lớn các điểm còn lại; **biến đổi dữ liệu** là việc đổi dạng giá trị (chuẩn hoá, lấy log, gom nhóm) để phù hợp với phân tích. Hai việc đi liền vì biến đổi thường là cách xử lý dữ liệu lệch có ngoại lai.\n\n### Tìm ngoại lai\n- **Quy tắc IQR**: tính `Q1`, `Q3`, `IQR = Q3 − Q1`; điểm ngoài `[Q1 − 1,5·IQR ; Q3 + 1,5·IQR]` bị coi là nghi ngờ. Đây cũng là quy tắc của biểu đồ hộp (boxplot).\n- **Điểm z**: `z = (x − trung bình) / độ lệch chuẩn`; thường nghi ngờ khi |z| > 3. Kém tin cậy khi chính ngoại lai kéo lệch trung bình và độ lệch chuẩn.\n- **Nhìn bằng mắt**: histogram, boxplot, biểu đồ phân tán.\n\n```python\nq1, q3 = df[\"amount\"].quantile([0.25, 0.75])\niqr = q3 - q1\nnghi_ngo = df[(df[\"amount\"] < q1 - 1.5*iqr) | (df[\"amount\"] > q3 + 1.5*iqr)]\n```\n\n### Làm gì với ngoại lai\nĐừng tự động xoá. Hỏi nguyên nhân: lỗi nhập (thêm một số 0)? giao dịch thật nhưng hiếm (khách mua sỉ)? Lỗi thì sửa hoặc loại; thật thì giữ và dùng thống kê bền vững (trung vị, IQR) hoặc phân tích riêng.\n\n### Biến đổi thường gặp\n- **Log**: nén dữ liệu lệch phải như thu nhập, giá.\n- **Chuẩn hoá min-max** hoặc **z-score**: đưa các biến về cùng thang đo cho mô hình.\n- **Mã hoá biến phân loại** (one-hot), **gom nhóm** giá trị liên tục (độ tuổi thành nhóm tuổi).\n\n### Lỗi hay gặp\n- Xoá ngoại lai chỉ vì nó \"làm xấu\" kết quả.\n- Chuẩn hoá trên toàn bộ dữ liệu trước khi chia tập huấn luyện và kiểm tra (rò rỉ thông tin).\n- Lấy log của giá trị 0 hoặc âm.\n\n### Tự kiểm tra\n1. Một khách mua 500 triệu trong khi đa số mua dưới 2 triệu: bạn kiểm tra gì trước khi quyết định giữ hay loại?\n2. Vì sao dữ liệu thu nhập thường được lấy log?",
+  "lessons": [
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-ts-3-3",
+    "ten": "3.3 — Chuỗi, ngày tháng, ngoại lai và ghép bảng an toàn",
+    "nguon": "Data Science · Chương 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSI201"
+   },
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-ts-5-1",
+    "ten": "5.1 — Mã hoá biến phân loại và chuẩn hoá biến số",
+    "nguon": "Data Science · Chương 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSI201"
+   },
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-ts-5-2",
+    "ten": "5.2 — Tạo đặc trưng: hiểu biết nghiệp vụ, log và tương tác",
+    "nguon": "Data Science · Chương 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSI201"
+   }
+  ]
+ },
+ "Thu thập & Làm sạch Dữ liệu › Thu thập dữ liệu (Collection)": {
+  "body": "**Thu thập dữ liệu** là khâu đầu tiên của vòng đời phân tích: đưa dữ liệu từ nhiều nơi về một chỗ để có thể làm việc. Điểm khác với việc chỉ \"tải một tệp\" là bạn phải trả lời rõ: *dữ liệu này đại diện cho ai, cho giai đoạn nào, và đủ để trả lời câu hỏi chưa?*\n\n### Các cách nạp phổ biến\n- **Tệp**: `read_csv`, `read_excel`, `read_json`.\n- **Cơ sở dữ liệu**: `read_sql_query` với một kết nối.\n- **API**: gửi yêu cầu HTTP, nhận JSON, chuyển thành bảng (`json_normalize`).\n- **Khảo sát, form**: dữ liệu do bạn tự thiết kế và thu về.\n\n### Một quy trình gọn\n1. Xác định câu hỏi và các trường dữ liệu cần để trả lời.\n2. Tìm nguồn và xin quyền truy cập.\n3. Nạp về, kiểm tra kích thước, kiểu dữ liệu, khoảng ngày.\n4. Tạo **từ điển dữ liệu** (data dictionary): tên cột, ý nghĩa, đơn vị, nguồn.\n5. Lưu bản thô nguyên vẹn, đặt tên có ngày.\n\n### Ý chính\n- **Mẫu**: nếu chỉ có một phần dữ liệu, kiểm tra xem nó có đại diện không (thiên lệch chọn mẫu làm kết luận lệch).\n- Ghép nhiều nguồn cần một **khoá chung** đáng tin (mã khách, mã đơn).\n- Luôn ghi lại cách lấy dữ liệu để người khác (hoặc chính bạn sau ba tháng) lấy lại được.\n\n### Lỗi hay gặp\n- Gộp các nguồn có định nghĩa khác nhau (doanh thu trước thuế và sau thuế) mà không nhận ra.\n- Bỏ qua múi giờ khi ghép dữ liệu từ nhiều hệ thống.\n- Không kiểm tra số dòng sau khi nạp nên không biết dữ liệu bị cắt.\n\n### Tự kiểm tra\n1. Từ điển dữ liệu gồm những thông tin gì và dùng để làm gì?\n2. Vì sao cần kiểm tra mức đại diện của mẫu dữ liệu?",
+  "lessons": [
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-ts-2-1",
+    "ten": "2.1 — Đọc tệp: CSV, JSON và các định dạng khác mà không sai âm thầm",
+    "nguon": "Data Science · Chương 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSI201"
+   },
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-ts-2-2",
+    "ten": "2.2 — API web: JSON, phân trang và làm phẳng dữ liệu lồng nhau",
+    "nguon": "Data Science · Chương 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSI201"
+   },
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-ts-2-3",
+    "ten": "2.3 — Cơ sở dữ liệu SQL: để CSDL làm việc ghép bảng và tổng hợp",
+    "nguon": "Data Science · Chương 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSI201"
+   },
+   {
+    "href": "/courses/prp201c-python-programming/learn?lessonSlug=prp201c-5-1-data-apps",
+    "ten": "5.1 — Truy xuất & xử lý dữ liệu (JSON, CSV, API)",
+    "nguon": "Python programming · Chapter 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRP201c"
+   }
+  ]
+ },
+ "Thu thập & Làm sạch Dữ liệu › Làm sạch dữ liệu (Cleanup)": {
+  "body": "**Làm sạch dữ liệu** biến dữ liệu thô, lộn xộn thành bảng đáng tin để phân tích. Dữ liệu thực hầu như luôn có vấn đề: ô trống, bản ghi trùng, chữ viết khác nhau cho cùng một thứ, ngày sai định dạng, giá trị vô lý.\n\n### Danh sách việc kiểm tra\n1. **Kiểu dữ liệu**: số có đang là chữ? ngày có đúng không?\n2. **Giá trị thiếu**: bao nhiêu, vì sao thiếu, xử lý thế nào.\n3. **Bản ghi trùng**: theo khoá nào.\n4. **Chuỗi không nhất quán**: `\"Hà Nội\"`, `\"ha noi\"`, `\"HN\"`, khoảng trắng thừa.\n5. **Giá trị vô lý**: tuổi âm, ngày trong tương lai, số lượng bằng 0.\n6. **Ngoại lai** và **ràng buộc** giữa các cột (ngày giao không thể trước ngày đặt).\n\n```python\ndf[\"city\"] = df[\"city\"].str.strip().str.title().replace({\"Hn\": \"Hà Nội\"})\ndf[\"order_date\"] = pd.to_datetime(df[\"order_date\"], errors=\"coerce\")\ndf[\"amount\"] = pd.to_numeric(df[\"amount\"], errors=\"coerce\")\nassert (df[\"ship_date\"] >= df[\"order_date\"]).all(), \"ngày giao trước ngày đặt\"\n```\n\n### Ý chính\n- Dùng `errors=\"coerce\"` để biến giá trị không đọc được thành `NaT/NaN` rồi đếm chúng — thay vì để chương trình dừng hoặc bỏ qua thầm lặng.\n- Viết quy trình làm sạch thành **code hoặc truy vấn chạy lại được**, không sửa tay trong tệp.\n- Ghi lại mỗi quyết định (vì sao điền trung vị, vì sao loại dòng này).\n- Dữ liệu **tidy**: mỗi biến một cột, mỗi quan sát một dòng.\n\n### Lỗi hay gặp\n- Làm sạch quá tay: xoá mọi dòng có ô trống khiến mất phần lớn dữ liệu.\n- Sửa lỗi bằng tay trên tệp gốc.\n- Không kiểm lại số liệu tổng sau khi làm sạch (tổng doanh thu có còn khớp với báo cáo tài chính không?).\n\n### Tự kiểm tra\n1. Vì sao nên dùng `errors=\"coerce\"` thay vì để chương trình báo lỗi?\n2. Làm sao kiểm tra sau khi làm sạch xong là mình không làm mất dữ liệu quan trọng?",
+  "lessons": [
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-ts-3-1",
+    "ten": "3.1 — Dữ liệu tidy: mỗi biến một cột, mỗi quan sát một dòng",
+    "nguon": "Data Science · Chương 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSI201"
+   },
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-ts-3-2",
+    "ten": "3.2 — Kiểu dữ liệu, bản ghi trùng và giá trị thiếu",
+    "nguon": "Data Science · Chương 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSI201"
+   },
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-ts-3-3",
+    "ten": "3.3 — Chuỗi, ngày tháng, ngoại lai và ghép bảng an toàn",
+    "nguon": "Data Science · Chương 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSI201"
+   },
+   {
+    "href": "/courses/dta301-data-analysis/learn?lessonSlug=dta301-2-1-collect-clean",
+    "ten": "2.1 — Thu thập & làm sạch dữ liệu",
+    "nguon": "Data Analysis · Chapter 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DTA301"
+   },
+   {
+    "href": "/courses/aba201c-ai-and-big-data-analytics-for-communications/learn?lessonSlug=aba201c-ts-1-3",
+    "ten": "1.3 — Chất lượng dữ liệu và ghép nguồn bằng pandas",
+    "nguon": "AI and Big Data Analytics for Communications · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "ABA201c"
+   }
+  ]
+ },
+ "Thu thập & Làm sạch Dữ liệu › Khám phá dữ liệu (Exploration)": {
+  "body": "**Khám phá dữ liệu (EDA — Exploratory Data Analysis)** là bước nhìn kỹ dữ liệu *trước khi* đưa ra kết luận hay xây mô hình, để biết nó trông thế nào, có gì lạ, và những câu hỏi nào đáng đặt ra.\n\n### Quy trình gợi ý\n1. **Nhìn tổng thể**: số dòng, số cột, kiểu dữ liệu, tỷ lệ thiếu (`df.info()`, `df.describe()`).\n2. **Từng biến một**: biến số xem phân phối bằng histogram và boxplot, kèm trung bình, trung vị, độ lệch chuẩn; biến phân loại xem bảng tần số.\n3. **Từng cặp biến**: biểu đồ phân tán, tương quan, so sánh nhóm (`groupby`).\n4. **Theo thời gian**: xu hướng, mùa vụ, các điểm gãy.\n5. **Ghi lại phát hiện** và giả thuyết cần kiểm chứng.\n\n```python\ndf.describe(include=\"all\")\ndf[\"amount\"].hist(bins=40)\ndf.groupby(\"segment\")[\"amount\"].agg([\"count\", \"median\", \"mean\"])\ndf[[\"amount\", \"visits\", \"tenure\"]].corr()\n```\n\n### Vì sao cần biết\nEDA cho bạn phát hiện lỗi dữ liệu sớm, hiểu hình dạng phân phối (từ đó chọn đúng thống kê), và sinh ra giả thuyết để kiểm định. Bỏ qua EDA là lý do hay gặp nhất của những kết luận sai.\n\n### Ý chính\n- Trung bình và trung vị chênh nhiều là dấu hiệu dữ liệu lệch hoặc có ngoại lai.\n- Tương quan chỉ đo quan hệ tuyến tính và không chứng minh nguyên nhân.\n- Cẩn thận với **nghịch lý Simpson**: xu hướng của tổng có thể ngược với xu hướng trong từng nhóm.\n- Vẽ nhiều biểu đồ nhưng chỉ giữ lại những biểu đồ kể được một điều gì.\n\n### Lỗi hay gặp\n- Chỉ nhìn các con số tóm tắt mà không vẽ biểu đồ (cùng trung bình và độ lệch chuẩn nhưng hình dạng rất khác nhau).\n- Lục lọi nhiều cặp biến cho tới khi thấy \"mối liên hệ\", rồi coi đó là phát hiện (kết quả có thể chỉ do ngẫu nhiên).\n\n### Tự kiểm tra\n1. Trung bình 15 triệu, trung vị 8 triệu: bạn suy ra điều gì về phân phối?\n2. Nghịch lý Simpson là gì, và làm sao phát hiện?",
+  "lessons": [
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-ts-4-1",
+    "ten": "4.1 — Khám phá một biến: tâm, độ phân tán, hình dạng và tần số",
+    "nguon": "Data Science · Chương 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSI201"
+   },
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-ts-4-2",
+    "ten": "4.2 — Quan hệ giữa các biến: so sánh nhóm, tương quan và nghịch lý Simpson",
+    "nguon": "Data Science · Chương 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSI201"
+   },
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-ts-4-3",
+    "ten": "4.3 — Trực quan hoá với matplotlib: chọn và dựng biểu đồ trung thực",
+    "nguon": "Data Science · Chương 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSI201"
+   },
+   {
+    "href": "/courses/dta301-data-analysis/learn?lessonSlug=dta301-4-1-eda",
+    "ten": "4.1 — Khám phá dữ liệu (EDA)",
+    "nguon": "Data Analysis · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DTA301"
+   },
+   {
+    "href": "/courses/pba301-python-for-business-analytics/learn?lessonSlug=pba301-6-1-stats-eda",
+    "ten": "6.1 — Thống kê mô tả & phân tích khám phá (EDA)",
+    "nguon": "Python for Business Analytics · Chapter 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PBA301"
+   }
+  ]
+ },
+ "Thu thập & Làm sạch Dữ liệu › Đọc và xử lý file CSV": {
+  "body": "**CSV** (Comma-Separated Values) là định dạng văn bản thuần: mỗi dòng là một bản ghi, các giá trị cách nhau bằng dấu phân cách (thường là dấu phẩy). Đơn giản nên gần như hệ thống nào cũng xuất được, và là cách trao đổi dữ liệu phổ biến nhất.\n\n```python\nimport pandas as pd\n\ndf = pd.read_csv(\n    \"orders.csv\",\n    sep=\";\",                 # nhiều tệp Việt Nam/châu Âu dùng ; làm dấu phân cách\n    decimal=\",\",             # dấu thập phân là phẩy\n    encoding=\"utf-8-sig\",    # xử lý tệp có BOM khi xuất từ Excel\n    parse_dates=[\"order_date\"],\n    dayfirst=True,           # ngày dạng dd/mm/yyyy\n    na_values=[\"N/A\", \"-\", \"\"],\n    dtype={\"customer_id\": \"string\"},   # giữ mã khách là chuỗi, không mất số 0 đầu\n)\n```\n\n### Vì sao cần biết\nHầu hết lỗi dữ liệu khi nạp CSV là **lỗi âm thầm**: không báo gì nhưng số bị đọc sai (1.250,5 thành chữ), ngày bị hiểu ngược tháng-ngày, tiếng Việt thành ký tự lạ.\n\n### Ý chính\n- Thử `encoding=\"utf-8\"` trước; nếu lỗi, thử `utf-8-sig` hoặc `cp1258`/`latin-1`.\n- Với tệp lớn: `usecols=[...]` chỉ đọc cột cần, `chunksize` đọc từng khúc.\n- Sau khi nạp luôn xem `df.dtypes` và `df.head()`.\n- Ghi ra: `df.to_csv(\"ket_qua.csv\", index=False, encoding=\"utf-8-sig\")` để Excel mở đúng tiếng Việt.\n\n### Lỗi hay gặp\n- Mã định danh như số điện thoại hoặc mã bưu chính bị đọc thành số, mất số 0 ở đầu.\n- Trường văn bản chứa dấu phẩy mà không được bao trong dấu nháy làm lệch cột.\n- Dòng tiêu đề lặp lại giữa tệp (do nối nhiều tệp) làm cột số thành chữ.\n\n### Tự kiểm tra\n1. Vì sao nên chỉ định `dtype` cho cột mã khách hàng?\n2. Làm sao đọc một tệp CSV vài GB mà máy ít RAM?",
+  "lessons": [
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-ts-2-1",
+    "ten": "2.1 — Đọc tệp: CSV, JSON và các định dạng khác mà không sai âm thầm",
+    "nguon": "Data Science · Chương 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSI201"
+   },
+   {
+    "href": "/courses/prp201c-python-programming/learn?lessonSlug=prp201c-5-1-data-apps",
+    "ten": "5.1 — Truy xuất & xử lý dữ liệu (JSON, CSV, API)",
+    "nguon": "Python programming · Chapter 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRP201c"
+   },
+   {
+    "href": "/courses/pba301-python-for-business-analytics/learn?lessonSlug=pba301-3-1-pandas",
+    "ten": "3.1 — pandas: Series/DataFrame, đọc/ghi dữ liệu",
+    "nguon": "Python for Business Analytics · Chapter 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PBA301"
+   }
+  ]
+ },
+ "Thu thập & Làm sạch Dữ liệu › Thu thập dữ liệu từ API": {
+  "body": "**API** cho phép chương trình của bạn xin dữ liệu từ một dịch vụ khác theo cách có cấu trúc, thay vì tải tệp bằng tay. Phần lớn API web hiện nay là **REST** trả dữ liệu dạng **JSON** qua HTTP.\n\n### Quy trình lấy dữ liệu\n1. Đọc tài liệu API: địa chỉ (endpoint), tham số, cách xác thực, giới hạn tần suất.\n2. Gửi yêu cầu `GET` kèm tham số và (nếu cần) khoá API trong header.\n3. Kiểm tra mã trạng thái (200 là thành công; 401/403 lỗi xác thực; 429 gọi quá nhiều).\n4. Chuyển JSON thành bảng.\n5. Nếu dữ liệu chia **trang**, lặp qua các trang cho đến hết.\n\n```python\nimport requests, pandas as pd, time\n\nurl = \"https://api.example.com/v1/orders\"\nheaders = {\"Authorization\": f\"Bearer {TOKEN}\"}\nrows, page = [], 1\nwhile True:\n    r = requests.get(url, headers=headers, params={\"page\": page, \"per_page\": 100}, timeout=15)\n    r.raise_for_status()\n    data = r.json()\n    if not data[\"items\"]:\n        break\n    rows.extend(data[\"items\"])\n    page += 1\n    time.sleep(0.5)                  # lịch sự với máy chủ\ndf = pd.json_normalize(rows)         # làm phẳng JSON lồng nhau\n```\n\n### Ý chính\n- **Không ghi khoá API vào code**; lấy từ biến môi trường.\n- Luôn đặt `timeout` và xử lý lỗi, thử lại có giãn cách khi gặp 429/5xx.\n- `json_normalize` làm phẳng các trường lồng nhau thành cột.\n- Lưu bản dữ liệu thô đã tải để không phải gọi lại.\n\n### Lỗi hay gặp\n- Quên phân trang nên chỉ lấy được trang đầu mà tưởng là đủ.\n- Đẩy khoá API lên kho mã công khai.\n- Gọi liên tục không nghỉ nên bị chặn.\n\n### Tự kiểm tra\n1. Mã trạng thái 429 nghĩa là gì và nên xử lý ra sao?\n2. Vì sao không nên để khoá API trong code?",
+  "lessons": [
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-ts-2-2",
+    "ten": "2.2 — API web: JSON, phân trang và làm phẳng dữ liệu lồng nhau",
+    "nguon": "Data Science · Chương 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSI201"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-6-0-slides",
+    "ten": "6.0 — Slide bài giảng: HTTP & API trong 12 slide",
+    "nguon": "Nền tảng Lập trình Web · Chương 6",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-6-4-headers-json",
+    "ten": "6.4 — Header, JSON và phần thân thông điệp",
+    "nguon": "Nền tảng Lập trình Web · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/prp201c-python-programming/learn?lessonSlug=prp201c-5-1-data-apps",
+    "ten": "5.1 — Truy xuất & xử lý dữ liệu (JSON, CSV, API)",
+    "nguon": "Python programming · Chapter 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRP201c"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "Requests — Quickstart",
+    "url": "https://docs.python-requests.org/en/latest/user/quickstart/"
+   }
+  ]
+ },
+ "Thu thập & Làm sạch Dữ liệu › Cơ sở dữ liệu (Database)": {
+  "body": "**Cơ sở dữ liệu quan hệ** lưu dữ liệu trong các **bảng**: mỗi **hàng** là một bản ghi, mỗi **cột** là một thuộc tính, và các bảng liên kết với nhau bằng **khoá**. Dữ liệu doanh nghiệp (khách hàng, đơn hàng, sản phẩm) gần như luôn nằm trong loại database này.\n\n### Khái niệm cốt lõi\n- **Khoá chính** (primary key): định danh duy nhất mỗi hàng, ví dụ `customer_id`.\n- **Khoá ngoại** (foreign key): cột trỏ tới khoá chính của bảng khác, ví dụ `orders.customer_id` trỏ tới `customers.id`.\n- **Quan hệ một-nhiều**: một khách có nhiều đơn.\n- **Chuẩn hoá**: tách dữ liệu để mỗi thông tin chỉ lưu một nơi, tránh mâu thuẫn.\n\nVí dụ: thay vì lặp tên và địa chỉ khách trên mỗi đơn hàng, bảng `orders` chỉ giữ `customer_id`; muốn biết tên khách thì **JOIN** sang `customers`.\n\n```sql\nSELECT c.name, COUNT(o.id) AS so_don, SUM(o.amount) AS tong_tien\nFROM customers c\nLEFT JOIN orders o ON o.customer_id = c.id\nGROUP BY c.id, c.name\nORDER BY tong_tien DESC NULLS LAST;\n```\n\n### Vì sao analyst cần hiểu\nBiết cấu trúc database giúp bạn tự tìm bảng cần dùng, đoán trước được lỗi nhân dòng khi join, và nói chuyện hiệu quả với kỹ sư dữ liệu. Với phân tích nặng, nên truy vấn trên bản sao hoặc kho dữ liệu chuyên dùng thay vì database đang phục vụ ứng dụng.\n\n### Ý chính\n- Đọc **sơ đồ thực thể–liên kết (ERD)** hoặc tài liệu schema trước khi viết truy vấn.\n- OLTP (ghi giao dịch nhanh) khác OLAP (đọc phân tích lớn); kho dữ liệu thuộc loại sau.\n- NoSQL (MongoDB, v.v.) lưu tài liệu linh hoạt hơn, nhưng SQL vẫn là kỹ năng cốt lõi.\n\n### Lỗi hay gặp\n- Join bảng một-nhiều rồi cộng một giá trị của bảng \"một\", số bị nhân lên.\n- Chạy truy vấn nặng trực tiếp trên database sản xuất.\n\n### Tự kiểm tra\n1. Vì sao `orders` lưu `customer_id` thay vì tên khách?\n2. Khoá chính và khoá ngoại khác nhau thế nào?",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-8-0-slides",
+    "ten": "8.0 — Slide bài giảng: dữ liệu & SQL trong 13 slide",
+    "nguon": "Nền tảng Lập trình Web · Chương 8",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/bcp201-business-computing/learn?lessonSlug=bcp201-6-1-database-basics",
+    "ten": "6.1 — Cơ sở dữ liệu cơ bản",
+    "nguon": "Business Computing · Chapter 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "BCP201"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-1-1-mo-hinh-quan-he",
+    "ten": "1.1 — Mô hình quan hệ & vì sao nó thắng",
+    "nguon": "PostgreSQL · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/introduction-to-databases/learn?lessonSlug=dbi202-mo-hinh-quan-he",
+    "ten": "2.1 — Bảng, khóa & mô hình quan hệ",
+    "nguon": "Database Systems · Chương 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DBI202"
+   },
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-ts-2-3",
+    "ten": "2.3 — Cơ sở dữ liệu SQL: để CSDL làm việc ghép bảng và tổng hợp",
+    "nguon": "Data Science · Chương 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSI201"
+   }
+  ]
+ },
+ "Thu thập & Làm sạch Dữ liệu › Thu thập dữ liệu bằng Web Scraping": {
+  "body": "**Web scraping** là việc dùng chương trình tải một trang web rồi trích dữ liệu từ HTML của nó. Chỉ dùng khi dữ liệu cần thiết hiển thị công khai trên web nhưng không có tệp tải về hay API.\n\n### Quy trình\n1. Tải HTML bằng `requests`.\n2. Phân tích HTML bằng `BeautifulSoup`.\n3. Tìm phần tử cần lấy bằng **CSS selector** (xem cấu trúc trang bằng công cụ DevTools của trình duyệt).\n4. Đưa kết quả vào bảng và lưu.\n\n```python\nimport requests, pandas as pd\nfrom bs4 import BeautifulSoup\n\nr = requests.get(\"https://example.com/products\",\n                 headers={\"User-Agent\": \"nghien-cuu-du-lieu (lienhe@example.com)\"},\n                 timeout=15)\nr.raise_for_status()\nsoup = BeautifulSoup(r.text, \"html.parser\")\n\nrows = []\nfor card in soup.select(\"div.product\"):\n    rows.append({\n        \"ten\": card.select_one(\"h2\").get_text(strip=True),\n        \"gia\": card.select_one(\".price\").get_text(strip=True),\n    })\ndf = pd.DataFrame(rows)\n```\n\nNếu trang chứa sẵn bảng HTML, `pd.read_html(url)` có thể lấy luôn.\n\n### Phép lịch sự và pháp lý\n- Đọc **`robots.txt`** và điều khoản sử dụng của trang; không scrape thứ bị cấm.\n- Giới hạn tốc độ (nghỉ giữa các yêu cầu), đừng làm quá tải máy chủ.\n- Không thu thập dữ liệu cá nhân trái quy định; chú ý bản quyền nội dung.\n- Ưu tiên API chính thức nếu có.\n\n### Lỗi hay gặp\n- Trang tải nội dung bằng JavaScript nên HTML tải về không có dữ liệu (cần công cụ như Playwright hoặc tìm API ngầm mà trang gọi).\n- Giao diện trang đổi làm selector hỏng; viết thêm kiểm tra để phát hiện sớm.\n- Không xử lý lỗi và thử lại.\n\n### Tự kiểm tra\n1. Khi nào nên scrape và khi nào nên tìm API?\n2. `robots.txt` cho bạn biết điều gì?",
+  "more": [
+   {
+    "type": "official",
+    "title": "Beautiful Soup — Documentation",
+    "url": "https://www.crummy.com/software/BeautifulSoup/bs4/doc/"
+   }
+  ]
+ }
+}

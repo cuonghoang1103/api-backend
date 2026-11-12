@@ -34,7 +34,9 @@ _KF = os.path.join(W if 'W' in globals() else os.path.expanduser('~/Documents/ro
 KHUNG = set(json.load(open(_KF))) if os.path.exists(_KF) else set()
 # Trang buổi học FLM (`*-flm-bNNN`): 📑 = có slide giảng, 📘 = chỉ lịch buổi theo syllabus (gần như rỗng) ⇒ bỏ 📘
 # trừ khi nội dung dài thật (đo 12/11: 20.575 trang, 20.136 rỗng).
+KHUNG_MO_TA = re.compile(r'khung bài|bài khung', re.I)  # bài khung ghi ngay trong mô tả (gai401/ais201/cac301… 148 bài)
 def trang_buoi_rong(b):
+    if KHUNG_MO_TA.search(b.get('moTa', '') + ' ' + b.get('mo', '')): return True
     return bool(re.search(r'-flm-b\d{3}', b['bai'])) and not b['vi'].startswith('📑') and b['doDai'] < 1500
 bai = [b for b in (json.loads(x) for x in open(f'{W}/chi-muc-bai.jsonl'))
        if (not b['academy'] or ITS.get(b['khoa'], 0) >= 0.2) and (not KHOA or b['khoa'] == KHOA)

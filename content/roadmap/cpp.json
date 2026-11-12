@@ -1452,5 +1452,780 @@
  },
  "Templates & Generic Programming › Type Traits": {
   "body": "**Type traits** (header `<type_traits>`) là các \"câu hỏi\" và \"phép biến đổi\" về **kiểu**, trả lời ngay lúc biên dịch. Chúng giúp template tự thích nghi theo kiểu được truyền vào.\n\n### Truy vấn kiểu\n```cpp\n#include <type_traits>\n\nstatic_assert(std::is_integral_v<int>);\nstatic_assert(!std::is_pointer_v<int>);\nstatic_assert(std::is_same_v<std::remove_const_t<const int>, int>);\n```\nMột số trait hay dùng: `is_integral`, `is_floating_point`, `is_pointer`, `is_class`, `is_same`, `is_base_of`, `is_trivially_copyable`, `is_constructible`. Hậu tố `_v` (C++17) cho giá trị `bool`; `_t` cho kiểu kết quả.\n\n### Biến đổi kiểu\n`remove_const`, `remove_reference`, `add_pointer`, `decay` (mô phỏng cách kiểu bị biến đổi khi truyền theo giá trị: bỏ tham chiếu, bỏ const, mảng/hàm thành con trỏ), `conditional<B, T, F>` (chọn một trong hai kiểu).\n\n### Dùng để chọn cài đặt\n```cpp\ntemplate <typename T>\nvoid in(const T& v) {\n    if constexpr (std::is_integral_v<T>) {      // C++17: nhánh không dùng bị loại bỏ\n        std::cout << \"so nguyen \" << v << '\\n';\n    } else {\n        std::cout << \"khac \" << v << '\\n';\n    }\n}\n\ntemplate <typename T, typename = std::enable_if_t<std::is_arithmetic_v<T>>>\nT gapDoi(T x) { return x * 2; }                  // chỉ nhận kiểu số (SFINAE)\n```\n`std::enable_if` bật/tắt một overload theo điều kiện kiểu (kỹ thuật SFINAE); từ C++20, **concepts** (`requires`, `std::integral`) làm việc này rõ ràng hơn.\n\n### Vì sao cần\nThư viện chuẩn dùng traits để chọn thuật toán tối ưu (ví dụ sao chép vùng nhớ bằng `memmove` khi kiểu \"trivially copyable\"), và để báo lỗi sớm khi dùng sai kiểu. Bạn thường dùng `static_assert` + traits để kiểm tra giả định của template.\n\n### Lỗi hay gặp\n- Dùng `if` thường thay vì `if constexpr` nên cả hai nhánh đều phải biên dịch được.\n- Quên `std::decay_t`/`remove_cvref_t` khi so sánh kiểu nhận qua forwarding reference.\n- `enable_if` làm thông báo lỗi khó đọc (concepts sẽ cải thiện)."
+ },
+ "Templates & Generic Programming › SFINAE": {
+  "body": "SFINAE (Substitution Failure Is Not An Error) là luật của trình biên dịch: khi thử thay một kiểu cụ thể vào khai báo của một template mà phép thay **thất bại**, compiler không báo lỗi ngay mà chỉ **loại ứng viên đó khỏi tập overload** và thử ứng viên khác. Chỉ khi không còn ứng viên nào hợp lệ mới có lỗi biên dịch.\n\nHình dung: bạn có hai hàm cùng tên, một hàm chỉ nhận số nguyên, một hàm chỉ nhận số thực. Khi gọi, compiler \"thử mặc\" từng hàm vào đối số; hàm nào không vừa thì lặng lẽ bị gạt bỏ.\n\n### Vì sao cần biết\n- Thư viện chuẩn (`<type_traits>`, `std::enable_if`, nhiều overload của `std::vector`, `std::function`...) dựa nhiều vào SFINAE.\n- Đọc được mã template cũ (trước C++20) và hiểu thông báo lỗi kiểu \"no matching function\".\n- Nó là tiền thân của `if constexpr` (C++17) và Concepts (C++20) — hai công cụ hiện đại thay thế phần lớn nhu cầu SFINAE.\n\n### Ý chính\n- Lỗi phải nằm ở **chữ ký** (kiểu trả về, tham số, tham số template), không phải trong thân hàm. Lỗi trong thân hàm vẫn là lỗi cứng.\n- `std::enable_if_t<điều_kiện, T>` chỉ tồn tại khi điều kiện đúng; nếu sai, phép thay thất bại và overload bị loại.\n- Các kỹ thuật phổ biến: `enable_if`, `decltype(...)` trong kiểu trả về, `std::void_t` để \"dò\" một thành viên có tồn tại không.\n\n```cpp\n#include <iostream>\n#include <string>\n#include <type_traits>\n\ntemplate <typename T, std::enable_if_t<std::is_integral_v<T>, int> = 0>\nstd::string describe(T) { return \"so nguyen\"; }\n\ntemplate <typename T, std::enable_if_t<std::is_floating_point_v<T>, int> = 0>\nstd::string describe(T) { return \"so thuc\"; }\n\nint main() {\n    std::cout << describe(42) << '\\n';    // so nguyen\n    std::cout << describe(3.14) << '\\n';  // so thuc\n    // describe(\"abc\");  // loi: khong overload nao hop le\n}\n```\n\n### Lỗi hay gặp\n- Đặt điều kiện trong **thân** hàm rồi mong SFINAE cứu: không được, đó là lỗi cứng.\n- Hai overload cùng chữ ký (chỉ khác tham số template mặc định `= void`) gây lỗi redefinition; dùng kiểu `int = 0` như ví dụ để tránh.\n- Viết SFINAE phức tạp cho việc mà `if constexpr` hoặc concepts làm gọn hơn nhiều: với C++17/20, ưu tiên hai thứ đó.\n\n### Tự kiểm tra\n1. Vì sao lỗi trong thân hàm template không kích hoạt SFINAE?\n2. Viết lại ví dụ trên bằng `if constexpr` — ngắn hơn ra sao?"
+ },
+ "Templates & Generic Programming › Full Template Specialization": {
+  "body": "Full template specialization (chuyên biệt hoá toàn phần) cho phép bạn nói với compiler: \"với **đúng kiểu này**, đừng dùng bản template chung, hãy dùng bản viết riêng của tôi\". Cú pháp mở đầu bằng `template <>` — danh sách tham số rỗng vì mọi tham số đã được chốt.\n\nVí dụ đời thường: có một công thức chung để in mọi thứ, nhưng riêng `bool` bạn muốn in `true/false` thay vì `1/0`.\n\n### Vì sao cần biết\n- Cho phép tối ưu hoặc đổi hành vi cho một kiểu đặc biệt (`bool`, `const char*`, kiểu của thư viện lạ).\n- Là cách thư viện chuẩn làm việc: `std::vector<bool>` là chuyên biệt hoá toàn phần của `std::vector<T>` (lưu mỗi phần tử 1 bit), `std::hash<std::string>` cũng vậy.\n- Là nền để hiểu traits (`std::is_integral`, `std::numeric_limits<int>`).\n\n### Ý chính\n- Có bản template chung (primary template) trước, rồi mới chuyên biệt hoá.\n- Chuyên biệt hoá phải được khai báo **trước** chỗ đầu tiên làm phát sinh bản chung cho kiểu đó, nếu không sẽ lỗi.\n- Với **class template**, chuyên biệt hoá là cách chuẩn. Với **function template**, chuyên biệt hoá không tham gia overload resolution; thường nên dùng **overload thường** thay vì chuyên biệt hoá hàm.\n\n```cpp\n#include <iostream>\n\ntemplate <typename T>\nstruct TypeName {\n    static const char* get() { return \"khong ro\"; }\n};\n\ntemplate <>\nstruct TypeName<int> {\n    static const char* get() { return \"int\"; }\n};\n\ntemplate <>\nstruct TypeName<bool> {\n    static const char* get() { return \"bool\"; }\n};\n\nint main() {\n    std::cout << TypeName<int>::get() << '\\n';     // int\n    std::cout << TypeName<bool>::get() << '\\n';    // bool\n    std::cout << TypeName<double>::get() << '\\n';  // khong ro\n}\n```\n\n### Lỗi hay gặp\n- Quên `template <>` (thành định nghĩa lớp mới, gây lỗi lạ).\n- Chuyên biệt hoá hàm rồi ngạc nhiên vì overload khác được chọn thay: hãy viết overload bình thường.\n- Đặt chuyên biệt hoá trong file `.cpp` thay vì header, khiến các file khác không thấy và vẫn dùng bản chung (vi phạm ODR).\n\n### Tự kiểm tra\n1. `template <>` nghĩa là gì?\n2. Vì sao `std::vector<bool>` hay bị nhắc là \"đặc biệt\"?",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-5-3-function-template",
+    "ten": "5.3 — Function template: một hàm cho nhiều kiểu",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   }
+  ]
+ },
+ "Templates & Generic Programming › Partial Template Specialization": {
+  "body": "Partial template specialization (chuyên biệt hoá từng phần) là chuyên biệt hoá cho **một họ kiểu** thay vì một kiểu duy nhất: ví dụ \"mọi con trỏ `T*`\", \"mọi `std::vector<T>`\", \"cặp có hai kiểu giống nhau\". Bạn vẫn giữ lại tham số template cho phần chưa chốt.\n\nKhác với toàn phần (`template <>`), ở đây danh sách tham số vẫn còn, ví dụ `template <typename T> struct X<T*>`.\n\n### Vì sao cần biết\n- Là cơ chế đứng sau hầu hết **type traits**: `std::is_pointer`, `std::remove_const`, `std::is_same`.\n- Cho phép viết code tổng quát nhưng xử lý riêng nhóm kiểu: con trỏ, mảng, tham chiếu, container.\n- Giúp đọc thư viện template nặng (Boost, STL).\n\n### Ý chính\n- Chỉ áp dụng cho **class template** và **variable template**. **Function template không được chuyên biệt hoá từng phần**; dùng overload hoặc ủy quyền sang một struct hỗ trợ.\n- Khi nhiều chuyên biệt hoá cùng khớp, compiler chọn cái \"chuyên biệt hơn\"; nếu không phân định được sẽ báo mơ hồ.\n- Thứ tự ưu tiên: toàn phần > từng phần > bản chung.\n\n```cpp\n#include <iostream>\n#include <type_traits>\n\ntemplate <typename T>\nstruct IsPointer : std::false_type {};\n\ntemplate <typename T>\nstruct IsPointer<T*> : std::true_type {};   // chuyen biet hoa tung phan\n\nint main() {\n    std::cout << IsPointer<int>::value << '\\n';    // 0\n    std::cout << IsPointer<int*>::value << '\\n';   // 1\n    std::cout << IsPointer<char**>::value << '\\n'; // 1\n}\n```\n\n### Lỗi hay gặp\n- Cố viết `template <typename T> void f<T*>(T*)` — không hợp lệ; hãy dùng overload `template <typename T> void f(T*)`.\n- Hai chuyên biệt hoá chồng lấn không cái nào hẹp hơn: lỗi \"ambiguous partial specializations\".\n- Quên rằng chuyên biệt hoá không kế thừa thành viên của bản chung: phải viết lại mọi thành viên cần thiết.\n\n### Tự kiểm tra\n1. Vì sao `IsPointer<int*>` chọn bản `T*` mà không chọn bản chung?\n2. Hàm template có chuyên biệt hoá từng phần không? Thay bằng gì?"
+ },
+ "Templates & Generic Programming › Concepts (C++20)": {
+  "body": "Concepts (C++20) là cách đặt **ràng buộc có tên** lên tham số template: \"`T` phải là số nguyên\", \"`T` phải so sánh được\". Compiler kiểm tra ràng buộc ngay tại chỗ gọi và báo lỗi bằng ngôn ngữ dễ hiểu, thay vì hàng trăm dòng lỗi bên trong template như trước.\n\nHình dung: trước đây template là \"nhận gì cũng được rồi nổ ở đâu đó sâu bên trong\"; concept là tấm biển ở cửa ghi rõ \"chỉ nhận loại này\".\n\n### Vì sao cần biết\n- Thay thế gần hết nhu cầu `enable_if`/SFINAE bằng cú pháp đọc được.\n- Tài liệu hoá giao diện của hàm template ngay trong chữ ký.\n- Thư viện chuẩn C++20 có sẵn nhiều concept trong `<concepts>`: `std::integral`, `std::floating_point`, `std::totally_ordered`, `std::invocable`, `std::ranges::range`...\n\n### Ý chính\n- Định nghĩa: `template <typename T> concept Name = biểu_thức_hằng_bool;`\n- Dùng: `template <Name T>`, hoặc mệnh đề `requires Name<T>`, hoặc `Name auto x`.\n- `requires`-expression kiểm tra \"biểu thức này có hợp lệ không\", ví dụ có `operator+`.\n- Hỗ trợ overload theo mức ràng buộc: bản ràng buộc chặt hơn thắng.\n\n```cpp\n#include <concepts>\n#include <iostream>\n\ntemplate <typename T>\nconcept Addable = requires(T a, T b) {\n    { a + b } -> std::convertible_to<T>;\n};\n\ntemplate <Addable T>\nT sum(T a, T b) { return a + b; }\n\nint main() {\n    std::cout << sum(2, 3) << '\\n';        // 5\n    std::cout << sum(1.5, 2.5) << '\\n';    // 4\n    // sum(std::cout, std::cout);          // loi ro: ostream khong thoa Addable\n}\n```\n\nCần compiler hỗ trợ C++20 (ví dụ `g++ -std=c++20`).\n\n### Lỗi hay gặp\n- Quên bật `-std=c++20` nên concept bị báo \"không biết từ khoá\".\n- Viết concept quá rộng (chỉ kiểm tra tên mà không kiểm hành vi) khiến ràng buộc vô nghĩa.\n- Nhầm `requires` mệnh đề (đứng sau khai báo) với `requires`-expression (khối `requires(...) { ... }`).\n\n### Tự kiểm tra\n1. Concept giúp thông báo lỗi tốt hơn SFINAE ở điểm nào?\n2. `std::integral auto x` có nghĩa gì?"
+ },
+ "Exception & Ngôn ngữ nâng cao › Exception Handling": {
+  "body": "Exception là cơ chế báo và xử lý lỗi bằng `throw`, `try`, `catch`: khi code gặp tình huống không thể tiếp tục, nó **ném** một đối tượng; chương trình tự **thoát ngược lên** (stack unwinding) qua các hàm gọi cho đến khi gặp `catch` khớp kiểu.\n\nVí dụ đời thường: nhân viên gặp sự cố không tự xử lý được thì báo lên cấp trên có thẩm quyền, thay vì mỗi cấp đều phải kiểm tra \"có lỗi không\".\n\n### Vì sao cần biết\n- Constructor không có giá trị trả về, nên exception là cách chuẩn báo lỗi khởi tạo.\n- Thư viện chuẩn ném exception: `vector::at` ném `std::out_of_range`, `new` ném `std::bad_alloc`.\n- Kết hợp RAII, exception giúp dọn tài nguyên tự động khi lỗi.\n\n### Ý chính\n- Bắt theo **tham chiếu const**: `catch (const std::exception& e)` để tránh cắt lát (slicing) và sao chép.\n- Các lớp chuẩn: `std::runtime_error`, `std::invalid_argument`, `std::out_of_range`, đều kế thừa `std::exception` và có `what()`.\n- `catch (...)` bắt mọi thứ; `throw;` (không đối số) ném lại exception hiện tại.\n- Chỉ dùng cho tình huống **ngoại lệ** (file mất, dữ liệu sai). Không dùng thay `if`/`return` cho luồng bình thường.\n- Destructor không nên ném exception.\n\n```cpp\n#include <iostream>\n#include <stdexcept>\n\ndouble chia(double a, double b) {\n    if (b == 0) throw std::invalid_argument(\"chia cho 0\");\n    return a / b;\n}\n\nint main() {\n    try {\n        std::cout << chia(10, 2) << '\\n';\n        std::cout << chia(1, 0) << '\\n';\n    } catch (const std::exception& e) {\n        std::cout << \"Loi: \" << e.what() << '\\n';\n    }\n}\n```\n\n### Lỗi hay gặp\n- `catch (std::exception e)` (bắt theo giá trị) làm mất phần lớp con.\n- Đặt `catch` lớp cha trước lớp con khiến nhánh con không bao giờ chạy.\n- Exception thoát khỏi `main` hoặc khỏi thread mà không bắt sẽ gọi `std::terminate`.\n- Ném con trỏ (`throw new X`) gây rò rỉ; hãy ném đối tượng theo giá trị.\n\n### Tự kiểm tra\n1. Vì sao nên bắt exception bằng tham chiếu const?\n2. Khi nào KHÔNG nên dùng exception?",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-7-8-exception",
+    "ten": "7.8 — Exception: try, catch, throw",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   }
+  ]
+ },
+ "Exception & Ngôn ngữ nâng cao › Type Casting (static/dynamic/const/reinterpret_cast)": {
+  "body": "C++ cung cấp bốn toán tử ép kiểu tường minh: `static_cast`, `dynamic_cast`, `const_cast`, `reinterpret_cast`. Chúng thay cho cast kiểu C `(int)x`, vốn \"ép mọi thứ\" mà không nói rõ ý đồ.\n\nMỗi toán tử thể hiện **một loại ý định** và chỉ làm đúng loại đó, nên dễ tìm trong code (grep `_cast`) và dễ review.\n\n### Ý chính\n- `static_cast<T>(x)`: chuyển đổi hợp lý, kiểm tra lúc biên dịch (số ↔ số, up/downcast không kiểm tra, `void*` ↔ `T*`).\n- `dynamic_cast<T>(x)`: downcast an toàn trong hệ thống kế thừa đa hình, kiểm tra lúc chạy.\n- `const_cast<T>(x)`: thêm/bỏ `const`/`volatile`.\n- `reinterpret_cast<T>(x)`: diễn giải lại bit-pattern, nguy hiểm nhất.\n- Quy tắc thực tế: dùng `static_cast` hầu hết thời gian; cast xuất hiện nhiều là dấu hiệu thiết kế cần xem lại.\n\n```cpp\ndouble d = 3.9;\nint a = static_cast<int>(d);            // 3 (cat phan thap phan)\nint b = (int)d;                         // cast kieu C: khong ro y do\n```\n\n### Lỗi hay gặp\n- Dùng cast kiểu C trong C++ vì nó âm thầm chọn một trong bốn loại, kể cả loại nguy hiểm.\n- Ép kiểu để \"im lặng\" cảnh báo của compiler thay vì sửa nguyên nhân."
+ },
+ "Exception & Ngôn ngữ nâng cao › Lambdas": {
+  "body": "Lambda là hàm **ẩn danh** viết ngay tại chỗ dùng, cú pháp `[capture](tham_số) { thân }`. Nó đặc biệt hợp với thuật toán STL cần một \"tiêu chí\" nhỏ như so sánh hay điều kiện lọc.\n\nVí dụ đời thường: thay vì đi viết hẳn một hàm có tên chỉ để dùng đúng một lần, bạn ghi tờ giấy nhắn ngay tại chỗ.\n\n### Vì sao cần biết\n- Hầu hết code C++ hiện đại với `std::sort`, `std::find_if`, `std::transform`, thread, callback đều dùng lambda.\n- Lambda có thể \"bắt\" biến xung quanh nên gọn hơn functor tự viết.\n\n### Ý chính\n- `[]` không bắt gì; `[=]` bắt mọi biến theo giá trị; `[&]` theo tham chiếu; `[x, &y]` bắt từng biến.\n- Mặc định `operator()` của lambda là `const`; thêm `mutable` để sửa bản sao đã bắt.\n- C++14: generic lambda `[](auto a, auto b) {...}` và init-capture `[p = std::move(ptr)]`.\n- Mỗi lambda có kiểu riêng duy nhất; lưu bằng `auto` hoặc `std::function`.\n\n```cpp\n#include <algorithm>\n#include <iostream>\n#include <vector>\n\nint main() {\n    std::vector<int> v{5, 2, 9, 1};\n    int nguong = 3;\n\n    std::sort(v.begin(), v.end(), [](int a, int b) { return a > b; });\n\n    auto dem = std::count_if(v.begin(), v.end(),\n                             [nguong](int x) { return x > nguong; });\n    std::cout << dem << '\\n';   // 2 (9 va 5)\n}\n```\n\n### Lỗi hay gặp\n- Bắt theo tham chiếu rồi để lambda sống lâu hơn biến (dangling reference), ví dụ trả lambda `[&]` ra khỏi hàm.\n- Dùng `[=]` trong hàm thành viên và tưởng bắt được thành viên; thực ra nó bắt `this` (con trỏ), từ C++20 cách này bị khuyến cáo bỏ.\n- Mong lambda sửa được biến bắt theo giá trị mà quên `mutable`.\n\n### Tự kiểm tra\n1. `[=]` và `[&]` khác nhau thế nào khi biến gốc thay đổi sau đó?\n2. Vì sao trả về lambda `[&]` khỏi hàm là nguy hiểm?"
+ },
+ "Exception & Ngôn ngữ nâng cao › RTTI - Run-Time Type Identification": {
+  "body": "RTTI (Run-Time Type Information) cho phép chương trình **biết kiểu thật của đối tượng lúc chạy**, qua hai công cụ: `typeid` và `dynamic_cast`. Điều này cần thiết khi bạn giữ con trỏ/tham chiếu tới lớp cha nhưng đối tượng thật là một lớp con.\n\nHình dung: bạn cầm tấm vé \"Động vật\" nhưng muốn biết con vật thật sự là chó hay mèo.\n\n### Vì sao cần biết\n- Cần cho `dynamic_cast` (downcast an toàn) và để ghi log/gỡ lỗi kiểu thật.\n- Hiểu vì sao có trình biên dịch/dự án (game, nhúng) tắt RTTI bằng `-fno-rtti` để giảm kích thước và chi phí.\n\n### Ý chính\n- RTTI chỉ cho **kiểu động** với lớp **đa hình** (có ít nhất một hàm `virtual`).\n- `typeid(x)` trả về `std::type_info`; `typeid(a) == typeid(b)` so sánh kiểu; `.name()` cho tên (định dạng phụ thuộc compiler).\n- `typeid(*p)` với `p` là con trỏ tới lớp đa hình cho kiểu thật; `typeid(p)` chỉ cho kiểu con trỏ.\n- Cần `#include <typeinfo>`.\n\n```cpp\n#include <iostream>\n#include <typeinfo>\n\nstruct Animal { virtual ~Animal() = default; };\nstruct Dog : Animal {};\nstruct Cat : Animal {};\n\nint main() {\n    Animal* a = new Dog;\n    std::cout << (typeid(*a) == typeid(Dog)) << '\\n';  // 1\n    std::cout << (typeid(*a) == typeid(Cat)) << '\\n';  // 0\n    delete a;\n}\n```\n\n### Lỗi hay gặp\n- Dùng `typeid(p)` thay vì `typeid(*p)` nên nhận được kiểu con trỏ.\n- Lạm dụng RTTI/`if typeid == ...` thay vì dùng hàm `virtual`; thường đa hình thật sự là giải pháp tốt hơn.\n- Mong `name()` ra tên đẹp: GCC/Clang trả tên đã mangle.\n\n### Tự kiểm tra\n1. Vì sao lớp không có hàm virtual thì `typeid(*p)` chỉ cho kiểu tĩnh?\n2. RTTI có chi phí gì?",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-7-7-da-hinh",
+    "ten": "7.7 — Đa hình: một lời gọi, nhiều hành vi",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   }
+  ]
+ },
+ "Exception & Ngôn ngữ nâng cao › Dynamic Polymorphism": {
+  "body": "Dynamic polymorphism (đa hình động) nghĩa là: bạn gọi một hàm qua con trỏ/tham chiếu lớp cha, nhưng **phiên bản của lớp con thật sự được chạy**, quyết định lúc chạy chương trình, không phải lúc biên dịch.\n\nVí dụ: danh sách `Shape*` chứa hình tròn, hình vuông; gọi `shape->area()` cho từng phần tử, mỗi hình tự tính diện tích theo cách của mình.\n\n### Vì sao cần biết\n- Nền tảng của thiết kế hướng đối tượng: giao diện (interface), plugin, chiến lược (strategy).\n- Thư viện và framework dựa vào nó để cho phép bạn \"cắm\" hành vi riêng.\n\n### Ý chính\n- Khai báo hàm ở lớp cha là `virtual`; ở lớp con nên ghi `override` để compiler kiểm tra đúng chữ ký.\n- Hàm thuần ảo `= 0` tạo **lớp trừu tượng**, không tạo được đối tượng.\n- Cơ chế thường thấy: mỗi đối tượng có con trỏ tới **vtable** (bảng hàm ảo) của lớp; gọi hàm ảo = tra bảng này (thêm một lần gián tiếp).\n- **Destructor của lớp cha phải `virtual`** nếu xoá qua con trỏ lớp cha.\n- Đa hình chỉ hoạt động qua **con trỏ hoặc tham chiếu**; truyền theo giá trị gây object slicing.\n\n```cpp\n#include <iostream>\n#include <memory>\n#include <vector>\n\nstruct Shape {\n    virtual double area() const = 0;\n    virtual ~Shape() = default;\n};\nstruct Circle : Shape {\n    double r; explicit Circle(double r) : r(r) {}\n    double area() const override { return 3.14159 * r * r; }\n};\nstruct Square : Shape {\n    double s; explicit Square(double s) : s(s) {}\n    double area() const override { return s * s; }\n};\n\nint main() {\n    std::vector<std::unique_ptr<Shape>> v;\n    v.push_back(std::make_unique<Circle>(1));\n    v.push_back(std::make_unique<Square>(2));\n    for (auto& p : v) std::cout << p->area() << '\\n';\n}\n```\n\n### Lỗi hay gặp\n- Quên destructor `virtual`: xoá lớp con qua con trỏ cha là hành vi không xác định.\n- Quên `override`, gõ sai chữ ký nên thành hàm mới, không phải ghi đè.\n- Gọi hàm ảo trong constructor/destructor: chạy bản của lớp đang dựng, không phải lớp con.\n\n### Tự kiểm tra\n1. Đa hình động khác đa hình tĩnh (template, overload) ở điểm nào?\n2. Vì sao destructor lớp cha cần `virtual`?",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-7-7-da-hinh",
+    "ten": "7.7 — Đa hình: một lời gọi, nhiều hành vi",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/pcp291-c-programming/learn?lessonSlug=pcp291-5-1-inheritance-polymorphism",
+    "ten": "5.1 — Kế thừa & đa hình",
+    "nguon": "C++ Programming · Chapter 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PCP291"
+   }
+  ]
+ },
+ "Exception & Ngôn ngữ nâng cao › Exit Codes và Signal Handling": {
+  "body": "Exit code là một số nguyên mà chương trình trả cho hệ điều hành khi kết thúc, để script hoặc tiến trình cha biết nó **thành công hay lỗi**. Quy ước phổ biến: `0` = thành công, khác `0` = lỗi (mỗi giá trị có thể là một loại lỗi).\n\nSignal là \"tin nhắn\" ngắn hệ điều hành gửi cho tiến trình (ví dụ Ctrl+C gửi `SIGINT`, lệnh `kill` gửi `SIGTERM`).\n\n### Vì sao cần biết\n- Script/CI chỉ biết chương trình C++ của bạn lỗi hay không qua exit code (`make`, GitHub Actions, shell `&&`).\n- Chương trình chạy trong Docker/service cần dọn dẹp gọn khi nhận `SIGTERM`.\n\n### Ý chính\n- `return n;` trong `main` hoặc `std::exit(n)` đặt exit code. Dùng `EXIT_SUCCESS`/`EXIT_FAILURE` (trong `<cstdlib>`) cho di động.\n- Trên shell: `echo $?` in exit code của lệnh vừa chạy. Nếu bị signal giết, shell thường báo `128 + số signal` (ví dụ 139 = 128 + 11 = `SIGSEGV`, 137 = `SIGKILL`).\n- Bắt signal bằng `std::signal` (hoặc `sigaction` trên POSIX). Trong handler chỉ làm việc cực nhỏ, ví dụ đặt cờ kiểu `volatile std::sig_atomic_t`; không `printf`/`new`/khoá mutex.\n\n```cpp\n#include <csignal>\n#include <cstdlib>\n#include <iostream>\n\nvolatile std::sig_atomic_t dung = 0;\nvoid xu_ly(int) { dung = 1; }\n\nint main() {\n    std::signal(SIGINT, xu_ly);\n    while (!dung) { /* lam viec... */ }\n    std::cout << \"Dang thoat gon\\n\";\n    return EXIT_SUCCESS;\n}\n```\n\n### Lỗi hay gặp\n- Trả mã lỗi `256` hoặc âm: trên Unix chỉ 8 bit thấp được giữ (0–255).\n- Làm việc nặng/không an toàn trong signal handler.\n- `SIGKILL` và `SIGSTOP` không thể bắt hay bỏ qua.",
+  "lessons": [
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-1-4-vong-doi",
+    "ten": "1.4 — Trạng thái tiến trình, tín hiệu và mã thoát (vì sao exit 137 = OOM)",
+    "nguon": "Operating Systems for Developers · Chương 1",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Exception & Ngôn ngữ nâng cao › static_cast": {
+  "body": "`static_cast` là toán tử ép kiểu bạn dùng nhiều nhất: chuyển đổi mà compiler **kiểm tra lúc biên dịch** là hợp lý, không có kiểm tra gì lúc chạy.\n\n### Vì sao cần biết\nMọi chỗ cần đổi kiểu tường minh nên bắt đầu bằng `static_cast`; chỉ khi nó không đủ mới nghĩ tới cast khác. Nó làm ý định rõ ràng (so với `(int)x`) và tìm được bằng grep.\n\n### Ý chính\n- Chuyển đổi số: `static_cast<int>(3.9)` → `3` (cắt phần thập phân, không làm tròn).\n- Giữ độ chính xác khi chia: `static_cast<double>(a) / b`.\n- Upcast (lớp con → lớp cha) luôn an toàn; downcast bằng `static_cast` **không** kiểm tra, sai kiểu là hành vi không xác định (cần kiểm tra thì dùng `dynamic_cast`).\n- `void*` → `T*`, `enum` ↔ số nguyên.\n- Gọi constructor/conversion operator tường minh.\n\n```cpp\n#include <iostream>\n\nint main() {\n    int a = 7, b = 2;\n    std::cout << a / b << '\\n';                          // 3\n    std::cout << static_cast<double>(a) / b << '\\n';     // 3.5\n\n    enum class Mau { Do = 1, Xanh = 2 };\n    int so = static_cast<int>(Mau::Xanh);                // 2\n    std::cout << so << '\\n';\n}\n```\n\n### Lỗi hay gặp\n- Viết `static_cast<double>(a / b)`: phép chia nguyên xảy ra trước, kết quả đã mất phần lẻ.\n- Dùng `static_cast` để downcast khi không chắc kiểu thật.\n- Ép số thực quá lớn sang số nguyên nhỏ: tràn, hành vi không xác định."
+ },
+ "Exception & Ngôn ngữ nâng cao › const_cast": {
+  "body": "`const_cast` là toán tử duy nhất có thể **thêm hoặc bỏ** `const` (và `volatile`) của một con trỏ/tham chiếu. Nó không đổi dữ liệu, chỉ đổi cái nhìn của compiler.\n\n### Vì sao cần biết\nCách dùng chính đáng hiếm: gọi một API cũ (kiểu C) nhận `char*` dù không sửa dữ liệu, hoặc cài hàm `const` bằng cách gọi lại hàm non-const để khỏi viết hai lần.\n\n### Ý chính\n- Bỏ `const` khỏi **đối tượng ban đầu được khai báo `const`** rồi ghi vào nó là **hành vi không xác định**. Chỉ an toàn khi đối tượng gốc thật sự không phải `const`.\n- Thêm `const` thì an toàn (và thường không cần cast).\n- Dùng để tránh lặp mã giữa overload `const` và non-const của getter.\n- Cần `const_cast` thường báo hiệu API thiếu `const`: nên sửa API nếu được.\n\n```cpp\n#include <iostream>\n\nvoid api_cu(char* s) { std::cout << s << '\\n'; }  // khong sua s\n\nint main() {\n    const char* msg = \"xin chao\";\n    api_cu(const_cast<char*>(msg));   // OK vi api_cu khong ghi vao s\n\n    int x = 5;\n    const int& r = x;\n    const_cast<int&>(r) = 6;          // OK: doi tuong goc x khong const\n    std::cout << x << '\\n';           // 6\n\n    // const int y = 5;\n    // const_cast<int&>(y) = 6;       // UB: ghi vao doi tuong const that\n}\n```\n\n### Lỗi hay gặp\n- Ghi vào chuỗi literal sau khi bỏ `const`: literal nằm ở vùng chỉ đọc, thường crash.\n- Dùng `const_cast` để \"tắt lỗi\" thay vì sửa thiết kế `const`-correctness."
+ },
+ "Exception & Ngôn ngữ nâng cao › dynamic_cast": {
+  "body": "`dynamic_cast` ép kiểu **an toàn trong cây kế thừa**, kiểm tra bằng RTTI lúc chạy. Nó trả lời câu hỏi: \"đối tượng mà con trỏ cha này trỏ tới, có thật sự là lớp con X không?\".\n\n### Vì sao cần biết\nKhi có `Animal*` mà cần gọi hàm riêng của `Dog`, `dynamic_cast` cho bạn thử xem và xử lý trường hợp không khớp, thay vì ép bừa rồi crash.\n\n### Ý chính\n- Dùng với **con trỏ**: thất bại trả `nullptr`. Dùng với **tham chiếu**: thất bại ném `std::bad_cast`.\n- Lớp nguồn phải **đa hình** (có hàm `virtual`).\n- Có thể downcast, upcast và cast ngang (cross-cast) giữa các nhánh kế thừa đa trọng.\n- Có chi phí lúc chạy; nếu gọi liên tục trong đường nóng, cân nhắc thiết kế `virtual` thay thế.\n\n```cpp\n#include <iostream>\n\nstruct Animal { virtual ~Animal() = default; };\nstruct Dog : Animal { void sua() const { std::cout << \"Gau!\\n\"; } };\nstruct Cat : Animal {};\n\nvoid thu(Animal* a) {\n    if (auto* d = dynamic_cast<Dog*>(a)) d->sua();\n    else std::cout << \"Khong phai Dog\\n\";\n}\n\nint main() {\n    Dog d; Cat c;\n    thu(&d);   // Gau!\n    thu(&c);   // Khong phai Dog\n}\n```\n\n### Lỗi hay gặp\n- Không kiểm tra `nullptr` sau cast rồi dùng luôn.\n- Dùng trên lớp không đa hình: lỗi biên dịch.\n- Dùng `dynamic_cast` khắp nơi thay vì hàm `virtual`: dấu hiệu thiết kế yếu.\n- Build với `-fno-rtti`: `dynamic_cast` không dùng được.",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-7-7-da-hinh",
+    "ten": "7.7 — Đa hình: một lời gọi, nhiều hành vi",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   }
+  ]
+ },
+ "Exception & Ngôn ngữ nâng cao › reinterpret_cast": {
+  "body": "`reinterpret_cast` ra lệnh cho compiler **diễn giải lại dãy bit** của một giá trị/địa chỉ như kiểu khác, không chuyển đổi, không kiểm tra. Đây là cast \"mạnh tay\" và dễ gây hành vi không xác định nhất.\n\n### Vì sao cần biết\nXuất hiện trong code hệ thống: đọc thanh ghi phần cứng ở địa chỉ cố định, xử lý buffer nhị phân/mạng, đổi con trỏ ↔ số nguyên (`uintptr_t`). Biết nó để **biết khi nào nên tránh**.\n\n### Ý chính\n- Con trỏ ↔ con trỏ khác loại, con trỏ ↔ số nguyên đủ rộng (`std::uintptr_t`).\n- Truy cập đối tượng qua con trỏ kiểu không liên quan vi phạm **strict aliasing**, kết quả không xác định. Ngoại lệ: `char`, `unsigned char`, `std::byte` được phép đọc byte của bất kỳ đối tượng nào.\n- Cách an toàn để \"đọc bit pattern của float như int\": `std::memcpy`, hoặc `std::bit_cast` (C++20).\n- Kết quả phụ thuộc nền tảng (endianness, alignment).\n\n```cpp\n#include <bit>        // C++20\n#include <cstdint>\n#include <cstring>\n#include <iostream>\n\nint main() {\n    float f = 1.0f;\n\n    std::uint32_t bits1;\n    std::memcpy(&bits1, &f, sizeof bits1);          // an toan, moi phien ban C++\n    std::uint32_t bits2 = std::bit_cast<std::uint32_t>(f);  // C++20\n\n    std::cout << std::hex << bits1 << ' ' << bits2 << '\\n'; // 3f800000 3f800000\n\n    // std::uint32_t bad = *reinterpret_cast<std::uint32_t*>(&f);  // vi pham aliasing (UB)\n}\n```\n\n### Lỗi hay gặp\n- Dùng nó để \"ép cho biên dịch qua\" giữa hai kiểu không liên quan.\n- Giả định kích thước/căn chỉnh/thứ tự byte giống nhau trên mọi máy.\n- Ép `char*` thành `int*` rồi đọc khi địa chỉ không căn chỉnh đúng: crash trên một số kiến trúc."
+ },
+ "Exception & Ngôn ngữ nâng cao › Undefined Behavior (UB)": {
+  "body": "Undefined Behavior (UB) là mọi thao tác mà chuẩn C++ **không quy định chuyện gì xảy ra**. Khi chạm UB, chương trình có thể chạy \"bình thường\", crash, in ra rác, hay chạy đúng trên máy bạn nhưng sai trên máy khác: **không có gì được đảm bảo**, kể cả những dòng chạy trước đó.\n\nVì sao nguy hiểm: compiler tối ưu với giả định \"UB không bao giờ xảy ra\", nên có thể xoá cả kiểm tra của bạn nếu nó chỉ có ý nghĩa khi UB xảy ra.\n\n### Vì sao cần biết\nPhần lớn lỗi bảo mật và bug \"chỉ lỗi khi bật -O2\" trong C/C++ bắt nguồn từ UB.\n\n### Ý chính — các UB thường gặp\n- Truy cập ngoài biên mảng/vector (`v[10]` khi `size()==3`).\n- Dereference con trỏ null, con trỏ treo (dangling), dùng sau `delete`/`free` (use-after-free).\n- Tràn số nguyên **có dấu** (`INT_MAX + 1`).\n- Đọc biến chưa khởi tạo; chia cho 0; dịch bit quá số bit của kiểu.\n- Data race (nhiều luồng ghi chung biến không đồng bộ).\n- Vi phạm strict aliasing; `delete` đối tượng sai cách (`new[]` mà `delete`).\n\n### Cách phòng\n- Bật cảnh báo: `-Wall -Wextra`.\n- Chạy với sanitizer: `-fsanitize=address,undefined` (ASan bắt lỗi bộ nhớ, UBSan bắt tràn số, dịch bit...).\n- Dùng `.at()`, container chuẩn, smart pointer, `std::span`; tránh con trỏ trần.\n\n```cpp\n#include <climits>\n#include <iostream>\n\nint main() {\n    int x = INT_MAX;\n    // x + 1 la UB (tran so co dau). Compiler co the gia dinh \"x + 1 > x\" luon dung.\n    unsigned u = UINT_MAX;\n    std::cout << u + 1 << '\\n';   // 0: so khong dau co dinh nghia (quay vong)\n}\n```\n\nBiên dịch thử: `g++ -fsanitize=undefined -g file.cpp` để UBSan báo thẳng chỗ lỗi.\n\n### Lỗi hay gặp\n- Nghĩ \"chạy ra kết quả đúng nghĩa là không có UB\".\n- Chỉ test ở chế độ debug; UB lộ ra khi tối ưu.\n\n### Tự kiểm tra\n1. Vì sao tràn số có dấu là UB nhưng tràn số không dấu thì không?\n2. Công cụ nào bắt use-after-free?",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-10-2-sanitizer-ro-ri",
+    "ten": "10.2 — Sanitizer và đo rò rỉ bộ nhớ",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 10",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   }
+  ]
+ },
+ "Standard Library + STL › Containers (vector/map/set...)": {
+  "body": "Container là cấu trúc dữ liệu chứa nhiều phần tử có sẵn trong thư viện chuẩn (STL). Bạn không tự viết danh sách/bảng băm mà dùng loại phù hợp, đã được tối ưu và kiểm thử.\n\n### Vì sao cần biết\nChọn đúng container quyết định tốc độ và độ đơn giản của chương trình. Mặc định hợp lý: bắt đầu bằng `std::vector`.\n\n### Ý chính\n- `std::vector<T>`: mảng động liên tục, truy cập `[i]` O(1), thêm cuối `push_back` O(1) amortized, chèn giữa O(n). Cache-friendly, nên thường là lựa chọn đầu tiên.\n- `std::array<T,N>`: mảng kích thước cố định lúc biên dịch.\n- `std::deque<T>`: thêm/xoá hiệu quả ở cả hai đầu.\n- `std::list<T>`: liên kết đôi, chèn/xoá O(1) khi đã có vị trí, nhưng duyệt chậm do không liên tục.\n- `std::map` / `std::set`: cây nhị phân cân bằng, **tự sắp thứ tự**, tìm O(log n).\n- `std::unordered_map` / `std::unordered_set`: bảng băm, tìm trung bình O(1), không có thứ tự.\n- Adapter: `stack`, `queue`, `priority_queue`.\n\n```cpp\n#include <iostream>\n#include <map>\n#include <string>\n#include <vector>\n\nint main() {\n    std::vector<int> v{3, 1, 2};\n    v.push_back(4);\n\n    std::map<std::string, int> diem;\n    diem[\"An\"] = 9;\n    diem[\"Binh\"] = 8;\n    for (const auto& [ten, d] : diem) std::cout << ten << \": \" << d << '\\n';\n\n    std::cout << v.size() << '\\n';\n}\n```\n\n### Lỗi hay gặp\n- `map::operator[]` **tạo** phần tử mới nếu khoá chưa có; muốn chỉ kiểm tra thì dùng `find`/`count`/`contains`.\n- Giữ iterator/con trỏ tới phần tử `vector` rồi `push_back`: có thể bị vô hiệu hoá khi vector cấp phát lại.\n- Dùng `list` vì nghĩ \"chèn nhanh\" mà bỏ qua chi phí duyệt.\n\n### Tự kiểm tra\n1. Khi nào chọn `unordered_map` thay `map`?\n2. Vì sao `vector` thường nhanh hơn `list` dù độ phức tạp lý thuyết tương đương?",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-7-9-stl-vector",
+    "ten": "7.9 — STL vector: mảng tự biết lớn lên",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-7-10-stl-map-set",
+    "ten": "7.10 — STL map và set: tra theo khoá, tập hợp không trùng",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/pcp291-c-programming/learn?lessonSlug=pcp291-7-1-stl",
+    "ten": "7.1 — STL: container, iterator, thuật toán",
+    "nguon": "C++ Programming · Chapter 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PCP291"
+   }
+  ]
+ },
+ "Standard Library + STL › Iterators & Algorithms": {
+  "body": "Thư viện `<algorithm>` chứa hàng chục thuật toán sẵn có (`sort`, `find`, `transform`, `count_if`, `accumulate`...). Điểm hay của STL: thuật toán **không biết** container là gì; nó chỉ làm việc với **iterator** chỉ khoảng `[first, last)`. Nhờ vậy một thuật toán dùng cho vector, array, list hay mảng thô.\n\n### Ý chính\n- Tư tưởng: container lưu dữ liệu, iterator là \"con trỏ tổng quát\", thuật toán xử lý.\n- Phần lớn thuật toán nhận cặp `begin()/end()` (nửa mở: `end()` là sau phần tử cuối).\n- Nhiều thuật toán nhận thêm hàm/lambda làm tiêu chí.\n- Thuật toán không tự đổi kích thước container (ví dụ `remove` chỉ dồn phần tử, xem thêm erase-remove).\n\n```cpp\n#include <algorithm>\n#include <iostream>\n#include <vector>\n\nint main() {\n    std::vector<int> v{4, 1, 3, 2};\n    std::sort(v.begin(), v.end());\n    auto it = std::find(v.begin(), v.end(), 3);\n    if (it != v.end()) std::cout << \"tim thay o vi tri \" << (it - v.begin()) << '\\n';\n}\n```\n\n### Lỗi hay gặp\n- Truyền hai iterator của hai container khác nhau.\n- `std::sort` trên `std::list` (không có iterator truy cập ngẫu nhiên): dùng `list::sort`.\n- Quên kiểm tra kết quả `find` so với `end()`.",
+  "lessons": [
+   {
+    "href": "/courses/pcp291-c-programming/learn?lessonSlug=pcp291-7-1-stl",
+    "ten": "7.1 — STL: container, iterator, thuật toán",
+    "nguon": "C++ Programming · Chapter 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PCP291"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-7-9-stl-vector",
+    "ten": "7.9 — STL vector: mảng tự biết lớn lên",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   }
+  ]
+ },
+ "Standard Library + STL › iostream": {
+  "body": "`<iostream>` là thư viện nhập/xuất chuẩn của C++: `std::cin` (nhập), `std::cout` (xuất), `std::cerr` (lỗi, không đệm). Toán tử `<<` và `>>` nối các giá trị lại, và **tự nhận biết kiểu** nên không cần ký hiệu `%d`, `%s` như `printf`.\n\n### Vì sao cần biết\nMọi chương trình console C++ đều dùng; ngoài ra cùng cơ chế \"stream\" áp dụng cho file (`fstream`) và chuỗi (`stringstream`).\n\n### Ý chính\n- `std::cout << \"x = \" << x << '\\n';`\n- `std::cin >> a >> b;` bỏ qua khoảng trắng; đọc cả dòng dùng `std::getline(std::cin, s)`.\n- `'\\n'` nhanh hơn `std::endl` (`endl` còn flush bộ đệm).\n- Kiểm tra trạng thái: `if (!(std::cin >> n)) { /* nhap loi */ }`.\n\n```cpp\n#include <iostream>\n#include <string>\n\nint main() {\n    std::string ten;\n    int tuoi;\n    std::cout << \"Ten: \";\n    std::getline(std::cin, ten);\n    std::cout << \"Tuoi: \";\n    std::cin >> tuoi;\n    std::cout << \"Chao \" << ten << \", \" << tuoi << \" tuoi\\n\";\n}\n```\n\n### Lỗi hay gặp\n- Trộn `cin >> x` với `getline`: ký tự xuống dòng còn sót khiến `getline` đọc dòng rỗng; thêm `std::cin.ignore()`.\n- Dùng `std::cout` mà quên `#include <iostream>` hoặc tiền tố `std::`.\n- Không kiểm tra nhập lỗi: một lần nhập chữ vào biến số làm `cin` rơi vào trạng thái lỗi và các lệnh sau bị bỏ qua.\n\n### Tự kiểm tra\n1. Vì sao `'\\n'` thường tốt hơn `std::endl`?\n2. Điều gì xảy ra với `cin` khi nhập chữ vào biến `int`?",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-1-1-basics",
+    "ten": "1.1 — Chương trình C/C++ đầu tiên",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-8-1-stream-io",
+    "ten": "8.1 — Stream I/O: đọc và ghi file",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   }
+  ]
+ },
+ "Standard Library + STL › Argument Dependent Lookup (ADL)": {
+  "body": "ADL (Argument Dependent Lookup, còn gọi Koenig lookup) là quy tắc: khi gọi hàm **không có tiền tố namespace**, compiler tìm tên hàm không chỉ ở phạm vi hiện tại mà còn trong **namespace của các kiểu đối số**.\n\n### Vì sao cần biết\nNó là lý do `std::cout << x` hoạt động với kiểu của bạn: nếu `operator<<` được định nghĩa trong namespace của kiểu `x`, ADL tìm thấy nó mà bạn không phải viết `ns::operator<<`. Cũng là lý do `swap(a, b)` tìm đúng `swap` tuỳ chỉnh.\n\n### Ý chính\n- Chỉ áp dụng cho lời gọi hàm \"trần\" (unqualified).\n- Chuẩn mực viết `swap` tổng quát: `using std::swap; swap(a, b);` — nếu kiểu có `swap` riêng thì ADL chọn nó, không thì dùng `std::swap`.\n- \"Hidden friend\": hàm `friend` định nghĩa trong lớp chỉ tìm được qua ADL, tốt cho toán tử.\n\n```cpp\n#include <iostream>\nnamespace geo {\n    struct Point { int x, y; };\n    std::ostream& operator<<(std::ostream& os, const Point& p) {\n        return os << '(' << p.x << ',' << p.y << ')';\n    }\n}\nint main() {\n    geo::Point p{1, 2};\n    std::cout << p << '\\n';   // ADL tim geo::operator<<\n}\n```\n\n### Lỗi hay gặp\n- Định nghĩa `operator<<` ở namespace khác với kiểu rồi ngạc nhiên vì \"không tìm thấy\".\n- ADL kéo vào hàm không mong muốn gây mơ hồ; gọi có tiền tố namespace để tắt ADL."
+ },
+ "Standard Library + STL › Name Mangling": {
+  "body": "C++ cho phép nhiều hàm cùng tên (overload), nhưng tầng liên kết (linker) chỉ hiểu **tên ký hiệu duy nhất**. Name mangling là việc compiler **mã hoá chữ ký** (tên, kiểu tham số, namespace, lớp) vào tên ký hiệu, ví dụ `foo(int, double)` thành `_Z3fooid` theo quy ước Itanium ABI của GCC/Clang.\n\n### Vì sao cần biết\n- Giải thích lỗi linker kiểu `undefined reference to _Z3fooid`.\n- Cần khi C++ gọi C hoặc ngược lại: C không mangle, nên phải dùng `extern \"C\"`.\n- Hữu ích khi đọc stack trace, `nm`, hay debug.\n\n### Ý chính\n- Khuôn mangling **không chuẩn hoá** giữa compiler (GCC/Clang khác MSVC), nên thư viện C++ biên dịch bằng compiler này thường khó dùng với compiler kia.\n- `extern \"C\"` tắt mangling cho hàm đó, giữ tên kiểu C, để gọi từ C/Python (ctypes)/FFI.\n- Giải mã: `c++filt _Z3fooid` ra `foo(int, double)`; xem ký hiệu: `nm -C libx.a`.\n\n```cpp\n// header chung cho C va C++\n#ifdef __cplusplus\nextern \"C\" {\n#endif\nint cong(int a, int b);   // ten ky hieu van la \"cong\"\n#ifdef __cplusplus\n}\n#endif\n```\n\n### Lỗi hay gặp\n- Khai báo hàm C trong header mà quên `extern \"C\"`: linker tìm tên đã mangle và không thấy.\n- Trộn thư viện build bằng hai compiler/ABI khác nhau."
+ },
+ "Standard Library + STL › Iterators": {
+  "body": "Iterator là đối tượng hoạt động như **con trỏ tổng quát**, trỏ tới một phần tử của container và biết di chuyển sang phần tử kế tiếp. Nhờ nó, code duyệt và thuật toán không phụ thuộc vào container cụ thể.\n\n### Vì sao cần biết\nMọi container STL cung cấp iterator; mọi thuật toán `<algorithm>` nhận iterator. Hiểu iterator là hiểu cách STL ghép các phần lại.\n\n### Ý chính\n- `c.begin()` trỏ phần tử đầu; `c.end()` trỏ **sau** phần tử cuối (không dereference được). Khoảng `[begin, end)` là nửa mở.\n- Thao tác cơ bản: `*it` (lấy giá trị), `++it` (tiến), `it == end` (hết).\n- Phân loại theo khả năng: input, forward, bidirectional, random access (`vector`, `array`, `deque`: cho `it + n`, `it2 - it1`), và contiguous (C++20).\n- `const_iterator` (`cbegin`/`cend`) chỉ đọc. `rbegin`/`rend` duyệt ngược.\n- Range-for là cú pháp gọn của vòng lặp iterator.\n\n```cpp\n#include <iostream>\n#include <vector>\n\nint main() {\n    std::vector<int> v{10, 20, 30};\n    for (auto it = v.begin(); it != v.end(); ++it)\n        std::cout << *it << ' ';\n    std::cout << '\\n';\n    for (int x : v) std::cout << x << ' ';   // tuong duong\n}\n```\n\n### Lỗi hay gặp\n- **Iterator invalidation**: `push_back`/`insert`/`erase` có thể làm iterator cũ vô hiệu; dùng sau đó là hành vi không xác định. Với `erase`, dùng giá trị trả về: `it = v.erase(it);`.\n- Dereference `end()`.\n- Dùng `<` thay `!=` với iterator của container không truy cập ngẫu nhiên.",
+  "lessons": [
+   {
+    "href": "/courses/pcp291-c-programming/learn?lessonSlug=pcp291-7-1-stl",
+    "ten": "7.1 — STL: container, iterator, thuật toán",
+    "nguon": "C++ Programming · Chapter 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PCP291"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-7-9-stl-vector",
+    "ten": "7.9 — STL vector: mảng tự biết lớn lên",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   }
+  ]
+ },
+ "Standard Library + STL › iostream & Formatting": {
+  "body": "Ngoài in và đọc cơ bản, iostream còn là hệ thống **stream** hướng đối tượng, an toàn kiểu: cùng toán tử `<<` / `>>` làm việc với console, file (`fstream`) và chuỗi trong bộ nhớ (`stringstream`). Phần \"định dạng\" điều khiển cách hiển thị: độ rộng, số chữ số thập phân, hệ cơ số.\n\n### Vì sao cần biết\nIn bảng số liệu thẳng cột, đọc/ghi file, tách chuỗi, đổi chuỗi ↔ số là việc hằng ngày.\n\n### Ý chính\n- Header `<iomanip>`: `std::setw(n)`, `std::setprecision(n)`, `std::fixed`, `std::setfill('0')`, `std::hex`, `std::left`/`std::right`.\n- `std::stringstream` để ghép/tách chuỗi và đổi kiểu.\n- File: `std::ifstream in(\"a.txt\");` `std::ofstream out(\"b.txt\");`, kiểm tra `if (!in)` và đóng tự động khi ra khỏi phạm vi (RAII).\n- Từ C++20 có `std::format`, C++23 có `std::print` cho định dạng kiểu Python, an toàn hơn và gọn hơn `<<`.\n\n```cpp\n#include <iomanip>\n#include <iostream>\n#include <sstream>\n\nint main() {\n    double pi = 3.14159265;\n    std::cout << std::fixed << std::setprecision(2) << pi << '\\n';   // 3.14\n    std::cout << std::setw(6) << std::setfill('0') << 42 << '\\n';    // 000042\n\n    std::stringstream ss(\"10 20 30\");\n    int a, b, c;\n    ss >> a >> b >> c;\n    std::cout << a + b + c << '\\n';                                   // 60\n}\n```\n\n### Lỗi hay gặp\n- `std::fixed`/`setprecision` giữ hiệu lực cho các lần in sau: đặt lại khi cần.\n- `while (!in.eof())` để đọc file thường lặp thừa một lần; dùng `while (in >> x)` hoặc `while (std::getline(in, s))`.\n- Quên kiểm tra mở file thành công.",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-8-1-stream-io",
+    "ten": "8.1 — Stream I/O: đọc và ghi file",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-1-1-basics",
+    "ten": "1.1 — Chương trình C/C++ đầu tiên",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   }
+  ]
+ },
+ "Standard Library + STL › Algorithms": {
+  "body": "STL Algorithms là bộ hơn một trăm hàm tổng quát trong `<algorithm>` và `<numeric>` để tìm kiếm, sắp xếp, biến đổi, đếm, sao chép, gộp... trên một **khoảng iterator**. Dùng chúng thay cho vòng `for` viết tay giúp code ngắn, ít lỗi và nói rõ ý đồ.\n\n### Vì sao cần biết\nNgười viết C++ giỏi hiếm khi viết vòng lặp thô để tìm/đếm/sắp xếp: họ gọi thuật toán. Đọc code người khác cũng đòi hỏi nhận ra chúng.\n\n### Ý chính — nhóm thường dùng\n- Sắp xếp: `sort`, `stable_sort`, `partial_sort`, `nth_element`.\n- Tìm: `find`, `find_if`, `binary_search`, `lower_bound` (trên dãy đã sắp xếp).\n- Đếm/kiểm tra: `count`, `count_if`, `any_of`, `all_of`, `none_of`.\n- Biến đổi: `transform`, `copy`, `fill`, `replace`, `reverse`, `unique`.\n- Số học (`<numeric>`): `accumulate`, `iota`, `partial_sum`.\n- Truyền lambda làm tiêu chí; từ C++20 có bản `std::ranges::` nhận thẳng container.\n\n```cpp\n#include <algorithm>\n#include <iostream>\n#include <numeric>\n#include <vector>\n\nint main() {\n    std::vector<int> v{5, 3, 8, 1};\n    std::sort(v.begin(), v.end(), std::greater<>());           // 8 5 3 1\n    int tong = std::accumulate(v.begin(), v.end(), 0);         // 17\n    bool co_chan = std::any_of(v.begin(), v.end(),\n                               [](int x) { return x % 2 == 0; });\n    std::cout << tong << ' ' << co_chan << '\\n';\n}\n```\n\n### Lỗi hay gặp\n- `binary_search`/`lower_bound` trên dãy **chưa sắp xếp**: kết quả sai.\n- Comparator không thoả \"strict weak ordering\" (ví dụ dùng `<=`): `sort` có thể crash hoặc lặp vô hạn.\n- `accumulate` với giá trị khởi đầu `0` khi cộng số thực: kiểu `int` làm mất phần lẻ; dùng `0.0`.\n\n### Tự kiểm tra\n1. Khác nhau giữa `sort` và `stable_sort`?\n2. Vì sao comparator dùng `<=` là sai?",
+  "lessons": [
+   {
+    "href": "/courses/pcp291-c-programming/learn?lessonSlug=pcp291-7-1-stl",
+    "ten": "7.1 — STL: container, iterator, thuật toán",
+    "nguon": "C++ Programming · Chapter 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PCP291"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-7-9-stl-vector",
+    "ten": "7.9 — STL vector: mảng tự biết lớn lên",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   }
+  ]
+ },
+ "Standard Library + STL › Date / Time": {
+  "body": "`<chrono>` là thư viện thời gian chuẩn, dựa trên ba khái niệm: **duration** (một khoảng thời gian), **time_point** (một thời điểm) và **clock** (nguồn thời gian). Nhờ kiểu mạnh, bạn không còn nhầm lẫn giây với mili-giây.\n\n### Vì sao cần biết\nĐo hiệu năng, đặt timeout, `sleep`, hẹn giờ trong luồng đều cần đến chrono.\n\n### Ý chính\n- `std::chrono::steady_clock`: đồng hồ đơn điệu, **không bao giờ lùi**: dùng để đo khoảng thời gian.\n- `std::chrono::system_clock`: giờ thực của hệ thống (có thể bị chỉnh); dùng khi cần ngày giờ.\n- `duration_cast<milliseconds>(...)` đổi đơn vị; literal `1s`, `250ms`, `5min` (`using namespace std::chrono_literals;`).\n- `std::this_thread::sleep_for(100ms);` để ngủ.\n- C++20 bổ sung lịch và múi giờ (`year_month_day`, `zoned_time`), tuỳ trình biên dịch hỗ trợ.\n\n```cpp\n#include <chrono>\n#include <iostream>\n#include <thread>\n\nint main() {\n    using namespace std::chrono;\n    auto t0 = steady_clock::now();\n    std::this_thread::sleep_for(150ms);\n    auto t1 = steady_clock::now();\n    auto ms = duration_cast<milliseconds>(t1 - t0).count();\n    std::cout << \"Tong: \" << ms << \" ms\\n\";\n}\n```\n\n### Lỗi hay gặp\n- Đo hiệu năng bằng `system_clock`: giờ hệ thống có thể bị chỉnh giữa chừng làm kết quả sai.\n- Chia số nguyên khi đổi đơn vị và mất độ chính xác; để chrono tự đổi bằng `duration<double>`.\n- Quên rằng `std::clock()` đo thời gian CPU, không phải thời gian thực.\n\n### Tự kiểm tra\n1. Vì sao đo thời gian chạy nên dùng `steady_clock`?\n2. Viết `duration_cast` đổi một khoảng thời gian sang giây."
+ },
+ "Standard Library + STL › Erase-Remove Idiom": {
+  "body": "Erase-remove idiom là cách chuẩn (trước C++20) để **xoá các phần tử thoả điều kiện** khỏi một container tuần tự như `vector`. Lý do cần hai bước: thuật toán `std::remove`/`remove_if` chỉ nhận iterator nên **không thể** thay đổi kích thước container.\n\n### Vì sao cần biết\nXoá phần tử trong vòng `for` bằng `erase` từng cái vừa chậm (O(n) mỗi lần) vừa dễ làm iterator vô hiệu. Idiom này xoá cả loạt trong **một lượt** O(n).\n\n### Ý chính\n- `std::remove_if(first, last, pred)` dồn các phần tử cần **giữ** lên đầu dãy và trả về iterator tới phần cuối \"rác\" (giá trị phần đuôi không xác định).\n- `container.erase(new_end, container.end())` xoá thật phần đuôi đó.\n- C++20 có `std::erase(v, value)` và `std::erase_if(v, pred)` làm cả hai bước trong một lệnh.\n- `std::list` có hàm thành viên `remove`/`remove_if` riêng.\n\n```cpp\n#include <algorithm>\n#include <iostream>\n#include <vector>\n\nint main() {\n    std::vector<int> v{1, 2, 3, 4, 5, 6};\n\n    // truoc C++20\n    v.erase(std::remove_if(v.begin(), v.end(),\n                           [](int x) { return x % 2 == 0; }),\n            v.end());                       // con: 1 3 5\n\n    // C++20: std::erase_if(v, [](int x){ return x % 2 == 0; });\n    for (int x : v) std::cout << x << ' ';\n}\n```\n\n### Lỗi hay gặp\n- Chỉ gọi `remove_if` mà quên `erase`: kích thước vector không đổi, đuôi chứa giá trị rác.\n- Truyền sai: `v.erase(std::remove_if(...))` thiếu tham số thứ hai chỉ xoá đúng một phần tử.\n- Dùng `std::remove` trên `std::map`/`set`: không hợp lệ, hãy dùng `erase_if`/duyệt có `erase`.\n\n### Tự kiểm tra\n1. Vì sao `remove_if` không thể xoá thật phần tử?\n2. Viết lại bằng `std::erase_if` (C++20).",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-7-9-stl-vector",
+    "ten": "7.9 — STL vector: mảng tự biết lớn lên",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   }
+  ]
+ },
+ "Standard Library + STL › Boost Library": {
+  "body": "Boost là bộ sưu tập thư viện C++ mã nguồn mở, được hội đồng chuẩn rất tôn trọng: nhiều thứ trong chuẩn C++ sinh ra từ Boost (`shared_ptr`, `regex`, `filesystem`, `optional`, `thread`, `chrono`...). Hơn trăm thư viện con, đa số chỉ cần `#include` (header-only), một số cần biên dịch.\n\n### Vì sao cần biết\nKhi chuẩn chưa có hoặc chưa đủ, Boost thường có sẵn: `Boost.Asio` (mạng và I/O bất đồng bộ), `Boost.Filesystem`, `Boost.Program_options`, `Boost.Graph`, `Boost.Spirit`, `Boost.Beast` (HTTP/WebSocket).\n\n### Ý chính\n- Cài qua trình quản lý gói (`apt install libboost-all-dev`, `brew install boost`, vcpkg, Conan).\n- Header-only chỉ cần `-I` đường dẫn; thư viện cần biên dịch thì link thêm, ví dụ `-lboost_system`.\n- Trong CMake: `find_package(Boost REQUIRED COMPONENTS system filesystem)` rồi `target_link_libraries(app Boost::filesystem)`.\n- Ưu tiên tính năng đã vào chuẩn (`std::optional`, `std::filesystem`) khi compiler hỗ trợ; dùng Boost cho phần chuẩn chưa có.\n\n```cpp\n#include <boost/algorithm/string.hpp>\n#include <iostream>\n#include <string>\n\nint main() {\n    std::string s = \"  Xin Chao  \";\n    boost::algorithm::trim(s);\n    boost::algorithm::to_upper(s);\n    std::cout << s << '\\n';   // XIN CHAO\n}\n```\n\n### Lỗi hay gặp\n- Trộn nhiều phiên bản Boost/compiler: lỗi link khó hiểu.\n- Kéo cả Boost chỉ để dùng một hàm nhỏ: tăng thời gian biên dịch.\n\n### Tự kiểm tra\n1. Vì sao nhiều tính năng của Boost về sau xuất hiện trong chuẩn C++?\n2. Khi nào nên dùng `std::filesystem` thay cho Boost.Filesystem?"
+ },
+ "Standard Library + STL › spdlog": {
+  "body": "spdlog là thư viện ghi log (nhật ký) nhanh, dùng cú pháp định dạng của `fmt`, thread-safe, có thể chạy ở chế độ header-only. Log giúp bạn biết chương trình đang làm gì khi chạy thật mà không phải gắn debugger.\n\n### Vì sao cần biết\n`std::cout << ...` rải khắp nơi không có mức độ, không có thời gian, không ghi ra file xoay vòng. Một thư viện log cho cả ba, và bật/tắt theo mức mà không sửa code.\n\n### Ý chính\n- Các mức: `trace`, `debug`, `info`, `warn`, `error`, `critical`; chỉ in từ mức cài đặt trở lên (`spdlog::set_level`).\n- Cú pháp: `spdlog::info(\"User {} dang nhap sau {} ms\", name, ms);`\n- Sink: console màu, file, file xoay vòng (`rotating_file_sink`), nhiều sink cùng lúc.\n- Có chế độ async để ghi log không chặn luồng chính; gọi `spdlog::shutdown()` khi thoát.\n\n```cpp\n#include <spdlog/spdlog.h>\n\nint main() {\n    spdlog::set_level(spdlog::level::debug);\n    spdlog::info(\"Khoi dong chuong trinh\");\n    spdlog::debug(\"x = {}\", 42);\n    spdlog::warn(\"Dung luong con {}%\", 8);\n    spdlog::error(\"Khong mo duoc file {}\", \"data.txt\");\n}\n```\n\n### Lỗi hay gặp\n- Log quá chi tiết ở mức `info` trong đường nóng làm chậm chương trình.\n- Ghi dữ liệu nhạy cảm (mật khẩu, token) vào log.\n- Quên cấu hình xoay vòng file: log đầy ổ đĩa.\n\n### Tự kiểm tra\n1. Vì sao nên dùng mức log thay vì `cout`?\n2. Chế độ async của spdlog đổi cái gì lấy cái gì?"
+ },
+ "Standard Library + STL › OpenCL": {
+  "body": "OpenCL (Open Computing Language) là chuẩn mở của Khronos để viết chương trình chạy **song song** trên nhiều loại thiết bị tính toán: CPU, GPU của nhiều hãng, FPGA, bộ tăng tốc khác. Bạn viết phần tính toán nặng dưới dạng **kernel** (ngôn ngữ OpenCL C, gần C), còn phần điều khiển viết bằng C/C++.\n\n### Vì sao cần biết\nKhi bài toán có tính chất \"cùng một phép tính trên hàng triệu phần tử\" (xử lý ảnh, mô phỏng, học máy), GPU nhanh hơn CPU nhiều lần. OpenCL là lựa chọn không phụ thuộc hãng (khác CUDA chỉ cho NVIDIA).\n\n### Ý chính\n- Mô hình: **host** (chương trình C++) nạp **kernel** lên **device**; dữ liệu chuyển qua **buffer**.\n- Các bước: chọn platform/device → tạo context & command queue → biên dịch program từ mã nguồn kernel → tạo buffer → đặt đối số → xếp kernel vào hàng đợi → đọc kết quả.\n- Mỗi kernel chạy ở nhiều **work-item** song song, nhóm thành **work-group**.\n- Chi phí chuyển dữ liệu host ↔ device có thể lấn át lợi ích nếu việc tính quá nhỏ.\n- Trên nhiều hệ, hỗ trợ OpenCL thay đổi theo hãng/OS (macOS đã đánh dấu OpenCL là deprecated); kiểm tra nền tảng bạn dùng trước.\n\n```c\n// kernel cong hai vector (OpenCL C)\n__kernel void cong(__global const float* a,\n                   __global const float* b,\n                   __global float* c) {\n    int i = get_global_id(0);\n    c[i] = a[i] + b[i];\n}\n```\n\n### Lỗi hay gặp\n- Quên kiểm tra mã lỗi trả về từ các hàm `cl*`.\n- Chuyển dữ liệu qua lại liên tục giữa host và device.\n- Giả định mọi thiết bị hỗ trợ cùng phiên bản/tính năng."
+ },
+ "Standard Library + STL › fmt Library": {
+  "body": "`{fmt}` (thư viện `fmt`) là thư viện **định dạng chuỗi** hiện đại: cú pháp giống Python `{}` thay cho `printf`'s `%d` hay chuỗi `<<` dài dòng. Nó an toàn kiểu (kiểm tra lúc biên dịch), nhanh, và là nền của `std::format` (C++20) cũng như `std::print` (C++23).\n\n### Vì sao cần biết\nĐịnh dạng chuỗi là việc hằng ngày: in log, tạo thông báo lỗi. `fmt` vừa dễ đọc hơn `iostream` vừa không có lỗ hổng kiểu `printf(\"%s\", number)`.\n\n### Ý chính\n- `fmt::format(\"Xin chao {}!\", ten)` trả về `std::string`.\n- `fmt::print(\"{} + {} = {}\\n\", a, b, a + b);` in thẳng ra stdout.\n- Chỉ định định dạng sau dấu hai chấm: `{:>8}` canh phải rộng 8, `{:.2f}` hai số lẻ, `{:08.3f}`, `{:x}` hex, `{:*^20}` căn giữa với ký tự `*`.\n- Đối số có thể đánh số/đặt tên: `{0} {1} {0}`.\n- Muốn in kiểu của riêng bạn thì chuyên biệt hoá `fmt::formatter<MyType>`.\n- Nếu compiler hỗ trợ C++20, bạn có thể dùng `std::format` với cú pháp gần như y hệt, không cần cài thêm.\n\n```cpp\n#include <fmt/core.h>\n\nint main() {\n    double pi = 3.14159265;\n    fmt::print(\"pi = {:.3f}\\n\", pi);          // pi = 3.142\n    fmt::print(\"{:>6}|{:<6}|{:^6}|\\n\", 1, 2, 3);\n    std::string s = fmt::format(\"{0}-{1}-{0}\", \"a\", \"b\");  // a-b-a\n    fmt::print(\"{}\\n\", s);\n}\n```\n\n### Lỗi hay gặp\n- Số lượng `{}` không khớp số đối số: `fmt` bắt lúc biên dịch (với chuỗi hằng).\n- Quên link `fmt` hoặc dùng chế độ header-only (`FMT_HEADER_ONLY`) mà không khai báo.\n- Nhầm cú pháp `%` của `printf` với `{}`."
+ },
+ "Standard Library + STL › Ranges v3": {
+  "body": "Ranges (bản gốc là thư viện `range-v3` của Eric Niebler; một phần lớn đã vào chuẩn C++20 dưới `std::ranges` và `std::views`) cho phép thao tác trên **cả một dãy** thay vì phải truyền cặp iterator, và **ghép các bước xử lý bằng dấu `|`** giống pipe trong shell.\n\n### Vì sao cần biết\nCode kiểu \"lọc rồi biến đổi rồi lấy 5 phần tử đầu\" sẽ ngắn và dễ đọc hơn nhiều so với vòng `for` hoặc các lời gọi lồng nhau.\n\n### Ý chính\n- **Range**: bất kỳ thứ gì có `begin()` và `end()` (container, mảng, view).\n- **View**: lớp nhìn **lười (lazy)**, nhẹ, không sao chép dữ liệu: `filter`, `transform`, `take`, `drop`, `reverse`, `iota`, `split`...\n- Phép tính chỉ chạy khi bạn duyệt view; có thể đại diện cả dãy vô hạn như `iota(1)`.\n- Thuật toán ranges nhận container trực tiếp: `std::ranges::sort(v);`\n- `range-v3` dùng được với C++14/17 và có thêm nhiều view; `std::ranges` (C++20) là tập con, C++23 bổ sung thêm.\n\n```cpp\n#include <iostream>\n#include <ranges>\n#include <vector>\n\nint main() {\n    std::vector<int> v{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};\n    auto kq = v\n        | std::views::filter([](int x) { return x % 2 == 0; })\n        | std::views::transform([](int x) { return x * x; })\n        | std::views::take(3);\n    for (int x : kq) std::cout << x << ' ';   // 4 16 36\n}\n```\n\n### Lỗi hay gặp\n- Giữ view sau khi container gốc đã bị huỷ hoặc thay đổi (view không sở hữu dữ liệu): tham chiếu treo.\n- Mong view đã \"tính sẵn\" kết quả; thực tế tính lại mỗi lần duyệt.\n- Dùng sai thư viện: `range-v3` dùng namespace `ranges::views`, còn chuẩn là `std::views`."
+ },
+ "Standard Library + STL › Làm việc với thư viện bên ngoài": {
+  "body": "Hầu hết dự án thật dùng thư viện của người khác. Với C++, có ba cách đưa một thư viện vào chương trình, mỗi cách có đánh đổi riêng.\n\n### Vì sao cần biết\nLỗi \"undefined reference\", \"cannot find -lxxx\", \"DLL not found\" đều bắt nguồn từ việc hiểu sai cách thư viện được biên dịch, tìm kiếm và liên kết.\n\n### Ý chính\n- **Header-only** (`fmt` ở chế độ header-only, `nlohmann/json`, Eigen): chỉ cần `#include`; không có bước liên kết; đổi lại biên dịch chậm hơn.\n- **Thư viện tĩnh** (`.a` trên Linux/macOS, `.lib` trên Windows): mã được **chép vào** file thực thi lúc link; file chạy độc lập nhưng lớn hơn và phải build lại khi thư viện đổi.\n- **Thư viện động** (`.so`, `.dylib`, `.dll`): file thực thi tham chiếu thư viện lúc chạy; nhỏ gọn, cập nhật thư viện không cần build lại, nhưng phải có thư viện ở nơi hệ thống tìm được (`LD_LIBRARY_PATH`, `rpath`, cùng thư mục với `.exe` trên Windows).\n- Cờ gcc/clang: `-I<thư mục header>`, `-L<thư mục lib>`, `-l<tên>` (thư viện `libfoo.a` ứng với `-lfoo`).\n- Ưu tiên quản lý bằng CMake (`find_package`, `target_link_libraries`) và trình quản lý gói (vcpkg, Conan) thay vì chép tay.\n- ABI: thư viện C++ build bằng compiler/phiên bản/cờ khác có thể không tương thích.\n\n```bash\ng++ main.cpp -I/opt/foo/include -L/opt/foo/lib -lfoo -o app\nldd ./app          # Linux: xem app can nhung thu vien dong nao\n```\n\n### Lỗi hay gặp\n- Thứ tự `-l` quan trọng với thư viện tĩnh: đặt sau file nguồn cần chúng.\n- Chạy app báo \"error while loading shared libraries\": thư viện động không ở đường dẫn tìm kiếm.\n- Trộn thư viện Debug/Release hoặc runtime khác nhau trên Windows.",
+  "lessons": [
+   {
+    "href": "/courses/ics102-introduction-to-computer-systems/learn?lessonSlug=ics102-ts-7-3",
+    "ten": "7.3 — Nạp chương trình, thư viện dùng chung, liên kết động và mã độc lập vị trí",
+    "nguon": "Introduction to Computer Systems · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "ICS102"
+   },
+   {
+    "href": "/courses/programming-fundamentals/learn?lessonSlug=prf192-n4-1-du-an-c",
+    "ten": "N4.1 — Nhiều file, header guard & Makefile",
+    "nguon": "Programming Fundamentals · Nâng cao 4 — Tổ chức dự án C thực chiến",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF192"
+   }
+  ]
+ },
+ "Đa luồng › std::thread & Mutex": {
+  "body": "`std::thread` (từ C++11, header `<thread>`) tạo một luồng thực thi mới chạy song song. Khi nhiều luồng cùng đọc/ghi một dữ liệu, bạn phải bảo vệ nó bằng **mutex** (khoá loại trừ lẫn nhau) để tránh **race condition**.\n\nHình dung: nhiều người cùng ghi vào một cuốn sổ; mutex là cây bút duy nhất, ai cầm bút mới được ghi.\n\n### Vì sao cần biết\nTận dụng nhiều lõi CPU, giữ ứng dụng phản hồi (giao diện, server) trong khi làm việc nặng ở luồng phụ.\n\n### Ý chính\n- `std::thread t(hàm, đối_số...);` rồi **bắt buộc** `t.join()` (chờ xong) hoặc `t.detach()` trước khi `t` bị huỷ, nếu không `std::terminate`.\n- Đối số được **sao chép** vào luồng; muốn truyền tham chiếu dùng `std::ref(x)`.\n- `std::mutex` + `std::lock_guard<std::mutex>` (hoặc `std::scoped_lock`): khoá khi vào phạm vi, tự mở khi ra (RAII, an toàn cả khi có exception).\n- Cần khoá nhiều mutex cùng lúc: `std::scoped_lock lk(m1, m2);` để tránh deadlock.\n- Biên dịch có thể cần `-pthread`.\n\n```cpp\n#include <iostream>\n#include <mutex>\n#include <thread>\n\nint dem = 0;\nstd::mutex m;\n\nvoid tang() {\n    for (int i = 0; i < 100000; ++i) {\n        std::lock_guard<std::mutex> lk(m);\n        ++dem;\n    }\n}\n\nint main() {\n    std::thread a(tang), b(tang);\n    a.join(); b.join();\n    std::cout << dem << '\\n';   // luon 200000\n}\n```\n\nBỏ `lock_guard`, kết quả thường nhỏ hơn 200000 và thay đổi mỗi lần chạy (đó là race).\n\n### Lỗi hay gặp\n- Quên `join`/`detach`.\n- Khoá/mở mutex thủ công bằng `lock()`/`unlock()` rồi quên mở khi có `return`/exception.\n- Giữ khoá khi làm việc lâu (gọi I/O): các luồng khác bị chặn.\n- Truyền tham chiếu tới biến cục bộ vào luồng `detach` rồi biến bị huỷ.\n\n### Tự kiểm tra\n1. Race condition là gì? Vì sao `++dem` không an toàn?\n2. `lock_guard` hơn `lock()/unlock()` thủ công ở điểm nào?",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-7-11-multithread",
+    "ten": "7.11 — Đa luồng: std::thread, mutex và race condition",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-5-2-mutex",
+    "ten": "5.2 — Mutex, spinlock và biến điều kiện, đo thật",
+    "nguon": "Operating Systems for Developers · Chương 5",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-5-1-race",
+    "ten": "5.1 — Race condition tái hiện được: counter++ trong C, Java và Node",
+    "nguon": "Operating Systems for Developers · Chương 5",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Đa luồng › Atomic & Async": {
+  "body": "`std::atomic` và `std::async` là hai công cụ đồng thời **nhẹ hơn** việc tự quản lý luồng và mutex.\n\n### Ý chính\n- `std::atomic<T>` (header `<atomic>`): biến mà các phép đọc/ghi/cộng (`++`, `fetch_add`, `exchange`, `compare_exchange_strong`) là **nguyên tử**, không bị luồng khác xen vào giữa. Phù hợp bộ đếm, cờ dừng (`std::atomic<bool>`); thường nhanh hơn mutex cho thao tác đơn giản.\n- Không phải mọi kiểu đều \"không khoá\" (lock-free); kiểm tra `is_lock_free()`. Các thao tác phức hợp nhiều biến vẫn cần mutex.\n- `std::async(std::launch::async, hàm, đối số...)` chạy hàm bất đồng bộ và trả về `std::future<T>`; gọi `.get()` để chờ và lấy kết quả (hoặc exception bị ném trong hàm).\n- Chú ý: `future` do `async` trả về sẽ **chặn ở destructor** cho tới khi tác vụ xong, nên nếu không giữ nó trong biến, \"bất đồng bộ\" thành tuần tự.\n\n```cpp\n#include <atomic>\n#include <future>\n#include <iostream>\n#include <thread>\n#include <vector>\n\nint main() {\n    std::atomic<int> dem{0};\n    std::vector<std::thread> ts;\n    for (int i = 0; i < 4; ++i)\n        ts.emplace_back([&] { for (int j = 0; j < 100000; ++j) ++dem; });\n    for (auto& t : ts) t.join();\n    std::cout << dem << '\\n';   // 400000\n\n    auto f = std::async(std::launch::async, [] { return 6 * 7; });\n    std::cout << f.get() << '\\n';  // 42\n}\n```\n\n### Lỗi hay gặp\n- Dùng `std::async` mà không chỉ định `std::launch::async`: thực thi có thể bị hoãn (deferred) tới lúc `get`.\n- Cho rằng `atomic` bảo vệ cả khối lệnh: chỉ từng thao tác riêng lẻ là nguyên tử.",
+  "lessons": [
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-5-2-mutex",
+    "ten": "5.2 — Mutex, spinlock và biến điều kiện, đo thật",
+    "nguon": "Operating Systems for Developers · Chương 5",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-7-11-multithread",
+    "ten": "7.11 — Đa luồng: std::thread, mutex và race condition",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   }
+  ]
+ },
+ "Đa luồng › Đa luồng (Multithreading)": {
+  "body": "Đa luồng là chạy nhiều luồng thực thi cùng lúc trong một tiến trình, dùng chung bộ nhớ. Mục tiêu: dùng hết các lõi CPU (tăng throughput) và không để việc chậm (I/O, tính toán nặng) chặn phần còn lại. Cái giá: lỗi **đồng bộ hoá** rất khó tái hiện và gỡ.\n\n### Vì sao cần biết\nServer, game, ứng dụng xử lý dữ liệu đều đa luồng; hiểu bốn khái niệm dưới đây giúp tránh phần lớn lỗi.\n\n### Ý chính\n- **Race condition**: kết quả phụ thuộc thứ tự chạy của các luồng khi cùng truy cập dữ liệu chung có ít nhất một thao tác ghi, không đồng bộ. Trong C++ đây là hành vi không xác định (data race).\n- **Đồng bộ hoá**: `std::mutex`, `std::lock_guard`/`scoped_lock`, `std::condition_variable` (chờ một điều kiện), `std::atomic`.\n- **Deadlock**: hai luồng giữ khoá và chờ khoá của nhau mãi mãi. Cách tránh: luôn khoá theo cùng thứ tự, hoặc dùng `std::scoped_lock` để khoá nhiều mutex một lần.\n- **Công cụ**: `std::thread`, `std::async/future`, `std::jthread` (C++20, tự join, hỗ trợ dừng), thuật toán song song (`std::execution::par`, C++17).\n- Ưu tiên thiết kế **ít chia sẻ**: mỗi luồng làm việc trên dữ liệu riêng rồi gộp kết quả.\n- Công cụ phát hiện: **ThreadSanitizer** (`-fsanitize=thread`) bắt data race lúc chạy.\n\n```cpp\n// tong mot mang bang 4 luong, moi luong mot doan rieng, khong chia se\n#include <numeric>\n#include <thread>\n#include <vector>\n#include <iostream>\n\nint main() {\n    std::vector<int> v(1000, 1);\n    std::vector<long long> ket(4);\n    std::vector<std::thread> ts;\n    for (int i = 0; i < 4; ++i)\n        ts.emplace_back([&, i] {\n            auto b = v.begin() + i * 250;\n            ket[i] = std::accumulate(b, b + 250, 0LL);\n        });\n    for (auto& t : ts) t.join();\n    std::cout << std::accumulate(ket.begin(), ket.end(), 0LL) << '\\n';  // 1000\n}\n```\n\n### Lỗi hay gặp\n- Tưởng thêm luồng luôn nhanh hơn: tạo luồng và khoá có chi phí, và số lõi có hạn.\n- Quên bảo vệ một biến chung \"chỉ đọc một chỗ\".\n- `condition_variable` không dùng kèm vòng kiểm tra điều kiện (spurious wakeup).\n\n### Tự kiểm tra\n1. Nêu bốn điều kiện cần để xảy ra deadlock (Coffman).\n2. Khi nào `atomic` đủ, khi nào cần mutex?",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-7-11-multithread",
+    "ten": "7.11 — Đa luồng: std::thread, mutex và race condition",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-5-1-race",
+    "ten": "5.1 — Race condition tái hiện được: counter++ trong C, Java và Node",
+    "nguon": "Operating Systems for Developers · Chương 5",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-5-2-mutex",
+    "ten": "5.2 — Mutex, spinlock và biến điều kiện, đo thật",
+    "nguon": "Operating Systems for Developers · Chương 5",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-6-1-deadlock",
+    "ten": "6.1 — Deadlock: bốn điều kiện Coffman, tìm ra bằng gdb và jstack",
+    "nguon": "Operating Systems for Developers · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/simulation?scenario=deadlock",
+    "ten": "Deadlock — hai bên cùng chờ nhau mãi mãi",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "Build System & Package Manager › CMake": {
+  "body": "CMake là công cụ **tạo ra** hệ thống build (không tự biên dịch): bạn mô tả dự án trong file `CMakeLists.txt`, CMake sinh ra Makefile, Ninja, hoặc project Visual Studio/Xcode phù hợp với máy và compiler. Đó là cách làm cross-platform phổ biến nhất cho C/C++ hiện nay.\n\n### Vì sao cần biết\nGần như mọi dự án C++ mã nguồn mở và công ty đều dùng CMake; thư viện bên thứ ba thường kèm sẵn cấu hình CMake; IDE (CLion, VS Code, Visual Studio) hiểu nó.\n\n### Ý chính\n- Tư duy **target**: khai báo `add_executable`/`add_library` rồi gắn thuộc tính cho từng target bằng `target_*`.\n- `target_include_directories`, `target_link_libraries`, `target_compile_features(app PRIVATE cxx_std_20)`, `target_compile_options`.\n- Từ khoá `PUBLIC/PRIVATE/INTERFACE` quyết định thuộc tính có \"lan\" sang target phụ thuộc hay không.\n- **Build ngoài nguồn (out-of-source)**: build vào thư mục riêng `build/`, không làm bẩn cây mã nguồn.\n- Tìm thư viện ngoài: `find_package(...)`; tải thẳng: `FetchContent`.\n\n```cmake\ncmake_minimum_required(VERSION 3.20)\nproject(HelloApp LANGUAGES CXX)\n\nadd_executable(app src/main.cpp src/util.cpp)\ntarget_include_directories(app PRIVATE include)\ntarget_compile_features(app PRIVATE cxx_std_20)\ntarget_compile_options(app PRIVATE -Wall -Wextra)\n```\n\n```bash\ncmake -S . -B build -DCMAKE_BUILD_TYPE=Release   # cau hinh\ncmake --build build                               # bien dich\nctest --test-dir build                            # chay test (neu co)\n```\n\n### Lỗi hay gặp\n- Dùng biến toàn cục kiểu cũ (`include_directories`, `CMAKE_CXX_FLAGS`) thay vì `target_*`: khó bảo trì.\n- Không đặt `CMAKE_BUILD_TYPE` (đơn-cấu hình như Makefile/Ninja): mặc định không tối ưu.\n- Đổi `CMakeLists.txt` hoặc compiler mà không xoá cache (`build/CMakeCache.txt`).\n- Chép tay đường dẫn tuyệt đối vào script.\n\n### Tự kiểm tra\n1. Khác nhau giữa bước *configure* và bước *build*?\n2. `PRIVATE` và `PUBLIC` khác nhau thế nào?"
+ },
+ "Build System & Package Manager › Makefile / Ninja": {
+  "body": "**Make** (đọc file `Makefile`) là công cụ build kinh điển của Unix: mô tả \"file nào được tạo từ file nào và bằng lệnh gì\", rồi chỉ build lại phần đã thay đổi. **Ninja** là công cụ build tối giản chú trọng **tốc độ**, thường không viết tay mà được **CMake sinh ra**.\n\n### Ý chính\n- Makefile viết tay phù hợp dự án nhỏ, dễ đọc, có sẵn trên Linux/macOS.\n- Ninja bỏ bớt tính năng \"lập trình\" để khởi động và kiểm tra thay đổi rất nhanh; hiệu quả rõ ở dự án lớn, build tăng dần.\n- Dùng với CMake: `cmake -G Ninja -S . -B build && ninja -C build`.\n- Có thể gọi cả hai qua `cmake --build build` mà không cần nhớ lệnh riêng.\n\n```bash\ncmake -G Ninja -S . -B build\nninja -C build          # nhanh hon make o du an lon\n```\n\n### Lỗi hay gặp\n- Viết Ninja tay: không nên, hãy để CMake/Meson sinh.\n- Makefile viết tay thiếu khai báo phụ thuộc header: sửa `.h` mà không build lại `.cpp`.",
+  "lessons": [
+   {
+    "href": "/courses/programming-fundamentals/learn?lessonSlug=prf192-n4-1-du-an-c",
+    "ten": "N4.1 — Nhiều file, header guard & Makefile",
+    "nguon": "Programming Fundamentals · Nâng cao 4 — Tổ chức dự án C thực chiến",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF192"
+   },
+   {
+    "href": "/courses/operating-systems/learn?lessonSlug=osg202-lab-3",
+    "ten": "Lab 3 — Lập trình C trên Linux: gcc, make, gdb, fork/exec/wait, ống, lời gọi hệ thống, tín hiệu, và một mini-shell",
+    "nguon": "Operating Systems · Chương 7",
+    "kieu": "lab",
+    "academy": true,
+    "ma": "OSG202"
+   }
+  ]
+ },
+ "Build System & Package Manager › vcpkg / Conan": {
+  "body": "Trước đây dùng thư viện ngoài trong C++ nghĩa là tự tải mã nguồn, tự biên dịch, tự chỉnh đường dẫn. **vcpkg** (của Microsoft) và **Conan** (của JFrog) là các **trình quản lý gói** cho C/C++: khai báo thư viện cần dùng, công cụ tự tải, build với cờ phù hợp, và báo cho build system biết nó ở đâu.\n\n### Vì sao cần biết\nQuản lý phụ thuộc thủ công là nguồn lỗi lớn khi dự án có nhiều thư viện và nhiều máy/CI. Hai công cụ này làm cho `fmt`, `spdlog`, `boost`, `gtest`... chỉ cần một dòng khai báo.\n\n### Ý chính\n- **vcpkg**: chế độ manifest với file `vcpkg.json` (khai báo `dependencies`), tích hợp CMake qua toolchain file `-DCMAKE_TOOLCHAIN_FILE=.../vcpkg.cmake`. Thư viện được build từ nguồn theo \"port\"; có \"triplet\" (kiến trúc, tĩnh/động).\n- **Conan**: file `conanfile.txt`/`conanfile.py`, lệnh `conan install` tải/build rồi sinh file tích hợp CMake. Hỗ trợ gói nhị phân dựng sẵn và nhiều profile (compiler, cờ).\n- Cả hai: khoá phiên bản để build tái lập được.\n\n```json\n{\n  \"name\": \"myapp\",\n  \"version-string\": \"0.1.0\",\n  \"dependencies\": [\"fmt\", \"spdlog\"]\n}\n```\n\n```cmake\nfind_package(fmt CONFIG REQUIRED)\ntarget_link_libraries(app PRIVATE fmt::fmt)\n```\n\n### Lỗi hay gặp\n- Quên truyền toolchain file nên `find_package` không thấy thư viện.\n- Trộn thư viện build bằng triplet/profile khác nhau (tĩnh vs động, Debug vs Release).\n- Không ghim phiên bản: build hôm nay khác build tuần sau."
+ },
+ "Build System & Package Manager › gtest/gmock & Catch2 (Testing)": {
+  "body": "Unit test kiểm tra từng đơn vị nhỏ (hàm, lớp) tự động. Hai framework phổ biến cho C++: **GoogleTest** (gtest, kèm **gmock** để giả lập đối tượng) và **Catch2**.\n\n### Vì sao cần biết\nTest tự động cho phép sửa/refactor code mà biết ngay có hỏng gì không; CI chạy test mỗi lần đẩy code.\n\n### Ý chính\n- **GoogleTest**: `TEST(Suite, Name) { EXPECT_EQ(a, b); }`; `EXPECT_*` ghi nhận lỗi rồi chạy tiếp, `ASSERT_*` dừng test ngay. `TEST_F` cho test dùng chung fixture. **gmock**: `MOCK_METHOD(...)` để giả lập phụ thuộc, `EXPECT_CALL` để kiểm tra lời gọi.\n- **Catch2**: `TEST_CASE(\"mo ta\") { REQUIRE(x == 2); SECTION(\"...\") {...} }`; cú pháp tự nhiên, không macro cho từng loại so sánh. Bản v2 là một header duy nhất, v3 chia thành thư viện biên dịch sẵn.\n- Tích hợp CMake: `enable_testing()`, `add_test(...)` hoặc `gtest_discover_tests`, chạy bằng `ctest`.\n- Test tốt: nhỏ, độc lập, xác định (không phụ thuộc thời gian/ngẫu nhiên), tên nói rõ hành vi.\n\n```cpp\n#include <gtest/gtest.h>\n\nint cong(int a, int b) { return a + b; }\n\nTEST(CongTest, SoDuong) { EXPECT_EQ(cong(2, 3), 5); }\nTEST(CongTest, SoAm)    { EXPECT_EQ(cong(-1, -1), -2); }\n\n// link voi GTest::gtest_main de khong can tu viet main()\n```\n\n### Lỗi hay gặp\n- Test phụ thuộc thứ tự chạy hoặc dùng chung trạng thái toàn cục.\n- Dùng `EXPECT_EQ` để so sánh số thực: dùng `EXPECT_NEAR`/`EXPECT_DOUBLE_EQ`.\n- Mock quá mức khiến test chỉ kiểm tra cài đặt chứ không kiểm tra hành vi."
+ },
+ "Build System & Package Manager › Build Systems": {
+  "body": "Build system là công cụ biến mã nguồn thành chương trình: quyết định file nào cần biên dịch lại, thứ tự, cờ compiler, cách liên kết. Có hai lớp công cụ cần phân biệt.\n\n### Ý chính\n- **Công cụ thực thi build**: `make` (đọc Makefile) và `ninja` (nhanh, thường do công cụ khác sinh ra) — chạy các lệnh biên dịch theo đồ thị phụ thuộc.\n- **Công cụ sinh/mô tả build**: `CMake` (phổ biến nhất), `Meson` (cú pháp gọn, mặc định dùng Ninja), `Bazel` (build tái lập, quy mô rất lớn, tăng dần và cache từ xa), `SCons` (cấu hình bằng Python).\n- Nguyên tắc chung: khai báo phụ thuộc đúng thì chỉ build lại phần thay đổi (incremental build).\n- Chọn công cụ theo quy mô: dự án nhỏ → Makefile hoặc CMake; đa nền tảng/đa thư viện → CMake; monorepo khổng lồ → Bazel.\n\n```bash\n# Quy trinh pho bien hien nay\ncmake -G Ninja -S . -B build\ncmake --build build\n```\n\n### Lỗi hay gặp\n- Nhầm \"CMake build code\": CMake chỉ sinh file cho build tool thật sự chạy.\n- Khai báo thiếu phụ thuộc làm build tăng dần cho kết quả sai.",
+  "lessons": [
+   {
+    "href": "/courses/programming-fundamentals/learn?lessonSlug=prf192-n4-1-du-an-c",
+    "ten": "N4.1 — Nhiều file, header guard & Makefile",
+    "nguon": "Programming Fundamentals · Nâng cao 4 — Tổ chức dự án C thực chiến",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF192"
+   },
+   {
+    "href": "/courses/operating-systems/learn?lessonSlug=osg202-lab-3",
+    "ten": "Lab 3 — Lập trình C trên Linux: gcc, make, gdb, fork/exec/wait, ống, lời gọi hệ thống, tín hiệu, và một mini-shell",
+    "nguon": "Operating Systems · Chương 7",
+    "kieu": "lab",
+    "academy": true,
+    "ma": "OSG202"
+   }
+  ]
+ },
+ "Build System & Package Manager › Makefile cơ bản": {
+  "body": "Makefile là file văn bản mô tả cho `make` cách dựng dự án qua các **luật (rule)**: `target: phụ_thuộc` kèm các lệnh để tạo target. `make` so thời gian sửa file và chỉ chạy lại lệnh khi phụ thuộc mới hơn target.\n\n### Vì sao cần biết\nHiểu Makefile là hiểu vòng đời biên dịch (`.cpp` → `.o` → file chạy) và đọc được hàng nghìn dự án Unix/Linux.\n\n### Ý chính\n- Cú pháp rule: dòng đầu `target: dep1 dep2`, các dòng lệnh **bắt đầu bằng ký tự Tab** (không phải dấu cách).\n- Biến: `CXX = g++`, `CXXFLAGS = -std=c++20 -Wall -O2`, dùng `$(CXX)`.\n- Biến tự động: `$@` (target), `$<` (phụ thuộc đầu tiên), `$^` (mọi phụ thuộc).\n- Luật mẫu `%.o: %.cpp` để một luật cho mọi file; `.PHONY: clean` cho target không phải file.\n- Khai báo phụ thuộc header (ví dụ `-MMD -MP` của gcc) để sửa `.h` thì build lại đúng chỗ.\n\n```make\nCXX      = g++\nCXXFLAGS = -std=c++20 -Wall -Wextra -O2\nSRC      = main.cpp util.cpp\nOBJ      = $(SRC:.cpp=.o)\n\napp: $(OBJ)\n\t$(CXX) $(OBJ) -o $@\n\n%.o: %.cpp\n\t$(CXX) $(CXXFLAGS) -c $< -o $@\n\n.PHONY: clean\nclean:\n\trm -f $(OBJ) app\n```\n\n### Lỗi hay gặp\n- Dùng dấu cách thay Tab: `missing separator`.\n- Không khai báo header là phụ thuộc: sửa header nhưng không build lại.\n- Quên `.PHONY` nên có file tên `clean` làm lệnh không chạy.\n\n### Tự kiểm tra\n1. `$@`, `$<`, `$^` là gì?\n2. Vì sao `make` thứ hai gần như không làm gì?",
+  "lessons": [
+   {
+    "href": "/courses/programming-fundamentals/learn?lessonSlug=prf192-n4-1-du-an-c",
+    "ten": "N4.1 — Nhiều file, header guard & Makefile",
+    "nguon": "Programming Fundamentals · Nâng cao 4 — Tổ chức dự án C thực chiến",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF192"
+   },
+   {
+    "href": "/courses/operating-systems/learn?lessonSlug=osg202-lab-3",
+    "ten": "Lab 3 — Lập trình C trên Linux: gcc, make, gdb, fork/exec/wait, ống, lời gọi hệ thống, tín hiệu, và một mini-shell",
+    "nguon": "Operating Systems · Chương 7",
+    "kieu": "lab",
+    "academy": true,
+    "ma": "OSG202"
+   }
+  ]
+ },
+ "Build System & Package Manager › Ninja Build System": {
+  "body": "Ninja là hệ thống build nhỏ, mục tiêu duy nhất là **chạy build thật nhanh**. File `build.ninja` rất đơn giản và gần như không có tính năng lập trình: nó **được sinh tự động** bởi CMake, Meson hay GN, không phải để người viết tay.\n\n### Ý chính\n- Dùng với CMake: `cmake -G Ninja -S . -B build`, rồi `ninja -C build` (hoặc `cmake --build build`).\n- Nhanh vì parse ít, kiểm tra thay đổi hiệu quả, chạy song song tối đa theo số lõi theo mặc định.\n- Hiển thị tiến độ gọn một dòng; `ninja -v` để xem lệnh đầy đủ; `ninja -t clean` để dọn.\n- Có thể thấy rõ khác biệt khi dự án có hàng nghìn file.\n\n### Lỗi hay gặp\n- Cố sửa `build.ninja` tay: lần cấu hình lại sẽ ghi đè.\n- Trộn generator: đổi `-G` mà không xoá thư mục build cũ."
+ },
+ "Build System & Package Manager › NuGet cho C++": {
+  "body": "NuGet là trình quản lý gói của hệ sinh thái .NET/Microsoft, nhưng cũng có thể phân phối **thư viện C++ native** trong Visual Studio: gói `.nupkg` chứa header, `.lib`/`.dll` và file `.targets`/`.props` để MSBuild tự thêm đường dẫn include và liên kết.\n\n### Ý chính\n- Thường gặp trong dự án C++ thuần Visual Studio/MSBuild (cài gói qua giao diện *Manage NuGet Packages*, lưu trong `packages.config` hoặc project).\n- Phù hợp khi cả nhóm đã dùng MSBuild; với dự án đa nền tảng hiện nay, **vcpkg** (cũng của Microsoft) hoặc **Conan** thường được chọn hơn.\n- Gói native phải khớp toolset, kiến trúc (x86/x64) và cấu hình (Debug/Release).\n\n### Lỗi hay gặp\n- Dùng gói build cho toolset khác (ví dụ v142 trong dự án v143): lỗi link.\n- Quên đổi cả hai cấu hình Debug và Release."
+ },
+ "Build System & Package Manager › Spack Package Manager": {
+  "body": "Spack là trình quản lý gói thiết kế cho **tính toán hiệu năng cao (HPC)** và khoa học: nhiều máy chủ, nhiều compiler, nhiều thư viện toán (MPI, BLAS, HDF5...) phải cùng tồn tại với các phiên bản và cấu hình khác nhau.\n\n### Ý chính\n- Mỗi bản cài được mô tả bằng **spec**: `spack install hdf5@1.14 +mpi %gcc@12 ^openmpi` (phiên bản `@`, biến thể `+`, compiler `%`, phụ thuộc `^`).\n- Cài nhiều phiên bản cạnh nhau, tách biệt; nạp bằng `spack load`.\n- Build từ nguồn theo công thức (recipe) viết bằng Python; không cần quyền root.\n- Không phải công cụ cho ứng dụng C++ thông thường; những dự án đó dùng vcpkg/Conan.\n\n### Lỗi hay gặp\n- Dùng Spack cho dự án nhỏ vốn chỉ cần vcpkg: phức tạp thừa.\n- Không ghim compiler và phiên bản: kết quả khác nhau giữa các cụm máy."
+ },
+ "Chuẩn C++ hiện đại › C++11/14 → 17 → 20": {
+  "body": "C++ hiện đại là cách gọi các chuẩn từ C++11 trở đi; mỗi ba năm có một chuẩn mới (C++14, 17, 20, 23). C++11 là bước ngoặt: đưa vào những thứ làm thay đổi hẳn cách viết C++.\n\n### Vì sao cần biết\nCode mới và thư viện hiện đại giả định bạn biết các tính năng này; đọc sách/bài cũ trước 2011 sẽ dạy thói quen lỗi thời (`new/delete` trần, `NULL`, vòng iterator dài dòng).\n\n### Ý chính — mỗi chuẩn thêm gì\n- **C++11**: `auto`, range-based `for`, lambda, `nullptr`, smart pointer (`unique_ptr`, `shared_ptr`), move semantics và rvalue reference, `constexpr`, `std::thread`, `enum class`, danh sách khởi tạo `{}`, `override`/`final`.\n- **C++14**: lambda tổng quát (`auto` tham số), `make_unique`, `constexpr` linh hoạt hơn, kiểu trả về `auto`.\n- **C++17**: structured bindings, `std::optional`/`variant`/`string_view`, `if constexpr`, `std::filesystem`, thuật toán song song.\n- **C++20**: concepts, ranges, coroutines, modules, `<=>`, `std::format`, `std::span`, `std::jthread`.\n- **C++23**: `std::expected`, `std::print`, `std::mdspan` và bổ sung ranges.\n- Chọn chuẩn bằng cờ: `-std=c++17`, `-std=c++20`.\n\n```cpp\n#include <iostream>\n#include <memory>\n#include <vector>\n\nint main() {\n    auto p = std::make_unique<int>(42);       // 11/14: khong can delete\n    std::vector<int> v{1, 2, 3};              // 11: khoi tao bang {}\n    for (auto x : v) std::cout << x * *p << ' ';  // 11: auto, range-for\n}\n```\n\n### Lỗi hay gặp\n- Quên bật `-std=c++NN` nên tính năng mới báo lỗi (mặc định compiler có thể thấp hơn).\n- Dùng tính năng chuẩn mới mà compiler của đồng đội/CI chưa hỗ trợ.\n\n### Tự kiểm tra\n1. Kể ba tính năng C++11 thay đổi cách quản lý bộ nhớ và thuật toán.\n2. Chuẩn nào có concepts?",
+  "lessons": [
+   {
+    "href": "/courses/pcp291-c-programming/learn?lessonSlug=pcp291-8-1-modern-cpp",
+    "ten": "8.1 — C++ hiện đại & nhúng ô tô",
+    "nguon": "C++ Programming · Chapter 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PCP291"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-10-3-smart-pointer-raii",
+    "ten": "10.3 — Smart pointer & RAII hiện đại (C++11 → C++20)",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 10",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   }
+  ]
+ },
+ "Chuẩn C++ hiện đại › Idioms (RAII/CRTP/Pimpl)": {
+  "body": "Idiom là mẫu thiết kế đặc trưng của một ngôn ngữ. Ba idiom quan trọng của C++ là **RAII**, **CRTP** và **Pimpl**.\n\n### Ý chính\n- **RAII** (Resource Acquisition Is Initialization): gắn đời sống tài nguyên (bộ nhớ, file, mutex, socket) với đời sống một đối tượng: constructor chiếm tài nguyên, destructor trả. Nhờ đó không rò rỉ kể cả khi có exception. Ví dụ: `unique_ptr`, `lock_guard`, `ifstream`.\n- **CRTP** (Curiously Recurring Template Pattern): lớp con truyền chính mình làm tham số template cho lớp cha: `struct D : Base<D>`. Cho **đa hình tĩnh** (quyết định lúc biên dịch, không tốn vtable) và tái sử dụng hành vi.\n- **Pimpl** (Pointer to implementation): lớp công khai chỉ giữ một con trỏ tới lớp cài đặt ẩn trong `.cpp`. Giấu chi tiết, giảm phụ thuộc header và thời gian biên dịch, giữ ổn định ABI.\n\n```cpp\n// RAII\n{\n    std::lock_guard<std::mutex> lk(m);   // khoa\n    // lam viec...\n}                                         // tu mo khoa, ke ca khi co exception\n\n// CRTP\ntemplate <typename Derived>\nstruct Shape {\n    double dien_tich() const { return static_cast<const Derived*>(this)->tinh(); }\n};\nstruct Square : Shape<Square> {\n    double s = 2;\n    double tinh() const { return s * s; }\n};\n```\n\n### Lỗi hay gặp\n- Giữ tài nguyên bằng con trỏ trần thay vì bọc trong đối tượng RAII.\n- CRTP: lớp con truyền sai tham số (`struct A : Base<B>`).\n- Pimpl với `unique_ptr` quên khai báo destructor trong `.cpp` (kiểu chưa đầy đủ ở header).",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-10-3-smart-pointer-raii",
+    "ten": "10.3 — Smart pointer & RAII hiện đại (C++11 → C++20)",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 10",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/pcp291-c-programming/learn?lessonSlug=pcp291-8-1-modern-cpp",
+    "ten": "8.1 — C++ hiện đại & nhúng ô tô",
+    "nguon": "C++ Programming · Chapter 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PCP291"
+   }
+  ]
+ },
+ "Chuẩn C++ hiện đại › Standards": {
+  "body": "C++ là ngôn ngữ có **chuẩn quốc tế do ISO quản lý** (nhóm làm việc WG21). Chuẩn mô tả ngôn ngữ và thư viện chuẩn; các compiler (GCC, Clang, MSVC) tự hiện thực nó.\n\n### Ý chính\n- Dòng thời gian: C++98 (chuẩn đầu tiên) → C++03 (sửa lỗi) → **C++11** (bước ngoặt) → C++14 → C++17 → C++20 → C++23 → C++26 (chuẩn kế tiếp). Từ C++11, chu kỳ khoảng ba năm một chuẩn.\n- Chuẩn ≠ compiler: một tính năng được chuẩn hoá chưa chắc đã có ở mọi compiler/phiên bản; xem bảng hỗ trợ trên cppreference (\"Compiler support\").\n- Chọn chuẩn khi biên dịch bằng `-std=c++17` (hoặc `/std:c++17` trên MSVC); macro `__cplusplus` cho biết chuẩn đang dùng.\n- Cũng có \"Core Guidelines\" (Stroustrup & Sutter) là khuyến nghị cách viết tốt, không phải chuẩn bắt buộc.\n- Nguồn tham khảo: cppreference.com, bản nháp chuẩn trên isocpp.org.\n\n### Lỗi hay gặp\n- Nhầm tính năng \"trong chuẩn\" với \"compiler của bạn đã có\".\n- Giữ mặc định của compiler cũ và không biết mình đang dùng chuẩn nào."
+ },
+ "Chuẩn C++ hiện đại › C++ 0x": {
+  "body": "C++0x là **tên mã** của chuẩn C++ kế tiếp trong lúc đang soạn thảo, vì người ta kỳ vọng nó hoàn thành trước năm 2010 (chữ \"x\" là chữ số cuối chưa định). Cuối cùng chuẩn được thông qua năm 2011 và chính thức mang tên **C++11**.\n\n### Ý chính\n- Bạn sẽ gặp tên này trong tài liệu và bài viết cũ, và cờ compiler cũ `-std=c++0x` (GCC/Clang cũ) tương đương cờ `-std=c++11` hiện nay.\n- Nội dung \"C++0x\" chính là những tính năng của C++11: `auto`, lambda, `nullptr`, rvalue reference, smart pointer...\n- Trong code mới hãy dùng `-std=c++11` hoặc cao hơn, không dùng tên cũ.\n\n### Lỗi hay gặp\n- Tìm tài liệu \"C++0x\" và tưởng nó là phiên bản riêng khác C++11."
+ },
+ "Chuẩn C++ hiện đại › C++ 11 / C++ 14": {
+  "body": "C++11 là chuẩn tạo ra \"C++ hiện đại\"; C++14 là bản hoàn thiện và sửa lỗi nhỏ của nó. Học hai chuẩn này cùng nhau là có nền tảng đủ để đọc hầu hết code C++ ngày nay.\n\n### Vì sao cần biết\nHầu hết thư viện và code công ty hiện có đều đặt chuẩn tối thiểu là C++11/14; những tính năng bên dưới có mặt khắp nơi.\n\n### Ý chính\n- **Suy luận kiểu**: `auto`, `decltype`.\n- **Range-based for**: `for (auto& x : c)`.\n- **Lambda** và `std::function`.\n- **`nullptr`** thay `NULL`; **`enum class`** (enum có phạm vi).\n- **Smart pointer**: `unique_ptr`, `shared_ptr`, `weak_ptr`; C++14 thêm `make_unique`.\n- **Move semantics**: rvalue reference `T&&`, `std::move`; chuyển tài nguyên thay vì sao chép.\n- **`constexpr`** (tính ở compile-time; C++14 cho phép thân hàm phức tạp hơn).\n- **Khởi tạo đồng nhất** `{}`, `override`/`final`, `= default`/`= delete`, `static_assert`, `std::thread`, `<chrono>`, `<random>`.\n- C++14: lambda tổng quát (`auto` ở tham số), init-capture, kiểu trả về `auto`, literal nhị phân `0b1010`, dấu nháy tách chữ số `1'000'000`.\n\n```cpp\n#include <memory>\n#include <string>\n#include <utility>\n#include <vector>\n\nstruct Nguoi {\n    std::string ten;\n    explicit Nguoi(std::string t) : ten(std::move(t)) {}   // move thay vi copy\n};\n\nint main() {\n    std::vector<std::unique_ptr<Nguoi>> ds;\n    ds.push_back(std::make_unique<Nguoi>(\"An\"));           // C++14\n    auto in = [](const auto& p) { return p->ten; };        // C++14: generic lambda\n    return in(ds[0]).size() == 2 ? 0 : 1;\n}\n```\n\n### Lỗi hay gặp\n- Dùng `std::move` rồi vẫn dùng đối tượng đã bị chuyển (trạng thái hợp lệ nhưng không xác định giá trị).\n- Dùng `auto` làm mất tham chiếu/`const` (`auto x = v[0]` sao chép); dùng `auto&`/`const auto&`.\n- Còn dùng `NULL`/`new` trần trong code mới.\n\n### Tự kiểm tra\n1. `std::move` thực chất có \"di chuyển\" gì không?\n2. Vì sao `unique_ptr` không sao chép được nhưng chuyển được?",
+  "lessons": [
+   {
+    "href": "/courses/pcp291-c-programming/learn?lessonSlug=pcp291-8-1-modern-cpp",
+    "ten": "8.1 — C++ hiện đại & nhúng ô tô",
+    "nguon": "C++ Programming · Chapter 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PCP291"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-10-3-smart-pointer-raii",
+    "ten": "10.3 — Smart pointer & RAII hiện đại (C++11 → C++20)",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 10",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   }
+  ]
+ },
+ "Chuẩn C++ hiện đại › C++ 17": {
+  "body": "C++17 là bản cập nhật **thực dụng**: ít thay đổi lớn, nhiều tiện ích giúp code ngắn và an toàn hơn trong công việc hằng ngày.\n\n### Vì sao cần biết\nĐây là chuẩn tối thiểu mà nhiều dự án hiện nay yêu cầu; những tính năng dưới đây xuất hiện nhiều trong code mới.\n\n### Ý chính\n- **Structured bindings**: `auto [a, b] = cap;` hoặc `for (auto& [khoa, gia_tri] : map)`.\n- **`std::optional<T>`**: \"có thể có giá trị\" thay cho con trỏ null/giá trị đặc biệt. **`std::variant`**: kiểu hợp nhất an toàn (`std::visit`). **`std::any`**: giữ giá trị bất kỳ.\n- **`if constexpr`**: rẽ nhánh lúc biên dịch trong template, nhánh không chọn không cần hợp lệ; thay thế nhiều chỗ dùng SFINAE.\n- **`std::string_view`**: \"cái nhìn\" không sở hữu lên chuỗi, tránh sao chép.\n- **`std::filesystem`**: thao tác đường dẫn, thư mục, file.\n- **`if (init; cond)`**, **`inline` biến**, **fold expression** cho variadic template, **CTAD** (`std::pair p{1, 2.0};`), thuật toán song song (`std::execution::par`).\n- Đảm bảo bỏ qua bước sao chép (guaranteed copy elision).\n\n```cpp\n#include <iostream>\n#include <map>\n#include <optional>\n#include <string>\n\nstd::optional<int> tim(const std::map<std::string, int>& m, const std::string& k) {\n    if (auto it = m.find(k); it != m.end()) return it->second;\n    return std::nullopt;\n}\n\nint main() {\n    std::map<std::string, int> diem{{\"An\", 9}, {\"Binh\", 8}};\n    for (const auto& [ten, d] : diem) std::cout << ten << '=' << d << '\\n';\n    if (auto d = tim(diem, \"An\")) std::cout << \"An: \" << *d << '\\n';\n}\n```\n\n### Lỗi hay gặp\n- `string_view` trỏ tới chuỗi tạm đã bị huỷ (dangling).\n- Gọi `*opt` khi `opt` rỗng: hành vi không xác định; dùng `has_value()`/`value_or`.\n- Quên `-std=c++17`."
+ },
+ "Chuẩn C++ hiện đại › C++ 20": {
+  "body": "C++20 là bản cập nhật lớn nhất kể từ C++11: thay đổi cách viết template, thư viện thuật toán, lập trình bất đồng bộ và cách tổ chức mã nguồn.\n\n### Vì sao cần biết\nCompiler mới đã hỗ trợ phần lớn; code mới trong nhiều công ty bắt đầu dùng. Biết nó để đọc code và chọn công cụ phù hợp.\n\n### Ý chính\n- **Concepts**: ràng buộc có tên trên tham số template, lỗi dễ đọc, thay thế `enable_if`.\n- **Ranges**: thao tác trên cả dãy, ghép bằng `|` với view lười (`std::views::filter`, `transform`).\n- **Coroutines**: hàm có thể tạm dừng/tiếp tục (`co_await`, `co_yield`, `co_return`) cho bất đồng bộ và generator; cần thư viện hỗ trợ.\n- **Modules**: `import` thay `#include`, giảm thời gian biên dịch (hỗ trợ trong build system còn đang hoàn thiện).\n- **So sánh ba chiều `<=>`** (spaceship) sinh toàn bộ toán tử so sánh.\n- **`std::format`**, **`std::span`**, **`std::jthread`** (tự join, hỗ trợ dừng), **`consteval`/`constinit`**, **designated initializers**, mở rộng `<chrono>` (lịch, múi giờ), `std::bit_cast`.\n- Hỗ trợ đầy đủ khác nhau giữa GCC, Clang, MSVC: kiểm tra bảng \"Compiler support\".\n\n```cpp\n#include <iostream>\n#include <ranges>\n#include <vector>\n#include <concepts>\n\ntemplate <std::integral T>\nT binh_phuong(T x) { return x * x; }\n\nint main() {\n    std::vector<int> v{1, 2, 3, 4};\n    for (int x : v | std::views::filter([](int i) { return i % 2; }))\n        std::cout << binh_phuong(x) << ' ';   // 1 9\n}\n```\n\n### Lỗi hay gặp\n- Dùng modules/coroutines mà chuỗi công cụ chưa sẵn sàng.\n- Tưởng mọi tính năng của `<chrono>` mới (múi giờ) có sẵn ở mọi thư viện chuẩn.\n\n### Tự kiểm tra\n1. Concepts giải quyết vấn đề gì của template cũ?\n2. `<=>` giúp giảm code ra sao?"
+ },
+ "Chuẩn C++ hiện đại › C++ 23": {
+  "body": "C++23 là bản cập nhật vừa phải: hoàn thiện những gì C++20 mở ra (đặc biệt ranges) và bổ sung các tiện ích thư viện mong đợi từ lâu.\n\n### Ý chính\n- **`std::expected<T, E>`**: trả về \"giá trị hoặc lỗi\" không cần exception, kiểu `Result` của Rust.\n- **`std::print` / `std::println`**: in định dạng kiểu `fmt`, an toàn kiểu, nhanh hơn `iostream`.\n- **`std::mdspan`**: cái nhìn đa chiều lên mảng liên tục.\n- **Ranges bổ sung**: `std::ranges::to`, `views::zip`, `views::enumerate`, `views::chunk`...\n- **\"Deducing this\"** (đối tượng tường minh), `std::flat_map`/`flat_set`, `std::stacktrace`, `import std;` (tuỳ hỗ trợ).\n- Hỗ trợ compiler còn khác nhau; kiểm tra trước khi dùng cho dự án thật.\n\n```cpp\n#include <print>        // C++23\n#include <expected>\n\nstd::expected<int, const char*> chia(int a, int b) {\n    if (b == 0) return std::unexpected(\"chia cho 0\");\n    return a / b;\n}\n\nint main() {\n    auto r = chia(10, 2);\n    if (r) std::println(\"ket qua = {}\", *r);\n}\n```\n\n### Lỗi hay gặp\n- Dùng header chuẩn C++23 với compiler/thư viện chuẩn chưa hỗ trợ."
+ },
+ "Debug & Thực chiến › Debug (gdb/valgrind)": {
+  "body": "Khi chương trình chạy sai, đoán mò và rải `cout` khắp nơi rất chậm. Hai công cụ chuẩn: **gdb** (hoặc `lldb`) để dừng chương trình tại điểm bạn chọn và xem trạng thái, **valgrind** (và sanitizer) để bắt lỗi bộ nhớ lúc chạy.\n\n### Vì sao cần biết\nSegfault, rò rỉ bộ nhớ, dùng sau khi giải phóng, đọc biến chưa khởi tạo là những lỗi kinh điển của C/C++ mà chỉ công cụ mới chỉ chính xác chỗ.\n\n### Ý chính\n- Biên dịch có thông tin gỡ lỗi: `g++ -g -O0 file.cpp -o app` (đừng tối ưu khi gỡ lỗi).\n- **gdb**: `break` (điểm dừng), `run`, `next`/`step`, `print x`, `backtrace` (chuỗi lời gọi), `watch` (dừng khi biến đổi), `continue`, `quit`.\n- **valgrind** (Linux): `valgrind --leak-check=full ./app` báo rò rỉ và truy cập bộ nhớ sai kèm dòng code. Chậm 10–50 lần.\n- **Sanitizer** của compiler: `-fsanitize=address` (lỗi bộ nhớ), `-fsanitize=undefined` (UB), `-fsanitize=thread` (data race); nhanh hơn valgrind.\n- Quy trình: tái hiện lỗi ổn định → thu hẹp → đặt giả thuyết → kiểm bằng debugger → sửa → thêm test.\n\n```bash\ng++ -g -O0 -fsanitize=address bug.cpp -o bug\n./bug                       # ASan bao loi + dong code\ngdb ./bug\n(gdb) break main\n(gdb) run\n(gdb) next\n(gdb) print x\n(gdb) backtrace\n```\n\n### Lỗi hay gặp\n- Debug bản `-O2`: biến bị tối ưu mất, dòng nhảy lung tung.\n- Quên `-g`: backtrace chỉ có địa chỉ.\n- Không chạy sanitizer thường xuyên trong test/CI.",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-10-1-go-loi-gdb",
+    "ten": "10.1 — Gỡ lỗi thật bằng gdb / lldb",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 10",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-10-2-sanitizer-ro-ri",
+    "ten": "10.2 — Sanitizer và đo rò rỉ bộ nhớ",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 10",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-6-1-deadlock",
+    "ten": "6.1 — Deadlock: bốn điều kiện Coffman, tìm ra bằng gdb và jstack",
+    "nguon": "Operating Systems for Developers · Chương 6",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Debug & Thực chiến › Thư viện phổ biến (Boost/Qt/OpenCV)": {
+  "body": "Ngoài thư viện chuẩn, hệ sinh thái C++ có vài thư viện lớn mà bạn sẽ gặp thường xuyên ở các lĩnh vực khác nhau.\n\n### Ý chính\n- **Boost**: tập hợp rất lớn thư viện tổng quát (mạng với Asio, filesystem, graph, program_options...); nhiều thứ sau này vào chuẩn.\n- **Qt**: framework GUI và ứng dụng đa nền tảng (cửa sổ, mạng, đa phương tiện, cơ sở dữ liệu), có cơ chế signals/slots.\n- **OpenCV**: thị giác máy tính và xử lý ảnh/video (đọc ảnh, lọc, phát hiện cạnh, nhận diện).\n- Cách dùng chung: cài bằng trình quản lý gói (vcpkg, Conan, apt, brew), tìm bằng `find_package` trong CMake, link vào target.\n- Cân nhắc khi chọn: giấy phép (Qt có LGPL/thương mại), kích thước, độ ổn định ABI, mức độ duy trì.\n\n### Lỗi hay gặp\n- Kéo cả framework lớn chỉ để dùng một tính năng nhỏ.\n- Bỏ qua giấy phép khi phân phối phần mềm thương mại."
+ },
+ "Debug & Thực chiến › Competitive Programming": {
+  "body": "Competitive programming là thi giải bài thuật toán trong thời gian và bộ nhớ giới hạn (Codeforces, AtCoder, ICPC...). C++ là ngôn ngữ phổ biến nhất ở đó vì chạy nhanh và STL có sẵn nhiều cấu trúc dữ liệu/thuật toán.\n\n### Vì sao cần biết\nRèn tư duy thuật toán và sự thạo STL; hữu ích cho phỏng vấn kỹ thuật.\n\n### Ý chính\n- Tăng tốc nhập/xuất: `std::ios::sync_with_stdio(false); std::cin.tie(nullptr);` rồi dùng `'\\n'` thay `endl`.\n- Dùng `long long` khi giá trị có thể vượt khoảng `2·10^9`; chú ý tràn số.\n- STL hay dùng: `vector`, `sort`, `lower_bound`, `set/map`, `priority_queue`, `unordered_map`, `pair/tuple`, `bitset`.\n- Phải đoán độ phức tạp từ giới hạn đề: n ≈ 10^5 → cần O(n log n); n ≈ 10^7 → gần O(n).\n- Luyện: bắt đầu bài dễ, đọc lời giải sau khi tự thử; ghi lại các mẫu hay (DFS/BFS, DSU, quy hoạch động).\n\n```cpp\n#include <bits/stdc++.h>   // chi co o GCC; tien cho thi dau, khong dung trong du an that\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    int n; cin >> n;\n    vector<long long> a(n);\n    for (auto& x : a) cin >> x;\n    sort(a.begin(), a.end());\n    cout << a.front() + a.back() << '\\n';\n}\n```\n\n### Lỗi hay gặp\n- `endl` trong vòng lặp lớn gây chậm (mỗi lần flush).\n- Dùng `int` cho tổng lớn nên tràn.\n- Trộn `scanf` với `cin` sau khi đã tắt đồng bộ.",
+  "lessons": [
+   {
+    "href": "/algorithms",
+    "ten": "Trực quan thuật toán",
+    "nguon": "Công cụ học trên web",
+    "kieu": "trang"
+   }
+  ]
+ },
+ "Debug & Thực chiến › Access Violations (Lỗi truy cập bộ nhớ)": {
+  "body": "Access violation (trên Windows) hay **segmentation fault / segfault** (trên Linux/macOS, tín hiệu `SIGSEGV`) xảy ra khi chương trình đọc/ghi vùng nhớ mà nó không được phép: địa chỉ không tồn tại, bộ nhớ chỉ đọc, hoặc đã trả lại cho hệ điều hành. Hệ điều hành giết tiến trình ngay.\n\n### Vì sao cần biết\nĐây là lỗi hay gặp nhất khi học con trỏ; biết nguyên nhân phổ biến và công cụ tìm lỗi giúp sửa nhanh.\n\n### Ý chính — nguyên nhân phổ biến\n- Dereference con trỏ `nullptr` hoặc chưa khởi tạo.\n- Dùng con trỏ treo (dangling): trỏ tới biến cục bộ đã hết phạm vi hoặc vùng đã `delete`.\n- Truy cập ngoài biên mảng/vector.\n- Tràn ngăn xếp: đệ quy quá sâu hoặc mảng cục bộ quá lớn.\n- Ghi vào chuỗi literal (`char* s = \"abc\"; s[0] = 'x';`).\n- Hỏng bộ nhớ heap (double free, tràn buffer).\n\n### Cách tìm\n- Chạy trong **gdb**: crash dừng đúng dòng; gõ `backtrace`.\n- Biên dịch với `-g -fsanitize=address`: ASan báo loại lỗi và dòng code.\n- Trên Windows: debugger Visual Studio hiện \"Access violation reading location 0x00000000\"; địa chỉ gần 0 thường là null.\n\n```cpp\nint main() {\n    int* p = nullptr;\n    *p = 1;                 // segfault: ghi vao dia chi 0\n}\n```\n\n### Lỗi hay gặp\n- Sửa triệu chứng (thêm `if (p)`) mà không tìm xem vì sao con trỏ null.\n- Chỉ thử ở bản Release: lỗi bộ nhớ có thể \"ẩn\" rồi nổ ở nơi khác sau đó.",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-10-2-sanitizer-ro-ri",
+    "ten": "10.2 — Sanitizer và đo rò rỉ bộ nhớ",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 10",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-10-1-go-loi-gdb",
+    "ten": "10.1 — Gỡ lỗi thật bằng gdb / lldb",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 10",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   }
+  ]
+ },
+ "Debug & Thực chiến › Debuggers": {
+  "body": "Debugger là công cụ cho phép bạn **dừng chương trình đang chạy**, xem giá trị biến, chuỗi hàm đã gọi (call stack) và chạy từng bước. Nhờ đó bạn quan sát thực tế thay vì đoán.\n\n### Vì sao cần biết\nMọi lập trình viên chuyên nghiệp đều dùng debugger hằng ngày; nó nhanh hơn rất nhiều so với in giá trị ra màn hình.\n\n### Ý chính\n- Khái niệm chung: **breakpoint** (điểm dừng), **step over** (chạy qua lời gọi hàm), **step into** (đi vào hàm), **step out** (ra khỏi hàm), **continue**, **watch** (theo dõi biến/địa chỉ), **call stack**, **conditional breakpoint**.\n- Công cụ phổ biến: GDB và LLDB (dòng lệnh, Linux/macOS), debugger tích hợp Visual Studio và WinDbg (Windows), debugger của VS Code/CLion (giao diện đồ hoạ bên trên GDB/LLDB).\n- Cần biên dịch với thông tin gỡ lỗi (`-g`) và tốt nhất tắt tối ưu (`-O0`).\n- Postmortem: phân tích file **core dump** sau khi chương trình crash.\n\n### Lỗi hay gặp\n- Quên `-g` hoặc debug bản đã tối ưu.\n- Dùng debugger cho lỗi đa luồng nhưng bị lệch timing; kết hợp log và ThreadSanitizer.\n\n### Tự kiểm tra\n1. Khác nhau giữa step over và step into?\n2. Vì sao nên gỡ lỗi bản `-O0` thay vì `-O2`?\n3. Core dump giúp ích gì khi lỗi chỉ xảy ra trên server?",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-10-1-go-loi-gdb",
+    "ten": "10.1 — Gỡ lỗi thật bằng gdb / lldb",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 10",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/programming-fundamentals/learn?lessonSlug=prf192-n1-1-debug",
+    "ten": "N1.1 — Đọc thông báo lỗi & debug bằng printf",
+    "nguon": "Programming Fundamentals · Nâng cao 1 — Gỡ lỗi & tư duy debug",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF192"
+   }
+  ]
+ },
+ "Debug & Thực chiến › GDB": {
+  "body": "GDB (GNU Debugger) là debugger dòng lệnh chuẩn trên Linux cho C/C++ (macOS dùng `lldb` với lệnh tương tự). Nó chạy chương trình dưới sự điều khiển của bạn.\n\n### Vì sao cần biết\nTrên server, container và môi trường không có giao diện, gdb gần như là lựa chọn duy nhất; kỹ năng này dùng được cho mọi chương trình native.\n\n### Ý chính\n- Mở: `gdb ./app` (đã biên dịch `-g`). Có đối số: `run arg1 arg2`.\n- `break main` / `break file.cpp:42` / `break ham if x > 5`; `info breakpoints`.\n- `run` (r), `next` (n) qua dòng, `step` (s) vào hàm, `finish` ra khỏi hàm, `continue` (c).\n- `print x`, `print *ptr`, `print arr[0]@5` (5 phần tử), `display x` (hiện lại sau mỗi bước).\n- `backtrace` (bt), `frame 2`, `up`/`down` đổi khung stack.\n- `watch x` dừng khi `x` bị ghi; `info locals`, `info args`.\n- Phân tích core dump: `gdb ./app core`.\n- `layout src` hoặc chế độ TUI cho nhìn mã nguồn trực quan.\n\n```text\n$ g++ -g -O0 bug.cpp -o bug\n$ gdb ./bug\n(gdb) break main\n(gdb) run\n(gdb) next\n(gdb) print x\n(gdb) backtrace\n(gdb) quit\n```\n\n### Lỗi hay gặp\n- `step` vào hàm thư viện không có mã nguồn: dùng `finish` hoặc `next`.\n- Đặt breakpoint ở dòng đã bị tối ưu mất.\n- Dùng `print` biến đã ra khỏi phạm vi của khung hiện tại.",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-10-1-go-loi-gdb",
+    "ten": "10.1 — Gỡ lỗi thật bằng gdb / lldb",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 10",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/operating-systems/learn?lessonSlug=osg202-lab-3",
+    "ten": "Lab 3 — Lập trình C trên Linux: gcc, make, gdb, fork/exec/wait, ống, lời gọi hệ thống, tín hiệu, và một mini-shell",
+    "nguon": "Operating Systems · Chương 7",
+    "kieu": "lab",
+    "academy": true,
+    "ma": "OSG202"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-6-1-deadlock",
+    "ten": "6.1 — Deadlock: bốn điều kiện Coffman, tìm ra bằng gdb và jstack",
+    "nguon": "Operating Systems for Developers · Chương 6",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Debug & Thực chiến › WinDBg": {
+  "body": "WinDbg là debugger của Microsoft cho Windows, mạnh nhất ở việc gỡ lỗi **driver, kernel và phân tích crash dump**; có phiên bản mới **WinDbg** (từ Microsoft Store) với giao diện hiện đại hơn bản cổ điển.\n\n### Ý chính\n- Dùng khi: debug chế độ nhân (kernel-mode), phân tích file `.dmp` (crash/BSOD), debug ứng dụng native khi không có Visual Studio.\n- Symbol (`.pdb`) là bắt buộc để thấy tên hàm: cấu hình `.sympath srv*C:\\symbols*https://msdl.microsoft.com/download/symbols`, rồi `.reload`.\n- Lệnh thường dùng: `bp module!ham` (breakpoint), `g` (chạy), `p` (bước qua), `t` (bước vào), `k` (call stack), `dv` (biến cục bộ), `dt` (hiển thị cấu trúc), `!analyze -v` (phân tích crash).\n- Bản mới hỗ trợ **Time Travel Debugging**: ghi lại cả quá trình chạy rồi chạy ngược để tìm nguyên nhân.\n- Với ứng dụng thông thường trên Windows, debugger trong Visual Studio thường tiện hơn.\n\n### Lỗi hay gặp\n- Quên cấu hình symbol nên chỉ thấy địa chỉ.\n- Dùng WinDbg 32-bit để debug tiến trình 64-bit hoặc ngược lại."
+ },
+ "Debug & Thực chiến › Debugging Symbols": {
+  "body": "Debug symbol (thông tin gỡ lỗi) là dữ liệu đi kèm file thực thi, **ánh xạ địa chỉ máy sang tên hàm, tên biến, kiểu, và số dòng mã nguồn**. Không có nó, debugger và stack trace chỉ cho bạn thấy những địa chỉ như `0x4011a3`.\n\n### Ý chính\n- GCC/Clang: biên dịch với `-g` (thêm `-g3` để có cả macro). Thông tin theo định dạng **DWARF**. MSVC: `/Zi`, lưu ra file riêng `.pdb`.\n- Thông tin gỡ lỗi **không thay đổi hành vi** chương trình nhưng làm file lớn hơn; bản phát hành thường tách ra file riêng (`objcopy --only-keep-debug`, `strip`) để giữ stack trace dịch ngược được mà file chạy vẫn nhỏ.\n- Nên kết hợp `-O0` khi debug; với `-O2` vẫn có `-g` nhưng biến có thể \"optimized out\".\n- Kiểm tra: `file app` hoặc `readelf --debug-dump=info app | head`.\n- Công cụ dịch địa chỉ: `addr2line -e app 0x4011a3`.\n\n```bash\ng++ -g -O0 main.cpp -o app        # co symbol\ng++ -O2 main.cpp -o app_release   # khong co symbol, backtrace chi co dia chi\n```\n\n### Lỗi hay gặp\n- Phát hành bản không giữ lại symbol: không dịch được crash report.\n- Symbol không khớp bản build (khác phiên bản).",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-10-1-go-loi-gdb",
+    "ten": "10.1 — Gỡ lỗi thật bằng gdb / lldb",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 10",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   }
+  ]
+ },
+ "Debug & Thực chiến › Understanding Debugger Messages": {
+  "body": "Khi chương trình native lỗi, bạn thường nhận được một thông báo ngắn. Biết đọc nó là bước đầu tiên để biết lỗi gì và nên làm gì tiếp.\n\n### Ý chính\n- **\"Segmentation fault (core dumped)\"**: tiến trình nhận `SIGSEGV` vì truy cập bộ nhớ không hợp lệ. Việc làm: chạy lại trong gdb hoặc với ASan.\n- **Exit code 139** (= 128 + 11): bị `SIGSEGV`; **134** (= 128 + 6): `SIGABRT` (thường do `abort()`, `assert` hoặc exception không bắt); **137** (= 128 + 9): `SIGKILL` (hay do hết bộ nhớ, OOM killer).\n- **Stack trace / backtrace**: đọc từ **trên xuống**: dòng trên cùng là chỗ xảy ra lỗi, các dòng dưới là chuỗi hàm gọi tới đó. Tìm dòng đầu tiên thuộc mã của bạn.\n- **Cảnh báo của AddressSanitizer** (`heap-buffer-overflow`, `use-after-free`, `stack-buffer-overflow`): có sẵn loại lỗi, địa chỉ và dòng code.\n- **`terminate called after throwing an instance of 'std::out_of_range'`**: exception không có `catch`; message kèm `what()`.\n- **Watchpoint hit** (gdb): biến bạn theo dõi vừa bị ghi; xem `Old value`/`New value`.\n- **Lỗi linker `undefined reference`**: thiếu định nghĩa hoặc thiếu `-l` thư viện, không phải lỗi runtime.\n\n### Lỗi hay gặp\n- Đọc stack trace từ dưới lên.\n- Chỉ nhìn dòng cuối cùng nằm trong thư viện chuẩn mà bỏ qua dòng gọi từ mã của bạn.",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-10-1-go-loi-gdb",
+    "ten": "10.1 — Gỡ lỗi thật bằng gdb / lldb",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 10",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/programming-fundamentals/learn?lessonSlug=prf192-n1-1-debug",
+    "ten": "N1.1 — Đọc thông báo lỗi & debug bằng printf",
+    "nguon": "Programming Fundamentals · Nâng cao 1 — Gỡ lỗi & tư duy debug",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF192"
+   }
+  ]
+ },
+ "Debug & Thực chiến › Qt Framework": {
+  "body": "Qt là framework C++ đa nền tảng toàn diện để xây dựng **ứng dụng có giao diện đồ hoạ** (desktop, nhúng, di động), kèm nhiều module: mạng, đa phương tiện, cơ sở dữ liệu, đa luồng, XML/JSON, quốc tế hoá.\n\n### Vì sao cần biết\nRất phổ biến trong phần mềm desktop chuyên nghiệp, công cụ kỹ thuật, ứng dụng nhúng ô tô/công nghiệp; cùng một mã chạy trên Windows, Linux, macOS.\n\n### Ý chính\n- **Hai cách làm UI**: Qt Widgets (giao diện desktop truyền thống, viết bằng C++) và **Qt Quick/QML** (ngôn ngữ khai báo, phù hợp giao diện hiện đại/cảm ứng).\n- **Signals & slots**: cơ chế liên lạc giữa đối tượng; một sự kiện (signal) nối tới hàm xử lý (slot) bằng `connect`.\n- **Hệ thống đối tượng `QObject`** và **moc** (Meta-Object Compiler) sinh mã bổ trợ cho signals/slots, thuộc tính, phản chiếu.\n- Công cụ: Qt Creator, Qt Designer (kéo thả UI), build bằng CMake hoặc qmake.\n- Giấy phép: LGPL (với điều kiện) hoặc thương mại; đọc kỹ khi phân phối.\n\n```cpp\n#include <QApplication>\n#include <QPushButton>\n\nint main(int argc, char* argv[]) {\n    QApplication app(argc, argv);\n    QPushButton nut(\"Bam vao day\");\n    QObject::connect(&nut, &QPushButton::clicked, &app, &QApplication::quit);\n    nut.show();\n    return app.exec();\n}\n```\n\n### Lỗi hay gặp\n- Thao tác UI từ luồng khác luồng giao diện chính.\n- Quên macro `Q_OBJECT` trong lớp dùng signals/slots (hoặc quên chạy lại moc/CMake `AUTOMOC`).\n- Bỏ qua điều khoản giấy phép khi đóng gói."
+ },
+ "Debug & Thực chiến › OpenCV": {
+  "body": "OpenCV (Open Source Computer Vision Library) là thư viện C++ (có binding Python, Java) cho **xử lý ảnh, video và thị giác máy tính**: đọc/ghi ảnh, đổi màu, lọc, phát hiện cạnh, tìm đường viền, theo dõi vật thể, hiệu chỉnh camera, cùng module học sâu (`dnn`) để chạy mô hình đã huấn luyện.\n\n### Vì sao cần biết\nLà thư viện chuẩn thực tế cho thị giác máy tính; dùng trong robot, kiểm tra chất lượng công nghiệp, ứng dụng camera, AI.\n\n### Ý chính\n- Kiểu dữ liệu trung tâm: **`cv::Mat`** (ma trận điểm ảnh, đếm tham chiếu — gán `Mat b = a;` dùng chung dữ liệu, muốn bản sao dùng `a.clone()`).\n- OpenCV lưu ảnh màu theo thứ tự **BGR**, không phải RGB.\n- Hàm hay dùng: `cv::imread`, `cv::imwrite`, `cv::cvtColor`, `cv::GaussianBlur`, `cv::Canny`, `cv::resize`, `cv::VideoCapture`.\n- Build với CMake: `find_package(OpenCV REQUIRED)` và `target_link_libraries(app ${OpenCV_LIBS})`.\n\n```cpp\n#include <opencv2/opencv.hpp>\n\nint main() {\n    cv::Mat anh = cv::imread(\"input.jpg\");\n    if (anh.empty()) return 1;\n    cv::Mat xam, canh;\n    cv::cvtColor(anh, xam, cv::COLOR_BGR2GRAY);\n    cv::Canny(xam, canh, 100, 200);\n    cv::imwrite(\"canh.png\", canh);\n}\n```\n\n### Lỗi hay gặp\n- Không kiểm tra `imread` trả về ảnh rỗng (sai đường dẫn).\n- Nhầm BGR với RGB khi trộn với thư viện khác.\n- Gán `Mat` rồi sửa, vô tình sửa luôn ảnh gốc vì dùng chung dữ liệu.\n\n### Tự kiểm tra\n1. `Mat b = a;` có sao chép điểm ảnh không?\n2. Vì sao nhầm BGR/RGB làm ảnh bị đổi màu?"
+ },
+ "Debug & Thực chiến › POCO C++ Libraries": {
+  "body": "POCO (POrtable COmponents) C++ Libraries là bộ thư viện đa nền tảng nhắm tới **ứng dụng mạng và máy chủ**, phong cách rõ ràng, nhất quán, gần với thư viện chuẩn của Java/.NET.\n\n### Ý chính\n- Module chính: `Foundation` (chuỗi, file, luồng, thread, log, sự kiện), `Net` (socket, HTTP client/server, FTP, SMTP), `NetSSL` (TLS), `JSON`, `XML`, `Data` (truy cập cơ sở dữ liệu), `Util` (cấu hình, tham số dòng lệnh).\n- Phù hợp để xây dịch vụ/ứng dụng mạng nhẹ, công cụ nhúng, khi không muốn kéo Boost hay Qt.\n- Cài bằng vcpkg/Conan hoặc build bằng CMake; link theo từng module cần dùng.\n- Tương tự Boost.Asio về mạng nhưng cung cấp bộ API trọn gói hơn cho tác vụ hằng ngày.\n\n### Lỗi hay gặp\n- Quên link module phụ thuộc (ví dụ dùng `Net` mà thiếu `Foundation`).\n- Trộn với một thư viện logging/mạng khác trong cùng dự án làm rối thiết kế."
+ },
+ "Debug & Thực chiến › Protocol Buffers (protobuf)": {
+  "body": "Protocol Buffers (protobuf) là cơ chế của Google để **mô tả cấu trúc dữ liệu một lần trong file `.proto`**, rồi sinh mã đọc/ghi cho nhiều ngôn ngữ (C++, Java, Python, Go...). Dữ liệu được mã hoá thành **nhị phân gọn**, nhanh hơn và nhỏ hơn JSON/XML, và có thể tiến hoá lược đồ mà vẫn tương thích ngược.\n\n### Vì sao cần biết\nNền tảng dữ liệu của **gRPC**; dùng để lưu file, truyền giữa các dịch vụ, cấu hình khi cần hiệu năng và hợp đồng dữ liệu rõ ràng.\n\n### Ý chính\n- Mỗi trường có **số hiệu (field number)**; trên đường truyền chỉ có số hiệu và giá trị, không có tên. **Không bao giờ đổi hoặc tái dùng số hiệu** của trường đã triển khai.\n- Thêm trường mới với số hiệu mới là an toàn: bên cũ bỏ qua trường lạ.\n- Xoá trường: đánh dấu `reserved` để không ai dùng lại số hiệu hay tên đó.\n- Biên dịch bằng `protoc --cpp_out=. person.proto` sinh `person.pb.h/.pb.cc`.\n- Không tự mô tả (cần `.proto` để giải mã); không đọc được bằng mắt như JSON.\n\n```proto\nsyntax = \"proto3\";\nmessage Person {\n  string name = 1;\n  int32  id   = 2;\n  repeated string emails = 3;\n}\n```\n\n```cpp\nPerson p;\np.set_name(\"An\");\np.set_id(7);\nstd::string bytes;\np.SerializeToString(&bytes);\n\nPerson q;\nq.ParseFromString(bytes);\n```\n\n### Lỗi hay gặp\n- Đổi số hiệu hoặc kiểu trường đang dùng: dữ liệu cũ đọc sai.\n- Quên link `libprotobuf` hoặc dùng `protoc` khác phiên bản thư viện.\n\n### Tự kiểm tra\n1. Vì sao không được tái sử dụng số hiệu trường đã xoá?\n2. protobuf khác JSON ở điểm nào về kích thước và tự mô tả?"
+ },
+ "Debug & Thực chiến › gRPC": {
+  "body": "gRPC là framework **gọi hàm từ xa (RPC)** do Google phát triển: client gọi một hàm trên server như gọi hàm cục bộ, còn gRPC lo việc truyền dữ liệu. Nó chạy trên **HTTP/2** và dùng **Protocol Buffers** làm định dạng dữ liệu mặc định.\n\n### Vì sao cần biết\nPhổ biến cho giao tiếp giữa các dịch vụ (microservices), nhất là khi cần hiệu năng và nhiều ngôn ngữ cùng tham gia (C++ server, Python/Go client...).\n\n### Ý chính\n- Quy trình: viết `service` và `message` trong file `.proto` → `protoc` với plugin gRPC sinh **stub** client và lớp cơ sở server → bạn cài đặt phần xử lý.\n- Bốn kiểu gọi: **unary** (1 yêu cầu – 1 phản hồi), **server streaming**, **client streaming**, **bidirectional streaming**.\n- Ưu điểm: hợp đồng kiểu mạnh, nhị phân gọn, multiplexing của HTTP/2, deadline/hủy yêu cầu, xác thực TLS.\n- Hạn chế: không gọi trực tiếp từ trình duyệt (cần gRPC-Web/proxy), khó đọc bằng mắt hơn REST/JSON.\n- C++: thư viện `grpc++`; build qua CMake, thường cài bằng vcpkg/Conan.\n\n```proto\nsyntax = \"proto3\";\nservice Chao {\n  rpc NoiXinChao (YeuCau) returns (PhanHoi);\n}\nmessage YeuCau  { string ten = 1; }\nmessage PhanHoi { string loi = 1; }\n```\n\n### Lỗi hay gặp\n- Quên đặt **deadline** nên client treo vô hạn khi server chậm.\n- Thay đổi `.proto` không tương thích ngược (xem quy tắc protobuf).\n- Dùng gRPC cho API công khai tới trình duyệt mà không tính đến proxy.",
+  "lessons": [
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-7-4-khac",
+    "ten": "7.5 — GraphQL và gRPC: khi REST không phải câu trả lời, đo trên LabFlow",
+    "nguon": "API & System Design · Chương 7",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Debug & Thực chiến › TensorFlow C++ API": {
+  "body": "TensorFlow có **C++ API** để nạp mô hình đã huấn luyện và chạy **suy luận (inference)** ngay trong ứng dụng C++, không cần Python khi triển khai. Đây là hướng dùng điển hình: huấn luyện bằng Python, nhúng mô hình vào hệ thống C++ cần độ trễ thấp.\n\n### Ý chính\n- Quy trình: xuất mô hình từ Python (định dạng SavedModel) → trong C++ nạp mô hình → đưa tensor đầu vào → chạy → đọc tensor đầu ra.\n- Với thiết bị nhúng/di động, thường dùng **TensorFlow Lite** (runtime gọn hơn, API C++ riêng) thay vì bản đầy đủ.\n- Cài đặt và build bản C++ đầy đủ khá nặng (thường dựng bằng Bazel); nhiều nhóm chọn runtime nhẹ khác (ONNX Runtime) hoặc API C để đơn giản.\n- Phải khớp phiên bản giữa phần xuất mô hình và runtime, cũng như tiền xử lý đầu vào (kích thước, chuẩn hoá) giống lúc huấn luyện.\n\n### Lỗi hay gặp\n- Tiền xử lý ở C++ khác ở Python nên kết quả lệch.\n- Chọn bản TensorFlow đầy đủ cho thiết bị tài nguyên ít."
+ },
+ "Debug & Thực chiến › pybind11": {
+  "body": "pybind11 là thư viện header-only giúp **dùng mã C++ từ Python** (và ngược lại) với rất ít mã dán. Bạn khai báo hàm, lớp C++ nào muốn \"phơi\" ra, rồi biên dịch thành một module Python (`.so`/`.pyd`) mà Python `import` như thường.\n\n### Vì sao cần biết\nCách phổ biến để tăng tốc phần nặng của chương trình Python bằng C++, hoặc để cho code C++ có giao diện Python dễ dùng (nhiều thư viện khoa học dùng nó).\n\n### Ý chính\n- Macro `PYBIND11_MODULE(ten_module, m)` mở khai báo; `m.def(\"ten\", &ham)` phơi một hàm; `py::class_<Lop>(m, \"Lop\")` phơi một lớp với `.def(py::init<...>())`, `.def(\"phuong_thuc\", ...)`, `.def_readwrite(\"truong\", ...)`.\n- Tự chuyển đổi kiểu cơ bản và container chuẩn (`#include <pybind11/stl.h>` cho `vector`/`map`); dùng `py::array_t` để chia sẻ mảng NumPy không sao chép.\n- Build bằng CMake (`pybind11_add_module`) hoặc `setuptools`.\n- Lưu ý **GIL** của Python: gọi mã C++ nặng nên nhả GIL (`py::gil_scoped_release`) nếu muốn đa luồng.\n\n```cpp\n#include <pybind11/pybind11.h>\nnamespace py = pybind11;\n\nint cong(int a, int b) { return a + b; }\n\nPYBIND11_MODULE(vidu, m) {\n    m.def(\"cong\", &cong, \"Cong hai so\");\n}\n```\n\n```python\nimport vidu\nprint(vidu.cong(2, 3))   # 5\n```\n\n### Lỗi hay gặp\n- Biên dịch với phiên bản Python khác bản đang chạy: không import được.\n- Sao chép dữ liệu lớn qua biên giới Python/C++ thay vì dùng buffer/NumPy.\n- Quản lý vòng đời đối tượng sai khi trả con trỏ thô về Python."
+ },
+ "Debug & Thực chiến › Catch2 Testing Framework": {
+  "body": "Catch2 là framework kiểm thử đơn vị cho C++ với cú pháp tự nhiên: viết điều kiện bằng biểu thức C++ thông thường và nhận thông báo lỗi nêu rõ giá trị hai vế.\n\n### Ý chính\n- `TEST_CASE(\"mo ta\", \"[tag]\") { ... }` định nghĩa test; `REQUIRE(bieu_thuc)` dừng test khi sai, `CHECK(...)` ghi nhận rồi chạy tiếp.\n- `SECTION(\"...\")` chia nhỏ một test: mỗi section chạy trên bản thiết lập (setup) mới, dùng chung phần mở đầu, không cần lớp fixture.\n- `REQUIRE(a == b)` không cần macro riêng cho từng phép so sánh; số thực: `REQUIRE(x == Catch::Approx(0.3))`.\n- Bản v2 là một header duy nhất; v3 chia thành thư viện biên dịch sẵn, tích hợp qua CMake (`find_package(Catch2 3)`) và có sẵn `main` khi link `Catch2::Catch2WithMain`.\n- Đối trọng của GoogleTest: Catch2 gọn và dễ bắt đầu, GoogleTest mạnh ở mocking (gmock).\n\n```cpp\n#include <catch2/catch_test_macros.hpp>\n#include <vector>\n\nTEST_CASE(\"vector\") {\n    std::vector<int> v;\n    REQUIRE(v.empty());\n\n    SECTION(\"them phan tu\") {\n        v.push_back(1);\n        REQUIRE(v.size() == 1);\n    }\n    SECTION(\"van rong o section khac\") {\n        REQUIRE(v.empty());\n    }\n}\n```\n\n### Lỗi hay gặp\n- Dùng include của v2 (`catch.hpp`) với bản v3 hoặc ngược lại.\n- Nhầm `REQUIRE` (dừng ngay) với `CHECK` (chạy tiếp)."
+ },
+ "Debug & Thực chiến › Orbit Profiler": {
+  "body": "Orbit là **profiler** mã nguồn mở của Google (cho Windows và Linux), cho phép bạn xem chương trình **dành thời gian ở đâu**: hàm nào chạy lâu, được gọi bao nhiêu lần, các luồng làm gì theo trục thời gian. Điểm đặc trưng: nó **chèn mã đo động** lúc chương trình đang chạy, thường không cần biên dịch lại hay chỉnh sửa mã.\n\n### Vì sao cần biết\nTối ưu hiệu năng phải dựa trên đo đạc, không phải đoán. Profiler cho thấy \"điểm nóng\" thật sự (thường chỉ vài hàm chiếm phần lớn thời gian), nhờ đó bạn tối ưu đúng chỗ.\n\n### Ý chính\n- Hai kiểu đo chung: **lấy mẫu (sampling)** — định kỳ chụp call stack, chi phí thấp; và **instrumentation** — đo chính xác từng lời gọi, chi phí cao hơn. Orbit cho phép chọn hàm cần đo bằng thao tác chuột.\n- Bạn đọc kết quả theo **timeline** (theo luồng) và theo **biểu đồ nhiệt/flame graph** để thấy chuỗi gọi hàm tốn thời gian.\n- Quy trình: đo trước → tìm điểm nóng → sửa → đo lại để xác nhận có cải thiện.\n- Công cụ tương tự để biết thêm: `perf` (Linux), `gprof`, Valgrind `callgrind`, Visual Studio Profiler, Tracy.\n- Biên dịch với `-O2` kèm `-g` để số đo phản ánh bản thật nhưng vẫn có tên hàm.\n\n### Lỗi hay gặp\n- Đo bản Debug (`-O0`): điểm nóng khác hẳn bản Release.\n- Tối ưu khi chưa đo (\"premature optimization\").\n- Chỉ đo một lần với dữ liệu quá nhỏ không đại diện.",
+  "lessons": [
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-15-7-profiler",
+    "ten": "15.4 — Profiler của từng ngôn ngữ trên một dịch vụ chậm: Node, Java, Python",
+    "nguon": "Operating Systems for Developers · Chương 15",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Debug & Thực chiến › PyTorch C++ (libtorch)": {
+  "body": "LibTorch là bản **C++ của PyTorch**: cho phép nạp mô hình đã huấn luyện bằng Python và chạy suy luận trong ứng dụng C++, hoặc thậm chí huấn luyện hoàn toàn bằng C++ (API `torch::`).\n\n### Ý chính\n- Cách triển khai phổ biến: trong Python chuyển mô hình sang **TorchScript** bằng `torch.jit.trace` hoặc `torch.jit.script` rồi lưu `model.pt`; trong C++ nạp bằng `torch::jit::load(\"model.pt\")`.\n- Kiểu dữ liệu chính: `torch::Tensor`; tạo bằng `torch::ones({1, 3, 224, 224})`, `torch::from_blob(...)` để bọc buffer sẵn có (không sao chép).\n- Trước suy luận: `module.eval()` và dùng `torch::NoGradGuard` để tắt tính gradient, tiết kiệm bộ nhớ.\n- Build: tải LibTorch hoặc cài qua trình quản lý gói; trong CMake `find_package(Torch REQUIRED)` và `target_link_libraries(app \"${TORCH_LIBRARIES}\")`. Phải đúng bản (CPU/CUDA, ABI) với thư viện.\n- Giống TensorFlow: tiền xử lý đầu vào ở C++ phải giống hệt lúc huấn luyện.\n\n```cpp\n#include <torch/script.h>\n#include <iostream>\n\nint main() {\n    torch::jit::script::Module m = torch::jit::load(\"model.pt\");\n    m.eval();\n    torch::NoGradGuard no_grad;\n    auto out = m.forward({torch::ones({1, 3, 224, 224})}).toTensor();\n    std::cout << out.sizes() << '\\n';\n}\n```\n\n### Lỗi hay gặp\n- Trộn bản LibTorch với compiler/ABI khác: lỗi link hoặc crash.\n- Quên `eval()`/`NoGradGuard` nên chậm và tốn bộ nhớ.\n- Phiên bản PyTorch dùng để xuất mô hình khác bản LibTorch."
+ },
+ "Debug & Thực chiến › Debug chương trình C++": {
+  "body": "Debug chương trình C++ là kỹ năng kết hợp vài công cụ theo một quy trình, không phải chỉ biết lệnh gdb. Mục tiêu: **tái hiện lỗi ổn định, thu hẹp phạm vi, xác định nguyên nhân, sửa, và giữ cho nó không quay lại.**\n\n### Vì sao cần biết\nC++ cho nhiều cách hỏng mà ngôn ngữ khác ngăn cản (truy cập ngoài biên, dùng sau khi giải phóng, race). Có quy trình bài bản tiết kiệm hàng giờ.\n\n### Ý chính — quy trình\n1. **Tái hiện**: tìm đầu vào/điều kiện làm lỗi xảy ra mỗi lần. Lỗi lúc có lúc không thường là dấu hiệu của bộ nhớ chưa khởi tạo hoặc race.\n2. **Đọc thông báo**: lỗi biên dịch/linker, \"Segmentation fault\", exception chưa bắt, stack trace (đọc từ trên xuống, tìm dòng đầu tiên thuộc mã của bạn).\n3. **Bật cảnh báo và sanitizer**: `-Wall -Wextra`, `-fsanitize=address,undefined`, `-fsanitize=thread` cho đa luồng.\n4. **Debugger**: biên dịch `-g -O0`, đặt breakpoint trước chỗ nghi ngờ, bước từng dòng, xem biến, `backtrace`; dùng `watch` để biết ai ghi đè biến.\n5. **Chia để trị**: loại dần phần code/đầu vào cho đến khi ví dụ tối thiểu còn lỗi.\n6. **Sửa, kiểm lại, thêm test** để lỗi không quay lại.\n\n```bash\ng++ -g -O0 -Wall -Wextra -fsanitize=address,undefined main.cpp -o app\n./app                 # sanitizer bao ngay dong gay loi\ngdb ./app             # neu can dung tai mot diem de xem bien\n```\n\n### Lỗi hay gặp\n- Rải `cout` rồi xoá không đều, hoặc chỉ sửa triệu chứng.\n- Debug bản tối ưu hoá.\n- Bỏ qua cảnh báo của compiler: nhiều cảnh báo chính là lỗi sắp xảy ra.\n\n### Tự kiểm tra\n1. Vì sao nên tạo ví dụ tối thiểu trước khi sửa?\n2. Khi nào ASan hữu ích hơn gdb?",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-10-1-go-loi-gdb",
+    "ten": "10.1 — Gỡ lỗi thật bằng gdb / lldb",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 10",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/programming-fundamentals/learn?lessonSlug=prf192-n1-1-debug",
+    "ten": "N1.1 — Đọc thông báo lỗi & debug bằng printf",
+    "nguon": "Programming Fundamentals · Nâng cao 1 — Gỡ lỗi & tư duy debug",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF192"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-10-2-sanitizer-ro-ri",
+    "ten": "10.2 — Sanitizer và đo rò rỉ bộ nhớ",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 10",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   }
+  ]
  }
 }

@@ -80,6 +80,13 @@
  * ────────────────────────────────────────────────────────────────────────────
  *
  * Seed: node scripts/academy-seed-exam.mjs --file ./content/exams/PRISMA-ORM-PT2.mjs --apply
+ *
+ * ⚠️ ĐÍNH CHÍNH 12/11/2026 (đối chiếu bài web 7.3 + 12.2, Prisma 6.19.3):
+ *    câu khoá chết chuyển tiền KHÔNG ra `P2034`. Đo: deadlock giữa hai phép
+ *    ghi ORM trong giao dịch tương tác ⇒ `PrismaClientUnknownRequestError`
+ *    không mã, 40P01 chỉ nằm trong thông báo; deadlock trên `$queryRaw … FOR
+ *    UPDATE` ⇒ `P2010` + `meta.code = "40P01"`. P2034 chỉ còn là lỗi tuần tự
+ *    hoá (40001, `meta` rỗng). Đề + phương án nhiễu + lời giải sửa theo.
  */
 import { B, EX, code, c, RUBRIC_CODE, ptInstructions, mcq, codeQ } from './_lib/prisma-exam-kit.mjs';
 
@@ -1018,13 +1025,13 @@ export default {
 
         mcq({
           prompt: B(
-            'Two transfers run at the same moment and one dies with <code>P2034</code>, <code>meta.code 40P01 deadlock detected</code> in the PostgreSQL log:' + code(
-              'transfer(1, 2, 100)   // locks account 1, then account 2\n' +
-              'transfer(2, 1,  50)   // locks account 2, then account 1',
+            'Two transfers run at the same moment, each an interactive <code>$transaction</code> of two <code>update</code>s. One dies — not with <code>P2034</code>, but with a <code>PrismaClientUnknownRequestError</code> that has no <code>code</code> at all; the only clue is <code>40P01</code> / <code>deadlock detected</code> inside its message (Prisma 6.19.3), and the same line in the PostgreSQL log:' + code(
+              'transfer(1, 2, 100)   // updates account 1, then account 2\n' +
+              'transfer(2, 1,  50)   // updates account 2, then account 1',
             ) + 'What is the fix, and how should you think about the failure?',
-            'Hai lệnh chuyển tiền chạy cùng lúc và một cái chết với <code>P2034</code>, log PostgreSQL ghi <code>40P01 deadlock detected</code>:' + code(
-              'transfer(1, 2, 100)   // khoá tài khoản 1, rồi tài khoản 2\n' +
-              'transfer(2, 1,  50)   // khoá tài khoản 2, rồi tài khoản 1',
+            'Hai lệnh chuyển tiền chạy cùng lúc, mỗi lệnh là một <code>$transaction</code> tương tác gồm hai lần <code>update</code>. Một cái chết — không phải với <code>P2034</code>, mà với một <code>PrismaClientUnknownRequestError</code> chẳng có <code>code</code> nào; manh mối duy nhất là <code>40P01</code> / <code>deadlock detected</code> nằm trong thông báo lỗi (Prisma 6.19.3), và đúng dòng ấy trong log PostgreSQL:' + code(
+              'transfer(1, 2, 100)   // cập nhật tài khoản 1, rồi tài khoản 2\n' +
+              'transfer(2, 1,  50)   // cập nhật tài khoản 2, rồi tài khoản 1',
             ) + 'Cách vá là gì, và nên nghĩ về cú hỏng này thế nào?',
           ),
           options: [
@@ -1033,12 +1040,12 @@ export default {
               'Nâng <code>timeout</code> của giao dịch lên: cả hai đang chờ, và cho đủ thời gian thì PostgreSQL để cái tới trước xong rồi cái sau đi tiếp',
             ),
             B(
-              'Remove the explicit locks — deadlocks only occur with <code>FOR UPDATE</code>, and the atomic <code>decrement</code>/<code>increment</code> pair is already safe without them',
-              'Bỏ các khoá tường minh đi — khoá chết chỉ xảy ra với <code>FOR UPDATE</code>, còn cặp <code>decrement</code>/<code>increment</code> nguyên tử vốn đã an toàn mà không cần chúng',
+              'Add an explicit <code>SELECT … FOR UPDATE</code> before each <code>update</code> — plain <code>update</code>s take no row locks, so without explicit locking the two transactions cannot order themselves',
+              'Thêm một câu <code>SELECT … FOR UPDATE</code> tường minh trước mỗi <code>update</code> — <code>update</code> thường không lấy khoá hàng nào, nên thiếu khoá tường minh thì hai giao dịch không tự xếp thứ tự được',
             ),
             B(
-              'Acquire the locks in a deterministic order — sort the two ids ascending before locking anything — and treat the deadlock as a design smell rather than bad luck: it means two code paths take the same locks in different orders, so it will keep happening. Keep the retry wrapper anyway, for the path nobody has written yet',
-              'Lấy khoá theo một thứ tự xác định — sắp hai id tăng dần TRƯỚC khi khoá bất cứ thứ gì — và coi khoá chết là một mùi thiết kế chứ không phải xui: nó nghĩa là hai nhánh mã lấy cùng bộ khoá theo hai thứ tự khác nhau, nên nó sẽ còn tái diễn. Vẫn giữ lớp bọc thử lại, cho cái nhánh chưa ai viết',
+              'Acquire the locks in a deterministic order — each <code>update</code> takes a row lock, so update the lower id first — and treat the deadlock as a design smell, not bad luck: it means two code paths take the same locks in different orders, so it will keep happening. Keep the retry wrapper anyway, for the path nobody has written yet',
+              'Lấy khoá theo một thứ tự xác định — mỗi lần <code>update</code> đều lấy khoá hàng, nên cập nhật id nhỏ trước — và coi khoá chết là một mùi thiết kế chứ không phải xui: nó nghĩa là hai nhánh mã lấy cùng bộ khoá theo hai thứ tự khác nhau, nên nó sẽ còn tái diễn. Vẫn giữ lớp bọc thử lại, cho cái nhánh chưa ai viết',
             ),
             B(
               'Switch to <code>Serializable</code>, which detects the dependency cycle before either transaction blocks and therefore prevents deadlocks entirely',
@@ -1047,8 +1054,8 @@ export default {
           ],
           correct: 2,
           explanation: EX(
-            'PostgreSQL detects the cycle in about a second and kills one transaction, so a deadlock is survivable — which is exactly why it gets treated as noise and retried forever instead of fixed. Sorting the ids before acquiring any lock costs nothing and removes the entire class: <code>const [a, b] = [from, to].sort((x, y) =&gt; x - y)</code>, then one <code>SELECT id FROM … WHERE id IN (a, b) ORDER BY id FOR UPDATE</code>. Apply the same rule to tables, not just rows. Note that <code>Serializable</code> does not prevent deadlocks — it adds a second reason to abort, and both arrive as <code>P2034</code>. And the test that proves a transfer implementation is right is not a unit test of one transfer: run two hundred concurrent ones between twenty accounts and check that the sum of all balances is unchanged. Conservation is the only invariant that fails on the naive code.',
-            'PostgreSQL phát hiện vòng lặp trong khoảng một giây rồi giết một giao dịch, nên khoá chết là thứ sống sót được — và chính vì thế nó hay bị coi là nhiễu rồi thử lại mãi thay vì được sửa. Sắp hai id trước khi lấy bất cứ khoá nào chẳng tốn gì và xoá sạch cả lớp lỗi ấy: <code>const [a, b] = [from, to].sort((x, y) =&gt; x - y)</code>, rồi một câu <code>SELECT id FROM … WHERE id IN (a, b) ORDER BY id FOR UPDATE</code>. Áp cùng luật ấy cho bảng chứ không chỉ cho hàng. Để ý rằng <code>Serializable</code> KHÔNG ngăn được khoá chết — nó thêm một lý do thứ hai để huỷ, và cả hai đều về dưới dạng <code>P2034</code>. Và phép thử chứng minh một cài đặt chuyển tiền là đúng không phải một unit test cho một lần chuyển: hãy chạy hai trăm lần chuyển song song giữa hai mươi tài khoản rồi kiểm rằng tổng mọi số dư không đổi. Bảo toàn là bất biến duy nhất mà bản ngây thơ trượt.',
+            'PostgreSQL detects the cycle in about a second and kills one transaction, so a deadlock is survivable — which is exactly why it gets treated as noise and retried forever instead of fixed. Sorting the ids before acquiring any lock costs nothing and removes the entire class: <code>const [a, b] = [from, to].sort((x, y) =&gt; x - y)</code>, then one <code>SELECT id FROM … WHERE id IN (a, b) ORDER BY id FOR UPDATE</code>. Apply the same rule to tables, not just rows. (The deadlock in the prompt needed no <code>FOR UPDATE</code> at all: each <code>update</code> holds its row lock until <code>COMMIT</code>, and two of them taken in opposite orders are exactly the cycle.) Note that <code>Serializable</code> does not prevent deadlocks — it adds a second reason to abort. And the two reasons do NOT arrive under one code, measured on 6.19.3: a serialization failure is <code>P2034</code>, but a deadlock between ORM writes is a code-less <code>PrismaClientUnknownRequestError</code> (40P01 only in the message), and a deadlock on a <code>$queryRaw … FOR UPDATE</code> is <code>P2010</code> with <code>meta.code = "40P01"</code> (Lesson 7.3). So the retry wrapper you keep must recognise <code>40P01</code>, not just <code>e.code === \'P2034\'</code> — otherwise it never retries this failure. And the test that proves a transfer implementation is right is not a unit test of one transfer: run two hundred concurrent ones between twenty accounts and check that the sum of all balances is unchanged. Conservation is the only invariant that fails on the naive code.',
+            'PostgreSQL phát hiện vòng lặp trong khoảng một giây rồi giết một giao dịch, nên khoá chết là thứ sống sót được — và chính vì thế nó hay bị coi là nhiễu rồi thử lại mãi thay vì được sửa. Sắp hai id trước khi lấy bất cứ khoá nào chẳng tốn gì và xoá sạch cả lớp lỗi ấy: <code>const [a, b] = [from, to].sort((x, y) =&gt; x - y)</code>, rồi một câu <code>SELECT id FROM … WHERE id IN (a, b) ORDER BY id FOR UPDATE</code>. Áp cùng luật ấy cho bảng chứ không chỉ cho hàng. (Khoá chết trong đề chẳng cần <code>FOR UPDATE</code> nào: mỗi lần <code>update</code> giữ khoá hàng của nó tới tận <code>COMMIT</code>, và hai lần như thế lấy theo hai thứ tự ngược nhau chính là cái vòng.) Để ý rằng <code>Serializable</code> KHÔNG ngăn được khoá chết — nó thêm một lý do thứ hai để huỷ. Và hai lý do ấy KHÔNG về chung một mã, đo trên 6.19.3: lỗi tuần tự hoá là <code>P2034</code>, còn khoá chết giữa các phép ghi ORM là một <code>PrismaClientUnknownRequestError</code> không mã (40P01 chỉ nằm trong thông báo), và khoá chết trên <code>$queryRaw … FOR UPDATE</code> là <code>P2010</code> kèm <code>meta.code = "40P01"</code> (Bài 7.3). Nên lớp bọc thử lại mà bạn giữ phải nhận ra <code>40P01</code>, chứ không chỉ <code>e.code === \'P2034\'</code> — không thì nó chẳng bao giờ thử lại cú hỏng này. Và phép thử chứng minh một cài đặt chuyển tiền là đúng không phải một unit test cho một lần chuyển: hãy chạy hai trăm lần chuyển song song giữa hai mươi tài khoản rồi kiểm rằng tổng mọi số dư không đổi. Bảo toàn là bất biến duy nhất mà bản ngây thơ trượt.',
           ),
         }),
 

@@ -44,6 +44,11 @@ export default {
 </ul>
 <p><strong>Why it matters:</strong> in a team, the API contract is the thing two people agree on before either writes code. Companies hire for this: “we keep our OpenAPI in the repo and CI checks it” is a normal line in a job description, and the capstone (Chapter 12) starts from this file.</p>
 </div>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/API/v1/labflow-api-ch7-dau.zip" target="_blank" rel="noopener">
+  <span class="lc-ico">📦</span>
+  <span class="lc-body"><span class="lc-title">Download: LabFlow API at the start of Chapter 7 (zip, without node_modules)</span><span class="lc-sub">Contract 2.0.0, before Lab 7. Run <code>npm ci</code>, then <code>npm start</code>; every command of lessons 7.1–7.5 works from the project folder. Demo passwords: an-lab-2026, binh-lab-2026, lan-lab-2026 (learning only).</span></span>
+  <span class="lc-cta">DOWNLOAD →</span>
+</a>
 
 <h3>OpenAPI in one picture</h3>
 <p><strong>OpenAPI</strong> is a standard format (YAML or JSON) for describing an HTTP API: every path, method, parameter, request body, response and error. It started as <em>Swagger</em> (2011) and became the OpenAPI Specification in 2016. Version 3.1 (2021) made its schemas real <strong>JSON Schema 2020-12</strong> — the same language Ajv and Zod’s exporter speak. The current editions are 3.1.1 (October 2024) and 3.2.0 (September 2025); LabFlow uses 3.1 because every tool in this chapter supports it (measured at the end of the lesson).</p>
@@ -289,6 +294,11 @@ Woohoo! Your API description is valid. 🎉</div>
 </ul>
 <p><strong>Vì sao đáng học:</strong> trong một đội, hợp đồng API là thứ hai người thống nhất TRƯỚC khi ai viết code. Tin tuyển dụng hay ghi “OpenAPI nằm trong repo, CI kiểm nó”; và dự án cuối khoá (Chương 12) bắt đầu từ chính tệp này.</p>
 </div>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/API/v1/labflow-api-ch7-dau.zip" target="_blank" rel="noopener">
+  <span class="lc-ico">📦</span>
+  <span class="lc-body"><span class="lc-title">Tải về: LabFlow API đầu Chương 7 (zip, không kèm node_modules)</span><span class="lc-sub">Hợp đồng 2.0.0, trước Lab 7. Chạy <code>npm ci</code> rồi <code>npm start</code>; mọi lệnh của bài 7.1–7.5 chạy từ thư mục dự án. Mật khẩu demo: an-lab-2026, binh-lab-2026, lan-lab-2026 (chỉ để học).</span></span>
+  <span class="lc-cta">TẢI VỀ →</span>
+</a>
 
 <h3>OpenAPI trong một hình</h3>
 <p><strong>OpenAPI</strong> là một định dạng chuẩn (YAML hoặc JSON) để mô tả một HTTP API: mọi đường dẫn (path), phương thức, tham số, body gửi lên, câu trả lời và lỗi. Nó bắt đầu là <em>Swagger</em> (2011) và đổi tên thành OpenAPI Specification năm 2016. Bản 3.1 (2021) cho lược đồ (schema) dùng đúng <strong>JSON Schema 2020-12</strong> — cùng ngôn ngữ mà Ajv và bộ xuất của Zod dùng. Bản mới hiện có là 3.1.1 (10/2024) và 3.2.0 (9/2025); LabFlow dùng 3.1 vì mọi công cụ trong chương này đều hỗ trợ (có đo ở cuối bài).</p>
@@ -2184,6 +2194,11 @@ sau gzip:     JSON 1089 byte · Protobuf 944 byte
 </div>
 
 <h3>Part A — design (<code>openapi.yaml</code> only)</h3>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/API/v1/labflow-api-ch7-dau.zip" target="_blank" rel="noopener">
+  <span class="lc-ico">📦</span>
+  <span class="lc-body"><span class="lc-title">Starting point: LabFlow API at the start of Chapter 7 (zip)</span><span class="lc-sub">Contract 2.0.0 with every gate green: <code>npm run api:lint</code> 0 errors, <code>npm run api:diff</code> no breaking change, <code>npm run api:drift</code> 19 ✓, <code>npm test</code> 10/10. No waitlist yet — that is your job.</span></span>
+  <span class="lc-cta">DOWNLOAD →</span>
+</a>
 <ol>
   <li>Copy the current document to <code>openapi/openapi-v2.0.0.yaml</code> — the baseline for the gate.</li>
   <li>Add three operations: <code>POST /labs/{labId}/waitlist</code>, <code>GET /me/waitlist</code>, <code>DELETE /waitlist/{id}</code>, with schemas, every error, and examples realistic enough for a mock.</li>
@@ -2408,6 +2423,11 @@ exit=0</div>
 </div>
 
 <h3>Phần A — thiết kế (chỉ sửa <code>openapi.yaml</code>)</h3>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/API/v1/labflow-api-ch7-dau.zip" target="_blank" rel="noopener">
+  <span class="lc-ico">📦</span>
+  <span class="lc-body"><span class="lc-title">Điểm xuất phát: LabFlow API đầu Chương 7 (zip)</span><span class="lc-sub">Hợp đồng 2.0.0, mọi cổng đang xanh: <code>npm run api:lint</code> 0 lỗi, <code>npm run api:diff</code> không phá vỡ, <code>npm run api:drift</code> 19 ✓, <code>npm test</code> 10/10. Chưa có hàng chờ — đó là việc của bạn.</span></span>
+  <span class="lc-cta">TẢI VỀ →</span>
+</a>
 <ol>
   <li>Chép tài liệu hiện tại thành <code>openapi/openapi-v2.0.0.yaml</code> — mốc để cổng so sánh.</li>
   <li>Thêm ba thao tác: <code>POST /labs/{labId}/waitlist</code>, <code>GET /me/waitlist</code>, <code>DELETE /waitlist/{id}</code>, có schema, đủ mọi lỗi, và ví dụ đủ thật để mock dùng được.</li>

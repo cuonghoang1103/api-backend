@@ -6,6 +6,11 @@
  * < > trong code → &lt; &gt;; & → &amp;. Khối .out đóng bằng </div>. KHÔNG dùng <svg>.
  * Gạch chéo ngược PHẢI viết đôi (\\n), xem scripts/course-content-check.mjs.
  */
+import G10_1 from './giang/pr-10-1.mjs';
+import G10_2 from './giang/pr-10-2.mjs';
+import G10_3 from './giang/pr-10-3.mjs';
+import G10_4 from './giang/pr-10-4.mjs';
+import G10_5 from './giang/pr-10-5.mjs';
 const REF = '?ref=%2Fcourses%2Fprisma-orm%2Flearn&reflabel=Prisma';
 
 export default {
@@ -20,6 +25,7 @@ export default {
       isFreePreview: true,
       description: 'Khác biệt giữa $queryRaw, $executeRaw và hai biến thể Unsafe; vì sao dấu backtick của thẻ mẫu là ranh giới an toàn thật sự; một cú SQL injection chạy thật trên bản Unsafe; và Prisma.sql với Prisma.join để dựng câu truy vấn động mà vẫn tham số hoá.',
       content: `
+${G10_1}
 <div class="ml-en">
 <span class="eyebrow">Chapter 10 · Lesson 10.1</span>
 <h2>Four raw functions, and the one that lets an attacker in</h2>
@@ -242,6 +248,7 @@ prisma:query params: ["%prisma%", "clx7…", 20]</div>
       type: 'LESSON',
       description: 'Vì sao $queryRaw<User[]> chỉ là một phép ép kiểu chứ không phải phép kiểm, những cú ánh xạ kiểu làm ngã người (BigInt vỡ JSON, Decimal, numeric thành chuỗi), việc @map buộc bạn viết tên CỘT chứ không phải tên trường, và cách kiểm ở biên bằng zod.',
       content: `
+${G10_2}
 <div class="ml-en">
 <span class="eyebrow">Chapter 10 · Lesson 10.2</span>
 <h2>The type parameter on <code>$queryRaw</code> is a promise nobody checks</h2>
@@ -512,6 +519,7 @@ const rows = StatsRow.array().parse(
       type: 'LESSON',
       description: 'Top-N mỗi nhóm bằng LATERAL, xếp hạng và tổng luỹ tiến bằng window function, cây bình luận bằng CTE đệ quy, ON CONFLICT DO UPDATE có biểu thức mà upsert không diễn đạt nổi, và tìm kiếm toàn văn với ts_rank — kèm phần nói rõ khi nào ĐỪNG dùng SQL thô.',
       content: `
+${G10_3}
 <div class="ml-en">
 <span class="eyebrow">Chapter 10 · Lesson 10.3</span>
 <h2>Five things only SQL can say</h2>
@@ -870,6 +878,7 @@ Execution Time: 4,7 ms tren 1,2 trieu hang (quet chi muc GIN)</div>
       type: 'LESSON',
       description: 'Đặt câu SQL vào file .sql, khai tham số bằng chú thích @param, chạy prisma generate --sql để Prisma HỎI THẲNG cơ sở dữ liệu kiểu trả về, và biến cú trôi dạt lược đồ của Bài 10.2 từ một lỗi lúc chạy thành một lỗi lúc build — kèm cái giá thật: CI phải có một cơ sở dữ liệu.',
       content: `
+${G10_4}
 <div class="ml-en">
 <span class="eyebrow">Chapter 10 · Lesson 10.4</span>
 <h2>TypedSQL: raw queries the compiler can check</h2>
@@ -1144,6 +1153,7 @@ services:
       type: 'LESSON',
       description: 'Bốn thành phần result, model, query, client; trường tính toán kèm needs; phương thức riêng cho từng model; chặn mọi thao tác để làm soft delete — và ba chỗ soft delete bằng extension KHÔNG với tới, phải biết trước khi tin nó.',
       content: `
+${G10_5}
 <div class="ml-en">
 <span class="eyebrow">Chapter 10 · Lesson 10.5</span>
 <h2><code>$extends</code>: changing the client without wrapping it</h2>

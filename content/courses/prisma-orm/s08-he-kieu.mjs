@@ -102,12 +102,18 @@ const e = Prisma.JsonNull;      <span class="tok-comment">// the JSON value null
 await prisma.user.update({ where: { id: 1 }, data: { settings: Prisma.DbNull } });
 await prisma.user.update({ where: { id: 2 }, data: { settings: Prisma.JsonNull } });
 
-const r = await prisma.$queryRaw&#96;SELECT id, cai_dat, cai_dat IS NULL AS la_sql_null FROM users WHERE id IN (1,2)&#96;;
-console.log(r);</code></pre>
+const r = await prisma.$queryRaw&#96;SELECT id, cai_dat, cai_dat IS NULL AS la_sql_null, jsonb_typeof(cai_dat) AS kieu_json
+                                   FROM users WHERE id IN (1, 2) ORDER BY id&#96;;
+console.log(r);
+console.log('Prisma doc ra:', await prisma.user.findMany({ where: { id: { in: [1, 2] } }, select: { id: true, settings: true }, orderBy: { id: 'asc' } }));</code></pre>
 <div class="out">[
-  { id: 1, cai_dat: null,   la_sql_null: true  },   ← DbNull:   the column is SQL NULL
-  { id: 2, cai_dat: 'null', la_sql_null: false }    ← JsonNull: the column holds JSON null
-]</div>
+  { id: 1, cai_dat: null, la_sql_null: true, kieu_json: null },
+  { id: 2, cai_dat: null, la_sql_null: false, kieu_json: 'null' }
+]
+Prisma doc ra: [ { id: 1, settings: null }, { id: 2, settings: null } ]</div>
+<p>Measured (measured 12 Nov 2026, Apple-silicon laptop, PostgreSQL 16.14 in Docker, Prisma 6.19.3): row 1 is SQL <code>NULL</code> (<code>IS NULL</code> true, no JSON type); row 2 holds the JSON value <code>null</code> (<code>IS NULL</code> false, <code>jsonb_typeof</code> says <code>'null'</code>). Read back, both arrive as <code>null</code> — from the driver and from Prisma — so the difference is only visible to SQL. Filter on it with <code>{ settings: { equals: Prisma.DbNull } }</code> or <code>Prisma.JsonNull</code>, not by inspecting the value you read:</p>
+<div class="out">$ npx tsx json-loc.mts
+equals DbNull → [ { id: 1 } ] · equals JsonNull → [ { id: 2 } ]</div>
 
 <h3>5 · Error classes — for catching precisely</h3>
 <pre><code class="language-javascript">import { Prisma } from '@prisma/client';
@@ -150,13 +156,17 @@ export class PostService {
 }
 
 <span class="tok-comment">// The type that accepts either the client or a transaction client</span>
-export type DbClient = Omit&lt;PrismaClient, '$connect' | '$disconnect' | '$on' | '$transaction' | '$use' | '$extends'&gt;;
+export type DbClient = Omit&lt;PrismaClient, '$connect' | '$disconnect' | '$on' | '$transaction' | '$extends'&gt;;
 
 async function writeAuditLog(db: DbClient, action: string) {
   return db.auditLog.create({ data: { action } });
 }</code></pre>
 <div class="callout">
-<p><strong>That <code>DbClient</code> alias is worth putting in a shared file on day one.</strong> Every helper that might be called inside a transaction needs it, and writing the <code>Omit</code> at each call site is how people end up typing the parameter as <code>any</code> instead — which reintroduces exactly the bug from Lesson 7.1, where a helper silently used the outer client and escaped the transaction.</p>
+<p><strong>That <code>DbClient</code> alias is worth putting in a shared file on day one.</strong> Every helper that might be called inside a transaction needs it, and writing the <code>Omit</code> at each call site is how people end up typing the parameter as <code>any</code> instead — which reintroduces exactly the bug from Lesson 7.1, where a helper silently used the outer client and escaped the transaction.</p><p>Measured (measured 12 Nov 2026, Apple-silicon laptop, PostgreSQL 16.14 in Docker, Prisma 6.19.3): <code>DbClient</code> — and <code>Prisma.TransactionClient</code> — accept both the plain client and <code>tx</code>. A client returned by <code>$extends</code> does not fit <code>Prisma.TransactionClient</code>; if your app exports an extended client (Lesson 8.4), derive the helper type from that client instead. (<code>$use</code> is no longer on the client in 6.19.3, so there is nothing to omit for it.)</p>
+<div class="out">$ npx tsc --noEmit --strict dbclient.ts
+dbclient.ts(11,18): error TS2345: Argument of type 'DynamicClientExtensionThis&lt;TypeMap&lt;InternalArgs &amp; { result: {}; model: {}; query: {}; client: {}; }, {}&gt;, TypeMapCb&lt;PrismaClientOptions&gt;, { re
+  The types of 'user.findUnique' are incompatible between these types.
+    Type '&lt;A extends UserFindUniqueArgs&lt;InternalArgs &amp; { result: {}; model: {}; query: {}; client: {}; }&gt;&gt;(args: Exact&lt;A, UserFindUniqueArgs&lt;InternalArgs &amp; { result: {}; model: {}; query: {}; client:</div>
 </div>
 
 <h3>The golden rule</h3>
@@ -256,12 +266,18 @@ const e = Prisma.JsonNull;      <span class="tok-comment">// giá trị JSON nul
 await prisma.user.update({ where: { id: 1 }, data: { settings: Prisma.DbNull } });
 await prisma.user.update({ where: { id: 2 }, data: { settings: Prisma.JsonNull } });
 
-const r = await prisma.$queryRaw&#96;SELECT id, cai_dat, cai_dat IS NULL AS la_sql_null FROM users WHERE id IN (1,2)&#96;;
-console.log(r);</code></pre>
+const r = await prisma.$queryRaw&#96;SELECT id, cai_dat, cai_dat IS NULL AS la_sql_null, jsonb_typeof(cai_dat) AS kieu_json
+                                   FROM users WHERE id IN (1, 2) ORDER BY id&#96;;
+console.log(r);
+console.log('Prisma doc ra:', await prisma.user.findMany({ where: { id: { in: [1, 2] } }, select: { id: true, settings: true }, orderBy: { id: 'asc' } }));</code></pre>
 <div class="out">[
-  { id: 1, cai_dat: null,   la_sql_null: true  },   ← DbNull:   cột đang là NULL của SQL
-  { id: 2, cai_dat: 'null', la_sql_null: false }    ← JsonNull: cột đang giữ giá trị JSON null
-]</div>
+  { id: 1, cai_dat: null, la_sql_null: true, kieu_json: null },
+  { id: 2, cai_dat: null, la_sql_null: false, kieu_json: 'null' }
+]
+Prisma doc ra: [ { id: 1, settings: null }, { id: 2, settings: null } ]</div>
+<p>Đo thật (đo ngày 12/11/2026, laptop Apple silicon, PostgreSQL 16.14 trong Docker, Prisma 6.19.3): hàng 1 là <code>NULL</code> của SQL (<code>IS NULL</code> đúng, không có kiểu JSON); hàng 2 giữ giá trị JSON <code>null</code> (<code>IS NULL</code> sai, <code>jsonb_typeof</code> trả <code>'null'</code>). Đọc ra thì cả hai đều về <code>null</code> — từ trình điều khiển lẫn từ Prisma — nên khác biệt chỉ SQL mới thấy. Lọc theo nó bằng <code>{ settings: { equals: Prisma.DbNull } }</code> hoặc <code>Prisma.JsonNull</code>, đừng soi giá trị đã đọc ra:</p>
+<div class="out">$ npx tsx json-loc.mts
+equals DbNull → [ { id: 1 } ] · equals JsonNull → [ { id: 2 } ]</div>
 
 <h3>5 · Lớp lỗi — để bắt cho đúng chỗ</h3>
 <pre><code class="language-javascript">import { Prisma } from '@prisma/client';
@@ -304,13 +320,17 @@ export class PostService {
 }
 
 <span class="tok-comment">// Kiểu nhận được cả client thường lẫn client của giao dịch</span>
-export type DbClient = Omit&lt;PrismaClient, '$connect' | '$disconnect' | '$on' | '$transaction' | '$use' | '$extends'&gt;;
+export type DbClient = Omit&lt;PrismaClient, '$connect' | '$disconnect' | '$on' | '$transaction' | '$extends'&gt;;
 
 async function writeAuditLog(db: DbClient, action: string) {
   return db.auditLog.create({ data: { action } });
 }</code></pre>
 <div class="callout">
-<p><strong>Cái bí danh <code>DbClient</code> đó đáng đặt vào một tệp dùng chung ngay ngày đầu.</strong> Mọi hàm phụ có khả năng được gọi bên trong một giao dịch đều cần nó, và viết cái <code>Omit</code> ở từng chỗ gọi là cách người ta rốt cuộc gán kiểu tham số thành <code>any</code> — và như thế là đưa trở lại đúng con bọ ở Bài 7.1, nơi một hàm phụ âm thầm dùng client bên ngoài và thoát khỏi giao dịch.</p>
+<p><strong>Cái bí danh <code>DbClient</code> đó đáng đặt vào một tệp dùng chung ngay ngày đầu.</strong> Mọi hàm phụ có khả năng được gọi bên trong một giao dịch đều cần nó, và viết cái <code>Omit</code> ở từng chỗ gọi là cách người ta rốt cuộc gán kiểu tham số thành <code>any</code> — và như thế là đưa trở lại đúng con bọ ở Bài 7.1, nơi một hàm phụ âm thầm dùng client bên ngoài và thoát khỏi giao dịch.</p><p>Đo thật (đo ngày 12/11/2026, laptop Apple silicon, PostgreSQL 16.14 trong Docker, Prisma 6.19.3): <code>DbClient</code> — và <code>Prisma.TransactionClient</code> — nhận cả client thường lẫn <code>tx</code>. Client trả về từ <code>$extends</code> thì không vừa <code>Prisma.TransactionClient</code>; nếu ứng dụng xuất một client đã mở rộng (Bài 8.4), hãy suy kiểu hàm phụ từ chính client đó. (Ở 6.19.3 client không còn <code>$use</code>, nên chẳng có gì để bỏ cho nó.)</p>
+<div class="out">$ npx tsc --noEmit --strict dbclient.ts
+dbclient.ts(11,18): error TS2345: Argument of type 'DynamicClientExtensionThis&lt;TypeMap&lt;InternalArgs &amp; { result: {}; model: {}; query: {}; client: {}; }, {}&gt;, TypeMapCb&lt;PrismaClientOptions&gt;, { re
+  The types of 'user.findUnique' are incompatible between these types.
+    Type '&lt;A extends UserFindUniqueArgs&lt;InternalArgs &amp; { result: {}; model: {}; query: {}; client: {}; }&gt;&gt;(args: Exact&lt;A, UserFindUniqueArgs&lt;InternalArgs &amp; { result: {}; model: {}; query: {}; client:</div>
 </div>
 
 <h3>Luật vàng</h3>
@@ -362,9 +382,10 @@ ${G08_2}
 function the(b: Post) { … }        <span class="tok-comment">// ✗ Post has body, views, authorId… none of which we selected</span>
 function the(b: any) { … }         <span class="tok-comment">// ✗ works, and throws away everything</span>
 interface Card { … }             <span class="tok-comment">// ✗ works, and drifts the moment the select changes</span></code></pre>
-<div class="out">Argument of type '{ id: number; title: string; author: {...}; _count: {...} }'
-is not assignable to parameter of type 'Post'.
-  Type is missing the following properties from type 'Post': body, published, views, createdAt, authorId</div>
+<div class="out">$ npx tsc --noEmit --strict van-de.ts
+van-de.ts(7,5): error TS2345: Argument of type '{ id: number; title: string; author: { username: string; avatarUrl: string | null; }; _count: { comments: number; }; }' is not assignable to parameter of type '{ id: number; title: string; body: string | null; published: boolean; publishedAt: Date | null; views: number; createdAt: Date; authorId: number; tenantId: number; }'.
+  Type '{ id: number; title: string; author: { username: string; avatarUrl: string | null; }; _count: { comments: number; }; }' is missing the following properties from type '{ id: number; title: string; body: string | null; published: boolean; publishedAt: Date | null; views: number; createdAt: Date; authorId: number; tenantId: number; }': body, published, publishedAt, views, and 3 more.
+[exit 2]</div>
 
 <h3>Answer 1 — <code>satisfies</code> plus <code>GetPayload</code></h3>
 <pre><code class="language-javascript">import { Prisma } from '@prisma/client';
@@ -389,10 +410,24 @@ function the(b: Card) {
   return &#96;\${b.title} — \${b.author.username} (\${b._count.comments})&#96;;
 }</code></pre>
 <div class="lz-flow">
-  <div class="lz-step"><span class="lz-k"><code>satisfies</code>, not <code>:</code></span><span class="lz-t">This matters</span><span class="lz-d"><code>const x: Prisma.PostSelect = {…}</code> widens the value to the whole <code>PostSelect</code> type, so <code>typeof x</code> is useless. <code>satisfies</code> checks it against <code>PostSelect</code> while keeping the literal shape — which is exactly what <code>GetPayload</code> needs to compute the result.</span></div>
+  <div class="lz-step"><span class="lz-k"><code>satisfies</code>, not <code>:</code></span><span class="lz-t">This matters</span><span class="lz-d"><code>const x: Prisma.PostSelect = {…}</code> widens the value to the whole <code>PostSelect</code> type, and then the type <em>lies</em>: <code>GetPayload</code> sees "any field may be selected" and promises every column plus every relation, while the query still fetches only what you wrote. <code>satisfies</code> checks it against <code>PostSelect</code> while keeping the literal shape — which is exactly what <code>GetPayload</code> needs. Measured below.</span></div>
   <div class="lz-step"><span class="lz-k"><code>GetPayload</code> does the work</span><span class="lz-t">One generic per model</span><span class="lz-d"><code>PostGetPayload</code>, <code>UserGetPayload</code>, one for each. It takes the same argument object the query takes and computes the exact return type — the same machinery Prisma uses internally, exposed for you.</span></div>
   <div class="lz-step"><span class="lz-k">The selection is now shared</span><span class="lz-t">Import it anywhere</span><span class="lz-d">Three endpoints returning the same card shape use one <code>pickCard</code>, so they cannot diverge. Change it once and all three change.</span></div>
   <div class="lz-step"><span class="lz-k">Removing a field breaks the users</span><span class="lz-t">Which is the point</span><span class="lz-d">Delete <code>title</code> from the selection and <code>the()</code> turns red immediately, naming the exact line. A hand-written interface would have compiled and returned <code>undefined</code> at runtime.</span></div>
+</div>
+<div class="pitfall">
+<p><strong>Trap — a colon instead of <code>satisfies</code>, and the type promises fields the query never fetched.</strong> The query below selects <code>id</code> and <code>title</code>; a deliberate error makes tsc print the type it derived (measured 12 Nov 2026, Apple-silicon laptop, PostgreSQL 16.14 in Docker, Prisma 6.19.3):</p>
+<pre><code class="language-typescript">const pickRong: Prisma.PostSelect = { id: true, title: true };
+type CardRong = Prisma.PostGetPayload&lt;{ select: typeof pickRong }&gt;;
+const x: CardRong = null!;
+const y: number = x;   <span class="tok-comment">// deliberate: print the type</span></code></pre>
+<div class="out">$ npx tsc --noEmit --strict rong.ts
+rong.ts(5,7): error TS2322: Type '{ id: number; title: string; body: string | null; published: boolean; publishedAt: Date | null; views: number; createdAt: Date; authorId: number; tenantId: number; author: { id: number; ... 8 more ...; settings: JsonValue; }; comments: { ...; }[]; _count: { ...; }; }' is not assignable to type 'number'.
+[exit 2]</div>
+<p>Every column, <code>author</code>, <code>comments</code> and <code>_count</code> — none of which the query returns. <code>b.author.username</code> compiles and throws at runtime. With <code>satisfies</code>, the same lines give exactly <code>{ id: number; title: string }</code>, and removing <code>title</code> fails at the line that reads it:</p>
+<div class="out">$ npx tsc --noEmit --strict bo-title.ts
+bo-title.ts(13,37): error TS2339: Property 'title' does not exist on type '{ id: number; author: { username: string; avatarUrl: string | null; }; _count: { comments: number; }; }'.
+[exit 2]</div>
 </div>
 <pre><code class="language-typescript"><span class="tok-comment">// It works for include too</span>
 type PostWithAuthor = Prisma.PostGetPayload&lt;{ include: { author: true } }&gt;;
@@ -518,9 +553,10 @@ app.get('/api/v1/users/:username', async (req, res) =&gt; {
 function the(b: Post) { … }        <span class="tok-comment">// ✗ Post có body, views, authorId… mà ta không chọn cái nào</span>
 function the(b: any) { … }         <span class="tok-comment">// ✗ chạy được, và vứt bỏ mọi thứ</span>
 interface Card { … }             <span class="tok-comment">// ✗ chạy được, và trôi dạt ngay khi select đổi</span></code></pre>
-<div class="out">Argument of type '{ id: number; title: string; author: {...}; _count: {...} }'
-is not assignable to parameter of type 'Post'.
-  Type is missing the following properties from type 'Post': body, published, views, createdAt, authorId</div>
+<div class="out">$ npx tsc --noEmit --strict van-de.ts
+van-de.ts(7,5): error TS2345: Argument of type '{ id: number; title: string; author: { username: string; avatarUrl: string | null; }; _count: { comments: number; }; }' is not assignable to parameter of type '{ id: number; title: string; body: string | null; published: boolean; publishedAt: Date | null; views: number; createdAt: Date; authorId: number; tenantId: number; }'.
+  Type '{ id: number; title: string; author: { username: string; avatarUrl: string | null; }; _count: { comments: number; }; }' is missing the following properties from type '{ id: number; title: string; body: string | null; published: boolean; publishedAt: Date | null; views: number; createdAt: Date; authorId: number; tenantId: number; }': body, published, publishedAt, views, and 3 more.
+[exit 2]</div>
 
 <h3>Cách 1 — <code>satisfies</code> cộng <code>GetPayload</code></h3>
 <pre><code class="language-javascript">import { Prisma } from '@prisma/client';
@@ -545,10 +581,24 @@ function the(b: Card) {
   return &#96;\${b.title} — \${b.author.username} (\${b._count.comments})&#96;;
 }</code></pre>
 <div class="lz-flow">
-  <div class="lz-step"><span class="lz-k"><code>satisfies</code>, không phải <code>:</code></span><span class="lz-t">Chỗ này quan trọng</span><span class="lz-d"><code>const x: Prisma.PostSelect = {…}</code> nới rộng giá trị thành cả kiểu <code>PostSelect</code>, nên <code>typeof x</code> thành vô dụng. <code>satisfies</code> kiểm nó với <code>PostSelect</code> mà vẫn giữ nguyên hình dạng chữ — đúng thứ <code>GetPayload</code> cần để tính ra kết quả.</span></div>
+  <div class="lz-step"><span class="lz-k"><code>satisfies</code>, không phải <code>:</code></span><span class="lz-t">Chỗ này quan trọng</span><span class="lz-d"><code>const x: Prisma.PostSelect = {…}</code> nới rộng giá trị thành cả kiểu <code>PostSelect</code>, và khi đó kiểu <em>nói dối</em>: <code>GetPayload</code> thấy "trường nào cũng có thể được chọn" nên hứa mọi cột cộng mọi quan hệ, trong khi truy vấn vẫn chỉ lấy đúng những gì bạn viết. <code>satisfies</code> kiểm nó với <code>PostSelect</code> mà vẫn giữ nguyên hình dạng chữ — đúng thứ <code>GetPayload</code> cần. Đo ở dưới.</span></div>
   <div class="lz-step"><span class="lz-k"><code>GetPayload</code> làm phần việc</span><span class="lz-t">Mỗi model một generic</span><span class="lz-d"><code>PostGetPayload</code>, <code>UserGetPayload</code>, mỗi model một cái. Nó nhận đúng cái đối tượng tham số mà câu truy vấn nhận rồi tính ra kiểu trả về chính xác — đúng bộ máy Prisma dùng bên trong, phơi ra cho bạn.</span></div>
   <div class="lz-step"><span class="lz-k">Phép chọn giờ dùng chung được</span><span class="lz-t">Import ở đâu cũng được</span><span class="lz-d">Ba endpoint cùng trả về một hình thẻ thì dùng chung một <code>pickCard</code>, nên chúng không thể tách nhau ra. Đổi một lần là cả ba đổi.</span></div>
   <div class="lz-step"><span class="lz-k">Bỏ một trường thì làm vỡ chỗ dùng</span><span class="lz-t">Và đó chính là điểm mấu chốt</span><span class="lz-d">Xoá <code>title</code> khỏi phép chọn thì <code>the()</code> đỏ lên ngay lập tức, nêu đúng dòng. Một interface viết tay thì đã biên dịch trót lọt và trả về <code>undefined</code> lúc chạy.</span></div>
+</div>
+<div class="pitfall">
+<p><strong>Bẫy — dấu hai chấm thay cho <code>satisfies</code>, và kiểu hứa những trường truy vấn chưa từng lấy.</strong> Truy vấn dưới đây chọn <code>id</code> và <code>title</code>; một lỗi cố ý khiến tsc in ra kiểu nó suy được (đo ngày 12/11/2026, laptop Apple silicon, PostgreSQL 16.14 trong Docker, Prisma 6.19.3):</p>
+<pre><code class="language-typescript">const pickRong: Prisma.PostSelect = { id: true, title: true };
+type CardRong = Prisma.PostGetPayload&lt;{ select: typeof pickRong }&gt;;
+const x: CardRong = null!;
+const y: number = x;   <span class="tok-comment">// cố ý: in kiểu ra</span></code></pre>
+<div class="out">$ npx tsc --noEmit --strict rong.ts
+rong.ts(5,7): error TS2322: Type '{ id: number; title: string; body: string | null; published: boolean; publishedAt: Date | null; views: number; createdAt: Date; authorId: number; tenantId: number; author: { id: number; ... 8 more ...; settings: JsonValue; }; comments: { ...; }[]; _count: { ...; }; }' is not assignable to type 'number'.
+[exit 2]</div>
+<p>Mọi cột, <code>author</code>, <code>comments</code> và <code>_count</code> — không cái nào truy vấn trả về. <code>b.author.username</code> biên dịch được và ném lỗi lúc chạy. Với <code>satisfies</code>, cùng những dòng ấy cho đúng <code>{ id: number; title: string }</code>, và bỏ <code>title</code> thì hỏng đúng dòng đọc nó:</p>
+<div class="out">$ npx tsc --noEmit --strict bo-title.ts
+bo-title.ts(13,37): error TS2339: Property 'title' does not exist on type '{ id: number; author: { username: string; avatarUrl: string | null; }; _count: { comments: number; }; }'.
+[exit 2]</div>
 </div>
 <pre><code class="language-typescript"><span class="tok-comment">// Nó cũng chạy với include</span>
 type PostWithAuthor = Prisma.PostGetPayload&lt;{ include: { author: true } }&gt;;
@@ -662,7 +712,7 @@ app.get('/api/v1/users/:username', async (req, res) =&gt; {
       title: '8.3 — The type that broke production|||8.3 — Cái kiểu làm vỡ production',
       slug: 'pr-8-3-su-co-enum',
       type: 'LESSON',
-      description: 'Sự cố 08/08/2026 mổ từng bước: thay đổi, năm phép kiểm đều qua, thứ vỡ, hai lý do khiến nó vô hình, hai cách vá đã đưa vào danh sách kiểm của kho, và cả lớp lỗi mà nó đại diện — mã không ai kiểm kiểu.',
+      description: 'Sự cố 08/08/2026 mổ từng bước: thay đổi, năm phép kiểm đều qua, thứ vỡ, lý do thật khiến nó vô hình, hai cách vá đã đưa vào danh sách kiểm của kho, và cả lớp lỗi mà nó đại diện — mã không ai kiểm kiểu.',
       content: `
 ${G08_3}
 <div class="ml-en">
@@ -692,38 +742,72 @@ enum ContentType {
   <div class="lz-layer"><span class="lz-lname"><code>(cd frontend &amp;&amp; npm run build)</code></span><span class="lz-lnote">Green. The frontend already used the new name — that was the point of the change.</span></div>
   <div class="lz-layer"><span class="lz-lname">The migration</span><span class="lz-lnote">Applied cleanly. PostgreSQL renamed the enum value and every existing row followed.</span></div>
 </div>
+<p>Replayed in the lab (measured 12 Nov 2026, Apple-silicon laptop, PostgreSQL 16.14 in Docker, Prisma 6.19.3) — every check green, and <code>migrate diff</code> reports an empty migration:</p>
+<div class="out">$ docker exec -i prisma-pg psql -U student -d c83 -c "ALTER TYPE \\"ContentType\\" RENAME VALUE 'CODE' TO 'CODE_REVIEW'"
+ALTER TYPE
+$ npx prisma validate --schema schema.prisma
+The schema at schema.prisma is valid 🚀
+$ npx prisma generate --schema schema.prisma | grep Generated
+✔ Generated Prisma Client (v6.19.3) to ./gen in 69ms
+$ npx tsc -p tsconfig.json &amp;&amp; echo 'tsc --noEmit: no errors'
+tsc --noEmit: no errors
+$ npx prisma migrate diff --from-schema-datasource schema.prisma --to-schema-datamodel schema.prisma --script
+-- This is an empty migration.</div>
 
 <h3>What broke</h3>
-<pre><code class="language-bash">npx prisma db seed</code></pre>
-<div class="out">Running seed command &#96;tsx prisma/seed.ts&#96; ...
-
-PrismaClientKnownRequestError:
-Invalid &#96;prisma.content.create()&#96; invocation:
-
+<p>Rebuilt in the lab (measured 12 Nov 2026, Apple-silicon laptop, PostgreSQL 16.14 in Docker, Prisma 6.19.3) with the same rename and the same hand-written union, the seed fails exactly as production did:</p>
+<div class="out">$ npx tsx prisma/seed.ts
+PrismaClientValidationError: 
+Invalid &#96;prisma.content.create()&#96; invocation in
+prisma/seed.ts:9:47
+  6   { title: 'Review code nguon Prisma', type: 'CODE' },
+  7   { title: 'Vlog ngay dau', type: 'VLOG' },
+  8 ];
+→ 9 for (const d of payload) await prisma.content.create({
+      data: {
+        title: "Review code nguon Prisma",
+        type: "CODE"
+              ~~~~~~
+      }
+    })
 Invalid value for argument &#96;type&#96;. Expected ContentType.
-  code: 'P2009'
-
-An error occurred while running the seed command.</div>
-<pre><code class="language-css"><span class="tok-comment">// prisma/seed.ts — the cause, and it had been there for months</span>
+  clientVersion: '6.19.3'
+}
+[exit 1]</div>
+<p>Note what it is: a <code>PrismaClientValidationError</code>, with no error code and no <code>meta</code>. The client checked the argument against the generated enum and refused before any SQL was sent. Catching <code>PrismaClientKnownRequestError</code> or looking for a <code>P2xxx</code> code would not have caught it.</p>
+<pre><code class="language-typescript"><span class="tok-comment">// prisma/seed.ts — the cause, and it had been there for months</span>
 type ContentType = 'VLOG' | 'ARTICLE' | 'CODE' | 'TUTORIAL';
 <span class="tok-comment">//                                       ^^^^^^ still the old name</span>
 
 const payload: { title: string; type: ContentType }[] = [
   { title: 'Review code nguon Prisma', type: 'CODE' },
-  …
+  { title: 'Vlog ngay dau', type: 'VLOG' },
 ];
 
 for (const d of payload) {
-  await prisma.content.create({ data: d });    <span class="tok-comment">// sends 'CODE' to a database that no longer has it</span>
+  await prisma.content.create({ data: d });    <span class="tok-comment">// refused by the client: 'CODE' is no longer a ContentType</span>
 }</code></pre>
 
-<h3>The two reasons it was invisible</h3>
+<h3>The reason it was invisible</h3>
+<pre><code class="language-bash"><span class="tok-comment"># what does tsc actually read?</span></code></pre>
+<div class="out">$ npx tsc -p tsconfig.json --listFiles | grep -v node_modules | grep -v /gen/
+src/index.ts
+$ find p8/83 -name '*.ts' -not -path '*/gen/*' | sort
+prisma/seed.ts
+src/index.ts</div>
 <div class="lz-flow">
-  <div class="lz-step"><span class="lz-k">Reason 1</span><span class="lz-t">The union was internally consistent</span><span class="lz-d">The hand-written type said <code>'CODE'</code> and the data said <code>'CODE'</code>. They agreed perfectly. A type only catches a disagreement between two things — and here both things came from the same file, so there was nothing to disagree with.</span></div>
-  <div class="lz-step"><span class="lz-k">Reason 2</span><span class="lz-t">Nothing type-checked the file</span><span class="lz-d"><code>tsconfig.json</code> has <code>rootDir: "./src"</code>, so <code>prisma/**</code> could not be in <code>include</code> — it sat in <code>exclude</code>. <code>tsc --noEmit</code> never opened <code>seed.ts</code>. Even if the union had been imported, nothing would have compiled it.</span></div>
-  <div class="lz-step"><span class="lz-k">Together</span><span class="lz-t">A file outside the type system</span><span class="lz-d">Either problem alone is survivable. A hand-copied type in a checked file breaks the build; a checked import in an unchecked file still works. Both at once produces a file that is TypeScript in name only.</span></div>
+  <div class="lz-step"><span class="lz-k">The reason</span><span class="lz-t">Nothing type-checked the file</span><span class="lz-d"><code>tsconfig.json</code> has <code>rootDir: "./src"</code>, so <code>prisma/**</code> could not be in <code>include</code> — it sat in <code>exclude</code>. <code>tsc --noEmit</code> never opened <code>seed.ts</code>, and tsc does not warn about files it does not read.</span></div>
+  <div class="lz-step"><span class="lz-k">Not the reason</span><span class="lz-t">"The union agreed with itself"</span><span class="lz-d">It is tempting to blame the hand-copied union for shielding the data. Measured, it did not: the moment tsc read <code>seed.ts</code>, the old union met the real input type of <code>prisma.content.create()</code> and failed with TS2322 (next section). The copy made the error land on the wrong line; the unchecked file is what let it ship.</span></div>
   <div class="lz-step"><span class="lz-k">And it only ran on deploy</span><span class="lz-t">So the failure was in production</span><span class="lz-d">The seed is not part of the test suite and not part of local development once the database exists. Its first execution after the change was against production.</span></div>
 </div>
+<p>The real repository, read-only, on 12 November 2026:</p>
+<div class="out">$ npx tsc -p tsconfig.json --listFilesOnly | grep -v node_modules | grep -c '^prisma/'
+0
+# .ts files in git that this tsconfig never reads (excluding frontend, packages, course content):
+prisma/    19   (seed.ts and 18 other seed / data files)
+scripts/   41
+$ npx tsc -p tsconfig.seed.json --listFilesOnly | grep -v node_modules | grep -c '^prisma/'
+19</div>
 
 <h3>The two fixes</h3>
 <pre><code class="language-javascript"><span class="tok-comment">// Fix 1 — import the generated type. One line.</span>
@@ -738,31 +822,33 @@ for (const d of payload) {
 }</code></pre>
 <pre><code class="language-typescript"><span class="tok-comment">// package.json</span>
 "scripts": {
-  "typecheck:seed": "tsc -p tsconfig.seed.json --noEmit"
+  "typecheck:seed": "tsc -p tsconfig.seed.json"
 }</code></pre>
+<p>Run against the lab — first with the hand-written union still in place, then with fix 1 applied:</p>
+<div class="out">$ npx tsc -p tsconfig.seed.json; echo "[tsconfig.seed.json, seed.ts van con union chep tay: exit $?]"
+prisma/seed.ts(9,56): error TS2322: Type '{ title: string; type: ContentType; }' is not assignable to type '(Without&lt;ContentCreateInput, ContentUncheckedCreateInput&gt; &amp; ContentUncheckedCreateInput) | (Without&lt;...&gt; &amp; ContentCreateInput)'.
+  Type '{ title: string; type: ContentType; }' is not assignable to type 'Without&lt;ContentUncheckedCreateInput, ContentCreateInput&gt; &amp; ContentCreateInput'.
+    Type '{ title: string; type: ContentType; }' is not assignable to type 'ContentCreateInput'.
+      Types of property 'type' are incompatible.
+        Type 'ContentType' is not assignable to type 'import("gen/index").$Enums.ContentType'.
+          Type '"CODE"' is not assignable to type 'ContentType'.
+[tsconfig.seed.json, seed.ts van con union chep tay: exit 2]
+$ # after fix 1: npx tsc -p tsconfig.seed.json; echo "[sau sua 1 — import kieu sinh ra: exit $?]"
+prisma/seed.ts(6,40): error TS2322: Type '"CODE"' is not assignable to type 'ContentType'.
+[sau sua 1 — import kieu sinh ra: exit 2]</div>
+<p>Fix 2 alone already caught the bug, at the <code>create</code> call. Fix 1 moves the error onto the data line itself — <code>'CODE'</code> is not a <code>ContentType</code> — which is where you want to read it. Do both.</p>
 <div class="note-ct">
 <p><strong>Both fixes are now in the repository's pre-push checklist, and the checklist says why in capital letters.</strong> Whenever <code>prisma/schema.prisma</code> changes, the required commands are <code>npx tsc --noEmit</code> <em>and</em> <code>npm run typecheck:seed</code> <em>and</em> <code>npx prisma db seed</code> — the last one because a runtime failure in a script nothing type-checks is only found by running it. The checklist notes, in its own words, that <code>tsc --noEmit</code> does not touch <code>prisma/**</code>, and that this was learned by breaking production.</p>
 </div>
 
 <h3>The class of bug, generalised</h3>
 <pre><code class="language-bash"><span class="tok-comment"># The question to ask of any codebase: what is NOT type-checked?</span>
-npx tsc --noEmit --listFiles | wc -l
-find . -name '*.ts' -not -path './node_modules/*' -not -path './dist/*' | wc -l</code></pre>
-<div class="out">412      ← files tsc actually reads
-487      ← .ts files that exist
-
--- 75 files outside the type system. Which ones?</div>
-<pre><code><span class="tok-comment"># Name them</span>
+<span class="tok-comment"># --listFilesOnly lists what tsc would read, without checking anything (about 5 s on CuongThai)</span>
 comm -13 \\
-  &lt;(npx tsc --noEmit --listFiles | grep -v node_modules | sort) \\
-  &lt;(find . -name '*.ts' -not -path './node_modules/*' -not -path './dist/*' | sed 's|^\\./||' | sort)</code></pre>
-<div class="out">prisma/seed.ts
-prisma/seed-dev.ts
-scripts/backfill-slugs.ts
-scripts/import-legacy.ts
-…</div>
+  &lt;(npx tsc -p tsconfig.json --listFilesOnly | grep -v node_modules | sed "s|^$PWD/||" | sort) \\
+  &lt;(git ls-files '*.ts' | grep -v '\\.d\\.ts$' | sort)</code></pre>
 <div class="callout warn">
-<p><strong>Look at that list.</strong> Seeds, one-off scripts, backfills, migration helpers — the files that touch production data most directly and are reviewed least carefully, all sitting outside the type system. Every one of them can hold a hand-copied type that agrees with itself and disagrees with the schema, and none of them will tell you until they run. That is the general shape of the incident, and it is present in most codebases.</p>
+<p><strong>Read that list.</strong> On CuongThai it named the 19 seed and data files under <code>prisma/</code> and 41 scripts — seeds, backfills, one-off imports: the files that touch production data most directly and are reviewed least carefully. Give each group a tsconfig with <code>noEmit</code> and <code>rootDir: "."</code>, an npm script, and a line in the checklist that says why.</p>
 </div>
 
 <h3>The four other places this hides</h3>
@@ -776,15 +862,39 @@ scripts/import-legacy.ts
 <h3>The rename you should have written instead</h3>
 <pre><code class="language-sql"><span class="tok-comment">// Expand-contract, exactly as in Lesson 6.5, applied to an enum</span>
 
-<span class="tok-comment">// Migration 1: add the new value. Safe, one statement, no lock of consequence.</span>
+<span class="tok-comment">// Migration 1: add the new value — alone in its file.</span>
 ALTER TYPE "ContentType" ADD VALUE 'CODE_REVIEW';
 
 <span class="tok-comment">// Deploy 1: code accepts both, writes the new one</span>
-<span class="tok-comment">// Data migration: UPDATE contents SET type='CODE_REVIEW' WHERE type='CODE';</span>
+<span class="tok-comment">// Migration 2 — a SEPARATE file: UPDATE contents SET type='CODE_REVIEW' WHERE type='CODE';</span>
 <span class="tok-comment">// Deploy 2: code no longer mentions the old value</span>
 
-<span class="tok-comment">// Migration 2, days later: remove the old value</span>
+<span class="tok-comment">// Migration 3, days later: remove the old value</span>
 <span class="tok-comment">// (the seven-statement type swap from Lesson 2.5)</span></code></pre>
+<div class="pitfall">
+<p><strong>Trap — <code>ADD VALUE</code> and the <code>UPDATE</code> in the same migration file.</strong> A migration file runs in one transaction, and PostgreSQL does not let a new enum value be used until it is committed. Measured (measured 12 Nov 2026, Apple-silicon laptop, PostgreSQL 16.14 in Docker, Prisma 6.19.3) — first both in one transaction, then split in two:</p>
+<div class="out">$ psql -U student -d c83 &lt; them-gia-tri.sql
+BEGIN
+ALTER TYPE
+ERROR:  unsafe use of new value "CODE_REVIEW2" of enum type "ContentType"
+LINE 1: UPDATE contents SET type = 'CODE_REVIEW2' WHERE type = 'CODE...
+                                   ^
+HINT:  New enum values must be committed before they can be used.
+ROLLBACK
+$ psql -U student -d c83 &lt; them-gia-tri-2.sql
+BEGIN
+ALTER TYPE
+COMMIT
+BEGIN
+UPDATE 2
+COMMIT
+     type     | count 
+--------------+-------
+ VLOG         |     1
+ CODE_REVIEW2 |     2
+(2 rows)</div>
+<p>The second <code>BEGIN … COMMIT</code> is what two migration files give you. Put the data move in its own migration (or in deploy-time code), never in the file that adds the value.</p>
+</div>
 <div class="callout ok">
 <p><strong>The deeper lesson is not "import your types" — it is that a rename is never a one-step change.</strong> Importing the type would have turned this into a compile error, which is a much better outcome. But the expand–contract version would have survived even the hand-copied union, because <code>'CODE'</code> would still have been a valid value while the old code was running. Type safety catches the mistake; sequencing makes the mistake harmless. Do both.</p>
 </div>
@@ -836,44 +946,78 @@ enum ContentType {
   <div class="lz-layer"><span class="lz-lname"><code>(cd frontend &amp;&amp; npm run build)</code></span><span class="lz-lnote">Xanh. Frontend vốn đã dùng tên mới — đó chính là điểm của thay đổi này.</span></div>
   <div class="lz-layer"><span class="lz-lname">Migration</span><span class="lz-lnote">Áp dụng sạch sẽ. PostgreSQL đổi tên giá trị enum và mọi hàng đang có đều đi theo.</span></div>
 </div>
+<p>Chạy lại trong lab (đo ngày 12/11/2026, laptop Apple silicon, PostgreSQL 16.14 trong Docker, Prisma 6.19.3) — mọi phép kiểm đều xanh, và <code>migrate diff</code> báo một migration rỗng:</p>
+<div class="out">$ docker exec -i prisma-pg psql -U student -d c83 -c "ALTER TYPE \\"ContentType\\" RENAME VALUE 'CODE' TO 'CODE_REVIEW'"
+ALTER TYPE
+$ npx prisma validate --schema schema.prisma
+The schema at schema.prisma is valid 🚀
+$ npx prisma generate --schema schema.prisma | grep Generated
+✔ Generated Prisma Client (v6.19.3) to ./gen in 69ms
+$ npx tsc -p tsconfig.json &amp;&amp; echo 'tsc --noEmit: no errors'
+tsc --noEmit: no errors
+$ npx prisma migrate diff --from-schema-datasource schema.prisma --to-schema-datamodel schema.prisma --script
+-- This is an empty migration.</div>
 
 <h3>Cái đã vỡ</h3>
-<pre><code class="language-bash">npx prisma db seed</code></pre>
-<div class="out">Running seed command &#96;tsx prisma/seed.ts&#96; ...
-
-PrismaClientKnownRequestError:
-Invalid &#96;prisma.content.create()&#96; invocation:
-
+<p>Dựng lại trong lab (đo ngày 12/11/2026, laptop Apple silicon, PostgreSQL 16.14 trong Docker, Prisma 6.19.3) với đúng lần đổi tên ấy và đúng union viết tay ấy, seed hỏng y như trên production:</p>
+<div class="out">$ npx tsx prisma/seed.ts
+PrismaClientValidationError: 
+Invalid &#96;prisma.content.create()&#96; invocation in
+prisma/seed.ts:9:47
+  6   { title: 'Review code nguon Prisma', type: 'CODE' },
+  7   { title: 'Vlog ngay dau', type: 'VLOG' },
+  8 ];
+→ 9 for (const d of payload) await prisma.content.create({
+      data: {
+        title: "Review code nguon Prisma",
+        type: "CODE"
+              ~~~~~~
+      }
+    })
 Invalid value for argument &#96;type&#96;. Expected ContentType.
-  code: 'P2009'
-
-An error occurred while running the seed command.</div>
-<pre><code class="language-css"><span class="tok-comment">// prisma/seed.ts — nguyên nhân, và nó nằm đó nhiều tháng rồi</span>
+  clientVersion: '6.19.3'
+}
+[exit 1]</div>
+<p>Hãy để ý nó là gì: một <code>PrismaClientValidationError</code>, không có mã lỗi và không có <code>meta</code>. Client đối chiếu tham số với enum sinh ra và từ chối trước khi gửi câu SQL nào. Bắt <code>PrismaClientKnownRequestError</code> hay tìm một mã <code>P2xxx</code> đều không bắt được nó.</p>
+<pre><code class="language-typescript"><span class="tok-comment">// prisma/seed.ts — thủ phạm, và nó đã nằm đó nhiều tháng</span>
 type ContentType = 'VLOG' | 'ARTICLE' | 'CODE' | 'TUTORIAL';
 <span class="tok-comment">//                                       ^^^^^^ vẫn là tên cũ</span>
 
 const payload: { title: string; type: ContentType }[] = [
   { title: 'Review code nguon Prisma', type: 'CODE' },
-  …
+  { title: 'Vlog ngay dau', type: 'VLOG' },
 ];
 
 for (const d of payload) {
-  await prisma.content.create({ data: d });    <span class="tok-comment">// gửi 'CODE' tới một cơ sở dữ liệu không còn nó</span>
+  await prisma.content.create({ data: d });    <span class="tok-comment">// client từ chối: 'CODE' không còn là một ContentType</span>
 }</code></pre>
 
-<h3>Hai lý do khiến nó vô hình</h3>
+<h3>Lý do nó vô hình</h3>
+<pre><code class="language-bash"><span class="tok-comment"># tsc thật sự đọc những gì?</span></code></pre>
+<div class="out">$ npx tsc -p tsconfig.json --listFiles | grep -v node_modules | grep -v /gen/
+src/index.ts
+$ find p8/83 -name '*.ts' -not -path '*/gen/*' | sort
+prisma/seed.ts
+src/index.ts</div>
 <div class="lz-flow">
-  <div class="lz-step"><span class="lz-k">Lý do 1</span><span class="lz-t">Cái union nhất quán với chính nó</span><span class="lz-d">Kiểu viết tay nói <code>'CODE'</code> và dữ liệu cũng nói <code>'CODE'</code>. Chúng đồng ý hoàn hảo. Một kiểu chỉ bắt được sự bất đồng giữa hai thứ — mà ở đây cả hai thứ đều đến từ cùng một tệp, nên chẳng có gì để bất đồng.</span></div>
-  <div class="lz-step"><span class="lz-k">Lý do 2</span><span class="lz-t">Không có gì kiểm kiểu tệp đó</span><span class="lz-d"><code>tsconfig.json</code> có <code>rootDir: "./src"</code>, nên <code>prisma/**</code> không thể nằm trong <code>include</code> — nó nằm trong <code>exclude</code>. <code>tsc --noEmit</code> chưa bao giờ mở <code>seed.ts</code>. Ngay cả nếu cái union đã được import thì cũng chẳng có gì biên dịch nó.</span></div>
-  <div class="lz-step"><span class="lz-k">Gộp lại</span><span class="lz-t">Một tệp nằm ngoài hệ kiểu</span><span class="lz-d">Riêng một vấn đề thì sống sót được. Một kiểu chép tay trong một tệp được kiểm thì làm vỡ bản build; một lệnh import được kiểm trong một tệp không được kiểm thì vẫn chạy. Hai cái cùng lúc đẻ ra một tệp chỉ là TypeScript trên danh nghĩa.</span></div>
-  <div class="lz-step"><span class="lz-k">Và nó chỉ chạy lúc deploy</span><span class="lz-t">Nên chỗ hỏng nằm trên production</span><span class="lz-d">Seed không phải một phần của bộ kiểm thử và không phải một phần của việc phát triển ở máy khi cơ sở dữ liệu vốn đã tồn tại. Lần chạy đầu tiên của nó sau thay đổi là chạy trên production.</span></div>
+  <div class="lz-step"><span class="lz-k">Lý do</span><span class="lz-t">Không gì kiểm kiểu tệp ấy</span><span class="lz-d"><code>tsconfig.json</code> có <code>rootDir: "./src"</code>, nên <code>prisma/**</code> không thể nằm trong <code>include</code> — nó bị đặt vào <code>exclude</code>. <code>tsc --noEmit</code> chưa từng mở <code>seed.ts</code>, và tsc không cảnh báo về những tệp nó không đọc.</span></div>
+  <div class="lz-step"><span class="lz-k">Không phải lý do</span><span class="lz-t">"Union tự khớp với chính nó"</span><span class="lz-d">Rất dễ đổ cho union chép tay là đã che chắn dữ liệu. Đo thật thì không phải: ngay khi tsc đọc <code>seed.ts</code>, union cũ gặp kiểu đầu vào thật của <code>prisma.content.create()</code> và báo TS2322 (mục sau). Bản chép tay chỉ làm lỗi rơi sai dòng; chính tệp không được kiểm mới để nó lọt ra.</span></div>
+  <div class="lz-step"><span class="lz-k">Và nó chỉ chạy lúc triển khai</span><span class="lz-t">Nên chỗ hỏng là production</span><span class="lz-d">Seed không nằm trong bộ test và không nằm trong việc phát triển hằng ngày khi cơ sở dữ liệu đã có. Lần chạy đầu tiên của nó sau thay đổi là trên production.</span></div>
 </div>
+<p>Repo thật, chỉ đọc, ngày 12/11/2026:</p>
+<div class="out">$ npx tsc -p tsconfig.json --listFilesOnly | grep -v node_modules | grep -c '^prisma/'
+0
+# tệp .ts trong git mà tsconfig này không bao giờ đọc (trừ frontend, packages, nội dung khoá học):
+prisma/    19   (seed.ts và 18 tệp seed / dữ liệu khác)
+scripts/   41
+$ npx tsc -p tsconfig.seed.json --listFilesOnly | grep -v node_modules | grep -c '^prisma/'
+19</div>
 
 <h3>Hai cách vá</h3>
-<pre><code class="language-javascript"><span class="tok-comment">// Vá 1 — import kiểu được sinh ra. Một dòng.</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Sửa 1 — import kiểu sinh ra. Một dòng.</span>
 - type ContentType = 'VLOG' | 'ARTICLE' | 'CODE' | 'TUTORIAL';
 + import type { ContentType } from '@prisma/client';</code></pre>
-<pre><code class="language-typescript"><span class="tok-comment">// Vá 2 — một tsconfig thật sự bao được prisma/</span>
+<pre><code class="language-typescript"><span class="tok-comment">// Sửa 2 — một tsconfig thật sự phủ cả prisma/</span>
 <span class="tok-comment">// tsconfig.seed.json</span>
 {
   "extends": "./tsconfig.json",
@@ -882,31 +1026,33 @@ for (const d of payload) {
 }</code></pre>
 <pre><code class="language-typescript"><span class="tok-comment">// package.json</span>
 "scripts": {
-  "typecheck:seed": "tsc -p tsconfig.seed.json --noEmit"
+  "typecheck:seed": "tsc -p tsconfig.seed.json"
 }</code></pre>
+<p>Chạy trên lab — trước với union viết tay vẫn còn nguyên, rồi sau khi áp sửa 1:</p>
+<div class="out">$ npx tsc -p tsconfig.seed.json; echo "[tsconfig.seed.json, seed.ts van con union chep tay: exit $?]"
+prisma/seed.ts(9,56): error TS2322: Type '{ title: string; type: ContentType; }' is not assignable to type '(Without&lt;ContentCreateInput, ContentUncheckedCreateInput&gt; &amp; ContentUncheckedCreateInput) | (Without&lt;...&gt; &amp; ContentCreateInput)'.
+  Type '{ title: string; type: ContentType; }' is not assignable to type 'Without&lt;ContentUncheckedCreateInput, ContentCreateInput&gt; &amp; ContentCreateInput'.
+    Type '{ title: string; type: ContentType; }' is not assignable to type 'ContentCreateInput'.
+      Types of property 'type' are incompatible.
+        Type 'ContentType' is not assignable to type 'import("gen/index").$Enums.ContentType'.
+          Type '"CODE"' is not assignable to type 'ContentType'.
+[tsconfig.seed.json, seed.ts van con union chep tay: exit 2]
+$ # sau sửa 1: npx tsc -p tsconfig.seed.json; echo "[sau sua 1 — import kieu sinh ra: exit $?]"
+prisma/seed.ts(6,40): error TS2322: Type '"CODE"' is not assignable to type 'ContentType'.
+[sau sua 1 — import kieu sinh ra: exit 2]</div>
+<p>Chỉ riêng sửa 2 đã bắt được lỗi, ở lời gọi <code>create</code>. Sửa 1 dời lỗi về đúng dòng dữ liệu — <code>'CODE'</code> không phải một <code>ContentType</code> — là chỗ bạn muốn đọc nó. Hãy làm cả hai.</p>
 <div class="note-ct">
 <p><strong>Cả hai cách vá nay đều nằm trong danh sách kiểm trước-khi-đẩy của kho, và danh sách ấy nói rõ lý do bằng chữ in hoa.</strong> Mỗi khi <code>prisma/schema.prisma</code> đổi thì các câu lệnh bắt buộc là <code>npx tsc --noEmit</code> <em>và</em> <code>npm run typecheck:seed</code> <em>và</em> <code>npx prisma db seed</code> — cái cuối vì một thất bại lúc chạy trong một script không ai kiểm kiểu thì chỉ tìm ra bằng cách chạy nó. Danh sách ấy ghi rõ, bằng chính lời của nó, rằng <code>tsc --noEmit</code> không đụng tới <code>prisma/**</code>, và rằng điều đó được học bằng cách làm vỡ production.</p>
 </div>
 
 <h3>Lớp lỗi ấy, tổng quát hoá</h3>
-<pre><code class="language-bash"><span class="tok-comment"># Câu hỏi cần hỏi với bất kỳ kho mã nào: cái gì KHÔNG được kiểm kiểu?</span>
-npx tsc --noEmit --listFiles | wc -l
-find . -name '*.ts' -not -path './node_modules/*' -not -path './dist/*' | wc -l</code></pre>
-<div class="out">412      ← số tệp tsc thật sự đọc
-487      ← số tệp .ts đang tồn tại
-
--- 75 tệp nằm ngoài hệ kiểu. Là những tệp nào?</div>
-<pre><code><span class="tok-comment"># Gọi tên chúng ra</span>
+<pre><code class="language-bash"><span class="tok-comment"># Câu nên hỏi mọi kho mã: cái gì KHÔNG được kiểm kiểu?</span>
+<span class="tok-comment"># --listFilesOnly liệt kê những gì tsc sẽ đọc, không kiểm gì cả (khoảng 5 giây trên CuongThai)</span>
 comm -13 \\
-  &lt;(npx tsc --noEmit --listFiles | grep -v node_modules | sort) \\
-  &lt;(find . -name '*.ts' -not -path './node_modules/*' -not -path './dist/*' | sed 's|^\\./||' | sort)</code></pre>
-<div class="out">prisma/seed.ts
-prisma/seed-dev.ts
-scripts/backfill-slugs.ts
-scripts/import-legacy.ts
-…</div>
+  &lt;(npx tsc -p tsconfig.json --listFilesOnly | grep -v node_modules | sed "s|^$PWD/||" | sort) \\
+  &lt;(git ls-files '*.ts' | grep -v '\\.d\\.ts$' | sort)</code></pre>
 <div class="callout warn">
-<p><strong>Hãy nhìn cái danh sách đó.</strong> Seed, các script chạy một lần, các lần đổ dữ liệu, các công cụ hỗ trợ migration — những tệp chạm vào dữ liệu production trực tiếp nhất và được review cẩn thận ít nhất, tất cả đều ngồi ngoài hệ kiểu. Mỗi cái trong số đó đều có thể chứa một kiểu chép tay đồng ý với chính nó và bất đồng với lược đồ, và không cái nào báo cho bạn cho tới khi nó chạy. Đó là hình dạng chung của sự cố này, và nó có mặt trong phần lớn kho mã.</p>
+<p><strong>Đọc danh sách ấy.</strong> Trên CuongThai nó gọi tên 19 tệp seed và dữ liệu dưới <code>prisma/</code> cùng 41 script — seed, backfill, import một lần: những tệp chạm dữ liệu production trực tiếp nhất và được soát kỹ ít nhất. Cho mỗi nhóm một tsconfig với <code>noEmit</code> và <code>rootDir: "."</code>, một lệnh npm, và một dòng trong checklist nói rõ vì sao.</p>
 </div>
 
 <h3>Bốn chỗ khác mà chuyện này ẩn nấp</h3>
@@ -920,15 +1066,39 @@ scripts/import-legacy.ts
 <h3>Lần đổi tên lẽ ra bạn nên viết</h3>
 <pre><code class="language-sql"><span class="tok-comment">// Nới–thu, đúng như ở Bài 6.5, áp lên một enum</span>
 
-<span class="tok-comment">// Migration 1: thêm giá trị mới. An toàn, một câu lệnh, không khoá gì đáng kể.</span>
+<span class="tok-comment">// Migration 1: thêm giá trị mới — một mình trong tệp của nó.</span>
 ALTER TYPE "ContentType" ADD VALUE 'CODE_REVIEW';
 
 <span class="tok-comment">// Deploy 1: mã chấp nhận cả hai, ghi giá trị mới</span>
-<span class="tok-comment">// Di chuyển dữ liệu: UPDATE contents SET type='CODE_REVIEW' WHERE type='CODE';</span>
+<span class="tok-comment">// Migration 2 — một tệp RIÊNG: UPDATE contents SET type='CODE_REVIEW' WHERE type='CODE';</span>
 <span class="tok-comment">// Deploy 2: mã không còn nhắc tới giá trị cũ</span>
 
-<span class="tok-comment">// Migration 2, vài ngày sau: bỏ giá trị cũ</span>
+<span class="tok-comment">// Migration 3, vài ngày sau: bỏ giá trị cũ</span>
 <span class="tok-comment">// (phép tráo kiểu bảy câu lệnh ở Bài 2.5)</span></code></pre>
+<div class="pitfall">
+<p><strong>Bẫy — <code>ADD VALUE</code> và <code>UPDATE</code> trong cùng một tệp migration.</strong> Một tệp migration chạy trong một giao dịch, và PostgreSQL không cho dùng giá trị enum mới cho tới khi nó được commit. Đo thật (đo ngày 12/11/2026, laptop Apple silicon, PostgreSQL 16.14 trong Docker, Prisma 6.19.3) — trước là cả hai trong một giao dịch, rồi tách làm hai:</p>
+<div class="out">$ psql -U student -d c83 &lt; them-gia-tri.sql
+BEGIN
+ALTER TYPE
+ERROR:  unsafe use of new value "CODE_REVIEW2" of enum type "ContentType"
+LINE 1: UPDATE contents SET type = 'CODE_REVIEW2' WHERE type = 'CODE...
+                                   ^
+HINT:  New enum values must be committed before they can be used.
+ROLLBACK
+$ psql -U student -d c83 &lt; them-gia-tri-2.sql
+BEGIN
+ALTER TYPE
+COMMIT
+BEGIN
+UPDATE 2
+COMMIT
+     type     | count 
+--------------+-------
+ VLOG         |     1
+ CODE_REVIEW2 |     2
+(2 rows)</div>
+<p><code>BEGIN … COMMIT</code> thứ hai chính là thứ hai tệp migration cho bạn. Đặt việc chuyển dữ liệu vào migration riêng của nó (hoặc vào mã chạy lúc triển khai), không bao giờ vào tệp thêm giá trị.</p>
+</div>
 <div class="callout ok">
 <p><strong>Bài học sâu hơn không phải là "hãy import kiểu của bạn" — mà là một lần đổi tên không bao giờ là thay đổi một bước.</strong> Import cái kiểu thì đã biến chuyện này thành một lỗi biên dịch, và đó là kết cục tốt hơn nhiều. Nhưng bản nới–thu thì đã sống sót ngay cả với cái union chép tay, vì <code>'CODE'</code> vẫn còn là một giá trị hợp lệ trong lúc mã cũ đang chạy. An toàn kiểu bắt được sai lầm; sắp thứ tự làm cho sai lầm trở nên vô hại. Hãy làm cả hai.</p>
 </div>
@@ -1008,11 +1178,18 @@ ${G08_4}
   },
 });
 
-const u = await prisma.user.findUniqueOrThrow({ where: { id: 1 } });
-console.log(u.tenHienThi, u.urlHoSo);</code></pre>
-<div class="out">prisma:query SELECT "id","username","full_name","email","created_at" FROM "users" WHERE "id" = $1
-
-Nguyen Van An https://cuongthai.com/u/an</div>
+<span class="tok-comment">// ask only for id and the computed field — then read the SQL</span>
+const u = await prisma.user.findUniqueOrThrow({ where: { id: 3 }, select: { id: true, tenHienThi: true } });
+console.log(u);
+<span class="tok-comment">// and through an include on another model</span>
+const bai = await prisma.post.findFirstOrThrow({ where: { id: 1 }, include: { author: true } });
+console.log('trong include: author.tenHienThi =', JSON.stringify(bai.author.tenHienThi));</code></pre>
+<div class="out">$ npx tsx ext.mts
+== result: select chi xin id va tenHienThi
+prisma:query SELECT "id", "full_name", "username" FROM "users" WHERE ("id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+{ id: 3, tenHienThi: 'user3' }
+trong include: author.tenHienThi = "Nguoi dung 2"</div>
+<p>Measured (measured 12 Nov 2026, Apple-silicon laptop, PostgreSQL 16.14 in Docker, Prisma 6.19.3): the select asked for <code>id</code> and <code>tenHienThi</code>, and the SQL still fetched <code>full_name</code> and <code>username</code> — that is <code>needs</code> at work. The computed field was present inside the <code>include</code> too.</p>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k"><code>needs</code> is the contract</span><span class="lz-t">And it is enforced</span><span class="lz-d">Prisma adds the needed columns to the <code>SELECT</code> automatically, even when your <code>select</code> did not ask for them. Without <code>needs</code>, the computed field would be <code>undefined</code> whenever the source column was not fetched.</span></div>
   <div class="lz-step"><span class="lz-k">Computed in JavaScript</span><span class="lz-t">Not in SQL</span><span class="lz-d">It runs after the rows come back, so you cannot filter or sort by a computed field. <code>where: { tenHienThi: … }</code> does not compile — that would need a generated column in the database.</span></div>
@@ -1094,9 +1271,16 @@ CHAM 233ms user.aggregate</div>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">The four levels of specificity</span><span class="lz-lnote"><code>$allOperations</code> (everything) · <code>$allModels: { findMany }</code> (one operation, all models) · <code>user: { $allOperations }</code> (one model, everything) · <code>user: { create }</code> (exactly one). Choose the narrowest that does the job.</span></div>
   <div class="lz-layer"><span class="lz-lname">You must call <code>query(args)</code></span><span class="lz-lnote">It is the rest of the pipeline. Forget it and the operation silently never runs — the promise resolves with <code>undefined</code> and nothing errors.</span></div>
-  <div class="lz-layer"><span class="lz-lname">It replaced the old middleware</span><span class="lz-lnote"><code>$use</code> is deprecated. Extensions are typed, scoped per model, and composable, where <code>$use</code> was a single untyped chain over everything.</span></div>
-  <div class="lz-layer"><span class="lz-lname">Raw queries are not intercepted</span><span class="lz-lnote"><code>$queryRaw</code> and <code>$executeRaw</code> bypass the query component entirely. Any invariant enforced here — soft-delete filtering, tenant scoping — must be repeated in every raw query by hand.</span></div>
+  <div class="lz-layer"><span class="lz-lname">The old middleware is gone</span><span class="lz-lnote">In Prisma 6.19.3 the client has no <code>$use</code> at all — <code>typeof prisma.$use</code> is <code>'undefined'</code> (measured), so code copied from an old tutorial throws a TypeError at startup. Extensions are the replacement: typed, scoped per model, composable.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Raw SQL is seen, never rewritten</span><span class="lz-lnote">A top-level <code>$allOperations</code> does receive <code>$queryRaw</code> and <code>$executeRaw</code> (it counted three calls below), but model-level hooks like <code>$allModels</code> never do, and no extension can change the SQL inside. Any invariant enforced here — soft-delete filtering, tenant scoping — must be repeated in every raw query by hand.</span></div>
 </div>
+<div class="out">$ npx tsx ext.mts
+== query: quen goi query(args) → undefined
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "id" FROM "users" WHERE 1=1 OFFSET $1) AS "sub"
+prisma:query SELECT 1
+prisma:query SELECT 1
+== query: $allOperations dem duoc 3 lan cho: user.count + $queryRaw + $executeRaw
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "id" FROM "users" WHERE 1=1 OFFSET $1) AS "sub"</div>
 <pre><code class="language-javascript"><span class="tok-comment">// Multi-tenant scoping: the highest-value use of the query component</span>
 function tenantClient(tenantId: number) {
   return base.$extends({
@@ -1119,10 +1303,22 @@ function tenantClient(tenantId: number) {
 }
 
 const db = tenantClient(req.user.tenantId);
-await db.post.findMany();       <span class="tok-comment">// automatically scoped, impossible to forget</span></code></pre>
+await db.post.findMany();                               <span class="tok-comment">// scoped</span>
+await db.user.findMany({ include: { posts: true } });    <span class="tok-comment">// the include is NOT</span>
+await db.$queryRaw&#96;SELECT count(*)::int AS n FROM posts&#96;; <span class="tok-comment">// neither is raw SQL</span></code></pre>
+<p>Run against the lab (measured 12 Nov 2026, Apple-silicon laptop, PostgreSQL 16.14 in Docker, Prisma 6.19.3), two tenants and 30 posts:</p>
+<div class="out">$ npx tsx tenant.mts
+findMany posts: tenant cua cac bai = [ 1 ]
+findMany users + include posts: 5 user tenant 1, nhung 15 bai cua tenant 2 lot vao qua include
+$queryRaw dem posts: 30 (ca hai tenant)</div>
 <div class="pitfall">
-<p><strong>Trap — a tenant filter in an extension is a safety net, not a security boundary.</strong> It covers the queries that go through the extended client and nothing else: not <code>$queryRaw</code>, not nested reads inside an <code>include</code> on a different model, not a helper that captured the base client. For real isolation, use PostgreSQL row-level security, or a schema per tenant, or a database per tenant — and keep the extension as the layer that catches the ordinary mistakes.</p>
+<p><strong>Trap — a tenant filter in an extension is a safety net, not a security boundary.</strong> Measured above: the top-level query was scoped, while one <code>include</code> handed tenant 1 fifteen posts of tenant 2, and a raw count saw all thirty. Copied as a security control, this is a data leak between customers. It covers the queries that go through the extended client and nothing else: not <code>$queryRaw</code>, not nested reads inside an <code>include</code> on a different model, not a helper that captured the base client. For real isolation, use PostgreSQL row-level security, or a schema per tenant, or a database per tenant — and keep the extension as the layer that catches the ordinary mistakes.</p>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-6-2-phan-quyen" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Who may see which rows — API Design 6.2: Authorization</span><span class="lc-sub">Same: a request must only reach its own tenant&#39;s rows. Different: there the check lives in the API layer and is tested per endpoint — the measured leak above is why it cannot be left to a client extension.</span></span>
+  <span class="lc-cta">OPEN API DESIGN LESSON →</span>
+</a>
 
 <h3>4 · <code>client</code> — top-level methods</h3>
 <pre><code class="language-javascript">const prisma = new PrismaClient().$extends({
@@ -1155,9 +1351,10 @@ app.get('/health', async (_, res) =&gt; {
   .$extends(truongTinh)    <span class="tok-comment">// 3 — computed fields</span>
   .$extends(phuongThuc);   <span class="tok-comment">// 4 — model methods</span></code></pre>
 <div class="kv-grid">
-  <div class="kv"><span class="k">Query components run outside-in</span><span class="v">The last extension added wraps the earlier ones, so it sees the arguments first and the result last. When two extensions both modify <code>args.where</code>, the order decides what the database receives.</span></div>
+  <div class="kv"><span class="k">The first extension added is the outermost</span><span class="v">Measured with two logging query extensions, A added before B: A sees the arguments first and the result last; B, added later, sits closer to the database. When two extensions both modify <code>args.where</code>, the order decides what the database receives — so print it for your own stack.<div class="out">$ npx tsx ext.mts
+== chong A roi B: A (them truoc) vao → B (them sau) vao → B (them sau) ra → A (them truoc) ra</div></span></div>
   <div class="kv"><span class="k">The type accumulates</span><span class="v">Each <code>$extends</code> returns a wider type, so the final client has every added member typed. Export that one client and import it everywhere.</span></div>
-  <div class="kv"><span class="k">Three things extensions cannot do</span><span class="v">They cannot add a field to the database, cannot make a computed field filterable, and cannot intercept raw queries. Each of those is a schema or SQL job.</span></div>
+  <div class="kv"><span class="k">Three things extensions cannot do</span><span class="v">They cannot add a field to the database, cannot make a computed field filterable, and cannot rewrite raw SQL. Each of those is a schema or SQL job.</span></div>
   <div class="kv"><span class="k">And a cost worth knowing</span><span class="v">Deeply stacked extensions make the client's inferred type large, which is one of the inputs to editor slowness on a big schema — the subject of the next lesson.</span></div>
 </div>
 
@@ -1213,11 +1410,18 @@ app.get('/health', async (_, res) =&gt; {
   },
 });
 
-const u = await prisma.user.findUniqueOrThrow({ where: { id: 1 } });
-console.log(u.tenHienThi, u.urlHoSo);</code></pre>
-<div class="out">prisma:query SELECT "id","username","full_name","email","created_at" FROM "users" WHERE "id" = $1
-
-Nguyen Van An https://cuongthai.com/u/an</div>
+<span class="tok-comment">// chỉ xin id và trường tính toán — rồi đọc câu SQL</span>
+const u = await prisma.user.findUniqueOrThrow({ where: { id: 3 }, select: { id: true, tenHienThi: true } });
+console.log(u);
+<span class="tok-comment">// và qua một include trên model khác</span>
+const bai = await prisma.post.findFirstOrThrow({ where: { id: 1 }, include: { author: true } });
+console.log('trong include: author.tenHienThi =', JSON.stringify(bai.author.tenHienThi));</code></pre>
+<div class="out">$ npx tsx ext.mts
+== result: select chi xin id va tenHienThi
+prisma:query SELECT "id", "full_name", "username" FROM "users" WHERE ("id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+{ id: 3, tenHienThi: 'user3' }
+trong include: author.tenHienThi = "Nguoi dung 2"</div>
+<p>Đo thật (đo ngày 12/11/2026, laptop Apple silicon, PostgreSQL 16.14 trong Docker, Prisma 6.19.3): select chỉ xin <code>id</code> và <code>tenHienThi</code>, vậy mà câu SQL vẫn lấy <code>full_name</code> và <code>username</code> — đó là <code>needs</code> đang làm việc. Trường tính toán có mặt cả bên trong <code>include</code>.</p>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k"><code>needs</code> là bản giao kèo</span><span class="lz-t">Và nó được thi hành</span><span class="lz-d">Prisma tự thêm các cột cần thiết vào câu <code>SELECT</code>, ngay cả khi <code>select</code> của bạn không xin chúng. Không có <code>needs</code> thì trường tính toán sẽ là <code>undefined</code> mỗi khi cột nguồn không được lấy về.</span></div>
   <div class="lz-step"><span class="lz-k">Tính bằng JavaScript</span><span class="lz-t">Không phải trong SQL</span><span class="lz-d">Nó chạy sau khi các hàng quay về, nên bạn không lọc hay sắp xếp theo một trường tính toán được. <code>where: { tenHienThi: … }</code> không biên dịch được — muốn thế thì cần một cột sinh ra dưới cơ sở dữ liệu.</span></div>
@@ -1299,9 +1503,16 @@ CHAM 233ms user.aggregate</div>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">Bốn mức cụ thể</span><span class="lz-lnote"><code>$allOperations</code> (mọi thứ) · <code>$allModels: { findMany }</code> (một thao tác, mọi model) · <code>user: { $allOperations }</code> (một model, mọi thao tác) · <code>user: { create }</code> (đúng một). Hãy chọn mức hẹp nhất làm được việc.</span></div>
   <div class="lz-layer"><span class="lz-lname">Bạn buộc phải gọi <code>query(args)</code></span><span class="lz-lnote">Nó là phần còn lại của đường ống. Quên nó thì thao tác âm thầm không bao giờ chạy — promise trả về <code>undefined</code> và không có lỗi nào cả.</span></div>
-  <div class="lz-layer"><span class="lz-lname">Nó đã thay thế middleware cũ</span><span class="lz-lnote"><code>$use</code> đã lỗi thời. Extension có kiểu, phạm vi theo từng model, và ghép chồng được, trong khi <code>$use</code> là một chuỗi không kiểu áp lên mọi thứ.</span></div>
-  <div class="lz-layer"><span class="lz-lname">Truy vấn thô không bị chặn</span><span class="lz-lnote"><code>$queryRaw</code> và <code>$executeRaw</code> đi vòng hoàn toàn qua thành phần query. Mọi bất biến được thi hành ở đây — lọc xoá mềm, phạm vi theo khách thuê — đều phải lặp lại bằng tay trong từng câu truy vấn thô.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Middleware cũ đã bị gỡ</span><span class="lz-lnote">Ở Prisma 6.19.3 client không còn <code>$use</code> nữa — <code>typeof prisma.$use</code> là <code>'undefined'</code> (đo thật), nên mã chép từ hướng dẫn cũ ném TypeError ngay lúc khởi động. Extension là thứ thay thế: có kiểu, phạm vi theo từng model, ghép chồng được.</span></div>
+  <div class="lz-layer"><span class="lz-lname">SQL thô được thấy, không bao giờ bị viết lại</span><span class="lz-lnote">Một <code>$allOperations</code> mức trên có nhận <code>$queryRaw</code> và <code>$executeRaw</code> (nó đếm được ba lời gọi ở dưới), nhưng hook mức model như <code>$allModels</code> thì không, và không extension nào sửa được câu SQL bên trong. Mọi bất biến được thi hành ở đây — lọc xoá mềm, phạm vi theo khách thuê — đều phải lặp lại bằng tay trong từng câu truy vấn thô.</span></div>
 </div>
+<div class="out">$ npx tsx ext.mts
+== query: quen goi query(args) → undefined
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "id" FROM "users" WHERE 1=1 OFFSET $1) AS "sub"
+prisma:query SELECT 1
+prisma:query SELECT 1
+== query: $allOperations dem duoc 3 lan cho: user.count + $queryRaw + $executeRaw
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "id" FROM "users" WHERE 1=1 OFFSET $1) AS "sub"</div>
 <pre><code class="language-javascript"><span class="tok-comment">// Phạm vi theo khách thuê: cách dùng giá trị nhất của thành phần query</span>
 function tenantClient(tenantId: number) {
   return base.$extends({
@@ -1324,10 +1535,22 @@ function tenantClient(tenantId: number) {
 }
 
 const db = tenantClient(req.user.tenantId);
-await db.post.findMany();       <span class="tok-comment">// tự động giới hạn phạm vi, không thể quên</span></code></pre>
+await db.post.findMany();                               <span class="tok-comment">// có giới hạn</span>
+await db.user.findMany({ include: { posts: true } });    <span class="tok-comment">// include thì KHÔNG</span>
+await db.$queryRaw&#96;SELECT count(*)::int AS n FROM posts&#96;; <span class="tok-comment">// SQL thô cũng không</span></code></pre>
+<p>Chạy trên lab (đo ngày 12/11/2026, laptop Apple silicon, PostgreSQL 16.14 trong Docker, Prisma 6.19.3), hai khách thuê và 30 bài viết:</p>
+<div class="out">$ npx tsx tenant.mts
+findMany posts: tenant cua cac bai = [ 1 ]
+findMany users + include posts: 5 user tenant 1, nhung 15 bai cua tenant 2 lot vao qua include
+$queryRaw dem posts: 30 (ca hai tenant)</div>
 <div class="pitfall">
-<p><strong>Bẫy — một bộ lọc theo khách thuê đặt trong extension là một lưới an toàn, không phải một ranh giới bảo mật.</strong> Nó bao những truy vấn đi qua client đã mở rộng và không bao gì khác: không bao <code>$queryRaw</code>, không bao các lần đọc lồng bên trong một <code>include</code> trên model khác, không bao một hàm phụ đã cầm sẵn client gốc. Muốn cô lập thật thì hãy dùng row-level security của PostgreSQL, hoặc mỗi khách một schema, hoặc mỗi khách một cơ sở dữ liệu — và giữ extension làm tầng bắt những sai sót thông thường.</p>
+<p><strong>Bẫy — một bộ lọc theo khách thuê đặt trong extension là một lưới an toàn, không phải một ranh giới bảo mật.</strong> Đo ở trên: truy vấn mức trên đã được giới hạn, nhưng một <code>include</code> trao cho khách thuê 1 mười lăm bài của khách thuê 2, và một câu đếm thô thấy cả ba mươi. Chép nó làm biện pháp bảo mật thì đó là rò dữ liệu giữa các khách hàng. Nó bao những truy vấn đi qua client đã mở rộng và không bao gì khác: không bao <code>$queryRaw</code>, không bao các lần đọc lồng bên trong một <code>include</code> trên model khác, không bao một hàm phụ đã cầm sẵn client gốc. Muốn cô lập thật thì hãy dùng row-level security của PostgreSQL, hoặc mỗi khách một schema, hoặc mỗi khách một cơ sở dữ liệu — và giữ extension làm tầng bắt những sai sót thông thường.</p>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-6-2-phan-quyen" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Ai được thấy hàng nào — API Design 6.2: Phân quyền</span><span class="lc-sub">Giống: một yêu cầu chỉ được chạm hàng của đúng khách thuê. Khác: ở đó phép kiểm nằm ở tầng API và được test theo từng endpoint — chỗ rò đo được ở trên là lý do không thể giao việc này cho extension.</span></span>
+  <span class="lc-cta">MỞ BÀI API DESIGN →</span>
+</a>
 
 <h3>4 · <code>client</code> — phương thức mức trên</h3>
 <pre><code class="language-javascript">const prisma = new PrismaClient().$extends({
@@ -1360,9 +1583,10 @@ app.get('/health', async (_, res) =&gt; {
   .$extends(truongTinh)    <span class="tok-comment">// 3 — trường tính toán</span>
   .$extends(phuongThuc);   <span class="tok-comment">// 4 — phương thức của model</span></code></pre>
 <div class="kv-grid">
-  <div class="kv"><span class="k">Thành phần query chạy từ ngoài vào</span><span class="v">Extension thêm sau cùng bọc những cái trước, nên nó thấy tham số đầu tiên và thấy kết quả cuối cùng. Khi hai extension cùng sửa <code>args.where</code> thì thứ tự quyết định cơ sở dữ liệu nhận được gì.</span></div>
+  <div class="kv"><span class="k">Extension thêm trước là lớp ngoài cùng</span><span class="v">Đo bằng hai extension query ghi nhật ký, A thêm trước B: A thấy tham số đầu tiên và thấy kết quả sau cùng; B, thêm sau, nằm gần cơ sở dữ liệu hơn. Khi hai extension cùng sửa <code>args.where</code> thì thứ tự quyết định cơ sở dữ liệu nhận được gì — nên hãy in nó ra cho chồng của chính bạn.<div class="out">$ npx tsx ext.mts
+== chong A roi B: A (them truoc) vao → B (them sau) vao → B (them sau) ra → A (them truoc) ra</div></span></div>
   <div class="kv"><span class="k">Kiểu tích luỹ lại</span><span class="v">Mỗi lần <code>$extends</code> trả về một kiểu rộng hơn, nên client cuối cùng có mọi thành viên thêm vào đều có kiểu. Hãy xuất đúng cái client đó và import nó ở khắp nơi.</span></div>
-  <div class="kv"><span class="k">Ba thứ extension không làm được</span><span class="v">Nó không thêm được một trường vào cơ sở dữ liệu, không làm cho một trường tính toán lọc được, và không chặn được truy vấn thô. Mỗi thứ đó là việc của lược đồ hoặc của SQL.</span></div>
+  <div class="kv"><span class="k">Ba thứ extension không làm được</span><span class="v">Nó không thêm được một trường vào cơ sở dữ liệu, không làm cho một trường tính toán lọc được, và không viết lại được SQL thô. Mỗi thứ đó là việc của lược đồ hoặc của SQL.</span></div>
   <div class="kv"><span class="k">Và một cái giá đáng biết</span><span class="v">Extension chồng sâu làm kiểu suy ra của client trở nên đồ sộ, và đó là một trong các đầu vào của chuyện trình soạn thảo ì với lược đồ lớn — chủ đề của bài kế tiếp.</span></div>
 </div>
 
@@ -1380,7 +1604,7 @@ app.get('/health', async (_, res) =&gt; {
       title: '8.5 — Big schemas and a slow editor|||8.5 — Lược đồ lớn và trình soạn thảo ì',
       slug: 'pr-8-5-luoc-do-lon',
       type: 'LESSON',
-      description: 'Vì sao một lược đồ 112 model làm TypeScript bò, cách đo thay vì đoán bằng tsc --diagnostics và extendedDiagnostics, năm cách giảm nhẹ theo mức hiệu quả thật, và điều nào trong số đó thật sự đáng làm.',
+      description: 'Lược đồ lớn tốn gì khi TypeScript kiểm kiểu (đo trên 612 model thật và lược đồ 20–300 model), đọc tsc --extendedDiagnostics, skipLibCheck và incremental đo thật, generateTrace chỉ trên dòng lệnh.',
       content: `
 ${G08_5}
 <div class="ml-en">
@@ -1398,60 +1622,57 @@ ${G08_5}
 
 <h3>Measure it</h3>
 <pre><code class="language-bash"><span class="tok-comment"># The first number: how long a clean check takes, and where it goes</span>
-npx tsc --noEmit --diagnostics</code></pre>
-<div class="out">Files:                         487
-Lines of Library:            41982
-Lines of Definitions:       284611
-Lines of TypeScript:         38104
-Identifiers:                412884
-Symbols:                    488210
-Types:                      184029
-Instantiations:            4128092        ← the number that matters
-Memory used:               1284102K
-Parse time:                   1.94s
-Bind time:                    0.71s
-Check time:                  18.42s        ← and this one
-Total time:                  21.07s</div>
+npx tsc --noEmit --extendedDiagnostics</code></pre>
+<div class="out">Files:                         3454
+Lines of Library:             50140
+Lines of Definitions:       1732150
+Lines of TypeScript:         368792
+Types:                      1703073
+Instantiations:             6861338
+Memory used:               4933922K
+Parse time:                   3.13s
+Bind time:                    2.43s
+Check time:                  37.82s
+Total time:                  44.69s</div>
+<p>That is the real CuongThai backend (12 Nov 2026, Apple M1 Max laptop, TypeScript 5.9.3, Prisma 6.19.3): 612 models, 57 enums, a 17,699-line schema and a 70 MB generated <code>index.d.ts</code>. Read it like this:</p>
 <div class="kv-grid">
-  <div class="kv"><span class="k"><code>Instantiations</code></span><span class="v">How many times a generic type had to be evaluated. This is the single best proxy for "why is my editor slow" — under a million is comfortable, over five million is where hovering becomes noticeable.</span></div>
-  <div class="kv"><span class="k"><code>Check time</code></span><span class="v">Type checking proper. If this dominates <code>Parse</code> and <code>Bind</code>, the problem is type complexity rather than file size, and adding files will not be what fixes it.</span></div>
-  <div class="kv"><span class="k"><code>Lines of Definitions</code></span><span class="v">284k lines of <code>.d.ts</code> — most of it the generated client. Worth comparing against your own <code>Lines of TypeScript</code> to see the ratio you are working with.</span></div>
-  <div class="kv"><span class="k">Re-measure after every change</span><span class="v">This is the whole discipline. Most "make Prisma faster" advice moves this number by a few percent or not at all, and you cannot tell which without the before and after.</span></div>
+  <div class="kv"><span class="k"><code>Instantiations</code></span><span class="v">How many times a generic type had to be evaluated. It is deterministic — the same code gives the same count on any machine — so it is the number to compare before and after a change. Seconds are not: the same check varied by several seconds between runs here while other work was running.</span></div>
+  <div class="kv"><span class="k"><code>Check time</code></span><span class="v">Type checking proper — about 38 of the 45 seconds above. When it dominates <code>Parse</code> and <code>Bind</code>, the cost is type complexity, not file size.</span></div>
+  <div class="kv"><span class="k"><code>Lines of Definitions</code></span><span class="v">1.7 million lines of <code>.d.ts</code>, most of them the generated client, against 369k lines of the project&#39;s own TypeScript.</span></div>
+  <div class="kv"><span class="k">Re-measure after every change</span><span class="v">This is the whole discipline. The sections below show which advice moved the number and which did not.</span></div>
 </div>
 <pre><code class="language-bash"><span class="tok-comment"># The second number: which files and which types are expensive</span>
 npx tsc --noEmit --extendedDiagnostics --generateTrace ./trace
 ls trace/</code></pre>
-<div class="out">trace.json  types.json
-
--- open chrome://tracing (or ui.perfetto.dev) and load trace.json
--- the wide bars are the expensive checks, named by file and line</div>
+<div class="out">trace.json
+types.json</div>
 <div class="callout ok">
-<p><strong><code>--generateTrace</code> is the tool that ends the guessing.</strong> It produces a flame chart of the type checker, and on a Prisma codebase the wide bars are almost always a specific query — a deeply nested <code>include</code>, or a generic helper that takes <code>Prisma.Args</code>. Fixing the three widest bars usually accounts for most of the available improvement, and you find them in two minutes rather than by rewriting the whole data layer on a hunch.</p>
+<p><strong><code>--generateTrace</code> is a command-line flag, and it ends the guessing.</strong> Load <code>trace.json</code> in <code>ui.perfetto.dev</code>: the wide bars are the expensive checks, named by file and line. On a Prisma codebase they are usually a specific query — a deeply nested <code>include</code>, or a generic helper over <code>Prisma.Args</code>. Run it when you have a slow spot to find; it is not a tsconfig setting (see below).</p>
 </div>
 
-<h3>The five mitigations, ranked by measured effect</h3>
+<h3>What schema size costs — measured</h3>
+<p>Three generated schemas of 20, 100 and 300 models (every model with two relations out and two back), the same small file of queries against each, three runs per cell, 12 Nov 2026, Apple M1 Max laptop, TypeScript 5.9.3, Prisma 6.19.3:</p>
+<div class="out">models  index.d.ts  skipLibCheck  Instantiations  Check   Total (median of 3)
+20         1.3 MB   true                   9,653   0.07s    0.31s
+20         1.3 MB   false                132,027    fals    1.08s
+100        6.3 MB   true                   9,653   0.08s    0.64s
+100        6.3 MB   false                569,387    fals    2.94s
+300       19.1 MB   true                   9,653   0.09s    1.40s
+300       19.1 MB   false              1,662,787    fals    7.35s</div>
+<div class="kv-grid">
+  <div class="kv"><span class="k">With <code>skipLibCheck: true</code></span><span class="v">Instantiations did not move — 9,653 at 20 models and at 300. The checker only evaluates the types your code touches. A bigger schema costs reading a bigger file (total time rose about fourfold), not checking.</span></div>
+  <div class="kv"><span class="k">With <code>skipLibCheck: false</code></span><span class="v">tsc re-verifies the entire generated client: 1.66 million instantiations at 300 models, check time more than sixty times longer — all of it spent on a file nobody edits.</span></div>
+</div>
+
+<h3>The mitigations, ranked by measured effect</h3>
 <div class="lz-flow">
-  <div class="lz-step"><span class="lz-k">1 · Name deep query types</span><span class="lz-t">Biggest effect, least effort</span><span class="lz-d">A four-level <code>include</code> written inline is re-evaluated at every use. Extract it with <code>satisfies</code> + <code>GetPayload</code> (Lesson 8.2) and the type is computed once. On the CuongThai schema this was the single largest win.</span></div>
-  <div class="lz-step"><span class="lz-k">2 · Annotate exported function returns</span><span class="lz-t">Large effect on incremental checks</span><span class="lz-d">An exported <code>async function</code> with an inferred return type forces every consumer to re-infer it. Writing <code>: Promise&lt;Card[]&gt;</code> gives the checker a stopping point.</span></div>
-  <div class="lz-step"><span class="lz-k">3 · Turn on <code>incremental</code></span><span class="lz-t">Large effect on repeat runs</span><span class="lz-d"><code>"incremental": true</code> plus a <code>.tsbuildinfo</code> makes the second and later checks a fraction of the first. Does nothing for a cold run or for the editor's first load, but transforms the edit-check loop.</span></div>
-  <div class="lz-step"><span class="lz-k">4 · Split the schema by domain</span><span class="lz-t">Moderate effect, real cost</span><span class="lz-d">Two Prisma clients over two schemas halves each client's type surface. Genuinely helps, and it is an architectural change — separate migration histories, no cross-client relations. Only for a schema that is genuinely two systems.</span></div>
-  <div class="lz-step"><span class="lz-k">5 · Fewer stacked extensions</span><span class="lz-t">Small effect</span><span class="lz-d">Merging four extensions into one reduces the inference layers. Measurable, and rarely worth the loss in organisation unless the trace names it.</span></div>
+  <div class="lz-step"><span class="lz-k">1 · <code>skipLibCheck: true</code></span><span class="lz-t">Largest effect measured</span><span class="lz-d">Skips type-checking declaration files, never your code. In the lab above it is the difference between 9,653 and 1.66 million instantiations. Prisma&#39;s <code>index.d.ts</code> is machine-written; re-verifying it on every build buys nothing.</span></div>
+  <div class="lz-step"><span class="lz-k">2 · Turn on <code>incremental</code></span><span class="lz-t">Large effect on repeat runs</span><span class="lz-d">On the CuongThai backend the second run with nothing changed took 6.2 s instead of 41.6 s, with zero instantiations and half the memory (output below). Nothing for a cold run, a CI job without the cached <code>.tsbuildinfo</code>, or the editor&#39;s first load.</span></div>
+  <div class="lz-step"><span class="lz-k">3 · Name deep query types</span><span class="lz-t">Fewer instantiations; measure the time yourself</span><span class="lz-d">A four-level <code>include</code> used by eight functions: written inline eight times versus named once with <code>satisfies</code> + <code>GetPayload</code> (Lesson 8.2) — a quarter fewer instantiations, and no change the clock could see (output below). Do it for correctness; promise speed only after measuring your own code.</span></div>
+  <div class="lz-step"><span class="lz-k">4 · Annotate exported function returns</span><span class="lz-t">Not measured in this course</span><span class="lz-d">An explicit <code>: Promise&lt;FullPost | null&gt;</code> gives the checker a stopping point for consumers. Plausible for incremental checks; verify with the numbers above before relying on it.</span></div>
+  <div class="lz-step"><span class="lz-k">5 · Split the schema by domain</span><span class="lz-t">Architectural, not a tuning knob</span><span class="lz-d">Two clients over two schemas means separate migration histories and no cross-client relations. Only for a schema that is genuinely two systems — and the measurement above says schema size alone is mostly a reading cost.</span></div>
 </div>
-<pre><code class="language-javascript"><span class="tok-comment">// Mitigation 1, applied — this is the change to make first</span>
-
-<span class="tok-comment">// Before: the type is re-computed at every call site</span>
-async function getPost(id: number) {
-  return prisma.post.findUnique({
-    where: { id },
-    include: {
-      author:   { include: { profile: true } },
-      comments: { include: { author: true, replies: { include: { author: true } } } },
-      tags:     { include: { tag: true } },
-    },
-  });
-}
-
-<span class="tok-comment">// After: computed once, named, and reusable</span>
+<pre><code class="language-javascript"><span class="tok-comment">// After: computed once, named, and reusable</span>
 const kemDayDu = {
   author:   { include: { profile: true } },
   comments: { include: { author: true, replies: { include: { author: true } } } },
@@ -1463,47 +1684,59 @@ export type FullPost = Prisma.PostGetPayload&lt;{ include: typeof kemDayDu }&gt;
 export async function getPost(id: number): Promise&lt;FullPost | null&gt; {
   return prisma.post.findUnique({ where: { id }, include: kemDayDu });
 }</code></pre>
-<div class="out">-- before
-Instantiations: 4128092
-Check time:       18.42s
-
--- after (same schema, this one function extracted)
-Instantiations: 2914773        ← −29%
-Check time:        13.11s      ← −29%</div>
+<div class="out">-- the lab&#39;s version: a four-level include used by 8 functions, 300 models
+written inline ×8   Instantiations  9,653   Check 0.09s   Total 1.40s
+named once          Instantiations  7,268   Check 0.08s   Total 1.35s   ← −25% instantiations</div>
+<pre><code class="language-bash"><span class="tok-comment"># incremental, measured on the CuongThai backend (tsbuildinfo kept outside the repo)</span></code></pre>
+<div class="out">$ npx tsc --noEmit -p tsconfig.json --incremental --tsBuildInfoFile &lt;outside the repo&gt; --extendedDiagnostics   # run 1 (cold)
+Instantiations:             6861338
+Memory used:               4976690K
+Check time:                  35.04s
+Total time:                  41.60s
+$ # run 2, nothing changed
+Instantiations:                   0
+Memory used:               2379628K
+Total time:                   6.22s</div>
 
 <h3>The tsconfig that helps</h3>
 <pre><code class="language-typescript">{
   "compilerOptions": {
     "incremental": true,
     "tsBuildInfoFile": "./node_modules/.cache/tsbuildinfo",
-
-    <span class="tok-comment">// Do not re-check every .d.ts in node_modules, including Prisma's</span>
-    "skipLibCheck": true,
-
-    <span class="tok-comment">// Fail loudly instead of silently taking forever</span>
-    "generateTrace": false
+    "skipLibCheck": true
   },
   "exclude": ["node_modules", "dist", "frontend"]
 }</code></pre>
-<div class="kv-grid">
-  <div class="kv"><span class="k"><code>skipLibCheck</code> is not cheating</span><span class="v">It skips type-checking declaration files, not your code. Prisma's generated <code>index.d.ts</code> is machine-written and correct by construction; re-verifying it on every build buys nothing.</span></div>
-  <div class="kv"><span class="k"><code>incremental</code> needs a stable cache location</span><span class="v">Point <code>tsBuildInfoFile</code> somewhere gitignored but persistent. In CI, caching that file between runs is often the single biggest build-time saving available.</span></div>
-  <div class="kv"><span class="k">Restart the TypeScript server after regenerating</span><span class="v">The editor holds the old <code>index.d.ts</code> in memory. After a <code>prisma generate</code> that changed the schema, "TypeScript: Restart TS Server" is what makes the new types appear — and it is the answer to most "my editor says this field does not exist but it does".</span></div>
+<div class="pitfall">
+<p><strong>Trap — <code>"generateTrace": false</code> in tsconfig stops the build.</strong> <code>generateTrace</code> takes a directory, so a boolean is rejected and tsc exits with code 2 — every check, every build. Measured:</p>
+<div class="out">tsconfig.trace.json(1,169): error TS5024: Compiler option 'generateTrace' requires a value of type string.
+[exit 2]</div>
+<p>Pass <code>--generateTrace ./trace</code> on the command line when you are hunting a slow spot, and leave it out of tsconfig.</p>
 </div>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>skipLibCheck</code> is not cheating</span><span class="v">It skips declaration files, not your code — and it is the setting that moved the number most in the measurement above.</span></div>
+  <div class="kv"><span class="k"><code>incremental</code> needs a stable cache location</span><span class="v">Point <code>tsBuildInfoFile</code> somewhere gitignored but persistent. In CI, cache that file between runs, or the second-run saving never happens.</span></div>
+  <div class="kv"><span class="k">Restart the TypeScript server after regenerating</span><span class="v">The editor holds the old <code>index.d.ts</code> in memory. After a <code>prisma generate</code> that changed the schema, "TypeScript: Restart TS Server" is what makes the new types appear.</span></div>
+</div>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-9-1-tsc-and-tsconfig" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">tsconfig from first principles — TS 9.1: What tsc does &amp; tsconfig basics</span><span class="lc-sub">Same: skipLibCheck, incremental and which options are command-line only. Different: there for any project; here measured on a generated Prisma client.</span></span>
+  <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
+</a>
 
 <h3>What does not help</h3>
 <div class="callout warn">
 <p><strong>Three pieces of common advice that measure as noise.</strong> <em>Importing types individually</em> rather than the <code>Prisma</code> namespace — TypeScript loads the whole declaration file either way. <em>Using <code>import type</code> everywhere</em> — it helps bundling and emit, not checking. <em>Turning off <code>strict</code></em> — it makes checking marginally faster and every other thing in this course worse; the whole point of Prisma is the types.</p>
-<p>The real answer is almost always mitigation 1: find the two or three deeply-nested inline query types in the trace and name them. Everything else is rounding.</p>
+<p>Measured, the order is: <code>skipLibCheck</code> first, <code>incremental</code> with a cached <code>.tsbuildinfo</code> second, and then <code>--generateTrace</code> to find the specific query that is slow — instead of rewriting the data layer on a hunch.</p>
 </div>
 
 <div class="note-ct">
-<p><strong>Scale, for reference.</strong> The CuongThai schema is 3,847 lines with 112 models and 19 enums — comfortably in the range where this matters. It is also the case that the schema grew there one model at a time, and nobody notices the day it crosses the threshold. Running <code>tsc --diagnostics</code> once a quarter and writing the number down is enough: when <code>Instantiations</code> doubles, you know which quarter's work to look at.</p>
+<p><strong>Scale, for reference.</strong> The CuongThai schema is 17,699 lines with 612 models and 57 enums, and its generated <code>index.d.ts</code> is 70 MB — measured on 12 November 2026. It grew one model at a time, and nobody notices the day it crosses a threshold. Running <code>tsc --extendedDiagnostics</code> once a quarter and writing <code>Instantiations</code> down is enough: when it doubles, you know which quarter&#39;s work to look at.</p>
 </div>
 
 <h3>Learning sources for this lesson</h3>
 <div class="pitfall">
-<p><strong>Trap — deleting types to speed up the editor, and losing the checking that was the point.</strong> When the language server slows to a crawl on a large schema, the tempting fix is to loosen: type a query result as &#96;any&#96;, drop a &#96;select&#96; so the payload type is simpler, replace a derived type with a hand-written one. Each is instant relief and each removes a real check, so the schema is now large <em>and</em> unverified — the worst of both. The measured mitigations in this lesson (narrowing &#96;select&#96;, splitting the client, raising the TS server memory) keep the checking and cost only configuration. Measure with &#96;tsc --diagnostics&#96; before and after, and treat any fix that changes a type to &#96;any&#96; as a regression, not a solution.</p>
+<p><strong>Trap — deleting types to speed up the editor, and losing the checking that was the point.</strong> When the language server slows to a crawl on a large schema, the tempting fix is to loosen: type a query result as &#96;any&#96;, drop a &#96;select&#96; so the payload type is simpler, replace a derived type with a hand-written one. Each is instant relief and each removes a real check, so the schema is now large <em>and</em> unverified — the worst of both. The measured mitigations in this lesson (&#96;skipLibCheck&#96;, &#96;incremental&#96;, naming deep query types) keep the checking and cost only configuration. Measure with &#96;tsc --diagnostics&#96; before and after, and treat any fix that changes a type to &#96;any&#96; as a regression, not a solution.</p>
 </div>
 <a class="link-card" href="https://github.com/microsoft/TypeScript/wiki/Performance" target="_blank" rel="noopener"><span class="lc-ico">⚡</span><span class="lc-body"><span class="lc-title">TypeScript — Performance wiki</span><span class="lc-sub">github.com · The official guide, including <code>--generateTrace</code> and how to read the output</span></span></a>
 <a class="link-card" href="https://www.prisma.io/docs/orm/more/help-and-troubleshooting/help-articles/working-with-many-to-many-relations" target="_blank" rel="noopener"><span class="lc-ico">📐</span><span class="lc-body"><span class="lc-title">Prisma — large schema guidance</span><span class="lc-sub">prisma.io/docs · The maintainers' own notes on schema size and editor performance</span></span></a>
@@ -1526,60 +1759,57 @@ Check time:        13.11s      ← −29%</div>
 
 <h3>Hãy đo nó</h3>
 <pre><code class="language-bash"><span class="tok-comment"># Con số đầu tiên: một lần kiểm sạch mất bao lâu, và thời gian đi đâu</span>
-npx tsc --noEmit --diagnostics</code></pre>
-<div class="out">Files:                         487
-Lines of Library:            41982
-Lines of Definitions:       284611
-Lines of TypeScript:         38104
-Identifiers:                412884
-Symbols:                    488210
-Types:                      184029
-Instantiations:            4128092        ← con số quan trọng
-Memory used:               1284102K
-Parse time:                   1.94s
-Bind time:                    0.71s
-Check time:                  18.42s        ← và cái này
-Total time:                  21.07s</div>
+npx tsc --noEmit --extendedDiagnostics</code></pre>
+<div class="out">Files:                         3454
+Lines of Library:             50140
+Lines of Definitions:       1732150
+Lines of TypeScript:         368792
+Types:                      1703073
+Instantiations:             6861338
+Memory used:               4933922K
+Parse time:                   3.13s
+Bind time:                    2.43s
+Check time:                  37.82s
+Total time:                  44.69s</div>
+<p>Đó là backend CuongThai thật (12/11/2026, laptop Apple M1 Max, TypeScript 5.9.3, Prisma 6.19.3): 612 model, 57 enum, lược đồ 17.699 dòng và tệp <code>index.d.ts</code> sinh ra nặng 70 MB. Đọc nó thế này:</p>
 <div class="kv-grid">
-  <div class="kv"><span class="k"><code>Instantiations</code></span><span class="v">Số lần một kiểu generic phải được tính. Đây là chỉ số đại diện tốt nhất cho câu "vì sao trình soạn thảo của tôi ì" — dưới một triệu là dễ chịu, trên năm triệu là chỗ rê chuột bắt đầu thấy được độ trễ.</span></div>
-  <div class="kv"><span class="k"><code>Check time</code></span><span class="v">Phần kiểm kiểu đúng nghĩa. Nếu nó áp đảo <code>Parse</code> và <code>Bind</code> thì bài toán là độ phức tạp kiểu chứ không phải kích thước tệp, và thêm tệp sẽ không phải là thứ vá được.</span></div>
-  <div class="kv"><span class="k"><code>Lines of Definitions</code></span><span class="v">284 nghìn dòng <code>.d.ts</code> — phần lớn là client sinh ra. Đáng so với <code>Lines of TypeScript</code> của chính bạn để thấy tỉ lệ mình đang làm việc cùng.</span></div>
-  <div class="kv"><span class="k">Đo lại sau mỗi thay đổi</span><span class="v">Đây là toàn bộ kỷ luật. Phần lớn lời khuyên "làm Prisma nhanh hơn" chỉ dịch con số này vài phần trăm hoặc không dịch chút nào, và bạn không biết được cái nào nếu không có số trước và số sau.</span></div>
+  <div class="kv"><span class="k"><code>Instantiations</code></span><span class="v">Số lần một kiểu generic phải được tính. Nó tất định — cùng một mã thì ra cùng một số trên mọi máy — nên đây là con số để so trước và sau một thay đổi. Giây thì không: cùng một lần kiểm ở đây lệch nhau vài giây giữa các lần chạy khi máy đang làm việc khác.</span></div>
+  <div class="kv"><span class="k"><code>Check time</code></span><span class="v">Phần kiểm kiểu thật sự — khoảng 38 trên 45 giây ở trên. Khi nó lấn át <code>Parse</code> và <code>Bind</code>, cái giá nằm ở độ phức tạp của kiểu, không phải kích thước tệp.</span></div>
+  <div class="kv"><span class="k"><code>Lines of Definitions</code></span><span class="v">1,7 triệu dòng <code>.d.ts</code>, phần lớn là client sinh ra, so với 369 nghìn dòng TypeScript của chính dự án.</span></div>
+  <div class="kv"><span class="k">Đo lại sau mỗi thay đổi</span><span class="v">Đây là toàn bộ kỷ luật. Các mục dưới cho thấy lời khuyên nào làm con số đổi và lời khuyên nào không.</span></div>
 </div>
-<pre><code class="language-bash"><span class="tok-comment"># Con số thứ hai: tệp nào và kiểu nào đắt</span>
+<pre><code class="language-bash"><span class="tok-comment"># Con số thứ hai: tệp nào và kiểu nào tốn kém</span>
 npx tsc --noEmit --extendedDiagnostics --generateTrace ./trace
 ls trace/</code></pre>
-<div class="out">trace.json  types.json
-
--- mở chrome://tracing (hoặc ui.perfetto.dev) rồi nạp trace.json
--- những thanh rộng là các phép kiểm đắt, có write tên tệp và số dòng</div>
+<div class="out">trace.json
+types.json</div>
 <div class="callout ok">
-<p><strong><code>--generateTrace</code> là công cụ chấm dứt việc đoán mò.</strong> Nó tạo ra một biểu đồ ngọn lửa của bộ kiểm kiểu, và trên một kho mã Prisma thì những thanh rộng hầu như luôn là một câu truy vấn cụ thể — một <code>include</code> lồng sâu, hoặc một hàm phụ generic nhận <code>Prisma.Args</code>. Vá ba thanh rộng nhất thường chiếm gần hết phần cải thiện có thể có, và bạn tìm ra chúng trong hai phút thay vì viết lại cả tầng dữ liệu theo linh cảm.</p>
+<p><strong><code>--generateTrace</code> là cờ dòng lệnh, và nó chấm dứt việc đoán mò.</strong> Mở <code>trace.json</code> trong <code>ui.perfetto.dev</code>: những thanh rộng là các lần kiểm tốn kém, kèm tên tệp và dòng. Trên một kho mã Prisma chúng thường là một truy vấn cụ thể — một <code>include</code> lồng sâu, hoặc một hàm phụ generic nhận <code>Prisma.Args</code>. Chạy nó khi cần tìm chỗ chậm; nó không phải một thiết lập của tsconfig (xem bên dưới).</p>
 </div>
 
-<h3>Năm cách giảm nhẹ, xếp theo hiệu quả đo được</h3>
+<h3>Kích thước lược đồ tốn gì — đo thật</h3>
+<p>Ba lược đồ sinh ra với 20, 100 và 300 model (mỗi model hai quan hệ đi và hai quan hệ về), cùng một tệp truy vấn nhỏ dùng chúng, mỗi ô chạy ba lần, 12/11/2026, laptop Apple M1 Max, TypeScript 5.9.3, Prisma 6.19.3:</p>
+<div class="out">model   index.d.ts  skipLibCheck  Instantiations  Check   Total (trung vị 3 lần)
+20         1.3 MB   true                   9,653   0.07s    0.31s
+20         1.3 MB   false                132,027    fals    1.08s
+100        6.3 MB   true                   9,653   0.08s    0.64s
+100        6.3 MB   false                569,387    fals    2.94s
+300       19.1 MB   true                   9,653   0.09s    1.40s
+300       19.1 MB   false              1,662,787    fals    7.35s</div>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Với <code>skipLibCheck: true</code></span><span class="v">Instantiations không nhúc nhích — 9.653 ở 20 model và ở 300 model. Bộ kiểm chỉ tính những kiểu mã của bạn chạm tới. Lược đồ to tốn công đọc một tệp to hơn (tổng thời gian tăng khoảng bốn lần), không tốn công kiểm.</span></div>
+  <div class="kv"><span class="k">Với <code>skipLibCheck: false</code></span><span class="v">tsc kiểm lại toàn bộ client sinh ra: 1,66 triệu instantiation ở 300 model, phần kiểm chậm hơn sáu mươi lần — toàn bộ công đó dồn vào một tệp không ai sửa.</span></div>
+</div>
+
+<h3>Các cách giảm nhẹ, xếp theo hiệu quả đo được</h3>
 <div class="lz-flow">
-  <div class="lz-step"><span class="lz-k">1 · Đặt tên cho các kiểu truy vấn sâu</span><span class="lz-t">Hiệu quả lớn nhất, công sức ít nhất</span><span class="lz-d">Một <code>include</code> bốn tầng viết thẳng trong dòng sẽ được tính lại ở mọi chỗ dùng. Hãy tách nó ra bằng <code>satisfies</code> + <code>GetPayload</code> (Bài 8.2) và cái kiểu chỉ được tính một lần. Trên lược đồ CuongThai thì đây là phần cải thiện lớn nhất.</span></div>
-  <div class="lz-step"><span class="lz-k">2 · Ghi rõ kiểu trả về cho các hàm xuất ra</span><span class="lz-t">Hiệu quả lớn với các lần kiểm tăng dần</span><span class="lz-d">Một <code>async function</code> được xuất ra mà để kiểu trả về tự suy sẽ buộc mọi bên tiêu thụ phải suy lại nó. Viết <code>: Promise&lt;Card[]&gt;</code> cho bộ kiểm một điểm dừng.</span></div>
-  <div class="lz-step"><span class="lz-k">3 · Bật <code>incremental</code></span><span class="lz-t">Hiệu quả lớn với các lần chạy lặp lại</span><span class="lz-d"><code>"incremental": true</code> cộng một tệp <code>.tsbuildinfo</code> làm lần kiểm thứ hai trở đi chỉ còn một phần nhỏ lần đầu. Không giúp gì cho lần chạy nguội hay lần nạp đầu tiên của trình soạn thảo, nhưng biến đổi hẳn vòng lặp sửa-kiểm.</span></div>
-  <div class="lz-step"><span class="lz-k">4 · Chẻ lược đồ theo miền</span><span class="lz-t">Hiệu quả vừa, giá thật</span><span class="lz-d">Hai Prisma client trên hai lược đồ giảm một nửa bề mặt kiểu của mỗi client. Thật sự có tác dụng, và nó là một thay đổi kiến trúc — lịch sử migration riêng, không có quan hệ xuyên client. Chỉ dành cho lược đồ thật sự là hai hệ thống.</span></div>
-  <div class="lz-step"><span class="lz-k">5 · Bớt extension chồng lên nhau</span><span class="lz-t">Hiệu quả nhỏ</span><span class="lz-d">Gộp bốn extension thành một làm giảm số tầng suy diễn. Đo được, và hiếm khi đáng đánh đổi bằng sự lộn xộn về tổ chức trừ khi bản trace gọi tên nó.</span></div>
+  <div class="lz-step"><span class="lz-k">1 · <code>skipLibCheck: true</code></span><span class="lz-t">Hiệu quả lớn nhất đo được</span><span class="lz-d">Bỏ qua kiểm kiểu tệp khai báo, không bao giờ bỏ qua mã của bạn. Trong lab ở trên, đó là khác biệt giữa 9.653 và 1,66 triệu instantiation. <code>index.d.ts</code> của Prisma do máy viết; kiểm lại nó mỗi lần dựng không được gì.</span></div>
+  <div class="lz-step"><span class="lz-k">2 · Bật <code>incremental</code></span><span class="lz-t">Hiệu quả lớn với lần chạy lặp lại</span><span class="lz-d">Trên backend CuongThai, lần chạy thứ hai khi không đổi gì mất 6,2 giây thay vì 41,6 giây, không còn instantiation nào, và nửa bộ nhớ (output bên dưới). Không được gì cho lần chạy lạnh, cho CI không cache <code>.tsbuildinfo</code>, hay lần đầu mở trình soạn thảo.</span></div>
+  <div class="lz-step"><span class="lz-k">3 · Đặt tên kiểu truy vấn sâu</span><span class="lz-t">Ít instantiation hơn; thời gian thì tự đo</span><span class="lz-d">Một <code>include</code> lồng bốn tầng dùng ở tám hàm: viết tại chỗ tám lần so với đặt tên một lần bằng <code>satisfies</code> + <code>GetPayload</code> (bài 8.2) — giảm một phần tư instantiation, và đồng hồ không thấy khác (output bên dưới). Làm nó vì tính đúng đắn; chỉ hứa nhanh hơn sau khi đo trên mã của chính bạn.</span></div>
+  <div class="lz-step"><span class="lz-k">4 · Ghi kiểu trả về cho hàm export</span><span class="lz-t">Khoá học này chưa đo</span><span class="lz-d">Một <code>: Promise&lt;FullPost | null&gt;</code> rõ ràng cho bộ kiểm một điểm dừng với bên dùng. Hợp lý với lần kiểm tăng dần; hãy kiểm bằng các con số ở trên trước khi dựa vào nó.</span></div>
+  <div class="lz-step"><span class="lz-k">5 · Tách lược đồ theo miền</span><span class="lz-t">Thay đổi kiến trúc, không phải núm vặn</span><span class="lz-d">Hai client trên hai lược đồ nghĩa là hai lịch sử migration riêng và không có quan hệ chéo giữa client. Chỉ dành cho lược đồ thật sự là hai hệ thống — và số đo ở trên cho thấy riêng kích thước lược đồ chủ yếu là chi phí đọc.</span></div>
 </div>
-<pre><code class="language-javascript"><span class="tok-comment">// Cách 1, áp dụng — đây là thay đổi nên làm trước tiên</span>
-
-<span class="tok-comment">// Trước: cái kiểu được tính lại ở mọi chỗ gọi</span>
-async function getPost(id: number) {
-  return prisma.post.findUnique({
-    where: { id },
-    include: {
-      author:   { include: { profile: true } },
-      comments: { include: { author: true, replies: { include: { author: true } } } },
-      tags:     { include: { tag: true } },
-    },
-  });
-}
-
-<span class="tok-comment">// Sau: tính một lần, có tên, và dùng lại được</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Sau: tính một lần, có tên, và dùng lại được</span>
 const kemDayDu = {
   author:   { include: { profile: true } },
   comments: { include: { author: true, replies: { include: { author: true } } } },
@@ -1591,47 +1821,59 @@ export type FullPost = Prisma.PostGetPayload&lt;{ include: typeof kemDayDu }&gt;
 export async function getPost(id: number): Promise&lt;FullPost | null&gt; {
   return prisma.post.findUnique({ where: { id }, include: kemDayDu });
 }</code></pre>
-<div class="out">-- trước
-Instantiations: 4128092
-Check time:       18.42s
-
--- sau (cùng lược đồ, chỉ tách riêng một hàm này)
-Instantiations: 2914773        ← −29%
-Check time:        13.11s      ← −29%</div>
+<div class="out">-- bản của lab: một include bốn tầng dùng ở 8 hàm, 300 model
+viết tại chỗ ×8      Instantiations  9,653   Check 0.09s   Total 1.40s
+đặt tên một lần     Instantiations  7,268   Check 0.08s   Total 1.35s   ← −25% instantiations</div>
+<pre><code class="language-bash"><span class="tok-comment"># incremental, đo trên backend CuongThai (tsbuildinfo để ngoài repo)</span></code></pre>
+<div class="out">$ npx tsc --noEmit -p tsconfig.json --incremental --tsBuildInfoFile &lt;ngoài repo&gt; --extendedDiagnostics   # lần 1 (lạnh)
+Instantiations:             6861338
+Memory used:               4976690K
+Check time:                  35.04s
+Total time:                  41.60s
+$ # lần 2, không đổi tệp nào
+Instantiations:                   0
+Memory used:               2379628K
+Total time:                   6.22s</div>
 
 <h3>Cái tsconfig có giúp</h3>
 <pre><code class="language-typescript">{
   "compilerOptions": {
     "incremental": true,
     "tsBuildInfoFile": "./node_modules/.cache/tsbuildinfo",
-
-    <span class="tok-comment">// Đừng kiểm lại mọi .d.ts trong node_modules, kể cả của Prisma</span>
-    "skipLibCheck": true,
-
-    <span class="tok-comment">// Báo lỗi to thay vì âm thầm chạy mãi</span>
-    "generateTrace": false
+    "skipLibCheck": true
   },
   "exclude": ["node_modules", "dist", "frontend"]
 }</code></pre>
-<div class="kv-grid">
-  <div class="kv"><span class="k"><code>skipLibCheck</code> không phải gian lận</span><span class="v">Nó bỏ qua việc kiểm kiểu các tệp khai báo, không bỏ qua mã của bạn. Tệp <code>index.d.ts</code> sinh ra của Prisma là do máy viết và đúng ngay từ cấu trúc; kiểm lại nó ở mọi lần build chẳng đổi lại được gì.</span></div>
-  <div class="kv"><span class="k"><code>incremental</code> cần một chỗ đệm ổn định</span><span class="v">Trỏ <code>tsBuildInfoFile</code> vào một nơi được gitignore nhưng còn tồn tại lâu dài. Trong CI, lưu đệm tệp đó giữa các lần chạy thường là khoản tiết kiệm thời gian build lớn nhất mà bạn có.</span></div>
-  <div class="kv"><span class="k">Khởi động lại TypeScript server sau khi sinh lại mã</span><span class="v">Trình soạn thảo đang giữ <code>index.d.ts</code> cũ trong bộ nhớ. Sau một lần <code>prisma generate</code> có đổi lược đồ thì "TypeScript: Restart TS Server" là thứ làm các kiểu mới xuất hiện — và đó là câu trả lời cho hầu hết các than phiền "trình soạn thảo bảo trường này không tồn tại mà rõ ràng nó có".</span></div>
+<div class="pitfall">
+<p><strong>Bẫy — <code>"generateTrace": false</code> trong tsconfig làm dừng cả lần dựng.</strong> <code>generateTrace</code> nhận một thư mục, nên giá trị boolean bị từ chối và tsc thoát với mã 2 — mọi lần kiểm, mọi lần dựng. Đo thật:</p>
+<div class="out">tsconfig.trace.json(1,169): error TS5024: Compiler option 'generateTrace' requires a value of type string.
+[exit 2]</div>
+<p>Truyền <code>--generateTrace ./trace</code> trên dòng lệnh khi đang săn chỗ chậm, và để nó ra khỏi tsconfig.</p>
 </div>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>skipLibCheck</code> không phải gian lận</span><span class="v">Nó bỏ qua tệp khai báo, không bỏ qua mã của bạn — và đó là thiết lập làm con số đổi nhiều nhất trong phép đo ở trên.</span></div>
+  <div class="kv"><span class="k"><code>incremental</code> cần một chỗ cache ổn định</span><span class="v">Trỏ <code>tsBuildInfoFile</code> tới một chỗ bị gitignore nhưng tồn tại lâu dài. Trong CI, hãy cache tệp đó giữa các lần chạy, không thì phần tiết kiệm của lần chạy thứ hai không bao giờ xảy ra.</span></div>
+  <div class="kv"><span class="k">Khởi động lại TypeScript server sau khi sinh lại</span><span class="v">Trình soạn thảo giữ <code>index.d.ts</code> cũ trong bộ nhớ. Sau một lần <code>prisma generate</code> có đổi lược đồ, "TypeScript: Restart TS Server" mới làm kiểu mới hiện ra.</span></div>
+</div>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-9-1-tsc-and-tsconfig" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">tsconfig từ gốc — TS 9.1: tsc làm gì &amp; cơ bản về tsconfig</span><span class="lc-sub">Giống: skipLibCheck, incremental và tuỳ chọn nào chỉ dùng trên dòng lệnh. Khác: ở đó cho mọi dự án; ở đây đo trên client Prisma sinh ra.</span></span>
+  <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
+</a>
 
 <h3>Những gì không giúp</h3>
 <div class="callout warn">
 <p><strong>Ba lời khuyên phổ biến mà đo ra chỉ là nhiễu.</strong> <em>Import từng kiểu riêng</em> thay vì cả không gian tên <code>Prisma</code> — TypeScript nạp cả tệp khai báo đằng nào cũng vậy. <em>Dùng <code>import type</code> ở khắp nơi</em> — nó giúp phần đóng gói và phát mã, không giúp phần kiểm kiểu. <em>Tắt <code>strict</code></em> — nó làm việc kiểm nhanh hơn một chút và làm mọi thứ khác trong khoá học này tệ đi; toàn bộ điểm của Prisma chính là hệ kiểu.</p>
-<p>Câu trả lời thật hầu như luôn là cách 1: tìm hai hoặc ba kiểu truy vấn lồng sâu viết trong dòng ở bản trace và đặt tên cho chúng. Mọi thứ khác là sai số làm tròn.</p>
+<p>Theo số đo, thứ tự là: <code>skipLibCheck</code> trước, <code>incremental</code> với <code>.tsbuildinfo</code> được cache thứ hai, rồi <code>--generateTrace</code> để tìm đúng truy vấn chậm — thay vì viết lại tầng dữ liệu theo linh cảm.</p>
 </div>
 
 <div class="note-ct">
-<p><strong>Quy mô, để tham chiếu.</strong> Lược đồ CuongThai dài 3.847 dòng với 112 model và 19 enum — nằm gọn trong vùng mà chuyện này có ý nghĩa. Và cũng đúng là lược đồ ấy lớn dần lên từng model một, và không ai để ý cái ngày nó vượt ngưỡng. Chạy <code>tsc --diagnostics</code> mỗi quý một lần rồi ghi con số lại là đủ: khi <code>Instantiations</code> tăng gấp đôi thì bạn biết phải nhìn lại phần việc của quý nào.</p>
+<p><strong>Quy mô, để tham chiếu.</strong> Lược đồ CuongThai dài 17.699 dòng với 612 model và 57 enum, và tệp <code>index.d.ts</code> sinh ra nặng 70 MB — đo ngày 12/11/2026. Nó lớn dần lên từng model một, và không ai để ý cái ngày nó vượt ngưỡng. Chạy <code>tsc --extendedDiagnostics</code> mỗi quý một lần rồi ghi <code>Instantiations</code> lại là đủ: khi nó tăng gấp đôi thì bạn biết phải nhìn lại phần việc của quý nào.</p>
 </div>
 
 <h3>Nguồn học cho bài này</h3>
 <div class="pitfall">
-<p><strong>Bẫy — xoá bớt kiểu cho trình soạn thảo chạy nhanh, và mất luôn phần kiểm vốn là mục đích.</strong> Khi máy chủ ngôn ngữ ì ạch trên một lược đồ lớn, cách chữa hấp dẫn là nới lỏng: gán kết quả truy vấn là &#96;any&#96;, bỏ một &#96;select&#96; cho kiểu payload đơn giản đi, thay một kiểu dẫn xuất bằng một kiểu viết tay. Cái nào cũng nhẹ nhõm tức thì và cái nào cũng gỡ đi một phép kiểm thật, nên giờ lược đồ vừa lớn <em>vừa</em> không được xác minh — tệ cả đôi đường. Những cách giảm nhẹ đã đo trong bài này (thu hẹp &#96;select&#96;, tách client, nâng bộ nhớ cho TS server) giữ nguyên phần kiểm và chỉ tốn cấu hình. Hãy đo bằng &#96;tsc --diagnostics&#96; trước và sau, và coi mọi cách chữa biến một kiểu thành &#96;any&#96; là một bước lùi chứ không phải một lời giải.</p>
+<p><strong>Bẫy — xoá bớt kiểu cho trình soạn thảo chạy nhanh, và mất luôn phần kiểm vốn là mục đích.</strong> Khi máy chủ ngôn ngữ ì ạch trên một lược đồ lớn, cách chữa hấp dẫn là nới lỏng: gán kết quả truy vấn là &#96;any&#96;, bỏ một &#96;select&#96; cho kiểu payload đơn giản đi, thay một kiểu dẫn xuất bằng một kiểu viết tay. Cái nào cũng nhẹ nhõm tức thì và cái nào cũng gỡ đi một phép kiểm thật, nên giờ lược đồ vừa lớn <em>vừa</em> không được xác minh — tệ cả đôi đường. Những cách giảm nhẹ đã đo trong bài này (&#96;skipLibCheck&#96;, &#96;incremental&#96;, đặt tên kiểu truy vấn sâu) giữ nguyên phần kiểm và chỉ tốn cấu hình. Hãy đo bằng &#96;tsc --diagnostics&#96; trước và sau, và coi mọi cách chữa biến một kiểu thành &#96;any&#96; là một bước lùi chứ không phải một lời giải.</p>
 </div>
 <a class="link-card" href="https://github.com/microsoft/TypeScript/wiki/Performance" target="_blank" rel="noopener"><span class="lc-ico">⚡</span><span class="lc-body"><span class="lc-title">TypeScript — wiki về hiệu năng</span><span class="lc-sub">github.com · Hướng dẫn chính thức, kể cả <code>--generateTrace</code> và cách đọc kết quả</span></span></a>
 <a class="link-card" href="https://www.prisma.io/docs/orm/more/help-and-troubleshooting/help-articles/working-with-many-to-many-relations" target="_blank" rel="noopener"><span class="lc-ico">📐</span><span class="lc-body"><span class="lc-title">Prisma — hướng dẫn cho lược đồ lớn</span><span class="lc-sub">prisma.io/docs · Ghi chú của chính đội ngũ về kích thước lược đồ và hiệu năng trình soạn thảo</span></span></a>
@@ -1646,7 +1888,7 @@ Check time:        13.11s      ← −29%</div>
       title: '8.6 — Chapter 8 quiz|||8.6 — Trắc nghiệm Chương 8',
       slug: 'pr-8-6-quiz',
       type: 'QUIZ',
-      description: 'Tám câu: kiểu model không mô tả được gì, satisfies so với chú thích kiểu, hai lý do sự cố enum vô hình, needs trong result extension, query extension bỏ sót gì, instanceof khi bắt lỗi, DbNull so với JsonNull, và cách giảm Instantiations.',
+      description: 'Tám câu: kiểu model không mô tả được gì, satisfies so với chú thích kiểu, lý do sự cố enum vô hình, needs trong result extension, query extension bỏ sót gì, instanceof khi bắt lỗi, DbNull so với JsonNull, và cách giảm Instantiations.',
       content: `
 <div class="ml-en">
 <p>Eight questions on the generated type system. The two about the production incident are the ones worth getting right — they describe a bug that is present in most codebases right now.</p>
@@ -1683,7 +1925,7 @@ Check time:        13.11s      ← −29%</div>
           {
             question: 'Why did the CODE → CODE_REVIEW rename pass every check and still break the seed?|||Vì sao lần đổi tên CODE → CODE_REVIEW qua mọi phép kiểm mà vẫn làm vỡ phần seed?',
             options: [
-              'seed.ts hand-copied the union so it type-checked against itself, and tsconfig excluded prisma/** so tsc never opened the file|||seed.ts chép tay cái union nên nó tự kiểm với chính nó, và tsconfig loại prisma/** nên tsc chưa bao giờ mở tệp đó',
+              'tsconfig excluded prisma/**, so tsc never opened seed.ts — whose hand-copied union still said CODE; the client refused it only when the seed ran|||tsconfig loại prisma/**, nên tsc chưa bao giờ mở seed.ts — nơi union chép tay vẫn ghi CODE; client chỉ từ chối nó khi seed chạy',
               'The migration renamed the enum but not the existing rows, so old values remained|||Migration đổi tên enum nhưng không đổi các hàng đang có, nên giá trị cũ vẫn còn',
               'prisma generate was not run, so the client still had the old value|||prisma generate chưa được chạy, nên client vẫn giữ giá trị cũ',
               'The seed runs before migrations, so it saw the old schema|||Seed chạy trước migration, nên nó thấy lược đồ cũ',
@@ -1705,7 +1947,7 @@ Check time:        13.11s      ← −29%</div>
           {
             question: 'A `query` extension adds a tenant filter to every operation. What does it miss?|||Một extension `query` thêm bộ lọc theo khách thuê vào mọi thao tác. Nó bỏ sót cái gì?',
             options: [
-              '$queryRaw and $executeRaw bypass it entirely, so it is a safety net rather than a security boundary — real isolation needs row-level security|||$queryRaw và $executeRaw đi vòng hoàn toàn qua nó, nên nó là lưới an toàn chứ không phải ranh giới bảo mật — cô lập thật cần row-level security',
+              'Rows read through an include on another model, and raw SQL — measured, an include leaked another tenant’s posts; it is a safety net, real isolation needs row-level security|||Các hàng đọc qua include trên model khác, và SQL thô — đo thật, một include làm lọt bài của khách thuê khác; nó là lưới an toàn, cô lập thật cần row-level security',
               'Nothing — the query component intercepts every path to the database|||Không sót gì — thành phần query chặn mọi đường tới cơ sở dữ liệu',
               'Only findMany; the other read operations are not interceptable|||Chỉ findMany; các thao tác đọc khác không chặn được',
               'Writes; the query component can only modify read arguments|||Các lần ghi; thành phần query chỉ sửa được tham số của lần đọc',
@@ -1736,9 +1978,9 @@ Check time:        13.11s      ← −29%</div>
             points: 1,
           },
           {
-            question: 'Your editor lags on a 112-model schema. Which change moves the number most?|||Trình soạn thảo của bạn lag với lược đồ 112 model. Thay đổi nào dịch con số nhiều nhất?',
+            question: 'In this chapter’s measurements on large schemas, which setting moved the instantiation count most?|||Trong các phép đo của chương này trên lược đồ lớn, thiết lập nào làm số instantiation đổi nhiều nhất?',
             options: [
-              'Extract deeply nested inline include/select types into named ones with satisfies + GetPayload, so they are computed once instead of at every use|||Tách các kiểu include/select lồng sâu viết trong dòng thành kiểu có tên bằng satisfies + GetPayload, để chúng được tính một lần thay vì ở mọi chỗ dùng',
+              'skipLibCheck: true — tsc stops re-checking the generated client’s declarations (9,653 vs 1.66 million at 300 models)|||skipLibCheck: true — tsc thôi kiểm lại phần khai báo của client sinh ra (9.653 so với 1,66 triệu ở 300 model)',
               'Import types individually instead of the Prisma namespace|||Import từng kiểu riêng thay vì cả không gian tên Prisma',
               'Turn off strict mode in tsconfig|||Tắt chế độ strict trong tsconfig',
               'Use import type everywhere instead of plain import|||Dùng import type ở khắp nơi thay vì import thường',

@@ -5,6 +5,11 @@
  * < > trong code → &lt; &gt;; & → &amp;. Khối .out đóng bằng </div>. KHÔNG dùng <svg>.
  * Gạch chéo ngược PHẢI viết đôi (\\n), xem scripts/course-content-check.mjs.
  */
+import G09_1 from './giang/pr-09-1.mjs';
+import G09_2 from './giang/pr-09-2.mjs';
+import G09_3 from './giang/pr-09-3.mjs';
+import G09_4 from './giang/pr-09-4.mjs';
+import G09_5 from './giang/pr-09-5.mjs';
 const REF = '?ref=%2Fcourses%2Fprisma-orm%2Flearn&reflabel=Prisma';
 
 export default {
@@ -19,6 +24,7 @@ export default {
       isFreePreview: true,
       description: 'Vòng lặp năm bước: bắt sự kiện query kèm thời lượng, tìm câu chậm nhất và câu chạy nhiều nhất, dựng lại SQL đầy đủ với tham số, chạy EXPLAIN ANALYZE lên nó, và đo lại — cùng ba con số phân biệt truy vấn chậm với ứng dụng chậm.',
       content: `
+${G09_1}
 <div class="ml-en">
 <span class="eyebrow">Chapter 9 · Lesson 9.1</span>
 <h2>Measure before you change anything</h2>
@@ -376,6 +382,7 @@ LIMIT 10;</code></pre>
       type: 'LESSON',
       description: 'Bốn cách N+1 lẻn vào một kho mã Prisma dù không có lazy loading, relationLoadStrategy join so với query đo trên cùng dữ liệu, khi nào join thắng và khi nào nó thua, và hai mẫu thay thế khi include là sai công cụ.',
       content: `
+${G09_2}
 <div class="ml-en">
 <span class="eyebrow">Chapter 9 · Lesson 9.2</span>
 <h2>N+1 in all its forms</h2>
@@ -777,6 +784,7 @@ await prisma.$transaction([
       type: 'LESSON',
       description: 'Từ câu truy vấn Prisma tới chỉ mục đúng: khoá ngoại chưa ai đánh, thứ tự cột trong chỉ mục phức hợp, chỉ mục phủ, cách tìm chỉ mục không ai dùng và cột thiếu chỉ mục bằng pg_stat, và bốn kiểu truy vấn không chỉ mục nào cứu được.',
       content: `
+${G09_3}
 <div class="ml-en">
 <span class="eyebrow">Chapter 9 · Lesson 9.3</span>
 <h2>Indexes your Prisma queries can use</h2>
@@ -1134,6 +1142,7 @@ LIMIT 10;</code></pre>
       type: 'LESSON',
       description: 'Mặc định num_cpus*2+1 nghĩa là gì trên máy 16 nhân, phép nhân làm cạn max_connections, cách đo pool đang bận bao nhiêu, vì sao pool to hơn thường chậm hơn, và PgBouncer với directUrl khi số tiến trình vượt quá số kết nối.',
       content: `
+${G09_4}
 <div class="ml-en">
 <span class="eyebrow">Chapter 9 · Lesson 9.4</span>
 <h2>The connection pool, sized by arithmetic</h2>
@@ -1398,6 +1407,7 @@ DIRECT_URL="postgresql://u:p@host:5432/db"</code></pre>
       type: 'LESSON',
       description: 'Chọn ít cột thay vì cả hàng, phân trang bằng con trỏ thay vì offset, đếm xấp xỉ thay vì count() quét bảng, gộp ghi thay vì vòng lặp await, và đặt một tầng cache trước Prisma với luật vô hiệu hoá không tự lừa mình.',
       content: `
+${G09_5}
 <div class="ml-en">
 <span class="eyebrow">Chapter 9 · Lesson 9.5</span>
 <h2>The query you should not send at all</h2>

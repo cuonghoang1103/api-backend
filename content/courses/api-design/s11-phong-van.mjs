@@ -1955,7 +1955,7 @@ Bình xác nhận #3: 1 dòng đổi ⇒ 200 CONFIRMED</div>
       slug: 'api-11-7-lab',
       type: 'LESSON',
       isFreePreview: true,
-      description: 'Phỏng vấn thử 45 phút có kịch bản người hỏi: viết design doc 6 mục và OpenAPI 3.1 cho hệ thống sự kiện CLB (hàng chờ, check-in khi mất mạng), tự chấm bằng lab/grade-lab11.mjs (khởi đầu 0/10, lời giải 10/10) và thang 6 tiêu chí; gói labflow-api-ch11.zip.',
+      description: 'Phỏng vấn thử 45 phút có kịch bản người hỏi: viết design doc 6 mục và OpenAPI 3.1 cho hệ thống sự kiện CLB (hàng chờ, check-in khi mất mạng), tự chấm bằng lab/grade-lab11.mjs (khởi đầu 0/10, lời giải 10/10) và thang 6 tiêu chí; gói labflow-api-ch11-b.zip.',
       content: `${GL11}
 <div class="ml-en">
 <span class="eyebrow">Chapter 11 · Lab 11</span>
@@ -2063,9 +2063,9 @@ ràng buộc trong CSDL: đúng 1.</code></pre>
 </div>
 <p><strong>Discussion.</strong> Why 201 with <code>status: WAITLISTED</code> instead of 202? A waitlist place <em>is</em> created immediately — it has an id, a position and can be cancelled — so 201 is truthful; 202 means “I will decide later”, which you would use only if registrations went through a queue at a far bigger scale. And why does a repeated scan return 200, not 409? At the door, “already in” is the answer the organiser needs, not an error to dismiss — the same reasoning as a replayed Idempotency-Key.</p>
 
-<a class="link-card" href="https://media.cuongthai.com/files/academy/API/v1/labflow-api-ch11.zip" target="_blank" rel="noopener">
+<a class="link-card" href="https://media.cuongthai.com/files/academy/API/v1/labflow-api-ch11-b.zip" target="_blank" rel="noopener">
   <span class="lc-ico">📦</span>
-  <span class="lc-body"><span class="lc-title">Download: LabFlow API at the end of Chapter 11 (labflow-api-ch11.zip)</span><span class="lc-sub">Everything of Chapter 10 plus interview/: estimate.mjs, shortener/ (app, codes, collisions, browser-redirect), feed/fanout.mjs, chat/ (server, send), booking/race.mjs; lab/lab11/ (problem, starters, reference solution) and lab/grade-lab11.mjs. npm install, npm test (13 tests).</span></span>
+  <span class="lc-body"><span class="lc-title">Download: LabFlow API at the end of Chapter 11 (labflow-api-ch11-b.zip)</span><span class="lc-sub">Everything of Chapter 10 plus interview/: estimate.mjs, shortener/ (app, codes, collisions, browser-redirect), feed/fanout.mjs, chat/ (server, send), booking/race.mjs; lab/lab11/ (problem, starters, reference solution) and lab/grade-lab11.mjs. npm install, npm test (13 tests).</span></span>
   <span class="lc-cta">DOWNLOAD →</span>
 </a>
 
@@ -2189,9 +2189,9 @@ ràng buộc trong CSDL: đúng 1.</code></pre>
 </div>
 <p><strong>Bàn luận.</strong> Vì sao 201 kèm <code>status: WAITLISTED</code> mà không 202? Một chỗ trong hàng chờ <em>được tạo</em> ngay — có id, có vị trí, huỷ được — nên 201 là nói thật; 202 nghĩa là “để tôi quyết sau”, chỉ dùng khi đăng ký phải đi qua hàng đợi ở quy mô lớn hơn nhiều. Và vì sao quét lặp trả 200 chứ không 409? Ở cửa, “đã vào rồi” là câu trả lời ban tổ chức cần, không phải một lỗi để bấm tắt — cùng lý lẽ với Idempotency-Key được phát lại.</p>
 
-<a class="link-card" href="https://media.cuongthai.com/files/academy/API/v1/labflow-api-ch11.zip" target="_blank" rel="noopener">
+<a class="link-card" href="https://media.cuongthai.com/files/academy/API/v1/labflow-api-ch11-b.zip" target="_blank" rel="noopener">
   <span class="lc-ico">📦</span>
-  <span class="lc-body"><span class="lc-title">Tải về: LabFlow API cuối Chương 11 (labflow-api-ch11.zip)</span><span class="lc-sub">Mọi thứ của Chương 10 cộng thư mục interview/: estimate.mjs, shortener/ (app, codes, collisions, browser-redirect), feed/fanout.mjs, chat/ (server, send), booking/race.mjs; lab/lab11/ (đề, tệp khởi đầu, lời giải tham khảo) và lab/grade-lab11.mjs. npm install, npm test (13 test).</span></span>
+  <span class="lc-body"><span class="lc-title">Tải về: LabFlow API cuối Chương 11 (labflow-api-ch11-b.zip)</span><span class="lc-sub">Mọi thứ của Chương 10 cộng thư mục interview/: estimate.mjs, shortener/ (app, codes, collisions, browser-redirect), feed/fanout.mjs, chat/ (server, send), booking/race.mjs; lab/lab11/ (đề, tệp khởi đầu, lời giải tham khảo) và lab/grade-lab11.mjs. npm install, npm test (13 test).</span></span>
   <span class="lc-cta">TẢI VỀ →</span>
 </a>
 

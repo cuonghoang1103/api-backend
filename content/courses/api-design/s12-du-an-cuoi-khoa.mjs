@@ -69,7 +69,7 @@ export default {
 <p>One code base serves both worlds: <code>LABFLOW_STORE=memory</code> (the default, so <code>npm test</code> still needs no database) and <code>LABFLOW_STORE=pg</code>. That switch is what lets every “before” and “after” in this chapter run on the same code.</p>
 
 <h3>Inventory: everything that still lives in RAM</h3>
-<p>Before designing anything, list the state. On the Chapter 11 code (<code>labflow-api-ch11.zip</code>) one search finds it:</p>
+<p>Before designing anything, list the state. On the Chapter 11 code (<code>labflow-api-ch11-b.zip</code>) one search finds it:</p>
 <pre><code class="language-bash">grep -rnE "new Map\\(\\)|^export const (labs|devices|users|bookings|issues|waitlist|versions) =|const counters|const ring = \\[\\]" src | grep -vE "reports|inflight|deprecation" | cut -c1-64 | sed 's/ *$//'</code></pre>
 <div class="out">src/idempotency.js:8:const store = new Map();   // "usr_1:&lt;khoá&gt;
 src/events.js:12:const ring = [];
@@ -241,7 +241,7 @@ GET /v2/bookings/bk_1: 200 instance=B</div>
 <p>Một bộ mã phục vụ cả hai thế giới: <code>LABFLOW_STORE=memory</code> (mặc định, nên <code>npm test</code> vẫn không cần CSDL) và <code>LABFLOW_STORE=pg</code>. Chính công tắc này cho phép mọi cặp “trước” và “sau” trong chương chạy trên cùng một bộ mã.</p>
 
 <h3>Kiểm kê: mọi thứ còn nằm trong RAM</h3>
-<p>Trước khi thiết kế, hãy liệt kê trạng thái. Trên mã Chương 11 (<code>labflow-api-ch11.zip</code>), một lệnh tìm là ra:</p>
+<p>Trước khi thiết kế, hãy liệt kê trạng thái. Trên mã Chương 11 (<code>labflow-api-ch11-b.zip</code>), một lệnh tìm là ra:</p>
 <pre><code class="language-bash">grep -rnE "new Map\\(\\)|^export const (labs|devices|users|bookings|issues|waitlist|versions) =|const counters|const ring = \\[\\]" src | grep -vE "reports|inflight|deprecation" | cut -c1-64 | sed 's/ *$//'</code></pre>
 <div class="out">src/idempotency.js:8:const store = new Map();   // "usr_1:&lt;khoá&gt;
 src/events.js:12:const ring = [];
@@ -791,11 +791,11 @@ exit 0</div>
 <p>Opening a PostgreSQL connection costs a process on the server and a few milliseconds of handshake, so apps keep a <strong>pool</strong> of open connections and lend them out. Chapter 11's code had grown seven separate pools:</p>
 <pre><code class="language-bash">grep -rn "new pg.Pool" src | sed -E 's/connectionString: [^,]+, //' | cut -c1-110</code></pre>
 <div class="out">src/worker.js:52:  const db = new pg.Pool({ max: 3 });
-src/idempotency-pg.js:7:const pool = new pg.Pool({ max: 5 });
+src/idempotency-pg.js:8:const pool = new pg.Pool({ max: 5 });
 src/exportTask.js:6:export const pool = new pg.Pool({ max: 5 });
-src/routes/notes.js:11:const primary = new pg.Pool({ max: 5 });
-src/routes/notes.js:12:const replica = new pg.Pool({ max: 5 });
-src/routes/webhooks.js:12:export const pool = new pg.Pool({ max: 3 });
+src/routes/notes.js:12:const primary = new pg.Pool({ max: 5 });
+src/routes/notes.js:13:const replica = new pg.Pool({ max: 5 });
+src/routes/webhooks.js:13:export const pool = new pg.Pool({ max: 3 });
 src/routes/stats.js:7:const pool = new pg.Pool({ max: 10 });</div>
 <p>Now there is one, in <code>src/pg.js</code>, and every module borrows from it (the two left in <code>notes.js</code>/<code>stats.js</code> are Chapter 9’s replica demos, loaded only with <code>LABFLOW_PG=1</code>):</p>
 <pre><code class="language-javascript">export const pool = new pg.Pool({
@@ -971,11 +971,11 @@ an: Server-Timing: auth;dur=0.06, user;dur=0.42, validate;dur=0.07, db;dur=0.49,
 <p>Mở một kết nối PostgreSQL tốn một tiến trình bên máy chủ và vài mili giây bắt tay, nên ứng dụng giữ một <strong>pool</strong> (bể) kết nối mở sẵn rồi cho mượn. Mã Chương 11 đã mọc ra bảy pool riêng:</p>
 <pre><code class="language-bash">grep -rn "new pg.Pool" src | sed -E 's/connectionString: [^,]+, //' | cut -c1-110</code></pre>
 <div class="out">src/worker.js:52:  const db = new pg.Pool({ max: 3 });
-src/idempotency-pg.js:7:const pool = new pg.Pool({ max: 5 });
+src/idempotency-pg.js:8:const pool = new pg.Pool({ max: 5 });
 src/exportTask.js:6:export const pool = new pg.Pool({ max: 5 });
-src/routes/notes.js:11:const primary = new pg.Pool({ max: 5 });
-src/routes/notes.js:12:const replica = new pg.Pool({ max: 5 });
-src/routes/webhooks.js:12:export const pool = new pg.Pool({ max: 3 });
+src/routes/notes.js:12:const primary = new pg.Pool({ max: 5 });
+src/routes/notes.js:13:const replica = new pg.Pool({ max: 5 });
+src/routes/webhooks.js:13:export const pool = new pg.Pool({ max: 3 });
 src/routes/stats.js:7:const pool = new pg.Pool({ max: 10 });</div>
 <p>Giờ chỉ còn một, ở <code>src/pg.js</code>, mọi module mượn từ đó (hai pool còn lại ở <code>notes.js</code>/<code>stats.js</code> là bài replica của Chương 9, chỉ nạp khi có <code>LABFLOW_PG=1</code>):</p>
 <pre><code class="language-javascript">export const pool = new pg.Pool({
@@ -2514,9 +2514,9 @@ SMOKE ĐẠT: mọi bước xanh</div>
 <p class="lead">Bookings, labs, devices and users now live in PostgreSQL. One resource was left behind on purpose: <strong>issues</strong> — the broken-device reports you built in Lab 1, paginated in Lab 3 and protected with <code>If-Match</code> in Lab 5. In the starter they still live in each instance's RAM. Your job: give them a table, a store, and a grader score of 10/10 on two instances.</p>
 <p><strong>What you practise:</strong> the whole 12.1–12.4 loop on a resource you know — a migration with the right constraints, a store that keeps the API contract, a transaction that changes two tables, and optimistic locking inside an UPDATE. <strong>Why it is worth it:</strong> it is the capstone in miniature; if you can do this alone, you can do it for your own project's next table.</p>
 
-<a class="link-card" href="https://media.cuongthai.com/files/academy/API/v1/labflow-api-final.zip" target="_blank" rel="noopener">
+<a class="link-card" href="https://media.cuongthai.com/files/academy/API/v1/labflow-api-final-b.zip" target="_blank" rel="noopener">
   <span class="lc-ico">📦</span>
-  <span class="lc-body"><span class="lc-title">Download: LabFlow API, final version (labflow-api-final.zip, 443 KB)</span><span class="lc-sub">Everything of Chapters 1–12: PostgreSQL store + migrations, Redis, worker, outbox, ops/ (dev-stack, smoke, backup), perf/ scripts, OpenAPI 2.4.0, Lab 12 starter + solution + grader. README.txt lists the commands of every lesson; npm ci && npm test needs no database.</span></span>
+  <span class="lc-body"><span class="lc-title">Download: LabFlow API, final version (labflow-api-final-b.zip, 443 KB)</span><span class="lc-sub">Everything of Chapters 1–12: PostgreSQL store + migrations, Redis, worker, outbox, ops/ (dev-stack, smoke, backup), perf/ scripts, OpenAPI 2.4.0, Lab 12 starter + solution + grader. README.txt lists the commands of every lesson; npm ci && npm test needs no database.</span></span>
   <span class="lc-cta">DOWNLOAD →</span>
 </a>
 
@@ -2640,9 +2640,9 @@ TỔNG: 10/10</div>
 <p class="lead">Lượt đặt, phòng, thiết bị và người dùng đã nằm trong PostgreSQL. Một tài nguyên được cố ý để lại: <strong>issues</strong> — báo hỏng thiết bị bạn dựng ở Lab 1, phân trang ở Lab 3 và bảo vệ bằng <code>If-Match</code> ở Lab 5. Trong bản khởi đầu chúng vẫn nằm trong RAM của từng instance. Việc của bạn: cho chúng một bảng, một store, và điểm 10/10 của bộ chấm trên hai instance.</p>
 <p><strong>Bạn luyện gì:</strong> trọn vòng 12.1–12.4 trên một tài nguyên quen thuộc — migration có đúng ràng buộc, store giữ nguyên hợp đồng API, một transaction đổi hai bảng, và khoá lạc quan nằm trong câu UPDATE. <strong>Vì sao đáng làm:</strong> đây là dự án cuối khoá thu nhỏ; tự làm được bài này thì bạn làm được cho bảng tiếp theo của đồ án mình.</p>
 
-<a class="link-card" href="https://media.cuongthai.com/files/academy/API/v1/labflow-api-final.zip" target="_blank" rel="noopener">
+<a class="link-card" href="https://media.cuongthai.com/files/academy/API/v1/labflow-api-final-b.zip" target="_blank" rel="noopener">
   <span class="lc-ico">📦</span>
-  <span class="lc-body"><span class="lc-title">Tải về: LabFlow API bản cuối khoá (labflow-api-final.zip, 443 KB)</span><span class="lc-sub">Toàn bộ Chương 1–12: kho PostgreSQL + migration, Redis, worker, outbox, ops/ (dev-stack, smoke, backup), script perf/, OpenAPI 2.4.0, Lab 12 khởi đầu + lời giải + bộ chấm. README.txt ghi lệnh của từng bài; npm ci && npm test không cần CSDL.</span></span>
+  <span class="lc-body"><span class="lc-title">Tải về: LabFlow API bản cuối khoá (labflow-api-final-b.zip, 443 KB)</span><span class="lc-sub">Toàn bộ Chương 1–12: kho PostgreSQL + migration, Redis, worker, outbox, ops/ (dev-stack, smoke, backup), script perf/, OpenAPI 2.4.0, Lab 12 khởi đầu + lời giải + bộ chấm. README.txt ghi lệnh của từng bài; npm ci && npm test không cần CSDL.</span></span>
   <span class="lc-cta">TẢI VỀ →</span>
 </a>
 
@@ -3045,9 +3045,9 @@ Node 22 · Express 5 · PostgreSQL 18 · Redis 8 · OpenAPI 3.1 (29 thao tác)
   <div class="lz-layer"><span class="lz-lname">Production (Ch12)</span><span class="lz-lnote">schema and migrations, pool and transactions, shared state, outbox and queue, re-measured load, deploy checklist, your story</span></div>
 </div>
 
-<a class="link-card" href="https://media.cuongthai.com/files/academy/API/v1/labflow-api-final.zip" target="_blank" rel="noopener">
+<a class="link-card" href="https://media.cuongthai.com/files/academy/API/v1/labflow-api-final-b.zip" target="_blank" rel="noopener">
   <span class="lc-ico">📦</span>
-  <span class="lc-body"><span class="lc-title">Download: LabFlow API, final version (labflow-api-final.zip, 443 KB)</span><span class="lc-sub">Everything of Chapters 1–12: PostgreSQL store + migrations, Redis, worker, outbox, ops/ (dev-stack, smoke, backup), perf/ scripts, OpenAPI 2.4.0, Lab 12 starter + solution + grader. README.txt lists the commands of every lesson; npm ci && npm test needs no database.</span></span>
+  <span class="lc-body"><span class="lc-title">Download: LabFlow API, final version (labflow-api-final-b.zip, 443 KB)</span><span class="lc-sub">Everything of Chapters 1–12: PostgreSQL store + migrations, Redis, worker, outbox, ops/ (dev-stack, smoke, backup), perf/ scripts, OpenAPI 2.4.0, Lab 12 starter + solution + grader. README.txt lists the commands of every lesson; npm ci && npm test needs no database.</span></span>
   <span class="lc-cta">DOWNLOAD →</span>
 </a>
 
@@ -3124,9 +3124,9 @@ Node 22 · Express 5 · PostgreSQL 18 · Redis 8 · OpenAPI 3.1 (29 thao tác)
   <div class="lz-layer"><span class="lz-lname">Production (Ch12)</span><span class="lz-lnote">lược đồ và migration, pool và transaction, trạng thái dùng chung, outbox và hàng đợi, đo tải lại, checklist triển khai, câu chuyện của bạn</span></div>
 </div>
 
-<a class="link-card" href="https://media.cuongthai.com/files/academy/API/v1/labflow-api-final.zip" target="_blank" rel="noopener">
+<a class="link-card" href="https://media.cuongthai.com/files/academy/API/v1/labflow-api-final-b.zip" target="_blank" rel="noopener">
   <span class="lc-ico">📦</span>
-  <span class="lc-body"><span class="lc-title">Tải về: LabFlow API bản cuối khoá (labflow-api-final.zip, 443 KB)</span><span class="lc-sub">Toàn bộ Chương 1–12: kho PostgreSQL + migration, Redis, worker, outbox, ops/ (dev-stack, smoke, backup), script perf/, OpenAPI 2.4.0, Lab 12 khởi đầu + lời giải + bộ chấm. README.txt ghi lệnh của từng bài; npm ci && npm test không cần CSDL.</span></span>
+  <span class="lc-body"><span class="lc-title">Tải về: LabFlow API bản cuối khoá (labflow-api-final-b.zip, 443 KB)</span><span class="lc-sub">Toàn bộ Chương 1–12: kho PostgreSQL + migration, Redis, worker, outbox, ops/ (dev-stack, smoke, backup), script perf/, OpenAPI 2.4.0, Lab 12 khởi đầu + lời giải + bộ chấm. README.txt ghi lệnh của từng bài; npm ci && npm test không cần CSDL.</span></span>
   <span class="lc-cta">TẢI VỀ →</span>
 </a>
 

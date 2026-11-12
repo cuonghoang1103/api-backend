@@ -44,6 +44,11 @@ export default {
 </ul>
 <p><strong>Why it is worth it:</strong> Chapter 8 kept one server alive; this chapter is about data that grows. Caching, replicas and IDs are where real outages and data leaks come from — and every decision shows up in the API contract, not only in the infrastructure.</p>
 </div>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/API/v1/labflow-api-ch9-dau.zip" target="_blank" rel="noopener">
+  <span class="lc-ico">📦</span>
+  <span class="lc-body"><span class="lc-title">Download: LabFlow API at the start of Chapter 9 (zip, without node_modules)</span><span class="lc-sub">Before Lab 9. <code>npm ci</code>, <code>npm start</code> (no database needed); the Chapter 9 routes need <code>LABFLOW_PG=1</code> with PostgreSQL 18 (+ Redis for 9.2, a replica for 9.3). Scripts in <code>perf/</code>, SQL in <code>sql/</code>. Demo passwords: an-lab-2026, binh-lab-2026, lan-lab-2026 (learning only).</span></span>
+  <span class="lc-cta">DOWNLOAD →</span>
+</a>
 
 <h3>Who may keep a response, and for how long</h3>
 <div class="lz-flow">
@@ -83,6 +88,17 @@ export function notModifiedEarly(name, cacheControl) {
   };
 }</code></pre>
 <p>It is wired as one middleware per list, and <code>bump('bookings')</code> is called after create, cancel and check-in.</p>
+<pre><code class="language-javascript">// routes/labs.js — danh sách phòng giống nhau cho mọi người, hiếm khi đổi ⇒ public, cache dùng chung giữ 60 s
+import { notModifiedEarly } from '../httpCache.js';
+  .get(ipLimit, validate('query', LabsQuery), notModifiedEarly('labs', () =&gt; 'public, max-age=60'), (req, res) =&gt; {
+
+// routes/bookings.js — danh sách RIÊNG của từng người: private (cache dùng chung không được giữ), no-cache (dùng lại phải hỏi bằng ETag)
+// LABFLOW_CACHE_BUG=1 ⇒ cố ý ghi public, max-age=60 để thấy cache dùng chung làm lộ dữ liệu (CHỈ để học)
+import { notModifiedEarly, bump } from '../httpCache.js';
+const bookingsCacheControl = () =&gt; (process.env.LABFLOW_CACHE_BUG ? 'public, max-age=60' : 'private, no-cache');
+  .get(validate('query', { 1: BookingsQuery, 2: BookingsQueryV2 }), notModifiedEarly('bookings', bookingsCacheControl), (req, res) =&gt; {
+// … và một dòng ngay sau mỗi lệnh ghi: bookings.push(booking) (tạo), b.status = 'CHECKED_IN', b.status = 'CANCELLED'
+    bump('bookings');</code></pre>
 <pre><code class="language-bash">curl -s -D - -o /dev/null http://localhost:4000/v2/labs | grep -iE '^(HTTP|cache-control|etag|content-length)'</code></pre>
 <div class="out">HTTP/1.1 200 OK
 Cache-Control: public, max-age=60
@@ -123,17 +139,17 @@ Server-Timing: auth;dur=0.22, validate;dur=1.64, db;dur=0.34, sort;dur=8.00, tot
 Server-Timing: auth;dur=0.07, validate;dur=0.14, total;dur=0.79
 body: 0 byte</div>
 <p>Now the 304 costs 0.65 ms with no <code>db</code> step. Under load (autocannon, 10 connections, every request sending <code>If-None-Match</code>):</p>
-<pre><code class="language-bash">npx autocannon -c 10 -d 10 -H "Authorization=Bearer $(cat ../lan.jwt)" 'http://localhost:4000/v2/bookings?limit=100' 2&gt;&amp;1 | grep -E 'Req/Sec|requests in'</code></pre>
+<pre><code class="language-bash">npx autocannon -c 10 -d 10 -H "Authorization=Bearer $(cat lan.jwt)" 'http://localhost:4000/v2/bookings?limit=100' 2&gt;&amp;1 | grep -E 'Req/Sec|requests in'</code></pre>
 <div class="out">│ Req/Sec   │ 688     │ 688     │ 1,161   │ 1,276   │ 1,127   │ 154.6   │ 688     │
 12k requests in 11.01s, 458 MB read</div>
-<pre><code class="language-bash">npx autocannon -c 10 -d 10 -H "Authorization=Bearer $(cat ../lan.jwt)" -H "If-None-Match=$(grep -i ^etag ../hdr.txt | cut -d' ' -f2 | tr -d '\\r')" 'http://localhost:4000/v2/bookings?limit=100' 2&gt;&amp;1 | grep -E 'Req/Sec|2xx|requests in'</code></pre>
+<pre><code class="language-bash">npx autocannon -c 10 -d 10 -H "Authorization=Bearer $(cat lan.jwt)" -H "If-None-Match=$(grep -i ^etag hdr.txt | cut -d' ' -f2 | tr -d '\\r')" 'http://localhost:4000/v2/bookings?limit=100' 2&gt;&amp;1 | grep -E 'Req/Sec|2xx|requests in'</code></pre>
 <div class="out">│ Req/Sec   │ 454    │ 454    │ 1,175  │ 1,270  │ 1,032.82 │ 263.46 │ 454    │
 0 2xx responses, 11361 non 2xx responses
 11k requests in 11.02s, 5.15 MB read</div>
-<pre><code class="language-bash">npx autocannon -c 10 -d 10 -H "Authorization=Bearer $(cat ../lan.jwt)" 'http://localhost:4000/v2/bookings?limit=100' 2&gt;&amp;1 | grep -E 'Req/Sec|requests in'</code></pre>
+<pre><code class="language-bash">npx autocannon -c 10 -d 10 -H "Authorization=Bearer $(cat lan.jwt)" 'http://localhost:4000/v2/bookings?limit=100' 2&gt;&amp;1 | grep -E 'Req/Sec|requests in'</code></pre>
 <div class="out">│ Req/Sec   │ 1,036   │ 1,036   │ 1,221   │ 1,298 │ 1,197.37 │ 77.25   │ 1,036   │
 13k requests in 11.01s, 487 MB read</div>
-<pre><code class="language-bash">npx autocannon -c 10 -d 10 -H "Authorization=Bearer $(cat ../lan.jwt)" -H "If-None-Match=$(grep -i ^etag ../hdr.txt | cut -d' ' -f2 | tr -d '\\r')" 'http://localhost:4000/v2/bookings?limit=100' 2&gt;&amp;1 | grep -E 'Req/Sec|2xx|requests in'</code></pre>
+<pre><code class="language-bash">npx autocannon -c 10 -d 10 -H "Authorization=Bearer $(cat lan.jwt)" -H "If-None-Match=$(grep -i ^etag hdr.txt | cut -d' ' -f2 | tr -d '\\r')" 'http://localhost:4000/v2/bookings?limit=100' 2&gt;&amp;1 | grep -E 'Req/Sec|2xx|requests in'</code></pre>
 <div class="out">│ Req/Sec   │ 8,655   │ 8,655   │ 9,103   │ 9,599   │ 9,111.64 │ 253.68  │ 8,652   │
 0 2xx responses, 100230 non 2xx responses
 100k requests in 11.01s, 28.5 MB read</div>
@@ -258,6 +274,11 @@ age: 0 x-cache: HIT</div>
 </ul>
 <p><strong>Vì sao đáng học:</strong> Chương 8 giữ một server sống; chương này nói về dữ liệu lớn lên. Cache, bản sao và định danh là nơi sinh ra sự cố và rò rỉ dữ liệu thật — và mọi quyết định đều hiện ra trong hợp đồng API, không chỉ ở hạ tầng.</p>
 </div>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/API/v1/labflow-api-ch9-dau.zip" target="_blank" rel="noopener">
+  <span class="lc-ico">📦</span>
+  <span class="lc-body"><span class="lc-title">Tải về: LabFlow API đầu Chương 9 (zip, không kèm node_modules)</span><span class="lc-sub">Trước Lab 9. <code>npm ci</code>, <code>npm start</code> (không cần CSDL); các route Chương 9 cần <code>LABFLOW_PG=1</code> với PostgreSQL 18 (+ Redis cho 9.2, một replica cho 9.3). Script ở <code>perf/</code>, SQL ở <code>sql/</code>. Mật khẩu demo: an-lab-2026, binh-lab-2026, lan-lab-2026 (chỉ để học).</span></span>
+  <span class="lc-cta">TẢI VỀ →</span>
+</a>
 
 <h3>Ai được giữ một response, và giữ bao lâu</h3>
 <div class="lz-flow">
@@ -297,6 +318,17 @@ export function notModifiedEarly(name, cacheControl) {
   };
 }</code></pre>
 <p>Mỗi danh sách gắn một middleware, và <code>bump('bookings')</code> được gọi sau khi tạo, huỷ và check-in.</p>
+<pre><code class="language-javascript">// routes/labs.js — danh sách phòng giống nhau cho mọi người, hiếm khi đổi ⇒ public, cache dùng chung giữ 60 s
+import { notModifiedEarly } from '../httpCache.js';
+  .get(ipLimit, validate('query', LabsQuery), notModifiedEarly('labs', () =&gt; 'public, max-age=60'), (req, res) =&gt; {
+
+// routes/bookings.js — danh sách RIÊNG của từng người: private (cache dùng chung không được giữ), no-cache (dùng lại phải hỏi bằng ETag)
+// LABFLOW_CACHE_BUG=1 ⇒ cố ý ghi public, max-age=60 để thấy cache dùng chung làm lộ dữ liệu (CHỈ để học)
+import { notModifiedEarly, bump } from '../httpCache.js';
+const bookingsCacheControl = () =&gt; (process.env.LABFLOW_CACHE_BUG ? 'public, max-age=60' : 'private, no-cache');
+  .get(validate('query', { 1: BookingsQuery, 2: BookingsQueryV2 }), notModifiedEarly('bookings', bookingsCacheControl), (req, res) =&gt; {
+// … và một dòng ngay sau mỗi lệnh ghi: bookings.push(booking) (tạo), b.status = 'CHECKED_IN', b.status = 'CANCELLED'
+    bump('bookings');</code></pre>
 <pre><code class="language-bash">curl -s -D - -o /dev/null http://localhost:4000/v2/labs | grep -iE '^(HTTP|cache-control|etag|content-length)'</code></pre>
 <div class="out">HTTP/1.1 200 OK
 Cache-Control: public, max-age=60
@@ -337,17 +369,17 @@ Server-Timing: auth;dur=0.22, validate;dur=1.64, db;dur=0.34, sort;dur=8.00, tot
 Server-Timing: auth;dur=0.07, validate;dur=0.14, total;dur=0.79
 body: 0 byte</div>
 <p>Giờ 304 chỉ tốn 0,65 ms và không có bước <code>db</code>. Khi có tải (autocannon, 10 kết nối, request nào cũng gửi <code>If-None-Match</code>):</p>
-<pre><code class="language-bash">npx autocannon -c 10 -d 10 -H "Authorization=Bearer $(cat ../lan.jwt)" 'http://localhost:4000/v2/bookings?limit=100' 2&gt;&amp;1 | grep -E 'Req/Sec|requests in'</code></pre>
+<pre><code class="language-bash">npx autocannon -c 10 -d 10 -H "Authorization=Bearer $(cat lan.jwt)" 'http://localhost:4000/v2/bookings?limit=100' 2&gt;&amp;1 | grep -E 'Req/Sec|requests in'</code></pre>
 <div class="out">│ Req/Sec   │ 688     │ 688     │ 1,161   │ 1,276   │ 1,127   │ 154.6   │ 688     │
 12k requests in 11.01s, 458 MB read</div>
-<pre><code class="language-bash">npx autocannon -c 10 -d 10 -H "Authorization=Bearer $(cat ../lan.jwt)" -H "If-None-Match=$(grep -i ^etag ../hdr.txt | cut -d' ' -f2 | tr -d '\\r')" 'http://localhost:4000/v2/bookings?limit=100' 2&gt;&amp;1 | grep -E 'Req/Sec|2xx|requests in'</code></pre>
+<pre><code class="language-bash">npx autocannon -c 10 -d 10 -H "Authorization=Bearer $(cat lan.jwt)" -H "If-None-Match=$(grep -i ^etag hdr.txt | cut -d' ' -f2 | tr -d '\\r')" 'http://localhost:4000/v2/bookings?limit=100' 2&gt;&amp;1 | grep -E 'Req/Sec|2xx|requests in'</code></pre>
 <div class="out">│ Req/Sec   │ 454    │ 454    │ 1,175  │ 1,270  │ 1,032.82 │ 263.46 │ 454    │
 0 2xx responses, 11361 non 2xx responses
 11k requests in 11.02s, 5.15 MB read</div>
-<pre><code class="language-bash">npx autocannon -c 10 -d 10 -H "Authorization=Bearer $(cat ../lan.jwt)" 'http://localhost:4000/v2/bookings?limit=100' 2&gt;&amp;1 | grep -E 'Req/Sec|requests in'</code></pre>
+<pre><code class="language-bash">npx autocannon -c 10 -d 10 -H "Authorization=Bearer $(cat lan.jwt)" 'http://localhost:4000/v2/bookings?limit=100' 2&gt;&amp;1 | grep -E 'Req/Sec|requests in'</code></pre>
 <div class="out">│ Req/Sec   │ 1,036   │ 1,036   │ 1,221   │ 1,298 │ 1,197.37 │ 77.25   │ 1,036   │
 13k requests in 11.01s, 487 MB read</div>
-<pre><code class="language-bash">npx autocannon -c 10 -d 10 -H "Authorization=Bearer $(cat ../lan.jwt)" -H "If-None-Match=$(grep -i ^etag ../hdr.txt | cut -d' ' -f2 | tr -d '\\r')" 'http://localhost:4000/v2/bookings?limit=100' 2&gt;&amp;1 | grep -E 'Req/Sec|2xx|requests in'</code></pre>
+<pre><code class="language-bash">npx autocannon -c 10 -d 10 -H "Authorization=Bearer $(cat lan.jwt)" -H "If-None-Match=$(grep -i ^etag hdr.txt | cut -d' ' -f2 | tr -d '\\r')" 'http://localhost:4000/v2/bookings?limit=100' 2&gt;&amp;1 | grep -E 'Req/Sec|2xx|requests in'</code></pre>
 <div class="out">│ Req/Sec   │ 8,655   │ 8,655   │ 9,103   │ 9,599   │ 9,111.64 │ 253.68  │ 8,652   │
 0 2xx responses, 100230 non 2xx responses
 100k requests in 11.01s, 28.5 MB read</div>
@@ -490,6 +522,19 @@ statsRouter.route('/labs')
   })
   .all(onlyAllow('GET'));</code></pre>
 <p>The header <code>LabFlow-DB-Queries</code> counts how many times the database was asked — only for learning.</p>
+<pre><code class="language-javascript">// timing.js — thêm vào req.timing (bài 8.1) để đo một đoạn await
+    async timeAsync(name, fn) {
+      const a = performance.now();
+      try { return await fn(); } finally { marks.push([name, performance.now() - a]); }
+    },
+
+// app.js — các route Chương 9 dùng PostgreSQL (+ replica, Redis) chỉ bật khi có LABFLOW_PG=1; thiếu thì LabFlow vẫn chạy như cũ
+const pgRoutes = process.env.LABFLOW_PG ? { ...(await import('./routes/notes.js')), ...(await import('./routes/stats.js')) } : null;
+if (pgRoutes) api.use('/labs/:labId/notes', pgRoutes.labNotesRouter);   // bài 9.3 — đặt TRƯỚC /labs
+api.use('/labs', labsRouter);
+// …
+if (pgRoutes) api.use('/stats', pgRoutes.statsRouter);          // bài 9.2
+if (pgRoutes) api.use('/notes', pgRoutes.notesRouter);          // bài 9.3</code></pre>
 
 <h3>Cache-aside in five steps</h3>
 <div class="lz-flow">
@@ -651,6 +696,19 @@ statsRouter.route('/labs')
   })
   .all(onlyAllow('GET'));</code></pre>
 <p>Header <code>LabFlow-DB-Queries</code> đếm số lần CSDL bị hỏi — chỉ để học.</p>
+<pre><code class="language-javascript">// timing.js — thêm vào req.timing (bài 8.1) để đo một đoạn await
+    async timeAsync(name, fn) {
+      const a = performance.now();
+      try { return await fn(); } finally { marks.push([name, performance.now() - a]); }
+    },
+
+// app.js — các route Chương 9 dùng PostgreSQL (+ replica, Redis) chỉ bật khi có LABFLOW_PG=1; thiếu thì LabFlow vẫn chạy như cũ
+const pgRoutes = process.env.LABFLOW_PG ? { ...(await import('./routes/notes.js')), ...(await import('./routes/stats.js')) } : null;
+if (pgRoutes) api.use('/labs/:labId/notes', pgRoutes.labNotesRouter);   // bài 9.3 — đặt TRƯỚC /labs
+api.use('/labs', labsRouter);
+// …
+if (pgRoutes) api.use('/stats', pgRoutes.statsRouter);          // bài 9.2
+if (pgRoutes) api.use('/notes', pgRoutes.notesRouter);          // bài 9.3</code></pre>
 
 <h3>Cache-aside trong năm bước</h3>
 <div class="lz-flow">
@@ -823,10 +881,11 @@ import pg from 'pg';
 import { HttpError, onlyAllow } from '../http.js';
 import { requireAuth, requireRole } from '../auth.js';
 import { validate } from '../validate.js';
+import { ddlOnce } from '../pg-ddl.js';                     // bài 8.4: tạo bảng dưới khoá advisory
 
 const primary = new pg.Pool({ connectionString: process.env.PGURL ?? 'postgres://labflow@localhost:55432/labflow', max: 5 });
 const replica = new pg.Pool({ connectionString: process.env.PG_REPLICA_URL ?? 'postgres://labflow@localhost:55433/labflow', max: 5 });
-await primary.query(&#96;CREATE TABLE IF NOT EXISTS lab_notes (id bigserial PRIMARY KEY, lab_id text NOT NULL,
+await ddlOnce(primary, &#96;CREATE TABLE IF NOT EXISTS lab_notes (id bigserial PRIMARY KEY, lab_id text NOT NULL,
   author text NOT NULL, body text NOT NULL, created_at timestamptz NOT NULL DEFAULT now())&#96;);
 const MODE = process.env.LABFLOW_READS ?? 'replica';
 const view = (r) =&gt; ({ id: &#96;note_\${r.id}&#96;, labId: r.lab_id, author: r.author, body: r.body, createdAt: r.created_at.toISOString() });
@@ -876,6 +935,9 @@ notesRouter.route('/:id')
     res.json(view(r));
   })
   .all(onlyAllow('GET'));</code></pre>
+<pre><code class="language-javascript">// messages.js — mã lỗi mới (vi rồi en)
+    NOTE_NOT_FOUND: ['Không tìm thấy ghi chú', (p) =&gt; &#96;Không có ghi chú \${p.id}&#96;],
+    NOTE_NOT_FOUND: ['Note not found', (p) =&gt; &#96;There is no note \${p.id}&#96;],</code></pre>
 <pre><code class="language-bash">curl -s -D hdrn.txt http://localhost:4000/v2/labs/lab_2/notes \\
   -H "Authorization: Bearer $(cat lan.jwt)" \\
   --json '{"body":"Phòng IoT đóng cửa chiều thứ Sáu"}' | tee note.json | jq -c .</code></pre>
@@ -1006,10 +1068,11 @@ import pg from 'pg';
 import { HttpError, onlyAllow } from '../http.js';
 import { requireAuth, requireRole } from '../auth.js';
 import { validate } from '../validate.js';
+import { ddlOnce } from '../pg-ddl.js';                     // bài 8.4: tạo bảng dưới khoá advisory
 
 const primary = new pg.Pool({ connectionString: process.env.PGURL ?? 'postgres://labflow@localhost:55432/labflow', max: 5 });
 const replica = new pg.Pool({ connectionString: process.env.PG_REPLICA_URL ?? 'postgres://labflow@localhost:55433/labflow', max: 5 });
-await primary.query(&#96;CREATE TABLE IF NOT EXISTS lab_notes (id bigserial PRIMARY KEY, lab_id text NOT NULL,
+await ddlOnce(primary, &#96;CREATE TABLE IF NOT EXISTS lab_notes (id bigserial PRIMARY KEY, lab_id text NOT NULL,
   author text NOT NULL, body text NOT NULL, created_at timestamptz NOT NULL DEFAULT now())&#96;);
 const MODE = process.env.LABFLOW_READS ?? 'replica';
 const view = (r) =&gt; ({ id: &#96;note_\${r.id}&#96;, labId: r.lab_id, author: r.author, body: r.body, createdAt: r.created_at.toISOString() });
@@ -1059,6 +1122,9 @@ notesRouter.route('/:id')
     res.json(view(r));
   })
   .all(onlyAllow('GET'));</code></pre>
+<pre><code class="language-javascript">// messages.js — mã lỗi mới (vi rồi en)
+    NOTE_NOT_FOUND: ['Không tìm thấy ghi chú', (p) =&gt; &#96;Không có ghi chú \${p.id}&#96;],
+    NOTE_NOT_FOUND: ['Note not found', (p) =&gt; &#96;There is no note \${p.id}&#96;],</code></pre>
 <pre><code class="language-bash">curl -s -D hdrn.txt http://localhost:4000/v2/labs/lab_2/notes \\
   -H "Authorization: Bearer $(cat lan.jwt)" \\
   --json '{"body":"Phòng IoT đóng cửa chiều thứ Sáu"}' | tee note.json | jq -c .</code></pre>
@@ -1190,7 +1256,7 @@ INSERT INTO id_v7 (n) SELECT g FROM generate_series(1, 1000000) g;
 SELECT relname AS index, pg_size_pretty(pg_relation_size(oid)) AS size FROM pg_class WHERE relname IN ('id_seq_pkey', 'id_v4_pkey', 'id_v7_pkey') ORDER BY relname;
 SELECT id, uuid_extract_timestamp(id) AS created FROM id_v7 ORDER BY id LIMIT 2;
 SELECT id FROM id_v4 ORDER BY id LIMIT 2;</code></pre>
-<pre><code class="language-bash">psql -h localhost -p 55432 -U labflow -d labflow -f ids.sql 2&gt;&amp;1 | grep -vE "^$|NOTICE|^(DROP|CREATE) TABLE|Time: [0-9.]+ ms$|Timing is"</code></pre>
+<pre><code class="language-bash">psql -h localhost -p 55432 -U labflow -d labflow -f sql/ids.sql 2&gt;&amp;1 | grep -vE "^$|NOTICE|^(DROP|CREATE) TABLE|Time: [0-9.]+ ms$|Timing is"</code></pre>
 <div class="out">INSERT 0 1000000
 Time: 2822.625 ms (00:02.823)
 INSERT 0 1000000
@@ -1238,9 +1304,15 @@ CREATE TABLE shard0.bookings AS SELECT * FROM bookings WHERE abs(hashtext(lab_id
 CREATE TABLE shard1.bookings AS SELECT * FROM bookings WHERE abs(hashtext(lab_id)) % 2 = 1;
 CREATE INDEX ON shard0.bookings (created_at DESC, id DESC); CREATE INDEX ON shard1.bookings (created_at DESC, id DESC);
 CREATE INDEX ON shard0.bookings (lab_id, start_at); CREATE INDEX ON shard1.bookings (lab_id, start_at);
-CREATE INDEX ON shard0.bookings (user_id); CREATE INDEX ON shard1.bookings (user_id);
+CREATE INDEX ON shard0.bookings (user_id, start_at); CREATE INDEX ON shard1.bookings (user_id, start_at);
 ANALYZE shard0.bookings; ANALYZE shard1.bookings;
 SELECT 'shard0' AS shard, count(*), count(DISTINCT lab_id) AS labs FROM shard0.bookings UNION ALL SELECT 'shard1', count(*), count(DISTINCT lab_id) FROM shard1.bookings;</code></pre>
+<pre><code class="language-bash">psql -h localhost -p 55432 -U labflow -d labflow -f sql/shards.sql 2&gt;&amp;1 | grep -vE "^$|NOTICE|^(DROP|CREATE) (TABLE|SCHEMA|INDEX)|^SELECT [0-9]+$|^ANALYZE$"</code></pre>
+<div class="out"> shard  | count  | labs
+--------+--------+------
+ shard1 | 460000 |   23
+ shard0 | 540000 |   27
+(2 rows)</div>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">request</span><span class="lz-t">GET /v2/bookings…</span><span class="lz-d">does it name the shard key (labId)?</span></div>
   <div class="lz-step"><span class="lz-k">yes</span><span class="lz-t">route to ONE shard</span><span class="lz-d">cheap, scales with more shards</span></div>
@@ -1254,8 +1326,8 @@ offset ĐÚNG: mỗi mảnh LIMIT 20000, gộp, cắt   40000 dòng kéo về ·
   ⇒ khớp bảng gốc? ĐÚNG
 cursor: mỗi mảnh WHERE (…) &lt; cursor LIMIT 20     40 dòng kéo về ·    1.9 ms
   ⇒ khớp bảng gốc? ĐÚNG
-có khoá phân mảnh: lab lab_7 ⇒ chỉ shard1       252 dòng kéo về ·    0.6 ms
-không có khoá: user usr_4536 ⇒ hỏi MỌI mảnh     200 dòng kéo về ·    0.8 ms</div>
+có khoá phân mảnh: lab lab_7 ⇒ chỉ shard1       403 dòng kéo về ·    1.4 ms
+không có khoá: user usr_2, cùng tuần ⇒ hỏi MỌI mảnh  10080 dòng kéo về ·    6.1 ms</div>
 <ul>
   <li><strong>Offset, done naively</strong> — each shard <code>OFFSET 19980 LIMIT 20</code>, merge: fast, and <strong>wrong</strong>. The 19,980 newest rows overall are not 19,980 from each shard.</li>
   <li><strong>Offset, done correctly</strong> — each shard must return its first 20,000 rows, the server merges 40,000 to keep 20: 52 ms, and it grows with every page and every shard.</li>
@@ -1333,7 +1405,7 @@ INSERT INTO id_v7 (n) SELECT g FROM generate_series(1, 1000000) g;
 SELECT relname AS index, pg_size_pretty(pg_relation_size(oid)) AS size FROM pg_class WHERE relname IN ('id_seq_pkey', 'id_v4_pkey', 'id_v7_pkey') ORDER BY relname;
 SELECT id, uuid_extract_timestamp(id) AS created FROM id_v7 ORDER BY id LIMIT 2;
 SELECT id FROM id_v4 ORDER BY id LIMIT 2;</code></pre>
-<pre><code class="language-bash">psql -h localhost -p 55432 -U labflow -d labflow -f ids.sql 2&gt;&amp;1 | grep -vE "^$|NOTICE|^(DROP|CREATE) TABLE|Time: [0-9.]+ ms$|Timing is"</code></pre>
+<pre><code class="language-bash">psql -h localhost -p 55432 -U labflow -d labflow -f sql/ids.sql 2&gt;&amp;1 | grep -vE "^$|NOTICE|^(DROP|CREATE) TABLE|Time: [0-9.]+ ms$|Timing is"</code></pre>
 <div class="out">INSERT 0 1000000
 Time: 2822.625 ms (00:02.823)
 INSERT 0 1000000
@@ -1381,9 +1453,15 @@ CREATE TABLE shard0.bookings AS SELECT * FROM bookings WHERE abs(hashtext(lab_id
 CREATE TABLE shard1.bookings AS SELECT * FROM bookings WHERE abs(hashtext(lab_id)) % 2 = 1;
 CREATE INDEX ON shard0.bookings (created_at DESC, id DESC); CREATE INDEX ON shard1.bookings (created_at DESC, id DESC);
 CREATE INDEX ON shard0.bookings (lab_id, start_at); CREATE INDEX ON shard1.bookings (lab_id, start_at);
-CREATE INDEX ON shard0.bookings (user_id); CREATE INDEX ON shard1.bookings (user_id);
+CREATE INDEX ON shard0.bookings (user_id, start_at); CREATE INDEX ON shard1.bookings (user_id, start_at);
 ANALYZE shard0.bookings; ANALYZE shard1.bookings;
 SELECT 'shard0' AS shard, count(*), count(DISTINCT lab_id) AS labs FROM shard0.bookings UNION ALL SELECT 'shard1', count(*), count(DISTINCT lab_id) FROM shard1.bookings;</code></pre>
+<pre><code class="language-bash">psql -h localhost -p 55432 -U labflow -d labflow -f sql/shards.sql 2&gt;&amp;1 | grep -vE "^$|NOTICE|^(DROP|CREATE) (TABLE|SCHEMA|INDEX)|^SELECT [0-9]+$|^ANALYZE$"</code></pre>
+<div class="out"> shard  | count  | labs
+--------+--------+------
+ shard1 | 460000 |   23
+ shard0 | 540000 |   27
+(2 rows)</div>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">request</span><span class="lz-t">GET /v2/bookings…</span><span class="lz-d">có nêu khoá phân mảnh (labId) không?</span></div>
   <div class="lz-step"><span class="lz-k">có</span><span class="lz-t">đi tới MỘT mảnh</span><span class="lz-d">rẻ, càng nhiều mảnh càng mở rộng được</span></div>
@@ -1397,8 +1475,8 @@ offset ĐÚNG: mỗi mảnh LIMIT 20000, gộp, cắt   40000 dòng kéo về ·
   ⇒ khớp bảng gốc? ĐÚNG
 cursor: mỗi mảnh WHERE (…) &lt; cursor LIMIT 20     40 dòng kéo về ·    1.9 ms
   ⇒ khớp bảng gốc? ĐÚNG
-có khoá phân mảnh: lab lab_7 ⇒ chỉ shard1       252 dòng kéo về ·    0.6 ms
-không có khoá: user usr_4536 ⇒ hỏi MỌI mảnh     200 dòng kéo về ·    0.8 ms</div>
+có khoá phân mảnh: lab lab_7 ⇒ chỉ shard1       403 dòng kéo về ·    1.4 ms
+không có khoá: user usr_2, cùng tuần ⇒ hỏi MỌI mảnh  10080 dòng kéo về ·    6.1 ms</div>
 <ul>
   <li><strong>Offset làm ngây thơ</strong> — mỗi mảnh <code>OFFSET 19980 LIMIT 20</code>, rồi gộp: nhanh, và <strong>sai</strong>. 19.980 dòng mới nhất của cả bảng không phải là 19.980 dòng của mỗi mảnh.</li>
   <li><strong>Offset làm đúng</strong> — mỗi mảnh phải trả 20.000 dòng đầu, server gộp 40.000 dòng để giữ 20: 52 ms, và tăng theo mỗi trang, mỗi mảnh.</li>
@@ -1496,6 +1574,12 @@ CREATE INDEX labs_d_gin ON labs_d USING gin (doc jsonb_path_ops);
 ANALYZE labs_r; ANALYZE devices_r; ANALYZE issues_r; ANALYZE labs_d;
 SELECT pg_size_pretty(avg(pg_column_size(doc))::bigint) AS avg_doc, pg_size_pretty(pg_total_relation_size('labs_d')) AS doc_table,
   pg_size_pretty(pg_total_relation_size('labs_r') + pg_total_relation_size('devices_r') + pg_total_relation_size('issues_r')) AS relational FROM labs_d;</code></pre>
+<p>The script is <code>sql/docs.sql</code> in the chapter download:</p>
+<pre><code class="language-bash">psql -h localhost -p 55432 -U labflow -d labflow -f sql/docs.sql 2&gt;&amp;1 | grep -vE "^$|NOTICE|^(DROP|CREATE) (TABLE|INDEX)|^INSERT 0 [0-9]+$|^ANALYZE$"</code></pre>
+<div class="out">  avg_doc   | doc_table | relational
+------------+-----------+------------
+ 1512 bytes | 21 MB     | 17 MB
+(1 row)</div>
 <p>Then <code>perf/doc-vs-rel.mjs</code> sends the questions LabFlow’s endpoints would ask, hundreds of times each, and prints the median:</p>
 <pre><code class="language-bash">node perf/doc-vs-rel.mjs</code></pre>
 <div class="out">chi tiết 1 phòng · quan hệ: JOIN + json_agg                median   0.236 ms
@@ -1615,6 +1699,12 @@ CREATE INDEX labs_d_gin ON labs_d USING gin (doc jsonb_path_ops);
 ANALYZE labs_r; ANALYZE devices_r; ANALYZE issues_r; ANALYZE labs_d;
 SELECT pg_size_pretty(avg(pg_column_size(doc))::bigint) AS avg_doc, pg_size_pretty(pg_total_relation_size('labs_d')) AS doc_table,
   pg_size_pretty(pg_total_relation_size('labs_r') + pg_total_relation_size('devices_r') + pg_total_relation_size('issues_r')) AS relational FROM labs_d;</code></pre>
+<p>Tệp này là <code>sql/docs.sql</code> trong gói tải về của chương:</p>
+<pre><code class="language-bash">psql -h localhost -p 55432 -U labflow -d labflow -f sql/docs.sql 2&gt;&amp;1 | grep -vE "^$|NOTICE|^(DROP|CREATE) (TABLE|INDEX)|^INSERT 0 [0-9]+$|^ANALYZE$"</code></pre>
+<div class="out">  avg_doc   | doc_table | relational
+------------+-----------+------------
+ 1512 bytes | 21 MB     | 17 MB
+(1 row)</div>
 <p>Rồi <code>perf/doc-vs-rel.mjs</code> gửi các câu hỏi mà endpoint của LabFlow sẽ hỏi, mỗi câu hàng trăm lần, và in trung vị:</p>
 <pre><code class="language-bash">node perf/doc-vs-rel.mjs</code></pre>
 <div class="out">chi tiết 1 phòng · quan hệ: JOIN + json_agg                median   0.236 ms
@@ -1719,6 +1809,11 @@ một tài liệu phòng lab: 10247 byte JSON, lưu 1685 byte sau nén — sửa
 <p class="lead">Lab notes (9.3) are popular: lab_1 now has 200,000 of them, the app polls the feed every few seconds, and the team plans to shard by lab next year. The feed works but uses page numbers, exposes counter IDs (<code>note_200003</code>), and makes the server rebuild every page for clients whose copy is still current. Your job: change the <em>contract</em> so the feed is cheap to revalidate, consistent after writes, and safe to shard — measuring each step.</p>
 
 <h3>Starting point</h3>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/API/v1/labflow-api-ch9-dau.zip" target="_blank" rel="noopener">
+  <span class="lc-ico">📦</span>
+  <span class="lc-body"><span class="lc-title">Starting point: LabFlow API at the start of Chapter 9 (zip)</span><span class="lc-sub"><code>src/routes/notes.js</code> is already the starter (same as <code>lab/notes-starter.js</code>: page numbers, <code>note_N</code> IDs); <code>openapi.yaml</code> has no notes paths yet — tasks 2–6 are yours. <code>npm ci</code>, <code>npm test</code> 10/10.</span></span>
+  <span class="lc-cta">DOWNLOAD →</span>
+</a>
 <p>Chapter code (download below), the primary on 55432 with the replica on 55433 (9.3), and the starter list handler: <code>cp lab/notes-starter.js src/routes/notes.js</code>. Start with <code>LABFLOW_PG=1 LABFLOW_READS=token npm start</code>. Seed the notes once:</p>
 <pre><code class="language-sql">INSERT INTO lab_notes (lab_id, author, body, created_at)
 SELECT 'lab_1', 'Cô Lan', 'Ghi chú số ' || g, now() - (200000 - g) * interval '1 minute' FROM generate_series(1, 200000) g;
@@ -1765,9 +1860,9 @@ Server-Timing: db;dur=10.37, total;dur=11.16</div>
 <p>Page 5000 costs 10 ms against 7 ms for page 1: the index on <code>(lab_id, id DESC)</code> keeps OFFSET tolerable at this size — Chapter 3 showed 35 ms at OFFSET 900,000 on the full table. The IDs announce “there are about 200,000 notes”.</p>
 <pre><code class="language-javascript">// routes/notes.js — Lab 9, lời giải (trích): migration + GET danh sách
 // Lab 9 — id công khai: uuidv7 (không lộ số lượng, không đoán được, vẫn xếp theo thời gian) + chỉ mục cho trang theo phòng
-await primary.query(&#96;ALTER TABLE lab_notes ADD COLUMN IF NOT EXISTS public_id uuid NOT NULL DEFAULT uuidv7()&#96;);
-await primary.query(&#96;CREATE UNIQUE INDEX IF NOT EXISTS lab_notes_public ON lab_notes (public_id)&#96;);
-await primary.query(&#96;CREATE INDEX IF NOT EXISTS lab_notes_lab_public ON lab_notes (lab_id, public_id DESC)&#96;);
+await ddlOnce(primary, &#96;ALTER TABLE lab_notes ADD COLUMN IF NOT EXISTS public_id uuid NOT NULL DEFAULT uuidv7()&#96;);
+await ddlOnce(primary, &#96;CREATE UNIQUE INDEX IF NOT EXISTS lab_notes_public ON lab_notes (public_id)&#96;);
+await ddlOnce(primary, &#96;CREATE INDEX IF NOT EXISTS lab_notes_lab_public ON lab_notes (lab_id, public_id DESC)&#96;);
 
 labNotesRouter.route('/')
   .get(async (req, res) =&gt; {
@@ -1818,9 +1913,9 @@ Server-Timing: etag;dur=0.52, total;dur=0.86</div>
 <p><strong>Why Vary: LabFlow-Consistency?</strong> A shared cache may serve the 5-second-old public feed to anyone — except to a client that just posted and sent a token; with Vary, that request is a different cache entry and reaches LabFlow.</p>
 <p><strong>Discuss — a finding of the reference run.</strong> The first note’s UUIDv7 says it was created at 07:19:38 on 1 Nov — the moment of the <code>ALTER TABLE</code>, not when the note was written (its <code>created_at</code> is up to 200,000 minutes earlier). Backfilled UUIDv7 values carry the migration time. Does LabFlow care? If yes, backfill with <code>uuidv7(created_at - now())</code>.</p>
 
-<a class="link-card" href="https://media.cuongthai.com/files/academy/API/v1/labflow-api-ch9.zip" target="_blank" rel="noopener">
+<a class="link-card" href="https://media.cuongthai.com/files/academy/API/v1/labflow-api-ch9-b.zip" target="_blank" rel="noopener">
   <span class="lc-ico">📦</span>
-  <span class="lc-body"><span class="lc-title">Download: LabFlow API at the end of Chapter 9 (labflow-api-ch9.zip)</span><span class="lc-sub">Chapter code = this lab’s solution: httpCache.js, serverCache.js (Redis), stats and notes routes (LABFLOW_PG=1), perf/ scripts (cache-proxy, stampede, shards, doc-vs-rel), SQL files (ids, shards, docs) and lab/notes-starter.js. npm install, npm test.</span></span>
+  <span class="lc-body"><span class="lc-title">Download: LabFlow API at the end of Chapter 9 (labflow-api-ch9-b.zip)</span><span class="lc-sub">Chapter code = this lab’s solution: httpCache.js, serverCache.js (Redis), stats and notes routes (LABFLOW_PG=1), perf/ scripts (cache-proxy, stampede, shards, doc-vs-rel), SQL files (ids, shards, docs) and lab/notes-starter.js. npm install, npm test.</span></span>
   <span class="lc-cta">DOWNLOAD →</span>
 </a>
 
@@ -1839,6 +1934,11 @@ Server-Timing: etag;dur=0.52, total;dur=0.86</div>
 <p class="lead">Ghi chú phòng lab (9.3) được dùng nhiều: lab_1 giờ có 200.000 ghi chú, app hỏi lại luồng ghi chú vài giây một lần, và năm sau nhóm định chia mảnh theo phòng. Luồng ghi chú chạy được nhưng dùng số trang, lộ id bộ đếm (<code>note_200003</code>), và bắt server dựng lại mọi trang cho cả những client mà bản của họ vẫn còn đúng. Việc của bạn: đổi <em>hợp đồng</em> để luồng ghi chú kiểm lại được với giá rẻ, nhất quán sau khi ghi, và an toàn khi phân mảnh — đo từng bước.</p>
 
 <h3>Điểm xuất phát</h3>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/API/v1/labflow-api-ch9-dau.zip" target="_blank" rel="noopener">
+  <span class="lc-ico">📦</span>
+  <span class="lc-body"><span class="lc-title">Điểm xuất phát: LabFlow API đầu Chương 9 (zip)</span><span class="lc-sub"><code>src/routes/notes.js</code> đã là bản khởi đầu (giống <code>lab/notes-starter.js</code>: số trang, id <code>note_N</code>); <code>openapi.yaml</code> chưa có path ghi chú — nhiệm vụ 2–6 là của bạn. <code>npm ci</code>, <code>npm test</code> 10/10.</span></span>
+  <span class="lc-cta">TẢI VỀ →</span>
+</a>
 <p>Code của chương (tải ở cuối bài), primary ở 55432 với replica ở 55433 (9.3), và handler danh sách khởi đầu: <code>cp lab/notes-starter.js src/routes/notes.js</code>. Khởi động bằng <code>LABFLOW_PG=1 LABFLOW_READS=token npm start</code>. Nạp ghi chú một lần:</p>
 <pre><code class="language-sql">INSERT INTO lab_notes (lab_id, author, body, created_at)
 SELECT 'lab_1', 'Cô Lan', 'Ghi chú số ' || g, now() - (200000 - g) * interval '1 minute' FROM generate_series(1, 200000) g;
@@ -1885,9 +1985,9 @@ Server-Timing: db;dur=10.37, total;dur=11.16</div>
 <p>Trang 5000 tốn 10 ms so với 7 ms của trang 1: chỉ mục <code>(lab_id, id DESC)</code> giữ cho OFFSET còn chịu được ở cỡ này — Chương 3 đã thấy 35 ms ở OFFSET 900.000 trên cả bảng. Các id thông báo “có khoảng 200.000 ghi chú”.</p>
 <pre><code class="language-javascript">// routes/notes.js — Lab 9, lời giải (trích): migration + GET danh sách
 // Lab 9 — id công khai: uuidv7 (không lộ số lượng, không đoán được, vẫn xếp theo thời gian) + chỉ mục cho trang theo phòng
-await primary.query(&#96;ALTER TABLE lab_notes ADD COLUMN IF NOT EXISTS public_id uuid NOT NULL DEFAULT uuidv7()&#96;);
-await primary.query(&#96;CREATE UNIQUE INDEX IF NOT EXISTS lab_notes_public ON lab_notes (public_id)&#96;);
-await primary.query(&#96;CREATE INDEX IF NOT EXISTS lab_notes_lab_public ON lab_notes (lab_id, public_id DESC)&#96;);
+await ddlOnce(primary, &#96;ALTER TABLE lab_notes ADD COLUMN IF NOT EXISTS public_id uuid NOT NULL DEFAULT uuidv7()&#96;);
+await ddlOnce(primary, &#96;CREATE UNIQUE INDEX IF NOT EXISTS lab_notes_public ON lab_notes (public_id)&#96;);
+await ddlOnce(primary, &#96;CREATE INDEX IF NOT EXISTS lab_notes_lab_public ON lab_notes (lab_id, public_id DESC)&#96;);
 
 labNotesRouter.route('/')
   .get(async (req, res) =&gt; {
@@ -1938,9 +2038,9 @@ Server-Timing: etag;dur=0.52, total;dur=0.86</div>
 <p><strong>Vì sao Vary: LabFlow-Consistency?</strong> Cache dùng chung được phép đưa luồng ghi chú công khai cũ 5 giây cho bất kỳ ai — trừ client vừa đăng bài và gửi token; có Vary, request đó là một mục cache khác và đi tới LabFlow.</p>
 <p><strong>Thảo luận — một phát hiện của lần chạy tham khảo.</strong> UUIDv7 của ghi chú đầu tiên nói nó được tạo lúc 07:19:38 ngày 1/11 — đúng lúc chạy <code>ALTER TABLE</code>, không phải lúc ghi chú được viết (<code>created_at</code> của nó sớm hơn tới 200.000 phút). UUIDv7 điền bù mang thời điểm migration. LabFlow có quan tâm không? Nếu có, điền bằng <code>uuidv7(created_at - now())</code>.</p>
 
-<a class="link-card" href="https://media.cuongthai.com/files/academy/API/v1/labflow-api-ch9.zip" target="_blank" rel="noopener">
+<a class="link-card" href="https://media.cuongthai.com/files/academy/API/v1/labflow-api-ch9-b.zip" target="_blank" rel="noopener">
   <span class="lc-ico">📦</span>
-  <span class="lc-body"><span class="lc-title">Tải về: LabFlow API cuối Chương 9 (labflow-api-ch9.zip)</span><span class="lc-sub">Code của chương = lời giải lab này: httpCache.js, serverCache.js (Redis), route stats và notes (LABFLOW_PG=1), các script perf/ (cache-proxy, stampede, shards, doc-vs-rel), tệp SQL (ids, shards, docs) và lab/notes-starter.js. npm install, npm test.</span></span>
+  <span class="lc-body"><span class="lc-title">Tải về: LabFlow API cuối Chương 9 (labflow-api-ch9-b.zip)</span><span class="lc-sub">Code của chương = lời giải lab này: httpCache.js, serverCache.js (Redis), route stats và notes (LABFLOW_PG=1), các script perf/ (cache-proxy, stampede, shards, doc-vs-rel), tệp SQL (ids, shards, docs) và lab/notes-starter.js. npm install, npm test.</span></span>
   <span class="lc-cta">TẢI VỀ →</span>
 </a>
 

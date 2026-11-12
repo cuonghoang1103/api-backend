@@ -46,6 +46,51 @@ export default {
 </ul>
 <p><strong>Why it is worth learning:</strong> every real backend has work that does not fit in a request — exports, emails, payments, AI calls. The way you expose that work (a job, an event, a stream, a webhook) is part of your API contract, and the bugs it causes — lost jobs, duplicate emails, stuck spinners — are the ones users notice first.</p>
 </div>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/API/v1/labflow-api-ch10-dau.zip" target="_blank" rel="noopener">
+  <span class="lc-ico">📦</span>
+  <span class="lc-body"><span class="lc-title">Download: LabFlow API at the start of Chapter 10 (zip, without node_modules)</span><span class="lc-sub">Before Lab 10. Every new module of the chapter is inside (jobs.js, worker.js, tasks.js, events.js, webhooks.js, routes, <code>perf/</code>, <code>events/</code>, <code>webhooks/</code>, <code>asyncapi/</code>). <code>npm ci</code>, <code>npm start</code>; Chapter 9–10 routes need PostgreSQL 18 and Redis 8.2. Demo passwords: an-lab-2026, binh-lab-2026, lan-lab-2026 (learning only).</span></span>
+  <span class="lc-cta">DOWNLOAD →</span>
+</a>
+<p>Continuing from your own Chapter 9 code instead? These are the glue lines; the new modules themselves come from the package above.</p>
+<pre><code class="language-javascript">// app.js — gắn route Chương 10 (đặt /reports/usage/exports TRƯỚC /reports)
+import { exportsRouter } from './routes/exports.js';
+import { jobsRouter } from './routes/jobs.js';
+import { realtimeRouter } from './routes/realtime.js';
+import { reportExportsRouter } from './routes/reportExports.js';
+const pgRoutes = process.env.LABFLOW_PG
+  ? { ...(await import('./routes/notes.js')), ...(await import('./routes/stats.js')), ...(await import('./routes/webhooks.js')) } : null;
+api.use('/reports/usage/exports', reportExportsRouter);        // Lab 10 — đặt TRƯỚC /reports
+if (pgRoutes) api.use('/webhooks', pgRoutes.webhooksRouter);    // bài 10.5
+api.use('/exports', exportsRouter);                            // bài 10.1: đồng bộ (chờ) và bất đồng bộ (202)
+api.use('/jobs', jobsRouter);                                  // bài 10.1: tài nguyên công việc
+api.use(realtimeRouter);                                       // bài 10.4: /events, /events/stream, /realtime/tickets
+
+// rateLimit.js — kịch bản đo tạo hàng trăm lượt đặt ⇒ LABFLOW_BOOKING_LIMIT=1000000/60 (CHỈ để đo, như LABFLOW_IP_LIMIT)
+const [bq, bw] = (process.env.LABFLOW_BOOKING_LIMIT ?? '5/60').split('/').map(Number);
+export const bookingLimit = rateLimit({ name: 'booking', capacity: bq, windowSec: bw, key: (req) =&gt; req.user.id });
+
+// routes/bookings.js — mỗi thay đổi của lượt đặt thành MỘT sự kiện (10.3–10.6); version tăng mỗi lần đổi
+import { publish } from '../events.js';
+const bookingEvent = (b) =&gt; ({ id: b.id, labId: b.labId, period: { start: b.startAt, end: b.endAt }, status: b.status, version: b.version ?? 1 });
+const emit = (type, b) =&gt; publish(&#96;labflow.booking.\${type}.v1&#96;, b.id, bookingEvent(b)).catch((e) =&gt; console.error('publish', e.message));
+//   tạo: bookings.push(booking); bump('bookings'); emit('created', booking);
+//   check-in / huỷ: b.status = …; b.version = (b.version ?? 1) + 1; bump('bookings'); emit('checked_in' | 'cancelled', b);
+
+// messages.js — mã lỗi mới (vi rồi en)
+    JOB_NOT_FOUND: ['Không tìm thấy việc', (p) =&gt; &#96;Không có việc \${p.id} (hoặc bản ghi đã quá hạn giữ)&#96;],
+    JOB_FINISHED: ['Việc đã kết thúc', (p) =&gt; &#96;Việc \${p.id} đã \${p.status}, không huỷ được nữa&#96;],
+    JOB_NOT_FINISHED: ['Việc chưa xong', (p) =&gt; &#96;Việc \${p.id} đang \${p.status}; hỏi lại GET /jobs/\${p.id} sau Retry-After giây&#96;],
+    RESULT_EXPIRED: ['Kết quả đã hết hạn', (p) =&gt; &#96;Kết quả của việc \${p.id} chỉ giữ \${p.ttl} giây sau khi xong; hãy tạo việc mới&#96;],
+    EVENTS_EXPIRED: ['Đã quá xa để lấy bù sự kiện', (p) =&gt; &#96;Sự kiện sau \${p.after} không còn giữ; hãy tải lại trạng thái rồi nghe tiếp từ \${p.latest}&#96;],
+    TICKET_INVALID: ['Vé kết nối không hợp lệ', () =&gt; 'Vé không đúng, đã dùng hoặc đã quá 30 giây; xin vé mới bằng POST /realtime/tickets'],
+    WEBHOOK_NOT_FOUND: ['Không tìm thấy webhook', (p) =&gt; &#96;Không có đăng ký webhook \${p.id}&#96;],
+    JOB_NOT_FOUND: ['Job not found', (p) =&gt; &#96;There is no job \${p.id} (or its record has expired)&#96;],
+    JOB_FINISHED: ['Job already finished', (p) =&gt; &#96;Job \${p.id} is \${p.status} and can no longer be cancelled&#96;],
+    JOB_NOT_FINISHED: ['Job not finished', (p) =&gt; &#96;Job \${p.id} is \${p.status}; poll GET /jobs/\${p.id} after Retry-After seconds&#96;],
+    RESULT_EXPIRED: ['Result expired', (p) =&gt; &#96;The result of job \${p.id} is kept for \${p.ttl} seconds after it finishes; start a new job&#96;],
+    EVENTS_EXPIRED: ['Too far behind to catch up', (p) =&gt; &#96;Events after \${p.after} are no longer kept; reload the state, then listen from \${p.latest}&#96;],
+    TICKET_INVALID: ['Invalid connection ticket', () =&gt; 'The ticket is wrong, already used or older than 30 seconds; get a new one with POST /realtime/tickets'],
+    WEBHOOK_NOT_FOUND: ['Webhook not found', (p) =&gt; &#96;There is no webhook subscription \${p.id}&#96;],</code></pre>
 
 <h3>A button that takes two minutes</h3>
 <p>Cô Lan wants a CSV of every booking on campus this semester, with attendance, for the faculty report. The data is the Chapter 3 table in PostgreSQL (1,000,000 rows). The slow part is not SQL: for every 500 rows LabFlow must ask the campus attendance service, which answers in about 250 ms (simulated with <code>EXPORT_BATCH_MS</code> so you can reproduce it). The first version simply waits:</p>
@@ -190,6 +235,11 @@ Keep-Alive: timeout=5
 
 <h3>Cancel, retention and a second click</h3>
 <p>Three contract questions every async API must answer in writing, measured:</p>
+<pre><code class="language-bash"># terminal 1: Ctrl+C, rồi  RESULT_TTL_SEC=20 npm start   (việc trong RAM về số 0)
+curl -s -o /dev/null -w '%{http_code} %header{location}\\n' -X POST http://localhost:4000/v2/exports \\
+  -H 'Authorization: Bearer tok_lan' \\
+  --json '{"labId":"lab_1","from":"2026-11-01","to":"2027-03-01"}'</code></pre>
+<div class="out">202 /v2/jobs/job_1</div>
 <pre><code class="language-bash">curl -s -o /dev/null -w '%{http_code} %header{location}\\n' -X POST http://localhost:4000/v2/exports \\
   -H 'Authorization: Bearer tok_lan' \\
   --json '{"from":"2026-11-01","to":"2027-03-01"}'</code></pre>
@@ -201,7 +251,7 @@ Keep-Alive: timeout=5
 <pre><code class="language-bash">curl -s -X POST http://localhost:4000/v2/jobs/job_2/cancel \\
   -H 'Authorization: Bearer tok_lan' | jq -c '{status, code, detail}'</code></pre>
 <div class="out">{"status":409,"code":"JOB_FINISHED","detail":"Việc job_2 đã cancelled, không huỷ được nữa"}</div>
-<p>Cancel is a request, so it is <code>202</code> with <code>cancelRequested: true</code>; the worker stops at the next batch (here 261 ms later, at 6,000 of 213,749 rows), and a second cancel is <code>409 JOB_FINISHED</code>. Results are not kept forever — an 11.7 MB CSV per click would fill Redis — so the job says <code>expiresAt</code> and the result becomes <code>410 Gone</code> afterwards (20 s here so you can watch it; LabFlow keeps results 1 hour and job records 7 days):</p>
+<p>Cancel is a request, so it is <code>202</code> with <code>cancelRequested: true</code>; the worker stops at the next batch (here 261 ms later, at 6,000 of 213,749 rows), and a second cancel is <code>409 JOB_FINISHED</code>. Results are not kept forever — an 11.7 MB CSV per click would fill Redis — so the job says <code>expiresAt</code> and the result becomes <code>410 Gone</code> afterwards (20 s here — this LabFlow was restarted with <code>RESULT_TTL_SEC=20</code> — so you can watch it; LabFlow keeps results 1 hour and job records 7 days):</p>
 <pre><code class="language-bash">curl -s http://localhost:4000/v2/jobs/job_1 \\
   -H 'Authorization: Bearer tok_lan' | jq -c '{status, result}'</code></pre>
 <div class="out">{"status":"succeeded","result":{"href":"/v2/jobs/job_1/result","contentType":"text/csv; charset=utf-8","bytes":230490,"expiresAt":"2026-11-01T01:05:39.249Z"}}</div>
@@ -218,6 +268,7 @@ Keep-Alive: timeout=5
   "code": "RESULT_EXPIRED"
 }</div>
 <p>And the double click? The <code>Idempotency-Key</code> from Chapter 5 works unchanged on a <code>202</code>: same key, same body ⇒ the same job, not a second two-minute export.</p>
+<pre><code class="language-bash"># terminal 1: Ctrl+C, rồi  npm start   (việc trong RAM về số 0 — việc đầu tiên lại là job_1)</code></pre>
 <pre><code class="language-bash">for i in 1 2; do curl -s -D - -o /dev/null -X POST http://localhost:4000/v2/exports -H 'Authorization: Bearer tok_lan' -H 'Idempotency-Key: exp-2026-11-lab3' --json '{"labId":"lab_3","from":"2026-11-01","to":"2027-03-01"}' | grep -iE '^(HTTP|location|idempotent)' | tr -d '\\r'; done</code></pre>
 <div class="out">HTTP/1.1 202 Accepted
 Location: /v2/jobs/job_1
@@ -282,6 +333,51 @@ Location: /v2/jobs/job_1</div>
 </ul>
 <p><strong>Vì sao đáng học:</strong> backend thật nào cũng có việc không vừa một request — xuất file, gửi email, thanh toán, gọi AI. Cách bạn mở việc đó ra ngoài (một job, một sự kiện, một luồng, một webhook) là một phần hợp đồng API, và lỗi nó gây ra — việc mất, email gửi hai lần, vòng xoay mãi không dừng — là những lỗi người dùng thấy đầu tiên.</p>
 </div>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/API/v1/labflow-api-ch10-dau.zip" target="_blank" rel="noopener">
+  <span class="lc-ico">📦</span>
+  <span class="lc-body"><span class="lc-title">Tải về: LabFlow API đầu Chương 10 (zip, không kèm node_modules)</span><span class="lc-sub">Trước Lab 10. Có đủ mọi module mới của chương (jobs.js, worker.js, tasks.js, events.js, webhooks.js, các route, <code>perf/</code>, <code>events/</code>, <code>webhooks/</code>, <code>asyncapi/</code>). <code>npm ci</code>, <code>npm start</code>; route Chương 9–10 cần PostgreSQL 18 và Redis 8.2. Mật khẩu demo: an-lab-2026, binh-lab-2026, lan-lab-2026 (chỉ để học).</span></span>
+  <span class="lc-cta">TẢI VỀ →</span>
+</a>
+<p>Đi tiếp từ mã Chương 9 của bạn? Đây là phần nối ghép; bản thân các module mới lấy từ gói ở trên.</p>
+<pre><code class="language-javascript">// app.js — gắn route Chương 10 (đặt /reports/usage/exports TRƯỚC /reports)
+import { exportsRouter } from './routes/exports.js';
+import { jobsRouter } from './routes/jobs.js';
+import { realtimeRouter } from './routes/realtime.js';
+import { reportExportsRouter } from './routes/reportExports.js';
+const pgRoutes = process.env.LABFLOW_PG
+  ? { ...(await import('./routes/notes.js')), ...(await import('./routes/stats.js')), ...(await import('./routes/webhooks.js')) } : null;
+api.use('/reports/usage/exports', reportExportsRouter);        // Lab 10 — đặt TRƯỚC /reports
+if (pgRoutes) api.use('/webhooks', pgRoutes.webhooksRouter);    // bài 10.5
+api.use('/exports', exportsRouter);                            // bài 10.1: đồng bộ (chờ) và bất đồng bộ (202)
+api.use('/jobs', jobsRouter);                                  // bài 10.1: tài nguyên công việc
+api.use(realtimeRouter);                                       // bài 10.4: /events, /events/stream, /realtime/tickets
+
+// rateLimit.js — kịch bản đo tạo hàng trăm lượt đặt ⇒ LABFLOW_BOOKING_LIMIT=1000000/60 (CHỈ để đo, như LABFLOW_IP_LIMIT)
+const [bq, bw] = (process.env.LABFLOW_BOOKING_LIMIT ?? '5/60').split('/').map(Number);
+export const bookingLimit = rateLimit({ name: 'booking', capacity: bq, windowSec: bw, key: (req) =&gt; req.user.id });
+
+// routes/bookings.js — mỗi thay đổi của lượt đặt thành MỘT sự kiện (10.3–10.6); version tăng mỗi lần đổi
+import { publish } from '../events.js';
+const bookingEvent = (b) =&gt; ({ id: b.id, labId: b.labId, period: { start: b.startAt, end: b.endAt }, status: b.status, version: b.version ?? 1 });
+const emit = (type, b) =&gt; publish(&#96;labflow.booking.\${type}.v1&#96;, b.id, bookingEvent(b)).catch((e) =&gt; console.error('publish', e.message));
+//   tạo: bookings.push(booking); bump('bookings'); emit('created', booking);
+//   check-in / huỷ: b.status = …; b.version = (b.version ?? 1) + 1; bump('bookings'); emit('checked_in' | 'cancelled', b);
+
+// messages.js — mã lỗi mới (vi rồi en)
+    JOB_NOT_FOUND: ['Không tìm thấy việc', (p) =&gt; &#96;Không có việc \${p.id} (hoặc bản ghi đã quá hạn giữ)&#96;],
+    JOB_FINISHED: ['Việc đã kết thúc', (p) =&gt; &#96;Việc \${p.id} đã \${p.status}, không huỷ được nữa&#96;],
+    JOB_NOT_FINISHED: ['Việc chưa xong', (p) =&gt; &#96;Việc \${p.id} đang \${p.status}; hỏi lại GET /jobs/\${p.id} sau Retry-After giây&#96;],
+    RESULT_EXPIRED: ['Kết quả đã hết hạn', (p) =&gt; &#96;Kết quả của việc \${p.id} chỉ giữ \${p.ttl} giây sau khi xong; hãy tạo việc mới&#96;],
+    EVENTS_EXPIRED: ['Đã quá xa để lấy bù sự kiện', (p) =&gt; &#96;Sự kiện sau \${p.after} không còn giữ; hãy tải lại trạng thái rồi nghe tiếp từ \${p.latest}&#96;],
+    TICKET_INVALID: ['Vé kết nối không hợp lệ', () =&gt; 'Vé không đúng, đã dùng hoặc đã quá 30 giây; xin vé mới bằng POST /realtime/tickets'],
+    WEBHOOK_NOT_FOUND: ['Không tìm thấy webhook', (p) =&gt; &#96;Không có đăng ký webhook \${p.id}&#96;],
+    JOB_NOT_FOUND: ['Job not found', (p) =&gt; &#96;There is no job \${p.id} (or its record has expired)&#96;],
+    JOB_FINISHED: ['Job already finished', (p) =&gt; &#96;Job \${p.id} is \${p.status} and can no longer be cancelled&#96;],
+    JOB_NOT_FINISHED: ['Job not finished', (p) =&gt; &#96;Job \${p.id} is \${p.status}; poll GET /jobs/\${p.id} after Retry-After seconds&#96;],
+    RESULT_EXPIRED: ['Result expired', (p) =&gt; &#96;The result of job \${p.id} is kept for \${p.ttl} seconds after it finishes; start a new job&#96;],
+    EVENTS_EXPIRED: ['Too far behind to catch up', (p) =&gt; &#96;Events after \${p.after} are no longer kept; reload the state, then listen from \${p.latest}&#96;],
+    TICKET_INVALID: ['Invalid connection ticket', () =&gt; 'The ticket is wrong, already used or older than 30 seconds; get a new one with POST /realtime/tickets'],
+    WEBHOOK_NOT_FOUND: ['Webhook not found', (p) =&gt; &#96;There is no webhook subscription \${p.id}&#96;],</code></pre>
 
 <h3>Một nút bấm mất hai phút</h3>
 <p>Cô Lan cần file CSV mọi lượt đặt của cả trường trong học kỳ, kèm điểm danh, để nộp báo cáo khoa. Dữ liệu là bảng 1.000.000 dòng của Chương 3 trong PostgreSQL. Phần chậm không nằm ở SQL: cứ 500 dòng, LabFlow phải hỏi dịch vụ điểm danh của trường một lần, mất khoảng 250 ms (giả lập bằng <code>EXPORT_BATCH_MS</code> để bạn chạy lại được). Bản đầu tiên cứ thế ngồi chờ:</p>
@@ -426,6 +522,11 @@ Keep-Alive: timeout=5
 
 <h3>Huỷ, thời hạn giữ và cú bấm thứ hai</h3>
 <p>Ba câu hỏi hợp đồng mà API bất đồng bộ nào cũng phải trả lời bằng văn bản, đo thật:</p>
+<pre><code class="language-bash"># terminal 1: Ctrl+C, rồi  RESULT_TTL_SEC=20 npm start   (việc trong RAM về số 0)
+curl -s -o /dev/null -w '%{http_code} %header{location}\\n' -X POST http://localhost:4000/v2/exports \\
+  -H 'Authorization: Bearer tok_lan' \\
+  --json '{"labId":"lab_1","from":"2026-11-01","to":"2027-03-01"}'</code></pre>
+<div class="out">202 /v2/jobs/job_1</div>
 <pre><code class="language-bash">curl -s -o /dev/null -w '%{http_code} %header{location}\\n' -X POST http://localhost:4000/v2/exports \\
   -H 'Authorization: Bearer tok_lan' \\
   --json '{"from":"2026-11-01","to":"2027-03-01"}'</code></pre>
@@ -437,7 +538,7 @@ Keep-Alive: timeout=5
 <pre><code class="language-bash">curl -s -X POST http://localhost:4000/v2/jobs/job_2/cancel \\
   -H 'Authorization: Bearer tok_lan' | jq -c '{status, code, detail}'</code></pre>
 <div class="out">{"status":409,"code":"JOB_FINISHED","detail":"Việc job_2 đã cancelled, không huỷ được nữa"}</div>
-<p>Huỷ là một <em>yêu cầu</em>, nên trả <code>202</code> kèm <code>cancelRequested: true</code>; worker dừng ở lô kế tiếp (ở đây sau 261 ms, tại dòng 6.000 trên 213.749), và huỷ lần hai là <code>409 JOB_FINISHED</code>. Kết quả không giữ mãi — mỗi cú bấm một CSV 11,7 MB thì Redis đầy — nên việc ghi rõ <code>expiresAt</code>, sau đó kết quả thành <code>410 Gone</code> (ở đây 20 giây để bạn kịp thấy; LabFlow giữ kết quả 1 giờ, bản ghi việc 7 ngày):</p>
+<p>Huỷ là một <em>yêu cầu</em>, nên trả <code>202</code> kèm <code>cancelRequested: true</code>; worker dừng ở lô kế tiếp (ở đây sau 261 ms, tại dòng 6.000 trên 213.749), và huỷ lần hai là <code>409 JOB_FINISHED</code>. Kết quả không giữ mãi — mỗi cú bấm một CSV 11,7 MB thì Redis đầy — nên việc ghi rõ <code>expiresAt</code>, sau đó kết quả thành <code>410 Gone</code> (ở đây 20 giây — LabFlow này được khởi động lại với <code>RESULT_TTL_SEC=20</code> — để bạn kịp thấy; LabFlow giữ kết quả 1 giờ, bản ghi việc 7 ngày):</p>
 <pre><code class="language-bash">curl -s http://localhost:4000/v2/jobs/job_1 \\
   -H 'Authorization: Bearer tok_lan' | jq -c '{status, result}'</code></pre>
 <div class="out">{"status":"succeeded","result":{"href":"/v2/jobs/job_1/result","contentType":"text/csv; charset=utf-8","bytes":230490,"expiresAt":"2026-11-01T01:05:39.249Z"}}</div>
@@ -454,6 +555,7 @@ Keep-Alive: timeout=5
   "code": "RESULT_EXPIRED"
 }</div>
 <p>Còn cú bấm thứ hai? <code>Idempotency-Key</code> của Chương 5 chạy nguyên vẹn với <code>202</code>: cùng khoá, cùng body ⇒ cùng một việc, không phải thêm một lần xuất hai phút.</p>
+<pre><code class="language-bash"># terminal 1: Ctrl+C, rồi  npm start   (việc trong RAM về số 0 — việc đầu tiên lại là job_1)</code></pre>
 <pre><code class="language-bash">for i in 1 2; do curl -s -D - -o /dev/null -X POST http://localhost:4000/v2/exports -H 'Authorization: Bearer tok_lan' -H 'Idempotency-Key: exp-2026-11-lab3' --json '{"labId":"lab_3","from":"2026-11-01","to":"2027-03-01"}' | grep -iE '^(HTTP|location|idempotent)' | tr -d '\\r'; done</code></pre>
 <div class="out">HTTP/1.1 202 Accepted
 Location: /v2/jobs/job_1
@@ -525,7 +627,8 @@ Location: /v2/jobs/job_1</div>
 <div class="out">202 /v2/jobs/job_1</div>
 <pre><code class="language-bash">sleep 2; curl -s http://localhost:4000/v2/jobs/job_1 -H 'Authorization: Bearer tok_lan' | jq -c '{status, progress}'</code></pre>
 <div class="out">{"status":"running","progress":{"done":3500,"total":20000,"percent":17}}</div>
-<pre><code class="language-bash">bash srv.sh labflow-ch10 4000 LABFLOW_JOBS=memory</code></pre>
+<pre><code class="language-bash"># terminal 1: Ctrl+C, rồi khởi động lại y như cũ
+LABFLOW_JOBS=memory npm start</code></pre>
 <pre><code class="language-bash">curl -s http://localhost:4000/v2/jobs/job_1 \\
   -H 'Authorization: Bearer tok_lan' | jq -c '{status, code}'</code></pre>
 <div class="out">{"status":404,"code":"JOB_NOT_FOUND"}</div>
@@ -596,6 +699,10 @@ bull:labflow-jobs:stalled-check</div>
 
 <h3>When the work itself fails: retries with backoff</h3>
 <p>The attendance service goes down (<code>ATTENDANCE_DOWN=1</code> on the worker). Each job was added with <code>attempts: 3</code> and exponential backoff from 2 s:</p>
+<pre><code class="language-bash">LABFLOW_JOBS=bullmq npm start      # terminal 1 (Ctrl+C rồi chạy lại với bullmq)</code></pre>
+<pre><code class="language-bash">redis-cli -p 6390 FLUSHDB; pkill -f 'src/worker.js'     # hàng đợi sạch (việc đầu tiên lại là job_1), tắt worker cũ
+ATTENDANCE_DOWN=1 WORKER_NAME=w1 WORKER_WEBHOOKS=0 node src/worker.js &gt; worker-w1.log 2&gt;&amp;1 &amp;</code></pre>
+<div class="out">OK</div>
 <pre><code class="language-bash">curl -s -o /dev/null -w '%{http_code} %header{location}\\n' -X POST http://localhost:4000/v2/exports \\
   -H 'Authorization: Bearer tok_lan' \\
   --json '{"labId":"lab_6","from":"2026-11-01","to":"2027-03-01"}'</code></pre>
@@ -613,6 +720,9 @@ bull:labflow-jobs:stalled-check</div>
 
 <h3>When a process dies</h3>
 <p>Kill the API with <code>kill -9</code> in the middle of an export and restart it three seconds later: the job is still <code>running</code> at 60% — the worker never noticed. Now kill the <em>worker</em> instead:</p>
+<pre><code class="language-bash">redis-cli -p 6390 FLUSHDB; pkill -f 'src/worker.js'     # hàng đợi sạch (việc đầu tiên lại là job_1), tắt worker cũ
+WORKER_NAME=w1 WORKER_WEBHOOKS=0 node src/worker.js &gt; worker-w1.log 2&gt;&amp;1 &amp;</code></pre>
+<div class="out">OK</div>
 <pre><code class="language-bash">curl -s -o /dev/null -w '%{http_code} %header{location}\\n' -X POST http://localhost:4000/v2/exports \\
   -H 'Authorization: Bearer tok_lan' \\
   --json '{"labId":"lab_5","from":"2026-11-01","to":"2028-06-01"}'</code></pre>
@@ -622,7 +732,7 @@ bull:labflow-jobs:stalled-check</div>
 <pre><code class="language-bash">curl -s http://localhost:4000/v2/jobs/job_1 \\
   -H 'Authorization: Bearer tok_lan' | jq -c '{status, progress}'</code></pre>
 <div class="out">{"status":"running","progress":{"done":7500,"total":20000,"percent":37}}</div>
-<pre><code class="language-bash">bash w.sh w2 WORKER_WEBHOOKS=0; sleep 20; curl -s http://localhost:4000/v2/jobs/job_1 -H 'Authorization: Bearer tok_lan' | jq -c '{status, progress}'</code></pre>
+<pre><code class="language-bash">WORKER_NAME=w2 WORKER_WEBHOOKS=0 node src/worker.js &gt; worker-w2.log 2&gt;&amp;1 &amp; sleep 20; curl -s http://localhost:4000/v2/jobs/job_1 -H 'Authorization: Bearer tok_lan' | jq -c '{status, progress}'</code></pre>
 <div class="out">{"status":"running","progress":{"done":7500,"total":20000,"percent":37}}</div>
 <pre><code class="language-bash">sleep 25; curl -s http://localhost:4000/v2/jobs/job_1 -H 'Authorization: Bearer tok_lan' | jq -c '{status, progress, startedAt, finishedAt}'</code></pre>
 <div class="out">{"status":"succeeded","progress":{"done":20000,"total":20000,"percent":100},"startedAt":"2026-11-01T01:07:38.585Z","finishedAt":"2026-11-01T01:07:48.804Z"}</div>
@@ -643,6 +753,9 @@ bull:labflow-jobs:stalled-check</div>
 
 <h3>Deploying without killing jobs</h3>
 <p><code>kill -9</code> is a crash. A deploy sends <code>SIGTERM</code> first — and the worker can use it to stop taking new jobs but finish the ones it holds (<code>worker.close()</code>):</p>
+<pre><code class="language-bash">redis-cli -p 6390 FLUSHDB; pkill -f 'src/worker.js'     # hàng đợi sạch (việc đầu tiên lại là job_1), tắt worker cũ
+WORKER_NAME=w1 WORKER_WEBHOOKS=0 node src/worker.js &gt; worker-w1.log 2&gt;&amp;1 &amp;</code></pre>
+<div class="out">OK</div>
 <pre><code class="language-bash">curl -s -o /dev/null -w '%{http_code} %header{location}\\n' -X POST http://localhost:4000/v2/exports \\
   -H 'Authorization: Bearer tok_lan' \\
   --json '{"labId":"lab_7","from":"2026-11-01","to":"2028-06-01"}'</code></pre>
@@ -660,6 +773,9 @@ bull:labflow-jobs:stalled-check</div>
 <p>SIGTERM at second 3; the job finished at second 10 and only then did the process exit — no stall, no 30-second gap, no redone work. Your process manager must allow this: Docker gives 10 s by default before <code>SIGKILL</code>, so a worker with two-minute jobs needs a longer stop timeout (or checkpoints).</p>
 
 <h3>More workers, same API</h3>
+<pre><code class="language-bash">redis-cli -p 6390 FLUSHDB; pkill -f 'src/worker.js'     # hàng đợi sạch (việc đầu tiên lại là job_1), tắt worker cũ
+WORKER_NAME=w1 WORKER_WEBHOOKS=0 node src/worker.js &gt; worker-w1.log 2&gt;&amp;1 &amp;</code></pre>
+<div class="out">OK</div>
 <pre><code class="language-bash">node perf/many-jobs.mjs 6</code></pre>
 <div class="out">6 việc nhận 202 trong 63 ms
 job_1: chờ trong hàng   0.0 s · xong ở giây  10.2
@@ -669,7 +785,9 @@ job_4: chờ trong hàng  10.2 s · xong ở giây  20.4
 job_5: chờ trong hàng  20.4 s · xong ở giây  30.6
 job_6: chờ trong hàng  20.4 s · xong ở giây  30.6
 ⇒ 6 việc xong sau 30.9 s</div>
-<pre><code class="language-bash">bash w.sh w2 WORKER_WEBHOOKS=0; bash w.sh w3 WORKER_WEBHOOKS=0; cd labflow-ch10 &amp;&amp; node perf/many-jobs.mjs 6</code></pre>
+<pre><code class="language-bash">WORKER_NAME=w2 WORKER_WEBHOOKS=0 node src/worker.js &gt; worker-w2.log 2&gt;&amp;1 &amp;
+WORKER_NAME=w3 WORKER_WEBHOOKS=0 node src/worker.js &gt; worker-w3.log 2&gt;&amp;1 &amp;
+node perf/many-jobs.mjs 6</code></pre>
 <div class="out">6 việc nhận 202 trong 52 ms
 job_7: chờ trong hàng   0.0 s · xong ở giây  10.2
 job_8: chờ trong hàng   0.0 s · xong ở giây  10.3
@@ -734,7 +852,8 @@ job_12: chờ trong hàng   0.1 s · xong ở giây  10.2
 <div class="out">202 /v2/jobs/job_1</div>
 <pre><code class="language-bash">sleep 2; curl -s http://localhost:4000/v2/jobs/job_1 -H 'Authorization: Bearer tok_lan' | jq -c '{status, progress}'</code></pre>
 <div class="out">{"status":"running","progress":{"done":3500,"total":20000,"percent":17}}</div>
-<pre><code class="language-bash">bash srv.sh labflow-ch10 4000 LABFLOW_JOBS=memory</code></pre>
+<pre><code class="language-bash"># terminal 1: Ctrl+C, rồi khởi động lại y như cũ
+LABFLOW_JOBS=memory npm start</code></pre>
 <pre><code class="language-bash">curl -s http://localhost:4000/v2/jobs/job_1 \\
   -H 'Authorization: Bearer tok_lan' | jq -c '{status, code}'</code></pre>
 <div class="out">{"status":404,"code":"JOB_NOT_FOUND"}</div>
@@ -805,6 +924,10 @@ bull:labflow-jobs:stalled-check</div>
 
 <h3>Khi chính công việc hỏng: thử lại với backoff</h3>
 <p>Dịch vụ điểm danh sập (<code>ATTENDANCE_DOWN=1</code> đặt cho worker). Mỗi việc được thêm với <code>attempts: 3</code> và backoff luỹ thừa (exponential backoff) bắt đầu từ 2 s:</p>
+<pre><code class="language-bash">LABFLOW_JOBS=bullmq npm start      # terminal 1 (Ctrl+C rồi chạy lại với bullmq)</code></pre>
+<pre><code class="language-bash">redis-cli -p 6390 FLUSHDB; pkill -f 'src/worker.js'     # hàng đợi sạch (việc đầu tiên lại là job_1), tắt worker cũ
+ATTENDANCE_DOWN=1 WORKER_NAME=w1 WORKER_WEBHOOKS=0 node src/worker.js &gt; worker-w1.log 2&gt;&amp;1 &amp;</code></pre>
+<div class="out">OK</div>
 <pre><code class="language-bash">curl -s -o /dev/null -w '%{http_code} %header{location}\\n' -X POST http://localhost:4000/v2/exports \\
   -H 'Authorization: Bearer tok_lan' \\
   --json '{"labId":"lab_6","from":"2026-11-01","to":"2027-03-01"}'</code></pre>
@@ -822,6 +945,9 @@ bull:labflow-jobs:stalled-check</div>
 
 <h3>Khi một tiến trình chết</h3>
 <p>Giết API bằng <code>kill -9</code> giữa lúc đang xuất rồi bật lại sau ba giây: việc vẫn <code>running</code> ở 60% — worker không hề biết. Giờ giết <em>worker</em>:</p>
+<pre><code class="language-bash">redis-cli -p 6390 FLUSHDB; pkill -f 'src/worker.js'     # hàng đợi sạch (việc đầu tiên lại là job_1), tắt worker cũ
+WORKER_NAME=w1 WORKER_WEBHOOKS=0 node src/worker.js &gt; worker-w1.log 2&gt;&amp;1 &amp;</code></pre>
+<div class="out">OK</div>
 <pre><code class="language-bash">curl -s -o /dev/null -w '%{http_code} %header{location}\\n' -X POST http://localhost:4000/v2/exports \\
   -H 'Authorization: Bearer tok_lan' \\
   --json '{"labId":"lab_5","from":"2026-11-01","to":"2028-06-01"}'</code></pre>
@@ -831,7 +957,7 @@ bull:labflow-jobs:stalled-check</div>
 <pre><code class="language-bash">curl -s http://localhost:4000/v2/jobs/job_1 \\
   -H 'Authorization: Bearer tok_lan' | jq -c '{status, progress}'</code></pre>
 <div class="out">{"status":"running","progress":{"done":7500,"total":20000,"percent":37}}</div>
-<pre><code class="language-bash">bash w.sh w2 WORKER_WEBHOOKS=0; sleep 20; curl -s http://localhost:4000/v2/jobs/job_1 -H 'Authorization: Bearer tok_lan' | jq -c '{status, progress}'</code></pre>
+<pre><code class="language-bash">WORKER_NAME=w2 WORKER_WEBHOOKS=0 node src/worker.js &gt; worker-w2.log 2&gt;&amp;1 &amp; sleep 20; curl -s http://localhost:4000/v2/jobs/job_1 -H 'Authorization: Bearer tok_lan' | jq -c '{status, progress}'</code></pre>
 <div class="out">{"status":"running","progress":{"done":7500,"total":20000,"percent":37}}</div>
 <pre><code class="language-bash">sleep 25; curl -s http://localhost:4000/v2/jobs/job_1 -H 'Authorization: Bearer tok_lan' | jq -c '{status, progress, startedAt, finishedAt}'</code></pre>
 <div class="out">{"status":"succeeded","progress":{"done":20000,"total":20000,"percent":100},"startedAt":"2026-11-01T01:07:38.585Z","finishedAt":"2026-11-01T01:07:48.804Z"}</div>
@@ -852,6 +978,9 @@ bull:labflow-jobs:stalled-check</div>
 
 <h3>Deploy mà không giết việc</h3>
 <p><code>kill -9</code> là sập. Deploy thì gửi <code>SIGTERM</code> trước — và worker dùng nó để thôi nhận việc mới nhưng làm nốt việc đang giữ (<code>worker.close()</code>):</p>
+<pre><code class="language-bash">redis-cli -p 6390 FLUSHDB; pkill -f 'src/worker.js'     # hàng đợi sạch (việc đầu tiên lại là job_1), tắt worker cũ
+WORKER_NAME=w1 WORKER_WEBHOOKS=0 node src/worker.js &gt; worker-w1.log 2&gt;&amp;1 &amp;</code></pre>
+<div class="out">OK</div>
 <pre><code class="language-bash">curl -s -o /dev/null -w '%{http_code} %header{location}\\n' -X POST http://localhost:4000/v2/exports \\
   -H 'Authorization: Bearer tok_lan' \\
   --json '{"labId":"lab_7","from":"2026-11-01","to":"2028-06-01"}'</code></pre>
@@ -869,6 +998,9 @@ bull:labflow-jobs:stalled-check</div>
 <p>SIGTERM ở giây thứ 3; việc xong ở giây thứ 10 rồi tiến trình mới thoát — không bị bỏ dở, không hụt 30 giây, không làm lại. Trình quản lý tiến trình phải cho phép điều đó: Docker mặc định chỉ chờ 10 s trước khi <code>SIGKILL</code>, nên worker có việc hai phút cần thời gian dừng dài hơn (hoặc có mốc).</p>
 
 <h3>Thêm worker, giữ nguyên API</h3>
+<pre><code class="language-bash">redis-cli -p 6390 FLUSHDB; pkill -f 'src/worker.js'     # hàng đợi sạch (việc đầu tiên lại là job_1), tắt worker cũ
+WORKER_NAME=w1 WORKER_WEBHOOKS=0 node src/worker.js &gt; worker-w1.log 2&gt;&amp;1 &amp;</code></pre>
+<div class="out">OK</div>
 <pre><code class="language-bash">node perf/many-jobs.mjs 6</code></pre>
 <div class="out">6 việc nhận 202 trong 63 ms
 job_1: chờ trong hàng   0.0 s · xong ở giây  10.2
@@ -878,7 +1010,9 @@ job_4: chờ trong hàng  10.2 s · xong ở giây  20.4
 job_5: chờ trong hàng  20.4 s · xong ở giây  30.6
 job_6: chờ trong hàng  20.4 s · xong ở giây  30.6
 ⇒ 6 việc xong sau 30.9 s</div>
-<pre><code class="language-bash">bash w.sh w2 WORKER_WEBHOOKS=0; bash w.sh w3 WORKER_WEBHOOKS=0; cd labflow-ch10 &amp;&amp; node perf/many-jobs.mjs 6</code></pre>
+<pre><code class="language-bash">WORKER_NAME=w2 WORKER_WEBHOOKS=0 node src/worker.js &gt; worker-w2.log 2&gt;&amp;1 &amp;
+WORKER_NAME=w3 WORKER_WEBHOOKS=0 node src/worker.js &gt; worker-w3.log 2&gt;&amp;1 &amp;
+node perf/many-jobs.mjs 6</code></pre>
 <div class="out">6 việc nhận 202 trong 52 ms
 job_7: chờ trong hàng   0.0 s · xong ở giây  10.2
 job_8: chờ trong hàng   0.0 s · xong ở giây  10.3
@@ -961,7 +1095,7 @@ const emit = (type, b) =&gt; publish(&#96;labflow.booking.\${type}.v1&#96;, b.id
 </a>
 
 <h3>Thin or fat: measured on 300 events</h3>
-<p>A <strong>thin</strong> event carries only an id (“booking bk_7 changed — ask me”). A <strong>fat</strong> event carries the state. <code>events/thin-vs-fat.mjs</code> creates 200 bookings, cancels 100 of them at once, then plays a slow consumer that sends a “your booking is confirmed” email for each <code>booking.created</code>:</p>
+<p>A <strong>thin</strong> event carries only an id (“booking bk_7 changed — ask me”). A <strong>fat</strong> event carries the state. <code>events/thin-vs-fat.mjs</code> creates 200 bookings, cancels 100 of them at once, then plays a slow consumer that sends a “your booking is confirmed” email for each <code>booking.created</code>: (Start LabFlow with <code>LABFLOW_BOOKING_LIMIT=1000000/60</code> for these measurements: they create hundreds of bookings, and the 5-per-minute limit of lesson 5.3 would stop them at 5.)</p>
 <pre><code class="language-bash">node events/thin-vs-fat.mjs</code></pre>
 <div class="out">300 sự kiện: 200 created, 100 cancelled
 kích thước: mỏng 60966 B (203 B/sự kiện) · dày 98966 B (330 B/sự kiện)
@@ -1126,7 +1260,7 @@ const emit = (type, b) =&gt; publish(&#96;labflow.booking.\${type}.v1&#96;, b.id
 </a>
 
 <h3>Mỏng hay dày: đo trên 300 sự kiện</h3>
-<p>Sự kiện <strong>mỏng (thin)</strong> chỉ mang id (“lượt bk_7 đã đổi — hỏi tôi đi”). Sự kiện <strong>dày (fat)</strong> mang trạng thái. <code>events/thin-vs-fat.mjs</code> tạo 200 lượt đặt, huỷ ngay 100 lượt trong số đó, rồi đóng vai một consumer chậm gửi email “lượt đặt của bạn đã được xác nhận” cho mỗi <code>booking.created</code>:</p>
+<p>Sự kiện <strong>mỏng (thin)</strong> chỉ mang id (“lượt bk_7 đã đổi — hỏi tôi đi”). Sự kiện <strong>dày (fat)</strong> mang trạng thái. <code>events/thin-vs-fat.mjs</code> tạo 200 lượt đặt, huỷ ngay 100 lượt trong số đó, rồi đóng vai một consumer chậm gửi email “lượt đặt của bạn đã được xác nhận” cho mỗi <code>booking.created</code>: (Chạy LabFlow với <code>LABFLOW_BOOKING_LIMIT=1000000/60</code> cho các phép đo này: chúng tạo hàng trăm lượt đặt, giới hạn 5 lượt/phút của bài 5.3 sẽ chặn ở lượt thứ 5.)</p>
 <pre><code class="language-bash">node events/thin-vs-fat.mjs</code></pre>
 <div class="out">300 sự kiện: 200 created, 100 cancelled
 kích thước: mỏng 60966 B (203 B/sự kiện) · dày 98966 B (330 B/sự kiện)
@@ -1366,13 +1500,13 @@ data: {"id":"42","specversion":"1.0","type":"labflow.booking.created.v1","source
 <p>LabFlow compresses responses (Chapter 8.3). Compression keeps a window of output in a buffer to compress it well — fine for JSON, fatal for a stream that writes 300 bytes now and then. With <code>LABFLOW_SSE_NOFLUSH=1</code> the handler forgets <code>res.flush()</code>:</p>
 <pre><code class="language-bash">node perf/sse-buffer.mjs</code></pre>
 <div class="out">Content-Encoding: gzip · sinh 8 sự kiện ở giây 1…8 · client thấy 0: —</div>
-<pre><code class="language-bash">(sleep 1; cd labflow-ch10 &amp;&amp; node -e "import('./perf/book.mjs').then((m) =&gt; m.book(1))") &amp; curl -sN --max-time 3 http://localhost:4000/v2/events/stream -H 'Authorization: Bearer tok_lan' | cut -c1-90</code></pre>
+<pre><code class="language-bash">(sleep 1; node -e "import('./perf/book.mjs').then((m) =&gt; m.book(1))") &amp; curl -sN --max-time 3 http://localhost:4000/v2/events/stream -H 'Authorization: Bearer tok_lan' | cut -c1-90</code></pre>
 <div class="out">retry: 3000
 
 id: 9
 event: labflow.booking.created.v1
 data: {"id":"9","specversion":"1.0","type":"labflow.booking.created.v1","source":"/labflow</div>
-<pre><code class="language-bash">(sleep 1; cd labflow-ch10 &amp;&amp; node -e "import('./perf/book.mjs').then((m) =&gt; m.book(1))") &amp; curl -sN --max-time 3 --compressed http://localhost:4000/v2/events/stream -H 'Authorization: Bearer tok_lan' | cut -c1-90; echo "(curl --compressed: không thấy gì sau 3 s)"</code></pre>
+<pre><code class="language-bash">(sleep 1; node -e "import('./perf/book.mjs').then((m) =&gt; m.book(1))") &amp; curl -sN --max-time 3 --compressed http://localhost:4000/v2/events/stream -H 'Authorization: Bearer tok_lan' | cut -c1-90; echo "(curl --compressed: không thấy gì sau 3 s)"</code></pre>
 <div class="out">(curl --compressed: không thấy gì sau 3 s)</div>
 <p>A client that sends <code>Accept-Encoding: gzip</code> — every browser does — saw <em>nothing</em> in 8 seconds; plain <code>curl</code> (no compression) worked perfectly, and <code>curl --compressed</code> also saw nothing. That is how this bug ships: the developer tests with curl. With <code>res.flush()</code> after every write:</p>
 <pre><code class="language-bash">node perf/sse-buffer.mjs</code></pre>
@@ -1553,13 +1687,13 @@ data: {"id":"42","specversion":"1.0","type":"labflow.booking.created.v1","source
 <p>LabFlow nén response (bài 8.3). Bộ nén giữ một đoạn output trong bộ đệm để nén cho tốt — ổn với JSON, chết người với một luồng thỉnh thoảng mới viết 300 byte. Với <code>LABFLOW_SSE_NOFLUSH=1</code>, handler quên <code>res.flush()</code>:</p>
 <pre><code class="language-bash">node perf/sse-buffer.mjs</code></pre>
 <div class="out">Content-Encoding: gzip · sinh 8 sự kiện ở giây 1…8 · client thấy 0: —</div>
-<pre><code class="language-bash">(sleep 1; cd labflow-ch10 &amp;&amp; node -e "import('./perf/book.mjs').then((m) =&gt; m.book(1))") &amp; curl -sN --max-time 3 http://localhost:4000/v2/events/stream -H 'Authorization: Bearer tok_lan' | cut -c1-90</code></pre>
+<pre><code class="language-bash">(sleep 1; node -e "import('./perf/book.mjs').then((m) =&gt; m.book(1))") &amp; curl -sN --max-time 3 http://localhost:4000/v2/events/stream -H 'Authorization: Bearer tok_lan' | cut -c1-90</code></pre>
 <div class="out">retry: 3000
 
 id: 9
 event: labflow.booking.created.v1
 data: {"id":"9","specversion":"1.0","type":"labflow.booking.created.v1","source":"/labflow</div>
-<pre><code class="language-bash">(sleep 1; cd labflow-ch10 &amp;&amp; node -e "import('./perf/book.mjs').then((m) =&gt; m.book(1))") &amp; curl -sN --max-time 3 --compressed http://localhost:4000/v2/events/stream -H 'Authorization: Bearer tok_lan' | cut -c1-90; echo "(curl --compressed: không thấy gì sau 3 s)"</code></pre>
+<pre><code class="language-bash">(sleep 1; node -e "import('./perf/book.mjs').then((m) =&gt; m.book(1))") &amp; curl -sN --max-time 3 --compressed http://localhost:4000/v2/events/stream -H 'Authorization: Bearer tok_lan' | cut -c1-90; echo "(curl --compressed: không thấy gì sau 3 s)"</code></pre>
 <div class="out">(curl --compressed: không thấy gì sau 3 s)</div>
 <p>Client gửi <code>Accept-Encoding: gzip</code> — trình duyệt nào cũng gửi — <em>không thấy gì</em> trong 8 giây; <code>curl</code> thường (không nén) chạy hoàn hảo, còn <code>curl --compressed</code> cũng không thấy gì. Lỗi này lên production đúng theo cách đó: lập trình viên thử bằng curl. Có <code>res.flush()</code> sau mỗi lần viết:</p>
 <pre><code class="language-bash">node perf/sse-buffer.mjs</code></pre>
@@ -1668,6 +1802,7 @@ dùng lại vé cũ ⇒ 401 {"type":"https://labflow.example/problems/ticket-inv
 
 <h3>Registering: a URL is an attack surface</h3>
 <p>A subscription is a URL plus the event types it wants. LabFlow will send requests to that URL from inside its own network — which is exactly the SSRF of lesson 6.3. So the same checks apply, at registration <em>and</em> again before each delivery (DNS can change in between):</p>
+<pre><code class="language-bash">LABFLOW_PG=1 LABFLOW_EVENTS=redis npm start      # terminal 1 — CHƯA cho phép localhost</code></pre>
 <pre><code class="language-bash">curl -s -X POST http://localhost:4000/v2/webhooks \\
   -H 'Authorization: Bearer tok_lan' \\
   --json '{"url":"http://localhost:4005/hooks","events":["labflow.booking.created.v1"]}' | jq -c '{status, code, detail}'</code></pre>
@@ -1681,6 +1816,8 @@ dùng lại vé cũ ⇒ 401 {"type":"https://labflow.example/problems/ticket-inv
   --json '{"url":"https://example.com/hooks","events":["labflow.booking.created.v1"]}' | jq -c '{status, code}'</code></pre>
 <div class="out">{"status":403,"code":"FORBIDDEN"}</div>
 <p>Plain <code>http</code> and private addresses (here the cloud metadata address 169.254.169.254) are refused with <code>422</code>, and only lab managers may subscribe. For this course <code>LABFLOW_WEBHOOK_ALLOW_LOCAL=1</code> lets <code>http://localhost:4005</code> through, so you can run a receiver on your own machine:</p>
+<pre><code class="language-bash">LABFLOW_PG=1 LABFLOW_EVENTS=redis LABFLOW_WEBHOOK_ALLOW_LOCAL=1 npm start      # terminal 1 (Ctrl+C rồi chạy lại)
+WEBHOOK_BACKOFF_MS=1000 LABFLOW_WEBHOOK_ALLOW_LOCAL=1 WORKER_NAME=w1 node src/worker.js &gt; worker-w1.log 2&gt;&amp;1   # terminal 2</code></pre>
 <pre><code class="language-bash">curl -s -i -X POST http://localhost:4000/v2/webhooks \\
   -H 'Authorization: Bearer tok_lan' \\
   --json '{"url":"http://localhost:4005/hooks","events":["labflow.booking.cancelled.v1"]}'</code></pre>
@@ -1738,6 +1875,9 @@ export function verify(secret, headers, body, { toleranceSec = 300, now = Date.n
   }
   return { ok: false, reason: 'bad signature' };
 }</code></pre>
+<p>The training office's receiver runs on :4005. <code>webhooks/doi-ben-nhan.sh</code> (in the chapter download) registers it for three event types, saves the answer — secret included — to <code>wh.json</code>, and starts <code>webhooks/receiver.mjs</code> with that secret (log in <code>recv.log</code>, last valid request in <code>dump.json</code>). Every later step re-runs it with that step's switches:</p>
+<pre><code class="language-bash">bash webhooks/doi-ben-nhan.sh</code></pre>
+<div class="out">bên nhận :4005 · đăng ký wh_mwcxcitj</div>
 <pre><code class="language-bash">curl -s -o /dev/null -w '%{http_code}\\n' -X POST http://localhost:4000/v2/bookings \\
   -H 'Authorization: Bearer tok_an' \\
   --json '{"labId":"lab_1","period":{"start":"2026-11-20T01:00:00Z","end":"2026-11-20T03:00:00Z"}}'</code></pre>
@@ -1794,9 +1934,11 @@ export function verify(secret, headers, body, { toleranceSec = 300, now = Date.n
     }
     throw new Error(error ?? &#96;HTTP \${status}&#96;);                         // lỗi khác ⇒ BullMQ thử lại theo backoff
   }, { connection, concurrency: 10 });</code></pre>
+<pre><code class="language-bash">bash webhooks/doi-ben-nhan.sh FAIL_FIRST=3</code></pre>
+<div class="out">bên nhận :4005 · đăng ký wh_mwcxckdn · FAIL_FIRST=3</div>
 <pre><code class="language-bash">curl -s -o /dev/null -w '%{http_code}\\n' -X POST http://localhost:4000/v2/bookings \\
   -H 'Authorization: Bearer tok_an' \\
-  --json '{"labId":"lab_1","period":{"start":"2026-11-20T01:00:00Z","end":"2026-11-20T03:00:00Z"}}'</code></pre>
+  --json '{"labId":"lab_1","period":{"start":"2026-11-21T01:00:00Z","end":"2026-11-21T03:00:00Z"}}'</code></pre>
 <div class="out">201</div>
 <pre><code class="language-bash">sleep 12; curl -s http://localhost:4000/v2/webhooks/$(jq -r .id wh.json)/deliveries -H 'Authorization: Bearer tok_lan' | jq -c '.data | reverse | .[] | {attempt, status, error, durationMs, at}'</code></pre>
 <div class="out">{"attempt":1,"status":503,"error":null,"durationMs":22,"at":"2026-11-01T01:17:06.874Z"}
@@ -1882,6 +2024,7 @@ export function verify(secret, headers, body, { toleranceSec = 300, now = Date.n
 
 <h3>Đăng ký: một URL là một bề mặt tấn công</h3>
 <p>Một đăng ký (subscription) là một URL cộng các loại sự kiện nó muốn. LabFlow sẽ gửi request tới URL đó từ bên trong mạng của chính mình — đúng kiểu SSRF của bài 6.3. Nên áp đúng những phép kiểm đó, lúc đăng ký <em>và</em> lại trước mỗi lần giao (DNS có thể đổi ở giữa):</p>
+<pre><code class="language-bash">LABFLOW_PG=1 LABFLOW_EVENTS=redis npm start      # terminal 1 — CHƯA cho phép localhost</code></pre>
 <pre><code class="language-bash">curl -s -X POST http://localhost:4000/v2/webhooks \\
   -H 'Authorization: Bearer tok_lan' \\
   --json '{"url":"http://localhost:4005/hooks","events":["labflow.booking.created.v1"]}' | jq -c '{status, code, detail}'</code></pre>
@@ -1895,6 +2038,8 @@ export function verify(secret, headers, body, { toleranceSec = 300, now = Date.n
   --json '{"url":"https://example.com/hooks","events":["labflow.booking.created.v1"]}' | jq -c '{status, code}'</code></pre>
 <div class="out">{"status":403,"code":"FORBIDDEN"}</div>
 <p><code>http</code> trơn và địa chỉ nội bộ (ở đây địa chỉ metadata của đám mây 169.254.169.254) bị từ chối bằng <code>422</code>, và chỉ quản lý phòng lab được đăng ký. Trong khoá học, <code>LABFLOW_WEBHOOK_ALLOW_LOCAL=1</code> cho <code>http://localhost:4005</code> đi qua để bạn chạy bên nhận ngay trên máy mình:</p>
+<pre><code class="language-bash">LABFLOW_PG=1 LABFLOW_EVENTS=redis LABFLOW_WEBHOOK_ALLOW_LOCAL=1 npm start      # terminal 1 (Ctrl+C rồi chạy lại)
+WEBHOOK_BACKOFF_MS=1000 LABFLOW_WEBHOOK_ALLOW_LOCAL=1 WORKER_NAME=w1 node src/worker.js &gt; worker-w1.log 2&gt;&amp;1   # terminal 2</code></pre>
 <pre><code class="language-bash">curl -s -i -X POST http://localhost:4000/v2/webhooks \\
   -H 'Authorization: Bearer tok_lan' \\
   --json '{"url":"http://localhost:4005/hooks","events":["labflow.booking.cancelled.v1"]}'</code></pre>
@@ -1952,6 +2097,9 @@ export function verify(secret, headers, body, { toleranceSec = 300, now = Date.n
   }
   return { ok: false, reason: 'bad signature' };
 }</code></pre>
+<p>Bên nhận của phòng đào tạo chạy ở :4005. <code>webhooks/doi-ben-nhan.sh</code> (có trong gói của chương) đăng ký nó cho ba loại sự kiện, lưu câu trả lời — kèm secret — vào <code>wh.json</code>, rồi chạy <code>webhooks/receiver.mjs</code> với secret đó (log ở <code>recv.log</code>, request hợp lệ cuối cùng ở <code>dump.json</code>). Mỗi bước sau chạy lại nó với công tắc của bước đó:</p>
+<pre><code class="language-bash">bash webhooks/doi-ben-nhan.sh</code></pre>
+<div class="out">bên nhận :4005 · đăng ký wh_mwcxcitj</div>
 <pre><code class="language-bash">curl -s -o /dev/null -w '%{http_code}\\n' -X POST http://localhost:4000/v2/bookings \\
   -H 'Authorization: Bearer tok_an' \\
   --json '{"labId":"lab_1","period":{"start":"2026-11-20T01:00:00Z","end":"2026-11-20T03:00:00Z"}}'</code></pre>
@@ -2008,9 +2156,11 @@ export function verify(secret, headers, body, { toleranceSec = 300, now = Date.n
     }
     throw new Error(error ?? &#96;HTTP \${status}&#96;);                         // lỗi khác ⇒ BullMQ thử lại theo backoff
   }, { connection, concurrency: 10 });</code></pre>
+<pre><code class="language-bash">bash webhooks/doi-ben-nhan.sh FAIL_FIRST=3</code></pre>
+<div class="out">bên nhận :4005 · đăng ký wh_mwcxckdn · FAIL_FIRST=3</div>
 <pre><code class="language-bash">curl -s -o /dev/null -w '%{http_code}\\n' -X POST http://localhost:4000/v2/bookings \\
   -H 'Authorization: Bearer tok_an' \\
-  --json '{"labId":"lab_1","period":{"start":"2026-11-20T01:00:00Z","end":"2026-11-20T03:00:00Z"}}'</code></pre>
+  --json '{"labId":"lab_1","period":{"start":"2026-11-21T01:00:00Z","end":"2026-11-21T03:00:00Z"}}'</code></pre>
 <div class="out">201</div>
 <pre><code class="language-bash">sleep 12; curl -s http://localhost:4000/v2/webhooks/$(jq -r .id wh.json)/deliveries -H 'Authorization: Bearer tok_lan' | jq -c '.data | reverse | .[] | {attempt, status, error, durationMs, at}'</code></pre>
 <div class="out">{"attempt":1,"status":503,"error":null,"durationMs":22,"at":"2026-11-01T01:17:06.874Z"}
@@ -2141,11 +2291,17 @@ chữ ký trên body thô v1,ZLrEsD7a9yl… · trên bản dựng lại v1,wAoAD
 
 <h3>Step 2–3: forgeries and replays</h3>
 <p>An attacker who captured one real delivery (the receiver's <code>DUMP</code> file plays the captured request) tries three things, with <code>TOLERANCE_SEC=10</code> so we do not wait five minutes:</p>
-<pre><code class="language-bash">node webhooks/replay.mjs ../dump.json --tamper</code></pre>
+<pre><code class="language-bash">bash webhooks/doi-ben-nhan.sh TOLERANCE_SEC=10</code></pre>
+<div class="out">bên nhận :4005 · đăng ký wh_mwcxcuh3 · TOLERANCE_SEC=10</div>
+<pre><code class="language-bash">curl -s -o /dev/null -w '%{http_code}\\n' -X POST http://localhost:4000/v2/bookings \\
+  -H 'Authorization: Bearer tok_lan' \\
+  --json '{"labId":"lab_1","period":{"start":"2026-11-22T01:00:00Z","end":"2026-11-22T03:00:00Z"}}'</code></pre>
+<div class="out">201</div>
+<pre><code class="language-bash">node webhooks/replay.mjs dump.json --tamper</code></pre>
 <div class="out">body đã sửa (chữ ký ký 1 s trước) ⇒ 401 {"error":"bad signature"}</div>
-<pre><code class="language-bash">node webhooks/replay.mjs ../dump.json</code></pre>
+<pre><code class="language-bash">node webhooks/replay.mjs dump.json</code></pre>
 <div class="out">gửi lại y nguyên (chữ ký ký 1 s trước) ⇒ 200 {"duplicate":true}</div>
-<pre><code class="language-bash">sleep 10; cd labflow-ch10 &amp;&amp; node webhooks/replay.mjs ../dump.json</code></pre>
+<pre><code class="language-bash">sleep 10; node webhooks/replay.mjs dump.json</code></pre>
 <div class="out">gửi lại y nguyên (chữ ký ký 11 s trước) ⇒ 401 {"error":"timestamp outside tolerance"}</div>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">Changed body, old signature ⇒ 401</span><span class="lz-lnote">the HMAC covers the body; compare with timingSafeEqual, not ===</span></div>
@@ -2161,6 +2317,14 @@ chữ ký trên body thô v1,ZLrEsD7a9yl… · trên bản dựng lại v1,wAoAD
 
 <h3>Step 4: answer first, work later — measured three ways</h3>
 <p>The receiver's work takes 3 s (it emails the lecturer and calls another system). LabFlow waits 2 s (5 s in production) and allows 5 attempts:</p>
+<pre><code class="language-bash"># worker: Ctrl+C, rồi
+WEBHOOK_TIMEOUT_MS=2000 WEBHOOK_ATTEMPTS=5 WEBHOOK_BACKOFF_MS=1000 LABFLOW_WEBHOOK_ALLOW_LOCAL=1 WORKER_NAME=w1 node src/worker.js &gt; worker-w1.log 2&gt;&amp;1</code></pre>
+<pre><code class="language-bash">bash webhooks/doi-ben-nhan.sh SLOW_MS=3000 DEDUPE=0</code></pre>
+<div class="out">bên nhận :4005 · đăng ký wh_mwcxfwxe · SLOW_MS=3000 DEDUPE=0</div>
+<pre><code class="language-bash">curl -s -o /dev/null -w '%{http_code}\\n' -X POST http://localhost:4000/v2/bookings \\
+  -H 'Authorization: Bearer tok_lan' \\
+  --json '{"labId":"lab_1","period":{"start":"2026-11-23T01:00:00Z","end":"2026-11-23T03:00:00Z"}}'</code></pre>
+<div class="out">201</div>
 <pre><code class="language-bash">sleep 28; curl -s http://localhost:4000/v2/webhooks/$(jq -r .id wh.json)/deliveries -H 'Authorization: Bearer tok_lan' | jq -c '.data | reverse | .[] | {attempt, status, error, durationMs}'</code></pre>
 <div class="out">{"attempt":1,"status":null,"error":"timeout 2000 ms","durationMs":2003}
 {"attempt":2,"status":null,"error":"timeout 2000 ms","durationMs":2003}
@@ -2168,16 +2332,28 @@ chữ ký trên body thô v1,ZLrEsD7a9yl… · trên bản dựng lại v1,wAoAD
 {"attempt":4,"status":null,"error":"timeout 2000 ms","durationMs":2001}
 {"attempt":5,"status":null,"error":"timeout 2000 ms","durationMs":2004}</div>
 <pre><code class="language-bash">curl -s http://localhost:4005/state | jq -c .stats</code></pre>
-<div class="out">{"received":5,"rejected":0,"duplicates":0,"emails":5,"processed":5,"stale":0,"failedOnPurpose":0}</div>
+<div class="out">{"received":5,"rejected":0,"duplicates":0,"emails":5,"processed":1,"stale":4,"failedOnPurpose":0}</div>
 <pre><code class="language-bash">grep -E 'BỎ' worker-w1.log</code></pre>
 <div class="out">01:19:08.433 [w1] webhook msg_1793495925400-0_wh_mvx5604z BỎ sau 5 lần: timeout 2000 ms</div>
-<p>Every attempt timed out, so LabFlow retried — but the receiver <em>did</em> finish each one after the sender had hung up. Five attempts, five emails to the lecturer, and LabFlow finally marked the message failed. Both sides did their job; together they sent five emails and recorded a failure. Turn deduplication on (still slow):</p>
+<p>Every attempt timed out, so LabFlow retried — but the receiver <em>did</em> finish each one after the sender had hung up. Five attempts, five emails to the lecturer, and LabFlow finally marked the message failed. Both sides did their job; together they sent five emails and recorded a failure. (<code>processed:1, stale:4</code>: step 5 dropped the four repeats as the same version — but only after <code>handle</code> had already sent the email.) Turn deduplication on (still slow):</p>
+<pre><code class="language-bash">bash webhooks/doi-ben-nhan.sh SLOW_MS=3000</code></pre>
+<div class="out">bên nhận :4005 · đăng ký wh_mwcxgjau · SLOW_MS=3000</div>
+<pre><code class="language-bash">curl -s -o /dev/null -w '%{http_code}\\n' -X POST http://localhost:4000/v2/bookings \\
+  -H 'Authorization: Bearer tok_lan' \\
+  --json '{"labId":"lab_1","period":{"start":"2026-11-24T01:00:00Z","end":"2026-11-24T03:00:00Z"}}'</code></pre>
+<div class="out">201</div>
 <pre><code class="language-bash">sleep 8; curl -s http://localhost:4000/v2/webhooks/$(jq -r .id wh.json)/deliveries -H 'Authorization: Bearer tok_lan' | jq -c '.data | reverse | .[] | {attempt, status, error, durationMs}'</code></pre>
 <div class="out">{"attempt":1,"status":null,"error":"timeout 2000 ms","durationMs":2004}
 {"attempt":2,"status":200,"error":null,"durationMs":7}</div>
 <pre><code class="language-bash">curl -s http://localhost:4005/state | jq -c .stats</code></pre>
 <div class="out">{"received":2,"rejected":0,"duplicates":1,"emails":1,"processed":1,"stale":0,"failedOnPurpose":0}</div>
 <p>Attempt 2 found the id already seen and answered in 7 ms: one email. Better — but the sender still waited 2 s and logged a failure for nothing. Now answer first and work afterwards (<code>ASYNC=1</code>, a <code>202</code> before the 3-second job):</p>
+<pre><code class="language-bash">bash webhooks/doi-ben-nhan.sh SLOW_MS=3000 ASYNC=1</code></pre>
+<div class="out">bên nhận :4005 · đăng ký wh_mwcxgq7c · SLOW_MS=3000 ASYNC=1</div>
+<pre><code class="language-bash">curl -s -o /dev/null -w '%{http_code}\\n' -X POST http://localhost:4000/v2/bookings \\
+  -H 'Authorization: Bearer tok_lan' \\
+  --json '{"labId":"lab_1","period":{"start":"2026-11-25T01:00:00Z","end":"2026-11-25T03:00:00Z"}}'</code></pre>
+<div class="out">201</div>
 <pre><code class="language-bash">sleep 5; curl -s http://localhost:4000/v2/webhooks/$(jq -r .id wh.json)/deliveries -H 'Authorization: Bearer tok_lan' | jq -c '.data | reverse | .[] | {attempt, status, error, durationMs}'</code></pre>
 <div class="out">{"attempt":1,"status":202,"error":null,"durationMs":21}</div>
 <pre><code class="language-bash">curl -s http://localhost:4005/state | jq -c .stats</code></pre>
@@ -2190,12 +2366,23 @@ chữ ký trên body thô v1,ZLrEsD7a9yl… · trên bản dựng lại v1,wAoAD
 </a>
 
 <h3>Step 5: the cancellation that arrived before the booking</h3>
-<p>An books and cancels at once. The receiver fails its first request (<code>FAIL_FIRST=1</code>), so <code>booking.created</code> is retried a second later — after <code>booking.cancelled</code> has already been delivered. First with <code>ORDER=0</code> (last write wins), then with the version check:</p>
+<p>Ms Lan books and cancels at once. The receiver fails its first request (<code>FAIL_FIRST=1</code>), so <code>booking.created</code> is retried a second later — after <code>booking.cancelled</code> has already been delivered. First with <code>ORDER=0</code> (last write wins), then with the version check:</p>
+<pre><code class="language-bash"># worker: Ctrl+C, rồi chạy lại như ở 10.5 (WEBHOOK_BACKOFF_MS=1000 …)
+bash webhooks/doi-ben-nhan.sh FAIL_FIRST=1 ORDER=0</code></pre>
+<div class="out">bên nhận :4005 · đăng ký wh_mwcxgwcl · FAIL_FIRST=1 ORDER=0</div>
+<pre><code class="language-bash">curl -s -X POST http://localhost:4000/v2/bookings -H 'Authorization: Bearer tok_lan' \\
+  --json '{"labId":"lab_1","period":{"start":"2026-11-26T01:00:00Z","end":"2026-11-26T03:00:00Z"}}' -o b.json; curl -s -o /dev/null -w '%{http_code}\\n' -X POST http://localhost:4000/v2/bookings/$(jq -r .id b.json)/cancel -H 'Authorization: Bearer tok_lan'</code></pre>
+<div class="out">200</div>
 <pre><code class="language-bash">sleep 4; grep '✓' recv.log</code></pre>
 <div class="out">✓ msg_1793495989883-0_wh_mvx57… labflow.booking.cancelled.v1 bk_1 v2
 ✓ msg_1793495989863-0_wh_mvx57… labflow.booking.created.v1 bk_1 v1</div>
 <pre><code class="language-bash">curl -s http://localhost:4005/state | jq -c '{bookings, stale: .stats.stale}'</code></pre>
 <div class="out">{"bookings":{"bk_1":{"status":"PENDING","version":1}},"stale":0}</div>
+<pre><code class="language-bash">bash webhooks/doi-ben-nhan.sh FAIL_FIRST=1</code></pre>
+<div class="out">bên nhận :4005 · đăng ký wh_mwcxh06q · FAIL_FIRST=1</div>
+<pre><code class="language-bash">curl -s -X POST http://localhost:4000/v2/bookings -H 'Authorization: Bearer tok_lan' \\
+  --json '{"labId":"lab_1","period":{"start":"2026-11-27T01:00:00Z","end":"2026-11-27T03:00:00Z"}}' -o b.json; curl -s -o /dev/null -w '%{http_code}\\n' -X POST http://localhost:4000/v2/bookings/$(jq -r .id b.json)/cancel -H 'Authorization: Bearer tok_lan'</code></pre>
+<div class="out">200</div>
 <pre><code class="language-bash">sleep 4; grep '✓' recv.log</code></pre>
 <div class="out">✓ msg_1793495998569-0_wh_mvx57… labflow.booking.cancelled.v1 bk_1 v2
 ✓ msg_1793495998551-0_wh_mvx57… labflow.booking.created.v1 bk_1 v1</div>
@@ -2299,11 +2486,17 @@ chữ ký trên body thô v1,ZLrEsD7a9yl… · trên bản dựng lại v1,wAoAD
 
 <h3>Bước 2–3: hàng giả và hàng phát lại</h3>
 <p>Kẻ tấn công bắt được một lần giao thật (tệp <code>DUMP</code> của bên nhận đóng vai request bị bắt) thử ba việc, với <code>TOLERANCE_SEC=10</code> để khỏi chờ năm phút:</p>
-<pre><code class="language-bash">node webhooks/replay.mjs ../dump.json --tamper</code></pre>
+<pre><code class="language-bash">bash webhooks/doi-ben-nhan.sh TOLERANCE_SEC=10</code></pre>
+<div class="out">bên nhận :4005 · đăng ký wh_mwcxcuh3 · TOLERANCE_SEC=10</div>
+<pre><code class="language-bash">curl -s -o /dev/null -w '%{http_code}\\n' -X POST http://localhost:4000/v2/bookings \\
+  -H 'Authorization: Bearer tok_lan' \\
+  --json '{"labId":"lab_1","period":{"start":"2026-11-22T01:00:00Z","end":"2026-11-22T03:00:00Z"}}'</code></pre>
+<div class="out">201</div>
+<pre><code class="language-bash">node webhooks/replay.mjs dump.json --tamper</code></pre>
 <div class="out">body đã sửa (chữ ký ký 1 s trước) ⇒ 401 {"error":"bad signature"}</div>
-<pre><code class="language-bash">node webhooks/replay.mjs ../dump.json</code></pre>
+<pre><code class="language-bash">node webhooks/replay.mjs dump.json</code></pre>
 <div class="out">gửi lại y nguyên (chữ ký ký 1 s trước) ⇒ 200 {"duplicate":true}</div>
-<pre><code class="language-bash">sleep 10; cd labflow-ch10 &amp;&amp; node webhooks/replay.mjs ../dump.json</code></pre>
+<pre><code class="language-bash">sleep 10; node webhooks/replay.mjs dump.json</code></pre>
 <div class="out">gửi lại y nguyên (chữ ký ký 11 s trước) ⇒ 401 {"error":"timestamp outside tolerance"}</div>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">Sửa body, giữ chữ ký cũ ⇒ 401</span><span class="lz-lnote">HMAC phủ cả body; so bằng timingSafeEqual, không bằng ===</span></div>
@@ -2319,6 +2512,14 @@ chữ ký trên body thô v1,ZLrEsD7a9yl… · trên bản dựng lại v1,wAoAD
 
 <h3>Bước 4: trả lời trước, làm sau — đo ba cách</h3>
 <p>Việc của bên nhận mất 3 s (gửi email cho giảng viên và gọi một hệ thống khác). LabFlow chờ 2 s (production 5 s) và cho 5 lần thử:</p>
+<pre><code class="language-bash"># worker: Ctrl+C, rồi
+WEBHOOK_TIMEOUT_MS=2000 WEBHOOK_ATTEMPTS=5 WEBHOOK_BACKOFF_MS=1000 LABFLOW_WEBHOOK_ALLOW_LOCAL=1 WORKER_NAME=w1 node src/worker.js &gt; worker-w1.log 2&gt;&amp;1</code></pre>
+<pre><code class="language-bash">bash webhooks/doi-ben-nhan.sh SLOW_MS=3000 DEDUPE=0</code></pre>
+<div class="out">bên nhận :4005 · đăng ký wh_mwcxfwxe · SLOW_MS=3000 DEDUPE=0</div>
+<pre><code class="language-bash">curl -s -o /dev/null -w '%{http_code}\\n' -X POST http://localhost:4000/v2/bookings \\
+  -H 'Authorization: Bearer tok_lan' \\
+  --json '{"labId":"lab_1","period":{"start":"2026-11-23T01:00:00Z","end":"2026-11-23T03:00:00Z"}}'</code></pre>
+<div class="out">201</div>
 <pre><code class="language-bash">sleep 28; curl -s http://localhost:4000/v2/webhooks/$(jq -r .id wh.json)/deliveries -H 'Authorization: Bearer tok_lan' | jq -c '.data | reverse | .[] | {attempt, status, error, durationMs}'</code></pre>
 <div class="out">{"attempt":1,"status":null,"error":"timeout 2000 ms","durationMs":2003}
 {"attempt":2,"status":null,"error":"timeout 2000 ms","durationMs":2003}
@@ -2326,16 +2527,28 @@ chữ ký trên body thô v1,ZLrEsD7a9yl… · trên bản dựng lại v1,wAoAD
 {"attempt":4,"status":null,"error":"timeout 2000 ms","durationMs":2001}
 {"attempt":5,"status":null,"error":"timeout 2000 ms","durationMs":2004}</div>
 <pre><code class="language-bash">curl -s http://localhost:4005/state | jq -c .stats</code></pre>
-<div class="out">{"received":5,"rejected":0,"duplicates":0,"emails":5,"processed":5,"stale":0,"failedOnPurpose":0}</div>
+<div class="out">{"received":5,"rejected":0,"duplicates":0,"emails":5,"processed":1,"stale":4,"failedOnPurpose":0}</div>
 <pre><code class="language-bash">grep -E 'BỎ' worker-w1.log</code></pre>
 <div class="out">01:19:08.433 [w1] webhook msg_1793495925400-0_wh_mvx5604z BỎ sau 5 lần: timeout 2000 ms</div>
-<p>Lần nào cũng hết giờ, nên LabFlow thử lại — nhưng bên nhận <em>vẫn</em> làm xong từng lần sau khi bên gửi đã cúp máy. Năm lần thử, năm email tới giảng viên, và cuối cùng LabFlow đánh dấu thông điệp là hỏng. Cả hai bên đều làm đúng phần mình; gộp lại thì gửi năm email và ghi một lần thất bại. Bật chống trùng (vẫn chậm):</p>
+<p>Lần nào cũng hết giờ, nên LabFlow thử lại — nhưng bên nhận <em>vẫn</em> làm xong từng lần sau khi bên gửi đã cúp máy. Năm lần thử, năm email tới giảng viên, và cuối cùng LabFlow đánh dấu thông điệp là hỏng. Cả hai bên đều làm đúng phần mình; gộp lại thì gửi năm email và ghi một lần thất bại. (<code>processed:1, stale:4</code>: bước 5 bỏ bốn lần lặp vì cùng version — nhưng lúc đó <code>handle</code> đã gửi email rồi.) Bật chống trùng (vẫn chậm):</p>
+<pre><code class="language-bash">bash webhooks/doi-ben-nhan.sh SLOW_MS=3000</code></pre>
+<div class="out">bên nhận :4005 · đăng ký wh_mwcxgjau · SLOW_MS=3000</div>
+<pre><code class="language-bash">curl -s -o /dev/null -w '%{http_code}\\n' -X POST http://localhost:4000/v2/bookings \\
+  -H 'Authorization: Bearer tok_lan' \\
+  --json '{"labId":"lab_1","period":{"start":"2026-11-24T01:00:00Z","end":"2026-11-24T03:00:00Z"}}'</code></pre>
+<div class="out">201</div>
 <pre><code class="language-bash">sleep 8; curl -s http://localhost:4000/v2/webhooks/$(jq -r .id wh.json)/deliveries -H 'Authorization: Bearer tok_lan' | jq -c '.data | reverse | .[] | {attempt, status, error, durationMs}'</code></pre>
 <div class="out">{"attempt":1,"status":null,"error":"timeout 2000 ms","durationMs":2004}
 {"attempt":2,"status":200,"error":null,"durationMs":7}</div>
 <pre><code class="language-bash">curl -s http://localhost:4005/state | jq -c .stats</code></pre>
 <div class="out">{"received":2,"rejected":0,"duplicates":1,"emails":1,"processed":1,"stale":0,"failedOnPurpose":0}</div>
 <p>Lần 2 thấy id đã gặp và trả lời trong 7 ms: một email. Khá hơn — nhưng bên gửi vẫn chờ 2 s và ghi một lần hỏng vô ích. Giờ trả lời trước rồi mới làm (<code>ASYNC=1</code>, trả <code>202</code> trước việc 3 giây):</p>
+<pre><code class="language-bash">bash webhooks/doi-ben-nhan.sh SLOW_MS=3000 ASYNC=1</code></pre>
+<div class="out">bên nhận :4005 · đăng ký wh_mwcxgq7c · SLOW_MS=3000 ASYNC=1</div>
+<pre><code class="language-bash">curl -s -o /dev/null -w '%{http_code}\\n' -X POST http://localhost:4000/v2/bookings \\
+  -H 'Authorization: Bearer tok_lan' \\
+  --json '{"labId":"lab_1","period":{"start":"2026-11-25T01:00:00Z","end":"2026-11-25T03:00:00Z"}}'</code></pre>
+<div class="out">201</div>
 <pre><code class="language-bash">sleep 5; curl -s http://localhost:4000/v2/webhooks/$(jq -r .id wh.json)/deliveries -H 'Authorization: Bearer tok_lan' | jq -c '.data | reverse | .[] | {attempt, status, error, durationMs}'</code></pre>
 <div class="out">{"attempt":1,"status":202,"error":null,"durationMs":21}</div>
 <pre><code class="language-bash">curl -s http://localhost:4005/state | jq -c .stats</code></pre>
@@ -2348,12 +2561,23 @@ chữ ký trên body thô v1,ZLrEsD7a9yl… · trên bản dựng lại v1,wAoAD
 </a>
 
 <h3>Bước 5: tin huỷ tới trước tin đặt</h3>
-<p>An đặt rồi huỷ ngay. Bên nhận hỏng request đầu tiên (<code>FAIL_FIRST=1</code>), nên <code>booking.created</code> được thử lại một giây sau — lúc <code>booking.cancelled</code> đã giao xong. Lần đầu với <code>ORDER=0</code> (ai ghi sau thắng), rồi với phép so version:</p>
+<p>Cô Lan đặt rồi huỷ ngay. Bên nhận hỏng request đầu tiên (<code>FAIL_FIRST=1</code>), nên <code>booking.created</code> được thử lại một giây sau — lúc <code>booking.cancelled</code> đã giao xong. Lần đầu với <code>ORDER=0</code> (ai ghi sau thắng), rồi với phép so version:</p>
+<pre><code class="language-bash"># worker: Ctrl+C, rồi chạy lại như ở 10.5 (WEBHOOK_BACKOFF_MS=1000 …)
+bash webhooks/doi-ben-nhan.sh FAIL_FIRST=1 ORDER=0</code></pre>
+<div class="out">bên nhận :4005 · đăng ký wh_mwcxgwcl · FAIL_FIRST=1 ORDER=0</div>
+<pre><code class="language-bash">curl -s -X POST http://localhost:4000/v2/bookings -H 'Authorization: Bearer tok_lan' \\
+  --json '{"labId":"lab_1","period":{"start":"2026-11-26T01:00:00Z","end":"2026-11-26T03:00:00Z"}}' -o b.json; curl -s -o /dev/null -w '%{http_code}\\n' -X POST http://localhost:4000/v2/bookings/$(jq -r .id b.json)/cancel -H 'Authorization: Bearer tok_lan'</code></pre>
+<div class="out">200</div>
 <pre><code class="language-bash">sleep 4; grep '✓' recv.log</code></pre>
 <div class="out">✓ msg_1793495989883-0_wh_mvx57… labflow.booking.cancelled.v1 bk_1 v2
 ✓ msg_1793495989863-0_wh_mvx57… labflow.booking.created.v1 bk_1 v1</div>
 <pre><code class="language-bash">curl -s http://localhost:4005/state | jq -c '{bookings, stale: .stats.stale}'</code></pre>
 <div class="out">{"bookings":{"bk_1":{"status":"PENDING","version":1}},"stale":0}</div>
+<pre><code class="language-bash">bash webhooks/doi-ben-nhan.sh FAIL_FIRST=1</code></pre>
+<div class="out">bên nhận :4005 · đăng ký wh_mwcxh06q · FAIL_FIRST=1</div>
+<pre><code class="language-bash">curl -s -X POST http://localhost:4000/v2/bookings -H 'Authorization: Bearer tok_lan' \\
+  --json '{"labId":"lab_1","period":{"start":"2026-11-27T01:00:00Z","end":"2026-11-27T03:00:00Z"}}' -o b.json; curl -s -o /dev/null -w '%{http_code}\\n' -X POST http://localhost:4000/v2/bookings/$(jq -r .id b.json)/cancel -H 'Authorization: Bearer tok_lan'</code></pre>
+<div class="out">200</div>
 <pre><code class="language-bash">sleep 4; grep '✓' recv.log</code></pre>
 <div class="out">✓ msg_1793495998569-0_wh_mvx57… labflow.booking.cancelled.v1 bk_1 v2
 ✓ msg_1793495998551-0_wh_mvx57… labflow.booking.created.v1 bk_1 v1</div>
@@ -2429,6 +2653,11 @@ chữ ký trên body thô v1,ZLrEsD7a9yl… · trên bản dựng lại v1,wAoAD
 <p class="lead">In Lab 8 you made the usage report fast enough for one instance and one data set. Now the faculty wants it for the <em>whole campus</em> — 50 labs, up to 92 days, from the 1,000,000-row table — and each day needs a call to the attendance service. The starter answers correctly in 23 seconds while the client waits. Your job is to change the <em>contract</em>: answer at once with a job, let a worker compute it, let the manager cancel it, keep the result for a limited time, and tell the manager's system with a signed webhook when it is ready. A grading script measures all of it.</p>
 
 <h3>Starting point</h3>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/API/v1/labflow-api-ch10-dau.zip" target="_blank" rel="noopener">
+  <span class="lc-ico">📦</span>
+  <span class="lc-body"><span class="lc-title">Starting point: LabFlow API at the start of Chapter 10 (zip)</span><span class="lc-sub"><code>src/routes/reportExports.js</code> is already the starter (same as <code>lab/report-exports-starter.js</code>) — skip the two <code>cp</code> lines below. <code>node lab/grade-lab10.mjs</code> scores it 0/10.</span></span>
+  <span class="lc-cta">DOWNLOAD →</span>
+</a>
 <p>The chapter's code (download at the end of this page), PostgreSQL with the Chapter 3 table on 55432, Redis 8.2 on 6390. The computation is already written (<code>src/reportTask.js › usageReport</code>, registered as task <code>usage-report</code> in <code>src/tasks.js</code>); the route is synchronous:</p>
 <pre><code class="language-bash">cp src/routes/reportExports.js lab/report-exports-solution.backup.js   # the package ships the solution
 cp lab/report-exports-starter.js src/routes/reportExports.js
@@ -2565,9 +2794,9 @@ Server-Timing: validate;dur=1.43, total;dur=16.09</div>
 </div>
 <p><strong>Discussion.</strong> Why is <code>report.ready</code> thin when booking events are fat (10.3)? Because the report is 46 KB for 14 days and up to 300 KB for 92, it is private to its creator, and it already lives at a URL that checks the token. A webhook full of campus data would sit in the receiver's logs for years.</p>
 
-<a class="link-card" href="https://media.cuongthai.com/files/academy/API/v1/labflow-api-ch10.zip" target="_blank" rel="noopener">
+<a class="link-card" href="https://media.cuongthai.com/files/academy/API/v1/labflow-api-ch10-b.zip" target="_blank" rel="noopener">
   <span class="lc-ico">📦</span>
-  <span class="lc-body"><span class="lc-title">Download: LabFlow API at the end of Chapter 10 (labflow-api-ch10.zip)</span><span class="lc-sub">The chapter's code = this lab's solution: jobs.js, worker.js (BullMQ jobs + webhook dispatcher and sender), events.js (memory or Redis Stream), realtime routes (polling, SSE, WebSocket tickets), webhooks.js (Standard Webhooks), exports and reportExports, events/ (redelivery, outbox, thin-vs-fat, versions), asyncapi/, webhooks/receiver.mjs, perf/ scripts, lab/report-exports-starter.js and lab/grade-lab10.mjs. npm install, npm test (13 tests).</span></span>
+  <span class="lc-body"><span class="lc-title">Download: LabFlow API at the end of Chapter 10 (labflow-api-ch10-b.zip)</span><span class="lc-sub">The chapter's code = this lab's solution: jobs.js, worker.js (BullMQ jobs + webhook dispatcher and sender), events.js (memory or Redis Stream), realtime routes (polling, SSE, WebSocket tickets), webhooks.js (Standard Webhooks), exports and reportExports, events/ (redelivery, outbox, thin-vs-fat, versions), asyncapi/, webhooks/receiver.mjs, perf/ scripts, lab/report-exports-starter.js and lab/grade-lab10.mjs. npm install, npm test (13 tests).</span></span>
   <span class="lc-cta">DOWNLOAD →</span>
 </a>
 
@@ -2586,6 +2815,11 @@ Server-Timing: validate;dur=1.43, total;dur=16.09</div>
 <p class="lead">Ở Lab 8 bạn làm báo cáo dùng phòng đủ nhanh cho một instance và một bộ dữ liệu. Giờ khoa muốn báo cáo cho <em>cả trường</em> — 50 phòng, tới 92 ngày, trên bảng 1.000.000 dòng — và mỗi ngày phải hỏi dịch vụ điểm danh một lần. Bản khởi đầu trả lời đúng sau 23 giây trong lúc client ngồi chờ. Việc của bạn là đổi <em>hợp đồng</em>: trả lời ngay bằng một việc (job), để worker tính, cho quản lý huỷ được, giữ kết quả có thời hạn, và báo cho hệ thống của quản lý bằng một webhook có chữ ký khi xong. Một script chấm điểm đo tất cả.</p>
 
 <h3>Điểm xuất phát</h3>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/API/v1/labflow-api-ch10-dau.zip" target="_blank" rel="noopener">
+  <span class="lc-ico">📦</span>
+  <span class="lc-body"><span class="lc-title">Điểm xuất phát: LabFlow API đầu Chương 10 (zip)</span><span class="lc-sub"><code>src/routes/reportExports.js</code> đã là bản khởi đầu (giống <code>lab/report-exports-starter.js</code>) — bỏ qua hai dòng <code>cp</code> bên dưới. <code>node lab/grade-lab10.mjs</code> chấm nó 0/10.</span></span>
+  <span class="lc-cta">TẢI VỀ →</span>
+</a>
 <p>Code của chương (tải ở cuối trang), PostgreSQL có bảng của Chương 3 ở 55432, Redis 8.2 ở 6390. Phần tính đã viết sẵn (<code>src/reportTask.js › usageReport</code>, đăng ký thành việc <code>usage-report</code> trong <code>src/tasks.js</code>); route thì đồng bộ:</p>
 <pre><code class="language-bash">cp src/routes/reportExports.js lab/report-exports-solution.backup.js   # gói tải về chứa sẵn lời giải
 cp lab/report-exports-starter.js src/routes/reportExports.js
@@ -2722,9 +2956,9 @@ Server-Timing: validate;dur=1.43, total;dur=16.09</div>
 </div>
 <p><strong>Thảo luận.</strong> Vì sao <code>report.ready</code> mỏng trong khi sự kiện lượt đặt lại dày (10.3)? Vì báo cáo nặng 46 KB cho 14 ngày và tới 300 KB cho 92 ngày, nó riêng tư với người tạo, và nó đã nằm sẵn ở một URL có kiểm token. Một webhook nhồi số liệu cả trường sẽ nằm trong log của bên nhận nhiều năm.</p>
 
-<a class="link-card" href="https://media.cuongthai.com/files/academy/API/v1/labflow-api-ch10.zip" target="_blank" rel="noopener">
+<a class="link-card" href="https://media.cuongthai.com/files/academy/API/v1/labflow-api-ch10-b.zip" target="_blank" rel="noopener">
   <span class="lc-ico">📦</span>
-  <span class="lc-body"><span class="lc-title">Tải về: LabFlow API cuối Chương 10 (labflow-api-ch10.zip)</span><span class="lc-sub">Code của chương = lời giải lab này: jobs.js, worker.js (việc BullMQ + bộ điều phối và gửi webhook), events.js (RAM hoặc Redis Stream), route realtime (polling, SSE, vé WebSocket), webhooks.js (Standard Webhooks), exports và reportExports, events/ (redelivery, outbox, thin-vs-fat, versions), asyncapi/, webhooks/receiver.mjs, các script perf/, lab/report-exports-starter.js và lab/grade-lab10.mjs. npm install, npm test (13 test).</span></span>
+  <span class="lc-body"><span class="lc-title">Tải về: LabFlow API cuối Chương 10 (labflow-api-ch10-b.zip)</span><span class="lc-sub">Code của chương = lời giải lab này: jobs.js, worker.js (việc BullMQ + bộ điều phối và gửi webhook), events.js (RAM hoặc Redis Stream), route realtime (polling, SSE, vé WebSocket), webhooks.js (Standard Webhooks), exports và reportExports, events/ (redelivery, outbox, thin-vs-fat, versions), asyncapi/, webhooks/receiver.mjs, các script perf/, lab/report-exports-starter.js và lab/grade-lab10.mjs. npm install, npm test (13 test).</span></span>
   <span class="lc-cta">TẢI VỀ →</span>
 </a>
 

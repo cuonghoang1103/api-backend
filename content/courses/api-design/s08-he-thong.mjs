@@ -46,7 +46,7 @@ export default {
 </ul>
 <p><strong>Why it is worth it:</strong> “it works on my machine with one user” is where most student projects stop. Interviews for backend roles ask “what happens when 1,000 people do this at once?”, and on-call work is mostly reading these numbers. Every number in this chapter was measured on LabFlow — none is copied from a blog.</p>
 </div>
-<a class="link-card" href="https://media.cuongthai.com/files/academy/API/v1/labflow-api-ch8-dau.zip" target="_blank" rel="noopener">
+<a class="link-card" href="https://media.cuongthai.com/files/academy/API/v1/labflow-api-ch8-dau-b.zip" target="_blank" rel="noopener">
   <span class="lc-ico">📦</span>
   <span class="lc-body"><span class="lc-title">Download: LabFlow API at the start of Chapter 8 (zip, without node_modules)</span><span class="lc-sub">Before Lab 8. Run <code>npm ci</code>, then <code>npm start</code>; every command of lessons 8.1–8.6 works from the project folder (scripts in <code>perf/</code>). Demo passwords: an-lab-2026, binh-lab-2026, lan-lab-2026 (learning only).</span></span>
   <span class="lc-cta">DOWNLOAD →</span>
@@ -224,7 +224,7 @@ Server-Timing: auth;dur=0.18, validate;dur=0.34, db;dur=3.20, sort;dur=0.59, tot
 </ul>
 <p><strong>Vì sao đáng học:</strong> “máy em chạy được với một người dùng” là chỗ phần lớn đồ án sinh viên dừng lại. Phỏng vấn backend hay hỏi “1.000 người cùng làm việc này thì sao?”, và trực sự cố (on-call) phần lớn là đọc những con số này. Mọi số trong chương đều đo trên LabFlow — không số nào chép từ blog.</p>
 </div>
-<a class="link-card" href="https://media.cuongthai.com/files/academy/API/v1/labflow-api-ch8-dau.zip" target="_blank" rel="noopener">
+<a class="link-card" href="https://media.cuongthai.com/files/academy/API/v1/labflow-api-ch8-dau-b.zip" target="_blank" rel="noopener">
   <span class="lc-ico">📦</span>
   <span class="lc-body"><span class="lc-title">Tải về: LabFlow API đầu Chương 8 (zip, không kèm node_modules)</span><span class="lc-sub">Trước Lab 8. Chạy <code>npm ci</code> rồi <code>npm start</code>; mọi lệnh của bài 8.1–8.6 chạy từ thư mục dự án (script ở <code>perf/</code>). Mật khẩu demo: an-lab-2026, binh-lab-2026, lan-lab-2026 (chỉ để học).</span></span>
   <span class="lc-cta">TẢI VỀ →</span>
@@ -1210,6 +1210,37 @@ if (won.rowCount === 0) {                                  // khoá đã có —
   return res.status(e.status).json(e.body);                // phát lại đúng câu trả lời đã lưu
 }
 // thắng ⇒ chạy handler; khi response xong: 2xx ⇒ UPDATE state = 'done' + lưu status/body; lỗi ⇒ DELETE để cho thử lại</code></pre>
+<p><strong>One more race, at startup.</strong> The module creates its table when it loads, with <code>CREATE TABLE IF NOT EXISTS</code>. That is not atomic between two sessions: start A and B <em>at the same moment</em> against an empty database and both see “no table”, both create it, and one dies with <code>duplicate key value violates unique constraint "pg_type_typname_nsp_index"</code>. Measured on the machine that wrote this lesson: 30 simultaneous starts of two instances, <strong>5 crashed</strong>. The fix is a transaction-level <em>advisory lock</em>: the second instance waits until the first commits, then finds the table already there — <strong>0 crashes in 30</strong>. Chapter 12 uses the same lock for migrations.</p>
+<pre><code class="language-javascript">// pg-ddl.js — tạo bảng lúc khởi động mà KHÔNG đua nhau giữa các instance
+// CREATE TABLE IF NOT EXISTS không nguyên tử giữa hai phiên: hai instance khởi động CÙNG LÚC thì cả hai cùng thấy "chưa có",
+// cùng tạo, và một bên chết với "duplicate key value violates unique constraint pg_type_typname_nsp_index".
+// Khoá advisory theo giao dịch xếp hàng các lần tạo: bên thứ hai CHỜ bên thứ nhất COMMIT, rồi thấy bảng đã có.
+const KHOA_DDL = 727011;                                       // một số cố định, chung cho mọi instance LabFlow
+
+export async function ddlOnce(pool, ...sqls) {
+  const db = await pool.connect();
+  try {
+    await db.query('BEGIN');
+    await db.query('SELECT pg_advisory_xact_lock($1)', [KHOA_DDL]);   // tự nhả khi COMMIT/ROLLBACK
+    for (const sql of sqls) await db.query(sql);
+    await db.query('COMMIT');
+  } catch (e) {
+    await db.query('ROLLBACK').catch(() =&gt; {});
+    throw e;
+  } finally {
+    db.release();
+  }
+}</code></pre>
+<pre><code class="language-javascript">// idempotency-pg.js — đầu tệp: bảng khoá được tạo QUA ddlOnce
+import { ddlOnce } from './pg-ddl.js';
+
+const pool = new pg.Pool({ connectionString: process.env.PGURL ?? 'postgres://labflow@localhost:55432/labflow', max: 5 });
+await ddlOnce(pool, &#96;CREATE TABLE IF NOT EXISTS idempotency_keys (
+  scope text NOT NULL, key text NOT NULL, fp text NOT NULL,
+  state text NOT NULL CHECK (state IN ('running', 'done')),
+  status int, body jsonb, location text,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  PRIMARY KEY (scope, key))&#96;);</code></pre>
 <p><code>idempotency.js</code> exports this version when <code>LABFLOW_IDEMPOTENCY=pg</code>, so routes do not change. Same two requests, fresh instances:</p>
 <pre><code class="language-bash">for i in 1 2; do curl -s -D - http://localhost:8080/v2/bookings -H "Authorization: Bearer $(cat lan.jwt)" -H 'Idempotency-Key: dat-phong-lan-01' --json '{"labId":"lab_3","period":{"start":"2027-04-20T08:00:00+07:00","end":"2027-04-20T10:00:00+07:00"}}' | grep -iE '^(HTTP|LabFlow-Instance|Location|Idempotent-Replayed)|"id"' | tr -d '\\r' | paste -sd' ' -; done</code></pre>
 <div class="out">HTTP/1.1 201 Created labflow-instance: B location: /v2/bookings/bk_1   "id": "bk_1",
@@ -1403,6 +1434,37 @@ if (won.rowCount === 0) {                                  // khoá đã có —
   return res.status(e.status).json(e.body);                // phát lại đúng câu trả lời đã lưu
 }
 // thắng ⇒ chạy handler; khi response xong: 2xx ⇒ UPDATE state = 'done' + lưu status/body; lỗi ⇒ DELETE để cho thử lại</code></pre>
+<p><strong>Thêm một cuộc đua, lúc khởi động.</strong> Module tạo bảng của nó ngay khi được nạp, bằng <code>CREATE TABLE IF NOT EXISTS</code>. Câu đó không nguyên tử giữa hai phiên: khởi động A và B <em>cùng lúc</em> trên một CSDL trống thì cả hai cùng thấy “chưa có bảng”, cùng tạo, và một bản chết với <code>duplicate key value violates unique constraint "pg_type_typname_nsp_index"</code>. Đo trên máy soạn bài: 30 lần khởi động hai bản cùng lúc, <strong>5 lần một bản chết</strong>. Cách sửa là <em>khoá advisory</em> theo giao dịch: bản thứ hai chờ bản thứ nhất COMMIT, rồi thấy bảng đã có — <strong>0/30 lần chết</strong>. Chương 12 dùng đúng khoá này cho migration.</p>
+<pre><code class="language-javascript">// pg-ddl.js — tạo bảng lúc khởi động mà KHÔNG đua nhau giữa các instance
+// CREATE TABLE IF NOT EXISTS không nguyên tử giữa hai phiên: hai instance khởi động CÙNG LÚC thì cả hai cùng thấy "chưa có",
+// cùng tạo, và một bên chết với "duplicate key value violates unique constraint pg_type_typname_nsp_index".
+// Khoá advisory theo giao dịch xếp hàng các lần tạo: bên thứ hai CHỜ bên thứ nhất COMMIT, rồi thấy bảng đã có.
+const KHOA_DDL = 727011;                                       // một số cố định, chung cho mọi instance LabFlow
+
+export async function ddlOnce(pool, ...sqls) {
+  const db = await pool.connect();
+  try {
+    await db.query('BEGIN');
+    await db.query('SELECT pg_advisory_xact_lock($1)', [KHOA_DDL]);   // tự nhả khi COMMIT/ROLLBACK
+    for (const sql of sqls) await db.query(sql);
+    await db.query('COMMIT');
+  } catch (e) {
+    await db.query('ROLLBACK').catch(() =&gt; {});
+    throw e;
+  } finally {
+    db.release();
+  }
+}</code></pre>
+<pre><code class="language-javascript">// idempotency-pg.js — đầu tệp: bảng khoá được tạo QUA ddlOnce
+import { ddlOnce } from './pg-ddl.js';
+
+const pool = new pg.Pool({ connectionString: process.env.PGURL ?? 'postgres://labflow@localhost:55432/labflow', max: 5 });
+await ddlOnce(pool, &#96;CREATE TABLE IF NOT EXISTS idempotency_keys (
+  scope text NOT NULL, key text NOT NULL, fp text NOT NULL,
+  state text NOT NULL CHECK (state IN ('running', 'done')),
+  status int, body jsonb, location text,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  PRIMARY KEY (scope, key))&#96;);</code></pre>
 <p><code>idempotency.js</code> xuất bản này khi <code>LABFLOW_IDEMPOTENCY=pg</code>, nên các route không đổi. Cùng hai request, hai bản mới khởi động:</p>
 <pre><code class="language-bash">for i in 1 2; do curl -s -D - http://localhost:8080/v2/bookings -H "Authorization: Bearer $(cat lan.jwt)" -H 'Idempotency-Key: dat-phong-lan-01' --json '{"labId":"lab_3","period":{"start":"2027-04-20T08:00:00+07:00","end":"2027-04-20T10:00:00+07:00"}}' | grep -iE '^(HTTP|LabFlow-Instance|Location|Idempotent-Replayed)|"id"' | tr -d '\\r' | paste -sd' ' -; done</code></pre>
 <div class="out">HTTP/1.1 201 Created labflow-instance: B location: /v2/bookings/bk_1   "id": "bk_1",
@@ -2330,7 +2392,7 @@ Trang trạng thái: https://status.labflow.example (ví dụ)</code></pre>
 <p class="lead">Ms Lan asked for a usage report: for each day and each lab, how many bookings and how many hours. A teammate wrote <code>GET /v2/reports/usage</code>; it returns the right numbers. On planning day five lab managers open it at once — and every student’s app freezes. Your job is the whole chapter in one task: measure it, find why it hurts <em>other</em> endpoints, fix it without changing a single number in the answer, protect the server, check it across two instances, and write down what LabFlow now promises.</p>
 
 <h3>Starting point</h3>
-<a class="link-card" href="https://media.cuongthai.com/files/academy/API/v1/labflow-api-ch8-dau.zip" target="_blank" rel="noopener">
+<a class="link-card" href="https://media.cuongthai.com/files/academy/API/v1/labflow-api-ch8-dau-b.zip" target="_blank" rel="noopener">
   <span class="lc-ico">📦</span>
   <span class="lc-body"><span class="lc-title">Starting point: LabFlow API at the start of Chapter 8 (zip)</span><span class="lc-sub"><code>src/routes/reports.js</code> is already the deliberately slow starter (same as <code>lab/reports-starter.js</code>); <code>openapi.yaml</code> 2.2.0 has no <code>/reports/usage</code> yet and <code>docs/slo.md</code> no report row — task 6 is yours. <code>npm ci</code>, <code>npm test</code> 10/10.</span></span>
   <span class="lc-cta">DOWNLOAD →</span>
@@ -2521,9 +2583,9 @@ Quá tải: tối đa 2 lượt tính cùng lúc mỗi instance ⇒ 503 OVERLOAD
 <p>Why keep <code>limitInflight(2)</code> after task 2 showed it shed nothing? The report will not stay synchronous: once bookings live in PostgreSQL (Chapter 12) it becomes a query that <em>waits</em>, and then the limit protects the database pool.</p>
 <p><strong>Discuss:</strong> days are UTC dates, so a booking at 06:00 in Vietnam (UTC+7) would land on the previous day. What would you change in the contract if the building opened at 06:00?</p>
 
-<a class="link-card" href="https://media.cuongthai.com/files/academy/API/v1/labflow-api-ch8.zip" target="_blank" rel="noopener">
+<a class="link-card" href="https://media.cuongthai.com/files/academy/API/v1/labflow-api-ch8-b.zip" target="_blank" rel="noopener">
   <span class="lc-ico">📦</span>
-  <span class="lc-body"><span class="lc-title">Download: LabFlow API at the end of Chapter 8 (labflow-api-ch8.zip)</span><span class="lc-sub">The chapter’s code = this lab’s solution, every perf/ script of the chapter, OpenAPI 2.2.0, docs/slo.md and lab/reports-starter.js. npm install, then npm test.</span></span>
+  <span class="lc-body"><span class="lc-title">Download: LabFlow API at the end of Chapter 8 (labflow-api-ch8-b.zip)</span><span class="lc-sub">The chapter’s code = this lab’s solution, every perf/ script of the chapter, OpenAPI 2.2.0, docs/slo.md and lab/reports-starter.js. npm install, then npm test.</span></span>
   <span class="lc-cta">DOWNLOAD →</span>
 </a>
 
@@ -2542,7 +2604,7 @@ Quá tải: tối đa 2 lượt tính cùng lúc mỗi instance ⇒ 503 OVERLOAD
 <p class="lead">Cô Lan cần một báo cáo dùng phòng: mỗi ngày, mỗi phòng, bao nhiêu lượt đặt và bao nhiêu giờ. Một bạn trong nhóm viết <code>GET /v2/reports/usage</code>; nó trả đúng số. Ngày lên kế hoạch học kỳ, năm quản lý phòng lab cùng mở báo cáo — và app của mọi sinh viên đứng hình. Việc của bạn là cả chương gói trong một bài: đo, tìm ra vì sao nó làm hại endpoint <em>khác</em>, sửa mà không đổi một con số nào trong câu trả lời, bảo vệ server, kiểm khi chạy hai bản, và viết ra LabFlow giờ hứa những gì.</p>
 
 <h3>Điểm xuất phát</h3>
-<a class="link-card" href="https://media.cuongthai.com/files/academy/API/v1/labflow-api-ch8-dau.zip" target="_blank" rel="noopener">
+<a class="link-card" href="https://media.cuongthai.com/files/academy/API/v1/labflow-api-ch8-dau-b.zip" target="_blank" rel="noopener">
   <span class="lc-ico">📦</span>
   <span class="lc-body"><span class="lc-title">Điểm xuất phát: LabFlow API đầu Chương 8 (zip)</span><span class="lc-sub"><code>src/routes/reports.js</code> đã là bản khởi đầu cố ý chậm (giống <code>lab/reports-starter.js</code>); <code>openapi.yaml</code> 2.2.0 chưa có <code>/reports/usage</code> và <code>docs/slo.md</code> chưa có dòng báo cáo — nhiệm vụ 6 là của bạn. <code>npm ci</code>, <code>npm test</code> 10/10.</span></span>
   <span class="lc-cta">TẢI VỀ →</span>
@@ -2733,9 +2795,9 @@ Quá tải: tối đa 2 lượt tính cùng lúc mỗi instance ⇒ 503 OVERLOAD
 <p>Vì sao giữ <code>limitInflight(2)</code> khi nhiệm vụ 2 cho thấy nó không từ chối gì? Báo cáo sẽ không đồng bộ mãi: khi lượt đặt nằm trong PostgreSQL (Chương 12) nó thành truy vấn có <em>chờ</em>, và lúc đó giới hạn này bảo vệ pool kết nối CSDL.</p>
 <p><strong>Thảo luận:</strong> ngày là ngày theo UTC, nên lượt đặt lúc 06:00 giờ Việt Nam (UTC+7) sẽ rơi vào hôm trước. Nếu toà nhà mở cửa từ 06:00, bạn đổi gì trong hợp đồng?</p>
 
-<a class="link-card" href="https://media.cuongthai.com/files/academy/API/v1/labflow-api-ch8.zip" target="_blank" rel="noopener">
+<a class="link-card" href="https://media.cuongthai.com/files/academy/API/v1/labflow-api-ch8-b.zip" target="_blank" rel="noopener">
   <span class="lc-ico">📦</span>
-  <span class="lc-body"><span class="lc-title">Tải về: LabFlow API cuối Chương 8 (labflow-api-ch8.zip)</span><span class="lc-sub">Code của chương = lời giải lab này, mọi script perf/ của chương, OpenAPI 2.2.0, docs/slo.md và lab/reports-starter.js. npm install, rồi npm test.</span></span>
+  <span class="lc-body"><span class="lc-title">Tải về: LabFlow API cuối Chương 8 (labflow-api-ch8-b.zip)</span><span class="lc-sub">Code của chương = lời giải lab này, mọi script perf/ của chương, OpenAPI 2.2.0, docs/slo.md và lab/reports-starter.js. npm install, rồi npm test.</span></span>
   <span class="lc-cta">TẢI VỀ →</span>
 </a>
 

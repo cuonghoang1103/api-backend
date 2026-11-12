@@ -1,0 +1,32 @@
+/** Giảng theo slide — bài 5.2 Cái gì được cache, và vụ rò rỉ khi có thứ lẽ ra không nên (deck ngx-05-2, 9 slide). VI = lời giảng video ngx-5-2; EN = ghi chú `en` của deck. SINH bằng scratchpad/ngx/giang.mjs — sửa ở deck/kichban rồi sinh lại. */
+import { walkNgx } from '../_slides.mjs';
+
+export default walkNgx('ngx-05-2', "What gets cached, and the leak when something should not", "Cái gì được cache, và vụ rò rỉ khi có thứ lẽ ra không nên", [
+  [1, "What gets cached, and the leak when something should not",
+    "<p>Lesson 5.2. Nginx refuses to cache some responses by itself. But it never looks at who asked. One missing header, and user A's private page is served to everybody.</p>",
+    "<p>Bài 5.2: cái gì được cache, và vụ rò rỉ khi có thứ lẽ ra không nên.</p>"],
+  [2, "What you will take away from this lesson",
+    "<p>Five takeaways: three responses Nginx refuses to store; how methods behave; the leak; why the Authorization header does not protect you; and three ways to make it safe.</p>",
+    "<p>Năm điều: ba phản hồi Nginx từ chối lưu, các phương thức GET, HEAD, POST, và vụ rò rỉ. Rồi vì sao header Authorization không bảo vệ bạn, và ba cách làm cho an toàn.</p>"],
+  [3, "Three responses that never enter the cache",
+    "<p>Three responses never entered the cache: one with Set-Cookie, one with Cache-Control private, and a 500, because proxy cache valid listed only 200. Each was a MISS twice.</p>",
+    "<p>Ba phản hồi không bao giờ vào bộ đệm: có Set-Cookie, có Cache-Control private, và một lỗi năm trăm. Lỗi năm trăm không được lưu vì proxy_cache_valid chỉ khai mã hai trăm. Cả ba đều MISS hai lần liền.</p>"],
+  [4, "Methods: GET and HEAD share, POST is never cached",
+    "<p>Methods. GET was MISS then HIT. HEAD hit the same entry. POST is not cached at all: the cache status variable was not even set.</p>",
+    "<p>Phương thức: GET là MISS rồi HIT. HEAD trúng đúng mục của GET. POST không được cache, biến trạng thái còn không được đặt.</p>"],
+  [5, "The leak",
+    "<p>The leak. The upstream returns each user's profile, with no Cache-Control. User A asks: MISS. A visitor with no token: HIT — and sees A's profile. User B, with a different token: HIT — A's profile again.</p>",
+    "<p>Upstream trả hồ sơ riêng của từng người mà không đặt Cache-Control. Nginx cất nó dưới đường dẫn ho-so, và phát cho mọi người.</p>"],
+  [6, "Why Authorization does not protect you",
+    "<p>Why. The Authorization header is not part of the key, and Nginx does not skip the cache because of it. A cookie in the request does not either; only a Set-Cookie in the response stops storing. The key is the URL.</p>",
+    "<p>Header Authorization không nằm trong khoá, và Nginx không bỏ qua bộ đệm vì nó. Cookie trong request cũng không. Chỉ Set-Cookie trong phản hồi mới chặn việc lưu. Khoá chính là URL.</p>"],
+  [7, "Three ways to make it safe",
+    "<p>Three ways to be safe. Best: the upstream marks personal answers private. Or switch the cache off on that route. Or skip it whenever the request carries a token or a session cookie: proxy cache bypass to not answer from cache, proxy no cache to not store. Measured: A and B got BYPASS and their own profiles; the visitor got a MISS and nobody else's data.</p>",
+    "<p>Ba cách. Tốt nhất: upstream đánh dấu câu trả lời riêng là private. Hoặc tắt bộ đệm ở tuyến đó. Hoặc bỏ qua bộ đệm khi request mang token: proxy_cache_bypass để không trả từ bộ đệm, proxy_no_cache để không lưu. Đo thật: A và B nhận BYPASS và hồ sơ của chính mình. Khách nhận MISS, không thấy dữ liệu của ai.</p>"],
+  [8, "Key terms of this lesson",
+    "<p>Key terms: Set-Cookie, Cache-Control private, proxy cache valid, proxy cache bypass, proxy no cache, and cache leak.</p>",
+    "<p>Thuật ngữ: Set-Cookie, Cache-Control private, proxy_cache_valid. Proxy_cache_bypass, proxy_no_cache, và rò rỉ bộ đệm.</p>"],
+  [9, "Your turn — and what to keep",
+    "<p>Your turn: make the three refused responses, compare methods, reproduce the leak as two users and a visitor, then fix it. Keep: Nginx never checks who asked; the key is the URL; personal answers must be private or bypassed; test as two users.</p>",
+    "<p>Tới lượt bạn: dựng ba phản hồi bị từ chối, so ba phương thức, dựng lại vụ rò rỉ với hai người dùng và một khách. Rồi vá bằng proxy_cache_bypass cộng proxy_no_cache, và đo lại. Tóm lại: Nginx không bao giờ nhìn ai hỏi. Khoá là URL. Câu trả lời riêng phải private hoặc bypass. Luôn thử với hai người dùng. Bạn mở Code Lab Nginx, module mẫu production. Bài sau: ai quyết định giữ bao lâu.</p>"],
+]);

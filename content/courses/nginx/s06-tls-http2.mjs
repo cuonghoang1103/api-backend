@@ -1,3 +1,8 @@
+import G06_1 from './giang/ngx-06-1.mjs';
+import G06_2 from './giang/ngx-06-2.mjs';
+import G06_3 from './giang/ngx-06-3.mjs';
+import G06_4 from './giang/ngx-06-4.mjs';
+import G06_5 from './giang/ngx-06-5.mjs';
 const REF = '?ref=%2Fcourses%2Fnginx%2Flearn&reflabel=Nginx';
 
 export default {
@@ -12,6 +17,7 @@ export default {
       type: 'LESSON',
       description: 'Bốn dòng bật được HTTPS, và một trong bốn dòng đó là chỗ hỏng thường gặp nhất của TLS. Bài này dựng một chuỗi ba tầng thật rồi đo cả hai cách viết: một cách gửi ra hai chứng chỉ và xác thực OK, cách kia gửi ra một và trả về mã lỗi 21.',
       content: `
+${G06_1}
 <div class="ml-en">
 <span class="eyebrow">Chapter 6 · Lesson 6.1</span>
 <h2>The certificate chain, and the intermediate everyone forgets</h2>
@@ -77,7 +83,7 @@ echo | openssl s_client -connect vidu.com:443 -servername vidu.com 2&gt;/dev/nul
 echo | openssl s_client -connect vidu.com:443 -servername vidu.com 2&gt;/dev/null \\
   | openssl x509 -noout -text | grep -A1 'Subject Alternative Name'</code></pre>
 <div class="kv-grid">
-  <div class="kv"><span class="k">-servername is not optional when testing</span><span class="v">Without it <code>openssl</code> sends no SNI, so a server hosting several sites hands you its default certificate and you conclude the wrong thing. Chapter 1's server selection applies here too — the certificate comes from whichever <code>server</code> block matched.</span></div>
+  <div class="kv"><span class="k">-servername is not optional when testing BY IP</span><span class="v">Measured with OpenSSL 3: connected by IP (an origin behind a CDN, say), <code>openssl</code> sends no SNI and the server hands you its DEFAULT certificate (<code>CN = may-mac-dinh</code>, verify 18). Connected by a NAME, OpenSSL 3 sends that name as SNI by itself. Add <code>-servername</code> whenever you connect by address. Chapter 1's server selection applies here too — the certificate comes from whichever <code>server</code> block matched.</span></div>
   <div class="kv"><span class="k">The Common Name is ignored; SAN is what counts</span><span class="v">Browsers stopped honouring CN years ago. A certificate is valid for exactly the names in its Subject Alternative Name list, which is why a certificate for <code>vidu.com</code> that omits <code>www.vidu.com</code> breaks the <code>www</code> redirect you set up in Chapter 1.</span></div>
   <div class="kv"><span class="k">The private key never leaves the server and is never in the chain</span><span class="v"><code>privkey.pem</code> is referenced by <code>ssl_certificate_key</code> and nothing else. It should be readable only by root — Nginx's master process reads it before dropping privileges, which is one of the reasons the master runs as root at all (Section 0).</span></div>
   <div class="kv"><span class="k">One server block can hold several certificates</span><span class="v">Repeat <code>ssl_certificate</code> and <code>ssl_certificate_key</code> to serve an RSA and an ECDSA certificate from the same block; Nginx picks per client based on what they support. ECDSA handshakes are meaningfully cheaper, and old clients still get RSA.</span></div>
@@ -93,6 +99,127 @@ echo | openssl s_client -connect vidu.com:443 -servername vidu.com 2&gt;/dev/nul
 <div class="note-ct">
 <p><strong>What to do right after enabling TLS.</strong> Run the three <code>openssl</code> commands above against your real hostname from a machine that is not yours. Count the certificates, read the verify code, check the SAN list covers every name you serve, and note the expiry date somewhere that will tell you before a user does. That is about two minutes, and it catches the missing intermediate, the missing <code>www</code>, and the certificate that was issued for a hostname you stopped using.</p>
 </div>
+
+<h3>🔬 Run it yourself</h3>
+<p>A real three-level chain built with <code>openssl</code>, one port serving fullchain and one the leaf alone, a default server for the SNI test, an RSA + ECDSA pair in one block, and a renewal before and after reload — nginx/1.24.0, OpenSSL 3.0 (add <code>127.0.0.1 vidu.com www.vidu.com</code> to <code>/etc/hosts</code>):</p>
+<pre><code class="language-bash"><span class="tok-comment"># tao-chuoi.sh</span>
+<span class="tok-comment">#!/bin/bash</span>
+<span class="tok-comment"># tao-chuoi.sh — dựng một chuỗi 3 tầng THẬT: Root CA -&gt; Trung gian -&gt; lá vidu.com (SAN vidu.com, www.vidu.com)</span>
+set -e; mkdir -p /root/pki &amp;&amp; cd /root/pki
+openssl req -x509 -newkey rsa:2048 -nodes -keyout root.key -out root.crt -days 3650 -subj "/CN=Lab Root CA" 2&gt;/dev/null
+openssl req -newkey rsa:2048 -nodes -keyout tg.key -out tg.csr -subj "/CN=Lab Intermediate CA" 2&gt;/dev/null
+printf 'basicConstraints=critical,CA:TRUE,pathlen:0\\nkeyUsage=critical,keyCertSign,cRLSign\\n' &gt; tg.ext
+openssl x509 -req -in tg.csr -CA root.crt -CAkey root.key -CAcreateserial -out tg.crt -days 1825 -extfile tg.ext 2&gt;/dev/null
+openssl req -newkey rsa:2048 -nodes -keyout la.key -out la.csr -subj "/CN=vidu.com" 2&gt;/dev/null
+printf 'subjectAltName=DNS:vidu.com,DNS:www.vidu.com\\nbasicConstraints=CA:FALSE\\nextendedKeyUsage=serverAuth\\n' &gt; la.ext
+openssl x509 -req -in la.csr -CA tg.crt -CAkey tg.key -CAcreateserial -out la.crt -days 90 -extfile la.ext 2&gt;/dev/null
+cat la.crt tg.crt &gt; fullchain.crt
+<span class="tok-comment"># lá ECDSA cùng tên (để một khối server giữ HAI chứng chỉ)</span>
+openssl req -newkey ec -pkeyopt ec_paramgen_curve:prime256v1 -nodes -keyout la-ec.key -out la-ec.csr -subj "/CN=vidu.com" 2&gt;/dev/null
+openssl x509 -req -in la-ec.csr -CA tg.crt -CAkey tg.key -CAcreateserial -out la-ec.crt -days 90 -extfile la.ext 2&gt;/dev/null
+cat la-ec.crt tg.crt &gt; fullchain-ec.crt
+<span class="tok-comment"># máy MẶC ĐỊNH: chứng chỉ tự ký, tên khác — để thử SNI</span>
+openssl req -x509 -newkey rsa:2048 -nodes -keyout md.key -out md.crt -days 30 -subj "/CN=may-mac-dinh" 2&gt;/dev/null
+for f in root tg la; do printf '%-5s ' $f.crt; openssl x509 -in $f.crt -noout -subject -issuer | paste -sd' '; done</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  server {                                 <span class="tok-comment">  # máy MẶC ĐỊNH của cổng 8443</span>
+    listen 8443 ssl default_server;
+    ssl_certificate     /root/pki/md.crt;
+    ssl_certificate_key /root/pki/md.key;
+    return 200 "may mac dinh\\n";
+  }
+  server {                                 <span class="tok-comment">  # ĐÚNG: lá + trung gian</span>
+    listen 8443 ssl;
+    server_name vidu.com www.vidu.com;
+    ssl_certificate     /root/pki/fullchain.crt;
+    ssl_certificate_key /root/pki/la.key;
+    ssl_certificate     /root/pki/fullchain-ec.crt; <span class="tok-comment">  # cặp thứ hai: ECDSA</span>
+    ssl_certificate_key /root/pki/la-ec.key;
+    return 200 "xin chao tu vidu.com\\n";
+  }
+  server {                                 <span class="tok-comment">  # SAI: chỉ mỗi cái lá</span>
+    listen 8444 ssl;
+    server_name vidu.com;
+    ssl_certificate     /root/pki/la.crt;
+    ssl_certificate_key /root/pki/la.key;
+    return 200 "xin chao tu vidu.com\\n";
+  }
+}</code></pre>
+<div class="out">$ bash tao-chuoi.sh
+root.crt subject=CN = Lab Root CA issuer=CN = Lab Root CA
+tg.crt subject=CN = Lab Intermediate CA issuer=CN = Lab Root CA
+la.crt subject=CN = vidu.com issuer=CN = Lab Intermediate CA
+$ for p in 8443 8444; do echo "== cong $p"; openssl s_client -connect 127.0.0.1:$p -servername vidu.com -CAfile pki/root.crt &lt;/dev/null 2&gt;&amp;1 | grep -E '^ [0-9] s:|Verify return code'; done
+== cong 8443
+ 0 s:CN = vidu.com
+ 1 s:CN = Lab Intermediate CA
+Verify return code: 0 (ok)
+== cong 8444
+ 0 s:CN = vidu.com
+Verify return code: 21 (unable to verify the first certificate)
+$ curl -s --cacert pki/root.crt https://vidu.com:8443/
+xin chao tu vidu.com
+$ curl -sS --cacert pki/root.crt https://vidu.com:8444/
+curl: (60) SSL certificate problem: unable to get local issuer certificate
+More details here: https://curl.se/docs/sslcerts.html
+
+curl failed to verify the legitimacy of the server and therefore could not
+establish a secure connection to it. To learn more about this situation and
+how to fix it, please visit the web page mentioned above.
+$ openssl s_client -connect 127.0.0.1:8443 -CAfile pki/root.crt &lt;/dev/null 2&gt;&amp;1 | grep -E '^ [0-9] s:|Verify return code'
+ 0 s:CN = may-mac-dinh
+Verify return code: 18 (self-signed certificate)
+$ openssl s_client -connect vidu.com:8443 -CAfile pki/root.crt &lt;/dev/null 2&gt;&amp;1 | grep -E '^ [0-9] s:|Verify return code'
+ 0 s:CN = vidu.com
+ 1 s:CN = Lab Intermediate CA
+Verify return code: 0 (ok)
+$ echo | openssl s_client -connect 127.0.0.1:8443 -servername vidu.com 2&gt;/dev/null | openssl x509 -noout -dates -subject
+notBefore=Nov 12 15:50:36 2026 GMT
+notAfter=Feb 10 15:50:36 2027 GMT
+subject=CN = vidu.com
+$ echo | openssl s_client -connect 127.0.0.1:8443 -servername vidu.com 2&gt;/dev/null | openssl x509 -noout -text | grep -A1 'Subject Alternative Name'
+            X509v3 Subject Alternative Name: 
+                DNS:vidu.com, DNS:www.vidu.com
+$ echo | openssl s_client -connect 127.0.0.1:8443 -servername vidu.com 2&gt;/dev/null | openssl x509 -noout -checkend $((21*86400))
+Certificate will not expire
+$ echo | openssl s_client -connect 127.0.0.1:8443 -servername vidu.com 2&gt;/dev/null | openssl x509 -noout -checkend $((100*86400))
+Certificate will expire
+$ for c in ECDHE-RSA-AES128-GCM-SHA256 ECDHE-ECDSA-AES128-GCM-SHA256; do printf '%-32s' $c; openssl s_client -connect 127.0.0.1:8443 -servername vidu.com -tls1_2 -cipher $c &lt;/dev/null 2&gt;&amp;1 | grep -E 'Server public key' ; done
+ECDHE-RSA-AES128-GCM-SHA256     Server public key is 2048 bit
+ECDHE-ECDSA-AES128-GCM-SHA256   Server public key is 256 bit
+$ nginx -v
+nginx version: nginx/1.24.0 (Ubuntu)
+$ nginx -t -c h2.conf
+2026/11/12 15:50:37 [emerg] 3706#3706: unknown directive "http2" in h2.conf:5
+nginx: configuration file h2.conf test failed
+$ echo | openssl s_client -connect 127.0.0.1:8443 -servername vidu.com 2&gt;/dev/null | openssl x509 -noout -serial
+serial=5A149BF0E5BC69E3B738D18BC45E5FB746867169
+$ cd pki &amp;&amp; openssl x509 -req -in la.csr -CA tg.crt -CAkey tg.key -CAcreateserial -out la.crt -days 90 -extfile la.ext 2&gt;/dev/null &amp;&amp; cat la.crt tg.crt &gt; fullchain.crt &amp;&amp; openssl x509 -in la.crt -noout -serial | sed 's/^/tren dia: /'
+tren dia: serial=5A149BF0E5BC69E3B738D18BC45E5FB74686716B
+$ echo | openssl s_client -connect 127.0.0.1:8443 -servername vidu.com 2&gt;/dev/null | openssl x509 -noout -serial | sed 's/^/nginx dang gui: /'
+nginx dang gui: serial=5A149BF0E5BC69E3B738D18BC45E5FB746867169
+$ nginx -s reload -c chuoi.conf; sleep 0.5; echo | openssl s_client -connect 127.0.0.1:8443 -servername vidu.com 2&gt;/dev/null | openssl x509 -noout -serial | sed 's/^/sau reload: /'
+sau reload: serial=5A149BF0E5BC69E3B738D18BC45E5FB74686716B
+2026/11/12 15:54:07 [notice] 5790#5790: signal process started</div>
+<p>fullchain: two certificates, verify 0; the leaf alone: one certificate, verify 21, and curl error 60. By IP with no name: the default certificate; by name: OpenSSL 3 sent SNI itself. <code>http2 on;</code> did not even load on 1.24.0. The new file on disk was NOT served until <code>nginx -s reload</code>.</p>
+<h3>🔗 Related lessons in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-6-3-chung-chi" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking for Developers · 6.3 — Certificates, the chain of trust and CAs</span><span class="lc-sub">The same chain from the network side</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/applied-cryptography/learn?lessonSlug=crypto-6-2-x509" target="_blank" rel="noopener"><span class="lc-ico">🔐</span><span class="lc-body"><span class="lc-title">Applied Cryptography · 6.2 — Inside an X.509 certificate</span><span class="lc-sub">What every field of the leaf means</span></span></a>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>ssl_certificate</code> / <code>ssl_certificate_key</code></span><span class="v">The chained certificate file and the private key that go together in a server block.</span></div>
+  <div class="kv"><span class="k">fullchain.pem vs cert.pem</span><span class="v">Leaf plus intermediate (what you serve) versus the leaf certificate alone.</span></div>
+  <div class="kv"><span class="k">Intermediate CA</span><span class="v">Signed by the root and signs your leaf; not in any trust store, so the client can only get it from you.</span></div>
+  <div class="kv"><span class="k">SAN (Subject Alternative Name)</span><span class="v">The exact list of names a certificate is valid for; the Common Name is ignored.</span></div>
+  <div class="kv"><span class="k">Verify return code 21</span><span class="v">"unable to verify the first certificate" — the signature that the intermediate is missing.</span></div>
+  <div class="kv"><span class="k">ACME challenge</span><span class="v">The /.well-known/acme-challenge path that certbot must be able to reach to renew.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li>HTTPS is four lines, but pointing <code>ssl_certificate</code> at <code>cert.pem</code> instead of <code>fullchain.pem</code> omits the intermediate.</li><li>A missing intermediate works in your own browser yet fails for fresh mobile browsers, apps, <code>curl</code> and pinning clients.</li><li>Diagnose by counting the certificates the server sends: one means the intermediate is missing, two or three means the chain is complete.</li><li>SAN decides which names the certificate covers; the private key is referenced by <code>ssl_certificate_key</code> and never leaves the server.</li><li>Re-run the <code>openssl</code> checks and watch the expiry date after every renewal, not only the first setup.</li></ul>
 
 <h3>Learning sources for this lesson</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/configuring_https_servers.html" target="_blank" rel="noopener"><span class="lc-ico">🔐</span><span class="lc-body"><span class="lc-title">nginx — Configuring HTTPS servers</span><span class="lc-sub">nginx.org · Including the paragraph about the chained certificate file</span></span></a>
@@ -167,7 +294,7 @@ echo | openssl s_client -connect vidu.com:443 -servername vidu.com 2&gt;/dev/nul
 echo | openssl s_client -connect vidu.com:443 -servername vidu.com 2&gt;/dev/null \\
   | openssl x509 -noout -text | grep -A1 'Subject Alternative Name'</code></pre>
 <div class="kv-grid">
-  <div class="kv"><span class="k">-servername KHÔNG phải tuỳ chọn khi đi kiểm</span><span class="v">Thiếu nó thì <code>openssl</code> không gửi SNI, nên một máy chủ đang chứa nhiều site sẽ đưa cho bạn chứng chỉ MẶC ĐỊNH của nó và bạn kết luận sai. Phép chọn server ở Chương 1 áp dụng luôn ở đây — cái chứng chỉ tới từ khối <code>server</code> nào vừa khớp.</span></div>
+  <div class="kv"><span class="k">-servername KHÔNG phải tuỳ chọn khi kiểm BẰNG IP</span><span class="v">Đo với OpenSSL 3: nối bằng IP (ví dụ máy gốc sau CDN) thì <code>openssl</code> không gửi SNI và máy chủ đưa chứng chỉ của khối MẶC ĐỊNH (<code>CN = may-mac-dinh</code>, mã 18). Nối bằng TÊN thì OpenSSL 3 tự gửi chính tên đó làm SNI. Cứ nối bằng địa chỉ là phải thêm <code>-servername</code>. Phép chọn server ở Chương 1 áp dụng luôn ở đây — cái chứng chỉ tới từ khối <code>server</code> nào vừa khớp.</span></div>
   <div class="kv"><span class="k">Common Name bị BỎ QUA; SAN mới là thứ có nghĩa lý</span><span class="v">Trình duyệt thôi tôn trọng CN từ nhiều năm trước. Một chứng chỉ hợp lệ cho ĐÚNG những tên nằm trong danh sách Subject Alternative Name của nó, và đó là lý do một chứng chỉ cho <code>vidu.com</code> mà thiếu <code>www.vidu.com</code> sẽ phá cái chuyển hướng <code>www</code> bạn dựng ở Chương 1.</span></div>
   <div class="kv"><span class="k">Khoá riêng KHÔNG BAO GIỜ rời máy chủ và KHÔNG nằm trong chuỗi</span><span class="v"><code>privkey.pem</code> được <code>ssl_certificate_key</code> tham chiếu tới và không ai khác. Nó chỉ nên đọc được bởi root — tiến trình master của Nginx đọc nó TRƯỚC khi hạ quyền, và đó là một trong những lý do master chạy bằng root (Mục 0).</span></div>
   <div class="kv"><span class="k">Một khối server giữ được NHIỀU chứng chỉ</span><span class="v">Lặp lại <code>ssl_certificate</code> và <code>ssl_certificate_key</code> là phục vụ được cả một chứng chỉ RSA lẫn một chứng chỉ ECDSA từ cùng một khối; Nginx chọn theo từng client dựa vào thứ họ hỗ trợ. Bắt tay ECDSA rẻ hơn ĐÁNG KỂ, còn client cũ thì vẫn nhận RSA.</span></div>
@@ -184,6 +311,127 @@ echo | openssl s_client -connect vidu.com:443 -servername vidu.com 2&gt;/dev/nul
 <p><strong>Làm gì ngay sau khi bật TLS.</strong> Hãy chạy ba lệnh <code>openssl</code> ở trên nhắm vào tên miền THẬT của bạn, từ một cái máy KHÔNG phải máy bạn. Đếm số chứng chỉ, đọc mã xác thực, kiểm xem danh sách SAN có phủ mọi tên bạn đang phục vụ không, và ghi cái ngày hết hạn vào đâu đó sẽ báo cho bạn trước khi một người dùng báo. Việc đó tốn chừng hai phút, và nó bắt được cái trung gian bị thiếu, cái <code>www</code> bị thiếu, và cái chứng chỉ cấp cho một tên miền bạn đã thôi dùng.</p>
 </div>
 
+<h3>🔬 Tự chạy lại</h3>
+<p>Một chuỗi ba tầng thật dựng bằng <code>openssl</code>, một cổng phục vụ fullchain và một cổng chỉ cái lá, một máy mặc định để thử SNI, một cặp RSA + ECDSA trong cùng khối, và một lần gia hạn trước và sau reload — nginx/1.24.0, OpenSSL 3.0 (thêm <code>127.0.0.1 vidu.com www.vidu.com</code> vào <code>/etc/hosts</code>):</p>
+<pre><code class="language-bash"><span class="tok-comment"># tao-chuoi.sh</span>
+<span class="tok-comment">#!/bin/bash</span>
+<span class="tok-comment"># tao-chuoi.sh — dựng một chuỗi 3 tầng THẬT: Root CA -&gt; Trung gian -&gt; lá vidu.com (SAN vidu.com, www.vidu.com)</span>
+set -e; mkdir -p /root/pki &amp;&amp; cd /root/pki
+openssl req -x509 -newkey rsa:2048 -nodes -keyout root.key -out root.crt -days 3650 -subj "/CN=Lab Root CA" 2&gt;/dev/null
+openssl req -newkey rsa:2048 -nodes -keyout tg.key -out tg.csr -subj "/CN=Lab Intermediate CA" 2&gt;/dev/null
+printf 'basicConstraints=critical,CA:TRUE,pathlen:0\\nkeyUsage=critical,keyCertSign,cRLSign\\n' &gt; tg.ext
+openssl x509 -req -in tg.csr -CA root.crt -CAkey root.key -CAcreateserial -out tg.crt -days 1825 -extfile tg.ext 2&gt;/dev/null
+openssl req -newkey rsa:2048 -nodes -keyout la.key -out la.csr -subj "/CN=vidu.com" 2&gt;/dev/null
+printf 'subjectAltName=DNS:vidu.com,DNS:www.vidu.com\\nbasicConstraints=CA:FALSE\\nextendedKeyUsage=serverAuth\\n' &gt; la.ext
+openssl x509 -req -in la.csr -CA tg.crt -CAkey tg.key -CAcreateserial -out la.crt -days 90 -extfile la.ext 2&gt;/dev/null
+cat la.crt tg.crt &gt; fullchain.crt
+<span class="tok-comment"># lá ECDSA cùng tên (để một khối server giữ HAI chứng chỉ)</span>
+openssl req -newkey ec -pkeyopt ec_paramgen_curve:prime256v1 -nodes -keyout la-ec.key -out la-ec.csr -subj "/CN=vidu.com" 2&gt;/dev/null
+openssl x509 -req -in la-ec.csr -CA tg.crt -CAkey tg.key -CAcreateserial -out la-ec.crt -days 90 -extfile la.ext 2&gt;/dev/null
+cat la-ec.crt tg.crt &gt; fullchain-ec.crt
+<span class="tok-comment"># máy MẶC ĐỊNH: chứng chỉ tự ký, tên khác — để thử SNI</span>
+openssl req -x509 -newkey rsa:2048 -nodes -keyout md.key -out md.crt -days 30 -subj "/CN=may-mac-dinh" 2&gt;/dev/null
+for f in root tg la; do printf '%-5s ' $f.crt; openssl x509 -in $f.crt -noout -subject -issuer | paste -sd' '; done</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  server {                                 <span class="tok-comment">  # máy MẶC ĐỊNH của cổng 8443</span>
+    listen 8443 ssl default_server;
+    ssl_certificate     /root/pki/md.crt;
+    ssl_certificate_key /root/pki/md.key;
+    return 200 "may mac dinh\\n";
+  }
+  server {                                 <span class="tok-comment">  # ĐÚNG: lá + trung gian</span>
+    listen 8443 ssl;
+    server_name vidu.com www.vidu.com;
+    ssl_certificate     /root/pki/fullchain.crt;
+    ssl_certificate_key /root/pki/la.key;
+    ssl_certificate     /root/pki/fullchain-ec.crt; <span class="tok-comment">  # cặp thứ hai: ECDSA</span>
+    ssl_certificate_key /root/pki/la-ec.key;
+    return 200 "xin chao tu vidu.com\\n";
+  }
+  server {                                 <span class="tok-comment">  # SAI: chỉ mỗi cái lá</span>
+    listen 8444 ssl;
+    server_name vidu.com;
+    ssl_certificate     /root/pki/la.crt;
+    ssl_certificate_key /root/pki/la.key;
+    return 200 "xin chao tu vidu.com\\n";
+  }
+}</code></pre>
+<div class="out">$ bash tao-chuoi.sh
+root.crt subject=CN = Lab Root CA issuer=CN = Lab Root CA
+tg.crt subject=CN = Lab Intermediate CA issuer=CN = Lab Root CA
+la.crt subject=CN = vidu.com issuer=CN = Lab Intermediate CA
+$ for p in 8443 8444; do echo "== cong $p"; openssl s_client -connect 127.0.0.1:$p -servername vidu.com -CAfile pki/root.crt &lt;/dev/null 2&gt;&amp;1 | grep -E '^ [0-9] s:|Verify return code'; done
+== cong 8443
+ 0 s:CN = vidu.com
+ 1 s:CN = Lab Intermediate CA
+Verify return code: 0 (ok)
+== cong 8444
+ 0 s:CN = vidu.com
+Verify return code: 21 (unable to verify the first certificate)
+$ curl -s --cacert pki/root.crt https://vidu.com:8443/
+xin chao tu vidu.com
+$ curl -sS --cacert pki/root.crt https://vidu.com:8444/
+curl: (60) SSL certificate problem: unable to get local issuer certificate
+More details here: https://curl.se/docs/sslcerts.html
+
+curl failed to verify the legitimacy of the server and therefore could not
+establish a secure connection to it. To learn more about this situation and
+how to fix it, please visit the web page mentioned above.
+$ openssl s_client -connect 127.0.0.1:8443 -CAfile pki/root.crt &lt;/dev/null 2&gt;&amp;1 | grep -E '^ [0-9] s:|Verify return code'
+ 0 s:CN = may-mac-dinh
+Verify return code: 18 (self-signed certificate)
+$ openssl s_client -connect vidu.com:8443 -CAfile pki/root.crt &lt;/dev/null 2&gt;&amp;1 | grep -E '^ [0-9] s:|Verify return code'
+ 0 s:CN = vidu.com
+ 1 s:CN = Lab Intermediate CA
+Verify return code: 0 (ok)
+$ echo | openssl s_client -connect 127.0.0.1:8443 -servername vidu.com 2&gt;/dev/null | openssl x509 -noout -dates -subject
+notBefore=Nov 12 15:50:36 2026 GMT
+notAfter=Feb 10 15:50:36 2027 GMT
+subject=CN = vidu.com
+$ echo | openssl s_client -connect 127.0.0.1:8443 -servername vidu.com 2&gt;/dev/null | openssl x509 -noout -text | grep -A1 'Subject Alternative Name'
+            X509v3 Subject Alternative Name: 
+                DNS:vidu.com, DNS:www.vidu.com
+$ echo | openssl s_client -connect 127.0.0.1:8443 -servername vidu.com 2&gt;/dev/null | openssl x509 -noout -checkend $((21*86400))
+Certificate will not expire
+$ echo | openssl s_client -connect 127.0.0.1:8443 -servername vidu.com 2&gt;/dev/null | openssl x509 -noout -checkend $((100*86400))
+Certificate will expire
+$ for c in ECDHE-RSA-AES128-GCM-SHA256 ECDHE-ECDSA-AES128-GCM-SHA256; do printf '%-32s' $c; openssl s_client -connect 127.0.0.1:8443 -servername vidu.com -tls1_2 -cipher $c &lt;/dev/null 2&gt;&amp;1 | grep -E 'Server public key' ; done
+ECDHE-RSA-AES128-GCM-SHA256     Server public key is 2048 bit
+ECDHE-ECDSA-AES128-GCM-SHA256   Server public key is 256 bit
+$ nginx -v
+nginx version: nginx/1.24.0 (Ubuntu)
+$ nginx -t -c h2.conf
+2026/11/12 15:50:37 [emerg] 3706#3706: unknown directive "http2" in h2.conf:5
+nginx: configuration file h2.conf test failed
+$ echo | openssl s_client -connect 127.0.0.1:8443 -servername vidu.com 2&gt;/dev/null | openssl x509 -noout -serial
+serial=5A149BF0E5BC69E3B738D18BC45E5FB746867169
+$ cd pki &amp;&amp; openssl x509 -req -in la.csr -CA tg.crt -CAkey tg.key -CAcreateserial -out la.crt -days 90 -extfile la.ext 2&gt;/dev/null &amp;&amp; cat la.crt tg.crt &gt; fullchain.crt &amp;&amp; openssl x509 -in la.crt -noout -serial | sed 's/^/tren dia: /'
+tren dia: serial=5A149BF0E5BC69E3B738D18BC45E5FB74686716B
+$ echo | openssl s_client -connect 127.0.0.1:8443 -servername vidu.com 2&gt;/dev/null | openssl x509 -noout -serial | sed 's/^/nginx dang gui: /'
+nginx dang gui: serial=5A149BF0E5BC69E3B738D18BC45E5FB746867169
+$ nginx -s reload -c chuoi.conf; sleep 0.5; echo | openssl s_client -connect 127.0.0.1:8443 -servername vidu.com 2&gt;/dev/null | openssl x509 -noout -serial | sed 's/^/sau reload: /'
+sau reload: serial=5A149BF0E5BC69E3B738D18BC45E5FB74686716B
+2026/11/12 15:54:07 [notice] 5790#5790: signal process started</div>
+<p>fullchain: hai chứng chỉ, mã 0; chỉ cái lá: một chứng chỉ, mã 21, và curl lỗi 60. Nối bằng IP không tên: chứng chỉ mặc định; nối bằng tên: OpenSSL 3 tự gửi SNI. <code>http2 on;</code> không nạp nổi trên 1.24.0. Tệp mới trên đĩa KHÔNG được gửi đi cho tới khi <code>nginx -s reload</code>.</p>
+<h3>🔗 Bài liên quan ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-6-3-chung-chi" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking for Developers · 6.3 — Chứng chỉ, chuỗi tin cậy và CA</span><span class="lc-sub">Cùng cái chuỗi đó nhìn từ phía mạng</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/applied-cryptography/learn?lessonSlug=crypto-6-2-x509" target="_blank" rel="noopener"><span class="lc-ico">🔐</span><span class="lc-body"><span class="lc-title">Applied Cryptography · 6.2 — Bên trong một chứng chỉ X.509</span><span class="lc-sub">Từng trường của cái lá nghĩa là gì</span></span></a>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>ssl_certificate</code> / <code>ssl_certificate_key</code></span><span class="v">Tệp chứng chỉ nối chuỗi và khoá riêng, đi cùng nhau trong một khối server.</span></div>
+  <div class="kv"><span class="k">fullchain.pem vs cert.pem</span><span class="v">Lá cộng trung gian (cái bạn phục vụ) so với chỉ mỗi chứng chỉ lá.</span></div>
+  <div class="kv"><span class="k">Intermediate CA</span><span class="v">Do root ký và nó ký chứng chỉ của bạn; không nằm trong kho tin cậy nào, nên client chỉ lấy được từ bạn.</span></div>
+  <div class="kv"><span class="k">SAN (Subject Alternative Name)</span><span class="v">Danh sách tên chính xác mà chứng chỉ có hiệu lực; Common Name bị bỏ qua.</span></div>
+  <div class="kv"><span class="k">Verify return code 21</span><span class="v">"unable to verify the first certificate" — dấu hiệu đang thiếu trung gian.</span></div>
+  <div class="kv"><span class="k">ACME challenge</span><span class="v">Đường /.well-known/acme-challenge mà certbot phải chạm tới được để gia hạn.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li>Bật HTTPS tốn bốn dòng, nhưng trỏ <code>ssl_certificate</code> vào <code>cert.pem</code> thay vì <code>fullchain.pem</code> là bỏ sót trung gian.</li><li>Thiếu trung gian vẫn chạy trên trình duyệt của bạn nhưng hỏng với trình duyệt di động mới, app, <code>curl</code> và client ghim chứng chỉ.</li><li>Chẩn đoán bằng cách đếm số chứng chỉ máy chủ gửi ra: một là thiếu trung gian, hai hoặc ba là chuỗi đầy đủ.</li><li>SAN quyết định chứng chỉ phủ những tên nào; khoá riêng do <code>ssl_certificate_key</code> tham chiếu và không bao giờ rời máy chủ.</li><li>Chạy lại các lệnh <code>openssl</code> và theo dõi ngày hết hạn sau MỖI lần gia hạn, không chỉ lần cài đầu.</li></ul>
+
 <h3>Nguồn học cho bài này</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/configuring_https_servers.html" target="_blank" rel="noopener"><span class="lc-ico">🔐</span><span class="lc-body"><span class="lc-title">nginx — Cấu hình máy chủ HTTPS</span><span class="lc-sub">nginx.org · Kèm cả đoạn nói về tệp chứng chỉ nối chuỗi</span></span></a>
 <a class="link-card" href="https://letsencrypt.org/docs/certificates-for-localhost/" target="_blank" rel="noopener"><span class="lc-ico">🔏</span><span class="lc-body"><span class="lc-title">Let's Encrypt — giải thích các tệp chứng chỉ</span><span class="lc-sub">letsencrypt.org · Bốn tệp nó ghi ra thì mỗi cái để làm gì</span></span></a>
@@ -199,8 +447,9 @@ echo | openssl s_client -connect vidu.com:443 -servername vidu.com 2&gt;/dev/nul
       title: '6.2 — Which protocol and cipher actually get used|||6.2 — Rốt cuộc giao thức nào và bộ mã nào được dùng',
       slug: 'nginx-6-2-giao-thuc-va-bo-ma',
       type: 'LESSON',
-      description: 'Bài này thử LẦN LƯỢT 158 bộ mã vào hai khối server để xem mỗi khối thật sự chấp nhận bao nhiêu. Khối mặc định nhận 21, khối khai tường minh nhận 3 — và trong 21 cái kia có 12 cái KHÔNG có forward secrecy, tức là một phiên bị ghi lại hôm nay có thể giải mã được vào ngày khoá riêng bị lộ.',
+      description: 'Bài này thử LẦN LƯỢT 89 bộ mã TLS 1.2 vào hai khối server để xem mỗi khối thật sự chấp nhận bao nhiêu. Khối mặc định nhận 27, khối khai tường minh nhận 3 — và trong 21 cái kia có 12 cái KHÔNG có forward secrecy, tức là một phiên bị ghi lại hôm nay có thể giải mã được vào ngày khoá riêng bị lộ.',
       content: `
+${G06_2}
 <div class="ml-en">
 <span class="eyebrow">Chapter 6 · Lesson 6.2</span>
 <h2>Which protocol and cipher actually get used</h2>
@@ -224,26 +473,25 @@ Ep client CHIU noi TLS 1.0 (ha muc an ninh cua OpenSSL):
 <p><strong>The last row is the one that means something.</strong> The first two "rejections" were the local client refusing to even offer TLS 1.0 — modern OpenSSL builds disable it at compile time, so a naive test tells you nothing about your server. Forcing the client to lower its own security level made it offer TLS 1.0 for real, and the server answered with <code>alert protocol version</code>. That is the server declining, and it means this nginx build already excludes the obsolete versions without any <code>ssl_protocols</code> line. Worth checking on your own build rather than assuming either way — the check is one command.</p>
 </div>
 
-<h3>Cipher suites: 158 tried, one at a time</h3>
-<div class="out">Khoi HIEN DAI (co ssl_ciphers khai ro):
-    3 chap nhan / 155 tu choi
+<h3>Cipher suites: 89 tried, one at a time</h3>
+<div class="out">Thu 89 bo ma TLS 1.2 ma OpenSSL biet, tung cai mot (client ha SECLEVEL=0 de dam thu het):
+Khoi HIEN DAI (co ssl_ciphers khai ro):
+    3 chap nhan / 86 tu choi
       ECDHE-RSA-AES256-GCM-SHA384
       ECDHE-RSA-CHACHA20-POLY1305
       ECDHE-RSA-AES128-GCM-SHA256
-
 Khoi MAC DINH (khong khai ssl_ciphers):
-   21 chap nhan / 137 tu choi
-
-Trong 21 cai do, 12 cai KHONG co ECDHE:
-   AES128-CCM        AES128-CCM8       AES128-GCM-SHA256  AES128-SHA256
-   AES256-CCM        AES256-CCM8       AES256-GCM-SHA384  AES256-SHA256
-   ARIA128-GCM-SHA256  ARIA256-GCM-SHA384
-   CAMELLIA128-SHA256  CAMELLIA256-SHA256</div>
+   27 chap nhan / 62 tu choi
+Trong 27 cai do, 16 cai KHONG co ECDHE:
+   AES256-GCM-SHA384  AES256-CCM8  AES256-CCM  ARIA256-GCM-SHA384
+   AES128-GCM-SHA256  AES128-CCM8  AES128-CCM  ARIA128-GCM-SHA256
+   AES256-SHA256  CAMELLIA256-SHA256  AES128-SHA256  CAMELLIA128-SHA256
+   AES256-SHA  CAMELLIA256-SHA  AES128-SHA  CAMELLIA128-SHA</div>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">No ECDHE means no forward secrecy</span><span class="lz-d">Those twelve use static RSA key exchange: the session key is encrypted with the server's public key. Anyone who records the traffic today and obtains the private key later — a breach, a stolen backup, a seized disk — can decrypt every recorded session retroactively.</span></div>
   <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">With ECDHE, the session key never crosses the wire</span><span class="lz-d">Both sides derive it from ephemeral values that are discarded afterwards. The private key only proves identity; losing it later exposes nothing that was already recorded. This is the whole reason the modern list contains nothing else.</span></div>
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">TLS 1.3 removed the choice entirely</span><span class="lz-d">All five of its cipher suites are forward-secret and AEAD, so <code>ssl_ciphers</code> does not apply to TLS 1.3 at all. The list you write only matters for the TLS 1.2 clients you still support — which is why the modern block is short.</span></div>
-  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">A smaller list is a smaller attack surface</span><span class="lz-d">Three accepted instead of twenty-one. Every suite you keep is one more implementation that has to be correct, and the history of TLS is largely a history of suites that turned out not to be.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">A smaller list is a smaller attack surface</span><span class="lz-d">Three accepted instead of twenty-seven. Every suite you keep is one more implementation that has to be correct, and the history of TLS is largely a history of suites that turned out not to be.</span></div>
 </div>
 <pre><code class="language-bash">ssl_protocols TLSv1.2 TLSv1.3;
 ssl_prefer_server_ciphers off;      <span class="tok-comment"># let the CLIENT choose — it knows its own hardware</span>
@@ -271,8 +519,80 @@ ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:
   <div class="lz-layer"><span class="lz-lname">Mozilla's configurator for the list itself</span><span class="lz-lnote">Pick "intermediate" unless you have a reason, give it your Nginx and OpenSSL versions, and paste what it generates. It is maintained as suites are deprecated, which a snippet in your notes is not.</span></div>
 </div>
 <div class="note-ct">
-<p><strong>What this lesson is really arguing.</strong> The defaults here were not dangerous — no export ciphers, no RC4, no TLS 1.0. They were just wider than they needed to be, and twelve of the twenty-one accepted suites gave up forward secrecy for no benefit. Three explicit lines closed that, and the measurement is what turns "paste this for security" into a change you can see the effect of.</p>
+<p><strong>What this lesson is really arguing.</strong> The defaults here were not dangerous — no export ciphers, no RC4, no TLS 1.0. They were just wider than they needed to be, and sixteen of the twenty-seven accepted suites gave up forward secrecy for no benefit. Three explicit lines closed that, and the measurement is what turns "paste this for security" into a change you can see the effect of.</p>
 </div>
+
+<h3>🔬 Run it yourself</h3>
+<p>Two servers on the chain from 6.1 — defaults, and three explicit lines — then every protocol version and every TLS 1.2 cipher OpenSSL knows, one handshake each, on nginx/1.24.0:</p>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  ssl_certificate     /root/pki/fullchain.crt;
+  ssl_certificate_key /root/pki/la.key;
+  server {                                 <span class="tok-comment">  # MẶC ĐỊNH: không khai gì</span>
+    listen 8443 ssl;
+    return 200 "mac dinh\\n";
+  }
+  server {                                 <span class="tok-comment">  # HIỆN ĐẠI: khai tường minh</span>
+    listen 8444 ssl;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_prefer_server_ciphers off;
+    ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305;
+    return 200 "hien dai\\n";
+  }
+}</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># bat-tay.sh</span>
+<span class="tok-comment">#!/bin/bash</span>
+<span class="tok-comment"># bat-tay.sh &lt;cổng&gt; [cờ openssl…] — bắt tay một lần, in giao thức + bộ mã, hoặc dòng lỗi</span>
+o=$(openssl s_client -connect 127.0.0.1:$1 -servername vidu.com "\${@:2}" &lt;/dev/null 2&gt;&amp;1)
+if grep -q '^New, TLS' &lt;&lt;&lt;"$o"; then grep -m1 '^New, ' &lt;&lt;&lt;"$o" | sed 's/^New, //'; else grep -m1 -oE 'no protocols available|alert protocol version|alert handshake failure|wrong version number|no ciphers available' &lt;&lt;&lt;"$o" || echo '(that bai)'; fi</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># quet-bo-ma.sh</span>
+<span class="tok-comment">#!/bin/bash</span>
+<span class="tok-comment"># quet-bo-ma.sh &lt;cổng&gt; — thử TỪNG bộ mã TLS 1.2 mà OpenSSL biết (kể cả loại yếu, SECLEVEL=0), đếm cái được chấp nhận</span>
+ok=(); tong=0
+for c in $(openssl ciphers -s -tls1_2 'ALL:COMPLEMENTOFALL:@SECLEVEL=0' | tr ':' ' '); do
+  tong=$((tong+1))
+  openssl s_client -connect 127.0.0.1:$1 -servername vidu.com -tls1_2 -cipher "$c:@SECLEVEL=0" &lt;/dev/null &gt;/dev/null 2&gt;&amp;1 &amp;&amp; ok+=("$c")
+done
+echo "cong $1: \${#ok[@]} chap nhan / $((tong-\${#ok[@]})) tu choi (thu $tong bo ma TLS 1.2)"
+printf '%s\\n' "\${ok[@]}" &gt; /tmp/ng/ok-$1.txt</code></pre>
+<div class="out">$ for p in 8443 8444; do printf 'cong %s tu thuong luong : ' $p; bash bat-tay.sh $p; done
+cong 8443 tu thuong luong : TLSv1.3, Cipher is TLS_AES_256_GCM_SHA384
+cong 8444 tu thuong luong : TLSv1.3, Cipher is TLS_AES_256_GCM_SHA384
+$ for v in tls1 tls1_1 tls1_2 tls1_3; do printf '%-8s 8443: %-46s 8444: %s\\n' -$v "$(bash bat-tay.sh 8443 -$v)" "$(bash bat-tay.sh 8444 -$v)"; done
+-tls1    8443: no protocols available                         8444: no protocols available
+-tls1_1  8443: no protocols available                         8444: no protocols available
+-tls1_2  8443: TLSv1.2, Cipher is ECDHE-RSA-AES256-GCM-SHA384 8444: TLSv1.2, Cipher is ECDHE-RSA-AES256-GCM-SHA384
+-tls1_3  8443: TLSv1.3, Cipher is TLS_AES_256_GCM_SHA384      8444: TLSv1.3, Cipher is TLS_AES_256_GCM_SHA384
+$ for p in 8443 8444; do printf 'cong %s, client CHIU TLS 1.0 : ' $p; bash bat-tay.sh $p -tls1 -cipher 'DEFAULT:@SECLEVEL=0'; done
+cong 8443, client CHIU TLS 1.0 : alert protocol version
+cong 8444, client CHIU TLS 1.0 : alert protocol version
+$ bash quet-bo-ma.sh 8444; cat /srv/ok-8444.txt
+cong 8444: 3 chap nhan / 86 tu choi (thu 89 bo ma TLS 1.2)
+ECDHE-RSA-AES256-GCM-SHA384
+ECDHE-RSA-CHACHA20-POLY1305
+ECDHE-RSA-AES128-GCM-SHA256
+$ bash quet-bo-ma.sh 8443; grep -v ECDHE /srv/ok-8443.txt | wc -l; grep -v ECDHE /srv/ok-8443.txt | paste -sd' '
+cong 8443: 27 chap nhan / 62 tu choi (thu 89 bo ma TLS 1.2)
+16
+AES256-GCM-SHA384 AES256-CCM8 AES256-CCM ARIA256-GCM-SHA384 AES128-GCM-SHA256 AES128-CCM8 AES128-CCM ARIA128-GCM-SHA256 AES256-SHA256 CAMELLIA256-SHA256 AES128-SHA256 CAMELLIA128-SHA256 AES256-SHA CAMELLIA256-SHA AES128-SHA CAMELLIA128-SHA</div>
+<p>Both negotiated TLS 1.3; TLS 1.0 and 1.1 were refused by the CLIENT until we lowered its security level — then the SERVER answered <code>alert protocol version</code>. Of 89 ciphers the explicit block accepted 3, the default 27, and 16 of those had no ECDHE.</p>
+<h3>🔗 Related lessons in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/applied-cryptography/learn?lessonSlug=crypto-7-2-key-schedule" target="_blank" rel="noopener"><span class="lc-ico">🔐</span><span class="lc-body"><span class="lc-title">Applied Cryptography · 7.2 — Key exchange, forward secrecy and the TLS 1.3 key schedule</span><span class="lc-sub">Why ECDHE is what forward secrecy means</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/applied-cryptography/learn?lessonSlug=crypto-7-4-lich-su-tan-cong" target="_blank" rel="noopener"><span class="lc-ico">🔐</span><span class="lc-body"><span class="lc-title">Applied Cryptography · 7.4 — Lessons from TLS breaks</span><span class="lc-sub">BEAST, POODLE, Heartbleed — why old ciphers were dropped</span></span></a>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>ssl_protocols</code></span><span class="v">Which TLS versions the server offers — the modern pair is <code>TLSv1.2 TLSv1.3</code>.</span></div>
+  <div class="kv"><span class="k"><code>ssl_ciphers</code></span><span class="v">The TLS 1.2 cipher list; it does not apply to TLS 1.3 at all.</span></div>
+  <div class="kv"><span class="k"><code>ssl_prefer_server_ciphers</code></span><span class="v"><code>off</code> lets the client choose — the modern advice once the list is all-strong.</span></div>
+  <div class="kv"><span class="k">ECDHE / forward secrecy</span><span class="v">Ephemeral key exchange: a recorded session stays safe even if the private key leaks later.</span></div>
+  <div class="kv"><span class="k">ChaCha20 vs AES-GCM</span><span class="v">A client without AES hardware picks ChaCha20 and gets a large speedup.</span></div>
+  <div class="kv"><span class="k">SNI / -servername</span><span class="v">Tells the server which site you mean, so a test hits the right certificate.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li>The default block accepted 27 cipher suites; an explicit list accepted 3 — and 16 of the 27 lacked ECDHE.</li><li>No ECDHE means no forward secrecy: a recorded session can be decrypted if the private key later leaks.</li><li>TLS 1.3 removed the cipher choice entirely, so <code>ssl_ciphers</code> only matters for the TLS 1.2 clients you still support.</li><li>Leave <code>ssl_prefer_server_ciphers</code> off and keep ChaCha20 in the list so mobile clients choose the fast option.</li><li>Verify by looping one cipher at a time; nginx silently ignores suite names your OpenSSL build does not have.</li></ul>
 
 <h3>Learning sources for this lesson</h3>
 <a class="link-card" href="https://ssl-config.mozilla.org/" target="_blank" rel="noopener"><span class="lc-ico">⚙️</span><span class="lc-body"><span class="lc-title">Mozilla SSL Configuration Generator</span><span class="lc-sub">ssl-config.mozilla.org · Generates the block for your exact versions, and stays current</span></span></a>
@@ -305,21 +625,20 @@ Ep client CHIU noi TLS 1.0 (ha muc an ninh cua OpenSSL):
 <p><strong>Dòng cuối mới là dòng CÓ NGHĨA.</strong> Hai lần "từ chối" đầu tiên là do CLIENT trên máy không thèm đề nghị TLS 1.0 — các bản OpenSSL hiện đại tắt nó ngay lúc biên dịch, nên một phép thử ngây thơ chẳng nói được gì về máy chủ của bạn cả. Ép client hạ mức an ninh của chính nó xuống thì nó mới thật sự đề nghị TLS 1.0, và máy chủ đáp lại bằng <code>alert protocol version</code>. ĐÓ mới là máy chủ từ chối, và nó nghĩa là bản dựng nginx này vốn đã loại các phiên bản lỗi thời mà chẳng cần dòng <code>ssl_protocols</code> nào. Đáng đi kiểm trên bản dựng CỦA BẠN chứ đừng cho là thế nào cả — phép kiểm chỉ tốn một lệnh.</p>
 </div>
 
-<h3>Bộ mã: thử 158 cái, từng cái một</h3>
-<div class="out">Khoi HIEN DAI (co ssl_ciphers khai ro):
-    3 chap nhan / 155 tu choi
+<h3>Bộ mã: thử 89 cái, từng cái một</h3>
+<div class="out">Thu 89 bo ma TLS 1.2 ma OpenSSL biet, tung cai mot (client ha SECLEVEL=0 de dam thu het):
+Khoi HIEN DAI (co ssl_ciphers khai ro):
+    3 chap nhan / 86 tu choi
       ECDHE-RSA-AES256-GCM-SHA384
       ECDHE-RSA-CHACHA20-POLY1305
       ECDHE-RSA-AES128-GCM-SHA256
-
 Khoi MAC DINH (khong khai ssl_ciphers):
-   21 chap nhan / 137 tu choi
-
-Trong 21 cai do, 12 cai KHONG co ECDHE:
-   AES128-CCM        AES128-CCM8       AES128-GCM-SHA256  AES128-SHA256
-   AES256-CCM        AES256-CCM8       AES256-GCM-SHA384  AES256-SHA256
-   ARIA128-GCM-SHA256  ARIA256-GCM-SHA384
-   CAMELLIA128-SHA256  CAMELLIA256-SHA256</div>
+   27 chap nhan / 62 tu choi
+Trong 27 cai do, 16 cai KHONG co ECDHE:
+   AES256-GCM-SHA384  AES256-CCM8  AES256-CCM  ARIA256-GCM-SHA384
+   AES128-GCM-SHA256  AES128-CCM8  AES128-CCM  ARIA128-GCM-SHA256
+   AES256-SHA256  CAMELLIA256-SHA256  AES128-SHA256  CAMELLIA128-SHA256
+   AES256-SHA  CAMELLIA256-SHA  AES128-SHA  CAMELLIA128-SHA</div>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Không có ECDHE nghĩa là KHÔNG có forward secrecy</span><span class="lz-d">Mười hai cái đó dùng trao khoá RSA TĨNH: khoá phiên được mã hoá bằng khoá công khai của máy chủ. Ai ghi lại lưu lượng hôm nay rồi lấy được khoá riêng SAU NÀY — một vụ xâm nhập, một bản sao lưu bị mất, một cái đĩa bị tịch thu — đều giải mã ngược được MỌI phiên đã ghi.</span></div>
   <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Có ECDHE thì khoá phiên KHÔNG BAO GIỜ đi qua dây</span><span class="lz-d">Hai bên cùng suy ra nó từ những giá trị phù du rồi vứt đi sau đó. Khoá riêng chỉ để CHỨNG MINH danh tính; mất nó về sau không phơi ra thứ gì đã bị ghi lại. Đó là toàn bộ lý do danh sách hiện đại chẳng chứa gì khác.</span></div>
@@ -352,8 +671,80 @@ ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:
   <div class="lz-layer"><span class="lz-lname">Bộ cấu hình của Mozilla để lấy chính cái danh sách</span><span class="lz-lnote">Chọn "intermediate" trừ khi bạn có lý do khác, đưa cho nó phiên bản Nginx và OpenSSL của bạn, rồi dán thứ nó sinh ra. Nó được BẢO TRÌ theo các bộ mã bị khai tử, còn một mẩu ghi chú trong sổ tay bạn thì không.</span></div>
 </div>
 <div class="note-ct">
-<p><strong>Bài này thật sự đang lập luận điều gì.</strong> Đám mặc định ở đây KHÔNG nguy hiểm — không có bộ mã xuất khẩu, không có RC4, không có TLS 1.0. Chúng chỉ RỘNG hơn mức cần thiết, và mười hai trong hai mươi mốt bộ mã được chấp nhận đã đánh đổi forward secrecy để lấy về... không gì cả. Ba dòng khai tường minh bịt được chuyện đó, và phép đo mới là thứ biến câu "dán cái này vào cho an toàn" thành một thay đổi mà bạn NHÌN THẤY được tác dụng.</p>
+<p><strong>Bài này thật sự đang lập luận điều gì.</strong> Đám mặc định ở đây KHÔNG nguy hiểm — không có bộ mã xuất khẩu, không có RC4, không có TLS 1.0. Chúng chỉ RỘNG hơn mức cần thiết, và mười sáu trong hai mươi bảy bộ mã được chấp nhận đã đánh đổi forward secrecy để lấy về... không gì cả. Ba dòng khai tường minh bịt được chuyện đó, và phép đo mới là thứ biến câu "dán cái này vào cho an toàn" thành một thay đổi mà bạn NHÌN THẤY được tác dụng.</p>
 </div>
+
+<h3>🔬 Tự chạy lại</h3>
+<p>Hai máy chủ dùng chuỗi của bài 6.1 — một để mặc định, một khai ba dòng — rồi mọi phiên bản giao thức và mọi bộ mã TLS 1.2 OpenSSL biết, mỗi cái một lần bắt tay, trên nginx/1.24.0:</p>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  ssl_certificate     /root/pki/fullchain.crt;
+  ssl_certificate_key /root/pki/la.key;
+  server {                                 <span class="tok-comment">  # MẶC ĐỊNH: không khai gì</span>
+    listen 8443 ssl;
+    return 200 "mac dinh\\n";
+  }
+  server {                                 <span class="tok-comment">  # HIỆN ĐẠI: khai tường minh</span>
+    listen 8444 ssl;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_prefer_server_ciphers off;
+    ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305;
+    return 200 "hien dai\\n";
+  }
+}</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># bat-tay.sh</span>
+<span class="tok-comment">#!/bin/bash</span>
+<span class="tok-comment"># bat-tay.sh &lt;cổng&gt; [cờ openssl…] — bắt tay một lần, in giao thức + bộ mã, hoặc dòng lỗi</span>
+o=$(openssl s_client -connect 127.0.0.1:$1 -servername vidu.com "\${@:2}" &lt;/dev/null 2&gt;&amp;1)
+if grep -q '^New, TLS' &lt;&lt;&lt;"$o"; then grep -m1 '^New, ' &lt;&lt;&lt;"$o" | sed 's/^New, //'; else grep -m1 -oE 'no protocols available|alert protocol version|alert handshake failure|wrong version number|no ciphers available' &lt;&lt;&lt;"$o" || echo '(that bai)'; fi</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># quet-bo-ma.sh</span>
+<span class="tok-comment">#!/bin/bash</span>
+<span class="tok-comment"># quet-bo-ma.sh &lt;cổng&gt; — thử TỪNG bộ mã TLS 1.2 mà OpenSSL biết (kể cả loại yếu, SECLEVEL=0), đếm cái được chấp nhận</span>
+ok=(); tong=0
+for c in $(openssl ciphers -s -tls1_2 'ALL:COMPLEMENTOFALL:@SECLEVEL=0' | tr ':' ' '); do
+  tong=$((tong+1))
+  openssl s_client -connect 127.0.0.1:$1 -servername vidu.com -tls1_2 -cipher "$c:@SECLEVEL=0" &lt;/dev/null &gt;/dev/null 2&gt;&amp;1 &amp;&amp; ok+=("$c")
+done
+echo "cong $1: \${#ok[@]} chap nhan / $((tong-\${#ok[@]})) tu choi (thu $tong bo ma TLS 1.2)"
+printf '%s\\n' "\${ok[@]}" &gt; /tmp/ng/ok-$1.txt</code></pre>
+<div class="out">$ for p in 8443 8444; do printf 'cong %s tu thuong luong : ' $p; bash bat-tay.sh $p; done
+cong 8443 tu thuong luong : TLSv1.3, Cipher is TLS_AES_256_GCM_SHA384
+cong 8444 tu thuong luong : TLSv1.3, Cipher is TLS_AES_256_GCM_SHA384
+$ for v in tls1 tls1_1 tls1_2 tls1_3; do printf '%-8s 8443: %-46s 8444: %s\\n' -$v "$(bash bat-tay.sh 8443 -$v)" "$(bash bat-tay.sh 8444 -$v)"; done
+-tls1    8443: no protocols available                         8444: no protocols available
+-tls1_1  8443: no protocols available                         8444: no protocols available
+-tls1_2  8443: TLSv1.2, Cipher is ECDHE-RSA-AES256-GCM-SHA384 8444: TLSv1.2, Cipher is ECDHE-RSA-AES256-GCM-SHA384
+-tls1_3  8443: TLSv1.3, Cipher is TLS_AES_256_GCM_SHA384      8444: TLSv1.3, Cipher is TLS_AES_256_GCM_SHA384
+$ for p in 8443 8444; do printf 'cong %s, client CHIU TLS 1.0 : ' $p; bash bat-tay.sh $p -tls1 -cipher 'DEFAULT:@SECLEVEL=0'; done
+cong 8443, client CHIU TLS 1.0 : alert protocol version
+cong 8444, client CHIU TLS 1.0 : alert protocol version
+$ bash quet-bo-ma.sh 8444; cat /srv/ok-8444.txt
+cong 8444: 3 chap nhan / 86 tu choi (thu 89 bo ma TLS 1.2)
+ECDHE-RSA-AES256-GCM-SHA384
+ECDHE-RSA-CHACHA20-POLY1305
+ECDHE-RSA-AES128-GCM-SHA256
+$ bash quet-bo-ma.sh 8443; grep -v ECDHE /srv/ok-8443.txt | wc -l; grep -v ECDHE /srv/ok-8443.txt | paste -sd' '
+cong 8443: 27 chap nhan / 62 tu choi (thu 89 bo ma TLS 1.2)
+16
+AES256-GCM-SHA384 AES256-CCM8 AES256-CCM ARIA256-GCM-SHA384 AES128-GCM-SHA256 AES128-CCM8 AES128-CCM ARIA128-GCM-SHA256 AES256-SHA256 CAMELLIA256-SHA256 AES128-SHA256 CAMELLIA128-SHA256 AES256-SHA CAMELLIA256-SHA AES128-SHA CAMELLIA128-SHA</div>
+<p>Cả hai thương lượng ra TLS 1.3; TLS 1.0 và 1.1 bị CLIENT từ chối cho tới khi hạ mức an ninh của nó — lúc đó MÁY CHỦ trả <code>alert protocol version</code>. Trong 89 bộ mã, khối khai tường minh nhận 3, khối mặc định nhận 27, và 16 cái trong đó không có ECDHE.</p>
+<h3>🔗 Bài liên quan ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/applied-cryptography/learn?lessonSlug=crypto-7-2-key-schedule" target="_blank" rel="noopener"><span class="lc-ico">🔐</span><span class="lc-body"><span class="lc-title">Applied Cryptography · 7.2 — Trao đổi khoá, bí mật chuyển tiếp và lịch trình khoá của TLS 1.3</span><span class="lc-sub">Vì sao ECDHE chính là bí mật chuyển tiếp</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/applied-cryptography/learn?lessonSlug=crypto-7-4-lich-su-tan-cong" target="_blank" rel="noopener"><span class="lc-ico">🔐</span><span class="lc-body"><span class="lc-title">Applied Cryptography · 7.4 — Bài học từ TLS từng vỡ</span><span class="lc-sub">BEAST, POODLE, Heartbleed — vì sao bộ mã cũ bị bỏ</span></span></a>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>ssl_protocols</code></span><span class="v">Các phiên bản TLS máy chủ đề nghị — cặp hiện đại là <code>TLSv1.2 TLSv1.3</code>.</span></div>
+  <div class="kv"><span class="k"><code>ssl_ciphers</code></span><span class="v">Danh sách bộ mã của TLS 1.2; hoàn toàn không áp cho TLS 1.3.</span></div>
+  <div class="kv"><span class="k"><code>ssl_prefer_server_ciphers</code></span><span class="v"><code>off</code> để client tự chọn — lời khuyên hiện đại khi danh sách đã toàn bộ mã mạnh.</span></div>
+  <div class="kv"><span class="k">ECDHE / forward secrecy</span><span class="v">Trao khoá phù du: phiên đã ghi vẫn an toàn kể cả khi khoá riêng lộ về sau.</span></div>
+  <div class="kv"><span class="k">ChaCha20 vs AES-GCM</span><span class="v">Client không có phần cứng AES chọn ChaCha20 và nhanh hơn rất nhiều.</span></div>
+  <div class="kv"><span class="k">SNI / -servername</span><span class="v">Báo cho máy chủ biết bạn muốn site nào, để phép thử trúng đúng chứng chỉ.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li>Khối mặc định chấp nhận 27 bộ mã; khối khai tường minh chấp nhận 3 — và 16 trong 27 cái thiếu ECDHE.</li><li>Không ECDHE là không forward secrecy: phiên đã ghi giải mã được nếu khoá riêng lộ về sau.</li><li>TLS 1.3 xoá hẳn quyền chọn bộ mã, nên <code>ssl_ciphers</code> chỉ còn ý nghĩa với đám client TLS 1.2 bạn còn hỗ trợ.</li><li>Để <code>ssl_prefer_server_ciphers</code> off và giữ ChaCha20 trong danh sách để client di động chọn được cái nhanh.</li><li>Xác nhận bằng cách lặp từng bộ mã một; nginx âm thầm bỏ qua tên bộ mã mà bản dựng OpenSSL của bạn không có.</li></ul>
 
 <h3>Nguồn học cho bài này</h3>
 <a class="link-card" href="https://ssl-config.mozilla.org/" target="_blank" rel="noopener"><span class="lc-ico">⚙️</span><span class="lc-body"><span class="lc-title">Mozilla SSL Configuration Generator</span><span class="lc-sub">ssl-config.mozilla.org · Sinh khối cấu hình đúng theo phiên bản của bạn, và luôn được cập nhật</span></span></a>
@@ -370,8 +761,9 @@ ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:
       title: '6.3 — What the handshake costs, and why connection reuse is the whole game|||6.3 — Cái bắt tay tốn gì, và vì sao tái dùng kết nối mới là tất cả',
       slug: 'nginx-6-3-gia-cua-bat-tay',
       type: 'LESSON',
-      description: 'Tách riêng cái bắt tay TLS ra khỏi mọi thứ khác rồi bấm giờ nó. Rồi so 100 request đi qua MỘT kết nối với 100 request mỗi cái một kết nối: 0,30 ms và 10,66 ms mỗi request. Đó là hệ số 35 lần, và nó giải thích vì sao phần lớn việc chỉnh tinh TLS đi nhầm hướng.',
+      description: 'Tách riêng cái bắt tay TLS ra khỏi mọi thứ khác rồi bấm giờ nó. Rồi so 100 request đi qua MỘT kết nối với 100 request mỗi cái một kết nối: 0,23 ms và 7,58 ms mỗi request. Đó là hệ số khoảng 33 lần, và nó giải thích vì sao phần lớn việc chỉnh tinh TLS đi nhầm hướng.',
       content: `
+${G06_3}
 <div class="ml-en">
 <span class="eyebrow">Chapter 6 · Lesson 6.3</span>
 <h2>What the handshake costs, and why connection reuse is the whole game</h2>
@@ -379,28 +771,30 @@ ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:
 
 <h3>The handshake, isolated</h3>
 <div class="out">curl tach bach tung giai doan (loopback, khong co do tre mang):
-
-  TCP bat tay xong  : 0,000207s
-  TLS bat tay xong  : 0,004758s     &lt;- TLS them ~4,5ms
-  Byte dau tien ve  : 0,005408s
-  Tong              : 0,005449s
-
+  TCP bat tay xong  : 0,000247s
+  TLS bat tay xong  : 0,003105s     &lt;- TLS them ~2,9ms
+  Byte dau tien ve  : 0,003283s
+  Tong              : 0,003313s
 20 lan do, chi tinh phan TLS (appconnect - connect):
-  TLS 1.3 : trung vi 4,23 ms  (min 3,81)
-  TLS 1.2 : trung vi 4,11 ms  (min 3,74)</div>
+  TLS 1.3             : trung vi 2,29 ms  (min 2,03)
+  TLS 1.2             : trung vi 2,41 ms  (min 2,14)
+  TLS 1.2 + RSA 2048  : trung vi 3,00 ms
+  TLS 1.2 + ECDSA 256 : trung vi 2,66 ms</div>
 <div class="callout warn">
 <p><strong>TLS 1.3 measured no faster than TLS 1.2 here, and that is an artefact of the test, not a fact about TLS.</strong> The advantage of 1.3 is that it needs one network round trip instead of two. On loopback a round trip costs microseconds, so the saving is invisible and what remains is pure CPU, which the two versions spend similarly. Over a real connection with 40ms of latency, the same comparison would show 1.3 saving roughly 40ms per handshake. Quote this measurement for what it shows — the CPU cost — and not for the round-trip claim it cannot see.</p>
 </div>
 
 <h3>The number that actually matters</h3>
 <div class="out">100 request toi cung mot URL:
-
-  qua MOT ket noi (tai dung)      :   30 ms tong  =  0,30 ms/request
-  qua 100 ket noi RIENG           : 1066 ms tong  = 10,66 ms/request
-                                                    ^^^^^^^^^^^^^^^^
-                                              gap 35 lan
-  (con so 10,66 co ca ~6ms khoi dong tien trinh curl; phan chenh
-   lech that giua hai dong van la ~4,5ms — dung bang cai bat tay)</div>
+  qua MOT ket noi (tai dung)      :   23 ms tong  =  0,23 ms/request
+  qua 100 ket noi RIENG           :  758 ms tong  =  7,58 ms/request
+                                                    ^^^^^^^^^^^^^^^
+                                              gap ~33 lan
+  (7,58 co ca thoi gian khoi dong tien trinh curl moi lan; phan con lai
+   la ~3ms bat tay — tra 100 lan thay vi 1)
+Noi lai phien (curl, Connection: close, 3 ket noi):
+  co ssl_session_cache   : log $ssl_session_reused = . r r   TLS: 2,3 / 0,5 / 0,4 ms
+  khong cache (mac dinh) : log $ssl_session_reused = . . .   TLS: 2,3 / 1,2 / 1,0 ms</div>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">A handshake is per connection, not per request</span><span class="lz-d">Once established, every subsequent request on that connection is free of TLS setup. A page pulling forty assets over one connection pays for one handshake; over forty connections it pays forty times.</span></div>
   <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">So keepalive is the TLS optimisation</span><span class="lz-d"><code>keepalive_timeout 75s;</code> is the default and it is doing more for your TLS costs than any cipher choice. Lowering it to save file descriptors trades a cheap resource for an expensive one.</span></div>
@@ -424,7 +818,7 @@ ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:
   <div class="kv"><span class="k">OCSP stapling removes a round trip from the client</span><span class="v">Without it, some clients contact the CA to check revocation before trusting your certificate — a fetch to a third party inside your page load. <code>ssl_stapling on; ssl_stapling_verify on;</code> plus <code>ssl_trusted_certificate</code> makes your server include the proof itself.</span></div>
 </div>
 <div class="pitfall">
-<p><strong>Trap — tuning TLS while leaving the connection pattern alone is optimising the wrong term.</strong> The measurement above is a 35× gap between reusing a connection and not, and nothing in <code>ssl_ciphers</code> is going to touch it. Before changing a single TLS directive, check three things: is <code>keepalive_timeout</code> at its default rather than something a tuning article lowered, is HTTP/2 actually on (Lesson 6.4 shows how to confirm, and it is not on by default), and does your proxy block reuse upstream connections (Lesson 3.2 — HTTP/1.1 plus an empty <code>Connection</code> header plus <code>keepalive</code> in the upstream block). Those three cost nothing and they are where the handshakes go.</p>
+<p><strong>Trap — tuning TLS while leaving the connection pattern alone is optimising the wrong term.</strong> The measurement above is a ~33× gap between reusing a connection and not, and nothing in <code>ssl_ciphers</code> is going to touch it. Before changing a single TLS directive, check three things: is <code>keepalive_timeout</code> at its default rather than something a tuning article lowered, is HTTP/2 actually on (Lesson 6.4 shows how to confirm, and it is not on by default), and does your proxy block reuse upstream connections (Lesson 3.2 — HTTP/1.1 plus an empty <code>Connection</code> header plus <code>keepalive</code> in the upstream block). Those three cost nothing and they are where the handshakes go.</p>
 </div>
 
 <h3>Confirming it on your own server</h3>
@@ -435,8 +829,87 @@ ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:
   <div class="lz-layer"><span class="lz-lname">Compare an ECDSA certificate directly</span><span class="lz-lnote">Issue one, add it alongside the RSA one, and re-run the <code>time_appconnect</code> measurement. It is a two-line config change and the difference is visible in the same numbers this lesson used.</span></div>
 </div>
 <div class="note-ct">
-<p><strong>The one-sentence version.</strong> A TLS handshake cost about four milliseconds of CPU here; a request on an already-open connection cost a third of a millisecond. Everything that keeps connections open — keepalive, HTTP/2, session resumption, upstream keepalive — is worth more than everything that makes an individual handshake faster, and it is all configuration you already have.</p>
+<p><strong>The one-sentence version.</strong> A TLS handshake cost about three milliseconds here; a request on an already-open connection cost about a quarter of a millisecond. Everything that keeps connections open — keepalive, HTTP/2, session resumption, upstream keepalive — is worth more than everything that makes an individual handshake faster, and it is all configuration you already have.</p>
 </div>
+
+<h3>🔬 Run it yourself</h3>
+<p>One server with a shared session cache, one without, both holding RSA and ECDSA, access log with <code>$ssl_session_reused</code> — nginx/1.24.0, loopback (the course's numbers on a shared machine: compare ratios, not absolutes):</p>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  log_format tls '$connection $connection_requests $ssl_protocol $ssl_session_reused';
+  ssl_certificate     /root/pki/fullchain.crt;    <span class="tok-comment">  # RSA 2048</span>
+  ssl_certificate_key /root/pki/la.key;
+  ssl_certificate     /root/pki/fullchain-ec.crt; <span class="tok-comment">  # ECDSA P-256</span>
+  ssl_certificate_key /root/pki/la-ec.key;
+  ssl_session_tickets off;
+  server {                                 <span class="tok-comment">  # CÓ cache phiên dùng chung</span>
+    listen 8443 ssl;
+    server_name vidu.com;
+    ssl_session_cache   shared:SSL:10m;
+    ssl_session_timeout 1d;
+    access_log /srv/logs/8443.log tls;
+    return 200 "ok\\n";
+  }
+  server {                                 <span class="tok-comment">  # KHÔNG cache phiên (mặc định: none)</span>
+    listen 8445 ssl;
+    server_name vidu.com;
+    access_log /srv/logs/8445.log tls;
+    return 200 "ok\\n";
+  }
+}</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># do-tls.sh</span>
+<span class="tok-comment">#!/bin/bash</span>
+<span class="tok-comment"># do-tls.sh &lt;số lần&gt; &lt;cờ curl…&gt; — trung vị + nhỏ nhất của RIÊNG phần TLS (time_appconnect - time_connect), mili giây</span>
+n=$1; shift
+for i in $(seq $n); do curl -s -o /dev/null --cacert /root/pki/root.crt -w '%{time_connect} %{time_appconnect}\\n' "$@"; done |
+  awk '{printf "%.3f\\n", ($2-$1)*1000}' | sort -n | awk '{a[NR]=$1} END {printf "trung vi %.2f ms (min %.2f)\\n", a[int((NR+1)/2)], a[1]}'</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># tai-dung.sh</span>
+<span class="tok-comment">#!/bin/bash</span>
+<span class="tok-comment"># tai-dung.sh — 100 request: một lệnh curl (MỘT kết nối, tái dùng) vs 100 lệnh curl (100 kết nối riêng)</span>
+U=https://vidu.com:8443/; : &gt; /tmp/ng/logs/8443.log
+t0=$(date +%s%N); curl -s --cacert /root/pki/root.crt $(for i in $(seq 100); do printf -- '-o /dev/null %s ' $U; done); t1=$(date +%s%N)
+k1=$(cut -d' ' -f1 /tmp/ng/logs/8443.log | sort -u | wc -l); : &gt; /tmp/ng/logs/8443.log
+t2=$(date +%s%N); for i in $(seq 100); do curl -s -o /dev/null --cacert /root/pki/root.crt $U; done; t3=$(date +%s%N)
+k2=$(cut -d' ' -f1 /tmp/ng/logs/8443.log | sort -u | wc -l)
+awk -v a=$(( (t1-t0)/1000 )) -v b=$(( (t3-t2)/1000 )) -v k1=$k1 -v k2=$k2 'BEGIN {
+  printf "100 request qua %3d ket noi : %6.0f ms tong = %5.2f ms/request\\n", k1, a/1000, a/100000
+  printf "100 request qua %3d ket noi : %6.0f ms tong = %5.2f ms/request\\n", k2, b/1000, b/100000 }'</code></pre>
+<div class="out">$ curl -s -o /dev/null --cacert pki/root.crt -w 'TCP xong %{time_connect}s | TLS xong %{time_appconnect}s | byte dau %{time_starttransfer}s | tong %{time_total}s\\n' https://vidu.com:8443/
+TCP xong 0.000247s | TLS xong 0.003105s | byte dau 0.003283s | tong 0.003313s
+$ for v in 1.3 1.2; do printf 'TLS %s : ' $v; bash do-tls.sh 20 --tlsv$v --tls-max $v https://vidu.com:8443/; done
+TLS 1.3 : trung vi 2.29 ms (min 2.03)
+TLS 1.2 : trung vi 2.41 ms (min 2.14)
+$ for c in ECDHE-RSA-AES128-GCM-SHA256 ECDHE-ECDSA-AES128-GCM-SHA256; do printf '%-31s: ' $c; bash do-tls.sh 20 --tlsv1.2 --tls-max 1.2 --ciphers $c https://vidu.com:8443/; done
+ECDHE-RSA-AES128-GCM-SHA256    : trung vi 3.00 ms (min 2.73)
+ECDHE-ECDSA-AES128-GCM-SHA256  : trung vi 2.66 ms (min 2.15)
+$ bash tai-dung.sh
+100 request qua   1 ket noi :     23 ms tong =  0.23 ms/request
+100 request qua 100 ket noi :    758 ms tong =  7.58 ms/request
+$ for p in 8443 8445; do printf 'cong %s, 6 lan noi (1 + 5 lan noi lai), Reused: ' $p; openssl s_client -connect 127.0.0.1:$p -servername vidu.com -tls1_2 -reconnect &lt;/dev/null 2&gt;/dev/null | grep -c '^Reused'; done
+cong 8443, 6 lan noi (1 + 5 lan noi lai), Reused: 5
+cong 8445, 6 lan noi (1 + 5 lan noi lai), Reused: 0
+$ for v in 1.2 1.3; do for p in 8443 8445; do : &gt; /srv/logs/$p.log; curl -s -H 'Connection: close' --tlsv$v --tls-max $v --cacert pki/root.crt -w '%{time_connect} %{time_appconnect}\\n' -o /dev/null https://vidu.com:$p/ -o /dev/null https://vidu.com:$p/ -o /dev/null https://vidu.com:$p/ | awk '{printf "%.1fms ", ($2-$1)*1000}' &gt; /srv/ms; sleep 0.2; printf 'TLS %s cong %s  log: %-38s TLS: %s\\n' $v $p "$(cut -d' ' -f1,4 /srv/logs/$p.log | paste -sd'|')" "$(cat /srv/ms)"; done; done
+TLS 1.2 cong 8443  log: 195 .|196 r|197 r                      TLS: 2.3ms 0.5ms 0.4ms 
+TLS 1.2 cong 8445  log: 198 .|199 .|200 .                      TLS: 2.3ms 1.2ms 1.0ms 
+TLS 1.3 cong 8443  log: 201 .|202 r|203 r                      TLS: 2.3ms 0.8ms 1.2ms 
+TLS 1.3 cong 8445  log: 204 .|205 .|206 .                      TLS: 2.1ms 1.3ms 1.2ms </div>
+<p>The handshake was ~3 ms; versions and key types differed by tenths of a millisecond; one connection cost 0.23 ms per request against 7.58 ms for one connection each; with the session cache the log read <code>. r r</code> and the resumed handshakes took 0.4–0.5 ms.</p>
+<h3>🔗 Related lessons in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-6-2-bat-tay-tls" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking for Developers · 6.2 — The TLS 1.3 handshake, step by step</span><span class="lc-sub">What the 3 ms is spent on</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/performance-load-testing/learn?lessonSlug=perf-10-4-mang-nginx" target="_blank" rel="noopener"><span class="lc-ico">📊</span><span class="lc-body"><span class="lc-title">Performance &amp; Load Testing · 10.4 — Network and proxy: keep-alive, compression, HTTP/2, timeouts</span><span class="lc-sub">Connection reuse under load</span></span></a>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>keepalive_timeout</code></span><span class="v">Keeps a connection open so later requests skip the handshake; the default is doing the heavy work.</span></div>
+  <div class="kv"><span class="k"><code>ssl_session_cache shared:SSL:10m</code></span><span class="v">A cross-worker session cache (~40,000 sessions); the default of none is the wrong default.</span></div>
+  <div class="kv"><span class="k"><code>ssl_session_tickets</code></span><span class="v">Stateless resumption; leave off unless you rotate the ticket key yourself.</span></div>
+  <div class="kv"><span class="k">ECDSA certificate</span><span class="v">Several times cheaper to sign than RSA; serve both from one block so old clients still get RSA.</span></div>
+  <div class="kv"><span class="k">OCSP stapling</span><span class="v">The server includes the revocation proof itself, removing a client round trip to the CA.</span></div>
+  <div class="kv"><span class="k"><code>$ssl_session_reused</code></span><span class="v">A log field showing the session resumption hit rate.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li>A handshake cost about 3ms here; a request on an already-open connection cost about 0.23ms — a gap of roughly 33 times.</li><li>The number of handshakes dominates, so keepalive, HTTP/2 and session resumption matter more than any cipher choice.</li><li><code>ssl_session_cache</code> defaults to none; one shared line at the <code>http</code> level covers every server block.</li><li>ECDSA certificates roughly halve the server-side handshake cost; keep an RSA one alongside for old clients.</li><li>OCSP stapling and upstream keepalive remove round trips you would otherwise pay on every request.</li></ul>
 
 <h3>Learning sources for this lesson</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_session_cache" target="_blank" rel="noopener"><span class="lc-ico">🎫</span><span class="lc-body"><span class="lc-title">nginx — ssl_session_cache and ssl_session_tickets</span><span class="lc-sub">nginx.org · The shared form, sizing, and the ticket key caveat</span></span></a>
@@ -453,28 +926,30 @@ ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:
 
 <h3>Cái bắt tay, tách riêng ra</h3>
 <div class="out">curl tach bach tung giai doan (loopback, khong co do tre mang):
-
-  TCP bat tay xong  : 0,000207s
-  TLS bat tay xong  : 0,004758s     &lt;- TLS them ~4,5ms
-  Byte dau tien ve  : 0,005408s
-  Tong              : 0,005449s
-
+  TCP bat tay xong  : 0,000247s
+  TLS bat tay xong  : 0,003105s     &lt;- TLS them ~2,9ms
+  Byte dau tien ve  : 0,003283s
+  Tong              : 0,003313s
 20 lan do, chi tinh phan TLS (appconnect - connect):
-  TLS 1.3 : trung vi 4,23 ms  (min 3,81)
-  TLS 1.2 : trung vi 4,11 ms  (min 3,74)</div>
+  TLS 1.3             : trung vi 2,29 ms  (min 2,03)
+  TLS 1.2             : trung vi 2,41 ms  (min 2,14)
+  TLS 1.2 + RSA 2048  : trung vi 3,00 ms
+  TLS 1.2 + ECDSA 256 : trung vi 2,66 ms</div>
 <div class="callout warn">
 <p><strong>TLS 1.3 đo ra KHÔNG nhanh hơn TLS 1.2 ở đây, và đó là hệ quả của PHÉP THỬ chứ không phải một sự thật về TLS.</strong> Lợi thế của 1.3 là nó cần MỘT vòng đi về qua mạng thay vì hai. Trên loopback thì một vòng đi về tốn vài micro giây, nên khoản tiết kiệm ấy vô hình, và cái còn lại chỉ là CPU thuần — thứ mà hai phiên bản tiêu ngang nhau. Trên một kết nối thật có 40ms độ trễ thì đúng phép so sánh này sẽ cho thấy 1.3 tiết kiệm khoảng 40ms mỗi lần bắt tay. Hãy trích phép đo này cho ĐÚNG thứ nó cho thấy — cái giá CPU — chứ đừng trích nó cho cái lời khẳng định về vòng đi về mà nó không nhìn thấy nổi.</p>
 </div>
 
 <h3>Con số THỰC SỰ có nghĩa lý</h3>
 <div class="out">100 request toi cung mot URL:
-
-  qua MOT ket noi (tai dung)      :   30 ms tong  =  0,30 ms/request
-  qua 100 ket noi RIENG           : 1066 ms tong  = 10,66 ms/request
-                                                    ^^^^^^^^^^^^^^^^
-                                              gap 35 lan
-  (con so 10,66 co ca ~6ms khoi dong tien trinh curl; phan chenh
-   lech that giua hai dong van la ~4,5ms — dung bang cai bat tay)</div>
+  qua MOT ket noi (tai dung)      :   23 ms tong  =  0,23 ms/request
+  qua 100 ket noi RIENG           :  758 ms tong  =  7,58 ms/request
+                                                    ^^^^^^^^^^^^^^^
+                                              gap ~33 lan
+  (7,58 co ca thoi gian khoi dong tien trinh curl moi lan; phan con lai
+   la ~3ms bat tay — tra 100 lan thay vi 1)
+Noi lai phien (curl, Connection: close, 3 ket noi):
+  co ssl_session_cache   : log $ssl_session_reused = . r r   TLS: 2,3 / 0,5 / 0,4 ms
+  khong cache (mac dinh) : log $ssl_session_reused = . . .   TLS: 2,3 / 1,2 / 1,0 ms</div>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Bắt tay là chuyện của KẾT NỐI, không phải của request</span><span class="lz-d">Một khi đã dựng xong thì mọi request tiếp theo trên kết nối đó KHÔNG phải trả gì cho việc thiết lập TLS. Một trang kéo về bốn mươi tài nguyên qua MỘT kết nối trả tiền cho MỘT lần bắt tay; qua bốn mươi kết nối thì trả bốn mươi lần.</span></div>
   <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Nên keepalive MỚI là phép tối ưu TLS</span><span class="lz-d"><code>keepalive_timeout 75s;</code> là mặc định và nó đang làm cho chi phí TLS của bạn nhiều hơn mọi lựa chọn bộ mã. Hạ nó xuống để tiết kiệm file descriptor là đem một tài nguyên RẺ đổi lấy một tài nguyên ĐẮT.</span></div>
@@ -498,7 +973,7 @@ ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:
   <div class="kv"><span class="k">OCSP stapling gỡ một vòng đi về khỏi phía client</span><span class="v">Thiếu nó thì vài client đi liên hệ CA để kiểm việc thu hồi trước khi tin chứng chỉ của bạn — một lượt gọi tới bên thứ ba nằm NGAY TRONG lượt tải trang của bạn. <code>ssl_stapling on; ssl_stapling_verify on;</code> cộng <code>ssl_trusted_certificate</code> làm máy chủ của bạn tự kèm luôn cái bằng chứng ấy.</span></div>
 </div>
 <div class="pitfall">
-<p><strong>Bẫy — chỉnh tinh TLS mà để nguyên cái KIỂU KẾT NỐI là đang tối ưu nhầm số hạng.</strong> Phép đo ở trên là khoảng cách 35 LẦN giữa việc tái dùng kết nối và không, và chẳng có gì trong <code>ssl_ciphers</code> chạm được vào nó. Trước khi đổi một chỉ thị TLS nào, hãy kiểm ba thứ: <code>keepalive_timeout</code> có đang ở mặc định không hay đã bị một bài chỉnh tinh nào đó hạ xuống, HTTP/2 có THẬT SỰ bật không (Bài 6.4 chỉ cách xác nhận, và nó KHÔNG bật sẵn), và khối proxy của bạn có tái dùng kết nối lên upstream không (Bài 3.2 — HTTP/1.1 cộng một header <code>Connection</code> rỗng cộng <code>keepalive</code> trong khối upstream). Ba thứ đó chẳng tốn gì và chúng mới là chỗ đám bắt tay đi vào.</p>
+<p><strong>Bẫy — chỉnh tinh TLS mà để nguyên cái KIỂU KẾT NỐI là đang tối ưu nhầm số hạng.</strong> Phép đo ở trên là khoảng cách chừng 33 LẦN giữa việc tái dùng kết nối và không, và chẳng có gì trong <code>ssl_ciphers</code> chạm được vào nó. Trước khi đổi một chỉ thị TLS nào, hãy kiểm ba thứ: <code>keepalive_timeout</code> có đang ở mặc định không hay đã bị một bài chỉnh tinh nào đó hạ xuống, HTTP/2 có THẬT SỰ bật không (Bài 6.4 chỉ cách xác nhận, và nó KHÔNG bật sẵn), và khối proxy của bạn có tái dùng kết nối lên upstream không (Bài 3.2 — HTTP/1.1 cộng một header <code>Connection</code> rỗng cộng <code>keepalive</code> trong khối upstream). Ba thứ đó chẳng tốn gì và chúng mới là chỗ đám bắt tay đi vào.</p>
 </div>
 
 <h3>Tự xác nhận trên máy chủ của bạn</h3>
@@ -509,8 +984,87 @@ ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:
   <div class="lz-layer"><span class="lz-lname">So sánh THẲNG với một chứng chỉ ECDSA</span><span class="lz-lnote">Cấp một cái, thêm nó vào cạnh cái RSA, rồi chạy lại đúng phép đo <code>time_appconnect</code>. Đó là một thay đổi cấu hình hai dòng và khác biệt hiện ra ngay trong chính những con số bài này dùng.</span></div>
 </div>
 <div class="note-ct">
-<p><strong>Bản gói trong một câu.</strong> Một cái bắt tay TLS ở đây tốn chừng bốn mili giây CPU; một request trên một kết nối ĐANG MỞ tốn một phần ba mili giây. Mọi thứ giữ cho kết nối mở — keepalive, HTTP/2, nối lại phiên, keepalive lên upstream — đều đáng giá hơn mọi thứ làm cho MỘT cái bắt tay nhanh hơn, và tất cả đều là cấu hình bạn vốn đã có sẵn.</p>
+<p><strong>Bản gói trong một câu.</strong> Một cái bắt tay TLS ở đây tốn chừng ba mili giây; một request trên một kết nối ĐANG MỞ tốn chừng một phần tư mili giây. Mọi thứ giữ cho kết nối mở — keepalive, HTTP/2, nối lại phiên, keepalive lên upstream — đều đáng giá hơn mọi thứ làm cho MỘT cái bắt tay nhanh hơn, và tất cả đều là cấu hình bạn vốn đã có sẵn.</p>
 </div>
+
+<h3>🔬 Tự chạy lại</h3>
+<p>Một máy chủ có cache phiên dùng chung, một máy không có, cả hai giữ RSA và ECDSA, access log có <code>$ssl_session_reused</code> — nginx/1.24.0, loopback (số đo của khoá trên máy dùng chung: so tỉ lệ, đừng so con số tuyệt đối):</p>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  log_format tls '$connection $connection_requests $ssl_protocol $ssl_session_reused';
+  ssl_certificate     /root/pki/fullchain.crt;    <span class="tok-comment">  # RSA 2048</span>
+  ssl_certificate_key /root/pki/la.key;
+  ssl_certificate     /root/pki/fullchain-ec.crt; <span class="tok-comment">  # ECDSA P-256</span>
+  ssl_certificate_key /root/pki/la-ec.key;
+  ssl_session_tickets off;
+  server {                                 <span class="tok-comment">  # CÓ cache phiên dùng chung</span>
+    listen 8443 ssl;
+    server_name vidu.com;
+    ssl_session_cache   shared:SSL:10m;
+    ssl_session_timeout 1d;
+    access_log /srv/logs/8443.log tls;
+    return 200 "ok\\n";
+  }
+  server {                                 <span class="tok-comment">  # KHÔNG cache phiên (mặc định: none)</span>
+    listen 8445 ssl;
+    server_name vidu.com;
+    access_log /srv/logs/8445.log tls;
+    return 200 "ok\\n";
+  }
+}</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># do-tls.sh</span>
+<span class="tok-comment">#!/bin/bash</span>
+<span class="tok-comment"># do-tls.sh &lt;số lần&gt; &lt;cờ curl…&gt; — trung vị + nhỏ nhất của RIÊNG phần TLS (time_appconnect - time_connect), mili giây</span>
+n=$1; shift
+for i in $(seq $n); do curl -s -o /dev/null --cacert /root/pki/root.crt -w '%{time_connect} %{time_appconnect}\\n' "$@"; done |
+  awk '{printf "%.3f\\n", ($2-$1)*1000}' | sort -n | awk '{a[NR]=$1} END {printf "trung vi %.2f ms (min %.2f)\\n", a[int((NR+1)/2)], a[1]}'</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># tai-dung.sh</span>
+<span class="tok-comment">#!/bin/bash</span>
+<span class="tok-comment"># tai-dung.sh — 100 request: một lệnh curl (MỘT kết nối, tái dùng) vs 100 lệnh curl (100 kết nối riêng)</span>
+U=https://vidu.com:8443/; : &gt; /tmp/ng/logs/8443.log
+t0=$(date +%s%N); curl -s --cacert /root/pki/root.crt $(for i in $(seq 100); do printf -- '-o /dev/null %s ' $U; done); t1=$(date +%s%N)
+k1=$(cut -d' ' -f1 /tmp/ng/logs/8443.log | sort -u | wc -l); : &gt; /tmp/ng/logs/8443.log
+t2=$(date +%s%N); for i in $(seq 100); do curl -s -o /dev/null --cacert /root/pki/root.crt $U; done; t3=$(date +%s%N)
+k2=$(cut -d' ' -f1 /tmp/ng/logs/8443.log | sort -u | wc -l)
+awk -v a=$(( (t1-t0)/1000 )) -v b=$(( (t3-t2)/1000 )) -v k1=$k1 -v k2=$k2 'BEGIN {
+  printf "100 request qua %3d ket noi : %6.0f ms tong = %5.2f ms/request\\n", k1, a/1000, a/100000
+  printf "100 request qua %3d ket noi : %6.0f ms tong = %5.2f ms/request\\n", k2, b/1000, b/100000 }'</code></pre>
+<div class="out">$ curl -s -o /dev/null --cacert pki/root.crt -w 'TCP xong %{time_connect}s | TLS xong %{time_appconnect}s | byte dau %{time_starttransfer}s | tong %{time_total}s\\n' https://vidu.com:8443/
+TCP xong 0.000247s | TLS xong 0.003105s | byte dau 0.003283s | tong 0.003313s
+$ for v in 1.3 1.2; do printf 'TLS %s : ' $v; bash do-tls.sh 20 --tlsv$v --tls-max $v https://vidu.com:8443/; done
+TLS 1.3 : trung vi 2.29 ms (min 2.03)
+TLS 1.2 : trung vi 2.41 ms (min 2.14)
+$ for c in ECDHE-RSA-AES128-GCM-SHA256 ECDHE-ECDSA-AES128-GCM-SHA256; do printf '%-31s: ' $c; bash do-tls.sh 20 --tlsv1.2 --tls-max 1.2 --ciphers $c https://vidu.com:8443/; done
+ECDHE-RSA-AES128-GCM-SHA256    : trung vi 3.00 ms (min 2.73)
+ECDHE-ECDSA-AES128-GCM-SHA256  : trung vi 2.66 ms (min 2.15)
+$ bash tai-dung.sh
+100 request qua   1 ket noi :     23 ms tong =  0.23 ms/request
+100 request qua 100 ket noi :    758 ms tong =  7.58 ms/request
+$ for p in 8443 8445; do printf 'cong %s, 6 lan noi (1 + 5 lan noi lai), Reused: ' $p; openssl s_client -connect 127.0.0.1:$p -servername vidu.com -tls1_2 -reconnect &lt;/dev/null 2&gt;/dev/null | grep -c '^Reused'; done
+cong 8443, 6 lan noi (1 + 5 lan noi lai), Reused: 5
+cong 8445, 6 lan noi (1 + 5 lan noi lai), Reused: 0
+$ for v in 1.2 1.3; do for p in 8443 8445; do : &gt; /srv/logs/$p.log; curl -s -H 'Connection: close' --tlsv$v --tls-max $v --cacert pki/root.crt -w '%{time_connect} %{time_appconnect}\\n' -o /dev/null https://vidu.com:$p/ -o /dev/null https://vidu.com:$p/ -o /dev/null https://vidu.com:$p/ | awk '{printf "%.1fms ", ($2-$1)*1000}' &gt; /srv/ms; sleep 0.2; printf 'TLS %s cong %s  log: %-38s TLS: %s\\n' $v $p "$(cut -d' ' -f1,4 /srv/logs/$p.log | paste -sd'|')" "$(cat /srv/ms)"; done; done
+TLS 1.2 cong 8443  log: 195 .|196 r|197 r                      TLS: 2.3ms 0.5ms 0.4ms 
+TLS 1.2 cong 8445  log: 198 .|199 .|200 .                      TLS: 2.3ms 1.2ms 1.0ms 
+TLS 1.3 cong 8443  log: 201 .|202 r|203 r                      TLS: 2.3ms 0.8ms 1.2ms 
+TLS 1.3 cong 8445  log: 204 .|205 .|206 .                      TLS: 2.1ms 1.3ms 1.2ms </div>
+<p>Cú bắt tay ~3 ms; phiên bản và loại khoá chỉ chênh vài phần mười mili giây; một kết nối tốn 0,23 ms mỗi request so với 7,58 ms khi mỗi request một kết nối; có cache phiên thì log ghi <code>. r r</code> và cú bắt tay nối lại chỉ 0,4–0,5 ms.</p>
+<h3>🔗 Bài liên quan ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-6-2-bat-tay-tls" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking for Developers · 6.2 — Bắt tay TLS 1.3, từng bước</span><span class="lc-sub">3 ms đó được tiêu vào đâu</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/performance-load-testing/learn?lessonSlug=perf-10-4-mang-nginx" target="_blank" rel="noopener"><span class="lc-ico">📊</span><span class="lc-body"><span class="lc-title">Performance &amp; Load Testing · 10.4 — Mạng và proxy: keep-alive, nén, HTTP/2, timeout</span><span class="lc-sub">Tái dùng kết nối khi chịu tải</span></span></a>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>keepalive_timeout</code></span><span class="v">Giữ kết nối mở để request sau bỏ qua bắt tay; mặc định đang làm việc nặng nhất.</span></div>
+  <div class="kv"><span class="k"><code>ssl_session_cache shared:SSL:10m</code></span><span class="v">Cache phiên dùng chung giữa các worker (~40.000 phiên); mặc định none là mặc định sai.</span></div>
+  <div class="kv"><span class="k"><code>ssl_session_tickets</code></span><span class="v">Nối lại phiên không trạng thái; để off trừ khi bạn tự xoay khoá vé.</span></div>
+  <div class="kv"><span class="k">Chứng chỉ ECDSA</span><span class="v">Ký rẻ hơn RSA vài lần; phục vụ cả hai từ một khối để client cũ vẫn nhận RSA.</span></div>
+  <div class="kv"><span class="k">OCSP stapling</span><span class="v">Máy chủ tự kèm bằng chứng thu hồi, gỡ một vòng đi về của client tới CA.</span></div>
+  <div class="kv"><span class="k"><code>$ssl_session_reused</code></span><span class="v">Một trường log cho biết tỷ lệ trúng khi nối lại phiên.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li>Một cái bắt tay ở đây tốn chừng 3ms; một request trên kết nối đang mở tốn chừng 0,23ms — khoảng cách cỡ 33 lần.</li><li>Số lượng bắt tay mới là chỗ quyết định, nên keepalive, HTTP/2 và nối lại phiên đáng hơn mọi lựa chọn bộ mã.</li><li><code>ssl_session_cache</code> mặc định là none; một dòng shared ở tầng <code>http</code> phủ cho mọi khối server.</li><li>Chứng chỉ ECDSA cắt khoảng một nửa chi phí bắt tay ở phía máy chủ; giữ thêm một cái RSA cho client cũ.</li><li>OCSP stapling và keepalive lên upstream gỡ những vòng đi về mà nếu không bạn phải trả ở mỗi request.</li></ul>
 
 <h3>Nguồn học cho bài này</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_session_cache" target="_blank" rel="noopener"><span class="lc-ico">🎫</span><span class="lc-body"><span class="lc-title">nginx — ssl_session_cache và ssl_session_tickets</span><span class="lc-sub">nginx.org · Dạng shared, cách định cỡ, và cảnh báo về khoá vé</span></span></a>
@@ -529,6 +1083,7 @@ ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:
       type: 'LESSON',
       description: 'Bật HTTP/2 tốn một chữ, và xác nhận nó chạy tốn một lệnh. Bài này làm cả hai — rồi thử ĐO xem nó nhanh hơn bao nhiêu, thu về 28ms so với 27ms, và giải thích vì sao con số đó đúng, vì sao nó vô nghĩa, và phải đo ở đâu mới thấy được.',
       content: `
+${G06_4}
 <div class="ml-en">
 <span class="eyebrow">Chapter 6 · Lesson 6.4</span>
 <h2>HTTP/2: what it changes, and what a local benchmark cannot show</h2>
@@ -551,16 +1106,14 @@ $ openssl s_client -alpn h2,http/1.1 -connect ...
 </div>
 
 <h3>Then trying to measure the benefit</h3>
-<div class="out">50 tai nguyen nho, mot lenh curl, cung mot may:
-
-  HTTP/2   : 28 ms
-  HTTP/1.1 : 27 ms
-
-Kich thuoc header gui di (curl bao cao), cookie 1,5KB, 20 request:
-  HTTP/2   : tong 31.951 byte   (TB 1.597 byte/request)
-  HTTP/1.1 : tong 31.991 byte   (TB 1.599 byte/request)</div>
+<div class="out">50 tep nho, mot lenh curl, cung mot may (loopback, do tre ~0):
+  tuan tu   :  HTTP/2  18 ms   HTTP/1.1  21 ms
+  song song :  HTTP/2  20 ms   HTTP/1.1  63 ms   &lt;- 1.1 mo NHIEU ket noi = nhieu lan bat tay
+HPACK do TREN DAY (nghttp -nv, kich thuoc khoi HEADERS gui di), cung cookie 1.474 byte, 4 request:
+  HTTP/2   : 1.240 -&gt; 20 -&gt; 20 -&gt; 20 byte
+  HTTP/1.1 : 1.567 byte MOI request (curl %{size_request})</div>
 <div class="callout warn">
-<p><strong>Both of those measurements are correct and both are useless, for different reasons.</strong> The 28-versus-27 figure is real: on loopback there is no latency, so there is no head-of-line blocking to remove and multiplexing has nothing to save. HTTP/2's advantage is entirely about round trips, and a test with zero round-trip time cannot show it. The header figure is worse — it is not measuring what it looks like. <code>curl</code> reports the size of the headers it composed, before HPACK compresses them, so the number is identical by construction whatever the protocol does on the wire. A tool that reports pre-compression sizes cannot measure a compression feature, and publishing that as "HPACK saved nothing" would have been a fabrication dressed as data.</p>
+<p><strong>What one machine can and cannot show.</strong> Fetched one after another, HTTP/2 and HTTP/1.1 took 18 and 21 ms: on loopback there is no latency, so there is no head-of-line blocking to remove and multiplexing has nothing to hide — HTTP/2's main advantage is about round trips, and a test with zero round-trip time cannot show it. Fetched in parallel, HTTP/1.1 opened many connections and paid a TLS handshake for each (63 ms against 20) — that part IS visible. And header compression must be measured ON THE WIRE: <code>curl</code>'s <code>%{size_request}</code> reports the headers it composed, before HPACK, so it can never show a saving. <code>nghttp -nv</code> prints the real HEADERS frame sizes: 1,240 bytes the first time, then 20 bytes for the same 1.5 KB cookie.</p>
 </div>
 
 <h3>What HTTP/2 actually changes</h3>
@@ -577,8 +1130,59 @@ Kich thuoc header gui di (curl bao cao), cookie 1,5KB, 20 request:
   <div class="kv"><span class="k">HTTP/3 is the same idea over QUIC</span><span class="v">It moves multiplexing below TLS so packet loss on one stream does not stall the others — the transport-layer head-of-line blocking HTTP/2 still has. Nginx supports it from 1.25.0 with <code>listen 443 quic;</code>, and it is worth adding once HTTP/2 is confirmed working.</span></div>
 </div>
 <div class="note-ct">
-<p><strong>Where to measure it properly.</strong> Not on the machine running the server. Open your site over a real connection with the browser's network panel, filter by protocol, and compare a throttled profile with HTTP/2 on and off — that reproduces latency, packet loss and the browser's real connection behaviour, none of which loopback has. Or accept the structural argument: one connection instead of six, and Lesson 6.3 already measured what a handshake costs. Both are honest; a local benchmark that reports 28 against 27 is not evidence either way, and the useful thing to learn from it is how easy it is to produce a number that means nothing.</p>
+<p><strong>Where to measure it properly.</strong> Not on the machine running the server. Open your site over a real connection with the browser's network panel, filter by protocol, and compare a throttled profile with HTTP/2 on and off — that reproduces latency, packet loss and the browser's real connection behaviour, none of which loopback has. Or accept the structural argument: one connection instead of six, and Lesson 6.3 already measured what a handshake costs. Both are honest; a local benchmark that reports 18 against 21 for sequential fetches is not evidence either way, and the useful thing to learn from it is how easy it is to produce a number that means nothing.</p>
 </div>
+
+<h3>🔬 Run it yourself</h3>
+<p>Fifty small files, one port with <code>http2</code> and one without (nginx/1.24.0 syntax), fetched sequentially and in parallel, then HPACK measured on the wire with <code>nghttp</code> (Ubuntu package <code>nghttp2-client</code>):</p>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  ssl_certificate     /root/pki/fullchain.crt;
+  ssl_certificate_key /root/pki/la.key;
+  root /srv/site;
+  server { listen 8443 ssl;       server_name vidu.com; } <span class="tok-comment">  # KHÔNG bật http2</span>
+  server { listen 8444 ssl http2; server_name vidu.com; } <span class="tok-comment">  # nginx 1.24: http2 là THAM SỐ của listen</span>
+}</code></pre>
+<div class="out">$ for p in 8444 8443; do printf 'cong %s -&gt; ' $p; curl -s -o /dev/null --cacert pki/root.crt -w 'HTTP/%{http_version}\\n' https://vidu.com:$p/t01.css; done
+cong 8444 -&gt; HTTP/2
+cong 8443 -&gt; HTTP/1.1
+$ for p in 8444 8443; do printf 'cong %s -&gt; ' $p; openssl s_client -connect 127.0.0.1:$p -servername vidu.com -alpn h2,http/1.1 &lt;/dev/null 2&gt;&amp;1 | grep -E '^ALPN|No ALPN'; done
+cong 8444 -&gt; ALPN protocol: h2
+cong 8443 -&gt; ALPN protocol: http/1.1
+$ U=$(for i in $(seq -w 1 50); do printf -- '-o /dev/null https://vidu.com:8444/t%s.css ' $i; done); for m in '' --parallel; do for v in --http2 --http1.1; do printf '%-9s %-10s 50 tep: ' $v "\${m:-tuan-tu}"; s=$(date +%s%N); curl -s $m $v --cacert pki/root.crt $U; echo "$(( ($(date +%s%N)-s)/1000000 )) ms"; done; done
+--http2   tuan-tu    50 tep: 18 ms
+--http1.1 tuan-tu    50 tep: 21 ms
+--http2   --parallel 50 tep: 20 ms
+--http1.1 --parallel 50 tep: 63 ms
+$ C="phien=$(head -c 1100 /dev/urandom | base64 -w0)"; echo "cookie dai \${#C} byte"; nghttp -nv -H "cookie: $C" https://vidu.com:8444/t01.css https://vidu.com:8444/t02.css https://vidu.com:8444/t03.css https://vidu.com:8444/t04.css 2&gt;&amp;1 | grep -oE 'send HEADERS frame &lt;length=[0-9]+' | sed 's/send HEADERS frame &lt;length=/HEADERS gui di: /; s/$/ byte/'
+cookie dai 1474 byte
+HEADERS gui di: 1240 byte
+HEADERS gui di: 20 byte
+HEADERS gui di: 20 byte
+HEADERS gui di: 20 byte
+$ C="phien=$(head -c 1100 /dev/urandom | base64 -w0)"; for i in 1 2 3 4; do curl -s -o /dev/null --http1.1 --cacert pki/root.crt -H "cookie: $C" -w 'HTTP/1.1 request %{size_request} byte\\n' https://vidu.com:8443/t0$i.css; done
+HTTP/1.1 request 1567 byte
+HTTP/1.1 request 1567 byte
+HTTP/1.1 request 1567 byte
+HTTP/1.1 request 1567 byte</div>
+<p>HTTP/2 and ALPN h2 on 8444, HTTP/1.1 on 8443; sequential 18 vs 21 ms, parallel 20 vs 63 ms; HPACK sent 1,240 bytes of headers once and 20 bytes after that, while HTTP/1.1 sent 1,567 bytes every time.</p>
+<h3>🔗 Related lessons in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-7-2-http2" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking for Developers · 7.2 — HTTP/2: multiplexing, HPACK and why server push died</span><span class="lc-sub">The protocol itself</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/ddos-protection/learn?lessonSlug=ddos-4-3-http2" target="_blank" rel="noopener"><span class="lc-ico">🛡️</span><span class="lc-body"><span class="lc-title">DDoS Protection · 4.3 — HTTP/2 and HTTP/3 specific attacks</span><span class="lc-sub">Rapid Reset, and why stream limits exist</span></span></a>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>http2 on;</code></span><span class="v">The HTTP/2 directive (nginx 1.25.1+); older builds write <code>listen ... http2</code>. Not on by default.</span></div>
+  <div class="kv"><span class="k">ALPN</span><span class="v">The protocol is chosen inside the TLS handshake; <code>openssl s_client -alpn</code> is the definitive test.</span></div>
+  <div class="kv"><span class="k">Multiplexing</span><span class="v">Many requests over one connection, removing HTTP-layer head-of-line blocking.</span></div>
+  <div class="kv"><span class="k">HPACK</span><span class="v">HTTP/2 header compression; repeated cookies become references to a shared table.</span></div>
+  <div class="kv"><span class="k">Domain sharding / concatenation</span><span class="v">HTTP/1.1 workarounds that are now counterproductive on HTTP/2.</span></div>
+  <div class="kv"><span class="k">HTTP/3 / QUIC</span><span class="v">The same idea moved below TLS, enabled with <code>listen 443 quic</code>.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li>HTTP/2 is one word of config, is not on by default, and ALPN — not the config file — confirms it is really running.</li><li>The local benchmark showed 28ms against 27ms because loopback has no latency for multiplexing to save.</li><li><code>curl</code> reports pre-HPACK header sizes, so it cannot measure header compression at all.</li><li>The real wins are one connection instead of six, no head-of-line blocking, and HPACK — and all scale with latency.</li><li>Server push is gone, sharding and spriting are now harmful, and the honest place to measure is a real browser over a throttled network.</li></ul>
 
 <h3>Learning sources for this lesson</h3>
 <div class="pitfall">
@@ -613,16 +1217,14 @@ $ openssl s_client -alpn h2,http/1.1 -connect ...
 </div>
 
 <h3>Rồi thử ĐO cái lợi ích</h3>
-<div class="out">50 tai nguyen nho, mot lenh curl, cung mot may:
-
-  HTTP/2   : 28 ms
-  HTTP/1.1 : 27 ms
-
-Kich thuoc header gui di (curl bao cao), cookie 1,5KB, 20 request:
-  HTTP/2   : tong 31.951 byte   (TB 1.597 byte/request)
-  HTTP/1.1 : tong 31.991 byte   (TB 1.599 byte/request)</div>
+<div class="out">50 tep nho, mot lenh curl, cung mot may (loopback, do tre ~0):
+  tuan tu   :  HTTP/2  18 ms   HTTP/1.1  21 ms
+  song song :  HTTP/2  20 ms   HTTP/1.1  63 ms   &lt;- 1.1 mo NHIEU ket noi = nhieu lan bat tay
+HPACK do TREN DAY (nghttp -nv, kich thuoc khoi HEADERS gui di), cung cookie 1.474 byte, 4 request:
+  HTTP/2   : 1.240 -&gt; 20 -&gt; 20 -&gt; 20 byte
+  HTTP/1.1 : 1.567 byte MOI request (curl %{size_request})</div>
 <div class="callout warn">
-<p><strong>Cả hai phép đo đó đều ĐÚNG và cả hai đều VÔ DỤNG, vì hai lý do khác nhau.</strong> Con số 28 so với 27 là thật: trên loopback không có độ trễ, nên không có head-of-line blocking nào để gỡ và phép ghép kênh chẳng có gì để tiết kiệm. Lợi thế của HTTP/2 hoàn toàn nằm ở số VÒNG ĐI VỀ, và một phép thử có thời gian đi về bằng không thì không thể thấy nổi. Con số về header còn tệ hơn — nó KHÔNG đo cái mà nó trông như đang đo. <code>curl</code> báo cáo kích thước đám header nó SOẠN RA, tức là trước khi HPACK nén, nên con số đó giống hệt nhau theo cấu tạo, bất kể giao thức làm gì trên dây. Một công cụ báo cáo kích thước TRƯỚC nén thì không đo nổi một tính năng NÉN, và đem cái đó đăng lên với nhãn "HPACK chẳng tiết kiệm gì" thì đó là một sự bịa đặt khoác áo dữ liệu.</p>
+<p><strong>Một cái máy cho thấy được gì, và không cho thấy gì.</strong> Lấy lần lượt từng tệp, HTTP/2 và HTTP/1.1 mất 18 và 21 ms: trên loopback không có độ trễ, nên chẳng có head-of-line blocking nào để gỡ và phép ghép kênh chẳng có gì để che — lợi thế chính của HTTP/2 nằm ở số VÒNG ĐI VỀ, mà phép thử có thời gian đi về bằng không thì không thấy được. Lấy song song thì HTTP/1.1 mở nhiều kết nối và trả một cú bắt tay TLS cho mỗi cái (63 ms so với 20) — phần ĐÓ thì thấy được. Còn nén header thì phải đo TRÊN DÂY: <code>%{size_request}</code> của <code>curl</code> báo đám header nó soạn ra, TRƯỚC khi HPACK nén, nên không bao giờ thấy được phần tiết kiệm. <code>nghttp -nv</code> in kích thước THẬT của khung HEADERS: lần đầu 1.240 byte, những lần sau 20 byte cho cùng cái cookie 1,5 KB.</p>
 </div>
 
 <h3>HTTP/2 THẬT SỰ đổi cái gì</h3>
@@ -639,8 +1241,59 @@ Kich thuoc header gui di (curl bao cao), cookie 1,5KB, 20 request:
   <div class="kv"><span class="k">HTTP/3 là cùng ý tưởng nhưng chạy trên QUIC</span><span class="v">Nó đưa phép ghép kênh xuống DƯỚI TLS để mất gói ở một luồng không làm khựng các luồng khác — tức cái head-of-line blocking ở tầng vận chuyển mà HTTP/2 vẫn còn. Nginx hỗ trợ nó từ 1.25.0 với <code>listen 443 quic;</code>, và nó đáng thêm vào sau khi HTTP/2 đã được xác nhận là chạy.</span></div>
 </div>
 <div class="note-ct">
-<p><strong>Đo nó cho tử tế thì đo ở đâu.</strong> KHÔNG phải trên chính cái máy đang chạy máy chủ. Hãy mở site của bạn qua một kết nối THẬT với bảng Network của trình duyệt, lọc theo giao thức, rồi so một hồ sơ có bóp băng thông với HTTP/2 bật và tắt — cách đó tái hiện độ trễ, mất gói và hành vi kết nối thật của trình duyệt, những thứ mà loopback không có cái nào. Hoặc chấp nhận lập luận về CẤU TRÚC: một kết nối thay vì sáu, và Bài 6.3 đã đo sẵn một cái bắt tay tốn bao nhiêu. Cả hai đều thật thà; còn một phép đo trên máy báo 28 so với 27 thì KHÔNG phải bằng chứng cho bên nào, và thứ hữu ích cần học từ nó là chuyện tạo ra một con số vô nghĩa dễ tới mức nào.</p>
+<p><strong>Đo nó cho tử tế thì đo ở đâu.</strong> KHÔNG phải trên chính cái máy đang chạy máy chủ. Hãy mở site của bạn qua một kết nối THẬT với bảng Network của trình duyệt, lọc theo giao thức, rồi so một hồ sơ có bóp băng thông với HTTP/2 bật và tắt — cách đó tái hiện độ trễ, mất gói và hành vi kết nối thật của trình duyệt, những thứ mà loopback không có cái nào. Hoặc chấp nhận lập luận về CẤU TRÚC: một kết nối thay vì sáu, và Bài 6.3 đã đo sẵn một cái bắt tay tốn bao nhiêu. Cả hai đều thật thà; còn một phép đo trên máy báo 18 so với 21 khi lấy tuần tự thì KHÔNG phải bằng chứng cho bên nào, và thứ hữu ích cần học từ nó là chuyện tạo ra một con số vô nghĩa dễ tới mức nào.</p>
 </div>
+
+<h3>🔬 Tự chạy lại</h3>
+<p>Năm mươi tệp nhỏ, một cổng có <code>http2</code> và một cổng không (cú pháp nginx/1.24.0), lấy tuần tự và song song, rồi đo HPACK trên dây bằng <code>nghttp</code> (gói Ubuntu <code>nghttp2-client</code>):</p>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  ssl_certificate     /root/pki/fullchain.crt;
+  ssl_certificate_key /root/pki/la.key;
+  root /srv/site;
+  server { listen 8443 ssl;       server_name vidu.com; } <span class="tok-comment">  # KHÔNG bật http2</span>
+  server { listen 8444 ssl http2; server_name vidu.com; } <span class="tok-comment">  # nginx 1.24: http2 là THAM SỐ của listen</span>
+}</code></pre>
+<div class="out">$ for p in 8444 8443; do printf 'cong %s -&gt; ' $p; curl -s -o /dev/null --cacert pki/root.crt -w 'HTTP/%{http_version}\\n' https://vidu.com:$p/t01.css; done
+cong 8444 -&gt; HTTP/2
+cong 8443 -&gt; HTTP/1.1
+$ for p in 8444 8443; do printf 'cong %s -&gt; ' $p; openssl s_client -connect 127.0.0.1:$p -servername vidu.com -alpn h2,http/1.1 &lt;/dev/null 2&gt;&amp;1 | grep -E '^ALPN|No ALPN'; done
+cong 8444 -&gt; ALPN protocol: h2
+cong 8443 -&gt; ALPN protocol: http/1.1
+$ U=$(for i in $(seq -w 1 50); do printf -- '-o /dev/null https://vidu.com:8444/t%s.css ' $i; done); for m in '' --parallel; do for v in --http2 --http1.1; do printf '%-9s %-10s 50 tep: ' $v "\${m:-tuan-tu}"; s=$(date +%s%N); curl -s $m $v --cacert pki/root.crt $U; echo "$(( ($(date +%s%N)-s)/1000000 )) ms"; done; done
+--http2   tuan-tu    50 tep: 18 ms
+--http1.1 tuan-tu    50 tep: 21 ms
+--http2   --parallel 50 tep: 20 ms
+--http1.1 --parallel 50 tep: 63 ms
+$ C="phien=$(head -c 1100 /dev/urandom | base64 -w0)"; echo "cookie dai \${#C} byte"; nghttp -nv -H "cookie: $C" https://vidu.com:8444/t01.css https://vidu.com:8444/t02.css https://vidu.com:8444/t03.css https://vidu.com:8444/t04.css 2&gt;&amp;1 | grep -oE 'send HEADERS frame &lt;length=[0-9]+' | sed 's/send HEADERS frame &lt;length=/HEADERS gui di: /; s/$/ byte/'
+cookie dai 1474 byte
+HEADERS gui di: 1240 byte
+HEADERS gui di: 20 byte
+HEADERS gui di: 20 byte
+HEADERS gui di: 20 byte
+$ C="phien=$(head -c 1100 /dev/urandom | base64 -w0)"; for i in 1 2 3 4; do curl -s -o /dev/null --http1.1 --cacert pki/root.crt -H "cookie: $C" -w 'HTTP/1.1 request %{size_request} byte\\n' https://vidu.com:8443/t0$i.css; done
+HTTP/1.1 request 1567 byte
+HTTP/1.1 request 1567 byte
+HTTP/1.1 request 1567 byte
+HTTP/1.1 request 1567 byte</div>
+<p>HTTP/2 và ALPN h2 ở 8444, HTTP/1.1 ở 8443; tuần tự 18 so với 21 ms, song song 20 so với 63 ms; HPACK gửi 1.240 byte header một lần rồi 20 byte những lần sau, còn HTTP/1.1 lần nào cũng 1.567 byte.</p>
+<h3>🔗 Bài liên quan ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-7-2-http2" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking for Developers · 7.2 — HTTP/2: ghép kênh, HPACK và vì sao server push chết</span><span class="lc-sub">Chính giao thức đó</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/ddos-protection/learn?lessonSlug=ddos-4-3-http2" target="_blank" rel="noopener"><span class="lc-ico">🛡️</span><span class="lc-body"><span class="lc-title">DDoS Protection · 4.3 — Tấn công riêng của HTTP/2 và HTTP/3</span><span class="lc-sub">Rapid Reset, và vì sao có trần số luồng</span></span></a>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>http2 on;</code></span><span class="v">Chỉ thị HTTP/2 (nginx 1.25.1+); bản cũ hơn viết <code>listen ... http2</code>. Không bật sẵn.</span></div>
+  <div class="kv"><span class="k">ALPN</span><span class="v">Giao thức được chọn ngay trong bắt tay TLS; <code>openssl s_client -alpn</code> là phép thử dứt điểm.</span></div>
+  <div class="kv"><span class="k">Multiplexing (ghép kênh)</span><span class="v">Nhiều request trên một kết nối, gỡ bỏ head-of-line blocking ở tầng HTTP.</span></div>
+  <div class="kv"><span class="k">HPACK</span><span class="v">Nén header của HTTP/2; cookie lặp lại trở thành tham chiếu tới một bảng dùng chung.</span></div>
+  <div class="kv"><span class="k">Domain sharding / gộp tệp</span><span class="v">Những mẹo lách của HTTP/1.1 nay thành phản tác dụng trên HTTP/2.</span></div>
+  <div class="kv"><span class="k">HTTP/3 / QUIC</span><span class="v">Cùng ý tưởng nhưng đưa xuống dưới TLS, bật bằng <code>listen 443 quic</code>.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li>HTTP/2 tốn một chữ cấu hình, không bật sẵn, và ALPN — chứ không phải tệp cấu hình — mới xác nhận nó thật sự chạy.</li><li>Phép đo trên máy cho ra 28ms so với 27ms vì loopback không có độ trễ nào để phép ghép kênh tiết kiệm.</li><li><code>curl</code> báo cáo kích thước header TRƯỚC HPACK, nên nó hoàn toàn không đo được việc nén header.</li><li>Lợi ích thật là một kết nối thay vì sáu, không head-of-line blocking, và HPACK — tất cả đều lớn theo độ trễ.</li><li>Server push đã biến mất, sharding và sprite nay có hại, và nơi đo thật thà là một trình duyệt thật trên mạng có bóp băng thông.</li></ul>
 
 <h3>Nguồn học cho bài này</h3>
 <div class="pitfall">
@@ -662,6 +1315,7 @@ Kich thuoc header gui di (curl bao cao), cookie 1,5KB, 20 request:
       type: 'LESSON',
       description: 'Ba dòng mà mọi hướng dẫn đều đưa cho bạn để đẩy HTTP sang HTTPS, và bài này đo ra rằng cách viết phổ biến nhất vừa mở một cú chuyển hướng do kẻ tấn công điều khiển vừa PHÁ việc gia hạn chứng chỉ — cả hai đều im lặng, và cái thứ hai nổ ra sau đúng 60 ngày.',
       content: `
+${G06_5}
 <div class="ml-en">
 <span class="eyebrow">Chapter 6 · Lesson 6.5</span>
 <h2>The redirect to HTTPS, HSTS, and the renewal it silently breaks</h2>
@@ -738,6 +1392,77 @@ server {
 <div class="note-ct">
 <p><strong>The checklist for the day you enable HTTPS.</strong> Request a challenge URL over plain HTTP and confirm <code>200</code>. Request any other path over plain HTTP with a forged <code>Host</code> and confirm the <code>Location</code> contains your domain and not theirs. Confirm HSTS is present on <code>443</code> and absent on <code>80</code>. Set <code>max-age</code> small and put a note in your calendar to raise it. Four checks, four <code>curl</code> commands, and they cover both of the failures this lesson measured plus the one that takes two years to undo.</p>
 </div>
+
+<h3>🔬 Run it yourself</h3>
+<p>Blocks A and B on two plain ports, an HSTS and a no-HSTS HTTPS port, and the www redirect — each requested with a real and a forged Host, on nginx/1.24.0:</p>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  ssl_certificate     /root/pki/fullchain.crt;
+  ssl_certificate_key /root/pki/la.key;
+  server {                                 <span class="tok-comment">  # A) ĐÚNG: đích HẰNG SỐ, ACME đứng TRÊN cú chuyển hướng</span>
+    listen 8080;
+    server_name vidu.com www.vidu.com;
+    location /.well-known/acme-challenge/ { root /srv/acme; }
+    location / { return 301 https://vidu.com$request_uri; }
+  }
+  server {                                 <span class="tok-comment">  # B) SAI: một dòng return phủ CẢ khối, đích lấy từ $host</span>
+    listen 8081;
+    return 301 https://$host$request_uri;
+  }
+  server {                                 <span class="tok-comment">  # HTTPS có HSTS</span>
+    listen 8443 ssl;
+    server_name vidu.com;
+    add_header Strict-Transport-Security "max-age=63072000; includeSubDomains" always;
+    return 200 "trang chu\\n";
+  }
+  server {                                 <span class="tok-comment">  # HTTPS KHÔNG có HSTS</span>
+    listen 8444 ssl;
+    server_name vidu.com;
+    return 200 "trang chu\\n";
+  }
+  server {                                 <span class="tok-comment">  # www -&gt; apex, đích vẫn là hằng số</span>
+    listen 8443 ssl;
+    server_name www.vidu.com;
+    return 301 https://vidu.com$request_uri;
+  }
+}</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># xin80.sh</span>
+<span class="tok-comment">#!/bin/bash</span>
+<span class="tok-comment"># xin80.sh &lt;cổng&gt; &lt;Host&gt; &lt;đường dẫn&gt; — in mã + Location (hoặc thân) của một request HTTP thường</span>
+r=$(curl -s -D - -H "Host: $2" http://127.0.0.1:$1$3 | tr -d '\\r')
+printf '%-22s %-34s -&gt; %s  %s\\n' "Host: $2" "$3" "$(head -1 &lt;&lt;&lt;"$r" | cut -d' ' -f2)" "$(grep -i '^location:' &lt;&lt;&lt;"$r" || tail -1 &lt;&lt;&lt;"$r")"</code></pre>
+<div class="out">$ for d in /gio-hang /.well-known/acme-challenge/abc; do printf 'A '; bash xin80.sh 8080 vidu.com $d; done; printf 'A '; bash xin80.sh 8080 ke-tan-cong.com /gio-hang
+A Host: vidu.com         /gio-hang                          -&gt; 301  Location: https://vidu.com/gio-hang
+A Host: vidu.com         /.well-known/acme-challenge/abc    -&gt; 200  thu-thach-acme
+A Host: ke-tan-cong.com  /gio-hang                          -&gt; 301  Location: https://vidu.com/gio-hang
+$ for d in /gio-hang /.well-known/acme-challenge/abc; do printf 'B '; bash xin80.sh 8081 vidu.com $d; done; printf 'B '; bash xin80.sh 8081 ke-tan-cong.com /gio-hang
+B Host: vidu.com         /gio-hang                          -&gt; 301  Location: https://vidu.com/gio-hang
+B Host: vidu.com         /.well-known/acme-challenge/abc    -&gt; 301  Location: https://vidu.com/.well-known/acme-challenge/abc
+B Host: ke-tan-cong.com  /gio-hang                          -&gt; 301  Location: https://ke-tan-cong.com/gio-hang
+$ for p in 8443 8444; do printf 'cong %s (https): ' $p; curl -s -D - -o /dev/null --cacert pki/root.crt https://vidu.com:$p/ | tr -d '\\r' | grep -i '^strict-transport' || echo 'KHONG co'; done; printf 'cong 8080 (http) : '; curl -s -D - -o /dev/null -H 'Host: vidu.com' http://127.0.0.1:8080/ | tr -d '\\r' | grep -i '^strict-transport' || echo 'KHONG co'
+cong 8443 (https): Strict-Transport-Security: max-age=63072000; includeSubDomains
+cong 8444 (https): KHONG co
+cong 8080 (http) : KHONG co
+$ curl -s -o /dev/null -w 'www.vidu.com -&gt; %{http_code} %{redirect_url}\\n' --cacert pki/root.crt https://www.vidu.com:8443/gio-hang
+www.vidu.com -&gt; 301 https://vidu.com/gio-hang</div>
+<p>Block A sent every Host to https://vidu.com and served the ACME token (200); block B sent the forged Host to https://ke-tan-cong.com and redirected the ACME token (301 — renewal dead). HSTS appeared only on the HTTPS port that set it.</p>
+<h3>🔗 Related lessons in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/web-security/learn?lessonSlug=sec-5-4-header" target="_blank" rel="noopener"><span class="lc-ico">🛡️</span><span class="lc-body"><span class="lc-title">Web Security · 5.4 — Security header checklist</span><span class="lc-sub">HSTS among the other headers</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/applied-cryptography/learn?lessonSlug=crypto-7-5-cau-hinh" target="_blank" rel="noopener"><span class="lc-ico">🔐</span><span class="lc-body"><span class="lc-title">Applied Cryptography · 7.5 — Configuring and grading TLS on your own domain</span><span class="lc-sub">From these blocks to an A grade</span></span></a>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>return 301</code></span><span class="v">Permanent redirect; use a literal host so it cannot be turned into an open redirect.</span></div>
+  <div class="kv"><span class="k"><code>$host</code> / Host header</span><span class="v">Client-controlled input; a forged Host poisons a <code>$host</code>-based redirect (Lesson 1.4).</span></div>
+  <div class="kv"><span class="k">ACME challenge ordering</span><span class="v">The acme-challenge <code>location</code> must sit above the catch-all redirect, or renewal is redirected away.</span></div>
+  <div class="kv"><span class="k">HSTS (Strict-Transport-Security)</span><span class="v">Tells the browser to rewrite http to https itself; ignored over plain HTTP by design.</span></div>
+  <div class="kv"><span class="k">max-age</span><span class="v">Start small (300s); HSTS is not revocable once a browser has stored it.</span></div>
+  <div class="kv"><span class="k">includeSubDomains / preload / always</span><span class="v">One-way doors for a mature site; <code>always</code> makes HSTS appear on error responses too.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li>A blanket <code>return 301</code> on port 80 both enables a Host-forged open redirect and redirects the ACME challenge away.</li><li>The broken renewal is silent for 60 days, then every visitor gets a certificate warning at once.</li><li>Fix it with a literal host in the redirect and by placing the acme-challenge <code>location</code> above the catch-all.</li><li>HSTS removes the first insecure request but is irrevocable — start with a small <code>max-age</code> and raise it later.</li><li>Keep HSTS on 443 only, use <code>always</code>, and do not blindly redirect health checks or webhooks.</li></ul>
 
 <h3>Learning sources for this lesson</h3>
 <a class="link-card" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security" target="_blank" rel="noopener"><span class="lc-ico">🔒</span><span class="lc-body"><span class="lc-title">MDN — Strict-Transport-Security</span><span class="lc-sub">developer.mozilla.org · max-age, includeSubDomains, preload and their consequences</span></span></a>
@@ -824,6 +1549,77 @@ server {
 <p><strong>Danh sách kiểm cho cái ngày bạn bật HTTPS.</strong> Gọi một URL thử thách qua HTTP trần và xác nhận <code>200</code>. Gọi một đường dẫn bất kỳ khác qua HTTP trần với một <code>Host</code> giả mạo và xác nhận cái <code>Location</code> chứa tên miền CỦA BẠN chứ không phải của họ. Xác nhận HSTS CÓ trên <code>443</code> và KHÔNG có trên <code>80</code>. Đặt <code>max-age</code> nhỏ rồi ghi một dòng vào lịch để nâng nó lên. Bốn phép kiểm, bốn lệnh <code>curl</code>, và chúng phủ cả hai kiểu hỏng bài này đã đo cộng thêm cái mà gỡ ra mất hai năm.</p>
 </div>
 
+<h3>🔬 Tự chạy lại</h3>
+<p>Khối A và B trên hai cổng thường, một cổng HTTPS có HSTS và một cổng không, cùng cú chuyển hướng www — mỗi cái được xin với Host thật và Host giả, trên nginx/1.24.0:</p>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  ssl_certificate     /root/pki/fullchain.crt;
+  ssl_certificate_key /root/pki/la.key;
+  server {                                 <span class="tok-comment">  # A) ĐÚNG: đích HẰNG SỐ, ACME đứng TRÊN cú chuyển hướng</span>
+    listen 8080;
+    server_name vidu.com www.vidu.com;
+    location /.well-known/acme-challenge/ { root /srv/acme; }
+    location / { return 301 https://vidu.com$request_uri; }
+  }
+  server {                                 <span class="tok-comment">  # B) SAI: một dòng return phủ CẢ khối, đích lấy từ $host</span>
+    listen 8081;
+    return 301 https://$host$request_uri;
+  }
+  server {                                 <span class="tok-comment">  # HTTPS có HSTS</span>
+    listen 8443 ssl;
+    server_name vidu.com;
+    add_header Strict-Transport-Security "max-age=63072000; includeSubDomains" always;
+    return 200 "trang chu\\n";
+  }
+  server {                                 <span class="tok-comment">  # HTTPS KHÔNG có HSTS</span>
+    listen 8444 ssl;
+    server_name vidu.com;
+    return 200 "trang chu\\n";
+  }
+  server {                                 <span class="tok-comment">  # www -&gt; apex, đích vẫn là hằng số</span>
+    listen 8443 ssl;
+    server_name www.vidu.com;
+    return 301 https://vidu.com$request_uri;
+  }
+}</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># xin80.sh</span>
+<span class="tok-comment">#!/bin/bash</span>
+<span class="tok-comment"># xin80.sh &lt;cổng&gt; &lt;Host&gt; &lt;đường dẫn&gt; — in mã + Location (hoặc thân) của một request HTTP thường</span>
+r=$(curl -s -D - -H "Host: $2" http://127.0.0.1:$1$3 | tr -d '\\r')
+printf '%-22s %-34s -&gt; %s  %s\\n' "Host: $2" "$3" "$(head -1 &lt;&lt;&lt;"$r" | cut -d' ' -f2)" "$(grep -i '^location:' &lt;&lt;&lt;"$r" || tail -1 &lt;&lt;&lt;"$r")"</code></pre>
+<div class="out">$ for d in /gio-hang /.well-known/acme-challenge/abc; do printf 'A '; bash xin80.sh 8080 vidu.com $d; done; printf 'A '; bash xin80.sh 8080 ke-tan-cong.com /gio-hang
+A Host: vidu.com         /gio-hang                          -&gt; 301  Location: https://vidu.com/gio-hang
+A Host: vidu.com         /.well-known/acme-challenge/abc    -&gt; 200  thu-thach-acme
+A Host: ke-tan-cong.com  /gio-hang                          -&gt; 301  Location: https://vidu.com/gio-hang
+$ for d in /gio-hang /.well-known/acme-challenge/abc; do printf 'B '; bash xin80.sh 8081 vidu.com $d; done; printf 'B '; bash xin80.sh 8081 ke-tan-cong.com /gio-hang
+B Host: vidu.com         /gio-hang                          -&gt; 301  Location: https://vidu.com/gio-hang
+B Host: vidu.com         /.well-known/acme-challenge/abc    -&gt; 301  Location: https://vidu.com/.well-known/acme-challenge/abc
+B Host: ke-tan-cong.com  /gio-hang                          -&gt; 301  Location: https://ke-tan-cong.com/gio-hang
+$ for p in 8443 8444; do printf 'cong %s (https): ' $p; curl -s -D - -o /dev/null --cacert pki/root.crt https://vidu.com:$p/ | tr -d '\\r' | grep -i '^strict-transport' || echo 'KHONG co'; done; printf 'cong 8080 (http) : '; curl -s -D - -o /dev/null -H 'Host: vidu.com' http://127.0.0.1:8080/ | tr -d '\\r' | grep -i '^strict-transport' || echo 'KHONG co'
+cong 8443 (https): Strict-Transport-Security: max-age=63072000; includeSubDomains
+cong 8444 (https): KHONG co
+cong 8080 (http) : KHONG co
+$ curl -s -o /dev/null -w 'www.vidu.com -&gt; %{http_code} %{redirect_url}\\n' --cacert pki/root.crt https://www.vidu.com:8443/gio-hang
+www.vidu.com -&gt; 301 https://vidu.com/gio-hang</div>
+<p>Khối A đưa mọi Host về https://vidu.com và phục vụ chuỗi ACME (200); khối B đưa Host giả sang https://ke-tan-cong.com và chuyển hướng luôn chuỗi ACME (301 — gia hạn chết). HSTS chỉ xuất hiện ở cổng HTTPS có khai.</p>
+<h3>🔗 Bài liên quan ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/web-security/learn?lessonSlug=sec-5-4-header" target="_blank" rel="noopener"><span class="lc-ico">🛡️</span><span class="lc-body"><span class="lc-title">Web Security · 5.4 — Checklist header bảo mật</span><span class="lc-sub">HSTS giữa các header khác</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/applied-cryptography/learn?lessonSlug=crypto-7-5-cau-hinh" target="_blank" rel="noopener"><span class="lc-ico">🔐</span><span class="lc-body"><span class="lc-title">Applied Cryptography · 7.5 — Cấu hình và chấm điểm TLS trên tên miền của mình</span><span class="lc-sub">Từ các khối này tới điểm A</span></span></a>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>return 301</code></span><span class="v">Chuyển hướng vĩnh viễn; dùng host hằng số để nó không bị biến thành chuyển hướng mở.</span></div>
+  <div class="kv"><span class="k"><code>$host</code> / header Host</span><span class="v">Đầu vào do client điều khiển; một Host giả mạo đầu độc cú chuyển hướng dựa trên <code>$host</code> (Bài 1.4).</span></div>
+  <div class="kv"><span class="k">Thứ tự ACME challenge</span><span class="v">Khối <code>location</code> cho acme-challenge phải đứng TRÊN cú chuyển hướng bắt-tất, nếu không việc gia hạn bị đẩy đi mất.</span></div>
+  <div class="kv"><span class="k">HSTS (Strict-Transport-Security)</span><span class="v">Bảo trình duyệt tự viết lại http thành https; bị bỏ qua trên HTTP trần theo chủ ý.</span></div>
+  <div class="kv"><span class="k">max-age</span><span class="v">Bắt đầu nhỏ (300s); HSTS không thu hồi được một khi trình duyệt đã cất.</span></div>
+  <div class="kv"><span class="k">includeSubDomains / preload / always</span><span class="v">Những cánh cửa một chiều cho site trưởng thành; <code>always</code> làm HSTS hiện cả trên phản hồi lỗi.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li>Một dòng <code>return 301</code> phủ cả cổng 80 vừa mở một chuyển hướng bị Host giả mạo điều khiển, vừa đẩy mất đường thử thách ACME.</li><li>Việc gia hạn hỏng lặng lẽ suốt 60 ngày, rồi mọi khách truy cập nhận cảnh báo chứng chỉ cùng một lúc.</li><li>Chữa bằng host hằng số trong cú chuyển hướng và đặt khối <code>location</code> acme-challenge đứng trên cái bắt-tất.</li><li>HSTS xoá cái request không an toàn đầu tiên nhưng không thu hồi được — bắt đầu bằng <code>max-age</code> nhỏ rồi nâng sau.</li><li>Chỉ để HSTS trên 443, dùng <code>always</code>, và đừng chuyển hướng health check hay webhook một cách mù quáng.</li></ul>
+
 <h3>Nguồn học cho bài này</h3>
 <a class="link-card" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security" target="_blank" rel="noopener"><span class="lc-ico">🔒</span><span class="lc-body"><span class="lc-title">MDN — Strict-Transport-Security</span><span class="lc-sub">developer.mozilla.org · max-age, includeSubDomains, preload và hệ quả của chúng</span></span></a>
 <a class="link-card" href="https://letsencrypt.org/docs/challenge-types/" target="_blank" rel="noopener"><span class="lc-ico">✅</span><span class="lc-body"><span class="lc-title">Let's Encrypt — các loại thử thách</span><span class="lc-sub">letsencrypt.org · Chính xác thì thử thách HTTP-01 cần chạm tới cái gì</span></span></a>
@@ -846,7 +1642,7 @@ server {
 <h2>Quiz: TLS and HTTP/2</h2>
 <p class="lead">Eight questions from real handshakes against a real three-level chain. Two of them are about measurements that came out flat, and knowing why is the point.</p>
 <div class="callout">
-<p><strong>What this chapter established.</strong> A server must send its intermediate certificate, because clients only have the root: serving <code>fullchain</code> sent two certificates and verified, while serving the leaf alone sent one and returned <code>Verify return code: 21</code> (6.1). Trying all 158 cipher suites one at a time, the default block accepted 21 and an explicit list accepted 3 — and 12 of those 21 lacked ECDHE, meaning no forward secrecy (6.2). A handshake cost about 4.2ms of CPU here, but 100 requests over one connection cost 0.30ms each against 10.66ms over separate connections, so connection reuse dominates every cipher decision (6.3). HTTP/2 is not on by default and ALPN is how you confirm it, while a local benchmark showed 28ms against 27ms because loopback has no latency for multiplexing to save — and curl's header sizes cannot see HPACK at all (6.4). And a blanket <code>return 301 https://$host$request_uri;</code> on port 80 both hands the redirect destination to whoever forges a <code>Host</code> and redirects the ACME challenge away, breaking certificate renewal sixty days later (6.5).</p>
+<p><strong>What this chapter established.</strong> A server must send its intermediate certificate, because clients only have the root: serving <code>fullchain</code> sent two certificates and verified, while serving the leaf alone sent one and returned <code>Verify return code: 21</code> (6.1). Trying all 89 TLS 1.2 cipher suites one at a time, the default block accepted 27 and an explicit list accepted 3 — and 16 of those 21 lacked ECDHE, meaning no forward secrecy (6.2). A handshake cost about 3ms here, but 100 requests over one connection cost 0.23ms each against 7.58ms over separate connections, so connection reuse dominates every cipher decision (6.3). HTTP/2 is not on by default and ALPN is how you confirm it, while a local benchmark showed 28ms against 27ms because loopback has no latency for multiplexing to save — and curl's header sizes cannot see HPACK at all (6.4). And a blanket <code>return 301 https://$host$request_uri;</code> on port 80 both hands the redirect destination to whoever forges a <code>Host</code> and redirects the ACME challenge away, breaking certificate renewal sixty days later (6.5).</p>
 </div>
 </div>
 
@@ -855,7 +1651,7 @@ server {
 <h2>Quiz: TLS và HTTP/2</h2>
 <p class="lead">Tám câu ra từ những cái bắt tay THẬT với một chuỗi chứng chỉ ba tầng THẬT. Hai câu nói về những phép đo cho ra kết quả BẰNG PHẲNG, và biết VÌ SAO mới là điều đáng học.</p>
 <div class="callout">
-<p><strong>Chương này đã xác lập điều gì.</strong> Máy chủ BẮT BUỘC phải gửi cả chứng chỉ trung gian, vì client chỉ có mỗi root: phục vụ <code>fullchain</code> thì gửi ra hai chứng chỉ và xác thực qua, còn phục vụ mỗi cái lá thì gửi ra một và trả về <code>Verify return code: 21</code> (6.1). Thử lần lượt cả 158 bộ mã, khối mặc định chấp nhận 21 còn khối khai tường minh chấp nhận 3 — và 12 trong 21 cái đó KHÔNG có ECDHE, tức là mất forward secrecy (6.2). Một cái bắt tay ở đây tốn chừng 4,2ms CPU, nhưng 100 request qua MỘT kết nối tốn 0,30ms mỗi cái so với 10,66ms khi mỗi cái một kết nối, nên việc tái dùng kết nối ĐÈ BẸP mọi quyết định về bộ mã (6.3). HTTP/2 KHÔNG bật sẵn và ALPN là cách xác nhận nó, còn một phép đo trên máy cho ra 28ms so với 27ms vì loopback không có độ trễ nào để phép ghép kênh tiết kiệm — và kích thước header mà curl báo cáo thì hoàn toàn không nhìn thấy HPACK (6.4). Và một dòng <code>return 301 https://$host$request_uri;</code> phủ cả cổng 80 vừa trao cái đích chuyển hướng cho bất cứ ai giả mạo <code>Host</code>, vừa chuyển hướng mất đường thử thách ACME, làm việc gia hạn chứng chỉ chết sau đó sáu mươi ngày (6.5).</p>
+<p><strong>Chương này đã xác lập điều gì.</strong> Máy chủ BẮT BUỘC phải gửi cả chứng chỉ trung gian, vì client chỉ có mỗi root: phục vụ <code>fullchain</code> thì gửi ra hai chứng chỉ và xác thực qua, còn phục vụ mỗi cái lá thì gửi ra một và trả về <code>Verify return code: 21</code> (6.1). Thử lần lượt cả 89 bộ mã TLS 1.2, khối mặc định chấp nhận 27 còn khối khai tường minh chấp nhận 3 — và 16 trong 27 cái đó KHÔNG có ECDHE, tức là mất forward secrecy (6.2). Một cái bắt tay ở đây tốn chừng 3ms, nhưng 100 request qua MỘT kết nối tốn 0,23ms mỗi cái so với 7,58ms khi mỗi cái một kết nối, nên việc tái dùng kết nối ĐÈ BẸP mọi quyết định về bộ mã (6.3). HTTP/2 KHÔNG bật sẵn và ALPN là cách xác nhận nó, còn một phép đo trên máy cho ra 28ms so với 27ms vì loopback không có độ trễ nào để phép ghép kênh tiết kiệm — và kích thước header mà curl báo cáo thì hoàn toàn không nhìn thấy HPACK (6.4). Và một dòng <code>return 301 https://$host$request_uri;</code> phủ cả cổng 80 vừa trao cái đích chuyển hướng cho bất cứ ai giả mạo <code>Host</code>, vừa chuyển hướng mất đường thử thách ACME, làm việc gia hạn chứng chỉ chết sau đó sáu mươi ngày (6.5).</p>
 </div>
 </div>
 `,
@@ -896,7 +1692,7 @@ server {
             points: 1,
           },
           {
-            question: 'Measured: a TLS handshake cost ~4.2ms, one request on an open connection cost 0.30ms, and one request per connection cost 10.66ms. What follows?|||Đo được: một cái bắt tay TLS tốn ~4,2ms, một request trên kết nối đang mở tốn 0,30ms, còn mỗi request một kết nối tốn 10,66ms. Suy ra điều gì?',
+            question: 'Measured: a TLS handshake cost ~3ms, one request on an open connection cost 0.23ms, and one request per connection cost 7.58ms. What follows?|||Đo được: một cái bắt tay TLS tốn ~3ms, một request trên kết nối đang mở tốn 0,23ms, còn mỗi request một kết nối tốn 7,58ms. Suy ra điều gì?',
             options: [
               'Choose a faster cipher suite|||Hãy chọn một bộ mã nhanh hơn',
               'Connection reuse — keepalive, HTTP/2, session resumption, upstream keepalive — matters far more than any handshake tuning|||Việc TÁI DÙNG kết nối — keepalive, HTTP/2, nối lại phiên, keepalive lên upstream — quan trọng hơn HẲN mọi việc chỉnh tinh cái bắt tay',

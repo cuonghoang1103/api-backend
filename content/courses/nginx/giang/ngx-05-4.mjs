@@ -1,0 +1,32 @@
+/** Giảng theo slide — bài 5.4 Cơn giẫm đạp: 20 request, gọi upstream 20 lần hay 1 lần (deck ngx-05-4, 9 slide). VI = lời giảng video ngx-5-4; EN = ghi chú `en` của deck. SINH bằng scratchpad/ngx/giang.mjs — sửa ở deck/kichban rồi sinh lại. */
+import { walkNgx } from '../_slides.mjs';
+
+export default walkNgx('ngx-05-4', "The stampede: 20 requests, 20 upstream calls or 1", "Cơn giẫm đạp: 20 request, gọi upstream 20 lần hay 1 lần", [
+  [1, "The stampede: 20 requests, 20 upstream calls or 1",
+    "<p>Lesson 5.4. A cache entry is missing exactly when it hurts most: right after it expires, with traffic arriving. Every request misses at the same moment, and every one goes to the upstream.</p>",
+    "<p>Bài 5.4: cơn giẫm đạp, hai mươi request, gọi upstream hai mươi lần hay một lần.</p>"],
+  [2, "What you will take away from this lesson",
+    "<p>Five takeaways: a counted stampede; the cache lock; what waiting costs with one and with four workers; the lock timeouts; and three cures ranked, plus how to spot one in your log.</p>",
+    "<p>Năm điều: một cơn giẫm đạp đếm được, proxy_cache_lock, và cái giá của việc chờ, đo với một và bốn worker. Hai cái timeout của khoá. Rồi ba cách chữa xếp hạng, và cách nhận ra cơn giẫm đạp trong log.</p>"],
+  [3, "Twenty at once, counted",
+    "<p>A small script fires twenty requests at the same instant at a path that takes the upstream one second, and counts how many times the upstream was really called. Without a lock: twenty times. With proxy cache lock: once.</p>",
+    "<p>Một kịch bản Python bắn hai mươi request cùng lúc vào một đường dẫn mà upstream mất đúng một giây, rồi hỏi upstream đã bị gọi mấy lần. Không có khoá: hai mươi lần. Có proxy_cache_lock: một lần.</p>"],
+  [4, "One goes, nineteen wait",
+    "<p>One request goes to the upstream, the other nineteen wait for its answer. The lock has two timeouts: how long a waiter waits before asking the upstream itself, and how long a slow leader keeps the lock.</p>",
+    "<p>Một request được cử lên upstream, mười chín cái còn lại chờ câu trả lời của nó. Khoá có hai cái timeout. Proxy_cache_lock_timeout: người chờ chờ tối đa bao lâu, rồi tự đi hỏi upstream. Proxy_cache_lock_age: người dẫn đầu chậm quá thì cho người khác thử. Mặc định cả hai đều năm giây.</p>"],
+  [5, "What waiting costs",
+    "<p>What waiting costs. With four workers, six runs: the leader always took one second, and the slowest took one and a half in five runs out of six — waiters re-check every half second. Not every run pays, so measure on the worker count you really run, several times.</p>",
+    "<p>Người dẫn đầu luôn mất một giây. Người chờ cứ năm trăm mili giây mới kiểm lại một lần, nên hay phải trả thêm nửa giây. Không phải lần nào cũng trả. Vì vậy hãy đo đúng số worker bạn chạy thật, và đo nhiều lần.</p>"],
+  [6, "The trade",
+    "<p>The trade: one upstream call instead of twenty, paid for with half a second for the waiters, and the risk that a slow leader holds everyone. The better cure is to never let the entry be empty: serve the stale copy while one request refreshes it — the next lesson.</p>",
+    "<p>Đổi chác: một lần gọi upstream thay vì hai mươi, trả bằng nửa giây cho người chờ. Không khoá thì backend ngã ở mỗi lần hết hạn. Có khoá thì một người dẫn đầu chậm bắt mọi người chờ.</p>"],
+  [7, "Three cures, ranked — and how to spot a stampede",
+    "<p>Three cures, ranked. First, serve stale while one request updates — nobody waits. Second, the lock, when data must be fresh. Third, a longer TTL, which has no downside at all. To spot a stampede, look for a burst of MISS lines for one URI, one TTL apart. And cover the bad path with use stale on errors.</p>",
+    "<p>Ba cách chữa, xếp hạng. Một: phục vụ bản cũ trong khi một request làm mới, không ai phải chờ. Đó là bài 5.5. Hai: khoá, khi dữ liệu bắt buộc phải mới, như giá tiền, tồn kho, số dư. Ba: thời hạn dài hơn, từ mười lên sáu mươi giây là ít đi sáu lần. Nhận ra nó trong log: một chùm MISS cho cùng một đường dẫn trong vài mili giây, lặp lại cách nhau đúng một thời hạn. Và che con đường xấu bằng proxy_cache_use_stale cho lỗi và timeout, nếu không bộ đệm sẽ khuếch đại sự cố.</p>"],
+  [8, "Key terms of this lesson",
+    "<p>Key terms: cache stampede, proxy cache lock, lock timeout, lock age, and thundering herd.</p>",
+    "<p>Thuật ngữ: cache stampede, tức cơn giẫm đạp. Proxy_cache_lock, lock timeout, lock age. Và thundering herd, đàn thú chạy rầm rập, một tên khác của cùng hiện tượng.</p>"],
+  [9, "Your turn — and what to keep",
+    "<p>Your turn: build the slow counting upstream, fire twenty at once with and without the lock, repeat with four workers, then try serving stale. Keep: a miss under load is a stampede; the lock turns twenty calls into one; waiters pay half a second.</p>",
+    "<p>Tới lượt bạn: dựng một upstream mất một giây và biết đếm, bắn hai mươi request cùng lúc, có khoá và không khoá. Lặp lại với bốn worker, đọc người chậm nhất, rồi thử phục vụ bản cũ. Tóm lại: trượt lúc đông khách là giẫm đạp. Khoá biến hai mươi lần gọi thành một. Người chờ trả khoảng nửa giây. Bạn mở Code Lab Nginx, module bộ đệm, bắn hai mươi request vào một upstream biết đếm. Bài sau: phục vụ bản cũ.</p>"],
+]);

@@ -1,0 +1,32 @@
+/** Giảng theo slide — bài 5.3 Ai quyết định giữ bao lâu: chuỗi ưu tiên, đo thật (deck ngx-05-3, 9 slide). VI = lời giảng video ngx-5-3; EN = ghi chú `en` của deck. SINH bằng scratchpad/ngx/giang.mjs — sửa ở deck/kichban rồi sinh lại. */
+import { walkNgx } from '../_slides.mjs';
+
+export default walkNgx('ngx-05-3', "Who decides how long: the precedence chain, measured", "Ai quyết định giữ bao lâu: chuỗi ưu tiên, đo thật", [
+  [1, "Who decides how long: the precedence chain, measured",
+    "<p>Lesson 5.3. Your config says ten seconds. The upstream can overrule that with its own header, and one special header overrules both. Four cases, measured to the second.</p>",
+    "<p>Bài 5.3: ai quyết định giữ bao lâu, chuỗi ưu tiên, đo thật.</p>"],
+  [2, "What you will take away from this lesson",
+    "<p>Six takeaways: four timed cases; the upstream beats your config; ignore headers takes control back; X-Accel-Expires beats everything and never reaches the client; the ignore trap and per-status lifetimes; and which lever to reach for.</p>",
+    "<p>Sáu điều: bốn trường hợp bấm giờ, upstream thắng cấu hình, và proxy_ignore_headers giành lại quyền. X-Accel-Expires thắng tất cả mà client không thấy. Cái bẫy của ignore, thời hạn theo mã trạng thái, và nên dùng cái nào.</p>"],
+  [3, "The setup: same config, four upstream answers",
+    "<p>The setup. Every location has proxy cache valid two hundred, ten seconds. The upstream answers four ways: nothing; max-age two; the same max-age but ignored by the config; and X-Accel-Expires two together with max-age six hundred.</p>",
+    "<p>Dàn thí nghiệm. Bốn location giống hệt nhau, cùng proxy_cache_valid hai trăm, mười giây. Upstream trả lời bốn kiểu: không khai gì, max-age hai giây, max-age hai giây nhưng cấu hình bỏ qua, và X-Accel-Expires hai giây kèm max-age sáu trăm.</p>"],
+  [4, "Four cases, timed",
+    "<p>Four cases. A: nothing from upstream, expired after the configured ten seconds. B: the upstream's max-age two won — expired at three seconds. C: with proxy ignore headers, back to ten. D: X-Accel-Expires two beat max-age six hundred.</p>",
+    "<p>Một kịch bản Python xin đúng tại từng mốc giây, rồi in X-Cache-Status. A hết hạn ở giây mười hai. B hết ở giây ba. C quay lại mười hai. D hết ở giây ba.</p>"],
+  [5, "The chain, highest first",
+    "<p>The chain, highest first: X-Accel-Expires, then the upstream's Cache-Control or Expires, then your proxy cache valid, then nothing. proxy ignore headers removes a step. And X-Accel-Expires never reached the client: zero lines.</p>",
+    "<p>Chuỗi ưu tiên, từ cao xuống: X-Accel-Expires, rồi Cache-Control hoặc Expires của upstream, rồi proxy_cache_valid, cuối cùng là không cache. Proxy_ignore_headers rút một bậc ra khỏi chuỗi. Và X-Accel-Expires không bao giờ tới client: đếm được không dòng.</p>"],
+  [6, "The trap: ignoring Cache-Control ignores private too",
+    "<p>The trap. proxy ignore headers Cache-Control does not only drop the lifetime: it drops private, no-store and no-cache too. Measured: the private page was never stored on the normal path, but on the ignoring path the second visitor got the first one's page. And per-status lifetimes: a 404 cached for a minute was a HIT the second time.</p>",
+    "<p>Bỏ qua Cache-Control là bỏ luôn private, no-store và no-cache. Đúng cái tuyến phòng thủ của bài 5.2. Bắt buộc dùng thì khoanh vào đúng một location công khai, kèm proxy_no_cache theo Authorization. Mỗi mã trạng thái một thời hạn: hai trăm mười phút, 404 một phút, lỗi năm trăm chỉ một giây để dập cơn bão thử lại.</p>"],
+  [7, "Two audiences, two lifetimes",
+    "<p>Two audiences, two lifetimes. Case D is useful: browsers keep the page ten minutes, Nginx refreshes it every two seconds. Let the app decide with Cache-Control, let operations decide with ignore headers, or split the two with X-Accel-Expires.</p>",
+    "<p>Trường hợp D rất hữu ích: trình duyệt giữ mười phút, còn Nginx làm mới mỗi hai giây. Ứng dụng của bạn thì đặt Cache-Control ngay trong ứng dụng. Backend không sửa được thì dùng proxy_cache_valid, kèm ignore, khoanh hẹp. Muốn bộ đệm chung giữ khác trình duyệt thì dùng X-Accel-Expires.</p>"],
+  [8, "Key terms of this lesson",
+    "<p>Key terms: proxy cache valid, Cache-Control max-age, proxy ignore headers, X-Accel-Expires, and EXPIRED.</p>",
+    "<p>Thuật ngữ: proxy_cache_valid, thấp nhất. Cache-Control max-age, thắng cấu hình. Proxy_ignore_headers. X-Accel-Expires, cao nhất và không chuyển tiếp. Và EXPIRED: mục đã cũ, upstream bị hỏi lại.</p>"],
+  [9, "Your turn — and what to keep",
+    "<p>Your turn: build the four answers, request them at fixed seconds, add ignore headers to one, and check the client headers, and put upstream cache status in your log format from day one. Keep: the upstream beats the config, ignore headers takes it back, X-Accel-Expires beats all.</p>",
+    "<p>Tới lượt bạn: dựng bốn kiểu trả lời, xin tại các mốc giây cố định, ghi lại chỗ EXPIRED xuất hiện. Thêm ignore vào một cái, kiểm header phía client, và đưa upstream_cache_status vào log ngay từ ngày đầu. Tóm lại: upstream thắng cấu hình, ignore giành lại nhưng bỏ luôn private, X-Accel-Expires thắng tất cả. Bạn mở Code Lab Nginx, module bộ đệm, tự bấm giờ cả bốn dòng. Bài sau: cơn giẫm đạp.</p>"],
+]);

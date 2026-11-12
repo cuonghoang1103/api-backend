@@ -1,0 +1,32 @@
+/** Giảng theo slide — bài 5.1 Bật bộ đệm lên, và cái khoá được làm từ gì (deck ngx-05-1, 9 slide). VI = lời giảng video ngx-5-1; EN = ghi chú `en` của deck. SINH bằng scratchpad/ngx/giang.mjs — sửa ở deck/kichban rồi sinh lại. */
+import { walkNgx } from '../_slides.mjs';
+
+export default walkNgx('ngx-05-1', "Turning the cache on, and what the key is made of", "Bật bộ đệm lên, và cái khoá được làm từ gì", [
+  [1, "Turning the cache on, and what the key is made of",
+    "<p>Lesson 5.1, opening Chapter 5: a cache in front of the application. Three directives turn it on. The key decides which requests share an answer — and by default the client's Host is not part of it.</p>",
+    "<p>Bài 5.1: bật bộ đệm lên, và cái khoá được làm từ gì.</p>"],
+  [2, "What you will take away from this lesson",
+    "<p>Five takeaways: the three directives; how to see the cache work; what the key contains; where entries live on disk; and why inactive is not a lifetime.</p>",
+    "<p>Năm điều: ba chỉ thị, cách nhìn thấy bộ đệm chạy, và cái khoá có query nhưng không có Host. Rồi mỗi câu trả lời là một tệp trên đĩa, và vì sao inactive không phải thời hạn.</p>"],
+  [3, "Three directives",
+    "<p>Three directives. proxy cache path declares the store: a folder on disk and a shared memory zone, at the http level only. proxy cache uses that store in a location. proxy cache valid says how long a 200 stays fresh.</p>",
+    "<p>Ba chỉ thị. Proxy_cache_path khai cái kho: một thư mục trên đĩa và một vùng bộ nhớ chung, chỉ đặt được ở tầng http. Proxy_cache dùng kho đó trong một location. Proxy_cache_valid nói một phản hồi hai trăm được coi là tươi bao lâu.</p>"],
+  [4, "Seeing it work",
+    "<p>Seeing it work. The upstream counts how often it is called. Three requests: MISS, then HIT, HIT — and the body still says call number one. The upstream was asked once; the next two answers came from the cache.</p>",
+    "<p>Nhìn thấy nó chạy. Upstream đếm số lần bị gọi. Ba request: MISS, rồi HIT, HIT. Thân phản hồi vẫn ghi lần gọi thứ nhất. Upstream chỉ bị hỏi đúng một lần.</p>"],
+  [5, "The key: the query is in it, the Host is NOT",
+    "<p>The key. A different query string made a different entry. But two different Hosts, same path, shared one entry: the default key uses proxy host — the upstream address — not the Host the client sent. If one upstream serves several sites, add the Host to the key.</p>",
+    "<p>Vì khoá mặc định là scheme, proxy_host, request_uri. Proxy_host là địa chỉ upstream, không phải Host mà client gõ. Một upstream phục vụ nhiều trang web thì phải thêm Host vào khoá. Và tham số theo dõi trên URL sẽ xé bộ đệm thành nhiều mục.</p>"],
+  [6, "One file per answer — the key, hashed",
+    "<p>On disk: one file per cached answer. The file name is the md5 of the key — we computed it and it matched. levels one colon two makes the folders from the last characters of that hash. Inside the file, the key in clear text, then headers and body.</p>",
+    "<p>Trên đĩa, mỗi câu trả lời là một tệp. Tên tệp là mã md5 của khoá, mình đã tính lại và khớp. Levels một hai dựng thư mục từ mấy ký tự cuối của mã đó. Trong tệp có khoá dạng chữ, rồi header và thân.</p>"],
+  [7, "Fresh, then EXPIRED — and inactive is something else",
+    "<p>After eleven seconds, past the ten-second validity: EXPIRED, and the upstream was called again — call number five. inactive is different: it deletes entries nobody asked for, fresh or not. max size caps the disk.</p>",
+    "<p>Mười một giây sau, quá mười giây hiệu lực: EXPIRED, và upstream bị gọi lại. Inactive là chuyện khác: xoá mục không ai hỏi tới trong một khoảng, dù còn tươi hay không. Max_size giới hạn dung lượng đĩa.</p>"],
+  [8, "Key terms of this lesson",
+    "<p>Key terms: proxy cache path, keys zone, proxy cache valid, the cache key, upstream cache status, and inactive.</p>",
+    "<p>Thuật ngữ: proxy_cache_path, keys_zone, proxy_cache_valid. Khoá bộ đệm, biến upstream_cache_status, và inactive.</p>"],
+  [9, "Your turn — and what to keep",
+    "<p>Your turn: build a counting upstream behind the cache, expose the status, vary the query and then the Host, find the file on disk, and wait past the validity. Keep: store, use, how long; always expose the status; the default key ignores the Host; inactive is not a lifetime.</p>",
+    "<p>Tới lượt bạn: dựng một upstream biết đếm, đặt bộ đệm phía trước, thêm X-Cache-Status, xin ba lần. Đổi riêng query, rồi riêng Host. Tìm tệp trên đĩa, kiểm tên bằng md5sum, chờ quá thời hạn. Tóm lại: kho, dùng, bao lâu. Luôn hiện X-Cache-Status. Khoá mặc định bỏ qua Host. Inactive không phải thời hạn. Bạn mở Code Lab Nginx, module mẫu production. Bài sau: cái gì được cache, và vụ rò rỉ.</p>"],
+]);

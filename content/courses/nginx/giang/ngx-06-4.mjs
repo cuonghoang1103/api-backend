@@ -1,0 +1,32 @@
+/** Giảng theo slide — bài 6.4 HTTP/2: nó đổi cái gì, và phép đo trên máy KHÔNG cho bạn thấy cái gì (deck ngx-06-4, 9 slide). VI = lời giảng video ngx-6-4; EN = ghi chú `en` của deck. SINH bằng scratchpad/ngx/giang.mjs — sửa ở deck/kichban rồi sinh lại. */
+import { walkNgx } from '../_slides.mjs';
+
+export default walkNgx('ngx-06-4', "HTTP/2: what it changes, and what a local measurement cannot show", "HTTP/2: nó đổi cái gì, và phép đo trên máy KHÔNG cho bạn thấy cái gì", [
+  [1, "HTTP/2: what it changes, and what a local measurement cannot show",
+    "<p>Lesson 6.4. HTTP/2 changes three things: one connection instead of many, compressed headers, and no head-of-line blocking at the HTTP level. Two of them show up on one machine; one needs a real network.</p>",
+    "<p>Bài 6.4: HTTP/2, nó đổi cái gì, và phép đo trên máy không cho bạn thấy cái gì.</p>"],
+  [2, "What you will take away from this lesson",
+    "<p>Five takeaways: turning it on with the right syntax; confirming it; fifty files sequential and parallel; HPACK shrinking a cookie to twenty bytes; and what changes for your site, plus where to measure.</p>",
+    "<p>Năm điều: bật nó lên đúng cú pháp phiên bản của bạn, xác nhận nó, và năm mươi tệp tuần tự so với song song. HPACK nén một cookie từ hơn nghìn byte còn hai mươi byte. Và cách xây site đổi ra sao, đo ở đâu cho đúng.</p>"],
+  [3, "Turn it on, then confirm it",
+    "<p>On nginx 1.24 HTTP/2 is a parameter of listen; from 1.25.1 it is its own directive. Then confirm it: curl reports HTTP two on port 8444 and one point one on 8443, and openssl shows the ALPN protocol, h2. ALPN is negotiated inside the TLS handshake.</p>",
+    "<p>Trên nginx 1.24, HTTP/2 là tham số của listen. Từ 1.25.1 mới là chỉ thị riêng http2 on. Rồi xác nhận: curl báo HTTP hai ở cổng có bật, một chấm một ở cổng không bật. Openssl cho thấy ALPN là h2. ALPN được thương lượng ngay trong cú bắt tay TLS. Client đòi h2 mà máy chủ không có thì lặng lẽ quay về một chấm một, không lỗi, không cảnh báo.</p>"],
+  [4, "50 files: where HTTP/2 shows on one machine",
+    "<p>Fifty small files. One after another, HTTP two and one point one are the same, eighteen and twenty one milliseconds: on loopback there is no latency to hide. Fetched in parallel, HTTP one point one opens many connections and pays a handshake for each: sixty three milliseconds against twenty.</p>",
+    "<p>Trên loopback, độ trễ gần bằng không, nên chẳng có gì để ghép kênh che giấu. Tuần tự thì hai bên như nhau. Song song thì khác hẳn, vì HTTP một chấm một phải trả tiền bắt tay cho mỗi kết nối mới.</p>"],
+  [5, "HPACK: the cookie is sent once",
+    "<p>HPACK. The same one and a half kilobyte cookie on four requests. HTTP two sent one thousand two hundred forty bytes of headers the first time, then twenty bytes each: references to a shared table. HTTP one point one sent one thousand five hundred sixty seven bytes every single time.</p>",
+    "<p>HPACK giữ một bảng chung ở hai đầu. Lần đầu gửi đủ, lần sau chỉ gửi số thứ tự trong bảng. Một cookie một phẩy năm KB trên bốn mươi request là sáu mươi KB tải lên với một chấm một, còn với HTTP hai chỉ hơn một KB.</p>"],
+  [6, "What HTTP/2 really changes",
+    "<p>What really changes. One connection instead of six. No head-of-line blocking at the HTTP level. Bundling and sprites become counter-productive, and splitting assets across domains now hurts. Server push is gone. And max concurrent streams caps one client at a hundred twenty eight.</p>",
+    "<p>Thật sự đổi: một kết nối thay vì sáu, tiết kiệm năm cú bắt tay mỗi lượt tải trang. Hết nghẽn đầu hàng ở tầng HTTP. Gộp tệp và ghép ảnh sprite thành phản tác dụng, chia tài nguyên ra nhiều tên miền thì có hại. Server push đã bị gỡ, dùng preload hoặc early hints. Và http2_max_concurrent_streams, mặc định một trăm hai mươi tám, là trần cho một client.</p>"],
+  [7, "Measure it where your users are",
+    "<p>So measure where your users are: over a real connection, in the browser's network panel with the protocol column, throttled, with HTTP two on and off, comparing the waterfall. On the server itself latency is near zero and there is nothing to hide.</p>",
+    "<p>Vậy đo ở đâu? Qua một kết nối thật, trong tab Network của trình duyệt, thêm cột Protocol, bóp băng thông, bật rồi tắt HTTP/2 và so thác nước. HTTP/3 chạy trên QUIC đi xa thêm một bước: mất một gói cũng không làm khựng các luồng khác. Nginx hỗ trợ từ 1.25.</p>"],
+  [8, "Key terms of this lesson",
+    "<p>Key terms: ALPN, multiplexing, HPACK, head-of-line blocking, the listen http2 syntax, and HTTP three over QUIC.</p>",
+    "<p>Thuật ngữ: ALPN, multiplexing tức ghép kênh, HPACK. Head-of-line blocking, cú pháp listen kèm http2, và HTTP/3 trên QUIC.</p>"],
+  [9, "Your turn — and what to keep",
+    "<p>Your turn: two ports, confirm the protocol, fetch fifty files both ways, and read the HEADERS sizes with nghttp. Keep: the syntax depends on your version; one connection means fewer handshakes; HPACK turns a repeated header into a few bytes; measure on a real network.</p>",
+    "<p>Tới lượt bạn: hai cổng, một có http2, xác nhận bằng http_version và ALPN, lấy năm mươi tệp hai cách. Dùng nghttp với một cookie lớn, đọc kích thước khối HEADERS. Tóm lại: cú pháp tuỳ phiên bản. Một kết nối là ít bắt tay hơn. HPACK biến header lặp lại thành vài byte. Đo trên mạng thật. Bạn mở Code Lab Nginx, module TLS và chứng chỉ. Bài sau: chuyển hướng sang HTTPS và HSTS.</p>"],
+]);

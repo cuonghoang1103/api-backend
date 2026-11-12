@@ -27,6 +27,7 @@ export const KHOA_DU_100: Readonly<Record<string, KhoaDu100>> = Object.freeze({
   'software-testing': { ngay: '10/11/2026', ghiChu: 'SWT301 · slide trường · 111/111 bài có video · Code Lab 77 module · quiz mọi chương · đề FE/PE' },
   'software-requirements': { ngay: '10/11/2026', ghiChu: 'SWR302 · slide trường · 139/139 bài có video · Code Lab 131 module · quiz chương bài giảng · đề FE/PE' },
   'authentication': { ngay: '12/11/2026', ghiChu: '77/77 bài có video · Code Lab 77 module (đủ Ch0–12) · quiz 13 chương · đề FE/PE/PT×3' },
+  'operating-systems': { ngay: '12/11/2026', ghiChu: 'OSG202 · slide trường · 97/100 bài có video (3 bài chữa đề FE) · Code Lab 30 module · quiz 17 chương · 29 đề FE' },
   'nodejs': { ngay: '12/11/2026', ghiChu: '94/94 bài có video · Code Lab 114 module · quiz 18 chương · đề PE/FE×4/PT×3' },
   'server-side-development-nodejs-express-mongodb': { ngay: '12/11/2026', ghiChu: 'SDN302 · slide trường · 40/42 bài có video (2 bài đề thi) · Code Lab 35 module · quiz 8 chương · 25 đề PE/FE' },
 });

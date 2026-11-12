@@ -213,6 +213,22 @@ export default function RoadmapDetail({ slug }: { slug: string }) {
   const pct = total > 0 ? Math.round((doneCount / total) * 100) : 0;
   const color = data?.color || '#6366f1';
   const linked = flat.filter((x) => (x.n.lessons?.length ?? 0) > 0).length;
+  // Khoá trên web phủ lộ trình này nhiều nhất (gom từ bài đã gắn vào các bước) — để người học thấy "học cả khoá nào".
+  const khoaPhu = useMemo(() => {
+    const m = new Map<string, { slug: string; ten: string; buoc: number; academy: boolean; ma?: string }>();
+    for (const { n } of flat) {
+      const daDem = new Set<string>();
+      for (const l of n.lessons ?? []) {
+        const k = l.href.match(/^\/courses\/([^/?]+)/)?.[1];
+        if (!k || daDem.has(k)) continue;
+        daDem.add(k);
+        const ten = (l.nguon ?? k).split(' · ')[0];
+        const cu = m.get(k) ?? { slug: k, ten, buoc: 0, academy: !!l.academy, ma: l.ma };
+        cu.buoc += 1; m.set(k, cu);
+      }
+    }
+    return [...m.values()].sort((a, b) => b.buoc - a.buoc).slice(0, 8);
+  }, [flat]);
   const Icon = roadmapIcon(data?.icon);
   const active = activeId != null ? flat[viTri.get(activeId) ?? -1] : undefined;
   const ai = activeId != null ? viTri.get(activeId) ?? -1 : -1;
@@ -277,6 +293,30 @@ export default function RoadmapDetail({ slug }: { slug: string }) {
               </div>
             </div>
           </motion.header>
+
+          {khoaPhu.length > 0 && (
+            <section className="mb-8">
+              <h2 className="mb-3 flex items-center gap-2 text-sm font-bold uppercase tracking-[0.12em]" style={{ color: 'var(--text-secondary)' }}>
+                <GraduationCap size={15} /> {s.coursesCover}
+              </h2>
+              <div className="grid gap-2.5 sm:grid-cols-2 lg:grid-cols-4">
+                {khoaPhu.map((k) => (
+                  <Link key={k.slug} href={`/courses/${k.slug}`}
+                    className="group flex items-center gap-3 rounded-2xl border p-3 transition hover:-translate-y-0.5 hover:shadow-lg"
+                    style={{ borderColor: 'var(--border-color)', background: 'var(--bg-card)' }}>
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-xs font-bold" style={{ background: `${color}1c`, color }}>
+                      {k.academy ? (k.ma?.slice(0, 3) ?? 'FU') : <GraduationCap size={17} />}
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="line-clamp-1 text-[13px] font-semibold" style={{ color: 'var(--text-primary)' }}>{k.ten}</span>
+                      <span className="text-[11px]" style={{ color: 'var(--text-secondary)' }}>{k.academy ? `${s.academy}${k.ma ? ` · ${k.ma}` : ''} · ` : ''}{s.coversSteps(k.buoc)}</span>
+                    </span>
+                    <ArrowRight size={14} className="shrink-0 opacity-30 transition group-hover:translate-x-0.5 group-hover:opacity-80" />
+                  </Link>
+                ))}
+              </div>
+            </section>
+          )}
 
           <div className="grid gap-8 lg:grid-cols-[264px_minmax(0,1fr)]">
             {/* Mục lục */}

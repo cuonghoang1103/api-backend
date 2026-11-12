@@ -972,6 +972,1138 @@
    }
   ]
  },
+ "Viết CSS ở quy mô lớn › Tailwind CSS": {
+  "body": "Tailwind CSS là framework **utility-first**: thay vì tự đặt tên class như `.card-title` rồi viết CSS riêng, bạn ghép các class nhỏ, mỗi class làm đúng một việc (`p-4`, `flex`, `text-lg`, `hover:bg-blue-600`) ngay trong HTML/JSX. Tailwind quét mã nguồn, thấy class nào bạn dùng thì **sinh ra đúng những dòng CSS đó** — file CSS cuối cùng chỉ chứa phần được dùng nên rất nhẹ.\n\n```html\n<button class=\"rounded-lg bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 md:px-6\">\n  Lưu\n</button>\n```\n\n### Vì sao cần biết\nPhần lớn dự án React/Next.js hiện nay dùng Tailwind. Nó cho một thang giá trị chung (khoảng cách, màu, cỡ chữ) nên giao diện nhất quán mà không phải nghĩ tên class, không lo đụng tên giữa các component, và xoá component là xoá luôn style của nó.\n\n### Ý chính\n- **Thang giá trị**: khoảng cách là bội số của 4px (`p-4` = 1rem = 16px), màu theo bậc 50–950 (`blue-600`).\n- **Biến thể (variant)** dạng tiền tố: `hover:`, `focus:`, `md:` (responsive, mobile-first), `dark:`, `disabled:`, `group-hover:`.\n- **Tuỳ biến** qua file cấu hình/theme (màu thương hiệu, font, breakpoint); giá trị lẻ dùng `w-[372px]`.\n- Class dài thì **tách thành component** (React component), không tách thành `@apply` lung tung.\n- Ghép class có điều kiện: dùng hàm như `clsx`/`cn()`; `tailwind-merge` giúp class sau ghi đè class trước.\n\n### Lỗi hay gặp\n- **Nối chuỗi class động** như `` `bg-${color}-500` ``: Tailwind không thấy chuỗi đầy đủ nên không sinh CSS. Hãy ghi nguyên tên class đầy đủ trong mã (ví dụ map `{ red: 'bg-red-500' }`).\n- Tin rằng thứ tự viết class quyết định ai thắng: không đúng, thứ tự nằm trong file CSS được sinh ra mới quyết định.\n- Quên khai báo đường dẫn nguồn cần quét nên class \"không ăn\".\n\n### Tự kiểm tra\n1. Vì sao Tailwind không cần bạn đặt tên class mà CSS vẫn nhỏ?\n2. `md:flex` có hiệu lực ở màn hình nhỏ hay lớn? Vì sao?\n3. Tại sao `` `text-${size}` `` thường không hoạt động?",
+  "lessons": [
+   {
+    "href": "/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-a3-2-slot20-nextjs-tailwind-slides",
+    "ten": "A3.2 — Học theo từng slide: Next.js & Tailwind CSS (Slot 20)",
+    "nguon": "Front-End Web Development with React · Nâng cao A3 — TypeScript & Next.js",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "FER202"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-13-1-styling-va-tailwind",
+    "ten": "13.1 — Các cách style, và vì sao Tailwind",
+    "nguon": "Next.js: The React Framework · Chương 13",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-13-2-tailwind-nen-tang",
+    "ten": "13.2 — Nền tảng Tailwind: utility, responsive, trạng thái",
+    "nguon": "Next.js: The React Framework · Chương 13",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/tailwind-css/learn?lessonSlug=tw-0-1-trinh-sinh",
+    "ten": "0.1 — Tailwind là một trình SINH, không phải một thư viện",
+    "nguon": "Tailwind CSS · Mục 0",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/code-lab/tailwind-css",
+    "ten": "Tailwind CSS",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Viết CSS ở quy mô lớn › Sass/SCSS": {
+  "body": "Sass là **bộ tiền xử lý CSS (preprocessor)**: bạn viết cú pháp mở rộng (file `.scss`), bước build biên dịch ra CSS thường. Nó ra đời khi CSS chưa có biến hay nesting; ngày nay CSS thuần đã có custom properties và nesting, nhưng Sass vẫn phổ biến ở dự án cũ, Bootstrap và nhiều design system.\n\n```scss\n@use 'sass:color';\n\n$brand: #2563eb;               // biến Sass (biên dịch xong là mất)\n\n@mixin center {                // mixin: khối style tái dùng\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n\n.card {\n  padding: 1rem;\n  border: 1px solid color.adjust($brand, $lightness: 30%);\n  @include center;\n  &:hover { border-color: $brand; }   // nesting với &\n  .title { font-weight: 600; }         // -> .card .title\n}\n```\n\n### Ý chính\n- **Biến `$x`** được thay lúc biên dịch; khác với CSS custom property `--x` còn sống lúc chạy và đổi được theo theme.\n- **Nesting** và `&` giúp nhóm style theo component.\n- **Mixin / function / `@extend`** tái dùng logic; đừng lạm dụng `@extend`.\n- **Module**: dùng `@use` và `@forward` (mỗi file có namespace riêng). `@import` đã bị đánh dấu lỗi thời, đừng dùng cho code mới.\n- Chia file theo kiểu partial (`_buttons.scss`) rồi gom ở một file chính.\n\n### Lỗi hay gặp\n- Lồng quá sâu (4–5 cấp) làm selector dài, độ đặc hiệu cao, khó ghi đè.\n- Dùng biến Sass cho giá trị cần đổi lúc chạy (dark mode): hãy dùng CSS custom property.\n- Trộn `@import` và `@use` khiến biến bị trùng hoặc không thấy.",
+  "more": [
+   {
+    "type": "official",
+    "title": "Sass — hướng dẫn chính thức",
+    "url": "https://sass-lang.com/guide/"
+   }
+  ]
+ },
+ "Viết CSS ở quy mô lớn › PostCSS": {
+  "body": "PostCSS là một **công cụ biến đổi CSS bằng plugin viết bằng JavaScript**. Nó tự không \"làm\" gì nhiều: nó phân tích CSS thành cây cú pháp (AST), đưa qua chuỗi plugin, rồi in lại CSS. Chính các plugin mới tạo ra giá trị.\n\n### Vì sao cần biết\nNhiều công cụ bạn dùng hằng ngày chạy trên PostCSS mà bạn không để ý: **Autoprefixer** (tự thêm tiền tố như `-webkit-` theo danh sách trình duyệt cần hỗ trợ), Tailwind CSS (bản 3 là một plugin PostCSS), `postcss-preset-env` (viết cú pháp CSS mới, đổi sang bản trình duyệt cũ hiểu), cssnano (nén CSS). Vite và Next.js tự đọc file cấu hình PostCSS nếu có.\n\n```js\n// postcss.config.js\nexport default {\n  plugins: {\n    autoprefixer: {},   // thêm vendor prefix theo browserslist\n    cssnano: {},        // nén CSS (thường chỉ bật khi build)\n  },\n};\n```\n\n### Ý chính\n- PostCSS ≠ Sass: Sass là một ngôn ngữ riêng, PostCSS là bộ khung chạy plugin; có thể dùng cùng nhau (Sass biên dịch trước, PostCSS xử lý sau).\n- Danh sách trình duyệt cần hỗ trợ khai ở `browserslist` (trong `package.json` hoặc `.browserslistrc`), các plugin dùng chung nó.\n- Thứ tự plugin quan trọng: ví dụ nén phải chạy sau cùng.\n\n### Lỗi hay gặp\n- Cấu hình PostCSS bị bỏ qua vì sai tên/vị trí file hoặc plugin chưa cài; kết quả là Tailwind \"không ăn\".\n- Mong PostCSS tự làm mọi thứ: không có plugin thì nó không đổi gì.",
+  "lessons": [
+   {
+    "href": "/courses/tailwind-css/learn?lessonSlug=tw-0-3-bon-bo-phan",
+    "ten": "0.3 — Bốn bộ phận chuyển động, và cái nào hay hỏng",
+    "nguon": "Tailwind CSS · Mục 0",
+    "kieu": "bai-doc"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "PostCSS — trang chính thức",
+    "url": "https://postcss.org/"
+   }
+  ]
+ },
+ "Viết CSS ở quy mô lớn › CSS Architecture — BEM": {
+  "body": "BEM (**Block – Element – Modifier**) là quy ước đặt tên class CSS để giao diện lớn vẫn dễ đọc, ít va chạm tên và không cần lồng selector sâu.\n\n- **Block**: thành phần độc lập, đứng riêng được (`card`, `menu`).\n- **Element**: phần con chỉ có nghĩa bên trong block, nối bằng hai gạch dưới (`card__title`).\n- **Modifier**: biến thể hoặc trạng thái, nối bằng hai gạch ngang (`card--featured`, `card__title--small`).\n\n```html\n<article class=\"card card--featured\">\n  <h2 class=\"card__title\">Khoá học</h2>\n  <a class=\"card__link\" href=\"#\">Xem</a>\n</article>\n```\n```css\n.card { padding: 1rem; }\n.card--featured { border: 2px solid gold; }\n.card__title { font-size: 1.25rem; }\n```\n\n### Vì sao cần biết\nHai nguyên nhân khiến CSS rối khi dự án lớn là **tên class toàn cục đụng nhau** và **cuộc chiến độ đặc hiệu** (selector dài thắng selector ngắn). BEM giữ mọi selector ở độ đặc hiệu thấp, phẳng (một class), nên ghi đè dự đoán được. Bạn sẽ gặp BEM ở nhiều codebase cũ và thư viện.\n\n### Ý chính\n- Mỗi selector chỉ một class: `.card__title`, không phải `.card .title`.\n- Element không lồng element: viết `card__title`, đừng viết `card__header__title`.\n- Modifier đi kèm class gốc (`card card--featured`), không thay thế nó.\n- Công cụ hiện đại giải quyết cùng vấn đề theo cách khác: CSS Modules (tên được băm tự động), `@layer`, utility-first như Tailwind.\n\n### Lỗi hay gặp\n- Tên theo diện mạo (`red-box`) thay vì vai trò, đổi giao diện là sai tên.\n- Block quá to hoặc lồng block vào element làm quy ước mất ý nghĩa.\n\n### Tự kiểm tra\n1. Vì sao `.card__title` tốt hơn `.card .title` về độ đặc hiệu?\n2. Modifier `--featured` dùng một mình hay đi kèm class gốc?",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-12-0-slides",
+    "ten": "12.0 — CSS nâng cao trong 12 slide",
+    "nguon": "Nền tảng Lập trình Web · Chương 12",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-12-3-css-architecture",
+    "ten": "12.3 — Đặt tên và tổ chức CSS",
+    "nguon": "Nền tảng Lập trình Web · Chương 12",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-12-5-quiz",
+    "ten": "12.5 — Kiểm tra chương 12",
+    "nguon": "Nền tảng Lập trình Web · Chương 12",
+    "kieu": "quiz"
+   }
+  ]
+ },
+ "Viết CSS ở quy mô lớn › CSS-in-JS": {
+  "body": "CSS-in-JS là cách viết style **ngay trong JavaScript**, gắn với từng component. Thư viện (styled-components, Emotion, và các bản \"zero-runtime\" như vanilla-extract, Panda CSS, Linaria) sinh ra tên class riêng cho component nên không đụng tên, và style có thể phụ thuộc props/state.\n\n```jsx\nimport styled from 'styled-components';\n\nconst Button = styled.button`\n  padding: 0.5rem 1rem;\n  background: ${(p) => (p.$primary ? '#2563eb' : '#e5e7eb')};\n`;\n\n<Button $primary>Lưu</Button>\n```\n\n### Ý chính\n- **Runtime CSS-in-JS** (styled-components, Emotion) tạo và chèn CSS lúc trang chạy: linh hoạt nhưng tốn thêm JavaScript và khó dùng với **React Server Components** vì cần chạy phía client.\n- **Zero-runtime** trích CSS ra file lúc build: nhẹ hơn, hợp SSR/RSC hơn, đổi lại động theo props bị hạn chế hơn.\n- Lựa chọn khác không cần thư viện: CSS Modules, Tailwind, CSS thuần với `@layer`. Xu hướng gần đây của hệ sinh thái React/Next.js nghiêng về các lựa chọn này.\n\n### Lỗi hay gặp\n- Chọn thư viện runtime cho dự án Next.js App Router mà không kiểm tra hỗ trợ Server Components.\n- Tạo styled component bên trong hàm render: mỗi lần render ra một component mới, mất state và chậm.\n- Lạm dụng style động theo props khiến sinh quá nhiều class."
+ },
+ "Viết CSS ở quy mô lớn › Design Systems": {
+  "body": "Design System là **bộ tài nguyên dùng chung giữa thiết kế và code** để mọi màn hình trông và hành xử nhất quán: nguyên tắc, token, component, tài liệu hướng dẫn dùng.\n\n### Gồm những gì\n- **Design token**: tên có ý nghĩa cho giá trị thiết kế (`color-text-primary`, `space-4`, `radius-md`) thay vì viết số cứng. Trên web thường là CSS custom properties.\n- **Component library**: Button, Input, Modal… đã xử lý trạng thái, truy cập (a11y), biến thể.\n- **Tài liệu và công cụ**: Storybook hiển thị từng component; hướng dẫn khi nào dùng cái nào.\n\n```css\n:root { --color-bg: #fff; --color-text: #111; --space-4: 1rem; }\nhtml.dark { --color-bg: #0b0b0c; --color-text: #f5f5f5; }\n.card { background: var(--color-bg); color: var(--color-text); padding: var(--space-4); }\n```\n\n### Ý chính\n- Token là lớp nối giữa Figma và code; đổi token một chỗ là đổi toàn bộ sản phẩm (theme sáng/tối, đổi thương hiệu).\n- Đặt tên token theo **vai trò** (`text-primary`) hơn là diện mạo (`gray-900`).\n- Có thể xây từ đầu hoặc dựa trên thư viện có sẵn (Radix, shadcn/ui, Material UI…) rồi tuỳ biến.\n\n### Lỗi hay gặp\n- Làm component library khi chưa có đủ ca dùng thật, thành bộ khung cồng kềnh.\n- Không ghi version/changelog nên sản phẩm này dùng bản này, sản phẩm kia dùng bản khác.",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-12-4-tokens-theming",
+    "ten": "12.4 — Token thiết kế và chế độ sáng/tối",
+    "nguon": "Nền tảng Lập trình Web · Chương 12",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-13-5-scale-va-bay-mau",
+    "ten": "13.5 — Style ở quy mô lớn, và bẫy chữ đen trên nền đen",
+    "nguon": "Next.js: The React Framework · Chương 13",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Viết CSS ở quy mô lớn › CSS Frameworks": {
+  "body": "\"CSS framework\" là tên chung cho các cách giúp tổ chức CSS khi dự án lớn. Có vài hướng chính, mỗi hướng đánh đổi khác nhau:\n\n- **Utility-first** (Tailwind CSS): ghép class nhỏ trong markup, không đặt tên; nhất quán nhờ thang giá trị.\n- **Component-based** (Bootstrap, Bulma, Material UI): có sẵn nút, form, lưới, modal; dựng nhanh nhưng giao diện dễ giống nhau và ghi đè tốn công.\n- **Tiền xử lý** (Sass/SCSS) và **hậu xử lý** (PostCSS): mở rộng cú pháp hoặc biến đổi CSS lúc build.\n- **Quy ước đặt tên và phạm vi** (BEM, CSS Modules, `@layer`): giữ tên không đụng nhau và độ đặc hiệu thấp.\n- **CSS-in-JS**: style gắn với component JavaScript.\n\n### Chọn thế nào\n- Ứng dụng React/Next.js mới, nhóm nhỏ: Tailwind (có thể kèm thư viện component như shadcn/ui) hoặc CSS Modules.\n- Cần dựng giao diện quản trị nhanh, ít tuỳ biến: Bootstrap hoặc Material UI.\n- Codebase cũ: tôn trọng quy ước sẵn có (BEM, Sass), đừng trộn thêm một hệ thứ ba.\n\n### Lỗi hay gặp\n- Trộn nhiều hệ cùng lúc làm xung đột reset/độ đặc hiệu.\n- Chọn framework theo mốt mà không xét kích thước bundle, khả năng tuỳ biến và kỹ năng của nhóm.",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-12-3-css-architecture",
+    "ten": "12.3 — Đặt tên và tổ chức CSS",
+    "nguon": "Nền tảng Lập trình Web · Chương 12",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-4-3-slot4-bootstrap-slides",
+    "ten": "4.2 — Học theo từng slide: Layout & component Bootstrap (Slot 4–5)",
+    "nguon": "Front-End Web Development with React · Chương 4",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "FER202"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-13-1-styling-va-tailwind",
+    "ten": "13.1 — Các cách style, và vì sao Tailwind",
+    "nguon": "Next.js: The React Framework · Chương 13",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Linter & Formatter › ESLint": {
+  "body": "ESLint là **công cụ phân tích tĩnh (linter)** cho JavaScript/TypeScript: đọc mã mà không chạy, báo lỗi và thói quen xấu, đồng thời tự sửa được nhiều loại. Nó bắt những lỗi như biến dùng mà chưa khai báo, `==` thay vì `===`, hook React gọi sai chỗ, import thừa.\n\n```js\n// eslint.config.js (flat config)\nimport js from '@eslint/js';\nimport tseslint from 'typescript-eslint';\n\nexport default [\n  js.configs.recommended,\n  ...tseslint.configs.recommended,\n  { rules: { 'no-console': 'warn', eqeqeq: 'error' } },\n];\n```\nChạy: `npx eslint .` hoặc `npx eslint . --fix`.\n\n### Vì sao cần biết\nHầu hết dự án đều chạy ESLint trong editor (báo lỗi khi gõ), trong git hook và trong CI để chặn mã xấu trước khi merge. Với React, plugin `eslint-plugin-react-hooks` bắt lỗi vi phạm quy tắc hook mà TypeScript không thấy.\n\n### Ý chính\n- **Rule** có ba mức: `off`, `warn`, `error`. Cấu hình hiện đại dùng **flat config** (`eslint.config.js`).\n- Dùng bộ cấu hình dựng sẵn (`recommended`) rồi chỉnh thêm, đừng tự bật hàng trăm rule.\n- ESLint lo **chất lượng mã**; chuyện xuống dòng, dấu nháy là việc của formatter (Prettier). Nếu dùng cả hai, tắt rule định dạng của ESLint để khỏi xung đột.\n- TypeScript kiểm kiểu, ESLint kiểm thói quen: hai thứ bổ sung nhau.\n\n### Lỗi hay gặp\n- Bật quá nhiều rule gây nhiễu, cả nhóm đâm ra tắt hết bằng `eslint-disable`.\n- Chỉ chạy ở máy cá nhân, không chạy trong CI nên không ai bị chặn.\n- Không tắt rule định dạng khi dùng cùng Prettier.\n\n### Tự kiểm tra\n1. ESLint khác trình kiểm kiểu của TypeScript ở điểm nào?\n2. Vì sao nên chạy ESLint trong CI chứ không chỉ trong editor?",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-1-2-vscode",
+    "ten": "1.2 — VS Code: xưởng làm việc của bạn",
+    "nguon": "Nền tảng Lập trình Web · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/software-testing/learn?lessonSlug=swt301-lab1-static-analysis",
+    "ten": "Lab 1.9 — Công cụ phân tích tĩnh: PVS-Studio, SonarQube, ESLint, PMD, FindBugs/SpotBugs",
+    "nguon": "Software Testing · Lab 1 (tài liệu FLM) — Review code & phâ",
+    "kieu": "lab",
+    "academy": true,
+    "ma": "SWT301"
+   }
+  ]
+ },
+ "Linter & Formatter › Prettier": {
+  "body": "Prettier là **công cụ định dạng mã tự động có chủ kiến (opinionated)**: nó đọc mã, bỏ định dạng cũ, rồi in lại theo một kiểu thống nhất (thụt lề, dấu nháy, độ dài dòng, dấu phẩy cuối). Ít tuỳ chọn cố ý, để cả nhóm khỏi cãi nhau về style.\n\n```json\n// .prettierrc\n{ \"semi\": true, \"singleQuote\": true, \"printWidth\": 100, \"trailingComma\": \"all\" }\n```\nChạy: `npx prettier --write .` (ghi đè) hoặc `npx prettier --check .` (dùng trong CI).\n\n### Vì sao cần biết\nBật \"format on save\" trong VS Code thì mã luôn đẹp, diff trong pull request chỉ còn thay đổi thật, không lẫn dòng sửa khoảng trắng. Prettier hỗ trợ JS, TS, JSX, CSS, JSON, Markdown, HTML…\n\n### Ý chính\n- Chỉ lo **định dạng**, không bắt lỗi logic; dùng cùng ESLint (ESLint bắt lỗi, Prettier định dạng).\n- Dùng `eslint-config-prettier` để tắt các rule ESLint trùng việc với Prettier.\n- Thêm file `.prettierignore` cho thư mục build, file sinh tự động.\n- Gắn vào git hook (husky + lint-staged) để chỉ format file vừa sửa.\n\n### Lỗi hay gặp\n- Mỗi người một bản cấu hình hoặc phiên bản Prettier khác nhau, format qua lại tạo diff nhiễu: khoá phiên bản trong `package.json` và commit file cấu hình.\n- Chạy cả ESLint (rule định dạng) lẫn Prettier mà không tắt rule trùng, hai công cụ \"đánh nhau\".",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-1-2-vscode",
+    "ten": "1.2 — VS Code: xưởng làm việc của bạn",
+    "nguon": "Nền tảng Lập trình Web · Chương 1",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Linter & Formatter › Biome": {
+  "body": "Biome là bộ công cụ **lint + format (và sắp xếp import)** viết bằng Rust, gộp việc của ESLint và Prettier trong một chương trình, một file cấu hình. Ưu điểm lớn là tốc độ: xử lý cả kho mã trong thời gian ngắn, phản hồi gần như tức thì trong editor. Cách format của nó tương thích rất cao với Prettier.\n\n```json\n// biome.json\n{\n  \"formatter\": { \"indentStyle\": \"space\", \"lineWidth\": 100 },\n  \"linter\": { \"enabled\": true, \"rules\": { \"recommended\": true } }\n}\n```\nLệnh thường dùng: `npx biome check .` (lint + format + import), `npx biome check --write .` (tự sửa).\n\n### Khi nào chọn\n- Dự án mới muốn cấu hình gọn, một công cụ, chạy nhanh trong CI.\n- Kho mã lớn (monorepo) mà ESLint chậm.\n\n### Cần cân nhắc\n- Hệ sinh thái rule/plugin nhỏ hơn ESLint; nếu bạn cần plugin chuyên biệt (một số rule của React, Next.js, hay rule dựa trên thông tin kiểu TypeScript đầy đủ) có thể vẫn phải giữ ESLint cho phần đó. Hãy kiểm tra rule bạn cần đã được hỗ trợ trước khi chuyển.\n- Di chuyển từ ESLint/Prettier có lệnh `biome migrate` hỗ trợ đọc cấu hình cũ.\n\n### Lỗi hay gặp\n- Gỡ ESLint rồi mới phát hiện thiếu rule quan trọng, nên so sánh trước.\n- Chạy song song Biome và Prettier trên cùng file, hai bên định dạng khác nhau.",
+  "more": [
+   {
+    "type": "official",
+    "title": "Biome — bắt đầu nhanh",
+    "url": "https://biomejs.dev/guides/getting-started/"
+   }
+  ]
+ },
+ "Build Tools & Module Bundlers › Vite": {
+  "body": "Vite là công cụ dựng dự án frontend thế hệ mới. Hai chế độ làm việc khác nhau:\n\n- **Dev server**: không gộp (bundle) cả dự án trước khi chạy. Nó phục vụ mã nguồn dạng **ES module native** của trình duyệt, chỉ biến đổi file nào trình duyệt đang yêu cầu, và dùng esbuild để tiền xử lý thư viện bên ngoài (dependency pre-bundling). Vì vậy khởi động gần như tức thì và HMR (cập nhật nóng) nhanh dù dự án lớn.\n- **Build production**: `vite build` gộp, thu nhỏ, tách chunk, băm tên file (hash) và xuất ra thư mục `dist/` (các bản trước dùng Rollup làm bộ gộp; các bản mới đang chuyển sang Rolldown, xem bước Rolldown).\n\n```bash\nnpm create vite@latest my-app -- --template react-ts\ncd my-app && npm install\nnpm run dev       # dev server, mặc định cổng 5173\nnpm run build     # ra dist/\nnpm run preview   # chạy thử bản build\n```\n\n### Ý chính\n- Cấu hình ở `vite.config.ts`; thêm tính năng qua plugin (`@vitejs/plugin-react`).\n- Biến môi trường phía client phải có tiền tố `VITE_` và đọc bằng `import.meta.env.VITE_API_URL`; **chúng được nhúng cứng vào bundle lúc build**, nên đừng để khoá bí mật trong đó.\n- Hỗ trợ sẵn TypeScript, JSX, CSS Modules, PostCSS, import ảnh/SVG.\n- Proxy API trong dev (`server.proxy`) để tránh lỗi CORS.\n\n### Lỗi hay gặp\n- Quên `npm run preview` hoặc test trên bản build: dev và production khác nhau (tree-shaking, minify) nên có lỗi chỉ hiện ở production.\n- Đổi biến `VITE_*` mà không build lại.\n- Ứng dụng deploy ở thư mục con mà không đặt `base`.\n\n### Tự kiểm tra\n1. Vì sao Vite khởi động dev nhanh hơn bundler truyền thống?\n2. Vì sao không nên đặt API key bí mật trong biến `VITE_`?",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-14-0-slides",
+    "ten": "14.0 — Đưa lên mạng trong 12 slide",
+    "nguon": "Nền tảng Lập trình Web · Chương 14",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-14-1-build",
+    "ten": "14.1 — Bản dựng production thật ra làm gì",
+    "nguon": "Nền tảng Lập trình Web · Chương 14",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-0-1-cai-dat",
+    "ten": "0.1 — Cài đặt với Vite và TypeScript (đo so với Create React App)",
+    "nguon": "React · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-14-2-api-that",
+    "ten": "14.2 — API thật: hết giờ, thử lại, mất mạng, idempotency, báo lỗi, biến môi trường Vite",
+    "nguon": "React · Chương 14",
+    "kieu": "video"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "Vite — hướng dẫn chính thức",
+    "url": "https://vite.dev/guide/"
+   }
+  ]
+ },
+ "Build Tools & Module Bundlers › esbuild": {
+  "body": "esbuild là bộ **bundler và minifier viết bằng Go**, nổi tiếng vì tốc độ: nhanh gấp hàng chục lần các bundler cũ nhờ chạy song song, ít bước phân tích lặp. Nó hiểu sẵn TypeScript, JSX, CSS, ES module.\n\n```bash\nnpm i -D esbuild\nnpx esbuild src/index.ts --bundle --minify --sourcemap --outfile=dist/app.js\n```\n\n### Vì sao cần biết\nBạn thường dùng esbuild mà không hay biết: Vite dùng nó để tiền xử lý thư viện và biến đổi TypeScript/JSX lúc dev; nhiều công cụ khác (tsup, một số runner) xây trên nó.\n\n### Ý chính\n- Phù hợp: bundle thư viện nhỏ, script Node, công cụ nội bộ, bước build cần nhanh.\n- Hạn chế: **không kiểm kiểu TypeScript**, nó chỉ xoá kiểu. Vẫn cần `tsc --noEmit` để kiểm kiểu.\n- Hệ sinh thái plugin và các tính năng nâng cao (như HMR đầy đủ, tách chunk tinh tế cho ứng dụng lớn) ít hơn Webpack/Rollup; đó là lý do app lớn thường dùng Vite hoặc framework bọc ngoài.\n\n### Lỗi hay gặp\n- Tưởng build xanh là mã đúng kiểu: esbuild bỏ qua lỗi kiểu.\n- Dùng tính năng TypeScript cần thông tin kiểu để biến đổi (như `const enum` xuyên file, `emitDecoratorMetadata`) mà bộ biến đổi từng-file không hỗ trợ đầy đủ.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-15-3-isolated-modules",
+    "ten": "15.3 — Tách kiểm kiểu khỏi transpile",
+    "nguon": "TypeScript · Chương 15",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Build Tools & Module Bundlers › SWC": {
+  "body": "SWC (Speedy Web Compiler) là **trình biên dịch JavaScript/TypeScript viết bằng Rust**, làm cùng việc với Babel — đổi JSX, TypeScript, cú pháp mới sang JavaScript mà trình duyệt hoặc Node hiểu — nhưng nhanh hơn nhiều. Next.js dùng SWC làm bộ biên dịch mặc định, Vite có plugin `@vitejs/plugin-react-swc`, Jest có thể dùng qua `@swc/jest`.\n\n```json\n// .swcrc\n{\n  \"jsc\": {\n    \"parser\": { \"syntax\": \"typescript\", \"tsx\": true },\n    \"target\": \"es2020\"\n  },\n  \"module\": { \"type\": \"es6\" }\n}\n```\n\n### Ý chính\n- Việc của SWC: **transpile** (đổi cú pháp) và minify; bundling phụ thuộc công cụ bao ngoài.\n- Cũng như esbuild, SWC **chỉ xoá kiểu TypeScript, không kiểm kiểu**: vẫn chạy `tsc --noEmit` trong CI.\n- Plugin SWC viết bằng WebAssembly/Rust nên hệ sinh thái nhỏ hơn Babel; một plugin Babel đặc thù có thể chưa có bản tương ứng.\n\n### Lỗi hay gặp\n- Giữ file `.babelrc` trong dự án Next.js: Next sẽ chuyển sang dùng Babel và mất lợi thế SWC (trừ khi thật sự cần).\n- Kỳ vọng SWC báo lỗi kiểu như `tsc`.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-15-3-isolated-modules",
+    "ten": "15.3 — Tách kiểm kiểu khỏi transpile",
+    "nguon": "TypeScript · Chương 15",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Build Tools & Module Bundlers › Webpack": {
+  "body": "Webpack là **module bundler** kinh điển: nhìn từ file đầu vào (entry), lần theo mọi `import`/`require`, dựng đồ thị phụ thuộc rồi đóng gói thành một hay nhiều file (bundle) cho trình duyệt. Điểm mạnh là cấu hình rất linh hoạt: **loader** biến mọi loại file (TS, CSS, ảnh) thành module, **plugin** can thiệp toàn bộ quá trình build.\n\n```js\n// webpack.config.js\nconst HtmlWebpackPlugin = require('html-webpack-plugin');\nconst MiniCssExtractPlugin = require('mini-css-extract-plugin');\n\nmodule.exports = {\n  entry: './src/index.js',\n  output: { filename: '[name].[contenthash].js', clean: true },\n  module: {\n    rules: [\n      { test: /\\.tsx?$/, use: 'babel-loader', exclude: /node_modules/ },\n      { test: /\\.css$/, use: [MiniCssExtractPlugin.loader, 'css-loader'] },\n    ],\n  },\n  plugins: [new HtmlWebpackPlugin({ template: './public/index.html' }), new MiniCssExtractPlugin()],\n  optimization: { splitChunks: { chunks: 'all' } },\n};\n```\n\n### Ý chính\n- Khái niệm cốt lõi: **entry, output, loader, plugin, mode** (`development` / `production`).\n- Tối ưu có sẵn: tree-shaking (cần ES module), code splitting (`import()` động, `splitChunks`), hash tên file để cache lâu dài, source map.\n- Hay gặp ở dự án cũ (Create React App cũ, nhiều cấu hình doanh nghiệp). Dự án mới thường chọn Vite hoặc dùng framework có bundler sẵn (Next.js).\n\n### Lỗi hay gặp\n- Cấu hình phình to khó đọc; dựng lại từ đầu thay vì dùng preset.\n- Bundle nặng vì import cả thư viện (`import _ from 'lodash'`) thay vì import phần cần dùng.\n- Quên đặt `mode: 'production'` nên không minify, hoặc dùng nhầm cấu hình dev để deploy.",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-8-3-lazy",
+    "ten": "8.3 — Chia nhỏ bundle và tải lười: route, Suspense, bẫy barrel và ảnh",
+    "nguon": "React · Chương 8",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-14-1-build",
+    "ten": "14.1 — Bản dựng production thật ra làm gì",
+    "nguon": "Nền tảng Lập trình Web · Chương 14",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-5-5-es-modules",
+    "ten": "5.5 — ES module: tách mã thành nhiều tệp",
+    "nguon": "Nền tảng Lập trình Web · Chương 5",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Build Tools & Module Bundlers › Rollup": {
+  "body": "Rollup là **bundler tập trung vào ES module**, nổi tiếng với việc cho ra bundle **gọn và sạch**, nhờ tree-shaking tốt. Vì vậy nó là lựa chọn phổ biến để đóng gói **thư viện** (React, Vue, nhiều gói npm đều dựng bằng Rollup), có thể xuất đồng thời nhiều định dạng: `esm`, `cjs`, `umd`.\n\n```js\n// rollup.config.mjs\nimport resolve from '@rollup/plugin-node-resolve';\nimport terser from '@rollup/plugin-terser';\n\nexport default {\n  input: 'src/index.js',\n  output: [\n    { file: 'dist/lib.mjs', format: 'esm' },\n    { file: 'dist/lib.cjs', format: 'cjs' },\n  ],\n  external: ['react'],           // không đóng gói vào bundle\n  plugins: [resolve(), terser()],\n};\n```\n\n### Ý chính\n- **Tree-shaking**: bỏ phần code export mà không ai import. Hoạt động tốt nhất khi mã không có tác dụng phụ ở cấp module; khai báo `\"sideEffects\": false` trong `package.json` khi thật sự đúng.\n- Khai báo thư viện phụ thuộc (peer dependency) ở `external` để người dùng không phải tải hai bản.\n- Vite dùng Rollup cho bản build production ở các phiên bản hiện hành, nên hiểu Rollup giúp bạn đọc cấu hình `build.rollupOptions` của Vite.\n\n### Lỗi hay gặp\n- Quên `external` làm bundle thư viện kéo cả React vào.\n- Trộn CommonJS cần plugin chuyển đổi; thiếu nó thì import báo lỗi.",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-14-1-build",
+    "ten": "14.1 — Bản dựng production thật ra làm gì",
+    "nguon": "Nền tảng Lập trình Web · Chương 14",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-5-5-es-modules",
+    "ten": "5.5 — ES module: tách mã thành nhiều tệp",
+    "nguon": "Nền tảng Lập trình Web · Chương 5",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Build Tools & Module Bundlers › Parcel": {
+  "body": "Parcel là bundler **zero-config**: bạn trỏ vào file HTML hoặc JS đầu vào, nó tự nhận ra loại file (TypeScript, JSX, Sass, ảnh…), tự cài chuyển đổi cần thiết, bật dev server có HMR, và build production có minify, tree-shaking, tách chunk.\n\n```bash\nnpm i -D parcel\n# package.json: \"source\": \"src/index.html\", scripts: start/build\nnpx parcel src/index.html      # dev server\nnpx parcel build src/index.html\n```\n\n### Phù hợp khi nào\n- Prototype, dự án nhỏ, bài demo, workshop: cần chạy ngay không muốn viết cấu hình.\n- Dự án lớn cần kiểm soát chi tiết thì Vite hoặc Webpack có hệ sinh thái, tài liệu và cộng đồng lớn hơn.\n\n### Ý chính\n- Cấu hình tối thiểu qua `package.json` và `.parcelrc` khi cần tuỳ biến.\n- Bản 2 dùng lõi Rust, build song song và có cache trong thư mục `.parcel-cache`.\n\n### Lỗi hay gặp\n- Cache cũ gây hiện tượng \"sửa mà không đổi\": xoá `.parcel-cache` và `dist`.\n- Kỳ vọng mức tuỳ biến sâu như Webpack mà không dựa vào plugin."
+ },
+ "Build Tools & Module Bundlers › Rolldown": {
+  "body": "Rolldown là bundler **viết bằng Rust**, dùng chung nền với bộ công cụ Oxc (parser, transformer), được xây để **thay Rollup (và esbuild) bên trong Vite** — cùng một bộ gộp cho cả dev lẫn production — đồng thời giữ API gần với Rollup nên nhiều plugin cũ chạy được. Mục tiêu: giữ độ linh hoạt kiểu Rollup nhưng nhanh tương đương esbuild.\n\n### Ý chính\n- Với người dùng Vite, đây là chuyện \"dưới nắp ca-pô\": cấu hình `vite.config` gần như giữ nguyên, tốc độ build cải thiện.\n- Việc đang phát triển nhanh: trạng thái ổn định, tính năng và cách bật thay đổi theo từng bản, nên đọc tài liệu chính thức của Vite/Rolldown tại thời điểm bạn dùng thay vì dựa vào bài viết cũ.\n- Cùng xu hướng chung của hệ sinh thái: công cụ build viết lại bằng ngôn ngữ biên dịch sẵn (Rust, Go) cho nhanh: esbuild, SWC, Rolldown, Biome.\n\n### Lỗi hay gặp\n- Đưa phiên bản thử nghiệm vào dự án production mà không khoá phiên bản.\n- Giả định mọi plugin Rollup/Vite đều tương thích; cần thử và đối chiếu."
+ },
+ "Build Tools & Module Bundlers › Docs Generation": {
+  "body": "Tài liệu cho code gồm hai kiểu, và web dùng hai công cụ khác nhau:\n\n- **TypeDoc**: đọc mã TypeScript cùng chú thích TSDoc/JSDoc rồi sinh **tài liệu API** (trang HTML hoặc JSON) cho thư viện: hàm nào nhận gì, trả gì, kiểu ra sao.\n- **Storybook**: dựng **xưởng thử component** tách khỏi ứng dụng. Mỗi \"story\" là một trạng thái của component (nút bình thường, bị vô hiệu, đang tải), vừa là tài liệu sống, vừa để thiết kế/QA xem và kiểm thử trực quan.\n\n```ts\n/**\n * Tính tổng tiền có thuế.\n * @param price giá chưa thuế\n * @param rate  thuế suất, ví dụ 0.1 = 10%\n */\nexport function withTax(price: number, rate: number): number {\n  return price * (1 + rate);\n}\n```\n```tsx\n// Button.stories.tsx\nimport type { Meta, StoryObj } from '@storybook/react';\nimport { Button } from './Button';\n\nconst meta = { component: Button } satisfies Meta<typeof Button>;\nexport default meta;\n\nexport const Primary: StoryObj<typeof meta> = { args: { children: 'Lưu', disabled: false } };\n```\n\n### Vì sao cần biết\nThư viện nội bộ hay design system mà không có tài liệu thì không ai dùng đúng. Storybook cũng là nơi dễ gắn kiểm thử tương tác và kiểm thử hình ảnh.\n\n### Lỗi hay gặp\n- Tài liệu lệch khỏi mã vì viết tay: hãy sinh từ chú thích trong mã và chạy trong CI.\n- Chỉ viết story cho trạng thái đẹp, bỏ qua trạng thái lỗi, rỗng, đang tải.",
+  "more": [
+   {
+    "type": "official",
+    "title": "Storybook — tài liệu",
+    "url": "https://storybook.js.org/docs"
+   }
+  ]
+ },
+ "Bảo mật Web › Web Security Basics": {
+  "body": "Bảo mật web ở phía frontend xoay quanh một nguyên tắc: **đừng tin gì đến từ người dùng, URL, hay bên thứ ba**, và đừng để trình duyệt chạy mã không phải của bạn.\n\n### Ba loại tấn công phải biết\n- **XSS (Cross-Site Scripting)**: kẻ tấn công làm trang của bạn chạy script của chúng (qua ô bình luận, tham số URL, nội dung HTML không lọc). Script chạy với quyền của người dùng: đọc dữ liệu trang, gọi API thay họ, lấy token nếu nằm ở `localStorage`.\n- **CSRF**: trang lạ khiến trình duyệt tự gửi request tới site của bạn kèm cookie đăng nhập. Phòng bằng cookie `SameSite`, token CSRF, kiểm tra header Origin.\n- **Injection** phía server (SQL, lệnh hệ thống) thuộc backend nhưng FE phải hiểu dữ liệu nào cần kiểm tra.\n\n```jsx\n// React tự escape khi hiển thị chuỗi, an toàn:\n<p>{comment}</p>\n\n// NGUY HIỂM nếu comment là HTML do người dùng gửi:\n<div dangerouslySetInnerHTML={{ __html: comment }} />\n// Nếu bắt buộc, lọc bằng DOMPurify trước:\n// <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(comment) }} />\n```\n\n### Ý chính\n- **Escape khi xuất ra, kiểm tra khi nhập vào**; framework hiện đại escape mặc định, các lỗ hổng thường nằm ở `innerHTML`, `dangerouslySetInnerHTML`, `href=\"javascript:...\"`.\n- Lưu token: cookie `HttpOnly; Secure; SameSite` an toàn hơn `localStorage` với XSS (đổi lại phải lo CSRF).\n- Kiểm tra mọi thứ ở server; kiểm tra phía client chỉ để tiện cho người dùng.\n- Cập nhật phụ thuộc, quét lỗ hổng gói (`npm audit`), chỉ nạp script bên thứ ba tin cậy.\n\n### Lỗi hay gặp\n- Tin rằng ẩn nút là đủ phân quyền.\n- Chèn HTML thô từ API vào trang mà không lọc.\n- Để khoá bí mật trong biến môi trường phía client.\n\n### Tự kiểm tra\n1. React có tự chống XSS không? Trường hợp nào vẫn dính?\n2. Vì sao cookie `HttpOnly` chống được việc script đánh cắp token nhưng lại cần phòng CSRF?",
+  "lessons": [
+   {
+    "href": "/courses/maw301-modern-web-application-security/learn?lessonSlug=maw301-ts-3-1",
+    "ten": "3.1 — Cross-site scripting: phản xạ, lưu trữ và DOM",
+    "nguon": "Modern Web Application Security · Chương 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "MAW301"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-13-4-bao-mat-i18n",
+    "ten": "13.4 — HTML an toàn (XSS, dangerouslySetInnerHTML, DOMPurify) và i18n cơ bản với Intl",
+    "nguon": "React · Chương 13",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-9-2-xss-va-sanitize",
+    "ten": "9.2 — XSS: từ ghi chú của người lạ tới phiên đăng nhập của bạn",
+    "nguon": "Node.js · Chương 9",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/authentication/learn?lessonSlug=auth-4-5-cat-token-o-dau",
+    "ten": "4.5 — Cất token ở đâu trong trình duyệt",
+    "nguon": "Authentication · Chương 4",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/maw301-modern-web-application-security/learn?lessonSlug=maw301-quiz-3",
+    "ten": "Quiz 3 — XSS & CSRF",
+    "nguon": "Modern Web Application Security · Chapter 3",
+    "kieu": "quiz",
+    "academy": true,
+    "ma": "MAW301"
+   }
+  ]
+ },
+ "Bảo mật Web › CORS": {
+  "body": "CORS (Cross-Origin Resource Sharing) là cơ chế để **máy chủ cho phép trình duyệt** cho trang ở origin khác gọi API của nó. Để hiểu CORS phải hiểu **same-origin policy**: mặc định, JavaScript ở trang `https://app.com` không được đọc phản hồi từ `https://api.com`. Origin = giao thức + tên miền + cổng; khác một thành phần là khác origin.\n\n### Cách hoạt động\n- **Request đơn giản** (GET/POST thường): trình duyệt gửi kèm header `Origin`; server trả `Access-Control-Allow-Origin`. Trình duyệt chỉ đưa phản hồi cho JS nếu header khớp.\n- **Preflight**: với request \"phức tạp\" (method như PUT/DELETE, header tuỳ biến như `Authorization`, `Content-Type: application/json`), trình duyệt gửi trước một request `OPTIONS` hỏi được phép không; server phải trả `Access-Control-Allow-Methods`/`-Headers`.\n- Gửi cookie xuyên origin cần `credentials: 'include'` ở client và `Access-Control-Allow-Credentials: true` ở server, khi đó origin phải **cụ thể**, không được là `*`.\n\n```js\n// Express: danh sách cho phép, không dùng '*' khi có credentials\nimport cors from 'cors';\napp.use(cors({ origin: ['https://app.com'], credentials: true }));\n```\n\n### Ý chính\n- CORS do **trình duyệt** thi hành; `curl` hay server-to-server không bị ảnh hưởng.\n- CORS không phải biện pháp xác thực: nó không ngăn ai gọi API trực tiếp.\n- Khi phát triển, dùng proxy của dev server để tránh CORS.\n\n### Lỗi hay gặp\n- Sửa lỗi bằng `Allow-Origin: *` rồi gửi cookie: trình duyệt sẽ từ chối.\n- Phản chiếu bừa header `Origin` vào `Allow-Origin` mà không kiểm danh sách cho phép: mở toang API.\n- Quên xử lý request `OPTIONS` ở server hoặc proxy.",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-7-5-https-cors",
+    "ten": "7.5 — HTTPS và CORS",
+    "nguon": "Nền tảng Lập trình Web · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-6-4-cors",
+    "ten": "6.4 — CORS, CSRF và trình duyệt: đo trong Chromium thật",
+    "nguon": "API & System Design · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-7-4-header-quan-trong",
+    "ten": "7.4 — Các header đổi hành vi: cache, nén, CORS, bảo mật",
+    "nguon": "Networking for Developers · Chương 7",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Bảo mật Web › HTTPS": {
+  "body": "HTTPS là HTTP chạy bên trong **TLS**: dữ liệu giữa trình duyệt và máy chủ được mã hoá. TLS đem lại ba điều: **bí mật** (người nghe lén không đọc được), **toàn vẹn** (không bị sửa giữa đường) và **xác thực máy chủ** (bạn đang nói chuyện đúng với `example.com`, nhờ chứng chỉ do CA tin cậy ký).\n\n### Cách hoạt động (rút gọn)\n1. Trình duyệt và máy chủ **bắt tay** TLS: thống nhất phiên bản, thuật toán, máy chủ gửi chứng chỉ.\n2. Trình duyệt kiểm chuỗi chứng chỉ (CA ký, còn hạn, đúng tên miền).\n3. Hai bên cùng tạo khoá phiên chung; từ đó mã hoá dữ liệu bằng khoá này.\n\n### Vì sao cần biết\nMọi trang production cần HTTPS: nhiều API trình duyệt (service worker, geolocation, clipboard, camera) **chỉ chạy trên \"secure context\"** (HTTPS hoặc localhost); cookie `Secure` chỉ gửi qua HTTPS; trình duyệt cảnh báo trang HTTP; HTTP/2 và HTTP/3 trên trình duyệt đòi TLS.\n\n### Ý chính\n- Chứng chỉ miễn phí và tự gia hạn qua Let's Encrypt (Certbot, Caddy, hoặc nhà cung cấp hosting lo sẵn).\n- **HSTS** (`Strict-Transport-Security`) bảo trình duyệt luôn dùng HTTPS cho site, chống bị hạ xuống HTTP.\n- **Mixed content**: trang HTTPS tải tài nguyên qua HTTP bị chặn hoặc cảnh báo.\n- HTTPS không che nội dung trang khỏi chính máy chủ, cũng không khiến trang \"an toàn\" trước XSS hay SQL injection.\n\n### Lỗi hay gặp\n- Chứng chỉ hết hạn vì quên gia hạn tự động.\n- Thiếu chứng chỉ trung gian trong chuỗi nên một số thiết bị báo lỗi.\n- Chuyển hướng HTTP sang HTTPS rồi quên cập nhật URL cứng trong mã.",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-7-5-https-cors",
+    "ten": "7.5 — HTTPS và CORS",
+    "nguon": "Nền tảng Lập trình Web · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-6-3-chung-chi",
+    "ten": "6.3 — Chứng chỉ, chuỗi tin cậy và CA",
+    "nguon": "Networking for Developers · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-6-5-lab-tls-labflow",
+    "ten": "Lab 6 — Siết HTTPS của LabFlow: chứng minh, đọc chuỗi, giải mã, chẩn đoán",
+    "nguon": "Networking for Developers · Chương 6",
+    "kieu": "lab"
+   }
+  ]
+ },
+ "Bảo mật Web › Content Security Policy (CSP)": {
+  "body": "Content Security Policy (CSP) là header HTTP cho trình duyệt biết **nguồn nào được phép** tải và chạy script, style, ảnh, kết nối… trên trang. Nếu kẻ tấn công chèn được `<script>` vào HTML (XSS), CSP vẫn có thể chặn script đó chạy: đây là lớp phòng thủ thứ hai, không thay thế việc escape/sanitize.\n\n```http\nContent-Security-Policy:\n  default-src 'self';\n  script-src 'self' 'nonce-r4nd0m123';\n  style-src 'self' 'unsafe-inline';\n  img-src 'self' data: https://cdn.example.com;\n  connect-src 'self' https://api.example.com;\n  frame-ancestors 'none';\n  object-src 'none'\n```\n\n### Ý chính\n- Mỗi **directive** kiểm một loại tài nguyên: `script-src`, `style-src`, `img-src`, `connect-src` (fetch/XHR/WebSocket), `frame-ancestors` (ai được nhúng trang bạn, chống clickjacking), `default-src` làm mặc định.\n- Tránh `'unsafe-inline'` và `'unsafe-eval'` cho script, vì chúng mở lại cửa cho XSS. Thay bằng **nonce** (chuỗi ngẫu nhiên mỗi response, gắn vào `<script nonce=\"...\">`) hoặc hash.\n- Triển khai an toàn: bắt đầu bằng `Content-Security-Policy-Report-Only` để xem vi phạm (báo qua `report-to`/`report-uri`) mà chưa chặn thật, sửa dần rồi mới bật.\n- Next.js hỗ trợ CSP dựa trên nonce qua middleware; script bên thứ ba (analytics, quảng cáo) phải được liệt kê rõ.\n\n### Lỗi hay gặp\n- Cho `script-src *` hoặc `https:` rộng đến mức vô nghĩa.\n- Bật chế độ chặn ngay mà không thử `Report-Only`, làm hỏng chức năng của trang.\n- Nghĩ rằng đã có CSP thì khỏi cần escape dữ liệu.",
+  "lessons": [
+   {
+    "href": "/courses/maw301-modern-web-application-security/learn?lessonSlug=maw301-ts-3-2",
+    "ten": "3.2 — Content Security Policy và header bảo mật",
+    "nguon": "Modern Web Application Security · Chương 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "MAW301"
+   },
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-7-4-header-quan-trong",
+    "ten": "7.4 — Các header đổi hành vi: cache, nén, CORS, bảo mật",
+    "nguon": "Networking for Developers · Chương 7",
+    "kieu": "bai-doc"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "MDN — Content Security Policy (CSP)",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CSP"
+   }
+  ]
+ },
+ "Bảo mật Web › OWASP Security Risks": {
+  "body": "OWASP (Open Worldwide Application Security Project) là tổ chức phi lợi nhuận về bảo mật phần mềm. **OWASP Top 10** là danh sách mười nhóm rủi ro bảo mật ứng dụng web phổ biến và nghiêm trọng nhất, cập nhật định kỳ theo dữ liệu thực tế (các nhóm quen thuộc: Broken Access Control, Cryptographic Failures, Injection, Insecure Design, Security Misconfiguration, thành phần lỗi thời/chuỗi cung ứng, lỗi xác thực, lỗi toàn vẹn dữ liệu, thiếu log và giám sát, SSRF). Hãy đối chiếu danh sách mới nhất trên trang chính thức vì tên và thứ hạng thay đổi theo bản.\n\n### Vì sao FE dev cần biết\nĐây là ngôn ngữ chung của bảo mật: review code, kiểm thử xâm nhập, yêu cầu khách hàng đều quy chiếu về nó. Nhiều mục chạm tới frontend:\n- **Broken Access Control**: chỉ ẩn nút \"Xoá\" mà server không kiểm quyền.\n- **Injection / XSS**: HTML từ người dùng đưa vào trang.\n- **Vulnerable components**: phụ thuộc npm có lỗ hổng.\n- **Security misconfiguration**: thiếu header bảo mật, CORS quá rộng, để lộ source map và khoá bí mật trong bundle.\n\n### Cách dùng như checklist\n1. Với mỗi tính năng mới, hỏi \"nó chạm mục nào?\".\n2. Chạy `npm audit` và công cụ quét phụ thuộc trong CI.\n3. Đặt header bảo mật (CSP, HSTS, `X-Content-Type-Options`, `Referrer-Policy`).\n4. Có thêm các danh sách riêng như OWASP API Security Top 10 khi làm việc với API.\n\n### Lỗi hay gặp\n- Coi Top 10 là danh sách đầy đủ: đây chỉ là mức \"nhận thức tối thiểu\".\n- Học thuộc tên rủi ro mà không thử tái hiện lỗi trên bản demo (các lab như OWASP Juice Shop giúp việc này).",
+  "lessons": [
+   {
+    "href": "/courses/maw301-modern-web-application-security/learn?lessonSlug=maw301-ts-1-2",
+    "ten": "1.2 — Tổng quan OWASP Top 10",
+    "nguon": "Modern Web Application Security · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "MAW301"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-6-3-owasp-api",
+    "ten": "6.3 — OWASP API Security Top 10 (2023) trên LabFlow, thành bộ kiểm tự động",
+    "nguon": "API & System Design · Chương 6",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Bảo mật Web › Cache-Control": {
+  "body": "`Cache-Control` là header HTTP điều khiển **trình duyệt và CDN được lưu bản sao phản hồi bao lâu, và có được dùng lại không**. Dùng đúng thì trang tải nhanh, tiết kiệm băng thông; dùng sai thì người dùng thấy bản cũ sau khi bạn deploy.\n\n### Các giá trị hay dùng\n- `max-age=31536000, immutable`: cache một năm, không bao giờ kiểm lại. Dành cho file có **hash trong tên** (`app.3f9a1c.js`): đổi nội dung là đổi tên, nên an toàn.\n- `no-cache`: được lưu nhưng **phải hỏi lại server** (kèm `ETag`/`If-None-Match` → server trả `304 Not Modified` nếu chưa đổi) trước khi dùng. Hợp cho HTML.\n- `no-store`: không lưu gì cả (dữ liệu nhạy cảm).\n- `public` / `private`: cho phép CDN chia sẻ cache hay chỉ cache riêng trên trình duyệt người dùng.\n- `s-maxage`: thời hạn riêng cho cache chia sẻ (CDN); `stale-while-revalidate`: cho dùng bản cũ trong khi tải bản mới ngầm.\n\n```http\n# HTML\nCache-Control: no-cache\n# JS/CSS có hash\nCache-Control: public, max-age=31536000, immutable\n# API dữ liệu người dùng\nCache-Control: private, no-store\n```\n\n### Chiến lược chuẩn\nTài nguyên tĩnh có hash → cache dài hạn; file HTML → luôn kiểm lại. Build tool (Vite, Next.js) đã băm tên file sẵn.\n\n### Lỗi hay gặp\n- Cache dài cho file **không** đổi tên: người dùng kẹt bản cũ.\n- Hiểu nhầm `no-cache` là \"không cache\" (đó là `no-store`).\n- Reverse proxy hoặc CDN ghi đè header của bạn mà không hay biết: luôn kiểm bằng `curl -I`.\n\n### Tự kiểm tra\n1. Vì sao file JS có hash tên được phép cache một năm?\n2. `no-cache` và `no-store` khác nhau thế nào?",
+  "lessons": [
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-9-1-cache",
+    "ten": "9.1 — Cache HTTP cho API: Cache-Control, ETag và 304",
+    "nguon": "API & System Design · Chương 9",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-7-4-header-quan-trong",
+    "ten": "7.4 — Các header đổi hành vi: cache, nén, CORS, bảo mật",
+    "nguon": "Networking for Developers · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-8-3-nginx-nuot-header",
+    "ten": "8.3 — Khi proxy ghi đè header cache của bạn",
+    "nguon": "Networking for Developers · Chương 8",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-12-4-cdn-tep-tinh",
+    "ten": "12.4 — CDN và tệp tĩnh: header cache, đổi tên khi đổi nội dung, và kho object",
+    "nguon": "Deploy lên VPS · Chương 12",
+    "kieu": "video"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "MDN — Cache-Control",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Cache-Control"
+   }
+  ]
+ },
+ "Kiểm thử (Testing) › Testing": {
+  "body": "Test là mã tự động kiểm tra mã khác còn đúng. Với frontend có ba tầng, xếp theo kim tự tháp (nhiều ở đáy, ít ở đỉnh):\n\n- **Unit test**: một hàm hoặc module thuần (định dạng tiền, validate form). Nhanh, ổn định. Công cụ: Vitest, Jest.\n- **Component / integration test**: render một component hoặc cụm component, thao tác như người dùng và kiểm kết quả. Công cụ: Testing Library (trên nền Vitest/Jest).\n- **End-to-end (E2E)**: chạy ứng dụng thật trong trình duyệt thật, đi hết luồng như \"đăng nhập → đặt hàng\". Công cụ: Playwright, Cypress. Chậm hơn, nhưng gần thực tế nhất.\n\n```js\nimport { test, expect } from 'vitest';\nimport { formatPrice } from './formatPrice';\n\ntest('định dạng giá theo VND', () => {\n  expect(formatPrice(1500000)).toBe('1.500.000 ₫');\n});\n```\n\n### Ý chính\n- Cấu trúc một test: **Arrange – Act – Assert** (chuẩn bị, hành động, khẳng định).\n- Test component theo cái người dùng thấy (vai trò, nhãn, chữ hiển thị), không theo chi tiết cài đặt nội bộ.\n- Giả lập (mock) chỉ phần ranh giới (mạng, thời gian); mock quá nhiều làm test vô giá trị.\n- Chạy test trong CI để chặn lỗi trước khi merge.\n\n### Lỗi hay gặp\n- Test phụ thuộc thứ tự chạy hoặc thời gian thật, thỉnh thoảng đỏ vô cớ (flaky).\n- Chạy theo phần trăm coverage mà không kiểm hành vi quan trọng.\n- Dồn hết vào E2E: chậm và khó tìm nguyên nhân lỗi.",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-13-0-slides",
+    "ten": "13.0 — Kiểm thử trong 12 slide",
+    "nguon": "Nền tảng Lập trình Web · Chương 13",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-13-1-why-test",
+    "ten": "13.1 — Kiểm thử để làm gì",
+    "nguon": "Nền tảng Lập trình Web · Chương 13",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-0-1-kim-tu-thap",
+    "ten": "0.2 — Kim tự tháp test (và chiếc cúp), đo thật trên LabFlow Lite",
+    "nguon": "Testing · Mục 0",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-19-1-vi-sao-test",
+    "ten": "19.1 — Vì sao test, và ba loại test",
+    "nguon": "Next.js: The React Framework · Chương 19",
+    "kieu": "video"
+   },
+   {
+    "href": "/code-lab/testing-practice",
+    "ten": "Testing — Luyện viết test, chấm bằng đột biến",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Kiểm thử (Testing) › Vitest": {
+  "body": "Vitest là **test runner dùng chung cấu hình với Vite**: chạy ngay TypeScript, JSX, alias, plugin của dự án mà không cần cấu hình thêm (khác Jest hay phải thêm Babel/ts-jest). API gần như giống Jest (`describe`, `it`/`test`, `expect`, `vi.fn()`, `vi.mock()`), nên chuyển từ Jest rất dễ. Chế độ watch dùng HMR của Vite nên chỉ chạy lại test bị ảnh hưởng.\n\n```ts\n// sum.test.ts\nimport { describe, it, expect } from 'vitest';\nimport { sum } from './sum';\n\ndescribe('sum', () => {\n  it('cộng hai số', () => {\n    expect(sum(1, 2)).toBe(3);\n  });\n  it.each([[0, 0, 0], [-1, 1, 0]])('sum(%i, %i) = %i', (a, b, kq) => {\n    expect(sum(a, b)).toBe(kq);\n  });\n});\n```\n```bash\nnpx vitest          # chế độ watch\nnpx vitest run      # chạy một lần (dùng trong CI)\nnpx vitest --coverage\n```\n\n### Ý chính\n- Test component cần môi trường DOM: đặt `test.environment: 'jsdom'` (hoặc `happy-dom`) trong `vitest.config` và dùng Testing Library.\n- `toBe` so sánh bằng `Object.is`; `toEqual` so sánh cấu trúc; `toBeCloseTo` cho số thực.\n- Mock module bằng `vi.mock`, mock timer bằng `vi.useFakeTimers()`.\n- Dự án không dùng Vite vẫn dùng Vitest được, nhưng lợi thế lớn nhất là khi đã dùng Vite.\n\n### Lỗi hay gặp\n- Quên cấu hình môi trường DOM nên lỗi `document is not defined`.\n- Dùng `globals: true` mà không khai báo kiểu `vitest/globals` cho TypeScript.",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-13-2-unit-tests",
+    "ten": "13.2 — Những unit test đầu tiên",
+    "nguon": "Nền tảng Lập trình Web · Chương 13",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-19-2-unit-test-vitest",
+    "ten": "19.2 — Unit test với Vitest",
+    "nguon": "Next.js: The React Framework · Chương 19",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-0-2-cai-dat",
+    "ten": "0.3 — Cài đặt: Node 22, Vitest 5 và dự án LabFlow Lite",
+    "nguon": "Testing · Mục 0",
+    "kieu": "lab"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-1-1-cau-truc",
+    "ten": "1.1 — Giải phẫu một test: chuẩn bị, hành động, khẳng định",
+    "nguon": "Testing · Chương 1",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Kiểm thử (Testing) › Jest": {
+  "body": "Jest là test framework phổ biến nhất của hệ sinh thái JavaScript/React (Meta phát triển): có sẵn trình chạy test, `expect` với nhiều matcher, **mock**, **snapshot**, đo coverage, chế độ watch, tất cả trong một gói. Create React App và nhiều dự án Next.js/React cũ dùng Jest.\n\n```js\n// cart.test.js\nconst { total } = require('./cart');\n\ntest('tính tổng giỏ hàng', () => {\n  expect(total([{ price: 10, qty: 2 }, { price: 5, qty: 1 }])).toBe(25);\n});\n\ntest('gọi API đúng một lần', async () => {\n  const fetchFn = jest.fn().mockResolvedValue({ ok: true });\n  await sendOrder(fetchFn);\n  expect(fetchFn).toHaveBeenCalledTimes(1);\n});\n```\n\n### Ý chính\n- Mock: `jest.fn()`, `jest.mock('module')`, `jest.spyOn(obj, 'method')`, fake timers.\n- **Snapshot** lưu \"ảnh chụp\" đầu ra để so lần sau. Tiện nhưng dễ thành test vô nghĩa nếu snapshot to, ai cũng bấm cập nhật: dùng cho đầu ra nhỏ và có chủ đích.\n- Test component: Jest + React Testing Library + `jest-environment-jsdom`.\n- Cần Babel hoặc SWC (`next/jest`) để hiểu JSX/TypeScript; hỗ trợ ES module còn cần cấu hình thêm so với Vitest.\n\n### Lỗi hay gặp\n- Quên `await` khi test bất đồng bộ: test xanh dù lỗi.\n- Mock không được dọn giữa các test (`jest.clearAllMocks()`/`restoreMocks`), test ảnh hưởng nhau.\n- Dự án mới dùng Vite thì Vitest thường gọn hơn; dự án đã có Jest thì không cần ép đổi.",
+  "lessons": [
+   {
+    "href": "/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-a2-1-testing",
+    "ten": "A2.1 — Jest & React Testing Library",
+    "nguon": "Front-End Web Development with React · Nâng cao A2 — Kiểm thử React",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "FER202"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-3-1-phan-loai",
+    "ten": "3.1 — Stub, mock, spy, fake: mỗi loại là gì",
+    "nguon": "Testing · Chương 3",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-3-3-qua-da",
+    "ten": "3.3 — Khi mock làm test vô giá trị: một bug được cài, một thay đổi vô hại",
+    "nguon": "Testing · Chương 3",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-9-1-testing-library",
+    "ten": "9.1 — Testing Library căn bản: hỏi theo vai trò, user-event, jest-dom",
+    "nguon": "React · Chương 9",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Kiểm thử (Testing) › Playwright": {
+  "body": "Playwright (Microsoft) là công cụ **kiểm thử end-to-end** điều khiển trình duyệt thật: Chromium, Firefox, WebKit (lõi Safari) với cùng một API. Nó tự **chờ (auto-wait)** phần tử sẵn sàng (hiện, ổn định, bấm được) trước khi thao tác, nên giảm hẳn test chập chờn do chờ thủ công.\n\n```ts\n// tests/login.spec.ts\nimport { test, expect } from '@playwright/test';\n\ntest('đăng nhập thành công', async ({ page }) => {\n  await page.goto('/login');\n  await page.getByLabel('Email').fill('an@example.com');\n  await page.getByLabel('Mật khẩu').fill('mat-khau-test');\n  await page.getByRole('button', { name: 'Đăng nhập' }).click();\n  await expect(page.getByRole('heading', { name: 'Bảng điều khiển' })).toBeVisible();\n});\n```\n```bash\nnpm init playwright@latest\nnpx playwright test           # chạy tất cả\nnpx playwright test --ui      # giao diện xem từng bước\nnpx playwright show-trace trace.zip\n```\n\n### Ý chính\n- **Locator** nên chọn theo vai trò/nhãn (`getByRole`, `getByLabel`, `getByText`), bền hơn selector CSS.\n- Cấu hình `webServer` trong `playwright.config.ts` để tự chạy app trước khi test.\n- Có **trace viewer**, ảnh chụp và video khi test lỗi, chạy song song, nhiều trình duyệt/thiết bị giả lập, kiểm API và so sánh ảnh.\n- Dùng tài khoản và dữ liệu test riêng; đăng nhập một lần rồi tái dùng trạng thái (storage state).\n\n### Lỗi hay gặp\n- Dùng `waitForTimeout` (ngủ cố định) thay vì để auto-wait hoặc `expect` có sẵn cơ chế chờ.\n- Test phụ thuộc dữ liệu chung nên chạy song song thì đụng nhau.\n- Chọn phần tử bằng class CSS dễ vỡ khi đổi giao diện.",
+  "lessons": [
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-7-1-playwright",
+    "ten": "7.1 — Playwright: test trình duyệt đầu tiên",
+    "nguon": "Testing · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-19-4-playwright-e2e",
+    "ten": "19.4 — Test end-to-end với Playwright",
+    "nguon": "Next.js: The React Framework · Chương 19",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-7-3-on-dinh",
+    "ten": "7.3 — Làm test e2e ổn định",
+    "nguon": "Testing · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-7-4-da-trinh-duyet",
+    "ten": "7.4 — Nhiều trình duyệt, thiết bị và kiểm tra hình ảnh",
+    "nguon": "Testing · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-7-5-lab-e2e",
+    "ten": "Lab 7 — Hành trình đầu-cuối: diệt 8 đột biến trong app, form đăng nhập và server",
+    "nguon": "Testing · Chương 7",
+    "kieu": "lab"
+   }
+  ]
+ },
+ "Kiểm thử (Testing) › Cypress": {
+  "body": "Cypress là công cụ **E2E và component testing** chạy ngay **bên trong trình duyệt** cùng với ứng dụng, nổi tiếng nhờ trải nghiệm dev: giao diện Test Runner hiện từng bước, cho \"du hành thời gian\" xem trạng thái DOM trước/sau mỗi lệnh, tự retry các phép khẳng định cho tới khi đúng hoặc hết giờ.\n\n```js\n// cypress/e2e/login.cy.js\ndescribe('đăng nhập', () => {\n  it('vào được bảng điều khiển', () => {\n    cy.visit('/login');\n    cy.get('[data-cy=email]').type('an@example.com');\n    cy.get('[data-cy=password]').type('mat-khau-test');\n    cy.contains('button', 'Đăng nhập').click();\n    cy.url().should('include', '/dashboard');\n  });\n});\n```\n```bash\nnpx cypress open     # giao diện tương tác\nnpx cypress run      # chạy dòng lệnh cho CI\n```\n\n### Ý chính\n- Lệnh Cypress **không trả giá trị trực tiếp** mà xếp hàng bất đồng bộ; đừng dùng `async/await` như thường, hãy nối `.then()` hoặc dùng alias `cy.get(...).as('x')`.\n- `cy.intercept()` giả lập hoặc theo dõi request mạng.\n- Ưu thế: gỡ lỗi trực quan, tài liệu tốt. So với Playwright: Cypress trước đây hạn chế đa tab/đa origin và số trình duyệt; hỗ trợ đã được cải thiện, nhưng hãy xem tài liệu hiện hành khi cần.\n- Nên đặt thuộc tính `data-cy`/`data-testid` riêng cho phần tử cần test.\n\n### Lỗi hay gặp\n- Dùng selector theo class/độ sâu DOM nên test vỡ khi đổi giao diện.\n- Chèn `cy.wait(2000)` cố định thay vì chờ điều kiện cụ thể.",
+  "more": [
+   {
+    "type": "official",
+    "title": "Cypress — vì sao chọn Cypress",
+    "url": "https://docs.cypress.io/app/get-started/why-cypress"
+   }
+  ]
+ },
+ "Xác thực (Auth) › Authentication Strategies": {
+  "body": "Xác thực (authentication) trả lời \"bạn là ai?\". Ba chiến lược phổ biến, và mỗi cái sinh ra cho một hoàn cảnh:\n\n### 1. Session cookie (phiên phía server)\nĐăng nhập thành công → server tạo bản ghi phiên (trong DB/Redis) và gửi về cookie chứa **ID phiên ngẫu nhiên**. Mỗi request sau, trình duyệt tự gửi cookie, server tra ID ra người dùng. Thu hồi tức thì (xoá phiên). Hợp ứng dụng web truyền thống và SSR.\n\n### 2. JWT (token tự chứa)\nServer ký một token chứa thông tin (user id, hạn dùng); client gửi lại ở header `Authorization: Bearer ...`; server chỉ cần kiểm chữ ký, không tra DB. Hợp API cho nhiều dịch vụ, mobile. Nhược: khó thu hồi giữa chừng, thường dùng **access token ngắn hạn + refresh token**.\n\n### 3. OAuth 2.0 / OpenID Connect (đăng nhập bằng Google, GitHub…)\nOAuth 2.0 là giao thức **uỷ quyền** (cho ứng dụng quyền truy cập hạn chế); **OIDC** thêm lớp **danh tính** (ID token) để đăng nhập. Luồng nên dùng cho ứng dụng web/SPA là **Authorization Code + PKCE**.\n\n```http\nSet-Cookie: sid=9f8c...; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=86400\n```\n\n### Ý chính\n- **Lưu token ở đâu** là câu hỏi then chốt: cookie `HttpOnly` an toàn trước XSS hơn `localStorage`, nhưng cần phòng CSRF (`SameSite`, token CSRF).\n- Xác thực ≠ **phân quyền** (authorization): sau khi biết bạn là ai còn phải kiểm bạn được làm gì, và kiểm ở server.\n- Hash mật khẩu bằng thuật toán chậm (argon2, bcrypt), không tự nghĩ ra thuật toán; cân nhắc thêm 2FA/passkey.\n- Với frontend dùng Next.js: đọc người dùng ở server, bảo vệ route bằng middleware, và lo trường hợp token hết hạn.\n\n### Lỗi hay gặp\n- Nhét JWT dài hạn vào `localStorage`: XSS lấy được là mất tài khoản.\n- Không kiểm `alg`, `exp`, `aud` của JWT khi xác minh.\n- Chỉ ẩn trang trên client mà API không kiểm quyền.\n\n### Tự kiểm tra\n1. Khi nào session cookie hợp hơn JWT, và ngược lại?\n2. PKCE bảo vệ khỏi điều gì trong luồng OAuth cho SPA?",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-7-0-slides",
+    "ten": "7.0 — Slide bài giảng: xác thực & bảo mật trong 12 slide",
+    "nguon": "Nền tảng Lập trình Web · Chương 7",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-7-2-cookies-sessions",
+    "ten": "7.2 — Cookie và phiên",
+    "nguon": "Nền tảng Lập trình Web · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-7-3-jwt",
+    "ten": "7.3 — JWT: token tự chứng minh",
+    "nguon": "Nền tảng Lập trình Web · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-15-1-nen-tang-auth",
+    "ten": "15.1 — Nền tảng auth: session, JWT, và token nằm ở đâu",
+    "nguon": "Next.js: The React Framework · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/authentication/learn?lessonSlug=auth-8-2-luong-code-pkce",
+    "ten": "8.2 — Luồng authorization code kèm PKCE, từng bước một",
+    "nguon": "Authentication · Chương 8",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Kiểm tra kiểu (Type Checkers) › TypeScript": {
+  "body": "TypeScript là JavaScript có thêm **hệ thống kiểu tĩnh**: bạn mô tả hình dạng dữ liệu, trình biên dịch kiểm tra **ngay khi viết** (trong editor), trước khi chạy. Cuối cùng kiểu bị xoá, ra JavaScript thường: kiểu chỉ tồn tại lúc phát triển, không có ở lúc chạy.\n\n```ts\ninterface User {\n  id: number;\n  name: string;\n  email?: string;               // tuỳ chọn\n}\n\nfunction greet(u: User): string {\n  return `Xin chào ${u.name}`;\n}\n\ngreet({ id: 1, name: 'An' });   // ok\ngreet({ id: 2 });                // lỗi: thiếu 'name'\n\n// generic: giữ nguyên kiểu đi qua hàm\nfunction first<T>(xs: T[]): T | undefined { return xs[0]; }\n```\n\n### Vì sao cần biết\nHầu hết dự án frontend chuyên nghiệp dùng TypeScript: bắt lỗi (gọi sai tham số, quên xử lý `null`) sớm, gợi ý mã trong editor, đổi tên/tái cấu trúc an toàn, và kiểu đóng vai trò tài liệu. React, Next.js, Vue đều hỗ trợ sẵn.\n\n### Ý chính\n- Bật `\"strict\": true` trong `tsconfig.json`; nó bao gồm `strictNullChecks` (bắt lỗi `undefined`) là lợi ích lớn nhất.\n- Công cụ cốt lõi: `interface`/`type`, **union** (`'idle' | 'loading'`), **generic**, thu hẹp kiểu (narrowing).\n- **Suy luận kiểu** giúp bạn viết ít hơn; chỉ cần chú thích ở ranh giới (tham số hàm, giá trị trả về, props).\n- Ưu tiên `unknown` hơn `any`; dùng `any` là tắt kiểm tra.\n- TypeScript **không kiểm dữ liệu lúc chạy**: dữ liệu từ API vẫn cần kiểm (ví dụ bằng Zod).\n\n### Lỗi hay gặp\n- Ép kiểu bằng `as` để \"im lặng\" lỗi, thực chất giấu lỗi.\n- Tin rằng JSON từ server đúng kiểu vì đã khai báo `interface`.\n- Để `any` lan khắp nơi.\n\n### Tự kiểm tra\n1. Điều gì xảy ra với kiểu sau khi biên dịch?\n2. `strictNullChecks` giúp tránh lỗi nào?",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-9-0-slides",
+    "ten": "9.0 — Slide bài giảng: TypeScript trong 12 slide",
+    "nguon": "Nền tảng Lập trình Web · Chương 9",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-9-1-why-typescript",
+    "ten": "9.1 — Vì sao TypeScript: bắt lỗi trước khi chạy",
+    "nguon": "Nền tảng Lập trình Web · Chương 9",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-1-2-chung-minh-gi",
+    "ten": "1.2 — Trình kiểm tra kiểu chứng minh được gì — và không được gì",
+    "nguon": "TypeScript · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-1-4-any-unknown",
+    "ten": "1.4 — any, unknown & dùng TypeScript dần dần",
+    "nguon": "TypeScript · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/code-lab/typescript-practice",
+    "ten": "TypeScript — Luyện kiểu, chấm bằng tsc thật",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Kiểm tra kiểu (Type Checkers) › TypeScript — Kiểm tra kiểu tĩnh": {
+  "body": "TypeScript mở rộng JavaScript bằng **kiểu tĩnh**: lỗi như gọi hàm sai tham số, truy cập thuộc tính không tồn tại, quên xử lý `null` bị phát hiện ngay trong editor thay vì nổ lúc chạy. Với dự án lớn và nhiều người, đó là khác biệt giữa sửa dám và sửa sợ.\n\n```ts\ntype Status = 'idle' | 'loading' | 'error';\n\nfunction label(s: Status) {\n  switch (s) {\n    case 'idle': return 'Sẵn sàng';\n    case 'loading': return 'Đang tải';\n    case 'error': return 'Có lỗi';\n  }\n}\nlabel('done');   // lỗi: 'done' không thuộc Status\n\nconst el = document.querySelector('#name');   // HTMLElement | null\nel.textContent = 'x';                          // lỗi: có thể null\nel?.textContent;                               // ok\n```\n\n### Ý chính\n- **Hai pha**: kiểm kiểu (`tsc --noEmit`, chậm, nhìn cả chương trình) và chuyển sang JS (nhanh, từng file, do esbuild/SWC/Vite làm). Build xanh chưa chắc là kiểu đúng, cần chạy kiểm kiểu riêng trong CI.\n- `tsconfig.json` quyết định mức chặt chẽ; bắt đầu từ `strict: true`.\n- **Chuyển dần** từ JavaScript: đổi tên file `.js` → `.ts`, bật `allowJs`, siết dần từng cờ.\n- Kiểu cho thư viện JS đến từ gói `@types/...` hoặc file `.d.ts`.\n\n### Lỗi hay gặp\n- Cho rằng kiểu bảo vệ dữ liệu lúc chạy: nó không làm điều đó.\n- Dùng `any` để \"qua\" lỗi rồi quên quay lại.\n- Thiếu `@types/node` hoặc kiểu DOM nên báo \"Cannot find name\".",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-0-8-bat-dau-tai-day",
+    "ten": "Bắt đầu tại đây (1/2) — TypeScript là gì, và vì sao nó ra đời",
+    "nguon": "TypeScript · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-0-4-mo-hinh",
+    "ten": "0.4 — Mô hình tư duy cốt lõi: lúc biên dịch vs lúc chạy",
+    "nguon": "TypeScript · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-9-1-tsc-and-tsconfig",
+    "ten": "9.1 — tsc làm gì & tsconfig căn bản",
+    "nguon": "TypeScript · Chương 9",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-9-2-strict-mode",
+    "ten": "9.2 — Chế độ strict",
+    "nguon": "TypeScript · Chương 9",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-9-5-ts-in-practice",
+    "ten": "9.5 — TypeScript trong một dự án thật",
+    "nguon": "Nền tảng Lập trình Web · Chương 9",
+    "kieu": "lab"
+   }
+  ]
+ },
+ "Web Components › HTML Templates": {
+  "body": "Thẻ `<template>` chứa một đoạn HTML mà trình duyệt **phân tích nhưng không hiển thị và không chạy**: ảnh không tải, script không thực thi, nội dung không xuất hiện trong trang cho đến khi bạn **nhân bản (clone)** nó bằng JavaScript rồi chèn vào DOM. Rất hợp để làm khuôn cho phần tử lặp lại (dòng bảng, thẻ sản phẩm) và là nền của Web Components.\n\n```html\n<template id=\"row\">\n  <li><strong class=\"name\"></strong> - <span class=\"price\"></span></li>\n</template>\n<ul id=\"list\"></ul>\n\n<script>\n  const tpl = document.querySelector('#row');\n  const list = document.querySelector('#list');\n  for (const item of [{ name: 'Bút', price: '5.000đ' }, { name: 'Vở', price: '12.000đ' }]) {\n    const node = tpl.content.cloneNode(true);       // DocumentFragment\n    node.querySelector('.name').textContent = item.name;\n    node.querySelector('.price').textContent = item.price;\n    list.append(node);\n  }\n</script>\n```\n\n### Ý chính\n- Truy cập nội dung qua thuộc tính `.content` (một `DocumentFragment`); dùng `cloneNode(true)` để sao chép sâu.\n- Gán dữ liệu bằng `textContent` thay vì `innerHTML` để tránh XSS.\n- `<slot>` bên trong template (dùng với Shadow DOM) cho phép người dùng component chèn nội dung của họ.\n\n### Lỗi hay gặp\n- Thao tác trực tiếp lên `template` thay vì bản clone, nên không thấy gì.\n- Quên `true` trong `cloneNode`, chỉ sao chép thẻ ngoài cùng."
+ },
+ "Web Components › Shadow DOM": {
+  "body": "Shadow DOM cho phép một phần tử có **cây DOM riêng, bị cô lập** khỏi trang chính: CSS bên trong không rò ra ngoài, CSS của trang không lọt vào trong (trừ những thứ cố ý cho phép như biến CSS), và `document.querySelector` không thấy các phần tử bên trong. Nhờ đó component đóng gói thật sự, không đụng tên class với ai. Các phần tử như `<video>` hay `<input type=range>` của trình duyệt cũng dùng shadow DOM.\n\n```js\nconst host = document.querySelector('#host');\nconst root = host.attachShadow({ mode: 'open' });   // 'open': JS ngoài truy cập được host.shadowRoot\nroot.innerHTML = `\n  <style>p { color: crimson; }</style>   <!-- chỉ áp dụng bên trong -->\n  <p>Nội dung trong shadow</p>\n  <slot></slot>                           <!-- chỗ nhận nội dung con từ ngoài -->\n`;\n```\n\n### Ý chính\n- `mode: 'open' | 'closed'` quyết định `element.shadowRoot` có truy cập được từ ngoài hay không. `closed` không phải biện pháp bảo mật thật sự.\n- **`<slot>`** để chèn nội dung từ light DOM vào vị trí định sẵn.\n- Style xuyên ranh giới: **CSS custom properties** (`--brand`) kế thừa được xuyên qua shadow; có thêm `::part()` để mở chọn lọc các phần tử bên trong.\n- Sự kiện thường bị **retarget**: người nghe ở ngoài thấy target là host; sự kiện cần xuyên ra phải có `composed: true`.\n- Ứng dụng React/Vue thông thường ít dùng, nhưng thư viện component framework-agnostic và widget nhúng vào trang khác hay dùng.\n\n### Lỗi hay gặp\n- Kỳ vọng CSS toàn cục (Tailwind, reset) tự áp dụng bên trong shadow: không, phải nạp riêng.\n- Tự đặt id/label cho form bên trong shadow và gặp khó với a11y, form submit xuyên ranh giới.",
+  "more": [
+   {
+    "type": "official",
+    "title": "MDN — Web Components",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/API/Web_components"
+   }
+  ]
+ },
+ "Web Components › Custom Elements": {
+  "body": "Custom Elements cho phép bạn **định nghĩa thẻ HTML riêng** (`<user-card>`) kèm logic JavaScript, dùng ở bất kỳ đâu như thẻ có sẵn, không cần framework. Tên thẻ bắt buộc có **dấu gạch ngang** để không đụng thẻ chuẩn.\n\n```js\nclass RatingStars extends HTMLElement {\n  static observedAttributes = ['value'];\n\n  connectedCallback() {            // được gắn vào DOM\n    this.attachShadow({ mode: 'open' });\n    this.render();\n  }\n  attributeChangedCallback() {     // thuộc tính theo dõi đổi\n    if (this.shadowRoot) this.render();\n  }\n  render() {\n    const n = Number(this.getAttribute('value') ?? 0);\n    this.shadowRoot.innerHTML = `<span>${'★'.repeat(n)}${'☆'.repeat(5 - n)}</span>`;\n  }\n}\ncustomElements.define('rating-stars', RatingStars);\n```\n```html\n<rating-stars value=\"4\"></rating-stars>\n```\n\n### Ý chính\n- **Vòng đời**: `constructor`, `connectedCallback`, `disconnectedCallback`, `attributeChangedCallback`, `adoptedCallback`.\n- Thuộc tính HTML (chuỗi) khác thuộc tính JS (mọi kiểu): cần đồng bộ hai bên.\n- Kết hợp với `<template>` và Shadow DOM thành bộ ba Web Components. Thư viện như Lit giúp viết gọn hơn.\n- Tương tác với framework: React hiện đại truyền được prop cho custom element; vẫn cần để ý sự kiện tuỳ biến và kiểu dữ liệu.\n\n### Lỗi hay gặp\n- Làm việc nặng/đụng DOM con trong `constructor` (lúc đó phần tử có thể chưa gắn).\n- Render lại toàn bộ mỗi lần đổi và quên gỡ listener ở `disconnectedCallback` (rò rỉ).\n- Đặt tên không có dấu gạch ngang nên `define` báo lỗi."
+ },
+ "Server-Side Rendering › SSR là gì": {
+  "body": "**Server-Side Rendering (SSR)** nghĩa là máy chủ dựng sẵn HTML của trang rồi gửi về, thay vì gửi một trang trống rồi để JavaScript trong trình duyệt tự dựng (Client-Side Rendering, CSR).\n\nVí dụ: CSR giống nhận bộ đồ nội thất tháo rời kèm hướng dẫn tự lắp; SSR là nhận món đã lắp xong.\n\n### Vì sao cần biết\n- **First Paint / LCP nhanh hơn**: người dùng thấy nội dung ngay khi HTML về, không đợi tải và chạy cả bundle JS.\n- **SEO tốt hơn**: HTML có sẵn nội dung cho bot (dù Google chạy được JS, SSR vẫn đáng tin và nhanh hơn, và mạng xã hội chỉ đọc thẻ meta/OG trong HTML ban đầu).\n- Đổi lại, server phải tốn tài nguyên mỗi request, và TTFB có thể chậm hơn nếu dữ liệu chậm.\n\n### Hydration\nHTML từ server chỉ \"tĩnh\". Trình duyệt tải JS rồi **hydrate**: gắn sự kiện, đưa state vào để trang tương tác được. HTML do client dựng phải khớp HTML server gửi, nếu không sẽ có cảnh báo/lỗi hydration mismatch (dùng `Date.now()` hoặc `window` lúc render là nguyên nhân hay gặp).\n\n### Các chiến lược liên quan\n- **CSR**: dựng hoàn toàn ở trình duyệt (SPA).\n- **SSR**: dựng theo từng request.\n- **SSG**: dựng sẵn một lần lúc build.\n- **ISR**: SSG nhưng làm mới theo thời gian hoặc theo yêu cầu.\n- Framework hiện đại cho trộn từng trang, thậm chí từng phần trang (streaming).\n\n### Lỗi hay gặp\n- Dùng SSR cho trang không cần (trang tĩnh nên dùng SSG).\n- Gọi API chỉ có ở trình duyệt (`window`, `localStorage`) trong mã chạy ở server.",
+  "lessons": [
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-17-1-bon-cach-render",
+    "ten": "17.1 — Bốn cách một trang được tạo ra (CSR, SSR, SSG, ISR)",
+    "nguon": "Next.js: The React Framework · Chương 17",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-17-2-tinh-vs-dong",
+    "ten": "17.2 — Tĩnh vs động trong App Router",
+    "nguon": "Next.js: The React Framework · Chương 17",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-qa3-1-chua-quiz",
+    "ten": "Chữa quiz Nâng cao A3 (1/2): Next.js là gì, SSR, SEO, định tuyến theo tệp — 8 câu FE thật",
+    "nguon": "Front-End Web Development with React · Nâng cao A3 — TypeScript & Next.js",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "FER202"
+   }
+  ]
+ },
+ "Server-Side Rendering › Next.js": {
+  "body": "Next.js là **framework full-stack trên nền React**: thêm những thứ React không có sẵn là định tuyến theo thư mục, render phía server, tối ưu ảnh/font, API ngay trong dự án và công cụ build/deploy. Cách tổ chức hiện hành là **App Router** (thư mục `app/`).\n\n```tsx\n// app/products/[id]/page.tsx  ->  URL /products/42\ntype Props = { params: Promise<{ id: string }> };\n\nexport default async function ProductPage({ params }: Props) {\n  const { id } = await params;\n  const res = await fetch(`https://api.example.com/products/${id}`);\n  const product = await res.json();\n  return <h1>{product.name}</h1>;     // chạy trên server, gửi HTML về\n}\n```\n\n### Ý chính\n- **File quy ước**: `page.tsx` (trang), `layout.tsx` (khung dùng chung, giữ nguyên khi chuyển trang), `loading.tsx`, `error.tsx`, `route.ts` (API).\n- **Server Component là mặc định**: chạy trên server, không gửi JS của chính nó cho trình duyệt, có thể `await` dữ liệu trực tiếp. Muốn dùng state, effect, sự kiện thì thêm `'use client'` ở đầu file.\n- **Cách render**: tĩnh (SSG), động theo request (SSR), làm mới theo thời gian/yêu cầu (ISR), streaming với `Suspense`.\n- Tích hợp `next/image`, `next/font`, `metadata` cho SEO và Open Graph.\n- Cơ chế cache và API cụ thể thay đổi giữa các phiên bản: xem tài liệu đúng phiên bản bạn dùng.\n\n### Lỗi hay gặp\n- Đặt `'use client'` quá cao khiến cả cây thành client và mất lợi thế.\n- Truyền props không serialize được (hàm, class instance) từ Server sang Client Component.\n- Biến `NEXT_PUBLIC_*` được nhúng lúc build: đổi giá trị phải build lại, và không bao giờ đặt khoá bí mật vào đó.\n\n### Tự kiểm tra\n1. Server Component khác Client Component ở điểm nào về JS gửi cho trình duyệt?\n2. Khi nào một trang nên là tĩnh, khi nào động?",
+  "lessons": [
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-0-2-react-vs-nextjs",
+    "ten": "0.2 — React vs Next.js: mỗi cái là gì",
+    "nguon": "Next.js: The React Framework · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-8-1-tu-react-toi-nextjs",
+    "ten": "8.1 — Từ app React tới framework Next.js",
+    "nguon": "Next.js: The React Framework · Chương 8",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-8-2-cac-file-quy-uoc",
+    "ten": "8.2 — Các file quy ước: page, layout, loading, error",
+    "nguon": "Next.js: The React Framework · Chương 8",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-9-1-mac-dinh-la-server-component",
+    "ten": "9.1 — Mặc định là Server Component",
+    "nguon": "Next.js: The React Framework · Chương 9",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-17-1-bon-cach-render",
+    "ten": "17.1 — Bốn cách một trang được tạo ra (CSR, SSR, SSG, ISR)",
+    "nguon": "Next.js: The React Framework · Chương 17",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Server-Side Rendering › Nuxt.js": {
+  "body": "Nuxt là **meta-framework cho Vue**, vai trò tương đương Next.js với React. Nó thêm vào Vue: định tuyến theo thư mục, SSR/SSG/hybrid rendering, tự import component và composable, lớp server (Nitro) để viết API, và hệ module phong phú (UI, i18n, image, content…).\n\n```vue\n<!-- pages/products/[id].vue  ->  /products/42 -->\n<script setup lang=\"ts\">\nconst route = useRoute();\nconst { data: product } = await useFetch(`/api/products/${route.params.id}`);\n</script>\n\n<template>\n  <h1>{{ product?.name }}</h1>\n</template>\n```\n\n### Ý chính\n- **File-based routing**: `pages/` sinh route, `layouts/` cho khung chung, `server/api/` cho endpoint.\n- **Auto-import**: `ref`, `useFetch`, component trong `components/` dùng không cần import.\n- **Chế độ render theo route** qua `routeRules` (SSR, SSG, ISR/SWR, SPA cho từng đường dẫn).\n- `useFetch` / `useAsyncData` lấy dữ liệu một lần ở server, tái dùng ở client khi hydrate để không gọi lại.\n- Chọn Nuxt nếu nhóm dùng Vue; nếu dùng React thì Next.js là tương đương.\n\n### Lỗi hay gặp\n- Dùng API chỉ có ở trình duyệt (`window`) trong mã chạy trên server; bọc bằng `onMounted` hoặc `import.meta.client`.\n- Khoá fetch trùng nhau nên hai request dùng chung kết quả ngoài ý muốn."
+ },
+ "Server-Side Rendering › SvelteKit": {
+  "body": "SvelteKit là **framework ứng dụng chính thức của Svelte**. Svelte biên dịch component thành JavaScript gọn lúc build thay vì chạy một runtime lớn trong trình duyệt, nên bundle nhỏ và phản ứng (reactivity) nhẹ. SvelteKit thêm định tuyến, SSR/SSG, tải dữ liệu và triển khai.\n\n```\nsrc/routes/\n  +layout.svelte\n  +page.svelte             -> /\n  products/[id]/\n    +page.server.ts        -> load() chạy trên server\n    +page.svelte           -> giao diện\n```\n```ts\n// +page.server.ts\nexport async function load({ params, fetch }) {\n  const res = await fetch(`/api/products/${params.id}`);\n  return { product: await res.json() };\n}\n```\n\n### Ý chính\n- Quy ước tên file bắt đầu bằng `+`: `+page`, `+layout`, `+server` (endpoint), `+error`.\n- Hàm `load` cấp dữ liệu cho trang, chạy server hoặc cả server và client tuỳ file.\n- **Adapter** quyết định nơi triển khai: Node, tĩnh, Vercel, Cloudflare…\n- Form action cho phép gửi form có cải tiến dần (progressive enhancement): hoạt động cả khi chưa có JavaScript.\n- Cú pháp reactive của Svelte đã thay đổi giữa các phiên bản lớn (runes ở Svelte 5), nên theo tài liệu đúng phiên bản.\n\n### Lỗi hay gặp\n- Quên chọn adapter hợp với nơi deploy nên build không chạy.\n- Trộn cú pháp Svelte 4 và Svelte 5 trong cùng dự án.",
+  "more": [
+   {
+    "type": "official",
+    "title": "SvelteKit — giới thiệu",
+    "url": "https://svelte.dev/docs/kit/introduction"
+   }
+  ]
+ },
+ "Server-Side Rendering › Astro": {
+  "body": "Astro là framework hướng **nội dung** (blog, tài liệu, trang giới thiệu, thương mại điện tử nhẹ). Ý tưởng cốt lõi là **islands architecture**: trang là HTML tĩnh, chỉ những \"đảo\" tương tác thật sự mới tải JavaScript. Mặc định Astro **gửi gần như 0 JS** xuống trình duyệt, nên trang rất nhanh.\n\n```astro\n---\n// Phần này chạy lúc build (hoặc trên server), không gửi cho trình duyệt\nimport Header from '../components/Header.astro';\nimport Counter from '../components/Counter.jsx';   // component React\nconst posts = await fetch('https://example.com/api/posts').then(r => r.json());\n---\n<Header />\n<ul>{posts.map(p => <li>{p.title}</li>)}</ul>\n\n<!-- chỉ đảo này mới tải JS, khi lướt tới -->\n<Counter client:visible />\n```\n\n### Ý chính\n- File `.astro` có hai phần: khung code (giữa `---`) và template giống HTML/JSX.\n- Dùng được component React, Vue, Svelte… trong cùng dự án; **directive `client:*`** (`load`, `idle`, `visible`) quyết định khi nào hydrate.\n- Mạnh về **content collections** (Markdown/MDX có kiểu), tối ưu ảnh, render tĩnh mặc định, có thể bật SSR theo route bằng adapter.\n- Hợp khi nội dung quan trọng hơn tương tác; ứng dụng nhiều trạng thái chung giữa nhiều phần của trang thì SPA/Next.js hợp hơn.\n\n### Lỗi hay gặp\n- Quên directive `client:*` nên component tương tác chỉ hiện HTML, không phản ứng.\n- Cố chia sẻ state giữa các đảo bằng biến thường (cần store riêng như nanostores)."
+ },
+ "Server-Side Rendering › react-router": {
+  "body": "React Router là thư viện **định tuyến phía client** phổ biến nhất cho React khi không dùng Next.js: ánh xạ URL với component, đổi trang mà **không tải lại** cả trang (SPA), vẫn giữ lịch sử và nút Back. Bản v7 còn hợp nhất với Remix nên có thể dùng như một framework có SSR; tài liệu chính thức mô tả các \"chế độ\" sử dụng, hãy chọn đúng chế độ cho dự án.\n\n```tsx\nimport { createBrowserRouter, RouterProvider, Link, useParams } from 'react-router';\n\nfunction Product() {\n  const { id } = useParams();\n  return <h1>Sản phẩm {id}</h1>;\n}\n\nconst router = createBrowserRouter([\n  { path: '/', element: <Link to=\"/products/42\">Xem sản phẩm</Link> },\n  { path: '/products/:id', element: <Product /> },\n]);\n\nexport default function App() { return <RouterProvider router={router} />; }\n```\n\n### Ý chính\n- `<Link>`/`<NavLink>` điều hướng không reload; `useNavigate()` điều hướng bằng code.\n- **Route lồng nhau** + `<Outlet />` để layout dùng chung.\n- `useParams`, `useSearchParams` đọc tham số đường dẫn và query.\n- Loader/action (khi dùng data router) đưa việc lấy dữ liệu về cấp route.\n- Với SPA: server phải trả `index.html` cho mọi đường dẫn (fallback), nếu không tải lại trang sẽ 404.\n\n### Lỗi hay gặp\n- Dùng thẻ `<a href>` thường làm tải lại cả trang.\n- Quên cấu hình fallback ở hosting nên F5 ở route con bị 404.\n- Import từ tên gói khác nhau giữa các phiên bản (`react-router-dom` và `react-router`): theo tài liệu bản bạn dùng.",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-7-0-slides",
+    "ten": "7.0 — Slide Chương 7: định tuyến và cấu trúc bằng hình",
+    "nguon": "React · Chương 7",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-7-1-router",
+    "ten": "7.1 — React Router căn bản: route, link, tham số — và những gì đã đổi từ bản 6",
+    "nguon": "React · Chương 7",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-9-1-router",
+    "ten": "9.1 — Route, tham số & link",
+    "nguon": "Front-End Web Development with React · Chương 9",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "FER202"
+   },
+   {
+    "href": "/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-9-2-slot14-router-slides",
+    "ten": "9.2 — Học theo từng slide: Điều hướng với React Router (Slot 14)",
+    "nguon": "Front-End Web Development with React · Chương 9",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "FER202"
+   }
+  ]
+ },
+ "Server-Side Rendering › Streamed Responses": {
+  "body": "Streamed response là kỹ thuật gửi phản hồi HTTP **từng mảnh (chunk) khi sẵn sàng** thay vì đợi toàn bộ dữ liệu xong mới gửi. Trình duyệt nhận và xử lý được ngay phần đầu trong khi server còn làm phần sau.\n\n### Dùng ở đâu\n- **HTML streaming**: server gửi vỏ trang (header, khung) trước, phần chậm (danh sách cần truy vấn nặng) đổ vào sau. Người dùng thấy trang sớm hơn. Trong Next.js App Router, `loading.tsx` và `<Suspense>` làm đúng việc này.\n- **Phản hồi AI/LLM**: chữ hiện dần từng token.\n- Tải file lớn, log trực tiếp, sự kiện từ server (SSE).\n\n### Cách đọc ở client\n```js\nconst res = await fetch('/api/chat', { method: 'POST', body: JSON.stringify({ q }) });\nconst reader = res.body.pipeThrough(new TextDecoderStream()).getReader();\n\nwhile (true) {\n  const { value, done } = await reader.read();\n  if (done) break;\n  output.textContent += value;     // cập nhật dần\n}\n```\nPhía server thường dùng `Transfer-Encoding: chunked` (HTTP/1.1) hoặc khung dữ liệu của HTTP/2.\n\n### Ý chính\n- Cải thiện cảm nhận tốc độ (TTFB và First Paint) dù tổng thời gian không đổi.\n- Cần để ý **waterfall**: await nối tiếp làm trì hoãn cả luồng; chạy song song những gì độc lập.\n- Một số proxy/CDN **buffer** phản hồi nên stream mất tác dụng; kiểm tra cấu hình (ví dụ tắt buffering ở Nginx cho đường dẫn đó).\n\n### Lỗi hay gặp\n- Đã bắt đầu stream thì không đổi được mã trạng thái HTTP nữa: lỗi giữa chừng phải xử lý trong nội dung.\n- Quên xử lý ngắt kết nối, server vẫn tiếp tục tạo dữ liệu vô ích.",
+  "lessons": [
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-10-4-streaming-suspense",
+    "ten": "10.4 — Streaming: loading.tsx, Suspense và bẫy waterfall",
+    "nguon": "Next.js: The React Framework · Chương 10",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-12-1-suspense-use",
+    "ten": "12.1 — Suspense cho dữ liệu và use(): để cây component chờ, không phải chuỗi if",
+    "nguon": "React · Chương 12",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-9-1-polling-sse",
+    "ten": "9.1 — Polling, long polling và Server-Sent Events",
+    "nguon": "Networking for Developers · Chương 9",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "GraphQL › GraphQL": {
+  "body": "GraphQL là **ngôn ngữ truy vấn cho API**, do Facebook tạo ra. Khác REST có nhiều endpoint mỗi cái trả một khối dữ liệu cố định, GraphQL thường chỉ có **một endpoint** (`POST /graphql`); client gửi truy vấn nói rõ cần **những trường nào**, server trả đúng cấu trúc đó. Hợp khi nhiều màn hình cần các lát cắt khác nhau của cùng dữ liệu, hoặc khi một màn hình phải gom dữ liệu từ nhiều nguồn.\n\n```graphql\n# Schema (hợp đồng, có kiểu)\ntype User { id: ID!  name: String!  posts: [Post!]! }\ntype Post { id: ID!  title: String! }\ntype Query { user(id: ID!): User }\ntype Mutation { createPost(title: String!): Post! }\n\n# Truy vấn: lấy đúng thứ cần, một vòng\nquery {\n  user(id: \"1\") { name  posts { title } }\n}\n```\n\n### Ý chính\n- Ba loại thao tác: **query** (đọc), **mutation** (ghi), **subscription** (nhận cập nhật liên tục).\n- **Schema có kiểu** là hợp đồng giữa FE và BE; công cụ sinh kiểu TypeScript tự động (GraphQL Code Generator) giữ hai bên đồng bộ.\n- Server cài **resolver** cho từng trường; cần chú ý vấn đề **N+1** (dùng DataLoader).\n- Giải quyết over-fetching/under-fetching của REST, đổi lại có độ phức tạp: cache HTTP khó hơn (mọi thứ là POST), cần giới hạn độ sâu/độ phức tạp truy vấn để chống lạm dụng, lỗi trả về `200` kèm mảng `errors`.\n- Không phải lúc nào cũng hơn REST; API đơn giản, ít client thì REST dễ hơn.\n\n### Lỗi hay gặp\n- Bật introspection và truy vấn không giới hạn ở production.\n- Lấy quá nhiều trường lồng sâu, mỗi cấp một truy vấn DB.\n- Coi mọi request `200` là thành công mà bỏ qua trường `errors`.\n\n### Tự kiểm tra\n1. GraphQL giải quyết vấn đề over-fetching như thế nào?\n2. Vì sao cần cẩn thận với N+1 ở resolver?",
+  "lessons": [
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-7-4-khac",
+    "ten": "7.5 — GraphQL và gRPC: khi REST không phải câu trả lời, đo trên LabFlow",
+    "nguon": "API & System Design · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/code-lab/graphql",
+    "ten": "GraphQL",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "GraphQL › Apollo Client": {
+  "body": "Apollo Client là thư viện GraphQL client phổ biến nhất cho React (và framework khác): gửi truy vấn, **lưu cache chuẩn hoá** và cập nhật giao diện khi dữ liệu đổi.\n\n```tsx\nimport { ApolloClient, InMemoryCache, ApolloProvider, gql, useQuery, useMutation } from '@apollo/client';\n\nconst client = new ApolloClient({ uri: '/graphql', cache: new InMemoryCache() });\n\nconst GET_USER = gql`query($id: ID!) { user(id: $id) { id name } }`;\nconst RENAME = gql`mutation($id: ID!, $name: String!) { rename(id: $id, name: $name) { id name } }`;\n\nfunction Profile({ id }) {\n  const { data, loading, error } = useQuery(GET_USER, { variables: { id } });\n  const [rename] = useMutation(RENAME);\n  if (loading) return <p>Đang tải...</p>;\n  if (error) return <p>Lỗi: {error.message}</p>;\n  return <button onClick={() => rename({ variables: { id, name: 'Mới' } })}>{data.user.name}</button>;\n}\n```\n\n### Ý chính\n- **Cache chuẩn hoá**: mỗi đối tượng lưu một lần theo `__typename` + `id`; khi một mutation trả về đối tượng đã đổi, mọi truy vấn đang hiển thị nó tự cập nhật.\n- Hook chính: `useQuery`, `useMutation`, `useLazyQuery`, `useSubscription`; có `fetchPolicy` (`cache-first`, `network-only`, `cache-and-network`).\n- Cập nhật cache sau mutation bằng `update`, `refetchQueries`, hoặc **optimistic response** (giao diện đổi trước, rollback nếu lỗi).\n- Cần mọi đối tượng có `id` (hoặc cấu hình `keyFields`) để cache chuẩn hoá hoạt động đúng.\n\n### Lỗi hay gặp\n- Truy vấn không lấy `id` nên cache không gộp được đối tượng.\n- Danh sách không cập nhật sau khi thêm mới vì quên cập nhật cache hoặc refetch.\n- Dùng Apollo cho một API REST thuần chỉ vì thói quen: TanStack Query hợp hơn."
+ },
+ "GraphQL › Relay Modern": {
+  "body": "Relay là GraphQL client do Meta phát triển, thiết kế để **mở rộng cho ứng dụng rất lớn**. Điểm khác biệt là mỗi component tự khai báo dữ liệu nó cần bằng một **fragment** đặt ngay cạnh (co-location); các fragment được ghép lên thành truy vấn của cả trang, và một **bộ biên dịch (relay-compiler)** kiểm tra, tối ưu truy vấn lúc build.\n\n```tsx\nimport { graphql, useFragment } from 'react-relay';\n\nfunction UserCard({ userRef }) {\n  const user = useFragment(\n    graphql`fragment UserCard_user on User { name avatarUrl }`,\n    userRef,\n  );\n  return <div>{user.name}</div>;\n}\n// Trang cha có truy vấn: query PageQuery { user(id:\"1\") { ...UserCard_user } }\n```\n\n### Ý chính\n- **Data masking**: component chỉ thấy dữ liệu trong fragment của chính nó, nên đổi dữ liệu một component không vô tình phá component khác.\n- Chuẩn quy ước máy chủ: mọi đối tượng có `id` toàn cục (Node interface) và phân trang theo **Connection** (`edges`, `pageInfo`, cursor). Server không theo quy ước này thì dùng Relay rất khó.\n- Tích hợp Suspense/concurrent của React; cần bước build (compiler).\n- Đường học dốc hơn Apollo; đáng giá khi dự án lớn, nhiều đội, cần hiệu năng và kỷ luật dữ liệu. Dự án nhỏ thường chọn Apollo hoặc urql cho nhẹ.\n\n### Lỗi hay gặp\n- Server không hỗ trợ Node/Connection spec nhưng vẫn chọn Relay.\n- Quên chạy relay-compiler nên mã sinh ra lỗi thời."
+ },
+ "PWA & Web API nâng cao › PWA — Progressive Web Apps": {
+  "body": "PWA (Progressive Web App) là web app **có thể cài lên máy và hoạt động gần như app native**: có biểu tượng trên màn hình, mở toàn màn hình, chạy được khi mất mạng hoặc mạng yếu, nhận thông báo đẩy ở nơi hệ điều hành hỗ trợ. Không cần cửa hàng ứng dụng, một mã nguồn cho mọi nền tảng.\n\n### Ba thành phần cốt lõi\n1. **HTTPS**: bắt buộc (secure context).\n2. **Web App Manifest** (`manifest.webmanifest`): tên, biểu tượng, màu, chế độ hiển thị.\n3. **Service Worker**: script chạy nền chặn request, quản lý cache.\n\n```json\n{\n  \"name\": \"Ứng dụng của tôi\",\n  \"short_name\": \"MyApp\",\n  \"start_url\": \"/\",\n  \"display\": \"standalone\",\n  \"background_color\": \"#ffffff\",\n  \"theme_color\": \"#2563eb\",\n  \"icons\": [\n    { \"src\": \"/icon-192.png\", \"sizes\": \"192x192\", \"type\": \"image/png\" },\n    { \"src\": \"/icon-512.png\", \"sizes\": \"512x512\", \"type\": \"image/png\" }\n  ]\n}\n```\n```html\n<link rel=\"manifest\" href=\"/manifest.webmanifest\" />\n```\n\n### Ý chính\n- Điều kiện để trình duyệt đề nghị cài đặt có thể khác nhau giữa trình duyệt; kiểm bằng tab **Application** của DevTools hoặc Lighthouse.\n- Thiết kế **offline-first**: quyết định cái gì cache (vỏ app) và cái gì luôn lấy mới (dữ liệu).\n- Khả năng thực tế khác nhau theo nền tảng (đặc biệt iOS): luôn kiểm tính năng hỗ trợ trên thiết bị đích.\n- Dùng công cụ như Workbox hoặc plugin cho framework (vite-plugin-pwa) thay vì tự viết hết.\n\n### Lỗi hay gặp\n- Cache cứng file HTML nên người dùng kẹt bản cũ sau khi deploy.\n- Biểu tượng thiếu kích thước hoặc thiếu loại maskable.\n- Cho rằng PWA thay thế được mọi app native: không đúng khi cần API phần cứng sâu.",
+  "more": [
+   {
+    "type": "course",
+    "title": "web.dev — Learn PWA",
+    "url": "https://web.dev/learn/pwa/"
+   }
+  ]
+ },
+ "PWA & Web API nâng cao › Service Workers": {
+  "body": "Service Worker là script JavaScript **chạy nền, tách biệt khỏi trang**, đóng vai **proxy giữa ứng dụng và mạng**. Nó chặn được mọi request của trang (sự kiện `fetch`), tự quyết định lấy từ cache hay từ mạng, nhờ vậy làm được offline, tăng tốc và nhận push khi trang đã đóng. Không truy cập được DOM; giao tiếp qua `postMessage`.\n\n```js\n// Đăng ký (trong trang)\nif ('serviceWorker' in navigator) {\n  navigator.serviceWorker.register('/sw.js');\n}\n```\n```js\n// sw.js\nconst CACHE = 'v1';\nself.addEventListener('install', (e) => {\n  e.waitUntil(caches.open(CACHE).then((c) => c.addAll(['/', '/app.css', '/app.js'])));\n});\nself.addEventListener('activate', (e) => {\n  e.waitUntil(caches.keys().then((ks) => Promise.all(ks.filter((k) => k !== CACHE).map((k) => caches.delete(k)))));\n});\nself.addEventListener('fetch', (e) => {\n  e.respondWith(caches.match(e.request).then((hit) => hit || fetch(e.request)));\n});\n```\n\n### Ý chính\n- **Vòng đời**: install → (waiting) → activate → điều khiển trang. Bản mới chờ tới khi mọi tab dùng bản cũ đóng, trừ khi gọi `skipWaiting()`.\n- Chỉ chạy trên **HTTPS** (hoặc localhost).\n- **Chiến lược cache** hay dùng: cache-first (tài nguyên tĩnh), network-first (nội dung hay đổi), stale-while-revalidate (nhanh mà vẫn mới dần). Workbox đóng gói sẵn.\n- Đặt tên/phiên bản cache và dọn cache cũ ở `activate`.\n\n### Lỗi hay gặp\n- Cache cứng HTML/chính file `sw.js`: người dùng không bao giờ nhận được bản cập nhật. Đừng để `sw.js` bị cache lâu.\n- Dev gặp \"sửa không thấy đổi\" vì service worker cũ vẫn phục vụ; dùng DevTools → Application → Service Workers (Update on reload, Unregister).\n- Cache cả phản hồi lỗi hoặc API chứa dữ liệu riêng tư."
+ },
+ "PWA & Web API nâng cao › Web Sockets": {
+  "body": "WebSocket là **kênh hai chiều, kết nối lâu dài** giữa trình duyệt và máy chủ: sau cú bắt tay bắt đầu bằng HTTP (`Upgrade: websocket`), cả hai bên gửi tin nhắn cho nhau bất cứ lúc nào mà không cần hỏi-đáp. Hợp với chat, bảng giá trực tiếp, cộng tác thời gian thực, game.\n\n```js\nconst ws = new WebSocket('wss://example.com/chat');   // wss = qua TLS\n\nws.addEventListener('open', () => ws.send(JSON.stringify({ type: 'hello' })));\nws.addEventListener('message', (e) => {\n  const msg = JSON.parse(e.data);\n  console.log('nhận', msg);\n});\nws.addEventListener('close', () => console.log('mất kết nối'));\n```\n\n### Ý chính\n- Dùng **`wss://`** trên trang HTTPS.\n- Trình duyệt **không tự nối lại**: bạn phải viết logic reconnect (lùi dần theo cấp số nhân + ngẫu nhiên), và đồng bộ lại trạng thái bị lỡ khi mất kết nối.\n- Cần **heartbeat/ping** để phát hiện kết nối chết.\n- Xác thực: API `WebSocket` trình duyệt không cho đặt header tuỳ ý, nên thường xác thực bằng cookie hoặc token lúc handshake/tin nhắn đầu.\n- Mở rộng nhiều máy chủ cần sticky session hoặc broker chung (Redis); proxy (Nginx) phải cấu hình cho phép nâng cấp kết nối.\n- Thư viện như Socket.IO bổ sung reconnect, phòng (room), fallback; đổi lại không tương thích WebSocket thuần.\n- Nếu chỉ cần server đẩy một chiều, SSE đơn giản hơn.\n\n### Lỗi hay gặp\n- Quên dọn kết nối khi component bị huỷ (rò rỉ trong React: đóng ở cleanup của `useEffect`).\n- Gửi tin theo thứ tự nhưng không xử lý trùng lặp sau khi reconnect.\n- Không giới hạn kích thước tin hay tần suất, bị lạm dụng.",
+  "lessons": [
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-9-2-websocket",
+    "ten": "9.2 — WebSocket: nâng cấp, frame và nhịp tim",
+    "nguon": "Networking for Developers · Chương 9",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-11-1-websocket-co-ban",
+    "ten": "11.1 — Từ hỏi đi hỏi lại tới được báo: WebSocket",
+    "nguon": "Node.js · Chương 11",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-10-3-realtime",
+    "ten": "10.4 — API thời gian thực: polling, SSE hay WebSocket — chọn hợp đồng",
+    "nguon": "API & System Design · Chương 10",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-11-2-ws-vs-socketio-rooms",
+    "ten": "11.2 — ws hay Socket.IO: cái giá của sự tiện nghi",
+    "nguon": "Node.js · Chương 11",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "PWA & Web API nâng cao › Server-Sent Events": {
+  "body": "Server-Sent Events (SSE) là cách **server đẩy dữ liệu một chiều xuống trình duyệt** qua một kết nối HTTP thông thường kéo dài, định dạng văn bản `text/event-stream`. Trình duyệt có sẵn đối tượng `EventSource` lo việc kết nối và **tự nối lại** khi đứt.\n\n```js\n// client\nconst es = new EventSource('/api/notifications');\nes.addEventListener('message', (e) => console.log('tin', JSON.parse(e.data)));\nes.addEventListener('price', (e) => console.log('giá', e.data));   // sự kiện đặt tên\nes.onerror = () => console.log('lỗi/đang nối lại');\n```\n```js\n// server (Express)\napp.get('/api/notifications', (req, res) => {\n  res.set({ 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', Connection: 'keep-alive' });\n  res.flushHeaders();\n  const t = setInterval(() => res.write(`data: ${JSON.stringify({ at: Date.now() })}\\n\\n`), 5000);\n  req.on('close', () => clearInterval(t));\n});\n```\n\n### Ý chính\n- Mỗi sự kiện là các dòng `field: value`, kết thúc bằng **một dòng trống**; trường `id` giúp trình duyệt gửi lại `Last-Event-ID` khi nối lại để server gửi bù.\n- Chạy trên HTTP thường nên dễ qua proxy/CDN, tận dụng HTTP/2 (HTTP/1.1 bị giới hạn khoảng 6 kết nối mỗi tên miền).\n- `EventSource` không cho đặt header tuỳ ý (thường dùng cookie); cần header thì dùng `fetch` với streaming.\n- Chọn SSE: thông báo, tiến độ tác vụ, luồng dữ liệu giá. Chọn WebSocket khi cần client gửi nhiều lên cùng lúc (chat, game).\n\n### Lỗi hay gặp\n- Proxy buffer phản hồi nên sự kiện đến dồn cục (tắt buffering ở Nginx cho route này).\n- Quên dọn bộ đếm giờ khi client ngắt kết nối.\n- Không đóng `EventSource` khi component bị huỷ.",
+  "lessons": [
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-9-1-polling-sse",
+    "ten": "9.1 — Polling, long polling và Server-Sent Events",
+    "nguon": "Networking for Developers · Chương 9",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-10-3-realtime",
+    "ten": "10.4 — API thời gian thực: polling, SSE hay WebSocket — chọn hợp đồng",
+    "nguon": "API & System Design · Chương 10",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "PWA & Web API nâng cao › Storage (LocalStorage/IndexedDB)": {
+  "body": "Trình duyệt cho lưu dữ liệu ngay trên máy người dùng, mỗi nơi hợp một việc:\n\n| Nơi lưu | Dung lượng (ước chừng) | Đặc điểm |\n|---|---|---|\n| **Cookie** | ~4KB | Tự gửi kèm mỗi request; dùng cho phiên |\n| **localStorage** | ~5MB | Chuỗi key-value, đồng bộ, tồn tại lâu dài |\n| **sessionStorage** | ~5MB | Như localStorage nhưng mất khi đóng tab |\n| **IndexedDB** | lớn hơn nhiều | CSDL bất đồng bộ, lưu đối tượng/Blob, có chỉ mục, giao dịch |\n\n```js\n// localStorage: chỉ lưu chuỗi\nlocalStorage.setItem('theme', 'dark');\nconst theme = localStorage.getItem('theme');\nlocalStorage.setItem('cart', JSON.stringify({ items: [1, 2] }));\nconst cart = JSON.parse(localStorage.getItem('cart') ?? '{}');\n```\n```js\n// IndexedDB (rút gọn, dạng nguyên thủy)\nconst req = indexedDB.open('app', 1);\nreq.onupgradeneeded = () => req.result.createObjectStore('notes', { keyPath: 'id' });\nreq.onsuccess = () => {\n  const db = req.result;\n  db.transaction('notes', 'readwrite').objectStore('notes').put({ id: 1, text: 'xin chào' });\n};\n```\n\n### Ý chính\n- `localStorage` **đồng bộ** nên chặn luồng chính nếu lưu nhiều; không dùng được trong Web Worker/Service Worker.\n- **Không lưu token nhạy cảm** ở `localStorage`: mọi script chạy trên trang (kể cả bị XSS) đọc được.\n- IndexedDB API nguyên thủy khá dài dòng; thường dùng thư viện bọc như `idb` hoặc Dexie.\n- Dung lượng và việc trình duyệt tự xoá khi thiếu chỗ khác nhau theo trình duyệt; có `navigator.storage.persist()` và `estimate()`.\n- Dữ liệu theo origin: khác domain/cổng là kho khác.\n\n### Lỗi hay gặp\n- Quên `JSON.stringify/parse` nên lưu ra `\"[object Object]\"`.\n- Đọc `localStorage` lúc render ở server (không có `window`); chỉ đọc sau khi mount ở client.\n- Coi dữ liệu client là đáng tin: người dùng sửa được.",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-7-2-cookies-sessions",
+    "ten": "7.2 — Cookie và phiên",
+    "nguon": "Nền tảng Lập trình Web · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/authentication/learn?lessonSlug=auth-4-5-cat-token-o-dau",
+    "ten": "4.5 — Cất token ở đâu trong trình duyệt",
+    "nguon": "Authentication · Chương 4",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-4-4-custom-hook",
+    "ten": "4.4 — Hook tự viết: useDebounce, useLocalStorage, useTieuDeTrang và quy tắc hook",
+    "nguon": "React · Chương 4",
+    "kieu": "video"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "MDN — IndexedDB API",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API"
+   }
+  ]
+ },
+ "PWA & Web API nâng cao › Notifications / Location / Payments": {
+  "body": "Trình duyệt có nhiều **Web API truy cập khả năng của thiết bị**. Điểm chung: hầu hết cần **HTTPS** (secure context) và **người dùng cấp quyền** (permission), nên luôn phải xử lý trường hợp bị từ chối.\n\n### Geolocation (vị trí)\n```js\nnavigator.geolocation.getCurrentPosition(\n  (pos) => console.log(pos.coords.latitude, pos.coords.longitude),\n  (err) => console.warn('Không lấy được vị trí:', err.message),\n  { enableHighAccuracy: false, timeout: 10000 }\n);\n```\n\n### Notifications và Push\n- **Notifications API** hiện thông báo hệ thống; **Push API** (cùng Service Worker) cho phép nhận tin khi trang đã đóng.\n```js\nconst perm = await Notification.requestPermission();   // 'granted' | 'denied' | 'default'\nif (perm === 'granted') new Notification('Xong rồi!', { body: 'Đơn hàng đã giao' });\n```\nPush đầy đủ cần service worker, khoá VAPID và phía server gửi tin; hỗ trợ khác nhau theo nền tảng (đặc biệt trên iOS có điều kiện riêng).\n\n### Payment Request\nCung cấp giao diện thanh toán thống nhất của trình duyệt (lưu địa chỉ, thẻ), giảm các ô nhập. Việc xử lý thanh toán thật vẫn do nhà cung cấp thanh toán và server của bạn làm.\n\n### Ý chính\n- **Xin quyền đúng lúc**, sau một hành động của người dùng và giải thích lý do. Xin ngay khi tải trang dễ bị từ chối và bị trình duyệt chặn luôn.\n- Kiểm tính năng trước khi dùng (`'geolocation' in navigator`) và có phương án dự phòng.\n- Vị trí và thông báo là dữ liệu cá nhân: chỉ xin cái cần, nói rõ cách dùng.\n- Xem bảng hỗ trợ trình duyệt (MDN, Can I use) trước khi dựa vào một API.\n\n### Lỗi hay gặp\n- Quên rằng người dùng có thể thu hồi quyền sau đó.\n- Gọi API trong mã chạy ở server (không có `navigator`)."
+ },
+ "PWA & Web API nâng cao › Progressive Web Apps (PWA)": {
+  "body": "PWA kết hợp **Service Worker, Web App Manifest và HTTPS** để web app có trải nghiệm gần native: cài được lên màn hình chính, mở như một ứng dụng riêng, dùng được khi mất mạng, có thể nhận thông báo đẩy.\n\n### Ba phần\n- **Manifest**: file JSON mô tả tên, biểu tượng, màu, `display: standalone`, `start_url`.\n- **Service Worker**: chặn request và quản lý cache để chạy offline/nhanh.\n- **HTTPS**: điều kiện bắt buộc.\n\n```js\n// đăng ký service worker khi trang tải xong\nwindow.addEventListener('load', () => navigator.serviceWorker?.register('/sw.js'));\n```\n\n### Ý chính\n- Kiểm chất lượng PWA bằng **Lighthouse** và tab **Application** trong DevTools (manifest, service worker, storage).\n- Nên có trang dự phòng khi offline thay vì màn hình lỗi trắng của trình duyệt.\n- Cập nhật: bản service worker mới chỉ có hiệu lực sau khi các tab cũ đóng, nên cần thiết kế thông báo \"có phiên bản mới, tải lại\".\n- Plugin sẵn cho framework (vite-plugin-pwa, next-pwa và tương tự) và Workbox giảm công sức viết tay.\n\n### Lỗi hay gặp\n- Offline mà dữ liệu lỗi thời vẫn hiển thị như mới: cần cho người dùng biết trạng thái.\n- Cache API chứa dữ liệu riêng tư dùng chung giữa nhiều người trên một máy."
+ },
+ "Hiệu năng (Performance) › Web Performance": {
+  "body": "Hiệu năng web là **cảm giác nhanh của người dùng**, đo bằng số liệu thay vì cảm tính. Google chuẩn hoá bộ **Core Web Vitals**:\n\n- **LCP (Largest Contentful Paint)**: thời gian phần nội dung lớn nhất (ảnh hero, tiêu đề) hiện ra. Mục tiêu \"tốt\": dưới khoảng 2,5 giây.\n- **INP (Interaction to Next Paint)**: độ trễ phản hồi khi người dùng bấm/gõ (thay thế FID). Mục tiêu: dưới khoảng 200 ms.\n- **CLS (Cumulative Layout Shift)**: mức độ bố cục \"nhảy\" bất ngờ khi tải. Mục tiêu: dưới khoảng 0,1.\n\n### Việc thường làm để cải thiện\n- **Ảnh**: định dạng hiện đại (WebP/AVIF), đúng kích thước, `loading=\"lazy\"` cho ảnh dưới màn hình đầu, luôn khai báo `width`/`height` để giữ chỗ (chống CLS). Ảnh LCP thì không lazy-load, có thể `fetchpriority=\"high\"`.\n- **JavaScript**: gửi ít hơn (code splitting, tải lười theo route/component, loại thư viện nặng), tránh tác vụ dài chặn luồng chính.\n- **Mạng**: nén (gzip/brotli), CDN, `Cache-Control` hợp lý, `preconnect` tới domain quan trọng.\n- **Render**: SSR/SSG cho nội dung đầu trang; font dùng `font-display: swap`.\n\n```html\n<img src=\"hero.avif\" width=\"1200\" height=\"600\" fetchpriority=\"high\" alt=\"...\" />\n<img src=\"below.avif\" width=\"600\" height=\"400\" loading=\"lazy\" alt=\"...\" />\n```\n\n### Ý chính\n- **Đo trước, sửa sau**: tìm đúng nút thắt (thường là ảnh nặng và quá nhiều JS) rồi mới tối ưu.\n- Phân biệt **dữ liệu phòng lab** (Lighthouse, môi trường cố định) và **dữ liệu thực địa** (RUM, CrUX từ người dùng thật); Google xếp hạng theo dữ liệu thực địa.\n- Đặt **ngân sách hiệu năng** và chạy trong CI để không tụt lại.\n\n### Lỗi hay gặp\n- Chạy Lighthouse trên máy mạnh, mạng nhanh rồi kết luận \"ổn\".\n- Tối ưu vi mô khi trang đang tải 5MB ảnh.",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-14-4-performance",
+    "ten": "14.4 — Đo hiệu năng",
+    "nguon": "Nền tảng Lập trình Web · Chương 14",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-17-5-core-web-vitals",
+    "ten": "17.5 — Core Web Vitals: Google đo \"tốt\" thế nào",
+    "nguon": "Next.js: The React Framework · Chương 17",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-18-1-do-truoc",
+    "ten": "18.1 — Điều gì làm trang chậm (và hãy đo trước)",
+    "nguon": "Next.js: The React Framework · Chương 18",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-8-3-lazy",
+    "ten": "8.3 — Chia nhỏ bundle và tải lười: route, Suspense, bẫy barrel và ảnh",
+    "nguon": "React · Chương 8",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Hiệu năng (Performance) › Performance Metrics & RAIL": {
+  "body": "RAIL là mô hình do đội Chrome đề xuất để **đo hiệu năng theo cảm nhận của người dùng**, chia trải nghiệm thành bốn pha: **R**esponse, **A**nimation, **I**dle, **L**oad. Mỗi pha có \"ngân sách thời gian\" gắn với giới hạn nhận thức của con người.\n\n| Pha | Mục tiêu | Ý nghĩa |\n|---|---|---|\n| **Response** | Phản hồi thao tác trong **dưới 100 ms** | Bấm xong thấy phản ứng ngay; việc nặng làm ngầm |\n| **Animation** | Mỗi khung hình trong **~10 ms** (để đạt 60 fps, tổng khung ~16 ms) | Cuộn và hoạt ảnh mượt, không giật |\n| **Idle** | Chia việc nền thành khối **dưới 50 ms** | Tận dụng lúc rảnh, vẫn sẵn sàng đón thao tác |\n| **Load** | Nội dung chính tương tác được trong **~5 giây** trên thiết bị/mạng trung bình | Tải nhanh, nhất là lần đầu trên di động |\n\n### Vì sao cần biết\nRAIL cho bạn **cách nghĩ**: người dùng cảm nhận nhanh/chậm ở từng khoảnh khắc khác nhau. Những chỉ số hiện đại hơn như **Core Web Vitals** (LCP, INP, CLS) kế thừa tinh thần này; RAIL đáng hiểu như nền tảng khái niệm, còn khi đo thực tế hãy dùng bộ chỉ số hiện hành.\n\n### Ý chính\n- Dùng tác vụ bất đồng bộ, `requestIdleCallback`, Web Worker để không chiếm luồng chính quá 50 ms một lần (**long task**).\n- Hoạt ảnh dùng thuộc tính rẻ (`transform`, `opacity`) thay vì đổi `width`/`top` gây layout lại.\n- Đo bằng tab **Performance** của DevTools và Lighthouse.\n\n### Lỗi hay gặp\n- Xử lý nặng đồng bộ trong sự kiện click khiến giao diện đứng.\n- Hoạt ảnh bằng JS đổi vị trí từng khung thay vì CSS transition/animation.",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-14-4-performance",
+    "ten": "14.4 — Đo hiệu năng",
+    "nguon": "Nền tảng Lập trình Web · Chương 14",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-17-5-core-web-vitals",
+    "ten": "17.5 — Core Web Vitals: Google đo \"tốt\" thế nào",
+    "nguon": "Next.js: The React Framework · Chương 17",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-8-0-slides",
+    "ten": "8.0 — Slide Chương 8: hiệu năng và khả năng tiếp cận bằng hình",
+    "nguon": "React · Chương 8",
+    "kieu": "slide"
+   }
+  ]
+ },
+ "Hiệu năng (Performance) › Using Lighthouse": {
+  "body": "Lighthouse là công cụ **kiểm toán tự động** của Google có sẵn trong Chrome DevTools (tab **Lighthouse**), cũng chạy được bằng dòng lệnh (`npx lighthouse https://example.com`) hoặc trong CI. Nó tải trang trong môi trường giả lập rồi chấm điểm 0–100 theo các nhóm: **Performance, Accessibility, Best Practices, SEO**, kèm danh sách việc cần sửa và ước tính tiết kiệm được bao nhiêu.\n\n### Cách dùng\n1. Mở trang trong **cửa sổ ẩn danh** (tránh tiện ích làm nhiễu).\n2. DevTools → Lighthouse → chọn Mobile hoặc Desktop → Analyze.\n3. Đọc phần **Opportunities / Diagnostics**: ảnh quá lớn, JS không dùng, chặn render, thiếu `alt`, tương phản màu thấp…\n4. Sửa, chạy lại, so sánh.\n\n### Ý chính\n- Điểm Performance là tổng hợp có trọng số của các chỉ số (LCP, TBT, CLS…). Điểm số **dao động** giữa các lần chạy: chạy nhiều lần, lấy trung vị.\n- Đây là **dữ liệu phòng lab**; không thay thế dữ liệu người dùng thật (RUM/CrUX). Lighthouse trên máy mạnh cho số đẹp giả: hãy bật giả lập CPU và mạng chậm.\n- **Lighthouse CI** chạy mỗi pull request và so với ngân sách hiệu năng để chặn việc làm trang chậm đi.\n- Điểm 100 không đồng nghĩa trang tốt cho người dùng thật; điểm Accessibility tự động chỉ bắt được một phần lỗi.\n\n### Lỗi hay gặp\n- Chạy trên bản dev (không minify) rồi lo vì điểm thấp: kiểm bản build production.\n- Chạy với tiện ích trình duyệt đang bật.\n- Đuổi theo con số thay vì sửa nguyên nhân thật.",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-14-4-performance",
+    "ten": "14.4 — Đo hiệu năng",
+    "nguon": "Nền tảng Lập trình Web · Chương 14",
+    "kieu": "video"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "Chrome — Tổng quan Lighthouse",
+    "url": "https://developer.chrome.com/docs/lighthouse/overview"
+   }
+  ]
+ },
+ "Hiệu năng (Performance) › Using DevTools": {
+  "body": "Chrome DevTools (mở bằng `F12` hoặc `Ctrl/Cmd + Shift + I`) là bộ công cụ gỡ lỗi và phân tích có sẵn trong trình duyệt. Các tab FE dev dùng nhiều nhất:\n\n- **Elements**: xem và sửa DOM/CSS trực tiếp; thấy style nào đang áp dụng, cái nào bị ghi đè (gạch ngang), mô hình hộp, bật `:hover`.\n- **Console**: chạy JS, xem log và lỗi.\n- **Sources**: đặt **breakpoint**, bước từng dòng, xem biến.\n- **Network**: từng request (URL, trạng thái, header, kích thước, thời gian), lọc theo loại, **giả lập mạng chậm** (throttling), tắt cache để thử lần tải đầu.\n- **Performance**: ghi lại một đoạn chạy để xem biểu đồ **flame chart**, tìm **long task** chặn luồng chính, đo khung hình.\n- **Application**: cookie, localStorage, IndexedDB, service worker, manifest.\n- **Lighthouse**: kiểm toán tự động.\n\n### Quy trình tìm bottleneck với Performance\n1. Mở tab Performance, bật throttling CPU 4x–6x để mô phỏng máy yếu.\n2. Bấm Record, thao tác (hoặc tải lại trang), Stop.\n3. Tìm các khối đỏ (long task) ở dòng Main, bấm vào xem hàm nào tốn thời gian.\n4. Sửa, ghi lại, so sánh.\n\n### Ý chính\n- Bật **Disable cache** (chỉ khi DevTools mở) khi cần đo lần tải đầu; kiểm cả lần có cache.\n- Mục **Coverage** cho biết bao nhiêu phần trăm JS/CSS không được dùng.\n- Dùng chế độ giả lập thiết bị để kiểm responsive; vẫn nên thử trên máy thật.\n- Chuột phải phần tử → **Copy → Copy selector** hay \"Store as global variable\" giúp làm việc nhanh.\n\n### Lỗi hay gặp\n- Đo hiệu năng khi đang mở nhiều tiện ích hoặc không giả lập mạng/CPU.\n- Sửa CSS trong DevTools rồi quên chép lại vào mã nguồn.",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-6-0-slides",
+    "ten": "6.0 — Slide bài giảng: HTTP & API trong 12 slide",
+    "nguon": "Nền tảng Lập trình Web · Chương 6",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-14-4-performance",
+    "ten": "14.4 — Đo hiệu năng",
+    "nguon": "Nền tảng Lập trình Web · Chương 14",
+    "kieu": "video"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "Chrome DevTools — tài liệu",
+    "url": "https://developer.chrome.com/docs/devtools"
+   }
+  ]
+ },
+ "Hiệu năng (Performance) › Sử dụng DevTools": {
+  "body": "Chrome DevTools có nhiều panel, mỗi cái để trả lời một loại câu hỏi. Nắm vai trò từng panel là cách nhanh nhất để biết \"lỗi này nên nhìn ở đâu\":\n\n- **Elements** — \"Vì sao phần tử này trông sai?\" Xem cây DOM, các luật CSS áp dụng và thứ tự ghi đè, thử đổi thuộc tính ngay trên trang. Có công cụ chỉnh Flexbox/Grid trực quan.\n- **Console** — \"Có lỗi JS nào không? Biến này đang là gì?\" Xem log, cảnh báo, lỗi kèm stack trace; gõ biểu thức để thử. `console.table(arr)` in mảng đối tượng thành bảng, `console.time('x')`/`timeEnd('x')` đo thời gian.\n- **Sources** — \"Chạy đến dòng này giá trị bao nhiêu?\" Đặt breakpoint (cả điều kiện), bước vào/qua/ra, theo dõi biến, xem **call stack**; dùng source map để debug mã TypeScript gốc thay vì bản đã nén.\n- **Network** — \"Request nào chậm hoặc lỗi?\" Xem trạng thái (4xx/5xx), header, payload, phản hồi, biểu đồ thời gian (chờ, tải); sao chép request thành lệnh `curl`.\n- **Application** — \"Dữ liệu lưu ở đâu?\" Cookie, localStorage, sessionStorage, IndexedDB, Cache Storage, service worker, manifest.\n- **Performance / Lighthouse** — \"Vì sao trang chậm?\" Đo và kiểm toán.\n\n### Mẹo hay dùng\n- Từ khoá `debugger;` trong mã sẽ dừng lại khi DevTools đang mở.\n- Breakpoint trên **sự kiện DOM** hoặc \"khi thuộc tính thay đổi\" tìm ra đoạn mã nào đang sửa phần tử.\n- Trong React, cài thêm **React Developer Tools** để xem cây component và đo re-render.\n\n### Lỗi hay gặp\n- Dùng `console.log` khắp nơi mà không thử breakpoint, mất nhiều thời gian hơn.\n- Debug trên bản build nén mà không bật source map.",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-6-0-slides",
+    "ten": "6.0 — Slide bài giảng: HTTP & API trong 12 slide",
+    "nguon": "Nền tảng Lập trình Web · Chương 6",
+    "kieu": "slide"
+   }
+  ]
+ },
+ "Static Site Generators › Static Site Generators": {
+  "body": "Static Site Generation (SSG) là dựng **toàn bộ HTML ngay lúc build**, ra các file tĩnh để đặt lên hosting/CDN. Khi người dùng truy cập, server chỉ việc gửi file có sẵn: không chạy mã, không truy vấn cơ sở dữ liệu mỗi request.\n\n### Vì sao dùng\n- **Nhanh**: file tĩnh phục vụ từ CDN, TTFB rất thấp.\n- **Rẻ và đơn giản**: không cần server ứng dụng, dễ mở rộng.\n- **Bảo mật**: bề mặt tấn công nhỏ (không có server động để khai thác).\n- **SEO tốt**: HTML có sẵn nội dung.\n\n### Hợp và không hợp\n- Hợp: blog, tài liệu, trang giới thiệu, trang bán hàng, danh mục ít đổi.\n- Không hợp khi nội dung **cá nhân hoá theo người dùng** hoặc đổi từng giây, trừ khi kết hợp tải dữ liệu phía client hoặc **ISR** (làm mới trang theo thời gian/yêu cầu).\n- Thay đổi nội dung nghĩa là phải **build lại**; với site nhiều nghìn trang thời gian build có thể dài.\n\n### Công cụ\nNext.js (`generateStaticParams`, static export), Nuxt, Astro, Eleventy, Hugo, Jekyll, Docusaurus… Nội dung thường từ Markdown hoặc một headless CMS, kích hoạt build lại khi nội dung đổi (webhook).\n\n### Lỗi hay gặp\n- Dùng SSR cho trang hoàn toàn tĩnh, tốn tài nguyên không cần thiết.\n- Quên cơ chế cập nhật nên nội dung lệch khỏi nguồn thật.\n- Đặt khoá bí mật vào bundle vì nghĩ \"build rồi thì an toàn\": mọi thứ trong file tĩnh đều công khai.",
+  "lessons": [
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-17-1-bon-cach-render",
+    "ten": "17.1 — Bốn cách một trang được tạo ra (CSR, SSR, SSG, ISR)",
+    "nguon": "Next.js: The React Framework · Chương 17",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-17-2-tinh-vs-dong",
+    "ten": "17.2 — Tĩnh vs động trong App Router",
+    "nguon": "Next.js: The React Framework · Chương 17",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-11-2-generate-static-params",
+    "ten": "11.2 — generateStaticParams: dựng sẵn route động",
+    "nguon": "Next.js: The React Framework · Chương 11",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Static Site Generators › Eleventy (11ty)": {
+  "body": "Eleventy (11ty) là **trình tạo site tĩnh tối giản** viết bằng JavaScript: đọc thư mục nội dung (Markdown, HTML, Nunjucks, Liquid, JS…), áp dụng layout, ghi ra thư mục `_site/` toàn HTML. Điểm nổi bật: **không ràng buộc framework frontend** và mặc định **không gửi JavaScript** xuống trình duyệt, nên rất nhanh và dễ kiểm soát.\n\n```bash\nnpm init -y && npm i -D @11ty/eleventy\nmkdir src && echo '# Xin chào' > src/index.md\nnpx @11ty/eleventy --serve        # dev có reload; build ra _site/\n```\n```md\n---\ntitle: Bài đầu tiên\nlayout: base.njk\ntags: post\n---\nNội dung bài viết bằng **Markdown**.\n```\n\n### Ý chính\n- **Front matter** (khối YAML đầu file) gắn dữ liệu cho từng trang.\n- **Layout** và template lồng nhau; **collections** (theo `tags`) gom bài thành danh sách; **data cascade** gộp dữ liệu từ nhiều nơi (file `_data`, front matter).\n- Đầu ra tĩnh nên deploy ở đâu cũng được (Netlify, GitHub Pages, Cloudflare Pages).\n- Hợp blog, tài liệu, site giới thiệu. Nếu cần component tương tác nhiều thì chọn Astro hoặc Next.js.\n\n### Lỗi hay gặp\n- Quên cấu hình thư mục input/output (`.eleventy.js`/`eleventy.config.js`) nên build ra chỗ không mong muốn.\n- Đường dẫn tài nguyên sai khi site đặt ở thư mục con (cần `pathPrefix`).",
+  "lessons": [
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-17-1-bon-cach-render",
+    "ten": "17.1 — Bốn cách một trang được tạo ra (CSR, SSR, SSG, ISR)",
+    "nguon": "Next.js: The React Framework · Chương 17",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Static Site Generators › Tạo trang tĩnh (SSG)": {
+  "body": "Tạo trang tĩnh (SSG) nghĩa là **render HTML của các trang một lần, lúc build**, và đưa file kết quả lên CDN/hosting. Mỗi trang là một file sẵn sàng phục vụ ngay.\n\nVí dụ với Next.js App Router, trang động vẫn dựng sẵn được nếu bạn khai báo trước các tham số:\n\n```tsx\n// app/blog/[slug]/page.tsx\nexport async function generateStaticParams() {\n  const posts = await fetch('https://api.example.com/posts').then((r) => r.json());\n  return posts.map((p: { slug: string }) => ({ slug: p.slug }));   // mỗi slug -> một trang tĩnh\n}\n\nexport default async function Post({ params }: { params: Promise<{ slug: string }> }) {\n  const { slug } = await params;\n  const post = await fetch(`https://api.example.com/posts/${slug}`).then((r) => r.json());\n  return <article><h1>{post.title}</h1></article>;\n}\n```\nXuất hoàn toàn thành file tĩnh (không cần server Node) bằng cấu hình `output: 'export'` trong `next.config` (có một số tính năng cần server sẽ không dùng được).\n\n### Ý chính\n- Quy trình: lấy dữ liệu lúc build → render ra HTML → deploy thư mục kết quả.\n- **Dữ liệu đổi** thì cần build lại, hoặc dùng **ISR** (`revalidate`) để làm mới theo thời gian hoặc theo yêu cầu.\n- Trang cần dữ liệu riêng của người dùng: để phần đó tải ở client sau khi trang tĩnh hiện ra.\n- Kiểm bằng `next build`: báo cáo cho biết trang nào là tĩnh (○) và trang nào là động (ƒ). Chỉ cần một API động như `cookies()` hay `headers()` là cả route chuyển thành động.\n- Số lượng trang lớn: có thể chỉ dựng trước các trang phổ biến, trang còn lại dựng khi có request đầu tiên.\n\n### Lỗi hay gặp\n- Tưởng trang là tĩnh nhưng vô tình dùng API động nên bị render theo request.\n- Gọi API không chạy được lúc build (cần biến môi trường hoặc backend chưa chạy trong CI).\n- Quên rằng `NEXT_PUBLIC_*` và dữ liệu lấy lúc build bị \"đóng băng\" trong kết quả.\n\n### Tự kiểm tra\n1. Khi nào SSG không phù hợp?\n2. ISR giải quyết vấn đề gì của SSG?",
+  "lessons": [
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-17-1-bon-cach-render",
+    "ten": "17.1 — Bốn cách một trang được tạo ra (CSR, SSR, SSG, ISR)",
+    "nguon": "Next.js: The React Framework · Chương 17",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-17-2-tinh-vs-dong",
+    "ten": "17.2 — Tĩnh vs động trong App Router",
+    "nguon": "Next.js: The React Framework · Chương 17",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-11-2-generate-static-params",
+    "ten": "11.2 — generateStaticParams: dựng sẵn route động",
+    "nguon": "Next.js: The React Framework · Chương 11",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-17-6-quiz",
+    "ten": "17.6 — Kiểm tra chương 17",
+    "nguon": "Next.js: The React Framework · Chương 17",
+    "kieu": "quiz"
+   }
+  ]
+ },
  "Static Site Generators › VuePress": {
   "body": "VuePress là trình tạo trang tĩnh (static site generator) dựa trên Vue, sinh ra chủ yếu để làm **trang tài liệu**. Bạn viết nội dung bằng Markdown, VuePress biên dịch thành các trang HTML tĩnh, có sẵn thanh điều hướng (navbar), sidebar và giao diện đọc tài liệu. Hình dung: bạn chỉ cần viết file `.md`, còn khung giao diện, định tuyến và tối ưu tải trang đã được lo sẵn.\n\n### Vì sao cần biết\n- Tài liệu dự án, blog kỹ thuật, trang hướng dẫn nội bộ thường dùng generator kiểu này vì rẻ, nhanh, host được ở bất kỳ nơi nào phục vụ file tĩnh (GitHub Pages, Netlify, Cloudflare Pages...).\n- Vì nền là Vue, bạn có thể nhúng component Vue ngay trong Markdown khi cần demo tương tác.\n\n### Ý chính\n- Mỗi file `.md` trong thư mục nguồn tương ứng một đường dẫn trang.\n- Cấu hình nằm trong thư mục `.vuepress/` (ví dụ `config.ts`): tiêu đề, theme, navbar, sidebar, bundler.\n- Theme mặc định đã có navbar, sidebar, chế độ sáng/tối; muốn nhiều tính năng hơn (tìm kiếm, phân tích...) thì thêm plugin.\n- Lệnh `dev` chạy server phát triển có hot reload; lệnh `build` xuất ra thư mục HTML tĩnh để deploy.\n\n```ts\n// docs/.vuepress/config.ts\nimport { defineUserConfig } from 'vuepress'\nimport { defaultTheme } from '@vuepress/theme-default'\nimport { viteBundler } from '@vuepress/bundler-vite'\n\nexport default defineUserConfig({\n  lang: 'vi-VN',\n  title: 'Tài liệu của tôi',\n  theme: defaultTheme({\n    navbar: [{ text: 'Hướng dẫn', link: '/guide/' }],\n  }),\n  bundler: viteBundler(),\n})\n```\n\n### Lưu ý khi chọn công cụ\nVuePress không phải lựa chọn duy nhất: VitePress (cùng hệ sinh thái Vue, nhẹ hơn) hay Docusaurus, Astro Starlight cũng làm tài liệu rất tốt. Với dự án mới, hãy so sánh theo nhu cầu (ngôn ngữ nền, plugin, cộng đồng) thay vì chọn theo tên.\n\n### Lỗi hay gặp\n- Trộn lẫn tài liệu VuePress 1 và 2: cấu hình, tên package và API khác nhau, hãy kiểm tra phiên bản bạn đang đọc.\n- Quên đặt `base` khi deploy vào đường dẫn con (ví dụ GitHub Pages dạng `/ten-repo/`), khiến CSS/JS 404.",
   "more": [

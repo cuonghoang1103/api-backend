@@ -42,6 +42,7 @@ export const T = {
     stages: 'stages', steps: 'steps', withLessons: 'with lessons',
     open: 'Open roadmap', noMatch: 'No roadmap matches', empty: 'No roadmaps yet.',
     // detail
+    coursesCover: 'Courses on CuongThai that cover this roadmap', coversSteps: (n: number) => `covers ${n} steps`,
     back: 'All roadmaps', contents: 'Contents', done: 'done', resume: 'Continue', start: 'Start here',
     searchSteps: (n: number) => `Search ${n} steps…`,
     fAll: 'All steps', fTodo: 'Not done', fLinked: 'Has lessons', fCore: 'Core only',
@@ -69,6 +70,7 @@ export const T = {
     continueLearning: 'Đang học dở',
     stages: 'chặng', steps: 'bước', withLessons: 'có bài học',
     open: 'Xem lộ trình', noMatch: 'Không có lộ trình nào khớp', empty: 'Chưa có lộ trình nào.',
+    coursesCover: 'Khoá trên CuongThai phủ lộ trình này', coversSteps: (n: number) => `phủ ${n} bước`,
     back: 'Tất cả lộ trình', contents: 'Mục lục', done: 'xong', resume: 'Học tiếp', start: 'Bắt đầu',
     searchSteps: (n: number) => `Tìm trong ${n} bước…`,
     fAll: 'Tất cả', fTodo: 'Chưa xong', fLinked: 'Có bài học', fCore: 'Bước chính',

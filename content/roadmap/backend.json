@@ -683,6 +683,812 @@
  "Chọn MỘT ngôn ngữ › Pick a Backend Language": {
   "body": "Câu hỏi \"học ngôn ngữ nào\" thường làm người mới tốn cả tháng. Hãy ra quyết định có tiêu chí rồi cam kết ít nhất vài tháng.\n\n### Tiêu chí\n- **Thị trường việc làm** ở nơi bạn muốn làm: xem tin tuyển dụng thật, hỏi người trong nghề.\n- **Hệ sinh thái**: framework trưởng thành, ORM, thư viện xác thực, kiểm thử, tài liệu tiếng Việt/Anh.\n- **Hiệu năng và mô hình chạy**: Node/Python mạnh I/O và phát triển nhanh; Java/C#/Go mạnh hiệu năng ổn định và hệ thống lớn.\n- **Đường cong học** và nền tảng sẵn có của bạn (đã biết JavaScript thì Node.js là bước ngắn nhất).\n- **Khả năng debug và công cụ**: IDE, debugger, profiler.\n\n### Gợi ý theo mục tiêu\n| Mục tiêu | Lựa chọn thực tế |\n|---|---|\n| Làm web/startup nhanh, quen JavaScript | Node.js + TypeScript |\n| Dữ liệu, AI, tự động hoá | Python (FastAPI/Django) |\n| Doanh nghiệp, ngân hàng | Java (Spring Boot) hoặc C# (.NET) |\n| Dịch vụ hiệu năng cao, hạ tầng | Go |\n\n### Cách làm cho đúng\nLàm **một dự án đầy đủ** (xác thực, CRUD, cơ sở dữ liệu, test, deploy) bằng ngôn ngữ đã chọn thay vì xem thêm so sánh. Hiểu sâu một ngôn ngữ rồi, ngôn ngữ thứ hai học rất nhanh.\n\n### Lỗi hay gặp\n- Chọn theo xu hướng mạng xã hội, không xét mục tiêu nghề nghiệp.\n- Học cú pháp mà bỏ qua nền tảng chung (HTTP, SQL, kiểm thử).\n\n### Tự kiểm tra\nMục tiêu nghề nghiệp 12 tháng tới của bạn là gì, và ngôn ngữ nào phục vụ nó tốt nhất?"
  },
+ "Version Control & Repo Hosting › Git": {
+  "body": "**Git** là hệ thống quản lý phiên bản phân tán: nó lưu lịch sử mọi thay đổi của mã nguồn, cho phép nhiều người làm song song trên các **nhánh** rồi **gộp** lại, và quay về bất kỳ thời điểm nào khi có sự cố. Mỗi bản sao (clone) chứa toàn bộ lịch sử, nên bạn làm việc offline được.\n\n### Mô hình ba vùng\n`thư mục làm việc` → (`git add`) → `staging (index)` → (`git commit`) → `kho cục bộ` → (`git push`) → `remote`. Mỗi **commit** là một ảnh chụp toàn bộ cây thư mục kèm tác giả, thời gian, lời nhắn và con trỏ tới commit cha. **Nhánh** chỉ là một con trỏ tới một commit.\n\n### Lệnh hằng ngày\n```bash\ngit clone <url>\ngit switch -c feature/login        # tạo nhánh\ngit add -p && git commit -m \"feat: thêm đăng nhập\"\ngit fetch && git rebase origin/main  # hoặc git merge\ngit push -u origin feature/login\ngit log --oneline --graph\ngit restore <file>                  # bỏ thay đổi chưa commit\n```\n\n### Ý chính\n- Commit nhỏ, một ý, lời nhắn rõ ràng.\n- **merge** giữ nguyên lịch sử rẽ nhánh; **rebase** phát lại commit lên đầu nhánh khác để lịch sử thẳng (không rebase nhánh đã chia sẻ).\n- `.gitignore` loại bỏ `node_modules`, build, `.env`.\n- `git revert` hoàn tác an toàn trên lịch sử chung; `git reflog` cứu commit \"mất\".\n\n### Lỗi hay gặp\n- Commit bí mật (khoá API, `.env`): xoá khỏi lịch sử không đủ, phải **thu hồi và đổi** khoá.\n- `git push --force` lên nhánh chung; dùng `--force-with-lease` và chỉ trên nhánh của mình.\n- Làm trực tiếp trên `main`.\n\n### Tự kiểm tra\n1. Khác nhau giữa `git fetch` và `git pull`?\n2. Bạn lỡ commit nhầm lên `main` chưa push: cứu bằng cách nào?",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-1-0-slides",
+    "ten": "1.0 — Slide Chương 1: mô hình Git bằng hình",
+    "nguon": "Git & GitHub · Chương 1",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-1-3-vong-lap-hang-ngay",
+    "ten": "1.3 — Vòng lặp hằng ngày: add, commit, diff — và add -p",
+    "nguon": "Git & GitHub · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-3-1-nhanh-la-gi",
+    "ten": "3.1 — Một nhánh là một file 41 byte",
+    "nguon": "Git & GitHub · Chương 3",
+    "kieu": "video"
+   },
+   {
+    "href": "/simulation?scenario=git-flow",
+    "ten": "Git — bốn vùng chứa và cái nhãn tên nhánh",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   },
+   {
+    "href": "/code-lab/git",
+    "ten": "Git",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Version Control & Repo Hosting › GitHub": {
+  "body": "**GitHub** là nền tảng lưu trữ kho Git trên đám mây kèm công cụ cộng tác: **Pull Request** (đề xuất và review thay đổi), **Issues** và **Projects** (quản lý việc), **Actions** (CI/CD), cùng các tính năng bảo mật như Dependabot và quét bí mật.\n\n### Ý chính\n- Quy trình phổ biến: tạo nhánh → đẩy lên → mở PR → review và CI chạy → merge (merge commit, squash hoặc rebase).\n- **Bảo vệ nhánh** (`main`): bắt buộc PR, bắt buộc review, bắt buộc CI xanh.\n- Xác thực bằng khoá **SSH** hoặc token truy cập; không bao giờ dán mật khẩu hay token vào code.\n- **GitHub Actions** chạy workflow YAML khi có push/PR để test và deploy.\n- Hồ sơ GitHub là một phần của CV lập trình viên.\n\n### Lỗi hay gặp\n- Đẩy file `.env` lên kho công khai (bot quét lấy khoá trong vài phút).\n- PR quá lớn, không ai review kỹ; chia nhỏ.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-11-0-slides",
+    "ten": "11.0 — Slide Chương 11: nền tảng GitHub bằng hình",
+    "nguon": "Git & GitHub · Chương 11",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-5-1-remote-fetch-pull",
+    "ten": "5.1 — Remote là gì, và vì sao fetch ≠ pull",
+    "nguon": "Git & GitHub · Chương 5",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-6-1-giai-phau-pr",
+    "ten": "6.1 — Giải phẫu một pull request thật sự được review",
+    "nguon": "Git & GitHub · Chương 6",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-11-1-issue-projects-gh",
+    "ten": "11.1 — Issue, Projects & CLI gh",
+    "nguon": "Git & GitHub · Chương 11",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-kd-4-truong-nhom-tao-repo",
+    "ten": "KĐ.4 — Trưởng nhóm tạo repo: trên github.com hoặc từ terminal",
+    "nguon": "Git & GitHub · Khởi động nhanh — Làm việc nhóm trên Git",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Version Control & Repo Hosting › GitLab / Bitbucket": {
+  "body": "**GitLab** và **Bitbucket** là hai lựa chọn thay GitHub, cùng dùng Git nhưng khác thế mạnh.\n\n- **GitLab**: nền tảng DevOps trọn gói (kho, merge request, CI/CD tích hợp bằng `.gitlab-ci.yml`, container registry, quét bảo mật), có thể **tự host** (self-managed) khi doanh nghiệp cần giữ dữ liệu nội bộ. Nhiều trường đại học và công ty dùng GitLab cho dự án nhóm.\n- **Bitbucket** (Atlassian): tích hợp chặt với Jira, Trello; có Bitbucket Pipelines cho CI/CD.\n\nKhái niệm Git không đổi: đổi nền tảng chỉ đổi giao diện (Pull Request ↔ Merge Request) và cú pháp pipeline.\n\n### Lỗi hay gặp\n- Gắn chặt toàn bộ quy trình vào cú pháp CI riêng của một nền tảng; giữ các bước build/test ở script chạy được cục bộ.",
+  "lessons": [
+   {
+    "href": "/courses/software-development-project/learn?lessonSlug=swp391-1-3-gitlab-setup-du-an",
+    "ten": "1.3 — Dựng project GitLab: repo, thành viên, nhánh bảo vệ, label & milestone",
+    "nguon": "Software Development Project · Chương 1",
+    "kieu": "lab",
+    "academy": true,
+    "ma": "SWP391"
+   },
+   {
+    "href": "/courses/software-development-project/learn?lessonSlug=swp391-9-1-docker-devops",
+    "ten": "9.1 — Docker & GitLab CI cho dự án Java web + MySQL",
+    "nguon": "Software Development Project · Chương 9",
+    "kieu": "lab",
+    "academy": true,
+    "ma": "SWP391"
+   }
+  ]
+ },
+ "Version Control & Repo Hosting › Version Control Systems": {
+  "body": "**Hệ thống quản lý phiên bản (VCS)** ghi lại lịch sử thay đổi của tệp để bạn so sánh, quay lui, cộng tác và truy vết ai đã sửa gì, khi nào, vì sao.\n\n### Ba thế hệ\n- **Cục bộ** (RCS): lịch sử nằm trên một máy, không cộng tác được.\n- **Tập trung** (CVS, Subversion/SVN): một máy chủ trung tâm giữ lịch sử; cần kết nối khi commit; máy chủ hỏng là rủi ro.\n- **Phân tán** (Git, Mercurial): mỗi người có bản sao đầy đủ lịch sử; commit, tạo nhánh, xem log đều làm offline; nhánh rất rẻ.\n\n### Vì sao quan trọng với dự án\nVCS hỗ trợ **nhánh** để làm song song, **code review** qua pull/merge request, **rollback** khi release lỗi, **truy vết** (`blame`, `bisect`) và là nền của CI/CD. Nhờ nhánh rẻ, nhiều đội dùng quy trình như GitHub Flow hoặc trunk-based development.\n\n### Lỗi hay gặp\n- Dùng VCS như nơi sao lưu tệp lớn nhị phân; dùng Git LFS hoặc lưu trữ đối tượng.\n- Commit khổng lồ gộp nhiều thay đổi không liên quan, khó review và khó hoàn tác.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-0-5-bat-dau-tai-day",
+    "ten": "Bắt đầu tại đây (1/2) — Git và GitHub là gì, ra đời thế nào, và vì sao quan trọng với bạn",
+    "nguon": "Git & GitHub · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-0-2-van-de-git-giai-quyet",
+    "ten": "0.2 — Vấn đề Git giải quyết (và vì sao thư mục thì không)",
+    "nguon": "Git & GitHub · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-7-1-chien-luoc-nhanh",
+    "ten": "7.1 — Chiến lược nhánh: trunk-based, GitHub flow, git-flow",
+    "nguon": "Git & GitHub · Chương 7",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Version Control & Repo Hosting › GitLab": {
+  "body": "**GitLab** là nền tảng DevOps tích hợp: kho Git, **Merge Request**, CI/CD, container registry, quản lý issue và quét bảo mật trong cùng một giao diện; có thể dùng bản đám mây hoặc **tự host**.\n\n### CI/CD với `.gitlab-ci.yml`\nPipeline gồm các **stage** chạy tuần tự, mỗi stage có nhiều **job** chạy song song trên **runner**.\n\n```yaml\nstages: [test, build]\n\ntest:\n  stage: test\n  image: node:22\n  script:\n    - npm ci\n    - npm test\n\nbuild:\n  stage: build\n  script:\n    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA .\n```\n\n### Ý chính\n- **Protected branches** và quy tắc phê duyệt bắt buộc review trước khi merge vào `main`.\n- Biến CI/CD (đánh dấu *masked/protected*) để giữ bí mật; không ghi vào YAML.\n- **Container Registry** tích hợp để lưu image sau khi build.\n\n### Lỗi hay gặp\n- Để lộ bí mật trong log pipeline vì in biến môi trường.\n- Runner dùng chung chạy job không đáng tin cậy với quyền cao.",
+  "lessons": [
+   {
+    "href": "/courses/software-development-project/learn?lessonSlug=swp391-1-3-gitlab-setup-du-an",
+    "ten": "1.3 — Dựng project GitLab: repo, thành viên, nhánh bảo vệ, label & milestone",
+    "nguon": "Software Development Project · Chương 1",
+    "kieu": "lab",
+    "academy": true,
+    "ma": "SWP391"
+   },
+   {
+    "href": "/courses/software-development-project/learn?lessonSlug=swp391-9-1-docker-devops",
+    "ten": "9.1 — Docker & GitLab CI cho dự án Java web + MySQL",
+    "nguon": "Software Development Project · Chương 9",
+    "kieu": "lab",
+    "academy": true,
+    "ma": "SWP391"
+   }
+  ]
+ },
+ "Version Control & Repo Hosting › Repo Hosting Services": {
+  "body": "Ba nền tảng lưu trữ kho Git phổ biến có nhiều điểm chung (pull/merge request, issue, CI) nhưng khác trọng tâm.\n\n| Nền tảng | Điểm mạnh |\n|---|---|\n| **GitHub** | Cộng đồng mã nguồn mở lớn nhất, Actions, hồ sơ cá nhân làm \"CV\" |\n| **GitLab** | DevOps tích hợp trọn gói, tự host được |\n| **Bitbucket** | Liền mạch với Jira/Trello của Atlassian |\n\n### Chọn thế nào\n- Dự án mở hoặc cần cộng đồng: GitHub.\n- Cần giữ mã trong hạ tầng riêng, muốn một nền tảng cho cả CI/CD và bảo mật: GitLab.\n- Đội đã dùng Jira là chính: Bitbucket.\n\n### Việc cần làm dù chọn nền tảng nào\nBảo vệ nhánh chính, bắt buộc review và CI xanh trước khi merge, bật quét bí mật và cảnh báo phụ thuộc, dùng khoá SSH/token có phạm vi hẹp, và sao lưu hoặc có kế hoạch di chuyển (mã nằm trong Git nên di chuyển tương đối dễ).",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-6-4-bao-ve-nhanh",
+    "ten": "6.4 — Bảo vệ nhánh, CODEOWNERS & kiểm tra bắt buộc",
+    "nguon": "Git & GitHub · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-11-4-bao-mat-kho",
+    "ten": "11.3 — Bảo mật & quản trị kho trên GitHub",
+    "nguon": "Git & GitHub · Chương 11",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/software-development-project/learn?lessonSlug=swp391-1-3-gitlab-setup-du-an",
+    "ten": "1.3 — Dựng project GitLab: repo, thành viên, nhánh bảo vệ, label & milestone",
+    "nguon": "Software Development Project · Chương 1",
+    "kieu": "lab",
+    "academy": true,
+    "ma": "SWP391"
+   }
+  ]
+ },
+ "Cơ sở dữ liệu quan hệ › PostgreSQL": {
+  "body": "**PostgreSQL** là cơ sở dữ liệu quan hệ mã nguồn mở mạnh và đầy đủ: tuân thủ chuẩn SQL tốt, giao dịch ACID, kiểu dữ liệu phong phú (`jsonb`, mảng, `uuid`, `timestamptz`), chỉ mục đa dạng và hệ mở rộng (PostGIS, pg_trgm...). Đây là lựa chọn mặc định hợp lý cho hầu hết ứng dụng backend mới.\n\n### Ý chính\n- **Mô hình quan hệ**: bảng, hàng, cột; khoá chính (PK), khoá ngoại (FK), ràng buộc (`NOT NULL`, `UNIQUE`, `CHECK`) để cơ sở dữ liệu tự giữ tính toàn vẹn.\n- **SQL**: `SELECT ... WHERE`, `JOIN`, `GROUP BY`, CTE (`WITH`), hàm cửa sổ.\n- **Chỉ mục** (B-tree mặc định, thêm GIN, BRIN, GiST) và `EXPLAIN ANALYZE` để hiểu truy vấn.\n- **MVCC**: người đọc không chặn người ghi.\n\n```sql\nCREATE TABLE orders (\n  id          bigserial PRIMARY KEY,\n  user_id     bigint NOT NULL REFERENCES users(id),\n  total_cents integer NOT NULL CHECK (total_cents >= 0),\n  created_at  timestamptz NOT NULL DEFAULT now()\n);\nCREATE INDEX ON orders (user_id, created_at DESC);\n\nSELECT u.name, count(*) AS n\nFROM orders o JOIN users u ON u.id = o.user_id\nGROUP BY u.name ORDER BY n DESC LIMIT 10;\n```\n\n### Lỗi hay gặp\n- Lưu tiền bằng `float` (dùng số nguyên theo đơn vị nhỏ nhất hoặc `numeric`).\n- Dùng `timestamp` không múi giờ; ưu tiên `timestamptz`.\n- Không có chỉ mục trên cột khoá ngoại thường lọc/join.\n- Ghép chuỗi vào SQL thay vì tham số hoá.\n\n### Tự kiểm tra\n1. Khi nào `LEFT JOIN` khác `INNER JOIN` về kết quả?\n2. Vì sao một truy vấn có chỉ mục vẫn có thể chọn quét tuần tự (Seq Scan)?",
+  "lessons": [
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-0-1-gioi-thieu",
+    "ten": "0.1 — Về khoá học này & bản đồ toàn khoá",
+    "nguon": "PostgreSQL · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-1-1-mo-hinh-quan-he",
+    "ten": "1.1 — Mô hình quan hệ & vì sao nó thắng",
+    "nguon": "PostgreSQL · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-5-1-inner-join",
+    "ten": "5.1 — INNER JOIN: ráp các dòng lại với nhau",
+    "nguon": "PostgreSQL · Chương 5",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-9-1-chi-muc-la-gi",
+    "ten": "9.1 — Chỉ mục là gì: B-tree, Seq Scan vs Index Scan",
+    "nguon": "PostgreSQL · Chương 9",
+    "kieu": "video"
+   },
+   {
+    "href": "/code-lab/postgresql-practice",
+    "ten": "PostgreSQL — Luyện tập SQL chấm thật",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Cơ sở dữ liệu quan hệ › MySQL / MariaDB": {
+  "body": "**MySQL** là hệ quản trị cơ sở dữ liệu quan hệ rất phổ biến, đặc biệt với PHP/WordPress, hosting chia sẻ và nhiều startup. **MariaDB** là nhánh (fork) mã nguồn mở do chính những người sáng lập MySQL tạo ra, tương thích cao với MySQL.\n\n### Ý chính\n- Engine lưu trữ mặc định hiện nay là **InnoDB**: có transaction ACID, khoá cấp hàng, khoá ngoại. (Engine cũ MyISAM không có transaction.)\n- SQL gần giống PostgreSQL nhưng có khác biệt: `AUTO_INCREMENT` thay cho sequence, dấu backtick để trích định danh, và một số hành vi mặc định khác.\n- Phù hợp khi hệ thống sẵn có đã dùng MySQL hoặc hosting chỉ hỗ trợ nó.\n\n### Lỗi hay gặp\n- Dùng `utf8` (chỉ 3 byte) thay vì `utf8mb4`, làm mất emoji.\n- Giả định hành vi nghiêm ngặt (strict mode) như PostgreSQL khi cấu hình lỏng.",
+  "lessons": [
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-1-3-vs-alternatives",
+    "ten": "1.3 — PostgreSQL vs MySQL, SQLite & NoSQL",
+    "nguon": "PostgreSQL · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-17-1-bon-he-csdl",
+    "ten": "17.1 — Bốn hệ cơ sở dữ liệu",
+    "nguon": "PostgreSQL · Chương 17",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Cơ sở dữ liệu quan hệ › MS SQL Server / Oracle": {
+  "body": "**Microsoft SQL Server** và **Oracle Database** là hai cơ sở dữ liệu quan hệ thương mại, rất phổ biến ở doanh nghiệp lớn, ngân hàng, viễn thông. Cả hai có ngôn ngữ mở rộng riêng cho lập trình bên trong cơ sở dữ liệu: **T-SQL** (SQL Server) và **PL/SQL** (Oracle).\n\n### Ý chính\n- Kiến thức SQL chuẩn (SELECT, JOIN, GROUP BY, transaction) dùng lại được; khác nhau ở phương ngữ (ví dụ `TOP n` của SQL Server, `FETCH FIRST n ROWS ONLY` của Oracle), kiểu dữ liệu, tự tăng (`IDENTITY` so với sequence).\n- Đi kèm công cụ quản trị riêng, tính năng sẵn sàng cao và hỗ trợ thương mại.\n- Chi phí bản quyền và vận hành thường cao hơn PostgreSQL/MySQL.\n\n### Khi nào gặp\nHệ thống doanh nghiệp có sẵn, hệ sinh thái .NET/Azure (SQL Server), hay ngân hàng, viễn thông (Oracle). Học SQL chuẩn vững trước, phương ngữ sẽ dễ chuyển.",
+  "lessons": [
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-0-5-tu-sql-server-mysql",
+    "ten": "0.5 — Từ SQL Server / MySQL sang PostgreSQL",
+    "nguon": "PostgreSQL · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-17-2-cung-truy-van-ba-he",
+    "ten": "17.2 — Cùng truy vấn trên ba máy chủ SQL",
+    "nguon": "PostgreSQL · Chương 17",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/introduction-to-databases/learn?lessonSlug=dbi202-cai-dat",
+    "ten": "0.3 — Cài SQL Server & SSMS",
+    "nguon": "Database Systems · Mục 0",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DBI202"
+   }
+  ]
+ },
+ "Cơ sở dữ liệu quan hệ › SQLite": {
+  "body": "**SQLite** là cơ sở dữ liệu quan hệ **nhúng**: toàn bộ dữ liệu nằm trong một tệp, không có tiến trình máy chủ riêng; ứng dụng liên kết thư viện và đọc/ghi tệp trực tiếp. Nó nằm trong điện thoại, trình duyệt và vô số ứng dụng.\n\n### Ý chính\n- Không cần cài đặt hay cấu hình; rất hợp app di động, công cụ CLI, thử nghiệm, test, và dịch vụ nhỏ ít ghi.\n- Hỗ trợ transaction ACID. Chỉ cho **một người ghi tại một thời điểm** (bật chế độ WAL giúp đọc song song khi ghi).\n- Kiểu dữ liệu \"linh hoạt\" (type affinity), nên không chặt như PostgreSQL.\n- Không hợp khi nhiều tiến trình/máy cần ghi đồng thời qua mạng.\n\n```bash\nsqlite3 app.db \"CREATE TABLE t(id INTEGER PRIMARY KEY, name TEXT); INSERT INTO t(name) VALUES('an'); SELECT * FROM t;\"\n```\n\n### Lỗi hay gặp\n- Dùng SQLite làm cơ sở dữ liệu production cho dịch vụ nhiều ghi đồng thời, rồi gặp `database is locked`.\n- Test bằng SQLite nhưng production dùng PostgreSQL: khác biệt hành vi che giấu lỗi.",
+  "lessons": [
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-1-3-vs-alternatives",
+    "ten": "1.3 — PostgreSQL vs MySQL, SQLite & NoSQL",
+    "nguon": "PostgreSQL · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/edb201-database-application/learn?lessonSlug=edb201-ts-6-3",
+    "ten": "6.3 — Giao dịch trong SQLite",
+    "nguon": "Database Application · Chương 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "EDB201"
+   }
+  ]
+ },
+ "Cơ sở dữ liệu quan hệ › MS SQL Server": {
+  "body": "**Microsoft SQL Server** là hệ quản trị cơ sở dữ liệu quan hệ của Microsoft, rất phổ biến trong môi trường doanh nghiệp và .NET. Ngôn ngữ mở rộng là **T-SQL**: biến, `IF`, vòng lặp, xử lý lỗi `TRY...CATCH`, thủ tục lưu sẵn, hàm, trigger.\n\n### Ý chính\n- Công cụ: **SQL Server Management Studio (SSMS)**, Azure Data Studio.\n- **Stored procedure** đóng gói logic chạy phía cơ sở dữ liệu; **view** che đi truy vấn phức tạp; **trigger** chạy tự động khi dữ liệu đổi (với bảng ảo `inserted`/`deleted`).\n- Phương ngữ: `TOP`, `IDENTITY`, `GETDATE()`, `NVARCHAR` cho Unicode.\n- Tích hợp với Azure, Power BI, SSIS.\n\n```sql\nCREATE PROCEDURE dbo.GetOrdersByUser @UserId INT AS\nBEGIN\n  SELECT TOP 20 * FROM Orders WHERE UserId = @UserId ORDER BY CreatedAt DESC;\nEND;\n```\n\n### Lỗi hay gặp\n- Đặt quá nhiều logic nghiệp vụ trong trigger, khó kiểm thử và gỡ lỗi.\n- Quên tham số hoá, mở lỗ hổng SQL injection khi ghép chuỗi trong thủ tục động.",
+  "lessons": [
+   {
+    "href": "/courses/introduction-to-databases/learn?lessonSlug=dbi202-cai-dat",
+    "ten": "0.3 — Cài SQL Server & SSMS",
+    "nguon": "Database Systems · Mục 0",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DBI202"
+   },
+   {
+    "href": "/courses/introduction-to-databases/learn?lessonSlug=dbi202-slide-dbi9-1",
+    "ten": "7.A — 📑 Học theo từng slide · T-SQL cơ bản: biến, IF, CASE, WHILE, xử lý lỗi (Chapter 8, 1–19)",
+    "nguon": "Database Systems · Chương 7",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "DBI202"
+   },
+   {
+    "href": "/courses/introduction-to-databases/learn?lessonSlug=dbi202-proc-function",
+    "ten": "7.3 — Thủ tục & hàm lưu trữ",
+    "nguon": "Database Systems · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DBI202"
+   },
+   {
+    "href": "/courses/introduction-to-databases/learn?lessonSlug=dbi202-view",
+    "ten": "7.2 — View: bảng ảo che đi sự phức tạp",
+    "nguon": "Database Systems · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DBI202"
+   },
+   {
+    "href": "/code-lab/dbi202-practice",
+    "ten": "DBI202 — Luyện tập SQL",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Cơ sở dữ liệu quan hệ › MySQL": {
+  "body": "**MySQL** là cơ sở dữ liệu quan hệ phổ biến nhất trên shared hosting và nhiều startup. Điểm cần học:\n\n### Ý chính\n- **InnoDB** (engine mặc định): transaction ACID, khoá cấp hàng, khoá ngoại, phục hồi sau sự cố.\n- **Công cụ**: MySQL Workbench, `mysql` CLI.\n- **Sao chép (replication)**: nguồn – bản sao (trước gọi master–slave) để tách tải đọc và dự phòng; có cả nhóm nhân bản nhiều nguồn.\n- **Chỉ mục và tối ưu**: `EXPLAIN`, chỉ mục B-tree, chỉ mục ghép; slow query log để tìm truy vấn chậm.\n- **Phân vùng (partitioning)** cho bảng rất lớn.\n\n```sql\nEXPLAIN SELECT * FROM orders WHERE user_id = 42 ORDER BY created_at DESC LIMIT 20;\n```\n\n### Lỗi hay gặp\n- Bảng/cột dùng sai bộ ký tự (`utf8mb4` mới đủ Unicode).\n- Đọc từ bản sao ngay sau khi ghi ở nguồn và gặp dữ liệu cũ do trễ sao chép.",
+  "lessons": [
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-0-5-tu-sql-server-mysql",
+    "ten": "0.5 — Từ SQL Server / MySQL sang PostgreSQL",
+    "nguon": "PostgreSQL · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-17-2-cung-truy-van-ba-he",
+    "ten": "17.2 — Cùng truy vấn trên ba máy chủ SQL",
+    "nguon": "PostgreSQL · Chương 17",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Cơ sở dữ liệu quan hệ › Oracle Database": {
+  "body": "**Oracle Database** là hệ quản trị cơ sở dữ liệu quan hệ thương mại mạnh về tính sẵn sàng và quy mô, phổ biến trong ngân hàng, bảo hiểm, viễn thông.\n\n### Ý chính\n- **PL/SQL**: ngôn ngữ thủ tục bên trong cơ sở dữ liệu với procedure, function, **package**, trigger.\n- Kiến trúc doanh nghiệp: **RAC** (nhiều máy cùng phục vụ một cơ sở dữ liệu), **Data Guard** (bản dự phòng đồng bộ), phân vùng, sao lưu RMAN.\n- Công cụ: SQL\\*Plus, SQL Developer.\n- Phương ngữ riêng: sequence thay cho tự tăng, `ROWNUM` hoặc `FETCH FIRST`, và một điểm khác biệt nổi tiếng: chuỗi rỗng được coi là `NULL` với `VARCHAR2`.\n\n### Lỗi hay gặp\n- Giả định cú pháp giống PostgreSQL/MySQL, gặp lỗi khi chuyển phương ngữ.\n- Đánh giá thấp chi phí bản quyền khi mở rộng.\n\nNếu mục tiêu là học nền tảng, hãy vững SQL chuẩn và PostgreSQL trước; Oracle chỉ học thêm khi nơi làm việc yêu cầu."
+ },
+ "Cơ sở dữ liệu quan hệ › MariaDB": {
+  "body": "**MariaDB** là nhánh mã nguồn mở của MySQL do những người sáng lập MySQL khởi xướng sau khi Oracle mua lại MySQL. Ban đầu nó là bản thay thế \"drop-in\" (đổi vào là chạy), nhưng hai bên đã phân kỳ dần nên cần kiểm tra khi chuyển.\n\n### Ý chính\n- Giữ giao thức và phần lớn SQL tương thích MySQL; giấy phép hoàn toàn tự do.\n- Nhiều engine lưu trữ: **InnoDB**, **Aria**, **ColumnStore** (phân tích dạng cột), cộng **Galera Cluster** cho nhân bản đa nguồn đồng bộ.\n- Có thread pool, cột ảo (virtual/generated columns), và một số tính năng riêng.\n- Nhiều bản phân phối Linux dùng MariaDB làm \"MySQL\" mặc định.\n\n### Lỗi hay gặp\n- Giả định mọi tính năng MySQL mới đều có ở MariaDB và ngược lại; đọc ghi chú tương thích của từng phiên bản."
+ },
+ "Cơ sở dữ liệu quan hệ › Relational Databases": {
+  "body": "**Cơ sở dữ liệu quan hệ** lưu dữ liệu trong các **bảng** (hàng = bản ghi, cột = thuộc tính) và liên kết chúng bằng khoá.\n\n### Ý chính\n- **Khoá chính (PK)** định danh duy nhất mỗi hàng; **khoá ngoại (FK)** trỏ tới khoá chính bảng khác và được cơ sở dữ liệu kiểm tra (toàn vẹn tham chiếu).\n- **Ràng buộc**: `NOT NULL`, `UNIQUE`, `CHECK`, `DEFAULT`.\n- **JOIN**: `INNER` (chỉ hàng khớp), `LEFT`/`RIGHT` (giữ cả bên không khớp), `FULL`.\n- **Chuẩn hoá** (1NF → 3NF): mỗi sự thật lưu một chỗ, tránh dư thừa và lỗi cập nhật; đôi khi phi chuẩn hoá có chủ đích để đọc nhanh.\n- **Giao dịch và ACID** giữ dữ liệu nhất quán.\n\n```sql\nSELECT c.name, o.total\nFROM customers c LEFT JOIN orders o ON o.customer_id = c.id;\n```\n\n### Lỗi hay gặp\n- Không đặt khoá ngoại \"cho nhanh\", rồi dữ liệu mồ côi tích tụ.\n- Lưu danh sách giá trị trong một cột chuỗi thay vì bảng riêng.",
+  "lessons": [
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-1-1-mo-hinh-quan-he",
+    "ten": "1.1 — Mô hình quan hệ & vì sao nó thắng",
+    "nguon": "PostgreSQL · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-3-1-khoa-chinh",
+    "ten": "3.1 — Khoá chính: danh tính của một dòng",
+    "nguon": "PostgreSQL · Chương 3",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-3-2-khoa-ngoai",
+    "ten": "3.2 — Khoá ngoại & toàn vẹn tham chiếu",
+    "nguon": "PostgreSQL · Chương 3",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-5-1-inner-join",
+    "ten": "5.1 — INNER JOIN: ráp các dòng lại với nhau",
+    "nguon": "PostgreSQL · Chương 5",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-3-4-alter-chuan-hoa",
+    "ten": "3.4 — Tiến hoá lược đồ: ALTER TABLE & chuẩn hoá",
+    "nguon": "PostgreSQL · Chương 3",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Cơ sở dữ liệu quan hệ › Giới thiệu ORM": {
+  "body": "**ORM (Object-Relational Mapper)** ánh xạ bảng cơ sở dữ liệu thành **đối tượng/lớp** trong code, để bạn đọc và ghi dữ liệu bằng ngôn ngữ lập trình thay vì viết SQL thuần ở mọi chỗ. Ví dụ: Prisma, TypeORM, Sequelize (Node), SQLAlchemy, Django ORM (Python), Hibernate/JPA (Java), Entity Framework (C#), ActiveRecord (Ruby).\n\n### Vì sao dùng ORM\n- Giảm code lặp (CRUD), có kiểu dữ liệu và gợi ý trong IDE.\n- Quản lý **migration** (thay đổi schema có phiên bản).\n- Tham số hoá truy vấn mặc định, giúp tránh SQL injection.\n\n### Cái giá phải hiểu\n- **Lệch trở kháng**: mô hình đối tượng và mô hình quan hệ không khớp hoàn toàn (kế thừa, quan hệ nhiều-nhiều).\n- **N+1 truy vấn**: tải danh sách rồi lặp lấy quan hệ từng cái một.\n- SQL sinh ra có thể kém tối ưu; truy vấn phức tạp (báo cáo, hàm cửa sổ) nên viết SQL thô.\n\n```ts\n// Prisma: một câu lệnh, kèm quan hệ bằng JOIN/2 truy vấn thay vì N+1\nconst users = await prisma.user.findMany({\n  where: { active: true },\n  include: { orders: true },\n});\n```\n\n### Lỗi hay gặp\n- Dùng ORM để khỏi học SQL; rồi không đọc nổi truy vấn nó sinh ra. Hãy bật log truy vấn.\n- Không đặt chỉ mục vì \"ORM lo hết\".\n\n### Tự kiểm tra\n1. N+1 là gì và nhận ra nó bằng cách nào?\n2. Khi nào bạn chọn SQL thô thay vì ORM?",
+  "lessons": [
+   {
+    "href": "/courses/prisma-orm/learn?lessonSlug=pr-0-8-bat-dau-tai-day",
+    "ten": "Bắt đầu tại đây (1/2) — Prisma là gì, học để làm gì, và lộ trình",
+    "nguon": "Prisma ORM · Mục 0",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/prisma-orm/learn?lessonSlug=pr-1-1-lech-tro-khang",
+    "ten": "1.1 — Lệch trở kháng giữa hàng và đối tượng",
+    "nguon": "Prisma ORM · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/prisma-orm/learn?lessonSlug=pr-1-3-thanh-sql",
+    "ten": "1.3 — Một câu truy vấn thành SQL như thế nào",
+    "nguon": "Prisma ORM · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/prisma-orm/learn?lessonSlug=pr-9-2-n-cong-1",
+    "ten": "9.2 — N+1 ở đủ mọi dạng",
+    "nguon": "Prisma ORM · Chương 9",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/code-lab/prisma-orm",
+    "ten": "Prisma ORM",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Cơ sở dữ liệu quan hệ › ACID": {
+  "body": "**ACID** là bốn bảo đảm của một **giao dịch** (transaction) trong cơ sở dữ liệu, giúp dữ liệu đúng ngay cả khi có lỗi hoặc nhiều người cùng ghi.\n\n- **Atomicity (nguyên tử)**: tất cả các thao tác trong giao dịch cùng thành công hoặc cùng bị huỷ; không có trạng thái \"nửa vời\".\n- **Consistency (nhất quán)**: giao dịch đưa cơ sở dữ liệu từ trạng thái hợp lệ này sang trạng thái hợp lệ khác, không vi phạm ràng buộc (khoá ngoại, `CHECK`, `UNIQUE`).\n- **Isolation (cô lập)**: các giao dịch chạy đồng thời không \"giẫm chân\" nhau; mức cô lập quyết định hiện tượng nào còn có thể xảy ra.\n- **Durability (bền vững)**: sau khi `COMMIT`, dữ liệu không mất dù máy sập, nhờ ghi nhật ký (WAL) xuống đĩa.\n\n### Ví dụ: chuyển tiền\n```sql\nBEGIN;\nUPDATE accounts SET balance = balance - 100 WHERE id = 1;\nUPDATE accounts SET balance = balance + 100 WHERE id = 2;\nCOMMIT;   -- nếu có lỗi ở giữa: ROLLBACK, không ai mất tiền\n```\n\n### Vì sao cần biết\nMọi nghiệp vụ liên quan tiền, kho, đặt chỗ đều cần ACID. Nó cũng giải thích vì sao có ứng dụng chọn hệ NoSQL đánh đổi một phần ACID lấy khả năng mở rộng.\n\n### Lỗi hay gặp\n- Hiểu \"Consistency\" của ACID giống \"consistency\" trong hệ phân tán (CAP); hai khái niệm khác nhau.\n- Thực hiện nhiều câu lệnh ghi liên quan mà không bọc trong một giao dịch.\n\n### Tự kiểm tra\n1. Nếu máy sập giữa hai câu `UPDATE` ở trên, thuộc tính nào bảo vệ bạn?\n2. `COMMIT` xong mà mất điện: thuộc tính nào đảm bảo dữ liệu còn?",
+  "lessons": [
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-1-2-acid",
+    "ten": "1.2 — ACID: bốn bảo đảm, được chứng minh",
+    "nguon": "PostgreSQL · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-11-1-giao-dich",
+    "ten": "11.1 — Giao dịch: được tất cả, hoặc không gì cả",
+    "nguon": "PostgreSQL · Chương 11",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-11-3-muc-co-lap",
+    "ten": "11.3 — Các mức cô lập và những bất thường mỗi mức chặn được",
+    "nguon": "PostgreSQL · Chương 11",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Cơ sở dữ liệu quan hệ › Transactions": {
+  "body": "**Transaction (giao dịch)** nhóm nhiều thao tác SQL thành một đơn vị: hoặc **tất cả** được ghi (`COMMIT`), hoặc **không gì** được ghi (`ROLLBACK`). Đây là cách duy nhất để thao tác nhiều bước (trừ kho + tạo đơn + ghi thanh toán) không để lại dữ liệu nửa vời.\n\n### Ý chính\n- `BEGIN` → các câu lệnh → `COMMIT`/`ROLLBACK`. Trong ứng dụng, ORM thường cung cấp hàm bọc (`$transaction`, `@Transactional`).\n- **Mức cô lập**: Read Committed (mặc định của PostgreSQL), Repeatable Read, Serializable. Mức cao hơn ngăn nhiều bất thường hơn (đọc không lặp lại, đọc bóng ma, lost update) nhưng có thể làm giao dịch bị huỷ cần thử lại.\n- **Khoá**: `SELECT ... FOR UPDATE` khoá hàng để chặn người khác sửa cùng lúc; **khoá lạc quan** dùng cột `version`.\n- **Deadlock**: hai giao dịch chờ nhau; cơ sở dữ liệu huỷ một bên. Giảm bằng cách luôn khoá theo cùng một thứ tự.\n\n```sql\nBEGIN;\nSELECT stock FROM products WHERE id = 7 FOR UPDATE;\nUPDATE products SET stock = stock - 1 WHERE id = 7 AND stock > 0;\nINSERT INTO orders (product_id, user_id) VALUES (7, 42);\nCOMMIT;\n```\n\n### Lỗi hay gặp\n- Giữ giao dịch mở lâu (chờ người dùng, gọi API ngoài trong giao dịch): giữ khoá và chiếm kết nối.\n- Đọc rồi ghi mà không khoá: hai request cùng đọc `stock = 1`, cùng trừ.\n- Không thử lại khi gặp lỗi serialization hoặc deadlock.\n\n### Tự kiểm tra\n1. Gọi API thanh toán bên thứ ba nên ở trong hay ngoài giao dịch? Vì sao?\n2. Làm sao tránh bán quá số lượng tồn kho khi 100 người mua cùng lúc?",
+  "lessons": [
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-11-1-giao-dich",
+    "ten": "11.1 — Giao dịch: được tất cả, hoặc không gì cả",
+    "nguon": "PostgreSQL · Chương 11",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-11-3-muc-co-lap",
+    "ten": "11.3 — Các mức cô lập và những bất thường mỗi mức chặn được",
+    "nguon": "PostgreSQL · Chương 11",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-11-4-khoa-deadlock",
+    "ten": "11.4 — Khoá dòng, lost update và deadlock",
+    "nguon": "PostgreSQL · Chương 11",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/prisma-orm/learn?lessonSlug=pr-7-1-hai-dang",
+    "ten": "7.1 — Hai dạng `$transaction`",
+    "nguon": "Prisma ORM · Chương 7",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-7-3-crud-transaction",
+    "ten": "7.3 — CRUD, transaction, và đổi ruột Notes API sang PostgreSQL",
+    "nguon": "Node.js · Chương 7",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Cơ sở dữ liệu quan hệ › Database Failure Modes": {
+  "body": "Cơ sở dữ liệu có lúc hỏng. Thiết kế tốt là biết nó hỏng **kiểu nào** và hệ thống sẽ phản ứng ra sao.\n\n### Các kiểu hỏng thường gặp\n- **Crash / mất điện**: giao dịch đang dở bị huỷ, giao dịch đã commit được phục hồi từ nhật ký ghi trước (WAL). Cần `fsync` đúng và đĩa đáng tin.\n- **Deadlock và chờ khoá**: hai giao dịch chờ nhau, hoặc một giao dịch dài giữ khoá khiến hàng loạt request treo.\n- **Hết kết nối (connection exhaustion)**: quá nhiều kết nối mở làm cơ sở dữ liệu cạn tài nguyên; dùng connection pool và giới hạn.\n- **Đĩa đầy / bảng phình (bloat)**: ghi thất bại; cần giám sát và dọn dẹp (`VACUUM` ở PostgreSQL).\n- **Hỏng dữ liệu (corruption)** do lỗi phần cứng hoặc bug: cần sao lưu kiểm chứng được.\n- **Replica trễ và failover**: đọc từ bản sao thấy dữ liệu cũ; chuyển đổi dự phòng có thể mất các giao dịch chưa kịp nhân bản.\n- **Phân mảnh mạng**: ứng dụng không thấy cơ sở dữ liệu dù cả hai vẫn sống.\n\n### Cách phòng\nSao lưu định kỳ **và thử khôi phục**, sao lưu liên tục WAL cho khôi phục theo thời điểm (PITR), nhân bản, timeout và retry có backoff, giám sát (độ trễ, số kết nối, đĩa, khoá), và kiểm thử sự cố.\n\n### Lỗi hay gặp\n- Có sao lưu nhưng chưa bao giờ thử khôi phục.\n- Retry ngay lập tức vô hạn khiến cơ sở dữ liệu đang quá tải càng sập.\n\n### Tự kiểm tra\n1. Khôi phục theo thời điểm khác sao lưu hằng đêm ở điểm nào?\n2. Dấu hiệu nào cho thấy bạn đang cạn kết nối?",
+  "lessons": [
+   {
+    "href": "/courses/prisma-orm/learn?lessonSlug=pr-12-2-bay-hinh-dang",
+    "ten": "12.2 — Bảy hình dáng hỏng hóc, phân biệt bằng mã lỗi",
+    "nguon": "Prisma ORM · Chương 12",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-11-4-khoa-deadlock",
+    "ten": "11.4 — Khoá dòng, lost update và deadlock",
+    "nguon": "PostgreSQL · Chương 11",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-14-3-vacuum-bloat",
+    "ten": "14.3 — VACUUM, autovacuum và bloat",
+    "nguon": "PostgreSQL · Chương 14",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-15-2-wal-pitr",
+    "ten": "15.2 — WAL và khôi phục theo thời điểm",
+    "nguon": "PostgreSQL · Chương 15",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-15-3-nhan-ban",
+    "ten": "15.3 — Nhân bản streaming, dựng thật",
+    "nguon": "PostgreSQL · Chương 15",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Cơ sở dữ liệu quan hệ › Performance Profiling": {
+  "body": "Truy vấn chậm là nguyên nhân phổ biến nhất của API chậm. **Profiling** cơ sở dữ liệu là đo để biết *truy vấn nào* chậm và *vì sao*, trước khi tối ưu.\n\n### Công cụ\n- **`EXPLAIN`** cho biết kế hoạch dự kiến; **`EXPLAIN (ANALYZE, BUFFERS)`** chạy thật và cho thời gian, số hàng thực tế, số trang đọc.\n- **Slow query log** (`log_min_duration_statement` ở PostgreSQL, `slow_query_log` ở MySQL) ghi lại truy vấn vượt ngưỡng.\n- **`pg_stat_statements`** thống kê tổng thời gian và số lần gọi theo từng dạng truy vấn: thường truy vấn \"tầm thường\" gọi hàng triệu lần mới là thủ phạm.\n\n### Cách đọc plan\n- `Seq Scan` trên bảng lớn có điều kiện chọn lọc → cân nhắc chỉ mục.\n- So sánh số hàng **ước lượng** và **thực tế**: lệch nhiều thường do thống kê cũ (`ANALYZE`).\n- Chú ý `Nested Loop` lặp quá nhiều lần, `Sort` tràn ra đĩa.\n\n```sql\nEXPLAIN (ANALYZE, BUFFERS)\nSELECT * FROM orders WHERE user_id = 42 ORDER BY created_at DESC LIMIT 20;\n-- Index Scan using orders_user_id_created_at_idx ... Execution Time: 0.3 ms\n```\n\n### Lỗi hay gặp\n- Thêm chỉ mục bừa bãi: làm chậm ghi và tốn dung lượng.\n- Đo trên dữ liệu bé ở máy dev; kế hoạch với một triệu dòng khác hẳn.\n- Bỏ qua N+1: mỗi truy vấn đều nhanh nhưng có hàng trăm cái.\n\n### Tự kiểm tra\n1. Vì sao cần `ANALYZE` (chạy thật) chứ không chỉ `EXPLAIN`?\n2. Chỉ mục ghép `(user_id, created_at)` có giúp truy vấn chỉ lọc theo `created_at` không?",
+  "lessons": [
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-10-1-doc-explain",
+    "ten": "10.1 — Đọc một plan: EXPLAIN vs EXPLAIN ANALYZE",
+    "nguon": "PostgreSQL · Chương 10",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-10-4-buffers-tinh-chinh",
+    "ten": "10.4 — BUFFERS và quy trình tinh chỉnh",
+    "nguon": "PostgreSQL · Chương 10",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-14-4-giam-sat",
+    "ten": "14.4 — Giám sát: trả lời câu \"sao nó chậm thế?\"",
+    "nguon": "PostgreSQL · Chương 14",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/simulation?scenario=nodejs-index-explain",
+    "ten": "Chỉ mục và EXPLAIN ANALYZE",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   },
+   {
+    "href": "/simulation?scenario=database",
+    "ten": "Truy vấn CSDL — Chỉ mục & Ghi",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "Cơ sở dữ liệu quan hệ › bcrypt": {
+  "body": "**bcrypt** là hàm băm mật khẩu cố ý **chậm** và có **cost factor** điều chỉnh được. Mật khẩu không bao giờ được lưu dạng gốc (và cũng không băm bằng hàm nhanh như SHA-256); ngay cả khi cơ sở dữ liệu bị lộ, kẻ tấn công vẫn phải tốn rất nhiều thời gian để dò từng mật khẩu.\n\n### Cách hoạt động\n- Tự sinh **salt** ngẫu nhiên cho mỗi mật khẩu, nên hai người cùng mật khẩu cho hai chuỗi băm khác nhau và bảng \"rainbow\" vô dụng.\n- **Cost** (ví dụ 12) nghĩa là 2¹² vòng lặp: tăng 1 là chậm gấp đôi. Chọn cost sao cho băm mất khoảng vài chục tới trăm mili giây trên server của bạn, và tăng theo thời gian khi phần cứng mạnh lên.\n- Kết quả có cả phiên bản, cost, salt và băm trong một chuỗi, dạng `$2b$12$...`, nên chỉ cần lưu một cột.\n\n```js\nimport bcrypt from 'bcrypt';\n\nconst hash = await bcrypt.hash(password, 12);        // lưu hash vào DB\nconst ok = await bcrypt.compare(input, hash);        // kiểm tra khi đăng nhập\n```\n\n### Lưu ý\n- bcrypt chỉ xét tối đa **72 byte** đầu của mật khẩu; mật khẩu rất dài bị cắt. Một số thư viện bị lỗi với ký tự NUL.\n- Với hệ thống mới, OWASP khuyến nghị **Argon2id** trước, rồi scrypt, bcrypt; bcrypt vẫn chấp nhận được khi đặt cost đủ cao.\n- Băm chậm tốn CPU: giới hạn tần suất đăng nhập để tránh bị dùng làm đòn từ chối dịch vụ.\n\n### Lỗi hay gặp\n- Tự cộng chuỗi salt rồi băm bằng SHA-256.\n- So sánh hai chuỗi băm bằng `===` thay vì hàm của thư viện.\n- Đặt cost quá thấp vì \"cho nhanh\".\n\n### Tự kiểm tra\n1. Vì sao hai người cùng mật khẩu `abc123` có chuỗi băm khác nhau?\n2. Tăng cost lên 1 thì thời gian băm thay đổi thế nào?",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-7-4-passwords",
+    "ten": "7.4 — Mật khẩu: hash, muối, bcrypt",
+    "nguon": "Nền tảng Lập trình Web · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/authentication/learn?lessonSlug=auth-2-1-da-co-csdl",
+    "ten": "2.1 — Kẻ tấn công ĐÃ CÓ cơ sở dữ liệu của bạn",
+    "nguon": "Authentication · Chương 2",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/authentication/learn?lessonSlug=auth-2-2-chon-va-chinh",
+    "ten": "2.2 — Chọn và chỉnh hàm băm, bằng phép đo",
+    "nguon": "Authentication · Chương 2",
+    "kieu": "video"
+   },
+   {
+    "href": "/simulation?scenario=password-hashing",
+    "ten": "Băm mật khẩu — muối và sự chậm chạp",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   },
+   {
+    "href": "/code-lab/authentication-practice",
+    "ten": "Authentication — Luyện tập",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Cơ sở dữ liệu quan hệ › scrypt": {
+  "body": "**scrypt** là hàm băm mật khẩu **tốn bộ nhớ** (memory-hard): ngoài thời gian CPU, mỗi lần băm buộc phải dùng một lượng RAM lớn. Kẻ tấn công dùng GPU, FPGA hay ASIC để thử hàng tỷ mật khẩu mỗi giây vì chip có nhiều lõi nhưng ít RAM trên mỗi lõi; đòi hỏi bộ nhớ làm việc tấn công song song đắt đỏ hơn nhiều.\n\n### Tham số\n- **N**: chi phí CPU/bộ nhớ (luỹ thừa của 2).\n- **r**: kích thước khối.\n- **p**: mức song song.\nBộ nhớ dùng xấp xỉ `128 × N × r` byte. Thư viện chuẩn của Node có sẵn:\n\n```js\nimport { scrypt, randomBytes, timingSafeEqual } from 'node:crypto';\nimport { promisify } from 'node:util';\nconst scryptAsync = promisify(scrypt);\n\nconst salt = randomBytes(16);\nconst key = await scryptAsync(password, salt, 64, { N: 2 ** 17, r: 8, p: 1, maxmem: 256 * 1024 * 1024 });\n// lưu cả tham số, salt và key; so sánh bằng timingSafeEqual\n```\n\n### Chọn tham số\nTham khảo bộ tham số OWASP (ví dụ N=2¹⁷, r=8, p=1) rồi **đo trên server thật**: băm trong khoảng 100 ms và tổng RAM các lượt băm đồng thời vẫn nằm trong giới hạn. Với hệ thống mới, Argon2id thường được ưu tiên hơn nhưng scrypt vẫn là lựa chọn tốt và có sẵn trong nhiều runtime.\n\n### Lỗi hay gặp\n- Đặt N rất cao rồi 50 người cùng đăng nhập làm cạn RAM.\n- Không lưu tham số cùng chuỗi băm, nên sau này không nâng được tham số.",
+  "lessons": [
+   {
+    "href": "/courses/authentication/learn?lessonSlug=auth-2-2-chon-va-chinh",
+    "ten": "2.2 — Chọn và chỉnh hàm băm, bằng phép đo",
+    "nguon": "Authentication · Chương 2",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/cac301-cryptography-and-applied-cryptography/learn?lessonSlug=cac301-ts-6-4",
+    "ten": "Băm mật khẩu và dẫn xuất khoá: PBKDF2, bcrypt, Argon2, HKDF",
+    "nguon": "Cryptography and Applied Cryptography · Chương 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CAC301"
+   },
+   {
+    "href": "/simulation?scenario=password-hashing",
+    "ten": "Băm mật khẩu — muối và sự chậm chạp",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "Cơ sở dữ liệu quan hệ › MD5 và SHA — không dùng cho mật khẩu": {
+  "body": "**MD5** và họ **SHA** (SHA-1, SHA-256...) là hàm băm mật mã được thiết kế để **nhanh**: một GPU có thể thử hàng chục tỷ giá trị MD5 mỗi giây. Chính tốc độ này làm chúng **không phù hợp để lưu mật khẩu**; hãy dùng bcrypt, scrypt hoặc Argon2.\n\n### Khi nào dùng hàm băm nhanh\n- Kiểm tra toàn vẹn tệp (checksum), định danh nội dung (ví dụ Git, ETag), khoá bộ nhớ đệm: nên dùng **SHA-256** hoặc mới hơn.\n- **HMAC-SHA256** để ký/xác thực thông điệp (webhook, chữ ký API) với một khoá bí mật.\n- MD5 và SHA-1 đã bị phá về khả năng chống đụng độ (collision): không dùng cho chữ ký hay chứng chỉ; chỉ chấp nhận cho checksum không liên quan bảo mật.\n\n```js\nimport { createHash, createHmac } from 'node:crypto';\ncreateHash('sha256').update(fileBuffer).digest('hex');      // checksum\ncreateHmac('sha256', secret).update(body).digest('hex');    // chữ ký webhook\n```\n\n### Lỗi hay gặp\n- `sha256(password)` hoặc `md5(password + salt)` để \"lưu mật khẩu\".\n- So sánh chữ ký bằng `===` thay vì so sánh thời gian hằng (`timingSafeEqual`).\n- Nghĩ băm là mã hoá: băm là một chiều, không giải ngược được.",
+  "lessons": [
+   {
+    "href": "/courses/authentication/learn?lessonSlug=auth-1-4-bam-mac-chu-ky",
+    "ten": "1.4 — Băm, MAC, chữ ký: ba công cụ, một sự nhầm lẫn",
+    "nguon": "Authentication · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/authentication/learn?lessonSlug=auth-2-1-da-co-csdl",
+    "ten": "2.1 — Kẻ tấn công ĐÃ CÓ cơ sở dữ liệu của bạn",
+    "nguon": "Authentication · Chương 2",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/authentication/learn?lessonSlug=auth-2-5-chuyen-doi",
+    "ten": "2.5 — Chuyển khỏi hàm băm cũ, không bắt đặt lại mật khẩu",
+    "nguon": "Authentication · Chương 2",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/cac301-cryptography-and-applied-cryptography/learn?lessonSlug=cac301-6-1-hash-mac",
+    "ten": "6.1 — Hàm băm & toàn vẹn",
+    "nguon": "Cryptography and Applied Cryptography · Chapter 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CAC301"
+   }
+  ]
+ },
+ "Cơ sở dữ liệu quan hệ › ORMs chi tiết": {
+  "body": "ORM làm nhiều việc ngầm; hiểu chúng giúp bạn tránh những lỗi hiệu năng khó thấy.\n\n### Ý chính\n- **Ánh xạ**: kiểu *Active Record* (đối tượng tự lưu mình: Rails, Django) so với *Data Mapper* (tách đối tượng và lớp lưu trữ: Hibernate, SQLAlchemy). Quan hệ một-nhiều và nhiều-nhiều ánh xạ thành tham chiếu/danh sách.\n- **Lazy vs eager loading**: *lazy* chỉ nạp quan hệ khi truy cập, dễ sinh **N+1** (1 truy vấn lấy danh sách + N truy vấn lấy quan hệ). *Eager* nạp trước bằng `JOIN` hoặc truy vấn gộp (`include`, `JOIN FETCH`, `selectinload`).\n- **Unit of Work**: ORM theo dõi các đối tượng bạn đã đổi trong một phiên, rồi khi `flush/commit` mới sinh các câu `INSERT/UPDATE/DELETE` theo đúng thứ tự trong **một giao dịch**; cùng với *identity map* bảo đảm một dòng chỉ có một đối tượng trong phiên.\n- **Query builder**: mức giữa SQL thô và ORM, ghép truy vấn bằng code.\n\n```python\n# SQLAlchemy: tránh N+1 bằng eager loading\nusers = session.scalars(select(User).options(selectinload(User.orders))).all()\n```\n\n### Lỗi hay gặp\n- Lặp qua `user.orders` trong vòng lặp mà không eager load.\n- Tải cả thực thể chỉ để đếm hoặc lấy một cột; dùng truy vấn tổng hợp/`select` cột cần thiết.\n- Phiên (session) sống quá lâu, giữ khoá và dữ liệu cũ.",
+  "lessons": [
+   {
+    "href": "/courses/edb201-database-application/learn?lessonSlug=edb201-ts-9-3",
+    "ten": "9.3 — ORM và query builder",
+    "nguon": "Database Application · Chương 9",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "EDB201"
+   },
+   {
+    "href": "/courses/prisma-orm/learn?lessonSlug=pr-4-2-select-include",
+    "ten": "4.2 — `select`, `include`, và nắn hình kết quả",
+    "nguon": "Prisma ORM · Chương 4",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/prisma-orm/learn?lessonSlug=pr-9-2-n-cong-1",
+    "ten": "9.2 — N+1 ở đủ mọi dạng",
+    "nguon": "Prisma ORM · Chương 9",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/hsf302-working-with-spring-framework/learn?lessonSlug=hsf302-1-1-jpa",
+    "ten": "1.1 — JPA & ORM: ánh xạ entity",
+    "nguon": "Working with Spring Framework · Chapter 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "HSF302"
+   },
+   {
+    "href": "/simulation?scenario=n-plus-one",
+    "ten": "Bẫy N+1 query",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "API › REST API": {
+  "body": "**REST** (Representational State Transfer) là phong cách thiết kế API trên HTTP xoay quanh **tài nguyên**: mỗi thứ (người dùng, đơn hàng, bài viết) có một URL, và bạn thao tác lên nó bằng các phương thức HTTP chuẩn. Đây là kiểu API phổ biến nhất trên web.\n\n### Nguyên tắc cốt lõi\n- **URL là danh từ, số nhiều, phân cấp**: `/users`, `/users/42`, `/users/42/orders`. Hành động nằm ở *method*, không nằm trong đường dẫn (tránh `/getUser`).\n- **Method và ý nghĩa**: `GET` đọc (an toàn), `POST` tạo, `PUT` thay thế, `PATCH` sửa một phần, `DELETE` xoá. `GET/PUT/DELETE` là *idempotent*.\n- **Stateless**: mỗi request mang đủ thông tin (token xác thực); server không giữ ngữ cảnh giữa các request.\n- **Status code có nghĩa**: `201 Created` kèm `Location`, `204` không nội dung, `400/422` dữ liệu sai, `401` chưa xác thực, `403` không đủ quyền, `404`, `409` xung đột, `429` quá tần suất.\n- **Danh sách**: phân trang (ưu tiên *cursor* cho dữ liệu lớn), lọc và sắp xếp bằng query string.\n- **Phiên bản**: `/v1/...` hoặc qua header; khai tử có báo trước.\n\n```http\nPOST /v1/users HTTP/1.1\nContent-Type: application/json\n\n{\"email\":\"an@example.com\",\"name\":\"An\"}\n\nHTTP/1.1 201 Created\nLocation: /v1/users/42\n{\"id\":42,\"email\":\"an@example.com\",\"name\":\"An\"}\n```\n\n### Lỗi hay gặp\n- Luôn trả `200` kể cả khi lỗi; client không phân biệt được thành công.\n- `POST` tạo tài nguyên không có cơ chế chống trùng: client mất mạng và gửi lại thì tạo hai đơn. Dùng **idempotency key**.\n- Phân trang bằng `OFFSET` lớn: chậm dần và nhảy dòng khi dữ liệu đổi.\n- Lộ trường nội bộ vì trả thẳng đối tượng cơ sở dữ liệu.\n\n### Tự kiểm tra\n1. `PUT` và `PATCH` khác nhau thế nào?\n2. Khách bấm \"Thanh toán\" hai lần do mạng chậm: API cần gì để chỉ trừ tiền một lần?",
+  "lessons": [
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-6-1-tai-nguyen-phuong-thuc",
+    "ten": "6.1 — Tài nguyên, phương thức, và REST thật sự là gì",
+    "nguon": "Node.js · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-1-1-tai-nguyen",
+    "ten": "1.1 — Mô hình hoá tài nguyên, không phải hành động",
+    "nguon": "API & System Design · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-1-3-status",
+    "ten": "1.3 — Mã trạng thái có ý nghĩa: 201, 400 và 422, 401 và 403, 404 và 410, 409",
+    "nguon": "API & System Design · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-4-2-chien-luoc",
+    "ten": "4.2 — Chiến lược đánh phiên bản: URL, header, media type, theo ngày — và một router cho hai phiên bản",
+    "nguon": "API & System Design · Chương 4",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/code-lab/api-design-practice",
+    "ten": "API & System Design — Luyện tập",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "API › JSON APIs": {
+  "body": "**JSON** (JavaScript Object Notation) là định dạng văn bản nhẹ, dễ đọc, mà hầu hết API web dùng để trao đổi dữ liệu. Khai báo bằng header `Content-Type: application/json` (UTF-8) và `Accept: application/json` ở phía client.\n\n### Ý chính\n- Kiểu dữ liệu: chuỗi, số, boolean, `null`, mảng, đối tượng. **Không có kiểu ngày/giờ**: dùng chuỗi ISO 8601 (`\"2026-11-12T08:30:00Z\"`, nên là UTC). Số nguyên lớn hơn 2⁵³ nên gửi dạng chuỗi (JavaScript mất độ chính xác); tiền nên dùng số nguyên đơn vị nhỏ nhất.\n- **Nhất quán** tên trường (camelCase hoặc snake_case, chọn một), phân biệt rõ trường vắng mặt và `null`.\n- **Hình dạng lỗi chuẩn** (ví dụ Problem Details RFC 9457) để client xử lý đồng đều.\n- **Validate đầu vào** bằng schema (Zod, Pydantic, JSON Schema); đừng tin dữ liệu client.\n- Có thêm chuẩn như **JSON:API** quy định cấu trúc tài nguyên, quan hệ, phân trang.\n\n```json\n{\n  \"data\": { \"id\": 42, \"name\": \"An\", \"createdAt\": \"2026-11-12T08:30:00Z\" },\n  \"meta\": { \"requestId\": \"a1b2c3\" }\n}\n```\n\n### Lỗi hay gặp\n- Đổi tên hay kiểu trường mà không báo client.\n- `JSON.parse` dữ liệu không đáng tin không bắt lỗi, hoặc không giới hạn kích thước body.",
+  "lessons": [
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-2-3-envelope",
+    "ten": "2.3 — Hình dạng phản hồi: view, null hay vắng mặt, bọc danh sách, không luôn 200",
+    "nguon": "API & System Design · Chương 2",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-6-4-headers-json",
+    "ten": "6.4 — Header, JSON và phần thân thông điệp",
+    "nguon": "Nền tảng Lập trình Web · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-2-1-problem-details",
+    "ten": "2.1 — Problem Details (RFC 9457): một định dạng lỗi cho cả API",
+    "nguon": "API & System Design · Chương 2",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-2-2-validation",
+    "ten": "2.2 — Kiểm dữ liệu vào ngay cửa: schema, object strict, 415 và 413",
+    "nguon": "API & System Design · Chương 2",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-6-3-validate-schema",
+    "ten": "6.3 — Kiểm tra dữ liệu bằng lược đồ",
+    "nguon": "Node.js · Chương 6",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "API › GraphQL": {
+  "body": "**GraphQL** là ngôn ngữ truy vấn cho API: server công bố một **schema** có kiểu, client gửi *một truy vấn* mô tả đúng các trường cần, và nhận về đúng hình dạng đó, thường qua **một endpoint** (`POST /graphql`).\n\n### Ý chính\n- **Schema** gồm kiểu, `Query` (đọc), `Mutation` (ghi), `Subscription` (thời gian thực).\n- **Resolver** là hàm lấy dữ liệu cho từng trường; một truy vấn lồng nhau dễ gây **N+1**, giải quyết bằng gom nhóm (DataLoader).\n- Giải quyết *over-fetching/under-fetching*: client không phải gọi nhiều endpoint hay nhận thừa trường; phù hợp app di động và frontend nhiều màn hình.\n- Đánh đổi: khó cache theo HTTP, phải giới hạn **độ sâu/độ phức tạp** truy vấn, kiểm soát quyền theo từng trường, và tắt introspection ở môi trường công khai nếu cần.\n\n```graphql\nquery {\n  user(id: 42) {\n    name\n    orders(first: 3) { id total }\n  }\n}\n```\n\n### Lỗi hay gặp\n- Cho client tự do truy vấn sâu vô hạn (dễ bị lạm dụng làm sập server).\n- Mỗi resolver tự truy vấn cơ sở dữ liệu, nổ N+1.\n- Trả HTTP 200 kèm trường `errors` mà không giám sát lỗi.",
+  "lessons": [
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-7-4-khac",
+    "ten": "7.5 — GraphQL và gRPC: khi REST không phải câu trả lời, đo trên LabFlow",
+    "nguon": "API & System Design · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/code-lab/graphql",
+    "ten": "GraphQL",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "API › gRPC": {
+  "body": "**gRPC** là framework RPC hiệu năng cao của Google: client gọi hàm trên server từ xa như gọi hàm cục bộ. Nó dùng **Protocol Buffers** (định dạng nhị phân, nhỏ và nhanh) và chạy trên **HTTP/2**.\n\n### Ý chính\n- Bạn mô tả dịch vụ trong tệp `.proto`, rồi **sinh mã** client/server cho nhiều ngôn ngữ; hợp đồng có kiểu chặt.\n- Bốn kiểu gọi: *unary* (1 request – 1 response), *server streaming*, *client streaming*, *bidirectional streaming*.\n- Có **deadline**, huỷ, metadata; ghép nhiều lời gọi trên một kết nối.\n- Hợp giao tiếp **giữa các microservice** nội bộ. Trình duyệt không gọi trực tiếp được nên cần gRPC-Web hoặc một lớp chuyển đổi; khó đọc/debug bằng `curl` hơn REST.\n\n```protobuf\nservice UserService {\n  rpc GetUser (GetUserRequest) returns (User);\n}\nmessage GetUserRequest { int64 id = 1; }\nmessage User { int64 id = 1; string name = 2; }\n```\n\n### Lỗi hay gặp\n- Đổi số thứ tự trường (`= 1`, `= 2`) của message đã dùng: phá tương thích; chỉ thêm trường mới với số mới.\n- Không đặt deadline, lời gọi treo kéo theo chuỗi dịch vụ.",
+  "lessons": [
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-7-4-khac",
+    "ten": "7.5 — GraphQL và gRPC: khi REST không phải câu trả lời, đo trên LabFlow",
+    "nguon": "API & System Design · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/prn232-building-cross-platform-back-end-application-with-net/learn?lessonSlug=prn232-7-1-grpc-micro",
+    "ten": "7.1 — gRPC, WCF & giới thiệu microservices",
+    "nguon": "Building Cross-Platform Back-End Application With .NET · Chapter 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRN232"
+   }
+  ]
+ },
+ "API › SOAP": {
+  "body": "**SOAP** (Simple Object Access Protocol) là giao thức dịch vụ web đời đầu dựa trên **XML**. Mọi thông điệp nằm trong một phong bì (`Envelope`) gồm `Header` (metadata, bảo mật) và `Body` (nội dung hoặc `Fault` khi lỗi), thường gửi bằng `POST` tới một endpoint duy nhất. Hợp đồng được mô tả bằng **WSDL**, từ đó công cụ sinh mã client.\n\n```xml\n<soap:Envelope xmlns:soap=\"http://www.w3.org/2003/05/soap-envelope\">\n  <soap:Body>\n    <GetBalance><AccountId>12345</AccountId></GetBalance>\n  </soap:Body>\n</soap:Envelope>\n```\n\n### Ý chính\n- Hợp đồng chặt, có chuẩn mở rộng (**WS-Security**, giao dịch, tin cậy), nên vẫn gặp ở ngân hàng, bảo hiểm, chính phủ và hệ thống tích hợp doanh nghiệp cũ.\n- So với REST/JSON: nặng, dài dòng, khó đọc; nhưng có kiểu và công cụ mạnh.\n- Bạn thường *tiêu thụ* SOAP của đối tác hơn là tự thiết kế mới: dùng thư viện sinh client từ WSDL.\n\n### Lỗi hay gặp\n- Bỏ qua `Fault` vì HTTP vẫn trả 200/500 tuỳ cài đặt; luôn đọc thân phản hồi.\n- Quên giới hạn kích thước XML và vô hiệu hoá thực thể ngoài (XXE) khi phân tích.",
+  "lessons": [
+   {
+    "href": "/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-goc-2-1-api",
+    "ten": "Slot 2.1 — 📑 Dùng API (slide gốc)",
+    "nguon": "Server-Side Development with Node.js, Express & MongoDB · Chương 1",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "SDN302"
+   },
+   {
+    "href": "/courses/software-architecture-and-design/learn?lessonSlug=swd392-slide-swd21-1",
+    "ten": "3.L — 📑 Học theo từng slide · Kiến trúc hướng dịch vụ (1/2): nguyên tắc, broker, SOAP (Ch.16, slide 1–14)",
+    "nguon": "Software Architecture and Design · Chương 3",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "SWD392"
+   }
+  ]
+ },
+ "API › HATEOAS & OpenAPI Specs": {
+  "body": "Hai khái niệm này nằm ở hai đầu của việc \"API tự mô tả\".\n\n### HATEOAS\n**Hypermedia as the Engine of Application State** là ràng buộc cao nhất của REST theo Fielding (mức 3 trong mô hình trưởng thành Richardson): phản hồi kèm **liên kết** tới các hành động tiếp theo hợp lệ, để client đi theo link thay vì tự ghép URL.\n\n```json\n{\n  \"id\": 42, \"status\": \"pending\",\n  \"_links\": {\n    \"self\":   { \"href\": \"/orders/42\" },\n    \"cancel\": { \"href\": \"/orders/42/cancel\", \"method\": \"POST\" }\n  }\n}\n```\nTrong thực tế ít API công khai theo đến mức này; nhưng ý tưởng \"link phân trang `next`\" và \"hành động khả dụng theo trạng thái\" rất hữu ích.\n\n### OpenAPI\n**OpenAPI** (trước là Swagger) là chuẩn mô tả API bằng YAML/JSON: đường dẫn, method, tham số, schema yêu cầu/phản hồi, mã lỗi, xác thực.\n\n```yaml\npaths:\n  /users/{id}:\n    get:\n      parameters: [{ name: id, in: path, required: true, schema: { type: integer } }]\n      responses:\n        \"200\": { description: OK }\n        \"404\": { description: Không tìm thấy }\n```\nTừ tệp này bạn sinh được **tài liệu** (Swagger UI), **client/SDK**, **mock server**, và kiểm tra hợp đồng tự động. Có hai cách: *design-first* (viết spec trước) và *code-first* (sinh spec từ code).\n\n### Lỗi hay gặp\n- Spec và code lệch nhau vì không kiểm tra tự động; thêm contract test vào CI.",
+  "lessons": [
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-7-1-openapi",
+    "ten": "7.1 — Viết OpenAPI 3.1: hợp đồng của LabFlow thành một tệp",
+    "nguon": "API & System Design · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-7-1-kiem-hop-dong",
+    "ten": "7.2 — Tài liệu có nói thật không? Kiểm hợp đồng với server đang chạy",
+    "nguon": "API & System Design · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-7-2-sinh-code",
+    "ten": "7.3 — Sinh tài liệu, client có kiểu và bộ validate từ một tệp",
+    "nguon": "API & System Design · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-7-3-design-first",
+    "ten": "7.4 — Thiết kế trước hay code trước: mock, luật phong cách và cổng chặn thay đổi phá vỡ",
+    "nguon": "API & System Design · Chương 7",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
  "Mở rộng Database (Scaling) › Sharding Strategies": {
   "body": "Sharding là chia một tập dữ liệu lớn thành nhiều phần (shard), mỗi phần nằm trên một máy cơ sở dữ liệu riêng. Hãy hình dung một thư viện quá đông: thay vì xây thêm kệ cho một toà nhà duy nhất, bạn mở nhiều chi nhánh và quy ước sách có tên bắt đầu bằng chữ A–H nằm ở chi nhánh 1, I–P ở chi nhánh 2, v.v. Mỗi chi nhánh chỉ lo một phần, nên cả hệ thống ghi được nhiều hơn một máy đơn có thể chịu.\n\n### Vì sao cần biết\nReplica chỉ giúp mở rộng **đọc**; mọi lượt ghi vẫn dồn vào một primary. Khi một máy không còn đủ dung lượng đĩa hoặc không còn chịu nổi lượng ghi, sharding là cách mở rộng ghi theo chiều ngang. Đổi lại, nó là một trong những thay đổi kiến trúc đắt và khó đảo ngược nhất — nên cần hiểu kỹ trước khi dùng.\n\n### Ý chính\n- **Shard key** là cột (hoặc tổ hợp cột) quyết định dòng dữ liệu nằm ở shard nào. Chọn key là quyết định quan trọng nhất.\n- **Chia theo khoảng (range)**: dễ truy vấn theo khoảng, nhưng dễ tạo *điểm nóng* (ví dụ chia theo ngày thì mọi ghi mới dồn vào shard cuối).\n- **Chia theo băm (hash)**: `shard = hash(key) mod N` rải đều tải, nhưng truy vấn theo khoảng phải hỏi mọi shard.\n- **Băm nhất quán (consistent hashing)** giúp khi thêm/bớt shard chỉ phải dời một phần nhỏ dữ liệu thay vì xáo trộn tất cả.\n- **Chia theo thư mục (lookup/directory)**: một bảng tra cứu ghi rõ key nào ở shard nào — linh hoạt nhưng bảng tra cứu thành điểm phụ thuộc mới.\n\n```sql\n-- Ví dụ ý tưởng: định tuyến theo user_id\n-- shard_index = hash(user_id) % 4\n-- user_id = 1042 -> shard 2: SELECT ... FROM orders WHERE user_id = 1042;\n```\n\n### Lỗi hay gặp\n- Chọn shard key có độ phân bố lệch (ví dụ `country`) nên một shard quá tải trong khi các shard khác rảnh.\n- Truy vấn không chứa shard key phải quét mọi shard (scatter-gather), chậm và tốn kém; JOIN và giao dịch xuyên shard rất khó.\n- Dùng `id` tự tăng làm khoá ở nhiều shard gây trùng; cần sinh định danh toàn cục (UUIDv7, Snowflake…).\n- Shard sớm khi chưa cần: thường nên tối ưu index, cache và thêm replica trước.\n\n### Tự kiểm tra\n1. Vì sao chia theo ngày tạo thường tạo điểm nóng ghi?\n2. Hash mod N có vấn đề gì khi N đổi từ 4 lên 5, và băm nhất quán giải quyết thế nào?",
   "lessons": [
@@ -1344,6 +2150,258 @@
     "kieu": "bai-doc"
    }
   ]
+ },
+ "Message Broker & Real-time › Long Polling & Short Polling": {
+  "body": "**Short polling** là client gửi yêu cầu theo chu kỳ cố định để hỏi \"có dữ liệu mới chưa?\". **Long polling** là client gửi yêu cầu rồi server giữ kết nối mở cho tới khi có dữ liệu mới (hoặc hết thời gian chờ) mới trả lời, sau đó client lập tức hỏi tiếp.\n\n### Ý chính\n- Short polling: dễ cài, hợp tần suất thay đổi thấp; nhược điểm là nhiều request rỗng và trễ tới một chu kỳ.\n- Long polling: trễ thấp hơn, ít request rỗng; đổi lại mỗi client giữ một kết nối treo, cần timeout và xử lý nối lại.\n- Cả hai chạy trên HTTP thông thường nên đi qua mọi proxy/tường lửa; vì thế Socket.IO vẫn dùng long polling làm đường dự phòng.\n- Khi cần đẩy liên tục, nên cân nhắc SSE (một chiều) hoặc WebSocket (hai chiều).\n\n```js\n// Long polling phía client\nasync function nghe(lastId) {\n  const r = await fetch(`/events?after=${lastId}`);   // server giữ tới ~30s\n  const { events, last } = await r.json();\n  events.forEach(hienThi);\n  nghe(last ?? lastId);\n}\n```\n\n### Lỗi hay gặp\n- Vòng lặp polling không có backoff khi lỗi nên đánh sập server.\n- Quên `lastId` nên bị mất hoặc trùng sự kiện giữa hai lần hỏi.\n\n### Tự kiểm tra\nVới 1.000 client, short polling mỗi giây tạo bao nhiêu request mỗi giây, và long polling thay đổi con số đó thế nào?",
+  "lessons": [
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-9-1-polling-sse",
+    "ten": "9.1 — Polling, long polling và Server-Sent Events",
+    "nguon": "Networking for Developers · Chương 9",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/socket-io/learn?lessonSlug=io-0-2-long-poll",
+    "ten": "0.2 — Vì sao long-polling KHÔNG chết trong năm 2026",
+    "nguon": "Socket.IO · Mục 0",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-10-3-realtime",
+    "ten": "10.4 — API thời gian thực: polling, SSE hay WebSocket — chọn hợp đồng",
+    "nguon": "API & System Design · Chương 10",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "NoSQL Database › MongoDB": {
+  "body": "MongoDB là document database: lưu dữ liệu dạng **document** giống JSON (thực chất là BSON) trong **collection**, không bắt buộc schema cố định như bảng SQL. Hợp khi dữ liệu có cấu trúc thay đổi hoặc lồng nhau tự nhiên (đơn hàng có danh sách sản phẩm).\n\n### Vì sao cần biết\nNó là NoSQL phổ biến nhất, thường đi cùng Node.js (stack MEAN/MERN) và Mongoose. Hiểu khi nào document thắng và khi nào bảng quan hệ thắng giúp bạn chọn đúng.\n\n### Ý chính\n- **Document lồng nhau**: nhúng dữ liệu liên quan vào cùng document (đọc một lần, không cần JOIN) hoặc **tham chiếu** bằng `_id` khi dữ liệu dùng chung hoặc lớn không giới hạn.\n- **CRUD**: `insertOne`, `find`, `updateOne` với toán tử như `$set`, `$inc`, `deleteOne`.\n- **Index** quyết định tốc độ truy vấn, giống SQL; có index trên mảng (multikey).\n- **Aggregation pipeline** xử lý theo các giai đoạn (`$match`, `$group`, `$sort`, `$lookup`…).\n- **Replica set** để chịu lỗi, **sharding** để mở rộng.\n- **Mongoose** (ODM cho Node) thêm schema, validation, populate (nối tham chiếu).\n\n```js\nawait db.collection('don').insertOne({ khach: 'An', mon: [{ ten: 'Cà phê', sl: 2 }], tong: 60000 });\nconst don = await db.collection('don').find({ khach: 'An' }).toArray();\n```\n\n### Lỗi hay gặp\n- Nhúng mảng tăng vô hạn làm document phình (giới hạn mỗi document khoảng 16 MB).\n- Thiết kế như SQL (mọi thứ tham chiếu) rồi phải nối nhiều lần.\n- Quên index nên truy vấn quét cả collection.\n\n### Tự kiểm tra\n1. Khi nào nên nhúng và khi nào nên tham chiếu?\n2. Aggregation pipeline khác `find` ở điểm nào?",
+  "lessons": [
+   {
+    "href": "/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-goc-3-2-nosql-mongodb",
+    "ten": "Slot 3.2 — 📑 CSDL NoSQL với MongoDB (slide gốc)",
+    "nguon": "Server-Side Development with Node.js, Express & MongoDB · Chương 3",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "SDN302"
+   },
+   {
+    "href": "/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-3-1-mongodb-crud",
+    "ten": "⭐ Chuyên sâu 3.1 — CRUD MongoDB & bẫy truy vấn (chạy thật)",
+    "nguon": "Server-Side Development with Node.js, Express & MongoDB · Chương 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SDN302"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-17-3-mongodb-vs-jsonb",
+    "ten": "17.3 — Document MongoDB và JSONB của PostgreSQL",
+    "nguon": "PostgreSQL · Chương 17",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/code-lab/mongodb",
+    "ten": "MongoDB",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   },
+   {
+    "href": "/courses/idb201-introduction-to-databases/learn?lessonSlug=idb201-ts-10-2",
+    "ten": "CSDL tài liệu với MongoDB",
+    "nguon": "Introduction to Databases · Chương 10",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "IDB201"
+   }
+  ]
+ },
+ "NoSQL Database › DynamoDB / Firebase": {
+  "body": "**DynamoDB** (AWS) là cơ sở dữ liệu key-value/document được quản lý hoàn toàn: không cần quản lý máy chủ, co giãn gần như vô hạn, độ trễ thấp ổn định, trả tiền theo dung lượng và lượng đọc/ghi. **Firebase** (Google) cung cấp các cơ sở dữ liệu realtime (Realtime Database, Firestore) đồng bộ dữ liệu về app di động/web theo thời gian thực, kèm xác thực và hosting.\n\n### Ý chính\n- **DynamoDB**: mỗi bảng có **partition key** (và tuỳ chọn **sort key**); truy vấn nhanh khi dùng đúng khoá. Muốn tra theo thuộc tính khác phải tạo **index phụ (GSI/LSI)**.\n- Thiết kế bảng DynamoDB **bắt đầu từ các truy vấn cần có** (access pattern), không phải từ thực thể như SQL; thường dồn nhiều loại thực thể vào một bảng.\n- Không có JOIN, truy vấn tuỳ ý bị hạn chế; đổi lại là hiệu năng dự đoán được ở quy mô lớn.\n- **Firebase** mạnh ở đồng bộ realtime và dựng nhanh MVP; hạn chế ở truy vấn phức tạp và phụ thuộc nhà cung cấp.\n- Cả hai là dịch vụ độc quyền: tiện nhưng khoá nhà cung cấp.\n\n### Lỗi hay gặp\n- Chọn partition key phân bố lệch gây \"hot partition\" và bị giới hạn tốc độ.\n- Dùng DynamoDB như SQL (quét toàn bảng) nên tốn tiền và chậm.\n\n### Tự kiểm tra\nVì sao thiết kế DynamoDB phải bắt đầu từ danh sách truy vấn thay vì từ sơ đồ thực thể?",
+  "lessons": [
+   {
+    "href": "/courses/prc392c-cloud-computing/learn?lessonSlug=prc392c-3-1-database",
+    "ten": "3.1 — Cơ sở dữ liệu: RDS & DynamoDB",
+    "nguon": "Cloud Computing · Chapter 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRC392c"
+   }
+  ]
+ },
+ "NoSQL Database › Cassandra / CouchDB": {
+  "body": "**Apache Cassandra** là cơ sở dữ liệu **wide-column** phân tán, không có nút chủ (mọi nút ngang hàng), tối ưu cho **ghi cực nhanh** và khả năng sống sót khi nút hỏng. **Apache CouchDB** là document database có API HTTP/REST và **đồng bộ nhiều chiều (multi-master replication)**, hợp ứng dụng cần hoạt động offline rồi đồng bộ lại.\n\n### Ý chính\n- **Cassandra**: dữ liệu chia theo partition key bằng băm nhất quán; nhân bản đến N nút; mức nhất quán chỉnh được mỗi truy vấn (`ONE`, `QUORUM`, `ALL`) — thường dùng quorum (W + R > N) để đọc thấy ghi mới. Thiết kế bảng theo truy vấn; mô hình ghi theo log (LSM-tree) nên ghi rất nhanh.\n- **CouchDB**: mỗi document có phiên bản (`_rev`); khi sao chép hai chiều gặp xung đột thì giữ cả hai nhánh và chọn một bản thắng theo quy tắc xác định để ứng dụng có thể giải quyết.\n- Cả hai nghiêng về **tính sẵn sàng** và nhất quán cuối cùng (kiểu AP).\n\n### Lỗi hay gặp\n- Dùng Cassandra như SQL (cần JOIN, truy vấn tuỳ ý) — nó không hợp.\n- Chọn partition key khiến phân vùng quá lớn hoặc lệch.\n- Phớt lờ việc giải quyết xung đột ở CouchDB, để dữ liệu \"thắng\" ngẫu nhiên.\n\n### Tự kiểm tra\n1. Với 3 bản sao, vì sao đọc và ghi cùng mức QUORUM đảm bảo đọc thấy ghi mới?\n2. Xung đột ghi giữa hai thiết bị offline được xử lý thế nào ở CouchDB?",
+  "lessons": [
+   {
+    "href": "/courses/dmd301-data-modeling-and-databases/learn?lessonSlug=dmd301-ts-9-2",
+    "ten": "9.2 — CSDL khoá-giá trị, cột rộng và đồ thị",
+    "nguon": "Data Modeling and Databases · Chương 9",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DMD301"
+   }
+  ]
+ },
+ "NoSQL Database › Neo4j (Graph DB)": {
+  "body": "Neo4j là **graph database** (cơ sở dữ liệu đồ thị) lưu dữ liệu dưới dạng **nút** (node) và **quan hệ** (relationship) có hướng, cả hai có thể mang thuộc tính. Quan hệ là công dân hạng nhất, lưu sẵn thay vì tính lúc truy vấn.\n\n### Vì sao cần biết\nBài toán \"bạn của bạn của bạn\", gợi ý sản phẩm, phát hiện gian lận, đồ thị tri thức, định tuyến. Với SQL phải JOIN nhiều tầng và chậm dần; trong đồ thị, duyệt quan hệ gần như tốn chi phí theo số quan hệ thực sự đi qua chứ không theo kích thước toàn bộ dữ liệu.\n\n### Ý chính\n- Ngôn ngữ truy vấn **Cypher**, mô tả mẫu bằng \"hình vẽ ASCII\": `(a)-[:BAN_CUA]->(b)`.\n- **Label** phân loại nút (`:Nguoi`), **kiểu quan hệ** đặt tên cạnh (`:THEO_DOI`).\n- Hợp khi truy vấn xoay quanh *quan hệ nhiều bước*; không hợp khi chủ yếu là tổng hợp số liệu hàng loạt hoặc lưu dữ liệu dạng bảng phẳng.\n\n```cypher\n// Gợi ý: bạn của bạn mà chưa là bạn\nMATCH (me:Nguoi {ten:'An'})-[:BAN]->(:Nguoi)-[:BAN]->(goiY:Nguoi)\nWHERE NOT (me)-[:BAN]->(goiY) AND goiY <> me\nRETURN goiY.ten, count(*) AS banChung ORDER BY banChung DESC\n```\n\n### Lỗi hay gặp\n- Dùng đồ thị cho dữ liệu không có quan hệ sâu.\n- Tạo \"siêu nút\" có hàng triệu cạnh làm duyệt chậm.\n- Quên index trên thuộc tính dùng để tìm nút xuất phát.\n\n### Tự kiểm tra\nVì sao truy vấn \"bạn của bạn của bạn\" thường nhanh hơn trong đồ thị so với nhiều JOIN trong SQL?",
+  "lessons": [
+   {
+    "href": "/courses/dmd301-data-modeling-and-databases/learn?lessonSlug=dmd301-ts-9-2",
+    "ten": "9.2 — CSDL khoá-giá trị, cột rộng và đồ thị",
+    "nguon": "Data Modeling and Databases · Chương 9",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DMD301"
+   },
+   {
+    "href": "/courses/dbd301-advanced-database/learn?lessonSlug=dbd301-7-1-nosql-distributed",
+    "ten": "7.1 — NoSQL & cơ sở dữ liệu phân tán",
+    "nguon": "Advanced Database · Chapter 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DBD301"
+   }
+  ]
+ },
+ "NoSQL Database › InfluxDB / TimescaleDB": {
+  "body": "Time-series database (TSDB) tối ưu cho dữ liệu gắn với thời gian: metric máy chủ, cảm biến IoT, giá cả, log sự kiện. Đặc trưng: ghi liên tục theo thứ tự thời gian, hiếm khi sửa, truy vấn theo khoảng thời gian và tổng hợp (trung bình mỗi phút, tối đa mỗi giờ).\n\n### Ý chính\n- **InfluxDB**: TSDB chuyên dụng, mô hình *measurement + tag + field + timestamp*, ngôn ngữ truy vấn riêng (InfluxQL/Flux, bản mới có SQL).\n- **TimescaleDB**: extension của PostgreSQL biến bảng thường thành **hypertable** tự chia theo thời gian; vẫn dùng SQL đầy đủ, JOIN và hệ sinh thái Postgres.\n- Tính năng chung: nén dữ liệu theo thời gian, **retention policy** (tự xoá/hạ độ phân giải dữ liệu cũ), **downsampling/continuous aggregate**.\n- Chọn theo nhu cầu: đã dùng Postgres và cần SQL ⇒ TimescaleDB; khối lượng metric rất lớn, mô hình đơn giản ⇒ TSDB chuyên dụng hoặc ClickHouse.\n- Với khối lượng nhỏ, một bảng Postgres có index theo thời gian có thể đã đủ.\n\n### Lỗi hay gặp\n- Dùng tag có số giá trị rất lớn (như `user_id`) gây \"bùng nổ cardinality\" làm chậm và tốn bộ nhớ.\n- Giữ dữ liệu thô vô hạn mà không có retention.\n\n### Tự kiểm tra\nRetention policy và downsampling giúp kiểm soát chi phí lưu trữ ra sao?"
+ },
+ "NoSQL Database › NoSQL Databases": {
+  "body": "NoSQL là tên chung của các cơ sở dữ liệu không dùng mô hình bảng quan hệ truyền thống. Chúng ra đời để giải các bài toán mà SQL đơn lẻ làm kém: quy mô ghi rất lớn, dữ liệu lồng/linh hoạt, quan hệ phức tạp, độ trễ cực thấp.\n\n### Bốn họ chính\n- **Document** (MongoDB, CouchDB): lưu JSON lồng nhau, schema linh hoạt.\n- **Key-value** (Redis, DynamoDB): tra theo khoá cực nhanh, mô hình đơn giản nhất.\n- **Wide-column** (Cassandra, ScyllaDB, HBase): hàng có nhiều cột thay đổi, ghi lớn và phân tán.\n- **Graph** (Neo4j): nút và quan hệ, truy vấn đa bước.\n- Ngoài ra: time-series, search engine, vector database.\n\n### Ý chính\n- Thường hy sinh một phần JOIN, giao dịch ACID đa bản ghi hoặc nhất quán mạnh để đổi lấy mở rộng ngang và độ linh hoạt (xem CAP).\n- Thiết kế **theo truy vấn** thay vì chuẩn hoá thực thể.\n- Không phải \"SQL cũ, NoSQL mới\": PostgreSQL với JSONB, index và replica đáp ứng nhiều nhu cầu; \"polyglot persistence\" dùng mỗi loại kho cho đúng việc.\n\n### Lỗi hay gặp\n- Chọn NoSQL vì \"có khả năng mở rộng\" khi dữ liệu còn nhỏ, rồi thiếu JOIN và giao dịch.\n- Bỏ qua việc mô hình hoá và để dữ liệu thành một mớ.\n\n### Tự kiểm tra\nVới dữ liệu giỏ hàng, mạng bạn bè và log cảm biến, bạn chọn họ NoSQL nào cho từng cái và vì sao?",
+  "lessons": [
+   {
+    "href": "/courses/dmd301-data-modeling-and-databases/learn?lessonSlug=dmd301-8-1-warehouse-nosql",
+    "ten": "8.1 — Kho dữ liệu & NoSQL",
+    "nguon": "Data Modeling and Databases · Chapter 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DMD301"
+   },
+   {
+    "href": "/courses/idb201-introduction-to-databases/learn?lessonSlug=idb201-ts-10-1",
+    "ten": "Các họ NoSQL và định lý CAP",
+    "nguon": "Introduction to Databases · Chương 10",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "IDB201"
+   },
+   {
+    "href": "/courses/dbd301-advanced-database/learn?lessonSlug=dbd301-7-1-nosql-distributed",
+    "ten": "7.1 — NoSQL & cơ sở dữ liệu phân tán",
+    "nguon": "Advanced Database · Chapter 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DBD301"
+   }
+  ]
+ },
+ "NoSQL Database › MongoDB chi tiết": {
+  "body": "Đi sâu hơn vào MongoDB: dữ liệu lưu dạng **BSON** (JSON mở rộng, thêm kiểu như ObjectId, Date, số thập phân), linh hoạt schema, nhưng hiệu năng và độ đúng phụ thuộc vào cách bạn mô hình hoá và đánh index.\n\n### Ý chính\n- **Mô hình hoá**: nhúng khi dữ liệu luôn đọc cùng nhau và có giới hạn kích thước; tham chiếu khi dữ liệu lớn, dùng chung hoặc cập nhật độc lập.\n- **Aggregation pipeline**: chuỗi giai đoạn biến đổi dữ liệu.\n\n```js\ndb.don.aggregate([\n  { $match: { trangThai: 'DA_THANH_TOAN', ngay: { $gte: ISODate('2026-01-01') } } },\n  { $group: { _id: '$khachId', tong: { $sum: '$tien' }, soDon: { $sum: 1 } } },\n  { $sort: { tong: -1 } },\n  { $limit: 10 }\n])\n```\n  Đặt `$match` sớm để tận dụng index và giảm dữ liệu đi tiếp.\n- **Index**: đơn, kép (thứ tự trường quan trọng), multikey cho mảng, TTL tự xoá, text; dùng `explain()` kiểm tra có dùng index không.\n- **Mongoose**: schema, validation, `populate()` để nối tham chiếu (nhớ bẫy N+1 và hiệu năng).\n- **Replica set** (bầu primary, tự chuyển đổi dự phòng), **write concern** (`w: \"majority\"`) và **read concern** quyết định độ bền và nhất quán.\n- Giao dịch đa document có hỗ trợ trên replica set nhưng đắt hơn thao tác đơn document (vốn đã nguyên tử).\n\n### Lỗi hay gặp\n- Aggregation chạy toàn bộ collection vì `$match` đặt sau.\n- Index kép sai thứ tự nên không phục vụ được truy vấn.\n- Dùng `$lookup` khắp nơi để bắt chước JOIN mà không xét hiệu năng.\n\n### Tự kiểm tra\n1. Vì sao `$match` nên đặt đầu pipeline?\n2. Write concern `majority` bảo vệ bạn khỏi rủi ro nào?",
+  "lessons": [
+   {
+    "href": "/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-3-1-mongodb-crud",
+    "ten": "⭐ Chuyên sâu 3.1 — CRUD MongoDB & bẫy truy vấn (chạy thật)",
+    "nguon": "Server-Side Development with Node.js, Express & MongoDB · Chương 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SDN302"
+   },
+   {
+    "href": "/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-8-1-nestjs-hono",
+    "ten": "⭐ Chuyên sâu 8.1 — NestJS, Hono đo thật & aggregation pipeline",
+    "nguon": "Server-Side Development with Node.js, Express & MongoDB · Chương 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SDN302"
+   },
+   {
+    "href": "/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-3-2-mongoose",
+    "ten": "⭐ Chuyên sâu 3.2 — Mongoose: bẫy validation & population (chạy thật)",
+    "nguon": "Server-Side Development with Node.js, Express & MongoDB · Chương 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SDN302"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-17-3-mongodb-vs-jsonb",
+    "ten": "17.3 — Document MongoDB và JSONB của PostgreSQL",
+    "nguon": "PostgreSQL · Chương 17",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-8-2-production",
+    "ten": "⭐ Chuyên sâu 8.2 — Gia cố production: env, validation, rate limit & index",
+    "nguon": "Server-Side Development with Node.js, Express & MongoDB · Chương 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SDN302"
+   }
+  ]
+ },
+ "NoSQL Database › CouchDB": {
+  "body": "Apache CouchDB là document database lưu JSON, truy cập hoàn toàn qua **API HTTP/REST** (dùng được ngay bằng `curl`). Điểm nổi bật là **sao chép nhiều chiều (multi-master replication)**: bất kỳ hai bản CouchDB nào cũng đồng bộ với nhau, kể cả khi đứt kết nối một thời gian.\n\n### Ý chính\n- Mỗi document có `_id` và `_rev` (mã phiên bản); cập nhật phải gửi đúng `_rev` hiện tại (khoá lạc quan).\n- Khi hai bản sửa cùng document trong lúc offline, replication phát hiện **xung đột**, giữ cả hai nhánh và chọn một bản làm \"thắng\" theo quy tắc xác định; ứng dụng có thể xử lý nhánh còn lại.\n- Truy vấn bằng **view** (MapReduce) hoặc Mango (truy vấn kiểu JSON).\n- Hợp ứng dụng **offline-first**: đồng bộ với PouchDB trong trình duyệt/di động.\n- Thuộc phía ưu tiên tính sẵn sàng và nhất quán cuối cùng.\n\n```bash\ncurl -X PUT http://localhost:5984/sach/s1 -d '{\"ten\":\"Dế Mèn phiêu lưu ký\"}'\n```\n\n### Lỗi hay gặp\n- Không xử lý xung đột nên dữ liệu \"thắng\" tuỳ ý.\n- Dùng CouchDB cho truy vấn phân tích phức tạp mà nó không sinh ra để làm.\n\n### Tự kiểm tra\nVì sao CouchDB hợp với ứng dụng cần hoạt động khi mất mạng?"
+ },
+ "NoSQL Database › Neo4j — Cơ sở dữ liệu đồ thị": {
+  "body": "Neo4j lưu dữ liệu theo **mô hình đồ thị thuộc tính** (property graph): **nút** (node) đại diện thực thể, **quan hệ** (relationship) có hướng và có kiểu nối hai nút, cả hai đều có thể mang thuộc tính. Nhờ quan hệ được lưu sẵn như con trỏ, duyệt đồ thị nhanh mà không cần JOIN.\n\n### Ý chính\n- Bài toán hợp: mạng xã hội, gợi ý, phát hiện gian lận (vòng tài khoản liên quan), đồ thị tri thức, quản lý quyền/cây tổ chức, định tuyến.\n- **Cypher** mô tả mẫu cần tìm; có thể truy vấn đường đi ngắn nhất, các nút trong N bước, thành phần liên thông.\n- **Thuật toán đồ thị** (PageRank, phát hiện cộng đồng, độ trung tâm) giúp phân tích cấu trúc mạng.\n- Mô hình hoá: nút cho \"danh từ\", quan hệ cho \"động từ\"; đặt tên quan hệ rõ nghĩa và có hướng hợp lý.\n\n```cypher\nMATCH p = shortestPath((a:Ga {ten:'Hà Nội'})-[:NOI*]-(b:Ga {ten:'Sài Gòn'}))\nRETURN [n IN nodes(p) | n.ten]\n```\n\n### Lỗi hay gặp\n- Biến thuộc tính thành nút không cần thiết (hoặc ngược lại) làm mô hình rối.\n- Truy vấn không giới hạn độ sâu (`*`) có thể bùng nổ.\n\n### Tự kiểm tra\nKhi nào nên biểu diễn một thứ là *nút*, khi nào là *thuộc tính* của nút?",
+  "lessons": [
+   {
+    "href": "/courses/dmd301-data-modeling-and-databases/learn?lessonSlug=dmd301-ts-9-2",
+    "ten": "9.2 — CSDL khoá-giá trị, cột rộng và đồ thị",
+    "nguon": "Data Modeling and Databases · Chương 9",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DMD301"
+   }
+  ]
+ },
+ "NoSQL Database › Vector Database": {
+  "body": "Vector database lưu **embedding** — vector số (thường vài trăm đến vài nghìn chiều) do mô hình AI sinh ra từ văn bản, ảnh, âm thanh — và tìm nhanh các vector **gần nhau nhất**. Hai câu có nghĩa giống nhau cho hai vector gần nhau, nên tìm theo ý nghĩa thay vì theo từ khoá.\n\n### Vì sao cần biết\nĐây là nền tảng của **RAG** (cho LLM tra cứu tài liệu của bạn trước khi trả lời), tìm kiếm ngữ nghĩa, gợi ý, tìm ảnh tương tự.\n\n### Ý chính\n- **Độ đo tương đồng**: cosine, tích vô hướng (dot product), khoảng cách Euclid. Phải dùng đúng độ đo mà mô hình embedding được huấn luyện cho.\n- **Tìm kiếm gần đúng (ANN)**: so với mọi vector thì quá chậm ở quy mô lớn, nên dùng chỉ mục như **HNSW** (đồ thị phân tầng, nhanh, tốn RAM) hoặc **IVFFlat** (chia cụm). Đổi chút độ chính xác (recall) lấy tốc độ.\n- **Lựa chọn triển khai**: extension **pgvector** của PostgreSQL (đơn giản, dùng chung dữ liệu quan hệ), Elasticsearch `dense_vector`, hoặc dịch vụ chuyên dụng (Pinecone, Qdrant, Milvus, Weaviate…).\n- Thường kết hợp **lọc theo metadata** và **tìm kiếm lai** (từ khoá + vector) để chính xác hơn.\n- Đổi mô hình embedding là phải nhúng lại toàn bộ dữ liệu.\n\n```sql\nCREATE EXTENSION vector;\nCREATE TABLE tai_lieu (id serial PRIMARY KEY, noi_dung text, emb vector(1536));\nCREATE INDEX ON tai_lieu USING hnsw (emb vector_cosine_ops);\nSELECT id FROM tai_lieu ORDER BY emb <=> $1 LIMIT 5;  -- 5 hàng xóm gần nhất\n```\n\n### Lỗi hay gặp\n- Trộn embedding của nhiều mô hình khác nhau trong cùng một cột.\n- Chia đoạn (chunk) quá dài hoặc quá ngắn nên kết quả kém.\n- Dùng vector search thuần cho truy vấn cần khớp chính xác (mã sản phẩm).\n\n### Tự kiểm tra\nVì sao tìm kiếm vector dùng ANN thay vì so với mọi vector?"
+ },
+ "NoSQL Database › Time-Series Database": {
+  "body": "Time-series database tối ưu cho dữ liệu theo dõi theo thời gian — metric hạ tầng, dữ liệu cảm biến, sự kiện, log. Dữ liệu được ghi nối tiếp theo thời gian, ít khi sửa, và thường truy vấn theo khoảng thời gian cùng phép tổng hợp.\n\n### Ý chính\n- Mô hình dữ liệu: **timestamp + tag (chiều, có index) + giá trị**.\n- Tối ưu lưu trữ: chia theo thời gian, nén cột, xoá cả phân vùng cũ rất rẻ.\n- **Retention**: tự xoá dữ liệu quá hạn; **downsampling**: giữ bản tổng hợp thô hơn cho dữ liệu cũ (ví dụ trung bình theo giờ sau 30 ngày).\n- **Cardinality** (số tổ hợp tag khác nhau) là kẻ thù chính của hiệu năng.\n- Lựa chọn: InfluxDB, TimescaleDB (trên PostgreSQL), Prometheus (cho metric giám sát), ClickHouse (phân tích khối lượng lớn).\n- Hệ thống giám sát hiện đại gần như luôn dựa trên một TSDB.\n\n### Lỗi hay gặp\n- Gắn thuộc tính có quá nhiều giá trị (id người dùng) làm tag.\n- Truy vấn dữ liệu thô trên khoảng thời gian dài thay vì dùng bản tổng hợp sẵn.\n\n### Tự kiểm tra\nVì sao xoá dữ liệu cũ trong TSDB thường rẻ hơn xoá hàng loạt dòng trong bảng thường?"
+ },
+ "NoSQL Database › RethinkDB": {
+  "body": "RethinkDB là cơ sở dữ liệu document mã nguồn mở phân tán, thiết kế cho ứng dụng thời gian thực. Điểm khác biệt là **changefeeds**: bạn đăng ký một truy vấn và server **đẩy** mỗi thay đổi liên quan tới client, thay vì client phải hỏi lại.\n\n### Ý chính\n- Lưu JSON như MongoDB, nhưng ngôn ngữ truy vấn **ReQL** nhúng trong ngôn ngữ lập trình (JavaScript, Python…), hỗ trợ JOIN giữa bảng.\n- Hợp bảng điều khiển trực tiếp, chat, cộng tác: dữ liệu đổi là UI đổi.\n- Dự án RethinkDB gốc từng ngừng thương mại và hiện do cộng đồng duy trì; trước khi dùng cho dự án mới nên kiểm tra mức độ hoạt động và hỗ trợ của nó.\n- Thay thế: Postgres `LISTEN/NOTIFY` hoặc logical replication, MongoDB change streams, Firebase, hoặc broker tin nhắn.\n\n```js\nr.table('tin_nhan').filter({ phong: 'general' }).changes().run(conn, (err, cursor) => {\n  cursor.each((e, change) => console.log(change.new_val));\n});\n```\n\n### Lỗi hay gặp\n- Chọn công nghệ ít người dùng cho hệ thống dài hạn mà không tính chi phí bảo trì.\n- Đẩy mọi thay đổi xuống client mà không lọc, tốn băng thông.\n\n### Tự kiểm tra\nChangefeed khác polling ở chỗ nào, và những giải pháp nào khác cho cùng bài toán?"
+ },
+ "NoSQL Database › InfluxDB": {
+  "body": "InfluxDB là cơ sở dữ liệu chuỗi thời gian chuyên dụng, được tối ưu cho ghi lượng lớn điểm dữ liệu theo thời gian và truy vấn tổng hợp trên khoảng thời gian — metric, giám sát hạ tầng, IoT, phân tích sự kiện.\n\n### Ý chính\n- **Mô hình dữ liệu**: *measurement* (như tên bảng), *tag* (cặp khoá-giá trị có index, dùng để lọc/nhóm), *field* (giá trị đo, không index), *timestamp*.\n- **Line protocol** là định dạng ghi gọn: `cpu,host=web1 usage=0.64 1700000000000000000`.\n- **Retention policy / bucket**: tự xoá dữ liệu cũ; **task/continuous query** để downsample.\n- Ngôn ngữ truy vấn: Flux hoặc InfluxQL (bản 3.x thêm SQL); bộ thu thập Telegraf nổi tiếng đi kèm.\n- Cardinality của tag phải được kiểm soát vì nó ảnh hưởng mạnh bộ nhớ và tốc độ.\n\n### Lỗi hay gặp\n- Đặt id duy nhất (người dùng, request) làm tag.\n- Quên thiết lập thời gian lưu giữ nên đĩa đầy dần.\n\n### Tự kiểm tra\nKhác biệt giữa tag và field trong InfluxDB là gì và nên đặt thông tin nào vào mỗi loại?"
+ },
+ "NoSQL Database › TimescaleDB": {
+  "body": "TimescaleDB là extension của PostgreSQL cho dữ liệu chuỗi thời gian: bạn giữ nguyên SQL, JOIN, công cụ và hệ sinh thái Postgres nhưng có thêm khả năng ghi/truy vấn chuỗi thời gian hiệu quả ở quy mô lớn.\n\n### Ý chính\n- **Hypertable**: bảng thường được tự động chia thành nhiều **chunk** theo thời gian (và tuỳ chọn theo khoá khác). Truy vấn theo khoảng thời gian chỉ chạm các chunk liên quan.\n- **Nén** dữ liệu cũ dạng cột, tiết kiệm đáng kể dung lượng.\n- **Continuous aggregate**: view tổng hợp được cập nhật tăng dần (ví dụ trung bình mỗi giờ).\n- **Retention policy** tự xoá chunk quá hạn.\n- Hàm chuyên dụng như `time_bucket()` để gom theo khoảng thời gian.\n- Lợi thế lớn nhất: dữ liệu thời gian và dữ liệu quan hệ cùng một DB, JOIN dễ dàng.\n\n```sql\nCREATE TABLE do_luong (thoi_diem timestamptz NOT NULL, thiet_bi int, nhiet_do float);\nSELECT create_hypertable('do_luong', 'thoi_diem');\nSELECT time_bucket('1 hour', thoi_diem) AS gio, avg(nhiet_do)\nFROM do_luong GROUP BY gio ORDER BY gio;\n```\n\n### Lỗi hay gặp\n- Chunk quá nhỏ hoặc quá lớn ảnh hưởng hiệu năng; cần chọn khoảng chunk phù hợp với lượng dữ liệu.\n- Giữ dữ liệu thô vô hạn, không bật nén và retention.\n\n### Tự kiểm tra\nHypertable giúp truy vấn \"dữ liệu 1 giờ qua\" nhanh hơn bảng Postgres thường như thế nào?"
+ },
+ "NoSQL Database › Apache Cassandra": {
+  "body": "Apache Cassandra là cơ sở dữ liệu NoSQL phân tán dạng **wide-column**, thiết kế để xử lý lượng dữ liệu khổng lồ trên nhiều máy với **không có điểm hỏng duy nhất**, ghi rất nhanh và mở rộng tuyến tính khi thêm nút.\n\n### Vì sao cần biết\nDùng cho khối lượng ghi lớn, luôn sẵn sàng: nhắn tin, dòng sự kiện, IoT, lịch sử hoạt động. Hiểu Cassandra cũng giúp hiểu cách các hệ phân tán kiểu Dynamo làm việc.\n\n### Ý chính\n- **Kiến trúc ngang hàng (peer-to-peer)**: mọi nút như nhau, giao tiếp bằng giao thức gossip; dữ liệu chia bởi **partition key** lên **vòng băm nhất quán**, nhân bản đến N nút (**replication factor**).\n- **Mức nhất quán chỉnh được**: `ONE`, `QUORUM`, `ALL`; W + R > N cho đọc thấy ghi mới. Mặc định thiên về sẵn sàng và nhất quán cuối cùng (AP).\n- **Mô hình dữ liệu theo truy vấn**: bảng được thiết kế cho từng truy vấn cụ thể, dữ liệu có thể trùng lặp giữa các bảng; **partition key** quyết định nơi lưu, **clustering key** quyết định thứ tự trong partition.\n- Ghi theo **LSM-tree** (commit log → memtable → SSTable) nên rất nhanh; xoá tạo \"tombstone\" cần quản lý.\n- CQL trông giống SQL nhưng **không có JOIN** và hạn chế truy vấn không dùng khoá.\n\n```sql\nCREATE TABLE tin_nhan_theo_phong (\n  phong_id uuid, gui_luc timeuuid, nguoi_gui text, noi_dung text,\n  PRIMARY KEY ((phong_id), gui_luc)\n) WITH CLUSTERING ORDER BY (gui_luc DESC);\n```\n\n### Lỗi hay gặp\n- Thiết kế bảng như SQL rồi phải `ALLOW FILTERING` (quét chậm).\n- Partition quá lớn hoặc nóng; nhiều tombstone làm đọc chậm.\n\n### Tự kiểm tra\nPartition key và clustering key khác nhau ra sao, và vì sao chọn partition key là quyết định quan trọng nhất?",
+  "lessons": [
+   {
+    "href": "/courses/dmd301-data-modeling-and-databases/learn?lessonSlug=dmd301-ts-9-2",
+    "ten": "9.2 — CSDL khoá-giá trị, cột rộng và đồ thị",
+    "nguon": "Data Modeling and Databases · Chương 9",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DMD301"
+   }
+  ]
+ },
+ "NoSQL Database › AWS Neptune": {
+  "body": "AWS Neptune là dịch vụ cơ sở dữ liệu đồ thị được AWS quản lý hoàn toàn. Nó hỗ trợ nhiều mô hình và ngôn ngữ: **Property Graph** với Apache TinkerPop Gremlin (và openCypher), và **RDF** với SPARQL.\n\n### Ý chính\n- Dùng cho bài toán quan hệ nhiều bước: đồ thị tri thức, phát hiện gian lận, gợi ý, quản lý danh tính và quyền truy cập, sinh học mạng.\n- Là dịch vụ quản lý: tự sao lưu, nhân bản nhiều vùng khả dụng, tự mở rộng lưu trữ, bảo mật bằng IAM/VPC; bạn không quản lý máy chủ.\n- Chạy trong VPC của bạn; truy cập qua điểm cuối trong mạng riêng.\n- Đánh đổi: khoá nhà cung cấp AWS và chi phí; nếu muốn tự chạy cục bộ, có thể dùng Neo4j hoặc JanusGraph.\n- Mô hình dữ liệu đồ thị (nút, cạnh, thuộc tính) giống nhau ở các hệ, nên học một hệ giúp chuyển sang hệ khác.\n\n### Lỗi hay gặp\n- Chọn đồ thị khi dữ liệu thực chất là bảng, hoặc ngược lại.\n- Để Neptune ở mạng công khai hoặc cấp quyền quá rộng.\n\n### Tự kiểm tra\nProperty Graph và RDF khác nhau ở điểm nào, và ngôn ngữ truy vấn nào đi với mỗi mô hình?",
+  "lessons": [
+   {
+    "href": "/courses/dmd301-data-modeling-and-databases/learn?lessonSlug=dmd301-ts-9-2",
+    "ten": "9.2 — CSDL khoá-giá trị, cột rộng và đồ thị",
+    "nguon": "Data Modeling and Databases · Chương 9",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DMD301"
+   }
+  ]
+ },
+ "NoSQL Database › ClickHouse": {
+  "body": "ClickHouse là cơ sở dữ liệu **lưu theo cột (columnar)**, mã nguồn mở, tối ưu cho truy vấn phân tích **OLAP** trên hàng tỷ dòng với độ trễ rất thấp. Nó không thay thế PostgreSQL cho giao dịch (OLTP) mà bổ sung cho phần báo cáo/phân tích.\n\n### Vì sao cần biết\nTruy vấn báo cáo nặng chạy thẳng trên database sản xuất làm chậm cả ứng dụng. Chuyển dữ liệu sang kho phân tích như ClickHouse giữ hệ thống chính nhanh và cho báo cáo nhanh hơn nhiều lần.\n\n### Ý chính\n- **Lưu theo cột**: truy vấn chỉ đọc các cột cần (ví dụ `SUM(doanh_thu)`) thay vì cả dòng; các giá trị cùng cột giống nhau nên **nén rất tốt**; xử lý theo lô vector hoá.\n- **MergeTree**: engine chính; dữ liệu ghi thành các *part* sắp theo `ORDER BY` (khoá sắp xếp đóng vai chỉ mục thưa), gộp nền. Chọn `ORDER BY` theo truy vấn là quyết định then chốt.\n- **Partition**, skip index, **materialized view** để tổng hợp tăng dần khi ghi.\n- Hợp ghi theo lô lớn, hiếm sửa/xoá từng dòng; không phù hợp giao dịch đa dòng hay cập nhật nhỏ liên tục.\n- Nạp dữ liệu: batch, CDC từ Postgres, hoặc Kafka.\n\n```sql\nCREATE TABLE su_kien (\n  ngay Date, user_id UInt64, loai LowCardinality(String), gia_tri Float64\n) ENGINE = MergeTree\nPARTITION BY toYYYYMM(ngay)\nORDER BY (loai, ngay, user_id);\n\nSELECT loai, count(), sum(gia_tri) FROM su_kien WHERE ngay >= today() - 30 GROUP BY loai;\n```\n\n### Lỗi hay gặp\n- Chèn từng dòng nhỏ lẻ (nên gom thành lô lớn).\n- Chọn `ORDER BY` không khớp truy vấn nên quét nhiều dữ liệu.\n- Dùng làm database giao dịch.\n\n### Tự kiểm tra\n1. Vì sao lưu theo cột nhanh hơn lưu theo dòng cho truy vấn tổng hợp?\n2. Vì sao `ORDER BY` của MergeTree quan trọng?"
+ },
+ "NoSQL Database › ScyllaDB": {
+  "body": "ScyllaDB là cơ sở dữ liệu NoSQL dạng wide-column **tương thích với Cassandra** (cùng mô hình dữ liệu, CQL và giao thức), nhưng viết lại bằng C++ với kiến trúc *shard-per-core* để đạt độ trễ thấp và thông lượng cao trên cùng phần cứng.\n\n### Ý chính\n- **Cùng khái niệm với Cassandra**: partition key, clustering key, replication factor, mức nhất quán chỉnh được, mô hình ghi LSM-tree. Ứng dụng dùng driver Cassandra thường chuyển qua được.\n- **Khác biệt**: mỗi lõi CPU được gán các shard riêng, có bộ lập lịch I/O riêng, tránh khoá và tranh chấp; không dùng JVM nên không có dừng do thu gom rác; tự điều chỉnh nhiều thông số.\n- Thường cần ít nút hơn để đạt cùng tải, đổi lại là một hệ sinh thái ít phổ biến hơn Cassandra.\n- Hợp nhắn tin, lưu hoạt động, IoT, đề xuất — nơi cần độ trễ đuôi (p99) thấp.\n- Các lưu ý thiết kế dữ liệu của Cassandra (thiết kế theo truy vấn, tránh partition quá lớn) vẫn áp dụng nguyên vẹn.\n\n### Lỗi hay gặp\n- Cho rằng \"tương thích\" nghĩa là mọi tính năng Cassandra đều giống hệt; cần kiểm tra các điểm khác biệt trước khi di chuyển.\n- Thiết kế bảng sai rồi trông chờ phần cứng bù.\n\n### Tự kiểm tra\nKiến trúc shard-per-core giúp giảm độ trễ đuôi như thế nào so với mô hình nhiều luồng dùng chung?"
+ },
+ "NoSQL Database › DGraph": {
+  "body": "Dgraph là cơ sở dữ liệu đồ thị phân tán, mã nguồn mở, viết bằng Go, thiết kế để mở rộng ngang với dữ liệu có quan hệ phức tạp. Nó dùng **GraphQL** làm giao diện gốc, và có ngôn ngữ truy vấn riêng **DQL**.\n\n### Ý chính\n- Bạn khai báo schema GraphQL; Dgraph sinh ra API truy vấn và ghi tương ứng, nên rất tiện cho đội đã quen GraphQL.\n- Dữ liệu chia theo **predicate** (mỗi loại quan hệ/thuộc tính) giữa các nút trong cụm, để truy vấn đồ thị lớn mở rộng được.\n- Hỗ trợ giao dịch ACID phân tán và index trên thuộc tính (term, fulltext, geo…).\n- Hợp ứng dụng có quan hệ phức tạp cần API GraphQL: mạng xã hội, gợi ý, đồ thị tri thức.\n- So với Neo4j: Neo4j có hệ sinh thái và Cypher phổ biến hơn; Dgraph nhấn vào phân tán và GraphQL gốc.\n\n```graphql\ntype Nguoi {\n  id: ID!\n  ten: String! @search(by: [term])\n  ban: [Nguoi] @hasInverse(field: ban)\n}\n```\n\n### Lỗi hay gặp\n- Chọn một đồ thị ít phổ biến mà không xét độ chín muồi và sự hỗ trợ lâu dài.\n- Mô hình hoá thuộc tính thành nút tuỳ tiện làm truy vấn thêm phức tạp.\n\n### Tự kiểm tra\nKhi nào việc có GraphQL làm giao diện gốc của cơ sở dữ liệu là lợi thế, và khi nào chỉ là phức tạp thêm?"
  },
  "NoSQL Database › Vector Databases & Semantic Search": {
   "body": "Tìm kiếm thông thường so khớp **chữ**: gõ \"xe hơi\" thì không ra bài viết chỉ chứa \"ô tô\". Tìm kiếm ngữ nghĩa (semantic search) so khớp **ý nghĩa**: mỗi đoạn văn được biến thành một dãy số (vector embedding), và hai đoạn có nghĩa gần nhau thì vector của chúng nằm gần nhau trong không gian. Cơ sở dữ liệu vector là nơi lưu các vector đó và trả lời nhanh câu hỏi \"trong hàng triệu vector, đâu là K vector gần vector truy vấn nhất?\".\n\n### Vì sao cần biết\n- Là tầng lưu trữ của hầu hết hệ thống RAG, chatbot hỏi đáp trên tài liệu nội bộ, gợi ý sản phẩm \"tương tự\", tìm ảnh/bài viết liên quan.\n- Backend developer thường là người chọn: dùng luôn PostgreSQL + pgvector hay thêm một dịch vụ riêng.\n\n### Ý chính\n- **Độ gần** đo bằng khoảng cách: cosine (phổ biến nhất cho văn bản), L2 (Euclid), inner product.\n- Tìm chính xác (so với mọi vector) là O(N) nên chậm; thực tế dùng **ANN** (approximate nearest neighbor) với chỉ mục như **HNSW** hoặc **IVFFlat**: nhanh hơn nhiều, đổi lại kết quả *gần đúng* (recall < 100%).\n- **pgvector** biến PostgreSQL thành vector DB: có sẵn transaction, JOIN, backup, quyền truy cập. Với vài triệu vector thường là lựa chọn hợp lý nhất vì không phải vận hành thêm hệ thống.\n- Dịch vụ chuyên dụng (Pinecone, Weaviate, Qdrant, Milvus) đáng cân nhắc khi quy mô rất lớn hoặc cần tính năng lọc/sharding chuyên biệt.\n- Luôn lưu kèm **metadata** (id tài liệu, người sở hữu, ngày) để lọc và để trích dẫn nguồn.\n\n```sql\nCREATE EXTENSION IF NOT EXISTS vector;\n\nCREATE TABLE chunks (\n  id        bigserial PRIMARY KEY,\n  doc_id    int NOT NULL,\n  content   text NOT NULL,\n  embedding vector(1536) NOT NULL   -- số chiều phải khớp model embedding\n);\n\nCREATE INDEX ON chunks USING hnsw (embedding vector_cosine_ops);\n\n-- 5 đoạn gần nhất với vector truy vấn $1 (<=> là khoảng cách cosine)\nSELECT id, content, 1 - (embedding <=> $1) AS do_giong\nFROM chunks\nORDER BY embedding <=> $1\nLIMIT 5;\n```\n\n### Lỗi hay gặp\n- Số chiều cột `vector(n)` không khớp model embedding đang dùng, hoặc đổi model mà không embed lại toàn bộ dữ liệu cũ.\n- Dùng toán tử khác với toán tử của chỉ mục (chỉ mục `vector_cosine_ops` chỉ giúp truy vấn dùng `<=>`).\n- Tưởng ANN trả kết quả tuyệt đối đúng; kết hợp lọc `WHERE` với ANN có thể trả ít kết quả hơn mong đợi.\n- Không lưu metadata nên không lọc được theo người dùng, dẫn tới lộ dữ liệu giữa các tenant.\n\n### Tự kiểm tra\n1. Vì sao tìm \"ô tô\" có thể ra bài chứa \"xe hơi\" khi dùng vector nhưng không ra khi dùng `LIKE`?\n2. Chỉ mục HNSW đánh đổi điều gì để đổi lấy tốc độ?\n3. Khi nào bạn chọn pgvector, khi nào chọn một vector DB riêng?",

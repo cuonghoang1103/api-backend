@@ -1364,5 +1364,681 @@
     "kieu": "bai-doc"
    }
   ]
+ },
+ "Testing › Playwright": {
+  "body": "Playwright là bộ công cụ do Microsoft phát triển để **điều khiển một trình duyệt thật** (Chromium, Firefox, WebKit) và kiểm tra ứng dụng của bạn như một người dùng thật: mở trang, gõ vào ô nhập, bấm nút, rồi xác nhận kết quả hiện ra. Đây là loại test end-to-end (E2E) — chậm hơn unit test nhưng chứng minh cả hệ thống (giao diện, API, cơ sở dữ liệu) chạy khớp nhau.\n\n### Vì sao cần biết\nUnit test và test component không bắt được lỗi \"mỗi phần đều đúng nhưng ghép lại hỏng\": cấu hình proxy sai, cookie không gửi đi, route bị chặn, CSS che mất nút. Vài test E2E cho các luồng sống còn (đăng nhập, thanh toán, đặt lịch) là lưới an toàn cuối cùng trước khi deploy.\n\n### Ý chính\n- **Auto-wait**: trước khi bấm hay gõ, Playwright tự chờ phần tử hiện ra, ổn định và bấm được. Bạn hiếm khi cần `sleep`.\n- **Web-first assertion**: `await expect(locator).toBeVisible()` tự thử lại đến khi đúng hoặc hết giờ — khác với `expect(await el.isVisible())` chỉ kiểm một lần.\n- **Locator theo cách người dùng thấy**: `getByRole`, `getByLabel`, `getByText` bền hơn selector CSS gắn chặt vào cấu trúc DOM.\n- **Cô lập**: mỗi test có một browser context riêng (cookie, storage riêng), chạy song song được.\n- **Trace viewer**: khi test đỏ, file trace ghi lại ảnh chụp từng bước, request mạng và console để bạn xem lại.\n- **Network interception**: `page.route()` cho phép giả lập hoặc chặn request khi cần.\n\n```ts\nimport { test, expect } from '@playwright/test';\n\ntest('đăng nhập rồi thấy trang chủ', async ({ page }) => {\n  await page.goto('/login');\n  await page.getByLabel('Email').fill('an@example.com');\n  await page.getByLabel('Mật khẩu').fill('matkhau-thu');\n  await page.getByRole('button', { name: 'Đăng nhập' }).click();\n  await expect(page.getByRole('heading', { name: 'Trang chủ' })).toBeVisible();\n});\n```\n\nTrong `playwright.config.ts`, khối `webServer` có thể tự bật app trước khi chạy test, và `projects` cho phép chạy cùng bộ test trên nhiều trình duyệt.\n\n### Lỗi hay gặp\n- Dùng `waitForTimeout` cố định thay vì chờ một điều kiện cụ thể — test chập chờn (flaky).\n- Các test dùng chung một dữ liệu (cùng tài khoản, cùng khung giờ) nên chạy song song thì đạp lên nhau.\n- Viết quá nhiều E2E cho những thứ unit test làm được rẻ hơn.\n- Bắt đầu mỗi test bằng việc đăng nhập qua giao diện, rất chậm — nên đăng nhập một lần rồi lưu `storageState`.\n\n### Tự kiểm tra\n1. Vì sao `await expect(locator).toBeVisible()` ổn định hơn kiểm một lần rồi so sánh?\n2. Luồng nào trong dự án của bạn đáng một test E2E, luồng nào thì không?",
+  "lessons": [
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-7-1-playwright",
+    "ten": "7.1 — Playwright: test trình duyệt đầu tiên",
+    "nguon": "Testing · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-7-2-luong",
+    "ten": "7.2 — Test luồng người dùng thật",
+    "nguon": "Testing · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-7-3-on-dinh",
+    "ten": "7.3 — Làm test e2e ổn định",
+    "nguon": "Testing · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-7-4-da-trinh-duyet",
+    "ten": "7.4 — Nhiều trình duyệt, thiết bị và kiểm tra hình ảnh",
+    "nguon": "Testing · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-7-5-lab-e2e",
+    "ten": "Lab 7 — Hành trình đầu-cuối: diệt 8 đột biến trong app, form đăng nhập và server",
+    "nguon": "Testing · Chương 7",
+    "kieu": "lab"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "Playwright — Best Practices",
+    "url": "https://playwright.dev/docs/best-practices"
+   }
+  ]
+ },
+ "Testing › Cypress": {
+  "body": "Cypress là công cụ test E2E (và component test) chạy **ngay bên trong trình duyệt** cùng với ứng dụng của bạn. Điểm hấp dẫn nhất là trải nghiệm phát triển: bạn mở Test Runner, thấy ứng dụng ở bên phải và từng lệnh test ở bên trái, rê chuột vào lệnh nào là thấy trạng thái trang tại thời điểm đó (\"time-travel\").\n\n### Vì sao cần biết\nNhiều dự án React hiện có đã dùng Cypress, và công cụ này đặc biệt dễ tiếp cận với người mới nhờ vòng lặp phản hồi nhanh. Khái niệm E2E bạn học ở đây (luồng người dùng, độ ổn định, dữ liệu cô lập) dùng được cho cả Playwright.\n\n### Ý chính\n- Lệnh viết dạng chuỗi: `cy.visit()`, `cy.get()`, `cy.contains()`, rồi `.click()`, `.type()`, `.should()`.\n- Cypress **tự thử lại** các câu lệnh truy vấn và assertion đến hết thời gian chờ, nên không cần chờ thủ công.\n- `cy.intercept()` để theo dõi hoặc giả lập request mạng.\n- Mở giao diện bằng `npx cypress open`, chạy không giao diện (CI) bằng `npx cypress run`.\n- Cypress Cloud là dịch vụ trả phí để lưu kết quả, chạy song song và xem lại.\n\n```js\ndescribe('đăng nhập', () => {\n  it('vào được trang chủ', () => {\n    cy.visit('/login');\n    cy.get('input[name=email]').type('an@example.com');\n    cy.get('input[name=password]').type('matkhau-thu');\n    cy.contains('button', 'Đăng nhập').click();\n    cy.contains('h1', 'Trang chủ').should('be.visible');\n  });\n});\n```\n\n### So với Playwright\nCypress có DX rất tốt nhưng chạy trong một trình duyệt và có những giới hạn về nhiều tab hay nhiều origin; Playwright điều khiển trình duyệt từ bên ngoài, hỗ trợ cả WebKit và song song hóa sẵn. Chọn công cụ theo đội và dự án, đừng chọn theo sở thích.\n\n### Lỗi hay gặp\n- Cố viết `await cy.get(...)` như code async thông thường — lệnh Cypress được xếp hàng, không trả Promise đúng nghĩa.\n- Selector dính vào class CSS; nên dùng thuộc tính riêng như `data-testid`.\n\nLưu ý: các bài học bên dưới dạy bằng Playwright, nhưng phần luồng người dùng thật và làm test ổn định áp dụng y nguyên cho Cypress.",
+  "lessons": [
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-7-2-luong",
+    "ten": "7.2 — Test luồng người dùng thật",
+    "nguon": "Testing · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-7-3-on-dinh",
+    "ten": "7.3 — Làm test e2e ổn định",
+    "nguon": "Testing · Chương 7",
+    "kieu": "bai-doc"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "Cypress — Introduction to Cypress",
+    "url": "https://docs.cypress.io/app/core-concepts/introduction-to-cypress"
+   }
+  ]
+ },
+ "Gọi API › TanStack Query (react-query)": {
+  "body": "TanStack Query (trước đây là React Query) quản lý **server state**: dữ liệu nằm ở máy chủ mà giao diện chỉ giữ bản sao. Thay vì tự viết `useEffect` + `useState` cho loading, lỗi, thử lại, bạn khai báo \"dữ liệu này lấy bằng hàm nào, ứng với khóa nào\" và thư viện lo phần còn lại: cache, gộp request trùng, làm mới nền, thử lại.\n\n### Vì sao cần biết\nHầu hết ứng dụng React thực tế là giao diện đứng trên API. Tự xử lý fetch trong effect dễ dính race condition (kết quả của request cũ ghi đè request mới), quên hủy, quên thử lại. TanStack Query là chuẩn de-facto của cộng đồng cho việc này.\n\n### Ý chính\n- **`useQuery({ queryKey, queryFn })`**: `queryKey` là \"địa chỉ\" của dữ liệu trong cache, ví dụ `['doctors', { specialty }]`. Khóa đổi thì tự tải lại.\n- **`staleTime`** (bao lâu dữ liệu được coi là còn tươi) và **`gcTime`** (bao lâu dữ liệu không ai dùng thì bị xóa khỏi cache).\n- **`status`** (có dữ liệu chưa: pending/error/success) khác **`fetchStatus`** (có đang gọi mạng không).\n- **`useMutation`** cho thao tác ghi; sau khi ghi gọi `queryClient.invalidateQueries({ queryKey })` để dữ liệu liên quan tải lại.\n- Cập nhật lạc quan (optimistic update): cập nhật giao diện trước, hoàn tác nếu server báo lỗi.\n\n```tsx\nimport { useQuery } from '@tanstack/react-query';\n\nfunction Doctors() {\n  const { data, isPending, error } = useQuery({\n    queryKey: ['doctors'],\n    queryFn: () => fetch('/api/doctors').then((r) => {\n      if (!r.ok) throw new Error('Không tải được danh sách');\n      return r.json();\n    }),\n  });\n  if (isPending) return <p>Đang tải…</p>;\n  if (error) return <p>{error.message}</p>;\n  return <ul>{data.map((d) => <li key={d.id}>{d.name}</li>)}</ul>;\n}\n```\nCần bọc app trong `QueryClientProvider` với một `QueryClient`.\n\n### Lỗi hay gặp\n- `fetch` không ném lỗi với HTTP 404/500; phải tự kiểm `res.ok` rồi `throw`, nếu không Query coi là thành công.\n- Đặt `queryKey` thiếu tham số (ví dụ quên `specialty`) nên các danh sách khác nhau dùng chung một cache.\n- Nhét dữ liệu server vào `useState`/Redux rồi tự đồng bộ — mất hết lợi ích của cache.\n- Quên `invalidateQueries` sau mutation nên màn hình vẫn hiện dữ liệu cũ.\n\n### Tự kiểm tra\n1. `status` và `fetchStatus` khác nhau thế nào? Khi nào dữ liệu có sẵn mà vẫn đang `fetching`?\n2. Sau khi tạo một lịch hẹn mới, bạn làm gì để danh sách lịch hẹn cập nhật?",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-6-0-slides",
+    "ten": "6.0 — Slide Chương 6: lấy dữ liệu bằng hình",
+    "nguon": "React · Chương 6",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-6-2-tanstack",
+    "ten": "6.2 — TanStack Query: useQuery, query key, staleTime/gcTime, status và fetchStatus",
+    "nguon": "React · Chương 6",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-6-3-mutation",
+    "ten": "6.3 — Mutation và cập nhật lạc quan: useMutation, invalidate, hoàn tác khi lỗi",
+    "nguon": "React · Chương 6",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-6-4-loi-api",
+    "ten": "6.4 — Đang tải, lỗi và rỗng: skeleton, thử lại, ranh giới lỗi, thông báo nổi",
+    "nguon": "React · Chương 6",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-14-3-tanstack-query",
+    "ten": "14.3 — State server phía client với TanStack Query",
+    "nguon": "Next.js: The React Framework · Chương 14",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Gọi API › Axios / swr": {
+  "body": "Hai công cụ này giải quyết hai bài toán gần nhau nhưng khác tầng. **Axios** là HTTP client: gửi request và nhận response, thay cho `fetch` với vài tiện ích. **SWR** là thư viện lấy dữ liệu cho React: quản lý cache và làm mới dữ liệu quanh một hàm fetcher do bạn cung cấp (hàm đó có thể dùng `fetch` hoặc Axios).\n\n### Ý chính\n- Axios tự parse JSON, ném lỗi khi HTTP status là 4xx/5xx (khác `fetch`), có `baseURL`, `timeout` và **interceptor** để gắn token hoặc xử lý 401 ở một chỗ.\n- SWR theo mô hình *stale-while-revalidate*: trả ngay dữ liệu cũ trong cache, đồng thời gọi lại để cập nhật. Tự làm mới khi người dùng quay lại tab hoặc mạng nối lại.\n- Hai thứ hay đi cùng nhau: Axios làm tầng gọi mạng, SWR (hoặc TanStack Query) làm tầng cache.\n\n```tsx\nimport axios from 'axios';\nimport useSWR from 'swr';\n\nconst api = axios.create({ baseURL: '/api', timeout: 8000 });\nconst fetcher = (url: string) => api.get(url).then((res) => res.data);\n\nfunction Profile() {\n  const { data, error, isLoading } = useSWR('/me', fetcher);\n  if (isLoading) return <p>Đang tải…</p>;\n  if (error) return <p>Có lỗi</p>;\n  return <p>Xin chào {data.name}</p>;\n}\n```\n\nBên dưới là các bài về `fetch`/Axios trong React; phần SWR thì dùng bài TanStack Query để học mô hình cache vì hai thư viện cùng triết lý.\n\n### Lỗi hay gặp\n- Quên rằng `fetch` không ném lỗi theo HTTP status, rồi chuyển sang Axios mà vẫn viết code kiểm `res.ok`.\n- Truyền object mới mỗi lần render làm khóa SWR đổi liên tục.\n- Đặt token trong từng lời gọi thay vì interceptor, sót chỗ.",
+  "lessons": [
+   {
+    "href": "/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-11-2-axios-json-server",
+    "ten": "11.2 — Axios & json-server",
+    "nguon": "Front-End Web Development with React · Chương 11",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "FER202"
+   },
+   {
+    "href": "/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-11-4-slot19-fetch-axios-slides",
+    "ten": "11.4 — Học theo từng slide: Lấy dữ liệu với fetch & axios (Slot 19)",
+    "nguon": "Front-End Web Development with React · Chương 11",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "FER202"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-6-2-tanstack",
+    "ten": "6.2 — TanStack Query: useQuery, query key, staleTime/gcTime, status và fetchStatus",
+    "nguon": "React · Chương 6",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Gọi API › Apollo / Relay / urql (GraphQL)": {
+  "body": "GraphQL là ngôn ngữ truy vấn cho API: client mô tả **chính xác trường dữ liệu mình cần**, server trả đúng hình dạng đó trong một request. Một GraphQL client cho React lo việc gửi query/mutation, lưu cache và cập nhật giao diện khi dữ liệu đổi.\n\n### Ba lựa chọn phổ biến\n- **Apollo Client**: đầy đủ nhất, cache chuẩn hóa theo `id`, hỗ trợ subscription, hệ sinh thái lớn.\n- **Relay**: do Meta phát triển, ép bạn khai báo dữ liệu theo từng component bằng *fragment* và có compiler; mạnh khi ứng dụng rất lớn nhưng đường học dốc.\n- **urql**: nhẹ, mở rộng bằng các *exchange* (cache, auth, retry).\n\n### Ý chính\n- Cache **theo tài liệu** (đơn giản: cache theo cả câu query) khác cache **chuẩn hóa** (tách thành từng thực thể, cập nhật một chỗ là mọi query dùng thực thể đó tự đổi).\n- Hook `useQuery`/`useMutation` trả về trạng thái loading, error và data tương tự TanStack Query.\n- Chọn client cũng là chọn cách cache; đừng dùng GraphQL client nếu API của bạn là REST.\n\n```tsx\nimport { gql, useQuery } from '@apollo/client';\n\nconst DOCTORS = gql`\n  query { doctors { id name specialty } }\n`;\n\nfunction Doctors() {\n  const { data, loading, error } = useQuery(DOCTORS);\n  if (loading) return <p>Đang tải…</p>;\n  if (error) return <p>{error.message}</p>;\n  return <ul>{data.doctors.map((d) => <li key={d.id}>{d.name}</li>)}</ul>;\n}\n```\n\n### Lỗi hay gặp\n- GraphQL trả HTTP 200 kể cả khi có lỗi; lỗi nằm trong trường `errors` của body, nên phải kiểm cả hai.\n- Query lồng quá sâu làm server tốn kém (N+1); cần giới hạn độ sâu ở server.\n- Chọn công cụ nặng cho dự án nhỏ.\n\nBài học bên dưới giải thích GraphQL (đánh đổi so với REST) và có luyện tập; chưa có bài riêng cho từng client.",
+  "lessons": [
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-7-4-khac",
+    "ten": "7.5 — GraphQL và gRPC: khi REST không phải câu trả lời, đo trên LabFlow",
+    "nguon": "API & System Design · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/code-lab/graphql",
+    "ten": "GraphQL",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Gọi API › API Calls": {
+  "body": "Gọi API là cách giao diện React nói chuyện với backend: lấy danh sách, gửi form, xóa một bản ghi. Điểm khó không nằm ở câu lệnh `fetch`, mà ở mọi thứ xung quanh: đang tải, lỗi, dữ liệu rỗng, thử lại, và làm mới khi dữ liệu đổi.\n\n### Vì sao cần biết\nMột màn hình gọi API thiếu xử lý trạng thái sẽ trắng trang khi mạng chậm, hiện dữ liệu cũ sau khi lưu, hoặc hiển thị kết quả của một request đã lỗi thời. Đây là nguồn bug phổ biến nhất ở frontend.\n\n### Ý chính\n- Mọi khu dữ liệu có **bốn trạng thái**: đang tải, lỗi, rỗng, có dữ liệu. Kiểm đúng thứ tự.\n- `fetch` **không ném lỗi** với HTTP 404/500, chỉ ném khi mất mạng. Phải kiểm `response.ok`.\n- Gọi trong `useEffect` cần dọn dẹp: hủy bằng `AbortController` để request cũ không ghi đè request mới (race condition).\n- Thay vì tự viết hết, dùng thư viện (TanStack Query, SWR, RTK Query) để có cache, thử lại và gộp request.\n- Thao tác ghi (POST/PUT/DELETE) cần xử lý riêng: tránh gửi hai lần, báo kết quả, làm mới danh sách.\n\n```tsx\nuseEffect(() => {\n  const controller = new AbortController();\n  fetch('/api/doctors', { signal: controller.signal })\n    .then((r) => { if (!r.ok) throw new Error(r.statusText); return r.json(); })\n    .then(setDoctors)\n    .catch((e) => { if (e.name !== 'AbortError') setError(e); });\n  return () => controller.abort();\n}, []);\n```\n\n### Lỗi hay gặp\n- Không kiểm `res.ok`, coi trang lỗi là dữ liệu hợp lệ.\n- Không hủy request khi component unmount hoặc tham số đổi.\n- Đặt URL cứng thay vì biến môi trường nên bản build trỏ nhầm môi trường.\n- Dùng `localhost` làm địa chỉ API trong app chạy trên thiết bị khác.",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-6-0-slides",
+    "ten": "6.0 — Slide Chương 6: lấy dữ liệu bằng hình",
+    "nguon": "React · Chương 6",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-6-1-fetch",
+    "ten": "6.1 — Fetch trong effect, và vì sao đau đầu: MSW, cuộc đua đo thật, AbortController",
+    "nguon": "React · Chương 6",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-6-2-tanstack",
+    "ten": "6.2 — TanStack Query: useQuery, query key, staleTime/gcTime, status và fetchStatus",
+    "nguon": "React · Chương 6",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-14-2-api-that",
+    "ten": "14.2 — API thật: hết giờ, thử lại, mất mạng, idempotency, báo lỗi, biến môi trường Vite",
+    "nguon": "React · Chương 14",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-5-4-fetch-apis",
+    "ten": "5.4 — fetch: lấy dữ liệu từ API",
+    "nguon": "Nền tảng Lập trình Web · Chương 5",
+    "kieu": "bai-doc"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "MDN — Using the Fetch API",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch"
+   }
+  ]
+ },
+ "Gọi API › SWR": {
+  "body": "SWR (của Vercel) là một hook lấy dữ liệu nhỏ gọn, đặt tên theo chiến lược HTTP *stale-while-revalidate* (RFC 5861): **trả ngay dữ liệu cũ từ cache, rồi gọi lại để cập nhật**. Người dùng thấy giao diện tức thì, và dữ liệu tự tươi lên ở nền.\n\n### Vì sao cần biết\nSWR có API rất nhỏ, phù hợp dự án không cần nhiều tính năng nâng cao. Hiểu nó cũng giúp hiểu chung mô hình \"cache theo khóa + làm mới nền\" mà TanStack Query và RTK Query cùng dùng.\n\n### Ý chính\n- `useSWR(key, fetcher)` trả về `data`, `error`, `isLoading`, `isValidating`, `mutate`.\n- **Khóa** (`key`) xác định mục cache; hai component dùng cùng khóa chia sẻ một request.\n- Tự **revalidate** khi tab được focus lại, khi mạng nối lại, hoặc theo chu kỳ (`refreshInterval`).\n- `mutate` để cập nhật cache thủ công (cập nhật lạc quan) hoặc ép tải lại.\n- Khóa có thể là `null` để tạm không tải (dữ liệu phụ thuộc).\n\n```tsx\nimport useSWR from 'swr';\n\nconst fetcher = (url: string) =>\n  fetch(url).then((r) => {\n    if (!r.ok) throw new Error('Lỗi tải');\n    return r.json();\n  });\n\nfunction Notifications() {\n  const { data, error, isLoading } = useSWR('/api/notifications', fetcher, {\n    refreshInterval: 30000,\n  });\n  if (isLoading) return <p>Đang tải…</p>;\n  if (error) return <p>Không tải được</p>;\n  return <p>Bạn có {data.length} thông báo</p>;\n}\n```\n\n### So với TanStack Query\nSWR gọn nhẹ hơn nhưng ít công cụ hơn cho mutation, phân trang vô hạn có cấu trúc và DevTools. Dự án nhiều thao tác ghi thường chọn TanStack Query.\n\nCác bài học bên dưới dạy bằng TanStack Query; phần cache, tươi/cũ và làm mới nền dùng chung cho SWR.\n\n### Lỗi hay gặp\n- Quên rằng `fetcher` phải tự ném lỗi khi HTTP lỗi.\n- Dùng khóa thay đổi mỗi lần render (object mới) nên không bao giờ trúng cache.",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-6-0-slides",
+    "ten": "6.0 — Slide Chương 6: lấy dữ liệu bằng hình",
+    "nguon": "React · Chương 6",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-6-2-tanstack",
+    "ten": "6.2 — TanStack Query: useQuery, query key, staleTime/gcTime, status và fetchStatus",
+    "nguon": "React · Chương 6",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Gọi API › Apollo Client": {
+  "body": "Apollo Client là GraphQL client đầy đủ tính năng nhất cho React. Nó gửi query/mutation, **lưu kết quả trong một cache chuẩn hóa** và tự cập nhật mọi component đang dùng dữ liệu đó khi cache đổi.\n\n### Vì sao cần biết\nNếu backend đã là GraphQL, Apollo là lựa chọn mặc định của nhiều đội. Cache chuẩn hóa giúp: sửa một bác sĩ ở trang chi tiết thì danh sách bác sĩ cũng tự đổi, không cần tải lại.\n\n### Ý chính\n- Tạo `ApolloClient` với `uri` và `cache: new InMemoryCache()`, bọc app bằng `ApolloProvider`.\n- `useQuery` và `useMutation` trả về `loading`, `error`, `data`.\n- **Cache chuẩn hóa**: mỗi object được lưu theo `__typename` + `id`; query khác nhau trỏ về cùng một bản ghi.\n- `fetchPolicy` điều khiển cách đọc: `cache-first` (mặc định), `network-only`, `cache-and-network`.\n- Sau mutation, cập nhật cache bằng `update`, `refetchQueries` hoặc trả về object đủ trường để cache tự hợp nhất.\n- Hỗ trợ subscription (qua WebSocket) cho dữ liệu thời gian thực.\n\n```tsx\nconst client = new ApolloClient({\n  uri: '/graphql',\n  cache: new InMemoryCache(),\n});\n\nconst RENAME = gql`\n  mutation Rename($id: ID!, $name: String!) {\n    renameDoctor(id: $id, name: $name) { id name }\n  }\n`;\nconst [rename] = useMutation(RENAME); // trả về id + name nên cache tự cập nhật\n```\n\n### Lỗi hay gặp\n- Quên lấy trường `id` trong query nên cache không chuẩn hóa được.\n- Chỉ kiểm `error` của hook mà bỏ sót lỗi GraphQL trong `errors`.\n- Dùng Apollo chỉ để gọi một vài query đơn giản — nặng hơn mức cần.\n\nBài học bên dưới cho cái nhìn tổng thể về GraphQL và đánh đổi so với REST; chưa có bài riêng cho Apollo.",
+  "lessons": [
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-7-4-khac",
+    "ten": "7.5 — GraphQL và gRPC: khi REST không phải câu trả lời, đo trên LabFlow",
+    "nguon": "API & System Design · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/code-lab/graphql",
+    "ten": "GraphQL",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Gọi API › Relay": {
+  "body": "Relay là GraphQL client do Meta tạo ra và dùng cho chính ứng dụng của họ. Ý tưởng trung tâm: **mỗi component tự khai báo dữ liệu nó cần bằng một fragment**, rồi compiler của Relay ghép các fragment thành query tối ưu cho cả màn hình.\n\n### Vì sao cần biết\nỞ quy mô rất lớn, nhiều đội cùng sửa một màn hình, việc \"thêm một trường mà không làm hỏng component khác\" trở nên khó. Relay giải bằng cách ràng buộc dữ liệu chặt với component và kiểm tra lúc build.\n\n### Ý chính\n- **Fragment colocation**: component viết `graphql` fragment ngay cạnh code của nó và đọc bằng `useFragment`.\n- **Compiler** (`relay-compiler`) đọc mọi thẻ `graphql`, kiểm tra với schema và sinh mã/kiểu.\n- Component cha không biết con cần trường nào; che dữ liệu (data masking) giúp con không bị ảnh hưởng khi cha đổi.\n- Cache bất biến, chuẩn hóa theo id, dùng giao thức node/connection (phân trang theo cursor).\n- Yêu cầu schema GraphQL theo quy ước của Relay (ví dụ `Node` interface, connection), nên backend phải chuẩn bị trước.\n\n```tsx\n// Ví dụ minh họa dạng fragment trong component\nconst data = useFragment(\n  graphql`\n    fragment DoctorCard_doctor on Doctor { name specialty }\n  `,\n  doctorRef,\n);\n```\n\n### Khi nào chọn\nRelay hợp với ứng dụng lớn, đội đông, backend GraphQL theo chuẩn. Với dự án nhỏ hay vừa, Apollo hoặc urql thường đủ và dễ học hơn.\n\n### Lỗi hay gặp\n- Quên chạy compiler nên mã sinh ra lỗi thời.\n- Cố dùng Relay với schema không theo quy ước của nó.\n\nBài học bên dưới giải thích nền tảng GraphQL; chưa có bài riêng cho Relay.",
+  "lessons": [
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-7-4-khac",
+    "ten": "7.5 — GraphQL và gRPC: khi REST không phải câu trả lời, đo trên LabFlow",
+    "nguon": "API & System Design · Chương 7",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Gọi API › urql": {
+  "body": "urql (đọc \"ur-quill\") là GraphQL client nhẹ và dễ mở rộng cho React. Thay vì một khối lớn đầy tính năng, nó có lõi nhỏ và bạn ghép thêm tính năng bằng **exchange** — các mảnh xử lý request/response nối thành một chuỗi.\n\n### Vì sao cần biết\nNếu bạn muốn trải nghiệm GraphQL đơn giản hơn Apollo, kích thước bundle nhỏ hơn và kiểm soát được từng bước (cache, auth, retry), urql là lựa chọn đáng cân nhắc.\n\n### Ý chính\n- Tạo `createClient({ url, exchanges })` và bọc app bằng `Provider`.\n- `useQuery({ query })` trả về một mảng `[result, reexecute]`; `result` có `data`, `fetching`, `error`.\n- **Document cache** (mặc định): cache theo cả câu query, mutation làm mất hiệu lực các query liên quan theo kiểu (`__typename`).\n- Muốn cache chuẩn hóa như Apollo thì thêm gói riêng `@urql/exchange-graphcache`.\n- Exchange tùy biến: gắn token (`authExchange`), thử lại, log, v.v.\n\n```tsx\nimport { Provider, createClient, cacheExchange, fetchExchange, useQuery } from 'urql';\n\nconst client = createClient({\n  url: '/graphql',\n  exchanges: [cacheExchange, fetchExchange],\n});\n\nfunction Doctors() {\n  const [{ data, fetching, error }] = useQuery({\n    query: '{ doctors { id name } }',\n  });\n  if (fetching) return <p>Đang tải…</p>;\n  if (error) return <p>{error.message}</p>;\n  return <ul>{data.doctors.map((d) => <li key={d.id}>{d.name}</li>)}</ul>;\n}\n// <Provider value={client}><Doctors /></Provider>\n```\n\n### Lỗi hay gặp\n- Quên thêm `fetchExchange` khi tự khai báo danh sách exchange — request không bao giờ ra mạng.\n- Nhầm document cache với cache chuẩn hóa nên nghĩ dữ liệu tự đồng bộ giữa các query.\n\nBài học bên dưới giải thích nền tảng GraphQL; chưa có bài riêng cho urql.",
+  "lessons": [
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-7-4-khac",
+    "ten": "7.5 — GraphQL và gRPC: khi REST không phải câu trả lời, đo trên LabFlow",
+    "nguon": "API & System Design · Chương 7",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Gọi API › Axios": {
+  "body": "Axios là HTTP client dựa trên Promise, chạy được cả trình duyệt lẫn Node. So với `fetch` có sẵn, nó bớt việc lặp: tự chuyển JSON, ném lỗi khi HTTP status là 4xx/5xx, có `timeout`, và đặc biệt là **interceptor** để xử lý chung cho mọi request.\n\n### Vì sao cần biết\nTrong dự án thật, mọi request đều cần cùng vài thứ: base URL, header xác thực, xử lý khi token hết hạn. Gom chúng vào một instance Axios giúp code gọi API ở các component ngắn gọn và nhất quán.\n\n### Ý chính\n- `axios.create({ baseURL, timeout })` tạo một instance riêng cho API của bạn.\n- **Request interceptor** gắn token vào header; **response interceptor** bắt lỗi 401 để làm mới token hoặc đăng xuất.\n- Lỗi có cấu trúc: `error.response` (server có trả lời), `error.request` (không có phản hồi), còn lại là lỗi cấu hình.\n- Hủy request bằng `AbortController` (truyền `signal`).\n- Đặt các hàm gọi API vào một lớp riêng, rồi bọc trong custom hook hoặc TanStack Query để tái sử dụng.\n\n```ts\nimport axios from 'axios';\n\nexport const api = axios.create({ baseURL: import.meta.env.VITE_API_URL, timeout: 10000 });\n\napi.interceptors.request.use((config) => {\n  const token = localStorage.getItem('token');\n  if (token) config.headers.Authorization = `Bearer ${token}`;\n  return config;\n});\n\napi.interceptors.response.use(\n  (res) => res,\n  (error) => {\n    if (error.response?.status === 401) {\n      // đăng xuất hoặc làm mới token ở đây\n    }\n    return Promise.reject(error);\n  },\n);\n```\n\n### Lỗi hay gặp\n- Gọi `axios.get` trực tiếp ở khắp nơi, rồi mỗi chỗ tự gắn token một kiểu.\n- Interceptor 401 gọi làm mới token vô hạn khi chính request làm mới cũng trả 401.\n- Lưu token ở `localStorage` mà không cân nhắc rủi ro XSS.\n- Quên timeout nên request treo mãi.",
+  "lessons": [
+   {
+    "href": "/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-11-2-axios-json-server",
+    "ten": "11.2 — Axios & json-server",
+    "nguon": "Front-End Web Development with React · Chương 11",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "FER202"
+   },
+   {
+    "href": "/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-11-4-slot19-fetch-axios-slides",
+    "ten": "11.4 — Học theo từng slide: Lấy dữ liệu với fetch & axios (Slot 19)",
+    "nguon": "Front-End Web Development with React · Chương 11",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "FER202"
+   },
+   {
+    "href": "/courses/clinic-appointment-booking-system/learn?lessonSlug=int601-react-auth",
+    "ten": "5.1 — Setup React, auth context & axios interceptor",
+    "nguon": "Clinic Appointment Booking System · Mục 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "INT601"
+   },
+   {
+    "href": "/courses/web-development-project/learn?lessonSlug=wdp301-4-1-react-api",
+    "ten": "4.1 — React routing, axios & gọi API",
+    "nguon": "Web Development Project · Chương 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "WDP301"
+   }
+  ]
+ },
+ "Gọi API › rtk-query": {
+  "body": "RTK Query là công cụ lấy dữ liệu và cache nằm **ngay trong Redux Toolkit**. Bạn khai báo các endpoint của API ở một nơi, và nó tự sinh ra hook, quản lý cache, trạng thái loading/lỗi và việc làm mới dữ liệu — không cần viết thêm reducer hay action.\n\n### Vì sao cần biết\nNếu dự án đã dùng Redux Toolkit, RTK Query cho bạn một tầng gọi API đồng nhất với store có sẵn, và hiển thị được trong Redux DevTools. Nếu chưa dùng Redux, TanStack Query thường nhẹ nhàng hơn.\n\n### Ý chính\n- `createApi` với `baseQuery` (thường là `fetchBaseQuery`) và `endpoints`.\n- **Query endpoint** (đọc) và **mutation endpoint** (ghi); hook được sinh tự động, ví dụ `useGetDoctorsQuery`.\n- **Tag** để làm mất hiệu lực cache: endpoint đọc `providesTags`, endpoint ghi `invalidatesTags`; ghi xong thì các query gắn tag đó tự tải lại.\n- Thêm `api.reducer` và `api.middleware` vào `configureStore`.\n\n```ts\nimport { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';\n\nexport const api = createApi({\n  reducerPath: 'api',\n  baseQuery: fetchBaseQuery({ baseUrl: '/api' }),\n  tagTypes: ['Doctor'],\n  endpoints: (builder) => ({\n    getDoctors: builder.query<Doctor[], void>({\n      query: () => 'doctors',\n      providesTags: ['Doctor'],\n    }),\n    addDoctor: builder.mutation<Doctor, Partial<Doctor>>({\n      query: (body) => ({ url: 'doctors', method: 'POST', body }),\n      invalidatesTags: ['Doctor'],\n    }),\n  }),\n});\nexport const { useGetDoctorsQuery, useAddDoctorMutation } = api;\n```\n\n### Lỗi hay gặp\n- Quên đăng ký `api.middleware` trong store nên cache không dọn và không tự làm mới.\n- Quên khai tag nên sau mutation danh sách không cập nhật.\n- Dùng cả RTK Query và TanStack Query trong cùng một dự án mà không có lý do rõ ràng.\n\nCác bài bên dưới dạy nền Redux Toolkit và mô hình cache của TanStack Query (khái niệm tương đương); chưa có bài riêng cho RTK Query.",
+  "lessons": [
+   {
+    "href": "/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-12-1-redux-toolkit",
+    "ten": "12.1 — Flux & Redux Toolkit",
+    "nguon": "Front-End Web Development with React · Chương 12",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "FER202"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-6-2-tanstack",
+    "ten": "6.2 — TanStack Query: useQuery, query key, staleTime/gcTime, status và fetchStatus",
+    "nguon": "React · Chương 6",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Gọi API › Socket.IO-client (WebSockets)": {
+  "body": "Khi cần dữ liệu **đẩy từ server xuống client ngay lập tức** (chat, thông báo, cập nhật giá, cùng chỉnh sửa tài liệu), HTTP request/response không đủ. WebSocket mở một kênh hai chiều lâu dài; Socket.IO là thư viện phổ biến xây trên đó, thêm kết nối lại tự động, room, ack và tự lùi về long-polling khi cần.\n\n### Vì sao cần biết\nMọi ứng dụng \"trực tiếp\" đều cần client giữ kết nối, lắng nghe sự kiện và xử lý khi mất mạng rồi nối lại. Phần client trong React có vài bẫy riêng liên quan đến vòng đời component.\n\n### Ý chính\n- Tạo socket bằng `io(url)` từ `socket.io-client`; các sự kiện hệ thống `connect`, `disconnect`, `connect_error`.\n- Gửi bằng `socket.emit('ten-su-kien', data)`, nghe bằng `socket.on('ten-su-kien', handler)`.\n- **Tự động kết nối lại** với backoff, nhưng sau khi nối lại bạn có `socket.id` mới, room trống, và sự kiện trong lúc mất kết nối bị mất — nên cần đồng bộ lại trạng thái.\n- Xác thực qua tùy chọn `auth` khi tạo socket.\n- Chỉ tạo **một** socket dùng chung cho cả app, không tạo mỗi lần render.\n\n```tsx\nimport { useEffect, useState } from 'react';\nimport { socket } from './socket'; // const socket = io(URL, { autoConnect: false })\n\nfunction Chat() {\n  const [messages, setMessages] = useState<string[]>([]);\n  useEffect(() => {\n    const onMsg = (m: string) => setMessages((prev) => [...prev, m]);\n    socket.connect();\n    socket.on('message', onMsg);\n    return () => {\n      socket.off('message', onMsg);\n      socket.disconnect();\n    };\n  }, []);\n  return <ul>{messages.map((m, i) => <li key={i}>{m}</li>)}</ul>;\n}\n```\n\n### Lỗi hay gặp\n- Quên `socket.off` trong cleanup nên mỗi lần mount lại đăng ký thêm một handler, tin nhắn hiện nhiều lần (Strict Mode ở môi trường dev làm lỗi này lộ ra sớm).\n- Giả định mọi tin nhắn đều tới nơi (mặc định là \"tối đa một lần\", không bảo đảm).\n- Cập nhật state theo kiểu `setMessages([...messages, m])` trong handler cũ nên bị closure cũ.",
+  "lessons": [
+   {
+    "href": "/courses/socket-io/learn?lessonSlug=io-0-1-la-gi",
+    "ten": "0.1 — Socket.IO là engine.io được BỌC bởi namespace và room",
+    "nguon": "Socket.IO · Mục 0",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/socket-io/learn?lessonSlug=io-1-1-connect",
+    "ten": "1.1 — Connect: năm event trong chín mili giây",
+    "nguon": "Socket.IO · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/socket-io/learn?lessonSlug=io-1-3-reconnect",
+    "ten": "1.3 — Reconnect: cái thật sự xảy ra và cái KHÔNG",
+    "nguon": "Socket.IO · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/simulation?scenario=websocket",
+    "ten": "WebSocket — Realtime hai chiều",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   },
+   {
+    "href": "/code-lab/socket-io",
+    "ten": "Socket.IO & Realtime",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Gọi API › Server APIs": {
+  "body": "React chỉ lo giao diện; dữ liệu thật nằm ở backend. \"Server APIs\" là phần nối hai bên: cách giao diện gọi REST hoặc GraphQL, xử lý đang tải/lỗi, và giữ giao diện khớp với dữ liệu trên server.\n\n### Vì sao cần biết\nGần như mọi công việc frontend là đọc và ghi dữ liệu qua API. Hiểu vòng đời của một request (từ lúc bấm nút tới lúc màn hình đổi) giúp bạn debug nhanh khi giao diện \"đơ\", hiện dữ liệu cũ hoặc báo lỗi mơ hồ.\n\n### Ý chính\n- **REST**: tài nguyên + phương thức HTTP (GET đọc, POST tạo, PUT/PATCH sửa, DELETE xóa), mã trạng thái cho biết kết quả (2xx thành công, 4xx lỗi phía client, 5xx lỗi phía server).\n- **GraphQL**: một endpoint, client chọn trường cần lấy.\n- Phân biệt **server state** (bản sao dữ liệu từ máy chủ, cần cache/làm mới) với **client state** (trạng thái giao diện như hộp thoại đang mở).\n- Luôn có ba trạng thái hiển thị ngoài dữ liệu: đang tải, lỗi, rỗng.\n- Với API thật: phải tính tới hết giờ, mất mạng, thử lại có giới hạn, và lỗi 401 (hết phiên).\n- Biến môi trường cho địa chỉ API (`VITE_API_URL` với Vite) để cùng một mã chạy được ở dev và production; lưu ý mọi biến này nằm công khai trong bundle nên không đặt khóa bí mật vào đó.\n\n```ts\n// Một lớp mỏng gọi API, tách khỏi component\nexport async function getDoctors(signal?: AbortSignal) {\n  const res = await fetch(`${import.meta.env.VITE_API_URL}/doctors`, { signal });\n  if (!res.ok) throw new Error(`HTTP ${res.status}`);\n  return (await res.json()) as Doctor[];\n}\n```\n\n### Lỗi hay gặp\n- Gọi API trực tiếp trong JSX hoặc rải khắp component, không có chỗ trung tâm xử lý lỗi.\n- Gắn khóa bí mật (API key) vào biến môi trường phía client.\n- Coi mọi lỗi như nhau thay vì phân biệt lỗi mạng, lỗi 4xx và lỗi 5xx.",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-6-0-slides",
+    "ten": "6.0 — Slide Chương 6: lấy dữ liệu bằng hình",
+    "nguon": "React · Chương 6",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-6-2-tanstack",
+    "ten": "6.2 — TanStack Query: useQuery, query key, staleTime/gcTime, status và fetchStatus",
+    "nguon": "React · Chương 6",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-14-2-api-that",
+    "ten": "14.2 — API thật: hết giờ, thử lại, mất mạng, idempotency, báo lỗi, biến môi trường Vite",
+    "nguon": "React · Chương 14",
+    "kieu": "video"
+   },
+   {
+    "href": "/simulation?scenario=rest-api",
+    "ten": "REST API — Request & Response",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "Gọi API › GSock": {
+  "body": "Mục này nói đến việc dùng **WebSocket thuần** trong React, không qua Socket.IO hay GraphQL subscription. Tôi không có tài liệu đáng tin về API cụ thể của thư viện tên GSock, nên phần dưới giải thích nguyên lý WebSocket dùng chung cho mọi thư viện bọc mỏng quanh nó; hãy đọc tài liệu chính thức của thư viện để biết tên hàm chính xác.\n\n### Ý chính\n- WebSocket bắt đầu bằng một request HTTP có yêu cầu nâng cấp giao thức; server trả **101 Switching Protocols**, sau đó hai bên gửi thông điệp qua lại trên cùng một kết nối TCP.\n- API trình duyệt có sẵn: `new WebSocket(url)` với các sự kiện `open`, `message`, `close`, `error`, và `send()`.\n- WebSocket thuần **không** tự kết nối lại, không có room, không có ack. Muốn có phải tự viết (hoặc dùng thư viện).\n- Thông điệp chỉ là chuỗi hoặc nhị phân; bạn tự định dạng, thường là JSON `{ type, payload }`.\n\n```tsx\nuseEffect(() => {\n  const ws = new WebSocket('wss://example.com/ws');\n  ws.onmessage = (e) => setLast(JSON.parse(e.data));\n  ws.onclose = () => { /* quyết định có nối lại hay không, với backoff */ };\n  return () => ws.close();\n}, []);\n```\n\n### Khi nào chọn WebSocket thuần\nKhi bạn cần nhẹ, không muốn phụ thuộc, và tự chịu trách nhiệm phần nối lại, xác thực, định dạng thông điệp. Khi cần room, ack, tự nối lại có sẵn thì Socket.IO tiện hơn.\n\n### Lỗi hay gặp\n- Dùng `ws://` trên trang `https://` — trình duyệt chặn; phải dùng `wss://`.\n- Quên đóng socket trong cleanup nên rò rỉ kết nối.\n- Nối lại ngay lập tức không có backoff, làm server quá tải khi sự cố.\n- Không có cơ chế ping/heartbeat nên không phát hiện kết nối chết âm thầm.",
+  "lessons": [
+   {
+    "href": "/simulation?scenario=websocket",
+    "ten": "WebSocket — Realtime hai chiều",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "MDN — WebSockets API",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API"
+   }
+  ]
+ },
+ "Forms & Validation › React Hook Form": {
+  "body": "React Hook Form (RHF) là thư viện quản lý form tập trung vào **hiệu năng**: thay vì lưu từng giá trị ô nhập vào state (mỗi phím gõ render lại cả form), nó dùng input *không kiểm soát* (uncontrolled) và đọc giá trị qua ref. Kết quả là ít render lại hơn, code ngắn hơn và dễ gắn validation.\n\n### Vì sao cần biết\nForm là nơi người dùng đưa dữ liệu vào hệ thống nên sai ở đây là mất dữ liệu hoặc mất khách. RHF xử lý giúp bạn các chuyện lặp lại: theo dõi lỗi, trạng thái đang gửi, đặt lại form, validate khi blur hoặc submit.\n\n### Ý chính\n- `useForm()` trả về `register`, `handleSubmit`, `formState` (có `errors`, `isSubmitting`, `isDirty`).\n- `register('email', { required: 'Bắt buộc' })` nối ô nhập vào form.\n- `handleSubmit(onValid)` chỉ gọi hàm của bạn khi dữ liệu hợp lệ.\n- Tùy chọn `mode` quyết định validate lúc nào: `onSubmit` (mặc định), `onBlur`, `onChange`, `onTouched`.\n- Với component không hỗ trợ ref (UI library), dùng `Controller` hoặc `useController`.\n- Kết hợp schema (ví dụ Zod qua `@hookform/resolvers`) để một schema vừa kiểm dữ liệu vừa suy ra kiểu.\n\n```tsx\nimport { useForm } from 'react-hook-form';\n\ntype Values = { email: string; name: string };\n\nexport function BookingForm() {\n  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<Values>();\n  const onSubmit = async (values: Values) => { await save(values); };\n\n  return (\n    <form onSubmit={handleSubmit(onSubmit)}>\n      <input {...register('email', { required: 'Nhập email' })} />\n      {errors.email && <p role=\"alert\">{errors.email.message}</p>}\n      <input {...register('name', { required: 'Nhập tên', minLength: 2 })} />\n      <button disabled={isSubmitting}>Gửi</button>\n    </form>\n  );\n}\n```\n\n### Lỗi hay gặp\n- Dùng `watch()` ở cấp form khiến lại render mỗi lần gõ; ưu tiên `useWatch` ở component con khi cần.\n- Gắn `value`/`onChange` kiểu controlled lên ô đã `register`, làm hai cơ chế xung đột.\n- Chỉ dùng `isSubmitting` để chặn gửi hai lần mà quên rằng lỗi trả về từ server cũng cần gắn vào đúng ô (`setError`).\n- Quên `defaultValues` nên form báo \"uncontrolled to controlled\".\n\n### Tự kiểm tra\n1. Vì sao RHF ít render lại hơn cách `useState` + `onChange`?\n2. Khi nào bạn cần `Controller` thay vì `register`?",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-3-0-slides",
+    "ten": "3.0 — Slide Chương 3: form bằng hình",
+    "nguon": "React · Chương 3",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-3-2-react-hook-form",
+    "ten": "3.2 — React Hook Form + Zod: register, một schema cho luật và kiểu, và các mode kiểm",
+    "nguon": "React · Chương 3",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-3-3-loi",
+    "ten": "3.3 — Lỗi, đang gửi và trạng thái submit: lỗi đúng chỗ, không gửi hai lần",
+    "nguon": "React · Chương 3",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-16-2-react-hook-form",
+    "ten": "16.2 — react-hook-form: form client nhanh",
+    "nguon": "Next.js: The React Framework · Chương 16",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-3-5-kiem-tra",
+    "ten": "3.5 — Kiểm tra Chương 3: form",
+    "nguon": "React · Chương 3",
+    "kieu": "quiz"
+   }
+  ]
+ },
+ "Forms & Validation › Zod": {
+  "body": "Zod là thư viện khai báo **schema** cho dữ liệu: bạn mô tả hình dạng hợp lệ một lần, Zod vừa kiểm dữ liệu lúc chạy, vừa suy ra kiểu TypeScript từ chính schema đó. Điều này quan trọng vì kiểu TypeScript biến mất khi chạy — dữ liệu từ form, API hay URL vẫn có thể sai hình dạng.\n\n### Vì sao cần biết\nRanh giới của ứng dụng (nơi dữ liệu từ bên ngoài đi vào) là nơi lỗi phát sinh. Một schema dùng chung cho form ở client và API ở server nghĩa là hai phía không thể lệch luật với nhau.\n\n### Ý chính\n- `z.object({...})`, `z.string()`, `z.number()`, `z.array()`, `z.enum()`, kèm ràng buộc như `.min()`, `.email()`.\n- `schema.parse(data)` ném lỗi nếu sai; `schema.safeParse(data)` trả `{ success, data | error }` — không ném.\n- `z.infer<typeof schema>` suy ra kiểu TypeScript, không phải viết kiểu bằng tay (tránh hai nguồn sự thật).\n- Biến đổi dữ liệu: `.transform()`, `.trim()`, `z.coerce.number()` (ép chuỗi sang số).\n- Kiểm tra chéo trường bằng `.refine()` / `.superRefine()` (ví dụ mật khẩu nhập lại khớp nhau).\n- Dùng với React Hook Form qua `zodResolver`.\n\n```ts\nimport { z } from 'zod';\n\nconst bookingSchema = z.object({\n  name: z.string().trim().min(2, 'Tên quá ngắn'),\n  email: z.string().email('Email không hợp lệ'),\n  age: z.coerce.number().int().min(0).max(120),\n});\n\ntype Booking = z.infer<typeof bookingSchema>;\n\nconst result = bookingSchema.safeParse(input);\nif (!result.success) {\n  console.log(result.error.issues); // danh sách lỗi theo từng trường\n} else {\n  const booking: Booking = result.data;\n}\n```\n\n### Lỗi hay gặp\n- Validate ở client rồi tin dữ liệu ở server — luôn kiểm lại ở server, vì client có thể bị bỏ qua.\n- Dùng `as Booking` thay vì parse: đó là lời hứa chứ không phải phép kiểm.\n- Quên rằng dữ liệu form là chuỗi, nên cần `z.coerce` cho số, ngày.\n- Với bản Zod mới, một số API đổi tên (ví dụ định dạng email); kiểm tra tài liệu phiên bản bạn cài.",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-3-2-react-hook-form",
+    "ten": "3.2 — React Hook Form + Zod: register, một schema cho luật và kiểu, và các mode kiểm",
+    "nguon": "React · Chương 3",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-16-3-zod",
+    "ten": "16.3 — Validation với Zod: một schema, cả hai phía",
+    "nguon": "Next.js: The React Framework · Chương 16",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-13-1-boundary-zod",
+    "ten": "13.1 — Vấn đề tại biên & Zod",
+    "nguon": "TypeScript · Chương 13",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-13-3-schema-source-of-truth",
+    "ten": "13.3 — Schema là nguồn sự thật duy nhất",
+    "nguon": "TypeScript · Chương 13",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-6-3-validate-schema",
+    "ten": "6.3 — Kiểm tra dữ liệu bằng lược đồ",
+    "nguon": "Node.js · Chương 6",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Forms & Validation › Formik": {
+  "body": "Formik là thư viện quản lý form cho React xuất hiện trước React Hook Form và từng là lựa chọn phổ biến nhất. Nó giữ giá trị, lỗi và trạng thái \"đã chạm\" của form trong state, nên các ô nhập là input *kiểm soát* (controlled).\n\n### Vì sao cần biết\nBạn sẽ gặp Formik trong nhiều codebase cũ. Hiểu nó giúp bảo trì và cũng làm rõ vì sao React Hook Form ra đời: cách controlled làm mỗi lần gõ phím cập nhật state của cả form, dễ gây render lại nhiều.\n\n### Ý chính\n- Hook `useFormik({ initialValues, validationSchema, onSubmit })` hoặc component `<Formik>`.\n- Trả về `values`, `errors`, `touched`, `handleChange`, `handleBlur`, `handleSubmit`, `isSubmitting`.\n- Hay đi cùng **Yup** cho schema validation (cũng dùng được Zod qua bộ chuyển đổi).\n- Component `<Field>`, `<Form>`, `<ErrorMessage>` rút gọn việc nối ô nhập.\n\n```tsx\nimport { useFormik } from 'formik';\n\nfunction Signup() {\n  const formik = useFormik({\n    initialValues: { email: '' },\n    validate: (v) => (v.email ? {} : { email: 'Nhập email' }),\n    onSubmit: async (v) => { await save(v); },\n  });\n  return (\n    <form onSubmit={formik.handleSubmit}>\n      <input name=\"email\" value={formik.values.email}\n             onChange={formik.handleChange} onBlur={formik.handleBlur} />\n      {formik.touched.email && formik.errors.email && <p>{formik.errors.email}</p>}\n      <button type=\"submit\" disabled={formik.isSubmitting}>Gửi</button>\n    </form>\n  );\n}\n```\n\n### Nên dùng khi nào\nDự án mới thường chọn React Hook Form vì ít render lại và đang được bảo trì tích cực hơn; chỉ chọn Formik khi dự án đã có sẵn.\n\nCác bài bên dưới dạy form controlled, lỗi và trạng thái gửi — nền tảng mà Formik dựa vào; chưa có bài riêng cho Formik.\n\n### Lỗi hay gặp\n- Quên `name` trên ô nhập nên `handleChange` không biết cập nhật trường nào.\n- Hiện lỗi ngay khi chưa chạm vào ô (không kiểm `touched`).",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-3-0-slides",
+    "ten": "3.0 — Slide Chương 3: form bằng hình",
+    "nguon": "React · Chương 3",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-3-1-controlled",
+    "ten": "3.1 — Input kiểm soát và không kiểm soát: value/onChange, defaultValue, useRef",
+    "nguon": "React · Chương 3",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-3-3-loi",
+    "ten": "3.3 — Lỗi, đang gửi và trạng thái submit: lỗi đúng chỗ, không gửi hai lần",
+    "nguon": "React · Chương 3",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Forms & Validation › Formish": {
+  "body": "Mô tả của mục này nói đến một thư viện form theo mô hình **schema-first**: bạn khai báo schema (cấu trúc, luật kiểm, kiểu) rồi form được dựng và kiểm dựa trên schema đó. Tôi không có tài liệu đáng tin về một thư viện React tên Formish, nên phần dưới giải thích **mô hình schema-first** và cách đạt nó bằng công cụ phổ biến; hãy đọc tài liệu của thư viện để biết API thật.\n\n### Ý chính của mô hình schema-first\n- **Một nguồn sự thật**: schema quyết định trường nào có, kiểu gì, luật gì. Kiểu TypeScript, thông báo lỗi và validation đều suy ra từ đó.\n- Tách **logic form** (luật, dữ liệu) khỏi **giao diện** (ô nhập trông thế nào), nên đổi giao diện không đổi luật.\n- Dùng lại được: cùng một schema kiểm ở client và ở server.\n\n### Cách làm quen thuộc trong hệ sinh thái React\nKết hợp React Hook Form với Zod (hoặc Valibot) qua resolver:\n\n```tsx\nimport { z } from 'zod';\nimport { useForm } from 'react-hook-form';\nimport { zodResolver } from '@hookform/resolvers/zod';\n\nconst schema = z.object({ email: z.string().email() });\ntype Values = z.infer<typeof schema>;\n\nconst { register, handleSubmit } = useForm<Values>({ resolver: zodResolver(schema) });\n```\n\n### Lưu ý khi chọn thư viện ít phổ biến\nTrước khi đưa vào dự án, kiểm tra: số người dùng, lần cập nhật gần nhất, hỗ trợ TypeScript, tương thích phiên bản React bạn dùng. Thư viện ít người dùng dễ thành gánh nặng bảo trì.\n\nBài học bên dưới dạy cách dựng form theo schema với React Hook Form và Zod, tức là áp dụng đúng mô hình này.",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-3-2-react-hook-form",
+    "ten": "3.2 — React Hook Form + Zod: register, một schema cho luật và kiểu, và các mode kiểm",
+    "nguon": "React · Chương 3",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Forms & Validation › Valibot": {
+  "body": "Valibot là thư viện validation schema cho TypeScript, cùng mục tiêu với Zod nhưng thiết kế **modular**: mỗi hàm là một export riêng, nên bundler chỉ giữ lại phần bạn dùng (tree-shaking). Kết quả là bundle thường nhỏ hơn đáng kể ở client.\n\n### Vì sao cần biết\nKhi kích thước JavaScript quan trọng (trang tải nhanh, thiết bị yếu), một thư viện validation nhỏ có ý nghĩa. Biết Valibot cũng cho bạn thấy ý tưởng chung: schema vừa kiểm vừa suy kiểu.\n\n### Ý chính\n- Dùng hàm thay vì chuỗi phương thức: ghép luật bằng `v.pipe(...)`.\n- `v.parse(schema, data)` ném lỗi; `v.safeParse(schema, data)` trả kết quả kèm trạng thái thành công.\n- Suy kiểu bằng `v.InferOutput<typeof schema>`.\n- Có resolver cho React Hook Form (`@hookform/resolvers/valibot`).\n- Không phụ thuộc Zod; các khái niệm (object, string, array, transform, kiểm tra chéo trường) tương đương.\n\n```ts\nimport * as v from 'valibot';\n\nconst BookingSchema = v.object({\n  name: v.pipe(v.string(), v.trim(), v.minLength(2, 'Tên quá ngắn')),\n  email: v.pipe(v.string(), v.email('Email không hợp lệ')),\n});\n\ntype Booking = v.InferOutput<typeof BookingSchema>;\n\nconst result = v.safeParse(BookingSchema, input);\nif (result.success) {\n  const booking: Booking = result.output;\n}\n```\n\n### Chọn Zod hay Valibot\nZod có hệ sinh thái và tài liệu rộng hơn; Valibot nhỏ hơn và hợp khi tối ưu bundle. Cả hai đều ổn, quan trọng là cả dự án dùng thống nhất.\n\n### Lỗi hay gặp\n- Quên rằng kết quả của `safeParse` nằm ở `output` (không phải `data` như Zod).\n- Trộn hai thư viện trong cùng một form mà không cần thiết.\n\nBài học bên dưới dạy bằng Zod; khái niệm schema, resolver và suy kiểu áp dụng giống nhau.",
+  "lessons": [
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-16-3-zod",
+    "ten": "16.3 — Validation với Zod: một schema, cả hai phía",
+    "nguon": "Next.js: The React Framework · Chương 16",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-3-2-react-hook-form",
+    "ten": "3.2 — React Hook Form + Zod: register, một schema cho luật và kiểu, và các mode kiểm",
+    "nguon": "React · Chương 3",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Animation, Error Boundary & Suspense › Framer Motion": {
+  "body": "Framer Motion (nay phát triển dưới tên **Motion**, gói `motion`, import từ `motion/react`; gói cũ `framer-motion` vẫn tồn tại) là thư viện animation phổ biến nhất cho React. Nó **khai báo** (declarative): bạn mô tả trạng thái đầu và cuối, thư viện lo phần chuyển động ở giữa.\n\n### Vì sao cần biết\nAnimation tốt giúp giao diện \"có phản hồi\": hộp thoại trượt vào, danh sách sắp xếp lại mượt, nút có cảm giác bấm. Viết bằng CSS thuần cho các ca đơn giản thì tốt, nhưng với chuyển động theo trạng thái React, thoát khỏi DOM (exit) hay thay đổi bố cục thì Motion đỡ vất vả hơn nhiều.\n\n### Ý chính\n- Dùng `motion.div` (và các thẻ khác) thay thẻ thường, thêm prop `initial`, `animate`, `transition`.\n- **Gesture**: `whileHover`, `whileTap`, `drag`.\n- **`AnimatePresence`**: cho phép phần tử có animation `exit` khi bị gỡ khỏi cây React.\n- **`variants`**: đặt tên các trạng thái animation và truyền xuống con để phối hợp (stagger).\n- **`layout`**: tự animate khi vị trí/kích thước phần tử đổi do bố cục.\n- Ưu tiên animate `transform` và `opacity` vì rẻ cho trình duyệt.\n\n```tsx\nimport { motion, AnimatePresence } from 'motion/react';\n\nfunction Toast({ show, children }: { show: boolean; children: React.ReactNode }) {\n  return (\n    <AnimatePresence>\n      {show && (\n        <motion.div\n          initial={{ opacity: 0, y: 12 }}\n          animate={{ opacity: 1, y: 0 }}\n          exit={{ opacity: 0, y: 12 }}\n          transition={{ duration: 0.2 }}\n        >\n          {children}\n        </motion.div>\n      )}\n    </AnimatePresence>\n  );\n}\n```\n\n### Lỗi hay gặp\n- Quên `key` ổn định cho phần tử con của `AnimatePresence` nên exit không chạy.\n- Animate thuộc tính gây reflow như `width`/`height`/`top` khiến giật.\n- Không tôn trọng người dùng bật \"giảm chuyển động\" (`prefers-reduced-motion`); Motion có `useReducedMotion` và cấu hình `MotionConfig reducedMotion=\"user\"`.\n\nBài học bên dưới dạy nền animation bằng CSS (transition, keyframes, thuộc tính rẻ, giảm chuyển động); chưa có bài riêng cho Motion.",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-12-2-transition-animation",
+    "ten": "12.2 — Chuyển cảnh và hoạt hình",
+    "nguon": "Nền tảng Lập trình Web · Chương 12",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Animation, Error Boundary & Suspense › Error Boundaries": {
+  "body": "Nếu một component ném lỗi trong lúc render, React mặc định **gỡ cả cây giao diện** và người dùng thấy trang trắng. *Error boundary* là một component đặc biệt đứng bên trên, bắt lỗi của các con và hiện giao diện dự phòng (fallback) thay vì làm sập cả ứng dụng.\n\n### Vì sao cần biết\nMột widget lỗi (biểu đồ, bình luận) không nên làm chết cả trang. Đặt ranh giới lỗi ở những khu vực độc lập cho phép phần còn lại tiếp tục dùng được, và có chỗ để ghi log lỗi.\n\n### Ý chính\n- Hiện vẫn phải viết bằng **class component** với `static getDerivedStateFromError` (đổi sang trạng thái lỗi để hiện fallback) và `componentDidCatch` (ghi log). Không có hook tương đương; thực tế thường dùng gói `react-error-boundary`.\n- Bắt được: lỗi lúc render, trong lifecycle, trong constructor của các component con.\n- **Không** bắt được: lỗi trong event handler (`onClick`), code bất đồng bộ (`setTimeout`, Promise), render phía server, và lỗi của chính boundary.\n- Đặt nhiều ranh giới theo vùng thay vì một cái duy nhất ở gốc.\n- Cho người dùng cách thử lại: reset boundary khi khóa đổi hoặc bấm nút.\n\n```tsx\nimport { Component, type ReactNode } from 'react';\n\nclass ErrorBoundary extends Component<\n  { fallback: ReactNode; children: ReactNode },\n  { hasError: boolean }\n> {\n  state = { hasError: false };\n  static getDerivedStateFromError() {\n    return { hasError: true };\n  }\n  componentDidCatch(error: Error) {\n    console.error(error); // gửi tới dịch vụ ghi log lỗi\n  }\n  render() {\n    return this.state.hasError ? this.props.fallback : this.props.children;\n  }\n}\n// <ErrorBoundary fallback={<p>Có lỗi xảy ra</p>}><Chart /></ErrorBoundary>\n```\n\nTrong Next.js App Router, file `error.tsx` của một segment chính là error boundary.\n\n### Lỗi hay gặp\n- Mong error boundary bắt lỗi trong `onClick`; phải dùng `try/catch` ở handler.\n- Chỉ đặt một boundary ở gốc nên mọi lỗi đều thành trang lỗi toàn màn hình.\n- Fallback không có cách thử lại.",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-11-0-slides",
+    "ten": "11.0 — Slide Chương 11: React bên trong bằng hình",
+    "nguon": "React · Chương 11",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-11-4-portal-error-boundary",
+    "ten": "11.4 — Portal và error boundary: thoát thẻ cha, lỗi không làm trắng trang",
+    "nguon": "React · Chương 11",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-6-4-loi-api",
+    "ten": "6.4 — Đang tải, lỗi và rỗng: skeleton, thử lại, ranh giới lỗi, thông báo nổi",
+    "nguon": "React · Chương 6",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-12-1-suspense-use",
+    "ten": "12.1 — Suspense cho dữ liệu và use(): để cây component chờ, không phải chuỗi if",
+    "nguon": "React · Chương 12",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-8-2-cac-file-quy-uoc",
+    "ten": "8.2 — Các file quy ước: page, layout, loading, error",
+    "nguon": "Next.js: The React Framework · Chương 8",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Animation, Error Boundary & Suspense › Suspense": {
+  "body": "`<Suspense>` cho phép một phần giao diện **báo \"tôi chưa sẵn sàng\"** và hiện `fallback` (ví dụ spinner hay skeleton) cho tới khi xong. Thay vì mỗi component tự viết `if (loading) return ...`, bạn đặt một ranh giới chờ ở trên và để các con \"treo\" bên trong.\n\n### Vì sao cần biết\nSuspense là nền của nhiều tính năng hiện đại: tải component lười (code splitting), lấy dữ liệu với `use()`, streaming của Next.js. Nó cũng làm trải nghiệm chờ nhất quán và dễ kiểm soát.\n\n### Ý chính\n- `<Suspense fallback={<Spinner />}>…</Suspense>`: trong lúc con chưa xong, hiện fallback.\n- Hoạt động với: `React.lazy` (tải component khi cần), `use(promise)` của React 19, và các framework/thư viện hỗ trợ Suspense (TanStack Query có `useSuspenseQuery`).\n- Đặt nhiều ranh giới **lồng nhau** để từng vùng hiện dần, không bắt cả trang chờ.\n- Kết hợp với error boundary: lỗi khi đang chờ đi tới error boundary gần nhất.\n- Dùng `useTransition`/`startTransition` để khi đổi dữ liệu thì giữ giao diện cũ thay vì quay lại fallback.\n\n```tsx\nimport { lazy, Suspense } from 'react';\n\nconst Chart = lazy(() => import('./Chart')); // chỉ tải khi cần\n\nexport function Dashboard() {\n  return (\n    <Suspense fallback={<p>Đang tải biểu đồ…</p>}>\n      <Chart />\n    </Suspense>\n  );\n}\n```\n\n### Lỗi hay gặp\n- Tạo Promise ngay trong component rồi truyền cho `use()`, mỗi lần render tạo Promise mới nên lặp vô hạn; Promise phải đến từ cache/loader ổn định.\n- Một ranh giới Suspense duy nhất ở gốc nên chỉ hiện spinner toàn trang.\n- Đặt nhiều `await` nối tiếp (waterfall) thay vì tải song song.\n- Quên rằng Suspense không bắt được fetch trong `useEffect`.\n\n### Tự kiểm tra\n1. Điều gì xảy ra khi một component con trong `<Suspense>` \"treo\"?\n2. Vì sao nên có nhiều ranh giới Suspense thay vì một?",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-12-0-slides",
+    "ten": "12.0 — Slide Chương 12: React 19 và concurrent bằng hình",
+    "nguon": "React · Chương 12",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-12-1-suspense-use",
+    "ten": "12.1 — Suspense cho dữ liệu và use(): để cây component chờ, không phải chuỗi if",
+    "nguon": "React · Chương 12",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-8-3-lazy",
+    "ten": "8.3 — Chia nhỏ bundle và tải lười: route, Suspense, bẫy barrel và ảnh",
+    "nguon": "React · Chương 8",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-10-1-lazy-suspense",
+    "ten": "10.1 — lazy() & Suspense",
+    "nguon": "Front-End Web Development with React · Chương 10",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "FER202"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-10-4-streaming-suspense",
+    "ten": "10.4 — Streaming: loading.tsx, Suspense và bẫy waterfall",
+    "nguon": "Next.js: The React Framework · Chương 10",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Animation, Error Boundary & Suspense › Animation với Framer Motion": {
+  "body": "Mục này đi sâu hơn vào cách dùng Framer Motion (nay là **Motion**, `motion/react`) để làm animation có cấu trúc: component `motion`, variants, layout animation và `AnimatePresence`.\n\n### Ý chính\n- **Motion components**: `motion.div`, `motion.li`... nhận `initial`, `animate`, `exit`, `transition`.\n- **Variants**: đặt tên trạng thái rồi dùng lại; cha điều phối con bằng `staggerChildren`.\n\n```tsx\nconst list = { hidden: {}, show: { transition: { staggerChildren: 0.06 } } };\nconst item = { hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0 } };\n\n<motion.ul variants={list} initial=\"hidden\" animate=\"show\">\n  {items.map((i) => (\n    <motion.li key={i.id} variants={item}>{i.name}</motion.li>\n  ))}\n</motion.ul>\n```\n\n- **Layout animation**: thêm prop `layout` để khi vị trí/kích thước đổi (sắp xếp lại, mở rộng) phần tử trượt mượt thay vì nhảy. `layoutId` cho chuyển động chia sẻ giữa hai phần tử.\n- **`AnimatePresence`**: giữ phần tử trong DOM đến khi `exit` xong; con trực tiếp cần `key` duy nhất.\n- **Gesture**: `whileHover`, `whileTap`, `drag` với `dragConstraints`.\n- **Transition**: `type: 'spring'` (theo vật lý, với `stiffness`, `damping`) hoặc `type: 'tween'` (theo thời lượng).\n- Tôn trọng người dùng giảm chuyển động bằng `useReducedMotion` hoặc `MotionConfig reducedMotion=\"user\"`.\n\n### Khi nào KHÔNG cần\nHiệu ứng hover, đổi màu đơn giản làm bằng CSS transition là đủ và nhẹ hơn. Dùng Motion khi chuyển động phụ thuộc state, cần exit hoặc layout.\n\n### Lỗi hay gặp\n- Animate thuộc tính gây reflow (`width`, `height`) thay vì `transform`/`opacity`.\n- Bọc quá nhiều phần tử bằng `motion` làm nặng trang dài.\n- Quên `key` trong danh sách có `AnimatePresence`.\n\nBài học bên dưới dạy cơ sở animation bằng CSS (transition, keyframes, thuộc tính rẻ, giảm chuyển động); chưa có bài riêng cho Motion.",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-12-2-transition-animation",
+    "ten": "12.2 — Chuyển cảnh và hoạt hình",
+    "nguon": "Nền tảng Lập trình Web · Chương 12",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Animation, Error Boundary & Suspense › React Spring": {
+  "body": "React Spring là thư viện animation cho React dùng **mô hình vật lý lò xo** thay vì thời lượng cố định. Bạn không nói \"chạy trong 300 ms\" mà chọn các tham số của lò xo (khối lượng, độ cứng, ma sát), và chuyển động tự nhiên thu được từ đó.\n\n### Vì sao cần biết\nAnimation theo lò xo có cảm giác tự nhiên và **xử lý ngắt giữa chừng rất tốt**: nếu người dùng đổi ý khi phần tử đang bay, nó chuyển hướng liền mạch với vận tốc hiện tại thay vì giật về đầu. Đây là điểm mạnh so với animation theo thời gian.\n\n### Ý chính\n- `useSpring({ from, to })` trả về giá trị animate; dùng cùng `animated.div` để áp dụng.\n- Các hook khác: `useSprings` (nhiều phần tử), `useTrail` (nối đuôi), `useTransition` (vào/ra khỏi cây), `useChain` (nối tiếp).\n- Cấu hình lò xo bằng `config` (`tension`, `friction`, `mass`) hoặc preset có sẵn.\n- Giá trị animate không làm component render lại ở mỗi khung hình, nên hiệu năng tốt.\n\n```tsx\nimport { useSpring, animated } from '@react-spring/web';\n\nfunction Fade() {\n  const styles = useSpring({\n    from: { opacity: 0, y: 20 },\n    to: { opacity: 1, y: 0 },\n    config: { tension: 170, friction: 20 },\n  });\n  return <animated.div style={styles}>Xin chào</animated.div>;\n}\n```\n\n### So với Framer Motion/Motion\nCả hai đều hỗ trợ spring. Motion mạnh về API khai báo, layout animation và exit; React Spring mạnh khi bạn muốn kiểm soát vật lý chi tiết. Chọn một và dùng nhất quán.\n\n### Lỗi hay gặp\n- Dùng thẻ thường thay vì `animated.*` nên không có hiệu ứng.\n- Cài sai gói: dùng `@react-spring/web` cho web, không phải gói lõi.\n\nWeb chưa có bài học riêng về chuyển động bằng lò xo, nên mục này chưa gắn bài."
+ },
+ "Animation, Error Boundary & Suspense › Portals": {
+  "body": "Portal cho phép một component **vẽ phần con của nó ra một nơi khác trong DOM**, thường là gần cuối `<body>`, trong khi về mặt cây React nó vẫn là con của component gọi. Dùng cho modal, tooltip, dropdown, toast.\n\n### Vì sao cần biết\nHộp thoại đặt sâu trong một thẻ cha có `overflow: hidden`, `transform` hay `z-index` thấp sẽ bị cắt hoặc bị che. Vẽ nó ra ngoài cây DOM của cha giải quyết gọn các vấn đề cắt xén và xếp chồng đó.\n\n### Ý chính\n- `createPortal(children, domNode)` từ `react-dom`.\n- Về DOM: nội dung nằm ở `domNode`. Về React: vẫn là con của component gọi, nên **context, state vẫn hoạt động**.\n- **Sự kiện nổi bọt theo cây React**, không theo cây DOM: một click trong modal vẫn nổi lên tới `onClick` của component cha trong React.\n- Với modal cần chú ý khả năng tiếp cận: đưa focus vào hộp, giữ focus bên trong, đóng bằng Escape, trả focus về nơi cũ khi đóng, và dùng `role=\"dialog\"` (hoặc thẻ `<dialog>`).\n\n```tsx\nimport { createPortal } from 'react-dom';\n\nfunction Modal({ open, onClose, children }: {\n  open: boolean; onClose: () => void; children: React.ReactNode;\n}) {\n  if (!open) return null;\n  return createPortal(\n    <div role=\"dialog\" aria-modal=\"true\" className=\"modal-backdrop\" onClick={onClose}>\n      <div className=\"modal\" onClick={(e) => e.stopPropagation()}>{children}</div>\n    </div>,\n    document.body,\n  );\n}\n```\n\n### Lỗi hay gặp\n- Quên rằng sự kiện vẫn nổi bọt qua cây React nên click trong modal kích hoạt handler của cha ngoài ý muốn (cần `stopPropagation` hoặc đặt handler cẩn thận).\n- Không quản lý focus và phím Escape, gây khó cho người dùng bàn phím và trình đọc màn hình.\n- Dùng `document.body` trong code chạy phía server (SSR) mà không kiểm tra môi trường.",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-11-0-slides",
+    "ten": "11.0 — Slide Chương 11: React bên trong bằng hình",
+    "nguon": "React · Chương 11",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-11-4-portal-error-boundary",
+    "ten": "11.4 — Portal và error boundary: thoát thẻ cha, lỗi không làm trắng trang",
+    "nguon": "React · Chương 11",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Framework & Mobile › Next.js": {
+  "body": "Next.js là **framework** xây trên React. React thuần chỉ lo giao diện; Next.js thêm những thứ một ứng dụng thật cần: định tuyến theo thư mục, render phía server, tối ưu ảnh/font, API routes, build và deploy.\n\n### Vì sao cần biết\nMột SPA React thuần gửi về trình duyệt một trang HTML gần như rỗng rồi chạy JavaScript mới có nội dung, kém cho SEO và cho thời gian hiện nội dung đầu tiên. Next.js có thể gửi sẵn HTML có nội dung, và là lựa chọn phổ biến khi cần SEO hoặc muốn cả frontend lẫn phần server trong một dự án.\n\n### Ý chính\n- **App Router**: mỗi thư mục trong `app/` là một route; các file quy ước như `page.tsx`, `layout.tsx`, `loading.tsx`, `error.tsx`.\n- **Server Components** là mặc định: chạy trên server, không gửi JavaScript của chúng xuống client; thêm `'use client'` ở file cần tương tác (state, effect, sự kiện).\n- **Các cách render**: CSR, SSR (mỗi request), SSG (dựng sẵn lúc build), ISR (dựng sẵn rồi làm mới theo lịch hoặc theo yêu cầu).\n- **Route Handlers** (`route.ts`) làm API ngay trong dự án; **Server Actions** để submit form gọi hàm chạy trên server.\n- Tối ưu có sẵn: component `Image`, `Link` prefetch, font, metadata cho SEO.\n\n```tsx\n// app/doctors/page.tsx — Server Component, tải dữ liệu ngay trên server\nexport default async function DoctorsPage() {\n  const res = await fetch('https://api.example.com/doctors');\n  const doctors: { id: number; name: string }[] = await res.json();\n  return (\n    <ul>\n      {doctors.map((d) => <li key={d.id}>{d.name}</li>)}\n    </ul>\n  );\n}\n```\n\n### Khi nào chọn Next.js, khi nào Vite SPA là đủ\nChọn Next.js khi cần SEO, nội dung công khai, hay muốn một nơi cho cả giao diện và server. Một SPA Vite thường đủ cho ứng dụng nội bộ sau đăng nhập, nơi SEO không quan trọng.\n\n### Lỗi hay gặp\n- Dùng hook/sự kiện trong Server Component mà quên `'use client'`.\n- Biến môi trường `NEXT_PUBLIC_*` bị nhúng vào bundle lúc build, nên không đặt khóa bí mật ở đó và đổi giá trị thì phải build lại.\n- Nghĩ cache mặc định \"luôn tươi\"; hành vi cache đổi theo phiên bản, cần đọc tài liệu đúng phiên bản bạn dùng.\n\n### Tự kiểm tra\n1. Server Component và Client Component khác nhau thế nào về nơi chạy và JavaScript gửi xuống?\n2. Trang nào của dự án nên SSG, trang nào cần SSR?",
+  "lessons": [
+   {
+    "href": "/courses/react/learn?lessonSlug=rx-7-4-sang-nextjs",
+    "ten": "7.4 — Từ React sang Next.js: khác gì, khi nào cần, và route của ta chuyển sang thế nào",
+    "nguon": "React · Chương 7",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-0-2-react-vs-nextjs",
+    "ten": "0.2 — React vs Next.js: mỗi cái là gì",
+    "nguon": "Next.js: The React Framework · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-8-1-tu-react-toi-nextjs",
+    "ten": "8.1 — Từ app React tới framework Next.js",
+    "nguon": "Next.js: The React Framework · Chương 8",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-17-1-bon-cach-render",
+    "ten": "17.1 — Bốn cách một trang được tạo ra (CSR, SSR, SSG, ISR)",
+    "nguon": "Next.js: The React Framework · Chương 17",
+    "kieu": "video"
+   },
+   {
+    "href": "/code-lab/nextjs",
+    "ten": "Next.js",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Framework & Mobile › Astro": {
+  "body": "Astro là framework cho **website thiên về nội dung** (blog, tài liệu, trang giới thiệu, cửa hàng đơn giản). Mặc định nó dựng HTML tĩnh và **gửi gần như không có JavaScript** xuống trình duyệt; chỉ những phần bạn đánh dấu là tương tác mới tải JavaScript.\n\n### Vì sao cần biết\nVới trang chủ yếu để đọc, phần lớn JavaScript của một SPA React là thừa. Astro cho trang tải nhanh vì gửi ít mã, mà vẫn cho bạn dùng React ở đúng chỗ cần tương tác.\n\n### Ý chính\n- **Islands architecture**: trang là biển HTML tĩnh, các \"đảo\" tương tác (một component React) được hydrate riêng, độc lập nhau.\n- Thêm React bằng integration `@astrojs/react`, rồi dùng component React trong file `.astro`.\n- Chọn **lúc nào** đảo tải JavaScript bằng chỉ thị `client:*`: `client:load` (ngay), `client:idle` (khi trình duyệt rảnh), `client:visible` (khi cuộn tới), `client:only=\"react\"` (chỉ render ở client).\n- Không có chỉ thị `client:*` nghĩa là component chỉ render thành HTML, không có JavaScript.\n- Có sẵn content collections để quản lý Markdown/MDX có kiểm kiểu.\n- Hỗ trợ nhiều framework UI (React, Vue, Svelte...) trong cùng một dự án.\n\n```astro\n---\nimport Header from '../components/Header.astro';\nimport LikeButton from '../components/LikeButton.tsx'; // component React\n---\n<Header />\n<h1>Bài viết</h1>\n<p>Nội dung tĩnh, không tốn JavaScript.</p>\n<LikeButton client:visible />\n```\n\n### Khi nào chọn\nChọn Astro cho trang nội dung, SEO và tốc độ quan trọng. Với ứng dụng nhiều tương tác ở mọi nơi (dashboard), Next.js hoặc SPA thường hợp hơn.\n\n### Lỗi hay gặp\n- Quên chỉ thị `client:*` nên nút React hiện ra nhưng không phản hồi.\n- Dùng `client:load` cho mọi thứ, làm mất lợi thế ít JavaScript.\n- Cố chia sẻ state giữa các đảo bằng React context; các đảo độc lập nên cần store dùng chung bên ngoài.\n\nWeb chưa có bài học riêng về Astro, nên mục này chưa gắn bài."
+ },
+ "Framework & Mobile › React Native": {
+  "body": "React Native cho phép bạn dùng **React và JavaScript/TypeScript để làm ứng dụng iOS và Android thật**. Giao diện không chạy trong WebView mà được dựng bằng các thành phần native của hệ điều hành; bạn viết một codebase và chia sẻ phần lớn giữa hai nền tảng.\n\n### Vì sao cần biết\nNếu bạn đã biết React, đây là đường ngắn nhất sang di động: cùng component, props, state, hook. Phần mới chủ yếu là các thành phần giao diện, cách bố cục và công cụ build.\n\n### Ý chính\n- Không có `div`/`span`; dùng `View`, `Text`, `Image`, `ScrollView`, `FlatList`, `Pressable`...\n- **Style bằng JavaScript** (`StyleSheet.create`), bố cục bằng Flexbox (mặc định cột dọc). Không có CSS thật.\n- **Expo** là cách làm React Native mặc định hiện nay: công cụ, SDK (camera, thông báo, hệ thống file) và dịch vụ build (EAS) trong một bộ. Có thể thử ngay trên điện thoại thật bằng Expo Go.\n- **Điều hướng** với Expo Router (định tuyến theo file, giống Next.js) hoặc React Navigation.\n- Khác biệt nền tảng xử lý bằng `Platform.OS` hoặc file riêng theo nền tảng (`.ios.tsx`, `.android.tsx`).\n- Cần module native mà Expo chưa có thì dùng development build và config plugin.\n\n```tsx\nimport { View, Text, Pressable, StyleSheet } from 'react-native';\nimport { useState } from 'react';\n\nexport default function Counter() {\n  const [n, setN] = useState(0);\n  return (\n    <View style={styles.box}>\n      <Text>Đã bấm {n} lần</Text>\n      <Pressable onPress={() => setN(n + 1)}>\n        <Text>Bấm</Text>\n      </Pressable>\n    </View>\n  );\n}\nconst styles = StyleSheet.create({ box: { padding: 16, gap: 8 } });\n```\n\n### Lỗi hay gặp\n- Đặt chữ trực tiếp ngoài `<Text>`.\n- Gọi API bằng `localhost` trong app chạy trên điện thoại; `localhost` lúc đó là chính điện thoại, phải dùng địa chỉ IP của máy phát triển.\n- Dùng `ScrollView` với danh sách dài thay vì `FlatList`.\n- Mong mọi gói npm dành cho web chạy được; thư viện phụ thuộc DOM sẽ không chạy.",
+  "lessons": [
+   {
+    "href": "/code-lab/react-native",
+    "ten": "React Native",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Framework & Mobile › Mobile Applications": {
+  "body": "Mục này nói về việc **xây một ứng dụng di động hoàn chỉnh** với React Native, từ điều hướng và dữ liệu tới đưa lên cửa hàng ứng dụng. Mục tiêu là chia sẻ phần lớn code giữa iOS và Android nhưng vẫn tôn trọng khác biệt của từng nền tảng.\n\n### Vì sao cần biết\nỨng dụng di động có những ràng buộc web không có: màn hình nhỏ, mạng chập chờn, quyền truy cập thiết bị, vòng đời app (nền/tiền cảnh) và quy trình phát hành qua App Store, Google Play.\n\n### Ý chính\n- **Điều hướng**: stack (đi vào/quay lại), tab (chuyển giữa khu vực chính), cả hai thường kết hợp. Expo Router định tuyến theo cấu trúc file; React Navigation là lựa chọn dựa trên code.\n- **Dữ liệu**: dùng lại TanStack Query như ở web, nhưng chú ý mất mạng và đặt làm mới theo trạng thái app (đưa app lên tiền cảnh) thay cho focus cửa sổ.\n- **Lưu trữ**: `AsyncStorage` cho dữ liệu thường, kho an toàn (Keychain/Keystore, như `expo-secure-store`) cho token và dữ liệu nhạy cảm.\n- **Mã theo nền tảng**: `Platform.OS`, `Platform.select`, file `.ios.tsx`/`.android.tsx`.\n- **Cử chỉ và hoạt ảnh**: `react-native-gesture-handler` và `react-native-reanimated` chạy trên luồng giao diện nên mượt khi luồng JS bận.\n- **Hiệu năng**: danh sách dài dùng `FlatList`, tối ưu ảnh, tránh render lại không cần thiết.\n- **Phát hành**: build bằng EAS Build trên cloud, kiểm thử nội bộ (TestFlight, Play internal testing), cập nhật OTA cho phần JavaScript, rồi nộp lên cửa hàng.\n\n```tsx\nimport { Platform } from 'react-native';\n\nconst shadow = Platform.select({\n  ios: { shadowColor: '#000', shadowOpacity: 0.2, shadowRadius: 6 },\n  android: { elevation: 4 },\n});\n```\n\n### Lỗi hay gặp\n- Giả định mạng luôn ổn định, không thiết kế cho lúc offline.\n- Lưu token ở nơi không an toàn.\n- Không thử trên thiết bị thật của cả hai hệ điều hành trước khi phát hành.\n- Quên rằng thay đổi có mã native hay cấu hình thì cần build lại, OTA không thay được.",
+  "lessons": [
+   {
+    "href": "/code-lab/react-native",
+    "ten": "React Native",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
  }
 }

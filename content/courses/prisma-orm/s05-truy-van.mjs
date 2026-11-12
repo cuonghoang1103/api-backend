@@ -77,14 +77,16 @@ CREATE EXTENSION IF NOT EXISTS pg_trgm;
 CREATE INDEX "posts_title_trgm_idx" ON "posts" USING gin ("title" gin_trgm_ops);</code></pre>
 <pre><code class="language-sql">EXPLAIN ANALYZE SELECT * FROM posts WHERE title ILIKE '%prisma%';</code></pre>
 <div class="out">-- before the index
-Seq Scan on posts  (cost=0.00..12842.00 rows=41 width=97) (actual time=0.4..184.2 rows=38 loops=1)
-Execution Time: 184.377 ms
+Gather (actual time=0.136..75.901 rows=80 loops=1)        -- 400,000 posts
+  -&gt;  Parallel Seq Scan on posts (actual time=1.259..71.748 rows=27 loops=3)
+        Filter: (title ~~* '%prisma%'::text)
+Execution Time: 75.930 ms
 
 -- after the index
-Bitmap Heap Scan on posts  (cost=52.03..188.41 rows=41 width=97) (actual time=0.9..2.1 rows=38 loops=1)
-  -&gt;  Bitmap Index Scan on posts_title_trgm_idx  (cost=0.00..52.02 rows=41 width=0)
-Execution Time: 2.203 ms</div>
-<p>Eighty-four times faster, and the Prisma code did not change at all. That is the shape of most Prisma performance work: the query was fine, the schema was missing something.</p>
+Bitmap Heap Scan on posts (actual time=0.051..0.172 rows=80 loops=1)
+  -&gt;  Bitmap Index Scan on posts_title_trgm_idx (actual time=0.041..0.041 rows=80 loops=1)
+Execution Time: 0.188 ms</div>
+<p>About four hundred times faster (measured 12 Nov 2026 on one Apple-silicon laptop, PostgreSQL 16.14 in Docker, Prisma 6.19.3), and the Prisma code did not change at all. That is the shape of most Prisma performance work: the query was fine, the schema was missing something.</p>
 
 <h3>Lists and sets</h3>
 <pre><code class="language-typescript">where: { id:     { in:    [1, 2, 3] } }        <span class="tok-comment">// IN ($1,$2,$3)</span>
@@ -92,10 +94,10 @@ where: { id:     { notIn: [1, 2, 3] } }        <span class="tok-comment">// NOT 
 where: { status: { in: ['MOI', 'DANG_XU_LY'] } }
 
 <span class="tok-comment">// Array columns (PostgreSQL String[])</span>
-where: { tags: { has:      'prisma' } }        <span class="tok-comment">// $1 = ANY(tags)</span>
+where: { tags: { has:      'prisma' } }        <span class="tok-comment">// tags @&gt; $1   (an array of one)</span>
 where: { tags: { hasEvery: ['a', 'b'] } }      <span class="tok-comment">// tags @&gt; ARRAY[...]</span>
 where: { tags: { hasSome:  ['a', 'b'] } }      <span class="tok-comment">// tags &amp;&amp; ARRAY[...]</span>
-where: { tags: { isEmpty:  true } }            <span class="tok-comment">// array_length IS NULL</span></code></pre>
+where: { tags: { isEmpty:  true } }            <span class="tok-comment">// tags = '{}'</span></code></pre>
 <div class="out">SELECT ... WHERE "posts"."tags" @&gt; $1        -- params: [["a","b"]]</div>
 <div class="kv-grid">
   <div class="kv"><span class="k"><code>in</code> with an empty array matches nothing</span><span class="v"><code>{ id: { in: [] } }</code> becomes <code>WHERE 1=0</code>. Correct, and a common source of "my filter returns zero rows" when the array came from a <code>.map()</code> over an empty list. Check before you filter.</span></div>
@@ -214,14 +216,16 @@ CREATE EXTENSION IF NOT EXISTS pg_trgm;
 CREATE INDEX "posts_title_trgm_idx" ON "posts" USING gin ("title" gin_trgm_ops);</code></pre>
 <pre><code class="language-sql">EXPLAIN ANALYZE SELECT * FROM posts WHERE title ILIKE '%prisma%';</code></pre>
 <div class="out">-- trước khi có chỉ mục
-Seq Scan on posts  (cost=0.00..12842.00 rows=41 width=97) (actual time=0.4..184.2 rows=38 loops=1)
-Execution Time: 184.377 ms
+Gather (actual time=0.136..75.901 rows=80 loops=1)        -- 400,000 posts
+  -&gt;  Parallel Seq Scan on posts (actual time=1.259..71.748 rows=27 loops=3)
+        Filter: (title ~~* '%prisma%'::text)
+Execution Time: 75.930 ms
 
 -- sau khi có chỉ mục
-Bitmap Heap Scan on posts  (cost=52.03..188.41 rows=41 width=97) (actual time=0.9..2.1 rows=38 loops=1)
-  -&gt;  Bitmap Index Scan on posts_title_trgm_idx  (cost=0.00..52.02 rows=41 width=0)
-Execution Time: 2.203 ms</div>
-<p>Nhanh gấp tám mươi tư lần, và đoạn mã Prisma không đổi một chữ. Đó là hình dạng của phần lớn công việc tối ưu hiệu năng Prisma: câu truy vấn vốn ổn, chỉ là lược đồ thiếu một thứ.</p>
+Bitmap Heap Scan on posts (actual time=0.051..0.172 rows=80 loops=1)
+  -&gt;  Bitmap Index Scan on posts_title_trgm_idx (actual time=0.041..0.041 rows=80 loops=1)
+Execution Time: 0.188 ms</div>
+<p>Nhanh gấp khoảng bốn trăm lần (đo ngày 12/11/2026 trên một laptop Apple silicon, PostgreSQL 16.14 trong Docker, Prisma 6.19.3), và đoạn mã Prisma không đổi một chữ. Đó là hình dạng của phần lớn công việc tối ưu hiệu năng Prisma: câu truy vấn vốn ổn, chỉ là lược đồ thiếu một thứ.</p>
 
 <h3>Danh sách và tập hợp</h3>
 <pre><code class="language-typescript">where: { id:     { in:    [1, 2, 3] } }        <span class="tok-comment">// IN ($1,$2,$3)</span>
@@ -229,10 +233,10 @@ where: { id:     { notIn: [1, 2, 3] } }        <span class="tok-comment">// NOT 
 where: { status: { in: ['MOI', 'DANG_XU_LY'] } }
 
 <span class="tok-comment">// Cột mảng (String[] của PostgreSQL)</span>
-where: { tags: { has:      'prisma' } }        <span class="tok-comment">// $1 = ANY(tags)</span>
+where: { tags: { has:      'prisma' } }        <span class="tok-comment">// tags @&gt; $1   (an array of one)</span>
 where: { tags: { hasEvery: ['a', 'b'] } }      <span class="tok-comment">// tags @&gt; ARRAY[...]</span>
 where: { tags: { hasSome:  ['a', 'b'] } }      <span class="tok-comment">// tags &amp;&amp; ARRAY[...]</span>
-where: { tags: { isEmpty:  true } }            <span class="tok-comment">// array_length IS NULL</span></code></pre>
+where: { tags: { isEmpty:  true } }            <span class="tok-comment">// tags = '{}'</span></code></pre>
 <div class="out">SELECT ... WHERE "posts"."tags" @&gt; $1        -- tham số: [["a","b"]]</div>
 <div class="kv-grid">
   <div class="kv"><span class="k"><code>in</code> với mảng rỗng thì khớp không gì cả</span><span class="v"><code>{ id: { in: [] } }</code> thành <code>WHERE 1=0</code>. Đúng, và là nguồn phổ biến của chuyện "bộ lọc của tôi trả về không hàng nào" khi cái mảng đến từ một <code>.map()</code> trên một danh sách rỗng. Hãy kiểm trước khi lọc.</span></div>
@@ -348,7 +352,7 @@ SELECT ... FROM "users" WHERE NOT EXISTS (
   </div>
   <div class="lz-stage">
     <span class="lz-badge">To-one</span>
-    <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">is / isNot</span><span class="lz-nsub">A join on the single related row. <code>is: null</code> means the relation is absent; <code>isNot</code> excludes rows with no relation at all, which is the same three-valued-logic trap one level up.</span></div></div>
+    <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">is / isNot</span><span class="lz-nsub">A join on the single related row. <code>is: null</code> means the relation is absent; <code>isNot</code> — in Prisma 6.19.3 — <em>keeps</em> rows with no relation at all (the SQL adds <code>OR … IS NULL</code>); see the last section.</span></div></div>
   </div>
 </div>
 
@@ -465,13 +469,19 @@ where: { profile: { is: { bio: { not: null } } } }
 <span class="tok-comment">// Users with no profile, OR a profile with no bio</span>
 where: { OR: [{ profile: { is: null } }, { profile: { is: { bio: null } } }] }
 
-<span class="tok-comment">// Posts whose category is NOT the archive one — note this EXCLUDES</span>
-<span class="tok-comment">// posts with no category at all, which is usually not what you want</span>
+<span class="tok-comment">// Posts whose category is NOT the archive one. In Prisma 6.19.3 this KEEPS</span>
+<span class="tok-comment">// posts with no category at all — the SQL adds "OR id IS NULL" for you</span>
 where: { category: { isNot: { slug: 'archive' } } }
-where: { OR: [{ categoryId: null }, { category: { isNot: { slug: 'archive' } } }] }</code></pre>
-<div class="out">SELECT ... FROM "users" WHERE NOT EXISTS (
-  SELECT 1 FROM "profiles" WHERE "profiles"."user_id" = "users"."id")</div>
-<p>The <code>isNot</code> case is the same three-valued-logic trap as <code>not</code> from Lesson 5.1, one level up: an absent relation is not a relation that fails the test, so it does not match. Whenever you write a negative filter on an optional relation, ask what should happen to rows that have nothing there — and then write that down too.</p>
+<span class="tok-comment">// If you want ONLY posts that have some other category, say so</span>
+where: { categoryId: { not: null }, category: { isNot: { slug: 'archive' } } }</code></pre>
+<div class="out">-- profile: { is: null }
+SELECT … FROM "users" LEFT JOIN "profiles" AS "j0" ON ("j0"."user_id") = ("id") WHERE ("j0"."user_id" IS NULL)
+-- category: { isNot: { slug: 'archive' } }
+SELECT … FROM "posts" LEFT JOIN "categories" AS "j0" ON ("j0"."id") = ("category_id")
+  WHERE ((NOT "j0"."slug" = $1) OR ("j0"."id" IS NULL))
+-- 687 posts: 2 in archive, 684 with no category → isNot returns 685; adding OR categoryId: null still 685
+-- (Prisma 6.19.3, PostgreSQL 16.14, 12 Nov 2026)</div>
+<p><strong><code>isNot</code> is not the three-valued-logic trap of <code>not</code> — Prisma works around it.</strong> Measured on Prisma 6.19.3, the generated SQL adds <code>OR "j0"."id" IS NULL</code>, so a post with no category <em>does</em> count as "not in archive". Many write-ups (and an earlier version of this lesson) say the opposite, so do not rely on memory: whenever you write a negative filter on an optional relation, read the SQL of the version you run, decide what should happen to rows that have nothing there, and then write that down explicitly.</p>
 
 <h3>Learning sources for this lesson</h3>
 <a class="link-card" href="https://www.prisma.io/docs/orm/prisma-client/queries/filtering-and-sorting#filter-on-relations" target="_blank" rel="noopener"><span class="lc-ico">🔗</span><span class="lc-body"><span class="lc-title">Filter on relations</span><span class="lc-sub">prisma.io/docs · <code>some</code>, <code>every</code>, <code>none</code>, <code>is</code>, <code>isNot</code> with the SQL each generates</span></span></a>
@@ -519,7 +529,7 @@ SELECT ... FROM "users" WHERE NOT EXISTS (
   </div>
   <div class="lz-stage">
     <span class="lz-badge">Tới-một</span>
-    <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">is / isNot</span><span class="lz-nsub">Một phép join với hàng liên quan duy nhất. <code>is: null</code> nghĩa là quan hệ vắng mặt; <code>isNot</code> loại những hàng hoàn toàn không có quan hệ, đúng cái bẫy logic ba giá trị dịch lên một tầng.</span></div></div>
+    <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">is / isNot</span><span class="lz-nsub">Một phép join với hàng liên quan duy nhất. <code>is: null</code> nghĩa là quan hệ vắng mặt; <code>isNot</code> — ở Prisma 6.19.3 — <em>giữ</em> cả những hàng hoàn toàn không có quan hệ (câu SQL thêm <code>OR … IS NULL</code>); xem mục cuối.</span></div></div>
   </div>
 </div>
 
@@ -636,13 +646,19 @@ where: { profile: { is: { bio: { not: null } } } }
 <span class="tok-comment">// Người dùng chưa có hồ sơ, HOẶC có hồ sơ mà không có phần giới thiệu</span>
 where: { OR: [{ profile: { is: null } }, { profile: { is: { bio: null } } }] }
 
-<span class="tok-comment">// Bài viết có chuyên mục KHÔNG phải chuyên mục lưu trữ — lưu ý cái này LOẠI</span>
-<span class="tok-comment">// những bài không thuộc chuyên mục nào, và đó thường không phải ý bạn</span>
+<span class="tok-comment">// Bài viết có chuyên mục KHÔNG phải chuyên mục lưu trữ. Ở Prisma 6.19.3 cái này GIỮ</span>
+<span class="tok-comment">// cả những bài không thuộc chuyên mục nào — câu SQL tự thêm "OR id IS NULL"</span>
 where: { category: { isNot: { slug: 'archive' } } }
-where: { OR: [{ categoryId: null }, { category: { isNot: { slug: 'archive' } } }] }</code></pre>
-<div class="out">SELECT ... FROM "users" WHERE NOT EXISTS (
-  SELECT 1 FROM "profiles" WHERE "profiles"."user_id" = "users"."id")</div>
-<p>Trường hợp <code>isNot</code> là đúng cái bẫy logic ba giá trị của <code>not</code> ở Bài 5.1, chỉ dịch lên một tầng: một quan hệ vắng mặt không phải là một quan hệ trượt phép kiểm, nên nó không khớp. Mỗi khi bạn viết một bộ lọc phủ định trên một quan hệ tuỳ chọn, hãy hỏi xem những hàng chẳng có gì ở đó thì nên ra sao — rồi viết luôn điều đó ra.</p>
+<span class="tok-comment">// Muốn CHỈ những bài có một chuyên mục khác thì nói rõ ra</span>
+where: { categoryId: { not: null }, category: { isNot: { slug: 'archive' } } }</code></pre>
+<div class="out">-- profile: { is: null }
+SELECT … FROM "users" LEFT JOIN "profiles" AS "j0" ON ("j0"."user_id") = ("id") WHERE ("j0"."user_id" IS NULL)
+-- category: { isNot: { slug: 'archive' } }
+SELECT … FROM "posts" LEFT JOIN "categories" AS "j0" ON ("j0"."id") = ("category_id")
+  WHERE ((NOT "j0"."slug" = $1) OR ("j0"."id" IS NULL))
+-- 687 posts: 2 in archive, 684 with no category → isNot returns 685; adding OR categoryId: null still 685
+-- (Prisma 6.19.3, PostgreSQL 16.14, 12 Nov 2026)</div>
+<p><strong><code>isNot</code> không phải cái bẫy logic ba giá trị của <code>not</code> — Prisma đã tự vá.</strong> Đo trên Prisma 6.19.3, câu SQL sinh ra thêm <code>OR "j0"."id" IS NULL</code>, nên một bài viết không có chuyên mục <em>vẫn</em> được tính là "không thuộc archive". Nhiều bài viết (và bản cũ của chính bài này) nói ngược lại, nên đừng dựa vào trí nhớ: mỗi khi viết một bộ lọc phủ định trên quan hệ tuỳ chọn, hãy đọc câu SQL của đúng phiên bản bạn chạy, quyết định những hàng chẳng có gì ở đó nên ra sao, rồi viết điều đó ra tường minh.</p>
 
 <h3>Nguồn học cho bài này</h3>
 <a class="link-card" href="https://www.prisma.io/docs/orm/prisma-client/queries/filtering-and-sorting#filter-on-relations" target="_blank" rel="noopener"><span class="lc-ico">🔗</span><span class="lc-body"><span class="lc-title">Filter on relations</span><span class="lc-sub">prisma.io/docs · <code>some</code>, <code>every</code>, <code>none</code>, <code>is</code>, <code>isNot</code> kèm SQL mỗi cái sinh ra</span></span></a>
@@ -710,17 +726,18 @@ const [rows, total] = await Promise.all([
 ]);</code></pre>
 <div class="out">SELECT ... FROM "posts" WHERE "published" = $1
 ORDER BY "published_at" DESC, "id" DESC LIMIT $2 OFFSET $3</div>
-<pre><code class="language-sql"><span class="tok-comment">-- The same query at four different offsets. 2,000,000 rows.</span>
+<pre><code class="language-sql"><span class="tok-comment">-- The same query at four different offsets. 1,000,000 rows, index on (published_at DESC, id DESC).</span>
 EXPLAIN ANALYZE SELECT * FROM posts ORDER BY published_at DESC, id DESC LIMIT 20 OFFSET 0;
 EXPLAIN ANALYZE SELECT * FROM posts ORDER BY published_at DESC, id DESC LIMIT 20 OFFSET 10000;
 EXPLAIN ANALYZE SELECT * FROM posts ORDER BY published_at DESC, id DESC LIMIT 20 OFFSET 100000;
-EXPLAIN ANALYZE SELECT * FROM posts ORDER BY published_at DESC, id DESC LIMIT 20 OFFSET 1000000;</code></pre>
-<div class="out">OFFSET       0 → Execution Time:    0.094 ms
-OFFSET   10000 → Execution Time:    9.812 ms
-OFFSET  100000 → Execution Time:   96.447 ms
-OFFSET 1000000 → Execution Time:  982.115 ms</div>
+EXPLAIN ANALYZE SELECT * FROM posts ORDER BY published_at DESC, id DESC LIMIT 20 OFFSET 900000;</code></pre>
+<div class="out">OFFSET      0 → index scan reads      20 rows → Execution Time:  0.055 ms
+OFFSET  10000 → index scan reads  10,020 rows → Execution Time:  5.622 ms
+OFFSET 100000 → index scan reads 100,020 rows → Execution Time: 20.511 ms
+OFFSET 900000 → index scan reads 900,020 rows → Execution Time: 85.453 ms
+-- measured 12 Nov 2026, Apple-silicon laptop, PostgreSQL 16.14 in Docker</div>
 <div class="callout warn">
-<p><strong>Linear, and there is no index that fixes it.</strong> <code>OFFSET 1000000</code> means the database walks and discards a million rows before returning twenty. The index is being used perfectly — it is the algorithm that is wrong. And the <code>count</code> alongside it is a second full scan, because PostgreSQL stores no row count. A "page 50,000" link on a big table is two seconds of work to render twenty rows.</p>
+<p><strong>Linear, and there is no index that fixes it.</strong> <code>OFFSET 900000</code> means the database walks and discards 900,000 index entries before returning twenty. The index is being used perfectly — it is the algorithm that is wrong. And the <code>count</code> alongside it is a second full scan, because PostgreSQL stores no row count. A "page 50,000" link on a big table is two seconds of work to render twenty rows.</p>
 </div>
 <div class="kv-grid">
   <div class="kv"><span class="k">The other failure: drift</span><span class="v">Between loading page 1 and page 2, three new posts are inserted at the top. Everything shifts down by three, so three rows you already saw reappear on page 2 and three you have not seen are skipped. Offset paginates over <em>positions</em>, and positions move.</span></div>
@@ -737,15 +754,16 @@ OFFSET 1000000 → Execution Time:  982.115 ms</div>
 
 const next = page.length === 20 ? page[page.length - 1].id : null;
 res.json({ rows: page, nextCursor: next });</code></pre>
-<div class="out">SELECT ... FROM "posts" WHERE "published" = $1 AND "id" &lt;= $2
-ORDER BY "id" DESC LIMIT $3 OFFSET $4
+<div class="out">SELECT ... FROM "posts" WHERE ("published" = $1 AND "id" &lt;= (SELECT "id" FROM "posts" WHERE ("id") = ($2)))
+ORDER BY "id" DESC LIMIT $3 OFFSET $4          -- what Prisma 6.19.3 sends
 
-OFFSET       0 → Execution Time: 0.081 ms
-after 10,000  → Execution Time: 0.079 ms
-after 100,000 → Execution Time: 0.083 ms
-after 1,000,000 → Execution Time: 0.088 ms</div>
+-- EXPLAIN ANALYZE … WHERE id &lt; X ORDER BY id DESC LIMIT 20 (1,000,000 rows)
+after id 1,000,000 → reads 20 rows → Execution Time: 0.446 ms   (cold)
+after id   990,000 → reads 20 rows → Execution Time: 0.017 ms
+after id   900,000 → reads 20 rows → Execution Time: 0.032 ms
+after id   100,000 → reads 20 rows → Execution Time: 0.015 ms</div>
 <div class="lz-flow">
-  <div class="lz-step"><span class="lz-k">Constant time</span><span class="lz-t">0.08 ms at any depth</span><span class="lz-d">The cursor becomes a <code>WHERE id &lt;= $2</code>, so the index seeks straight to the position instead of counting to it. Page one million costs the same as page one.</span></div>
+  <div class="lz-step"><span class="lz-k">Constant time</span><span class="lz-t">20 rows read at any depth</span><span class="lz-d">The cursor becomes a <code>WHERE id &lt;= $2</code>, so the index seeks straight to the position instead of counting to it. Page one million costs the same as page one.</span></div>
   <div class="lz-step"><span class="lz-k">No drift</span><span class="lz-t">Rows are not skipped or repeated</span><span class="lz-d">The cursor names a <em>row</em>, not a position. Inserting at the top does not move it, so the next page continues exactly where the last one stopped.</span></div>
   <div class="lz-step"><span class="lz-k">No page numbers</span><span class="lz-t">Only next and previous</span><span class="lz-d">You cannot jump to page 50. For an infinite-scroll feed that is no loss; for a numbered admin table it rules the technique out.</span></div>
   <div class="lz-step"><span class="lz-k"><code>skip: 1</code> is required</span><span class="lz-d">The cursor row is <em>included</em> by default. Forget the skip and the last row of each page becomes the first row of the next — a duplicate at every boundary, which is subtle enough to reach production.</span><span class="lz-t">Or you duplicate a row</span></div>
@@ -861,17 +879,18 @@ const [rows, total] = await Promise.all([
 ]);</code></pre>
 <div class="out">SELECT ... FROM "posts" WHERE "published" = $1
 ORDER BY "published_at" DESC, "id" DESC LIMIT $2 OFFSET $3</div>
-<pre><code class="language-sql"><span class="tok-comment">-- Cùng một câu truy vấn ở bốn mức offset. 2.000.000 hàng.</span>
+<pre><code class="language-sql"><span class="tok-comment">-- Cùng một câu truy vấn ở bốn mức offset. 1.000.000 hàng, chỉ mục (published_at DESC, id DESC).</span>
 EXPLAIN ANALYZE SELECT * FROM posts ORDER BY published_at DESC, id DESC LIMIT 20 OFFSET 0;
 EXPLAIN ANALYZE SELECT * FROM posts ORDER BY published_at DESC, id DESC LIMIT 20 OFFSET 10000;
 EXPLAIN ANALYZE SELECT * FROM posts ORDER BY published_at DESC, id DESC LIMIT 20 OFFSET 100000;
-EXPLAIN ANALYZE SELECT * FROM posts ORDER BY published_at DESC, id DESC LIMIT 20 OFFSET 1000000;</code></pre>
-<div class="out">OFFSET       0 → Execution Time:    0.094 ms
-OFFSET   10000 → Execution Time:    9.812 ms
-OFFSET  100000 → Execution Time:   96.447 ms
-OFFSET 1000000 → Execution Time:  982.115 ms</div>
+EXPLAIN ANALYZE SELECT * FROM posts ORDER BY published_at DESC, id DESC LIMIT 20 OFFSET 900000;</code></pre>
+<div class="out">OFFSET      0 → index scan reads      20 rows → Execution Time:  0.055 ms
+OFFSET  10000 → index scan reads  10,020 rows → Execution Time:  5.622 ms
+OFFSET 100000 → index scan reads 100,020 rows → Execution Time: 20.511 ms
+OFFSET 900000 → index scan reads 900,020 rows → Execution Time: 85.453 ms
+-- measured 12 Nov 2026, Apple-silicon laptop, PostgreSQL 16.14 in Docker</div>
 <div class="callout warn">
-<p><strong>Tuyến tính, và không có chỉ mục nào vá được.</strong> <code>OFFSET 1000000</code> nghĩa là cơ sở dữ liệu đi qua rồi vứt bỏ một triệu hàng trước khi trả về hai mươi. Chỉ mục đang được dùng hoàn hảo — cái sai là thuật toán. Và câu <code>count</code> đi kèm là một lần quét toàn bộ thứ hai, vì PostgreSQL không lưu số đếm hàng nào cả. Một liên kết "trang 50.000" trên bảng lớn là hai giây công sức để vẽ ra hai mươi hàng.</p>
+<p><strong>Tuyến tính, và không có chỉ mục nào vá được.</strong> <code>OFFSET 900000</code> nghĩa là cơ sở dữ liệu đi qua rồi vứt bỏ 900.000 mục chỉ mục trước khi trả về hai mươi. Chỉ mục đang được dùng hoàn hảo — cái sai là thuật toán. Và câu <code>count</code> đi kèm là một lần quét toàn bộ thứ hai, vì PostgreSQL không lưu số đếm hàng nào cả. Một liên kết "trang 50.000" trên bảng lớn là hai giây công sức để vẽ ra hai mươi hàng.</p>
 </div>
 <div class="kv-grid">
   <div class="kv"><span class="k">Thất bại còn lại: trôi vị trí</span><span class="v">Giữa lúc tải trang 1 và trang 2, có ba bài mới được chèn lên đầu. Mọi thứ dịch xuống ba, nên ba hàng bạn đã xem hiện lại ở trang 2 và ba hàng bạn chưa xem bị bỏ qua. Offset phân trang theo <em>vị trí</em>, mà vị trí thì di chuyển.</span></div>
@@ -888,15 +907,16 @@ OFFSET 1000000 → Execution Time:  982.115 ms</div>
 
 const next = page.length === 20 ? page[page.length - 1].id : null;
 res.json({ rows: page, nextCursor: next });</code></pre>
-<div class="out">SELECT ... FROM "posts" WHERE "published" = $1 AND "id" &lt;= $2
-ORDER BY "id" DESC LIMIT $3 OFFSET $4
+<div class="out">SELECT ... FROM "posts" WHERE ("published" = $1 AND "id" &lt;= (SELECT "id" FROM "posts" WHERE ("id") = ($2)))
+ORDER BY "id" DESC LIMIT $3 OFFSET $4          -- Prisma 6.19.3 gửi đúng câu này
 
-OFFSET       0 → Execution Time: 0.081 ms
-sau 10.000     → Execution Time: 0.079 ms
-sau 100.000    → Execution Time: 0.083 ms
-sau 1.000.000  → Execution Time: 0.088 ms</div>
+-- EXPLAIN ANALYZE … WHERE id &lt; X ORDER BY id DESC LIMIT 20 (1.000.000 hàng)
+sau id 1.000.000 → đọc 20 hàng → Execution Time: 0.446 ms   (lần đầu, bộ đệm nguội)
+sau id   990.000 → đọc 20 hàng → Execution Time: 0.017 ms
+sau id   900.000 → đọc 20 hàng → Execution Time: 0.032 ms
+sau id   100.000 → đọc 20 hàng → Execution Time: 0.015 ms</div>
 <div class="lz-flow">
-  <div class="lz-step"><span class="lz-k">Thời gian hằng</span><span class="lz-t">0,08 ms ở mọi độ sâu</span><span class="lz-d">Con trỏ trở thành một <code>WHERE id &lt;= $2</code>, nên chỉ mục nhảy thẳng tới vị trí thay vì đếm tới đó. Trang một triệu tốn đúng bằng trang một.</span></div>
+  <div class="lz-step"><span class="lz-k">Thời gian hằng</span><span class="lz-t">đọc 20 hàng ở mọi độ sâu</span><span class="lz-d">Con trỏ trở thành một <code>WHERE id &lt;= $2</code>, nên chỉ mục nhảy thẳng tới vị trí thay vì đếm tới đó. Trang một triệu tốn đúng bằng trang một.</span></div>
   <div class="lz-step"><span class="lz-k">Không trôi</span><span class="lz-t">Hàng không bị bỏ sót hay lặp lại</span><span class="lz-d">Con trỏ nêu tên một <em>hàng</em>, không phải một vị trí. Chèn thêm ở đầu không làm nó dịch đi, nên trang kế tiếp đi tiếp đúng chỗ trang trước dừng lại.</span></div>
   <div class="lz-step"><span class="lz-k">Không có số trang</span><span class="lz-t">Chỉ có tiếp và lùi</span><span class="lz-d">Bạn không nhảy tới trang 50 được. Với một dòng thời gian cuộn vô tận thì chẳng mất gì; với một bảng quản trị có đánh số thì điều đó loại luôn kỹ thuật này.</span></div>
   <div class="lz-step"><span class="lz-k">Bắt buộc phải có <code>skip: 1</code></span><span class="lz-d">Hàng con trỏ mặc định <em>được bao gồm</em>. Quên cái skip thì hàng cuối của mỗi trang thành hàng đầu của trang sau — một bản trùng ở mọi ranh giới, và nó tinh vi đủ để lọt lên production.</span><span class="lz-t">Không thì bạn lặp một hàng</span></div>
@@ -988,17 +1008,17 @@ ${G05_4}
   _max:   { views: true, publishedAt: true },
 });
 console.log(k);</code></pre>
-<div class="out">prisma:query SELECT COUNT(*), COUNT("posts"."body"), SUM("posts"."views"),
-  AVG("posts"."views"), MIN("posts"."published_at"),
-  MAX("posts"."views"), MAX("posts"."published_at")
-  FROM "posts" WHERE "posts"."published" = $1
+<div class="out">prisma:query SELECT COUNT("body"), COUNT(*), SUM("views"), AVG("views"),
+  MIN("published_at"), MAX("views"), MAX("published_at")
+  FROM (SELECT "body", "views", "published_at" FROM "posts"
+        WHERE "published" = $1 OFFSET $2) AS "sub"      -- Prisma 6.19.3, aliases trimmed
 
 {
-  _count: { _all: 201773, body: 189114 },
-  _sum:   { views: 48219044 },
-  _avg:   { views: 239.0 },
-  _min:   { publishedAt: 2024-01-03T02:11:08.000Z },
-  _max:   { views: 184029, publishedAt: 2026-08-23T04:11:52.000Z }
+  _count: { _all: 85715, body: 77143 },
+  _sum:   { views: 85630910 },
+  _avg:   { views: 999.0189581753485 },
+  _min:   { publishedAt: 2025-01-01T00:02:00.000Z },
+  _max:   { views: 1998, publishedAt: 2025-05-19T21:20:00.000Z }
 }</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">One statement for all of it</span><span class="v">Seven aggregate functions, one scan. Doing this as seven separate <code>count</code>/<code>findFirst</code> calls is seven scans of the same table — a real difference on anything large.</span></div>
@@ -1017,15 +1037,15 @@ console.log(k);</code></pre>
   orderBy: { _sum: { total: 'desc' } },
 });
 console.log(byMonth);</code></pre>
-<div class="out">prisma:query SELECT "orders"."status", COUNT(*), SUM("orders"."total"), AVG("orders"."total")
-  FROM "orders" WHERE "orders"."created_at" &gt;= $1
-  GROUP BY "orders"."status"
-  ORDER BY SUM("orders"."total") DESC
+<div class="out">prisma:query SELECT COUNT(*), SUM("total"), AVG("total"), "status"
+  FROM "orders" WHERE "created_at" &gt;= $1
+  GROUP BY "status"
+  ORDER BY SUM("total") DESC OFFSET $2
 
 [
-  { status: 'DA_GIAO',    _count: { _all: 4128 }, _sum: { total: 812440000 }, _avg: { total: 196812.5 } },
-  { status: 'DANG_XU_LY', _count: { _all:  391 }, _sum: { total:  74280000 }, _avg: { total: 189974.4 } },
-  { status: 'DA_HUY',     _count: { _all:  204 }, _sum: { total:  31900000 }, _avg: { total: 156372.5 } }
+  { _count: { _all: 3867 }, _sum: { total: 773629922 }, _avg: { total: 200059.45746056375 }, status: 'DA_GIAO' },
+  { _count: { _all:  454 }, _sum: { total:  90934276 }, _avg: { total: 200295.76211453744 }, status: 'DANG_XU_LY' },
+  { _count: { _all:  227 }, _sum: { total:  45365000 }, _avg: { total: 199845.81497797355 }, status: 'DA_HUY' }
 ]</div>
 <pre><code class="language-javascript"><span class="tok-comment">// Group by several fields, and filter the GROUPS with &#96;having&#96;</span>
 const byAuthor = await prisma.post.groupBy({
@@ -1080,11 +1100,14 @@ const onePostPerPerson = await prisma.post.findMany({
   orderBy:  [{ authorId: 'asc' }, { publishedAt: 'desc' }],
   take:     50,
 });</code></pre>
-<div class="out">prisma:query SELECT DISTINCT ON ("posts"."author_id") ... FROM "posts"
-  ORDER BY "posts"."author_id" ASC, "posts"."published_at" DESC LIMIT $1</div>
+<div class="out">prisma:query SELECT "id", "author_id", ... FROM "posts" WHERE 1=1
+  ORDER BY "author_id" ASC, "published_at" DESC OFFSET $1
+-- Prisma 6.19.3 + PostgreSQL 16.14: no DISTINCT ON, no LIMIT.
+-- With take: 3 on a 200,000-row table the database still sent all 200,000 rows;
+-- the engine kept the first row per author_id, then applied take.</div>
 <div class="kv-grid">
-  <div class="kv"><span class="k">On PostgreSQL: a real <code>DISTINCT ON</code></span><span class="v">Executed in the database, and it requires the distinct columns to come first in <code>orderBy</code> — which is a PostgreSQL rule, not a Prisma one, and the error message says so plainly.</span></div>
-  <div class="kv"><span class="k">On other providers: in memory</span><span class="v">MySQL has no <code>DISTINCT ON</code>, so Prisma fetches the rows and de-duplicates in the query engine. Correct results, and <code>take</code> is applied <em>after</em> de-duplication — so the database may return far more rows than you asked for.</span></div>
+  <div class="kv"><span class="k">By default: in memory, on every provider</span><span class="v">Prisma 6.19.3 does <em>not</em> send <code>DISTINCT ON</code>, even on PostgreSQL. It fetches every row that matches <code>where</code>, de-duplicates in the query engine, and only then applies <code>take</code>. The result is correct; the cost is reading the whole filtered table.</span></div>
+  <div class="kv"><span class="k">The <code>nativeDistinct</code> preview flag does not rescue this query</span><span class="v">With <code>previewFeatures = ["nativeDistinct"]</code> on 6.19.3 we saw <code>DISTINCT ON</code> only when the query had <em>neither</em> <code>orderBy</code> nor <code>take</code>. Add either one — as "newest post per author" must — and it falls back to the in-memory path above. For a hot path, write the raw query: <code>SELECT DISTINCT ON (author_id) … ORDER BY author_id, published_at DESC LIMIT 50</code>.</span></div>
   <div class="kv"><span class="k">Inside an <code>include</code>, always in memory</span><span class="v">A <code>distinct</code> on a nested relation is applied by the engine. It shapes the result but does not reduce the work the database did. Check the query log before relying on it for performance.</span></div>
 </div>
 
@@ -1101,12 +1124,15 @@ const [
   prisma.post.groupBy({ by: ['authorId'], _count: { _all: true },
                         orderBy: { _count: { authorId: 'desc' } }, take: 5 }),
 ]);</code></pre>
-<div class="out">-- six separate awaits
-real    0m0.412s
+<div class="out">-- measured 12 Nov 2026, Apple-silicon laptop, PostgreSQL 16.14 in Docker, Prisma 6.19.3
+round 1: six separate awaits 74 ms · one $transaction array 52 ms
+round 2: six separate awaits 56 ms · one $transaction array 59 ms
+round 3: six separate awaits 61 ms · one $transaction array 54 ms
 
--- one $transaction array
-real    0m0.087s</div>
-<p>Nearly five times faster, and the numbers are now consistent with each other — they all see the same snapshot, so the totals cannot disagree because a row was inserted between query three and query four. The array form of <code>$transaction</code> is covered properly in Chapter 7; for read-only dashboards it is simply free.</p>
+-- a second client inserts 100 posts between the first and second count()
+default (ReadCommitted): count before 4548 · after → 4648
+RepeatableRead:          count before 4648 · after → 4648</div>
+<p><strong>Not faster here, and not one snapshot by default.</strong> With the database on the same machine a round trip costs almost nothing, so the array wins one round and loses another — the gap you would see against a remote database is the network, not the transaction. And under PostgreSQL's default <code>READ COMMITTED</code> each statement takes its own snapshot: a row committed between query three and query four <em>is</em> seen by query four. If the six numbers must agree with each other, ask for it: <code>prisma.$transaction([...], { isolationLevel: 'RepeatableRead' })</code>. The array form of <code>$transaction</code> is covered properly in Chapter 7.</p>
 
 <div class="callout ok">
 <p><strong>When to stop using <code>groupBy</code> entirely.</strong> If a dashboard query takes more than a second, no amount of Prisma will fix it — aggregating a million rows on every page load is the wrong shape regardless of the client. The answers are the same as they have always been: a summary table refreshed on a schedule, a materialised view, or a counter maintained on write. Chapter 9 measures the first two; the point here is that reaching raw SQL is not the last step, it is the second-to-last.</p>
@@ -1134,17 +1160,17 @@ real    0m0.087s</div>
   _max:   { views: true, publishedAt: true },
 });
 console.log(k);</code></pre>
-<div class="out">prisma:query SELECT COUNT(*), COUNT("posts"."body"), SUM("posts"."views"),
-  AVG("posts"."views"), MIN("posts"."published_at"),
-  MAX("posts"."views"), MAX("posts"."published_at")
-  FROM "posts" WHERE "posts"."published" = $1
+<div class="out">prisma:query SELECT COUNT("body"), COUNT(*), SUM("views"), AVG("views"),
+  MIN("published_at"), MAX("views"), MAX("published_at")
+  FROM (SELECT "body", "views", "published_at" FROM "posts"
+        WHERE "published" = $1 OFFSET $2) AS "sub"      -- Prisma 6.19.3, đã lược bí danh
 
 {
-  _count: { _all: 201773, body: 189114 },
-  _sum:   { views: 48219044 },
-  _avg:   { views: 239.0 },
-  _min:   { publishedAt: 2024-01-03T02:11:08.000Z },
-  _max:   { views: 184029, publishedAt: 2026-08-23T04:11:52.000Z }
+  _count: { _all: 85715, body: 77143 },
+  _sum:   { views: 85630910 },
+  _avg:   { views: 999.0189581753485 },
+  _min:   { publishedAt: 2025-01-01T00:02:00.000Z },
+  _max:   { views: 1998, publishedAt: 2025-05-19T21:20:00.000Z }
 }</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">Một câu lệnh cho tất cả</span><span class="v">Bảy hàm tổng hợp, một lần quét. Làm chuyện này bằng bảy lời gọi <code>count</code>/<code>findFirst</code> riêng là bảy lần quét cùng một bảng — khác biệt thật trên bất cứ thứ gì lớn.</span></div>
@@ -1163,15 +1189,15 @@ console.log(k);</code></pre>
   orderBy: { _sum: { total: 'desc' } },
 });
 console.log(byMonth);</code></pre>
-<div class="out">prisma:query SELECT "orders"."status", COUNT(*), SUM("orders"."total"), AVG("orders"."total")
-  FROM "orders" WHERE "orders"."created_at" &gt;= $1
-  GROUP BY "orders"."status"
-  ORDER BY SUM("orders"."total") DESC
+<div class="out">prisma:query SELECT COUNT(*), SUM("total"), AVG("total"), "status"
+  FROM "orders" WHERE "created_at" &gt;= $1
+  GROUP BY "status"
+  ORDER BY SUM("total") DESC OFFSET $2
 
 [
-  { status: 'DA_GIAO',    _count: { _all: 4128 }, _sum: { total: 812440000 }, _avg: { total: 196812.5 } },
-  { status: 'DANG_XU_LY', _count: { _all:  391 }, _sum: { total:  74280000 }, _avg: { total: 189974.4 } },
-  { status: 'DA_HUY',     _count: { _all:  204 }, _sum: { total:  31900000 }, _avg: { total: 156372.5 } }
+  { _count: { _all: 3867 }, _sum: { total: 773629922 }, _avg: { total: 200059.45746056375 }, status: 'DA_GIAO' },
+  { _count: { _all:  454 }, _sum: { total:  90934276 }, _avg: { total: 200295.76211453744 }, status: 'DANG_XU_LY' },
+  { _count: { _all:  227 }, _sum: { total:  45365000 }, _avg: { total: 199845.81497797355 }, status: 'DA_HUY' }
 ]</div>
 <pre><code class="language-javascript"><span class="tok-comment">// Gộp theo nhiều trường, và lọc chính các NHÓM bằng &#96;having&#96;</span>
 const byAuthor = await prisma.post.groupBy({
@@ -1226,11 +1252,14 @@ const onePostPerPerson = await prisma.post.findMany({
   orderBy:  [{ authorId: 'asc' }, { publishedAt: 'desc' }],
   take:     50,
 });</code></pre>
-<div class="out">prisma:query SELECT DISTINCT ON ("posts"."author_id") ... FROM "posts"
-  ORDER BY "posts"."author_id" ASC, "posts"."published_at" DESC LIMIT $1</div>
+<div class="out">prisma:query SELECT "id", "author_id", ... FROM "posts" WHERE 1=1
+  ORDER BY "author_id" ASC, "published_at" DESC OFFSET $1
+-- Prisma 6.19.3 + PostgreSQL 16.14: không DISTINCT ON, không LIMIT.
+-- Với take: 3 trên bảng 200.000 hàng, cơ sở dữ liệu vẫn gửi đủ 200.000 hàng;
+-- bộ máy giữ hàng đầu tiên của mỗi author_id, rồi mới áp take.</div>
 <div class="kv-grid">
-  <div class="kv"><span class="k">Trên PostgreSQL: một <code>DISTINCT ON</code> thật</span><span class="v">Thực thi trong cơ sở dữ liệu, và nó đòi các cột distinct phải đứng đầu trong <code>orderBy</code> — đó là luật của PostgreSQL chứ không phải của Prisma, và thông báo lỗi nói thẳng điều đó.</span></div>
-  <div class="kv"><span class="k">Trên các provider khác: trong bộ nhớ</span><span class="v">MySQL không có <code>DISTINCT ON</code>, nên Prisma kéo các hàng về rồi khử trùng trong query engine. Kết quả đúng, và <code>take</code> được áp dụng <em>sau</em> khi khử trùng — nên cơ sở dữ liệu có thể trả về nhiều hàng hơn bạn xin rất nhiều.</span></div>
+  <div class="kv"><span class="k">Mặc định: trong bộ nhớ, ở mọi provider</span><span class="v">Prisma 6.19.3 <em>không</em> gửi <code>DISTINCT ON</code>, kể cả trên PostgreSQL. Nó kéo mọi hàng khớp <code>where</code> về, khử trùng trong query engine, rồi mới áp <code>take</code>. Kết quả đúng; cái giá là đọc trọn bảng sau lọc.</span></div>
+  <div class="kv"><span class="k">Cờ xem trước <code>nativeDistinct</code> không cứu được câu này</span><span class="v">Bật <code>previewFeatures = ["nativeDistinct"]</code> trên 6.19.3, chúng tôi chỉ thấy <code>DISTINCT ON</code> khi câu truy vấn <em>không có cả</em> <code>orderBy</code> lẫn <code>take</code>. Thêm một trong hai — mà "bài mới nhất của mỗi tác giả" bắt buộc phải có — là nó quay về đường trong bộ nhớ ở trên. Với đường nóng, hãy viết truy vấn thô: <code>SELECT DISTINCT ON (author_id) … ORDER BY author_id, published_at DESC LIMIT 50</code>.</span></div>
   <div class="kv"><span class="k">Bên trong một <code>include</code> thì luôn ở bộ nhớ</span><span class="v">Một <code>distinct</code> trên quan hệ lồng nhau do engine áp dụng. Nó nắn kết quả nhưng không giảm phần việc cơ sở dữ liệu đã làm. Hãy kiểm log truy vấn trước khi trông cậy vào nó về mặt hiệu năng.</span></div>
 </div>
 
@@ -1247,12 +1276,15 @@ const [
   prisma.post.groupBy({ by: ['authorId'], _count: { _all: true },
                         orderBy: { _count: { authorId: 'desc' } }, take: 5 }),
 ]);</code></pre>
-<div class="out">-- sáu lần await riêng
-real    0m0.412s
+<div class="out">-- đo ngày 12/11/2026, laptop Apple silicon, PostgreSQL 16.14 trong Docker, Prisma 6.19.3
+lượt 1: sáu lần await riêng 74 ms · một mảng $transaction 52 ms
+lượt 2: sáu lần await riêng 56 ms · một mảng $transaction 59 ms
+lượt 3: sáu lần await riêng 61 ms · một mảng $transaction 54 ms
 
--- một mảng $transaction
-real    0m0.087s</div>
-<p>Nhanh gần gấp năm lần, và các con số giờ nhất quán với nhau — tất cả đều nhìn cùng một bản chụp, nên các tổng không thể lệch nhau chỉ vì có một hàng được chèn vào giữa câu truy vấn thứ ba và thứ tư. Dạng mảng của <code>$transaction</code> được nói đủ ở Chương 7; với một bảng điều khiển chỉ đọc thì nó đơn giản là miễn phí.</p>
+-- một client khác chèn 100 bài giữa count() thứ nhất và thứ hai
+mặc định (ReadCommitted): trước 4548 · sau → 4648
+RepeatableRead:           trước 4648 · sau → 4648</div>
+<p><strong>Ở đây không nhanh hơn, và mặc định không phải một bản chụp.</strong> Cơ sở dữ liệu nằm cùng máy thì một lượt đi về gần như không tốn gì, nên dạng mảng thắng lượt này, thua lượt khác — khoảng chênh bạn thấy với một cơ sở dữ liệu ở xa là do mạng, không phải do transaction. Và dưới mức mặc định <code>READ COMMITTED</code> của PostgreSQL, mỗi câu lệnh lấy bản chụp riêng: một hàng được commit giữa câu thứ ba và câu thứ tư <em>sẽ</em> được câu thứ tư nhìn thấy. Nếu sáu con số phải khớp nhau, hãy xin điều đó: <code>prisma.$transaction([...], { isolationLevel: 'RepeatableRead' })</code>. Dạng mảng của <code>$transaction</code> được nói đủ ở Chương 7.</p>
 
 <div class="callout ok">
 <p><strong>Khi nào nên thôi dùng <code>groupBy</code> hẳn.</strong> Nếu một truy vấn bảng điều khiển mất hơn một giây thì không lượng Prisma nào vá được — tổng hợp một triệu hàng ở mỗi lần tải trang là một hình dạng sai, bất kể client là gì. Câu trả lời vẫn như xưa nay: một bảng tổng hợp làm mới theo lịch, một materialised view, hoặc một cột đếm duy trì lúc ghi. Chương 9 đo hai cái đầu; điều đáng nói ở đây là rơi xuống SQL thô không phải bước cuối cùng, nó là bước áp chót.</p>
@@ -1293,10 +1325,18 @@ ${G05_5}
 <div class="out">SELECT ... WHERE ("title"::text ILIKE $1 OR "body"::text ILIKE $2) LIMIT $3
 -- params: ["%prisma%", "%prisma%"]
 
-Execution Time: 412.883 ms</div>
+-- measured 12 Nov 2026, Apple-silicon laptop, PostgreSQL 16.14 in Docker, 400,000 rows
+-- LIMIT 20: stops at the 20th match
+Seq Scan on posts (actual rows=20 loops=1)
+  Rows Removed by Filter: 75067
+Execution Time: 158.890 ms
+-- every match (96 rows) — what a count, or the last page, costs
+Parallel Seq Scan on posts (actual rows=32 loops=3)
+  Rows Removed by Filter: 133301
+Execution Time: 295.289 ms</div>
 <div class="kv-grid">
-  <div class="kv"><span class="k">What it costs</span><span class="v">A sequential scan over every row, twice. 413 ms at 400,000 rows, and it grows linearly — at four million it is four seconds.</span></div>
-  <div class="kv"><span class="k">What it gets wrong</span><span class="v">No stemming ("chạy" does not match "chạying"), no ranking (a title match scores the same as a body match), no multi-word logic (searching "prisma migrate" finds only that exact substring).</span></div>
+  <div class="kv"><span class="k">What it costs</span><span class="v">A sequential scan that tests <code>ILIKE</code> on two columns of every row it reaches. 159 ms when twenty matches turn up within the first 75,000 rows; 295 ms when it has to read all 400,000. Both grow linearly with the table — ten times the rows, roughly ten times the time — and a rare search term always pays the full scan.</span></div>
+  <div class="kv"><span class="k">What it gets wrong</span><span class="v">No stemming ("run" does not match "running"), no ranking (a title match scores the same as a body match), no multi-word logic (searching "prisma migrate" finds only that exact substring).</span></div>
   <div class="kv"><span class="k">When it is genuinely fine</span><span class="v">Under about 10,000 rows, or when the search is already narrowed by another indexed filter — searching within one user's own documents, for instance.</span></div>
 </div>
 
@@ -1305,14 +1345,15 @@ Execution Time: 412.883 ms</div>
 CREATE EXTENSION IF NOT EXISTS pg_trgm;
 CREATE INDEX "posts_title_trgm" ON "posts" USING gin ("title" gin_trgm_ops);
 CREATE INDEX "posts_body_trgm"  ON "posts" USING gin ("body"  gin_trgm_ops);</code></pre>
-<div class="out">-- exactly the same Prisma query as level 1
-Bitmap Heap Scan on posts (actual time=1.8..4.9 rows=38 loops=1)
+<div class="out">-- exactly the same Prisma query as level 1 (every match, no LIMIT)
+Bitmap Heap Scan on posts (actual rows=96 loops=1)
   -&gt;  BitmapOr
-        -&gt;  Bitmap Index Scan on posts_title_trgm
-        -&gt;  Bitmap Index Scan on posts_body_trgm
-Execution Time: 5.104 ms</div>
+        -&gt;  Bitmap Index Scan on posts_title_trgm (actual rows=80 loops=1)
+        -&gt;  Bitmap Index Scan on posts_body_trgm (actual rows=16 loops=1)
+Execution Time: 0.282 ms
+-- building the two indexes on 400,000 rows: 1.9 s and 7.5 s</div>
 <div class="callout ok">
-<p><strong>Eighty times faster, and the application code did not change.</strong> This is the highest-value two lines in the chapter. A GIN trigram index makes <code>ILIKE '%…%'</code> index-backed, which is normally impossible. It also brings fuzzy matching for free — <code>similarity()</code> and the <code>%</code> operator let you handle typos, which no amount of <code>contains</code> ever will. The costs are real but modest: the index is larger than a B-tree and writes are slower, so measure both if the table is write-heavy.</p>
+<p><strong>About a thousand times faster on the same machine (295 ms → 0.28 ms for all 96 matches), and the application code did not change.</strong> This is the highest-value two lines in the chapter. A GIN trigram index makes <code>ILIKE '%…%'</code> index-backed, which is normally impossible. It also brings fuzzy matching for free — <code>similarity()</code> and the <code>%</code> operator let you handle typos, which no amount of <code>contains</code> ever will. The costs are real but modest: the index is larger than a B-tree and writes are slower, so measure both if the table is write-heavy.</p>
 </div>
 <pre><code class="language-javascript"><span class="tok-comment">// Fuzzy matching, once the trigram index exists</span>
 const attach = await prisma.$queryRaw&lt;{ id: number; title: string; sim: number }[]&gt;&#96;
@@ -1321,10 +1362,12 @@ const attach = await prisma.$queryRaw&lt;{ id: number; title: string; sim: numbe
   WHERE title % \${q}
   ORDER BY sim DESC
   LIMIT 20&#96;;</code></pre>
-<div class="out">[
-  { id: 4182, title: 'Huong dan Prisma from dau', sim: 0.42 },
-  { id: 9013, title: 'Prima facie: doc lai',    sim: 0.31 }   ← typo tolerance
-]</div>
+<div class="out">-- q = 'Huong dan Prima'   ← typo: "Prima", not "Prisma"
+  id   |             title             | sim
+-------+-------------------------------+------
+     7 | Huong dan Prisma tu dau 7     | 0.54
+ 10007 | Huong dan Prisma tu dau 10007 | 0.47
+ 20007 | Huong dan Prisma tu dau 20007 | 0.47</div>
 
 <h3>Level 3 — PostgreSQL full-text search</h3>
 <pre><code class="language-sql"><span class="tok-comment">-- A generated column, maintained by PostgreSQL on every write</span>
@@ -1351,14 +1394,19 @@ model Post {
   WHERE "search" @@ websearch_to_tsquery('simple', \${q})
   ORDER BY rank DESC, id DESC
   LIMIT 20&#96;;</code></pre>
-<div class="out">Bitmap Heap Scan on posts (actual time=0.6..1.8 rows=41 loops=1)
-  -&gt;  Bitmap Index Scan on posts_search_idx
-Execution Time: 2.011 ms
+<div class="out">Limit (actual rows=20 loops=1)
+  -&gt;  Sort (actual rows=20 loops=1)
+        Sort Method: top-N heapsort  Memory: 26kB
+        -&gt;  Bitmap Heap Scan on posts (actual rows=96 loops=1)
+              -&gt;  Bitmap Index Scan on posts_search_idx (actual rows=96 loops=1)
+Execution Time: 0.850 ms
+-- adding the generated column rewrote all 400,000 rows: 20.3 s; its GIN index: 2.1 s
 
-[
-  { id: 4182, title: 'Huong dan Prisma from dau', rank: 0.6079 },
-  { id: 7710, title: 'Migrate voi Prisma',      rank: 0.2432 }
-]</div>
+   id   |             title              |  rank
+--------+--------------------------------+--------
+ 390013 | Migrate voi Prisma 390013      | 0.6079
+ 390007 | Huong dan Prisma tu dau 390007 | 0.6079
+ 380013 | Migrate voi Prisma 380013      | 0.6079</div>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">Ranking</span><span class="lz-t"><code>setweight</code> + <code>ts_rank</code></span><span class="lz-d">A match in the title (weight A) outranks one in the body (weight B). This is the thing <code>contains</code> can never give you, and it is what makes results feel correct rather than merely present.</span></div>
   <div class="lz-step"><span class="lz-k">Query syntax</span><span class="lz-t"><code>websearch_to_tsquery</code></span><span class="lz-d">Accepts what users actually type: <code>prisma -mysql "exact phrase" or migrate</code>. Unlike <code>to_tsquery</code>, malformed input does not throw — which matters when the input is a text box.</span></div>
@@ -1393,10 +1441,10 @@ ALTER TABLE "posts" ADD COLUMN "search" tsvector
 
 <h3>The four, side by side</h3>
 <div class="lz-stack">
-  <div class="lz-layer"><span class="lz-lname">1 · <code>contains</code></span><span class="lz-lnote">413 ms · zero setup · no ranking, no stemming, no typo tolerance. Correct answer below ~10,000 rows or behind another indexed filter.</span></div>
-  <div class="lz-layer"><span class="lz-lname">2 · trigram index</span><span class="lz-lnote">5 ms · two lines of SQL, no code change · adds fuzzy matching. The best effort-to-benefit ratio of the four, by a wide margin.</span></div>
-  <div class="lz-layer"><span class="lz-lname">3 · <code>tsvector</code> + GIN</span><span class="lz-lnote">2 ms · a generated column, an <code>Unsupported</code> field and raw queries · adds ranking and real query syntax. Where most applications should end up.</span></div>
-  <div class="lz-layer"><span class="lz-lname">4 · search engine</span><span class="lz-lnote">Sub-millisecond · a second system to operate · adds everything else. Justified by requirements, not by row count alone.</span></div>
+  <div class="lz-layer"><span class="lz-lname">1 · <code>contains</code></span><span class="lz-lnote">159–295 ms here, linear in rows · zero setup · no ranking, no stemming, no typo tolerance. Correct answer below ~10,000 rows or behind another indexed filter.</span></div>
+  <div class="lz-layer"><span class="lz-lname">2 · trigram index</span><span class="lz-lnote">0.28 ms · two lines of SQL, no code change · adds fuzzy matching. The best effort-to-benefit ratio of the four, by a wide margin.</span></div>
+  <div class="lz-layer"><span class="lz-lname">3 · <code>tsvector</code> + GIN</span><span class="lz-lnote">0.85 ms with ranking and sort · a generated column, an <code>Unsupported</code> field and raw queries · adds ranking and real query syntax. Where most applications should end up.</span></div>
+  <div class="lz-layer"><span class="lz-lname">4 · search engine</span><span class="lz-lnote">Not measured here · a second system to operate · adds everything else. Justified by requirements, not by row count alone.</span></div>
 </div>
 
 <div class="note-ct">
@@ -1428,9 +1476,17 @@ ALTER TABLE "posts" ADD COLUMN "search" tsvector
 <div class="out">SELECT ... WHERE ("title"::text ILIKE $1 OR "body"::text ILIKE $2) LIMIT $3
 -- tham số: ["%prisma%", "%prisma%"]
 
-Execution Time: 412.883 ms</div>
+-- đo ngày 12/11/2026, laptop Apple silicon, PostgreSQL 16.14 trong Docker, 400.000 hàng
+-- LIMIT 20: dừng ở kết quả khớp thứ 20
+Seq Scan on posts (actual rows=20 loops=1)
+  Rows Removed by Filter: 75067
+Execution Time: 158.890 ms
+-- mọi kết quả khớp (96 hàng) — cái giá của một phép đếm, hay của trang cuối
+Parallel Seq Scan on posts (actual rows=32 loops=3)
+  Rows Removed by Filter: 133301
+Execution Time: 295.289 ms</div>
 <div class="kv-grid">
-  <div class="kv"><span class="k">Nó tốn gì</span><span class="v">Một lần quét tuần tự qua mọi hàng, hai lần. 413 ms ở 400.000 hàng, và nó tăng tuyến tính — ở bốn triệu hàng thì là bốn giây.</span></div>
+  <div class="kv"><span class="k">Nó tốn gì</span><span class="v">Một lần quét tuần tự, thử <code>ILIKE</code> trên hai cột của mọi hàng nó đi qua. 159 ms khi hai mươi kết quả khớp xuất hiện trong 75.000 hàng đầu; 295 ms khi phải đọc trọn 400.000 hàng. Cả hai tăng tuyến tính theo bảng — gấp mười số hàng thì gần gấp mười thời gian — và một từ khoá hiếm luôn trả giá quét trọn bảng.</span></div>
   <div class="kv"><span class="k">Nó sai ở đâu</span><span class="v">Không rút gốc từ, không xếp hạng (khớp ở tiêu đề tính điểm y hệt khớp ở nội dung), không có logic nhiều từ (tìm "prisma migrate" chỉ ra đúng chuỗi con đó).</span></div>
   <div class="kv"><span class="k">Khi nào nó thật sự ổn</span><span class="v">Dưới khoảng 10.000 hàng, hoặc khi phép tìm vốn đã bị thu hẹp bởi một bộ lọc có chỉ mục khác — ví dụ tìm trong đúng tài liệu của một người dùng.</span></div>
 </div>
@@ -1440,14 +1496,15 @@ Execution Time: 412.883 ms</div>
 CREATE EXTENSION IF NOT EXISTS pg_trgm;
 CREATE INDEX "posts_title_trgm" ON "posts" USING gin ("title" gin_trgm_ops);
 CREATE INDEX "posts_body_trgm"  ON "posts" USING gin ("body"  gin_trgm_ops);</code></pre>
-<div class="out">-- đúng câu truy vấn Prisma của cấp 1
-Bitmap Heap Scan on posts (actual time=1.8..4.9 rows=38 loops=1)
+<div class="out">-- đúng câu truy vấn Prisma của cấp 1 (mọi kết quả khớp, không LIMIT)
+Bitmap Heap Scan on posts (actual rows=96 loops=1)
   -&gt;  BitmapOr
-        -&gt;  Bitmap Index Scan on posts_title_trgm
-        -&gt;  Bitmap Index Scan on posts_body_trgm
-Execution Time: 5.104 ms</div>
+        -&gt;  Bitmap Index Scan on posts_title_trgm (actual rows=80 loops=1)
+        -&gt;  Bitmap Index Scan on posts_body_trgm (actual rows=16 loops=1)
+Execution Time: 0.282 ms
+-- dựng hai chỉ mục trên 400.000 hàng: 1,9 s và 7,5 s</div>
 <div class="callout ok">
-<p><strong>Nhanh gấp tám mươi lần, và mã ứng dụng không đổi một chữ.</strong> Đây là hai dòng đáng giá nhất trong cả chương. Một chỉ mục trigram GIN khiến <code>ILIKE '%…%'</code> được chỉ mục đỡ, điều vốn dĩ là bất khả. Nó còn cho thêm phép khớp mờ miễn phí — <code>similarity()</code> và toán tử <code>%</code> cho phép bạn xử lý lỗi gõ, thứ mà <code>contains</code> không bao giờ làm được. Cái giá là có thật nhưng vừa phải: chỉ mục to hơn B-tree và ghi chậm hơn, nên hãy đo cả hai nếu bảng nặng ghi.</p>
+<p><strong>Nhanh khoảng một nghìn lần trên cùng máy (295 ms → 0,28 ms cho cả 96 kết quả khớp), và mã ứng dụng không đổi một chữ.</strong> Đây là hai dòng đáng giá nhất trong cả chương. Một chỉ mục trigram GIN khiến <code>ILIKE '%…%'</code> được chỉ mục đỡ, điều vốn dĩ là bất khả. Nó còn cho thêm phép khớp mờ miễn phí — <code>similarity()</code> và toán tử <code>%</code> cho phép bạn xử lý lỗi gõ, thứ mà <code>contains</code> không bao giờ làm được. Cái giá là có thật nhưng vừa phải: chỉ mục to hơn B-tree và ghi chậm hơn, nên hãy đo cả hai nếu bảng nặng ghi.</p>
 </div>
 <pre><code class="language-javascript"><span class="tok-comment">// Khớp mờ, một khi đã có chỉ mục trigram</span>
 const attach = await prisma.$queryRaw&lt;{ id: number; title: string; sim: number }[]&gt;&#96;
@@ -1456,10 +1513,12 @@ const attach = await prisma.$queryRaw&lt;{ id: number; title: string; sim: numbe
   WHERE title % \${q}
   ORDER BY sim DESC
   LIMIT 20&#96;;</code></pre>
-<div class="out">[
-  { id: 4182, title: 'Huong dan Prisma from dau', sim: 0.42 },
-  { id: 9013, title: 'Prima facie: doc lai',    sim: 0.31 }   ← chịu được lỗi gõ
-]</div>
+<div class="out">-- q = 'Huong dan Prima'   ← gõ sai: "Prima" chứ không phải "Prisma"
+  id   |             title             | sim
+-------+-------------------------------+------
+     7 | Huong dan Prisma tu dau 7     | 0.54
+ 10007 | Huong dan Prisma tu dau 10007 | 0.47
+ 20007 | Huong dan Prisma tu dau 20007 | 0.47</div>
 
 <h3>Cấp 3 — tìm kiếm toàn văn của PostgreSQL</h3>
 <pre><code class="language-sql"><span class="tok-comment">-- Một cột sinh ra, do PostgreSQL tự duy trì ở mọi lần ghi</span>
@@ -1486,14 +1545,19 @@ model Post {
   WHERE "search" @@ websearch_to_tsquery('simple', \${q})
   ORDER BY rank DESC, id DESC
   LIMIT 20&#96;;</code></pre>
-<div class="out">Bitmap Heap Scan on posts (actual time=0.6..1.8 rows=41 loops=1)
-  -&gt;  Bitmap Index Scan on posts_search_idx
-Execution Time: 2.011 ms
+<div class="out">Limit (actual rows=20 loops=1)
+  -&gt;  Sort (actual rows=20 loops=1)
+        Sort Method: top-N heapsort  Memory: 26kB
+        -&gt;  Bitmap Heap Scan on posts (actual rows=96 loops=1)
+              -&gt;  Bitmap Index Scan on posts_search_idx (actual rows=96 loops=1)
+Execution Time: 0.850 ms
+-- thêm cột sinh ra phải ghi lại cả 400.000 hàng: 20,3 s; chỉ mục GIN của nó: 2,1 s
 
-[
-  { id: 4182, title: 'Huong dan Prisma from dau', rank: 0.6079 },
-  { id: 7710, title: 'Migrate voi Prisma',      rank: 0.2432 }
-]</div>
+   id   |             title              |  rank
+--------+--------------------------------+--------
+ 390013 | Migrate voi Prisma 390013      | 0.6079
+ 390007 | Huong dan Prisma tu dau 390007 | 0.6079
+ 380013 | Migrate voi Prisma 380013      | 0.6079</div>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">Xếp hạng</span><span class="lz-t"><code>setweight</code> + <code>ts_rank</code></span><span class="lz-d">Khớp ở tiêu đề (trọng số A) xếp trên khớp ở nội dung (trọng số B). Đây là thứ <code>contains</code> không bao giờ cho bạn, và là thứ khiến kết quả cảm thấy đúng chứ không chỉ đơn thuần là có.</span></div>
   <div class="lz-step"><span class="lz-k">Cú pháp truy vấn</span><span class="lz-t"><code>websearch_to_tsquery</code></span><span class="lz-d">Nhận đúng thứ người dùng gõ ra: <code>prisma -mysql "cụm chính xác" or migrate</code>. Khác <code>to_tsquery</code>, đầu vào hỏng không làm nó ném lỗi — và điều đó quan trọng khi đầu vào là một ô nhập chữ.</span></div>
@@ -1528,10 +1592,10 @@ ALTER TABLE "posts" ADD COLUMN "search" tsvector
 
 <h3>Bốn cấp, đặt cạnh nhau</h3>
 <div class="lz-stack">
-  <div class="lz-layer"><span class="lz-lname">1 · <code>contains</code></span><span class="lz-lnote">413 ms · không cần chuẩn bị gì · không xếp hạng, không rút gốc từ, không chịu được lỗi gõ. Câu trả lời đúng khi dưới ~10.000 hàng hoặc khi nằm sau một bộ lọc có chỉ mục khác.</span></div>
-  <div class="lz-layer"><span class="lz-lname">2 · chỉ mục trigram</span><span class="lz-lnote">5 ms · hai dòng SQL, không đổi mã · thêm khớp mờ. Tỉ lệ công-sức-trên-lợi-ích tốt nhất trong bốn cấp, hơn hẳn phần còn lại.</span></div>
-  <div class="lz-layer"><span class="lz-lname">3 · <code>tsvector</code> + GIN</span><span class="lz-lnote">2 ms · một cột sinh ra, một trường <code>Unsupported</code> và các truy vấn thô · thêm xếp hạng và cú pháp truy vấn thật. Đây là chỗ phần lớn ứng dụng nên dừng lại.</span></div>
-  <div class="lz-layer"><span class="lz-lname">4 · máy tìm kiếm</span><span class="lz-lnote">Dưới một mili giây · thêm một hệ thống phải vận hành · thêm mọi thứ còn lại. Được biện minh bởi yêu cầu chức năng, không phải bởi riêng số hàng.</span></div>
+  <div class="lz-layer"><span class="lz-lname">1 · <code>contains</code></span><span class="lz-lnote">159–295 ms ở đây, tuyến tính theo số hàng · không cần chuẩn bị gì · không xếp hạng, không rút gốc từ, không chịu được lỗi gõ. Câu trả lời đúng khi dưới ~10.000 hàng hoặc khi nằm sau một bộ lọc có chỉ mục khác.</span></div>
+  <div class="lz-layer"><span class="lz-lname">2 · chỉ mục trigram</span><span class="lz-lnote">0,28 ms · hai dòng SQL, không đổi mã · thêm khớp mờ. Tỉ lệ công-sức-trên-lợi-ích tốt nhất trong bốn cấp, hơn hẳn phần còn lại.</span></div>
+  <div class="lz-layer"><span class="lz-lname">3 · <code>tsvector</code> + GIN</span><span class="lz-lnote">0,85 ms kể cả xếp hạng và sắp xếp · một cột sinh ra, một trường <code>Unsupported</code> và các truy vấn thô · thêm xếp hạng và cú pháp truy vấn thật. Đây là chỗ phần lớn ứng dụng nên dừng lại.</span></div>
+  <div class="lz-layer"><span class="lz-lname">4 · máy tìm kiếm</span><span class="lz-lnote">Không đo ở đây · thêm một hệ thống phải vận hành · thêm mọi thứ còn lại. Được biện minh bởi yêu cầu chức năng, không phải bởi riêng số hàng.</span></div>
 </div>
 
 <div class="note-ct">
@@ -1609,7 +1673,7 @@ ALTER TABLE "posts" ADD COLUMN "search" tsvector
             points: 1,
           },
           {
-            question: 'At OFFSET 1000000 a query takes 982 ms. What is the fix?|||Ở OFFSET 1000000 một câu truy vấn mất 982 ms. Cách vá là gì?',
+            question: 'At OFFSET 900000 the index scan reads 900,020 rows to return 20. What is the fix?|||Ở OFFSET 900000, lần quét chỉ mục đọc 900.020 hàng để trả về 20. Cách vá là gì?',
             options: [
               'Cursor pagination — the cursor becomes WHERE id <= $2, so the index seeks to the position instead of counting to it, in constant time|||Phân trang bằng con trỏ — con trỏ thành WHERE id <= $2, nên chỉ mục nhảy thẳng tới vị trí thay vì đếm tới đó, với thời gian hằng',
               'An index on the ORDER BY column — the scan is slow because it has to sort|||Một chỉ mục trên cột ORDER BY — nó chậm vì phải sắp xếp',

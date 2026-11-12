@@ -5,6 +5,11 @@
  * < > trong code → &lt; &gt;; & → &amp;. Khối .out đóng bằng </div>. KHÔNG dùng <svg>.
  * Gạch chéo ngược PHẢI viết đôi (\\n), xem scripts/course-content-check.mjs.
  */
+import G06_1 from './giang/pr-06-1.mjs';
+import G06_2 from './giang/pr-06-2.mjs';
+import G06_3 from './giang/pr-06-3.mjs';
+import G06_4 from './giang/pr-06-4.mjs';
+import G06_5 from './giang/pr-06-5.mjs';
 const REF = '?ref=%2Fcourses%2Fprisma-orm%2Flearn&reflabel=Prisma';
 
 export default {
@@ -19,6 +24,7 @@ export default {
       isFreePreview: true,
       description: 'Mở bảng _prisma_migrations ra xem từng cột, checksum bảo vệ điều gì, tên thư mục có ý nghĩa gì, ba trạng thái một migration có thể ở, và vì sao sửa một tệp đã áp dụng làm chết mọi lần deploy sau đó.',
       content: `
+${G06_1}
 <div class="ml-en">
 <span class="eyebrow">Chapter 6 · Lesson 6.1</span>
 <h2>What a migration actually is</h2>
@@ -266,6 +272,7 @@ wc -l prisma/migrations/*/migration.sql | tail -1</code></pre>
       type: 'LESSON',
       description: 'Cơ sở dữ liệu nháp mà migrate dev tạo rồi xoá: nó dùng để làm gì, năm bước migrate dev thật sự chạy, ba lý do nó hỏng trên dịch vụ thuê, shadowDatabaseUrl, và vì sao migrate deploy không cần nó.',
       content: `
+${G06_2}
 <div class="ml-en">
 <span class="eyebrow">Chapter 6 · Lesson 6.2</span>
 <h2>The shadow database</h2>
@@ -517,6 +524,7 @@ npx prisma migrate diff \\
       type: 'LESSON',
       description: 'Khi nào phải tự viết SQL: migrate dev hỏng, thêm cột bắt buộc vào bảng có dữ liệu, đổi tên cột mà không mất dữ liệu, partial index và CHECK, extension. Quy trình bốn bước sinh SQL rồi tự sửa, và cách kiểm rằng bạn không tạo ra trôi dạt.',
       content: `
+${G06_3}
 <div class="ml-en">
 <span class="eyebrow">Chapter 6 · Lesson 6.3</span>
 <h2>Hand-written migrations</h2>
@@ -824,6 +832,7 @@ CREATE UNIQUE INDEX "posts_slug_active_key"
       type: 'LESSON',
       description: 'Trôi dạt là gì, bốn nguồn sinh ra nó, cách phát hiện bằng migrate diff mà không đụng gì, ba cách xử lý theo mức độ nguy hiểm, và quy trình dựng nền đầy đủ để đưa Prisma vào một cơ sở dữ liệu đã chạy production nhiều năm.',
       content: `
+${G06_4}
 <div class="ml-en">
 <span class="eyebrow">Chapter 6 · Lesson 6.4</span>
 <h2>Drift, and adopting a database that exists</h2>
@@ -1137,6 +1146,7 @@ The seed command has been executed.</div>
       type: 'LESSON',
       description: 'Chạy migration ở đâu trong đường ống deploy, mẫu nới–thu để đổi lược đồ mà không có thời gian chết, mỗi câu ALTER TABLE khoá cái gì, tách đổ dữ liệu lớn ra khỏi migration, và giao thức đầy đủ khi một migration chết giữa chừng.',
       content: `
+${G06_5}
 <div class="ml-en">
 <span class="eyebrow">Chapter 6 · Lesson 6.5</span>
 <h2>Migrations in production</h2>

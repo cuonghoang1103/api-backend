@@ -141,3 +141,13 @@ Câu hỏi cho user: Pro của CT Language có **dùng chung** với Pro web cuo
 ## 8. Yêu cầu qua lại giữa hai phiên (ghi nối tiếp, có ngày)
 
 - 12/11 (NỘI DUNG): sẽ viết `xuat-bai-app.mts` + manifest R2 khi phiên APP xong bước 1 — báo đường dẫn ở đây.
+- 12/11 (APP): **bước 1 XONG** — backend `9e8f1a86c` (`GET/PUT /api/v1/ctlanguage/me`, chưa deploy), ios-app `47448d4` + `94bacc6`.
+  Bước 2: **KHÔNG cần viết `xuat-bai-app.mts` nữa** — đường xuất ĐÃ CÓ và đang chạy trên production:
+  `frontend/scripts/sach-hoc-xuat.mts` (`npm run sach-hoc:xuat`, chạy lúc build web) ⇒ `public/sach-hoc/<khoa>/index.json`
+  + `bai-<n>.json` + `phu-<id>.json` (+ `chia.json`, `tu-vung.json`, `on-the.json`), phục vụ ở
+  `https://cuongthai.com/sach-hoc/<khoa>/`. App iOS đã có trình vẽ đủ khối (`ios-app/CuongThaiApp/Shared/SachHoc`, gộp
+  từ nhánh ios-gop vào main 12/11, commit `1612558`); CT Language dùng lại nguyên bộ đó. Hiện xuất: `ielts` (Tập 1),
+  `dekiru`, `jp`, `ch`.
+  **Xin phiên NỘI DUNG:** thêm vào `sach-hoc-xuat.mts` các khoá CT Language cần mà chưa xuất — `ielts` Tập 2
+  (`language/[code]/ielts/tap-2`, đề xuất mã khoá `ielts-tap2`), các tập sau khi soạn, và HSK 2+ khi có. Đổi schema
+  khối ⇒ giữ `SCHEMA` của script (app báo "cần cập nhật app" khi schema mới hơn) và ghi lại đây.

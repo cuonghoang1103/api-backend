@@ -108,9 +108,9 @@ export default {
     "typescript-16-3-organizing-types": { yt: "IXAT3If0pGI", credit: "basarat — TypeScript TYPES vs INTERFACES (Key Differences)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/typescript/16-kien-truc-type-driven/16-03-organizing-types-291790d5.mp4' }, defaultVideoTrack: 'VI'},
     "typescript-16-4-whole-picture": { yt: "QSIXYMIJkQg", credit: "Matt Pocock — 8 TypeScript Tips To Expand Your Mind (and improve your code)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/typescript/16-kien-truc-type-driven/16-04-the-whole-picture-d7b333b5.mp4' }, defaultVideoTrack: 'VI'},
     'typescript-8-6-lab-utility-dto': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/typescript/08-utility-types/08-06-lab-utility-dto-f8c6e41d.mp4' }, defaultVideoTrack: 'VI'},
-    'typescript-9-6-lab-siet-strict': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/typescript/09-tsconfig-trinh-bien-dich/09-06-lab-siet-strict-46d37a2d.mp4' }, defaultVideoTrack: 'VI' },
-    'typescript-10-6-lab-viet-dts': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/typescript/10-module-tep-khai-bao/10-06-lab-viet-dts-08a672d4.mp4' }, defaultVideoTrack: 'VI' },
-    'typescript-12-6-lab-form-co-kieu': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/typescript/12-go-kieu-react/12-06-lab-form-co-kieu-b9109f28.mp4' }, defaultVideoTrack: 'VI' },
-    'typescript-15-6-lab-bien-transpile': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/typescript/15-hieu-nang-build/15-06-lab-bien-transpile-b7a05d99.mp4' }, defaultVideoTrack: 'VI' },
+    'typescript-9-6-lab-siet-strict': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/typescript/09-tsconfig-trinh-bien-dich/09-06-lab-siet-strict-46d37a2d.mp4' }, defaultVideoTrack: 'VI'},
+    'typescript-10-6-lab-viet-dts': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/typescript/10-module-tep-khai-bao/10-06-lab-viet-dts-08a672d4.mp4' }, defaultVideoTrack: 'VI'},
+    'typescript-12-6-lab-form-co-kieu': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/typescript/12-go-kieu-react/12-06-lab-form-co-kieu-b9109f28.mp4' }, defaultVideoTrack: 'VI'},
+    'typescript-15-6-lab-bien-transpile': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/typescript/15-hieu-nang-build/15-06-lab-bien-transpile-b7a05d99.mp4' }, defaultVideoTrack: 'VI'},
   },
 };

@@ -114,6 +114,21 @@ export async function thuQuyen(userId: number) {
   nhoQuyen.delete(userId);
 }
 
+/**
+ * Tài khoản còn dùng được (bật, không khoá, không phải agent) — cho đường VÉ media IELTS, nơi không chạy
+ * `authenticate` (thẻ <video> không gửi header). Nhớ 60 giây như `coQuyen`.
+ */
+const nhoTaiKhoan = new Map<number, { ok: boolean; den: number }>();
+export async function taiKhoanConDung(userId: number): Promise<boolean> {
+  const n = nhoTaiKhoan.get(userId);
+  if (n && n.den > Date.now()) return n.ok;
+  const u = await prisma.user.findUnique({ where: { id: userId }, select: { enabled: true, accountNonLocked: true, kind: true } });
+  const ok = !!u && u.enabled && u.accountNonLocked && u.kind !== 'AGENT';
+  nhoTaiKhoan.set(userId, { ok, den: Date.now() + 60_000 });
+  if (nhoTaiKhoan.size > 500) nhoTaiKhoan.delete(nhoTaiKhoan.keys().next().value!);
+  return ok;
+}
+
 export async function chanNeuKhongCoQuyen(userId: number | undefined): Promise<void> {
   if (!(await coQuyen(userId))) throw new ForbiddenError('Mục này chỉ dành cho tài khoản được phép.');
   if (!daBat()) throw new NotFoundError('Sách gốc chưa được bật trên máy chủ (thiếu SACH_RIENG_KHOA hoặc R2).');

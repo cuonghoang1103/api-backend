@@ -5,6 +5,7 @@
  * quyết định có HIỆN mục "📷 Sách gốc" không); mọi route dữ liệu còn lại trả
  * 403 cho tài khoản không được phép. Xem services/sachRieng/sachRieng.service.ts.
  */
+import { once } from 'node:events';
 import { Router, type NextFunction, type Request, type Response } from 'express';
 import { body } from 'express-validator';
 import { authenticate, requireAdmin } from '../middleware/auth.js';
@@ -16,9 +17,81 @@ import {
   timNguoi,
   capQuyen,
   thuQuyen,
+  taiKhoanConDung,
 } from '../services/sachRieng/sachRieng.service.js';
+import {
+  anhTrangIelts, choTrinhDuyet, danhMucIelts, dauMedia, docMedia, kiemVe, mimeCua, mucCuaBai, mucIelts, taoVe,
+} from '../services/sachRieng/ielts.js';
+import { phanTichRange } from '../services/sachRieng/maHoaKhuc.js';
+import { NotFoundError, UnauthorizedError } from '../middleware/errorHandler.js';
 
 const router = Router();
+
+/*
+ * 🔒 Tài liệu riêng IELTS — phát video/audio (12/11/2026). Đặt TRƯỚC `router.use(authenticate)`: thẻ <video>/<audio>
+ * không gửi header Authorization, và app desktop (`app://`) không có cookie ⇒ nhận VÉ ngắn hạn `?ve=` (HMAC, gắn
+ * userId + id tệp, 30 phút — cấp ở GET /ielts/ve/:id, có đăng nhập). Không có vé ⇒ xác thực như mọi route (cookie
+ * `backend_token` / Bearer). Cả hai đường đều qua `chanNeuKhongCoQuyen` như Sách gốc.
+ */
+router.get('/ielts/media/:id', (req: Request, res: Response, next: NextFunction) => {
+  if (req.query.ve === undefined) { void authenticate(req, res, next); return; }
+  (async () => {
+    const uid = kiemVe(req.query.ve, String(req.params.id));
+    if (!uid) throw new UnauthorizedError('Vé xem đã hết hạn — tải lại trang.');
+    if (!(await taiKhoanConDung(uid))) throw new UnauthorizedError('Tài khoản không còn dùng được.');
+    req.userId = uid;
+  })().then(() => next(), next);
+}, async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    await chanNeuKhongCoQuyen(req.userId);
+    await phatMediaIelts(req, res);
+  } catch (e) {
+    if (res.headersSent) { res.destroy(e as Error); return; }
+    next(e);
+  }
+});
+
+/** Phát media SR2: Range ⇒ 206 (tối đa KHUC_MOI_PHAN_HOI khúc, trình duyệt tự xin tiếp); không Range ⇒ 200 dạng luồng. */
+async function phatMediaIelts(req: Request, res: Response) {
+  const id = String(req.params.id);
+  const m = await mucIelts(id);
+  if (!m || m.loai === 'pdf') throw new NotFoundError('Không có tệp này');
+  let dau = await dauMedia(id);
+  if (!dau) throw new NotFoundError('Tệp chưa được tải lên');
+  res.setHeader('Content-Type', mimeCua(m));
+  res.setHeader('Accept-Ranges', 'bytes');
+  res.setHeader('Cache-Control', 'private, no-store');
+  res.setHeader('X-Robots-Tag', 'noindex, noimageindex');
+  res.setHeader('Content-Disposition', 'inline');
+  const r = phanTichRange(req.headers.range, dau.kichThuoc);
+  if (r === 'ngoai') {
+    res.status(416).setHeader('Content-Range', `bytes */${dau.kichThuoc}`);
+    res.end();
+    return;
+  }
+  if (req.method === 'HEAD') { res.setHeader('Content-Length', String(dau.kichThuoc)); res.end(); return; }
+  if (r) {
+    const kq = await docMedia(id, dau, r.a, r.b);
+    res.status(206);
+    res.setHeader('Content-Range', `bytes ${kq.a}-${kq.b}/${kq.dau.kichThuoc}`);
+    res.setHeader('Content-Length', String(kq.du.length));
+    res.end(kq.du);
+    return;
+  }
+  // Không Range (tải thẳng / trình phát lạ): đẩy cả tệp theo từng mẻ 8 khúc, chờ `drain` — bộ nhớ ~8 MiB/yêu cầu.
+  res.status(200);
+  res.setHeader('Content-Length', String(dau.kichThuoc));
+  let dong = false;
+  res.on('close', () => { dong = true; });
+  for (let a = 0; a < dau.kichThuoc && !dong;) {
+    const kq = await docMedia(id, dau, a, dau.kichThuoc - 1);
+    dau = kq.dau;
+    if (!res.write(kq.du) && !dong) await Promise.race([once(res, 'drain'), once(res, 'close')]);
+    a = kq.b + 1;
+  }
+  res.end();
+}
+
 router.use(authenticate);
 
 const ok = (res: Response<ApiResponse>, data: unknown) => res.json({ success: true, data });
@@ -26,7 +99,12 @@ const ok = (res: Response<ApiResponse>, data: unknown) => res.json({ success: tr
 router.get('/quyen', async (req: Request, res: Response<ApiResponse>, next) => {
   try {
     const co = (await coQuyen(req.userId)) && daBat();
-    ok(res, { coQuyen: co, sach: co ? ['dekiru'] : [] });
+    const sach = co ? ['dekiru'] : [];
+    // 'ielts' chỉ khi danh mục tài liệu riêng IELTS đã có mục — web dựa vào đây để quyết định có gọi thêm API không.
+    if (co) {
+      try { if ((await danhMucIelts()).muc.length) sach.push('ielts'); } catch { /* R2 trục trặc ⇒ coi như chưa có */ }
+    }
+    ok(res, { coQuyen: co, sach });
   } catch (e) { next(e); }
 });
 
@@ -136,6 +214,54 @@ router.get('/dekiru/nghe/am/:track', async (req: Request, res: Response, next) =
     }
     res.setHeader('Content-Length', String(b.length));
     res.end(b);
+  } catch (e) { next(e); }
+});
+
+/* ── 🔒 Tài liệu riêng IELTS (trừ phát media — ở đầu tệp) ─────────────── */
+router.use('/ielts', async (req: Request, _res, next) => {
+  try { await chanNeuKhongCoQuyen(req.userId); next(); } catch (e) { next(e); }
+});
+
+router.get('/ielts/danh-muc', async (_req, res: Response<ApiResponse>, next) => {
+  try {
+    res.setHeader('Cache-Control', 'private, no-store');
+    res.setHeader('X-Robots-Tag', 'noindex');
+    const dm = await danhMucIelts();
+    ok(res, { capNhat: dm.capNhat ?? null, muc: dm.muc.map(choTrinhDuyet) });
+  } catch (e) { next(e); }
+});
+
+/** Các mục gắn với một bài (vd `d4-doc`, `t2d12-doc`) — khung "🔒 Tài liệu riêng" đầu bài gọi cái này. */
+router.get('/ielts/bai/:lessonId', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.setHeader('Cache-Control', 'private, no-store');
+    res.setHeader('X-Robots-Tag', 'noindex');
+    ok(res, (await mucCuaBai(String(req.params.lessonId))).map(choTrinhDuyet));
+  } catch (e) { next(e); }
+});
+
+/** Vé 30 phút để thẻ <video>/<audio> phát `/ielts/media/:id?ve=…` (app desktop không có cookie). */
+router.get('/ielts/ve/:id', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const id = String(req.params.id);
+    const m = await mucIelts(id);
+    if (!m || m.loai === 'pdf') throw new NotFoundError('Không có tệp này');
+    const v = taoVe(req.userId!, id);
+    if (!v) throw new NotFoundError('Tài liệu riêng chưa bật trên máy chủ');
+    res.setHeader('Cache-Control', 'private, no-store');
+    ok(res, { ...v, duong: `/sach-rieng/ielts/media/${encodeURIComponent(id)}?ve=${encodeURIComponent(v.ve)}` });
+  } catch (e) { next(e); }
+});
+
+/** Ảnh một trang PDF (WebP). */
+router.get('/ielts/trang/:id/:p', async (req: Request, res: Response, next) => {
+  try {
+    const anh = await anhTrangIelts(String(req.params.id), Number(req.params.p));
+    if (!anh) throw new NotFoundError('Không có trang này');
+    res.setHeader('Content-Type', 'image/webp');
+    res.setHeader('Cache-Control', 'private, max-age=86400');
+    res.setHeader('X-Robots-Tag', 'noindex, noimageindex');
+    res.send(anh);
   } catch (e) { next(e); }
 });
 

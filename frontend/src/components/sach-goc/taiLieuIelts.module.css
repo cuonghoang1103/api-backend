@@ -1,0 +1,59 @@
+/* 🔒 Tài liệu riêng IELTS — dùng biến màu của khung sách học (course.module.css .root), có giá trị dự phòng. */
+.khung {
+  margin: 0 0 18px;
+  border-radius: 14px;
+  border: 1px dashed color-mix(in srgb, var(--lh-accent, #1d4f91) 45%, var(--lh-line, #e3e0d8));
+  background: var(--lh-surface, #fff);
+  color: var(--lh-ink, #16181d);
+}
+.khung > summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 10px 14px;
+  font-weight: 650;
+  font-size: 14.5px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.khung > summary::-webkit-details-marker { display: none; }
+.khung > summary::after { content: '▸'; display: inline-block; margin-left: auto; opacity: 0.6; transition: transform 0.15s; }
+.khung[open] > summary::after { transform: rotate(90deg); }
+.dem { font-weight: 500; font-size: 12.5px; color: var(--lh-ink-3, #636a75); }
+.than { padding: 0 14px 14px; display: grid; gap: 12px; }
+.muc {
+  border: 1px solid var(--lh-line, #e3e0d8);
+  border-radius: 12px;
+  padding: 12px;
+  background: var(--lh-surface-2, #f1efe9);
+  min-width: 0;
+}
+.dau { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: baseline; }
+.tieuDe { font-weight: 650; font-size: 15px; }
+.phu { font-size: 12.5px; color: var(--lh-ink-3, #636a75); }
+.trongTam { margin: 6px 0 0; font-size: 14px; line-height: 1.5; white-space: pre-line; }
+.nut {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-top: 8px; padding: 6px 12px; border-radius: 8px;
+  background: var(--lh-accent, #1d4f91); color: var(--lh-accent-ink, #fff);
+  font-size: 13.5px; font-weight: 600; border: 0; cursor: pointer;
+}
+.nut:disabled { opacity: 0.6; cursor: default; }
+.nutPhu {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 9px; border-radius: 999px;
+  border: 1px solid var(--lh-line, #e3e0d8); background: var(--lh-surface, #fff); color: inherit;
+  font-size: 12.5px; cursor: pointer; text-align: left;
+}
+.nutPhu:hover { border-color: var(--lh-accent, #1d4f91); }
+.nutPhu.dang { border-color: var(--lh-accent, #1d4f91); background: var(--lh-accent-soft, #e7eef8); font-weight: 600; }
+.moc { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.trinhPhat { margin-top: 10px; }
+.trinhPhat video { width: 100%; max-height: 70vh; border-radius: 10px; background: #000; display: block; }
+.trinhPhat audio { width: 100%; display: block; }
+.loi { color: var(--lh-bad, #b3261e); font-size: 13.5px; margin: 6px 0 0; }
+.trang { margin: 10px 0 0; }
+.trangSo { font-size: 12px; color: var(--lh-ink-3, #636a75); margin: 0 0 4px; }
+.trangAnh { min-height: 200px; background: rgba(128, 128, 128, 0.08); border-radius: 8px; overflow: hidden; }
+.trangAnh img { width: 100%; height: auto; display: block; }
+.thanhTrang { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 8px; font-size: 13px; }

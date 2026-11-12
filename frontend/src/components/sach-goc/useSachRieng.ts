@@ -127,22 +127,35 @@ export function useAnhTrang(p: number, nho = false): string {
   return src;
 }
 
-let quyenDem: Promise<boolean> | null = null;
+type QuyenRieng = { coQuyen: boolean; sach: string[] };
+let quyenDem: Promise<QuyenRieng> | null = null;
+function hoiQuyen(): Promise<QuyenRieng> {
+  quyenDem ??= api.get('/sach-rieng/quyen')
+    .then((r) => ({ coQuyen: !!r.data?.data?.coQuyen, sach: Array.isArray(r.data?.data?.sach) ? (r.data.data.sach as string[]) : [] }))
+    .catch(() => { quyenDem = null; return { coQuyen: false, sach: [] }; });
+  return quyenDem;
+}
 
 /** true = tài khoản này xem được Sách gốc. null = đang hỏi. */
 export function useQuyenSachRieng(): boolean | null {
+  const ds = useSachRiengDs();
+  return ds === null ? null : ds.includes('dekiru');
+}
+
+/**
+ * Bộ tài liệu riêng tài khoản này xem được (`['dekiru', 'ielts']`…). null = đang hỏi. Chưa đăng nhập ⇒ [] và KHÔNG gọi
+ * API. Một lần `/sach-rieng/quyen` dùng chung cho cả trang (Sách gốc Dekiru + 🔒 Tài liệu riêng IELTS).
+ */
+export function useSachRiengDs(): string[] | null {
   const { isAuthenticated } = useLangUser();
-  const [co, setCo] = useState<boolean | null>(null);
+  const [ds, setDs] = useState<string[] | null>(null);
   useEffect(() => {
-    if (!isAuthenticated) { setCo(false); return; }
+    if (!isAuthenticated) { setDs([]); return; }
     let live = true;
-    quyenDem ??= api.get('/sach-rieng/quyen')
-      .then((r) => !!r.data?.data?.coQuyen)
-      .catch(() => { quyenDem = null; return false; });
-    quyenDem.then((v) => { if (live) setCo(v); });
+    hoiQuyen().then((q) => { if (live) setDs(q.coQuyen ? q.sach : []); });
     return () => { live = false; };
   }, [isAuthenticated]);
-  return co;
+  return ds;
 }
 
 let mucLucDem: Promise<MucLuc> | null = null;

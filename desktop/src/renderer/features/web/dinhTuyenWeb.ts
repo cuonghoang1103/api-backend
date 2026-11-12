@@ -70,6 +70,8 @@ const TUYEN_KHAC: readonly TuyenWeb[] = [
   { mau: '/language/:code/ielts/so-loi', nap: () => import('@/app/language/[code]/ielts/so-loi/page') },
   // IELTS Tập 2 (12/11/2026) — khoá riêng cùng bộ khung sach-hoc (stage sach2).
   { mau: '/language/:code/ielts/tap-2', nap: () => import('@/app/language/[code]/ielts/tap-2/page') },
+  // 🔒 Tài liệu riêng IELTS (12/11/2026) — chỉ tài khoản được phép; khung đầu bài dẫn tới đây.
+  { mau: '/language/:code/ielts/tai-lieu-rieng', nap: () => import('@/app/language/[code]/ielts/tai-lieu-rieng/page') },
 
   /* ── IELTS — mục riêng trên thanh bên (03/10/2026); cùng trang web, code='en'. ── */
   { mau: '/ielts', nap: () => import('@/app/language/[code]/ielts/page'), thamSoCo: { code: 'en' } },
@@ -80,6 +82,7 @@ const TUYEN_KHAC: readonly TuyenWeb[] = [
   { mau: '/ielts/the-tu', nap: () => import('@/app/language/[code]/ielts/the-tu/page'), thamSoCo: { code: 'en' } },
   { mau: '/ielts/so-loi', nap: () => import('@/app/language/[code]/ielts/so-loi/page'), thamSoCo: { code: 'en' } },
   { mau: '/ielts/tap-2', nap: () => import('@/app/language/[code]/ielts/tap-2/page'), thamSoCo: { code: 'en' } },
+  { mau: '/ielts/tai-lieu-rieng', nap: () => import('@/app/language/[code]/ielts/tai-lieu-rieng/page'), thamSoCo: { code: 'en' } },
   { mau: '/language/:code/dekiru', nap: () => import('@/app/language/[code]/dekiru/page') },
   { mau: '/language/:code/dekiru/sach-goc', nap: () => import('@/app/language/[code]/dekiru/sach-goc/page') },
   // 09/11/2026: hai trang con của Sách gốc (🎧 bản chép file nghe CD, 🖼️ tài liệu gốc của lớp) — thiếu ⇒ "Không tìm thấy".

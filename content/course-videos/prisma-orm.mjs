@@ -26,18 +26,18 @@ export default {
   lessons: {
     /* ── Mục 0 — Prisma giải quyết gì, và cài đặt ── */
     'pr-0-1-van-de': { yt: 'Ehv69qFvN2I', credit: 'Classsed — Prisma Tutorial - Next Gen ORM (with JS & TS)' },  // Prisma Tutorial - Next Gen ORM (with JS & TS)
-    'pr-0-2-cai-dat': { yt: 'CYH04BJzamo', credit: 'Traversy Media — Prisma Crash Course' }, // Prisma Crash Course
-    'pr-0-3-nam-phut': { yt: '3AldkDy7TQ4', credit: '6 Pack Programmer — Prisma Complete Course 2025 - Modern Database ORM for Node.js & TypeScript' },// Prisma Complete Course 2025 - Modern Database ORM for Node.js & TypeScript
+    'pr-0-2-cai-dat': { yt: 'CYH04BJzamo', credit: 'Traversy Media — Prisma Crash Course', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/prisma-orm/00-prisma-giai-quyet-gi-cai-dat/00-04-cho-prisma-chay-len-a6232b8c.mp4' }, defaultVideoTrack: 'VI'}, // Prisma Crash Course
+    'pr-0-3-nam-phut': { yt: '3AldkDy7TQ4', credit: '6 Pack Programmer — Prisma Complete Course 2025 - Modern Database ORM for Node.js & TypeScript', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/prisma-orm/00-prisma-giai-quyet-gi-cai-dat/00-05-nam-phut-dau-tien-bad67610.mp4' }, defaultVideoTrack: 'VI'},// Prisma Complete Course 2025 - Modern Database ORM for Node.js & TypeScript
 
     /* ── Chương 1 — ORM thật ra là gì ── */
-    'pr-1-1-lech-tro-khang': { yt: 'mU8-nKwfw4Y', credit: 'Laiture — Prisma 2 (Node JS ORM) Crash Course' },       // Prisma 2 (Node JS ORM) Crash Course
+    'pr-1-1-lech-tro-khang': { yt: 'mU8-nKwfw4Y', credit: 'Laiture — Prisma 2 (Node JS ORM) Crash Course', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/prisma-orm/01-orm-la-gi/01-01-lech-tro-khang-634dcb8d.mp4' }, defaultVideoTrack: 'VI'},       // Prisma 2 (Node JS ORM) Crash Course
     'pr-1-2-generate-viet-gi': { yt: 'JuAauKOj1Kk', credit: 'Josh tried coding — They Finally Fixed Prisma' },     // They Finally Fixed Prisma
     'pr-1-3-thanh-sql': { yt: 'z_sfTz5S3SU', credit: 'Prisma — Is Prisma ORM Slow?' },            // Is Prisma ORM Slow?
-    'pr-1-4-datasource-generator': { yt: 'i0gUVkQ2grA', credit: 'Code with Sloba — Prisma Schema - Next.js 14 Course Tutorial #20' }, // Prisma Schema - Next.js 14 Course Tutorial #20
-    'pr-1-5-ba-luong': { yt: 'BkUH_6BSFyo', credit: 'Prisma — Deep dive into database workflows with Prisma - Alex Ruheni I Prisma Day 2022' },             // Deep dive into database workflows with Prisma - Alex Ruheni | Prisma Day 2022
+    'pr-1-4-datasource-generator': { yt: 'i0gUVkQ2grA', credit: 'Code with Sloba — Prisma Schema - Next.js 14 Course Tutorial #20', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/prisma-orm/01-orm-la-gi/01-04-datasource-generator-efad38a9.mp4' }, defaultVideoTrack: 'VI'}, // Prisma Schema - Next.js 14 Course Tutorial #20
+    'pr-1-5-ba-luong': { yt: 'BkUH_6BSFyo', credit: 'Prisma — Deep dive into database workflows with Prisma - Alex Ruheni I Prisma Day 2022', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/prisma-orm/01-orm-la-gi/01-05-ba-luong-8517b2df.mp4' }, defaultVideoTrack: 'VI'},             // Deep dive into database workflows with Prisma - Alex Ruheni | Prisma Day 2022
 
     /* ── Chương 2 — Ngôn ngữ lược đồ ── */
-    'pr-2-1-model-va-kieu': { yt: 'gT2KNOIDHoI', credit: 'GiraffeReactor — Prisma Tutorial for Beginners #2 - Creating Our First Schema' },      // Prisma Tutorial for Beginners #2 - Creating Our First Schema
+    'pr-2-1-model-va-kieu': { yt: 'gT2KNOIDHoI', credit: 'GiraffeReactor — Prisma Tutorial for Beginners #2 - Creating Our First Schema', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/prisma-orm/02-ngon-ngu-luoc-do/02-01-model-va-kieu-59ada316.mp4' }, defaultVideoTrack: 'VI'},      // Prisma Tutorial for Beginners #2 - Creating Our First Schema
     'pr-2-2-thuoc-tinh-truong': { yt: 'eKY4lCDZP2I', credit: 'Holodeck — Create a Prisma Schema' },  // Create a Prisma Schema
     'pr-2-3-thuoc-tinh-khoi': { yt: 'zS_vJgRPYo8', credit: 'Prisma — Using Multiple Prisma Schema Files' },    // Using Multiple Prisma Schema Files
     'pr-2-4-native-type': { yt: '6clK-CAsFus', credit: 'Mehul Kundu | That Product Dude — Prisma Schema Builder' },        // Prisma Schema Builder

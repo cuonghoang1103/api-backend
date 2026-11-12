@@ -32,9 +32,13 @@ CHUA_SOAN = re.compile(r'đang (được )?(biên )?soạn|being written|coming 
 # bài Academy nên không dò được từ chỉ mục; danh sách lấy từ mã nguồn content/academy (bai-khung.json).
 _KF = os.path.join(W if 'W' in globals() else os.path.expanduser('~/Documents/roadmap-lam'), 'bai-khung.json')
 KHUNG = set(json.load(open(_KF))) if os.path.exists(_KF) else set()
+# Trang buổi học FLM (`*-flm-bNNN`): 📑 = có slide giảng, 📘 = chỉ lịch buổi theo syllabus (gần như rỗng) ⇒ bỏ 📘
+# trừ khi nội dung dài thật (đo 12/11: 20.575 trang, 20.136 rỗng).
+def trang_buoi_rong(b):
+    return bool(re.search(r'-flm-b\d{3}', b['bai'])) and not b['vi'].startswith('📑') and b['doDai'] < 1500
 bai = [b for b in (json.loads(x) for x in open(f'{W}/chi-muc-bai.jsonl'))
        if (not b['academy'] or ITS.get(b['khoa'], 0) >= 0.2) and (not KHOA or b['khoa'] == KHOA)
-       and not CHUA_SOAN.search(b['mo']) and b['bai'] not in KHUNG]
+       and not CHUA_SOAN.search(b['mo']) and b['bai'] not in KHUNG and not trang_buoi_rong(b)]
 docs = []
 for b in bai:
     t = tu(f"{b['vi']} {b['en']}") * 3 + tu(b['chuong']) + tu(b['khoaTen']) + tu(' '.join(b['deMuc'][:12])) + tu(b['moTa'])

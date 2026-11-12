@@ -2245,14 +2245,6 @@
     "ma": "CSD201"
    },
    {
-    "href": "/courses/csd203-data-structures-and-algorithm-with-python/learn?lessonSlug=csd203-flm-b034",
-    "ten": "📘 Buổi 34 — 5.4.2 Dijkstra’s Algorithm",
-    "nguon": "Data Structures and Algorithm with Python · FLM 5 · Chương 5 (buổi 29–40)",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "CSD203"
-   },
-   {
     "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-slide-csd10-2",
     "ten": "5.B — 📑 Học theo từng slide · Đồ thị, phần 1b: biểu diễn, BFS/DFS, Dijkstra & Floyd (5A-Graphs1, slide 18–36)",
     "nguon": "Data Structures and Algorithms · Chương 5",

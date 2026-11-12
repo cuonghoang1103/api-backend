@@ -1,0 +1,1456 @@
+{
+ "Nền tảng › C vs C++ & Trình biên dịch": {
+  "body": "C và C++ có chung \"dòng máu\": C++ ra đời như một bản mở rộng của C, nên phần lớn cú pháp cơ bản (biến, `if`, `for`, con trỏ, hàm) giống nhau. C là ngôn ngữ **thủ tục** – chương trình là tập hợp hàm thao tác trên dữ liệu. C++ giữ nguyên khả năng đó và thêm **lập trình hướng đối tượng** (class), **template** (code tổng quát), **thư viện chuẩn STL** và nhiều công cụ quản lý tài nguyên an toàn hơn.\n\nDù vậy C++ **không phải tập cha hoàn hảo** của C: có đoạn C hợp lệ nhưng C++ từ chối (ví dụ ép `void*` sang kiểu khác không cần cast trong C, nhưng bắt buộc trong C++).\n\n### Trình biên dịch làm gì\nBạn viết mã nguồn (`.c` / `.cpp`), trình biên dịch (`gcc`/`g++`, `clang`/`clang++`, MSVC) dịch ra mã máy. Quy trình gồm tiền xử lý, biên dịch, assemble rồi **liên kết (link)** các file đối tượng thành file chạy.\n\n```bash\ng++ -std=c++17 -Wall -Wextra main.cpp -o main\n./main\n```\n\n### Lỗi hay gặp\n- Dùng `gcc` để biên dịch file `.cpp` rồi báo thiếu thư viện C++ (nên dùng `g++`).\n- Nghĩ rằng \"viết C++ = viết C có thêm `cout`\": C++ hiện đại tránh `malloc`/con trỏ trần, ưu tiên `std::string`, `std::vector`, smart pointer.",
+  "lessons": [
+   {
+    "href": "/courses/programming-fundamentals/learn?lessonSlug=prf192-1-0b-slides-bien-dich-cau-truc-c",
+    "ten": "1.0b — Slide bài giảng: Ngôn ngữ lập trình, trình biên dịch & cấu trúc chương trình C (slide 24–45)",
+    "nguon": "Programming Fundamentals · Chương 1",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRF192"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-1-1-basics",
+    "ten": "1.1 — Chương trình C/C++ đầu tiên",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   }
+  ]
+ },
+ "Nền tảng › Cú pháp cơ bản & Control Flow": {
+  "body": "Cú pháp cơ bản là bộ \"chữ cái và ngữ pháp\" của ngôn ngữ: khai báo biến, chọn kiểu dữ liệu, tính toán bằng toán tử, rẽ nhánh và lặp để điều khiển luồng, rồi gói đoạn mã lặp lại vào hàm. Mọi chương trình C++ phức tạp đến đâu cũng dựng từ các mảnh này.\n\n### Vì sao cần biết\nĐây là nền để đọc được code của người khác và để học các phần sau (con trỏ, class, template). Lỗi cú pháp và lỗi logic cơ bản chiếm phần lớn thời gian debug của người mới.\n\n### Ý chính\n- **Biến**: có kiểu cố định (`int`, `double`, `char`, `bool`, `std::string`). Khai báo và khởi tạo cùng lúc: `int tuoi = 20;`. Biến chưa khởi tạo cục bộ chứa giá trị rác.\n- **Toán tử**: số học (`+ - * / %`), so sánh (`== != < >`), logic (`&& || !`), gán (`=`, `+=`...). Chia hai số nguyên cho kết quả nguyên: `7 / 2 == 3`.\n- **Rẽ nhánh**: `if / else if / else` và `switch` (so sánh với hằng nguyên, nhớ `break`).\n- **Lặp**: `for`, `while`, `do while`; `break` thoát vòng, `continue` bỏ qua lượt hiện tại.\n- **Hàm**: `kieu_tra_ve ten(tham_so) { ... }`.\n\n```cpp\n#include <iostream>\nusing namespace std;\n\nint binhPhuong(int x) { return x * x; }\n\nint main() {\n    int tong = 0;\n    for (int i = 1; i <= 5; ++i) {\n        if (i % 2 == 0) continue;       // bỏ số chẵn\n        tong += binhPhuong(i);\n    }\n    cout << \"Tong = \" << tong << '\\n';  // 1 + 9 + 25 = 35\n    return 0;\n}\n```\n\n### Lỗi hay gặp\n- Nhầm `=` (gán) với `==` (so sánh) trong điều kiện `if`.\n- Quên `break` trong `switch` làm chạy tràn sang nhánh sau.\n- Chia nguyên khi định chia thực: `double kq = 1 / 2;` cho `0`, cần `1.0 / 2`.\n- Vòng lặp lệch một đơn vị (`<` thay vì `<=`).\n\n### Tự kiểm tra\n1. `int a = 7; double b = a / 2;` thì `b` bằng bao nhiêu và vì sao?\n2. Khác nhau giữa `while` và `do while` là gì?",
+  "lessons": [
+   {
+    "href": "/courses/pcp291-c-programming/learn?lessonSlug=pcp291-1-1-basics",
+    "ten": "1.1 — Nhập môn, biến, kiểu, I/O & biên dịch",
+    "nguon": "C++ Programming · Chapter 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PCP291"
+   },
+   {
+    "href": "/courses/pcp291-c-programming/learn?lessonSlug=pcp291-2-1-control-functions",
+    "ten": "2.1 — Điều khiển luồng & hàm",
+    "nguon": "C++ Programming · Chapter 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PCP291"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-1-3-kieu-du-lieu",
+    "ten": "1.3 — Kiểu dữ liệu, kích thước, ép kiểu",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-2-1-control-flow",
+    "ten": "3.1 — Rẽ nhánh: if, else if, switch",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/code-lab/c",
+    "ten": "C",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Nền tảng › Namespaces & Headers/CPP Files": {
+  "body": "Khi chương trình lớn lên, bạn không thể nhồi mọi thứ vào một file. C++ cho phép **tách khai báo và cài đặt**: file header (`.h`/`.hpp`) nói \"có những gì\", file `.cpp` chứa phần \"làm thế nào\". Còn **namespace** là cách đặt tên có \"họ\" để hai thư viện cùng có hàm `print` không đụng nhau.\n\n### Ý chính\n- **Header (.h)**: chứa khai báo hàm, class, hằng. Được `#include` vào nhiều nơi.\n- **Source (.cpp)**: chứa định nghĩa. Mỗi `.cpp` được biên dịch riêng rồi linker ghép lại.\n- **Header guard** tránh include trùng: `#pragma once` hoặc cặp `#ifndef/#define/#endif`.\n- **Namespace**: `namespace app { int dem(); }`, gọi `app::dem()`. `std::` là namespace của thư viện chuẩn.\n- Tránh `using namespace std;` trong header, vì nó \"tràn\" vào mọi file include header đó.\n\n```cpp\n// toan.h\n#pragma once\nnamespace toan {\n    int cong(int a, int b);   // khai báo\n}\n\n// toan.cpp\n#include \"toan.h\"\nnamespace toan {\n    int cong(int a, int b) { return a + b; }   // định nghĩa\n}\n\n// main.cpp\n#include <iostream>\n#include \"toan.h\"\nint main() { std::cout << toan::cong(2, 3) << '\\n'; }\n```\nBiên dịch: `g++ main.cpp toan.cpp -o app`.\n\n### Lỗi hay gặp\n- Định nghĩa hàm (không `inline`) trong header rồi include ở hai `.cpp`: lỗi *multiple definition* lúc link.\n- Quên thêm `toan.cpp` vào lệnh biên dịch: lỗi *undefined reference*.\n- Include vòng tròn giữa hai header (giải quyết bằng forward declaration).\n\n### Tự kiểm tra\nVì sao đặt `using namespace std;` trong header là thói quen xấu?",
+  "lessons": [
+   {
+    "href": "/courses/programming-fundamentals/learn?lessonSlug=prf192-n4-1-du-an-c",
+    "ten": "N4.1 — Nhiều file, header guard & Makefile",
+    "nguon": "Programming Fundamentals · Nâng cao 4 — Tổ chức dự án C thực chiến",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF192"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-7-4-access-encapsulation",
+    "ten": "7.4 — Access modifier và đóng gói (+ một class, hai file)",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   }
+  ]
+ },
+ "Nền tảng › Giới thiệu ngôn ngữ C++": {
+  "body": "C++ do Bjarne Stroustrup bắt đầu phát triển từ cuối thập niên 1970 (lúc đầu gọi là \"C with Classes\") tại Bell Labs, với mục tiêu giữ tốc độ và khả năng sát phần cứng của C nhưng thêm các công cụ trừu tượng hoá để quản lý chương trình lớn. Ngôn ngữ được ISO chuẩn hoá và ra phiên bản mới đều đặn: C++11 (thay đổi lớn: `auto`, lambda, smart pointer, move), C++14, C++17, C++20 (concepts, ranges, coroutines), C++23.\n\n### Đặc điểm nổi bật\n- **Đa mô hình**: thủ tục, hướng đối tượng, tổng quát (template), có phần hàm (lambda, algorithm).\n- **Biên dịch ra mã máy**, kiểu tĩnh, không có bộ gom rác: bạn kiểm soát vòng đời bộ nhớ.\n- **\"Không trả tiền cho thứ bạn không dùng\"**: tính năng trừu tượng cố gắng không tốn chi phí chạy.\n\n### Dùng ở đâu\nGame engine, trình duyệt, hệ điều hành và driver, cơ sở dữ liệu, hệ thống giao dịch tài chính, nhúng và ô tô.",
+  "lessons": [
+   {
+    "href": "/courses/programming-fundamentals/learn?lessonSlug=prf192-1-0b-slides-bien-dich-cau-truc-c",
+    "ten": "1.0b — Slide bài giảng: Ngôn ngữ lập trình, trình biên dịch & cấu trúc chương trình C (slide 24–45)",
+    "nguon": "Programming Fundamentals · Chương 1",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRF192"
+   }
+  ]
+ },
+ "Nền tảng › Cài đặt môi trường lập trình C++": {
+  "body": "Để chạy C++ bạn cần một **trình biên dịch** biến mã `.cpp` thành file thực thi. Cài đặt đúng ngay từ đầu giúp tránh nhiều lỗi khó hiểu về sau.\n\n### Cài trình biên dịch theo hệ điều hành\n- **Linux (Debian/Ubuntu)**: `sudo apt install build-essential` (có `g++`, `make`).\n- **macOS**: `xcode-select --install` để có `clang++` (hoặc `brew install gcc`).\n- **Windows**: MSYS2/MinGW-w64 (`g++`), hoặc cài Visual Studio (MSVC), hoặc dùng WSL để có môi trường Linux.\n\nKiểm tra: \n```bash\ng++ --version\n```\n\n### Quy trình biên dịch\nMã nguồn `.cpp` đi qua bốn giai đoạn: tiền xử lý, biên dịch (ra assembly), assemble (ra file đối tượng `.o`), liên kết (ra file chạy). Với dự án một file, một lệnh là đủ:\n```bash\ng++ -std=c++17 -Wall -Wextra -g main.cpp -o main\n```\n`-std=` chọn chuẩn ngôn ngữ, `-Wall -Wextra` bật cảnh báo hữu ích, `-g` thêm thông tin cho debugger.\n\n### Lỗi hay gặp\n- Lệnh `g++` không tìm thấy vì thư mục `bin` chưa nằm trong `PATH` (hay gặp trên Windows).\n- Không chỉ định `-std`, dùng tính năng mới mà trình biên dịch cũ mặc định không hỗ trợ.\n- Trên macOS, `g++` thực ra là bí danh của `clang++`.\n\n### Tự kiểm tra\nBốn giai đoạn biên dịch là gì? Giai đoạn nào báo lỗi *undefined reference*?\n\n### Ý chính\n- Trình biên dịch chỉ là một mảnh; trình soạn thảo và debugger (gdb/lldb) cài riêng hoặc đi kèm IDE.\n- Với dự án nhiều file sau này sẽ cần thêm hệ thống build như CMake.\n- Làm quen với terminal giúp bạn hiểu rõ lỗi biên dịch/liên kết hơn là chỉ bấm nút \"Run\" trong IDE.",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-1-2-cong-cu",
+    "ten": "1.2 — Công cụ: DevC++ 6.3, VS Code, dòng lệnh",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/programming-fundamentals/learn?lessonSlug=prf192-0-5-cai-dat-moi-truong",
+    "ten": "0.5 — Cài đặt & sử dụng DevC++ / VS Code",
+    "nguon": "Programming Fundamentals · Mục 0",
+    "kieu": "video",
+    "academy": true,
+    "ma": "PRF192"
+   },
+   {
+    "href": "/courses/pcp291-c-programming/learn?lessonSlug=pcp291-flm-b001",
+    "ten": "📑 Buổi 1 — Introduction to C++ and Development Environment",
+    "nguon": "C++ Programming · FLM 1 · Buổi 1–5",
+    "kieu": "video",
+    "academy": true,
+    "ma": "PCP291"
+   }
+  ]
+ },
+ "Nền tảng › Trình soạn thảo mã và IDE cho C++": {
+  "body": "Trình soạn thảo/IDE là nơi bạn sống hằng ngày khi lập trình, nên chọn công cụ hợp sẽ tăng năng suất rõ rệt. Các lựa chọn phổ biến:\n\n- **Visual Studio Code** + extension C/C++ (hoặc clangd) và CMake Tools: nhẹ, đa nền tảng, linh hoạt.\n- **Visual Studio** (Windows): debugger rất mạnh, tích hợp MSVC.\n- **CLion** (JetBrains): hiểu CMake sâu, refactor tốt.\n- **Dev-C++** và Code::Blocks: gọn, hay dùng ở lớp nhập môn.\n\nTính năng cần có: tô màu cú pháp, gợi ý code (IntelliSense/clangd), nhảy tới định nghĩa, **debugger** (breakpoint, xem biến, từng bước), và tích hợp build. Lời khuyên: dù dùng IDE nào, hãy tập chạy `g++` bằng tay vài lần để hiểu IDE đang làm gì sau lưng.",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-1-2-cong-cu",
+    "ten": "1.2 — Công cụ: DevC++ 6.3, VS Code, dòng lệnh",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/programming-fundamentals/learn?lessonSlug=prf192-0-5-cai-dat-moi-truong",
+    "ten": "0.5 — Cài đặt & sử dụng DevC++ / VS Code",
+    "nguon": "Programming Fundamentals · Mục 0",
+    "kieu": "video",
+    "academy": true,
+    "ma": "PRF192"
+   }
+  ]
+ },
+ "Nền tảng › Chạy chương trình C++ đầu tiên": {
+  "body": "Chương trình \"Hello, World!\" nhỏ nhưng chứa đủ khung xương của mọi chương trình C++: nạp thư viện, điểm vào `main`, và xuất dữ liệu.\n\n```cpp\n#include <iostream>\n\nint main() {\n    std::cout << \"Hello, World!\" << std::endl;\n    return 0;\n}\n```\n\n### Giải phẫu từng dòng\n- `#include <iostream>`: chỉ thị tiền xử lý, chép khai báo của thư viện nhập/xuất vào file.\n- `int main()`: **điểm vào** của chương trình; hệ điều hành gọi hàm này đầu tiên. Trả về `int`: `0` nghĩa là thành công.\n- `std::cout`: luồng xuất chuẩn (màn hình), thuộc namespace `std`.\n- `<<`: toán tử \"đẩy\" dữ liệu vào luồng; có thể nối nhiều lần.\n- `std::endl` xuống dòng và xả bộ đệm; `'\\n'` chỉ xuống dòng (nhanh hơn).\n- `;` kết thúc mỗi câu lệnh.\n\n### Chạy thử\n```bash\ng++ -std=c++17 hello.cpp -o hello\n./hello\n```\nTrên Windows file chạy là `hello.exe`.\n\n### Lỗi hay gặp\n- Quên `std::` (hoặc `using namespace std;`) nên báo `cout was not declared`.\n- Quên dấu `;` hoặc dấu ngoặc nhọn: thông báo lỗi trỏ vào dòng *sau* chỗ thiếu.\n- Chạy `./hello` khi biên dịch thất bại: đang chạy file cũ (hoặc không có file).\n\n### Tự kiểm tra\nNếu `main` trả về `1` thay vì `0` thì có ý nghĩa gì với tiến trình gọi?\n\n### Ý chính\nMọi chương trình C++ đều bắt đầu chạy từ `main`. Phần còn lại chỉ là bạn thêm biến, hàm, lớp... vào xung quanh khung xương này. Thử đổi chuỗi, thêm nhiều dòng `cout`, hoặc đọc tên từ `cin` rồi chào người dùng là cách tốt nhất để làm quen với chu trình *viết – biên dịch – chạy – sửa lỗi*.",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-1-1-basics",
+    "ten": "1.1 — Chương trình C/C++ đầu tiên",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/pcp291-c-programming/learn?lessonSlug=pcp291-1-1-basics",
+    "ten": "1.1 — Nhập môn, biến, kiểu, I/O & biên dịch",
+    "nguon": "C++ Programming · Chapter 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PCP291"
+   },
+   {
+    "href": "/courses/programming-fundamentals/learn?lessonSlug=prf192-1-3-cau-truc-chuong-trinh-c",
+    "ten": "1.3 — Cấu trúc một chương trình C",
+    "nguon": "Programming Fundamentals · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF192"
+   },
+   {
+    "href": "/code-lab/c",
+    "ten": "C",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Nền tảng › Toán tử số học & Bitwise": {
+  "body": "Toán tử số học tính toán trên giá trị, còn toán tử bitwise làm việc trực tiếp trên từng bit của số nguyên. Cả hai là công cụ cốt lõi của mọi chương trình, và bitwise là nền của cờ trạng thái (flags), mã hoá, nén, đồ hoạ, lập trình nhúng.\n\n### Số học\n`+ - * / %`. Điểm cần nhớ:\n- Chia hai số nguyên cắt phần thập phân: `7 / 2 = 3`, `-7 / 2 = -3` (cắt về 0).\n- `%` lấy phần dư, chỉ dùng cho số nguyên: `7 % 3 = 1`; dấu của kết quả theo số bị chia.\n- Tràn số (overflow) với số nguyên **có dấu** là hành vi không xác định (UB).\n\n### Bitwise\n| Toán tử | Ý nghĩa |\n|---|---|\n| `&` | AND từng bit |\n| `\\|` | OR từng bit |\n| `^` | XOR (khác nhau thì 1) |\n| `~` | đảo bit |\n| `<<` `>>` | dịch trái/phải |\n\n```cpp\nunsigned flags = 0;\nconst unsigned READ = 1u << 0, WRITE = 1u << 1;\nflags |= READ | WRITE;     // bật hai cờ\nflags &= ~WRITE;           // tắt cờ WRITE\nbool coRead = flags & READ; // kiểm tra\nint x = 5; x <<= 1;        // x = 10 (nhân 2)\n```\n\n### Lỗi hay gặp\n- Nhầm `&` với `&&` (và `|` với `||`).\n- Dịch bit quá số bit của kiểu (`1 << 32` với `int` 32-bit) là UB.\n- Dịch phải số âm: kết quả phụ thuộc triển khai ở chuẩn cũ.\n- Quên ngoặc: `a & b == c` được hiểu `a & (b == c)`.\n\n### Tự kiểm tra\nLàm sao kiểm tra một số nguyên dương là luỹ thừa của 2 chỉ bằng một biểu thức bitwise?",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-2-1-toan-tu-gan-so-hoc",
+    "ten": "2.1 — Toán tử gán và số học",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-2-3-toan-tu-bitwise-ternary",
+    "ten": "2.3 — Toán tử bit và toán tử ba ngôi",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/programming-fundamentals/learn?lessonSlug=prf192-3-1-toan-tu",
+    "ten": "3.1 — Các nhóm toán tử",
+    "nguon": "Programming Fundamentals · Chương 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF192"
+   },
+   {
+    "href": "/simulation?scenario=number-bits",
+    "ten": "Số âm và số thực trong máy tính",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "Nền tảng › Cấu trúc điều khiển & Vòng lặp": {
+  "body": "Cấu trúc điều khiển quyết định **dòng chảy** của chương trình: chạy đoạn nào, bao nhiêu lần, khi nào dừng. Chọn đúng cấu trúc làm code ngắn và dễ đọc.\n\n### Rẽ nhánh\n```cpp\nif (diem >= 8.0)      xepLoai = 'A';\nelse if (diem >= 5.0) xepLoai = 'B';\nelse                  xepLoai = 'F';\n\nswitch (thu) {          // so sánh với hằng nguyên/enum\n    case 2: case 3: std::cout << \"Dau tuan\"; break;\n    case 7:        std::cout << \"Cuoi tuan\"; break;\n    default:       std::cout << \"Khac\";\n}\n```\n\n### Vòng lặp\n- `for (init; điều kiện; bước)`: khi biết trước số lần lặp.\n- `while (điều kiện)`: lặp khi chưa biết số lần, kiểm tra **trước** khi vào thân.\n- `do { ... } while (điều kiện);`: chạy thân **ít nhất một lần** (ví dụ nhập lại đến khi hợp lệ).\n- Range-based for (C++11): `for (int v : danhSach) { ... }`.\n- `break` thoát hẳn vòng, `continue` nhảy sang lượt kế.\n\n```cpp\nint n; \ndo { std::cout << \"Nhap so duong: \"; std::cin >> n; } while (n <= 0);\nfor (int i = 1; i <= n; ++i) if (n % i == 0) std::cout << i << ' ';\n```\n\n### Lỗi hay gặp\n- Vòng lặp vô hạn do quên cập nhật biến điều kiện.\n- Lệch một (off-by-one): `i <= n` hay `i < n`.\n- `switch` thiếu `break` (fall-through ngoài ý muốn).\n- Dấu `;` thừa sau `for (...)` hoặc `if (...)` biến thân thành rỗng.\n- Dùng `goto` bừa bãi làm luồng rối; hiếm khi cần.\n\n### Tự kiểm tra\nKhi nào nên dùng `do while` thay vì `while`?",
+  "lessons": [
+   {
+    "href": "/courses/programming-fundamentals/learn?lessonSlug=prf192-4-0b-slides-vong-lap",
+    "ten": "4.0b — Slide bài giảng: Vòng lặp — for, while, do-while, break và biến cờ (slide 24–40)",
+    "nguon": "Programming Fundamentals · Chương 4",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRF192"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-2-1-control-flow",
+    "ten": "3.1 — Rẽ nhánh: if, else if, switch",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-3-2-for-loop",
+    "ten": "3.2 — Vòng lặp for: lặp có đếm",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-3-3-while-loop",
+    "ten": "3.3 — Vòng lặp while: lặp đến khi xong",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-3-4-do-while",
+    "ten": "3.4 — do-while, so sánh ba vòng lặp, goto",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   }
+  ]
+ },
+ "Nền tảng › Hàm (Functions) trong C++": {
+  "body": "Hàm là khối mã có tên, nhận đầu vào (tham số), thực hiện một việc và có thể trả về kết quả. Chia chương trình thành các hàm nhỏ giúp tái sử dụng, kiểm thử riêng và đọc dễ hơn.\n\n### Cú pháp\n```cpp\nint luyThua(int co, int mu);          // khai báo (prototype), thường ở header\n\nint luyThua(int co, int mu) {         // định nghĩa\n    int kq = 1;\n    for (int i = 0; i < mu; ++i) kq *= co;\n    return kq;\n}\n```\nHàm không trả gì dùng `void`. Hàm phải được **khai báo trước khi gọi**.\n\n### Truyền tham số\n- **Theo giá trị**: hàm nhận bản sao, sửa không ảnh hưởng biến gốc.\n- **Theo tham chiếu** `int&`: sửa trực tiếp biến gốc, không sao chép.\n- **Tham chiếu hằng** `const std::string&`: đọc mà không sao chép (nên dùng cho đối tượng lớn).\n```cpp\nvoid hoanDoi(int& a, int& b) { int t = a; a = b; b = t; }\n```\n\n### Tính năng khác\n- **Tham số mặc định**: `void in(int n, char c = '*');`\n- **Nạp chồng** (overload): nhiều hàm cùng tên, khác danh sách tham số.\n- **Đệ quy**: hàm tự gọi chính nó, cần điều kiện dừng.\n- `inline`, `constexpr` cho hàm tính lúc biên dịch.\n\n### Lỗi hay gặp\n- Trả về tham chiếu/con trỏ tới biến cục bộ (biến đã bị huỷ khi hàm kết thúc).\n- Đệ quy thiếu điều kiện dừng gây tràn stack.\n- Truyền đối tượng lớn theo giá trị không cần thiết.\n\n### Tự kiểm tra\nKhác nhau giữa `void f(int x)` và `void f(int& x)` khi gọi `f(a)` là gì?",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-4-1-functions",
+    "ten": "5.1 — Hàm: khai báo, đối số, đệ quy",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-6-2-pass-by-reference",
+    "ten": "6.2 — Truyền tham chiếu: giá trị, con trỏ, tham chiếu",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-5-2-nap-chong",
+    "ten": "5.2 — Nạp chồng hàm và nạp chồng toán tử",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/pcp291-c-programming/learn?lessonSlug=pcp291-2-1-control-functions",
+    "ten": "2.1 — Điều khiển luồng & hàm",
+    "nguon": "C++ Programming · Chapter 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PCP291"
+   },
+   {
+    "href": "/courses/programming-fundamentals/learn?lessonSlug=prf192-5-0b-slides-ham-c-prototype",
+    "ten": "5.0b — Slide bài giảng: Định nghĩa, gọi và khai báo nguyên mẫu hàm C (slide 26–48)",
+    "nguon": "Programming Fundamentals · Chương 5",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRF192"
+   }
+  ]
+ },
+ "Nền tảng › Scope và Visibility": {
+  "body": "**Scope** là vùng mã nơi một tên (biến, hàm, class) còn \"nhìn thấy\" được; **lifetime** là khoảng thời gian đối tượng thật sự tồn tại. Hai thứ này liên quan nhưng không đồng nhất.\n\n### Các cấp scope\n- **Block** `{ ... }`: biến khai báo trong khối chỉ sống tới dấu `}`; biến cục bộ bị huỷ (gọi destructor) khi ra khỏi khối.\n- **Hàm**, **class** (thành viên), **namespace**, **global** (toàn file/chương trình).\n\n```cpp\nint x = 1;              // global\nint main() {\n    int x = 2;          // che (shadow) x toàn cục\n    { int x = 3; }      // che tiếp trong khối con\n    std::cout << x;     // 2\n    std::cout << ::x;   // 1 (toán tử :: chọn tên toàn cục)\n}\n```\nLỗi hay gặp: shadowing vô tình, và trả về địa chỉ biến cục bộ (biến đã chết khi hàm kết thúc). Nên khai báo biến ở scope hẹp nhất có thể và khởi tạo ngay.",
+  "lessons": [
+   {
+    "href": "/courses/programming-fundamentals/learn?lessonSlug=prf192-5-0c-slides-stack-scope-walkthrough",
+    "ten": "5.0c — Slide bài giảng: Ngăn xếp lời gọi, truyền theo giá trị, phạm vi biến & chạy tay hàm (slide 49–71)",
+    "nguon": "Programming Fundamentals · Chương 5",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRF192"
+   },
+   {
+    "href": "/courses/programming-fundamentals/learn?lessonSlug=prf192-5-3-scope",
+    "ten": "5.3 — Phạm vi biến (scope) · hàm dựng sẵn vs tự định nghĩa",
+    "nguon": "Programming Fundamentals · Chương 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF192"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-1-4-bien",
+    "ten": "1.4 — Biến, phạm vi, lvalue và rvalue",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   }
+  ]
+ },
+ "Nền tảng › Khái niệm ngôn ngữ (Language Concepts)": {
+  "body": "Một vài khái niệm nền khiến C++ \"khó đoán\" nếu bạn chưa nắm:\n\n- **Access specifier** (`public`, `protected`, `private`): quyết định ai được truy cập thành viên của class. `private` chỉ nội bộ class; `protected` thêm lớp con; `public` ai cũng dùng. Mặc định của `class` là private, của `struct` là public.\n- **Storage duration** (thời gian lưu trữ): *automatic* (biến cục bộ, tự huỷ khi ra scope), *static* (sống suốt chương trình, ví dụ biến toàn cục và `static`), *dynamic* (tạo bằng `new`, bạn tự giải phóng), *thread* (`thread_local`).\n- **Linkage**: *external* (nhìn thấy từ file `.cpp` khác), *internal* (chỉ trong file, dùng `static` hoặc namespace vô danh), *none* (biến cục bộ).\n- **Language linkage**: `extern \"C\"` yêu cầu dùng quy tắc đặt tên ký hiệu của C, để C++ gọi được thư viện C (hoặc ngược lại), vì C++ \"mangle\" tên hàm để hỗ trợ overload.",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-7-4-access-encapsulation",
+    "ten": "7.4 — Access modifier và đóng gói (+ một class, hai file)",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-1-4-bien",
+    "ten": "1.4 — Biến, phạm vi, lvalue và rvalue",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   }
+  ]
+ },
+ "Nền tảng › Macros & Preprocessor": {
+  "body": "**Tiền xử lý (preprocessor)** là bước chạy *trước* khi trình biên dịch thật sự đọc mã: nó xử lý các dòng bắt đầu bằng `#`, thay thế văn bản thuần tuý, không biết gì về kiểu hay scope của C++. **Macro** là tên do `#define` tạo ra để thay thế.\n\n### Các chỉ thị chính\n- `#include <file>` / `#include \"file\"`: chép nội dung file vào chỗ này.\n- `#define TEN gia_tri` và macro hàm `#define BINHPHUONG(x) ((x)*(x))`.\n- `#if / #ifdef / #ifndef / #else / #endif`: biên dịch có điều kiện (theo hệ điều hành, chế độ debug...).\n- `#pragma once` hoặc cặp `#ifndef`/`#define`/`#endif` làm **header guard**.\n\n```cpp\n#ifndef MYLIB_H\n#define MYLIB_H\n// nội dung header\n#endif\n\n#ifdef _WIN32\n  // mã riêng Windows\n#endif\n```\n\n### Vì sao macro dễ gây hại\nMacro chỉ chép chữ, nên:\n```cpp\n#define BINHPHUONG(x) x * x\nint k = BINHPHUONG(2 + 3);   // thành 2 + 3 * 2 + 3 = 11, không phải 25\n#define MAX(a, b) ((a) > (b) ? (a) : (b))\nMAX(i++, j);                 // i++ có thể bị tính hai lần\n```\nCách hiện đại thay thế: hằng dùng `constexpr`, hàm nhỏ dùng `inline` hoặc template, kiểu dùng `using`. Macro vẫn hữu ích cho header guard, biên dịch có điều kiện theo nền tảng và một số kỹ thuật ghi log (`__FILE__`, `__LINE__`).\n\n### Lỗi hay gặp\n- Thiếu ngoặc quanh tham số và cả biểu thức macro.\n- Đặt tên macro ngắn, trùng với tên thật trong thư viện (nên viết HOA kèm tiền tố).\n- Macro không có scope, nên \"rò\" sang mọi file include sau đó.\n\n### Tự kiểm tra\nVì sao `constexpr int N = 10;` tốt hơn `#define N 10` khi debug?",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-1-5-hang",
+    "ten": "1.5 — Hằng: const, #define, constexpr",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/programming-fundamentals/learn?lessonSlug=prf192-n4-1-du-an-c",
+    "ten": "N4.1 — Nhiều file, header guard & Makefile",
+    "nguon": "Programming Fundamentals · Nâng cao 4 — Tổ chức dự án C thực chiến",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF192"
+   }
+  ]
+ },
+ "Nền tảng › Atomic & Memory Model": {
+  "body": "Khi nhiều luồng cùng đọc/ghi một biến mà không đồng bộ, chương trình rơi vào **data race** – hành vi không xác định theo chuẩn C++. `std::atomic<T>` (header `<atomic>`) cho phép thao tác **không thể bị chia cắt** trên một biến chia sẻ, thường nhanh hơn mutex vì dựa vào lệnh phần cứng.\n\n```cpp\n#include <atomic>\n#include <thread>\n#include <vector>\n#include <iostream>\n\nstd::atomic<int> dem{0};\n\nint main() {\n    std::vector<std::thread> ts;\n    for (int i = 0; i < 4; ++i)\n        ts.emplace_back([]{ for (int k = 0; k < 100000; ++k) dem.fetch_add(1); });\n    for (auto& t : ts) t.join();\n    std::cout << dem << '\\n';   // luôn 400000\n}\n```\nNếu `dem` là `int` thường, kết quả sai và thay đổi theo từng lần chạy.\n\n### Ý chính\n- Thao tác cơ bản: `load`, `store`, `exchange`, `fetch_add/sub`, `compare_exchange_weak/strong` (CAS: \"nếu giá trị đang là A thì đổi thành B\").\n- Atomic chỉ bảo vệ **từng thao tác đơn lẻ**; chuỗi nhiều bước cần khoá hoặc thiết kế khác.\n- `std::atomic<bool>` hay dùng làm cờ dừng luồng.\n\n### Memory order (mô hình bộ nhớ)\nCPU và trình biên dịch có thể sắp xếp lại lệnh. Mỗi thao tác atomic nhận tham số `std::memory_order`:\n- `memory_order_seq_cst` (mặc định): thứ tự toàn cục dễ suy luận nhất, an toàn.\n- `acquire` / `release`: ghi bằng `release` rồi đọc bằng `acquire` thì mọi thứ ghi *trước* release sẽ nhìn thấy được *sau* acquire – dùng để \"bàn giao\" dữ liệu giữa luồng.\n- `relaxed`: chỉ đảm bảo tính nguyên tử, không bảo đảm thứ tự; dùng cho bộ đếm đơn giản.\n\n### Lỗi hay gặp\n- Dùng `relaxed` khi chưa hiểu rõ, tạo lỗi hiếm và khó tái hiện.\n- Tưởng `atomic<int> a; a = a + 1;` là nguyên tử (đọc và ghi là hai thao tác riêng; hãy dùng `++a` hoặc `fetch_add`).\n- Dùng `volatile` thay atomic: `volatile` không đồng bộ giữa luồng.\n\n### Tự kiểm tra\nKhi nào `acquire/release` đủ, không cần `seq_cst`?",
+  "lessons": [
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-5-3-semaphore",
+    "ten": "5.3 — Semaphore, khoá đọc-ghi, nguyên tử/CAS và tầm nhìn bộ nhớ",
+    "nguon": "Operating Systems for Developers · Chương 5",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-5-1-race",
+    "ten": "5.1 — Race condition tái hiện được: counter++ trong C, Java và Node",
+    "nguon": "Operating Systems for Developers · Chương 5",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-7-11-multithread",
+    "ten": "7.11 — Đa luồng: std::thread, mutex và race condition",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   }
+  ]
+ },
+ "Nền tảng › Async & Futures": {
+  "body": "`std::async` (header `<future>`) chạy một hàm ở luồng khác (hoặc hoãn lại) và trả về `std::future<T>` – \"phiếu hẹn\" để lấy kết quả sau. Bạn không phải tự quản lý `std::thread`, promise hay truyền kết quả qua biến chia sẻ.\n\n```cpp\n#include <future>\n#include <iostream>\n\nint tinhNang(int n) { /* việc nặng */ return n * n; }\n\nint main() {\n    std::future<int> f = std::async(std::launch::async, tinhNang, 12);\n    // ... làm việc khác ...\n    std::cout << f.get() << '\\n';   // chờ xong rồi lấy kết quả: 144\n}\n```\n\n### Ý chính\n- **Launch policy**: `std::launch::async` ép chạy luồng mới; `std::launch::deferred` hoãn đến lúc gọi `get()`/`wait()` (chạy ngay tại luồng gọi). Không chỉ định gì thì trình triển khai tự chọn – dễ gây khó đoán, nên nêu rõ.\n- `f.get()` chỉ gọi được **một lần**; nó chờ và trả kết quả.\n- **Ngoại lệ** ném trong hàm sẽ được lưu và **ném lại** khi gọi `get()`: bắt chúng bằng `try/catch` ở nơi gọi.\n- `std::promise`/`std::future` cho phép luồng này đặt giá trị cho luồng kia; `std::shared_future` chia sẻ kết quả cho nhiều bên.\n\n### Lỗi hay gặp\n- Không giữ lại future: destructor của future do `std::async(launch::async)` trả về sẽ **chờ** tác vụ xong, nên đoạn `std::async(...)` không gán vào biến vô tình chạy tuần tự.\n- Quên `get()`/`wait()` nên mất ngoại lệ hoặc kết quả.\n- Hai tác vụ chờ nhau (future của cái này phụ thuộc cái kia) dẫn tới deadlock.\n\n### Ví dụ có ngoại lệ\n```cpp\nauto f = std::async(std::launch::async, []() -> int { throw std::runtime_error(\"loi\"); });\ntry { f.get(); } catch (const std::exception& e) { std::cout << e.what(); }\n```\nNgoại lệ được chuyển từ luồng phụ về nơi gọi `get()`.\n\n### Tự kiểm tra\nVì sao nên dùng `std::launch::async` khi muốn chắc chắn tác vụ chạy song song?",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-7-11-multithread",
+    "ten": "7.11 — Đa luồng: std::thread, mutex và race condition",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   }
+  ]
+ },
+ "Nền tảng › Compilers": {
+  "body": "Bốn trình biên dịch C++ thường gặp:\n- **GCC** (`g++`): mặc định trên hầu hết Linux, hỗ trợ chuẩn mới nhanh, tối ưu mạnh.\n- **Clang** (`clang++`): thông báo lỗi dễ đọc, là nền của nhiều công cụ (clang-tidy, clangd, sanitizer); mặc định trên macOS.\n- **MSVC** (`cl.exe`): trình biên dịch của Microsoft, gắn với Visual Studio và hệ sinh thái Windows.\n- **Intel oneAPI DPC++/C++**: nhắm tối ưu cho CPU Intel và tính toán song song.\n\nChọn theo nền tảng đích và yêu cầu của dự án. Với mã đa nền tảng, nên biên dịch bằng ít nhất hai trình biên dịch trong CI để bắt lỗi chuẩn mà một bên dung thứ.",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-1-2-cong-cu",
+    "ten": "1.2 — Công cụ: DevC++ 6.3, VS Code, dòng lệnh",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-10-4-chuan-ma-cong-cu",
+    "ten": "10.4 — Chuẩn code & công cụ: clang-format, cảnh báo, cppcheck, Snyk",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 10",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   }
+  ]
+ },
+ "Nền tảng › Compiler Stages": {
+  "body": "Từ `main.cpp` đến file chạy được, trình biên dịch đi qua **bốn giai đoạn**. Biết lỗi xảy ra ở giai đoạn nào giúp bạn sửa đúng chỗ.\n\n1. **Tiền xử lý** (`g++ -E main.cpp`): xử lý `#include`, `#define`, `#if`. Kết quả là một file văn bản rất dài đã \"bung\" hết header.\n2. **Biên dịch** (`g++ -S main.cpp`): kiểm tra cú pháp và kiểu, tối ưu, sinh mã **assembly** (qua biểu diễn trung gian/IR).\n3. **Assemble** (`g++ -c main.cpp`): dịch assembly thành **file đối tượng** `main.o` chứa mã máy và bảng ký hiệu; chưa chạy được vì còn tham chiếu chưa giải quyết.\n4. **Liên kết** (`g++ main.o util.o -o app`): linker ghép các `.o` và thư viện, gắn địa chỉ thật cho các ký hiệu, tạo file thực thi.\n\n```bash\ng++ -c main.cpp          # -> main.o\ng++ -c util.cpp          # -> util.o\ng++ main.o util.o -o app # liên kết\n```\n\n### Lỗi thuộc giai đoạn nào\n- `expected ';'`, `was not declared in this scope`, `no matching function`: lỗi **biên dịch**.\n- `fatal error: x.h: No such file or directory`: lỗi **tiền xử lý** (đường dẫn include).\n- `undefined reference to 'f()'`: lỗi **liên kết**, hàm được khai báo nhưng chưa có định nghĩa nào được ghép vào.\n- `multiple definition of`: lỗi **liên kết**, một ký hiệu được định nghĩa ở nhiều file object.\n\n### Ý chính\n- Mỗi `.cpp` được biên dịch độc lập (*translation unit*); nhờ vậy build tăng dần mới nhanh.\n- Cờ hữu ích: `-O2` (tối ưu), `-g` (debug), `-Wall -Wextra` (cảnh báo), `-v` (xem toàn bộ lệnh con).\n\n### Tự kiểm tra\nKhai báo hàm trong header nhưng quên viết định nghĩa thì lỗi xuất hiện ở giai đoạn nào?",
+  "lessons": [
+   {
+    "href": "/courses/programming-fundamentals/learn?lessonSlug=prf192-1-0b-slides-bien-dich-cau-truc-c",
+    "ten": "1.0b — Slide bài giảng: Ngôn ngữ lập trình, trình biên dịch & cấu trúc chương trình C (slide 24–45)",
+    "nguon": "Programming Fundamentals · Chương 1",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRF192"
+   },
+   {
+    "href": "/courses/ics102-introduction-to-computer-systems/learn?lessonSlug=ics102-6-1-linking",
+    "ten": "6.1 — Liên kết & nạp chương trình",
+    "nguon": "Introduction to Computer Systems · Chapter 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "ICS102"
+   },
+   {
+    "href": "/courses/ics102-introduction-to-computer-systems/learn?lessonSlug=ics102-ts-7-2",
+    "ten": "7.2 — Phân giải ký hiệu, thư viện tĩnh và định vị lại",
+    "nguon": "Introduction to Computer Systems · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "ICS102"
+   },
+   {
+    "href": "/courses/pcp291-c-programming/learn?lessonSlug=pcp291-flm-b002",
+    "ten": "📑 Buổi 2 — Program Structure and Compilation Process",
+    "nguon": "C++ Programming · FLM 1 · Buổi 1–5",
+    "kieu": "video",
+    "academy": true,
+    "ma": "PCP291"
+   }
+  ]
+ },
+ "Nền tảng › Compiler Feature Support": {
+  "body": "Chuẩn C++ ra đều đặn (C++11, 14, 17, 20, 23...), nhưng mỗi trình biên dịch hỗ trợ tính năng ở thời điểm khác nhau. Ví dụ module hay một số phần của thư viện chuẩn có thể chạy trên GCC trước, MSVC sau. \n\nTrước khi dùng một tính năng mới, hãy tra bảng **Compiler support** trên cppreference.com để biết phiên bản GCC/Clang/MSVC nào đã hỗ trợ, rồi kiểm tra phiên bản trình biên dịch tối thiểu của dự án. Trong code, dùng macro kiểm tính năng như `__cpp_concepts` hoặc `__has_include` thay vì đoán, và cố định chuẩn bằng cờ `-std=c++17` (hoặc `CMAKE_CXX_STANDARD`) để build giống nhau giữa các máy."
+ },
+ "Nền tảng › Software Licensing cho C++ Developer": {
+  "body": "Phần lớn dự án C++ dùng thư viện bên thứ ba (Boost, Qt, OpenCV, fmt...). Mỗi thư viện đi kèm **giấy phép** quy định bạn được làm gì, và vi phạm là rủi ro pháp lý thật.\n\n### Nhóm giấy phép phổ biến\n- **Permissive** (MIT, BSD, Apache 2.0, Boost): dùng, sửa, bán thoải mái, chỉ cần giữ thông báo bản quyền (Apache 2.0 có thêm điều khoản bằng sáng chế).\n- **Copyleft yếu** (LGPL): dùng làm thư viện, liên kết *động* thì không buộc mở mã của bạn; sửa chính thư viện thì phải chia sẻ phần sửa.\n- **Copyleft mạnh** (GPL, AGPL): sản phẩm phân phối có liên kết với mã GPL thường buộc phải phát hành mã nguồn dưới cùng giấy phép; AGPL mở rộng cả với dịch vụ chạy trên mạng.\n- **Thương mại / đóng nguồn**: theo hợp đồng riêng.\n\n### Lưu ý khi làm thật\nKiểu liên kết (tĩnh hay động) ảnh hưởng nghĩa vụ với LGPL. Hãy ghi lại danh sách thư viện và giấy phép của chúng (SBOM đơn giản), và hỏi bộ phận pháp lý khi không chắc. Đây là kiến thức tổng quát, không phải tư vấn pháp lý.",
+  "lessons": [
+   {
+    "href": "/courses/los201-linux-and-open-source-platform/learn?lessonSlug=los201-1-1-history-licenses",
+    "ten": "1.1 — Lịch sử Linux/GNU & giấy phép mã nguồn mở",
+    "nguon": "Linux and Open Source Platform · Chapter 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "LOS201"
+   },
+   {
+    "href": "/courses/ite303c-ethics-in-it/learn?lessonSlug=ite303c-4-1-intellectual-property",
+    "ten": "4.1 — Sở hữu trí tuệ & mã nguồn mở",
+    "nguon": "Ethics in IT · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "ITE303c"
+   }
+  ]
+ },
+ "Nền tảng › Tại sao nên dùng C++?": {
+  "body": "C++ đáng học khi bạn cần **hiệu năng cao và kiểm soát tài nguyên**, những thứ các ngôn ngữ có bộ gom rác khó đáp ứng tuyệt đối.\n\n### Vì sao chọn C++\n- **Tốc độ**: biên dịch ra mã máy, tối ưu mạnh, không có bộ gom rác gây \"khựng\" bất ngờ.\n- **Kiểm soát bộ nhớ và phần cứng**: bạn quyết định đối tượng nằm ở đâu (stack/heap), vòng đời thế nào, bố trí dữ liệu ra sao cho hợp cache.\n- **Trừu tượng không tốn phí**: class, template, STL cho code gọn mà vẫn nhanh (nguyên tắc \"không trả tiền cho thứ không dùng\").\n- **Hệ sinh thái khổng lồ** và tương thích C: dùng được hàng chục năm thư viện sẵn có, chạy đa nền tảng.\n\n### Dùng ở đâu\nGame engine (Unreal), trình duyệt (Chromium), cơ sở dữ liệu, hệ điều hành và driver, nhúng và ô tô, hệ giao dịch tài chính độ trễ thấp, đồ hoạ, xử lý ảnh và AI ở tầng hạ tầng.\n\n### Đánh đổi cần biết\nĐường cong học khó, dễ mắc lỗi bộ nhớ và undefined behavior nếu viết kiểu cũ, thời gian biên dịch lâu, và hệ thống build/quản lý gói chưa thống nhất như một số ngôn ngữ khác. C++ hiện đại (smart pointer, RAII, STL) giảm đáng kể các rủi ro này.\n\n### Tự kiểm tra\nVới một dịch vụ web CRUD thông thường, C++ có phải lựa chọn hợp lý nhất không? Vì sao?",
+  "lessons": [
+   {
+    "href": "/courses/pcp291-c-programming/learn?lessonSlug=pcp291-0-1-overview",
+    "ten": "Tổng quan: Lập trình C++",
+    "nguon": "C++ Programming · Course introduction",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PCP291"
+   }
+  ]
+ },
+ "Nền tảng › Cài đặt trình biên dịch C++": {
+  "body": "Bước này tập trung vào **cài đặt đúng và kiểm chứng được** trình biên dịch trên máy của bạn.\n\n### Chọn theo hệ điều hành\n- **Linux**: `sudo apt install build-essential` (Debian/Ubuntu) hoặc `sudo dnf install gcc-c++ make` (Fedora). Có sẵn `g++`.\n- **macOS**: chạy `xcode-select --install` để lấy Apple Clang. Muốn GCC thật: `brew install gcc` (lệnh `g++-<phiên bản>`).\n- **Windows**: ba hướng chính – (1) MSYS2 + MinGW-w64 cho `g++`; (2) Visual Studio với workload \"Desktop development with C++\" cho MSVC; (3) WSL cài Ubuntu rồi làm như Linux (hay được khuyên dùng khi học).\n\n### Kiểm chứng\n```bash\ng++ --version        # hoặc clang++ --version\ncat > t.cpp <<'EOF'\n#include <iostream>\nint main() { std::cout << __cplusplus << '\\n'; }\nEOF\ng++ -std=c++17 t.cpp -o t && ./t     # in 201703\n```\nSố `__cplusplus` cho biết chuẩn đang bật (201103, 201402, 201703, 202002...).\n\n### Lỗi hay gặp\n- Chưa thêm thư mục chứa `g++.exe` vào `PATH` (mở lại terminal sau khi sửa).\n- Cài nhiều trình biên dịch và gọi nhầm bản cũ.\n- Trên Windows dùng lẫn MinGW và MSVC cho cùng một thư viện: ABI khác nhau nên không liên kết được với nhau.\n\n### Tự kiểm tra\nLàm sao biết trình biên dịch của bạn đang biên dịch theo chuẩn C++ nào?\n\n### Ý chính\n- Một máy có thể có nhiều trình biên dịch; kiểm tra bằng `which g++` (Linux/macOS) hoặc `where g++` (Windows) xem bản nào đang được gọi.\n- Nên cài bản đủ mới để dùng được C++17/20; bản quá cũ sẽ báo thiếu tính năng.\n- Khi đã cài xong, bước kế tiếp là chọn trình soạn thảo/IDE và thử biên dịch chương trình đầu tiên.",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-1-2-cong-cu",
+    "ten": "1.2 — Công cụ: DevC++ 6.3, VS Code, dòng lệnh",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/programming-fundamentals/learn?lessonSlug=prf192-0-5-cai-dat-moi-truong",
+    "ten": "0.5 — Cài đặt & sử dụng DevC++ / VS Code",
+    "nguon": "Programming Fundamentals · Mục 0",
+    "kieu": "video",
+    "academy": true,
+    "ma": "PRF192"
+   },
+   {
+    "href": "/courses/pcp291-c-programming/learn?lessonSlug=pcp291-flm-b001",
+    "ten": "📑 Buổi 1 — Introduction to C++ and Development Environment",
+    "nguon": "C++ Programming · FLM 1 · Buổi 1–5",
+    "kieu": "video",
+    "academy": true,
+    "ma": "PCP291"
+   }
+  ]
+ },
+ "Nền tảng › Toán tử số học (Arithmetic Operators)": {
+  "body": "Toán tử số học làm việc trên số; nhưng chi tiết về **kiểu** quyết định kết quả đúng hay sai.\n\n### Bốn phép tính và phép dư\n`+ - * / %`. Với số nguyên, `/` là **chia nguyên** (cắt phần thập phân về 0), `%` là phần dư:\n```cpp\n7 / 2     // 3\n7 % 2     // 1\n-7 / 2    // -3\n-7 % 2    // -1  (dấu theo số bị chia)\n7.0 / 2   // 3.5 (một vế là số thực thì chia thực)\n```\nĐể chia thực từ hai số nguyên, ép kiểu: `static_cast<double>(a) / b`.\n\n### Ý chính\n- **Chuyển kiểu ngầm khi tính**: `int` + `double` thì `int` được nâng thành `double`. Kiểu nhỏ hơn `int` (`char`, `short`) được nâng thành `int` trước khi tính.\n- **Toán tử gán kép**: `+=`, `-=`, `*=`, `/=`, `%=`.\n- **Tăng/giảm**: `++i` (tăng rồi dùng) khác `i++` (dùng rồi tăng); đứng riêng một câu lệnh thì cho cùng kết quả, nhưng `++i` không tạo bản sao nên nên ưu tiên với iterator.\n- **Độ ưu tiên**: `* / %` trước `+ -`; dùng ngoặc khi nghi ngờ.\n- Hàm toán học (`sqrt`, `pow`, `abs`, `fmod`) nằm trong `<cmath>`/`<cstdlib>`.\n\n### Lỗi hay gặp\n- Chia cho 0: số nguyên gây hành vi không xác định (thường crash); số thực cho `inf`/`nan`.\n- Tràn số `int` (khoảng ±2,1 tỷ); số nguyên có dấu tràn là UB. Dùng `long long` hoặc kiểm tra trước khi tính.\n- `double kq = 5 / 2;` cho `2.0`, không phải `2.5`.\n- So sánh số thực bằng `==`: nên so sánh với sai số nhỏ.\n\n### Tự kiểm tra\n`int a = 10, b = 4; double c = a / b;` cho `c` bằng bao nhiêu? Sửa thế nào để được `2.5`?",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-2-1-toan-tu-gan-so-hoc",
+    "ten": "2.1 — Toán tử gán và số học",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/simulation?scenario=number-bits",
+    "ten": "Số âm và số thực trong máy tính",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "Nền tảng › Toán tử logic (Logical Operators)": {
+  "body": "Toán tử logic kết hợp các điều kiện đúng/sai (`bool`) để quyết định nhánh rẽ hay vòng lặp.\n\n| Toán tử | Ý nghĩa |\n|---|---|\n| `&&` | AND – đúng khi **cả hai** đúng |\n| `\\|\\|` | OR – đúng khi **ít nhất một** đúng |\n| `!` | NOT – đảo giá trị |\n\n```cpp\nint tuoi = 20; bool coThe = true;\nif (tuoi >= 18 && coThe) { /* được vào */ }\nif (!(tuoi < 18) || coThe) { /* ... */ }\n```\n\n### Short-circuit (đánh giá tắt)\n`&&` và `||` đánh giá từ trái sang phải và **dừng ngay khi kết quả đã rõ**: vế phải của `a && b` chỉ chạy nếu `a` đúng; vế phải của `a || b` chỉ chạy nếu `a` sai. Thủ thuật này dùng để bảo vệ phép truy cập nguy hiểm:\n```cpp\nif (p != nullptr && p->giaTri > 0) { ... }   // không dereference khi p null\nif (i < n && mang[i] == x) { ... }            // không ra ngoài mảng\n```\nHệ quả: nếu vế phải có tác dụng phụ (`i++`, gọi hàm đổi trạng thái) thì có thể không chạy.\n\n### Lỗi hay gặp\n- Nhầm `&&` với `&` (bitwise) – `&` luôn tính cả hai vế.\n- Viết `0 < x < 10` (luôn đúng sau khi chuyển kiểu); phải viết `0 < x && x < 10`.\n- Quên ngoặc khi trộn `&&` và `||` (`&&` ưu tiên hơn `||`).\n- Điều kiện kiểu `if (x = 5)` là phép gán, không phải so sánh.\n\n### Tự kiểm tra\nVới `int x = 0; if (x != 0 && 10 / x > 1)`, vì sao không bị chia cho 0?",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-2-2-toan-tu-quan-he-logic",
+    "ten": "2.2 — Toán tử quan hệ và logic",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   }
+  ]
+ },
+ "Nền tảng › Toán tử Bitwise": {
+  "body": "Toán tử bitwise xử lý từng bit của số nguyên: `&` (AND), `|` (OR), `^` (XOR), `~` (NOT), `<<`, `>>` (dịch). Kỹ thuật nền tảng là **mặt nạ bit (bitmask)**: dùng một số có đúng các bit quan tâm bật lên để đọc, bật, tắt hoặc đảo bit.\n\n```cpp\n#include <cstdint>\n#include <bitset>\n#include <iostream>\n\nint main() {\n    std::uint8_t x = 0b0000'1010;      // 10\n    std::uint8_t bit2 = 1u << 2;       // mặt nạ 0000'0100\n\n    x |= bit2;        // bật bit 2     -> 0000'1110\n    x &= ~bit2;       // tắt bit 2     -> 0000'1010\n    x ^= bit2;        // đảo bit 2     -> 0000'1110\n    bool bat = x & bit2;               // kiểm tra bit 2\n\n    std::cout << std::bitset<8>(x) << '\\n';\n}\n```\n\n### Ý chính\n- **Dùng làm cờ**: lưu nhiều true/false trong một số nguyên (quyền truy cập, trạng thái thiết bị).\n- **Dịch trái `n` bit** ~ nhân `2^n`; **dịch phải** ~ chia `2^n` (với số không dấu).\n- `x & (x - 1)` xoá bit 1 thấp nhất; `x & (x - 1) == 0` (x > 0) nghĩa là x là luỹ thừa của 2.\n- XOR hai lần với cùng giá trị trả về giá trị ban đầu (dùng trong mã hoá đơn giản, hoán đổi).\n- Dùng `std::bitset<N>` để in bit hoặc làm tập cờ gọn gàng.\n\n### Lỗi hay gặp\n- Dùng kiểu **có dấu** cho bitwise rồi dịch phải/trái ra bit dấu: kết quả phụ thuộc hoặc không xác định. Nên dùng kiểu không dấu (`uint32_t`...).\n- Dịch số bit ≥ độ rộng kiểu (`1 << 32` với `int`).\n- Đặt `1 << n` mà quên rằng `1` là `int` (cần `1ULL << n` cho 64-bit).\n- Ưu tiên toán tử: `x & mask == 0` bị hiểu là `x & (mask == 0)`; hãy viết `(x & mask) == 0`.\n\n### Tự kiểm tra\nViết biểu thức đọc bit thứ 5 (tính từ 0) của một `uint32_t x`.",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-2-3-toan-tu-bitwise-ternary",
+    "ten": "2.3 — Toán tử bit và toán tử ba ngôi",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/ics102-introduction-to-computer-systems/learn?lessonSlug=ics102-ts-2-2",
+    "ten": "2.2 — Phép toán mức bit, mặt nạ, toán tử logic và phép dịch",
+    "nguon": "Introduction to Computer Systems · Chương 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "ICS102"
+   },
+   {
+    "href": "/simulation?scenario=number-bits",
+    "ten": "Số âm và số thực trong máy tính",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "Nền tảng › Vòng lặp (for / while / do while)": {
+  "body": "Vòng lặp chạy lại một đoạn mã nhiều lần. Chọn loại phù hợp để code rõ ý đồ.\n\n### Ba dạng cổ điển\n```cpp\n// for: biết trước số lần lặp\nfor (int i = 0; i < 5; ++i) std::cout << i << ' ';\n\n// while: lặp chừng nào điều kiện còn đúng (kiểm tra trước)\nint n = 27;\nwhile (n != 1) n = (n % 2 == 0) ? n / 2 : 3 * n + 1;\n\n// do while: chạy thân ít nhất một lần (kiểm tra sau)\nint pin;\ndo { std::cout << \"Nhap PIN: \"; std::cin >> pin; } while (pin != 1234);\n```\n\n### Ý chính\n- **for** gom khởi tạo, điều kiện, bước nhảy trên một dòng nên dễ nhìn ra phạm vi lặp. Biến đếm khai báo trong `for` chỉ sống trong vòng đó.\n- **while** hợp khi số lần lặp phụ thuộc dữ liệu (đọc đến hết file, tìm kiếm, thuật toán hội tụ).\n- **do while** hợp khi cần thực hiện trước rồi mới kiểm tra (menu, nhập liệu hợp lệ).\n- **range-for** (C++11) duyệt container gọn: `for (const auto& x : v)`.\n- Vòng lặp lồng nhau: độ phức tạp nhân lên (hai vòng lồng nhau n lần ~ n² bước).\n- `break` thoát vòng trong cùng, `continue` bỏ qua phần còn lại của lượt hiện tại. Muốn thoát nhiều tầng: đặt vòng vào hàm rồi `return`, hoặc dùng cờ.\n\n### Lỗi hay gặp\n- Vòng vô hạn: quên cập nhật biến điều kiện hoặc điều kiện không bao giờ sai.\n- Lệch một: duyệt mảng `n` phần tử mà dùng `i <= n` gây truy cập ngoài biên.\n- Sửa container (thêm/xoá phần tử) trong lúc đang duyệt, làm iterator mất hiệu lực.\n- Dấu `;` thừa: `for (...);` biến thân vòng thành câu rỗng.\n\n### Tự kiểm tra\nDùng loại vòng lặp nào để đọc số nguyên từ bàn phím cho tới khi người dùng nhập `0`, và vì sao?",
+  "lessons": [
+   {
+    "href": "/courses/programming-fundamentals/learn?lessonSlug=prf192-4-0b-slides-vong-lap",
+    "ten": "4.0b — Slide bài giảng: Vòng lặp — for, while, do-while, break và biến cờ (slide 24–40)",
+    "nguon": "Programming Fundamentals · Chương 4",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRF192"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-3-2-for-loop",
+    "ten": "3.2 — Vòng lặp for: lặp có đếm",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-3-3-while-loop",
+    "ten": "3.3 — Vòng lặp while: lặp đến khi xong",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-3-4-do-while",
+    "ten": "3.4 — do-while, so sánh ba vòng lặp, goto",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/code-lab/c",
+    "ten": "C",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Nền tảng › Câu lệnh điều kiện (if / switch / goto)": {
+  "body": "Câu lệnh điều kiện chọn nhánh thực thi dựa vào giá trị lúc chạy.\n\n### if / else\n```cpp\nif (diem >= 8)      std::cout << \"Gioi\";\nelse if (diem >= 6.5) std::cout << \"Kha\";\nelse                std::cout << \"Can co gang\";\n```\nC++17 cho phép khai báo ngay trong điều kiện, giữ biến trong phạm vi hẹp:\n```cpp\nif (auto it = bang.find(k); it != bang.end()) { /* dùng it */ }\n```\nToán tử ba ngôi cho biểu thức ngắn: `int lon = (a > b) ? a : b;`.\n\n### switch\nDùng khi so một giá trị **nguyên/enum** với nhiều hằng:\n```cpp\nswitch (lenh) {\n    case 'a': them(); break;\n    case 'x': xoa();  break;\n    default:  std::cout << \"Lenh la\";\n}\n```\nNếu thiếu `break` chương trình **rơi** (fall-through) xuống nhánh tiếp theo; nếu cố ý, ghi chú hoặc dùng `[[fallthrough]];` (C++17). `switch` không dùng được với chuỗi `std::string` hay số thực.\n\n### goto\n`goto nhan;` nhảy tới nhãn. Hiếm khi cần; một chỗ chấp nhận được là thoát khỏi nhiều vòng lồng nhau hoặc dọn dẹp lỗi trong code kiểu C. Trong C++ hiện đại, ưu tiên `return`, ngoại lệ hoặc RAII.\n\n### Lỗi hay gặp\n- `if (x = 0)` thay vì `==`.\n- Else treo: `else` luôn thuộc về `if` gần nhất; dùng `{}` cho rõ.\n- Khai báo biến trong `case` mà không bọc `{}`: lỗi \"jump to case label crosses initialization\".\n- `goto` nhảy qua khởi tạo biến.\n\n### Tự kiểm tra\nKhi nào `switch` hợp lý hơn một chuỗi `if / else if`, và khi nào không dùng được?",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-2-1-control-flow",
+    "ten": "3.1 — Rẽ nhánh: if, else if, switch",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-3-4-do-while",
+    "ten": "3.4 — do-while, so sánh ba vòng lặp, goto",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/programming-fundamentals/learn?lessonSlug=prf192-4-0a-slides-cau-truc-re-nhanh",
+    "ten": "4.0a — Slide bài giảng: Lập trình có cấu trúc, mã giả, lưu đồ & rẽ nhánh (slide 1–23)",
+    "nguon": "Programming Fundamentals · Chương 4",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRF192"
+   }
+  ]
+ },
+ "Nền tảng › Kiểu tĩnh (Static Typing)": {
+  "body": "C++ là ngôn ngữ **kiểu tĩnh**: kiểu của mọi biến, hàm, biểu thức được xác định và kiểm tra **lúc biên dịch**, không đổi trong suốt đời biến.\n\n```cpp\nint n = 5;\n// n = \"xin chao\";        // lỗi biên dịch: không gán chuỗi cho int\nauto x = 3.14;            // vẫn tĩnh: trình biên dịch suy ra double\n```\n\n### Lợi ích\n- **Bắt lỗi sớm**: sai kiểu bị chặn trước khi chạy.\n- **Nhanh**: biết kiểu từ đầu nên sinh mã máy trực tiếp, không kiểm tra kiểu lúc chạy.\n- **Công cụ tốt hơn**: gợi ý code, refactor chính xác.\n- Đổi lại bạn phải khai báo (hoặc để `auto`/template suy ra) và nhiều khi viết dài hơn so với ngôn ngữ động như Python hay JavaScript.\n\nCẩn thận: kiểu tĩnh không có nghĩa \"an toàn tuyệt đối\" – ép kiểu kiểu C `(int)p` hoặc `reinterpret_cast` vẫn phá được hệ thống kiểu. Hãy ưu tiên `static_cast` và để trình biên dịch giúp bạn.",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-1-3-kieu-du-lieu",
+    "ten": "1.3 — Kiểu dữ liệu, kích thước, ép kiểu",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-1-4-bien",
+    "ten": "1.4 — Biến, phạm vi, lvalue và rvalue",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   }
+  ]
+ },
+ "Nền tảng › Kiểu động (Dynamic Typing)": {
+  "body": "Phần lớn kiểu trong C++ được chốt lúc biên dịch, nhưng khi dùng **đa hình** (lớp có hàm `virtual`) kiểu *thật* của đối tượng phía sau con trỏ/tham chiếu lớp cơ sở chỉ biết **lúc chạy**. Cơ chế **RTTI** (run-time type information) cho phép hỏi kiểu đó.\n\n```cpp\nstruct Hinh { virtual ~Hinh() = default; };\nstruct Tron : Hinh { double r = 1; };\nstruct Vuong : Hinh { double a = 2; };\n\nvoid xuLy(Hinh* h) {\n    if (auto* t = dynamic_cast<Tron*>(h)) {\n        // h thật sự trỏ tới Tron\n    } else if (typeid(*h) == typeid(Vuong)) {\n        // so sánh kiểu động bằng typeid\n    }\n}\n```\n\n- `dynamic_cast<Dich*>(p)`: ép kiểu an toàn xuống lớp con; trả `nullptr` nếu sai (với tham chiếu thì ném `std::bad_cast`). Yêu cầu lớp có ít nhất một hàm virtual.\n- `typeid(x)` trả về thông tin kiểu để so sánh hoặc lấy `.name()`.\n\nDùng trong plugin, xử lý sự kiện, serialization. Tuy nhiên nếu bạn phải `dynamic_cast` nhiều, thường thiết kế nên chuyển sang hàm `virtual` hoặc `std::variant`/visitor.",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-7-7-da-hinh",
+    "ten": "7.7 — Đa hình: một lời gọi, nhiều hành vi",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   }
+  ]
+ },
+ "Nền tảng › Thiết lập môi trường phát triển C++": {
+  "body": "Một dự án C++ nghiêm túc cần ba thứ ngoài trình soạn thảo: **trình biên dịch**, **hệ thống build** và **quản lý thư viện**.\n\n### Các mảnh ghép\n- **Trình biên dịch**: GCC, Clang hoặc MSVC.\n- **Hệ thống build**: **CMake** là chuẩn phổ biến nhất; nó sinh ra Makefile/Ninja/Visual Studio project tuỳ nền tảng. `make` hoặc `ninja` thực thi việc build.\n- **Quản lý gói**: **vcpkg** (Microsoft) hoặc **Conan** để tải và biên dịch thư viện bên thứ ba cho dự án.\n- Tuỳ chọn: **clangd** + `clang-format`/`clang-tidy` (phân tích và định dạng), **gdb/lldb** (debug), **ccache** (tăng tốc build).\n\n### CMakeLists.txt tối thiểu\n```cmake\ncmake_minimum_required(VERSION 3.16)\nproject(Demo LANGUAGES CXX)\n\nset(CMAKE_CXX_STANDARD 17)\nset(CMAKE_CXX_STANDARD_REQUIRED ON)\nset(CMAKE_EXPORT_COMPILE_COMMANDS ON)   # cho clangd\n\nadd_executable(demo main.cpp)\ntarget_compile_options(demo PRIVATE -Wall -Wextra)   # MSVC dùng /W4\n```\nBuild:\n```bash\ncmake -S . -B build\ncmake --build build\n./build/demo\n```\n\n### Lỗi hay gặp\n- Build trong thư mục nguồn (nên dùng thư mục `build/` riêng để không lẫn file sinh ra).\n- Sửa `CMakeLists.txt` mà dùng cache cũ: xoá `build/` hoặc cấu hình lại.\n- Dùng `-Wall` kiểu GCC trên MSVC (cờ khác nhau).\n\n### Tự kiểm tra\nVì sao nên để file build ra thư mục riêng khỏi mã nguồn?\n\n### Lưu ý\nThiết lập một lần cho cả nhóm: đưa `CMakeLists.txt`, file `.clang-format` và danh sách phụ thuộc (`vcpkg.json` hoặc `conanfile.txt`) vào kho Git để máy nào clone về cũng build được giống nhau. Ghi rõ phiên bản trình biên dịch tối thiểu trong README."
+ },
+ "Nền tảng › Thao tác cơ bản (Basic Operations)": {
+  "body": "Phần lớn chương trình nhỏ làm đúng ba việc: **nhận dữ liệu, xử lý, hiển thị**. Trong C++ dùng luồng `<iostream>`.\n\n```cpp\n#include <iostream>\n#include <string>\n\nint main() {\n    std::string ten;\n    int tuoi;\n    std::cout << \"Ten ban: \";\n    std::getline(std::cin, ten);   // đọc cả dòng, có khoảng trắng\n    std::cout << \"Tuoi: \";\n    std::cin >> tuoi;              // đọc số\n    std::cout << \"Xin chao \" << ten << \", nam sau ban \" << tuoi + 1 << \" tuoi\\n\";\n}\n```\n\n### Ý chính\n- `std::cin >> x`: đọc theo kiểu của `x`, **bỏ qua khoảng trắng** đầu và dừng ở khoảng trắng; `std::getline` đọc nguyên dòng.\n- `std::cout << a << b`: nối chuỗi xuất; không tự xuống dòng (dùng `'\\n'`).\n- Kiểm tra đọc thành công: `if (!(std::cin >> n)) { /* nhập sai */ }`.\n- **Gán** `=` ghi giá trị vào biến; gán chuỗi nhiều biến: `a = b = 0;`.\n- **Chuyển kiểu ngầm**: `double d = 3;` (int thành double – an toàn), `int i = 3.9;` (mất phần thập phân, còn `3`), `unsigned u = -1;` (thành số rất lớn). Muốn chuyển rõ ràng dùng `static_cast<int>(3.9)`.\n\n### Lỗi hay gặp\n- Trộn `cin >> x` rồi `getline`: ký tự xuống dòng còn lại làm `getline` đọc ra chuỗi rỗng (xử lý bằng `std::cin.ignore(...)`).\n- Nhập chữ vào biến số khiến `cin` rơi vào trạng thái lỗi và các lệnh đọc sau đều thất bại.\n- Chuyển ngầm giữa số có dấu và không dấu cho kết quả bất ngờ.\n\n### Tự kiểm tra\n`int i = 7.9;` thì `i` bằng gì? Vì sao một số trình biên dịch cảnh báo dòng này?",
+  "lessons": [
+   {
+    "href": "/courses/pcp291-c-programming/learn?lessonSlug=pcp291-1-1-basics",
+    "ten": "1.1 — Nhập môn, biến, kiểu, I/O & biên dịch",
+    "nguon": "C++ Programming · Chapter 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PCP291"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-1-1-basics",
+    "ten": "1.1 — Chương trình C/C++ đầu tiên",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-1-3-kieu-du-lieu",
+    "ten": "1.3 — Kiểu dữ liệu, kích thước, ép kiểu",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/programming-fundamentals/learn?lessonSlug=prf192-2-0b-slides-literal-hang-nhap-xuat",
+    "ten": "2.0b — Slide bài giảng: Khai báo biến, literal, hằng có tên & nhập/xuất định dạng (slide 23–44)",
+    "nguon": "Programming Fundamentals · Chương 2",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRF192"
+   }
+  ]
+ },
+ "Nền tảng › Luồng điều khiển (Control Flow & Statements)": {
+  "body": "Luồng điều khiển là thứ tự các câu lệnh được thực thi. Mặc định chương trình chạy tuần tự từ trên xuống; ba nhóm lệnh làm thay đổi thứ tự đó:\n\n- **Rẽ nhánh**: `if / else`, `switch`.\n- **Lặp**: `for`, `while`, `do while`, range-for.\n- **Nhảy**: `break` (thoát vòng/switch), `continue` (sang lượt kế), `return` (thoát hàm), `goto` (hiếm dùng), và ném ngoại lệ `throw`.\n\nKỹ năng thực tế: viết điều kiện rõ ràng, xử lý **trường hợp lỗi sớm** bằng `return` để tránh lồng `if` nhiều tầng (\"guard clause\"), và luôn nghĩ tới biên (mảng rỗng, giá trị 0, âm). Chi tiết từng cấu trúc xem các bước về vòng lặp và câu lệnh điều kiện.",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-2-1-control-flow",
+    "ten": "3.1 — Rẽ nhánh: if, else if, switch",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-3-2-for-loop",
+    "ten": "3.2 — Vòng lặp for: lặp có đếm",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   }
+  ]
+ },
+ "Nền tảng › Kiểu dữ liệu (Data Types)": {
+  "body": "**Kiểu cơ bản (built-in)**: `bool`; số nguyên `char`, `short`, `int`, `long`, `long long` (mỗi loại có bản `unsigned`); số thực `float`, `double`, `long double`; `void`. Kích thước phụ thuộc nền tảng – cần chắc chắn thì dùng kiểu cố định trong `<cstdint>` như `std::int32_t`, `std::uint64_t`; hỏi kích thước bằng `sizeof(T)`.\n\n**Kiểu do người dùng định nghĩa**: `struct`/`class` (gộp dữ liệu và hành vi), `enum` / `enum class` (tập hằng có tên; nên ưu tiên `enum class` vì có phạm vi riêng và không tự chuyển sang int), `union`, và alias `using`.\n\n```cpp\nenum class MauSac { Do, Xanh };\nstruct Diem { double x, y; };\nusing ID = std::uint32_t;\n```\nChọn kiểu theo miền giá trị cần lưu (tuổi dùng `int` hoặc `unsigned char`, tiền tệ tránh `float` vì sai số), tiết kiệm bộ nhớ và tránh tràn số.",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-1-3-kieu-du-lieu",
+    "ten": "1.3 — Kiểu dữ liệu, kích thước, ép kiểu",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-4-2-struct",
+    "ten": "4.2 — Struct: một bản ghi, nhiều trường",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-4-3-enum",
+    "ten": "4.3 — Enum: hằng số có tên",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/programming-fundamentals/learn?lessonSlug=prf192-2-2-kieu-du-lieu",
+    "ten": "2.2 — Kiểu dữ liệu & cách bộ nhớ lưu trữ",
+    "nguon": "Programming Fundamentals · Chương 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF192"
+   }
+  ]
+ },
+ "Con trỏ & Bộ nhớ › Pointers & References": {
+  "body": "Mọi biến nằm ở một **địa chỉ** trong bộ nhớ. **Con trỏ** là biến lưu địa chỉ đó; **tham chiếu** là một *tên khác* (bí danh) cho một biến có sẵn.\n\n```cpp\nint a = 10;\nint* p = &a;     // p lưu địa chỉ của a\n*p = 20;         // giải tham chiếu: ghi vào a -> a == 20\nint& r = a;      // r là bí danh của a\nr = 30;          // a == 30\n```\n\n### Khác biệt chính\n| | Con trỏ `T*` | Tham chiếu `T&` |\n|---|---|---|\n| Có thể rỗng | Có (`nullptr`) | Không, phải gắn với đối tượng thật |\n| Đổi đối tượng trỏ tới | Được | Không, gắn một lần lúc khai báo |\n| Cú pháp dùng | `*p`, `p->x` | dùng như biến thường |\n| Số học địa chỉ | Có (`p + 1`) | Không |\n\n### Khi nào dùng cái nào\n- Tham số hàm cần sửa biến của người gọi, hoặc tránh sao chép đối tượng lớn: **tham chiếu** (`const T&` nếu chỉ đọc).\n- Giá trị có thể \"không có\", hoặc cần trỏ lại đối tượng khác, hoặc làm việc với mảng/bộ nhớ động: **con trỏ** (hiện đại: ưu tiên smart pointer cho quyền sở hữu).\n\n### Lỗi hay gặp\n- Giải tham chiếu con trỏ chưa khởi tạo hoặc `nullptr` (crash/UB).\n- Trả về tham chiếu hoặc con trỏ tới biến cục bộ (đã bị huỷ).\n- Dùng con trỏ treo (dangling) sau khi đối tượng bị `delete`.\n- Nhầm `int* a, b;` (chỉ `a` là con trỏ).\n\n### Tự kiểm tra\nVì sao `void tang(int x) { ++x; }` không đổi được biến truyền vào, còn `void tang(int& x)` thì đổi được?",
+  "lessons": [
+   {
+    "href": "/courses/programming-fundamentals/learn?lessonSlug=prf192-6-0a-slides-con-tro-co-ban",
+    "ten": "6.0a — Slide bài giảng: Con trỏ là gì, toán tử & và *, số học con trỏ (slide 1–18)",
+    "nguon": "Programming Fundamentals · Chương 6",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRF192"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-6-1-con-tro",
+    "ten": "6.1 — Con trỏ và mảng: địa chỉ và ô nhớ",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-6-2-pass-by-reference",
+    "ten": "6.2 — Truyền tham chiếu: giá trị, con trỏ, tham chiếu",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/pcp291-c-programming/learn?lessonSlug=pcp291-3-1-pointers-memory",
+    "ten": "3.1 — Con trỏ, tham chiếu & quản lý bộ nhớ",
+    "nguon": "C++ Programming · Chapter 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PCP291"
+   },
+   {
+    "href": "/courses/programming-fundamentals/learn?lessonSlug=prf192-6-1-con-tro",
+    "ten": "6.1 — Con trỏ là gì? Toán tử & và *",
+    "nguon": "Programming Fundamentals · Chương 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF192"
+   }
+  ]
+ },
+ "Con trỏ & Bộ nhớ › Memory Model (Stack vs Heap)": {
+  "body": "Bộ nhớ của một chương trình chạy chủ yếu chia thành hai vùng cho dữ liệu:\n\n- **Stack (ngăn xếp)**: biến cục bộ và tham số hàm. Cấp phát/giải phóng cực nhanh theo quy tắc vào-sau-ra: ra khỏi scope là biến tự bị huỷ. Dung lượng nhỏ (thường vài MB), đệ quy quá sâu gây *stack overflow*.\n- **Heap (vùng cấp phát động)**: đối tượng tạo bằng `new` (hoặc `malloc`); sống đến khi bạn giải phóng bằng `delete`. Dung lượng lớn, linh hoạt, nhưng chậm hơn và bạn tự chịu trách nhiệm vòng đời.\n\n```cpp\nvoid f() {\n    int a = 1;              // stack, tự dọn\n    int* p = new int(2);    // *p nằm ở heap, p nằm ở stack\n    delete p;               // phải giải phóng, nếu quên là rò rỉ\n}\n```\nNgoài ra còn vùng **dữ liệu tĩnh/toàn cục** và vùng **mã**. Dùng heap khi kích thước chỉ biết lúc chạy, đối tượng lớn, hoặc cần sống lâu hơn hàm tạo ra nó; mặc định hãy ưu tiên stack và container (`std::vector`...) tự quản lý heap giúp bạn.",
+  "lessons": [
+   {
+    "href": "/courses/programming-fundamentals/learn?lessonSlug=prf192-n2-1-stack-heap",
+    "ten": "N2.1 — Stack vs Heap · rò rỉ & con trỏ treo",
+    "nguon": "Programming Fundamentals · Nâng cao 2 — Bộ nhớ sâu: Stack & Heap",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF192"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-6-3-quan-ly-bo-nho",
+    "ten": "6.3 — Quản lý bộ nhớ: stack, heap, new và delete",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-7-1-khong-gian",
+    "ten": "7.1 — Không gian địa chỉ: stack, heap, code, mmap, ASLR — và RSS vs VSZ vs PSS",
+    "nguon": "Operating Systems for Developers · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/simulation?scenario=stack-heap",
+    "ten": "Stack và Heap — biến của bạn nằm ở đâu",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   },
+   {
+    "href": "/courses/ics102-introduction-to-computer-systems/learn?lessonSlug=ics102-ts-9-3",
+    "ten": "9.3 — Ánh xạ bộ nhớ và cấp phát động; các lỗi bộ nhớ thường gặp",
+    "nguon": "Introduction to Computer Systems · Chương 9",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "ICS102"
+   }
+  ]
+ },
+ "Con trỏ & Bộ nhớ › Smart Pointers (unique/shared/weak_ptr)": {
+  "body": "**Smart pointer** (header `<memory>`) là đối tượng bọc con trỏ thô và **tự giải phóng** bộ nhớ khi hết vòng đời (nguyên tắc RAII). Chúng loại bỏ phần lớn rò rỉ và lỗi giải phóng hai lần, nên là chuẩn của C++ hiện đại thay cho `new`/`delete` thủ công.\n\n### Ba loại chính\n- **`std::unique_ptr<T>`**: *sở hữu độc quyền*. Không sao chép được, chỉ **chuyển** (`std::move`). Chi phí gần như bằng con trỏ thô. Là lựa chọn mặc định.\n- **`std::shared_ptr<T>`**: *sở hữu chung* bằng bộ đếm tham chiếu; đối tượng bị huỷ khi con trỏ cuối cùng biến mất. Có chi phí cho khối điều khiển và đếm nguyên tử.\n- **`std::weak_ptr<T>`**: *quan sát không sở hữu* một đối tượng của `shared_ptr`, không tăng bộ đếm; dùng để phá **vòng tham chiếu** (A giữ B, B giữ A thì không bao giờ được giải phóng). Muốn dùng phải `lock()` ra `shared_ptr` rồi kiểm tra rỗng.\n\n```cpp\n#include <memory>\n#include <iostream>\n\nstruct SinhVien { std::string ten; };\n\nint main() {\n    auto a = std::make_unique<SinhVien>(SinhVien{\"An\"});   // C++14\n    auto b = std::move(a);          // a rỗng, b sở hữu\n\n    auto s1 = std::make_shared<SinhVien>(SinhVien{\"Binh\"});\n    std::shared_ptr<SinhVien> s2 = s1;\n    std::cout << s1.use_count() << '\\n';   // 2\n\n    std::weak_ptr<SinhVien> w = s1;\n    if (auto p = w.lock()) std::cout << p->ten << '\\n';\n}   // tất cả tự được giải phóng\n```\n\n### Ý chính\n- Tạo bằng `make_unique` / `make_shared` thay vì `new` trực tiếp (an toàn ngoại lệ, gọn).\n- Truyền hàm: nếu chỉ *dùng* đối tượng thì truyền `T&`/`T*`; chỉ truyền smart pointer khi chuyển hoặc chia sẻ quyền sở hữu.\n- `unique_ptr<T[]>` quản lý mảng; có thể kèm custom deleter (đóng file, giải phóng handle).\n\n### Lỗi hay gặp\n- Tạo hai `shared_ptr` độc lập từ cùng một con trỏ thô: bị giải phóng hai lần.\n- Vòng `shared_ptr` giữa hai đối tượng gây rò rỉ (dùng `weak_ptr` cho một chiều).\n- Dùng `shared_ptr` khi `unique_ptr` là đủ (tốn tài nguyên không cần).\n- Gọi `.get()` rồi `delete` tay.\n\n### Tự kiểm tra\nVì sao `unique_ptr` không cho sao chép, và làm sao chuyển nó vào một hàm?",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-10-3-smart-pointer-raii",
+    "ten": "10.3 — Smart pointer & RAII hiện đại (C++11 → C++20)",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 10",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/pcp291-c-programming/learn?lessonSlug=pcp291-8-1-modern-cpp",
+    "ten": "8.1 — C++ hiện đại & nhúng ô tô",
+    "nguon": "C++ Programming · Chapter 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PCP291"
+   }
+  ]
+ },
+ "Con trỏ & Bộ nhớ › Memory Leakage & Undefined Behavior": {
+  "body": "**Rò rỉ bộ nhớ (memory leak)**: cấp phát bằng `new`/`malloc` rồi mất địa chỉ mà không `delete`/`free`; chương trình chạy lâu sẽ ngốn dần RAM. **Hành vi không xác định (Undefined Behavior – UB)**: chuẩn C++ không quy định chuyện gì xảy ra – có thể chạy đúng, crash, hoặc cho kết quả sai âm thầm, và còn đổi theo trình biên dịch/cờ tối ưu.\n\n### UB thường gặp\n- Truy cập ngoài biên mảng, đọc biến chưa khởi tạo.\n- Dùng con trỏ treo (dangling): đối tượng đã `delete` hoặc đã ra khỏi scope.\n- `delete` hai lần, hoặc `delete` thay cho `delete[]`.\n- Giải tham chiếu `nullptr`.\n- Tràn số nguyên có dấu, dịch bit quá cỡ.\n\n### Cách phòng và tìm lỗi\n- Dùng RAII: `std::vector`, `std::string`, smart pointer, tránh `new`/`delete` trần.\n- Biên dịch thêm sanitizer: `g++ -g -fsanitize=address,undefined main.cpp` (bắt lỗi biên, use-after-free, leak, UB); **Valgrind** là công cụ khác; `-Wall -Wextra` bắt nhiều lỗi sớm.\n- Khởi tạo mọi biến, kiểm tra biên khi truy cập (`v.at(i)` ném ngoại lệ).",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-10-2-sanitizer-ro-ri",
+    "ten": "10.2 — Sanitizer và đo rò rỉ bộ nhớ",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 10",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/programming-fundamentals/learn?lessonSlug=prf192-n2-1-stack-heap",
+    "ten": "N2.1 — Stack vs Heap · rò rỉ & con trỏ treo",
+    "nguon": "Programming Fundamentals · Nâng cao 2 — Bộ nhớ sâu: Stack & Heap",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF192"
+   },
+   {
+    "href": "/courses/ics102-introduction-to-computer-systems/learn?lessonSlug=ics102-ts-9-3",
+    "ten": "9.3 — Ánh xạ bộ nhớ và cấp phát động; các lỗi bộ nhớ thường gặp",
+    "nguon": "Introduction to Computer Systems · Chương 9",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "ICS102"
+   }
+  ]
+ },
+ "Con trỏ & Bộ nhớ › Lifetime of Objects": {
+  "body": "**Vòng đời (lifetime)** của một đối tượng là khoảng từ lúc nó được **tạo xong** (constructor chạy xong) đến lúc nó bị **huỷ** (destructor bắt đầu chạy). Truy cập đối tượng ngoài khoảng đó là hành vi không xác định.\n\n### Bốn kiểu vòng đời\n- **Tự động** (biến cục bộ): sống đến khi ra khỏi khối `{}`; huỷ theo thứ tự **ngược** với lúc tạo.\n- **Tĩnh** (biến toàn cục, `static`): tạo trước/trong `main`, huỷ khi chương trình kết thúc.\n- **Động** (`new`): sống đến khi bạn `delete` (hoặc smart pointer tự làm).\n- **Tạm thời** (temporary): kết quả trung gian của biểu thức, thường huỷ ở cuối câu lệnh đầy đủ.\n\n```cpp\nstruct Log {\n    Log()  { std::cout << \"tao\\n\"; }\n    ~Log() { std::cout << \"huy\\n\"; }\n};\nint main() {\n    Log a;\n    { Log b; }              // b huỷ ngay ở đây\n    std::cout << \"cuoi\\n\";\n}   // a huỷ ở đây\n```\nIn ra: `tao`, `tao`, `huy`, `cuoi`, `huy`.\n\n### Ý chính\n- Thành viên của lớp được tạo trước thân constructor, và huỷ sau thân destructor (thứ tự ngược).\n- Kéo dài đời tạm thời: gán vào `const T&` kéo dài nó đến hết đời tham chiếu.\n- Vòng đời quyết định lúc nào tài nguyên (file, khoá, bộ nhớ) được trả – nền tảng của RAII.\n\n### Lỗi hay gặp\n- **Dangling reference/pointer**: trả về tham chiếu tới biến cục bộ, lưu `string_view` trỏ vào chuỗi tạm.\n- **Use-after-free**: dùng con trỏ sau `delete`.\n- Iterator mất hiệu lực sau khi container đổi kích thước.\n\n### Tự kiểm tra\nĐoạn `const std::string& s = std::string(\"abc\") + \"d\";` an toàn hay không, và vì sao?",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-7-2-constructor",
+    "ten": "7.2 — Constructor: object sinh ra là dùng được ngay",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-7-3-destructor",
+    "ten": "7.3 — Destructor: trả lại tài nguyên đúng lúc",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-10-3-smart-pointer-raii",
+    "ten": "10.3 — Smart pointer & RAII hiện đại (C++11 → C++20)",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 10",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/programming-fundamentals/learn?lessonSlug=prf192-5-3-scope",
+    "ten": "5.3 — Phạm vi biến (scope) · hàm dựng sẵn vs tự định nghĩa",
+    "nguon": "Programming Fundamentals · Chương 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF192"
+   }
+  ]
+ },
+ "Con trỏ & Bộ nhớ › Copy on Write": {
+  "body": "**Copy-on-Write (COW)**: nhiều bên *cùng dùng chung* một vùng dữ liệu cho tới khi có bên **muốn sửa**; lúc đó mới tạo bản sao riêng cho bên đó. Nhờ vậy việc \"sao chép\" ban đầu gần như miễn phí.\n\n### Ở đâu bạn gặp nó\n- **Hệ điều hành**: sau `fork()`, tiến trình cha và con dùng chung các trang bộ nhớ ở chế độ chỉ đọc; khi một bên ghi, nhân tạo bản sao trang đó.\n- **Chuỗi**: một số cài đặt `std::string` cũ (trước C++11) dùng COW; C++11 cấm vì không hợp luồng nên chuỗi hiện đại sao chép thật hoặc dùng tối ưu chuỗi ngắn.\n- **Tự cài đặt**: cấu trúc dữ liệu kiểu `shared_ptr<const T>` + \"sửa thì clone\".\n\n### Ý chính và cái giá\n- Cần **bộ đếm tham chiếu** để biết còn ai dùng chung; kiểm tra \"mình có là người duy nhất không\" trước khi ghi.\n- Với đa luồng, đếm tham chiếu phải nguyên tử, khiến chi phí không nhỏ.\n- Hợp khi đọc nhiều, ghi ít.",
+  "lessons": [
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-7-3-page-fault",
+    "ten": "7.3 — Page fault, nạp trang theo yêu cầu và copy-on-write: Redis BGSAVE làm gì với RAM của bạn",
+    "nguon": "Operating Systems for Developers · Chương 7",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Con trỏ & Bộ nhớ › Làm việc với External Libraries": {
+  "body": "Khi dùng thư viện ngoài (ví dụ `libcurl`, `fmt`, `sqlite3`) bạn cần làm cho **hai** giai đoạn biết về nó: lúc **biên dịch** (tìm header để kiểm tra khai báo) và lúc **liên kết** (tìm mã thật của hàm).\n\n### Các dạng file thư viện\n- **Static**: `.a` (Linux/macOS), `.lib` (Windows) – mã được chép vào file chạy.\n- **Shared/dynamic**: `.so` (Linux), `.dylib` (macOS), `.dll` (Windows) – nạp lúc chương trình chạy.\n\n### Lệnh gcc/clang\n```bash\ng++ main.cpp -I/duong/dan/include -L/duong/dan/lib -lcurl -o app\n```\n- `-I`: thêm thư mục tìm header (`#include <curl/curl.h>`).\n- `-L`: thêm thư mục tìm file thư viện.\n- `-l<ten>`: liên kết với `lib<ten>.so` hoặc `lib<ten>.a`.\n- **Thứ tự quan trọng** với thư viện tĩnh: đặt `-l...` sau file nguồn/đối tượng dùng nó.\n- Công cụ: `pkg-config --cflags --libs <thư viện>` in sẵn cờ cần thiết.\n\n### Lỗi hay gặp\n- `fatal error: x.h: No such file`: thiếu `-I` (lỗi biên dịch).\n- `undefined reference to ...`: thiếu `-l`, sai thứ tự, hoặc sai `-L` (lỗi liên kết).\n- `error while loading shared libraries: libx.so`: chạy lúc runtime không tìm thấy `.so` (cần `LD_LIBRARY_PATH`/`rpath`/cài đúng chỗ).\n- Trộn thư viện biên dịch bằng trình biên dịch/ABI khác nhau.\n\n### Tự kiểm tra\nPhân biệt lỗi do thiếu `-I` và lỗi do thiếu `-l` qua thông báo lỗi.\n\n### Tự kiểm tra\nTrên Linux, `ldd ./app` in ra gì và nó giúp bạn tìm lỗi nào?",
+  "lessons": [
+   {
+    "href": "/courses/ics102-introduction-to-computer-systems/learn?lessonSlug=ics102-ts-7-2",
+    "ten": "7.2 — Phân giải ký hiệu, thư viện tĩnh và định vị lại",
+    "nguon": "Introduction to Computer Systems · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "ICS102"
+   },
+   {
+    "href": "/courses/ics102-introduction-to-computer-systems/learn?lessonSlug=ics102-ts-7-3",
+    "ten": "7.3 — Nạp chương trình, thư viện dùng chung, liên kết động và mã độc lập vị trí",
+    "nguon": "Introduction to Computer Systems · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "ICS102"
+   },
+   {
+    "href": "/courses/ics102-introduction-to-computer-systems/learn?lessonSlug=ics102-6-1-linking",
+    "ten": "6.1 — Liên kết & nạp chương trình",
+    "nguon": "Introduction to Computer Systems · Chapter 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "ICS102"
+   }
+  ]
+ },
+ "Con trỏ & Bộ nhớ › Library Inclusion Models": {
+  "body": "Có ba cách đưa một thư viện vào chương trình, mỗi cách một đánh đổi.\n\n### 1. Header-only\nToàn bộ mã nằm trong header (thường là template), chỉ cần `#include`. Ví dụ nhiều phần của Boost, `nlohmann/json`. Dễ tích hợp, không phải liên kết gì; đổi lại thời gian biên dịch lâu và mã bị chép vào từng translation unit.\n\n### 2. Liên kết tĩnh (static linking)\nMã cần dùng từ file `.a`/`.lib` được **chép vào file thực thi** lúc link. File chạy tự đủ, không phụ thuộc thư viện trên máy người dùng, nhưng to hơn; nâng cấp thư viện phải build lại; cần xem điều khoản giấy phép (với LGPL/GPL).\n\n### 3. Liên kết động (dynamic)\nChương trình tham chiếu `.so`/`.dll`, **nạp lúc khởi động** hoặc lúc chạy. File nhỏ, nhiều chương trình dùng chung một bản thư viện, sửa lỗi thư viện không cần build lại. Đổi lại: phải đảm bảo đúng phiên bản có mặt trên máy (\"dependency hell\"), khởi động chậm hơn một chút.\n\nNạp lúc chạy (plugin) bằng `dlopen`/`dlsym` (POSIX) hoặc `LoadLibrary`/`GetProcAddress` (Windows):\n```cpp\n#include <dlfcn.h>\nvoid* h = dlopen(\"./libplugin.so\", RTLD_NOW);\nauto f = reinterpret_cast<int(*)(int)>(dlsym(h, \"tinh\"));\nint kq = f(5);\ndlclose(h);\n```\nHàm xuất cho plugin thường khai báo `extern \"C\"` để tránh name mangling.\n\n### Chọn thế nào\nThư viện nhỏ, ổn định: header-only hoặc tĩnh. Thư viện dùng chung giữa nhiều chương trình hoặc cần cập nhật bảo mật nhanh: động. Hệ thống plugin: nạp động.\n\n### Tự kiểm tra\nVì sao một thư viện header-only làm thời gian biên dịch tăng, còn thư viện tĩnh thì không?",
+  "lessons": [
+   {
+    "href": "/courses/ics102-introduction-to-computer-systems/learn?lessonSlug=ics102-ts-7-3",
+    "ten": "7.3 — Nạp chương trình, thư viện dùng chung, liên kết động và mã độc lập vị trí",
+    "nguon": "Introduction to Computer Systems · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "ICS102"
+   },
+   {
+    "href": "/courses/ics102-introduction-to-computer-systems/learn?lessonSlug=ics102-ts-7-2",
+    "ten": "7.2 — Phân giải ký hiệu, thư viện tĩnh và định vị lại",
+    "nguon": "Introduction to Computer Systems · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "ICS102"
+   }
+  ]
+ },
+ "Con trỏ & Bộ nhớ › Con trỏ thô (Raw Pointers)": {
+  "body": "**Con trỏ thô (raw pointer)** `T*` là biến chứa địa chỉ của một đối tượng kiểu `T`. Nó là cơ chế nền tảng cho mảng kiểu C, cấu trúc liên kết, truyền dữ liệu không sao chép, và giao tiếp với API C.\n\n```cpp\nint a = 7;\nint* p = &a;        // lấy địa chỉ\nstd::cout << *p;    // 7  (giải tham chiếu)\n\nint arr[3] = {10, 20, 30};\nint* q = arr;       // mảng \"phân rã\" thành con trỏ tới phần tử đầu\nstd::cout << *(q + 1) << q[2];   // 20 và 30\n\nint* rong = nullptr;     // con trỏ không trỏ tới đâu\nif (rong) { /* chỉ vào khi khác null */ }\n```\n\n### Ý chính\n- **Số học con trỏ**: `p + 1` nhích đúng một phần tử (`sizeof(T)` byte), không phải một byte.\n- Truy cập thành viên qua con trỏ: `p->x` tương đương `(*p).x`.\n- `const int* p` (không sửa được giá trị trỏ tới) khác `int* const p` (không đổi được địa chỉ).\n- Luôn khởi tạo bằng `nullptr` khi chưa có đích (không dùng `NULL`/`0`).\n- Con trỏ **không** sở hữu gì cả; ai giải phóng bộ nhớ phải được quy ước rõ.\n\n### Lỗi hay gặp\n- Giải tham chiếu con trỏ chưa khởi tạo hoặc `nullptr` (crash).\n- Con trỏ treo sau khi đối tượng bị huỷ.\n- Truy cập ngoài biên mảng qua số học con trỏ.\n- `sizeof(p)` trả kích thước con trỏ, không phải kích thước mảng nó trỏ tới.\n\n### Tự kiểm tra\nNếu `int* p` trỏ vào `arr[0]` và `sizeof(int) == 4`, `p + 2` cách `p` bao nhiêu byte?",
+  "lessons": [
+   {
+    "href": "/courses/programming-fundamentals/learn?lessonSlug=prf192-6-0a-slides-con-tro-co-ban",
+    "ten": "6.0a — Slide bài giảng: Con trỏ là gì, toán tử & và *, số học con trỏ (slide 1–18)",
+    "nguon": "Programming Fundamentals · Chương 6",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRF192"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-6-1-con-tro",
+    "ten": "6.1 — Con trỏ và mảng: địa chỉ và ô nhớ",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/programming-fundamentals/learn?lessonSlug=prf192-6-1-con-tro",
+    "ten": "6.1 — Con trỏ là gì? Toán tử & và *",
+    "nguon": "Programming Fundamentals · Chương 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF192"
+   },
+   {
+    "href": "/courses/programming-fundamentals/learn?lessonSlug=prf192-n3-1-con-tro-nang-cao",
+    "ten": "N3.1 — Con trỏ đa cấp, con trỏ hàm, mảng–con trỏ",
+    "nguon": "Programming Fundamentals · Nâng cao 3 — Con trỏ nâng cao",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF192"
+   },
+   {
+    "href": "/courses/pcp291-c-programming/learn?lessonSlug=pcp291-3-1-pointers-memory",
+    "ten": "3.1 — Con trỏ, tham chiếu & quản lý bộ nhớ",
+    "nguon": "C++ Programming · Chapter 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PCP291"
+   }
+  ]
+ },
+ "Con trỏ & Bộ nhớ › Toán tử New / Delete": {
+  "body": "`new` cấp phát bộ nhớ trên **heap** và (với đối tượng) gọi constructor; `delete` gọi destructor rồi trả bộ nhớ. Dùng khi kích thước hoặc thời gian sống của dữ liệu chỉ được biết lúc chạy.\n\n```cpp\nint* p = new int(5);        // một số nguyên giá trị 5\ndelete p;                   // giải phóng\n\nint n = 100;\nint* mang = new int[n];     // mảng n phần tử\nmang[0] = 1;\ndelete[] mang;              // phải là delete[] cho mảng\n```\n\n### Quy tắc ghép cặp\n- `new` đi với `delete`; `new[]` đi với `delete[]`. Ghép sai là UB.\n- `malloc`/`free` (kiểu C) là một họ khác; **không** trộn với `new`/`delete`.\n- Sau `delete`, đặt con trỏ về `nullptr` để tránh dùng lại và để `delete nullptr` (an toàn, không làm gì) nếu lỡ gọi lại.\n- Nếu cấp phát thất bại, `new` ném `std::bad_alloc`.\n\n### Ý chính hiện đại\nTrong code mới, hầu như không cần viết `new`/`delete` trực tiếp: dùng `std::vector` thay mảng động, `std::string` thay `char*`, `std::make_unique`/`make_shared` cho đối tượng đơn. Hiểu `new`/`delete` vẫn cần để đọc code cũ và hiểu smart pointer làm gì bên dưới.\n\n### Lỗi hay gặp\n- **Rò rỉ**: quên `delete`, hoặc ngoại lệ/`return` sớm bỏ qua dòng `delete`.\n- `delete` hai lần cùng một con trỏ.\n- Dùng `delete` cho mảng (thiếu `[]`).\n- Ghi vượt quá kích thước đã cấp phát (heap overflow).\n\n### Tự kiểm tra\nVì sao `int* p = new int[10]; delete p;` là lỗi, dù chương trình có thể \"tình cờ\" chạy?",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-6-3-quan-ly-bo-nho",
+    "ten": "6.3 — Quản lý bộ nhớ: stack, heap, new và delete",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/programming-fundamentals/learn?lessonSlug=prf192-6-0b-slides-con-tro-cap-phat-dong",
+    "ten": "6.0b — Slide bài giảng: Con trỏ làm tham số, cấp phát động malloc/calloc/realloc/free (slide 19–35)",
+    "nguon": "Programming Fundamentals · Chương 6",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRF192"
+   },
+   {
+    "href": "/courses/programming-fundamentals/learn?lessonSlug=prf192-6-3-malloc",
+    "ten": "6.3 — Cấp phát động: malloc & free",
+    "nguon": "Programming Fundamentals · Chương 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF192"
+   },
+   {
+    "href": "/courses/pcp291-c-programming/learn?lessonSlug=pcp291-3-1-pointers-memory",
+    "ten": "3.1 — Con trỏ, tham chiếu & quản lý bộ nhớ",
+    "nguon": "C++ Programming · Chapter 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PCP291"
+   }
+  ]
+ },
+ "OOP & Structuring Codebase › Structures & Classes": {
+  "body": "`struct` và `class` cho phép gộp **dữ liệu** (thành viên) và **hành vi** (hàm thành viên) thành một kiểu mới, mô hình hoá đối tượng của bài toán (sinh viên, tài khoản, điểm trên mặt phẳng...).\n\nKhác biệt duy nhất về ngôn ngữ: mặc định thành viên của `struct` là `public`, của `class` là `private`. Quy ước: `struct` cho gói dữ liệu đơn giản, `class` khi có bất biến cần bảo vệ.\n\n```cpp\nclass TaiKhoan {\npublic:\n    explicit TaiKhoan(double soDuBanDau) : soDu_(soDuBanDau) {}   // constructor\n    ~TaiKhoan() = default;                                        // destructor\n\n    void nap(double x) { if (x > 0) soDu_ += x; }\n    bool rut(double x) {\n        if (x <= 0 || x > soDu_) return false;\n        soDu_ -= x; return true;\n    }\n    double soDu() const { return soDu_; }   // hàm const: không sửa đối tượng\nprivate:\n    double soDu_;                           // dữ liệu được che giấu\n};\n```\n\n### Ý chính\n- **Constructor**: chạy khi đối tượng được tạo; dùng *danh sách khởi tạo* (`: soDu_(x)`) để khởi tạo thành viên. `explicit` chặn chuyển kiểu ngầm.\n- **Destructor** `~T()`: chạy khi đối tượng bị huỷ, nơi trả tài nguyên.\n- **Đóng gói**: dữ liệu `private`, thao tác qua hàm `public`, để mọi thay đổi đi qua code kiểm tra hợp lệ.\n- Hàm `const` hứa không đổi đối tượng, cho phép gọi trên đối tượng `const`.\n- Tách khai báo class vào `.h` và định nghĩa hàm vào `.cpp`.\n\n### Lỗi hay gặp\n- Không khởi tạo thành viên (giá trị rác) hoặc khởi tạo sai thứ tự (thứ tự theo khai báo, không theo danh sách khởi tạo).\n- Để dữ liệu `public` rồi bên ngoài tuỳ ý phá bất biến.\n- Quên `const` cho hàm chỉ đọc.\n\n### Tự kiểm tra\nVì sao nên dùng danh sách khởi tạo thay vì gán trong thân constructor, đặc biệt với thành viên `const` hoặc tham chiếu?",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-4-2-struct",
+    "ten": "4.2 — Struct: một bản ghi, nhiều trường",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-5-1-oop-files",
+    "ten": "7.1 — Class và object: gói dữ liệu cùng hành vi",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-7-2-constructor",
+    "ten": "7.2 — Constructor: object sinh ra là dùng được ngay",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-7-3-destructor",
+    "ten": "7.3 — Destructor: trả lại tài nguyên đúng lúc",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/pcp291-c-programming/learn?lessonSlug=pcp291-4-1-classes-oop",
+    "ten": "4.1 — Lớp & lập trình hướng đối tượng",
+    "nguon": "C++ Programming · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PCP291"
+   }
+  ]
+ },
+ "OOP & Structuring Codebase › Inheritance & Virtual Methods": {
+  "body": "**Kế thừa** cho phép lớp con (derived) thừa hưởng dữ liệu và hàm của lớp cha (base), mô tả quan hệ \"là một\" (is-a). **Hàm `virtual`** cho phép lớp con *ghi đè* hành vi, và lời gọi qua con trỏ/tham chiếu lớp cha sẽ chạy bản đúng của đối tượng thật – gọi là **đa hình động**.\n\n```cpp\nclass Hinh {\npublic:\n    virtual ~Hinh() = default;           // destructor ảo: bắt buộc cho lớp cơ sở đa hình\n    virtual double dienTich() const = 0; // thuần ảo: lớp trừu tượng\n};\nclass Tron : public Hinh {\n    double r_;\npublic:\n    explicit Tron(double r) : r_(r) {}\n    double dienTich() const override { return 3.14159265 * r_ * r_; }\n};\n\nvoid in(const Hinh& h) { std::cout << h.dienTich(); }   // gọi đúng bản của Tron\n```\n\n### Ý chính\n- `override` nhờ trình biên dịch kiểm tra bạn thật sự ghi đè một hàm ảo.\n- Muốn xoá đối tượng qua con trỏ lớp cha thì destructor lớp cha phải `virtual`.\n- Truyền lớp con **theo giá trị** vào hàm nhận lớp cha gây *slicing* (cắt mất phần của lớp con): truyền bằng tham chiếu/con trỏ.\n- Kế thừa `public` mô hình is-a; ưu tiên **hợp thành** (có một) khi không đúng quan hệ is-a.",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-7-6-ke-thua",
+    "ten": "7.6 — Kế thừa: tái sử dụng mà không copy-paste",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-7-7-da-hinh",
+    "ten": "7.7 — Đa hình: một lời gọi, nhiều hành vi",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/pcp291-c-programming/learn?lessonSlug=pcp291-5-1-inheritance-polymorphism",
+    "ten": "5.1 — Kế thừa & đa hình",
+    "nguon": "C++ Programming · Chapter 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PCP291"
+   }
+  ]
+ },
+ "OOP & Structuring Codebase › Operator & Function Overloading": {
+  "body": "C++ cho phép hai điều tương tự nhau nhưng khác bản chất: **nạp chồng hàm** (cùng tên, khác tham số) và **nạp chồng toán tử** (cho các toán tử như `+`, `==`, `<<` ý nghĩa mới trên kiểu do bạn định nghĩa).\n\n### Toán tử trên kiểu tự tạo\n```cpp\nstruct Vec2 {\n    double x, y;\n    Vec2 operator+(const Vec2& o) const { return {x + o.x, y + o.y}; }\n    bool operator==(const Vec2& o) const { return x == o.x && y == o.y; }\n};\n\nstd::ostream& operator<<(std::ostream& os, const Vec2& v) {\n    return os << '(' << v.x << \", \" << v.y << ')';\n}\n\nint main() {\n    Vec2 a{1, 2}, b{3, 4};\n    std::cout << a + b << '\\n';     // (4, 6)\n}\n```\n\n### Ý chính\n- Toán tử có thể là hàm thành viên (`a.operator+(b)`) hoặc hàm tự do (bắt buộc cho `operator<<` với `ostream` ở vế trái).\n- Giữ **ngữ nghĩa quen thuộc**: `+` không nên làm điều bất ngờ; nếu cài `==` thì nên cài `!=` nhất quán (C++20 có `operator<=>`).\n- Không nạp chồng được: `::`, `.`, `.*`, `?:`, `sizeof`.\n- Toán tử gán `=`, `[]`, `()`, `->` bắt buộc là hàm thành viên.\n\n### Lỗi hay gặp\n- `operator+` làm thay đổi toán hạng (nên trả đối tượng mới).\n- Quên `const` cho hàm/tham số nên không dùng được với đối tượng `const`.\n- Lạm dụng: đặt `+` cho phép toán không giống cộng.\n\n### Tự kiểm tra\nVì sao `operator<<` cho `std::ostream` thường là hàm tự do chứ không phải hàm thành viên của lớp của bạn?",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-5-2-nap-chong",
+    "ten": "5.2 — Nạp chồng hàm và nạp chồng toán tử",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   }
+  ]
+ },
+ "OOP & Structuring Codebase › Rule of Zero/Three/Five & RAII": {
+  "body": "**RAII** (Resource Acquisition Is Initialization): gắn một tài nguyên (bộ nhớ, file, khoá, socket) vào **vòng đời của một đối tượng** – constructor lấy tài nguyên, destructor trả. Vì destructor luôn chạy khi ra khỏi scope (kể cả khi ném ngoại lệ), tài nguyên không bao giờ bị quên.\n\n```cpp\nclass FileHandle {\n    std::FILE* f_;\npublic:\n    explicit FileHandle(const char* ten) : f_(std::fopen(ten, \"r\")) {\n        if (!f_) throw std::runtime_error(\"khong mo duoc file\");\n    }\n    ~FileHandle() { if (f_) std::fclose(f_); }\n\n    FileHandle(const FileHandle&) = delete;            // không cho copy\n    FileHandle& operator=(const FileHandle&) = delete;\n};\n```\n\n### Rule of Three / Five / Zero\nNếu lớp tự quản lý tài nguyên, thường phải viết **các hàm đặc biệt** đi cùng nhau:\n- **Rule of Three**: nếu cần tự viết *một* trong destructor, copy constructor, copy assignment thì gần như chắc chắn cần cả ba.\n- **Rule of Five** (C++11): thêm **move constructor** và **move assignment** để chuyển tài nguyên thay vì sao chép.\n- **Rule of Zero**: tốt nhất là *không viết cái nào* – để các thành viên tự quản lý (`std::string`, `std::vector`, `std::unique_ptr`) và trình biên dịch sinh đúng các hàm.\n\n### Ý chính\n- Ưu tiên Rule of Zero; chỉ viết tay khi bọc một tài nguyên mới (handle, socket) – và khi đó bọc càng nhỏ càng tốt.\n- Nếu bị sao chép sai nghĩa, dùng `= delete`; nếu chỉ chuyển được thì đặt move và xoá copy.\n- Các hàm di chuyển nên đánh dấu `noexcept` để container dùng được.\n\n### Lỗi hay gặp\n- Copy mặc định chép **con trỏ** (shallow copy), hai đối tượng cùng `delete` một vùng nhớ.\n- Viết destructor mà quên copy/move (vi phạm Rule of Three).\n- Ném ngoại lệ từ destructor.\n\n### Tự kiểm tra\nVì sao RAII an toàn hơn `fopen ... fclose` thủ công khi giữa hai lệnh đó có thể xảy ra ngoại lệ?",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-10-3-smart-pointer-raii",
+    "ten": "10.3 — Smart pointer & RAII hiện đại (C++11 → C++20)",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 10",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-7-3-destructor",
+    "ten": "7.3 — Destructor: trả lại tài nguyên đúng lúc",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-7-2-constructor",
+    "ten": "7.2 — Constructor: object sinh ra là dùng được ngay",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   }
+  ]
+ },
+ "OOP & Structuring Codebase › Kế thừa hình thoi (Diamond Inheritance)": {
+  "body": "**Vấn đề hình thoi** xảy ra khi lớp `D` kế thừa hai lớp `B` và `C`, mà cả hai cùng kế thừa lớp `A`. Mặc định `D` chứa **hai** bản của `A` (một qua `B`, một qua `C`), nên truy cập thành viên của `A` từ `D` bị **mơ hồ**, và đối tượng chứa dữ liệu trùng lặp.\n\n```cpp\nstruct A { int id = 0; };\nstruct B : A {};\nstruct C : A {};\nstruct D : B, C {};\n\nD d;\n// d.id = 1;     // lỗi: ambiguous (B::A::id hay C::A::id?)\nd.B::id = 1;     // phải chỉ rõ đường đi\n```\n\n### Lời giải: kế thừa ảo\n```cpp\nstruct A { int id = 0; };\nstruct B : virtual A {};\nstruct C : virtual A {};\nstruct D : B, C {};\n\nD d;\nd.id = 1;        // OK: chỉ còn một A dùng chung\n```\nVới `virtual`, mọi đường kế thừa chia sẻ **một** thể hiện duy nhất của `A`.\n\n### Cái giá\n- Truy cập `A` qua con trỏ gián tiếp nên chậm hơn, đối tượng lớn hơn.\n- **Lớp cơ sở ảo được khởi tạo bởi lớp dẫn xuất nhất** (`D`), không phải `B`/`C`; nếu `A` không có constructor mặc định, `D` phải gọi constructor của `A` trực tiếp.\n- Thiết kế phức tạp hơn, dễ rối.\n\n### Lời khuyên\nHãy tránh hình thoi nếu có thể: dùng hợp thành, hoặc chỉ kế thừa nhiều từ các *interface thuần* (không có dữ liệu). Kế thừa ảo là công cụ đặc biệt chứ không phải mặc định.\n\n### Tự kiểm tra\nVì sao constructor của `B` và `C` không khởi tạo được `A` khi `A` là cơ sở ảo?",
+  "lessons": [
+   {
+    "href": "/courses/pcp291-c-programming/learn?lessonSlug=pcp291-5-1-inheritance-polymorphism",
+    "ten": "5.1 — Kế thừa & đa hình",
+    "nguon": "C++ Programming · Chapter 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PCP291"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-7-6-ke-thua",
+    "ten": "7.6 — Kế thừa: tái sử dụng mà không copy-paste",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   }
+  ]
+ },
+ "OOP & Structuring Codebase › Forward Declaration": {
+  "body": "**Forward declaration** là khai báo \"có tồn tại\" một tên mà chưa đưa định nghĩa đầy đủ:\n```cpp\nclass NhanVien;                 // khai báo trước\nvoid in(const NhanVien& nv);    // chỉ cần tên khi dùng tham chiếu/con trỏ\n```\nTrình biên dịch chỉ cần biết `NhanVien` là một class; chưa cần biết kích thước hay thành viên của nó.\n\n### Khi nào dùng được\nVới kiểu *chưa đầy đủ* (incomplete type) bạn chỉ được: khai báo con trỏ/tham chiếu tới nó, khai báo hàm nhận/trả nó theo con trỏ/tham chiếu (hoặc chỉ khai báo, chưa gọi). Bạn **không** được: tạo đối tượng, gọi hàm thành viên, dùng `sizeof`, hay có nó làm thành viên theo giá trị — những việc đó cần định nghĩa đầy đủ.\n\n### Lợi ích\n1. **Phá phụ thuộc vòng**: `A` có con trỏ tới `B`, `B` có con trỏ tới `A` mà không cần include lẫn nhau.\n2. **Giảm thời gian biên dịch**: header chỉ forward declare thay vì `#include` cả header nặng; `#include` chuyển sang file `.cpp`.\n3. Giảm phụ thuộc, build tăng dần nhanh hơn.\n\n```cpp\n// a.h\n#pragma once\nclass B;                 // không cần #include \"b.h\"\nclass A { B* b_; };\n// a.cpp\n#include \"a.h\"\n#include \"b.h\"           // cần định nghĩa đầy đủ mới gọi hàm của B\n```\n\n### Lỗi hay gặp\n- `invalid use of incomplete type`: dùng thành viên của kiểu mới forward declare.\n- Forward declare thứ trong `namespace std` (hành vi không xác định, nên include `<iosfwd>`, `<memory>`...).\n- Đặt `unique_ptr<TypeChuaDayDu>` làm thành viên rồi để trình biên dịch sinh destructor trong header: cần khai báo destructor ở header và định nghĩa trong `.cpp`.",
+  "lessons": [
+   {
+    "href": "/courses/programming-fundamentals/learn?lessonSlug=prf192-n4-1-du-an-c",
+    "ten": "N4.1 — Nhiều file, header guard & Makefile",
+    "nguon": "Programming Fundamentals · Nâng cao 4 — Tổ chức dự án C thực chiến",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF192"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-7-4-access-encapsulation",
+    "ten": "7.4 — Access modifier và đóng gói (+ một class, hai file)",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   }
+  ]
+ },
+ "OOP & Structuring Codebase › Virtual Tables (vtables)": {
+  "body": "Khi một class có hàm `virtual`, trình biên dịch (triển khai phổ biến) tạo cho **mỗi class** một **bảng hàm ảo (vtable)** – mảng con trỏ tới phiên bản đúng của từng hàm ảo – và thêm vào **mỗi đối tượng** một con trỏ ẩn **vptr** trỏ tới vtable của class đó.\n\nLời gọi `p->dienTich()` qua con trỏ lớp cha được dịch thành: lấy `vptr` của đối tượng, tra phần tử tương ứng trong vtable, gọi gián tiếp. Vì vậy dù `p` có kiểu `Hinh*`, hàm chạy là của kiểu thật (`Tron`, `Vuong`).\n\n```cpp\nstruct Hinh { virtual double dienTich() const; int id; };\n// sizeof(Hinh) thường lớn hơn sizeof(int) vì có thêm vptr\n```\n\n### Chi phí ẩn\n- Mỗi đối tượng thêm một con trỏ (8 byte trên máy 64-bit).\n- Gọi hàm ảo là một lần gián tiếp, khó inline, có thể làm hụt cache dự đoán nhánh.\n- Vtable được thiết lập trong constructor: gọi hàm ảo *bên trong constructor/destructor* chỉ chạy bản của chính class đang xây (không phải lớp con).\n\nChi tiết bố trí vtable là của trình triển khai (chuẩn không quy định). Cần ghi nhớ: đa hình động có giá, nên dùng khi thật sự cần.",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-7-7-da-hinh",
+    "ten": "7.7 — Đa hình: một lời gọi, nhiều hành vi",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/pcp291-c-programming/learn?lessonSlug=pcp291-5-1-inheritance-polymorphism",
+    "ten": "5.1 — Kế thừa & đa hình",
+    "nguon": "C++ Programming · Chapter 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PCP291"
+   }
+  ]
+ },
+ "OOP & Structuring Codebase › Multiple Inheritance": {
+  "body": "**Đa kế thừa**: một lớp kế thừa trực tiếp từ nhiều lớp cơ sở.\n```cpp\nstruct Doc  { virtual ~Doc() = default; virtual std::string doc() const = 0; };\nstruct Ghi  { virtual ~Ghi() = default; virtual void ghi(const std::string&) = 0; };\nstruct File : Doc, Ghi {\n    std::string doc() const override { return \"...\"; }\n    void ghi(const std::string&) override {}\n};\n```\nDạng dùng an toàn và phổ biến nhất: kế thừa nhiều **interface** (chỉ có hàm thuần ảo, không dữ liệu), kết hợp với 0 hoặc 1 lớp cơ sở có cài đặt.\n\n### Điều cần nắm\n- **Thứ tự khởi tạo**: các lớp cơ sở được khởi tạo theo **thứ tự khai báo trong danh sách kế thừa** (`: Doc, Ghi`), không theo danh sách khởi tạo; huỷ theo thứ tự ngược lại.\n- **Mơ hồ tên**: nếu hai cơ sở cùng có hàm/biến trùng tên, phải chỉ rõ `File::Doc::ten`.\n- **Diamond**: nếu hai cơ sở cùng kế thừa một lớp chung, cần kế thừa `virtual` (xem bước riêng về diamond).\n- **Slicing**: gán/truyền đối tượng dẫn xuất *theo giá trị* vào biến kiểu cơ sở sẽ cắt mất phần của lớp dẫn xuất; luôn dùng tham chiếu hoặc con trỏ (hay smart pointer) khi làm việc đa hình.\n- Ép kiểu giữa các cơ sở khác nhau có thể làm **địa chỉ con trỏ đổi**; dùng `static_cast`/`dynamic_cast`, tránh ép kiểu C.\n\n### Lỗi hay gặp\n- Quên destructor ảo ở một cơ sở đa hình.\n- Lạm dụng đa kế thừa cài đặt, làm hệ phân cấp khó hiểu: ưu tiên hợp thành.",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-7-6-ke-thua",
+    "ten": "7.6 — Kế thừa: tái sử dụng mà không copy-paste",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/pcp291-c-programming/learn?lessonSlug=pcp291-5-1-inheritance-polymorphism",
+    "ten": "5.1 — Kế thừa & đa hình",
+    "nguon": "C++ Programming · Chapter 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PCP291"
+   }
+  ]
+ },
+ "OOP & Structuring Codebase › Non-Copyable / Non-Moveable": {
+  "body": "Một số đối tượng **không nên sao chép**: file handle, socket, mutex, `std::unique_ptr` – sao chép sẽ khiến hai đối tượng cùng nghĩ mình sở hữu một tài nguyên và cùng giải phóng nó. C++11 cho phép chặn bằng `= delete`:\n\n```cpp\nclass Socket {\npublic:\n    Socket() = default;\n    Socket(const Socket&) = delete;             // cấm copy\n    Socket& operator=(const Socket&) = delete;\n\n    Socket(Socket&& other) noexcept             // nhưng cho phép chuyển\n        : fd_(std::exchange(other.fd_, -1)) {}\n    Socket& operator=(Socket&& other) noexcept {\n        if (this != &other) { dong(); fd_ = std::exchange(other.fd_, -1); }\n        return *this;\n    }\n    ~Socket() { dong(); }\nprivate:\n    void dong() { if (fd_ >= 0) { /* ::close(fd_); */ fd_ = -1; } }\n    int fd_ = -1;\n};\n```\n\n### Ý chính\n- **Non-copyable nhưng movable** (như `unique_ptr`): sở hữu độc quyền, chuyển được. \n- **Non-copyable và non-movable** (như `std::mutex`, `std::atomic`): cấm cả hai bằng cách xoá copy; khai báo copy bị xoá thì move không được sinh ngầm.\n- Cách cũ (trước C++11) khai báo hàm copy ở `private` và không định nghĩa; hãy dùng `= delete` vì thông báo lỗi rõ hơn.\n- Xoá hàm được kiểm tra lúc biên dịch: lỗi xuất hiện ngay tại dòng cố sao chép.\n\n### Lỗi hay gặp\n- Quên rằng khai báo move làm copy tự bị xoá (và ngược lại tuỳ trường hợp).\n- Để đối tượng không-sao-chép làm thành viên rồi lớp bao ngoài cũng thành không-sao-chép (đúng, nhưng dễ ngạc nhiên).\n\n### Tự kiểm tra\nVì sao một lớp có `unique_ptr` làm thành viên tự động trở thành non-copyable?",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-10-3-smart-pointer-raii",
+    "ten": "10.3 — Smart pointer & RAII hiện đại (C++11 → C++20)",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 10",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   }
+  ]
+ },
+ "OOP & Structuring Codebase › Copy and Swap": {
+  "body": "**Copy-and-swap** là thành ngữ cài đặt toán tử gán sao chép sao cho **an toàn ngoại lệ** và **tự xử lý gán cho chính mình**, với rất ít code.\n\nÝ tưởng: nhận tham số **theo giá trị** (nên bản sao đã được tạo trước khi vào hàm, có thể ném ngoại lệ mà đối tượng gốc chưa bị đụng), rồi **hoán đổi** nội dung với bản sao; khi hàm kết thúc, bản sao (giờ chứa dữ liệu cũ) tự bị huỷ.\n\n```cpp\nclass Mang {\n    std::size_t n_;\n    int* d_;\npublic:\n    explicit Mang(std::size_t n) : n_(n), d_(new int[n]{}) {}\n    Mang(const Mang& o) : n_(o.n_), d_(new int[o.n_]) { std::copy(o.d_, o.d_ + n_, d_); }\n    ~Mang() { delete[] d_; }\n\n    friend void swap(Mang& a, Mang& b) noexcept {\n        using std::swap;\n        swap(a.n_, b.n_);\n        swap(a.d_, b.d_);\n    }\n    Mang& operator=(Mang o) {   // tham số theo giá trị = bản sao\n        swap(*this, o);\n        return *this;           // o (chứa dữ liệu cũ) bị huỷ ở đây\n    }\n};\n```\n\n### Ý chính\n- Một hàm duy nhất lo cả copy assignment và (nếu có move constructor) move assignment.\n- `swap` phải `noexcept` để toàn bộ phép gán có đảm bảo mạnh (hoặc xong hoặc không đổi gì).\n- Gán `a = a` vẫn đúng mà không cần kiểm tra `this != &o`.\n\n### Lưu ý\nCó chi phí tạo bản sao dù gán tự thân; trong tình huống cực kỳ nhạy hiệu năng, người ta viết tay. Với lớp tuân Rule of Zero thì không cần kỹ thuật này."
+ },
+ "OOP & Structuring Codebase › Lập trình hướng đối tượng (OOP)": {
+  "body": "**Lập trình hướng đối tượng (OOP)** tổ chức chương trình thành các **đối tượng** – mỗi đối tượng gói dữ liệu và các thao tác trên dữ liệu đó – thay vì một dãy hàm rời rạc. Cách nghĩ này hợp khi phần mềm lớn, mô hình hoá thực thể rõ ràng (sinh viên, đơn hàng, hình học) và cần bảo trì lâu dài.\n\n### Bốn trụ cột\n- **Đóng gói (encapsulation)**: giấu dữ liệu nội bộ (`private`), chỉ lộ giao diện cần thiết; bảo vệ bất biến của đối tượng.\n- **Kế thừa (inheritance)**: lớp con dùng lại và mở rộng lớp cha (quan hệ is-a).\n- **Đa hình (polymorphism)**: cùng một lời gọi, hành vi khác nhau tuỳ kiểu thật của đối tượng (hàm `virtual` – đa hình động; template/overload – đa hình tĩnh).\n- **Trừu tượng (abstraction)**: chỉ trình bày \"làm gì\" (lớp trừu tượng, interface), ẩn \"làm thế nào\".\n\n```cpp\nclass DongVat {\npublic:\n    virtual ~DongVat() = default;\n    virtual std::string tiengKeu() const = 0;   // trừu tượng\n};\nclass Cho : public DongVat { public: std::string tiengKeu() const override { return \"Gau\"; } };\nclass Meo : public DongVat { public: std::string tiengKeu() const override { return \"Meo\"; } };\n\nvoid chao(const DongVat& d) { std::cout << d.tiengKeu() << '\\n'; }  // đa hình\n```\n\n### Lời khuyên thực tế\n- Ưu tiên **hợp thành hơn kế thừa**: \"có một\" linh hoạt hơn \"là một\".\n- Giữ lớp nhỏ, mỗi lớp một trách nhiệm.\n- C++ là ngôn ngữ **đa mô hình**: không phải mọi thứ đều cần là class; hàm tự do và template vẫn rất mạnh.\n- Dùng smart pointer để quản lý đối tượng đa hình.\n\n### Lỗi hay gặp\n- Cây kế thừa quá sâu chỉ để tái sử dụng code.\n- Thiếu destructor ảo ở lớp cơ sở.\n- Để dữ liệu `public` làm mất đóng gói.\n\n### Tự kiểm tra\nPhân biệt đóng gói và trừu tượng. Cho một ví dụ khi nên chọn hợp thành thay vì kế thừa.",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-5-1-oop-files",
+    "ten": "7.1 — Class và object: gói dữ liệu cùng hành vi",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-7-4-access-encapsulation",
+    "ten": "7.4 — Access modifier và đóng gói (+ một class, hai file)",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-7-7-da-hinh",
+    "ten": "7.7 — Đa hình: một lời gọi, nhiều hành vi",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/pcp291-c-programming/learn?lessonSlug=pcp291-4-1-classes-oop",
+    "ten": "4.1 — Lớp & lập trình hướng đối tượng",
+    "nguon": "C++ Programming · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PCP291"
+   },
+   {
+    "href": "/simulation?scenario=oop-pillars",
+    "ten": "Bốn tính chất OOP — nhìn từ bộ nhớ",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "Templates & Generic Programming › Function/Class Templates": {
+  "body": "**Template** cho phép viết **một lần** một hàm hoặc một lớp cho **nhiều kiểu**; trình biên dịch tự sinh phiên bản cụ thể cho từng kiểu bạn dùng (*instantiation*) ngay lúc biên dịch. Đây là nền tảng của lập trình tổng quát và của toàn bộ thư viện chuẩn (STL).\n\n### Function template\n```cpp\ntemplate <typename T>\nT lonHon(const T& a, const T& b) { return (a > b) ? a : b; }\n\nint main() {\n    lonHon(3, 7);          // T suy ra là int\n    lonHon(2.5, 1.5);      // T là double\n    lonHon<std::string>(\"a\", \"b\");   // chỉ định kiểu rõ ràng\n}\n```\nKiểu `T` được **suy luận** từ đối số. Mọi kiểu dùng với template phải hỗ trợ các phép toán mà thân hàm dùng (ở đây là `>`).\n\n### Class template\n```cpp\ntemplate <typename T>\nclass NganXep {\n    std::vector<T> d_;\npublic:\n    void day(const T& x) { d_.push_back(x); }\n    T lay() { T x = d_.back(); d_.pop_back(); return x; }\n    bool rong() const { return d_.empty(); }\n};\n\nNganXep<int> s;      // kiểu phải ghi rõ (hoặc dùng CTAD từ C++17 khi có thể suy ra)\ns.day(5);\n```\nCó thể có tham số không phải kiểu: `template <typename T, std::size_t N> struct Mang { T d[N]; };`.\n\n### Ý chính\n- Template giải quyết ở **compile-time**: không có chi phí lúc chạy như đa hình ảo, nhưng có thể làm tăng kích thước mã (mỗi kiểu một bản) và thời gian biên dịch.\n- Định nghĩa template thường đặt **trong header**, vì trình biên dịch cần thấy toàn bộ định nghĩa lúc sinh mã.\n- Thông báo lỗi khi sai kiểu có thể rất dài; C++20 **concepts** giúp ràng buộc rõ ràng và lỗi dễ đọc hơn.\n\n### Lỗi hay gặp\n- Đặt định nghĩa hàm template trong `.cpp` rồi gặp lỗi `undefined reference`.\n- Truyền hai đối số khác kiểu (`lonHon(1, 2.5)`) làm suy luận `T` mâu thuẫn.\n- Quên `typename` khi dùng kiểu phụ thuộc: `typename T::value_type`.\n\n### Tự kiểm tra\nVì sao hàm `lonHon(1, 2.5)` không biên dịch được, và có hai cách nào sửa?",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-5-3-function-template",
+    "ten": "5.3 — Function template: một hàm cho nhiều kiểu",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/pcp291-c-programming/learn?lessonSlug=pcp291-6-1-templates",
+    "ten": "6.1 — Template & lập trình tổng quát",
+    "nguon": "C++ Programming · Chapter 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PCP291"
+   }
+  ]
+ },
+ "Templates & Generic Programming › Template Specialization": {
+  "body": "**Chuyên biệt hoá (specialization)** cho phép cung cấp một cài đặt *riêng* của template cho một kiểu (hoặc nhóm kiểu) cụ thể, khi bản tổng quát không đúng hoặc không tối ưu cho kiểu đó.\n\n```cpp\ntemplate <typename T>\nstruct TenKieu { static const char* ten() { return \"khac\"; } };    // bản tổng quát\n\ntemplate <>                                    // chuyên biệt hoá TOÀN PHẦN\nstruct TenKieu<int> { static const char* ten() { return \"int\"; } };\n\ntemplate <typename T>                          // chuyên biệt hoá MỘT PHẦN\nstruct TenKieu<T*> { static const char* ten() { return \"con tro\"; } };\n```\n- **Full specialization**: `template <>` và chỉ định đủ mọi tham số. Dùng được cho cả class template và function template.\n- **Partial specialization**: chỉ cố định một phần mẫu (ví dụ \"mọi con trỏ `T*`\"). Chỉ có cho **class template** (function template thì dùng overload thay thế).\n- Chuyên biệt hoá phải được khai báo trước khi bị dùng lần đầu.\n\nVí dụ trong STL: `std::vector<bool>` là chuyên biệt hoá đóng gói mỗi phần tử bằng một bit (và vì thế hành xử khác `vector<T>` thông thường – một lý do không nên lạm dụng)."
+ },
+ "Templates & Generic Programming › auto & Type Deduction": {
+  "body": "Từ C++11, `auto` bảo trình biên dịch **suy ra kiểu** của biến từ biểu thức khởi tạo. Biến vẫn là kiểu tĩnh, chỉ là bạn không phải viết ra.\n\n```cpp\nauto n = 42;                    // int\nauto x = 3.14;                  // double\nauto ten = std::string(\"An\");   // std::string\nstd::vector<int> v{1, 2, 3};\nauto it = v.begin();            // thay cho std::vector<int>::iterator\nfor (const auto& e : v) { /* ... */ }\n```\n\n### Ý chính\n- `auto` **bỏ** `const` và tham chiếu của biểu thức: nếu muốn giữ, viết `const auto&` hoặc `auto&`.\n- `auto&&` (forwarding reference) bắt được cả giá trị tạm lẫn biến có tên.\n- `decltype(expr)` cho đúng kiểu của biểu thức (giữ cả `const`/`&`); `decltype(auto)` (C++14) suy kiểu trả về giữ nguyên.\n- C++14: `auto` làm kiểu trả về của hàm; C++14 có lambda tổng quát `[](auto a, auto b) { return a + b; }`.\n- C++17: *structured bindings* `auto [k, v] = *map_it;` và CTAD (`std::pair p{1, 2.0};`).\n\n### Khi nên dùng\nKiểu dài hoặc hiển nhiên (iterator, `make_unique`, lambda), khi kiểu không quan trọng với người đọc. Tránh khi kiểu là thông tin quan trọng hoặc để tránh chuyển đổi ngầm ngoài ý muốn.\n\n### Lỗi hay gặp\n- `auto x = {1, 2, 3};` suy ra `std::initializer_list<int>`, không phải mảng/vector.\n- `auto s = \"abc\";` ra `const char*`, không phải `std::string`.\n- `auto b = vec_bool[0];` cho proxy của `vector<bool>`.\n- Mất tham chiếu: `auto x = v[0]; x = 5;` không sửa `v`.\n\n### Tự kiểm tra\nKiểu của `x` trong `const int c = 1; auto x = c;` là gì? Còn `decltype(c) y = 2;`?"
+ },
+ "Templates & Generic Programming › Static Polymorphism": {
+  "body": "**Đa hình tĩnh** là đa hình được chọn **lúc biên dịch**, đối lập với đa hình động (hàm `virtual`) chọn lúc chạy. Hai công cụ chính: **nạp chồng hàm** và **template**.\n\n```cpp\nstruct Cho { void keu() const { std::cout << \"Gau\\n\"; } };\nstruct Meo { void keu() const { std::cout << \"Meo\\n\"; } };\n\ntemplate <typename T>\nvoid choKeu(const T& dv) { dv.keu(); }   // mọi kiểu có keu() đều dùng được\n\nint main() { choKeu(Cho{}); choKeu(Meo{}); }\n```\n`Cho` và `Meo` không cần chung lớp cha hay hàm ảo; chỉ cần có phương thức `keu()` (\"duck typing\" lúc biên dịch). Trình biên dịch sinh `choKeu<Cho>` và `choKeu<Meo>` riêng, gọi trực tiếp (có thể inline).\n\n### So sánh với đa hình động\n| | Tĩnh (template) | Động (virtual) |\n|---|---|---|\n| Chọn lúc | biên dịch | chạy |\n| Chi phí gọi | gần như 0, inline được | gián tiếp qua vtable |\n| Tập kiểu | phải biết lúc biên dịch | có thể mở rộng lúc chạy (plugin) |\n| Chứa nhiều kiểu trong một container | khó (cần `variant`) | dễ (`vector<unique_ptr<Base>>`) |\n| Kích thước mã | tăng theo số kiểu | nhỏ |\n\n### CRTP\nKỹ thuật \"template lặp lạ\": lớp cơ sở nhận chính lớp dẫn xuất làm tham số để gọi hàm của nó mà không cần virtual.\n```cpp\ntemplate <typename Derived>\nstruct HinhCRTP {\n    double dienTich() const { return static_cast<const Derived&>(*this).dienTichImpl(); }\n};\nstruct Vuong : HinhCRTP<Vuong> { double a = 2; double dienTichImpl() const { return a * a; } };\n```\nC++20 **concepts** cho phép nêu rõ yêu cầu (\"kiểu phải có `keu()`\") và báo lỗi dễ hiểu.\n\n### Lỗi hay gặp\n- Template yêu cầu giao diện ngầm; thiếu hàm gây lỗi biên dịch dài khó đọc.\n- Dùng đa hình tĩnh khi cần chọn kiểu theo dữ liệu nhập lúc chạy (phải dùng động).\n\n### Tự kiểm tra\nKhi nào bạn buộc phải dùng `virtual` thay vì template?",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-5-3-function-template",
+    "ten": "5.3 — Function template: một hàm cho nhiều kiểu",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-7-7-da-hinh",
+    "ten": "7.7 — Đa hình: một lời gọi, nhiều hành vi",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   },
+   {
+    "href": "/courses/pcp291-c-programming/learn?lessonSlug=pcp291-5-1-inheritance-polymorphism",
+    "ten": "5.1 — Kế thừa & đa hình",
+    "nguon": "C++ Programming · Chapter 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PCP291"
+   }
+  ]
+ },
+ "Templates & Generic Programming › Function Overloading": {
+  "body": "**Nạp chồng hàm (function overloading)**: nhiều hàm **cùng tên** nhưng khác **danh sách tham số** (số lượng hoặc kiểu). Trình biên dịch chọn hàm phù hợp lúc biên dịch dựa trên đối số.\n\n```cpp\nvoid in(int x)            { std::cout << \"int \" << x << '\\n'; }\nvoid in(double x)         { std::cout << \"double \" << x << '\\n'; }\nvoid in(const std::string& s) { std::cout << \"string \" << s << '\\n'; }\n\nin(5);          // int\nin(2.5);        // double\nin(\"xin chao\"); // string (const char* -> std::string)\n```\n\n### Cách chọn hàm (tóm tắt)\nTrình biên dịch tìm: khớp chính xác, rồi khớp sau chuyển đổi nhỏ (nâng kiểu như `char`→`int`), rồi chuyển đổi chuẩn (`int`→`double`), rồi chuyển đổi do người dùng định nghĩa. Nếu có nhiều hàm ngang cấp thì báo lỗi **mơ hồ (ambiguous)**.\n\n### Ý chính\n- **Kiểu trả về không phải** là một phần của chữ ký để nạp chồng: hai hàm chỉ khác kiểu trả về thì lỗi.\n- Tham số `const`/tham chiếu có thể phân biệt (`f(int&)` và `f(const int&)`).\n- Tham số mặc định có thể gây mơ hồ khi kết hợp với overload.\n- Template và hàm thường cùng tên: hàm thường được ưu tiên nếu khớp ngang nhau.\n\n### Lỗi hay gặp\n- `in(0)` hoặc `in(NULL)` với overload `int` và `char*`: mơ hồ/chọn sai; dùng `nullptr`.\n- `in(5L)` với hai overload `int` và `double`: mơ hồ vì cả hai cần chuyển đổi.\n- Overload khiến khó biết hàm nào được gọi: đặt tên rõ khi hành vi khác nhau.\n\n### Tự kiểm tra\nĐoạn `int f(int); double f(int);` có hợp lệ không? Vì sao?",
+  "lessons": [
+   {
+    "href": "/courses/prf193-programming-fundamentals/learn?lessonSlug=prf193-5-2-nap-chong",
+    "ten": "5.2 — Nạp chồng hàm và nạp chồng toán tử",
+    "nguon": "Programming Fundamentals (with C/C++) · Chương 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRF193"
+   }
+  ]
+ },
+ "Templates & Generic Programming › Variadic Templates": {
+  "body": "**Variadic template** (C++11) cho phép template nhận **số lượng tham số bất kỳ** nhờ *parameter pack* `...`. Đây là cơ chế sau `std::tuple`, `std::make_unique`, `std::function`, `std::thread` và nhiều hàm ghi log.\n\n### Cú pháp\n```cpp\n// Cách 1: đệ quy\nvoid in() {}                                   // điều kiện dừng\ntemplate <typename T, typename... Rest>\nvoid in(const T& dau, const Rest&... con) {\n    std::cout << dau << ' ';\n    in(con...);                                // mở rộng pack\n}\n\n// Cách 2: C++17 fold expression, gọn hơn\ntemplate <typename... Args>\nauto tong(Args... args) { return (args + ... + 0); }\n\nin(1, \"xin\", 2.5);        // 1 xin 2.5\ntong(1, 2, 3);            // 6\n```\n- `typename... Rest`: khai báo pack kiểu; `Rest... con`: pack giá trị; `con...`: **mở rộng** pack thành danh sách.\n- `sizeof...(Rest)` cho số phần tử của pack.\n\n### Chuyển tiếp hoàn hảo\nHàm \"bao\" kiểu `make_unique` cần chuyển nguyên vẹn đối số (giữ lvalue/rvalue):\n```cpp\ntemplate <typename T, typename... Args>\nstd::unique_ptr<T> tao(Args&&... args) {\n    return std::unique_ptr<T>(new T(std::forward<Args>(args)...));\n}\n```\n\n### Lỗi hay gặp\n- Quên điều kiện dừng của bản đệ quy, gây lỗi biên dịch.\n- Nhầm vị trí dấu `...` (bên trái tên là khai báo pack, bên phải là mở rộng).\n- Quên `std::forward` nên mất tính rvalue và sao chép thừa.\n\n### Tự kiểm tra\nViết hàm variadic `tichTatCa` trả về tích của mọi đối số bằng fold expression."
+ },
+ "Templates & Generic Programming › Type Traits": {
+  "body": "**Type traits** (header `<type_traits>`) là các \"câu hỏi\" và \"phép biến đổi\" về **kiểu**, trả lời ngay lúc biên dịch. Chúng giúp template tự thích nghi theo kiểu được truyền vào.\n\n### Truy vấn kiểu\n```cpp\n#include <type_traits>\n\nstatic_assert(std::is_integral_v<int>);\nstatic_assert(!std::is_pointer_v<int>);\nstatic_assert(std::is_same_v<std::remove_const_t<const int>, int>);\n```\nMột số trait hay dùng: `is_integral`, `is_floating_point`, `is_pointer`, `is_class`, `is_same`, `is_base_of`, `is_trivially_copyable`, `is_constructible`. Hậu tố `_v` (C++17) cho giá trị `bool`; `_t` cho kiểu kết quả.\n\n### Biến đổi kiểu\n`remove_const`, `remove_reference`, `add_pointer`, `decay` (mô phỏng cách kiểu bị biến đổi khi truyền theo giá trị: bỏ tham chiếu, bỏ const, mảng/hàm thành con trỏ), `conditional<B, T, F>` (chọn một trong hai kiểu).\n\n### Dùng để chọn cài đặt\n```cpp\ntemplate <typename T>\nvoid in(const T& v) {\n    if constexpr (std::is_integral_v<T>) {      // C++17: nhánh không dùng bị loại bỏ\n        std::cout << \"so nguyen \" << v << '\\n';\n    } else {\n        std::cout << \"khac \" << v << '\\n';\n    }\n}\n\ntemplate <typename T, typename = std::enable_if_t<std::is_arithmetic_v<T>>>\nT gapDoi(T x) { return x * 2; }                  // chỉ nhận kiểu số (SFINAE)\n```\n`std::enable_if` bật/tắt một overload theo điều kiện kiểu (kỹ thuật SFINAE); từ C++20, **concepts** (`requires`, `std::integral`) làm việc này rõ ràng hơn.\n\n### Vì sao cần\nThư viện chuẩn dùng traits để chọn thuật toán tối ưu (ví dụ sao chép vùng nhớ bằng `memmove` khi kiểu \"trivially copyable\"), và để báo lỗi sớm khi dùng sai kiểu. Bạn thường dùng `static_assert` + traits để kiểm tra giả định của template.\n\n### Lỗi hay gặp\n- Dùng `if` thường thay vì `if constexpr` nên cả hai nhánh đều phải biên dịch được.\n- Quên `std::decay_t`/`remove_cvref_t` khi so sánh kiểu nhận qua forwarding reference.\n- `enable_if` làm thông báo lỗi khó đọc (concepts sẽ cải thiện)."
+ }
+}

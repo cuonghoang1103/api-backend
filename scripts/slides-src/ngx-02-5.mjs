@@ -32,12 +32,13 @@ export const S = [
   { t: 'try_files, in the order it tries', body: ngc(CONF().slice(10, 14).map((l) => l.trim()).join('\n'), { sm: true }) +
     tn(O('tryfiles'), { wrap: 110, fs: 14 }),
     en: 'Three uses measured. A, an SPA: any missing path under /spa/ falls back to /index.html. B, =404: the request ends right there — here an error_page then runs. C, a fallback to another location: the /dich-cuoi block ran, with a new $uri.' },
-  { t: 'Four rules', body: tiers([
-      ['list', '1 · Arguments are tried LEFT to RIGHT', '$uri = that file · $uri/ = a folder of that name · first that EXISTS is served', '#2563eb'],
-      ['warn', '2 · The LAST argument is not tried — it is USED', '=404 ⇒ end with that code · a URI ⇒ internal redirect', '#c0392b'],
-      ['loop', '3 · An internal redirect RESETS $uri and RE-MATCHES', 'the five steps of 2.1 run again — another block may win', '#7c3aed'],
-      ['cut', '4 · Ten of them and Nginx gives up', '500 + one line in error.log', '#b85a2b'],
-    ], { th: 70, gap: 20 }),
+  { t: 'Four rules', to: true, body: icards([
+      ['list', '1 · Arguments are tried LEFT to RIGHT', '<code>$uri</code> = that file · <code>$uri/</code> = a folder of that name · the first that EXISTS is served'],
+      ['warn', '2 · The LAST argument is not tried — it is USED', '<code>=404</code> ⇒ end with that code · a URI ⇒ internal redirect'],
+      ['loop', '3 · An internal redirect RESETS $uri and RE-MATCHES', 'the five steps of Lesson 2.1 run again — another block may win'],
+      ['cut', '4 · Ten of them and Nginx gives up', '500, and one line in error.log: <code>rewrite or internal redirection cycle</code>'],
+    ], 2) + ngc(`try_files $uri $uri/ /index.html;
+#        ^1    ^1     ^2 → 3: re-match with $uri = /index.html`, { sm: true }),
     en: 'Four rules. Arguments are tried left to right; the first one that exists is served. The last argument is not tried but used: a code ends the request, a URI triggers an internal redirect. That redirect resets $uri and re-runs matching. And after ten of them Nginx gives up with a 500.' },
   { t: 'Row C: a different block ran', body: seq(['client', 'location /di-vong/', 'location /dich-cuoi'], [
       [0, 1, 'GET /di-vong/khong-co'], [1, 1, 'try_files: $uri missing', '#7c3aed'], [1, 1, 'last arg ⇒ $uri = /dich-cuoi, MATCH AGAIN', '#7c3aed'],

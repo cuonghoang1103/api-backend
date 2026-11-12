@@ -17,7 +17,7 @@
 export const CDN_ROOT = 'https://media.cuongthai.com/images/academy/NGX';
 
 /** Deck nào đã phải dựng lại thì ghi phiên bản ở đây, vd { 'ngx-01-1': 'v2' }. */
-const VER = {};
+const VER = { 'ngx-02-5': 'v2' };   // 12/11: slide 4 chữ đè (tiers) ⇒ dựng lại, đẩy NGX/v2
 
 const pad = (n) => String(n).padStart(3, '0');
 const attr = (s) => String(s).replace(/<[^>]+>/g, '').replace(/&/g, '&amp;').replace(/"/g, '&quot;');

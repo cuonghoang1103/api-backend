@@ -1,3 +1,8 @@
+import G04_1 from './giang/ngx-04-1.mjs';
+import G04_2 from './giang/ngx-04-2.mjs';
+import G04_3 from './giang/ngx-04-3.mjs';
+import G04_4 from './giang/ngx-04-4.mjs';
+import G04_5 from './giang/ngx-04-5.mjs';
 const REF = '?ref=%2Fcourses%2Fnginx%2Flearn&reflabel=Nginx';
 
 export default {
@@ -12,6 +17,7 @@ export default {
       type: 'LESSON',
       description: 'Năm tệp, năm phần đuôi khác nhau, và một bảng cho thấy Content-Type được quyết định thế nào — cùng ba hành vi của một thư mục mà kết quả là 403 chứ không phải 404 như phần lớn mọi người đoán.',
       content: `
+${G04_1}
 <div class="ml-en">
 <span class="eyebrow">Chapter 4 · Lesson 4.1</span>
 <h2>From URI to bytes, and where the content type comes from</h2>
@@ -35,19 +41,26 @@ Accept-Ranges: bytes</div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">The bytes are sent, possibly partially</span><span class="lz-d">With <code>Accept-Ranges: bytes</code> advertised, a client may ask for a slice and get <code>206 Partial Content</code>. That is what makes video seeking and resumable downloads work at all.</span></div>
 </div>
 
-<h3>Content-Type, measured across five files</h3>
-<div class="out">trang.html     -> text/html
-nho.txt        -> text/plain
-lon.bin        -> application/octet-stream
-khong-duoi     -> application/octet-stream    &lt;- KHONG co phan duoi
-la.xyz123      -> application/octet-stream    &lt;- duoi la, khong co trong bang
+<h3>Content-Type, measured across six files and two servers</h3>
+<div class="out">$ for f in …; do printf '%-13s 8080 -&gt; %-26s 8081 -&gt; %s\\n' $f "$(curl -s -o /dev/null -w '%{content_type}' http://127.0.0.1:8080/$f)" "$(curl -s -o /dev/null -w '%{content_type}' http://127.0.0.1:8081/$f)"; done
+trang.html    8080 -&gt; text/html                  8081 -&gt; text/html
+nho.txt       8080 -&gt; text/plain                 8081 -&gt; text/plain
+lon.bin       8080 -&gt; application/octet-stream   8081 -&gt; application/octet-stream
+khong-duoi    8080 -&gt; text/plain                 8081 -&gt; application/octet-stream
+la.xyz123     8080 -&gt; text/plain                 8081 -&gt; application/octet-stream
+tep/anh.svg   8080 -&gt; image/svg+xml              8081 -&gt; image/svg+xml
 
-$ curl -I -H 'Range: bytes=0-99' .../lon.bin
+$ curl -sI -H 'Range: bytes=0-99' http://127.0.0.1:8080/lon.bin | grep -E '^(HTTP|Content-Length|Content-Range)'
 HTTP/1.1 206 Partial Content
 Content-Length: 100
-Content-Range: bytes 0-99/2000000</div>
+Content-Range: bytes 0-99/2000000
+$ curl -sI -H 'Range: bytes=0-9,100-109' http://127.0.0.1:8080/lon.bin | grep -E '^(HTTP|Content-Type|Content-Length)'
+HTTP/1.1 206 Partial Content
+Content-Type: multipart/byteranges; boundary=00000000000000000001
+Content-Length: 256</div>
 <div class="pitfall">
-<p><strong>Trap — <code>default_type</code> defaults to <code>text/plain</code>, and that is the wrong default for a file server.</strong> If your <code>http</code> block does not set it, an unknown extension is announced as text, and a browser will happily render a downloaded file as a page. Serve user-uploaded content that way and an uploaded <code>.svg</code> or an extension you forgot becomes stored XSS: the browser renders attacker markup on your origin. Two things together fix it — <code>default_type application/octet-stream;</code> so unknown types download rather than render, and <code>add_header X-Content-Type-Options "nosniff" always;</code> so the browser does not second-guess you. Both are one line, and for a route that serves uploads they are not optional.</p>
+<p><strong>Trap — <code>default_type</code> defaults to <code>text/plain</code>, and that is the wrong default for a file server.</strong> If your <code>http</code> block does not set it, an unknown extension is announced as text, and a browser will happily render a downloaded file as a page. Serve user-uploaded content that way and an uploaded <code>.svg</code> or an extension you forgot becomes stored XSS: the browser renders attacker markup on your origin. Two things together fix it — <code>default_type application/octet-stream;</code> so unknown types download rather than render, and <code>add_header X-Content-Type-Options "nosniff" always;</code> so the browser does not second-guess you. Both are one line, and for a route that serves uploads they are not optional. Measured above: port 8080 (no <code>default_type</code>) announced <code>khong-duoi</code> and <code>la.xyz123</code> as <code>text/plain</code>; port 8081 sent the same files as <code>application/octet-stream</code>. Ubuntu's packaged <code>nginx.conf</code> already sets that line — a config written from scratch does not.</p>
+<p><strong>And neither line saves an SVG.</strong> <code>.svg</code> is a KNOWN extension: both servers answered <code>image/svg+xml</code>, so <code>default_type</code> is never consulted and <code>nosniff</code> has nothing to correct — opened directly, the script inside runs on your origin. For user uploads, empty the table for that location (<code>types { }</code>) and force a download with <code>Content-Disposition: attachment</code>; Lesson 4.5 measures that block.</p>
 </div>
 
 <h3>A directory, three ways</h3>
@@ -82,6 +95,106 @@ Content-Range: bytes 0-99/2000000</div>
 <p><strong>What to check on a new static route.</strong> Request one file of each kind you serve and read the four headers: is <code>Content-Type</code> right, is there an <code>ETag</code>, is <code>Accept-Ranges</code> present, and is <code>Cache-Control</code> what you intended? It takes one <code>curl -I</code> per file type, and it catches the misconfigurations in this lesson before a browser does something surprising with them.</p>
 </div>
 
+<h3>🔬 Run it yourself</h3>
+<p>Two servers over the same six files — one with no <code>default_type</code>, one with octet-stream and nosniff — plus listings, ranges and a gzip server, on nginx/1.24.0:</p>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  include      /etc/nginx/mime.types;
+  access_log   off;
+  server {
+    listen 8080;                     <span class="tok-comment">  # KHÔNG khai default_type ⇒ mặc định của nginx</span>
+    root /srv/www;
+    location /liet-ke/      { autoindex on; }
+    location /liet-ke-json/ { alias /srv/www/liet-ke/; autoindex on; autoindex_format json; }
+  }
+  server {
+    listen 8081;
+    root /srv/www;
+    default_type application/octet-stream;
+    add_header X-Content-Type-Options "nosniff" always;
+  }
+}</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/gz.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  include /etc/nginx/mime.types;
+  access_log off;
+  server {
+    listen 8082; root /srv/www;
+    gzip on; gzip_min_length 1;    <span class="tok-comment">  # text/html luôn nằm trong gzip_types</span>
+  }
+}</code></pre>
+<div class="out">$ curl -sI http://127.0.0.1:8080/trang.html | grep -vE '^(Date|Connection)'
+HTTP/1.1 200 OK
+Server: nginx/1.24.0 (Ubuntu)
+Content-Type: text/html
+Content-Length: 27026
+Last-Modified: Thu, 12 Nov 2026 13:54:46 GMT
+ETag: "6af5c526-6992"
+Accept-Ranges: bytes
+$ for f in trang.html nho.txt lon.bin khong-duoi la.xyz123 tep/anh.svg; do printf '%-13s 8080 -&gt; %-26s 8081 -&gt; %s\\n' $f "$(curl -s -o /dev/null -w '%{content_type}' http://127.0.0.1:8080/$f)" "$(curl -s -o /dev/null -w '%{content_type}' http://127.0.0.1:8081/$f)"; done
+trang.html    8080 -&gt; text/html                  8081 -&gt; text/html
+nho.txt       8080 -&gt; text/plain                 8081 -&gt; text/plain
+lon.bin       8080 -&gt; application/octet-stream   8081 -&gt; application/octet-stream
+khong-duoi    8080 -&gt; text/plain                 8081 -&gt; application/octet-stream
+la.xyz123     8080 -&gt; text/plain                 8081 -&gt; application/octet-stream
+tep/anh.svg   8080 -&gt; image/svg+xml              8081 -&gt; image/svg+xml
+$ grep -n 'default_type' /etc/nginx/nginx.conf
+27:	default_type application/octet-stream;
+=== autoindex on ===
+$ curl -s http://127.0.0.1:8080/liet-ke/
+&lt;html&gt;
+&lt;head&gt;&lt;title&gt;Index of /liet-ke/&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;Index of /liet-ke/&lt;/h1&gt;&lt;hr&gt;&lt;pre&gt;&lt;a href="../"&gt;../&lt;/a&gt;
+&lt;a href="a.txt"&gt;a.txt&lt;/a&gt;                                              12-Nov-2026 13:54                   2
+&lt;a href="b.txt"&gt;b.txt&lt;/a&gt;                                              12-Nov-2026 13:54                   2
+&lt;/pre&gt;&lt;hr&gt;&lt;/body&gt;
+&lt;/html&gt;
+=== autoindex_format json ===
+$ curl -s http://127.0.0.1:8080/liet-ke-json/
+[
+{ "name":"a.txt", "type":"file", "mtime":"Thu, 12 Nov 2026 13:54:46 GMT", "size":2 },
+{ "name":"b.txt", "type":"file", "mtime":"Thu, 12 Nov 2026 13:54:46 GMT", "size":2 }
+]
+=== KHONG autoindex, thu muc KHONG co index.html ===
+$ curl -s -o /dev/null -w '%{http_code}\\n' http://127.0.0.1:8080/rong/
+403
+$ curl -s -o /dev/null -w '%{http_code}\\n' http://127.0.0.1:8080/khong-co-thu-muc-nay/
+404
+$ curl -sI -H 'Range: bytes=0-99' http://127.0.0.1:8080/lon.bin | grep -E '^(HTTP|Content-Length|Content-Range)'
+HTTP/1.1 206 Partial Content
+Content-Length: 100
+Content-Range: bytes 0-99/2000000
+$ curl -sI -H 'Range: bytes=0-9,100-109' http://127.0.0.1:8080/lon.bin | grep -E '^(HTTP|Content-Type|Content-Length)'
+HTTP/1.1 206 Partial Content
+Content-Type: multipart/byteranges; boundary=00000000000000000001
+Content-Length: 256
+$ curl -s -o /dev/null -D - -H 'Range: bytes=0-99' http://127.0.0.1:8082/trang.html | grep -E '^(HTTP|Content-Range|Content-Encoding)'
+HTTP/1.1 206 Partial Content
+Content-Range: bytes 0-99/27026
+$ curl -s -o /dev/null -D - -H 'Range: bytes=0-99' -H 'Accept-Encoding: gzip' http://127.0.0.1:8082/trang.html | grep -E '^(HTTP|Content-Range|Content-Encoding)'
+HTTP/1.1 200 OK
+Content-Encoding: gzip</div>
+<p>Unknown and missing extensions were <code>text/plain</code> until <code>default_type</code> said otherwise; the SVG stayed <code>image/svg+xml</code> on both; an empty directory answered 403 and a missing one 404; one range gave 206, two gave <code>multipart/byteranges</code>; and with <code>Accept-Encoding: gzip</code> the same range came back 200 with the whole file compressed.</p>
+<h3>🔗 Related lessons in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-7-4-header-quan-trong" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking for Developers · 7.4 — Headers that change behaviour</span><span class="lc-sub">Content-Type, caching, compression and security headers</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-9-1-header-csp-cors" target="_blank" rel="noopener"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Node.js · 9.1 — Security headers, CSP and CORS</span><span class="lc-sub">nosniff and friends from the application side</span></span></a>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">mime.types</span><span class="v">The plain extension-to-type table Nginx consults to set <code>Content-Type</code> — no sniffing, no reading the file.</span></div>
+  <div class="kv"><span class="k">default_type</span><span class="v">The type used when the extension is unknown or absent; it defaults to <code>text/plain</code>.</span></div>
+  <div class="kv"><span class="k">nosniff</span><span class="v"><code>X-Content-Type-Options: nosniff</code> tells the browser not to second-guess the declared type — essential on upload routes.</span></div>
+  <div class="kv"><span class="k">index</span><span class="v">The ordered list of files tried for a directory request; order matters and the list should stay short.</span></div>
+  <div class="kv"><span class="k">autoindex</span><span class="v">Off by default; turned on it lists every filename in a directory, including the backup someone forgot.</span></div>
+  <div class="kv"><span class="k">Accept-Ranges / 206</span><span class="v">Nginx advertising it can serve a byte slice; a <code>Range</code> request then returns <code>206 Partial Content</code>.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li><code>Content-Type</code> is decided by the file extension alone, looked up in <code>mime.types</code>; an unknown extension falls to <code>default_type</code>.</li><li>On any route serving uploads, set <code>default_type application/octet-stream</code> plus <code>nosniff</code> so a stray file downloads instead of rendering as a page.</li><li>A directory with no index file and <code>autoindex</code> off answers <code>403</code>, not <code>404</code> — and that leaks its existence.</li><li>Range requests are on by default and make video seeking and resumable downloads work; they do not combine with on-the-fly compression.</li><li>Check a new static route with one <code>curl -I</code> per file type: Content-Type, ETag, Accept-Ranges, Cache-Control.</li></ul>
+
 <h3>Learning sources for this lesson</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_core_module.html#types" target="_blank" rel="noopener"><span class="lc-ico">🏷️</span><span class="lc-body"><span class="lc-title">nginx — types and default_type</span><span class="lc-sub">nginx.org · How the extension table is consulted, and the fallback</span></span></a>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_autoindex_module.html" target="_blank" rel="noopener"><span class="lc-ico">📂</span><span class="lc-body"><span class="lc-title">nginx — the autoindex module</span><span class="lc-sub">nginx.org · Including autoindex_format and the exact JSON shape</span></span></a>
@@ -113,19 +226,26 @@ Accept-Ranges: bytes</div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Byte được gửi đi, và có thể chỉ MỘT PHẦN</span><span class="lz-d">Đã quảng cáo <code>Accept-Ranges: bytes</code> thì client được phép xin một lát và nhận <code>206 Partial Content</code>. Đó là thứ làm cho việc tua video và việc tải tiếp chạy được.</span></div>
 </div>
 
-<h3>Content-Type, đo trên năm tệp</h3>
-<div class="out">trang.html     -> text/html
-nho.txt        -> text/plain
-lon.bin        -> application/octet-stream
-khong-duoi     -> application/octet-stream    &lt;- KHONG co phan duoi
-la.xyz123      -> application/octet-stream    &lt;- duoi la, khong co trong bang
+<h3>Content-Type, đo trên sáu tệp và hai máy chủ</h3>
+<div class="out">$ for f in …; do printf '%-13s 8080 -&gt; %-26s 8081 -&gt; %s\\n' $f "$(curl -s -o /dev/null -w '%{content_type}' http://127.0.0.1:8080/$f)" "$(curl -s -o /dev/null -w '%{content_type}' http://127.0.0.1:8081/$f)"; done
+trang.html    8080 -&gt; text/html                  8081 -&gt; text/html
+nho.txt       8080 -&gt; text/plain                 8081 -&gt; text/plain
+lon.bin       8080 -&gt; application/octet-stream   8081 -&gt; application/octet-stream
+khong-duoi    8080 -&gt; text/plain                 8081 -&gt; application/octet-stream
+la.xyz123     8080 -&gt; text/plain                 8081 -&gt; application/octet-stream
+tep/anh.svg   8080 -&gt; image/svg+xml              8081 -&gt; image/svg+xml
 
-$ curl -I -H 'Range: bytes=0-99' .../lon.bin
+$ curl -sI -H 'Range: bytes=0-99' http://127.0.0.1:8080/lon.bin | grep -E '^(HTTP|Content-Length|Content-Range)'
 HTTP/1.1 206 Partial Content
 Content-Length: 100
-Content-Range: bytes 0-99/2000000</div>
+Content-Range: bytes 0-99/2000000
+$ curl -sI -H 'Range: bytes=0-9,100-109' http://127.0.0.1:8080/lon.bin | grep -E '^(HTTP|Content-Type|Content-Length)'
+HTTP/1.1 206 Partial Content
+Content-Type: multipart/byteranges; boundary=00000000000000000001
+Content-Length: 256</div>
 <div class="pitfall">
-<p><strong>Bẫy — <code>default_type</code> mặc định là <code>text/plain</code>, và đó là mặc định SAI cho một máy chủ tệp.</strong> Nếu khối <code>http</code> của bạn không đặt nó thì một phần đuôi lạ sẽ được công bố là VĂN BẢN, và trình duyệt sẽ vui vẻ dựng cái tệp vừa tải thành một trang web. Đem cách đó phục vụ nội dung do người dùng tải lên là một cái <code>.svg</code> hay một phần đuôi bạn quên trở thành XSS lưu trữ: trình duyệt dựng đánh dấu của kẻ tấn công ngay trên gốc của bạn. Hai thứ đi cùng nhau chữa được — <code>default_type application/octet-stream;</code> để kiểu lạ thì TẢI VỀ chứ không dựng ra, và <code>add_header X-Content-Type-Options "nosniff" always;</code> để trình duyệt đừng đoán lại thay bạn. Cả hai đều một dòng, và với một tuyến phục vụ tệp tải lên thì chúng KHÔNG phải tuỳ chọn.</p>
+<p><strong>Bẫy — <code>default_type</code> mặc định là <code>text/plain</code>, và đó là mặc định SAI cho một máy chủ tệp.</strong> Nếu khối <code>http</code> của bạn không đặt nó thì một phần đuôi lạ sẽ được công bố là VĂN BẢN, và trình duyệt sẽ vui vẻ dựng cái tệp vừa tải thành một trang web. Đem cách đó phục vụ nội dung do người dùng tải lên là một cái <code>.svg</code> hay một phần đuôi bạn quên trở thành XSS lưu trữ: trình duyệt dựng đánh dấu của kẻ tấn công ngay trên gốc của bạn. Hai thứ đi cùng nhau chữa được — <code>default_type application/octet-stream;</code> để kiểu lạ thì TẢI VỀ chứ không dựng ra, và <code>add_header X-Content-Type-Options "nosniff" always;</code> để trình duyệt đừng đoán lại thay bạn. Cả hai đều một dòng, và với một tuyến phục vụ tệp tải lên thì chúng KHÔNG phải tuỳ chọn. Đo ở trên: cổng 8080 (không khai <code>default_type</code>) công bố <code>khong-duoi</code> và <code>la.xyz123</code> là <code>text/plain</code>; cổng 8081 gửi chính các tệp đó dưới dạng <code>application/octet-stream</code>. Tệp <code>nginx.conf</code> đóng gói sẵn của Ubuntu đã có dòng ấy — một cấu hình tự viết từ đầu thì KHÔNG.</p>
+<p><strong>Và cả hai dòng đều KHÔNG cứu được một tệp SVG.</strong> <code>.svg</code> là phần đuôi ĐÃ BIẾT: cả hai máy chủ đều trả <code>image/svg+xml</code>, nên <code>default_type</code> không bao giờ được hỏi tới và <code>nosniff</code> chẳng có gì để sửa — mở thẳng ra là script bên trong chạy trên chính gốc của bạn. Với tệp người dùng tải lên: làm rỗng bảng kiểu ở location đó (<code>types { }</code>) và ép tải về bằng <code>Content-Disposition: attachment</code>; Bài 4.5 đo đúng khối ấy.</p>
 </div>
 
 <h3>Một thư mục, ba kiểu</h3>
@@ -160,6 +280,106 @@ Content-Range: bytes 0-99/2000000</div>
 <p><strong>Kiểm gì trên một tuyến tĩnh mới.</strong> Hãy gọi MỘT tệp của mỗi loại bạn phục vụ rồi đọc bốn cái header: <code>Content-Type</code> có đúng không, có <code>ETag</code> không, có <code>Accept-Ranges</code> không, và <code>Cache-Control</code> có đúng ý bạn không? Nó tốn một lệnh <code>curl -I</code> cho mỗi loại tệp, và nó bắt được đúng những cấu hình sai trong bài này TRƯỚC khi một trình duyệt làm gì đó bất ngờ với chúng.</p>
 </div>
 
+<h3>🔬 Tự chạy lại</h3>
+<p>Hai máy chủ trên cùng sáu tệp — một cái không khai <code>default_type</code>, một cái có octet-stream và nosniff — cộng danh sách thư mục, dải byte và một máy nén gzip, trên nginx/1.24.0:</p>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  include      /etc/nginx/mime.types;
+  access_log   off;
+  server {
+    listen 8080;                     <span class="tok-comment">  # KHÔNG khai default_type ⇒ mặc định của nginx</span>
+    root /srv/www;
+    location /liet-ke/      { autoindex on; }
+    location /liet-ke-json/ { alias /srv/www/liet-ke/; autoindex on; autoindex_format json; }
+  }
+  server {
+    listen 8081;
+    root /srv/www;
+    default_type application/octet-stream;
+    add_header X-Content-Type-Options "nosniff" always;
+  }
+}</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/gz.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  include /etc/nginx/mime.types;
+  access_log off;
+  server {
+    listen 8082; root /srv/www;
+    gzip on; gzip_min_length 1;    <span class="tok-comment">  # text/html luôn nằm trong gzip_types</span>
+  }
+}</code></pre>
+<div class="out">$ curl -sI http://127.0.0.1:8080/trang.html | grep -vE '^(Date|Connection)'
+HTTP/1.1 200 OK
+Server: nginx/1.24.0 (Ubuntu)
+Content-Type: text/html
+Content-Length: 27026
+Last-Modified: Thu, 12 Nov 2026 13:54:46 GMT
+ETag: "6af5c526-6992"
+Accept-Ranges: bytes
+$ for f in trang.html nho.txt lon.bin khong-duoi la.xyz123 tep/anh.svg; do printf '%-13s 8080 -&gt; %-26s 8081 -&gt; %s\\n' $f "$(curl -s -o /dev/null -w '%{content_type}' http://127.0.0.1:8080/$f)" "$(curl -s -o /dev/null -w '%{content_type}' http://127.0.0.1:8081/$f)"; done
+trang.html    8080 -&gt; text/html                  8081 -&gt; text/html
+nho.txt       8080 -&gt; text/plain                 8081 -&gt; text/plain
+lon.bin       8080 -&gt; application/octet-stream   8081 -&gt; application/octet-stream
+khong-duoi    8080 -&gt; text/plain                 8081 -&gt; application/octet-stream
+la.xyz123     8080 -&gt; text/plain                 8081 -&gt; application/octet-stream
+tep/anh.svg   8080 -&gt; image/svg+xml              8081 -&gt; image/svg+xml
+$ grep -n 'default_type' /etc/nginx/nginx.conf
+27:	default_type application/octet-stream;
+=== autoindex on ===
+$ curl -s http://127.0.0.1:8080/liet-ke/
+&lt;html&gt;
+&lt;head&gt;&lt;title&gt;Index of /liet-ke/&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;Index of /liet-ke/&lt;/h1&gt;&lt;hr&gt;&lt;pre&gt;&lt;a href="../"&gt;../&lt;/a&gt;
+&lt;a href="a.txt"&gt;a.txt&lt;/a&gt;                                              12-Nov-2026 13:54                   2
+&lt;a href="b.txt"&gt;b.txt&lt;/a&gt;                                              12-Nov-2026 13:54                   2
+&lt;/pre&gt;&lt;hr&gt;&lt;/body&gt;
+&lt;/html&gt;
+=== autoindex_format json ===
+$ curl -s http://127.0.0.1:8080/liet-ke-json/
+[
+{ "name":"a.txt", "type":"file", "mtime":"Thu, 12 Nov 2026 13:54:46 GMT", "size":2 },
+{ "name":"b.txt", "type":"file", "mtime":"Thu, 12 Nov 2026 13:54:46 GMT", "size":2 }
+]
+=== KHONG autoindex, thu muc KHONG co index.html ===
+$ curl -s -o /dev/null -w '%{http_code}\\n' http://127.0.0.1:8080/rong/
+403
+$ curl -s -o /dev/null -w '%{http_code}\\n' http://127.0.0.1:8080/khong-co-thu-muc-nay/
+404
+$ curl -sI -H 'Range: bytes=0-99' http://127.0.0.1:8080/lon.bin | grep -E '^(HTTP|Content-Length|Content-Range)'
+HTTP/1.1 206 Partial Content
+Content-Length: 100
+Content-Range: bytes 0-99/2000000
+$ curl -sI -H 'Range: bytes=0-9,100-109' http://127.0.0.1:8080/lon.bin | grep -E '^(HTTP|Content-Type|Content-Length)'
+HTTP/1.1 206 Partial Content
+Content-Type: multipart/byteranges; boundary=00000000000000000001
+Content-Length: 256
+$ curl -s -o /dev/null -D - -H 'Range: bytes=0-99' http://127.0.0.1:8082/trang.html | grep -E '^(HTTP|Content-Range|Content-Encoding)'
+HTTP/1.1 206 Partial Content
+Content-Range: bytes 0-99/27026
+$ curl -s -o /dev/null -D - -H 'Range: bytes=0-99' -H 'Accept-Encoding: gzip' http://127.0.0.1:8082/trang.html | grep -E '^(HTTP|Content-Range|Content-Encoding)'
+HTTP/1.1 200 OK
+Content-Encoding: gzip</div>
+<p>Phần đuôi lạ và không có đuôi đều là <code>text/plain</code> cho tới khi <code>default_type</code> nói khác; tệp SVG vẫn là <code>image/svg+xml</code> ở cả hai; thư mục rỗng trả 403 còn thư mục không có trả 404; một dải cho 206, hai dải cho <code>multipart/byteranges</code>; và kèm <code>Accept-Encoding: gzip</code> thì cùng dải đó về 200 với nguyên tệp đã nén.</p>
+<h3>🔗 Bài liên quan ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-7-4-header-quan-trong" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking for Developers · 7.4 — Các header đổi hành vi</span><span class="lc-sub">Content-Type, cache, nén và header bảo mật</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-9-1-header-csp-cors" target="_blank" rel="noopener"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Node.js · 9.1 — Header bảo mật, CSP và CORS</span><span class="lc-sub">nosniff và các header khác nhìn từ phía ứng dụng</span></span></a>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">mime.types</span><span class="v">Bảng tra phần-đuôi-sang-kiểu mà Nginx dùng để đặt <code>Content-Type</code> — không đánh hơi, không đọc tệp.</span></div>
+  <div class="kv"><span class="k">default_type</span><span class="v">Kiểu dùng khi phần đuôi lạ hoặc không có; mặc định là <code>text/plain</code>.</span></div>
+  <div class="kv"><span class="k">nosniff</span><span class="v"><code>X-Content-Type-Options: nosniff</code> bảo trình duyệt đừng đoán lại kiểu đã khai — thiết yếu cho tuyến tải lên.</span></div>
+  <div class="kv"><span class="k">index</span><span class="v">Danh sách tệp thử theo thứ tự cho một request tới thư mục; thứ tự có nghĩa lý và nên để ngắn.</span></div>
+  <div class="kv"><span class="k">autoindex</span><span class="v">Mặc định tắt; bật lên thì liệt kê mọi tên tệp trong thư mục, kể cả bản sao lưu ai đó bỏ quên.</span></div>
+  <div class="kv"><span class="k">Accept-Ranges / 206</span><span class="v">Nginx quảng cáo rằng nó phục vụ được một lát byte; một request <code>Range</code> khi ấy trả <code>206 Partial Content</code>.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li><code>Content-Type</code> do một mình phần đuôi quyết định, tra trong <code>mime.types</code>; đuôi lạ thì rơi về <code>default_type</code>.</li><li>Trên mọi tuyến phục vụ tệp tải lên, đặt <code>default_type application/octet-stream</code> kèm <code>nosniff</code> để một tệp lạ tải về chứ không dựng thành trang.</li><li>Một thư mục không có tệp index và <code>autoindex</code> tắt sẽ trả <code>403</code>, không phải <code>404</code> — và điều đó lộ ra rằng nó tồn tại.</li><li>Request theo dải byte bật sẵn và làm cho việc tua video và tải tiếp chạy được; nó không đi cùng phép nén tại chỗ.</li><li>Kiểm một tuyến tĩnh mới bằng một lệnh <code>curl -I</code> cho mỗi loại tệp: Content-Type, ETag, Accept-Ranges, Cache-Control.</li></ul>
+
 <h3>Nguồn học cho bài này</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_core_module.html#types" target="_blank" rel="noopener"><span class="lc-ico">🏷️</span><span class="lc-body"><span class="lc-title">nginx — types và default_type</span><span class="lc-sub">nginx.org · Bảng phần đuôi được tra thế nào, và cái rơi về</span></span></a>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_autoindex_module.html" target="_blank" rel="noopener"><span class="lc-ico">📂</span><span class="lc-body"><span class="lc-title">nginx — module autoindex</span><span class="lc-sub">nginx.org · Kèm autoindex_format và hình dạng JSON chính xác</span></span></a>
@@ -177,6 +397,7 @@ Content-Range: bytes 0-99/2000000</div>
       type: 'LESSON',
       description: 'ETag của Nginx là hex(mtime)-hex(size) — bài này chứng minh bằng số. Rồi chạm vào tệp bằng touch: nội dung y hệt từng byte, md5 y hệt, mà ETag ĐỔI, và client cầm ETag cũ phải tải lại nguyên tệp. Đó là chuyện xảy ra ở MỌI lần deploy, và ở MỌI máy chủ thứ hai sau bộ cân bằng tải.',
       content: `
+${G04_2}
 <div class="ml-en">
 <span class="eyebrow">Chapter 4 · Lesson 4.2</span>
 <h2>ETag is built from mtime, and that is why deploys break caching</h2>
@@ -198,7 +419,7 @@ Content-Range: bytes 0-99/2000000</div>
 === Client cu gui lai ETag CU ===
   ma=200  tai=27026 byte      &lt;- tai LAI ca tep, du noi dung y het</div>
 <div class="pitfall">
-<p><strong>Trap — every deploy that re-creates files resets mtime, so every cached asset revalidates as a full download.</strong> A <code>git clone</code>, a <code>COPY</code> in a Dockerfile, an <code>rsync</code> without <code>-t</code>, an artifact unpacked from a tarball — all of them stamp the current time onto files whose bytes never changed. Returning visitors then re-fetch your entire asset set. Worse, behind a load balancer two servers deployed a few seconds apart produce <em>different</em> ETags for the same bytes, so a client bouncing between them re-downloads on every alternation, forever, with nothing in your metrics saying why. Two fixes: give assets content-hashed filenames (<code>app.4f9a2c.js</code>) so the URL changes when the content does and the ETag stops mattering; or preserve mtimes across deploys — <code>rsync -a</code>, or a build that writes a stable timestamp. The first is better because it also lets you cache for a year.</p>
+<p><strong>Trap — every deploy that re-creates files resets mtime, so every cached asset revalidates as a full download.</strong> A <code>git clone</code> or an <code>rsync</code> without <code>-t</code> stamps the current time onto files whose bytes never changed. (A Dockerfile <code>COPY</code> and <code>tar -x</code> KEEP the mtime they find — measured — but in CI what they find is usually a fresh clone, so the effect is the same.) Returning visitors then re-fetch your entire asset set. Worse, behind a load balancer two servers deployed a few seconds apart produce <em>different</em> ETags for the same bytes, so a client bouncing between them re-downloads on every alternation, forever, with nothing in your metrics saying why. Two fixes: give assets content-hashed filenames (<code>app.4f9a2c.js</code>) so the URL changes when the content does and the ETag stops mattering; or preserve mtimes across deploys — <code>rsync -a</code>, or a build that writes a stable timestamp. The first is better because it also lets you cache for a year.</p>
 </div>
 
 <h3>Conditional requests, both forms measured</h3>
@@ -256,6 +477,87 @@ location /tinh/ {
 <p><strong>How to tell whether this is costing you anything.</strong> Load your site twice in a browser with the network panel open and look at the second load: assets served from cache with no request are ideal, <code>304</code>s are acceptable, and <code>200</code>s on unchanged files are the symptom this lesson is about. If they are <code>200</code>s, check whether the ETag changed between the two deploys — one <code>curl -I</code> before and after tells you in seconds.</p>
 </div>
 
+<h3>🔬 Run it yourself</h3>
+<p>One file, three servers — validators on, <code>etag off</code>, and every form of <code>expires</code> — on nginx/1.24.0:</p>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  include /etc/nginx/mime.types;
+  access_log off;
+  server { listen 8080; root /srv/www; }
+  server { listen 8081; root /srv/www; etag off; }
+  server {
+    listen 8082; root /srv/www;
+    location /mac-dinh/ { alias /srv/www/; }
+    location /off/      { alias /srv/www/; expires off; }
+    location /am1/      { alias /srv/www/; expires -1; }
+    location /khong/    { alias /srv/www/; expires 0; }
+    location /30d/      { alias /srv/www/; expires 30d; }
+    location /max/      { alias /srv/www/; expires max; }
+    location /ca-hai/   { alias /srv/www/; expires 1y; add_header Cache-Control "public, max-age=31536000, immutable" always; }
+  }
+}</code></pre>
+<div class="out">$ curl -sI http://127.0.0.1:8080/trang.html | grep -E '^(ETag|Last-Modified)'
+Last-Modified: Sun, 23 Aug 2026 17:02:43 GMT
+ETag: "6a8b27b3-6992"
+$ printf 'hex(mtime)-hex(size) = %x-%x\\n' $(stat -c '%Y %s' /srv/www/trang.html)
+hex(mtime)-hex(size) = 6a8b27b3-6992
+$ md5sum /srv/www/trang.html; curl -sI http://127.0.0.1:8080/trang.html | grep ETag
+d0d64a23c28d66fdec7065b70db03d85  /srv/www/trang.html
+ETag: "6a8b27b3-6992"
+$ touch /srv/www/trang.html
+$ md5sum /srv/www/trang.html; curl -sI http://127.0.0.1:8080/trang.html | grep ETag
+d0d64a23c28d66fdec7065b70db03d85  /srv/www/trang.html
+ETag: "6af5c561-6992"
+=== client cu gui lai ETag CU ===
+$ curl -s -o /dev/null -w 'ma=%{http_code}  tai=%{size_download} byte\\n' -H 'If-None-Match: "6a8b27b3-6992"' http://127.0.0.1:8080/trang.html
+ma=200  tai=27026 byte
+$ curl -s -o /dev/null -w 'khong dieu kien          -&gt; %{http_code}, %{size_download} byte\\n' http://127.0.0.1:8080/trang.html
+khong dieu kien          -&gt; 200, 27026 byte
+$ curl -s -o /dev/null -w 'If-None-Match dung       -&gt; %{http_code}, %{size_download} byte\\n' -H 'If-None-Match: "6a8b27b3-6992"' http://127.0.0.1:8080/trang.html
+If-None-Match dung       -&gt; 304, 0 byte
+$ curl -s -o /dev/null -w 'If-Modified-Since dung   -&gt; %{http_code}, %{size_download} byte\\n' -H 'If-Modified-Since: Sun, 23 Aug 2026 17:02:43 GMT' http://127.0.0.1:8080/trang.html
+If-Modified-Since dung   -&gt; 304, 0 byte
+$ curl -s -o /dev/null -w 'ETag SAI + ngay DUNG     -&gt; %{http_code}, %{size_download} byte\\n' -H 'If-None-Match: "khac"' -H 'If-Modified-Since: Sun, 23 Aug 2026 17:02:43 GMT' http://127.0.0.1:8080/trang.html
+ETag SAI + ngay DUNG     -&gt; 200, 27026 byte
+$ curl -sI http://127.0.0.1:8081/trang.html | grep -cE '^ETag'
+0
+$ for p in mac-dinh off am1 khong 30d max ca-hai; do echo "--- expires $p"; curl -sI http://127.0.0.1:8082/$p/trang.html | grep -E '^(Expires|Cache-Control)' ; done
+--- expires mac-dinh
+--- expires off
+--- expires am1
+Expires: Thu, 12 Nov 2026 13:55:45 GMT
+Cache-Control: no-cache
+--- expires khong
+Expires: Thu, 12 Nov 2026 13:55:46 GMT
+Cache-Control: max-age=0
+--- expires 30d
+Expires: Sat, 12 Dec 2026 13:55:46 GMT
+Cache-Control: max-age=2592000
+--- expires max
+Expires: Thu, 31 Dec 2037 23:55:55 GMT
+Cache-Control: max-age=315360000
+--- expires ca-hai
+Expires: Fri, 12 Nov 2027 13:55:47 GMT
+Cache-Control: max-age=31536000
+Cache-Control: public, max-age=31536000, immutable</div>
+<p>The ETag matched <code>hex(mtime)-hex(size)</code> character for character; <code>touch</code> left the md5 unchanged and the ETag changed, so the old ETag earned a full 27,026-byte download; a wrong ETag with a correct date gave 200; and <code>expires 1y</code> plus <code>add_header Cache-Control</code> sent two Cache-Control lines.</p>
+<h3>🔗 Related lessons in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-12-4-cdn-tep-tinh" target="_blank" rel="noopener"><span class="lc-ico">🚀</span><span class="lc-body"><span class="lc-title">Deploy to a VPS · 12.4 — CDN and static files</span><span class="lc-sub">Hashed assets and long caching on a real server</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-7-4-header-quan-trong" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking for Developers · 7.4 — Headers that change behaviour</span><span class="lc-sub">Cache-Control, ETag and revalidation on the wire</span></span></a>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">ETag</span><span class="v">Built as <code>hex(mtime)-hex(size)</code> — it identifies the inode, not the content, so <code>touch</code> alone changes it.</span></div>
+  <div class="kv"><span class="k">Last-Modified</span><span class="v">The file mtime, one-second resolution; the weaker of the two validators.</span></div>
+  <div class="kv"><span class="k">Conditional request</span><span class="v"><code>If-None-Match</code> carries the ETag, <code>If-Modified-Since</code> the date; a match yields an empty <code>304</code>.</span></div>
+  <div class="kv"><span class="k">expires</span><span class="v">Sets <code>Expires</code> and <code>Cache-Control: max-age</code>; combining it with a manual <code>add_header Cache-Control</code> emits two colliding headers.</span></div>
+  <div class="kv"><span class="k">immutable</span><span class="v">Tells the browser never to revalidate — safe only with a content-hashed filename, and the thing <code>expires</code> cannot express.</span></div>
+  <div class="kv"><span class="k">Content-hashed filename</span><span class="v"><code>app.4f9a2c.js</code> — the URL changes when the content does, so the ETag stops mattering and a year-long cache is safe.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li>The ETag is exactly <code>hex(mtime)-hex(size)</code>, proven character by character; it tracks the inode, not the bytes.</li><li>Every deploy that re-creates files resets mtime, so cached assets re-download as full <code>200</code>s; behind a load balancer two servers even produce different ETags for the same bytes.</li><li>Fix it with content-hashed filenames (then cache a year <code>immutable</code>) or by preserving mtimes across deploys (<code>rsync -a</code>).</li><li>Conditional requests return a <code>304</code> with an empty body — that saves bandwidth, not the round trip.</li><li>Use <code>expires</code> alone or the manual header alone, never both; HTML gets <code>no-cache</code>, hashed assets get a year.</li></ul>
+
 <h3>Learning sources for this lesson</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_core_module.html#etag" target="_blank" rel="noopener"><span class="lc-ico">🏷️</span><span class="lc-body"><span class="lc-title">nginx — etag</span><span class="lc-sub">nginx.org · The directive, and what turning it off leaves behind</span></span></a>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_headers_module.html#expires" target="_blank" rel="noopener"><span class="lc-ico">📅</span><span class="lc-body"><span class="lc-title">nginx — expires</span><span class="lc-sub">nginx.org · Every form including max, off and negative values</span></span></a>
@@ -285,7 +587,7 @@ location /tinh/ {
 === Client cu gui lai ETag CU ===
   ma=200  tai=27026 byte      &lt;- tai LAI ca tep, du noi dung y het</div>
 <div class="pitfall">
-<p><strong>Bẫy — MỌI lần deploy tạo lại tệp đều đặt lại mtime, nên MỌI tài nguyên đang nằm trong bộ đệm đều phải tải lại nguyên vẹn.</strong> Một lệnh <code>git clone</code>, một dòng <code>COPY</code> trong Dockerfile, một lệnh <code>rsync</code> thiếu <code>-t</code>, một gói artifact vừa bung ra từ tarball — tất cả đều đóng dấu thời điểm hiện tại lên những tệp mà byte của chúng chưa từng đổi. Khách quay lại thế là tải lại TOÀN BỘ bộ tài nguyên của bạn. Tệ hơn nữa, đứng sau một bộ cân bằng tải thì hai máy chủ deploy cách nhau vài giây sinh ra ETag KHÁC NHAU cho cùng đám byte, nên một client nhảy qua lại giữa chúng sẽ tải lại ở mỗi lần đổi máy, MÃI MÃI, mà chẳng có số đo nào của bạn nói vì sao. Hai cách chữa: đặt tên tệp theo BĂM NỘI DUNG (<code>app.4f9a2c.js</code>) để URL đổi khi nội dung đổi và cái ETag thôi có nghĩa lý; hoặc GIỮ NGUYÊN mtime qua các lần deploy — <code>rsync -a</code>, hoặc một quy trình dựng ghi ra một dấu thời gian cố định. Cách đầu tốt hơn, vì nó còn cho phép bạn cache nguyên MỘT NĂM.</p>
+<p><strong>Bẫy — MỌI lần deploy tạo lại tệp đều đặt lại mtime, nên MỌI tài nguyên đang nằm trong bộ đệm đều phải tải lại nguyên vẹn.</strong> Một lệnh <code>git clone</code> hay một lệnh <code>rsync</code> thiếu <code>-t</code> đóng dấu thời điểm hiện tại lên những tệp mà byte của chúng chưa từng đổi. (Dòng <code>COPY</code> trong Dockerfile và <code>tar -x</code> thì GIỮ nguyên mtime chúng nhận được — đã đo — nhưng trên máy CI thứ chúng nhận thường là một bản clone vừa tạo, nên kết quả vẫn y như vậy.) Khách quay lại thế là tải lại TOÀN BỘ bộ tài nguyên của bạn. Tệ hơn nữa, đứng sau một bộ cân bằng tải thì hai máy chủ deploy cách nhau vài giây sinh ra ETag KHÁC NHAU cho cùng đám byte, nên một client nhảy qua lại giữa chúng sẽ tải lại ở mỗi lần đổi máy, MÃI MÃI, mà chẳng có số đo nào của bạn nói vì sao. Hai cách chữa: đặt tên tệp theo BĂM NỘI DUNG (<code>app.4f9a2c.js</code>) để URL đổi khi nội dung đổi và cái ETag thôi có nghĩa lý; hoặc GIỮ NGUYÊN mtime qua các lần deploy — <code>rsync -a</code>, hoặc một quy trình dựng ghi ra một dấu thời gian cố định. Cách đầu tốt hơn, vì nó còn cho phép bạn cache nguyên MỘT NĂM.</p>
 </div>
 
 <h3>Request có điều kiện, đo cả hai dạng</h3>
@@ -343,6 +645,87 @@ location /tinh/ {
 <p><strong>Làm sao biết chuyện này có đang tốn tiền của bạn không.</strong> Nạp site hai lần trên trình duyệt với bảng Network đang mở rồi nhìn lượt nạp THỨ HAI: tài nguyên lấy từ cache mà không có request nào là lý tưởng, <code>304</code> là chấp nhận được, còn <code>200</code> trên những tệp không hề đổi chính là cái triệu chứng mà bài này nói về nó. Nếu là <code>200</code> thì hãy kiểm xem ETag có đổi giữa hai lần deploy không — một lệnh <code>curl -I</code> trước và sau là biết ngay trong vài giây.</p>
 </div>
 
+<h3>🔬 Tự chạy lại</h3>
+<p>Một tệp, ba máy chủ — có validator, <code>etag off</code>, và mọi cách viết <code>expires</code> — trên nginx/1.24.0:</p>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  include /etc/nginx/mime.types;
+  access_log off;
+  server { listen 8080; root /srv/www; }
+  server { listen 8081; root /srv/www; etag off; }
+  server {
+    listen 8082; root /srv/www;
+    location /mac-dinh/ { alias /srv/www/; }
+    location /off/      { alias /srv/www/; expires off; }
+    location /am1/      { alias /srv/www/; expires -1; }
+    location /khong/    { alias /srv/www/; expires 0; }
+    location /30d/      { alias /srv/www/; expires 30d; }
+    location /max/      { alias /srv/www/; expires max; }
+    location /ca-hai/   { alias /srv/www/; expires 1y; add_header Cache-Control "public, max-age=31536000, immutable" always; }
+  }
+}</code></pre>
+<div class="out">$ curl -sI http://127.0.0.1:8080/trang.html | grep -E '^(ETag|Last-Modified)'
+Last-Modified: Sun, 23 Aug 2026 17:02:43 GMT
+ETag: "6a8b27b3-6992"
+$ printf 'hex(mtime)-hex(size) = %x-%x\\n' $(stat -c '%Y %s' /srv/www/trang.html)
+hex(mtime)-hex(size) = 6a8b27b3-6992
+$ md5sum /srv/www/trang.html; curl -sI http://127.0.0.1:8080/trang.html | grep ETag
+d0d64a23c28d66fdec7065b70db03d85  /srv/www/trang.html
+ETag: "6a8b27b3-6992"
+$ touch /srv/www/trang.html
+$ md5sum /srv/www/trang.html; curl -sI http://127.0.0.1:8080/trang.html | grep ETag
+d0d64a23c28d66fdec7065b70db03d85  /srv/www/trang.html
+ETag: "6af5c561-6992"
+=== client cu gui lai ETag CU ===
+$ curl -s -o /dev/null -w 'ma=%{http_code}  tai=%{size_download} byte\\n' -H 'If-None-Match: "6a8b27b3-6992"' http://127.0.0.1:8080/trang.html
+ma=200  tai=27026 byte
+$ curl -s -o /dev/null -w 'khong dieu kien          -&gt; %{http_code}, %{size_download} byte\\n' http://127.0.0.1:8080/trang.html
+khong dieu kien          -&gt; 200, 27026 byte
+$ curl -s -o /dev/null -w 'If-None-Match dung       -&gt; %{http_code}, %{size_download} byte\\n' -H 'If-None-Match: "6a8b27b3-6992"' http://127.0.0.1:8080/trang.html
+If-None-Match dung       -&gt; 304, 0 byte
+$ curl -s -o /dev/null -w 'If-Modified-Since dung   -&gt; %{http_code}, %{size_download} byte\\n' -H 'If-Modified-Since: Sun, 23 Aug 2026 17:02:43 GMT' http://127.0.0.1:8080/trang.html
+If-Modified-Since dung   -&gt; 304, 0 byte
+$ curl -s -o /dev/null -w 'ETag SAI + ngay DUNG     -&gt; %{http_code}, %{size_download} byte\\n' -H 'If-None-Match: "khac"' -H 'If-Modified-Since: Sun, 23 Aug 2026 17:02:43 GMT' http://127.0.0.1:8080/trang.html
+ETag SAI + ngay DUNG     -&gt; 200, 27026 byte
+$ curl -sI http://127.0.0.1:8081/trang.html | grep -cE '^ETag'
+0
+$ for p in mac-dinh off am1 khong 30d max ca-hai; do echo "--- expires $p"; curl -sI http://127.0.0.1:8082/$p/trang.html | grep -E '^(Expires|Cache-Control)' ; done
+--- expires mac-dinh
+--- expires off
+--- expires am1
+Expires: Thu, 12 Nov 2026 13:55:45 GMT
+Cache-Control: no-cache
+--- expires khong
+Expires: Thu, 12 Nov 2026 13:55:46 GMT
+Cache-Control: max-age=0
+--- expires 30d
+Expires: Sat, 12 Dec 2026 13:55:46 GMT
+Cache-Control: max-age=2592000
+--- expires max
+Expires: Thu, 31 Dec 2037 23:55:55 GMT
+Cache-Control: max-age=315360000
+--- expires ca-hai
+Expires: Fri, 12 Nov 2027 13:55:47 GMT
+Cache-Control: max-age=31536000
+Cache-Control: public, max-age=31536000, immutable</div>
+<p>ETag trùng <code>hex(mtime)-hex(size)</code> từng ký tự; <code>touch</code> giữ nguyên md5 mà ETag đổi, nên ETag cũ nhận về nguyên 27.026 byte; ETag sai kèm ngày đúng ra 200; và <code>expires 1y</code> cộng <code>add_header Cache-Control</code> gửi đi hai dòng Cache-Control.</p>
+<h3>🔗 Bài liên quan ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-12-4-cdn-tep-tinh" target="_blank" rel="noopener"><span class="lc-ico">🚀</span><span class="lc-body"><span class="lc-title">Deploy lên VPS · 12.4 — CDN và tệp tĩnh</span><span class="lc-sub">Tệp có mã băm và cache dài trên máy chủ thật</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-7-4-header-quan-trong" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking for Developers · 7.4 — Các header đổi hành vi</span><span class="lc-sub">Cache-Control, ETag và hỏi lại trên dây</span></span></a>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">ETag</span><span class="v">Dựng dạng <code>hex(mtime)-hex(size)</code> — nó định danh cái inode, không phải nội dung, nên chỉ cần <code>touch</code> là nó đổi.</span></div>
+  <div class="kv"><span class="k">Last-Modified</span><span class="v">Chính là mtime của tệp, phân giải tới giây; là bộ xác thực yếu hơn trong hai cái.</span></div>
+  <div class="kv"><span class="k">Request có điều kiện</span><span class="v"><code>If-None-Match</code> mang ETag, <code>If-Modified-Since</code> mang ngày; khớp thì cho ra một cú <code>304</code> rỗng.</span></div>
+  <div class="kv"><span class="k">expires</span><span class="v">Đặt <code>Expires</code> và <code>Cache-Control: max-age</code>; ghép nó với một <code>add_header Cache-Control</code> tay sẽ phát ra hai header đâm nhau.</span></div>
+  <div class="kv"><span class="k">immutable</span><span class="v">Bảo trình duyệt đừng bao giờ xác thực lại — chỉ an toàn với tên tệp băm nội dung, và là thứ <code>expires</code> không diễn đạt được.</span></div>
+  <div class="kv"><span class="k">Tên tệp băm nội dung</span><span class="v"><code>app.4f9a2c.js</code> — URL đổi khi nội dung đổi, nên ETag thôi có nghĩa lý và cache một năm là an toàn.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li>ETag đúng là <code>hex(mtime)-hex(size)</code>, khớp từng ký tự; nó theo cái inode chứ không theo đám byte.</li><li>Mọi lần deploy tạo lại tệp đều đặt lại mtime, nên tài nguyên trong cache tải lại nguyên dạng <code>200</code>; đứng sau bộ cân bằng tải thì hai máy chủ còn sinh ETag khác nhau cho cùng đám byte.</li><li>Chữa bằng tên tệp băm nội dung (rồi cache một năm <code>immutable</code>) hoặc giữ nguyên mtime qua các lần deploy (<code>rsync -a</code>).</li><li>Request có điều kiện trả một cú <code>304</code> thân rỗng — tiết kiệm băng thông, không tiết kiệm vòng đi về.</li><li>Dùng một mình <code>expires</code> hoặc một mình header tay, đừng cả hai; HTML nhận <code>no-cache</code>, tài nguyên có băm nhận một năm.</li></ul>
+
 <h3>Nguồn học cho bài này</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_core_module.html#etag" target="_blank" rel="noopener"><span class="lc-ico">🏷️</span><span class="lc-body"><span class="lc-title">nginx — etag</span><span class="lc-sub">nginx.org · Chỉ thị này, và tắt nó đi thì còn lại gì</span></span></a>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_headers_module.html#expires" target="_blank" rel="noopener"><span class="lc-ico">📅</span><span class="lc-body"><span class="lc-title">nginx — expires</span><span class="lc-sub">nginx.org · Mọi dạng viết, kèm max, off và giá trị âm</span></span></a>
@@ -360,25 +743,29 @@ location /tinh/ {
       type: 'LESSON',
       description: 'Nén tại chỗ tốn CPU ở MỖI request. Bài này đo cái giá đó trên một tệp 125KB thật, rồi cho thấy gzip_static cho ra tệp NHỎ HƠN với chi phí gần bằng không — kèm một khác biệt về ETag mà ít người biết.',
       content: `
+${G04_3}
 <div class="ml-en">
 <span class="eyebrow">Chapter 4 · Lesson 4.3</span>
 <h2>Compression: pay once at build time, not once per request</h2>
 <p class="lead">Turning on <code>gzip</code> is the first performance change everyone makes, and it is the right one. What follows it is less well known: the same bytes can be compressed once when you build the site instead of every single time somebody asks for them, and the result is both cheaper and smaller.</p>
 
 <h3>The cost, measured on a real 125KB file</h3>
-<div class="out">Tep: mot file .mjs that trong kho nay, 125.596 byte
+<div class="out">Tep: mot file .mjs that cua chinh kho nay, 113.771 byte (phuc vu duoi ten .js — xem bay .mjs ben duoi)
 
-  khong nen                          125.596 byte
-  gzip tai cho, comp_level 5          32.317 byte   (25,7% cua goc)
-  gzip_static, gzip -9 dung san       31.327 byte   (24,9% — NHO HON 3,1%)
+  khong nen                          113.771 byte
+  gzip tai cho, comp_level 5          31.557 byte   (27,7% cua goc)
+  gzip tai cho, comp_level 9          30.794 byte
+  gzip_static, gzip -9 dung san       30.626 byte   (26,9% — nho hon muc 5 khoang 3%)
 
-Thoi gian moi request (200 luot, gom ca chi phi khoi dong curl ~6ms
-nen hay doc phan CHENH LECH chu dung doc so tuyet doi):
+wrk, 1 ket noi, 5 giay moi may (HTTP/1.1, Accept-Encoding: gzip):
 
-  khong nen                            6,3 ms
-  gzip tai cho, comp_level 5          10,2 ms      (+3,9 ms)
-  gzip tai cho, comp_level 9          12,1 ms      (+5,8 ms)
-  gzip_static (doc tep .gz co san)     6,5 ms      (+0,2 ms)</div>
+  khong nen                          ~14.354 request/giay   do tre TB ~80 us
+  gzip tai cho, comp_level 5            ~449 request/giay   do tre TB ~2,3 ms
+  gzip tai cho, comp_level 9            ~308 request/giay   do tre TB ~3,3 ms
+  gzip_static (doc tep .gz co san)   ~18.597 request/giay   do tre TB ~86 us
+
+  ^^^ nen TAI CHO cham ~30 lan. Nen SAN con nhanh hon ca khong nen (it byte hon).
+  (Dung do bang ab: ab noi HTTP/1.0, gzip_http_version mac dinh 1.1 =&gt; Nginx KHONG nen cho ab.)</div>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">On-the-fly compression costs CPU per request</span><span class="lz-d">Nearly four milliseconds of worker time for this file at level 5, and nearly six at level 9. Multiply by requests per second: at 200 rps that is most of a core doing nothing but re-compressing the same unchanged bytes.</span></div>
   <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Higher levels cost more and save little</span><span class="lz-d">Level 9 took 49% longer than level 5 here. For on-the-fly work the sweet spot is 4 to 6; anything higher is paying real CPU for a percent or two of bandwidth.</span></div>
@@ -387,10 +774,10 @@ nen hay doc phan CHENH LECH chu dung doc so tuyet doi):
 </div>
 
 <h3>The ETag difference nobody mentions</h3>
-<div class="out">khong nen           Content-Length: 125596   ETag: "6a8b295e-1ea9c"
-gzip TAI CHO        (khong co Content-Length) ETag: W/"6a8b295e-1ea9c"
+<div class="out">khong nen           Content-Length: 113771   ETag: "6a8b2710-1bc6b"
+gzip TAI CHO        (khong co Content-Length) ETag: W/"6a8b2710-1bc6b"
                                                    ^^ YEU, va cung gia tri
-gzip_static (tep)   Content-Length: 31327    ETag: "6a8b295e-7a5f"
+gzip_static (tep)   Content-Length: 30626    ETag: "6a8b2710-77a2"
                                                    ^^ MANH, va tinh tu chinh tep .gz</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">On-the-fly compression weakens the ETag</span><span class="v">Nginx marks it <code>W/</code> because the bytes it is sending are no longer the bytes it hashed the metadata from. A weak validator still works for <code>304</code> but cannot be used for range requests, which is one reason ranges and on-the-fly gzip do not combine.</span></div>
@@ -411,7 +798,8 @@ gzip_static (tep)   Content-Length: 31327    ETag: "6a8b295e-7a5f"
   gzip_static       on;          <span class="tok-comment"># if a .gz file sits alongside, use it</span>
 }</code></pre>
 <div class="pitfall">
-<p><strong>Trap — do not compress what is already compressed, and be careful what you compress at all.</strong> JPEG, PNG, MP4, WebP, WOFF2 and every archive format are already compressed; running gzip over them burns CPU to make the file very slightly larger. They are absent from the default <code>gzip_types</code> for that reason, and adding them "for completeness" is a pure loss. Separately, compressing a response that mixes a secret with attacker-influenced content is what BREACH exploits — the compressed length leaks whether a guess appeared in the body. That is a real concern for HTML pages containing CSRF tokens, and the practical mitigations are per-request token randomisation rather than turning compression off site-wide.</p>
+<p><strong>Trap — do not compress what is already compressed, and be careful what you compress at all.</strong> JPEG, PNG, MP4, WebP, WOFF2 and every archive format are already compressed; running gzip over them burns CPU to make the file very slightly larger. They are absent from the default <code>gzip_types</code> for that reason, and adding them "for completeness" is a pure loss. Separately, compressing a response that mixes a secret with attacker-influenced content is what BREACH exploits — the compressed length leaks whether a guess appeared in the body. That is a real concern for HTML pages containing CSRF tokens, and the practical mitigations are per-request token randomisation rather than turning compression off site-wide. Measured: a 300,000-byte JPEG pushed through gzip came out at 300,113 bytes.</p>
+<p><strong>And the <code>.mjs</code> file that is never compressed.</strong> nginx 1.24's <code>mime.types</code> has no <code>mjs</code> entry. The same file served as <code>bai.js</code> was <code>application/javascript</code> and compressed to 31,557 bytes; served as <code>bai.mjs</code> it was <code>text/plain</code>, 113,771 bytes uncompressed — and a browser refuses to run a module script with that type. One extra <code>types { application/javascript mjs; }</code> after the <code>include</code> ADDS the entry (measured: <code>.jpg</code> was still <code>image/jpeg</code>).</p>
 </div>
 
 <h3>Producing the .gz files</h3>
@@ -424,6 +812,74 @@ gzip_static (tep)   Content-Length: 31327    ETag: "6a8b295e-7a5f"
 <div class="note-ct">
 <p><strong>What to do with this today.</strong> If your site compresses on the fly, keep doing it — it is a large win over not compressing. The upgrade is one line in the build and one line in the config, and the measurement above says it gives you a smaller payload for essentially no per-request cost. It matters most exactly where you feel it least: under load, when the CPU you are spending on re-compression is the CPU you needed for everything else.</p>
 </div>
+
+<h3>🔬 Run it yourself</h3>
+<p>One real 114 KB file served four ways, timed with <code>wrk</code> (one connection, five seconds), plus the <code>.mjs</code> and JPEG traps, on nginx/1.24.0:</p>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  include /etc/nginx/mime.types;
+  access_log off;
+  server { listen 8080; root /srv/www; }                                                      <span class="tok-comment">  # không nén</span>
+  server { listen 8081; root /srv/www; gzip on; gzip_types application/javascript; gzip_comp_level 5; } # nén tại chỗ, mức 5
+  server { listen 8082; root /srv/www; gzip on; gzip_types application/javascript; gzip_comp_level 9; } # nén tại chỗ, mức 9
+  server { listen 8083; root /srv/www-gz; gzip_static on; }                                   <span class="tok-comment">  # đọc tệp .gz dựng sẵn</span>
+}</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/ty.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  include /etc/nginx/mime.types;
+  types { application/javascript mjs; }   <span class="tok-comment">  # khối types thứ HAI cùng tầng: THÊM vào bảng</span>
+  access_log off;
+  server { listen 8085; root /srv/www; gzip on; gzip_types application/javascript; }
+}</code></pre>
+<div class="out">$ gzip -9 -k /srv/www-gz/bai.js &amp;&amp; ls -l /srv/www-gz/ | awk 'NR&gt;1{print $5, $9}'
+113771 bai.js
+30626 bai.js.gz
+$ for p in 8080 8081 8082 8083; do printf '%s -&gt; ' $p; curl -s -o /dev/null -H 'Accept-Encoding: gzip' -w '%{size_download} byte\\n' http://127.0.0.1:$p/bai.js; done
+8080 -&gt; 113771 byte
+8081 -&gt; 31557 byte
+8082 -&gt; 30794 byte
+8083 -&gt; 30626 byte
+$ for p in 8080 8081 8082 8083; do printf '%s -&gt; ' $p; wrk -t1 -c1 -d5s -H 'Accept-Encoding: gzip' http://127.0.0.1:$p/bai.js | awk '/Latency/{l=$2} /Requests\\/sec/{r=$2} END{print "do tre TB " l ", " r " request/giay"}'; done
+8080 -&gt; do tre TB 232.90us, 11169.74 request/giay
+8081 -&gt; do tre TB 2.97ms, 359.21 request/giay
+8082 -&gt; do tre TB 3.71ms, 275.76 request/giay
+8083 -&gt; do tre TB 177.37us, 15501.83 request/giay
+$ for p in 8080 8081 8083; do printf '%s -&gt; ' $p; curl -s -o /dev/null -D - -H 'Accept-Encoding: gzip' http://127.0.0.1:$p/bai.js | grep -E '^(Content-Length|ETag|Content-Encoding)' | tr -d '\\r' | tr '\\n' ' '; echo; done
+8080 -&gt; Content-Length: 113771 ETag: "6a8b2710-1bc6b" 
+8081 -&gt; ETag: W/"6a8b2710-1bc6b" Content-Encoding: gzip 
+8083 -&gt; Content-Length: 30626 ETag: "6a8b2710-77a2" Content-Encoding: gzip 
+$ for f in bai.js bai.mjs; do printf '%-8s -&gt; ' $f; curl -s -o /dev/null -H 'Accept-Encoding: gzip' -w '%{content_type}  %{size_download} byte\\n' http://127.0.0.1:8081/$f; done
+bai.js   -&gt; application/javascript  31557 byte
+bai.mjs  -&gt; text/plain  113771 byte
+$ grep -c 'mjs' /etc/nginx/mime.types
+0
+$ for f in bai.js bai.mjs anh.jpg; do printf '%-8s -&gt; ' $f; curl -s -o /dev/null -H 'Accept-Encoding: gzip' -w '%{content_type}  %{size_download} byte\\n' http://127.0.0.1:8085/$f; done
+bai.js   -&gt; application/javascript  37976 byte
+bai.mjs  -&gt; application/javascript  37976 byte
+anh.jpg  -&gt; image/jpeg  5000 byte
+$ curl -s -o /dev/null -w 'khong xin gzip: %{size_download} byte\\n' http://127.0.0.1:8084/anh.jpg
+khong xin gzip: 300000 byte
+$ curl -s -o /dev/null -w 'xin gzip      : %{size_download} byte\\n' -H 'Accept-Encoding: gzip' http://127.0.0.1:8084/anh.jpg
+xin gzip      : 300113 byte</div>
+<p>All three compressed forms landed near 31 KB; on-the-fly gzip ran at roughly 450 and 300 requests a second against 14,000 uncompressed and 18,600 for <code>gzip_static</code>; the ETag went weak on the fly and stayed strong for the pre-built file; <code>.mjs</code> was <code>text/plain</code> until one <code>types</code> line added it; and the JPEG got bigger.</p>
+<h3>🔗 Related lessons in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-16-3-nen-va-duong-truyen" target="_blank" rel="noopener"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Node.js · 16.3 — Compression and the wire</span><span class="lc-sub">The same trade-off from the application side</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-7-4-header-quan-trong" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking for Developers · 7.4 — Headers that change behaviour</span><span class="lc-sub">Content-Encoding, Vary and caches</span></span></a>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">gzip</span><span class="v">On-the-fly compression — it costs CPU on every request (about 3.9ms here at level 5 on a 125KB file).</span></div>
+  <div class="kv"><span class="k">gzip_static</span><span class="v">Serves a pre-built <code>.gz</code> file sitting next to the asset; about 0.2ms, one extra <code>open()</code>, no compressor.</span></div>
+  <div class="kv"><span class="k">gzip_comp_level</span><span class="v">The effort dial; the sweet spot for on-the-fly work is 4–6, higher pays real CPU for a percent or two.</span></div>
+  <div class="kv"><span class="k">gzip_vary</span><span class="v">Emits <code>Vary: Accept-Encoding</code>, mandatory whenever a shared cache sits between you and the user.</span></div>
+  <div class="kv"><span class="k">Weak ETag (W/)</span><span class="v">On-the-fly gzip marks the ETag weak and drops <code>Content-Length</code>; <code>gzip_static</code> keeps both strong.</span></div>
+  <div class="kv"><span class="k">Brotli</span><span class="v">A separate module (<code>ngx_brotli</code>); <code>brotli_static</code> serves <code>.br</code> files, typically 15–20% smaller than gzip on text.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li>On-the-fly gzip is a real win over not compressing, but it burns CPU on every request and has a sweet spot of level 4–6.</li><li><code>gzip_static</code> serves a file built once at <code>gzip -9</code>: cheaper (about 0.2ms) and smaller than on-the-fly at the same time.</li><li>On-the-fly compression weakens the ETag (<code>W/</code>) and removes <code>Content-Length</code>; <code>gzip_static</code> keeps a strong ETag and a real length.</li><li><code>gzip_vary on</code> is not optional whenever any cache sits in between.</li><li>Never gzip already-compressed formats (JPEG, PNG, MP4, WOFF2), and keep each <code>.gz</code> in sync with its source in the same build step.</li></ul>
 
 <h3>Learning sources for this lesson</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_gzip_static_module.html" target="_blank" rel="noopener"><span class="lc-ico">📦</span><span class="lc-body"><span class="lc-title">nginx — the gzip_static module</span><span class="lc-sub">nginx.org · on versus always, and how the file is located</span></span></a>
@@ -439,19 +895,22 @@ gzip_static (tep)   Content-Length: 31327    ETag: "6a8b295e-7a5f"
 <p class="lead">Bật <code>gzip</code> là thay đổi hiệu năng đầu tiên ai cũng làm, và nó đúng. Thứ đi sau nó thì ít người biết hơn: cũng đám byte đó có thể được nén MỘT lần lúc bạn dựng site thay vì nén lại mỗi lần có người hỏi tới, và kết quả vừa rẻ hơn vừa NHỎ hơn.</p>
 
 <h3>Cái giá, đo trên một tệp 125KB thật</h3>
-<div class="out">Tep: mot file .mjs that trong kho nay, 125.596 byte
+<div class="out">Tep: mot file .mjs that cua chinh kho nay, 113.771 byte (phuc vu duoi ten .js — xem bay .mjs ben duoi)
 
-  khong nen                          125.596 byte
-  gzip tai cho, comp_level 5          32.317 byte   (25,7% cua goc)
-  gzip_static, gzip -9 dung san       31.327 byte   (24,9% — NHO HON 3,1%)
+  khong nen                          113.771 byte
+  gzip tai cho, comp_level 5          31.557 byte   (27,7% cua goc)
+  gzip tai cho, comp_level 9          30.794 byte
+  gzip_static, gzip -9 dung san       30.626 byte   (26,9% — nho hon muc 5 khoang 3%)
 
-Thoi gian moi request (200 luot, gom ca chi phi khoi dong curl ~6ms
-nen hay doc phan CHENH LECH chu dung doc so tuyet doi):
+wrk, 1 ket noi, 5 giay moi may (HTTP/1.1, Accept-Encoding: gzip):
 
-  khong nen                            6,3 ms
-  gzip tai cho, comp_level 5          10,2 ms      (+3,9 ms)
-  gzip tai cho, comp_level 9          12,1 ms      (+5,8 ms)
-  gzip_static (doc tep .gz co san)     6,5 ms      (+0,2 ms)</div>
+  khong nen                          ~14.354 request/giay   do tre TB ~80 us
+  gzip tai cho, comp_level 5            ~449 request/giay   do tre TB ~2,3 ms
+  gzip tai cho, comp_level 9            ~308 request/giay   do tre TB ~3,3 ms
+  gzip_static (doc tep .gz co san)   ~18.597 request/giay   do tre TB ~86 us
+
+  ^^^ nen TAI CHO cham ~30 lan. Nen SAN con nhanh hon ca khong nen (it byte hon).
+  (Dung do bang ab: ab noi HTTP/1.0, gzip_http_version mac dinh 1.1 =&gt; Nginx KHONG nen cho ab.)</div>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Nén tại chỗ tốn CPU ở MỖI request</span><span class="lz-d">Gần bốn mili giây thời gian worker cho tệp này ở mức 5, và gần sáu ở mức 9. Đem nhân với số request mỗi giây: ở 200 rps thì đó là gần trọn một nhân chỉ để nén đi nén lại đúng đám byte không hề đổi.</span></div>
   <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Mức cao hơn tốn hơn mà tiết kiệm chẳng bao nhiêu</span><span class="lz-d">Mức 9 ở đây lâu hơn mức 5 tới 49%. Với việc nén tại chỗ thì điểm ngọt là 4 tới 6; cao hơn nữa là trả CPU thật để đổi lấy một hai phần trăm băng thông.</span></div>
@@ -460,10 +919,10 @@ nen hay doc phan CHENH LECH chu dung doc so tuyet doi):
 </div>
 
 <h3>Khác biệt về ETag mà chẳng ai nhắc</h3>
-<div class="out">khong nen           Content-Length: 125596   ETag: "6a8b295e-1ea9c"
-gzip TAI CHO        (khong co Content-Length) ETag: W/"6a8b295e-1ea9c"
+<div class="out">khong nen           Content-Length: 113771   ETag: "6a8b2710-1bc6b"
+gzip TAI CHO        (khong co Content-Length) ETag: W/"6a8b2710-1bc6b"
                                                    ^^ YEU, va cung gia tri
-gzip_static (tep)   Content-Length: 31327    ETag: "6a8b295e-7a5f"
+gzip_static (tep)   Content-Length: 30626    ETag: "6a8b2710-77a2"
                                                    ^^ MANH, va tinh tu chinh tep .gz</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">Nén tại chỗ làm ETag YẾU đi</span><span class="v">Nginx đánh dấu <code>W/</code> vì đám byte nó đang gửi không còn là đám byte nó đã băm siêu dữ liệu ra. Một bộ xác thực yếu vẫn dùng được cho <code>304</code> nhưng KHÔNG dùng được cho request theo dải byte, và đó là một lý do nữa để dải byte và gzip tại chỗ không đi với nhau.</span></div>
@@ -484,7 +943,8 @@ gzip_static (tep)   Content-Length: 31327    ETag: "6a8b295e-7a5f"
   gzip_static       on;          <span class="tok-comment"># có tệp .gz kề bên thì dùng nó</span>
 }</code></pre>
 <div class="pitfall">
-<p><strong>Bẫy — đừng nén thứ đã nén, và hãy cẩn thận với chuyện nén cái gì.</strong> JPEG, PNG, MP4, WebP, WOFF2 và mọi định dạng nén sẵn đều đã nén rồi; chạy gzip lên chúng là đốt CPU để làm tệp TO RA một tí. Chúng vắng mặt trong <code>gzip_types</code> mặc định đúng vì lý do đó, và thêm chúng vào "cho đủ bộ" là lỗ thuần tuý. Chuyện riêng: nén một phản hồi có trộn một BÍ MẬT với nội dung do kẻ tấn công chi phối chính là thứ BREACH khai thác — độ dài sau nén tiết lộ rằng một lần đoán có xuất hiện trong thân hay không. Đó là mối lo có thật với những trang HTML mang token CSRF, và cách giảm thiểu thực tế là NGẪU NHIÊN HOÁ token theo từng request, chứ không phải tắt nén cả site.</p>
+<p><strong>Bẫy — đừng nén thứ đã nén, và hãy cẩn thận với chuyện nén cái gì.</strong> JPEG, PNG, MP4, WebP, WOFF2 và mọi định dạng nén sẵn đều đã nén rồi; chạy gzip lên chúng là đốt CPU để làm tệp TO RA một tí. Chúng vắng mặt trong <code>gzip_types</code> mặc định đúng vì lý do đó, và thêm chúng vào "cho đủ bộ" là lỗ thuần tuý. Chuyện riêng: nén một phản hồi có trộn một BÍ MẬT với nội dung do kẻ tấn công chi phối chính là thứ BREACH khai thác — độ dài sau nén tiết lộ rằng một lần đoán có xuất hiện trong thân hay không. Đó là mối lo có thật với những trang HTML mang token CSRF, và cách giảm thiểu thực tế là NGẪU NHIÊN HOÁ token theo từng request, chứ không phải tắt nén cả site. Đo thật: một ảnh JPEG 300.000 byte qua gzip ra 300.113 byte.</p>
+<p><strong>Và tệp <code>.mjs</code> không bao giờ được nén.</strong> <code>mime.types</code> của nginx 1.24 KHÔNG có dòng <code>mjs</code>. Cùng một tệp, phục vụ dưới tên <code>bai.js</code> là <code>application/javascript</code> và được nén còn 31.557 byte; dưới tên <code>bai.mjs</code> thì thành <code>text/plain</code>, 113.771 byte không nén — và trình duyệt TỪ CHỐI chạy một module script mang kiểu đó. Thêm một khối <code>types { application/javascript mjs; }</code> sau dòng <code>include</code> là nó được THÊM vào bảng (đo thật: <code>.jpg</code> vẫn là <code>image/jpeg</code>).</p>
 </div>
 
 <h3>Sinh ra đám tệp .gz thế nào</h3>
@@ -497,6 +957,74 @@ gzip_static (tep)   Content-Length: 31327    ETag: "6a8b295e-7a5f"
 <div class="note-ct">
 <p><strong>Hôm nay làm gì với chuyện này.</strong> Nếu site của bạn đang nén tại chỗ thì cứ tiếp tục — nó là một cú thắng lớn so với không nén. Bước nâng cấp là một dòng trong quy trình dựng và một dòng trong cấu hình, và phép đo ở trên nói rằng nó cho bạn một gói tin nhỏ hơn với chi phí mỗi request gần như bằng không. Nó có nghĩa lý nhất đúng ở chỗ bạn cảm thấy nó ít nhất: lúc tải nặng, khi cái CPU bạn đang tiêu để nén đi nén lại chính là cái CPU bạn cần cho mọi thứ còn lại.</p>
 </div>
+
+<h3>🔬 Tự chạy lại</h3>
+<p>Một tệp thật 114 KB phục vụ bốn cách, bấm giờ bằng <code>wrk</code> (một kết nối, năm giây), cộng cái bẫy <code>.mjs</code> và JPEG, trên nginx/1.24.0:</p>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  include /etc/nginx/mime.types;
+  access_log off;
+  server { listen 8080; root /srv/www; }                                                      <span class="tok-comment">  # không nén</span>
+  server { listen 8081; root /srv/www; gzip on; gzip_types application/javascript; gzip_comp_level 5; } # nén tại chỗ, mức 5
+  server { listen 8082; root /srv/www; gzip on; gzip_types application/javascript; gzip_comp_level 9; } # nén tại chỗ, mức 9
+  server { listen 8083; root /srv/www-gz; gzip_static on; }                                   <span class="tok-comment">  # đọc tệp .gz dựng sẵn</span>
+}</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/ty.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  include /etc/nginx/mime.types;
+  types { application/javascript mjs; }   <span class="tok-comment">  # khối types thứ HAI cùng tầng: THÊM vào bảng</span>
+  access_log off;
+  server { listen 8085; root /srv/www; gzip on; gzip_types application/javascript; }
+}</code></pre>
+<div class="out">$ gzip -9 -k /srv/www-gz/bai.js &amp;&amp; ls -l /srv/www-gz/ | awk 'NR&gt;1{print $5, $9}'
+113771 bai.js
+30626 bai.js.gz
+$ for p in 8080 8081 8082 8083; do printf '%s -&gt; ' $p; curl -s -o /dev/null -H 'Accept-Encoding: gzip' -w '%{size_download} byte\\n' http://127.0.0.1:$p/bai.js; done
+8080 -&gt; 113771 byte
+8081 -&gt; 31557 byte
+8082 -&gt; 30794 byte
+8083 -&gt; 30626 byte
+$ for p in 8080 8081 8082 8083; do printf '%s -&gt; ' $p; wrk -t1 -c1 -d5s -H 'Accept-Encoding: gzip' http://127.0.0.1:$p/bai.js | awk '/Latency/{l=$2} /Requests\\/sec/{r=$2} END{print "do tre TB " l ", " r " request/giay"}'; done
+8080 -&gt; do tre TB 232.90us, 11169.74 request/giay
+8081 -&gt; do tre TB 2.97ms, 359.21 request/giay
+8082 -&gt; do tre TB 3.71ms, 275.76 request/giay
+8083 -&gt; do tre TB 177.37us, 15501.83 request/giay
+$ for p in 8080 8081 8083; do printf '%s -&gt; ' $p; curl -s -o /dev/null -D - -H 'Accept-Encoding: gzip' http://127.0.0.1:$p/bai.js | grep -E '^(Content-Length|ETag|Content-Encoding)' | tr -d '\\r' | tr '\\n' ' '; echo; done
+8080 -&gt; Content-Length: 113771 ETag: "6a8b2710-1bc6b" 
+8081 -&gt; ETag: W/"6a8b2710-1bc6b" Content-Encoding: gzip 
+8083 -&gt; Content-Length: 30626 ETag: "6a8b2710-77a2" Content-Encoding: gzip 
+$ for f in bai.js bai.mjs; do printf '%-8s -&gt; ' $f; curl -s -o /dev/null -H 'Accept-Encoding: gzip' -w '%{content_type}  %{size_download} byte\\n' http://127.0.0.1:8081/$f; done
+bai.js   -&gt; application/javascript  31557 byte
+bai.mjs  -&gt; text/plain  113771 byte
+$ grep -c 'mjs' /etc/nginx/mime.types
+0
+$ for f in bai.js bai.mjs anh.jpg; do printf '%-8s -&gt; ' $f; curl -s -o /dev/null -H 'Accept-Encoding: gzip' -w '%{content_type}  %{size_download} byte\\n' http://127.0.0.1:8085/$f; done
+bai.js   -&gt; application/javascript  37976 byte
+bai.mjs  -&gt; application/javascript  37976 byte
+anh.jpg  -&gt; image/jpeg  5000 byte
+$ curl -s -o /dev/null -w 'khong xin gzip: %{size_download} byte\\n' http://127.0.0.1:8084/anh.jpg
+khong xin gzip: 300000 byte
+$ curl -s -o /dev/null -w 'xin gzip      : %{size_download} byte\\n' -H 'Accept-Encoding: gzip' http://127.0.0.1:8084/anh.jpg
+xin gzip      : 300113 byte</div>
+<p>Cả ba dạng nén đều về quanh 31 KB; gzip tại chỗ chạy khoảng 450 và 300 request mỗi giây, so với 14.000 khi không nén và 18.600 với <code>gzip_static</code>; ETag thành ETag yếu khi nén tại chỗ và vẫn mạnh với tệp dựng sẵn; <code>.mjs</code> là <code>text/plain</code> cho tới khi một dòng <code>types</code> thêm nó vào; và ảnh JPEG to ra.</p>
+<h3>🔗 Bài liên quan ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-16-3-nen-va-duong-truyen" target="_blank" rel="noopener"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Node.js · 16.3 — Nén và đường truyền</span><span class="lc-sub">Cùng phép đổi chác đó nhìn từ phía ứng dụng</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-7-4-header-quan-trong" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking for Developers · 7.4 — Các header đổi hành vi</span><span class="lc-sub">Content-Encoding, Vary và bộ đệm</span></span></a>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">gzip</span><span class="v">Nén tại chỗ — tốn CPU ở mỗi request (ở đây chừng 3,9ms ở mức 5 trên tệp 125KB).</span></div>
+  <div class="kv"><span class="k">gzip_static</span><span class="v">Phục vụ một tệp <code>.gz</code> dựng sẵn nằm cạnh tài nguyên; chừng 0,2ms, thêm một lệnh <code>open()</code>, không có bộ nén.</span></div>
+  <div class="kv"><span class="k">gzip_comp_level</span><span class="v">Núm chỉnh mức nén; với nén tại chỗ điểm ngọt là 4–6, cao hơn là trả CPU thật cho một hai phần trăm.</span></div>
+  <div class="kv"><span class="k">gzip_vary</span><span class="v">Phát ra <code>Vary: Accept-Encoding</code>, bắt buộc khi có một bộ đệm dùng chung nằm giữa bạn và người dùng.</span></div>
+  <div class="kv"><span class="k">ETag yếu (W/)</span><span class="v">Nén tại chỗ đánh dấu ETag yếu và bỏ <code>Content-Length</code>; <code>gzip_static</code> giữ cả hai ở dạng mạnh.</span></div>
+  <div class="kv"><span class="k">Brotli</span><span class="v">Một module riêng (<code>ngx_brotli</code>); <code>brotli_static</code> phục vụ tệp <code>.br</code>, với văn bản thường nhỏ hơn gzip 15–20%.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li>Nén tại chỗ là một cú thắng lớn so với không nén, nhưng nó đốt CPU ở mỗi request và có điểm ngọt là mức 4–6.</li><li><code>gzip_static</code> phục vụ một tệp dựng sẵn ở <code>gzip -9</code>: vừa rẻ hơn (chừng 0,2ms) vừa nhỏ hơn cùng lúc.</li><li>Nén tại chỗ làm ETag yếu đi (<code>W/</code>) và mất <code>Content-Length</code>; <code>gzip_static</code> giữ ETag mạnh và độ dài thật.</li><li><code>gzip_vary on</code> không phải tuỳ chọn khi có bất cứ bộ đệm nào ở giữa.</li><li>Đừng bao giờ nén thứ đã nén sẵn (JPEG, PNG, MP4, WOFF2), và giữ mỗi tệp <code>.gz</code> đồng bộ với tệp gốc trong cùng một bước dựng.</li></ul>
 
 <h3>Nguồn học cho bài này</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_gzip_static_module.html" target="_blank" rel="noopener"><span class="lc-ico">📦</span><span class="lc-body"><span class="lc-title">nginx — module gzip_static</span><span class="lc-sub">nginx.org · on và always, và cách nó tìm ra cái tệp</span></span></a>
@@ -515,6 +1043,7 @@ gzip_static (tep)   Content-Length: 31327    ETag: "6a8b295e-7a5f"
       type: 'LESSON',
       description: 'Hai chỉ thị mà mọi cấu hình mẫu đều có và gần như không ai biết chúng làm gì. Bài này đếm SYSCALL bằng strace trên chính worker của Nginx: một cái biến 186 lời gọi thành 3, cái kia xoá sạch mọi lời gọi mở tệp — và một phép đo bằng đồng hồ KHÔNG thấy gì cả, điều đó cũng đáng nói.',
       content: `
+${G04_4}
 <div class="ml-en">
 <span class="eyebrow">Chapter 4 · Lesson 4.4</span>
 <h2>How the bytes leave the machine: sendfile and open_file_cache</h2>
@@ -536,10 +1065,14 @@ gzip_static (tep)   Content-Length: 31327    ETag: "6a8b295e-7a5f"
 <div class="out">5 request toi cung mot tep nho:
 
                         openat   fstat   sendfile   close
-  open_file_cache BAT      0       0        5         5
-  open_file_cache TAT     10       5        5        10
+  open_file_cache BAT      0       0        5         5     &lt;- chi dong 5 ket noi
+  open_file_cache TAT      5       5        5        10     &lt;- dong ca tep lan ket noi
                           ^^      ^^
-                   2 lan mo + 1 lan stat MOI REQUEST, bien mat sach</div>
+                   1 lan mo + 1 lan stat MOI REQUEST, bien mat sach
+
+Deploy bang mv (tep moi, inode MOI) trong luc cache dang giu tep cu:
+  co open_file_cache  -&gt; ban CU      (61 giay sau -&gt; ban MOI)
+  khong cache         -&gt; ban MOI</div>
 <div class="callout warn">
 <p><strong>And a measurement that found nothing, which is also information.</strong> Timing 500 sequential <code>curl</code> requests to the same small file gave 7.16ms with the cache on and 7.10ms with it off — no difference at all. That is not evidence the directive is useless; it is evidence the benchmark was wrong. Each <code>curl</code> spends about 7ms starting a process, so the microseconds of a saved <code>openat</code> were invisible under it. The syscall count is the honest measurement here, and the wall-clock number would have been the misleading one to publish.</p>
 </div>
@@ -574,6 +1107,61 @@ gzip_static (tep)   Content-Length: 31327    ETag: "6a8b295e-7a5f"
 <p><strong>The habit this lesson is really about.</strong> When a directive claims to make something faster, ask what it changes rather than whether it helps — <code>strace</code> on the worker answers in thirty seconds and the answer is a count, not an opinion. It also protects you from the opposite error: the 500-request timing above would have let me report "no difference, do not bother", and that would have been wrong.</p>
 </div>
 
+<h3>🔬 Run it yourself</h3>
+<p>One worker, <code>strace</code> attached, four servers that differ only in <code>sendfile</code> and <code>open_file_cache</code> — then a deploy under the cache — on nginx/1.24.0 (the container needs <code>--cap-add SYS_PTRACE</code>):</p>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+worker_processes 1;
+events {}
+http {
+  include /etc/nginx/mime.types;
+  access_log off;
+  server { listen 8080; root /srv/www; sendfile on; }
+  server { listen 8081; root /srv/www; sendfile off; }
+  server { listen 8082; root /srv/www; sendfile on; open_file_cache max=1000 inactive=60s; }
+  server { listen 8083; root /srv/www; sendfile on; }
+}</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># dem-syscall.sh</span>
+<span class="tok-comment"># dem-syscall.sh &lt;cổng&gt; &lt;tệp&gt; &lt;số request&gt; — strace worker DUY NHẤT của nginx trong lúc gửi N request, đếm từng lời gọi hệ thống</span>
+W=$(pgrep -f 'nginx: worker'); curl -s -o /dev/null http://127.0.0.1:$1/$2 <span class="tok-comment">  # hâm nóng (open_file_cache cần lượt đầu)</span>
+strace -f -p $W -e trace=openat,newfstatat,fstat,sendfile,writev,write,read,pread64,close -o /tmp/st.txt 2&gt;/dev/null &amp; S=$!; sleep 0.5
+for i in $(seq $3); do curl -s -o /dev/null http://127.0.0.1:$1/$2; done; sleep 0.3; kill $S; sleep 0.3
+for c in openat fstat sendfile writev pread64 close; do printf '%s=%s  ' $c $(grep -c "^[0-9]* *$c(\\|^$c(" /tmp/st.txt); done; echo</code></pre>
+<div class="out">$ bash dem-syscall.sh 8080 lon.bin 3
+openat=3  fstat=3  sendfile=3  writev=3  pread64=0  close=6  
+$ bash dem-syscall.sh 8081 lon.bin 3
+openat=3  fstat=3  sendfile=0  writev=186  pread64=186  close=6  
+$ bash dem-syscall.sh 8082 nho.txt 5
+openat=0  fstat=0  sendfile=5  writev=5  pread64=0  close=5  
+$ bash dem-syscall.sh 8083 nho.txt 5
+openat=5  fstat=5  sendfile=5  writev=5  pread64=0  close=10  
+$ curl -s http://127.0.0.1:8082/phien-ban.txt; curl -s http://127.0.0.1:8083/phien-ban.txt
+ban CU
+ban CU
+=== deploy: ghi tep moi roi mv de len (inode MOI) ===
+$ echo 'ban MOI' &gt; /srv/www/.tam &amp;&amp; mv /srv/www/.tam /srv/www/phien-ban.txt
+$ printf 'co open_file_cache  -&gt; '; curl -s http://127.0.0.1:8082/phien-ban.txt; printf 'khong cache         -&gt; '; curl -s http://127.0.0.1:8083/phien-ban.txt
+co open_file_cache  -&gt; ban CU
+khong cache         -&gt; ban MOI
+=== 61 giay sau (open_file_cache_valid mac dinh 60s) ===
+$ sleep 61; printf 'co open_file_cache  -&gt; '; curl -s http://127.0.0.1:8082/phien-ban.txt
+co open_file_cache  -&gt; ban MOI</div>
+<p>sendfile on: one <code>sendfile</code> per request; off: 62 reads and 62 writes per request for a 2 MB file. The file cache removed the open and the stat entirely. And a file replaced with <code>mv</code> kept coming out OLD from the cached server until the 60-second validity ran out.</p>
+<h3>🔗 Related lessons in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-5-1-tien-trinh-la-gi" target="_blank" rel="noopener"><span class="lc-ico">🐧</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash · 5.1 — What a process is</span><span class="lc-sub">Processes, system calls and the tools that watch them</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-16-1-do-truoc-khi-doan" target="_blank" rel="noopener"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Node.js · 16.1 — Measure first</span><span class="lc-sub">Profiling before tuning</span></span></a>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">sendfile</span><span class="v">Moves bytes from the page cache straight to the socket in one syscall (186 writev became 3 here); the worker never touches them.</span></div>
+  <div class="kv"><span class="k">tcp_nopush</span><span class="v">Holds headers back until there is a full packet; only has an effect when <code>sendfile</code> is on, so the pair appears together.</span></div>
+  <div class="kv"><span class="k">open_file_cache</span><span class="v">Caches open descriptors, <code>stat</code> results and path existence — not file contents; removes every <code>openat</code> and <code>fstat</code>.</span></div>
+  <div class="kv"><span class="k">open_file_cache_valid</span><span class="v">The staleness window: a replaced or deleted file can be served from the cached descriptor for up to this long.</span></div>
+  <div class="kv"><span class="k">open_file_cache_errors</span><span class="v">Caches the misses too, so a scanner hammering non-existent paths does not re-stat the filesystem every time.</span></div>
+  <div class="kv"><span class="k">strace</span><span class="v">Counts the worker's syscalls — the honest measurement here, where a wall-clock timer showed nothing.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li><code>sendfile</code> moves file bytes to the socket in one syscall instead of a read-then-write loop (186 to 3 for three 2MB requests); <code>tcp_nopush</code> pairs with it.</li><li>It cannot be used when the body is transformed (on-the-fly gzip, <code>sub_filter</code>, SSI) — one more reason to prefer <code>gzip_static</code>.</li><li><code>open_file_cache</code> caches descriptors, stat results and existence, not contents, and removes every per-request <code>openat</code>/<code>fstat</code>.</li><li>It can serve stale or even deleted files for up to <code>open_file_cache_valid</code> — reload Nginx after an urgent deletion.</li><li>Measure with <code>strace</code> (a count), not wall-clock: the 500-request timer found nothing because <code>curl</code> startup dominated it.</li></ul>
+
 <h3>Learning sources for this lesson</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_core_module.html#sendfile" target="_blank" rel="noopener"><span class="lc-ico">🚀</span><span class="lc-body"><span class="lc-title">nginx — sendfile, tcp_nopush, tcp_nodelay</span><span class="lc-sub">nginx.org · The three that belong together, with their interactions</span></span></a>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_core_module.html#open_file_cache" target="_blank" rel="noopener"><span class="lc-ico">🗄️</span><span class="lc-body"><span class="lc-title">nginx — open_file_cache</span><span class="lc-sub">nginx.org · Exactly what is cached, and the validity semantics</span></span></a>
@@ -603,10 +1191,14 @@ gzip_static (tep)   Content-Length: 31327    ETag: "6a8b295e-7a5f"
 <div class="out">5 request toi cung mot tep nho:
 
                         openat   fstat   sendfile   close
-  open_file_cache BAT      0       0        5         5
-  open_file_cache TAT     10       5        5        10
+  open_file_cache BAT      0       0        5         5     &lt;- chi dong 5 ket noi
+  open_file_cache TAT      5       5        5        10     &lt;- dong ca tep lan ket noi
                           ^^      ^^
-                   2 lan mo + 1 lan stat MOI REQUEST, bien mat sach</div>
+                   1 lan mo + 1 lan stat MOI REQUEST, bien mat sach
+
+Deploy bang mv (tep moi, inode MOI) trong luc cache dang giu tep cu:
+  co open_file_cache  -&gt; ban CU      (61 giay sau -&gt; ban MOI)
+  khong cache         -&gt; ban MOI</div>
 <div class="callout warn">
 <p><strong>Và một phép đo KHÔNG tìm thấy gì, mà điều đó cũng là thông tin.</strong> Bấm giờ 500 lượt <code>curl</code> tuần tự tới cùng một tệp nhỏ cho ra 7,16ms khi bật cache và 7,10ms khi tắt — không khác gì cả. Đó KHÔNG phải bằng chứng rằng chỉ thị này vô dụng; đó là bằng chứng rằng PHÉP ĐO đã sai. Mỗi lượt <code>curl</code> tốn chừng 7ms chỉ để khởi động một tiến trình, nên vài micro giây tiết kiệm được từ một lời gọi <code>openat</code> chìm nghỉm dưới đó. Đếm syscall mới là phép đo thật thà ở đây, còn con số đồng hồ mới là thứ mà đem đăng lên thì gây hiểu lầm.</p>
 </div>
@@ -641,6 +1233,61 @@ gzip_static (tep)   Content-Length: 31327    ETag: "6a8b295e-7a5f"
 <p><strong>Thói quen mà bài này thật sự nói về nó.</strong> Khi một chỉ thị tuyên bố làm cái gì đó nhanh hơn, hãy hỏi nó ĐỔI cái gì thay vì hỏi nó có giúp không — <code>strace</code> trên worker trả lời trong ba mươi giây và câu trả lời là một CON SỐ ĐẾM, không phải một ý kiến. Nó cũng bảo vệ bạn khỏi cái lỗi ngược lại: cái phép bấm giờ 500 request ở trên lẽ ra đã cho tôi kết luận "không khác gì, khỏi bận tâm", và kết luận đó SAI.</p>
 </div>
 
+<h3>🔬 Tự chạy lại</h3>
+<p>Một worker, gắn <code>strace</code>, bốn máy chủ chỉ khác nhau ở <code>sendfile</code> và <code>open_file_cache</code> — rồi một lần deploy dưới cache — trên nginx/1.24.0 (container cần <code>--cap-add SYS_PTRACE</code>):</p>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+worker_processes 1;
+events {}
+http {
+  include /etc/nginx/mime.types;
+  access_log off;
+  server { listen 8080; root /srv/www; sendfile on; }
+  server { listen 8081; root /srv/www; sendfile off; }
+  server { listen 8082; root /srv/www; sendfile on; open_file_cache max=1000 inactive=60s; }
+  server { listen 8083; root /srv/www; sendfile on; }
+}</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># dem-syscall.sh</span>
+<span class="tok-comment"># dem-syscall.sh &lt;cổng&gt; &lt;tệp&gt; &lt;số request&gt; — strace worker DUY NHẤT của nginx trong lúc gửi N request, đếm từng lời gọi hệ thống</span>
+W=$(pgrep -f 'nginx: worker'); curl -s -o /dev/null http://127.0.0.1:$1/$2 <span class="tok-comment">  # hâm nóng (open_file_cache cần lượt đầu)</span>
+strace -f -p $W -e trace=openat,newfstatat,fstat,sendfile,writev,write,read,pread64,close -o /tmp/st.txt 2&gt;/dev/null &amp; S=$!; sleep 0.5
+for i in $(seq $3); do curl -s -o /dev/null http://127.0.0.1:$1/$2; done; sleep 0.3; kill $S; sleep 0.3
+for c in openat fstat sendfile writev pread64 close; do printf '%s=%s  ' $c $(grep -c "^[0-9]* *$c(\\|^$c(" /tmp/st.txt); done; echo</code></pre>
+<div class="out">$ bash dem-syscall.sh 8080 lon.bin 3
+openat=3  fstat=3  sendfile=3  writev=3  pread64=0  close=6  
+$ bash dem-syscall.sh 8081 lon.bin 3
+openat=3  fstat=3  sendfile=0  writev=186  pread64=186  close=6  
+$ bash dem-syscall.sh 8082 nho.txt 5
+openat=0  fstat=0  sendfile=5  writev=5  pread64=0  close=5  
+$ bash dem-syscall.sh 8083 nho.txt 5
+openat=5  fstat=5  sendfile=5  writev=5  pread64=0  close=10  
+$ curl -s http://127.0.0.1:8082/phien-ban.txt; curl -s http://127.0.0.1:8083/phien-ban.txt
+ban CU
+ban CU
+=== deploy: ghi tep moi roi mv de len (inode MOI) ===
+$ echo 'ban MOI' &gt; /srv/www/.tam &amp;&amp; mv /srv/www/.tam /srv/www/phien-ban.txt
+$ printf 'co open_file_cache  -&gt; '; curl -s http://127.0.0.1:8082/phien-ban.txt; printf 'khong cache         -&gt; '; curl -s http://127.0.0.1:8083/phien-ban.txt
+co open_file_cache  -&gt; ban CU
+khong cache         -&gt; ban MOI
+=== 61 giay sau (open_file_cache_valid mac dinh 60s) ===
+$ sleep 61; printf 'co open_file_cache  -&gt; '; curl -s http://127.0.0.1:8082/phien-ban.txt
+co open_file_cache  -&gt; ban MOI</div>
+<p>sendfile bật: mỗi request một lời gọi <code>sendfile</code>; tắt: 62 lần đọc và 62 lần ghi mỗi request với tệp 2 MB. Bộ đệm tệp xoá sạch lần mở và lần stat. Và một tệp được thay bằng <code>mv</code> vẫn cứ ra bản CŨ ở máy có cache cho tới khi hết 60 giây hiệu lực.</p>
+<h3>🔗 Bài liên quan ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-5-1-tien-trinh-la-gi" target="_blank" rel="noopener"><span class="lc-ico">🐧</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash · 5.1 — Tiến trình là gì</span><span class="lc-sub">Tiến trình, lời gọi hệ thống và công cụ theo dõi chúng</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-16-1-do-truoc-khi-doan" target="_blank" rel="noopener"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Node.js · 16.1 — Đo trước đã</span><span class="lc-sub">Đo trước khi tối ưu</span></span></a>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">sendfile</span><span class="v">Chuyển byte từ bộ đệm trang thẳng ra socket trong một syscall (186 writev thành 3 ở đây); worker không hề chạm vào byte.</span></div>
+  <div class="kv"><span class="k">tcp_nopush</span><span class="v">Giữ header lại cho tới khi có đủ một gói đầy; chỉ có tác dụng khi <code>sendfile</code> bật, nên cặp này luôn đi cùng nhau.</span></div>
+  <div class="kv"><span class="k">open_file_cache</span><span class="v">Cache mô tả tệp đang mở, kết quả <code>stat</code> và sự tồn tại của đường dẫn — không cache nội dung; xoá sạch mọi <code>openat</code> và <code>fstat</code>.</span></div>
+  <div class="kv"><span class="k">open_file_cache_valid</span><span class="v">Cửa sổ dữ liệu cũ: một tệp bị thay hoặc bị xoá vẫn có thể được phục vụ từ mô tả tệp đã cache trong tối đa bằng này.</span></div>
+  <div class="kv"><span class="k">open_file_cache_errors</span><span class="v">Cache cả những lần trượt, nên một con quét nện vào đường dẫn không có sẽ không phải stat lại hệ tệp mỗi lần.</span></div>
+  <div class="kv"><span class="k">strace</span><span class="v">Đếm syscall của worker — phép đo thật thà ở đây, nơi một phép bấm giờ đồng hồ không thấy gì cả.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li><code>sendfile</code> chuyển byte tệp ra socket trong một syscall thay cho vòng đọc-rồi-ghi (186 thành 3 cho ba request 2MB); <code>tcp_nopush</code> đi kèm với nó.</li><li>Nó không dùng được khi thân bị biến đổi (gzip tại chỗ, <code>sub_filter</code>, SSI) — thêm một lý do để chuộng <code>gzip_static</code>.</li><li><code>open_file_cache</code> cache mô tả tệp, kết quả stat và sự tồn tại, không cache nội dung, và xoá mọi <code>openat</code>/<code>fstat</code> theo từng request.</li><li>Nó có thể phục vụ tệp cũ hoặc thậm chí tệp đã xoá trong tối đa <code>open_file_cache_valid</code> — hãy nạp lại Nginx sau một lần xoá khẩn.</li><li>Đo bằng <code>strace</code> (một con số đếm), không bằng đồng hồ: phép bấm giờ 500 request không thấy gì vì chi phí khởi động <code>curl</code> áp đảo.</li></ul>
+
 <h3>Nguồn học cho bài này</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_core_module.html#sendfile" target="_blank" rel="noopener"><span class="lc-ico">🚀</span><span class="lc-body"><span class="lc-title">nginx — sendfile, tcp_nopush, tcp_nodelay</span><span class="lc-sub">nginx.org · Bộ ba đi liền nhau, kèm cách chúng tương tác</span></span></a>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_core_module.html#open_file_cache" target="_blank" rel="noopener"><span class="lc-ico">🗄️</span><span class="lc-body"><span class="lc-title">nginx — open_file_cache</span><span class="lc-sub">nginx.org · Chính xác cái gì được cache, và ngữ nghĩa của hiệu lực</span></span></a>
@@ -658,6 +1305,7 @@ gzip_static (tep)   Content-Length: 31327    ETag: "6a8b295e-7a5f"
       type: 'LESSON',
       description: 'Ghép mọi thứ trong chương thành một cấu hình chạy được cho một SPA có tài nguyên băm và một thư mục tệp người dùng tải lên, rồi đo TỪNG tuyến. Sáu dòng đo, và dòng cuối phơi ra một con lỗi thật trong cấu hình do chính bài này viết: một cú 404 bị cache MỘT NĂM.',
       content: `
+${G04_5}
 <div class="ml-en">
 <span class="eyebrow">Chapter 4 · Lesson 4.5</span>
 <h2>A production static block, assembled and measured</h2>
@@ -686,7 +1334,7 @@ gzip_static (tep)   Content-Length: 31327    ETag: "6a8b295e-7a5f"
 
     <span class="tok-comment"># HASHED assets: one year, immutable (4.2)</span>
     location /tinh/ {
-      add_header Cache-Control "public, max-age=31536000, immutable";
+      add_header Cache-Control "public, max-age=31536000, immutable" always;   <span class="tok-comment"># "always" — the bug measured below</span>
       add_header X-Content-Type-Options "nosniff" always;
       try_files \$uri =404;
     }
@@ -762,6 +1410,116 @@ tep khong ton tai   404  Cache-Control: public, max-age=31536000, immutable
 <p><strong>Why the bug stays in the lesson.</strong> It was not planted. The config was written from the four preceding lessons, it looked right, it passed <code>nginx -t</code>, and five of six routes were perfect. It took one request to a path that does not exist to find a failure that would have been invisible in production until a user complained about a permanently broken page. That is the argument for measuring error paths, made better by an example than by an assertion.</p>
 </div>
 
+<h3>🔬 Run it yourself</h3>
+<p>The whole block above on port 8080 (listen 443 replaced by a plain port for the lab), every route requested, then <code>always</code> removed from Cache-Control, on nginx/1.24.0:</p>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  include       /etc/nginx/mime.types;
+  default_type  application/octet-stream;
+  access_log    off;
+  sendfile on; tcp_nopush on; tcp_nodelay on;
+  open_file_cache max=10000 inactive=60s;
+  open_file_cache_valid 30s;
+  open_file_cache_min_uses 2;
+  open_file_cache_errors on;
+  gzip on; gzip_vary on; gzip_comp_level 5; gzip_min_length 256;
+  gzip_types text/css application/javascript application/json image/svg+xml;
+  gzip_static on;
+
+  server {
+    listen 8080;
+    root /srv/site;
+    location /tinh/ {
+      add_header Cache-Control "public, max-age=31536000, immutable" always; <span class="tok-comment">  # "always" — xem 404 bên dưới</span>
+      add_header X-Content-Type-Options "nosniff" always;
+      try_files $uri =404;
+    }
+    location /tai-len/ {
+      types { }
+      default_type application/octet-stream;
+      add_header Content-Disposition "attachment" always;
+      add_header X-Content-Type-Options "nosniff" always;
+      add_header Cache-Control "public, max-age=604800";
+      try_files $uri =404;
+    }
+    location = /index.html {
+      add_header Cache-Control "no-cache";
+      add_header X-Content-Type-Options "nosniff" always;
+    }
+    location / { try_files $uri $uri/ /index.html; }
+  }
+}</code></pre>
+<div class="out">$ for u in /tinh/app.4f9a2c.js /index.html /trang/bat-ky /tai-len/anh.jpg /tai-len/la.html /tinh/khong-co.js; do echo "== $u"; bash xem.sh $u; done
+== /tinh/app.4f9a2c.js
+  HTTP/1.1 200 OK
+  Content-Type: application/javascript
+  ETag: W/"6af5c6b4-1bc6b"
+  Cache-Control: public, max-age=31536000, immutable
+  X-Content-Type-Options: nosniff
+  Content-Encoding: gzip
+== /index.html
+  HTTP/1.1 200 OK
+  Content-Type: text/html
+  ETag: "6af5c6b4-4d"
+  Cache-Control: no-cache
+  X-Content-Type-Options: nosniff
+== /trang/bat-ky
+  HTTP/1.1 200 OK
+  Content-Type: text/html
+  ETag: "6af5c6b4-4d"
+  Cache-Control: no-cache
+  X-Content-Type-Options: nosniff
+== /tai-len/anh.jpg
+  HTTP/1.1 200 OK
+  Content-Type: application/octet-stream
+  ETag: "6af5c6b4-1388"
+  Content-Disposition: attachment
+  X-Content-Type-Options: nosniff
+  Cache-Control: public, max-age=604800
+== /tai-len/la.html
+  HTTP/1.1 200 OK
+  Content-Type: application/octet-stream
+  ETag: "6af5c6b4-28"
+  Content-Disposition: attachment
+  X-Content-Type-Options: nosniff
+  Cache-Control: public, max-age=604800
+== /tinh/khong-co.js
+  HTTP/1.1 404 Not Found
+  Content-Type: text/html
+  Cache-Control: public, max-age=31536000, immutable
+  X-Content-Type-Options: nosniff
+$ grep -n 'immutable' site.conf
+21:      add_header Cache-Control "public, max-age=31536000, immutable";
+$ for u in /tinh/khong-co.js /tinh/app.4f9a2c.js; do echo "== $u"; bash xem.sh $u; done
+== /tinh/khong-co.js
+  HTTP/1.1 404 Not Found
+  Content-Type: text/html
+  X-Content-Type-Options: nosniff
+== /tinh/app.4f9a2c.js
+  HTTP/1.1 200 OK
+  Content-Type: application/javascript
+  ETag: W/"6af5c6b4-1bc6b"
+  Cache-Control: public, max-age=31536000, immutable
+  X-Content-Type-Options: nosniff
+  Content-Encoding: gzip</div>
+<p>Hashed asset: gzip, a weak ETag, a year immutable. Index and the SPA path: the same ETag and <code>no-cache</code>. Both uploads: octet-stream, attachment, nosniff. The missing hashed file: a 404 carrying a year of <code>immutable</code> — gone once <code>always</code> was removed, while the real file kept its year.</p>
+<h3>🔗 Related lessons in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-12-4-cdn-tep-tinh" target="_blank" rel="noopener"><span class="lc-ico">🚀</span><span class="lc-body"><span class="lc-title">Deploy to a VPS · 12.4 — CDN and static files</span><span class="lc-sub">This block in front of a real app</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-10-1-nhan-file-multipart" target="_blank" rel="noopener"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Node.js · 10.1 — Receiving multipart uploads</span><span class="lc-sub">Accepting the files this block later serves</span></span></a>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">default_type application/octet-stream</span><span class="v">The safe fallback type for a file server, so an unknown extension downloads rather than renders.</span></div>
+  <div class="kv"><span class="k">types { }</span><span class="v">An empty type table inside a location; with octet-stream it forces every upload to be announced as binary.</span></div>
+  <div class="kv"><span class="k">Content-Disposition: attachment</span><span class="v">The second lock on uploads — tells the browser to download, not display, even types it would normally render.</span></div>
+  <div class="kv"><span class="k">try_files ... =404</span><span class="v">An explicit miss so a missing upload is a <code>404</code>, not the SPA shell returned with status <code>200</code>.</span></div>
+  <div class="kv"><span class="k">always flag</span><span class="v">Applies an <code>add_header</code> to error responses too — right for security headers, wrong on <code>Cache-Control</code>.</span></div>
+  <div class="kv"><span class="k">SPA fallback</span><span class="v">The internal redirect to <code>/index.html</code> re-runs location matching, landing back in <code>location = /index.html</code>.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li>One config combines hashed assets (a year, <code>immutable</code>), HTML (<code>no-cache</code>), an SPA fallback, and a locked-down uploads directory.</li><li>Uploads use empty <code>types { }</code> + <code>default_type application/octet-stream</code> + <code>Content-Disposition: attachment</code> + <code>nosniff</code>, so an uploaded file can never render as a document (stored XSS).</li><li>The SPA fallback re-runs location matching, so the HTML caching rule written once in <code>location = /index.html</code> applies to every SPA route.</li><li><code>always</code> on <code>Cache-Control</code> cached a <code>404</code> for a year — <code>always</code> belongs on security headers, never on caching.</li><li>Measure the error paths too: one <code>curl -I</code> per route, including a path that does not exist, is the whole review.</li></ul>
+
 <h3>Learning sources for this lesson</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_headers_module.html#add_header" target="_blank" rel="noopener"><span class="lc-ico">📤</span><span class="lc-body"><span class="lc-title">nginx — add_header and the always flag</span><span class="lc-sub">nginx.org · Exactly which status codes each form applies to</span></span></a>
 <a class="link-card" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition" target="_blank" rel="noopener"><span class="lc-ico">📎</span><span class="lc-body"><span class="lc-title">MDN — Content-Disposition</span><span class="lc-sub">developer.mozilla.org · attachment versus inline, and filename handling</span></span></a>
@@ -798,7 +1556,7 @@ tep khong ton tai   404  Cache-Control: public, max-age=31536000, immutable
 
     <span class="tok-comment"># Tài nguyên CÓ BĂM: một năm, immutable (4.2)</span>
     location /tinh/ {
-      add_header Cache-Control "public, max-age=31536000, immutable";
+      add_header Cache-Control "public, max-age=31536000, immutable" always;   <span class="tok-comment"># "always" — the bug measured below</span>
       add_header X-Content-Type-Options "nosniff" always;
       try_files \$uri =404;
     }
@@ -873,6 +1631,116 @@ tep khong ton tai   404  Cache-Control: public, max-age=31536000, immutable
 <div class="note-ct">
 <p><strong>Vì sao con lỗi được giữ nguyên trong bài.</strong> Nó KHÔNG phải cài cắm. Cấu hình được viết ra từ bốn bài trước, nó trông đúng, nó qua được <code>nginx -t</code>, và năm trên sáu tuyến hoàn hảo. Chỉ cần MỘT request tới một đường dẫn không tồn tại là lòi ra một kiểu hỏng mà ngoài production sẽ vô hình cho tới khi có người dùng kêu rằng trang của họ hỏng vĩnh viễn. Đó là lý lẽ cho việc đo cả đường LỖI, và một ví dụ nói điều đó hay hơn một lời khẳng định.</p>
 </div>
+
+<h3>🔬 Tự chạy lại</h3>
+<p>Nguyên khối ở trên trên cổng 8080 (thay listen 443 bằng một cổng thường cho phòng thí nghiệm), xin từng tuyến, rồi bỏ <code>always</code> khỏi Cache-Control, trên nginx/1.24.0:</p>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  include       /etc/nginx/mime.types;
+  default_type  application/octet-stream;
+  access_log    off;
+  sendfile on; tcp_nopush on; tcp_nodelay on;
+  open_file_cache max=10000 inactive=60s;
+  open_file_cache_valid 30s;
+  open_file_cache_min_uses 2;
+  open_file_cache_errors on;
+  gzip on; gzip_vary on; gzip_comp_level 5; gzip_min_length 256;
+  gzip_types text/css application/javascript application/json image/svg+xml;
+  gzip_static on;
+
+  server {
+    listen 8080;
+    root /srv/site;
+    location /tinh/ {
+      add_header Cache-Control "public, max-age=31536000, immutable" always; <span class="tok-comment">  # "always" — xem 404 bên dưới</span>
+      add_header X-Content-Type-Options "nosniff" always;
+      try_files $uri =404;
+    }
+    location /tai-len/ {
+      types { }
+      default_type application/octet-stream;
+      add_header Content-Disposition "attachment" always;
+      add_header X-Content-Type-Options "nosniff" always;
+      add_header Cache-Control "public, max-age=604800";
+      try_files $uri =404;
+    }
+    location = /index.html {
+      add_header Cache-Control "no-cache";
+      add_header X-Content-Type-Options "nosniff" always;
+    }
+    location / { try_files $uri $uri/ /index.html; }
+  }
+}</code></pre>
+<div class="out">$ for u in /tinh/app.4f9a2c.js /index.html /trang/bat-ky /tai-len/anh.jpg /tai-len/la.html /tinh/khong-co.js; do echo "== $u"; bash xem.sh $u; done
+== /tinh/app.4f9a2c.js
+  HTTP/1.1 200 OK
+  Content-Type: application/javascript
+  ETag: W/"6af5c6b4-1bc6b"
+  Cache-Control: public, max-age=31536000, immutable
+  X-Content-Type-Options: nosniff
+  Content-Encoding: gzip
+== /index.html
+  HTTP/1.1 200 OK
+  Content-Type: text/html
+  ETag: "6af5c6b4-4d"
+  Cache-Control: no-cache
+  X-Content-Type-Options: nosniff
+== /trang/bat-ky
+  HTTP/1.1 200 OK
+  Content-Type: text/html
+  ETag: "6af5c6b4-4d"
+  Cache-Control: no-cache
+  X-Content-Type-Options: nosniff
+== /tai-len/anh.jpg
+  HTTP/1.1 200 OK
+  Content-Type: application/octet-stream
+  ETag: "6af5c6b4-1388"
+  Content-Disposition: attachment
+  X-Content-Type-Options: nosniff
+  Cache-Control: public, max-age=604800
+== /tai-len/la.html
+  HTTP/1.1 200 OK
+  Content-Type: application/octet-stream
+  ETag: "6af5c6b4-28"
+  Content-Disposition: attachment
+  X-Content-Type-Options: nosniff
+  Cache-Control: public, max-age=604800
+== /tinh/khong-co.js
+  HTTP/1.1 404 Not Found
+  Content-Type: text/html
+  Cache-Control: public, max-age=31536000, immutable
+  X-Content-Type-Options: nosniff
+$ grep -n 'immutable' site.conf
+21:      add_header Cache-Control "public, max-age=31536000, immutable";
+$ for u in /tinh/khong-co.js /tinh/app.4f9a2c.js; do echo "== $u"; bash xem.sh $u; done
+== /tinh/khong-co.js
+  HTTP/1.1 404 Not Found
+  Content-Type: text/html
+  X-Content-Type-Options: nosniff
+== /tinh/app.4f9a2c.js
+  HTTP/1.1 200 OK
+  Content-Type: application/javascript
+  ETag: W/"6af5c6b4-1bc6b"
+  Cache-Control: public, max-age=31536000, immutable
+  X-Content-Type-Options: nosniff
+  Content-Encoding: gzip</div>
+<p>Tệp có mã băm: gzip, ETag yếu, một năm immutable. Trang index và đường dẫn SPA: cùng ETag và <code>no-cache</code>. Cả hai tệp tải lên: octet-stream, attachment, nosniff. Tệp băm không tồn tại: một cú 404 mang theo một năm <code>immutable</code> — biến mất khi bỏ <code>always</code>, còn tệp có thật vẫn giữ một năm.</p>
+<h3>🔗 Bài liên quan ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-12-4-cdn-tep-tinh" target="_blank" rel="noopener"><span class="lc-ico">🚀</span><span class="lc-body"><span class="lc-title">Deploy lên VPS · 12.4 — CDN và tệp tĩnh</span><span class="lc-sub">Khối này đứng trước một ứng dụng thật</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-10-1-nhan-file-multipart" target="_blank" rel="noopener"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Node.js · 10.1 — Nhận tệp multipart</span><span class="lc-sub">Nhận đúng những tệp mà khối này sau đó phục vụ</span></span></a>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">default_type application/octet-stream</span><span class="v">Kiểu rơi về an toàn cho một máy chủ tệp, để một phần đuôi lạ tải về chứ không dựng ra.</span></div>
+  <div class="kv"><span class="k">types { }</span><span class="v">Một bảng kiểu rỗng đặt trong location; đi với octet-stream nó ép mọi tệp tải lên được công bố là nhị phân.</span></div>
+  <div class="kv"><span class="k">Content-Disposition: attachment</span><span class="v">Cái khoá thứ hai cho tệp tải lên — bảo trình duyệt tải về, không hiển thị, kể cả kiểu bình thường nó dựng ra.</span></div>
+  <div class="kv"><span class="k">try_files ... =404</span><span class="v">Một cú trượt tường minh để tệp tải lên thiếu là một <code>404</code>, không phải vỏ SPA trả về với mã <code>200</code>.</span></div>
+  <div class="kv"><span class="k">cờ always</span><span class="v">Áp một <code>add_header</code> cho cả phản hồi lỗi — đúng cho header bảo mật, sai trên <code>Cache-Control</code>.</span></div>
+  <div class="kv"><span class="k">Dự phòng SPA</span><span class="v">Cú chuyển hướng nội bộ về <code>/index.html</code> chạy lại phép khớp location, rơi lại vào <code>location = /index.html</code>.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li>Một cấu hình gộp tài nguyên có băm (một năm, <code>immutable</code>), HTML (<code>no-cache</code>), một dự phòng SPA, và một thư mục tệp tải lên bị khoá chặt.</li><li>Tệp tải lên dùng <code>types { }</code> rỗng + <code>default_type application/octet-stream</code> + <code>Content-Disposition: attachment</code> + <code>nosniff</code>, nên một tệp tải lên không bao giờ dựng được thành tài liệu (XSS lưu trữ).</li><li>Dự phòng SPA chạy lại phép khớp location, nên luật cache HTML viết một lần trong <code>location = /index.html</code> áp cho mọi tuyến của SPA.</li><li><code>always</code> trên <code>Cache-Control</code> đã cache một cú <code>404</code> suốt một năm — <code>always</code> thuộc về header bảo mật, không bao giờ thuộc về chuyện cache.</li><li>Đo cả đường lỗi: một lệnh <code>curl -I</code> cho mỗi tuyến, kể cả một đường dẫn không tồn tại, là xong cả buổi rà.</li></ul>
 
 <h3>Nguồn học cho bài này</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_headers_module.html#add_header" target="_blank" rel="noopener"><span class="lc-ico">📤</span><span class="lc-body"><span class="lc-title">nginx — add_header và cờ always</span><span class="lc-sub">nginx.org · Chính xác mỗi dạng áp cho những mã trạng thái nào</span></span></a>

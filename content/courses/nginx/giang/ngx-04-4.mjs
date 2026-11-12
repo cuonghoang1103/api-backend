@@ -1,0 +1,32 @@
+/** Giảng theo slide — bài 4.4 sendfile và open_file_cache, đếm bằng lời gọi hệ thống (deck ngx-04-4, 9 slide). VI = lời giảng video ngx-4-4; EN = ghi chú `en` của deck. SINH bằng scratchpad/ngx/giang.mjs — sửa ở deck/kichban rồi sinh lại. */
+import { walkNgx } from '../_slides.mjs';
+
+export default walkNgx('ngx-04-4', "sendfile and open_file_cache, counted in system calls", "sendfile và open_file_cache, đếm bằng lời gọi hệ thống", [
+  [1, "sendfile and open_file_cache, counted in system calls",
+    "<p>Lesson 4.4. Two directives every tuning guide copies: sendfile and open file cache. Instead of trusting them, we count the system calls a real worker makes, with strace.</p>",
+    "<p>Bài 4.4: sendfile và open_file_cache, đếm bằng lời gọi hệ thống.</p>"],
+  [2, "What you will take away from this lesson",
+    "<p>Five takeaways: counting a worker with strace; what sendfile removes; what open file cache removes; the deploy that keeps serving the old file; and which knobs matter.</p>",
+    "<p>Năm điều: cách đếm một worker làm gì bằng strace, sendfile biến một trăm tám mươi sáu lời gọi thành ba. Open_file_cache xoá sạch lần mở tệp, cú deploy phục vụ tệp cũ cả phút, và núm nào đáng vặn.</p>"],
+  [3, "The measuring tool: strace on one worker",
+    "<p>The tool. One worker process, so every system call we see belongs to our requests. A small script attaches strace to that worker, sends N requests, and counts each system call by name.</p>",
+    "<p>Dụng cụ đo: chỉ một worker, nên mọi lời gọi hệ thống mình thấy đều là của request mình gửi. Một script nhỏ gắn strace vào worker đó, gửi N request, rồi đếm từng loại lời gọi theo tên.</p>"],
+  [4, "sendfile: 186 calls become 3",
+    "<p>Three requests for a two megabyte file. With sendfile on: three sendfile calls, one per request, plus the header writes. With sendfile off: one hundred and eighty-six reads and one hundred and eighty-six writes — sixty-two of each per request, every byte copied into Nginx memory and out again.</p>",
+    "<p>Đo thật, ba request tới tệp hai megabyte. Sendfile bật: ba lời gọi sendfile, một cho mỗi request, cộng ba lần ghi header. Sendfile tắt: một trăm tám mươi sáu lần đọc và một trăm tám mươi sáu lần ghi. Mỗi byte vào bộ nhớ Nginx rồi lại ra.</p>"],
+  [5, "open_file_cache: the opens disappear",
+    "<p>Five requests for a small file. With open file cache: zero opens, zero stats — only the connections are closed. Without it: one open and one stat per request, and the file closed each time. The descriptor simply stays open between requests.</p>",
+    "<p>Năm request tới một tệp nhỏ. Có open_file_cache: không lần mở nào, không lần stat nào, chỉ đóng năm kết nối. Không có cache: mỗi request một lần mở, một lần stat, và đóng tệp mỗi lần. Đáng kể khi bạn phục vụ rất nhiều tệp nhỏ. Với một tệp lớn thì không đáng gì.</p>"],
+  [6, "Trap: the cache keeps serving the OLD file",
+    "<p>The trap. A deploy writes a new file and moves it into place, which creates a new inode. With open file cache, the cached descriptor still points at the old one: the old content kept coming out. Sixty-one seconds later, the default validity, the new content appeared.</p>",
+    "<p>Vì sao: mv tạo ra một inode mới. Descriptor trong cache vẫn trỏ vào inode cũ, nên byte cũ cứ đi ra. Tới khi open_file_cache_valid hết hạn, mặc định sáu mươi giây. Hạ nó xuống, hoặc reload Nginx trong script deploy.</p>"],
+  [7, "The rest of the tuning, by how much it matters",
+    "<p>The rest, by how much it matters. sendfile on, and tcp nopush with it. open file cache when you serve many small files, minding the deploy. aio and directio only after a measurement says the disk is the bottleneck.</p>",
+    "<p>Phần còn lại, xếp theo mức đáng làm: sendfile bật, kèm tcp_nopush. Ubuntu bật sẵn cả hai. Open_file_cache khi phục vụ nhiều tệp nhỏ, nhớ cú deploy. Còn aio và directio chỉ khi phép đo chỉ ra đĩa là nút cổ chai.</p>"],
+  [8, "Key terms of this lesson",
+    "<p>Key terms: system call, strace, sendfile, open file cache, open file cache valid, and inode.</p>",
+    "<p>Thuật ngữ: lời gọi hệ thống, strace, sendfile. Open_file_cache, open_file_cache_valid, và inode.</p>"],
+  [9, "Your turn — and what to keep",
+    "<p>Your turn: count system calls with strace, compare sendfile on and off, compare the file cache, and replace a file under a running cache. Keep: count, do not guess; sendfile on; a cache serves the old file after a deploy unless you reload.</p>",
+    "<p>Tới lượt bạn: chạy một worker, gắn strace, so sendfile bật và tắt, so có và không có cache. Rồi mv một bản mới vào dưới cache, lấy nó ngay, rồi lấy lại sau một phút. Tóm lại: đếm lời gọi, đừng đoán. Bật sendfile. Cache tệp thì sau deploy là tệp cũ, trừ khi bạn reload. Bạn mở Code Lab Nginx, module nén, header và hiệu năng. Bài sau: một khối tệp tĩnh production, ráp lại và đem đo.</p>"],
+]);

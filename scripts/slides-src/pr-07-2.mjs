@@ -9,6 +9,7 @@ const DU_LIEU = {
  "demo/out/p7-2/muc.txt": "$ DATABASE_URL=postgresql://student:matkhau@127.0.0.1:55491/c72 npx tsx p7/72/muc.mts\nprisma:query BEGIN\nprisma:query SET TRANSACTION ISOLATION LEVEL SERIALIZABLE\nprisma:query SELECT COUNT(*) AS \"_count$_all\" FROM (SELECT \"id\" FROM \"users\" WHERE 1=1 OFFSET $1) AS \"sub\"\nprisma:query COMMIT\nprisma:query BEGIN\nprisma:query SET TRANSACTION ISOLATION LEVEL REPEATABLE READ\nprisma:query SELECT COUNT(*) AS \"_count$_all\" FROM (SELECT \"id\" FROM \"users\" WHERE 1=1 OFFSET $1) AS \"sub\"\nprisma:query SELECT COUNT(*) AS \"_count$_all\" FROM (SELECT \"id\" FROM \"posts\" WHERE 1=1 OFFSET $1) AS \"sub\"\nprisma:query COMMIT\n$ DATABASE_URL=postgresql://student:matkhau@127.0.0.1:55491/c72 npx tsx p7/72/muc2.mts\nSerializable     mảng 1 câu: read committed   · mảng 2 câu: serializable     · tương tác: serializable\nRepeatableRead   mảng 1 câu: read committed   · mảng 2 câu: repeatable read  · tương tác: repeatable read\nReadUncommitted  mảng 1 câu: read committed   · mảng 2 câu: read uncommitted · tương tác: read uncommitted\n",
  "demo/out/p7-2/hai-phien.txt": "$ DATABASE_URL=postgresql://student:matkhau@127.0.0.1:55491/c72 npx tsx p7/72/hai-phien.mts\nReadCommitted   lần đọc 1: 1000 · lần đọc 2: 2000   ← non-repeatable read\nRepeatableRead  lần đọc 1: 1000 · lần đọc 2: 1000\nReadCommitted   đếm MOI lần 1: 0 · lần 2: 1   ← phantom read\nRepeatableRead  đếm MOI lần 1: 0 · lần 2: 0\n",
  "demo/out/p7-2/admin.txt": "$ DATABASE_URL=postgresql://student:matkhau@127.0.0.1:55491/c72 npx tsx p7/72/admin.mts\n== mac dinh (ReadCommitted): fulfilled, fulfilled · admin: 3\n== RepeatableRead: fulfilled, fulfilled · admin: 3\n== Serializable: fulfilled, rejected · admin: 2\n   PrismaClientKnownRequestError P2034: Transaction failed due to a write conflict or a deadlock. Please retry your transaction\n   meta: {}\n   thu lai lan 1 (P2034)\n== Serializable + retry: rejected: Da du 2 admin, fulfilled · admin: 2\n",
+ "demo/out/p7-b/retry-deadlock.txt": "$ DATABASE_URL=postgresql://student:matkhau@127.0.0.1:55491/c7b npx tsx p7/7b/retry-deadlock.mts\n== retry chi bat P2034: rejected P2010, fulfilled · da thu lai: P2010 0, P2034 0\n== retry bat P2034 + P2010/40P01: fulfilled, fulfilled · da thu lai: P2010 1, P2034 0\n",
  "demo/lab/p7/72/rang-buoc.sql": "UPDATE users SET role = 'USER', admin_slot = NULL WHERE id > 1;\n-- \"At most 2 admins\", kept by the DATABASE: each admin takes slot 1 or 2, never the same slot\nALTER TABLE users ADD CONSTRAINT admin_slot_1_2 CHECK (admin_slot IN (1, 2));\nALTER TABLE users ADD CONSTRAINT admin_co_slot CHECK ((role = 'ADMIN') = (admin_slot IS NOT NULL));\nCREATE UNIQUE INDEX chi_hai_admin ON users (admin_slot) WHERE role = 'ADMIN';\n",
  "demo/out/p7-2/rang-buoc.txt": "$ docker exec -i prisma-pg psql -U student -d c72 < p7/72/rang-buoc.sql\nUPDATE 19\nALTER TABLE\nALTER TABLE\nCREATE INDEX\n$ DATABASE_URL=postgresql://student:matkhau@127.0.0.1:55491/c72 npx tsx p7/72/admin-rang-buoc.mts\nfulfilled | rejected: Da du 2 admin | rejected: Da du 2 admin\nadmin: 2\npsql-style ghi thang: PrismaClientKnownRequestError P2010: Raw query failed. Code: `23514`. Message: `ERROR: new row for relation \"users\" violates check constraint \"admin_slot_1_2\" DETAIL: Failing row contains (13, u13@vd.vn, ADMIN, 3).`\n"
 };
@@ -72,22 +73,24 @@ await Promise.allSettled([levelUp(10), levelUp(11)]);   // 1 admin to start with
         ['The price is an error', 'P2034, "write conflict or a deadlock — please retry". Here <code>meta</code> was empty: catch on the code.'],
         ['So you need a retry', 'Serializable without a retry wrapper just turns a silent bug into a visible failure.'],
       ], 3) },
-  /* 8 */ { t: 'The retry wrapper', body: two(ts(`async function retry(fn, max = 5) {
-  for (let attempt = 1; ; attempt++) {
-    try { return await fn(); }
-    catch (e) {
-      const conflict = e.code === 'P2034';
-      if (!conflict || attempt >= max) throw e;
-      await ngu(Math.min(50 * 2 ** attempt, 1000)
-        * (0.5 + Math.random()));
+  /* 8 */ { t: 'The retry wrapper — catch raw-query deadlocks too', body: two(ts(`const K = Prisma.PrismaClientKnownRequestError;
+function isConflict(e) {
+  if (!(e instanceof K)) return false;
+  if (e.code === 'P2034') return true;
+  const pg = e.meta?.code; // raw query
+  return e.code === 'P2010'
+    && (pg === '40P01' || pg === '40001');
+}
+async function retry(fn, max = 5) {
+  for (let i = 1; ; i++) {
+    try { return await fn(); } catch (e) {
+      if (!isConflict(e) || i >= max) throw e;
+      const ms = Math.min(50 * 2 ** i, 1000);
+      await ngu(ms * (0.5 + Math.random()));
     }
   }
-}`, { sm: true }), tp(gon(OUT('admin')).split('\n').filter((l) => /thu lai|retry/.test(l)).join('\n').replace(/^== Serializable \+ retry: /m, '== Serializable + retry:\n   '), { wrap: 52, fs: 13 }), '') +
-      cards([
-        ['Jitter', 'A random wait, so retries do not collide again.'],
-        ['Bounded', 'Five tries; beyond that the design is wrong.'],
-        ['Conflicts only', 'P2034 here — and P2010 with meta 40P01 for raw-query deadlocks (Lesson 7.3).'],
-      ], 3) },
+}`, { sm: true }), tp(gon(OUT('admin')).split('\n').filter((l) => /thu lai|retry/.test(l)).join('\n').replace(/^== Serializable \+ retry: /m, '== Serializable + retry:\n   ') + '\n\n# Lesson 7.3 deadlock, two opposite transfers:\n' + gon(fs.readFileSync(`${DEMO}/out/p7-b/retry-deadlock.txt`, 'utf8')).split('\n').filter((l) => /^==/.test(l)).join('\n').replace(/: (rejected|fulfilled)/g, ':\n   $1').replace(/ · da thu lai/g, '\n   da thu lai'), { wrap: 52, fs: 12 }), '') +
+      box('Only P2034? A raw-query deadlock slips through', 'Catching only P2034, the deadlocked transfer failed. Also catching P2010 with meta.code 40P01: one retry, both transfers done.', 'lam') },
   /* 9 */ { t: 'The cheaper fix: let the database enforce it', body: sql(SRC('rang-buoc.sql').split('\n').slice(1).join('\n'), { sm: true }) +
       tp(cat('rang-buoc', 1), { wrap: 140, fs: 12 }) +
       box('No isolation level, no retry — and it holds against psql too', 'Each admin takes slot 1 or 2; the partial unique index allows each slot once. Three concurrent promotions: one succeeds (with the existing admin, two in total), and a direct write of slot 3 is refused by the CHECK.', 'xanh') },

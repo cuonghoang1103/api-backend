@@ -31,21 +31,22 @@ ${G07_1}
 <p class="lead">Prisma has two transaction APIs that look similar and behave very differently. One takes an array and is essentially free; the other takes a callback, holds a connection open for as long as your code runs inside it, and is the fastest way to exhaust a connection pool. Choosing between them is the whole of this lesson.</p>
 
 <h3>The array form — sequential operations</h3>
-<pre><code class="language-typescript">const [user, baiViet, order] = await prisma.$transaction([
+<pre><code class="language-typescript">const [users, posts, orders] = await prisma.$transaction([
   prisma.user.count(),
-  prisma.post.count({ where: { published: true } }),
+  prisma.post.count({ where: { views: { gte: 0 } } }),
   prisma.order.groupBy({ by: ['status'], _count: { _all: true } }),
 ]);</code></pre>
-<div class="out">prisma:query BEGIN
-prisma:query SELECT COUNT(*) FROM "users"
-prisma:query SELECT COUNT(*) FROM "posts" WHERE "published" = $1
-prisma:query SELECT "status", COUNT(*) FROM "orders" GROUP BY "status"
+<div class="out">-- measured 12 Nov 2026, Apple-silicon laptop, PostgreSQL 16.14 in Docker, Prisma 6.19.3
+prisma:query BEGIN
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "id" FROM "users" WHERE 1=1 OFFSET $1) AS "sub"
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "id" FROM "posts" WHERE "views" &gt;= $1 OFFSET $2) AS "sub"
+prisma:query SELECT COUNT(*) AS "_count$_all", "status" FROM "orders" WHERE 1=1 GROUP BY "status" OFFSET $1
 prisma:query COMMIT</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">All or nothing</span><span class="v">One <code>BEGIN</code>, one <code>COMMIT</code>. Any failure rolls back everything, and the promise rejects with the original error.</span></div>
-  <div class="kv"><span class="k">One consistent snapshot</span><span class="v">Every query sees the same view of the database, so three counts cannot disagree because a row was inserted between the second and the third. This alone makes it worth using for dashboards.</span></div>
-  <div class="kv"><span class="k">One round trip's worth of latency</span><span class="v">The queries are sent together rather than awaited one at a time. Lesson 5.4 measured this at nearly five times faster for six dashboard queries.</span></div>
-  <div class="kv"><span class="k">No logic between the steps</span><span class="v">This is the limitation. You cannot use the result of query one to decide query two, because all of them are built before any of them runs. If you need that, you need the other form.</span></div>
+  <div class="kv"><span class="k">NOT one snapshot by default</span><span class="v">Under PostgreSQL&#39;s default <code>READ COMMITTED</code> each statement sees what committed before it started — a count can change between the second and third query (Lesson 5.4 measured 4548 → 4648). For numbers that must agree, pass <code>{{ isolationLevel: &#39;RepeatableRead&#39; }}</code> — with at least two queries (Lesson 7.2).</span></div>
+  <div class="kv"><span class="k">Not faster on its own</span><span class="v">The statements still run one after another on one connection. Lesson 5.4 measured six dashboard queries: no consistent difference against six separate awaits on the same machine.</span></div>
+  <div class="kv"><span class="k">No logic between the steps</span><span class="v">You cannot use the result of query one to decide query two, because all of them are built before any of them runs. If you need that, you need the other form.</span></div>
 </div>
 
 <h3>The interactive form — a callback</h3>
@@ -63,17 +64,27 @@ prisma:query COMMIT</div>
   <span class="tok-comment">// 4 — and record it</span>
   return tx.transaction.create({ data: { fromId, toId, amount } });
 });</code></pre>
-<div class="out">prisma:query BEGIN
-prisma:query SELECT ... FROM "tai_khoan" WHERE "id" = $1 LIMIT $2
-prisma:query UPDATE "tai_khoan" SET "so_du" = "tai_khoan"."so_du" - $1 WHERE "id" = $2
-prisma:query UPDATE "tai_khoan" SET "so_du" = "tai_khoan"."so_du" + $1 WHERE "id" = $2
-prisma:query INSERT INTO "giao_dich" ("tu_id","den_id","so_tien") VALUES ($1,$2,$3) RETURNING ...
-prisma:query COMMIT</div>
+<div class="out">-- measured 12 Nov 2026, Apple-silicon laptop, PostgreSQL 16.14 in Docker, Prisma 6.19.3
+-- second run: throws right after the first UPDATE
+prisma:query BEGIN
+prisma:query SELECT "id", "so_du" FROM "tai_khoan" WHERE ("id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query UPDATE "tai_khoan" SET "so_du" = ("so_du" - $1) WHERE ("id" = $2 AND 1=1) RETURNING …
+prisma:query UPDATE "tai_khoan" SET "so_du" = ("so_du" + $1) WHERE ("id" = $2 AND 1=1) RETURNING …
+prisma:query INSERT INTO "giao_dich" ("khoa_idempotent","tu_id","den_id","so_tien","tao_luc") VALUES ($1,$2,$3,$4,$5) RETURNING …
+prisma:query COMMIT
+giao dich: 1 30000
+
+prisma:query BEGIN
+prisma:query UPDATE "tai_khoan" SET "so_du" = ("so_du" - $1) WHERE ("id" = $2 AND 1=1) RETURNING …
+prisma:query ROLLBACK
+loi: nem loi giua chung
+prisma:query SELECT "id", "so_du" FROM "tai_khoan" WHERE ("id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+so du tk1 sau khi nem loi: 70000</div>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">Use <code>tx</code>, never <code>prisma</code></span><span class="lz-t">Inside the callback</span><span class="lz-d">A call on <code>prisma</code> inside the callback runs on a <em>different connection, outside the transaction</em>. It will not see the uncommitted writes, it will not be rolled back, and nothing warns you. This is the single most common bug in interactive transactions.</span></div>
   <div class="lz-step"><span class="lz-k">Throw to roll back</span><span class="lz-t">Any thrown error</span><span class="lz-d">Rolls back and rejects the outer promise. Returning a value commits. There is no explicit <code>rollback()</code>; the exception is the mechanism.</span></div>
   <div class="lz-step"><span class="lz-k">It holds a connection</span><span class="lz-t">For the entire callback</span><span class="lz-d">One of your pool's connections is unavailable to everyone else from <code>BEGIN</code> to <code>COMMIT</code> — including while your JavaScript is doing something that is not a query.</span></div>
-  <div class="lz-step"><span class="lz-k">And it has a deadline</span><span class="lz-t">5 seconds by default</span><span class="lz-d">Exceed it and Prisma rolls back with <code>P2028</code>. Lesson 7.5 covers the two timeouts and when to raise them.</span></div>
+  <div class="lz-step"><span class="lz-k">And it has a deadline</span><span class="lz-t">5 seconds by default</span><span class="lz-d">Exceed it and Prisma rolls back with <code>P2028</code>. Lesson 7.4 covers the timeouts and when to raise them.</span></div>
 </div>
 
 <h3>The <code>tx</code> mistake, shown</h3>
@@ -88,14 +99,15 @@ prisma:query COMMIT</div>
 
   console.log('prisma:', u1.email, '| tx:', u2.email);
 });</code></pre>
-<div class="out">prisma: cu@x.com | tx: moi@x.com</div>
+<div class="out">prisma: cu@x.com | tx: moi@x.com
+
+-- same callback, DATABASE_URL with connection_limit=1&amp;pool_timeout=3
+connection_limit=1, sau 3.0 s: PrismaClientKnownRequestError P2024: Timed out fetching a new connection from the connection pool. More info: http://pris.ly/d/connection-pool (Current connection pool timeout: 3, connection limit: 1)</div>
 <div class="pitfall">
 <p><strong>Trap — and it gets worse than a stale read.</strong> If your pool has one free connection and the transaction is holding it, that <code>prisma.user.findUnique</code> waits for a connection that will not be released until the transaction ends — and the transaction cannot end until the query returns. That is a self-deadlock: the request hangs until <code>pool_timeout</code> fires with <code>P2024</code>. It happens on a busy server and never on your laptop, which is the worst possible failure profile. Never reference the outer client inside the callback; pass <code>tx</code> into any helper the callback calls.</p>
 </div>
-<pre><code class="language-javascript"><span class="tok-comment">// Type a helper so it accepts either client and cannot be called wrongly</span>
-type TxClient = Omit&lt;PrismaClient, '$connect' | '$disconnect' | '$on' | '$transaction' | '$use' | '$extends'&gt;;
-
-async function writeAuditLog(db: TxClient, action: string, userId: number) {
+<pre><code class="language-javascript"><span class="tok-comment">// Type a helper so it accepts either client: Prisma ships the type (tsc-checked, 6.19.3)</span>
+async function writeAuditLog(db: Prisma.TransactionClient, action: string, userId: number) {
   return db.auditLog.create({ data: { action, userId } });
 }
 
@@ -113,10 +125,11 @@ await prisma.user.create({
     posts:   { create: [{ title: 'A' }, { title: 'B' }] },
   },
 });</code></pre>
-<div class="out">BEGIN
-INSERT INTO "users" ... RETURNING "id"
-INSERT INTO "profiles" ...
-INSERT INTO "posts" ... VALUES ($1,$2),($3,$4)
+<div class="out">-- user + two posts (demo schema has no profile model), real log
+BEGIN
+INSERT INTO "users" ("email","role") VALUES ($1,CAST($2::text AS "Role")) RETURNING "id"
+INSERT INTO "posts" ("slug","title","views","author_id") VALUES ($1,$2,$3,$4), ($5,$6,$7,$8)
+SELECT "id", "email", "role"::text, "admin_slot" FROM "users" WHERE "id" = $1 LIMIT $2 OFFSET $3
 COMMIT</div>
 <div class="callout ok">
 <p><strong>Reach for a transaction only when a nested write cannot express what you need.</strong> Every nested write, every <code>updateMany</code>, every single <code>update</code> with an atomic operator is already atomic. The three cases that genuinely need an explicit transaction are: operations across models that are not related, a decision in JavaScript between a read and a write, and a guard that spans more than one table. Everything else is a transaction you do not have to hold open.</p>
@@ -125,9 +138,9 @@ COMMIT</div>
 <h3>Choosing, in one table</h3>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">Nothing — a single call</span><span class="lz-lnote">One <code>create</code> with nested writes, one <code>update</code> with <code>increment</code>, one <code>updateMany</code> with the precondition in the <code>where</code>. Atomic already, holds no connection longer than one statement.</span></div>
-  <div class="lz-layer"><span class="lz-lname">Array <code>$transaction</code></span><span class="lz-lnote">Several independent operations that must all succeed, or several reads that must see one snapshot. No logic between them. Cheap — use it freely.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Array <code>$transaction</code></span><span class="lz-lnote">Several independent operations that must all succeed. No logic between them. For reads that must agree, add <code>isolationLevel: &#39;RepeatableRead&#39;</code> — with at least two queries (Lesson 7.2).</span></div>
   <div class="lz-layer"><span class="lz-lname">Interactive <code>$transaction</code></span><span class="lz-lnote">A read, a decision in JavaScript, then writes that depend on it. Genuinely necessary for transfers, inventory checks, anything with a guard. Holds a connection — keep the callback short.</span></div>
-  <div class="lz-layer"><span class="lz-lname">Raw SQL in a transaction</span><span class="lz-lnote"><code>tx.$executeRaw</code> inside an interactive transaction, for <code>SELECT … FOR UPDATE</code> and advisory locks. Lesson 7.4.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Raw SQL in a transaction</span><span class="lz-lnote"><code>tx.$executeRaw</code> inside an interactive transaction, for <code>SELECT … FOR UPDATE</code> and advisory locks. Lesson 7.3.</span></div>
 </div>
 
 <h3>The three ways to exhaust the pool</h3>
@@ -137,10 +150,11 @@ await prisma.$transaction(async (tx) =&gt; {
   const result  = await fetch('https://cong-thanh-toan/charge', { … });   <span class="tok-comment">// 2 seconds!</span>
   await tx.order.update({ where: { id: order.id }, data: { txCode: result.id } });
 });</code></pre>
-<div class="out">-- 10 concurrent orders, pool of 10, payment gateway at 2s each
-PrismaClientKnownRequestError: Timed out fetching a new connection from the connection pool.
-(Current connection pool timeout: 10, connection limit: 10)
-  code: 'P2024'</div>
+<div class="out">-- 20 concurrent orders, pool of 10, payment call takes 2 s — measured 12 Nov 2026, Apple-silicon laptop, PostgreSQL 16.14 in Docker, Prisma 6.19.3
+== HTTP trong giao dich: 10/20 thanh cong, 2.1 s
+   10 × PrismaClientKnownRequestError P2028: Transaction API error: Unable to start a transaction in the given time.
+== HTTP ngoai giao dich: 20/20 thanh cong, 2.0 s</div>
+<p>Half the orders failed — and with <strong>P2028</strong>, not P2024: ten transactions held all ten connections for two seconds, and the other ten waited for a connection longer than <code>maxWait</code> (2 s by default) and were refused before they began. The second line is the fix below, run the same way: all twenty succeeded in the same two seconds.</p>
 <pre><code class="language-javascript"><span class="tok-comment">// The fix: the external call happens OUTSIDE, between two short transactions</span>
 const order = await prisma.order.create({ data: { …, status: 'CHO_THANH_TOAN' } });
 const result  = await fetch('https://cong-thanh-toan/charge', { … });     <span class="tok-comment">// no connection held</span>
@@ -150,7 +164,7 @@ await prisma.order.update({
 });</code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">2 — a loop inside the transaction</span><span class="v">A thousand <code>tx.post.update</code> calls is a thousand round trips holding one connection. Batch them: build the array and pass it to the array form, or use <code>updateMany</code>.</span></div>
-  <div class="kv"><span class="k">3 — a transaction per item in a <code>Promise.all</code></span><span class="v">Fifty concurrent interactive transactions on a pool of ten means forty of them queue. Process in chunks sized to the pool, not all at once.</span></div>
+  <div class="kv"><span class="k">3 — a transaction per item in a <code>Promise.all</code></span><span class="v">Fifty concurrent interactive transactions on a pool of ten means forty of them queue — and those that wait longer than <code>maxWait</code> fail with P2028, as measured above. Process in chunks sized to the pool, not all at once.</span></div>
   <div class="kv"><span class="k">The rule</span><span class="v">A transaction should contain database work and nothing else. No HTTP, no file I/O, no <code>await</code> on anything that is not a query. If the callback contains a call you cannot see the SQL for, it does not belong there.</span></div>
 </div>
 <div class="callout warn">
@@ -170,21 +184,22 @@ await prisma.order.update({
 <p class="lead">Prisma có hai API giao dịch trông giống nhau và cư xử rất khác nhau. Một cái nhận một mảng và gần như miễn phí; cái kia nhận một callback, giữ một kết nối mở suốt thời gian mã của bạn chạy bên trong, và là cách nhanh nhất để vét cạn connection pool. Chọn giữa hai cái đó là toàn bộ bài này.</p>
 
 <h3>Dạng mảng — các thao tác tuần tự</h3>
-<pre><code class="language-typescript">const [user, baiViet, order] = await prisma.$transaction([
+<pre><code class="language-typescript">const [users, posts, orders] = await prisma.$transaction([
   prisma.user.count(),
-  prisma.post.count({ where: { published: true } }),
+  prisma.post.count({ where: { views: { gte: 0 } } }),
   prisma.order.groupBy({ by: ['status'], _count: { _all: true } }),
 ]);</code></pre>
-<div class="out">prisma:query BEGIN
-prisma:query SELECT COUNT(*) FROM "users"
-prisma:query SELECT COUNT(*) FROM "posts" WHERE "published" = $1
-prisma:query SELECT "status", COUNT(*) FROM "orders" GROUP BY "status"
+<div class="out">-- đo ngày 12/11/2026, laptop Apple silicon, PostgreSQL 16.14 trong Docker, Prisma 6.19.3
+prisma:query BEGIN
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "id" FROM "users" WHERE 1=1 OFFSET $1) AS "sub"
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "id" FROM "posts" WHERE "views" &gt;= $1 OFFSET $2) AS "sub"
+prisma:query SELECT COUNT(*) AS "_count$_all", "status" FROM "orders" WHERE 1=1 GROUP BY "status" OFFSET $1
 prisma:query COMMIT</div>
 <div class="kv-grid">
-  <div class="kv"><span class="k">Được tất hoặc không gì cả</span><span class="v">Một <code>BEGIN</code>, một <code>COMMIT</code>. Bất kỳ lỗi nào cũng làm quay lui tất cả, và promise bị từ chối với đúng lỗi gốc.</span></div>
-  <div class="kv"><span class="k">Một bản chụp nhất quán</span><span class="v">Mọi câu truy vấn nhìn cùng một góc nhìn của cơ sở dữ liệu, nên ba con số đếm không thể lệch nhau chỉ vì có hàng được chèn vào giữa câu thứ hai và thứ ba. Riêng điều đó đã đủ để dùng nó cho bảng điều khiển.</span></div>
-  <div class="kv"><span class="k">Chỉ tốn độ trễ của một lượt đi về</span><span class="v">Các câu truy vấn được gửi cùng nhau chứ không await từng cái. Bài 5.4 đo được nhanh gần gấp năm lần cho sáu truy vấn bảng điều khiển.</span></div>
-  <div class="kv"><span class="k">Không có logic giữa các bước</span><span class="v">Đây là hạn chế. Bạn không dùng kết quả của câu một để quyết câu hai được, vì tất cả đều đã được dựng xong trước khi bất cứ cái nào chạy. Cần điều đó thì bạn cần dạng còn lại.</span></div>
+  <div class="kv"><span class="k">Tất cả hoặc không</span><span class="v">Một <code>BEGIN</code>, một <code>COMMIT</code>. Hỏng một câu là lùi tất cả, và promise bị từ chối kèm lỗi gốc.</span></div>
+  <div class="kv"><span class="k">KHÔNG phải một bản chụp, ở mặc định</span><span class="v">Ở mức mặc định <code>READ COMMITTED</code> của PostgreSQL, mỗi câu thấy những gì đã commit trước khi nó bắt đầu — một phép đếm có thể đổi giữa câu thứ hai và thứ ba (Bài 5.4 đo được 4548 → 4648). Muốn các con số khớp nhau thì truyền <code>{{ isolationLevel: &#39;RepeatableRead&#39; }}</code> — với ít nhất hai câu (Bài 7.2).</span></div>
+  <div class="kv"><span class="k">Tự nó không nhanh hơn</span><span class="v">Các câu vẫn chạy lần lượt trên một kết nối. Bài 5.4 đo sáu câu cho bảng điều khiển: không có khác biệt ổn định so với sáu lần await riêng trên cùng máy.</span></div>
+  <div class="kv"><span class="k">Không có logic giữa các bước</span><span class="v">Bạn không dùng được kết quả câu một để quyết câu hai, vì mọi câu đã được dựng trước khi câu đầu tiên chạy. Cần điều đó thì cần dạng còn lại.</span></div>
 </div>
 
 <h3>Dạng tương tác — một callback</h3>
@@ -202,17 +217,27 @@ prisma:query COMMIT</div>
   <span class="tok-comment">// 4 — và ghi nhận lại</span>
   return tx.transaction.create({ data: { fromId, toId, amount } });
 });</code></pre>
-<div class="out">prisma:query BEGIN
-prisma:query SELECT ... FROM "tai_khoan" WHERE "id" = $1 LIMIT $2
-prisma:query UPDATE "tai_khoan" SET "so_du" = "tai_khoan"."so_du" - $1 WHERE "id" = $2
-prisma:query UPDATE "tai_khoan" SET "so_du" = "tai_khoan"."so_du" + $1 WHERE "id" = $2
-prisma:query INSERT INTO "giao_dich" ("tu_id","den_id","so_tien") VALUES ($1,$2,$3) RETURNING ...
-prisma:query COMMIT</div>
+<div class="out">-- đo ngày 12/11/2026, laptop Apple silicon, PostgreSQL 16.14 trong Docker, Prisma 6.19.3
+-- lần 2: ném lỗi ngay sau câu UPDATE đầu tiên
+prisma:query BEGIN
+prisma:query SELECT "id", "so_du" FROM "tai_khoan" WHERE ("id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query UPDATE "tai_khoan" SET "so_du" = ("so_du" - $1) WHERE ("id" = $2 AND 1=1) RETURNING …
+prisma:query UPDATE "tai_khoan" SET "so_du" = ("so_du" + $1) WHERE ("id" = $2 AND 1=1) RETURNING …
+prisma:query INSERT INTO "giao_dich" ("khoa_idempotent","tu_id","den_id","so_tien","tao_luc") VALUES ($1,$2,$3,$4,$5) RETURNING …
+prisma:query COMMIT
+giao dich: 1 30000
+
+prisma:query BEGIN
+prisma:query UPDATE "tai_khoan" SET "so_du" = ("so_du" - $1) WHERE ("id" = $2 AND 1=1) RETURNING …
+prisma:query ROLLBACK
+loi: nem loi giua chung
+prisma:query SELECT "id", "so_du" FROM "tai_khoan" WHERE ("id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+so du tk1 sau khi nem loi: 70000</div>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">Dùng <code>tx</code>, đừng bao giờ dùng <code>prisma</code></span><span class="lz-t">Bên trong callback</span><span class="lz-d">Một lời gọi trên <code>prisma</code> bên trong callback chạy trên <em>một kết nối khác, ngoài giao dịch</em>. Nó không nhìn thấy các lần ghi chưa commit, nó không bị quay lui, và không có gì cảnh báo bạn. Đây là con bọ phổ biến nhất của giao dịch tương tác.</span></div>
   <div class="lz-step"><span class="lz-k">Ném lỗi để quay lui</span><span class="lz-t">Bất kỳ lỗi nào được ném ra</span><span class="lz-d">Làm quay lui và từ chối promise bên ngoài. Trả về một giá trị thì commit. Không có <code>rollback()</code> tường minh; ngoại lệ chính là cơ chế.</span></div>
   <div class="lz-step"><span class="lz-k">Nó giữ một kết nối</span><span class="lz-t">Suốt cả callback</span><span class="lz-d">Một trong các kết nối của pool không dùng được cho ai khác từ <code>BEGIN</code> tới <code>COMMIT</code> — kể cả trong lúc JavaScript của bạn đang làm một việc không phải truy vấn.</span></div>
-  <div class="lz-step"><span class="lz-k">Và nó có hạn chót</span><span class="lz-t">Mặc định 5 giây</span><span class="lz-d">Quá hạn thì Prisma quay lui với <code>P2028</code>. Bài 7.5 nói về hai cái timeout và khi nào nên nâng chúng.</span></div>
+  <div class="lz-step"><span class="lz-k">Và nó có hạn chót</span><span class="lz-t">Mặc định 5 giây</span><span class="lz-d">Quá hạn thì Prisma quay lui với <code>P2028</code>. Bài 7.4 nói về các timeout và khi nào nên nâng chúng.</span></div>
 </div>
 
 <h3>Cái lỗi <code>tx</code>, nhìn tận mắt</h3>
@@ -227,14 +252,15 @@ prisma:query COMMIT</div>
 
   console.log('prisma:', u1.email, '| tx:', u2.email);
 });</code></pre>
-<div class="out">prisma: cu@x.com | tx: moi@x.com</div>
+<div class="out">prisma: cu@x.com | tx: moi@x.com
+
+-- cùng callback, DATABASE_URL có connection_limit=1&amp;pool_timeout=3
+connection_limit=1, sau 3.0 s: PrismaClientKnownRequestError P2024: Timed out fetching a new connection from the connection pool. More info: http://pris.ly/d/connection-pool (Current connection pool timeout: 3, connection limit: 1)</div>
 <div class="pitfall">
 <p><strong>Bẫy — và nó còn tệ hơn một lần đọc dữ liệu cũ.</strong> Nếu pool của bạn còn đúng một kết nối rỗi và giao dịch đang giữ nó, thì lời gọi <code>prisma.user.findUnique</code> kia sẽ đợi một kết nối chỉ được nhả ra khi giao dịch kết thúc — mà giao dịch thì không kết thúc được cho tới khi câu truy vấn trả về. Đó là tự khoá chết: yêu cầu treo cho tới khi <code>pool_timeout</code> nổ với <code>P2024</code>. Nó xảy ra trên một máy chủ bận và không bao giờ xảy ra trên laptop của bạn, tức kiểu hỏng tệ nhất có thể. Đừng bao giờ nhắc tới client bên ngoài bên trong callback; hãy truyền <code>tx</code> vào mọi hàm phụ mà callback gọi.</p>
 </div>
-<pre><code class="language-javascript"><span class="tok-comment">// Gán kiểu cho hàm phụ để nó nhận được cả hai client và không thể gọi sai</span>
-type TxClient = Omit&lt;PrismaClient, '$connect' | '$disconnect' | '$on' | '$transaction' | '$use' | '$extends'&gt;;
-
-async function writeAuditLog(db: TxClient, action: string, userId: number) {
+<pre><code class="language-javascript"><span class="tok-comment">// Hàm phụ nhận được cả hai client: Prisma có sẵn kiểu này (đã kiểm bằng tsc, 6.19.3)</span>
+async function writeAuditLog(db: Prisma.TransactionClient, action: string, userId: number) {
   return db.auditLog.create({ data: { action, userId } });
 }
 
@@ -252,10 +278,11 @@ await prisma.user.create({
     posts:   { create: [{ title: 'A' }, { title: 'B' }] },
   },
 });</code></pre>
-<div class="out">BEGIN
-INSERT INTO "users" ... RETURNING "id"
-INSERT INTO "profiles" ...
-INSERT INTO "posts" ... VALUES ($1,$2),($3,$4)
+<div class="out">-- user + two posts (demo schema has no profile model), real log
+BEGIN
+INSERT INTO "users" ("email","role") VALUES ($1,CAST($2::text AS "Role")) RETURNING "id"
+INSERT INTO "posts" ("slug","title","views","author_id") VALUES ($1,$2,$3,$4), ($5,$6,$7,$8)
+SELECT "id", "email", "role"::text, "admin_slot" FROM "users" WHERE "id" = $1 LIMIT $2 OFFSET $3
 COMMIT</div>
 <div class="callout ok">
 <p><strong>Chỉ với tay tới một giao dịch khi ghi lồng nhau diễn đạt không nổi thứ bạn cần.</strong> Mọi lần ghi lồng nhau, mọi <code>updateMany</code>, mọi <code>update</code> đơn lẻ có toán tử nguyên tử đều vốn đã nguyên tử. Ba trường hợp thật sự cần một giao dịch tường minh là: các thao tác trên những model không có quan hệ với nhau, một quyết định bằng JavaScript nằm giữa một lần đọc và một lần ghi, và một hàng rào trải qua nhiều hơn một bảng. Mọi thứ còn lại là một giao dịch mà bạn không phải giữ mở.</p>
@@ -264,9 +291,9 @@ COMMIT</div>
 <h3>Chọn thế nào, gói trong một bảng</h3>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">Không dùng gì — một lời gọi đơn</span><span class="lz-lnote">Một <code>create</code> có ghi lồng nhau, một <code>update</code> có <code>increment</code>, một <code>updateMany</code> có tiền điều kiện đặt trong <code>where</code>. Vốn đã nguyên tử, và không giữ kết nối lâu hơn một câu lệnh.</span></div>
-  <div class="lz-layer"><span class="lz-lname">Dạng mảng <code>$transaction</code></span><span class="lz-lnote">Vài thao tác độc lập buộc phải cùng thành công, hoặc vài lần đọc buộc phải nhìn cùng một bản chụp. Không có logic ở giữa. Rẻ — cứ dùng thoải mái.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Dạng mảng <code>$transaction</code></span><span class="lz-lnote">Vài thao tác độc lập buộc phải cùng thành công. Không có logic ở giữa. Với những lần đọc buộc phải khớp nhau, thêm <code>isolationLevel: &#39;RepeatableRead&#39;</code> — với ít nhất hai câu (Bài 7.2).</span></div>
   <div class="lz-layer"><span class="lz-lname">Dạng tương tác <code>$transaction</code></span><span class="lz-lnote">Một lần đọc, một quyết định bằng JavaScript, rồi các lần ghi phụ thuộc vào nó. Thật sự cần thiết cho chuyển khoản, kiểm tồn kho, mọi thứ có hàng rào. Nó giữ một kết nối — hãy để callback ngắn.</span></div>
-  <div class="lz-layer"><span class="lz-lname">SQL thô bên trong một giao dịch</span><span class="lz-lnote"><code>tx.$executeRaw</code> bên trong một giao dịch tương tác, cho <code>SELECT … FOR UPDATE</code> và advisory lock. Bài 7.4.</span></div>
+  <div class="lz-layer"><span class="lz-lname">SQL thô bên trong một giao dịch</span><span class="lz-lnote"><code>tx.$executeRaw</code> bên trong một giao dịch tương tác, cho <code>SELECT … FOR UPDATE</code> và advisory lock. Bài 7.3.</span></div>
 </div>
 
 <h3>Ba cách vét cạn pool</h3>
@@ -276,10 +303,11 @@ await prisma.$transaction(async (tx) =&gt; {
   const result  = await fetch('https://cong-thanh-toan/charge', { … });   <span class="tok-comment">// 2 giây!</span>
   await tx.order.update({ where: { id: order.id }, data: { txCode: result.id } });
 });</code></pre>
-<div class="out">-- 10 đơn hàng song song, pool 10 kết nối, cổng thanh toán 2 giây mỗi lượt
-PrismaClientKnownRequestError: Timed out fetching a new connection from the connection pool.
-(Current connection pool timeout: 10, connection limit: 10)
-  code: 'P2024'</div>
+<div class="out">-- 20 đơn cùng lúc, pool 10 kết nối, lời gọi thanh toán mất 2 s — đo ngày 12/11/2026, laptop Apple silicon, PostgreSQL 16.14 trong Docker, Prisma 6.19.3
+== HTTP trong giao dich: 10/20 thanh cong, 2.1 s
+   10 × PrismaClientKnownRequestError P2028: Transaction API error: Unable to start a transaction in the given time.
+== HTTP ngoai giao dich: 20/20 thanh cong, 2.0 s</div>
+<p>Một nửa số đơn hỏng — và với <strong>P2028</strong>, không phải P2024: mười giao dịch giữ cả mười kết nối trong hai giây, mười giao dịch còn lại đợi kết nối lâu hơn <code>maxWait</code> (mặc định 2 s) và bị từ chối trước khi bắt đầu. Dòng thứ hai là cách vá ngay dưới, chạy cùng kiểu: cả hai mươi đơn thành công trong cùng hai giây.</p>
 <pre><code class="language-javascript"><span class="tok-comment">// Cách vá: lời gọi ra ngoài xảy ra BÊN NGOÀI, giữa hai giao dịch ngắn</span>
 const order = await prisma.order.create({ data: { …, status: 'CHO_THANH_TOAN' } });
 const result  = await fetch('https://cong-thanh-toan/charge', { … });     <span class="tok-comment">// không giữ kết nối nào</span>
@@ -289,7 +317,7 @@ await prisma.order.update({
 });</code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">2 — một vòng lặp nằm bên trong giao dịch</span><span class="v">Một nghìn lời gọi <code>tx.post.update</code> là một nghìn lượt đi về trong khi giữ một kết nối. Hãy gom lô: dựng cái mảng rồi truyền vào dạng mảng, hoặc dùng <code>updateMany</code>.</span></div>
-  <div class="kv"><span class="k">3 — mỗi phần tử một giao dịch trong một <code>Promise.all</code></span><span class="v">Năm mươi giao dịch tương tác song song trên một pool mười kết nối nghĩa là bốn mươi cái phải xếp hàng. Hãy xử lý theo cụm cỡ bằng pool, đừng đổ hết một lúc.</span></div>
+  <div class="kv"><span class="k">3 — mỗi phần tử một giao dịch trong một <code>Promise.all</code></span><span class="v">Năm mươi giao dịch tương tác song song trên một pool mười kết nối nghĩa là bốn mươi cái phải xếp hàng — và cái nào đợi quá <code>maxWait</code> thì hỏng với P2028, như vừa đo ở trên. Hãy xử lý theo cụm cỡ bằng pool, đừng đổ hết một lúc.</span></div>
   <div class="kv"><span class="k">Luật</span><span class="v">Một giao dịch nên chứa công việc cơ sở dữ liệu và không chứa gì khác. Không HTTP, không đọc ghi tệp, không <code>await</code> lên thứ gì không phải một câu truy vấn. Nếu callback chứa một lời gọi mà bạn không nhìn thấy SQL của nó thì nó không thuộc về đó.</span></div>
 </div>
 <div class="callout warn">
@@ -320,21 +348,38 @@ ${G07_2}
 
 <h3>Setting it</h3>
 <pre><code class="language-typescript">await prisma.$transaction(
-  async (tx) =&gt; { /* … */ },
+  async (tx) =&gt; tx.user.count(),
   { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
 );
 
-<span class="tok-comment">// Also available on the array form</span>
-await prisma.$transaction([ /* … */ ], {
+<span class="tok-comment">// Also available on the array form — with TWO or more queries (see the trap below)</span>
+await prisma.$transaction([prisma.user.count(), prisma.post.count()], {
   isolationLevel: Prisma.TransactionIsolationLevel.RepeatableRead,
 });</code></pre>
-<div class="out">prisma:query BEGIN ISOLATION LEVEL SERIALIZABLE
-prisma:query SELECT ...
+<div class="out">-- measured 12 Nov 2026, Apple-silicon laptop, PostgreSQL 16.14 in Docker, Prisma 6.19.3
+prisma:query BEGIN
+prisma:query SET TRANSACTION ISOLATION LEVEL SERIALIZABLE
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "id" FROM "users" WHERE 1=1 OFFSET $1) AS "sub"
+prisma:query COMMIT
+prisma:query BEGIN
+prisma:query SET TRANSACTION ISOLATION LEVEL REPEATABLE READ
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "id" FROM "users" WHERE 1=1 OFFSET $1) AS "sub"
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "id" FROM "posts" WHERE 1=1 OFFSET $1) AS "sub"
 prisma:query COMMIT</div>
 <div class="kv-grid">
-  <div class="kv"><span class="k">The default is the database's default</span><span class="v">Omit it and you get whatever the database is configured for — <code>READ COMMITTED</code> on PostgreSQL and MySQL's <code>REPEATABLE READ</code>. Prisma does not impose one of its own.</span></div>
-  <div class="kv"><span class="k">PostgreSQL has three, not four</span><span class="v"><code>READ UNCOMMITTED</code> is accepted and silently behaves as <code>READ COMMITTED</code>. There are no dirty reads in PostgreSQL at any level.</span></div>
-  <div class="kv"><span class="k">It applies to the whole transaction</span><span class="v">Set at <code>BEGIN</code> and unchangeable afterwards. A single query outside a transaction is its own implicit transaction at the default level.</span></div>
+  <div class="kv"><span class="k">BEGIN, then SET TRANSACTION</span><span class="v">Prisma opens the transaction and sets the level as its first statement. Omit the option and you get the database default — <code>READ COMMITTED</code> on PostgreSQL (checked with <code>SHOW transaction_isolation</code>), <code>REPEATABLE READ</code> on MySQL.</span></div>
+  <div class="kv"><span class="k">PostgreSQL has three, not four</span><span class="v"><code>ReadUncommitted</code> is accepted and behaves as read committed. There are no dirty reads in PostgreSQL at any level.</span></div>
+</div>
+<pre><code class="language-typescript"><span class="tok-comment">// Ask PostgreSQL what it is really running at, three ways</span>
+const show = () =&gt; prisma.$queryRaw&#96;SHOW transaction_isolation&#96;;
+await prisma.$transaction([show()], { isolationLevel });                        <span class="tok-comment">// array, ONE query</span>
+await prisma.$transaction([show(), prisma.user.count()], { isolationLevel });   <span class="tok-comment">// array, two queries</span>
+await prisma.$transaction(async (tx) =&gt; tx.$queryRaw&#96;SHOW transaction_isolation&#96;, { isolationLevel });</code></pre>
+<div class="out">Serializable     mảng 1 câu: read committed   · mảng 2 câu: serializable     · tương tác: serializable
+RepeatableRead   mảng 1 câu: read committed   · mảng 2 câu: repeatable read  · tương tác: repeatable read
+ReadUncommitted  mảng 1 câu: read committed   · mảng 2 câu: read uncommitted · tương tác: read uncommitted</div>
+<div class="pitfall">
+<p><strong>Trap — an array of ONE query is not a transaction.</strong> Prisma runs it as a plain query: no <code>BEGIN</code>, so the isolation level you passed is silently ignored and the query runs at read committed. With two or more queries, or with the callback form, the level is real.</p>
 </div>
 
 <h3>The three phenomena, in two terminals</h3>
@@ -355,6 +400,13 @@ COMMIT;</code></pre>
   <div class="lz-layer"><span class="lz-lname">Write skew — two transactions each valid, together invalid</span><span class="lz-lnote">Allowed even by <code>REPEATABLE READ</code>. Only <code>SERIALIZABLE</code> prevents it, and it is the one people do not know exists — see below.</span></div>
 </div>
 
+<p>The same experiment with two Prisma clients, run for real (one transaction reads twice; between the reads the other client commits):</p>
+<div class="out">-- measured 12 Nov 2026, Apple-silicon laptop, PostgreSQL 16.14 in Docker, Prisma 6.19.3
+ReadCommitted   lần đọc 1: 1000 · lần đọc 2: 2000   ← non-repeatable read
+RepeatableRead  lần đọc 1: 1000 · lần đọc 2: 1000
+ReadCommitted   đếm MOI lần 1: 0 · lần 2: 1   ← phantom read
+RepeatableRead  đếm MOI lần 1: 0 · lần 2: 0</div>
+
 <h3><code>READ COMMITTED</code>: what the default lets through</h3>
 <pre><code class="language-javascript"><span class="tok-comment">// Rule: at most 2 admins. Two requests promote two different users at once.</span>
 async function levelUp(userId: number) {
@@ -367,13 +419,14 @@ async function levelUp(userId: number) {
 
 await Promise.all([levelUp(10), levelUp(11)]);
 console.log('admin:', await prisma.user.count({ where: { role: 'ADMIN' } }));</code></pre>
-<div class="out">admin: 3</div>
+<div class="out">== mac dinh (ReadCommitted): fulfilled, fulfilled · admin: 3
+== RepeatableRead: fulfilled, fulfilled · admin: 3</div>
 <div class="pitfall">
 <p><strong>Trap — both transactions counted 1, both decided "there is room", both wrote.</strong> Neither did anything wrong on its own; the rule was violated by the pair. <code>READ COMMITTED</code> permits this because the <code>count</code> in transaction A never saw transaction B's uncommitted insert, and nothing forced them to conflict. This is <em>write skew</em>, and it is the reason "I read it and checked" is not a guarantee. Two ways to fix it, in the next two sections.</p>
 </div>
 
 <h3><code>SERIALIZABLE</code>: the guarantee, and its price</h3>
-<pre><code class="language-javascript">async function levelUp(userId: number) {
+<pre><code class="language-typescript">async function levelUp(userId: number) {
   return prisma.$transaction(
     async (tx) =&gt; {
       const adminCount = await tx.user.count({ where: { role: 'ADMIN' } });
@@ -383,32 +436,28 @@ console.log('admin:', await prisma.user.count({ where: { role: 'ADMIN' } }));</c
     { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
   );
 }
-
-const result = await Promise.allSettled([levelUp(10), levelUp(11)]);
-console.log(result.map((r) =&gt; r.status));
-console.log('admin:', await prisma.user.count({ where: { role: 'ADMIN' } }));</code></pre>
-<div class="out">[ 'fulfilled', 'rejected' ]
-admin: 2
-
--- and the rejection:
-PrismaClientKnownRequestError:
-Transaction failed due to a write conflict or a deadlock. Please retry your transaction
-  code: 'P2034'
-  meta: { code: '40001', message: 'could not serialize access due to read/write dependencies among transactions' }</div>
+await Promise.allSettled([levelUp(10), levelUp(11)]);</code></pre>
+<div class="out">-- measured 12 Nov 2026, Apple-silicon laptop, PostgreSQL 16.14 in Docker, Prisma 6.19.3
+== Serializable: fulfilled, rejected · admin: 2
+   PrismaClientKnownRequestError P2034: Transaction failed due to a write conflict or a deadlock. Please retry your transaction
+   meta: {}</div>
 <div class="callout ok">
-<p><strong>Serializable does not make both succeed — it makes one fail loudly.</strong> PostgreSQL tracks the read/write dependencies between concurrent transactions and aborts one when the pair could not have been produced by running them one after the other. The rule is preserved; the cost is a <code>40001</code> error, and the contract is that <strong>you must retry it</strong>. A serializable transaction without a retry wrapper is not safer than <code>READ COMMITTED</code> — it just fails differently.</p>
+<p><strong>Serializable does not make both succeed — it makes one fail loudly.</strong> PostgreSQL aborted the transaction whose result could not have come from running the two one after the other, and the rule held at two admins. Note what the error carried: code <code>P2034</code> and an <em>empty</em> <code>meta</code> — match on the code, not on <code>meta.code</code>.</p>
 </div>
-<pre><code class="language-javascript"><span class="tok-comment">// The retry wrapper that makes Serializable usable</span>
+<pre><code class="language-javascript"><span class="tok-comment">// The retry wrapper — it must also catch deadlocks raised from raw queries (Lesson 7.3)</span>
+function isConflict(e: unknown) {
+  if (!(e instanceof Prisma.PrismaClientKnownRequestError)) return false;
+  if (e.code === 'P2034') return true;                              <span class="tok-comment">// serialization failure or deadlock</span>
+  const pg = (e.meta as { code?: string } | undefined)?.code;
+  return e.code === 'P2010' &amp;&amp; (pg === '40P01' || pg === '40001');  <span class="tok-comment">// the same, inside $queryRaw</span>
+}
+
 async function retry&lt;T&gt;(fn: () =&gt; Promise&lt;T&gt;, maxAttempts = 5): Promise&lt;T&gt; {
   for (let attempt = 1; ; attempt++) {
     try {
       return await fn();
     } catch (e) {
-      const isConflict =
-        e instanceof Prisma.PrismaClientKnownRequestError &amp;&amp;
-        (e.code === 'P2034' || e.code === 'P2002');
-      if (!isConflict || attempt &gt;= maxAttempts) throw e;
-
+      if (!isConflict(e) || attempt &gt;= maxAttempts) throw e;
       <span class="tok-comment">// exponential backoff with jitter, so retries do not collide again</span>
       const waitMs = Math.min(50 * 2 ** attempt, 1000) * (0.5 + Math.random());
       await new Promise((r) =&gt; setTimeout(r, waitMs));
@@ -416,29 +465,48 @@ async function retry&lt;T&gt;(fn: () =&gt; Promise&lt;T&gt;, maxAttempts = 5): P
   }
 }
 
-await retry(() =&gt; levelUp(11));</code></pre>
+await Promise.allSettled([retry(() =&gt; levelUp(10)), retry(() =&gt; levelUp(11))]);</code></pre>
+<div class="out">   thu lai lan 1 (P2034)
+== Serializable + retry: rejected: Da du 2 admin, fulfilled · admin: 2
+
+-- the deadlock from Lesson 7.3, two opposite transfers, with each version of the check:
+== retry chi bat P2034: rejected P2010, fulfilled · da thu lai: P2010 0, P2034 0
+== retry bat P2034 + P2010/40P01: fulfilled, fulfilled · da thu lai: P2010 1, P2034 0</div>
 <div class="kv-grid">
-  <div class="kv"><span class="k">Jitter is not optional</span><span class="v">Without randomness, two transactions that conflicted will retry at the same instant and conflict again. The jitter is what breaks the cycle.</span></div>
-  <div class="kv"><span class="k">Bound the attempts</span><span class="v">Five is plenty. If a transaction fails five times, the contention is structural — the design needs changing, not more retries.</span></div>
-  <div class="kv"><span class="k">Only retry conflict errors</span><span class="v"><code>P2034</code> (serialization failure or deadlock) and sometimes <code>P2002</code> from a racing upsert. Retrying a constraint violation or a validation error just does the wrong thing five times.</span></div>
-  <div class="kv"><span class="k">The transaction must be idempotent</span><span class="v">It will run more than once. Anything with a side effect outside the database — an email, a webhook, a charge — must not be inside it, which is Lesson 7.1's rule from a different angle.</span></div>
+  <div class="kv"><span class="k">Catch P2010 + 40P01 too</span><span class="v">A deadlock inside <code>$queryRaw</code> (a <code>FOR UPDATE</code>, say) arrives as <code>P2010</code> with <code>meta.code = "40P01"</code>. A wrapper that only checks <code>P2034</code> let that transfer fail; the one above retried it once and both succeeded.</span></div>
+  <div class="kv"><span class="k">Jitter is not optional</span><span class="v">Without randomness, two transactions that conflicted retry at the same instant and conflict again.</span></div>
+  <div class="kv"><span class="k">Bound the attempts</span><span class="v">Five is plenty. If a transaction fails five times, the contention is structural — the design needs changing.</span></div>
+  <div class="kv"><span class="k">The transaction must be idempotent</span><span class="v">It will run more than once. Anything with a side effect outside the database — an email, a webhook, a charge — must not be inside it (Lesson 7.1, and the outbox in Lesson 7.4).</span></div>
 </div>
 
 <h3>The cheaper fix: make the database check it</h3>
-<pre><code class="language-javascript"><span class="tok-comment">// No isolation level, no retry — put the precondition in the WHERE</span>
-const r = await prisma.user.updateMany({
-  where: { id: userId, role: { not: 'ADMIN' } },
-  data:  { role: 'ADMIN' },
-});
-if (r.count === 0) throw new Error('Nguoi dung nay da la admin');</code></pre>
-<pre><code class="language-typescript"><span class="tok-comment">-- Or let a constraint enforce it, which nothing can bypass</span>
-CREATE UNIQUE INDEX "chi_hai_admin" ON "users"("role", "admin_slot")
-  WHERE "role" = 'ADMIN';</code></pre>
+<pre><code class="language-sql"><span class="tok-comment">-- "At most 2 admins" as a rule the database enforces: each admin holds slot 1 or 2</span>
+-- "At most 2 admins", kept by the DATABASE: each admin takes slot 1 or 2, never the same slot
+ALTER TABLE users ADD CONSTRAINT admin_slot_1_2 CHECK (admin_slot IN (1, 2));
+ALTER TABLE users ADD CONSTRAINT admin_co_slot CHECK ((role = 'ADMIN') = (admin_slot IS NOT NULL));
+CREATE UNIQUE INDEX chi_hai_admin ON users (admin_slot) WHERE role = 'ADMIN';</code></pre>
+<pre><code class="language-javascript"><span class="tok-comment">// Promote = take a free slot. No isolation level, no retry wrapper.</span>
+async function levelUp(userId: number) {
+  for (const slot of [1, 2]) {
+    try {
+      return await prisma.user.update({ where: { id: userId }, data: { role: 'ADMIN', adminSlot: slot } });
+    } catch (e) {
+      if (e.code !== 'P2002') throw e;      <span class="tok-comment">// slot taken — try the next</span>
+    }
+  }
+  throw new Error('Da du 2 admin');
+}
+await Promise.allSettled([levelUp(10), levelUp(11), levelUp(12)]);   <span class="tok-comment">// one admin already holds slot 1</span></code></pre>
+<div class="out">-- measured 12 Nov 2026, Apple-silicon laptop, PostgreSQL 16.14 in Docker, Prisma 6.19.3
+fulfilled | rejected: Da du 2 admin | rejected: Da du 2 admin
+admin: 2
+psql-style ghi thang: PrismaClientKnownRequestError P2010: Raw query failed. Code: &#96;23514&#96;. Message: &#96;ERROR: new row for relation "users" violates check constraint "admin_slot_1_2" DETAIL: Failing row contains (13, u13@vd.vn, ADMIN, 3).&#96;</div>
+<p>Exactly two admins, and the last line shows the rule holding against a direct SQL write too. Note what does <em>not</em> work: a precondition like <code>updateMany({{ where: {{ id, role: {{ not: &#39;ADMIN&#39; }} }} }})</code> only stops promoting the same person twice — it cannot count the others, so it does not enforce "at most two".</p>
 <div class="lz-flow">
-  <div class="lz-step"><span class="lz-k">1 · A constraint</span><span class="lz-t">Strongest, cheapest</span><span class="lz-d">The database enforces it against every writer, including psql and other services. No isolation level, no retry, no application code. Reach for this first whenever the rule can be expressed as one.</span></div>
-  <div class="lz-step"><span class="lz-k">2 · Precondition in the <code>where</code></span><span class="lz-t">Usually enough</span><span class="lz-d">One statement means check and write cannot be separated. Covers most guarded transitions — Lesson 4.4. Fails when the condition spans a different table.</span></div>
-  <div class="lz-step"><span class="lz-k">3 · An explicit lock</span><span class="lz-t">Targeted</span><span class="lz-d"><code>SELECT … FOR UPDATE</code> on the rows in question. Serialises just the contended rows instead of the whole transaction. Lesson 7.4.</span></div>
-  <div class="lz-step"><span class="lz-k">4 · Serializable + retry</span><span class="lz-t">Last, not first</span><span class="lz-d">Correct for genuinely complex invariants across several tables. Costs throughput under contention and requires the retry wrapper. Use it when the first three cannot express the rule.</span></div>
+  <div class="lz-step"><span class="lz-k">1 · A constraint</span><span class="lz-t">Strongest, cheapest</span><span class="lz-d">Enforced against every writer, including psql and other services. Reach for it first whenever the rule can be expressed as one — even if it takes a helper column like <code>admin_slot</code>.</span></div>
+  <div class="lz-step"><span class="lz-k">2 · Precondition in the <code>where</code></span><span class="lz-t">Same-row rules</span><span class="lz-d">Check and write in one statement — covers guarded transitions on one row (Lesson 4.4). Cannot see other rows.</span></div>
+  <div class="lz-step"><span class="lz-k">3 · An explicit lock</span><span class="lz-t">Targeted</span><span class="lz-d"><code>SELECT … FOR UPDATE</code> on the rows in question (Lesson 7.3).</span></div>
+  <div class="lz-step"><span class="lz-k">4 · Serializable + retry</span><span class="lz-t">Last, not first</span><span class="lz-d">For invariants across several tables that the first three cannot express. Costs throughput under contention and needs the retry wrapper above.</span></div>
 </div>
 
 <h3><code>REPEATABLE READ</code>: the middle option</h3>
@@ -477,21 +545,38 @@ const bc = await prisma.$transaction(
 
 <h3>Đặt nó</h3>
 <pre><code class="language-typescript">await prisma.$transaction(
-  async (tx) =&gt; { /* … */ },
+  async (tx) =&gt; tx.user.count(),
   { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
 );
 
-<span class="tok-comment">// Dạng mảng cũng nhận</span>
-await prisma.$transaction([ /* … */ ], {
+<span class="tok-comment">// Dạng mảng cũng có — với HAI câu trở lên (xem bẫy ngay dưới)</span>
+await prisma.$transaction([prisma.user.count(), prisma.post.count()], {
   isolationLevel: Prisma.TransactionIsolationLevel.RepeatableRead,
 });</code></pre>
-<div class="out">prisma:query BEGIN ISOLATION LEVEL SERIALIZABLE
-prisma:query SELECT ...
+<div class="out">-- đo ngày 12/11/2026, laptop Apple silicon, PostgreSQL 16.14 trong Docker, Prisma 6.19.3
+prisma:query BEGIN
+prisma:query SET TRANSACTION ISOLATION LEVEL SERIALIZABLE
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "id" FROM "users" WHERE 1=1 OFFSET $1) AS "sub"
+prisma:query COMMIT
+prisma:query BEGIN
+prisma:query SET TRANSACTION ISOLATION LEVEL REPEATABLE READ
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "id" FROM "users" WHERE 1=1 OFFSET $1) AS "sub"
+prisma:query SELECT COUNT(*) AS "_count$_all" FROM (SELECT "id" FROM "posts" WHERE 1=1 OFFSET $1) AS "sub"
 prisma:query COMMIT</div>
 <div class="kv-grid">
-  <div class="kv"><span class="k">Mặc định là mặc định của cơ sở dữ liệu</span><span class="v">Bỏ qua nó thì bạn nhận thứ cơ sở dữ liệu được cấu hình — <code>READ COMMITTED</code> ở PostgreSQL và <code>REPEATABLE READ</code> ở MySQL. Prisma không áp đặt mức riêng nào.</span></div>
-  <div class="kv"><span class="k">PostgreSQL có ba mức, không phải bốn</span><span class="v"><code>READ UNCOMMITTED</code> được chấp nhận và âm thầm hành xử như <code>READ COMMITTED</code>. Không có đọc bẩn ở bất kỳ mức nào trong PostgreSQL.</span></div>
-  <div class="kv"><span class="k">Nó áp cho cả giao dịch</span><span class="v">Đặt tại <code>BEGIN</code> và không đổi được sau đó. Một câu truy vấn đơn nằm ngoài giao dịch chính là một giao dịch ngầm của riêng nó, ở mức mặc định.</span></div>
+  <div class="kv"><span class="k">BEGIN, rồi SET TRANSACTION</span><span class="v">Prisma mở giao dịch rồi đặt mức ngay ở câu đầu tiên. Bỏ tuỳ chọn thì bạn nhận mặc định của cơ sở dữ liệu — <code>READ COMMITTED</code> trên PostgreSQL (đã kiểm bằng <code>SHOW transaction_isolation</code>), <code>REPEATABLE READ</code> trên MySQL.</span></div>
+  <div class="kv"><span class="k">PostgreSQL có ba mức, không phải bốn</span><span class="v"><code>ReadUncommitted</code> được chấp nhận và hành xử như read committed. PostgreSQL không có đọc bẩn ở mức nào.</span></div>
+</div>
+<pre><code class="language-typescript"><span class="tok-comment">// Hỏi PostgreSQL nó thật sự đang chạy ở mức nào, theo ba cách</span>
+const show = () =&gt; prisma.$queryRaw&#96;SHOW transaction_isolation&#96;;
+await prisma.$transaction([show()], { isolationLevel });                        <span class="tok-comment">// mảng, MỘT câu</span>
+await prisma.$transaction([show(), prisma.user.count()], { isolationLevel });   <span class="tok-comment">// mảng, hai câu</span>
+await prisma.$transaction(async (tx) =&gt; tx.$queryRaw&#96;SHOW transaction_isolation&#96;, { isolationLevel });</code></pre>
+<div class="out">Serializable     mảng 1 câu: read committed   · mảng 2 câu: serializable     · tương tác: serializable
+RepeatableRead   mảng 1 câu: read committed   · mảng 2 câu: repeatable read  · tương tác: repeatable read
+ReadUncommitted  mảng 1 câu: read committed   · mảng 2 câu: read uncommitted · tương tác: read uncommitted</div>
+<div class="pitfall">
+<p><strong>Bẫy — mảng chỉ MỘT câu không phải là giao dịch.</strong> Prisma chạy nó như một câu thường: không có <code>BEGIN</code>, nên mức cô lập bạn truyền vào bị lặng lẽ bỏ qua và câu chạy ở read committed. Có từ hai câu trở lên, hoặc dùng dạng callback, thì mức cô lập mới là thật.</p>
 </div>
 
 <h3>Ba hiện tượng, trên hai terminal</h3>
@@ -512,6 +597,13 @@ COMMIT;</code></pre>
   <div class="lz-layer"><span class="lz-lname">Lệch ghi — hai giao dịch mỗi cái đều hợp lệ, gộp lại thì không</span><span class="lz-lnote">Ngay cả <code>REPEATABLE READ</code> cũng cho phép. Chỉ <code>SERIALIZABLE</code> chặn được, và đây là cái mà người ta không biết là nó tồn tại — xem bên dưới.</span></div>
 </div>
 
+<p>Cùng thí nghiệm với hai Prisma client, chạy thật (một giao dịch đọc hai lần; giữa hai lần đọc, client kia commit):</p>
+<div class="out">-- đo ngày 12/11/2026, laptop Apple silicon, PostgreSQL 16.14 trong Docker, Prisma 6.19.3
+ReadCommitted   lần đọc 1: 1000 · lần đọc 2: 2000   ← non-repeatable read
+RepeatableRead  lần đọc 1: 1000 · lần đọc 2: 1000
+ReadCommitted   đếm MOI lần 1: 0 · lần 2: 1   ← phantom read
+RepeatableRead  đếm MOI lần 1: 0 · lần 2: 0</div>
+
 <h3><code>READ COMMITTED</code>: mức mặc định để lọt cái gì</h3>
 <pre><code class="language-javascript"><span class="tok-comment">// Luật: nhiều nhất 2 admin. Hai yêu cầu cùng lúc thăng cấp hai người khác nhau.</span>
 async function levelUp(userId: number) {
@@ -524,13 +616,14 @@ async function levelUp(userId: number) {
 
 await Promise.all([levelUp(10), levelUp(11)]);
 console.log('admin:', await prisma.user.count({ where: { role: 'ADMIN' } }));</code></pre>
-<div class="out">admin: 3</div>
+<div class="out">== mac dinh (ReadCommitted): fulfilled, fulfilled · admin: 3
+== RepeatableRead: fulfilled, fulfilled · admin: 3</div>
 <div class="pitfall">
 <p><strong>Bẫy — cả hai giao dịch đều đếm ra 1, đều kết luận "còn chỗ", và đều ghi.</strong> Riêng lẻ thì không cái nào làm sai gì; cái luật bị vi phạm bởi cả cặp. <code>READ COMMITTED</code> cho phép chuyện này vì câu <code>count</code> trong giao dịch A không bao giờ nhìn thấy phần ghi chưa commit của giao dịch B, và không có gì buộc chúng phải xung đột. Đây là <em>lệch ghi</em>, và nó là lý do câu "tôi đọc rồi tôi kiểm rồi" không phải một bảo đảm. Hai cách vá, ở hai phần tiếp theo.</p>
 </div>
 
 <h3><code>SERIALIZABLE</code>: bảo đảm, và cái giá của nó</h3>
-<pre><code class="language-javascript">async function levelUp(userId: number) {
+<pre><code class="language-typescript">async function levelUp(userId: number) {
   return prisma.$transaction(
     async (tx) =&gt; {
       const adminCount = await tx.user.count({ where: { role: 'ADMIN' } });
@@ -540,62 +633,77 @@ console.log('admin:', await prisma.user.count({ where: { role: 'ADMIN' } }));</c
     { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
   );
 }
-
-const result = await Promise.allSettled([levelUp(10), levelUp(11)]);
-console.log(result.map((r) =&gt; r.status));
-console.log('admin:', await prisma.user.count({ where: { role: 'ADMIN' } }));</code></pre>
-<div class="out">[ 'fulfilled', 'rejected' ]
-admin: 2
-
--- và lời từ chối:
-PrismaClientKnownRequestError:
-Transaction failed due to a write conflict or a deadlock. Please retry your transaction
-  code: 'P2034'
-  meta: { code: '40001', message: 'could not serialize access due to read/write dependencies among transactions' }</div>
+await Promise.allSettled([levelUp(10), levelUp(11)]);</code></pre>
+<div class="out">-- đo ngày 12/11/2026, laptop Apple silicon, PostgreSQL 16.14 trong Docker, Prisma 6.19.3
+== Serializable: fulfilled, rejected · admin: 2
+   PrismaClientKnownRequestError P2034: Transaction failed due to a write conflict or a deadlock. Please retry your transaction
+   meta: {}</div>
 <div class="callout ok">
-<p><strong>Serializable không làm cả hai thành công — nó làm một cái hỏng một cách ồn ào.</strong> PostgreSQL theo dõi các phụ thuộc đọc/ghi giữa các giao dịch song song và huỷ một cái khi cặp đó không thể được tạo ra bởi việc chạy chúng lần lượt. Cái luật được giữ; cái giá là một lỗi <code>40001</code>, và giao kèo là <strong>bạn phải thử lại nó</strong>. Một giao dịch serializable không có lớp bọc thử lại thì không an toàn hơn <code>READ COMMITTED</code> — nó chỉ hỏng theo kiểu khác.</p>
+<p><strong>Serializable không làm cả hai thành công — nó làm một bên hỏng một cách rõ ràng.</strong> PostgreSQL huỷ giao dịch mà kết quả không thể có được nếu chạy hai giao dịch lần lượt, và luật giữ ở hai admin. Để ý lỗi mang theo gì: mã <code>P2034</code> và <code>meta</code> <em>rỗng</em> — hãy bắt theo mã lỗi, đừng dựa vào <code>meta.code</code>.</p>
 </div>
-<pre><code class="language-javascript"><span class="tok-comment">// Lớp bọc thử lại khiến Serializable dùng được</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Hàm thử lại — phải bắt cả khoá chết phát ra từ truy vấn thô (Bài 7.3)</span>
+function isConflict(e: unknown) {
+  if (!(e instanceof Prisma.PrismaClientKnownRequestError)) return false;
+  if (e.code === 'P2034') return true;                              <span class="tok-comment">// lỗi tuần tự hoá hoặc khoá chết</span>
+  const pg = (e.meta as { code?: string } | undefined)?.code;
+  return e.code === 'P2010' &amp;&amp; (pg === '40P01' || pg === '40001');  <span class="tok-comment">// cũng thế, nhưng trong $queryRaw</span>
+}
+
 async function retry&lt;T&gt;(fn: () =&gt; Promise&lt;T&gt;, maxAttempts = 5): Promise&lt;T&gt; {
   for (let attempt = 1; ; attempt++) {
     try {
       return await fn();
     } catch (e) {
-      const isConflict =
-        e instanceof Prisma.PrismaClientKnownRequestError &amp;&amp;
-        (e.code === 'P2034' || e.code === 'P2002');
-      if (!isConflict || attempt &gt;= maxAttempts) throw e;
-
-      <span class="tok-comment">// lùi theo cấp số nhân kèm nhiễu, để các lần thử lại không lại đụng nhau</span>
+      if (!isConflict(e) || attempt &gt;= maxAttempts) throw e;
+      <span class="tok-comment">// lùi theo hàm mũ có nhiễu ngẫu nhiên, để các lần thử lại không va nhau nữa</span>
       const waitMs = Math.min(50 * 2 ** attempt, 1000) * (0.5 + Math.random());
       await new Promise((r) =&gt; setTimeout(r, waitMs));
     }
   }
 }
 
-await retry(() =&gt; levelUp(11));</code></pre>
+await Promise.allSettled([retry(() =&gt; levelUp(10)), retry(() =&gt; levelUp(11))]);</code></pre>
+<div class="out">   thu lai lan 1 (P2034)
+== Serializable + retry: rejected: Da du 2 admin, fulfilled · admin: 2
+
+-- khoá chết của Bài 7.3, hai lệnh chuyển ngược chiều, với từng phiên bản của phép kiểm:
+== retry chi bat P2034: rejected P2010, fulfilled · da thu lai: P2010 0, P2034 0
+== retry bat P2034 + P2010/40P01: fulfilled, fulfilled · da thu lai: P2010 1, P2034 0</div>
 <div class="kv-grid">
-  <div class="kv"><span class="k">Nhiễu không phải tuỳ chọn</span><span class="v">Không có yếu tố ngẫu nhiên thì hai giao dịch vừa xung đột sẽ thử lại đúng cùng một khoảnh khắc và lại xung đột. Chính cái nhiễu ấy phá vỡ vòng lặp.</span></div>
-  <div class="kv"><span class="k">Chặn số lần thử</span><span class="v">Năm là quá đủ. Nếu một giao dịch hỏng năm lần thì tranh chấp là chuyện cấu trúc — thiết kế cần đổi, chứ không cần thêm lần thử.</span></div>
-  <div class="kv"><span class="k">Chỉ thử lại các lỗi xung đột</span><span class="v"><code>P2034</code> (hỏng tuần tự hoá hoặc khoá chết) và đôi khi <code>P2002</code> từ một upsert đang đua. Thử lại một lỗi vi phạm ràng buộc hay một lỗi kiểm dữ liệu chỉ là làm sai năm lần.</span></div>
-  <div class="kv"><span class="k">Giao dịch phải idempotent</span><span class="v">Nó sẽ chạy hơn một lần. Mọi thứ có tác dụng phụ ra ngoài cơ sở dữ liệu — một email, một webhook, một lần thu tiền — đều không được nằm bên trong nó, và đó là luật của Bài 7.1 nhìn từ góc khác.</span></div>
+  <div class="kv"><span class="k">Bắt cả P2010 + 40P01</span><span class="v">Khoá chết bên trong <code>$queryRaw</code> (ví dụ một câu <code>FOR UPDATE</code>) đến dưới dạng <code>P2010</code> kèm <code>meta.code = "40P01"</code>. Hàm chỉ kiểm <code>P2034</code> để lệnh chuyển ấy hỏng; hàm ở trên thử lại một lần và cả hai thành công.</span></div>
+  <div class="kv"><span class="k">Nhiễu ngẫu nhiên là bắt buộc</span><span class="v">Không có ngẫu nhiên, hai giao dịch vừa va nhau sẽ thử lại cùng một lúc và va nhau lần nữa.</span></div>
+  <div class="kv"><span class="k">Giới hạn số lần</span><span class="v">Năm lần là đủ. Hỏng năm lần nghĩa là tranh chấp nằm ở cấu trúc — thiết kế cần đổi.</span></div>
+  <div class="kv"><span class="k">Giao dịch phải idempotent</span><span class="v">Nó sẽ chạy hơn một lần. Mọi thứ có hiệu ứng ngoài cơ sở dữ liệu — email, webhook, thu tiền — không được nằm bên trong (Bài 7.1, và outbox ở Bài 7.4).</span></div>
 </div>
 
 <h3>Cách vá rẻ hơn: để cơ sở dữ liệu tự kiểm</h3>
-<pre><code class="language-javascript"><span class="tok-comment">// Không mức cô lập, không thử lại — đặt tiền điều kiện vào WHERE</span>
-const r = await prisma.user.updateMany({
-  where: { id: userId, role: { not: 'ADMIN' } },
-  data:  { role: 'ADMIN' },
-});
-if (r.count === 0) throw new Error('Nguoi dung nay da la admin');</code></pre>
-<pre><code class="language-typescript"><span class="tok-comment">-- Hoặc để một ràng buộc thi hành nó, thứ không gì đi vòng được</span>
-CREATE UNIQUE INDEX "chi_hai_admin" ON "users"("role", "admin_slot")
-  WHERE "role" = 'ADMIN';</code></pre>
+<pre><code class="language-sql"><span class="tok-comment">-- "Tối đa 2 admin" thành luật do cơ sở dữ liệu giữ: mỗi admin giữ ô 1 hoặc 2</span>
+-- "At most 2 admins", kept by the DATABASE: each admin takes slot 1 or 2, never the same slot
+ALTER TABLE users ADD CONSTRAINT admin_slot_1_2 CHECK (admin_slot IN (1, 2));
+ALTER TABLE users ADD CONSTRAINT admin_co_slot CHECK ((role = 'ADMIN') = (admin_slot IS NOT NULL));
+CREATE UNIQUE INDEX chi_hai_admin ON users (admin_slot) WHERE role = 'ADMIN';</code></pre>
+<pre><code class="language-javascript"><span class="tok-comment">// Thăng chức = lấy một ô trống. Không mức cô lập, không hàm thử lại.</span>
+async function levelUp(userId: number) {
+  for (const slot of [1, 2]) {
+    try {
+      return await prisma.user.update({ where: { id: userId }, data: { role: 'ADMIN', adminSlot: slot } });
+    } catch (e) {
+      if (e.code !== 'P2002') throw e;      <span class="tok-comment">// ô đã có người — thử ô sau</span>
+    }
+  }
+  throw new Error('Da du 2 admin');
+}
+await Promise.allSettled([levelUp(10), levelUp(11), levelUp(12)]);   <span class="tok-comment">// đã có một admin giữ ô 1</span></code></pre>
+<div class="out">-- đo ngày 12/11/2026, laptop Apple silicon, PostgreSQL 16.14 trong Docker, Prisma 6.19.3
+fulfilled | rejected: Da du 2 admin | rejected: Da du 2 admin
+admin: 2
+psql-style ghi thang: PrismaClientKnownRequestError P2010: Raw query failed. Code: &#96;23514&#96;. Message: &#96;ERROR: new row for relation "users" violates check constraint "admin_slot_1_2" DETAIL: Failing row contains (13, u13@vd.vn, ADMIN, 3).&#96;</div>
+<p>Đúng hai admin, và dòng cuối cho thấy luật giữ được cả trước một lệnh ghi SQL trực tiếp. Để ý cái <em>không</em> chạy: một điều kiện như <code>updateMany({{ where: {{ id, role: {{ not: &#39;ADMIN&#39; }} }} }})</code> chỉ chặn việc thăng chức một người hai lần — nó không đếm được những người khác, nên không giữ được luật "tối đa hai".</p>
 <div class="lz-flow">
-  <div class="lz-step"><span class="lz-k">1 · Một ràng buộc</span><span class="lz-t">Mạnh nhất, rẻ nhất</span><span class="lz-d">Cơ sở dữ liệu thi hành nó với mọi bên ghi, kể cả psql và các dịch vụ khác. Không mức cô lập, không thử lại, không mã ứng dụng. Hãy với tay tới đây trước mỗi khi cái luật diễn đạt được thành một ràng buộc.</span></div>
-  <div class="lz-step"><span class="lz-k">2 · Tiền điều kiện trong <code>where</code></span><span class="lz-t">Thường là đủ</span><span class="lz-d">Một câu lệnh nghĩa là kiểm và ghi không tách rời được. Bao gần hết các chuyển trạng thái có canh gác — Bài 4.4. Hỏng khi điều kiện nằm ở một bảng khác.</span></div>
-  <div class="lz-step"><span class="lz-k">3 · Một khoá tường minh</span><span class="lz-t">Đúng trọng tâm</span><span class="lz-d"><code>SELECT … FOR UPDATE</code> lên đúng những hàng đang bàn. Tuần tự hoá riêng những hàng bị tranh chấp thay vì cả giao dịch. Bài 7.4.</span></div>
-  <div class="lz-step"><span class="lz-k">4 · Serializable cộng thử lại</span><span class="lz-t">Cuối cùng, không phải đầu tiên</span><span class="lz-d">Đúng cho những bất biến thật sự phức tạp trải qua nhiều bảng. Tốn thông lượng khi có tranh chấp và cần lớp bọc thử lại. Dùng khi ba cách trên diễn đạt không nổi cái luật.</span></div>
+  <div class="lz-step"><span class="lz-k">1 · Một ràng buộc</span><span class="lz-t">Mạnh nhất, rẻ nhất</span><span class="lz-d">Được cưỡng chế với mọi bên ghi, kể cả psql và các dịch vụ khác. Hãy với tới nó đầu tiên mỗi khi luật diễn đạt được thành một ràng buộc — dù phải thêm một cột phụ như <code>admin_slot</code>.</span></div>
+  <div class="lz-step"><span class="lz-k">2 · Điều kiện trong <code>where</code></span><span class="lz-t">Luật trên cùng một hàng</span><span class="lz-d">Kiểm và ghi trong một câu — đủ cho chuyển trạng thái có điều kiện trên một hàng (Bài 4.4). Không nhìn thấy các hàng khác.</span></div>
+  <div class="lz-step"><span class="lz-k">3 · Một khoá tường minh</span><span class="lz-t">Đúng chỗ</span><span class="lz-d"><code>SELECT … FOR UPDATE</code> trên đúng các hàng liên quan (Bài 7.3).</span></div>
+  <div class="lz-step"><span class="lz-k">4 · Serializable + thử lại</span><span class="lz-t">Sau cùng, không phải đầu tiên</span><span class="lz-d">Cho những bất biến trải nhiều bảng mà ba cách đầu không diễn đạt được. Tốn thông lượng khi tranh chấp và cần hàm thử lại ở trên.</span></div>
 </div>
 
 <h3><code>REPEATABLE READ</code>: lựa chọn ở giữa</h3>
@@ -657,11 +765,12 @@ ${G07_3}
 
   return tx.orderItem.create({ data: { orderId, productId: spId, quantity } });
 });</code></pre>
-<div class="out">prisma:query BEGIN
-prisma:query SELECT id, stock FROM products WHERE id = $1 FOR UPDATE
-prisma:query UPDATE "products" SET "stock" = "products"."stock" - $1 WHERE "id" = $2
-prisma:query INSERT INTO "order_items" ...
-prisma:query COMMIT</div>
+<div class="out">-- measured 12 Nov 2026, Apple-silicon laptop, PostgreSQL 16.14 in Docker, Prisma 6.19.3
+-- one ticket left, two buyers at once; then: one transaction holds FOR UPDATE for 2 s
+== doc roi ghi, khong khoa: An: mua duoc | Binh: mua duoc · stock con: -1
+== SELECT … FOR UPDATE: An: Khong du hang | Binh: mua duoc · stock con: 0
+SELECT thuong trong luc hang bi khoa: 7 ms
+UPDATE cung hang do: doi 1.7 s</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">Why raw SQL</span><span class="v">Prisma Client has no <code>FOR UPDATE</code> option. Use <code>tx.$queryRaw</code> for the locking read and normal Prisma calls for everything else — they share the transaction and the connection.</span></div>
   <div class="kv"><span class="k">The lock is held to <code>COMMIT</code></span><span class="v">Not to the end of the statement. That is the point, and it is also why the callback must be short: every other buyer of that product is blocked for its duration.</span></div>
@@ -707,11 +816,16 @@ const cong = await prisma.$transaction(async (tx) =&gt; {
     throw new Error('Tai lieu da bi nguoi khac sua. Tai lai va thu lai.');
   }
 }</code></pre>
-<div class="out">UPDATE "Document" SET "body" = $1, "version" = "Document"."version" + $2
-WHERE ("id" = $3 AND "version" = $4)
-
--- User A saved first:  { count: 1 }, version 3 → 4
--- User B, still on 3:  { count: 0 } → rejected, and told why</div>
+<div class="out">-- measured 12 Nov 2026, Apple-silicon laptop, PostgreSQL 16.14 in Docker, Prisma 6.19.3
+prisma:query BEGIN
+prisma:query UPDATE "documents" SET "body" = $1, "version" = ("version" + $2) WHERE ("id" = $3 AND "version" = $4)
+prisma:query COMMIT
+A luu (dang thay version 3): 1
+prisma:query BEGIN
+prisma:query UPDATE "documents" SET "body" = $1, "version" = ("version" + $2) WHERE ("id" = $3 AND "version" = $4)
+prisma:query COMMIT
+B luu (van dang thay version 3): 0
+{ id: 1, body: 'Ban cua A', version: 4 }</div>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">No lock at all</span><span class="lz-t">Nobody waits</span><span class="lz-d">Both users edit freely for as long as they like. The collision is detected at save time, not prevented at read time — which is the only workable model when "editing" lasts minutes.</span></div>
   <div class="lz-step"><span class="lz-k">One statement</span><span class="lz-t">No transaction needed</span><span class="lz-d">The check and the write are the same <code>UPDATE</code>, so nothing can slip between them. <code>count === 0</code> is the collision signal.</span></div>
@@ -725,25 +839,30 @@ const r = await prisma.document.updateMany({
 });</code></pre>
 
 <h3>Advisory locks: for things that are not rows</h3>
-<pre><code class="language-javascript"><span class="tok-comment">// "Only one instance may run this import at a time" — across all servers</span>
+<pre><code class="language-javascript"><span class="tok-comment">// "Only one instance may run this import at a time" — across all servers.</span>
+<span class="tok-comment">// The transaction form: taken and released on the SAME connection, released at COMMIT.</span>
 const KHOA_NHAP = 918273n;
 
-const ok = await prisma.$queryRaw&lt;{ pg_try_advisory_lock: boolean }[]&gt;&#96;
-  SELECT pg_try_advisory_lock(\${KHOA_NHAP})&#96;;
-
-if (!ok[0].pg_try_advisory_lock) {
-  console.log('Mot ban khac dang chay. Bo qua.');
-  return;
-}
-
-try {
-  await runImport();          <span class="tok-comment">// minutes of work, safely exclusive</span>
-} finally {
-  await prisma.$executeRaw&#96;SELECT pg_advisory_unlock(\${KHOA_NHAP})&#96;;
-}</code></pre>
-<div class="out">-- instance 1
-Mot ban khac dang chay. Bo qua.     ← instance 2, immediately
-… nhap 41,208 ban write …             ← instance 1, three minutes later</div>
+const ketQua = await prisma.$transaction(async (tx) =&gt; {
+  const [{ ok }] = await tx.$queryRaw&lt;{ ok: boolean }[]&gt;&#96;
+    SELECT pg_try_advisory_xact_lock(\${KHOA_NHAP}) AS ok&#96;;
+  if (!ok) return 'Mot ban khac dang chay. Bo qua.';
+  await runImport(tx);                     <span class="tok-comment">// the exclusive work</span>
+  return 'nhap xong';
+}, { timeout: 10 * 60_000 });              <span class="tok-comment">// raised on this one call only (Lesson 7.4)</span></code></pre>
+<div class="out">-- measured 12 Nov 2026, Apple-silicon laptop, PostgreSQL 16.14 in Docker, Prisma 6.19.3 · two "servers" start the same job 0.2 s apart
+server 1: nhap xong
+server 2: mot ban khac dang chay. Bo qua.
+khoa advisory con lai sau COMMIT: 0</div>
+<div class="pitfall">
+<p><strong>Trap — the session form through a pool leaks.</strong> <code>pg_try_advisory_lock</code> and <code>pg_advisory_unlock</code> called on <code>prisma</code> can run on two different pool connections. Run for real with <code>connection_limit=5</code> and a few other queries in between:</p>
+</div>
+<div class="out">pg_try_advisory_lock: true
+pg_advisory_unlock: false
+khoa advisory con ton tai sau khi "nha": 1</div>
+<p>The unlock returned <code>false</code> and the lock stayed held — until that pooled connection closes, every later run of the job "sees another instance" and skips. If you need the session form, take and release it on one connection: both calls on <code>tx</code> inside one <code>$transaction</code> —</p>
+<div class="out">lay: true · nha: true
+khoa advisory con lai: 0</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">The lock is a number you choose</span><span class="v">It protects nothing in particular — it is a name in a shared namespace. Two different features must use different numbers; keep them in one constants file.</span></div>
   <div class="kv"><span class="k">Session-scoped or transaction-scoped</span><span class="v"><code>pg_advisory_lock</code> is held until you unlock or the connection closes; <code>pg_advisory_xact_lock</code> releases automatically at <code>COMMIT</code>. Prefer the transaction form — it cannot leak.</span></div>
@@ -766,14 +885,22 @@ async function transfer(from: number, to: number, money: number) {
 }
 
 await Promise.all([transfer(1, 2, 100), transfer(2, 1, 50)]);</code></pre>
-<div class="out">PrismaClientKnownRequestError:
-Transaction failed due to a write conflict or a deadlock. Please retry your transaction
-  code: 'P2034'
-  meta: { code: '40P01', message: 'deadlock detected' }
+<div class="out">-- the same two transfers, with a 200 ms pause between the two locks — measured 12 Nov 2026, Apple-silicon laptop, PostgreSQL 16.14 in Docker, Prisma 6.19.3
+== khoa theo chieu chuyen: fulfilled, rejected · 1.3 s
+   PrismaClientKnownRequestError P2010: Process 682 waits for ShareLock on transaction 1324; blocked by process 681. HINT: See server log for query details.&#96;
+   meta: {"code":"40P01","message":"ERROR: deadlock detected
+        DETAIL: Process 681 waits for ShareLock on transaction 1325; blocked by process 682.
+        Process 682 waits for ShareLock on transaction 1324; blocked by process 681.
+        HINT: See server log for query details."}
+== khoa theo id tang dan: fulfilled, fulfilled · 0.4 s
+
+-- note the code: P2010 (raw query failed), the deadlock is in meta.code 40P01 — not P2034
 
 -- PostgreSQL log:
-DETAIL: Process 4182 waits for ShareLock on transaction 9014; blocked by process 4190.
-        Process 4190 waits for ShareLock on transaction 9013; blocked by process 4182.</div>
+2026-11-12 01:18:24.292 UTC [681] ERROR:  deadlock detected
+2026-11-12 01:18:24.292 UTC [681] DETAIL:  Process 681 waits for ShareLock on transaction 1325; blocked by process 682.
+	Process 682 waits for ShareLock on transaction 1324; blocked by process 681.
+	Process 681: SELECT id FROM tai_khoan WHERE id = $1 FOR UPDATE</div>
 <pre><code class="language-sql"><span class="tok-comment">// The fix: always lock in the same order, regardless of direction</span>
 async function transfer(from: number, to: number, money: number) {
   const [dau, sau] = [from, to].sort((a, b) =&gt; a - b);   <span class="tok-comment">// ascending id, always</span>
@@ -785,7 +912,7 @@ async function transfer(from: number, to: number, money: number) {
   });
 }</code></pre>
 <div class="pitfall">
-<p><strong>Trap — a deadlock is a design smell, not bad luck.</strong> PostgreSQL detects it in about a second and kills one transaction, so it is survivable — but it means two code paths acquire the same locks in different orders, and that will keep happening. The fix is a rule you apply everywhere: <strong>lock rows in ascending primary-key order</strong>, and lock tables in a fixed order too. Sorting the ids before locking, as above, costs nothing and removes the whole class of failure. Keep the retry wrapper as well: an unrelated deadlock can still arrive from a path you have not written yet.</p>
+<p><strong>Trap — a deadlock is a design smell, not bad luck.</strong> PostgreSQL detected it in about a second and killed one transaction, so it is survivable — and a retry wrapper that also catches <code>P2010</code> with <code>meta.code = "40P01"</code> (Lesson 7.2) will rerun the loser — but it means two code paths acquire the same locks in different orders, and that will keep happening. The fix is a rule you apply everywhere: <strong>lock rows in ascending primary-key order</strong>, and lock tables in a fixed order too. Sorting the ids before locking, as above, costs nothing and removes the whole class of failure. Keep the retry wrapper as well: an unrelated deadlock can still arrive from a path you have not written yet.</p>
 </div>
 
 <h3>Choosing</h3>
@@ -823,11 +950,12 @@ async function transfer(from: number, to: number, money: number) {
 
   return tx.orderItem.create({ data: { orderId, productId: spId, quantity } });
 });</code></pre>
-<div class="out">prisma:query BEGIN
-prisma:query SELECT id, stock FROM products WHERE id = $1 FOR UPDATE
-prisma:query UPDATE "products" SET "stock" = "products"."stock" - $1 WHERE "id" = $2
-prisma:query INSERT INTO "order_items" ...
-prisma:query COMMIT</div>
+<div class="out">-- đo ngày 12/11/2026, laptop Apple silicon, PostgreSQL 16.14 trong Docker, Prisma 6.19.3
+-- còn 1 vé, hai người mua cùng lúc; rồi: một giao dịch giữ FOR UPDATE 2 s
+== doc roi ghi, khong khoa: An: mua duoc | Binh: mua duoc · stock con: -1
+== SELECT … FOR UPDATE: An: Khong du hang | Binh: mua duoc · stock con: 0
+SELECT thuong trong luc hang bi khoa: 7 ms
+UPDATE cung hang do: doi 1.7 s</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">Vì sao phải SQL thô</span><span class="v">Prisma Client không có tuỳ chọn <code>FOR UPDATE</code>. Hãy dùng <code>tx.$queryRaw</code> cho lần đọc có khoá và các lời gọi Prisma bình thường cho mọi thứ khác — chúng dùng chung giao dịch và chung kết nối.</span></div>
   <div class="kv"><span class="k">Khoá giữ tới tận <code>COMMIT</code></span><span class="v">Không phải tới cuối câu lệnh. Đó chính là điểm mấu chốt, và cũng là lý do callback phải ngắn: mọi người mua khác của sản phẩm đó đều bị chặn suốt thời gian ấy.</span></div>
@@ -873,11 +1001,16 @@ const cong = await prisma.$transaction(async (tx) =&gt; {
     throw new Error('Tai lieu da bi nguoi khac sua. Tai lai va thu lai.');
   }
 }</code></pre>
-<div class="out">UPDATE "Document" SET "body" = $1, "version" = "Document"."version" + $2
-WHERE ("id" = $3 AND "version" = $4)
-
--- Người dùng A lưu trước: { count: 1 }, version 3 → 4
--- Người dùng B, vẫn ở 3:  { count: 0 } → bị từ chối, và được nói rõ vì sao</div>
+<div class="out">-- đo ngày 12/11/2026, laptop Apple silicon, PostgreSQL 16.14 trong Docker, Prisma 6.19.3
+prisma:query BEGIN
+prisma:query UPDATE "documents" SET "body" = $1, "version" = ("version" + $2) WHERE ("id" = $3 AND "version" = $4)
+prisma:query COMMIT
+A luu (dang thay version 3): 1
+prisma:query BEGIN
+prisma:query UPDATE "documents" SET "body" = $1, "version" = ("version" + $2) WHERE ("id" = $3 AND "version" = $4)
+prisma:query COMMIT
+B luu (van dang thay version 3): 0
+{ id: 1, body: 'Ban cua A', version: 4 }</div>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">Không khoá gì cả</span><span class="lz-t">Không ai phải đợi</span><span class="lz-d">Cả hai người dùng cứ soạn thoải mái bao lâu tuỳ thích. Va chạm được phát hiện lúc lưu, không phải bị ngăn từ lúc đọc — và đó là mô hình duy nhất chạy được khi "đang soạn" kéo dài hàng phút.</span></div>
   <div class="lz-step"><span class="lz-k">Một câu lệnh</span><span class="lz-t">Không cần giao dịch</span><span class="lz-d">Phép kiểm và phép ghi là cùng một câu <code>UPDATE</code>, nên không gì lọt vào giữa được. <code>count === 0</code> chính là tín hiệu va chạm.</span></div>
@@ -891,25 +1024,30 @@ const r = await prisma.document.updateMany({
 });</code></pre>
 
 <h3>Advisory lock: cho những thứ không phải hàng dữ liệu</h3>
-<pre><code class="language-javascript"><span class="tok-comment">// "Chỉ một bản chạy được phép chạy lần nhập này" — trên toàn bộ máy chủ</span>
+<pre><code class="language-javascript"><span class="tok-comment">// "Mỗi lúc chỉ một bản được chạy lần nhập này" — trên mọi máy chủ.</span>
+<span class="tok-comment">// Dạng giao dịch: lấy và nhả trên CÙNG một kết nối, tự nhả khi COMMIT.</span>
 const KHOA_NHAP = 918273n;
 
-const ok = await prisma.$queryRaw&lt;{ pg_try_advisory_lock: boolean }[]&gt;&#96;
-  SELECT pg_try_advisory_lock(\${KHOA_NHAP})&#96;;
-
-if (!ok[0].pg_try_advisory_lock) {
-  console.log('Mot ban khac dang chay. Bo qua.');
-  return;
-}
-
-try {
-  await runImport();          <span class="tok-comment">// hàng phút công việc, độc quyền an toàn</span>
-} finally {
-  await prisma.$executeRaw&#96;SELECT pg_advisory_unlock(\${KHOA_NHAP})&#96;;
-}</code></pre>
-<div class="out">-- bản chạy 1
-Mot ban khac dang chay. Bo qua.     ← bản chạy 2, day lập tức
-… nhap 41,208 ban write …             ← bản chạy 1, ba phút sau</div>
+const ketQua = await prisma.$transaction(async (tx) =&gt; {
+  const [{ ok }] = await tx.$queryRaw&lt;{ ok: boolean }[]&gt;&#96;
+    SELECT pg_try_advisory_xact_lock(\${KHOA_NHAP}) AS ok&#96;;
+  if (!ok) return 'Mot ban khac dang chay. Bo qua.';
+  await runImport(tx);                     <span class="tok-comment">// phần việc độc quyền</span>
+  return 'nhap xong';
+}, { timeout: 10 * 60_000 });              <span class="tok-comment">// chỉ nâng cho đúng lời gọi này (Bài 7.4)</span></code></pre>
+<div class="out">-- đo ngày 12/11/2026, laptop Apple silicon, PostgreSQL 16.14 trong Docker, Prisma 6.19.3 · hai "máy chủ" khởi động cùng việc cách nhau 0,2 s
+server 1: nhap xong
+server 2: mot ban khac dang chay. Bo qua.
+khoa advisory con lai sau COMMIT: 0</div>
+<div class="pitfall">
+<p><strong>Bẫy — dạng phiên đi qua pool sẽ rò.</strong> <code>pg_try_advisory_lock</code> và <code>pg_advisory_unlock</code> gọi trên <code>prisma</code> có thể chạy trên hai kết nối khác nhau của pool. Chạy thật với <code>connection_limit=5</code> và vài câu khác chen giữa:</p>
+</div>
+<div class="out">pg_try_advisory_lock: true
+pg_advisory_unlock: false
+khoa advisory con ton tai sau khi "nha": 1</div>
+<p>Lệnh nhả trả về <code>false</code> và khoá vẫn bị giữ — cho tới khi kết nối ấy trong pool đóng lại, mọi lần chạy sau của công việc đều "thấy một bản khác" và bỏ qua. Nếu cần dạng phiên, hãy lấy và nhả trên một kết nối: cả hai lời gọi trên <code>tx</code> trong cùng một <code>$transaction</code> —</p>
+<div class="out">lay: true · nha: true
+khoa advisory con lai: 0</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">Cái khoá là một con số bạn chọn</span><span class="v">Nó không bảo vệ thứ gì cụ thể — nó là một cái tên trong một không gian tên dùng chung. Hai tính năng khác nhau phải dùng hai con số khác nhau; hãy giữ chúng trong một tệp hằng số.</span></div>
   <div class="kv"><span class="k">Phạm vi phiên hay phạm vi giao dịch</span><span class="v"><code>pg_advisory_lock</code> giữ tới khi bạn mở khoá hoặc kết nối đóng; <code>pg_advisory_xact_lock</code> tự nhả lúc <code>COMMIT</code>. Hãy ưu tiên dạng giao dịch — nó không rò được.</span></div>
@@ -932,14 +1070,22 @@ async function transfer(from: number, to: number, money: number) {
 }
 
 await Promise.all([transfer(1, 2, 100), transfer(2, 1, 50)]);</code></pre>
-<div class="out">PrismaClientKnownRequestError:
-Transaction failed due to a write conflict or a deadlock. Please retry your transaction
-  code: 'P2034'
-  meta: { code: '40P01', message: 'deadlock detected' }
+<div class="out">-- cùng hai lệnh chuyển, nghỉ 200 ms giữa hai lần khoá — đo ngày 12/11/2026, laptop Apple silicon, PostgreSQL 16.14 trong Docker, Prisma 6.19.3
+== khoa theo chieu chuyen: fulfilled, rejected · 1.3 s
+   PrismaClientKnownRequestError P2010: Process 682 waits for ShareLock on transaction 1324; blocked by process 681. HINT: See server log for query details.&#96;
+   meta: {"code":"40P01","message":"ERROR: deadlock detected
+        DETAIL: Process 681 waits for ShareLock on transaction 1325; blocked by process 682.
+        Process 682 waits for ShareLock on transaction 1324; blocked by process 681.
+        HINT: See server log for query details."}
+== khoa theo id tang dan: fulfilled, fulfilled · 0.4 s
+
+-- để ý mã lỗi: P2010 (truy vấn thô hỏng), khoá chết nằm ở meta.code 40P01 — không phải P2034
 
 -- log của PostgreSQL:
-DETAIL: Process 4182 waits for ShareLock on transaction 9014; blocked by process 4190.
-        Process 4190 waits for ShareLock on transaction 9013; blocked by process 4182.</div>
+2026-11-12 01:18:24.292 UTC [681] ERROR:  deadlock detected
+2026-11-12 01:18:24.292 UTC [681] DETAIL:  Process 681 waits for ShareLock on transaction 1325; blocked by process 682.
+	Process 682 waits for ShareLock on transaction 1324; blocked by process 681.
+	Process 681: SELECT id FROM tai_khoan WHERE id = $1 FOR UPDATE</div>
 <pre><code class="language-sql"><span class="tok-comment">// Cách vá: luôn khoá theo cùng một thứ tự, bất kể chiều nào</span>
 async function transfer(from: number, to: number, money: number) {
   const [dau, sau] = [from, to].sort((a, b) =&gt; a - b);   <span class="tok-comment">// id tăng dần, luôn luôn</span>
@@ -951,7 +1097,7 @@ async function transfer(from: number, to: number, money: number) {
   });
 }</code></pre>
 <div class="pitfall">
-<p><strong>Bẫy — khoá chết là một mùi thiết kế, không phải chuyện xui.</strong> PostgreSQL phát hiện nó trong khoảng một giây rồi giết một giao dịch, nên nó sống sót được — nhưng nó có nghĩa là hai nhánh mã lấy cùng những cái khoá theo thứ tự khác nhau, và chuyện đó sẽ còn tiếp diễn. Cách vá là một luật bạn áp ở mọi nơi: <strong>khoá các hàng theo thứ tự khoá chính tăng dần</strong>, và khoá các bảng theo một thứ tự cố định luôn. Sắp các id trước khi khoá, như ở trên, không tốn gì và gỡ bỏ cả một lớp sự cố. Vẫn giữ lớp bọc thử lại: một khoá chết không liên quan vẫn có thể đến từ một nhánh bạn chưa viết.</p>
+<p><strong>Bẫy — khoá chết là một mùi thiết kế, không phải chuyện xui.</strong> PostgreSQL phát hiện nó trong khoảng một giây rồi giết một giao dịch, nên nó sống sót được — và một hàm thử lại có bắt cả <code>P2010</code> kèm <code>meta.code = "40P01"</code> (Bài 7.2) sẽ chạy lại bên thua — nhưng nó có nghĩa là hai nhánh mã lấy cùng những cái khoá theo thứ tự khác nhau, và chuyện đó sẽ còn tiếp diễn. Cách vá là một luật bạn áp ở mọi nơi: <strong>khoá các hàng theo thứ tự khoá chính tăng dần</strong>, và khoá các bảng theo một thứ tự cố định luôn. Sắp các id trước khi khoá, như ở trên, không tốn gì và gỡ bỏ cả một lớp sự cố. Vẫn giữ lớp bọc thử lại: một khoá chết không liên quan vẫn có thể đến từ một nhánh bạn chưa viết.</p>
 </div>
 
 <h3>Chọn thế nào</h3>
@@ -1004,11 +1150,10 @@ await prisma.$transaction(async (tx) =&gt; {
     await tx.product.create({ data: dong });
   }
 });</code></pre>
-<div class="out">PrismaClientKnownRequestError:
-Transaction API error: Transaction already closed: A query cannot be executed on an
-expired transaction. The timeout for this transaction was 5000 ms, however 5013 ms
-passed since the start of the transaction.
-  code: 'P2028'</div>
+<div class="out">-- measured 12 Nov 2026, Apple-silicon laptop, PostgreSQL 16.14 in Docker, Prisma 6.19.3 · 10,000 rows
+sau 5.0 s: P2028 Transaction API error: Transaction already closed: A query cannot be executed on an expired transaction. The timeout for this transaction was 5000 ms, however 5000 ms passed since the start of the transaction.
+Consider increasing the interactive transaction timeout or doing less work in the transaction.
+so hang da vao bang: 0</div>
 <div class="pitfall">
 <p><strong>Trap — the obvious fix is the wrong one.</strong> Setting <code>timeout: 600000</code> makes it work and creates a ten-minute transaction: one connection held, locks accumulating, the write-ahead log growing, autovacuum blocked on those tables, and a rollback that discards ten minutes of work if anything fails at minute nine. Raise the timeout only when the operation is genuinely one indivisible unit. For an import it is not — a thousand products are a thousand independent facts.</p>
 </div>
@@ -1022,11 +1167,10 @@ for (let i = 0; i &lt; tenNghinDong.length; i += KICH_THUOC) {
 }</code></pre>
 <div class="out">da nhap 500
 da nhap 1000
-… 18 lần …
 da nhap 10000
-
-real    0m2.184s</div>
-<p>Two seconds instead of five minutes, no transaction held open, and the process is resumable — if it dies at batch fourteen, <code>skipDuplicates</code> makes re-running it safe. That is the general shape: <strong>if raising a timeout would fix it, batching would fix it better.</strong></p>
+createMany theo lo 500: 20 lo, 0.14 s · so hang: 10000
+chay lai 7000 hang dau (skipDuplicates): 0.07 s · so hang van: 10000</div>
+<p>A fraction of a second here instead of a failed five-second transaction, no transaction held open, and the process is resumable — if it dies at batch fourteen, <code>skipDuplicates</code> makes re-running it safe. That is the general shape: <strong>if raising a timeout would fix it, batching would fix it better.</strong></p>
 
 <h3>When raising it is right</h3>
 <pre><code class="language-typescript"><span class="tok-comment">// A month-end close: genuinely all-or-nothing, and genuinely slow</span>
@@ -1089,9 +1233,14 @@ model Transaction {
 <span class="tok-comment">// The caller generates the key once and reuses it across every retry</span>
 const key = crypto.randomUUID();
 await retry(() =&gt; withdraw(1, 100, key));</code></pre>
-<div class="out">-- first attempt:  INSERT … RETURNING  → { id: 41, key: 'a1b2…', amount: 100 }
--- retried:        INSERT → P2002 → SELECT → { id: 41, key: 'a1b2…', amount: 100 }
--- balance debited exactly once</div>
+<div class="out">-- the same key, called three times; then three calls with a NEW key each — measured 12 Nov 2026, Apple-silicon laptop, PostgreSQL 16.14 in Docker, Prisma 6.19.3
+lan 1: giao dich #1, 100
+   P2002 → da lam roi, tra ve ket qua cu
+lan 2: giao dich #1, 100
+   P2002 → da lam roi, tra ve ket qua cu
+lan 3: giao dich #1, 100
+so du: 99900 (truoc: 100000)
+so du sau 3 lan thu lai voi khoa MOI moi lan: 99600</div>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">The key comes from the caller</span><span class="lz-t">Not from the server</span><span class="lz-d">Generated once, before the first attempt, and reused for every retry. A server-generated key would be different each time, which defeats the whole mechanism.</span></div>
   <div class="lz-step"><span class="lz-k">The constraint is the enforcement</span><span class="lz-t">Not an application check</span><span class="lz-d">A <code>findUnique</code> before the insert races. A <code>@unique</code> column cannot — the database rejects the second write no matter how simultaneous.</span></div>
@@ -1106,41 +1255,42 @@ await prisma.$transaction(async (tx) =&gt; {
   await sendEmail(order);          <span class="tok-comment">// ← outside the database, cannot be rolled back</span>
   await tx.stock.update({ … }); <span class="tok-comment">// ← if THIS throws, the email was already sent</span>
 });</code></pre>
-<pre><code class="language-typescript"><span class="tok-comment">// The outbox pattern: record the intent inside the transaction,</span>
-<span class="tok-comment">// act on it outside. Now the record and the intent commit together.</span>
-model Outbox {
-  id        Int       @id @default(autoincrement())
-  kind      String
-  payload   Json
-  daXuLy    DateTime? @map("da_xu_ly")
-  createdAt DateTime  @default(now())
-
-  @@index([daXuLy, createdAt])
-  @@map("outbox")
-}</code></pre>
+<pre><code class="language-sql"><span class="tok-comment">-- The outbox: the intent is a row, written in the same transaction as the order</span>
+CREATE TABLE outbox (
+  id       serial PRIMARY KEY,
+  kind     text NOT NULL,
+  payload  jsonb NOT NULL,
+  khoa     text NOT NULL UNIQUE,      <span class="tok-comment">-- idempotency key for the action</span>
+  da_xu_ly timestamptz,               <span class="tok-comment">-- set only AFTER the action succeeded</span>
+  giu_den  timestamptz,               <span class="tok-comment">-- a lease: who is working on it, until when</span>
+  so_lan   int NOT NULL DEFAULT 0
+);</code></pre>
 <pre><code class="language-javascript">await prisma.$transaction(async (tx) =&gt; {
   const order = await tx.order.create({ data: { … } });
-  await tx.stock.update({ … });
-  await tx.outbox.create({ data: { kind: 'DON_HANG_MOI', payload: { orderId: order.id } } });
+  await tx.$executeRaw&#96;INSERT INTO outbox (kind, payload, khoa)
+    VALUES ('DON_HANG_MOI', \${JSON.stringify({ orderId: order.id })}::jsonb, \${&#96;don-\${order.id}-email&#96;})&#96;;
 });
 
-<span class="tok-comment">// A separate worker, using SKIP LOCKED from Lesson 7.3</span>
-for (;;) {
-  const job = await prisma.$transaction(async (tx) =&gt; {
-    const [v] = await tx.$queryRaw&lt;{ id: number; kind: string; payload: any }[]&gt;&#96;
-      SELECT id, kind, "payload" FROM outbox
-      WHERE "da_xu_ly" IS NULL ORDER BY "createdAt"
-      FOR UPDATE SKIP LOCKED LIMIT 1&#96;;
-    if (!v) return null;
-    await tx.outbox.update({ where: { id: v.id }, data: { daXuLy: new Date() } });
-    return v;
-  });
-
-  if (!job) { await nghi(1000); continue; }
-  await xuLy(job);      <span class="tok-comment">// send the email, call the webhook, publish the event</span>
-}</code></pre>
+<span class="tok-comment">// The worker. 1 — take a lease, committed at once (SKIP LOCKED, Lesson 7.3)</span>
+const [v] = await prisma.$queryRaw&#96;
+  UPDATE outbox SET giu_den = now() + interval '30 seconds', so_lan = so_lan + 1
+  WHERE id = (SELECT id FROM outbox
+              WHERE da_xu_ly IS NULL AND (giu_den IS NULL OR giu_den &lt; now())
+              ORDER BY id FOR UPDATE SKIP LOCKED LIMIT 1)
+  RETURNING id, khoa&#96;;
+<span class="tok-comment">// 2 — act OUTSIDE any transaction, passing the key so the action is idempotent</span>
+await guiEmail(v.khoa);              <span class="tok-comment">// e.g. the provider&#39;s idempotency key, or a unique row written first</span>
+<span class="tok-comment">// 3 — only now mark it done</span>
+await prisma.$executeRaw&#96;UPDATE outbox SET da_xu_ly = now() WHERE id = \${v.id}&#96;;</code></pre>
+<div class="out">-- measured 12 Nov 2026, Apple-silicon laptop, PostgreSQL 16.14 in Docker, Prisma 6.19.3 · worker 1 dies between step 2 and step 3; lease 2 s
+worker 1 nhan viec #1 (lan 1) → gui that → CHET truoc khi danh dau
+worker 2 thu nhan ngay: khong co (dang bi thue)
+worker 2 sau khi het thue: nhan viec #1 (lan 2) → da gui roi, bo qua
+worker 2 danh dau da xu ly
+nhan lai lan nua: khong con viec
+so lan goi guiEmail: 2 · email that su gui: 1</div>
 <div class="callout ok">
-<p><strong>The outbox trades "exactly once" for "at least once", and that is the honest trade.</strong> If the worker crashes after acting but before marking the row processed, the action repeats — so the action itself must be idempotent, which is the same discipline as the previous section. What you gain is that the intent can never be lost: if the order exists, the outbox row exists, because they committed together. No distributed transaction, no message broker, one table.</p>
+<p><strong>At least once, made safe by idempotency.</strong> Because the row is marked done only after the action, a crash in between leaves it unfinished: the lease expires and another worker does it again — the action ran twice. Because the action carries the outbox key, the second run is recognised and skipped: one email. Marking the row <em>before</em> acting would be at-most-once — a crash there loses the email silently. And the lease means no transaction is held open while the email is being sent (Lesson 7.1).</p>
 </div>
 
 <h3>Learning sources for this lesson</h3>
@@ -1175,11 +1325,10 @@ await prisma.$transaction(async (tx) =&gt; {
     await tx.product.create({ data: dong });
   }
 });</code></pre>
-<div class="out">PrismaClientKnownRequestError:
-Transaction API error: Transaction already closed: A query cannot be executed on an
-expired transaction. The timeout for this transaction was 5000 ms, however 5013 ms
-passed since the start of the transaction.
-  code: 'P2028'</div>
+<div class="out">-- đo ngày 12/11/2026, laptop Apple silicon, PostgreSQL 16.14 trong Docker, Prisma 6.19.3 · 10,000 rows
+sau 5.0 s: P2028 Transaction API error: Transaction already closed: A query cannot be executed on an expired transaction. The timeout for this transaction was 5000 ms, however 5000 ms passed since the start of the transaction.
+Consider increasing the interactive transaction timeout or doing less work in the transaction.
+so hang da vao bang: 0</div>
 <div class="pitfall">
 <p><strong>Bẫy — cách vá hiển nhiên lại là cách sai.</strong> Đặt <code>timeout: 600000</code> thì nó chạy được và bạn có một giao dịch mười phút: một kết nối bị giữ, khoá chồng chất, nhật ký ghi-trước phình lên, autovacuum bị chặn trên những bảng đó, và một lần quay lui vứt đi mười phút công sức nếu có gì hỏng ở phút thứ chín. Chỉ nâng timeout khi thao tác thật sự là một đơn vị không chia được. Với một lần nhập dữ liệu thì nó không phải — một nghìn sản phẩm là một nghìn sự kiện độc lập.</p>
 </div>
@@ -1193,11 +1342,10 @@ for (let i = 0; i &lt; tenNghinDong.length; i += KICH_THUOC) {
 }</code></pre>
 <div class="out">da nhap 500
 da nhap 1000
-… 18 lần …
 da nhap 10000
-
-real    0m2.184s</div>
-<p>Hai giây thay vì năm phút, không giao dịch nào bị giữ mở, và tiến trình chạy tiếp được — nếu nó chết ở lô thứ mười bốn thì <code>skipDuplicates</code> khiến việc chạy lại là an toàn. Đó là hình dạng chung: <strong>nếu nâng timeout mà vá được thì chia lô vá còn tốt hơn.</strong></p>
+createMany theo lo 500: 20 lo, 0.14 s · so hang: 10000
+chay lai 7000 hang dau (skipDuplicates): 0.07 s · so hang van: 10000</div>
+<p>Ở đây chỉ một phần nhỏ của giây thay cho một giao dịch năm giây hỏng, không giao dịch nào bị giữ mở, và tiến trình chạy tiếp được — nếu nó chết ở lô thứ mười bốn thì <code>skipDuplicates</code> khiến việc chạy lại là an toàn. Đó là hình dạng chung: <strong>nếu nâng timeout mà vá được thì chia lô vá còn tốt hơn.</strong></p>
 
 <h3>Khi nâng nó là đúng</h3>
 <pre><code class="language-typescript"><span class="tok-comment">// Một lần chốt sổ cuối tháng: thật sự được-tất-hoặc-không-gì, và thật sự chậm</span>
@@ -1260,9 +1408,14 @@ model Transaction {
 <span class="tok-comment">// Bên gọi sinh khoá một lần và dùng lại nó qua mọi lần thử lại</span>
 const key = crypto.randomUUID();
 await retry(() =&gt; withdraw(1, 100, key));</code></pre>
-<div class="out">-- lần đầu:     INSERT … RETURNING  → { id: 41, key: 'a1b2…', amount: 100 }
--- thử lại:     INSERT → P2002 → SELECT → { id: 41, key: 'a1b2…', amount: 100 }
--- số dư bị trừ đúng một lần</div>
+<div class="out">-- cùng một khoá, gọi ba lần; rồi ba lần gọi, mỗi lần một khoá MỚI — đo ngày 12/11/2026, laptop Apple silicon, PostgreSQL 16.14 trong Docker, Prisma 6.19.3
+lan 1: giao dich #1, 100
+   P2002 → da lam roi, tra ve ket qua cu
+lan 2: giao dich #1, 100
+   P2002 → da lam roi, tra ve ket qua cu
+lan 3: giao dich #1, 100
+so du: 99900 (truoc: 100000)
+so du sau 3 lan thu lai voi khoa MOI moi lan: 99600</div>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">Khoá đến từ bên gọi</span><span class="lz-t">Không phải từ máy chủ</span><span class="lz-d">Sinh một lần, trước lần thử đầu tiên, và dùng lại cho mọi lần thử lại. Một khoá do máy chủ sinh sẽ khác nhau mỗi lần, và như thế là vô hiệu hoá toàn bộ cơ chế.</span></div>
   <div class="lz-step"><span class="lz-k">Ràng buộc mới là thứ thi hành</span><span class="lz-t">Không phải một phép kiểm trong ứng dụng</span><span class="lz-d">Một <code>findUnique</code> trước lần chèn thì có tranh chấp. Một cột <code>@unique</code> thì không — cơ sở dữ liệu từ chối lần ghi thứ hai bất kể hai bên đồng thời tới đâu.</span></div>
@@ -1277,41 +1430,42 @@ await prisma.$transaction(async (tx) =&gt; {
   await sendEmail(order);          <span class="tok-comment">// ← ngoài cơ sở dữ liệu, không quay lui được</span>
   await tx.stock.update({ … }); <span class="tok-comment">// ← nếu CÁI NÀY ném lỗi thì email đã gửi mất rồi</span>
 });</code></pre>
-<pre><code class="language-typescript"><span class="tok-comment">// Mẫu outbox: ghi lại ý định bên trong giao dịch,</span>
-<span class="tok-comment">// rồi hành động bên ngoài. Giờ bản ghi và ý định commit cùng nhau.</span>
-model Outbox {
-  id        Int       @id @default(autoincrement())
-  kind      String
-  payload   Json
-  daXuLy    DateTime? @map("da_xu_ly")
-  createdAt DateTime  @default(now())
-
-  @@index([daXuLy, createdAt])
-  @@map("outbox")
-}</code></pre>
+<pre><code class="language-sql"><span class="tok-comment">-- Outbox: ý định là một hàng, ghi trong cùng giao dịch với đơn hàng</span>
+CREATE TABLE outbox (
+  id       serial PRIMARY KEY,
+  kind     text NOT NULL,
+  payload  jsonb NOT NULL,
+  khoa     text NOT NULL UNIQUE,      <span class="tok-comment">-- khoá idempotent cho hành động</span>
+  da_xu_ly timestamptz,               <span class="tok-comment">-- chỉ đặt SAU khi hành động thành công</span>
+  giu_den  timestamptz,               <span class="tok-comment">-- hợp đồng thuê: đang có người làm, tới lúc nào</span>
+  so_lan   int NOT NULL DEFAULT 0
+);</code></pre>
 <pre><code class="language-javascript">await prisma.$transaction(async (tx) =&gt; {
   const order = await tx.order.create({ data: { … } });
-  await tx.stock.update({ … });
-  await tx.outbox.create({ data: { kind: 'DON_HANG_MOI', payload: { orderId: order.id } } });
+  await tx.$executeRaw&#96;INSERT INTO outbox (kind, payload, khoa)
+    VALUES ('DON_HANG_MOI', \${JSON.stringify({ orderId: order.id })}::jsonb, \${&#96;don-\${order.id}-email&#96;})&#96;;
 });
 
-<span class="tok-comment">// Một thợ chạy riêng, dùng SKIP LOCKED từ Bài 7.3</span>
-for (;;) {
-  const job = await prisma.$transaction(async (tx) =&gt; {
-    const [v] = await tx.$queryRaw&lt;{ id: number; kind: string; payload: any }[]&gt;&#96;
-      SELECT id, kind, "payload" FROM outbox
-      WHERE "da_xu_ly" IS NULL ORDER BY "createdAt"
-      FOR UPDATE SKIP LOCKED LIMIT 1&#96;;
-    if (!v) return null;
-    await tx.outbox.update({ where: { id: v.id }, data: { daXuLy: new Date() } });
-    return v;
-  });
-
-  if (!job) { await nghi(1000); continue; }
-  await xuLy(job);      <span class="tok-comment">// gửi email, gọi webhook, phát sự kiện</span>
-}</code></pre>
+<span class="tok-comment">// Worker. 1 — nhận một hợp đồng thuê, commit ngay (SKIP LOCKED, Bài 7.3)</span>
+const [v] = await prisma.$queryRaw&#96;
+  UPDATE outbox SET giu_den = now() + interval '30 seconds', so_lan = so_lan + 1
+  WHERE id = (SELECT id FROM outbox
+              WHERE da_xu_ly IS NULL AND (giu_den IS NULL OR giu_den &lt; now())
+              ORDER BY id FOR UPDATE SKIP LOCKED LIMIT 1)
+  RETURNING id, khoa&#96;;
+<span class="tok-comment">// 2 — làm việc NGOÀI mọi giao dịch, truyền khoá để hành động idempotent</span>
+await guiEmail(v.khoa);              <span class="tok-comment">// ví dụ khoá idempotent của nhà cung cấp, hoặc một hàng unique ghi trước</span>
+<span class="tok-comment">// 3 — chỉ lúc này mới đánh dấu xong</span>
+await prisma.$executeRaw&#96;UPDATE outbox SET da_xu_ly = now() WHERE id = \${v.id}&#96;;</code></pre>
+<div class="out">-- đo ngày 12/11/2026, laptop Apple silicon, PostgreSQL 16.14 trong Docker, Prisma 6.19.3 · worker 1 chết giữa bước 2 và bước 3; thuê 2 s
+worker 1 nhan viec #1 (lan 1) → gui that → CHET truoc khi danh dau
+worker 2 thu nhan ngay: khong co (dang bi thue)
+worker 2 sau khi het thue: nhan viec #1 (lan 2) → da gui roi, bo qua
+worker 2 danh dau da xu ly
+nhan lai lan nua: khong con viec
+so lan goi guiEmail: 2 · email that su gui: 1</div>
 <div class="callout ok">
-<p><strong>Outbox đánh đổi "đúng một lần" lấy "ít nhất một lần", và đó là đánh đổi trung thực.</strong> Nếu thợ chết sau khi đã hành động nhưng trước khi đánh dấu hàng là đã xử lý thì hành động ấy lặp lại — nên bản thân hành động phải idempotent, tức đúng cái kỷ luật ở phần trước. Thứ bạn được là ý định không bao giờ mất được: nếu đơn hàng tồn tại thì hàng outbox tồn tại, vì chúng commit cùng nhau. Không giao dịch phân tán, không message broker, chỉ một cái bảng.</p>
+<p><strong>Ít nhất một lần, được làm cho an toàn nhờ tính idempotent.</strong> Vì hàng chỉ được đánh dấu xong sau khi làm, một lần chết ở giữa để nó dang dở: hợp đồng thuê hết hạn và một worker khác làm lại — hành động chạy hai lần. Vì hành động mang theo khoá của outbox, lần chạy thứ hai được nhận ra và bỏ qua: một email. Đánh dấu hàng <em>trước</em> khi làm sẽ thành nhiều nhất một lần — chết ở đó là email mất lặng lẽ. Và nhờ hợp đồng thuê, không giao dịch nào bị giữ mở trong lúc gửi email (Bài 7.1).</p>
 </div>
 
 <h3>Nguồn học cho bài này</h3>
@@ -1337,12 +1491,14 @@ ${G07_5}
 <p class="lead">This chapter has given you four tools: atomic operators, preconditions in a <code>where</code>, locks, and isolation levels. Here are the six problems you will actually meet, each with the naive version, where it breaks, and which tool is right. The pattern to notice is that the heaviest tool is almost never the answer.</p>
 
 <h3>1 · A view counter</h3>
-<pre><code class="language-javascript"><span class="tok-comment">// Naive — loses writes under any concurrency (Lesson 4.4 measured 77 of 100)</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Naive — loses writes under any concurrency (measured below: 1 left of 100)</span>
 const p = await prisma.post.findUniqueOrThrow({ where: { id } });
 await prisma.post.update({ where: { id }, data: { views: p.views + 1 } });
 
 <span class="tok-comment">// Correct — one statement, computed by the database</span>
 await prisma.post.update({ where: { id }, data: { views: { increment: 1 } } });</code></pre>
+<div class="out">-- measured 12 Nov 2026, Apple-silicon laptop, PostgreSQL 16.14 in Docker, Prisma 6.19.3 · 100 concurrent requests
+1 · luot xem, 100 yeu cau: doc roi ghi → 1 · increment → 100</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">Tool: atomic operator</span><span class="v">No transaction, no lock, no retry. The arithmetic happens under a row lock PostgreSQL takes for the duration of one statement.</span></div>
   <div class="kv"><span class="k">At very high volume</span><span class="v">Every increment on the same row serialises on that row's lock. A post going viral becomes a hot row. The answer then is to count in Redis and flush periodically, or to insert one row per view and aggregate — both trade accuracy-now for throughput.</span></div>
@@ -1368,6 +1524,9 @@ async function createPost(title: string) {
   }
   return prisma.post.create({ data: { slug: &#96;\${base}-\${crypto.randomUUID().slice(0, 8)}&#96;, title } });
 }</code></pre>
+<div class="out">-- measured 12 Nov 2026, Apple-silicon laptop, PostgreSQL 16.14 in Docker, Prisma 6.19.3
+2 · slug, 5 yeu cau cung tieu de, kiem roi chen: hoc-prisma-a · loi: P2002, P2002, P2002, P2002
+2 · slug, 5 yeu cau cung tieu de, chen roi bat P2002: hoc-prisma-b-3, hoc-prisma-b, hoc-prisma-b-1, hoc-prisma-b-4, hoc-prisma-b-2</div>
 <div class="callout ok">
 <p><strong>Insert and catch beats check and insert, every time.</strong> The check-then-insert version is two round trips and still races; the insert-and-catch version is one round trip and is correct by construction, because the unique index is enforced atomically. The loop handles the ordinary case of a genuinely duplicate title, and the final fallback guarantees termination.</p>
 </div>
@@ -1384,6 +1543,9 @@ const r = await prisma.seat.updateMany({
   data:  { remaining: { decrement: 1 } },
 });
 if (r.count === 0) throw new Error('Het seat');</code></pre>
+<div class="out">-- measured 12 Nov 2026, Apple-silicon laptop, PostgreSQL 16.14 in Docker, Prisma 6.19.3 · 10 buyers at once, no CHECK yet
+3 · ghe cuoi, 10 nguoi, doc roi tru: 10 nguoi dat duoc · con_lai = -9
+3 · ghe cuoi, 10 nguoi, updateMany co dieu kien: 1 nguoi dat duoc · con_lai = 0</div>
 <pre><code class="language-sql"><span class="tok-comment">-- And the constraint that makes the bug impossible even from psql</span>
 ALTER TABLE "seat" ADD CONSTRAINT "ghe_con_lai_khong_am" CHECK ("con_lai" &gt;= 0);</code></pre>
 <div class="lz-flow">
@@ -1399,15 +1561,30 @@ const n = await prisma.apiCall.count({
 if (n &gt;= 10) throw new Error('Qua nhieu yeu cau');
 await prisma.apiCall.create({ data: { userId } });
 
-<span class="tok-comment">// Better in PostgreSQL — insert and count in ONE statement</span>
-const [result] = await prisma.$queryRaw&lt;{ cnt: number }[]&gt;&#96;
-  WITH them AS (
-    INSERT INTO api_calls (user_id, tao_luc) VALUES (\${userId}, now()) RETURNING id
-  )
-  SELECT count(*)::int AS cnt FROM api_calls
-  WHERE user_id = \${userId} AND tao_luc &gt;= now() - interval '1 minute'&#96;;
-
-if (result.cnt &gt; 10) throw new Error('Qua nhieu yeu cau');</code></pre>
+<span class="tok-comment">// ALSO WRONG — "insert and count in one statement"</span>
+WITH them AS (INSERT INTO api_calls (user_id, tao_luc) VALUES (\${userId}, now()) RETURNING id)
+SELECT count(*)::int AS cnt FROM api_calls
+WHERE user_id = \${userId} AND tao_luc &gt;= now() - interval '1 minute';</code></pre>
+<div class="out">-- measured 12 Nov 2026, Apple-silicon laptop, PostgreSQL 16.14 in Docker, Prisma 6.19.3 · limit 10, reject when cnt &gt; 10
+goi lan luot 3 lan, cnt tra ve: 0, 1, 2 (bang that dang co 3 hang)
+20 yeu cau cung luc, gioi han 10: 17 yeu cau duoc cho qua · cnt tra ve: 0,1,1,1,1,5,5,5,8,8,8,9,9,9,9,10,10,17,17,19</div>
+<div class="pitfall">
+<p><strong>Trap — one statement is not one snapshot-free step.</strong> All parts of a statement share one snapshot, so the outer <code>SELECT</code> cannot see the row its own CTE just inserted (0, 1, 2 for three calls), and concurrent requests do not see each other&#39;s rows at all: twenty at once against a limit of ten let seventeen through.</p>
+</div>
+<pre><code class="language-sql"><span class="tok-comment">-- Correct in PostgreSQL — one counter row per user per minute, incremented atomically</span>
+CREATE TABLE rate_window (
+  user_id int NOT NULL, window_start timestamptz NOT NULL, n int NOT NULL,
+  PRIMARY KEY (user_id, window_start)
+);</code></pre>
+<pre><code class="language-javascript">const [{ n }] = await prisma.$queryRaw&lt;{ n: number }[]&gt;&#96;
+  INSERT INTO rate_window (user_id, window_start, n)
+  VALUES (\${userId}, date_trunc('minute', now()), 1)
+  ON CONFLICT (user_id, window_start) DO UPDATE SET n = rate_window.n + 1
+  RETURNING n&#96;;
+if (n &gt; 10) throw new Error('Qua nhieu yeu cau');</code></pre>
+<div class="out">goi lan luot 3 lan: true, true, true
+20 yeu cau cung luc, gioi han 10: 10 yeu cau duoc cho qua</div>
+<p>The upsert takes the row lock on the counter, so concurrent requests queue on that one row and each gets its own number: exactly ten allowed. It is a fixed one-minute window — a burst straddling two minutes can pass up to twice the limit; a sliding window needs more bookkeeping.</p>
 <div class="callout warn">
 <p><strong>Rate limiting in PostgreSQL is possible and usually the wrong place for it.</strong> Every request becomes a write, which means WAL, replication traffic, and a table that needs constant cleanup. Redis exists for exactly this: a sliding-window counter with an expiry is one command and no persistence cost, and the CuongThai Redis course covers the pattern. Use the database only when the limit must survive a Redis restart — a monthly quota, a billing cap.</p>
 </div>
@@ -1437,11 +1614,9 @@ async function transfer(fromId: number, toId: number, money: number, key: string
     }),
   );
 }</code></pre>
-<div class="out">-- 200 concurrent transfers between 20 accounts
-sum(so_du) truoc: 2000000.00
-sum(so_du) sau  : 2000000.00     ← conserved, which is the only test that matters
-count giao dich    : 200
-count attempt thu lai  : 3</div>
+<div class="out">-- 200 concurrent transfers between 20 accounts (100,000 each), pool 20 — measured 12 Nov 2026, Apple-silicon laptop, PostgreSQL 16.14 in Docker, Prisma 6.19.3
+== ngay tho: tong so du truoc 2000000 · sau 2360000 · thanh cong 200/200 · giao dich ghi lai 0 · lan thu lai 0
+== khoa sap xep + dieu kien + khoa idempotent + retry: tong so du truoc 2000000 · sau 2000000 · thanh cong 200/200 · giao dich ghi lai 200 · lan thu lai 0</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">Every tool from this chapter, and each earns its place</span><span class="v">Sorted locks prevent deadlock (7.3), the precondition prevents overdraft (4.4), the atomic operator prevents lost updates (4.4), the idempotency key prevents double-charging on retry (7.4), and the retry handles the deadlock that arrives from a path you have not written yet (7.2).</span></div>
   <div class="kv"><span class="k">The test is conservation</span><span class="v">Sum the balances before and after. Money moving between accounts must leave the total unchanged, and no unit test of a single transfer catches what two hundred concurrent ones do.</span></div>
@@ -1517,12 +1692,14 @@ await prisma.job.updateMany({
 <p class="lead">Chương này đã đưa cho bạn bốn công cụ: toán tử nguyên tử, tiền điều kiện trong <code>where</code>, khoá, và mức cô lập. Đây là sáu bài toán bạn sẽ thật sự gặp, mỗi bài kèm bản ngây thơ, chỗ nó vỡ, và công cụ nào là đúng. Điều đáng để ý là công cụ nặng nhất hầu như không bao giờ là câu trả lời.</p>
 
 <h3>1 · Bộ đếm lượt xem</h3>
-<pre><code class="language-javascript"><span class="tok-comment">// Ngây thơ — mất lần ghi khi có tranh chấp (Bài 4.4 đo được 77 trên 100)</span>
+<pre><code class="language-javascript"><span class="tok-comment">// Ngây thơ — mất lần ghi khi có tranh chấp (đo ngay dưới: còn 1 trên 100)</span>
 const p = await prisma.post.findUniqueOrThrow({ where: { id } });
 await prisma.post.update({ where: { id }, data: { views: p.views + 1 } });
 
 <span class="tok-comment">// Đúng — một câu lệnh, do cơ sở dữ liệu tính</span>
 await prisma.post.update({ where: { id }, data: { views: { increment: 1 } } });</code></pre>
+<div class="out">-- đo ngày 12/11/2026, laptop Apple silicon, PostgreSQL 16.14 trong Docker, Prisma 6.19.3 · 100 yêu cầu cùng lúc
+1 · luot xem, 100 yeu cau: doc roi ghi → 1 · increment → 100</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">Công cụ: toán tử nguyên tử</span><span class="v">Không giao dịch, không khoá, không thử lại. Phép tính xảy ra dưới một khoá hàng mà PostgreSQL giữ trong suốt một câu lệnh.</span></div>
   <div class="kv"><span class="k">Khi lưu lượng cực lớn</span><span class="v">Mọi lần tăng trên cùng một hàng đều tuần tự hoá trên khoá của hàng đó. Một bài viết viral thành một hàng nóng. Câu trả lời khi ấy là đếm trong Redis rồi định kỳ đổ xuống, hoặc chèn mỗi lượt xem một hàng rồi tổng hợp — cả hai đánh đổi độ chính xác tức thời lấy thông lượng.</span></div>
@@ -1548,6 +1725,9 @@ async function createPost(title: string) {
   }
   return prisma.post.create({ data: { slug: &#96;\${base}-\${crypto.randomUUID().slice(0, 8)}&#96;, title } });
 }</code></pre>
+<div class="out">-- đo ngày 12/11/2026, laptop Apple silicon, PostgreSQL 16.14 trong Docker, Prisma 6.19.3
+2 · slug, 5 yeu cau cung tieu de, kiem roi chen: hoc-prisma-a · loi: P2002, P2002, P2002, P2002
+2 · slug, 5 yeu cau cung tieu de, chen roi bat P2002: hoc-prisma-b-3, hoc-prisma-b, hoc-prisma-b-1, hoc-prisma-b-4, hoc-prisma-b-2</div>
 <div class="callout ok">
 <p><strong>Chèn rồi bắt lỗi thắng kiểm rồi chèn, lần nào cũng vậy.</strong> Bản kiểm-rồi-chèn là hai lượt đi về mà vẫn có tranh chấp; bản chèn-rồi-bắt là một lượt đi về và đúng ngay từ cấu trúc, vì chỉ mục unique được thi hành một cách nguyên tử. Vòng lặp xử lý trường hợp bình thường là tiêu đề trùng thật, còn nhánh dự phòng cuối cùng bảo đảm nó luôn kết thúc.</p>
 </div>
@@ -1564,6 +1744,9 @@ const r = await prisma.seat.updateMany({
   data:  { remaining: { decrement: 1 } },
 });
 if (r.count === 0) throw new Error('Het seat');</code></pre>
+<div class="out">-- đo ngày 12/11/2026, laptop Apple silicon, PostgreSQL 16.14 trong Docker, Prisma 6.19.3 · 10 người cùng lúc, chưa có CHECK
+3 · ghe cuoi, 10 nguoi, doc roi tru: 10 nguoi dat duoc · con_lai = -9
+3 · ghe cuoi, 10 nguoi, updateMany co dieu kien: 1 nguoi dat duoc · con_lai = 0</div>
 <pre><code class="language-sql"><span class="tok-comment">-- Và cái ràng buộc khiến con bọ thành bất khả ngay cả khi gõ từ psql</span>
 ALTER TABLE "seat" ADD CONSTRAINT "ghe_con_lai_khong_am" CHECK ("con_lai" &gt;= 0);</code></pre>
 <div class="lz-flow">
@@ -1572,22 +1755,37 @@ ALTER TABLE "seat" ADD CONSTRAINT "ghe_con_lai_khong_am" CHECK ("con_lai" &gt;= 
 </div>
 
 <h3>4 · Giới hạn tần suất</h3>
-<pre><code class="language-sql"><span class="tok-comment">// Ngây thơ — đếm, rồi quyết. Hai yêu cầu đều đếm ra 9 trên 10.</span>
+<pre><code class="language-sql"><span class="tok-comment">// Ngây thơ — đếm rồi mới quyết. Hai yêu cầu cùng đếm được 9 trên 10.</span>
 const n = await prisma.apiCall.count({
   where: { userId, createdAt: { gte: motPhutTruoc } },
 });
 if (n &gt;= 10) throw new Error('Qua nhieu yeu cau');
 await prisma.apiCall.create({ data: { userId } });
 
-<span class="tok-comment">// Tốt hơn trong PostgreSQL — chèn và đếm trong MỘT câu lệnh</span>
-const [result] = await prisma.$queryRaw&lt;{ cnt: number }[]&gt;&#96;
-  WITH them AS (
-    INSERT INTO api_calls (user_id, tao_luc) VALUES (\${userId}, now()) RETURNING id
-  )
-  SELECT count(*)::int AS cnt FROM api_calls
-  WHERE user_id = \${userId} AND tao_luc &gt;= now() - interval '1 minute'&#96;;
-
-if (result.cnt &gt; 10) throw new Error('Qua nhieu yeu cau');</code></pre>
+<span class="tok-comment">// CŨNG SAI — "chèn và đếm trong một câu"</span>
+WITH them AS (INSERT INTO api_calls (user_id, tao_luc) VALUES (\${userId}, now()) RETURNING id)
+SELECT count(*)::int AS cnt FROM api_calls
+WHERE user_id = \${userId} AND tao_luc &gt;= now() - interval '1 minute';</code></pre>
+<div class="out">-- đo ngày 12/11/2026, laptop Apple silicon, PostgreSQL 16.14 trong Docker, Prisma 6.19.3 · giới hạn 10, từ chối khi cnt &gt; 10
+goi lan luot 3 lan, cnt tra ve: 0, 1, 2 (bang that dang co 3 hang)
+20 yeu cau cung luc, gioi han 10: 17 yeu cau duoc cho qua · cnt tra ve: 0,1,1,1,1,5,5,5,8,8,8,9,9,9,9,10,10,17,17,19</div>
+<div class="pitfall">
+<p><strong>Bẫy — một câu lệnh vẫn chỉ có một bản chụp.</strong> Mọi phần của một câu dùng chung một bản chụp, nên câu <code>SELECT</code> bên ngoài không thấy hàng mà chính CTE của nó vừa chèn (0, 1, 2 cho ba lần gọi), và các yêu cầu đồng thời hoàn toàn không thấy hàng của nhau: hai mươi yêu cầu cùng lúc với giới hạn mười, mười bảy yêu cầu lọt qua.</p>
+</div>
+<pre><code class="language-sql"><span class="tok-comment">-- Đúng trong PostgreSQL — một hàng đếm cho mỗi người mỗi phút, tăng một cách nguyên tử</span>
+CREATE TABLE rate_window (
+  user_id int NOT NULL, window_start timestamptz NOT NULL, n int NOT NULL,
+  PRIMARY KEY (user_id, window_start)
+);</code></pre>
+<pre><code class="language-javascript">const [{ n }] = await prisma.$queryRaw&lt;{ n: number }[]&gt;&#96;
+  INSERT INTO rate_window (user_id, window_start, n)
+  VALUES (\${userId}, date_trunc('minute', now()), 1)
+  ON CONFLICT (user_id, window_start) DO UPDATE SET n = rate_window.n + 1
+  RETURNING n&#96;;
+if (n &gt; 10) throw new Error('Qua nhieu yeu cau');</code></pre>
+<div class="out">goi lan luot 3 lan: true, true, true
+20 yeu cau cung luc, gioi han 10: 10 yeu cau duoc cho qua</div>
+<p>Câu upsert lấy khoá hàng trên bộ đếm, nên các yêu cầu đồng thời xếp hàng trên đúng một hàng ấy và mỗi yêu cầu nhận một con số riêng: đúng mười yêu cầu được qua. Đây là cửa sổ cố định một phút — một đợt dồn vắt qua hai phút có thể lọt gấp đôi giới hạn; cửa sổ trượt cần ghi chép nhiều hơn.</p>
 <div class="callout warn">
 <p><strong>Giới hạn tần suất trong PostgreSQL là khả thi và thường là chỗ sai để làm việc đó.</strong> Mọi yêu cầu đều thành một lần ghi, nghĩa là WAL, lưu lượng nhân bản, và một cái bảng cần dọn dẹp liên tục. Redis tồn tại đúng cho việc này: một bộ đếm cửa sổ trượt kèm hạn dùng chỉ là một câu lệnh và không tốn chi phí lưu lâu dài, và khoá Redis của CuongThai nói về mẫu đó. Chỉ dùng cơ sở dữ liệu khi cái giới hạn ấy buộc phải sống sót qua một lần Redis khởi động lại — một hạn mức theo tháng, một trần tính tiền.</p>
 </div>
@@ -1617,11 +1815,9 @@ async function transfer(fromId: number, toId: number, money: number, key: string
     }),
   );
 }</code></pre>
-<div class="out">-- 200 lần chuyển song song giữa 20 tài khoản
-sum(so_du) truoc: 2000000.00
-sum(so_du) sau  : 2000000.00     ← bảo toàn, và đó là phép kiểm duy nhất có ý nghĩa
-count giao dich    : 200
-count attempt thu lai  : 3</div>
+<div class="out">-- 200 lệnh chuyển song song giữa 20 tài khoản (mỗi tài khoản 100.000), pool 20 — đo ngày 12/11/2026, laptop Apple silicon, PostgreSQL 16.14 trong Docker, Prisma 6.19.3
+== ngay tho: tong so du truoc 2000000 · sau 2360000 · thanh cong 200/200 · giao dich ghi lai 0 · lan thu lai 0
+== khoa sap xep + dieu kien + khoa idempotent + retry: tong so du truoc 2000000 · sau 2000000 · thanh cong 200/200 · giao dich ghi lai 200 · lan thu lai 0</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">Mọi công cụ của chương này, và cái nào cũng xứng chỗ của nó</span><span class="v">Khoá đã sắp thứ tự chặn khoá chết (7.3), tiền điều kiện chặn rút quá số dư (4.4), toán tử nguyên tử chặn mất cập nhật (4.4), khoá idempotent chặn tính tiền hai lần khi thử lại (7.4), và lớp thử lại xử lý cái khoá chết đến từ một nhánh bạn chưa viết (7.2).</span></div>
   <div class="kv"><span class="k">Phép kiểm là tính bảo toàn</span><span class="v">Cộng tổng số dư trước và sau. Tiền chuyển giữa các tài khoản phải để tổng không đổi, và không một bài kiểm đơn vị nào cho một lần chuyển bắt được thứ mà hai trăm lần chuyển song song làm.</span></div>

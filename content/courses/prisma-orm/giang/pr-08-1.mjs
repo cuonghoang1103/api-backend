@@ -1,0 +1,32 @@
+/** Giảng theo slide — bài 8.1 Những kiểu nên import (deck pr-08-1, 9 slide). VI = lời giảng video prisma-8-1; EN viết riêng. */
+import { walkPr } from '../_slides.mjs';
+
+export default walkPr('pr-08-1', "The types you should be importing", "Những kiểu nên import", [
+  [1, "The types you should be importing",
+    "<p>Lesson 8.1 opens Chapter 8, the generated type system: prisma generate has already written your types — this lesson is about which ones to import, and where.</p>",
+    "<p>Đây là bài 8.1: những kiểu nên import.</p>"],
+  [2, "What you will take away from this lesson",
+    "<p>Five takeaways: model types and enums, and the switch that turns red; Args types for functions that take a filter; Decimal and the Json family, where DbNull is not JsonNull; the error classes and what is really inside meta; and the client type, with the golden rule.</p>",
+    "<p>Năm điều mang về. Kiểu model và enum, cùng câu switch tự đỏ lên. Kiểu Args cho hàm nhận bộ lọc. Decimal và họ Json. Các lớp lỗi, và thứ thật sự nằm trong meta. Kiểu của chính client, và luật vàng.</p>"],
+  [3, "Model types and enums",
+    "<p>User contains exactly the scalar columns. An enum is both a runtime value and a type. With a new value added to the enum but missing from an exhaustive switch, tsc reported TS2366: the function no longer returns a string on every path. A hand-written union would have stayed green.</p>",
+    "<p>Kiểu User chỉ gồm các cột vô hướng, đúng như bảng. Enum vừa là giá trị lúc chạy, vừa là kiểu. Ta thêm một giá trị mới vào enum, nhưng câu switch chưa có nó. tsc báo TS2366: hàm không còn trả về chuỗi trên mọi nhánh. Một union chép tay thì vẫn xanh.</p>"],
+  [4, "Args types: a filter the caller cannot get wrong",
+    "<p>findPost takes a Prisma.PostWhereInput, so callers get autocomplete and checking. A typo — publisshed — is TS2561 with a \"did you mean published?\" hint; with where typed as any it would only surface at runtime. Even the four-model lab schema generated a 285 KB index.d.ts with 177 Input types, 42 of them for Post. Import the Prisma namespace once.</p>",
+    "<p>Hàm findPost nhận where kiểu PostWhereInput. Người gọi có gợi ý đầy đủ, và được kiểm đầy đủ. Gõ nhầm published, tsc báo TS2561 và gợi ý đúng tên. Nếu where là any, lỗi này chỉ hiện lúc chạy. Lược đồ bốn model đã sinh ra một trăm bảy mươi bảy kiểu Input. Bạn import không gian tên Prisma một lần là đủ.</p>"],
+  [5, "Decimal, and the Json family",
+    "<p>Prisma.Decimal is an object with methods, not a number: passing 12.5 is TS2345. Prisma.DbNull makes the column SQL NULL; Prisma.JsonNull stores the JSON value null, which jsonb_typeof reports as 'null'. Read back, both come out as null — from the driver and from Prisma — so to tell them apart you ask SQL with IS NULL.</p>",
+    "<p>Decimal là một đối tượng có phương thức, không phải number. Truyền mười hai phẩy năm vào, tsc báo lỗi. DbNull làm cột thành NULL của SQL. JsonNull lưu giá trị null của JSON, và jsonb_typeof trả về chữ null. Nhưng khi đọc lại, cả trình điều khiển lẫn Prisma đều trả null cho cả hai. Muốn phân biệt, hỏi SQL bằng IS NULL.</p>"],
+  [6, "Error classes: catch by class, then by code",
+    "<p>Catch by class, then by code. Measured meta: P2002 carries target [\"email\"], P2003 the foreign-key constraint name, P2025 a cause, \"No record was found for an update.\" An unknown field or a bad enum value is a PrismaClientValidationError with no code and no meta — a bug in our own query, so a 500.</p>",
+    "<p>Bắt theo lớp trước, rồi theo mã. P2002 cho biết trường bị trùng trong meta.target. P2003 kèm tên ràng buộc khoá ngoại. P2025 kèm lý do: không tìm thấy bản ghi để cập nhật. Trường lạ hay enum sai là PrismaClientValidationError, không có mã nào. Đó là lỗi trong mã của ta, nên trả lỗi năm trăm.</p>"],
+  [7, "The client type: one parameter for both",
+    "<p>Helpers called both inside and outside a transaction need a type for either client. An Omit alias over PrismaClient, or Prisma.TransactionClient, accepts both the plain client and tx. A client produced by $extends is a different type: passing it where Prisma.TransactionClient is expected failed with TS2345 — Lesson 8.4 returns to this.</p>",
+    "<p>Hàm phụ hay được gọi cả trong lẫn ngoài giao dịch. Kiểu DbClient bỏ đi các phương thức mức trên của client. Nó nhận cả client thường lẫn client giao dịch tx. Prisma.TransactionClient cũng nhận được cả hai. Nhưng client đã gọi $extends là một kiểu khác, tsc báo không gán được. Bài 8.4 quay lại chuyện này.</p>"],
+  [8, "The golden rule",
+    "<p>The golden rule: never hand-write a type the generator produces; derive with Pick, Omit and GetPayload; hand-write only the boundary — request and response contracts. The test is to rename a column and rebuild: whatever still compiles is using a hand-written copy.</p>",
+    "<p>Luật vàng: đừng viết tay kiểu mà bộ sinh đã viết. Hãy suy ra bằng Pick, Omit, GetPayload. Chỉ viết tay ở ranh giới: hợp đồng của yêu cầu và phản hồi. Phép thử: đổi tên một cột rồi dựng lại. Chỗ nào vẫn biên dịch được là chỗ đang dùng kiểu chép tay.</p>"],
+  [9, "Your turn — and what to keep",
+    "<p>Your turn: add an enum value and run tsc, put a typo in a PostWhereInput, write DbNull and JsonNull and look with jsonb_typeof, and trigger P2002, P2003 and P2025 to print meta. Keep: import, never copy; exhaustive switches; DbNull is not JsonNull in the table; catch by class, then by code.</p>",
+    "<p>Tới lượt bạn: thêm một giá trị vào enum rồi chạy tsc. Gõ nhầm một trường trong PostWhereInput. Ghi DbNull và JsonNull rồi xem bằng jsonb_typeof. Gây ra P2002, P2003, P2025, và in meta ra. Tóm lại: import, đừng chép. Câu switch phủ đủ bắt giá trị enum mới. Bắt lỗi theo lớp, rồi theo mã. Bạn bấm liên kết Code Lab dưới video, làm module tích hợp TypeScript và an toàn kiểu. Bài sau: đặt tên cho hình dạng truy vấn.</p>"],
+]);

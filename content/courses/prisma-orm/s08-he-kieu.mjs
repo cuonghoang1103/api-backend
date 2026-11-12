@@ -5,6 +5,11 @@
  * < > trong code → &lt; &gt;; & → &amp;. Khối .out đóng bằng </div>. KHÔNG dùng <svg>.
  * Gạch chéo ngược PHẢI viết đôi (\\n), xem scripts/course-content-check.mjs.
  */
+import G08_1 from './giang/pr-08-1.mjs';
+import G08_2 from './giang/pr-08-2.mjs';
+import G08_3 from './giang/pr-08-3.mjs';
+import G08_4 from './giang/pr-08-4.mjs';
+import G08_5 from './giang/pr-08-5.mjs';
 const REF = '?ref=%2Fcourses%2Fprisma-orm%2Flearn&reflabel=Prisma';
 
 export default {
@@ -19,6 +24,7 @@ export default {
       isFreePreview: true,
       description: 'Sáu nhóm kiểu bộ sinh đẻ ra và dùng chúng ở đâu: model, enum, các kiểu Args cho hàm nhận bộ lọc, Prisma.Decimal và JsonValue, các lớp lỗi để bắt cho đúng, và luật vàng — đừng viết tay thứ bộ sinh đã viết.',
       content: `
+${G08_1}
 <div class="ml-en">
 <span class="eyebrow">Chapter 8 · Lesson 8.1</span>
 <h2>The types you should be importing</h2>
@@ -336,6 +342,7 @@ async function writeAuditLog(db: DbClient, action: string) {
       type: 'LESSON',
       description: 'Vấn đề mà kiểu model không giải được, ba cách đặt tên cho một phép chọn — satisfies, Prisma.validator, GetPayload — và cách dùng chúng để một lần bỏ trường khỏi select làm đỏ đúng những hàm dùng trường đó.',
       content: `
+${G08_2}
 <div class="ml-en">
 <span class="eyebrow">Chapter 8 · Lesson 8.2</span>
 <h2>Naming the shape a query returns</h2>
@@ -657,6 +664,7 @@ app.get('/api/v1/users/:username', async (req, res) =&gt; {
       type: 'LESSON',
       description: 'Sự cố 08/08/2026 mổ từng bước: thay đổi, năm phép kiểm đều qua, thứ vỡ, hai lý do khiến nó vô hình, hai cách vá đã đưa vào danh sách kiểm của kho, và cả lớp lỗi mà nó đại diện — mã không ai kiểm kiểu.',
       content: `
+${G08_3}
 <div class="ml-en">
 <span class="eyebrow">Chapter 8 · Lesson 8.3</span>
 <h2>The type that broke production</h2>
@@ -954,6 +962,7 @@ ALTER TYPE "ContentType" ADD VALUE 'CODE_REVIEW';
       type: 'LESSON',
       description: 'result để thêm trường tính toán, model để thêm phương thức, query để chặn mọi truy vấn, client để thêm phương thức mức trên — mỗi loại kèm một ví dụ thật, cách chúng ghép chồng, và ba điều extension không làm được.',
       content: `
+${G08_4}
 <div class="ml-en">
 <span class="eyebrow">Chapter 8 · Lesson 8.4</span>
 <h2>Client extensions: four kinds</h2>
@@ -1373,6 +1382,7 @@ app.get('/health', async (_, res) =&gt; {
       type: 'LESSON',
       description: 'Vì sao một lược đồ 112 model làm TypeScript bò, cách đo thay vì đoán bằng tsc --diagnostics và extendedDiagnostics, năm cách giảm nhẹ theo mức hiệu quả thật, và điều nào trong số đó thật sự đáng làm.',
       content: `
+${G08_5}
 <div class="ml-en">
 <span class="eyebrow">Chapter 8 · Lesson 8.5</span>
 <h2>Big schemas and a slow editor</h2>

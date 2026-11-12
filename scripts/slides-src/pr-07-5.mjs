@@ -8,6 +8,7 @@
 const DU_LIEU = {
  "demo/out/p7-5/sau-bai.txt": "$ DATABASE_URL=postgresql://student:matkhau@127.0.0.1:55491/c75 npx tsx p7/75/sau-bai.mts\n1 · luot xem, 100 yeu cau: doc roi ghi → 1 · increment → 100\n2 · slug, 5 yeu cau cung tieu de, kiem roi chen: hoc-prisma-a · loi: P2002, P2002, P2002, P2002\n2 · slug, 5 yeu cau cung tieu de, chen roi bat P2002: hoc-prisma-b-3, hoc-prisma-b, hoc-prisma-b-1, hoc-prisma-b-4, hoc-prisma-b-2\n3 · ghe cuoi, 10 nguoi, doc roi tru: 10 nguoi dat duoc · con_lai = -9\n3 · ghe cuoi, 10 nguoi, updateMany co dieu kien: 1 nguoi dat duoc · con_lai = 0\n",
  "demo/out/p7-5/rate.txt": "$ DATABASE_URL=postgresql://student:matkhau@127.0.0.1:55491/c75 npx tsx p7/75/rate.mts\ngoi lan luot 3 lan, cnt tra ve: 0, 1, 2 (bang that dang co 3 hang)\n20 yeu cau cung luc, gioi han 10: 17 yeu cau duoc cho qua · cnt tra ve: 0,1,1,1,1,5,5,5,8,8,8,9,9,9,9,10,10,17,17,19\n",
+ "demo/out/p7-b/rate-dung.txt": "$ DATABASE_URL=postgresql://student:matkhau@127.0.0.1:55491/c7b npx tsx p7/7b/rate-dung.mts\ngoi lan luot 3 lan: true, true, true\n20 yeu cau cung luc, gioi han 10: 10 yeu cau duoc cho qua\n",
  "demo/out/p7-5/chuyen.txt": "$ DATABASE_URL=postgresql://student:matkhau@127.0.0.1:55491/c75 npx tsx p7/75/chuyen.mts\n== ngay tho: tong so du truoc 2000000 · sau 2360000 · thanh cong 200/200 · giao dich ghi lai 0 · lan thu lai 0\n== khoa sap xep + dieu kien + khoa idempotent + retry: tong so du truoc 2000000 · sau 2000000 · thanh cong 200/200 · giao dich ghi lai 200 · lan thu lai 0\n",
  "demo/out/p7-3/skip-locked.txt": "$ DATABASE_URL=postgresql://student:matkhau@127.0.0.1:55491/c73 npx tsx p7/73/skip-locked.mts\n== findFirst roi update: 4 worker nhan 149 lan cho 40 viec · 109 lan nhan TRUNG · 37 viec bi danh dau 2 lan tro len\n== FOR UPDATE SKIP LOCKED: 4 worker nhan 40 lan cho 40 viec · 0 lan nhan TRUNG · 0 viec bi danh dau 2 lan tro len\n"
 };
@@ -63,13 +64,19 @@ ALTER TABLE "seat" ADD CONSTRAINT "ghe_con_lai_khong_am" CHECK ("con_lai" >= 0);
         ['Tool: precondition + constraint', 'The where makes check and write one statement; the CHECK guards against every other writer.'],
         ['Booking spans two tables?', 'Seat count AND a ticket row AND a charge: then a transaction with FOR UPDATE on the seat row.'],
       ], 2) },
-  /* 6 */ { t: '4 · A rate limit: "insert and count in one statement"', body: sql(`WITH them AS (
-  INSERT INTO api_calls (user_id, tao_luc) VALUES (\${userId}, now()) RETURNING id
-)
+  /* 6 */ { t: '4 · A rate limit: one statement is not enough', body: two(sql(`-- WRONG: insert and count in one statement
+WITH them AS (INSERT INTO api_calls (user_id, tao_luc)
+  VALUES (\${userId}, now()) RETURNING id)
 SELECT count(*)::int AS cnt FROM api_calls
-WHERE user_id = \${userId} AND tao_luc >= now() - interval '1 minute';   -- reject if cnt > 10`, { sm: true }) +
-      tp(gon(OUT('rate')), { wrap: 130, fs: 13 }) +
-      box('Two surprises', 'The SELECT does not see the row its own CTE just inserted — all parts of one statement share one snapshot — so the first call counts 0. And it does not serialise anything: twenty requests at once, seventeen let through a limit of ten. Rate limits belong in Redis.', 'do2') },
+WHERE user_id = \${userId}
+  AND tao_luc >= now() - interval '1 minute';`, { sm: true }) + tp(gon(OUT('rate')).replace(/, gioi han 10:/, ',\ngioi han 10:').replace(/ · cnt tra ve:/, '\ncnt tra ve:'), { wrap: 60, fs: 12 }),
+      sql(`-- RIGHT: one counter row per user per minute
+INSERT INTO rate_window (user_id, window_start, n)
+VALUES (\${userId}, date_trunc('minute', now()), 1)
+ON CONFLICT (user_id, window_start)
+  DO UPDATE SET n = rate_window.n + 1
+RETURNING n;          -- reject if n > 10`, { sm: true }) + tp(gon(OUT('rate-dung', 'p7-b')), { wrap: 60, fs: 12 }), '') +
+      box('One snapshot per statement — so lock one row instead', 'The CTE cannot see its own insert or anyone else&#39;s: 17 of 20 got through. The upsert queues every request on one counter row: exactly 10. Redis remains the natural home for rate limits.', 'lam') },
   /* 7 */ { t: '5 · A balance transfer, 200 at once', body: ts(`async function transfer(fromId, toId, money, key) {
   const [a, b] = [fromId, toId].sort((x, y) => x - y);              // ordered locks (7.3)
   return retry(() => prisma.$transaction(async (tx) => {

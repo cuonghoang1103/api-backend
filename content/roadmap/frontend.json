@@ -342,25 +342,7 @@
   "body": "AI-assisted coding là viết phần mềm với một trợ lý AI cùng làm: bạn là người quyết định và chịu trách nhiệm, AI là công cụ tăng tốc.\n\n### Quy trình làm việc hiệu quả\n1. **Nêu rõ mục tiêu và ràng buộc**: ngôn ngữ, thư viện, quy ước, ví dụ đầu vào/đầu ra mong muốn.\n2. **Chia việc nhỏ**: một hàm, một component, một lỗi mỗi lượt.\n3. **Đọc kỹ kết quả** như đang review code của đồng nghiệp.\n4. **Chạy và kiểm thử**: viết test hoặc chạy thử thủ công. Đừng tin vì \"trông có vẻ đúng\".\n5. **Lặp lại**: đưa thông báo lỗi thật cho AI để sửa tiếp.\n\n### Hiểu giới hạn\n- AI có thể bịa API, tên hàm hay phiên bản gói không tồn tại. Hãy đối chiếu với tài liệu chính thức.\n- Nó không thấy hết hệ thống của bạn, chỉ thấy phần bạn đưa vào.\n- Code sinh ra có thể có lỗ hổng bảo mật (ví dụ ghép chuỗi vào câu SQL), cần rà soát.\n\n### Thói quen nên có\n- Commit thường xuyên để dễ quay lại.\n- Không dán khoá bí mật, dữ liệu khách hàng vào công cụ không được phép.\n- Dùng AI để học: nhờ nó giải thích, đừng chỉ nhờ nó làm hộ.\n\n### Tự kiểm tra\n1. Ba cách bạn kiểm chứng code do AI sinh?\n2. Điều gì bạn không bao giờ nên đưa vào prompt?"
  },
  "Nền tảng Internet › Prompting Techniques": {
-  "body": "Prompt là chỉ dẫn bạn đưa cho model. Prompt tốt không phải câu thần chú mà là một bản mô tả công việc rõ ràng.\n\n### Các kỹ thuật chính\n- **Nêu vai trò và bối cảnh**: \"Bạn là reviewer React; dự án dùng TypeScript và Tailwind\".\n- **Chỉ dẫn cụ thể**: nói rõ đầu ra mong muốn (định dạng, độ dài, ngôn ngữ) và điều cần tránh.\n- **Few-shot**: đưa vài ví dụ đầu vào/đầu ra mẫu để model bắt chước đúng kiểu.\n- **Chain-of-thought**: yêu cầu lập luận từng bước trước khi kết luận, hữu ích cho bài toán nhiều bước.\n- **System prompt**: chỉ dẫn nền cố định cho cả cuộc trò chuyện (vai trò, quy tắc), tách khỏi yêu cầu cụ thể của từng lượt.\n- **Chia nhỏ tác vụ phức tạp**: yêu cầu lập kế hoạch rồi làm từng phần, kiểm tra từng bước.\n\n### Ví dụ\nThay vì \"sửa lỗi này\", hãy viết:\n```\nComponent UserList trong file này không cập nhật khi props.users đổi.\nĐây là code và thông báo lỗi: <...>\nHãy tìm nguyên nhân, giải thích ngắn gọn, rồi đưa bản sửa nhỏ nhất.\nKhông đổi API của component.\n```\n\n### Lỗi hay gặp\n- Yêu cầu mơ hồ rồi trách model.\n- Nhồi một đống việc vào một prompt thay vì chia nhỏ.\n- Không đưa lỗi thật hoặc ví dụ dữ liệu, buộc model đoán.",
-  "lessons": [
-   {
-    "href": "/courses/gai401-generative-ai/learn?lessonSlug=gai401-ts-6-1",
-    "ten": "6.1 — Cơ bản về prompt và prompt vài mẫu",
-    "nguon": "Generative AI · Chương 6",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "GAI401"
-   },
-   {
-    "href": "/courses/gai401-generative-ai/learn?lessonSlug=gai401-ts-6-2",
-    "ten": "6.2 — Prompt suy luận: chuỗi suy nghĩ và tự nhất quán",
-    "nguon": "Generative AI · Chương 6",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "GAI401"
-   }
-  ]
+  "body": "Prompt là chỉ dẫn bạn đưa cho model. Prompt tốt không phải câu thần chú mà là một bản mô tả công việc rõ ràng.\n\n### Các kỹ thuật chính\n- **Nêu vai trò và bối cảnh**: \"Bạn là reviewer React; dự án dùng TypeScript và Tailwind\".\n- **Chỉ dẫn cụ thể**: nói rõ đầu ra mong muốn (định dạng, độ dài, ngôn ngữ) và điều cần tránh.\n- **Few-shot**: đưa vài ví dụ đầu vào/đầu ra mẫu để model bắt chước đúng kiểu.\n- **Chain-of-thought**: yêu cầu lập luận từng bước trước khi kết luận, hữu ích cho bài toán nhiều bước.\n- **System prompt**: chỉ dẫn nền cố định cho cả cuộc trò chuyện (vai trò, quy tắc), tách khỏi yêu cầu cụ thể của từng lượt.\n- **Chia nhỏ tác vụ phức tạp**: yêu cầu lập kế hoạch rồi làm từng phần, kiểm tra từng bước.\n\n### Ví dụ\nThay vì \"sửa lỗi này\", hãy viết:\n```\nComponent UserList trong file này không cập nhật khi props.users đổi.\nĐây là code và thông báo lỗi: <...>\nHãy tìm nguyên nhân, giải thích ngắn gọn, rồi đưa bản sửa nhỏ nhất.\nKhông đổi API của component.\n```\n\n### Lỗi hay gặp\n- Yêu cầu mơ hồ rồi trách model.\n- Nhồi một đống việc vào một prompt thay vì chia nhỏ.\n- Không đưa lỗi thật hoặc ví dụ dữ liệu, buộc model đoán."
  },
  "Nền tảng Internet › Trình duyệt xử lý mã như thế nào": {
   "body": "Mở rộng từ bước \"Trình duyệt hoạt động thế nào\": ở đây ta nhìn riêng cách trình duyệt xử lý từng loại mã.\n\n### HTML thành DOM\nTrình duyệt đọc HTML từ trên xuống, dựng cây **DOM**. Khi gặp `<script>` thường (không `defer`/`async`) nó dừng parse để tải và chạy script, vì script có thể sửa DOM.\n\n### CSS thành CSSOM\nCSS được parse thành **CSSOM**. Việc tính kiểu của từng phần tử dựa trên **cascade** (thứ tự và độ ưu tiên), **kế thừa** và giá trị mặc định.\n\n### JavaScript trên luồng chính\nJS chạy trên **main thread**, cùng luồng với việc tính layout, paint và xử lý sự kiện. Vì vậy một đoạn JS chạy lâu làm trang \"đơ\": không bấm được, không cuộn mượt. JS đơn luồng nhưng dùng **event loop** để xử lý việc bất đồng bộ: gọi `fetch`, `setTimeout`, sự kiện... được đưa vào hàng đợi, chạy khi call stack trống.\n\n### Ý chính\n- `defer` tải song song và chạy sau khi parse xong HTML, giữ đúng thứ tự; `async` chạy ngay khi tải xong, không đảm bảo thứ tự.\n- Việc nặng nên chia nhỏ hoặc chuyển sang Web Worker để không chặn luồng chính.\n- Đổi DOM nhiều lần liên tiếp nên gom lại để giảm layout.\n\n### Lỗi hay gặp\n- Vòng lặp nặng làm treo giao diện.\n- Cho rằng `setTimeout(fn, 0)` chạy ngay lập tức; thực ra nó chỉ chạy sau khi call stack trống.",
@@ -1263,14 +1245,6 @@
   "body": "Bảo mật web ở phía frontend xoay quanh một nguyên tắc: **đừng tin gì đến từ người dùng, URL, hay bên thứ ba**, và đừng để trình duyệt chạy mã không phải của bạn.\n\n### Ba loại tấn công phải biết\n- **XSS (Cross-Site Scripting)**: kẻ tấn công làm trang của bạn chạy script của chúng (qua ô bình luận, tham số URL, nội dung HTML không lọc). Script chạy với quyền của người dùng: đọc dữ liệu trang, gọi API thay họ, lấy token nếu nằm ở `localStorage`.\n- **CSRF**: trang lạ khiến trình duyệt tự gửi request tới site của bạn kèm cookie đăng nhập. Phòng bằng cookie `SameSite`, token CSRF, kiểm tra header Origin.\n- **Injection** phía server (SQL, lệnh hệ thống) thuộc backend nhưng FE phải hiểu dữ liệu nào cần kiểm tra.\n\n```jsx\n// React tự escape khi hiển thị chuỗi, an toàn:\n<p>{comment}</p>\n\n// NGUY HIỂM nếu comment là HTML do người dùng gửi:\n<div dangerouslySetInnerHTML={{ __html: comment }} />\n// Nếu bắt buộc, lọc bằng DOMPurify trước:\n// <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(comment) }} />\n```\n\n### Ý chính\n- **Escape khi xuất ra, kiểm tra khi nhập vào**; framework hiện đại escape mặc định, các lỗ hổng thường nằm ở `innerHTML`, `dangerouslySetInnerHTML`, `href=\"javascript:...\"`.\n- Lưu token: cookie `HttpOnly; Secure; SameSite` an toàn hơn `localStorage` với XSS (đổi lại phải lo CSRF).\n- Kiểm tra mọi thứ ở server; kiểm tra phía client chỉ để tiện cho người dùng.\n- Cập nhật phụ thuộc, quét lỗ hổng gói (`npm audit`), chỉ nạp script bên thứ ba tin cậy.\n\n### Lỗi hay gặp\n- Tin rằng ẩn nút là đủ phân quyền.\n- Chèn HTML thô từ API vào trang mà không lọc.\n- Để khoá bí mật trong biến môi trường phía client.\n\n### Tự kiểm tra\n1. React có tự chống XSS không? Trường hợp nào vẫn dính?\n2. Vì sao cookie `HttpOnly` chống được việc script đánh cắp token nhưng lại cần phòng CSRF?",
   "lessons": [
    {
-    "href": "/courses/maw301-modern-web-application-security/learn?lessonSlug=maw301-ts-3-1",
-    "ten": "3.1 — Cross-site scripting: phản xạ, lưu trữ và DOM",
-    "nguon": "Modern Web Application Security · Chương 3",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "MAW301"
-   },
-   {
     "href": "/courses/react/learn?lessonSlug=rx-13-4-bao-mat-i18n",
     "ten": "13.4 — HTML an toàn (XSS, dangerouslySetInnerHTML, DOMPurify) và i18n cơ bản với Intl",
     "nguon": "React · Chương 13",
@@ -1348,14 +1322,6 @@
   "body": "Content Security Policy (CSP) là header HTTP cho trình duyệt biết **nguồn nào được phép** tải và chạy script, style, ảnh, kết nối… trên trang. Nếu kẻ tấn công chèn được `<script>` vào HTML (XSS), CSP vẫn có thể chặn script đó chạy: đây là lớp phòng thủ thứ hai, không thay thế việc escape/sanitize.\n\n```http\nContent-Security-Policy:\n  default-src 'self';\n  script-src 'self' 'nonce-r4nd0m123';\n  style-src 'self' 'unsafe-inline';\n  img-src 'self' data: https://cdn.example.com;\n  connect-src 'self' https://api.example.com;\n  frame-ancestors 'none';\n  object-src 'none'\n```\n\n### Ý chính\n- Mỗi **directive** kiểm một loại tài nguyên: `script-src`, `style-src`, `img-src`, `connect-src` (fetch/XHR/WebSocket), `frame-ancestors` (ai được nhúng trang bạn, chống clickjacking), `default-src` làm mặc định.\n- Tránh `'unsafe-inline'` và `'unsafe-eval'` cho script, vì chúng mở lại cửa cho XSS. Thay bằng **nonce** (chuỗi ngẫu nhiên mỗi response, gắn vào `<script nonce=\"...\">`) hoặc hash.\n- Triển khai an toàn: bắt đầu bằng `Content-Security-Policy-Report-Only` để xem vi phạm (báo qua `report-to`/`report-uri`) mà chưa chặn thật, sửa dần rồi mới bật.\n- Next.js hỗ trợ CSP dựa trên nonce qua middleware; script bên thứ ba (analytics, quảng cáo) phải được liệt kê rõ.\n\n### Lỗi hay gặp\n- Cho `script-src *` hoặc `https:` rộng đến mức vô nghĩa.\n- Bật chế độ chặn ngay mà không thử `Report-Only`, làm hỏng chức năng của trang.\n- Nghĩ rằng đã có CSP thì khỏi cần escape dữ liệu.",
   "lessons": [
    {
-    "href": "/courses/maw301-modern-web-application-security/learn?lessonSlug=maw301-ts-3-2",
-    "ten": "3.2 — Content Security Policy và header bảo mật",
-    "nguon": "Modern Web Application Security · Chương 3",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "MAW301"
-   },
-   {
     "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-7-4-header-quan-trong",
     "ten": "7.4 — Các header đổi hành vi: cache, nén, CORS, bảo mật",
     "nguon": "Networking for Developers · Chương 7",
@@ -1373,14 +1339,6 @@
  "Bảo mật Web › OWASP Security Risks": {
   "body": "OWASP (Open Worldwide Application Security Project) là tổ chức phi lợi nhuận về bảo mật phần mềm. **OWASP Top 10** là danh sách mười nhóm rủi ro bảo mật ứng dụng web phổ biến và nghiêm trọng nhất, cập nhật định kỳ theo dữ liệu thực tế (các nhóm quen thuộc: Broken Access Control, Cryptographic Failures, Injection, Insecure Design, Security Misconfiguration, thành phần lỗi thời/chuỗi cung ứng, lỗi xác thực, lỗi toàn vẹn dữ liệu, thiếu log và giám sát, SSRF). Hãy đối chiếu danh sách mới nhất trên trang chính thức vì tên và thứ hạng thay đổi theo bản.\n\n### Vì sao FE dev cần biết\nĐây là ngôn ngữ chung của bảo mật: review code, kiểm thử xâm nhập, yêu cầu khách hàng đều quy chiếu về nó. Nhiều mục chạm tới frontend:\n- **Broken Access Control**: chỉ ẩn nút \"Xoá\" mà server không kiểm quyền.\n- **Injection / XSS**: HTML từ người dùng đưa vào trang.\n- **Vulnerable components**: phụ thuộc npm có lỗ hổng.\n- **Security misconfiguration**: thiếu header bảo mật, CORS quá rộng, để lộ source map và khoá bí mật trong bundle.\n\n### Cách dùng như checklist\n1. Với mỗi tính năng mới, hỏi \"nó chạm mục nào?\".\n2. Chạy `npm audit` và công cụ quét phụ thuộc trong CI.\n3. Đặt header bảo mật (CSP, HSTS, `X-Content-Type-Options`, `Referrer-Policy`).\n4. Có thêm các danh sách riêng như OWASP API Security Top 10 khi làm việc với API.\n\n### Lỗi hay gặp\n- Coi Top 10 là danh sách đầy đủ: đây chỉ là mức \"nhận thức tối thiểu\".\n- Học thuộc tên rủi ro mà không thử tái hiện lỗi trên bản demo (các lab như OWASP Juice Shop giúp việc này).",
   "lessons": [
-   {
-    "href": "/courses/maw301-modern-web-application-security/learn?lessonSlug=maw301-ts-1-2",
-    "ten": "1.2 — Tổng quan OWASP Top 10",
-    "nguon": "Modern Web Application Security · Chương 1",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "MAW301"
-   },
    {
     "href": "/courses/api-design/learn?lessonSlug=api-6-3-owasp-api",
     "ten": "6.3 — OWASP API Security Top 10 (2023) trên LabFlow, thành bộ kiểm tự động",
@@ -2332,28 +2290,12 @@
     "kieu": "bai-doc",
     "academy": true,
     "ma": "PRJ301"
-   },
-   {
-    "href": "/courses/gai401-generative-ai/learn?lessonSlug=gai401-ts-10-1",
-    "ten": "10.1 — Ảo giác và độ tin cậy",
-    "nguon": "Generative AI · Chương 10",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "GAI401"
    }
   ]
  },
  "Tiếp tục học › AI Provider": {
   "body": "Nhà cung cấp AI (AI provider) là nơi bạn gọi mô hình ngôn ngữ lớn (LLM): Anthropic với Claude, Google với Gemini, OpenAI với dòng GPT, và nhiều bên khác. Riêng **GitHub Copilot** là một sản phẩm trợ lý trong editor; nó cho chọn nhiều mô hình từ các nhà cung cấp khác nhau chứ không phải một mô hình duy nhất. Cần phân biệt: *dùng AI trong editor* (Copilot, Cursor, Claude Code) khác với *gọi API để đưa AI vào sản phẩm của bạn*.\n\n### Vì sao cần biết\nChọn sai nhà cung cấp hoặc mô hình có thể làm chi phí tăng gấp nhiều lần, chậm, hoặc chất lượng không đạt. Danh sách mô hình và giá đổi liên tục, nên điều bền vững là biết **tiêu chí so sánh**.\n\n### Tiêu chí so sánh\n- **Chất lượng cho đúng việc của bạn**: sinh code, tóm tắt, trích xuất JSON, hội thoại; hãy thử trên dữ liệu thật thay vì tin bảng xếp hạng chung.\n- **Chi phí**: giá theo token vào và token ra khác nhau; hội thoại dài càng đắt vì mỗi lượt gửi lại toàn bộ ngữ cảnh.\n- **Độ trễ và streaming**: thời gian tới chữ đầu tiên quyết định cảm giác nhanh.\n- **Cửa sổ ngữ cảnh** và khả năng đọc ảnh, PDF, gọi công cụ (tool use), đầu ra có cấu trúc.\n- **Giới hạn tốc độ** (rate limit) và độ ổn định dịch vụ.\n- **Dữ liệu và quyền riêng tư**: dữ liệu có được dùng để huấn luyện không, lưu bao lâu, có phù hợp yêu cầu của công ty bạn không.\n- **Hệ sinh thái**: SDK, tài liệu, tích hợp IDE.\n\n### Cách làm thực tế\nTạo một bộ 10-20 tác vụ đại diện, chạy trên vài mô hình, so sánh chất lượng, thời gian, chi phí. Giấu nhà cung cấp phía sau một lớp trừu tượng nhỏ và để tên mô hình trong biến môi trường để dễ đổi.\n\n### Lỗi hay gặp\n- Chọn theo tên tuổi hoặc benchmark chung mà không thử trên bài toán của mình.\n- Gắn chặt vào API riêng của một bên, sau này khó chuyển.\n- Quên rằng mô hình lớn nhất không phải lúc nào cũng cần; việc đơn giản dùng mô hình nhỏ rẻ hơn nhiều.\n\n### Tự kiểm tra\n1. Ba tiêu chí nào bạn dùng để chọn mô hình cho tính năng chat hỗ trợ khách hàng?\n2. Vì sao hội thoại dài làm chi phí tăng nhanh?\n3. Copilot khác một mô hình như Claude hay Gemini ở điểm nào?",
   "lessons": [
-   {
-    "href": "/courses/gai401-generative-ai/learn?lessonSlug=gai401-ts-9-1",
-    "ten": "9.1 — Benchmark và bảng xếp hạng",
-    "nguon": "Generative AI · Chương 9",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "GAI401"
-   },
    {
     "href": "/courses/multiplatform-mobile-app-development/learn?lessonSlug=mma301-5-1-gemini-ai",
     "ten": "5.1 — Tích hợp Gemini AI",
@@ -2384,14 +2326,6 @@
     "ten": "10.3 — Review test trong pull request",
     "nguon": "Testing · Chương 10",
     "kieu": "bai-doc"
-   },
-   {
-    "href": "/courses/gai401-generative-ai/learn?lessonSlug=gai401-ts-10-1",
-    "ten": "10.1 — Ảo giác và độ tin cậy",
-    "nguon": "Generative AI · Chương 10",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "GAI401"
    }
   ]
  },
@@ -2463,24 +2397,6 @@
  },
  "Tiếp tục học › AI Agents": {
   "body": "AI agent là hệ thống để mô hình ngôn ngữ **tự quyết định bước tiếp theo trong một vòng lặp**: quan sát tình huống, suy nghĩ, gọi công cụ (đọc file, chạy lệnh, tìm kiếm, gọi API), đọc kết quả rồi lặp lại tới khi xong hoặc chạm giới hạn. Khác một lần gọi mô hình trả lời một câu, agent có thể thực hiện chuỗi hành động nhiều bước.\n\n### Vì sao cần biết\nCác công cụ như Claude Code, chế độ agent của Copilot hay Cursor đều chạy theo kiểu này: đọc codebase, sửa nhiều file, chạy test, đọc lỗi, sửa tiếp. Hiểu cơ chế giúp bạn giao việc đúng, đặt rào chắn đúng, và biết vì sao agent đôi khi lặp vòng hoặc làm sai.\n\n### Ý chính\n- **Vòng lặp lõi**: mô hình quyết định → hệ thống chạy công cụ → kết quả đưa lại cho mô hình → lặp. Mô hình báo xong bằng cách không gọi công cụ nữa.\n- **Thành phần**: mô hình, danh sách công cụ (mô tả rõ, tham số tối thiểu), trạng thái/bộ nhớ (lịch sử hội thoại), điều kiện dừng.\n- **Không phải việc nào cũng cần agent**: việc một bước rõ ràng thì gọi mô hình một lần là đủ, rẻ và dễ dự đoán hơn.\n- **Rào chắn**: giới hạn số vòng, chi phí, thời gian; công cụ chỉ có quyền tối thiểu (đọc-chỉ khi đủ); người duyệt trước các hành động khó hoàn tác (xóa, force push, deploy); chạy trong môi trường cô lập khi có thể.\n- **Rủi ro**: agent có thể lặp vô hạn, dùng sai công cụ, dồn lỗi qua nhiều bước, hoặc bị nội dung độc hại (trong README, issue, trang web) điều khiển (prompt injection).\n- Đánh giá agent phải xét cả chuỗi hành động, không chỉ câu trả lời cuối.\n\n### Áp dụng cho frontend\nGiao agent việc có tiêu chí kiểm chứng được: \"thêm trạng thái loading cho danh sách; `npm test` và `npm run build` phải xanh\". Cho nó tự chạy lint, type-check, test; bạn đọc diff cuối cùng.\n\n### Lỗi hay gặp\n- Giao việc mơ hồ, quá rộng; hãy chia nhỏ và nêu tiêu chí xong.\n- Cấp quyền rộng (token production, ghi vào mọi thư mục) cho tiện.\n- Bỏ qua việc theo dõi chi phí và số vòng của phiên chạy dài.\n\n### Tự kiểm tra\n1. Agent khác một lần gọi mô hình ở điểm nào?\n2. Bạn đặt những rào chắn nào trước khi cho agent chạy lệnh trên máy mình?\n3. Prompt injection tác động tới agent thế nào?",
-  "lessons": [
-   {
-    "href": "/courses/gai401-generative-ai/learn?lessonSlug=gai401-ts-7-3",
-    "ten": "7.3 — Tác tử LLM và dùng công cụ",
-    "nguon": "Generative AI · Chương 7",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "GAI401"
-   },
-   {
-    "href": "/courses/daa401-design-and-secure-ai-system/learn?lessonSlug=daa401-ts-5-3",
-    "ten": "5.3 — Bảo mật RAG, plugin và agent",
-    "nguon": "Design and Secure AI System · Chương 5",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "DAA401"
-   }
-  ],
   "more": [
    {
     "type": "article",
@@ -2502,30 +2418,6 @@
  "Tiếp tục học › Skills — Phát triển kỹ năng AI": {
   "body": "Làm việc hiệu quả với AI là một kỹ năng có thể rèn: biết giao việc rõ ràng, cung cấp đúng ngữ cảnh, nhận xét kết quả và lặp lại. Phần lớn \"AI viết dở\" là do yêu cầu mơ hồ hoặc thiếu ngữ cảnh, không phải do công cụ.\n\n### Vì sao cần biết\nCùng một mô hình, người biết cách hỏi cho kết quả tốt hơn hẳn và ít tốn thời gian sửa hơn. Kỹ năng đánh giá đầu ra còn quan trọng hơn kỹ năng viết prompt, vì mô hình có thể trả lời rất tự tin nhưng sai.\n\n### Ý chính\n- **Một prompt tốt** nêu: vai trò/bối cảnh, nhiệm vụ cụ thể, ngữ cảnh (đoạn mã, lỗi, phiên bản), ràng buộc, định dạng đầu ra, tiêu chí xong.\n- **Tách chỉ dẫn khỏi dữ liệu** bằng dấu phân cách để mô hình không nhầm nội dung dán vào là lệnh.\n- **Đưa ví dụ** (few-shot) khi cần đúng một kiểu định dạng hay giọng văn.\n- **Yêu cầu suy luận có kiểm chứng** với bài khó: chia bước, nêu giả thuyết, cách kiểm tra.\n- **Lặp lại**: nếu kết quả sai, đừng chỉ nói \"sai rồi\"; chỉ ra sai ở đâu, thêm ngữ cảnh hoặc thu hẹp yêu cầu. Khi cuộc hội thoại đã lạc hướng, mở phiên mới với tóm tắt ngắn.\n- **Gỡ lỗi đầu ra AI**: chạy thật, đọc tài liệu chính thức để kiểm API, thử ca biên, hỏi lại \"vì sao\" để lộ giả định sai.\n- **Chọn việc hợp với AI**: việc lặp lại, có tiêu chí kiểm chứng; tự làm phần cần phán đoán.\n\n```text\nYếu:  \"sửa lỗi form đăng nhập\"\n\nTốt:  Dự án React 18 + TypeScript + react-hook-form.\n      Form đăng nhập hiện hiển thị lỗi cũ sau khi người dùng gõ lại.\n      Mã component: <dán mã>. Hành vi mong đợi: lỗi biến mất khi trường hợp lệ.\n      Giải thích nguyên nhân trước, rồi đề xuất sửa nhỏ nhất. Không thêm thư viện.\n```\n\n### Lỗi hay gặp\n- Yêu cầu quá chung, rồi chấp nhận kết quả đầu tiên.\n- Dán cả repo hoặc dữ liệu nhạy cảm vào prompt.\n- Phụ thuộc AI cho việc đang học; hãy tự làm trước, dùng AI để giải thích và kiểm tra.\n\n### Tự kiểm tra\n1. Viết lại một prompt mơ hồ của bạn theo cấu trúc trên.\n2. Bạn kiểm chứng một đoạn mã AI sinh ra bằng những cách nào?\n3. Khi nào nên mở phiên trò chuyện mới thay vì tiếp tục sửa?",
   "lessons": [
-   {
-    "href": "/courses/gai401-generative-ai/learn?lessonSlug=gai401-ts-6-1",
-    "ten": "6.1 — Cơ bản về prompt và prompt vài mẫu",
-    "nguon": "Generative AI · Chương 6",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "GAI401"
-   },
-   {
-    "href": "/courses/gai401-generative-ai/learn?lessonSlug=gai401-ts-6-2",
-    "ten": "6.2 — Prompt suy luận: chuỗi suy nghĩ và tự nhất quán",
-    "nguon": "Generative AI · Chương 6",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "GAI401"
-   },
-   {
-    "href": "/courses/gai401-generative-ai/learn?lessonSlug=gai401-ts-6-3",
-    "ten": "6.3 — Prompt hệ thống, đầu ra có cấu trúc và gọi công cụ",
-    "nguon": "Generative AI · Chương 6",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "GAI401"
-   },
    {
     "href": "/courses/java-web-application-development/learn?lessonSlug=prj301-ai-prompt",
     "ten": "10.1 — Prompt engineering cho công việc Java web",

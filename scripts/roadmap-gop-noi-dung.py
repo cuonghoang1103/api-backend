@@ -11,10 +11,14 @@ RA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'content
 os.makedirs(RA_DIR, exist_ok=True)
 
 CHUA_SOAN = re.compile(r'đang (được )?(biên )?soạn|being written|coming soon|chưa soạn', re.I)
+# Bài "khung" của Academy (chỉ mục tiêu + khái niệm + chỗ đọc, chưa có lời giảng) — API công khai không trả nội dung
+# bài Academy nên không dò được từ chỉ mục; danh sách lấy từ mã nguồn content/academy (bai-khung.json).
+_KF = os.path.join(W if 'W' in globals() else os.path.expanduser('~/Documents/roadmap-lam'), 'bai-khung.json')
+KHUNG = set(json.load(open(_KF))) if os.path.exists(_KF) else set()
 bai = {}
 for x in open(f'{W}/chi-muc-bai.jsonl'):
     b = json.loads(x)
-    if not CHUA_SOAN.search(b['mo']): bai[f"{b['khoa']}/{b['bai']}"] = b  # bài giữ chỗ ⇒ coi như không có
+    if not CHUA_SOAN.search(b['mo']) and b['bai'] not in KHUNG: bai[f"{b['khoa']}/{b['bai']}"] = b  # bài giữ chỗ / khung ⇒ coi như không có
 sims = {s['id']: s for s in json.load(open(f'{W}/mo-phong.json'))}
 cls = {c['slug']: c for c in json.load(open(f'{W}/code-lab.json'))}
 TRANG = {'/algorithms': 'Trực quan thuật toán', '/os-lab': 'OS Lab — hệ điều hành chạy được', '/net-lab': 'Net Lab — mạng máy tính',

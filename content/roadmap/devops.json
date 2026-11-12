@@ -1364,14 +1364,6 @@
     "kieu": "video"
    },
    {
-    "href": "/courses/maw301-modern-web-application-security/learn?lessonSlug=maw301-ts-8-4",
-    "ten": "8.4 — Phòng thủ nhiều lớp: WAF, giới hạn tần suất và sẵn sàng sự cố",
-    "nguon": "Modern Web Application Security · Chương 8",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "MAW301"
-   },
-   {
     "href": "/simulation?scenario=caching",
     "ten": "Tầng đệm — CDN & Redis",
     "nguon": "Xưởng mô phỏng",
@@ -1531,17 +1523,7 @@
   ]
  },
  "Provisioning (IaC) › Terraform": {
-  "body": "Terraform (HashiCorp) là công cụ Infrastructure as Code khai báo: bạn mô tả hạ tầng mong muốn bằng ngôn ngữ HCL, Terraform tính ra khác biệt so với hiện trạng và thực hiện thay đổi qua API của nhà cung cấp (AWS, GCP, Azure, Cloudflare, DigitalOcean, Kubernetes... đều có provider).\n\n### Vòng lặp công việc\n```bash\nterraform init      # tải provider, cấu hình backend\nterraform plan      # xem sẽ thêm/sửa/xoá gì (chưa làm gì cả)\nterraform apply     # thực hiện thay đổi\nterraform destroy   # gỡ toàn bộ\n```\n\n```hcl\nprovider \"aws\" { region = \"ap-southeast-1\" }\n\nresource \"aws_s3_bucket\" \"assets\" {\n  bucket = \"ten-bucket-duy-nhat-cua-ban\"\n}\n```\n\n### Ý chính\n- **State file** ghi lại tài nguyên Terraform đang quản lý và ánh xạ chúng với tài nguyên thật. Mất hoặc hỏng state là mất khả năng quản lý đúng. Dùng **remote backend có khoá** (S3 + khoá, Terraform Cloud...) khi làm nhóm.\n- State có thể chứa dữ liệu nhạy cảm: mã hoá và hạn chế quyền đọc.\n- **Biến, output, module**: tái sử dụng cấu hình, tách môi trường.\n- **Drift**: hạ tầng bị sửa tay ngoài Terraform; `plan` sẽ cho thấy khác biệt.\n- Từ 2023 giấy phép của Terraform chuyển sang BSL; cộng đồng có nhánh mã nguồn mở **OpenTofu** với cú pháp và quy trình gần như tương thích.\n\n### Lỗi hay gặp\n- Chạy `apply` mà không đọc kỹ `plan` (đặc biệt các dòng `destroy` hoặc `replace`).\n- Commit state hoặc file `.tfvars` có bí mật vào Git.\n- Hai người chạy `apply` cùng lúc khi không có khoá state.\n\n### Tự kiểm tra\n- State dùng để làm gì và vì sao không nên sửa tay?\n- `plan` khác `apply` thế nào?",
-  "lessons": [
-   {
-    "href": "/courses/mlo401-machine-learning-operations/learn?lessonSlug=mlo401-ts-8-1",
-    "ten": "8.1 — Nền tảng ML trên cloud và hạ tầng như mã",
-    "nguon": "Machine learning operations · Chương 8",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "MLO401"
-   }
-  ]
+  "body": "Terraform (HashiCorp) là công cụ Infrastructure as Code khai báo: bạn mô tả hạ tầng mong muốn bằng ngôn ngữ HCL, Terraform tính ra khác biệt so với hiện trạng và thực hiện thay đổi qua API của nhà cung cấp (AWS, GCP, Azure, Cloudflare, DigitalOcean, Kubernetes... đều có provider).\n\n### Vòng lặp công việc\n```bash\nterraform init      # tải provider, cấu hình backend\nterraform plan      # xem sẽ thêm/sửa/xoá gì (chưa làm gì cả)\nterraform apply     # thực hiện thay đổi\nterraform destroy   # gỡ toàn bộ\n```\n\n```hcl\nprovider \"aws\" { region = \"ap-southeast-1\" }\n\nresource \"aws_s3_bucket\" \"assets\" {\n  bucket = \"ten-bucket-duy-nhat-cua-ban\"\n}\n```\n\n### Ý chính\n- **State file** ghi lại tài nguyên Terraform đang quản lý và ánh xạ chúng với tài nguyên thật. Mất hoặc hỏng state là mất khả năng quản lý đúng. Dùng **remote backend có khoá** (S3 + khoá, Terraform Cloud...) khi làm nhóm.\n- State có thể chứa dữ liệu nhạy cảm: mã hoá và hạn chế quyền đọc.\n- **Biến, output, module**: tái sử dụng cấu hình, tách môi trường.\n- **Drift**: hạ tầng bị sửa tay ngoài Terraform; `plan` sẽ cho thấy khác biệt.\n- Từ 2023 giấy phép của Terraform chuyển sang BSL; cộng đồng có nhánh mã nguồn mở **OpenTofu** với cú pháp và quy trình gần như tương thích.\n\n### Lỗi hay gặp\n- Chạy `apply` mà không đọc kỹ `plan` (đặc biệt các dòng `destroy` hoặc `replace`).\n- Commit state hoặc file `.tfvars` có bí mật vào Git.\n- Hai người chạy `apply` cùng lúc khi không có khoá state.\n\n### Tự kiểm tra\n- State dùng để làm gì và vì sao không nên sửa tay?\n- `plan` khác `apply` thế nào?"
  },
  "Provisioning (IaC) › Pulumi": {
   "body": "Pulumi là công cụ IaC cho phép viết hạ tầng bằng ngôn ngữ lập trình thật: TypeScript, Python, Go, C#, Java hoặc YAML, thay vì HCL của Terraform.\n\n```ts\nimport * as aws from \"@pulumi/aws\";\n\nconst bucket = new aws.s3.Bucket(\"assets\");\nexport const bucketName = bucket.id;\n```\n\n### Khác Terraform ở đâu\n- Dùng vòng lặp, hàm, lớp, kiểm thử đơn vị và thư viện sẵn có của ngôn ngữ, thay vì cú pháp riêng.\n- Vẫn là mô hình khai báo: chương trình mô tả đồ thị tài nguyên mong muốn, `pulumi preview` cho thấy thay đổi, `pulumi up` áp dụng.\n- Lưu **state** ở Pulumi Cloud hoặc backend tự chọn (S3, Azure Blob, hệ thống file cục bộ).\n- Có `Output<T>` cho giá trị chỉ biết sau khi tạo tài nguyên; cần dùng `.apply()` hoặc template để xử lý.\n\n### Khi nào chọn\nNhóm mạnh về lập trình, hạ tầng logic phức tạp (nhiều điều kiện, lặp), muốn dùng chung công cụ test với ứng dụng. Đổi lại cộng đồng và nguồn mẫu nhỏ hơn Terraform.\n\n### Lỗi hay gặp\nDùng ngôn ngữ quá \"thông minh\" nên cấu hình khó đọc; quên rằng giá trị Output chưa có lúc chạy chương trình nên không thể so sánh hay in trực tiếp."
@@ -1553,17 +1535,7 @@
   "body": "Pulumi biến hạ tầng thành chương trình. Thay vì khối cấu hình tĩnh, bạn dùng đầy đủ ngôn ngữ như TypeScript hay Python.\n\n### Khái niệm chính\n- **Project**: thư mục chứa chương trình và `Pulumi.yaml`.\n- **Stack**: một bản triển khai của project (dev, staging, prod), mỗi stack có cấu hình và state riêng.\n- **Config và secrets**: `pulumi config set --secret dbPassword ...` lưu giá trị đã mã hoá.\n- **Component resource**: gói nhiều tài nguyên thành một đơn vị tái sử dụng (giống module).\n- **Stack reference**: đọc output của stack khác.\n\n```python\nimport pulumi\nimport pulumi_aws as aws\n\nbucket = aws.s3.Bucket(\"assets\")\npulumi.export(\"bucket_name\", bucket.id)\n```\n\n### Quy trình\n`pulumi preview` rồi `pulumi up`; tích hợp CI để chạy preview trên pull request. Kiểm thử bằng framework quen thuộc (Jest, pytest) với mock.\n\n### Lỗi hay gặp\nDùng logic không xác định (random, thời gian hiện tại) trong chương trình khiến mỗi lần chạy ra kết quả khác; lưu state cục bộ rồi mất máy."
  },
  "Provisioning (IaC) › Tổng quan Provisioning Infrastructure": {
-  "body": "Provisioning là việc **tạo ra** hạ tầng: mạng, máy chủ, database, DNS, quyền truy cập. Làm bằng tay (bấm console) thì chậm, khó lặp lại và dễ sai; Infrastructure as Code (IaC) mô tả hạ tầng bằng file, đặt trong Git, và để công cụ thực hiện.\n\n### Phân biệt ba việc\n- **Provisioning**: tạo tài nguyên (Terraform, Pulumi, CloudFormation).\n- **Configuration management**: cấu hình bên trong máy, như cài gói, ghi file, bật dịch vụ (Ansible, Puppet, Chef).\n- **Dựng image**: đóng gói sẵn máy đã cấu hình (Packer, Dockerfile).\n\n### Khai báo và mệnh lệnh\nKhai báo: bạn nêu trạng thái mong muốn, công cụ tự tính bước. Mệnh lệnh: bạn viết từng bước (script bash). Khai báo dễ chạy lại an toàn vì công cụ chỉ làm phần chênh lệch.\n\n### Lợi ích\nTái lập môi trường nhanh, review thay đổi qua pull request, lịch sử trong Git, giảm \"snowflake server\" (máy cấu hình tay không ai nhớ), dễ khôi phục sau sự cố.\n\n### Lỗi hay gặp\nVừa dùng IaC vừa sửa tay trên console gây drift; để bí mật nằm trong mã; không tách môi trường nên một lệnh sai ảnh hưởng production.",
-  "lessons": [
-   {
-    "href": "/courses/mlo401-machine-learning-operations/learn?lessonSlug=mlo401-ts-8-1",
-    "ten": "8.1 — Nền tảng ML trên cloud và hạ tầng như mã",
-    "nguon": "Machine learning operations · Chương 8",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "MLO401"
-   }
-  ]
+  "body": "Provisioning là việc **tạo ra** hạ tầng: mạng, máy chủ, database, DNS, quyền truy cập. Làm bằng tay (bấm console) thì chậm, khó lặp lại và dễ sai; Infrastructure as Code (IaC) mô tả hạ tầng bằng file, đặt trong Git, và để công cụ thực hiện.\n\n### Phân biệt ba việc\n- **Provisioning**: tạo tài nguyên (Terraform, Pulumi, CloudFormation).\n- **Configuration management**: cấu hình bên trong máy, như cài gói, ghi file, bật dịch vụ (Ansible, Puppet, Chef).\n- **Dựng image**: đóng gói sẵn máy đã cấu hình (Packer, Dockerfile).\n\n### Khai báo và mệnh lệnh\nKhai báo: bạn nêu trạng thái mong muốn, công cụ tự tính bước. Mệnh lệnh: bạn viết từng bước (script bash). Khai báo dễ chạy lại an toàn vì công cụ chỉ làm phần chênh lệch.\n\n### Lợi ích\nTái lập môi trường nhanh, review thay đổi qua pull request, lịch sử trong Git, giảm \"snowflake server\" (máy cấu hình tay không ai nhớ), dễ khôi phục sau sự cố.\n\n### Lỗi hay gặp\nVừa dùng IaC vừa sửa tay trên console gây drift; để bí mật nằm trong mã; không tách môi trường nên một lệnh sai ảnh hưởng production."
  },
  "Configuration Management › Ansible": {
   "body": "Ansible cấu hình máy chủ theo **playbook** viết bằng YAML. Nó **agentless**: chỉ cần SSH (và Python trên máy đích) từ máy điều khiển, không cài agent lên máy được quản lý.\n\n### Thành phần\n- **Inventory**: danh sách máy và nhóm (`web`, `db`).\n- **Playbook**: danh sách play, mỗi play áp một tập task lên một nhóm máy.\n- **Module**: đơn vị công việc có sẵn (`apt`, `copy`, `template`, `service`, `user`...).\n- **Handler**: tác vụ chỉ chạy khi có thay đổi, ví dụ reload nginx sau khi sửa cấu hình.\n- **Role**: đóng gói task, biến, template để tái sử dụng.\n\n```yaml\n- hosts: web\n  become: true\n  tasks:\n    - name: Cài nginx\n      ansible.builtin.apt:\n        name: nginx\n        state: present\n        update_cache: true\n    - name: Bật và khởi động nginx\n      ansible.builtin.service:\n        name: nginx\n        state: started\n        enabled: true\n```\n\n```bash\nansible-playbook -i inventory.ini site.yml --check --diff   # chạy thử\n```\n\n### Ý chính\nTask nên **idempotent**: chạy lại lần hai không đổi gì thêm nếu máy đã đúng. Module chuẩn làm được điều này, còn `shell` và `command` thì không tự đảm bảo.\n\n### Lỗi hay gặp\nLạm dụng `shell` khiến playbook báo \"changed\" mãi; để mật khẩu trong playbook thay vì dùng Ansible Vault."
@@ -1878,14 +1850,6 @@
     "ten": "10.1 — Cái bảng này dành cho ai?",
     "nguon": "Observability & Monitoring (Node.js trên VPS) · Chương 10",
     "kieu": "video"
-   },
-   {
-    "href": "/courses/mlo401-machine-learning-operations/learn?lessonSlug=mlo401-ts-7-4",
-    "ten": "7.4 — Quan sát hệ thống với Prometheus và Grafana",
-    "nguon": "Machine learning operations · Chương 7",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "MLO401"
    },
    {
     "href": "/code-lab/observability-monitoring",
@@ -2214,5 +2178,493 @@
     "kieu": "bai-doc"
    }
   ]
+ },
+ "Secret & Artifact Management › HashiCorp Vault nâng cao": {
+  "body": "HashiCorp Vault là \"két sắt có thư ký\" cho bí mật (secret): mật khẩu database, API key, chứng chỉ TLS. Ở mức cơ bản bạn dùng nó như một kho key-value được mã hoá (KV). Ở mức nâng cao, Vault không chỉ *giữ* bí mật mà còn *tạo ra* chúng theo yêu cầu, cho sống ngắn rồi tự thu hồi.\n\n### Vì sao cần biết\nMật khẩu database dùng chung, sống vài năm, nằm trong biến môi trường của mười dịch vụ là rủi ro kinh điển: lộ một chỗ là lộ tất cả, và không ai biết ai đã dùng. Vault giải quyết bằng danh tính + thời hạn: mỗi ứng dụng xác thực (Kubernetes ServiceAccount, AppRole, OIDC…) rồi nhận credential riêng, có TTL.\n\n### Ý chính\n- **Secrets engine**: plugin sinh/lưu bí mật, bật theo đường dẫn (`kv/`, `database/`, `pki/`, `aws/`, `transit/`).\n- **Dynamic secrets**: đọc `database/creds/<role>` thì Vault chạy `CREATE ROLE` trên database, trả user/password mới kèm *lease*; hết TTL hoặc bị revoke thì Vault `DROP` user đó. Mỗi instance ứng dụng một user riêng, truy vết được.\n- **PKI engine**: Vault làm CA nội bộ, cấp chứng chỉ ngắn hạn (vài giờ đến vài ngày) cho mTLS giữa dịch vụ, thay cho việc gia hạn tay.\n- **Transit engine**: \"mã hoá như một dịch vụ\" — ứng dụng gửi dữ liệu để mã hoá/giải mã mà không bao giờ cầm khoá.\n- **Policy** (HCL) gán quyền theo path; **auth method** gắn danh tính vào policy; **audit device** ghi mọi request.\n- **Namespaces** (bản Enterprise/HCP) cô lập nhiều team/tenant trong cùng một cụm Vault.\n- **Seal/unseal**: dữ liệu mã hoá bằng khoá master; khởi động xong Vault ở trạng thái sealed, cần unseal (Shamir hoặc auto-unseal qua cloud KMS).\n\n```bash\nvault secrets enable database\nvault write database/config/appdb \\\n  plugin_name=postgresql-database-plugin \\\n  allowed_roles=app \\\n  connection_url=\"postgresql://{{username}}:{{password}}@db:5432/app\" \\\n  username=vaultadmin password=...\nvault write database/roles/app db_name=appdb \\\n  creation_statements=\"CREATE ROLE \\\"{{name}}\\\" WITH LOGIN PASSWORD '{{password}}' VALID UNTIL '{{expiration}}'; GRANT SELECT ON ALL TABLES IN SCHEMA public TO \\\"{{name}}\\\";\" \\\n  default_ttl=1h max_ttl=24h\nvault read database/creds/app   # user/password mới, hết hạn sau 1 giờ\n```\n\n### Lỗi hay gặp\n- Quên *renew* lease: ứng dụng chạy lâu bị mất quyền DB giữa chừng. Dùng Vault Agent hoặc thư viện tự renew.\n- Mất khoá unseal/recovery key hoặc không backup storage backend (Raft snapshot) — mất cả két.\n- Bật root token dùng thường xuyên; root token chỉ nên dùng lúc khởi tạo rồi thu hồi.\n- Đặt TTL quá dài khiến dynamic secrets mất ý nghĩa.\n\n### Tự kiểm tra\n1. Dynamic secret khác KV secret ở điểm nào, lợi ích bảo mật là gì?\n2. Khi một pod bị xâm nhập, Vault giúp thu hẹp thiệt hại ra sao so với mật khẩu dùng chung?",
+  "lessons": [
+   {
+    "href": "/courses/authentication/learn?lessonSlug=auth-11-1-bi-mat",
+    "ten": "11.1 — Bí mật: đưa chúng tới tiến trình mà không đụng vào kho mã",
+    "nguon": "Authentication · Chương 11",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-4-0-slides",
+    "ten": "4.0 — Slide Chương 4: cấu hình và bí mật, bằng hình",
+    "nguon": "Deploy lên VPS · Chương 4",
+    "kieu": "slide"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "Vault — Database secrets engine",
+    "url": "https://developer.hashicorp.com/vault/docs/secrets/databases"
+   }
+  ]
+ },
+ "Secret & Artifact Management › SOPS (Secrets OPerationS)": {
+  "body": "SOPS (Secrets OPerationS) mã hoá **giá trị** trong file YAML/JSON/ENV/INI nhưng **giữ nguyên tên khoá**, nên file mã hoá vẫn đọc diff được trong Git: bạn thấy `db_password` đổi, chỉ không thấy giá trị. Nhờ đó có thể commit secret cùng mã nguồn an toàn.\n\n### Vì sao cần biết\nGitOps đòi hỏi *mọi thứ* nằm trong Git, kể cả secret. SOPS là cách đơn giản nhất mà không phải dựng thêm máy chủ như Vault.\n\n### Ý chính\n- Khoá mã hoá có thể là **age** (đơn giản, khuyên dùng cho đội nhỏ), **PGP**, hoặc KMS của cloud (**AWS KMS, GCP KMS, Azure Key Vault**), và cả HashiCorp Vault. Một file có thể mã hoá cho nhiều khoá cùng lúc, ai giữ một khoá là giải được.\n- File cấu hình `.sops.yaml` khai quy tắc theo đường dẫn: file nào mã hoá bằng khoá nào, và chỉ mã hoá trường nào (ví dụ `encrypted_regex: '^(data|stringData)$'` cho Kubernetes Secret).\n- Có sẵn tích hợp: Flux giải mã SOPS native; Argo CD dùng plugin như KSOPS hoặc helm-secrets.\n\n```bash\nage-keygen -o key.txt                       # in ra public key: age1...\nexport SOPS_AGE_KEY_FILE=key.txt\nsops --encrypt --age age1xxxx secrets.yaml > secrets.enc.yaml\nsops secrets.enc.yaml                       # mở editor, tự giải mã/mã hoá lại khi lưu\nsops --decrypt secrets.enc.yaml | kubectl apply -f -\n```\n\n### Lỗi hay gặp\n- Làm mất private key age/PGP: không có cách khôi phục — hãy sao lưu khoá ở nơi tách biệt.\n- Commit nhầm file `secrets.yaml` chưa mã hoá; thêm pre-commit hook hoặc `.gitignore`.\n- Người rời nhóm vẫn giữ khoá cũ: cần `sops updatekeys` và xoay vòng giá trị thực sự, vì lịch sử Git vẫn giải được bằng khoá cũ.",
+  "more": [
+   {
+    "type": "official",
+    "title": "SOPS — tài liệu chính thức",
+    "url": "https://getsops.io/docs/"
+   }
+  ]
+ },
+ "Secret & Artifact Management › Sealed Secrets": {
+  "body": "Sealed Secrets (của Bitnami) giải bài toán \"Kubernetes Secret chỉ là base64, không thể đưa lên Git\". Bạn mã hoá secret thành một object `SealedSecret`; chỉ **controller chạy trong cluster** giữ private key nên chỉ cluster đó mới giải mã được và tạo ra `Secret` thật.\n\n### Cách hoạt động\n1. Cài controller vào cluster; nó sinh cặp khoá và công bố chứng chỉ công khai.\n2. Dev dùng CLI `kubeseal` mã hoá bằng chứng chỉ công khai (không cần quyền vào cluster).\n3. Commit file `SealedSecret` vào Git; Argo CD/Flux áp dụng như mọi manifest.\n4. Controller giải mã và tạo `Secret` cùng tên, cùng namespace.\n\n```bash\nkubectl create secret generic db --from-literal=password=S3cret \\\n  --dry-run=client -o yaml \\\n  | kubeseal --format yaml > sealed-db.yaml\nkubectl apply -f sealed-db.yaml\n```\n\n### Ý chính\n- **Scope**: mặc định *strict* — mã hoá gắn với đúng namespace + tên, đem sang chỗ khác không giải được. Có thể nới thành `namespace-wide` hoặc `cluster-wide`.\n- Controller định kỳ sinh khoá mới (mặc định khoảng 30 ngày) nhưng giữ khoá cũ để giải các secret đã niêm phong.\n- Khác SOPS: Sealed Secrets chỉ dành cho Kubernetes và gắn với một cluster cụ thể.\n\n### Lỗi hay gặp\n- Không sao lưu private key của controller: dựng lại cluster là mất khả năng giải mã mọi SealedSecret cũ.\n- Đổi tên hoặc namespace của Secret mà quên niêm phong lại (scope strict).\n- Nghĩ rằng SealedSecret xoay vòng giá trị: nó chỉ bảo vệ khi lưu trữ; giá trị lộ vẫn phải đổi."
+ },
+ "Secret & Artifact Management › Artifact Repository": {
+  "body": "Artifact repository là \"kho hàng\" lưu kết quả đầu ra của quá trình build: gói npm, JAR/Maven, wheel Python, NuGet, Docker image, Helm chart… Thay vì mỗi máy tải thẳng từ Internet hay build lại từ đầu, mọi người lấy từ một kho chung, được kiểm soát.\n\n### Ba kiểu repository thường gặp\n- **Hosted (local)**: nơi team đẩy bản build nội bộ lên.\n- **Proxy (remote)**: cache của kho công cộng (npmjs, Maven Central, Docker Hub) — nhanh hơn, vẫn dùng được khi kho gốc sập, tránh rate limit.\n- **Group (virtual)**: gộp nhiều repo thành một URL duy nhất để client cấu hình một lần.\n\n### Các sản phẩm phổ biến\nSonatype Nexus Repository, JFrog Artifactory, Cloudsmith (SaaS), và dịch vụ gắn với nền tảng như GitHub Packages, GitLab Package/Container Registry, AWS ECR/CodeArtifact, Google Artifact Registry.\n\n### Vì sao cần\nTái lập được build, quét lỗ hổng/giấy phép tập trung, kiểm soát ai được kéo/đẩy gì, và giảm phụ thuộc vào Internet ngoài.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-3-0-slides",
+    "ten": "3.0 — Slide Chương 3: image và registry bằng hình",
+    "nguon": "Docker · Chương 3",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-3-3-registry",
+    "ten": "3.3 — Registry: Hub, GHCR và của riêng bạn",
+    "nguon": "Docker · Chương 3",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Secret & Artifact Management › Quản lý Artifact": {
+  "body": "Artifact là sản phẩm nhị phân bất biến mà pipeline CI tạo ra và các môi trường sau dùng lại: image, gói, thư viện, file zip. Nguyên tắc cốt lõi của CI/CD: **build một lần, triển khai nhiều lần** — cùng một artifact đi qua dev → staging → production, chỉ khác cấu hình.\n\n### Vì sao cần biết\nNếu staging build một lần và production build lại, bạn đang chạy hai thứ khác nhau (khác phiên bản thư viện, khác thời điểm), nên \"test xong rồi mà production vẫn lỗi\". Một artifact có định danh cố định giúp truy vết, rollback nhanh và kiểm toán.\n\n### Ý chính\n- **Version bất biến**: không ghi đè `1.4.2`. Với Docker, tag (`:latest`, `:v1`) có thể bị trỏ lại; **digest** (`@sha256:…`) thì không.\n- **Gắn commit SHA** vào tên/metadata để từ artifact tìm ngược ra mã nguồn và lần chạy CI.\n- **Promotion**: đẩy lên repo `snapshot/dev`, qua kiểm thử rồi *promote* (copy/gắn nhãn) sang repo `release` — không build lại.\n- **Retention**: đặt chính sách dọn bản cũ, nếu không kho phình vô hạn; nhưng giữ đủ bản để rollback.\n- **An ninh chuỗi cung ứng**: quét lỗ hổng, sinh SBOM, ký image (ví dụ cosign) và chỉ cho deploy artifact đã ký.\n\n```yaml\n# GitHub Actions: giữ lại bản build để job sau dùng\n- uses: actions/upload-artifact@v4\n  with:\n    name: dist\n    path: dist/\n    retention-days: 7\n```\n\n### Lỗi hay gặp\n- Dùng tag `latest` trong manifest production, không biết đang chạy phiên bản nào.\n- Build lại ở bước deploy thay vì dùng artifact đã kiểm thử.\n- Không đặt retention nên kho đầy; hoặc dọn quá tay làm mất đường lùi.\n\n### Tự kiểm tra\n1. Vì sao digest tin cậy hơn tag?\n2. \"Build once, promote many\" khác \"build ở mỗi môi trường\" ở điểm nào?",
+  "lessons": [
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-5-0-slides",
+    "ten": "5.0 — Slide Chương 5: cache và artifact bằng hình",
+    "nguon": "GitHub Actions · Chương 5",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-5-4-artifact",
+    "ten": "5.4 — Artifact, và con số tôi phải đo hai lần",
+    "nguon": "GitHub Actions · Chương 5",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-2-3-tao-tac-la-anh-container",
+    "ten": "2.3 — Tạo tác là một ảnh container",
+    "nguon": "Deploy lên VPS · Chương 2",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-13-2-registry-build-o-may-khac",
+    "ten": "13.2 — Registry và dựng ở máy khác: chứng minh ảnh chạy được trước khi đẩy",
+    "nguon": "Deploy lên VPS · Chương 13",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Secret & Artifact Management › Nexus Repository": {
+  "body": "Sonatype Nexus Repository là artifact repository chạy tự host, nổi tiếng nhờ hỗ trợ nhiều định dạng trong một ứng dụng: Maven, npm, Docker, Helm, NuGet, PyPI, raw files…\n\n### Khái niệm chính\n- **Repository** có 3 loại: *hosted* (lưu bản của bạn), *proxy* (cache kho ngoài), *group* (gộp nhiều repo thành một URL).\n- **Blob store**: nơi vật lý lưu dữ liệu (đĩa, S3…).\n- **Cleanup policy**: tự xoá component cũ/ít dùng để khỏi đầy đĩa.\n- **Role/Privilege** kiểm soát ai đọc/ghi repo nào; có tích hợp LDAP/SSO.\n- Docker registry trong Nexus thường cần cổng riêng hoặc reverse proxy cho từng repo.\n\n### Dùng thử\n```bash\ndocker run -d -p 8081:8081 --name nexus sonatype/nexus3\n# mật khẩu admin ban đầu nằm trong /nexus-data/admin.password của container\n```\nClient chỉ cần trỏ về URL group, ví dụ npm: `npm config set registry http://nexus:8081/repository/npm-group/`.\n\n### Lưu ý\nHãy đọc kỹ điều khoản bản Community vs Pro (có giới hạn sử dụng ở bản miễn phí), và nhớ sao lưu thư mục dữ liệu cùng blob store cho nhất quán."
+ },
+ "Secret & Artifact Management › JFrog Artifactory": {
+  "body": "JFrog Artifactory là artifact repository cấp doanh nghiệp, nằm trong nền tảng JFrog (có bản tự host và bản SaaS), hỗ trợ rất nhiều định dạng: Generic, Docker, Helm, npm, Maven, Gradle, PyPI, Go…\n\n### Khái niệm chính\n- **Local** (lưu bản của bạn), **Remote** (proxy kho ngoài có cache), **Virtual** (gộp nhiều repo dưới một URL) — tương đương hosted/proxy/group của Nexus.\n- **Build info**: gắn metadata build (CI job, commit, dependency) vào artifact để truy vết hai chiều.\n- **Promotion**: chuyển build đã đạt kiểm thử từ repo dev sang repo release mà không build lại.\n- **AQL** (Artifactory Query Language) để truy vấn artifact; **Xray** (sản phẩm đi kèm) quét lỗ hổng và giấy phép.\n- Tích hợp sẵn với Jenkins, GitHub Actions, GitLab CI qua JFrog CLI (`jf`).\n\n```bash\njf rt upload \"dist/*.tgz\" generic-local/myapp/1.4.2/\njf rt download \"generic-local/myapp/1.4.2/*\"\n```\n\n### Khi nào chọn\nCông ty lớn cần replication đa vùng, quản lý quyền chi tiết và quét bảo mật tích hợp. Đội nhỏ thường thấy GHCR/ECR hoặc Nexus là đủ."
+ },
+ "Secret & Artifact Management › CloudSmith": {
+  "body": "Cloudsmith là dịch vụ artifact repository **managed (SaaS)**: bạn không phải cài hay vận hành máy chủ. Nó hỗ trợ nhiều định dạng như Docker, Helm, Maven, npm, Python, Debian/RPM…\n\n### Điểm đáng chú ý\n- **Upstream proxying**: cache các kho công cộng (npm, PyPI, Docker Hub) để giảm phụ thuộc và rate limit.\n- **Entitlement token**: cấp token chỉ-đọc riêng cho từng khách hàng/môi trường — hợp với việc phân phối phần mềm cho bên ngoài.\n- **Chính sách** (license, lỗ hổng, quarantine) chặn gói không đạt trước khi vào kho.\n- Có mạng phân phối toàn cầu để tải nhanh, và tích hợp CI qua CLI/API.\n\n### Khi nào chọn\nBạn muốn khỏi tự vận hành Nexus/Artifactory, hoặc cần phát hành gói cho bên thứ ba một cách có kiểm soát. Đổi lại là chi phí thuê bao và dữ liệu nằm ở nhà cung cấp, nên cần cân nhắc yêu cầu tuân thủ của công ty."
+ },
+ "Container Orchestration › Kubernetes": {
+  "body": "Kubernetes (K8s) là hệ thống điều phối container: bạn *khai báo* trạng thái mong muốn (\"chạy 3 bản của ứng dụng này, mở cổng 8080\"), K8s liên tục so sánh với thực tế và sửa cho khớp. Container sập thì dựng lại, node chết thì chuyển sang node khác, tải tăng thì thêm bản sao.\n\n### Kiến trúc trong một hình\n- **Control plane**: `kube-apiserver` (cổng vào duy nhất), `etcd` (lưu trạng thái), `scheduler` (chọn node cho pod), `controller-manager` (vòng lặp đối soát).\n- **Node**: chạy `kubelet` (nhận lệnh, chạy container), container runtime (containerd), `kube-proxy`.\n\n### Các đối tượng cốt lõi\n- **Pod**: đơn vị nhỏ nhất, một hoặc vài container chia sẻ mạng và volume.\n- **Deployment** (qua ReplicaSet): giữ đúng số bản sao, cập nhật cuốn chiếu và rollback.\n- **Service**: địa chỉ ổn định + cân bằng tải tới các pod được chọn bằng label (ClusterIP, NodePort, LoadBalancer).\n- **Ingress / Gateway API**: định tuyến HTTP từ ngoài vào theo host/path.\n- **ConfigMap / Secret**: cấu hình tách khỏi image. **Namespace**: tách môi trường/team.\n\n```yaml\napiVersion: apps/v1\nkind: Deployment\nmetadata: { name: web }\nspec:\n  replicas: 3\n  selector: { matchLabels: { app: web } }\n  template:\n    metadata: { labels: { app: web } }\n    spec:\n      containers:\n        - name: web\n          image: ghcr.io/acme/web:1.4.2\n          ports: [{ containerPort: 8080 }]\n          readinessProbe: { httpGet: { path: /healthz, port: 8080 } }\n          resources:\n            requests: { cpu: 100m, memory: 128Mi }\n            limits: { memory: 256Mi }\n---\napiVersion: v1\nkind: Service\nmetadata: { name: web }\nspec:\n  selector: { app: web }\n  ports: [{ port: 80, targetPort: 8080 }]\n```\n```bash\nkubectl apply -f web.yaml\nkubectl get pods -l app=web\nkubectl rollout status deploy/web\nkubectl logs deploy/web\n```\n\n### Lỗi hay gặp\n- Không đặt `requests/limits` nên một pod ngốn hết node hoặc bị `OOMKilled`.\n- `readinessProbe` sai khiến traffic đổ vào pod chưa sẵn sàng; `livenessProbe` quá gắt gây restart liên tục.\n- Dùng tag `latest`, hoặc chạy database có trạng thái mà không hiểu StatefulSet/volume.\n- Dùng K8s cho ứng dụng nhỏ chạy được bằng Compose trên một VPS: chi phí vận hành vượt xa lợi ích.\n\n### Tự kiểm tra\n1. Vì sao dùng Service thay vì gọi thẳng IP của pod?\n2. Khi bạn đổi image trong Deployment, K8s thay pod như thế nào để không gián đoạn?",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-15-0-slides",
+    "ten": "15.0 — Slide Chương 15: vượt khỏi một lệnh, một người, một máy",
+    "nguon": "Docker · Chương 15",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-15-4-kubernetes",
+    "ten": "15.4 — Từ Compose tới Kubernetes — và khi nào bạn KHÔNG cần nó",
+    "nguon": "Docker · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-14-3-paas-vps-kubernetes",
+    "ten": "14.3 — Chọn nền tảng: VPS, PaaS, serverless hay Kubernetes, với giá thật",
+    "nguon": "Deploy lên VPS · Chương 14",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-12-7-pod-dockerfile",
+    "ten": "12.7 — Pod là namespace dùng chung, và checklist Dockerfile nhìn từ hệ điều hành — mục nào cũng đo",
+    "nguon": "Operating Systems for Developers · Chương 12",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Container Orchestration › Docker Swarm": {
+  "body": "Docker Swarm là chế độ điều phối tích hợp sẵn trong Docker Engine: gộp nhiều máy thành một cụm và chạy *service* trên đó, với cú pháp quen thuộc từ Docker/Compose. Đơn giản hơn Kubernetes rất nhiều.\n\n### Khái niệm\n- **Manager node** (giữ trạng thái cụm bằng Raft, nên dùng 3 hoặc 5 để chịu lỗi) và **worker node**.\n- **Service**: trạng thái mong muốn (image, số replica, cổng) — Swarm lên lịch **task** (container) và tự dựng lại khi chết.\n- **Overlay network** nối container giữa các máy; **routing mesh** cho phép truy cập một cổng công bố từ bất kỳ node nào.\n- **Secrets/configs** của Swarm: gắn vào container dạng file, chỉ nằm trong RAM.\n\n```bash\ndocker swarm init                       # máy này thành manager\ndocker service create --name web --replicas 3 -p 80:8080 myapp:1.0\ndocker service scale web=5\ndocker service update --image myapp:1.1 web   # cập nhật cuốn chiếu\ndocker stack deploy -c compose.yml mystack    # triển khai file Compose\n```\n\n### Khi nào dùng, khi nào không\nPhù hợp cụm nhỏ vài máy, đội ít người, muốn có rolling update và tự hồi phục mà không học K8s. Nhưng hệ sinh thái nhỏ hơn nhiều, ít công cụ (autoscaling, operator, GitOps) và thị trường việc làm gần như chỉ hỏi Kubernetes. Học Swarm để hiểu khái niệm điều phối, còn đi làm thì ưu tiên Kubernetes.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-15-0-slides",
+    "ten": "15.0 — Slide Chương 15: vượt khỏi một lệnh, một người, một máy",
+    "nguon": "Docker · Chương 15",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-15-3-swarm",
+    "ten": "15.3 — Nhiều máy ở mức nhẹ: Docker Swarm",
+    "nguon": "Docker · Chương 15",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Container Orchestration › GKE / EKS / AKS / ECS": {
+  "body": "Chạy Kubernetes tự dựng (tự cài control plane, etcd, nâng cấp, vá lỗi) rất tốn công. Các nhà cung cấp cloud đưa ra bản **managed**: họ vận hành control plane, bạn chỉ lo workload (và thường là node).\n\n### Bốn cái tên hay gặp\n- **GKE** (Google Cloud): trải nghiệm K8s mượt nhất, có chế độ Autopilot (Google quản luôn node).\n- **EKS** (AWS): tích hợp IAM, VPC, load balancer của AWS.\n- **AKS** (Azure): tích hợp Entra ID (trước là Azure AD), Azure Monitor.\n- **ECS** (AWS): *không phải Kubernetes* — orchestrator riêng của AWS, đơn giản hơn; chạy trên EC2 hoặc Fargate (serverless).\n\n### Cái được, cái vẫn phải tự lo\nĐược: control plane sẵn sàng cao, nâng cấp có hướng dẫn, tích hợp mạng/danh tính/load balancer. Vẫn tự lo: thiết kế mạng, node pool và nâng cấp node, phân quyền RBAC, bảo mật pod, chi phí (control plane và node đều tính tiền), theo dõi (monitoring).\n\n### Chọn thế nào\nThường chọn theo cloud công ty đang dùng. Nếu chỉ cần chạy vài container không cần hệ sinh thái K8s, ECS/Fargate hoặc dịch vụ như Cloud Run thường rẻ công vận hành hơn.",
+  "lessons": [
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-14-3-paas-vps-kubernetes",
+    "ten": "14.3 — Chọn nền tảng: VPS, PaaS, serverless hay Kubernetes, với giá thật",
+    "nguon": "Deploy lên VPS · Chương 14",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Container Orchestration › Helm": {
+  "body": "Helm là \"trình quản lý gói\" cho Kubernetes. Thay vì viết và `kubectl apply` hàng chục file YAML cho từng môi trường, bạn đóng gói chúng thành **chart** có tham số hoá, rồi cài/nâng cấp/rollback bằng một lệnh.\n\n### Khái niệm\n- **Chart**: thư mục gồm `Chart.yaml`, `values.yaml` (giá trị mặc định) và `templates/` (YAML dùng template Go).\n- **Release**: một lần cài chart vào cluster, có lịch sử phiên bản để rollback.\n- **Repository** (hoặc OCI registry) chứa chart; Helm 3 không còn Tiller.\n\n```bash\nhelm repo add bitnami https://charts.bitnami.com/bitnami\nhelm install db bitnami/postgresql --set auth.postgresPassword=changeme -n data --create-namespace\nhelm upgrade web ./mychart -f values-prod.yaml\nhelm history web\nhelm rollback web 1\nhelm template web ./mychart -f values-prod.yaml   # xem YAML sinh ra mà không cài\n```\n\n### Lưu ý\n- Không để mật khẩu thật trong `values.yaml` commit vào Git; kết hợp SOPS/External Secrets.\n- Template quá phức tạp rất khó đọc; nhiều đội dùng Kustomize khi chỉ cần chồng cấu hình theo môi trường.\n- Dùng `helm template` + `helm lint` trong CI để bắt lỗi trước khi deploy."
+ },
+ "Container Orchestration › Google Kubernetes Engine (GKE)": {
+  "body": "Google Kubernetes Engine (GKE) là dịch vụ Kubernetes managed của Google Cloud, và Google là nơi sinh ra Kubernetes nên GKE thường nhận tính năng mới sớm.\n\n### Hai chế độ vận hành\n- **Autopilot**: Google quản lý cả node; bạn khai báo pod và bị tính tiền theo tài nguyên pod yêu cầu. Ít việc vận hành, nhưng có một số ràng buộc về loại workload.\n- **Standard**: bạn tự quản node pool (loại máy, số lượng, autoscaling), linh hoạt hơn.\n\n### Ý chính\n- **Cluster VPC-native** dùng dải IP alias, tích hợp mạng GCP; Load balancer của GCP được tạo tự động khi bạn tạo `Service` kiểu LoadBalancer hoặc Ingress.\n- **Release channels** (Rapid/Regular/Stable) quyết định tốc độ nâng cấp phiên bản K8s tự động.\n- **Workload Identity**: gắn Kubernetes ServiceAccount với Google service account để pod truy cập dịch vụ GCP mà không cần file khoá JSON.\n- Quan sát qua Cloud Logging/Cloud Monitoring có sẵn.\n\n```bash\ngcloud container clusters create-auto demo --region asia-southeast1\ngcloud container clusters get-credentials demo --region asia-southeast1\nkubectl get nodes\n```\n\n### Lỗi hay gặp\nĐể lại cluster không dùng (vẫn tính tiền); cấp quyền IAM quá rộng cho node service account; nhúng khoá service account vào image thay vì dùng Workload Identity."
+ },
+ "Container Orchestration › Amazon Elastic Kubernetes Service (EKS)": {
+  "body": "Amazon EKS là Kubernetes managed của AWS: AWS vận hành control plane (nhiều AZ), bạn lo node và workload.\n\n### Cách chạy workload\n- **Managed node groups**: AWS tạo/quản lý EC2 trong Auto Scaling Group.\n- **Fargate profiles**: pod chạy serverless, không quản node (có một số hạn chế, ví dụ DaemonSet không dùng được).\n- **Karpenter** là công cụ tự động cấp node theo nhu cầu pod (thay cho Cluster Autoscaler ở nhiều đội).\n\n### Tích hợp AWS\n- **IAM**: người dùng truy cập cluster qua IAM (hiện dùng *access entries*, thay dần cách cũ `aws-auth` ConfigMap). Pod lấy quyền AWS qua **IRSA** hoặc **EKS Pod Identity** thay vì khoá cố định.\n- **VPC CNI**: mỗi pod nhận IP thật trong VPC — nhớ lập kế hoạch dải IP đủ rộng.\n- **Add-ons** do EKS quản lý: VPC CNI, CoreDNS, kube-proxy, EBS CSI driver.\n- Load balancer qua **AWS Load Balancer Controller** (ALB/NLB).\n\n```bash\neksctl create cluster --name demo --region ap-southeast-1 --nodes 2\naws eks update-kubeconfig --name demo --region ap-southeast-1\nkubectl get nodes\n```\n\n### Lỗi hay gặp\nHết IP trong subnet vì CNI cấp IP cho mỗi pod; quên EBS CSI driver nên PVC treo Pending; để cluster demo chạy quên xoá (control plane và NAT gateway đều tính phí)."
+ },
+ "Container Orchestration › Azure Kubernetes Service (AKS)": {
+  "body": "Azure Kubernetes Service (AKS) là Kubernetes managed của Microsoft Azure. Azure vận hành control plane; bạn quản lý **node pool** (VM Scale Set) và workload.\n\n### Ý chính\n- **Danh tính**: tích hợp Microsoft Entra ID (trước là Azure AD) cho đăng nhập người dùng + Kubernetes RBAC; pod truy cập tài nguyên Azure qua **Workload Identity** (không nhúng secret).\n- **Mạng**: Azure CNI (pod nhận IP từ VNet) hoặc kubenet/overlay; Ingress qua Application Gateway hoặc ingress-nginx.\n- **Node pool**: tách pool hệ thống và pool người dùng, có thể dùng spot, autoscaler để co giãn.\n- **Quan sát**: Azure Monitor / Container Insights, có thể thêm Prometheus & Grafana được quản lý.\n- **Chính sách**: Azure Policy for Kubernetes áp quy tắc (ví dụ cấm container privileged).\n- Có các mức dịch vụ (free/standard) khác nhau về cam kết uptime SLA cho control plane.\n\n```bash\naz group create -n demo-rg -l southeastasia\naz aks create -g demo-rg -n demo --node-count 2 --enable-managed-identity\naz aks get-credentials -g demo-rg -n demo\nkubectl get nodes\n```\n\n### Lỗi hay gặp\nChọn dải IP/subnet quá nhỏ cho Azure CNI; cấp quyền Contributor quá rộng; để cluster thử nghiệm chạy quên tắt (`az aks stop` hoặc xoá resource group)."
+ },
+ "Container Orchestration › AWS ECS / Fargate": {
+  "body": "Amazon ECS (Elastic Container Service) là bộ điều phối container riêng của AWS, đơn giản hơn Kubernetes. **Fargate** là chế độ chạy \"không máy chủ\": bạn đưa container và khai CPU/RAM, AWS lo máy bên dưới.\n\n### Khái niệm\n- **Task definition**: bản mô tả (image, CPU/RAM, cổng, biến môi trường, log, role) — giống pod spec.\n- **Task**: một lần chạy từ task definition. **Service**: giữ N task chạy, thay thế task chết, gắn load balancer (ALB), cập nhật cuốn chiếu.\n- **Cluster**: nhóm logic để chứa service/task.\n- **Launch type**: *Fargate* (không quản máy) hoặc *EC2* (bạn quản instance, rẻ hơn khi tải lớn và ổn định).\n- Hai role cần phân biệt: **task execution role** (ECS dùng để kéo image từ ECR, ghi log) và **task role** (quyền của chính ứng dụng, ví dụ đọc S3).\n- Mạng `awsvpc`: mỗi task có ENI/IP riêng và security group riêng.\n\n```bash\naws ecs create-cluster --cluster-name demo\naws ecs register-task-definition --cli-input-json file://taskdef.json\naws ecs create-service --cluster demo --service-name web --task-definition web:1 \\\n  --desired-count 2 --launch-type FARGATE \\\n  --network-configuration \"awsvpcConfiguration={subnets=[subnet-aaa],securityGroups=[sg-bbb]}\"\n```\n\n### Khi nào chọn\nĐội chỉ dùng AWS, muốn chạy container với ít công vận hành nhất. Đổi lại là gắn chặt vào AWS, không có hệ sinh thái Helm/operator như K8s."
+ },
+ "Container Orchestration › ESO (External Secrets Operator)": {
+  "body": "External Secrets Operator (ESO) là operator Kubernetes **đồng bộ secret từ kho bên ngoài** (AWS Secrets Manager, HashiCorp Vault, GCP Secret Manager, Azure Key Vault…) thành `Secret` của Kubernetes. Nguồn sự thật nằm ở kho chuyên dụng; trong Git chỉ có *tham chiếu*, không có giá trị.\n\n### Hai đối tượng chính\n- **SecretStore / ClusterSecretStore**: cách kết nối và xác thực tới kho (trong namespace hoặc toàn cluster).\n- **ExternalSecret**: khai báo \"lấy khoá nào từ kho, tạo Secret tên gì\", kèm `refreshInterval` để tự cập nhật khi giá trị gốc đổi.\n\n```yaml\napiVersion: external-secrets.io/v1beta1   # tuỳ phiên bản có thể là v1\nkind: ExternalSecret\nmetadata: { name: db-creds }\nspec:\n  refreshInterval: 1h\n  secretStoreRef: { name: aws-sm, kind: ClusterSecretStore }\n  target: { name: db-creds }\n  data:\n    - secretKey: password\n      remoteRef: { key: prod/db, property: password }\n```\n\n### So với Sealed Secrets / SOPS\nSealed Secrets/SOPS đưa secret *đã mã hoá* vào Git; ESO không đưa gì vào Git và hỗ trợ xoay vòng tập trung ở kho gốc. Đổi lại cần một kho secret chạy sẵn và quyền xác thực của operator tới kho.\n\n### Lưu ý\nVẫn tạo ra `Secret` Kubernetes (base64, lưu trong etcd) — hãy bật mã hoá etcd lúc lưu và giới hạn RBAC đọc Secret. Giá trị thay đổi ở kho nhưng ứng dụng cần restart hoặc đọc lại file mới thì mới dùng giá trị mới.",
+  "more": [
+   {
+    "type": "official",
+    "title": "External Secrets Operator — Overview",
+    "url": "https://external-secrets.io/latest/introduction/overview/"
+   }
+  ]
+ },
+ "Container Orchestration › OpenShift": {
+  "body": "OpenShift là nền tảng container của Red Hat dựa trên Kubernetes, đóng gói sẵn những thứ bạn thường phải tự lắp: registry tích hợp, CI/CD, giám sát, quản lý người dùng và bảo mật chặt hơn mặc định. Bản cộng đồng upstream là **OKD**.\n\n### Khác biệt so với Kubernetes thuần\n- Công cụ dòng lệnh `oc` (mở rộng `kubectl`) và web console đầy đủ.\n- **Route** (tương tự Ingress), **ImageStream**, **BuildConfig / Source-to-Image (S2I)** để build ảnh từ mã nguồn trong cluster; **OpenShift Pipelines** (Tekton) và **GitOps** (Argo CD) có sẵn dạng Operator.\n- **Security Context Constraints (SCC)**: mặc định container chạy với UID ngẫu nhiên, không root — nhiều image Docker Hub phải sửa lại mới chạy được.\n- **OperatorHub** để cài ứng dụng/dịch vụ bằng Operator; có bản managed: ROSA (AWS), ARO (Azure), OpenShift Dedicated.\n\n### Khi nào gặp\nDoanh nghiệp, ngân hàng, viễn thông thường chọn OpenShift vì hỗ trợ thương mại và yêu cầu tuân thủ. Kiến thức Kubernetes vẫn là nền, chỉ cần học thêm các đối tượng riêng của OpenShift."
+ },
+ "GitOps & Service Mesh › ArgoCD / FluxCD": {
+  "body": "ArgoCD và FluxCD là hai công cụ GitOps chính cho Kubernetes: cả hai chạy **trong cluster**, đọc Git và kéo trạng thái cluster về đúng với những gì Git khai báo. Không còn cảnh pipeline CI cầm kubeconfig đẩy `kubectl apply` vào production.\n\n### So sánh nhanh\n- **Argo CD**: có UI web rất trực quan (cây tài nguyên, diff, trạng thái Healthy/Synced), khái niệm `Application`/`AppProject`, hỗ trợ Helm, Kustomize, plain YAML. Hợp đội muốn nhìn thấy mọi thứ.\n- **Flux**: bộ \"toolkit\" gồm các controller nhỏ (source, kustomize, helm, notification), cấu hình hoàn toàn bằng CRD và Git, ít UI sẵn. Hợp đội thích mô hình thuần khai báo, tích hợp tốt với SOPS.\n- Cả hai đều là dự án tốt nghiệp (graduated) của CNCF, đều phát hiện **drift** (ai đó sửa tay) và tự đồng bộ lại nếu bạn bật.\n\n### Luồng chung\n1. CI build image, đẩy lên registry, rồi cập nhật tag trong repo cấu hình (hoặc dùng tự động cập nhật image).\n2. Argo CD/Flux thấy commit mới, so sánh với cluster, áp dụng phần khác biệt.\n3. Muốn rollback: `git revert`.\n\nChọn một công cụ để học sâu trước; khái niệm (repo cấu hình, sync, drift, prune) chuyển sang công cụ kia rất dễ."
+ },
+ "GitOps & Service Mesh › Istio / Linkerd / Envoy / Consul": {
+  "body": "Service mesh là lớp hạ tầng xử lý giao tiếp giữa các dịch vụ (east-west traffic) để ứng dụng không phải tự viết: retry, timeout, mã hoá mTLS, chia traffic theo tỉ lệ, đo đạc.\n\n### Bốn cái tên\n- **Istio**: đầy đủ tính năng nhất, dùng Envoy làm proxy; phức tạp nhất.\n- **Linkerd**: nhẹ và đơn giản, dùng proxy Rust riêng; hợp đội muốn có mTLS và quan sát nhanh.\n- **Envoy**: không phải mesh trọn gói mà là *proxy L7* — nền (data plane) cho Istio, Consul và nhiều gateway.\n- **Consul**: vốn là service discovery của HashiCorp, có thêm service mesh và chạy được cả ngoài Kubernetes (VM).\n\n### Kiến trúc chung\n**Data plane** (proxy cạnh mỗi workload, hoặc proxy theo node) chuyển traffic; **control plane** phát cấu hình và chứng chỉ cho các proxy.\n\n### Khi nào KHÔNG nên dùng\nMesh thêm độ trễ, tài nguyên và nhất là độ phức tạp vận hành. Với vài dịch vụ, mTLS có thể đạt bằng cách khác và retry/timeout nằm trong thư viện client. Chỉ lên mesh khi bạn có nhiều dịch vụ, nhiều team và các yêu cầu bắt buộc về mã hoá/kiểm soát/quan sát đồng nhất."
+ },
+ "GitOps & Service Mesh › GitOps": {
+  "body": "GitOps là cách vận hành hạ tầng và ứng dụng sao cho **Git là nguồn sự thật duy nhất** về trạng thái mong muốn của hệ thống. Muốn thay đổi production? Mở pull request. Muốn biết ai đổi gì, khi nào? Đọc lịch sử Git. Muốn quay lui? `git revert`.\n\n### Bốn nguyên tắc (OpenGitOps)\n1. **Declarative**: mô tả trạng thái mong muốn, không phải kịch bản các bước.\n2. **Versioned and immutable**: trạng thái lưu trong hệ thống có lịch sử bất biến (Git).\n3. **Pulled automatically**: một tác nhân phần mềm *kéo* trạng thái từ nguồn.\n4. **Continuously reconciled**: tác nhân liên tục so sánh thực tế với mong muốn và sửa lệch (drift).\n\n### Push và Pull\nCI/CD truyền thống *đẩy* thay đổi vào cluster (pipeline giữ credential cluster). GitOps kiểu pull để một agent trong cluster (Argo CD, Flux) tự kéo — credential không rời cluster, và drift được tự sửa.\n\n### Cách tổ chức repo\nThường tách *repo mã nguồn ứng dụng* và *repo cấu hình* (manifest/Helm values/Kustomize overlay theo môi trường). CI cập nhật tag image trong repo cấu hình; thăng cấp dev → staging → prod là các commit/PR.\n\n### Lỗi hay gặp\nĐể secret thô trong Git (dùng SOPS/Sealed Secrets/External Secrets); vẫn `kubectl edit` tay trên production làm drift; gộp mọi môi trường vào một nhánh mà không có quy trình duyệt.\n\n### Tự kiểm tra\n1. Vì sao mô hình pull an toàn hơn push về mặt credential?\n2. Chuyện gì xảy ra khi ai đó sửa tay Deployment trong cluster?"
+ },
+ "GitOps & Service Mesh › ArgoCD": {
+  "body": "Argo CD là công cụ GitOps declarative cho Kubernetes. Bạn khai báo một `Application` trỏ tới thư mục trong Git (YAML thuần, Helm hoặc Kustomize) và cluster đích; Argo CD theo dõi và đồng bộ.\n\n```yaml\napiVersion: argoproj.io/v1alpha1\nkind: Application\nmetadata: { name: web, namespace: argocd }\nspec:\n  project: default\n  source:\n    repoURL: https://github.com/acme/deploy-config\n    targetRevision: main\n    path: apps/web/overlays/prod\n  destination:\n    server: https://kubernetes.default.svc\n    namespace: web\n  syncPolicy:\n    automated: { prune: true, selfHeal: true }\n    syncOptions: [CreateNamespace=true]\n```\n\n### Ý chính\n- **Trạng thái**: *Sync* (Synced/OutOfSync) so Git với cluster; *Health* (Healthy/Progressing/Degraded) cho biết tài nguyên có chạy tốt không.\n- **prune**: xoá tài nguyên đã bị gỡ khỏi Git. **selfHeal**: tự sửa khi ai đó chỉnh tay trong cluster.\n- **AppProject** giới hạn repo, namespace, cluster mà một team được phép triển khai.\n- **ApplicationSet** sinh nhiều Application từ một mẫu (nhiều môi trường, nhiều cluster).\n- **Sync waves / hooks** để điều khiển thứ tự (ví dụ chạy migration trước khi cập nhật app).\n- Có UI, CLI `argocd` và tích hợp SSO.\n\n### Lỗi hay gặp\n- Bật `automated` + `prune` khi chưa hiểu: xoá nhầm tài nguyên quan trọng.\n- Secret thô trong repo; hãy kết hợp công cụ quản lý secret.\n- Trường do controller khác thay đổi (ví dụ `replicas` do HPA) gây OutOfSync vĩnh viễn: dùng `ignoreDifferences`.\n\n### Tự kiểm tra\n1. Synced và Healthy khác nhau thế nào?\n2. `selfHeal` giải quyết vấn đề gì?",
+  "more": [
+   {
+    "type": "official",
+    "title": "Argo CD — tài liệu chính thức",
+    "url": "https://argo-cd.readthedocs.io/en/stable/"
+   }
+  ]
+ },
+ "GitOps & Service Mesh › FluxCD": {
+  "body": "Flux là bộ công cụ GitOps của CNCF chạy trong cluster, tự đối soát trạng thái cluster với Git. Thiết kế theo kiểu modular: mỗi nhiệm vụ một controller.\n\n### Thành phần\n- **Source controller**: theo dõi `GitRepository`, `OCIRepository`, `HelmRepository`, `Bucket` và tải nội dung về.\n- **Kustomize controller**: áp dụng `Kustomization` (thư mục YAML/Kustomize) lên cluster, có `prune` và `healthChecks`.\n- **Helm controller**: quản lý `HelmRelease`.\n- **Notification controller**: gửi sự kiện (Slack…) và nhận webhook; **Image automation** có thể tự cập nhật tag trong Git.\n\n```bash\nflux bootstrap github --owner=acme --repository=fleet --path=clusters/prod --personal\n```\nLệnh này cài Flux vào cluster và cam kết chính cấu hình của Flux vào Git, nên Flux quản lý cả bản thân nó.\n\n```yaml\napiVersion: kustomize.toolkit.fluxcd.io/v1\nkind: Kustomization\nmetadata: { name: apps, namespace: flux-system }\nspec:\n  interval: 5m\n  path: ./apps/prod\n  prune: true\n  sourceRef: { kind: GitRepository, name: fleet }\n```\n\n### Điểm mạnh\nGiải mã SOPS tích hợp sẵn, mô hình đa-tenant rõ ràng, nhẹ. Không có UI chính thức đầy đủ như Argo CD (có dự án bên ngoài). Nếu ưu tiên giao diện trực quan, Argo CD thường dễ tiếp cận hơn."
+ },
+ "GitOps & Service Mesh › Service Mesh": {
+  "body": "Trong hệ microservices, mỗi dịch vụ phải làm những việc giống nhau khi gọi nhau qua mạng: thử lại khi lỗi, đặt timeout, mã hoá, xác thực dịch vụ, ghi metric/trace. Viết ở từng ngôn ngữ, từng dịch vụ thì lặp lại và dễ lệch. **Service mesh** đẩy các việc đó xuống hạ tầng.\n\n### Kiến trúc\n- **Data plane**: proxy (thường là sidecar cạnh mỗi pod, hoặc proxy theo node ở chế độ không sidecar) chặn toàn bộ traffic vào/ra của workload.\n- **Control plane**: cấp chứng chỉ, phát cấu hình định tuyến/chính sách cho proxy.\n\n### Mesh cho bạn gì\n- **Bảo mật**: mTLS tự động giữa các dịch vụ, chính sách \"dịch vụ A được gọi dịch vụ B\".\n- **Quản lý traffic**: chia tỉ lệ (canary 90/10), retry, timeout, circuit breaking, fault injection.\n- **Quan sát**: metric \"vàng\" (request rate, lỗi, độ trễ) và trace không cần sửa mã (trừ việc truyền header trace).\n\n### Cái giá\nThêm độ trễ nhỏ mỗi hop, tốn CPU/RAM cho proxy, thêm một hệ thống phức tạp phải nâng cấp và gỡ lỗi. Mesh không thay thế được thiết kế tốt: retry tràn lan có thể làm sự cố tệ hơn (retry storm).\n\n### Tự kiểm tra\n1. Khác biệt data plane và control plane?\n2. Khi nào một mesh là quá tay?"
+ },
+ "GitOps & Service Mesh › Istio": {
+  "body": "Istio là service mesh phổ biến nhất. Control plane (`istiod`) cấu hình các proxy **Envoy** và cấp chứng chỉ; workload được mesh gắn proxy sidecar, hoặc dùng **ambient mode** (không sidecar: proxy cấp node cho L4 và tuỳ chọn proxy riêng cho L7).\n\n### Đối tượng cấu hình chính\n- **Gateway**: cửa vào/ra của mesh. **VirtualService**: luật định tuyến (theo path/header, chia tỉ lệ, retry, timeout). **DestinationRule**: chính sách cho đích (subset phiên bản, load balancing, circuit breaker).\n- **PeerAuthentication**: bắt buộc mTLS (`STRICT`). **AuthorizationPolicy**: ai được gọi ai.\n- Kubernetes Gateway API cũng được Istio hỗ trợ ngày càng nhiều.\n\n```yaml\napiVersion: networking.istio.io/v1\nkind: VirtualService\nmetadata: { name: web }\nspec:\n  hosts: [web]\n  http:\n    - route:\n        - destination: { host: web, subset: v1 }\n          weight: 90\n        - destination: { host: web, subset: v2 }\n          weight: 10\n```\n(Cần `DestinationRule` định nghĩa subset v1/v2 theo label; phiên bản API cũ hơn dùng `networking.istio.io/v1beta1`.)\n\n### Quan sát\nIstio phát metric cho Prometheus, trace cho Jaeger/OTel, và Kiali vẽ đồ thị phụ thuộc giữa các dịch vụ.\n\n### Lỗi hay gặp\nBật `STRICT` mTLS khi vẫn còn workload chưa vào mesh làm đứt kết nối; cấu hình VirtualService/DestinationRule chồng chéo; quên tài nguyên tăng thêm của sidecar khi tính dung lượng node.\n\n### Tự kiểm tra\n1. VirtualService và DestinationRule chia việc thế nào?\n2. Ambient mode thay đổi điều gì so với sidecar?",
+  "more": [
+   {
+    "type": "official",
+    "title": "Istio — What is Istio?",
+    "url": "https://istio.io/latest/docs/concepts/what-is-istio/"
+   }
+  ]
+ },
+ "GitOps & Service Mesh › Consul": {
+  "body": "Consul (HashiCorp) khởi đầu là công cụ **service discovery** và health checking, sau đó thêm key-value store và **service mesh** (Consul Connect). Điểm riêng của nó là chạy tốt cả trên Kubernetes lẫn máy ảo/bare metal, và liên kết nhiều datacenter.\n\n### Ý chính\n- **Service catalog + DNS/HTTP API**: dịch vụ đăng ký, client tìm bằng tên (`web.service.consul`); health check loại các instance hỏng khỏi kết quả.\n- **Service mesh**: sidecar Envoy cạnh dịch vụ, mTLS tự động, **intentions** khai báo \"A được/không được gọi B\" (cấu hình theo ý định thay vì theo IP).\n- **Mô hình agent**: server Consul giữ trạng thái (đồng thuận Raft), mỗi node chạy agent client.\n- **Multi-datacenter / cluster peering**, **API gateway** cho traffic từ ngoài vào.\n\n### Khi nào chọn\nHạ tầng hỗn hợp (VM + Kubernetes), hoặc đã dùng hệ sinh thái HashiCorp (Vault, Nomad, Terraform). Nếu chỉ chạy thuần Kubernetes, Istio/Linkerd thường là lựa chọn đầu tiên."
+ },
+ "GitOps & Service Mesh › Linkerd": {
+  "body": "Linkerd là service mesh CNCF graduated, thiết kế để **đơn giản và nhẹ**. Điểm khác biệt: không dùng Envoy mà có micro-proxy riêng viết bằng Rust (`linkerd2-proxy`), tập trung vào ít tính năng nhưng chạy ổn định, dùng ít tài nguyên và độ trễ thấp.\n\n### Đặc điểm\n- **mTLS tự động** cho TCP giữa các pod được inject ngay khi vào mesh, không phải cấu hình thêm.\n- **Quan sát có sẵn**: golden metrics (tỉ lệ thành công, RPS, độ trễ) theo từng dịch vụ.\n- Có retry, timeout, chia traffic (traffic split / HTTPRoute), policy cơ bản.\n\n```bash\nlinkerd check --pre\nlinkerd install --crds | kubectl apply -f -\nlinkerd install | kubectl apply -f -\nlinkerd check\nkubectl get deploy web -o yaml | linkerd inject - | kubectl apply -f -\n```\n\n### Lưu ý\nÍt tính năng hơn Istio (ví dụ ít điều khiển L7 phức tạp, chỉ hợp Kubernetes). Hãy đọc kỹ chính sách phát hành và giấy phép của các bản stable hiện hành (nhà phát triển Buoyant có thay đổi cách phân phối) trước khi dùng cho công ty."
+ },
+ "GitOps & Service Mesh › Envoy": {
+  "body": "Envoy là proxy L7/L4 hiệu năng cao (viết bằng C++, ra đời tại Lyft, nay là dự án CNCF graduated). Nó là **data plane** của Istio, Consul Connect, AWS App Mesh và nhiều API gateway (Contour, Emissary, Envoy Gateway). Hiểu Envoy giúp bạn gỡ lỗi mesh vì mọi thứ cuối cùng đều thành cấu hình Envoy.\n\n### Mô hình cấu hình\n- **Listener**: cổng lắng nghe. Trên mỗi listener có **filter chain** (ví dụ `http_connection_manager`).\n- **Route**: khớp request theo host/path/header rồi gửi tới một **cluster**.\n- **Cluster**: nhóm upstream với thuật toán cân bằng tải, health check, circuit breaker.\n- **Endpoint**: các địa chỉ cụ thể trong cluster.\n\n### xDS: cấu hình động\nThay vì sửa file rồi reload, control plane đẩy cấu hình qua các API gọi chung là **xDS** (LDS, RDS, CDS, EDS…), nên đổi route hay thêm endpoint không làm rớt kết nối.\n\n### Công cụ gỡ lỗi\n- Admin interface (thường cổng 9901): `/stats`, `/clusters`, `/config_dump`.\n- Access log, và với Istio có `istioctl proxy-config` để xem listener/route/cluster của một sidecar.\n\n### Lỗi hay gặp\nNhầm giữa \"route không khớp\" (404 từ Envoy) và \"upstream lỗi\" (503 với cờ như `UF`, `UH`, `NR` trong access log): cờ phản hồi là manh mối quan trọng nhất."
+ },
+ "Application Monitoring › OpenTelemetry": {
+  "body": "OpenTelemetry (OTel) là chuẩn mở, trung lập nhà cung cấp, để **tạo và thu thập telemetry**: trace, metric và log. Bạn đo đạc ứng dụng một lần theo chuẩn OTel, rồi xuất dữ liệu tới bất kỳ backend nào (Jaeger, Prometheus, Grafana, Datadog, New Relic…) mà không phải viết lại mã.\n\n### Các mảnh ghép\n- **API** (giao diện để mã gọi) và **SDK** (cài đặt: lấy mẫu, xử lý, xuất) theo từng ngôn ngữ.\n- **Instrumentation**: tự động (thư viện bọc HTTP, DB client, framework) hoặc thủ công (tự tạo span cho đoạn nghiệp vụ).\n- **OTLP**: giao thức chuẩn gửi dữ liệu (gRPC cổng 4317, HTTP cổng 4318).\n- **Collector**: dịch vụ độc lập nhận–xử lý–xuất dữ liệu, gồm *receivers → processors → exporters*. Cho phép thêm lọc/lấy mẫu/gắn nhãn tập trung.\n- **Semantic conventions**: quy ước tên thuộc tính (`http.request.method`, `service.name`…) để mọi công cụ hiểu cùng một nghĩa.\n- **Context propagation** (W3C `traceparent`) giúp trace xuyên qua nhiều dịch vụ.\n\n```js\n// tracing.js — chạy bằng: node --require ./tracing.js app.js\nconst { NodeSDK } = require('@opentelemetry/sdk-node');\nconst { getNodeAutoInstrumentations } = require('@opentelemetry/auto-instrumentations-node');\nconst { OTLPTraceExporter } = require('@opentelemetry/exporter-trace-otlp-http');\n\nnew NodeSDK({\n  serviceName: 'api',\n  traceExporter: new OTLPTraceExporter({ url: 'http://localhost:4318/v1/traces' }),\n  instrumentations: [getNodeAutoInstrumentations()],\n}).start();\n```\n```yaml\n# otel-collector.yaml (rút gọn)\nreceivers: { otlp: { protocols: { grpc: {}, http: {} } } }\nprocessors: { batch: {} }\nexporters: { otlp: { endpoint: jaeger:4317, tls: { insecure: true } } }\nservice:\n  pipelines:\n    traces: { receivers: [otlp], processors: [batch], exporters: [otlp] }\n```\n\n### Lỗi hay gặp\n- Quên đặt `service.name`, nên mọi dịch vụ lẫn thành \"unknown_service\".\n- Gửi 100% trace ở production mà không lấy mẫu: tốn chi phí lưu trữ.\n- Gắn dữ liệu cá nhân (email, token) vào thuộc tính span.\n- Instrumentation khởi động *sau* khi thư viện đã được import nên không bắt được gì (phải nạp trước).\n\n### Tự kiểm tra\n1. Collector giải quyết vấn đề gì so với gửi thẳng từ ứng dụng tới backend?\n2. Trace context được truyền giữa hai dịch vụ bằng cách nào?",
+  "lessons": [
+   {
+    "href": "/courses/observability-monitoring/learn?lessonSlug=obs-6-1-span-la-gi",
+    "ten": "6.1 — Một span là một khoảng thời gian có cha",
+    "nguon": "Observability & Monitoring (Node.js trên VPS) · Chương 6",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/observability-monitoring/learn?lessonSlug=obs-6-2-otel-trong-node",
+    "ten": "6.2 — OpenTelemetry trong Node, và việc tự-đo-đạc thật ra làm gì",
+    "nguon": "Observability & Monitoring (Node.js trên VPS) · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-15-5-opentelemetry-trace",
+    "ten": "15.5 — Trace: thời gian thật sự đi đâu",
+    "nguon": "Node.js · Chương 15",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Application Monitoring › Jaeger / New Relic / Datadog APM": {
+  "body": "Khi một request đi qua nhiều dịch vụ, log và metric riêng lẻ không cho bạn biết nó chậm ở đâu. **Distributed tracing** ghi lại hành trình đó thành một cây các *span* (mỗi span là một đoạn công việc có thời gian bắt đầu/kết thúc), gom chung bằng một *trace ID*.\n\n### Ba hướng chọn\n- **Jaeger**: mã nguồn mở (CNCF), tự host, chuyên về trace; nhận dữ liệu OTLP.\n- **New Relic / Datadog APM**: nền tảng thương mại (SaaS) gom trace cùng metric, log, cảnh báo, và gợi ý nguyên nhân; trả phí theo dung lượng/host nhưng đỡ vận hành.\n- Còn có Grafana Tempo, Zipkin, Honeycomb…\n\n### Đọc trace thế nào\nNhìn biểu đồ thác (waterfall): span cha dài mà span con ngắn nghĩa là thời gian mất ở chính dịch vụ cha; các span con tuần tự trong khi có thể song song là cơ hội tối ưu; một loạt span giống hệt nhau lặp lại thường là lỗi N+1 query.\n\n### Nên làm\nĐo đạc bằng OpenTelemetry để không bị khoá vào một nhà cung cấp, rồi chọn backend phù hợp ngân sách. Dùng lấy mẫu (sampling) để giảm chi phí.",
+  "lessons": [
+   {
+    "href": "/courses/observability-monitoring/learn?lessonSlug=obs-6-1-span-la-gi",
+    "ten": "6.1 — Một span là một khoảng thời gian có cha",
+    "nguon": "Observability & Monitoring (Node.js trên VPS) · Chương 6",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/observability-monitoring/learn?lessonSlug=obs-6-4-doc-bieu-do-thac",
+    "ten": "6.4 — Đọc biểu đồ thác: năm hình dạng",
+    "nguon": "Observability & Monitoring (Node.js trên VPS) · Chương 6",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Application Monitoring › Grafana Loki": {
+  "body": "Grafana Loki là hệ thống lưu log \"như Prometheus nhưng cho log\". Điểm khác biệt cốt lõi: Loki chỉ **đánh chỉ mục nhãn** (label) của luồng log, không đánh chỉ mục toàn văn nội dung. Nhờ vậy chi phí lưu trữ và vận hành thấp hơn nhiều so với ELK/OpenSearch, đổi lại tìm kiếm văn bản phải quét dữ liệu (nhanh nếu lọc nhãn trước).\n\n### Cách dùng\n- Agent thu log (Promtail đang được thay dần bằng **Grafana Alloy**, hoặc OTel Collector) gắn nhãn như `app`, `namespace`, `pod` rồi đẩy lên Loki.\n- Truy vấn bằng **LogQL**: chọn luồng bằng nhãn, rồi lọc/phân tích nội dung.\n\n```logql\n{app=\"api\", env=\"prod\"} |= \"error\" | json | level=\"error\"\nsum by (app) (rate({env=\"prod\"} |= \"error\" [5m]))\n```\nDòng trên: lấy log của `api` có chữ \"error\", parse JSON, lọc `level`. Dòng dưới: tốc độ dòng lỗi mỗi 5 phút theo ứng dụng — biến log thành metric để cảnh báo.\n\n### Lỗi hay gặp\n- **Nhãn có độ phân tán cao** (user_id, request_id làm nhãn) sinh ra hàng triệu luồng, làm Loki chậm và đắt. Giữ nhãn ít và ổn định; thông tin chi tiết để trong nội dung dòng log.\n- Log không có cấu trúc, khó lọc: ghi log JSON.\n- Không đặt thời gian lưu giữ (retention) nên dung lượng tăng mãi.",
+  "lessons": [
+   {
+    "href": "/courses/observability-monitoring/learn?lessonSlug=obs-2-3-trinh-thu-log",
+    "ten": "2.3 — Trình thu log: đưa log rời khỏi cái máy",
+    "nguon": "Observability & Monitoring (Node.js trên VPS) · Chương 2",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/observability-monitoring/learn?lessonSlug=obs-2-4-logql",
+    "ten": "2.4 — LogQL: hỏi một câu và nhận được câu trả lời",
+    "nguon": "Observability & Monitoring (Node.js trên VPS) · Chương 2",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/observability-monitoring/learn?lessonSlug=obs-2-5-luu-tru",
+    "ten": "2.5 — Giữ bao lâu, và cái đó tốn bao nhiêu",
+    "nguon": "Observability & Monitoring (Node.js trên VPS) · Chương 2",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Application Monitoring › Observability (Tính quan sát được)": {
+  "body": "Observability (tính quan sát được) là khả năng **hiểu trạng thái bên trong hệ thống chỉ từ những tín hiệu nó phát ra bên ngoài** — đủ để trả lời cả những câu hỏi bạn chưa nghĩ tới từ trước. Monitoring cổ điển trả lời \"có hỏng không?\" bằng các ngưỡng đặt sẵn; observability giúp trả lời \"*vì sao* nó hỏng, với ai, ở đâu?\".\n\n### Ba trụ cột tín hiệu\n- **Log**: sự kiện rời rạc, chi tiết nhất, tốn dung lượng. Nên ghi dạng có cấu trúc (JSON) kèm `request_id`.\n- **Metric**: con số tổng hợp theo thời gian (số request, độ trễ, mức dùng CPU), rẻ, tốt để cảnh báo và xem xu hướng.\n- **Trace**: hành trình của một request qua nhiều dịch vụ, cho biết thời gian mất ở đâu.\nĐiều quan trọng là **liên kết** ba thứ: từ cảnh báo metric nhảy sang trace chậm, từ trace tới log của đúng request đó.\n\n### Khung tư duy hữu ích\n- **Bốn tín hiệu vàng** (Google SRE): latency, traffic, errors, saturation.\n- **RED** cho dịch vụ (Rate, Errors, Duration) và **USE** cho tài nguyên (Utilization, Saturation, Errors).\n- **SLO** (mục tiêu mức dịch vụ) và **error budget**: biến \"đủ tốt\" thành con số để quyết định cảnh báo và nhịp phát hành.\n\n### Bộ công cụ thường gặp\nOpenTelemetry (thu thập) → Prometheus (metric) + Loki (log) + Tempo/Jaeger (trace) → Grafana (hiển thị) + Alertmanager (cảnh báo); hoặc nền tảng thương mại Datadog, New Relic, Dynatrace.\n\n### Lỗi hay gặp\n- Thu thập mọi thứ mà không có câu hỏi cần trả lời, hoá đơn lưu trữ phình to.\n- Cảnh báo theo nguyên nhân (CPU > 80%) thay vì theo triệu chứng người dùng thấy (lỗi, chậm), gây \"báo động giả\" và mệt mỏi.\n- Metric dùng nhãn có độ phân tán cực cao làm sập hệ thống theo dõi.\n- Không có `request_id` xuyên suốt nên không nối được log giữa các dịch vụ.\n\n### Tự kiểm tra\n1. Monitoring và observability khác nhau ở điểm nào?\n2. Với sự cố \"trang thanh toán chậm\", bạn bắt đầu từ tín hiệu nào và đi tiếp ra sao?",
+  "lessons": [
+   {
+    "href": "/courses/observability-monitoring/learn?lessonSlug=obs-0-1-vi-sao",
+    "ten": "0.1 — Cú sự cố bạn không nhìn thấy từ bên trong",
+    "nguon": "Observability & Monitoring (Node.js trên VPS) · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/observability-monitoring/learn?lessonSlug=obs-0-2-ba-tru-cot",
+    "ten": "0.2 — Ba trụ cột, và cái thứ tư ai cũng quên",
+    "nguon": "Observability & Monitoring (Node.js trên VPS) · Mục 0",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-15-1-log-co-cau-truc",
+    "ten": "15.1 — Ba trụ cột, và điểm dừng của console.log",
+    "nguon": "Node.js · Chương 15",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/code-lab/observability-monitoring",
+    "ten": "Observability & Monitoring",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Application Monitoring › Jaeger": {
+  "body": "Jaeger là công cụ distributed tracing mã nguồn mở của CNCF (khởi nguồn từ Uber). Nó thu, lưu và hiển thị trace để bạn thấy một request đi qua những dịch vụ nào, mất bao lâu ở mỗi bước.\n\n### Khái niệm\n- **Trace**: toàn bộ hành trình một request. **Span**: một đoạn công việc có tên, thời gian, thuộc tính (tag) và quan hệ cha–con.\n- Thành phần: collector nhận dữ liệu, kho lưu trữ (Elasticsearch/OpenSearch, Cassandra, Badger hoặc bộ nhớ trong cho thử nghiệm), query service + UI. Jaeger v2 được xây trên nền OpenTelemetry Collector và nhận dữ liệu **OTLP** trực tiếp.\n- UI: tìm theo dịch vụ/operation/tag/độ dài, xem biểu đồ thác của từng trace, so sánh hai trace, xem đồ thị phụ thuộc dịch vụ.\n\n```bash\n# chạy thử trên máy (nên ghim phiên bản cụ thể khi dùng thật)\ndocker run --rm -p 16686:16686 -p 4317:4317 -p 4318:4318 jaegertracing/jaeger\n# mở http://localhost:16686, trỏ OTLP exporter của ứng dụng tới localhost:4318\n```\n\n### Lấy mẫu (sampling)\nLưu 100% trace thì rất tốn. Có lấy mẫu theo đầu (head-based, quyết định ngay từ đầu request) hoặc theo đuôi (tail-based, giữ trace lỗi/chậm — cần Collector).\n\n### Lỗi hay gặp\nTrace bị đứt giữa chừng vì một dịch vụ không truyền header `traceparent`; để backend lưu in-memory ở production nên mất dữ liệu khi restart; nhầm giữa \"span lâu\" (tự làm chậm) và \"đang chờ downstream\".",
+  "lessons": [
+   {
+    "href": "/courses/observability-monitoring/learn?lessonSlug=obs-6-1-span-la-gi",
+    "ten": "6.1 — Một span là một khoảng thời gian có cha",
+    "nguon": "Observability & Monitoring (Node.js trên VPS) · Chương 6",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/observability-monitoring/learn?lessonSlug=obs-6-4-doc-bieu-do-thac",
+    "ten": "6.4 — Đọc biểu đồ thác: năm hình dạng",
+    "nguon": "Observability & Monitoring (Node.js trên VPS) · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/observability-monitoring/learn?lessonSlug=obs-6-5-khi-nao-khong-dang",
+    "ten": "6.5 — Khi nào trace không đáng",
+    "nguon": "Observability & Monitoring (Node.js trên VPS) · Chương 6",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Application Monitoring › New Relic": {
+  "body": "New Relic là nền tảng observability/APM thương mại dạng SaaS: gom metric, log, trace, lỗi và trải nghiệm người dùng vào một chỗ, với hỗ trợ ngôn ngữ sâu qua các **agent** cài vào ứng dụng.\n\n### Điểm chính\n- **APM**: agent tự đo thời gian từng transaction, lệnh gọi DB, lời gọi ngoài; hiển thị giao dịch chậm nhất và lỗi.\n- **Distributed tracing** xuyên dịch vụ; **Logs in context** nối log với trace/transaction tương ứng.\n- **NRQL**: ngôn ngữ truy vấn giống SQL cho dữ liệu telemetry, dùng để vẽ dashboard và cảnh báo.\n- Nhận dữ liệu **OpenTelemetry (OTLP)**, nên có thể đo đạc bằng OTel và vẫn dùng New Relic làm backend.\n\n```sql\nSELECT percentile(duration, 95) FROM Transaction\nWHERE appName = 'api' FACET name SINCE 1 hour ago\n```\n\n### Đánh đổi\nĐỡ vận hành so với tự dựng Prometheus/Loki/Jaeger, trải nghiệm tích hợp tốt. Đổi lại chi phí theo dung lượng dữ liệu/người dùng, và nếu dùng agent riêng của nhà cung cấp thì khó chuyển đi. Đo đạc bằng OTel giúp giảm rủi ro này."
+ },
+ "Application Monitoring › Prometheus": {
+  "body": "Prometheus là hệ thống giám sát và cảnh báo mã nguồn mở (CNCF graduated), lưu **metric dạng chuỗi thời gian**. Điểm đặc trưng là mô hình **pull**: Prometheus định kỳ gọi `GET /metrics` của từng đích để lấy số liệu.\n\n### Khái niệm\n- **Metric + nhãn**: `http_requests_total{method=\"GET\", status=\"500\"}` — mỗi tổ hợp nhãn là một chuỗi thời gian riêng.\n- Bốn loại: **counter** (chỉ tăng), **gauge** (lên xuống), **histogram** và **summary** (phân bố, ví dụ độ trễ).\n- **Exporter**: chương trình xuất metric cho hệ thống không có sẵn (node_exporter cho máy, postgres_exporter…). **Service discovery** (đặc biệt Kubernetes) tự tìm đích để scrape.\n- **PromQL**: ngôn ngữ truy vấn. **Alertmanager**: gom nhóm, loại trùng và gửi cảnh báo (Slack, email, PagerDuty). **Pushgateway** chỉ dành cho job ngắn hạn.\n\n```yaml\n# prometheus.yml\nglobal: { scrape_interval: 15s }\nscrape_configs:\n  - job_name: api\n    static_configs: [{ targets: ['api:3000'] }]\n```\n```promql\n# số request/giây, 5 phút gần nhất\nsum by (status) (rate(http_requests_total[5m]))\n\n# độ trễ p95 từ histogram\nhistogram_quantile(0.95, sum by (le) (rate(http_request_duration_seconds_bucket[5m])))\n```\n\n### Lỗi hay gặp\n- Dùng `rate()` sai chỗ hoặc nhìn thẳng giá trị counter (chỉ tăng nên vô nghĩa nếu không lấy tốc độ).\n- **Nhãn có độ phân tán cao** (user_id, URL đầy đủ) làm bộ nhớ nổ.\n- Lưu dài hạn: Prometheus cục bộ không dành cho lưu nhiều tháng; dùng remote write sang Thanos, Mimir hoặc VictoriaMetrics.\n- Cảnh báo theo ngưỡng tức thời gây nhiễu; dùng `for:` để yêu cầu điều kiện kéo dài.\n\n### Tự kiểm tra\n1. Vì sao dùng `rate()` với counter?\n2. Ưu và nhược của mô hình pull so với push?",
+  "lessons": [
+   {
+    "href": "/courses/observability-monitoring/learn?lessonSlug=obs-4-1-bon-loai-chi-so",
+    "ten": "4.1 — Chỉ số là gì, và bốn loại của nó",
+    "nguon": "Observability & Monitoring (Node.js trên VPS) · Chương 4",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/observability-monitoring/learn?lessonSlug=obs-4-3-histogram",
+    "ten": "4.3 — Histogram: một phân vị với giá 104 byte",
+    "nguon": "Observability & Monitoring (Node.js trên VPS) · Chương 4",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/observability-monitoring/learn?lessonSlug=obs-4-4-luc-luong-nhan",
+    "ten": "4.4 — Lực lượng nhãn: cách bạn tự làm sập hệ thống theo dõi của mình",
+    "nguon": "Observability & Monitoring (Node.js trên VPS) · Chương 4",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-15-4-metrics-prometheus",
+    "ten": "15.4 — Metric, và cái nhãn ngốn 939MB",
+    "nguon": "Node.js · Chương 15",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Application Monitoring › Dynatrace": {
+  "body": "Dynatrace là nền tảng observability cấp doanh nghiệp (SaaS hoặc tự quản), nổi bật ở tự động hoá: bạn cài một tác nhân và hệ thống tự khám phá, đo đạc và vẽ bản đồ phụ thuộc.\n\n### Thành phần đáng chú ý\n- **OneAgent**: cài trên host/node, tự phát hiện tiến trình, framework và đo đạc mà gần như không sửa mã.\n- **Smartscape**: bản đồ topology tự động giữa dịch vụ, tiến trình, host, cloud.\n- **PurePath**: trace phân tán chi tiết từng request.\n- **Davis AI**: công cụ AI phân tích nguyên nhân gốc, gom nhiều bất thường thành một \"vấn đề\" thay vì hàng chục cảnh báo rời rạc.\n- **Grail**: kho dữ liệu cho log, metric, trace, truy vấn bằng DQL. Cũng nhận dữ liệu OpenTelemetry.\n\n### Khi nào gặp\nDoanh nghiệp lớn với hàng trăm dịch vụ, muốn giảm công cấu hình thủ công. Đổi lại giá cao và mức phụ thuộc nhà cung cấp lớn; thường nằm ở vai \"công cụ công ty đã mua\" mà bạn học khi vào làm. Nắm chắc khái niệm chung (trace, metric, SLO) thì chuyển công cụ rất nhanh."
+ },
+ "Tiếp tục học › Cloud Design Patterns": {
+  "body": "Cloud design patterns là tập hợp các giải pháp thiết kế đã được kiểm chứng cho những bài toán lặp lại khi xây ứng dụng phân tán trên cloud: chịu lỗi, mở rộng, quản lý dữ liệu, vận hành. Danh mục nổi tiếng nhất là bộ trong Azure Architecture Center (áp dụng được cho mọi cloud).\n\n### Các nhóm chính\n- **Availability / Resiliency**: giữ hệ thống sống khi một phần hỏng (retry, circuit breaker, bulkhead, health endpoint).\n- **Data management**: lưu và đồng bộ dữ liệu phân tán (cache-aside, CQRS, event sourcing, sharding).\n- **Design & implementation**: cách tổ chức mã và dịch vụ (sidecar, strangler fig, anti-corruption layer, gateway).\n- **Management & monitoring**: vận hành, quan sát, cấu hình.\n\nBạn không cần thuộc cả danh mục. Hãy học cách đọc một pattern theo khung: *bài toán – giải pháp – khi nào dùng – đánh đổi*. Bốn mục con dưới đây tóm tắt từng nhóm."
+ },
+ "Tiếp tục học › Tiếp: Backend / System Design": {
+  "body": "DevOps giỏi cần hiểu cách ứng dụng được xây và hành xử, vì bạn đang quyết định hạ tầng cho nó: cần bao nhiêu bản sao, database nào chịu tải, cache đặt đâu, chỗ nào là điểm đơn lỗi.\n\n### Nên học tiếp\n- **Backend**: HTTP/API, xác thực, cơ sở dữ liệu, hàng đợi, caching, kết nối pool; cách ứng dụng đọc cấu hình và tắt êm (graceful shutdown) — những thứ quyết định liệu nó chạy ổn trên Kubernetes hay không.\n- **System design**: ước lượng tải, scale ngang/dọc, cân bằng tải, replication, phân vùng dữ liệu, chọn giữa nhất quán và sẵn sàng, đo bằng SLO.\n\n### Cách học\nLấy một ứng dụng nhỏ bạn đã triển khai, rồi tự hỏi: nếu lưu lượng tăng 10 lần thì điểm nào vỡ trước? Nếu node chết giữa giờ cao điểm thì sao? Trả lời bằng thiết kế, rồi thử phá nó để kiểm chứng.",
+  "lessons": [
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-8-4-kha-dung",
+    "ten": "8.5 — Tính sẵn sàng trong hợp đồng (1/2): SLO, ngân sách lỗi và bỏ bớt tải",
+    "nguon": "API & System Design · Chương 8",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/code-lab/api-design-practice",
+    "ten": "API & System Design — Luyện tập",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Tiếp tục học › Khám phá chuyên sâu": {
+  "body": "Sau phần nền DevOps, có vài hướng chuyên sâu phổ biến:\n\n- **SRE (Site Reliability Engineering)**: xem độ tin cậy là bài toán kỹ thuật. Khái niệm trọng tâm: SLI (chỉ số đo), SLO (mục tiêu), **error budget** (ngân sách lỗi cho phép), giảm toil (việc vận hành lặp đi lặp lại), postmortem không đổ lỗi, quản lý sự cố và on-call.\n- **Platform engineering**: xây *nền tảng nội bộ* (Internal Developer Platform) để dev tự phục vụ: tạo môi trường, deploy, xem log chỉ bằng vài cú nhấp, theo \"golden path\" đã được chuẩn hoá. Sản phẩm là nền tảng, khách hàng là các dev trong công ty.\n- **DevSecOps / bảo mật chuỗi cung ứng**: quét lỗ hổng, ký artifact, SBOM, policy-as-code.\n- **FinOps**: kiểm soát chi phí cloud.\n\nChọn hướng gần với công việc của bạn nhất. Dù hướng nào, nền tảng vẫn là Linux, mạng, container, IaC, CI/CD và quan sát hệ thống.",
+  "lessons": [
+   {
+    "href": "/courses/observability-monitoring/learn?lessonSlug=obs-9-3-slo-va-toc-do-dot",
+    "ten": "9.3 — SLO, ngân sách lỗi, tốc độ đốt",
+    "nguon": "Observability & Monitoring (Node.js trên VPS) · Chương 9",
+    "kieu": "bai-doc"
+   }
+  ],
+  "more": [
+   {
+    "type": "article",
+    "title": "Site Reliability Engineering (Google SRE Book)",
+    "url": "https://sre.google/sre-book/table-of-contents/"
+   }
+  ]
+ },
+ "Tiếp tục học › Tiếp tục học": {
+  "body": "DevOps thay đổi nhanh, nên kỹ năng quan trọng nhất là cách học, không phải thuộc một bộ công cụ.\n\n### Gợi ý lộ trình tiếp theo\n- **Infrastructure as Code** nâng cao: module, quản lý state, kiểm thử hạ tầng (Terraform/OpenTofu, Pulumi).\n- **Platform engineering và Internal Developer Platform**: Backstage, golden path, self-service.\n- **Policy as code** (OPA, Kyverno) và bảo mật chuỗi cung ứng (SBOM, cosign).\n- **Chaos engineering** và game day: chủ động phá để kiểm tra khả năng chịu lỗi.\n- Chứng chỉ có giá trị thực hành: CKA/CKAD (Kubernetes), AWS/Azure/GCP associate.\n\n### Thói quen nên có\nTự dựng một dự án thật (VPS, CI/CD, giám sát, sao lưu), ghi lại bằng tài liệu; đọc postmortem công khai của các công ty; theo dõi release note của công cụ bạn dùng hằng ngày. Một dự án chạy ổn định nhiều tháng dạy bạn nhiều hơn mười khoá lý thuyết."
+ },
+ "Tiếp tục học › Cloud Design Patterns — Availability": {
+  "body": "Nhóm mẫu **Availability** giúp hệ thống tiếp tục phục vụ khi một thành phần hỏng. Ý tưởng nền tảng: giả định mọi thứ đều có thể hỏng, nên phải có dự phòng và đường lùi.\n\n### Ý chính\n- **Redundancy**: nhiều bản của mỗi thành phần, trải qua nhiều node/zone/vùng.\n- **Failover**: chuyển sang bản dự phòng. **Active-passive**: bản phụ chờ sẵn, tiếp quản khi bản chính chết (đơn giản, tốn tài nguyên chờ). **Active-active**: cả hai cùng phục vụ (tận dụng tốt, nhưng đồng bộ dữ liệu phức tạp hơn).\n- **Health endpoint monitoring**: load balancer kiểm tra sức khoẻ và ngừng gửi traffic tới bản hỏng.\n- **Suy giảm có chủ đích** (graceful degradation), **throttling**, **queue-based load leveling** để chịu tải đột biến.\n- Đo bằng **SLO**: ví dụ 99,9%/tháng nghĩa là được phép chết tối đa khoảng 43 phút. **RTO** (thời gian khôi phục tối đa) và **RPO** (lượng dữ liệu mất tối đa) quyết định mức đầu tư.\n\n### Lỗi hay gặp\nCó bản dự phòng nhưng chưa bao giờ thử failover; hai bản \"dự phòng\" cùng nằm trong một zone/cùng phụ thuộc một database nên vẫn là một điểm đơn lỗi.",
+  "lessons": [
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-8-4-suy-giam",
+    "ten": "8.6 — Tính sẵn sàng trong hợp đồng (2/2): suy giảm có chủ đích, readiness, và client biết đọc luật",
+    "nguon": "API & System Design · Chương 8",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-8-4-kha-dung",
+    "ten": "8.5 — Tính sẵn sàng trong hợp đồng (1/2): SLO, ngân sách lỗi và bỏ bớt tải",
+    "nguon": "API & System Design · Chương 8",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Tiếp tục học › Cloud Design Patterns — Data Management": {
+  "body": "Nhóm mẫu **Data management** xử lý dữ liệu khi nó bị phân tán qua nhiều dịch vụ và nhiều máy, nơi giao dịch ACID một database không còn bao trùm hết.\n\n### Ý chính\n- **Cache-aside**: đọc cache trước, trượt thì đọc DB rồi nạp lại; cần chiến lược vô hiệu hoá.\n- **Replication**: nhiều bản sao để chịu lỗi và tăng đọc; đánh đổi là độ trễ sao chép (đọc có thể thấy dữ liệu cũ).\n- **Sharding**: chia dữ liệu theo khoá sang nhiều node để mở rộng ghi.\n- **CQRS**: tách mô hình ghi (command) và đọc (query) để mỗi bên tối ưu riêng.\n- **Event sourcing**: lưu chuỗi sự kiện thay đổi thay vì chỉ trạng thái cuối; dựng lại trạng thái bằng cách phát lại.\n- **Saga**: giao dịch kéo dài qua nhiều dịch vụ, gồm chuỗi bước cục bộ kèm *hành động bù trừ* nếu một bước hỏng (thay cho giao dịch phân tán).\n- **Materialized view**: kết quả truy vấn tính sẵn.\n\n### Lưu ý\nCQRS, event sourcing, saga làm hệ thống phức tạp hơn nhiều; chỉ dùng khi có áp lực thật. Hãy hiểu tính nhất quán cuối cùng (eventual consistency) và đảm bảo thao tác idempotent trước khi dùng."
+ },
+ "Tiếp tục học › Cloud Design Patterns — Design and Implementation": {
+  "body": "Nhóm mẫu **Design & implementation** nói về cách tổ chức ứng dụng và dịch vụ để dễ vận hành, dễ thay đổi trên cloud.\n\n### Ý chính\n- **Twelve-factor app**: 12 nguyên tắc cho ứng dụng cloud-native, ví dụ cấu hình lấy từ môi trường, log ra stdout, tiến trình stateless, dev/prod giống nhau, build–release–run tách biệt.\n- **Strangler fig**: thay dần hệ thống cũ bằng hệ thống mới từng phần qua lớp định tuyến, thay vì viết lại một lần.\n- **Anti-corruption layer**: lớp dịch giữa hệ thống mới và hệ thống cũ để mô hình cũ không \"ô nhiễm\" thiết kế mới.\n- **Sidecar**: tiến trình phụ chạy cạnh ứng dụng (proxy, thu log, mTLS) — nền của service mesh. **Ambassador**: sidecar đóng vai proxy thay mặt ứng dụng gọi ra ngoài.\n- **API gateway / Backends for Frontends**: một cửa vào (hoặc một cửa mỗi loại client) để gom, xác thực và định tuyến.\n\n### Lưu ý\nMẫu là công cụ tư duy, không phải mục tiêu: tách vi dịch vụ hay thêm sidecar khi chưa cần chỉ làm tăng độ phức tạp.",
+  "more": [
+   {
+    "type": "article",
+    "title": "The Twelve-Factor App",
+    "url": "https://12factor.net/"
+   }
+  ]
+ },
+ "Tiếp tục học › Cloud Design Patterns — Management and Monitoring": {
+  "body": "Nhóm mẫu **Management & monitoring** giúp hệ thống tự phát hiện, tự bảo vệ và dễ vận hành khi chạy thật.\n\n### Ý chính\n- **Health endpoint monitoring**: dịch vụ lộ ra `/healthz` (còn sống) và `/readyz` (sẵn sàng nhận traffic) để orchestrator và load balancer quyết định restart hay tạm ngưng gửi request. Đừng gộp hai thứ: kiểm tra phụ thuộc nặng trong liveness có thể gây restart hàng loạt khi database chậm.\n- **Autoscaling**: tự tăng giảm số bản sao theo CPU, độ dài hàng đợi hoặc metric tuỳ chỉnh; cần đặt giới hạn trên/dưới và thời gian hạ nhiệt.\n- **Circuit breaker**: ngừng gọi tạm thời một dịch vụ đang lỗi để nó phục hồi và để lỗi không lan, cùng **retry với exponential backoff + jitter** và timeout.\n- **External configuration store**: cấu hình tách khỏi mã, thay đổi không cần build lại.\n- **Tooling approach**: công cụ giám sát, logging, tracing nhất quán trên mọi dịch vụ (xem OpenTelemetry).\n\n### Lỗi hay gặp\nRetry không giới hạn gây retry storm; liveness probe gọi cả database; autoscale không có trần làm hoá đơn phình khi bị tấn công.",
+  "lessons": [
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-15-6-health-check-canh-bao",
+    "ten": "15.6 — Health check, cảnh báo, và chuyện bị gọi dậy lúc 3 giờ sáng",
+    "nguon": "Node.js · Chương 15",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-12-7-trien-khai",
+    "ten": "12.7 — Checklist triển khai: cấu hình, readiness, tắt êm, log, sao lưu, smoke test",
+    "nguon": "API & System Design · Chương 12",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Tiếp tục học › Tiếp theo: Backend / System Design": {
+  "body": "Đi từ DevOps sang backend hoặc system design là bước tự nhiên: bạn đã biết cách chạy phần mềm, giờ hiểu cách *thiết kế* nó để chạy tốt ở quy mô lớn.\n\n### Hướng học\n- **Backend**: thiết kế API, xác thực/phân quyền, mô hình dữ liệu và tối ưu truy vấn, hàng đợi và xử lý nền, caching, kiểm thử.\n- **System design**: từ yêu cầu → ước lượng tải → kiến trúc (load balancer, cache, database, queue, CDN) → điểm nghẽn → đánh đổi (nhất quán, sẵn sàng, chi phí).\n\n### Cách vận dụng kinh nghiệm DevOps\nBạn có lợi thế thật: hiểu giới hạn của hạ tầng (mạng, đĩa, tài nguyên), chi phí và vận hành. Khi thiết kế, luôn hỏi: sẽ triển khai thế nào, theo dõi ra sao, hỏng thì sao, rollback thế nào? Tập trả lời các câu hỏi thiết kế bằng sơ đồ và con số ước lượng, vì phỏng vấn system design chấm chính khả năng này.",
+  "lessons": [
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-11-4-dat-lich",
+    "ten": "11.6 — Phỏng vấn: thiết kế API cho hệ thống đặt lịch",
+    "nguon": "API & System Design · Chương 11",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-12-7-trien-khai",
+    "ten": "12.7 — Checklist triển khai: cấu hình, readiness, tắt êm, log, sao lưu, smoke test",
+    "nguon": "API & System Design · Chương 12",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Tiếp tục học › Khám phá chuyên sâu DevOps": {
+  "body": "DevOps rộng và đổi mới liên tục; không ai biết hết. Thay vì cố học mọi công cụ, hãy xây thói quen cập nhật có chọn lọc.\n\n### Nguồn nên theo dõi\n- **CNCF Landscape**: bản đồ hệ sinh thái cloud-native. Dùng để biết một loại công cụ có những lựa chọn nào, đừng tìm cách học hết.\n- Blog kỹ thuật và release note của các cloud vendor và dự án bạn dùng.\n- Báo cáo thường niên về DevOps (như DORA/State of DevOps) cho các chỉ số hiệu quả: tần suất deploy, thời gian từ commit đến production, tỉ lệ thay đổi gây lỗi, thời gian khôi phục.\n- Postmortem công khai của các công ty: cách tốt nhất để học xem hệ thống thật hỏng ra sao.\n- Cộng đồng, meetup, hội nghị (KubeCon, SREcon).\n\n### Cách học hiệu quả\nChọn một vấn đề cụ thể rồi thử công cụ để giải nó, thay vì đọc giới thiệu. Ghi lại những gì bạn học được thành bài viết hoặc repo mẫu: dạy lại là cách nhớ lâu nhất, và cũng là hồ sơ năng lực khi xin việc."
+ },
+ "Tiếp tục học › Phương pháp tiếp cận công cụ mới": {
+  "body": "Mỗi khi gặp một công cụ mới, đừng bắt đầu bằng việc đọc hết tài liệu. Hãy xác định **mục tiêu học** trước, vì nó quyết định mức độ cần đầu tư.\n\n### Ba mức mục tiêu\n1. **Biết nó là gì**: đọc trang giới thiệu, hiểu nó giải bài toán nào, so với lựa chọn thay thế ra sao. Đủ để tham gia cuộc trò chuyện và đưa ra lựa chọn sơ bộ.\n2. **Dùng được**: làm theo hướng dẫn \"getting started\", dựng thử trên máy (Docker, kind, tài khoản dùng thử), chạy được một tình huống thật nhỏ.\n3. **Vận hành được**: đọc tài liệu chính thức sâu, hiểu kiến trúc, cấu hình bảo mật, cách nâng cấp, sao lưu, theo dõi và xử lý sự cố.\n\n### Quy trình gợi ý\n- Hỏi: nó giải quyết vấn đề gì mà công cụ tôi đang dùng chưa giải quyết?\n- Tìm tài liệu chính thức và ví dụ \"hello world\" chạy được.\n- Làm một dự án nhỏ có đầu ra rõ ràng, rồi cố làm nó hỏng để xem cách gỡ lỗi.\n- Ghi chú lại các đánh đổi, không chỉ lệnh.\nChỉ đào sâu tới mức vận hành khi công việc thực sự cần; ngược lại mức 1–2 là đủ."
  }
 }

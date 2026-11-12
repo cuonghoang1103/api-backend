@@ -928,14 +928,6 @@
     "ten": "1.3 — PostgreSQL vs MySQL, SQLite & NoSQL",
     "nguon": "PostgreSQL · Chương 1",
     "kieu": "video"
-   },
-   {
-    "href": "/courses/edb201-database-application/learn?lessonSlug=edb201-ts-6-3",
-    "ten": "6.3 — Giao dịch trong SQLite",
-    "nguon": "Database Application · Chương 6",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "EDB201"
    }
   ]
  },
@@ -1297,14 +1289,6 @@
  "Cơ sở dữ liệu quan hệ › ORMs chi tiết": {
   "body": "ORM làm nhiều việc ngầm; hiểu chúng giúp bạn tránh những lỗi hiệu năng khó thấy.\n\n### Ý chính\n- **Ánh xạ**: kiểu *Active Record* (đối tượng tự lưu mình: Rails, Django) so với *Data Mapper* (tách đối tượng và lớp lưu trữ: Hibernate, SQLAlchemy). Quan hệ một-nhiều và nhiều-nhiều ánh xạ thành tham chiếu/danh sách.\n- **Lazy vs eager loading**: *lazy* chỉ nạp quan hệ khi truy cập, dễ sinh **N+1** (1 truy vấn lấy danh sách + N truy vấn lấy quan hệ). *Eager* nạp trước bằng `JOIN` hoặc truy vấn gộp (`include`, `JOIN FETCH`, `selectinload`).\n- **Unit of Work**: ORM theo dõi các đối tượng bạn đã đổi trong một phiên, rồi khi `flush/commit` mới sinh các câu `INSERT/UPDATE/DELETE` theo đúng thứ tự trong **một giao dịch**; cùng với *identity map* bảo đảm một dòng chỉ có một đối tượng trong phiên.\n- **Query builder**: mức giữa SQL thô và ORM, ghép truy vấn bằng code.\n\n```python\n# SQLAlchemy: tránh N+1 bằng eager loading\nusers = session.scalars(select(User).options(selectinload(User.orders))).all()\n```\n\n### Lỗi hay gặp\n- Lặp qua `user.orders` trong vòng lặp mà không eager load.\n- Tải cả thực thể chỉ để đếm hoặc lấy một cột; dùng truy vấn tổng hợp/`select` cột cần thiết.\n- Phiên (session) sống quá lâu, giữ khoá và dữ liệu cũ.",
   "lessons": [
-   {
-    "href": "/courses/edb201-database-application/learn?lessonSlug=edb201-ts-9-3",
-    "ten": "9.3 — ORM và query builder",
-    "nguon": "Database Application · Chương 9",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "EDB201"
-   },
    {
     "href": "/courses/prisma-orm/learn?lessonSlug=pr-4-2-select-include",
     "ten": "4.2 — `select`, `include`, và nắn hình kết quả",
@@ -1786,22 +1770,6 @@
   "body": "Function calling (hay tool use) cho phép mô hình \"nhờ\" chương trình của bạn làm việc. Mô hình không tự chạy được code: nó chỉ trả về một yêu cầu kiểu \"hãy gọi hàm `getWeather` với `city = Hà Nội`\". Backend chạy hàm thật, gửi kết quả lại, và mô hình dùng kết quả đó để soạn câu trả lời cuối.\n\n### Vì sao cần biết\nĐây là cách cho AI chạm vào dữ liệu và hành động thật: tra đơn hàng, đặt lịch, truy vấn cơ sở dữ liệu. Nó là nền của các trợ lý và agent.\n\n### Ý chính\n- Bạn khai báo danh sách **tool**: tên, mô tả và schema tham số (JSON Schema). Mô tả viết rõ vì đó là cách mô hình biết khi nào nên dùng tool.\n- Vòng lặp: gửi hỏi, mô hình đề xuất gọi tool, backend chạy tool, gửi kết quả lại, mô hình trả lời cuối (hoặc đề xuất thêm một tool nữa).\n- **Backend quyết định chạy gì.** Kiểm tra tên tool có nằm trong danh sách cho phép, validate tham số, và kiểm quyền của chính người dùng đang hỏi.\n- Mặc định cho quyền tối thiểu: tool chỉ đọc là an toàn nhất; tool ghi hoặc xoá cần xác nhận của người dùng.\n- Đặt giới hạn số vòng lặp để tránh mô hình gọi tool mãi.\n\n```js\nconst tools = [{\n  type: 'function',\n  function: {\n    name: 'get_order',\n    description: 'Tra cứu đơn hàng của người dùng hiện tại theo mã đơn',\n    parameters: {\n      type: 'object',\n      properties: { orderId: { type: 'string' } },\n      required: ['orderId'],\n    },\n  },\n}];\n```\nCú pháp khai báo hơi khác giữa các nhà cung cấp, nhưng ý tưởng giống nhau.\n\n### Lỗi hay gặp\n- Để mô hình tự điền `userId` thay vì lấy từ phiên đăng nhập: người dùng có thể dẫn dụ để đọc dữ liệu người khác.\n- Cho tool chạy câu SQL tuỳ ý do mô hình viết ra.\n- Quên trả lỗi của tool về cho mô hình nên nó bịa kết quả.\n\n### Tự kiểm tra\n1. Ai thực sự chạy hàm: mô hình hay backend?\n2. Vì sao `userId` phải lấy từ phiên chứ không từ tham số mô hình đưa?",
   "lessons": [
    {
-    "href": "/courses/gai401-generative-ai/learn?lessonSlug=gai401-ts-6-3",
-    "ten": "6.3 — Prompt hệ thống, đầu ra có cấu trúc và gọi công cụ",
-    "nguon": "Generative AI · Chương 6",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "GAI401"
-   },
-   {
-    "href": "/courses/gai401-generative-ai/learn?lessonSlug=gai401-ts-7-3",
-    "ten": "7.3 — Tác tử LLM và dùng công cụ",
-    "nguon": "Generative AI · Chương 7",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "GAI401"
-   },
-   {
     "href": "/courses/java-web-application-development/learn?lessonSlug=prj301-ai-servlet",
     "ten": "10.2 — Gọi LLM từ một Servlet",
     "nguon": "Java Web Application Development · Chương 10",
@@ -1848,36 +1816,12 @@
     "ten": "13.3 — Thất bại: thử lại, backoff, và cú trừ tiền chạy ba lần",
     "nguon": "Node.js · Chương 13",
     "kieu": "bai-doc"
-   },
-   {
-    "href": "/courses/mlo401-machine-learning-operations/learn?lessonSlug=mlo401-ts-8-4",
-    "ten": "8.4 — LLMOps: vận hành ứng dụng LLM",
-    "nguon": "Machine learning operations · Chương 8",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "MLO401"
    }
   ]
  },
  "API › Retrieval-Augmented Generation (RAG)": {
   "body": "RAG (Retrieval-Augmented Generation) là cách cho mô hình ngôn ngữ trả lời dựa trên tài liệu riêng của bạn mà không cần huấn luyện lại. Trước khi hỏi mô hình, hệ thống **tìm** các đoạn tài liệu liên quan nhất, rồi **đưa chúng vào prompt** cùng câu hỏi. Giống như cho học sinh mang theo tài liệu vào phòng thi: em không cần thuộc lòng, chỉ cần tra đúng trang rồi trả lời.\n\n### Vì sao cần biết\nMô hình không biết dữ liệu nội bộ của bạn và có thể bịa khi không biết. RAG cho câu trả lời bám sát tài liệu, có thể trích dẫn nguồn, và cập nhật chỉ bằng cách thêm tài liệu mới.\n\n### Ý chính\n- **Hai giai đoạn**. Lập chỉ mục (chạy trước): chia tài liệu thành đoạn (chunk), biến mỗi đoạn thành vector bằng mô hình embedding, lưu vào kho vector. Truy vấn (lúc người dùng hỏi): embed câu hỏi, tìm các đoạn gần nhất, ghép vào prompt, gọi LLM.\n- **Embedding** là một dãy số biểu diễn ý nghĩa của văn bản; hai đoạn gần nghĩa thì vector gần nhau, thường đo bằng cosine similarity.\n- **Kho vector**: pgvector (extension của PostgreSQL) là lựa chọn gọn khi bạn đã dùng Postgres; có các chỉ mục như HNSW và IVFFlat để tìm gần đúng nhanh.\n- **Chia đoạn** là quyết định chất lượng quan trọng: quá nhỏ mất ngữ cảnh, quá lớn loãng ý. Thường chia theo cấu trúc tài liệu, có chồng lấn nhẹ giữa các đoạn.\n- **Prompt** nên yêu cầu mô hình chỉ trả lời từ ngữ cảnh được cho và nói \"không biết\" khi thiếu.\n- Lọc theo quyền: chỉ truy hồi tài liệu mà người hỏi được phép đọc.\n\n```sql\n-- pgvector: lấy 5 đoạn gần câu hỏi nhất\nSELECT id, content\nFROM chunks\nORDER BY embedding <=> $1   -- $1 là vector của câu hỏi\nLIMIT 5;\n```\n\n### Lỗi hay gặp\n- Truy hồi ra đoạn không liên quan rồi mô hình vẫn \"tự tin\" trả lời: cần ngưỡng điểm và cho phép trả lời \"không có thông tin\".\n- Đổi mô hình embedding mà không nhúng lại toàn bộ dữ liệu cũ: vector cũ và mới không so sánh được.\n- Tài liệu chứa chỉ dẫn độc hại (prompt injection gián tiếp) được đưa thẳng vào prompt.\n\n### Tự kiểm tra\n1. Vì sao RAG thường tốt hơn việc nhét cả kho tài liệu vào prompt?\n2. Hai giai đoạn của RAG chạy vào những thời điểm nào?\n3. Điều gì xảy ra nếu đổi mô hình embedding giữa chừng?",
   "lessons": [
-   {
-    "href": "/courses/gai401-generative-ai/learn?lessonSlug=gai401-ts-7-2",
-    "ten": "7.2 — Quy trình RAG",
-    "nguon": "Generative AI · Chương 7",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "GAI401"
-   },
-   {
-    "href": "/courses/gai401-generative-ai/learn?lessonSlug=gai401-ts-7-1",
-    "ten": "7.1 — Embedding văn bản và tìm kiếm vector",
-    "nguon": "Generative AI · Chương 7",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "GAI401"
-   },
    {
     "href": "/courses/ai-study-assistant/learn?lessonSlug=int609-schema",
     "ten": "1.2 — Schema pgvector & index vector",
@@ -2671,14 +2615,6 @@
   "body": "OWASP Top 10 là danh sách mười nhóm rủi ro bảo mật ứng dụng web phổ biến và nghiêm trọng nhất, do cộng đồng OWASP tổng hợp từ dữ liệu thật và cập nhật định kỳ. Đây là bản kiểm tra tối thiểu cho mọi backend dev: nếu bạn tránh được các lỗi này thì đã chặn được phần lớn tấn công thực tế.\n\n### Vì sao cần biết\nHầu hết các vụ lộ dữ liệu đến từ những lỗi quen thuộc này chứ không phải từ kỹ thuật tinh vi. Danh sách cũng là ngôn ngữ chung khi trao đổi về bảo mật với nhóm và khách hàng.\n\n### Các nhóm chính (bản 2021, nên đối chiếu bản mới nhất)\n- **Broken Access Control** (kiểm quyền hỏng): người dùng làm được việc ngoài quyền, như đọc dữ liệu người khác bằng cách đổi ID (IDOR/BOLA).\n- **Cryptographic Failures**: dữ liệu nhạy cảm không mã hoá, băm mật khẩu yếu, dùng HTTP thay HTTPS.\n- **Injection**: SQL, NoSQL, lệnh hệ thống, XSS; phòng bằng truy vấn tham số hoá và encode đầu ra.\n- **Insecure Design**: thiếu thiết kế bảo mật ngay từ đầu.\n- **Security Misconfiguration**: cấu hình mặc định, bật debug, lộ trang quản trị.\n- **Vulnerable and Outdated Components**: thư viện cũ có lỗ hổng đã biết.\n- **Identification and Authentication Failures**: đăng nhập yếu, không giới hạn thử sai, phiên không an toàn.\n- **Software and Data Integrity Failures**, **Security Logging and Monitoring Failures**, **SSRF**.\n\n### Về server\nBảo mật không chỉ là code ứng dụng: cập nhật hệ điều hành, đóng cổng không cần, dùng SSH bằng khoá, chạy dịch vụ bằng người dùng ít quyền, giấu bí mật khỏi git, và có sao lưu đã thử khôi phục.\n\n### Lỗi hay gặp\n- Chỉ kiểm quyền ở giao diện (ẩn nút) mà không kiểm ở API.\n- Dựa vào kiểm tra đầu vào ở frontend.\n- Ghi log chứa mật khẩu, token hay số thẻ.",
   "lessons": [
    {
-    "href": "/courses/maw301-modern-web-application-security/learn?lessonSlug=maw301-ts-1-2",
-    "ten": "1.2 — Tổng quan OWASP Top 10",
-    "nguon": "Modern Web Application Security · Chương 1",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "MAW301"
-   },
-   {
     "href": "/courses/api-design/learn?lessonSlug=api-6-3-owasp-api",
     "ten": "6.3 — OWASP API Security Top 10 (2023) trên LabFlow, thành bộ kiểm tự động",
     "nguon": "API & System Design · Chương 6",
@@ -2790,14 +2726,6 @@
     "ten": "9.1 — Đường biên: header bảo mật, CSP và CORS",
     "nguon": "Node.js · Chương 9",
     "kieu": "bai-doc"
-   },
-   {
-    "href": "/courses/maw301-modern-web-application-security/learn?lessonSlug=maw301-ts-3-2",
-    "ten": "3.2 — Content Security Policy và header bảo mật",
-    "nguon": "Modern Web Application Security · Chương 3",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "MAW301"
    },
    {
     "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-7-4-header-quan-trong",
@@ -2936,14 +2864,6 @@
  "Bảo mật Web › OWASP Risks": {
   "body": "OWASP Top 10 liệt kê các nhóm rủi ro phổ biến nhất. Dưới đây là cách hiểu từng nhóm bằng ví dụ cụ thể và biện pháp chính, để bạn dùng nó làm danh mục kiểm tra khi review.\n\n### Ý chính\n- **Broken Access Control**: đổi `/orders/42` thành `/orders/43` mà xem được đơn của người khác. Cách chặn: kiểm quyền theo từng đối tượng ở server, mặc định từ chối.\n- **Cryptographic Failures**: mật khẩu băm bằng MD5, dữ liệu nhạy cảm gửi qua HTTP. Cách chặn: HTTPS, Argon2/bcrypt, mã hoá dữ liệu nhạy cảm khi lưu, quản lý khoá đúng cách.\n- **Injection**: chuỗi người dùng đi vào SQL, lệnh hệ thống, HTML. Cách chặn: tham số hoá, encode đầu ra, kiểm đầu vào theo danh sách cho phép.\n- **Insecure Design**: thiếu giới hạn tần suất ở chức năng đặt lại mật khẩu. Cách chặn: mô hình hoá mối đe doạ ngay lúc thiết kế.\n- **Security Misconfiguration**: để chế độ debug, tài khoản mặc định, S3 công khai. Cách chặn: cấu hình tối thiểu, kiểm tự động.\n- **Vulnerable Components**: dùng thư viện có lỗ hổng đã công bố. Cách chặn: `npm audit`, Dependabot, cập nhật đều.\n- **Authentication Failures**: cho thử mật khẩu vô hạn. Cách chặn: giới hạn tần suất, MFA, phiên an toàn.\n- **Integrity Failures**: cập nhật phần mềm không kiểm chữ ký, pipeline CI bị chiếm. Cách chặn: ghim phiên bản, kiểm chữ ký, bảo vệ CI.\n- **Logging and Monitoring Failures**: không ai biết mình đang bị tấn công. Cách chặn: log sự kiện bảo mật và đặt cảnh báo.\n- **SSRF**: server bị lừa gọi tới địa chỉ nội bộ (ví dụ dịch vụ metadata của đám mây). Cách chặn: danh sách cho phép địa chỉ đích, chặn dải IP nội bộ.\n\nOWASP còn có **API Security Top 10** riêng, nơi BOLA (kiểm quyền cấp đối tượng) đứng đầu.\n\n### Cách dùng trong công việc\nBiến danh sách thành test tự động: ví dụ một bài test gọi endpoint bằng token của người A để lấy dữ liệu của người B và khẳng định phải trả 403 hoặc 404.",
   "lessons": [
-   {
-    "href": "/courses/maw301-modern-web-application-security/learn?lessonSlug=maw301-ts-1-2",
-    "ten": "1.2 — Tổng quan OWASP Top 10",
-    "nguon": "Modern Web Application Security · Chương 1",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "MAW301"
-   },
    {
     "href": "/courses/api-design/learn?lessonSlug=api-6-3-owasp-api",
     "ten": "6.3 — OWASP API Security Top 10 (2023) trên LabFlow, thành bộ kiểm tự động",
@@ -3596,17 +3516,7 @@
   ]
  },
  "Mở rộng Database (Scaling) › CAP Theorem": {
-  "body": "Định lý CAP phát biểu rằng một kho dữ liệu phân tán không thể đồng thời đảm bảo cả ba: **Consistency** (mọi lần đọc thấy ghi mới nhất, tức nhất quán tuyến tính), **Availability** (mọi yêu cầu tới nút còn sống đều được trả lời) và **Partition tolerance** (hệ thống vẫn chạy khi mạng giữa các nút bị đứt). Vì phân vùng mạng là điều không thể tránh trong hệ phân tán thật, câu hỏi thực tế là: *khi mạng bị chia cắt, bạn hy sinh C hay A?*\n\n### Ý chính\n- **CP**: khi bị phân vùng, nút ở phía thiểu số từ chối phục vụ để không trả dữ liệu cũ (ví dụ hệ dùng đồng thuận như etcd, ZooKeeper).\n- **AP**: vẫn trả lời nhưng có thể là dữ liệu cũ, rồi hợp nhất sau (kiểu Dynamo, Cassandra ở cấu hình mặc định).\n- Cách nói \"chọn 2 trong 3\" dễ gây hiểu lầm: bạn không \"bỏ\" P được, và khi mạng bình thường bạn có thể có cả C lẫn A.\n- **PACELC** mở rộng CAP: khi *không* có phân vùng, vẫn phải đánh đổi giữa độ trễ (Latency) và nhất quán (Consistency).\n- \"C\" trong CAP **không** phải chữ C trong ACID; đó là tính tuyến tính (linearizability).\n\n### Lỗi hay gặp\n- Gắn nhãn cứng \"MongoDB là CP, Cassandra là AP\" mà quên rằng hành vi phụ thuộc cấu hình (mức quorum, write concern…).\n- Coi CAP là lý do để bỏ nhất quán trong mọi trường hợp; thực ra nhiều hệ chỉ cần nhất quán yếu ở một vài thao tác.\n\n### Tự kiểm tra\n1. Giữa hai trung tâm dữ liệu bị đứt cáp, hệ CP và hệ AP ứng xử khác nhau thế nào?\n2. Vì sao PACELC mô tả thực tế hằng ngày tốt hơn CAP?",
-  "lessons": [
-   {
-    "href": "/courses/idb201-introduction-to-databases/learn?lessonSlug=idb201-ts-10-1",
-    "ten": "Các họ NoSQL và định lý CAP",
-    "nguon": "Introduction to Databases · Chương 10",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "IDB201"
-   }
-  ]
+  "body": "Định lý CAP phát biểu rằng một kho dữ liệu phân tán không thể đồng thời đảm bảo cả ba: **Consistency** (mọi lần đọc thấy ghi mới nhất, tức nhất quán tuyến tính), **Availability** (mọi yêu cầu tới nút còn sống đều được trả lời) và **Partition tolerance** (hệ thống vẫn chạy khi mạng giữa các nút bị đứt). Vì phân vùng mạng là điều không thể tránh trong hệ phân tán thật, câu hỏi thực tế là: *khi mạng bị chia cắt, bạn hy sinh C hay A?*\n\n### Ý chính\n- **CP**: khi bị phân vùng, nút ở phía thiểu số từ chối phục vụ để không trả dữ liệu cũ (ví dụ hệ dùng đồng thuận như etcd, ZooKeeper).\n- **AP**: vẫn trả lời nhưng có thể là dữ liệu cũ, rồi hợp nhất sau (kiểu Dynamo, Cassandra ở cấu hình mặc định).\n- Cách nói \"chọn 2 trong 3\" dễ gây hiểu lầm: bạn không \"bỏ\" P được, và khi mạng bình thường bạn có thể có cả C lẫn A.\n- **PACELC** mở rộng CAP: khi *không* có phân vùng, vẫn phải đánh đổi giữa độ trễ (Latency) và nhất quán (Consistency).\n- \"C\" trong CAP **không** phải chữ C trong ACID; đó là tính tuyến tính (linearizability).\n\n### Lỗi hay gặp\n- Gắn nhãn cứng \"MongoDB là CP, Cassandra là AP\" mà quên rằng hành vi phụ thuộc cấu hình (mức quorum, write concern…).\n- Coi CAP là lý do để bỏ nhất quán trong mọi trường hợp; thực ra nhiều hệ chỉ cần nhất quán yếu ở một vài thao tác.\n\n### Tự kiểm tra\n1. Giữa hai trung tâm dữ liệu bị đứt cáp, hệ CP và hệ AP ứng xử khác nhau thế nào?\n2. Vì sao PACELC mô tả thực tế hằng ngày tốt hơn CAP?"
  },
  "Mở rộng Database (Scaling) › Scaling Databases": {
   "body": "Khi cơ sở dữ liệu quá tải, có hai hướng mở rộng. **Vertical scaling** (scale up) là nâng cấp một máy: thêm CPU, RAM, đĩa nhanh. Dễ làm nhưng có trần giá và trần phần cứng, và vẫn là một điểm hỏng duy nhất. **Horizontal scaling** (scale out) là thêm nhiều máy: read replica, partitioning, sharding.\n\n### Thứ tự nên thử\n1. **Đo trước**: tìm truy vấn chậm, thêm index đúng chỗ, sửa N+1.\n2. **Cache** kết quả đọc nhiều (Redis, CDN) để giảm tải vào DB.\n3. **Connection pool** để không mở quá nhiều kết nối.\n4. **Read replica**: primary nhận ghi, các replica nhận đọc. Vì nhân bản thường bất đồng bộ nên replica có thể *trễ* (replication lag) — vừa ghi xong đọc ra dữ liệu cũ.\n5. **Partitioning** (chia một bảng thành nhiều phần *trong cùng một máy*) để truy vấn và bảo trì bảng khổng lồ dễ hơn.\n6. **Sharding** khi ghi hoặc dung lượng vượt khả năng một primary.\n\n### Ý chính\n- Replica mở rộng **đọc**, sharding mở rộng **ghi và dung lượng**.\n- Mỗi bước thêm độ phức tạp vận hành và rủi ro nhất quán; chỉ làm khi số đo cho thấy cần.\n- Ứng dụng phải chịu được \"đọc-sau-ghi\": ví dụ đọc từ primary ngay sau khi người dùng ghi.\n\n### Lỗi hay gặp\n- Thêm replica để chữa một truy vấn chậm vốn chỉ cần một index.\n- Quên rằng failover sang replica có thể mất những giao dịch chưa kịp nhân bản.\n\n### Tự kiểm tra\n1. Replica giúp ích khi nào và không giúp khi nào?\n2. Vì sao partitioning một bảng khác sharding?",
@@ -4299,14 +4209,6 @@
     "ten": "MongoDB",
     "nguon": "Code Lab · luyện có chấm",
     "kieu": "code-lab"
-   },
-   {
-    "href": "/courses/idb201-introduction-to-databases/learn?lessonSlug=idb201-ts-10-2",
-    "ten": "CSDL tài liệu với MongoDB",
-    "nguon": "Introduction to Databases · Chương 10",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "IDB201"
    }
   ]
  },
@@ -4324,29 +4226,11 @@
   ]
  },
  "NoSQL Database › Cassandra / CouchDB": {
-  "body": "**Apache Cassandra** là cơ sở dữ liệu **wide-column** phân tán, không có nút chủ (mọi nút ngang hàng), tối ưu cho **ghi cực nhanh** và khả năng sống sót khi nút hỏng. **Apache CouchDB** là document database có API HTTP/REST và **đồng bộ nhiều chiều (multi-master replication)**, hợp ứng dụng cần hoạt động offline rồi đồng bộ lại.\n\n### Ý chính\n- **Cassandra**: dữ liệu chia theo partition key bằng băm nhất quán; nhân bản đến N nút; mức nhất quán chỉnh được mỗi truy vấn (`ONE`, `QUORUM`, `ALL`) — thường dùng quorum (W + R > N) để đọc thấy ghi mới. Thiết kế bảng theo truy vấn; mô hình ghi theo log (LSM-tree) nên ghi rất nhanh.\n- **CouchDB**: mỗi document có phiên bản (`_rev`); khi sao chép hai chiều gặp xung đột thì giữ cả hai nhánh và chọn một bản thắng theo quy tắc xác định để ứng dụng có thể giải quyết.\n- Cả hai nghiêng về **tính sẵn sàng** và nhất quán cuối cùng (kiểu AP).\n\n### Lỗi hay gặp\n- Dùng Cassandra như SQL (cần JOIN, truy vấn tuỳ ý) — nó không hợp.\n- Chọn partition key khiến phân vùng quá lớn hoặc lệch.\n- Phớt lờ việc giải quyết xung đột ở CouchDB, để dữ liệu \"thắng\" ngẫu nhiên.\n\n### Tự kiểm tra\n1. Với 3 bản sao, vì sao đọc và ghi cùng mức QUORUM đảm bảo đọc thấy ghi mới?\n2. Xung đột ghi giữa hai thiết bị offline được xử lý thế nào ở CouchDB?",
-  "lessons": [
-   {
-    "href": "/courses/dmd301-data-modeling-and-databases/learn?lessonSlug=dmd301-ts-9-2",
-    "ten": "9.2 — CSDL khoá-giá trị, cột rộng và đồ thị",
-    "nguon": "Data Modeling and Databases · Chương 9",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "DMD301"
-   }
-  ]
+  "body": "**Apache Cassandra** là cơ sở dữ liệu **wide-column** phân tán, không có nút chủ (mọi nút ngang hàng), tối ưu cho **ghi cực nhanh** và khả năng sống sót khi nút hỏng. **Apache CouchDB** là document database có API HTTP/REST và **đồng bộ nhiều chiều (multi-master replication)**, hợp ứng dụng cần hoạt động offline rồi đồng bộ lại.\n\n### Ý chính\n- **Cassandra**: dữ liệu chia theo partition key bằng băm nhất quán; nhân bản đến N nút; mức nhất quán chỉnh được mỗi truy vấn (`ONE`, `QUORUM`, `ALL`) — thường dùng quorum (W + R > N) để đọc thấy ghi mới. Thiết kế bảng theo truy vấn; mô hình ghi theo log (LSM-tree) nên ghi rất nhanh.\n- **CouchDB**: mỗi document có phiên bản (`_rev`); khi sao chép hai chiều gặp xung đột thì giữ cả hai nhánh và chọn một bản thắng theo quy tắc xác định để ứng dụng có thể giải quyết.\n- Cả hai nghiêng về **tính sẵn sàng** và nhất quán cuối cùng (kiểu AP).\n\n### Lỗi hay gặp\n- Dùng Cassandra như SQL (cần JOIN, truy vấn tuỳ ý) — nó không hợp.\n- Chọn partition key khiến phân vùng quá lớn hoặc lệch.\n- Phớt lờ việc giải quyết xung đột ở CouchDB, để dữ liệu \"thắng\" ngẫu nhiên.\n\n### Tự kiểm tra\n1. Với 3 bản sao, vì sao đọc và ghi cùng mức QUORUM đảm bảo đọc thấy ghi mới?\n2. Xung đột ghi giữa hai thiết bị offline được xử lý thế nào ở CouchDB?"
  },
  "NoSQL Database › Neo4j (Graph DB)": {
   "body": "Neo4j là **graph database** (cơ sở dữ liệu đồ thị) lưu dữ liệu dưới dạng **nút** (node) và **quan hệ** (relationship) có hướng, cả hai có thể mang thuộc tính. Quan hệ là công dân hạng nhất, lưu sẵn thay vì tính lúc truy vấn.\n\n### Vì sao cần biết\nBài toán \"bạn của bạn của bạn\", gợi ý sản phẩm, phát hiện gian lận, đồ thị tri thức, định tuyến. Với SQL phải JOIN nhiều tầng và chậm dần; trong đồ thị, duyệt quan hệ gần như tốn chi phí theo số quan hệ thực sự đi qua chứ không theo kích thước toàn bộ dữ liệu.\n\n### Ý chính\n- Ngôn ngữ truy vấn **Cypher**, mô tả mẫu bằng \"hình vẽ ASCII\": `(a)-[:BAN_CUA]->(b)`.\n- **Label** phân loại nút (`:Nguoi`), **kiểu quan hệ** đặt tên cạnh (`:THEO_DOI`).\n- Hợp khi truy vấn xoay quanh *quan hệ nhiều bước*; không hợp khi chủ yếu là tổng hợp số liệu hàng loạt hoặc lưu dữ liệu dạng bảng phẳng.\n\n```cypher\n// Gợi ý: bạn của bạn mà chưa là bạn\nMATCH (me:Nguoi {ten:'An'})-[:BAN]->(:Nguoi)-[:BAN]->(goiY:Nguoi)\nWHERE NOT (me)-[:BAN]->(goiY) AND goiY <> me\nRETURN goiY.ten, count(*) AS banChung ORDER BY banChung DESC\n```\n\n### Lỗi hay gặp\n- Dùng đồ thị cho dữ liệu không có quan hệ sâu.\n- Tạo \"siêu nút\" có hàng triệu cạnh làm duyệt chậm.\n- Quên index trên thuộc tính dùng để tìm nút xuất phát.\n\n### Tự kiểm tra\nVì sao truy vấn \"bạn của bạn của bạn\" thường nhanh hơn trong đồ thị so với nhiều JOIN trong SQL?",
   "lessons": [
-   {
-    "href": "/courses/dmd301-data-modeling-and-databases/learn?lessonSlug=dmd301-ts-9-2",
-    "ten": "9.2 — CSDL khoá-giá trị, cột rộng và đồ thị",
-    "nguon": "Data Modeling and Databases · Chương 9",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "DMD301"
-   },
    {
     "href": "/courses/dbd301-advanced-database/learn?lessonSlug=dbd301-7-1-nosql-distributed",
     "ten": "7.1 — NoSQL & cơ sở dữ liệu phân tán",
@@ -4370,14 +4254,6 @@
     "kieu": "bai-doc",
     "academy": true,
     "ma": "DMD301"
-   },
-   {
-    "href": "/courses/idb201-introduction-to-databases/learn?lessonSlug=idb201-ts-10-1",
-    "ten": "Các họ NoSQL và định lý CAP",
-    "nguon": "Introduction to Databases · Chương 10",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "IDB201"
    },
    {
     "href": "/courses/dbd301-advanced-database/learn?lessonSlug=dbd301-7-1-nosql-distributed",
@@ -4436,17 +4312,7 @@
   "body": "Apache CouchDB là document database lưu JSON, truy cập hoàn toàn qua **API HTTP/REST** (dùng được ngay bằng `curl`). Điểm nổi bật là **sao chép nhiều chiều (multi-master replication)**: bất kỳ hai bản CouchDB nào cũng đồng bộ với nhau, kể cả khi đứt kết nối một thời gian.\n\n### Ý chính\n- Mỗi document có `_id` và `_rev` (mã phiên bản); cập nhật phải gửi đúng `_rev` hiện tại (khoá lạc quan).\n- Khi hai bản sửa cùng document trong lúc offline, replication phát hiện **xung đột**, giữ cả hai nhánh và chọn một bản làm \"thắng\" theo quy tắc xác định; ứng dụng có thể xử lý nhánh còn lại.\n- Truy vấn bằng **view** (MapReduce) hoặc Mango (truy vấn kiểu JSON).\n- Hợp ứng dụng **offline-first**: đồng bộ với PouchDB trong trình duyệt/di động.\n- Thuộc phía ưu tiên tính sẵn sàng và nhất quán cuối cùng.\n\n```bash\ncurl -X PUT http://localhost:5984/sach/s1 -d '{\"ten\":\"Dế Mèn phiêu lưu ký\"}'\n```\n\n### Lỗi hay gặp\n- Không xử lý xung đột nên dữ liệu \"thắng\" tuỳ ý.\n- Dùng CouchDB cho truy vấn phân tích phức tạp mà nó không sinh ra để làm.\n\n### Tự kiểm tra\nVì sao CouchDB hợp với ứng dụng cần hoạt động khi mất mạng?"
  },
  "NoSQL Database › Neo4j — Cơ sở dữ liệu đồ thị": {
-  "body": "Neo4j lưu dữ liệu theo **mô hình đồ thị thuộc tính** (property graph): **nút** (node) đại diện thực thể, **quan hệ** (relationship) có hướng và có kiểu nối hai nút, cả hai đều có thể mang thuộc tính. Nhờ quan hệ được lưu sẵn như con trỏ, duyệt đồ thị nhanh mà không cần JOIN.\n\n### Ý chính\n- Bài toán hợp: mạng xã hội, gợi ý, phát hiện gian lận (vòng tài khoản liên quan), đồ thị tri thức, quản lý quyền/cây tổ chức, định tuyến.\n- **Cypher** mô tả mẫu cần tìm; có thể truy vấn đường đi ngắn nhất, các nút trong N bước, thành phần liên thông.\n- **Thuật toán đồ thị** (PageRank, phát hiện cộng đồng, độ trung tâm) giúp phân tích cấu trúc mạng.\n- Mô hình hoá: nút cho \"danh từ\", quan hệ cho \"động từ\"; đặt tên quan hệ rõ nghĩa và có hướng hợp lý.\n\n```cypher\nMATCH p = shortestPath((a:Ga {ten:'Hà Nội'})-[:NOI*]-(b:Ga {ten:'Sài Gòn'}))\nRETURN [n IN nodes(p) | n.ten]\n```\n\n### Lỗi hay gặp\n- Biến thuộc tính thành nút không cần thiết (hoặc ngược lại) làm mô hình rối.\n- Truy vấn không giới hạn độ sâu (`*`) có thể bùng nổ.\n\n### Tự kiểm tra\nKhi nào nên biểu diễn một thứ là *nút*, khi nào là *thuộc tính* của nút?",
-  "lessons": [
-   {
-    "href": "/courses/dmd301-data-modeling-and-databases/learn?lessonSlug=dmd301-ts-9-2",
-    "ten": "9.2 — CSDL khoá-giá trị, cột rộng và đồ thị",
-    "nguon": "Data Modeling and Databases · Chương 9",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "DMD301"
-   }
-  ]
+  "body": "Neo4j lưu dữ liệu theo **mô hình đồ thị thuộc tính** (property graph): **nút** (node) đại diện thực thể, **quan hệ** (relationship) có hướng và có kiểu nối hai nút, cả hai đều có thể mang thuộc tính. Nhờ quan hệ được lưu sẵn như con trỏ, duyệt đồ thị nhanh mà không cần JOIN.\n\n### Ý chính\n- Bài toán hợp: mạng xã hội, gợi ý, phát hiện gian lận (vòng tài khoản liên quan), đồ thị tri thức, quản lý quyền/cây tổ chức, định tuyến.\n- **Cypher** mô tả mẫu cần tìm; có thể truy vấn đường đi ngắn nhất, các nút trong N bước, thành phần liên thông.\n- **Thuật toán đồ thị** (PageRank, phát hiện cộng đồng, độ trung tâm) giúp phân tích cấu trúc mạng.\n- Mô hình hoá: nút cho \"danh từ\", quan hệ cho \"động từ\"; đặt tên quan hệ rõ nghĩa và có hướng hợp lý.\n\n```cypher\nMATCH p = shortestPath((a:Ga {ten:'Hà Nội'})-[:NOI*]-(b:Ga {ten:'Sài Gòn'}))\nRETURN [n IN nodes(p) | n.ten]\n```\n\n### Lỗi hay gặp\n- Biến thuộc tính thành nút không cần thiết (hoặc ngược lại) làm mô hình rối.\n- Truy vấn không giới hạn độ sâu (`*`) có thể bùng nổ.\n\n### Tự kiểm tra\nKhi nào nên biểu diễn một thứ là *nút*, khi nào là *thuộc tính* của nút?"
  },
  "NoSQL Database › Vector Database": {
   "body": "Vector database lưu **embedding** — vector số (thường vài trăm đến vài nghìn chiều) do mô hình AI sinh ra từ văn bản, ảnh, âm thanh — và tìm nhanh các vector **gần nhau nhất**. Hai câu có nghĩa giống nhau cho hai vector gần nhau, nên tìm theo ý nghĩa thay vì theo từ khoá.\n\n### Vì sao cần biết\nĐây là nền tảng của **RAG** (cho LLM tra cứu tài liệu của bạn trước khi trả lời), tìm kiếm ngữ nghĩa, gợi ý, tìm ảnh tương tự.\n\n### Ý chính\n- **Độ đo tương đồng**: cosine, tích vô hướng (dot product), khoảng cách Euclid. Phải dùng đúng độ đo mà mô hình embedding được huấn luyện cho.\n- **Tìm kiếm gần đúng (ANN)**: so với mọi vector thì quá chậm ở quy mô lớn, nên dùng chỉ mục như **HNSW** (đồ thị phân tầng, nhanh, tốn RAM) hoặc **IVFFlat** (chia cụm). Đổi chút độ chính xác (recall) lấy tốc độ.\n- **Lựa chọn triển khai**: extension **pgvector** của PostgreSQL (đơn giản, dùng chung dữ liệu quan hệ), Elasticsearch `dense_vector`, hoặc dịch vụ chuyên dụng (Pinecone, Qdrant, Milvus, Weaviate…).\n- Thường kết hợp **lọc theo metadata** và **tìm kiếm lai** (từ khoá + vector) để chính xác hơn.\n- Đổi mô hình embedding là phải nhúng lại toàn bộ dữ liệu.\n\n```sql\nCREATE EXTENSION vector;\nCREATE TABLE tai_lieu (id serial PRIMARY KEY, noi_dung text, emb vector(1536));\nCREATE INDEX ON tai_lieu USING hnsw (emb vector_cosine_ops);\nSELECT id FROM tai_lieu ORDER BY emb <=> $1 LIMIT 5;  -- 5 hàng xóm gần nhất\n```\n\n### Lỗi hay gặp\n- Trộn embedding của nhiều mô hình khác nhau trong cùng một cột.\n- Chia đoạn (chunk) quá dài hoặc quá ngắn nên kết quả kém.\n- Dùng vector search thuần cho truy vấn cần khớp chính xác (mã sản phẩm).\n\n### Tự kiểm tra\nVì sao tìm kiếm vector dùng ANN thay vì so với mọi vector?"
@@ -4464,30 +4330,10 @@
   "body": "TimescaleDB là extension của PostgreSQL cho dữ liệu chuỗi thời gian: bạn giữ nguyên SQL, JOIN, công cụ và hệ sinh thái Postgres nhưng có thêm khả năng ghi/truy vấn chuỗi thời gian hiệu quả ở quy mô lớn.\n\n### Ý chính\n- **Hypertable**: bảng thường được tự động chia thành nhiều **chunk** theo thời gian (và tuỳ chọn theo khoá khác). Truy vấn theo khoảng thời gian chỉ chạm các chunk liên quan.\n- **Nén** dữ liệu cũ dạng cột, tiết kiệm đáng kể dung lượng.\n- **Continuous aggregate**: view tổng hợp được cập nhật tăng dần (ví dụ trung bình mỗi giờ).\n- **Retention policy** tự xoá chunk quá hạn.\n- Hàm chuyên dụng như `time_bucket()` để gom theo khoảng thời gian.\n- Lợi thế lớn nhất: dữ liệu thời gian và dữ liệu quan hệ cùng một DB, JOIN dễ dàng.\n\n```sql\nCREATE TABLE do_luong (thoi_diem timestamptz NOT NULL, thiet_bi int, nhiet_do float);\nSELECT create_hypertable('do_luong', 'thoi_diem');\nSELECT time_bucket('1 hour', thoi_diem) AS gio, avg(nhiet_do)\nFROM do_luong GROUP BY gio ORDER BY gio;\n```\n\n### Lỗi hay gặp\n- Chunk quá nhỏ hoặc quá lớn ảnh hưởng hiệu năng; cần chọn khoảng chunk phù hợp với lượng dữ liệu.\n- Giữ dữ liệu thô vô hạn, không bật nén và retention.\n\n### Tự kiểm tra\nHypertable giúp truy vấn \"dữ liệu 1 giờ qua\" nhanh hơn bảng Postgres thường như thế nào?"
  },
  "NoSQL Database › Apache Cassandra": {
-  "body": "Apache Cassandra là cơ sở dữ liệu NoSQL phân tán dạng **wide-column**, thiết kế để xử lý lượng dữ liệu khổng lồ trên nhiều máy với **không có điểm hỏng duy nhất**, ghi rất nhanh và mở rộng tuyến tính khi thêm nút.\n\n### Vì sao cần biết\nDùng cho khối lượng ghi lớn, luôn sẵn sàng: nhắn tin, dòng sự kiện, IoT, lịch sử hoạt động. Hiểu Cassandra cũng giúp hiểu cách các hệ phân tán kiểu Dynamo làm việc.\n\n### Ý chính\n- **Kiến trúc ngang hàng (peer-to-peer)**: mọi nút như nhau, giao tiếp bằng giao thức gossip; dữ liệu chia bởi **partition key** lên **vòng băm nhất quán**, nhân bản đến N nút (**replication factor**).\n- **Mức nhất quán chỉnh được**: `ONE`, `QUORUM`, `ALL`; W + R > N cho đọc thấy ghi mới. Mặc định thiên về sẵn sàng và nhất quán cuối cùng (AP).\n- **Mô hình dữ liệu theo truy vấn**: bảng được thiết kế cho từng truy vấn cụ thể, dữ liệu có thể trùng lặp giữa các bảng; **partition key** quyết định nơi lưu, **clustering key** quyết định thứ tự trong partition.\n- Ghi theo **LSM-tree** (commit log → memtable → SSTable) nên rất nhanh; xoá tạo \"tombstone\" cần quản lý.\n- CQL trông giống SQL nhưng **không có JOIN** và hạn chế truy vấn không dùng khoá.\n\n```sql\nCREATE TABLE tin_nhan_theo_phong (\n  phong_id uuid, gui_luc timeuuid, nguoi_gui text, noi_dung text,\n  PRIMARY KEY ((phong_id), gui_luc)\n) WITH CLUSTERING ORDER BY (gui_luc DESC);\n```\n\n### Lỗi hay gặp\n- Thiết kế bảng như SQL rồi phải `ALLOW FILTERING` (quét chậm).\n- Partition quá lớn hoặc nóng; nhiều tombstone làm đọc chậm.\n\n### Tự kiểm tra\nPartition key và clustering key khác nhau ra sao, và vì sao chọn partition key là quyết định quan trọng nhất?",
-  "lessons": [
-   {
-    "href": "/courses/dmd301-data-modeling-and-databases/learn?lessonSlug=dmd301-ts-9-2",
-    "ten": "9.2 — CSDL khoá-giá trị, cột rộng và đồ thị",
-    "nguon": "Data Modeling and Databases · Chương 9",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "DMD301"
-   }
-  ]
+  "body": "Apache Cassandra là cơ sở dữ liệu NoSQL phân tán dạng **wide-column**, thiết kế để xử lý lượng dữ liệu khổng lồ trên nhiều máy với **không có điểm hỏng duy nhất**, ghi rất nhanh và mở rộng tuyến tính khi thêm nút.\n\n### Vì sao cần biết\nDùng cho khối lượng ghi lớn, luôn sẵn sàng: nhắn tin, dòng sự kiện, IoT, lịch sử hoạt động. Hiểu Cassandra cũng giúp hiểu cách các hệ phân tán kiểu Dynamo làm việc.\n\n### Ý chính\n- **Kiến trúc ngang hàng (peer-to-peer)**: mọi nút như nhau, giao tiếp bằng giao thức gossip; dữ liệu chia bởi **partition key** lên **vòng băm nhất quán**, nhân bản đến N nút (**replication factor**).\n- **Mức nhất quán chỉnh được**: `ONE`, `QUORUM`, `ALL`; W + R > N cho đọc thấy ghi mới. Mặc định thiên về sẵn sàng và nhất quán cuối cùng (AP).\n- **Mô hình dữ liệu theo truy vấn**: bảng được thiết kế cho từng truy vấn cụ thể, dữ liệu có thể trùng lặp giữa các bảng; **partition key** quyết định nơi lưu, **clustering key** quyết định thứ tự trong partition.\n- Ghi theo **LSM-tree** (commit log → memtable → SSTable) nên rất nhanh; xoá tạo \"tombstone\" cần quản lý.\n- CQL trông giống SQL nhưng **không có JOIN** và hạn chế truy vấn không dùng khoá.\n\n```sql\nCREATE TABLE tin_nhan_theo_phong (\n  phong_id uuid, gui_luc timeuuid, nguoi_gui text, noi_dung text,\n  PRIMARY KEY ((phong_id), gui_luc)\n) WITH CLUSTERING ORDER BY (gui_luc DESC);\n```\n\n### Lỗi hay gặp\n- Thiết kế bảng như SQL rồi phải `ALLOW FILTERING` (quét chậm).\n- Partition quá lớn hoặc nóng; nhiều tombstone làm đọc chậm.\n\n### Tự kiểm tra\nPartition key và clustering key khác nhau ra sao, và vì sao chọn partition key là quyết định quan trọng nhất?"
  },
  "NoSQL Database › AWS Neptune": {
-  "body": "AWS Neptune là dịch vụ cơ sở dữ liệu đồ thị được AWS quản lý hoàn toàn. Nó hỗ trợ nhiều mô hình và ngôn ngữ: **Property Graph** với Apache TinkerPop Gremlin (và openCypher), và **RDF** với SPARQL.\n\n### Ý chính\n- Dùng cho bài toán quan hệ nhiều bước: đồ thị tri thức, phát hiện gian lận, gợi ý, quản lý danh tính và quyền truy cập, sinh học mạng.\n- Là dịch vụ quản lý: tự sao lưu, nhân bản nhiều vùng khả dụng, tự mở rộng lưu trữ, bảo mật bằng IAM/VPC; bạn không quản lý máy chủ.\n- Chạy trong VPC của bạn; truy cập qua điểm cuối trong mạng riêng.\n- Đánh đổi: khoá nhà cung cấp AWS và chi phí; nếu muốn tự chạy cục bộ, có thể dùng Neo4j hoặc JanusGraph.\n- Mô hình dữ liệu đồ thị (nút, cạnh, thuộc tính) giống nhau ở các hệ, nên học một hệ giúp chuyển sang hệ khác.\n\n### Lỗi hay gặp\n- Chọn đồ thị khi dữ liệu thực chất là bảng, hoặc ngược lại.\n- Để Neptune ở mạng công khai hoặc cấp quyền quá rộng.\n\n### Tự kiểm tra\nProperty Graph và RDF khác nhau ở điểm nào, và ngôn ngữ truy vấn nào đi với mỗi mô hình?",
-  "lessons": [
-   {
-    "href": "/courses/dmd301-data-modeling-and-databases/learn?lessonSlug=dmd301-ts-9-2",
-    "ten": "9.2 — CSDL khoá-giá trị, cột rộng và đồ thị",
-    "nguon": "Data Modeling and Databases · Chương 9",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "DMD301"
-   }
-  ]
+  "body": "AWS Neptune là dịch vụ cơ sở dữ liệu đồ thị được AWS quản lý hoàn toàn. Nó hỗ trợ nhiều mô hình và ngôn ngữ: **Property Graph** với Apache TinkerPop Gremlin (và openCypher), và **RDF** với SPARQL.\n\n### Ý chính\n- Dùng cho bài toán quan hệ nhiều bước: đồ thị tri thức, phát hiện gian lận, gợi ý, quản lý danh tính và quyền truy cập, sinh học mạng.\n- Là dịch vụ quản lý: tự sao lưu, nhân bản nhiều vùng khả dụng, tự mở rộng lưu trữ, bảo mật bằng IAM/VPC; bạn không quản lý máy chủ.\n- Chạy trong VPC của bạn; truy cập qua điểm cuối trong mạng riêng.\n- Đánh đổi: khoá nhà cung cấp AWS và chi phí; nếu muốn tự chạy cục bộ, có thể dùng Neo4j hoặc JanusGraph.\n- Mô hình dữ liệu đồ thị (nút, cạnh, thuộc tính) giống nhau ở các hệ, nên học một hệ giúp chuyển sang hệ khác.\n\n### Lỗi hay gặp\n- Chọn đồ thị khi dữ liệu thực chất là bảng, hoặc ngược lại.\n- Để Neptune ở mạng công khai hoặc cấp quyền quá rộng.\n\n### Tự kiểm tra\nProperty Graph và RDF khác nhau ở điểm nào, và ngôn ngữ truy vấn nào đi với mỗi mô hình?"
  },
  "NoSQL Database › ClickHouse": {
   "body": "ClickHouse là cơ sở dữ liệu **lưu theo cột (columnar)**, mã nguồn mở, tối ưu cho truy vấn phân tích **OLAP** trên hàng tỷ dòng với độ trễ rất thấp. Nó không thay thế PostgreSQL cho giao dịch (OLTP) mà bổ sung cho phần báo cáo/phân tích.\n\n### Vì sao cần biết\nTruy vấn báo cáo nặng chạy thẳng trên database sản xuất làm chậm cả ứng dụng. Chuyển dữ liệu sang kho phân tích như ClickHouse giữ hệ thống chính nhanh và cho báo cáo nhanh hơn nhiều lần.\n\n### Ý chính\n- **Lưu theo cột**: truy vấn chỉ đọc các cột cần (ví dụ `SUM(doanh_thu)`) thay vì cả dòng; các giá trị cùng cột giống nhau nên **nén rất tốt**; xử lý theo lô vector hoá.\n- **MergeTree**: engine chính; dữ liệu ghi thành các *part* sắp theo `ORDER BY` (khoá sắp xếp đóng vai chỉ mục thưa), gộp nền. Chọn `ORDER BY` theo truy vấn là quyết định then chốt.\n- **Partition**, skip index, **materialized view** để tổng hợp tăng dần khi ghi.\n- Hợp ghi theo lô lớn, hiếm sửa/xoá từng dòng; không phù hợp giao dịch đa dòng hay cập nhật nhỏ liên tục.\n- Nạp dữ liệu: batch, CDC từ Postgres, hoặc Kafka.\n\n```sql\nCREATE TABLE su_kien (\n  ngay Date, user_id UInt64, loai LowCardinality(String), gia_tri Float64\n) ENGINE = MergeTree\nPARTITION BY toYYYYMM(ngay)\nORDER BY (loai, ngay, user_id);\n\nSELECT loai, count(), sum(gia_tri) FROM su_kien WHERE ngay >= today() - 30 GROUP BY loai;\n```\n\n### Lỗi hay gặp\n- Chèn từng dòng nhỏ lẻ (nên gom thành lô lớn).\n- Chọn `ORDER BY` không khớp truy vấn nên quét nhiều dữ liệu.\n- Dùng làm database giao dịch.\n\n### Tự kiểm tra\n1. Vì sao lưu theo cột nhanh hơn lưu theo dòng cho truy vấn tổng hợp?\n2. Vì sao `ORDER BY` của MergeTree quan trọng?"
@@ -4516,36 +4362,12 @@
     "kieu": "bai-doc",
     "academy": true,
     "ma": "INT609"
-   },
-   {
-    "href": "/courses/gai401-generative-ai/learn?lessonSlug=gai401-ts-7-1",
-    "ten": "7.1 — Embedding văn bản và tìm kiếm vector",
-    "nguon": "Generative AI · Chương 7",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "GAI401"
-   },
-   {
-    "href": "/courses/eai201-ai-in-e-commerce/learn?lessonSlug=eai201-ts-4-2",
-    "ten": "4.2 — Tìm kiếm ngữ nghĩa và vector",
-    "nguon": "AI in E-Commerce · Chương 4",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "EAI201"
    }
   ]
  },
  "NoSQL Database › Embeddings": {
   "body": "Embedding là cách biến một thứ khó so sánh (đoạn văn, ảnh, âm thanh) thành một **dãy số cố định chiều**, sao cho thứ nào giống nhau về nghĩa thì dãy số gần nhau. Hình dung như toạ độ trên bản đồ: \"chó\" và \"mèo\" nằm gần nhau, \"hoá đơn\" nằm ở vùng khác. Mô hình embedding được huấn luyện để bản đồ ấy phản ánh ý nghĩa.\n\n### Vì sao cần biết\nEmbedding là nguyên liệu của tìm kiếm ngữ nghĩa, RAG, phân cụm, phát hiện trùng lặp, gợi ý. Backend phải biết gọi API sinh embedding, lưu, và truy vấn sao cho đúng, rẻ, nhanh.\n\n### Ý chính\n- Mỗi model cho vector có **số chiều cố định** (ví dụ `text-embedding-3-small` của OpenAI là 1536 chiều). Vector của model A **không so sánh được** với vector của model B.\n- Độ giống thường đo bằng **cosine similarity**: gần 1 là giống, gần 0 là không liên quan.\n- Phải dùng **cùng một model** cho cả lúc lập chỉ mục lẫn lúc truy vấn.\n- Văn bản dài phải **chia đoạn (chunk)** trước khi embed, vì model có giới hạn độ dài và một vector chỉ \"gói\" được ý chính của một đoạn vừa phải.\n- Lựa chọn: API trả phí (OpenAI, Google, Cohere, Voyage…) hoặc model mã nguồn mở chạy tự host (sentence-transformers, BGE, E5…).\n- Gọi theo **lô** (batch) để giảm số request; cache theo hash nội dung để không trả tiền embed lại đoạn chưa đổi.\n\n```ts\n// Gọi API embeddings của OpenAI (Node 18+)\nconst res = await fetch(\"https://api.openai.com/v1/embeddings\", {\n  method: \"POST\",\n  headers: {\n    \"Content-Type\": \"application/json\",\n    Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,\n  },\n  body: JSON.stringify({\n    model: \"text-embedding-3-small\",\n    input: [\"Cách đổi mật khẩu?\", \"Hướng dẫn đặt lại password\"],\n  }),\n});\nconst { data } = await res.json();\nconst [a, b] = data.map((x: { embedding: number[] }) => x.embedding);\n\nconst cosine = (u: number[], v: number[]) => {\n  let dot = 0, nu = 0, nv = 0;\n  for (let i = 0; i < u.length; i++) { dot += u[i]*v[i]; nu += u[i]**2; nv += v[i]**2; }\n  return dot / Math.sqrt(nu * nv);\n};\nconsole.log(cosine(a, b)); // hai câu cùng ý nên cao\n```\n\n### Lỗi hay gặp\n- Đổi model embedding nhưng giữ vector cũ trong DB: kết quả tìm kiếm sai mà không báo lỗi.\n- Embed cả tài liệu dài thành một vector: mất chi tiết, truy hồi kém.\n- Gọi API từ trình duyệt làm lộ khoá; luôn gọi qua backend.\n- Gửi dữ liệu nhạy cảm tới nhà cung cấp bên ngoài mà không kiểm tra chính sách.\n\n### Tự kiểm tra\n1. Vì sao không thể so sánh vector của hai model embedding khác nhau?\n2. Cosine similarity cho biết điều gì mà khoảng cách chữ (edit distance) không cho biết?",
   "lessons": [
-   {
-    "href": "/courses/gai401-generative-ai/learn?lessonSlug=gai401-ts-7-1",
-    "ten": "7.1 — Embedding văn bản và tìm kiếm vector",
-    "nguon": "Generative AI · Chương 7",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "GAI401"
-   },
    {
     "href": "/courses/ai-study-assistant/learn?lessonSlug=int609-retrieval",
     "ten": "3.1 — Biến văn bản thành vector & tìm gần nhất",
@@ -4561,14 +4383,6 @@
     "kieu": "bai-doc",
     "academy": true,
     "ma": "INT609"
-   },
-   {
-    "href": "/courses/eai201-ai-in-e-commerce/learn?lessonSlug=eai201-ts-4-2",
-    "ten": "4.2 — Tìm kiếm ngữ nghĩa và vector",
-    "nguon": "AI in E-Commerce · Chương 4",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "EAI201"
    }
   ]
  },
@@ -4782,14 +4596,6 @@
     "ten": "4.3 — Histogram: một phân vị với giá 104 byte",
     "nguon": "Observability & Monitoring (Node.js trên VPS) · Chương 4",
     "kieu": "bai-doc"
-   },
-   {
-    "href": "/courses/mlo401-machine-learning-operations/learn?lessonSlug=mlo401-ts-7-4",
-    "ten": "7.4 — Quan sát hệ thống với Prometheus và Grafana",
-    "nguon": "Machine learning operations · Chương 7",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "MLO401"
    },
    {
     "href": "/code-lab/observability-monitoring",
@@ -5165,14 +4971,6 @@
     "ma": "GAI401"
    },
    {
-    "href": "/courses/gai401-generative-ai/learn?lessonSlug=gai401-ts-3-1",
-    "ten": "3.1 — Tự chú ý và chú ý đa đầu",
-    "nguon": "Generative AI · Chương 3",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "GAI401"
-   },
-   {
     "href": "/simulation?scenario=ai-chat",
     "ten": "Chat AI — đường đi của một câu trả lời",
     "nguon": "Xưởng mô phỏng",
@@ -5225,22 +5023,6 @@
   "body": "Prompt là cách bạn \"lập trình\" một LLM bằng ngôn ngữ tự nhiên. Cùng một mô hình, prompt tốt và prompt tệ cho chất lượng khác xa nhau.\n\n### Các kỹ thuật chính\n- **Zero-shot**: chỉ nêu yêu cầu. Hợp với việc đơn giản, quen thuộc.\n- **Few-shot**: kèm vài ví dụ đầu vào → đầu ra mong muốn để mô hình bắt chước định dạng và cách làm.\n- **Chain-of-thought**: yêu cầu suy luận từng bước trước khi kết luận, cải thiện bài toán nhiều bước. (Một số model suy luận đã tự làm việc này.)\n- **Role / system prompt**: đặt vai trò, giọng điệu, quy tắc bất biến (\"Bạn là trợ lý hỗ trợ khách hàng của X, chỉ trả lời dựa trên tài liệu được cung cấp\").\n- **Ràng buộc định dạng**: yêu cầu JSON theo schema cụ thể, kèm ví dụ; xác thực đầu ra ở phía backend.\n- **Phân tách thành bước**: chia nhiệm vụ lớn thành nhiều lời gọi nhỏ có kiểm tra.\n\n### Nguyên tắc viết\nNêu rõ mục tiêu, ngữ cảnh, định dạng đầu ra, những điều không được làm; dùng dấu phân cách (thẻ XML hoặc ```) giữa chỉ dẫn và dữ liệu; thử và đo trên một bộ ví dụ thay vì cảm tính.\n\n```text\nBạn là bộ phân loại ticket hỗ trợ. Trả về JSON {\"loai\": \"...\", \"khan\": true|false}.\nloai thuộc: thanh_toan | ky_thuat | tai_khoan.\n\nVí dụ:\nTicket: \"Trừ tiền hai lần\" -> {\"loai\":\"thanh_toan\",\"khan\":true}\nTicket: \"Quên mật khẩu\" -> {\"loai\":\"tai_khoan\",\"khan\":false}\n\nTicket: <noi_dung>{{ticket}}</noi_dung>\n```\n\n### Lỗi hay gặp\n- Nhét dữ liệu người dùng thẳng vào prompt mà không phân tách: dễ bị **prompt injection**.\n- Tin tuyệt đối đầu ra JSON mà không parse và kiểm tra.\n- Prompt dài, mâu thuẫn nhau.\n\n### Tự kiểm tra\n1. Khi nào few-shot tốt hơn zero-shot?\n2. Vì sao phải xác thực đầu ra của LLM ở backend?",
   "lessons": [
    {
-    "href": "/courses/gai401-generative-ai/learn?lessonSlug=gai401-ts-6-1",
-    "ten": "6.1 — Cơ bản về prompt và prompt vài mẫu",
-    "nguon": "Generative AI · Chương 6",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "GAI401"
-   },
-   {
-    "href": "/courses/gai401-generative-ai/learn?lessonSlug=gai401-ts-6-2",
-    "ten": "6.2 — Prompt suy luận: chuỗi suy nghĩ và tự nhất quán",
-    "nguon": "Generative AI · Chương 6",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "GAI401"
-   },
-   {
     "href": "/courses/gai401-generative-ai/learn?lessonSlug=gai401-6-1-prompt-finetune",
     "ten": "6.1 — Prompt & fine-tuning",
     "nguon": "Generative AI · Chapter 6",
@@ -5282,16 +5064,6 @@
  },
  "Tiếp tục học › MCP (Model Context Protocol)": {
   "body": "MCP (Model Context Protocol) là giao thức mở, chuẩn hoá cách ứng dụng AI kết nối với **công cụ và dữ liệu bên ngoài**. Trước đây mỗi ứng dụng AI tự viết tích hợp riêng cho từng hệ thống (database, GitHub, Slack, hệ thống nội bộ). Với MCP, bạn viết **một MCP server** cho hệ thống của mình, và mọi client hỗ trợ MCP (Claude Code, Claude Desktop, các IDE…) đều dùng được.\n\n### Vì sao cần biết\nBackend developer là người đứng ra \"mở\" hệ thống của mình cho AI: cho trợ lý tra cứu đơn hàng, đọc tài liệu nội bộ, tạo ticket. Làm vậy qua MCP có chuẩn chung thay vì mỗi nơi một kiểu.\n\n### Ý chính\n- **Kiến trúc**: *host* (ứng dụng AI) chứa *client*; mỗi client nối tới một *server*. Giao tiếp theo JSON-RPC.\n- Server cung cấp ba loại thứ: **tools** (hàm model có thể gọi, ví dụ `get_order`), **resources** (dữ liệu để đọc, như file hoặc bản ghi), **prompts** (mẫu prompt tái sử dụng).\n- **Transport**: `stdio` (chạy server như tiến trình con trên máy người dùng) hoặc HTTP (server từ xa, dùng xác thực như OAuth).\n- Mô tả tool bằng JSON schema; mô tả rõ ràng giúp model chọn và gọi đúng.\n- Có SDK chính thức (TypeScript, Python và các ngôn ngữ khác).\n\n```ts\nimport { McpServer } from \"@modelcontextprotocol/sdk/server/mcp.js\";\nimport { StdioServerTransport } from \"@modelcontextprotocol/sdk/server/stdio.js\";\nimport { z } from \"zod\";\n\nconst server = new McpServer({ name: \"orders\", version: \"1.0.0\" });\nserver.tool(\"get_order\", { id: z.string() }, async ({ id }) => ({\n  content: [{ type: \"text\", text: JSON.stringify({ id, status: \"paid\" }) }],\n}));\nawait server.connect(new StdioServerTransport());\n```\n(Giao diện SDK có thể thay đổi giữa các phiên bản; xem tài liệu hiện hành.)\n\n### Bảo mật — rất quan trọng\n- Coi mọi tool là bề mặt tấn công: cấp **quyền tối thiểu**, tách tool đọc và tool ghi, yêu cầu xác nhận của người dùng cho thao tác phá huỷ.\n- Kết quả tool và nội dung tài liệu là **dữ liệu không đáng tin**, có thể chứa prompt injection.\n- Chỉ cài MCP server từ nguồn bạn tin cậy; không nhúng secret vào mô tả tool.\n\n### Tự kiểm tra\n1. Tool, resource và prompt khác nhau thế nào?\n2. Vì sao một tool \"xoá bản ghi\" cần thêm bước xác nhận?",
-  "lessons": [
-   {
-    "href": "/courses/gai401-generative-ai/learn?lessonSlug=gai401-ts-7-3",
-    "ten": "7.3 — Tác tử LLM và dùng công cụ",
-    "nguon": "Generative AI · Chương 7",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "GAI401"
-   }
-  ],
   "more": [
    {
     "type": "official",
@@ -5338,36 +5110,12 @@
     "ten": "Chat AI — đường đi của một câu trả lời",
     "nguon": "Xưởng mô phỏng",
     "kieu": "mo-phong"
-   },
-   {
-    "href": "/courses/gai401-generative-ai/learn?lessonSlug=gai401-ts-7-3",
-    "ten": "7.3 — Tác tử LLM và dùng công cụ",
-    "nguon": "Generative AI · Chương 7",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "GAI401"
    }
   ]
  },
  "Tiếp tục học › RAG (Retrieval-Augmented Generation)": {
   "body": "RAG kết hợp **truy hồi** (tìm đoạn tài liệu liên quan trong kho của bạn) với **sinh** (LLM viết câu trả lời dựa trên các đoạn vừa tìm). Mô hình không cần \"học thuộc\" dữ liệu của bạn; mỗi lần hỏi, bạn nhét đúng phần tài liệu cần thiết vào prompt.\n\n### Vì sao dùng RAG\n- Cập nhật tri thức bằng cách sửa kho tài liệu, không cần huấn luyện lại mô hình.\n- Giảm bịa đặt vì câu trả lời neo vào nguồn, và có thể **trích dẫn nguồn**.\n- Kiểm soát được quyền truy cập: chỉ truy hồi tài liệu người hỏi được phép xem.\n\n### Luồng cơ bản\n1. **Nạp**: tách tài liệu thành các đoạn (chunk) → tạo embedding → lưu vào vector DB cùng metadata.\n2. **Truy hồi**: embed câu hỏi → tìm K đoạn gần nhất.\n3. **Sinh**: đưa các đoạn đó vào prompt kèm chỉ dẫn \"chỉ trả lời dựa trên ngữ cảnh dưới đây, nếu không có thì nói không biết\", rồi gọi LLM.\n\n### Chất lượng phụ thuộc vào\n- **Chiến lược chunking**: đoạn quá dài thì loãng, quá ngắn thì mất ngữ cảnh; thường chia theo cấu trúc (đề mục, đoạn) có chồng lấp nhẹ.\n- Chất lượng embedding và số K; có thể thêm **re-rank** và tìm kiếm lai (từ khoá + vector).\n- Lọc theo metadata và quyền truy cập.\n\n### Lỗi hay gặp\n- Cho rằng RAG loại bỏ hoàn toàn bịa đặt; vẫn cần kiểm tra và trích nguồn.\n- Nội dung truy hồi chứa chỉ thị độc hại (prompt injection gián tiếp).\n- Không đánh giá: cần bộ câu hỏi mẫu để đo truy hồi có tìm đúng đoạn không.",
   "lessons": [
-   {
-    "href": "/courses/gai401-generative-ai/learn?lessonSlug=gai401-ts-7-2",
-    "ten": "7.2 — Quy trình RAG",
-    "nguon": "Generative AI · Chương 7",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "GAI401"
-   },
-   {
-    "href": "/courses/eai201-ai-in-e-commerce/learn?lessonSlug=eai201-ts-5-3",
-    "ten": "5.3 — Trợ lý LLM và sinh có truy xuất (RAG)",
-    "nguon": "AI in E-Commerce · Chương 5",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "EAI201"
-   },
    {
     "href": "/courses/ai-study-assistant/learn?lessonSlug=int609-ingestion",
     "ten": "2.2 — Pipeline nạp: chunk → embed → lưu",
@@ -5420,22 +5168,6 @@
     "kieu": "bai-doc",
     "academy": true,
     "ma": "INT609"
-   },
-   {
-    "href": "/courses/gai401-generative-ai/learn?lessonSlug=gai401-ts-7-2",
-    "ten": "7.2 — Quy trình RAG",
-    "nguon": "Generative AI · Chương 7",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "GAI401"
-   },
-   {
-    "href": "/courses/daa401-design-and-secure-ai-system/learn?lessonSlug=daa401-ts-5-3",
-    "ten": "5.3 — Bảo mật RAG, plugin và agent",
-    "nguon": "Design and Secure AI System · Chương 5",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "DAA401"
    }
   ]
  }

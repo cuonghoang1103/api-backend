@@ -1242,16 +1242,6 @@
  },
  "Web Framework › Plotly Dash / Sanic / Tornado": {
   "body": "Ba cái tên này thuộc ba nhóm khác nhau, đừng nhầm:\n\n### Plotly Dash: ứng dụng dữ liệu / dashboard\n**Dash** (của Plotly) cho phép dựng dashboard tương tác hoàn toàn bằng Python, không cần viết JavaScript. Bạn khai báo giao diện bằng các thành phần Python và dùng **callback** để cập nhật biểu đồ khi người dùng đổi bộ lọc.\n\n```python\nfrom dash import Dash, dcc, html, Input, Output\nimport plotly.express as px\n\napp = Dash(__name__)\napp.layout = html.Div([\n    dcc.Dropdown([\"a\", \"b\"], \"a\", id=\"chon\"),\n    dcc.Graph(id=\"bieu-do\"),\n])\n\n@app.callback(Output(\"bieu-do\", \"figure\"), Input(\"chon\", \"value\"))\ndef ve(gia_tri):\n    return px.bar(x=[\"x\", \"y\"], y=[1, 2 if gia_tri == \"a\" else 5])\n\nif __name__ == \"__main__\":\n    app.run(debug=True)\n```\nHợp cho data scientist cần chia sẻ phân tích dưới dạng ứng dụng web.\n\n### Sanic và Tornado: framework web bất đồng bộ\n- **Sanic**: framework async hiệu năng cao, cú pháp gần Flask nhưng dùng `async def` và có server riêng.\n- **Tornado**: framework và thư viện mạng bất đồng bộ ra đời từ trước `asyncio`, mạnh ở kết nối dài (WebSocket, long polling); từ các bản mới chạy trên vòng lặp `asyncio`.\n\n### Chọn gì\n- Dashboard / ứng dụng phân tích dữ liệu → **Dash** (hoặc Streamlit).\n- API bất đồng bộ mới → ưu tiên **FastAPI**, trừ khi bạn có lý do chọn Sanic.\n- Dịch vụ có nhiều kết nối dài hạn, hoặc bảo trì hệ thống Tornado cũ → **Tornado**.\n\n### Lỗi hay gặp\n- Dùng Dash cho giao diện sản phẩm phức tạp nhiều người dùng, nơi framework frontend thật sự phù hợp hơn.\n- Chạy server dev (`debug=True`) trên production.\n- Gọi code chặn trong handler async của Sanic/Tornado làm đứng cả luồng.",
-  "lessons": [
-   {
-    "href": "/courses/idv301-interactive-data-visualization-for-business-analytics/learn?lessonSlug=idv301-ts-9-3",
-    "ten": "9.3 — Plotly, Dash và Streamlit cho ứng dụng phân tích",
-    "nguon": "Interactive Data Visualization for Business Analytics · Chương 9",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "IDV301"
-   }
-  ],
   "more": [
    {
     "type": "official",
@@ -1283,14 +1273,6 @@
     "kieu": "bai-doc",
     "academy": true,
     "ma": "PWD301"
-   },
-   {
-    "href": "/courses/mlo401-machine-learning-operations/learn?lessonSlug=mlo401-ts-6-2",
-    "ten": "6.2 — Phục vụ mô hình bằng REST API với FastAPI",
-    "nguon": "Machine learning operations · Chương 6",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "MLO401"
    },
    {
     "href": "/courses/pwd301-python-web-development/learn?lessonSlug=pwd301-4-1-rest-deploy",
@@ -1668,14 +1650,6 @@
  "Tiếp tục học › Tiếp: Backend / AI Engineer": {
   "body": "Python là ngôn ngữ chính của hai hướng nghề: **Backend** (xây API và dịch vụ) và **AI Engineer** (đưa mô hình học máy và LLM vào sản phẩm). Sau khi nắm nền tảng ngôn ngữ, test, đóng gói và Docker, bạn chọn một hướng để đi sâu.\n\n### Hướng Backend\n- Một framework (FastAPI hoặc Django), thiết kế REST API, xác thực.\n- Database và ORM (SQLAlchemy hoặc ORM của Django), migration.\n- Hàng đợi tác vụ, cache, triển khai bằng Docker, logging và giám sát.\n- Hiểu `async`, thread và GIL để chọn mô hình đồng thời phù hợp.\n\n### Hướng AI Engineer\n- NumPy, pandas, scikit-learn cho dữ liệu và học máy cổ điển.\n- Gọi và tích hợp mô hình (API LLM, embeddings, RAG), phục vụ mô hình qua REST API.\n- Đóng gói và theo dõi phiên bản mô hình, đánh giá chất lượng đầu ra.\n\n### Lời khuyên\nHai hướng giao nhau ở chỗ đưa thứ chạy được lên production, nên kỹ năng test, Docker và API đều dùng cho cả hai. Hãy chọn một dự án nhỏ end-to-end (ví dụ API dự đoán dựa trên một mô hình đơn giản, có test và Dockerfile) làm bước tiếp theo.",
   "lessons": [
-   {
-    "href": "/courses/mlo401-machine-learning-operations/learn?lessonSlug=mlo401-ts-6-2",
-    "ten": "6.2 — Phục vụ mô hình bằng REST API với FastAPI",
-    "nguon": "Machine learning operations · Chương 6",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "MLO401"
-   },
    {
     "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-4-4-python",
     "ten": "4.4 — Python: GIL, threading vs multiprocessing vs asyncio, đo thật",

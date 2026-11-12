@@ -1750,14 +1750,6 @@
     "kieu": "slide",
     "academy": true,
     "ma": "DBI202"
-   },
-   {
-    "href": "/courses/edb201-database-application/learn?lessonSlug=edb201-ts-4-4",
-    "ten": "4.4 — Phép tập hợp và window function",
-    "nguon": "Database Application · Chương 4",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "EDB201"
    }
   ]
  },
@@ -1810,14 +1802,6 @@
     "kieu": "slide",
     "academy": true,
     "ma": "DBI202"
-   },
-   {
-    "href": "/courses/edb201-database-application/learn?lessonSlug=edb201-ts-4-4",
-    "ten": "4.4 — Phép tập hợp và window function",
-    "nguon": "Database Application · Chương 4",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "EDB201"
    }
   ]
  },
@@ -1918,14 +1902,6 @@
     "ten": "6.4 — Tổng hợp trên JOIN: thuần hoá fan-out",
     "nguon": "PostgreSQL · Chương 6",
     "kieu": "video"
-   },
-   {
-    "href": "/courses/edb201-database-application/learn?lessonSlug=edb201-ts-4-2",
-    "ten": "4.2 — Phép nối bảng",
-    "nguon": "Database Application · Chương 4",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "EDB201"
    }
   ]
  },
@@ -2015,14 +1991,6 @@
     "kieu": "bai-doc",
     "academy": true,
     "ma": "DBI202"
-   },
-   {
-    "href": "/courses/edb201-database-application/learn?lessonSlug=edb201-ts-8-1",
-    "ten": "8.1 — Thủ tục và hàm lưu sẵn",
-    "nguon": "Database Application · Chương 8",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "EDB201"
    }
   ]
  },
@@ -2194,14 +2162,6 @@
     "ma": "DBI202"
    },
    {
-    "href": "/courses/edb201-database-application/learn?lessonSlug=edb201-ts-10-1",
-    "ten": "10.1 — Vai trò và đặc quyền",
-    "nguon": "Database Application · Chương 10",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "EDB201"
-   },
-   {
     "href": "/courses/postgresql/learn?lessonSlug=postgresql-lab-8-sao-luu-nhan-ban-ct-shop",
     "ten": "Lab 8 — CT Shop: backups that restore, a read-only account, a streaming replica",
     "nguon": "PostgreSQL · Chương 15",
@@ -2225,14 +2185,6 @@
     "ten": "11.1 — Giao dịch: được tất cả, hoặc không gì cả",
     "nguon": "PostgreSQL · Chương 11",
     "kieu": "video"
-   },
-   {
-    "href": "/courses/edb201-database-application/learn?lessonSlug=edb201-ts-6-4",
-    "ten": "6.4 — Giao dịch từ mã ứng dụng",
-    "nguon": "Database Application · Chương 6",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "EDB201"
    }
   ]
  },
@@ -2309,14 +2261,6 @@
     "ma": "DBI202"
    },
    {
-    "href": "/courses/edb201-database-application/learn?lessonSlug=edb201-ts-10-1",
-    "ten": "10.1 — Vai trò và đặc quyền",
-    "nguon": "Database Application · Chương 10",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "EDB201"
-   },
-   {
     "href": "/courses/postgresql/learn?lessonSlug=postgresql-lab-8-sao-luu-nhan-ban-ct-shop",
     "ten": "Lab 8 — CT Shop: backups that restore, a read-only account, a streaming replica",
     "nguon": "PostgreSQL · Chương 15",
@@ -2342,22 +2286,6 @@
     "kieu": "slide",
     "academy": true,
     "ma": "DBI202"
-   },
-   {
-    "href": "/courses/edb201-database-application/learn?lessonSlug=edb201-ts-9-2",
-    "ten": "9.2 — Truy vấn tham số hoá và SQL injection",
-    "nguon": "Database Application · Chương 9",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "EDB201"
-   },
-   {
-    "href": "/courses/edb201-database-application/learn?lessonSlug=edb201-ts-10-2",
-    "ten": "10.2 — Bảo mật cấp dòng và kết nối mã hoá",
-    "nguon": "Database Application · Chương 10",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "EDB201"
    }
   ]
  },
@@ -2558,14 +2486,6 @@
     "kieu": "slide",
     "academy": true,
     "ma": "DBI202"
-   },
-   {
-    "href": "/courses/edb201-database-application/learn?lessonSlug=edb201-ts-4-3",
-    "ten": "4.3 — Truy vấn con và CTE",
-    "nguon": "Database Application · Chương 4",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "EDB201"
    }
   ]
  },
@@ -2647,14 +2567,6 @@
     "ten": "Lab 7 — CT Shop: JSONB attributes and an accent-free search box",
     "nguon": "PostgreSQL · Chương 13",
     "kieu": "lab"
-   },
-   {
-    "href": "/courses/edb201-database-application/learn?lessonSlug=edb201-ts-10-2",
-    "ten": "10.2 — Bảo mật cấp dòng và kết nối mã hoá",
-    "nguon": "Database Application · Chương 10",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "EDB201"
    }
   ]
  },
@@ -2911,14 +2823,6 @@
     "kieu": "video",
     "academy": true,
     "ma": "DBI202"
-   },
-   {
-    "href": "/courses/idb201-introduction-to-databases/learn?lessonSlug=idb201-ts-10-1",
-    "ten": "Các họ NoSQL và định lý CAP",
-    "nguon": "Introduction to Databases · Chương 10",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "IDB201"
    }
   ]
  },
@@ -2985,14 +2889,6 @@
     "ten": "Lab 5 — CT Shop: một triệu đơn — chỉ mục và EXPLAIN",
     "nguon": "PostgreSQL · Chương 10",
     "kieu": "lab"
-   },
-   {
-    "href": "/courses/idb201-introduction-to-databases/learn?lessonSlug=idb201-ts-7-3",
-    "ten": "Kế hoạch truy vấn và tối ưu",
-    "nguon": "Introduction to Databases · Chương 7",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "IDB201"
    }
   ]
  },
@@ -3163,14 +3059,6 @@
     "ten": "10.3 — Bản sao lưu HỎNG và cú phục hồi NÓI DỐI",
     "nguon": "Deploy lên VPS · Chương 10",
     "kieu": "bai-doc"
-   },
-   {
-    "href": "/courses/edb201-database-application/learn?lessonSlug=edb201-ts-10-3",
-    "ten": "10.3 — Sao lưu và khôi phục",
-    "nguon": "Database Application · Chương 10",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "EDB201"
    }
   ]
  },
@@ -3190,22 +3078,6 @@
     "kieu": "slide",
     "academy": true,
     "ma": "DBI202"
-   },
-   {
-    "href": "/courses/idb201-introduction-to-databases/learn?lessonSlug=idb201-ts-8-3",
-    "ten": "Nhật ký và khôi phục sau sự cố",
-    "nguon": "Introduction to Databases · Chương 8",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "IDB201"
-   },
-   {
-    "href": "/courses/edb201-database-application/learn?lessonSlug=edb201-ts-8-4",
-    "ten": "8.4 — Nhật ký kiểm toán và bảng lịch sử",
-    "nguon": "Database Application · Chương 8",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "EDB201"
    }
   ]
  },
@@ -3338,14 +3210,6 @@
   "body": "**Export** đưa dữ liệu ra khỏi cơ sở dữ liệu, **import** nạp dữ liệu vào, thường dùng định dạng CSV, JSON hoặc tệp dump SQL. Dùng cho nạp dữ liệu ban đầu, chuyển dữ liệu giữa hệ thống, xuất báo cáo, chia sẻ cho người khác.\n\n### PostgreSQL: `COPY`\n`COPY` chạy phía máy chủ và rất nhanh với lượng lớn; `\\copy` trong `psql` đọc/ghi tệp ở máy của bạn.\n\n```sql\n-- Xuất ra CSV\n\\copy (SELECT id, name, email FROM customers) TO 'customers.csv' CSV HEADER\n\n-- Nạp từ CSV\n\\copy customers (id, name, email) FROM 'customers.csv' CSV HEADER\n```\n\n### Các công cụ thường gặp\n- Dump/restore cả CSDL: `pg_dump` / `pg_restore`.\n- SQL Server: Import and Export Wizard, `bcp`, `BULK INSERT`.\n- MySQL: `LOAD DATA INFILE`, `mysqldump`.\n\n### Mẹo khi nạp lượng lớn\n- Nạp bằng `COPY` hay chèn nhiều dòng một câu lệnh, không chèn từng dòng.\n- Nạp vào bảng tạm (staging), kiểm tra và làm sạch, rồi mới chèn vào bảng thật.\n- Có thể tạo index và bật ràng buộc **sau** khi nạp để nhanh hơn, nhưng nhớ bật lại và kiểm tra dữ liệu.\n- Thống nhất mã hoá ký tự (UTF-8), dấu phân cách, định dạng ngày và cách biểu diễn `NULL`.\n\n### Lỗi hay gặp\nSai mã hoá làm hỏng tiếng Việt; dấu phẩy trong giá trị không được quote; nhập thẳng dữ liệu không kiểm tra vào bảng thật; xuất dữ liệu nhạy cảm ra tệp không bảo vệ.",
   "lessons": [
    {
-    "href": "/courses/edb201-database-application/learn?lessonSlug=edb201-ts-5-4",
-    "ten": "5.4 — Nạp dữ liệu hàng loạt và nhập dữ liệu",
-    "nguon": "Database Application · Chương 5",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "EDB201"
-   },
-   {
     "href": "/courses/postgresql/learn?lessonSlug=postgresql-15-1-pg-dump",
     "ten": "15.1 — Sao lưu logic bằng pg_dump",
     "nguon": "PostgreSQL · Chương 15",
@@ -3443,22 +3307,6 @@
     "ma": "DBI202"
    },
    {
-    "href": "/courses/idb201-introduction-to-databases/learn?lessonSlug=idb201-ts-7-1",
-    "ten": "DBMS lưu dữ liệu thế nào",
-    "nguon": "Introduction to Databases · Chương 7",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "IDB201"
-   },
-   {
-    "href": "/courses/idb201-introduction-to-databases/learn?lessonSlug=idb201-ts-7-2",
-    "ten": "Chỉ mục và cây B+",
-    "nguon": "Introduction to Databases · Chương 7",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "IDB201"
-   },
-   {
     "href": "/courses/postgresql/learn?lessonSlug=postgresql-11-2-mvcc",
     "ten": "11.2 — MVCC: vì sao người đọc không bao giờ chặn người ghi",
     "nguon": "PostgreSQL · Chương 11",
@@ -3507,22 +3355,6 @@
     "kieu": "bai-doc",
     "academy": true,
     "ma": "TBI301c"
-   },
-   {
-    "href": "/courses/tbi301c-technology-for-bi-analysts/learn?lessonSlug=tbi301c-ts-3-2",
-    "ten": "3.2 — ELT và biến đổi trong kho dữ liệu (dbt)",
-    "nguon": "Technology for BI Analysts · Chương 3",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "TBI301c"
-   },
-   {
-    "href": "/courses/dmd301-data-modeling-and-databases/learn?lessonSlug=dmd301-ts-8-1",
-    "ten": "8.1 — OLTP với kho dữ liệu, và ETL",
-    "nguon": "Data Modeling and Databases · Chương 8",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "DMD301"
    },
    {
     "href": "/courses/dbd301-advanced-database/learn?lessonSlug=dbd301-6-1-warehouse-olap",

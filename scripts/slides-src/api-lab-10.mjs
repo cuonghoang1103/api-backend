@@ -75,5 +75,5 @@ Server-Timing: validate;dur=1.43, total;dur=16.09`, { sm: true, wrap: 'any' }) +
 <li>The webhook reached only the creator — signed, thin; the cancelled report sent nothing</li>
 <li>The grader: <b>0/10</b> for the starter, <b>10/10</b> for the solution</li>
 </ul>
-${two(box('Why is report.ready thin?', '46–300 KB, private to its creator, already at a URL that checks the token. Campus data in a webhook would sit in logs for years.', 'lam'), box('Download', 'labflow-api-ch10.zip — chapter code = this lab’s solution, plus lab/report-exports-starter.js and lab/grade-lab10.mjs.', 'xanh'))}` },
+${two(box('Why is report.ready thin?', '46–300 KB, private to its creator, already at a URL that checks the token. Campus data in a webhook would sit in logs for years.', 'lam'), box('Download', 'labflow-api-ch10-b.zip — chapter code = this lab’s solution, plus lab/report-exports-starter.js and lab/grade-lab10.mjs.', 'xanh'))}` },
 ]);

@@ -29,18 +29,18 @@ export const slides = lamDeck(meta, [
   { t: 'Raw bytes, forgeries and replays', body: http(`$ node webhooks/reserialize.mjs
 body thô        : {"type": "labflow.booking.created.v1", "data": {"labName": "Ph\\u00f2ng Lab M\\u1ea1ng"}}
 parse + stringify: {"type":"labflow.booking.created.v1","data":{"labName":"Phòng Lab Mạng"}}
-chữ ký trên body thô v1,ZLrEsD7a9yl… · trên bản dựng lại v1,wAoADndHaYw… ⇒ LỆCH`, { sm: true, wrap: 'any', title: 'express.json() + JSON.stringify ≠ the bytes a Python sender signed' }) + http(`$ node webhooks/replay.mjs ../dump.json --tamper
+chữ ký trên body thô v1,ZLrEsD7a9yl… · trên bản dựng lại v1,wAoADndHaYw… ⇒ LỆCH`, { sm: true, wrap: 'any', title: 'express.json() + JSON.stringify ≠ the bytes a Python sender signed' }) + http(`$ node webhooks/replay.mjs dump.json --tamper
 body đã sửa (chữ ký ký 1 s trước) ⇒ 401 {"error":"bad signature"}
-$ node webhooks/replay.mjs ../dump.json
+$ node webhooks/replay.mjs dump.json
 gửi lại y nguyên (chữ ký ký 1 s trước) ⇒ 200 {"duplicate":true}
-$ sleep 10; node webhooks/replay.mjs ../dump.json
+$ sleep 10; node webhooks/replay.mjs dump.json
 gửi lại y nguyên (chữ ký ký 11 s trước) ⇒ 401 {"error":"timestamp outside tolerance"}`, { sm: true, wrap: 'any', title: 'a captured delivery, TOLERANCE_SEC=10' }) + two(box('Verify the raw body', 'Same data, different bytes, different signature — and it only breaks for Vietnamese lab names.', 'do2'), box('Two defences, together', 'The window limits how long a capture is useful; the id store covers replays inside it. Compare with timingSafeEqual.', 'xanh')) },
 
   { t: 'Answer first, work later — measured three ways', body: `<p class="nho">The receiver’s work takes 3 s (an email to the lecturer + another system); LabFlow waits 2 s and allows 5 attempts.</p>` + http(`# slow, no dedupe
 {"attempt":1,"status":null,"error":"timeout 2000 ms","durationMs":2003}
 …
 {"attempt":5,"status":null,"error":"timeout 2000 ms","durationMs":2004}
-{"received":5,"rejected":0,"duplicates":0,"emails":5,"processed":5,"stale":0,"failedOnPurpose":0}
+{"received":5,"rejected":0,"duplicates":0,"emails":5,"processed":1,"stale":4,"failedOnPurpose":0}
 # slow + dedupe
 {"attempt":1,"status":null,"error":"timeout 2000 ms","durationMs":2004}
 {"attempt":2,"status":200,"error":null,"durationMs":7}
@@ -49,7 +49,7 @@ gửi lại y nguyên (chữ ký ký 11 s trước) ⇒ 401 {"error":"timestamp 
 {"attempt":1,"status":202,"error":null,"durationMs":21}
 {"received":1,"rejected":0,"duplicates":0,"emails":1,"processed":1,"stale":0,"failedOnPurpose":0}`, { sm: true, wrap: 'any', title: '/v2/webhooks/{id}/deliveries  +  receiver /state' }) + two(box('5 timeouts, 5 emails', 'Both sides did their job; together they sent five emails and logged a failure (BỎ sau 5 lần).', 'do2'), box('1 attempt, 21 ms, 1 email', '“Later” means a queue (10.2), not setImmediate: a receiver that crashes after 202 must still find the event.', 'xanh')) },
 
-  { t: 'The cancellation that arrived before the booking', body: `<p class="nho">An books and cancels at once; the receiver fails its first request (FAIL_FIRST=1), so <b>created</b> is retried after <b>cancelled</b> was delivered.</p>` + vsd(http(`$ sleep 4; grep '✓' recv.log
+  { t: 'The cancellation that arrived before the booking', body: `<p class="nho">Lan books and cancels at once; the receiver fails its first request (FAIL_FIRST=1), so <b>created</b> is retried after <b>cancelled</b> was delivered.</p>` + vsd(http(`$ sleep 4; grep '✓' recv.log
 ✓ msg_1793495989883-0_wh_mvx57… labflow.booking.cancelled.v1 bk_1 v2
 ✓ msg_1793495989863-0_wh_mvx57… labflow.booking.created.v1 bk_1 v1
 $ curl -s …:4005/state | jq -c '{bookings, stale: .stats.stale}'

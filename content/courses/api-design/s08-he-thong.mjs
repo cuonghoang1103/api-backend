@@ -414,6 +414,9 @@ Server-Timing: auth;dur=0.18, validate;dur=0.34, db;dur=3.20, sort;dur=0.59, tot
 │ Stat      │ 1%      │ 2.5%    │ 50%     │ 97.5%   │ Avg      │ Stdev    │ Min     │
 │ Req/Sec   │ 6,499   │ 6,499   │ 9,847   │ 11,007  │ 9,414.19 │ 1,372.42 │ 6,498   │
 104k requests in 11.01s, 85 MB read</div>
+<p>The commands below read the token of Lan (lab manager) from the folder <em>above</em> the project (<code>../lan.jwt</code>), so one login serves every chapter package unzipped side by side. Write it there first — the token lives 15 minutes (lesson 6.1), so log in again if a command answers 401:</p>
+<pre><code class="language-bash">curl -s -X POST http://localhost:4000/v2/auth/login \\
+  --json '{"email":"lan@labflow.example","password":"lan-lab-2026"}' | jq -r .accessToken &gt; ../lan.jwt</code></pre>
 <pre><code class="language-bash">npx autocannon -c 10 -d 10 -H "Authorization=Bearer $(cat ../lan.jwt)" 'http://localhost:4000/v2/bookings?limit=20' 2&gt;&amp;1 | grep -E 'Stat|Latency|Req/Sec|2xx|requests in'</code></pre>
 <div class="out">│ Stat    │ 2.5% │ 50%  │ 97.5% │ 99%   │ Avg    │ Stdev   │ Max    │
 │ Latency │ 5 ms │ 7 ms │ 24 ms │ 37 ms │ 8.7 ms │ 7.35 ms │ 151 ms │
@@ -584,6 +587,9 @@ GET /v2/labs trong lúc đó: 398 lần · p50 2.7 ms · p99 13.0 ms · max 47.8
 │ Stat      │ 1%      │ 2.5%    │ 50%     │ 97.5%   │ Avg      │ Stdev    │ Min     │
 │ Req/Sec   │ 6,499   │ 6,499   │ 9,847   │ 11,007  │ 9,414.19 │ 1,372.42 │ 6,498   │
 104k requests in 11.01s, 85 MB read</div>
+<p>Các lệnh dưới đây đọc token của Lan (quản lý phòng lab) ở thư mục <em>cha</em> của dự án (<code>../lan.jwt</code>), để một lần đăng nhập dùng chung cho mọi gói chương giải nén cạnh nhau. Ghi nó ra đó trước — token sống 15 phút (bài 6.1), lệnh nào trả 401 thì đăng nhập lại:</p>
+<pre><code class="language-bash">curl -s -X POST http://localhost:4000/v2/auth/login \\
+  --json '{"email":"lan@labflow.example","password":"lan-lab-2026"}' | jq -r .accessToken &gt; ../lan.jwt</code></pre>
 <pre><code class="language-bash">npx autocannon -c 10 -d 10 -H "Authorization=Bearer $(cat ../lan.jwt)" 'http://localhost:4000/v2/bookings?limit=20' 2&gt;&amp;1 | grep -E 'Stat|Latency|Req/Sec|2xx|requests in'</code></pre>
 <div class="out">│ Stat    │ 2.5% │ 50%  │ 97.5% │ 99%   │ Avg    │ Stdev   │ Max    │
 │ Latency │ 5 ms │ 7 ms │ 24 ms │ 37 ms │ 8.7 ms │ 7.35 ms │ 151 ms │
@@ -867,6 +873,9 @@ size: 1447 byte</div>
 
 <h3>The server pays for bytes too</h3>
 <p>The same 100-booking list under load, without and with gzip (autocannon, 10 connections, 10 s):</p>
+<p>The commands below read the token of Lan (lab manager) from the folder <em>above</em> the project (<code>../lan.jwt</code>), so one login serves every chapter package unzipped side by side. Write it there first — the token lives 15 minutes (lesson 6.1), so log in again if a command answers 401:</p>
+<pre><code class="language-bash">curl -s -X POST http://localhost:4000/v2/auth/login \\
+  --json '{"email":"lan@labflow.example","password":"lan-lab-2026"}' | jq -r .accessToken &gt; ../lan.jwt</code></pre>
 <pre><code class="language-bash">npx autocannon -c 10 -d 10 -H "Authorization=Bearer $(cat ../lan.jwt)" 'http://localhost:4000/v2/bookings?limit=100' 2&gt;&amp;1 | grep -E 'Latency|Req/Sec|requests in'</code></pre>
 <div class="out">│ Latency │ 5 ms │ 7 ms │ 16 ms │ 21 ms │ 8.11 ms │ 4.6 ms │ 140 ms │
 │ Req/Sec   │ 683     │ 683     │ 1,224   │ 1,336   │ 1,163.91 │ 198.97  │ 683     │
@@ -1045,6 +1054,9 @@ size: 1447 byte</div>
 
 <h3>Server cũng trả giá cho từng byte</h3>
 <p>Cùng danh sách 100 lượt đặt khi có tải, không nén và có gzip (autocannon, 10 kết nối, 10 giây):</p>
+<p>Các lệnh dưới đây đọc token của Lan (quản lý phòng lab) ở thư mục <em>cha</em> của dự án (<code>../lan.jwt</code>), để một lần đăng nhập dùng chung cho mọi gói chương giải nén cạnh nhau. Ghi nó ra đó trước — token sống 15 phút (bài 6.1), lệnh nào trả 401 thì đăng nhập lại:</p>
+<pre><code class="language-bash">curl -s -X POST http://localhost:4000/v2/auth/login \\
+  --json '{"email":"lan@labflow.example","password":"lan-lab-2026"}' | jq -r .accessToken &gt; ../lan.jwt</code></pre>
 <pre><code class="language-bash">npx autocannon -c 10 -d 10 -H "Authorization=Bearer $(cat ../lan.jwt)" 'http://localhost:4000/v2/bookings?limit=100' 2&gt;&amp;1 | grep -E 'Latency|Req/Sec|requests in'</code></pre>
 <div class="out">│ Latency │ 5 ms │ 7 ms │ 16 ms │ 21 ms │ 8.11 ms │ 4.6 ms │ 140 ms │
 │ Req/Sec   │ 683     │ 683     │ 1,224   │ 1,336   │ 1,163.91 │ 198.97  │ 683     │
@@ -2466,6 +2478,9 @@ Server-Timing: auth;dur=0.12, validate;dur=0.57, total;dur=335.41</div>
 <pre><code class="language-bash">jq -c ".rows[0:3], (.rows | length)" before.json</code></pre>
 <div class="out">[{"day":"2026-11-02","labId":"lab_1","bookings":4,"hours":8},{"day":"2026-11-02","labId":"lab_2","bookings":4,"hours":8},{"day":"2026-11-02","labId":"lab_3","bookings":5,"hours":10}]
 120</div>
+<p>The commands below read the token of Lan (lab manager) from the folder <em>above</em> the project (<code>../lan.jwt</code>), so one login serves every chapter package unzipped side by side. Write it there first — the token lives 15 minutes (lesson 6.1), so log in again if a command answers 401:</p>
+<pre><code class="language-bash">curl -s -X POST http://localhost:4000/v2/auth/login \\
+  --json '{"email":"lan@labflow.example","password":"lan-lab-2026"}' | jq -r .accessToken &gt; ../lan.jwt</code></pre>
 <pre><code class="language-bash">TOKEN=$(cat ../lan.jwt) CONC=5 node perf/report-mixed.mjs</code></pre>
 <div class="out">report: 2.9 req/s · p50 1677 ms · p99 3098 ms · 2xx 29 · non-2xx 0
 GET /v2/labs trong lúc đó: 4 lần · p50 3119.9 ms · p99 3336.4 ms · max 3336.4 ms · mã {"200":4}</div>
@@ -2678,6 +2693,9 @@ Server-Timing: auth;dur=0.12, validate;dur=0.57, total;dur=335.41</div>
 <pre><code class="language-bash">jq -c ".rows[0:3], (.rows | length)" before.json</code></pre>
 <div class="out">[{"day":"2026-11-02","labId":"lab_1","bookings":4,"hours":8},{"day":"2026-11-02","labId":"lab_2","bookings":4,"hours":8},{"day":"2026-11-02","labId":"lab_3","bookings":5,"hours":10}]
 120</div>
+<p>Các lệnh dưới đây đọc token của Lan (quản lý phòng lab) ở thư mục <em>cha</em> của dự án (<code>../lan.jwt</code>), để một lần đăng nhập dùng chung cho mọi gói chương giải nén cạnh nhau. Ghi nó ra đó trước — token sống 15 phút (bài 6.1), lệnh nào trả 401 thì đăng nhập lại:</p>
+<pre><code class="language-bash">curl -s -X POST http://localhost:4000/v2/auth/login \\
+  --json '{"email":"lan@labflow.example","password":"lan-lab-2026"}' | jq -r .accessToken &gt; ../lan.jwt</code></pre>
 <pre><code class="language-bash">TOKEN=$(cat ../lan.jwt) CONC=5 node perf/report-mixed.mjs</code></pre>
 <div class="out">report: 2.9 req/s · p50 1677 ms · p99 3098 ms · 2xx 29 · non-2xx 0
 GET /v2/labs trong lúc đó: 4 lần · p50 3119.9 ms · p99 3336.4 ms · max 3336.4 ms · mã {"200":4}</div>

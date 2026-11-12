@@ -2372,6 +2372,9 @@ exit=0</div>
 <pre><code class="language-bash">BASE=http://localhost:4010 node client/waitlist.ts</code></pre>
 <div class="out">201 wl_1 WAITING vị trí 1 string</div>
 <p>Against the mock the client already works: the id, status and position come from the examples; <code>Location</code> prints “string” because the header has no example — a hint to add one.</p>
+<p>The commands below read the token of Bình (student) from the folder <em>above</em> the project (<code>../bin.jwt</code>), so one login serves every chapter package unzipped side by side. Write it there first — the token lives 15 minutes (lesson 6.1), so log in again if a command answers 401:</p>
+<pre><code class="language-bash">curl -s -X POST http://localhost:4000/v2/auth/login \\
+  --json '{"email":"binh@student.labflow.example","password":"binh-lab-2026"}' | jq -r .accessToken &gt; ../bin.jwt</code></pre>
 <pre><code class="language-bash">TOKEN=$(cat ../bin.jwt) node client/waitlist.ts</code></pre>
 <div class="out">409 SLOT_AVAILABLE</div>
 <pre><code class="language-bash">curl -s -X POST http://localhost:4000/v2/bookings \\
@@ -2600,6 +2603,9 @@ exit=0</div>
 <pre><code class="language-bash">BASE=http://localhost:4010 node client/waitlist.ts</code></pre>
 <div class="out">201 wl_1 WAITING vị trí 1 string</div>
 <p>Với mock, client đã chạy: id, trạng thái và vị trí lấy từ ví dụ; <code>Location</code> in ra “string” vì header chưa có ví dụ — một gợi ý nên thêm.</p>
+<p>Các lệnh dưới đây đọc token của Bình (sinh viên) ở thư mục <em>cha</em> của dự án (<code>../bin.jwt</code>), để một lần đăng nhập dùng chung cho mọi gói chương giải nén cạnh nhau. Ghi nó ra đó trước — token sống 15 phút (bài 6.1), lệnh nào trả 401 thì đăng nhập lại:</p>
+<pre><code class="language-bash">curl -s -X POST http://localhost:4000/v2/auth/login \\
+  --json '{"email":"binh@student.labflow.example","password":"binh-lab-2026"}' | jq -r .accessToken &gt; ../bin.jwt</code></pre>
 <pre><code class="language-bash">TOKEN=$(cat ../bin.jwt) node client/waitlist.ts</code></pre>
 <div class="out">409 SLOT_AVAILABLE</div>
 <pre><code class="language-bash">curl -s -X POST http://localhost:4000/v2/bookings \\

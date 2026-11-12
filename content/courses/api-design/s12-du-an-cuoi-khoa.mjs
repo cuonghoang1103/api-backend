@@ -100,10 +100,17 @@ src/routes/waitlist.js:15:export const waitlist = [];   // { id,</div>
 
 <h3>Measure the damage first</h3>
 <p>Two instances A (:4200) and B (:4201) run the RAM store behind a small health-checking proxy (:8180, <code>perf/proxy-health.mjs</code>). First, book on A, restart A, read it back:</p>
+<p>Start the in-memory pair and the proxy (three terminals), then log in as Cô Lan:</p>
+<pre><code class="language-bash">PORT=4200 LABFLOW_INSTANCE=A npm start        # terminal 1
+PORT=4201 LABFLOW_INSTANCE=B npm start        # terminal 2
+node perf/proxy-health.mjs 8180 4200 4201    # terminal 3</code></pre>
+<pre><code class="language-bash">curl -s -X POST http://localhost:4200/v2/auth/login --json '{"email":"lan@labflow.example","password":"lan-lab-2026"}' | jq -r .accessToken &gt; lan.jwt</code></pre>
 <pre><code class="language-bash">curl -s -o /dev/null -w '%{http_code} %header{location}\\n' http://localhost:4200/v2/bookings \\
   -H "Authorization: Bearer $(cat lan.jwt)" \\
   --json '{"labId":"lab_1","period":{"start":"2027-04-05T08:00:00+07:00","end":"2027-04-05T10:00:00+07:00"}}' | tee created.txt</code></pre>
 <div class="out">201 /v2/bookings/bk_1</div>
+<p>Restart A (terminal 1: Ctrl+C, then the same command again):</p>
+<pre><code class="language-bash">PORT=4200 LABFLOW_INSTANCE=A npm start</code></pre>
 <pre><code class="language-bash">curl -s -o /dev/null -w "GET $(cut -d' ' -f2 created.txt) sau khi khởi động lại: %{http_code}\\n" "http://localhost:4200$(cut -d' ' -f2 created.txt)" \\
   -H "Authorization: Bearer $(cat lan.jwt)"</code></pre>
 <div class="out">GET /v2/bookings/bk_1 sau khi khởi động lại: 404</div>
@@ -211,6 +218,11 @@ GET /v2/bookings/bk_1: 200 instance=B</div>
   <li><code>timestamptz(3)</code> matches the millisecond cursor: microseconds lost 900 of 1,000 rows on a bulk insert, 11–61 on single inserts.</li>
   <li>Next lesson: getting this schema into a database safely — migrations, constraints at work, seed data.</li>
 </ul>
+<a class="link-card" href="/courses/postgresql/learn?lessonSlug=postgresql-3-3-rang-buoc-cot" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper: PostgreSQL course — 3.3 Column constraints</span><span class="lc-sub">“One rule, one constraint” starts with NOT NULL, UNIQUE and CHECK; that lesson builds them from zero before this chapter adds EXCLUDE.</span></span>
+  <span class="lc-cta">OPEN →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -272,10 +284,17 @@ src/routes/waitlist.js:15:export const waitlist = [];   // { id,</div>
 
 <h3>Đo thiệt hại trước đã</h3>
 <p>Hai instance A (:4200) và B (:4201) chạy kho RAM sau một proxy nhỏ có kiểm sức khoẻ (:8180, <code>perf/proxy-health.mjs</code>). Đầu tiên đặt ở A, khởi động lại A, rồi đọc lại:</p>
+<p>Bật hai instance kho RAM và proxy (ba terminal), rồi đăng nhập bằng Cô Lan:</p>
+<pre><code class="language-bash">PORT=4200 LABFLOW_INSTANCE=A npm start        # terminal 1
+PORT=4201 LABFLOW_INSTANCE=B npm start        # terminal 2
+node perf/proxy-health.mjs 8180 4200 4201    # terminal 3</code></pre>
+<pre><code class="language-bash">curl -s -X POST http://localhost:4200/v2/auth/login --json '{"email":"lan@labflow.example","password":"lan-lab-2026"}' | jq -r .accessToken &gt; lan.jwt</code></pre>
 <pre><code class="language-bash">curl -s -o /dev/null -w '%{http_code} %header{location}\\n' http://localhost:4200/v2/bookings \\
   -H "Authorization: Bearer $(cat lan.jwt)" \\
   --json '{"labId":"lab_1","period":{"start":"2027-04-05T08:00:00+07:00","end":"2027-04-05T10:00:00+07:00"}}' | tee created.txt</code></pre>
 <div class="out">201 /v2/bookings/bk_1</div>
+<p>Khởi động lại A (terminal 1: Ctrl+C, rồi chạy lại đúng lệnh cũ):</p>
+<pre><code class="language-bash">PORT=4200 LABFLOW_INSTANCE=A npm start</code></pre>
 <pre><code class="language-bash">curl -s -o /dev/null -w "GET $(cut -d' ' -f2 created.txt) sau khi khởi động lại: %{http_code}\\n" "http://localhost:4200$(cut -d' ' -f2 created.txt)" \\
   -H "Authorization: Bearer $(cat lan.jwt)"</code></pre>
 <div class="out">GET /v2/bookings/bk_1 sau khi khởi động lại: 404</div>
@@ -383,6 +402,11 @@ GET /v2/bookings/bk_1: 200 instance=B</div>
   <li><code>timestamptz(3)</code> khớp con trỏ mili giây: để micro giây thì mất 900/1.000 dòng khi nhập lô, 11–61 dòng khi chèn từng dòng.</li>
   <li>Bài sau: đưa lược đồ này vào CSDL một cách an toàn — migration, ràng buộc khi chạy thật, dữ liệu mẫu.</li>
 </ul>
+<a class="link-card" href="/courses/postgresql/learn?lessonSlug=postgresql-3-3-rang-buoc-cot" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn: khoá PostgreSQL — 3.3 Ràng buộc cột</span><span class="lc-sub">“Một luật, một ràng buộc” bắt đầu từ NOT NULL, UNIQUE và CHECK; bài đó dựng chúng từ số 0 trước khi chương này thêm EXCLUDE.</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
 </div>
 `,
     },
@@ -424,6 +448,9 @@ for (const f of files) {                                          //    001_core
   await db.query('BEGIN'); await db.query(sql);                   // 4) one transaction per file:
   await db.query('INSERT INTO schema_migrations …'); await db.query('COMMIT');   //    all of it or none of it
 }</code></pre>
+<p>The lesson works on its own empty database:</p>
+<pre><code class="language-bash">createdb -h localhost -p 55432 -U labflow labflow_demo
+export DATABASE_URL=postgres://labflow@localhost:55432/labflow_demo</code></pre>
 <pre><code class="language-bash">npm run -s db:status</code></pre>
 <div class="out">  CHƯA áp 001_core.sql
   CHƯA áp 002_outbox.sql
@@ -450,12 +477,20 @@ xong: áp 4 migration</div>
 <div class="out">migration DỪNG: 002_outbox.sql đã áp nhưng nội dung ĐÃ BỊ SỬA (checksum b0c90a7db3f1 ⇒ 302e7ffe0ea0). Đừng sửa migration đã chạy — viết tệp mới.
 exit 1</div>
 <p>The checksum catches it. The fix is never “edit and force”: revert the edit and write <code>005_…sql</code>. A migration that fails halfway (a typo in its third statement):</p>
+<p>Undo the edit (never “fix and force”):</p>
+<pre><code class="language-bash">perl -i -ne 'print unless /^-- sửa một dòng chú thích$/' migrations/002_outbox.sql &amp;&amp; npm run -s db:status</code></pre>
+<div class="out">  đã áp   001_core.sql
+  đã áp   002_outbox.sql
+  đã áp   003_shared_state.sql
+  đã áp   004_issues.sql</div>
 <pre><code class="language-bash">printf "CREATE TABLE lab_photos (id text PRIMARY KEY, lab_id text NOT NULL REFERENCES labs);\\nALTER TABLE lab_photos ADD COLUMN url text NOT NULL CHECK (url LIKE 'https://%%');\\nALTER TABLE lab_photos ADD COLUMN size_kb int NOT NULL REFERENCS labs;\\n" &gt; migrations/005_lab_photos.sql &amp;&amp; npm run -s db:migrate; echo "exit $?"</code></pre>
 <div class="out">migration DỪNG: 005_lab_photos.sql hỏng, đã ROLLBACK cả tệp: syntax error at or near "REFERENCS"
 exit 1</div>
 <pre><code class="language-bash">psql "$DATABASE_URL" -Atc "SELECT to_regclass('lab_photos') IS NULL AS khong_co_bang, (SELECT count(*) FROM schema_migrations) AS so_migration"</code></pre>
 <div class="out">t|4</div>
 <p>The table from the first statement does not exist and the history still has four rows — PostgreSQL runs DDL inside transactions, so a broken file leaves no half-built schema. And two instances starting at the same moment:</p>
+<p>Delete the broken file and start from an empty database again, so both instances find work to do:</p>
+<pre><code class="language-bash">rm migrations/005_lab_photos.sql; dropdb -h localhost -p 55432 -U labflow labflow_demo; createdb -h localhost -p 55432 -U labflow labflow_demo</code></pre>
 <pre><code class="language-bash">(INSTANCE=A npm run -s db:migrate | sed 's/^/[A] /' &amp; INSTANCE=B npm run -s db:migrate | sed 's/^/[B] /' &amp; wait)</code></pre>
 <div class="out">[A]   áp 001_core.sql (38 ms)
 [A]   áp 002_outbox.sql (3 ms)
@@ -526,6 +561,8 @@ exit 1</div>
 <div class="out">  áp 005_bookings_lab_start.sql (5 ms)
 xong: áp 1 migration
 exit 0</div>
+<p>The 005 file was only for this experiment — delete it so the next lessons run exactly four migrations:</p>
+<pre><code class="language-bash">rm migrations/005_bookings_lab_start.sql</code></pre>
 <div class="pitfall"><p><strong>Trap — testing migrations on an empty database.</strong> On your laptop every ALTER takes 1 ms because the tables are empty. Rehearse on a copy with production-sized data (the restore drill of 12.7 gives you one) before the real deploy.</p></div>
 
 <h3>On deploy day: expand, then contract</h3>
@@ -570,6 +607,11 @@ exit 0</div>
   <span class="lc-body"><span class="lc-title">You met this in PRJ301 — ⭐ CS.3 (1): HikariCP, Flyway, JdbcTemplate</span><span class="lc-sub">Same: numbered migrations run once, recorded with a checksum, never edited after they ran. Different: here you write the runner yourself (advisory lock, one transaction per file) and measure which DDL blocks writes on 1M rows. Not taken PRJ301? This lesson stands on its own.</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
+<a class="link-card" href="/courses/prisma-orm/learn?lessonSlug=pr-6-1-migration-la-gi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper: Prisma course — 6.1 What a migration actually is</span><span class="lc-sub">This chapter writes SQL migrations by hand; if your project uses Prisma, that lesson shows the same ideas — history table, checksums, drift — through its tooling.</span></span>
+  <span class="lc-cta">OPEN →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -602,6 +644,9 @@ for (const f of files) {                                          //    001_core
   await db.query('BEGIN'); await db.query(sql);                   // 4) mỗi tệp một transaction:
   await db.query('INSERT INTO schema_migrations …'); await db.query('COMMIT');   //    hoặc tất cả, hoặc không gì
 }</code></pre>
+<p>Bài này làm trên một CSDL trống riêng:</p>
+<pre><code class="language-bash">createdb -h localhost -p 55432 -U labflow labflow_demo
+export DATABASE_URL=postgres://labflow@localhost:55432/labflow_demo</code></pre>
 <pre><code class="language-bash">npm run -s db:status</code></pre>
 <div class="out">  CHƯA áp 001_core.sql
   CHƯA áp 002_outbox.sql
@@ -628,12 +673,20 @@ xong: áp 4 migration</div>
 <div class="out">migration DỪNG: 002_outbox.sql đã áp nhưng nội dung ĐÃ BỊ SỬA (checksum b0c90a7db3f1 ⇒ 302e7ffe0ea0). Đừng sửa migration đã chạy — viết tệp mới.
 exit 1</div>
 <p>Checksum bắt được. Cách sửa không bao giờ là “sửa rồi ép”: hoàn tác chỗ sửa và viết <code>005_…sql</code>. Một migration hỏng giữa chừng (gõ sai ở câu lệnh thứ ba):</p>
+<p>Hoàn tác chỗ sửa (không bao giờ “sửa rồi ép”):</p>
+<pre><code class="language-bash">perl -i -ne 'print unless /^-- sửa một dòng chú thích$/' migrations/002_outbox.sql &amp;&amp; npm run -s db:status</code></pre>
+<div class="out">  đã áp   001_core.sql
+  đã áp   002_outbox.sql
+  đã áp   003_shared_state.sql
+  đã áp   004_issues.sql</div>
 <pre><code class="language-bash">printf "CREATE TABLE lab_photos (id text PRIMARY KEY, lab_id text NOT NULL REFERENCES labs);\\nALTER TABLE lab_photos ADD COLUMN url text NOT NULL CHECK (url LIKE 'https://%%');\\nALTER TABLE lab_photos ADD COLUMN size_kb int NOT NULL REFERENCS labs;\\n" &gt; migrations/005_lab_photos.sql &amp;&amp; npm run -s db:migrate; echo "exit $?"</code></pre>
 <div class="out">migration DỪNG: 005_lab_photos.sql hỏng, đã ROLLBACK cả tệp: syntax error at or near "REFERENCS"
 exit 1</div>
 <pre><code class="language-bash">psql "$DATABASE_URL" -Atc "SELECT to_regclass('lab_photos') IS NULL AS khong_co_bang, (SELECT count(*) FROM schema_migrations) AS so_migration"</code></pre>
 <div class="out">t|4</div>
 <p>Bảng của câu lệnh đầu không tồn tại và lịch sử vẫn bốn dòng — PostgreSQL chạy DDL trong transaction, nên một tệp hỏng không để lại lược đồ dở dang. Và hai instance khởi động cùng một lúc:</p>
+<p>Xoá tệp hỏng và dựng lại CSDL trống, để cả hai instance cùng có việc:</p>
+<pre><code class="language-bash">rm migrations/005_lab_photos.sql; dropdb -h localhost -p 55432 -U labflow labflow_demo; createdb -h localhost -p 55432 -U labflow labflow_demo</code></pre>
 <pre><code class="language-bash">(INSTANCE=A npm run -s db:migrate | sed 's/^/[A] /' &amp; INSTANCE=B npm run -s db:migrate | sed 's/^/[B] /' &amp; wait)</code></pre>
 <div class="out">[A]   áp 001_core.sql (38 ms)
 [A]   áp 002_outbox.sql (3 ms)
@@ -704,6 +757,8 @@ exit 1</div>
 <div class="out">  áp 005_bookings_lab_start.sql (5 ms)
 xong: áp 1 migration
 exit 0</div>
+<p>Tệp 005 chỉ để thử — xoá nó để các bài sau chạy đúng bốn migration:</p>
+<pre><code class="language-bash">rm migrations/005_bookings_lab_start.sql</code></pre>
 <div class="pitfall"><p><strong>Bẫy — thử migration trên CSDL rỗng.</strong> Trên máy bạn ALTER nào cũng mất 1 ms vì bảng trống. Diễn tập trên bản sao có dữ liệu cỡ production (bài diễn tập khôi phục 12.7 cho bạn một bản) trước khi triển khai thật.</p></div>
 
 <h3>Ngày triển khai: mở rộng trước, thu gọn sau</h3>
@@ -748,6 +803,11 @@ exit 0</div>
   <span class="lc-body"><span class="lc-title">Bạn đã gặp ở PRJ301 — ⭐ CS.3 (1): HikariCP, Flyway, JdbcTemplate</span><span class="lc-sub">Giống: migration đánh số chạy một lần, ghi kèm checksum, đã chạy thì không sửa. Khác: ở đây bạn tự viết bộ chạy (advisory lock, mỗi file một transaction) và đo câu DDL nào chặn ghi trên 1 triệu dòng. Chưa học PRJ301? Bài này tự đủ.</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
 </a>
+<a class="link-card" href="/courses/prisma-orm/learn?lessonSlug=pr-6-1-migration-la-gi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn: khoá Prisma — 6.1 Migration thật sự là gì</span><span class="lc-sub">Chương này viết migration SQL bằng tay; dự án dùng Prisma thì bài đó cho thấy cùng các ý — bảng lịch sử, checksum, lệch — qua công cụ của nó.</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
 </div>
 `,
     },
@@ -774,6 +834,7 @@ exit 0</div>
   <div class="lz-step"><span class="lz-k">pg.js</span><span class="lz-t">SQL + transactions</span><span class="lz-d">LABFLOW_STORE=pg</span></div>
 </div>
 <p>The payoff: the <em>same</em> test files run against both. Five new tests in <code>test/capstone.test.mjs</code> cover the rules that only matter with real concurrency; the outbox test runs only where an outbox exists:</p>
+<pre><code class="language-bash">createdb -h localhost -p 55432 -U labflow labflow_test      # một lần; test:pg chỉ chịu xoá CSDL tên kết thúc _test</code></pre>
 <pre><code class="language-bash">DATABASE_URL=postgres://labflow@localhost:55432/labflow_test npm run -s test:pg 2&gt;&amp;1 | grep -E "^seed|^ℹ (tests|pass|fail|skipped)|12\\.[0-9]:"</code></pre>
 <div class="out">seed labflow_test: users 3 · labs 4 · devices 3 · bookings 0 · issues 0 (5 ms)
 ✔ 12.3: 20 request cùng đặt MỘT khung giờ ⇒ đúng 1 lượt 201, 19 lượt 409 kèm conflictWith (69.824833ms)
@@ -807,6 +868,11 @@ src/routes/stats.js:7:const pool = new pg.Pool({ max: 10 });</div>
 });
 pool.on('error', (e) =&gt; console.error('pg pool:', e.message));   // an idle connection dying must not kill the process</code></pre>
 <p>A pool is a queue. Twenty queries of 100 ms against two connections need a full second — whoever waits longer than the timeout gets an error:</p>
+<p>Everything below runs on the chapter database (created, migrated and seeded once) behind the full stack:</p>
+<pre><code class="language-bash">createdb -h localhost -p 55432 -U labflow labflow_app
+export DATABASE_URL=postgres://labflow@localhost:55432/labflow_app LABFLOW_REDIS=redis://localhost:6390
+npm run -s db:migrate &amp;&amp; SEED_BOOKINGS=10000 npm run -s db:seed
+bash ops/dev-stack.sh start      # A :4200, B :4201, worker, proxy :8180</code></pre>
 <pre><code class="language-bash">MAX=2 WAIT=0 node perf/pool.mjs</code></pre>
 <div class="out">max=2 chờ tối đa ∞ ms · 20 truy vấn 100 ms: xong 20 (nhanh nhất 103 ms, chậm nhất 1028 ms) · lỗi 0 · tổng 1028 ms</div>
 <pre><code class="language-bash">MAX=2 WAIT=500 node perf/pool.mjs</code></pre>
@@ -848,16 +914,30 @@ pool.on('error', (e) =&gt; console.error('pg pool:', e.message));   // an idle c
   return row;
 });</code></pre>
 <p>Fifty managers press “Book” for the same lab and slot, through the proxy, so both instances receive about half. First the RAM store, then PostgreSQL:</p>
+<p>The race needs a database with no sample bookings (a seeded booking already holds that slot, and An already has three) and the Chapter 8 test-only limit, or Lan’s fifty requests stop at 429. First the in-memory pair (three terminals):</p>
+<pre><code class="language-bash">createdb -h localhost -p 55432 -U labflow labflow_race
+export DATABASE_URL=postgres://labflow@localhost:55432/labflow_race
+npm run -s db:migrate &amp;&amp; npm run -s db:seed</code></pre>
+<pre><code class="language-bash">PORT=4200 LABFLOW_INSTANCE=A LABFLOW_BOOKING_LIMIT=1000000/60 npm start
+PORT=4201 LABFLOW_INSTANCE=B LABFLOW_BOOKING_LIMIT=1000000/60 npm start
+node perf/proxy-health.mjs 8180 4200 4201</code></pre>
 <pre><code class="language-bash">node perf/race-api.mjs slot 50</code></pre>
 <div class="out">50 request cùng đặt lab_1 2027-06-01 07:00–09:00: 201@A×1  201@B×1  409@A×24  409@B×24
 GET /v2/bookings khung giờ đó (qua proxy): 1 lượt PENDING</div>
+<p>Stop the three, then the PostgreSQL stack on the same empty database:</p>
+<pre><code class="language-bash">bash ops/dev-stack.sh start LABFLOW_BOOKING_LIMIT=1000000/60</code></pre>
 <pre><code class="language-bash">node perf/race-api.mjs slot 50</code></pre>
 <div class="out">50 request cùng đặt lab_1 2027-06-01 07:00–09:00: 409@B×25  409@A×24  201@A×1
 GET /v2/bookings khung giờ đó (qua proxy): 1 lượt PENDING</div>
 <p>RAM: one winner <em>per instance</em> — two bookings for one room (the list shows one, because each instance only sees its own). PostgreSQL: the EXCLUDE constraint lets exactly one INSERT through; the 49 others get the Chapter 2 <code>409 BOOKING_CONFLICT</code> with <code>conflictWith</code>, which the store finds after catching <code>23P01</code>.</p>
 <p>The quieter rule is “a student holds at most three active bookings”. Counting then inserting is a race even inside one database. We ran An's ten simultaneous requests three times without the <code>FOR UPDATE</code> line (<code>LABFLOW_NO_USER_LOCK=1</code>, a learning switch) and three times with it:</p>
-<div class="out">nolock #1: An bấm 10 lượt (10 khung giờ khác nhau) cùng lúc: 201×8  422×2  — luật: tối đa 3 lượt còn hiệu lực
-lock #1: An bấm 10 lượt (10 khung giờ khác nhau) cùng lúc: 201×3  422×7  — luật: tối đa 3 lượt còn hiệu lực</div>
+<pre><code class="language-bash">bash ops/dev-stack.sh start LABFLOW_BOOKING_LIMIT=1000000/60 LABFLOW_NO_USER_LOCK=1
+node perf/race-api.mjs quota 10</code></pre>
+<div class="out">An bấm 10 lượt (10 khung giờ khác nhau) cùng lúc: 201×6  422×4  — luật: tối đa 3 lượt còn hiệu lực</div>
+<pre><code class="language-bash">bash ops/dev-stack.sh stop; dropdb -h localhost -p 55432 -U labflow labflow_race &amp;&amp; createdb -h localhost -p 55432 -U labflow labflow_race &amp;&amp; npm run -s db:migrate &amp;&amp; npm run -s db:seed
+bash ops/dev-stack.sh start LABFLOW_BOOKING_LIMIT=1000000/60
+node perf/race-api.mjs quota 10</code></pre>
+<div class="out">An bấm 10 lượt (10 khung giờ khác nhau) cùng lúc: 201×3  422×7  — luật: tối đa 3 lượt còn hiệu lực</div>
 <p>Three runs each (first runs shown): without the lock 8, 6 and 5 bookings got through; with it, 3, 3 and 3. Without the lock each transaction counted before any of the others committed. Locking <em>the user's row</em> makes one student's requests queue, while other students are not blocked at all — a lock as narrow as the rule.</p>
 
 <h3>Database errors become HTTP errors</h3>
@@ -873,6 +953,11 @@ lock #1: An bấm 10 lượt (10 khung giờ khác nhau) cùng lúc: 201×3  422
 
 <h3>Pages come straight from an index</h3>
 <p>The cursor from Chapter 3 becomes a keyset condition, <code>(created_at, seq) &lt; ($1, $2)</code>, and the 12.1 index serves it without sorting. On 10,000 seeded bookings, “my bookings” for An:</p>
+<p>Back to the seeded chapter database for the rest of the lesson, and log in as Lan and An:</p>
+<pre><code class="language-bash">export DATABASE_URL=postgres://labflow@localhost:55432/labflow_app
+bash ops/dev-stack.sh start</code></pre>
+<pre><code class="language-bash">curl -s -X POST http://localhost:4200/v2/auth/login --json '{"email":"lan@labflow.example","password":"lan-lab-2026"}' | jq -r .accessToken &gt; lan.jwt
+curl -s -X POST http://localhost:4200/v2/auth/login --json '{"email":"an@student.labflow.example","password":"an-lab-2026"}' | jq -r .accessToken &gt; an.jwt</code></pre>
 <pre><code class="language-bash">psql "$DATABASE_URL" -c "EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY ON) SELECT * FROM bookings WHERE user_id = 'usr_1' ORDER BY created_at DESC, seq DESC LIMIT 21"</code></pre>
 <div class="out">                                     QUERY PLAN                                      
 -------------------------------------------------------------------------------------
@@ -954,6 +1039,7 @@ an: Server-Timing: auth;dur=0.06, user;dur=0.42, validate;dur=0.07, db;dur=0.49,
   <div class="lz-step"><span class="lz-k">pg.js</span><span class="lz-t">SQL + transaction</span><span class="lz-d">LABFLOW_STORE=pg</span></div>
 </div>
 <p>Phần thưởng: <em>cùng</em> các tệp test chạy được trên cả hai. Năm test mới trong <code>test/capstone.test.mjs</code> phủ những luật chỉ có ý nghĩa khi có đồng thời thật; test outbox chỉ chạy ở nơi có outbox:</p>
+<pre><code class="language-bash">createdb -h localhost -p 55432 -U labflow labflow_test      # một lần; test:pg chỉ chịu xoá CSDL tên kết thúc _test</code></pre>
 <pre><code class="language-bash">DATABASE_URL=postgres://labflow@localhost:55432/labflow_test npm run -s test:pg 2&gt;&amp;1 | grep -E "^seed|^ℹ (tests|pass|fail|skipped)|12\\.[0-9]:"</code></pre>
 <div class="out">seed labflow_test: users 3 · labs 4 · devices 3 · bookings 0 · issues 0 (5 ms)
 ✔ 12.3: 20 request cùng đặt MỘT khung giờ ⇒ đúng 1 lượt 201, 19 lượt 409 kèm conflictWith (69.824833ms)
@@ -987,6 +1073,11 @@ src/routes/stats.js:7:const pool = new pg.Pool({ max: 10 });</div>
 });
 pool.on('error', (e) =&gt; console.error('pg pool:', e.message));   // một kết nối rảnh bị đứt không được làm chết tiến trình</code></pre>
 <p>Pool là một hàng đợi. Hai mươi truy vấn 100 ms trên hai kết nối cần trọn một giây — ai chờ quá thời hạn thì nhận lỗi:</p>
+<p>Mọi lệnh dưới đây chạy trên CSDL của chương (tạo, migrate, nạp mẫu một lần) sau trọn bộ API:</p>
+<pre><code class="language-bash">createdb -h localhost -p 55432 -U labflow labflow_app
+export DATABASE_URL=postgres://labflow@localhost:55432/labflow_app LABFLOW_REDIS=redis://localhost:6390
+npm run -s db:migrate &amp;&amp; SEED_BOOKINGS=10000 npm run -s db:seed
+bash ops/dev-stack.sh start      # A :4200, B :4201, worker, proxy :8180</code></pre>
 <pre><code class="language-bash">MAX=2 WAIT=0 node perf/pool.mjs</code></pre>
 <div class="out">max=2 chờ tối đa ∞ ms · 20 truy vấn 100 ms: xong 20 (nhanh nhất 103 ms, chậm nhất 1028 ms) · lỗi 0 · tổng 1028 ms</div>
 <pre><code class="language-bash">MAX=2 WAIT=500 node perf/pool.mjs</code></pre>
@@ -1028,16 +1119,30 @@ pool.on('error', (e) =&gt; console.error('pg pool:', e.message));   // một k�
   return row;
 });</code></pre>
 <p>Năm mươi quản lý cùng bấm “Đặt” cho cùng phòng, cùng khung giờ, qua proxy, nên mỗi instance nhận chừng một nửa. Trước là kho RAM, sau là PostgreSQL:</p>
+<p>Cuộc đua cần một CSDL không có lượt mẫu (lượt mẫu đã chiếm khung giờ đó, và An đã có ba lượt) và giới hạn chỉ-để-đo của Chương 8, không thì năm mươi request của Lan dừng ở 429. Trước hết là cặp kho RAM (ba terminal):</p>
+<pre><code class="language-bash">createdb -h localhost -p 55432 -U labflow labflow_race
+export DATABASE_URL=postgres://labflow@localhost:55432/labflow_race
+npm run -s db:migrate &amp;&amp; npm run -s db:seed</code></pre>
+<pre><code class="language-bash">PORT=4200 LABFLOW_INSTANCE=A LABFLOW_BOOKING_LIMIT=1000000/60 npm start
+PORT=4201 LABFLOW_INSTANCE=B LABFLOW_BOOKING_LIMIT=1000000/60 npm start
+node perf/proxy-health.mjs 8180 4200 4201</code></pre>
 <pre><code class="language-bash">node perf/race-api.mjs slot 50</code></pre>
 <div class="out">50 request cùng đặt lab_1 2027-06-01 07:00–09:00: 201@A×1  201@B×1  409@A×24  409@B×24
 GET /v2/bookings khung giờ đó (qua proxy): 1 lượt PENDING</div>
+<p>Tắt ba tiến trình đó, rồi bật bộ PostgreSQL trên cùng CSDL trống:</p>
+<pre><code class="language-bash">bash ops/dev-stack.sh start LABFLOW_BOOKING_LIMIT=1000000/60</code></pre>
 <pre><code class="language-bash">node perf/race-api.mjs slot 50</code></pre>
 <div class="out">50 request cùng đặt lab_1 2027-06-01 07:00–09:00: 409@B×25  409@A×24  201@A×1
 GET /v2/bookings khung giờ đó (qua proxy): 1 lượt PENDING</div>
 <p>RAM: mỗi <em>instance</em> một người thắng — hai lượt đặt cho một phòng (danh sách chỉ hiện một, vì mỗi instance chỉ thấy phần của mình). PostgreSQL: ràng buộc EXCLUDE cho đúng một câu INSERT đi qua; 49 người còn lại nhận <code>409 BOOKING_CONFLICT</code> của Chương 2 kèm <code>conflictWith</code>, store tìm ra nó sau khi bắt lỗi <code>23P01</code>.</p>
 <p>Luật lặng lẽ hơn là “một sinh viên giữ tối đa ba lượt còn hiệu lực”. Đếm rồi chèn là một cuộc đua kể cả trong một CSDL. Mười request cùng lúc của An được chạy ba lần khi bỏ dòng <code>FOR UPDATE</code> (<code>LABFLOW_NO_USER_LOCK=1</code>, công tắc chỉ để học) và ba lần khi có nó:</p>
-<div class="out">nolock #1: An bấm 10 lượt (10 khung giờ khác nhau) cùng lúc: 201×8  422×2  — luật: tối đa 3 lượt còn hiệu lực
-lock #1: An bấm 10 lượt (10 khung giờ khác nhau) cùng lúc: 201×3  422×7  — luật: tối đa 3 lượt còn hiệu lực</div>
+<pre><code class="language-bash">bash ops/dev-stack.sh start LABFLOW_BOOKING_LIMIT=1000000/60 LABFLOW_NO_USER_LOCK=1
+node perf/race-api.mjs quota 10</code></pre>
+<div class="out">An bấm 10 lượt (10 khung giờ khác nhau) cùng lúc: 201×6  422×4  — luật: tối đa 3 lượt còn hiệu lực</div>
+<pre><code class="language-bash">bash ops/dev-stack.sh stop; dropdb -h localhost -p 55432 -U labflow labflow_race &amp;&amp; createdb -h localhost -p 55432 -U labflow labflow_race &amp;&amp; npm run -s db:migrate &amp;&amp; npm run -s db:seed
+bash ops/dev-stack.sh start LABFLOW_BOOKING_LIMIT=1000000/60
+node perf/race-api.mjs quota 10</code></pre>
+<div class="out">An bấm 10 lượt (10 khung giờ khác nhau) cùng lúc: 201×3  422×7  — luật: tối đa 3 lượt còn hiệu lực</div>
 <p>Ba lần mỗi kiểu (in lần đầu): không khoá thì lọt 8, 6 rồi 5 lượt; có khoá thì 3, 3 và 3. Không khoá, mỗi transaction đếm xong trước khi những cái khác kịp commit. Khoá <em>dòng của người dùng</em> làm request của một sinh viên xếp hàng, còn sinh viên khác không bị chặn chút nào — khoá hẹp đúng bằng luật.</p>
 
 <h3>Lỗi CSDL thành lỗi HTTP</h3>
@@ -1053,6 +1158,11 @@ lock #1: An bấm 10 lượt (10 khung giờ khác nhau) cùng lúc: 201×3  422
 
 <h3>Trang lấy thẳng từ index</h3>
 <p>Con trỏ của Chương 3 thành điều kiện keyset <code>(created_at, seq) &lt; ($1, $2)</code>, và index của bài 12.1 phục vụ nó mà không phải sắp xếp. Trên 10.000 lượt đặt mẫu, “lượt của tôi” với An:</p>
+<p>Quay về CSDL của chương (có lượt mẫu) cho phần còn lại, và đăng nhập bằng Lan và An:</p>
+<pre><code class="language-bash">export DATABASE_URL=postgres://labflow@localhost:55432/labflow_app
+bash ops/dev-stack.sh start</code></pre>
+<pre><code class="language-bash">curl -s -X POST http://localhost:4200/v2/auth/login --json '{"email":"lan@labflow.example","password":"lan-lab-2026"}' | jq -r .accessToken &gt; lan.jwt
+curl -s -X POST http://localhost:4200/v2/auth/login --json '{"email":"an@student.labflow.example","password":"an-lab-2026"}' | jq -r .accessToken &gt; an.jwt</code></pre>
 <pre><code class="language-bash">psql "$DATABASE_URL" -c "EXPLAIN (ANALYZE, COSTS OFF, TIMING OFF, SUMMARY ON) SELECT * FROM bookings WHERE user_id = 'usr_1' ORDER BY created_at DESC, seq DESC LIMIT 21"</code></pre>
 <div class="out">                                     QUERY PLAN                                      
 -------------------------------------------------------------------------------------
@@ -1136,6 +1246,15 @@ an: Server-Timing: auth;dur=0.06, user;dur=0.42, validate;dur=0.07, db;dur=0.49,
 
 <h3>The 12.1 probes, again</h3>
 <p>Same commands, same proxy, same two instances — now with <code>LABFLOW_STORE=pg</code> and Redis:</p>
+<p>The PostgreSQL stack on an empty chapter database (no sample bookings, so ids start at bk_1), Lan logged in, and the restart test of 12.1 first:</p>
+<pre><code class="language-bash">bash ops/dev-stack.sh stop; dropdb -h localhost -p 55432 -U labflow labflow_app &amp;&amp; createdb -h localhost -p 55432 -U labflow labflow_app
+npm run -s db:migrate &amp;&amp; npm run -s db:seed &amp;&amp; bash ops/dev-stack.sh start</code></pre>
+<pre><code class="language-bash">curl -s -X POST http://localhost:4200/v2/auth/login --json '{"email":"lan@labflow.example","password":"lan-lab-2026"}' | jq -r .accessToken &gt; lan.jwt</code></pre>
+<pre><code class="language-bash">curl -s -o /dev/null -w '%{http_code} %header{location}\\n' http://localhost:4200/v2/bookings -H "Authorization: Bearer $(cat lan.jwt)" --json '{"labId":"lab_1","period":{"start":"2027-04-05T08:00:00+07:00","end":"2027-04-05T10:00:00+07:00"}}' | tee created.txt</code></pre>
+<div class="out">201 /v2/bookings/bk_1</div>
+<pre><code class="language-bash">bash ops/dev-stack.sh start      # khởi động lại cả A, B</code></pre>
+<pre><code class="language-bash">curl -s -o /dev/null -w "GET $(cut -d' ' -f2 created.txt) sau khi khởi động lại: %{http_code}\\n" "http://localhost:4200$(cut -d' ' -f2 created.txt)" -H "Authorization: Bearer $(cat lan.jwt)"</code></pre>
+<div class="out">GET /v2/bookings/bk_1 sau khi khởi động lại: 200</div>
 <pre><code class="language-bash">for i in 1 2; do curl -s -o /dev/null -w '%{http_code} instance=%header{labflow-instance} %header{location}\\n' http://localhost:8180/v2/bookings -H "Authorization: Bearer $(cat lan.jwt)" --json '{"labId":"lab_3","period":{"start":"2027-04-07T08:00:00+07:00","end":"2027-04-07T10:00:00+07:00"}}'; done</code></pre>
 <div class="out">201 instance=A /v2/bookings/bk_3
 409 instance=B </div>
@@ -1177,6 +1296,8 @@ redis.call('HSET', KEYS[1], 'tokens', tostring(tokens), 'at', tostring(nowS))
 redis.call('EXPIRE', KEYS[1], math.ceil(cap / rate) + 1)   -- an idle bucket disappears by itself
 return {ok, tostring(tokens)}</code></pre>
 <p>The clock comes from Redis (<code>TIME</code>), so two app servers whose clocks disagree by a second still refill the bucket correctly. Eight bookings by Lan through the proxy:</p>
+<p>The commands above used five of Lan’s booking tokens; wait a minute so the bucket is full again:</p>
+<pre><code class="language-bash">sleep 60</code></pre>
 <pre><code class="language-bash">for d in 10 11 12 13 14 15 16 17; do curl -s -o /dev/null -w "%{http_code} instance=%header{labflow-instance} ratelimit=%header{ratelimit}\\n" http://localhost:8180/v2/bookings -H "Authorization: Bearer $(cat lan.jwt)" --json "{\\"labId\\":\\"lab_2\\",\\"period\\":{\\"start\\":\\"2027-04-\${d}T08:00:00+07:00\\",\\"end\\":\\"2027-04-\${d}T10:00:00+07:00\\"}}"; done</code></pre>
 <div class="out">201 instance=B ratelimit="booking";r=4;t=12
 201 instance=A ratelimit="booking";r=3;t=24
@@ -1204,6 +1325,8 @@ labflow:rl:login:::ffff:127.0.0.1|lan@labflow.example</div>
     .finally(() =&gt; json(body));                                          // only then does the client get its 201
   return res;
 };</code></pre>
+<p>Twenty bookings in a row need the Chapter 8 test-only limit:</p>
+<pre><code class="language-bash">bash ops/dev-stack.sh start LABFLOW_BOOKING_LIMIT=1000000/60</code></pre>
 <pre><code class="language-bash">(npx autocannon -c 50 -d 12 -H "Authorization=Bearer tok_lan" 'http://localhost:8180/v2/bookings?limit=100' &gt; /dev/null 2&gt;&amp;1 &amp;) ; sleep 1; N=20 node perf/idem-replay.mjs</code></pre>
 <div class="out">20 lần "nhận 201 rồi gửi lại ngay": phát lại đúng ×20</div>
 <p>Twenty “201, then retry at once” pairs under background load: all twenty replayed the stored 201, none created a second booking.</p>
@@ -1217,8 +1340,10 @@ labflow:rl:login:::ffff:127.0.0.1|lan@labflow.example</div>
 
 <h3>Optimistic locking in one statement</h3>
 <p>Chapter 5's <code>If-Match</code> compared ETags in JavaScript, then wrote — safe in one process, a race across two. Two managers read <code>dev_1</code>'s ETag and PATCH it at the same time through the proxy. With the check-then-write version (<code>LABFLOW_NAIVE_UPDATE=1</code>, learning switch) and then the real one:</p>
+<pre><code class="language-bash">bash ops/dev-stack.sh start LABFLOW_NAIVE_UPDATE=1      # bản kiểm-rồi-ghi</code></pre>
 <pre><code class="language-bash">node perf/race-api.mjs etag-n 20</code></pre>
 <div class="out">20 lần hai người cùng PATCH với cùng If-Match: cả hai 200 (MẤT một bản sửa) ×11 · 200 + 412 ×9</div>
+<pre><code class="language-bash">bash ops/dev-stack.sh start      # bản thật</code></pre>
 <pre><code class="language-bash">node perf/race-api.mjs etag-n 20</code></pre>
 <div class="out">20 lần hai người cùng PATCH với cùng If-Match: cả hai 200 (MẤT một bản sửa) ×0 · 200 + 412 ×20</div>
 <p>11 of 20 trials lost an edit silently: both got 200, the second overwrote the first. The real store puts the condition into the write itself — <code>UPDATE devices SET … , version = version + 1 WHERE id = $1 AND version = $2</code> — zero rows means someone was first, and the route answers 412 with the current ETag. 20 of 20 correct.</p>
@@ -1260,6 +1385,8 @@ labflow:rl:login:::ffff:127.0.0.1|lan@labflow.example</div>
 <tr><td>events</td><td>wait in the outbox (12.5)</td><td>the booking is committed; delivery is late, not lost</td></tr>
 </table>
 <p>When Redis came back (empty — it was started without persistence), the worker recreated its consumer groups, the seven waiting outbox rows went out, and the worker log showed seven emails, <code>ntf_bk_1_v1</code> to <code>ntf_bk_7_v1</code>, each “đã gửi (lần 1, 300 ms)”:</p>
+<p>Bring Redis back (empty — it runs without persistence) and give the worker a few seconds:</p>
+<pre><code class="language-bash">redis-server --port 6390 --save '' --appendonly no --daemonize yes; sleep 5</code></pre>
 <pre><code class="language-bash">psql postgres://labflow@localhost:55432/labflow_app -c "SELECT count(*) FILTER (WHERE published_at IS NULL) AS chua_phat, count(*) AS tong, max(published_at - created_at) AS cho_lau_nhat FROM outbox"</code></pre>
 <div class="out"> chua_phat | tong | cho_lau_nhat 
 -----------+------+--------------
@@ -1321,6 +1448,15 @@ labflow:rl:login:::ffff:127.0.0.1|lan@labflow.example</div>
 
 <h3>Các phép thử của bài 12.1, chạy lại</h3>
 <p>Cùng lệnh, cùng proxy, cùng hai instance — giờ với <code>LABFLOW_STORE=pg</code> và Redis:</p>
+<p>Bộ PostgreSQL trên CSDL của chương làm lại trống (không lượt mẫu, để id bắt đầu từ bk_1), Lan đăng nhập, và phép thử khởi động lại của 12.1 trước:</p>
+<pre><code class="language-bash">bash ops/dev-stack.sh stop; dropdb -h localhost -p 55432 -U labflow labflow_app &amp;&amp; createdb -h localhost -p 55432 -U labflow labflow_app
+npm run -s db:migrate &amp;&amp; npm run -s db:seed &amp;&amp; bash ops/dev-stack.sh start</code></pre>
+<pre><code class="language-bash">curl -s -X POST http://localhost:4200/v2/auth/login --json '{"email":"lan@labflow.example","password":"lan-lab-2026"}' | jq -r .accessToken &gt; lan.jwt</code></pre>
+<pre><code class="language-bash">curl -s -o /dev/null -w '%{http_code} %header{location}\\n' http://localhost:4200/v2/bookings -H "Authorization: Bearer $(cat lan.jwt)" --json '{"labId":"lab_1","period":{"start":"2027-04-05T08:00:00+07:00","end":"2027-04-05T10:00:00+07:00"}}' | tee created.txt</code></pre>
+<div class="out">201 /v2/bookings/bk_1</div>
+<pre><code class="language-bash">bash ops/dev-stack.sh start      # khởi động lại cả A, B</code></pre>
+<pre><code class="language-bash">curl -s -o /dev/null -w "GET $(cut -d' ' -f2 created.txt) sau khi khởi động lại: %{http_code}\\n" "http://localhost:4200$(cut -d' ' -f2 created.txt)" -H "Authorization: Bearer $(cat lan.jwt)"</code></pre>
+<div class="out">GET /v2/bookings/bk_1 sau khi khởi động lại: 200</div>
 <pre><code class="language-bash">for i in 1 2; do curl -s -o /dev/null -w '%{http_code} instance=%header{labflow-instance} %header{location}\\n' http://localhost:8180/v2/bookings -H "Authorization: Bearer $(cat lan.jwt)" --json '{"labId":"lab_3","period":{"start":"2027-04-07T08:00:00+07:00","end":"2027-04-07T10:00:00+07:00"}}'; done</code></pre>
 <div class="out">201 instance=A /v2/bookings/bk_3
 409 instance=B </div>
@@ -1362,6 +1498,8 @@ redis.call('HSET', KEYS[1], 'tokens', tostring(tokens), 'at', tostring(nowS))
 redis.call('EXPIRE', KEYS[1], math.ceil(cap / rate) + 1)   -- xô không ai dùng tự biến mất
 return {ok, tostring(tokens)}</code></pre>
 <p>Đồng hồ lấy từ Redis (<code>TIME</code>), nên hai máy chủ ứng dụng lệch nhau một giây vẫn rót xô đúng. Tám lượt đặt của Cô Lan qua proxy:</p>
+<p>Các lệnh trên đã tiêu năm lượt trong xô của Cô Lan; chờ một phút cho xô đầy lại:</p>
+<pre><code class="language-bash">sleep 60</code></pre>
 <pre><code class="language-bash">for d in 10 11 12 13 14 15 16 17; do curl -s -o /dev/null -w "%{http_code} instance=%header{labflow-instance} ratelimit=%header{ratelimit}\\n" http://localhost:8180/v2/bookings -H "Authorization: Bearer $(cat lan.jwt)" --json "{\\"labId\\":\\"lab_2\\",\\"period\\":{\\"start\\":\\"2027-04-\${d}T08:00:00+07:00\\",\\"end\\":\\"2027-04-\${d}T10:00:00+07:00\\"}}"; done</code></pre>
 <div class="out">201 instance=B ratelimit="booking";r=4;t=12
 201 instance=A ratelimit="booking";r=3;t=24
@@ -1389,6 +1527,8 @@ labflow:rl:login:::ffff:127.0.0.1|lan@labflow.example</div>
     .finally(() =&gt; json(body));                                          // rồi client mới nhận 201
   return res;
 };</code></pre>
+<p>Hai mươi lượt đặt liền nhau cần giới hạn chỉ-để-đo của Chương 8:</p>
+<pre><code class="language-bash">bash ops/dev-stack.sh start LABFLOW_BOOKING_LIMIT=1000000/60</code></pre>
 <pre><code class="language-bash">(npx autocannon -c 50 -d 12 -H "Authorization=Bearer tok_lan" 'http://localhost:8180/v2/bookings?limit=100' &gt; /dev/null 2&gt;&amp;1 &amp;) ; sleep 1; N=20 node perf/idem-replay.mjs</code></pre>
 <div class="out">20 lần "nhận 201 rồi gửi lại ngay": phát lại đúng ×20</div>
 <p>Hai mươi cặp “nhận 201 rồi gửi lại ngay” trong lúc có tải nền: cả hai mươi được phát lại đúng 201 đã lưu, không lượt đặt thứ hai nào.</p>
@@ -1402,8 +1542,10 @@ labflow:rl:login:::ffff:127.0.0.1|lan@labflow.example</div>
 
 <h3>Khoá lạc quan trong một câu lệnh</h3>
 <p><code>If-Match</code> của Chương 5 so ETag trong JavaScript rồi mới ghi — an toàn trong một tiến trình, là cuộc đua qua hai tiến trình. Hai quản lý đọc ETag của <code>dev_1</code> rồi cùng PATCH qua proxy. Với bản kiểm-rồi-ghi (<code>LABFLOW_NAIVE_UPDATE=1</code>, công tắc chỉ để học) và bản thật:</p>
+<pre><code class="language-bash">bash ops/dev-stack.sh start LABFLOW_NAIVE_UPDATE=1      # bản kiểm-rồi-ghi</code></pre>
 <pre><code class="language-bash">node perf/race-api.mjs etag-n 20</code></pre>
 <div class="out">20 lần hai người cùng PATCH với cùng If-Match: cả hai 200 (MẤT một bản sửa) ×11 · 200 + 412 ×9</div>
+<pre><code class="language-bash">bash ops/dev-stack.sh start      # bản thật</code></pre>
 <pre><code class="language-bash">node perf/race-api.mjs etag-n 20</code></pre>
 <div class="out">20 lần hai người cùng PATCH với cùng If-Match: cả hai 200 (MẤT một bản sửa) ×0 · 200 + 412 ×20</div>
 <p>11/20 lần thử mất một bản sửa mà không ai hay: cả hai nhận 200, người sau ghi đè người trước. Kho thật đặt điều kiện vào chính câu ghi — <code>UPDATE devices SET … , version = version + 1 WHERE id = $1 AND version = $2</code> — 0 dòng nghĩa là có người tới trước, và route trả 412 kèm ETag hiện tại. Đúng 20/20.</p>
@@ -1445,6 +1587,8 @@ labflow:rl:login:::ffff:127.0.0.1|lan@labflow.example</div>
 <tr><td>sự kiện</td><td>chờ trong outbox (12.5)</td><td>lượt đặt đã commit; giao trễ, không mất</td></tr>
 </table>
 <p>Khi Redis quay lại (rỗng — nó chạy không lưu đĩa), worker dựng lại các nhóm consumer, bảy dòng outbox đang chờ được phát, và log worker ghi bảy email, từ <code>ntf_bk_1_v1</code> tới <code>ntf_bk_7_v1</code>, mỗi dòng “đã gửi (lần 1, 300 ms)”:</p>
+<p>Bật Redis lại (rỗng — nó chạy không lưu đĩa) và cho worker vài giây:</p>
+<pre><code class="language-bash">redis-server --port 6390 --save '' --appendonly no --daemonize yes; sleep 5</code></pre>
 <pre><code class="language-bash">psql postgres://labflow@localhost:55432/labflow_app -c "SELECT count(*) FILTER (WHERE published_at IS NULL) AS chua_phat, count(*) AS tong, max(published_at - created_at) AS cho_lau_nhat FROM outbox"</code></pre>
 <div class="out"> chua_phat | tong | cho_lau_nhat 
 -----------+------+--------------
@@ -1515,6 +1659,9 @@ labflow:rl:login:::ffff:127.0.0.1|lan@labflow.example</div>
 
 <h3>A cache for the labs list</h3>
 <p><code>GET /v2/labs</code> is the first call of every app start and the data almost never changes. It goes through the cache-aside helper of 9.2: look in Redis, on a miss read PostgreSQL and store the result for 60 s (+0–10% jitter), with single-flight so fifty simultaneous misses do one query:</p>
+<p>Each measurement below starts from a clean state. A small shell function rebuilds the chapter database empty, clears Redis (including the login limiter — every script logs in) and the fake mail log; then the stack:</p>
+<pre><code class="language-bash">reset_app() { bash ops/dev-stack.sh stop; dropdb -h localhost -p 55432 -U labflow labflow_app &amp;&amp; createdb -h localhost -p 55432 -U labflow labflow_app &amp;&amp; npm run -s db:migrate &amp;&amp; npm run -s db:seed; redis-cli -p 6390 FLUSHDB; rm -f tmp/mail.jsonl tmp/mail-down; }
+reset_app; bash ops/dev-stack.sh start</code></pre>
 <pre><code class="language-bash">for i in 1 2 3; do curl -s -o /dev/null -D - http://localhost:4200/v2/labs | grep -iE '^(labflow-cache|server-timing)' | tr -d '\\r' | paste -sd' ' -; done</code></pre>
 <div class="out">LabFlow-Cache: MISS Server-Timing: validate;dur=1.01, cache;dur=1.69, db;dur=13.80, total;dur=22.98
 LabFlow-Cache: HIT Server-Timing: validate;dur=0.04, cache;dur=2.35, total;dur=8.38
@@ -1523,6 +1670,7 @@ LabFlow-Cache: HIT Server-Timing: validate;dur=0.04, cache;dur=0.58, total;dur=1
 <div class="out">labflow:labs:v1:||</div>
 <pre><code class="language-bash">redis-cli -p 6390 ttl 'labflow:labs:v1:||'</code></pre>
 <div class="out">60</div>
+<pre><code class="language-bash">bash ops/dev-stack.sh start LABFLOW_CACHE_MODE=none      # tắt cache để so</code></pre>
 <pre><code class="language-bash">for i in 1 2 3; do curl -s -o /dev/null -D - http://localhost:4200/v2/labs | grep -iE '^(labflow-cache|server-timing)' | tr -d '\\r' | paste -sd' ' -; done</code></pre>
 <div class="out">Server-Timing: validate;dur=1.16, db;dur=2.14, total;dur=6.22
 Server-Timing: validate;dur=0.12, db;dur=1.32, total;dur=4.09
@@ -1544,8 +1692,10 @@ SELECT * FROM outbox WHERE published_at IS NULL ORDER BY id LIMIT 100
 UPDATE outbox SET published_at = now() WHERE id = ANY($1);
 COMMIT;</code></pre>
 <p>The relay sleeps until <code>NOTIFY</code> wakes it (PostgreSQL delivers it at COMMIT), with a 1-second poll as a safety net. From the moment the API returns 201 to the moment an SSE client holds the event — twenty bookings, first with LISTEN/NOTIFY, then with polling only (<code>RELAY_LISTEN=0</code>):</p>
+<pre><code class="language-bash">bash ops/dev-stack.sh start LABFLOW_BOOKING_LIMIT=1000000/60</code></pre>
 <pre><code class="language-bash">N=20 node perf/event-lag.mjs</code></pre>
 <div class="out">20 lượt đặt: từ 201 tới sự kiện SSE — p50 1.0 ms · p90 3.1 ms · chậm nhất 6.6 ms · nhanh nhất 0.5 ms</div>
+<pre><code class="language-bash">reset_app; bash ops/dev-stack.sh start LABFLOW_BOOKING_LIMIT=1000000/60 RELAY_LISTEN=0</code></pre>
 <pre><code class="language-bash">N=20 node perf/event-lag.mjs</code></pre>
 <div class="out">20 lượt đặt: từ 201 tới sự kiện SSE — p50 946.0 ms · p90 967.0 ms · chậm nhất 982.6 ms · nhanh nhất 889.1 ms</div>
 <a class="link-card" href="https://www.postgresql.org/docs/18/sql-notify.html" target="_blank" rel="noopener">
@@ -1556,23 +1706,26 @@ COMMIT;</code></pre>
 
 <h3>Email: in the request, or in a queue?</h3>
 <p>The email provider here is a fake (<code>src/mailer.js</code>): 300 ms per message, like an HTTPS call to SES or Resend, and a file switch that makes it fail. First the naive design, <code>LABFLOW_NOTIFY=sync</code>: send inside <code>POST /v2/bookings</code>. Then the provider goes down:</p>
+<pre><code class="language-bash">reset_app; bash ops/dev-stack.sh start LABFLOW_BOOKING_LIMIT=1000000/60 LABFLOW_NOTIFY=sync</code></pre>
 <pre><code class="language-bash">N=20 START_DAY=30 node perf/notify-cost.mjs</code></pre>
 <div class="out">20 lượt POST /v2/bookings: p50 311.0 ms · chậm nhất 327.4 ms · mã 201 ×20</div>
 <pre><code class="language-bash">psql postgres://labflow@localhost:55432/labflow_app -Atc "SELECT 'lượt đặt trong bảng: ' || count(*) FROM bookings"</code></pre>
 <div class="out">lượt đặt trong bảng: 20</div>
-<pre><code class="language-bash">touch mail-down; cd labflow-ch12 &amp;&amp; N=5 START_DAY=60 node perf/notify-cost.mjs</code></pre>
+<pre><code class="language-bash">touch tmp/mail-down; N=5 START_DAY=60 node perf/notify-cost.mjs</code></pre>
 <div class="out">5 lượt POST /v2/bookings: p50 311.1 ms · chậm nhất 313.8 ms · mã 500 INTERNAL ×5</div>
 <pre><code class="language-bash">psql postgres://labflow@localhost:55432/labflow_app -Atc "SELECT 'lượt đặt trong bảng: ' || count(*) FROM bookings"</code></pre>
 <div class="out">lượt đặt trong bảng: 25</div>
-<pre><code class="language-bash">N=1 START_DAY=60 node perf/notify-cost.mjs; rm -f ../mail-down</code></pre>
+<pre><code class="language-bash">N=1 START_DAY=60 node perf/notify-cost.mjs; rm -f tmp/mail-down</code></pre>
 <div class="out">1 lượt POST /v2/bookings: p50 14.8 ms · chậm nhất 14.8 ms · mã 409 BOOKING_CONFLICT ×1</div>
 <p>Every booking now costs the user 300 ms more. Worse, with the provider down the student sees <code>500</code> — but the table grew from 20 to 25: the bookings exist. The student presses again and gets <code>409 BOOKING_CONFLICT</code> against their own booking. A side effect inside the request turned a working booking into a confusing error.</p>
 <p>The queued design (the default): the worker reads <code>booking.created</code> and <code>booking.cancelled</code> from the stream (consumer group <code>notify</code>), adds a BullMQ job per email, and a mailer worker sends it, retrying with exponential backoff:</p>
+<pre><code class="language-bash">reset_app; bash ops/dev-stack.sh start LABFLOW_BOOKING_LIMIT=1000000/60      # hàng đợi (mặc định)</code></pre>
 <pre><code class="language-bash">N=20 START_DAY=0 node perf/notify-cost.mjs</code></pre>
 <div class="out">20 lượt POST /v2/bookings: p50 3.6 ms · chậm nhất 6.4 ms · mã 201 ×20</div>
-<pre><code class="language-bash">touch mail-down; cd labflow-ch12 &amp;&amp; N=5 START_DAY=90 node perf/notify-cost.mjs</code></pre>
+<pre><code class="language-bash">reset_app; bash ops/dev-stack.sh start LABFLOW_BOOKING_LIMIT=1000000/60      # sạch lại: lượt đặt bk_1…, log worker mới</code></pre>
+<pre><code class="language-bash">touch tmp/mail-down; N=5 START_DAY=90 node perf/notify-cost.mjs</code></pre>
 <div class="out">5 lượt POST /v2/bookings: p50 6.4 ms · chậm nhất 19.6 ms · mã 201 ×5</div>
-<pre><code class="language-bash">sleep 8; rm -f mail-down; sleep 8; grep -E 'thư ntf' log-w12.log | cut -c1-118</code></pre>
+<pre><code class="language-bash">sleep 8; rm -f tmp/mail-down; sleep 8; grep -E 'thư ntf' tmp/worker.log | cut -c1-118</code></pre>
 <div class="out">04:07:57.297 [w1] thư ntf_bk_1_v1 hỏng lần 1: MAIL_PROVIDER_DOWN: 503 từ nhà cung cấp email
 04:07:57.301 [w1] thư ntf_bk_2_v1 hỏng lần 1: MAIL_PROVIDER_DOWN: 503 từ nhà cung cấp email
 04:07:57.307 [w1] thư ntf_bk_3_v1 hỏng lần 1: MAIL_PROVIDER_DOWN: 503 từ nhà cung cấp email
@@ -1597,17 +1750,18 @@ COMMIT;</code></pre>
 
 <h3>At-least-once, exactly one email</h3>
 <p>The outbox guarantees “at least once”, never “exactly once”: if the relay dies after <code>XADD</code> but before <code>UPDATE … published_at</code>, the row is published again. <code>RELAY_CRASH=0.15</code> (learning switch) kills the relay at random just there:</p>
+<pre><code class="language-bash">reset_app; bash ops/dev-stack.sh start LABFLOW_BOOKING_LIMIT=1000000/60 RELAY_CRASH=0.15</code></pre>
 <pre><code class="language-bash">N=20 START_DAY=0 node perf/notify-cost.mjs</code></pre>
 <div class="out">20 lượt POST /v2/bookings: p50 4.3 ms · chậm nhất 19.8 ms · mã 201 ×20</div>
-<pre><code class="language-bash">sleep 2; grep 'relay "chết"' log-w12.log | cut -c1-90</code></pre>
+<pre><code class="language-bash">sleep 2; grep 'relay "chết"' tmp/worker.log | cut -c1-90</code></pre>
 <div class="out">04:09:58.114 [w1] relay "chết" sau XADD outbox #5 (RELAY_CRASH)</div>
 <pre><code class="language-bash">psql postgres://labflow@localhost:55432/labflow_app -Atc "SELECT 'outbox: ' || count(*) || ' dòng, chưa phát ' || count(*) FILTER (WHERE published_at IS NULL) FROM outbox"</code></pre>
 <div class="out">outbox: 20 dòng, chưa phát 16</div>
-<pre><code class="language-bash">./restart-w.sh &gt; /dev/null; t0=$(date +%s); until [ "$(wc -l &lt; mail12.jsonl)" -ge 20 ] || [ $(( $(date +%s) - t0 )) -gt 90 ]; do sleep 1; done; echo "đủ thư sau khi khởi động lại: $(( $(date +%s) - t0 )) s"</code></pre>
+<pre><code class="language-bash">bash ops/dev-stack.sh start LABFLOW_BOOKING_LIMIT=1000000/60 &gt; /dev/null; t0=$(date +%s); until [ "$(wc -l &lt; tmp/mail.jsonl)" -ge 20 ] || [ $(( $(date +%s) - t0 )) -gt 90 ]; do sleep 1; done; echo "đủ thư sau khi khởi động lại: $(( $(date +%s) - t0 )) s"</code></pre>
 <div class="out">đủ thư sau khi khởi động lại: 30 s</div>
 <pre><code class="language-bash">psql postgres://labflow@localhost:55432/labflow_app -Atc "SELECT 'outbox: ' || count(*) || ' dòng, chưa phát ' || count(*) FILTER (WHERE published_at IS NULL) FROM outbox"</code></pre>
 <div class="out">outbox: 20 dòng, chưa phát 0</div>
-<pre><code class="language-bash">echo "sự kiện trong stream: $(redis-cli -p 6390 xlen labflow:events) · thư đã gửi: $(wc -l &lt; mail12.jsonl | tr -d ' ') · thư trùng: $(jq -r .id mail12.jsonl | sort | uniq -d | wc -l | tr -d ' ')"</code></pre>
+<pre><code class="language-bash">echo "sự kiện trong stream: $(redis-cli -p 6390 xlen labflow:events) · thư đã gửi: $(wc -l &lt; tmp/mail.jsonl | tr -d ' ') · thư trùng: $(jq -r .id tmp/mail.jsonl | sort | uniq -d | wc -l | tr -d ' ')"</code></pre>
 <div class="out">sự kiện trong stream: 21 · thư đã gửi: 20 · thư trùng: 0</div>
 <p>21 events for 20 bookings — one duplicate — and still exactly 20 emails. Three layers make that true: the job id is <code>ntf_&lt;booking&gt;_v&lt;version&gt;</code>, so BullMQ ignores a second job with the same id; the mailer passes the same id as the provider's idempotency key; and on start the worker re-reads stream messages it had read but not acknowledged (Redis's pending list) before taking new ones. The jobs the dead worker was holding came back after its lock expired — that is the 30 s.</p>
 <div class="pitfall"><p><strong>Trap — reading a consumer group only with <code>'&gt;'</code>.</strong> <code>'&gt;'</code> returns only never-delivered messages. Messages delivered to a consumer that crashed before <code>XACK</code> stay pending forever unless you read them again with id <code>0</code> (or <code>XAUTOCLAIM</code> them from a dead consumer).</p></div>
@@ -1676,6 +1830,9 @@ COMMIT;</code></pre>
 
 <h3>Cache cho danh sách phòng</h3>
 <p><code>GET /v2/labs</code> là lời gọi đầu tiên mỗi lần mở app và dữ liệu gần như không đổi. Nó đi qua hàm cache-aside của bài 9.2: tìm trong Redis, trượt thì đọc PostgreSQL và lưu kết quả 60 s (+0–10% jitter), kèm single-flight để năm mươi lần trượt cùng lúc chỉ chạy một truy vấn:</p>
+<p>Mỗi phép đo dưới đây bắt đầu từ trạng thái sạch. Một hàm shell nhỏ dựng lại CSDL của chương (trống), xoá Redis (cả xô giới hạn đăng nhập — script nào cũng đăng nhập) và nhật ký thư giả; rồi bật bộ:</p>
+<pre><code class="language-bash">reset_app() { bash ops/dev-stack.sh stop; dropdb -h localhost -p 55432 -U labflow labflow_app &amp;&amp; createdb -h localhost -p 55432 -U labflow labflow_app &amp;&amp; npm run -s db:migrate &amp;&amp; npm run -s db:seed; redis-cli -p 6390 FLUSHDB; rm -f tmp/mail.jsonl tmp/mail-down; }
+reset_app; bash ops/dev-stack.sh start</code></pre>
 <pre><code class="language-bash">for i in 1 2 3; do curl -s -o /dev/null -D - http://localhost:4200/v2/labs | grep -iE '^(labflow-cache|server-timing)' | tr -d '\\r' | paste -sd' ' -; done</code></pre>
 <div class="out">LabFlow-Cache: MISS Server-Timing: validate;dur=1.01, cache;dur=1.69, db;dur=13.80, total;dur=22.98
 LabFlow-Cache: HIT Server-Timing: validate;dur=0.04, cache;dur=2.35, total;dur=8.38
@@ -1684,6 +1841,7 @@ LabFlow-Cache: HIT Server-Timing: validate;dur=0.04, cache;dur=0.58, total;dur=1
 <div class="out">labflow:labs:v1:||</div>
 <pre><code class="language-bash">redis-cli -p 6390 ttl 'labflow:labs:v1:||'</code></pre>
 <div class="out">60</div>
+<pre><code class="language-bash">bash ops/dev-stack.sh start LABFLOW_CACHE_MODE=none      # tắt cache để so</code></pre>
 <pre><code class="language-bash">for i in 1 2 3; do curl -s -o /dev/null -D - http://localhost:4200/v2/labs | grep -iE '^(labflow-cache|server-timing)' | tr -d '\\r' | paste -sd' ' -; done</code></pre>
 <div class="out">Server-Timing: validate;dur=1.16, db;dur=2.14, total;dur=6.22
 Server-Timing: validate;dur=0.12, db;dur=1.32, total;dur=4.09
@@ -1705,8 +1863,10 @@ SELECT * FROM outbox WHERE published_at IS NULL ORDER BY id LIMIT 100
 UPDATE outbox SET published_at = now() WHERE id = ANY($1);
 COMMIT;</code></pre>
 <p>Relay ngủ cho tới khi <code>NOTIFY</code> đánh thức (PostgreSQL giao nó lúc COMMIT), kèm hỏi vòng mỗi 1 giây làm lưới an toàn. Từ lúc API trả 201 tới lúc client SSE cầm được sự kiện — hai mươi lượt đặt, trước với LISTEN/NOTIFY, sau chỉ hỏi vòng (<code>RELAY_LISTEN=0</code>):</p>
+<pre><code class="language-bash">bash ops/dev-stack.sh start LABFLOW_BOOKING_LIMIT=1000000/60</code></pre>
 <pre><code class="language-bash">N=20 node perf/event-lag.mjs</code></pre>
 <div class="out">20 lượt đặt: từ 201 tới sự kiện SSE — p50 1.0 ms · p90 3.1 ms · chậm nhất 6.6 ms · nhanh nhất 0.5 ms</div>
+<pre><code class="language-bash">reset_app; bash ops/dev-stack.sh start LABFLOW_BOOKING_LIMIT=1000000/60 RELAY_LISTEN=0</code></pre>
 <pre><code class="language-bash">N=20 node perf/event-lag.mjs</code></pre>
 <div class="out">20 lượt đặt: từ 201 tới sự kiện SSE — p50 946.0 ms · p90 967.0 ms · chậm nhất 982.6 ms · nhanh nhất 889.1 ms</div>
 <a class="link-card" href="https://www.postgresql.org/docs/18/sql-notify.html" target="_blank" rel="noopener">
@@ -1717,23 +1877,26 @@ COMMIT;</code></pre>
 
 <h3>Email: trong request, hay qua hàng đợi?</h3>
 <p>Nhà cung cấp email ở đây là đồ giả (<code>src/mailer.js</code>): 300 ms mỗi thư, như một lời gọi HTTPS tới SES hay Resend, và một tệp công tắc làm nó hỏng. Trước hết là thiết kế ngây thơ, <code>LABFLOW_NOTIFY=sync</code>: gửi ngay trong <code>POST /v2/bookings</code>. Rồi nhà cung cấp sập:</p>
+<pre><code class="language-bash">reset_app; bash ops/dev-stack.sh start LABFLOW_BOOKING_LIMIT=1000000/60 LABFLOW_NOTIFY=sync</code></pre>
 <pre><code class="language-bash">N=20 START_DAY=30 node perf/notify-cost.mjs</code></pre>
 <div class="out">20 lượt POST /v2/bookings: p50 311.0 ms · chậm nhất 327.4 ms · mã 201 ×20</div>
 <pre><code class="language-bash">psql postgres://labflow@localhost:55432/labflow_app -Atc "SELECT 'lượt đặt trong bảng: ' || count(*) FROM bookings"</code></pre>
 <div class="out">lượt đặt trong bảng: 20</div>
-<pre><code class="language-bash">touch mail-down; cd labflow-ch12 &amp;&amp; N=5 START_DAY=60 node perf/notify-cost.mjs</code></pre>
+<pre><code class="language-bash">touch tmp/mail-down; N=5 START_DAY=60 node perf/notify-cost.mjs</code></pre>
 <div class="out">5 lượt POST /v2/bookings: p50 311.1 ms · chậm nhất 313.8 ms · mã 500 INTERNAL ×5</div>
 <pre><code class="language-bash">psql postgres://labflow@localhost:55432/labflow_app -Atc "SELECT 'lượt đặt trong bảng: ' || count(*) FROM bookings"</code></pre>
 <div class="out">lượt đặt trong bảng: 25</div>
-<pre><code class="language-bash">N=1 START_DAY=60 node perf/notify-cost.mjs; rm -f ../mail-down</code></pre>
+<pre><code class="language-bash">N=1 START_DAY=60 node perf/notify-cost.mjs; rm -f tmp/mail-down</code></pre>
 <div class="out">1 lượt POST /v2/bookings: p50 14.8 ms · chậm nhất 14.8 ms · mã 409 BOOKING_CONFLICT ×1</div>
 <p>Mỗi lượt đặt giờ tốn của người dùng thêm 300 ms. Tệ hơn, khi nhà cung cấp sập sinh viên thấy <code>500</code> — nhưng bảng tăng từ 20 lên 25: các lượt đặt có thật. Sinh viên bấm lại và nhận <code>409 BOOKING_CONFLICT</code> với chính lượt của mình. Một việc phụ nằm trong request đã biến lượt đặt thành công thành một lỗi khó hiểu.</p>
 <p>Thiết kế qua hàng đợi (mặc định): worker đọc <code>booking.created</code> và <code>booking.cancelled</code> từ stream (nhóm consumer <code>notify</code>), thêm một job BullMQ cho mỗi email, và một worker gửi thư làm việc đó, thử lại lùi dần theo cấp số nhân:</p>
+<pre><code class="language-bash">reset_app; bash ops/dev-stack.sh start LABFLOW_BOOKING_LIMIT=1000000/60      # hàng đợi (mặc định)</code></pre>
 <pre><code class="language-bash">N=20 START_DAY=0 node perf/notify-cost.mjs</code></pre>
 <div class="out">20 lượt POST /v2/bookings: p50 3.6 ms · chậm nhất 6.4 ms · mã 201 ×20</div>
-<pre><code class="language-bash">touch mail-down; cd labflow-ch12 &amp;&amp; N=5 START_DAY=90 node perf/notify-cost.mjs</code></pre>
+<pre><code class="language-bash">reset_app; bash ops/dev-stack.sh start LABFLOW_BOOKING_LIMIT=1000000/60      # sạch lại: lượt đặt bk_1…, log worker mới</code></pre>
+<pre><code class="language-bash">touch tmp/mail-down; N=5 START_DAY=90 node perf/notify-cost.mjs</code></pre>
 <div class="out">5 lượt POST /v2/bookings: p50 6.4 ms · chậm nhất 19.6 ms · mã 201 ×5</div>
-<pre><code class="language-bash">sleep 8; rm -f mail-down; sleep 8; grep -E 'thư ntf' log-w12.log | cut -c1-118</code></pre>
+<pre><code class="language-bash">sleep 8; rm -f tmp/mail-down; sleep 8; grep -E 'thư ntf' tmp/worker.log | cut -c1-118</code></pre>
 <div class="out">04:07:57.297 [w1] thư ntf_bk_1_v1 hỏng lần 1: MAIL_PROVIDER_DOWN: 503 từ nhà cung cấp email
 04:07:57.301 [w1] thư ntf_bk_2_v1 hỏng lần 1: MAIL_PROVIDER_DOWN: 503 từ nhà cung cấp email
 04:07:57.307 [w1] thư ntf_bk_3_v1 hỏng lần 1: MAIL_PROVIDER_DOWN: 503 từ nhà cung cấp email
@@ -1758,17 +1921,18 @@ COMMIT;</code></pre>
 
 <h3>Giao ít nhất một lần, đúng một email</h3>
 <p>Outbox bảo đảm “ít nhất một lần”, không bao giờ “đúng một lần”: nếu relay chết sau <code>XADD</code> nhưng trước <code>UPDATE … published_at</code>, dòng đó được phát lại. <code>RELAY_CRASH=0.15</code> (công tắc chỉ để học) giết relay ngẫu nhiên đúng chỗ đó:</p>
+<pre><code class="language-bash">reset_app; bash ops/dev-stack.sh start LABFLOW_BOOKING_LIMIT=1000000/60 RELAY_CRASH=0.15</code></pre>
 <pre><code class="language-bash">N=20 START_DAY=0 node perf/notify-cost.mjs</code></pre>
 <div class="out">20 lượt POST /v2/bookings: p50 4.3 ms · chậm nhất 19.8 ms · mã 201 ×20</div>
-<pre><code class="language-bash">sleep 2; grep 'relay "chết"' log-w12.log | cut -c1-90</code></pre>
+<pre><code class="language-bash">sleep 2; grep 'relay "chết"' tmp/worker.log | cut -c1-90</code></pre>
 <div class="out">04:09:58.114 [w1] relay "chết" sau XADD outbox #5 (RELAY_CRASH)</div>
 <pre><code class="language-bash">psql postgres://labflow@localhost:55432/labflow_app -Atc "SELECT 'outbox: ' || count(*) || ' dòng, chưa phát ' || count(*) FILTER (WHERE published_at IS NULL) FROM outbox"</code></pre>
 <div class="out">outbox: 20 dòng, chưa phát 16</div>
-<pre><code class="language-bash">./restart-w.sh &gt; /dev/null; t0=$(date +%s); until [ "$(wc -l &lt; mail12.jsonl)" -ge 20 ] || [ $(( $(date +%s) - t0 )) -gt 90 ]; do sleep 1; done; echo "đủ thư sau khi khởi động lại: $(( $(date +%s) - t0 )) s"</code></pre>
+<pre><code class="language-bash">bash ops/dev-stack.sh start LABFLOW_BOOKING_LIMIT=1000000/60 &gt; /dev/null; t0=$(date +%s); until [ "$(wc -l &lt; tmp/mail.jsonl)" -ge 20 ] || [ $(( $(date +%s) - t0 )) -gt 90 ]; do sleep 1; done; echo "đủ thư sau khi khởi động lại: $(( $(date +%s) - t0 )) s"</code></pre>
 <div class="out">đủ thư sau khi khởi động lại: 30 s</div>
 <pre><code class="language-bash">psql postgres://labflow@localhost:55432/labflow_app -Atc "SELECT 'outbox: ' || count(*) || ' dòng, chưa phát ' || count(*) FILTER (WHERE published_at IS NULL) FROM outbox"</code></pre>
 <div class="out">outbox: 20 dòng, chưa phát 0</div>
-<pre><code class="language-bash">echo "sự kiện trong stream: $(redis-cli -p 6390 xlen labflow:events) · thư đã gửi: $(wc -l &lt; mail12.jsonl | tr -d ' ') · thư trùng: $(jq -r .id mail12.jsonl | sort | uniq -d | wc -l | tr -d ' ')"</code></pre>
+<pre><code class="language-bash">echo "sự kiện trong stream: $(redis-cli -p 6390 xlen labflow:events) · thư đã gửi: $(wc -l &lt; tmp/mail.jsonl | tr -d ' ') · thư trùng: $(jq -r .id tmp/mail.jsonl | sort | uniq -d | wc -l | tr -d ' ')"</code></pre>
 <div class="out">sự kiện trong stream: 21 · thư đã gửi: 20 · thư trùng: 0</div>
 <p>21 sự kiện cho 20 lượt đặt — một bản trùng — mà vẫn đúng 20 email. Ba lớp làm điều đó thành thật: id của job là <code>ntf_&lt;lượt đặt&gt;_v&lt;version&gt;</code>, nên BullMQ bỏ qua job thứ hai cùng id; worker gửi thư truyền chính id đó làm khoá idempotency cho nhà cung cấp; và khi khởi động, worker đọc lại những tin stream nó đã đọc nhưng chưa xác nhận (danh sách chờ của Redis) trước khi lấy tin mới. Các job worker chết đang giữ quay lại sau khi khoá của chúng hết hạn — đó là 30 s.</p>
 <div class="pitfall"><p><strong>Bẫy — đọc nhóm consumer chỉ bằng <code>'&gt;'</code>.</strong> <code>'&gt;'</code> chỉ trả tin chưa từng được giao. Tin đã giao cho một consumer chết trước khi <code>XACK</code> nằm chờ mãi, trừ khi bạn đọc lại bằng id <code>0</code> (hoặc <code>XAUTOCLAIM</code> chúng từ consumer đã chết).</p></div>
@@ -1853,12 +2017,31 @@ COMMIT;</code></pre>
   <div class="lz-layer"><span class="lz-lname">PostgreSQL + cache · 2 instances</span><span class="lz-lnote">through the health-checking proxy :8180, same laptop</span></div>
 </div>
 <p>The laptop is shared with other work, so the whole set ran three times and <code>uptime</code> was recorded around each round (1-minute load average): round 1 6.3 → 53.0, round 2 53.0 → 77.5, round 3 17.1 → 36.9. Round 2 started under heavy outside load and is left out. One raw result from round 1, before and after:</p>
+<p>The commands below read the token of Lan (lab manager) from the folder <em>above</em> the project (<code>../lan.jwt</code>), so one login serves every chapter package unzipped side by side. Write it there first — the token lives 15 minutes (lesson 6.1), so log in again if a command answers 401:</p>
+<p>The in-memory run (one instance, 10,000 sample bookings in RAM, the two test-only limits); <code>BASE</code> is used by every command below:</p>
+<pre><code class="language-bash">PORT=4200 SEED_BOOKINGS=10000 LABFLOW_IP_LIMIT=1000000/60 LABFLOW_BOOKING_LIMIT=1000000/60 npm start      # terminal 1
+export BASE=http://localhost:4200</code></pre>
+<pre><code class="language-bash">curl -s -X POST $BASE/v2/auth/login \\
+  --json '{"email":"lan@labflow.example","password":"lan-lab-2026"}' | jq -r .accessToken &gt; ../lan.jwt</code></pre>
 <pre><code class="language-bash">npx autocannon -c 10 -d 10 -H "Authorization=Bearer $(cat ../lan.jwt)" "$BASE/v2/bookings?limit=20" 2&gt;&amp;1 | grep -E 'Stat|Latency|Req/Sec|requests in|non 2xx'</code></pre>
 <div class="out">│ Stat    │ 2.5% │ 50%  │ 97.5% │ 99%   │ Avg     │ Stdev   │ Max   │
 │ Latency │ 5 ms │ 6 ms │ 16 ms │ 20 ms │ 7.12 ms │ 3.62 ms │ 71 ms │
 │ Stat      │ 1%      │ 2.5%    │ 50%     │ 97.5% │ Avg     │ Stdev  │ Min     │
 │ Req/Sec   │ 1,152   │ 1,152   │ 1,272   │ 1,499 │ 1,317.5 │ 122.52 │ 1,152   │
 13k requests in 10.01s, 105 MB read</div>
+<p>Then PostgreSQL + Redis cache on the seeded chapter database (stop the RAM instance first; tokens are signed with the same secret, but log in again to be safe):</p>
+<pre><code class="language-bash">bash ops/dev-stack.sh stop; dropdb -h localhost -p 55432 -U labflow labflow_app &amp;&amp; createdb -h localhost -p 55432 -U labflow labflow_app
+npm run -s db:migrate &amp;&amp; SEED_BOOKINGS=10000 npm run -s db:seed
+bash ops/dev-stack.sh start LABFLOW_IP_LIMIT=1000000/60 LABFLOW_BOOKING_LIMIT=1000000/60</code></pre>
+<p>The in-memory run (one instance, 10,000 sample bookings in RAM, the two test-only limits); <code>BASE</code> is used by every command below:</p>
+<pre><code class="language-bash">PORT=4200 SEED_BOOKINGS=10000 LABFLOW_IP_LIMIT=1000000/60 LABFLOW_BOOKING_LIMIT=1000000/60 npm start      # terminal 1
+export BASE=http://localhost:4200</code></pre>
+<pre><code class="language-bash">curl -s -X POST $BASE/v2/auth/login --json '{"email":"lan@labflow.example","password":"lan-lab-2026"}' | jq -r .accessToken &gt; ../lan.jwt</code></pre>
+<p>Then PostgreSQL + Redis cache on the seeded chapter database (stop the RAM instance first; tokens are signed with the same secret, but log in again to be safe):</p>
+<pre><code class="language-bash">bash ops/dev-stack.sh stop; dropdb -h localhost -p 55432 -U labflow labflow_app &amp;&amp; createdb -h localhost -p 55432 -U labflow labflow_app
+npm run -s db:migrate &amp;&amp; SEED_BOOKINGS=10000 npm run -s db:seed
+bash ops/dev-stack.sh start LABFLOW_IP_LIMIT=1000000/60 LABFLOW_BOOKING_LIMIT=1000000/60</code></pre>
+<pre><code class="language-bash">curl -s -X POST $BASE/v2/auth/login --json '{"email":"lan@labflow.example","password":"lan-lab-2026"}' | jq -r .accessToken &gt; ../lan.jwt</code></pre>
 <pre><code class="language-bash">npx autocannon -c 10 -d 10 -H "Authorization=Bearer $(cat ../lan.jwt)" "$BASE/v2/bookings?limit=20" 2&gt;&amp;1 | grep -E 'Stat|Latency|Req/Sec|requests in|non 2xx'</code></pre>
 <div class="out">│ Stat    │ 2.5% │ 50%  │ 97.5% │ 99%  │ Avg     │ Stdev   │ Max   │
 │ Latency │ 2 ms │ 3 ms │ 5 ms  │ 6 ms │ 2.99 ms │ 0.99 ms │ 21 ms │
@@ -1914,12 +2097,20 @@ openapi: 16 thao tác khai 503</div>
 openapi/openapi.yaml: validated in 60ms
 Woohoo! Your API description is valid. 🎉</div>
 <p>A spec that lints and diffs cleanly can still lie about the server. The drift checker (7.2) sends 40 real requests and validates every answer against the document — on the PostgreSQL stack, then on two RAM instances:</p>
-<pre><code class="language-bash">BASE=http://localhost:8180/v2 node openapi/check-drift.mjs &gt; ../drift.txt; echo "✓ $(grep -c '^✓' ../drift.txt) · ✗ $(grep -c '^✗' ../drift.txt)"; grep '^✗' ../drift.txt | head -5</code></pre>
+<p>The drift check creates and cancels bookings, so give it an empty database (as in 12.4):</p>
+<pre><code class="language-bash">bash ops/dev-stack.sh stop; dropdb -h localhost -p 55432 -U labflow labflow_app &amp;&amp; createdb -h localhost -p 55432 -U labflow labflow_app
+npm run -s db:migrate &amp;&amp; npm run -s db:seed &amp;&amp; bash ops/dev-stack.sh start LABFLOW_IP_LIMIT=1000000/60 LABFLOW_BOOKING_LIMIT=1000000/60</code></pre>
+<pre><code class="language-bash">BASE=http://localhost:8180/v2 node openapi/check-drift.mjs &gt; ../drift-pg.txt; echo "✓ $(grep -c '^✓' ../drift-pg.txt) · ✗ $(grep -c '^✗' ../drift-pg.txt)"; grep '^✗' ../drift-pg.txt | head -5</code></pre>
 <div class="out">✓ 40 · ✗ 0</div>
+<p>Then the in-memory pair behind the same proxy (stop the stack first; three terminals):</p>
+<pre><code class="language-bash">bash ops/dev-stack.sh stop
+PORT=4200 LABFLOW_INSTANCE=A LABFLOW_IP_LIMIT=1000000/60 LABFLOW_BOOKING_LIMIT=1000000/60 npm start
+PORT=4201 LABFLOW_INSTANCE=B LABFLOW_IP_LIMIT=1000000/60 LABFLOW_BOOKING_LIMIT=1000000/60 npm start
+node perf/proxy-health.mjs 8180 4200 4201</code></pre>
 <pre><code class="language-bash">BASE=http://localhost:8180/v2 node openapi/check-drift.mjs &gt; ../drift-mem.txt; echo "✓ $(grep -c '^✓' ../drift-mem.txt) · ✗ $(grep -c '^✗' ../drift-mem.txt)"; grep '^✗' ../drift-mem.txt | head -5</code></pre>
 <div class="out">✓ 40 · ✗ 0</div>
 <p>Both 40/40. Now look at the same requests side by side (RAM left, PostgreSQL right):</p>
-<pre><code class="language-bash">paste -d'|' &lt;(sed -n 8,16p drift-mem.txt) &lt;(sed -n 8,16p drift-pg.txt) | column -t -s'|'</code></pre>
+<pre><code class="language-bash">paste -d'|' &lt;(sed -n 8,16p ../drift-mem.txt) &lt;(sed -n 8,16p ../drift-pg.txt) | column -t -s'|'</code></pre>
 <div class="out">✓ POST /bookings → 201              ✓ POST /bookings → 409
 ✓ POST /bookings → 400              ✓ POST /bookings → 400
 ✓ GET /bookings?limit=1 → 200       ✓ GET /bookings?limit=1 → 200
@@ -1969,6 +2160,11 @@ Woohoo! Your API description is valid. 🎉</div>
   <li>OpenAPI 2.4.0: X-Request-Id and 503 documented on 16 operations; 0 breaking changes, lint clean, drift 40/40.</li>
   <li>Contract checks pass even on a double-booking RAM pair — behaviour tests are what catch it.</li>
 </ul>
+<a class="link-card" href="/courses/nodejs/learn?lessonSlug=nodejs-16-1-do-truoc-khi-doan" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper: Node.js course — 16.1 Profile first</span><span class="lc-sub">Re-measuring here tells you that a number moved; that lesson shows how to find why — profiling one route from 285 to 3,550 req/s.</span></span>
+  <span class="lc-cta">OPEN →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -1986,12 +2182,31 @@ Woohoo! Your API description is valid. 🎉</div>
   <div class="lz-layer"><span class="lz-lname">PostgreSQL + cache · 2 instance</span><span class="lz-lnote">qua proxy kiểm sức khoẻ :8180, cùng một máy</span></div>
 </div>
 <p>Máy dùng chung với việc khác, nên cả bộ chạy ba lượt và <code>uptime</code> được ghi trước sau mỗi lượt (load average 1 phút): lượt 1 6,3 → 53,0, lượt 2 53,0 → 77,5, lượt 3 17,1 → 36,9. Lượt 2 bắt đầu khi máy đang bị tải nặng từ bên ngoài nên bị loại. Một kết quả thô của lượt 1, trước và sau:</p>
+<p>Các lệnh dưới đây đọc token của Lan (quản lý phòng lab) ở thư mục <em>cha</em> của dự án (<code>../lan.jwt</code>), để một lần đăng nhập dùng chung cho mọi gói chương giải nén cạnh nhau. Ghi nó ra đó trước — token sống 15 phút (bài 6.1), lệnh nào trả 401 thì đăng nhập lại:</p>
+<p>Lượt chạy kho RAM (một instance, 10.000 lượt mẫu trong RAM, hai giới hạn chỉ-để-đo); <code>BASE</code> dùng cho mọi lệnh bên dưới:</p>
+<pre><code class="language-bash">PORT=4200 SEED_BOOKINGS=10000 LABFLOW_IP_LIMIT=1000000/60 LABFLOW_BOOKING_LIMIT=1000000/60 npm start      # terminal 1
+export BASE=http://localhost:4200</code></pre>
+<pre><code class="language-bash">curl -s -X POST $BASE/v2/auth/login \\
+  --json '{"email":"lan@labflow.example","password":"lan-lab-2026"}' | jq -r .accessToken &gt; ../lan.jwt</code></pre>
 <pre><code class="language-bash">npx autocannon -c 10 -d 10 -H "Authorization=Bearer $(cat ../lan.jwt)" "$BASE/v2/bookings?limit=20" 2&gt;&amp;1 | grep -E 'Stat|Latency|Req/Sec|requests in|non 2xx'</code></pre>
 <div class="out">│ Stat    │ 2.5% │ 50%  │ 97.5% │ 99%   │ Avg     │ Stdev   │ Max   │
 │ Latency │ 5 ms │ 6 ms │ 16 ms │ 20 ms │ 7.12 ms │ 3.62 ms │ 71 ms │
 │ Stat      │ 1%      │ 2.5%    │ 50%     │ 97.5% │ Avg     │ Stdev  │ Min     │
 │ Req/Sec   │ 1,152   │ 1,152   │ 1,272   │ 1,499 │ 1,317.5 │ 122.52 │ 1,152   │
 13k requests in 10.01s, 105 MB read</div>
+<p>Rồi PostgreSQL + cache Redis trên CSDL của chương có lượt mẫu (tắt instance RAM trước; token ký cùng bí mật, nhưng cứ đăng nhập lại cho chắc):</p>
+<pre><code class="language-bash">bash ops/dev-stack.sh stop; dropdb -h localhost -p 55432 -U labflow labflow_app &amp;&amp; createdb -h localhost -p 55432 -U labflow labflow_app
+npm run -s db:migrate &amp;&amp; SEED_BOOKINGS=10000 npm run -s db:seed
+bash ops/dev-stack.sh start LABFLOW_IP_LIMIT=1000000/60 LABFLOW_BOOKING_LIMIT=1000000/60</code></pre>
+<p>Lượt chạy kho RAM (một instance, 10.000 lượt mẫu trong RAM, hai giới hạn chỉ-để-đo); <code>BASE</code> dùng cho mọi lệnh bên dưới:</p>
+<pre><code class="language-bash">PORT=4200 SEED_BOOKINGS=10000 LABFLOW_IP_LIMIT=1000000/60 LABFLOW_BOOKING_LIMIT=1000000/60 npm start      # terminal 1
+export BASE=http://localhost:4200</code></pre>
+<pre><code class="language-bash">curl -s -X POST $BASE/v2/auth/login --json '{"email":"lan@labflow.example","password":"lan-lab-2026"}' | jq -r .accessToken &gt; ../lan.jwt</code></pre>
+<p>Rồi PostgreSQL + cache Redis trên CSDL của chương có lượt mẫu (tắt instance RAM trước; token ký cùng bí mật, nhưng cứ đăng nhập lại cho chắc):</p>
+<pre><code class="language-bash">bash ops/dev-stack.sh stop; dropdb -h localhost -p 55432 -U labflow labflow_app &amp;&amp; createdb -h localhost -p 55432 -U labflow labflow_app
+npm run -s db:migrate &amp;&amp; SEED_BOOKINGS=10000 npm run -s db:seed
+bash ops/dev-stack.sh start LABFLOW_IP_LIMIT=1000000/60 LABFLOW_BOOKING_LIMIT=1000000/60</code></pre>
+<pre><code class="language-bash">curl -s -X POST $BASE/v2/auth/login --json '{"email":"lan@labflow.example","password":"lan-lab-2026"}' | jq -r .accessToken &gt; ../lan.jwt</code></pre>
 <pre><code class="language-bash">npx autocannon -c 10 -d 10 -H "Authorization=Bearer $(cat ../lan.jwt)" "$BASE/v2/bookings?limit=20" 2&gt;&amp;1 | grep -E 'Stat|Latency|Req/Sec|requests in|non 2xx'</code></pre>
 <div class="out">│ Stat    │ 2.5% │ 50%  │ 97.5% │ 99%  │ Avg     │ Stdev   │ Max   │
 │ Latency │ 2 ms │ 3 ms │ 5 ms  │ 6 ms │ 2.99 ms │ 0.99 ms │ 21 ms │
@@ -2047,12 +2262,20 @@ openapi: 16 thao tác khai 503</div>
 openapi/openapi.yaml: validated in 60ms
 Woohoo! Your API description is valid. 🎉</div>
 <p>Một tài liệu lint sạch và diff sạch vẫn có thể nói sai về server. Bộ kiểm trôi (drift, 7.2) gửi 40 request thật và kiểm từng câu trả lời theo tài liệu — trên cả bộ PostgreSQL, rồi trên hai instance RAM:</p>
-<pre><code class="language-bash">BASE=http://localhost:8180/v2 node openapi/check-drift.mjs &gt; ../drift.txt; echo "✓ $(grep -c '^✓' ../drift.txt) · ✗ $(grep -c '^✗' ../drift.txt)"; grep '^✗' ../drift.txt | head -5</code></pre>
+<p>Bộ kiểm trôi tạo và huỷ lượt đặt, nên cho nó CSDL trống (như 12.4):</p>
+<pre><code class="language-bash">bash ops/dev-stack.sh stop; dropdb -h localhost -p 55432 -U labflow labflow_app &amp;&amp; createdb -h localhost -p 55432 -U labflow labflow_app
+npm run -s db:migrate &amp;&amp; npm run -s db:seed &amp;&amp; bash ops/dev-stack.sh start LABFLOW_IP_LIMIT=1000000/60 LABFLOW_BOOKING_LIMIT=1000000/60</code></pre>
+<pre><code class="language-bash">BASE=http://localhost:8180/v2 node openapi/check-drift.mjs &gt; ../drift-pg.txt; echo "✓ $(grep -c '^✓' ../drift-pg.txt) · ✗ $(grep -c '^✗' ../drift-pg.txt)"; grep '^✗' ../drift-pg.txt | head -5</code></pre>
 <div class="out">✓ 40 · ✗ 0</div>
+<p>Rồi cặp kho RAM sau cùng proxy (tắt bộ trước; ba terminal):</p>
+<pre><code class="language-bash">bash ops/dev-stack.sh stop
+PORT=4200 LABFLOW_INSTANCE=A LABFLOW_IP_LIMIT=1000000/60 LABFLOW_BOOKING_LIMIT=1000000/60 npm start
+PORT=4201 LABFLOW_INSTANCE=B LABFLOW_IP_LIMIT=1000000/60 LABFLOW_BOOKING_LIMIT=1000000/60 npm start
+node perf/proxy-health.mjs 8180 4200 4201</code></pre>
 <pre><code class="language-bash">BASE=http://localhost:8180/v2 node openapi/check-drift.mjs &gt; ../drift-mem.txt; echo "✓ $(grep -c '^✓' ../drift-mem.txt) · ✗ $(grep -c '^✗' ../drift-mem.txt)"; grep '^✗' ../drift-mem.txt | head -5</code></pre>
 <div class="out">✓ 40 · ✗ 0</div>
 <p>Cả hai 40/40. Giờ nhìn cùng các request đặt cạnh nhau (RAM bên trái, PostgreSQL bên phải):</p>
-<pre><code class="language-bash">paste -d'|' &lt;(sed -n 8,16p drift-mem.txt) &lt;(sed -n 8,16p drift-pg.txt) | column -t -s'|'</code></pre>
+<pre><code class="language-bash">paste -d'|' &lt;(sed -n 8,16p ../drift-mem.txt) &lt;(sed -n 8,16p ../drift-pg.txt) | column -t -s'|'</code></pre>
 <div class="out">✓ POST /bookings → 201              ✓ POST /bookings → 409
 ✓ POST /bookings → 400              ✓ POST /bookings → 400
 ✓ GET /bookings?limit=1 → 200       ✓ GET /bookings?limit=1 → 200
@@ -2102,6 +2325,11 @@ Woohoo! Your API description is valid. 🎉</div>
   <li>OpenAPI 2.4.0: khai X-Request-Id và 503 trên 16 thao tác; 0 thay đổi phá vỡ, lint sạch, drift 40/40.</li>
   <li>Kiểm hợp đồng vẫn qua trên cặp RAM đặt trùng — test hành vi mới bắt được nó.</li>
 </ul>
+<a class="link-card" href="/courses/nodejs/learn?lessonSlug=nodejs-16-1-do-truoc-khi-doan" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn: khoá Node.js — 16.1 Đo trước đã</span><span class="lc-sub">Đo lại ở đây cho biết con số đã đổi; bài đó chỉ cách tìm vì sao — đo một route từ 285 lên 3.550 req/giây.</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
 </div>
 `,
     },
@@ -2150,7 +2378,11 @@ exit 1</div>
 
 <h3>2 · Health is not readiness</h3>
 <p><code>/health</code> answers “is the process alive?” — a supervisor restarts it if not. <code>/ready</code> answers “should traffic come here?” — it now pings PostgreSQL (1 s timeout), reports Redis, and says <code>draining</code> during shutdown. Stop the database under a running instance:</p>
-<pre><code class="language-bash">pg_ctl -D pgdata stop -m fast &gt; /dev/null; sleep 1</code></pre>
+<p>Run the full stack on the seeded chapter database, warm the labs cache once, then stop PostgreSQL underneath it (set <code>PGDATA</code> to your data directory; with Homebrew or Docker use their own stop command):</p>
+<pre><code class="language-bash">bash ops/dev-stack.sh stop; dropdb -h localhost -p 55432 -U labflow labflow_app &amp;&amp; createdb -h localhost -p 55432 -U labflow labflow_app
+npm run -s db:migrate &amp;&amp; SEED_BOOKINGS=10000 npm run -s db:seed &amp;&amp; bash ops/dev-stack.sh start
+curl -s -o /dev/null http://localhost:4200/v2/labs</code></pre>
+<pre><code class="language-bash">pg_ctl -D "$PGDATA" stop -m fast &gt; /dev/null; sleep 1</code></pre>
 <pre><code class="language-bash">curl -s -o /dev/null -w '/health %{http_code}\\n' http://localhost:4200/health; curl -s -w '\\n' http://localhost:4200/ready</code></pre>
 <div class="out">/health 200
 {
@@ -2170,6 +2402,14 @@ Retry-After: 5
   "code": "DEPENDENCY_DOWN"</div>
 <p>Alive (200) but not ready (503) — a restart would not help; labs still came from the Redis cache; the booking got <code>503 DEPENDENCY_DOWN</code> + <code>Retry-After: 5</code>, not a 500; the pool's dead idle connections did not kill the process (the <code>'error'</code> listener of 12.3). When the database came back, <code>/ready</code> returned 200 within two seconds and the same booking got 201 — no restart.</p>
 
+<p>Start PostgreSQL again; readiness comes back on its own:</p>
+<pre><code class="language-bash">pg_ctl -D "$PGDATA" -l "$PGDATA/server.log" start &gt; /dev/null; sleep 2; curl -s -w '\\n' http://localhost:4200/ready</code></pre>
+<div class="out">{
+  "status": "ready",
+  "store": "pg",
+  "database": "up",
+  "redis": "up"
+}</div>
 <h3>3 · Graceful shutdown, measured</h3>
 <p>Every deploy stops the old process with SIGTERM; Kubernetes, Docker and systemd all do, then SIGKILL after a grace period (30 s by default in Kubernetes). The order inside <code>src/server.js</code>:</p>
 <pre><code class="language-javascript">lifecycle.draining = true;                       // 1) /ready ⇒ 503: the load balancer stops sending NEW requests
@@ -2178,15 +2418,17 @@ lifecycle.emit('shutdown'); closeAllWs(wss);     // 3) SSE streams end, WebSocke
 await new Promise((r) =&gt; { server.close(r); server.closeIdleConnections(); });   // 4) finish in-flight, accept nothing new
 await store.close();                             // 5) close the pool, exit 0 (a timer forces it after SHUTDOWN_GRACE_MS)</code></pre>
 <p>The test: 20 clients loop on <code>GET /v2/bookings</code> through the health-checking proxy; after 2 s instance A gets SIGTERM. First with <code>LABFLOW_SHUTDOWN=abrupt</code> (exit at once, as if the code above did not exist), then with a 1.5 s drain:</p>
+<pre><code class="language-bash">bash ops/dev-stack.sh start LABFLOW_SHUTDOWN=abrupt      # trước: thoát ngay</code></pre>
 <pre><code class="language-bash">KILL_PID=$(lsof -ti tcp:4200 -sTCP:LISTEN) AT=2000 SECONDS=6 node perf/shutdown.mjs</code></pre>
 <div class="out">  2006 ms: gửi SIGTERM tới PID 3450
 trước 200: 2419 · sau SIGTERM 200: 4505 · sau SIGTERM 502: 622 · sau SIGTERM UND_ERR_SOCKET: 2</div>
-<pre><code class="language-bash">sleep 1; grep -h -E 'shutdown|ngừng gửi' log-a12.log log-p12.log | cut -c1-130</code></pre>
+<pre><code class="language-bash">sleep 1; grep -h -E 'shutdown|ngừng gửi' tmp/a.log tmp/proxy.log | cut -c1-130</code></pre>
 <div class="out">   6.5 s  :4200 không trả lời (ECONNREFUSED) 2 lần liền ⇒ ngừng gửi</div>
+<pre><code class="language-bash">bash ops/dev-stack.sh start LABFLOW_LOG_FORMAT=json SHUTDOWN_DRAIN_MS=1500      # sau: xả 1,5 s</code></pre>
 <pre><code class="language-bash">KILL_PID=$(lsof -ti tcp:4200 -sTCP:LISTEN) AT=2000 SECONDS=6 node perf/shutdown.mjs</code></pre>
 <div class="out">  2000 ms: gửi SIGTERM tới PID 3809
 trước 200: 3134 · sau SIGTERM 200: 8493</div>
-<pre><code class="language-bash">sleep 1; grep -h -E 'shutdown|ngừng gửi' log-a12.log log-p12.log | cut -c1-130</code></pre>
+<pre><code class="language-bash">sleep 1; grep -h -E 'shutdown|ngừng gửi' tmp/a.log tmp/proxy.log | cut -c1-130</code></pre>
 <div class="out">{"time":"2026-11-01T04:44:53.083Z","level":"info","msg":"shutdown","instance":"A","signal":"SIGTERM","drainMs":1500}
 {"time":"2026-11-01T04:44:54.584Z","level":"info","msg":"shutdown complete","instance":"A","ms":1501}
    6.5 s  :4200 KHÔNG sẵn sàng (/ready 503) 2 lần liền ⇒ ngừng gửi</div>
@@ -2200,11 +2442,14 @@ trước 200: 3134 · sau SIGTERM 200: 8493</div>
 
 <h3>4 · Logs and metrics an operator can use</h3>
 <p>With <code>LABFLOW_LOG_FORMAT=json</code> (the production default) every request is one JSON line; <code>X-Request-Id</code> is accepted from the proxy or generated, and returned to the client — the id a user quotes in a bug report:</p>
+<p>For logs and metrics run instance A alone, with JSON logs and the metrics port (one port can only be opened once, so not through the two-instance script):</p>
+<pre><code class="language-bash">bash ops/dev-stack.sh stop
+LABFLOW_STORE=pg LABFLOW_LOG_FORMAT=json METRICS_PORT=9464 PORT=4200 LABFLOW_INSTANCE=A node src/server.js &gt; tmp/a.log 2&gt;&amp;1 &amp;</code></pre>
 <pre><code class="language-bash">curl -s -o /dev/null -D - http://localhost:4200/v2/bookings?limit=2 \\
   -H 'Authorization: Bearer tok_lan' \\
   -H 'X-Request-Id: smoke-7f3a' | grep -i '^x-request-id'</code></pre>
 <div class="out">X-Request-Id: smoke-7f3a</div>
-<pre><code class="language-bash">grep '"smoke-7f3a"' log-a12.log | jq -c .</code></pre>
+<pre><code class="language-bash">grep '"smoke-7f3a"' tmp/a.log | jq -c .</code></pre>
 <div class="out">{"time":"2026-11-01T04:47:24.068Z","level":"info","msg":"request","instance":"A","reqId":"smoke-7f3a","method":"GET","path":"/v2/bookings","route":"/v2/bookings","status":200,"ms":8.1,"userId":"usr_3"}</div>
 <p>Never log the Authorization header, passwords, tokens, connection strings or personal data (OWASP). Metrics — counters and histograms in Prometheus text format — live on a <strong>separate port</strong> (<code>METRICS_PORT</code>, bound to 127.0.0.1); the public port answers 404:</p>
 <pre><code class="language-bash">curl -s http://127.0.0.1:9464/metrics | grep -E 'bookings",(status|le="0.01")|_count.*bookings|pg_pool|event_loop'</code></pre>
@@ -2239,7 +2484,9 @@ KHỚP — bản sao lưu dùng được</div>
 
 <h3>7 · The smoke test</h3>
 <p><code>ops/smoke.mjs</code> walks one real user's path through the public URL — health, readiness, the contract URL, login, an idempotent booking and its replay, a read that may hit the other instance, the cancel, both events over SSE and both emails — and cleans up after itself:</p>
-<pre><code class="language-bash">MAIL_LOG=$PWD/../mail12.jsonl node ops/smoke.mjs http://localhost:8180</code></pre>
+<p>Smoke test against the whole stack again (stop the lone instance A first):</p>
+<pre><code class="language-bash">kill %1 2&gt;/dev/null; bash ops/dev-stack.sh start</code></pre>
+<pre><code class="language-bash">MAIL_LOG=tmp/mail.jsonl node ops/smoke.mjs http://localhost:8180</code></pre>
 <div class="out">✓ GET /health                                         31 ms
 ✓ GET /ready (CSDL + Redis)                            4 ms  store=pg database=up redis=up
 ✓ GET /openapi.yaml                                    2 ms  version 2.4.0
@@ -2343,7 +2590,11 @@ exit 1</div>
 
 <h3>2 · Health không phải readiness</h3>
 <p><code>/health</code> trả lời “tiến trình còn sống không?” — trình giám sát khởi động lại nếu không. <code>/ready</code> trả lời “có nên gửi request tới đây không?” — giờ nó ping PostgreSQL (thời hạn 1 s), báo tình trạng Redis, và nói <code>draining</code> khi đang tắt. Tắt CSDL dưới một instance đang chạy:</p>
-<pre><code class="language-bash">pg_ctl -D pgdata stop -m fast &gt; /dev/null; sleep 1</code></pre>
+<p>Chạy trọn bộ trên CSDL của chương có lượt mẫu, làm ấm cache danh sách phòng một lần, rồi tắt PostgreSQL bên dưới (đặt <code>PGDATA</code> là thư mục dữ liệu của bạn; cài bằng Homebrew hay Docker thì dùng lệnh dừng của chúng):</p>
+<pre><code class="language-bash">bash ops/dev-stack.sh stop; dropdb -h localhost -p 55432 -U labflow labflow_app &amp;&amp; createdb -h localhost -p 55432 -U labflow labflow_app
+npm run -s db:migrate &amp;&amp; SEED_BOOKINGS=10000 npm run -s db:seed &amp;&amp; bash ops/dev-stack.sh start
+curl -s -o /dev/null http://localhost:4200/v2/labs</code></pre>
+<pre><code class="language-bash">pg_ctl -D "$PGDATA" stop -m fast &gt; /dev/null; sleep 1</code></pre>
 <pre><code class="language-bash">curl -s -o /dev/null -w '/health %{http_code}\\n' http://localhost:4200/health; curl -s -w '\\n' http://localhost:4200/ready</code></pre>
 <div class="out">/health 200
 {
@@ -2363,6 +2614,14 @@ Retry-After: 5
   "code": "DEPENDENCY_DOWN"</div>
 <p>Còn sống (200) nhưng không sẵn sàng (503) — khởi động lại cũng vô ích; danh sách phòng vẫn trả từ cache Redis; lượt đặt nhận <code>503 DEPENDENCY_DOWN</code> + <code>Retry-After: 5</code>, không phải 500; kết nối rảnh trong pool chết mà tiến trình không chết (trình nghe <code>'error'</code> của bài 12.3). Khi CSDL trở lại, <code>/ready</code> trả 200 trong vòng hai giây và chính lượt đặt đó được 201 — không khởi động lại.</p>
 
+<p>Bật PostgreSQL lại; readiness tự trở lại:</p>
+<pre><code class="language-bash">pg_ctl -D "$PGDATA" -l "$PGDATA/server.log" start &gt; /dev/null; sleep 2; curl -s -w '\\n' http://localhost:4200/ready</code></pre>
+<div class="out">{
+  "status": "ready",
+  "store": "pg",
+  "database": "up",
+  "redis": "up"
+}</div>
 <h3>3 · Tắt êm, có số đo</h3>
 <p>Mỗi lần triển khai dừng tiến trình cũ bằng SIGTERM; Kubernetes, Docker và systemd đều vậy, rồi SIGKILL sau một thời gian ân hạn (mặc định 30 s ở Kubernetes). Thứ tự trong <code>src/server.js</code>:</p>
 <pre><code class="language-javascript">lifecycle.draining = true;                       // 1) /ready ⇒ 503: load balancer ngừng gửi request MỚI
@@ -2371,15 +2630,17 @@ lifecycle.emit('shutdown'); closeAllWs(wss);     // 3) SSE kết thúc, WebSocke
 await new Promise((r) =&gt; { server.close(r); server.closeIdleConnections(); });   // 4) làm nốt request dở, không nhận mới
 await store.close();                             // 5) đóng pool, thoát 0 (quá SHUTDOWN_GRACE_MS thì hẹn giờ cắt)</code></pre>
 <p>Phép thử: 20 client gọi liên tục <code>GET /v2/bookings</code> qua proxy có kiểm sức khoẻ; sau 2 s instance A nhận SIGTERM. Trước với <code>LABFLOW_SHUTDOWN=abrupt</code> (thoát ngay, như thể đoạn mã trên không tồn tại), sau với thời gian xả 1,5 s:</p>
+<pre><code class="language-bash">bash ops/dev-stack.sh start LABFLOW_SHUTDOWN=abrupt      # trước: thoát ngay</code></pre>
 <pre><code class="language-bash">KILL_PID=$(lsof -ti tcp:4200 -sTCP:LISTEN) AT=2000 SECONDS=6 node perf/shutdown.mjs</code></pre>
 <div class="out">  2006 ms: gửi SIGTERM tới PID 3450
 trước 200: 2419 · sau SIGTERM 200: 4505 · sau SIGTERM 502: 622 · sau SIGTERM UND_ERR_SOCKET: 2</div>
-<pre><code class="language-bash">sleep 1; grep -h -E 'shutdown|ngừng gửi' log-a12.log log-p12.log | cut -c1-130</code></pre>
+<pre><code class="language-bash">sleep 1; grep -h -E 'shutdown|ngừng gửi' tmp/a.log tmp/proxy.log | cut -c1-130</code></pre>
 <div class="out">   6.5 s  :4200 không trả lời (ECONNREFUSED) 2 lần liền ⇒ ngừng gửi</div>
+<pre><code class="language-bash">bash ops/dev-stack.sh start LABFLOW_LOG_FORMAT=json SHUTDOWN_DRAIN_MS=1500      # sau: xả 1,5 s</code></pre>
 <pre><code class="language-bash">KILL_PID=$(lsof -ti tcp:4200 -sTCP:LISTEN) AT=2000 SECONDS=6 node perf/shutdown.mjs</code></pre>
 <div class="out">  2000 ms: gửi SIGTERM tới PID 3809
 trước 200: 3134 · sau SIGTERM 200: 8493</div>
-<pre><code class="language-bash">sleep 1; grep -h -E 'shutdown|ngừng gửi' log-a12.log log-p12.log | cut -c1-130</code></pre>
+<pre><code class="language-bash">sleep 1; grep -h -E 'shutdown|ngừng gửi' tmp/a.log tmp/proxy.log | cut -c1-130</code></pre>
 <div class="out">{"time":"2026-11-01T04:44:53.083Z","level":"info","msg":"shutdown","instance":"A","signal":"SIGTERM","drainMs":1500}
 {"time":"2026-11-01T04:44:54.584Z","level":"info","msg":"shutdown complete","instance":"A","ms":1501}
    6.5 s  :4200 KHÔNG sẵn sàng (/ready 503) 2 lần liền ⇒ ngừng gửi</div>
@@ -2393,11 +2654,14 @@ trước 200: 3134 · sau SIGTERM 200: 8493</div>
 
 <h3>4 · Log và metrics người vận hành dùng được</h3>
 <p>Với <code>LABFLOW_LOG_FORMAT=json</code> (mặc định ở production) mỗi request là một dòng JSON; <code>X-Request-Id</code> nhận từ proxy hoặc tự sinh, và trả lại cho client — chính mã người dùng đọc lên khi báo lỗi:</p>
+<p>Cho log và metrics, chạy riêng instance A với log JSON và cổng metrics (một cổng chỉ mở được một lần, nên không qua script hai instance):</p>
+<pre><code class="language-bash">bash ops/dev-stack.sh stop
+LABFLOW_STORE=pg LABFLOW_LOG_FORMAT=json METRICS_PORT=9464 PORT=4200 LABFLOW_INSTANCE=A node src/server.js &gt; tmp/a.log 2&gt;&amp;1 &amp;</code></pre>
 <pre><code class="language-bash">curl -s -o /dev/null -D - http://localhost:4200/v2/bookings?limit=2 \\
   -H 'Authorization: Bearer tok_lan' \\
   -H 'X-Request-Id: smoke-7f3a' | grep -i '^x-request-id'</code></pre>
 <div class="out">X-Request-Id: smoke-7f3a</div>
-<pre><code class="language-bash">grep '"smoke-7f3a"' log-a12.log | jq -c .</code></pre>
+<pre><code class="language-bash">grep '"smoke-7f3a"' tmp/a.log | jq -c .</code></pre>
 <div class="out">{"time":"2026-11-01T04:47:24.068Z","level":"info","msg":"request","instance":"A","reqId":"smoke-7f3a","method":"GET","path":"/v2/bookings","route":"/v2/bookings","status":200,"ms":8.1,"userId":"usr_3"}</div>
 <p>Không bao giờ ghi vào log header Authorization, mật khẩu, token, chuỗi kết nối hay dữ liệu cá nhân (OWASP). Metrics — bộ đếm và histogram dạng văn bản của Prometheus — nằm ở <strong>cổng riêng</strong> (<code>METRICS_PORT</code>, chỉ nghe 127.0.0.1); cổng công khai trả 404:</p>
 <pre><code class="language-bash">curl -s http://127.0.0.1:9464/metrics | grep -E 'bookings",(status|le="0.01")|_count.*bookings|pg_pool|event_loop'</code></pre>
@@ -2432,7 +2696,9 @@ KHỚP — bản sao lưu dùng được</div>
 
 <h3>7 · Smoke test</h3>
 <p><code>ops/smoke.mjs</code> đi đúng đường của một người dùng thật qua URL công khai — health, readiness, URL hợp đồng, đăng nhập, một lượt đặt idempotent và lần phát lại, một lần đọc có thể rơi vào instance kia, lệnh huỷ, cả hai sự kiện qua SSE và cả hai email — rồi tự dọn:</p>
-<pre><code class="language-bash">MAIL_LOG=$PWD/../mail12.jsonl node ops/smoke.mjs http://localhost:8180</code></pre>
+<p>Smoke test trên trọn bộ lần nữa (tắt instance A chạy riêng trước):</p>
+<pre><code class="language-bash">kill %1 2&gt;/dev/null; bash ops/dev-stack.sh start</code></pre>
+<pre><code class="language-bash">MAIL_LOG=tmp/mail.jsonl node ops/smoke.mjs http://localhost:8180</code></pre>
 <div class="out">✓ GET /health                                         31 ms
 ✓ GET /ready (CSDL + Redis)                            4 ms  store=pg database=up redis=up
 ✓ GET /openapi.yaml                                    2 ms  version 2.4.0
@@ -2524,7 +2790,7 @@ SMOKE ĐẠT: mọi bước xanh</div>
 <p>The final zip contains the solution, so first put the starter in place (keep a copy of the solution to compare later):</p>
 <pre><code class="language-bash">cp src/store/issues-pg.js ../issues-pg.solution.js &amp;&amp; cp migrations/004_issues.sql ../004_issues.solution.sql
 cp lab/lab12/issues-pg-starter.js src/store/issues-pg.js &amp;&amp; rm migrations/004_issues.sql
-dropdb labflow_lab12; createdb labflow_lab12
+dropdb --if-exists -h localhost -p 55432 -U labflow labflow_lab12; createdb -h localhost -p 55432 -U labflow labflow_lab12
 export DATABASE_URL=postgres://labflow@localhost:55432/labflow_lab12
 npm run db:migrate &amp;&amp; SEED_ISSUES=60 npm run db:seed
 bash ops/dev-stack.sh start LABFLOW_REPORT_LIMIT=1000/60     # A :4200, B :4201, worker, proxy :8180
@@ -2592,6 +2858,9 @@ CREATE UNIQUE INDEX issues_open_title ON issues (device_id, title_key) WHERE sta
   return toIssue(row);
 });            // 23505 on issues_open_title ⇒ 409 DUPLICATE_ISSUE + existing</code></pre>
 <p>Put the solution files back, restart both instances (<code>bash ops/dev-stack.sh start …</code>), then migrate (only <code>004</code> runs), seed the 60 sample issues and grade again:</p>
+<p>Put the two solution files back and restart both instances:</p>
+<pre><code class="language-bash">cp ../issues-pg.solution.js src/store/issues-pg.js &amp;&amp; cp ../004_issues.solution.sql migrations/004_issues.sql
+bash ops/dev-stack.sh start LABFLOW_REPORT_LIMIT=1000/60</code></pre>
 <pre><code class="language-bash">npm run -s db:migrate &amp;&amp; SEED_ISSUES=60 npm run -s db:seed</code></pre>
 <div class="out">  áp 004_issues.sql (5 ms)
 xong: áp 1 migration
@@ -2650,7 +2919,7 @@ TỔNG: 10/10</div>
 <p>Gói zip cuối khoá chứa lời giải, nên trước hết đặt bản khởi đầu vào chỗ (giữ một bản lời giải để so sau):</p>
 <pre><code class="language-bash">cp src/store/issues-pg.js ../issues-pg.solution.js &amp;&amp; cp migrations/004_issues.sql ../004_issues.solution.sql
 cp lab/lab12/issues-pg-starter.js src/store/issues-pg.js &amp;&amp; rm migrations/004_issues.sql
-dropdb labflow_lab12; createdb labflow_lab12
+dropdb --if-exists -h localhost -p 55432 -U labflow labflow_lab12; createdb -h localhost -p 55432 -U labflow labflow_lab12
 export DATABASE_URL=postgres://labflow@localhost:55432/labflow_lab12
 npm run db:migrate &amp;&amp; SEED_ISSUES=60 npm run db:seed
 bash ops/dev-stack.sh start LABFLOW_REPORT_LIMIT=1000/60     # A :4200, B :4201, worker, proxy :8180
@@ -2718,6 +2987,9 @@ CREATE UNIQUE INDEX issues_open_title ON issues (device_id, title_key) WHERE sta
   return toIssue(row);
 });            // 23505 trên issues_open_title ⇒ 409 DUPLICATE_ISSUE + existing</code></pre>
 <p>Đặt lại hai tệp lời giải, khởi động lại hai instance (<code>bash ops/dev-stack.sh start …</code>), rồi migrate (chỉ <code>004</code> chạy), nạp 60 báo hỏng mẫu và chấm lại:</p>
+<p>Đặt lại hai tệp lời giải và khởi động lại hai instance:</p>
+<pre><code class="language-bash">cp ../issues-pg.solution.js src/store/issues-pg.js &amp;&amp; cp ../004_issues.solution.sql migrations/004_issues.sql
+bash ops/dev-stack.sh start LABFLOW_REPORT_LIMIT=1000/60</code></pre>
 <pre><code class="language-bash">npm run -s db:migrate &amp;&amp; SEED_ISSUES=60 npm run -s db:seed</code></pre>
 <div class="out">  áp 004_issues.sql (5 ms)
 xong: áp 1 migration
@@ -2794,7 +3066,7 @@ TỔNG: 10/10</div>
 <pre><code class="language-bash">echo "thao tác OpenAPI: $(grep -c 'operationId:' openapi/openapi.yaml) · migration: $(ls migrations | wc -l | tr -d ' ') · bảng: $(grep -c '^CREATE TABLE' migrations/*.sql | awk -F: '{s+=$2} END {print s}')"</code></pre>
 <div class="out">thao tác OpenAPI: 29 · migration: 4 · bảng: 11</div>
 <pre><code class="language-bash">echo "mã nguồn src/: $(find src -name '*.js' | wc -l | tr -d ' ') tệp, $(find src -name '*.js' -exec cat {} + | wc -l | tr -d ' ') dòng · script đo perf/: $(ls perf/*.mjs | wc -l | tr -d ' ') · test: $(ls test/*.test.mjs | wc -l | tr -d ' ') tệp"</code></pre>
-<div class="out">mã nguồn src/: 73 tệp, 3617 dòng · script đo perf/: 34 · test: 4 tệp</div>
+<div class="out">mã nguồn src/: 74 tệp, 3640 dòng · script đo perf/: 34 · test: 4 tệp</div>
 <pre><code class="language-bash">npm test 2&gt;&amp;1 | grep -E '^ℹ (tests|pass|fail|skipped)' | paste -sd' ' -</code></pre>
 <div class="out">ℹ tests 18 ℹ pass 17 ℹ fail 0 ℹ skipped 1</div>
 
@@ -2920,7 +3192,7 @@ Node 22 · Express 5 · PostgreSQL 18 · Redis 8 · OpenAPI 3.1 (29 operations)
 <pre><code class="language-bash">echo "thao tác OpenAPI: $(grep -c 'operationId:' openapi/openapi.yaml) · migration: $(ls migrations | wc -l | tr -d ' ') · bảng: $(grep -c '^CREATE TABLE' migrations/*.sql | awk -F: '{s+=$2} END {print s}')"</code></pre>
 <div class="out">thao tác OpenAPI: 29 · migration: 4 · bảng: 11</div>
 <pre><code class="language-bash">echo "mã nguồn src/: $(find src -name '*.js' | wc -l | tr -d ' ') tệp, $(find src -name '*.js' -exec cat {} + | wc -l | tr -d ' ') dòng · script đo perf/: $(ls perf/*.mjs | wc -l | tr -d ' ') · test: $(ls test/*.test.mjs | wc -l | tr -d ' ') tệp"</code></pre>
-<div class="out">mã nguồn src/: 73 tệp, 3617 dòng · script đo perf/: 34 · test: 4 tệp</div>
+<div class="out">mã nguồn src/: 74 tệp, 3640 dòng · script đo perf/: 34 · test: 4 tệp</div>
 <pre><code class="language-bash">npm test 2&gt;&amp;1 | grep -E '^ℹ (tests|pass|fail|skipped)' | paste -sd' ' -</code></pre>
 <div class="out">ℹ tests 18 ℹ pass 17 ℹ fail 0 ℹ skipped 1</div>
 

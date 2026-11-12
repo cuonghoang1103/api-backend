@@ -78,6 +78,8 @@ export default {
 <tr><td>What must never happen?</td><td>Double booking, a lost payment, someone reading another user's data — these become constraints, not features.</td></tr>
 </table>
 <p>Then <strong>size it</strong> in two minutes — to learn whether one machine is enough and where the pressure is. Here it is for LabFlow as a script, after a real capacity figure measured on one Node process:</p>
+<p>Start LabFlow on port 4100 in a second terminal. Lesson 5.3 limits <code>GET /v2/labs</code> to 100 requests per minute per IP, so raise that limit for the measurement — otherwise almost every request is a 429:</p>
+<pre><code class="language-bash">PORT=4100 LABFLOW_IP_LIMIT=1000000/60 npm start</code></pre>
 <pre><code class="language-bash">npx autocannon -c 50 -d 10 -j http://localhost:4100/v2/labs &gt; perf/bench-labs.json</code></pre>
 <pre><code class="language-bash">node interview/estimate.mjs</code></pre>
 <div class="out">autocannon GET /v2/labs: 7963 req/s trung bình · p50 5 ms · p99 16 ms · non-2xx 0
@@ -255,6 +257,8 @@ POST   /v2/issues/{id}/resolve   If-Match           200              403 · 409 
 <tr><td>Điều gì tuyệt đối không được xảy ra?</td><td>Đặt trùng, mất tiền, đọc được dữ liệu người khác — chúng thành ràng buộc, không phải tính năng.</td></tr>
 </table>
 <p>Rồi <strong>ước lượng</strong> trong hai phút (back-of-the-envelope — tính nhanh trên mặt sau phong bì) — để biết một máy có đủ không và áp lực nằm ở đâu. Đây là phép tính đó cho LabFlow, chạy bằng script, sau một con số công suất thật đo trên một tiến trình Node:</p>
+<p>Bật LabFlow ở cổng 4100 trong terminal thứ hai. Bài 5.3 giới hạn <code>GET /v2/labs</code> 100 request mỗi phút mỗi IP, nên nới giới hạn đó cho phép đo — không thì gần như mọi request là 429:</p>
+<pre><code class="language-bash">PORT=4100 LABFLOW_IP_LIMIT=1000000/60 npm start</code></pre>
 <pre><code class="language-bash">npx autocannon -c 50 -d 10 -j http://localhost:4100/v2/labs &gt; perf/bench-labs.json</code></pre>
 <pre><code class="language-bash">node interview/estimate.mjs</code></pre>
 <div class="out">autocannon GET /v2/labs: 7963 req/s trung bình · p50 5 ms · p99 16 ms · non-2xx 0
@@ -426,6 +430,8 @@ GET    /{code}              the redirect              302 Location      404 unkn
   <div class="lz-step"><span class="lz-k">5</span><span class="lz-t">store</span><span class="lz-d">201 + Location: /v1/links/{code}</span></div>
 </div>
 <p>A runnable version of this answer is <code>interview/shortener/app.mjs</code> (Express 5, ≈120 lines, data in memory). Its behaviour, measured (the demo runs with <code>DAY_MS=2000</code>, so “one day” lasts 2 s and expiry can be seen):</p>
+<p>Start it in its own terminal (<code>DAY_MS=2000</code> makes a “day” last 2 s so expiry is visible; tokens <code>tok_an</code> / <code>tok_bin</code> / <code>tok_lan</code> are built in):</p>
+<pre><code class="language-bash">PORT=4120 DAY_MS=2000 node interview/shortener/app.mjs</code></pre>
 <pre><code class="language-bash">curl -i localhost:4120/v1/links \\
   -H 'Authorization: Bearer tok_an' \\
   --json '{"url":"https://club.fpt.edu.vn/su-kien/hackathon-2026?utm_source=fb"}'</code></pre>
@@ -440,6 +446,9 @@ Connection: keep-alive
 Keep-Alive: timeout=5
 
 {"code":"pnbwZf7","shortUrl":"http://localhost:4120/pnbwZf7","url":"https://club.fpt.edu.vn/su-kien/hackathon-2026?utm_source=fb","createdAt":"2026-11-01T02:17:56.137Z","expiresAt":null,"clicks":0}</div>
+<p>An (a club member) has already taken the alias <code>f-code-k20</code>:</p>
+<pre><code class="language-bash">curl -s -o /dev/null -w '%{http_code}\\n' localhost:4120/v1/links -H 'Authorization: Bearer tok_an' --json '{"url":"https://club.fpt.edu.vn/f-code","alias":"f-code-k20"}'</code></pre>
+<div class="out">201</div>
 <pre><code class="language-bash">curl -s localhost:4120/v1/links \\
   -H 'Authorization: Bearer tok_bin' \\
   --json '{"url":"https://example.com/x","alias":"f-code-k20"}'</code></pre>
@@ -616,6 +625,8 @@ GET    /{code}              the redirect              302 Location      404 unkn
   <div class="lz-step"><span class="lz-k">5</span><span class="lz-t">lưu</span><span class="lz-d">201 + Location: /v1/links/{code}</span></div>
 </div>
 <p>Bản chạy được của câu trả lời này là <code>interview/shortener/app.mjs</code> (Express 5, ≈120 dòng, dữ liệu trong RAM). Hành vi của nó, đo thật (bản demo chạy với <code>DAY_MS=2000</code>, nên “một ngày” dài 2 s để thấy được hết hạn):</p>
+<p>Bật nó trong một terminal riêng (<code>DAY_MS=2000</code> cho “một ngày” dài 2 s để thấy được hết hạn; token <code>tok_an</code> / <code>tok_bin</code> / <code>tok_lan</code> có sẵn):</p>
+<pre><code class="language-bash">PORT=4120 DAY_MS=2000 node interview/shortener/app.mjs</code></pre>
 <pre><code class="language-bash">curl -i localhost:4120/v1/links \\
   -H 'Authorization: Bearer tok_an' \\
   --json '{"url":"https://club.fpt.edu.vn/su-kien/hackathon-2026?utm_source=fb"}'</code></pre>
@@ -630,6 +641,9 @@ Connection: keep-alive
 Keep-Alive: timeout=5
 
 {"code":"pnbwZf7","shortUrl":"http://localhost:4120/pnbwZf7","url":"https://club.fpt.edu.vn/su-kien/hackathon-2026?utm_source=fb","createdAt":"2026-11-01T02:17:56.137Z","expiresAt":null,"clicks":0}</div>
+<p>An (thành viên CLB) đã giữ alias <code>f-code-k20</code> trước:</p>
+<pre><code class="language-bash">curl -s -o /dev/null -w '%{http_code}\\n' localhost:4120/v1/links -H 'Authorization: Bearer tok_an' --json '{"url":"https://club.fpt.edu.vn/f-code","alias":"f-code-k20"}'</code></pre>
+<div class="out">201</div>
 <pre><code class="language-bash">curl -s localhost:4120/v1/links \\
   -H 'Authorization: Bearer tok_bin' \\
   --json '{"url":"https://example.com/x","alias":"f-code-k20"}'</code></pre>
@@ -796,6 +810,11 @@ base62 của bộ đếm:
 <tr><td>🧑‍💻</td><td>The link is permanent, so 301 sounds right — but we promised click counts. Let me check what a browser does with each.</td></tr>
 </table>
 <p>Both mean “go over there”; the difference is what the browser may remember. <code>interview/shortener/browser-redirect.mjs</code> opens Chromium through Playwright, clicks the same short link five times as two different people (two separate browser profiles), and then asks the server how many clicks it counted:</p>
+<p>This lesson uses four copies of the service, one per terminal, kept running to the end (stop the 11.2 one first — same port). <code>browser-redirect.mjs</code> needs Chromium once: <code>npx playwright install chromium</code>.</p>
+<pre><code class="language-bash">PORT=4120 node interview/shortener/app.mjs                  # 302 (mặc định), đếm trong RAM
+PORT=4122 REDIRECT=301 node interview/shortener/app.mjs
+PORT=4125 CLICKS=pg node interview/shortener/app.mjs       # PostgreSQL ở PGURL (mặc định :55432)
+PORT=4126 CLICKS=stream node interview/shortener/app.mjs   # Redis ở LABFLOW_REDIS (mặc định :6390)</code></pre>
 <pre><code class="language-bash">node interview/shortener/browser-redirect.mjs http://localhost:4120</code></pre>
 <div class="out">bạn A: bấm 5 lần · trình duyệt nhận 302 302 302 302 302 · server đếm 5 · tới trang đích 5
 bạn B: bấm 5 lần · trình duyệt nhận 302 302 302 302 302 · server đếm 10 · tới trang đích 10</div>
@@ -822,6 +841,11 @@ bạn B: bấm 5 lần · trình duyệt nhận 301 301 301 301 301 · server đ
   if (redis) return redis.xAdd('short:clicks', '*', { code: l.code, at: String(Date.now()) });           // a worker aggregates
   l.clicks++;
 }</code></pre>
+<p>The benchmark hits <code>/f-code-k20</code>, so create that link on the three counting servers first:</p>
+<pre><code class="language-bash">for p in 4120 4125 4126; do curl -s -o /dev/null -w "$p %{http_code}\\n" localhost:$p/v1/links -H 'Authorization: Bearer tok_bin' --json '{"url":"https://example.com/x","alias":"f-code-k20"}'; done</code></pre>
+<div class="out">4120 201
+4125 201
+4126 201</div>
 <pre><code class="language-bash">bash interview/shortener/bench-short.sh 4120 "CLICKS=memory"</code></pre>
 <div class="out">CLICKS=memory              15107 chuyển hướng/s · p50 3 ms · p99 6 ms · tổng 166175 · lỗi 0</div>
 <pre><code class="language-bash">bash interview/shortener/bench-short.sh 4126 "CLICKS=stream (XADD)"</code></pre>
@@ -907,6 +931,11 @@ bạn B: bấm 5 lần · trình duyệt nhận 301 301 301 301 301 · server đ
   <li>One UPDATE per click cost 21–39% even locally and is one hot row; a Redis Stream append cost 0–12%.</li>
   <li>Abuse: login + 429, http(s) only, blocklist, disable with 410, never reuse deleted codes quickly.</li>
 </ul>
+<a class="link-card" href="/courses/redis/learn?lessonSlug=rd-8-2-stream" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper: Redis course — 8.2 Streams: a log that remembers</span><span class="lc-sub">The click counter here appends to a stream; that lesson covers XADD, consumer groups, acknowledgements and trimming — what a worker that folds clicks per minute needs.</span></span>
+  <span class="lc-cta">OPEN →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -920,6 +949,11 @@ bạn B: bấm 5 lần · trình duyệt nhận 301 301 301 301 301 · server đ
 <tr><td>🧑‍💻</td><td>Link là vĩnh viễn nên nghe như 301 — nhưng mình đã hứa đếm lượt bấm. Để em xem trình duyệt làm gì với từng mã.</td></tr>
 </table>
 <p>Cả hai đều nghĩa là “sang chỗ kia”; khác nhau ở chỗ trình duyệt được phép nhớ gì. <code>interview/shortener/browser-redirect.mjs</code> mở Chromium qua Playwright, bấm cùng một link rút gọn năm lần dưới vai hai người khác nhau (hai hồ sơ trình duyệt riêng), rồi hỏi server đã đếm được bao nhiêu lượt:</p>
+<p>Bài này dùng bốn bản của dịch vụ, mỗi bản một terminal, để chạy tới cuối bài (tắt bản của 11.2 trước — cùng cổng). <code>browser-redirect.mjs</code> cần Chromium một lần: <code>npx playwright install chromium</code>.</p>
+<pre><code class="language-bash">PORT=4120 node interview/shortener/app.mjs                  # 302 (mặc định), đếm trong RAM
+PORT=4122 REDIRECT=301 node interview/shortener/app.mjs
+PORT=4125 CLICKS=pg node interview/shortener/app.mjs       # PostgreSQL ở PGURL (mặc định :55432)
+PORT=4126 CLICKS=stream node interview/shortener/app.mjs   # Redis ở LABFLOW_REDIS (mặc định :6390)</code></pre>
 <pre><code class="language-bash">node interview/shortener/browser-redirect.mjs http://localhost:4120</code></pre>
 <div class="out">bạn A: bấm 5 lần · trình duyệt nhận 302 302 302 302 302 · server đếm 5 · tới trang đích 5
 bạn B: bấm 5 lần · trình duyệt nhận 302 302 302 302 302 · server đếm 10 · tới trang đích 10</div>
@@ -946,6 +980,11 @@ bạn B: bấm 5 lần · trình duyệt nhận 301 301 301 301 301 · server đ
   if (redis) return redis.xAdd('short:clicks', '*', { code: l.code, at: String(Date.now()) });           // a worker aggregates
   l.clicks++;
 }</code></pre>
+<p>Bộ đo gọi <code>/f-code-k20</code>, nên tạo link đó trên ba server đếm trước:</p>
+<pre><code class="language-bash">for p in 4120 4125 4126; do curl -s -o /dev/null -w "$p %{http_code}\\n" localhost:$p/v1/links -H 'Authorization: Bearer tok_bin' --json '{"url":"https://example.com/x","alias":"f-code-k20"}'; done</code></pre>
+<div class="out">4120 201
+4125 201
+4126 201</div>
 <pre><code class="language-bash">bash interview/shortener/bench-short.sh 4120 "CLICKS=memory"</code></pre>
 <div class="out">CLICKS=memory              15107 chuyển hướng/s · p50 3 ms · p99 6 ms · tổng 166175 · lỗi 0</div>
 <pre><code class="language-bash">bash interview/shortener/bench-short.sh 4126 "CLICKS=stream (XADD)"</code></pre>
@@ -1031,6 +1070,11 @@ bạn B: bấm 5 lần · trình duyệt nhận 301 301 301 301 301 · server đ
   <li>Mỗi lượt bấm một UPDATE tốn 21–39% dù CSDL chạy cùng máy, và là một dòng nóng; thêm vào Redis Stream tốn 0–12%.</li>
   <li>Lạm dụng: đăng nhập + 429, chỉ http(s), blocklist, vô hiệu bằng 410, không trao lại mã đã xoá sớm.</li>
 </ul>
+<a class="link-card" href="/courses/redis/learn?lessonSlug=rd-8-2-stream" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn: khoá Redis — 8.2 Stream: cuốn nhật ký biết nhớ</span><span class="lc-sub">Bộ đếm lượt bấm ở đây ghi vào stream; bài đó giảng XADD, consumer group, xác nhận và cắt bớt — đúng thứ một worker gộp lượt bấm theo phút cần.</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
 </div>
 `,
     },
@@ -1393,6 +1437,9 @@ app.post('/v1/conversations/:cid/messages', (req, res) =&gt; {
   if (DROP_EVERY &amp;&amp; ++n % DROP_EVERY === 0) return req.socket.destroy();   // đã LƯU, nhưng điện thoại không nhận được 201
   res.status(201).json(m);
 });</code></pre>
+<p>Two servers, each in its own terminal: the same flaky network (<code>DROP_EVERY=4</code>), without and with the dedupe:</p>
+<pre><code class="language-bash">PORT=4123 DEDUPE=0 DROP_EVERY=4 node interview/chat/server.mjs
+PORT=4124 DEDUPE=1 DROP_EVERY=4 node interview/chat/server.mjs</code></pre>
 <pre><code class="language-bash">node interview/chat/send.mjs http://localhost:4123</code></pre>
 <div class="out">gửi 200 tin, 266 lần gọi (66 lần không nhận được trả lời ⇒ gửi lại)
 server lưu 266 tin, 200 nội dung khác nhau ⇒ 66 tin trùng</div>
@@ -1472,6 +1519,11 @@ sắp theo sentAt của máy client: tin 2, 4, 6, 8, 10, 12, 14, 16, …  ⇒ 20
   <span class="lc-body"><span class="lc-title">Go deeper: System Design in Practice — 7.2 Message ordering, delivery receipts and sync across devices</span><span class="lc-sub">The interview version ends here. That course (being written) goes to WebSocket gateways at scale, storing billions of messages and presence.</span></span>
   <span class="lc-cta">OPEN →</span>
 </a>
+<a class="link-card" href="/courses/redis/learn?lessonSlug=rd-8-5-chon-cong-cu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper: Redis course — 8.5 Choosing: Pub/Sub, Streams, lists or a real broker</span><span class="lc-sub">Delivering a message to an online device is a fan-out problem; that lesson compares what each tool loses when a consumer is offline.</span></span>
+  <span class="lc-cta">OPEN →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -1520,6 +1572,9 @@ app.post('/v1/conversations/:cid/messages', (req, res) =&gt; {
   if (DROP_EVERY &amp;&amp; ++n % DROP_EVERY === 0) return req.socket.destroy();   // đã LƯU, nhưng điện thoại không nhận được 201
   res.status(201).json(m);
 });</code></pre>
+<p>Hai server, mỗi cái một terminal: cùng mạng chập chờn (<code>DROP_EVERY=4</code>), không và có chống trùng:</p>
+<pre><code class="language-bash">PORT=4123 DEDUPE=0 DROP_EVERY=4 node interview/chat/server.mjs
+PORT=4124 DEDUPE=1 DROP_EVERY=4 node interview/chat/server.mjs</code></pre>
 <pre><code class="language-bash">node interview/chat/send.mjs http://localhost:4123</code></pre>
 <div class="out">gửi 200 tin, 266 lần gọi (66 lần không nhận được trả lời ⇒ gửi lại)
 server lưu 266 tin, 200 nội dung khác nhau ⇒ 66 tin trùng</div>
@@ -1597,6 +1652,11 @@ sắp theo sentAt của máy client: tin 2, 4, 6, 8, 10, 12, 14, 16, …  ⇒ 20
 <a class="link-card" href="/courses/system-design/learn?lessonSlug=sysd-7-2-thu-tu" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn: System Design in Practice — 7.2 Thứ tự tin nhắn, xác nhận đã nhận và đồng bộ nhiều thiết bị</span><span class="lc-sub">Bản phỏng vấn dừng ở đây. Khoá đó (đang soạn) đi tới gateway WebSocket ở quy mô lớn, lưu hàng tỉ tin nhắn và trạng thái online.</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
+<a class="link-card" href="/courses/redis/learn?lessonSlug=rd-8-5-chon-cong-cu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn: khoá Redis — 8.5 Chọn: Pub/Sub, Stream, list hay một broker thật</span><span class="lc-sub">Đẩy tin nhắn tới thiết bị đang mở là bài toán toả; bài đó so mỗi công cụ mất gì khi bên nhận đang offline.</span></span>
   <span class="lc-cta">MỞ →</span>
 </a>
 </div>
@@ -1777,6 +1837,11 @@ Bình xác nhận #3: 1 dòng đổi ⇒ 200 CONFIRMED</div>
   <span class="lc-body"><span class="lc-title">You met this in PRJ301 — ⭐ CS.7 part 2: double booking with two locks</span><span class="lc-sub">Same: two people pressing the same button at the same millisecond, stopped by a database constraint and measured with parallel threads (Java + partial unique index). This lesson adds overlapping time ranges (EXCLUDE), SERIALIZABLE vs FOR UPDATE, expiring holds and how to say it in an interview. Not taken PRJ301? This lesson stands on its own.</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
+<a class="link-card" href="/courses/postgresql/learn?lessonSlug=postgresql-11-4-khoa-deadlock" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper: PostgreSQL course — 11.4 Row locks, lost updates and deadlocks</span><span class="lc-sub">The “lock” answer measured here is SELECT … FOR UPDATE; that lesson shows lock order, lost updates and how deadlocks are detected.</span></span>
+  <span class="lc-cta">OPEN →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -1945,6 +2010,11 @@ Bình xác nhận #3: 1 dòng đổi ⇒ 200 CONFIRMED</div>
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Bạn đã gặp điều này ở PRJ301 — ⭐ CS.7 phần 2: chống đặt trùng bằng hai ổ khoá</span><span class="lc-sub">Giống: hai người bấm cùng một nút trong cùng một mili-giây, bị chặn bằng ràng buộc CSDL và đo bằng nhiều luồng song song (Java + partial unique index). Bài này thêm khoảng thời gian chồng nhau (EXCLUDE), SERIALIZABLE so với FOR UPDATE, giữ chỗ có hạn và cách nói khi phỏng vấn. Chưa học PRJ301? Bài này vẫn tự đứng được.</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card" href="/courses/postgresql/learn?lessonSlug=postgresql-11-4-khoa-deadlock" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn: khoá PostgreSQL — 11.4 Khoá dòng, lost update và deadlock</span><span class="lc-sub">Cách “khoá” đo ở đây là SELECT … FOR UPDATE; bài đó giảng thứ tự khoá, lost update và cách phát hiện deadlock.</span></span>
+  <span class="lc-cta">MỞ →</span>
 </a>
 </div>
 `,

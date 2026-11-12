@@ -10,9 +10,10 @@ import { getRedis } from '../config/redis.js';
 import { authenticate } from '../middleware/auth.js';
 import { BadRequestError } from '../middleware/errorHandler.js';
 import { logger } from '../utils/logger.js';
+import { isProEffective } from '../services/pro.service.js';
 import type { ApiResponse } from '../types/index.js';
 import { docHoSo, luuHoSo } from '../services/ctlanguage/hoSo.js';
-import { chiTiet, chuHan, tra, vietTay } from '../services/ctlanguage/tuDien.js';
+import { chiTiet, chuCuaNgay, chuHan, goiOffline, tra, vietTay } from '../services/ctlanguage/tuDien.js';
 
 const router = Router();
 
@@ -69,8 +70,31 @@ router.post('/tu-dien/:nn/viet-tay', gioiHanTra, async (req: Request, res: Respo
   try { res.json({ success: true, data: await vietTay(req.params.nn, req.body) }); } catch (e) { next(e); }
 });
 
+/** "Một chữ · ba ngôn ngữ" của ngày `?ngay=YYYY-MM-DD` (theo giờ máy người dùng). */
+router.get('/tu-dien/chu-ngay', gioiHanTra, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.setHeader('Cache-Control', 'public, max-age=3600');
+    res.json({ success: true, data: await chuCuaNgay(String(req.query.ngay ?? '')) });
+  } catch (e) { next(e); }
+});
+
 // ─── Từ đây trở xuống: cần đăng nhập ───────────────────────────────────────────────────────────────────────────
 router.use(authenticate);
+
+/**
+ * Gói từ điển offline (quyền Pro — docs mục 4: "offline" là của Pro). Vài MB JSON (nén gzip ở middleware) ⇒ app tải
+ * một lần, so `phienBan` để biết khi nào tải lại. Không Pro ⇒ 403 `CTL_CAN_PRO`.
+ */
+router.get('/tu-dien/:nn/goi-offline', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    if (!(await isProEffective(req.userId))) {
+      res.status(403).json({ success: false, message: 'Từ điển offline là tính năng Pro.', code: 'CTL_CAN_PRO' } as ApiResponse);
+      return;
+    }
+    res.setHeader('Cache-Control', 'private, max-age=600');
+    res.json({ success: true, data: await goiOffline(req.params.nn) });
+  } catch (e) { next(e); }
+});
 
 /** Hồ sơ học (ngôn ngữ đang học + lựa chọn làm quen + giờ nhắc). `data: null` khi chưa từng lưu. */
 router.get('/me', async (req: Request, res: Response<ApiResponse>, next) => {

@@ -50,7 +50,7 @@ const log = (...a: unknown[]) => console.log(`[${((Date.now() - t0) / 1000).toFi
 
 // ─── Unihan ──────────────────────────────────────────────────
 
-type Han = { hv?: string[]; py?: string; on?: string; kun?: string; en?: string; bo?: number; net?: number; phon?: string; gian?: string; tanSuat?: number };
+type Han = { hv?: string[]; pinlu?: number; cuNhat?: string; py?: string; on?: string; kun?: string; en?: string; bo?: number; net?: number; phon?: string; gian?: string; tanSuat?: number };
 const unihan = new Map<string, Han>();
 const cp = (u: string) => String.fromCodePoint(parseInt(u.slice(2), 16));
 
@@ -74,6 +74,8 @@ function napUnihan() {
     else if (k === 'kMandarin') h.py = v.split(' ')[0];
     else if (k === 'kDefinition') h.en = v;
     else if (k === 'kJapaneseOn') h.on = v.toLowerCase();
+    // Tần suất tiếng Trung hiện đại: "xué(5640)" — cộng mọi âm. Unicode đã BỎ kFrequency khỏi Unihan bản mới.
+    else if (k === 'kHanyuPinlu') h.pinlu = [...v.matchAll(/\((\d+)\)/g)].reduce((t, m) => t + Number(m[1]), 0);
     else if (k === 'kJapaneseKun') h.kun = v.toLowerCase();
   });
   doc('Unihan_RadicalStrokeCounts.txt', (ch, k, v) => { if (k === 'kRSUnicode') lay(ch).bo = parseInt(v, 10); });
@@ -85,6 +87,8 @@ function napUnihan() {
     const dau = cp(v.split(' ')[0].split('<')[0]);
     if (k === 'kTraditionalVariant' && dau !== ch) lay(ch).phon = dau;
     if (k === 'kSimplifiedVariant' && dau !== ch) lay(ch).gian = dau;
+    // Kanji Nhật dạng MỚI (shinjitai, 歴) ⇒ dạng cũ (歷) — từ đó mới ra giản thể Trung (历).
+    if (k === 'kJapaneseOldVariant' && dau !== ch) lay(ch).cuNhat = dau;
   });
   doc('Unihan_DictionaryLikeData.txt', (ch, k, v) => { if (k === 'kFrequency') lay(ch).tanSuat = parseInt(v, 10); });
   log('Unihan', unihan.size, 'chữ');
@@ -202,11 +206,16 @@ async function nhapZh() {
     if (k) daCo.add(k.word);
     const py = pinyinCoDau(pySo);
     const thuong = !/^[A-Z]/.test(pySo); // tên riêng viết hoa pinyin
+    // "Thông dụng" ngoài kho soạn tay: từ 2–4 chữ (chữ đơn đã có kho/thẻ chữ Hán), không phải tên riêng, MỌI chữ có
+    // tần suất kHanyuPinlu ≥ 280 (≈ 1.100 chữ hay gặp nhất). Dùng cho gói từ điển offline + dấu ⭐ + xếp hạng.
+    const soChu = [...gian].length;
+    const chuThuong = soChu >= 2 && soChu <= 4 && [...gian].every((c) => (unihan.get(c)?.pinlu ?? 0) >= 280);
+    const thongDungZh = thuong && chuThuong;
     ds.push({
       chu: gian, chuPhu: phon !== gian ? phon : null, doc: py, docLatin: pySo, hanViet: hanVietTu(phon) ?? hanVietTu(gian),
       nghiaVi: k?.vi ?? null, nghiaEn: nghia.split('/').filter((x) => !x.startsWith('CL:')).slice(0, 8).join('; '),
-      viDu: k?.viDu, viDuVi: k?.viDuVi, thongDung: !!k,
-      uuTien: (k ? 100 : 0) + (thuong ? 10 : 0) + Math.max(0, 8 - [...gian].length) + (unihan.get(gian)?.tanSuat ? 6 - unihan.get(gian)!.tanSuat! : 0),
+      viDu: k?.viDu, viDuVi: k?.viDuVi, thongDung: !!k || thongDungZh,
+      uuTien: (k ? 100 : 0) + (thongDungZh ? 40 : 0) + (thuong ? 10 : 0) + Math.max(0, 8 - [...gian].length) + (unihan.get(gian)?.tanSuat ? 6 - unihan.get(gian)!.tanSuat! : 0),
       nguon: k ? 'kho' : 'cedict',
       khoa: [gian, phon, py, pySo.replace(/\s+/g, ''), ...(hanVietTu(phon) ?? hanVietTu(gian) ? [(hanVietTu(phon) ?? hanVietTu(gian))!] : [])],
     });
@@ -276,7 +285,8 @@ async function nhapChuHan() {
       chu: ch, hanViet: hanVietCacAm(ch).slice(0, 4).join(' · ') || null, pinyin: h.py ?? k?.py[0] ?? null,
       onYomi: k?.on.join('、') || null, kunYomi: k?.kun.join('、') || null,
       nghiaEn: k?.en.join('; ') || h.en || null, boThu: k?.bo ?? h.bo ?? null, soNet: k?.net ?? h.net ?? null,
-      jlptCu: k?.jlpt ?? null, lop: k?.lop ?? null, tanSuat: k?.tanSuat ?? null, phonThe: h.phon ?? null, gianThe: h.gian ?? null,
+      jlptCu: k?.jlpt ?? null, lop: k?.lop ?? null, tanSuat: k?.tanSuat ?? null,
+      phonThe: h.phon ?? h.cuNhat ?? null, gianThe: h.gian ?? (h.cuNhat ? unihan.get(h.cuNhat)?.gian : undefined) ?? null,
     };
   });
   await db.ctlChuHan.deleteMany({});

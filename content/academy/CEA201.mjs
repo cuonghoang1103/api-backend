@@ -39,6 +39,12 @@ import ch15bSlides from './cea201/ch15b-slides.mjs';
 import ch15cSlides from './cea201/ch15c-slides.mjs';
 import asmaSlides from './cea201/asm-a-slides.mjs';
 import asmbSlides from './cea201/asm-b-slides.mjs';
+/* ⭐ Chuyên sâu — deck chính hãng không nằm trong lịch học (cea10, cea11, cea19) */
+import cs1HeDem from './cea201/cs1-he-dem.mjs';
+import cs2SoHocSoNguyen from './cea201/cs2-so-hoc-so-nguyen.mjs';
+import cs3DauPhayDong from './cea201/cs3-dau-phay-dong-ieee754.mjs';
+import cs4KhoiDieuKhien from './cea201/cs4-khoi-dieu-khien-vi-chuong-trinh.mjs';
+import csQuiz from './cea201/cs-quiz.mjs';
 import { thuNgay } from '../_labs.mjs';
 
 export default {
@@ -106,6 +112,7 @@ export default {
   <div class="lz-node"><div class="lz-badge">16</div><div class="lz-nbody"><div class="lz-ntitle">Hands-on assembly with MARIE</div><div class="lz-nsub">Six of the sixty sessions; the MARIE simulator is a listed course material</div></div></div>
   <div class="lz-stage">Extra · beyond the syllabus</div>
   <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">Inside a modern CPU · CPU security</div><div class="lz-nsub">Deeper connections</div></div></div>
+  <div class="lz-node"><div class="lz-badge">⭐</div><div class="lz-nbody"><div class="lz-ntitle">Advanced: number systems · integer &amp; floating-point arithmetic · control unit</div><div class="lz-nsub">Official decks CEA10, CEA11, CEA19 — in the slide set, not in the session schedule</div></div></div>
 </div>
 <p>CEA201 pairs with <span class="badge">CSI104</span> in semester 1 and is the hardware backbone for <span class="badge">OSG202</span> (Operating Systems), <span class="badge">IOT102</span> and any low-level or performance work later. Where PRF192 taught you to write code, CEA201 shows you the machine that runs it.</p>
 <div class="callout ok">Study tip: this course is full of numbers (cache sizes, clock cycles, address bits). Do not memorize them — understand the <strong>trade-offs</strong> behind them. Every design choice in hardware answers "faster, smaller, or cheaper — pick two".</div>
@@ -149,6 +156,7 @@ export default {
   <div class="lz-node"><div class="lz-badge">15</div><div class="lz-nbody"><div class="lz-ntitle">Xử lý song song &amp; Đa nhân</div><div class="lz-nsub">SMP · nhất quán cache · GPU</div></div></div>
   <div class="lz-stage">Nâng cao · ngoài giáo trình</div>
   <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">Hợp ngữ MARIE · hazard pipeline · bảo mật CPU hiện đại</div><div class="lz-nsub">Thực hành &amp; kết nối sâu hơn</div></div></div>
+  <div class="lz-node"><div class="lz-badge">⭐</div><div class="lz-nbody"><div class="lz-ntitle">Chuyên sâu: hệ đếm · số học số nguyên &amp; dấu phẩy động · khối điều khiển</div><div class="lz-nsub">Deck chính hãng CEA10, CEA11, CEA19 — có trong bộ slide, không có trong lịch học</div></div></div>
 </div>
 <p>CEA201 đi cặp với <span class="badge">CSI104</span> ở kỳ 1 và là xương sống phần cứng cho <span class="badge">OSG202</span> (Hệ điều hành), <span class="badge">IOT102</span> và mọi việc low-level hay tối ưu hiệu năng sau này. PRF192 dạy bạn viết code, còn CEA201 cho bạn thấy cỗ máy chạy code đó.</p>
 <div class="callout ok">Mẹo học: môn này đầy con số (kích thước cache, chu kỳ clock, số bit địa chỉ). Đừng học thuộc — hãy hiểu <strong>đánh đổi</strong> đằng sau chúng. Mọi lựa chọn thiết kế phần cứng đều trả lời "nhanh, nhỏ, hay rẻ — chọn hai".</div>
@@ -2228,6 +2236,12 @@ ${thuNgay('vi', 'cpu', 'selfmod', 'Ý tưởng lớn của von Neumann có mặt
 `,
         },
       ],
+    },
+    /* ⭐ Chuyên sâu — deck chính hãng KHÔNG nằm trong lịch 60 buổi: cea10, cea11, cea19 — ./cea201/cs*.mjs */
+    {
+      title: '⭐ Advanced — Number systems, computer arithmetic & the control unit|||⭐ Chuyên sâu — Hệ đếm, số học máy tính & khối điều khiển',
+      description: 'Phần TỰ THÊM (⭐): ba deck chính hãng Stallings có trong bộ slide môn nhưng không nằm trong lịch học — Chapter 10 Number Systems, Chapter 11 Computer Arithmetic (số nguyên + IEEE 754), Chapter 19 Control Unit — giảng từng slide, có code C/Python chạy thật, lab nhúng, bài tập che lời giải và quiz.',
+      lessons: [cs1HeDem, cs2SoHocSoNguyen, cs3DauPhayDong, cs4KhoiDieuKhien, csQuiz],
     },
     {
       "title": "Final Exam|||Thi cuối kỳ",

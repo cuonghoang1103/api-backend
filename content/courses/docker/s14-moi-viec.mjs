@@ -469,6 +469,32 @@ ${slide('dk-14', 8, 'Khi nào dùng container, khi nào cài thật')}
 <div class="pitfall"><strong>Bẫy:</strong> gắn nhiều hơn thứ công cụ cần, "cho tiện". <code>-v "$HOME":/w</code> trao cho một ảnh bạn vừa kéo về năm phút trước quyền đọc-ghi vào <code>~/.ssh</code>, thông tin đăng nhập cloud và mọi dự án khác — mà nó lại chạy bằng root. Chỉ gắn đúng thư mục công việc cần, thêm <code>:ro</code> cho đầu vào mà công cụ không được sửa (<code>-v "$PWD/input":/in:ro</code>), và ưu tiên ảnh mà bạn gọi được tên người phát hành (Bài 14.2: ảnh chính thức trước).</div>
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> Mẫu lệnh là <code>--rm</code> + <code>-v "$PWD":/w</code> + <code>-w /w</code> + một ảnh có ghim tag; mọi thứ khác là biến thể. Trên Linux, container ghi file bằng root trừ khi bạn nói <code>-u "$(id -u):$(id -g)"</code>. Và mượn những công cụ thỉnh thoảng mới dùng hoặc cần đúng một phiên bản; cài thật những thứ bạn dùng cả ngày.</p>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-8-4-tuy-bien-shell" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 8.4 — Customising the shell: aliases, functions, prompt, history</span><span class="lc-sub">Functions, aliases and the zshrc file, taught properly.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-4-2-chmod-chown-umask" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 4.2 — chmod, chown and umask: changing what you found</span><span class="lc-sub">UIDs, chown, and why you cannot edit a root-owned file.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-8-4-tuy-bien-shell" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 8.4 — Tuỳ biến shell: bí danh, hàm, dấu nhắc, lịch sử</span><span class="lc-sub">Hàm, bí danh và tệp zshrc, giảng kỹ.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-4-2-chmod-chown-umask" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 4.2 — chmod, chown và umask: đổi thứ bạn vừa đọc ra</span><span class="lc-sub">uid, chown và vì sao tệp thuộc root thì bạn không sửa được.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 14.2 ─────────────────────────── */
@@ -973,6 +999,32 @@ mail      Up 2 seconds (healthy)   127.0.0.1:18147-&gt;1025/tcp, 127.0.0.1:18146
 <div class="pitfall"><strong>Bẫy:</strong> <code>image: postgres:latest</code> (hoặc không ghi tag) cho một CSDL đang có dữ liệu. Một ngày <code>pull</code> kéo về một phiên bản <em>chính</em> (major) mới, và PostgreSQL từ chối khởi động trên thư mục dữ liệu do phiên bản chính cũ hơn ghi ra — container khởi động lại vòng vòng trong khi dữ liệu vẫn nằm đó, nguyên vẹn mà không dùng được. Nâng phiên bản chính của CSDL phải đi qua dump và restore (hoặc <code>pg_upgrade</code>), một cách có chủ đích. Ít nhất hãy ghim phiên bản chính: <code>postgres:16-alpine</code>, <code>mysql:8.0</code>, <code>mongo:7</code>.</div>
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> Một CSDL trong Docker chỉ là một lệnh, nhưng lần khởi động đầu tiên của nó đặc biệt: biến môi trường và script init chỉ áp cho thư mục dữ liệu rỗng. Đưa dữ liệu ra/vào bằng công cụ của chính container, qua stdout và stdin. Và một tên ảnh là lời hứa của người khác — ghim nó lại, và biết đường lùi nếu họ nuốt lời.</p>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-15-1-pg-dump" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">PostgreSQL · 15.1 — Logical backups with pg_dump</span><span class="lc-sub">Logical backups with pg_dump, in every format.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/object-storage/learn?lessonSlug=os-1-1-client" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Object Storage · 1.1 — Client initialization: SDK v3</span><span class="lc-sub">S3 upload code that runs against a fake store on your machine.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-15-1-pg-dump" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">PostgreSQL · 15.1 — Sao lưu logic bằng pg_dump</span><span class="lc-sub">Sao lưu logic bằng pg_dump, đủ mọi định dạng.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/object-storage/learn?lessonSlug=os-1-1-client" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Object Storage · 1.1 — Khởi tạo client: SDK v3</span><span class="lc-sub">Đoạn mã tải tệp lên S3, chạy được với kho giả ở máy bạn.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 14.3 ─────────────────────────── */
@@ -1412,6 +1464,32 @@ ${slide('dk-14', 20, 'Mở cổng ra Internet: -p đi vòng qua tường lửa')
 
 <div class="pitfall"><strong>Bẫy:</strong> bản sao lưu duy nhất nằm ngay trên cùng một máy. Một file <code>.tgz</code> cạnh volume sống sót qua một lần cập nhật hỏng, nhưng không sống sót qua một ổ đĩa chết, một VPS bị xoá hay một máy chủ ở nhà bị mã độc tống tiền mã hoá. Chép nó ra khỏi máy — về laptop bằng <code>scp</code>, hoặc lên kho lưu trữ đối tượng — và giữ nhiều hơn một thế hệ. Bản sao lưu chỉ là thật khi có một bản ở nơi khác và đã thử khôi phục.</div>
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> Một reverse proxy có HTTPS tự động là cửa trước của mọi dịch vụ tự host, và <code>tls internal</code> cho bạn tập dượt nó mà không cần Internet. Một dịch vụ tự host chỉ an toàn bằng lần khôi phục gần nhất đã thử và lần cập nhật gần nhất đã đọc. Và cổng duy nhất một máy chủ nên công bố là cổng của proxy — mọi thứ khác ở trong mạng nội bộ hoặc sau SSH.</p>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nginx/learn?lessonSlug=nginx-6-1-chuoi-chung-chi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nginx · 6.1 — The certificate chain, and the intermediate everyone forgets</span><span class="lc-sub">The certificate chain and the intermediate CA everybody forgets.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-10-3-noi-doi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy VPS · 10.3 — The backup that failed and the restore that lied</span><span class="lc-sub">A broken backup and a restore that lies.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nginx/learn?lessonSlug=nginx-6-1-chuoi-chung-chi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nginx · 6.1 — Chuỗi chứng chỉ, và cái CA trung gian ai cũng quên</span><span class="lc-sub">Chuỗi chứng chỉ và cái CA trung gian ai cũng quên.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-10-3-noi-doi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 10.3 — Bản sao lưu HỎNG và cú phục hồi NÓI DỐI</span><span class="lc-sub">Bản sao lưu hỏng và cú phục hồi nói dối.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

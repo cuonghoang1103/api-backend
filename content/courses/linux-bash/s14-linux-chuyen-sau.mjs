@@ -1915,6 +1915,7 @@ cong 19141: curl exit 28
 <tr><td><code>nft add element inet T S { IP timeout 1h }</code></td><td>Add to a set, with expiry</td></tr>
 <tr><td><code>nft flush ruleset</code></td><td>Remove ALL rules (everything allowed again)</td></tr>
 </table>
+<div class="pitfall"><strong><code>flush ruleset</code> removes everybody's rules, not just yours.</strong> Re-run on 13/11/2026 in the course's lab container: after loading a file that starts with <code>flush ruleset</code>, the lynis audit warned that the nameservers did not respond — the flush had also deleted the DNS rules Docker had installed. On a host that runs Docker (or anything else that manages its own nftables tables), that line silently breaks their networking. Restarting the Docker daemon re-creates its rules; better, keep your rules in a table of your own and flush only that table instead of the whole ruleset.</div>
 
 <h3>fail2ban for your own application's log</h3>
 ${slide('lx-14', 25, 'fail2ban cho log của app')}
@@ -2258,6 +2259,7 @@ cong 19141: curl exit 28
 <tr><td><code>nft add element inet T S { IP timeout 1h }</code></td><td>Thêm vào tập, có hạn dùng</td></tr>
 <tr><td><code>nft flush ruleset</code></td><td>Xoá MỌI luật (mọi thứ lại được cho qua)</td></tr>
 </table>
+<div class="pitfall"><strong><code>flush ruleset</code> xoá luật của TẤT CẢ mọi người, không chỉ của bạn.</strong> Chạy lại ngày 13/11/2026 trong container thí nghiệm của khoá: sau khi nạp một file mở đầu bằng <code>flush ruleset</code>, lynis cảnh báo các nameserver không trả lời — lệnh flush đã xoá luôn cả luật DNS mà Docker đặt sẵn. Trên máy chủ có chạy Docker (hay bất cứ thứ gì tự quản bảng nftables riêng), dòng đó lặng lẽ làm hỏng mạng của chúng. Khởi động lại dịch vụ Docker thì nó dựng lại luật của nó; tốt hơn là để luật của bạn trong một bảng riêng và chỉ flush đúng bảng đó thay vì cả ruleset.</div>
 
 <h3>fail2ban cho log của chính ứng dụng</h3>
 ${slide('lx-14', 25, 'fail2ban cho log của app')}

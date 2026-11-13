@@ -567,6 +567,32 @@ eth1 172.27.0.2/16</div>
 <div class="pitfall"><strong>Bẫy:</strong> dùng địa chỉ IP của container trong cấu hình. Chúng trông có vẻ ổn định — hôm nay <code>172.17.0.2</code>, khởi động lại vẫn <code>172.17.0.2</code> — cho tới đúng lúc một container khởi động theo thứ tự khác và mọi địa chỉ dịch đi một nấc. Khi đó một file cấu hình trỏ vào nhầm dịch vụ, và vì cả hai dịch vụ đều nhận kết nối TCP, cái hỏng hiện ra thành một lỗi giao thức khó hiểu chứ không phải connection refused. Trên mạng tự tạo, tên container là một bản ghi DNS đi theo container tới bất cứ đâu; hãy dùng nó. Chỗ duy nhất IP trần còn hợp lệ là một lệnh <code>curl</code> dùng một lần lúc chẩn đoán, và ngay cả ở đó thì <code>docker inspect -f '{{ .NetworkSettings.Networks.appnet.IPAddress }}'</code> vẫn là thói quen tốt hơn đọc bằng mắt trên màn hình.</div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Mỗi container có network namespace riêng, nối vào một cây cầu trên máy chủ bằng một cặp veth — mô hình đó giải thích cùng lúc chuyện công bố cổng, chuyện <code>localhost</code>, và chuyện cách ly. Container trên bridge <em>tự tạo</em> phân giải được tên nhau nhờ DNS nhúng của Docker ở <code>127.0.0.11</code>; trên bridge mặc định thì không, và đó là lý do bạn luôn tạo một cái mạng. Và mạng là ranh giới cách ly thật: một mạng backend <code>--internal</code> là an toàn miễn phí.</p>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-9-1-giao-dien-cong-dns" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 9.1 — The network from the shell: interfaces, ports and DNS</span><span class="lc-sub">ip, the routing table and resolv.conf on an ordinary Linux machine, from zero.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-14-1-ben-trong-nhan" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 14.1 — Inside the kernel: system calls, /proc, namespaces, cgroups and capabilities</span><span class="lc-sub">How the kernel creates a network namespace, with the lid off.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-9-1-giao-dien-cong-dns" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 9.1 — Mạng nhìn từ shell: giao diện, cổng và DNS</span><span class="lc-sub">Lệnh ip, bảng định tuyến, resolv.conf trên một máy Linux bình thường, dạy từ số 0.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-14-1-ben-trong-nhan" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 14.1 — Bên trong nhân: system call, /proc, namespaces, cgroups và capabilities</span><span class="lc-sub">Nhân tạo ra namespace mạng thế nào, mở nắp cho bạn xem.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 8.2 ─────────────────────────── */
@@ -1110,6 +1136,42 @@ LISTEN 0      5            0.0.0.0:18087      0.0.0.0:*    users:(("python3",pid
 <div class="pitfall"><strong>Bẫy:</strong> công bố cổng cơ sở dữ liệu "tạm thôi, để chạy một lần migration từ máy tôi". Cái luật sống lâu hơn cái lý do: nó được ghi vào cấu hình của container, nên nó quay lại sau mỗi lần khởi động lại, mỗi lần deploy, mãi mãi, và không luật tường lửa nào bạn thêm sau đó đóng được nó. Máy quét khắp Internet tìm ra một cổng 5432, 6379 hay 27017 đang mở trong vòng vài giờ, và thông tin đăng nhập mặc định hoặc yếu lo nốt phần còn lại — đây là cách phổ biến nhất khiến một cơ sở dữ liệu production nhỏ bị chiếm. Hãy dùng đường hầm SSH thay vào đó: <code>ssh -L 5432:localhost:5432 deploy@server</code> cho bạn đúng quyền truy cập ấy trong thời gian phiên làm việc và không để lại gì. Nếu bạn từng làm chuyện này, hãy chạy <code>sudo ss -lntp | grep docker-proxy</code> trên máy chủ trước khi đọc bài tiếp theo.</div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> <code>EXPOSE</code> là tài liệu, <code>-p</code> mới tạo ra cái lỗ, và <code>-p</code> đọc theo thứ tự máy-chủ rồi container. Công bố cổng ghi ra một luật DNAT của iptables chạy TRƯỚC luật filter của UFW, nên <strong>một cổng đã công bố là đang mở bất kể tường lửa của bạn nói gì</strong> — hãy gắn vào <code>127.0.0.1</code>, hoặc đừng công bố gì cả mà dùng mạng container. Và <code>DOCKER-USER</code> là chuỗi duy nhất Docker không ghi đè, nên mọi luật tuỳ chỉnh thuộc về chỗ đó.</p>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-9-5-tuong-lua" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 9.5 — Firewalls, and where the packet actually stops</span><span class="lc-sub">Packets through INPUT and FORWARD, and why Docker bypasses ufw on a real machine, measured step by step.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-9-3-ssh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 9.3 — SSH: keys, config and tunnels</span><span class="lc-sub">An SSH tunnel to reach a database bound only to 127.0.0.1 from your laptop.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-2-3-nat" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Networking for Developers · 2.3 — NAT, private ranges and Docker networks</span><span class="lc-sub">NAT and the private address ranges behind Docker networks, from first principles.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-9-5-tuong-lua" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 9.5 — Tường lửa, và gói tin thật ra dừng ở đâu</span><span class="lc-sub">Gói tin đi qua INPUT, FORWARD, và vì sao Docker vượt mặt ufw trên một máy thật, đo từng bước.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-9-3-ssh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 9.3 — SSH: khoá, file cấu hình và đường hầm</span><span class="lc-sub">Đường hầm SSH để mở một cơ sở dữ liệu chỉ mở ở 127.0.0.1 từ laptop.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-2-3-nat" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Networking for Developers · 2.3 — NAT, dải IP riêng và mạng Docker</span><span class="lc-sub">NAT và dải địa chỉ riêng của mạng Docker, giải thích từ gốc.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 8.3 ─────────────────────────── */
@@ -1581,6 +1643,32 @@ open</div>
 <div class="pitfall"><strong>Bẫy:</strong> một dịch vụ chạy được từ máy bạn mà từ chối mọi kết nối từ container khác, vì nó gắn vào <code>127.0.0.1</code>. Lần đầu gặp thì đúng là rối thật: container đang chạy, tên phân giải được, cổng đúng, mà kết nối bị từ chối tức thì. Lý do là loopback bên trong một network namespace chính là loopback riêng của namespace đó — với tới được từ chính tiến trình ấy và từ không gì khác, mãi mãi. Nhiều framework mặc định <code>localhost</code> cho an toàn, điều đó đúng trên một cái máy dùng chung và sai hoàn toàn trong container, nơi chính cái namespace đã là sự cách ly. Trong container, hãy gắn vào <code>0.0.0.0</code> rồi để ranh giới mạng lo phần bảo vệ: đừng công bố cổng, và đặt dịch vụ lên một mạng <code>--internal</code>.</div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Container trên cùng mạng tự tạo gọi nhau bằng tên ở cổng của <em>container</em>, không cần công bố gì — công bố chỉ là chuyện ranh giới máy chủ. Một container vào được nhiều mạng, và đó là cách bạn dựng tách công khai/nội bộ để một proxy bị chiếm cũng không phân giải nổi tên cơ sở dữ liệu. Và khi tên phân giải được mà kết nối bị từ chối, gần như luôn luôn là dịch vụ đang gắn vào <code>127.0.0.1</code> bên trong namespace của chính nó.</p>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-3-1-phan-giai" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Networking for Developers · 3.1 — Resolution: stub, recursive resolver, root, TLD, authoritative</span><span class="lc-sub">Every step a name lookup takes, from your machine to the root servers.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nginx/learn?lessonSlug=nginx-1-1-listen" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nginx · 1.1 — listen, and the address:port pair</span><span class="lc-sub">Choosing the listen address, 127.0.0.1 or 0.0.0.0, on nginx itself.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-3-1-phan-giai" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Networking for Developers · 3.1 — Phân giải: stub, recursive resolver, root, TLD, authoritative</span><span class="lc-sub">Một câu hỏi tên đi qua những bước nào, từ máy bạn tới máy chủ tên gốc.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nginx/learn?lessonSlug=nginx-1-1-listen" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nginx · 1.1 — listen, và cặp địa chỉ:cổng</span><span class="lc-sub">Chọn địa chỉ chờ kết nối, 127.0.0.1 hay 0.0.0.0, làm trên chính nginx.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 8.4 ─────────────────────────── */
@@ -2013,6 +2101,32 @@ inet6 fe80::642f:daff:fee4:22b3/64</div>
 
 <div class="pitfall"><strong>Bẫy:</strong> với tay lấy <code>--network host</code> để "chữa" một vấn đề kết nối. Nó thường làm cái lỗi trước mắt biến mất thật, và chính điều đó khiến nó nguy hiểm: bạn vừa gỡ bỏ sự cách ly thay vì tìm ra nguyên nhân, còn cái lỗi thật — một dịch vụ gắn vào <code>127.0.0.1</code>, hai container ở hai mạng khác nhau, một ánh xạ cổng viết ngược — vẫn còn đó, giờ thì bị che đi. Nó cũng không mở rộng được: container thứ hai muốn cổng 8080 sẽ không khởi động nổi, <code>-p</code> ngừng có tác dụng, và trên Docker Desktop hành vi khác Linux, nên cách chữa vá được máy bạn lại làm vỡ CI. Hãy bỏ ra hai phút cho <code>docker network inspect</code> và <code>ss -lntp</code>; nguyên nhân gần như luôn là một trong bốn cái ở Bài 8.3.</div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> <code>localhost</code> bên trong container là loopback của chính container đó — không bao giờ là máy chủ, không bao giờ là container khác. Muốn với tới một dịch vụ trên máy chủ thì thêm <code>--add-host=host.docker.internal:host-gateway</code> <em>và</em> bảo đảm dịch vụ đó nghe ở <code>0.0.0.0</code>. Và <code>--network container:&lt;tên&gt;</code> đặt một container gỡ lỗi vào bên trong network namespace của container khác, đó là nước cờ chẩn đoán hữu ích nhất bạn học được trong chương này.</p>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-1-4-cong-socket" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Networking for Developers · 1.5 — Ports and sockets: how one server serves many apps and many clients</span><span class="lc-sub">Loopback, sockets, and how listening on 127.0.0.1 differs from 0.0.0.0, from first principles.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-13-1-compose-tren-vps" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy VPS · 13.1 — Compose on the VPS: one file that describes the whole machine</span><span class="lc-sub">Works on the Mac, fails on the VPS: compose on a real Linux machine.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-1-4-cong-socket" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Networking for Developers · 1.5 — Cổng và socket: một máy phục vụ nhiều ứng dụng và nhiều khách thế nào</span><span class="lc-sub">Loopback, socket, và chờ ở 127.0.0.1 khác 0.0.0.0 thế nào, giải thích từ gốc.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-13-1-compose-tren-vps" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 13.1 — Compose trên VPS: một tệp mô tả cả cái máy</span><span class="lc-sub">Mac chạy được mà VPS thì không: dựng compose trên một máy Linux thật.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -2472,6 +2586,32 @@ dk08-db        5432/tcp
 
 <div class="pitfall"><strong>Bẫy:</strong> gỡ lỗi từ máy chủ trong khi vấn đề nằm GIỮA các container. Lệnh <code>curl localhost:8080</code> từ shell của bạn kiểm cổng công bố và góc nhìn của máy chủ — một đường hoàn toàn khác với đường một container với tới container khác qua cây cầu. Nó có thể thành công trong khi container-tới-container thất bại (dịch vụ gắn đúng cho máy chủ nhưng container bên gọi lại ở nhầm mạng), và nó có thể thất bại trong khi mọi thứ vẫn ổn (chẳng có gì được công bố, vì chẳng cần công bố). Hãy thử từ ĐÚNG góc nhìn của bên đang hỏng: <code>docker run --rm --network &lt;mạng của bên gọi&gt; nicolaka/netshoot</code>, rồi chạy phép kiểm của bạn từ đó. Khớp được góc nhìn đã là phần lớn kỹ năng.</div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Hỏi bốn câu theo thứ tự — có đang nghe không, nghe ở địa chỉ nào, tên có phân giải được không, gói tin có đi lọt không — và mỗi câu loại bỏ nguyên một nhóm nguyên nhân. <em>Refused</em> và <em>timeout</em> là hai chẩn đoán khác nhau: một cái nghĩa là có thứ gì trả lời không, cái kia nghĩa là im lặng. Và hãy thử từ đúng góc nhìn của thứ đang hỏng, bằng <code>--network container:&lt;tên&gt;</code> hoặc một container netshoot trên cùng mạng.</p>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-4-1-bat-tay" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Networking for Developers · 4.1 — The three-way handshake and connection teardown</span><span class="lc-sub">What S, S., . and R mean at the TCP level: the three-way handshake and closing a connection.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-9-5-tuong-lua" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 9.5 — Firewalls, and where the packet actually stops</span><span class="lc-sub">tcpdump at every layer of a real Linux machine, and where the packet stops.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-4-1-bat-tay" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Networking for Developers · 4.1 — Bắt tay ba bước và đóng kết nối</span><span class="lc-sub">Các cờ S, S., . và R nghĩa là gì ở tầng TCP: bắt tay ba bước và đóng kết nối.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-9-5-tuong-lua" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 9.5 — Tường lửa, và gói tin thật ra dừng ở đâu</span><span class="lc-sub">tcpdump ở từng tầng trên một máy Linux thật, và gói tin dừng ở đâu.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

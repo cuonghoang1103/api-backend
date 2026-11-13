@@ -443,6 +443,32 @@ ssh -i ./khoa -o UserKnownHostsFile=./known_hosts -p 19012 deploy@127.0.0.1</cod
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Git &amp; GitHub — git theo dõi cái gì và bỏ qua cái gì</span><span class="lc-sub">/courses/git/learn${REF} — cơ chế nằm sau cuộc kiểm kê <code>--ignored</code> ở trên.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Docker — vì sao một module native dựng trên laptop lại vỡ trong ảnh</span><span class="lc-sub">/courses/docker/learn${REF} — cái sự cố glibc-so-với-musl nêu trong hộp bẫy, đo từ đầu tới cuối.</span></span></div>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/git/learn?lessonSlug=git-1-5-gitignore" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Git · 1.5 — .gitignore, and what must never be committed</span><span class="lc-sub">.gitignore, and the things that must never be committed — the list this lesson checks the working tree against.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-15-3-windows-wsl2" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 15.3 — Windows: WSL2, Git Bash, and the CRLF bug from start to finish</span><span class="lc-sub">On Windows: WSL2, Git Bash, and the CRLF line-ending error from end to end.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/git/learn?lessonSlug=git-1-5-gitignore" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Git · 1.5 — .gitignore, và thứ không bao giờ được commit</span><span class="lc-sub">.gitignore, và những thứ không bao giờ được commit — danh sách mà bài này dùng để soát cây làm việc.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-15-3-windows-wsl2" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 15.3 — Windows: WSL2, Git Bash, và lỗi CRLF từ đầu tới cuối</span><span class="lc-sub">Trên Windows: WSL2, Git Bash, và lỗi xuống dòng CRLF từ đầu tới cuối.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
 
@@ -887,6 +913,22 @@ $ git -c core.autocrlf=true archive --worktree-attributes --format=tar HEAD | sh
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">reproducible-builds.org</span><span class="lc-sub">reproducible-builds.org/docs — bài toán tổng quát, kèm danh sách những thứ hay rò rỉ vào một bản dựng: dấu thời gian, đường dẫn, ngôn ngữ hệ thống, mã định danh bản dựng.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Git &amp; GitHub — commit, tag và rev-parse</span><span class="lc-sub">/courses/git/learn${REF} — cái định danh trong tên tạo tác tới từ đâu, và vì sao mã băm ngắn là đủ.</span></span></div>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-2-4-lien-ket-va-nen" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 2.4 — Links and archives: inodes, symlinks, and tar without looking it up</span><span class="lc-sub">tar and compression from the ground up — including why two archives of the same files can differ.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-2-4-lien-ket-va-nen" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 2.4 — Liên kết và kho nén: inode, symlink, và tar mà không phải tra lại</span><span class="lc-sub">tar và nén từ gốc — kể cả vì sao hai bản nén của cùng các tệp có thể khác nhau.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
 
@@ -1266,6 +1308,22 @@ ma thoat cua C: 0</div>
   <span class="lc-cta">Mở bài</span>
 </a>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-4-2-semver-lockfile" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 4.2 — Semver and the lockfile</span><span class="lc-sub">Semver and the lockfile: why npm ci refuses when package.json and the lockfile disagree.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-4-2-semver-lockfile" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 4.2 — Semver và lockfile</span><span class="lc-sub">Semver và lockfile: vì sao npm ci từ chối khi package.json và lockfile lệch nhau.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
 
@@ -1595,6 +1653,22 @@ v1.0.0-6-g9310ba1-dirty</div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Dấu thời gian ISO 8601 / RFC 3339</span><span class="lc-sub">datatracker.ietf.org/doc/html/rfc3339 — vì sao nên dùng <code>date -u +%Y-%m-%dT%H:%M:%SZ</code>, và vì sao nó sắp xếp đúng ngay ở dạng chữ.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Đặc tả ảnh OCI — annotations</span><span class="lc-sub">github.com/opencontainers/image-spec/blob/main/annotations.md — tên nhãn chuẩn (<code>org.opencontainers.image.revision</code>) cho đúng những thông tin đó khi tạo tác là một cái ảnh container.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Nginx — một header chẩn đoán khai ra khối nào đã xử lý request</span><span class="lc-sub">/courses/nginx/learn${REF} — cùng một ý tưởng ở lớp bên ngoài: bắt hạ tầng khai ra khối nào đã trả lời.</span></span></div>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/git/learn?lessonSlug=git-7-2-tag-semver" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Git · 7.2 — Tags &amp; semantic versioning</span><span class="lc-sub">Tags and semantic versioning on the Git side of a release name.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/git/learn?lessonSlug=git-7-2-tag-semver" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Git · 7.2 — Tag &amp; đánh phiên bản ngữ nghĩa</span><span class="lc-sub">Tag và đánh phiên bản ngữ nghĩa — phía Git của tên bản phát hành.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -2005,6 +2079,22 @@ $ readlink -f src/../package.json
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">link(2) — một liên kết cứng THẬT RA là gì</span><span class="lc-sub">man7.org/linux/man-pages/man2/link.2.html — một inode, nhiều tên, và vì sao trong đám tên đó không có cái nào là "bản gốc".</span></span></div>
 <div class="link-card"><span class="lc-ico">🔧</span><span class="lc-body"><span class="lc-title">du(1) — hai cờ --count-links và --separate-dirs</span><span class="lc-sub">man7.org/linux/man-pages/man1/du.1.html — vì sao tổng các phần lớn hơn cái toàn thể, và cách bắt nó đếm theo đúng ý bạn.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash — inode, liên kết và rm thật ra xoá cái gì</span><span class="lc-sub">/courses/linux-bash/learn${REF} — mô hình hệ tệp làm cho kết quả cp-so-với-mv ở trên thành có thể đoán trước chứ không phải bất ngờ.</span></span></div>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-2-4-lien-ket-va-nen" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 2.4 — Links and archives: inodes, symlinks, and tar without looking it up</span><span class="lc-sub">Hard links and inodes: how old releases can share files and what du really counts.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-2-4-lien-ket-va-nen" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 2.4 — Liên kết và kho nén: inode, symlink, và tar mà không phải tra lại</span><span class="lc-sub">Liên kết cứng và inode: các bản cũ dùng chung tệp thế nào và du thật ra đếm cái gì.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

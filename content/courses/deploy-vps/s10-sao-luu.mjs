@@ -588,6 +588,52 @@ ma thoat 1</div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">nice(1) và ionice(1)</span><span class="lc-sub">man 1 ionice — lớp 3 (idle) là thứ làm cho một bản sao lưu NHƯỜNG đĩa cho lưu lượng thật thay vì tranh giành với nó.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">PostgreSQL — MVCC, ảnh chụp và giao dịch dài</span><span class="lc-sub">/courses/postgresql/learn?lessonSlug=postgresql-14-3-vacuum-bloat${REF.replace('?', '&')} — vì sao một bản dump chạy lâu chặn VACUUM, và nó gây phình bảng thế nào trên một bảng bận rộn.</span></span></div>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-15-1-pg-dump" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">PostgreSQL · 15.1 — Logical backups with pg_dump</span><span class="lc-sub">Logical backups with pg_dump in every format, and checking them.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-11-2-mvcc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">PostgreSQL · 11.2 — MVCC: why readers never block writers</span><span class="lc-sub">MVCC: why readers do not block writers — and what a snapshot sees.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-11-2-cron-timer" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 11.2 — Scheduling: cron and systemd timers</span><span class="lc-sub">cron and systemd timers: running the job on a schedule.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-7-5-sao-luu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 7.5 — Backup, restore, migrate</span><span class="lc-sub">The same backup and restore with Docker volumes and a helper container.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-15-1-pg-dump" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">PostgreSQL · 15.1 — Sao lưu logic bằng pg_dump</span><span class="lc-sub">Sao lưu logic bằng pg_dump đủ mọi định dạng, và cách kiểm chúng.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-11-2-mvcc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">PostgreSQL · 11.2 — MVCC: vì sao người đọc không bao giờ chặn người ghi</span><span class="lc-sub">MVCC: vì sao người đọc không chặn người ghi — và một ảnh chụp nhìn thấy gì.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-11-2-cron-timer" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 11.2 — Hẹn giờ: cron và timer của systemd</span><span class="lc-sub">cron và timer của systemd: chạy việc theo lịch.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-7-5-sao-luu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 7.5 — Sao lưu, khôi phục, di chuyển</span><span class="lc-sub">Cùng việc sao lưu và khôi phục, với volume Docker và container phụ.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
 
@@ -1131,6 +1177,42 @@ sau khi cuu: tien_do = 320</div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Google SRE Workbook — Data Processing Pipelines</span><span class="lc-sub">sre.google/workbook/data-processing/ — về việc vì sao các mục tiêu phục hồi phải được phát biểu bằng con số ĐÃ ĐO chứ không phải bằng nguyện vọng.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">PostgreSQL — EXPLAIN, và đọc một kế hoạch truy vấn</span><span class="lc-sub">/courses/postgresql/learn?lessonSlug=postgresql-10-1-doc-explain${REF.replace('?', '&')} — nested loop so với hash join, và làm sao nhìn kế hoạch mà biết ước lượng đang sai.</span></span></div>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-15-1-pg-dump" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">PostgreSQL · 15.1 — Logical backups with pg_dump</span><span class="lc-sub">Logical backups with pg_dump in every format, and checking them.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-10-3-thong-ke-uoc-luong" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">PostgreSQL · 10.3 — Statistics: how the planner estimates, and when it's wrong</span><span class="lc-sub">Planner statistics — a restored database has none until ANALYZE runs.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-15-2-wal-pitr" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">PostgreSQL · 15.2 — WAL and point-in-time recovery</span><span class="lc-sub">WAL and point-in-time recovery: the restore that pg_dump cannot do.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-15-1-pg-dump" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">PostgreSQL · 15.1 — Sao lưu logic bằng pg_dump</span><span class="lc-sub">Sao lưu logic bằng pg_dump đủ mọi định dạng, và cách kiểm chúng.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-10-3-thong-ke-uoc-luong" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">PostgreSQL · 10.3 — Thống kê: bộ lập kế hoạch ước lượng ra sao, và khi nào sai</span><span class="lc-sub">Thống kê của bộ lập kế hoạch — một CSDL vừa khôi phục chưa có gì cho tới khi chạy ANALYZE.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-15-2-wal-pitr" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">PostgreSQL · 15.2 — WAL và khôi phục theo thời điểm</span><span class="lc-sub">WAL và khôi phục theo thời điểm: kiểu khôi phục mà pg_dump không làm được.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
 
@@ -1543,6 +1625,22 @@ $ psql -d ph4 -Atc "select count(*) from pg_tables where schemaname='public'"
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">PostgreSQL — pg_restore, --list và --exit-on-error</span><span class="lc-sub">postgresql.org/docs/current/app-pgrestore.html — <code>--list</code> CHỈ đọc mục lục, và <code>--exit-on-error</code> đổi cái mặc định đi-tiếp-qua-lỗi.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">errno(3) — ENOSPC</span><span class="lc-sub">man 3 errno — cái lỗi mà <code>pg_dump</code> phơi ra, đo từ phía hệ tệp ở Bài 8.4.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">PostgreSQL — giao dịch, và một câu COPY hỏng cuộn lại cái gì</span><span class="lc-sub">/courses/postgresql/learn?lessonSlug=postgresql-11-1-giao-dich${REF.replace('?', '&')} — vì sao một câu COPY bị cắt cụt để lại một bảng RỖNG chứ không phải một bảng nửa vời.</span></span></div>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-6-4-ma-thoat-dieu-kien" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 6.4 — Exit codes, conditions and case</span><span class="lc-sub">Exit codes and conditions: the number every check in this lesson is built on.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-6-4-ma-thoat-dieu-kien" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 6.4 — Mã thoát, điều kiện và case</span><span class="lc-sub">Mã thoát và điều kiện: con số mà mọi phép kiểm trong bài này dựa vào.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -2113,6 +2211,32 @@ ma thoat 2</div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">restic — sao lưu có khử trùng lặp và kiểm chứng</span><span class="lc-sub">restic.readthedocs.io — lệnh con <code>check --read-data</code> của nó chính là ý tưởng của bài này được dựng sẵn, và đáng đọc kể cả khi bạn ở lại với pg_dump.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash — trap, tài nguyên tạm và dọn dẹp</span><span class="lc-sub">/courses/linux-bash/learn?lessonSlug=lnx-7-3-trap-don-dep${REF.replace('?', '&')} — khuôn mẫu <code>trap … EXIT</code> ngăn một lần kiểm hỏng bỏ lại một cơ sở dữ liệu.</span></span></div>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-11-2-cron-timer" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 11.2 — Scheduling: cron and systemd timers</span><span class="lc-sub">cron and systemd timers: running the job on a schedule.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-7-2-volume" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 7.2 — Volumes in depth</span><span class="lc-sub">Docker volumes in depth: where the data a backup must reach actually lives.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-11-2-cron-timer" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 11.2 — Hẹn giờ: cron và timer của systemd</span><span class="lc-sub">cron và timer của systemd: chạy việc theo lịch.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-7-2-volume" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 7.2 — Volume, đào sâu</span><span class="lc-sub">Volume Docker, đào sâu: dữ liệu mà bản sao lưu phải với tới thật ra nằm ở đâu.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
 
@@ -2515,6 +2639,22 @@ dv10-tai-len-moi   400 tep, tong bam bda5e1e41d8feafe</div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Google SRE Book — Managing Incidents, và Postmortem Culture</span><span class="lc-sub">sre.google/sre-book/managing-incidents/ — về việc vì sao một quy trình VIẾT RA và ĐÃ DIỄN TẬP thắng chuyên môn dưới áp lực.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Let&#39;s Encrypt — rate limits</span><span class="lc-sub">letsencrypt.org/docs/rate-limits/ — đáng đọc TRƯỚC một buổi diễn tập: xin lại chứng chỉ nhiều lần lúc tập có thể làm cạn hạn mức tuần và khiến bạn không xin được lúc cần thật.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Docker — volume, và dữ liệu của một container THẬT SỰ nằm ở đâu</span><span class="lc-sub">/courses/docker/learn?lessonSlug=dk-7-2-volume${REF.replace('?', '&')} — vì sao "mọi thứ đều trong Docker" không có nghĩa là mọi thứ đều được sao lưu, và một tệp compose để lại những đường dẫn nào trên máy chủ.</span></span></div>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-7-5-sao-luu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 7.5 — Backup, restore, migrate</span><span class="lc-sub">The same backup and restore with Docker volumes and a helper container.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-7-5-sao-luu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 7.5 — Sao lưu, khôi phục, di chuyển</span><span class="lc-sub">Cùng việc sao lưu và khôi phục, với volume Docker và container phụ.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -2941,6 +3081,32 @@ $ ls -l --time-style=+%d/%m | awk "NR&gt;1{print \\$5, \\$6, \\$7}"
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">rclone — SFTP backend và rclone check</span><span class="lc-sub">rclone.org/sftp/ và rclone.org/commands/rclone_check/ — remote dùng ở trên và cách phép so hoạt động.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">rsync — tài liệu</span><span class="lc-sub">rsync.samba.org/documentation.html — <code>--partial</code>, <code>--checksum</code> và <code>--delete</code> sẽ làm gì với một bản sao lưu.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash — Chương 11 (11.2 timer) và Chương 16 (16.3 sao lưu)</span><span class="lc-sub">/courses/linux-bash/learn?lessonSlug=lnx-11-2-cron-timer${REF.replace('?', '&')} — chạy các script này bằng timer systemd theo giờ Việt Nam trên máy chạy UTC, giữ bảy bản.</span></span></div>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-9-3-ssh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 9.3 — SSH: keys, config and tunnels</span><span class="lc-sub">SSH keys, config and tunnels, from the ground up.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-9-4-scp-rsync" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 9.4 — Moving files: scp, rsync and the trailing slash</span><span class="lc-sub">scp and rsync: copying the backup off the machine.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-9-3-ssh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 9.3 — SSH: khoá, file cấu hình và đường hầm</span><span class="lc-sub">Khoá SSH, tệp cấu hình và đường hầm, dạy từ gốc.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-9-4-scp-rsync" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 9.4 — Chuyển file: scp, rsync và dấu gạch chéo cuối</span><span class="lc-sub">scp và rsync: chép bản sao lưu ra khỏi máy.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

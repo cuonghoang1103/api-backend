@@ -1484,6 +1484,32 @@ ${slide('dv-00', 27, 'rsync bằng root: tệp đổi chủ, app hết ghi đư�
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">ssh_config(5) — ControlMaster, ControlPath, ControlPersist</span><span class="lc-sub">man.openbsd.org/ssh_config — ba thiết lập nằm sau phép đo 26 lần, và các ký hiệu thay thế dùng được trong đường dẫn control path.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash — người dùng, nhóm và các bit quyền</span><span class="lc-sub">/courses/linux-bash/learn${REF} — cơ chế nằm dưới lỗi quyền sở hữu, kể cả chuyện vì sao đọc thì được mà ghi thì không.</span></span></div>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-9-3-ssh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 9.3 — SSH: keys, config and tunnels</span><span class="lc-sub">SSH keys, config and tunnels, from the ground up.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-14-4-bao-mat-sau" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 14.4 — Security in depth: SSH keys, nftables, fail2ban, SELinux, narrow sudo, lynis</span><span class="lc-sub">Hardening the receiving machine further: SSH keys, nftables, fail2ban, narrow sudo.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-9-3-ssh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 9.3 — SSH: khoá, file cấu hình và đường hầm</span><span class="lc-sub">Khoá SSH, tệp cấu hình và đường hầm, dạy từ gốc.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-14-4-bao-mat-sau" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 14.4 — Bảo mật sâu: khoá SSH, nftables, fail2ban, SELinux, sudo hẹp, lynis</span><span class="lc-sub">Siết cái máy nhận chặt hơn: khoá SSH, nftables, fail2ban, sudo hẹp.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
 

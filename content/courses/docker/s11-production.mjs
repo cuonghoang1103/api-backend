@@ -459,6 +459,22 @@ blog-api-1  |    triggerUncaughtException(err)</div>
 <div class="pitfall"><strong>Bẫy:</strong> để trống <code>restart</code> trên các dịch vụ production. Mặc định là <code>no</code>, nên một container sập một lần lúc bốn giờ sáng — một promise bị từ chối không ai bắt, một lần mạng phân mảnh chớp nhoáng, một lỗi cơ sở dữ liệu thoáng qua — sẽ nằm chết cho tới khi có người để ý. Trên máy chủ mọi thứ trông vẫn ổn: các container khác đang chạy, đĩa chưa đầy, <code>dmesg</code> không có gì. Triệu chứng duy nhất là trang của bạn chết và không có gì thử sửa nó. Hãy đặt <code>restart: unless-stopped</code> lên mọi dịch vụ chạy dài, và đặt tường minh <code>restart: "no"</code> cho những việc lẽ ra phải thoát, để người đọc phân biệt được đâu là lựa chọn có chủ đích và đâu là chỗ bị quên.</div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> <code>unless-stopped</code> là mặc định của production: nó sống sót qua sập và qua khởi động lại máy nhưng tôn trọng một lệnh dừng có chủ đích. Khởi động lại máy thì container được dựng lại mà KHÔNG tôn trọng <code>depends_on</code>, nên ứng dụng phải tự thử lại các phụ thuộc — và một unit systemd chạy <code>compose up</code> sẽ mang cả stack về đúng thứ tự. Và <code>RestartCount</code>, <code>ExitCode</code> với <code>OOMKilled</code> từ <code>docker inspect</code> nhận diện được phần lớn vòng lặp sập trước khi bạn đọc một dòng log nào.</p>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-11-1-systemd-unit" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 11.1 — systemd units: running your app as a service</span><span class="lc-sub">Writing a systemd unit from scratch and understanding every line.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-11-1-systemd-unit" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 11.1 — Unit của systemd: chạy ứng dụng của bạn như một dịch vụ</span><span class="lc-sub">Viết unit systemd từ gốc và hiểu từng dòng.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 11.2 ─────────────────────────── */
@@ -870,6 +886,52 @@ heap cap: 387MB</div>
 <div class="pitfall"><strong>Bẫy:</strong> chạy production mà không đặt hạn mức bộ nhớ vì "máy chủ nhiều RAM lắm". Đúng là nhiều, cho tới khi một dịch vụ rò rỉ — và rồi bộ giết OOM của nhân chọn nạn nhân theo điểm số, mà điểm cao nhất thường là tiến trình lớn nhất trên máy. Đó là Postgres. Cơ sở dữ liệu của bạn bị giết vì một cái lỗi trong con worker xử lý ảnh, dữ liệu thì còn nhưng khởi động lại mất mấy phút, và log của cái dịch vụ thật sự rò rỉ chẳng cho thấy gì bất thường vì nó đâu phải cái bị giết. Đặt hạn mức cho mọi dịch vụ là biến chuyện đó thành một container khởi động lại trong khi mọi thứ khác vẫn phục vụ. Hãy thêm chúng TRƯỚC khi bạn cần; đúng cái ngày bạn cần, bạn sẽ đang ngồi đọc <code>dmesg</code> chứ không phải ngồi viết YAML.</div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Hãy đặt hạn mức bộ nhớ cho mọi dịch vụ chạy dài, không thì một chỗ rò kéo sập cả máy chủ — kể cả cơ sở dữ liệu, thứ mà nhân sẽ chọn vì nó lớn nhất. Mã 137 nghĩa là SIGKILL; <code>docker inspect -f '{{ .State.OOMKilled }}'</code> nói cho bạn biết đó là do hạn mức bộ nhớ hay do thứ khác. Và hãy nói cho bộ chạy biết về cái hạn mức: Node 18 trở về trước tính heap từ RAM của máy chủ, Node 20+ chỉ lấy khoảng một nửa trần cgroup — hãy tự đặt <code>--max-old-space-size</code> thấp hơn trần của container để con số đó là có chủ đích.</p>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-8-3-oom" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 8.3 — The OOM killer: overcommit, oom_score and how it picks a victim</span><span class="lc-sub">How the kernel picks its victim.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-8-4-exit137" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 8.4 — The exit-137 incident, measured: parallel builds, memory.high and the kill</span><span class="lc-sub">A 137 incident measured on a real server.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-8-2-swap" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 8.2 — Swap, swappiness and thrashing, measured</span><span class="lc-sub">Swap, and what it does to a memory limit.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-16-5-ro-ri-bo-nho" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 16.5 — Memory: the cache that never forgets</span><span class="lc-sub">Finding the memory leak inside Node.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-8-3-oom" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Hệ điều hành cho lập trình viên · 8.3 — OOM killer: overcommit, oom_score và cách nó chọn nạn nhân</span><span class="lc-sub">Nhân hệ điều hành chọn nạn nhân thế nào.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-8-4-exit137" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Hệ điều hành cho lập trình viên · 8.4 — Sự cố exit 137, đo thật: build song song, memory.high và cú giết</span><span class="lc-sub">Sự cố 137 đo thật trên máy chủ.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-8-2-swap" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Hệ điều hành cho lập trình viên · 8.2 — Swap, swappiness và thrashing, đo thật</span><span class="lc-sub">Swap, và nó làm gì với một trần bộ nhớ.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-16-5-ro-ri-bo-nho" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 16.5 — Bộ nhớ: cái cache không bao giờ quên</span><span class="lc-sub">Tìm chỗ rò bộ nhớ trong Node.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 11.3 ─────────────────────────── */
@@ -1259,6 +1321,42 @@ log('info', 'request', { method: 'GET', path: '/api/v1/posts', ms: 42, status: 2
 <div class="pitfall"><strong>Bẫy:</strong> lấy lại chỗ trống bằng cách <code>rm</code> file log của một container. Container vẫn giữ file đó mở, nên nhân vẫn giữ nguyên các khối đã cấp cho tới khi tiến trình ấy thoát — <code>df</code> vẫn báo đĩa đầy y như cũ, và giờ thì <code>docker logs</code> cũng hỏng nốt, vì file nó đọc không còn tồn tại ở đường dẫn đó nữa. <code>truncate -s 0</code> mới là nước đi đúng: nó giải phóng các khối ngay lập tức, container đang chạy vẫn ghi tiếp vào cùng cái file handle đang mở, và <code>docker logs</code> vẫn chạy. Rồi hãy cấu hình <code>max-size</code> để bạn không phải làm lại chuyện này — và nhớ rằng thay đổi ở mức daemon cần <em>khởi động lại</em> daemon (không phải reload) và chỉ áp cho container tạo sau đó, nên hãy dựng lại những cái đang có.</div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Driver mặc định <code>json-file</code> KHÔNG bao giờ xoay vòng: hãy đặt <code>max-size</code> với <code>max-file</code> trong <code>daemon.json</code> <em>và</em> trong compose, rồi dựng lại container sau đó. File log nằm ngoài mọi thứ <code>docker system df</code> đếm, nên một máy chủ có thể hết đĩa trong khi Docker báo còn rộng rãi. Và để lấy lại chỗ từ log của một container đang chạy thì dùng <code>truncate -s 0</code> — xoá file chẳng giải phóng được gì cho tới khi tiến trình thoát.</p>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-10-1-dia-day" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 10.1 — The disk is full: finding out what filled it</span><span class="lc-sub">Finding what fills the disk, from the ground up.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-10-3-log-journalctl" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 10.3 — Logs: journalctl, /var/log and rotation</span><span class="lc-sub">journalctl and the operating system&#39;s own log rotation.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-1-1-tu-console-toi-json" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Observability · 1.1 — From console.log to a line a machine can read</span><span class="lc-sub">From console.log to a line a machine can read.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-10-1-dia-day" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 10.1 — Đĩa đầy: tìm ra cái gì làm nó đầy</span><span class="lc-sub">Tìm ra cái gì làm đầy đĩa, từ gốc.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-10-3-log-journalctl" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 10.3 — Log: journalctl, /var/log và việc xoay vòng</span><span class="lc-sub">journalctl và việc xoay log của chính hệ điều hành.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-1-1-tu-console-toi-json" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Observability · 1.1 — Từ console.log tới một dòng máy đọc được</span><span class="lc-sub">Từ console.log tới một dòng máy đọc được.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 11.4 ─────────────────────────── */
@@ -1347,6 +1445,7 @@ blog-api-1  | 3 requests in flight, waiting
 blog-api-1  | closed cleanly in 412ms</div>
 <div class="callout ok"><strong>412ms instead of 10 seconds, and no dropped requests.</strong> The pieces are small: handle SIGTERM, stop accepting new connections, let in-flight work finish, close your database pool, exit 0. And remember PID 1 — if your process is not PID 1 or does not install a handler, the signal goes nowhere, which is what <code>tini</code> and <code>init: true</code> fix (Lesson 1.3).</div>
 <p>Measured with the small API from the previous section, which has exactly this handler: <code>docker compose stop api</code> took <strong>213 ms</strong> from command to "Stopped", and the logs read <code>SIGTERM: draining</code> followed by <code>closed cleanly in 0ms</code> (no requests were in flight). Without the handler, the same stop takes the full 10-second grace period and ends in SIGKILL, exit 137 — Lesson 1.3 measured 10.17 s for a Node process that ignores SIGTERM.</p>
+<p class="note-ct">That 10 s is the Linux engine. Re-measured on 13/11/2026 on a Mac with Docker Desktop (Engine 29.8), a Node process without a handler was killed after about <strong>3.19 s</strong> — still SIGKILL, still exit 137, still every in-flight request dropped, just sooner. The grace period you get depends on where Docker runs, which is one more reason to handle SIGTERM yourself and state <code>stop_grace_period</code> explicitly instead of relying on the default.</p>
 
 <h3>Build elsewhere, swap here</h3>
 ${slide('dk-11', 21, 'Dựng ở máy khác, VPS chỉ kéo về và tráo — ba sự cố thật khi dựng trên VPS')}
@@ -1658,6 +1757,7 @@ blog-api-1  | 3 requests in flight, waiting
 blog-api-1  | closed cleanly in 412ms</div>
 <div class="callout ok"><strong>412ms thay vì 10 giây, và không rơi yêu cầu nào.</strong> Các mảnh ghép đều nhỏ: bắt SIGTERM, ngừng nhận kết nối mới, để việc đang dở làm nốt, đóng bể kết nối cơ sở dữ liệu, thoát 0. Và nhớ chuyện PID 1 — nếu tiến trình của bạn không phải PID 1 hoặc không cài bộ xử lý tín hiệu thì tín hiệu ấy rơi vào hư không, và đó là thứ <code>tini</code> với <code>init: true</code> chữa (Bài 1.3).</div>
 <p>Đo bằng API nhỏ ở mục trên, thứ có đúng bộ xử lý này: <code>docker compose stop api</code> mất <strong>213 ms</strong> từ lúc gõ lệnh tới "Stopped", và log ghi <code>SIGTERM: draining</code> rồi <code>closed cleanly in 0ms</code> (không có request nào đang dở). Không có bộ xử lý thì cũng lệnh stop đó chờ hết 10 giây ân hạn rồi kết thúc bằng SIGKILL, exit 137 — Bài 1.3 đo được 10,17 giây cho một tiến trình Node phớt lờ SIGTERM.</p>
+<p class="note-ct">Con số 10 giây đó là của engine trên Linux. Đo lại ngày 13/11/2026 trên Mac với Docker Desktop (Engine 29.8), một tiến trình Node không có bộ xử lý bị giết sau khoảng <strong>3,19 giây</strong> — vẫn SIGKILL, vẫn mã 137, vẫn rơi mọi request đang dở, chỉ là sớm hơn. Khoảng gia hạn bạn nhận được tuỳ vào nơi Docker chạy — thêm một lý do để tự bắt SIGTERM và khai <code>stop_grace_period</code> tường minh thay vì trông vào mặc định.</p>
 
 <h3>Dựng ở nơi khác, tráo ở đây</h3>
 ${slide('dk-11', 21, 'Dựng ở máy khác, VPS chỉ kéo về và tráo — ba sự cố thật khi dựng trên VPS')}
@@ -1889,6 +1989,42 @@ a91c4e7b2f60	213MB</div>
 
 <div class="pitfall"><strong>Bẫy:</strong> deploy bằng một cái nhãn hay đổi như <code>:latest</code> và không có bản ghi nào về thứ đang chạy. Khi có gì hỏng, bạn không trả lời nổi câu hỏi đầu tiên — "cái gì đã thay đổi?" — vì cái nhãn đó một giờ trước trỏ vào một cái ảnh và bây giờ trỏ vào cái khác, còn <code>docker images</code> chỉ cho bạn xem nghĩa hiện tại của nó. Quay lui biến thành khảo cổ: bạn ngồi đào mốc thời gian trên registry để cố nhận diện một cái ảnh mà bạn không có tên gọi. Hãy gắn nhãn mọi cái ảnh bằng mã SHA của commit, giữ cái nhãn đó trong log deploy, và để chính ứng dụng báo cáo phiên bản đang chạy — một phản hồi <code>/health</code> có kèm nó tốn một dòng và biến câu "bản nào đang sống?" thành một lệnh <code>curl</code>. Khi ấy quay lui là một câu lệnh với một cái tên bạn đã có sẵn.</div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> <code>up -d</code> dựng lại những container đã đổi, nghĩa là có một khoảng trống: hãy bắt SIGTERM, rút cạn các yêu cầu đang dở, và đặt <code>stop_grace_period</code> dài hơn thời gian chờ của chính bạn. Hãy dựng trên một cái máy còn chỗ thở rồi để máy chủ chỉ <code>pull</code> và tráo — một lượt dựng trên máy chủ production tranh bộ nhớ và làm đầy cái đĩa đang chứa cơ sở dữ liệu của bạn. Và hãy gắn nhãn theo mã SHA của commit để "cái gì đang chạy" là thứ kiểm được và quay lui là một câu lệnh, nhớ rằng một lượt deploy có kèm migration thì không hoàn tác được bằng cách deploy lại ảnh cũ.</p>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-7-2-concurrency" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">GitHub Actions · 7.2 — concurrency, and two opposite settings that are both right</span><span class="lc-sub">concurrency in a workflow, line by line.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-9-1-push-de-deploy" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">GitHub Actions · 9.1 — Push-to-deploy, and the two outages that ended it here</span><span class="lc-sub">Why push-to-deploy was retired in this very project.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-1-4-dat-ten-ban-phat-hanh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy VPS · 1.4 — Naming a release, and making the server admit what it is</span><span class="lc-sub">Naming releases, and making the server tell you which one it runs.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-7-2-concurrency" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">GitHub Actions · 7.2 — concurrency, và hai thiết lập ngược nhau đều đúng</span><span class="lc-sub">concurrency trong workflow, từng dòng.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-9-1-push-de-deploy" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">GitHub Actions · 9.1 — Push-để-deploy, và hai sự cố đã kết liễu nó ở đây</span><span class="lc-sub">Vì sao push để deploy bị khai tử ở chính dự án này.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-1-4-dat-ten-ban-phat-hanh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 1.4 — Đặt tên bản phát hành, và bắt máy chủ khai nó là bản nào</span><span class="lc-sub">Đặt tên bản phát hành, bắt máy chủ khai mình đang chạy bản nào.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -2334,6 +2470,42 @@ blog-api-1 38.12%
 
 <div class="pitfall"><strong>Bẫy:</strong> với tay lấy <code>docker system prune -a --volumes</code> khi một máy chủ hết đĩa. Đó là câu lệnh xuất hiện đầu tiên trong kết quả tìm kiếm và là câu lệnh biến một sự bất tiện thành một sự cố: cờ <code>-a</code> xoá mọi cái ảnh không gắn với một container đang chạy — kể cả bản phát hành trước mà lẽ ra bạn sẽ quay lui về — còn <code>--volumes</code> xoá mọi volume vô danh không ai dùng, mà trên một máy chủ từng chạy Postgres thiếu volume có tên thì nghĩa là cơ sở dữ liệu (engine cũ hơn bản 23 còn xoá cả volume có tên; ngày nay việc đó cần <code>docker volume prune -a</code>). Thứ tự an toàn là <code>builder prune</code>, rồi <code>image prune</code> (không có <code>-a</code>), rồi <code>container prune</code>, kiểm <code>df</code> sau mỗi bước; chừng đó lấy lại phần lớn dung lượng mà không đặt gì vào thế nguy. Nếu volume đúng là vấn đề thì hãy liệt kê chúng theo tên và xác nhận từng cái bằng tay. Và hãy coi cả chuyện này như một tín hiệu: một máy chủ chạm 90% đĩa một lần thì sẽ chạm lại, nên cách chữa là xoay vòng log, một việc dọn theo lịch và đưa việc dựng ảnh ra khỏi máy chủ — chứ không phải một lượt prune to hơn.</div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Có bốn thứ phình ra — ảnh, cache dựng, volume và file log — và chỉ ba cái đầu hiện trong <code>docker system df</code>. Hãy prune theo thứ tự an toàn: <code>builder</code>, rồi <code>image</code>, rồi <code>container</code>, và đừng bao giờ dùng <code>system prune -a --volumes</code> hay <code>volume prune -a</code> trên một máy chủ có dữ liệu. Và năm phép kiểm viết thành script (đĩa, không khoẻ, restart, điểm cuối health, bản sao lưu có tồn tại) bắt được gần hết những gì kéo sập một trang nhỏ — kể cả cái việc dọn dẹp đã lặng lẽ ngừng chạy.</p>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-8-4-day-dia" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy VPS · 8.4 — ENOSPC, and the two disks that are full without being full</span><span class="lc-sub">Out of disk space, and two disks that were full without being full.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-1-5-giu-ban-cu-khong-day-dia" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy VPS · 1.5 — Keeping old releases without filling the disk</span><span class="lc-sub">Keeping old releases for rollback without filling the disk.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-9-4-bao-dong" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy VPS · 9.4 — Alerting on the trend, not the threshold</span><span class="lc-sub">Alerting on trends instead of thresholds.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-8-4-day-dia" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 8.4 — ENOSPC, và hai cái đĩa ĐẦY mà không đầy</span><span class="lc-sub">Hết chỗ trên đĩa, và hai cái đĩa đầy mà không đầy.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-1-5-giu-ban-cu-khong-day-dia" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 1.5 — Giữ bản phát hành cũ mà không làm đầy đĩa</span><span class="lc-sub">Giữ bản phát hành cũ để quay lui mà không làm đầy đĩa.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-9-4-bao-dong" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 9.4 — Báo động theo XU HƯỚNG, không theo ngưỡng</span><span class="lc-sub">Báo động theo xu hướng thay vì theo ngưỡng.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

@@ -503,6 +503,32 @@ Error: ENOTFOUND getaddrinfo ENOTFOUND cache
 <div class="pitfall"><strong>Bẫy:</strong> bắt đầu bằng <code>docker logs</code>. Nó là câu lệnh đúng khoảng một nửa số lần và rỗng hoàn toàn ở nửa còn lại — vì một container hỏng ở tầng 1 hay 2 chưa bao giờ chạy mã của bạn, nên chẳng có gì để ghi log. Người ta khi ấy kết luận là log hỏng, hoặc khởi động lại kèm bật thêm log, và mất mười phút trước khi nhận ra thông báo lỗi đã được CLI của Docker in ra <code>stderr</code> ngay lúc tạo container. Hãy chạy <code>docker ps -a</code> trước: cột <code>STATUS</code> phân biệt <code>Created</code> (chưa từng khởi động — tầng 1 hoặc 2) với <code>Exited (1)</code> (đã chạy rồi hỏng — tầng 3) với <code>Restarting</code> (một vòng lặp) trước khi bạn đọc một dòng nào, và mã thoát cho biết cần mở mục nào trong sách công thức.</div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Hãy xác định TẦNG trước — ảnh, cấu hình container, tiến trình, hay môi trường — vì mỗi tầng có một dấu hiệu riêng và gọi tên được nó là loại ngay ba phần tư khả năng. Mã thoát là tín hiệu nhanh nhất: 125 là Docker, 126 là không chạy được, 127 là không tìm thấy, 137 là bị giết, và mọi số nhỏ là ứng dụng của chính bạn. Và dưới áp lực thì hãy đổi một thứ một lần; một lượt quay lui mua được thời gian yên tĩnh là nước đi đầu tiên chính đáng.</p>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-5-3-tin-hieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 5.3 — Signals: what Ctrl-C actually sends</span><span class="lc-sub">Which signal Ctrl-C really sends, and where "128 plus the number" comes from.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-5-1-tien-trinh-la-gi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 5.1 — What a process is, and how to look at one</span><span class="lc-sub">What a process is, and looking at it with ps.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-5-3-tin-hieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 5.3 — Tín hiệu: Ctrl-C thật ra gửi cái gì</span><span class="lc-sub">Ctrl-C thật ra gửi tín hiệu gì, và "128 cộng số hiệu" đến từ đâu.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-5-1-tien-trinh-la-gi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 5.1 — Tiến trình là gì, và nhìn vào nó bằng cách nào</span><span class="lc-sub">Tiến trình là gì, và nhìn vào nó bằng ps.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 12.2 ─────────────────────────── */
@@ -994,6 +1020,22 @@ error while interpolating services.api.image: required variable NODE_TAG is miss
 <div class="pitfall"><strong>Bẫy:</strong> đọc "executable file not found" thành "file của tôi bị thiếu" rồi đi tìm nó. Một nửa số lần thì cái file nằm ngay đó và thông báo nói về chuyện hoàn toàn khác: một script shell có dòng shebang kết thúc bằng <code>\\r</code>, nên nhân đi tìm một trình thông dịch tên <code>/bin/sh\\r</code>; hoặc một <code>CMD</code> dạng exec chứa <code>$VAR</code>, ở đó dấu đô la theo nghĩa đen bị coi là một phần của tên chương trình; hoặc một tệp nhị phân có tồn tại nhưng được biên dịch cho kiến trúc khác, thứ mà vài bộ chạy báo cáo y hệt như vậy. Phép chẩn đoán tách được cả ba chỉ mất một câu lệnh: <code>docker run --rm --entrypoint sh &lt;ảnh&gt; -c 'file /app/entrypoint.sh; command -v node'</code>. Nếu <code>file</code> nói "CRLF line terminators" thì bạn đã tìm ra mà không cần tìm gì cả.</div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Nếu container chưa từng khởi động thì <code>docker logs</code> rỗng là đúng thiết kế — thông báo nằm ở stderr do CLI in ra, và cột <code>STATUS</code> của <code>docker ps -a</code> cho bạn biết là <code>Created</code> hay <code>Exited</code>. <code>exec format error</code> nghĩa là sai kiến trúc, thứ mà một lượt dựng xanh trên máy Mac sẽ vui vẻ tạo ra cho một máy chủ x86. Và <code>-v</code> lặng lẽ tạo ra nguồn bind bị thiếu trong khi <code>--mount type=bind</code> từ chối — nên mọi thứ commit vào kho đều nên dùng <code>--mount</code>.</p>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/git/learn?lessonSlug=git-0-3-cai-dat-cau-hinh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Git · 0.3 — Install &amp; configure Git, and create your SSH key</span><span class="lc-sub">Git configuration, and a .gitattributes file that forces line endings for the whole team.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/git/learn?lessonSlug=git-0-3-cai-dat-cau-hinh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Git · 0.3 — Cài đặt &amp; cấu hình Git, và tạo khoá SSH</span><span class="lc-sub">Cấu hình Git, và tệp .gitattributes ép đuôi dòng cho cả nhóm.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 12.3 ─────────────────────────── */
@@ -1472,6 +1514,22 @@ real	0m10.312s</div>
 
 <div class="pitfall"><strong>Bẫy:</strong> chữa triệu chứng của một vòng lặp sập bằng cách thêm <code>restart: always</code> rồi đi tiếp. Container giờ vỗ cánh mãi mãi thay vì nằm chết, trông đẹp hơn trong <code>docker ps</code> và tệ hơn ở mọi khía cạnh khác: log đầy lên bằng đúng một lỗi với nhịp do độ trễ tăng dần quyết định, healthcheck nhảy qua nhảy lại giữa các trạng thái nên giám sát không nói cho bạn điều gì ổn định, và cái hỏng THẬT — thường là một dòng trong log của chính lần thử đầu tiên — thì trôi mất. Hãy đọc lần hỏng ĐẦU TIÊN, đừng đọc lần thứ một trăm: <code>docker logs --since &lt;thời điểm container khởi động&gt;</code>, hoặc dừng container lại rồi chạy nó một lần bằng tay với <code>compose run</code>. Một vòng lặp sập là một cái lỗi đang lặp, và sự lặp lại không thêm thông tin gì sau chu kỳ đầu tiên.</div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Một container thoát 0 ngay lập tức thì thường là đã chạy nền — chế độ tiền cảnh là bắt buộc, từ <code>nginx -g "daemon off;"</code> tới <code>redis-server</code> không kèm <code>--daemonize</code>. Mã 137 kèm <code>OOMKilled=true</code> là hạn mức bộ nhớ của chính container; kèm <code>false</code> thì có thứ khác đã gửi SIGKILL. Và <code>docker compose run --rm --entrypoint sh &lt;dịch vụ&gt;</code> cho bạn đúng ảnh, đúng môi trường và đúng mạng của dịch vụ đang hỏng với một cái shell thay cho câu lệnh — đường nhanh nhất từ "nó chết" tới "tôi thấy vì sao rồi".</p>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-5-3-tin-hieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 5.3 — Signals: what Ctrl-C actually sends</span><span class="lc-sub">Signals, SIGTERM, and why a process has to catch it itself.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-5-3-tin-hieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 5.3 — Tín hiệu: Ctrl-C thật ra gửi cái gì</span><span class="lc-sub">Tín hiệu, SIGTERM và vì sao tiến trình phải tự bắt nó.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -2032,6 +2090,22 @@ exit=255
 <div class="pitfall"><strong>Bẫy:</strong> coi một lượt dựng xanh là một cái ảnh chạy được. Dựng chỉ chứng minh rằng các chỉ thị đã chạy; nó không chứng minh gì về việc kết quả có khởi động được không. Mọi kiểu hỏng trong khoá này từng lọt tới production đều có cùng hình dạng đó — một engine glibc trong ảnh musl, một frontend dựng thiếu một biến công khai, một thư mục <code>dist/</code> cũ không bao giờ gắn được một cái router. Cả ba đều xanh lúc dựng, xanh lúc đẩy, xanh lúc tráo, và hỏng trên production. Cách phòng thủ rẻ nhất có thể là một lệnh <code>docker run</code> lên chính cái ảnh vừa dựng, chạy thứ nhỏ nhất mà sẽ hỏng nếu có gì sai: nạp client cơ sở dữ liệu, in ra phiên bản, gọi <code>/health</code>. Mười giây trong đường ống, trước khi đẩy — và nó biến một sự cố thành một lượt dựng thất bại.</div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Hãy đọc kết quả BuildKit từ dưới lên: dòng cuối gọi tên câu lệnh, khối trên nó gọi tên dòng trong Dockerfile, và <code>--target</code> cho bạn một cái shell ở tầng ngay trước chỗ hỏng. Một cái hỏng chỉ-trên-CI không bao giờ ngẫu nhiên — <code>--no-cache --pull --platform linux/amd64</code> trên một cây làm việc đã stash tái hiện gần hết chúng ngay tại máy. Và một lượt dựng xanh không phải là một cái ảnh đang chạy: hãy thêm một lệnh <code>docker run</code> chốt kiểm trước khi đẩy.</p>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-15-3-deploy-an-toan" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">GitHub Actions · 15.3 — Deploying safely: environment, SSH, a lock, a smoke test, automatic rollback</span><span class="lc-sub">Putting the dry-run gate into the pipeline, with a smoke test and automatic rollback.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-15-3-deploy-an-toan" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">GitHub Actions · 15.3 — Deploy an toàn: environment, SSH, khoá, smoke test, tự quay lui</span><span class="lc-sub">Đưa chốt chạy thử vào pipeline, cùng smoke test và tự quay lui.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 12.5 ─────────────────────────── */
@@ -2328,6 +2402,42 @@ ${slide('dk-12', 29, 'Sự cố thật: xanh ở mọi cửa → một phép ki�
 
 <div class="pitfall"><strong>Một cái bẫy cuối, và nó là cái bẫy ở tầng trên:</strong> tin rằng vì một container tái lập được nên nó đã được hiểu. Tái lập được nghĩa là cùng đầu vào cho cùng kết quả — nó không nói gì về việc kết quả đó có ĐÚNG hay không, và chính điều đó khiến những cái lỗi của container trông tự tin đến thế. Sai kiến trúc thì tái lập hoàn hảo. Cái engine glibc trong ảnh musl cũng vậy, thư mục <code>dist/</code> cũ cũng vậy, cái healthcheck gọi một tệp nhị phân không tồn tại cũng vậy. Ở mọi trường hợp, hệ thống chạy đúng y như đã được cấu hình, và cấu hình thì sai. Thói quen bảo vệ bạn không phải là cẩn thận hơn; đó là KIỂM CHỨNG Ở TỪNG RANH GIỚI — chạy cái ảnh bạn vừa dựng, curl cái tuyến bạn vừa deploy, khôi phục cái bản sao lưu bạn vừa tạo, và kiểm bộ kiểm trước khi tin nó.</div>
 <p class="note-ct"><strong>Bạn đang ở đâu rồi.</strong> Bạn đọc được một Dockerfile và đoán trước được các lớp của nó, hành vi cache của nó và kích thước cuối cùng của nó. Bạn dựng được một stack tách công khai khỏi riêng tư, chờ các phụ thuộc của mình cho đúng cách, và sống sót qua một lần khởi động lại máy. Bạn tìm ra được vì sao một container không khởi động, không đứng vững, hoặc không nói chuyện được với cái khác — thường trong chưa tới hai phút, vì bạn biết cần nhìn vào tầng nào trong bốn tầng. Đó là toàn bộ phần Docker thực dụng, và mọi thứ nằm trên nó (Kubernetes, service mesh, các nền tảng) đều dựng từ chính những mảnh này. Cảm ơn bạn đã đọc tới đây — giờ thì đi làm hỏng thứ gì đó một cách có chủ đích, khi việc đó còn an toàn.</p>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-12-1-namespaces" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 12.1 — A container is a process with a different view: the namespaces, one by one</span><span class="lc-sub">A container sees the world differently, one namespace at a time.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-12-2-cgroups" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 12.2 — cgroups v2 by hand: memory.max, cpu.max, pids.max and io.max, each one hit on purpose</span><span class="lc-sub">cgroups by hand.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-2-3-tao-tac-la-anh-container" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy VPS · 2.3 — The artifact as a container image</span><span class="lc-sub">The deploy artifact is a container image, on a real VPS.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-12-1-namespaces" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Hệ điều hành cho lập trình viên · 12.1 — Container là một tiến trình nhìn thế giới khác đi: từng namespace một</span><span class="lc-sub">Container nhìn thế giới khác đi, từng namespace một.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-12-2-cgroups" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Hệ điều hành cho lập trình viên · 12.2 — cgroup v2 bằng tay: memory.max, cpu.max, pids.max và io.max, chạm từng trần một</span><span class="lc-sub">cgroup bằng tay.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-2-3-tao-tac-la-anh-container" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 2.3 — Tạo tác là một ảnh container</span><span class="lc-sub">Tạo tác deploy là một ảnh container, trên VPS thật.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

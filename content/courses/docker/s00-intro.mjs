@@ -425,6 +425,22 @@ This message shows that your installation appears to be working correctly.
 </a>
 <p class="note-ct"><strong>Bài kế tiếp:</strong> “Bắt đầu tại đây” phần 2 — những sự cố có thật khi không có (hoặc dùng ẩu) container, những tình huống nhóm sinh viên gặp mỗi học kỳ, và một kế hoạch học giúp bạn đi tới cùng.</p>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-0-5-bat-dau-tai-day" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · Start here (1/2) — What Linux and the shell are, where they came from, why they matter</span><span class="lc-sub">This whole course lives in the terminal. New to the command line? Linux &amp; Bash starts from zero.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-0-5-bat-dau-tai-day" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · Bắt đầu tại đây (1/2) — Linux và shell là gì, ra đời thế nào, vì sao quan trọng với bạn</span><span class="lc-sub">Cả khoá này gõ lệnh liên tục trong terminal. Chưa quen dòng lệnh thì khoá Linux &amp; Bash dạy từ số 0.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────── 0.6 · BẮT ĐẦU TẠI ĐÂY (2/2) ─────────────────── */
@@ -789,6 +805,22 @@ Run 'docker run --help' for more information</div>
   <span class="lc-body"><span class="lc-title">Docker — hướng dẫn Get Started chính thức</span><span class="lc-sub">Một giọng nói thứ hai bên cạnh khoá này cho Mục 0 và Chương 1–4.</span></span>
 </a>
 <p class="note-ct"><strong>Bài kế tiếp:</strong> bài 0.0 gom mọi slide của Mục 0 vào một chỗ, và bài 0.1 soi kỹ ba cú hỏng mà Docker chấm dứt. Nếu bạn đã làm bài thực hành ở trên, bạn đã chạy container đầu tiên và đọc lỗi đầu tiên — phần còn lại dựng lên trên đó.</p>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-0-1-bon-buoc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy VPS · 0.1 — Four steps, and four ways to fail</span><span class="lc-sub">After Docker: put the image you built on a real server — the four steps of a deploy and the four ways it breaks.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-0-1-bon-buoc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 0.1 — Bốn bước, và bốn kiểu hỏng</span><span class="lc-sub">Học xong Docker: đưa ảnh bạn dựng lên máy chủ thật — bốn bước của một lần deploy và bốn kiểu hỏng.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -1247,6 +1279,32 @@ ${slide('dk-00', 25, 'Đọc khoá này thế nào: phần đầu theo thứ t�
 
 <div class="pitfall"><strong>Bẫy:</strong> học thuộc câu lệnh trước khi hiểu mô hình. Hoàn toàn có thể thuộc lòng <code>docker run -d -p 8080:80 nginx</code> rồi dùng nó trót lọt cả năm mà không biết một chữ nào trong đó nghĩa là gì — cho tới cái ngày một cổng không publish được, một volume không giữ được dữ liệu, hay một container không với tới được container khác. Mọi câu hỏi trong Chương 12 đều trả lời được trong vài giây nếu bạn giữ được mô hình của Chương 1, và không trả lời nổi nếu không có nó. Hãy cho Chương 1 một tiếng đồng hồ; nó trả lại nhiều lần con số đó.</div>
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> Sản phẩm thật sự của Docker là <em>KHẢ NĂNG TÁI LẬP</em> — môi trường trở thành một phần của thứ bạn đem đi, và cả ba cú hỏng ở đầu bài này đều bắt nguồn từ việc nó KHÔNG như vậy. Một image là một hệ thống file chỉ-đọc cộng siêu dữ liệu khởi động; một container là một bản đang chạy của nó. Và một container là một TIẾN TRÌNH, không phải máy ảo — riêng sự thật đó giải thích được tốc độ, kích thước, việc dùng chung nhân với máy chủ, và phần lớn những bất ngờ.</p>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-2-3-tao-tac-la-anh-container" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy VPS · 2.3 — The artifact as a container image</span><span class="lc-sub">The other half of "works on my machine": shipping exactly that thing to a server, with the container image as the artifact.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-17-1-anh-docker" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 17.1 — The image: 440MB down to 58,8MB</span><span class="lc-sub">A real Node.js API packaged as a Docker image, from 440 MB down to 58.8 MB.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-2-3-tao-tac-la-anh-container" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 2.3 — Tạo tác là một ảnh container</span><span class="lc-sub">Nửa còn lại của chuyện "máy tôi chạy được": đưa đúng thứ đó lên máy chủ, dùng chính ảnh container làm thứ đem đi.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-17-1-anh-docker" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 17.1 — Ảnh Docker: từ 440MB xuống 58,8MB</span><span class="lc-sub">Một API Node.js thật đóng gói thành ảnh Docker, từ 440 MB xuống còn 58,8 MB.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -1792,6 +1850,22 @@ hello-world:latest   5e2309035332       22.6kB         10.3kB   U</div>
 <div class="pitfall"><strong>Bẫy:</strong> <code>docker-compose</code> (gạch nối) so với <code>docker compose</code> (dấu cách). Lệnh có gạch nối là Compose v1, viết bằng Python, ngừng bảo trì từ 2023, và khác biệt theo những cách có thật — nó đặt tên container bằng gạch dưới, không hỗ trợ <code>include</code> hay các tính năng Compose mới như <code>develop.watch</code> (nó chỉ kịp có <code>profiles</code> ở các bản cuối, 1.28, tháng 1/2021), và xử lý điều kiện <code>depends_on</code> khác đi. Nếu một file Compose trong bài hướng dẫn nào đó "không chạy", hãy kiểm xem bạn đang chạy cái nào: <code>docker compose version</code> phải nói v2 hoặc mới hơn (máy Mac của khoá báo v5.5.1 vào tháng 9/2026). Trên Ubuntu, cài <code>docker-compose-plugin</code> như ở trên là bạn có v2, và nên xoá mọi tệp nhị phân v1 bạn tìm thấy.</div>
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> Câu lệnh <code>docker</code> chỉ là một máy khách — tiến trình nền mới làm việc, đó là lý do <code>docker version</code> in ra hai phần và là lý do "cannot connect to the Docker daemon" chưa bao giờ là lỗi của CLI. Thêm mình vào nhóm <code>docker</code> là cấp quyền root, nên cứ làm trên laptop và hãy nghĩ hai lần trên máy chủ. Và trên macOS với Windows thì có một máy ảo Linux nằm ở giữa: hãy giữ file của bạn ở phía Linux của nó, không thì bạn trả giá cho cú vượt biên đó ở MỌI lần đọc file.</p>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-15-3-windows-wsl2" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 15.3 — Windows: WSL2, Git Bash, and the CRLF bug from start to finish</span><span class="lc-sub">On Windows, WSL2 is what Docker Desktop runs on — plus the CRLF line-ending error you will meet again in Chapter 4.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-15-3-windows-wsl2" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 15.3 — Windows: WSL2, Git Bash, và lỗi CRLF từ đầu tới cuối</span><span class="lc-sub">Trên Windows, WSL2 là nền của Docker Desktop — kèm lỗi xuống dòng CRLF mà bạn sẽ gặp lại ở Chương 4.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 0.3 ─────────────────────────── */
@@ -2331,6 +2405,32 @@ hello-world   latest       d2c94e258dcb   14 months ago 13.3kB</div>
 
 <div class="pitfall"><strong>Bẫy:</strong> <code>docker: Error response from daemon: Bind for 0.0.0.0:8080 failed: port is already allocated</code>. Nó nghĩa là có thứ khác đang giữ cổng 8080 của máy chủ — thường là một container bạn quên mất, vì một container đã dừng vẫn giữ TÊN của nó còn một container đang chạy vẫn giữ CỔNG của nó. <code>docker ps -a</code> để nhìn thấy nó, <code>docker rm -f &lt;tên&gt;</code> để gỡ, hoặc chỉ cần publish sang một cổng khác của máy chủ: <code>-p 8081:80</code> vẫn chạy và không đổi gì bên trong container. Nếu <code>docker ps -a</code> rỗng thì cái cổng thuộc về một tiến trình bình thường trên máy bạn — <code>sudo ss -tlnp | grep 8080</code> gọi tên nó ra.</div>
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> <code>docker run</code> đã kéo một ảnh, TẠO một container rồi KHỞI CHẠY nó — ba bước mà Chương 1 tách ra, và biết chúng tách rời được giải thích phần lớn cái CLI này. <code>docker exec -it &lt;tên&gt; sh</code> là câu lệnh bạn sẽ dùng nhiều nhất trong lúc học, vì nhìn vào bên trong trả lời được những câu hỏi mà đọc bao nhiêu cũng không xong. Và tầng ghi được của một container chết cùng container: ổn với thí nghiệm, thảm hoạ với một cơ sở dữ liệu, và đó là lý do Chương 7 tồn tại.</p>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-9-2-curl" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 9.2 — curl: the flags that matter</span><span class="lc-sub">This lesson knocks on nginx with curl; here are the curl flags that actually matter.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-9-1-giao-dien-cong-dns" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 9.1 — The network from the shell: interfaces, ports and DNS</span><span class="lc-sub">Ports, 127.0.0.1 versus 0.0.0.0, taught from the ground up with real commands.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-9-2-curl" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 9.2 — curl: những cờ thật sự quan trọng</span><span class="lc-sub">Bài này dùng curl để gõ cửa nginx; bài kia giải thích những cờ curl thật sự quan trọng.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-9-1-giao-dien-cong-dns" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 9.1 — Mạng nhìn từ shell: giao diện, cổng và DNS</span><span class="lc-sub">Cổng, 127.0.0.1 so với 0.0.0.0, dạy từ gốc bằng lệnh thật.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

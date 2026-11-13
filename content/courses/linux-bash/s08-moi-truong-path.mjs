@@ -185,6 +185,7 @@ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin
 v22.6.0
 v22.6.0</div>
 <p>Three things to read off that output. <code>sudo</code> uses the value of <code>secure_path</code> in <code>/etc/sudoers</code> (on Ubuntu 24.04: <code>/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin</code>), not yours. <code>-E</code> ("preserve environment") does not change that, because <code>secure_path</code> is applied on top of whatever is preserved. And the error comes from <code>sudo</code> itself, with exit code <strong>1</strong> — not bash's 127 — so a script that checks for 127 will misread it. The two lines that work both avoid a <code>PATH</code> lookup inside <code>sudo</code>: one hands it an absolute path, the other runs <code>env</code> (which <em>is</em> on <code>secure_path</code>) with an explicit <code>PATH</code> for just that one command.</p>
+<div class="pitfall"><strong>The worse version, measured 12/11/2026:</strong> on a machine where <em>another</em> <code>node</code> sits in a directory that <em>is</em> on <code>secure_path</code> (here an old v20.11.1 in <code>/usr/local/bin</code>), <code>sudo node --version</code> does not fail at all — it prints <code>v20.11.1</code> while your own shell runs v22.6.0. Same cause (secure_path), quieter result: the command runs the wrong version and says nothing. Check with <code>sudo sh -c 'command -v node'</code> before trusting a <code>sudo</code> command that "works".</div>
 
 <h3>Debugging a PATH problem</h3>
 <pre><code class="language-bash">type -a mycommand                <span class="tok-comment"># 1. what does the shell think it is?</span>
@@ -434,6 +435,7 @@ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin
 v22.6.0
 v22.6.0</div>
 <p>Đọc ra ba điều từ output đó. <code>sudo</code> dùng giá trị <code>secure_path</code> trong <code>/etc/sudoers</code> (trên Ubuntu 24.04: <code>/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin</code>), không phải của bạn. Cờ <code>-E</code> ("preserve environment" — giữ nguyên môi trường) không đổi được điều đó, vì <code>secure_path</code> được áp ĐÈ lên bất cứ thứ gì đã được giữ lại. Và thông báo lỗi đến từ chính <code>sudo</code>, với mã thoát <strong>1</strong> — không phải 127 của bash — nên một script kiểm mã 127 sẽ đọc nhầm. Hai dòng chạy được đều tránh việc tra <code>PATH</code> bên trong <code>sudo</code>: một dòng đưa thẳng đường dẫn tuyệt đối, dòng kia chạy <code>env</code> (thứ CÓ nằm trong <code>secure_path</code>) kèm một <code>PATH</code> tường minh cho đúng một lệnh đó.</p>
+<div class="pitfall"><strong>Phiên bản tệ hơn, đo ngày 12/11/2026:</strong> trên một máy có <em>một</em> <code>node</code> KHÁC nằm trong thư mục CÓ trong <code>secure_path</code> (ở đây là bản cũ v20.11.1 ở <code>/usr/local/bin</code>), <code>sudo node --version</code> không hỏng gì cả — nó in <code>v20.11.1</code> trong khi shell của bạn chạy v22.6.0. Cùng nguyên nhân (secure_path), kết cục lặng lẽ hơn: lệnh chạy NHẦM phiên bản mà không báo gì. Hãy kiểm bằng <code>sudo sh -c 'command -v node'</code> trước khi tin một lệnh <code>sudo</code> "chạy được".</div>
 
 <h3>Gỡ một vấn đề về PATH</h3>
 <pre><code class="language-bash">type -a mycommand                <span class="tok-comment"># 1. shell nghĩ nó là cái gì?</span>
@@ -1983,6 +1985,7 @@ $ false
 1$ true
 $</div>
 <p>Three lessons in twelve lines. The script cannot see the alias. The alias cannot take <code>\$1</code>. And the one most people never expect: <strong>you cannot define a function while an alias of the same name exists</strong> — the alias is expanded inside the definition, bash sees <code>mkdir -p \$1 &amp;&amp; cd \$1() {</code>, and reports a syntax error. <code>unalias</code> first. Then the prompt shows the exit code only after a failure. The history half, with a pattern written as <code>sk-[l]ive</code> so the <code>grep</code> line does not match itself:</p>
+<p class="note-ct">One more, measured on 12/11/2026 and easy to trip over in a one-liner: an alias defined and used on the <strong>same line</strong> — <code>alias ll='ls -l'; ll</code> — does not work yet, because bash reads and expands the whole line before the <code>alias</code> command runs. Put the definition on its own line (as every <code>~/.bashrc</code> does) and it works from the next line on.</p>
 <pre><code class="language-bash">HISTFILE=/tmp/h84 HISTCONTROL=ignorespace
  export TOKEN=sk-live-bimat
 echo \${#TOKEN}
@@ -2266,6 +2269,7 @@ $ false
 1$ true
 $</div>
 <p>Ba bài học trong mười hai dòng. Script không thấy bí danh. Bí danh không nhận được <code>\$1</code>. Và cái ít ai ngờ nhất: <strong>bạn KHÔNG định nghĩa được một hàm khi đang có bí danh cùng tên</strong> — bí danh bị khai triển ngay trong lời định nghĩa, bash thấy <code>mkdir -p \$1 &amp;&amp; cd \$1() {</code> và báo lỗi cú pháp. Phải <code>unalias</code> trước. Rồi dấu nhắc chỉ hiện mã thoát sau một lần hỏng. Nửa về lịch sử, với mẫu viết là <code>sk-[l]ive</code> để dòng <code>grep</code> không tự khớp chính nó:</p>
+<p class="note-ct">Thêm một điều, đo ngày 12/11/2026 và rất dễ vấp khi viết lệnh một dòng: bí danh đặt và dùng trên <strong>CÙNG một dòng</strong> — <code>alias ll='ls -l'; ll</code> — chưa có hiệu lực, vì bash đọc và khai triển cả dòng trước khi lệnh <code>alias</code> kịp chạy. Đặt định nghĩa trên một dòng riêng (như mọi <code>~/.bashrc</code> vẫn làm) thì từ dòng sau nó mới chạy.</p>
 <pre><code class="language-bash">HISTFILE=/tmp/h84 HISTCONTROL=ignorespace
  export TOKEN=sk-live-bimat
 echo \${#TOKEN}

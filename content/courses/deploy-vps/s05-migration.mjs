@@ -1179,6 +1179,22 @@ from pg_stat_activity where wait_event_type = 'Lock';</code></pre>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">strong_migrations — danh sách các thao tác không an toàn</span><span class="lc-sub">github.com/ankane/strong_migrations — một gem của Rails mà tệp README của nó là bản danh mục dễ hiểu nhất về migration nguy hiểm và cách thay thế an toàn, bất kể bạn dùng ngôn ngữ nào.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">PostgreSQL — khoá, MVCC và pg_stat_activity</span><span class="lc-sub">/courses/postgresql/learn?lessonSlug=postgresql-11-4-khoa-deadlock${REF.replace('?', '&')} — vì sao người đọc không chặn người ghi, và vì sao <code>ALTER TABLE</code> là ngoại lệ chặn cả hai.</span></span></div>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-9-1-chi-muc-la-gi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">PostgreSQL · 9.1 — What an index is: B-tree, Seq Scan vs Index Scan</span><span class="lc-sub">What an index is — and why building one on a live table needs care.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-9-1-chi-muc-la-gi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">PostgreSQL · 9.1 — Chỉ mục là gì: B-tree, Seq Scan vs Index Scan</span><span class="lc-sub">Chỉ mục là gì — và vì sao dựng một cái trên bảng đang chạy phải cẩn thận.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
 
@@ -1649,6 +1665,22 @@ All migrations have been successfully applied.</div></li>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">PostgreSQL — pg_index và chỉ mục không hợp lệ</span><span class="lc-sub">postgresql.org/docs/current/catalog-pg-index.html — <code>indisvalid</code>, và một lần dựng CONCURRENTLY hỏng để lại cái gì.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Prisma ORM — bảng migrations và lệnh migrate diff</span><span class="lc-sub">/courses/prisma-orm/learn?lessonSlug=pr-6-4-troi-dat${REF.replace('?', '&')} — mỗi cột của cuốn sổ nghĩa là gì, và đọc một bản diff trôi dạt thế nào.</span></span></div>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/prisma-orm/learn?lessonSlug=pr-6-5-tren-production" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Prisma ORM · 6.5 — Migrations in production</span><span class="lc-sub">Prisma migrations on production, from the ORM side.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/prisma-orm/learn?lessonSlug=pr-6-5-tren-production" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Prisma ORM · 6.5 — Migration trên production</span><span class="lc-sub">Migration Prisma trên production, nhìn từ phía ORM.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
 
@@ -2052,6 +2084,22 @@ exit=1</div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">PostgreSQL — VACUUM và tuple chết</span><span class="lc-sub">postgresql.org/docs/current/routine-vacuuming.html — vì sao một lệnh UPDATE làm bảng phình ra, và vì sao một giao dịch dài chặn việc dọn dẹp ở khắp nơi.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Prisma — migrate deploy trên production</span><span class="lc-sub">prisma.io/docs/orm/prisma-migrate/workflows/production-and-testing — vì sao là <code>deploy</code> chứ không phải <code>dev</code>, và cái khoá tư vấn mà nó lấy.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">PostgreSQL — chia lô cho các lệnh cập nhật lớn</span><span class="lc-sub">/courses/postgresql/learn?lessonSlug=postgresql-11-2-mvcc${REF.replace('?', '&')} — khuôn CTE-cộng-limit ở trên, và chọn cỡ lô cho chính bảng của bạn thế nào.</span></span></div>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-16-2-deploy-script" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 16.2 — A production deploy script, and the systemd unit that runs the app</span><span class="lc-sub">A production-grade deploy script with a systemd unit, built in the Linux &amp; Bash capstone.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-16-2-deploy-script" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 16.2 — Script deploy mức production, và unit systemd chạy app</span><span class="lc-sub">Một script deploy mức production kèm unit systemd, dựng trong dự án cuối khoá Linux &amp; Bash.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

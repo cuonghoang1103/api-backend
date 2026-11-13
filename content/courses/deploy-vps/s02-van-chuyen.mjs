@@ -474,6 +474,22 @@ ssh -F cfg vps hostname</code></pre>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash — rename, tệp tạm và ghi nguyên tử</span><span class="lc-sub">/courses/linux-bash/learn${REF} — vì sao ghi-rồi-đổi-tên là cách chuẩn để cập nhật một tệp an toàn, và đó chính là thứ rsync làm với từng tệp.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Nginx — phục vụ từ một thư mục đang bị thay thế</span><span class="lc-sub">/courses/nginx/learn${REF} — máy chủ web làm gì với một tệp đang đổi ngay dưới chân nó, và vì sao cú tráo symlink là an toàn dưới góc nhìn của nó.</span></span></div>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-9-4-scp-rsync" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 9.4 — Moving files: scp, rsync and the trailing slash</span><span class="lc-sub">scp, rsync and the trailing slash, from first principles.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-9-4-scp-rsync" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 9.4 — Chuyển file: scp, rsync và dấu gạch chéo cuối</span><span class="lc-sub">scp, rsync và dấu / ở cuối, dạy từ gốc.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
 
@@ -860,6 +876,42 @@ exit=0</div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">git-push(1) — thiết lập push.default</span><span class="lc-sub">git-scm.com/docs/git-push — vì sao một lệnh <code>git push</code> trơ trọi có thể gửi đi nhiều nhánh hơn bạn định, và đó là thứ mà bộ lọc nhánh phòng ngừa.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Git &amp; GitHub — kho trần, ref và hook</span><span class="lc-sub">/courses/git/learn${REF} — một kho trần thật ra chứa gì, và hook nằm ở đâu.</span></span></div>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/git/learn?lessonSlug=git-12-1-hooks" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Git · 12.1 — Hooks: catching mistakes before they exist</span><span class="lc-sub">Git hooks: what runs where, and when.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/git/learn?lessonSlug=git-12-4-chinh-sach-may-chu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Git · 12.3 — Enforcing it for real: server-side hooks, rulesets and CI</span><span class="lc-sub">Server-side hooks, rulesets and CI — the server end of push-to-deploy.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-15-3-windows-wsl2" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 15.3 — Windows: WSL2, Git Bash, and the CRLF bug from start to finish</span><span class="lc-sub">On Windows: WSL2, Git Bash, and the CRLF line-ending error from end to end.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/git/learn?lessonSlug=git-12-1-hooks" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Git · 12.1 — Hook: bắt lỗi trước khi nó tồn tại</span><span class="lc-sub">Hook của Git: cái gì chạy ở đâu, lúc nào.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/git/learn?lessonSlug=git-12-4-chinh-sach-may-chu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Git · 12.3 — Cưỡng chế thật: hook phía máy chủ, ruleset và CI</span><span class="lc-sub">Hook phía máy chủ, ruleset và CI — đầu máy chủ của push-để-deploy.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-15-3-windows-wsl2" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 15.3 — Windows: WSL2, Git Bash, và lỗi CRLF từ đầu tới cuối</span><span class="lc-sub">Trên Windows: WSL2, Git Bash, và lỗi xuống dòng CRLF từ đầu tới cuối.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
 
@@ -1212,6 +1264,52 @@ sha256:401de05a22539efa507a3bbbfd0defbb9cb99ea9023fc00ce14cda6f359cfea8</div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Docker — cache dựng và việc vô hiệu lớp</span><span class="lc-sub">docs.docker.com/build/cache — cái luật nằm sau bẫy thứ-tự-COPY, phát biểu chính xác.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Docker — khoá đầy đủ</span><span class="lc-sub">/courses/docker/learn${REF} — lớp, Dockerfile, bản dựng nhiều tầng và Compose ở mức sâu. Bài này chỉ là lát cắt hình-dạng-deploy của nó.</span></span></div>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-1-2-tang-anh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 1.2 — Images are stacks of layers</span><span class="lc-sub">What an image really is: a stack of content-addressed layers.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-5-1-cache-quyet-dinh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 5.1 — How the build cache decides</span><span class="lc-sub">How the build cache decides what to rebuild.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-3-2-tag-digest" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 3.2 — Tags move, digests do not</span><span class="lc-sub">Tags move, digests do not — the reason a rollback should name a digest.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-3-3-registry" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 3.3 — Registries: Hub, GHCR and your own</span><span class="lc-sub">Registries: pushing, pulling and running your own.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-1-2-tang-anh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 1.2 — Image là những chồng tầng</span><span class="lc-sub">Một ảnh thật ra là gì: chồng tầng định danh theo nội dung.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-5-1-cache-quyet-dinh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 5.1 — Cache lúc dựng quyết định thế nào</span><span class="lc-sub">Cache lúc dựng quyết định dựng lại cái gì thế nào.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-3-2-tag-digest" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 3.2 — Tag thì di chuyển, digest thì không</span><span class="lc-sub">Tag thì di chuyển, digest thì không — lý do một cú lùi nên gọi tên digest.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-3-3-registry" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 3.3 — Registry: Hub, GHCR và của riêng bạn</span><span class="lc-sub">Registry: đẩy, kéo và tự chạy một cái.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
 
@@ -1495,6 +1593,22 @@ exec /bin/uname: exec format error</div>
 <div class="link-card"><span class="lc-ico">🔧</span><span class="lc-body"><span class="lc-title">rsync(1), git-push(1), docker-push(1)</span><span class="lc-sub">Ba trang man đứng sau ba đường vận chuyển. Đọc mục FILTER RULES của cái đầu tiên là một giờ đáng giá nhất trong ba cái.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Docker — dựng ở đâu, và bản dựng nhiều tầng</span><span class="lc-sub">/courses/docker/learn${REF} — khuôn dựng-bên-trong-ảnh-đích, và cách giữ cho công cụ dựng không lọt vào thứ bạn gửi đi.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Git &amp; GitHub — một lần push thật ra chuyển đi cái gì</span><span class="lc-sub">/courses/git/learn${REF} — packfile và delta, và đó là lý do cột git trong bảng ở trên nhỏ tới vậy.</span></span></div>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-6-1-multi-stage" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 6.1 — Multi-stage builds, properly</span><span class="lc-sub">Multi-stage builds done properly: build tools stay out of the shipped image.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-6-1-multi-stage" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 6.1 — Dựng nhiều tầng, cho tử tế</span><span class="lc-sub">Dựng nhiều tầng cho tử tế: công cụ dựng không đi vào ảnh được ship.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -1883,6 +1997,22 @@ rsync -a --bwlimit=100 rel/ vps:/srv/app/song/ &amp; sleep 3; kill $!</code></pr
 <div class="link-card"><span class="lc-ico">🔧</span><span class="lc-body"><span class="lc-title">rsync(1) — --partial, --partial-dir, --timeout</span><span class="lc-sub">man7.org/linux/man-pages/man1/rsync.1.html — chuyện đi tiếp, và cái timeout biến một lần chuyển bị treo thành một lần chuyển hỏng.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Tính bất biến khi lặp lại trong vận hành</span><span class="lc-sub">en.wikipedia.org/wiki/Idempotence — cái tính chất làm cho câu "cứ chạy lại đi" thành một chỉ dẫn an toàn, và lý do nó đáng được thiết kế một cách có chủ ý.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash — khoá tệp, trap và dọn dẹp lúc thoát</span><span class="lc-sub">/courses/linux-bash/learn${REF} — một script shell giữ một tài nguyên an toàn thế nào và trả lại nó ra sao ngay cả khi bị giết.</span></span></div>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-7-3-trap-don-dep" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 7.3 — trap, temp files and locks: cleaning up no matter what</span><span class="lc-sub">trap, temporary files and locks: cleaning up when a script dies halfway.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-7-3-trap-don-dep" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 7.3 — trap, file tạm và khoá: dọn dẹp bất kể chuyện gì xảy ra</span><span class="lc-sub">trap, tệp tạm và khoá: dọn dẹp khi script chết giữa chừng.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

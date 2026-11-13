@@ -363,6 +363,42 @@ $ perl -MTime::HiRes=time -e 'printf "%d\\n", time*1000'
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Nginx — nạp lại cấu hình giữa lúc có lưu lượng</span><span class="lc-sub">/courses/nginx/learn${REF} — phép đo cho thấy ba lần reload giữa bốn trăm request cho ra bốn trăm cú 200, và đó là thứ làm cho bước 3 ở trên trở nên nguyên tử.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash — tín hiệu, và một tiến trình làm gì khi nhận được</span><span class="lc-sub">/courses/linux-bash/learn${REF} — cơ chế nằm sau bước 4, và vì sao SIGTERM với SIGKILL không phải hai mức mạnh yếu của cùng một thứ.</span></span></div>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-9-2-curl" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 9.2 — curl: the flags that matter</span><span class="lc-sub">The curl flags that actually matter for checking a server.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-3-6-awk" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 3.6 — awk: a whole language in one line</span><span class="lc-sub">awk: turning the probe log into counts and gaps.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nginx/learn?lessonSlug=nginx-3-1-proxy-pass" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nginx · 3.1 — proxy_pass, and the slash that rewrites the path</span><span class="lc-sub">proxy_pass and what nginx returns while the upstream is down.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-9-2-curl" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 9.2 — curl: những cờ thật sự quan trọng</span><span class="lc-sub">Những cờ curl thật sự quan trọng khi kiểm một máy chủ.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-3-6-awk" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 3.6 — awk: cả một ngôn ngữ gói trong một dòng</span><span class="lc-sub">awk: biến log thăm dò thành số đếm và khoảng hở.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nginx/learn?lessonSlug=nginx-3-1-proxy-pass" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nginx · 3.1 — proxy_pass, và cái dấu gạch chéo viết lại đường dẫn</span><span class="lc-sub">proxy_pass, và nginx trả gì khi upstream đang chết.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
 
@@ -702,6 +738,22 @@ ${slide('dv-03', 12, 'Ai gửi tín hiệu, bạn được bao lâu')}
 <a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-12-7-trien-khai" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Áp vào API Design — bài 12.7: checklist triển khai</span><span class="lc-sub">Tắt êm khi đang chịu tải, hai instance sau một proxy có kiểm sức khoẻ: tắt đột ngột 622 × 502, tắt êm 0 lỗi trong 1,5 s — kèm bẫy kiểm sức khoẻ quá gắt (64.926 × 503).</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-5-3-tin-hieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 5.3 — Signals: what Ctrl-C actually sends</span><span class="lc-sub">Signals from first principles: what SIGTERM is and who receives it.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-5-3-tin-hieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 5.3 — Tín hiệu: Ctrl-C thật ra gửi cái gì</span><span class="lc-sub">Tín hiệu từ gốc: SIGTERM là gì và ai nhận nó.</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>
@@ -1139,6 +1191,22 @@ ${slide('dv-03', 17, 'nginx phân giải tên máy MỘT lần, lúc nạp')}
   <span class="lc-cta">MỞ BÀI NODE.JS →</span>
 </a>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nginx/learn?lessonSlug=nginx-9-1-khoi-upstream" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nginx · 9.1 — The upstream block and four ways to choose</span><span class="lc-sub">The upstream block and the four ways nginx picks a server — the switch in blue-green.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nginx/learn?lessonSlug=nginx-9-1-khoi-upstream" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nginx · 9.1 — Khối upstream và bốn cách chọn máy</span><span class="lc-sub">Khối upstream và bốn cách nginx chọn máy — cái công tắc của xanh-lam.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
 
@@ -1568,6 +1636,32 @@ ActiveState=active</div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">systemd.unit(5) — luật về các mục</span><span class="lc-sub">freedesktop.org/software/systemd/man/systemd.unit.html — khoá nào thuộc về <code>[Unit]</code> chứ không phải <code>[Service]</code>, chính là thứ bộ kiểm đã bắt được ở trên.</span></span></div>
 <div class="link-card"><span class="lc-ico">🔧</span><span class="lc-body"><span class="lc-title">systemd-analyze(1) — verify, security, blame</span><span class="lc-sub">freedesktop.org/software/systemd/man/systemd-analyze.html — <code>verify</code> để kiểm tính đúng đắn và <code>security</code> để chấm điểm gia cố cho unit của bạn.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash — unit systemd, timer và journal</span><span class="lc-sub">/courses/linux-bash/learn${REF} — dịch vụ, target và thứ tự phụ thuộc ở mức sâu.</span></span></div>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-10-3-log-journalctl" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 10.3 — Logs: journalctl, /var/log and rotation</span><span class="lc-sub">journalctl, /var/log and log rotation.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-11-1-systemd-unit" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 11.1 — systemd units: running your app as a service</span><span class="lc-sub">Writing a systemd unit from scratch and understanding every line.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-10-3-log-journalctl" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 10.3 — Log: journalctl, /var/log và việc xoay vòng</span><span class="lc-sub">journalctl, /var/log và việc xoay vòng log.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-11-1-systemd-unit" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 11.1 — Unit của systemd: chạy ứng dụng của bạn như một dịch vụ</span><span class="lc-sub">Viết unit systemd từ gốc và hiểu từng dòng.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -2090,6 +2184,32 @@ ${slide('dv-03', 25, 'Smoke-test sau tráo: 404 nghĩa là bản CŨ')}
 <div class="link-card"><span class="lc-ico">🔧</span><span class="lc-body"><span class="lc-title">fuser(1) và lsof(8)</span><span class="lc-sub">man7.org/linux/man-pages/man1/fuser.1.html — tìm xem tiến trình nào đang giữ một tệp hay một cái khoá, và đó là cách cái lỗi ở trên được TÌM RA chứ không phải được đoán.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">proc(5) — thư mục fd</span><span class="lc-sub">man7.org/linux/man-pages/man5/proc.html — <code>/proc/&lt;pid&gt;/fd</code>, nơi cho thấy mọi mô tả tệp một tiến trình đang giữ và chúng trỏ đi đâu.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash — mô tả tệp và thứ mà tiến trình con thừa hưởng</span><span class="lc-sub">/courses/linux-bash/learn${REF} — cơ chế nằm sau cả cái lỗi này lẫn cái lỗi ssh-treo ở Bài 0.3.</span></span></div>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-13-2-luong-nang-cao" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 13.2 — Streams in depth: file descriptors, process substitution, here-docs, FIFOs and coproc</span><span class="lc-sub">Advanced streams: file descriptors, exec and process substitution used inside the swap script.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-16-2-deploy-script" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 16.2 — A production deploy script, and the systemd unit that runs the app</span><span class="lc-sub">A production-grade deploy script with a systemd unit, built in the Linux &amp; Bash capstone.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-13-2-luong-nang-cao" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 13.2 — Luồng nâng cao: file descriptor, process substitution, heredoc, fifo và coproc</span><span class="lc-sub">Luồng nâng cao: file descriptor, exec và thay thế tiến trình dùng trong script tráo.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-16-2-deploy-script" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 16.2 — Script deploy mức production, và unit systemd chạy app</span><span class="lc-sub">Một script deploy mức production kèm unit systemd, dựng trong dự án cuối khoá Linux &amp; Bash.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

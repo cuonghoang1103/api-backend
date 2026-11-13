@@ -2206,6 +2206,7 @@ sudo apt install bats
  ✓ dry run changes nothing
 
 2 tests, 0 failures</div>
+<p class="note-ct">That is the output in a terminal. Re-run on 12/11/2026 in a container with bats 1.10 (installed from apt) and no terminal attached, the same two tests printed the TAP format instead — <code>1..2</code>, <code>ok 1 …</code>, <code>ok 2 …</code>. Same result, different shape: expect TAP in CI logs.</p>
 <p>The validation and dry-run work from Lesson 7.2 is what makes a script testable at all: guard clauses give you predictable exit codes to assert on, and <code>--dry-run</code> lets a test exercise the whole flow without touching production. Even two tests are worth having on a script that deploys something.</p>
 
 <h3>Reading a trace line by line</h3>
@@ -2546,6 +2547,7 @@ sudo apt install bats
  ✓ chạy thử thì không đổi gì cả
 
 2 tests, 0 failures</div>
+<p class="note-ct">Đó là output trong một terminal. Chạy lại ngày 12/11/2026 trong container với bats 1.10 (cài bằng apt) và không gắn terminal, đúng hai bài kiểm đó in ra dạng TAP — <code>1..2</code>, <code>ok 1 …</code>, <code>ok 2 …</code>. Cùng kết quả, khác hình dạng: trong log CI hãy chờ thấy TAP.</p>
 <p>Chính phần kiểm tính hợp lệ và chế độ chạy thử ở Bài 7.2 là thứ làm cho một script kiểm thử được: các chốt chặn cho bạn những mã thoát đoán trước được để mà khẳng định, còn <code>--dry-run</code> cho phép một phép kiểm chạy qua toàn bộ luồng mà không đụng vào production. Ngay cả hai phép kiểm cũng đáng có với một script đi triển khai thứ gì đó.</p>
 
 <h3>Đọc một vệt trace từng dòng</h3>

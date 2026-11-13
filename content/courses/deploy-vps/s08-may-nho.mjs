@@ -504,6 +504,32 @@ Sep 29 05:49:18.558337 cffcaaa5d26c systemd[1]: thu-oom.service: Failed with res
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash — Chương 5: tiến trình, job &amp; tín hiệu</span><span class="lc-sub">/courses/linux-bash/learn?lessonSlug=lnx-5-3-tin-hieu${REF.replace('?', '&')} — bảng tín hiệu đầy đủ, <code>kill -l</code>, và vì sao SIGKILL với SIGSTOP là hai tín hiệu một tiến trình không bao giờ xử lý được.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Docker — giới hạn tài nguyên, và một container THẬT SỰ nhìn thấy gì</span><span class="lc-sub">/courses/docker/learn?lessonSlug=dk-11-2-han-muc-137${REF.replace('?', '&')} — vì sao một tiến trình bên trong container bị giới hạn vẫn đọc ra tổng RAM của máy chủ từ <code>/proc/meminfo</code>, và chuyện đó làm hỏng cái gì.</span></span></div>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-2-5-gioi-han-restart" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 2.5 — Limits, restart policies and healthchecks</span><span class="lc-sub">Memory limits, restart policies and healthchecks for a container.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-10-3-log-journalctl" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 10.3 — Logs: journalctl, /var/log and rotation</span><span class="lc-sub">journalctl, /var/log and log rotation.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-2-5-gioi-han-restart" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 2.5 — Giới hạn, chính sách khởi động lại và healthcheck</span><span class="lc-sub">Giới hạn bộ nhớ, chính sách khởi động lại và healthcheck cho container.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-10-3-log-journalctl" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 10.3 — Log: journalctl, /var/log và việc xoay vòng</span><span class="lc-sub">journalctl, /var/log và việc xoay vòng log.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
 
@@ -982,6 +1008,32 @@ RestartCount=8 OOMKilled=true ExitCode=137</div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">PostgreSQL — Linux memory overcommit</span><span class="lc-sub">postgresql.org/docs/current/kernel-resources.html#LINUX-MEMORY-OVERCOMMIT — lời khuyên của chính PostgreSQL về việc bảo vệ postmaster khỏi OOM killer, và vì sao nó đặt điểm cho các tiến trình con khác đi.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash — Chương 11: systemd &amp; cron</span><span class="lc-sub">/courses/linux-bash/learn?lessonSlug=lnx-11-1-systemd-unit${REF.replace('?', '&')} — viết tệp unit, <code>systemctl show</code>, và chính sách khởi động lại, bộ máy mà mọi chỉ thị ở trên cắm vào.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">PostgreSQL — shared_buffers, work_mem và bộ nhớ đi đâu</span><span class="lc-sub">/courses/postgresql/learn?lessonSlug=postgresql-10-4-buffers-tinh-chinh${REF.replace('?', '&')} — vì sao cơ sở dữ liệu ĐÚNG LÝ là tiến trình lớn nhất trên máy, và đó là thứ khiến nó thành mục tiêu mặc định.</span></span></div>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-14-1-ben-trong-nhan" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 14.1 — Inside the kernel: system calls, /proc, namespaces, cgroups and capabilities</span><span class="lc-sub">Inside the kernel: cgroups, namespaces and the OOM killer, with the lid off.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-2-5-gioi-han-restart" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 2.5 — Limits, restart policies and healthchecks</span><span class="lc-sub">Memory limits, restart policies and healthchecks for a container.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-14-1-ben-trong-nhan" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 14.1 — Bên trong nhân: system call, /proc, namespaces, cgroups và capabilities</span><span class="lc-sub">Bên trong nhân: cgroup, namespace và OOM killer, mở nắp cho bạn xem.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-2-5-gioi-han-restart" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 2.5 — Giới hạn, chính sách khởi động lại và healthcheck</span><span class="lc-sub">Giới hạn bộ nhớ, chính sách khởi động lại và healthcheck cho container.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -2009,6 +2061,32 @@ journalctl --disk-usage &amp;&amp; sudo journalctl --vacuum-size=200M</code></pr
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash — Chương 10: đĩa, gói phần mềm &amp; log</span><span class="lc-sub">/courses/linux-bash/learn?lessonSlug=lnx-10-1-dia-day${REF.replace('?', '&')} — <code>df</code>, <code>du</code>, <code>journalctl</code> và <code>logrotate</code> từ gốc, kể cả bài diễn tập đĩa đầy.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Docker — ảnh, lớp, và system prune thật ra gỡ cái gì</span><span class="lc-sub">/courses/docker/learn?lessonSlug=dk-3-5-don-dia${REF.replace('?', '&')} — bộ đệm dựng nằm ở đâu, và vì sao <code>docker system df</code> với <code>du</code> báo hai con số khác nhau cho nó.</span></span></div>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-14-3-luu-tru" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 14.3 — Disks and filesystems: partitions, fstab, LVM, swap and checksums</span><span class="lc-sub">Disks and file systems: partitions, fstab, LVM and checksums.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-2-4-lien-ket-va-nen" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 2.4 — Links and archives: inodes, symlinks, and tar without looking it up</span><span class="lc-sub">Inodes: why a disk can be "full" while df still shows free space.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-14-3-luu-tru" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 14.3 — Đĩa và hệ thống file: phân vùng, fstab, LVM, swap và checksum</span><span class="lc-sub">Đĩa và hệ thống tệp: phân vùng, fstab, LVM và checksum.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-2-4-lien-ket-va-nen" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 2.4 — Liên kết và kho nén: inode, symlink, và tar mà không phải tra lại</span><span class="lc-sub">Inode: vì sao đĩa có thể "đầy" trong khi df vẫn báo còn chỗ.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
 
@@ -2481,6 +2559,32 @@ ${slide('dv-08', 27, 'Ngân sách RAM cho VPS 6 GB: trần từng dịch vụ v�
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Docker — ràng buộc tài nguyên lúc dựng</span><span class="lc-sub">docs.docker.com/reference/cli/docker/buildx/build/ — giới hạn bộ nhớ TRONG LÚC dựng, tách biệt với giới hạn runtime của cái container tạo ra.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">The Twelve-Factor App — V. Build, release, run</span><span class="lc-sub">12factor.net/build-release-run — sự tách bạch mà cả bài này là một lập luận thực hành cho nó: giai đoạn CHẠY không nên đi làm việc của giai đoạn DỰNG.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Docker — dựng nhiều tầng và vì sao ảnh cuối nhỏ hơn</span><span class="lc-sub">/courses/docker/learn?lessonSlug=dk-6-1-multi-stage${REF.replace('?', '&')} — cách giữ bộ công cụ dựng ở ngoài cái tạo tác được gửi đi, nửa còn lại của việc giữ cho máy chủ nhỏ gọn.</span></span></div>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-2-5-gioi-han-restart" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 2.5 — Limits, restart policies and healthchecks</span><span class="lc-sub">Memory limits, restart policies and healthchecks for a container.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-16-5-ro-ri-bo-nho" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 16.5 — Memory: the cache that never forgets</span><span class="lc-sub">Finding a memory leak inside Node before it becomes an OOM kill.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-2-5-gioi-han-restart" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 2.5 — Giới hạn, chính sách khởi động lại và healthcheck</span><span class="lc-sub">Giới hạn bộ nhớ, chính sách khởi động lại và healthcheck cho container.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-16-5-ro-ri-bo-nho" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 16.5 — Bộ nhớ: cái cache không bao giờ quên</span><span class="lc-sub">Tìm chỗ rò bộ nhớ trong Node trước khi nó thành một cú OOM.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

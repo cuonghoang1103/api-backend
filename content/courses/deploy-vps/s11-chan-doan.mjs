@@ -701,6 +701,22 @@ ThreadingHTTPServer(('127.0.0.1', 8080), H).serve_forever()</code></pre>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">proc_pid_cwd(5)</span><span class="lc-sub">man7.org/linux/man-pages/man5/proc_pid_cwd.5.html — liên kết tới thư mục làm việc hiện tại của một tiến trình, sự thật duy nhất nói bản nào đang THẬT SỰ chạy.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash — Chương 12: chẩn đoán một máy chủ thật</span><span class="lc-sub">/courses/linux-bash/learn?lessonSlug=lnx-12-1-phuong-phap${REF.replace('?', '&')} — cuộc quét 60 giây, cây chết/chậm/lạ và vòng lặp sáu bước: phần CÁI MÁY mà chương này không dạy lại.</span></span></div>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-11-1-systemd-unit" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 11.1 — systemd units: running your app as a service</span><span class="lc-sub">Writing a systemd unit from scratch and understanding every line.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-11-1-systemd-unit" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 11.1 — Unit của systemd: chạy ứng dụng của bạn như một dịch vụ</span><span class="lc-sub">Viết unit systemd từ gốc và hiểu từng dòng.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
 
@@ -1082,6 +1098,32 @@ basename "\$(readlink -f /srv/vps/nt/hien-tai)"   <span class="tok-comment"># ma
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Nginx — 502 so với 504, và error log nói gì</span><span class="lc-sub">/courses/nginx/learn?lessonSlug=nginx-9-3-khi-backend-chet${REF.replace('?', '&')} — cùng những chữ ký ấy nhìn từ phía proxy, kể cả việc <code>proxy_next_upstream</code> làm gì với chúng.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Everything curl — exit codes</span><span class="lc-sub">everything.curl.dev/cmdline/exitcode.html — danh sách đầy đủ sau các mã 6, 7, 28, 35 và 60, và vì sao một trang lỗi HTTP vẫn thoát 0 nếu không có <code>--fail</code>.</span></span></div>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nginx/learn?lessonSlug=nginx-11-4-tu-ma-trang-thai-toi-nguyen-nhan" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nginx · 11.4 — From a status code to the cause</span><span class="lc-sub">From status code to cause, from the proxy&#39;s side.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-9-2-curl" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 9.2 — curl: the flags that matter</span><span class="lc-sub">curl -w and the flags used to time each phase of a request.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nginx/learn?lessonSlug=nginx-11-4-tu-ma-trang-thai-toi-nguyen-nhan" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nginx · 11.4 — Đi từ một mã trạng thái tới đúng nguyên nhân</span><span class="lc-sub">Từ mã trạng thái tới nguyên nhân, nhìn từ phía proxy.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-9-2-curl" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 9.2 — curl: những cờ thật sự quan trọng</span><span class="lc-sub">curl -w và các cờ dùng để đo từng pha của một request.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
 
@@ -1454,6 +1496,22 @@ ${slide('dv-11', 16, '"Chẳng có gì thay đổi" gần như luôn sai: chứn
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Prisma ORM — migration và bảng theo dõi</span><span class="lc-sub">/courses/prisma-orm/learn?lessonSlug=pr-6-1-migration-la-gi${REF.replace('?', '&')} — các cột của cuốn sổ migration, và một migration hỏng để lại gì trong từng cột.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Linux kernel — Control Group v2</span><span class="lc-sub">docs.kernel.org/admin-guide/cgroup-v2.html — <code>memory.peak</code>, <code>memory.events</code> và bộ đếm <code>oom_kill</code> của nó: những tệp thay cho đường dẫn v1.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">docker inspect</span><span class="lc-sub">docs.docker.com/reference/cli/docker/inspect/ — mẫu Go của <code>-f</code> cho <code>State</code>, <code>RestartCount</code> và <code>Image</code>, dùng ở trên.</span></span></div>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-2-5-gioi-han-restart" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 2.5 — Limits, restart policies and healthchecks</span><span class="lc-sub">Restart policies — the Docker side of a container stuck in Restarting.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-2-5-gioi-han-restart" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 2.5 — Giới hạn, chính sách khởi động lại và healthcheck</span><span class="lc-sub">Chính sách khởi động lại — phía Docker của một container kẹt ở Restarting.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -1843,6 +1901,42 @@ ${slide('dv-11', 17, 'Thứ tự kiểm: đĩa → RAM → bão hoà → CSDL, v
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">PostgreSQL — khoá, chờ và truy vấn chậm</span><span class="lc-sub">/courses/postgresql/learn?lessonSlug=postgresql-11-4-khoa-deadlock${REF.replace('?', '&')} — đọc <code>pg_locks</code>, và thao tác nào lấy mức khoá nào.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">pid_namespaces(7)</span><span class="lc-sub">man7.org/linux/man-pages/man7/pid_namespaces.7.html — vì sao tiến trình init của một namespace chỉ nhận những tín hiệu nó có handler; gốc rễ của cú 139.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">docker container run — --init</span><span class="lc-sub">docs.docker.com/reference/cli/docker/container/run/ — chạy một init tí hon làm PID 1, chuyển tiếp tín hiệu và dọn zombie.</span></span></div>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-14-2-hieu-nang" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 14.2 — Performance with the USE method: CPU, memory, disk and network down to the function</span><span class="lc-sub">Performance: PSI, vmstat and iostat read properly.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-11-2-han-muc-137" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 11.2 — Limits, and exit 137</span><span class="lc-sub">Memory limits and exit 137 inside containers.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-12-3-no-cham" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 12.3 — Cookbook: it is slow</span><span class="lc-sub">"It is slow": the machine-side diagnosis tree.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-14-2-hieu-nang" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 14.2 — Hiệu năng theo phương pháp USE: CPU, bộ nhớ, đĩa và mạng, xuống tới từng hàm</span><span class="lc-sub">Hiệu năng: đọc PSI, vmstat và iostat cho đúng.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-11-2-han-muc-137" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 11.2 — Hạn mức, và mã thoát 137</span><span class="lc-sub">Hạn mức bộ nhớ và mã 137 trong container.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-12-3-no-cham" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 12.3 — Sách công thức: nó chậm</span><span class="lc-sub">"Nó chậm": cây chẩn đoán phía cái máy.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -2534,6 +2628,42 @@ ${slide('dv-11', 27, 'Đi tiếp: Chương 12 tên miền và HTTPS, 13 containe
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">ufw(8) — Ubuntu 24.04</span><span class="lc-sub">manpages.ubuntu.com/manpages/noble/man8/ufw.8.html — <code>allow</code>, <code>enable</code>, <code>status</code>; cho phép SSH trước khi bật trên một máy ở xa.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Ubuntu Server — Automatic updates</span><span class="lc-sub">ubuntu.com/server/docs/how-to/software/automatic-updates/ — <code>unattended-upgrades</code> và các thiết lập <code>APT::Periodic</code> mà phép 5 đọc.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">bash(1) — pipefail</span><span class="lc-sub">man7.org/linux/man-pages/man1/bash.1.html — "trạng thái trả về của một ống là giá trị của lệnh CUỐI CÙNG thoát khác 0", luật nằm sau 57 lần hỏng giả.</span></span></div>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-9-3-ssh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 9.3 — SSH: keys, config and tunnels</span><span class="lc-sub">SSH keys, config and tunnels, from the ground up.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-9-5-tuong-lua" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 9.5 — Firewalls, and where the packet actually stops</span><span class="lc-sub">Firewalls, and where the packet actually stops — the checks behind the acceptance script.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-3-2-ong-dan" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 3.2 — Pipes: two programs, running at the same time</span><span class="lc-sub">Pipes — and why grep -q in a pipeline with pipefail fails at random.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-9-3-ssh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 9.3 — SSH: khoá, file cấu hình và đường hầm</span><span class="lc-sub">Khoá SSH, tệp cấu hình và đường hầm, dạy từ gốc.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-9-5-tuong-lua" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 9.5 — Tường lửa, và gói tin thật ra dừng ở đâu</span><span class="lc-sub">Tường lửa, và gói tin thật ra dừng ở đâu — các phép kiểm nằm sau script nghiệm thu.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-3-2-ong-dan" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 3.2 — Ống dẫn: hai chương trình, chạy cùng một lúc</span><span class="lc-sub">Ống dẫn — và vì sao grep -q trong một ống có pipefail hỏng ngẫu nhiên.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

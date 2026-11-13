@@ -532,6 +532,42 @@ OOMKilled=true</div>
 <div class="pitfall"><strong>Bẫy:</strong> coi ranh giới container là một ranh giới an ninh đủ mạnh cho mã thù địch. Nó là một ranh giới thật và nó chặn được rất nhiều — nhưng nhân thì dùng chung, nên một con bọ của nhân mà với tới được từ bên trong là một cú thoát, còn <code>--privileged</code> hay một cái <code>docker.sock</code> được gắn vào thì xoá sạch ranh giới đó theo đúng thiết kế. Container tuyệt vời cho việc cô lập <em>CÁC TẢI CÔNG VIỆC CỦA CHÍNH BẠN</em> khỏi nhau và khỏi trình quản lý gói của máy chủ. Còn để chạy mã bạn không viết và không tin thì câu trả lời trung thực là một máy ảo cho mỗi khách, hoặc một môi trường chạy được đóng hộp cát như gVisor.</div>
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> Namespace điều khiển thứ một tiến trình NHÌN THẤY còn cgroup điều khiển thứ nó DÙNG ĐƯỢC — mọi tính năng container bạn gặp về sau đều là một trong hai cái đó, khoác một cái tên thân thiện hơn. Có đúng MỘT cái nhân: <code>uname -r</code> giống hệt nhau trong và ngoài, đó là toàn bộ lý do container nhanh và nhẹ, và cũng là toàn bộ lý do ranh giới của nó mỏng hơn của máy ảo. Và mã thoát 137 nghĩa là SIGKILL, mà chín trên mười lần nghĩa là đã chạm trần bộ nhớ của cgroup.</p>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-12-1-namespaces" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 12.1 — A container is a process with a different view: the namespaces, one by one</span><span class="lc-sub">See for yourself that a container is just a process: each namespace taken apart by hand.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-12-2-cgroups" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 12.2 — cgroups v2 by hand: memory.max, cpu.max, pids.max and io.max, each one hit on purpose</span><span class="lc-sub">Every cgroup limit set by hand, then hit on purpose.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-2-1-tien-trinh-lap-lich" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · 2.1 — Processes &amp; CPU scheduling</span><span class="lc-sub">If you took OSG202 at the Academy: lesson 2.1 on processes is the foundation of everything in this lesson.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-12-1-namespaces" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Hệ điều hành cho lập trình viên · 12.1 — Container là một tiến trình nhìn thế giới khác đi: từng namespace một</span><span class="lc-sub">Tận mắt thấy container chỉ là một tiến trình: tách từng namespace một bằng tay.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-12-2-cgroups" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Hệ điều hành cho lập trình viên · 12.2 — cgroup v2 bằng tay: memory.max, cpu.max, pids.max và io.max, chạm từng trần một</span><span class="lc-sub">Đặt từng trần cgroup bằng tay rồi cố tình chạm vào nó.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-2-1-tien-trinh-lap-lich" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · 2.1 — Tiến trình &amp; lập lịch CPU</span><span class="lc-sub">Nếu bạn đã học OSG202 ở Academy: bài 2.1 về tiến trình chính là nền của mọi thứ trong bài này.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 1.2 ─────────────────────────── */
@@ -1051,6 +1087,32 @@ DB_PASS=bimat123</div>
 
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> Một image là một chồng CÓ THỨ TỰ các tầng chỉ-đọc được định danh theo nội dung, cộng một cấu hình — đó là lý do những tầng giống nhau chỉ được lưu và truyền đúng một lần, và là lý do <code>docker images</code> với <code>docker system df</code> nói hai con số khác nhau. Một container thêm MỘT tầng ghi được lên trên, và sao chép-khi-ghi nghĩa là lần ghi đầu tiên vào bất kỳ file nào cũng chép trọn cái file lên. Và KHÔNG BAO GIỜ có thứ gì bị gỡ khỏi một tầng dưới: xoá chỉ là một dấu whiteout, nên một bí mật bạn thêm vào rồi xoá đi vẫn được đem tới tay mọi người kéo cái ảnh đó về.</p>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-12-3-overlayfs" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 12.3 — OverlayFS and image layers: lower, upper, work — copy-up, whiteouts and the build cache</span><span class="lc-sub">Stack the layers yourself: OverlayFS built by hand, every layer inspected.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-17-2-cache-tang" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 17.2 — Layer cache: the line order that makes builds 5,6× slower</span><span class="lc-sub">On a real project, layer order makes a build 5.6× slower.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-12-3-overlayfs" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Hệ điều hành cho lập trình viên · 12.3 — OverlayFS và các lớp ảnh: lower, upper, work — copy-up, whiteout và build cache</span><span class="lc-sub">Tự tay xếp các tầng: dựng OverlayFS bằng tay và soi từng lớp.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-17-2-cache-tang" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 17.2 — Cache tầng: thứ tự dòng làm build chậm gấp 5,6 lần</span><span class="lc-sub">Trên dự án thật, thứ tự tầng làm một lần dựng chậm gấp 5,6 lần.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 1.3 ─────────────────────────── */
@@ -1215,6 +1277,7 @@ real	0m0.131s</div>
 <tr><td>Node with <code>--init</code></td><td>0.16 s</td><td>143</td><td>tini is PID 1, forwards SIGTERM, Node (no longer PID 1) dies by default</td></tr>
 <tr><td>nginx</td><td>0.20 s</td><td>0</td><td>nginx has its own handler</td></tr>
 </table>
+<p class="note-ct">Measured again on 12/11/2026 on a Mac (Docker Desktop, Engine 29.8): the PID 1 that ignores SIGTERM was killed after about 3.19 s instead of ~10 s — still exit 137. The default grace period differs between engines; the lesson does not.</p>
 <p>For the Express API of a student project the right answer is both: exec form in the Dockerfile, and a handler that finishes in-flight requests before exiting.</p>
 <pre><code class="language-javascript">const server = app.listen(3000);
 process.on('SIGTERM', () =&gt; {
@@ -1487,6 +1550,7 @@ real	0m0.131s</div>
 <tr><td>Node với <code>--init</code></td><td>0,16 s</td><td>143</td><td>tini làm PID 1, chuyển tiếp SIGTERM; Node (không còn là PID 1) chết theo mặc định</td></tr>
 <tr><td>nginx</td><td>0,20 s</td><td>0</td><td>nginx tự có hàm xử lý</td></tr>
 </table>
+<p class="note-ct">Đo lại ngày 12/11/2026 trên Mac (Docker Desktop, Engine 29.8): PID 1 phớt lờ SIGTERM bị giết sau khoảng 3,19 giây thay vì ~10 giây — vẫn mã 137. Khoảng gia hạn mặc định khác nhau giữa các engine; bài học thì không.</p>
 <p>Với API Express của một đồ án sinh viên, câu trả lời đúng là CẢ HAI: dạng exec trong Dockerfile, và một hàm xử lý làm xong các request đang dở rồi mới thoát.</p>
 <pre><code class="language-javascript">const server = app.listen(3000);
 process.on('SIGTERM', () =&gt; {
@@ -1603,6 +1667,32 @@ die 0</div>
 
 <div class="pitfall"><strong>Bẫy:</strong> container đã dừng thì KHÔNG biến mất, và chúng chất đống. Mỗi lệnh <code>docker run</code> không có <code>--rm</code> để lại một container <code>Exited</code> giữ mãi cái tên, tầng ghi được và log của nó. Triệu chứng là một dòng khó hiểu <code>Conflict. The container name "/web" is already in use</code> trong khi chẳng có gì đang chạy, và một chỗ rò đĩa chậm rãi không ai để ý — <code>docker ps -a | wc -l</code> lên tới hàng trăm. Hãy dùng <code>--rm</code> cho mọi thứ tương tác hoặc chạy một lần, giữ container lại khi bạn cần log hay mã thoát của nó, và tỉa một cách có chủ ý: <code>docker container prune</code>.</div>
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> <code>run</code> là <code>pull</code> + <code>create</code> + <code>start</code>, và biết điều đó làm phần còn lại của CLI trở nên hiển nhiên. <code>docker stop</code> hỏi lịch sự bằng SIGTERM rồi ép buộc bằng SIGKILL mười giây sau — nên một cú stop lần nào cũng mất mười giây nghĩa là PID 1 của bạn không lắng nghe. Và hãy dùng dạng exec (<code>CMD ["node","server.js"]</code>) hoặc <code>exec</code> trong entrypoint để tiến trình của bạn THẬT SỰ là PID 1, vì một cái shell ở vị trí đó sẽ nuốt tín hiệu và để lại tiến trình xác.</p>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-5-3-tin-hieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 5.3 — Signals: what Ctrl-C actually sends</span><span class="lc-sub">docker stop is just a signal. What Ctrl-C actually sends, from first principles.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-1-4-vong-doi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 1.4 — Process states, signals and exit codes (why exit 137 = OOM)</span><span class="lc-sub">Why exit code 137 means "killed", measured at the source.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-5-3-tin-hieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 5.3 — Tín hiệu: Ctrl-C thật ra gửi cái gì</span><span class="lc-sub">docker stop chỉ là gửi tín hiệu. Ctrl-C thật ra gửi cái gì, giải thích từ gốc.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-1-4-vong-doi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Hệ điều hành cho lập trình viên · 1.4 — Trạng thái tiến trình, tín hiệu và mã thoát (vì sao exit 137 = OOM)</span><span class="lc-sub">Vì sao mã thoát 137 nghĩa là bị giết, đo tận nơi.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -2061,6 +2151,32 @@ V=\$(docker inspect thu-db --format '{{range .Mounts}}{{.Name}}{{end}}'); echo \
 <div class="pitfall"><strong>Bẫy:</strong> một volume VÔ DANH lặng lẽ ngốn đĩa. Chạy <code>postgres</code> mà không có <code>-v</code> thì Docker tôn trọng lời khai <code>VOLUME</code> của ảnh bằng cách tạo một volume có tên ngẫu nhiên 64 ký tự. Rốt cuộc dữ liệu của bạn CÓ sống sót qua <code>docker rm</code> — nhưng container kế tiếp lại được cấp một volume ngẫu nhiên MỚI và một cơ sở dữ liệu rỗng, nên trông như dữ liệu đã mất, trong khi cái volume cũ nằm đó mãi mãi ôm hàng gigabyte. Hãy kiểm bằng <code>docker volume ls -f dangling=true</code> và thu hồi bằng <code>docker volume prune</code>. Luôn đặt tên cho volume của bạn; khi đó bạn tìm được chúng, sao lưu được chúng, và gắn lại chúng một cách có chủ ý.</div>
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> <code>stop</code>/<code>start</code> giữ tầng ghi được còn <code>rm</code> huỷ nó — và vì mọi thay đổi cấu hình lẫn mọi bản deploy đều đồng nghĩa với <code>rm</code>, bất cứ thứ gì phải sống sót đều cần một volume. <code>docker cp</code> chạy được với container đã dừng, và điều đó khiến nó thành công cụ để lấy bằng chứng ra khỏi một thứ đã chết. Và <code>docker commit</code> đẻ ra một cái ảnh không ai tái lập hay giải thích nổi: ổn khi làm ảnh chụp khám nghiệm, không bao giờ ổn khi làm cách để dựng.</p>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-12-3-overlayfs" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 12.3 — OverlayFS and image layers: lower, upper, work — copy-up, whiteouts and the build cache</span><span class="lc-sub">Copy-up and whiteouts are OverlayFS mechanics — done here by hand.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-12-4-mini" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 12.4 — Build a mini container by hand: an Alpine rootfs, overlayfs, a cgroup, six namespaces and pivot_root</span><span class="lc-sub">Everything assembled into a tiny hand-built container, no Docker needed.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-12-3-overlayfs" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Hệ điều hành cho lập trình viên · 12.3 — OverlayFS và các lớp ảnh: lower, upper, work — copy-up, whiteout và build cache</span><span class="lc-sub">Copy-up và whiteout là cơ chế của OverlayFS — ở đây làm bằng tay.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-12-4-mini" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Hệ điều hành cho lập trình viên · 12.4 — Tự dựng một mini container bằng tay: rootfs Alpine, overlayfs, một cgroup, sáu namespace và pivot_root</span><span class="lc-sub">Ghép mọi thứ thành một container nhỏ tự dựng bằng tay, không cần Docker.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 1.5 ─────────────────────────── */
@@ -2403,6 +2519,32 @@ sudo ctr --namespace moby containers info \$(docker inspect -f '{{.Id}}' w) \\
 
 <div class="pitfall"><strong>Bẫy:</strong> <code>sudo systemctl restart docker</code> trên một máy chủ production mà không có <code>live-restore</code>. Nó dừng MỌI container trên máy rồi chỉ khởi chạy lại những cái có chính sách khởi động lại — nên mọi thứ bạn phóng bằng một lệnh <code>docker run -d</code> trần trụi sẽ nằm chết, trong im lặng, cho tới khi có người phát hiện. Những thói quen tránh được nó: đặt <code>"live-restore": true</code> trong <code>/etc/docker/daemon.json</code>, dùng <code>systemctl reload docker</code> khi bạn chỉ đổi cái file đó (reload đọc lại cấu hình mà không đụng vào container), và cho mọi thứ quan trọng một chính sách khởi động lại (Chương 11).</div>
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> Bốn chương trình, mỗi cái một việc: CLI nói chuyện với <code>dockerd</code>, cái này điều khiển <code>containerd</code>, cái này khởi chạy một shim cho mỗi container, và shim <code>exec</code> tiến trình của bạn thông qua <code>runc</code>. Cái shim là lý do tiến trình nền khởi động lại được mà không giết container — hãy bật <code>live-restore</code> để điều đó THẬT SỰ xảy ra. Và những hiện vật là một chuẩn mở, nên ảnh của bạn sống lâu hơn cả lựa chọn công cụ của bạn: đó là lý do cái tin Kubernetes-bỏ-Docker chẳng thay đổi gì trong thứ bạn dựng ra.</p>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-12-6-runc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 12.6 — What Docker really runs: dockerd, containerd, the shim, runc and an OCI config.json — and why it is not a VM</span><span class="lc-sub">dockerd, containerd, the shim and runc opened up one layer at a time.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-17-5-container" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 17.5 — Stretch project: a mini container runtime in C — namespaces, pivot_root, cgroups and dropped capabilities</span><span class="lc-sub">An extension project that writes a small container runtime in C.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-12-6-runc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Hệ điều hành cho lập trình viên · 12.6 — Docker thật sự chạy gì: dockerd, containerd, shim, runc và config.json OCI — và vì sao đó không phải máy ảo</span><span class="lc-sub">Mở từng tầng dockerd, containerd, shim và runc.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-17-5-container" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Hệ điều hành cho lập trình viên · 17.5 — Dự án mở rộng: mini container runtime bằng C — namespace, pivot_root, cgroup và bỏ capability</span><span class="lc-sub">Dự án mở rộng viết hẳn một runtime container nhỏ bằng C.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

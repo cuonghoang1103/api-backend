@@ -517,6 +517,32 @@ docker run --rm -v thu-data:/data alpine:3.20 cat /data/note.txt   <span class="
 <div class="pitfall"><strong>Bẫy:</strong> tưởng <code>docker rm</code> xoá luôn dữ liệu của container. Nó xoá lớp ghi được, và nó chỉ xoá volume <em>vô danh</em> nếu bạn truyền thêm <code>-v</code>. Volume CÓ TÊN sống sót qua <code>docker rm</code>, qua <code>docker compose down</code>, qua cả một lượt <code>docker system prune</code> đầy đủ, và — từ Docker 23 — qua cả <code>docker volume prune</code> trơn, vốn chỉ xoá volume vô danh; bạn phải gọi đích danh <code>docker volume rm &lt;tên&gt;</code>, <code>docker volume prune -a</code>, hoặc <code>docker compose down -v</code>. Sự bất đối xứng đó cứu bạn nhiều hơn hại bạn rất nhiều, nhưng nó cũng khiến câu "tôi xoá sạch rồi mà dữ liệu cũ vẫn quay lại" là chuyện thứ Ba bình thường, và nó cũng có nghĩa là một volume không ai dùng có thể lặng lẽ ôm 40GB suốt một năm. Kiểm bằng <code>docker system df -v</code> trước khi kết luận vấn đề đĩa của bạn nằm ở ảnh.</div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Lớp ghi được chết theo container, luôn luôn — thứ gì bạn muốn giữ thì phải cố ý đưa vào volume, bind mount hoặc lưu trữ đối tượng. Một <em>volume</em> rỗng gắn đè lên thư mục có sẵn của ảnh sẽ được chép file của ảnh vào một lần; một <em>bind mount</em> thì không bao giờ, và nó che mất thứ đang có ở đó. Và hãy đặt tên cho volume: volume vô danh bảo vệ dữ liệu của bạn rồi cố tình làm cho nó không thể tìm ra.</p>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-9-6-mount" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 9.5 — Mount points and bind mounts: why sed -i did not reach the container</span><span class="lc-sub">Bind mounts are not a Docker invention: how one directory tree is assembled from several file systems.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-13-1-compose-tren-vps" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy VPS · 13.1 — Compose on the VPS: one file that describes the whole machine</span><span class="lc-sub">Volumes on a real server, including the down -v trap, right inside the compose file.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-9-6-mount" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Hệ điều hành cho lập trình viên · 9.5 — Điểm gắn và bind mount: vì sao sed -i không tới được container</span><span class="lc-sub">Bind mount không phải phát minh của Docker: một cây thư mục ghép từ nhiều hệ thống tệp thế nào.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-13-1-compose-tren-vps" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 13.1 — Compose trên VPS: một tệp mô tả cả cái máy</span><span class="lc-sub">Volume trên máy chủ thật, kể cả cái bẫy down -v, ngay trong tệp compose.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 7.2 ─────────────────────────── */
@@ -1064,6 +1090,22 @@ docker rm thu-anon            <span class="tok-comment"># volume vô danh của 
 <div class="pitfall"><strong>Bẫy:</strong> đọc <code>dangling=true</code> thành "xoá được rồi". Nó chỉ có nghĩa là hiện không có container nào <em>đang chạy hoặc đang tồn tại</em> tham chiếu tới volume đó. Dựng lại container từ một file compose là volume lập tức được dùng lại với đủ dữ liệu của bạn — đó là đường nâng cấp bình thường, không phải tai nạn. Những volume thật sự là rác có đủ ba tính chất cùng lúc: không link, một cái tên vô danh 64 ký tự hex, và một ngày tạo mà bạn truy được về một lần thử nghiệm. Trước khi prune trên một máy chủ có dữ liệu thật, hãy chạy <code>docker volume ls --filter dangling=true</code>, đọc danh sách, và xác nhận từng cái tên. Một lượt prune xoá mất volume có tên mà bạn sắp gắn lại thì không cứu được, và hộp xác nhận của Docker chỉ cho bạn xem một con SỐ, không phải các cái tên. (Từ Docker 23 muốn vậy phải gõ <code>docker volume prune -a</code> — prune trơn để yên volume có tên — nhưng script cũ và bài hướng dẫn cũ vẫn còn dùng cờ đó.)</div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Volume chỉ là một thư mục có người quản — <code>docker volume inspect -f '{{ .Mountpoint }}'</code> chỉ đích danh thư mục nào, và điều đó biến sao lưu với chẩn đoán thành việc bình thường. Hãy gắn nhãn cho volume để <code>ls --filter</code> trả lời được câu "cái nào thuộc ứng dụng này" sau sáu tháng. Và chạy <code>docker system df -v</code> trước khi đổ lỗi cho ảnh khi đĩa đầy: một volume vô danh không link là bất ngờ vài gigabyte rất hay gặp.</p>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-8-4-day-dia" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy VPS · 8.4 — ENOSPC, and the two disks that are full without being full</span><span class="lc-sub">A full disk on a real server, unclaimed volumes included, from a real incident in this project.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-8-4-day-dia" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 8.4 — ENOSPC, và hai cái đĩa ĐẦY mà không đầy</span><span class="lc-sub">Đĩa đầy trên máy chủ thật, kể cả volume không ai nhận, từ một sự cố có thật của dự án này.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 7.3 ─────────────────────────── */
@@ -1260,13 +1302,13 @@ ${slide('dk-07', 17, 'Sửa file đã gắn đơn lẻ: cái nào container th�
 <p>Each way of editing, measured on both machines (the Mac uses Docker Desktop 4.91 with VirtioFS):</p>
 <table>
 <tr><th>How you change the host file</th><th>Inode</th><th>Linux: container sees</th><th>Mac: container sees</th></tr>
-<tr><td><code>sed -i …</code></td><td>new</td><td>old content</td><td><code>No such file or directory</code></td></tr>
+<tr><td><code>sed -i …</code></td><td>new</td><td>old content</td><td><code>No such file or directory</code> (4.91) · old content until restart (Engine 29.8, 11/2026)</td></tr>
 <tr><td><code>mv file.new file</code></td><td>new</td><td>old content</td><td><code>No such file or directory</code></td></tr>
 <tr><td><code>cat file.new &gt; file</code> (overwrite in place)</td><td>same</td><td>new content (after reload)</td><td>new content (after reload)</td></tr>
 <tr><td>vim 9.2 <code>:wq</code> (default settings)</td><td>same</td><td>new content</td><td>(not measured)</td></tr>
 <tr><td>Mount the <strong>folder</strong>, then <code>sed -i</code></td><td>new</td><td>new content</td><td>new content</td></tr>
 </table>
-<p>Two details made the incident worse than a simple "old config". First, once the inode has changed, overwriting in place no longer helps — the container is still attached to the old inode until it is <strong>restarted</strong>. Second, on a Mac the failure is louder but stranger: <code>grep</code> in the container says the file does not exist, while <code>stat</code> still shows inode 72. And the same identity problem breaks file watchers even with a folder mount: after one <code>sed -i</code> on <code>server.js</code>, <code>node --watch</code> restarted once and then never again on Linux, and never restarted at all on the Mac.</p>
+<p>Two details made the incident worse than a simple "old config". First, once the inode has changed, overwriting in place no longer helps — the container is still attached to the old inode until it is <strong>restarted</strong>. Second, on a Mac the failure is louder but stranger: <code>grep</code> in the container says the file does not exist, while <code>stat</code> still shows inode 72. Re-measured on 12/11/2026 with Docker Desktop on Engine 29.8, the Mac behaved differently for <code>sed -i</code>: no error at all — the container kept reading <code>phien ban 1</code>, <code>nginx -s reload</code> still served the old text, and only a restart showed the new one (<code>mv</code> still gave <code>No such file or directory</code>). So do not rely on a loud error to tell you; the sha256 check below is what catches both cases. And the same identity problem breaks file watchers even with a folder mount: after one <code>sed -i</code> on <code>server.js</code>, <code>node --watch</code> restarted once and then never again on Linux, and never restarted at all on the Mac.</p>
 <div class="callout ok"><strong>The fixes, best first.</strong> (1) Mount the directory, not the file: <code>./nginx/conf.d:/etc/nginx/conf.d:ro</code> — a directory is looked up by name every time. (2) If a single file is unavoidable, overwrite it in place (<code>cat new.conf &gt; nginx.conf</code>), then verify from <em>inside</em>: <code>docker exec ngx sha256sum /etc/nginx/nginx.conf</code> must equal <code>sha256sum nginx.conf</code> on the host. A mismatch means restart the container. (3) With vim, <code>:set backupcopy=yes</code> guarantees an in-place write whatever the defaults.</div>
 <pre><code class="language-bash"><span class="tok-comment"># the check that would have caught the incident (Linux, after an mv)</span>
 echo v1 &gt; f.txt
@@ -1296,7 +1338,7 @@ ${slide('dk-07', 18, 'Bind mount trên Mac chậm ~12 lần — trên Linux thì
 <tr><td>Linux · bind mount (btrfs)</td><td>30 ms</td><td>5 ms</td><td>13 ms</td><td>56 ms</td><td><strong>104 ms</strong></td></tr>
 <tr><td>Linux · named volume</td><td>31 ms</td><td>4 ms</td><td>14 ms</td><td>61 ms</td><td><strong>110 ms</strong></td></tr>
 </table>
-<p>On the Mac the bind mount is about twelve times slower than a volume, and noisy — the write step ranged from 830 to 2,081 ms across the three runs. On Linux the two are the same, because a bind mount there is the same kernel showing the same disk. The volume on the Mac lives on the VM's own ext4 disk (<code>/dev/vda1 … ext4</code> in <code>/proc/mounts</code>), so it is fast too. The source was the following script; you can repeat it on your machine:</p>
+<p>On the Mac the bind mount is about twelve times slower than a volume, and noisy — the write step ranged from 830 to 2,081 ms across the three runs. Re-run on 12/11/2026 (Docker Desktop, Engine 29.8) the medians were ~1,570 ms against ~155 ms — about ten times. The exact ratio moves between runs and versions; the order of magnitude does not. On Linux the two are the same, because a bind mount there is the same kernel showing the same disk. The volume on the Mac lives on the VM's own ext4 disk (<code>/dev/vda1 … ext4</code> in <code>/proc/mounts</code>), so it is fast too. The source was the following script; you can repeat it on your machine:</p>
 <pre><code class="language-bash"><span class="tok-comment"># bench.js — run: docker run --rm -v "$PWD:/p" node:22-alpine node /p/bench.js /p</span>
 <span class="tok-comment">#           and:  docker run --rm -v bench:/v -v "$PWD:/p:ro" node:22-alpine node /p/bench.js /v</span>
 const fs = require('fs'), path = require('path');
@@ -1321,7 +1363,7 @@ console.log('ghi ' + w + ' ms · stat ' + s + ' ms · doc ' + r + ' ms · xoa ' 
 <li>Append a line to <code>server.js</code> with <code>echo … &gt;&gt;</code>, confirm the restart in <code>docker logs thu-dev</code>. Then run <code>sed -i.bak 's/v1/v2/' server.js</code> (works on Mac and Linux) and check whether it still restarts on the next edit.</li>
 <li>In <code>~/thu-docker/ch07/ngx</code>, reproduce the single-file mount with the nginx block above (container <code>thu-ngx</code>, port 18071), change it with <code>sed -i.bak</code>, compare <code>sha256sum</code> inside and outside. Then remount the <em>folder</em> instead and repeat.</li>
 <li>Clean up: <code>docker rm -f thu-dev thu-ngx</code>, <code>docker rmi thu-app</code>, delete the folders.</li></ol>
-<p><strong>Done when:</strong> <code>curl</code> answers after the <code>node_modules</code> fix; you can show, for the single-file mount, sha256 values that do not match (on a Mac the inside command fails with <code>No such file or directory</code> instead) and, for the folder mount, a matching pair; and <code>docker ps -a --filter name=thu-</code> is empty.</p></div>
+<p><strong>Done when:</strong> <code>curl</code> answers after the <code>node_modules</code> fix; you can show, for the single-file mount, sha256 values that do not match (on a Mac the inside command may instead fail with <code>No such file or directory</code>, depending on the Docker Desktop version) and, for the folder mount, a matching pair; and <code>docker ps -a --filter name=thu-</code> is empty.</p></div>
 
 <h3>🗂 Key terms</h3>
 <div class="kv-grid">
@@ -1341,7 +1383,7 @@ console.log('ghi ' + w + ' ms · stat ' + s + ' ms · doc ' + r + ' ms · xoa ' 
 <li>On Linux numeric UIDs pass straight through: run with <code>-u "$(id -u):$(id -g)"</code> or clean up root-owned files through a container.</li>
 <li>SELinux denials need a daemon with SELinux enabled — check <code>docker info</code> before reaching for <code>:z</code>, and never <code>:Z</code> a system folder.</li>
 <li>A single-file mount is attached by inode: <code>sed -i</code>/<code>mv</code> leave the container on the old content (Linux) or a missing file (Mac) until restart — mount folders, or overwrite in place and verify with sha256 inside.</li>
-<li>On a Mac a bind mount was ~12× slower than a volume; on Linux they were equal — keep heavy directories in volumes on Mac/Windows.</li>
+<li>On a Mac a bind mount was ~10–12× slower than a volume; on Linux they were equal — keep heavy directories in volumes on Mac/Windows.</li>
 <li>On Windows keep the project inside WSL2, or you lose both speed and inotify.</li>
 </ul>
 
@@ -1548,13 +1590,13 @@ ${slide('dk-07', 17, 'Sửa file đã gắn đơn lẻ: cái nào container th�
 <p>Từng cách sửa, đo trên cả hai máy (máy Mac dùng Docker Desktop 4.91 với VirtioFS):</p>
 <table>
 <tr><th>Cách bạn sửa file trên máy</th><th>Inode</th><th>Linux: container thấy</th><th>Mac: container thấy</th></tr>
-<tr><td><code>sed -i …</code></td><td>mới</td><td>nội dung cũ</td><td><code>No such file or directory</code></td></tr>
+<tr><td><code>sed -i …</code></td><td>mới</td><td>nội dung cũ</td><td><code>No such file or directory</code> (4.91) · nội dung cũ tới khi restart (Engine 29.8, 11/2026)</td></tr>
 <tr><td><code>mv file.moi file</code></td><td>mới</td><td>nội dung cũ</td><td><code>No such file or directory</code></td></tr>
 <tr><td><code>cat file.moi &gt; file</code> (ghi đè tại chỗ)</td><td>giữ</td><td>nội dung mới (sau reload)</td><td>nội dung mới (sau reload)</td></tr>
 <tr><td>vim 9.2 <code>:wq</code> (cấu hình mặc định)</td><td>giữ</td><td>nội dung mới</td><td>(chưa đo)</td></tr>
 <tr><td>Gắn cả <strong>thư mục</strong>, rồi <code>sed -i</code></td><td>mới</td><td>nội dung mới</td><td>nội dung mới</td></tr>
 </table>
-<p>Hai chi tiết khiến sự cố tệ hơn một chữ "cấu hình cũ". Thứ nhất, một khi inode đã đổi, ghi đè tại chỗ cũng không cứu được nữa — container vẫn dính vào inode cũ cho tới khi được <strong>restart</strong>. Thứ hai, trên Mac lỗi to hơn nhưng lạ hơn: <code>grep</code> trong container nói file không tồn tại, trong khi <code>stat</code> vẫn báo inode 72. Và cùng vấn đề danh tính đó làm hỏng cả trình theo dõi file dù gắn cả thư mục: sau một lần <code>sed -i</code> trên <code>server.js</code>, <code>node --watch</code> chạy lại một lần rồi không bao giờ chạy lại nữa trên Linux, và không chạy lại lần nào trên Mac.</p>
+<p>Hai chi tiết khiến sự cố tệ hơn một chữ "cấu hình cũ". Thứ nhất, một khi inode đã đổi, ghi đè tại chỗ cũng không cứu được nữa — container vẫn dính vào inode cũ cho tới khi được <strong>restart</strong>. Thứ hai, trên Mac lỗi to hơn nhưng lạ hơn: <code>grep</code> trong container nói file không tồn tại, trong khi <code>stat</code> vẫn báo inode 72. Đo lại ngày 12/11/2026 với Docker Desktop chạy Engine 29.8, Mac cư xử khác với <code>sed -i</code>: không báo lỗi gì — container vẫn đọc <code>phien ban 1</code>, <code>nginx -s reload</code> vẫn trả chữ cũ, chỉ restart mới thấy bản mới (<code>mv</code> thì vẫn ra <code>No such file or directory</code>). Vậy đừng trông vào một lỗi ồn ào để biết; phép so sha256 bên dưới mới bắt được cả hai trường hợp. Và cùng vấn đề danh tính đó làm hỏng cả trình theo dõi file dù gắn cả thư mục: sau một lần <code>sed -i</code> trên <code>server.js</code>, <code>node --watch</code> chạy lại một lần rồi không bao giờ chạy lại nữa trên Linux, và không chạy lại lần nào trên Mac.</p>
 <div class="callout ok"><strong>Cách chữa, cái tốt nhất trước.</strong> (1) Gắn THƯ MỤC, không gắn file: <code>./nginx/conf.d:/etc/nginx/conf.d:ro</code> — thư mục thì được tra theo TÊN mỗi lần. (2) Nếu buộc phải gắn một file, hãy ghi đè tại chỗ (<code>cat new.conf &gt; nginx.conf</code>), rồi kiểm từ BÊN TRONG: <code>docker exec ngx sha256sum /etc/nginx/nginx.conf</code> phải bằng <code>sha256sum nginx.conf</code> trên máy. Lệch nghĩa là phải restart container. (3) Với vim, <code>:set backupcopy=yes</code> bảo đảm ghi tại chỗ bất kể cấu hình mặc định.</div>
 <pre><code class="language-bash"><span class="tok-comment"># phép kiểm lẽ ra đã bắt được sự cố (Linux, sau một lần mv)</span>
 echo v1 &gt; f.txt
@@ -1584,7 +1626,7 @@ ${slide('dk-07', 18, 'Bind mount trên Mac chậm ~12 lần — trên Linux thì
 <tr><td>Linux · bind mount (btrfs)</td><td>30 ms</td><td>5 ms</td><td>13 ms</td><td>56 ms</td><td><strong>104 ms</strong></td></tr>
 <tr><td>Linux · volume có tên</td><td>31 ms</td><td>4 ms</td><td>14 ms</td><td>61 ms</td><td><strong>110 ms</strong></td></tr>
 </table>
-<p>Trên Mac, bind mount chậm hơn volume khoảng mười hai lần, và dao động — bước ghi chạy từ 830 tới 2 081 ms qua ba lượt. Trên Linux hai cái như nhau, vì bind mount ở đó là cùng một nhân đang cho xem cùng một cái đĩa. Volume trên Mac nằm trên đĩa ext4 riêng của máy ảo (<code>/dev/vda1 … ext4</code> trong <code>/proc/mounts</code>), nên cũng nhanh. Nguồn đo là script sau; bạn chạy lại được trên máy mình:</p>
+<p>Trên Mac, bind mount chậm hơn volume khoảng mười hai lần, và dao động — bước ghi chạy từ 830 tới 2 081 ms qua ba lượt. Chạy lại ngày 12/11/2026 (Docker Desktop, Engine 29.8), trung vị là ~1 570 ms so với ~155 ms — khoảng mười lần. Tỉ lệ chính xác xê dịch theo lượt chạy và phiên bản; bậc độ lớn thì không. Trên Linux hai cái như nhau, vì bind mount ở đó là cùng một nhân đang cho xem cùng một cái đĩa. Volume trên Mac nằm trên đĩa ext4 riêng của máy ảo (<code>/dev/vda1 … ext4</code> trong <code>/proc/mounts</code>), nên cũng nhanh. Nguồn đo là script sau; bạn chạy lại được trên máy mình:</p>
 <pre><code class="language-bash"><span class="tok-comment"># bench.js — chạy: docker run --rm -v "$PWD:/p" node:22-alpine node /p/bench.js /p</span>
 <span class="tok-comment">#            và:  docker run --rm -v bench:/v -v "$PWD:/p:ro" node:22-alpine node /p/bench.js /v</span>
 const fs = require('fs'), path = require('path');
@@ -1609,7 +1651,7 @@ console.log('ghi ' + w + ' ms · stat ' + s + ' ms · doc ' + r + ' ms · xoa ' 
 <li>Nối một dòng vào <code>server.js</code> bằng <code>echo … &gt;&gt;</code>, xác nhận việc chạy lại trong <code>docker logs thu-dev</code>. Rồi chạy <code>sed -i.bak 's/v1/v2/' server.js</code> (chạy được cả trên Mac lẫn Linux) và xem lần sửa kế tiếp nó còn tự chạy lại không.</li>
 <li>Trong <code>~/thu-docker/ch07/ngx</code>, tái hiện phép gắn file đơn bằng khối lệnh nginx ở trên (container <code>thu-ngx</code>, cổng 18071), sửa bằng <code>sed -i.bak</code>, so <code>sha256sum</code> bên trong và bên ngoài. Rồi gắn cả <em>thư mục</em> thay vào và làm lại.</li>
 <li>Dọn: <code>docker rm -f thu-dev thu-ngx</code>, <code>docker rmi thu-app</code>, xoá các thư mục.</li></ol>
-<p><strong>Đạt khi:</strong> <code>curl</code> trả lời sau khi vá <code>node_modules</code>; với phép gắn file đơn, bạn đưa ra được hai giá trị sha256 không khớp (trên Mac lệnh bên trong báo <code>No such file or directory</code> thay vào đó) và với phép gắn thư mục, một cặp khớp nhau; và <code>docker ps -a --filter name=thu-</code> rỗng.</p></div>
+<p><strong>Đạt khi:</strong> <code>curl</code> trả lời sau khi vá <code>node_modules</code>; với phép gắn file đơn, bạn đưa ra được hai giá trị sha256 không khớp (trên Mac, tuỳ phiên bản Docker Desktop, lệnh bên trong có thể báo <code>No such file or directory</code> thay vào đó) và với phép gắn thư mục, một cặp khớp nhau; và <code>docker ps -a --filter name=thu-</code> rỗng.</p></div>
 
 <h3>🗂 Thuật ngữ trong bài</h3>
 <div class="kv-grid">
@@ -1629,7 +1671,7 @@ console.log('ghi ' + w + ' ms · stat ' + s + ' ms · doc ' + r + ' ms · xoa ' 
 <li>Trên Linux UID dạng số đi thẳng qua: chạy với <code>-u "$(id -u):$(id -g)"</code> hoặc dọn file của root qua một container.</li>
 <li>Lỗi SELinux chỉ có khi tiến trình nền bật SELinux — kiểm <code>docker info</code> trước khi với tới <code>:z</code>, và đừng bao giờ <code>:Z</code> một thư mục hệ thống.</li>
 <li>Gắn một file đơn là gắn theo inode: <code>sed -i</code>/<code>mv</code> để container lại với nội dung cũ (Linux) hoặc một file biến mất (Mac) cho tới khi restart — hãy gắn thư mục, hoặc ghi đè tại chỗ rồi kiểm sha256 từ bên trong.</li>
-<li>Trên Mac bind mount chậm hơn volume ~12 lần; trên Linux như nhau — thư mục nặng để trong volume khi dùng Mac/Windows.</li>
+<li>Trên Mac bind mount chậm hơn volume ~10–12 lần; trên Linux như nhau — thư mục nặng để trong volume khi dùng Mac/Windows.</li>
 <li>Trên Windows hãy để dự án trong WSL2, không thì mất cả tốc độ lẫn inotify.</li>
 </ul>
 
@@ -1648,6 +1690,32 @@ console.log('ghi ' + w + ' ms · stat ' + s + ' ms · doc ' + r + ' ms · xoa ' 
 
 <div class="pitfall"><strong>Bẫy:</strong> dùng bind mount cho thư mục dữ liệu của cơ sở dữ liệu chỉ vì nhìn thấy file cho tiện. Trên Linux nó phần lớn chạy được và cho bạn một thư mục mà sớm muộn bạn sẽ lỡ tay <code>rm -rf</code>; trên macOS và Windows nó đi qua tầng chia sẻ file, nơi những giả định của Postgres về thứ tự <code>fsync</code> và khoá file KHÔNG được bảo đảm — kết quả đã được ghi thành tài liệu là HỎNG DỮ LIỆU, không phải chậm. Ảnh Postgres chính thức gắn một <em>volume</em> vào <code>/var/lib/postgresql/data</code> đúng vì lý do này. Nếu bạn muốn nhìn file, lệnh <code>docker run --rm -v pg-data:/d -v "$PWD:/out" alpine tar -C /d -cf /out/pg.tar .</code> cho bạn một bản chép mà không đặt cơ sở dữ liệu đang sống lên nhầm hệ thống file.</div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Bind mount luôn thắng nội dung của ảnh và không bao giờ chép gì — riêng luật đó giải thích cảnh <code>node_modules</code> biến mất, và một volume vô danh gắn sâu hơn chính là cách vá. Trên Linux uid dạng số đi thẳng qua, nên <code>-u "$(id -u):$(id -g)"</code> là thứ giữ cho file thuộc quyền root không rơi vào cây làm việc của bạn. Và trên macOS hay Windows mọi thao tác file đều vượt ranh giới máy ảo: hãy giữ thư mục gói phụ thuộc trong volume, đừng để trên bind.</p>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-4-5-chan-doan-permission-denied" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 4.5 — Diagnosing "Permission denied" instead of reaching for sudo</span><span class="lc-sub">Root-owned files, UIDs, directory permissions: diagnosing "permission denied" step by step.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-9-1-inode" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 9.1 — A file name is only a pointer: VFS, inodes, dentries and links</span><span class="lc-sub">Why sed changes the inode: a file name is only a pointer to an inode.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-4-5-chan-doan-permission-denied" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 4.5 — Chẩn đoán "Permission denied" thay vì vớ lấy sudo</span><span class="lc-sub">Tệp thuộc root, uid, quyền thư mục: chẩn đoán permission denied từng bước.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-9-1-inode" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Hệ điều hành cho lập trình viên · 9.1 — Tên file chỉ là con trỏ: VFS, inode, dentry và liên kết</span><span class="lc-sub">Vì sao sed đổi inode: tên tệp chỉ là một con trỏ tới inode.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -2094,6 +2162,32 @@ A /run/secrets</div>
 <div class="pitfall"><strong>Bẫy:</strong> tin rằng <code>docker inspect</code> giấu biến môi trường. Nó in ra đủ từng biến, nguyên vẹn, cho bất cứ ai với tới được socket Docker — <code>docker compose config</code> cũng vậy, và phần lớn giao diện quản container cũng vậy. Hãy coi <code>-e</code> và <code>--env-file</code> là "được bảo vệ khỏi Internet, chứ không phải khỏi người có quyền vào máy chủ". Hệ quả thực tế là: xoay một cái khoá bị lộ nghĩa là xoay nó ở phía nhà cung cấp, chứ không phải chỉ đổi biến môi trường; và một kỹ sư hỗ trợ dán kết quả <code>docker inspect</code> vào một khung chat vừa công bố mật khẩu cơ sở dữ liệu của bạn. Khi bạn cần một bí mật sống sót qua kiểu tai nạn đó, nó buộc phải là một file trên tmpfs hoặc một trình quản bí mật thật, không phải một biến môi trường.</div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Luôn cho tmpfs một <code>size=</code>, vì nó tiêu vào hạn mức bộ nhớ của container và một cái không trần sẽ biến thành một cú giết OOM thay vì một lỗi hết đĩa. <code>--read-only</code> cộng vài phép gắn tmpfs nhỏ là một trong những cái lợi an toàn thật rẻ nhất bạn có — bật lên, đọc lỗi, và cấp đúng thứ ứng dụng xin. Và biến môi trường thì nhìn thấy được trong <code>docker inspect</code> mãi mãi: thứ gì không được rò thì hãy gắn thành file trên tmpfs.</p>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-8-1-ma-137" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy VPS · 8.1 — Exit 137, and what the kernel writes down</span><span class="lc-sub">Exit 137 and OOMKilled on a real server: reading what the kernel recorded.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-6-1-che-bi-mat" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">GitHub Actions · 6.1 — Masking covers the stored string, and nothing else</span><span class="lc-sub">Secrets in CI: why masking the string in the log is not enough.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-8-1-ma-137" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 8.1 — Mã thoát 137, và thứ nhân hệ điều hành ghi lại</span><span class="lc-sub">Mã 137 và OOMKilled trên máy chủ thật: đọc thứ nhân hệ điều hành ghi lại.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-6-1-che-bi-mat" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">GitHub Actions · 6.1 — Che bí mật phủ ĐÚNG chuỗi đã lưu, không phủ gì khác</span><span class="lc-sub">Bí mật trong CI: vì sao che chuỗi trong log là chưa đủ.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 7.5 ─────────────────────────── */
@@ -2243,6 +2337,7 @@ docker exec -i pg pg_restore -l &lt; db-tty.dump</code></pre>
 4631142 db-tty.dump
 pg_restore: error: could not read from input file: end of file</div>
 <p>20,700 bytes longer, and unreadable. <code>-t</code> allocates a pseudo-terminal; the terminal turns every <code>\\n</code> byte in the output into <code>\\r\\n</code>. For text you might never notice; a binary archive is destroyed — and both commands exit 0, even from a cron job with no terminal attached (this run was not interactive either). Rule of thumb: <code>-it</code> only when a <em>human</em> types (<code>psql</code>, <code>sh</code>); <code>-i</code> when you pipe data in; nothing when you pipe data out.</p>
+<div class="pitfall"><strong>Re-measured on a Mac (12/11/2026, Docker Desktop, Engine 29.8, postgres:16-alpine):</strong> the <code>-t</code> file was again longer — 4,632,239 against 4,611,743 bytes, +20,496 — but this time <code>pg_restore -l</code> did <em>not</em> report an error. It printed a table of contents starting with garbage such as <code>Archive created at +34370-06-12</code>. A corrupted dump that does not even fail loudly is worse, not better: never take "pg_restore -l ran" as proof. The only proof is a full restore into a fresh database followed by a row count, as earlier in this lesson.</div>
 
 <h3>Moving a volume to another machine</h3>
 <div class="lz-flow">
@@ -2535,6 +2630,7 @@ docker exec -i pg pg_restore -l &lt; db-tty.dump</code></pre>
 4631142 db-tty.dump
 pg_restore: error: could not read from input file: end of file</div>
 <p>Dài hơn 20 700 byte, và không đọc được. <code>-t</code> cấp một terminal ảo (pseudo-terminal); terminal biến mỗi byte <code>\\n</code> trong output thành <code>\\r\\n</code>. Với văn bản bạn có thể không bao giờ nhận ra; một file nén nhị phân thì bị phá huỷ — và cả hai lệnh đều thoát 0, kể cả từ một việc cron không có terminal nào (lượt chạy này cũng không tương tác). Mẹo nhớ: <code>-it</code> chỉ khi CON NGƯỜI gõ (<code>psql</code>, <code>sh</code>); <code>-i</code> khi bạn đổ dữ liệu vào; không cờ nào khi bạn lấy dữ liệu ra.</p>
+<div class="pitfall"><strong>Đo lại trên Mac (12/11/2026, Docker Desktop, Engine 29.8, postgres:16-alpine):</strong> tệp có <code>-t</code> lại dài hơn — 4 632 239 so với 4 611 743 byte, +20 496 — nhưng lần này <code>pg_restore -l</code> KHÔNG báo lỗi. Nó in ra một mục lục mở đầu bằng rác kiểu <code>Archive created at +34370-06-12</code>. Một bản dump hỏng mà không hề kêu còn tệ hơn: đừng bao giờ coi "pg_restore -l chạy được" là bằng chứng. Bằng chứng duy nhất là khôi phục trọn vào một CSDL mới rồi đếm dòng, như ở phần trước của bài.</div>
 
 <h3>Chuyển một volume sang máy khác</h3>
 <div class="lz-flow">
@@ -2686,6 +2782,32 @@ exit=0
 
 <div class="pitfall"><strong>Bẫy:</strong> sao lưu cái volume chứa cơ sở dữ liệu bằng cách tar nó trong lúc Postgres đang chạy, rồi 3 giờ sáng mới biết là nó không khôi phục được. Lệnh tar chạy xong, file có kích thước nghe hợp lý, và mọi thứ trông ổn — chỗ hỏng vô hình cho tới lúc bạn cần tới. Luật thì đơn giản: <em>chép ở mức file đòi hỏi bên ghi phải dừng, xuất logic thì không.</em> Với cơ sở dữ liệu trong container, điều đó nghĩa là <code>pg_dump</code>/<code>mysqldump</code> qua <code>docker exec</code>, hoặc một ảnh chụp hệ thống file thật, hoặc chấp nhận một phút ngừng dịch vụ để tar khi đã tắt. Và chọn cách nào thì cũng hãy khôi phục nó vào một cơ sở dữ liệu nháp một lần rồi đếm một dòng bạn nhận ra — hai phút biến một giả định thành một sự thật.</div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Một container dùng xong vứt, gắn volume bằng <code>:ro</code> và một thư mục máy chủ đọc-ghi, sao lưu được mọi thứ, ở mọi nơi, không cần công cụ nào thêm. Chép ở mức file một cơ sở dữ liệu <em>đang chạy</em> KHÔNG phải là bản sao lưu — hãy dùng bản xuất logic, một ảnh chụp, hoặc dừng engine. Và luôn khôi phục vào volume mới hoặc cơ sở dữ liệu nháp rồi kiểm: một bản sao lưu chưa từng được khôi phục có trạng thái không biết, chứ không phải trạng thái tốt.</p>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-10-2-phuc-hoi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy VPS · 10.2 — The restore is the number that matters</span><span class="lc-sub">Scheduled test restores on a real VPS, done end to end.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-7-1-khung-script" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 7.1 — The skeleton: shebang, strict mode, and its traps</span><span class="lc-sub">Why set -Eeuo pipefail saves a backup script, letter by letter.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-10-2-phuc-hoi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 10.2 — PHỤC HỒI mới là con số quan trọng</span><span class="lc-sub">Khôi phục thử theo lịch trên một VPS thật, làm trọn.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-7-1-khung-script" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 7.1 — Bộ khung: shebang, chế độ nghiêm ngặt, và những cái bẫy của nó</span><span class="lc-sub">Vì sao set -Eeuo pipefail cứu script sao lưu, giải thích từng chữ.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

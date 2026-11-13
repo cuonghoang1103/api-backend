@@ -565,6 +565,32 @@ SIGTERM — đóng server</div>
 </a>
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> Ngữ cảnh dựng do <code>.dockerignore</code> quyết định, và thiếu nó thì ảnh bị nhiễm độc theo những cách lộ ra ở rất xa nguyên nhân. Cài và chạy trên cùng một ảnh nền. Và cái ảnh chỉ xong khi nó trả lời được một request thật, không phải khi build chuyển xanh.</p>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/prisma-orm/learn?lessonSlug=pr-11-1-engine-trong-anh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Prisma ORM · 11.1 — The engine in the image, and the seven-minute outage</span><span class="lc-sub">The engine inside the image, and seven minutes of a dead API.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nextjs/learn?lessonSlug=nextjs-20-3-docker" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Next.js · 20.3 — Docker: packaging the app to run anywhere</span><span class="lc-sub">Packaging Next.js with Docker, from the Next side.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/prisma-orm/learn?lessonSlug=pr-11-1-engine-trong-anh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Prisma ORM · 11.1 — Engine nằm trong ảnh, và bảy phút API chết</span><span class="lc-sub">Engine nằm trong ảnh, và bảy phút API chết.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nextjs/learn?lessonSlug=nextjs-20-3-docker" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Next.js · 20.3 — Docker: đóng gói app để chạy ở đâu cũng được</span><span class="lc-sub">Đóng gói Next.js bằng Docker, nhìn từ phía Next.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 16.2 ─────────────────────────── */
@@ -1287,6 +1313,32 @@ TAG=dev</code></pre>
 </a>
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> Một file nền, một file override cho dev tự nạp, một file prod bạn gọi tên có chủ đích. Đặt healthcheck ở chỗ mọi target đều thấy và để <code>--wait</code> phán xử lúc khởi động. Và đừng bao giờ tin một cái trần bạn chưa đọc ngược lại bằng <code>docker inspect</code>.</p>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-4-3-env-khong-phai-mot-dinh-dang" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy VPS · 4.3 — The .env file is not one format</span><span class="lc-sub">.env is not one single format.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-2-2-xoay-vong" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Observability · 2.2 — Rotation, or a full disk</span><span class="lc-sub">Rotate logs, or the disk fills up.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-4-3-env-khong-phai-mot-dinh-dang" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 4.3 — Tệp .env không phải MỘT định dạng</span><span class="lc-sub">Tệp .env không phải một định dạng duy nhất.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-2-2-xoay-vong" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Observability · 2.2 — Xoay vòng, hoặc là đĩa đầy</span><span class="lc-sub">Xoay vòng log, hoặc là đĩa đầy.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 16.3 ─────────────────────────── */
@@ -1938,6 +1990,32 @@ api-1  | thiếu biến môi trường JWT_SECRET — dừng
   <span class="lc-body"><span class="lc-title">Luyện trong Code Lab</span><span class="lc-sub">Bài tập Docker có chấm tự động.</span></span>
 </a>
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> Deploy tag commit, không bao giờ "latest". Để máy chủ chỉ kéo, khởi động và kiểm — build ở nơi khác. Và cho script deploy tự đặt được bản cũ trở lại, vì bản hỏng sẽ tới đúng cái đêm bạn không ngồi canh.</p>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-15-3-deploy-an-toan" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">GitHub Actions · 15.3 — Deploying safely: environment, SSH, a lock, a smoke test, automatic rollback</span><span class="lc-sub">Safe deploys from CI: environments, SSH, smoke tests, automatic rollback.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-6-1-lui-chay-duoc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy VPS · 6.1 — The rollback that works</span><span class="lc-sub">A rollback that actually works, and how to prove it reaches users.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-15-3-deploy-an-toan" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">GitHub Actions · 15.3 — Deploy an toàn: environment, SSH, khoá, smoke test, tự quay lui</span><span class="lc-sub">Deploy an toàn từ CI: environment, SSH, smoke test, tự quay lui.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-6-1-lui-chay-duoc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 6.1 — Cú lùi CHẠY ĐƯỢC</span><span class="lc-sub">Cú lùi chạy được, và cách chứng minh nó tới người dùng.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -2622,6 +2700,42 @@ UTC
   <span class="lc-body"><span class="lc-title">Luyện trong Code Lab</span><span class="lc-sub">Bài tập Docker có chấm tự động.</span></span>
 </a>
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> Trạng thái và mã thoát trước, log sau, đoán mò thì không bao giờ. Bản sao lưu chỉ là bản sao lưu sau khi bạn đã khôi phục nó. Và sự cố nào trong tám sự cố cũng có một dòng phòng ngừa bạn đặt được ngay tuần này, trước khi nó xảy ra với mình.</p>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-10-2-phuc-hoi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy VPS · 10.2 — The restore is the number that matters</span><span class="lc-sub">A backup only counts once it has been restored.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-8-4-day-dia" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy VPS · 8.4 — ENOSPC, and the two disks that are full without being full</span><span class="lc-sub">Two disks that were full without being full.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-2-1-docker-bat-log" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Observability · 2.1 — What Docker does with your log line</span><span class="lc-sub">What Docker does with your log lines.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-10-2-phuc-hoi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 10.2 — PHỤC HỒI mới là con số quan trọng</span><span class="lc-sub">Sao lưu chỉ tính khi đã phục hồi được.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-8-4-day-dia" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 8.4 — ENOSPC, và hai cái đĩa ĐẦY mà không đầy</span><span class="lc-sub">Hai cái đĩa đầy mà không đầy.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-2-1-docker-bat-log" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Observability · 2.1 — Docker làm gì với dòng log của bạn</span><span class="lc-sub">Docker làm gì với dòng log của bạn.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

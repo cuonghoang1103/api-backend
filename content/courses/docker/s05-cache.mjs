@@ -490,6 +490,32 @@ Build Cache     41.06GB   21.27GB</div>
 <div class="pitfall"><strong>Bẫy:</strong> một tầng lưu đệm <em>ĐÚNG</em> theo luật của Docker và <em>SAI</em> trong thực tế. <code>RUN git clone https://github.com/me/lib.git</code> có một chuỗi câu lệnh cố định, nên BuildKit dùng lại kết quả đó MÃI MÃI — ảnh của bạn cứ đem theo cái commit của cái ngày bạn dựng lần đầu, và đẩy bao nhiêu lên kho đó cũng chẳng đổi được gì. Điều tương tự áp cho <code>RUN curl -O https://example.com/latest.tar.gz</code> và cho <code>RUN npm install -g some-cli</code> không ghim phiên bản. Cách chữa là làm cho thứ đang thay đổi trở thành một phần của cái khoá: ghim phiên bản ngay trong câu lệnh (<code>git clone --branch v1.4.2</code>), hoặc thêm một thứ vô hiệu hoá rẻ tiền như <code>ADD https://api.github.com/repos/me/lib/commits/main /tmp/commit.json</code> đứng trước lệnh clone.</div>
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> <code>RUN</code> được khoá theo CHUỖI câu lệnh còn <code>COPY</code> theo NỘI DUNG file — đó là lý do <code>apt-get update</code> đứng riêng một <code>RUN</code> là cái bẫy, và là lý do <code>touch</code> một file mà không sửa nó thì không tốn gì. Việc vô hiệu hoá LAN XUỐNG DƯỚI: trượt ở bước 3 là dựng lại mọi thứ sau nó, nên thứ tự là toàn bộ cuộc chơi. Và <code>--progress=plain</code> cùng <code>--no-cache</code> là hai cái cờ bạn cần để đo mọi thứ đó một cách trung thực.</p>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-17-2-cache-tang" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 17.2 — Layer cache: the line order that makes builds 5,6× slower</span><span class="lc-sub">These rules applied to a real API, measuring how line order makes the build 5.6× slower.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-5-1-cache-mua-gi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">GitHub Actions · 5.1 — What a cache actually buys</span><span class="lc-sub">Caching in CI: what a cache actually buys you, measured.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-17-2-cache-tang" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 17.2 — Cache tầng: thứ tự dòng làm build chậm gấp 5,6 lần</span><span class="lc-sub">Áp đúng các luật này lên một API thật, đo thứ tự dòng làm lượt dựng chậm gấp 5,6 lần.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-5-1-cache-mua-gi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">GitHub Actions · 5.1 — Một cái cache thật sự mua được gì</span><span class="lc-sub">Bộ đệm trong CI: đo xem một cái cache thật sự mua được gì.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 5.2 ─────────────────────────── */
@@ -945,6 +971,22 @@ docker build --progress=plain -f Dockerfile.fast -t o:m . 2&gt;&amp;1 \\
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 17.2: thứ tự dòng làm build chậm 9,3 lần</span><span class="lc-sub">npm ci trước mã nguồn, .dockerignore giữ file .env giả ngoài ảnh, một ARG ở đầu tệp làm npm ci chạy lại, và giả lập amd64 chậm 12,5 lần trên Mac arm64.</span></span>
   <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-5-2-khoa-cache" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">GitHub Actions · 5.2 — Keys, restore-keys, and immutability</span><span class="lc-sub">The same cache-key idea, for CI&#39;s own cache.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-5-2-khoa-cache" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">GitHub Actions · 5.2 — Khoá, restore-keys, và tính bất biến</span><span class="lc-sub">Gặp lại đúng ý tưởng khoá cache, cho bộ đệm của chính CI.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>
 `,
@@ -1424,6 +1466,32 @@ Description:  cached mount /root/.npm from exec /bin/sh -c npm ci --omit=dev --i
 <div class="pitfall"><strong>Bẫy:</strong> ghi KẾT QUẢ DỰNG vào một cache mount. <code>RUN --mount=type=cache,target=/app/dist npm run build</code> thành công, và <code>/app/dist</code> <strong>RỖNG trong cái ảnh kết quả</strong> — điểm gắn bị gỡ khi bước đó kết thúc và không gì nằm trong nó trở thành một tầng. Container sau đó khởi động rồi thoát ngay với <code>Cannot find module '/app/dist/index.js'</code>, với một lượt dựng xanh mướt phía sau. Cache mount là dành cho <em>ĐẦU VÀO</em> mà nếu không thì bạn phải tải lại: bộ đệm gói, bộ đệm trình biên dịch, kho mô-đun. Bất cứ thứ gì ảnh cuối PHẢI chứa thì đều phải được ghi vào một đường dẫn bình thường — hoặc chép ra khỏi cái mount trong CÙNG lệnh <code>RUN</code>.</div>
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> Cache mount làm cho một cú TRƯỢT cache trở nên rẻ, còn thứ tự các tầng làm cho cú trượt trở nên HIẾM — chúng giải hai nửa khác nhau của bài toán và bạn muốn cả hai. Hãy lưu đệm thư mục TẢI VỀ của trình quản lý gói (<code>~/.npm</code>, <code>~/.cache/pip</code>, <code>/go/pkg/mod</code>), đừng bao giờ lưu đệm chính cái cây đã cài. Và KHÔNG gì trong một cache mount kết thúc trong cái ảnh, nên kết quả dựng ghi vào đó sẽ biến mất và container hỏng lúc khởi động với một lượt dựng xanh phía sau.</p>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-5-1-cache-mua-gi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">GitHub Actions · 5.1 — What a cache actually buys</span><span class="lc-sub">Download caches are a CI concern too: what a cache actually buys.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-8-4-day-dia" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy VPS · 8.4 — ENOSPC, and the two disks that are full without being full</span><span class="lc-sub">A swollen cache filling a server disk, from a real incident.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-5-1-cache-mua-gi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">GitHub Actions · 5.1 — Một cái cache thật sự mua được gì</span><span class="lc-sub">Bộ đệm tải về cũng là chuyện của CI: một cái cache thật sự mua được gì.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-8-4-day-dia" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 8.4 — ENOSPC, và hai cái đĩa ĐẦY mà không đầy</span><span class="lc-sub">Cache phình làm đầy đĩa máy chủ, kể từ một sự cố thật.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 5.4 ─────────────────────────── */
@@ -1851,6 +1919,32 @@ docker buildx rm ci3</code></pre>
 <div class="pitfall"><strong>Bẫy:</strong> <code>--cache-to</code> âm thầm chẳng làm gì vì đang dùng bộ dựng mặc định. Bản cũ của bài này nói trình <code>docker</code> mặc định lặng lẽ phớt lờ <code>--cache-to</code>; thực tế không phải vậy. Trên engine còn dùng kho ảnh overlay2 kiểu cũ, nó HỎNG với lỗi <code>Cache export is not supported</code> (chỉ cho <code>type=inline</code>), còn trên Docker 29 dùng kho ảnh containerd thì nó xuất bình thường. Những phiên bản IM LẶNG thật sự là: xuất với <code>mode=min</code> mặc định trên Dockerfile nhiều stage nên chẳng lưu được gì có ích (xem phép đo trong bài này), hoặc <code>--cache-to</code> nằm trong một job chỉ chạy trên <code>main</code> trong khi mọi PR đọc một cache chưa bao giờ được ghi. Lượt dựng thành công, workflow xanh, và mọi lượt chạy đều nguội mãi mãi. Triệu chứng là một lượt dựng CI mất thời gian như nhau bất kể có gì thay đổi hay không. Hãy kiểm bằng <code>docker buildx inspect</code> rằng trình điều khiển là <code>docker-container</code>, và grep log dựng tìm dòng <code>exporting cache</code> — nếu dòng đó vắng mặt thì chẳng có gì được xuất cả.</div>
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> Một máy chạy CI mới tinh không có cache nào, nên mọi thứ ở phần trước của chương này đều vô giá trị ở đó cho tới khi bạn thêm <code>--cache-from</code>/<code>--cache-to</code>. Hãy dùng <code>mode=max</code> — giá trị mặc định <code>mode=min</code> chỉ xuất những tầng của ảnh cuối, và điều đó loại trừ cái stage dựng đắt tiền trong MỌI Dockerfile nhiều tầng. Và cache mount KHÔNG được xuất, nên trong CI một cú trượt tầng vẫn là một lượt tải đầy đủ: cache tầng thì đi theo, cache npm thì không.</p>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-15-2-build-anh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">GitHub Actions · 15.2 — Building the image once: multi-stage, two architectures, three tags, a signature</span><span class="lc-sub">The full multi-stage image build in CI: cache, multiple architectures and signing.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-13-3-github-actions-deploy" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy VPS · 13.3 — Deploying from GitHub Actions over SSH: one key, one command, one deploy at a time</span><span class="lc-sub">Taking that image from CI all the way to the server.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-15-2-build-anh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">GitHub Actions · 15.2 — Dựng ảnh một lần: multi-stage, hai kiến trúc, ba tag, một chữ ký</span><span class="lc-sub">Dựng trọn một ảnh nhiều stage trong CI: cache, nhiều kiến trúc và chữ ký.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-13-3-github-actions-deploy" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 13.3 — Deploy từ GitHub Actions qua SSH: một khoá, một lệnh, mỗi lần một deploy</span><span class="lc-sub">Đưa ảnh đó từ CI lên tận máy chủ.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 5.5 ─────────────────────────── */
@@ -2241,6 +2335,32 @@ Total:		40.23GB
 
 <div class="pitfall"><strong>Bẫy:</strong> tối ưu cái bước bạn NHÌN THẤY thay vì cái bước đang chậm. Một Dockerfile có hai mươi chỉ thị trông có vẻ kém hiệu quả — lắm lệnh <code>RUN</code>, một cặp rõ ràng là gộp được — trong khi 95% thời gian nằm ở đúng một lệnh <code>npm run build</code>. Gộp mấy cái <code>RUN</code> đó làm file gọn hơn và lượt dựng KHÔNG nhanh hơn, còn bạn thì mất độ mịn của cache (Bài 5.2). Hãy đo trước: <code>--progress=plain</code>, sắp xếp các dòng <code>DONE</code>, và chỉ đụng vào thứ nằm trên cùng. Vẫn là cái luật của mọi công việc tối ưu hiệu năng, và nó bị vi phạm liên tục với Dockerfile vì chúng TRÔNG như thứ liếc mắt là thấy.</div>
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> Có BA kiểu dựng chậm — nguội, ấm, và sau-một-lần-sửa — và mỗi kiểu chỉ vào một nguyên nhân khác nhau, nên hãy lấy đủ cả ba phép đo trước khi hình thành ý kiến. Hãy sắp xếp các dòng <code>DONE</code> từ <code>--progress=plain</code>: thường chỉ một hai bước là toàn bộ vấn đề. Và <code>docker build --check</code> không tốn gì mà bắt được biến chưa định nghĩa, nguồn <code>COPY</code> bị bỏ qua và cú pháp cũ trước khi chúng kịp tới một cái ảnh.</p>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-15-4-phuong-phap" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 15.8 — A tuning story end to end: measure, change one thing, verify</span><span class="lc-sub">Measure first, then fix — one full loop: measure, change one thing, verify.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-7-1-duong-toi-han" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">GitHub Actions · 7.1 — The critical path, and the job that was already waiting</span><span class="lc-sub">When the build lives in CI: finding the critical path of the whole pipeline.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-15-4-phuong-phap" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Hệ điều hành cho lập trình viên · 15.8 — Một câu chuyện tinh chỉnh trọn vẹn: đo, đổi một thứ, kiểm lại</span><span class="lc-sub">Đo trước rồi mới sửa — đi trọn một vòng: đo, đổi một thứ, kiểm lại.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-7-1-duong-toi-han" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">GitHub Actions · 7.1 — Đường tới hạn, và cái job vốn đã ngồi chờ</span><span class="lc-sub">Khi lượt dựng nằm trong CI: tìm đường tới hạn của cả pipeline.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

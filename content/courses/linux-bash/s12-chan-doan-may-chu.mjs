@@ -1974,6 +1974,7 @@ timedatectl | head -4</code></pre>
 notAfter=Nov  7 23:59:59 2026 GMT
 subject=CN = example.com
 issuer=C = US, O = Let's Encrypt, CN = R11</div>
+<p class="note-ct">example.com rotates its certificate and has changed CA since this block was recorded. Re-run on 13/11/2026: <code>issuer</code> was <code>Cloudflare TLS Issuing ECC CA 3</code>, valid from Sep 26 to Dec 25 2026. Your values will differ again — read the fields (dates against today, subject against the name you asked for, issuer), not the values.</p>
 <div class="kv-grid">
   <div class="kv"><span class="k">certificate has expired</span><span class="v">Check <code>notAfter</code> against the real date. Then check the renewal timer that should have prevented it: <code>systemctl list-timers | grep certbot</code> (Lesson 11.2). An expired certificate is nearly always a broken renewal job, not a certificate problem.</span></div>
   <div class="kv"><span class="k">certificate is not yet valid</span><span class="v">Almost never the certificate — it is the CLIENT's clock. A container or VM with a wrong date rejects perfectly good certificates. <code>timedatectl</code> on the machine doing the complaining.</span></div>
@@ -2265,6 +2266,7 @@ timedatectl | head -4</code></pre>
 notAfter=Nov  7 23:59:59 2026 GMT
 subject=CN = example.com
 issuer=C = US, O = Let's Encrypt, CN = R11</div>
+<p class="note-ct">example.com xoay chứng chỉ và đã đổi CA kể từ lúc khối này được ghi. Chạy lại ngày 13/11/2026: <code>issuer</code> là <code>Cloudflare TLS Issuing ECC CA 3</code>, hiệu lực từ 26/9 tới 25/12/2026. Giá trị của bạn sẽ lại khác — hãy đọc các TRƯỜNG (ngày so với hôm nay, subject so với tên bạn hỏi, issuer), đừng so giá trị.</p>
 <div class="kv-grid">
   <div class="kv"><span class="k">certificate has expired</span><span class="v">Hãy đối chiếu <code>notAfter</code> với ngày thật. Rồi kiểm cái timer gia hạn lẽ ra đã phải ngăn chuyện đó: <code>systemctl list-timers | grep certbot</code> (Bài 11.2). Một chứng chỉ hết hạn gần như luôn là một công việc gia hạn hỏng, không phải một vấn đề về chứng chỉ.</span></div>
   <div class="kv"><span class="k">certificate is not yet valid</span><span class="v">Gần như không bao giờ là chứng chỉ — đó là ĐỒNG HỒ CỦA MÁY KHÁCH. Một container hay máy ảo sai ngày sẽ từ chối những chứng chỉ hoàn toàn tốt. Hãy chạy <code>timedatectl</code> trên cái máy đang phàn nàn.</span></div>

@@ -636,6 +636,22 @@ EOF</code></pre>
   <span class="lc-cta">MỞ BÀI NODE.JS →</span>
 </a>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-15-2-build-anh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">GitHub Actions · 15.2 — Building the image once: multi-stage, two architectures, three tags, a signature</span><span class="lc-sub">Multi-stage builds in CI, from build to signature.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-15-2-build-anh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">GitHub Actions · 15.2 — Dựng ảnh một lần: multi-stage, hai kiến trúc, ba tag, một chữ ký</span><span class="lc-sub">Dựng ảnh nhiều tầng trong CI, làm trọn từ dựng tới gắn chữ ký.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 6.2 ─────────────────────────── */
@@ -1297,6 +1313,32 @@ Digest:    sha256:b6f26b36c8ff49624cfdac716b8ea1138d606df02586a77d364bb5536a634f
 <div class="pitfall"><strong>Bẫy:</strong> chuyển sang Alpine "cho ảnh nhỏ đi" rồi đem đi vì lượt dựng đã qua. Bước cài THÀNH CÔNG — npm tìm thấy một bản dựng sẵn cho musl, hoặc âm thầm biên dịch từ mã nguồn — và cú hỏng hiện ra lúc CHẠY, trên máy chủ, dưới dạng một mô-đun không nạp được hoặc một engine không khởi động nổi. Tệ hơn, vài thư viện không hỏng hẳn mà chỉ SUY GIẢM: một trình phân giải DNS hơi khác tạo ra những cú tra cứu hỏng chập chờn dưới tải mà chẳng bao giờ tái hiện được ở máy. Cái luật: đổi ảnh nền là một thay đổi cần một lượt CHẠY THẬT, không phải một lượt dựng xanh. Hãy khởi động container, gọi một endpoint thật, và đọc log — còn nếu ứng dụng dùng Prisma, mô-đun native hay wheel Python thì hãy dành sẵn một buổi chiều, hoặc đơn giản là dùng <code>-slim</code>.</div>
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> Alpine dùng musl còn mọi thứ khác dùng glibc; chúng KHÔNG tương thích nhị phân, và đó là lý do mô-đun native, wheel Python và engine Prisma vỡ đúng ở đó. <code>-slim</code> là mặc định an toàn cho một ảnh cuối — hơn Alpine chừng 40MB và không có bất ngờ nào — còn distroless là câu trả lời production tốt hơn khi ứng dụng đã ổn định. Và hãy ghim bản phát hành hệ điều hành ngay trong tag, không chỉ phiên bản ngôn ngữ, để việc nâng OS nền là một QUYẾT ĐỊNH chứ không phải một sự cố.</p>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-13-2-registry-build-o-may-khac" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy VPS · 13.2 — A registry, and building somewhere else: proving the image runs before you push it</span><span class="lc-sub">This exact check placed in a build-elsewhere pipeline, with the glibc-to-musl incident told end to end.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-11-3-raw" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 11.2 — Below libc: raw syscalls, no-libc programs, and how Node, the JVM and Go reach the kernel</span><span class="lc-sub">What libc really does for a program — by writing one that needs no libc.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-13-2-registry-build-o-may-khac" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 13.2 — Registry và dựng ở máy khác: chứng minh ảnh chạy được trước khi đẩy</span><span class="lc-sub">Đặt đúng chốt kiểm này vào đường dựng ở máy khác, kể lại sự cố glibc chép sang musl từ đầu tới cuối.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-11-3-raw" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Hệ điều hành cho lập trình viên · 11.2 — Dưới libc: syscall trần, chương trình không libc, Node/JVM/Go tới nhân</span><span class="lc-sub">libc thật ra làm gì cho chương trình — bằng cách viết hẳn một chương trình không cần libc.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 6.3 ─────────────────────────── */
@@ -1485,6 +1527,7 @@ dk06-api:single   dd89daa3d63b       1.88GB          489MB
 image size: 90MB
 size ok</div>
 <p>The same script on the same image reports roughly a quarter of what it reported on Docker 27, so a 250MB threshold that used to be tight is now very loose. That is not wrong — compressed bytes are what a deploy downloads — but <strong>after upgrading Docker, re-derive the threshold</strong> from today's numbers instead of trusting last year's.</p>
+<div class="pitfall"><strong>Measured again on a Mac (12/11/2026):</strong> on Docker Desktop with Engine 29.8 (macOS, arm64) the very same command returned <code>1874302097</code> — that is the DISK USAGE column, not CONTENT SIZE — and the gate on the slim image printed <code>image size: 378MB</code> / <code>over</code> instead of <code>90MB</code> / <code>size ok</code>. So what <code>{{.Size}}</code> measures depends on the Docker version <em>and</em> the platform/image store. Before you set or trust a threshold, run <code>docker images &lt;image&gt;</code> next to <code>docker image inspect -f '{{.Size}}' &lt;image&gt;</code> and check which column the number matches — on the machine that actually runs the gate (usually CI).</div>
 
 
 <h3>A worked before and after</h3>
@@ -1786,6 +1829,7 @@ dk06-api:single   dd89daa3d63b       1.88GB          489MB
 image size: 90MB
 size ok</div>
 <p>Cùng một script trên cùng một ảnh báo con số chỉ khoảng một phần tư so với trên Docker 27, nên một ngưỡng 250MB từng là chặt nay rất lỏng. Không phải là sai — số byte nén mới là thứ một lượt deploy phải tải — nhưng <strong>sau khi nâng cấp Docker, hãy tính lại ngưỡng</strong> từ số đo hôm nay thay vì tin số của năm ngoái.</p>
+<div class="pitfall"><strong>Đo lại trên Mac (12/11/2026):</strong> trên Docker Desktop với Engine 29.8 (macOS, arm64), đúng lệnh đó trả <code>1874302097</code> — tức cột DISK USAGE, không phải CONTENT SIZE — và cổng chặn trên ảnh gọn in <code>image size: 378MB</code> / <code>over</code> thay vì <code>90MB</code> / <code>size ok</code>. Vậy <code>{{.Size}}</code> đo cái gì còn tuỳ phiên bản Docker <em>và</em> nền tảng/kho ảnh. Trước khi đặt hay tin một ngưỡng, hãy chạy <code>docker images &lt;ảnh&gt;</code> cạnh <code>docker image inspect -f '{{.Size}}' &lt;ảnh&gt;</code> và xem con số khớp cột nào — trên đúng cái máy chạy cổng chặn (thường là CI).</div>
 
 
 <h3>Một ví dụ trước và sau</h3>
@@ -1907,6 +1951,32 @@ Count  Wasted Space  File Path
 
 <div class="pitfall"><strong>Bẫy:</strong> xoá file ở một lệnh <code>RUN</code> phía sau rồi mong cái ảnh nhỏ đi. <code>RUN apk add python3 make g++</code> rồi tới <code>RUN apk del python3 make g++</code> để lại trọn 188MB ở tầng trước, thêm một tầng whiteout lên trên, và làm cho ảnh LỚN HƠN một chút (Bài 1.2). Điều tương tự áp cho <code>RUN rm -rf /var/lib/apt/lists/*</code> đứng riêng một chỉ thị, và cho việc xoá một bí mật bạn vừa chép vào. Hai câu trả lời đúng: làm phần cài và phần dọn trong <strong>CÙNG</strong> một <code>RUN</code>, để chúng bù trừ trong một tầng; hoặc dùng một stage dựng và HOÀN TOÀN không chép mấy công cụ đó sang — cái này tốt hơn, vì nó còn giữ được độ mịn của cache mà cách kia làm bạn mất.</div>
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> Hãy ĐO trước khi tối ưu: <code>docker history</code> và <code>dive</code> tìm ra cái thư mục 400MB trong mười giây, và nó thường không nằm ở chỗ bạn tưởng. Dựng nhiều tầng và tỉa thư viện production chiếm phần lớn khoản tiết kiệm khả dĩ; mọi thứ sau hai cái đó chỉ là con số làm tròn. Và xoá ở một tầng phía sau KHÔNG BAO GIỜ làm nhỏ được thứ gì — hãy dọn ngay trong cùng lệnh <code>RUN</code>, hoặc đừng bao giờ đem cái thứ đó vào stage cuối.</p>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-17-1-anh-docker" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 17.1 — The image: 440MB down to 58,8MB</span><span class="lc-sub">The same slimming ladder on a real API, from 440 MB to 58.8 MB.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-8-4-day-dia" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy VPS · 8.4 — ENOSPC, and the two disks that are full without being full</span><span class="lc-sub">How fat images fill a server disk, from a real incident.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-17-1-anh-docker" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 17.1 — Ảnh Docker: từ 440MB xuống 58,8MB</span><span class="lc-sub">Đi đúng thang giảm cân này trên một API thật, từ 440 MB xuống 58,8 MB.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-8-4-day-dia" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 8.4 — ENOSPC, và hai cái đĩa ĐẦY mà không đầy</span><span class="lc-sub">Ảnh béo làm đầy đĩa máy chủ ra sao, kể từ một sự cố thật.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -2587,6 +2657,32 @@ done</code></pre>
 <div class="pitfall"><strong>Bẫy:</strong> thêm <code>USER node</code> vào một cái ảnh mà ứng dụng ghi vào một thư mục thuộc sở hữu root. Lượt dựng thành công, cái ảnh trên giấy tờ thì nhỏ hơn và an toàn hơn, và container chết lúc khởi động với <code>EACCES: permission denied, open '/app/logs/app.log'</code> — hoặc tệ hơn, khởi động ngon lành rồi hỏng vài giờ sau ở lần ghi đầu tiên. Hai thứ ngăn được nó: <code>COPY --chown</code> cho MỌI đường dẫn ứng dụng sở hữu, và chạy container một lần với <code>--read-only</code> TRƯỚC khi đem đi, vì khi đó bất cứ thứ gì cần ghi sẽ hỏng ngay lập tức và lộ ra thay vì hỏng lúc 3 giờ sáng. <code>docker diff</code> trên một container đang chạy bình thường liệt kê chính xác những đường dẫn cần khai báo.</div>
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> Mặc định KHÔNG có user namespace, nên root trong container là root trên máy chủ — <code>USER</code> với một UID số cao là dòng giá trị nhất trong một Dockerfile, chỉ sau dòng chọn ảnh nền. <code>--read-only</code> cộng một <code>--tmpfs</code> cho vài đường dẫn cần ghi chặn được phần lớn thứ mà kẻ tấn công sẽ làm tiếp theo, và chỉ tốn công liệt kê chúng ra. Và <code>--privileged</code> hay một cái <code>docker.sock</code> được gắn vào chính là root trên máy chủ: đôi khi cần thiết, không bao giờ được tuỳ tiện.</p>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-9-7-capabilities" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 9.7 — Beyond rwx: capabilities, ACLs, container users — and four permission incidents</span><span class="lc-sub">Root is really a set of capabilities, dissected one by one — including why root in a container has only 14.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-14-1-ben-trong-nhan" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 14.1 — Inside the kernel: system calls, /proc, namespaces, cgroups and capabilities</span><span class="lc-sub">How containers are built from namespaces, cgroups and capabilities, with the lid off.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-9-7-capabilities" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Hệ điều hành cho lập trình viên · 9.7 — Vượt khỏi rwx: capabilities, ACL, người dùng trong container — và bốn sự cố về quyền</span><span class="lc-sub">Root thật ra là một bộ capability, mổ xẻ từng cái — kể cả vì sao root trong container chỉ có 14.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-14-1-ben-trong-nhan" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 14.1 — Bên trong nhân: system call, /proc, namespaces, cgroups và capabilities</span><span class="lc-sub">Container được dựng từ namespace, cgroup và capability thế nào, mở nắp cho bạn xem.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 6.5 ─────────────────────────── */
@@ -3153,6 +3249,22 @@ có .trivyignore trong thư mục: exit=0</div>
 
 <div class="pitfall"><strong>Bẫy:</strong> coi số lượng CVE là điểm số. Đuổi theo con số 0 đẻ ra hai hậu quả tồi: người ta đổi sang một cái ảnh nền nhỏ hơn nhưng sai với gói phụ thuộc của mình (Bài 6.2), và người ta thêm những dòng bỏ qua vơ đũa cả nắm để build đỏ thành xanh. Không cái nào cải thiện an toàn cả. Con số chỉ là điểm khởi đầu cho một cuộc trao đổi, còn những câu hỏi thật sự quan trọng là: đã có bản vá chưa, đoạn mã dính lỗ hổng có với tới được từ ứng dụng của chúng ta không, và thứ này đã nằm trên production bao lâu rồi. Một cái ảnh có 40 phát hiện mức thấp chưa có bản vá nằm trong những thư viện bạn không bao giờ gọi tới thì lành mạnh hơn một cái ảnh có 3 phát hiện mà bạn đã ngó lơ tám tháng vì cổng chặn ồn quá nên bị tắt.</div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Lọc lấy HIGH và CRITICAL <em>đã có bản vá</em> trước khi bạn có ý kiến — một cổng chặn nổ vì những phát hiện không vá được sẽ bị tắt, và rồi chẳng còn gì được kiểm. Tách phát hiện của ảnh nền (sửa bằng cách nâng nền) khỏi phát hiện của gói phụ thuộc (sửa trong lockfile), vì chúng khác người chịu trách nhiệm và khác cách sửa. Và một lượt dựng lại theo lịch có <code>--pull</code> cộng với một con bot ghim digest mang lại nhiều an toàn hơn mọi máy quét, vì nó vá mà không cần ai phải để ý.</p>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-14-2-bao-mat-chuoi-cung-ung" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">GitHub Actions · 14.2 — Supply-chain security: pull_request_target, injection, scanners, Dependabot</span><span class="lc-sub">The supply chain does not stop at the image: protecting the CI pipeline that builds it.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-14-2-bao-mat-chuoi-cung-ung" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">GitHub Actions · 14.2 — Bảo mật chuỗi cung ứng: pull_request_target, tiêm lệnh, máy quét, Dependabot</span><span class="lc-sub">Chuỗi cung ứng không dừng ở ảnh: bảo vệ chính đường CI dựng ra cái ảnh đó.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

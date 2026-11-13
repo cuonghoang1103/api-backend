@@ -650,6 +650,22 @@ linux/arm64</div>
 
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> Bước RUN nặng thì dựng mỗi nền tảng trên một máy có đúng CPU đó — giả lập đúng nhưng chậm. Thông tin đăng nhập đi qua <code>--secret</code> và <code>--ssh</code>, và đổi bí mật không làm vỡ cache. Một <code>docker-bake.hcl</code> cộng với attestation biến câu hỏi "mình đã dựng cái này thế nào?" thành một file đọc được.</p>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-14-3-phat-hanh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">GitHub Actions · 14.3 — Releases: GitHub Releases, semantic-release, GHCR, npm, attestations</span><span class="lc-sub">Releases with attestations: signing what the pipeline built and recording where it came from.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-14-3-phat-hanh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">GitHub Actions · 14.3 — Phát hành: GitHub Release, semantic-release, GHCR, npm và attestation</span><span class="lc-sub">Phát hành kèm attestation: ký thứ pipeline đã dựng và ghi lại nó từ đâu ra.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 15.2 ─────────────────────────── */
@@ -1051,6 +1067,32 @@ ${slide('dk-15', 14, 'Chọn gì khi nào')}
 </a>
 
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> Với tới được socket của một daemon chạy root là có root, bất kể container được siết thế nào. Docker rootless và Podman đẩy root vào một user namespace, nên thoát khỏi container chỉ đưa tới một user thường — đổi lại mất vài tính năng. Các lớp mặc định (seccomp, capability, AppArmor/SELinux) bảo vệ bạn khỏi container, không khỏi những người ra lệnh được cho daemon.</p>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-12-1-namespaces" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 12.1 — A container is a process with a different view: the namespaces, one by one</span><span class="lc-sub">Every namespace taken apart by hand — including the user namespace that rootless Docker and Podman are built on.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-11-4-seccomp" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 11.7 — Filtering syscalls with seccomp: EPERM, ENOSYS, SIGSYS and Docker’s profile</span><span class="lc-sub">Filtering syscalls with seccomp: EPERM, ENOSYS, SIGSYS and Docker&#39;s default profile.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-12-1-namespaces" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Hệ điều hành cho lập trình viên · 12.1 — Container là một tiến trình nhìn thế giới khác đi: từng namespace một</span><span class="lc-sub">Tách từng namespace bằng tay — kể cả user namespace, nền móng của Docker rootless và Podman.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-11-4-seccomp" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Hệ điều hành cho lập trình viên · 11.7 — Lọc syscall bằng seccomp: EPERM, ENOSYS, SIGSYS và hồ sơ của Docker</span><span class="lc-sub">Lọc syscall bằng seccomp: EPERM, ENOSYS, SIGSYS và hồ sơ mặc định của Docker.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -1596,6 +1638,22 @@ docker_gwbridge</div>
 </a>
 
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> Swarm đã nằm sẵn trong Docker Engine của bạn: <code>swarm init</code>, và một service giữ đúng số bản bạn yêu cầu, trên nút nào cũng được. Cập nhật cuốn chiếu có khoảng nghỉ đã giữ cho mọi request đều được trả lời, đo thật. File compose phần lớn chạy được với <code>stack deploy</code> — nhưng hãy dựng ảnh trước, và đừng bao giờ trông vào <code>depends_on</code>.</p>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-3-3-xanh-lam" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy VPS · 3.3 — Blue-green: the same deploy, zero failures</span><span class="lc-sub">Zero-downtime deploys on one VPS without Swarm, blue-green style.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-3-3-xanh-lam" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 3.3 — Xanh-lam: cùng lần deploy đó, không cái nào hỏng</span><span class="lc-sub">Deploy không gián đoạn trên một VPS mà không cần Swarm, kiểu xanh lam.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

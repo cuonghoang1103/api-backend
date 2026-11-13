@@ -558,6 +558,32 @@ api: ra được Internet</div>
 <div class="pitfall"><strong>Bẫy:</strong> thiết kế stack bằng cách thêm dần từng dịch vụ rồi để mạng mặc định của compose ôm hết. Nó chạy được ngay, và đó chính là cái bẫy — mọi dịch vụ với tới được mọi dịch vụ khác, nên một lỗ hổng trong con worker thay đổi kích thước ảnh chỉ cách bảng người dùng của bạn đúng một lệnh <code>psql</code>, mà chẳng ai để ý vì có gì hỏng đâu. Hãy quyết cách tách mạng ngay từ đầu, khi mới có ba dịch vụ và việc đó tốn hai phút, thay vì đợi tới lúc có chín cái và tách chúng ra nghĩa là phải kiểm lại mọi đường đi. Cái luật sống sót được khi va vào thực tế: một dịch vụ chỉ vào một mạng nếu nó phải <em>chủ động mở</em> kết nối trên đó, và chỉ reverse proxy mới công bố cổng.</div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Một dịch vụ công bố cổng còn mọi thứ khác chỉ với tới được bằng tên container — riêng quyết định đó loại bỏ phần lớn tai nạn ở Chương 8. Migration thuộc về một dịch vụ riêng có <code>service_completed_successfully</code> canh cửa, để một lần migration hỏng dừng cả lượt deploy thay vì đẻ ra ứng dụng chạy nửa vời. Và mấy dòng <code>networks:</code> là một chính sách kiểm soát truy cập: hãy viết chúng trước các dịch vụ, đừng viết sau.</p>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-10-3-reverse-forward" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Networking for Developers · 10.3 — Reverse proxy, forward proxy and tunnels</span><span class="lc-sub">What a reverse proxy is, and how it differs from a forward proxy.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-13-1-compose-tren-vps" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy VPS · 13.1 — Compose on the VPS: one file that describes the whole machine</span><span class="lc-sub">This exact blueprint on a real VPS.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-10-3-reverse-forward" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Networking for Developers · 10.3 — Reverse proxy, forward proxy và đường hầm</span><span class="lc-sub">Reverse proxy là gì, khác forward proxy ra sao.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-13-1-compose-tren-vps" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 13.1 — Compose trên VPS: một tệp mô tả cả cái máy</span><span class="lc-sub">Đưa đúng bản vẽ này lên một VPS thật.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 10.2 ─────────────────────────── */
@@ -1101,6 +1127,32 @@ ket noi OK</div>
 <div class="pitfall"><strong>Bẫy:</strong> đổi <code>POSTGRES_PASSWORD</code> trong <code>.env</code> rồi trông đợi một lượt deploy sẽ áp nó. Biến đó được đọc đúng một lần, lúc thư mục dữ liệu được khởi tạo; trên một volume đã có sẵn nó bị phớt lờ hoàn toàn. Ứng dụng khi đó xác thực hỏng với mật khẩu mới trong khi cơ sở dữ liệu vẫn giữ mật khẩu cũ, và cách chữa trông có vẻ hiển nhiên — <code>docker compose down -v</code> để "làm lại từ đầu" — thì XOÁ MẤT cơ sở dữ liệu. Cách chữa thật là một câu SQL: <code>docker compose exec db psql -U blog -c "ALTER USER blog PASSWORD 'mới'"</code>, rồi cập nhật <code>.env</code> với <code>DATABASE_URL</code> cho khớp và dựng lại API. Cũng luật chỉ-chạy-một-lần đó áp cho <code>POSTGRES_DB</code>, <code>POSTGRES_USER</code> và mọi thứ trong <code>/docker-entrypoint-initdb.d</code>.</div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> <code>/docker-entrypoint-initdb.d</code> và <code>POSTGRES_PASSWORD</code> chỉ có tác dụng khi thư mục dữ liệu còn rỗng — trên một volume đã có sẵn thì cả hai bị lặng lẽ phớt lờ. Hãy cho Redis cả <code>maxmemory</code> lẫn một <code>maxmemory-policy</code>, không thì nó phình tới khi bộ giết OOM lấy nó đi thay vì đẩy bớt khoá. Và hãy ghim số hiệu phụ của ảnh cơ sở dữ liệu: một cú nhảy phiên bản chính sẽ không chịu khởi động trên thư mục dữ liệu đang có, và nó sẽ xảy ra giữa lúc deploy.</p>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-15-1-pg-dump" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">PostgreSQL · 15.1 — Logical backups with pg_dump</span><span class="lc-sub">Dump, restore, and verify a logical backup.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/redis/learn?lessonSlug=rd-9-2-day-khoa" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Redis · 9.2 — maxmemory and the eight eviction policies</span><span class="lc-sub">maxmemory and Redis&#39;s eight eviction policies.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-15-1-pg-dump" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">PostgreSQL · 15.1 — Sao lưu logic bằng pg_dump</span><span class="lc-sub">Đổ ra, đổ lại, và kiểm một bản sao lưu logic.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/redis/learn?lessonSlug=rd-9-2-day-khoa" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Redis · 9.2 — maxmemory và tám chính sách đẩy khoá</span><span class="lc-sub">maxmemory và tám chính sách đẩy khoá của Redis.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 10.3 ─────────────────────────── */
@@ -1153,6 +1205,18 @@ CMD ["node", "dist/index.js"]</code></pre>
   <div class="kv"><span class="k"><code>tini</code> as ENTRYPOINT</span><span class="v">Node as PID 1 does not reap zombies and handles signals oddly (Lesson 1.3). <code>tini</code> is 10KB and makes <code>docker stop</code> behave.</span></div>
   <div class="kv"><span class="k"><code>USER node</code> last</span><span class="v">After every <code>COPY --chown=node:node</code>, so the files are owned correctly and the process still cannot write outside them (Lesson 6.4).</span></div>
 </div>
+
+<div class="callout warn"><strong>Re-measured 12/11/2026 with the unpinned <code>node:22-alpine</code> (Docker Desktop, Engine 29.8): that image has no OpenSSL.</strong> Prisma cannot detect the libssl version, guesses <code>openssl-1.1.x</code>, generates the wrong engine (<code>libquery_engine-linux-musl-arm64-openssl-1.1.x.so.node</code>), and the <code>migrate</code> container — on the internal network, with no internet — then tries to download the right one and exits 1:</div>
+<div class="out">$ grep -n 'FROM\\|apk' Dockerfile.thieu-openssl
+2:FROM node:22-alpine AS deps
+9:FROM node:22-alpine AS build
+16:FROM node:22-alpine AS production
+19:RUN apk add --no-cache tini
+$ docker compose run --rm migrate
+prisma:warn Prisma failed to detect the libssl/openssl version to use, and may not work as expected. Defaulting to "openssl-1.1.x".
+Please manually install OpenSSL and try installing Prisma again.
+Error: request to https://binaries.prisma.sh/all_commits/605197351a3c…/linux-musl-arm64-openssl-1.1.x/libquery_engine.so.node.gz.sha256 failed, reason: getaddrinfo EAI_AGAIN binaries.prisma.sh</div>
+<p>The fix is one line in <strong>each of the three stages</strong> — <code>RUN apk add --no-cache openssl</code> in <code>deps</code> and <code>build</code> (where <code>prisma generate</code> runs) and <code>RUN apk add --no-cache tini openssl</code> in <code>production</code> (where the engine loads). With it the engines come out as <code>…musl-arm64-openssl-3.0.x</code> and <code>…musl-openssl-3.0.x</code> again, and the image measured 413MB DISK USAGE / 115MB CONTENT SIZE. If you pin a base image, re-check this whenever you move the pin.</p>
 <div class="callout warn"><strong>The Prisma engine has to match the base image's libc.</strong> Alpine is musl, Debian-based images are glibc, and a prebuilt engine for one does not load on the other. This is the exact failure this project shipped: a build that used the default <code>Dockerfile</code> instead of <code>Dockerfile.backend</code> put a <code>debian-openssl-3.0.x</code> engine into an Alpine image, the build was green, the push was green, and the API returned 502 for seven minutes while the container restarted in a loop. Declare it explicitly and verify it starts:
 <pre><code class="language-bash"><span class="tok-comment"># prisma/schema.prisma</span>
 generator client {
@@ -1494,6 +1558,18 @@ CMD ["node", "dist/index.js"]</code></pre>
   <div class="kv"><span class="k"><code>tini</code> làm ENTRYPOINT</span><span class="v">Node ở vị trí PID 1 không thu dọn tiến trình mồ côi và xử lý tín hiệu một cách kỳ lạ (Bài 1.3). <code>tini</code> nặng 10KB và làm cho <code>docker stop</code> hành xử đúng.</span></div>
   <div class="kv"><span class="k"><code>USER node</code> đặt cuối</span><span class="v">Sau mọi lệnh <code>COPY --chown=node:node</code>, để file thuộc quyền sở hữu đúng mà tiến trình vẫn không ghi được ra ngoài chúng (Bài 6.4).</span></div>
 </div>
+
+<div class="callout warn"><strong>Đo lại ngày 12/11/2026 với <code>node:22-alpine</code> không ghim (Docker Desktop, Engine 29.8): ảnh đó KHÔNG có OpenSSL.</strong> Prisma không dò được phiên bản libssl, đoán bừa <code>openssl-1.1.x</code>, sinh nhầm engine (<code>libquery_engine-linux-musl-arm64-openssl-1.1.x.so.node</code>), rồi container <code>migrate</code> — nằm trên mạng internal, không có internet — cố tải engine đúng về và thoát 1:</div>
+<div class="out">$ grep -n 'FROM\\|apk' Dockerfile.thieu-openssl
+2:FROM node:22-alpine AS deps
+9:FROM node:22-alpine AS build
+16:FROM node:22-alpine AS production
+19:RUN apk add --no-cache tini
+$ docker compose run --rm migrate
+prisma:warn Prisma failed to detect the libssl/openssl version to use, and may not work as expected. Defaulting to "openssl-1.1.x".
+Please manually install OpenSSL and try installing Prisma again.
+Error: request to https://binaries.prisma.sh/all_commits/605197351a3c…/linux-musl-arm64-openssl-1.1.x/libquery_engine.so.node.gz.sha256 failed, reason: getaddrinfo EAI_AGAIN binaries.prisma.sh</div>
+<p>Cách chữa là một dòng ở <strong>CẢ BA tầng</strong> — <code>RUN apk add --no-cache openssl</code> ở <code>deps</code> và <code>build</code> (nơi <code>prisma generate</code> chạy) và <code>RUN apk add --no-cache tini openssl</code> ở <code>production</code> (nơi engine được nạp). Có nó, engine lại ra đúng <code>…musl-arm64-openssl-3.0.x</code> và <code>…musl-openssl-3.0.x</code>, và ảnh đo được 413MB DISK USAGE / 115MB CONTENT SIZE. Nếu bạn ghim ảnh nền, hãy kiểm lại chuyện này mỗi lần dời mốc ghim.</p>
 <div class="callout warn"><strong>Engine của Prisma phải KHỚP với libc của ảnh nền.</strong> Alpine là musl, ảnh nền Debian là glibc, và một engine dựng sẵn cho bên này không nạp được ở bên kia. Đây đúng là sự cố mà dự án này từng đẩy lên: một lượt dựng dùng <code>Dockerfile</code> mặc định thay vì <code>Dockerfile.backend</code> đã nhét một engine <code>debian-openssl-3.0.x</code> vào một cái ảnh Alpine, dựng xanh, đẩy xanh, rồi API trả 502 suốt bảy phút trong khi container restart thành vòng lặp. Hãy khai báo nó tường minh và kiểm nó khởi động được:
 <pre><code class="language-bash"><span class="tok-comment"># prisma/schema.prisma</span>
 generator client {
@@ -1791,6 +1867,32 @@ api: 200</div>
 
 <div class="pitfall"><strong>Bẫy:</strong> chạy migration từ entrypoint của API thay vì từ một dịch vụ riêng. Nhìn thì gọn hơn và nó hỏng theo hai kiểu mà một dịch vụ migration không hỏng. Thứ nhất, nếu có lúc nào đó bạn chạy nhiều hơn một bản sao API, mọi bản sao sẽ đua nhau áp cùng một migration — khoá cố vấn của Prisma thường thì cứu được bạn, và chữ "thường thì" ở đây đang gánh việc thật. Thứ hai, một lần migration hỏng biến thành một API sập-rồi-restart-vòng-lặp chứ không phải một cú dừng rõ ràng: container khởi động lại, thử migration lại, hỏng tiếp, và log của bạn đầy cùng một lỗi trong khi lượt deploy báo thành công. Một dịch vụ <code>migrate</code> riêng với <code>restart: "no"</code> và <code>service_completed_successfully</code> cho bạn một lượt chạy, một mã thoát rõ ràng, và một lượt deploy biết dừng khi thay đổi schema hỏng.</div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Một cái ảnh với ba câu lệnh bảo đảm API, worker và migration là cùng một mã — dựng một lần, chỉ khác ở <code>command</code>. Migration thuộc về dịch vụ riêng của nó với <code>restart: "no"</code>, có <code>service_completed_successfully</code> canh cửa, không bao giờ nằm trong entrypoint. Và module gốc gắn với libc của ảnh nền: hãy khai <code>binaryTargets</code> của Prisma, và kiểm cái ảnh khởi động được thật trước khi đưa nó lên — build xanh không phải là một container đang chạy.</p>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-5-4-migration-nua-chung" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy VPS · 5.4 — The migration that half-applied</span><span class="lc-sub">A half-applied migration, and how to recover safely.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-17-1-anh-docker" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 17.1 — The image: 440MB down to 58,8MB</span><span class="lc-sub">A Docker image for Node, from 440 MB down to 58.8 MB.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-5-4-migration-nua-chung" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 5.4 — Cái migration áp dụng NỬA CHỪNG</span><span class="lc-sub">Migration áp dụng nửa chừng, và cách khôi phục an toàn.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-17-1-anh-docker" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 17.1 — Ảnh Docker: từ 440MB xuống 58,8MB</span><span class="lc-sub">Một ảnh Docker cho Node, từ 440 MB xuống còn 58,8 MB.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -2253,6 +2355,32 @@ export default function Home() { return &lt;p&gt;site: {process.env.NEXT_PUBLIC_
 <div class="pitfall"><strong>Bẫy:</strong> đổi một biến <code>NEXT_PUBLIC_*</code> trên máy chủ, khởi động lại container, rồi thấy trang web y nguyên. Chẳng có gì hỏng cả — giá trị đó đã bị thay vào JavaScript lúc cái ảnh được dựng, và khởi động lại một container thì không sửa được file nằm bên trong ảnh. Triệu chứng còn tệ hơn cả khó hiểu khi biến đó bị <em>thiếu</em> lúc dựng: gói JS khi ấy chứa <code>undefined</code>, và mã hoặc rơi về một giá trị mặc định không ai nhớ là mình đã viết, hoặc gọi tới <code>undefined/api/posts</code> rồi trả 404 theo kiểu trông hệt như một lỗi định tuyến. Hai thói quen: ưu tiên URL tương đối cùng gốc để không có gì phải nướng vào, và khi bạn thật sự cần một biến công khai lúc dựng thì hãy truyền nó dưới dạng <code>arg</code> rồi grep gói JS đã dựng tìm giá trị đó trước khi deploy.</div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> <code>output: 'standalone'</code> biến một cái ảnh 1,3GB thành khoảng 190MB, nhưng bạn phải tự chép <code>public/</code> và <code>.next/static</code>. <code>NEXT_PUBLIC_*</code> bị đóng đinh lúc dựng và được gửi tới mọi trình duyệt — nó là build arg, không bao giờ là biến lúc chạy, và không bao giờ là chỗ để khoá của bên thứ ba. Và hãy đặt <code>HOSTNAME=0.0.0.0</code>, không thì Next chỉ nghe ở địa chỉ Docker đã nhét vào <code>HOSTNAME</code> — ID của container — và mọi phép kiểm tới <code>127.0.0.1</code> đều bị từ chối.</p>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nextjs/learn?lessonSlug=nextjs-20-2-env-next-public" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Next.js · 20.2 — Environment variables and the NEXT_PUBLIC trap</span><span class="lc-sub">The NEXT_PUBLIC trap from the Next.js side, from first principles.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nextjs/learn?lessonSlug=nextjs-20-3-docker" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Next.js · 20.3 — Docker: packaging the app to run anywhere</span><span class="lc-sub">Packaging a Next app to run anywhere.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nextjs/learn?lessonSlug=nextjs-20-2-env-next-public" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Next.js · 20.2 — Biến môi trường và bẫy NEXT_PUBLIC</span><span class="lc-sub">Bẫy NEXT_PUBLIC nhìn từ phía Next.js, từ gốc.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nextjs/learn?lessonSlug=nextjs-20-3-docker" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Next.js · 20.3 — Docker: đóng gói app để chạy ở đâu cũng được</span><span class="lc-sub">Đóng gói một ứng dụng Next để chạy ở đâu cũng được.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 10.5 ─────────────────────────── */
@@ -2340,12 +2468,14 @@ ${slide('dk-10', 25, 'Dấu / cuối proxy_pass cắt mất /api — backend kho
 <pre><code class="language-bash">sed 's#proxy_pass http://api;#proxy_pass http://api/;#' nginx.conf.goc &gt; ops/nginx.conf   <span class="tok-comment"># ghi ĐÈ tại chỗ</span>
 docker compose exec nginx nginx -t
 docker compose exec nginx nginx -s reload
+sleep 1                                     <span class="tok-comment"># reload returns at once; the old workers are still answering</span>
 curl -s localhost:18100/api/v1/posts</code></pre>
 <div class="out">nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
 nginx: configuration file /etc/nginx/nginx.conf test is successful
 …
 &lt;pre&gt;Cannot GET /v1/posts&lt;/pre&gt;
 …</div>
+<p class="note-ct">Measured on 13/11/2026 (Docker Desktop, Engine 29.8, nginx:1.27-alpine): <code>nginx -s reload</code> only <em>signals</em> the master and returns immediately. A <code>curl</code> fired straight after it still reached an old worker and got <code>200</code>; about one second later the new workers answered <code>Cannot GET /v1/posts</code>. Any script that reloads and then checks needs that short wait (or a retry loop), or it will "prove" the old config.</p>
 <p><code>Cannot GET /v1/posts</code> is Express's own 404 page: the request reached a perfectly healthy API with <code>/api</code> cut off. <code>nginx -t</code> was green because the syntax is fine — it cannot know what paths your backend expects. Writing the original back with <code>cat nginx.conf.goc &gt; ops/nginx.conf</code>, <code>nginx -t</code>, reload: <code>posts 200</code>.</p>
 <p>Notice <em>how</em> the file was changed: <code>… &gt; ops/nginx.conf</code> writes into the existing file. That is not a style choice.</p>
 
@@ -2678,12 +2808,14 @@ ${slide('dk-10', 25, 'Dấu / cuối proxy_pass cắt mất /api — backend kho
 <pre><code class="language-bash">sed 's#proxy_pass http://api;#proxy_pass http://api/;#' nginx.conf.goc &gt; ops/nginx.conf   <span class="tok-comment"># ghi ĐÈ tại chỗ</span>
 docker compose exec nginx nginx -t
 docker compose exec nginx nginx -s reload
+sleep 1                                     <span class="tok-comment"># reload trả về ngay; worker cũ vẫn đang trả lời</span>
 curl -s localhost:18100/api/v1/posts</code></pre>
 <div class="out">nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
 nginx: configuration file /etc/nginx/nginx.conf test is successful
 …
 &lt;pre&gt;Cannot GET /v1/posts&lt;/pre&gt;
 …</div>
+<p class="note-ct">Đo ngày 13/11/2026 (Docker Desktop, Engine 29.8, nginx:1.27-alpine): <code>nginx -s reload</code> chỉ GỬI TÍN HIỆU cho tiến trình chủ rồi trả về ngay. Một <code>curl</code> bắn liền sau đó vẫn trúng worker cũ và nhận <code>200</code>; khoảng một giây sau worker mới mới trả <code>Cannot GET /v1/posts</code>. Script nào nạp lại rồi kiểm ngay thì cần chờ một nhịp ngắn đó (hoặc một vòng thử lại), không thì nó sẽ "chứng minh" cái cấu hình cũ.</p>
 <p><code>Cannot GET /v1/posts</code> là trang 404 của chính Express: yêu cầu đã tới một API hoàn toàn khoẻ mạnh nhưng bị cắt mất <code>/api</code>. <code>nginx -t</code> xanh vì cú pháp đúng — nó không thể biết backend của bạn chờ những đường dẫn nào. Ghi bản gốc trở lại bằng <code>cat nginx.conf.goc &gt; ops/nginx.conf</code>, <code>nginx -t</code>, reload: <code>posts 200</code>.</p>
 <p>Để ý CÁCH file được sửa: <code>… &gt; ops/nginx.conf</code> ghi vào chính file đang có. Đó không phải chuyện sở thích.</p>
 
@@ -2937,6 +3069,42 @@ ban-moi-2</div>
 
 <div class="pitfall"><strong>Bẫy:</strong> deploy bằng <code>--no-build</code> sau khi đã đổi mã, hoặc bằng cách nào đó để container đang chạy là một cái ảnh cũ hơn bạn tưởng. Stack lên, mọi container báo khoẻ mạnh, và trang web phần lớn vẫn chạy — trong khi một cái router chỉ tồn tại trong mã mới thì đơn giản là vắng mặt, trả 404 ở mọi lời gọi. Người dùng thấy một tính năng hỏng; log của bạn cho thấy một lượt khởi động sạch sẽ; và vì <code>docker compose ps</code> nói mọi thứ đang lên, lượt deploy trông như thành công. Đúng hình dạng đó đã xảy ra ở đây hai lần, và cách chữa mang tính máy móc chứ không cần thông minh: gắn nhãn ảnh theo mã SHA của commit để phiên bản đang chạy là một sự thật kiểm được, và kết thúc mọi lượt deploy bằng một lệnh <code>curl</code> không xác thực trên một tuyến của mỗi module tính năng, thất bại nếu gặp 404. Một lượt deploy chưa xong khi container khởi động; nó xong khi các tuyến trả lời.</div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Proxy phải chuyển tiếp <code>X-Forwarded-Proto</code> và <code>X-Forwarded-For</code>, không thì ứng dụng của bạn nhận chuyển hướng HTTP, cookie secure không được đặt, và mọi dòng log đều mang IP của proxy. Dấu gạch chéo cuối trong <code>proxy_pass</code> lặng lẽ viết lại đường dẫn — hãy quyết một lần rồi kiểm bằng curl. Và hãy kết thúc mọi lượt deploy bằng một chốt kiểm thất bại khi gặp 404: container khoẻ mạnh không đồng nghĩa với các tuyến đã được gắn.</p>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nginx/learn?lessonSlug=nginx-3-1-proxy-pass" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nginx · 3.1 — proxy_pass, and the slash that rewrites the path</span><span class="lc-sub">The trailing slash of proxy_pass, understood at the root.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nginx/learn?lessonSlug=nginx-3-2-header-len-upstream" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nginx · 3.2 — What Nginx sends upstream by default, and the four surprises</span><span class="lc-sub">What nginx sends upstream by default.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nginx/learn?lessonSlug=nginx-11-2-nginx-t-chung-minh-gi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nginx · 11.2 — What nginx -t proves, and what it does not</span><span class="lc-sub">What nginx -t proves, and what it does not.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nginx/learn?lessonSlug=nginx-3-1-proxy-pass" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nginx · 3.1 — proxy_pass, và cái dấu gạch chéo viết lại đường dẫn</span><span class="lc-sub">Hiểu tận gốc dấu gạch chéo của proxy_pass.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nginx/learn?lessonSlug=nginx-3-2-header-len-upstream" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nginx · 3.2 — Mặc định Nginx gửi gì lên upstream, và bốn thứ làm bạn bất ngờ</span><span class="lc-sub">nginx gửi gì lên upstream theo mặc định.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nginx/learn?lessonSlug=nginx-11-2-nginx-t-chung-minh-gi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nginx · 11.2 — nginx -t chứng minh được gì, và KHÔNG chứng minh được gì</span><span class="lc-sub">nginx -t chứng minh được gì, không chứng minh được gì.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

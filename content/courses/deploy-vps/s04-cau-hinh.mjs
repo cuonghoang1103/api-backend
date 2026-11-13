@@ -429,6 +429,32 @@ OLD_SMTP_PASS</div>
 <div class="link-card"><span class="lc-ico">🔧</span><span class="lc-body"><span class="lc-title">comm(1)</span><span class="lc-sub">man7.org/linux/man-pages/man1/comm.1.html — phép so tập hợp ba cột nằm sau lệnh kiểm trôi lệch ở trên.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Docker — env_file, environment và build args</span><span class="lc-sub">/courses/docker/learn${REF} — phiên bản container của cách bố trí này, nơi cùng một phân biệt ấy hiện ra thành ba khoá Compose khác nhau.</span></span></div>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-8-3-bien-moi-truong-bi-mat" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 8.3 — Environment variables in practice, and where secrets go</span><span class="lc-sub">Environment variables in practice, and where secrets belong.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-9-4-bien-profile" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 9.4 — Variables, .env, and profiles</span><span class="lc-sub">Variables, .env and profiles in Compose: which .env feeds what.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-8-3-bien-moi-truong-bi-mat" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 8.3 — Biến môi trường trong thực tế, và bí mật thì đặt ở đâu</span><span class="lc-sub">Biến môi trường trong thực tế, và bí mật nên đặt ở đâu.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-9-4-bien-profile" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 9.4 — Biến, .env, và profile</span><span class="lc-sub">Biến, .env và profile trong Compose: tệp .env nào cấp cho cái gì.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
 
@@ -762,6 +788,32 @@ ls: /run/secrets: No such file or directory</div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Docker — ARG, ENV và bí mật lúc dựng</span><span class="lc-sub">docs.docker.com/build/building/secrets — vì sao <code>--build-arg</code> KHÔNG phải một cơ chế bí mật, và nên dùng gì thay thế.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">proc(5) — tệp environ</span><span class="lc-sub">man7.org/linux/man-pages/man5/proc.html — môi trường mà một tiến trình đang chạy thật sự đang giữ, ngăn nhau bằng ký tự null.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Next.js &amp; React — cấu hình được đọc ở đâu</span><span class="lc-sub">/courses/nextjs/learn${REF} — server component, client component, và cái nào trong số đó nhìn thấy nổi một biến lúc chạy.</span></span></div>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-4-4-arg-env" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 4.4 — ARG and ENV: build time versus run time</span><span class="lc-sub">ARG versus ENV: build time against run time inside a Dockerfile.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-15-1-buildx-bake" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 15.1 — BuildKit beyond the basics: builders, native multi-platform, bake, secrets</span><span class="lc-sub">Advanced BuildKit, including build-time secrets that never reach the image.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-4-4-arg-env" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 4.4 — ARG và ENV: lúc dựng so với lúc chạy</span><span class="lc-sub">ARG so với ENV: lúc dựng so với lúc chạy trong một Dockerfile.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-15-1-buildx-bake" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 15.1 — BuildKit nâng cao: builder riêng, đa nền tảng, bake, bí mật lúc build</span><span class="lc-sub">BuildKit nâng cao, kể cả bí mật lúc dựng không bao giờ lọt vào ảnh.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -1251,6 +1303,42 @@ $ ./so-hai-bo-nap.sh xau.env          # DB_PASS=mat#khau, DUONG=$HOME/x
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">bash(1) — mục QUOTING</span><span class="lc-sub">gnu.org/software/bash/manual/bash.html#Quoting — vì sao nháy kép vẫn bung <code>\$</code> còn nháy đơn thì không.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash — bọc ngoặc, bung biến và thứ tự chúng xảy ra</span><span class="lc-sub">/courses/linux-bash/learn${REF} — mấy luật bung biến đã biến một trong những giá trị này thành một đường dẫn thư mục nhà.</span></span></div>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-6-2-dau-nhay" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 6.2 — Quoting: the one rule that stops scripts breaking</span><span class="lc-sub">Quoting: the one rule that stops scripts breaking — and why .env quotes differ between tools.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-9-4-bien-profile" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 9.4 — Variables, .env, and profiles</span><span class="lc-sub">Variables, .env and profiles in Compose: which .env feeds what.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-15-3-windows-wsl2" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 15.3 — Windows: WSL2, Git Bash, and the CRLF bug from start to finish</span><span class="lc-sub">On Windows: WSL2, Git Bash, and the CRLF line-ending error from end to end.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-6-2-dau-nhay" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 6.2 — Dấu nháy: luật duy nhất làm script thôi vỡ</span><span class="lc-sub">Dấu nháy: luật duy nhất làm script thôi vỡ — và vì sao dấu nháy trong .env mỗi công cụ hiểu một kiểu.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-9-4-bien-profile" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 9.4 — Biến, .env, và profile</span><span class="lc-sub">Biến, .env và profile trong Compose: tệp .env nào cấp cho cái gì.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-15-3-windows-wsl2" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 15.3 — Windows: WSL2, Git Bash, và lỗi CRLF từ đầu tới cuối</span><span class="lc-sub">Trên Windows: WSL2, Git Bash, và lỗi xuống dòng CRLF từ đầu tới cuối.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
 
@@ -1650,6 +1738,42 @@ cat: /opt/datlich/.env: Permission denied</div>
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Nền tảng Web 14.2 — Biến môi trường và bí mật</span><span class="lc-sub">Bí mật VITE_ nằm trong bundle đã dựng, cấu hình chết sớm, xoay khoá trước khi dọn lịch sử</span></span>
   <span class="lc-cta">Mở bài</span>
+</a>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/git/learn?lessonSlug=git-8-3-go-bi-mat" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Git · 8.3 — Removing a leaked secret from all of history</span><span class="lc-sub">Removing a leaked secret from the entire history — and why rotating it still comes first.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/git/learn?lessonSlug=git-12-1-hooks" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Git · 12.1 — Hooks: catching mistakes before they exist</span><span class="lc-sub">A pre-commit hook that catches the secret before it exists in history.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-4-2-chmod-chown-umask" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 4.2 — chmod, chown and umask: changing what you found</span><span class="lc-sub">chmod, chown and umask: making the .env file readable only by its owner.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/git/learn?lessonSlug=git-8-3-go-bi-mat" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Git · 8.3 — Gỡ một bí mật bị lộ khỏi toàn bộ lịch sử</span><span class="lc-sub">Gỡ một bí mật bị lộ khỏi toàn bộ lịch sử — và vì sao xoay nó vẫn phải làm trước.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/git/learn?lessonSlug=git-12-1-hooks" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Git · 12.1 — Hook: bắt lỗi trước khi nó tồn tại</span><span class="lc-sub">Một hook pre-commit bắt bí mật trước khi nó tồn tại trong lịch sử.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-4-2-chmod-chown-umask" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 4.2 — chmod, chown và umask: đổi thứ bạn vừa đọc ra</span><span class="lc-sub">chmod, chown và umask: cho tệp .env chỉ chủ của nó đọc được.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>
 `,
@@ -2069,6 +2193,32 @@ $ grep -rlF "$GIA_TRI_CU" /opt/datlich /home/deploy/bin       # tim theo GIA TRI
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Nền tảng Web 14.2 — Biến môi trường và bí mật</span><span class="lc-sub">Bí mật VITE_ nằm trong bundle đã dựng, cấu hình chết sớm, xoay khoá trước khi dọn lịch sử</span></span>
   <span class="lc-cta">Mở bài</span>
+</a>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-11-2-xoay-khoa" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Authentication · 11.2 — Rotating a key without logging everyone out</span><span class="lc-sub">Rotating a signing key without logging everybody out.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-14-2-pool-pgbouncer" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">PostgreSQL · 14.2 — Pooling: in the app, and in front of it</span><span class="lc-sub">Connection pools in the app and in front of it — what holds old credentials open.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-11-2-xoay-khoa" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Xác thực · 11.2 — Xoay một cái khoá mà không đá tất cả mọi người ra ngoài</span><span class="lc-sub">Xoay một khoá ký mà không đá mọi người ra ngoài.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-14-2-pool-pgbouncer" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">PostgreSQL · 14.2 — Pool: trong app, và đứng trước app</span><span class="lc-sub">Pool kết nối trong app và đứng trước app — thứ giữ thông tin đăng nhập cũ còn mở.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>
 `,

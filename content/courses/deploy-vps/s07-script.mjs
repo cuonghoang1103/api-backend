@@ -476,6 +476,42 @@ vps 'bash --version | head -1'</code></pre>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">ShellCheck</span><span class="lc-sub">shellcheck.net — SC2155 đúng là cảnh báo <code>local x=\$(cmd)</code>. Chạy nó qua một script deploy mất vài giây và là lần soi rẻ nhất trong cả khoá này.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash — mã thoát, ống và dấu nháy</span><span class="lc-sub">/courses/linux-bash/learn?lessonSlug=lnx-6-4-ma-thoat-dieu-kien${REF.replace('?', '&')} — trạng thái thoát của một cái ống tới từ đâu, và vì sao khai triển không đặt trong nháy là nửa còn lại của vấn đề này.</span></span></div>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-7-1-khung-script" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 7.1 — The skeleton: shebang, strict mode, and its traps</span><span class="lc-sub">The script skeleton: shebang, strict mode and its traps.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-6-3-khai-trien-tham-so" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 6.3 — Parameter expansion: string work without leaving bash</span><span class="lc-sub">Parameter expansion: defaults, required values and trimming.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-15-3-windows-wsl2" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 15.3 — Windows: WSL2, Git Bash, and the CRLF bug from start to finish</span><span class="lc-sub">On Windows: WSL2, Git Bash, and the CRLF line-ending error from end to end.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-7-1-khung-script" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 7.1 — Bộ khung: shebang, chế độ nghiêm ngặt, và những cái bẫy của nó</span><span class="lc-sub">Bộ khung script: shebang, chế độ nghiêm ngặt và các bẫy của nó.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-6-3-khai-trien-tham-so" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 6.3 — Khai triển tham số: xử lý chuỗi mà không phải rời khỏi bash</span><span class="lc-sub">Khai triển tham số: giá trị mặc định, giá trị bắt buộc và cắt chuỗi.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-15-3-windows-wsl2" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 15.3 — Windows: WSL2, Git Bash, và lỗi CRLF từ đầu tới cuối</span><span class="lc-sub">Trên Windows: WSL2, Git Bash, và lỗi xuống dòng CRLF từ đầu tới cuối.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
 
@@ -960,6 +996,42 @@ sed: 1: "f
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">grep(1) — ba cờ -q, -x và -F</span><span class="lc-sub">gnu.org/software/grep/manual/grep.html — ba cái cờ mà chắn nối-thêm cần, và thiếu từng cái thì hỏng ra sao.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Ansible — trạng thái mong muốn và tính bất biến</span><span class="lc-sub">docs.ansible.com/ansible/latest/playbook_guide/playbooks_intro.html — đáng đọc kể cả khi bạn không bao giờ dùng Ansible: cả công cụ đó là một lập luận rằng các bước deploy nên KHAI BÁO trạng thái cuối thay vì liệt kê một chuỗi thao tác sửa.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash — here-document và chuyển hướng</span><span class="lc-sub">/courses/linux-bash/learn?lessonSlug=lnx-3-1-dong-chuan-chuyen-huong${REF.replace('?', '&')} — dạng <code>cat &gt; file &lt;&lt;EOF</code> ở trên, kể cả lúc nào cần đặt <code>EOF</code> trong nháy để chặn khai triển.</span></span></div>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-2-4-lien-ket-va-nen" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 2.4 — Links and archives: inodes, symlinks, and tar without looking it up</span><span class="lc-sub">Inodes, hard links and symlinks — the file-system model behind this step.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-7-5-script-hoan-chinh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 7.5 — A complete script, and when bash is the wrong tool</span><span class="lc-sub">A complete script, checked with ShellCheck from top to bottom.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-15-1-macos-zsh-bsd" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 15.1 — macOS: a real Unix with zsh, bash 3.2 and BSD tools</span><span class="lc-sub">macOS: zsh, bash 3.2 and BSD tools — why the script must not assume GNU.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-2-4-lien-ket-va-nen" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 2.4 — Liên kết và kho nén: inode, symlink, và tar mà không phải tra lại</span><span class="lc-sub">Inode, liên kết cứng và symlink — mô hình hệ tệp nằm dưới bước này.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-7-5-script-hoan-chinh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 7.5 — Một script hoàn chỉnh, và khi nào bash là công cụ sai</span><span class="lc-sub">Một script hoàn chỉnh, kiểm bằng ShellCheck từ đầu tới cuối.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-15-1-macos-zsh-bsd" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 15.1 — macOS: một Unix thật với zsh, bash 3.2 và công cụ BSD</span><span class="lc-sub">macOS: zsh, bash 3.2 và công cụ BSD — vì sao script không được mặc định là GNU.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -1640,6 +1712,62 @@ usage: df [--libxo] [-b | -g | -H | -h | -k | -m | -P] [-acIilnY] [-,] [-T type]
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">sysexits.h — mã thoát theo quy ước</span><span class="lc-sub">man 3 sysexits — nỗ lực của BSD về mã thoát chuẩn (<code>EX_USAGE</code> 64, <code>EX_UNAVAILABLE</code> 69…). Không được theo rộng rãi, nhưng đáng đọc trước khi bạn tự bịa cách đánh số riêng.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Git &amp; GitHub — porcelain status và viết script với git</span><span class="lc-sub">/courses/git/learn?lessonSlug=git-1-1-ba-cai-cay${REF.replace('?', '&')} — <code>git status --porcelain</code> và <code>git rev-list --count</code>, hai lệnh nằm sau phép kiểm cây-sạch và không-đứng-sau.</span></span></div>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-9-3-ssh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 9.3 — SSH: keys, config and tunnels</span><span class="lc-sub">SSH keys, config and tunnels, from the ground up.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/git/learn?lessonSlug=git-5-1-remote-fetch-pull" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Git · 5.1 — What a remote is, and why fetch ≠ pull</span><span class="lc-sub">Remotes, and why fetch is not pull — the check that refuses an un-pushed commit.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-10-1-dia-day" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 10.1 — The disk is full: finding out what filled it</span><span class="lc-sub">Finding what fills the disk, before the deploy refuses on free space.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-7-3-trap-don-dep" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 7.3 — trap, temp files and locks: cleaning up no matter what</span><span class="lc-sub">trap, temporary files and locks: cleaning up when a script dies halfway.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-15-1-macos-zsh-bsd" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 15.1 — macOS: a real Unix with zsh, bash 3.2 and BSD tools</span><span class="lc-sub">macOS tools differ (BSD stat, df, date): what a refusal check must not assume.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-9-3-ssh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 9.3 — SSH: khoá, file cấu hình và đường hầm</span><span class="lc-sub">Khoá SSH, tệp cấu hình và đường hầm, dạy từ gốc.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/git/learn?lessonSlug=git-5-1-remote-fetch-pull" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Git · 5.1 — Remote là gì, và vì sao fetch ≠ pull</span><span class="lc-sub">Remote, và vì sao fetch khác pull — phép kiểm từ chối một commit chưa đẩy.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-10-1-dia-day" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 10.1 — Đĩa đầy: tìm ra cái gì làm nó đầy</span><span class="lc-sub">Tìm ra cái gì làm đầy đĩa, trước khi lần deploy từ chối vì thiếu chỗ.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-7-3-trap-don-dep" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 7.3 — trap, file tạm và khoá: dọn dẹp bất kể chuyện gì xảy ra</span><span class="lc-sub">trap, tệp tạm và khoá: dọn dẹp khi script chết giữa chừng.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-15-1-macos-zsh-bsd" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 15.1 — macOS: một Unix thật với zsh, bash 3.2 và công cụ BSD</span><span class="lc-sub">Công cụ trên macOS khác (stat, df, date bản BSD): điều một phép kiểm từ chối không được mặc định.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
 
@@ -2076,6 +2204,52 @@ $ git show "06d33ee:smoke-routes.txt" | kiem   # doc DUNG commit dang deploy
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Bash Reference Manual — Bourne Shell Variables (PS4)</span><span class="lc-sub">gnu.org/software/bash/manual/bash.html#Bourne-Shell-Variables — <code>PS4</code> cùng <code>BASH_SOURCE</code>/<code>LINENO</code>, thứ biến <code>set -x</code> từ tiếng ồn thành một vết chạy.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Bash Reference Manual — Process Substitution</span><span class="lc-sub">gnu.org/software/bash/manual/bash.html#Process-Substitution — tài liệu ghi rõ shell KHÔNG chờ tiến trình được thay thế, mà đó chính là cuộc đua đo trong cái bẫy ở trên.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Nginx — đọc mã trạng thái, và 404 nghĩa là gì ở chỗ proxy</span><span class="lc-sub">/courses/nginx/learn?lessonSlug=nginx-11-4-tu-ma-trang-thai-toi-nguyen-nhan${REF.replace('?', '&')} — vì sao một route thiếu và một upstream thiếu cho ra mã khác nhau, và đó là thứ làm cho mẹo 401-là-đạt đáng tin.</span></span></div>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-9-2-curl" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 9.2 — curl: the flags that matter</span><span class="lc-sub">The curl flags that actually matter for checking a server.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-7-4-go-loi-script" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 7.4 — Debugging a script without scattering echo</span><span class="lc-sub">Debugging a script without sprinkling echo: set -x, PS4 and bats.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-7-2-tham-so-kiem-tra" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 7.2 — Arguments, options and validation</span><span class="lc-sub">Arguments, options and validation for the smoke-test script.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/git/learn?lessonSlug=git-2-2-show-va-diff" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Git · 2.2 — git show and diffing any two points in time</span><span class="lc-sub">git show and comparing two points in time — what changed in the release you are testing.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-9-2-curl" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 9.2 — curl: những cờ thật sự quan trọng</span><span class="lc-sub">Những cờ curl thật sự quan trọng khi kiểm một máy chủ.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-7-4-go-loi-script" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 7.4 — Gỡ lỗi một script mà không phải rắc echo khắp nơi</span><span class="lc-sub">Gỡ lỗi script mà không rắc echo: set -x, PS4 và bats.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-7-2-tham-so-kiem-tra" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 7.2 — Tham số, tuỳ chọn và kiểm tính hợp lệ</span><span class="lc-sub">Tham số, tuỳ chọn và kiểm tính hợp lệ cho script kiểm khói.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/git/learn?lessonSlug=git-2-2-show-va-diff" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Git · 2.2 — git show và so sánh hai thời điểm bất kỳ</span><span class="lc-sub">git show và so sánh hai thời điểm — thứ gì đã đổi trong bản bạn đang kiểm.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -2621,6 +2795,32 @@ ${slide('dv-07', 28, 'Đừng sửa script deploy lúc nó đang chạy')}
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Google Shell Style Guide</span><span class="lc-sub">google.github.io/styleguide/shellguide.html — về lúc một script shell đã lớn quá cỡ của shell. Quy tắc ngón tay cái của họ: quá một trăm dòng hoặc có cấu trúc dữ liệu thật thì viết lại bằng thứ khác.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">systemd.service(5)</span><span class="lc-sub">freedesktop.org/software/systemd/man/systemd.service.html — lựa chọn thay thế cho khối giết-rồi-khởi-động-lại ở trên: <code>Restart=</code>, <code>ExecStartPre=</code> và một unit tự giám sát tiến trình giúp bạn.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash — tín hiệu, nhóm tiến trình và setsid</span><span class="lc-sub">/courses/linux-bash/learn?lessonSlug=lnx-5-3-tin-hieu${REF.replace('?', '&')} — vì sao <code>setsid nohup … &lt;/dev/null &amp;</code> là câu thần chú sống sót qua việc script thoát, và từng phần của nó làm gì.</span></span></div>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-7-3-trap-don-dep" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 7.3 — trap, temp files and locks: cleaning up no matter what</span><span class="lc-sub">trap, temporary files and locks: cleaning up when a script dies halfway.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-9-1-push-de-deploy" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">GitHub Actions · 9.1 — Push-to-deploy, and the two outages that ended it here</span><span class="lc-sub">Why push-to-deploy was retired in this project, from the CI side.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-7-3-trap-don-dep" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 7.3 — trap, file tạm và khoá: dọn dẹp bất kể chuyện gì xảy ra</span><span class="lc-sub">trap, tệp tạm và khoá: dọn dẹp khi script chết giữa chừng.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-9-1-push-de-deploy" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">GitHub Actions · 9.1 — Push-để-deploy, và hai sự cố đã kết liễu nó ở đây</span><span class="lc-sub">Vì sao push-để-deploy bị khai tử ở dự án này, nhìn từ phía CI.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

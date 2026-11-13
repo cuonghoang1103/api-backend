@@ -709,6 +709,32 @@ for v in v1 v2 v3; do mkdir -p ~/lui/ban/$v; cp ~/app.mjs ~/lui/ban/$v/; echo $v
   <span class="lc-cta">MỞ BÀI NODE.JS →</span>
 </a>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-8-3-bien-moi-truong-bi-mat" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 8.3 — Environment variables in practice, and where secrets go</span><span class="lc-sub">Environment variables and where the config of each release lives.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-3-2-tag-digest" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 3.2 — Tags move, digests do not</span><span class="lc-sub">Tags move, digests do not — the reason a rollback should name a digest.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-8-3-bien-moi-truong-bi-mat" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 8.3 — Biến môi trường trong thực tế, và bí mật thì đặt ở đâu</span><span class="lc-sub">Biến môi trường, và cấu hình của mỗi bản phát hành nằm ở đâu.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-3-2-tag-digest" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 3.2 — Tag thì di chuyển, digest thì không</span><span class="lc-sub">Tag thì di chuyển, digest thì không — lý do một cú lùi nên gọi tên digest.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
 
@@ -1087,6 +1113,22 @@ ${slide('dv-06', 14, 'git revert và lùi ảnh là hai việc khác nhau')}
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">PostgreSQL — ALTER TABLE ... RENAME</span><span class="lc-sub">postgresql.org/docs/current/sql-altertable.html — đổi tên là cập nhật danh mục, nên cả hai chiều đều tính bằng mili giây.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Kubernetes — cấu hình liveness, readiness và startup probe</span><span class="lc-sub">kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/ — phát biểu rõ nhất ở đâu đó về việc vì sao liveness probe phải giữ NÔNG, mà đó là lý do bài này tồn tại.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">PostgreSQL — thay đổi lược đồ, và mỗi thứ khoá cái gì</span><span class="lc-sub">/courses/postgresql/learn?lessonSlug=postgresql-3-4-alter-chuan-hoa${REF.replace('?', '&')} — bảng khả-nghịch ở trên, nhìn từ phía cơ sở dữ liệu.</span></span></div>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/git/learn?lessonSlug=git-13-1-cuu-ho" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Git · 13.1 — The disaster recovery cookbook</span><span class="lc-sub">The Git rescue recipe book: finding exactly what changed between two releases.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/git/learn?lessonSlug=git-13-1-cuu-ho" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Git · 13.1 — Sách công thức cứu hộ</span><span class="lc-sub">Sách công thức cứu hộ Git: tìm đúng thứ đã đổi giữa hai bản phát hành.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -1511,6 +1553,22 @@ ghi v2 don 100 15                                    # da lui ve v2</code></pre>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">PostgreSQL — VACUUM FULL</span><span class="lc-sub">postgresql.org/docs/current/sql-vacuum.html — nó ghi lại cả bảng và giữ khoá ACCESS EXCLUSIVE, nên 239 ms trên 20 MB không phải con số để ngoại suy sang bảng 20 GB.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">PostgreSQL — một dòng được lưu trên trang như thế nào</span><span class="lc-sub">/courses/postgresql/learn?lessonSlug=postgresql-14-3-vacuum-bloat${REF.replace('?', '&')} — đầu tuple, canh lề và TOAST, thứ làm cho output trang thô ở trên đọc được.</span></span></div>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-11-2-mvcc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">PostgreSQL · 11.2 — MVCC: why readers never block writers</span><span class="lc-sub">MVCC: why readers do not block writers — and what a snapshot sees.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-11-2-mvcc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">PostgreSQL · 11.2 — MVCC: vì sao người đọc không bao giờ chặn người ghi</span><span class="lc-sub">MVCC: vì sao người đọc không chặn người ghi — và một ảnh chụp nhìn thấy gì.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
 
@@ -1896,6 +1954,22 @@ huy y dinh chua gui        : 10</div>
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 18.5: những quyết định không rút lại được</span><span class="lc-sub">Năm cửa một chiều trong một backend, ADR bốn tiêu đề, nợ kỹ thuật thật ra là gì (50 file route bỏ tầng là nợ; file seed 6.113 dòng thì không), và ba khoản nợ website này đã trả.</span></span>
   <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-11-2-xoay-khoa" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Authentication · 11.2 — Rotating a key without logging everyone out</span><span class="lc-sub">Rotating a signing key without logging everybody out.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-11-2-xoay-khoa" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Xác thực · 11.2 — Xoay một cái khoá mà không đá tất cả mọi người ra ngoài</span><span class="lc-sub">Xoay một khoá ký mà không đá mọi người ra ngoài.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>
 `,
@@ -2394,6 +2468,22 @@ x-ban: v3 X-Cache: HIT
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">RFC 9111 — HTTP Caching</span><span class="lc-sub">rfc-editor.org/rfc/rfc9111 — §5.2 về Cache-Control, và vì sao một bản trả lời đã nằm trong bộ đệm trình duyệt thì máy chủ gốc KHÔNG gọi về được.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">flock(1) và flock(2)</span><span class="lc-sub">man 1 flock — kể cả hành vi thừa kế qua fork, thứ làm cho <code>9&gt;&amp;-</code> trở thành bắt buộc trong script ở trên.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Nginx — bộ đệm proxy, và nó thật ra lưu cái gì</span><span class="lc-sub">/courses/nginx/learn?lessonSlug=nginx-5-1-bat-bo-dem${REF.replace('?', '&')} — khoá bộ đệm, các trạng thái X-Cache, và luật header quyết định một bản trả lời có đệm được hay không.</span></span></div>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-16-2-deploy-script" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 16.2 — A production deploy script, and the systemd unit that runs the app</span><span class="lc-sub">A production-grade deploy script with a systemd unit, built in the Linux &amp; Bash capstone.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-16-2-deploy-script" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 16.2 — Script deploy mức production, và unit systemd chạy app</span><span class="lc-sub">Một script deploy mức production kèm unit systemd, dựng trong dự án cuối khoá Linux &amp; Bash.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

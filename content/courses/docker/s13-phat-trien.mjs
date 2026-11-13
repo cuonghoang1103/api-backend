@@ -448,6 +448,22 @@ ${slide('dk-13', 8, 'Dev Container đáng dùng khi nào — và khi nào KHÔNG
 
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> Mã ở lại trên ổ đĩa của bạn, còn bộ công cụ dọn vào một container có công thức commit ngay cạnh mã. CLI cho bạn thấy chính xác trình soạn thảo làm gì — một bind mount, hai cái nhãn và một shell cứ thế sống. Và "container đã khởi động" không bao giờ là "cơ sở dữ liệu đã sẵn sàng": chặn các lệnh vòng đời bằng healthcheck.</p>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/git/learn?lessonSlug=git-15-3-student-pack-codespaces" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Git · 15.3 — Student Developer Pack, Codespaces &amp; Copilot for students</span><span class="lc-sub">Free Codespaces for students, with the Student Developer Pack.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/git/learn?lessonSlug=git-15-3-student-pack-codespaces" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Git · 15.3 — Student Developer Pack, Codespaces &amp; Copilot cho sinh viên</span><span class="lc-sub">Codespaces miễn phí cho sinh viên, cùng Student Developer Pack.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 13.2 ─────────────────────────── */
@@ -1578,6 +1594,32 @@ ${slide('dk-13', 20, 'Trong CI: service container thay cho compose')}
 
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> Một CSDL thật trong container tốn khoảng một giây, nên không còn lý do gì để kiểm ràng buộc trên đồ giả. Hãy chờ lần khởi động thứ hai — kiểm sẵn sàng qua TCP, hỏi mỗi giây, và <code>up --wait</code>. Và tmpfs là thứ tăng tốc cho Linux/CI, không phải cho Mac: đo trước rồi hãy tin một bài blog.</p>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-15-1-ci-cho-pr" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">GitHub Actions · 15.1 — CI for pull requests: four jobs, a real Postgres, one required check</span><span class="lc-sub">A pull-request CI pipeline with a real Postgres.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-15-2-wal-pitr" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">PostgreSQL · 15.2 — WAL and point-in-time recovery</span><span class="lc-sub">Why COMMIT has to wait for the disk: WAL and fsync.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-15-1-ci-cho-pr" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">GitHub Actions · 15.1 — CI cho pull request: bốn job, một Postgres thật, một check bắt buộc</span><span class="lc-sub">Một pipeline CI cho pull request có Postgres thật.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-15-2-wal-pitr" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">PostgreSQL · 15.2 — WAL và khôi phục theo thời điểm</span><span class="lc-sub">Vì sao COMMIT phải chờ đĩa: WAL và fsync.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 13.4 ─────────────────────────── */
@@ -1941,6 +1983,32 @@ ${slide('dk-13', 26, 'Docker Desktop, OrbStack hay Colima?')}
 </a>
 
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> Trên laptop, Docker là một máy ảo Linux: giới hạn của nó là giới hạn của bạn, và <code>docker info</code> cho bạn biết giới hạn đó. Mọi thứ vượt qua vách máy ảo — bind mount, sự kiện file, <code>localhost</code> — đều tốn một cái giá hoặc cư xử khác đi, nên giữ thư mục nặng trong volume và mã trong WSL. Và con chip quan trọng: dựng image cho đúng cái máy sẽ chạy nó.</p>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-14-3-wsl" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 14.6 — WSL2 and Docker Desktop: why Linux on a Mac or a Windows laptop is a virtual machine, measured</span><span class="lc-sub">Why Linux on a Mac or Windows is a virtual machine, measured.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-14-7-file-system" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 14.5 — File systems and permissions: ext4, APFS and NTFS — case, paths, clones, hidden streams, ACLs, SIP</span><span class="lc-sub">How ext4, APFS and NTFS differ, case sensitivity included.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-14-3-wsl" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Hệ điều hành cho lập trình viên · 14.6 — WSL2 và Docker Desktop: vì sao Linux trên Mac hay laptop Windows là một máy ảo, đo thật</span><span class="lc-sub">Vì sao Linux trên Mac hay Windows là một máy ảo, đo thật.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-14-7-file-system" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Hệ điều hành cho lập trình viên · 14.5 — Hệ thống file và quyền: ext4, APFS và NTFS — hoa thường, đường dẫn, clone, luồng ẩn, ACL, SIP</span><span class="lc-sub">ext4, APFS, NTFS khác nhau ra sao, kể cả chuyện hoa thường.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

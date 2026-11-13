@@ -526,6 +526,22 @@ done</code></pre>
 <div class="pitfall"><strong>Bẫy:</strong> <code>docker push myregistry/app</code> hỏng với một lỗi xác thực đối với Docker Hub. Docker chỉ coi thành phần đầu tiên là một registry nếu nó chứa dấu chấm hoặc dấu hai chấm, hoặc là <code>localhost</code>. <code>myregistry/app</code> chẳng có cái nào, nên nó bị đọc thành người dùng Hub tên <code>myregistry</code> — và bạn nhận lỗi đăng nhập cho một tài khoản không phải của mình. Hãy dùng <code>localhost:5000/app</code>, <code>registry.internal/app</code>, hoặc một địa chỉ IP. Cùng cái luật đó bẫy những người viết <code>minikube/app</code> và <code>k3s/app</code>.</div>
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> Mọi tên ảnh đều là <code>registry/không-gian-tên/kho:tag</code> với ba phần đầu mặc định thành <code>docker.io/library</code> và tag mặc định thành <code>latest</code> — nên <code>nginx</code> mang nhiều nghĩa hơn hẳn những gì nó viết ra. Một tag có thể trỏ tới một CHỈ MỤC chứa nhiều ảnh theo từng nền tảng, và đó là lý do cùng một câu lệnh cho ra những byte khác nhau trên một laptop ARM và một máy chủ x86. Và nhãn <code>org.opencontainers.image.source</code> là cách bạn biết một cái ảnh thật sự từ đâu ra; một cái ảnh không có nó là đang đòi một sự tin tưởng mà nó chưa xứng đáng.</p>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-15-2-build-anh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">GitHub Actions · 15.2 — Building the image once: multi-stage, two architectures, three tags, a signature</span><span class="lc-sub">Naming images is what CI does every day: build one image, give it three names.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-15-2-build-anh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">GitHub Actions · 15.2 — Dựng ảnh một lần: multi-stage, hai kiến trúc, ba tag, một chữ ký</span><span class="lc-sub">Đặt tên ảnh là việc CI làm mỗi ngày: dựng một ảnh rồi gắn ba cái tên cho nó.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 3.2 ─────────────────────────── */
@@ -1052,6 +1068,22 @@ docker buildx imagetools inspect postgres:latest --format '{{json (index .Image 
 
 <div class="pitfall"><strong>Bẫy:</strong> cho rằng một cái tag đã lưu trên máy là mới nhất. <code>docker run app:latest</code> dùng bất cứ thứ gì <code>app:latest</code> đang mang nghĩa <em>TRÊN CÁI MÁY NÀY</em>, và thứ đó có thể đã sáu tuần tuổi — Docker KHÔNG kiểm lại registry với một cái tag nó đã có. Nên một script deploy không kéo ảnh nào có thể vui vẻ khởi chạy bản dựng của hôm qua, và triệu chứng là một bản vá "không deploy được" mà chẳng có lỗi nào ở đâu. Trong CI và script deploy, hãy tường minh: <code>docker pull image:tag</code> trước, hoặc <code>docker run --pull=always</code>, hoặc <code>docker build --pull</code> cho ảnh nền. Và hãy ưu tiên digest, chỗ mà câu hỏi này không thể phát sinh.</div>
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> Một cái tag là một con trỏ thay đổi được mà người bảo trì ở thượng nguồn CỐ Ý dịch — <code>latest</code> chỉ là cái tên tag mặc định, không phải một lời hứa về thời gian hay phiên bản. Một digest gọi tên NỘI DUNG và không trỏ lại được, nên <code>image:tag@sha256:…</code> là dạng vừa đọc được vừa tái lập được. Và ghim là một CAM KẾT: hãy ghép nó với Renovate hoặc một lịch dựng lại, không thì bạn vừa đông cứng luôn cả các bản vá an ninh cùng với phiên bản.</p>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-4-2-ghim" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">GitHub Actions · 4.2 — @v4 is a pointer, not a version</span><span class="lc-sub">Tags are pointers, digests are fixed — the same idea again when pinning actions by hash.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-4-2-ghim" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">GitHub Actions · 4.2 — @v4 là một CON TRỎ, không phải một phiên bản</span><span class="lc-sub">Tag là con trỏ, digest mới cố định — gặp lại đúng ý này khi ghim action theo mã băm.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -1585,6 +1617,22 @@ docker rmi localhost:5000/alpine:3.20 cuonghoang1103/demo:1.0 &gt;/dev/null 2&gt
 
 <div class="pitfall"><strong>Bẫy:</strong> <code>denied: requested access to the resource is denied</code> khi push, trong lúc bạn chắc chắn đã đăng nhập. Gần như luôn là tên ảnh không khớp với đích đến: đẩy <code>demo:1.0</code> là đang thử <code>docker.io/library/demo</code> — không gian tên của ảnh chính thức, thứ bạn không sở hữu. Tên kho phải chứa tài khoản: <code>docker tag demo:1.0 cuonghoang1103/demo:1.0</code>, hoặc <code>ghcr.io/cuonghoang1103/demo:1.0</code>. Trên GHCR còn có một biến thể thứ hai: lệnh push THÀNH CÔNG nhưng gói mặc định là riêng tư, nên một lượt kéo từ máy chủ của bạn hỏng với <code>unauthorized</code> cho tới khi bạn đặt nó thành công khai hoặc cấp cho máy chủ một cái token.</div>
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> Một registry chỉ là một API HTTP, nên Hub, GHCR và một container <code>registry:2</code> thay thế được cho nhau — thứ duy nhất thay đổi là cái tên bạn gắn tag. <code>~/.docker/config.json</code> cất thông tin đăng nhập dưới dạng base64, KHÔNG mã hoá, nên hãy dùng access token, <code>--password-stdin</code>, và một credential helper trên mọi máy bạn dùng chung. Và giới hạn của Hub được đếm theo IP với những lượt kéo ẩn danh, đó là lý do một bể CI hay một cái NAT văn phòng đụng trần: hãy xác thực, đặt ảnh của mình ở chỗ khác, và dựng một cái gương kéo xuyên ở phía trước.</p>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-13-2-registry-build-o-may-khac" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy VPS · 13.2 — A registry, and building somewhere else: proving the image runs before you push it</span><span class="lc-sub">A real registry in a deploy: build elsewhere, prove the image runs, then push.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-13-2-registry-build-o-may-khac" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 13.2 — Registry và dựng ở máy khác: chứng minh ảnh chạy được trước khi đẩy</span><span class="lc-sub">Registry thật trong một lần deploy: dựng ở máy khác, chứng minh ảnh chạy được rồi mới đẩy.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -2171,6 +2219,32 @@ services:
 <div class="pitfall"><strong>Bẫy:</strong> một lập trình viên dùng Mac Apple Silicon chạy <code>docker build -t app:1.0 . &amp;&amp; docker push app:1.0</code>. Lượt dựng mặc định theo nền tảng của máy chủ, nên một cái ảnh chỉ có arm64 đi lên registry, và cái máy chủ production x86 hỏng với <code>exec format error</code> — sau một lượt dựng thành công, một lượt đẩy thành công và một lượt deploy thành công. Ba bước xanh và một dịch vụ chết. Cách chữa, theo thứ tự ưu tiên: dựng trong CI trên một máy chạy x86; hoặc luôn dựng bằng <code>docker buildx build --platform linux/amd64,linux/arm64 --push</code>; hoặc tối thiểu là thêm một phép kiểm vào script deploy — <code>docker buildx imagetools inspect "\$IMAGE" | grep -q 'linux/amd64'</code> — để nó TỪ CHỐI triển khai một cái ảnh mà máy chủ không chạy được.</div>
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> <code>exec format error</code> trên một chương trình thật nghĩa là sai kiến trúc (trên script của chính bạn thì kiểm dòng <code>#!</code> của nó trước — xem ô bẫy phía trên): so <code>docker inspect --format '{{.Architecture}}'</code> với <code>uname -m</code> là xong phần chẩn đoán. Một cái tag có thể là một CHỈ MỤC gồm nhiều ảnh theo từng nền tảng, và <code>docker buildx imagetools inspect</code> là cách bạn nhìn thấy bên trong đó thật sự có gì. Và mô phỏng thì chạy được nhưng tốn 5–20 lần — hãy dựng native hoặc biên dịch chéo cho bất cứ thứ gì bạn làm thường xuyên hơn thi thoảng.</p>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-15-2-build-anh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">GitHub Actions · 15.2 — Building the image once: multi-stage, two architectures, three tags, a signature</span><span class="lc-sub">Two-architecture images are usually built in CI: one image for amd64 and arm64.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-7-1-khung-script" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 7.1 — The skeleton: shebang, strict mode, and its traps</span><span class="lc-sub">A missing shebang line also produces "exec format error" — explained here.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-15-2-build-anh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">GitHub Actions · 15.2 — Dựng ảnh một lần: multi-stage, hai kiến trúc, ba tag, một chữ ký</span><span class="lc-sub">Ảnh hai kiến trúc thường được dựng trong CI: một ảnh cho cả amd64 lẫn arm64.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-7-1-khung-script" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 7.1 — Bộ khung: shebang, chế độ nghiêm ngặt, và những cái bẫy của nó</span><span class="lc-sub">Thiếu dòng shebang cũng sinh exec format error — bài này giải thích.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 3.5 ─────────────────────────── */
@@ -2741,6 +2815,32 @@ Sun 2026-08-24 04:00:00 UTC 1 day 6h  -     -       docker-prune.timer  docker-p
 
 <div class="pitfall"><strong>Bẫy:</strong> <code>docker system prune -a --volumes</code> như một phản xạ khi đĩa đầy. Nó gỡ mọi ảnh không dùng, mọi container đã dừng, mọi mạng — và <strong>MỌI VOLUME VÔ DANH không gắn vào container nào</strong> (từ Docker Engine 23, volume có tên được bỏ qua trừ khi bạn dùng thêm <code>docker volume prune -a</code> — các bản cũ hơn lấy cả volume có tên). Nếu volume CSDL của bạn là vô danh — mặc định khi Postgres chạy thiếu <code>-v</code> — và container của nó đã bị xoá, thì dữ liệu biến mất, không có xác nhận nào ngoài một câu <code>y/N</code> chung chung chẳng gọi tên thứ nó sắp xoá. Không có hoàn tác. Hãy chạy cái thang ở trên theo thứ tự, đừng bao giờ thêm <code>--volumes</code> vào một công việc tự động, và hãy sao lưu trước mọi lần dọn dẹp trên một cái máy giữ dữ liệu bạn không tạo lại được.</div>
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> Bộ đệm dựng và ảnh mồ côi thường là phần lớn vấn đề và xoá chúng không rủi ro, nên <code>docker builder prune</code> với <code>docker image prune</code> đi trước, luôn luôn. <code>-a</code> gỡ những ảnh không container ĐANG CHẠY nào dùng, mà trên máy chủ thì điều đó bao gồm cả bản phát hành bạn định quay lui về — hãy dùng <code>--filter until=</code> với một cửa sổ rộng hơn chân trời quay lui. Và ĐỪNG BAO GIỜ tự động hoá việc tỉa volume: hãy đặt tên cho volume, nhìn vào bên trong trước khi xoá, và nhớ rằng một volume vô danh mang tên ngẫu nhiên rất thường là cơ sở dữ liệu của một ai đó.</p>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-10-1-dia-day" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 10.1 — The disk is full: finding out what filled it</span><span class="lc-sub">Docker is only one suspect: find what is filling the disk across the whole machine.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-8-4-day-dia" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy VPS · 8.4 — ENOSPC, and the two disks that are full without being full</span><span class="lc-sub">A full disk on a real server — including two disks that were "full" without being full.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-10-1-dia-day" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 10.1 — Đĩa đầy: tìm ra cái gì làm nó đầy</span><span class="lc-sub">Docker chỉ là một thủ phạm: tìm ra cái gì làm đầy đĩa trên cả máy.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-8-4-day-dia" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 8.4 — ENOSPC, và hai cái đĩa ĐẦY mà không đầy</span><span class="lc-sub">Đĩa đầy trên máy chủ thật — kể cả hai kiểu đầy mà không đầy.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

@@ -397,6 +397,32 @@ ${slide('dv-09', 6, 'Bốn tín hiệu vàng cho một VPS — và cái giá c�
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Google SRE Book — Monitoring Distributed Systems</span><span class="lc-sub">sre.google/sre-book/monitoring-distributed-systems/ — bốn tín hiệu vàng mà danh sách ở trên là bản dành cho máy chủ nhỏ của chúng.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash — đọc /proc, và viết một vòng lặp thu số đo</span><span class="lc-sub">/courses/linux-bash/learn?lessonSlug=lnx-14-2-hieu-nang${REF.replace('?', '&')} — các khuôn mẫu awk và đọc tệp ở trên, và vì sao tránh shell con lại quan trọng trong một vòng lặp chạy mãi mãi.</span></span></div>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-5-2-top-tai-bo-nho" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 5.2 — Watching a live system: top, load average and memory</span><span class="lc-sub">Reading top, load average and memory on the whole machine.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-4-1-bon-loai-chi-so" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Observability · 4.1 — What a metric is, and the four kinds</span><span class="lc-sub">The four kinds of metric, and which one each number here is.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-5-2-top-tai-bo-nho" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 5.2 — Nhìn một hệ thống đang chạy: top, tải trung bình và bộ nhớ</span><span class="lc-sub">Đọc top, tải trung bình và bộ nhớ của cả máy.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-4-1-bon-loai-chi-so" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Observability · 4.1 — Chỉ số là gì, và bốn loại của nó</span><span class="lc-sub">Bốn loại chỉ số, và mỗi con số ở đây thuộc loại nào.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
 
@@ -701,6 +727,42 @@ p95 THAT cua ca hai: 25.9 ms</div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Google SRE Book — Service Level Objectives</span><span class="lc-sub">sre.google/sre-book/service-level-objectives/ — vì sao một SLO được phát biểu bằng một phân vị trên một cửa sổ chứ không phải bằng trung bình, và chọn cửa sổ thế nào.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">nginx — log_format và \$request_time</span><span class="lc-sub">nginx.org/en/docs/http/ngx_http_log_module.html — cái biến làm cho dòng awk ở trên khả thi, cộng <code>\$upstream_response_time</code> để tách thời gian của ứng dụng khỏi thời gian của proxy.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Nginx — một định dạng log trả lời được câu hỏi</span><span class="lc-sub">/courses/nginx/learn?lessonSlug=nginx-10-1-log-mac-dinh-bo-sot${REF.replace('?', '&')} — ghi những biến nào để sau này tách được độ trễ, trạng thái bộ đệm và upstream.</span></span></div>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-4-2-trung-binh-noi-doi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Observability · 4.2 — The average is a lie, and here is the measurement</span><span class="lc-sub">Why averages lie — the same lesson with Prometheus metrics.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-4-3-histogram" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Observability · 4.3 — Histograms: a percentile for 104 bytes</span><span class="lc-sub">Histograms and percentiles done properly.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-3-6-awk" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 3.6 — awk: a whole language in one line</span><span class="lc-sub">awk: computing percentiles from a log with one command line.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-4-2-trung-binh-noi-doi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Observability · 4.2 — Trung bình là một lời nói dối, và đây là phép đo</span><span class="lc-sub">Vì sao trung bình nói dối — cùng bài học với chỉ số Prometheus.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-4-3-histogram" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Observability · 4.3 — Histogram: một phân vị với giá 104 byte</span><span class="lc-sub">Histogram và phân vị, làm cho tử tế.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-3-6-awk" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 3.6 — awk: cả một ngôn ngữ gói trong một dòng</span><span class="lc-sub">awk: tính phân vị từ log bằng một dòng lệnh.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -1068,6 +1130,42 @@ $ journalctl --user -t canh-vps.sh -g HONG -o verbose -n 1 | grep -E "_SYSTEMD_U
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">systemd-journald.conf(5)</span><span class="lc-sub">freedesktop.org/software/systemd/man/journald.conf.html — <code>SystemMaxUse=</code> và <code>MaxRetentionSec=</code>, hai thiết lập ngăn cuốn journal trở thành thứ làm đầy đĩa của bạn.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">jq manual</span><span class="lc-sub">jqlang.github.io/jq/manual/ — <code>select()</code>, <code>group_by()</code> và <code>-r</code>, ba thứ bao được phần lớn nhu cầu phân tích log.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Nginx — định dạng log, log có điều kiện và ghi có đệm</span><span class="lc-sub">/courses/nginx/learn?lessonSlug=nginx-10-3-khong-ghi-log-va-gia-cua-no${REF.replace('?', '&')} — giá đo được của việc ghi log mọi request so với ghi có đệm, và mẹo <code>map</code> nằm sau log có điều kiện.</span></span></div>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nginx/learn?lessonSlug=nginx-10-2-log-json-escape" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nginx · 10.2 — JSON logs, and the escape that decides if a machine can read them</span><span class="lc-sub">nginx access logs in JSON, and escaping them correctly.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-10-3-log-journalctl" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 10.3 — Logs: journalctl, /var/log and rotation</span><span class="lc-sub">journalctl, /var/log and log rotation.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-3-1-id-di-den-hu-vo" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Observability · 3.1 — The id that goes nowhere</span><span class="lc-sub">Following one request ID across services — and where it gets lost.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nginx/learn?lessonSlug=nginx-10-2-log-json-escape" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nginx · 10.2 — Log JSON, và cái escape quyết định máy có đọc nổi không</span><span class="lc-sub">Log truy cập của nginx dạng JSON, và escape cho đúng.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-10-3-log-journalctl" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 10.3 — Log: journalctl, /var/log và việc xoay vòng</span><span class="lc-sub">journalctl, /var/log và việc xoay vòng log.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-3-1-id-di-den-hu-vo" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Observability · 3.1 — Cái id chẳng đi tới đâu</span><span class="lc-sub">Theo một mã request qua các dịch vụ — và chỗ nó rơi mất.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -1506,6 +1604,42 @@ $ MA=$(curl -s -o /dev/null -w "%{http_code}" --max-time 3 $U); echo "[\${MA:-00
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Rob Ewaschuk — My Philosophy on Alerting</span><span class="lc-sub">Tài liệu nội bộ của Google về sau thành chương báo động của cuốn SRE; quy tắc rằng mỗi cú gọi phải HÀNH ĐỘNG ĐƯỢC, MỚI MẺ và ĐÒI HỎI TRÍ TUỆ là phát biểu ngắn gọn hữu dụng nhất của ý tưởng này.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash — cron, và viết một tác vụ biết báo hỏng</span><span class="lc-sub">/courses/linux-bash/learn?lessonSlug=lnx-11-2-cron-timer${REF.replace('?', '&')} — cron gửi output đi đâu, vì sao một cron job im lặng thường là một cron job hỏng, và làm sao bắt nó lên tiếng.</span></span></div>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-9-2-nguong-suy-ra" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Observability · 9.2 — Thresholds you derive instead of guess</span><span class="lc-sub">Deriving alert thresholds instead of guessing them.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-9-4-met-moi-va-truc-ca" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Observability · 9.4 — Alert fatigue, and on-call for one person</span><span class="lc-sub">Alert fatigue, and being on call.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-6-4-ma-thoat-dieu-kien" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 6.4 — Exit codes, conditions and case</span><span class="lc-sub">Exit codes and conditions: the number every check in this lesson is built on.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-9-2-nguong-suy-ra" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Observability · 9.2 — Ngưỡng suy ra được thay vì đoán mò</span><span class="lc-sub">Suy ra ngưỡng báo động thay vì đoán.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-9-4-met-moi-va-truc-ca" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Observability · 9.4 — Mệt mỏi vì cảnh báo, và trực ca khi chỉ có một người</span><span class="lc-sub">Mệt mỏi vì báo động, và trực ca.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-6-4-ma-thoat-dieu-kien" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 6.4 — Mã thoát, điều kiện và case</span><span class="lc-sub">Mã thoát và điều kiện: con số mà mọi phép kiểm trong bài này dựa vào.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
 
@@ -1908,6 +2042,22 @@ ${slide('dv-09', 27, 'Chọn công cụ: tự viết, Uptime Kuma, Prometheus + 
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">openssl-s_client(1)</span><span class="lc-sub">docs.openssl.org/master/man1/openssl-s_client/ — phép kiểm hạn chứng chỉ ở trên, và <code>-servername</code> cho SNI, thiếu nó là bạn kiểm nhầm máy chủ ảo.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Kubernetes — liveness, readiness và startup probe</span><span class="lc-sub">kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/ — phát biểu công bố rõ nhất về việc vì sao phép kiểm-để-khởi-động-lại và phép kiểm "nó có chạy không" phải là HAI thứ tách biệt.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Nginx — thứ tự khớp location, và chẩn đoán một cú 502</span><span class="lc-sub">/courses/nginx/learn?lessonSlug=nginx-11-4-tu-ma-trang-thai-toi-nguyen-nhan${REF.replace('?', '&')} — một request thật ra rơi vào khối nào, và log lỗi nói gì khi một upstream từ chối kết nối.</span></span></div>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nginx/learn?lessonSlug=nginx-6-1-chuoi-chung-chi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nginx · 6.1 — The certificate chain, and the intermediate everyone forgets</span><span class="lc-sub">The certificate chain and the intermediate CA everybody forgets.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nginx/learn?lessonSlug=nginx-6-1-chuoi-chung-chi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nginx · 6.1 — Chuỗi chứng chỉ, và cái CA trung gian ai cũng quên</span><span class="lc-sub">Chuỗi chứng chỉ và cái CA trung gian ai cũng quên.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

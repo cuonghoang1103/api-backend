@@ -598,6 +598,32 @@ no postgres:16-alpine</div>
 <div class="pitfall"><strong>Bẫy:</strong> <code>-p 5432:5432</code> trên một máy chủ công khai. Docker ghi luật cổng của nó thẳng vào chuỗi iptables <code>DOCKER</code>, và chuỗi đó được tra <em>TRƯỚC</em> luật của ufw — nên cơ sở dữ liệu của bạn nằm trên internet công cộng trong khi <code>ufw status</code> chẳng hiện gì bất thường và còn báo cổng đó là bị chặn. Đây không phải một con bọ; đây là Docker làm chính xác thứ bạn yêu cầu. Cách chữa là gắn tường minh: <code>-p 127.0.0.1:5432:5432</code>. Hãy soát bất cứ cái máy nào bằng <code>sudo ss -tlnp | grep -v 127.0.0.1</code> và kiểm rằng mọi dòng đều là thứ bạn CÓ Ý phơi ra.</div>
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> Cờ đứng trước tên ảnh và mọi thứ sau nó thuộc về container — riêng cái luật đó giải thích phần lớn sự bối rối kiểu "cờ của tôi bị bỏ qua". <code>-p</code> là <code>máy chủ:container</code>, và không có tiền tố <code>127.0.0.1:</code> tường minh thì bạn đang publish ra MỌI giao diện, có tường lửa hay không cũng vậy. Và <code>--entrypoint ""</code> là lối thoát để lấy một cái shell trong một ảnh mà entrypoint đang chắn đường.</p>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-9-1-giao-dien-cong-dns" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 9.1 — The network from the shell: interfaces, ports and DNS</span><span class="lc-sub">The -p flag is about network ports. If ports and addresses are still fuzzy, start here.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-5-1-tien-trinh-la-gi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 5.1 — What a process is, and how to look at one</span><span class="lc-sub">What a process is, and how to look at one.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-9-1-giao-dien-cong-dns" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 9.1 — Mạng nhìn từ shell: giao diện, cổng và DNS</span><span class="lc-sub">Cờ -p là chuyện cổng mạng. Nếu cổng và địa chỉ còn mơ hồ, bài này dạy từ gốc.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-5-1-tien-trinh-la-gi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 5.1 — Tiến trình là gì, và nhìn vào nó bằng cách nào</span><span class="lc-sub">Tiến trình là gì, và nhìn vào nó bằng cách nào.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 2.2 ─────────────────────────── */
@@ -1111,6 +1137,32 @@ api</div>
 <div class="pitfall"><strong>Bẫy:</strong> một môi trường chạy có đệm khiến <code>docker logs</code> trông như rỗng hoặc đứng hình. Python đệm stdout khi nó không phải TTY, nên output của <code>print()</code> có thể nằm im trong bộ đệm hàng phút — hoặc mãi mãi, nếu tiến trình bị giết — và bạn kết luận ứng dụng bị treo trong khi nó vẫn chạy tốt. Cách chữa tuỳ theo môi trường và đều gói trong một dòng: <code>ENV PYTHONUNBUFFERED=1</code> (hoặc <code>python -u</code>), <code>stdbuf -oL</code> cho chương trình bất kỳ, còn với Node thì không cần gì vì <code>console.log</code> ra một ống dẫn vốn đã xả theo từng lần ghi. Nếu một container "im lặng", hãy nghi bộ đệm trước khi nghi mã nguồn.</div>
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> Ứng dụng chạy trong container ghi log ra <strong>stdout và stderr</strong> — một file log bên trong container thì vô hình với mọi công cụ và chết cùng nó. <code>docker inspect --format</code> chạy lên tất cả container cho bạn trạng thái, mã thoát, cờ OOM và số lần khởi động lại trong một dòng, và đó là cách phân loại nhanh nhất từng có. Và trình <code>json-file</code> mặc định KHÔNG có giới hạn kích thước cho tới khi bạn đặt, nên hãy đưa <code>max-size</code> vào <code>daemon.json</code> trước khi một file log làm đầy cái đĩa.</p>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-5-2-top-tai-bo-nho" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 5.2 — Watching a live system: top, load average and memory</span><span class="lc-sub">docker top and docker stats borrow the view of top: reading load and memory for the whole machine.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-10-3-log-journalctl" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 10.3 — Logs: journalctl, /var/log and rotation</span><span class="lc-sub">Logs outside the container, and log rotation.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-5-2-top-tai-bo-nho" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 5.2 — Nhìn một hệ thống đang chạy: top, tải trung bình và bộ nhớ</span><span class="lc-sub">docker top và docker stats mượn cách nhìn của top: đọc tải và bộ nhớ của cả máy.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-10-3-log-journalctl" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 10.3 — Log: journalctl, /var/log và việc xoay vòng</span><span class="lc-sub">Log ngoài container, và chuyện xoay vòng log.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 2.3 ─────────────────────────── */
@@ -1542,6 +1594,32 @@ Hostname: f91e522a2e37</div>
 <div class="pitfall"><strong>Bẫy:</strong> vá một container bằng <code>docker exec</code> rồi coi như xong việc. <code>docker exec -u root web apk add curl</code> chạy được, và thay đổi đó chỉ sống trong tầng ghi được của ĐÚNG container đó — nên nó biến mất ở lần deploy kế tiếp, vắng mặt ở mọi bản sao khác, và không tồn tại trong file nào để ai review. Cái luật: <code>exec</code> là để <em>KHÁM PHÁ</em> xem sai ở đâu; còn cách chữa thì thuộc về Dockerfile, file Compose, hoặc môi trường. Nếu bạn đã exec cùng một bản vá tới lần thứ hai thì bạn vừa tìm ra một thứ thuộc về cái ảnh.</div>
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> <code>exec</code> khởi chạy một tiến trình mới và an toàn; <code>attach</code> nối vào PID 1 và Ctrl-C ở đó sẽ dừng ứng dụng của bạn — hãy tách ra bằng Ctrl-P Ctrl-Q. Dùng <code>-it</code> khi có người đang gõ và chỉ <code>-i</code> trong ống dẫn với script, vì một cái TTY sẽ tiêm mã thoát vào đúng thứ output bạn đang phân tích. Và một ảnh không có shell KHÔNG phải là thứ không gỡ lỗi được: hãy gia nhập namespace của nó bằng một container phụ (<code>--pid=container:X</code>) rồi đọc hệ thống file của nó qua <code>/proc/1/root/</code>.</p>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-12-1-namespaces" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 12.1 — A container is a process with a different view: the namespaces, one by one</span><span class="lc-sub">docker exec is a new process joining existing namespaces — here done by hand.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-5-3-tin-hieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 5.3 — Signals: what Ctrl-C actually sends</span><span class="lc-sub">Why attaching and pressing Ctrl-C kills the container: signals explained.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-12-1-namespaces" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Hệ điều hành cho lập trình viên · 12.1 — Container là một tiến trình nhìn thế giới khác đi: từng namespace một</span><span class="lc-sub">docker exec là một tiến trình mới chui vào namespace có sẵn — ở đây tự làm bằng tay.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-5-3-tin-hieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 5.3 — Tín hiệu: Ctrl-C thật ra gửi cái gì</span><span class="lc-sub">Vì sao attach rồi bấm Ctrl-C lại giết container: giải thích tín hiệu.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 2.4 ─────────────────────────── */
@@ -1956,6 +2034,32 @@ python:3.12-alpine: Wed Sep 23 21:23:13 +07 2026</div>
 
 <div class="pitfall"><strong>Bẫy:</strong> tưởng rằng <code>-e</code> đi tới một cái shell. <code>docker run -e "GREETING=chào \$USER" alpine sh -c 'echo \$GREETING'</code> chỉ chạy được vì <em>SHELL CỦA BẠN</em> đã khai triển <code>\$USER</code> trước khi Docker kịp nhìn thấy. Bên trong <code>--env-file</code> thì không có shell nào, nên cùng dòng chữ đó tới nơi theo nghĩa đen. Và theo chiều ngược lại, <code>docker run alpine echo \$HOSTNAME</code> in ra tên máy CHỦ của bạn chứ không phải của container, vì phép khai triển đã xảy ra trước khi container tồn tại — bạn cần <code>sh -c 'echo \$HOSTNAME'</code> để hoãn nó lại. Mỗi khi giá trị một biến trông có vẻ sai, hãy hỏi xem SHELL NÀO, ở PHÍA NÀO, đã khai triển nó.</div>
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> Thứ tự ưu tiên chạy từ <code>ENV</code> của ảnh → <code>--env-file</code> → <code>-e</code> → thứ mà entrypoint đặt, và <code>--env-file</code> thì GIỮ NGUYÊN dấu nháy của bạn và KHÔNG khai triển biến. Biến môi trường nhìn thấy được trong <code>docker inspect</code> và <code>/proc/PID/environ</code>, nên hãy ưu tiên quy ước <code>_FILE</code> cho bất cứ thứ gì bí mật. Và tham số đứng sau tên ảnh thì THAY THẾ <code>CMD</code> và được NỐI vào sau <code>ENTRYPOINT</code> — đó là lý do <code>--entrypoint ""</code> là cách bạn lấy được một cái shell khi entrypoint đang chắn đường.</p>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-8-3-bien-moi-truong-bi-mat" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 8.3 — Environment variables in practice, and where secrets go</span><span class="lc-sub">Environment variables are not a Docker thing: how they work in the shell, and where secrets belong.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-4-4-nguoi-dung-nhom-sudo" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 4.4 — Users, groups and sudo</span><span class="lc-sub">UIDs, groups and user permissions.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-8-3-bien-moi-truong-bi-mat" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 8.3 — Biến môi trường trong thực tế, và bí mật thì đặt ở đâu</span><span class="lc-sub">Biến môi trường không phải chuyện riêng của Docker: chúng chạy thế nào trong shell, và bí mật nên đặt ở đâu.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-4-4-nguoi-dung-nhom-sudo" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 4.4 — Người dùng, nhóm và sudo</span><span class="lc-sub">UID, nhóm và quyền của người dùng.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -2389,6 +2493,32 @@ unhealthy restarts=0 policy=unless-stopped</div>
 
 <div class="pitfall"><strong>Bẫy:</strong> <code>--restart always</code> trên một container thoát ngay lập tức. Nếu câu lệnh sai — gõ nhầm trong entrypoint, thiếu một biến môi trường — thì container chết trong vài mili giây và Docker khởi chạy lại nó MÃI MÃI. Cơ chế lùi dần chặn chi phí CPU ở khoảng một lần thử mỗi phút, nhưng container thì không bao giờ chạy và cú hỏng thì im lặng trừ khi bạn nhìn vào. Tệ hơn, <code>always</code> còn khởi chạy lại nó SAU KHI bạn đã cố ý dừng, ở lần tiến trình nền khởi động kế tiếp, nên "tôi tắt cái đó hôm qua rồi" không phải một trạng thái ổn định. Hãy dùng <code>unless-stopped</code> cho dịch vụ, theo dõi <code>RestartCount</code>, và coi một container ở trạng thái <code>restarting</code> là một sự cố (Chương 12).</div>
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> Một container không có <code>--memory</code> có thể kéo sập cả máy chủ, và giới hạn còn nói cho môi trường chạy hiện đại biết cách tự định kích thước, nên đặt chúng là chuyện về tính đúng đắn chứ không chỉ về an toàn. <code>unless-stopped</code> là chính sách khởi động lại đúng cho dịch vụ vì nó tôn trọng một cú dừng có chủ ý, trong khi <code>always</code> đảo ngược nó ở lần tiến trình nền khởi động kế tiếp. Và healthcheck chỉ <em>BÁO CÁO</em> — Docker sẽ KHÔNG BAO GIỜ khởi động lại một container không khoẻ, nên phải có thứ khác (Compose <code>depends_on</code>, một bộ điều phối, script deploy của bạn) hành động theo nó.</p>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-12-2-cgroups" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 12.2 — cgroups v2 by hand: memory.max, cpu.max, pids.max and io.max, each one hit on purpose</span><span class="lc-sub">Every limit flag in this lesson writes to a cgroup; here each ceiling is hit by hand.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-8-1-ma-137" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy VPS · 8.1 — Exit 137, and what the kernel writes down</span><span class="lc-sub">When exit 137 happens on a real server: reading what the kernel recorded.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-12-2-cgroups" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Hệ điều hành cho lập trình viên · 12.2 — cgroup v2 bằng tay: memory.max, cpu.max, pids.max và io.max, chạm từng trần một</span><span class="lc-sub">Mọi cờ giới hạn trong bài này đều ghi vào cgroup; bài kia chạm từng trần bằng tay.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-8-1-ma-137" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 8.1 — Mã thoát 137, và thứ nhân hệ điều hành ghi lại</span><span class="lc-sub">Khi mã 137 xảy ra trên máy chủ thật: đọc thứ nhân hệ điều hành ghi lại.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

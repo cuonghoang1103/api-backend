@@ -589,6 +589,32 @@ src</div>
 <div class="pitfall"><strong>Bẫy:</strong> <code>RUN cd /app</code> rồi tới một lệnh <code>RUN</code> khác tưởng mình đang ở đó. Mỗi <code>RUN</code> là một shell MỚI trong một tầng MỚI, nên việc đổi thư mục bị vứt đi ngay khoảnh khắc chỉ thị đó kết thúc. Dòng kế tiếp chạy ở thư mục làm việc cũ và hoặc là hỏng, hoặc — tệ hơn — thành công NHẦM CHỖ, âm thầm tạo ra một cái ảnh có file nằm dưới <code>/</code>. Hãy dùng <code>WORKDIR</code>, thứ có trạng thái xuyên qua các chỉ thị, và gộp những câu lệnh thật sự thuộc về nhau vào MỘT <code>RUN</code> bằng <code>&amp;&amp;</code>. Điều tương tự áp cho <code>RUN export VAR=x</code>: hãy dùng <code>ENV</code>.</div>
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> Dấu chấm ở cuối <code>docker build .</code> là NGỮ CẢNH, không phải Dockerfile — nó được tải lên tiến trình nền, và đó là lý do <code>COPY</code> không bao giờ với ra ngoài nó được, và là lý do một thư mục <code>node_modules</code> lạc chỗ tốn của bạn vài giây ở mọi lượt dựng. Hãy viết <code>.dockerignore</code> trước: nó làm bản dựng nhanh và ngăn <code>.env</code> với <code>.git</code> bị nướng vào một cái ảnh đã công bố. Và mỗi <code>RUN</code> là một shell riêng và một tầng riêng, nên <code>cd</code> với <code>export</code> không mang sang được — đó chính là việc của <code>WORKDIR</code> và <code>ENV</code>.</p>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-17-1-anh-docker" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 17.1 — The image: 440MB down to 58,8MB</span><span class="lc-sub">A Dockerfile for a real API, taking the image from 440 MB to 58.8 MB.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-4-2-semver-lockfile" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 4.2 — Semver and the lockfile</span><span class="lc-sub">Why npm ci needs a lockfile.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-17-1-anh-docker" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 17.1 — Ảnh Docker: từ 440MB xuống 58,8MB</span><span class="lc-sub">Dockerfile cho một API thật, kéo ảnh từ 440 MB xuống 58,8 MB.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-4-2-semver-lockfile" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 4.2 — Semver và lockfile</span><span class="lc-sub">Vì sao npm ci cần lockfile.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 4.2 ─────────────────────────── */
@@ -1141,6 +1167,32 @@ volume 6fb8fab50e078a21308a967271fab7ecd6813b625a9eddaece85168e52345b60 -&gt; /d
 
 <div class="pitfall"><strong>Bẫy:</strong> <code>RUN chown -R node:node /app</code> sau khi chép. Nó trông vô hại và nó NHÂN ĐÔI mọi file trong <code>/app</code> vào một tầng mới, vì đổi siêu dữ liệu của một file cũng là một lần GHI, và ghi thì chép-lên (Bài 1.2). Trên một <code>node_modules</code> có 40.000 file thì đó là hàng trăm megabyte thêm vào ảnh chỉ để đổi quyền. Hãy dùng <code>COPY --chown=node:node</code>, nó đặt quyền sở hữu ngay lúc file được ghi ra và không tốn gì. Điều tương tự áp cho <code>RUN chmod -R</code>: hãy ưu tiên <code>COPY --chmod</code>.</div>
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> Hãy đặt <code># syntax=docker/dockerfile:1</code> ở dòng đầu tiên của mọi Dockerfile — nó mở khoá cache mount, secret mount và heredoc mà không tốn gì. Hãy dùng <code>COPY</code>, đừng dùng <code>ADD</code>: việc tự giải nén và tải URL của <code>ADD</code> đều gây bất ngờ, và dạng URL thì chẳng kiểm chứng gì cả. Và đừng đặt <code>VOLUME</code> trong ảnh ứng dụng của chính bạn — nó vứt đi những file ghi sau đó và rò một volume vô danh ở mọi lượt chạy.</p>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-7-1-khung-script" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 7.1 — The skeleton: shebang, strict mode, and its traps</span><span class="lc-sub">set -e and pipefail are not Dockerfile-specific: strict mode and its traps.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-4-2-chmod-chown-umask" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 4.2 — chmod, chown and umask: changing what you found</span><span class="lc-sub">What chown and chmod actually change.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-7-1-khung-script" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 7.1 — Bộ khung: shebang, chế độ nghiêm ngặt, và những cái bẫy của nó</span><span class="lc-sub">set -e và pipefail không phải chuyện riêng của Dockerfile: chế độ nghiêm ngặt và các bẫy của nó.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-4-2-chmod-chown-umask" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 4.2 — chmod, chown và umask: đổi thứ bạn vừa đọc ra</span><span class="lc-sub">chown và chmod thật ra đổi cái gì.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -1723,6 +1775,32 @@ docker rmi sf ef ep noexp tt &gt;/dev/null 2&gt;&amp;1; rm -f entrypoint.sh</cod
   <span class="lc-cta">MỞ BÀI NODE.JS →</span>
 </a>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-1-5-pid1" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 1.5 — PID 1, init systems and processes in containers</span><span class="lc-sub">Why PID 1 is special to the kernel.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-5-3-tin-hieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 5.3 — Signals: what Ctrl-C actually sends</span><span class="lc-sub">SIGTERM and SIGKILL from first principles.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-1-5-pid1" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Hệ điều hành cho lập trình viên · 1.5 — PID 1, hệ thống init và tiến trình trong container</span><span class="lc-sub">Vì sao PID 1 đặc biệt với nhân hệ điều hành.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-5-3-tin-hieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 5.3 — Tín hiệu: Ctrl-C thật ra gửi cái gì</span><span class="lc-sub">SIGTERM và SIGKILL là gì, dạy từ gốc.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 4.4 ─────────────────────────── */
@@ -2180,6 +2258,32 @@ ERROR: process "/bin/sh -c npm run build" did not complete successfully: exit co
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 17.4: bí mật vẫn còn sau khi bạn đã xoá</span><span class="lc-sub">Dockerfile trông cẩn thận mà lộ hai bí mật, secret mount không để lại gì, biến môi trường lúc chạy (ảnh 0, container inspect 1), và dừng ngay khi thiếu biến.</span></span>
   <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-4-2-luc-dung-va-luc-chay" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy VPS · 4.2 — Build time and run time are different moments</span><span class="lc-sub">The same two moments — build time and run time — for the whole deploy process.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-6-1-che-bi-mat" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">GitHub Actions · 6.1 — Masking covers the stored string, and nothing else</span><span class="lc-sub">Secrets in CI logs: why masking the string is not enough.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-4-2-luc-dung-va-luc-chay" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 4.2 — Lúc DỰNG và lúc CHẠY là hai thời điểm khác nhau</span><span class="lc-sub">Đúng hai thời điểm này — lúc dựng và lúc chạy — nhưng cho cả quy trình deploy.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-6-1-che-bi-mat" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">GitHub Actions · 6.1 — Che bí mật phủ ĐÚNG chuỗi đã lưu, không phủ gì khác</span><span class="lc-sub">Bí mật trong log CI: vì sao che chuỗi là chưa đủ.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>
 `,
@@ -2818,6 +2922,42 @@ ${slide('dk-04', 24, '5 công thức dựng thật: ảnh cuối nhẹ hơn stag
 
 <div class="pitfall"><strong>Bẫy:</strong> một máy chủ gắn vào <code>127.0.0.1</code> bên trong container. <code>docker run -p 3000:3000</code> thành công, <code>docker ps</code> hiện cổng đã ánh xạ, log ghi "listening on 127.0.0.1:3000" — và <code>curl localhost:3000</code> từ máy chủ thì nhận connection refused. Bên trong container, <code>127.0.0.1</code> là loopback của CHÍNH container đó và không gì ngoài namespace mạng của nó với tới được (Bài 1.1). Cách chữa tuỳ framework và luôn cùng một ý: <code>HOSTNAME=0.0.0.0</code> cho Next.js, <code>--host 0.0.0.0</code> cho uvicorn và Vite, <code>app.listen(3000, '0.0.0.0')</code> cho Express, <code>0.0.0.0:8080</code> cho Go. Hãy xác nhận bằng <code>docker exec c netstat -tln</code>, hoặc nhìn cột Address trong <code>ss -tlnp</code> từ một container phụ.</div>
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> Mọi công thức ở đây đều cài thư viện TRƯỚC khi chép mã nguồn, và giữ trình biên dịch với thư viện dev nằm ngoài stage cuối — hai thói quen đó mang đi được qua mọi ngôn ngữ. Hãy gắn vào <code>0.0.0.0</code>, đừng <code>127.0.0.1</code>: một máy chủ nghe sai địa chỉ tạo ra một container chạy hoàn hảo mà chẳng trả lời ai — hoặc trả lời máy chủ mà không trả lời chính healthcheck của nó, như Next.js ở trên. Và mỗi hệ sinh thái có một cái bẫy riêng — engine target của Prisma, <code>HOSTNAME</code> của Next, bộ đệm với wheel musl của Python, <code>CGO_ENABLED</code> của Go — đáng kiểm trước khi bạn ném một buổi chiều vào nó.</p>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-17-1-anh-docker" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 17.1 — The image: 440MB down to 58,8MB</span><span class="lc-sub">Recipe one applied to a real API: 440 MB down to 58.8 MB.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nextjs/learn?lessonSlug=nextjs-20-3-docker" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Next.js · 20.3 — Docker: packaging the app to run anywhere</span><span class="lc-sub">Packaging Next.js with Docker in depth (lesson 20.2 just before it covers the NEXT_PUBLIC trap).</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nginx/learn?lessonSlug=nginx-4-5-khoi-tinh-production" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nginx · 4.5 — A production static block, assembled and measured</span><span class="lc-sub">The nginx static block, caching and compression included, assembled and measured line by line.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-17-1-anh-docker" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 17.1 — Ảnh Docker: từ 440MB xuống 58,8MB</span><span class="lc-sub">Công thức một áp vào một API thật: từ 440 MB xuống 58,8 MB.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nextjs/learn?lessonSlug=nextjs-20-3-docker" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Next.js · 20.3 — Docker: đóng gói app để chạy ở đâu cũng được</span><span class="lc-sub">Đi sâu đóng gói Next.js bằng Docker (bài 20.2 ngay trước đó nói kỹ bẫy NEXT_PUBLIC).</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nginx/learn?lessonSlug=nginx-4-5-khoi-tinh-production" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nginx · 4.5 — Một khối tĩnh cho production, ráp lại và đem đo</span><span class="lc-sub">Khối tĩnh của nginx, kể cả bộ đệm và nén, ráp lại và đo từng dòng.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

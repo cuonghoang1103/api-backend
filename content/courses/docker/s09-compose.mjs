@@ -200,7 +200,7 @@ proxy-1  | nginx: [emerg] host not found in upstream "api" in /etc/nginx/nginx.c
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">1 · api died</span><span class="lz-t">ECONNREFUSED: nobody listening on db:5432 yet</span><span class="lz-d"><code>depends_on: [db]</code> only made sure the db container was started first. Postgres needed about 0.87 s more to initialise; the API gave up after 0.17 s. Lesson 9.3 measures this race to the millisecond and fixes it.</span></div>
   <div class="lz-step"><span class="lz-k">2 · proxy died</span><span class="lz-t">nginx could not resolve "api"</span><span class="lz-d">The DNS name <code>api</code> exists only while the api container exists and is on the network. nginx resolves its upstreams once at startup, found nothing, and exited. One failure caused the other — read logs from the bottom of the dependency chain up.</span></div>
-  <div class="lz-step"><span class="lz-k">3 · db lived</span><span class="lz-t">and is ready a moment later</span><span class="lz-d">Running <code>docker compose up -d</code> a second time now starts api and proxy successfully, because db is ready by then. That "it works the second time" is the classic symptom of a startup race.</span></div>
+  <div class="lz-step"><span class="lz-k">3 · db lived</span><span class="lz-t">and is ready a moment later</span><span class="lz-d">Running <code>docker compose up -d</code> a second time now starts api, because db is ready by then — but on the 12/11/2026 re-run (Compose v5.5.1) proxy died again on that second run, because it started at the same moment as api and still could not resolve it; only a third run brought everything up. "It works the second (or third) time" is the classic symptom of a startup race.</span></div>
 </div>
 <p>Now look at what Compose actually created, without Compose — straight from Docker. Every object carries the project name, and every container carries labels that let Compose find it again later:</p>
 <pre><code class="language-bash">docker network ls --filter name=dk09
@@ -287,6 +287,7 @@ it will be ignored, please remove it to avoid potential confusion</div>
 </a>
 
 <div class="pitfall"><strong>Pitfall:</strong> typing <code>docker compose down -v</code> out of habit when you meant <code>down</code>. The <code>-v</code> deletes every named volume in the project, which on a development machine is the database you spent an afternoon seeding, and on a server is production data. There is no confirmation prompt and no undo. Two habits protect you: never put <code>-v</code> in a shell alias or a script that is not specifically named something like <code>reset-dev-db</code>, and on any machine with data worth keeping, back up first (Lesson 7.5). If you only want to restart the stack, <code>docker compose restart</code> or <code>up -d --force-recreate</code> does what you meant, and cannot delete anything.</div>
+<div class="pitfall"><strong>Pitfall (hit for real while recording this lesson, 12/11/2026):</strong> a <code>docker compose run</code> container without <code>--rm</code> is not part of what <code>down</code> cleans up. With one still running, <code>down</code> left both networks behind with <code>Resource is still in use</code>; a second <code>down</code> removed the networks, but <code>docker ps -a</code> still listed <code>dkr-blog-api-run-5890a3ce7e1e</code>. Only <code>docker compose down --remove-orphans</code> removed it. The habit that avoids it from the start: always write <code>docker compose run --rm</code>.</div>
 <p class="note-ct"><strong>Three things to remember.</strong> Compose is the file that records what seven <code>docker run</code> commands would have been, so the stack is reproducible and reviewable. The project name — the directory name unless you set <code>name:</code> — namespaces every container, network and volume, and renaming the directory silently orphans the old stack. And <code>down</code> keeps your named volumes while <code>down -v</code> deletes them; the difference is one character and there is no undo.</p>
 </div>
 <div class="ml-vi">
@@ -425,7 +426,7 @@ proxy-1  | nginx: [emerg] host not found in upstream "api" in /etc/nginx/nginx.c
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">1 · api chết</span><span class="lz-t">ECONNREFUSED (kết nối bị từ chối): chưa ai nghe ở db:5432</span><span class="lz-d"><code>depends_on: [db]</code> chỉ bảo đảm container db được khởi động trước. Postgres còn cần thêm khoảng 0,87 giây để khởi tạo; API bỏ cuộc sau 0,17 giây. Bài 9.3 đo cuộc đua này tới từng mili giây và chữa nó.</span></div>
   <div class="lz-step"><span class="lz-k">2 · proxy chết</span><span class="lz-t">nginx không phân giải được tên "api"</span><span class="lz-d">Tên DNS <code>api</code> chỉ tồn tại khi container api còn tồn tại và đang ở trong mạng. nginx phân giải upstream (máy phía sau) đúng một lần lúc khởi động, không thấy gì, và thoát. Hỏng cái này kéo theo cái kia — hãy đọc log từ đáy chuỗi phụ thuộc đi lên.</span></div>
-  <div class="lz-step"><span class="lz-k">3 · db sống</span><span class="lz-t">và sẵn sàng ngay sau đó</span><span class="lz-d">Chạy <code>docker compose up -d</code> lần thứ hai thì api và proxy lên được, vì lúc đó db đã sẵn sàng. Kiểu "chạy lần hai thì được" chính là triệu chứng kinh điển của một cuộc đua lúc khởi động (race condition).</span></div>
+  <div class="lz-step"><span class="lz-k">3 · db sống</span><span class="lz-t">và sẵn sàng ngay sau đó</span><span class="lz-d">Chạy <code>docker compose up -d</code> lần thứ hai thì api lên được, vì lúc đó db đã sẵn sàng — nhưng lượt chạy lại ngày 12/11/2026 (Compose v5.5.1) proxy VẪN chết ở lần hai, vì nó khởi động cùng lúc với api và vẫn chưa phân giải được api; phải tới lần thứ ba mọi thứ mới lên. Kiểu "chạy lần hai (hay lần ba) thì được" chính là triệu chứng kinh điển của một cuộc đua lúc khởi động (race condition).</span></div>
 </div>
 <p>Giờ hãy nhìn xem Compose thật sự đã tạo ra những gì, không qua Compose — hỏi thẳng Docker. Mọi đối tượng đều mang tên dự án, và mọi container đều mang nhãn (label) để về sau Compose tìm lại được nó:</p>
 <pre><code class="language-bash">docker network ls --filter name=dk09
@@ -512,7 +513,34 @@ it will be ignored, please remove it to avoid potential confusion</div>
 </a>
 
 <div class="pitfall"><strong>Bẫy:</strong> gõ <code>docker compose down -v</code> theo quán tính trong khi ý bạn là <code>down</code>. Cái <code>-v</code> xoá mọi volume có tên trong dự án, mà trên máy phát triển đó là cơ sở dữ liệu bạn mất cả buổi chiều để nạp dữ liệu mẫu, còn trên máy chủ đó là dữ liệu production. Không có hộp xác nhận nào và không hoàn tác được. Hai thói quen bảo vệ bạn: đừng bao giờ đặt <code>-v</code> vào một alias shell hay một script không được đặt tên rõ ràng kiểu <code>reset-dev-db</code>, và trên bất cứ máy nào có dữ liệu đáng giữ thì hãy sao lưu trước (Bài 7.5). Nếu bạn chỉ muốn khởi động lại stack thì <code>docker compose restart</code> hoặc <code>up -d --force-recreate</code> làm đúng ý bạn, và không xoá được gì.</div>
+<div class="pitfall"><strong>Bẫy (gặp thật khi quay bài này, 12/11/2026):</strong> một container tạo bằng <code>docker compose run</code> mà không có <code>--rm</code> không nằm trong thứ <code>down</code> dọn. Khi nó còn đang chạy, <code>down</code> để lại cả hai mạng với lỗi <code>Resource is still in use</code>; <code>down</code> lần nữa thì xoá được mạng, nhưng <code>docker ps -a</code> vẫn còn <code>dkr-blog-api-run-5890a3ce7e1e</code>. Phải <code>docker compose down --remove-orphans</code> mới dọn được. Thói quen tránh nó từ gốc: luôn viết <code>docker compose run --rm</code>.</div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Compose là cái file ghi lại bảy câu lệnh <code>docker run</code> lẽ ra bạn phải gõ, nên stack trở nên tái lập được và review được. Tên dự án — mặc định là tên thư mục nếu bạn không đặt <code>name:</code> — gắn vào tên mọi container, mạng và volume, và đổi tên thư mục là lặng lẽ bỏ rơi cái stack cũ. Và <code>down</code> giữ volume có tên còn <code>down -v</code> xoá chúng; khác biệt là một ký tự và không có hoàn tác.</p>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-13-1-compose-tren-vps" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy VPS · 13.1 — Compose on the VPS: one file that describes the whole machine</span><span class="lc-sub">This compose file on a real VPS — the whole machine described in one file.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-17-5-deploy-khong-gian-doan" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 17.5 — Zero downtime: 1,5% lost, or 0%</span><span class="lc-sub">A real Node API in compose: swapping the container without losing a request.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-13-1-compose-tren-vps" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 13.1 — Compose trên VPS: một tệp mô tả cả cái máy</span><span class="lc-sub">Đưa đúng tệp compose này lên một VPS thật — cả cái máy mô tả bằng một tệp.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-17-5-deploy-khong-gian-doan" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 17.5 — Deploy không gián đoạn: mất 1,5%, hay mất 0%</span><span class="lc-sub">Một API Node thật trong compose: tráo container mà không mất request.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -1003,6 +1031,32 @@ services:
 <div class="pitfall"><strong>Bẫy:</strong> mặc định rằng <code>build:</code> sẽ dùng cái <code>Dockerfile</code> nằm trong thư mục ngữ cảnh khi dự án có nhiều file. Nó dùng thật — và đó chính là vấn đề, vì cái bạn muốn có thể là <code>Dockerfile.backend</code>. Compose nói rõ chuyện này và mọi script dựng ảnh ngoài compose cũng phải nói rõ như vậy: chính dự án này từng đẩy lên một ảnh backend dựng từ nhầm Dockerfile, nên một cái ảnh Alpine nền musl nhận được engine Prisma biên dịch cho glibc. Dựng xanh, đẩy xanh, tráo xanh, rồi API trả 502 suốt bảy phút trong khi container restart thành vòng lặp. Bài học tổng quát ra: mỗi khi bạn dựng ngoài <code>docker compose build</code>, hãy truyền <code>-f</code> trỏ đúng cái Dockerfile mà compose sẽ dùng, và kiểm cái ảnh vừa dựng có khởi động được thật không trước khi đưa nó lên.</div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Phần lớn khoá của dịch vụ là một cờ <code>docker run</code> viết bằng YAML; những cái không có tương đương ở CLI — <code>depends_on</code>, <code>profiles</code>, <code>extends</code> — mới là phần compose thêm vào. Hãy bọc nháy mọi thứ trông giống số, vì YAML biến <code>22:22</code> thành một con số và <code>PORT: 3000</code> thành số nguyên. Và <code>docker compose config</code> hiện ra cái file đã hợp nhất và nội suy mà compose thật sự sẽ hành động theo — hãy chạy nó mỗi khi thực tế không khớp với file bạn đang đọc.</p>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-1-1-la-yaml" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">GitHub Actions · 1.1 — It is YAML, and that is where the traps live</span><span class="lc-sub">The same YAML traps in a workflow file, including on being read as true.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-3-4-da-loi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 3.4 — Multicore, affinity, NUMA and CPU limits in containers</span><span class="lc-sub">CPU limits in containers, and why half a core is 50000 of 100000.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-1-1-la-yaml" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">GitHub Actions · 1.1 — Nó là YAML, và bẫy nằm ở đó</span><span class="lc-sub">Cùng những cái bẫy YAML trong tệp workflow, kể cả on bị đọc thành true.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-3-4-da-loi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Hệ điều hành cho lập trình viên · 3.4 — Đa lõi, affinity, NUMA và giới hạn CPU trong container</span><span class="lc-sub">Giới hạn CPU trong container, và vì sao nửa nhân là 50000 trên 100000.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 9.3 ─────────────────────────── */
@@ -1159,6 +1213,7 @@ docker rm -f thu-pgt</code></pre>
    1 01:38:37.538 sock=[no response] tcp=[accepting connections]
   31 01:38:37.633 sock=[accepting connections] tcp=[accepting connections]</div>
 <p>Line two is the bug: for two consecutive checks the socket said "accepting" while TCP said "no response". A healthcheck that happened to run in that window would mark db healthy, Compose would start the API, and the API would get ECONNREFUSED — exactly the failure the healthcheck was added to prevent, just rarer and therefore harder to debug. The fix is one flag: <strong>check the same path the application uses</strong>, <code>pg_isready -h 127.0.0.1</code>. (On the Mac, <code>date +%N</code> needs GNU coreutils' <code>gdate</code> on some setups; on Linux it works as written.)</p>
+<p>Re-run four times on a Mac (12/11/2026, Docker Desktop, Engine 29.8): three of the four runs caught the same window — <code>sock=[accepting connections] tcp=[no response]</code>. The fourth showed a different lie: <code>sock=[rejecting connections]</code>, the moment the temporary server is shutting down. Either way the socket answer does not describe the server your application will talk to; the TCP check does.</p>
 <p>Two more checks worth running once for any healthcheck you write:</p>
 <pre><code class="language-bash"><span class="tok-comment"># 1. Does the command even exist in this image, and what does it return?</span>
 docker compose exec db pg_isready -h 127.0.0.1 -U postgres -d blog; echo "exit=$?"
@@ -1460,6 +1515,7 @@ docker rm -f thu-pgt</code></pre>
    1 01:38:37.538 sock=[no response] tcp=[accepting connections]
   31 01:38:37.633 sock=[accepting connections] tcp=[accepting connections]</div>
 <p>Dòng thứ hai chính là lỗi: hai lần kiểm liên tiếp socket nói "accepting" trong khi TCP nói "no response". Một healthcheck tình cờ chạy đúng khoảng đó sẽ đánh dấu db healthy, Compose khởi động API, và API ăn ECONNREFUSED — đúng cái hỏng mà healthcheck được thêm vào để ngăn, chỉ là hiếm hơn nên khó gỡ hơn. Cách chữa là một cái cờ: <strong>kiểm đúng con đường mà ứng dụng đi</strong>, <code>pg_isready -h 127.0.0.1</code>. (Trên Mac, <code>date +%N</code> ở vài máy cần <code>gdate</code> của GNU coreutils; trên Linux chạy y như viết.)</p>
+<p>Chạy lại bốn lượt trên Mac (12/11/2026, Docker Desktop, Engine 29.8): ba trong bốn lượt bắt được đúng khoảng đó — <code>sock=[accepting connections] tcp=[no response]</code>. Lượt thứ tư cho thấy một kiểu nói dối khác: <code>sock=[rejecting connections]</code>, đúng lúc máy chủ tạm đang tắt. Kiểu nào thì câu trả lời qua socket cũng không mô tả cái máy chủ mà ứng dụng của bạn sẽ nói chuyện; phép kiểm qua TCP mới mô tả.</p>
 <p>Thêm hai phép kiểm nên chạy một lần cho mọi healthcheck bạn viết:</p>
 <pre><code class="language-bash"><span class="tok-comment"># 1. Lệnh có tồn tại trong ảnh này không, và nó trả về gì?</span>
 docker compose exec db pg_isready -h 127.0.0.1 -U postgres -d blog; echo "exit=$?"
@@ -1614,6 +1670,32 @@ db not ready (P1001), retry 2 in 400ms
 <div class="pitfall"><strong>Bẫy:</strong> thay healthcheck bằng <code>sleep 15</code> trong entrypoint. Nó chạy được trên đúng cái máy bạn chỉnh nó và hỏng ở mọi chỗ khác: quá ngắn trên một runner CI đang tải nặng, nơi cơ sở dữ liệu mất hai mươi giây và API vẫn chết; và phí hoàn toàn ở mọi lần khởi động sau đó khi cơ sở dữ liệu đã sẵn sàng trong một giây, vì bạn vẫn trả đủ mười lăm giây mỗi lần. Healthcheck là đúng ý tưởng đó nhưng làm cho tử tế — nó thăm dò, nên nó trả về ngay khi dịch vụ thật sự sẵn sàng và vẫn tiếp tục chờ khi chưa. Và khác với sleep, nó tiếp tục báo cáo sau khi khởi động xong: <code>docker compose ps</code> hiện <code>(unhealthy)</code> ngay khi một dịch vụ ngừng trả lời, và đó là tín hiệu mà Chương 11 dựng chính sách khởi động lại với giám sát lên trên.</div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> <code>depends_on</code> trần sắp thứ tự khởi động chứ không sắp mức sẵn sàng — hãy ghép nó với một healthcheck và <code>condition: service_healthy</code>. Luôn đặt <code>start_period</code>, để một dịch vụ khởi động chậm không bị đánh dấu không khoẻ trong lúc nó vẫn đang khởi động một cách chính đáng. Và hãy xác minh phép kiểm chạy được thật bên trong cái ảnh đó: một healthcheck gọi một tệp nhị phân mà ảnh không có sẽ hỏng mãi mãi và chẳng nói cho bạn điều gì.</p>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-5-4-migration-nua-chung" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy VPS · 5.4 — The migration that half-applied</span><span class="lc-sub">Half-applied migrations, running twice, and why they must be safe to re-run.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-4-5-keepalive-pool" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Networking for Developers · 4.5 — Keep-alive, connection pools and timeouts in your code</span><span class="lc-sub">Connection pools, timeouts and retries in your own code.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-5-4-migration-nua-chung" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 5.4 — Cái migration áp dụng NỬA CHỪNG</span><span class="lc-sub">Migration nửa chừng, chạy hai lần, và vì sao phải an toàn khi chạy lặp.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-4-5-keepalive-pool" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Networking for Developers · 4.5 — Keep-alive, pool kết nối và timeout trong code của bạn</span><span class="lc-sub">Pool kết nối, timeout và thử lại trong chính mã của bạn.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 9.4 ─────────────────────────── */
@@ -1722,6 +1804,7 @@ host=55a5ac83d5db</div>
 <div class="out">error while interpolating services.db.environment.POSTGRES_PASSWORD: required variable DB_PASS is missing a value: dat DB_PASS trong .env truoc da
 exit=1</div>
 <p><code>DB_PASS=</code> (set but empty) gives the same error, because <code>:?</code> — like <code>:-</code> — counts empty as missing.</p>
+<div class="pitfall"><strong>Pitfall (met for real while preparing this lesson):</strong> the <code>db</code> service sat in a profile that was <em>not</em> enabled, and its password used <code>:?</code>. Running only <code>docker compose run --rm api</code> — which never touches <code>db</code> — still failed with <code>error while interpolating services.db.environment.POSTGRES_PASSWORD: required variable DB_PASS is missing a value</code>. Compose interpolates the whole file before it filters by profile, so a required variable must be present even when the service that uses it is switched off. Keep a <code>.env.example</code> that lists every key.</div>
 
 <h3>Precedence, from strongest to weakest</h3>
 ${slide('dk-09', 21, 'Nội suy: shell > --env-file > .env > mặc định trong YAML')}
@@ -2006,6 +2089,7 @@ host=55a5ac83d5db</div>
 <div class="out">error while interpolating services.db.environment.POSTGRES_PASSWORD: required variable DB_PASS is missing a value: dat DB_PASS trong .env truoc da
 exit=1</div>
 <p><code>DB_PASS=</code> (đặt nhưng rỗng) cũng ra đúng lỗi đó, vì <code>:?</code> — giống <code>:-</code> — tính rỗng là thiếu.</p>
+<div class="pitfall"><strong>Bẫy (gặp thật khi soạn bài này):</strong> dịch vụ <code>db</code> nằm trong một profile CHƯA bật, và mật khẩu của nó dùng <code>:?</code>. Chỉ chạy <code>docker compose run --rm api</code> — lệnh không hề đụng tới <code>db</code> — mà vẫn chết với <code>error while interpolating services.db.environment.POSTGRES_PASSWORD: required variable DB_PASS is missing a value</code>. Compose nội suy CẢ tệp trước khi lọc theo profile, nên một biến bắt buộc phải có mặt ngay cả khi dịch vụ dùng nó đang tắt. Hãy giữ một <code>.env.example</code> liệt kê đủ mọi khoá.</div>
 
 <h3>Thứ tự ưu tiên, từ mạnh nhất xuống yếu nhất</h3>
 ${slide('dk-09', 21, 'Nội suy: shell > --env-file > .env > mặc định trong YAML')}
@@ -2190,6 +2274,32 @@ bind /run/secrets/jwt_key RW=false
 
 <div class="pitfall"><strong>Bẫy:</strong> commit file <code>.env</code>. Nó nằm lại trong kho, trong mọi bản clone, trong mọi bản fork, và trong lịch sử Git nơi việc xoá file về sau KHÔNG gỡ được nó ra (Chương 13 khoá Git nói về việc bóc một cái khoá bị lộ khỏi lịch sử — đó không phải việc năm phút). Hãy commit một file <code>.env.example</code> có đủ mọi khoá và mọi giá trị để trống hoặc giả rõ ràng, thêm <code>.env</code> vào <code>.gitignore</code> ngay ở commit đầu tiên của dự án, và giữ giá trị production chỉ trên máy chủ. Chính dự án này làm đúng như vậy: môi trường chạy của production nằm ở <code>/opt/cuonghoangdev/.env</code>, script deploy nạp nó và rsync loại nó ra, nên giá trị ở đó sống sót qua mọi lần deploy và không bao giờ đi qua Git. Nếu bạn lỡ để lộ một cái, thì cách chữa là XOAY thông tin đăng nhập ở phía nhà cung cấp — xoá file thì không phải.</div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> File <code>.env</code> của dự án nuôi phép thay <code>&#36;{...}</code> trong YAML; <code>env_file</code> của một dịch vụ nuôi container — hai file khác nhau cho hai đối tượng khác nhau. Hãy dùng <code>&#36;{VAR:?thông báo}</code> cho mọi thứ bắt buộc, để một mật khẩu thiếu là một lỗi rõ ràng lúc <code>up</code> chứ không phải một container chạy với bí mật rỗng. Và profile cho phép một file mô tả cùng lúc công cụ phát triển, việc nạp dữ liệu mẫu và stack lõi, với chỉ phần lõi chạy theo mặc định.</p>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-4-3-env-khong-phai-mot-dinh-dang" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy VPS · 4.3 — The .env file is not one format</span><span class="lc-sub">.env is not one format: every tool reads it differently.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-4-4-bi-mat-trong-lich-su-git" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy VPS · 4.4 — A secret in git history is a leaked secret</span><span class="lc-sub">A password that reached git history is already leaked.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-4-3-env-khong-phai-mot-dinh-dang" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 4.3 — Tệp .env không phải MỘT định dạng</span><span class="lc-sub">Tệp .env không phải một định dạng: mỗi công cụ đọc một kiểu.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-4-4-bi-mat-trong-lich-su-git" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 4.4 — Bí mật lỡ vào lịch sử git là bí mật ĐÃ LỘ</span><span class="lc-sub">Lỡ đưa mật khẩu vào lịch sử git rồi thì coi như đã lộ.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -2721,6 +2831,32 @@ services:
 
 <div class="pitfall"><strong>Bẫy:</strong> trông đợi một file ghi đè sẽ <em>thay thế</em> một danh sách. Cổng, volume, và mọi dãy khác đều bị <strong>NỐI THÊM</strong>, nên một file ghi đè "đổi" cổng từ <code>"18098:3000"</code> sang <code>"18097:3000"</code> thật ra công bố <em>cả hai</em> — cổng cũ vẫn mở trên máy chủ dù chẳng ai yêu cầu. (Đo trên Compose v5.5.1: một ánh xạ lặp y hệt được gộp thành một, và volume trùng đích thì cái sau thay cái trước; các bản cũ và công cụ khác thì không dễ dãi như vậy.) Cách chữa là hoặc giữ danh sách ở đúng MỘT tầng (file nền không có <code>ports</code>, file của từng môi trường cung cấp chúng), hoặc dùng <code>!override</code> với <code>!reset</code> ở đúng chỗ bạn thật sự muốn thay thế. Khi một file đã hợp nhất làm bạn bất ngờ thì đừng ngồi suy luận — hãy chạy <code>docker compose -f a.yaml -f b.yaml config</code> và đọc thứ compose thật sự sinh ra.</div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> <code>compose.override.yaml</code> được nạp tự động và là chỗ ở tự nhiên cho trải nghiệm phát triển, trong khi truyền bất kỳ <code>-f</code> nào cũng tắt nó đi — và đó đúng là thứ một script deploy cần. Hợp nhất không đồng nhất: giá trị đơn bị thay thế, map hợp nhất theo từng khoá, còn danh sách thì <em>nối thêm</em>. Và hãy chạy <code>config</code> trên đúng tổ hợp file mà máy chủ sẽ dùng trước khi deploy; nó tốn một giây và nó cho bạn thấy thứ thật sự sẽ chạy.</p>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-13-1-compose-tren-vps" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy VPS · 13.1 — Compose on the VPS: one file that describes the whole machine</span><span class="lc-sub">This prod file running for real on a VPS.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-13-3-github-actions-deploy" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy VPS · 13.3 — Deploying from GitHub Actions over SSH: one key, one command, one deploy at a time</span><span class="lc-sub">A deploy script with explicit -f, run from GitHub Actions over SSH, one deploy at a time.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-13-1-compose-tren-vps" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 13.1 — Compose trên VPS: một tệp mô tả cả cái máy</span><span class="lc-sub">Tệp prod này chạy thật trên một VPS.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-13-3-github-actions-deploy" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 13.3 — Deploy từ GitHub Actions qua SSH: một khoá, một lệnh, mỗi lần một deploy</span><span class="lc-sub">Script deploy ghi -f tường minh, chạy từ GitHub Actions qua SSH, mỗi lần một deploy.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

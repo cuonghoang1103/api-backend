@@ -441,7 +441,7 @@ $ docker compose exec -T api sh -c 'printf %s "$JWT_SECRET" | od -c | head -1'
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Docker — JSON File logging driver</span><span class="lc-sub">docs.docker.com/engine/logging/drivers/json-file/ — <code>max-size</code>, <code>max-file</code>, and no rotation by default.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Docker — Bind mounts</span><span class="lc-sub">docs.docker.com/engine/storage/bind-mounts/ — host files and directories mounted into containers.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">The Twelve-Factor App — III. Config</span><span class="lc-sub">12factor.net/config — configuration lives in the environment, not in code or images.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Docker — the full course</span><span class="lc-sub">/courses/docker/learn${REF} — Dockerfiles, Compose, networks and volumes at the fundamentals level. This lesson is only its "running on a VPS" slice.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Docker — 16.2 Compose for development and for production</span><span class="lc-sub">/courses/docker/learn?lessonSlug=dk-16-2-compose-dev-prod${REF.replace('?', '&')} — one base compose.yaml, a dev override and a prod file (restart, RAM caps, log rotation); Dockerfiles, networks and volumes at the fundamentals level. This lesson is only its "running on a VPS" slice.</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 13 · Bài 13.1</span>
@@ -811,7 +811,7 @@ Cả <code>.env</code>, <code>env_file</code> và <code>docker run --env-file</c
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Docker — JSON File logging driver</span><span class="lc-sub">docs.docker.com/engine/logging/drivers/json-file/ — <code>max-size</code>, <code>max-file</code> và việc mặc định không xoay vòng.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Docker — Bind mounts</span><span class="lc-sub">docs.docker.com/engine/storage/bind-mounts/ — tệp và thư mục của máy chủ gắn vào container.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">The Twelve-Factor App — III. Config</span><span class="lc-sub">12factor.net/config — cấu hình nằm trong môi trường, không nằm trong mã hay ảnh.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Docker — khoá đầy đủ</span><span class="lc-sub">/courses/docker/learn${REF} — Dockerfile, Compose, mạng và volume ở mức nền tảng. Bài này chỉ là lát cắt "chạy trên VPS" của nó.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Docker — 16.2 Compose cho dev và cho prod</span><span class="lc-sub">/courses/docker/learn?lessonSlug=dk-16-2-compose-dev-prod${REF.replace('?', '&')} — một compose.yaml nền, một tệp dev và một tệp prod (restart, trần RAM, xoay log); Dockerfile, mạng và volume ở mức nền tảng. Bài này chỉ là lát cắt "chạy trên VPS" của nó.</span></span></div>
 </div>
 `,
     },
@@ -1122,7 +1122,7 @@ Error response from daemon: No such image: dv13-reg:5000/dat-lich:02f98c0
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Distribution — registry:2</span><span class="lc-sub">distribution.github.io/distribution/ — the open-source registry used in the lab, speaking the same OCI protocol as GHCR.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Docker — Multi-platform builds</span><span class="lc-sub">docs.docker.com/build/building/multi-platform/ — QEMU emulation, cross-compilation and the <code>BUILDPLATFORM</code>/<code>TARGETPLATFORM</code> variables.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Prisma — Prisma schema reference (binaryTargets)</span><span class="lc-sub">www.prisma.io/docs/orm/reference/prisma-schema-reference — the <code>binaryTargets</code> list and naming a target other than the build machine.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Docker — the full course: multi-stage builds</span><span class="lc-sub">/courses/docker/learn${REF} — multi-stage builds, keeping build tools out of the runtime image.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Docker — 6.1 Multi-stage builds</span><span class="lc-sub">/courses/docker/learn?lessonSlug=dk-6-1-multi-stage${REF.replace('?', '&')} — multi-stage builds, keeping build tools out of the runtime image.</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 13 · Bài 13.2</span>
@@ -1422,7 +1422,7 @@ Error response from daemon: No such image: dv13-reg:5000/dat-lich:02f98c0
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Distribution — registry:2</span><span class="lc-sub">distribution.github.io/distribution/ — phần mềm registry mã nguồn mở dùng trong phòng thí nghiệm, cùng giao thức OCI với GHCR.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Docker — Multi-platform builds</span><span class="lc-sub">docs.docker.com/build/building/multi-platform/ — giả lập QEMU, biên dịch chéo và các biến <code>BUILDPLATFORM</code>/<code>TARGETPLATFORM</code>.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Prisma — Prisma schema reference (binaryTargets)</span><span class="lc-sub">www.prisma.io/docs/orm/reference/prisma-schema-reference — danh sách <code>binaryTargets</code> và cách khai đích khác máy dựng.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Docker — khoá đầy đủ: bản dựng nhiều tầng</span><span class="lc-sub">/courses/docker/learn${REF} — multi-stage build, giữ công cụ dựng ngoài ảnh chạy.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Docker — 6.1 Bản dựng nhiều tầng</span><span class="lc-sub">/courses/docker/learn?lessonSlug=dk-6-1-multi-stage${REF.replace('?', '&')} — multi-stage build, giữ công cụ dựng ngoài ảnh chạy.</span></span></div>
 </div>
 `,
     },
@@ -1678,7 +1678,8 @@ ${slide('dv-13', 22, 'Vì sao dự án bỏ push-to-deploy')}
 <ul>
 <li><strong>Creating the CI key on Windows:</strong> OpenSSH for Windows' <code>ssh-keygen</code> produces the same format. When pasting the private key into the secret box, keep the line breaks; a key pasted without its final newline fails on the runner with <code>error in libcrypto</code>. The workflow above uses <code>printf '%s
 '</code> to guarantee the trailing newline.</li>
-<li><strong>A YAML file saved with CRLF</strong> is still read by GitHub, but a <code>run: |</code> block carrying <code></code> into shell commands on a Linux runner breaks like Chapter 7's CRLF script — keep <code>.gitattributes</code> with <code>eol=lf</code>.</li>
+<li><strong>A YAML file saved with CRLF</strong> is still read by GitHub, but a <code>run: |</code> block carrying <code>
+</code> into shell commands on a Linux runner breaks like Chapter 7's CRLF script — keep <code>.gitattributes</code> with <code>eol=lf</code>.</li>
 <li><strong>To run a workflow locally</strong>: <code>act</code> (nektos/act) runs workflows in Docker containers — on an arm64 Mac you need an amd64 runner image and emulation, so it is slow and not identical to the real runner. This lesson does not use it; splitting the VPS-touching part into a script that also runs outside CI, as above, is a cheaper way to test.</li>
 </ul>
 
@@ -1721,7 +1722,7 @@ ${slide('dv-13', 22, 'Vì sao dự án bỏ push-to-deploy')}
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">GitHub Blog — GitHub Actions now supports CI/CD (08/08/2019)</span><span class="lc-sub">github.blog/news-insights/product-news/github-actions-now-supports-ci-cd/ — when Actions became a CI/CD tool.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">sshd(8) — AUTHORIZED_KEYS FILE FORMAT</span><span class="lc-sub">man7.org/linux/man-pages/man8/sshd.8.html — <code>command=</code>, <code>restrict</code> and the <code>SSH_ORIGINAL_COMMAND</code> variable.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">nektos/act</span><span class="lc-sub">github.com/nektos/act — runs GitHub Actions workflows locally in Docker; not used here, listed for you to try.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">GitHub Actions — the full course</span><span class="lc-sub">/courses/github-actions/learn${REF} — workflow syntax, expressions, matrices, caching and action security.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">GitHub Actions — 9.1 Push to deploy</span><span class="lc-sub">/courses/github-actions/learn?lessonSlug=ga-9-1-push-de-deploy${REF.replace('?', '&')} — workflow syntax, expressions, matrices, caching and action security.</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 13 · Bài 13.3</span>
@@ -1966,7 +1967,8 @@ ${slide('dv-13', 22, 'Vì sao dự án bỏ push-to-deploy')}
 <ul>
 <li><strong>Tạo khoá CI trên Windows:</strong> <code>ssh-keygen</code> của OpenSSH cho Windows cho ra cùng định dạng. Khi dán khoá bí mật vào ô secret, giữ nguyên các dòng; một khoá bị dán mất dòng cuối sẽ báo <code>error in libcrypto</code> trên runner. Workflow ở trên dùng <code>printf '%s
 '</code> để chắc chắn có dấu xuống dòng cuối.</li>
-<li><strong>Tệp YAML lưu với CRLF</strong> vẫn được GitHub đọc, nhưng một khối <code>run: |</code> mang <code></code> vào lệnh shell trên runner Linux thì hỏng như script CRLF ở Chương 7 — giữ <code>.gitattributes</code> với <code>eol=lf</code>.</li>
+<li><strong>Tệp YAML lưu với CRLF</strong> vẫn được GitHub đọc, nhưng một khối <code>run: |</code> mang <code>
+</code> vào lệnh shell trên runner Linux thì hỏng như script CRLF ở Chương 7 — giữ <code>.gitattributes</code> với <code>eol=lf</code>.</li>
 <li><strong>Muốn chạy workflow cục bộ</strong>: <code>act</code> (nektos/act) chạy workflow trong container Docker — trên Mac arm64 cần chọn ảnh runner amd64 và giả lập, nên chậm và không giống hệt runner thật. Bài này không dùng nó; tách phần đụng VPS ra một script chạy được cả ngoài CI như trên là cách thử rẻ hơn.</li>
 </ul>
 
@@ -2009,7 +2011,7 @@ ${slide('dv-13', 22, 'Vì sao dự án bỏ push-to-deploy')}
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">GitHub Blog — GitHub Actions now supports CI/CD (08/08/2019)</span><span class="lc-sub">github.blog/news-insights/product-news/github-actions-now-supports-ci-cd/ — mốc Actions thành công cụ CI/CD.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">sshd(8) — AUTHORIZED_KEYS FILE FORMAT</span><span class="lc-sub">man7.org/linux/man-pages/man8/sshd.8.html — <code>command=</code>, <code>restrict</code> và biến <code>SSH_ORIGINAL_COMMAND</code>.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">nektos/act</span><span class="lc-sub">github.com/nektos/act — chạy workflow GitHub Actions cục bộ trong Docker; bài không dùng, ghi lại để bạn tự thử.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">GitHub Actions — khoá đầy đủ</span><span class="lc-sub">/courses/github-actions/learn${REF} — cú pháp workflow, biểu thức, matrix, cache và bảo mật action.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">GitHub Actions — 9.1 Push để deploy</span><span class="lc-sub">/courses/github-actions/learn?lessonSlug=ga-9-1-push-de-deploy${REF.replace('?', '&')} — cú pháp workflow, biểu thức, matrix, cache và bảo mật action.</span></span></div>
 </div>
 `,
     },
@@ -2349,7 +2351,7 @@ $ curl -s -o /dev/null -w '%{http_code}' 127.0.0.1:8080/api/phong-kham
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Compose file reference — services</span><span class="lc-sub">docs.docker.com/reference/compose-file/services/ — <code>healthcheck</code>, <code>depends_on</code> with <code>condition: service_healthy</code>, <code>stop_grace_period</code>.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">nginx — ngx_http_core_module: resolver</span><span class="lc-sub">nginx.org/en/docs/http/ngx_http_core_module.html — <code>resolver</code>, <code>valid=</code>, and resolution when <code>proxy_pass</code> contains a variable.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">nginx — ngx_http_upstream_module</span><span class="lc-sub">nginx.org/en/docs/http/ngx_http_upstream_module.html — the <code>upstream</code> block and <code>proxy_next_upstream</code>.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Nginx — the full course</span><span class="lc-sub">/courses/nginx/learn${REF} — proxying, upstreams, reloads without dropped connections.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Nginx — 9.5 Deploys without dropped requests</span><span class="lc-sub">/courses/nginx/learn?lessonSlug=nginx-9-5-deploy-khong-rot-request${REF.replace('?', '&')} — proxying, upstreams, reloads without dropped connections.</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 13 · Bài 13.4</span>
@@ -2678,7 +2680,7 @@ $ curl -s -o /dev/null -w '%{http_code}' 127.0.0.1:8080/api/phong-kham
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Compose file reference — services</span><span class="lc-sub">docs.docker.com/reference/compose-file/services/ — <code>healthcheck</code>, <code>depends_on</code> với <code>condition: service_healthy</code>, <code>stop_grace_period</code>.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">nginx — ngx_http_core_module: resolver</span><span class="lc-sub">nginx.org/en/docs/http/ngx_http_core_module.html — <code>resolver</code>, <code>valid=</code>, và việc phân giải khi <code>proxy_pass</code> có biến.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">nginx — ngx_http_upstream_module</span><span class="lc-sub">nginx.org/en/docs/http/ngx_http_upstream_module.html — khối <code>upstream</code> và <code>proxy_next_upstream</code>.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Nginx — khoá đầy đủ</span><span class="lc-sub">/courses/nginx/learn${REF} — proxy, upstream, reload không rơi kết nối.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Nginx — 9.5 Deploy không rơi request</span><span class="lc-sub">/courses/nginx/learn?lessonSlug=nginx-9-5-deploy-khong-rot-request${REF.replace('?', '&')} — proxy, upstream, reload không rơi kết nối.</span></span></div>
 </div>
 `,
     },

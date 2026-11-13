@@ -180,3 +180,10 @@ Câu hỏi cho user: Pro của CT Language có **dùng chung** với Pro web cuo
   listening` của các khoá; Thi thử = thi nhanh 30 câu/12 phút/3 phần (free 1 lần/ngày, tổng điểm; Pro: phiếu điểm từng phần +
   từ cần ôn) + đề kiểm tra trong khoá (lọc tiêu đề "Đề tổng hợp/kiểm tra…", "Kiểm tra chặng", "Bài kiểm tra"). Đề nhanh dùng
   `/tu-dien/:nn/tro-choi` (bước 6) ⇒ cần deploy. IELTS thi máy 4 đề của web CHƯA lên app (trình vẽ riêng — để bản sau).
+- 13/11 (APP): **bước 7 phần chuẩn bị XONG** (ios-app `9240243`, web `d9b14a4e6`). QA iPhone 17 Pro Max sáng + tối (8 màn chính); sửa:
+  màn Pro chỉ hứa tính năng đang có (3.1.2), bỏ mục "Sắp lên app" (2.1), từ loại JMdict → tiếng Việt. Chính sách bảo mật web thêm
+  **mục 14 CT Language** (`/chinh-sach-bao-mat#ct-language`, Việt + Anh). Ảnh App Store 6.9" `ios-app/thiet-ke-ctl/app-store/`, hồ sơ
+  store `ios-app/CTLANGUAGE_APP_STORE_LISTING.md` (tên, mô tả, từ khoá, độ tuổi, nhãn quyền riêng tư), review notes thêm phần 4.3.
+  Số phiên bản app + widget chung `PhienBanCTL.xcconfig`; **phát hành: `bash scripts/phat-hanh-ctlanguage.sh`** (`--thu` đã xanh —
+  archive Release không ký qua mọi phép kiểm). **CHƯA**: deploy backend + nhập từ điển VPS, việc tay trên ASC/Developer portal,
+  upload TestFlight (hỏi user), nộp duyệt.

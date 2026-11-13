@@ -140,10 +140,13 @@ fail() { echo "[$(date '+%H:%M:%S')] [❌ FAIL] $*"; }
 # macOS không có `timeout`/`gtimeout` nên chó gác phải tự viết.
 SSH_SONG=(-o ServerAliveInterval=15 -o ServerAliveCountMax=4)
 
-# Trần cho MỘT lời gọi ssh. Bước lâu nhất đo được là dựng ảnh ở nhà (~15 phút)
-# và kéo ảnh về VPS; 2400s (40 phút) rộng rãi mà vẫn hữu hạn. Đặt
-# `SSH_TRAN=0` để tắt hẳn chó gác khi cần soi tay.
-SSH_TRAN=${SSH_TRAN:-2400}
+# Trần cho MỘT lời gọi ssh. Đặt `SSH_TRAN=0` để tắt hẳn chó gác khi cần soi tay.
+# 13/11/2026: nâng 2400 → 5400 (90 phút). Bước lâu nhất KHÔNG còn là dựng ảnh mà là
+# khối SEED nội dung (một phiên ssh): Academy ~26 phút + Phòng thi ~14 phút + phần
+# còn lại ⇒ > 40 phút, chó gác giết giữa Phòng thi HAI lần trong một ngày (14:40 và
+# 22:23) ⇒ khôi phục chương/bình luận đề thi, Deep Dive, RoadMap, IELTS không chạy.
+# Xem docs/so-loi.md. Nội dung còn lớn dần ⇒ đo lại khi seed vượt ~60 phút.
+SSH_TRAN=${SSH_TRAN:-5400}
 
 chay_canh_gio() {
     if [ "$SSH_TRAN" -le 0 ]; then "$@"; return $?; fi

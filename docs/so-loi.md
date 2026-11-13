@@ -56,7 +56,7 @@ Mẫu một mục:
 ### 13/11/2026 — Deploy — Seed nội dung bị bộ canh ngắt giữa chừng
 - **Triệu chứng:** `deploy-nha.sh` báo `[chó gác] ssh treo quá 2400s`, các bước seed sau Phòng thi (khôi phục chương + bình luận CuongMini, Deep Dive, Roadmap, IELTS…) không chạy.
 - **Nguyên nhân:** cả khối seed chạy trong MỘT phiên ssh; riêng seed Academy đã 26 phút + Phòng thi 14 phút > trần `SSH_TRAN=2400` giây.
-- **Cách sửa:** chạy tay phần còn lại trên VPS (chủ kênh duyệt). Lần deploy sau đặt `SSH_TRAN=5400`.
+- **Cách sửa:** chạy tay phần còn lại trên VPS (chủ kênh duyệt) — lần 2 cùng ngày lúc 23:04 (lượt deploy của phiên khác, mặc định cũ) cũng chạy tay như vậy. Mặc định `SSH_TRAN` trong `deploy-nha.sh` nâng 2400 → 5400 giây.
 - **Ảnh hưởng:** ~1,5 giờ Phòng thi mất "học phần liên quan" + bình luận CuongMini chưa nối lại.
 - **Bài học:** nội dung lớn dần ⇒ thời gian seed lớn dần; trần thời gian phải xem lại theo dữ liệu, không đặt một lần rồi quên.
 

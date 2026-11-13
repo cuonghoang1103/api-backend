@@ -199,6 +199,22 @@ $ tail -n 2 /tmp/ng/logs/access.log
 <a class="link-card" href="https://nginx.org/en/docs/" target="_blank" rel="noopener"><span class="lc-ico">📚</span><span class="lc-body"><span class="lc-title">nginx — mục lục tài liệu</span><span class="lc-sub">nginx.org · Bản đồ mọi module bạn sẽ gặp trong khoá này</span></span></a>
 <a class="link-card codelab" href="/code-lab/tracks/nginx${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — chặng "Nginx"</span><span class="lc-sub">Một Nginx đang chạy để bạn thí nghiệm ngay từ bài đầu</span></span></a>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/nwc204-computer-networking/learn?lessonSlug=nwc204-14-1-tang-ung-dung-va-ngang-hang" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · NWC204 · 14.1 — Application, Presentation and Session, and Peer-to-Peer (FLM session 45)</span><span class="lc-sub">If you took NWC204 at the Academy: the application layer and the client–server model are where nginx lives.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/nwc204-computer-networking/learn?lessonSlug=nwc204-14-1-tang-ung-dung-va-ngang-hang" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · NWC204 · 14.1 — Tầng Ứng dụng, Trình diễn và Phiên, và mô hình ngang hàng (buổi 45 của FLM)</span><span class="lc-sub">Nếu bạn đã học NWC204 ở Academy: tầng ứng dụng và mô hình khách–chủ chính là chỗ nginx đứng.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
 
@@ -1443,6 +1459,22 @@ server {
 <a class="link-card" href="https://nginx.org/en/docs/dirindex.html" target="_blank" rel="noopener"><span class="lc-ico">🔤</span><span class="lc-body"><span class="lc-title">nginx — bảng tra directive theo bảng chữ cái</span><span class="lc-sub">nginx.org · Mọi directive kèm những ngữ cảnh nó được phép nằm</span></span></a>
 <a class="link-card" href="/courses/linux-bash/learn${REF}"><span class="lc-ico">🐧</span><span class="lc-body"><span class="lc-title">Khoá CuongThai — Linux &amp; Bash</span><span class="lc-sub">Đọc một tệp cấu hình lớn bằng grep và less, và tệp log nằm ở đâu</span></span></a>
 <a class="link-card codelab" href="/code-lab/tracks/nginx${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Nginx"</span><span class="lc-sub">Đặt bốn header ở http, thêm một cái ở một location, rồi nhìn ba cái kia biến mất</span></span></a>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-10-3-log-journalctl" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 10.3 — Logs: journalctl, /var/log and rotation</span><span class="lc-sub">journalctl and /var/log: where nginx&#39;s own start-up errors end up.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-10-3-log-journalctl" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 10.3 — Log: journalctl, /var/log và việc xoay vòng</span><span class="lc-sub">journalctl và /var/log: lỗi khởi động của chính nginx rơi vào đâu.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

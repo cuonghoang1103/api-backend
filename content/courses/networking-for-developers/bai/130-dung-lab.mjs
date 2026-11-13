@@ -43,7 +43,7 @@ ${kv([
 <h3>It runs</h3>
 <p>Bring it up with <code>bash lab/code/dung-output-ch13.sh</code> and send a request through the edge to the API:</p>
 ${run('c131-stack', 'curl', 1)}
-<p>The edge (<code>:8080</code>) proxied <code>/api/hello</code> to the API, which echoed what it saw: <code>seenOn</code> is the API's own address (<code>10.10.2.20:3000</code>), and the request carried the edge's <code>X-Forwarded-For</code>. The path is live end to end — now it is something you can put a stopwatch and a packet capture on.</p>
+<p>The edge (<code>:8080</code>) proxied <code>/api/hello</code> to the API, which echoed what it saw: <code>seenOn</code> is the API's own address (<code>10.10.2.20:3000</code>), <code>seenFrom</code> is the edge (<code>10.10.2.10</code>), and <code>forwardedFor</code> is <code>null</code>: this edge config (<code>stack.conf</code>) sets no <code>X-Forwarded-For</code>, so the API cannot see the real client. An earlier version of this lesson said the edge added it — the recorded output says otherwise. A production edge needs <code>proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</code> in <code>location /api/</code>, exactly as Chapter 7 (lesson 7.5) and Chapter 10 (lesson 10.1) showed. The path is live end to end — now it is something you can put a stopwatch and a packet capture on.</p>
 
 <h3>The method, and what you hand in</h3>
 <ol>
@@ -122,7 +122,7 @@ ${kv([
 <h3>Nó chạy</h3>
 <p>Dựng bằng <code>bash lab/code/dung-output-ch13.sh</code> và gửi một yêu cầu qua biên tới API:</p>
 ${run('c131-stack', 'curl', 1)}
-<p>Biên (<code>:8080</code>) proxy <code>/api/hello</code> tới API, nó echo cái nó thấy: <code>seenOn</code> là địa chỉ của chính API (<code>10.10.2.20:3000</code>), và yêu cầu mang <code>X-Forwarded-For</code> của biên. Đường sống đầu-cuối — giờ nó là thứ bạn đặt được một đồng hồ bấm giờ và một bản bắt gói lên.</p>
+<p>Biên (<code>:8080</code>) proxy <code>/api/hello</code> tới API, nó echo cái nó thấy: <code>seenOn</code> là địa chỉ của chính API (<code>10.10.2.20:3000</code>), <code>seenFrom</code> là biên (<code>10.10.2.10</code>), còn <code>forwardedFor</code> là <code>null</code>: cấu hình biên này (<code>stack.conf</code>) không đặt <code>X-Forwarded-For</code>, nên API không thấy client thật. Bản cũ của bài nói biên có thêm nó — output đã ghi nói ngược lại. Một biên production cần <code>proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</code> trong <code>location /api/</code>, đúng như Chương 7 (bài 7.5) và Chương 10 (bài 10.1) đã làm. Đường sống đầu-cuối — giờ nó là thứ bạn đặt được một đồng hồ bấm giờ và một bản bắt gói lên.</p>
 
 <h3>Phương pháp, và cái bạn nộp</h3>
 <ol>

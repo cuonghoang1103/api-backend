@@ -95,7 +95,7 @@ ${run('c00-internet', 'curl -s -o /dev/null -o /dev/null')}
 ${run('c00-internet', 'curl -s -o /dev/null -w', 1)}
 <p>Subtract: DNS 45.9 ms (not cached this time), TCP 27.1 ms, TLS 59.2 ms, first byte 54.0 ms later. Every network stage got longer because every round trip is longer. A faster CPU does not help — light in fibre covers roughly 200 km per millisecond, and the path is never a straight line. A rough model you can use in your head:</p>
 <p style="text-align:center"><strong>time to first byte ≈ DNS + 1 RTT (TCP) + 1 RTT (TLS 1.3) + 1 RTT + server time</strong></p>
-<p>With an 8 ms round trip the setup is about 24 ms; with a 180 ms round trip (a typical Asia–US figure) it is more than half a second before the server even starts. Later chapters are largely about removing round trips: reusing connections (Chapter 4), TLS resumption (Chapter 7), HTTP/3 (Chapter 8) and serving from a nearby CDN (Chapter 8).</p>
+<p>With an 8 ms round trip the setup is about 24 ms; with a 180 ms round trip (a typical Asia–US figure) it is more than half a second before the server even starts. Later chapters are largely about removing round trips: reusing connections (Chapter 4), TLS resumption (Chapter 6), HTTP/3 (Chapter 7) and serving from a nearby CDN (Chapter 8).</p>
 
 <h3>A browser does this dozens of times per page</h3>
 <p>The HTML of a modern page lists dozens of other files. Requests to the same host reuse the open connection — with HTTP/2 many of them share it at the same instant. Requests to another host (a CDN for images, an API on a subdomain, fonts from a third party) pay DNS, TCP and TLS again. Open your browser's DevTools → Network tab → click any request → <strong>Timing</strong>: you will see the same stages as curl, per request.</p>
@@ -219,7 +219,7 @@ ${run('c00-internet', 'curl -s -o /dev/null -o /dev/null')}
 ${run('c00-internet', 'curl -s -o /dev/null -w', 1)}
 <p>Trừ ra: DNS 45,9 ms (lần này chưa có trong cache), TCP 27,1 ms, TLS 59,2 ms, byte đầu tới sau thêm 54,0 ms. Mọi chặng mạng đều dài ra vì mỗi vòng đi-về dài hơn. CPU nhanh hơn chẳng giúp gì — ánh sáng trong cáp quang đi được khoảng 200 km mỗi mili giây, và đường đi chẳng bao giờ thẳng. Một mô hình thô để tính nhẩm:</p>
 <p style="text-align:center"><strong>thời gian tới byte đầu ≈ DNS + 1 RTT (TCP) + 1 RTT (TLS 1.3) + 1 RTT + thời gian máy chủ</strong></p>
-<p>Với vòng đi-về 8 ms, phần thiết lập khoảng 24 ms; với vòng đi-về 180 ms (con số điển hình giữa châu Á và Mỹ) thì đã hơn nửa giây trước khi máy chủ kịp bắt đầu. Các chương sau phần lớn là chuyện bớt vòng đi-về: dùng lại kết nối (Chương 4), nối lại phiên TLS (Chương 7), HTTP/3 (Chương 8) và phục vụ từ một CDN gần người dùng (Chương 8).</p>
+<p>Với vòng đi-về 8 ms, phần thiết lập khoảng 24 ms; với vòng đi-về 180 ms (con số điển hình giữa châu Á và Mỹ) thì đã hơn nửa giây trước khi máy chủ kịp bắt đầu. Các chương sau phần lớn là chuyện bớt vòng đi-về: dùng lại kết nối (Chương 4), nối lại phiên TLS (Chương 6), HTTP/3 (Chương 7) và phục vụ từ một CDN gần người dùng (Chương 8).</p>
 
 <h3>Trình duyệt làm việc này hàng chục lần cho mỗi trang</h3>
 <p>HTML của một trang hiện đại liệt kê hàng chục file khác. Request tới cùng host dùng lại kết nối đang mở — với HTTP/2 nhiều request dùng chung nó cùng một lúc. Request tới host khác (CDN cho ảnh, API ở tên miền con, font của bên thứ ba) lại trả DNS, TCP và TLS từ đầu. Mở DevTools của trình duyệt → tab Network → bấm vào một request bất kỳ → <strong>Timing</strong>: bạn thấy đúng các chặng như curl, cho từng request.</p>

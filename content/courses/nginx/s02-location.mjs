@@ -947,6 +947,22 @@ http {
 <a class="link-card" href="/courses/authentication/learn${REF}"><span class="lc-ico">🔑</span><span class="lc-body"><span class="lc-title">Khoá CuongThai — Authentication</span><span class="lc-sub">Mỗi header bảo mật chống lại cái gì, và KHÔNG chống được cái gì</span></span></a>
 <a class="link-card codelab" href="/code-lab/tracks/nginx${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — chặng "Nginx"</span><span class="lc-sub">Xoá một header bảo mật bằng một dòng thêm vào, rồi vá lại bằng include</span></span></a>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-7-4-header-quan-trong" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Networking for Developers · 7.4 — Headers that change behaviour: caching, compression, CORS, security</span><span class="lc-sub">The headers that change behaviour — what an add_header that silently disappears was meant to set.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-7-4-header-quan-trong" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Networking for Developers · 7.4 — Các header đổi hành vi: cache, nén, CORS, bảo mật</span><span class="lc-sub">Các header đổi hành vi — thứ mà một add_header lặng lẽ biến mất lẽ ra phải đặt.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
 
@@ -1288,6 +1304,22 @@ open() "/srv/www2/anh/" failed (2: No such file or directory)</div>
 <a class="link-card" href="https://owasp.org/www-community/attacks/Path_Traversal" target="_blank" rel="noopener"><span class="lc-ico">🕳️</span><span class="lc-body"><span class="lc-title">OWASP — Path traversal</span><span class="lc-sub">owasp.org · Lớp tấn công mà cái dấu gạch chéo thiếu thuộc về</span></span></a>
 <a class="link-card" href="/courses/linux-bash/learn${REF}"><span class="lc-ico">🐧</span><span class="lc-body"><span class="lc-title">Khoá CuongThai — Linux &amp; Bash</span><span class="lc-sub">Nhân hệ điều hành rút gọn .. thế nào và vì sao quyền là tuyến phòng thủ thứ hai</span></span></a>
 <a class="link-card codelab" href="/code-lab/tracks/nginx${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — chặng "Nginx"</span><span class="lc-sub">Dựng lại vụ rò rỉ trên một cây thư mục hộp cát, rồi bịt nó và chạy lại đúng lệnh curl đó</span></span></a>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-10-5-nginx-lap-rap" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 10.5 — nginx in front, and the whole file</span><span class="lc-sub">nginx in front of a whole Docker stack, with its config file bind-mounted.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-10-5-nginx-lap-rap" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 10.5 — nginx đứng trước, và cả cái file</span><span class="lc-sub">nginx đứng trước cả một stack Docker, với tệp cấu hình được bind-mount.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

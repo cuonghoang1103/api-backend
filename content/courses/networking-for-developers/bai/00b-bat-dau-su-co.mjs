@@ -84,7 +84,7 @@ ${run('c00-loi', 'curl -sS http://labflow.invalid/', 4)}
 </ul>
 
 <h3>Two paths through the course</h3>
-<p><strong>Minimum path (about 3 weeks).</strong> Section 0 → Chapter 1 → Chapter 2 (IP addresses, subnets, NAT) → Chapter 3 (DNS) → Chapter 4 (TCP basics) → Chapter 7 (TLS) → Chapter 10 (proxies, 502/504) → Chapter 11 (troubleshooting). Enough to deploy and debug a student project with confidence.</p>
+<p><strong>Minimum path (about 3 weeks).</strong> Section 0 → Chapter 1 → Chapter 2 (IP addresses, subnets, NAT) → Chapter 3 (DNS) → Chapter 4 (TCP basics) → Chapter 6 (TLS) → Chapter 10 (proxies, 502/504) → Chapter 11 (troubleshooting). Enough to deploy and debug a student project with confidence.</p>
 <p><strong>Full path (8–10 weeks).</strong> Every chapter in order, every lab, the capstone. About one hour a day, five days a week. You come out able to tune a production request path and to handle the networking round of an interview.</p>
 <p><strong>The rhythm of one session (about one hour):</strong></p>
 <ol>
@@ -213,7 +213,7 @@ ${run('c00-loi', 'curl -sS http://labflow.invalid/', 4)}
 </ul>
 
 <h3>Hai lộ trình học</h3>
-<p><strong>Lộ trình tối thiểu (khoảng 3 tuần).</strong> Mục 0 → Chương 1 → Chương 2 (địa chỉ IP, subnet, NAT) → Chương 3 (DNS) → Chương 4 (TCP cơ bản) → Chương 7 (TLS) → Chương 10 (proxy, 502/504) → Chương 11 (chẩn đoán). Đủ để deploy và gỡ lỗi một đồ án sinh viên một cách tự tin.</p>
+<p><strong>Lộ trình tối thiểu (khoảng 3 tuần).</strong> Mục 0 → Chương 1 → Chương 2 (địa chỉ IP, subnet, NAT) → Chương 3 (DNS) → Chương 4 (TCP cơ bản) → Chương 6 (TLS) → Chương 10 (proxy, 502/504) → Chương 11 (chẩn đoán). Đủ để deploy và gỡ lỗi một đồ án sinh viên một cách tự tin.</p>
 <p><strong>Lộ trình đầy đủ (8–10 tuần).</strong> Mọi chương theo thứ tự, mọi lab, dự án cuối khoá. Khoảng một giờ mỗi ngày, năm ngày một tuần. Học xong bạn tối ưu được đường đi của request trên production và qua được vòng hỏi về mạng khi phỏng vấn.</p>
 <p><strong>Nhịp của một buổi (khoảng một giờ):</strong></p>
 <ol>

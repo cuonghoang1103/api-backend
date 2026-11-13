@@ -327,6 +327,22 @@ b.test</div>
 <a class="link-card" href="/courses/linux-bash/learn${REF}"><span class="lc-ico">🐧</span><span class="lc-body"><span class="lc-title">Khoá CuongThai — Linux &amp; Bash</span><span class="lc-sub">ss và lsof để tìm ra tiến trình nào đang giữ một cái cổng</span></span></a>
 <a class="link-card codelab" href="/code-lab/tracks/nginx${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Nginx"</span><span class="lc-sub">Buộc một trang vào loopback và một trang vào địa chỉ đại diện, rồi chứng minh cái nào trả lời</span></span></a>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/nwc204-computer-networking/learn?lessonSlug=nwc204-13-1-tang-giao-van-va-so-hieu-cong" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · NWC204 · 13.1 — Layer 4 and port numbers: getting data to the right program (FLM session 41)</span><span class="lc-sub">NWC204 at the Academy: the transport layer and port numbers behind every listen directive.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/nwc204-computer-networking/learn?lessonSlug=nwc204-13-1-tang-giao-van-va-so-hieu-cong" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · NWC204 · 13.1 — Tầng 4 và số hiệu cổng: đưa dữ liệu tới đúng chương trình (buổi 41 của FLM)</span><span class="lc-sub">NWC204 ở Academy: tầng giao vận và số hiệu cổng nằm sau mọi chỉ thị listen.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
 
@@ -1204,6 +1220,22 @@ $ curl -s -o /dev/null -w '%{http_code}\\n' -H 'Host: vidu.com..' http://127.0.0
 <a class="link-card" href="https://portswigger.net/web-security/host-header" target="_blank" rel="noopener"><span class="lc-ico">💥</span><span class="lc-body"><span class="lc-title">PortSwigger — Tấn công qua header Host</span><span class="lc-sub">portswigger.net · Kẻ tấn công làm gì với cú chuyển hướng ở trên</span></span></a>
 <a class="link-card" href="/courses/web-foundations/learn${REF}"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Khoá CuongThai — Web Foundations</span><span class="lc-sub">URL tuyệt đối và tương đối, và cách trình duyệt phân giải một Location</span></span></a>
 <a class="link-card codelab" href="/code-lab/tracks/nginx${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — chặng "Nginx"</span><span class="lc-sub">Đầu độc một cú chuyển hướng bằng Host giả, rồi tắt absolute_redirect và thử lại</span></span></a>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/nwc204-computer-networking/learn?lessonSlug=nwc204-14-2-web-email-dns-dhcp-chia-se-tep" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · NWC204 · 14.2 — Web, email, DNS, DHCP and file sharing protocols (FLM session 46)</span><span class="lc-sub">NWC204 at the Academy: how web and DNS work together, which is why the Host header exists.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/nwc204-computer-networking/learn?lessonSlug=nwc204-14-2-web-email-dns-dhcp-chia-se-tep" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · NWC204 · 14.2 — Giao thức web, email, DNS, DHCP và chia sẻ tệp (buổi 46 của FLM)</span><span class="lc-sub">NWC204 ở Academy: web và DNS phối hợp thế nào — lý do có header Host.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

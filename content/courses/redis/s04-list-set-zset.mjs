@@ -147,6 +147,23 @@ OK
 
 <div class="pitfall"><strong>Pitfall:</strong> paginating a list with <code>LRANGE key offset offset+19</code>. Page one is instant, page five hundred is not — <code>LRANGE</code> is O(S+N) where S is the start offset, so it walks ten thousand nodes to reach the window and every other client waits while it does. The failure is invisible in development, where nobody scrolls past page three, and appears as unexplained latency spikes correlated with nothing obvious in production. Two fixes, depending on the shape: cap the list with <code>LTRIM</code> so deep pages cannot exist (which is honest — nobody reads page 500 of a feed), or use a sorted set scored by timestamp and paginate with <code>ZRANGEBYSCORE … LIMIT</code>, which is O(log N + count) regardless of depth. The same warning applies to <code>LINDEX</code> with a large index and to <code>LREM</code> on a long list: any list command that is not touching an end is walking the list.</div>
 <p class="note-ct"><strong>Three things to remember.</strong> Lists are O(1) at both ends and O(N) everywhere else — build on <code>LPUSH</code>/<code>RPUSH</code>/<code>LPOP</code>/<code>RPOP</code> and treat <code>LINDEX</code>, <code>LREM</code> and deep <code>LRANGE</code> as latency risks. <code>BLPOP</code> parks the <em>connection</em> without costing the server anything, so give every blocking consumer its own connection. And <code>LPUSH</code> + <code>LTRIM</code> gives you a feed with bounded memory and O(1) reads of page one — while a real job queue needs acknowledgements and retries that lists do not have.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">LPUSH / RPUSH / LPOP / RPOP</span><span class="v">The O(1) operations at the two ends of a list — the only ones you should build on.</span></div>
+  <div class="kv"><span class="k">LRANGE</span><span class="v">Reads a range; O(S+N) in the start offset, so deep pages walk the list and block.</span></div>
+  <div class="kv"><span class="k">BLPOP / BLMOVE</span><span class="v">Blocking variants that park the connection, not the server, and wake in FIFO order.</span></div>
+  <div class="kv"><span class="k">LMOVE</span><span class="v">Atomically moves an item to a per-worker processing list — the reliable-queue pattern.</span></div>
+  <div class="kv"><span class="k">LTRIM</span><span class="v">Trims a list to a range; O(removed), so trimming on every push costs almost nothing.</span></div>
+  <div class="kv"><span class="k">quicklist</span><span class="v">The encoding of a large list: a linked list of listpacks, O(1) at both ends.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>Lists are O(1) at both ends and O(N) everywhere else — build on the push/pop commands, treat LINDEX, LREM and deep LRANGE as latency risks.</li>
+<li>BLPOP parks the connection without costing the server anything, so give every blocking consumer its own connection.</li>
+<li>LMOVE to a per-worker list makes a crash-safe queue, but a real job queue still needs acks, retries and a sweeper.</li>
+<li>LPUSH + LTRIM gives a feed with bounded memory and O(1) reads of page one.</li>
+<li>Never paginate a long list by offset; use a sorted set scored by time instead.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 4 · Bài 4.1</span>
@@ -276,6 +293,23 @@ OK
 
 <div class="pitfall"><strong>Cái bẫy:</strong> phân trang một list bằng <code>LRANGE key offset offset+19</code>. Trang một tức thì, trang năm trăm thì không — <code>LRANGE</code> là O(S+N) với S là vị trí bắt đầu, nên nó đi bộ qua mười nghìn nút để tới cửa sổ cần lấy và mọi khách khác nằm chờ suốt lúc đó. Hỏng hóc này vô hình khi phát triển, nơi không ai cuộn quá trang ba, rồi hiện ra ở production dưới dạng những đợt trễ vọt lên không tương quan với bất cứ thứ gì rõ ràng. Hai cách chữa, tuỳ hình dáng bài toán: cắt list bằng <code>LTRIM</code> để trang sâu không thể tồn tại (cách này thành thật — không ai đọc trang 500 của một dòng tin), hoặc dùng sorted set chấm điểm theo mốc thời gian và phân trang bằng <code>ZRANGEBYSCORE … LIMIT</code>, vốn là O(log N + count) bất kể sâu tới đâu. Cảnh báo y hệt áp cho <code>LINDEX</code> với chỉ số lớn và cho <code>LREM</code> trên list dài: bất cứ lệnh list nào không chạm vào một đầu đều đang đi bộ qua list.</div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> List là O(1) ở hai đầu và O(N) ở mọi chỗ khác — hãy xây trên <code>LPUSH</code>/<code>RPUSH</code>/<code>LPOP</code>/<code>RPOP</code> và coi <code>LINDEX</code>, <code>LREM</code> cùng <code>LRANGE</code> sâu là rủi ro độ trễ. <code>BLPOP</code> đỗ <em>kết nối</em> lại mà không tốn gì của máy chủ, nên hãy cho mỗi bên tiêu thụ chặn một kết nối riêng. Và <code>LPUSH</code> + <code>LTRIM</code> cho bạn một dòng tin có bộ nhớ bị chặn trên và đọc trang một trong O(1) — trong khi một hàng đợi việc thật cần xác nhận và thử lại, thứ mà list không có.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">LPUSH / RPUSH / LPOP / RPOP</span><span class="v">Các phép O(1) ở hai đầu của list — những phép duy nhất nên xây lên.</span></div>
+  <div class="kv"><span class="k">LRANGE</span><span class="v">Đọc một dải; O(S+N) theo vị trí bắt đầu, nên trang sâu đi bộ qua list và gây chặn.</span></div>
+  <div class="kv"><span class="k">BLPOP / BLMOVE</span><span class="v">Biến thể chặn đỗ lại kết nối chứ không đỗ máy chủ, và đánh thức theo thứ tự FIFO.</span></div>
+  <div class="kv"><span class="k">LMOVE</span><span class="v">Chuyển nguyên tử một mục sang list xử lý của riêng worker — khuôn hàng đợi tin cậy.</span></div>
+  <div class="kv"><span class="k">LTRIM</span><span class="v">Cắt list về một dải; O(số bị xoá), nên cắt ở mỗi lần đẩy gần như không tốn gì.</span></div>
+  <div class="kv"><span class="k">quicklist</span><span class="v">Cách mã hoá của một list lớn: một danh sách liên kết của các listpack, O(1) ở hai đầu.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>List là O(1) ở hai đầu và O(N) ở mọi chỗ khác — hãy xây trên các lệnh đẩy/lấy, coi LINDEX, LREM và LRANGE sâu là rủi ro độ trễ.</li>
+<li>BLPOP đỗ kết nối lại mà không tốn gì của máy chủ, nên hãy cho mỗi bên tiêu thụ chặn một kết nối riêng.</li>
+<li>LMOVE sang list của từng worker tạo một hàng đợi an toàn trước sập, nhưng hàng đợi việc thật vẫn cần xác nhận, thử lại và một tiến trình quét.</li>
+<li>LPUSH + LTRIM cho một dòng tin có bộ nhớ bị chặn trên và đọc trang một trong O(1).</li>
+<li>Đừng phân trang một list dài theo vị trí; hãy dùng một sorted set chấm điểm theo thời gian.</li>
+</ul>
 </div>
 `,
     },
@@ -457,6 +491,23 @@ redis-cli SINTER tag:redis tag:docker</code></pre>
 </a>
 
 <p class="note-ct"><strong>Three things to remember.</strong> <code>SISMEMBER</code> is O(1) at any size and <code>SMEMBERS</code> is O(N) that blocks the whole server — the first is the reason to use a set, the second is the reason people get burned by one. Encoding decides memory: an <code>intset</code> costs ~8 bytes per member and a <code>hashtable</code> costs 60–90, the conversion happens silently at the threshold, and it never converts back. And set algebra belongs in Redis, not in your application — <code>SINTER</code> iterates the smallest set, <code>SINTERCARD … LIMIT 1</code> answers yes/no without computing the answer, and the <code>…STORE</code> variants keep large results off the wire at the price of a key with no TTL.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">SISMEMBER</span><span class="v">Tests membership in O(1) at any size — the whole reason sets exist.</span></div>
+  <div class="kv"><span class="k">SADD return value</span><span class="v">Reports how many members were new, not how many you sent — a free deduplication check.</span></div>
+  <div class="kv"><span class="k">SMEMBERS vs SSCAN</span><span class="v">SMEMBERS is O(N) and blocks; SSCAN returns an opaque cursor and iterates without stalling.</span></div>
+  <div class="kv"><span class="k">intset / listpack / hashtable</span><span class="v">The three encodings — about 8 bytes per member for intset versus 60–90 for hashtable.</span></div>
+  <div class="kv"><span class="k">SINTER / SUNION / SDIFF</span><span class="v">Set algebra in Redis; SINTER iterates the smallest set, so a small-against-huge intersection is cheap.</span></div>
+  <div class="kv"><span class="k">SINTERCARD … LIMIT</span><span class="v">Counts an intersection and stops early — a yes/no "anything in common?" without computing the whole answer.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>SISMEMBER is O(1) at any size, which is why you reach for a set; SMEMBERS is O(N) and blocks the whole server.</li>
+<li>Encoding decides memory: intset is ~8 bytes per member, hashtable 60–90, and the conversion is silent and one-way.</li>
+<li>Set algebra belongs in Redis — SINTER iterates the smallest set and SINTERCARD … LIMIT 1 answers yes/no cheaply.</li>
+<li>The …STORE variants keep large results off the wire, but the destination key has no TTL.</li>
+<li>A set bounded only by time (one "seen" key forever) is a memory leak; use per-item keys with a TTL instead.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 4 · Bài 4.2</span>
@@ -629,6 +680,23 @@ redis-cli SINTER tag:redis tag:docker</code></pre>
 </a>
 
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> <code>SISMEMBER</code> là O(1) ở mọi kích thước còn <code>SMEMBERS</code> là O(N) chặn cả máy chủ — cái đầu là lý do để dùng set, cái sau là lý do người ta bỏng tay vì set. Kiểu mã hoá quyết định bộ nhớ: <code>intset</code> tốn ~8 byte mỗi phần tử còn <code>hashtable</code> tốn 60–90, việc chuyển kiểu xảy ra âm thầm ở ngưỡng, và không bao giờ chuyển ngược. Và đại số tập hợp thuộc về Redis chứ không thuộc về ứng dụng của bạn — <code>SINTER</code> duyệt set nhỏ nhất, <code>SINTERCARD … LIMIT 1</code> trả lời có/không mà không cần tính ra đáp án, còn các biến thể <code>…STORE</code> giữ kết quả lớn khỏi đường truyền với cái giá là một khoá không có TTL.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">SISMEMBER</span><span class="v">Kiểm tra thành viên trong O(1) ở mọi kích thước — toàn bộ lý do set tồn tại.</span></div>
+  <div class="kv"><span class="k">Giá trị trả về của SADD</span><span class="v">Báo bao nhiêu phần tử là mới, không phải bao nhiêu bạn gửi — một phép khử trùng lặp miễn phí.</span></div>
+  <div class="kv"><span class="k">SMEMBERS so với SSCAN</span><span class="v">SMEMBERS là O(N) và gây chặn; SSCAN trả một con trỏ mờ và duyệt mà không treo máy.</span></div>
+  <div class="kv"><span class="k">intset / listpack / hashtable</span><span class="v">Ba cách mã hoá — khoảng 8 byte mỗi phần tử cho intset so với 60–90 cho hashtable.</span></div>
+  <div class="kv"><span class="k">SINTER / SUNION / SDIFF</span><span class="v">Đại số tập hợp trong Redis; SINTER duyệt set nhỏ nhất, nên giao một set nhỏ với một set khổng lồ thì rẻ.</span></div>
+  <div class="kv"><span class="k">SINTERCARD … LIMIT</span><span class="v">Đếm một phép giao rồi dừng sớm — trả lời có/không "có gì chung không?" mà không tính cả đáp án.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>SISMEMBER là O(1) ở mọi kích thước, đó là lý do bạn dùng set; SMEMBERS là O(N) và chặn cả máy chủ.</li>
+<li>Kiểu mã hoá quyết định bộ nhớ: intset ~8 byte mỗi phần tử, hashtable 60–90, và việc chuyển kiểu là âm thầm và một chiều.</li>
+<li>Đại số tập hợp thuộc về Redis — SINTER duyệt set nhỏ nhất còn SINTERCARD … LIMIT 1 trả lời có/không một cách rẻ.</li>
+<li>Các biến thể …STORE giữ kết quả lớn khỏi đường truyền, nhưng khoá đích không có TTL.</li>
+<li>Một set chỉ bị chặn bởi thời gian (một khoá "đã thấy" sống mãi) là một chỗ rò bộ nhớ; hãy dùng khoá từng mục kèm TTL.</li>
+</ul>
 </div>
 `,
     },
@@ -802,6 +870,23 @@ redis-cli ZINTERCARD 2 s1 s2</code></pre>
 </a>
 
 <p class="note-ct"><strong>Three things to remember.</strong> A sorted set is a hash table plus a skip list, which is why <code>ZSCORE</code> is O(1) while ranks, ranges and counts are O(log N) — and why ties break on the member string, not on insertion order. <code>ZADD</code> carries six flags and two of them replace code you would otherwise write badly: <code>GT</code> makes a high-score update race-free with no transaction, and <code>CH</code> makes the return value tell you whether anything actually changed. And the score is a double: exact only to 2^53, so millisecond timestamps are safe, snowflake IDs and nanoseconds are not, and money belongs in integer cents.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Skip list</span><span class="v">The ordered structure behind a sorted set: ranks, ranges and counts in O(log N), ordered by (score, member).</span></div>
+  <div class="kv"><span class="k">ZSCORE</span><span class="v">Reads a member's score in O(1) via the backing hash table, never touching the ordered structure.</span></div>
+  <div class="kv"><span class="k">ZADD GT / CH</span><span class="v">GT updates only if the new score is greater (a race-free high score); CH makes the reply count changes.</span></div>
+  <div class="kv"><span class="k">ZRANGE BYSCORE / BYLEX / REV</span><span class="v">The unified 6.2 command that folded ZREVRANGE, ZRANGEBYSCORE and ZRANGEBYLEX into flags.</span></div>
+  <div class="kv"><span class="k">Score (double)</span><span class="v">An IEEE-754 double, exact only to 2^53 — millisecond timestamps are safe, 64-bit IDs are not.</span></div>
+  <div class="kv"><span class="k">ZUNIONSTORE WEIGHTS</span><span class="v">Combines sorted sets, multiplying each input's scores before aggregating — blends recency and popularity.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>A sorted set is a hash table plus a skip list: ZSCORE is O(1) while ranks, ranges and counts are O(log N).</li>
+<li>Ties break on the member string, not insertion order — encode a tiebreaker into the score if that matters.</li>
+<li>ZADD GT makes a high-score update race-free with no transaction, and CH tells you whether anything changed.</li>
+<li>The score is a double, exact only to 2^53: use millisecond timestamps, not snowflake IDs or nanoseconds.</li>
+<li>Money belongs in integer cents; a long chain of ZINCRBY on a float will drift.</li>
+</ul>
 <a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-13-4-lich-trinh" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 13.4: delayed jobs live in a sorted set</span><span class="lc-sub">BullMQ keeps every delayed job in a zset scored by its run time. Measured from Node: 20 jobs due between 100 and 2,000 ms ran late by 47.9 ms on average (911 ms at worst with a busy worker) — "not before", never "exactly at".</span></span>
@@ -971,6 +1056,23 @@ redis-cli ZINTERCARD 2 s1 s2</code></pre>
 </a>
 
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Sorted set là một bảng băm cộng một skip list, đó là lý do <code>ZSCORE</code> là O(1) trong khi hạng, khoảng và phép đếm là O(log N) — và cũng là lý do điểm bằng nhau thì phân định theo chuỗi phần tử, không theo thứ tự chèn. <code>ZADD</code> mang sáu cờ và hai trong số đó thay cho phần mã bạn hẳn sẽ viết tệ: <code>GT</code> làm cho phép cập nhật điểm cao hết đua mà không cần giao dịch, còn <code>CH</code> làm giá trị trả về nói cho bạn biết có gì thật sự thay đổi hay không. Và điểm là một double: chỉ chính xác tới 2^53, nên mốc thời gian mili giây thì an toàn, ID snowflake và nano giây thì không, còn tiền thì phải nằm ở số xu dạng nguyên.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Skip list</span><span class="v">Cấu trúc có thứ tự đằng sau sorted set: hạng, khoảng và phép đếm trong O(log N), xếp theo (điểm, phần tử).</span></div>
+  <div class="kv"><span class="k">ZSCORE</span><span class="v">Đọc điểm của một thành viên trong O(1) qua bảng băm nền, không chạm vào cấu trúc có thứ tự.</span></div>
+  <div class="kv"><span class="k">ZADD GT / CH</span><span class="v">GT chỉ cập nhật nếu điểm mới lớn hơn (điểm cao hết đua); CH làm giá trị trả về đếm cả thay đổi.</span></div>
+  <div class="kv"><span class="k">ZRANGE BYSCORE / BYLEX / REV</span><span class="v">Lệnh hợp nhất của 6.2 gộp ZREVRANGE, ZRANGEBYSCORE và ZRANGEBYLEX thành các cờ.</span></div>
+  <div class="kv"><span class="k">Điểm (double)</span><span class="v">Một double IEEE-754, chỉ chính xác tới 2^53 — mốc thời gian mili giây an toàn, ID 64 bit thì không.</span></div>
+  <div class="kv"><span class="k">ZUNIONSTORE WEIGHTS</span><span class="v">Kết hợp các sorted set, nhân điểm của mỗi đầu vào trước khi gộp — pha trộn độ mới và độ phổ biến.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Sorted set là một bảng băm cộng một skip list: ZSCORE là O(1) trong khi hạng, khoảng và phép đếm là O(log N).</li>
+<li>Điểm bằng nhau thì phân định theo chuỗi phần tử, không theo thứ tự chèn — hãy nhét một tiêu chí phân định vào điểm nếu cần.</li>
+<li>ZADD GT làm cho phép cập nhật điểm cao hết đua mà không cần giao dịch, còn CH nói cho bạn biết có gì thay đổi.</li>
+<li>Điểm là một double, chỉ chính xác tới 2^53: hãy dùng mốc thời gian mili giây, không dùng ID snowflake hay nano giây.</li>
+<li>Tiền phải nằm ở số xu dạng nguyên; một chuỗi ZINCRBY dài trên số thực sẽ trôi dạt.</li>
+</ul>
 <a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-13-4-lich-trinh" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 13.4: job hẹn giờ nằm trong một sorted set</span><span class="lc-sub">BullMQ giữ mọi job hẹn giờ trong một zset, điểm là thời điểm chạy. Đo từ Node: 20 job hẹn từ 100 tới 2.000 ms chạy trễ trung bình 47,9 ms (tệ nhất 911 ms khi worker bận) — "không sớm hơn", không bao giờ "đúng vào lúc".</span></span>
@@ -1126,6 +1228,23 @@ redis-cli ZLEXCOUNT ac "[ha" "[ha\\xff"</code></pre>
 </a>
 
 <p class="note-ct"><strong>Three things to remember.</strong> All five patterns are the same two decisions — what goes in the score, what goes in the member — and getting those right is the entire design. <code>ZREM</code> returning 1 is a free distributed claim: exactly one worker wins, with no lock and no coordination, and it is the backbone of the scheduler. And every one of these keys needs a bound: <code>ZREMRANGEBYRANK</code> for leaderboards, <code>ZREMRANGEBYSCORE</code> plus <code>EXPIRE</code> for windows, a rebuild script for indexes — an unbounded sorted set is just a slower memory leak.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">ZREVRANK</span><span class="v">Answers "what rank am I?" in O(log N) using the skip list's span counts — the query SQL is worst at.</span></div>
+  <div class="kv"><span class="k">ZREM as a claim</span><span class="v">Returning 1 to exactly one worker makes an atomic distributed claim with no lock or coordination.</span></div>
+  <div class="kv"><span class="k">Delayed-job scheduler</span><span class="v">Score = the unix-ms run time; poll with ZRANGE … BYSCORE and claim due jobs with ZREM.</span></div>
+  <div class="kv"><span class="k">Sliding window (sorted set)</span><span class="v">One member per request; sweep with ZREMRANGEBYSCORE, then ZCARD, and always set a TTL.</span></div>
+  <div class="kv"><span class="k">Secondary index</span><span class="v">Score = a sortable number, member = an ID; range-query in O(log N + count), then fetch rows by key.</span></div>
+  <div class="kv"><span class="k">ZRANGEBYLEX</span><span class="v">Lexicographic autocomplete — only correct when every member shares the same score.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>Every pattern is the same two decisions — what goes in the score, what goes in the member.</li>
+<li>ZREM returning 1 is a free distributed claim: exactly one worker wins, and it is the backbone of the scheduler.</li>
+<li>A leaderboard answers "what rank am I?" in O(log N), and deep pages stay cheap unlike a list.</li>
+<li>ZRANGEBYLEX breaks silently the moment the scores are not all identical — normalise members and keep one score.</li>
+<li>Every key needs a bound: ZREMRANGEBYRANK for boards, ZREMRANGEBYSCORE plus EXPIRE for windows, a rebuild for indexes.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 4 · Bài 4.4</span>
@@ -1267,6 +1386,23 @@ redis-cli ZLEXCOUNT ac "[ha" "[ha\\xff"</code></pre>
 </a>
 
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Cả năm khuôn mẫu đều là cùng hai quyết định — cái gì vào điểm, cái gì vào phần tử — và làm đúng hai thứ đó chính là toàn bộ phần thiết kế. <code>ZREM</code> trả về 1 là một phép nhận việc phân tán miễn phí: đúng một worker thắng, không khoá và không phối hợp, và nó là xương sống của bộ hẹn giờ. Và mọi khoá kiểu này đều cần một cái trần: <code>ZREMRANGEBYRANK</code> cho bảng xếp hạng, <code>ZREMRANGEBYSCORE</code> cộng <code>EXPIRE</code> cho cửa sổ, một script dựng lại cho chỉ mục — một sorted set không có trần chỉ là một chỗ rò bộ nhớ chậm hơn.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">ZREVRANK</span><span class="v">Trả lời "mình hạng mấy?" trong O(log N) nhờ số span của skip list — câu hỏi mà SQL dở nhất.</span></div>
+  <div class="kv"><span class="k">ZREM làm phép nhận việc</span><span class="v">Trả về 1 cho đúng một worker tạo một phép nhận việc phân tán nguyên tử, không khoá không phối hợp.</span></div>
+  <div class="kv"><span class="k">Bộ hẹn giờ việc trễ</span><span class="v">Điểm = thời điểm chạy tính bằng unix-ms; thăm dò bằng ZRANGE … BYSCORE và nhận việc đến hạn bằng ZREM.</span></div>
+  <div class="kv"><span class="k">Cửa sổ trượt (sorted set)</span><span class="v">Mỗi yêu cầu một thành viên; quét bằng ZREMRANGEBYSCORE rồi ZCARD, và luôn đặt một TTL.</span></div>
+  <div class="kv"><span class="k">Chỉ mục phụ</span><span class="v">Điểm = một số sắp xếp được, phần tử = một ID; truy vấn khoảng trong O(log N + count) rồi nạp dòng theo khoá.</span></div>
+  <div class="kv"><span class="k">ZRANGEBYLEX</span><span class="v">Gợi ý gõ theo thứ tự chữ — chỉ đúng khi mọi thành viên có cùng một điểm.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Mọi khuôn mẫu đều là cùng hai quyết định — cái gì vào điểm, cái gì vào phần tử.</li>
+<li>ZREM trả về 1 là một phép nhận việc phân tán miễn phí: đúng một worker thắng, và nó là xương sống của bộ hẹn giờ.</li>
+<li>Một bảng xếp hạng trả lời "mình hạng mấy?" trong O(log N), và trang sâu vẫn rẻ khác với list.</li>
+<li>ZRANGEBYLEX vỡ âm thầm ngay khi điểm không còn giống nhau hết — hãy chuẩn hoá phần tử và giữ một điểm duy nhất.</li>
+<li>Mọi khoá đều cần một trần: ZREMRANGEBYRANK cho bảng, ZREMRANGEBYSCORE cộng EXPIRE cho cửa sổ, một script dựng lại cho chỉ mục.</li>
+</ul>
 </div>
 `,
     },
@@ -1345,16 +1481,16 @@ redis-cli GEODIST vn hanoi hcmc km
 redis-cli GEOSEARCH vn FROMLONLAT 106.0 16.0 BYRADIUS 400 km ASC WITHDIST
 redis-cli GEOSEARCH vn FROMMEMBER hanoi BYBOX 900 900 km ASC COUNT 2</code></pre>
 <div class="out">(integer) 3
-"skiplist"
+"listpack"
 zset
-"3981230787217013"
-"1140.4899"
+"3973593206939046"
+"1145.2568"
 1) 1) "danang"
-   2) "224.4431"
-1) "hanoi"
-2) "danang"</div>
+   2) "237.5209"
+1) "hanoi"</div>
+<p class="note-ct">Corrected 12/11/2026 against a real run: with three members the key is still <code>listpack</code>, and the 900 × 900 km box around Hanoi returns <strong>only Hanoi</strong> — Da Nang is about 550 km to the south, outside the 450 km half-height of the box. A box is not a circle: measure half its side, not its whole side, against the distance.</p>
 <div class="lz-stack">
-  <div class="lz-layer"><span class="lz-lname">There is no geo type</span><span class="lz-lnote"><code>TYPE</code> says <code>zset</code> and <code>OBJECT ENCODING</code> says <code>skiplist</code>, because a geo key <em>is</em> a sorted set. Every Z-command works on it: <code>ZCARD vn</code> counts your locations, <code>ZREM vn hanoi</code> deletes one, <code>ZRANGE</code> lists them.</span></div>
+  <div class="lz-layer"><span class="lz-lname">There is no geo type</span><span class="lz-lnote"><code>TYPE</code> says <code>zset</code> and <code>OBJECT ENCODING</code> says <code>listpack</code> — the compact encoding of a small sorted set, which becomes <code>skiplist</code> once it grows past the listpack threshold — because a geo key <em>is</em> a sorted set. Every Z-command works on it: <code>ZCARD vn</code> counts your locations, <code>ZREM vn hanoi</code> deletes one, <code>ZRANGE</code> lists them.</span></div>
   <div class="lz-layer"><span class="lz-lname">The score is a 52-bit geohash</span><span class="lz-lnote">Longitude and latitude are interleaved bit by bit into one integer, so nearby places get nearby scores. That is the whole idea: a 2-D proximity search becomes a handful of 1-D range scans on a structure Redis already has. 52 bits fits inside the 2^53 double budget exactly — not a coincidence.</span></div>
   <div class="lz-layer"><span class="lz-lname">GEOSEARCH replaced GEORADIUS</span><span class="lz-lnote">Redis 6.2 unified the old <code>GEORADIUS</code>/<code>GEORADIUSBYMEMBER</code> family into <code>GEOSEARCH</code> (read) and <code>GEOSEARCHSTORE</code> (write), with <code>FROMLONLAT</code>/<code>FROMMEMBER</code> and <code>BYRADIUS</code>/<code>BYBOX</code>. The old commands are deprecated but still work.</span></div>
 </div>
@@ -1374,6 +1510,23 @@ zset
 </a>
 
 <p class="note-ct"><strong>Three things to remember.</strong> The memory ratio is roughly 1 : 5 : 9 for list : set : sorted set on the same members — every extra capability is paid for, so do not buy one you never use. Choose by the <em>question</em> you will ask, not by what the data looks like: duplicates → list, membership → set, any kind of order or range → sorted set, acknowledgements → stream. And a geo key is literally a sorted set with a geohash for a score, which means every Z-command works on it, every sorted-set pitfall applies to it, and it needs the same self-imposed bound as any other unbounded key.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">1 : 5 : 9 ratio</span><span class="v">Rough per-member memory for list : set : sorted set on the same data — every capability is paid for.</span></div>
+  <div class="kv"><span class="k">Choose by the question</span><span class="v">Duplicates → list, membership → set, order or range → sorted set, acks → stream.</span></div>
+  <div class="kv"><span class="k">O(N) on grown data</span><span class="v">The shape of nearly every Redis incident: not a failing command, but an O(N) one on data that got big.</span></div>
+  <div class="kv"><span class="k">GEOADD / GEOSEARCH</span><span class="v">Geo commands over a sorted set; GEOSEARCH replaced the deprecated GEORADIUS family in 6.2.</span></div>
+  <div class="kv"><span class="k">Geohash score</span><span class="v">Longitude and latitude interleaved into one 52-bit integer, so nearby places get nearby scores.</span></div>
+  <div class="kv"><span class="k">Geo key = sorted set</span><span class="v">TYPE reports zset: every Z-command works on it, and every sorted-set pitfall applies.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>The memory ratio is roughly 1 : 5 : 9 for list : set : sorted set — do not buy a capability you never use.</li>
+<li>Choose by the question you will ask, not by what the data looks like.</li>
+<li>An O(N) command on data that grew is a server-wide stall, because Redis is single-threaded.</li>
+<li>A geo key is literally a sorted set with a geohash for a score, so every Z-command and every pitfall applies.</li>
+<li>Geo keys have no per-member TTL; sweep them yourself with a companion last-seen sorted set.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 4 · Bài 4.5</span>
@@ -1443,16 +1596,16 @@ redis-cli GEODIST vn hanoi hcmc km
 redis-cli GEOSEARCH vn FROMLONLAT 106.0 16.0 BYRADIUS 400 km ASC WITHDIST
 redis-cli GEOSEARCH vn FROMMEMBER hanoi BYBOX 900 900 km ASC COUNT 2</code></pre>
 <div class="out">(integer) 3
-"skiplist"
+"listpack"
 zset
-"3981230787217013"
-"1140.4899"
+"3973593206939046"
+"1145.2568"
 1) 1) "danang"
-   2) "224.4431"
-1) "hanoi"
-2) "danang"</div>
+   2) "237.5209"
+1) "hanoi"</div>
+<p class="note-ct">Sửa ngày 12/11/2026 theo lần chạy thật: với ba phần tử, khoá vẫn là <code>listpack</code>, và hộp 900 × 900 km quanh Hà Nội chỉ trả về <strong>MỖI Hà Nội</strong> — Đà Nẵng cách khoảng 550 km về phía nam, nằm ngoài nửa chiều cao 450 km của hộp. Hộp không phải hình tròn: hãy so khoảng cách với NỬA cạnh hộp, không phải cả cạnh.</p>
 <div class="lz-stack">
-  <div class="lz-layer"><span class="lz-lname">Không hề có kiểu geo</span><span class="lz-lnote"><code>TYPE</code> nói <code>zset</code> và <code>OBJECT ENCODING</code> nói <code>skiplist</code>, vì một khoá geo <em>chính là</em> một sorted set. Mọi lệnh Z đều chạy trên nó: <code>ZCARD vn</code> đếm số địa điểm, <code>ZREM vn hanoi</code> xoá một cái, <code>ZRANGE</code> liệt kê chúng.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Không hề có kiểu geo</span><span class="lz-lnote"><code>TYPE</code> nói <code>zset</code> và <code>OBJECT ENCODING</code> nói <code>listpack</code> — dạng mã hoá gọn của một sorted set nhỏ, sẽ thành <code>skiplist</code> khi lớn quá ngưỡng listpack — vì một khoá geo <em>chính là</em> một sorted set. Mọi lệnh Z đều chạy trên nó: <code>ZCARD vn</code> đếm số địa điểm, <code>ZREM vn hanoi</code> xoá một cái, <code>ZRANGE</code> liệt kê chúng.</span></div>
   <div class="lz-layer"><span class="lz-lname">Điểm số là một geohash 52 bit</span><span class="lz-lnote">Kinh độ và vĩ độ được đan xen từng bit thành một số nguyên duy nhất, nên những nơi gần nhau có điểm gần nhau. Toàn bộ ý tưởng nằm ở đó: một phép tìm lân cận trong không gian 2 chiều trở thành vài lượt quét khoảng trong không gian 1 chiều, trên đúng cấu trúc mà Redis đã có sẵn. 52 bit lọt vừa khít vào hạn mức 2^53 của double — không phải trùng hợp.</span></div>
   <div class="lz-layer"><span class="lz-lname">GEOSEARCH đã thay GEORADIUS</span><span class="lz-lnote">Redis 6.2 gộp họ <code>GEORADIUS</code>/<code>GEORADIUSBYMEMBER</code> cũ thành <code>GEOSEARCH</code> (đọc) và <code>GEOSEARCHSTORE</code> (ghi), với <code>FROMLONLAT</code>/<code>FROMMEMBER</code> và <code>BYRADIUS</code>/<code>BYBOX</code>. Các lệnh cũ đã bị đánh dấu lỗi thời nhưng vẫn chạy.</span></div>
 </div>
@@ -1472,6 +1625,23 @@ zset
 </a>
 
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Tỉ lệ bộ nhớ vào khoảng 1 : 5 : 9 cho list : set : sorted set trên cùng những phần tử — mọi năng lực thêm vào đều phải trả tiền, nên đừng mua thứ bạn không bao giờ dùng. Hãy chọn theo <em>câu hỏi</em> bạn sẽ hỏi, đừng chọn theo hình dạng dữ liệu: cần trùng → list, cần kiểm tra thành viên → set, cần bất cứ thứ tự hay khoảng nào → sorted set, cần xác nhận → stream. Và một khoá geo đúng nghĩa đen là một sorted set với geohash làm điểm, nghĩa là mọi lệnh Z đều chạy trên nó, mọi cái bẫy của sorted set đều áp cho nó, và nó cần đúng cái trần tự đặt ra như mọi khoá không có trần khác.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Tỉ lệ 1 : 5 : 9</span><span class="v">Bộ nhớ mỗi phần tử ước chừng cho list : set : sorted set trên cùng dữ liệu — mọi năng lực đều phải trả tiền.</span></div>
+  <div class="kv"><span class="k">Chọn theo câu hỏi</span><span class="v">Cần trùng → list, kiểm thành viên → set, cần thứ tự hay khoảng → sorted set, cần xác nhận → stream.</span></div>
+  <div class="kv"><span class="k">O(N) trên dữ liệu đã lớn</span><span class="v">Hình dáng của gần như mọi sự cố Redis: không phải lệnh hỏng, mà một lệnh O(N) trên dữ liệu đã phình ra.</span></div>
+  <div class="kv"><span class="k">GEOADD / GEOSEARCH</span><span class="v">Lệnh geo trên một sorted set; GEOSEARCH thay họ GEORADIUS đã bị bỏ từ 6.2.</span></div>
+  <div class="kv"><span class="k">Điểm geohash</span><span class="v">Kinh độ và vĩ độ đan vào nhau thành một số nguyên 52 bit, nên nơi gần nhau có điểm gần nhau.</span></div>
+  <div class="kv"><span class="k">Khoá geo = sorted set</span><span class="v">TYPE báo zset: mọi lệnh Z đều chạy trên nó, và mọi cái bẫy của sorted set đều áp.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Tỉ lệ bộ nhớ vào khoảng 1 : 5 : 9 cho list : set : sorted set — đừng mua năng lực bạn không bao giờ dùng.</li>
+<li>Hãy chọn theo câu hỏi bạn sẽ hỏi, đừng chọn theo hình dạng dữ liệu.</li>
+<li>Một lệnh O(N) trên dữ liệu đã phình ra là một cú đứng hình toàn máy chủ, vì Redis chạy một luồng.</li>
+<li>Một khoá geo đúng nghĩa đen là một sorted set với geohash làm điểm, nên mọi lệnh Z và mọi cái bẫy đều áp.</li>
+<li>Khoá geo không có TTL theo từng thành viên; hãy tự quét bằng một sorted set đồng hành ghi thời điểm thấy lần cuối.</li>
+</ul>
 </div>
 `,
     },

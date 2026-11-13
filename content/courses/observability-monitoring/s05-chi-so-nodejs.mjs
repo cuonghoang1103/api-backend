@@ -1382,8 +1382,9 @@ collectDefaultMetrics({
   // Buckets chosen for the GC pauses measured in lesson 5.3
   gcDurationBuckets: [0.001, 0.005, 0.01, 0.025, 0.05, 0.1, 0.25],
   // A label on every metric, so you can tell instances apart
-  labels: { service: 'backend', version: process.env.APP_VERSION ?? 'dev' },
+  labels: { service: 'backend', app_version: process.env.APP_VERSION ?? 'dev' },
 });</code></pre>
+<div class="pitfall"><strong>Why <code>app_version</code> and not <code>version</code> (corrected 12/11/2026).</strong> An earlier version of this block named the default label <code>version</code>. Run for real with <code>APP_VERSION=1.4.0</code>, that label <em>overwrote</em> the label of the same name on <code>nodejs_version_info</code>: Prometheus showed <code>nodejs_version_info{version="1.4.0",major="22",minor="23",patch="4",service="backend"}</code> — the Node version was gone. A default label is applied to every metric, so it must not reuse a name any metric already has.</div>
 <pre><code>What that gives you, by family:
 
   process_*            9 metrics   CPU, RSS, fds, start time
@@ -1414,11 +1415,11 @@ This "info metric" pattern is worth knowing because it lets
 you join a deployment fact onto a performance graph:
 
   # p99 latency, broken down by which app version served it
-  histogram_quantile(0.99, sum by (le, version) (
+  histogram_quantile(0.99, sum by (le, app_version) (
     rate(http_request_duration_seconds_bucket[5m])
   ))
 
-With the &#96;version&#96; label from collectDefaultMetrics above, a
+With the &#96;app_version&#96; label from collectDefaultMetrics above, a
 deploy becomes visible ON the latency graph rather than being
 something you correlate by squinting at timestamps. Chapter 11
 uses this to answer "did the deploy cause it?" in one query.</code></pre>
@@ -1525,8 +1526,9 @@ collectDefaultMetrics({
   // Ô chọn cho đúng dải thời gian dừng GC đo ở bài 5.3
   gcDurationBuckets: [0.001, 0.005, 0.01, 0.025, 0.05, 0.1, 0.25],
   // Một cái nhãn cho mọi chỉ số, để phân biệt được các thực thể
-  labels: { service: 'backend', version: process.env.APP_VERSION ?? 'dev' },
+  labels: { service: 'backend', app_version: process.env.APP_VERSION ?? 'dev' },
 });</code></pre>
+<div class="pitfall"><strong>Vì sao là <code>app_version</code> mà không phải <code>version</code> (sửa 12/11/2026).</strong> Bản cũ của khối này đặt tên nhãn mặc định là <code>version</code>. Chạy thật với <code>APP_VERSION=1.4.0</code>, nhãn đó đã <em>GHI ĐÈ</em> nhãn trùng tên trên <code>nodejs_version_info</code>: Prometheus hiện <code>nodejs_version_info{version="1.4.0",major="22",minor="23",patch="4",service="backend"}</code> — phiên bản Node biến mất. Nhãn mặc định gắn vào MỌI chỉ số, nên nó không được trùng tên với nhãn mà chỉ số nào đó đã có.</div>
 <pre><code>Nó cho bạn những gì, theo họ:
 
   process_*            9 chỉ số    CPU, RSS, fd, thời điểm khởi động
@@ -1557,11 +1559,11 @@ Cái mẫu "chỉ số thông tin" này đáng biết vì nó cho phép bạn gh
 một sự kiện triển khai vào một đồ thị hiệu năng:
 
   # độ trễ p99, chia theo phiên bản app nào đã phục vụ
-  histogram_quantile(0.99, sum by (le, version) (
+  histogram_quantile(0.99, sum by (le, app_version) (
     rate(http_request_duration_seconds_bucket[5m])
   ))
 
-Với cái nhãn &#96;version&#96; từ collectDefaultMetrics ở trên, một lần
+Với cái nhãn &#96;app_version&#96; từ collectDefaultMetrics ở trên, một lần
 deploy trở nên nhìn thấy được NGAY TRÊN đồ thị độ trễ thay vì là
 thứ bạn phải nheo mắt đối chiếu dấu thời gian. Chương 11 dùng cái
 này để trả lời "có phải lần deploy gây ra không?" trong một truy vấn.</code></pre>

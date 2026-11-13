@@ -3381,7 +3381,7 @@ Transfer-Encoding: chunked
 &lt;h1&gt;Sorry, something went wrong&lt;/h1&gt;
 &lt;p&gt;exception = java.lang.ArithmeticException: / by zero&lt;/p&gt;
 &lt;p&gt;status = 200, failed page = /jsp-thuoc-tinh/late.jsp&lt;/p&gt;</code></pre>
-<p>Same <code>errorPage="error.jsp"</code>, same division by zero — but the user gets a <strong>200</strong> page cut in the middle, no error page, and the exception only in Tomcat's log. That is the reason for the default 8 KB buffer, and for doing all the work (DAO calls…) <em>before</em> the page starts printing — in a servlet (Chapter 6).</p>
+<p>Same <code>errorPage="error.jsp"</code>, same division by zero — but the status is <strong>200</strong>: part 1 was already sent, so Tomcat can no longer change the status or forward — it simply pastes the error page into the middle of the half-sent page (the response above, Tomcat 10.1.61). The browser and any monitoring see a success. That is the reason for the default 8 KB buffer, and for doing all the work (DAO calls…) <em>before</em> the page starts printing — in a servlet (Chapter 6).</p>
 <p>➕ Attributes the slide's table leaves out, which you will actually use: <code>contentType</code> and <code>pageEncoding</code> (slide 23), <code>import</code> (22), <code>session="false"</code> (3.A, slide 17), <code>isELIgnored</code> (3.C), and <code>trimDirectiveWhitespaces</code>, which removes the empty lines left by directives:</p>
 <p class="nhan">📤 Request sent to Tomcat → 📥 the REAL response Tomcat 10.1 returned</p>
 <pre class="http-req"><code class="language-http">GET /jsp-thuoc-tinh/notrim.jsp HTTP/1.1
@@ -3579,7 +3579,7 @@ Transfer-Encoding: chunked
 &lt;h1&gt;Sorry, something went wrong&lt;/h1&gt;
 &lt;p&gt;exception = java.lang.ArithmeticException: / by zero&lt;/p&gt;
 &lt;p&gt;status = 200, failed page = /jsp-thuoc-tinh/late.jsp&lt;/p&gt;</code></pre>
-<p>Vẫn <code>errorPage="error.jsp"</code>, vẫn chia cho 0 — nhưng người dùng nhận trang <strong>200</strong> bị cắt giữa chừng, không có trang lỗi, còn exception chỉ nằm trong log của Tomcat. Đó là lý do có bộ đệm mặc định 8 KB, và lý do phải làm hết việc (gọi DAO…) <em>trước</em> khi trang bắt đầu in — trong một servlet (Chương 6).</p>
+<p>Vẫn <code>errorPage="error.jsp"</code>, vẫn chia cho 0 — nhưng mã trạng thái là <strong>200</strong>: phần 1 đã được gửi, nên Tomcat không còn đổi được mã trạng thái hay forward nữa — nó chỉ dán trang lỗi vào GIỮA trang đã gửi dở (response ở trên, Tomcat 10.1.61). Trình duyệt và mọi hệ giám sát đều thấy thành công. Đó là lý do có bộ đệm mặc định 8 KB, và lý do phải làm hết việc (gọi DAO…) <em>trước</em> khi trang bắt đầu in — trong một servlet (Chương 6).</p>
 <p>➕ Những thuộc tính bảng của slide bỏ sót mà bạn sẽ thật sự dùng: <code>contentType</code> và <code>pageEncoding</code> (slide 23), <code>import</code> (22), <code>session="false"</code> (3.A, slide 17), <code>isELIgnored</code> (3.C), và <code>trimDirectiveWhitespaces</code>, thứ xoá các dòng trống do chỉ thị để lại:</p>
 <p class="nhan">📤 Request gửi tới Tomcat → 📥 response THẬT Tomcat 10.1 trả về</p>
 <pre class="http-req"><code class="language-http">GET /jsp-thuoc-tinh/notrim.jsp HTTP/1.1

@@ -285,7 +285,7 @@ export default {
   <thead><tr><th>Method</th><th>Use</th><th>Data goes in</th></tr></thead>
   <tbody>
     <tr><td><span class="badge">GET</span></td><td>request a page, search</td><td>the URL (visible, bookmarkable)</td></tr>
-    <tr><td><span class="badge">POST</span></td><td>submit a form, log in</td><td>the request body (hidden, for sensitive data)</td></tr>
+    <tr><td><span class="badge">POST</span></td><td>submit a form, log in</td><td>the request body — not in the URL, history or server logs, but still visible in DevTools and to any proxy; only HTTPS makes it private</td></tr>
   </tbody>
 </table>
 <p>Responses carry a <strong>status code</strong>: 200 OK, 404 Not Found, 500 Server Error, 302 Redirect — you saw these while debugging in earlier courses.</p>
@@ -323,7 +323,7 @@ export default {
   <thead><tr><th>Method</th><th>Dùng</th><th>Dữ liệu nằm ở</th></tr></thead>
   <tbody>
     <tr><td><span class="badge">GET</span></td><td>yêu cầu trang, tìm kiếm</td><td>URL (nhìn thấy, bookmark được)</td></tr>
-    <tr><td><span class="badge">POST</span></td><td>gửi form, đăng nhập</td><td>thân request (ẩn, cho dữ liệu nhạy cảm)</td></tr>
+    <tr><td><span class="badge">POST</span></td><td>gửi form, đăng nhập</td><td>thân request — không nằm trên URL, lịch sử hay log máy chủ, nhưng vẫn thấy trong DevTools và với mọi proxy; chỉ HTTPS mới làm nó kín</td></tr>
   </tbody>
 </table>
 <p>Response mang một <strong>mã trạng thái</strong>: 200 OK, 404 Not Found, 500 Server Error, 302 Redirect — bạn đã thấy chúng khi debug ở các môn trước.</p>
@@ -1075,7 +1075,7 @@ ctx.<span class="tok-function">log</span>(<span class="tok-string">"Application 
 <p class="lead">The syllabus spends three sessions (37–39) on EL alone. Lesson 3.1 showed <span class="badge">\${user.name}</span>; this lesson is the full toolkit, because EL is what makes a scriptlet-free View possible — and it is heavily represented in the final exam.</p>
 
 <h3>What <span class="badge">\${user.name}</span> really does</h3>
-<div class="out">EL does not read a field. It calls the <b>getter</b>: <span class="badge">\${user.name}</span> → <span class="badge">user.getName()</span>. Which means: a <span class="badge">private String name</span> with no <span class="badge">getName()</span> prints <em>nothing</em> — the classic "my JSP shows blank" bug. Your model classes must follow JavaBean conventions: private fields, public getters, and a no-argument constructor.</div>
+<div class="out">EL does not read a field. It calls the <b>getter</b>: <span class="badge">\${user.name}</span> → <span class="badge">user.getName()</span>. Which means: a <span class="badge">private String name</span> with no <span class="badge">getName()</span> does <em>not</em> print blank — on Tomcat 10.1 (EL 5.0) the page fails with a 500 <span class="badge">PropertyNotFoundException</span> (measured 12/11/2026). What prints blank is a <em>missing object</em> (no attribute called <span class="badge">user</span>), not a missing property. Your model classes must follow JavaBean conventions: private fields, public getters, and a no-argument constructor.</div>
 <pre><code class="language-java">\${user.name}          <span class="tok-comment">// user.getName()</span>
 \${user["name"]}       <span class="tok-comment">// identical — needed when the key has dots/spaces</span>
 \${list[0]}            <span class="tok-comment">// first element of a List or array</span>
@@ -1137,9 +1137,9 @@ req.setAttribute(<span class="tok-string">"ACTIVE"</span>, Status.ACTIVE);
 \${ACTIVE}                             <span class="tok-comment">// in the JSP</span></code></pre>
 <p>Option 2 is what the Practical Exam expects: EL reads <em>attributes</em>, so the controller's job is to put every value the view needs into a scope first.</p>
 
-<div class="pitfall"><b>Trap:</b> EL swallows errors by design. A typo — <span class="badge">\${user.nmae}</span> — or a null object prints an empty string rather than throwing, so a blank page gives you no clue. Debug in this order: (1) did the Servlet actually <span class="badge">setAttribute</span> under exactly that name? (2) is the scope the one you think? (3) does the getter exist and is it public? Nine times out of ten it is the getter or a typo in the attribute name.</div>
+<div class="pitfall"><b>Trap:</b> EL swallows <em>some</em> errors by design. A null or missing object prints an empty string rather than throwing, so a blank page gives you no clue. A typo in a property of an object that exists — <span class="badge">\${user.nmae}</span> — is different: it throws <span class="badge">PropertyNotFoundException</span> (500). Debug in this order: (1) did the Servlet actually <span class="badge">setAttribute</span> under exactly that name? (2) is the scope the one you think? (3) does the getter exist and is it public? Nine times out of ten it is the getter or a typo in the attribute name.</div>
 
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>EL is deliberately powerless — and that is a security feature.</b> You cannot call <span class="badge">\${dao.deleteAll()}</span> with arguments, run a loop, or open a connection from EL. Compare that with a scriptlet, which can do anything Java can. Restricting the View's language <em>enforces</em> the MVC separation rather than merely recommending it: a designer editing a JSP cannot accidentally issue a DELETE. Every modern template engine (Thymeleaf, JSX-with-lint rules, Blade) makes the same trade — expressive enough to display, too weak to compute.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>EL is weaker than Java — but not powerless.</b> Since EL 2.2 (Java EE 6) it <em>can</em> call methods, with arguments: if a DAO object is put in a scope, <span class="badge">\${dao.deleteAll()}</span> really runs it. What EL cannot do is declare variables, run loops or catch exceptions the way a scriptlet can. So the MVC separation is kept by discipline, not enforced by the language: never put DAOs or services into request/session attributes — give the view plain data objects only, and it has nothing dangerous to call. Every modern template engine (Thymeleaf, JSX-with-lint rules, Blade) makes the same trade — expressive enough to display, too weak to compute.</div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 3 · Bài 3.3</span>
@@ -1147,7 +1147,7 @@ req.setAttribute(<span class="tok-string">"ACTIVE"</span>, Status.ACTIVE);
 <p class="lead">Syllabus dành trọn ba buổi (37–39) chỉ cho EL. Bài 3.1 mới cho thấy <span class="badge">\${user.name}</span>; bài này là toàn bộ hộp đồ nghề, vì EL chính là thứ khiến một View không scriptlet trở nên khả thi — và nó xuất hiện rất dày trong đề thi cuối kỳ.</p>
 
 <h3><span class="badge">\${user.name}</span> thực sự làm gì</h3>
-<div class="out">EL không đọc trường dữ liệu. Nó gọi <b>getter</b>: <span class="badge">\${user.name}</span> → <span class="badge">user.getName()</span>. Nghĩa là: một <span class="badge">private String name</span> mà không có <span class="badge">getName()</span> sẽ in ra <em>không gì cả</em> — đúng lỗi kinh điển "JSP của em hiện trắng trơn". Các lớp model của bạn phải theo quy ước JavaBean: trường private, getter public, và một hàm khởi tạo không tham số.</div>
+<div class="out">EL không đọc trường dữ liệu. Nó gọi <b>getter</b>: <span class="badge">\${user.name}</span> → <span class="badge">user.getName()</span>. Nghĩa là: một <span class="badge">private String name</span> mà không có <span class="badge">getName()</span> KHÔNG in ra rỗng — trên Tomcat 10.1 (EL 5.0) trang chết với lỗi 500 <span class="badge">PropertyNotFoundException</span> (đo ngày 12/11/2026). Thứ in ra rỗng là <em>đối tượng không có</em> (không có thuộc tính nào tên <span class="badge">user</span>), không phải thuộc tính thiếu getter. Các lớp model của bạn phải theo quy ước JavaBean: trường private, getter public, và một hàm khởi tạo không tham số.</div>
 <pre><code class="language-java">\${user.name}          <span class="tok-comment">// user.getName()</span>
 \${user["name"]}       <span class="tok-comment">// y hệt — cần khi khoá có dấu chấm/khoảng trắng</span>
 \${list[0]}            <span class="tok-comment">// phần tử đầu của List hoặc mảng</span>
@@ -1209,9 +1209,9 @@ req.setAttribute(<span class="tok-string">"ACTIVE"</span>, Status.ACTIVE);
 \${ACTIVE}                             <span class="tok-comment">// trong JSP</span></code></pre>
 <p>Cách 2 là thứ bài thi thực hành mong đợi: EL đọc <em>attribute</em>, nên việc của controller là đặt sẵn mọi giá trị mà view cần vào một scope.</p>
 
-<div class="pitfall"><b>Bẫy:</b> EL nuốt lỗi theo đúng thiết kế. Một lỗi gõ nhầm — <span class="badge">\${user.nmae}</span> — hay một đối tượng null sẽ in ra chuỗi rỗng thay vì ném ngoại lệ, nên một trang trắng chẳng cho bạn manh mối nào. Hãy gỡ lỗi theo thứ tự: (1) Servlet có thực sự <span class="badge">setAttribute</span> đúng cái tên đó không? (2) phạm vi có đúng như bạn nghĩ không? (3) getter có tồn tại và có public không? Chín trên mười lần là do getter hoặc gõ nhầm tên thuộc tính.</div>
+<div class="pitfall"><b>Bẫy:</b> EL nuốt <em>một số</em> lỗi theo đúng thiết kế. Một đối tượng null hay không tồn tại sẽ in ra chuỗi rỗng thay vì ném ngoại lệ, nên một trang trắng chẳng cho bạn manh mối nào. Gõ nhầm tên thuộc tính của một đối tượng CÓ tồn tại — <span class="badge">\${user.nmae}</span> — thì khác: nó ném <span class="badge">PropertyNotFoundException</span> (500). Hãy gỡ lỗi theo thứ tự: (1) Servlet có thực sự <span class="badge">setAttribute</span> đúng cái tên đó không? (2) phạm vi có đúng như bạn nghĩ không? (3) getter có tồn tại và có public không? Chín trên mười lần là do getter hoặc gõ nhầm tên thuộc tính.</div>
 
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>EL cố tình bị làm cho yếu — và đó là một tính năng an toàn.</b> Bạn không thể gọi <span class="badge">\${dao.deleteAll()}</span> kèm tham số, không chạy được vòng lặp, không mở được kết nối từ EL. So với một scriptlet vốn làm được mọi thứ Java làm được. Việc giới hạn ngôn ngữ của View <em>thi hành</em> sự tách bạch MVC chứ không chỉ khuyến nghị nó: một designer sửa JSP thì không thể vô tình phát ra một câu DELETE. Mọi bộ khung template hiện đại (Thymeleaf, JSX kèm luật lint, Blade) đều đánh đổi y như vậy — đủ diễn đạt để hiển thị, quá yếu để tính toán.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>EL yếu hơn Java — nhưng không phải bất lực.</b> Từ EL 2.2 (Java EE 6), nó <em>gọi được</em> phương thức, kể cả kèm tham số: nếu một đối tượng DAO được đặt vào scope, <span class="badge">\${dao.deleteAll()}</span> sẽ chạy thật. Thứ EL không làm được là khai biến, chạy vòng lặp hay bắt ngoại lệ như scriptlet. Vậy sự tách bạch MVC được giữ bằng kỷ luật chứ ngôn ngữ không ép: đừng bao giờ đặt DAO hay service vào thuộc tính request/session — chỉ đưa cho view những đối tượng dữ liệu thuần, thì nó chẳng có gì nguy hiểm để gọi. Mọi bộ khung template hiện đại (Thymeleaf, JSX kèm luật lint, Blade) đều đánh đổi y như vậy — đủ diễn đạt để hiển thị, quá yếu để tính toán.</div>
 </div>
 `,
         },
@@ -1227,7 +1227,7 @@ req.setAttribute(<span class="tok-string">"ACTIVE"</span>, Status.ACTIVE);
 <p class="lead">EL displays a value; JSTL adds the loops and conditions a view legitimately needs. Together they replace every scriptlet you would otherwise write. Two declarations at the top of the page unlock everything below.</p>
 <pre><code class="language-xml">&lt;%@ taglib prefix=<span class="tok-string">"c"</span>   uri=<span class="tok-string">"http://java.sun.com/jsp/jstl/core"</span> %&gt;
 &lt;%@ taglib prefix=<span class="tok-string">"fmt"</span> uri=<span class="tok-string">"http://java.sun.com/jsp/jstl/fmt"</span> %&gt;</code></pre>
-<div class="note-ct">JSTL is not built into Tomcat — the .jar must be in <span class="badge">WEB-INF/lib/</span>. "The tags print as plain text" always means a missing jar or a mistyped uri.</div>
+<div class="note-ct">JSTL is not built into Tomcat — the .jar must be in <span class="badge">WEB-INF/lib/</span>. Measured on Tomcat 10.1.61 (12/11/2026): a <em>missing jar</em> or a <em>mistyped uri</em> is a 500 at translation time (the tag library cannot be resolved). Tags that print as plain text mean something else — the <span class="badge">&lt;%@ taglib %&gt;</span> directive was forgotten, so <span class="badge">&lt;c:forEach&gt;</span> goes to the browser as unknown HTML.</div>
 
 <h3>Core tags — the ones you will actually use</h3>
 <pre><code class="language-xml"><span class="tok-comment">&lt;%-- loop with index and separator handling --%&gt;</span>
@@ -1285,7 +1285,7 @@ req.setAttribute(<span class="tok-string">"ACTIVE"</span>, Status.ACTIVE);
 <p class="lead">EL hiển thị một giá trị; JSTL bổ sung các vòng lặp và điều kiện mà một view có quyền cần tới. Cùng nhau chúng thay thế mọi scriptlet bạn lẽ ra phải viết. Hai dòng khai báo ở đầu trang mở khoá tất cả những gì bên dưới.</p>
 <pre><code class="language-xml">&lt;%@ taglib prefix=<span class="tok-string">"c"</span>   uri=<span class="tok-string">"http://java.sun.com/jsp/jstl/core"</span> %&gt;
 &lt;%@ taglib prefix=<span class="tok-string">"fmt"</span> uri=<span class="tok-string">"http://java.sun.com/jsp/jstl/fmt"</span> %&gt;</code></pre>
-<div class="note-ct">JSTL không có sẵn trong Tomcat — file .jar phải nằm trong <span class="badge">WEB-INF/lib/</span>. Hiện tượng "các thẻ in ra như văn bản thường" luôn có nghĩa là thiếu jar hoặc gõ sai uri.</div>
+<div class="note-ct">JSTL không có sẵn trong Tomcat — file .jar phải nằm trong <span class="badge">WEB-INF/lib/</span>. Đo trên Tomcat 10.1.61 (12/11/2026): <em>thiếu jar</em> hay <em>gõ sai uri</em> đều là lỗi 500 lúc dịch trang (không tìm được thư viện thẻ). Còn các thẻ in ra như văn bản thường thì là chuyện khác — quên chỉ thị <span class="badge">&lt;%@ taglib %&gt;</span>, nên <span class="badge">&lt;c:forEach&gt;</span> được gửi tới trình duyệt như HTML lạ.</div>
 
 <h3>Thẻ core — những cái bạn thực sự sẽ dùng</h3>
 <pre><code class="language-xml"><span class="tok-comment">&lt;%-- lặp kèm chỉ số và xử lý dòng chẵn lẻ --%&gt;</span>

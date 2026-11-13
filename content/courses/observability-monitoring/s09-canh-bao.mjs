@@ -852,7 +852,7 @@ real decision.</code></pre>
 <div class="callout ok"><ol>
 <li>Pick an SLI for this repo: the fraction of <code>GET /api/v1/...</code> requests that return &lt; 500 within 500ms.</li>
 <li>Set an SLO of 99.9% over 30 days and compute the error budget in minutes: 0.1% of 30 days ≈ 43 minutes of "allowed" badness.</li>
-<li>Define burn rate = how fast you are spending that budget. Write a fast-burn alert (2% of budget in 1 hour) and a slow-burn alert (10% in 6 hours).</li>
+<li>Define burn rate = how fast you are spending that budget. Write a fast-burn alert (2% of budget in 1 hour) and a slow-burn alert (10% in 3 days).</li>
 <li>State what the budget is FOR: when it is healthy, ship features; when it is spent, freeze and fix reliability.</li>
 </ol>
 <p><strong>Done when:</strong> you have one SLI, one SLO, a budget in minutes, and two multi-window burn-rate alerts that replace a dozen threshold alerts.</p></div>
@@ -1033,7 +1033,7 @@ cái thứ ba cho tới khi hai cái đầu đã dẫn tới một quyết đị
 <div class="callout ok"><ol>
 <li>Chọn một SLI cho kho này: tỷ lệ request <code>GET /api/v1/...</code> trả về &lt; 500 trong vòng 500ms.</li>
 <li>Đặt SLO 99,9% trên 30 ngày và tính ngân sách lỗi theo phút: 0,1% của 30 ngày ≈ 43 phút "được phép" hỏng.</li>
-<li>Định nghĩa burn rate = bạn đang tiêu ngân sách đó nhanh tới đâu. Viết một cảnh báo đốt-nhanh (2% ngân sách trong 1 giờ) và một cảnh báo đốt-chậm (10% trong 6 giờ).</li>
+<li>Định nghĩa burn rate = bạn đang tiêu ngân sách đó nhanh tới đâu. Viết một cảnh báo đốt-nhanh (2% ngân sách trong 1 giờ) và một cảnh báo đốt-chậm (10% trong 3 ngày).</li>
 <li>Nêu ngân sách để LÀM GÌ: khi còn khoẻ, ship tính năng; khi đã tiêu hết, đóng băng và sửa độ tin cậy.</li>
 </ol>
 <p><strong>Đạt khi:</strong> bạn có một SLI, một SLO, một ngân sách tính bằng phút, và hai cảnh báo burn-rate đa cửa sổ thay thế cho cả tá cảnh báo ngưỡng.</p></div>

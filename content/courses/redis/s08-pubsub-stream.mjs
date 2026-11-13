@@ -136,6 +136,22 @@ await redis.publish('metrics:tick', JSON.stringify({ rps, p99 }));</code></pre>
 </a>
 
 <p class="note-ct"><strong>Three things to remember.</strong> Pub/Sub is at-most-once by construction: nothing is stored, a subscriber that is disconnected for four seconds loses four seconds of messages, and <code>PUBLISH</code> returning 0 means the message is simply gone. A subscribed connection cannot run normal commands under RESP2, so Pub/Sub always needs its own connection — <code>redis.duplicate()</code> — and forgetting that breaks unrelated code paths. And it is the right tool when the message is a <em>hint</em> the receiver can recover from without: cache invalidation backed by a TTL, config reload, WebSocket fan-out, live metrics. The moment the message <em>is</em> the work, you need Streams.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">PUBLISH / SUBSCRIBE</span><span class="v">Send a message to a channel; every connected subscriber receives it, no one else.</span></div>
+  <div class="kv"><span class="k">At-most-once</span><span class="v">Nothing is stored — a disconnected subscriber simply loses those messages.</span></div>
+  <div class="kv"><span class="k">PUBLISH returns 0</span><span class="v">No subscribers were connected, so the message is gone with no error.</span></div>
+  <div class="kv"><span class="k">Dedicated connection</span><span class="v">A subscribed RESP2 connection cannot run normal commands — use <code>redis.duplicate()</code>.</span></div>
+  <div class="kv"><span class="k">PSUBSCRIBE</span><span class="v">Subscribe to a glob pattern of channels rather than one exact name.</span></div>
+  <div class="kv"><span class="k">Hint, not work</span><span class="v">Right when the receiver can recover without the message: cache invalidation, config reload, fan-out.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>Pub/Sub is at-most-once by construction: nothing is stored and a disconnected subscriber loses messages.</li>
+<li><code>PUBLISH</code> returning 0 means no one was listening and the message is simply gone.</li>
+<li>A subscribed connection needs its own socket (<code>redis.duplicate()</code>) under RESP2.</li>
+<li>Use it when the message is a recoverable hint; when the message <em>is</em> the work, use Streams.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 8 · Bài 8.1</span>
@@ -254,6 +270,22 @@ await redis.publish('metrics:tick', JSON.stringify({ rps, p99 }));</code></pre>
 </a>
 
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Pub/Sub là nhiều-nhất-một-lần ngay từ cách dựng: không có gì được lưu, một bên đăng ký rớt kết nối bốn giây thì mất bốn giây thông điệp, và <code>PUBLISH</code> trả về 0 nghĩa là bức thư đơn giản là đã mất. Một kết nối đã đăng ký không chạy được lệnh thường dưới RESP2, nên Pub/Sub luôn cần kết nối riêng của nó — <code>redis.duplicate()</code> — và quên điều đó sẽ phá hỏng những nhánh mã chẳng liên quan. Và nó là công cụ đúng khi thông điệp là một <em>lời mách nước</em> mà bên nhận không cần nó vẫn hồi phục được: vô hiệu hoá bộ đệm có TTL đỡ lưng, nạp lại cấu hình, toả WebSocket, số liệu trực tiếp. Ngay khi thông điệp <em>chính là</em> công việc thì bạn cần Stream.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">PUBLISH / SUBSCRIBE</span><span class="v">Gửi thông điệp tới một kênh; mọi bên đăng ký đang nối nhận được, không ai khác.</span></div>
+  <div class="kv"><span class="k">Nhiều-nhất-một-lần</span><span class="v">Không lưu gì — một bên đăng ký rớt kết nối đơn giản là mất những thông điệp đó.</span></div>
+  <div class="kv"><span class="k">PUBLISH trả 0</span><span class="v">Không có bên đăng ký nào nối, nên thông điệp mất mà không báo lỗi.</span></div>
+  <div class="kv"><span class="k">Kết nối riêng</span><span class="v">Một kết nối đã đăng ký dưới RESP2 không chạy lệnh thường — dùng <code>redis.duplicate()</code>.</span></div>
+  <div class="kv"><span class="k">PSUBSCRIBE</span><span class="v">Đăng ký theo một mẫu glob của kênh thay vì một tên chính xác.</span></div>
+  <div class="kv"><span class="k">Lời mách, không phải việc</span><span class="v">Đúng khi bên nhận hồi phục được mà không cần nó: vô hiệu cache, nạp lại cấu hình, toả tin.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Pub/Sub là nhiều-nhất-một-lần ngay từ cách dựng: không lưu gì và bên đăng ký rớt kết nối thì mất thông điệp.</li>
+<li><code>PUBLISH</code> trả 0 nghĩa là không ai nghe và thông điệp đơn giản là đã mất.</li>
+<li>Một kết nối đã đăng ký cần socket riêng (<code>redis.duplicate()</code>) dưới RESP2.</li>
+<li>Dùng khi thông điệp là lời mách hồi phục được; khi thông điệp <em>chính là</em> công việc, hãy dùng Stream.</li>
+</ul>
 </div>
 `,
     },
@@ -391,6 +423,7 @@ redis-cli XINFO STREAM orders | head -8</code></pre>
   <div class="kv"><span class="k">Trim on <code>XADD</code>, not on a cron</span><span class="v"><code>XADD s MAXLEN ~ 10000 * …</code> keeps the bound applied continuously and costs nothing. A nightly trim job means the stream is unbounded for 23 hours a day.</span></div>
   <div class="kv"><span class="k"><code>LIMIT</code> caps the work per call</span><span class="v"><code>XTRIM s MAXLEN ~ 1000 LIMIT 100</code> removes at most 100 entries this call. The safe way to shrink a stream that got out of hand: run it repeatedly rather than once.</span></div>
 </div>
+<p class="note-ct">Measured 12/11/2026 on a 200,000-entry stream: <code>XTRIM big MAXLEN ~ 150000</code> with no <code>LIMIT</code> removed only <strong>10,000</strong> entries (<code>XLEN</code> 190000) — the approximate form has a default cap per call of 100 × <code>stream-node-max-entries</code>, i.e. 10,000. The exact <code>MAXLEN 150000</code> removed all 40,000 at once. If a single <code>~</code> trim "did not work", run it again.</p>
 
 <h3>Memory, and the thing XDEL does not do</h3>
 <pre><code class="language-python">redis-cli DEL big &gt;/dev/null
@@ -410,7 +443,7 @@ redis-cli MEMORY USAGE big</code></pre>
 (integer) 1
 (integer) 199999
 17441216</div>
-<div class="pitfall"><strong>Pitfall:</strong> expecting <code>XDEL</code> to reclaim memory. It does not, and the reason is the storage layout: a stream is a radix tree of <em>macro nodes</em>, each packing many entries into one contiguous block for compactness — which is why 200,000 entries fit in 17 MB, far less than 200,000 separate keys would need (Lesson 5.2). <code>XDEL</code> cannot rewrite the middle of a packed node, so it marks the entry as deleted and leaves the bytes in place; memory comes back only when every entry in that node is gone and the whole node is freed. So a "delete-as-you-go" pattern produces a stream whose <code>XLEN</code> falls steadily while its <code>MEMORY USAGE</code> does not move at all — which is exactly the shape of an incident where a queue looks empty and the instance is still at 90% memory. Do not manage stream size with <code>XDEL</code>. Use <code>MAXLEN ~</code> or <code>MINID</code> on every <code>XADD</code>, which trims whole nodes from the head and genuinely frees them, and reserve <code>XDEL</code> for the rare case of removing one specific entry (a message containing data you must erase) rather than as a retention mechanism.</div>
+<div class="pitfall"><strong>Pitfall:</strong> expecting <code>XDEL</code> to reclaim memory. It does not, and the reason is the storage layout: a stream is a radix tree of <em>macro nodes</em>, each packing many entries into one contiguous block for compactness — which is why 200,000 entries fit in 17 MB, far less than 200,000 separate keys would need (Lesson 5.2). <code>XDEL</code> cannot rewrite the middle of a packed node, so it marks the entry as deleted and leaves the bytes in place; memory comes back only when every entry in that node is gone and the whole node is freed. So a "delete-as-you-go" pattern produces a stream whose <code>XLEN</code> falls steadily while its <code>MEMORY USAGE</code> does not move at all — which is exactly the shape of an incident where a queue looks empty and the instance is still at 90% memory. Measured 12/11/2026: deleting 1,000 scattered entries left <code>MEMORY USAGE … SAMPLES 0</code> at 5,369,056 bytes exactly; deleting 1,000 <em>contiguous</em> entries at the head emptied whole nodes and it fell to 5,297,292. Do not manage stream size with <code>XDEL</code>. Use <code>MAXLEN ~</code> or <code>MINID</code> on every <code>XADD</code>, which trims whole nodes from the head and genuinely frees them, and reserve <code>XDEL</code> for the rare case of removing one specific entry (a message containing data you must erase) rather than as a retention mechanism.</div>
 
 <h3>What you get that a list does not give you</h3>
 <div class="lz-stack">
@@ -434,6 +467,22 @@ redis-cli MEMORY USAGE big</code></pre>
 </a>
 
 <p class="note-ct"><strong>Three things to remember.</strong> A stream is an append-only log with sortable <code>ms-seq</code> IDs, so "everything after the last ID I processed" is a cheap query and a restarted consumer resumes instead of losing a window — the property Pub/Sub structurally cannot offer. Reading does not consume: entries stay put, which is what makes acknowledgement, replay and redelivery possible at all. And a stream grows forever unless you bound it: put <code>MAXLEN ~ N</code> or <code>MINID</code> on every <code>XADD</code>, because <code>XDEL</code> only tombstones an entry inside a packed radix node and gives no memory back.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Stream</span><span class="v">An append-only log of entries, each a set of field-value pairs under a sortable ID.</span></div>
+  <div class="kv"><span class="k">Entry ID (ms-seq)</span><span class="v">Millisecond timestamp plus a sequence number, so IDs sort in insertion order.</span></div>
+  <div class="kv"><span class="k">XADD</span><span class="v">Appends an entry; put a trim option on every call to bound growth.</span></div>
+  <div class="kv"><span class="k">XRANGE / XREAD</span><span class="v">Read entries by ID range or after a last-seen ID — reading does not consume.</span></div>
+  <div class="kv"><span class="k">MAXLEN / MINID</span><span class="v">Trim the stream by length or minimum ID; <code>~</code> makes trimming approximate and cheap.</span></div>
+  <div class="kv"><span class="k">XDEL tombstone</span><span class="v"><code>XDEL</code> only marks an entry deleted inside a packed node — it frees no memory.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>A stream is an append-only log with sortable <code>ms-seq</code> IDs, so "everything after my last ID" is a cheap query.</li>
+<li>Reading does not consume — entries stay, which is what makes acknowledgement, replay and redelivery possible.</li>
+<li>A restarted consumer resumes instead of losing a window — the property Pub/Sub cannot offer.</li>
+<li>A stream grows forever unless bounded: put <code>MAXLEN ~ N</code> or <code>MINID</code> on every <code>XADD</code>.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 8 · Bài 8.2</span>
@@ -562,6 +611,7 @@ redis-cli XINFO STREAM orders | head -8</code></pre>
   <div class="kv"><span class="k">Hãy cắt ngay trong <code>XADD</code>, đừng cắt bằng cron</span><span class="v"><code>XADD s MAXLEN ~ 10000 * …</code> giữ cho cái trần được áp liên tục và chẳng tốn gì. Một việc cắt chạy mỗi đêm nghĩa là cái stream không có trần suốt 23 tiếng mỗi ngày.</span></div>
   <div class="kv"><span class="k"><code>LIMIT</code> chặn khối lượng việc mỗi lời gọi</span><span class="v"><code>XTRIM s MAXLEN ~ 1000 LIMIT 100</code> gỡ nhiều nhất 100 mục trong lời gọi này. Đó là cách an toàn để thu nhỏ một stream đã vượt tầm kiểm soát: chạy nó nhiều lần thay vì một lần.</span></div>
 </div>
+<p class="note-ct">Đo ngày 12/11/2026 trên một stream 200.000 mục: <code>XTRIM big MAXLEN ~ 150000</code> không kèm <code>LIMIT</code> chỉ gỡ <strong>10.000</strong> mục (<code>XLEN</code> 190000) — dạng xấp xỉ có trần mặc định mỗi lần gọi là 100 × <code>stream-node-max-entries</code>, tức 10.000. Dạng chính xác <code>MAXLEN 150000</code> gỡ hết 40.000 trong một lần. Nếu một lần cắt <code>~</code> "không ăn thua", hãy chạy lại.</p>
 
 <h3>Bộ nhớ, và cái việc mà XDEL không làm</h3>
 <pre><code class="language-python">redis-cli DEL big &gt;/dev/null
@@ -581,7 +631,7 @@ redis-cli MEMORY USAGE big</code></pre>
 (integer) 1
 (integer) 199999
 17441216</div>
-<div class="pitfall"><strong>Cái bẫy:</strong> trông đợi <code>XDEL</code> trả lại bộ nhớ. Nó không trả, và lý do nằm ở cách lưu trữ: một stream là một cây radix gồm các <em>nút vĩ mô</em>, mỗi nút nhồi nhiều mục vào một khối liền mạch cho gọn — đó là vì sao 200.000 mục vừa trong 17 MB, ít hơn nhiều so với 200.000 khoá riêng lẻ (Bài 5.2). <code>XDEL</code> không thể viết lại phần giữa của một nút đã nhồi chặt, nên nó đánh dấu mục đó là đã xoá và để nguyên số byte tại chỗ; bộ nhớ chỉ về khi mọi mục trong nút đó đều biến mất và cả cái nút được giải phóng. Vậy nên một khuôn "xoá dần khi xử lý xong" tạo ra một stream mà <code>XLEN</code> tụt đều đặn trong khi <code>MEMORY USAGE</code> không nhúc nhích chút nào — đó chính xác là hình dáng của một sự cố mà hàng đợi nhìn thì rỗng còn cái máy vẫn ở 90% bộ nhớ. Đừng quản lý kích thước stream bằng <code>XDEL</code>. Hãy dùng <code>MAXLEN ~</code> hoặc <code>MINID</code> ở mỗi lệnh <code>XADD</code>, vốn cắt trọn từng nút từ phía đầu và thật sự giải phóng chúng, và hãy để dành <code>XDEL</code> cho trường hợp hiếm là gỡ một mục cụ thể (một thông điệp chứa dữ liệu bạn buộc phải xoá) chứ đừng dùng nó làm cơ chế lưu trữ.</div>
+<div class="pitfall"><strong>Cái bẫy:</strong> trông đợi <code>XDEL</code> trả lại bộ nhớ. Nó không trả, và lý do nằm ở cách lưu trữ: một stream là một cây radix gồm các <em>nút vĩ mô</em>, mỗi nút nhồi nhiều mục vào một khối liền mạch cho gọn — đó là vì sao 200.000 mục vừa trong 17 MB, ít hơn nhiều so với 200.000 khoá riêng lẻ (Bài 5.2). <code>XDEL</code> không thể viết lại phần giữa của một nút đã nhồi chặt, nên nó đánh dấu mục đó là đã xoá và để nguyên số byte tại chỗ; bộ nhớ chỉ về khi mọi mục trong nút đó đều biến mất và cả cái nút được giải phóng. Vậy nên một khuôn "xoá dần khi xử lý xong" tạo ra một stream mà <code>XLEN</code> tụt đều đặn trong khi <code>MEMORY USAGE</code> không nhúc nhích chút nào — đó chính xác là hình dáng của một sự cố mà hàng đợi nhìn thì rỗng còn cái máy vẫn ở 90% bộ nhớ. Đo ngày 12/11/2026: xoá 1.000 mục rải rác thì <code>MEMORY USAGE … SAMPLES 0</code> vẫn đúng 5.369.056 byte; xoá 1.000 mục <em>liền nhau</em> ở đầu làm rỗng trọn các nút và nó tụt xuống 5.297.292. Đừng quản lý kích thước stream bằng <code>XDEL</code>. Hãy dùng <code>MAXLEN ~</code> hoặc <code>MINID</code> ở mỗi lệnh <code>XADD</code>, vốn cắt trọn từng nút từ phía đầu và thật sự giải phóng chúng, và hãy để dành <code>XDEL</code> cho trường hợp hiếm là gỡ một mục cụ thể (một thông điệp chứa dữ liệu bạn buộc phải xoá) chứ đừng dùng nó làm cơ chế lưu trữ.</div>
 
 <h3>Thứ bạn có mà một cái list không cho được</h3>
 <div class="lz-stack">
@@ -605,6 +655,22 @@ redis-cli MEMORY USAGE big</code></pre>
 </a>
 
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Stream là một cuốn nhật ký chỉ ghi thêm với mã <code>ms-seq</code> sắp xếp được, nên "mọi thứ sau cái mã cuối tôi đã xử lý" là một truy vấn rẻ và một bên tiêu thụ vừa khởi động lại sẽ nối tiếp chứ không mất một cửa sổ — đúng tính chất mà Pub/Sub về mặt cấu trúc không cho được. Đọc thì không tiêu thụ: các mục nằm nguyên đó, và chính điều đó làm cho việc xác nhận, phát lại và giao lại khả thi. Và một stream phình mãi trừ khi bạn chặn nó lại: hãy đặt <code>MAXLEN ~ N</code> hoặc <code>MINID</code> lên mỗi lệnh <code>XADD</code>, vì <code>XDEL</code> chỉ dựng bia mộ cho một mục nằm trong một nút radix đã nhồi chặt và chẳng trả lại byte nào.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Stream</span><span class="v">Một nhật ký chỉ ghi thêm gồm các mục, mỗi mục là các cặp trường-giá-trị dưới một mã sắp xếp được.</span></div>
+  <div class="kv"><span class="k">Mã mục (ms-seq)</span><span class="v">Dấu thời gian mili giây cộng số thứ tự, nên mã sắp theo đúng thứ tự chèn.</span></div>
+  <div class="kv"><span class="k">XADD</span><span class="v">Ghi thêm một mục; đặt tuỳ chọn cắt bớt trên mỗi lần gọi để chặn phình.</span></div>
+  <div class="kv"><span class="k">XRANGE / XREAD</span><span class="v">Đọc mục theo khoảng mã hoặc sau một mã cuối đã thấy — đọc không tiêu thụ.</span></div>
+  <div class="kv"><span class="k">MAXLEN / MINID</span><span class="v">Cắt stream theo độ dài hoặc mã nhỏ nhất; <code>~</code> làm việc cắt gần đúng và rẻ.</span></div>
+  <div class="kv"><span class="k">Bia mộ XDEL</span><span class="v"><code>XDEL</code> chỉ đánh dấu một mục đã xoá bên trong một nút nhồi chặt — không trả byte nào.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Stream là một nhật ký chỉ ghi thêm với mã <code>ms-seq</code> sắp xếp được, nên "mọi thứ sau mã cuối của tôi" là một truy vấn rẻ.</li>
+<li>Đọc không tiêu thụ — các mục nằm nguyên, chính điều đó làm cho xác nhận, phát lại và giao lại khả thi.</li>
+<li>Một bên tiêu thụ vừa khởi động lại nối tiếp chứ không mất một cửa sổ — tính chất Pub/Sub không cho được.</li>
+<li>Stream phình mãi trừ khi bị chặn: đặt <code>MAXLEN ~ N</code> hoặc <code>MINID</code> lên mỗi <code>XADD</code>.</li>
+</ul>
 </div>
 `,
     },
@@ -795,6 +861,22 @@ redis-cli XINFO CONSUMERS orders billing</code></pre>
 </a>
 
 <p class="note-ct"><strong>Three things to remember.</strong> A group splits entries between its consumers while separate groups each get everything — split within, fan out across — and the PEL is what makes it a queue: delivery records the entry, and only <code>XACK</code> after successful work removes it. Read with <code>&gt;</code> in steady state and with an explicit <code>0</code> on startup to finish what this consumer left pending, use a stable consumer name, and never acknowledge in a <code>finally</code>. And the guarantee is at-least-once, not exactly-once — no placement of <code>XACK</code> closes the gap between doing the work and recording that you did, so every handler needs an idempotency key, and the stream entry ID is one you already have.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Consumer group</span><span class="v">Splits entries across its consumers; separate groups each see the whole stream.</span></div>
+  <div class="kv"><span class="k">XREADGROUP</span><span class="v">Reads on behalf of a named consumer and records the entry as pending.</span></div>
+  <div class="kv"><span class="k">PEL</span><span class="v">Pending Entries List — delivered-but-unacknowledged entries; what makes a group a queue.</span></div>
+  <div class="kv"><span class="k">XACK</span><span class="v">Removes an entry from the PEL after successful work — never in a <code>finally</code>.</span></div>
+  <div class="kv"><span class="k">&gt; vs 0</span><span class="v">Read new entries with <code>&gt;</code>; read <code>0</code> on startup to finish this consumer's pending.</span></div>
+  <div class="kv"><span class="k">At-least-once</span><span class="v">The gap between doing work and acknowledging it means every handler needs an idempotency key.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>A group splits entries within its consumers; separate groups fan out — split within, fan across.</li>
+<li>The PEL makes it a queue: delivery records an entry, and only <code>XACK</code> after success removes it.</li>
+<li>Read with <code>&gt;</code> steady-state, <code>0</code> on startup, use a stable consumer name, and never ack in a <code>finally</code>.</li>
+<li>The guarantee is at-least-once — give every handler an idempotency key, e.g. the stream entry ID.</li>
+</ul>
 <a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-5-pubsub-streams" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 12.5: Pub/Sub vs Streams</span><span class="lc-sub">Pub/Sub delivers only to whoever listens NOW (an offline subscriber loses the message, PUBLISH returns 0); a handler registered on every reconnect turns one message into three; a Stream with a consumer group loses no job when a worker dies.</span></span>
@@ -986,6 +1068,22 @@ redis-cli XINFO CONSUMERS orders billing</code></pre>
 </a>
 
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Một nhóm chia các mục cho các consumer của nó trong khi các nhóm riêng biệt thì mỗi nhóm nhận đủ mọi thứ — chia bên trong, toả ra bên ngoài — và PEL là thứ làm cho nó thành một hàng đợi: việc giao hàng ghi lại cái mục, và chỉ lệnh <code>XACK</code> sau khi làm việc thành công mới gỡ nó ra. Hãy đọc bằng <code>&gt;</code> ở trạng thái ổn định và bằng <code>0</code> tường minh lúc khởi động để làm nốt những gì consumer này còn để chờ, hãy dùng tên consumer ổn định, và đừng bao giờ xác nhận trong một khối <code>finally</code>. Và cái bảo đảm là ít-nhất-một-lần chứ không phải đúng-một-lần — không cách đặt <code>XACK</code> nào bịt được khe hở giữa việc làm xong và việc ghi lại rằng bạn đã làm, nên mọi handler đều cần một khoá chống trùng, và mã mục của stream là một cái bạn vốn đã có sẵn.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Nhóm tiêu thụ</span><span class="v">Chia các mục cho các consumer của nó; các nhóm riêng biệt mỗi nhóm thấy cả stream.</span></div>
+  <div class="kv"><span class="k">XREADGROUP</span><span class="v">Đọc thay cho một consumer có tên và ghi mục đó vào danh sách chờ.</span></div>
+  <div class="kv"><span class="k">PEL</span><span class="v">Danh sách mục chờ — đã giao nhưng chưa xác nhận; thứ làm cho một nhóm thành hàng đợi.</span></div>
+  <div class="kv"><span class="k">XACK</span><span class="v">Gỡ một mục khỏi PEL sau khi làm việc thành công — đừng bao giờ trong <code>finally</code>.</span></div>
+  <div class="kv"><span class="k">&gt; so với 0</span><span class="v">Đọc mục mới bằng <code>&gt;</code>; đọc <code>0</code> lúc khởi động để làm nốt phần chờ của consumer này.</span></div>
+  <div class="kv"><span class="k">Ít-nhất-một-lần</span><span class="v">Khe hở giữa làm việc và xác nhận nghĩa là mọi handler cần một khoá chống trùng.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Một nhóm chia các mục trong các consumer của nó; các nhóm riêng biệt toả ra — chia bên trong, toả bên ngoài.</li>
+<li>PEL làm cho nó thành hàng đợi: giao hàng ghi lại một mục, và chỉ <code>XACK</code> sau thành công mới gỡ nó.</li>
+<li>Đọc bằng <code>&gt;</code> ở trạng thái ổn định, <code>0</code> lúc khởi động, dùng tên consumer ổn định, và đừng ack trong <code>finally</code>.</li>
+<li>Bảo đảm là ít-nhất-một-lần — cho mọi handler một khoá chống trùng, vd mã mục của stream.</li>
+</ul>
 <a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-5-pubsub-streams" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 12.5: Pub/Sub hay Streams</span><span class="lc-sub">Pub/Sub chỉ giao cho ai đang nghe NGAY LÚC ĐÓ (thuê bao offline mất tin, PUBLISH trả 0); handler đăng ký lại mỗi lần nối lại biến một tin thành ba; Stream với consumer group không mất job nào khi worker chết.</span></span>
@@ -1157,6 +1255,22 @@ redis-cli XLEN orders:dead</code></pre>
 </a>
 
 <p class="note-ct"><strong>Three things to remember.</strong> Redis records the pending list but never acts on it — a dead consumer's entries stay pending forever unless <em>you</em> run a sweeper, so a consumer group without one is a queue that silently drops the work of every crashed worker. <code>XAUTOCLAIM</code> is the modern tool: cursor-based, one round trip, and it cleans up PEL entries whose stream entries are gone. And <code>min-idle-time</code> is the safety interlock in both directions — too long and recovery is slow, too short and you claim work from a healthy worker and run the job twice, so size it from your handler's p99 with a wide margin and heartbeat with <code>XCLAIM … JUSTID</code> on genuinely long jobs.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">XPENDING</span><span class="v">Inspects the PEL — which entries are pending, for which consumer, and how long idle.</span></div>
+  <div class="kv"><span class="k">XCLAIM</span><span class="v">Transfers a pending entry to another consumer so a crashed worker's work is recovered.</span></div>
+  <div class="kv"><span class="k">XAUTOCLAIM</span><span class="v">The modern sweeper: cursor-based, one round trip, and it cleans PEL entries whose entries are gone.</span></div>
+  <div class="kv"><span class="k">min-idle-time</span><span class="v">The safety interlock: too long delays recovery, too short steals work from a healthy worker.</span></div>
+  <div class="kv"><span class="k">Sweeper</span><span class="v">The job you must run — Redis records the PEL but never acts on it.</span></div>
+  <div class="kv"><span class="k">JUSTID heartbeat</span><span class="v"><code>XCLAIM … JUSTID</code> refreshes idle time on a long job without reprocessing it.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>Redis records the PEL but never acts on it — without a sweeper, a crashed worker's entries stay pending forever.</li>
+<li><code>XAUTOCLAIM</code> is the modern recovery tool: cursor-based, one round trip, cleans orphaned PEL entries.</li>
+<li><code>min-idle-time</code> cuts both ways: too long is slow recovery, too short runs a healthy worker's job twice.</li>
+<li>Size it from your handler's p99 with a wide margin, and heartbeat long jobs with <code>XCLAIM … JUSTID</code>.</li>
+</ul>
 <a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-13-3-thu-lai-va-idempotent" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 13.3: retries, backoff and the charge that ran three times</span><span class="lc-sub">The other half of retries: the handler. One order charged 300,000 VND instead of 100,000 by three honest retries, then three idempotent fixes measured — a unique key (charged once), a one-statement claim (rendered once), an idempotency key (charged once) — and jobId at the door.</span></span>
@@ -1314,6 +1428,22 @@ redis-cli XLEN orders:dead</code></pre>
 </a>
 
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Redis ghi lại danh sách chờ nhưng không bao giờ hành động dựa trên nó — các mục của một consumer đã chết nằm chờ mãi mãi trừ khi <em>bạn</em> chạy một tiến trình quét, nên một nhóm tiêu thụ không có tiến trình quét là một hàng đợi âm thầm vứt bỏ công việc của mọi worker từng sập. <code>XAUTOCLAIM</code> là công cụ hiện đại: dựa trên con trỏ, một vòng đi-về, và nó dọn cả những mục PEL mà mục stream tương ứng đã biến mất. Và <code>min-idle-time</code> là chốt an toàn theo cả hai chiều — quá dài thì hồi phục chậm, quá ngắn thì bạn đòi việc từ một worker khoẻ mạnh và chạy việc đó hai lần, nên hãy chọn nó từ p99 của handler kèm biên rất rộng và hãy gửi nhịp tim bằng <code>XCLAIM … JUSTID</code> cho những việc thật sự dài.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">XPENDING</span><span class="v">Soi PEL — mục nào đang chờ, của consumer nào, và nằm không bao lâu.</span></div>
+  <div class="kv"><span class="k">XCLAIM</span><span class="v">Chuyển một mục đang chờ sang consumer khác để cứu việc của một worker đã sập.</span></div>
+  <div class="kv"><span class="k">XAUTOCLAIM</span><span class="v">Tiến trình quét hiện đại: dựa trên con trỏ, một vòng đi-về, dọn cả PEL có mục đã biến mất.</span></div>
+  <div class="kv"><span class="k">min-idle-time</span><span class="v">Chốt an toàn: quá dài thì hồi phục chậm, quá ngắn thì cướp việc của một worker khoẻ.</span></div>
+  <div class="kv"><span class="k">Tiến trình quét</span><span class="v">Việc bạn phải tự chạy — Redis ghi PEL nhưng không bao giờ hành động theo nó.</span></div>
+  <div class="kv"><span class="k">Nhịp tim JUSTID</span><span class="v"><code>XCLAIM … JUSTID</code> làm mới thời gian nằm không của một việc dài mà không xử lý lại.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Redis ghi PEL nhưng không hành động theo nó — không có tiến trình quét, mục của worker sập nằm chờ mãi.</li>
+<li><code>XAUTOCLAIM</code> là công cụ hồi phục hiện đại: dựa trên con trỏ, một vòng đi-về, dọn các mục PEL mồ côi.</li>
+<li><code>min-idle-time</code> cắt cả hai chiều: quá dài thì hồi phục chậm, quá ngắn thì chạy việc của worker khoẻ hai lần.</li>
+<li>Chọn nó từ p99 của handler kèm biên rộng, và gửi nhịp tim cho việc dài bằng <code>XCLAIM … JUSTID</code>.</li>
+</ul>
 <a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-13-3-thu-lai-va-idempotent" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 13.3: thử lại, backoff và cú trừ tiền chạy ba lần</span><span class="lc-sub">Nửa còn lại của thử lại: hàm xử lý. Một đơn bị trừ 300.000 VND thay vì 100.000 bởi ba lần thử lại đúng cấu hình, rồi ba cách idempotent đo thật — khoá duy nhất (trừ 1 lần), giành quyền một câu lệnh (dựng 1 lần), khoá idempotency (trừ 1 lần) — và jobId chặn ở cửa.</span></span>
@@ -1400,6 +1530,22 @@ redis-cli EVAL "return redis.call('MEMORY','USAGE',KEYS[1]) / redis.call('XLEN',
 </a>
 
 <p class="note-ct"><strong>Three things to remember.</strong> Answer three questions in order — can the receiver recover a lost message on its own (Pub/Sub), does more than one independent consumer need it (Stream), and is your retention larger than the RAM you will buy (Kafka) — and the choice falls out. Raw streams are an excellent event log and a mediocre job queue: a library like BullMQ already has the sweeper, the backoff, the dead-letter path and the UI you would otherwise spend weeks rebuilding. And "durable" for a stream means exactly whatever your persistence and eviction settings say — check <code>appendonly</code> and <code>maxmemory-policy</code> before trusting one with data you cannot lose.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Three questions</span><span class="v">Can the receiver recover alone? Do multiple independent consumers need it? Is retention bigger than RAM?</span></div>
+  <div class="kv"><span class="k">Pub/Sub</span><span class="v">The answer when a lost message is recoverable by the receiver on its own.</span></div>
+  <div class="kv"><span class="k">Stream</span><span class="v">The answer when more than one independent consumer needs the message, within RAM.</span></div>
+  <div class="kv"><span class="k">Kafka</span><span class="v">The answer when retention must exceed the RAM you are willing to buy.</span></div>
+  <div class="kv"><span class="k">BullMQ</span><span class="v">A library that adds the sweeper, backoff, dead-letter path and UI on top of streams.</span></div>
+  <div class="kv"><span class="k">Durability depends on config</span><span class="v">"Durable" for a stream means exactly what <code>appendonly</code> and <code>maxmemory-policy</code> say.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>Answer three questions in order — self-recovery, multiple consumers, retention vs RAM — and the choice falls out.</li>
+<li>Raw streams are a great event log but a mediocre job queue; a library like BullMQ supplies the missing machinery.</li>
+<li>"Durable" for a stream is exactly whatever your persistence and eviction settings say.</li>
+<li>Check <code>appendonly</code> and <code>maxmemory-policy</code> before trusting a stream with data you cannot lose.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 8 · Bài 8.5</span>
@@ -1472,6 +1618,22 @@ redis-cli EVAL "return redis.call('MEMORY','USAGE',KEYS[1]) / redis.call('XLEN',
 </a>
 
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Hãy trả lời ba câu hỏi theo thứ tự — bên nhận có tự hồi phục được một thông điệp bị mất không (Pub/Sub), có nhiều hơn một bên tiêu thụ độc lập cần nó không (Stream), và thời gian lưu bạn cần có lớn hơn lượng RAM bạn sẽ mua không (Kafka) — và lựa chọn tự rơi ra. Stream thô là một cuốn nhật ký sự kiện xuất sắc và một hàng đợi việc tầm thường: một thư viện như BullMQ đã có sẵn tiến trình quét, nhịp lùi, nhánh thư-chết và giao diện mà nếu không thì bạn sẽ dựng lại mất hàng tuần. Và "bền vững" với một stream nghĩa là đúng những gì cấu hình lưu lâu dài và đẩy khoá của bạn nói — hãy kiểm <code>appendonly</code> và <code>maxmemory-policy</code> trước khi giao cho nó dữ liệu bạn không thể mất.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Ba câu hỏi</span><span class="v">Bên nhận tự hồi phục được không? Nhiều bên tiêu thụ độc lập có cần không? Lưu lâu hơn RAM không?</span></div>
+  <div class="kv"><span class="k">Pub/Sub</span><span class="v">Đáp án khi một thông điệp mất mà bên nhận tự hồi phục được.</span></div>
+  <div class="kv"><span class="k">Stream</span><span class="v">Đáp án khi nhiều hơn một bên tiêu thụ độc lập cần thông điệp, trong giới hạn RAM.</span></div>
+  <div class="kv"><span class="k">Kafka</span><span class="v">Đáp án khi thời gian lưu phải vượt lượng RAM bạn sẵn lòng mua.</span></div>
+  <div class="kv"><span class="k">BullMQ</span><span class="v">Thư viện thêm tiến trình quét, nhịp lùi, nhánh thư-chết và giao diện lên trên stream.</span></div>
+  <div class="kv"><span class="k">Bền tuỳ cấu hình</span><span class="v">"Bền" với một stream nghĩa là đúng những gì <code>appendonly</code> và <code>maxmemory-policy</code> nói.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Trả lời ba câu hỏi theo thứ tự — tự hồi phục, nhiều bên tiêu thụ, lưu lâu so với RAM — và lựa chọn tự rơi ra.</li>
+<li>Stream thô là một nhật ký sự kiện tốt nhưng một hàng đợi việc tầm thường; một thư viện như BullMQ cấp phần máy móc còn thiếu.</li>
+<li>"Bền" với một stream là đúng những gì cấu hình lưu lâu dài và đẩy khoá của bạn nói.</li>
+<li>Kiểm <code>appendonly</code> và <code>maxmemory-policy</code> trước khi giao cho một stream dữ liệu bạn không thể mất.</li>
+</ul>
 </div>
 `,
     },

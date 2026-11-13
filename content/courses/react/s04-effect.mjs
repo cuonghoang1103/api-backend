@@ -2157,7 +2157,7 @@ ${slide('rx-04', 26, 'New hooks turned two old tests red — and that was good n
 <p>After wiring the hooks in, the Chapter 2–3 test suite failed:</p>
 <div class="out">$ npx vitest run
  FAIL  src/components/KhuBacSi.test.tsx &gt; gõ "lan" (không dấu) ⇒ tìm ra BS. Phạm Ngọc Lan
-TestingLibraryElementError: Unable to find an element with the text: Đang hiện 1/6 bác sĩ. …
+TestingLibraryElementError: Unable to find an accessible element with the role "heading" and name "Đội ngũ bác sĩ (1)"
  FAIL  src/components/KhuBacSi.test.tsx &gt; không khớp ⇒ thông báo rỗng
 TestingLibraryElementError: Unable to find an element with the text: Không tìm thấy bác sĩ phù hợp.. …
  FAIL  src/components/FormDatLich.test.tsx &gt; đếm ký tự lý do theo NFC; vượt 500 ⇒ lỗi
@@ -2165,7 +2165,7 @@ TestingLibraryElementError: Unable to find an element with the text: 501/500. �
       Tests  3 failed | 36 passed (39)   ← (this run still included the chapter&#39;s demo tests in src/vi-du)</div>
 <p>Two different causes, both real:</p>
 <ul>
-<li><strong>The search tests were right to fail.</strong> They expected the filtered list immediately after typing (<code>getByText</code>), and debouncing deliberately delays it by 300 ms. The behaviour changed on purpose, so the tests change: <code>expect(await screen.findByText('Đang hiện 1/6 bác sĩ'))</code> — <code>findBy…</code> retries for up to one second. A new test also pins the intended behaviour: right after typing, the input shows "huy" while the count still says 6/6; then the count becomes 1/6.</li>
+<li><strong>The search tests were right to fail.</strong> They expected the filtered list immediately after typing (<code>getByText</code>), and debouncing deliberately delays it by 300 ms. The behaviour changed on purpose, so the tests change: <code>expect(await screen.findByRole('heading', { name: 'Đội ngũ bác sĩ (1)' }))</code> — <code>findBy…</code> retries for up to one second. A new test also pins the intended behaviour: right after typing, the input shows "huy" while the count still says 6/6; then the count becomes 1/6.</li>
 <li><strong>The form test exposed a test-isolation bug.</strong> The DOM of the failing test showed "Đã khôi phục bản nháp" and a counter of <strong>518/500</strong>: an earlier test in the same file had typed into the form for the same doctor, the draft was saved, and jsdom&#39;s <code>localStorage</code> lives for the whole test file. Chapter 1 added <code>cleanup()</code> for the DOM; now storage needs the same.</li>
 </ul>
 <pre><code class="language-ts">// src/test/setup.ts
@@ -2285,7 +2285,7 @@ export function KhuBacSi() {
   // … phần còn lại (hàm xuLyDoiYeuThich và JSX) giữ nguyên như Chương 3</code></pre>
 <p><code>src/components/FormDatLich.tsx</code> (whole file)</p>
 <pre><code class="language-tsx">import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState, type SubmitEvent } from 'react';
 import { useForm, useWatch, type Control } from 'react-hook-form';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { datLichSchema, LY_DO_TOI_DA, type DatLich, type DatLichForm } from '../schema/dat-lich';
@@ -2346,6 +2346,17 @@ export function FormDatLich({ bacSi, onGui }: FormDatLichProps) {
     }
   }
 
+  // Chốt ref của Bài 3.3 — GIỮ LẠI: thiếu nó, test "hai submit cùng nhịp" (requestSubmit ×2) của Chương 3 đỏ (onGui bị gọi 2 lần).
+  const dangGui = useRef(false);
+  const guiForm = handleSubmit(guiDi);
+  function xuLySubmit(ev: SubmitEvent&lt;HTMLFormElement&gt;) {
+    ev.preventDefault();
+    if (dangGui.current) return;
+    dangGui.current = true;
+    guiForm(ev).finally(() =&gt; {
+      dangGui.current = false;
+    });
+  }
   const e = errors.benhNhan;
 
   if (isSubmitSuccessful &amp;&amp; !errors.root) {
@@ -2357,7 +2368,7 @@ export function FormDatLich({ bacSi, onGui }: FormDatLichProps) {
   }
 
   return (
-    &lt;form className="form-dat-lich" onSubmit={handleSubmit(guiDi)} noValidate aria-label={&#96;Đặt lịch với &#36;{bacSi.ten}&#96;}&gt;
+    &lt;form className="form-dat-lich" onSubmit={xuLySubmit} noValidate aria-label={&#96;Đặt lịch với &#36;{bacSi.ten}&#96;}&gt;
       &lt;h3&gt;Đặt lịch với {bacSi.ten}&lt;/h3&gt;
       {daKhoiPhuc &amp;&amp; &lt;p className="ban-nhap"&gt;Đã khôi phục bản nháp — tự lưu trên máy này.&lt;/p&gt;}
       {errors.root?.server &amp;&amp; (
@@ -2523,7 +2534,7 @@ test.each([
 ])('%s ⇒ mở cửa: %s', (_ten, mong, luc) =&gt; {
   expect(dangMoCua(luc)).toBe(mong);
 });</code></pre>
-<p><code>src/components/KhuBacSi.test.tsx</code> — the two search tests now wait (<code>expect(await screen.findByText('Đang hiện 1/6 bác sĩ'))</code> and <code>expect(await screen.findByText('Không tìm thấy bác sĩ phù hợp.'))</code>), and two tests are added at the end:</p>
+<p><code>src/components/KhuBacSi.test.tsx</code> — the two search tests now wait (<code>expect(await screen.findByRole('heading', { name: 'Đội ngũ bác sĩ (1)' }))</code> and <code>expect(await screen.findByText('Không tìm thấy bác sĩ phù hợp.'))</code>), and two tests are added at the end:</p>
 <pre><code class="language-tsx">test('Chương 4 — tiêu đề tab theo bác sĩ đang xem, đóng thì trả lại', async () =&gt; {
   const user = userEvent.setup();
   document.title = 'Phòng khám An Tâm';
@@ -2539,9 +2550,10 @@ test('Chương 4 — ô tìm hiện chữ ngay, danh sách chờ ngừng gõ r�
   render(&lt;KhuBacSi /&gt;);
   await user.type(screen.getByLabelText('Tìm theo tên'), 'huy');
   expect(screen.getByLabelText('Tìm theo tên')).toHaveValue('huy');
-  expect(screen.getByText('Đang hiện 6/6 bác sĩ')).toBeInTheDocument(); // chưa lọc
-  expect(await screen.findByText('Đang hiện 1/6 bác sĩ')).toBeInTheDocument(); // ~300 ms sau
+  expect(screen.getByRole('heading', { name: 'Đội ngũ bác sĩ (6)' })).toBeInTheDocument(); // chưa lọc
+  expect(await screen.findByRole('heading', { name: 'Đội ngũ bác sĩ (1)' })).toBeInTheDocument(); // ~300 ms sau
 });</code></pre>
+<p class="note-ct">Corrected 12/11/2026 after running the whole project: the list heading the course built in Chapter 2 is "Đội ngũ bác sĩ (N)", so these tests now ask for that heading by role. An earlier version waited for the text "Đang hiện 1/6 bác sĩ", which no component in the project renders. The <code>FormDatLich</code> above also keeps Lesson 3.3&#39;s ref lock (<code>xuLySubmit</code>): without it, Chapter 3&#39;s "two submits in the same tick" test goes red — <code>onGui</code> is called twice.</p>
 <p><code>src/components/FormDatLich.test.tsx</code> — two tests added at the end:</p>
 <pre><code class="language-tsx">test('Chương 4 — bản nháp: gõ dở, đóng form, mở lại ⇒ chữ còn; gửi xong ⇒ bản nháp bị xoá', async () =&gt; {
   const user = userEvent.setup();
@@ -2898,7 +2910,7 @@ ${slide('rx-04', 26, 'Thêm hook vào dự án làm đỏ hai test cũ — và �
 <p>Gắn hook xong, bộ test của Chương 2–3 báo lỗi:</p>
 <div class="out">$ npx vitest run
  FAIL  src/components/KhuBacSi.test.tsx &gt; gõ "lan" (không dấu) ⇒ tìm ra BS. Phạm Ngọc Lan
-TestingLibraryElementError: Unable to find an element with the text: Đang hiện 1/6 bác sĩ. …
+TestingLibraryElementError: Unable to find an accessible element with the role "heading" and name "Đội ngũ bác sĩ (1)"
  FAIL  src/components/KhuBacSi.test.tsx &gt; không khớp ⇒ thông báo rỗng
 TestingLibraryElementError: Unable to find an element with the text: Không tìm thấy bác sĩ phù hợp.. …
  FAIL  src/components/FormDatLich.test.tsx &gt; đếm ký tự lý do theo NFC; vượt 500 ⇒ lỗi
@@ -2906,7 +2918,7 @@ TestingLibraryElementError: Unable to find an element with the text: 501/500. �
       Tests  3 failed | 36 passed (39)   ← (lần chạy này còn tính cả test ví dụ của chương trong src/vi-du)</div>
 <p>Hai nguyên nhân khác nhau, đều có thật:</p>
 <ul>
-<li><strong>Test tìm kiếm đỏ là đúng.</strong> Chúng đòi danh sách đã lọc ngay sau khi gõ (<code>getByText</code>), trong khi debounce cố ý trễ 300 ms. Hành vi đã đổi có chủ đích, nên test đổi theo: <code>expect(await screen.findByText('Đang hiện 1/6 bác sĩ'))</code> — <code>findBy…</code> thử lại trong tối đa một giây. Một test mới còn chốt luôn hành vi mong muốn: ngay sau khi gõ, ô input hiện "huy" trong khi bộ đếm vẫn ghi 6/6; rồi bộ đếm thành 1/6.</li>
+<li><strong>Test tìm kiếm đỏ là đúng.</strong> Chúng đòi danh sách đã lọc ngay sau khi gõ (<code>getByText</code>), trong khi debounce cố ý trễ 300 ms. Hành vi đã đổi có chủ đích, nên test đổi theo: <code>expect(await screen.findByRole('heading', { name: 'Đội ngũ bác sĩ (1)' }))</code> — <code>findBy…</code> thử lại trong tối đa một giây. Một test mới còn chốt luôn hành vi mong muốn: ngay sau khi gõ, ô input hiện "huy" trong khi bộ đếm vẫn ghi 6/6; rồi bộ đếm thành 1/6.</li>
 <li><strong>Test form lộ ra một bug cách ly test.</strong> DOM của test đỏ hiện "Đã khôi phục bản nháp" và bộ đếm <strong>518/500</strong>: một test trước đó trong cùng file đã gõ vào form của cùng bác sĩ, bản nháp được lưu, và <code>localStorage</code> của jsdom sống suốt cả file test. Chương 1 đã thêm <code>cleanup()</code> cho DOM; giờ kho lưu trữ cũng cần y như vậy.</li>
 </ul>
 <pre><code class="language-ts">// src/test/setup.ts
@@ -3026,7 +3038,7 @@ export function KhuBacSi() {
   // … phần còn lại (hàm xuLyDoiYeuThich và JSX) giữ nguyên như Chương 3</code></pre>
 <p><code>src/components/FormDatLich.tsx</code> (cả file)</p>
 <pre><code class="language-tsx">import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState, type SubmitEvent } from 'react';
 import { useForm, useWatch, type Control } from 'react-hook-form';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { datLichSchema, LY_DO_TOI_DA, type DatLich, type DatLichForm } from '../schema/dat-lich';
@@ -3087,6 +3099,17 @@ export function FormDatLich({ bacSi, onGui }: FormDatLichProps) {
     }
   }
 
+  // Chốt ref của Bài 3.3 — GIỮ LẠI: thiếu nó, test "hai submit cùng nhịp" (requestSubmit ×2) của Chương 3 đỏ (onGui bị gọi 2 lần).
+  const dangGui = useRef(false);
+  const guiForm = handleSubmit(guiDi);
+  function xuLySubmit(ev: SubmitEvent&lt;HTMLFormElement&gt;) {
+    ev.preventDefault();
+    if (dangGui.current) return;
+    dangGui.current = true;
+    guiForm(ev).finally(() =&gt; {
+      dangGui.current = false;
+    });
+  }
   const e = errors.benhNhan;
 
   if (isSubmitSuccessful &amp;&amp; !errors.root) {
@@ -3098,7 +3121,7 @@ export function FormDatLich({ bacSi, onGui }: FormDatLichProps) {
   }
 
   return (
-    &lt;form className="form-dat-lich" onSubmit={handleSubmit(guiDi)} noValidate aria-label={&#96;Đặt lịch với &#36;{bacSi.ten}&#96;}&gt;
+    &lt;form className="form-dat-lich" onSubmit={xuLySubmit} noValidate aria-label={&#96;Đặt lịch với &#36;{bacSi.ten}&#96;}&gt;
       &lt;h3&gt;Đặt lịch với {bacSi.ten}&lt;/h3&gt;
       {daKhoiPhuc &amp;&amp; &lt;p className="ban-nhap"&gt;Đã khôi phục bản nháp — tự lưu trên máy này.&lt;/p&gt;}
       {errors.root?.server &amp;&amp; (
@@ -3264,7 +3287,7 @@ test.each([
 ])('%s ⇒ mở cửa: %s', (_ten, mong, luc) =&gt; {
   expect(dangMoCua(luc)).toBe(mong);
 });</code></pre>
-<p><code>src/components/KhuBacSi.test.tsx</code> — hai test tìm kiếm giờ chờ (<code>expect(await screen.findByText('Đang hiện 1/6 bác sĩ'))</code> và <code>expect(await screen.findByText('Không tìm thấy bác sĩ phù hợp.'))</code>), và thêm hai test ở cuối:</p>
+<p><code>src/components/KhuBacSi.test.tsx</code> — hai test tìm kiếm giờ chờ (<code>expect(await screen.findByRole('heading', { name: 'Đội ngũ bác sĩ (1)' }))</code> và <code>expect(await screen.findByText('Không tìm thấy bác sĩ phù hợp.'))</code>), và thêm hai test ở cuối:</p>
 <pre><code class="language-tsx">test('Chương 4 — tiêu đề tab theo bác sĩ đang xem, đóng thì trả lại', async () =&gt; {
   const user = userEvent.setup();
   document.title = 'Phòng khám An Tâm';
@@ -3280,9 +3303,10 @@ test('Chương 4 — ô tìm hiện chữ ngay, danh sách chờ ngừng gõ r�
   render(&lt;KhuBacSi /&gt;);
   await user.type(screen.getByLabelText('Tìm theo tên'), 'huy');
   expect(screen.getByLabelText('Tìm theo tên')).toHaveValue('huy');
-  expect(screen.getByText('Đang hiện 6/6 bác sĩ')).toBeInTheDocument(); // chưa lọc
-  expect(await screen.findByText('Đang hiện 1/6 bác sĩ')).toBeInTheDocument(); // ~300 ms sau
+  expect(screen.getByRole('heading', { name: 'Đội ngũ bác sĩ (6)' })).toBeInTheDocument(); // chưa lọc
+  expect(await screen.findByRole('heading', { name: 'Đội ngũ bác sĩ (1)' })).toBeInTheDocument(); // ~300 ms sau
 });</code></pre>
+<p class="note-ct">Sửa ngày 12/11/2026 sau khi chạy cả dự án: tiêu đề danh sách mà khoá dựng ở Chương 2 là "Đội ngũ bác sĩ (N)", nên các test này giờ hỏi đúng tiêu đề đó theo role. Bản cũ chờ chữ "Đang hiện 1/6 bác sĩ" — chữ mà không component nào trong dự án in ra. <code>FormDatLich</code> ở trên cũng GIỮ chốt ref của Bài 3.3 (<code>xuLySubmit</code>): thiếu nó, test "hai lần submit trong cùng một nhịp" của Chương 3 đỏ — <code>onGui</code> bị gọi hai lần.</p>
 <p><code>src/components/FormDatLich.test.tsx</code> — thêm hai test ở cuối:</p>
 <pre><code class="language-tsx">test('Chương 4 — bản nháp: gõ dở, đóng form, mở lại ⇒ chữ còn; gửi xong ⇒ bản nháp bị xoá', async () =&gt; {
   const user = userEvent.setup();

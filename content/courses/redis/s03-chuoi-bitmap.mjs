@@ -133,6 +133,23 @@ min: 0, max: 31, avg: 4.18 (412 samples)</div>
 
 <div class="pitfall"><strong>Pitfall:</strong> storing a serialised object as a string and updating one field. The pattern is <code>GET user:1042</code>, <code>JSON.parse</code>, change <code>lastSeen</code>, <code>JSON.stringify</code>, <code>SET user:1042</code> — and it has two distinct problems that both stay invisible under light load. It moves the whole object across the network twice for a change of eight bytes, which on a 4KB object at a thousand updates per second is 8MB/s of traffic for 8KB of actual change. And it is a lost-update race: two requests that read the same version and write back will each overwrite the other's field, silently, with no error anywhere. A hash fixes both — <code>HSET user:1042 lastSeen 1787…</code> touches one field atomically and sends twenty bytes. Keep strings for values you read and write whole; the moment you find yourself parsing to change part of one, the type is wrong.</div>
 <p class="note-ct"><strong>Three things to remember.</strong> A string has three encodings — <code>int</code> (with shared objects for 0–9999), <code>embstr</code> up to 44 bytes, and <code>raw</code> above that — and any modification promotes to <code>raw</code> permanently. <code>SET</code> with <code>NX</code>, <code>XX</code>, <code>GET</code> and <code>KEEPTTL</code> replaces four legacy commands and composes atomically. And a multi-megabyte value is a latency problem, not a memory problem: every read copies it while the single thread is held, so 200 reads of a 4MB string took average latency from 0.09ms to 4.18ms for everybody.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">int encoding</span><span class="v">How Redis stores a value that parses as a 64-bit integer — no string at all; values 0–9999 are shared objects.</span></div>
+  <div class="kv"><span class="k">embstr</span><span class="v">A string up to 44 bytes, stored with its object header in one 64-byte allocation and never modified in place.</span></div>
+  <div class="kv"><span class="k">raw</span><span class="v">A string over 44 bytes, held in a separate SDS buffer that can be modified in place.</span></div>
+  <div class="kv"><span class="k">SET NX/XX/GET/KEEPTTL</span><span class="v">The modern SET options that replace SETNX, SETEX and GETSET and compose atomically.</span></div>
+  <div class="kv"><span class="k">SETRANGE</span><span class="v">Writes bytes at an offset, zero-padding past the end; a large offset allocates the whole string at once.</span></div>
+  <div class="kv"><span class="k">APPEND</span><span class="v">Appends to a string; SDS over-allocates (up to 2×) so repeated appends are amortised O(1).</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>A string has three encodings — int, embstr (up to 44 bytes) and raw — and any modification promotes it to raw permanently.</li>
+<li>The 44-byte threshold is allocator arithmetic: a 64-byte jemalloc size class minus the robj and SDS headers.</li>
+<li>SET with NX, XX, GET and KEEPTTL does atomically what four legacy commands did separately.</li>
+<li>A multi-megabyte value is a latency problem, not a memory one: every read copies it while the single thread is held.</li>
+<li>Keep strings for values read and written whole; the moment you parse to change one field, use a hash.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 3 · Bài 3.1</span>
@@ -248,6 +265,23 @@ min: 0, max: 31, avg: 4.18 (412 samples)</div>
 
 <div class="pitfall"><strong>Bẫy:</strong> cất một đối tượng đã tuần tự hoá dưới dạng chuỗi rồi cập nhật MỘT trường. Cái mẫu là <code>GET user:1042</code>, <code>JSON.parse</code>, đổi <code>lastSeen</code>, <code>JSON.stringify</code>, <code>SET user:1042</code> — và nó có hai vấn đề riêng biệt mà cả hai đều vô hình khi tải nhẹ. Nó chuyển cả đối tượng qua mạng HAI lần chỉ để đổi tám byte, mà trên một đối tượng 4KB với một nghìn lần cập nhật mỗi giây là 8MB/s lưu lượng cho 8KB thay đổi thật. Và nó là một cuộc đua MẤT CẬP NHẬT: hai request đọc cùng một phiên bản rồi ghi ngược lại sẽ đè lên trường của nhau, trong im lặng, không có lỗi ở đâu cả. Một cái hash chữa cả hai — <code>HSET user:1042 lastSeen 1787…</code> chạm vào một trường một cách nguyên tử và gửi đi hai mươi byte. Hãy giữ chuỗi cho những giá trị bạn đọc trọn và ghi trọn; ngay khoảnh khắc bạn thấy mình phải phân tích để đổi một PHẦN của nó, thì kiểu dữ liệu đó đã sai.</div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Một chuỗi có ba cách mã hoá — <code>int</code> (kèm đối tượng dùng chung cho 0–9999), <code>embstr</code> tới 44 byte, và <code>raw</code> trên mức đó — và mọi phép sửa đổi đều nâng lên <code>raw</code> vĩnh viễn. <code>SET</code> với <code>NX</code>, <code>XX</code>, <code>GET</code> và <code>KEEPTTL</code> thay thế bốn câu lệnh đời cũ và ghép được với nhau một cách nguyên tử. Và một giá trị vài megabyte là một vấn đề ĐỘ TRỄ chứ không phải vấn đề bộ nhớ: mọi lệnh đọc đều chép nó trong lúc cái luồng duy nhất bị giữ, nên 200 lần đọc một chuỗi 4MB đã đẩy độ trễ trung bình của TẤT CẢ MỌI NGƯỜI từ 0,09ms lên 4,18ms.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">int encoding</span><span class="v">Cách Redis lưu một giá trị phân tích được thành số nguyên 64 bit — không có chuỗi nào; giá trị 0–9999 là đối tượng dùng chung.</span></div>
+  <div class="kv"><span class="k">embstr</span><span class="v">Chuỗi tới 44 byte, lưu cùng phần đầu đối tượng trong một khối 64 byte, không sửa được tại chỗ.</span></div>
+  <div class="kv"><span class="k">raw</span><span class="v">Chuỗi trên 44 byte, nằm trong một bộ đệm SDS riêng, sửa được tại chỗ.</span></div>
+  <div class="kv"><span class="k">SET NX/XX/GET/KEEPTTL</span><span class="v">Các tuỳ chọn SET đời mới thay cho SETNX, SETEX và GETSET, ghép được với nhau một cách nguyên tử.</span></div>
+  <div class="kv"><span class="k">SETRANGE</span><span class="v">Ghi byte ở một vị trí, đệm byte 0 qua khỏi cuối; vị trí lớn thì cấp phát cả chuỗi ngay một lượt.</span></div>
+  <div class="kv"><span class="k">APPEND</span><span class="v">Nối thêm vào chuỗi; SDS cấp phát dư (tới 2×) nên nối liên tiếp được khấu hao thành O(1).</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Một chuỗi có ba cách mã hoá — int, embstr (tới 44 byte) và raw — và mọi phép sửa đều nâng nó lên raw vĩnh viễn.</li>
+<li>Ngưỡng 44 byte là số học của bộ cấp phát: một lớp kích thước 64 byte của jemalloc trừ đi phần đầu robj và SDS.</li>
+<li>SET với NX, XX, GET và KEEPTTL làm một cách nguyên tử thứ mà bốn câu lệnh đời cũ làm riêng lẻ.</li>
+<li>Một giá trị vài megabyte là vấn đề độ trễ chứ không phải bộ nhớ: mọi lệnh đọc đều chép nó trong lúc luồng duy nhất bị giữ.</li>
+<li>Giữ chuỗi cho những giá trị đọc trọn ghi trọn; ngay khi phải phân tích để đổi một trường, hãy dùng hash.</li>
+</ul>
 </div>
 `,
     },
@@ -380,6 +414,23 @@ db0:keys=142811,expires=14417,avg_ttl=1841203</div>
 
 <div class="pitfall"><strong>Pitfall:</strong> setting the TTL on a counter only when it is first created. The code reads sensibly — if <code>INCR</code> returns 1 this is a new key, so set the expiry — and it is subtly broken in two ways. If the process dies between the <code>INCR</code> and the <code>EXPIRE</code>, that key is immortal forever, and nothing will ever try again because the counter is no longer 1. And if a second writer increments in the window between them, neither sees the return value 1 and neither sets a TTL. Both cases leave a small permanent residue that accumulates for months and shows up as a growing gap between <code>keys</code> and <code>expires</code> in <code>INFO keyspace</code>. Use <code>EXPIRE key ttl NX</code> on <em>every</em> increment (Redis 7.0+): it is idempotent, costs nothing, and cannot be skipped by a crash or a race. On older versions, pipeline an unconditional <code>EXPIRE</code> alongside the <code>INCR</code> — resetting the window is almost always acceptable for a counter that is being written to.</div>
 <p class="note-ct"><strong>Three things to remember.</strong> <code>INCR</code> is atomic because one thread executes one command at a time — 10,000 parallel increments give exactly 10,000, while the read-modify-write version loses a different number every run. <code>INCRBYFLOAT</code> uses a long double and prints prettily; for money use integer minor units. And put the time bucket in the key name and set the TTL with <code>EXPIRE … NX</code> on every increment, or watch <code>keys</code> versus <code>expires</code> drift apart forever.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">INCR</span><span class="v">Atomic increment of an integer value; a missing key is created at 1, so no initialisation step is needed.</span></div>
+  <div class="kv"><span class="k">INCRBY / DECR / DECRBY</span><span class="v">Step an integer up or down by any amount, with the same single-command atomicity as INCR.</span></div>
+  <div class="kv"><span class="k">INCRBYFLOAT</span><span class="v">Increment by a float using a long double; prints with 17 significant digits — wrong for money.</span></div>
+  <div class="kv"><span class="k">HINCRBY</span><span class="v">Atomically increments a numeric field inside a hash — many related counters in one key.</span></div>
+  <div class="kv"><span class="k">ZINCRBY</span><span class="v">Atomically adds to a sorted-set member's score — the basis of a live leaderboard.</span></div>
+  <div class="kv"><span class="k">EXPIRE … NX</span><span class="v">Redis 7.0+: sets a TTL only if the key has none, so calling it on every increment is idempotent.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>INCR is atomic because one thread runs one command at a time: 10,000 parallel increments give exactly 10,000.</li>
+<li>Read-modify-write in the application loses updates silently — the count stays plausible, just wrong.</li>
+<li>Use INCRBYFLOAT for averages, rates and scores; store money as integer minor units.</li>
+<li>Put the time bucket in the key name and set the TTL with EXPIRE … NX on every increment.</li>
+<li>Watch the keys-versus-expires ratio in INFO keyspace to catch TTL leaks early.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 3 · Bài 3.2</span>
@@ -503,6 +554,23 @@ db0:keys=142811,expires=14417,avg_ttl=1841203</div>
 
 <div class="pitfall"><strong>Bẫy:</strong> chỉ đặt TTL cho một bộ đếm khi nó được TẠO RA lần đầu. Đoạn mã đọc lên rất hợp lý — nếu <code>INCR</code> trả về 1 thì đây là khoá mới, vậy đặt thời hạn — và nó hỏng một cách tinh vi theo HAI cách. Nếu tiến trình chết giữa lệnh <code>INCR</code> và lệnh <code>EXPIRE</code> thì cái khoá đó bất tử vĩnh viễn, và sẽ không bao giờ có gì thử lại vì bộ đếm không còn bằng 1 nữa. Và nếu một bên ghi thứ hai tăng bộ đếm đúng vào khoảng giữa hai lệnh đó thì không bên nào thấy giá trị trả về 1 và không bên nào đặt TTL. Cả hai trường hợp đều để lại một chút cặn vĩnh viễn, tích lại trong nhiều tháng và hiện ra thành khoảng chênh ngày càng lớn giữa <code>keys</code> với <code>expires</code> trong <code>INFO keyspace</code>. Hãy dùng <code>EXPIRE key ttl NX</code> ở MỌI lượt tăng (Redis 7.0+): nó bất biến khi lặp lại, không tốn gì, và không thể bị bỏ qua bởi một cú sập hay một cuộc đua. Trên bản cũ hơn, hãy đóng pipeline một lệnh <code>EXPIRE</code> vô điều kiện cạnh lệnh <code>INCR</code> — đặt lại cửa sổ gần như luôn chấp nhận được với một bộ đếm đang được ghi vào.</div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> <code>INCR</code> nguyên tử vì một luồng thực thi một câu lệnh tại một thời điểm — 10.000 lượt tăng song song cho ra đúng 10.000, trong khi bản đọc-sửa-ghi mất một con số khác nhau ở mỗi lần chạy. <code>INCRBYFLOAT</code> dùng long double và in ra rất đẹp mắt; với tiền thì hãy dùng số nguyên theo đơn vị nhỏ nhất. Và hãy đặt cái ô thời gian vào TÊN KHOÁ rồi đặt TTL bằng <code>EXPIRE … NX</code> ở mọi lượt tăng, không thì hãy nhìn <code>keys</code> với <code>expires</code> tách xa nhau mãi mãi.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">INCR</span><span class="v">Tăng nguyên tử một giá trị nguyên; khoá thiếu được tạo với giá trị 1, nên không cần bước khởi tạo.</span></div>
+  <div class="kv"><span class="k">INCRBY / DECR / DECRBY</span><span class="v">Tăng hoặc giảm một số nguyên theo lượng bất kỳ, nguyên tử một câu lệnh y như INCR.</span></div>
+  <div class="kv"><span class="k">INCRBYFLOAT</span><span class="v">Tăng theo số thực bằng long double; in ra 17 chữ số có nghĩa — sai cho tiền.</span></div>
+  <div class="kv"><span class="k">HINCRBY</span><span class="v">Tăng nguyên tử một trường số trong một hash — nhiều bộ đếm liên quan trong một khoá.</span></div>
+  <div class="kv"><span class="k">ZINCRBY</span><span class="v">Cộng nguyên tử vào điểm của một thành viên sorted set — nền của một bảng xếp hạng sống.</span></div>
+  <div class="kv"><span class="k">EXPIRE … NX</span><span class="v">Redis 7.0+: chỉ đặt TTL nếu khoá chưa có, nên gọi ở mọi lượt tăng là bất biến khi lặp lại.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>INCR nguyên tử vì một luồng chạy một câu lệnh tại một thời điểm: 10.000 lượt tăng song song cho đúng 10.000.</li>
+<li>Đọc-sửa-ghi trong ứng dụng làm mất cập nhật một cách âm thầm — con số vẫn nghe hợp lý, chỉ là sai.</li>
+<li>Dùng INCRBYFLOAT cho trung bình, tỷ lệ và điểm số; lưu tiền theo số nguyên đơn vị nhỏ nhất.</li>
+<li>Đặt ô thời gian vào tên khoá và đặt TTL bằng EXPIRE … NX ở mọi lượt tăng.</li>
+<li>Canh tỷ lệ keys so với expires trong INFO keyspace để bắt rò rỉ TTL từ sớm.</li>
+</ul>
 </div>
 `,
     },
@@ -565,10 +633,11 @@ redis-cli BITCOUNT active:2026-08-22 0 999 BIT     <span class="tok-comment"># 7
 redis-cli BITPOS active:2026-08-22 1               <span class="tok-comment"># first set bit</span>
 redis-cli BITPOS active:2026-08-22 0 100           <span class="tok-comment"># first clear bit from byte 100</span></code></pre>
 <div class="out">(integer) 3
-(integer) 2
-(integer) 2
+(integer) 1
+(integer) 1
 (integer) 7
 (integer) 800</div>
+<p class="note-ct">Corrected 12/11/2026 against a real run: both range counts are <strong>1</strong>, not 2. Bytes 0–99 are bits 0–799 and bits 0–999 stop before 1042, so the only set bit either range contains is bit 7.</p>
 <div class="kv-grid">
   <div class="kv"><span class="k"><code>BITCOUNT</code> is O(N)</span><span class="v">It walks the whole string — but the constant is tiny because it uses a population-count instruction. Counting a million bits takes microseconds; counting a billion does not.</span></div>
   <div class="kv"><span class="k">Ranges default to BYTES</span><span class="v">A long-standing surprise: <code>BITCOUNT k 0 99</code> means bytes, i.e. bits 0–799. Redis 7.0 added an explicit <code>BIT</code> suffix, and using it removes an easy off-by-eight.</span></div>
@@ -592,9 +661,10 @@ redis-cli BITCOUNT churn</code></pre>
 <div class="out">(integer) 262
 (integer) 1
 (integer) 262
-(integer) 2
+(integer) 3
 (integer) 262
 (integer) 1</div>
+<p class="note-ct">Corrected 12/11/2026: <code>OR</code> counts <strong>3</strong>, not 2 — <code>active:2026-08-22</code> still holds users 7, 1042 and 2091 from the first section, and each of them was active on at least one of the three days. <code>AND</code> leaves only 1042; <code>XOR</code> of the 21st and 22nd leaves only 7.</p>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">AND · retention</span><span class="lz-t">"active every day this week"</span><span class="lz-d">Seven <code>BITCOUNT</code>-able answers from seven daily bitmaps, in one command. The classic cohort-retention query, and it is microseconds rather than a table scan.</span></div>
   <div class="lz-step"><span class="lz-k">OR · reach</span><span class="lz-t">"active at least once this month"</span><span class="lz-d">Monthly actives from thirty daily bitmaps, computed on demand and cached. No de-duplication step, because a bit is already unique per user.</span></div>
@@ -636,6 +706,23 @@ export async function monthlyActive() {
 
 <div class="pitfall"><strong>Pitfall:</strong> using a bitmap with sparse or large user IDs. The memory model catches people out because it is the opposite of every other Redis type: cost is driven by the <em>largest</em> offset you ever set, not by how many you set. A single <code>SETBIT active 4000000000 1</code> — an entirely plausible ID from a database sequence or a Snowflake generator — allocates 500MB in one blocking operation to record one user, and it will do it again for every day you keep. Two habits keep you safe: maintain a dense internal index (a Redis <code>HINCRBY</code> counter that assigns each user a sequential bit position on first sight, stored in a hash) and bound the offset explicitly before every <code>SETBIT</code> so that a bad ID fails loudly instead of allocating half a gigabyte. If your IDs are UUIDs, a bitmap is simply the wrong structure — use a set, or a HyperLogLog if you only need the count.</div>
 <p class="note-ct"><strong>Three things to remember.</strong> A bitmap is a plain string addressed by bit, and a million dense user IDs cost 125KB versus 42MB for a set — a factor of 335. Memory is driven by the <em>largest</em> offset you set, not the number of bits, so sparse or huge IDs make it catastrophically worse than a set. And <code>BITOP AND</code>/<code>OR</code>/<code>XOR</code> across daily bitmaps gives you retention, monthly actives and churn in one command each — but they are O(N) and blocking, so compute them on a schedule rather than per request.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">SETBIT / GETBIT</span><span class="v">Set or read a single bit at an offset; the string grows to cover the largest offset touched.</span></div>
+  <div class="kv"><span class="k">BITCOUNT</span><span class="v">Counts set bits with a population-count instruction; O(N) with a tiny constant, range defaults to bytes.</span></div>
+  <div class="kv"><span class="k">BITPOS</span><span class="v">Finds the first 0 or 1 bit — useful for allocating the lowest free slot.</span></div>
+  <div class="kv"><span class="k">BITOP AND/OR/XOR</span><span class="v">Boolean operations across bitmaps; O(N) and blocking, so run them on a schedule.</span></div>
+  <div class="kv"><span class="k">BITFIELD</span><span class="v">Treats the string as packed integers of arbitrary width, with configurable overflow behaviour.</span></div>
+  <div class="kv"><span class="k">Dense IDs</span><span class="v">Bitmaps need integer IDs packed from zero; memory tracks the largest offset, not the number of set bits.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>A bitmap is a plain string addressed by bit: a million dense user IDs cost 125KB versus 42MB for a set, a factor of 335.</li>
+<li>Memory is driven by the largest offset you set, so sparse or huge IDs make it catastrophically worse than a set.</li>
+<li>BITOP AND/OR/XOR across daily bitmaps gives retention, monthly actives and churn, one command each.</li>
+<li>Those set operations are O(N) and blocking — compute them on a schedule and cache the result.</li>
+<li>Use a bitmap only for dense IDs, boolean state and count-only queries; never for membership retrieval or multi-state.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 3 · Bài 3.3</span>
@@ -689,10 +776,11 @@ redis-cli BITCOUNT active:2026-08-22 0 999 BIT     <span class="tok-comment"># 7
 redis-cli BITPOS active:2026-08-22 1               <span class="tok-comment"># bit 1 đầu tiên</span>
 redis-cli BITPOS active:2026-08-22 0 100           <span class="tok-comment"># bit 0 đầu tiên tính từ byte 100</span></code></pre>
 <div class="out">(integer) 3
-(integer) 2
-(integer) 2
+(integer) 1
+(integer) 1
 (integer) 7
 (integer) 800</div>
+<p class="note-ct">Sửa ngày 12/11/2026 theo lần chạy thật: cả hai phép đếm theo dải đều ra <strong>1</strong>, không phải 2. Byte 0–99 là bit 0–799, còn bit 0–999 dừng trước 1042, nên bit duy nhất được bật nằm trong mỗi dải là bit 7.</p>
 <div class="kv-grid">
   <div class="kv"><span class="k"><code>BITCOUNT</code> là O(N)</span><span class="v">Nó đi hết cả chuỗi — nhưng hằng số rất nhỏ vì nó dùng một chỉ thị đếm bit của bộ xử lý. Đếm một triệu bit tốn vài micro giây; đếm một tỷ bit thì không.</span></div>
   <div class="kv"><span class="k">Dải mặc định tính theo BYTE</span><span class="v">Một bất ngờ tồn tại từ lâu: <code>BITCOUNT k 0 99</code> nghĩa là BYTE, tức bit 0–799. Redis 7.0 thêm hậu tố <code>BIT</code> tường minh, và dùng nó là gỡ được một lỗi lệch-tám dễ mắc.</span></div>
@@ -716,9 +804,10 @@ redis-cli BITCOUNT churn</code></pre>
 <div class="out">(integer) 262
 (integer) 1
 (integer) 262
-(integer) 2
+(integer) 3
 (integer) 262
 (integer) 1</div>
+<p class="note-ct">Sửa ngày 12/11/2026: <code>OR</code> đếm ra <strong>3</strong>, không phải 2 — <code>active:2026-08-22</code> vẫn giữ người dùng 7, 1042 và 2091 từ mục đầu, và cả ba đều hoạt động ít nhất một trong ba ngày. <code>AND</code> chỉ còn 1042; <code>XOR</code> của ngày 21 và 22 chỉ còn 7.</p>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">AND · giữ chân</span><span class="lz-t">"hoạt động MỌI ngày trong tuần này"</span><span class="lz-d">Bảy câu trả lời <code>BITCOUNT</code> được từ bảy bitmap theo ngày, trong MỘT câu lệnh. Truy vấn giữ chân theo nhóm kinh điển, và nó tốn vài micro giây chứ không phải một lượt quét bảng.</span></div>
   <div class="lz-step"><span class="lz-k">OR · độ phủ</span><span class="lz-t">"hoạt động ít nhất một lần trong tháng"</span><span class="lz-d">Người dùng hoạt động hằng tháng từ ba mươi bitmap ngày, tính khi cần rồi cache lại. Không có bước khử trùng lặp, vì một bit vốn đã là duy nhất cho mỗi người dùng.</span></div>
@@ -760,6 +849,23 @@ export async function monthlyActive() {
 
 <div class="pitfall"><strong>Bẫy:</strong> dùng bitmap với ID người dùng thưa thớt hoặc lớn. Mô hình bộ nhớ làm người ta vấp vì nó NGƯỢC với mọi kiểu dữ liệu khác của Redis: chi phí bị chi phối bởi vị trí LỚN NHẤT bạn từng đặt, không phải bởi số lượng bạn đặt. Một lệnh <code>SETBIT active 4000000000 1</code> duy nhất — một ID hoàn toàn hợp lý từ một chuỗi số của cơ sở dữ liệu hay một bộ sinh Snowflake — sẽ cấp phát 500MB trong MỘT thao tác gây chặn để ghi lại MỘT người dùng, và nó sẽ làm lại chuyện đó ở mỗi ngày bạn giữ. Hai thói quen giữ bạn an toàn: duy trì một chỉ mục nội bộ dày đặc (một bộ đếm <code>HINCRBY</code> của Redis gán cho mỗi người dùng một vị trí bit tuần tự ở lần đầu nhìn thấy, cất trong một hash) và chặn giới hạn vị trí một cách tường minh trước MỌI lệnh <code>SETBIT</code> để một ID xấu hỏng TO TIẾNG thay vì cấp phát nửa gigabyte. Nếu ID của bạn là UUID thì bitmap đơn giản là cấu trúc SAI — hãy dùng một cái set, hoặc một HyperLogLog nếu bạn chỉ cần con số đếm.</div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Bitmap là một chuỗi thường được địa chỉ hoá theo bit, và một triệu ID người dùng dày đặc tốn 125KB so với 42MB của một cái set — chênh 335 lần. Bộ nhớ bị chi phối bởi vị trí LỚN NHẤT bạn đặt chứ không phải số bit, nên ID thưa thớt hay khổng lồ khiến nó tệ hơn một cái set một cách thảm hoạ. Và <code>BITOP AND</code>/<code>OR</code>/<code>XOR</code> qua các bitmap theo ngày cho bạn giữ chân, người dùng hằng tháng và tỷ lệ rời bỏ, mỗi thứ một câu lệnh — nhưng chúng là O(N) và có tính chặn, nên hãy tính theo lịch chứ đừng tính theo từng request.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">SETBIT / GETBIT</span><span class="v">Đặt hoặc đọc một bit ở một vị trí; chuỗi phình ra để phủ tới vị trí lớn nhất bị chạm.</span></div>
+  <div class="kv"><span class="k">BITCOUNT</span><span class="v">Đếm bit được bật bằng một chỉ thị đếm bit; O(N) với hằng số rất nhỏ, dải mặc định tính theo byte.</span></div>
+  <div class="kv"><span class="k">BITPOS</span><span class="v">Tìm bit 0 hoặc 1 đầu tiên — hữu ích để cấp phát chỗ trống thấp nhất.</span></div>
+  <div class="kv"><span class="k">BITOP AND/OR/XOR</span><span class="v">Phép luận lý qua nhiều bitmap; O(N) và có tính chặn, nên hãy chạy theo lịch.</span></div>
+  <div class="kv"><span class="k">BITFIELD</span><span class="v">Coi chuỗi như các số nguyên đóng gói với độ rộng tuỳ ý, hành vi tràn cấu hình được.</span></div>
+  <div class="kv"><span class="k">Dense IDs</span><span class="v">Bitmap cần ID nguyên dày đặc từ 0; bộ nhớ theo vị trí lớn nhất, không theo số bit được bật.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Bitmap là một chuỗi thường được địa chỉ hoá theo bit: một triệu ID dày đặc tốn 125KB so với 42MB của set, chênh 335 lần.</li>
+<li>Bộ nhớ bị chi phối bởi vị trí lớn nhất bạn đặt, nên ID thưa thớt hay khổng lồ khiến nó tệ hơn set một cách thảm hoạ.</li>
+<li>BITOP AND/OR/XOR qua các bitmap theo ngày cho bạn giữ chân, người dùng hằng tháng và tỷ lệ rời bỏ, mỗi thứ một câu lệnh.</li>
+<li>Các phép tập hợp đó là O(N) và có tính chặn — hãy tính theo lịch và cache kết quả.</li>
+<li>Chỉ dùng bitmap cho ID dày đặc, trạng thái luận lý và truy vấn chỉ cần đếm; đừng dùng để lấy lại thành viên hay nhiều trạng thái.</li>
+</ul>
 </div>
 `,
     },
@@ -880,6 +986,23 @@ sitewide uniques today:    412884  (union of 1,284 page HLLs, 41ms)</div>
 
 <div class="pitfall"><strong>Pitfall:</strong> using a HyperLogLog for a number that will be displayed next to a list. Unique viewers on a video, distinct participants in a room, members who reacted to a post — all of them are tempting HLL cases because the count is what you show, and all of them break the moment somebody expands the list. The count says 46, the list has 47 names, and now every number on the page is suspect. The rule is about who consumes the number rather than how large it is: if a human will ever compare it against something enumerable, or if it appears on an invoice, it must be exact — a set, or a database <code>COUNT DISTINCT</code>. HyperLogLog belongs where the number is the <em>only</em> artefact and nobody can check it against a list: unique visitors, distinct search terms, reach across a campaign. If you are unsure, ask whether being 0.8% wrong would ever be noticed. If the answer is "yes, by one person, once", use a set.</div>
 <p class="note-ct"><strong>Three things to remember.</strong> A HyperLogLog counts distinct items in a fixed 12KB with about 0.81% relative error, regardless of whether you add a thousand or a billion — 3,400× smaller than the equivalent set, and it works with any item because everything is hashed. <code>PFCOUNT</code> over several keys computes the union for free, which makes daily/weekly/monthly/per-page rollups a single command with no pre-aggregation. And there is no membership test and no delete: it is for numbers nobody can check against a list.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">PFADD</span><span class="v">Adds items to a HyperLogLog; duplicates cost nothing because everything is hashed first.</span></div>
+  <div class="kv"><span class="k">PFCOUNT</span><span class="v">Estimates the cardinality; given several keys it computes their union without storing it.</span></div>
+  <div class="kv"><span class="k">PFMERGE</span><span class="v">Merges several HyperLogLogs into one key, deduplicating across all of them.</span></div>
+  <div class="kv"><span class="k">Standard error 0.81%</span><span class="v">The fixed relative error, the same at a thousand items as at a billion — the absolute error grows, the relative does not.</span></div>
+  <div class="kv"><span class="k">Sparse / dense encoding</span><span class="v">A small HLL starts as a sparse 26-byte run-length form and converts to the dense 12KB form once it grows.</span></div>
+  <div class="kv"><span class="k">hll-sparse-max-bytes</span><span class="v">The config threshold at which the sparse encoding converts to dense (default 3000).</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>A HyperLogLog counts distinct items in a fixed 12KB with about 0.81% relative error, from a thousand items to a billion.</li>
+<li>It works with any item type because everything is hashed, and it is about 3,400× smaller than the equivalent set.</li>
+<li>PFCOUNT over several keys computes the union for free, so daily/weekly/monthly/per-page rollups are one command.</li>
+<li>There is no membership test and no delete — a HLL only grows, so use daily keys with TTLs and union them.</li>
+<li>It is wrong whenever a human can check the number against a list, or it appears on an invoice.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 3 · Bài 3.4</span>
@@ -991,6 +1114,23 @@ sitewide uniques today:    412884  (union of 1,284 page HLLs, 41ms)</div>
 
 <div class="pitfall"><strong>Bẫy:</strong> dùng HyperLogLog cho một con số sẽ được hiển thị NGAY CẠNH một danh sách. Số người xem duy nhất một video, số người tham gia khác nhau trong một phòng, số thành viên đã thả cảm xúc vào một bài viết — tất cả đều là những trường hợp HLL nghe rất hấp dẫn vì con số chính là thứ bạn hiển thị, và tất cả đều vỡ ngay khoảnh khắc có ai đó bung cái danh sách ra. Con số nói 46, danh sách có 47 cái tên, và giờ mọi con số trên trang đều đáng ngờ. Cái luật nằm ở chỗ AI tiêu thụ con số đó chứ không nằm ở việc nó lớn cỡ nào: nếu có lúc nào đó một con người sẽ so nó với một thứ đếm được, hoặc nếu nó xuất hiện trên một hoá đơn, thì nó phải CHÍNH XÁC — một cái set, hoặc một lệnh <code>COUNT DISTINCT</code> trong cơ sở dữ liệu. HyperLogLog thuộc về những chỗ mà con số là hiện vật DUY NHẤT và không ai đối chiếu nó với một danh sách được: khách truy cập duy nhất, từ khoá tìm kiếm khác nhau, độ phủ của một chiến dịch. Nếu bạn không chắc, hãy tự hỏi liệu việc sai 0,8% có bao giờ bị phát hiện không. Nếu câu trả lời là "có, bởi một người, một lần", hãy dùng set.</div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Một HyperLogLog đếm số mục khác nhau trong 12KB cố định với sai số tương đối khoảng 0,81%, bất kể bạn thêm một nghìn hay một tỷ — nhỏ hơn cái set tương đương 3.400 lần, và nó chạy với mọi loại mục vì mọi thứ đều được băm. <code>PFCOUNT</code> trên nhiều khoá tính phép hợp miễn phí, và điều đó biến việc gộp theo ngày/tuần/tháng/trang thành MỘT câu lệnh mà không cần gộp trước. Và nó không có phép kiểm thành viên và không có phép xoá: nó dành cho những con số mà không ai đối chiếu được với một danh sách.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">PFADD</span><span class="v">Thêm mục vào một HyperLogLog; trùng lặp không tốn gì vì mọi thứ đều được băm trước.</span></div>
+  <div class="kv"><span class="k">PFCOUNT</span><span class="v">Ước lượng số phần tử; cho nhiều khoá thì tính phép hợp của chúng mà không lưu lại.</span></div>
+  <div class="kv"><span class="k">PFMERGE</span><span class="v">Hợp nhiều HyperLogLog vào một khoá, khử trùng lặp qua tất cả.</span></div>
+  <div class="kv"><span class="k">Sai số chuẩn 0,81%</span><span class="v">Sai số tương đối cố định, ở một nghìn mục cũng bằng ở một tỷ — sai số tuyệt đối tăng, sai số tương đối thì không.</span></div>
+  <div class="kv"><span class="k">Mã hoá thưa / dày</span><span class="v">Một HLL nhỏ khởi đầu dạng thưa 26 byte theo độ dài lặp rồi chuyển sang dạng dày 12KB khi lớn lên.</span></div>
+  <div class="kv"><span class="k">hll-sparse-max-bytes</span><span class="v">Ngưỡng cấu hình mà tại đó mã hoá thưa chuyển sang dày (mặc định 3000).</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Một HyperLogLog đếm số mục khác nhau trong 12KB cố định với sai số tương đối khoảng 0,81%, từ một nghìn tới một tỷ mục.</li>
+<li>Nó chạy với mọi loại mục vì mọi thứ đều được băm, và nhỏ hơn cái set tương đương khoảng 3.400 lần.</li>
+<li>PFCOUNT trên nhiều khoá tính phép hợp miễn phí, nên gộp theo ngày/tuần/tháng/trang chỉ là một câu lệnh.</li>
+<li>Không có phép kiểm thành viên và không có phép xoá — HLL chỉ lớn lên, nên dùng khoá theo ngày kèm TTL rồi hợp chúng.</li>
+<li>Nó sai mỗi khi một con người đối chiếu được con số với một danh sách, hoặc nó xuất hiện trên một hoá đơn.</li>
+</ul>
 </div>
 `,
     },
@@ -1144,6 +1284,23 @@ if (!allowed) return res.status(429).set('Retry-After', String(retryAfter)).json
 
 <div class="pitfall"><strong>Pitfall:</strong> checking the limit and then incrementing it, in two separate commands. The code reads exactly the way you would describe the logic — read the count, if it is under the limit allow the request and add one — and it is a race that appears only under the load it is meant to protect against. Two requests arriving in the same millisecond both read 99, both decide they are allowed, and both increment to 101; with fifty concurrent workers a limit of 100 lets through 140. The fix is to make the increment <em>be</em> the check: <code>INCR</code> first, compare the returned value against the limit, and reject if it is over — the counter runs slightly high for rejected requests, which is harmless and self-correcting when the window expires. Anything more complex than that (a sliding log, a token bucket) needs the whole read-decide-write sequence inside a single Lua script, because Lua is the only way to make several commands one atomic step (Chapter 7).</div>
 <p class="note-ct"><strong>Three things to remember.</strong> A fixed window is two commands and lets through 2× the limit at a boundary; weighting the previous window fixes that for two counters and a multiplication, and is the right default. Exact algorithms — a sorted-set log or a token bucket — cost more and must live inside one Lua script, because a check-then-increment across two round trips is a race under exactly the load you are limiting. And choose the key deliberately: per user <em>and</em> per endpoint, with IP as a blunt fallback, since a single global bucket lets a cheap call starve an expensive one.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Fixed window</span><span class="v">A counter per time window plus a TTL; simplest, but lets through 2× the limit at a window boundary.</span></div>
+  <div class="kv"><span class="k">Sliding window (approximate)</span><span class="v">Weights the previous window by how much is still in view; the right default for most production limiters.</span></div>
+  <div class="kv"><span class="k">Sliding window log</span><span class="v">A sorted set of request timestamps — exact, but O(limit) memory per client.</span></div>
+  <div class="kv"><span class="k">Token bucket</span><span class="v">Tokens refilled by elapsed time × rate; allows deliberate bursts and uses constant memory.</span></div>
+  <div class="kv"><span class="k">Lua script</span><span class="v">Makes the read-decide-write sequence one atomic step — required for the exact algorithms.</span></div>
+  <div class="kv"><span class="k">Limiter key</span><span class="v">What you count against: per user and per endpoint, with IP as a blunt fallback.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>A fixed window is two commands and lets 2× the limit through at a boundary.</li>
+<li>Weighting the previous window fixes that with two counters and a multiplication — Cloudflare measured under 0.003% error.</li>
+<li>Exact algorithms (a sorted-set log, a token bucket) cost more and must live inside one Lua script.</li>
+<li>Check-then-increment is a race under exactly the load you are limiting; make the INCR be the check.</li>
+<li>Choose the key deliberately: per user and per endpoint, so a cheap call cannot starve an expensive one.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 3 · Bài 3.5</span>
@@ -1288,6 +1445,23 @@ if (!allowed) return res.status(429).set('Retry-After', String(retryAfter)).json
 
 <div class="pitfall"><strong>Bẫy:</strong> KIỂM giới hạn rồi mới TĂNG nó, bằng hai câu lệnh riêng. Đoạn mã đọc lên đúng y cách bạn mô tả lô-gíc — đọc con số, nếu nó dưới giới hạn thì cho phép rồi cộng một — và nó là một cuộc đua chỉ lộ ra dưới đúng cái tải mà nó sinh ra để chống. Hai yêu cầu tới trong cùng một mili giây đều đọc ra 99, đều quyết định là được phép, và đều tăng lên 101; với năm mươi worker chạy song song thì một giới hạn 100 cho lọt 140. Cách chữa là làm cho lệnh TĂNG CHÍNH LÀ phép kiểm: gọi <code>INCR</code> trước, so giá trị trả về với giới hạn, rồi từ chối nếu vượt — bộ đếm sẽ chạy hơi cao đối với những yêu cầu bị từ chối, chuyện đó vô hại và tự sửa khi cửa sổ hết hạn. Bất cứ thứ gì phức tạp hơn thế (một nhật ký trượt, một gáo token) đều cần cả chuỗi đọc-quyết-ghi nằm trong MỘT script Lua duy nhất, vì Lua là cách duy nhất khiến nhiều câu lệnh trở thành một bước nguyên tử (Chương 7).</div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Cửa sổ cố định gọn trong hai câu lệnh và cho lọt gấp 2 lần giới hạn ở một ranh giới; đánh trọng số cho cửa sổ trước chữa được chuyện đó với hai bộ đếm và một phép nhân, và đó là mặc định đúng. Những thuật toán chính xác — một nhật ký sorted set hay một gáo token — tốn hơn và BẮT BUỘC phải nằm trong một script Lua, vì kiểm-rồi-tăng qua hai vòng mạng là một cuộc đua dưới đúng cái tải bạn đang giới hạn. Và hãy chọn khoá một cách có chủ đích: theo người dùng <em>VÀ</em> theo điểm cuối, với IP làm phương án dự phòng thô, vì một cái gáo toàn cục duy nhất sẽ để một lời gọi rẻ bỏ đói một lời gọi đắt.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Cửa sổ cố định</span><span class="v">Mỗi cửa sổ thời gian một bộ đếm kèm TTL; đơn giản nhất, nhưng cho lọt gấp 2 lần giới hạn ở ranh giới.</span></div>
+  <div class="kv"><span class="k">Cửa sổ trượt (xấp xỉ)</span><span class="v">Đánh trọng số cửa sổ trước theo phần còn trong tầm nhìn; mặc định đúng cho phần lớn bộ giới hạn.</span></div>
+  <div class="kv"><span class="k">Nhật ký cửa sổ trượt</span><span class="v">Một sorted set các mốc thời gian yêu cầu — chính xác, nhưng tốn O(giới hạn) bộ nhớ mỗi client.</span></div>
+  <div class="kv"><span class="k">Gáo token</span><span class="v">Token được đổ đầy theo thời gian trôi × tốc độ; cho phép bùng nổ có chủ đích và dùng bộ nhớ hằng số.</span></div>
+  <div class="kv"><span class="k">Script Lua</span><span class="v">Làm cho chuỗi đọc-quyết-ghi thành một bước nguyên tử — bắt buộc cho các thuật toán chính xác.</span></div>
+  <div class="kv"><span class="k">Khoá giới hạn</span><span class="v">Thứ bạn đếm theo: theo người dùng và theo điểm cuối, với IP làm phương án dự phòng thô.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Cửa sổ cố định gọn trong hai câu lệnh và cho lọt gấp 2 lần giới hạn ở một ranh giới.</li>
+<li>Đánh trọng số cửa sổ trước chữa được với hai bộ đếm và một phép nhân — Cloudflare đo được sai số dưới 0,003%.</li>
+<li>Các thuật toán chính xác (nhật ký sorted set, gáo token) tốn hơn và bắt buộc nằm trong một script Lua.</li>
+<li>Kiểm-rồi-tăng là một cuộc đua dưới đúng cái tải bạn đang giới hạn; hãy làm cho lệnh INCR chính là phép kiểm.</li>
+<li>Chọn khoá một cách có chủ đích: theo người dùng và theo điểm cuối, để một lời gọi rẻ không bỏ đói một lời gọi đắt.</li>
+</ul>
 </div>
 `,
     },

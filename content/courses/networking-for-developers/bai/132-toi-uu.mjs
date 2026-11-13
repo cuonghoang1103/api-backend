@@ -30,7 +30,7 @@ ${run('c133-toiuu', 'echo "== compression', 3)}
 <h3>Edge caching — the ttfb gap</h3>
 <p>Now cache a <em>slow</em> (3-second) origin response at the edge and request it twice:</p>
 ${run('c133-toiuu', 'echo "== edge cache', 3)}
-<p>The first request is a <code>MISS</code> and pays the full <strong>3.0 s</strong> origin cost; the second is a <code>HIT</code> served from the edge in <strong>~0.3 ms</strong>, never touching the origin. For a cacheable response this collapses the <code>ttfb</code> gap to almost nothing and offloads the origin. The effect is dramatic <em>because</em> the origin was slow — caching a fast response saves little, but caching a slow one is transformative.</p>
+<p>The first request is a <code>MISS</code> and pays the full <strong>3.0 s</strong> origin cost; the second is a <code>HIT</code> served from the edge in <strong>~0.3 ms</strong>, never touching the origin. That ~0.3 ms is measured right next to the edge; re-measured on 13/11/2026 across a link with ~20 ms of delay, the same HIT took 0.041 s — the cache removes the origin&#39;s 3 s, not the network round trip. For a cacheable response this collapses the <code>ttfb</code> gap to almost nothing and offloads the origin. The effect is dramatic <em>because</em> the origin was slow — caching a fast response saves little, but caching a slow one is transformative.</p>
 
 <h3>Keep-alive, HTTP/2 and a CDN</h3>
 ${kv([
@@ -95,7 +95,7 @@ ${run('c133-toiuu', 'echo "== compression', 3)}
 <h3>Cache biên — khoảng trống ttfb</h3>
 <p>Giờ cache một câu trả lời origin <em>chậm</em> (3 giây) ở biên và hỏi nó hai lần:</p>
 ${run('c133-toiuu', 'echo "== edge cache', 3)}
-<p>Yêu cầu đầu là một <code>MISS</code> và trả trọn chi phí origin <strong>3,0 giây</strong>; cái thứ hai là một <code>HIT</code> phục vụ từ biên trong <strong>~0,3 ms</strong>, không bao giờ chạm origin. Cho một câu trả lời cache-được điều này làm sụp khoảng trống <code>ttfb</code> xuống gần không và gỡ tải origin. Hiệu ứng lớn <em>vì</em> origin chậm — cache một câu trả lời nhanh tiết kiệm ít, nhưng cache một cái chậm thì biến đổi.</p>
+<p>Yêu cầu đầu là một <code>MISS</code> và trả trọn chi phí origin <strong>3,0 giây</strong>; cái thứ hai là một <code>HIT</code> phục vụ từ biên trong <strong>~0,3 ms</strong>, không bao giờ chạm origin. Con số ~0,3 ms đó đo sát cạnh biên; đo lại ngày 13/11/2026 qua một đường có độ trễ ~20 ms, cùng cú HIT mất 0,041 giây — cache gỡ đi 3 giây của origin, không gỡ được vòng đi-về của mạng. Cho một câu trả lời cache-được điều này làm sụp khoảng trống <code>ttfb</code> xuống gần không và gỡ tải origin. Hiệu ứng lớn <em>vì</em> origin chậm — cache một câu trả lời nhanh tiết kiệm ít, nhưng cache một cái chậm thì biến đổi.</p>
 
 <h3>Keep-alive, HTTP/2 và một CDN</h3>
 ${kv([

@@ -299,6 +299,22 @@ rewrite or internal redirection cycle while processing "/vong-b"</div>
 <a class="link-card" href="/courses/web-foundations/learn${REF}"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Khoá CuongThai — Web Foundations</span><span class="lc-sub">Chuỗi chuyển hướng, và mỗi chặng thừa tốn gì của một lượt nạp trang</span></span></a>
 <a class="link-card codelab" href="/code-lab/tracks/nginx${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — chặng "Nginx"</span><span class="lc-sub">Đặt một cái return sau một cái break rồi tự chứng minh rằng nó không bao giờ chạy</span></span></a>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-6-3-status-codes" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations · 6.3 — Status codes: what the server replies</span><span class="lc-sub">Status codes from the beginning: what 301, 302, 307 and 308 tell a browser.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-6-3-status-codes" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations · 6.3 — Mã trạng thái: máy chủ trả lời gì</span><span class="lc-sub">Mã trạng thái từ đầu: 301, 302, 307 và 308 nói gì với trình duyệt.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
 

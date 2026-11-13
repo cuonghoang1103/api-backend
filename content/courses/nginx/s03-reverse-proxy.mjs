@@ -255,6 +255,22 @@ nginx: configuration file rx-sai.conf test failed</div>
 <a class="link-card" href="/courses/nodejs/learn${REF}"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Khoá CuongThai — Node.js</span><span class="lc-sub">Router của Express nhìn thấy đường dẫn thế nào, và một gạch chéo lặp làm gì nó</span></span></a>
 <a class="link-card codelab" href="/code-lab/tracks/nginx${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — chặng "Nginx"</span><span class="lc-sub">Chạy cái upstream vọng lại và dựng đủ bốn dòng, rồi phá dòng B một cách cố ý</span></span></a>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-3-5-http-server" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 3.5 — An HTTP server with no framework</span><span class="lc-sub">The HTTP server on the other side of proxy_pass, written without a framework.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-3-5-http-server" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 3.5 — Server HTTP không dùng framework</span><span class="lc-sub">Máy chủ HTTP ở đầu bên kia proxy_pass, viết không dùng framework.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
 
@@ -639,6 +655,22 @@ Location: http://localhost:3000/dang-nhap</div>
 <a class="link-card" href="/courses/authentication/learn${REF}"><span class="lc-ico">🔑</span><span class="lc-body"><span class="lc-title">Khoá CuongThai — Authentication</span><span class="lc-sub">Vì sao một giới hạn tần suất khoá theo IP giả mạo được thì không phải giới hạn</span></span></a>
 <a class="link-card codelab" href="/code-lab/tracks/nginx${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — chặng "Nginx"</span><span class="lc-sub">Giả mạo X-Forwarded-For qua proxy của chính bạn, rồi nới set_real_ip_from và xem $remote_addr dời đi</span></span></a>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-3-3-qua-ranh-gioi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Observability · 3.3 — Crossing boundaries: proxy, database, queue, worker</span><span class="lc-sub">Carrying a request ID across the proxy boundary so logs on both sides line up.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-3-3-qua-ranh-gioi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Observability · 3.3 — Đi qua ranh giới: proxy, cơ sở dữ liệu, hàng đợi, worker</span><span class="lc-sub">Mang một mã request qua ranh giới proxy để log hai bên khớp nhau.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
 
@@ -965,6 +997,32 @@ goi #1 1.62s   ... HET. MOT goi duy nhat.</div>
 <a class="link-card" href="/courses/nodejs/learn${REF}"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Khoá CuongThai — Node.js</span><span class="lc-sub">Stream, áp lực ngược, và một phản hồi bị giữ tốn gì của vòng lặp sự kiện</span></span></a>
 <a class="link-card codelab" href="/code-lab/tracks/nginx${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — chặng "Nginx"</span><span class="lc-sub">Dựng lại đủ sáu dòng bằng đầu dò socket, rồi chữa cái luồng theo ba cách khác nhau</span></span></a>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-11-4-scale-adapter-backpressure" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 11.4 — More than one process: adapters, sticky sessions, backpressure</span><span class="lc-sub">Several processes, sticky sessions and backpressure — the app side of buffering.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-16-3-nen-va-duong-truyen" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 16.3 — Compression: the setting that is 490× slower for a bigger file</span><span class="lc-sub">Compression and the wire, measured from inside Node.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-11-4-scale-adapter-backpressure" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 11.4 — Nhiều hơn một tiến trình: adapter, sticky session, và áp lực ngược</span><span class="lc-sub">Nhiều tiến trình, sticky session và áp lực ngược — phía ứng dụng của chuyện bộ đệm.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-16-3-nen-va-duong-truyen" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 16.3 — Nén: mức cài đặt chậm hơn 490 lần mà lại cho file TO HƠN</span><span class="lc-sub">Nén và đường truyền, đo từ bên trong Node.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
 
@@ -1242,6 +1300,42 @@ Content-Type: text/plain</div>
 <a class="link-card" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/504" target="_blank" rel="noopener"><span class="lc-ico">🚧</span><span class="lc-body"><span class="lc-title">MDN — 502 và 504</span><span class="lc-sub">developer.mozilla.org · Mỗi cái được cho là nói gì với client</span></span></a>
 <a class="link-card" href="/courses/nodejs/learn${REF}"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Khoá CuongThai — Node.js</span><span class="lc-sub">Vì sao một phản hồi chunked bị cắt cụt trông như một thành công rỗng với mã client</span></span></a>
 <a class="link-card codelab" href="/code-lab/tracks/nginx${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — chặng "Nginx"</span><span class="lc-sub">Dựng lại cú 200-không-thân, rồi bắt nó từ mã client vốn chỉ kiểm mã trạng thái</span></span></a>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-7-1-loi-khong-phai-log" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Observability · 7.1 — An error is not a log line</span><span class="lc-sub">An error is not a log line: what a timeout should leave behind for the person debugging it.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-4-4-trang-thai" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Networking for Developers · 4.4 — Connection states, TIME_WAIT and port exhaustion</span><span class="lc-sub">TCP connection states and TIME_WAIT — what is really happening while a timeout runs.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/academy/courses/nwc204-computer-networking/learn?lessonSlug=nwc204-13-2-bat-tay-tin-cay-va-doc-may-chu-that" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · NWC204 · 13.2 — Handshake, reliability, UDP, and reading a real server (FLM session 42)</span><span class="lc-sub">NWC204 at the Academy: the handshake and reliability that every timeout is waiting on.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-7-1-loi-khong-phai-log" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Observability · 7.1 — Một lỗi không phải một dòng log</span><span class="lc-sub">Một lỗi không phải một dòng log: một lần timeout nên để lại gì cho người gỡ lỗi.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-4-4-trang-thai" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Networking for Developers · 4.4 — Trạng thái kết nối, TIME_WAIT và cạn cổng</span><span class="lc-sub">Trạng thái kết nối TCP và TIME_WAIT — điều thật sự xảy ra trong lúc chờ timeout.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/academy/courses/nwc204-computer-networking/learn?lessonSlug=nwc204-13-2-bat-tay-tin-cay-va-doc-may-chu-that" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · NWC204 · 13.2 — Bắt tay, tính tin cậy, UDP, và đọc một máy chủ thật (buổi 42 của FLM)</span><span class="lc-sub">NWC204 ở Academy: bắt tay và độ tin cậy mà mọi timeout đang chờ.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -1570,6 +1664,32 @@ connection: 'close'  upgrade: (khong co)</div>
 <a class="link-card" href="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API" target="_blank" rel="noopener"><span class="lc-ico">📖</span><span class="lc-body"><span class="lc-title">MDN — WebSocket API</span><span class="lc-sub">developer.mozilla.org · Cái bắt tay, và client làm gì khi nó hỏng</span></span></a>
 <a class="link-card" href="/courses/nodejs/learn${REF}"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Khoá CuongThai — Node.js</span><span class="lc-sub">Xử lý sự kiện upgrade, và nuôi sống hàng nghìn socket cùng lúc</span></span></a>
 <a class="link-card codelab" href="/code-lab/tracks/nginx${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — chặng "Nginx"</span><span class="lc-sub">Xem cái bắt tay trả về 200, rồi thêm từng chỉ thị một cho tới khi nó trả về 101</span></span></a>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-11-3-xac-thuc-phan-quyen-socket" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 11.3 — Authenticate once, authorize every time</span><span class="lc-sub">Authenticating a WebSocket once and authorising every event, on the Node side.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-7-1-http11" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Networking for Developers · 7.1 — HTTP/1.1 on the wire</span><span class="lc-sub">HTTP/1.1 on the wire — the Upgrade and Connection headers the proxy must pass on.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-11-3-xac-thuc-phan-quyen-socket" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 11.3 — Xác thực một lần, phân quyền mọi lần</span><span class="lc-sub">Xác thực WebSocket một lần và phân quyền mọi sự kiện, phía Node.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-7-1-http11" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Networking for Developers · 7.1 — HTTP/1.1 trên dây</span><span class="lc-sub">HTTP/1.1 trên dây — các header Upgrade và Connection mà proxy phải chuyển tiếp.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

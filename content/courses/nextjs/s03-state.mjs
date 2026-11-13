@@ -5,6 +5,9 @@
  * ba setCount(count+1) từ 0 đều cho 1 ([1,1,1]); ba setCount(c=>c+1) cộng dồn thành 3.
  */
 
+import G03_1 from './giang/nxj-03-1.mjs';
+import G03_3 from './giang/nxj-03-3.mjs';
+import G03_2 from './giang/nxj-03-2.mjs';
 export default {
   title: 'Chapter 3 — State & the re-render model|||Chương 3 — State & mô hình render lại',
   description: 'useState cho component một trí nhớ. State là một ảnh chụp cho mỗi lần render — hiểu điều này giải thích mọi bug "giá trị bị cũ". Cập nhật object và mảng mà không mutate.',
@@ -17,6 +20,7 @@ export default {
       isFreePreview: false,
       description: 'useState trả về giá trị hiện tại và một hàm để đặt lại nó. Gọi hàm đặt là cách duy nhất kích hoạt một lần render lại.',
       content: `
+${G03_1}
 <div class="ml-en">
 <div class="callout ok"><strong>Already took the React course?</strong> This chapter is a quick React refresher &mdash; the same topic is taught in depth in the <a href="/courses/react">React</a> course (Chapter 2). Skim it or skip ahead to <strong>Chapter 8</strong>, where the Next.js-specific material starts. Remember: Next.js is a <em>framework built on React</em> &mdash; every component, prop, state and hook here is still plain React.</div>
 <span class="eyebrow">Chapter 3 · Lesson 3.1</span>
@@ -51,7 +55,7 @@ function Counter() {
 <p>Calling the setter is the <em>only</em> way to trigger a re-render from a component. If the screen isn't updating, you either didn't call a setter, or you mutated the value instead of setting it (Lesson 3.3). If you assign to the variable directly (<code>count = 5</code>), nothing happens — React never finds out.</p>
 
 <div class="pitfall">
-<p><strong>Hooks have two rules, and both matter.</strong> (1) Only call hooks at the <em>top level</em> of a component — never inside an <code>if</code>, a loop, or a nested function. React tracks state by call order, so a conditional hook shifts the order and corrupts every hook after it. (2) Only call hooks from React components or other hooks, not from ordinary functions. Break either and React throws "Rendered fewer hooks than expected" or "Invalid hook call". Chapter 6 explains <em>why</em> the order matters; for now, hooks go at the top, unconditionally.</p>
+<p><strong>Hooks have two rules, and both matter.</strong> (1) Only call hooks at the <em>top level</em> of a component — never inside an <code>if</code>, a loop, or a nested function. React tracks state by call order, so a conditional hook shifts the order and corrupts every hook after it. (2) Only call hooks from React components or other hooks, not from ordinary functions. What actually happens when you break them (measured on React 19.3): a hook inside an <code>if</code> crashes once the condition flips — "Rendered more hooks than during the previous render" (or "fewer…" the other way); a hook inside an event handler throws "Invalid hook call" (production: <em>Minified React error #321</em>); but a hook inside a plain helper called during render <b>runs without any error</b> — only ESLint's <code>react-hooks/rules-of-hooks</code> catches it, and <code>next build</code> in Next.js 16 no longer runs ESLint. Chapter 6 explains <em>why</em> the order matters; for now, hooks go at the top, unconditionally.</p>
 </div>
 <h3>What happens when you call a setter</h3>
 <div class="lz-flow">
@@ -69,6 +73,126 @@ function Counter() {
   <span class="lc-ico">⏳</span>
   <span class="lc-body"><span class="lc-title">react.dev — Queueing a series of state updates</span><span class="lc-sub">Exactly why two setters increment by one, drawn out step by step.</span></span>
 </a>
+
+
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Add a counter with <code>const [count, setCount] = useState(0)</code> and a button that calls <code>setCount(count + 1)</code>.</li>
+<li>Try changing a plain variable instead of state and confirm the screen does not update — then switch back to state.</li>
+<li>Add a second independent piece of state and confirm the two do not interfere.</li>
+</ol>
+<p><strong>Done when:</strong> you can give a component memory with <code>useState</code> and know a plain variable will not re-render the UI.</p></div>
+
+<h3>🔬 Measured: useState on React 19.3.0 / Next.js 16.4.6</h3>
+<p>One page, a module-level render counter, every action clicked in a real browser under <code>next start</code> (production — no Strict Mode doubling):</p>
+<pre><code class="language-tsx">'use client';
+import { useState } from 'react';
+
+let lanVe = 0;                                 <span class="tok-comment">  // đếm số lần component Nho render (chỉ để đo)</span>
+
+export default function Nho() {
+  lanVe++;
+  let bien = 0;                                <span class="tok-comment">  // ✗ biến thường</span>
+  const [count, setCount] = useState(0);       <span class="tok-comment">  // ✓ state</span>
+  const [a, setA] = useState(0);
+  const [b, setB] = useState(0);
+  const [n, setN] = useState(0);
+
+  return (
+    &lt;div className="space-y-2 p-6 font-sans text-lg"&gt;
+      &lt;p id="ve"&gt;Nho đã render: {lanVe} lần&lt;/p&gt;
+      &lt;button id="bien" className="block rounded border px-3" onClick={() =&gt; { bien++; console.log('bien =', bien); }}&gt;Biến thường: {bien}&lt;/button&gt;
+      &lt;button id="state" className="block rounded border px-3" onClick={() =&gt; setCount(count + 1)}&gt;useState: {count}&lt;/button&gt;
+      &lt;button id="hai" className="block rounded border px-3" onClick={() =&gt; { setA(a + 1); setA(a + 1); }}&gt;setA(a + 1) ×2: {a}&lt;/button&gt;
+      &lt;button id="ham" className="block rounded border px-3" onClick={() =&gt; { setB((x) =&gt; x + 1); setB((x) =&gt; x + 1); }}&gt;setB(x =&amp;gt; x + 1) ×2: {b}&lt;/button&gt;
+      &lt;button id="bacai" className="block rounded border px-3" onClick={() =&gt; { setCount((x) =&gt; x + 1); setA((x) =&gt; x + 1); setB((x) =&gt; x + 1); }}&gt;3 setter một lần bấm&lt;/button&gt;
+      &lt;button id="giong" className="block rounded border px-3" onClick={() =&gt; setN(0)}&gt;setN(0) khi n đang là {n}&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}</code></pre><div class="out">on load:                 Nho đã render: 1 lần
+plain variable × 3:      Nho đã render: 1 lần · Biến thường: 0   console: bien = 1, bien = 2, bien = 3
+useState × 3:            Nho đã render: 4 lần · useState: 3
+setA(a + 1) ×2, 1 click: Nho đã render: 5 lần · setA(a + 1) ×2: 1
+setB(x =&gt; x + 1) ×2:     Nho đã render: 6 lần · setB(x =&gt; x + 1) ×2: 2
+3 setters, 1 click:      Nho đã render: 7 lần · useState: 4 · setA(a + 1) ×2: 2 · setB(x =&gt; x + 1) ×2: 3
+setN(0) while n = 0 ×2:  Nho đã render: 7 lần</div>
+<p>Read it line by line: the plain variable changed (console 1, 2, 3) but nothing re-rendered; each setter call re-rendered once; two <code>setA(a + 1)</code> added one, the function form added two; three setters in one click re-rendered once (batching); setting the same value re-rendered zero times (<code>Object.is</code> bail-out).</p>
+<p>Breaking the rules of hooks — ESLint first (and note that the build stays green):</p>
+<pre><code class="language-tsx">'use client';
+import { useState } from 'react';
+
+function dungDem() {                           <span class="tok-comment">  // hàm THƯỜNG (không bắt đầu bằng use) gọi hook</span>
+  return useState(0);
+}
+
+export default function Giup() {
+  const [k, setK] = dungDem();
+  const [loi, setLoi] = useState('');
+  return (
+    &lt;div className="space-y-2 p-6 font-sans text-lg"&gt;
+      &lt;button id="k" className="block rounded border px-3" onClick={() =&gt; setK(k + 1)}&gt;hook trong hàm thường, gọi lúc render: {k}&lt;/button&gt;
+      &lt;button id="sk" className="block rounded border px-3" onClick={() =&gt; {
+        try { useState(0); } catch (e) { setLoi(String((e as Error).message).split('\\n')[0]); }
+      }}&gt;gọi useState trong hàm xử lý sự kiện&lt;/button&gt;
+      &lt;p id="loi" className="text-red-600"&gt;{loi}&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}</code></pre><pre><code class="language-bash">$ npx eslint src/app/giup/page.tsx 2&gt;&amp;1 | sed 's#.*/my-app/##'</code></pre><div class="out">
+src/app/giup/page.tsx
+   5:10  error  React Hook "useState" is called in function "dungDem" that is neither a React function component nor a custom React Hook function. React component names must start with an uppercase letter. React Hook names must start with the word "use"  react-hooks/rules-of-hooks
+  15:15  error  React Hook "useState" cannot be called inside a callback. React Hooks must be called in a React function component or a custom React Hook function                                                                                             react-hooks/rules-of-hooks
+
+✖ 2 problems (2 errors, 0 warnings)</div><pre><code class="language-bash">$ npm run build 2&gt;&amp;1 | grep -E 'Compiled|Failed|Error|nho|giup' | head -8</code></pre><div class="out">✓ Compiled successfully in 193ms
+├ ○ /giup
+├ ○ /nho</div>
+<div class="out">in the browser: hook trong hàm thường, gọi lúc render: 2
+click handler: Minified React error #321; visit https://react.dev/errors/321 for the full message or use the non-minified dev environment for full errors and additional helpful warnings.</div>
+<pre><code class="language-tsx">'use client';
+import { useState } from 'react';
+
+function Hop({ mo }: { mo: boolean }) {
+  const [ten] = useState('An');
+  if (mo) {
+    const [tuoi] = useState(20);                <span class="tok-comment">  // ✗ hook trong if</span>
+    return &lt;p&gt;{ten} · {tuoi}&lt;/p&gt;;
+  }
+  return &lt;p&gt;{ten}&lt;/p&gt;;
+}
+
+export default function DieuKien() {
+  const [mo, setMo] = useState(false);
+  return (
+    &lt;div className="space-y-2 p-6 font-sans text-lg"&gt;
+      &lt;button id="mo" className="rounded border px-3" onClick={() =&gt; setMo(!mo)}&gt;mo = {String(mo)}&lt;/button&gt;
+      &lt;Hop mo={mo} /&gt;
+    &lt;/div&gt;
+  );
+}</code></pre><pre><code class="language-bash">$ npx eslint src/app/dieu-kien/page.tsx 2&gt;&amp;1 | sed 's#.*/my-app/##'</code></pre><div class="out">
+src/app/dieu-kien/page.tsx
+  7:20  error  React Hook "useState" is called conditionally. React Hooks must be called in the exact same order in every component render. Did you accidentally call a React Hook after an early return?  react-hooks/rules-of-hooks
+
+✖ 1 problem (1 error, 0 warnings)</div>
+<div class="out">next dev, after flipping mo: Rendered more hooks than during the previous render.</div>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-bash">npm run build &amp;&amp; npm start  <span class="tok-comment">  # open /nho with DevTools → Console, click each button</span>
+npx eslint src/app/giup/page.tsx src/app/dieu-kien/page.tsx
+npm run dev                 <span class="tok-comment">  # /dieu-kien: click "mo" — read both errors</span></code></pre>
+<h3>🔗 Go deeper in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-2-1-use-state" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 2.1 — useState and re-rendering</span><span class="lc-sub">Snapshots, updater functions and batching — deeper</span></span></a>
+<a class="link-card lien-ket-cheo" href="/academy/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-5-2-state-class-vs-function" target="_blank" rel="noopener"><span class="lc-ico">🏫</span><span class="lc-body"><span class="lc-title">Academy · FER202 · 5.2 — State: class vs function</span><span class="lc-sub">The university-course view</span></span></a>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">useState</span><span class="v">The hook that gives a component a value that survives re-renders.</span></div>
+  <div class="kv"><span class="k">State variable</span><span class="v">The current value returned by <code>useState</code>.</span></div>
+  <div class="kv"><span class="k">Setter</span><span class="v">The function that updates state and schedules a re-render.</span></div>
+  <div class="kv"><span class="k">Initial value</span><span class="v">The argument to <code>useState</code>, used only on first render.</span></div>
+  <div class="kv"><span class="k">Re-render</span><span class="v">React re-runs the component when state changes.</span></div>
+  <div class="kv"><span class="k">Why not a plain var</span><span class="v">A normal variable resets each render and does not trigger an update.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li><code>useState</code> gives a component memory: a value that survives re-renders plus a setter to change it.</li><li>Calling the setter updates the value and schedules a re-render.</li><li>A plain variable will not work — it resets every render and never triggers an update.</li><li>Each <code>useState</code> call is independent; a component can have many.</li></ul>
 
 </div>
 
@@ -106,7 +230,7 @@ function Counter() {
 <p>Gọi setter là cách <em>duy nhất</em> kích hoạt render lại từ một component. Nếu màn hình không cập nhật, hoặc bạn chưa gọi một setter, hoặc bạn đã mutate giá trị thay vì đặt lại nó (Bài 3.3). Nếu bạn gán thẳng vào biến (<code>count = 5</code>), chẳng có gì xảy ra — React không bao giờ biết.</p>
 
 <div class="pitfall">
-<p><strong>Hook có hai luật, và cả hai đều quan trọng.</strong> (1) Chỉ gọi hook ở <em>cấp cao nhất</em> của một component — không bao giờ trong <code>if</code>, vòng lặp, hay một hàm lồng. React theo dõi state theo thứ tự gọi, nên một hook có điều kiện làm lệch thứ tự và hỏng mọi hook phía sau. (2) Chỉ gọi hook từ component React hoặc hook khác, không từ hàm thường. Vi phạm một trong hai là React ném "Rendered fewer hooks than expected" hoặc "Invalid hook call". Chương 6 giải thích <em>vì sao</em> thứ tự quan trọng; giờ thì, hook đặt trên cùng, vô điều kiện.</p>
+<p><strong>Hook có hai luật, và cả hai đều quan trọng.</strong> (1) Chỉ gọi hook ở <em>cấp cao nhất</em> của một component — không bao giờ trong <code>if</code>, vòng lặp, hay một hàm lồng. React theo dõi state theo thứ tự gọi, nên một hook có điều kiện làm lệch thứ tự và hỏng mọi hook phía sau. (2) Chỉ gọi hook từ component React hoặc hook khác, không từ hàm thường. Phá luật thì thật sự ra sao (đo trên React 19.3): hook trong <code>if</code> sập khi điều kiện đổi — "Rendered more hooks than during the previous render" (hoặc "fewer…" theo chiều ngược lại); hook trong hàm xử lý sự kiện ném "Invalid hook call" (production: <em>Minified React error #321</em>); còn hook trong một hàm thường được gọi lúc render thì <b>chạy mà không báo lỗi gì</b> — chỉ ESLint (<code>react-hooks/rules-of-hooks</code>) bắt được, và <code>next build</code> của Next.js 16 không còn chạy ESLint. Chương 6 giải thích <em>vì sao</em> thứ tự quan trọng; giờ thì, hook đặt trên cùng, vô điều kiện.</p>
 </div>
 <h3>Chuyện gì xảy ra khi bạn gọi setter</h3>
 <div class="lz-flow">
@@ -125,6 +249,126 @@ function Counter() {
   <span class="lc-body"><span class="lc-title">react.dev — Xếp hàng một chuỗi cập nhật state</span><span class="lc-sub">Chính xác vì sao hai setter chỉ tăng một, vẽ ra từng bước.</span></span>
 </a>
 
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Thêm một counter với <code>const [count, setCount] = useState(0)</code> và một nút gọi <code>setCount(count + 1)</code>.</li>
+<li>Thử đổi một biến thường thay vì state và xác nhận màn hình không cập nhật — rồi quay lại dùng state.</li>
+<li>Thêm một mẩu state độc lập thứ hai và xác nhận hai cái không ảnh hưởng nhau.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn cho component một trí nhớ bằng <code>useState</code> và biết biến thường sẽ không khiến UI render lại.</p></div>
+
+<h3>🔬 Đo thật: useState trên React 19.3.0 / Next.js 16.4.6</h3>
+<p>Một trang, một bộ đếm render ở cấp module, mọi thao tác bấm trên trình duyệt thật dưới <code>next start</code> (production — không bị Strict Mode nhân đôi):</p>
+<pre><code class="language-tsx">'use client';
+import { useState } from 'react';
+
+let lanVe = 0;                                 <span class="tok-comment">  // đếm số lần component Nho render (chỉ để đo)</span>
+
+export default function Nho() {
+  lanVe++;
+  let bien = 0;                                <span class="tok-comment">  // ✗ biến thường</span>
+  const [count, setCount] = useState(0);       <span class="tok-comment">  // ✓ state</span>
+  const [a, setA] = useState(0);
+  const [b, setB] = useState(0);
+  const [n, setN] = useState(0);
+
+  return (
+    &lt;div className="space-y-2 p-6 font-sans text-lg"&gt;
+      &lt;p id="ve"&gt;Nho đã render: {lanVe} lần&lt;/p&gt;
+      &lt;button id="bien" className="block rounded border px-3" onClick={() =&gt; { bien++; console.log('bien =', bien); }}&gt;Biến thường: {bien}&lt;/button&gt;
+      &lt;button id="state" className="block rounded border px-3" onClick={() =&gt; setCount(count + 1)}&gt;useState: {count}&lt;/button&gt;
+      &lt;button id="hai" className="block rounded border px-3" onClick={() =&gt; { setA(a + 1); setA(a + 1); }}&gt;setA(a + 1) ×2: {a}&lt;/button&gt;
+      &lt;button id="ham" className="block rounded border px-3" onClick={() =&gt; { setB((x) =&gt; x + 1); setB((x) =&gt; x + 1); }}&gt;setB(x =&amp;gt; x + 1) ×2: {b}&lt;/button&gt;
+      &lt;button id="bacai" className="block rounded border px-3" onClick={() =&gt; { setCount((x) =&gt; x + 1); setA((x) =&gt; x + 1); setB((x) =&gt; x + 1); }}&gt;3 setter một lần bấm&lt;/button&gt;
+      &lt;button id="giong" className="block rounded border px-3" onClick={() =&gt; setN(0)}&gt;setN(0) khi n đang là {n}&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}</code></pre><div class="out">lúc tải:                  Nho đã render: 1 lần
+biến thường × 3:          Nho đã render: 1 lần · Biến thường: 0   console: bien = 1, bien = 2, bien = 3
+useState × 3:             Nho đã render: 4 lần · useState: 3
+setA(a + 1) ×2, 1 click: Nho đã render: 5 lần · setA(a + 1) ×2: 1
+setB(x =&gt; x + 1) ×2:     Nho đã render: 6 lần · setB(x =&gt; x + 1) ×2: 2
+3 setter, 1 lần bấm:      Nho đã render: 7 lần · useState: 4 · setA(a + 1) ×2: 2 · setB(x =&gt; x + 1) ×2: 3
+setN(0) khi n = 0, ×2:    Nho đã render: 7 lần</div>
+<p>Đọc từng dòng: biến thường có đổi (console 1, 2, 3) nhưng không render lại; mỗi lần gọi setter render lại một lần; hai lần <code>setA(a + 1)</code> chỉ tăng một, dạng hàm tăng hai; ba setter trong một lần bấm render một lần (gộp lô); đặt lại đúng giá trị cũ render không lần nào (bỏ qua theo <code>Object.is</code>).</p>
+<p>Phá luật hook — ESLint trước (và để ý: build vẫn xanh):</p>
+<pre><code class="language-tsx">'use client';
+import { useState } from 'react';
+
+function dungDem() {                           <span class="tok-comment">  // hàm THƯỜNG (không bắt đầu bằng use) gọi hook</span>
+  return useState(0);
+}
+
+export default function Giup() {
+  const [k, setK] = dungDem();
+  const [loi, setLoi] = useState('');
+  return (
+    &lt;div className="space-y-2 p-6 font-sans text-lg"&gt;
+      &lt;button id="k" className="block rounded border px-3" onClick={() =&gt; setK(k + 1)}&gt;hook trong hàm thường, gọi lúc render: {k}&lt;/button&gt;
+      &lt;button id="sk" className="block rounded border px-3" onClick={() =&gt; {
+        try { useState(0); } catch (e) { setLoi(String((e as Error).message).split('\\n')[0]); }
+      }}&gt;gọi useState trong hàm xử lý sự kiện&lt;/button&gt;
+      &lt;p id="loi" className="text-red-600"&gt;{loi}&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}</code></pre><pre><code class="language-bash">$ npx eslint src/app/giup/page.tsx 2&gt;&amp;1 | sed 's#.*/my-app/##'</code></pre><div class="out">
+src/app/giup/page.tsx
+   5:10  error  React Hook "useState" is called in function "dungDem" that is neither a React function component nor a custom React Hook function. React component names must start with an uppercase letter. React Hook names must start with the word "use"  react-hooks/rules-of-hooks
+  15:15  error  React Hook "useState" cannot be called inside a callback. React Hooks must be called in a React function component or a custom React Hook function                                                                                             react-hooks/rules-of-hooks
+
+✖ 2 problems (2 errors, 0 warnings)</div><pre><code class="language-bash">$ npm run build 2&gt;&amp;1 | grep -E 'Compiled|Failed|Error|nho|giup' | head -8</code></pre><div class="out">✓ Compiled successfully in 193ms
+├ ○ /giup
+├ ○ /nho</div>
+<div class="out">trên trình duyệt: hook trong hàm thường, gọi lúc render: 2
+hàm xử lý sự kiện: Minified React error #321; visit https://react.dev/errors/321 for the full message or use the non-minified dev environment for full errors and additional helpful warnings.</div>
+<pre><code class="language-tsx">'use client';
+import { useState } from 'react';
+
+function Hop({ mo }: { mo: boolean }) {
+  const [ten] = useState('An');
+  if (mo) {
+    const [tuoi] = useState(20);                <span class="tok-comment">  // ✗ hook trong if</span>
+    return &lt;p&gt;{ten} · {tuoi}&lt;/p&gt;;
+  }
+  return &lt;p&gt;{ten}&lt;/p&gt;;
+}
+
+export default function DieuKien() {
+  const [mo, setMo] = useState(false);
+  return (
+    &lt;div className="space-y-2 p-6 font-sans text-lg"&gt;
+      &lt;button id="mo" className="rounded border px-3" onClick={() =&gt; setMo(!mo)}&gt;mo = {String(mo)}&lt;/button&gt;
+      &lt;Hop mo={mo} /&gt;
+    &lt;/div&gt;
+  );
+}</code></pre><pre><code class="language-bash">$ npx eslint src/app/dieu-kien/page.tsx 2&gt;&amp;1 | sed 's#.*/my-app/##'</code></pre><div class="out">
+src/app/dieu-kien/page.tsx
+  7:20  error  React Hook "useState" is called conditionally. React Hooks must be called in the exact same order in every component render. Did you accidentally call a React Hook after an early return?  react-hooks/rules-of-hooks
+
+✖ 1 problem (1 error, 0 warnings)</div>
+<div class="out">next dev, sau khi bật mo: Rendered more hooks than during the previous render.</div>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-bash">npm run build &amp;&amp; npm start  <span class="tok-comment">  # mở /nho kèm DevTools → Console, bấm từng nút</span>
+npx eslint src/app/giup/page.tsx src/app/dieu-kien/page.tsx
+npm run dev                 <span class="tok-comment">  # /dieu-kien: bấm "mo" — đọc cả hai lỗi</span></code></pre>
+<h3>🔗 Học sâu hơn ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-2-1-use-state" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 2.1 — useState và render lại</span><span class="lc-sub">Ảnh chụp state, cập nhật theo hàm và batching — sâu hơn</span></span></a>
+<a class="link-card lien-ket-cheo" href="/academy/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-5-2-state-class-vs-function" target="_blank" rel="noopener"><span class="lc-ico">🏫</span><span class="lc-body"><span class="lc-title">Academy · FER202 · 5.2 — State: class vs function</span><span class="lc-sub">Góc nhìn môn học ở trường</span></span></a>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">useState</span><span class="v">Hook cho component một giá trị sống sót qua các lần render lại.</span></div>
+  <div class="kv"><span class="k">Biến state</span><span class="v">Giá trị hiện tại mà <code>useState</code> trả về.</span></div>
+  <div class="kv"><span class="k">Setter</span><span class="v">Hàm cập nhật state và lên lịch render lại.</span></div>
+  <div class="kv"><span class="k">Giá trị khởi tạo</span><span class="v">Tham số của <code>useState</code>, chỉ dùng ở lần render đầu.</span></div>
+  <div class="kv"><span class="k">Render lại</span><span class="v">React chạy lại component khi state đổi.</span></div>
+  <div class="kv"><span class="k">Vì sao không dùng biến thường</span><span class="v">Biến thường reset mỗi lần render và không kích hoạt cập nhật.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li><code>useState</code> cho component một trí nhớ: một giá trị sống qua render lại cùng một setter để đổi nó.</li><li>Gọi setter sẽ cập nhật giá trị và lên lịch render lại.</li><li>Biến thường không dùng được — nó reset mỗi lần render và không bao giờ kích hoạt cập nhật.</li><li>Mỗi lời gọi <code>useState</code> là độc lập; một component có thể có nhiều cái.</li></ul>
+
 </div>
 `,
     },
@@ -137,6 +381,7 @@ function Counter() {
       isFreePreview: false,
       description: 'Trong một lần render, giá trị state là cố định. Ba setCount(count+1) chỉ tăng 1. Dạng updater setCount(c=>c+1) cộng dồn.',
       content: `
+${G03_2}
 <div class="ml-en">
 <span class="eyebrow">Chapter 3 · Lesson 3.2</span>
 <h2>The one idea that explains every "stale value" bug</h2>
@@ -163,7 +408,7 @@ setCount(count + 1);   <span class="tok-comment">// schedules 1</span></code></p
 <p>All three calls read the same snapshot, <code>count === 0</code>. Calling <code>setCount</code> does <em>not</em> change the <code>count</code> variable in the running function — that variable belongs to this render and stays <code>0</code> until the next render produces a new one. React batches the three updates and re-renders once, with <code>count = 1</code>.</p>
 
 <h3>Why React does this: batching</h3>
-<p>React <strong>batches</strong> all state updates triggered by the same event and re-renders once at the end, not after each <code>setState</code>. This is why a handler that sets five pieces of state causes one re-render, not five — a big performance win, and the reason <code>count</code> can't change mid-handler. Each render gets its own frozen set of state values, props, and event handlers; that consistency is what makes React predictable.</p>
+<p>React <strong>batches</strong> state updates — those triggered by the same event, and since React 18 also those inside timeouts, promises and native handlers (measured below: two setters in a <code>setTimeout</code>, one render) — and re-renders once at the end, not after each <code>setState</code>. This is why a handler that sets five pieces of state causes one re-render, not five — a big performance win, and the reason <code>count</code> can't change mid-handler. Each render gets its own frozen set of state values, props, and event handlers; that consistency is what makes React predictable.</p>
 
 <h3>When you need the latest value: the updater function</h3>
 <p>When the next state depends on the previous state, don't read the snapshot — pass a <em>function</em> to the setter. React calls it with the latest pending value and uses the return as the next state:</p>
@@ -195,6 +440,106 @@ setCount(c =&gt; c + 1);</code></pre>
   <span class="lc-body"><span class="lc-title">react.dev — Referencing values with refs</span><span class="lc-sub">When you genuinely need a value that survives renders without causing one.</span></span>
 </a>
 
+
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Call <code>setCount(count + 1)</code> three times in one handler and observe it only increases by one; explain why using the snapshot idea.</li>
+<li>Fix it with the updater form <code>setCount(c =&gt; c + 1)</code> and confirm it now adds three.</li>
+<li>Log <code>count</code> right after calling the setter and note it still shows the old value in this render.</li>
+</ol>
+<p><strong>Done when:</strong> you can explain why state is a snapshot and when to use the updater function.</p></div>
+
+<h3>🔬 Measured: the snapshot on React 19.3.0 / Next.js 16.4.6</h3>
+<p>Every claim above on one page, clicked in a real browser under <code>next start</code>:</p>
+<pre><code class="language-tsx">'use client';
+import { useState } from 'react';
+
+let lanVe = 0;
+
+export default function AnhChup() {
+  lanVe++;
+  const [count, setCount] = useState(0);
+  const [c2, setC2] = useState(0);
+  const [nhat, setNhat] = useState&lt;string[]&gt;([]);
+  const ghi = (s: string) =&gt; setNhat((cu) =&gt; [...cu, s]);
+
+  return (
+    &lt;div className="space-y-2 p-6 font-sans text-lg"&gt;
+      &lt;p id="ve"&gt;AnhChup đã render: {lanVe} lần&lt;/p&gt;
+      &lt;button id="ba" className="block rounded border px-3" onClick={() =&gt; {
+        setCount(count + 1);
+        setCount(count + 1);
+        setCount(count + 1);
+      }}&gt;setCount(count + 1) ×3 → count = {count}&lt;/button&gt;
+      &lt;button id="ham" className="block rounded border px-3" onClick={() =&gt; {
+        setC2((c) =&gt; c + 1);
+        setC2((c) =&gt; c + 1);
+        setC2((c) =&gt; c + 1);
+      }}&gt;setC2(c =&amp;gt; c + 1) ×3 → c2 = {c2}&lt;/button&gt;
+      &lt;button id="doc" className="block rounded border px-3" onClick={() =&gt; {
+        setCount(count + 10);
+        ghi(&#96;ngay sau setCount(count + 10): count = \${count}&#96;);
+      }}&gt;đọc ngay sau khi đặt&lt;/button&gt;
+      &lt;button id="hen" className="block rounded border px-3" onClick={() =&gt; {
+        setTimeout(() =&gt; ghi(&#96;setTimeout 2 s bắt được count = \${count}&#96;), 2000);
+      }}&gt;hẹn 2 giây rồi đọc count&lt;/button&gt;
+      &lt;button id="lo" className="block rounded border px-3" onClick={() =&gt; {
+        setTimeout(() =&gt; { setCount((c) =&gt; c + 1); setC2((c) =&gt; c + 1); }, 0);
+      }}&gt;2 setter trong setTimeout&lt;/button&gt;
+      &lt;ol id="nhat" className="list-decimal pl-6 text-base"&gt;{nhat.map((s, i) =&gt; &lt;li key={i}&gt;{s}&lt;/li&gt;)}&lt;/ol&gt;
+    &lt;/div&gt;
+  );
+}</code></pre><div class="out">×3 setCount(count + 1):   AnhChup đã render: 2 lần · setCount(count + 1) ×3 → count = 1
+×3 setC2(c =&gt; c + 1):     AnhChup đã render: 3 lần · setC2(c =&gt; c + 1) ×3 → c2 = 3
+read right after set:     setCount(count + 1) ×3 → count = 11 · ngay sau setCount(count + 10): count = 1
+setTimeout, 2 more clicks: setCount(count + 1) ×3 → count = 13 · ngay sau setCount(count + 10): count = 1 · setTimeout 2 s bắt được count = 11
+2 setters in setTimeout:   AnhChup đã render: 7 lần → AnhChup đã render: 8 lần</div>
+<p>The stale interval, measured after 3 seconds — and ESLint already points at the fix:</p>
+<pre><code class="language-tsx">'use client';
+import { useEffect, useState } from 'react';
+
+export default function DongHo() {
+  const [cu, setCu] = useState(0);
+  const [moi, setMoi] = useState(0);
+
+  useEffect(() =&gt; {
+    const id = setInterval(() =&gt; {
+      setCu(cu + 1);          <span class="tok-comment">  // ✗ đọc ảnh chụp của lần render đầu: cu = 0</span>
+      setMoi((m) =&gt; m + 1);   <span class="tok-comment">  // ✓ dạng hàm</span>
+    }, 500);
+    return () =&gt; clearInterval(id);
+  }, []);
+
+  return (
+    &lt;div className="space-y-2 p-6 font-sans text-xl"&gt;
+      &lt;p id="cu"&gt;setCu(cu + 1) mỗi 0,5 s: {cu}&lt;/p&gt;
+      &lt;p id="moi"&gt;setMoi(m =&amp;gt; m + 1) mỗi 0,5 s: {moi}&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}</code></pre><div class="out">setCu(cu + 1) mỗi 0,5 s: 1
+setMoi(m =&gt; m + 1) mỗi 0,5 s: 6</div>
+<pre><code class="language-bash">$ npx eslint src/app/dong-ho/page.tsx 2&gt;&amp;1 | sed 's#.*/my-app/##'</code></pre><div class="out">
+src/app/dong-ho/page.tsx
+  14:6  warning  React Hook useEffect has a missing dependency: 'cu'. Either include it or remove the dependency array. You can also do a functional update 'setCu(c =&gt; ...)' if you only need 'cu' in the 'setCu' call  react-hooks/exhaustive-deps
+
+✖ 1 problem (0 errors, 1 warning)</div>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-bash">npm run build &amp;&amp; npm start  <span class="tok-comment">  # open /anh-chup, click each button; /dong-ho, wait 3 s</span>
+npx eslint src/app/dong-ho/page.tsx</code></pre>
+<h3>🔗 Go deeper in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-2-1-use-state" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 2.1 — useState and re-rendering</span><span class="lc-sub">Snapshots, updater functions and batching — deeper</span></span></a>
+<a class="link-card lien-ket-cheo" href="/academy/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-5-2-state-class-vs-function" target="_blank" rel="noopener"><span class="lc-ico">🏫</span><span class="lc-body"><span class="lc-title">Academy · FER202 · 5.2 — State: class vs function</span><span class="lc-sub">The university-course view</span></span></a>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Snapshot</span><span class="v">State is fixed for the duration of one render — it does not change mid-function.</span></div>
+  <div class="kv"><span class="k">Stale value</span><span class="v">Reading state after a setter still gives the old value this render.</span></div>
+  <div class="kv"><span class="k">Updater function</span><span class="v"><code>setX(prev =&gt; next)</code> — computes from the latest value, not the snapshot.</span></div>
+  <div class="kv"><span class="k">Batching</span><span class="v">React applies multiple setState calls together, then re-renders once.</span></div>
+  <div class="kv"><span class="k">Re-render schedule</span><span class="v">Setters queue an update; the new value appears in the next render.</span></div>
+  <div class="kv"><span class="k">Closure capture</span><span class="v">Handlers close over the state value from the render they were created in.</span></div>
+</div>
+
 </div>
 
 <div class="ml-vi">
@@ -223,7 +568,7 @@ setCount(count + 1);   <span class="tok-comment">// lên lịch 1</span></code><
 <p>Cả ba lời gọi đọc cùng một ảnh chụp, <code>count === 0</code>. Gọi <code>setCount</code> <em>không</em> làm đổi biến <code>count</code> trong hàm đang chạy — biến đó thuộc về lần render này và vẫn là <code>0</code> cho tới khi lần render kế tạo ra một cái mới. React gộp ba cập nhật và render lại một lần, với <code>count = 1</code>.</p>
 
 <h3>Vì sao React làm vậy: gộp lô (batching)</h3>
-<p>React <strong>gộp lô</strong> mọi cập nhật state do cùng một sự kiện kích hoạt và render lại một lần ở cuối, không phải sau mỗi <code>setState</code>. Vì thế một handler đặt năm mẩu state chỉ gây một lần render lại, không phải năm — một lợi ích hiệu năng lớn, và là lý do <code>count</code> không thể đổi giữa handler. Mỗi lần render có bộ giá trị state, props và handler đóng băng của riêng nó; chính sự nhất quán đó làm React dự đoán được.</p>
+<p>React <strong>gộp lô</strong> các cập nhật state — do cùng một sự kiện kích hoạt, và từ React 18 cả trong timeout, promise, sự kiện gốc của trình duyệt (đo bên dưới: hai setter trong <code>setTimeout</code>, một lần render) — rồi render lại một lần ở cuối, không phải sau mỗi <code>setState</code>. Vì thế một handler đặt năm mẩu state chỉ gây một lần render lại, không phải năm — một lợi ích hiệu năng lớn, và là lý do <code>count</code> không thể đổi giữa handler. Mỗi lần render có bộ giá trị state, props và handler đóng băng của riêng nó; chính sự nhất quán đó làm React dự đoán được.</p>
 
 <h3>Khi bạn cần giá trị mới nhất: hàm updater</h3>
 <p>Khi state kế phụ thuộc state trước, đừng đọc ảnh chụp — hãy truyền một <em>hàm</em> vào setter. React gọi nó với giá trị đang chờ mới nhất và dùng kết quả trả về làm state kế:</p>
@@ -255,6 +600,106 @@ setCount(c =&gt; c + 1);</code></pre>
   <span class="lc-body"><span class="lc-title">react.dev — Tham chiếu giá trị bằng ref</span><span class="lc-sub">Khi nào bạn thật sự cần một giá trị sống qua các lần render mà không gây ra render.</span></span>
 </a>
 
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Gọi <code>setCount(count + 1)</code> ba lần trong một handler và quan sát nó chỉ tăng một; giải thích bằng ý tưởng ảnh chụp.</li>
+<li>Sửa bằng dạng updater <code>setCount(c =&gt; c + 1)</code> và xác nhận giờ nó cộng ba.</li>
+<li>Log <code>count</code> ngay sau khi gọi setter và để ý nó vẫn là giá trị cũ trong lần render này.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn giải thích được vì sao state là ảnh chụp và khi nào dùng hàm updater.</p></div>
+
+<h3>🔬 Đo thật: ảnh chụp trên React 19.3.0 / Next.js 16.4.6</h3>
+<p>Mọi khẳng định ở trên trên một trang, bấm trên trình duyệt thật dưới <code>next start</code>:</p>
+<pre><code class="language-tsx">'use client';
+import { useState } from 'react';
+
+let lanVe = 0;
+
+export default function AnhChup() {
+  lanVe++;
+  const [count, setCount] = useState(0);
+  const [c2, setC2] = useState(0);
+  const [nhat, setNhat] = useState&lt;string[]&gt;([]);
+  const ghi = (s: string) =&gt; setNhat((cu) =&gt; [...cu, s]);
+
+  return (
+    &lt;div className="space-y-2 p-6 font-sans text-lg"&gt;
+      &lt;p id="ve"&gt;AnhChup đã render: {lanVe} lần&lt;/p&gt;
+      &lt;button id="ba" className="block rounded border px-3" onClick={() =&gt; {
+        setCount(count + 1);
+        setCount(count + 1);
+        setCount(count + 1);
+      }}&gt;setCount(count + 1) ×3 → count = {count}&lt;/button&gt;
+      &lt;button id="ham" className="block rounded border px-3" onClick={() =&gt; {
+        setC2((c) =&gt; c + 1);
+        setC2((c) =&gt; c + 1);
+        setC2((c) =&gt; c + 1);
+      }}&gt;setC2(c =&amp;gt; c + 1) ×3 → c2 = {c2}&lt;/button&gt;
+      &lt;button id="doc" className="block rounded border px-3" onClick={() =&gt; {
+        setCount(count + 10);
+        ghi(&#96;ngay sau setCount(count + 10): count = \${count}&#96;);
+      }}&gt;đọc ngay sau khi đặt&lt;/button&gt;
+      &lt;button id="hen" className="block rounded border px-3" onClick={() =&gt; {
+        setTimeout(() =&gt; ghi(&#96;setTimeout 2 s bắt được count = \${count}&#96;), 2000);
+      }}&gt;hẹn 2 giây rồi đọc count&lt;/button&gt;
+      &lt;button id="lo" className="block rounded border px-3" onClick={() =&gt; {
+        setTimeout(() =&gt; { setCount((c) =&gt; c + 1); setC2((c) =&gt; c + 1); }, 0);
+      }}&gt;2 setter trong setTimeout&lt;/button&gt;
+      &lt;ol id="nhat" className="list-decimal pl-6 text-base"&gt;{nhat.map((s, i) =&gt; &lt;li key={i}&gt;{s}&lt;/li&gt;)}&lt;/ol&gt;
+    &lt;/div&gt;
+  );
+}</code></pre><div class="out">×3 setCount(count + 1):   AnhChup đã render: 2 lần · setCount(count + 1) ×3 → count = 1
+×3 setC2(c =&gt; c + 1):     AnhChup đã render: 3 lần · setC2(c =&gt; c + 1) ×3 → c2 = 3
+đọc ngay sau khi đặt:     setCount(count + 1) ×3 → count = 11 · ngay sau setCount(count + 10): count = 1
+setTimeout, bấm thêm 2:    setCount(count + 1) ×3 → count = 13 · ngay sau setCount(count + 10): count = 1 · setTimeout 2 s bắt được count = 11
+2 setter trong setTimeout: AnhChup đã render: 7 lần → AnhChup đã render: 8 lần</div>
+<p>Interval bị cũ, đo sau 3 giây — và ESLint đã chỉ sẵn cách sửa:</p>
+<pre><code class="language-tsx">'use client';
+import { useEffect, useState } from 'react';
+
+export default function DongHo() {
+  const [cu, setCu] = useState(0);
+  const [moi, setMoi] = useState(0);
+
+  useEffect(() =&gt; {
+    const id = setInterval(() =&gt; {
+      setCu(cu + 1);          <span class="tok-comment">  // ✗ đọc ảnh chụp của lần render đầu: cu = 0</span>
+      setMoi((m) =&gt; m + 1);   <span class="tok-comment">  // ✓ dạng hàm</span>
+    }, 500);
+    return () =&gt; clearInterval(id);
+  }, []);
+
+  return (
+    &lt;div className="space-y-2 p-6 font-sans text-xl"&gt;
+      &lt;p id="cu"&gt;setCu(cu + 1) mỗi 0,5 s: {cu}&lt;/p&gt;
+      &lt;p id="moi"&gt;setMoi(m =&amp;gt; m + 1) mỗi 0,5 s: {moi}&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}</code></pre><div class="out">setCu(cu + 1) mỗi 0,5 s: 1
+setMoi(m =&gt; m + 1) mỗi 0,5 s: 6</div>
+<pre><code class="language-bash">$ npx eslint src/app/dong-ho/page.tsx 2&gt;&amp;1 | sed 's#.*/my-app/##'</code></pre><div class="out">
+src/app/dong-ho/page.tsx
+  14:6  warning  React Hook useEffect has a missing dependency: 'cu'. Either include it or remove the dependency array. You can also do a functional update 'setCu(c =&gt; ...)' if you only need 'cu' in the 'setCu' call  react-hooks/exhaustive-deps
+
+✖ 1 problem (0 errors, 1 warning)</div>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-bash">npm run build &amp;&amp; npm start  <span class="tok-comment">  # mở /anh-chup, bấm từng nút; /dong-ho, chờ 3 giây</span>
+npx eslint src/app/dong-ho/page.tsx</code></pre>
+<h3>🔗 Học sâu hơn ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-2-1-use-state" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 2.1 — useState và render lại</span><span class="lc-sub">Ảnh chụp state, cập nhật theo hàm và batching — sâu hơn</span></span></a>
+<a class="link-card lien-ket-cheo" href="/academy/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-5-2-state-class-vs-function" target="_blank" rel="noopener"><span class="lc-ico">🏫</span><span class="lc-body"><span class="lc-title">Academy · FER202 · 5.2 — State: class vs function</span><span class="lc-sub">Góc nhìn môn học ở trường</span></span></a>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Ảnh chụp (snapshot)</span><span class="v">State cố định suốt một lần render — không đổi giữa chừng hàm.</span></div>
+  <div class="kv"><span class="k">Giá trị cũ</span><span class="v">Đọc state sau khi gọi setter vẫn cho giá trị cũ trong lần render này.</span></div>
+  <div class="kv"><span class="k">Hàm updater</span><span class="v"><code>setX(prev =&gt; next)</code> — tính từ giá trị mới nhất, không phải ảnh chụp.</span></div>
+  <div class="kv"><span class="k">Batching (gộp lô)</span><span class="v">React áp nhiều lời setState cùng nhau rồi render lại một lần.</span></div>
+  <div class="kv"><span class="k">Lịch render lại</span><span class="v">Setter xếp hàng một cập nhật; giá trị mới hiện ở lần render sau.</span></div>
+  <div class="kv"><span class="k">Bắt closure</span><span class="v">Handler ôm giá trị state từ lần render tạo ra nó.</span></div>
+</div>
+
 </div>
 `,
     },
@@ -267,6 +712,7 @@ setCount(c =&gt; c + 1);</code></pre>
       isFreePreview: false,
       description: 'React phát hiện thay đổi bằng so sánh tham chiếu. Sửa tại chỗ một object/mảng state không render lại; phải tạo giá trị mới.',
       content: `
+${G03_3}
 <div class="ml-en">
 <span class="eyebrow">Chapter 3 · Lesson 3.3</span>
 <h2>Treat state as immutable — always make a new one</h2>
@@ -322,6 +768,86 @@ setTodos(todos.map(t =&gt; t.id === id ? { ...t, done: true } : t));  <span clas
   <span class="lc-ico">📚</span>
   <span class="lc-body"><span class="lc-title">react.dev — Updating arrays in state</span><span class="lc-sub">A table of which array methods mutate and what to use instead.</span></span>
 </a>
+
+
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Add an item to a list in state by mutating it (<code>arr.push</code>) and confirm the UI does not update; fix with <code>setArr([...arr, item])</code>.</li>
+<li>Update one field of an object in state immutably with <code>setUser({ ...user, name })</code>.</li>
+<li>Remove and update an item in an array of objects using <code>.filter</code> and <code>.map</code> without mutating.</li>
+</ol>
+<p><strong>Done when:</strong> you can update objects and arrays in state without mutating the originals.</p></div>
+
+<h3>🔬 Measured: mutation vs replacement on React 19.3.0</h3>
+<p>One page, a render counter, every button clicked in order in a real browser under <code>next start</code>:</p>
+<pre><code class="language-tsx">'use client';
+import { useState } from 'react';
+
+let lanVe = 0;
+
+export default function BatBien() {
+  lanVe++;
+  const [user, setUser] = useState({ name: 'An', age: 20 });
+  const [list, setList] = useState(['c', 'a', 'b']);
+  const [dem, setDem] = useState(0);
+
+  return (
+    &lt;div className="space-y-2 p-6 font-sans text-lg"&gt;
+      &lt;p id="ve"&gt;BatBien đã render: {lanVe} lần&lt;/p&gt;
+      &lt;p id="user"&gt;user: {user.name}, {user.age} tuổi&lt;/p&gt;
+      &lt;button id="mutate" className="block rounded border px-3" onClick={() =&gt; {
+        user.age++;                        <span class="tok-comment">  // ✗ sửa thẳng object đang có</span>
+        setUser(user);                     <span class="tok-comment">  // ✗ cùng một tham chiếu</span>
+        console.log('dữ liệu thật: age =', user.age);
+      }}&gt;user.age++ rồi setUser(user)&lt;/button&gt;
+      &lt;button id="khac" className="block rounded border px-3" onClick={() =&gt; setDem(dem + 1)}&gt;đổi state khác (dem = {dem})&lt;/button&gt;
+      &lt;button id="spread" className="block rounded border px-3" onClick={() =&gt; setUser({ ...user, age: user.age + 1 })}&gt;setUser({'{ ...user, age: user.age + 1 }'})&lt;/button&gt;
+      &lt;p id="list"&gt;list: [{list.join(', ')}]&lt;/p&gt;
+      &lt;button id="push" className="block rounded border px-3" onClick={() =&gt; { list.push('x'); setList(list); }}&gt;list.push('x') rồi setList(list)&lt;/button&gt;
+      &lt;button id="them" className="block rounded border px-3" onClick={() =&gt; setList([...list, 'y'])}&gt;setList([...list, 'y'])&lt;/button&gt;
+      &lt;button id="sort" className="block rounded border px-3" onClick={() =&gt; setList(list.toSorted())}&gt;setList(list.toSorted())&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}</code></pre><div class="out">user.age++ + setUser(user) ×2: BatBien đã render: 1 lần · user: An, 20 tuổi   console: dữ liệu thật: age = 21, dữ liệu thật: age = 22
+unrelated button:              BatBien đã render: 2 lần · user: An, 22 tuổi
+setUser({ ...user, age + 1 }):  BatBien đã render: 3 lần · user: An, 23 tuổi
+list.push('x') + setList(list): BatBien đã render: 3 lần · list: [c, a, b]
+setList([...list, 'y']):        BatBien đã render: 5 lần · list: [c, a, b, x, y]
+setList(list.toSorted()):       BatBien đã render: 6 lần · list: [a, b, c, x, y]</div>
+<p>Read the second line twice: the age jumped to 22 on a button that has nothing to do with it — the delayed surprise of mutation. And the push line: the screen stayed <code>[c, a, b]</code> until the next real update revealed the hidden <code>x</code> (the counter went 3 → 5: React may call a component once more before bailing out of a same-value update).</p>
+<p>Which array methods copy and which mutate — measured in Node 22:</p>
+<pre><code class="language-javascript">const goc = ['c', 'a', 'b'];
+const banSao = [...goc].sort();
+console.log('[...goc].sort():', banSao, '· goc vẫn là:', goc);
+const moi = goc.toSorted();
+console.log('goc.toSorted(): ', moi, '· goc vẫn là:', goc);
+const tra = goc.sort();
+console.log('goc.sort():     ', tra, '· goc GIỜ là:', goc, '· cùng một mảng?', tra === goc);
+const u = { name: 'An', age: 20 };
+const u2 = { ...u, age: 21 };
+console.log('Object.is(u, u) =', Object.is(u, u), '· Object.is(u, { ...u, age: 21 }) =', Object.is(u, u2));</code></pre><pre><code class="language-bash">$ node sapxep.cjs</code></pre><div class="out">[...goc].sort(): [ 'a', 'b', 'c' ] · goc vẫn là: [ 'c', 'a', 'b' ]
+goc.toSorted():  [ 'a', 'b', 'c' ] · goc vẫn là: [ 'c', 'a', 'b' ]
+goc.sort():      [ 'a', 'b', 'c' ] · goc GIỜ là: [ 'a', 'b', 'c' ] · cùng một mảng? true
+Object.is(u, u) = true · Object.is(u, { ...u, age: 21 }) = false</div>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-bash">node sapxep.cjs
+npm run build &amp;&amp; npm start  <span class="tok-comment">  # open /bat-bien with DevTools → Console, click the buttons top to bottom</span></code></pre>
+<h3>🔗 Go deeper in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-2-3-object-array" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 2.3 — Updating objects and arrays immutably</span><span class="lc-sub">Object.is, spread, toSorted and Immer — deeper</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-8-2-memo" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 8.2 — memo, useMemo, useCallback</span><span class="lc-sub">Why kept identity lets React skip renders</span></span></a>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Mutation</span><span class="v">Changing an object/array in place — React may not notice, so no re-render.</span></div>
+  <div class="kv"><span class="k">Immutable update</span><span class="v">Create a new object/array instead of editing the old one.</span></div>
+  <div class="kv"><span class="k">Spread copy</span><span class="v"><code>{...obj}</code> / <code>[...arr]</code> make a shallow copy to change.</span></div>
+  <div class="kv"><span class="k">Reference equality</span><span class="v">React compares by reference; a new reference signals a change.</span></div>
+  <div class="kv"><span class="k">.map / .filter</span><span class="v">Return new arrays for updating or removing items.</span></div>
+  <div class="kv"><span class="k">Shallow vs deep</span><span class="v">Spread copies one level; nested objects need their own copy.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Never mutate state in place — React compares by reference and may not re-render.</li><li>Update immutably: copy with spread (<code>{...obj}</code>, <code>[...arr]</code>) then change the copy.</li><li>Use <code>.map</code> and <code>.filter</code> to update or remove items in arrays.</li><li>Spread is shallow — nested objects need their own fresh copy at each level you change.</li></ul>
 
 </div>
 
@@ -380,6 +906,86 @@ setTodos(todos.map(t =&gt; t.id === id ? { ...t, done: true } : t));  <span clas
   <span class="lc-ico">📚</span>
   <span class="lc-body"><span class="lc-title">react.dev — Cập nhật mảng trong state</span><span class="lc-sub">Bảng liệt kê phương thức mảng nào sửa tại chỗ và nên dùng gì thay thế.</span></span>
 </a>
+
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Thêm một item vào list trong state bằng cách mutate (<code>arr.push</code>) và xác nhận UI không cập nhật; sửa bằng <code>setArr([...arr, item])</code>.</li>
+<li>Cập nhật một trường của object trong state một cách immutable với <code>setUser({ ...user, name })</code>.</li>
+<li>Xoá và cập nhật một item trong mảng object bằng <code>.filter</code> và <code>.map</code> mà không mutate.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn cập nhật được object và mảng trong state mà không mutate bản gốc.</p></div>
+
+<h3>🔬 Đo thật: sửa thẳng vs thay mới trên React 19.3.0</h3>
+<p>Một trang, một bộ đếm render, bấm lần lượt từng nút trên trình duyệt thật dưới <code>next start</code>:</p>
+<pre><code class="language-tsx">'use client';
+import { useState } from 'react';
+
+let lanVe = 0;
+
+export default function BatBien() {
+  lanVe++;
+  const [user, setUser] = useState({ name: 'An', age: 20 });
+  const [list, setList] = useState(['c', 'a', 'b']);
+  const [dem, setDem] = useState(0);
+
+  return (
+    &lt;div className="space-y-2 p-6 font-sans text-lg"&gt;
+      &lt;p id="ve"&gt;BatBien đã render: {lanVe} lần&lt;/p&gt;
+      &lt;p id="user"&gt;user: {user.name}, {user.age} tuổi&lt;/p&gt;
+      &lt;button id="mutate" className="block rounded border px-3" onClick={() =&gt; {
+        user.age++;                        <span class="tok-comment">  // ✗ sửa thẳng object đang có</span>
+        setUser(user);                     <span class="tok-comment">  // ✗ cùng một tham chiếu</span>
+        console.log('dữ liệu thật: age =', user.age);
+      }}&gt;user.age++ rồi setUser(user)&lt;/button&gt;
+      &lt;button id="khac" className="block rounded border px-3" onClick={() =&gt; setDem(dem + 1)}&gt;đổi state khác (dem = {dem})&lt;/button&gt;
+      &lt;button id="spread" className="block rounded border px-3" onClick={() =&gt; setUser({ ...user, age: user.age + 1 })}&gt;setUser({'{ ...user, age: user.age + 1 }'})&lt;/button&gt;
+      &lt;p id="list"&gt;list: [{list.join(', ')}]&lt;/p&gt;
+      &lt;button id="push" className="block rounded border px-3" onClick={() =&gt; { list.push('x'); setList(list); }}&gt;list.push('x') rồi setList(list)&lt;/button&gt;
+      &lt;button id="them" className="block rounded border px-3" onClick={() =&gt; setList([...list, 'y'])}&gt;setList([...list, 'y'])&lt;/button&gt;
+      &lt;button id="sort" className="block rounded border px-3" onClick={() =&gt; setList(list.toSorted())}&gt;setList(list.toSorted())&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}</code></pre><div class="out">user.age++ + setUser(user) ×2: BatBien đã render: 1 lần · user: An, 20 tuổi   console: dữ liệu thật: age = 21, dữ liệu thật: age = 22
+nút không liên quan:           BatBien đã render: 2 lần · user: An, 22 tuổi
+setUser({ ...user, age + 1 }):  BatBien đã render: 3 lần · user: An, 23 tuổi
+list.push('x') + setList(list): BatBien đã render: 3 lần · list: [c, a, b]
+setList([...list, 'y']):        BatBien đã render: 5 lần · list: [c, a, b, x, y]
+setList(list.toSorted()):       BatBien đã render: 6 lần · list: [a, b, c, x, y]</div>
+<p>Đọc dòng thứ hai hai lần: tuổi nhảy lên 22 nhờ một nút chẳng liên quan — cú bất ngờ đến muộn của sửa thẳng. Và dòng push: màn hình đứng ở <code>[c, a, b]</code> cho tới khi lần cập nhật thật kế tiếp làm lộ <code>x</code> bị giấu (bộ đếm 3 → 5: React có thể gọi component thêm một lần trước khi bỏ qua cập nhật cùng giá trị).</p>
+<p>Phương thức mảng nào chép, cái nào sửa thẳng — đo trên Node 22:</p>
+<pre><code class="language-javascript">const goc = ['c', 'a', 'b'];
+const banSao = [...goc].sort();
+console.log('[...goc].sort():', banSao, '· goc vẫn là:', goc);
+const moi = goc.toSorted();
+console.log('goc.toSorted(): ', moi, '· goc vẫn là:', goc);
+const tra = goc.sort();
+console.log('goc.sort():     ', tra, '· goc GIỜ là:', goc, '· cùng một mảng?', tra === goc);
+const u = { name: 'An', age: 20 };
+const u2 = { ...u, age: 21 };
+console.log('Object.is(u, u) =', Object.is(u, u), '· Object.is(u, { ...u, age: 21 }) =', Object.is(u, u2));</code></pre><pre><code class="language-bash">$ node sapxep.cjs</code></pre><div class="out">[...goc].sort(): [ 'a', 'b', 'c' ] · goc vẫn là: [ 'c', 'a', 'b' ]
+goc.toSorted():  [ 'a', 'b', 'c' ] · goc vẫn là: [ 'c', 'a', 'b' ]
+goc.sort():      [ 'a', 'b', 'c' ] · goc GIỜ là: [ 'a', 'b', 'c' ] · cùng một mảng? true
+Object.is(u, u) = true · Object.is(u, { ...u, age: 21 }) = false</div>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-bash">node sapxep.cjs
+npm run build &amp;&amp; npm start  <span class="tok-comment">  # mở /bat-bien kèm DevTools → Console, bấm các nút từ trên xuống</span></code></pre>
+<h3>🔗 Học sâu hơn ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-2-3-object-array" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 2.3 — Cập nhật object và mảng bất biến</span><span class="lc-sub">Object.is, spread, toSorted và Immer — sâu hơn</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-8-2-memo" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 8.2 — memo, useMemo, useCallback</span><span class="lc-sub">Vì sao giữ danh tính giúp bỏ qua render</span></span></a>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Mutation</span><span class="v">Sửa object/mảng tại chỗ — React có thể không nhận ra, nên không render lại.</span></div>
+  <div class="kv"><span class="k">Cập nhật immutable</span><span class="v">Tạo object/mảng mới thay vì sửa cái cũ.</span></div>
+  <div class="kv"><span class="k">Sao chép bằng spread</span><span class="v"><code>{...obj}</code> / <code>[...arr]</code> tạo bản sao nông để đổi.</span></div>
+  <div class="kv"><span class="k">So sánh tham chiếu</span><span class="v">React so sánh theo tham chiếu; tham chiếu mới báo có thay đổi.</span></div>
+  <div class="kv"><span class="k">.map / .filter</span><span class="v">Trả về mảng mới để cập nhật hoặc xoá item.</span></div>
+  <div class="kv"><span class="k">Nông vs sâu</span><span class="v">Spread sao một tầng; object lồng cần bản sao riêng.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Đừng bao giờ mutate state tại chỗ — React so sánh theo tham chiếu và có thể không render lại.</li><li>Cập nhật immutable: sao bằng spread (<code>{...obj}</code>, <code>[...arr]</code>) rồi đổi bản sao.</li><li>Dùng <code>.map</code> và <code>.filter</code> để cập nhật hoặc xoá item trong mảng.</li><li>Spread là nông — object lồng cần bản sao mới ở mỗi tầng bạn thay đổi.</li></ul>
 
 </div>
 `,
@@ -449,6 +1055,18 @@ const count = items.length;              <span class="tok-comment">// always cor
   <span class="lc-body"><span class="lc-title">react.dev — You might not need an Effect</span><span class="lc-sub">Half the cases in this lesson end here: the value should be computed, not stored and synced.</span></span>
 </a>
 
+
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Find two components that need the same value and lift that state to their closest common parent.</li>
+<li>Identify one piece of derived data you are storing in state and replace it with a value computed during render.</li>
+<li>Decide for one widget whether its state should be local or lifted, and justify it in one sentence.</li>
+</ol>
+<p><strong>Done when:</strong> you can place state at the right level and stop storing values you can derive.</p></div>
+
+<h3>📌 Summary</h3>
+<ul><li>Keep state as local as possible; lift it only when two components must share it.</li><li>Lift shared state to the closest common parent — one source of truth.</li><li>Do not store derived data in state; compute it during render from existing state/props.</li><li>The right level for state is the smallest subtree that needs it.</li></ul>
+
 </div>
 
 <div class="ml-vi">
@@ -506,6 +1124,18 @@ const count = items.length;              <span class="tok-comment">// luôn đú
   <span class="lc-ico">🚫</span>
   <span class="lc-body"><span class="lc-title">react.dev — Có thể bạn không cần Effect</span><span class="lc-sub">Một nửa số ca trong bài này kết thúc ở đây: giá trị nên được tính ra, đừng lưu rồi đồng bộ.</span></span>
 </a>
+
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Tìm hai component cần cùng một giá trị và nâng state đó lên cha chung gần nhất.</li>
+<li>Chỉ ra một mẩu dữ liệu dẫn xuất bạn đang lưu trong state và thay bằng giá trị tính trong lúc render.</li>
+<li>Với một widget, quyết định state nên cục bộ hay nâng lên, và biện minh bằng một câu.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đặt state đúng tầng và thôi lưu những giá trị có thể dẫn xuất.</p></div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Giữ state cục bộ nhất có thể; chỉ nâng lên khi hai component buộc phải dùng chung.</li><li>Nâng state dùng chung lên cha chung gần nhất — một nguồn sự thật.</li><li>Đừng lưu dữ liệu dẫn xuất trong state; tính nó trong lúc render từ state/props sẵn có.</li><li>Tầng đúng cho state là cây con nhỏ nhất cần tới nó.</li></ul>
 
 </div>
 `,

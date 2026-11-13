@@ -15,8 +15,8 @@ const T2D23_GRAMMAR: Lesson = {
   id: "t2d23-ngu-phap",
   kind: "grammar",
   title: "too / enough / so / such + ôn tổng ngữ pháp Tập 2",
-  goal: "Nói mức độ đúng bằng too / enough / so / such / quite / rather / fairly (không còn nói “too delicious”), rồi ôn lại cả 12 điểm ngữ pháp của Tập 2 và 3 điểm nền Tập 1 bằng một bảng và 30 câu kiểm tra — sẵn sàng cho Đề 3 (GRA band 5).",
-  minutes: 90,
+  goal: "Nói mức độ đúng bằng too / enough / so / such / quite / rather / fairly (không còn nói “too delicious”), rồi ôn lại cả 12 điểm ngữ pháp của Tập 2 và 3 điểm nền Tập 1 bằng một bảng và 30 câu kiểm tra, rồi tự soát một đoạn văn có 8 lỗi — sẵn sàng cho Đề 3 (GRA band 5).",
+  minutes: 105,
   blocks: [
     {
       t: "recap",
@@ -27,6 +27,7 @@ const T2D23_GRAMMAR: Lesson = {
         "**so + adj / adv** · **such (a / an) + adj + N** (+ that…): so hot that… / such a hot day that…",
         "**quite / rather / fairly / pretty**: “khá” — nói có mức độ, nghe tự nhiên hơn “very” ở mọi câu (cộng LR + GRA Speaking).",
         "**Ôn tổng Tập 2**: bảng 12 điểm (mạo từ → too/enough) + 3 điểm nền Tập 1, mỗi điểm một công thức, một lỗi hay sai, ngày cần ôn — làm **30 câu**, sai câu nào ôn đúng ngày đó trước Đề 3.",
+        "**Soát cả đoạn** (mục 7): một đoạn thân bài có **đúng 8 lỗi** — tự tìm đủ 8 theo 3 lượt (danh từ → động từ → chỗ nối), viết lại, tự chấm theo %.",
       ],
     },
 
@@ -354,6 +355,92 @@ const T2D23_GRAMMAR: Lesson = {
         ["27–30", "Vững", "Chỉ xem lại câu sai; dành thời gian cho Viết và Nói."],
         ["21–26", "Đạt (≥ 70 %)", "Ôn đúng các ngày ghi trong lời giải câu sai."],
         ["< 21", "Chưa đạt", "Ôn lại theo nhóm trên sơ đồ 4 nhánh; làm lại bài này sau 2 ngày rồi mới thi Đề 3."],
+      ],
+    },
+
+    /* ── 7 ── */
+    { t: "h", text: "7. Soát lỗi cả đoạn — biết trước có 8 lỗi" },
+    {
+      t: "p",
+      text: "Trắc nghiệm từng câu khác hẳn **tự soát bài của mình**: trong bài thật không ai gạch chân chỗ sai cho bạn. Bài luyện này giống phút soát cuối giờ thi: một đoạn thân bài Task 2 (~100 từ) có **đúng 8 lỗi**, tất cả thuộc 12 điểm ở bảng mục 5. Cách làm: **(1)** chép đoạn ra giấy · **(2)** đọc **từng câu một**, tìm đủ 8 lỗi (chưa đủ 8 thì đọc lại — lỗi vẫn còn đó) · **(3)** viết lại câu đúng ở ô dưới · **(4)** đối chiếu bảng lời giải, tự chấm.",
+    },
+    {
+      t: "passage",
+      title: "Đoạn văn có 8 lỗi — Public transport in Vietnamese cities",
+      paras: [
+        { label: "1", text: "Nowadays, many city in Vietnam are trying to reduce traffic jams." },
+        { label: "2", text: "In my opinion, the best solution is to improve the public transport." },
+        { label: "3", text: "If buses will be cheaper and more frequent, more people will leave their motorbikes at home." },
+        { label: "4", text: "For example, Da Nang introduced new bus routes in 2022, and the number of passengers rose quickly." },
+        { label: "5", text: "Although buses are slower than motorbikes, but they are much more safer for children and old people." },
+        { label: "6", text: "In addition, people who takes the bus every day can read, relax or checking their emails." },
+        { label: "7", text: "Public transport is too important that governments should invest more money in it." },
+      ],
+    },
+    {
+      t: "note",
+      title: "Mẹo soát: mỗi lượt đọc chỉ săn MỘT loại lỗi",
+      items: [
+        "Lượt 1 — **danh từ**: số nhiều -s, mạo từ a / the / Ø. Lượt 2 — **động từ**: chia theo chủ ngữ, đúng thì. Lượt 3 — **chỗ nối**: although / but, so / too, song song sau and / or.",
+        "Câu có **chủ ngữ dài** (people who…, the number of…) → tìm danh từ chính rồi mới chia động từ.",
+        "Có câu **không có lỗi nào** — đừng \"sửa\" câu đúng thành sai.",
+      ],
+    },
+    {
+      t: "rule",
+      formula: "Soát 3 lượt: danh từ (-s, a / the / Ø) → động từ (chia, thì) → chỗ nối (although / but · so / too · and song song)",
+      vi: "Soát theo từng loại lỗi nhanh và chắc hơn đọc một lượt tìm mọi thứ.",
+    },
+    {
+      t: "quiz",
+      id: "t2d23-soat-doan",
+      title: "Viết lại 7 câu của đoạn cho đúng (câu không có lỗi thì chép nguyên)",
+      kind: "translate",
+      grammar: "Đoạn có đúng 8 lỗi nằm ở 6 câu (hai câu có 2 lỗi); một câu không có lỗi. Gợi ý 💡 chỉ nói loại lỗi — dùng SAU khi đã tự tìm.",
+      items: [
+        { q: "Câu 1: Nowadays, many city in Vietnam are trying to reduce traffic jams.", hint: "Lỗi danh từ số nhiều sau many", answers: ["Nowadays, many cities in Vietnam are trying to reduce traffic jams.", "Nowadays many cities in Vietnam are trying to reduce traffic jams.", "Nowadays, many cities in Vietnam are trying to reduce traffic congestion."] },
+        { q: "Câu 2: In my opinion, the best solution is to improve the public transport.", hint: "Lỗi mạo từ: nói chung về giao thông công cộng", answers: ["In my opinion, the best solution is to improve public transport.", "In my opinion the best solution is to improve public transport."] },
+        { q: "Câu 3: If buses will be cheaper and more frequent, more people will leave their motorbikes at home.", hint: "Lỗi câu điều kiện loại 1: vế If", answers: ["If buses are cheaper and more frequent, more people will leave their motorbikes at home.", "If buses become cheaper and more frequent, more people will leave their motorbikes at home.", "If buses are cheaper and more frequent more people will leave their motorbikes at home."] },
+        { q: "Câu 4: For example, Da Nang introduced new bus routes in 2022, and the number of passengers rose quickly.", hint: "Câu này có lỗi không? Có mốc năm 2022 → thì nào?", answers: ["For example, Da Nang introduced new bus routes in 2022, and the number of passengers rose quickly.", "For example, Da Nang introduced new bus routes in 2022 and the number of passengers rose quickly."] },
+        { q: "Câu 5: Although buses are slower than motorbikes, but they are much more safer for children and old people.", hint: "HAI lỗi: chỗ nối although…; so sánh hơn của safe", answers: ["Although buses are slower than motorbikes, they are much safer for children and old people.", "Buses are slower than motorbikes, but they are much safer for children and old people.", "Although buses are slower than motorbikes, they are much safer for children and older people.", "Buses are slower than motorbikes, but they are much safer for children and older people.", "Although buses are slower than motorbikes, they are far safer for children and old people."] },
+        { q: "Câu 6: In addition, people who takes the bus every day can read, relax or checking their emails.", hint: "HAI lỗi: động từ trong mệnh đề who (chia theo people); song song read, relax or …", answers: ["In addition, people who take the bus every day can read, relax or check their emails.", "In addition, people who take the bus every day can read, relax, or check their emails.", "In addition, people who take the bus every day can read, relax or check their email."] },
+        { q: "Câu 7: Public transport is too important that governments should invest more money in it.", hint: "… đến nỗi … : so + adj + that", answers: ["Public transport is so important that governments should invest more money in it.", "Public transport is so important that the government should invest more money in it.", "Public transport is so important that governments should invest more in it."] },
+      ],
+    },
+    {
+      t: "table",
+      caption: "Lời giải — 8 lỗi, thuộc điểm nào, ôn ngày nào",
+      head: ["#", "Sai → Đúng", "Vì sao", "Ôn"],
+      rows: [
+        ["1", "~~many city~~ → many **cities**", "many + danh từ đếm được **số nhiều**", "Tập 1 N5"],
+        ["2", "~~the public transport~~ → **public transport**", "Nói **chung** về một thứ không đếm được → Ø (không the)", "① N1"],
+        ["3", "~~If buses will be~~ → If buses **are**", "Loại 1: vế **If** dùng hiện tại đơn, will chỉ ở vế kết quả", "⑦ N13"],
+        ["4", "~~Although…, but…~~ → bỏ **but**", "Một chỗ nối chỉ một từ nối: although **hoặc** but", "⑨ N17"],
+        ["5", "~~much more safer~~ → much **safer**", "safe ngắn → safer; không ghép more + -er", "⑤ N9"],
+        ["6", "~~people who takes~~ → people who **take**", "Động từ trong mệnh đề who chia theo **people** (số nhiều)", "⑧ N15"],
+        ["7", "~~read, relax or checking~~ → read, relax or **check**", "**Song song**: sau can, ba động từ cùng dạng nguyên mẫu", "N17 mục 8"],
+        ["8", "~~too important that~~ → **so** important that", "**so + adj + that** = … đến nỗi; too + adj + **to V**", "⑫ N23"],
+      ],
+    },
+    {
+      t: "table",
+      caption: "Tự chấm — tính theo số lỗi bạn TỰ TÌM RA ở bước (2), trước khi xem gợi ý",
+      head: ["Tìm được", "Tỉ lệ", "Nghĩa là"],
+      rows: [
+        ["8/8", "100 %", "Soát bài rất tốt — giữ thói quen 3 lượt ở phút cuối giờ Writing."],
+        ["6–7/8", "75–88 %", "Đạt. Ghi lỗi bỏ sót vào sổ lỗi; 2 ngày sau soát lại đoạn này trên giấy mới, không nhìn lời giải."],
+        ["≤ 5/8", "≤ 63 %", "Chưa đạt. Ôn đúng các ngày ở cột “Ôn” của lỗi bỏ sót, rồi soát lại một bài viết cũ của chính bạn."],
+      ],
+    },
+    {
+      t: "table",
+      caption: "Thêm: chủ ngữ “khó” — chia động từ theo đâu?",
+      head: ["Chủ ngữ", "Chia theo", "Ví dụ"],
+      rows: [
+        ["**Either A or B** · **Neither A nor B** · **A or B**", "danh từ **gần động từ nhất** (B)", "Neither the teacher nor **the students were** ready. · Either the students or **the teacher is** wrong."],
+        ["**The number of** + N số nhiều", "số ít (the number)", "The number of tourists **has** doubled."],
+        ["**A number of** + N số nhiều", "số nhiều (= many)", "A number of students **were** absent."],
+        ["N + **of / in** + N khác", "danh từ **trước** of / in", "The price **of** vegetables **has** risen. · The quality of schools **in** rural areas **is** improving."],
       ],
     },
   ],
@@ -842,6 +929,26 @@ const T2D23_LISTENING: Lesson = {
         "Đề 3 trên phòng thi máy **không cho tua** và tính giờ thật — đó là lần đo chính thức của Tập 2.",
       ],
     },
+    {
+      t: "table",
+      caption: "Chữa đề 40 câu bằng lời thoại — 5 bước của Ngày 9 (mục 5), chia thời gian",
+      head: ["Bước", "Làm gì với đề hôm nay", "Thời gian"],
+      rows: [
+        ["① Tự tìm lại", "**Chưa xem đáp án.** Nghe lại tối đa 4 đoạn có câu bạn đoán mò (mỗi Part một đoạn), sửa bằng bút khác màu.", "10 phút"],
+        ["② Chấm + nghe lại chỗ sai", "Chấm cả hai màu — câu đúng nhờ bước ① cho biết bạn **hiểu được nhưng chậm**, khác với câu không nghe ra.", "5 phút"],
+        ["③ Đọc lời thoại", "Chỉ đọc đoạn quanh câu sai. Tô vàng câu chứa đáp án, gạch đỏ câu bẫy.", "10 phút"],
+        ["④ Sổ paraphrase", "Mỗi câu sai một dòng: đề viết ↔ người nói nói ↔ vì sao sai (paraphrase · bẫy đổi ý · chính tả · lạc chỗ).", "10 phút"],
+        ["⑤ Chép chính tả", "Hai đoạn: một ở Part bạn kém nhất, một ở Part 4.", "10 phút"],
+      ],
+    },
+    {
+      t: "note",
+      title: "Đề 40 câu — nhìn sổ để biết ôn gì trước Đề 3",
+      items: [
+        "Đếm các dòng trong sổ theo **loại lỗi**. Loại nhiều nhất là việc ôn trước: paraphrase ⇒ đọc lại các bảng cặp paraphrase (Ngày 8, 11) · bẫy đổi ý ⇒ Ngày 11 mục 3, Ngày 13 mục 9 · chính tả / số nhiều ⇒ Ngày 19 mục 2 · lạc chỗ ⇒ Ngày 11 mục 2 (từ báo hiệu).",
+        "Người band 4–5 không cần chữa cả 40 câu: **chữa các câu sai ở Part 1–2 trước** (dễ lấy lại điểm nhất), Part 3–4 chỉ chữa 2–3 câu sai đầu tiên.",
+      ],
+    },
   ],
 };
 
@@ -851,8 +958,8 @@ const T2D23_SPEAKING: Lesson = {
   id: "t2d23-noi",
   kind: "speaking",
   title: "Part 2 đề trừu tượng + giám khảo AI 11 phút",
-  goal: "Nói đủ 2 phút một đề Part 2 trừu tượng (một quy định, một lời khuyên, một quyết định…) bằng cách biến ý trừu tượng thành một cảnh cụ thể; rồi làm bài thi nói đủ 3 Part (~11 phút) với giám khảo AI lần đầu và đọc phản hồi theo 4 tiêu chí (Speaking band 5).",
-  minutes: 70,
+  goal: "Nói đủ 2 phút một đề Part 2 trừu tượng (một quy định, một lời khuyên, một quyết định…) bằng cách biến ý trừu tượng thành một cảnh cụ thể; kể trọn một đề tình huống “a time when…”, xử lý được đề lạ bằng kho 5 câu chuyện; rồi làm bài thi nói đủ 3 Part (~11 phút) với giám khảo AI lần đầu và đọc phản hồi theo 4 tiêu chí (Speaking band 5).",
+  minutes: 90,
   blocks: [
     {
       t: "recap",
@@ -862,7 +969,8 @@ const T2D23_SPEAKING: Lesson = {
         "Đề **trừu tượng** khó vì không có gì để “tả”: a rule, a piece of advice, a decision, a change, a goal… Cách giải: **gắn ý trừu tượng vào MỘT cảnh cụ thể** (ai, ở đâu, lúc nào, chuyện gì xảy ra).",
         "Ngữ pháp đề quy định: **have to / mustn't / be (not) allowed to** cho luật, **quá khứ** cho câu chuyện, **should / I think it would be better if** cho đề xuất.",
         "**Giám khảo AI lần đầu**: thi đủ Part 1 → Part 2 → Part 3 (~11 phút) trong phòng thi nói, AI chấm **FC · LR · GRA · P** và chỉ ra câu sửa.",
-        "🔊 **Nối âm phụ âm – nguyên âm**: turn it off → /tɜː nɪ tɒf/ — nói liền mạch, nghe trôi chảy hơn (FC + P).",
+        "Thêm **đề tình huống** “a time when you…” (đầu – sự cố – kết quả – bài học, cảm xúc đổi theo chặng), mẹo **gặp đề lạ** (mượn khung loại gần nhất) và **kho 5 câu chuyện** dùng cho nhiều thẻ đề.",
+        "🔊 **Nối âm phụ âm – nguyên âm**: turn it off → /tɜː nɪ tɒf/ — nói liền mạch, nghe trôi chảy hơn (FC + P); nói theo **cụm nghĩa**, nối âm trong cụm.",
       ],
     },
 
@@ -879,6 +987,16 @@ const T2D23_SPEAKING: Lesson = {
         ["Sự kiện", "Ngày 15", "Describe a celebration you attended", "quá khứ"],
         ["Hoạt động", "Ngày 19", "Describe an activity you enjoy", "hiện tại + HTHT"],
         ["**Trừu tượng**", "**Ngày 23**", "**Describe a rule you disliked / a piece of advice / an important decision**", "**hiện tại (luật) + quá khứ (chuyện)**"],
+        ["**Tình huống** (thêm)", "**Ngày 23 — mục 4**", "**Describe a time when you got lost / were late / had to wait / had to be polite**", "**quá khứ (cả bài)**"],
+      ],
+    },
+    {
+      t: "note",
+      title: "Mẹo: gặp đề lạ không thuộc loại nào thì sao?",
+      items: [
+        "Đề lạ (a website you often use · your favourite part of the day · a wild animal you saw…) vẫn có **4 gạch đầu dòng** → xếp ngay vào **khung 4 phần**: Mở → Bối cảnh → Phần chính → Cảm xúc / vì sao.",
+        "**Mượn khung của loại gần nhất**: con vật, website, ứng dụng ← **đồ vật** (trông thế nào, có từ khi nào, dùng để làm gì, vì sao thích) · một buổi trong ngày, một mùa ← **hoạt động** (thường làm gì, với ai, cảm giác) · một lần đặc biệt ← **sự kiện / tình huống**.",
+        "Gạch đầu dòng nào mỏng (nói được 1 câu) thì **tự đặt 2–3 câu hỏi phụ** cho nó trong 1 phút ghi chú: Since when? With whom? What exactly? — mỗi câu hỏi phụ = 1–2 câu nói thêm.",
       ],
     },
 
@@ -1009,7 +1127,116 @@ const T2D23_SPEAKING: Lesson = {
     },
 
     /* ── 4 ── */
-    { t: "h", text: "4. Thêm: nối âm phụ âm – nguyên âm" },
+    { t: "h", text: "4. Đề tình huống: “Describe a time when you…”" },
+    {
+      t: "p",
+      text: "Loại đề này rất hay gặp nhưng không giống đề sự kiện (Ngày 15): không phải một buổi lễ được tổ chức, mà là **một chuyện xảy ra với bạn** — lạc đường, trễ hẹn, phải chờ rất lâu, phải lịch sự với người khó chịu, giúp một người lạ. Điểm mạnh: nó có **sẵn kịch tính** (một sự cố), nên chỉ cần kể theo chuỗi **đầu – sự cố – kết quả** là đủ 2 phút.",
+    },
+    {
+      t: "sodo",
+      kind: "flow",
+      title: "Khung 4 chặng cho đề “a time when…”",
+      caption: "Cảm xúc ĐỔI theo từng chặng — nói rõ cảm xúc ở mỗi chặng là cách kéo dài tự nhiên nhất.",
+      steps: [
+        { label: "1 · Bối cảnh (20″)", sub: "When / where / who · cảm xúc lúc đầu: relaxed, excited" },
+        { label: "2 · Sự cố (40″)", sub: "Then something went wrong… · cảm xúc: worried, panicked" },
+        { label: "3 · Xử lý + kết quả (40″)", sub: "So I decided to… · một câu thoại trực tiếp · cảm xúc: relieved" },
+        { label: "4 · Bài học (20″)", sub: "Since then, I always… · Whenever I think about it, …" },
+      ],
+    },
+    {
+      t: "table",
+      caption: "Dải từ cảm xúc theo chặng — từ đơn giản đến mạnh hơn",
+      head: ["Chặng", "Mức nhẹ", "Mức mạnh hơn"],
+      rows: [
+        ["Lúc đầu", "happy · relaxed", "excited · looking forward to it"],
+        ["Khi có sự cố", "worried · confused", "panicked · completely lost · my heart was racing"],
+        ["Khi được giúp / xong việc", "happy · OK", "relieved · grateful · a huge weight off my shoulders"],
+        ["Nhìn lại", "funny now", "I can laugh about it now · it taught me a lesson"],
+      ],
+    },
+    {
+      t: "p",
+      text: "**Describe a time when you got lost.** You should say: **where** you were · **what** you were doing there · **how** you found your way · and explain **how you felt** about the experience.",
+    },
+    {
+      t: "dialogue",
+      title: "Part 2 — A time when you got lost (≈ 1 phút 50 giây · band 5.5 ước tính)",
+      lines: [
+        { who: "Candidate", role: "candidate", text: "I'd like to talk about a time when I got completely lost in Hanoi. It was about two years ago, when I went there for a weekend with my friend Minh. On the second day, Minh wanted to rest at the hotel, so I decided to walk around the Old Quarter on my own. At first I felt really relaxed, because I was taking photos and trying street food.", vi: "Tôi muốn kể về một lần bị lạc hoàn toàn ở Hà Nội. Khoảng hai năm trước, tôi ra Hà Nội chơi cuối tuần với bạn tôi là Minh. Ngày thứ hai, Minh muốn nghỉ ở khách sạn, nên tôi quyết định đi dạo khu phố cổ một mình. Lúc đầu tôi rất thoải mái, vì tôi chụp ảnh và ăn thử đồ ăn đường phố." },
+        { who: "Candidate", role: "candidate", text: "Then things went wrong. My phone battery died, and I suddenly realised that every street looked the same to me. I didn't even remember the name of the hotel, only that it was near a small lake. I started to panic, and my heart was racing.", vi: "Rồi mọi chuyện trục trặc. Điện thoại hết pin, và tôi chợt nhận ra con phố nào với tôi cũng giống nhau. Tôi thậm chí không nhớ tên khách sạn, chỉ nhớ nó gần một cái hồ nhỏ. Tôi bắt đầu hoảng, tim đập thình thịch." },
+        { who: "Candidate", role: "candidate", text: "In the end, I went into a little café and asked the owner for help. I said, “Excuse me, is there a small lake near here with a lot of hotels?” She smiled and drew a simple map on a napkin for me. Twenty minutes later, I was back at the hotel. I was so relieved, and also a bit embarrassed when Minh laughed at me.", vi: "Cuối cùng, tôi vào một quán cà phê nhỏ và nhờ chủ quán giúp. Tôi hỏi: “Xin lỗi, gần đây có cái hồ nhỏ nào nhiều khách sạn không ạ?” Cô ấy cười và vẽ cho tôi một tấm bản đồ đơn giản trên tờ giấy ăn. Hai mươi phút sau tôi đã về tới khách sạn. Tôi nhẹ cả người, và hơi ngượng khi Minh cười tôi." },
+        { who: "Candidate", role: "candidate", text: "Looking back, it was a useful lesson. Since then, I always take a photo of the hotel's business card before I go out, and I carry a power bank. Whenever I think about that day, I still remember the kind café owner and her napkin map.", vi: "Nhìn lại, đó là một bài học có ích. Từ đó tôi luôn chụp ảnh danh thiếp khách sạn trước khi ra ngoài, và mang theo sạc dự phòng. Mỗi lần nghĩ về hôm đó, tôi vẫn nhớ cô chủ quán tốt bụng và tấm bản đồ trên giấy ăn." },
+      ],
+    },
+    {
+      t: "table",
+      caption: "Vì sao bài mẫu đạt khoảng band 5.5",
+      head: ["Tiêu chí", "Bài mẫu làm gì"],
+      rows: [
+        ["**FC**", "Đúng 4 chặng; chuyển chặng rõ: **At first · Then things went wrong · In the end · Looking back · Since then**."],
+        ["**LR**", "Cảm xúc đổi theo chặng: relaxed → panic, heart was racing → relieved, embarrassed; cụm: battery died, on my own, power bank."],
+        ["**GRA**", "Quá khứ đơn chắc chắn; quá khứ tiếp diễn (**I was taking photos**); câu hỏi trực tiếp trong lời thoại; HTHT với **Since then** — chưa có cấu trúc khó, nên khoảng 5.5 chứ chưa 6.5."],
+        ["**Câu thoại trực tiếp**", "Một câu \"I said, '…'\" làm câu chuyện sống động và kéo dài tự nhiên — chỉ cần một câu, đừng diễn cả đoạn hội thoại."],
+      ],
+    },
+    {
+      t: "rule",
+      formula: "I'd like to talk about a time when … · At first I felt … · Then things went wrong. … · In the end, … I said, “…” · Looking back, … Since then, I always …",
+      vi: "Đề tình huống: bối cảnh → sự cố → xử lý + kết quả → bài học; cảm xúc đổi theo từng chặng.",
+    },
+    {
+      t: "speak",
+      id: "t2d23-noi-p2-tinh-huong",
+      part: "2",
+      questions: [
+        "Describe a time when you got lost. You should say: where you were; what you were doing there; how you found your way; and explain how you felt about the experience.",
+        "Describe a time when you were late for something important. You should say: what it was; why you were late; what happened as a result; and explain how you felt.",
+        "Describe a time when you had to be polite to someone you didn't like. You should say: who the person was; where you were; what happened; and explain why you stayed polite.",
+      ],
+    },
+
+    /* ── 5 ── */
+    { t: "h", text: "5. Kho 5 câu chuyện — một chuyện, nhiều thẻ đề" },
+    {
+      t: "p",
+      text: "Không ai chuẩn bị nổi 50 thẻ đề. Người thi khôn chuẩn bị **5 câu chuyện gốc** thật chi tiết (người, nơi, thời gian, sự cố, cảm xúc, từ vựng), rồi **bẻ** mỗi chuyện cho nhiều thẻ. Khi gặp đề: gạch chân động từ / tính từ chính của thẻ (Ngày 15) → chọn chuyện gần nhất → đổi **góc kể** cho đúng phần “explain”. Câu chuyện vẫn phải trả lời **đủ mọi gạch đầu dòng** — dùng lại chuyện, không dùng lại bài nói thuộc lòng.",
+    },
+    {
+      t: "table",
+      caption: "Ví dụ một kho 5 chuyện — viết kho của riêng bạn theo mẫu này",
+      head: ["Chuyện gốc", "Chi tiết nên có sẵn", "Dùng được cho thẻ"],
+      rows: [
+        ["① **Chuyến đi Hà Nội bị lạc**", "phố cổ, hết pin, cô chủ quán vẽ bản đồ", "a time you got lost · a trip you enjoyed · a kind stranger · a place you visited · a time your phone was important"],
+        ["② **Người cô dạy Toán lớp 9**", "nghiêm khắc, ở lại sau giờ dạy thêm, câu cô hay nói", "a teacher who influenced you · good advice you received · a person you admire · a time someone helped you"],
+        ["③ **Chiếc xe đạp cũ của bố**", "mua năm 2010, đạp đi học 3 năm, tự sửa xích", "an object important to you · something old you keep · a gift · a time you fixed something"],
+        ["④ **Đám cưới chị họ ở Huế**", "300 khách, bài phát biểu của chú, mưa bất chợt", "a celebration · a family event · a time you met many people · a time plans changed"],
+        ["⑤ **Lần vượt khó: thi lại môn Toán**", "trượt lần đầu, lập kế hoạch học, đỗ lần hai", "a challenge you faced · an important decision · a goal you achieved · a time you were proud"],
+      ],
+    },
+    {
+      t: "note",
+      title: "Cẩn thận khi dùng kho chuyện",
+      items: [
+        "**Phần “explain” phải đổi theo thẻ**: chuyện ① cho đề \"a kind stranger\" thì nói nhiều về **cô chủ quán**; cho đề \"a place you visited\" thì nói nhiều về **phố cổ** — cùng chuyện, khác trọng tâm.",
+        "Đừng bẻ chuyện tới mức **lạc đề**: thẻ hỏi \"a book\" mà kể chuyến đi Hà Nội là sai. Không có chuyện nào hợp thì dùng mẹo “gặp đề lạ” ở mục 1.",
+        "Mỗi chuyện chuẩn bị sẵn **một đoạn cảm xúc** (3–4 câu, dùng bảng dải từ ở mục 4) — phần “how you felt” xuất hiện ở rất nhiều thẻ.",
+      ],
+    },
+    {
+      t: "mcq",
+      id: "t2d23-noi-kho-chuyen",
+      title: "Chọn chuyện gốc phù hợp nhất trong kho trên (4 câu)",
+      items: [
+        { q: "Describe a person who helped you when you were in trouble.", options: ["① Chuyến đi Hà Nội bị lạc", "③ Chiếc xe đạp cũ của bố", "④ Đám cưới chị họ"], correct: 0, why: "Chuyện ① có **người giúp** (cô chủ quán) lúc bạn **gặp rắc rối** (lạc đường). Kể nhiều về cô ấy, phần lạc đường làm bối cảnh. Chuyện ② (cô giáo) cũng dùng được nếu bạn kể lần cô giúp." },
+        { q: "Describe something you own that you have had for a long time.", options: ["② Người cô dạy Toán", "③ Chiếc xe đạp cũ của bố", "⑤ Thi lại môn Toán"], correct: 1, why: "Đồ vật có **lâu năm** → chuyện ③. Thì: HTHT (I have had it since…) + quá khứ (lúc mới có)." },
+        { q: "Describe a time when you had to change your plans.", options: ["③ Chiếc xe đạp cũ", "④ Đám cưới chị họ (mưa bất chợt)", "② Người cô dạy Toán"], correct: 1, why: "Mưa bất chợt buộc dời tiệc vào trong nhà → **chiến thuật đổi ý** (At first we planned… but then… so we decided…). Kể quá khứ cả bài." },
+        { q: "Describe an achievement you are proud of.", options: ["⑤ Thi lại môn Toán", "① Chuyến đi Hà Nội", "③ Chiếc xe đạp"], correct: 0, why: "Thành tích = đỗ sau khi trượt → chuyện ⑤. Phần “why proud” nói về nỗ lực + bài học." },
+      ],
+    },
+
+    /* ── 6 ── */
+    { t: "h", text: "6. Thêm: nối âm phụ âm – nguyên âm" },
     {
       t: "p",
       text: "**Linking** (nối âm): khi một từ **kết thúc bằng phụ âm** và từ sau **bắt đầu bằng nguyên âm**, người bản ngữ **kéo phụ âm sang** từ sau, nói liền không ngắt: **turn it off** → /tɜː nɪ tɒf/ · **an apple** → /ə næpl/ · **pick it up** → /pɪ kɪ tʌp/. Người Việt quen tách rời từng chữ (vì tiếng Việt mỗi chữ một âm tiết) → nghe cứng và chậm. Nối âm không làm bạn “nói nhanh” hơn — nó làm bạn nói **liền** hơn, và giúp **nghe** Listening dễ hơn.",
@@ -1020,6 +1247,14 @@ const T2D23_SPEAKING: Lesson = {
         { en: "We had to hand in our phones.", vi: "hand‿in‿our → /hæn dɪ naʊə/" },
         { en: "It was an awful rule.", vi: "was‿an‿awful → /wə zə nɔːfl/" },
         { en: "I still remember it clearly.", vi: "remember‿it → âm /r/ nối (giọng Anh) /rɪmembə rɪt/ — gặp lại ở Tập 3" },
+      ],
+    },
+    {
+      t: "note",
+      title: "Mẹo: nói theo CỤM NGHĨA trước, nối âm trong cụm",
+      items: [
+        "Nối âm chỉ xảy ra **trong một cụm nghĩa**; giữa hai cụm thì được ngừng một chút. Chia câu trước: **We had to hand in our phones | at the school gate | every morning.** — nối hand‿in‿our trong cụm 1, ngừng nhẹ ở chỗ “|”.",
+        "Ngừng giữa một cụm (~~We had to hand | in our phones~~) nghe gãy và dễ sai nghĩa; ngừng đúng chỗ cụm thì vừa dễ nghe vừa cho bạn thời gian nghĩ.",
       ],
     },
     {
@@ -1039,8 +1274,8 @@ const T2D23_SPEAKING: Lesson = {
       ],
     },
 
-    /* ── 5 ── */
-    { t: "h", text: "5. Luyện đề trừu tượng (ghi âm trong bài)" },
+    /* ── 7 ── */
+    { t: "h", text: "7. Luyện đề trừu tượng (ghi âm trong bài)" },
     {
       t: "speak",
       id: "t2d23-noi-p2",
@@ -1063,8 +1298,8 @@ const T2D23_SPEAKING: Lesson = {
       ],
     },
 
-    /* ── 6 ── */
-    { t: "h", text: "6. Giám khảo AI — bài thi nói đủ 11 phút lần đầu" },
+    /* ── 8 ── */
+    { t: "h", text: "8. Giám khảo AI — bài thi nói đủ 11 phút lần đầu" },
     {
       t: "p",
       text: "Đến lúc ghép ba Part lại thành **một bài thi nói thật**. Khoá có **Phòng thi Speaking** với **giám khảo AI**: giám khảo (giọng Anh) chào, hỏi tên, hỏi **Part 1** theo chủ đề, đưa **thẻ đề Part 2** (1 phút chuẩn bị có ô ghi chú, nói tối đa 2 phút, hết giờ thì dừng lịch sự), hỏi 1–2 câu chốt, rồi **Part 3**. Xong cả bài, AI chấm **FC · LR · GRA · P**, cho bạn nghe lại từng câu, xem chữ, lỗi + câu sửa và cách nói band +1.",
@@ -1106,7 +1341,7 @@ const T2D23_SPEAKING: Lesson = {
     },
     {
       t: "p",
-      text: "**Không mở được phòng thi** (mất mạng, máy không có micro)? Làm bản thay thế ngay dưới đây: ghi âm **liên tục** ba khối theo đúng thứ tự, bấm giờ tổng ~11 phút — Part 1 (8 câu) → Part 2 (thẻ “a rule”, 1 phút chuẩn bị + 2 phút) → Part 3 (khối mục 5).",
+      text: "**Không mở được phòng thi** (mất mạng, máy không có micro)? Làm bản thay thế ngay dưới đây: ghi âm **liên tục** ba khối theo đúng thứ tự, bấm giờ tổng ~11 phút — Part 1 (8 câu) → Part 2 (thẻ “a rule”, 1 phút chuẩn bị + 2 phút) → Part 3 (khối mục 7).",
     },
     {
       t: "speak",

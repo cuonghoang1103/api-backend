@@ -82,6 +82,33 @@ export const TRA_CONG_THUC_CHANG2: Block[] = [
   },
   { t: "rule", formula: "Short-answer: chép NGUYÊN chữ trong bài · đúng giới hạn từ (số không tính là từ) · câu hỏi theo thứ tự · When → thời gian · How many → số", vi: "Viết quá số từ = sai cả câu." },
 
+  { t: "h", text: "Paraphrase số liệu & sổ paraphrase (Ngày 8 · Đọc mục 4)" },
+  {
+    t: "table",
+    head: ["Câu hỏi viết", "Bài đọc có thể viết"],
+    rows: [
+      ["ten years · 100 years", "a decade · a century"],
+      ["1990–1999", "the 1990s · the nineties"],
+      ["50% · 25% · 20% · 10%", "half · a quarter · a fifth · one in ten"],
+      ["about 30% · about 66%", "almost a third · two thirds"],
+      ["more than 50% · less than 50%", "the majority · a minority / fewer than half"],
+      ["doubled · tripled · halved", "twice as many · three times as many · fell by 50%"],
+    ],
+  },
+  {
+    t: "table",
+    caption: "5 nhãn ghi sổ paraphrase",
+    head: ["Nhãn", "Ví dụ (câu hỏi → bài)"],
+    rows: [
+      ["① Đồng nghĩa", "look at → check"],
+      ["② Đổi loại từ", "traditionally → the traditional solution"],
+      ["③ Chủ động ↔ bị động · đổi trật tự", "A replaced B → B was replaced by A"],
+      ["④ Phủ định đổi cách nói", "do not produce → produce no"],
+      ["⑤ Trái nghĩa (dấu hiệu FALSE / NO)", "rose → fell"],
+    ],
+  },
+  { t: "rule", formula: "Trước khi dò: giữ nguyên tên / năm / số + đoán 2–3 từ thay thế · khi dò: ghi số câu bên lề · sau khi chấm: sổ Câu hỏi | Trong bài | Nhãn", vi: "Sổ chỉ ghi từ ở câu hỏi và câu chứa đáp án — không tra mọi từ lạ." },
+
   { t: "h", text: "So sánh trong Task 1 bar chart (Ngày 8 · Viết mục 2)" },
   {
     t: "patterns",
@@ -95,6 +122,29 @@ export const TRA_CONG_THUC_CHANG2: Block[] = [
   { t: "rule", formula: "The figure for A was higher / the highest · far / slightly + higher · twice as high as · whereas · compared with", vi: "Biểu đồ không có năm = viết bằng so sánh; mỗi câu thân bài một phép so sánh." },
 
   /* ───────────── Ngày 9 ───────────── */
+  { t: "h", text: "Task 1 — gọi lại nhóm (counterparts) · bội số & phân số (Ngày 8 · Viết mục 3)" },
+  {
+    t: "table",
+    caption: "Gọi lại một nhóm mà không lặp nguyên cụm",
+    head: ["Cách", "Ví dụ"],
+    rows: [
+      ["**counterparts** = nhóm ở **vị trí tương ứng** bên kia (nam ↔ nữ, nước này ↔ nước kia)", "Men exercised for five hours a week, compared with three hours for their **female counterparts**."],
+      ["**their + nơi / nhóm + counterparts**", "Commuters in Ashford drove far more than **their Carlton counterparts**."],
+      ["Đổi tên nhóm tuổi", "people aged 18–24 → **the youngest group** · **younger adults** · **those in their early twenties**"],
+      ["**the former / the latter** (cái trước / cái sau)", "Bexley and Carlton relied more on public transport, **the latter** especially on the metro."],
+    ],
+  },
+  {
+    t: "table",
+    caption: "Bội số và phân số — ngoài twice / three times",
+    head: ["Khung", "Nghĩa", "Ví dụ"],
+    rows: [
+      ["rise / increase **fourfold** · **a fourfold increase**", "tăng **gấp 4**", "Sales of electric cars rose **fourfold**, from 5,000 to 20,000."],
+      ["**N times as many / much + N + as**", "nhiều gấp N lần (an toàn nhất)", "Carlton had **twice as many** metro users **as** Bexley."],
+      ["A had **N times more** + N **than** B", "nhiều hơn N lần (hay gặp trong bài mẫu)", "Men spent **three times more** time on sport **than** women."],
+      ["**a fifth / a quarter / half of** + that for… / the figure for…", "bằng 1/5, 1/4, 1/2 của…", "Ashford's metro figure (8%) was **a fifth of that for** Carlton (40%)."],
+    ],
+  },
   { t: "h", text: "So sánh hơn / nhất / bằng (Ngày 9 · Ngữ pháp mục 1–5)" },
   {
     t: "table",
@@ -131,6 +181,24 @@ export const TRA_CONG_THUC_CHANG2: Block[] = [
   { t: "rule", formula: "Đồng nghĩa · đổi loại từ · đổi cấu trúc · chung → cụ thể → lý do → ví dụ (2–4 câu)", vi: "Câu đầu tiên là chỗ dễ nhất để chứng minh paraphrase (LR)." },
 
   /* ───────────── Ngày 10 ───────────── */
+  { t: "h", text: "Part 1 — gặp chủ đề lạ · quên từ giữa câu: khung cứu hộ (Ngày 9 · Nói mục 2–2b)" },
+  {
+    t: "rule",
+    formula: "Chủ đề lạ: I don't know much about X, but… (chủ đề liền kề) · It's not something I take a keen interest in. I'm more of a … person.",
+    vi: "Không biết thì thừa nhận ngắn, rồi lái sang thứ mình nói được — vẫn đủ 2–3 câu.",
+  },
+  {
+    t: "table",
+    head: ["Khung cứu hộ", "Dùng cho", "Ví dụ (từ bị quên)"],
+    rows: [
+      ["**a thing which / that** + V…", "đồ vật", "I bought **a thing which** cooks rice automatically. (rice cooker)"],
+      ["**people who** + V…", "người, nghề", "I'd like to be one of those **people who** design buildings. (architect)"],
+      ["**a place where** + S + V…", "nơi chốn", "We went to **a place where** you can see lots of fish in big tanks. (aquarium)"],
+      ["**It's a kind of…** / **It's like a…, but…**", "so với thứ quen", "**It's a kind of** small motorbike, but it runs on electricity. (e-scooter)"],
+      ["**the opposite of…**", "tính chất", "He's **the opposite of** shy — he talks to everyone. (outgoing)"],
+      ["**What I mean is…** / **I'm not sure of the word, but…**", "báo trước + sửa", "**I'm not sure of the word, but** it's the feeling you get before an exam. (nervous / anxious)"],
+    ],
+  },
   { t: "h", text: "Ngôn ngữ xu hướng vòng 2 (Ngày 10 · Từ vựng mục 2)" },
   {
     t: "table",
@@ -144,6 +212,33 @@ export const TRA_CONG_THUC_CHANG2: Block[] = [
   },
   { t: "rule", formula: "dramatically > significantly > moderately > slightly > marginally (steadily / gradually nói về NHỊP độ, không phải độ lớn) · S + rose sharply = There was a sharp rise in + N", vi: "Chọn mức độ theo độ dốc thật của đường." },
 
+  { t: "h", text: "Bội số, phân số + tả trọn một đường trong một câu (Ngày 10 · Từ vựng mục 2b)" },
+  {
+    t: "table",
+    caption: "Bội số & phân số — đủ dùng cho Task 1",
+    head: ["Ý", "Cách viết", "Ví dụ (số tự đặt)"],
+    rows: [
+      ["Tăng gấp N lần (động từ)", "double · triple · quadruple · **increase fourfold / fivefold** · **rise more than eightfold**", "Online sales **increased fourfold**, from 5 to 20 million."],
+      ["Gấp N lần (danh từ)", "**a twofold / threefold / fourfold increase in** + N", "There was **a fourfold increase in** online sales."],
+      ["A gấp N lần B", "A had **three times as many** + N đếm được **as** B · A was **three times as high as** B", "Japan had **three times as many** tourists **as** Korea."],
+      ["Một phần của số đã nêu", "**a fifth of that amount** · **a quarter of the figure for** B · **half the figure for** B", "Bus use stood at 40%, while cycling was **a quarter of that figure** (10%)."],
+    ],
+  },
+  {
+    t: "table",
+    caption: "Tả trọn một đường trong MỘT câu — 3 khung (số theo biểu đồ du học sinh ở trên)",
+    head: ["Khung", "Ví dụ"],
+    rows: [
+      ["**started at** A, **after which** it rose / fell to B, **before ending at** C", "The number of language-school students **started at** 35,000 in 2000, **after which** it fell to 18,000 in 2010, **before ending at** 30,000 in 2020."],
+      ["rose / fell to B, **with a subsequent** + danh từ (rise / fall / surge / plateau)", "University numbers rose sharply to 60,000 in 2015, **with a subsequent plateau** at around 60,000."],
+      ["rose / fell…, **reaching** B in…, **before** + V-ing…", "University numbers rose rapidly after 2005, **reaching** 60,000 in 2015, **before** levelling off at around 61,000."],
+    ],
+  },
+  {
+    t: "rule",
+    formula: "S + started at A, after which it rose to B, before ending at C · S + rose to B, with a subsequent + N",
+    vi: "Một câu kể cả chặng đường (đầu – giữa – cuối) thay cho ba câu đơn rời — vừa gọn vừa ăn điểm GRA.",
+  },
   { t: "h", text: "Collocation AWL dùng ngay (Ngày 10 · Từ vựng mục 1)" },
   {
     t: "table",
@@ -170,6 +265,22 @@ export const TRA_CONG_THUC_CHANG2: Block[] = [
   { t: "rule", formula: "Discuss adv & disadv → bàn cân bằng · Do the advantages outweigh…? → BẮT BUỘC kết luận bên nào nặng hơn (mở bài + kết bài)", vi: "Khung: mở bài → mặt yếu hơn (Admittedly…) → mặt mạnh hơn (However…) → On balance…" },
 
   /* ───────────── Ngày 11 ───────────── */
+  { t: "h", text: "Task 2 — ba cách hỏi lợi – hại · “positive or negative development?” (Ngày 10 · Viết mục 1b)" },
+  {
+    t: "table",
+    caption: "So 3 cách hỏi — đọc đúng câu hỏi cuối đề trước khi viết thesis",
+    head: ["Câu hỏi", "Ý kiến", "Chia thân bài", "Thesis mẫu"],
+    rows: [
+      ["**Discuss the advantages and disadvantages** of…", "Không bắt buộc (trừ khi có “give your own opinion”)", "TB1 lợi · TB2 hại — **dài ngang nhau**", "This essay will examine both the benefits and the drawbacks of…"],
+      ["**Do the advantages outweigh the disadvantages?**", "**Bắt buộc**: bên nào nặng hơn", "TB1 bên **nhẹ** hơn · TB2 bên **nặng** hơn (dài hơn)", "I believe the advantages clearly outweigh the disadvantages."],
+      ["**Is this a positive or negative development?**", "**Bắt buộc**: xu hướng này tốt hay xấu", "Cách 1: cả hai TB đều nói một phía (2 lý do tốt) · Cách 2: TB1 thừa nhận mặt xấu nhỏ, TB2 mặt tốt lớn", "I believe this is a largely positive development."],
+    ],
+  },
+  {
+    t: "rule",
+    formula: "Discuss adv/disadv → cân bằng · Outweigh → bên nặng hơn ở TB2 · Positive or negative? → I believe this is a (largely) positive / negative development",
+    vi: "Ba câu hỏi nghe giống nhau nhưng thesis khác nhau — đọc câu hỏi cuối đề trước khi viết một chữ nào.",
+  },
   { t: "h", text: "Gerund & infinitive (Ngày 11 · Ngữ pháp mục 1–6)" },
   {
     t: "table",
@@ -230,4 +341,33 @@ export const TRA_CONG_THUC_CHANG2: Block[] = [
     ],
   },
   { t: "rule", formula: "accounted for / made up + % · the largest share · followed by · rose / fell from … to … · the remaining · respectively", vi: "Một pie = so sánh các phần (không rose / fell); hai pie hai năm = thêm ngôn ngữ thay đổi." },
+
+  { t: "h", text: "Task 1 — số đúng hay xấp xỉ · câu mở thân bài 2 (Ngày 12 · Viết mục 5)" },
+  {
+    t: "table",
+    caption: "Khi nào ghi đúng số, khi nào thêm about / just under",
+    head: ["Hình", "Số trên hình", "Viết thế nào"],
+    rows: [
+      ["**Pie**, **bảng**", "**in sẵn** (34%, 1,250)", "Ghi **đúng số**: Meat accounted for 34%. Thêm phân số bên cạnh để paraphrase: just over a third (34%)."],
+      ["**Cột**, **đường** không in số", "phải **đọc theo vạch** trục", "Dùng **about / around / approximately / nearly / just under / just over**: just under 30%."],
+      ["Cột / đường **có in số** ở đầu cột", "in sẵn", "Ghi đúng số như pie."],
+    ],
+  },
+  {
+    t: "table",
+    caption: "Mở thân bài 2 — chuyển sang nhóm số liệu khác (điểm CC)",
+    head: ["Khung", "Dùng khi"],
+    rows: [
+      ["**Turning to** + nhóm còn lại, …", "chuyển sang nhóm / hình khác: Turning to the remaining categories, …"],
+      ["**In terms of** + N, …", "nói về một mặt: In terms of food bought for the home, …"],
+      ["**As for** + N, …", "còn về…: As for dairy products, …"],
+      ["**The opposite trend can be seen in** + N.", "nhóm này đi **ngược** nhóm thân bài 1"],
+      ["**By contrast,** / **In contrast,** …", "đối lập trực tiếp với câu trước"],
+    ],
+  },
+  {
+    t: "rule",
+    formula: "Số in sẵn → ghi đúng · Đọc vạch → about / just under · Thân 2: Turning to / In terms of / As for · Other → cuối · 3–4 pie → một trục chia",
+    vi: "Bốn quyết định nhỏ giúp bài pie chart không bị trừ TA và CC.",
+  },
 ];

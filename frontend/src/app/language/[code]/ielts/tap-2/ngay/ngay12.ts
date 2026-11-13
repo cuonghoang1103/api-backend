@@ -32,6 +32,7 @@ const T2D12_TU_VUNG: Lesson = {
         "Phát âm: những từ **viết dài, đọc ngắn** — vegetable /ˈvedʒtəbl/ (3 âm tiết, không phải 4), chocolate, comfortable, interesting.",
         "Bài đọc hôm nay (cây lúa) và bài viết (chi tiêu cho thực phẩm) dùng lại phần lớn từ này.",
         "**Mục 6 (thêm)**: 13 từ ăn uống đời thường cho **Speaking Part 1** — dish · ingredient · cuisine · recipe · takeaway · portion · eat out…",
+        "**Mục 7–8 (thêm)**: 6 từ **an toàn thực phẩm** (preservative, food label, expiry date, GM food, food poisoning) và cách **giải thích món / đồ vật chỉ Việt Nam có** (giữ tên Việt + mệnh đề which…).",
       ],
     },
     {
@@ -285,6 +286,65 @@ const T2D12_TU_VUNG: Lesson = {
         "Is there any food you don't like?",
       ],
     },
+
+    { t: "h", text: "7. Thêm: an toàn thực phẩm (food safety)" },
+    {
+      t: "p",
+      text: "Đề Task 2 và Part 3 về thực phẩm không chỉ hỏi nông nghiệp mà còn hỏi **an toàn thực phẩm**: chất bảo quản, nhãn mác, thực phẩm biến đổi gen, ngộ độc. Sáu từ dưới đây đủ để bạn nêu một ý có lý do.",
+    },
+    {
+      t: "vocab",
+      items: [
+        { w: "food safety", pos: "n (U)", ipa: "/ˈfuːd ˌseɪfti/", vi: "an toàn thực phẩm", ex: "Street vendors should receive basic training in food safety.", exVi: "Người bán hàng rong nên được tập huấn cơ bản về an toàn thực phẩm.", more: "**food safety standards / rules** · **food hygiene** (vệ sinh thực phẩm)." },
+        { w: "preservative", pos: "n", ipa: "/prɪˈzɜːvətɪv/", vi: "chất bảo quản", ex: "Many processed foods contain preservatives to make them last longer.", exVi: "Nhiều đồ chế biến sẵn chứa chất bảo quản để để được lâu hơn.", more: "Động từ **preserve** (bảo quản) · **free from preservatives / preservative-free**." },
+        { w: "food label", pos: "n", ipa: "/ˈfuːd ˌleɪbl/", vi: "nhãn thực phẩm (ghi thành phần, hạn dùng)", ex: "I always read the food label before I buy snacks for my children.", exVi: "Tôi luôn đọc nhãn thực phẩm trước khi mua đồ ăn vặt cho con.", more: "**clear / accurate labelling** · **label** (v): products **must be labelled**." },
+        { w: "expiry date", pos: "n", ipa: "/ɪkˈspaɪəri deɪt/", vi: "hạn sử dụng", ex: "Check the expiry date on the milk before you drink it.", exVi: "Kiểm tra hạn sử dụng của sữa trước khi uống.", more: "Trên bao bì Anh: **use by** (an toàn đến ngày…) khác **best before** (ngon nhất trước…). Mỹ: **expiration date**." },
+        { w: "genetically modified (GM) food", pos: "n", ipa: "/dʒəˌnetɪkli ˈmɒdɪfaɪd fuːd/", vi: "thực phẩm biến đổi gen", ex: "Some people refuse to eat genetically modified food because they think it is unsafe.", exVi: "Một số người không ăn thực phẩm biến đổi gen vì cho rằng nó không an toàn.", more: "Viết tắt **GM food / GMOs**. Task 2: **GM crops** can **resist pests** and **survive droughts**." },
+        { w: "food poisoning", pos: "n (U)", ipa: "/ˈfuːd ˌpɔɪzənɪŋ/", vi: "ngộ độc thực phẩm", ex: "Hundreds of students got food poisoning after eating at the canteen.", exVi: "Hàng trăm học sinh bị ngộ độc thực phẩm sau khi ăn ở căng-tin.", more: "**get / suffer from food poisoning** · ~~a food poisoning~~ (không đếm được)." },
+      ],
+    },
+    {
+      t: "examples",
+      items: [
+        { en: "Governments should require clear food labels, so that consumers know exactly what they are eating.", vi: "Chính phủ nên bắt buộc nhãn thực phẩm rõ ràng, để người tiêu dùng biết chính xác mình đang ăn gì. (một câu luận điểm Task 2 dùng ngay được)" },
+        { en: "Although preservatives keep food fresh for longer, eating too many of them may harm our health.", vi: "Dù chất bảo quản giữ thực phẩm tươi lâu hơn, ăn quá nhiều có thể hại sức khoẻ. (câu nhượng bộ — Ngày 17)" },
+      ],
+    },
+
+    { t: "h", text: "8. Thêm: nói về món ăn, lễ, đồ vật chỉ Việt Nam có" },
+    {
+      t: "p",
+      text: "Part 1 hay hỏi “What's a traditional food in your country?”, “What do people do at Tet?”. Người học thường **cố dịch tên** (bánh chưng → ~~square cake~~?) rồi bí. Cách an toàn: **giữ nguyên tên tiếng Việt**, rồi thêm **một mệnh đề giải thích bằng từ quen** — giám khảo không cần biết món đó, chỉ cần hiểu bạn giải thích được.",
+    },
+    {
+      t: "patterns",
+      rows: [
+        { formula: "tên Việt + , which is basically + a / an + N + made from / served with + …", vi: "giữ tên, giải thích bản chất bằng từ dễ", examples: [{ en: "We eat banh chung, which is basically a square rice cake filled with pork and beans.", vi: "Chúng tôi ăn bánh chưng, về cơ bản là bánh gạo vuông nhân thịt lợn và đậu." }] },
+        { formula: "tên Việt + — a kind of + N + that / which + V", vi: "“một loại … mà …”", examples: [{ en: "Many women wear an ao dai — a kind of long silk dress that people wear on special occasions.", vi: "Nhiều phụ nữ mặc áo dài — một loại váy lụa dài mặc vào dịp đặc biệt." }] },
+        { formula: "tên Việt + , or + từ tiếng Anh gần nhất + , + …", vi: "đưa luôn từ gần nghĩa nhất", examples: [{ en: "My favourite breakfast is pho, or noodle soup, which is usually served with beef and fresh herbs.", vi: "Bữa sáng tôi thích nhất là phở, tức món phở nước, thường ăn với thịt bò và rau thơm." }] },
+      ],
+    },
+    {
+      t: "note",
+      title: "Mẹo giải thích thứ đặc thù",
+      items: [
+        "Giải thích bằng **3 thứ dễ**: làm từ gì (made from rice / beef), ăn / dùng khi nào (at Tet, for breakfast), trông thế nào (square, long, round).",
+        "Đừng giải thích quá 2 câu ở Part 1 — chỉ đủ để giám khảo hình dung, rồi quay lại trả lời câu hỏi.",
+        "Mệnh đề **, which…** sau tên riêng cần **dấu phẩy** (mệnh đề không xác định — học kỹ ở Ngày 15).",
+      ],
+    },
+    {
+      t: "quiz",
+      id: "t2d12-tv-dac-thu",
+      title: "Dịch — giữ tên Việt, giải thích bằng từ quen (3 câu)",
+      kind: "translate",
+      grammar: "tên Việt + , which is (basically) + a / an + N + made from / filled with / served with … · tên Việt + — a kind of + N + that …",
+      items: [
+        { q: "Vào dịp Tết chúng tôi ăn bánh chưng, về cơ bản là một loại bánh gạo vuông có nhân thịt lợn.", hint: "At Tet we eat banh chung, which is basically, a square rice cake, filled with pork", answers: ["At Tet we eat banh chung, which is basically a square rice cake filled with pork.", "At Tet, we eat banh chung, which is basically a square rice cake filled with pork.", "During Tet we eat banh chung, which is basically a square rice cake filled with pork.", "At Tet we eat banh chung, which is basically a kind of square rice cake filled with pork.", "At Tet we eat banh chung, which is basically a square rice cake with pork inside.", "During Tet, we eat banh chung, which is basically a square rice cake filled with pork."] },
+        { q: "Áo dài là một loại váy lụa dài mà phụ nữ mặc vào những dịp đặc biệt.", hint: "The ao dai is a kind of long silk dress, that / which women wear, on special occasions", answers: ["The ao dai is a kind of long silk dress that women wear on special occasions.", "The ao dai is a kind of long silk dress which women wear on special occasions.", "The ao dai is a type of long silk dress that women wear on special occasions.", "The ao dai is a long silk dress that women wear on special occasions.", "An ao dai is a kind of long silk dress that women wear on special occasions.", "Ao dai is a kind of long silk dress that women wear on special occasions."] },
+        { q: "Món tôi thích nhất là bún chả, tức là bún ăn với thịt lợn nướng.", hint: "My favourite dish is bun cha, which is, rice noodles served with grilled pork", answers: ["My favourite dish is bun cha, which is rice noodles served with grilled pork.", "My favourite dish is bun cha, which is basically rice noodles served with grilled pork.", "My favourite dish is bun cha, or rice noodles served with grilled pork.", "My favourite dish is bun cha, which is rice noodles with grilled pork.", "My favourite dish is bun cha, which consists of rice noodles served with grilled pork.", "My favourite food is bun cha, which is rice noodles served with grilled pork."] },
+      ],
+    },
   ],
 };
 
@@ -349,6 +409,26 @@ const T2D12_DOC: Lesson = {
       t: "rule",
       formula: "Tiêu đề = ý chính CẢ đoạn · câu đầu + câu cuối + sau However · trùng chữ ≠ đúng · mỗi tiêu đề dùng một lần",
       vi: "Tự tóm tắt đoạn bằng 3–5 từ TRƯỚC khi nhìn danh sách tiêu đề.",
+    },
+    {
+      t: "note",
+      title: "Thao tác trên đề trước khi đọc — tiết kiệm 2–3 phút",
+      items: [
+        "**Gạch ngay** tiêu đề đã dùng cho **đoạn ví dụ** (Example: Paragraph A — iv) ở danh sách, và **gạch chéo cả đoạn A** trong bài: đoạn đó không cần đọc.",
+        "**Đánh dấu đoạn không bị hỏi.** Đề có thể chỉ hỏi đoạn B–F (hoặc bỏ qua một đoạn giữa). Khoanh các chữ cái được hỏi ngay trên bài — đừng mất công tóm tắt đoạn không có câu hỏi.",
+        "**Làm đoạn NGẮN nhất / rõ nhất trước.** Đoạn 3–4 câu có ý chính lộ ngay; ghép xong, danh sách tiêu đề ngắn lại, đoạn dài khó trở nên dễ hơn.",
+        "**Ví dụ minh hoạ không phải ý chính.** Một nước (in Japan…), một con số (40% of…), một nghiên cứu (A 2019 study…) thường chỉ là **bằng chứng** cho ý chính. Tiêu đề chỉ nói về ví dụ đó gần như luôn là **bẫy**.",
+      ],
+    },
+    {
+      t: "mcq",
+      id: "t2d12-doc-vi-du",
+      title: "Tiêu đề nào là ý chính, cái nào chỉ là ví dụ? (3 câu)",
+      items: [
+        { q: "(1) Đoạn: “Many cities now pay people to cycle to work. In Milan, for example, commuters earn a small amount for every kilometre. Similar schemes exist in France and Belgium, and early results suggest that cycling rates rise when money is offered.” — Tiêu đề nào đúng?", options: ["A How Milan rewards its cyclists", "B Using money to encourage cycling", "C The cycling habits of Belgians"], correct: 1, why: "Câu đầu nêu ý chính: **trả tiền để khuyến khích đạp xe**. Milan, Pháp, Bỉ chỉ là **ví dụ** cho ý đó → A và C là bẫy chi tiết." },
+        { q: "(2) Đoạn: “Sleep affects memory more than most students realise. In a 2018 study, people who slept after learning new words remembered 30% more the next day. Teachers are now advising students not to study all night before exams.” — Tiêu đề nào đúng?", options: ["A A 30% improvement in one experiment", "B Why teachers dislike exams", "C The link between sleep and remembering"], correct: 2, why: "Ý chính ở câu đầu: **giấc ngủ ảnh hưởng trí nhớ**. Con số 30% và nghiên cứu 2018 là **bằng chứng**; câu về giáo viên là **hệ quả**. A chỉ đúng một chi tiết; B sai ý." },
+        { q: "(3) Đề: “Example: Paragraph A — iii”. Bạn làm gì đầu tiên?", options: ["A Đọc kỹ đoạn A để hiểu cách ghép", "B Gạch tiêu đề iii khỏi danh sách và bỏ qua đoạn A", "C Dùng lại tiêu đề iii cho đoạn giống A"], correct: 1, why: "Tiêu đề của ví dụ **không dùng lại**. Gạch nó ngay để danh sách ngắn đi, và không tốn thời gian đọc đoạn A." },
+      ],
     },
 
     { t: "h", text: "2. Bài đọc luyện tập — Questions 1–10" },
@@ -475,6 +555,7 @@ const T2D12_VIET: Lesson = {
         "Thân bài: gom **phần lớn** một đoạn, **phần nhỏ** một đoạn — hoặc **phần tăng** / **phần giảm**.",
         "Hai bài mẫu: **hai pie hai năm** (mục 3, ngân sách thực phẩm) và **một pie** (mục 4, nguồn đạm) — mỗi bài có đề tự viết cho AI chấm.",
         "Đẩy **TA** (overview nêu phần lớn nhất + thay đổi lớn nhất) và **LR** (không lặp “percent” — đổi sang phân số, share, proportion).",
+        "Mục 5: **số in sẵn ghi đúng, số đọc vạch mới thêm about**; khung **mở thân bài 2** (Turning to / In terms of / As for); **Other** luôn tả cuối; cách chia bài khi đề có **3–4 pie**.",
       ],
     },
 
@@ -723,7 +804,63 @@ const T2D12_VIET: Lesson = {
       ],
     },
 
-    { t: "h", text: "5. Tự viết bài hai pie (AI chấm)" },
+    { t: "h", text: "5. Số đúng hay số xấp xỉ · mở thân bài 2 · gặp 3–4 pie" },
+    {
+      t: "table",
+      caption: "Khi nào ghi đúng số, khi nào thêm about / just under",
+      head: ["Hình", "Số trên hình", "Viết thế nào"],
+      rows: [
+        ["**Pie**, **bảng**", "**in sẵn** (34%, 1,250)", "Ghi **đúng số**: Meat accounted for 34%. Thêm phân số bên cạnh để paraphrase: just over a third (34%)."],
+        ["**Cột**, **đường** không in số", "phải **đọc theo vạch** trục", "Dùng **about / around / approximately / nearly / just under / just over**: just under 30%."],
+        ["Cột / đường **có in số** ở đầu cột", "in sẵn", "Ghi đúng số như pie."],
+      ],
+    },
+    {
+      t: "note",
+      title: "Cẩn thận: đừng thêm about cho số in sẵn",
+      items: [
+        "~~Around 34% of protein came from meat~~ khi hình ghi rõ 34% — nghe như bạn không đọc kỹ hình. Ghi **34%**.",
+        "Ngược lại, ~~exactly 29.3%~~ khi chỉ đọc được từ vạch là **bịa độ chính xác**. Đọc vạch → **about 30% / just under 30%**.",
+      ],
+    },
+    {
+      t: "table",
+      caption: "Mở thân bài 2 — chuyển sang nhóm số liệu khác (điểm CC)",
+      head: ["Khung", "Dùng khi"],
+      rows: [
+        ["**Turning to** + nhóm còn lại, …", "chuyển sang nhóm / hình khác: Turning to the remaining categories, …"],
+        ["**In terms of** + N, …", "nói về một mặt: In terms of food bought for the home, …"],
+        ["**As for** + N, …", "còn về…: As for dairy products, …"],
+        ["**The opposite trend can be seen in** + N.", "nhóm này đi **ngược** nhóm thân bài 1"],
+        ["**By contrast,** / **In contrast,** …", "đối lập trực tiếp với câu trước"],
+      ],
+    },
+    {
+      t: "examples",
+      items: [
+        { en: "Spending on fresh food fell, with the notable exception of dairy, which stayed at 12%.", vi: "Chi cho đồ tươi giảm, **ngoại lệ đáng chú ý** là sữa, giữ ở 12%. (**with the notable exception of** = trừ một trường hợp nổi bật)" },
+        { en: "Meat fell from 28% to 20%. Likewise, the share for fresh produce dropped by eight percentage points.", vi: "Thịt giảm từ 28% xuống 20%. **Tương tự**, phần rau quả tươi giảm tám điểm phần trăm. (**Likewise** = cũng vậy, mở câu)" },
+        { en: "The remaining categories, including \"Other\", each accounted for less than 10%.", vi: "**Các hạng mục còn lại**, kể cả \"Other\", mỗi hạng mục chiếm dưới 10%. (\"Other\" luôn nói **cuối**, gộp một câu)" },
+      ],
+    },
+    {
+      t: "note",
+      title: "Mẹo khi đề có 3–4 pie (ví dụ 2 nước × 2 năm)",
+      items: [
+        "Trước khi viết, chọn **một trục chia** thân bài và giữ nguyên: **theo nước** (khổ 1 = nước A qua hai năm, khổ 2 = nước B) **hoặc** **theo năm** (khổ 1 = năm đầu so hai nước, khổ 2 = năm sau). Theo nước thường dễ hơn vì mỗi khổ là một câu chuyện thay đổi.",
+        "Overview: **mỗi trục một ý** — thay đổi chung theo thời gian + khác biệt lớn nhất giữa hai nước.",
+        "Mỗi pie chỉ chọn **2–3 phần nổi bật** (lớn nhất, đổi nhiều nhất). Kể đủ 4 pie × 5 phần = 20 số là quá dài và mất điểm TA.",
+        "Mục **Other** của mọi pie gộp vào một câu cuối, hoặc bỏ nếu nhỏ và không đổi.",
+        "Pie nào **thiếu số liệu** một nhóm (không có phần đó) → nói rõ một lần trong thân bài, đừng tự thêm.",
+      ],
+    },
+    {
+      t: "rule",
+      formula: "Số in sẵn → ghi đúng · Đọc vạch → about / just under · Thân 2: Turning to / In terms of / As for · Other → cuối · 3–4 pie → một trục chia",
+      vi: "Bốn quyết định nhỏ giúp bài pie chart không bị trừ TA và CC.",
+    },
+
+    { t: "h", text: "6. Tự viết bài hai pie (AI chấm)" },
     {
       t: "figure",
       fig: {

@@ -489,6 +489,7 @@ const D15_GRAMMAR: Lesson = {
       items: [
         "Trong quy trình, gần như **không bao giờ** có by + người (~~by workers~~, ~~by people~~). Chỉ giữ **by + phương tiện** khi hình có ghi: **by hand**, **by machine**, **by truck / by lorry**, **by conveyor belt**.",
         "Không có “a / the” sau by với phương tiện chung: **by machine**, **by truck** (~~by a truck~~ — nhưng **in a truck** thì có a).",
+        "Phần này sách chưa có: **by** + người làm / cách làm (by local farmers, by hand) ≠ **with** + dụng cụ cầm tay hoặc chất dùng để làm: The fruit is cut **with a knife** · The bottles are cleaned **with hot water** (~~cut by a knife~~).",
       ],
     },
 
@@ -984,6 +985,16 @@ const D15_VOCAB: Lesson = {
         "Người mới hay viết ~~is put~~ ở mọi câu (is put in a machine, is put in a truck…). Dùng đúng động từ: **transported**, **poured**, **placed**, **loaded**, **fed into** (cho vào máy).",
         "Đề bài in sẵn từ trong hình (dạng danh từ: “Collection”, “Sorting”) — **đổi sang động từ bị động**: Collection → **are collected**; Sorting → **is sorted**. Vừa đúng ngữ pháp vừa không chép nguyên văn.",
         "Thêm **mục đích** bằng **to + V** hoặc **in order to**: washed **to remove** labels; heated **in order to** melt it.",
+      ],
+    },
+    {
+      t: "table",
+      caption: "Phần này sách chưa có — từ trình tự chia 3 tầng (mỗi tầng chọn một, đừng lặp “then”)",
+      head: ["Tầng", "Cụm", "Ví dụ"],
+      rows: [
+        ["**Mở**", "The process **begins with** + N · **First (of all)**, … · **To begin with**, …", "The process **begins with** the collection of used bottles."],
+        ["**Giữa**", "**Next** · **After that** · **Subsequently** · **Once** S + has/have been V3, … · …, **after which** …", "They are washed, **after which** they are crushed."],
+        ["**Kết**", "**Finally**, … · The process **ends with** + N / V-ing", "The process **ends with** the bottles being delivered to shops."],
       ],
     },
 

@@ -15,8 +15,8 @@ const T2D17_GRAMMAR: Lesson = {
   id: "t2d17-ngu-phap",
   kind: "grammar",
   title: "Ngữ pháp: Từ nối cấp câu & cấp đoạn — đúng vai, không lạm dụng",
-  goal: "Phân biệt liên từ (nối hai mệnh đề trong một câu) với trạng từ liên kết (nối câu với câu, đoạn với đoạn), chọn từ nối theo đúng chức năng, đặt dấu câu đúng và không lạm dụng — để Writing tiêu chí Mạch lạc & Liên kết (CC) và Ngữ pháp (GRA) lên band 5–5.5.",
-  minutes: 75,
+  goal: "Phân biệt liên từ (nối hai mệnh đề trong một câu) với trạng từ liên kết (nối câu với câu, đoạn với đoạn), chọn từ nối theo đúng chức năng, đặt dấu câu đúng và không lạm dụng — viết các vế nối nhau cùng dạng (cấu trúc song song), sửa được câu dính và câu lê thê — để Writing tiêu chí Mạch lạc & Liên kết (CC) và Ngữ pháp (GRA) lên band 5–5.5.",
+  minutes: 95,
   blocks: [
     {
       t: "recap",
@@ -27,6 +27,7 @@ const T2D17_GRAMMAR: Lesson = {
         "Dấu câu: **However, S + V.** hoặc **S + V; however, S + V.** — không nối hai câu bằng dấu phẩy. **Although… , …** không kèm **but**; **Because… , …** không kèm **so**.",
         "Band descriptor ghi rõ: band 5 = **lạm dụng** từ nối hoặc dùng sai; band 6 = đủ loại, dùng đúng dù còn máy móc. Quy tắc nhanh: **khoảng 1 trạng từ liên kết đầu câu cho 2–3 câu**.",
         "Gắn kết không chỉ nhờ từ nối: **this / these + danh từ** và **lặp từ khoá có chủ ý** cũng nối ý (bước đầu của tiêu chí CC).",
+        "Lỗi cấp câu: **cấu trúc song song** (A and B cùng dạng; both… and, not only… but also) · **câu dính** và **câu lê thê** (quá 2 and / so trong một câu) · **And / But / So** không mở câu trong bài viết.",
         "Bài này đẩy **Writing CC + GRA từ 4.5 lên 5.0–5.5** và giúp **Speaking FC** (nói có mạch, không lặp \"and… and… and\").",
       ],
     },
@@ -221,6 +222,8 @@ const T2D17_GRAMMAR: Lesson = {
         "**while** có hai nghĩa: **trong khi** (đối lập — Young people…, while older people…) và **trong lúc** (thời gian — I read **while** I was waiting). Nhìn ngữ cảnh để hiểu.",
         "**despite / in spite of** (dù… + danh từ) cũng nói nhượng bộ, nhưng cách dùng khác hẳn although — học kỹ ở **Tập 3 Ngày 21**. Hôm nay chỉ cần nhớ: ~~despite of~~ luôn sai.",
         "Không viết một mệnh đề phụ đứng riêng làm câu: ~~I chose this job. Because it is interesting.~~ → **I chose this job because it is interesting.** (Khi **nói** trả lời ngắn \"Because it's interesting.\" thì vẫn tự nhiên.)",
+        "**since / as** cũng nghĩa là **vì**, hay đứng **đầu câu** khi lý do là điều người đọc đã biết, giọng trang trọng hơn: **Since / As** most students live far from campus, the university runs free buses. Trong bài viết, **because** thường đứng **giữa câu**; muốn mở câu bằng lý do thì since / as nghe tự nhiên hơn.",
+        "Khi **nói**, lỗi \"tuy… nhưng\" còn hay hơn khi viết: ~~Although it was raining, but we still went out.~~ Chọn **một**: **Although** it was raining, we still went out. / It was raining, **but** we still went out.",
       ],
     },
     {
@@ -383,7 +386,7 @@ const T2D17_GRAMMAR: Lesson = {
     },
     {
       t: "table",
-      caption: "8 lỗi lạm dụng / dùng sai hay gặp ở band 4.5–5",
+      caption: "9 lỗi lạm dụng / dùng sai hay gặp ở band 4.5–5",
       head: ["Lỗi", "Sai", "Sửa"],
       rows: [
         ["Câu nào cũng mở bằng từ nối", "~~Firstly… Moreover… Furthermore… In addition…~~", "Khoảng **1 từ nối đầu câu / 2–3 câu**; còn lại dùng and / because / this + N"],
@@ -394,6 +397,7 @@ const T2D17_GRAMMAR: Lesson = {
         ["Firstly of all · Lastly but not least", "~~Firstly of all~~ · ~~Lastly but not least~~ (sai cụm) · Last but not least (đúng nhưng sáo rỗng)", "**Firstly,** / **First of all,** · **Finally,**"],
         ["Chồng hai từ cùng chức năng", "~~In conclusion, to sum up,~~ · ~~But however~~", "Chỉ một: **In conclusion,** / **However,**"],
         ["Mở bài sáo rỗng", "~~Nowadays, this is a controversial issue.~~", "Nói thẳng chủ đề: **Many cities are now banning cars from their centres.**"],
+        ["**And / But / So** mở đầu câu trong bài viết", "~~Cars are fast. But they are expensive.~~ · ~~So governments should act.~~", "Cars are fast. **However,** they are expensive. · **Therefore,** governments should act. (And → **In addition,** · So → **Therefore, / As a result,**) — hoặc nối luôn vào câu trước: Cars are fast**, but** they are expensive."],
       ],
     },
     {
@@ -468,7 +472,120 @@ const T2D17_GRAMMAR: Lesson = {
     },
 
     /* ── 8 ── */
-    { t: "h", text: "8. Áp vào bài thi: một đoạn thân bài Task 2 và từ nối khi nói" },
+    { t: "h", text: "8. Cấu trúc song song: hai vế nối nhau phải cùng dạng" },
+    {
+      t: "p",
+      text: "**Cấu trúc song song** (parallel structure) = các vế được nối bằng **and / or / but** (hoặc cặp **both… and, either… or, neither… nor, not only… but also**) phải có **cùng dạng ngữ pháp**: danh từ đi với danh từ, V-ing đi với V-ing, to V đi với to V, mệnh đề đi với mệnh đề. Lệch dạng là lỗi Ngữ pháp (GRA) mà máy kiểm chính tả không bắt được — người Việt mắc rất nhiều vì tiếng Việt không đổi dạng từ.",
+    },
+    {
+      t: "table",
+      caption: "Nhìn vế ĐẦU tiên để biết các vế sau phải ở dạng nào",
+      head: ["Dạng", "Sai (lệch)", "Đúng (song song)"],
+      rows: [
+        ["N **and** N", "~~Cycling improves health and saving money.~~", "Cycling improves **health** and **fitness**. / Cycling **improves** health **and saves** money."],
+        ["V-ing **and** V-ing", "~~I enjoy reading, swimming and to cook.~~", "I enjoy **reading**, **swimming** and **cooking**."],
+        ["to V **or** to V", "~~Students can choose to study online or going to class.~~", "Students can choose **to study** online or **(to) go** to class."],
+        ["adj **and** adj", "~~The job is tiring and a lot of stress.~~", "The job is **tiring** and **stressful**."],
+        ["giới từ + V-ing **and** V-ing", "~~by walking more and eat less sugar~~", "**by walking** more and **eating** less sugar"],
+      ],
+    },
+    {
+      t: "patterns",
+      rows: [
+        {
+          formula: "both A and B · either A or B · neither A nor B · not only A but also B",
+          vi: "Cặp liên từ: A và B phải CÙNG DẠNG, và đặt ngay trước đúng phần được so.",
+          examples: [
+            { en: "Public transport is both cheap and reliable.", vi: "Giao thông công cộng vừa rẻ vừa đáng tin cậy. (adj – adj)" },
+            { en: "Exercise not only improves your health but also reduces stress.", vi: "Tập thể dục không chỉ cải thiện sức khoẻ mà còn giảm căng thẳng. (V – V)" },
+            { en: "You can either take the train or fly.", vi: "Bạn có thể hoặc đi tàu hoặc đi máy bay. (V – V)" },
+          ],
+        },
+      ],
+    },
+    {
+      t: "note",
+      title: "Người Việt hay sai với cấu trúc song song",
+      items: [
+        "Đặt cặp liên từ **lệch chỗ**: ~~Not only it is cheap but also fast.~~ → It is **not only cheap but also fast**. (Đặt **not only** ngay trước tính từ cheap; đảo ngữ \"Not only is it…\" học ở Tập 4.)",
+        "Liệt kê ba thứ: dùng **A, B and C** (dấu phẩy giữa, **and** trước thứ cuối), cả ba cùng dạng. Đừng viết ~~etc.~~ trong bài thi — nêu đủ 2–3 ví dụ là đủ.",
+        "Sau giới từ (by, for, of, without…) mọi vế đều là **V-ing**: ~~without paying or to wait~~ → without **paying** or **waiting**.",
+      ],
+    },
+    {
+      t: "rule",
+      formula: "A and / or / but B: A, B cùng dạng (N–N · V-ing–V-ing · to V–to V · adj–adj) · not only A but also B",
+      vi: "Nhìn vế đầu tiên, viết các vế sau theo đúng dạng ấy.",
+    },
+    {
+      t: "quiz",
+      id: "t2d17-song-song-dich",
+      title: "Song song — viết lại cho đúng / dịch (5 câu)",
+      kind: "translate",
+      grammar: "Các vế nối bằng and / or / both… and / not only… but also phải cùng dạng.",
+      items: [
+        { q: "Sửa lỗi: My hobbies are reading books and to play football.", hint: "reading … and playing …", answers: ["My hobbies are reading books and playing football.", "My hobbies are reading and playing football."] },
+        { q: "Sửa lỗi: The new park is quiet, clean and has a lot of space.", hint: "quiet, clean and spacious (adj, adj, adj)", answers: ["The new park is quiet, clean and spacious.", "The new park is quiet, clean, and spacious.", "The new park is quiet and clean and has a lot of space.", "The new park is quiet and clean, and it has a lot of space."] },
+        { q: "Bạn có thể tiết kiệm tiền bằng cách nấu ăn ở nhà và đi bộ đi làm.", hint: "You can save money by cooking at home and walking to work", answers: ["You can save money by cooking at home and walking to work.", "You can save money by cooking at home and by walking to work.", "You can save money by cooking at home and going to work on foot.", "We can save money by cooking at home and walking to work."] },
+        { q: "Học online vừa rẻ vừa linh hoạt.", hint: "Online learning is both cheap and flexible", answers: ["Online learning is both cheap and flexible.", "Studying online is both cheap and flexible.", "Learning online is both cheap and flexible.", "Online study is both cheap and flexible.", "Online learning is both inexpensive and flexible."] },
+        { q: "Tập thể dục không chỉ tốt cho cơ thể mà còn tốt cho tinh thần.", hint: "Exercise is not only good for the body but also good for the mind", answers: ["Exercise is not only good for the body but also good for the mind.", "Exercise is good not only for the body but also for the mind.", "Exercising is not only good for the body but also good for the mind.", "Exercise is good not only for your body but also for your mind.", "Exercise is not only good for your body but also good for your mind."] },
+      ],
+    },
+
+    /* ── 9 ── */
+    { t: "h", text: "9. Câu dính (run-on) và câu lê thê nhiều and / so" },
+    {
+      t: "p",
+      text: "Mục 4 đã nói về **dán hai câu bằng dấu phẩy**. Còn hai lỗi cùng họ: **câu dính** (run-on) — hai câu đứng liền nhau **không có dấu câu và không có từ nối**; và **câu lê thê** (stringy sentence) — một câu nối 3–4 mệnh đề bằng **and… so… and…**, đọc như kể lể, không rõ ý nào chính. Cả hai đều làm giám khảo khó theo dõi (CC) và bị coi là kiểm soát câu kém (GRA).",
+    },
+    {
+      t: "table",
+      caption: "Ba cách sửa câu dính / câu lê thê",
+      head: ["Lỗi", "Câu gốc", "Sửa"],
+      rows: [
+        ["Câu dính", "~~Many students work part-time they have less time to study.~~", "Tách: …part-time**. They** have… · Nối: …part-time**, so** they have… · Phụ thuộc: **Because** many students work part-time, they have…"],
+        ["Câu lê thê", "~~I went to the city and I found a job and it was hard so I moved back home and now I work on a farm.~~", "**When** I moved to the city, I found a job, **but** it was so hard **that** I moved back home. Now I work on a farm."],
+        ["Câu lê thê", "~~Cars are convenient and they are fast so many people use them and the air is polluted.~~", "Cars are convenient and fast, **which is why** many people use them. **As a result,** the air is polluted."],
+      ],
+    },
+    {
+      t: "note",
+      title: "Mẹo tự soát câu dài",
+      items: [
+        "Đếm **and / but / so** trong một câu: **quá 2** → tách câu hoặc đổi một vế thành mệnh đề phụ (**because, although, when, while, which**).",
+        "Câu trong bài viết nên khoảng **dưới 30 từ**, thường **2 mệnh đề** (một chính, một phụ). Dài hơn thì đọc to: hết hơi giữa câu → câu quá dài.",
+        "Câu có chủ ngữ dài nhớ **tìm động từ chính**: ~~People who live in big cities and work long hours.~~ (chưa có động từ chính → câu què) → People who live in big cities and work long hours **often feel stressed**.",
+      ],
+    },
+    {
+      t: "rule",
+      formula: "Câu. Câu. · Câu, so / but + câu. · Because / Although / When + S + V, S + V · ≤ 2 and / so trong một câu",
+      vi: "Hai mệnh đề cần dấu chấm hoặc một từ nối; nhiều mệnh đề thì đổi bớt thành mệnh đề phụ.",
+    },
+    {
+      t: "quiz",
+      id: "t2d17-run-on-dich",
+      title: "Sửa câu dính / câu lê thê (3 câu — viết lại thành câu đúng)",
+      kind: "translate",
+      grammar: "Thêm dấu chấm, hoặc so / but, hoặc because / although / which để gom câu.",
+      items: [
+        { q: "Sửa: The bus was late I missed the exam.", hint: "…was late, so I missed… / Because the bus was late, …", answers: ["The bus was late, so I missed the exam.", "The bus was late. I missed the exam.", "Because the bus was late, I missed the exam.", "I missed the exam because the bus was late.", "The bus was late, and I missed the exam.", "The bus was late; I missed the exam.", "As the bus was late, I missed the exam."] },
+        { q: "Sửa (gom còn 1 câu, ≤ 2 từ nối): Fast food is cheap and it is quick and so young people eat it a lot and they gain weight.", hint: "Because fast food is cheap and quick, young people eat it a lot, so they… / …, which…", answers: ["Because fast food is cheap and quick, young people eat it a lot, so they gain weight.", "Because fast food is cheap and quick, young people eat a lot of it, so they gain weight.", "Fast food is cheap and quick, so young people eat it a lot, which makes them gain weight.", "Because fast food is cheap and quick, young people eat it a lot and gain weight.", "Since fast food is cheap and quick, young people eat it a lot, so they gain weight.", "As fast food is cheap and quick, young people eat it a lot, so they gain weight."] },
+        { q: "Sửa (câu què): Students who spend hours on social media every night.", hint: "Students who spend hours on social media every night + often sleep badly / get lower marks…", answers: ["Students who spend hours on social media every night often sleep badly.", "Students who spend hours on social media every night often sleep poorly.", "Students who spend hours on social media every night often get lower marks.", "Students who spend hours on social media every night often feel tired.", "Students who spend hours on social media every night often feel tired at school.", "Students who spend hours on social media every night usually sleep badly.", "Students who spend hours on social media every night often get lower grades."] },
+      ],
+    },
+    {
+      t: "note",
+      title: "Giải thích đáp án",
+      items: [
+        "**Câu 1**: hai mệnh đề (The bus was late / I missed the exam) đứng liền không dấu → thêm **so**, hoặc tách bằng dấu chấm, hoặc biến một vế thành mệnh đề phụ với **because / as**.",
+        "**Câu 2**: bốn mệnh đề nối bằng and… and so… and → gộp hai tính từ (**cheap and quick**), đổi vế nguyên nhân thành **Because…**, giữ một **so** cho kết quả. Đáp án \"…, which makes them gain weight\" cũng đúng.",
+        "**Câu 3**: \"who spend hours…\" chỉ là mệnh đề quan hệ bổ nghĩa cho Students; câu còn **thiếu động từ chính** → thêm \"often sleep badly / get lower marks…\". Chấp nhận mọi động từ hợp nghĩa.",
+      ],
+    },
+
+    /* ── 10 ── */
+    { t: "h", text: "10. Áp vào bài thi: một đoạn thân bài Task 2 và từ nối khi nói" },
     {
       t: "p",
       text: "Đề: **Some people believe that employees work better in teams, while others think they work better alone. Discuss both views and give your opinion.** Dưới đây là một đoạn thân bài band khoảng 5.5 — đếm xem có mấy từ nối và mỗi cái làm chức năng gì.",
@@ -861,8 +978,8 @@ const T2D17_SPEAKING: Lesson = {
   id: "t2d17-noi",
   kind: "speaking",
   title: "Nói: Trọng âm câu & nhịp — nêu ý kiến trong họp và ở Part 3",
-  goal: "Nhấn đúng từ nội dung, đọc lướt từ chức năng để nói có nhịp tiếng Anh; dùng trọng âm để nhấn ý; nêu ý kiến 3 bước và phản hồi lịch sự trong họp và ở Speaking Part 3 — đẩy tiêu chí Phát âm (P) và Trôi chảy (FC) lên band 5–5.5.",
-  minutes: 65,
+  goal: "Nhấn đúng từ nội dung, đọc lướt từ chức năng để nói có nhịp tiếng Anh; dùng trọng âm để nhấn ý; nêu ý kiến 3 bước và phản hồi lịch sự trong họp và ở Speaking Part 3 — trả lời câu “Do you agree…?” theo đúng mức đồng ý — đẩy tiêu chí Phát âm (P) và Trôi chảy (FC) lên band 5–5.5.",
+  minutes: 75,
   blocks: [
     {
       t: "recap",
@@ -872,6 +989,7 @@ const T2D17_SPEAKING: Lesson = {
         "**Nhịp** tiếng Anh đi theo **trọng âm**, không theo từng chữ như tiếng Việt: \"Cats eat fish\" và \"The cats have eaten the fish\" dài gần bằng nhau.",
         "**Nhấn để đổi nghĩa**: nhấn từ nào là người nghe hiểu bạn đang **so sánh / sửa** điều gì (I booked the **library**, not the hotel).",
         "**Nêu ý kiến trong họp** 3 bước: Ý kiến → Lý do → Đề xuất / ví dụ; phản hồi lịch sự: Fair point · I see your point, but… — dùng y hệt ở **Part 3**.",
+        "Part 3 **“Do you agree…?”**: chọn đúng **mức** — đồng ý hoàn toàn · phần lớn · **một phần** (I agree up to a point, but…) · phản đối mềm (That's one way to look at it, but…) · phản đối rõ.",
         "Bài này đẩy **Speaking P (Phát âm)** từ \"đọc đều từng chữ\" (band 4) lên \"trọng âm đúng, có nhịp\" (band 5–6) và **FC** nhờ khung câu ý kiến.",
       ],
     },
@@ -1112,6 +1230,41 @@ const T2D17_SPEAKING: Lesson = {
         "**LR**: dùng được từ của bài Nghe hôm nay (agenda, summary, suggest) và cụm tự nhiên (end up, get a chance to).",
         "**GRA**: có câu phức (because, so, that I would never have thought of — mệnh đề quan hệ của Ngày 15).",
         "**P**: nếu đọc đúng chỗ in đậm, nhịp đều và từ chức năng nhẹ, người nghe theo dõi dễ — đó là đặc trưng band 6 của tiêu chí Phát âm.",
+      ],
+    },
+    {
+      t: "p",
+      text: "Part 3 hay hỏi dạng **“Some people say…. Do you agree?”** hoặc **“Do you agree that…?”**. Câu trả lời tệ nhất là “Yes.” / “No.” rồi dừng; câu trả lời “an toàn” nhất thường là **đồng ý một phần** — vì nó cho bạn nói **cả hai mặt** (đúng khung 4 bước Ngày 13). Bảng dưới xếp cụm theo **mức độ**, chọn mức đúng với ý mình thật sự nghĩ.",
+    },
+    {
+      t: "table",
+      caption: "Trả lời “Do you agree…?” — năm mức từ đồng ý hẳn đến phản đối rõ",
+      head: ["Mức", "Cụm mở đầu", "Nói tiếp gì"],
+      rows: [
+        ["Đồng ý hoàn toàn", "**Absolutely.** · I **completely** agree. · I couldn't agree **more**.", "lý do + ví dụ"],
+        ["Đồng ý phần lớn", "**Generally**, yes. · On the **whole**, I'd agree.", "lý do + một ngoại lệ nhỏ"],
+        ["Đồng ý một phần", "I agree **up to a point**, but… · That's **partly** true, but… · To **some** extent, yes.", "mặt đúng → **but** → mặt chưa đúng"],
+        ["Phản đối mềm", "That's **one** way to look at it, but… · I **see** why people say that, but… · I'm not **so** sure.", "thừa nhận lý lẽ của họ → ý của mình"],
+        ["Phản đối rõ", "I **don't** really agree. · **Actually**, I think it's the **opposite**.", "lý do mạnh + ví dụ"],
+      ],
+    },
+    {
+      t: "dialogue",
+      title: "Part 3 — Do you agree…? (band 5.5 ước tính)",
+      lines: [
+        { who: "Examiner", role: "examiner", text: "Some people say that working from home makes people lazy. Do you agree?" },
+        { who: "Candidate", role: "candidate", text: "I agree up to a point. Some people do find it hard to concentrate at home, especially if they live with small children. But I don't think it makes people lazy. In fact, my sister works more hours at home, because she doesn't waste time in traffic. So overall, I'd say it depends on the person, not the place.", vi: "Tôi đồng ý ở một mức nào đó. Một số người thấy khó tập trung ở nhà, nhất là khi sống cùng con nhỏ. Nhưng tôi không nghĩ nó làm người ta lười. Thực tế, chị tôi làm việc nhiều giờ hơn khi ở nhà, vì chị không mất thời gian kẹt xe. Nên nhìn chung, tôi cho là tuỳ người, không phải tuỳ nơi." },
+        { who: "Examiner", role: "examiner", text: "Do you agree that the best leaders are the ones who talk the most?" },
+        { who: "Candidate", role: "candidate", text: "That's one way to look at it, but I'm not so sure. Of course, a leader needs to explain things clearly. However, I think good leaders listen more than they talk. For example, my football coach always asks the players what they think before he decides anything. That's why the team trusts him.", vi: "Đó là một cách nhìn, nhưng tôi không chắc lắm. Tất nhiên lãnh đạo cần giải thích rõ ràng. Tuy nhiên, tôi nghĩ lãnh đạo giỏi nghe nhiều hơn nói. Ví dụ, huấn luyện viên bóng đá của tôi luôn hỏi ý cầu thủ trước khi quyết định điều gì. Vì thế cả đội tin ông ấy." },
+      ],
+    },
+    {
+      t: "note",
+      title: "Cẩn thận khi nói đồng ý / phản đối",
+      items: [
+        "~~I'm agree~~ → **I agree** (agree là động từ, không có am). ~~I'm not agree~~ → **I don't agree**.",
+        "Đồng ý một phần thì **phải** nói cả phần “but…” — nói “I partly agree” rồi chỉ kể mặt đúng thì nghe như đồng ý hoàn toàn.",
+        "Đề có chữ tuyệt đối (**always, the best, everyone, only**) là chỗ dễ **đồng ý một phần** nhất: “It's true **in many cases**, but not **always**.”",
       ],
     },
     {

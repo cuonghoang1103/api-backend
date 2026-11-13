@@ -17,7 +17,7 @@ const T2D24_VOCAB: Lesson = {
   kind: "vocab",
   title: "Ôn 18 chủ đề từ vựng + Nhà ở & thành phố (Housing & cities)",
   goal: "Học 20 từ nhà ở – thành phố (VC18) và ôn lại 18 chủ đề từ vựng của Tập 1–2 bằng 200 câu nhớ từ (Việt → Anh, có chữ cái đầu) — biết chủ đề nào còn “rỗng” để ôn bằng Flashcards trước Đề 3 (LR band 5).",
-  minutes: 90,
+  minutes: 105,
   blocks: [
     {
       t: "recap",
@@ -28,6 +28,7 @@ const T2D24_VOCAB: Lesson = {
         "**Match 200**: 20 từ mới + **180 câu** nhớ từ (Việt → Anh, cho chữ cái đầu) chia 6 khối, mỗi khối 3 chủ đề. Mục tiêu ≥ 70 % mỗi khối.",
         "Khối nào **dưới 70 %** → mở **Flashcards** (bộ “Từ của khoá — Tập 2”, lọc theo ngày) ôn 15 phút mỗi ngày tới hôm thi Đề 3.",
         "Đề 3 chấm **LR** ở Viết và Nói: dùng **đúng từ chủ đề** thay vì từ chung chung (good, bad, thing, people) là cách nhanh nhất lên band 5.",
+        "**Phần C–D (phát âm)**: trọng âm từ nhà ở, rồi ôn bốn phụ âm hay lẫn **/s/ – /ʃ/, /tʃ/ – /dʒ/** và **L cuối từ** (feel, school) — nghe phân biệt 8 cặp + đọc & chấm.",
       ],
     },
 
@@ -398,6 +399,92 @@ const T2D24_VOCAB: Lesson = {
         { text: "Rural areas need better public transport.", ipa: "rʊərəl eəriəz niːd betə pʌblɪk trænspɔːt", vi: "RU-ral · AR-eas · TRANS-port (danh từ)" },
       ],
     },
+    /* ── D ── */
+    { t: "h", text: "D. Thêm: ôn phụ âm /s/ – /ʃ/, /tʃ/ – /dʒ/ và âm L cuối từ (dark L)" },
+    {
+      t: "p",
+      text: "Phần này bù cho bốn âm người Việt hay đọc lẫn mà Tập 1–2 chưa có mục riêng. Lý do rất “Việt”: chữ **s** và **x** của nhiều vùng đọc như nhau nên **ship /ʃɪp/** (tàu) thành **sip /sɪp/** (nhấp môi); tiếng Việt **không có /dʒ/** nên **job** thành “giốp”; và tiếng Việt **không có L ở cuối âm tiết** nên **feel** thành “phiu”, **school** thành “xờ-cu”. Giám khảo vẫn hiểu phần lớn — nhưng mỗi lần phải đoán là một lần điểm **Pronunciation** bị kéo về band 5.",
+    },
+    {
+      t: "table",
+      caption: "Năm âm — khẩu hình và lỗi hay gặp",
+      head: ["Âm", "Khẩu hình", "Từ luyện", "Người Việt hay đọc thành"],
+      rows: [
+        ["**/s/**", "Đầu lưỡi gần lợi trên, **môi dẹt** (như cười nhẹ), hơi xì ra mảnh như tiếng rắn", "see · sip · seat · class", "đúng — chỉ cần giữ **khác** /ʃ/"],
+        ["**/ʃ/**", "Lưỡi **lùi ra sau** một chút, **môi tròn, đẩy ra trước**, hơi dày như “suỵt!”", "she · ship · sheet · fish · station", "/s/: she → “si”, ship → “síp”"],
+        ["**/tʃ/**", "Chặn hơi bằng đầu lưỡi ở lợi trên rồi **bật** ra thành /ʃ/; môi tròn; **không rung** cổ", "cheap · choose · watch · chicken", "“ch” Việt (lưỡi phẳng, không bật): cheap → “chíp”"],
+        ["**/dʒ/**", "Y như /tʃ/ nhưng **rung dây thanh** (đặt tay lên cổ thấy rung)", "job · jeep · bridge · age · June", "“gi” /z/: job → “giốp”, age → “ây-dơ”"],
+        ["**L cuối** (dark L)", "Đầu lưỡi **chạm lợi trên và GIỮ ở đó**; cuống lưỡi hơi nâng, nghe tối như “-ồl”", "feel · school · hotel · people · goal", "bỏ hẳn (“phi”) hoặc thành “u” (“phiu”, “xờ-cu”)"],
+      ],
+    },
+    {
+      t: "table",
+      caption: "Cặp tối thiểu — đọc to từng cặp, hai từ phải nghe KHÁC nhau",
+      head: ["Cặp", "Từ 1", "Từ 2"],
+      rows: [
+        ["/s/ – /ʃ/", "sip · see · sort · save", "ship · she · short · shave"],
+        ["/ʃ/ – /tʃ/", "wash · ship · share", "watch · chip · chair"],
+        ["/tʃ/ – /dʒ/", "cheap · choke · rich · H", "jeep · joke · ridge · age"],
+        ["không L – có L cuối", "go · fee · bow · tie", "goal · feel · bowl · tile"],
+      ],
+    },
+    {
+      t: "listen",
+      id: "t2d24-nghe-cap-am",
+      title: "Minimal pairs — which word do you hear?",
+      note: "Tám từ, mỗi từ đọc hai lần. Nghe rồi chọn từ đúng bên dưới — đừng mở lời thoại trước khi làm xong.",
+      lines: [
+        { who: "1", voice: "uk-nu", text: "Number one. Ship. Ship." },
+        { who: "2", voice: "uk-nu", text: "Number two. Short. Short." },
+        { who: "3", voice: "uk-nu", text: "Number three. Jeep. Jeep." },
+        { who: "4", voice: "uk-nu", text: "Number four. Wash. Wash." },
+        { who: "5", voice: "uk-nam", text: "Number five. Choke. Choke." },
+        { who: "6", voice: "uk-nam", text: "Number six. Goal. Goal." },
+        { who: "7", voice: "uk-nam", text: "Number seven. Fee. Fee." },
+        { who: "8", voice: "uk-nam", text: "Number eight. Bowl. Bowl." },
+      ],
+    },
+    {
+      t: "mcq",
+      id: "t2d24-nghe-cap-am-chon",
+      title: "Bạn nghe thấy từ nào? (8 câu)",
+      items: [
+        { q: "Số 1", options: ["sip", "ship"], correct: 1, why: "**ship /ʃɪp/** — hơi dày, môi tròn. sip /sɪp/ hơi mảnh, môi dẹt." },
+        { q: "Số 2", options: ["sort", "short"], correct: 1, why: "**short /ʃɔːt/** — mở đầu bằng /ʃ/. Nghe nhầm thành sort là hiểu “The meeting was short” thành “sắp xếp”." },
+        { q: "Số 3", options: ["cheap", "jeep"], correct: 1, why: "**jeep /dʒiːp/** — có rung cổ (hữu thanh). cheap /tʃiːp/ bật hơi, không rung." },
+        { q: "Số 4", options: ["wash", "watch"], correct: 0, why: "**wash /wɒʃ/** — âm cuối kéo dài được (/ʃ/). watch /wɒtʃ/ có chặn hơi rồi bật — không kéo dài được." },
+        { q: "Số 5", options: ["choke", "joke"], correct: 0, why: "**choke /tʃəʊk/** (bị nghẹn) — vô thanh, bật hơi. joke /dʒəʊk/ rung cổ." },
+        { q: "Số 6", options: ["go", "goal"], correct: 1, why: "**goal /ɡəʊl/** — cuối từ có lưỡi chạm lợi (L tối). go /ɡəʊ/ kết thúc mở." },
+        { q: "Số 7", options: ["fee", "feel"], correct: 0, why: "**fee /fiː/** (phí) — kết thúc bằng nguyên âm dài, không có L. feel /fiːl/ kết thúc lưỡi chạm lợi." },
+        { q: "Số 8", options: ["bow", "bowl"], correct: 1, why: "**bowl /bəʊl/** (cái bát) — có L cuối. bow /baʊ/ (cúi chào) hoặc /bəʊ/ (cái nơ) không có L." },
+      ],
+    },
+    {
+      t: "phatam",
+      id: "t2d24-phat-am-phu-am",
+      title: "Luyện phát âm — /s/ /ʃ/ /tʃ/ /dʒ/ và L cuối",
+      note: "Nghe mẫu rồi đọc & chấm. Đọc chậm trước: môi tròn cho /ʃ tʃ dʒ/, môi dẹt cho /s/; với L cuối, giữ đầu lưỡi chạm lợi trên đến hết từ.",
+      items: [
+        { text: "ship, sip, sheet, seat", ipa: "ʃɪp sɪp ʃiːt siːt", vi: "/ʃ/ môi tròn · /s/ môi dẹt" },
+        { text: "cheap, jeep, choose, juice", ipa: "tʃiːp dʒiːp tʃuːz dʒuːs", vi: "/tʃ/ bật hơi · /dʒ/ rung cổ" },
+        { text: "watch, wash, rich, ridge", ipa: "wɒtʃ wɒʃ rɪtʃ rɪdʒ", vi: "âm cuối: chặn rồi bật · kéo dài · bật · rung" },
+        { text: "feel, school, hotel, people", ipa: "fiːl skuːl həʊtel piːpl", vi: "L cuối: lưỡi chạm lợi, không thành “u”" },
+        { text: "She sells sea shells.", ipa: "ʃi selz siː ʃelz", vi: "/ʃ/ – /s/ – /s/ – /ʃ/ + L trong sells, shells" },
+        { text: "I usually choose a cheap hotel near the station.", ipa: "aɪ juːʒuəli tʃuːz ə tʃiːp həʊtel nɪə ðə steɪʃn", vi: "choose · cheap · hotel · station" },
+        { text: "The college changed its schedule in June.", ipa: "ðə kɒlɪdʒ tʃeɪndʒd ɪts ʃedjuːl ɪn dʒuːn", vi: "college /dʒ/ · changed /tʃ…dʒ/ · schedule /ʃ…l/ · June /dʒ/" },
+        { text: "I feel that public transport should be cheaper.", ipa: "aɪ fiːl ðæt pʌblɪk trænspɔːt ʃʊd bi tʃiːpə", vi: "feel (L cuối) · should /ʃ/ · cheaper /tʃ/" },
+      ],
+    },
+    {
+      t: "note",
+      title: "Mẹo tự sửa trong 2 phút mỗi ngày",
+      items: [
+        "**Gương**: nói “see – she” trước gương. Ở **she**, môi phải **tròn và đẩy ra**; nếu môi vẫn dẹt là bạn đang đọc /s/.",
+        "**Tay lên cổ**: “cheap – jeep”, “choke – joke”. Chỉ từ thứ hai làm **cổ rung**.",
+        "**L cuối**: nói “fee” rồi **giữ nguyên miệng**, đưa đầu lưỡi lên chạm lợi trên ⇒ “feel”. Đừng thả lưỡi ra thành “u”.",
+        "Ghi âm câu “**She sells sea shells.**” mỗi sáng một tuần; so với mẫu. Chấm phát âm ở khối trên đạt ≥ 80 % ở cả 8 dòng là đủ cho mức band 5–5.5 về âm.",
+      ],
+    },
   ],
 };
 
@@ -750,6 +837,74 @@ const T2D24_READING: Lesson = {
         "Đề 3 (thi cuối Tập 2) trên phòng thi máy: Reading 60 phút **không có thêm giờ**, thể loại du lịch · truyền thông · thể thao.",
       ],
     },
+
+    { t: "h", text: "Chép đáp án đúng hình thức — đừng mất điểm khi đã tìm ra đáp án" },
+    {
+      t: "p",
+      text: "Bài Reading chấm **từng chữ bạn ghi**, không chấm “ý bạn muốn nói”. Mỗi năm rất nhiều thí sinh mất 2–4 câu vì ghi sai **hình thức** — dù đã tìm đúng chỗ trong bài. Soát bảng dưới đây trong **3 phút cuối** (phút 57–60).",
+    },
+    {
+      t: "table",
+      caption: "Ghi gì vào ô trả lời",
+      head: ["Dạng câu hỏi", "Ghi đúng", "Ghi sai (mất điểm)"],
+      rows: [
+        ["True / False / Not Given", "**TRUE · FALSE · NOT GIVEN**", "~~YES~~ · ~~NO~~ · ~~T / F / NG~~ · ✓ ✗"],
+        ["Yes / No / Not Given", "**YES · NO · NOT GIVEN**", "~~TRUE~~ · ~~FALSE~~ · ~~Y / N~~"],
+        ["Summary / Matching có hộp từ (A–H)", "chỉ **chữ cái**: **D**", "~~quickly~~ (chép cả từ) · ~~D quickly~~"],
+        ["Matching headings", "**số La Mã**: **vi**", "~~6~~ · ~~the heading text~~"],
+        ["Điền từ (ONE WORD / TWO WORDS…)", "chữ **trong bài**, đúng giới hạn: **water flow**", "~~natural water flow~~ (3 từ khi chỉ cho 2) · ~~a biosphere reserve~~"],
+        ["Số", "chữ số **1978** · **58**", "viết “fifty-eight” vẫn đúng nhưng dễ sai chính tả — chữ số an toàn hơn"],
+        ["Chính tả · số ít / nhiều", "**TEUs** · **standards** (đúng như bài)", "~~standard~~ · ~~TEU~~ · sai một chữ cái"],
+      ],
+    },
+    {
+      t: "note",
+      title: "Nếu bạn thi trên GIẤY",
+      items: [
+        "Reading bản giấy **không có thêm giờ chép phiếu** (khác Listening có 10 phút). Ghi thẳng vào **phiếu trả lời** (answer sheet) trong 60 phút — hoặc chép theo từng passage, đừng để cuối giờ mới chép cả 40 câu.",
+        "Dùng **bút chì**. Viết **IN HOA toàn bộ** hoặc thường toàn bộ đều được chấm — viết in hoa giúp chữ rõ, tránh bị đọc nhầm (a / o, n / h).",
+        "Đầu phiếu: viết họ tên **IN HOA**, **tô số báo danh** (candidate number) và mã trung tâm đúng ô, đánh dấu **Academic** (không phải General Training).",
+        "Đúng **số thứ tự ô**: lỡ bỏ trống câu 15 mà ghi đáp án câu 16 vào ô 15 thì cả loạt sau trượt một ô. Mỗi khi chép xong một nhóm, nhìn lại số câu.",
+        "Thi **trên máy**: gõ trực tiếp, ô chọn TRUE / FALSE là nút bấm nên không lệch chữ — nhưng điền từ vẫn phải đúng chính tả và giới hạn từ.",
+      ],
+    },
+    {
+      t: "mcq",
+      id: "t2d24-doc-hinh-thuc",
+      title: "Ghi thế nào mới được chấm đúng? (4 câu)",
+      items: [
+        { q: "(1) Đề: “Do the following statements agree with the **claims of the writer**? Write YES, NO or NOT GIVEN.” Bạn thấy câu đề đúng với ý tác giả. Ghi gì?", options: ["TRUE", "YES", "Y"], correct: 1, why: "Đề YNNG → ghi **YES**. TRUE là chữ của đề TFNG — ghi lệch bộ là mất điểm. Y viết tắt cũng không an toàn." },
+        { q: "(2) Đề: “Complete the summary using the list of words, **A–H**.” Từ đúng là “quickly” (chữ D trong hộp). Ghi gì?", options: ["quickly", "D", "D quickly"], correct: 1, why: "Đề bảo dùng **list A–H** → chỉ ghi **chữ cái D**. Chép “quickly” hay “D quickly” đều có thể bị chấm sai." },
+        { q: "(3) Đề: “Choose **NO MORE THAN TWO WORDS** from the passage.” Bài viết: “recognised by UNESCO as a biosphere reserve”. Ghi gì?", options: ["a biosphere reserve", "biosphere reserve", "UNESCO reserve"], correct: 1, why: "**biosphere reserve** = 2 từ, đúng chữ trong bài. “a biosphere reserve” = 3 từ (mạo từ cũng tính). “UNESCO reserve” là ghép chữ của bạn, không có trong bài." },
+        { q: "(4) Thi giấy, câu 15 bạn chưa làm được, đã làm xong câu 16. Cách an toàn nhất?", options: ["Ghi đáp án câu 16 vào ô kế tiếp còn trống", "Ghi vào đúng ô 16, ô 15 để tạm rồi quay lại đoán", "Bỏ trống cả 15 và 16 cho chắc"], correct: 1, why: "Luôn ghi vào **đúng số ô**. Ghi lệch một ô là trượt cả loạt câu sau. Cuối giờ quay lại ô 15 và **đoán** — không bỏ trống." },
+      ],
+    },
+
+    { t: "h", text: "Bước cuối: lập sổ paraphrase cho đề này" },
+    {
+      t: "p",
+      text: "Chấm xong, đừng chỉ đếm điểm. Dành **10 phút** lập **sổ paraphrase** như Tập 2 Ngày 8 mục 4: với mỗi câu (kể cả câu làm đúng), tìm lại **câu chứa đáp án**, ghi một dòng **Câu hỏi | Trong bài | Nhãn**. Chỉ ghi từ ở **hai chỗ đó**, không tra mọi từ lạ. Một đề 40 câu cho bạn 30–40 cặp — đúng loại từ đề thật hay dùng.",
+    },
+    {
+      t: "table",
+      caption: "Sổ mẫu — vài dòng rút từ chính đề này",
+      head: ["Câu", "Câu hỏi", "Trong bài", "Nhãn"],
+      rows: [
+        ["2", "more mangrove forest **than any other country**", "has **the largest area** of mangrove forest in the world", "③ so sánh hơn → so sánh nhất"],
+        ["5", "**begin to grow before they leave** the parent tree", "**start to develop while** they are **still attached to** the parent tree", "① + ③"],
+        ["3", "All species deal with salt **in the same way**", "different species have developed **different solutions**", "⑤ trái nghĩa → FALSE"],
+        ["18", "McLean **ran a** ___ **business**", "**owned a** trucking **company**", "① đồng nghĩa"],
+      ],
+    },
+    {
+      t: "note",
+      title: "Dùng sổ thế nào",
+      items: [
+        "Nhãn ① đồng nghĩa · ② đổi loại từ · ③ đổi cấu trúc (chủ động ↔ bị động, so sánh) · ④ phủ định đổi cách nói · ⑤ trái nghĩa (dấu hiệu FALSE / NO).",
+        "Câu **làm sai** thì thêm một cột: **vì sao mình không nhận ra** (không biết từ? bị trùng chữ đánh lừa? quá số từ?). Đó là việc cần ôn trước Đề 3.",
+        "Trước mỗi đề mới, đọc lướt sổ **2 phút**. Cặp nào gặp lần thứ hai thì tô đậm — đó là cặp đề hay dùng nhất.",
+      ],
+    },
   ],
 };
 
@@ -760,14 +915,15 @@ const T2D24_WRITING: Lesson = {
   kind: "writing",
   title: "12 lỗi mất điểm oan + email công việc formal / informal",
   goal: "Nhận ra và tránh 12 lỗi làm bài viết mất điểm dù tiếng Anh không tệ (thiếu từ, chép đề, thiếu tổng quan, không chia đoạn…), và viết được email công việc đúng văn phong trang trọng / thân mật với đủ 5 phần — Writing band 5 + tiếng Anh dùng thật ở công sở.",
-  minutes: 75,
+  minutes: 95,
   blocks: [
     {
       t: "recap",
       title: "Bài này học gì — đẩy band nào",
       items: [
         "**12 lỗi mất điểm oan**: không phải lỗi “dở tiếng Anh” mà là lỗi **làm bài** — thiếu từ, chép đề, học thuộc, thiếu overview, không chia đoạn, viết gạch đầu dòng, văn nói, sai giờ… Mỗi lỗi có thể kéo điểm một tiêu chí xuống rõ rệt.",
-        "Trước Đề 3: **soát bài theo bảng 12 lỗi** trong 3 phút cuối mỗi Task.",
+        "Trước Đề 3: **soát bài theo bảng 12 lỗi** trong 3 phút cuối mỗi Task — cộng **6 lỗi cấp câu** (câu lê thê, And/So đầu câu, thiếu động từ chính, five ~~millions~~…) và **bảng soát riêng Task 1** (mục 1b).",
+        "Mục 1c: **một đoạn qua 3 phiên bản** (nháp ~4.5 → sửa câu ~5.5 → phát triển ý ~6.5), mỗi chỗ sửa có lý do.",
         "**Email công việc** — tiếng Anh dùng thật hằng ngày: **formal** (gửi sếp, khách, phòng nhân sự) và **informal** (gửi đồng nghiệp thân, bạn).",
         "Email 5 phần: **Tiêu đề → Lời chào → Lý do viết → Nội dung + đề nghị → Kết + ký tên**. Văn phong quyết định từ chọn: “I would be grateful if…” ≠ “Can you…?”.",
         "Viết thư / email là **Task 1 của General Training**; người thi Academic không gặp dạng này trong phòng thi, nhưng email là kỹ năng **CC + register** dùng lại ở mọi bài viết (Tập 3 báo cáo, Tập 4 cover letter).",
@@ -819,6 +975,80 @@ const T2D24_WRITING: Lesson = {
         { q: "Mở bài: “I agree that technology makes life better.” Kết bài: “In conclusion, technology has more disadvantages than advantages.”", options: ["Lỗi 3", "Lỗi 7 — quan điểm mâu thuẫn", "Lỗi 6", "Lỗi 11"], correct: 1, why: "Mở bài đồng ý, kết bài lại nghiêng về mặt hại → **quan điểm không nhất quán** → TR bị hạ." },
         { q: "Thân bài viết: “Advantages: 1. cheap 2. fast 3. convenient.”", options: ["Lỗi 1", "Lỗi 5", "Lỗi 9 — đánh số, ghi chú thay câu văn", "Lỗi 12"], correct: 2, why: "Bài IELTS phải là **đoạn văn**. Gạch đầu dòng / đánh số sai định dạng bài viết (TA / TR), làm hỏng CC và không thể hiện ngữ pháp." },
       ],
+    },
+
+    /* ── 1b ── */
+    { t: "h", text: "1b. Thêm vào lượt soát: 6 lỗi cấp CÂU" },
+    {
+      t: "p",
+      text: "12 lỗi ở trên là lỗi **làm bài**. Khi đã tránh được chúng, thứ kéo GRA và CC xuống band 5 thường là lỗi **cấp câu**: câu dính nhau, câu lê thê, câu thiếu động từ. Thêm 6 dòng này vào lượt soát 3 phút.",
+    },
+    {
+      t: "table",
+      caption: "6 lỗi cấp câu — sai → sửa",
+      head: ["Lỗi", "Sai", "Sửa"],
+      rows: [
+        ["**Câu dính / câu lê thê** — nhiều and / so nối liền, hoặc hai câu chỉ cách nhau dấu phẩy", "~~Prices rose and people could not buy houses and so they moved to the suburbs and the roads became crowded.~~", "As prices rose, many people could not afford houses **and** moved to the suburbs. **As a result,** the roads became crowded. (tối đa ~2 liên từ and / but / so mỗi câu)"],
+        ["**And / But / So mở câu**", "~~But this is not true.~~ · ~~So the government should act.~~", "**However,** this is not true. · **Therefore,** the government should act."],
+        ["**Câu quá dài**", "một câu 45 từ, 4 mệnh đề", "Nhắm khoảng **dưới 30 từ, ~2 mệnh đề** mỗi câu; dài hơn thì tách."],
+        ["**Chủ ngữ dài, thiếu động từ chính**", "~~People who live in big cities and work long hours every day.~~", "People who live in big cities and work long hours **often feel** stressed. (Hỏi: “chủ ngữ là ai — **làm gì**?”)"],
+        ["**million / thousand sau con số**", "~~five millions people~~ · ~~two thousands students~~", "**five million** people · **two thousand** students. Chỉ có **millions of** people khi KHÔNG có con số."],
+        ["**Văn cảm thán / cố khoe cấu trúc khó**", "~~This is terrible!~~ · ~~Not only does pollution harms… but also it does…~~ (đảo ngữ sai)", "Không dùng **dấu chấm than** trong bài học thuật. Câu đơn giản **đúng** được điểm hơn cấu trúc hiếm **sai** — sạch lỗi trước, khoe sau."],
+      ],
+    },
+    {
+      t: "table",
+      caption: "Soát riêng Task 1 — overview đã nói ĐÚNG loại thông tin của dạng hình chưa?",
+      head: ["Dạng hình", "Overview phải có", "Thân bài"],
+      rows: [
+        ["**Theo thời gian** (line; bar / table có nhiều năm)", "Xu hướng chung (tăng / giảm / ổn định) + điểm nổi bật (cao nhất, vượt nhau)", "Gom các nhóm cùng xu hướng; không chia theo từng năm (trừ bài có năm dự báo)"],
+        ["**Tĩnh** (pie; bar / table một mốc)", "Khác biệt lớn nhất + điểm giống nhau; lớn nhất / nhỏ nhất", "Gom nhóm lớn / nhỏ; mục “Other” tả cuối"],
+        ["**Bản đồ** (map)", "2–3 thay đổi lớn đã gom (đông dân hơn, mất cây xanh, thêm đường…)", "Đi theo vùng; mỗi thay đổi kèm **vị trí**"],
+        ["**Quy trình** (process)", "Có bao nhiêu bước · bắt đầu bằng gì → kết thúc bằng gì", "Chia nửa đầu / nửa sau; bị động; từ trình tự"],
+      ],
+    },
+    {
+      t: "note",
+      title: "Cẩn thận: từ chắc đúng hơn từ “kêu”",
+      items: [
+        "Task 1 ưu tiên **increase / decrease + sharply / slightly**. Chỉ dùng **soar / plummet** khi đường thật sự dốc đứng — dùng sai mức độ là sai Task Achievement, không phải được thêm điểm từ vựng.",
+      ],
+    },
+
+    /* ── 1c ── */
+    { t: "h", text: "1c. Một đoạn qua 3 phiên bản — sửa dần, có lý do" },
+    {
+      t: "p",
+      text: "Bài viết band 6 không “nảy ra” trong một lần viết. Dưới đây là **cùng một đoạn thân bài** (đề: “University education should be free for everyone. To what extent do you agree?”) qua ba lần sửa. Đọc từng bản, đoán trước chỗ cần sửa, rồi mới xem bảng chú thích. Từ Tập 3, bạn sẽ tự làm điều này với bài của mình.",
+    },
+    {
+      t: "table",
+      caption: "Ba phiên bản",
+      head: ["Bản", "Đoạn văn", "Band (ước tính)"],
+      rows: [
+        ["**1 — Nháp**", "Free university is good. Because many poor students can not pay the fee. And they must work part time. So they have no time for study and they get bad result and they leave the university. In my country this problem is very serious!", "~4.5"],
+        ["**2 — Sửa câu**", "Free university education would help students from poor families. Many of these students cannot afford the fees, so they have to work part-time while they study. As a result, they have less time for their studies, and some of them get poor results or even drop out.", "~5.5"],
+        ["**3 — Phát triển ý**", "Free university education would give talented students from low-income families a fair chance. At present, many of these students cannot afford tuition fees, so they have to work long hours in part-time jobs while they study. This leaves them with little time or energy for their coursework, which means that some fall behind and eventually drop out. For example, a classmate of mine worked in a restaurant every evening and left university in her second year, even though she was one of the best students in our class.", "~6.5"],
+      ],
+    },
+    {
+      t: "table",
+      caption: "Chú thích — sửa gì, vì sao",
+      head: ["Bước", "Sửa", "Vì sao"],
+      rows: [
+        ["1 → 2", "~~Because many poor students can not pay the fee.~~ → gộp vào câu trước bằng **so**", "Câu cụt (Because… đứng một mình) — lỗi GRA nặng nhất của bản nháp."],
+        ["1 → 2", "~~And they must…~~ · ~~So they have…~~ → bỏ And / So đầu câu; dùng **As a result,**", "And / But / So không mở câu học thuật."],
+        ["1 → 2", "~~…and they get bad result and they leave…~~ → **…and some of them get poor results or even drop out**", "Câu lê thê 3 lần and + lỗi số nhiều (result → results)."],
+        ["1 → 2", "~~can not~~ → **cannot** · ~~very serious!~~ → bỏ câu", "Chính tả + không dùng dấu chấm than; câu cuối không thêm thông tin."],
+        ["2 → 3", "Câu chủ đề: help → **give … a fair chance**; poor → **low-income**", "Câu chủ đề nói rõ **lập luận** (công bằng), từ chính xác hơn (LR)."],
+        ["2 → 3", "Thêm **This leaves them with… which means that…**", "Đẩy hệ quả thêm một bước (Explain sâu hơn) — TR lên band 6."],
+        ["2 → 3", "Thêm ví dụ **a classmate of mine… in her second year…**", "Ví dụ cụ thể (người, thời gian, kết quả) thay cho câu than chung chung của bản 1."],
+      ],
+    },
+    {
+      t: "rule",
+      formula: "Lượt 1: sửa CÂU (câu cụt · And/So đầu câu · câu lê thê · -s · chính tả) → Lượt 2: phát triển Ý (câu chủ đề rõ · hệ quả thêm một bước · ví dụ cụ thể)",
+      vi: "Sửa ngữ pháp trước để bài sạch (band 5.5), rồi mới thêm ý và từ chính xác (band 6+).",
     },
 
     /* ── 2 ── */
@@ -983,16 +1213,17 @@ const T2D24_HOMEWORK: Lesson = {
   id: "t2d24-bai-tap",
   kind: "homework",
   title: "Bài tập Ngày 24 + Sẵn sàng thi cuối Tập 2",
-  goal: "Ôn từ nhà ở – thành phố, câu email trang trọng và 12 lỗi mất điểm oan; rồi tự kiểm danh sách “sẵn sàng” từng kỹ năng trước khi vào thi Đề 3 (thi cuối Tập 2) trên phòng thi máy.",
-  minutes: 45,
+  goal: "Ôn từ nhà ở – thành phố, câu email trang trọng, 12 lỗi mất điểm oan và lỗi cấp câu (tách / gộp câu, soát một đoạn biết trước 6 lỗi); rồi tự kiểm danh sách “sẵn sàng” từng kỹ năng trước khi vào thi Đề 3 (thi cuối Tập 2) trên phòng thi máy.",
+  minutes: 55,
   blocks: [
     {
       t: "recap",
-      title: "Bài tập hôm nay (32 câu) + chuẩn bị Đề 3",
+      title: "Bài tập hôm nay (37 câu + 1 đoạn soát 6 lỗi) + chuẩn bị Đề 3",
       items: [
         "**I. Dịch Việt → Anh** (10 câu, có 💡): nhà ở – thành phố + câu email.",
         "**II. Trắc nghiệm** (10 câu): từ vựng, văn phong, 12 lỗi, chiến thuật Reading.",
         "**III. Điền từ** (6 câu). **IV. Sửa email** (6 câu).",
+        "**V. Tách / gộp câu** (5 câu) · **VI. Soát một đoạn Task 1** biết trước có 6 lỗi (tự chấm %).",
         "**Sẵn sàng thi cuối Tập 2**: bảng tự kiểm 4 kỹ năng + đường vào phòng thi Đề 3.",
       ],
     },
@@ -1067,6 +1298,54 @@ const T2D24_HOMEWORK: Lesson = {
         { q: "The kids in the course were gonna need more time.", hint: "children · were going to", answers: ["The children on the course were going to need more time.", "The children in the course were going to need more time.", "The children on the course would need more time.", "The children in the course would need more time.", "The children on the course needed more time.", "The children in the course needed more time."] },
         { q: "I can't come to the meeting on Monday.", hint: "không viết tắt + trang trọng: I am unable to / I will not be able to attend", answers: ["I will not be able to attend the meeting on Monday.", "I am unable to attend the meeting on Monday.", "I cannot attend the meeting on Monday.", "I will be unable to attend the meeting on Monday.", "I cannot come to the meeting on Monday."] },
         { q: "Sorry for the trouble.", hint: "I apologise for any inconvenience", answers: ["I apologise for any inconvenience.", "I apologise for any inconvenience this may cause.", "I apologize for any inconvenience.", "I apologise for the inconvenience.", "I apologize for the inconvenience."] },
+      ],
+    },
+
+    { t: "h", text: "V. Tách câu quá dài / gộp câu đơn ngắn (5 câu)" },
+    {
+      t: "quiz",
+      id: "t2d24-bt-tach-gop",
+      title: "V. Viết lại theo yêu cầu (5 câu)",
+      kind: "translate",
+      grammar: "Gộp: because / although / while / which / who · Tách: dấu chấm + As a result, / However, · Không mở câu bằng And / But / So.",
+      items: [
+        { q: "Gộp bằng **because**: “Many students work part-time. Their tuition fees are high.”", hint: "Many students work part-time because…", answers: ["Many students work part-time because their tuition fees are high.", "Many students work part-time because tuition fees are high.", "Because their tuition fees are high, many students work part-time.", "Because tuition fees are high, many students work part-time."] },
+        { q: "Gộp bằng **although**: “Online shopping is convenient. It produces a lot of packaging waste.”", hint: "Although online shopping is convenient, …", answers: ["Although online shopping is convenient, it produces a lot of packaging waste.", "Online shopping produces a lot of packaging waste, although it is convenient.", "Although it is convenient, online shopping produces a lot of packaging waste.", "Although online shopping is convenient, it creates a lot of packaging waste."] },
+        { q: "Gộp bằng **which**: “The city built a new metro line. It carries 200,000 people a day.”", hint: "The city built a new metro line, which…", answers: ["The city built a new metro line, which carries 200,000 people a day.", "The city built a new metro line which carries 200,000 people a day.", "The city built a new metro line that carries 200,000 people a day.", "The city has built a new metro line, which carries 200,000 people a day."] },
+        { q: "Tách thành HAI câu, câu sau mở bằng **As a result,**: “Rents rose and young people could not afford flats and so they lived with their parents.”", hint: "Rents rose, and young people could not afford flats. As a result, they…", answers: ["Rents rose, and young people could not afford flats. As a result, they lived with their parents.", "Rents rose and young people could not afford flats. As a result, they lived with their parents.", "Rents rose, so young people could not afford flats. As a result, they lived with their parents.", "Rents rose and young people could not afford flats. As a result, they had to live with their parents.", "Rents rose, and young people could not afford flats. As a result, they had to live with their parents."] },
+        { q: "Sửa câu mở bằng **But** cho đúng văn học thuật: “Technology saves time. But it can also make people lazy.”", hint: "However, … / …, but…", answers: ["Technology saves time. However, it can also make people lazy.", "Technology saves time, but it can also make people lazy.", "Although technology saves time, it can also make people lazy.", "Technology saves time; however, it can also make people lazy."] },
+      ],
+    },
+
+    { t: "h", text: "VI. Soát một đoạn Task 1 — biết trước có đúng 6 lỗi" },
+    {
+      t: "note",
+      title: "Đoạn thân bài Task 1 (91 từ, đã đếm) — chép ra giấy, gạch đủ 6 lỗi, 5 phút, rồi mới xem lời giải",
+      items: [
+        "The museum attracted far more visitors than the art gallery throughout the period. In 2000, five millions people visited the city museum. The number rose steadily and it reached eight million in 2010 and then it continued to climb and it peaked at ten million in 2015. The number of visitors to the art gallery were much lower, at only two million in 2000. But this figure also rose steadily. The number of gallery visitors in 2015, which was four million, twice the figure for 2000. This was a huge increase!",
+      ],
+    },
+    {
+      t: "table",
+      caption: "Lời giải VI — 6 lỗi",
+      head: ["#", "Sai", "Sửa", "Loại lỗi"],
+      rows: [
+        ["1", "~~five millions people~~", "**five million** people", "million sau con số không thêm -s"],
+        ["2", "~~…and it reached… and then it continued… and it peaked…~~", "The number rose steadily, **reaching** eight million in 2010, **before peaking** at ten million in 2015.", "Câu lê thê nhiều and"],
+        ["3", "~~The number of visitors… were~~", "The number of visitors… **was**", "Hoà hợp chủ – vị: chủ ngữ là **The number** (số ít)"],
+        ["4", "~~But this figure also rose…~~", "**However,** this figure also rose…", "But mở câu học thuật"],
+        ["5", "~~…, which was four million, twice the figure…~~", "…, which was four million, **was** twice the figure for 2000.", "Chủ ngữ dài thiếu động từ chính"],
+        ["6", "~~This was a huge increase!~~", "This was a significant increase.", "Dấu chấm than / văn cảm thán"],
+      ],
+    },
+    {
+      t: "table",
+      caption: "Tự chấm VI",
+      head: ["Tìm được", "Tỉ lệ", "Làm gì tiếp"],
+      rows: [
+        ["6/6", "100 %", "Sẵn sàng — giữ lượt soát câu trong 3 phút cuối."],
+        ["4–5/6", "67–83 %", "Ghi lỗi bỏ sót vào sổ lỗi; đọc lại bảng 6 lỗi cấp câu (mục 1b bài Viết)."],
+        ["≤ 3/6", "≤ 50 %", "Ôn hoà hợp chủ – vị và từ nối (Ngày 17); soát bằng câu hỏi “chủ ngữ là gì — động từ chính đâu?”."],
       ],
     },
 

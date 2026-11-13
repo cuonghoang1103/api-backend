@@ -361,6 +361,7 @@ const T2D11_NGHE: Lesson = {
         "③ **Bẫy sửa lời**: ==no, sorry · actually · I mean · we were going to…, but== — đáp án luôn ở **sau** chữ sửa.",
         "④ **Paraphrase khi nghe**: câu hỏi nói “cost”, người nói nói “you'll pay”; câu hỏi “a notebook”, người nói “something to write in”.",
         "Đích: **≥ 7/8** ở bài Part 1 cuối (mục 5) — chính là phiếu bạn đoán loại từ ở mục 1.",
+        "Thêm (mục 6–7): bẫy trắc nghiệm **cả ba phương án đều được nhắc** (5 đoạn luyện) và cách **không đuổi theo câu đã lỡ**.",
       ],
     },
 
@@ -612,6 +613,65 @@ const T2D11_NGHE: Lesson = {
         "Bỏ phí 30 giây đọc đề để… nghe lại câu cũ. Sửa: dùng nó để **đoán loại từ** cho cả nhóm câu tiếp theo.",
         "Không nghe từ báo hiệu nên **lạc câu**. Sửa: khoanh tròn các chữ trong câu hỏi giống tiêu đề ý (opening hours, study rooms) — người nói sẽ **nói tên ý** khi chuyển.",
         "Viết sai đuôi **-s** (battery) hoặc số ít / số nhiều không khớp phiếu. Sửa: đọc lại chữ **a / some** trước ô.",
+      ],
+    },
+
+    { t: "h", text: "6. Trắc nghiệm: khi CẢ BA lựa chọn đều được nhắc" },
+    {
+      t: "p",
+      text: "Bẫy “actually, no…” ở mục 3 là người nói **sửa lời**. Trắc nghiệm A/B/C (gặp cả ở Part 1, nhiều ở Part 2–3) còn một kiểu bẫy khác: người nói **nhắc đủ cả ba phương án**, không ai sửa lời ai — nhưng chỉ **một** khớp đúng câu hỏi. Hai cái còn lại đúng với **thời điểm khác**, **người khác**, hoặc **việc khác**. Vì thế nghe thấy chữ của một phương án **chưa** phải là đáp án.",
+    },
+    {
+      t: "table",
+      caption: "Ba câu hỏi để tách phương án đúng khỏi hai phương án “cũng được nhắc”",
+      head: ["Gạch chữ này trong câu hỏi", "Ví dụ câu hỏi", "Hai phương án sai thường là"],
+      rows: [
+        ["**Thời điểm** (now, finally, first, next year)", "When does the club meet **now**?", "lịch **cũ** (used to) và lịch **dự kiến** (might, from next term)"],
+        ["**Người** (the manager, the woman, Tom)", "What does **the manager** recommend?", "món **khách khác** hay chọn, món **vợ anh ấy** thích"],
+        ["**Động từ** (choose, pay, bring, sign up)", "Which item do they need to **bring**?", "thứ **được phát sẵn** (provided), thứ **chỉ được nói tới**"],
+      ],
+    },
+    {
+      t: "listen",
+      id: "t2d11-nghe-ca-ba",
+      title: "Five short conversations — all three options are mentioned",
+      dan: { so: "Day 11, Practice 4", boiCanh: "five short extracts. In each one, all three options are mentioned.", cau: [1, 5] },
+      note: "Năm đoạn ngắn, mỗi đoạn 1 câu hỏi. ĐỌC câu hỏi bên dưới và gạch chữ thời điểm / người / động từ TRƯỚC khi nghe. Nghe tối đa 2 lần.",
+      lines: [
+        { who: "1 · Woman", voice: "uk-nu", text: "My son always said he'd be a doctor, like his grandfather, and his teachers thought law would suit him because he loves arguing. In the end, though, he applied for engineering, and he's really enjoying it.", vi: "Con trai tôi lúc nào cũng nói sẽ làm bác sĩ như ông nội, còn thầy cô nghĩ ngành luật hợp với nó vì nó thích tranh luận. Nhưng cuối cùng nó nộp đơn vào ngành kỹ thuật, và nó đang rất thích." },
+        { who: "2 · Man", voice: "us-nam", text: "We used to meet on Mondays, but the pool was far too busy. At the moment we're on Wednesdays, and from next term we might move to Fridays, if enough members agree.", vi: "Trước đây bọn tôi họp vào thứ Hai, nhưng bể bơi quá đông. Hiện giờ là thứ Tư, và từ kỳ sau có thể chuyển sang thứ Sáu, nếu đủ thành viên đồng ý." },
+        { who: "3 · Manager", voice: "uk-nam", text: "The fish is what most of our customers order, and my wife always goes for the curry. But if you want my advice, try the tomato soup. We make it fresh every morning.", vi: "Món cá là món đa số khách gọi, còn vợ tôi lúc nào cũng chọn cà ri. Nhưng nếu anh muốn lời khuyên của tôi thì hãy thử súp cà chua. Chúng tôi nấu mới mỗi sáng." },
+        { who: "4 · Organiser", voice: "us-nu", text: "The coach takes thirty people, and we need at least twenty to cover the cost. At the moment there are twelve names on the list, so please tell your friends.", vi: "Xe khách chở được ba mươi người, và chúng tôi cần ít nhất hai mươi người mới đủ chi phí. Hiện giờ danh sách có mười hai tên, nên hãy rủ bạn bè nhé." },
+        { who: "5 · Instructor", voice: "uk-nu", text: "Lunch is provided, and we'll give everyone a towel when you arrive. The only thing we can't supply is something to drink from, so do bring your own water bottle.", vi: "Bữa trưa có sẵn, và chúng tôi phát cho mọi người một chiếc khăn khi đến. Thứ duy nhất chúng tôi không có là đồ để uống, nên nhớ mang bình nước riêng." },
+      ],
+    },
+    {
+      t: "mcq",
+      id: "t2d11-nghe-ca-ba-chon",
+      title: "Practice 4 — chọn A, B hoặc C (5 câu)",
+      items: [
+        { q: "(1) What did the woman's son **finally** choose to study?", options: ["A medicine", "B law", "C engineering"], correct: 2, why: "Chữ thời điểm **finally** ↔ “**In the end**, though, he applied for **engineering**”. Medicine (doctor) là điều cậu **từng nói**; law là ý của **thầy cô** — cả hai được nhắc nhưng không phải lựa chọn cuối." },
+        { q: "(2) When does the swimming club meet **now**?", options: ["A on Mondays", "B on Wednesdays", "C on Fridays"], correct: 1, why: "**now** ↔ “**At the moment** we're on **Wednesdays**”. Monday = **used to** (lịch cũ); Friday = **might**, **from next term** (chỉ là dự kiến)." },
+        { q: "(3) What does **the manager** recommend?", options: ["A the tomato soup", "B the fish", "C the curry"], correct: 0, why: "Người + động từ: recommend ↔ “**if you want my advice, try** the tomato soup”. Fish = món **khách** hay gọi (phổ biến ≠ được khuyên); curry = món **vợ ông ấy** thích." },
+        { q: "(4) How many people have signed up **so far**?", options: ["A 12", "B 20", "C 30"], correct: 0, why: "**so far** (tính đến giờ) ↔ “**At the moment** there are **twelve names** on the list”. 30 = sức chứa của xe; 20 = số **cần có**. Ba con số đều nghe rõ — chỉ một số trả lời đúng câu hỏi." },
+        { q: "(5) What do participants need to **bring**?", options: ["A a towel", "B a water bottle", "C lunch"], correct: 1, why: "**bring** ↔ “**do bring your own water bottle**” (“something to drink from” giải nghĩa trước). Lunch “is **provided**”, towel “we'll **give** everyone” ⇒ không cần mang." },
+      ],
+    },
+    {
+      t: "rule",
+      formula: "Nghe thấy chữ của phương án ≠ đáp án · đáp án = phương án khớp ĐÚNG thời điểm + người + động từ của câu hỏi",
+      vi: "Trước khi nghe, gạch ba thứ đó trong câu hỏi. Khi nghe, mỗi phương án được nhắc thì tự hỏi: đúng lúc này? đúng người này? đúng việc này?",
+    },
+
+    { t: "h", text: "7. Lỡ một câu — đừng đuổi theo" },
+    {
+      t: "note",
+      title: "Cẩn thận: câu đã lỡ là câu đã qua",
+      items: [
+        "Băng **không dừng** và **không phát lại**. Bạn còn mải nghĩ về câu 4 thì câu 5 và 6 đã trôi qua — **một câu lỡ biến thành ba câu mất**.",
+        "Khi thấy mình lạc: **bỏ ngay**, đặt mắt vào câu **kế tiếp** và từ khoá của nó (thường là một tiêu đề trên phiếu). Người nói sẽ nói tới đó trong vài giây.",
+        "Đánh một dấu chấm hỏi nhỏ cạnh câu lỡ. Cuối phần (2 phút kiểm) mới quay lại **đoán có cơ sở**: điền một từ **đúng loại ô** (ngày? số? danh từ số nhiều?) và **đúng giới hạn từ** — sai không bị trừ điểm (cách đoán: Ngày 19 mục 4).",
+        "Người mới thường hoảng khi không hiểu một câu và **nghe kém luôn cả phần sau**. Hãy nhớ: band 5 chỉ cần khoảng **16/40** — bạn được phép lỡ hơn một nửa mà vẫn đạt. Thả lỏng vai, thở ra, nghe tiếp.",
       ],
     },
   ],

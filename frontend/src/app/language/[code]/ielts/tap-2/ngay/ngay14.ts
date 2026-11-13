@@ -537,7 +537,7 @@ const T2D14_READING: Lesson = {
     {
       t: "mcq",
       id: "t2d14-doc-bay",
-      title: "Nhận ra bẫy — chọn đáp án HỢP LỆ (5 câu · ngữ liệu riêng, không lấy từ bài luyện mục 5)",
+      title: "Nhận ra bẫy — chọn đáp án HỢP LỆ (5 câu · ngữ liệu riêng, không lấy từ bài luyện mục 6)",
       items: [
         {
           q: "Bài: “Each visitor receives a free map and a guided walk.” — Câu: Every visitor is given a ______ as well as a guided walk. (NO MORE THAN TWO WORDS)",
@@ -572,8 +572,72 @@ const T2D14_READING: Lesson = {
       ],
     },
 
-    /* ── 5 ── */
-    { t: "h", text: "5. Luyện trọn bài Passage 2 (Questions 14–26)" },
+    /* ── 5 (thêm) ── */
+    { t: "h", text: "5. Điền từ khi không dịch được: tín hiệu ngữ pháp + cấu trúc song song" },
+    {
+      t: "p",
+      text: "Ở Passage 2 sẽ có câu bạn **không hiểu hết nghĩa**. Đừng bỏ trống: câu hỏi và câu trong bài **phải khớp ngữ pháp**, nên chữ quanh chỗ trống cho bạn biết cần **loại từ gì, số ít hay nhiều**, và câu trong bài thường có **cùng khung** với câu hỏi (cấu trúc song song). Khi hai ba từ trong bài đều “có vẻ đúng”, tín hiệu ngữ pháp loại giúp bạn những từ sai dạng.",
+    },
+    {
+      t: "table",
+      caption: "Bảng tín hiệu — nhìn chữ quanh chỗ trống",
+      head: ["Tín hiệu trong câu hỏi", "Chỗ trống cần", "Ví dụ"],
+      rows: [
+        ["**be / get + ___** (bị động)", "**V3** (quá khứ phân từ)", "The bridge was ___ in 1990. → **completed**, không phải completion"],
+        ["**giới từ (by, for, without, of…) + ___**", "**V-ing** hoặc **danh từ**", "saved money by ___ → **recycling**"],
+        ["**much / little / less / a great deal of + ___**", "danh từ **không đếm được** (không -s)", "much ___ → **pollution**, ~~cars~~"],
+        ["**many / few / fewer / a number of / several + ___**", "danh từ **số nhiều**", "a number of ___ → **visitors**"],
+        ["**___ + are / were / have** (chỗ trống là chủ ngữ)", "danh từ **số nhiều**", "___ were closed → **factories**"],
+        ["**a / an + ___**", "danh từ **đếm được số ít** (an + nguyên âm)", "an ___ → **experiment**"],
+        ["**remain / become / seem / stay + ___**", "**tính từ**", "Prices remained ___ → **stable**"],
+        ["**travel / go by + ___**", "**phương tiện, không mạo từ**", "go by ___ → **ferry**"],
+        ["**spend + thời gian / tiền + ___**", "**V-ing**", "spent years ___ → **studying**"],
+        ["**the most / the + -est** trong câu hỏi", "bài cũng có **so sánh nhất** (the largest, the main, number one)", "the most common reason ↔ **the main reason**"],
+        ["**be known for / famous for**", "bài có thể viết **has a reputation for / is noted for**", "known for its ___ ↔ has a reputation for **silk**"],
+        ["**___ and / or + X**", "**cùng loại từ với X** (song song)", "cheap and ___ → **reliable** (tính từ như cheap)"],
+      ],
+    },
+    {
+      t: "sodo",
+      kind: "compare",
+      title: "Cấu trúc song song — khung câu hỏi ↔ khung câu bài",
+      caption: "Câu hỏi đổi TỪ, nhưng hay giữ KHUNG. Tìm câu trong bài có cùng khung, rồi lấy đúng chữ đứng ở vị trí chỗ trống.",
+      cols: [
+        { title: "Câu hỏi", anh: "memo", items: ["The town is **best known for** its ______.", "Workers were **replaced by** ______.", "Farmers grew **both** rice **and** ______."] },
+        { title: "Câu trong bài", anh: "open-book", items: ["Its **reputation** rests mainly on its **pottery**.", "Machines **took the place of** workers. → bị động đảo: **machines**", "Rice **as well as** **cotton** was grown. → **cotton**"] },
+      ],
+    },
+    {
+      t: "rule",
+      formula: "Chữ quanh chỗ trống → loại từ + số ít / nhiều · tìm câu bài cùng KHUNG (song song) → chép chữ đứng đúng vị trí",
+      vi: "Không hiểu hết nghĩa vẫn loại được đáp án sai dạng; nhưng đáp án vẫn phải là chữ CÓ trong bài.",
+    },
+    {
+      t: "mcq",
+      id: "t2d14-doc-tin-hieu",
+      title: "Không cần dịch hết — chọn bằng tín hiệu ngữ pháp (7 câu · ngữ liệu riêng)",
+      items: [
+        { q: "Bài: “The old harbour was rebuilt after a fire in 1902, and its reconstruction attracted new trade.” — Câu: The harbour was ______ after a fire. (ONE WORD ONLY)", options: ["reconstruction", "rebuilt", "trade"], correct: 1, why: "**was + ___** → cần **V3**: **rebuilt**. reconstruction là danh từ cùng nghĩa nhưng sai dạng (“was reconstruction” không đúng ngữ pháp)." },
+        { q: "Bài: “Cutting down on plastic bags, the village reduced the amount of waste it sent to landfill.” — Câu: The village produced less ______. (ONE WORD ONLY)", options: ["bags", "waste", "villages"], correct: 1, why: "**less + ___** → danh từ **không đếm được**: **waste**. bags đếm được (sẽ đi với fewer). Ý cũng khớp: reduced the amount of waste = produced less waste." },
+        { q: "Bài: “Several hospitals and a number of schools were closed during the storm.” — Câu: A number of ______ had to close. (ONE WORD ONLY)", options: ["school", "schools", "storm"], correct: 1, why: "**a number of + ___** → danh từ **số nhiều**: **schools** (chép đúng đuôi -s như trong bài). “school” sai số; storm sai ý." },
+        { q: "Bài: “Despite the crisis, wages stayed steady throughout the decade.” — Câu: Wages remained ______ during those years. (ONE WORD ONLY)", options: ["steady", "crisis", "steadily"], correct: 0, why: "**remained + ___** → **tính từ**: **steady** (stayed = remained). steadily là trạng từ — sai dạng, và cũng không có trong câu bài." },
+        { q: "Bài: “Early settlers reached the island by canoe, a journey of several days.” — Câu: The first people travelled to the island by ______. (ONE WORD ONLY)", options: ["canoe", "journey", "days"], correct: 0, why: "**by + ___** chỉ **phương tiện**, không mạo từ: **canoe**. Câu hỏi giữ khung “by + phương tiện” của bài (song song), chỉ đổi Early settlers → The first people, reached → travelled to." },
+        { q: "Bài: “The region is famous for its tea, but its largest export is actually rubber.” — Câu: The region's biggest export is ______. (ONE WORD ONLY)", options: ["tea", "rubber", "region"], correct: 1, why: "Câu hỏi có **so sánh nhất** (biggest) → tìm so sánh nhất trong bài: **largest export is… rubber**. tea là cái nổi tiếng (famous for) — bẫy “đúng chủ đề, sai chỗ”." },
+        { q: "Bài: “Visitors praise the park for being quiet and clean.” — Câu: According to visitors, the park is quiet and ______. (ONE WORD ONLY)", options: ["visitors", "clean", "praise"], correct: 1, why: "**quiet and ___** → song song cùng loại với quiet (**tính từ**): **clean**. Khung “quiet and clean” giữ nguyên giữa bài và câu hỏi." },
+      ],
+    },
+    {
+      t: "note",
+      title: "Cẩn thận khi dùng tín hiệu ngữ pháp",
+      items: [
+        "Tín hiệu giúp **loại** đáp án sai dạng, **không thay** việc tìm vị trí. Đáp án vẫn phải là chữ **trong bài**, ở **đúng câu** khớp nghĩa.",
+        "Nếu bài chỉ có dạng khác của từ (bài: “**reconstruction**”, câu hỏi cần V3), đừng tự đổi dạng — hãy tìm **câu khác** trong bài có đúng dạng. Thường có.",
+        "Tra nhanh bảng này ở **Tra cứu Tập 2 → công thức** (mục “Tín hiệu ngữ pháp khi điền từ Reading”).",
+      ],
+    },
+
+    /* ── 6 ── */
+    { t: "h", text: "6. Luyện trọn bài Passage 2 (Questions 14–26)" },
     {
       t: "p",
       text: "Bấm giờ **20 phút** (đúng thời gian gợi ý cho Passage 2). Đọc lướt tiêu đề + câu đầu mỗi đoạn (1 phút), làm bước 2–3 cho câu 14–21, rồi mới đọc kỹ. Câu 22–26 là **True / False / Not Given** (ôn Tập 1 Ngày 12, Tập 2 Ngày 6).",
@@ -693,7 +757,7 @@ const T2D14_WRITING: Lesson = {
   kind: "writing",
   title: "Viết Task 2: Problem / solution · Cause / effect (+ solution)",
   goal: "Nhận ra 4 kiểu đề vấn đề – giải pháp / nguyên nhân – kết quả, dựng khung 4 đoạn đúng kiểu, viết thân bài có giải thích + ví dụ, đưa giải pháp gắn đúng vấn đề bằng should / câu điều kiện loại 1, và viết trọn bài ≥ 250 từ ở mức band 5.0–5.5 (Task Response + Coherence & Cohesion).",
-  minutes: 80,
+  minutes: 95,
   blocks: [
     {
       t: "recap",
@@ -704,6 +768,7 @@ const T2D14_WRITING: Lesson = {
         "Khung **4 đoạn**: Mở bài (paraphrase + nói sẽ bàn gì) → Thân 1 → Thân 2 → Kết bài (tóm lại, không ý mới). **Giải pháp phải gắn đúng vấn đề** đã nêu.",
         "Ngôn ngữ **nguyên nhân – kết quả** mức B1: because / because of · cause · lead to · result in · As a result, · This means that… ; **giải pháp**: should + V · One solution would be to + V · If + hiện tại, S + will + V (Ngày 13).",
         "Đẩy band nào? **Task Response 5 → 5.5**: trả lời đủ hai câu hỏi, ý có giải thích; **Coherence & Cohesion**: mỗi đoạn một ý chính, từ nối đúng vai (không lạm dụng). Hai bài mẫu trọn (band ước tính 5.5–6.0) + so một đoạn band 4.5 với 5.5.",
+        "Thêm: câu hỏi có **hai đối tượng** (local people **and** the environment); **bánh xe tầng** để tìm ý; **đảo chiều nguyên nhân** (B is caused by / results from A); **3 giải pháp không lặp should**; khung dàn ý gạch đầu dòng.",
       ],
     },
 
@@ -731,6 +796,7 @@ const T2D14_WRITING: Lesson = {
         "Gạch **từ hỏi**: why / reasons / causes → **nguyên nhân**; effects / impact / consequences → **kết quả**; problems / issues / difficulties → **vấn đề**; solutions / measures / what can be done / how can… be solved → **giải pháp**.",
         "Có biến thể **kết quả + giải pháp** (What are the effects… and how can they be reduced?) — vẫn dùng khung 4 đoạn: Thân 1 kết quả, Thân 2 giải pháp.",
         "Nếu câu hỏi thứ hai là **“Is this a positive or negative development?”** thì đó là **two-part question** (học ở Ngày 18), không phải dạng hôm nay — thân bài 2 phải nêu **quan điểm**.",
+        "**Một câu hỏi có HAI đối tượng** nối bằng **and**: “What problems does this cause **for local people and the environment**?” ⇒ mỗi đối tượng **ít nhất một ý** (vd. vấn đề 1 cho người dân, vấn đề 2 cho môi trường); chuyển ý bằng **For local people, … · In terms of the environment, …**. Bỏ sót một đối tượng = trả lời thiếu đề.",
       ],
     },
     {
@@ -822,6 +888,19 @@ const T2D14_WRITING: Lesson = {
       ],
     },
     {
+      t: "table",
+      caption: "Bí ý? Quay lại “bánh xe tầng” (Ngày 6) — vấn đề theo TẦNG, giải pháp theo NGƯỜI LÀM",
+      head: ["Hỏi", "Gợi ý cho đề “trẻ em ít vận động”"],
+      rows: [
+        ["Vấn đề / nguyên nhân ở tầng **cá nhân**?", "trẻ dán mắt vào màn hình; mệt vì học thêm"],
+        ["… ở tầng **gia đình**?", "bố mẹ bận, không đưa con đi chơi; sợ con ra đường không an toàn"],
+        ["… ở tầng **trường học**?", "giờ thể dục ít, sân trường nhỏ"],
+        ["… ở tầng **xã hội / thành phố**?", "thiếu công viên, sân chơi; đường đông xe"],
+        ["Giải pháp: **chính phủ / thành phố** làm gì?", "xây sân chơi công cộng, đóng một số phố cho trẻ chơi cuối tuần"],
+        ["Giải pháp: **trường / gia đình / cá nhân** làm gì?", "trường: mỗi ngày một tiết vận động · bố mẹ: giới hạn giờ màn hình"],
+      ],
+    },
+    {
       t: "mcq",
       id: "t2d14-viet-khop",
       title: "Chọn giải pháp KHỚP với vấn đề (4 câu)",
@@ -885,6 +964,26 @@ const T2D14_WRITING: Lesson = {
       vi: "because cần mệnh đề, because of cần danh từ; lead to / result in luôn có giới từ, cause thì không.",
     },
     {
+      t: "table",
+      caption: "Đảo chiều nguyên nhân – kết quả để không lặp “A causes B” trong cùng bài",
+      head: ["Hướng", "Khung", "Ví dụ"],
+      rows: [
+        ["A → B (chủ động)", "A **causes / leads to / results in** B", "Heavy traffic **causes** air pollution."],
+        ["B ← A (bị động)", "B **is caused by** A", "Air pollution **is** largely **caused by** heavy traffic."],
+        ["B ← A (động từ khác)", "B **results from** A", "Much of the air pollution **results from** heavy traffic."],
+        ["Nêu A là một nguyên nhân", "**One of the main causes of** B **is** A", "**One of the main causes of** air pollution **is** heavy traffic."],
+      ],
+    },
+    {
+      t: "note",
+      title: "Cẩn thận: results in ≠ results from · reasons for ≠ causes of",
+      items: [
+        "**A results in B** (A gây ra B) nhưng **B results from A** (B do A mà ra) — đổi giới từ là đổi chiều. ~~Pollution results in traffic~~ là sai nghĩa.",
+        "**the reasons for** + N (lý do cho) nhưng **the causes of** + N (nguyên nhân của): ~~the reasons of obesity~~ → the reasons **for** obesity / the causes **of** obesity.",
+        "Sau **One of the main causes of** là danh từ **số nhiều** “causes”, động từ chia theo **One** → **is**: ~~One of the main cause are…~~",
+      ],
+    },
+    {
       t: "quiz",
       id: "t2d14-viet-nhan-qua-dich",
       title: "Dịch sang tiếng Anh — nguyên nhân & kết quả (5 câu)",
@@ -941,6 +1040,26 @@ const T2D14_WRITING: Lesson = {
       t: "rule",
       formula: "S (ai) + should + V · One solution would be to + V · If + S + V(s/es), S + will + V",
       vi: "Giải pháp = AI làm GÌ → giải quyết vấn đề NÀO → kết quả (will).",
+    },
+    {
+      t: "table",
+      caption: "Viết 3 giải pháp mà không lặp “should” ba lần",
+      head: ["Giải pháp", "Khung", "Ví dụ"],
+      rows: [
+        ["1", "S **should** + V", "Local governments **should** build more playgrounds."],
+        ["2", "**It is necessary / important for** + ai + **to** V", "**It is important for** schools **to** offer a sports session every day."],
+        ["3", "**One of the most effective solutions would be for** + ai + **to** V", "**One of the most effective solutions would be for** parents **to** limit their children’s screen time."],
+        ["(thêm) bị động", "N **should be** + V3", "Screen time **should be** limited to two hours a day."],
+      ],
+    },
+    {
+      t: "note",
+      title: "Lỗi hay gặp với “for + ai + to V”",
+      items: [
+        "~~It is necessary for schools offer…~~ → for schools **to offer** (thiếu to).",
+        "~~One of the most effective solution~~ → One of the most effective **solutions** (số nhiều sau one of the).",
+        "Bị động khi **không cần nói ai làm**: ~~Screen time should limit~~ → Screen time **should be limited**.",
+      ],
     },
     {
       t: "quiz",
@@ -1056,6 +1175,17 @@ const T2D14_WRITING: Lesson = {
       ],
     },
     {
+      t: "note",
+      title: "Khung dàn ý gạch đầu dòng (chép ra nháp) — ví dụ cho đề bên dưới",
+      items: [
+        "**Đề**: kiểu B · từ hỏi: **Why** (nguyên nhân) + **what can be done** (giải pháp) · đối tượng: children.",
+        "**Mở bài**: paraphrase “not physically active enough” + This essay will examine the reasons and suggest solutions.",
+        "**Thân 1 — nguyên nhân**: (1) màn hình → ngồi nhiều · (2) thiếu sân chơi / bố mẹ sợ không an toàn → ví dụ: khu phố không có công viên.",
+        "**Thân 2 — giải pháp khớp**: (1) ↔ bố mẹ giới hạn giờ màn hình (It is important for parents to…) · (2) ↔ thành phố xây sân chơi (One of the most effective solutions would be for…) → If…, children will…",
+        "**Kết bài**: tóm 2 nguyên nhân + 2 giải pháp, không ý mới.",
+      ],
+    },
+    {
       t: "essay",
       id: "t2d14-viet-bai",
       task: "Task 2",
@@ -1079,17 +1209,18 @@ const T2D14_HOMEWORK: Lesson = {
   kind: "homework",
   title: "Bài tập Ngày 14",
   goal: "Ôn trọn Ngày 14: dùng đúng dạng họ từ AWL và từ du lịch, collocation, dịch câu nguyên nhân – kết quả – giải pháp, làm Sentence completion trên đoạn đọc mới, nhận diện kiểu đề và ghép giải pháp với vấn đề, rồi viết một đoạn thân bài giải pháp.",
-  minutes: 55,
+  minutes: 60,
   blocks: [
     {
       t: "recap",
-      title: "Bài tập hôm nay (40 câu + 1 đoạn viết)",
+      title: "Bài tập hôm nay (44 câu + 1 đoạn viết)",
       items: [
         "**I. Họ từ AWL** (10 chỗ trống) · **II. Từ du lịch** (6 chỗ trống) · **III. Collocation & cụm động từ** (6 câu chọn).",
         "**IV. Dịch Việt → Anh** (6 câu, có 💡): nguyên nhân – kết quả, giải pháp, từ vựng hôm nay; một câu ôn Tập 1.",
         "**V. Sentence completion** (4 câu) trên một đoạn đọc mới về du lịch cộng đồng.",
         "**VI. Kiểu đề** (4 câu) · **VII. Ghép giải pháp với vấn đề** (4 câu).",
         "**VIII. Viết** một đoạn thân bài nêu **hai giải pháp** (~100 từ) — AI chấm.",
+        "**IX. Xoay vòng cấu trúc** (4 câu dịch): giải pháp không lặp should + đảo chiều nguyên nhân.",
       ],
     },
     {
@@ -1274,6 +1405,22 @@ const T2D14_HOMEWORK: Lesson = {
         "Giải pháp 2: **Another solution would be to** reduce plastic at the source — e.g. hotels and beach cafés stop selling single-use bottles.",
         "Ví dụ ngắn (**For example, …**) cho một giải pháp. Dùng ít nhất 2 từ hôm nay: **regulate · restrict · resident · put pressure on · destination**.",
         "Soát: không will sau If; should + V nguyên mẫu; 90–110 từ.",
+      ],
+    },
+
+    /* IX */
+    { t: "h", text: "IX. Xoay vòng cấu trúc — giải pháp & nguyên nhân (4 câu)" },
+    {
+      t: "quiz",
+      id: "t2d14-bt-giai-phap",
+      title: "IX. Dịch Việt → Anh — không lặp should, đảo chiều nguyên nhân (4 câu)",
+      kind: "translate",
+      grammar: "It is important / necessary for + ai + to V · One of the most effective solutions would be for + ai + to V · N + should be + V3 · B is caused by A · One of the main causes of B is A",
+      items: [
+        { q: "Các trường học cần phải dạy học sinh cách quản lý tiền.", hint: "It is necessary / important for schools to teach students how to manage money", answers: ["It is necessary for schools to teach students how to manage money.", "It is important for schools to teach students how to manage money.", "It is necessary for schools to teach students to manage money.", "It is important for schools to teach students to manage money.", "It is necessary for schools to teach students how to manage their money.", "It is important for schools to teach students how to manage their money."] },
+        { q: "Một trong những giải pháp hiệu quả nhất là chính phủ đánh thuế đồ uống có đường.", hint: "One of the most effective solutions would be for the government to tax sugary drinks", answers: ["One of the most effective solutions would be for the government to tax sugary drinks.", "One of the most effective solutions would be for governments to tax sugary drinks.", "One of the most effective solutions is for the government to tax sugary drinks.", "One of the most effective solutions would be for the government to put a tax on sugary drinks.", "One of the most effective solutions would be for the government to impose a tax on sugary drinks."] },
+        { q: "Rác nhựa nên được thu gom hằng ngày.", hint: "Plastic waste, should be collected, every day / daily", answers: ["Plastic waste should be collected every day.", "Plastic waste should be collected daily.", "Plastic rubbish should be collected every day.", "Plastic waste should be collected each day.", "Plastic litter should be collected every day."] },
+        { q: "Một trong những nguyên nhân chính của béo phì là đồ ăn nhanh.", hint: "One of the main causes of obesity, is, fast food", answers: ["One of the main causes of obesity is fast food.", "One of the main causes of obesity is junk food.", "One of the main causes of obesity is eating fast food.", "Fast food is one of the main causes of obesity.", "One of the biggest causes of obesity is fast food.", "One of the major causes of obesity is fast food."] },
       ],
     },
   ],

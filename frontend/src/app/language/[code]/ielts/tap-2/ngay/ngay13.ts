@@ -597,6 +597,7 @@ const T2D13_LISTENING: Lesson = {
         "Bẫy lớn nhất của Part 3: **cả ba phương án đều được nhắc**, nhưng chỉ một cái là điều người nói **khẳng định cuối cùng**; và người **đồng ý** với một ý ≠ người **đề xuất** ý đó.",
         "Kỹ năng then chốt: nghe **tín hiệu** đồng ý (Exactly. / That makes sense.), phản đối (I'm not so sure… / I see what you mean, but…) và đề xuất (Why don't we…? / How about…?).",
         "Đẩy band: Listening band 5.0 cần **16/40**; Part 1–2 đã cho bạn phần lớn số đó — mỗi câu đúng ở Part 3 là phần “vượt” lên 5.0. Mục tiêu hôm nay: **≥ 6/10** ở bài 21–30.",
+        "Thêm (mục 9–10): **năm cặp ý hay bị đánh tráo** trong trắc nghiệm (miễn phí ↔ đã gồm trong giá, khuyên ↔ bắt buộc, ý định ↔ kết quả, đang có ↔ từng có, most ↔ a third) và **ba biến thể flow-chart** (đáp án là động từ, nhân – quả, chọn từ trong hộp).",
       ],
     },
 
@@ -963,6 +964,156 @@ const T2D13_LISTENING: Lesson = {
         "Nghe lại lần ba, **bóng nói** (shadowing — đọc đuổi theo băng) năm câu của Dr Hughes: giọng giảng viên Anh là giọng bạn gặp nhiều nhất ở Part 3 và Part 4.",
       ],
     },
+
+    /* ── 9 ── */
+    { t: "h", text: "9. Năm cặp ý hay bị ĐÁNH TRÁO trong trắc nghiệm" },
+    {
+      t: "p",
+      text: "Mục 3 có ba bẫy chung. Mục này gom những **cặp ý** người ra đề hay đặt cạnh nhau trong A/B/C: hai phương án **nghe gần giống**, nhưng một cái là điều người nói **thật sự nói**, cái kia là ý **gần kề** mà người nghe vội vàng tự suy ra. Thuộc năm cặp này, bạn sẽ biết trước bẫy nằm ở đâu ngay lúc đọc câu hỏi.",
+    },
+    {
+      t: "table",
+      caption: "Năm nhóm cặp bị đánh tráo — đọc phương án, đoán trước nhóm nào",
+      head: ["Nhóm", "Phương án A nói", "Phương án B nói", "Lời thoại phân biệt bằng"],
+      rows: [
+        ["① **Miễn phí ↔ đã trả / người khác trả**", "It is **free**.", "It is **included in** the fee / **paid for by** the college.", "free · no charge · you don't pay **anything** ↔ covered by · included in · the department pays"],
+        ["② **Khuyên ↔ bắt buộc ↔ cấm**", "Students **should / are advised to**…", "Students **must**… / are **not allowed** to…", "I'd suggest · it's a good idea · I'd strongly advise ↔ you have to · it's compulsory ↔ you can't · it isn't permitted"],
+        ["③ **Ý định ↔ kết quả**", "They **planned** to…", "They **actually** did…", "we were going to · our plan was · we hoped to · we tried ↔ in the end · so instead · it turned out"],
+        ["④ **Đang có ↔ từng có ↔ tạm đóng ↔ sắp có**", "It **is** open / available now.", "It **used to** exist / is **closed** until… / **will** open…", "now · at the moment · these days ↔ used to · was turned into ↔ closed for repairs ↔ won't open until"],
+        ["⑤ **Định lượng**", "**Most** students…", "**About a third** / **a minority** of students…", "35 % ≈ about a third (không phải most) · 52 % = just over half · hardly any = gần như không"],
+      ],
+    },
+    {
+      t: "listen",
+      id: "t2d13-nghe-danh-trao",
+      title: "Five extracts from tutorials — spot the swapped idea",
+      dan: { so: "Day 13, Practice 3", boiCanh: "five short extracts from conversations between students and tutors.", cau: [1, 5] },
+      note: "Năm đoạn ngắn kiểu Part 3. Đọc câu hỏi bên dưới trước, đoán mỗi câu thuộc nhóm ①–⑤ nào, rồi mới nghe. Nghe tối đa 2 lần.",
+      lines: [
+        { who: "1 · Tutor", voice: "uk-nam", text: "Some of you asked whether you'll have to pay for the field trip. You won't be asked for any money on the day, because the coach and the entrance tickets are already covered by the course fee you paid in September.", vi: "Vài bạn hỏi có phải trả tiền chuyến đi thực địa không. Hôm đó các bạn sẽ không bị thu đồng nào, vì xe và vé vào cửa đã nằm trong học phí các bạn đóng hồi tháng Chín." },
+        { who: "2 · Tutor", voice: "uk-nu", text: "The statistics workshop on Thursday isn't part of the assessment, so nobody will check whether you come. But honestly, I'd strongly advise you to go. Last year the students who went got much better marks. And yes, first-years are welcome too.", vi: "Buổi workshop thống kê thứ Năm không tính vào điểm, nên chẳng ai kiểm tra bạn có đến không. Nhưng thật lòng, tôi rất khuyên các bạn đi. Năm ngoái ai đi đều được điểm cao hơn hẳn. Và đúng, sinh viên năm nhất cũng được đến." },
+        { who: "3 · Anna", voice: "uk-nu", text: "Our plan was to put a questionnaire online, but hardly anyone filled it in. Then we thought about watching customers in the shop, but the manager said no. In the end, we stood outside the library and interviewed people directly.", vi: "Kế hoạch của bọn em là đăng bảng hỏi lên mạng, nhưng gần như không ai điền. Rồi bọn em tính quan sát khách trong cửa hàng, nhưng quản lý không cho. Cuối cùng bọn em đứng ngoài thư viện và phỏng vấn trực tiếp." },
+        { who: "3 · Ben", voice: "us-nam", text: "Which took ages, but the answers were much better.", vi: "Mất cả buổi, nhưng câu trả lời tốt hơn hẳn." },
+        { who: "4 · Ben", voice: "us-nam", text: "There used to be a language lab in the basement, didn't there?", vi: "Trước đây dưới tầng hầm có phòng lab ngoại ngữ, đúng không ạ?" },
+        { who: "4 · Tutor", voice: "uk-nam", text: "There was, but it was turned into offices two years ago. Everything it offered is now on the university website, so you can practise from home. You may have heard that the computer room is closed for repairs, but that's a different room. And the new self-access centre won't open until next month, but that's only for business students.", vi: "Có, nhưng hai năm trước nó bị đổi thành văn phòng. Mọi thứ nó từng có giờ đều trên trang web của trường, nên các bạn luyện ở nhà được. Có thể các bạn nghe nói phòng máy tính đang đóng để sửa, nhưng đó là phòng khác. Còn trung tâm tự học mới thì tháng sau mới mở, và chỉ dành cho sinh viên kinh doanh." },
+        { who: "5 · Anna", voice: "uk-nu", text: "Thirty-five per cent said they'd had a bike stolen at least once, which shocked us. We expected most of them to want more bike parking, but only about a quarter mentioned it. And the number who cycle every day was lower than we thought, just over half.", vi: "Ba mươi lăm phần trăm nói đã từng bị mất xe đạp ít nhất một lần, làm bọn em sốc. Bọn em tưởng đa số muốn thêm chỗ để xe, nhưng chỉ khoảng một phần tư nhắc tới. Còn số người đạp xe hằng ngày thấp hơn bọn em nghĩ, chỉ hơn một nửa." },
+      ],
+    },
+    {
+      t: "mcq",
+      id: "t2d13-nghe-danh-trao-chon",
+      title: "Chọn A, B hoặc C — và gọi tên nhóm bẫy (5 câu)",
+      items: [
+        { q: "(1) What does the tutor say about the field trip?", options: ["A It is free for students.", "B Its cost is included in the course fee.", "C Students pay for their own transport."], correct: 1, why: "Nhóm ①. “**covered by the course fee** you paid” = đã **gồm trong học phí** — sinh viên **đã trả**, chỉ là không trả **thêm**. Bẫy A: “You **won't be asked for any money on the day**” nghe như miễn phí. C sai: xe (coach) cũng đã gồm trong học phí." },
+        { q: "(2) The tutor says that the statistics workshop is", options: ["A compulsory.", "B recommended.", "C not open to first-year students."], correct: 1, why: "Nhóm ②. “**I'd strongly advise** you to go” = **khuyên**. Không bắt buộc: “isn't part of the assessment, so **nobody will check**”. C sai: “first-years are **welcome** too”." },
+        { q: "(3) How did the students finally collect their data?", options: ["A by an online questionnaire", "B by face-to-face interviews", "C by observing customers"], correct: 1, why: "Nhóm ③. “**In the end**, we… **interviewed people directly**” (directly ≈ face-to-face). A = **kế hoạch ban đầu** (our plan was) thất bại; C = chỉ **định** làm (we thought about) nhưng bị từ chối." },
+        { q: "(4) What is the current situation with the language lab?", options: ["A It is closed for repairs.", "B Its services are now available online.", "C It will reopen next month."], correct: 1, why: "Nhóm ④. “Everything it offered is **now on the university website**”. A = **phòng máy tính** (“a different room”); C = **trung tâm tự học** mới, cho sinh viên kinh doanh. Phòng lab “**used to**” có — giờ là văn phòng." },
+        { q: "(5) What did the survey show about students who cycle to campus?", options: ["A Most of them want more bike parking.", "B About a third of them have had a bike stolen.", "C Nearly all of them cycle every day."], correct: 1, why: "Nhóm ⑤. **35 %** ≈ **about a third** (paraphrase số liệu). A sai: chỉ “**about a quarter**” — “most” là điều nhóm **tưởng** (we expected). C sai: “**just over half**” ≠ nearly all." },
+      ],
+    },
+    {
+      t: "rule",
+      formula: "Đọc phương án → đoán nhóm ①–⑤ → nghe chữ PHÂN BIỆT của nhóm đó (included / advise / in the end / now / con số thật)",
+      vi: "Hai phương án nghe giống nhau thường khác nhau đúng một chữ: free ↔ included, should ↔ must, planned ↔ did, is ↔ used to, most ↔ a third.",
+    },
+
+    /* ── 10 ── */
+    { t: "h", text: "10. Flow-chart biến thể · từ báo bước · chuẩn bị phương án trước khi nghe" },
+    {
+      t: "table",
+      caption: "Ba biến thể flow-chart hay gặp ngoài dạng điền danh từ (mục 5)",
+      head: ["Biến thể", "Trông thế nào", "Mẹo"],
+      rows: [
+        ["**Đáp án là ĐỘNG TỪ**", "“___ the pieces in warm water” · “The mixture is ___ for an hour”", "Ô đứng đầu câu ⇒ động từ **nguyên mẫu** (mệnh lệnh). Sau **is / are / was** ⇒ **V3** (bị động). Nghe được “pressed” mà ô cần nguyên mẫu ⇒ ghi **press**."],
+        ["**Nhân – quả** (không phải thời gian)", "Mũi tên nghĩa là **“dẫn tới”**: Problem → Cause → Result", "Nghe từ nối nguyên nhân – kết quả: **because · so · as a result · which meant · that's why · this led to**."],
+        ["**Chọn từ trong HỘP** (A–G)", "Ô trống ghi số, bên cạnh là hộp cụm từ có chữ cái", "Ghi **chữ cái**, không ghi chữ. Cụm trong hộp là **paraphrase** lời nói; hộp luôn **thừa** 2–3 phương án."],
+      ],
+    },
+    {
+      t: "table",
+      caption: "Từ báo bước khi nghe một quy trình (cũng là từ bạn dùng ở Writing process — Ngày 20)",
+      head: ["Vị trí", "Người nói hay dùng"],
+      rows: [
+        ["Bước đầu", "To start with · First of all · The first step is · The process begins when · Initially"],
+        ["Bước giữa", "Once that's done · After that · The next stage is · Following this · At this point · Then"],
+        ["Bước cuối", "Finally · The last step is · Eventually · At the end of the process · Once it's finished"],
+      ],
+    },
+    {
+      t: "listen",
+      id: "t2d13-nghe-bien-the",
+      title: "Two student projects: making paper · a recycling campaign",
+      dan: { so: "Day 13, Practice 4", boiCanh: "two students describing their projects.", cau: [1, 6] },
+      note: "Hai đoạn. Đoạn A (câu 1–3): điền ĐỘNG TỪ, ONE WORD ONLY. Đoạn B (câu 4–6): chọn chữ cái A–F trong hộp. Đọc cả hai sơ đồ trước khi nghe.",
+      lines: [
+        { who: "A · Leo", voice: "uk-nam", text: "So, for our art project we made paper from old newspapers. To start with, we tore the newspapers into tiny pieces. Once that was done, you soak the pieces in warm water overnight, so they go soft.", vi: "Dự án mỹ thuật của bọn em là làm giấy từ báo cũ. Đầu tiên, bọn em xé báo thành mẩu nhỏ. Xong bước đó, bạn ngâm các mẩu trong nước ấm qua đêm cho mềm." },
+        { who: "A · Leo", voice: "uk-nam", text: "The next stage is blending everything into a thick pulp. After that, you pour the pulp onto a flat screen and press the water out with a sponge. You have to press quite hard. Finally, the sheet is left to dry for a whole day.", vi: "Bước tiếp theo là xay hết thành bột giấy đặc. Sau đó, đổ bột lên một tấm lưới phẳng rồi ép nước ra bằng miếng bọt biển. Phải ép khá mạnh. Cuối cùng, tờ giấy được để khô cả ngày." },
+        { who: "B · Maya", voice: "us-nu", text: "Our project was about rubbish on campus. So much paper was going into the general bins that the university was paying a lot more to have them emptied. That's why we started a campaign.", vi: "Dự án của bọn em về rác trong trường. Có quá nhiều giấy bị bỏ vào thùng rác chung đến mức trường phải trả nhiều tiền hơn hẳn để đổ rác. Vì thế bọn em mở một chiến dịch." },
+        { who: "B · Maya", voice: "us-nu", text: "We asked for new bins in every building, but there wasn't any money for that. So instead we set up a competition between the halls of residence to see who could recycle the most. As a result, general waste fell by about forty per cent, which meant the university's bills went down.", vi: "Bọn em xin thùng rác mới cho mọi toà nhà, nhưng không có kinh phí. Nên thay vào đó bọn em tổ chức cuộc thi giữa các khu ký túc xá xem ai tái chế nhiều nhất. Kết quả là rác chung giảm khoảng bốn mươi phần trăm, nhờ vậy hoá đơn của trường giảm." },
+      ],
+    },
+    {
+      t: "sodo",
+      kind: "flow",
+      title: "Đoạn A — Making paper (Questions 1–3 · ONE WORD ONLY)",
+      steps: [
+        { label: "Tear the newspapers into tiny pieces" },
+        { label: "(1) ______ the pieces in warm water overnight" },
+        { label: "Blend everything into a thick pulp" },
+        { label: "Pour the pulp onto a flat screen" },
+        { label: "(2) ______ the water out with a sponge" },
+        { label: "Leave the sheet to (3) ______ for 24 hours" },
+      ],
+    },
+    {
+      t: "sodo",
+      kind: "flow",
+      title: "Đoạn B — The recycling campaign (Questions 4–6 · chọn A–F)",
+      caption: "Hộp: A higher costs for emptying bins · B a fall in general waste · C cheaper paper for students · D a contest between halls · E more cleaning staff · F new bins in all buildings",
+      steps: [
+        { label: "Too much paper in the general bins" },
+        { label: "(4) ______" },
+        { label: "Students start a campaign" },
+        { label: "(5) ______" },
+        { label: "(6) ______" },
+        { label: "The university's bills go down" },
+      ],
+    },
+    {
+      t: "quiz",
+      id: "t2d13-nghe-bien-the-dien",
+      title: "Questions 1–6 — câu 1–3 ghi động từ · câu 4–6 ghi MỘT chữ cái",
+      kind: "fill",
+      items: [
+        { q: "(1) ___ the pieces in warm water overnight", answers: ["soak", "Soak"] },
+        { q: "(2) ___ the water out with a sponge", answers: ["press", "Press"] },
+        { q: "(3) Leave the sheet to ___ for 24 hours", answers: ["dry"] },
+        { q: "(4) Too much paper in the bins → ___", answers: ["A"] },
+        { q: "(5) Students start a campaign → ___", answers: ["D"] },
+        { q: "(6) ___ → the university's bills go down", answers: ["B"] },
+      ],
+    },
+    {
+      t: "note",
+      title: "Giải thích 1–6",
+      items: [
+        "**(1) soak** — “you **soak** the pieces in warm water overnight”. Ô đứng đầu dòng ⇒ động từ nguyên mẫu. Bước được báo bằng “**Once that was done**”.",
+        "**(2) press** — “**press** the water out with a sponge”. Không ghi ~~pressed~~ hay ~~pressing~~: ô cần dạng mệnh lệnh như các bước khác (Tear · Blend · Pour).",
+        "**(3) dry** — “the sheet **is left to dry** for a whole day” ↔ “Leave the sheet to ___ for **24 hours**” (a whole day = 24 hours). Sau **to** ⇒ nguyên mẫu.",
+        "**(4) A** — “the university was **paying a lot more to have them emptied**” = **higher costs for emptying bins**. Từ nối “**That's why**” cho biết đây là nguyên nhân dẫn tới chiến dịch.",
+        "**(5) D** — “**So instead** we set up **a competition between the halls**” = a contest between halls. Bẫy **F**: thùng rác mới được **xin** nhưng “there wasn't any money” (nhóm ③ ý định ↔ kết quả).",
+        "**(6) B** — “**As a result**, general waste **fell** by about forty per cent” = a fall in general waste, “**which meant**” hoá đơn giảm (ô có sẵn). **C** và **E** không được nhắc — hộp luôn có phương án thừa.",
+      ],
+    },
+    {
+      t: "note",
+      title: "Mẹo: chuẩn bị phương án Matching và hộp từ TRƯỚC khi nghe",
+      items: [
+        "Trong thời gian đọc đề, cạnh **mỗi phương án** ghi nhanh 2–3 từ người nói **có thể dùng thay** nó. Ví dụ: **cost** → expensive, price, budget, afford · **safety** → dangerous, risk, injury · **time** → takes ages, quick, hours · **a contest** → competition, see who can…",
+        "Khi nghe, bạn không chờ đúng chữ trên đề mà chờ **cả nhóm từ** đã chuẩn bị — nghe “took ages” là nghĩ ngay tới phương án **time**.",
+        "Một phương án có thể là đáp án cho **nhiều câu** nếu đề ghi **NB You may use any letter more than once**; không có dòng NB thì mỗi chữ dùng một lần — dùng rồi thì gạch đi để thu hẹp lựa chọn.",
+      ],
+    },
   ],
 };
 
@@ -972,16 +1123,17 @@ const T2D13_SPEAKING: Lesson = {
   id: "t2d13-noi",
   kind: "speaking",
   title: "Nói: Part 3 nhập môn — ý kiến + lý do + ví dụ; xin nhắc lại câu hỏi",
-  goal: "Trả lời một câu hỏi Speaking Part 3 trong 3–5 câu theo khung Ý kiến → Lý do → Ví dụ → Nhượng bộ, nói về “con người, xã hội” chứ không chỉ về bản thân, dùng câu điều kiện loại 1 để dự đoán, biết xin nhắc lại / giải thích câu hỏi đúng cách và đọc đúng trọng âm từ 3 âm tiết — đẩy Fluency & Coherence và Pronunciation từ band 4.5 lên 5.0–5.5.",
-  minutes: 65,
+  goal: "Trả lời một câu hỏi Speaking Part 3 trong 3–5 câu theo khung Ý kiến → Lý do → Ví dụ → Nhượng bộ, nói về “con người, xã hội” chứ không chỉ về bản thân, dùng câu điều kiện loại 1 để dự đoán, trả lời được câu hỏi ưu – nhược, tự sinh thêm ý khi bí (viễn cảnh ngược lại, It depends, bảng góc nhìn), chốt câu dứt khoát, biết xin nhắc lại / giải thích câu hỏi đúng cách và đọc đúng trọng âm từ 3 âm tiết — đẩy Fluency & Coherence và Pronunciation từ band 4.5 lên 5.0–5.5.",
+  minutes: 80,
   blocks: [
     {
       t: "recap",
       title: "Bài này học gì",
       items: [
         "**Part 3** (4–5 phút, ngay sau Part 2): giám khảo hỏi những câu **chung, trừu tượng** về chủ đề của Part 2 — không còn hỏi “bạn thích gì” mà hỏi “**người ta / xã hội** thì sao, vì sao, sẽ ra sao”.",
-        "Nhận diện **5 loại câu hỏi**: ý kiến · lý do · dự đoán · giải pháp · so sánh — mỗi loại có một câu mở đầu sẵn.",
-        "Khung trả lời 4 bước (nâng từ O–R–E của Tập 1 Ngày 12): ==Ý kiến → Lý do → Ví dụ → Nhượng bộ / chốt==, 3–5 câu, khoảng 30–45 giây.",
+        "Nhận diện **6 loại câu hỏi**: ý kiến · lý do · dự đoán · giải pháp · so sánh · **ưu – nhược** — mỗi loại có một câu mở đầu sẵn.",
+        "Khung trả lời 4 bước (nâng từ O–R–E của Tập 1 Ngày 12): ==Ý kiến → Lý do → Ví dụ → Nhượng bộ / chốt==, 3–5 câu, khoảng 30–45 giây — và **chốt bằng giọng xuống**, không treo “and…”.",
+        "Hết ý thì có **3 cách sinh ý**: viễn cảnh ngược lại (If… don't…), tách “It depends” thành từng trường hợp, và **bảng góc nhìn** (tiền bạc · quan hệ · cảm xúc…).",
         "Dùng **câu điều kiện loại 1** (bài 1 hôm nay) để dự đoán: If…, people will… · Unless…, … will… Khi không nghe rõ: **Sorry, could you repeat the question?**; không hiểu từ: **What do you mean by…?**",
         "Đẩy band: **Fluency & Coherence 5 → 6** (mô tả band 6: “sẵn lòng nói dài”; band 5: “giữ được mạch nhưng phải lặp, nói chậm”) và **Pronunciation** — trọng âm từ đúng là một đặc điểm band 6 mà người band 5 “có một phần”.",
       ],
@@ -1022,7 +1174,7 @@ const T2D13_SPEAKING: Lesson = {
     },
 
     /* ── 2 ── */
-    { t: "h", text: "2. Năm loại câu hỏi Part 3 — nhận ra để mở đầu đúng" },
+    { t: "h", text: "2. Sáu loại câu hỏi Part 3 — nhận ra để mở đầu đúng" },
     {
       t: "table",
       head: ["Loại", "Câu hỏi thường gặp", "Câu mở đầu gợi ý"],
@@ -1032,6 +1184,52 @@ const T2D13_SPEAKING: Lesson = {
         ["**Dự đoán**", "Will… in the future? · How will… change? · What will happen if…?", "I imagine that… · If…, … will probably… · It's hard to say, but…"],
         ["**Giải pháp**", "What can be done to…? · How can… encourage…? · What should the government do…?", "One thing that could help is… · If…, … will… · I think schools should…"],
         ["**So sánh**", "Is A better than B? · How is A different from B? · Are people today… than in the past?", "I'd say A is…er than B, mainly because… (so sánh quá khứ – hiện tại: Tập 2 Ngày 21)"],
+        ["**Ưu – nhược**", "What are the advantages and disadvantages of…? · What are the benefits of…? · What problems can… cause?", "There are clear benefits, but also a few drawbacks. · I think the biggest advantage is that…"],
+      ],
+    },
+    {
+      t: "p",
+      text: "**Loại 6 — ưu – nhược** cần một khung riêng, vì người mới hay chỉ nói một mặt rồi dừng. Câu hỏi có cả **advantages and disadvantages** thì phải nói **cả hai mặt**; câu chỉ hỏi **benefits** thì nói lợi là chính, mặt hại chỉ cần một câu ở cuối (bước nhượng bộ).",
+    },
+    {
+      t: "sodo",
+      kind: "flow",
+      title: "Trả lời câu hỏi ưu – nhược (40–50 giây)",
+      caption: "Hai ý lợi là phần dài nhất. Mặt hại chỉ cần một ý có lý do. Nhớ chốt — đừng dừng giữa chừng ở mặt hại.",
+      steps: [
+        { label: "1. Câu giới thiệu", sub: "There are both benefits and drawbacks." },
+        { label: "2. Lợi 1 + lý do", sub: "The biggest advantage is that…" },
+        { label: "3. Lợi 2 + ví dụ", sub: "Another benefit is… For example, …" },
+        { label: "4. Chuyển sang mặt hại", sub: "On the downside, … / In terms of problems, …" },
+        { label: "5. Chốt", sub: "So overall, I think the benefits outweigh the drawbacks." },
+      ],
+    },
+    {
+      t: "dialogue",
+      title: "Câu trả lời mẫu — ưu – nhược (band 5.5 ước tính)",
+      lines: [
+        { who: "Examiner", role: "examiner", text: "What are the advantages and disadvantages of studying online?" },
+        { who: "Candidate", role: "candidate", text: "Well, there are both benefits and drawbacks. The biggest advantage is that it saves a lot of time, because students don't have to travel to school. Another benefit is that you can watch a lesson again if you don't understand it. For example, my cousin often replays her maths lessons two or three times. On the downside, it's easy to lose concentration at home, especially when your phone is next to you. So overall, I think online learning is useful, but only for students who can manage their own time.", vi: "Chà, có cả lợi lẫn hại. Lợi lớn nhất là tiết kiệm nhiều thời gian, vì học sinh không phải đi đến trường. Một lợi nữa là bạn có thể xem lại bài nếu chưa hiểu. Ví dụ, em họ tôi hay xem lại bài toán hai ba lần. Mặt hại là ở nhà rất dễ mất tập trung, nhất là khi điện thoại ngay bên cạnh. Nên nhìn chung, tôi nghĩ học online có ích, nhưng chỉ với học sinh biết tự quản lý thời gian." },
+      ],
+    },
+    {
+      t: "table",
+      caption: "Cụm chuyển ý cho câu hỏi ưu – nhược",
+      head: ["Chức năng", "Cụm dùng được"],
+      rows: [
+        ["Mở", "There are both benefits and drawbacks. · It has its pros and cons."],
+        ["Nêu lợi", "The biggest / main advantage is that… · Another benefit is that… · It also helps people (to) + V"],
+        ["Chuyển sang hại", "**On the downside**, … · **In terms of** disadvantages, … · **Regarding** the drawbacks, … · The main problem is that…"],
+        ["Chốt", "So overall, the benefits outweigh the drawbacks. · So on balance, I'd say it's a good thing, as long as…"],
+      ],
+    },
+    {
+      t: "note",
+      title: "Cẩn thận với từ ưu – nhược",
+      items: [
+        "**advantage of + N / V-ing** (~~advantage to study~~) · **The advantage is that + S + V**.",
+        "**benefit** vừa là danh từ vừa là động từ: Online learning **benefits** busy students = brings **benefits to** busy students.",
+        "Đồng nghĩa để khỏi lặp: advantages = **benefits, pros, plus points** · disadvantages = **drawbacks, downsides, cons**.",
       ],
     },
     {
@@ -1104,6 +1302,26 @@ const T2D13_SPEAKING: Lesson = {
       t: "rule",
       formula: "Ý kiến → The main reason is that… → For example, … → Having said that, … / So overall, …",
       vi: "3–5 câu, khoảng 30–45 giây; bước 4 cho thấy bạn nhìn được cả hai mặt.",
+    },
+    {
+      t: "table",
+      caption: "Chốt câu trả lời cho dứt khoát — giám khảo biết bạn đã nói xong",
+      head: ["Cụm chốt", "Dùng khi"],
+      rows: [
+        ["**So overall, …** / **So on the whole, …**", "Nhắc lại ý kiến chính sau lý do + ví dụ."],
+        ["**That's why I think …**", "Vừa nêu lý do xong, muốn quay về câu trả lời."],
+        ["**So it really depends on …**", "Đã tách nhiều trường hợp (mục 6)."],
+        ["**…, and that's the main reason.**", "Câu ngắn, chốt sau một lý do dài."],
+      ],
+    },
+    {
+      t: "note",
+      title: "Cẩn thận: câu trả lời “treo”",
+      items: [
+        "~~… and people also… and… um…~~ rồi im — câu bị bỏ lửng làm giám khảo không biết bạn còn nói nữa không, và nghe như bạn **hết ý giữa chừng** (Fluency giảm).",
+        "Câu chốt đọc **giọng xuống** ở cuối (↘): So overall, I think it's a **good** thing ↘. Giọng lên (↗) ở cuối nghe như câu hỏi hoặc câu chưa xong.",
+        "Nói đến khi bị giám khảo cắt **không** được cộng điểm. Part 3 đủ 3–5 câu là chốt; giám khảo muốn nghe thêm sẽ hỏi tiếp “Why?”.",
+      ],
     },
 
     /* ── 4 ── */
@@ -1233,7 +1451,89 @@ const T2D13_SPEAKING: Lesson = {
     },
 
     /* ── 6 ── */
-    { t: "h", text: "6. Khi không nghe rõ, không hiểu từ, hoặc cần vài giây" },
+    { t: "h", text: "6. Bí ý thì làm gì? Ba cách sinh thêm ý" },
+    {
+      t: "p",
+      text: "Người band 4–5 thường có **một** ý rồi hết. Ba kỹ thuật dưới đây biến một ý thành 3–5 câu mà không cần kiến thức đặc biệt — chỉ cần câu điều kiện của bài 1.",
+    },
+    {
+      t: "table",
+      caption: "Cách 1 — Viễn cảnh ngược lại: nói điều sẽ xảy ra nếu KHÔNG làm",
+      head: ["Bước", "Khung", "Ví dụ (Should children learn to swim at school?)"],
+      rows: [
+        ["Ý chính", "Yes, I think so, because…", "Yes, I think so, because swimming is a skill that can save lives."],
+        ["Viễn cảnh ngược lại", "**If** + S + **don't / doesn't** + V, … **will** … · **Otherwise**, … · **Unless** + S + V, …", "**If schools don't** teach it, many children **will never** learn, especially in poor families. **Otherwise**, accidents in rivers will keep happening."],
+        ["Chốt", "So …", "So I'd say it should be compulsory."],
+      ],
+    },
+    {
+      t: "table",
+      caption: "Cách 2 — “It depends”: tách thành từng trường hợp, mỗi trường hợp một câu",
+      head: ["Bước", "Khung", "Ví dụ (Is it better to live in a city or in the countryside?)"],
+      rows: [
+        ["Mở", "Well, **it depends on** + N", "Well, **it depends on** a person's age."],
+        ["Trường hợp 1", "**If** + S + V, … · **For** + nhóm 1, …", "**If** you're young and want a career, the city is better because there are more jobs."],
+        ["Trường hợp 2", "**But if** + S + V, … · **For** + nhóm 2, **by contrast**, …", "**But if** you're retired, the countryside is probably better, as it's quieter and cleaner."],
+        ["Chốt", "So it really depends on…", "So it really depends on what stage of life you're at."],
+      ],
+    },
+    {
+      t: "note",
+      title: "Cẩn thận: “It depends” rồi dừng",
+      items: [
+        "~~It depends.~~ (im lặng) — giám khảo nghe như bạn né câu hỏi. Nói “It depends” thì **phải** nói ngay **phụ thuộc vào gì** và **ít nhất hai trường hợp**.",
+        "Các trục chia hay dùng: **tuổi** (young people / older people) · **thu nhập** (people on low incomes / wealthy people) · **nơi sống** (people in cities / rural areas) · **thời điểm** (on weekdays / at weekends).",
+      ],
+    },
+    {
+      t: "table",
+      caption: "Cách 3 — Bảng góc nhìn: nhìn câu hỏi qua từng “ống kính” để tìm lý do",
+      head: ["Góc nhìn", "Tự hỏi", "Ví dụ ý (Why do people work long hours?)"],
+      rows: [
+        ["**Tiền bạc / kinh tế**", "Có liên quan tới tiền, giá, việc làm không?", "Living costs are high, so people need extra income."],
+        ["**Xã hội / quan hệ**", "Gia đình, bạn bè, đồng nghiệp, cộng đồng nghĩ gì?", "In some companies, leaving early looks lazy to your boss."],
+        ["**Tâm lý / cảm xúc**", "Người ta cảm thấy thế nào — áp lực, vui, sợ?", "Some people are afraid of losing their job."],
+        ["**Cá nhân ↔ xã hội**", "Với một người thì sao, với cả xã hội thì sao?", "For individuals it means stress; for society it means less family time."],
+        ["**Lý thuyết ↔ thực tế**", "Nghe thì hợp lý, nhưng làm thật thì sao?", "In theory, eight hours is the rule, but in practice many people answer emails at night."],
+      ],
+    },
+    {
+      t: "rule",
+      formula: "If + S + don't + V, … will … · It depends on + N. If…, … But if…, … · tiền bạc → quan hệ → cảm xúc",
+      vi: "Bí ý thì: nói điều xảy ra nếu không làm · tách trường hợp · đổi góc nhìn. Mỗi cách cho thêm 1–2 câu.",
+    },
+    {
+      t: "quiz",
+      id: "t2d13-noi-phat-trien",
+      title: "Dịch — ba cách sinh ý (4 câu)",
+      kind: "translate",
+      grammar: "If + S + don't / doesn't + V, S + will + V · Otherwise, … · It depends on + N · But if…, …",
+      items: [
+        {
+          q: "Nếu cha mẹ không đọc sách cùng con, trẻ sẽ ít hứng thú với sách.",
+          hint: "If parents don't read with their children, children will be less interested in books",
+          answers: ["If parents don't read with their children, children will be less interested in books.", "If parents do not read with their children, children will be less interested in books.", "If parents don't read with their children, the children will be less interested in books.", "If parents don't read with their children, they will be less interested in books.", "If parents don't read with their kids, kids will be less interested in books.", "If parents don't read with their children, children will be less interested in reading."],
+        },
+        {
+          q: "Nếu không, nhiều người sẽ tiếp tục lái xe vào trung tâm.",
+          hint: "Otherwise, many people will continue to drive / driving into the city centre",
+          answers: ["Otherwise, many people will continue to drive into the city centre.", "Otherwise, many people will continue driving into the city centre.", "Otherwise, many people will keep driving into the city centre.", "Otherwise, a lot of people will continue to drive into the city centre.", "Otherwise many people will continue to drive into the city centre.", "Otherwise, many people will continue to drive into the city center.", "Otherwise, many people will keep driving into the city center."],
+        },
+        {
+          q: "Còn tuỳ vào thu nhập của mỗi người.",
+          hint: "It depends on, people's income / how much people earn",
+          answers: ["It depends on people's income.", "It depends on a person's income.", "It depends on each person's income.", "It depends on how much people earn.", "It depends on how much a person earns.", "It depends on people's incomes.", "Well, it depends on people's income.", "It depends on someone's income."],
+        },
+        {
+          q: "Nhưng nếu bạn đã nghỉ hưu, nông thôn có lẽ tốt hơn.",
+          hint: "But if you're retired, the countryside is probably better",
+          answers: ["But if you're retired, the countryside is probably better.", "But if you are retired, the countryside is probably better.", "But if you've retired, the countryside is probably better.", "But if you have retired, the countryside is probably better.", "But if you're retired, the countryside is probably a better choice.", "But if you're retired, living in the countryside is probably better.", "But if you're retired, the countryside might be better."],
+        },
+      ],
+    },
+
+    /* ── 7 ── */
+    { t: "h", text: "7. Khi không nghe rõ, không hiểu từ, hoặc cần vài giây" },
     {
       t: "p",
       text: "Tập 1 Ngày 13 bạn đã học “**Could you repeat the question, please?**”. Ở Part 3, câu hỏi dài và khó hơn, nên cần thêm vài câu nữa. Xin nhắc lại **một lần** không bị trừ điểm; im lặng lâu hoặc nói lạc đề vì hiểu sai câu hỏi mới bị trừ.",
@@ -1246,7 +1546,7 @@ const T2D13_SPEAKING: Lesson = {
         ["Không hiểu một từ", "Sorry, **what do you mean by** “consumerism”? · **Could you explain what** “sustainable” **means**?", "Đoán bừa rồi trả lời lạc đề"],
         ["Muốn chắc mình hiểu đúng", "**Do you mean** … ? · **So you're asking whether** …?", "Hỏi lại toàn bộ câu"],
         ["Cần vài giây suy nghĩ", "**That's an interesting question.** I've never really thought about it, but **I suppose** … · **Let me think** … Well, …", "Im lặng > 3 giây · “Ummmm…” kéo dài · ~~I don't know.~~ rồi dừng"],
-        ["Không có ý tưởng", "**I'm not really sure, but I imagine** that … · I don't know much about this, but **my guess is that** …", "~~I have no idea.~~ (rồi dừng)"],
+        ["Không có ý tưởng", "**I'm not really sure, but I imagine** that … · I don't know much about this, but **my guess is that** … · **I'm no expert, but** I'd say … · **Off the top of my head**, I'd say … (= nghĩ ngay lúc này)", "~~I have no idea.~~ (rồi dừng)"],
       ],
     },
     {
@@ -1255,6 +1555,7 @@ const T2D13_SPEAKING: Lesson = {
       items: [
         "**Part 1**: giám khảo chỉ được **nhắc lại** câu hỏi, **không giải thích** từ. Không hiểu một từ thì trả lời theo phần mình hiểu.",
         "**Part 3**: giám khảo **có thể diễn đạt lại** câu hỏi bằng cách khác khi bạn hỏi nghĩa — tận dụng điều này.",
+        "Thừa nhận không rành **không** bị trừ điểm — miễn là **vẫn đoán tiếp** bằng một ý: “I'm no expert, but I'd say the main problem is the cost.” Giám khảo chấm cách bạn **nói**, không chấm bạn biết nhiều hay ít.",
         "Câu kéo giờ phải **dẫn vào ý**: “That's an interesting question… I suppose the main reason is…”. Dùng cùng một câu kéo giờ cho **mọi** câu hỏi thì nghe như học thuộc — Fluency không tăng mà còn giảm.",
       ],
     },
@@ -1264,8 +1565,8 @@ const T2D13_SPEAKING: Lesson = {
       vi: "Hỏi lại một lần là bình thường; câu kéo giờ phải nối ngay vào câu trả lời.",
     },
 
-    /* ── 7 ── */
-    { t: "h", text: "7. Nghe hai câu trả lời mẫu: band 5 và band 6" },
+    /* ── 8 ── */
+    { t: "h", text: "8. Nghe hai câu trả lời mẫu: band 5 và band 6" },
     {
       t: "p",
       text: "Cùng hai câu hỏi Part 3 về chủ đề **rác thải** (nối với bài nghe hôm nay). Nghe câu trả lời band 5 trước, rồi band 6, sau đó đọc bảng so sánh — để thấy chính xác **điều gì** kéo điểm lên.",
@@ -1298,12 +1599,12 @@ const T2D13_SPEAKING: Lesson = {
         ["**Fluency & Coherence**", "2–3 câu ngắn rồi dừng; ý không phát triển; nối bằng and / so", "Đủ 4 bước (ý kiến → lý do → ví dụ → nhượng bộ); nối bằng **The main reason is that · For example · Having said that · So unless…**"],
         ["**Lexical Resource**", "Từ cơ bản, lặp đi lặp lại (throw away ×2, many ×3); thiếu từ chủ đề cụ thể và collocation — chỉ dùng được từ quen thuộc nhất", "**throw out · repair · landfills · run out of space · end up in the sea · take action · aware of**"],
         ["**Grammatical Range & Accuracy**", "Lỗi: ~~they throw away~~ (thiếu them) · ~~plastic bag~~ (thiếu số nhiều) · ~~for environment~~ (thiếu the) · ~~will more dirty~~", "Câu điều kiện **loại 1** và **unless** đúng; so sánh **easier… than**; **so… that** — câu phức đa dạng, gần như không lỗi"],
-        ["**Pronunciation**", "Đọc đều mọi âm tiết: ~~en-vi-ron-MENT~~", "Trọng âm đúng: en-**VI**-ron-ment, **GOV**-ern-ments, **NEIGH**-bour-hood — xem mục 8"],
+        ["**Pronunciation**", "Đọc đều mọi âm tiết: ~~en-vi-ron-MENT~~", "Trọng âm đúng: en-**VI**-ron-ment, **GOV**-ern-ments, **NEIGH**-bour-hood — xem mục 9"],
       ],
     },
 
-    /* ── 8 ── */
-    { t: "h", text: "8. Phát âm: trọng âm từ 3 âm tiết (nhập môn)" },
+    /* ── 9 ── */
+    { t: "h", text: "9. Phát âm: trọng âm từ 3 âm tiết (nhập môn)" },
     {
       t: "p",
       text: "**Trọng âm từ** (word stress) = âm tiết được đọc **to hơn, dài hơn, cao hơn** các âm tiết khác trong một từ. Tập 2 Ngày 11 đã học từ **2 âm tiết** (REcord / reCORD). Từ **3 âm tiết** khó hơn vì có hai âm tiết **không nhấn** — chúng thường **yếu đi**, nhiều khi thành âm /ə/. Người Việt đọc mỗi âm tiết như một chữ có thanh, đều nhau → nghe “máy”, có khi sai luôn từ.",
@@ -1347,11 +1648,11 @@ const T2D13_SPEAKING: Lesson = {
       ],
     },
 
-    /* ── 9 ── */
-    { t: "h", text: "9. Luyện nói Part 3" },
+    /* ── 10 ── */
+    { t: "h", text: "10. Luyện nói Part 3" },
     {
       t: "p",
-      text: "Mỗi câu: 3–5 giây nghĩ (dùng câu kéo giờ ở mục 6 nếu cần) → trả lời theo **4 bước** khoảng **30–45 giây**. Nghe lại bản ghi và tự kiểm: có **lý do**? có **ví dụ**? có câu **nhượng bộ / chốt**? chủ ngữ có phải **people / nhóm người** không? có ít nhất **một câu điều kiện** đúng ở câu dự đoán / giải pháp không?",
+      text: "Mỗi câu: 3–5 giây nghĩ (dùng câu kéo giờ ở mục 7 nếu cần) → trả lời theo **4 bước** khoảng **30–45 giây**. Nghe lại bản ghi và tự kiểm: có **lý do**? có **ví dụ**? có câu **nhượng bộ / chốt**? chủ ngữ có phải **people / nhóm người** không? có ít nhất **một câu điều kiện** đúng ở câu dự đoán / giải pháp không?",
     },
     {
       t: "speak",
@@ -1373,6 +1674,28 @@ const T2D13_SPEAKING: Lesson = {
         "Why do some parents work very long hours?",
         "How do you think family life will change in the future?",
         "Is it better for children to have hobbies at home or outside the home?",
+      ],
+    },
+    {
+      t: "p",
+      text: "Bộ thứ ba luyện **loại 6 (ưu – nhược)** và **ba cách sinh ý** ở mục 6: mỗi câu thử dùng ít nhất một câu “If… don't…”, một lần “It depends… But if…”, và chốt bằng “So overall…” giọng xuống.",
+    },
+    {
+      t: "speak",
+      id: "t2d13-noi-p3-uu-nhuoc",
+      part: "3",
+      questions: [
+        "What are the advantages and disadvantages of studying online?",
+        "What are the benefits of living in a big city?",
+        "What problems can smartphones cause for teenagers?",
+        "Is it better to live in a city or in the countryside?",
+      ],
+    },
+    {
+      t: "note",
+      title: "Mẹo: tự kiếm ý cho Part 3 trước ngày thi",
+      items: [
+        "Chọn một chủ đề (vd. công nghệ), đọc lướt **2–3 bài báo ngắn** tiếng Anh hoặc tiếng Việt về nó, rút ra **2 lý do + 3–4 cụm từ** và ghi vào sổ. Không chép cả bài — chỉ ghi ý và cụm để nói lại bằng lời của mình.",
       ],
     },
   ],
@@ -1567,7 +1890,7 @@ const T2D13_HOMEWORK: Lesson = {
     { t: "h", text: "VI. Trọng âm từ 3 âm tiết (6 câu)" },
     {
       t: "p",
-      text: "Đọc to từng từ, rồi chọn **âm tiết được nhấn**. Kiểm lại bằng bảng ở bài Nói mục 8.",
+      text: "Đọc to từng từ, rồi chọn **âm tiết được nhấn**. Kiểm lại bằng bảng ở bài Nói mục 9.",
     },
     {
       t: "mcq",

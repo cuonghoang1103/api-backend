@@ -3,7 +3,7 @@
  *   Bài 1 (vocab)   — Sport, leisure & entertainment [VC16] + play/go/do, win/beat, họ từ, cụm động từ · 🔊 (thêm) /ɔː/ – /ɒ/
  *   Bài 2 (reading) — Yes / No / Not Given: quan điểm tác giả, NO ≠ NOT GIVEN [R15] — 2 bài đọc (thể thao trẻ em · e-sports)
  *   Bài 3 (writing) — Task 1 process diagram trọn bài band 5: bị động + trình tự [W13 W17]
- *   Bài tập         — 34 câu.
+ *   Bài tập         — 42 câu.
  */
 import type { Lesson } from '../data';
 
@@ -13,7 +13,7 @@ const T2D20_VOCAB: Lesson = {
   id: "t2d20-tu-vung",
   kind: "vocab",
   title: "Từ vựng: Thể thao, giải trí (Sport, leisure & entertainment)",
-  goal: "Dùng đúng 20 từ + 10 cụm động từ / collocation chủ đề thể thao – giải trí, chọn đúng play / go / do và win / beat, đổi đúng 5 họ từ — để nói Part 1–3 và viết Task 2 về thể thao, giải trí (LR band 5).",
+  goal: "Dùng đúng 20 từ + 10 cụm động từ / collocation chủ đề thể thao – giải trí và 10 cụm âm nhạc – biểu diễn, chọn đúng play / go / do và win / beat, đổi đúng 5 họ từ — để nói Part 1–3 và viết Task 2 về thể thao, giải trí (LR band 5).",
   minutes: 60,
   blocks: [
     {
@@ -24,6 +24,7 @@ const T2D20_VOCAB: Lesson = {
         "**play / go / do + môn thể thao**: **play** football · **go** swimming · **do** yoga — người Việt sai chỗ này rất nhiều.",
         "**win** một trận / giải ≠ **beat** một người / một đội: We **won** the match. We **beat** Thailand.",
         "**5 họ từ** (compete → competition → competitive → competitor…) và **10 cụm** (take up, work out, keep fit…).",
+        "**Thêm 10 cụm âm nhạc – biểu diễn** (mục 6b): genre of music, live music, a concert venue, give a performance, a sell-out show… — cho Part 1 Music và Part 2 “một buổi diễn”.",
         "Chủ đề thể thao – giải trí ra ở **Part 1** (Do you like sport?), **Part 2** (Describe an activity — Ngày 19), **Task 2** (đầu tư cho thể thao, lương vận động viên, e-sports). Đẩy **LR** (Lexical Resource) lên 5.0: đủ từ để nói **cụ thể**, không lặp “sport is good”.",
       ],
     },
@@ -223,6 +224,41 @@ const T2D20_VOCAB: Lesson = {
       vi: "Ba khung câu phức ăn điểm cho chủ đề thể thao: liệt kê hai lợi ích, đưa giải pháp có mục đích, bình luận cả mệnh đề trước.",
     },
 
+    /* ── 6b ── */
+    { t: "h", text: "6b. Thêm: âm nhạc – biểu diễn (10 cụm cho Part 1 Music và Part 2 “một buổi diễn”)" },
+    {
+      t: "p",
+      text: "Giải trí không chỉ là thể thao. Part 1 rất hay hỏi **Music** (Do you like music? Have you ever been to a concert?), Part 2 có đề **“Describe a performance / an event you enjoyed”** (Ngày 15), Task 2 có đề **chính phủ có nên chi tiền cho nghệ thuật**. Mười cụm dưới đây đủ để bạn nói cụ thể thay vì lặp “music is good”.",
+    },
+    {
+      t: "vocab",
+      items: [
+        { w: "genre of music", pos: "n phrase", ipa: "/ˈʒɒnrə əv ˈmjuːzɪk/", vi: "thể loại nhạc", ex: "Pop is my favourite genre of music, but I also enjoy jazz.", exVi: "Pop là thể loại nhạc tôi thích nhất, nhưng tôi cũng thích jazz.", more: "Số nhiều **genres**. Đọc /ˈʒɒnrə/ — âm đầu /ʒ/ như trong **usually**. Nói gọn: **a kind / type of music**." },
+        { w: "live music", pos: "n phrase", ipa: "/laɪv ˈmjuːzɪk/", vi: "nhạc biểu diễn trực tiếp", ex: "This café has live music every Friday night.", exVi: "Quán cà phê này có nhạc sống mỗi tối thứ Sáu.", more: "**live** (adj) đọc /laɪv/ — khác động từ **live** /lɪv/ (sống). Cũng: a **live** performance, watch a match **live**." },
+        { w: "a concert venue", pos: "n phrase", ipa: "/ə ˈkɒnsət ˈvenjuː/", vi: "địa điểm tổ chức hoà nhạc", ex: "The new concert venue can hold about 5,000 people.", exVi: "Địa điểm hoà nhạc mới chứa được khoảng 5.000 người.", more: "**venue** dùng cho mọi sự kiện: a wedding venue, a sports venue (mục 3)." },
+        { w: "give a performance", pos: "phrase", ipa: "/ɡɪv ə pəˈfɔːməns/", vi: "biểu diễn (một tiết mục, một buổi)", ex: "The students gave a wonderful performance at the end-of-year party.", exVi: "Các bạn học sinh có một màn biểu diễn tuyệt vời ở buổi tiệc cuối năm.", more: "~~make a performance~~. Cũng nói **put on a show**." },
+        { w: "stage a play", pos: "phrase", ipa: "/steɪdʒ ə pleɪ/", vi: "dàn dựng / công diễn một vở kịch", ex: "Our drama club staged a play about life in Hanoi in the 1990s.", exVi: "Câu lạc bộ kịch của chúng tôi dàn dựng một vở kịch về đời sống Hà Nội những năm 1990.", more: "**on stage** = trên sân khấu · **stage fright** = sợ sân khấu." },
+        { w: "a sell-out show", pos: "n phrase", ipa: "/ə ˈsel aʊt ʃəʊ/", vi: "buổi diễn bán hết vé", ex: "Her concert in Ho Chi Minh City was a sell-out show.", exVi: "Buổi hoà nhạc của cô ấy ở TP.HCM bán sạch vé.", more: "Động từ: The tickets **sold out** in ten minutes. Tính từ: a **sold-out** concert." },
+        { w: "folk songs", pos: "n phrase", ipa: "/fəʊk sɒŋz/", vi: "dân ca", ex: "My grandmother still sings folk songs from her village.", exVi: "Bà tôi vẫn hát những bài dân ca của làng bà.", more: "**traditional music** · **folk music**. Giải thích nhạc Việt: **quan họ, a type of folk song from the north of Vietnam**." },
+        { w: "appeal to audiences", pos: "phrase", ipa: "/əˈpiːl tu ˈɔːdiənsɪz/", vi: "thu hút khán giả", ex: "K-pop appeals to young audiences all over Asia.", exVi: "K-pop thu hút khán giả trẻ khắp châu Á.", more: "**appeal to** + người (có to). Danh từ: **wide appeal**. **audience** = khán giả xem diễn; **spectator** = khán giả xem thể thao." },
+        { w: "catchy", pos: "adj", ipa: "/ˈkætʃi/", vi: "(giai điệu) dễ nhớ, bắt tai", ex: "The song has a catchy chorus that everyone can sing along to.", exVi: "Bài hát có đoạn điệp khúc bắt tai mà ai cũng hát theo được.", more: "Cụm: **a catchy tune / song** · **sing along (to)** = hát theo." },
+        { w: "the atmosphere was electric", pos: "phrase", ipa: "/ði ˈætməsfɪə wəz ɪˈlektrɪk/", vi: "bầu không khí cực kỳ sôi động", ex: "When the band came on stage, the atmosphere was electric.", exVi: "Khi ban nhạc bước lên sân khấu, bầu không khí bùng nổ.", more: "Câu “ăn điểm” cho dòng **explain how you felt** ở Part 2 buổi diễn. Cũng: **a lively / relaxed atmosphere**." },
+      ],
+    },
+    {
+      t: "quiz",
+      id: "t2d20-am-nhac-dien",
+      title: "Âm nhạc – biểu diễn: điền một từ (5 câu)",
+      kind: "fill",
+      items: [
+        { q: "Rock is not really my favourite ___ of music. (thể loại)", answers: ["genre"], hint: "genre of music" },
+        { q: "I prefer ___ music to recorded music because you can feel the energy. (trực tiếp)", answers: ["live"], hint: "live /laɪv/ music" },
+        { q: "The tickets for the concert sold ___ in less than an hour.", answers: ["out"], hint: "sell out — hết vé" },
+        { q: "Traditional music doesn't always appeal ___ teenagers.", answers: ["to"], hint: "appeal to + người" },
+        { q: "Our class ___ a short play about environmental problems last year. (dàn dựng, quá khứ)", answers: ["staged", "put on"], hint: "stage a play — quá khứ" },
+      ],
+    },
+
     /* ── 7 ── */
     { t: "h", text: "7. Thêm: phát âm /ɔː/ (sport) và /ɒ/ (spot)" },
     {
@@ -316,6 +352,7 @@ const T2D20_READING: Lesson = {
         "Hỏi: “Nếu câu đề **đúng**, thì có câu nào **của tác giả** bị thành **sai** không?” — Có → **NO**. Không có câu nào bị ảnh hưởng → **NOT GIVEN**.",
         "Đừng dùng **hiểu biết của bạn** hay **điều hợp lý**: tác giả có thể chưa từng nói điều mà bạn thấy hiển nhiên. Không viết ra = NOT GIVEN.",
         "Câu đề và bài văn **trùng nhiều từ** không có nghĩa là YES — đọc kỹ **động từ, từ phủ định, từ mức độ**.",
+        "**Chép đúng chữ của đề.** Đề YNNG ghi **YES / NO / NOT GIVEN**; đề TFNG ghi **TRUE / FALSE / NOT GIVEN**. Ghi lệch bộ (TRUE vào đề YNNG, NO vào đề TFNG) là **mất điểm dù hiểu đúng**. Bản thi giấy: viết **đủ chữ**, đừng viết tắt Y / N / NG hay dấu ✓ ✗.",
       ],
     },
 
@@ -495,6 +532,7 @@ const T2D20_WRITING: Lesson = {
         "Ngữ pháp chính: **bị động hiện tại đơn** (is / are + V3) cho quy trình nhân tạo; **chủ động** cho chu trình tự nhiên (eggs **hatch**).",
         "Mạch lạc (CC): từ nối trình tự **không lặp** — First · Next · After that · Once … have been V3 · Following this · Finally.",
         "Band 5 cần: có tổng quan, không sót bước, câu bị động phần lớn đúng, **≥ 150 từ**. Band 6: thêm câu gộp bước (which / where / after being V3) và chi tiết (thời gian, nhiệt độ).",
+        "Nâng cấp (mục 2b): từ trình tự **3 tầng** (The process commences with… · after which… · concludes with…), câu nêu **mục đích** của bước (so that / to ensure that / by means of), **by** + người ≠ **with** + dụng cụ — và **không bịa bước**.",
       ],
     },
 
@@ -585,6 +623,76 @@ const T2D20_WRITING: Lesson = {
         { q: "Khi đã được sấy khô, hạt được đóng gói vào túi.", hint: "Once, the beans / seeds, have been dried, they are packed into bags", answers: ["Once the beans have been dried, they are packed into bags.", "Once the seeds have been dried, they are packed into bags.", "Once they have been dried, the beans are packed into bags.", "Once they have been dried, the seeds are packed into bags.", "Once the beans have been dried, they are packed in bags.", "Once the seeds have been dried, they are packed in bags."] },
         { q: "Sữa được đưa tới một nhà máy, nơi nó được đun nóng.", hint: "The milk, is taken / transported to a factory, where it is heated", answers: ["The milk is taken to a factory, where it is heated.", "The milk is transported to a factory, where it is heated.", "The milk is taken to a factory where it is heated.", "The milk is transported to a factory where it is heated.", "The milk is sent to a factory, where it is heated."] },
         { q: "Cuối cùng, sản phẩm được giao tới các siêu thị.", hint: "Finally, the product(s), is / are delivered, to supermarkets", answers: ["Finally, the product is delivered to supermarkets.", "Finally, the products are delivered to supermarkets.", "Finally, the product is distributed to supermarkets.", "Finally, the products are distributed to supermarkets.", "Lastly, the product is delivered to supermarkets.", "Lastly, the products are delivered to supermarkets."] },
+      ],
+    },
+
+    /* ── 2b ── */
+    { t: "h", text: "2b. Nâng cấp: từ trình tự 3 tầng · mục đích của bước · by hay with" },
+    {
+      t: "table",
+      caption: "Từ trình tự chia 3 tầng — mỗi tầng chọn 2–3 cái, xoay vòng để không lặp then / next",
+      head: ["Tầng", "Cụm dùng được", "Ví dụ (quy trình ô liu)"],
+      rows: [
+        ["**Mở quy trình**", "The process **begins / commences with** + N / V-ing · **First of all**, … · **At the first stage**, …", "The process **commences with** the harvesting of the olives."],
+        ["**Giữa quy trình**", "**Subsequently**, … · **After that**, … · **At the next stage**, … · **Once** S + has / have been V3, … · …, **after which** S + is / are + V3", "The olives are crushed into a paste, **after which** it is mixed for 30–40 minutes."],
+        ["**Kết quy trình**", "**Finally**, … · **In the final stage**, … · The process **concludes / ends with** + N / V-ing", "The process **concludes with** the oil being bottled and delivered to shops."],
+      ],
+    },
+    {
+      t: "note",
+      title: "Cẩn thận khi dùng từ trình tự",
+      items: [
+        "**begin / commence / conclude / end WITH** + danh từ hoặc V-ing: ~~The process begins harvest the olives.~~ → The process begins **with harvesting** the olives / **with the harvesting of** the olives.",
+        "**after which** đứng sau dấu phẩy, nối hai bước trong MỘT câu: …is crushed, **after which** it is mixed… — ~~After which, it is mixed.~~ (không mở câu mới bằng after which).",
+        "**Subsequently** = sau đó (trang trọng) — dùng 1 lần mỗi bài là đủ; dùng mọi câu thì cũng là lặp.",
+      ],
+    },
+    {
+      t: "table",
+      caption: "Thêm MỤC ĐÍCH cho một bước — câu dài hơn, ý rõ hơn (TA + GRA)",
+      head: ["Khung", "Ví dụ"],
+      rows: [
+        ["… **to / in order to** + V", "The olives are washed in cold water **in order to** remove dirt."],
+        ["… **so that** + S + can + V", "The paste is mixed slowly **so that** small drops of oil can join together."],
+        ["… **to ensure that** + S + V", "The oil is filtered **to ensure that** no small particles remain."],
+        ["… **by means of** + công cụ / máy", "The oil is separated from the water **by means of** a centrifuge."],
+      ],
+    },
+    {
+      t: "note",
+      title: "Cẩn thận: thêm từ chính xác được — thêm BƯỚC thì không",
+      items: [
+        "Được dùng động từ / danh từ **chính xác hơn nhãn** khi hình đã vẽ rõ việc đó: hình có máy bơm nước lên bồn → **The water is pumped into a tank.** · hơi nước gặp lạnh thành nước → **The steam condenses into water.** · xe chở tới cửa hàng → **The products are distributed to shops.** Đây là điểm cộng Lexical Resource.",
+        "Mục đích chỉ thêm khi **lẽ thường ai cũng hiểu** (rửa → để sạch bụi; lọc → để bỏ cặn). Không chắc thì bỏ.",
+        "**KHÔNG bịa bước** hình không có (vd thêm “the oil is tested by experts” khi hình không vẽ) — giám khảo coi là thông tin sai → trừ Task Achievement.",
+      ],
+    },
+    {
+      t: "table",
+      caption: "Bị động: by + NGƯỜI / cách làm ≠ with + DỤNG CỤ cầm tay",
+      head: ["Dùng", "Ví dụ"],
+      rows: [
+        ["**by** + người / tác nhân", "The tea leaves are picked **by** local workers."],
+        ["**by** + cách làm (không mạo từ)", "picked **by hand** · cut **by machine** · sent **by truck**"],
+        ["**with** + dụng cụ / chất (thường có a / the)", "The fruit is cut **with a knife**. · The bottles are cleaned **with hot water**."],
+      ],
+    },
+    {
+      t: "rule",
+      formula: "The process commences with + N / V-ing · …, after which S + is / are + V3 · S + is / are + V3 + so that S + can + V · by + người / by hand · with + a knife",
+      vi: "Mở – giữa – kết bằng ba tầng từ trình tự; mỗi thân bài có ít nhất một câu nêu mục đích; by cho người làm, with cho dụng cụ.",
+    },
+    {
+      t: "quiz",
+      id: "t2d20-viet-muc-dich",
+      title: "Dịch — từ trình tự, mục đích, by / with (4 câu)",
+      kind: "translate",
+      grammar: "The process begins with + N · …, after which … · in order to / so that … can · by + người · with + dụng cụ",
+      items: [
+        { q: "Quy trình bắt đầu bằng việc thu hoạch cà phê.", hint: "The process begins / commences with, harvesting the coffee / the harvesting of the coffee", answers: ["The process begins with harvesting the coffee.", "The process begins with the harvesting of the coffee.", "The process commences with harvesting the coffee.", "The process commences with the harvesting of the coffee.", "The process starts with harvesting the coffee.", "The process starts with the harvesting of the coffee."] },
+        { q: "Hạt được sấy khô để chúng có thể được bảo quản lâu hơn.", hint: "The beans are dried, so that they can be stored, longer / for longer", answers: ["The beans are dried so that they can be stored for longer.", "The beans are dried so that they can be stored longer.", "The beans are dried so they can be stored for longer.", "The seeds are dried so that they can be stored for longer.", "The beans are dried in order to be stored for longer.", "The beans are dried so that they can be kept for longer."] },
+        { q: "Quả được cắt bằng dao.", hint: "The fruit, is cut, with a knife", answers: ["The fruit is cut with a knife.", "The fruit is cut with knives.", "The fruits are cut with a knife."] },
+        { q: "Sữa được đun nóng, sau đó nó được làm lạnh nhanh.", hint: "The milk is heated, after which, it is cooled quickly", answers: ["The milk is heated, after which it is cooled quickly.", "The milk is heated, after which it is quickly cooled.", "The milk is heated, after which it is cooled rapidly.", "The milk is heated, after which it is rapidly cooled."] },
       ],
     },
 
@@ -748,17 +856,18 @@ const T2D20_HOMEWORK: Lesson = {
   id: "t2d20-bai-tap",
   kind: "homework",
   title: "Bài tập Ngày 20",
-  goal: "Ôn trọn Ngày 20: từ vựng thể thao – giải trí (play/go/do, win/beat, họ từ), câu bị động quy trình, và một bài Yes / No / Not Given ngắn.",
+  goal: "Ôn trọn Ngày 20: từ vựng thể thao – giải trí (play/go/do, win/beat, họ từ), câu bị động quy trình, một bài Yes / No / Not Given ngắn, và câu quy trình nâng cấp (từ trình tự, mục đích, by / with).",
   minutes: 45,
   blocks: [
     {
       t: "recap",
-      title: "Bài tập hôm nay (34 câu)",
+      title: "Bài tập hôm nay (42 câu)",
       items: [
         "**I. Dịch Việt → Anh** (10 câu, có 💡): từ chủ đề + câu quy trình.",
         "**II. Trắc nghiệm** (10 câu): play / go / do · win / beat · collocation · từ nối quy trình.",
         "**III. Điền dạng từ** (8 câu).",
         "**IV. Yes / No / Not Given** (6 câu) với một đoạn nghị luận ngắn.",
+        "**V. Quy trình nâng cấp** (8 câu): thay then bằng từ trình tự · thêm mục đích cho bước · by / with.",
       ],
     },
     {
@@ -852,6 +961,44 @@ const T2D20_HOMEWORK: Lesson = {
         { q: "(4) Teenagers in the writer's town are not interested in free gym sessions.", options: ["YES", "NO", "NOT GIVEN"], correct: 1, why: "Đoạn B: “the sessions are **always full**. Young people clearly respond…” → ngược với câu đề → **NO**." },
         { q: "(5) Schools should provide at least two hours of physical education a week.", options: ["YES", "NO", "NOT GIVEN"], correct: 0, why: "Đoạn C: “**in my opinion two hours a week is the minimum**” → minimum = at least → **YES**." },
         { q: "(6) Most schools in the writer's country give children less than one hour of physical education a week.", options: ["YES", "NO", "NOT GIVEN"], correct: 2, why: "Tác giả nêu mức **nên có**, không nói hiện nay các trường dạy **bao nhiêu** → **NOT GIVEN** (bẫy 5: should ≠ thực tế)." },
+      ],
+    },
+
+    { t: "h", text: "V. Quy trình nâng cấp — trình tự · mục đích · by / with (8 câu)" },
+    {
+      t: "p",
+      text: "Đoạn nháp dưới đây lặp **Then** bốn lần: ~~First, used paper is collected. Then it is sorted. Then it is mixed with water. Then it is pressed into sheets. Then it is dried.~~ Điền một từ để mỗi câu dùng một cách nối khác.",
+    },
+    {
+      t: "quiz",
+      id: "t2d20-bt-trinh-tu",
+      title: "V-a. Thay “then” bằng từ trình tự đa dạng (4 câu)",
+      kind: "fill",
+      items: [
+        { q: "The process ___ with the collection of used paper. (bắt đầu — động từ, hiện tại đơn)", answers: ["commences", "begins", "starts"], hint: "begin / commence + with + N" },
+        { q: "The paper is sorted by hand, after ___ it is mixed with water. (sau đó — trong cùng một câu)", answers: ["which"], hint: "…, after which S + is / are + V3" },
+        { q: "___ the mixture has been cleaned, it is pressed into sheets. (Khi / Một khi)", answers: ["Once", "After", "When"], hint: "Once + S + has been V3, …" },
+        { q: "The process ___ with the sheets being dried and rolled. (kết thúc — động từ, hiện tại đơn)", answers: ["concludes", "ends", "finishes"], hint: "conclude / end + with + N / V-ing" },
+      ],
+    },
+    {
+      t: "quiz",
+      id: "t2d20-bt-muc-dich",
+      title: "V-b. Thêm mục đích cho bước (3 câu dịch)",
+      kind: "translate",
+      grammar: "S + is / are + V3 + in order to / to + V · so that + S + can + V · to ensure that + S + V",
+      items: [
+        { q: "Lá chè được phơi để giảm độ ẩm.", hint: "The tea leaves are dried / spread out, (in order) to reduce the moisture", answers: ["The tea leaves are dried to reduce the moisture.", "The tea leaves are dried in order to reduce the moisture.", "The tea leaves are dried to reduce their moisture.", "The tea leaves are dried in order to reduce their moisture.", "Tea leaves are dried to reduce the moisture.", "Tea leaves are dried in order to reduce moisture.", "The tea leaves are dried to reduce moisture."] },
+        { q: "Chai được rửa bằng nước nóng để đảm bảo rằng chúng sạch.", hint: "The bottles are washed with hot water, to ensure that they are clean", answers: ["The bottles are washed with hot water to ensure that they are clean.", "The bottles are washed with hot water to ensure they are clean.", "The bottles are cleaned with hot water to ensure that they are clean.", "The bottles are washed in hot water to ensure that they are clean.", "The bottles are washed in hot water to ensure they are clean."] },
+        { q: "Gạo được phân loại theo kích cỡ để hạt vỡ có thể được loại ra.", hint: "The rice is sorted by size, so that broken grains can be removed", answers: ["The rice is sorted by size so that broken grains can be removed.", "The rice is sorted by size so that the broken grains can be removed.", "The rice is sorted by size so that broken grains can be taken out.", "The rice is sorted by size so that the broken grains can be taken out.", "The rice is sorted by size so broken grains can be removed.", "Rice is sorted by size so that broken grains can be removed."] },
+      ],
+    },
+    {
+      t: "mcq",
+      id: "t2d20-bt-by-with",
+      title: "V-c. by hay with? (1 câu)",
+      items: [
+        { q: "The fish are cleaned ___ local women and then cut ___ sharp knives.", options: ["with … by", "by … with", "by … by", "with … with"], correct: 1, why: "**by** + người làm (local women) · **with** + dụng cụ cầm tay (sharp knives). Nhớ: by hand / by machine là cách làm, không có mạo từ." },
       ],
     },
   ],

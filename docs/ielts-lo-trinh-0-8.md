@@ -138,7 +138,7 @@ Band tổng = trung bình 4 kỹ năng, làm tròn về **.0 / .5 gần nhất**
 | G29 | Mệnh đề nhượng bộ/đối lập: although/despite/in spite of/whereas/while; nguyên nhân–kết quả: due to/owing to/as a result/lead to/result in | B2 | T3 N21 | T4 N15 | T5 N13 |
 | G30 | Mệnh đề danh ngữ (that-clause, wh-clause làm chủ/tân ngữ); It is + adj + that/to | B2 | T3 N23 | T4 N11 | — |
 | G31 | Cụm danh từ phức (pre/post-modification); danh hoá (nominalisation) mức 1 | B2 | T3 N25 | T4 N1 | T5 N1 |
-| G32 | Dấu câu: dấu phẩy, chấm phẩy, hai chấm, gạch ngang; lỗi comma splice/run-on | B2 | T3 N27 | T4 N21 | T5 N19 |
+| G32 | Dấu câu: dấu phẩy, chấm phẩy, hai chấm, gạch ngang; lỗi comma splice/run-on (nhập 13/11: run-on + câu lê thê nhiều and/so, And/But/So không mở câu học thuật — T2 N17; dòng soát ở T2 N24) | B2 | T3 N27 | T4 N21 | T5 N19 |
 | G33 | Cấu trúc so sánh nâng cao: the more…the more; twice as…as; by far | B2 | T3 N29 | T4 N9 | — |
 | G34 | Causative have/get sth done; make/let/allow | B2 | T3 N29 | T4 N17 | — |
 | G35 | Participle clauses (Having finished…, Faced with…); absolute clause | C1 | T4 N5 | T5 N7 | — |
@@ -149,7 +149,7 @@ Band tổng = trung bình 4 kỹ năng, làm tròn về **.0 / .5 gần nhất**
 | G40 | Cohesion nâng cao: referencing (this/such/the former/the latter), substitution (one/do so), ellipsis | C1 | T4 N13 | T5 N13 | — |
 | G41 | Danh hoá mức 2 (nominalised academic style) vs lúc nên dùng động từ; register formal/informal | C1 | T4 N21 | T5 N1 | — |
 | G42 | Subjunctive & formal structures: It is essential that he be…; Were it not for…; so/neither do I; fronting | C1 | T4 N27 | T5 N19 | — |
-| G43 | Hệ thống lỗi: subject–verb agreement, dangling modifier, parallelism, tense consistency — bảng tự soát 6 lượt | B2–C1 | T3 N27 | T4 N21 | T5 N25 |
+| G43 | Hệ thống lỗi: subject–verb agreement, dangling modifier, parallelism, tense consistency — bảng tự soát 6 lượt. **Nhập ở Tập 2 (13/11)**: cấu trúc song song + ghép câu đơn gãy vụn (T2 N15 · N17), soát CẢ ĐOẠN khi biết trước số lỗi, tự chấm theo % (T2 N2 · N23 · N24). T3 N27 nâng thành lượt "song song" trong bảng 6 lượt + đoạn bài luận 15–20 lỗi | B2–C1 | T3 N27 | T4 N21 | T5 N25 |
 | G44 | Ngữ pháp nói: ellipsis hội thoại, question tags, chunks (I'd say…, the thing is…), fillers học thuật | B2–C1 | T3 N11 | T4 N23 | T5 N11 |
 
 ### 2.2 Từ vựng (mã **V**)
@@ -158,22 +158,22 @@ Band tổng = trung bình 4 kỹ năng, làm tròn về **.0 / .5 gần nhất**
 
 **V-B Academic Word List 570 họ từ theo sublist** (mỗi sublist 60 họ, sublist 10 = 30): VB1 sublist 1 (T2 N2·N4) · VB2 sublist 2 (T2 N10·N14) · VB3 sublist 3 (T3 N2) · VB4 sublist 4 (T3 N8) · VB5 sublist 5 (T3 N14) · VB6 sublist 6 (T3 N20) · VB7 sublist 7 (T4 N2) · VB8 sublist 8 (T4 N8) · VB9 sublist 9 (T4 N14) · VB10 sublist 10 (T4 N20). Mỗi họ từ dạy đủ các dạng (analyse → analysis, analytical, analyst) + collocation + câu mẫu Task 2. Ôn trọn 570 ở T5 N2 (bộ flashcard "AWL 570").
 
-**V-C 30 chủ đề IELTS hay gặp** (mỗi chủ đề 1 bài `vocab` 20 từ + 10 collocation/cụm động từ + 5 họ từ + 4 câu mẫu ăn điểm; chủ đề đánh ★ có vòng 2 ở tập sau với từ nâng cao):
+**V-C 33 chủ đề IELTS hay gặp** (30 mã gốc + VC31–VC33 thêm 13/11 sau đối chiếu độ phủ chủ đề; mỗi chủ đề 1 bài `vocab` 20 từ + 10 collocation/cụm động từ + 5 họ từ + 4 câu mẫu ăn điểm; chủ đề đánh ★ có vòng 2 ở tập sau với từ nâng cao):
 
 | Mã | Chủ đề | Tập vòng 1 | Vòng 2 |
 |---|---|---|---|
 | VC01 | Social media & communication ★ | T1 N1 | T3 N18 |
 | VC02 | Education & society ★ | T1 N3 | T3 N2 |
-| VC03 | Work, careers & remote work ★ | T1 N5, N7 | T3 N14 |
+| VC03 | Work, careers & remote work ★ (vòng 2 thêm quyền lợi – điều kiện lao động: lương tối thiểu, nghỉ phép, nghỉ hưu, trợ cấp thất nghiệp, thực tập, a steady job; T2 N1 nhập 5 cụm) | T1 N5, N7 | T3 N14 |
 | VC04 | Volunteering & community | T1 N9 | T4 N14 |
 | VC05 | Charts & trends (ngôn ngữ Task 1) ★ | T1 N11 | T2 N10, T3 N11 |
 | VC06 | Online vs traditional learning | T1 N13 | T3 N2 |
 | VC07 | Maps & processes (ngôn ngữ Task 1) ★ | T1 N15 | T3 N17 |
 | VC08 | Environment, climate & pollution ★ | T2 N2 | T4 N2 |
-| VC09 | Health, diet & fitness ★ | T2 N4 | T4 N8 |
+| VC09 | Health, diet & fitness ★ (vòng 2 thêm hệ thống y tế: y tế dự phòng, chăm sóc ban đầu, bảo hiểm y tế, bệnh thoái hoá) | T2 N4 | T4 N8 |
 | VC10 | Technology & innovation ★ | T2 N6 | T4 N20 |
 | VC11 | Transport & urban life ★ | T2 N8 | T3 N20 |
-| VC12 | Food & agriculture | T2 N12 | T4 N26 |
+| VC12 | Food & agriculture (an toàn thực phẩm — chất bảo quản, nhãn, GM food, hạn dùng — nhập T2 N12; vòng 2 thêm công nghiệp thực phẩm, factory farming) | T2 N12 | T4 N26 |
 | VC13 | Travel, tourism & culture | T2 N14 | T3 N26 |
 | VC14 | Money, shopping & consumerism | T2 N16 | T4 N14 |
 | VC15 | Media, news & advertising | T2 N18 | T4 N26 |
@@ -184,14 +184,17 @@ Band tổng = trung bình 4 kỹ năng, làm tròn về **.0 / .5 gần nhất**
 | VC20 | Government, politics & public spending | T3 N6 | T5 N2 |
 | VC21 | Science, research & space | T3 N10 | T5 N20 |
 | VC22 | History, archaeology & heritage | T3 N12 | T5 N14 |
-| VC23 | Business, economy & globalisation | T3 N16 | T5 N8 |
+| VC23 | Business, economy & globalisation (T2 N16 nhập 5 cụm: earn a living, run a business, go out of business, revenue…) | T3 N16 | T5 N8 |
 | VC24 | Animals, nature & biodiversity | T3 N22 | T5 N20 |
 | VC25 | Energy & resources | T3 N24 | T5 N26 |
 | VC26 | Language, culture & identity | T3 N28 | T5 N26 |
 | VC27 | Psychology, happiness & behaviour | T4 N4 | T5 N14 |
-| VC28 | Art, music & creativity | T4 N10 | T5 N2 |
+| VC28 | Art, music & creativity (âm nhạc – biểu diễn đã nhập T2 N20; T4 N10 tập trung mỹ thuật – phê bình) | T4 N10 | T5 N2 |
 | VC29 | Ageing, population & migration | T4 N16 | T5 N8 |
 | VC30 | Children, parenting & gender roles | T4 N22 | T5 N20 |
+| VC31 | Books, reading & literature (thể loại, thói quen đọc, sách giấy vs e-book, read up on, read between the lines) — Part 1 Reading + Task 2 đọc sách | T3 N28 (T2 N9 nhập 8–10 cụm) | T5 N26 |
+| VC32 | Personality, character & relationships (tính từ/thành ngữ tính cách, mâu thuẫn – hoà hợp, giao tiếp) — đề người Part 2 + Task 2 quan hệ | T3 N18 (T2 N22 nhập 10 cụm dễ) | T4 N8 |
+| VC33 | Social issues & equality (bình đẳng, phân biệt đối xử, nhóm thiểu số, xã hội đa văn hoá, nghèo đói, phúc lợi, bạo lực gia đình, di cư kinh tế) | T4 N16 | T5 N22 |
 
 **V-D Kỹ năng từ vựng**: VD1 họ từ & hậu tố/tiền tố (T1 mỗi bài vocab; T2 N4 hệ thống hoá) · VD2 cụm động từ 150 cụm (T1–T2 rải, T3 N18 gom) · VD3 collocation (T2 N16 mở đầu; T3 N14·N24 Task 1/Task 2; T4 N10 học thuật; T5 N2 tinh) · VD4 paraphrase 3 cách — đồng nghĩa, đổi loại từ, đổi cấu trúc (T2 N8 mở đầu; T3 N3 hệ thống; T4 N15 nâng cao) · VD5 từ dễ nhầm (affect/effect, rise/raise, economic/economical…) (T3 N28; T4 N10) · VD6 từ nối & discourse markers theo chức năng (T2 N17; T3 N21; T4 N15) · VD7 idiom & ngôn ngữ tự nhiên cho Speaking (T3 N30; T4 N22; T5 N11) · VD8 sắc thái mạnh/nhẹ, register (T4 N10; T5 N1) · VD9 ngân hàng cụm học thuật (Academic Phrasebank: introducing, contrasting, concluding) (T4 N21; T5 N7) · VD10 đoán nghĩa từ ngữ cảnh khi đọc/nghe (T2 N6; T3 N9).
 
@@ -249,25 +252,25 @@ Band tổng = trung bình 4 kỹ năng, làm tròn về **.0 / .5 gần nhất**
 | Mã | Nội dung | Dạy lần 1 | Nâng cấp |
 |---|---|---|---|
 | W01 | Task 2 là gì, 4 tiêu chí, khung 4–5 đoạn | T1 N2 | T2 N2 (band 5 trông thế nào) · T3 N2 (band 6) · T4 N2 (band 7) · T5 N1 (band 8) |
-| W02 | Task 1 là gì, 6 dạng, Intro–Overview–Body. **Mỗi dạng có 2 biến thể phải dạy đủ**: tĩnh (no time — so sánh) và động (over time — xu hướng); line graph thêm biến thể **tương lai** (dự báo: is expected/projected to); process tách tự nhiên vs nhân tạo | T1 N4 | T2 N4 · T3 N4 |
-| W03 | Opinion essay (agree/disagree, to what extent): mở bài → thesis → body → kết | T1 N6, N8, N10 | T2 N2 (trọn bài) · T3 N6 · T4 N4 · T5 N3 |
-| W04 | Discussion essay (discuss both views and give your opinion) | T1 N14 | T2 N6 · T3 N10 · T4 N10 · T5 N9 |
-| W05 | Advantages / disadvantages (+ "do the advantages outweigh…") + biến thể **"Is this a positive or negative development?"** (đối chiếu 12/11: khoá Writing cũ của chủ kênh tách thành dạng riêng — dạy ở T3 N14) | T2 N10 | T3 N14 · T4 N16 · T5 N15 |
-| W06 | Problem / solution · cause / effect / solution | T2 N14 | T3 N18 · T4 N22 · T5 N21 |
-| W07 | Two-part question / direct questions | T2 N18 | T3 N22 · T4 N28 · T5 N27 |
+| W02 | Task 1 là gì, 6 dạng, Intro–Overview–Body. **Mỗi dạng có 2 biến thể phải dạy đủ**: tĩnh (no time — so sánh) và động (over time — xu hướng); line graph thêm biến thể **tương lai** (dự báo: is expected/projected to — đổi thì ngay trong một đường, overview bao cả hai giai đoạn, thân bài chia quá khứ / dự báo); process tách tự nhiên vs nhân tạo. **Thêm 13/11**: bảng chia thân bài theo số hạng mục (2–3 → giai đoạn; 4 → 2+2; 5+ → gom ≤ 4 khối, "Other" tả cuối; tối đa 3–4 chặng theo đỉnh/đáy); biến thể **có đường/cột/hàng TỔNG** (overview nói tổng trước + thành phần gây ra); bảng paraphrase câu mở bài chung 7 dạng; **đề lạ** (so sánh hai vật / các giai đoạn phát triển) ⇒ coi là bài so sánh — Tập 2 một dòng ở T2 N4, dạy trọn T5 N6 | T1 N4 | T2 N4 · T3 N4 · T5 N6 (đề lạ) |
+| W03 | Opinion essay (agree/disagree, to what extent): mở bài → thesis → body → kết. **Đọc đề (13/11)**: đếm số vế của đề (khẳng định + lý do/hệ quả ⇒ lập trường tuyệt đối phải xử lý đủ mọi vế); chữ tuyệt đối / so sánh trong đề (the best, the only, all, A better than B) là chỗ bám để đồng ý một phần, cần tiêu chí so sánh chung — nhập T2 N2, trọn T3 N6; phản biện "nêu rồi bác" / "Granted… but…" ở T4 N2·N4 | T1 N6, N8, N10 | T2 N2 (trọn bài) · T3 N6 · T4 N4 · T5 N3 |
+| W04 | Discussion essay (discuss both views and give your opinion) — phân biệt đề có / không "give your opinion" (T2 N6), hai quan điểm không loại trừ ⇒ ý kiến kết hợp (T2 N6), **balanced opinion** (T3 N10) | T1 N14 | T2 N6 · T3 N10 · T4 N10 · T5 N9 |
+| W05 | Advantages / disadvantages (+ "do the advantages outweigh…") + biến thể **"Is this a positive or negative development?"** (đối chiếu 12/11: khoá Writing cũ của chủ kênh tách thành dạng riêng — dạy ở T3 N14). T2 N10 đã có bảng so 3 cách hỏi (discuss adv/disadv — không hỏi bên nào nặng hơn · outweigh · positive/negative) + mục nhập "đề hỏi tốt hay xấu"; T3 N14 dạy trọn 3 lập trường | T2 N10 | T3 N14 · T4 N16 · T5 N15 |
+| W06 | Problem / solution · cause / effect / solution — xoay vòng cấu trúc (đảo chiều nguyên nhân bằng bị động, 3 cách thay should) nhập T2 N14; T3 N18: giải pháp gắn đúng nguyên nhân, mở bài nhượng bộ, chuỗi hệ quả | T2 N14 | T3 N18 · T4 N22 · T5 N21 |
+| W07 | Two-part question / direct questions — kể cả **một câu hỏi chứa HAI đối tượng** (gia đình VÀ xã hội…) ⇒ mỗi đối tượng ≥ 1 ý (T2 N18 nhập; T3 N22) | T2 N18 | T3 N22 · T4 N28 · T5 N27 |
 | W08 | Task 1 line graph (xu hướng theo thời gian) | T1 N12 (ngôn ngữ) | T2 N4 · T3 N8 · T4 N6 |
 | W09 | Task 1 bar chart (so sánh nhóm; có/không thời gian) | T2 N8 | T3 N12 · T4 N12 |
 | W10 | Task 1 pie chart (tỉ lệ, so sánh 2 pie) | T2 N12 | T3 N16 · T4 N18 |
 | W11 | Task 1 table (chọn lọc số liệu nổi bật) | T2 N16 | T3 N20 · T4 N24 |
-| W12 | Task 1 mixed charts (2 biểu đồ khác loại) | T3 N24 | T4 N24 · T5 N5 |
-| W13 | Task 1 process diagram (quy trình tự nhiên/sản xuất; bị động, trình tự) | T2 N20 | T3 N28 · T4 N30 (ôn) · T5 N11 |
-| W14 | Task 1 map (so sánh trước–sau, vị trí, hướng; bị động quá khứ/hoàn thành) | T2 N22 | T3 N28 · T5 N17 |
+| W12 | Task 1 mixed charts (2 biểu đồ khác loại): mở bài 2 câu, overview mỗi biểu đồ một ý, mỗi khổ thân bài một biểu đồ, mỗi biểu đồ chọn thì riêng (không năm ⇒ hiện tại); có bản kèm số dự báo. Nhiều biểu đồ CÙNG loại (3–4 pie, hai bar chart cùng đề) nhập T2 N8 · N12, vòng 2 T3 N12 · N16 | T3 N24 | T4 N24 · T5 N6 |
+| W13 | Task 1 process diagram (quy trình tự nhiên/sản xuất; bị động, trình tự 3 tầng; nêu mục đích của bước — to ensure that, so that, by means of — và dùng từ ngoài hình nhưng không bịa bước; by + người làm vs with + dụng cụ). **Biến thể "describe how something works"** (thân 1 cấu tạo, thân 2 vận hành; overview công dụng) — T5 N12 | T2 N20 | T3 N28 · T4 N30 (ôn) · T5 N12 |
+| W14 | Task 1 map (so sánh trước–sau, vị trí, hướng; bị động quá khứ/hoàn thành; câu khung overview + gói hai thay đổi cùng chỗ — replacing, with + N, there used to be… redeveloped into). **Biến thể**: map **chọn địa điểm** (hai vị trí đề xuất S1/S2 — hiện tại đơn + would/could, mỗi vị trí một khổ; T2 N22 hộp nhập, trọn T3 N28) · map **ba mốc** quá khứ – hiện tại – tương lai (T3 N28; mốc tương lai is likely/expected to — T5 N18) | T2 N22 | T3 N28 · T5 N18 (sửa 13/11: bản cũ ghi N17 — ngày lẻ, không có Writing) |
 | W15 | Kỹ năng: paraphrase đề, thesis statement, topic sentence, P-E-E-L, kết bài không lặp | T1 N6 | T2 N2·N6 · T3 N6 · T4 N4 |
 | W16 | Kỹ năng: cohesion — từ nối đúng vai, referencing, không lạm dụng; mỗi đoạn 1 ý | T2 N17 | T3 N10 · T4 N13 · T5 N13 |
-| W17 | Kỹ năng: ngôn ngữ số liệu — tăng/giảm/ổn định, mức độ (sharply/gradually), so sánh, tỉ lệ, dự đoán | T1 N11 | T2 N4·N8 · T3 N8 |
-| W18 | Kỹ năng: lập dàn ý 5 phút, brainstorm ý + ví dụ, quản lý 20/40 phút, đếm từ; **kho ý tưởng tự soạn theo 20 chủ đề Task 2** (mỗi chủ đề: 4–6 ý ủng hộ/phản đối + ví dụ + 10 collocation) — tra cứu ở `tracuu` từ Tập 3 | T2 N6 | T3 N22 · T4 N28 · T5 N21 |
-| W19 | Kỹ năng: tự chấm theo band descriptors, sổ lỗi, viết lại (rewrite) bài cũ | T3 N2 | T4 N2 · T5 N1 |
-| W20 | Kỹ năng: 12 lỗi mất điểm oan (lạc đề, memorised, chữ viết, thiếu từ, câu chép đề nguyên văn…) | T2 N24 | T4 N28 |
+| W17 | Kỹ năng: ngôn ngữ số liệu — tăng/giảm/ổn định, mức độ (sharply/gradually), so sánh, tỉ lệ, dự đoán; number/amount/proportion/figure; 5 cách gọi chủ ngữ số liệu (không lặp the figure); khi nào ghi đúng số / khi nào about (đọc vạch); bội số & phân số (fourfold, a fifth of); tả trọn một đường trong một câu (after which… before ending at…); counterpart; by + năm + quá khứ hoàn thành | T1 N11 | T2 N4·N8·N10·N12 · T3 N8 · N11 (G33) |
+| W18 | Kỹ năng: lập dàn ý 5 phút, brainstorm ý + ví dụ, quản lý 20/40 phút, đếm từ; **kho ý tưởng tự soạn theo 20 chủ đề Task 2** (mỗi chủ đề: 4–6 ý ủng hộ/phản đối + ví dụ + 10 collocation) — tra cứu ở `tracuu` từ Tập 3. **Thêm 13/11**: khung dàn ý gạch đầu dòng cho từng dạng (T2 N2·N6·N10·N14·N18); sinh ý "bánh xe tầng" (cá nhân → gia đình → doanh nghiệp → môi trường → xã hội) + theo nhóm người + chuỗi hệ quả; ý đơn giản giải thích kỹ hơn ý "hay"; luyện **tái tạo bài mẫu** (nghe/đọc → ghi từ khoá → viết lại → so cụm nối) — học KHUNG, không học thuộc (T2 N6·N10, dùng đều T3 N2·N22); tự tìm ý từ 2–3 bài báo ngắn (T3 N22) | T2 N6 | T3 N22 · T4 N28 · T5 N21 |
+| W19 | Kỹ năng: tự chấm theo band descriptors, sổ lỗi, viết lại (rewrite) bài cũ — nhập T2 N24 bằng một đoạn qua 3 phiên bản có chú thích lý do sửa | T3 N2 | T4 N2 · T5 N1 |
+| W20 | Kỹ năng: 12 lỗi mất điểm oan (lạc đề, memorised, chữ viết, thiếu từ, câu chép đề nguyên văn…) + soát cấp câu (run-on, And/But/So mở câu, câu > 30 từ, chủ ngữ dài thiếu động từ chính, "five millions", cố khoe cấu trúc khó) + bảng tự soát riêng Task 1 (overview đúng loại thông tin theo dạng). Mọi chỗ khoá cho xem bài mẫu: học KHUNG CÂU, không học thuộc bài | T2 N24 | T4 N28 |
 | W21 | Viết ứng dụng (gắn khéo): email công việc formal/informal (T2 N24), báo cáo ngắn (T3 N26), cover letter (T4 N26), tóm tắt bài giảng (T4 N24), bài phản biện học thuật (T5 N23) | | |
 
 ### 2.6 Speaking (mã **S**)
@@ -277,21 +280,21 @@ Band tổng = trung bình 4 kỹ năng, làm tròn về **.0 / .5 gần nhất**
 | S01 | Cấu trúc 3 Part, giám khảo làm gì, tiêu chí | T1 N2 | T3 N2 (band 6) · T5 N1 (band 8) |
 | S02 | Part 1 Yes/No → Trả lời + lý do + ví dụ | T1 N4 | T2 N1 |
 | S03 | Part 1 Wh- → trả lời thẳng + chi tiết + cảm xúc | T1 N6 | T2 N5 |
-| S04 | Part 1 sở thích / thói quen / quan điểm / trải nghiệm quá khứ | T1 N8, N10, N12, N14 | T2 N9 (12 chủ đề Part 1 nhanh) · T3 N4 |
-| S05 | Part 2 cue card: 4 dòng gợi ý, 1 phút ghi chú, kể 2 phút; 6 loại đề (người, nơi, đồ vật, sự kiện, hoạt động, trừu tượng) | T2 N3 (người) · N7 (nơi) · N11 (đồ vật) · N15 (sự kiện) · N19 (hoạt động) · N23 (trừu tượng) | T3 N8·N16·N24 · T4 N8·N20 · T5 N5·N17 |
-| S06 | Part 3: ý kiến + lý do + ví dụ + nhượng bộ; câu hỏi so sánh quá khứ–hiện tại, dự đoán, giả định, đánh giá | T2 N13 (nhập) | T3 N12·N20·N28 · T4 N4·N12·N24 · T5 N9·N15·N23·N27 |
-| S07 | Ngân hàng chủ đề Part 1 (30): work/study, hometown, home, family, friends, daily routine, hobbies, sport, music, films, books, food, weather, travel, transport, shopping, clothes, technology, social media, photography, art, plants/animals, colours, numbers, time management, sleep, noise, weekends, celebrations, neighbours. **+20 chủ đề "lạ" hay ra (đối chiếu 12/11 với bộ đề Part 1 cũ của chủ kênh)**: mirrors, robots, chocolate, watches, bags, shoes, flowers, birds, rain, sunshine, handwriting, patience, visitors, swimming, dreams, history, fruit, toys, housework, dancing — rải T3–T4, mỗi chủ đề 4 câu, tự soạn | rải T1–T3 (mỗi bài Speaking 2–3 chủ đề) | T4 N30 ôn trọn |
+| S04 | Part 1 sở thích / thói quen / quan điểm / trải nghiệm quá khứ; ngân hàng lý do dùng chung (giải trí / học hỏi / sức khoẻ; chán / mệt / bị bắt buộc) + 2 "phao" khi bí lý do (T1 N4 rút gọn, T2 N1 đủ) | T1 N8, N10, N12, N14 | T2 N9 (12 chủ đề Part 1 nhanh) · T3 N3 · T4 N2 |
+| S05 | Part 2 cue card: 4 dòng gợi ý, 1 phút ghi chú, kể 2 phút; 6 loại đề (người, nơi, đồ vật, sự kiện, hoạt động, trừu tượng) **+ loại "tình huống / a time when…"** (đầu – sự cố – kết quả, cảm xúc đổi theo chặng, một câu thoại, kết bằng bài học). Kỹ thuật thêm 13/11: ngân hàng tính cách (tính cách → chuyện chứng minh; T2 N3), kéo dài theo từng ô thông tin (T2 N3·N7·N15), công trình vs vùng đất (T2 N7), đọc ĐỘNG TỪ của thẻ để chọn góc (T2 N7·N15), đề lạ ⇒ mượn khung loại gần nhất + kho 5 câu chuyện dùng cho nhiều đề (T2 N23) | T2 N3 (người) · N7 (nơi) · N11 (đồ vật) · N15 (sự kiện) · N19 (hoạt động) · N23 (trừu tượng + tình huống) | T3 N7·N14·N22·N26 · T4 N6·N10·N14·N26 · T5 N7·N14·N17·N26 (thống nhất với ma trận 6.6, 13/11) |
+| S06 | Part 3: ý kiến + lý do + ví dụ + nhượng bộ; câu hỏi so sánh quá khứ–hiện tại, dự đoán, giả định, đánh giá; **ưu – nhược** (What are the advantages/benefits…?); viễn cảnh ngược lại (If… don't…, … will…); "It depends" tách từng trường hợp + bảng trục chia nhóm; bảng góc nhìn (kinh tế/xã hội/tâm lý, cá nhân/xã hội); đồng ý/phản đối theo mức (T2 N17); so sánh hai nhóm CÙNG THỜI (T2 N21, nâng T4 N3) | T2 N13 (nhập) · N17 · N21 | T3 N6·N10·N14 (ưu–nhược cạnh W05)·N15·N19·N23 · T4 N3·N7·N11·N14·N15·N18·N19·N23 · T5 N6·N10·N13·N17·N22·N23·N27 (thống nhất với ma trận 6.6) |
+| S07 | Ngân hàng chủ đề Part 1 (30) — gặp chủ đề lạ/không hứng thú: 2 lối thoát (nói rộng sang chủ đề liền kề; lịch sự nói không quan tâm rồi chuyển) + giải thích thứ đặc thù Việt Nam (giữ tên Việt + mệnh đề giải thích) nhập T2 N9 · N12: work/study, hometown, home, family, friends, daily routine, hobbies, sport, music, films, books, food, weather, travel, transport, shopping, clothes, technology, social media, photography, art, plants/animals, colours, numbers, time management, sleep, noise, weekends, celebrations, neighbours. **+20 chủ đề "lạ" hay ra (đối chiếu 12/11 với bộ đề Part 1 cũ của chủ kênh)**: mirrors, robots, chocolate, watches, bags, shoes, flowers, birds, rain, sunshine, handwriting, patience, visitors, swimming, dreams, history, fruit, toys, housework, dancing — rải T3–T4, mỗi chủ đề 4 câu, tự soạn | rải T1–T3 (mỗi bài Speaking 2–3 chủ đề) | T4 N30 ôn trọn |
 | S08 | Ngân hàng Part 2/3 (40 đề) theo 6 loại; mỗi đề đi kèm 4 câu Part 3 | T2–T5 (mỗi bài Speaking 1 đề + Part 3 tương ứng) | T5 N29 ôn 12 đề hay gặp |
-| S09 | Fluency: fillers học thuật (Well, I'd say…), kéo dài ý (because/which means/for instance), tự sửa đúng cách, không im > 3 giây; **khi không biết/không có trải nghiệm thì nói gì** (thừa nhận + chuyển ý), **kể chuyện ngắn làm ví dụ**, **kết câu trả lời dứt khoát** (không treo "…and yeah") | T2 N5 | T3 N4 · T4 N4 |
+| S09 | Fluency: fillers học thuật (Well, I'd say…), kéo dài ý (because/which means/for instance), tự sửa đúng cách, không im > 3 giây; **khi không biết/không có trải nghiệm thì nói gì** (thừa nhận + chuyển ý), **kể chuyện ngắn làm ví dụ**, **kết câu trả lời dứt khoát** (không treo "…and yeah"); Part 1 ngắn – thẳng – dừng đúng lúc (T2 N1·N5); quên từ ⇒ giải nghĩa bằng mệnh đề (T2 N9); xin nhắc lại: Part 1 chỉ nhắc lại, Part 3 được giải thích + "I'm no expert, but…" (T2 N13) | T2 N5 (+ N1 · N9 · N13) | T3 N11 · N27 · T4 N2 · N3 (sửa 13/11: bản cũ ghi T3 N4 · T4 N4 — hai ngày nghe) |
 | S10 | Paraphrase câu hỏi, không lặp từ giám khảo; mở rộng từ vựng tại chỗ | T2 N9 | T3 N12 |
-| S11 | Phát âm: 44 âm — 12 nguyên âm đơn (T1 N4), 8 nguyên âm đôi (T1 N6), 24 phụ âm (T1 N1 -s/-es; N3 /ð/; T1 N8 /θ/·/ð/; N10 /s/·/ʃ/·/tʃ/·/dʒ/; N12 /v/·/w/·/f/; N14 /r/·/l/; T2 N1 /p/·/b/·/t/·/d/·/k/·/g/ bật hơi + âm cuối; T2 N5 /z/·/ʒ/·/ŋ/·/h/·/j/; T2 N9 cụm phụ âm đầu/cuối -sts, -ths) | T1–T2 | Azure `phatam` mỗi ngày đo lại |
+| S11 | Phát âm: 44 âm. **Theo bài THẬT (rà 13/11)** — Tập 1: N1 -s/-es · N3 /ð/ · N4 11 nguyên âm đơn · N6 8 nguyên âm đôi · N8 /ŋ/ (-ing) · N9 -ed · N10 used to + /ʒ/ · N12 /θ/ · N14 -ed; Tập 2: N1 /p b t d k ɡ/ bật hơi + âm cuối · N2 /ʃ/ (-tion) + cụm cuối -nt/-st · N3 /θ ð/ · N4 /ʃ tʃ dʒ/ · N5 /z ʒ ŋ h j/ · N7 /r/ cuối + /t/ · N9 cụm phụ âm cuối · nguyên âm N8·N10·N14·N16·N18·N20·N22. **Còn thiếu** (bản cũ ghi T1 N10/N12/N14 nhưng bài thật không dạy): cặp /s/–/ʃ/ và /tʃ/–/dʒ/ đối lập tối thiểu, /v/·/w/·/f/, /r/–/l/ + L cuối (dark L) ⇒ bù ở T3 N1 (tự chẩn 44 âm, mỗi âm thiếu một `phatam` cặp tối thiểu) và T3 N26 (dark L) | T1–T2 (+ T3 N1 bù) | Azure `phatam` mỗi ngày đo lại |
 | S12 | Trọng âm từ (quy tắc theo hậu tố; danh–động cùng chữ) | T2 N13 | T3 N16 |
 | S13 | Trọng âm câu & nhịp (content vs function words); âm yếu /ə/ (to, for, of, and, can) | T2 N17 | T3 N20 · T4 N8 |
 | S14 | Nối âm (consonant–vowel, linking /r/, /j/ /w/), đồng hoá, nuốt âm (wanna/gonna nhận biết) | T3 N4 | T4 N12 · T5 N5 |
 | S15 | Ngữ điệu: lên/xuống câu hỏi, liệt kê, đối lập, thái độ; chunking (tone units) & pause mang nghĩa | T3 N24 | T4 N20 · T5 N17 |
 | S16 | Nói ứng dụng: tự giới thiệu + small talk (T1 N2), gọi điện/đặt lịch (T2 N3), họp & nêu ý kiến (T2 N17), phỏng vấn xin việc (T3 N18), thuyết trình 3 phút (T4 N20), đàm phán/phản biện lịch sự (T5 N15) | | |
 | S17 | Luyện với giám khảo AI đủ 11–14 phút (`/ielts/ai/tro-chuyen`), chấm 4 tiêu chí | T2 N24 (lần đầu) | mỗi đề `thi-may` từ Đề 3 |
-| S18 | Part 1 theo **11 khung câu hỏi** (cách khác với chia theo chủ đề — người học gặp chủ đề lạ vẫn có khung trả lời): Do you like X? · How often…? · When was the last time…? · Do you prefer X or Y? · Is X popular in your country? · How has X changed? · Did you do X as a child? · What do you dislike about X? · Is it easy/difficult to…? · What is the best time to…? · Is X suitable for…? | T3 N4 | T4 N4 (ôn nhanh) |
+| S18 | Part 1 theo **12 khung câu hỏi** (cách khác với chia theo chủ đề — người học gặp chủ đề lạ vẫn có khung trả lời): Do you like X? · How often…? · When was the last time…? · Do you prefer X or Y? · Is X popular in your country? · How has X changed? · Did you do X as a child? · What do you dislike about X? · Is it easy/difficult to…? · What is the best time to…? · Is X suitable for…? · **What kind of X do you like most?** (thêm 13/11). Kèm: kể trải nghiệm 2–3 câu quá khứ ngay trong Part 1, câu rào khi không nhớ rõ (It's been… since I last…), "It depends — If… But if…", kéo dài bằng đối lập. **Nhập ở T2 N5** (5–6 khung dễ) | T3 N3 (sửa 13/11: bản cũ ghi T3 N4 là ngày nghe) | T4 N2 (ôn nhanh, Part 1 band 7) |
 
 ### 2.7 Chiến thuật & quản lý thời gian; ngày thi (mã **X**)
 
@@ -367,6 +370,18 @@ Khuôn: lẻ = grammar · listening · speaking; chẵn = vocab · reading · wr
 | 23 | too / enough / so / such; ôn tổng ngữ pháp Tập 2 (bảng 12 điểm) [G21] | Đề Listening đủ 40 câu (luyện, cho tua) [L03–L06] | Part 2 đề trừu tượng (a rule you dislike) + **giám khảo AI lần đầu** 11 phút [S05 S17] 🔊 nối âm phụ âm–nguyên âm nhập [S14] | |
 | 24 | Ôn 18 chủ đề từ vựng (Match 200 từ) + Housing & cities nhập [VC18] | Reading đủ 3 passage 60 phút — thứ tự, 17–20–23, không bỏ trống [R20 X01 X03] | 12 lỗi mất điểm oan + email công việc formal/informal [W20 W21 E03] | 🖥️ **Đề 3 = thi cuối Tập 2** (band 5.0, đủ 4 kỹ năng) |
 
+**Bù lỗ hổng 13/11 (Viết · Nói · Từ vựng · Ngữ pháp) — đã thêm khối vào bài có sẵn, không đổi id cũ:**
+Viết — N2 đếm vế đề + chữ tuyệt đối + đoạn 7 lỗi · N4 line graph có năm dự báo (hình + bài mẫu + đề), bảng chia thân bài, biểu đồ có tổng,
+paraphrase mở bài 7 dạng, number/amount, by + năm, 5 cách gọi chủ ngữ · N6 có/không hỏi ý kiến, bánh xe tầng, tái tạo bài mẫu (`listen`) ·
+N8 counterpart, bội số, hai bar chart · N10 ba cách hỏi ưu–nhược + "tốt hay xấu" · N12 số đúng/xấp xỉ, mở thân bài 2, 3–4 pie · N14 đảo chiều
+nguyên nhân, 3 cách thay should · N16 Total / khác đơn vị · N18 một câu hỏi hai đối tượng · N20 từ trình tự 3 tầng, mục đích bước, by/with ·
+N22 câu khung map + map chọn địa điểm S1/S2 · N24 6 lỗi cấp câu, soát riêng Task 1, một đoạn qua 3 phiên bản.
+Nói — N1 ngân hàng lý do + trục It depends · N3 ngân hàng tính cách · N5 Part 1 theo 6 dạng câu hỏi (S18 nhập) + kéo dài bằng đối lập ·
+N7 động từ của thẻ, công trình vs vùng đất · N9 quên từ, chủ đề lạ · N13 Part 3 ưu–nhược, viễn cảnh ngược lại, góc nhìn, chốt câu, xin nhắc
+lại · N15 kéo dài theo ô (sự kiện) · N17 đồng ý theo mức · N21 hai nhóm cùng thời · N23 "a time when", đề lạ, kho 5 câu chuyện.
+Từ vựng — N1 Work (quyền lợi) · N9 Reading/sách · N12 an toàn thực phẩm + giải thích thứ đặc thù Việt Nam · N16 Business · N20 âm nhạc –
+biểu diễn · N22 tính cách – giao tiếp. Ngữ pháp — N15 ghép câu · N17 song song, run-on, And/But/So · N23 đoạn 8 lỗi biết trước + chủ ngữ khó.
+
 ### 3.3 Tập 3 — "5.0 → 6.0" (30 ngày; B1 → B2) — chặng đông người kẹt nhất, trọng tâm Writing + paraphrase
 
 Mục tiêu đo được cuối tập: Listening ≥ 23/40 · Reading ≥ 23/40 (làm đủ 3 passage trong 60 phút) · Writing 6.0 (đủ mọi phần đề, ý kiến rõ,
@@ -377,32 +392,32 @@ Khuôn: lẻ = grammar · reading · bài 3; chẵn = vocab · writing · bài 3
 |---|---|---|---|---|
 | 1 | Hệ 12 thì — timeline tổng; hiện tại hoàn thành tiếp diễn; quá khứ hoàn thành (ôn G01 G02 G06 G12 G20) [G22] | Chiến thuật đọc band 6: skim bố cục 900 từ, câu hỏi trước, paraphrase 4 mức [R17 R18] | 🎧 Part 1 giọng trộn UK/US/AU — 10/10 câu, 2 phút kiểm [L03 L16] 🔊 tự chẩn 44 âm (Azure) | |
 | 2 | AWL sublist 3 + Education vòng 2 [VB3 VC02] | Band 6 trông thế nào — tự chấm theo descriptors, sổ lỗi, viết lại [W01 W19 X07] | 🗣 Band 6 Speaking: tiêu chí, so mẫu band 5 vs 6 [S01] 🔊 /æ/ /e/ /ʌ/ | |
-| 3 | Mạo từ vòng 2 — the + danh từ chung, lỗi band 6 [G10] | True / False / Not Given 3 + paraphrase hệ thống [R05 R18 VD4] | 🗣 Part 1: Weather · Shopping · Clothes + nối âm phụ âm–nguyên âm [S04 S07 S14] 🔊 linking /r/ | |
+| 3 | Mạo từ vòng 2 — the + danh từ chung, lỗi band 6 [G10] | True / False / Not Given 3 + paraphrase hệ thống [R05 R18 VD4] | 🗣 Part 1: Weather · Shopping · Clothes theo **12 khung câu hỏi** + nối âm phụ âm–nguyên âm [S04 S07 S18 S14] 🔊 linking /r/ | |
 | 4 | Crime, law & punishment [VC19] | Task 1 band 6 — overview chọn 2 điểm, nhóm số liệu [W02] | 🎧 Part 2 MCQ + Map, **giọng CA** [L04 L13 L17] | |
 | 5 | Tương lai hoàn thành / tiếp diễn; dự đoán Task 1 (ôn G13) [G23] | Matching headings 2 — ý chính vs chi tiết [R12] | 🎧 Số liệu phức: thập phân, %, năm, đơn vị [L01] 🔊 thirteen/thirty | |
 | 6 | Government, politics & public spending [VC20] | Opinion band 6 — thesis có mức độ, phản đề 1 câu [W03] | 🗣 Part 3 "Why do you think…?" — 2 lý do + ví dụ [S06] 🔊 /ɔː/ /ɒ/ /əʊ/ | ✅ Kiểm tra chặng (N1–6) |
 | 7 | Verb patterns nâng cao + -ed/-ing adjectives (ôn G15 G05) | Short answer 2 + văn bản khoa học tự nhiên [R09 R21] | 🗣 Part 2: Describe a person vòng 2 (người có ảnh hưởng) [S05] 🔊 trọng âm theo hậu tố -tion/-ic/-ity [S12] | |
-| 8 | AWL sublist 4 + Housing & architecture [VB4 VC18] | Task 1 line graph 2 — hai đường cắt nhau [W08 W17] | 🎧 Part 3 — 3 người nói, phân biệt giọng, Matching [L05 L12] | |
+| 8 | AWL sublist 4 + Housing & architecture [VB4 VC18] | Task 1 line graph 2 — hai đường cắt nhau; biến thể có đường TỔNG + có năm dự báo; tả trọn một đường trong một câu [W02 W08 W17] | 🎧 Part 3 — 3 người nói, phân biệt giọng, Matching [L05 L12] | |
 | 9 | Giới từ phụ thuộc 60 cụm + đoán nghĩa ngữ cảnh (ôn G11) [VD10] | Sentence completion 3 + Summary hộp từ 2 [R01 R06] | 🎧 Kỹ năng: bẫy đổi ý, paraphrase khi nghe, 2 đáp án gần nhau [L15] 🔊 âm yếu trong cụm giới từ | |
 | 10 | Science, research & space [VC21] | Discussion band 6 — 2 thân bài cân đối + ý kiến rõ [W04 W16] | 🗣 Part 3 "Do you agree that…?" — đồng ý một phần [S06] 🔊 ngữ điệu nhượng bộ | |
 | 11 | So sánh nâng cao cho Task 1: the more…, twice as…, by far (ôn G14) [G33 VC05] | Multiple choice 2 — loại 3 đáp án sai [R10] | 🗣 Ngữ pháp nói: chunks (I'd say…, the thing is…) + fluency [G44 S09] 🔊 chunking nhập [S15] | |
-| 12 | History, archaeology & heritage [VC22] | Task 1 bar chart 2 — nhiều nhóm, không thời gian [W09] | 🎧 Part 2 map + dictation nâng cao; giọng CA/NZ [L04 L13 L02 L17] | ✅ Kiểm tra chặng (N7–12) |
+| 12 | History, archaeology & heritage [VC22] | Task 1 bar chart 2 — nhiều nhóm, không thời gian; hai bar chart cùng đề, thiếu số liệu một nhóm [W09 W17] | 🎧 Part 2 map + dictation nâng cao; giọng CA/NZ [L04 L13 L02 L17] | ✅ Kiểm tra chặng (N7–12) |
 | 13 | Bị động mọi thì + với modal + by agent (ôn G09) [G24] | Multiple choice nhiều đáp án (TWO/THREE) [R11] | 🎧 Part 4 — Note completion bài giảng 5 phút [L06 L07] 🔊 /ʃ/ /ʒ/ trong -tion/-sion | |
-| 14 | AWL sublist 5 + Work vòng 2 + collocation Task 2 [VB5 VC03 VD3] | Advantages/disadvantages band 6 — outweigh, cân nhắc [W05] | 🗣 Part 2: Describe a place vòng 2 (nơi công cộng) [S05] 🔊 /ɪə/ /eə/ /ʊə/ | |
+| 14 | AWL sublist 5 + Work vòng 2 (quyền lợi lao động) + collocation Task 2 [VB5 VC03 VD3] | Advantages/disadvantages band 6 — outweigh, cân nhắc; **positive or negative development** trọn 3 lập trường [W05] | 🗣 Part 2: Describe a place vòng 2 (nơi công cộng — công trình vs vùng đất) + Part 3 dạng ưu–nhược [S05 S06] 🔊 /ɪə/ /eə/ /ʊə/ | |
 | 15 | Điều kiện loại 2 & 3; wish / if only (ôn G16) [G25] | Table completion 2 + Short answer [R03 R09] | 🗣 Part 3 giả định "What would happen if…?" [S06] 🔊 would've / could've nối âm | 🖥️ **Đề 4** (giữa tập, band 5.5) |
-| 16 | Business, economy & globalisation [VC23] | Task 1 pie chart 2 — hai pie theo năm [W10] | 🎧 Đề nhỏ Part 1+2, 20 câu, không tua [L03 L04 L16] 🔊 trọng âm danh–động (INcrease/inCREASE) [S12] | |
+| 16 | Business, economy & globalisation [VC23] | Task 1 pie chart 2 — hai pie theo năm; 3–4 pie (nước × năm) [W10] | 🎧 Đề nhỏ Part 1+2, 20 câu, không tua [L03 L04 L16] 🔊 trọng âm danh–động (INcrease/inCREASE) [S12] | |
 | 17 | Mệnh đề quan hệ không xác định; rút gọn V-ing/V-ed (ôn G17) [G26] | Flow-chart 2 + Diagram label + ngôn ngữ quy trình/bản đồ vòng 2 [R02 R16 VC07] | 🎧 Part 3 Flow-chart + MCQ TWO [L05 L09 L11] 🔊 pause trước mệnh đề quan hệ | |
-| 18 | Social media vòng 2 + gom 150 cụm động từ [VC01 VD2] | Problem/solution band 6 — giải pháp gắn đúng vấn đề [W06] | 🗣 Phỏng vấn xin việc — Part 1/3 dạng + nghe phỏng vấn mẫu [S16 E05 L18] `canh` 🔊 ngữ điệu lịch sự | ✅ Kiểm tra chặng (N13–18) |
+| 18 | Social media vòng 2 + Personality & relationships + gom 150 cụm động từ [VC01 VC32 VD2] | Problem/solution band 6 — giải pháp gắn đúng vấn đề [W06] | 🗣 Phỏng vấn xin việc — Part 1/3 dạng + nghe phỏng vấn mẫu [S16 E05 L18] `canh` 🔊 ngữ điệu lịch sự | ✅ Kiểm tra chặng (N13–18) |
 | 19 | Reported speech + động từ tường thuật học thuật; modal suy đoán (ôn G08) [G27 G28] | Matching information 2 [R13] | 🗣 Part 3 tường thuật ý người khác "Some people say…" [S06] 🔊 /s/ /z/ cuối (claims, argues) | |
-| 20 | AWL sublist 6 + Transport vòng 2 [VB6 VC11] | Task 1 table 2 — bảng 2 chiều nhiều số [W11] | 🎧 Part 3 thảo luận đồ án: Matching + Sentence; **giọng NZ** [L05 L12 L14 L17] 🔊 âm yếu hội thoại nhanh [S13] | |
+| 20 | AWL sublist 6 + Transport vòng 2 [VB6 VC11] | Task 1 table 2 — bảng 2 chiều nhiều số; hàng/cột Total, cột khác đơn vị [W11] | 🎧 Part 3 thảo luận đồ án: Matching + Sentence; **giọng NZ** [L05 L12 L14 L17] 🔊 âm yếu hội thoại nhanh [S13] | |
 | 21 | Nhượng bộ/đối lập + nguyên nhân–kết quả (ôn G18 VD6) [G29] | Matching features 2 [R04] | 🎧 Đề Listening đủ 40 câu lần 1 của tập, đúng giờ [L03–L06] 🔊 /ð/ trong although/whereas | |
-| 22 | Animals, nature & biodiversity [VC24] | Two-part question band 6 + dàn ý 2 câu hỏi [W07 W18] | 🗣 Part 2: Describe an event vòng 2 — kể quá khứ hoàn chỉnh [S05] 🔊 -ed + nối âm | |
+| 22 | Animals, nature & biodiversity [VC24] | Two-part question band 6 + dàn ý 2 câu hỏi; kho ý tưởng (bánh xe tầng, tự tìm ý từ bài báo) [W07 W18] | 🗣 Part 2: Describe an event vòng 2 — kể quá khứ hoàn chỉnh + tình huống "a time when" vòng 2 [S05] 🔊 -ed + nối âm | |
 | 23 | Mệnh đề danh ngữ; It is + adj + that/to (ôn G21) [G30] | Yes/No/Not Given 2 + suy luận quan điểm, từ cực đoan [R15 R19] | 🗣 Part 3 đánh giá "Is it a good thing that…?" [S06] 🔊 ngữ điệu đối lập [S15] | |
-| 24 | Energy & resources + collocation Task 1 [VC25 VD3] | Task 1 mixed charts (bar + line) [W12] | 🎧 Part 4 Summary + Table completion; giọng NZ [L06 L10 L08] 🔊 nhận ra ngữ điệu khi nghe | ✅ Kiểm tra chặng (N19–24) |
+| 24 | Energy & resources + collocation Task 1 [VC25 VD3] | Task 1 mixed charts (bar + line; pie + table) — mở bài 2 câu, overview mỗi hình một ý, mỗi khổ một hình [W12] | 🎧 Part 4 Summary + Table completion; giọng NZ [L06 L10 L08] 🔊 nhận ra ngữ điệu khi nghe | ✅ Kiểm tra chặng (N19–24) |
 | 25 | Cụm danh từ phức + danh hoá mức 1 (ôn G19) [G31] | Summary từ trong bài 2 + Sentence completion [R07 R01] | 🎧 Đề nhỏ Part 3+4, 20 câu + bẫy [L05 L06 L15] 🔊 trọng âm cụm danh từ | |
-| 26 | Travel & culture vòng 2 [VC13] | Báo cáo ngắn / tóm tắt số liệu (ứng dụng) + ôn 7 dạng Task 1 [W21 E09] | 🗣 Part 2: Describe an object/activity vòng 2 [S05] 🔊 /l/ cuối, dark l | |
+| 26 | Travel & culture vòng 2 [VC13] | Báo cáo ngắn / tóm tắt số liệu (ứng dụng) + ôn 7 dạng Task 1 [W21 E09] | 🗣 Part 2: Describe an object/activity vòng 2 + đề lạ (mượn khung) [S05] 🔊 /l/ cuối, dark l | |
 | 27 | Dấu câu + bảng tự soát 6 lượt lần 1 [G32 G43] | Reading đủ 3 passage 60 phút lần 2 [R20] | 🗣 Fluency 2: không im > 3 giây, tự sửa đúng cách; ghi âm tự chấm [S09 S10] 🔊 tự chẩn lại 44 âm | |
-| 28 | Language, culture & identity + từ dễ nhầm [VC26 VD5] | Task 1 process + map band 6 [W13 W14] | 🎧 Part 2 + Part 4 giọng trộn, Short answer [L04 L06 L14] | |
+| 28 | Language, culture & identity + Books, reading & literature + từ dễ nhầm [VC26 VC31 VD5] | Task 1 process + map band 6 — map ba mốc, map chọn địa điểm S1/S2 [W13 W14] | 🎧 Part 2 + Part 4 giọng trộn, Short answer [L04 L06 L14] | |
 | 29 | Causative + ôn tổng ngữ pháp Tập 3 (bảng 24 điểm) [G34] | Chiến thuật 900 từ/20 phút, đọc bố cục, Passage 3 lần đầu [R20] | 🎧 Đề Listening 40 câu lần 2, 2 phút kiểm [L16] | |
 | 30 | 30 idiom tự nhiên + ôn 30 chủ đề flashcard [VD7] | Viết lại 2 bài cũ theo sổ lỗi (rewrite) [W19] | 🗣 Giám khảo AI 14 phút lần 2 [S17] | ✅ Kiểm tra chặng (N25–30) + 🖥️ **Đề 5 = thi cuối Tập 3** (band 6.0) |
 
@@ -415,13 +430,13 @@ Khuôn như Tập 3 (bài 3 = nghe khi N mod 4 ∈ {0,1}, nói khi ∈ {2,3}).
 | N | Bài 1 | Bài 2 | Bài 3 | Ghi chú |
 |---|---|---|---|---|
 | 1 | Cụm danh từ phức; mạo từ & danh từ không đếm — lỗi số 1 ở band 6.5 (ôn G04 G10) [G31] | Passage 3 nhập — văn bản nhân văn/khoa học xã hội, bố cục 900 từ/17 phút [R20 R21] | 🎧 Part 1 "quá dễ để sai": chính tả, số nhiều, 10/10 [L03 L16] 🔊 rhythm câu dài | 🖥️ **Đề 6** đầu tập (= `doc-01`/`nghe-01`/`viet-01` hiện có, band 6→7.5) |
-| 2 | AWL sublist 7 + Environment vòng 2 [VB7 VC08] | Band 7 trông thế nào — TR mở rộng & chống đỡ, CC, LR, GRA; so 2 bài 6 vs 7 [W01 W19] | 🗣 Part 1 band 7: chi tiết + từ ít gặp [S04 S09] 🔊 sentence stress mang nghĩa [S13] | |
+| 2 | AWL sublist 7 + Environment vòng 2 [VB7 VC08] | Band 7 trông thế nào — TR mở rộng & chống đỡ, CC, LR, GRA; so 2 bài 6 vs 7 [W01 W19] | 🗣 Part 1 band 7: chi tiết + từ ít gặp; ôn nhanh 12 khung [S04 S09 S18] 🔊 sentence stress mang nghĩa [S13] | |
 | 3 | Thì trong văn học thuật: HTHT cho xu hướng, QKHT trong tường thuật (ôn G12 G22) | Matching headings 3 + paraphrase ẩn ý [R12 R18] | 🗣 Part 3 band 7: quá khứ–hiện tại–tương lai, discourse markers linh hoạt [S06 S09] 🔊 /ɜː/ /ə/ | |
 | 4 | Psychology, happiness & behaviour [VC27] | Opinion band 7 — ý mở rộng 3 tầng, ví dụ cụ thể, không khái quát [W03 W15] | 🎧 Part 2 MCQ dài, phương án paraphrase [L04 L11] | |
 | 5 | Participle clauses; bị động + quan hệ rút gọn trong câu học thuật (ôn G24 G26) [G35] | TFNG / YNNG bẫy band 7: "đúng một nửa", so sánh ngầm, số đổi [R05 R15 R19] | 🎧 Part 3 — 4 người nói, Matching ý kiến [L05 L12] 🔊 nuốt /t/ /d/ giữa phụ âm [S14] | |
 | 6 | Collocation học thuật verb+noun (conduct research, pose a threat) [VD3 VD9] | Task 1 line 3 — nhiều đường, nhóm xu hướng [W08 W17] | 🗣 Part 2 band 7: Describe a person/place có câu chuyện nhỏ [S05] 🔊 ngữ điệu kể chuyện | ✅ Kiểm tra chặng (N1–6) |
 | 7 | Cleft sentences + đảo ngữ (ôn G11) [G36 G37] | Multiple choice Passage 3 (1 & nhiều đáp án) [R10 R11] | 🗣 Part 3 dự đoán tương lai có hedging [S06 G39] 🔊 nối âm /j/ /w/ [S14] | |
-| 8 | AWL sublist 8 + Health vòng 2 + Family vòng 2 [VB8 VC09 VC17] | Task 1 bar 3 — stacked / grouped [W09] | 🎧 Part 4 bài giảng 6 phút — Note + Sentence [L06 L18] 🔊 âm yếu chuỗi (should have been) [S13] | |
+| 8 | AWL sublist 8 + Health vòng 2 (hệ thống y tế) + Family vòng 2 + Personality vòng 2 (thành ngữ tính cách) [VB8 VC09 VC17 VC32] | Task 1 bar 3 — stacked / grouped [W09] | 🎧 Part 4 bài giảng 6 phút — Note + Sentence [L06 L18] 🔊 âm yếu chuỗi (should have been) [S13] | |
 | 9 | Ngôn ngữ so sánh & dự đoán Task 1 band 7 (ôn G14 G23 G33) | Suy luận & giọng điệu tác giả (ironic, cautious) + văn bản nghệ thuật [R19 R21] | 🎧 Đề nhỏ Part 1+2, 20 câu [L03 L04] 🔊 tone units | |
 | 10 | Art, music & creativity + sắc thái từ đồng nghĩa, từ dễ nhầm [VC28 VD5 VD8] | Discussion band 7 — thesis + hai góc + đánh giá [W04] | 🗣 Part 2: Describe an object/activity band 7 — từ ít gặp, idiom tự nhiên [S05 VD7] 🔊 /tʃ/ /dʒ/ /tr/ /dr/ | |
 | 11 | Mệnh đề danh ngữ & verb pattern trong câu phức dài không lỗi (ôn G15 G30) | Note completion 2 — Passage 3 [R08] | 🗣 Part 3 "To what extent…" có mức độ + chống đỡ [S06] 🔊 trọng âm tương phản | |
@@ -429,7 +444,7 @@ Khuôn như Tập 3 (bài 3 = nghe khi N mod 4 ∈ {0,1}, nói khi ∈ {2,3}).
 | 13 | Hedging & impersonal passive; cohesion nâng cao (referencing, substitution, ellipsis) (ôn G03 G28) [G39 G40] | Reading đủ 3 passage 60 phút lần 1 [R20] | 🎧 Part 4 Table + Summary [L06 L08 L10] 🔊 âm cuối trong chuỗi từ | |
 | 14 | AWL sublist 9 + Volunteering vòng 2 + Money vòng 2 [VB9 VC04 VC14] | Advantages/disadvantages band 7 — đánh giá "outweigh" rõ [W05] | 🗣 Part 2 Describe an event band 7 + Part 3 nối tiếp [S05 S06] 🔊 ngữ điệu liệt kê | |
 | 15 | Từ nối band 7 — đúng liều, cấp câu vs đoạn; cause–effect tinh (ôn G18 G29) [VD6] | Matching sentence endings 2 + paraphrase nâng cao [R14 R18 VD4] | 🗣 Part 3 nguyên nhân–hệ quả, lập luận chuỗi [S06] 🔊 pause mang nghĩa | 🖥️ **Đề 7** (giữa tập, band 6.5) |
-| 16 | Ageing, population & migration [VC29] | Task 1 table 3 — so sánh chéo nhiều chiều [W11] | 🎧 Part 2 Map phức — nhiều tầng, phương hướng [L04 L13] 🔊 /h/ rơi trong he/his nhanh | |
+| 16 | Ageing, population & migration + Social issues & equality [VC29 VC33] | Task 1 table 3 — so sánh chéo nhiều chiều [W11] | 🎧 Part 2 Map phức — nhiều tầng, phương hướng [L04 L13] 🔊 /h/ rơi trong he/his nhanh | |
 | 17 | Tường thuật học thuật (According to X, it is argued that…) + causative (ôn G27 G34) | Flow-chart / Diagram Passage 3 kỹ thuật [R02 R16] | 🎧 Đề nhỏ Part 3+4, 20 câu [L05 L06] 🔊 trọng âm từ 4–5 âm tiết | |
 | 18 | Idiom & register — lúc nào dùng (Speaking) / không dùng (Writing) [VD7 VD8] | Task 1 pie 3 — nhiều pie, so sánh chéo [W10] | 🗣 Part 3 band 7: ví dụ cá nhân vs xã hội; paraphrase nâng cao [S06 S10] 🔊 ngữ điệu thái độ [S15] | ✅ Kiểm tra chặng (N13–18) |
 | 19 | Mixed conditionals; provided that / as long as (ôn G25) [G38] | Matching information 3 — Passage 3 [R13] | 🗣 Part 3 giả định & phản thực tế [S06] 🔊 would've trong câu dài | |
@@ -439,7 +454,7 @@ Khuôn như Tập 3 (bài 3 = nghe khi N mod 4 ∈ {0,1}, nói khi ∈ {2,3}).
 | 23 | Ngữ pháp nói band 7: câu phức trong nói, ellipsis, tags [G44] | Matching features 3 [R04] | 🗣 Part 3 trừu tượng: giá trị, đạo đức, công nghệ & xã hội [S06] 🔊 từ trừu tượng dài | |
 | 24 | Collocation Task 1 & 2 nâng cao (adj+noun, adv+adj) [VD3] | Task 1 table + mixed 3 nguồn; tóm tắt bài giảng [W11 W12 W21 E09] | 🎧 Bài giảng 10 phút + Matching [L06 L12 L18] | ✅ Kiểm tra chặng (N19–24) |
 | 25 | Đọc hiểu câu phức Passage 3: chuỗi thì & bị động (ôn G22 G24) | Summary 3 — Passage 3 (hộp từ & từ trong bài) [R06 R07] | 🎧 Đề Listening 40 câu lần 1 của tập — mục tiêu 30+ [L16] | |
-| 26 | Food vòng 2 + Media vòng 2 [VC12 VC15] | Cover letter + email formal nâng cao [W21 E03] | 🗣 Part 2 band 7 đề trừu tượng (a law, a piece of advice) [S05] 🔊 tốc độ tự nhiên | |
+| 26 | Food vòng 2 (an toàn – công nghiệp thực phẩm) + Media vòng 2 [VC12 VC15] | Cover letter + email formal nâng cao [W21 E03] | 🗣 Part 2 band 7 đề trừu tượng (a law, a piece of advice) [S05] 🔊 tốc độ tự nhiên | |
 | 27 | Subjunctive & formal structures; fronting [G42] | Reading 3 passage 60 phút lần 3 — Passage 3 ≥ 9/13 [R20] | 🗣 Full 14 phút tự thu, tự chấm 4 tiêu chí [S17] 🔊 tự chẩn 44 âm | |
 | 28 | Ôn AWL 7–10 + 12 chủ đề vòng 2 (Match) [VB7–10] | Two-part band 7 + quản lý 60 phút + 12 lỗi ở band 7 [W07 W18 W20 X04 X08] | 🎧 Đề nhỏ Part 3+4 + bẫy [L05 L06 L15] | |
 | 29 | Ôn tổng ngữ pháp Tập 4 (bảng 20 điểm C1) [G35–G42] | Chiến thuật band 7: thứ tự passage theo độ khó cá nhân [R19 R20 X03] | 🎧 Đề Listening 40 câu lần 2 [L16] | |
@@ -458,31 +473,75 @@ Nhịp: 4 đề đủ (N8 · N16 · N24 · N30), ngày sau đề là ngày **m�
 | 3 | Lỗi dai dẳng cá nhân: SVA, mạo từ, giới từ — truy từ sổ lỗi [G43] | TFNG band 8 — câu 40 từ, suy luận [R05 R19] | 🗣 Part 1 band 8: tự nhiên, idiom khéo [S04 VD7] 🔊 nguyên âm đôi giảm giọng mẹ đẻ | |
 | 4 | 100 từ tần suất thấp đáng giá band 8 (phần 1) [VA5] | Opinion band 8 — lập luận sâu, ví dụ liên quan, không khái quát [W03] | 🎧 Part 2+3 tốc độ thật, 4 người nói [L04 L05] | |
 | 5 | Câu phức nhiều tầng không lỗi: participle + relative + noun clause (ôn G26 G30 G35) | Matching headings 4 — bài trừu tượng [R12] | 🎧 Part 4 bài giảng chuyên sâu 8 phút [L06] 🔊 nối âm chuỗi [S14] | |
-| 6 | Paraphrase & sắc thái band 8 [VD4 VD8] | Task 1 mixed charts band 8 [W12] | 🗣 Part 3 band 8: phản biện, nhượng bộ, hedging [S06 G39] 🔊 ngữ điệu thái độ [S15] | ✅ Kiểm tra chặng (N1–6) |
+| 6 | Paraphrase & sắc thái band 8 [VD4 VD8] | Task 1 mixed charts band 8 + đề lạ (so sánh hai vật / các giai đoạn) [W12 W02] | 🗣 Part 3 band 8: phản biện, nhượng bộ, hedging [S06 G39] 🔊 ngữ điệu thái độ [S15] | ✅ Kiểm tra chặng (N1–6) |
 | 7 | Bị động + rút gọn trong Task 1 process (vòng 3 G24 G26 G35) + Phrasebank [VD9] | Short answer & sentence completion Passage 3 [R09 R01] | 🗣 Part 2 band 8 — người/nơi với chi tiết cảm quan [S05] 🔊 giọng kể | |
 | 8 | Crime vòng 2 + Business vòng 2 + Ageing vòng 2 [VC19 VC23 VC29] | Writing Đề 9 — Task 1 + Task 2 trong 60 phút | 🎧 Listening Đề 9 | 🖥️ **Đề 9** (band 7.0–7.5; Reading + Speaking làm trong `thi-may`) |
 | 9 | Parallelism, dangling modifiers; câu dài vẫn rõ [G43 G32] | Yes/No/Not Given + Headings band 8 [R15 R12] | 🎧 Mổ Đề 9: từng câu sai → sổ lỗi [L16] | |
 | 10 | Academic Phrasebank nâng cao [VD9] | Discussion band 8 — đánh giá hai góc & lập trường tinh [W04] | 🗣 Mổ Speaking Đề 9 theo 4 tiêu chí [S06 S17] | |
 | 11 | Ngữ pháp nói band 8 — cấu trúc phức tự nhiên, ellipsis [G44] | Thể loại khó: triết học / kinh tế học, 900 từ/15 phút [R20 R21] | 🗣 Idiom & từ ít gặp dùng khéo [VD7 S10] 🔊 trọng âm chuỗi | |
-| 12 | Từ vựng Part 4 học thuật: sinh học, địa chất, tâm lý, kinh tế | Task 1 process band 8 — quy trình 2 giai đoạn [W13] | 🎧 Part 4 Summary band 8 + Part 3 bẫy [L06 L10 L05] | ✅ Kiểm tra chặng (N7–12) |
+| 12 | Từ vựng Part 4 học thuật: sinh học, địa chất, tâm lý, kinh tế | Task 1 process band 8 — quy trình 2 giai đoạn + "describe how something works" [W13] | 🎧 Part 4 Summary band 8 + Part 3 bẫy [L06 L10 L05] | ✅ Kiểm tra chặng (N7–12) |
 | 13 | Cleft / inversion / cohesion / concession trong Task 2 band 8 — dùng vừa đủ (vòng 3 G29 G36 G37 G40) | Reading 3 passage 55 phút [R20] | 🗣 Part 3 trừu tượng cấp cao: triết lý, chính sách [S06] 🔊 pause mang nghĩa | |
 | 14 | Sport vòng 2 + History vòng 2 + Psychology vòng 2 [VC16 VC22 VC27] | Task 2 trộn dạng — nhận dạng đề lạ, chọn khung [W03–W07] | 🗣 Part 2 band 8 đề hiếm (a time you changed your mind) [S05] | |
 | 15 | Register & tone: formal / neutral / informal trong Viết & Nói [G41 VD8] | Matching features / information band 8 [R04 R13] | 🎧 Bẫy nghe band 8: số liệu đổi, phủ định kép [L15] | |
-| 16 | Ôn 30 chủ đề (Match 300 từ) [VC01–30] | Advantages/disadvantages band 8 [W05] | 🎧 Listening Đề 10 | 🖥️ **Đề 10** (band 7.5) |
+| 16 | Ôn 33 chủ đề (Match 300 từ) [VC01–33] | Advantages/disadvantages band 8 [W05] | 🎧 Listening Đề 10 | 🖥️ **Đề 10** (band 7.5) |
 | 17 | Chuỗi lỗi 7→8: mạo từ, số nhiều, giới từ, dấu phẩy (vòng 3 G04 G10 G11) [G43] | Mổ Reading Đề 10 — paraphrase từng câu sai [R18] | 🗣 Part 2 nơi chốn/sự kiện band 8 + Part 3 nối [S05 S06] 🔊 ngữ điệu kể chuyện band 8 [S15] | |
 | 18 | Idiom & sắc thái vòng cuối [VD7 VD8] | Task 1 map band 8 [W14] | 🗣 Đàm phán & phản biện lịch sự; hedging giao tiếp [S16 E10] | ✅ Kiểm tra chặng (N13–18) |
 | 19 | Mixed conditionals, subjunctive, dấu câu vòng 3 [G38 G42 G32] | Reading 3 passage 55 phút lần 2 [R20] | 🎧 Đề nhỏ Part 3+4 tốc độ thật [L05 L06] | |
 | 20 | Science vòng 2 + Animals vòng 2 + Children vòng 2 [VC21 VC24 VC30] | Problem/solution band 8 [W06] | 🎧 Part 4 bài giảng 10 phút, giọng vùng [L06 L17] | |
 | 21 | 3 cấu trúc hiếm dùng đúng chỗ trong Part 3 [G36 G37 G42 G44] | Chiến thuật band 8: đọc 1 lần, không quay lại; 55 phút [R20 X03] | 🎧 Podcast / tin tức tốc độ thật, giọng vùng [E08 L17 L18] | |
-| 22 | Từ vựng cho đề Task 2 lạ: ethics, AI, space, genetics | Bài phản biện học thuật 300 từ [W21 E09] | 🗣 Mổ Speaking Đề 10 + paraphrase tinh [S06 S10 S17] | |
+| 22 | Từ vựng cho đề Task 2 lạ: ethics, AI, space, genetics + Social issues vòng 2 [VC33] | Bài phản biện học thuật 300 từ [W21 E09] | 🗣 Mổ Speaking Đề 10 + paraphrase tinh [S06 S10 S17] | |
 | 23 | Bảng tự soát 6 lượt lần 3 → lỗi 0–1 [G43] | Suy luận band 8 & bẫy cuối [R19 R05] | 🗣 Part 3 phản biện giám khảo khéo [S06] 🔊 nối âm chuỗi band 8 | |
 | 24 | Ôn AWL + 30 chủ đề (Match) | Writing Đề 11 | 🎧 Listening Đề 11 | 🖥️ **Đề 11** (band 8.0) · ✅ Kiểm tra chặng (N19–24) |
 | 25 | Ôn lỗi từ Đề 11 [G43] | Mổ Reading Đề 11 | 🎧 Mổ Listening Đề 11 + 2 phút kiểm [L16] | |
-| 26 | Energy vòng 2 + Language vòng 2 [VC25 VC26] | Sprint Task 1: 7 dạng × 20 phút [W08–W14] | 🗣 Sprint Part 2: 12 đề hay gặp, 1 phút chuẩn bị [S05 S08] | |
+| 26 | Energy vòng 2 + Language vòng 2 + Books vòng 2 [VC25 VC26 VC31] | Sprint Task 1: 7 dạng × 20 phút [W08–W14] | 🗣 Sprint Part 2: 12 đề hay gặp, 1 phút chuẩn bị [S05 S08] | |
 | 27 | Ôn tổng ngữ pháp 5 tập (bảng 44 điểm) [G01–G44] | Reading 3 passage 55 phút lần 3 — mục tiêu 35+ [R20] | 🗣 Sprint Part 3: 12 đề [S06 S08] | |
 | 28 | 100 từ band 8 (phần 2) [VA5] | Two-part band 8 + quản lý thời gian lần cuối [W07 W18] | 🎧 Đề Listening 40 câu — mục tiêu 35+ [L16] | |
 | 29 | Ngày thi: giấy tờ, thứ tự, tâm lý, EOR; khi lỡ câu / lạc đề [X06 X08] | Checklist 16 dạng Reading — 1 câu/dạng [R01–R16] | 🎧 Checklist 14 dạng Listening [L07–L14] | |
 | 30 | Tổng kết từ vựng: "nhớ sau 7 ngày" ≥ 90 % | Viết lại bài yếu nhất + tự chấm [W19] | 🗣 Giám khảo AI 14 phút lần cuối [S17] | ✅ Kiểm tra chặng (N25–30) + 🖥️ **Đề 12 "Final"** (band 8.0) |
+
+### 3.6 Chỗ dành sẵn ở Tập 3–5 sau đợt bù lỗ hổng Viết · Nói · Từ vựng · Ngữ pháp (13/11/2026)
+
+Tập 2 chỉ dạy các kỹ thuật dưới đây ở mức nhập (band 4–5). Khi soạn ngày tương ứng của Tập 3–5 phải dạy **trọn** và
+nối lại với bài Tập 2 đã có (ghi rõ "ôn từ T2 Nx"). Chỉ ghi kỹ thuật/dạng — nội dung, đề, bài mẫu đều tự soạn.
+
+**Tập 3**
+- **N1** 🔊 tự chẩn 44 âm + bù phần S11 còn thiếu: cặp tối thiểu /s/–/ʃ/, /tʃ/–/dʒ/, /v/–/w/–/f/, /r/–/l/ (một `phatam` mỗi cặp).
+- **N2** W19 + X07: viết lại một bài qua 3 phiên bản có chú thích lý do sửa (nối T2 N24); luyện tái tạo bài mẫu (nối T2 N6·N10); sổ Speaking riêng (chép câu trả lời, tự đóng vai giám khảo hỏi lại hôm sau).
+- **N3** S18 trọn 12 khung trên Weather · Shopping · Clothes (nối T2 N5): mỗi khung 1 câu mẫu band 6 + 1 câu tự nói; "What kind of X do you like most?" (I love all kinds of…, but if I had to choose one…).
+- **N5** G23: dự báo Task 1 dạng danh từ (followed by a projected rise to…, with a projection of…), đổi thì giữa câu (before being expected to reach…).
+- **N6** W03: bài tập "đếm vế đề" + đề có the best / A better than B — hai lập trường ngược nhau cho cùng một đề; S06 bảng góc nhìn + bảng trục chia nhóm (tuổi, thu nhập, vùng).
+- **N7** S05 người vòng 2: ngân hàng tính cách band 6 (nối T2 N3), mỗi tính cách một chuyện chứng minh.
+- **N8** W02/W08: line graph có đường TỔNG và có năm dự báo — viết trọn bài band 6; overview gộp "with the most dramatic rise being seen in…".
+- **N10** W04: balanced opinion vs discuss-only vs discuss + opinion; S06 "Do you agree…?" — đồng ý theo mức (nối T2 N17) + 4 cách phát triển câu trả lời; viễn cảnh ngược lại (If… don't…).
+- **N11** G33: bội số / phân số Task 1 (fourfold, N times more … than, a fifth of that amount — nối T2 N10); S09: khi không biết / quên từ (nối T2 N9·N13).
+- **N12** W09: hai bar chart cùng đề, biểu đồ thiếu số liệu một nhóm, gọi nhóm bằng counterpart (nối T2 N8).
+- **N14** W05 positive/negative 3 lập trường + S06 Part 3 ưu–nhược (nối T2 N10 · N13); VC03 vòng 2 quyền lợi lao động; S05 nơi chốn vòng 2 (công trình vs vùng đất, nối T2 N7).
+- **N16** W10: 3–4 pie (2 nước × 2 năm) — chọn trục chia thân bài (nối T2 N12); VC23 trọn (nối 5 cụm T2 N16).
+- **N17** G26: rút gọn mệnh đề quan hệ V-ing/V3 — có ví dụ khi nói (Part 3), không chỉ khi viết.
+- **N18** W06: giải pháp gắn đúng nguyên nhân, mở bài nhượng bộ, chuỗi hệ quả (nối T2 N14); VC32 vòng 1.
+- **N20** W11: bảng có hàng/cột Total đọc tổng trước; cột khác đơn vị không so ngang (nối T2 N16).
+- **N22** W07 hai đối tượng trong một câu hỏi (nối T2 N18) + W18 kho ý tưởng 20 chủ đề (bánh xe tầng, tự tìm ý từ 2–3 bài báo); S05 sự kiện + tình huống "a time when" vòng 2, chiến thuật đổi ý (nối T2 N15 · N23).
+- **N24** W12 mixed: mở bài 2 câu, overview mỗi hình một ý, mỗi khổ một hình, mỗi hình một thì.
+- **N26** S05 đồ vật/hoạt động vòng 2 + đề lạ (mượn khung — nối T2 N23); 🔊 dark L.
+- **N27** G32 + G43: run-on, câu lê thê, song song thành một lượt của bảng tự soát 6 lượt; đoạn bài luận 15–20 lỗi biết trước số lượng (nối T2 N17 · N23 · N24); S09 kết câu dứt khoát.
+- **N28** W13 nêu mục đích bước + từ ngoài hình (nối T2 N20); W14 map ba mốc + map chọn địa điểm S1/S2 trọn bài (nối T2 N22); VC31 vòng 1.
+
+**Tập 4**
+- **N2** S18 ôn nhanh ở mức band 7; W19 phản biện "nêu rồi bác" / "Granted… but…".
+- **N3** S06 so sánh hai nhóm cùng thời band 7 (nối T2 N21).
+- **N6** S05 người/nơi có câu chuyện nhỏ — tính cách bằng thành ngữ đúng nguyên dạng.
+- **N8** VC09 vòng 2 hệ thống y tế; VC32 vòng 2 thành ngữ tính cách.
+- **N10** VC28 mỹ thuật – phê bình (phần âm nhạc đã nhập T2 N20).
+- **N16** VC33 vòng 1 (cạnh VC29).
+- **N26** VC12 vòng 2 an toàn – công nghiệp thực phẩm (nối T2 N12).
+- **N28** W20 ở band 7: độ dài câu, danh hoá quá đà; X04 phân giờ Task 1 10–12 phút / Task 2 25–30 phút / 15 phút soát.
+- **N30** S07 20 chủ đề lạ + cách ôn bộ đề quý (chỉ ghi ý + từ, không viết bài; Part 3 nói 2 phút/câu; kho 5 câu chuyện — nối T2 N23).
+
+**Tập 5**
+- **N6** W02 đề lạ (so sánh hai vật / các giai đoạn phát triển) + W12 band 8.
+- **N12** W13 "describe how something works" (cấu tạo → vận hành; overview công dụng).
+- **N18** W14 map có mốc tương lai (is likely / is expected to).
+- **N22** VC33 vòng 2. **N26** VC31 vòng 2.
 
 ---
 
@@ -597,7 +656,7 @@ yếu nhất thay vì Overall. Mọi kết quả ghi "ước tính"; hiện bả
 | 9 | **P1** | `LATER` N7 "Từ vựng Làm việc từ xa (tiếp)" lặp chủ đề N5 | Đổi thành "Work & careers (tiếp): nghề nghiệp, tuyển dụng, thăng tiến" (mở rộng VC03, 20 từ mới không trùng). |
 | 10 | **P1** | `tracuu.ts` chỉ có công thức Ngày 1/3/5 + khung câu N2/4/6; N7–15 soạn mà không cập nhật là tra cứu thủng | Mỗi ngày N7–15 có `h` + `patterns` + `rule` thêm vào `tracuu.ts` (quy tắc SOAN-BAI §3 — nhắc lại trong báo cáo agent); từ Tập 2 tách `tracuu` theo tập, gộp hiện "Tất cả". |
 | 11 | **P1** | `videos.ts` 24 video chỉ Ngày 1–6 | N7–15 theo quy trình `reference_tim_video_youtube_cho_bai_hoc` sau khi nội dung xong. |
-| 12 | **P2** | N4 phát âm 11 nguyên âm, N6 8 nguyên âm đôi dạy bằng `table` + 1 `phatam` — kiểm `phatam` có đủ 11/8 âm không; 24 phụ âm mới có -s/-es, âm cuối, /ð/ | Lịch phụ âm Tập 1: N8 /θ ð/, N10 /s ʃ tʃ dʒ/, N12 /r l/, N14 /v w f/ (đã ghi 3.1); còn lại Tập 2 N1/N5/N9 (S11). Mỗi `phatam` ≥ 8 từ, có cặp tối thiểu. |
+| 12 | **P2** | N4 phát âm 11 nguyên âm, N6 8 nguyên âm đôi dạy bằng `table` + 1 `phatam` — kiểm `phatam` có đủ 11/8 âm không; 24 phụ âm mới có -s/-es, âm cuối, /ð/ | Lịch phụ âm Tập 1: N8 /θ ð/, N10 /s ʃ tʃ dʒ/, N12 /r l/, N14 /v w f/ (đã ghi 3.1); còn lại Tập 2 N1/N5/N9 (S11). ⚠ Rà 13/11: bài thật KHÔNG theo lịch này (N10 /ʒ/, N12 /θ/, N14 -ed) — lịch đúng và phần bù ghi ở S11 mục 2.6. Mỗi `phatam` ≥ 8 từ, có cặp tối thiểu. |
 | 13 | **P2** | id kiểm tra `kt1-*` không theo quy ước `dN-…` | Giữ (đổi id mất điểm cũ) nhưng ghi ngoại lệ vào SOAN-BAI; chặng mới dùng `d12-kt-…`. |
 | 14 | **P2** | N11 "Từ vựng: Biểu đồ theo thời gian 1" thực chất là ngôn ngữ Task 1 (W17) đặt ở kind `vocab` | Giữ kind, nhưng bài phải có `figure` line + 20 từ/cụm (rise/fall/fluctuate/peak…) dạng `vocab` để vào flashcard. |
 
@@ -695,6 +754,7 @@ mục lục cùng lúc. Mã không có ô ở tập nào = thủng ⇒ không đ
 | VC19 · VC20 · VC21 · VC22 | — | — | N4 · N6 · N10 · N12 | — | N8 · N2 · N20 · N14 |
 | VC23 · VC24 · VC25 · VC26 | — | — | N16 · N22 · N24 · N28 | — | N8 · N20 · N26 · N26 |
 | VC27 · VC28 · VC29 · VC30 | — | — | — | N4 · N10 · N16 · N22 | N14 · N2 · N8 · N20 |
+| VC31 · VC32 · VC33 (thêm 13/11) | — | N9 · N22 (nhập) | N28 · N18 | N8 (VC32) · N16 (VC33) | N26 · N22 |
 | Ôn trọn chủ đề | — | N24 | N30 | N28 | N16 · N24 · N30 |
 | VD1 họ từ | mỗi bài vocab | N4 | — | — | — |
 | VD2 cụm động từ | mỗi bài vocab | rải | N18 | — | — |
@@ -764,7 +824,7 @@ mục lục cùng lúc. Mã không có ô ở tập nào = thủng ⇒ không đ
 | Mã | T1 | T2 | T3 | T4 | T5 |
 |---|---|---|---|---|---|
 | W01 | N2 | N2 | N2 | N2 | N1 · N2 |
-| W02 | N4 | N4 | N4 | — | — |
+| W02 | N4 | N4 | N4 | — | N6 (đề lạ) |
 | W03 | N6 · N8 · N10 | N2 | N6 | N4 | N4 · N14 |
 | W04 | N14 | N6 | N10 | N10 | N10 |
 | W05 | — | N10 | N14 | N14 | N16 |
@@ -792,14 +852,15 @@ mục lục cùng lúc. Mã không có ô ở tập nào = thủng ⇒ không đ
 | S01 | N2 | — | N2 | — | N2 |
 | S02 | N4 | N1 | — | — | — |
 | S03 | N6 | N5 | — | — | — |
-| S04 | N8 · N10 · N12 · N14 | N9 | N3 | N2 | N3 |
+| S04 | N4 · N8 · N10 · N12 · N14 | N1 · N5 · N9 | N3 | N2 | N3 |
 | S05 | (N10 · N14 — đề xuất #3) | N3 · N7 · N11 · N15 · N19 · N23 | N7 · N14 · N22 · N26 | N6 · N10 · N14 · N26 | N7 · N14 · N17 · N26 |
-| S06 | — | N13 · N21 | N6 · N10 · N15 · N19 · N23 | N3 · N7 · N11 · N14 · N15 · N18 · N19 · N23 | N6 · N10 · N13 · N17 · N22 · N23 · N27 |
+| S06 | — | N13 · N17 · N21 | N6 · N10 · N14 · N15 · N19 · N23 | N3 · N7 · N11 · N14 · N15 · N18 · N19 · N23 | N6 · N10 · N13 · N17 · N22 · N23 · N27 |
 | S07 (30 chủ đề P1) | rải | N1 · N9 | N3 | N30 | — |
 | S08 (40 đề P2/P3) | — | 6 đề | 8 đề | 8 đề | N26 · N27 (12 đề) |
-| S09 | — | N5 | N11 · N27 | N2 · N3 | — |
+| S09 | — | N1 · N5 · N9 · N13 | N11 · N27 | N2 · N3 | — |
+| S18 (12 khung Part 1) | — | N5 (nhập) | N3 | N2 | — |
 | S10 | — | N9 | N27 | N18 | N11 · N22 |
-| S11 44 âm | N1 · N2 · N3 · N4 · N6 · N8 · N10 · N12 · N14 | N1 · N5 · N9 | N1 · N27 (tự chẩn) | N27 | — |
+| S11 44 âm | N1 · N3 · N4 · N6 · N8 · N9 · N10 · N12 · N14 (theo bài thật — xem 2.6) | N1 · N2 · N3 · N4 · N5 · N7 · N9 | N1 (tự chẩn + bù /s ʃ/, /tʃ dʒ/, /v w f/, /r l/) · N26 (dark L) · N27 | N27 | — |
 | S12 trọng âm từ | — | N11 · N13 | N7 · N16 | N17 | — |
 | S13 trọng âm câu / âm yếu | — | N15 · N17 | N9 · N20 | N2 · N8 | — |
 | S14 nối âm | — | N23 | N3 · N15 | N5 · N7 · N12 | N5 · N23 |

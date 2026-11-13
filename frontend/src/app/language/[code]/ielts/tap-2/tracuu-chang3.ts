@@ -306,45 +306,19 @@ export const TRA_CONG_THUC_CHANG3: Block[] = [
   "formula": "Task 2: If + giải pháp (hiện tại đơn), kết quả (will / can + V) · Unless + điều kiện, kết quả xấu (will + V)",
   "vi": "Hai khung câu phức an toàn cho bài problem / solution — dùng 1–2 lần mỗi đoạn."
 },
-{
-  "t": "h",
-  "text": "Năm loại câu hỏi Part 3 — nhận ra để mở đầu đúng (Ngày 13 · Nói mục 2)"
-},
-{
-  "t": "table",
-  "head": [
-    "Loại",
-    "Câu hỏi thường gặp",
-    "Câu mở đầu gợi ý"
-  ],
-  "rows": [
-    [
-      "**Ý kiến / đánh giá**",
-      "Do you think…? · Is it a good thing that…? · Should…?",
-      "Yes, I'd say so, because… · To some extent, yes. · Not really. I think…"
+  { t: "h", text: "Sáu loại câu hỏi Part 3 — nhận ra để mở đầu đúng (Ngày 13 · Nói mục 2)" },
+  {
+    t: "table",
+    head: ["Loại", "Câu hỏi thường gặp", "Câu mở đầu gợi ý"],
+    rows: [
+      ["**Ý kiến / đánh giá**", "Do you think…? · Is it a good thing that…? · Should…?", "Yes, I'd say so, because… · To some extent, yes. · Not really. I think…"],
+      ["**Lý do**", "Why do…? · What are the reasons…?", "I think the main reason is that… · There are probably two reasons…"],
+      ["**Dự đoán**", "Will… in the future? · How will… change? · What will happen if…?", "I imagine that… · If…, … will probably… · It's hard to say, but…"],
+      ["**Giải pháp**", "What can be done to…? · How can… encourage…? · What should the government do…?", "One thing that could help is… · If…, … will… · I think schools should…"],
+      ["**So sánh**", "Is A better than B? · How is A different from B? · Are people today… than in the past?", "I'd say A is…er than B, mainly because… (so sánh quá khứ – hiện tại: Tập 2 Ngày 21)"],
+      ["**Ưu – nhược**", "What are the advantages and disadvantages of…? · What are the benefits of…? · What problems can… cause?", "There are clear benefits, but also a few drawbacks. · I think the biggest advantage is that…"],
     ],
-    [
-      "**Lý do**",
-      "Why do…? · What are the reasons…?",
-      "I think the main reason is that… · There are probably two reasons…"
-    ],
-    [
-      "**Dự đoán**",
-      "Will… in the future? · How will… change? · What will happen if…?",
-      "I imagine that… · If…, … will probably… · It's hard to say, but…"
-    ],
-    [
-      "**Giải pháp**",
-      "What can be done to…? · How can… encourage…? · What should the government do…?",
-      "One thing that could help is… · If…, … will… · I think schools should…"
-    ],
-    [
-      "**So sánh**",
-      "Is A better than B? · How is A different from B? · Are people today… than in the past?",
-      "I'd say A is…er than B, mainly because… (so sánh quá khứ – hiện tại: Tập 2 Ngày 21)"
-    ]
-  ]
-},
+  },
 {
   "t": "h",
   "text": "Khung trả lời 4 bước: Ý kiến → Lý do → Ví dụ → Nhượng bộ (Ngày 13 · Nói mục 3)"
@@ -459,7 +433,7 @@ export const TRA_CONG_THUC_CHANG3: Block[] = [
 },
 {
   "t": "h",
-  "text": "Khi không nghe rõ, không hiểu từ, hoặc cần vài giây (Ngày 13 · Nói mục 6)"
+  "text": "Khi không nghe rõ, không hiểu từ, hoặc cần vài giây (Ngày 13 · Nói mục 7)"
 },
 {
   "t": "table",
@@ -501,6 +475,82 @@ export const TRA_CONG_THUC_CHANG3: Block[] = [
   "formula": "Sorry, could you repeat the question? · What do you mean by …? · That's an interesting question. I suppose …",
   "vi": "Hỏi lại một lần là bình thường; câu kéo giờ phải nối ngay vào câu trả lời."
 },
+  { t: "h", text: "Part 3 — câu hỏi ưu – nhược (loại thứ 6): khung + cụm chuyển ý (Ngày 13 · Nói mục 2)" },
+  {
+    t: "sodo",
+    kind: "flow",
+    title: "Trả lời câu hỏi ưu – nhược (40–50 giây)",
+    caption: "Hai ý lợi là phần dài nhất. Mặt hại chỉ cần một ý có lý do. Nhớ chốt — đừng dừng giữa chừng ở mặt hại.",
+    steps: [
+      { label: "1. Câu giới thiệu", sub: "There are both benefits and drawbacks." },
+      { label: "2. Lợi 1 + lý do", sub: "The biggest advantage is that…" },
+      { label: "3. Lợi 2 + ví dụ", sub: "Another benefit is… For example, …" },
+      { label: "4. Chuyển sang mặt hại", sub: "On the downside, … / In terms of problems, …" },
+      { label: "5. Chốt", sub: "So overall, I think the benefits outweigh the drawbacks." },
+    ],
+  },
+  {
+    t: "table",
+    caption: "Cụm chuyển ý cho câu hỏi ưu – nhược",
+    head: ["Chức năng", "Cụm dùng được"],
+    rows: [
+      ["Mở", "There are both benefits and drawbacks. · It has its pros and cons."],
+      ["Nêu lợi", "The biggest / main advantage is that… · Another benefit is that… · It also helps people (to) + V"],
+      ["Chuyển sang hại", "**On the downside**, … · **In terms of** disadvantages, … · **Regarding** the drawbacks, … · The main problem is that…"],
+      ["Chốt", "So overall, the benefits outweigh the drawbacks. · So on balance, I'd say it's a good thing, as long as…"],
+    ],
+  },
+  { t: "h", text: "Part 3 — chốt câu trả lời dứt khoát (Ngày 13 · Nói mục 3)" },
+  {
+    t: "table",
+    caption: "Chốt câu trả lời cho dứt khoát — giám khảo biết bạn đã nói xong",
+    head: ["Cụm chốt", "Dùng khi"],
+    rows: [
+      ["**So overall, …** / **So on the whole, …**", "Nhắc lại ý kiến chính sau lý do + ví dụ."],
+      ["**That's why I think …**", "Vừa nêu lý do xong, muốn quay về câu trả lời."],
+      ["**So it really depends on …**", "Đã tách nhiều trường hợp (mục 6)."],
+      ["**…, and that's the main reason.**", "Câu ngắn, chốt sau một lý do dài."],
+    ],
+  },
+  { t: "h", text: "Part 3 — bí ý: “If… don’t…”, “It depends → If… But if…”, bảng góc nhìn (Ngày 13 · Nói mục 6)" },
+  {
+    t: "table",
+    caption: "Cách 1 — Viễn cảnh ngược lại: nói điều sẽ xảy ra nếu KHÔNG làm",
+    head: ["Bước", "Khung", "Ví dụ (Should children learn to swim at school?)"],
+    rows: [
+      ["Ý chính", "Yes, I think so, because…", "Yes, I think so, because swimming is a skill that can save lives."],
+      ["Viễn cảnh ngược lại", "**If** + S + **don't / doesn't** + V, … **will** … · **Otherwise**, … · **Unless** + S + V, …", "**If schools don't** teach it, many children **will never** learn, especially in poor families. **Otherwise**, accidents in rivers will keep happening."],
+      ["Chốt", "So …", "So I'd say it should be compulsory."],
+    ],
+  },
+  {
+    t: "table",
+    caption: "Cách 2 — “It depends”: tách thành từng trường hợp, mỗi trường hợp một câu",
+    head: ["Bước", "Khung", "Ví dụ (Is it better to live in a city or in the countryside?)"],
+    rows: [
+      ["Mở", "Well, **it depends on** + N", "Well, **it depends on** a person's age."],
+      ["Trường hợp 1", "**If** + S + V, … · **For** + nhóm 1, …", "**If** you're young and want a career, the city is better because there are more jobs."],
+      ["Trường hợp 2", "**But if** + S + V, … · **For** + nhóm 2, **by contrast**, …", "**But if** you're retired, the countryside is probably better, as it's quieter and cleaner."],
+      ["Chốt", "So it really depends on…", "So it really depends on what stage of life you're at."],
+    ],
+  },
+  {
+    t: "table",
+    caption: "Cách 3 — Bảng góc nhìn: nhìn câu hỏi qua từng “ống kính” để tìm lý do",
+    head: ["Góc nhìn", "Tự hỏi", "Ví dụ ý (Why do people work long hours?)"],
+    rows: [
+      ["**Tiền bạc / kinh tế**", "Có liên quan tới tiền, giá, việc làm không?", "Living costs are high, so people need extra income."],
+      ["**Xã hội / quan hệ**", "Gia đình, bạn bè, đồng nghiệp, cộng đồng nghĩ gì?", "In some companies, leaving early looks lazy to your boss."],
+      ["**Tâm lý / cảm xúc**", "Người ta cảm thấy thế nào — áp lực, vui, sợ?", "Some people are afraid of losing their job."],
+      ["**Cá nhân ↔ xã hội**", "Với một người thì sao, với cả xã hội thì sao?", "For individuals it means stress; for society it means less family time."],
+      ["**Lý thuyết ↔ thực tế**", "Nghe thì hợp lý, nhưng làm thật thì sao?", "In theory, eight hours is the rule, but in practice many people answer emails at night."],
+    ],
+  },
+  {
+    t: "rule",
+    formula: "If + S + don't + V, … will … · It depends on + N. If…, … But if…, … · tiền bạc → quan hệ → cảm xúc",
+    vi: "Bí ý thì: nói điều xảy ra nếu không làm · tách trường hợp · đổi góc nhìn. Mỗi cách cho thêm 1–2 câu.",
+  },
   /* ───────── Ngày 14 — AWL + du lịch · Sentence completion · Problem / solution ───────── */
 {
   "t": "h",
@@ -555,6 +605,26 @@ export const TRA_CONG_THUC_CHANG3: Block[] = [
   "formula": "Đọc giới hạn từ → đoán loại từ → dò bằng tên / số / từ đồng nghĩa → chép NGUYÊN chữ trong bài → đọc lại cả câu (ngữ pháp + số ít / nhiều)",
   "vi": "Đáp án luôn là chữ CÓ trong bài; câu hỏi đi theo thứ tự bài đọc."
 },
+  { t: 'h', text: 'Tín hiệu ngữ pháp khi điền từ Reading — không dịch được vẫn loại được đáp án (Ngày 14 · Đọc mục 5)' },
+  {
+    t: 'table',
+    head: ['Tín hiệu quanh chỗ trống', 'Chỗ trống cần', 'Ví dụ'],
+    rows: [
+      ['be / get + ___', 'V3 (bị động)', 'was ___ → **completed**'],
+      ['giới từ + ___', 'V-ing / danh từ', 'by ___ → **recycling**'],
+      ['much / little / less + ___', 'danh từ không đếm được', 'less ___ → **waste**'],
+      ['many / few / a number of / several + ___', 'danh từ số nhiều', 'a number of ___ → **schools**'],
+      ['___ + are / were / have', 'chủ ngữ số nhiều', '___ were closed → **factories**'],
+      ['a / an + ___', 'danh từ đếm được số ít', 'an ___ → **experiment**'],
+      ['remain / become / seem / stay + ___', 'tính từ', 'remained ___ → **stable**'],
+      ['travel / go by + ___', 'phương tiện, không mạo từ', 'by ___ → **ferry**'],
+      ['spend + thời gian / tiền + ___', 'V-ing', 'spent years ___ → **studying**'],
+      ['the most / the + -est', 'câu bài cũng so sánh nhất', 'biggest export ↔ **largest** export'],
+      ['be known for', 'has a reputation for / is noted for', 'known for ↔ **reputation**'],
+      ['X and / or ___', 'cùng loại từ với X (song song)', 'quiet and ___ → **clean**'],
+    ],
+  },
+  { t: 'rule', formula: 'Chữ quanh chỗ trống → loại từ + số ít / nhiều · tìm câu bài cùng KHUNG → chép chữ đứng đúng vị trí', vi: 'Tín hiệu loại đáp án sai dạng; đáp án vẫn phải là chữ CÓ trong bài, đúng câu khớp nghĩa.' },
 {
   "t": "h",
   "text": "Problem / Solution · Cause / Effect — 4 kiểu đề & khung 4 đoạn (Ngày 14 · Viết mục 1–2)"
@@ -735,6 +805,29 @@ export const TRA_CONG_THUC_CHANG3: Block[] = [
   "formula": "S (ai) + should + V · One solution would be to + V · If + S + V(s/es), S + will + V",
   "vi": "Giải pháp = AI làm GÌ → giải quyết vấn đề NÀO → kết quả (will)."
 },
+  { t: "h", text: "Task 2 — đảo chiều nguyên nhân – kết quả · 3 giải pháp không lặp “should” (Ngày 14 · Viết mục 4–5)" },
+  {
+    t: "table",
+    caption: "Đảo chiều nguyên nhân – kết quả để không lặp “A causes B” trong cùng bài",
+    head: ["Hướng", "Khung", "Ví dụ"],
+    rows: [
+      ["A → B (chủ động)", "A **causes / leads to / results in** B", "Heavy traffic **causes** air pollution."],
+      ["B ← A (bị động)", "B **is caused by** A", "Air pollution **is** largely **caused by** heavy traffic."],
+      ["B ← A (động từ khác)", "B **results from** A", "Much of the air pollution **results from** heavy traffic."],
+      ["Nêu A là một nguyên nhân", "**One of the main causes of** B **is** A", "**One of the main causes of** air pollution **is** heavy traffic."],
+    ],
+  },
+  {
+    t: "table",
+    caption: "Viết 3 giải pháp mà không lặp “should” ba lần",
+    head: ["Giải pháp", "Khung", "Ví dụ"],
+    rows: [
+      ["1", "S **should** + V", "Local governments **should** build more playgrounds."],
+      ["2", "**It is necessary / important for** + ai + **to** V", "**It is important for** schools **to** offer a sports session every day."],
+      ["3", "**One of the most effective solutions would be for** + ai + **to** V", "**One of the most effective solutions would be for** parents **to** limit their children’s screen time."],
+      ["(thêm) bị động", "N **should be** + V3", "Screen time **should be** limited to two hours a day."],
+    ],
+  },
   /* ───────── Ngày 15 — Mệnh đề quan hệ xác định · Part 2 sự kiện ───────── */
 {
   "t": "h",
@@ -1260,7 +1353,55 @@ export const TRA_CONG_THUC_CHANG3: Block[] = [
   {"t":"h","text":"Gắn kết không chỉ bằng từ nối: this / these + danh từ, lặp từ khoá có chủ ý (Ngày 17 · Ngữ pháp mục 7)"},
   {"t":"table","head":["Cách","Làm thế nào","Ví dụ"],"rows":[["**this / these + danh từ**","Tóm cả ý câu trước vào một danh từ ở đầu câu sau","Many cities have built bike-sharing schemes. **These schemes** are cheap and popular."],["**this + danh từ tóm ý**","Dùng danh từ \"gói\" cả sự việc: this change, this problem, this trend, this decision","Rents doubled in five years. **This increase** forced many families to move."],["**Đại từ** it / they / them","Thay danh từ vừa nhắc (chỉ khi KHÔNG thể hiểu nhầm)","The council opened a new library. **It** is open until 10 p.m."],["**Lặp từ khoá có chủ ý**","Lặp lại từ khoá của đề ở đầu đoạn / câu chủ đề để người đọc không lạc","**Public transport** is cheap… **Public transport** also reduces traffic."]]},
   {"t":"rule","formula":"Câu 1. This / These + N (change, problem, trend, decision…) + V…","vi":"Nối câu bằng danh từ tóm ý — vừa mạch lạc vừa đỡ phải dùng từ nối."},
-  {"t":"h","text":"Áp vào bài thi: một đoạn thân bài Task 2 và từ nối khi nói (Ngày 17 · Ngữ pháp mục 8)"},
+  { t: "h", text: "Cấu trúc song song — các vế nối nhau cùng dạng (Ngày 17 · Ngữ pháp mục 8)" },
+  {
+    t: "table",
+    caption: "Nhìn vế ĐẦU tiên để biết các vế sau phải ở dạng nào",
+    head: ["Dạng", "Sai (lệch)", "Đúng (song song)"],
+    rows: [
+      ["N **and** N", "~~Cycling improves health and saving money.~~", "Cycling improves **health** and **fitness**. / Cycling **improves** health **and saves** money."],
+      ["V-ing **and** V-ing", "~~I enjoy reading, swimming and to cook.~~", "I enjoy **reading**, **swimming** and **cooking**."],
+      ["to V **or** to V", "~~Students can choose to study online or going to class.~~", "Students can choose **to study** online or **(to) go** to class."],
+      ["adj **and** adj", "~~The job is tiring and a lot of stress.~~", "The job is **tiring** and **stressful**."],
+      ["giới từ + V-ing **and** V-ing", "~~by walking more and eat less sugar~~", "**by walking** more and **eating** less sugar"],
+    ],
+  },
+  {
+    t: "patterns",
+    rows: [
+      {
+        formula: "both A and B · either A or B · neither A nor B · not only A but also B",
+        vi: "Cặp liên từ: A và B phải CÙNG DẠNG, và đặt ngay trước đúng phần được so.",
+        examples: [
+          { en: "Public transport is both cheap and reliable.", vi: "Giao thông công cộng vừa rẻ vừa đáng tin cậy. (adj – adj)" },
+          { en: "Exercise not only improves your health but also reduces stress.", vi: "Tập thể dục không chỉ cải thiện sức khoẻ mà còn giảm căng thẳng. (V – V)" },
+          { en: "You can either take the train or fly.", vi: "Bạn có thể hoặc đi tàu hoặc đi máy bay. (V – V)" },
+        ],
+      },
+    ],
+  },
+  {
+    t: "rule",
+    formula: "A and / or / but B: A, B cùng dạng (N–N · V-ing–V-ing · to V–to V · adj–adj) · not only A but also B",
+    vi: "Nhìn vế đầu tiên, viết các vế sau theo đúng dạng ấy.",
+  },
+  { t: "h", text: "Câu dính (run-on) và câu lê thê nhiều and / so (Ngày 17 · Ngữ pháp mục 9)" },
+  {
+    t: "table",
+    caption: "Ba cách sửa câu dính / câu lê thê",
+    head: ["Lỗi", "Câu gốc", "Sửa"],
+    rows: [
+      ["Câu dính", "~~Many students work part-time they have less time to study.~~", "Tách: …part-time**. They** have… · Nối: …part-time**, so** they have… · Phụ thuộc: **Because** many students work part-time, they have…"],
+      ["Câu lê thê", "~~I went to the city and I found a job and it was hard so I moved back home and now I work on a farm.~~", "**When** I moved to the city, I found a job, **but** it was so hard **that** I moved back home. Now I work on a farm."],
+      ["Câu lê thê", "~~Cars are convenient and they are fast so many people use them and the air is polluted.~~", "Cars are convenient and fast, **which is why** many people use them. **As a result,** the air is polluted."],
+    ],
+  },
+  {
+    t: "rule",
+    formula: "Câu. Câu. · Câu, so / but + câu. · Because / Although / When + S + V, S + V · ≤ 2 and / so trong một câu",
+    vi: "Hai mệnh đề cần dấu chấm hoặc một từ nối; nhiều mệnh đề thì đổi bớt thành mệnh đề phụ.",
+  },
+  {"t":"h","text":"Áp vào bài thi: một đoạn thân bài Task 2 và từ nối khi nói (Ngày 17 · Ngữ pháp mục 10)"},
   {"t":"table","caption":"Mổ xẻ đoạn văn — 6 câu, 3 trạng từ liên kết đầu câu (Firstly · For example · However)","head":["Từ nối / cách nối","Tầng","Chức năng"],"rows":[["Firstly,","đầu câu","trình tự — ý thứ nhất"],["For example,","đầu câu","ví dụ cụ thể (công ty của anh họ)"],["and","trong câu","thêm ý"],["This process","this + danh từ","tóm cả câu trước, không cần từ nối"],["However,","đầu câu","đối lập — điều kiện để làm nhóm hiệu quả"],["because","trong câu","nguyên nhân"],["therefore (giữa câu)","giữa câu","kết quả — đặt giữa câu để đổi nhịp, tránh thêm một từ nối đầu câu"]]},
   {"t":"table","caption":"Khi NÓI (Speaking) — từ nối khác khi VIẾT","head":["Chức năng","Viết (Task 2)","Nói (Part 1, 3)"],"rows":[["Thêm ý","In addition, / Moreover,","Also, … · And another thing is…"],["Đối lập","However, / In contrast,","But… · Then again, … · Having said that, …"],["Kết quả","Therefore, / As a result,","So… · That's why…"],["Ví dụ","For example, / For instance,","For example, … · Like, … (thân mật) · Take my sister, for example…"],["Kết luận","In conclusion,","So, overall, I'd say… · So basically…"]]},
   {"t":"h","text":"Ngôn ngữ họp theo chức năng (Ngày 17 · Nghe mục 2)"},
@@ -1281,6 +1422,19 @@ export const TRA_CONG_THUC_CHANG3: Block[] = [
   {"t":"h","text":"Nêu ý kiến trong họp: 3 bước + phản hồi lịch sự (Ngày 17 · Nói mục 5)"},
   {"t":"table","caption":"Phản hồi ý kiến người khác — từ đồng ý hẳn đến phản đối lịch sự","head":["Mức độ","Câu nói","Nhấn ở đâu"],"rows":[["Đồng ý hẳn","**Exactly.** · I **completely** agree. · That's a **great** idea.","exactly · completely · great"],["Đồng ý một phần","**Fair** point, but… · I **partly** agree. · That's **true**, but…","fair · partly · true — rồi \"but\" nhẹ"],["Phản đối lịch sự","I **see** your **point**, but… · I'm **not** sure about **that**. · That might be **difficult**, because…","see · point · not · difficult"],["Đề xuất thay thế","**What** about…? · **Why** don't we…? · We could **try**…","what · why · động từ chính sau could (could đọc nhẹ /kəd/)"]]},
   {"t":"rule","formula":"I think we should + V, because + S + V. For example / We could + V · I see your point, but + S + V","vi":"Ý kiến → lý do → đề xuất; phản đối bắt đầu bằng thừa nhận ý người kia."},
+  { t: "h", text: "Part 3 — “Do you agree…?”: năm mức đồng ý / phản đối (Ngày 17 · Nói mục 6)" },
+  {
+    t: "table",
+    caption: "Trả lời “Do you agree…?” — năm mức từ đồng ý hẳn đến phản đối rõ",
+    head: ["Mức", "Cụm mở đầu", "Nói tiếp gì"],
+    rows: [
+      ["Đồng ý hoàn toàn", "**Absolutely.** · I **completely** agree. · I couldn't agree **more**.", "lý do + ví dụ"],
+      ["Đồng ý phần lớn", "**Generally**, yes. · On the **whole**, I'd agree.", "lý do + một ngoại lệ nhỏ"],
+      ["Đồng ý một phần", "I agree **up to a point**, but… · That's **partly** true, but… · To **some** extent, yes.", "mặt đúng → **but** → mặt chưa đúng"],
+      ["Phản đối mềm", "That's **one** way to look at it, but… · I **see** why people say that, but… · I'm not **so** sure.", "thừa nhận lý lẽ của họ → ý của mình"],
+      ["Phản đối rõ", "I **don't** really agree. · **Actually**, I think it's the **opposite**.", "lý do mạnh + ví dụ"],
+    ],
+  },
   /* ───────── Ngày 18 — Truyền thông · Matching sentence endings · Two-part question ───────── */
 { t: 'h', text: 'Collocation truyền thông — học cả cụm (Ngày 18 · Từ vựng mục 4)' },
   {

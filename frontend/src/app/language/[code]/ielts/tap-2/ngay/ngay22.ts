@@ -13,7 +13,7 @@ const T2D22_VOCAB: Lesson = {
   id: "t2d22-tu-vung",
   kind: "vocab",
   title: "Từ vựng: Gia đình, quan hệ & thế hệ (Family, relationships & generations)",
-  goal: "Dùng đúng 20 từ + 10 cụm động từ chủ đề gia đình – thế hệ (relative, sibling, extended family, generation gap, bring up, get on with, look after…) để nói Part 1–3 và viết Task 2 về gia đình, người già, trẻ em (LR band 5).",
+  goal: "Dùng đúng 20 từ + 10 cụm động từ chủ đề gia đình – thế hệ (relative, sibling, extended family, generation gap, bring up, get on with, look after…) và 10 cụm tính cách – giao tiếp (easy-going, a team player, make small talk…) để nói Part 1–3 và viết Task 2 về gia đình, người già, trẻ em (LR band 5).",
   minutes: 60,
   blocks: [
     {
@@ -25,6 +25,7 @@ const T2D22_VOCAB: Lesson = {
         "**Họ từ**: relate → relationship / relative · depend → dependent / independent · responsible → responsibility.",
         "Chủ đề gia đình ra ở **Part 1** (Family), **Part 2** (Describe a family member you admire), **Part 3** (Ngày 21: gia đình xưa – nay), **Task 2** (người già sống với con cái? trẻ em có nên làm việc nhà?).",
         "Đẩy **LR**: thay “my family is happy / my mother is good” bằng từ cụ thể (**close-knit, supportive, strict, we get on well**).",
+        "**Thêm 10 cụm tính cách – giao tiếp** (mục 4b): easy-going, outgoing, a workaholic, a team player, make small talk, keep in touch… — mỗi tính cách kèm một chuyện nhỏ chứng minh.",
       ],
     },
 
@@ -184,6 +185,41 @@ const T2D22_VOCAB: Lesson = {
         { q: "Most families in the city are ___ families, with just parents and children.", options: ["extended", "relative", "nuclear", "household"], correct: 2, why: "Chỉ bố mẹ + con = **nuclear** family." },
         { q: "It is the ___ of parents to keep their children safe.", options: ["responsible", "responsibility", "responsibly", "respond"], correct: 1, why: "Sau **the** + trước **of** → danh từ **responsibility**." },
         { q: "My grandparents are getting old, so my mother ___ them every day.", options: ["looks after", "takes after", "falls out with", "looks up to"], correct: 0, why: "Chăm sóc → **looks after**." },
+      ],
+    },
+
+    /* ── 4b ── */
+    { t: "h", text: "4b. Thêm: tính cách & giao tiếp — 10 cụm dễ dùng" },
+    {
+      t: "p",
+      text: "Đề người (Part 2 “Describe a family member / a friend / a colleague”) và Part 1 Friends luôn cần **tả tính cách**. Đừng dừng ở “she is kind / he is nice”: chọn một cụm dưới đây rồi **kể một chuyện nhỏ chứng minh** (vd “she's a real team player — last year she stayed late to help me finish my project”). Kết hợp với get on with · fall out with · look up to ở mục 3.",
+    },
+    {
+      t: "vocab",
+      items: [
+        { w: "easy-going", pos: "adj", ipa: "/ˌiːzi ˈɡəʊɪŋ/", vi: "dễ tính, thoải mái", ex: "My dad is very easy-going — he rarely gets angry.", exVi: "Bố tôi rất dễ tính — hiếm khi nổi giận.", more: "Gần nghĩa **laid-back** /ˌleɪd ˈbæk/ (thong thả, không vội). Trái nghĩa: **strict, uptight**." },
+        { w: "outgoing", pos: "adj", ipa: "/ˈaʊtɡəʊɪŋ/", vi: "hướng ngoại, cởi mở", ex: "My cousin is so outgoing that she makes friends everywhere she goes.", exVi: "Em họ tôi hướng ngoại tới mức đi đâu cũng có bạn.", more: "Trái nghĩa: **shy, reserved** (kín đáo). ~~She is very outside.~~" },
+        { w: "bad-tempered", pos: "adj", ipa: "/ˌbæd ˈtempəd/", vi: "nóng tính, dễ cáu", ex: "My grandfather can be a bit bad-tempered in the morning.", exVi: "Ông tôi buổi sáng hơi dễ cáu.", more: "Nói nhẹ đi bằng **a bit / can be**. Cũng: **lose your temper** = nổi nóng." },
+        { w: "stubborn", pos: "adj", ipa: "/ˈstʌbən/", vi: "bướng bỉnh, cứng đầu", ex: "My little brother is too stubborn to admit he is wrong.", exVi: "Em trai tôi quá bướng nên không chịu nhận mình sai.", more: "Nói tích cực hơn: **determined** (quyết tâm). Đọc /ʌ/ như **mother** (mục 5)." },
+        { w: "a workaholic", pos: "n", ipa: "/ə ˌwɜːkəˈhɒlɪk/", vi: "người nghiện việc", ex: "My mother is a workaholic — she even answers emails at dinner.", exVi: "Mẹ tôi là người nghiện việc — đến bữa tối cũng trả lời email.", more: "Trọng âm work-a-**HOL**-ic. Đuôi -aholic: **a chocoholic** (người mê sô-cô-la, đùa)." },
+        { w: "a team player", pos: "n", ipa: "/ə ˈtiːm ˌpleɪə(r)/", vi: "người biết làm việc nhóm", ex: "Employers are looking for team players, not just clever individuals.", exVi: "Nhà tuyển dụng tìm người biết làm việc nhóm, không chỉ người giỏi riêng lẻ.", more: "Dùng được cả Task 2 (education, employment): **teamwork skills**." },
+        { w: "a good listener", pos: "n", ipa: "/ə ɡʊd ˈlɪsnə(r)/", vi: "người biết lắng nghe", ex: "I always talk to my sister when I'm worried because she's a good listener.", exVi: "Tôi luôn tâm sự với chị khi lo lắng vì chị là người biết lắng nghe.", more: "Chữ **t** trong listen câm: /ˈlɪsn/." },
+        { w: "make small talk", pos: "phrase", ipa: "/meɪk ˈsmɔːl tɔːk/", vi: "nói chuyện xã giao (thời tiết, chuyện vặt)", ex: "I'm not good at making small talk with people I don't know.", exVi: "Tôi không giỏi nói chuyện xã giao với người lạ.", more: "~~say small talk~~ · ~~do small talk~~. Luôn là **make**." },
+        { w: "have a lot in common (with)", pos: "phrase", ipa: "/hæv ə lɒt ɪn ˈkɒmən/", vi: "có nhiều điểm chung (với)", ex: "My best friend and I have a lot in common — we both love football and cooking.", exVi: "Bạn thân và tôi có nhiều điểm chung — cả hai đều mê bóng đá và nấu ăn.", more: "Phủ định: **have nothing / little in common**." },
+        { w: "keep in touch (with)", pos: "phrase", ipa: "/kiːp ɪn tʌtʃ/", vi: "giữ liên lạc (với)", ex: "I still keep in touch with my primary school friends through social media.", exVi: "Tôi vẫn giữ liên lạc với bạn tiểu học qua mạng xã hội.", more: "Cũng: **stay in touch** · **lose touch with** (mất liên lạc). Gọi điện: **call sb** (~~call to sb~~)." },
+      ],
+    },
+    {
+      t: "quiz",
+      id: "t2d22-tinh-cach",
+      title: "Tính cách & giao tiếp — điền một từ (5 câu)",
+      kind: "fill",
+      items: [
+        { q: "She never worries about anything — she's really easy-___.", answers: ["going"], hint: "easy-going" },
+        { q: "I find it hard to ___ small talk at parties.", answers: ["make"], hint: "___ small talk" },
+        { q: "We've known each other for ten years because we have a lot in ___.", answers: ["common"], hint: "have a lot in ___" },
+        { q: "After we graduated, we promised to keep in ___.", answers: ["touch"], hint: "keep in ___" },
+        { q: "He works twelve hours a day, even at weekends — he's a real ___.", answers: ["workaholic"], hint: "người nghiện việc" },
       ],
     },
 
@@ -448,6 +484,7 @@ const T2D22_WRITING: Lesson = {
         "Bố cục: Mở bài → **Tổng quan** (xu hướng chung: hiện đại hơn, ít cây xanh hơn…) → Thân 1 (một nửa bản đồ) → Thân 2 (nửa còn lại).",
         "Ngôn ngữ **phương hướng**: in the north-west of · to the east of · opposite · next to · at the southern end of.",
         "Band 5 cần: đủ các thay đổi chính, có tổng quan, bị động phần lớn đúng, ≥ 150 từ.",
+        "Nâng cấp (mục 3b–3c): tổng quan **“underwent a number of changes, the most important of which…”**, gói hai thay đổi bằng **replacing / with + N / there used to be… but**, tả **đúng như hình** + mỗi thay đổi kèm vị trí; biến thể **chọn địa điểm S1 / S2** (hiện tại đơn + would / could).",
       ],
     },
 
@@ -641,6 +678,134 @@ const T2D22_WRITING: Lesson = {
         { q: "Khu nhà cũ bị phá, chung cư mới chiếm chỗ. Câu đúng nghĩa:", options: ["The houses were replaced by apartments.", "The apartments were replaced by houses.", "The houses replaced apartments.", "The houses were relocated to apartments."], correct: 0, why: "Cái **cũ** (houses) **was / were replaced by** cái **mới** (apartments). Đảo lại là sai nghĩa." },
         { q: "Câu tổng quan tốt nhất:", options: ["Overall, there are many changes.", "Overall, a café was added to the park.", "Overall, the town centre became more modern, and almost all the old buildings were replaced.", "Overall, I think the town is nicer now."], correct: 2, why: "Tổng quan = **xu hướng chung** + điểm nổi bật nhất; không chi tiết lẻ, không ý kiến." },
         { q: "Vị trí của café trên bản đồ 2020:", options: ["in the south-west of the park", "in the north-eastern corner of the park", "opposite the library", "at the western end of Main Street"], correct: 1, why: "Café nằm ở **góc đông bắc** của công viên (phía trên, bên phải)." },
+      ],
+    },
+
+    {
+      t: "note",
+      title: "Cẩn thận: thêm ba lỗi về độ CHÍNH XÁC",
+      items: [
+        "**Tả đúng như hình**: hình vẽ 3 cây thì là ==three trees / a few trees==, không phải ~~a forest~~; hình vẽ 2 toà nhà thì không viết ~~many buildings~~. Đổi số lượng hay loại vật = thông tin sai → trừ Task Achievement.",
+        "**Nêu khoảng năm MỘT lần** ở đầu khổ (==Between 2000 and 2020, …== / ==Over the twenty-year period, …==), rồi các câu sau chỉ cần động từ bị động. Lặp “from 2000 to 2020” ở mọi câu làm bài nặng và mất điểm CC.",
+        "**Mỗi câu thay đổi phải kèm VỊ TRÍ** (in the north-west, next to the park, at the western end of…). ~~A café was added.~~ → A café was added **in the north-eastern corner of the park**. Giám khảo phải dò được trên bản đồ.",
+      ],
+    },
+
+    /* ── 3b ── */
+    { t: "h", text: "3b. Câu khung nâng cấp — tổng quan và gói hai thay đổi trong một câu" },
+    {
+      t: "table",
+      caption: "Khung câu bản đồ band 5.5–6 (dùng 2–3 cái mỗi bài, không cần tất cả)",
+      head: ["Dùng để", "Khung", "Ví dụ (Westbrook)"],
+      rows: [
+        ["**Tổng quan**", "X **underwent a number of changes**, the most important of which **was / were** + N / V-ing", "Westbrook town centre underwent a number of changes, the most important of which was the pedestrianisation of Main Street."],
+        ["Gói 2 thay đổi: **replacing**", "S + was + V3 …, **replacing** + N (cái cũ)", "A shopping centre was built in the north-west, **replacing** the old market."],
+        ["Gói 2 thay đổi: **with + N**", "S + was + V3, **with** + N + V-ing / V3", "The houses were demolished, **with** a block of apartments built in their place."],
+        ["Gói 2 thay đổi: **accompanied by**", "S + was + V3, **which was accompanied by** + N", "The bus station was moved to the south-east, **which was accompanied by** the construction of a library on its old site."],
+        ["Cái cũ → cái mới", "**There used to be** + N + …, **but it was** (later) **redeveloped into** + N", "**There used to be** a car park south of Main Street, **but it was redeveloped into** a public square."],
+        ["**Mở thân bài 2**", "**As can be seen from the map**, … · **Turning to** the southern part, …", "**As can be seen from the map**, the southern side changed even more dramatically."],
+      ],
+    },
+    {
+      t: "rule",
+      formula: "X underwent a number of changes, the most important of which was + N. · S + was + V3 …, replacing + N. · There used to be + N, but it was redeveloped into + N.",
+      vi: "Tổng quan có “the most important of which”; trong thân bài, gói hai thay đổi cùng chỗ vào một câu thay vì hai câu đơn.",
+    },
+    {
+      t: "quiz",
+      id: "t2d22-viet-goi-cau",
+      title: "Gộp hai câu bản đồ thành một (4 câu)",
+      kind: "translate",
+      grammar: "…, replacing + N · …, with + N + V3 · There used to be + N, but it was redeveloped into + N · X underwent a number of changes, the most important of which was + N",
+      items: [
+        { q: "Gộp: “A hotel was built in the east. It replaced the forest.”", hint: "A hotel was built in the east, replacing the forest", answers: ["A hotel was built in the east, replacing the forest.", "A hotel was built in the east of the village, replacing the forest.", "A hotel was constructed in the east, replacing the forest."] },
+        { q: "Gộp: “There was a car park in the south. It was turned into a square.”", hint: "There used to be a car park in the south, but it was redeveloped into a square", answers: ["There used to be a car park in the south, but it was redeveloped into a square.", "There used to be a car park in the south, but it was turned into a square.", "There used to be a car park in the south, but it was converted into a square."] },
+        { q: "Gộp: “The old houses were knocked down. Apartments were built in their place.”", hint: "The old houses were knocked down, with apartments built in their place", answers: ["The old houses were knocked down, with apartments built in their place.", "The old houses were demolished, with apartments built in their place.", "The old houses were knocked down, with apartments being built in their place."] },
+        { q: "Dịch: Ngôi làng đã trải qua nhiều thay đổi, quan trọng nhất là việc xây một sân golf.", hint: "The village underwent a number of changes, the most important of which was the construction of a golf course", answers: ["The village underwent a number of changes, the most important of which was the construction of a golf course.", "The village underwent a number of changes, the most important of which was the building of a golf course.", "The village underwent many changes, the most important of which was the construction of a golf course.", "The village has undergone a number of changes, the most important of which is the construction of a golf course.", "The village has undergone a number of changes, the most important of which was the construction of a golf course."] },
+      ],
+    },
+
+    /* ── 3c ── */
+    { t: "h", text: "3c. Biến thể: chọn địa điểm — hai vị trí đề xuất S1 và S2" },
+    {
+      t: "p",
+      text: "Có loại đề bản đồ **không có hai mốc thời gian** mà cho **một** bản đồ với **hai vị trí đề xuất** (S1, S2) cho một công trình mới (siêu thị, trường học, bệnh viện…). Không có gì “đã thay đổi”, nên **không dùng bị động quá khứ**. Bạn so sánh hai vị trí: mỗi chỗ **gần / xa** cái gì, **rộng / hẹp**, đi lại thế nào.",
+    },
+    {
+      t: "figure",
+      fig: {
+        kind: "map",
+        title: "Two proposed sites (S1 and S2) for a new supermarket in Riverton",
+        note: "Bản đồ tự đặt cho bài luyện. Phía Bắc ở trên cùng.",
+        map: {
+          cols: 12,
+          rows: 10,
+          paths: [
+            { x: 0.2, y: 4.4, w: 11.6, h: 1.1, label: "Main road" },
+            { x: 8.9, y: 0.2, w: 0.5, h: 8.1, label: "Railway" },
+            { x: 0.2, y: 8.6, w: 11.6, h: 1.1, label: "River" },
+          ],
+          boxes: [
+            { x: 0.4, y: 0.4, w: 3.6, h: 3.6, label: "Housing" },
+            { x: 4.3, y: 0.4, w: 4.3, h: 3.6, label: "Town centre" },
+            { x: 9.6, y: 0.4, w: 2, h: 3.6, label: "Farmland" },
+            { x: 0.4, y: 5.9, w: 3.6, h: 2.4, label: "Housing" },
+            { x: 4.3, y: 5.9, w: 1.8, h: 2.4, label: "S1" },
+            { x: 6.3, y: 5.9, w: 2.3, h: 2.4, label: "Park" },
+            { x: 9.6, y: 5.8, w: 2, h: 2.6, label: "S2" },
+          ],
+          pins: [{ x: 9.15, y: 4.95, label: "Station" }],
+        },
+      },
+    },
+    {
+      t: "sodo",
+      kind: "compare",
+      title: "Bản đồ trước – sau ≠ bản đồ chọn địa điểm",
+      cols: [
+        { title: "**Trước – sau** (Westbrook)", items: ["hai mốc thời gian", "**was replaced / was built** (bị động quá khứ)", "tổng quan = xu hướng thay đổi chung", "thân bài chia theo vùng"] },
+        { title: "**Chọn địa điểm** (S1 / S2)", items: ["một bản đồ, hai vị trí", "**is located / lies / is close to** (hiện tại đơn)", "ưu – nhược: **would / could** + V", "tổng quan = khác biệt chính giữa hai vị trí", "thân 1 = S1 · thân 2 = S2"] },
+      ],
+    },
+    {
+      t: "table",
+      caption: "Ngôn ngữ cho bài chọn địa điểm",
+      head: ["Ý", "Cụm"],
+      rows: [
+        ["Vị trí", "S1 **is located / is situated / lies** + in the south of / next to / opposite … · **on the outskirts** (ở rìa thị trấn) · **in the heart of** the town"],
+        ["Gần – xa", "**close to / within walking distance of** · **far from / some distance from**"],
+        ["Ưu điểm (dự đoán)", "A supermarket here **would** be easy to reach · it **could** provide more parking"],
+        ["Nhược điểm (dự đoán)", "**However / On the other hand**, shoppers **would** probably need to drive · there **would** be little room for…"],
+        ["Tổng quan", "Overall, **the main difference is that** S1 is…, **whereas** S2 is…"],
+      ],
+    },
+    {
+      t: "examples",
+      items: [
+        { en: "The map shows two possible sites, S1 and S2, for a new supermarket in the town of Riverton.", vi: "[Mở bài] Bản đồ cho thấy hai vị trí có thể, S1 và S2, cho một siêu thị mới ở thị trấn Riverton." },
+        { en: "Overall, the main difference is that S1 is in the heart of the town, close to housing and the town centre, whereas S2 lies on the eastern edge, next to the railway and farmland.", vi: "[Tổng quan] Nhìn chung, khác biệt chính là S1 nằm ở giữa thị trấn, gần khu nhà ở và trung tâm, còn S2 nằm ở rìa phía đông, cạnh đường sắt và đất nông nghiệp." },
+        { en: "S1 is located to the south of the main road, directly opposite the town centre, with housing immediately to its west and a park to its east. A supermarket here would be within walking distance for most residents. However, the site is smaller than S2 and is bordered by the river to the south, so there would be little room for a car park.", vi: "[Thân 1 — S1] S1 nằm phía nam đường chính, ngay đối diện trung tâm, khu nhà ở sát phía tây và công viên ở phía đông. Siêu thị ở đây sẽ nằm trong khoảng đi bộ được với phần lớn cư dân. Tuy nhiên, khu đất nhỏ hơn S2 và giáp sông ở phía nam, nên sẽ ít chỗ cho bãi đỗ xe." },
+        { en: "As can be seen from the map, S2 is situated on the outskirts, to the east of the railway and close to the station. Being larger, it could provide more parking, and goods could be delivered by train. On the other hand, it is further from where most people live, so shoppers would probably need to drive or take the train.", vi: "[Thân 2 — S2] Như bản đồ cho thấy, S2 nằm ở ngoại vi, phía đông đường sắt và gần nhà ga. Vì rộng hơn, nó có thể có nhiều chỗ đỗ xe hơn, và hàng hoá có thể chở tới bằng tàu. Mặt khác, nó xa nơi phần lớn người dân sống hơn, nên người mua sắm có lẽ sẽ phải lái xe hoặc đi tàu." },
+      ],
+    },
+    {
+      t: "table",
+      caption: "Bài mẫu chọn địa điểm: 177 từ (đã đếm) — ước tính band 6",
+      head: ["Tiêu chí", "Bài mẫu làm gì"],
+      rows: [
+        ["**Task Achievement**", "Tổng quan nêu **khác biệt chính** (giữa thị trấn ↔ rìa thị trấn); mỗi vị trí đủ: gần gì, rộng/hẹp, đi lại; ưu – nhược chỉ suy từ thứ **có trên bản đồ** (sông, đường sắt, nhà ga)."],
+        ["**Coherence & Cohesion**", "Thân 1 = S1, Thân 2 = S2; mở thân 2 bằng **As can be seen from the map**; nối **However · On the other hand · whereas**."],
+        ["**Grammar**", "**Hiện tại đơn** cho vị trí (is located, lies, is bordered by); **would / could** cho điều sẽ xảy ra nếu chọn chỗ đó; không câu bị động quá khứ nào."],
+      ],
+    },
+    {
+      t: "mcq",
+      id: "t2d22-viet-dia-diem",
+      title: "Bài chọn địa điểm — chọn câu đúng (3 câu)",
+      items: [
+        { q: "Câu nào đúng cho bài chọn địa điểm?", options: ["S1 was built next to the river.", "S1 is located next to the river.", "S1 has been located next to the river."], correct: 1, why: "Chưa có gì được xây — chỉ là vị trí đề xuất → **hiện tại đơn**: is located. A và C tả như việc đã xảy ra." },
+        { q: "Câu tổng quan tốt nhất:", options: ["Overall, S2 is better, so the town should choose it.", "Overall, there are two sites on the map.", "Overall, the main difference is that S1 is near the town centre, whereas S2 is on the outskirts next to the railway."], correct: 2, why: "Tổng quan = **khác biệt chính** giữa hai vị trí. A đưa ý kiến chọn chỗ (đề không hỏi); B không nói gì." },
+        { q: "Nói nhược điểm của S2 đúng nhất:", options: ["Shoppers would probably need to drive there.", "Shoppers needed to drive there.", "Shoppers are driving there."], correct: 0, why: "Nhược điểm là điều **sẽ** xảy ra nếu xây ở đó → **would + V**. Quá khứ hay tiếp diễn đều sai vì siêu thị chưa có." },
       ],
     },
 

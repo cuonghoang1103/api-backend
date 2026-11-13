@@ -467,7 +467,7 @@ const T2D2_WRITING: Lesson = {
   kind: 'writing',
   title: 'Writing Task 2: Opinion essay trọn bài band 5 — thân bài P-E-E',
   goal: 'Biết một bài Task 2 band 5 trông thế nào và vì sao chưa lên 6; viết trọn một bài Opinion 4 đoạn ≥ 250 từ trong 40 phút với hai thân bài theo khung P-E-E (Point – Explain – Example) và quan điểm nhất quán từ mở bài đến kết bài.',
-  minutes: 80,
+  minutes: 100,
   blocks: [
     {
       t: 'recap',
@@ -477,6 +477,7 @@ const T2D2_WRITING: Lesson = {
         'Ôn **vòng 2** của Tập 1: mở bài 5 bước (Ngày 6), thân bài (Ngày 8), kết bài và trọn bài (Ngày 10). Hôm nay **gộp lại thành một bài đủ 250+ từ**.',
         'Khung thân bài **P-E-E**: ==Point (câu chủ đề) → Explain (giải thích 1–2 câu) → Example (ví dụ cụ thể)==. Band 4–5 hay thiếu E thứ nhất (giải thích) hoặc ví dụ chung chung.',
         'So **bài band 5** (có thật những lỗi người Việt hay mắc) với **bài khoảng band 6.0–6.5 (ước tính)** cùng đề — thấy rõ mất điểm ở đâu theo **4 tiêu chí**.',
+        '**Đọc đề kỹ hơn** (mục 2b): đếm **số vế** của đề, khoanh **chữ tuyệt đối** (only / all / best / better than) để chọn quan điểm; dàn ý mẫu gạch đầu dòng. Mục 4b: **soát cả đoạn** khi biết trước có 7 lỗi.',
         'Cuối bài: tự viết một bài Opinion cho AI chấm (≥ 250 từ, 40 phút).',
       ],
     },
@@ -517,6 +518,63 @@ const T2D2_WRITING: Lesson = {
       caption: 'Tổng ~260–290 từ. Ba lựa chọn quan điểm: hoàn toàn đồng ý · hoàn toàn phản đối · đồng ý một phần (thân bài 1 = mặt đồng ý, thân bài 2 = mặt không).',
     },
 
+    { t: 'h', text: '2b. Đọc đề trước khi chọn quan điểm: đề có mấy vế? có chữ tuyệt đối không?' },
+    {
+      t: 'p',
+      text: 'Gạch chân **chủ đề** và **ý kiến của đề** là chưa đủ. Nhiều đề Opinion nói **hai điều một lúc** — một khẳng định **và** một lý do / hệ quả / đề xuất đi kèm. Mỗi điều như vậy là một **vế**. Bạn đồng ý hay phản đối là đồng ý / phản đối **từng vế**, nên phải đếm vế trước khi viết thesis.',
+    },
+    {
+      t: 'table',
+      caption: 'Đếm vế — hai đề tự soạn',
+      head: ['Đề', 'Các vế', 'Xử lý'],
+      rows: [
+        ['Tourism brings more problems than benefits to local communities, **therefore** governments should limit the number of visitors.', '**Vế 1**: du lịch gây hại nhiều hơn lợi · **Vế 2**: chính phủ nên giới hạn số khách', 'Hoàn toàn đồng ý ⇒ phải bảo vệ **cả hai** vế: TB1 = hại > lợi, TB2 = vì sao giới hạn là đúng. Đồng ý vế 1 mà không đồng ý vế 2 ⇒ đó là **đồng ý một phần** — nói rõ trong thesis.'],
+        ['Online courses are cheaper and more flexible than classroom courses, **so** universities should move **all** their teaching online.', '**Vế 1**: học online rẻ + linh hoạt hơn · **Vế 2**: đại học nên chuyển **toàn bộ** lên online', 'Vế 1 dễ đồng ý; vế 2 có chữ **all** ⇒ chỗ bám để phản đối. Thesis gợi ý: đồng ý vế 1, phản đối vế 2 (thí nghiệm, thực hành không học online được).'],
+      ],
+    },
+    {
+      t: 'note',
+      title: 'Đề nhiều vế — người Việt hay sai',
+      items: [
+        '**Chỉ trả lời vế cuối** (vế "should…") mà bỏ vế khẳng định đầu ⇒ trả lời thiếu một phần đề ⇒ Task Response khó qua band 5.',
+        '**Viết "I completely agree"** rồi thân bài 2 lại phản đối vế 2 ⇒ quan điểm không nhất quán. Đồng ý vế này, phản đối vế kia = **partly agree**.',
+        'Cách tiện nhất khi đề có 2 vế: **mỗi vế một thân bài**. Đề 3 vế: gộp 2 vế gần nhau vào một thân bài, vế còn lại một thân bài.',
+      ],
+    },
+    {
+      t: 'table',
+      caption: 'Chữ tuyệt đối / so sánh trong đề — chỗ bám để chọn quan điểm',
+      head: ['Chữ trong đề', 'Đề muốn bạn làm gì', 'Gợi ý thesis'],
+      rows: [
+        ['**only · all · always · never · completely**', 'Thường quá mạnh ⇒ dễ **đồng ý một phần**: chấp nhận phần đúng, bác chữ tuyệt đối.', 'Children should **only** learn job-related subjects ⇒ "Job-related subjects matter, but children should **not only** study these, since art and sport also build important skills."'],
+        ['**the best / the most effective / the most important**', 'Phải so với **cách khác**. Ba lập trường: (1) đúng là tốt nhất · (2) có cách **tốt ngang** · (3) có cách **tốt hơn**.', 'The best way to reduce traffic jams is to build more roads ⇒ "New roads may help in the short term, but **improving public transport is a more effective** long-term solution."'],
+        ['**A is better than B · A is more important than B**', 'Cần **một tiêu chí chung** (chi phí, sức khoẻ, thời gian, hiệu quả…) và **câu so sánh trực tiếp** ở mỗi thân bài.', 'Playing sport is better than watching it ⇒ "In terms of health, playing sport is **far more beneficial than** watching it on TV."'],
+      ],
+    },
+    {
+      t: 'note',
+      title: 'Mẹo: hai phương án không loại trừ nhau ⇒ kết hợp',
+      items: [
+        'Nếu A và B làm được **cùng lúc** (học online và học trên lớp; xây đường và mở xe buýt), lập trường mạnh nhất thường là: "**The best approach is a combination of** A and B." — nhưng thân bài vẫn phải nói rõ mỗi bên giỏi việc gì.',
+        'Câu so sánh trực tiếp dùng được ở mọi thân bài: **A is more / less + adj + than B** · **Compared with B, A…** · **Unlike B, A…** (so sánh: Ngày 9).',
+      ],
+    },
+    {
+      t: 'note',
+      title: 'Dàn ý mẫu Opinion (gạch đầu dòng, 5 phút) — đề du lịch ở trên, đồng ý một phần',
+      items: [
+        '**Mở bài**: du lịch tăng nhanh ở nhiều vùng · thesis: đúng là du lịch gây nhiều vấn đề, **nhưng** giới hạn số khách không phải cách tốt nhất — nên quản lý tốt hơn.',
+        '**TB1 (vế 1 — đồng ý)**: P: du lịch đông gây hại · E: rác, tắc đường, giá nhà tăng ⇒ người dân địa phương sống khó hơn · Ex: một thị trấn biển nhỏ mùa hè đông gấp 5 lần.',
+        '**TB2 (vế 2 — phản đối)**: P: giới hạn khách làm mất thu nhập · E: nhiều gia đình sống nhờ khách sạn, quán ăn ⇒ thay vào đó thu phí môi trường, chia khách theo mùa · Ex: thu vé vào một vịnh để trả tiền dọn rác.',
+        '**Kết bài**: nhắc lại — vấn đề có thật, nhưng quản lý tốt hơn là cấm bớt khách.',
+      ],
+    },
+    {
+      t: 'rule',
+      formula: 'Đọc đề: gạch chủ đề → đếm vế (therefore / so / which / and) → khoanh chữ tuyệt đối (only / all / best / better than) → chọn quan điểm cho TỪNG vế',
+      vi: 'Đồng ý hết mọi vế = hoàn toàn đồng ý; đồng ý vế này, phản đối vế kia hoặc bác chữ tuyệt đối = đồng ý một phần.',
+    },
+
     { t: 'h', text: '3. Thân bài P-E-E' },
     {
       t: 'table',
@@ -537,6 +595,14 @@ const T2D2_WRITING: Lesson = {
         { title: '**Cụ thể**', anh: 'round-pushpin', items: ['For example, since 2019 several supermarkets in Vietnam have wrapped vegetables in banana leaves instead of plastic.', 'For instance, when Hanoi opened its first metro line in 2021, thousands of commuters left their motorbikes at home.', 'A good example is the 2020 drought in the Mekong Delta, which destroyed thousands of hectares of rice.'] },
       ],
       caption: 'Ví dụ cụ thể có ít nhất một trong: tên nơi chốn · thời gian · con số · sự việc có thật hoặc rất có thể xảy ra.',
+    },
+    {
+      t: 'note',
+      title: 'Mẹo: một câu đơn ngắn để chốt ý',
+      items: [
+        'Sau 2–3 câu dài có **although / because / which**, một **câu đơn ngắn** (6–10 từ) làm ý nổi bật: "**The effect is clear.**" · "**This is a serious problem.**" · "**Individuals still matter.**"',
+        'Chỉ dùng **một** câu như vậy ở chỗ cần nhấn. Cả đoạn toàn câu đơn ngắn thì gãy vụn, giám khảo chấm GRA thấp (Ngày 17 học cách ghép câu).',
+      ],
     },
     {
       t: 'rule',
@@ -618,6 +684,43 @@ const T2D2_WRITING: Lesson = {
       ],
     },
 
+    { t: 'h', text: '4b. Soát cả đoạn — biết trước có đúng 7 lỗi' },
+    {
+      t: 'p',
+      text: 'Giám khảo không chấm từng câu rời mà chấm **cả đoạn**. Bài luyện này giống lúc bạn soát bài thật: chép đoạn dưới ra giấy, **gạch đủ 7 lỗi** và ghi loại lỗi (số nhiều · chia động từ · câu què · dấu câu · mạo từ), **5 phút**, rồi mới xem lời giải.',
+    },
+    {
+      t: 'note',
+      title: 'Đoạn thân bài khoảng band 5 (95 từ, đã đếm) — đề "The best way to reduce traffic jams is to build more roads."',
+      items: [
+        'Firstly, building more road is not the best way to reduce traffic jams. When a city open a new road, more people buy cars because driving become easier. As a result, the new road is soon as crowded as the old ones. For example, in my home city a new ring road was full of trucks only two years after it opened. Because the number of vehicles grew faster than the road space. Therefore, government should spend more money on the public transport, buses and metro lines can carry far more people than private cars.',
+      ],
+    },
+    {
+      t: 'table',
+      caption: 'Lời giải — 7 lỗi',
+      head: ['#', 'Sai', 'Sửa', 'Loại lỗi'],
+      rows: [
+        ['1', '~~building more road~~', 'building more **roads**', 'Số nhiều — road đếm được, "more" + số nhiều'],
+        ['2', '~~a city open~~', 'a city **opens**', 'Chia động từ — chủ ngữ số ít, hiện tại đơn'],
+        ['3', '~~driving become~~', 'driving **becomes**', 'Chia động từ — V-ing làm chủ ngữ = số ít'],
+        ['4', '~~Because the number of vehicles grew faster than the road space.~~', '…only two years after it opened**, because** the number of vehicles grew faster than the road space.', 'Câu què — "Because…" đứng một mình không phải câu; ghép vào câu trước'],
+        ['5', '~~government should~~', '**the government** / **governments** should', 'Mạo từ — danh từ đếm được số ít không đứng trần'],
+        ['6', '~~on the public transport~~', 'on **public transport**', 'Mạo từ — nói chung ⇒ Ø (Ngày 1)'],
+        ['7', '~~public transport, buses and metro lines can carry…~~', 'public transport**. Buses** and metro lines can carry…', 'Dấu câu — hai câu nối bằng dấu phẩy (comma splice) ⇒ tách bằng dấu chấm hoặc thêm **because**'],
+      ],
+    },
+    {
+      t: 'table',
+      caption: 'Tự chấm',
+      head: ['Tìm được', 'Tỉ lệ', 'Làm gì tiếp'],
+      rows: [
+        ['7/7', '100 %', 'Tốt — giữ thói quen 3 phút soát cuối bài.'],
+        ['5–6/7', '71–86 %', 'Ghi lỗi bỏ sót vào **sổ lỗi**; lần soát sau đọc riêng một lượt chỉ để tìm loại lỗi đó.'],
+        ['≤ 4/7', '≤ 57 %', 'Ôn mạo từ (Ngày 1) và hoà hợp chủ – vị; soát bằng cách **đọc từng câu, hỏi "chủ ngữ là gì, động từ đã chia chưa?"**.'],
+      ],
+    },
+
     { t: 'h', text: '5. Viết lại đoạn — luyện P-E-E' },
     {
       t: 'quiz',
@@ -676,18 +779,19 @@ const T2D2_HOMEWORK: Lesson = {
   id: 't2d2-bai-tap',
   kind: 'homework',
   title: 'Bài tập Ngày 2',
-  goal: 'Tự kiểm tra Ngày 2 bằng 34 câu có đáp án: 10 câu nghĩa từ AWL, 8 câu dạng từ, 6 câu Summary completion trên bài đọc mới, 6 câu dịch câu Task 2 và 4 câu sắp xếp đoạn P-E-E.',
-  minutes: 40,
+  goal: 'Tự kiểm tra Ngày 2 bằng 40 câu có đáp án: 10 câu nghĩa từ AWL, 8 câu dạng từ, 6 câu Summary completion trên bài đọc mới, 6 câu dịch câu Task 2, 4 câu sắp xếp đoạn P-E-E và 6 câu đọc đề (chọn thesis, đếm vế).',
+  minutes: 45,
   blocks: [
     {
       t: 'recap',
-      title: 'Bài tập hôm nay (34 câu)',
+      title: 'Bài tập hôm nay (40 câu)',
       items: [
         '**Phần I** — Nghĩa từ AWL & môi trường (10 câu trắc nghiệm).',
         '**Phần II** — Dạng từ (8 câu điền).',
         '**Phần III** — Summary completion trên một đoạn đọc mới (6 câu, ONE WORD ONLY).',
         '**Phần IV** — Dịch câu Task 2 (6 câu).',
         '**Phần V** — Câu nào là P / E / E trong một đoạn (4 câu trắc nghiệm).',
+        '**Phần VI** — Đọc đề Task 2: chọn thesis cho đề có chữ tuyệt đối + đếm vế (6 câu trắc nghiệm).',
       ],
     },
 
@@ -811,6 +915,71 @@ const T2D2_HOMEWORK: Lesson = {
         { q: 'Câu nào là Example?', options: ['④', '③', '①'], correct: 2, why: '① có nơi chốn (Ireland), năm (2002), con số (90 %) → ví dụ cụ thể.' },
         { q: 'Thứ tự P-E-E hợp lý nhất là:', options: ['② ④ ③ ①', '① ② ③ ④', '③ ① ④ ②'], correct: 0, why: 'P ② → giải thích ④ (vì sao thói quen đổi) → hệ quả ③ (As a result) → ví dụ ① (For example). Example đặt cuối là an toàn nhất.' },
         { q: 'Câu ③ "As a result, much less plastic ends up in rivers and the sea" thuộc phần nào?', options: ['Point', 'Explain', 'Example'], correct: 1, why: '"As a result" nêu **hệ quả** → phần Explain (giải thích).' },
+      ],
+    },
+
+    { t: 'h', text: 'Phần VI — Đọc đề: chữ tuyệt đối & số vế (6 câu)' },
+    {
+      t: 'mcq',
+      id: 't2d2-bt-doc-de',
+      title: 'Phần VI — Chọn thesis tốt nhất / đếm vế (6 câu)',
+      items: [
+        {
+          q: 'Đề: "The best way to reduce traffic congestion in cities is to build more roads." Thesis nào tốt nhất?',
+          options: [
+            'I agree that roads are important for every city.',
+            'Although new roads may ease congestion in the short term, I disagree that this is the best way, because improving public transport is more effective in the long run.',
+            'Traffic jams are a big problem in many cities nowadays.',
+          ],
+          correct: 1,
+          why: 'B bám chữ **the best**: thừa nhận tác dụng ngắn hạn, rồi đưa cách **hiệu quả hơn**. A không trả lời "best"; C chỉ là câu bối cảnh, không có quan điểm.',
+        },
+        {
+          q: 'Đề: "Children should only study subjects that will be useful for their future jobs." Thesis nào tốt nhất?',
+          options: [
+            'While job-related subjects are important, I disagree that children should study only these, since subjects such as art and music develop creativity.',
+            'Children study many subjects at school nowadays.',
+            'I both agree and disagree with this statement.',
+          ],
+          correct: 0,
+          why: 'A bác chữ **only** và nói rõ vì sao. B không có quan điểm; C mơ hồ — không nói đồng ý phần nào, phản đối phần nào.',
+        },
+        {
+          q: 'Đề: "Playing sport is better than watching sport on television." Thesis nào tốt nhất?',
+          options: [
+            'Watching sport on TV is enjoyable, and playing sport is also good.',
+            'I disagree, because television has many bad programmes.',
+            'I agree, because playing sport benefits both physical and mental health far more than watching it.',
+          ],
+          correct: 2,
+          why: 'Đề "better than" cần **tiêu chí chung** (sức khoẻ) và **so sánh trực tiếp** (far more than). A không so sánh; B lạc đề — nói về chương trình TV nói chung.',
+        },
+        {
+          q: 'Đề: "All advertising aimed at children should be banned." Thesis nào tốt nhất?',
+          options: [
+            'I agree that some adverts are bad.',
+            'I partly agree: adverts for unhealthy food and violent games should be banned, but adverts for books or road-safety campaigns should be allowed.',
+            'Advertising is everywhere in modern life.',
+          ],
+          correct: 1,
+          why: 'B bác chữ **all** và nói rõ loại nào cấm, loại nào không. A mơ hồ ("some" là những cái nào?); C không có quan điểm.',
+        },
+        {
+          q: 'Đề: "Tourism brings more problems than benefits to local communities, therefore governments should limit the number of visitors." Đề có mấy vế?',
+          options: ['1 vế', '2 vế', '3 vế'],
+          correct: 1,
+          why: 'Vế 1: du lịch hại nhiều hơn lợi · vế 2 (sau **therefore**): chính phủ nên giới hạn khách. Hoàn toàn đồng ý thì phải bảo vệ **cả hai**.',
+        },
+        {
+          q: 'Đề: "Young people spend too much time on social media, which harms both their studies and their relationships with their families." Câu nào mô tả đúng đề?',
+          options: [
+            '1 vế: người trẻ dùng mạng xã hội',
+            '2 vế: dùng quá nhiều + gây hại cho việc học',
+            '2 vế: dùng quá nhiều + gây hại — và vế 2 có HAI đối tượng (việc học VÀ quan hệ gia đình)',
+          ],
+          correct: 2,
+          why: '"which harms…" là vế 2, và nó nói tới **hai đối tượng** nối bằng **both… and**. Bỏ quên "relationships with their families" là trả lời thiếu đề.',
+        },
       ],
     },
   ],

@@ -440,6 +440,105 @@ const T2D8_DOC: Lesson = {
         "**Bỏ trống**: Short-answer không trừ điểm câu sai — luôn ghi một đáp án hợp lý.",
       ],
     },
+
+    { t: "h", text: "4. Ba thói quen của người band 5+: đoán trước từ thay thế · đánh số bên lề · sổ paraphrase" },
+    {
+      t: "p",
+      text: "Mục 2 dạy bạn **nhận ra** paraphrase khi đã thấy nó. Người band 5+ đi trước một bước: **đoán trước** bài sẽ viết lại thế nào, rồi mới dò. Cách làm: gạch từ khoá câu hỏi và chia hai nhóm — ==giữ nguyên== (tên riêng, năm, con số in sẵn, thuật ngữ như BRT, metro) và ==sẽ bị đổi== (động từ, tính từ, danh từ thường). Với mỗi từ nhóm hai, viết nhanh **2–3 từ dự đoán** bên cạnh. Mắt bạn sẽ “bắt” được câu đúng ngay cả khi không có từ nào trùng.",
+    },
+    {
+      t: "table",
+      caption: "Số liệu hay bị viết thành chữ — đoán trước để không lướt qua",
+      head: ["Câu hỏi viết", "Bài đọc có thể viết", "Ghi chú"],
+      rows: [
+        ["ten years", "**a decade** · over the past decade", "100 years = **a century** · 1,000 years = a millennium"],
+        ["1990–1999", "**the 1990s** · the nineties", "Hỏi decade (thập kỷ) → đáp án dạng **1990s**"],
+        ["50%", "**half** · one in two", "about 50% = **roughly half**"],
+        ["25% · 75%", "**a quarter** · **three quarters**", "20% = **a fifth** · 10% = **one in ten** / a tenth"],
+        ["about 30% · about 33%", "**almost / nearly a third**", "about 66% = **two thirds** · two in three"],
+        ["more than 50%", "**the majority** · most · over half", "less than 50% = a minority · fewer than half"],
+        ["doubled", "**twice as many / much** · rose by 100%", "tripled = **three times** as many · halved = fell by 50%"],
+        ["very few", "**a handful of** · only a small number", "almost all = **the vast majority** · nearly every"],
+      ],
+    },
+    {
+      t: "quiz",
+      id: "t2d8-doc-so-lieu",
+      title: "Paraphrase số liệu — điền MỘT từ (6 câu)",
+      kind: "fill",
+      items: [
+        { q: "Câu hỏi: “over a period of ten years” → Bài: “over a ___”", answers: ["decade"], hint: "một thập kỷ" },
+        { q: "Câu hỏi: “about 30% of residents” → Bài: “almost a ___ of residents”", answers: ["third"], hint: "một phần ba" },
+        { q: "Câu hỏi: “the number of cyclists doubled” → Bài: “there were ___ as many cyclists”", answers: ["twice"], hint: "gấp hai" },
+        { q: "Câu hỏi: “between 1980 and 1989” → Bài: “in the ___”", answers: ["1980s", "1980's", "eighties"], hint: "thập niên — số + s" },
+        { q: "Câu hỏi: “10% of passengers” → Bài: “one in ___ passengers”", answers: ["ten", "10"], hint: "một trên …" },
+        { q: "Câu hỏi: “more than half of the voters” → Bài: “the ___ of the voters”", answers: ["majority"], hint: "đa số" },
+      ],
+    },
+    {
+      t: "table",
+      caption: "Cặp paraphrase thuộc loại nào? — 5 nhãn để ghi sổ",
+      head: ["Nhãn", "Câu hỏi", "Bài đọc", "Dùng để"],
+      rows: [
+        ["① Đồng nghĩa", "look at a timetable", "check a timetable", "nhận ra đáp án đúng"],
+        ["② Đổi loại từ", "traditionally built", "the traditional solution", "nhận ra đáp án đúng"],
+        ["③ Chủ động ↔ bị động · đổi trật tự", "Electric buses replaced diesel buses.", "Diesel buses were replaced by electric ones.", "giữ ý — nhưng kiểm **ai làm gì cho ai**"],
+        ["④ Phủ định đổi cách nói", "do **not** produce exhaust fumes", "produce **no** exhaust fumes", "nhận ra đáp án đúng"],
+        ["⑤ Trái nghĩa", "journey times **rose**", "journey times **fell**", "dấu hiệu **FALSE / NO** (Ngày 12, 20) — cùng chủ đề, ngược nghĩa"],
+      ],
+    },
+    {
+      t: "note",
+      title: "Đánh số câu bên lề — đừng đọc lại từ đầu bài",
+      items: [
+        "Short-answer đi **theo thứ tự bài**. Tìm được đáp án câu 1 ở dòng nào, **ghi số “1” bên lề** dòng đó (thi máy: tô sáng). Câu 2 chỉ dò **từ đó trở xuống**.",
+        "Không thấy câu 6? Làm **câu 7** trước — đáp án câu 6 nằm **giữa số “5” và số “7”**. Vùng cần đọc lại chỉ còn vài dòng.",
+        "Mẹo dùng cho mọi dạng **theo thứ tự**: Short-answer, Sentence completion, TFNG / YNNG, Sentence endings, Note completion. Không dùng cho Matching (headings, information, features).",
+      ],
+    },
+    {
+      t: "sodo",
+      kind: "flow",
+      title: "Sổ paraphrase — 5 phút sau mỗi bài đọc",
+      steps: [
+        { label: "Chấm xong", sub: "đánh dấu câu đúng / sai" },
+        { label: "Với MỖI câu", sub: "tìm lại **câu chứa đáp án** trong bài (kể cả câu làm đúng)" },
+        { label: "Ghi một dòng", sub: "Câu hỏi | Trong bài | Nhãn ①–⑤" },
+        { label: "Chỉ ghi từ ở hai chỗ đó", sub: "không tra mọi từ lạ trong bài — tốn giờ, ít dùng lại" },
+        { label: "Ôn trước bài đọc sau", sub: "đọc lướt sổ 2 phút; cặp nào gặp lần 2 thì tô đậm" },
+      ],
+      caption: "Một đề Reading cho khoảng 20–30 cặp. Sau 10 đề, bạn có vài trăm cặp — đúng loại từ đề hay dùng, không phải danh sách học thuộc.",
+    },
+    {
+      t: "table",
+      caption: "Sổ mẫu — rút từ bài Bus Rapid Transit ở trên",
+      head: ["Câu", "Câu hỏi", "Trong bài", "Nhãn"],
+      rows: [
+        ["1", "traditionally built", "The traditional solution has been to build", "②"],
+        ["4", "benefits from", "helps", "① + ③"],
+        ["5", "not need to look at", "do not need to check", "①"],
+        ["10", "do NOT produce", "produce no", "④"],
+        ["11", "a long process", "take more than a decade to plan and construct", "① + số liệu"],
+        ["14", "easier to look after", "need less maintenance", "① + ③"],
+      ],
+    },
+    {
+      t: "quiz",
+      id: "t2d8-doc-so-paraphrase",
+      title: "Tự lập sổ — điền cụm TRONG BÀI ứng với cụm câu hỏi (4 câu)",
+      kind: "fill",
+      items: [
+        { q: "Câu hỏi: “A metro was too expensive for the planners.” → Bài (đoạn B): “Planners there could not ___ a metro.”", answers: ["afford"], hint: "không đủ tiền mua / xây" },
+        { q: "Câu hỏi: “A BRT line is far cheaper than a metro.” → Bài (đoạn D): “roughly ___ of the price of a metro”", answers: ["one-fifteenth", "one fifteenth"], hint: "một phần mười lăm" },
+        { q: "Câu hỏi: “10% of the passengers used to drive.” → Bài (đoạn D): “about one in ten of them ___ travelled by car”", answers: ["previously"], hint: "trước đây" },
+        { q: "Câu hỏi: “Electric buses make less noise.” → Bài (đoạn F): “Electric buses… are much ___”", answers: ["quieter"], hint: "yên tĩnh hơn" },
+      ],
+    },
+    {
+      t: "rule",
+      formula: "Trước khi dò: giữ nguyên (tên, năm, số) + đoán 2–3 từ thay thế · Khi dò: ghi số câu bên lề · Sau khi chấm: sổ Câu hỏi | Trong bài | Nhãn",
+      vi: "Ba thói quen biến “may mắn tìm thấy” thành tìm thấy có hệ thống. Sổ chỉ ghi từ ở câu hỏi và câu chứa đáp án.",
+    },
     {
       t: "vocab",
       items: [
@@ -474,6 +573,7 @@ const T2D8_VIET: Lesson = {
         "Gom nhóm thân bài theo **điểm chung** (theo thành phố / theo phương tiện) — không đi lần lượt từng cột.",
         "9 cấu trúc so sánh: ==higher / lower than== · ==the highest== · ==far / slightly + higher== · ==twice as high as== · ==whereas / while== · ==compared with== · ==the figure for X==…",
         "Đẩy **TA** (overview rõ, chọn số nổi bật) và **GRA** (câu so sánh đúng, có mệnh đề whereas) lên band 5–6. Bài mẫu band 6.5–7 + một bài band 4.5 để đối chiếu.",
+        "Mục 3: gọi lại nhóm bằng **counterparts / the latter**, bội số **fourfold · N times more … than · a fifth of that for**, và cách làm đề có **hai biểu đồ cột**.",
       ],
     },
 
@@ -560,7 +660,62 @@ const T2D8_VIET: Lesson = {
       ],
     },
 
-    { t: "h", text: "3. Bài mẫu band 6.5–7 — đối chiếu từng con số" },
+    { t: "h", text: "3. Gọi tên nhóm không lặp · bội số · đề có hai biểu đồ cột" },
+    {
+      t: "table",
+      caption: "Gọi lại một nhóm mà không lặp nguyên cụm",
+      head: ["Cách", "Ví dụ"],
+      rows: [
+        ["**counterparts** = nhóm ở **vị trí tương ứng** bên kia (nam ↔ nữ, nước này ↔ nước kia)", "Men exercised for five hours a week, compared with three hours for their **female counterparts**."],
+        ["**their + nơi / nhóm + counterparts**", "Commuters in Ashford drove far more than **their Carlton counterparts**."],
+        ["Đổi tên nhóm tuổi", "people aged 18–24 → **the youngest group** · **younger adults** · **those in their early twenties**"],
+        ["**the former / the latter** (cái trước / cái sau)", "Bexley and Carlton relied more on public transport, **the latter** especially on the metro."],
+      ],
+    },
+    {
+      t: "note",
+      title: "Cẩn thận với counterpart",
+      items: [
+        "Chỉ dùng khi hai nhóm **cùng vai**: nam ↔ nữ, học sinh Anh ↔ học sinh Mỹ. ~~Cars and their bus counterparts~~ — xe và xe buýt không phải “người tương ứng” của nhau → nói **buses**.",
+        "Nói về **nhóm người** → số nhiều **counterparts**; một người / một vật → **counterpart** (Japan's figure was lower than its **Korean counterpart**).",
+      ],
+    },
+    {
+      t: "table",
+      caption: "Bội số và phân số — ngoài twice / three times",
+      head: ["Khung", "Nghĩa", "Ví dụ"],
+      rows: [
+        ["rise / increase **fourfold** · **a fourfold increase**", "tăng **gấp 4**", "Sales of electric cars rose **fourfold**, from 5,000 to 20,000."],
+        ["**N times as many / much + N + as**", "nhiều gấp N lần (an toàn nhất)", "Carlton had **twice as many** metro users **as** Bexley."],
+        ["A had **N times more** + N **than** B", "nhiều hơn N lần (hay gặp trong bài mẫu)", "Men spent **three times more** time on sport **than** women."],
+        ["**a fifth / a quarter / half of** + that for… / the figure for…", "bằng 1/5, 1/4, 1/2 của…", "Ashford's metro figure (8%) was **a fifth of that for** Carlton (40%)."],
+      ],
+    },
+    {
+      t: "quiz",
+      id: "t2d8-viet-boi-so",
+      title: "Dịch — bội số, phân số, counterparts (3 câu)",
+      kind: "translate",
+      grammar: "rose fourfold · N times more + N + than · a fifth of that for + nhóm · their female / male counterparts. Nhân thử trước khi viết!",
+      items: [
+        { q: "Doanh số xe điện tăng gấp bốn, từ 5.000 lên 20.000 chiếc.", hint: "Sales of electric cars, rose / increased fourfold, from 5,000 to 20,000", answers: ["Sales of electric cars rose fourfold, from 5,000 to 20,000.", "Sales of electric cars increased fourfold, from 5,000 to 20,000.", "Electric car sales rose fourfold, from 5,000 to 20,000.", "Electric car sales increased fourfold, from 5,000 to 20,000.", "Sales of electric cars rose fourfold from 5,000 to 20,000.", "There was a fourfold increase in sales of electric cars, from 5,000 to 20,000."] },
+        { q: "Tỉ lệ đi metro ở Ashford (8%) chỉ bằng một phần năm con số của Carlton (40%).", hint: "The proportion of metro users in Ashford (8%), was only a fifth of, that for Carlton (40%)", answers: ["The proportion of metro users in Ashford (8%) was only a fifth of that for Carlton (40%).", "The proportion of metro users in Ashford (8%) was only one fifth of that for Carlton (40%).", "The figure for metro users in Ashford (8%) was only a fifth of that for Carlton (40%).", "The proportion of metro users in Ashford (8%) was just a fifth of that for Carlton (40%).", "The percentage of metro users in Ashford (8%) was only a fifth of that for Carlton (40%).", "The proportion of metro users in Ashford (8%) was only a fifth of the figure for Carlton (40%)."] },
+        { q: "Nam giới dành thời gian chơi thể thao nhiều gấp ba lần nữ giới (dùng counterparts).", hint: "Men, spent three times more time on sport, than their female counterparts", answers: ["Men spent three times more time on sport than their female counterparts.", "Men spent three times as much time on sport as their female counterparts.", "Men spent three times more time playing sport than their female counterparts.", "Men spent three times as much time playing sport as their female counterparts.", "Men spent three times more time on sports than their female counterparts.", "Men spent three times as much time on sports as their female counterparts."] },
+      ],
+    },
+    {
+      t: "note",
+      title: "Mẹo khi đề có HAI biểu đồ cột",
+      items: [
+        "**Đọc quan hệ giữa hai hình**: cùng nhóm nhưng đo hai thứ khác nhau (hình 1 = số người đi làm, hình 2 = thời gian đi) **hay** cùng thứ nhưng hai năm / hai nơi?",
+        "**Mở bài một câu gọi cả hai**: The first bar chart shows…, **while the second** compares…",
+        "**Overview: mỗi biểu đồ một ý** (2 câu). Không cần cố nối hai hình bằng nguyên nhân — Task 1 chỉ mô tả.",
+        "**Chia thân bài**: đo hai thứ khác nhau → **mỗi khổ một biểu đồ** (dễ nhất). Cùng thứ, hai năm / hai nơi → chia theo **nhóm tăng / nhóm giảm** như bảng ở Ngày 4.",
+        "Có cột **Total** → nói **tổng trước**, rồi mới vào từng nhóm. Một nhóm **không có số liệu** ở một hình → nói rõ một lần (no data is given for…), đừng bịa.",
+      ],
+    },
+
+    { t: "h", text: "4. Bài mẫu band 6.5–7 — đối chiếu từng con số" },
     {
       t: "p",
       text: "**Đề:** The bar chart below shows the percentage of commuters in three cities who travelled to work by car, bus, metro or train, and bicycle in 2024. Summarise the information by selecting and reporting the main features, and make comparisons where relevant. **Write at least 150 words.**",
@@ -646,7 +801,7 @@ const T2D8_VIET: Lesson = {
       ],
     },
 
-    { t: "h", text: "4. Tự viết một bài (AI chấm)" },
+    { t: "h", text: "5. Tự viết một bài (AI chấm)" },
     {
       t: "figure",
       fig: {
@@ -684,7 +839,7 @@ const T2D8_BAI_TAP: Lesson = {
   id: "t2d8-bai-tap",
   kind: "homework",
   title: "Bài tập Ngày 8",
-  goal: "Tự kiểm tra Ngày 8: 8 câu từ vựng giao thông, 6 câu họ từ, 6 câu Short-answer trên đoạn đọc mới, 5 câu paraphrase, 6 câu dịch so sánh Task 1 — 31 câu có đáp án và lời giải.",
+  goal: "Tự kiểm tra Ngày 8: 8 câu từ vựng giao thông, 6 câu họ từ, 6 câu Short-answer trên đoạn đọc mới, 5 câu paraphrase, 6 câu dịch so sánh Task 1, 2 câu chọn số chính xác / xấp xỉ — 33 câu có đáp án và lời giải.",
   minutes: 40,
   blocks: [
     {
@@ -694,6 +849,7 @@ const T2D8_BAI_TAP: Lesson = {
         "**Phần I** (8 câu): điền từ / cụm giao thông · **Phần II** (6 câu): chọn loại từ.",
         "**Phần III** (6 câu): Short-answer trên đoạn đọc ~140 từ — đúng giới hạn từ.",
         "**Phần IV** (5 câu): nhận paraphrase · **Phần V** (6 câu): dịch câu so sánh Task 1.",
+        "**Phần VI** (2 câu): khi nào ghi đúng số, khi nào dùng about / just under.",
       ],
     },
     {
@@ -805,6 +961,35 @@ const T2D8_BAI_TAP: Lesson = {
         { q: "Ngược lại, chỉ 10% người dân đạp xe.", hint: "By contrast, only 10% of people / residents, cycled", answers: ["By contrast, only 10% of people cycled.", "In contrast, only 10% of people cycled.", "By contrast, only 10% of residents cycled.", "By contrast, only 10% of people rode a bicycle.", "By contrast, only 10% of the population cycled.", "In contrast, only 10% of residents cycled."] },
         { q: "Xe buýt được 35% người đi làm sử dụng, so với 20% ở Ashford.", hint: "The bus was used by 35% of commuters, compared with 20% in Ashford", answers: ["The bus was used by 35% of commuters, compared with 20% in Ashford.", "The bus was used by 35% of commuters, compared to 20% in Ashford.", "Buses were used by 35% of commuters, compared with 20% in Ashford.", "35% of commuters used the bus, compared with 20% in Ashford.", "The bus was used by 35% of commuters compared with 20% in Ashford."] },
         { q: "Hơn một nửa số người đi làm lái ô tô.", hint: "Just over half of commuters, drove (to work)", answers: ["Just over half of commuters drove.", "Just over half of commuters drove to work.", "Just over half of all commuters drove to work.", "Slightly more than half of commuters drove to work.", "Just over half of the commuters drove to work.", "More than half of commuters drove to work.", "More than half of commuters drove.", "Over half of commuters drove.", "Over half of commuters drove to work."] },
+      ],
+    },
+
+    { t: "h", text: "Phần VI — Số chính xác hay số xấp xỉ? (2 câu)" },
+    {
+      t: "mcq",
+      id: "t2d8-bt-so-xap-xi",
+      title: "Phần VI — Chọn câu viết số đúng cách (2 câu)",
+      items: [
+        {
+          q: "Biểu đồ cột KHÔNG in số trên cột; cột của Bexley nằm hơi dưới vạch 30 trên trục (%). Câu nào tốt nhất?",
+          options: [
+            "Exactly 29.3% of commuters in Bexley drove to work.",
+            "Just under 30% of commuters in Bexley drove to work.",
+            "30% of commuters in Bexley drove to work.",
+          ],
+          correct: 1,
+          why: "Số phải **đọc theo vạch** → dùng **just under / about / around / nearly**. A bịa độ chính xác không có trên hình; C nói chắc chắn một con số bạn không đọc được.",
+        },
+        {
+          q: "Biểu đồ tròn / bảng IN SẴN số: Ashford — car 52%. Câu nào tốt nhất?",
+          options: [
+            "Around 52% of commuters in Ashford drove to work.",
+            "About half or maybe more of commuters in Ashford drove.",
+            "52% of commuters in Ashford drove to work, just over half.",
+          ],
+          correct: 2,
+          why: "Số đã in sẵn → **ghi đúng số**, không thêm around / about (thêm vào nghe như bạn không đọc kỹ). Được **thêm** cách nói phân số (just over half) bên cạnh để paraphrase.",
+        },
       ],
     },
   ],

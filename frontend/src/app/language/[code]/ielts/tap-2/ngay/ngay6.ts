@@ -361,7 +361,7 @@ const T2D6_WRITING: Lesson = {
   kind: 'writing',
   title: 'Writing Task 2: Discussion essay trọn bài + dàn ý 5 phút + chia 20/40 phút',
   goal: 'Viết trọn một bài Discussion ("Discuss both views and give your own opinion") ≥ 250 từ: lập dàn ý trong 5 phút, trình bày công bằng cả hai quan điểm bằng P-E-E, nêu rõ ý kiến riêng ở mở bài và kết bài, và chia đúng 60 phút cho Task 1 + Task 2.',
-  minutes: 75,
+  minutes: 100,
   blocks: [
     {
       t: 'recap',
@@ -372,6 +372,7 @@ const T2D6_WRITING: Lesson = {
         '**Dàn ý 5 phút** (W18): gạch đề → chọn ý kiến → 2 lý do / quan điểm → 1 ví dụ / lý do → câu thesis.',
         '**Chia 60 phút** (X04): Task 2 **40 phút** (5 dàn ý + 30 viết + 5 soát), Task 1 **20 phút**. Task 2 chiếm **2/3 điểm** Writing.',
         'Bài mẫu khoảng band 6.0–6.5 (ước tính) về **điện thoại trong trường học** (nối từ vựng công nghệ), rồi bạn tự viết một bài cho AI chấm.',
+        'Thêm: đọc câu lệnh **có / không hỏi ý kiến** (và ý kiến **kết hợp**); **bánh xe tầng** để sinh ý khi bí, chọn ý quen giải thích kỹ, đẩy hệ quả bằng **This, in turn,**; **tái tạo một đoạn mẫu** (nghe → viết lại → so) để học khung chứ không học thuộc.',
       ],
     },
 
@@ -395,6 +396,24 @@ const T2D6_WRITING: Lesson = {
         '**Ý kiến xuất hiện muộn** — chỉ ở kết bài. An toàn nhất: nêu trong **thesis** (cuối mở bài) và nhắc lại ở kết bài.',
         '**Viết lệch**: thân bài 1 năm câu, thân bài 2 hai câu. Hai quan điểm phải được bàn **gần cân bằng** (mỗi đoạn ~90 từ).',
         '**Viết "I agree"** — đề Discussion không hỏi agree / disagree. Dùng **I believe / In my view, … is more convincing**.',
+      ],
+    },
+    {
+      t: 'table',
+      caption: 'Đọc câu lệnh: đề có hỏi ý kiến của bạn không?',
+      head: ['Câu lệnh', 'Ý kiến riêng', 'Viết thế nào'],
+      rows: [
+        ['Discuss both these views **and give your own opinion**.', '**Bắt buộc**', 'Thesis nêu rõ bên bạn nghiêng về; TB2 = bên bạn chọn; kết bài nhắc lại.'],
+        ['Discuss both these views. (không có "give your opinion")', '**Không bắt buộc**', 'Bàn cân bằng hai bên; mở bài nói "This essay will discuss both views"; kết bài tóm tắt hai bên. Thêm ý kiến **ngắn** ở kết bài vẫn được, nhưng đừng để nó lấn át.'],
+        ['Discuss both views and give **a balanced opinion**.', 'Ý kiến **cân bằng**', 'Không chọn hẳn một bên: "both have a role, depending on…". Dạng này học kỹ ở Tập 3.'],
+      ],
+    },
+    {
+      t: 'note',
+      title: 'Mẹo: hai quan điểm không loại trừ nhau ⇒ ý kiến kết hợp',
+      items: [
+        'Nhiều đề Discussion đưa ra hai việc **làm được cùng lúc** (học online / học trên lớp; trường dạy / bố mẹ dạy). Khi đó ý kiến rõ nhất thường là **kết hợp**: "In my view, **the best approach is a combination of both**, with schools teaching the basics and parents…".',
+        'Kết hợp vẫn phải **rõ ràng**: nói bên nào làm việc gì. "Both views are right" mà không giải thích là ý kiến mơ hồ, TR không lên band 6.',
       ],
     },
 
@@ -455,6 +474,62 @@ const T2D6_WRITING: Lesson = {
         ['Kết', 'distraction real, but ban too far → allow for planned activities, switch off rest of day'],
       ],
     },
+    {
+      t: 'note',
+      title: 'Khung dàn ý Discussion — chép ra giấy nháp, điền từ khoá',
+      items: [
+        '**Đề**: chủ đề … · A = … · B = … · câu lệnh: có "give your opinion" không?',
+        '**Ý kiến**: nghiêng về A / B / kết hợp (A làm…, B làm…).',
+        '**TB1 — bên KHÔNG chọn**: lý do 1 … → vì sao … · lý do 2 … · ví dụ: nơi / năm / số.',
+        '**TB2 — bên CHỌN**: lý do 1 … → hệ quả … → hệ quả xa hơn … · ví dụ.',
+        '**Kết**: although A …, I believe B … (không ý mới).',
+      ],
+    },
+
+    { t: 'h', text: '3b. Bí ý? Quay "bánh xe tầng"' },
+    {
+      t: 'p',
+      text: 'Band 4–5 hay kẹt ở bước "2 lý do cho mỗi bên". Đừng ngồi chờ ý hay — hỏi lần lượt: việc này **ảnh hưởng tới ai**, từ gần tới xa. Mỗi tầng là một chỗ để tìm lý do. Sau đó hỏi thêm: với **nhóm người nào** thì khác (người trẻ / người già, thành phố / nông thôn, giàu / nghèo)?',
+    },
+    {
+      t: 'sodo',
+      kind: 'mindmap',
+      title: 'Bánh xe tầng — đề "điện thoại ở trường"',
+      center: '**Ai bị ảnh hưởng?**',
+      branches: [
+        { label: '1 · Cá nhân', items: ['học sinh xao nhãng / tra cứu nhanh', 'sức khoẻ mắt, giấc ngủ'] },
+        { label: '2 · Gia đình', items: ['bố mẹ liên lạc với con', 'chi phí mua máy'] },
+        { label: '3 · Nhà trường / doanh nghiệp', items: ['giáo viên quản lý lớp', 'công ty làm app giáo dục'] },
+        { label: '4 · Môi trường', items: ['ít in giấy, ít sách in', 'rác điện tử khi đổi máy'] },
+        { label: '5 · Xã hội / kinh tế', items: ['kỹ năng số cho thị trường lao động', 'khoảng cách số giàu – nghèo'] },
+      ],
+      caption: 'Không cần dùng cả 5 tầng. Chọn 2 tầng bạn giải thích được dễ nhất cho mỗi bên.',
+    },
+    {
+      t: 'sodo',
+      kind: 'compare',
+      title: 'Cùng một đề: ý "hay" khó viết vs ý quen dễ triển khai',
+      cols: [
+        { title: '**Ý khó** (band 4–5 hay chọn rồi bí)', anh: 'thinking-face', items: ['Phones change the structure of the brain.', 'Phones affect the national economy.', '→ cần số liệu khoa học bạn không có; viết 1 câu là hết ý.'] },
+        { title: '**Ý dễ** (giải thích kỹ được)', anh: 'light-bulb', items: ['Students check messages instead of listening to the teacher.', 'Students can look up new words instantly.', '→ có ví dụ từ đời bạn; viết đủ P-E-E 80–90 từ.'] },
+      ],
+      caption: 'Giám khảo chấm cách bạn **giải thích và nối ý**, không chấm độ độc đáo. Mỗi thân bài 1–2 ý quen, giải thích kỹ, thắng 4 ý "hay" mà nông.',
+    },
+    {
+      t: 'table',
+      caption: 'Đẩy hệ quả thêm một bước — câu Explain sâu hơn',
+      head: ['Bước', 'Câu mẫu'],
+      rows: [
+        ['Ý (Point)', 'Students who use phones in class often check social media.'],
+        ['Hệ quả 1 — **As a result,**', 'As a result, they miss important parts of the lesson.'],
+        ['Hệ quả 2 — **This, in turn,**', '**This, in turn,** leads to lower test scores and more stress before exams.'],
+      ],
+    },
+    {
+      t: 'rule',
+      formula: 'Point → As a result, + hệ quả 1 → This, in turn, + hệ quả 2 (xa hơn) → For example, …',
+      vi: 'Một ý quen + hai bước hệ quả + một ví dụ = thân bài đủ dài, đủ sâu mà không cần ý "độc".',
+    },
 
     { t: 'h', text: '4. Bài mẫu — khoảng band 6.0–6.5 (ước tính)' },
     {
@@ -490,6 +565,73 @@ const T2D6_WRITING: Lesson = {
         { q: 'Trong bài Discussion, ý kiến riêng nên xuất hiện ở đâu?', options: ['Chỉ ở thân bài 2', 'Chỉ ở kết bài', 'Ở thesis (mở bài) và nhắc lại ở kết bài'], correct: 2, why: 'Nêu sớm (thesis) để người đọc theo dõi, nhắc lại ở kết bài để khép bài — an toàn nhất cho TR.' },
         { q: 'Câu kết bài nào tốt nhất?', options: ['In conclusion, although phones can distract students, I believe a total ban goes too far, and they should be allowed for planned activities.', 'In conclusion, both views have advantages and disadvantages.', 'In conclusion, I agree with this statement.'], correct: 0, why: 'A nhắc cả hai mặt (although…) + ý kiến rõ. B không có ý kiến; C dùng "agree" — đề Discussion không hỏi đồng ý.' },
         { q: 'Bạn còn 10 phút cuối giờ thi Writing mà chưa viết Task 1. Nên làm gì?', options: ['Viết thật nhanh Task 1 ~150 từ: mở bài, overview, hai thân bài ngắn', 'Bỏ Task 1, sửa Task 2 thêm cho hay', 'Viết Task 1 50 từ thật kỹ'], correct: 0, why: 'Bỏ trống hay viết dưới 150 từ đều bị trừ nặng. Overview là phần quan trọng nhất — luôn có. Lần sau: chia giờ 20/40 ngay từ đầu.' },
+      ],
+    },
+
+    { t: 'h', text: '4b. Luyện tái tạo bài mẫu — học KHUNG, không học thuộc' },
+    {
+      t: 'p',
+      text: 'Chép thuộc lòng một bài mẫu không giúp bạn ở phòng thi: đề sẽ khác. Thứ cần "lấy" từ bài mẫu là **khung**: câu chủ đề viết thế nào, ý nối bằng gì, ví dụ đặt ở đâu. Cách luyện dưới đây bắt bạn **tự viết lại** một đoạn mẫu bằng lời của mình rồi so — chỗ nào bản gốc hay hơn chính là thứ bạn học được hôm nay.',
+    },
+    {
+      t: 'sodo',
+      kind: 'flow',
+      title: 'Tái tạo một đoạn mẫu — 20 phút',
+      steps: [
+        { label: '1 · Đọc dàn ý, tự viết trước (6′)', sub: 'Chưa nghe. Dựa vào dàn ý dưới, tự viết đoạn thân bài ~80 từ.' },
+        { label: '2 · Nghe đoạn mẫu 2 lần (3′)', sub: 'Đừng xem lời. Ghi **từ khoá + từ nối** nghe được.' },
+        { label: '3 · Viết lại theo từ khoá (6′)', sub: 'Viết đoạn mới vào ô bên dưới — không cần trùng từng chữ.' },
+        { label: '4 · Đối chiếu (5′)', sub: 'Mở lời bài nghe. Gạch dưới câu chủ đề + từ nối bản gốc có mà bạn chưa dùng; chép 2–3 cụm vào sổ.' },
+      ],
+      caption: 'Làm cách này 2–3 lần mỗi tuần với các đoạn mẫu trong khoá. Từ Tập 3 dùng đều đặn cho mọi dạng bài.',
+    },
+    {
+      t: 'table',
+      caption: 'Dàn ý đoạn mẫu — đề: "Some people think cooking should be taught at school, while others say it is the parents\' job. Discuss both views and give your opinion."',
+      head: ['Phần', 'Từ khoá'],
+      rows: [
+        ['Point (bên CHỌN)', 'school better place to teach cooking'],
+        ['Explain', 'parents work long hours → no time → teens eat instant noodles, fast food'],
+        ['Explain 2', 'weekly class → same basic skills for everyone, whatever family'],
+        ['Example', 'school near me · cooking club 2 years · students cook healthy meals at weekends'],
+      ],
+    },
+    {
+      t: 'listen',
+      id: 't2d6-viet-tai-tao-nghe',
+      title: 'Đoạn mẫu (Thân bài 2, khoảng band 6.0, ước tính — 95 từ)',
+      note: 'Nghe 2 lần, chỉ ghi từ khoá. Chưa mở lời trước khi viết xong bước 3.',
+      lines: [
+        { voice: 'uk-nu', text: 'On the other hand, I believe that schools are in a better position to teach cooking.' },
+        { voice: 'uk-nu', text: 'The main reason is that many parents today work long hours and rarely have time to cook with their children.' },
+        { voice: 'uk-nu', text: 'As a result, a growing number of teenagers rely on instant noodles and fast food.' },
+        { voice: 'uk-nu', text: 'A weekly cooking class would give every student the same basic skills, regardless of their family situation.' },
+        { voice: 'uk-nu', text: 'For example, a school in my neighbourhood started a cooking club two years ago, and many students now prepare simple, healthy meals for their families at weekends.' },
+      ],
+    },
+    {
+      t: 'essay',
+      id: 't2d6-viet-tai-tao',
+      task: 'Task 2',
+      prompt: 'Bước 3 — Viết lại đoạn Thân bài 2 (bên chọn: trường học nên dạy nấu ăn) theo từ khoá bạn ghi được, khoảng 80–100 từ. Đề: Some people think cooking should be taught at school, while others say it is the parents\' job. Discuss both views and give your own opinion.',
+      minWords: 70,
+      tips: [
+        'Câu đầu là **câu chủ đề** nói rõ bên bạn chọn (On the other hand, I believe…).',
+        'Giải thích bằng **The main reason is that… · As a result, …** — hai bước hệ quả.',
+        'Ví dụ cụ thể: một nơi, một thời gian, một kết quả.',
+        'Xong rồi mới mở lời bài nghe để so.',
+      ],
+    },
+    {
+      t: 'table',
+      caption: 'Bước 4 — đối chiếu: bản gốc dùng KHUNG nào?',
+      head: ['Vai trong đoạn', 'Khung bản gốc', 'Dùng lại cho đề khác'],
+      rows: [
+        ['Câu chủ đề', 'On the other hand, I believe that **X is in a better position to** + V', '…governments are in a better position to reduce pollution.'],
+        ['Lý do', '**The main reason is that** + S + V', 'The main reason is that companies control most of the waste.'],
+        ['Hệ quả', '**As a result, a growing number of** + N + V', 'As a result, a growing number of families buy bottled water.'],
+        ['Mở rộng', '…, **regardless of** + N', '…the same chance, regardless of their income.'],
+        ['Ví dụ', '**For example,** + nơi + **started** … **ago, and** … **now** …', 'For example, my city started a bike-sharing scheme in 2023, and…'],
       ],
     },
 
@@ -557,17 +699,18 @@ const T2D6_HOMEWORK: Lesson = {
   id: 't2d6-bai-tap',
   kind: 'homework',
   title: 'Bài tập Ngày 6',
-  goal: 'Tự kiểm tra Ngày 6 bằng 34 câu có đáp án: 8 câu từ công nghệ, 6 câu điền cụm từ, 4 câu đoán nghĩa, 6 câu TFNG, 6 câu dịch, 4 câu về đề Discussion và chia giờ.',
-  minutes: 40,
+  goal: 'Tự kiểm tra Ngày 6 bằng 36 câu có đáp án: 8 câu từ công nghệ, 6 câu điền cụm từ, 4 câu đoán nghĩa, 6 câu TFNG, 6 câu dịch, 4 câu về đề Discussion và chia giờ, 2 câu đọc câu lệnh — kèm 4 đề tự nghĩ ý rồi đối chiếu.',
+  minutes: 50,
   blocks: [
     {
       t: 'recap',
-      title: 'Bài tập hôm nay (34 câu)',
+      title: 'Bài tập hôm nay (36 câu + 4 đề nghĩ ý)',
       items: [
         '**Phần I** — Từ công nghệ (8 câu trắc nghiệm) · **Phần II** — Cụm từ (6 câu điền).',
         '**Phần III** — Đoán nghĩa từ ngữ cảnh (4 câu).',
         '**Phần IV** — TFNG trên đoạn đọc ngắn (6 câu).',
         '**Phần V** — Dịch (6 câu) · **Phần VI** — Discussion & chia giờ (4 câu).',
+        '**Phần VII** — Câu lệnh có hỏi ý kiến không (2 câu) + **4 đề tự nghĩ ý** bằng bánh xe tầng rồi đối chiếu ý gợi ý.',
       ],
     },
     {
@@ -679,6 +822,56 @@ const T2D6_HOMEWORK: Lesson = {
         { q: 'Trong 5 phút dàn ý, việc nào nên làm TRƯỚC?', options: ['Viết câu mở bài thật hay', 'Gạch đề và chọn ý kiến', 'Học thuộc từ mới'], correct: 1, why: 'Gạch đề (A, B, câu lệnh) → chọn ý kiến → ý + ví dụ → thesis.' },
         { q: 'Theo cách chia giờ khuyên dùng, phút thứ 40 bạn nên:', options: ['bắt đầu soát Task 2', 'đang viết thân bài 1 Task 2', 'chuyển sang Task 1'], correct: 2, why: 'Task 2 trước: 0–40 phút (5 + 30 + 5), phút 40 chuyển sang Task 1 (20 phút).' },
         { q: 'Câu thesis nào phù hợp với đề Discussion?', options: ['In my view, online learning works best when it is combined with face-to-face classes.', 'I totally agree with this statement.', 'This essay will discuss many things about online learning.'], correct: 0, why: 'A nêu ý kiến **rõ ràng, có mức độ**. B dùng "agree" (đề không hỏi); C không có ý kiến.' },
+      ],
+    },
+
+    { t: 'h', text: 'Phần VII — Đọc câu lệnh + tự nghĩ ý (2 câu + 4 đề)' },
+    {
+      t: 'mcq',
+      id: 't2d6-bt-y-kien',
+      title: 'Phần VII — Đề có hỏi ý kiến không? (2 câu)',
+      items: [
+        {
+          q: 'Đề: "Some people think young people should travel before starting university, while others think they should start studying immediately. Discuss both these views." Bài viết cần gì?',
+          options: [
+            'Bàn cân bằng hai quan điểm; ý kiến riêng không bắt buộc',
+            'Chọn một bên và chỉ viết về bên đó',
+            'Bắt buộc nêu ý kiến riêng ở thesis, nếu không bị trừ TR',
+          ],
+          correct: 0,
+          why: 'Câu lệnh chỉ có **Discuss both these views** — không có "give your own opinion". Phải bàn **cả hai** bên cân bằng; thêm ý kiến ngắn ở kết bài vẫn được nhưng không bắt buộc.',
+        },
+        {
+          q: 'Đề: "Some say children learn best at school, others say they learn more at home with parents. Discuss both views and give your own opinion." Thesis nào hợp lý nhất nếu bạn thấy cả hai đều cần?',
+          options: [
+            'Both views are right.',
+            'In my view, children learn best from a combination of both: school teaches academic subjects, while parents teach values and daily skills.',
+            'I agree with the first view.',
+          ],
+          correct: 1,
+          why: 'Hai bên **không loại trừ** nhau ⇒ ý kiến **kết hợp**, nhưng phải nói rõ **ai dạy gì**. A mơ hồ; C dùng "agree" và không cho thấy lý do.',
+        },
+      ],
+    },
+    {
+      t: 'note',
+      title: '4 đề tự nghĩ ý — mỗi đề 3 phút, dùng bánh xe tầng (cá nhân → gia đình → trường / công ty → môi trường → xã hội), ghi 2 ý mỗi bên bằng từ khoá',
+      items: [
+        '**Đề 1.** Some people think public libraries are no longer needed because of the internet. Others believe they are still important. Discuss both views and give your opinion.',
+        '**Đề 2.** Some people believe that working from home is better for employees, while others think working in an office is better. Discuss both views and give your opinion.',
+        '**Đề 3.** Some say that governments should spend money on space exploration, while others think the money should be spent on problems on Earth. Discuss both views and give your opinion.',
+        '**Đề 4.** Some people think that students should wear school uniforms, while others believe they should wear what they like. Discuss both views and give your opinion.',
+      ],
+    },
+    {
+      t: 'table',
+      caption: 'Ý gợi ý để đối chiếu (làm xong mới xem) — bạn có ý khác vẫn đúng nếu giải thích được',
+      head: ['Đề', 'Bên A', 'Bên B'],
+      rows: [
+        ['1 · Thư viện', '**Cá nhân**: tra cứu online nhanh, miễn phí · **Xã hội**: tiền ngân sách dùng việc khác', '**Gia đình**: chỗ học yên tĩnh cho học sinh nhà chật · **Xã hội**: người già, người nghèo không có internet được dùng miễn phí'],
+        ['2 · Làm ở nhà', '**Cá nhân**: không mất giờ đi lại, chủ động giờ giấc · **Môi trường**: ít xe trên đường', '**Công ty**: làm nhóm, hỏi nhau nhanh hơn · **Cá nhân**: tách việc khỏi nhà, đỡ cô đơn'],
+        ['3 · Vũ trụ', '**Xã hội / kinh tế**: công nghệ mới (vệ tinh thời tiết, GPS) · **Cá nhân**: truyền cảm hứng học khoa học', '**Xã hội**: nghèo đói, bệnh tật cần tiền ngay · **Môi trường**: biến đổi khí hậu gấp hơn'],
+        ['4 · Đồng phục', '**Gia đình**: đỡ tiền mua quần áo, sáng không phải chọn đồ · **Trường**: học sinh bình đẳng, ít so bì', '**Cá nhân**: thể hiện cá tính, thoải mái · **Gia đình**: đồng phục đắt, phải mua theo trường'],
       ],
     },
   ],

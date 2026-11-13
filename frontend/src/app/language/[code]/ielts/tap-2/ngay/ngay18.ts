@@ -4,7 +4,7 @@
  *            + (thêm) phát âm /juː/ vs /uː/ (news, review, music ↔ true, choose, rumour)
  *   Đọc: Matching sentence endings [R14] — bài đọc ~710 từ về tin giả, 13 câu (6 nối đuôi câu + 4 TFNG + 3 điền câu)
  *   Viết: Two-part question essay [W07] (+ ôn dàn ý 5 phút W18) — bài mẫu trọn band ước tính 5.5–6.0, phân tích 4 tiêu chí
- *   Bài tập về nhà: 38 câu + 1 đoạn viết (từ vựng, họ từ, collocation, dịch 💡, nối đuôi câu, nhận diện đề, ôn N13 · N15 · N17).
+ *   Bài tập về nhà: 40 câu + 1 đoạn viết (từ vựng, họ từ, collocation, dịch 💡, nối đuôi câu, nhận diện đề, ôn N13 · N15 · N17).
  * Bài kiểm tra chặng (Ngày 13–18) `t2d18-kiem-tra` được thêm vào cuối mảng NGAY_18 (người điều phối viết).
  */
 import type { Lesson } from '../data';
@@ -589,6 +589,7 @@ const T2D18_VIET: Lesson = {
         "Bố cục 4 đoạn: **Mở bài** (paraphrase + trả lời ngắn CẢ HAI) → **Thân 1** = câu hỏi 1 → **Thân 2** = câu hỏi 2 → **Kết bài** (tóm lại cả hai câu trả lời).",
         "Cặp câu hỏi hay gặp: **Why…? + Positive or negative?** · **What are the causes? + What can be done?** · **Why…? + How…?** · **What…? + Do you think…?**",
         "Đẩy band nào: **TR band 5 → 5.5–6** (đủ mọi phần, câu trả lời rõ) và **CC** (mỗi đoạn một câu hỏi, không lạc sang câu kia).",
+        "Bẫy mới: **một câu hỏi có HAI đối tượng** (families **and** society) ⇒ mỗi đối tượng ít nhất một ý · có **khung dàn ý gạch đầu dòng** dùng cho mọi đề hai câu hỏi.",
       ],
     },
 
@@ -638,6 +639,27 @@ const T2D18_VIET: Lesson = {
         "Câu 2 hỏi “positive **or** negative?” mà viết ~~“It has both positive and negative sides.”~~ rồi dừng → chưa trả lời. Được nói cả hai mặt, nhưng phải kết lại **mặt nào nặng hơn**.",
         "Câu 1 hỏi **Why** (nguyên nhân) mà lại viết **hậu quả** (effects) → lạc đề một nửa. Gạch chân từ để hỏi trước khi lập dàn ý.",
         "Biến bài thành **Discussion** (“Some people think… Others think…”) — đề không hỏi quan điểm của người khác, đề hỏi **bạn**.",
+      ],
+    },
+    {
+      t: "note",
+      title: "Cẩn thận: MỘT câu hỏi mà có HAI đối tượng",
+      items: [
+        "Nhiều đề chỉ có một câu hỏi nhưng bên trong có **hai đối tượng nối bằng and**: “What effects does this have on **families and society**?” · “What are the benefits for **individuals and for the country**?” · “What problems does this cause for **local people and the environment**?”",
+        "Luật: **mỗi đối tượng phải có ít nhất một ý** (có giải thích). Viết cả đoạn về gia đình mà không có câu nào về xã hội = trả lời **chưa đủ** phần đề hỏi → Task Response dễ kẹt ở band 5.",
+        "Cách gọn nhất: trong cùng thân bài, viết đối tượng 1 trước rồi **chuyển sang đối tượng 2** bằng ==In terms of society, …== / ==Regarding the wider community, …== / ==As for the country as a whole, …==.",
+        "Mẹo đọc đề: khi gạch chân từ để hỏi, **gạch luôn các danh từ sau “for / on”** trong câu hỏi. Có “and” giữa hai danh từ ⇒ ghi hai đầu dòng riêng trong dàn ý.",
+      ],
+    },
+    {
+      t: "table",
+      caption: "Ví dụ — đề tự soạn: “More and more adults now work from home. Why is this happening? What effects does this have on families and on society?”",
+      head: ["Phần", "Dàn ý (từ khoá)"],
+      rows: [
+        ["Thân 1 — Q1 Why?", "fast internet + video calls · companies save office rent"],
+        ["Thân 2 — Q2 đối tượng 1: **families**", "parents at home more → eat together, pick up children · but work and family time mix"],
+        ["Thân 2 — Q2 đối tượng 2: **society**", "**Regarding society**, … fewer cars at rush hour → less pollution · city-centre cafés lose customers"],
+        ["Câu sai cần tránh", "~~Thân 2 chỉ viết về gia đình~~ → thiếu “society” = bỏ sót một phần câu hỏi 2"],
       ],
     },
 
@@ -755,6 +777,17 @@ const T2D18_VIET: Lesson = {
         "Gạch chân **từ để hỏi** của từng câu (Why / Is it / How / What) và viết nó lên đầu mỗi cột — để không lạc sang câu kia.",
         "Với câu “positive or negative?”, quyết định **phía** trong 30 giây đầu: chọn phía bạn có **nhiều ý và ví dụ hơn**, không cần là điều bạn tin nhất.",
         "Mỗi cột chỉ cần **2 ý**: band 5–6 cần ý được **giải thích**, không cần nhiều ý.",
+      ],
+    },
+    {
+      t: "table",
+      caption: "Khung dàn ý gạch đầu dòng cho MỌI đề hai câu hỏi — chép ra giấy nháp, điền từ khoá trong 5 phút",
+      head: ["Đoạn", "Gạch đầu dòng cần có"],
+      rows: [
+        ["**Mở bài**", "– paraphrase tình huống (đổi 2–3 từ) · – trả lời Q1 trong **3–5 từ** · – trả lời Q2 trong **3–5 từ**"],
+        ["**Thân 1 = Q1**", "– câu chủ đề lặp từ để hỏi của Q1 · – ý 1 + vì sao · – ý 2 + ví dụ (tên nơi / nhóm người / con số ước chừng)"],
+        ["**Thân 2 = Q2**", "– câu chủ đề nói thẳng câu trả lời Q2 (chọn phía nếu hỏi tốt/xấu) · – ý 1 + vì sao · – ý 2 + ví dụ · – (tuỳ chọn) 1 câu nhượng bộ · – Q2 có HAI đối tượng ⇒ mỗi đối tượng 1 gạch"],
+        ["**Kết bài**", "– In conclusion + câu trả lời Q1 bằng lời khác · – câu trả lời Q2 bằng lời khác · – KHÔNG ý mới"],
       ],
     },
 
@@ -918,11 +951,11 @@ const T2D18_BAI_TAP: Lesson = {
   blocks: [
     {
       t: "recap",
-      title: "Bài tập hôm nay (38 câu + 1 đoạn viết)",
+      title: "Bài tập hôm nay (40 câu + 1 đoạn viết)",
       items: [
         "**I. Điền từ vựng** (8) · **II. Họ từ — đúng dạng** (6) · **III. Collocation** (6, trắc nghiệm).",
         "**IV. Dịch Việt → Anh** (5, có 💡) · **V. Matching sentence endings** (4) trên đoạn đọc mới về podcast.",
-        "**VI. Đề hai câu hỏi** (4, trắc nghiệm): nhận diện, chọn dàn ý, mở bài, kết bài.",
+        "**VI. Đề hai câu hỏi** (6, trắc nghiệm): nhận diện, chọn dàn ý, mở bài, kết bài, câu hỏi có hai đối tượng.",
         "**VII. Ôn xoắn ốc** (5): câu điều kiện 0/1 & unless (N13) · mệnh đề quan hệ (N15) · từ nối (N17).",
         "**VIII. Viết**: mở bài + dàn ý (~70 từ) cho một đề two-part. Đẩy band: **LR + TR** Writing band 5.",
       ],
@@ -1068,7 +1101,7 @@ const T2D18_BAI_TAP: Lesson = {
       ],
     },
 
-    { t: "h", text: "VI. Đề hai câu hỏi (4 câu)" },
+    { t: "h", text: "VI. Đề hai câu hỏi (6 câu)" },
     {
       t: "mcq",
       id: "t2d18-bt-de",
@@ -1113,6 +1146,26 @@ const T2D18_BAI_TAP: Lesson = {
           ],
           correct: 1,
           why: "**B** tóm lại đúng hai câu trả lời bằng lời khác. A thêm ý mới (government) và đổi câu hỏi; C chung chung và thêm ý mới (newspapers).",
+        },
+        {
+          q: "Prompt: Many young people now move from the countryside to big cities. Why is this happening? What effects does this have on rural areas and on cities? — Which Body 2 plan answers question 2 fully?",
+          options: [
+            "Body 2: villages lose young workers → farms close · old people live alone",
+            "Body 2: villages lose young workers → farms close · Regarding cities, more traffic and higher rents",
+            "Body 2: cities have better jobs and universities, so young people move there",
+          ],
+          correct: 1,
+          why: "Câu hỏi 2 có **hai đối tượng** (rural areas **and** cities) ⇒ cần ý cho **cả hai**. **B** có nông thôn + chuyển sang thành phố bằng **Regarding cities**. A chỉ nói nông thôn (bỏ sót cities); C là **lý do** — đó là câu hỏi 1, không phải hậu quả.",
+        },
+        {
+          q: "Which question has TWO targets that each need at least one idea?",
+          options: [
+            "Why do people prefer online shopping?",
+            "How does tourism affect local people and the natural environment?",
+            "Is online learning a positive or negative development?",
+          ],
+          correct: 1,
+          why: "**B**: “local people **and** the natural environment” — hai đối tượng nối bằng and ⇒ dàn ý phải có hai gạch riêng. A và C mỗi câu chỉ một đối tượng.",
         },
       ],
     },

@@ -424,7 +424,7 @@ const T2D4_WRITING: Lesson = {
   kind: 'writing',
   title: 'Writing Task 1: biểu đồ đường (line graph) trọn bài — overview 2 câu',
   goal: 'Viết trọn một bài Task 1 biểu đồ đường 160–190 từ trong 20 phút: mở bài paraphrase, overview đúng 2 câu không số, hai thân bài gom nhóm hợp lý, số liệu khớp hình và có so sánh.',
-  minutes: 65,
+  minutes: 95,
   blocks: [
     {
       t: 'recap',
@@ -435,6 +435,8 @@ const T2D4_WRITING: Lesson = {
         'Khung: ==Mở bài (1 câu paraphrase) → Overview (2 câu, KHÔNG số) → Body 1 → Body 2 (có số + so sánh)==.',
         'Ngôn ngữ số liệu (W17): **rise / fall / peak / remain stable** + trạng từ **slightly / steadily / sharply** + giới từ **to / by / at / from…to** (Ngày 3).',
         'Bài mẫu biểu đồ **lượng đường tiêu thụ** (nối từ vựng sức khoẻ), rồi bạn tự viết một bài cho AI chấm.',
+        'Bộ công cụ dùng cho **mọi dạng Task 1** (mục 5–6): bảng paraphrase câu mở bài · **number / amount / proportion / figure** · 5 cách gọi chủ ngữ số liệu · **by + năm** · cách **chia thân bài theo số hạng mục** · biểu đồ có đường **Total**.',
+        '**Biến thể có năm dự báo** (mục 7): phần đã qua dùng quá khứ, năm dự báo dùng **is expected / projected / predicted to** — có bài mẫu riêng.',
       ],
     },
 
@@ -451,6 +453,10 @@ const T2D4_WRITING: Lesson = {
         ['Map (bản đồ)', 'thay đổi trước – sau', 'Ngày 22'],
         ['Mixed (2 hình)', 'kết hợp hai loại', 'Tập 3'],
       ],
+    },
+    {
+      t: 'p',
+      text: '**Gặp hình lạ** (không thuộc 7 dạng — ví dụ hình so sánh hai chiếc xe, hai thiết kế nhà, các giai đoạn phát triển của một con vật)? Đừng hoảng: **coi nó là bài so sánh**. Mở bài paraphrase như thường; overview nêu **2–3 khác biệt (hoặc điểm giống) lớn nhất**; thân bài 1 tả vật A, thân bài 2 tả vật B và so luôn với A. Không có số thì so bằng **kích thước, vị trí, số bộ phận, chất liệu**.',
     },
     {
       t: 'sodo',
@@ -615,7 +621,242 @@ const T2D4_WRITING: Lesson = {
       ],
     },
 
-    { t: 'h', text: '5. Viết bài — AI chấm 4 tiêu chí' },
+    { t: 'h', text: '5. Câu mở bài & cách gọi số liệu — dùng cho cả 7 dạng' },
+    {
+      t: 'p',
+      text: 'Câu mở bài Task 1 luôn có cùng một khung: **tên hình + động từ + cái gì + ở đâu + khi nào**. Mỗi phần có sẵn vài cách đổi. Bạn chỉ cần đổi **2–3 chỗ** là đủ "paraphrase" — **không** đổi tên riêng, đơn vị, năm.',
+    },
+    {
+      t: 'table',
+      caption: 'Bảng paraphrase câu mở bài (dùng cho mọi dạng)',
+      head: ['Trong đề', 'Đổi thành', 'Ghi chú'],
+      rows: [
+        ['The graph / The chart', 'The **line graph** / **bar chart** / **pie charts** / **table** / **diagram** / **maps**', 'Gọi **đúng tên** hình; 2 hình → số nhiều (the two pie charts).'],
+        ['shows', '**illustrates** · **compares** (từ 2 nhóm trở lên) · **presents** · **gives information about**', 'compares chỉ dùng khi hình thật sự có nhiều nhóm.'],
+        ['the number of people who…', '**how many** people…', 'đếm được → how many'],
+        ['the amount of money spent on…', '**how much** money was spent on… · **spending on**…', 'không đếm được → how much'],
+        ['the percentage of…', '**the proportion of**… · **what percentage of**…', ''],
+        ['information about / data on', '**data on** · **figures for**', ''],
+        ['between 2000 and 2020', '**from** 2000 **to** 2020 · **over a twenty-year period**', 'Đếm đúng số năm!'],
+        ['in three countries', 'in **Japan, Canada and Vietnam**', 'Gọi tên luôn cho rõ.'],
+        ['(Process) how X is made', 'the **stages in the production of** X · **how** X **is produced**', 'Ngày 20'],
+        ['(Map) changes to a town', '**how** the town **changed / was developed** between… and…', 'Ngày 22'],
+      ],
+    },
+    {
+      t: 'rule',
+      formula: 'The + tên hình + illustrates / compares + how many / how much / the proportion of + N + in + nơi + from … to … / over a … period.',
+      vi: 'Câu mở bài: đổi 2–3 phần (tên hình, động từ, cụm số liệu, thời gian); giữ nguyên tên riêng, đơn vị, năm.',
+    },
+    {
+      t: 'table',
+      caption: 'number / amount / proportion / figure — dùng với gì',
+      head: ['Cụm', 'Đi với', 'Đúng', 'Sai hay gặp'],
+      rows: [
+        ['**the number of**', 'danh từ **đếm được** số nhiều', 'the number of **cars / tourists**', '~~the number of money~~'],
+        ['**the amount of**', 'danh từ **không đếm được**', 'the amount of **sugar / water / money**', '~~the amount of people~~'],
+        ['**the proportion / percentage of**', 'tỉ lệ (%), cả hai loại danh từ', 'the proportion of **adults who exercise**', '~~the percentage of 30%~~ → **30% of** adults'],
+        ['**the figure for**', 'thay cho cả cụm số liệu đã nhắc', 'the figure **for** Japan', '~~the figure of Japan~~'],
+        ['**percentage points**', 'khoảng cách giữa hai con số %', 'rose from 20% to 30% = **by 10 percentage points**', '~~rose by 10%~~ (10% của 20 chỉ là 2)'],
+      ],
+    },
+    {
+      t: 'note',
+      title: 'Số lớn — người Việt hay sai million / thousand',
+      items: [
+        'Có **số đứng trước** → million / thousand / billion **không thêm -s, không có of**: **five million people**, **2.5 million tonnes**, **three hundred thousand visitors**. ~~five millions people~~ · ~~five million of people~~.',
+        'Không có số đứng trước (nghĩa "hàng triệu") → **-s + of**: **millions of people**, **thousands of tourists**.',
+        'Đơn vị trên trục là "thousands" / "millions" → viết lại cho đủ: trục ghi 8 (millions) ⇒ **8 million visitors**, đừng viết ~~8 visitors~~.',
+      ],
+    },
+    {
+      t: 'table',
+      caption: '5 cách gọi chủ ngữ số liệu — xoay vòng để không lặp "the figure"',
+      head: ['Cách', 'Ví dụ (cùng một ý: du khách đến Đà Nẵng)'],
+      rows: [
+        ['1. **the number of** + N', 'The number of visitors to Da Nang rose to 8 million.'],
+        ['2. **Con số làm chủ ngữ**', 'Around 8 million tourists visited Da Nang in 2020.'],
+        ['3. **Danh từ khác / danh từ hoá**', 'Visitor numbers in Da Nang grew rapidly. · Tourism in Da Nang grew rapidly.'],
+        ['4. **Nơi chốn / nhóm người làm chủ ngữ**', 'Da Nang welcomed 8 million visitors. · Hoi An attracted far fewer.'],
+        ['5. **the figure for** + nơi / nhóm', 'The figure for Hoi An was much lower, at 3 million.'],
+      ],
+    },
+    {
+      t: 'note',
+      title: 'Mẹo xoay vòng chủ ngữ',
+      items: [
+        'Mỗi 1–2 câu đổi một cách gọi. **Không** để "the figure" đứng đầu hai câu liền nhau.',
+        'Cách 2 (con số làm chủ ngữ) **không** mở câu bằng chữ số: ~~8 million tourists…~~ ở đầu câu → **Around 8 million…** hoặc **Some 8 million…**.',
+      ],
+    },
+    {
+      t: 'table',
+      caption: '"in + năm" khác "by + năm"',
+      head: ['Cụm', 'Nghĩa', 'Thì', 'Ví dụ'],
+      rows: [
+        ['**in** 2010', 'đúng vào năm đó', 'quá khứ đơn', 'In 2010, the figure **reached** 50%.'],
+        ['**by** 2010', 'tính dồn **đến** mốc đó (xảy ra lúc nào đó trước hoặc đúng 2010)', '**quá khứ hoàn thành** had + V3', 'By 2010, the figure **had reached** 50%. · Vietnam **had overtaken** the UK **by** 2020.'],
+        ['**by** 2040 (dự báo)', 'đến mốc tương lai', 'is expected to + V (band 5) · will have + V3 (band 6+)', 'The figure **is expected to reach** 35% **by** 2040.'],
+      ],
+    },
+    {
+      t: 'quiz',
+      id: 't2d4-viet-goi-so',
+      title: 'Dịch câu số liệu (4 câu)',
+      kind: 'translate',
+      grammar: 'number (đếm được) / amount (không đếm được) · số + million (không -s) · by + năm + had V3.',
+      items: [
+        { q: 'Lượng nước tiêu thụ tăng gấp đôi.', hint: 'The amount of water consumed / Water consumption, doubled', answers: ['The amount of water consumed doubled.', 'Water consumption doubled.', 'The amount of water used doubled.', 'The amount of water consumed has doubled.', 'Water consumption has doubled.'] },
+        { q: 'Khoảng năm triệu du khách đã tới thành phố vào năm 2019.', hint: 'Around five million tourists, visited', answers: ['Around five million tourists visited the city in 2019.', 'About five million tourists visited the city in 2019.', 'Around 5 million tourists visited the city in 2019.', 'About 5 million tourists visited the city in 2019.', 'In 2019, around five million tourists visited the city.', 'In 2019, about five million tourists visited the city.', 'Approximately five million tourists visited the city in 2019.'] },
+        { q: 'Đến năm 2015, con số đã giảm xuống 20%.', hint: 'By 2015, the figure, had fallen to', answers: ['By 2015, the figure had fallen to 20%.', 'By 2015 the figure had fallen to 20%.', 'By 2015, the figure had dropped to 20%.', 'By 2015, the figure had decreased to 20%.', 'By 2015, the figure had declined to 20%.', 'The figure had fallen to 20% by 2015.', 'By 2015, the figure had fallen to 20 per cent.'] },
+        { q: 'Con số của Nhật thấp hơn nhiều.', hint: 'The figure for Japan, much lower', answers: ['The figure for Japan was much lower.', "Japan's figure was much lower.", 'The figure for Japan was far lower.', 'The figure for Japan is much lower.'] },
+      ],
+    },
+
+    { t: 'h', text: '6. Chia thân bài theo số hạng mục' },
+    {
+      t: 'p',
+      text: '"Hạng mục" = mỗi đường, mỗi loại cột, mỗi phần của bánh. Trước khi viết, **đếm số hạng mục** rồi chọn cách chia theo bảng dưới — đỡ mất 3–4 phút phân vân và không bị kể máy móc.',
+    },
+    {
+      t: 'table',
+      caption: 'Bảng quyết định chia thân bài',
+      head: ['Hình có…', 'Chia thân bài', 'Ghi chú'],
+      rows: [
+        ['**2–3 hạng mục**, theo thời gian', 'Theo **giai đoạn** (trước / sau điểm đổi chiều) **hoặc** mỗi khổ một nhóm đường có "câu chuyện" chung', 'Như bài mẫu: UK + Vietnam (cắt nhau) / Japan (phẳng).'],
+        ['**4 hạng mục**', '**2 + 2** theo xu hướng: nhóm tăng / nhóm giảm (hoặc nhóm cao / nhóm thấp)', ''],
+        ['**5–6 hạng mục trở lên**', 'Gom thành **tối đa 4 khối**: khổ 1 = các mục lớn / thay đổi mạnh, khổ 2 = phần còn lại; mỗi khổ 2–3 câu', 'Mục **"Other"** luôn tả **cuối cùng**, 1 câu là đủ.'],
+        ['Chỉ **2 mốc năm** (bar / pie / table)', 'Theo **nhóm tăng / nhóm giảm** — **không** chia "năm đầu / năm cuối"', 'Chia theo năm = kể hai lần cùng các mục.'],
+        ['Có **năm dự báo**', '**Đã qua → dự báo** (ngoại lệ — mục 7)', 'Mỗi khổ một nhóm thì.'],
+      ],
+    },
+    {
+      t: 'examples',
+      items: [
+        { en: 'Spending on both housing and transport rose, housing to a greater extent.', vi: 'Chi tiêu cho cả nhà ở và đi lại đều tăng, nhà ở tăng nhiều hơn. (**to a greater extent** = ở mức lớn hơn — gộp hai mục cùng chiều, khác độ lớn)' },
+        { en: 'Coffee and tea sales both declined, although tea fell to a lesser extent.', vi: 'Doanh số cà phê và trà đều giảm, dù trà giảm ít hơn. (**to a lesser extent** = ở mức nhỏ hơn)' },
+        { en: 'The remaining category, "Other", stayed at around 5% throughout.', vi: 'Hạng mục còn lại, "Khác", giữ quanh 5% suốt giai đoạn. (Other: một câu, đặt cuối)' },
+      ],
+    },
+    {
+      t: 'sodo',
+      kind: 'flow',
+      title: 'Đường lên xuống nhiều lần → tối đa 3–4 chặng',
+      steps: [
+        { label: '1. Đánh dấu đầu & cuối', sub: 'Số năm đầu, số năm cuối' },
+        { label: '2. Khoanh đỉnh & đáy', sub: 'Điểm cao nhất, điểm thấp nhất (chỉ những điểm đổi chiều lớn)' },
+        { label: '3. Cắt thành 3–4 chặng', sub: 'Mỗi chặng nằm giữa hai điểm đã khoanh' },
+        { label: '4. Mỗi chặng 1 câu', sub: 'Động từ xu hướng + số đầu / cuối chặng' },
+      ],
+      caption: 'Dao động nhỏ giữa một chặng → gom bằng "fluctuated between X and Y". Không tả từng năm một.',
+    },
+    {
+      t: 'examples',
+      items: [
+        { en: 'The number of visitors rose from 20,000 to a peak of 45,000 in 2008, then fell sharply to 25,000 in 2012. After fluctuating between 25,000 and 30,000 for several years, it recovered to 40,000 in 2020.', vi: 'Một đường lên xuống 7–8 lần, nhưng chỉ tả 3 chặng: lên đỉnh → rơi xuống → dao động rồi hồi lại. Đủ ý, kịp giờ.' },
+      ],
+    },
+    {
+      t: 'note',
+      title: 'Biểu đồ có đường / cột "Total" — tả tổng trước',
+      items: [
+        'Đường (hoặc cột) **Total** = cộng các phần lại. Số đã có sẵn trên hình — **không** cần tự cộng.',
+        '**Overview**: câu 1 nói **tổng** tăng / giảm thế nào; câu 2 nói **phần nào gây ra** phần lớn thay đổi đó. Ví dụ: Overall, **total** energy use rose over the period, **mainly because of** a sharp increase in electricity, while gas use fell.',
+        '**Thân bài 1** mở bằng số của **tổng** (đầu → cuối); **thân bài 2** tả các thành phần, phần đóng góp lớn nhất trước.',
+        'Bảng có **hàng / cột Total** làm y như vậy (Ngày 16).',
+      ],
+    },
+    {
+      t: 'rule',
+      formula: 'Đếm hạng mục → 2–3: theo giai đoạn / nhóm · 4: 2 + 2 · 5+: ≤ 4 khối, Other cuối · 2 mốc năm: tăng / giảm · Total: tổng trước.',
+      vi: 'Chọn cách chia thân bài TRƯỚC khi viết, theo số hạng mục và loại hình.',
+    },
+
+    { t: 'h', text: '7. Biến thể: biểu đồ đường có năm dự báo' },
+    {
+      t: 'p',
+      text: 'Một số đề có các năm **trong tương lai** (thường đánh dấu * hoặc ghi "projected / forecast"). Đây là số **dự báo** — chưa xảy ra. Khó nhất của dạng này là **đổi thì ngay trong một đường**: phần đã qua dùng quá khứ đơn, phần dự báo dùng khung "được dự đoán là sẽ…".',
+    },
+    {
+      t: 'p',
+      text: '**Đề:** The line graph below shows the percentage of the population aged 65 and over in Japan, Canada and Vietnam between 2000 and 2020, with projections for 2030 and 2040. Summarise the information by selecting and reporting the main features, and make comparisons where relevant. Write at least 150 words.',
+    },
+    {
+      t: 'figure',
+      fig: {
+        kind: 'line',
+        title: 'Percentage of the population aged 65 and over, 2000–2040 (* = projection)',
+        note: 'Số liệu tự đặt cho bài luyện. 2030 và 2040 là số dự báo.',
+        unit: '%',
+        categories: ['2000', '2010', '2020', '2030*', '2040*'],
+        series: [
+          { name: 'Japan', values: [17, 23, 29, 31, 35] },
+          { name: 'Canada', values: [13, 14, 18, 23, 25] },
+          { name: 'Vietnam', values: [6, 7, 8, 13, 18] },
+        ],
+      },
+    },
+    {
+      t: 'table',
+      caption: 'Ba phần thời gian — ba nhóm thì',
+      head: ['Phần', 'Năm', 'Thì / khung', 'Ví dụ'],
+      rows: [
+        ['**Đã qua**', '2000 → 2010', 'quá khứ đơn: rose, climbed, saw', 'The figure for Japan **climbed** steadily.'],
+        ['**Mốc hiện tại** (năm cuối có số thật)', '2020', 'quá khứ đơn: stood at, reached, was', 'In 2020, it **stood at** 18%.'],
+        ['**Dự báo**', '2030*, 2040*', '**is expected / projected / predicted / forecast to** + V · **is likely to** + V', 'It **is projected to reach** 25% **by** 2040.'],
+        ['**Overview** (bao cả hai)', 'cả giai đoạn', 'quá khứ + **is expected to continue / keep + V-ing**', 'The share **rose** … and **is expected to keep rising**.'],
+      ],
+    },
+    {
+      t: 'patterns',
+      rows: [
+        { formula: 'S + is expected / projected / predicted / forecast + to V (+ by + năm)', vi: 'chủ ngữ "được dự đoán sẽ…" — khung chính, xoay vòng 4 động từ', examples: [{ en: 'The figure for Japan is predicted to rise to 35% by 2040.', vi: 'Con số của Nhật được dự đoán tăng lên 35% vào năm 2040.' }] },
+        { formula: 'S + is likely to + V', vi: 'nhiều khả năng sẽ…', examples: [{ en: 'Canada is likely to follow a similar pattern.', vi: 'Canada nhiều khả năng đi theo xu hướng tương tự.' }] },
+        { formula: 'It is predicted / expected that + S + will + V', vi: 'người ta dự đoán rằng…', examples: [{ en: 'It is expected that the figure will double.', vi: 'Người ta dự đoán con số sẽ tăng gấp đôi.' }] },
+        { formula: '…, with + N + forecast / projected + to V', vi: 'gói thêm một ý dự báo vào cuối câu (band 6)', examples: [{ en: 'Canada is likely to follow, with its figure forecast to hit 25%.', vi: 'Canada nhiều khả năng theo sau, với con số dự báo đạt 25%.' }] },
+      ],
+    },
+    {
+      t: 'note',
+      title: 'Ngoại lệ — cẩn thận đừng áp nhầm',
+      items: [
+        'Mục 4 dặn **"chia theo năm làm bài thành liệt kê"** — đúng với hình thường. Hình có dự báo là **NGOẠI LỆ**: ranh giới "số thật / số dự báo" là một mốc tự nhiên, nên **thân bài 1 = phần đã qua**, **thân bài 2 = phần dự báo**. Trong mỗi khổ **vẫn phải so các đường** với nhau, không kể từng năm.',
+        'Không viết số dự báo bằng quá khứ: ~~In 2040, Japan rose to 35%.~~ → Japan **is predicted to rise** to 35% by 2040.',
+        'Không lặp **will** ở mọi câu: luân phiên **expected → projected → predicted → is likely to**.',
+        'Overview phải **bao cả hai giai đoạn** (đã tăng VÀ được dự đoán tiếp tục tăng), không chỉ nói phần quá khứ.',
+      ],
+    },
+    {
+      t: 'rule',
+      formula: 'Đã qua → V-ed · Dự báo → is expected / projected / predicted to + V (by + năm)',
+      vi: 'Một đường, hai thì: số thật dùng quá khứ đơn, số dự báo dùng khung "được dự đoán". Thân 1 = đã qua, thân 2 = dự báo.',
+    },
+    {
+      t: 'examples',
+      items: [
+        { en: '[Introduction] The line graph compares the proportion of people aged 65 and over in Japan, Canada and Vietnam from 2000 to 2020, with projections for 2030 and 2040.', vi: '[Mở bài] Biểu đồ đường so sánh tỉ lệ người từ 65 tuổi trở lên ở Nhật, Canada và Việt Nam từ 2000 đến 2020, kèm số dự báo cho 2030 và 2040.' },
+        { en: '[Overview] Overall, the share of older people rose in all three countries and is expected to keep rising until 2040. Japan had the oldest population throughout the period, while Vietnam is projected to see the fastest growth in the future.', vi: '[Tổng quan] Nhìn chung, tỉ lệ người cao tuổi tăng ở cả ba nước và được dự đoán tiếp tục tăng tới 2040. Nhật có dân số già nhất suốt giai đoạn, còn Việt Nam được dự báo tăng nhanh nhất trong tương lai.' },
+        { en: '[Body 1] In 2000, 17% of Japanese people were aged 65 or over, compared with 13% in Canada and only 6% in Vietnam. Over the next twenty years, the figure for Japan climbed steadily to 29%, whereas the Canadian figure rose more slowly, reaching 18% in 2020. Vietnam saw only a slight increase, to 8%.', vi: '[Thân bài 1 — đã qua, quá khứ đơn] Năm 2000, 17% người Nhật từ 65 tuổi trở lên, so với 13% ở Canada và chỉ 6% ở Việt Nam. Trong hai mươi năm sau, con số của Nhật tăng đều lên 29%, còn của Canada tăng chậm hơn, đạt 18% năm 2020. Việt Nam chỉ tăng nhẹ, lên 8%.' },
+        { en: '[Body 2] Looking ahead, the proportion in Japan is predicted to rise to 35% by 2040. Canada is likely to follow a similar pattern, with its figure forecast to hit 25%. The most dramatic change, however, is expected in Vietnam, where older people are projected to make up 18% of the population in 2040, more than double the 2020 level.', vi: '[Thân bài 2 — dự báo] Nhìn về sau, tỉ lệ ở Nhật được dự đoán tăng lên 35% vào 2040. Canada nhiều khả năng theo xu hướng tương tự, với con số dự báo đạt 25%. Tuy nhiên, thay đổi mạnh nhất được dự đoán ở Việt Nam, nơi người cao tuổi được dự báo chiếm 18% dân số năm 2040, hơn gấp đôi mức năm 2020.' },
+      ],
+    },
+    {
+      t: 'table',
+      caption: 'Soát số + vì sao bài mẫu (177 từ, đã đếm) đạt khoảng band 6.0 (ước tính)',
+      head: ['Câu / tiêu chí', 'Kiểm'],
+      rows: [
+        ['17% · 13% · 6% (2000)', '✓ khớp hình'],
+        ['Japan climbed steadily to 29% · Canada rose more slowly, 18% in 2020 · Vietnam slight, to 8%', '✓ 17→23→29 (+12) · 13→14→18 (+5) · 6→7→8'],
+        ['Japan 35% by 2040 · Canada 25% · Vietnam 18%, more than double 2020', '✓ 18 ÷ 8 = 2,25'],
+        ['"fastest growth" / "most dramatic change" — Vietnam', '✓ 2020→2040: VN +10 điểm, Canada +7, Japan +6'],
+        ['**TA**', 'Overview bao cả quá khứ và dự báo; số chọn lọc (đầu, 2020, 2040).'],
+        ['**CC**', 'Chia thân bài đã qua / dự báo; nối **Over the next twenty years, Looking ahead, however, whereas**.'],
+        ['**LR**', 'Xoay vòng **proportion / share / figure / level**; **expected / predicted / projected / forecast / is likely to**.'],
+        ['**GRA**', 'Hai nhóm thì đúng chỗ; mệnh đề **where**; cụm **with + N + forecast to**; **compared with**.'],
+      ],
+    },
+
+    { t: 'h', text: '8. Viết bài — AI chấm 4 tiêu chí' },
     {
       t: 'figure',
       fig: {
@@ -654,18 +895,22 @@ const T2D4_HOMEWORK: Lesson = {
   id: 't2d4-bai-tap',
   kind: 'homework',
   title: 'Bài tập Ngày 4',
-  goal: 'Tự kiểm tra Ngày 4 bằng 34 câu có đáp án: 8 câu nghĩa từ, 8 câu tiền tố / hậu tố, 5 câu Note completion, 6 câu ngôn ngữ xu hướng, 7 câu dịch.',
-  minutes: 40,
+  goal: 'Tự kiểm tra Ngày 4 bằng 44 câu có đáp án: 8 câu nghĩa từ, 8 câu tiền tố / hậu tố, 5 câu Note completion, 6 câu ngôn ngữ xu hướng, 7 câu dịch, 3 câu chọn cách chia thân bài, 3 câu "saw + xu hướng", 4 câu thì cho năm dự báo — và một bài viết line graph có năm dự báo cho AI chấm.',
+  minutes: 70,
   blocks: [
     {
       t: 'recap',
-      title: 'Bài tập hôm nay (34 câu)',
+      title: 'Bài tập hôm nay (44 câu + 1 bài viết)',
       items: [
         '**Phần I** — AWL & sức khoẻ (8 câu trắc nghiệm).',
         '**Phần II** — Tiền tố / hậu tố (8 câu điền).',
         '**Phần III** — Note completion trên đoạn đọc ngắn (5 câu).',
         '**Phần IV** — Ngôn ngữ xu hướng Task 1 (6 câu điền).',
         '**Phần V** — Dịch (7 câu).',
+        '**Phần VI** — Chọn cách chia thân bài (3 câu trắc nghiệm).',
+        '**Phần VII** — Viết lại câu "năm / nơi + saw + xu hướng" (3 câu).',
+        '**Phần VIII** — Thì cho năm dự báo (4 câu điền).',
+        '**Phần IX** — Viết trọn một bài line graph có năm dự báo (AI chấm).',
       ],
     },
 
@@ -774,6 +1019,108 @@ const T2D4_HOMEWORK: Lesson = {
         { q: 'Số người tập gym tăng từ 200 lên 500.', hint: 'The number of people who go to the gym / gym members, rose / increased from 200 to 500', answers: ['The number of gym members rose from 200 to 500.', 'The number of gym members increased from 200 to 500.', 'The number of people who go to the gym rose from 200 to 500.', 'The number of people going to the gym rose from 200 to 500.', 'The number of people who went to the gym rose from 200 to 500.', 'The number of gym-goers rose from 200 to 500.', 'The number of people who go to the gym increased from 200 to 500.', 'The number of people going to the gym increased from 200 to 500.'] },
         { q: 'Nhìn chung, lượng tiêu thụ đường ở Nhật hầu như không đổi.', hint: 'Overall, sugar consumption in Japan, hardly changed / remained almost unchanged', answers: ['Overall, sugar consumption in Japan hardly changed.', 'Overall, sugar consumption in Japan remained almost unchanged.', 'Overall, sugar consumption in Japan remained almost the same.', 'Overall, sugar consumption in Japan stayed almost the same.', 'Overall, sugar consumption in Japan remained almost stable.', 'Overall sugar consumption in Japan hardly changed.'] },
         { q: 'Hút thuốc trong bệnh viện là bất hợp pháp.', hint: 'Smoking in hospitals, is illegal', answers: ['Smoking in hospitals is illegal.', 'It is illegal to smoke in hospitals.', "It's illegal to smoke in hospitals.", 'Smoking in hospital is illegal.', 'Smoking in a hospital is illegal.'] },
+      ],
+    },
+
+    { t: 'h', text: 'Phần VI — Chọn cách chia thân bài (3 câu)' },
+    {
+      t: 'mcq',
+      id: 't2d4-bt-chia-than',
+      title: 'Phần VI — Chia thân bài thế nào? (3 câu)',
+      items: [
+        {
+          q: 'Bar chart: chi tiêu của hộ gia đình cho 6 mục (food, housing, transport, education, health, other) năm 2000 và 2020. Food, housing, education tăng; transport, health giảm; Other gần như không đổi.',
+          options: [
+            'Body 1: năm 2000 · Body 2: năm 2020',
+            'Body 1: ba mục tăng · Body 2: hai mục giảm, rồi một câu về Other ở cuối',
+            'Sáu khổ, mỗi mục một khổ',
+          ],
+          correct: 1,
+          why: 'Chỉ 2 mốc năm + 6 mục ⇒ gom theo **nhóm tăng / nhóm giảm**, "Other" tả **cuối**. A kể hai lần cùng sáu mục; C quá vụn, không gom nhóm.',
+        },
+        {
+          q: 'Line graph: 4 loại phương tiện đi làm 1990–2020 — xe máy và xe buýt tăng, xe đạp và đi bộ giảm.',
+          options: [
+            'Body 1: xe máy + xe buýt (tăng) · Body 2: xe đạp + đi bộ (giảm)',
+            'Body 1: 1990–2000 · Body 2: 2000–2020',
+            'Body 1: xe máy · Body 2: ba loại còn lại',
+          ],
+          correct: 0,
+          why: '4 hạng mục ⇒ **2 + 2 theo xu hướng**. B chia theo năm làm bài thành liệt kê; C lệch (một khổ quá ngắn, một khổ trộn cả tăng lẫn giảm).',
+        },
+        {
+          q: 'Line graph: tỉ lệ người trên 65 tuổi ở 3 nước, 2000–2020, kèm số dự báo 2030 và 2040.',
+          options: [
+            'Chỉ tả 2030 và 2040 vì đó là phần mới',
+            'Body 1: 2000–2020 (đã qua, quá khứ đơn) · Body 2: 2030–2040 (dự báo, is expected to)',
+            'Body 1: năm 2000 · Body 2: năm 2040, bỏ qua các năm giữa',
+          ],
+          correct: 1,
+          why: 'Đây là **ngoại lệ**: ranh giới số thật / số dự báo là mốc tự nhiên, mỗi khổ một nhóm thì. Trong mỗi khổ vẫn so ba nước. A bỏ mất nửa hình; C bỏ năm 2020 (mốc quan trọng nhất).',
+        },
+      ],
+    },
+
+    { t: 'h', text: 'Phần VII — "năm / nơi + saw + xu hướng" (3 câu)' },
+    {
+      t: 'quiz',
+      id: 't2d4-bt-saw',
+      title: 'Phần VII — Viết lại câu bắt đầu bằng thời gian / nơi chốn (3 câu)',
+      kind: 'translate',
+      grammar: 'S + rose sharply → [Năm / Giai đoạn / Nơi] + saw / witnessed + a sharp rise + in + N. Đổi trạng từ → tính từ (sharply → sharp). Không mở câu bằng chữ số: "2020 saw…" → "The year 2020 saw…".',
+      items: [
+        { q: 'Viết lại, bắt đầu bằng "The period between 2000 and 2020": "Sugar consumption in Vietnam rose sharply between 2000 and 2020."', hint: 'The period between 2000 and 2020 saw a sharp rise in…', answers: ['The period between 2000 and 2020 saw a sharp rise in sugar consumption in Vietnam.', 'The period between 2000 and 2020 witnessed a sharp rise in sugar consumption in Vietnam.', 'The period between 2000 and 2020 saw a sharp increase in sugar consumption in Vietnam.', 'The period between 2000 and 2020 witnessed a sharp increase in sugar consumption in Vietnam.'] },
+        { q: 'Viết lại, bắt đầu bằng "The year 2020": "The number of cinema visitors fell dramatically in 2020."', hint: 'The year 2020 saw a dramatic fall / drop in…', answers: ['The year 2020 saw a dramatic fall in the number of cinema visitors.', 'The year 2020 saw a dramatic drop in the number of cinema visitors.', 'The year 2020 witnessed a dramatic fall in the number of cinema visitors.', 'The year 2020 witnessed a dramatic drop in the number of cinema visitors.', 'The year 2020 saw a dramatic decline in the number of cinema visitors.', 'The year 2020 saw a dramatic decrease in the number of cinema visitors.'] },
+        { q: 'Viết lại, bắt đầu bằng "Hanoi": "Car ownership in Hanoi increased steadily over the decade."', hint: 'Hanoi saw / witnessed a steady increase in…', answers: ['Hanoi saw a steady increase in car ownership over the decade.', 'Hanoi witnessed a steady increase in car ownership over the decade.', 'Hanoi saw a steady rise in car ownership over the decade.', 'Hanoi witnessed a steady rise in car ownership over the decade.', 'Over the decade, Hanoi saw a steady increase in car ownership.'] },
+      ],
+    },
+
+    { t: 'h', text: 'Phần VIII — Thì cho năm dự báo (4 câu)' },
+    {
+      t: 'p',
+      text: 'Dựa vào hình tuổi già ở bài Viết (Japan 17 · 23 · 29 · 31* · 35*; Canada 13 · 14 · 18 · 23* · 25*; Vietnam 6 · 7 · 8 · 13* · 18*; * = dự báo). Điền dạng đúng của động từ trong ngoặc. Năm đã qua → quá khứ đơn; năm dự báo → khung "is … to".',
+    },
+    {
+      t: 'quiz',
+      id: 't2d4-bt-du-bao',
+      title: 'Phần VIII — Điền dạng đúng (4 câu)',
+      kind: 'fill',
+      items: [
+        { q: 'Between 2000 and 2020, the Canadian figure ___ (rise) from 13% to 18%.', answers: ['rose'] },
+        { q: 'In 2020, the proportion in Vietnam ___ (stand) at 8%.', answers: ['stood'] },
+        { q: 'By 2040, the figure for Japan ___ (project) to reach 35%. (bị động, hiện tại)', answers: ['is projected'] },
+        { q: 'Vietnam is expected ___ (see) the fastest growth after 2020.', answers: ['to see'] },
+      ],
+    },
+
+    { t: 'h', text: 'Phần IX — Viết: line graph có năm dự báo' },
+    {
+      t: 'figure',
+      fig: {
+        kind: 'line',
+        title: 'International students at universities in one city (thousands), 2005–2035 (* = projection)',
+        note: 'Số liệu tự đặt cho bài luyện. 2030 và 2035 là số dự báo.',
+        unit: 'thousands',
+        categories: ['2005', '2010', '2015', '2020', '2025', '2030*', '2035*'],
+        series: [
+          { name: 'From Asia', values: [12, 18, 25, 20, 30, 38, 45] },
+          { name: 'From Europe', values: [10, 11, 12, 9, 11, 12, 13] },
+          { name: 'From other regions', values: [3, 4, 4, 3, 5, 7, 10] },
+        ],
+      },
+    },
+    {
+      t: 'essay',
+      id: 't2d4-bt-viet-du-bao',
+      task: 'Task 1',
+      prompt: 'The line graph above shows the number of international students at universities in one city, by region of origin, between 2005 and 2025, with projections for 2030 and 2035. Summarise the information by selecting and reporting the main features, and make comparisons where relevant. Write at least 150 words. (Data, thousands — From Asia: 2005 12, 2010 18, 2015 25, 2020 20, 2025 30, 2030* 38, 2035* 45 · From Europe: 10, 11, 12, 9, 11, 12*, 13* · From other regions: 3, 4, 4, 3, 5, 7*, 10* · * = projection)',
+      minWords: 150,
+      tips: [
+        'Mở bài: shows the number of → **compares how many**; between 2005 and 2025 → **over a twenty-year period**; nhớ thêm **with projections for 2030 and 2035**.',
+        'Overview bao **cả hai phần**: cả ba nhóm nhìn chung tăng và **được dự đoán tiếp tục tăng**; sinh viên châu Á **luôn đông nhất** và khoảng cách ngày càng lớn.',
+        'Thân 1 = **2005–2025** (quá khứ đơn): châu Á 12 → đỉnh 25 (2015) → giảm còn 20 (2020) → 30; châu Âu dao động quanh 10–12; nhóm khác 3–5. Đường châu Á có 3 chặng — đừng tả từng năm.',
+        'Thân 2 = **2030*–2035*** (dự báo): **is expected / projected / predicted to**, **is likely to** — luân phiên, không lặp will. Số đơn vị nghìn → **45,000 students** hoặc **45 thousand**, không ~~45 thousands~~.',
+        'Soát: không viết số dự báo bằng quá khứ; overview không có số.',
       ],
     },
   ],

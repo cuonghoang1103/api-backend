@@ -849,7 +849,7 @@ const D2_HOMEWORK: Lesson = {
   id: "d2-bai-tap",
   kind: "homework",
   title: "Bài tập Ngày 2 — Tìm từ khoá",
-  goal: "Luyện 5 bài tìm từ khoá như sách, rồi củng cố: 5 câu trả lời ngắn, 10 câu nhận diện loại từ khoá và 5 câu dịch dùng từ vựng bài thi — tổng 31 câu.",
+  goal: "Luyện 5 bài tìm từ khoá như sách, rồi củng cố: 5 câu trả lời ngắn, 10 câu nhận diện loại từ khoá, 6 câu đoán trước từ thay thế và 5 câu dịch dùng từ vựng bài thi — tổng 37 câu.",
   minutes: 40,
   blocks: [
     {
@@ -858,7 +858,7 @@ const D2_HOMEWORK: Lesson = {
       items: [
         "Mỗi bài: đọc câu hỏi → **gạch từ khoá** → đọc đoạn văn → **tìm từ khoá tương ứng** → chọn đáp án.",
         "Cuối mỗi bài có **bản dịch** — làm xong mới mở.",
-        "Phần thêm: **5 câu trả lời ngắn** (tối đa HAI TỪ và/hoặc MỘT SỐ) · **10 câu** “từ khoá loại nào” · **5 câu dịch** dùng từ vựng bài thi (mục 9 bài Reading).",
+        "Phần thêm: **5 câu trả lời ngắn** (tối đa HAI TỪ và/hoặc MỘT SỐ) · **10 câu** “từ khoá loại nào” · **6 câu** đoán trước từ thay thế · **5 câu dịch** dùng từ vựng bài thi (mục 9 bài Reading).",
       ],
     },
     {
@@ -1148,6 +1148,43 @@ const D2_HOMEWORK: Lesson = {
         { q: "Almost **a quarter** of the forest was destroyed by fire.", options: ["Số liệu", "Thời điểm cụ thể", "Thay thế"], correct: 0, why: "“a quarter” (một phần tư) là **tỉ lệ** → **số liệu**." },
         { q: "Most tea in Vietnam is grown in **mountainous areas**.", options: ["Tên riêng", "Địa điểm", "Định hướng"], correct: 1, why: "“mountainous areas” (vùng núi) là từ chung chỉ nơi chốn, không viết hoa → **địa điểm**." },
         { q: "Question: “Young people **prefer** short videos.” — Bài đọc: “Teenagers **favour** short clips.”", options: ["Chủ đề", "Thay thế", "Ví dụ"], correct: 1, why: "“prefer” và “favour” cùng nghĩa “thích hơn” (cả young people → teenagers, videos → clips) → từ khoá **thay thế**." },
+      ],
+    },
+
+    { t: "h", text: "Thêm: Đoán trước từ thay thế (6 câu)" },
+    {
+      t: "p",
+      text: "Phần này sách chưa có. Trước khi dò bài, hãy chia từ khoá của câu hỏi thành **hai nhóm**. Nhóm ==giữ nguyên==: **tên riêng, con số, năm, ngày tháng, thuật ngữ chuyên ngành** — bài đọc gần như luôn viết **y hệt**, nên quét bằng mắt rất nhanh. Nhóm ==sẽ bị đổi==: động từ, tính từ, danh từ thường (cause, increase, popular, children…) — bài đọc thường viết bằng **từ khác cùng nghĩa**. Với nhóm này, hãy **tự nghĩ trước 2–3 từ** bài có thể dùng, rồi mới quét.",
+    },
+    {
+      t: "table",
+      caption: "Ví dụ: một câu hỏi, hai nhóm từ khoá",
+      head: ["Câu hỏi", "Giữ nguyên (quét y hệt)", "Sẽ bị đổi → đoán trước"],
+      rows: [
+        ["Why did **Japan** start building **fast trains** in **1959**?", "Japan · 1959", "fast trains → high-speed rail · bullet trains · express"],
+        ["How many **students** at **Lincoln College** **failed** the test?", "Lincoln College", "students → learners · pupils; failed → did not pass · were unsuccessful"],
+        ["**Most** people in **Norway** **prefer** electric cars.", "Norway", "most → the majority · over half; prefer → favour · would rather choose"],
+      ],
+    },
+    {
+      t: "mcq",
+      id: "d2-bt-doan-thay-the",
+      title: "Bài đọc nhiều khả năng viết từ in đậm thành gì? (6 câu)",
+      items: [
+        { q: "Câu hỏi: “Why are **young people** leaving the countryside?”", options: ["young peoples", "the younger generation", "the elderly"], correct: 1, why: "**young people** (người trẻ) = **the younger generation** (thế hệ trẻ). “the elderly” là người già — trái nghĩa. “peoples” sai ngữ pháp." },
+        { q: "Câu hỏi: “The museum **became more popular** after 2010.” — năm **2010** thuộc nhóm nào?", options: ["Giữ nguyên — quét đúng “2010”", "Sẽ bị đổi — bài viết “two thousand and ten”", "Bỏ qua — năm không quan trọng"], correct: 0, why: "**Năm, con số, tên riêng** gần như luôn giữ nguyên. Đây là mỏ neo nhanh nhất để tìm đúng đoạn. Từ cần đoán là **became more popular** (→ attracted more visitors…)." },
+        { q: "Câu hỏi: “The new law **reduced** traffic accidents.”", options: ["increased", "led to a fall in", "recorded"], correct: 1, why: "**reduced** (làm giảm) = **led to a fall in** (dẫn tới sự giảm). “increased” trái nghĩa; “recorded” (ghi lại) là ý khác." },
+        { q: "Câu hỏi: “Doctors **advise** people to **eat less sugar**.”", options: ["recommend cutting down on sugar", "advice people sugar", "sell sugar to people"], correct: 0, why: "**advise** = **recommend**; **eat less** = **cut down on** (ăn bớt). Phương án 2 sai ngữ pháp và mất nghĩa “less”." },
+        { q: "Câu hỏi: “The bridge was built **ten years ago**.”", options: ["a century ago", "a decade ago", "ten centuries ago"], correct: 1, why: "**ten years** = **a decade** (một thập kỷ). **a century** = 100 năm. Số liệu hay bị viết thành chữ như vậy — học thêm ở Tập 2 Ngày 8." },
+        { q: "Câu hỏi: “**About half** of the workers **walk** to the factory.”", options: ["Exactly 50 workers go by bus.", "Roughly 50% of the staff go there on foot.", "Half of the factories are near the workers."], correct: 1, why: "**about half** = **roughly 50%**; **workers** = **staff**; **walk** = **go on foot**. Phương án 1 đổi “đi bộ” thành “xe buýt”; phương án 3 đảo chủ ngữ." },
+      ],
+    },
+    {
+      t: "note",
+      title: "Mẹo: chỉ học từ ở chỗ “có điểm”",
+      items: [
+        "Làm xong bài, **đừng tra mọi từ lạ** trong đoạn văn. Chỉ ghi lại các cặp **từ trong câu hỏi ↔ từ trong câu chứa đáp án** (vd main cause ↔ mainly caused by). Đó là những cặp đề thi hay dùng lại.",
+        "Ghi theo dạng hai cột trong vở: **Câu hỏi | Bài đọc**. Tập 2 Ngày 8 sẽ biến vở này thành **sổ paraphrase** dùng sau mỗi bài đọc.",
       ],
     },
 

@@ -363,6 +363,7 @@ const T2D3_LISTENING: Lesson = {
       head: ['Loại', 'Người nói đọc', 'Bạn viết'],
       rows: [
         ['Số lớn', 'one thousand two hundred and fifty · two point five million', '1,250 · 2.5 million'],
+        ['Số đọc theo “trăm”', 'twelve hundred · fifteen hundred pounds · eighteen hundred metres', '1,200 · £1,500 · 1,800 m (twelve hundred = one thousand two hundred)'],
         ['Số thập phân', 'three point seven five', '3.75'],
         ['Phần trăm / phân số', 'fifteen per cent · a quarter · two thirds · half', '15% · 1/4 (25%) · 2/3 · 1/2'],
         ['Giá (Anh)', 'eighty-nine pounds fifty · twelve ninety-nine', '£89.50 · £12.99'],
@@ -383,6 +384,7 @@ const T2D3_LISTENING: Lesson = {
         '**Sửa lời**: "It’s ninety-five… **actually, sorry**, eighty-nine fifty" → lấy số sau.',
         '**Số đếm vs số thứ tự**: the six**teenth** of July → viết **16** (hoặc 16th), không viết ~~60~~.',
         '**at** trong email: người nói đọc "at" → bạn viết **@**. "dot" → **.** · "dash / hyphen" → **-** · "underscore" → **_**.',
+        '**Ký hiệu tiền đã in sẵn trên phiếu** (“£ ___”, “Cost: $ ___”) → chỉ ghi **số**: ghi “£1,500” vào ô đã có “£” là thừa ký hiệu. Ô không có ký hiệu thì ghi kèm £ / $ hoặc chữ pounds / dollars cho rõ. Dấu phẩy nghìn (1,500) viết hay không đều được chấm đúng.',
       ],
     },
     {
@@ -572,8 +574,8 @@ const T2D3_SPEAKING: Lesson = {
   id: 't2d3-noi',
   kind: 'speaking',
   title: 'Speaking Part 2 lần đầu: Describe a person — cue card, 1 phút ghi chú (+ gọi điện đặt lịch)',
-  goal: 'Hiểu đúng thể lệ Part 2, dùng 1 phút chuẩn bị để ghi chú theo 4 dòng gợi ý, nói liền 1 phút 30 – 2 phút về một người theo khung 4 phần; gọi điện đặt lịch hẹn bằng câu lịch sự; đọc rõ /θ/ /ð/ trong câu.',
-  minutes: 60,
+  goal: 'Hiểu đúng thể lệ Part 2, dùng 1 phút chuẩn bị để ghi chú theo 4 dòng gợi ý, nói liền 1 phút 30 – 2 phút về một người theo khung 4 phần; có sẵn ngân hàng 3–5 tính cách kèm chuyện chứng minh để dùng cho mọi đề người; gọi điện đặt lịch hẹn bằng câu lịch sự; đọc rõ /θ/ /ð/ trong câu.',
+  minutes: 70,
   blocks: [
     {
       t: 'recap',
@@ -584,6 +586,7 @@ const T2D3_SPEAKING: Lesson = {
         'Khung 4 phần: ==Mở đầu 1 câu → kể theo dòng 1–3 (chi tiết + quá khứ đơn) → dòng "explain" (cảm xúc, lý do) — phần dài nhất → câu chốt==.',
         'Ghi chú 1 phút: **4 ô từ khoá**, không viết câu. Đề hôm nay: **Describe a person** — loại đề dễ nhất trong 6 loại Part 2 (người · nơi · đồ vật · sự kiện · hoạt động · trừu tượng).',
         'Tiếng Anh ứng dụng: **gọi điện đặt lịch** (phòng khám, cắt tóc…). 🔊 Phát âm: **/θ/ /ð/** trong câu (think, three, the, mother).',
+        '**Ngân hàng tính cách** (mục 4b): chuẩn bị 3–5 tính cách, mỗi tính cách 2 cách nói + một chuyện chứng minh — dùng cho mọi đề người; bảng **ô thông tin → cách kéo dài**.',
       ],
     },
 
@@ -652,7 +655,7 @@ const T2D3_SPEAKING: Lesson = {
         ['**Dòng 1–2**: ai, quen thế nào', 'She was my… · I first met her when… · We got to know each other at…', 'Quá khứ đơn (was, met)'],
         ['**Dòng 3**: chuyện cụ thể', 'One thing I’ll never forget is… · What happened was… · After that, … · In the end, …', 'Quá khứ đơn + **giới từ thời gian** (in 2019, on Tuesdays, for three months)'],
         ['**Dòng explain**', 'The main reason this was important is that… · Thanks to her, … · Looking back, I realise…', 'Hiện tại đơn / quá khứ đơn'],
-        ['**Câu chốt** (khi còn thời gian)', 'So that’s why she has had such a big influence on me.', '—'],
+        ['**Câu chốt** (khi còn thời gian)', 'So that’s why she has had such a big influence on me. · So if I had to choose someone who has helped me, it would have to be her.', '—'],
       ],
     },
     {
@@ -699,6 +702,61 @@ const T2D3_SPEAKING: Lesson = {
         ['**Lexical Resource**', 'Từ tả người: strict but kind, sense of humour; cụm: **gained confidence, won a scholarship, encouraged me to join**.'],
         ['**Grammatical Range**', 'Quá khứ đơn chuẩn; mệnh đề quan hệ (**who was my English teacher**, **which I was afraid of**); giới từ thời gian đúng (**in 2019, every Tuesday, for three months, on Teachers’ Day**).'],
         ['**Pronunciation**', 'Nhiều /θ/ /ð/: **Thursday, three, thanks, the, that, together** — luyện ở mục 6.'],
+      ],
+    },
+
+    { t: 'h', text: '4b. Ngân hàng tính cách — chuẩn bị một lần, dùng cho mọi đề "người"' },
+    {
+      t: 'p',
+      text: 'Đề người rất nhiều: thầy cô, người thân, bạn cũ, người nổi tiếng, hàng xóm, người bạn ngưỡng mộ… Bạn **không** cần chuẩn bị riêng cho từng đề. Hãy chuẩn bị sẵn **3–5 tính cách**, mỗi tính cách gồm: **2 cách nói** (để khỏi lặp) + **một chi tiết / câu chuyện chứng minh**. Vào phòng thi, chọn 2 tính cách hợp với người trong đề là có ngay 30–40 giây nội dung.',
+    },
+    {
+      t: 'table',
+      head: ['Tính cách', '2 cách nói', 'Chi tiết chứng minh (ví dụ)'],
+      rows: [
+        ['**Kiên nhẫn**', 'patient · never loses her temper', 'She explained the same grammar point to me five times and never got annoyed.'],
+        ['**Hào phóng**', 'generous · always willing to share', 'He lent me his laptop for a whole month when mine broke before my exams.'],
+        ['**Chăm chỉ**', 'hard-working · a workaholic (hơi quá)', 'My mum gets up at five every morning to open her shop, even on Tết.'],
+        ['**Hài hước**', 'has a great sense of humour · always makes people laugh', 'Whenever our class was stressed before a test, he told a silly joke and everyone relaxed.'],
+        ['**Thoải mái, dễ tính**', 'laid-back · easy-going', 'When I broke her favourite cup, she just laughed and said, "It’s only a cup."'],
+        ['**Quyết tâm**', 'determined · never gives up', 'My cousin failed the university entrance exam once, studied for another year and got in.'],
+      ],
+    },
+    {
+      t: 'note',
+      title: 'Mẹo — "nói tính cách thì phải có bằng chứng"',
+      items: [
+        'Chỉ nói "She is very kind and patient" là **câu chung chung** — band 4. Thêm **một việc người đó đã làm** là câu có giá trị: She is very patient. **For example, once** she explained… → giám khảo thấy quá khứ đơn, chi tiết, mạch kể.',
+        'Đổi cách nói ở lần nhắc thứ hai: patient → **never loses her temper**; generous → **always willing to share**. Đó là điểm Lexical Resource.',
+        'Một câu chuyện có thể chứng minh nhiều tính cách: chuyện cô dạy thêm miễn phí (mục 4) = **kiên nhẫn** + **hào phóng** với thời gian.',
+      ],
+    },
+    {
+      t: 'table',
+      caption: 'Ô thông tin → cách kéo dài (đề người)',
+      head: ['Ô trên thẻ', 'Thêm gì cho dài mà vẫn đúng đề', 'Ví dụ'],
+      rows: [
+        ['**Who** — là ai', 'tên + biệt danh · tuổi bây giờ + sinh nhật sắp tới · nghề + số năm làm', 'His name is Tuấn, but everyone calls him "Tom". He’s 52 now — he’ll be 53 next month — and he has been a bus driver for almost 30 years.'],
+        ['**How you know** — quen thế nào', 'used to live… but moved to… · gặp lần đầu ở đâu, ấn tượng đầu tiên', 'We used to live next door, but his family moved to Da Nang in 2018. My first impression was that he looked quite strict.'],
+        ['**What he / she is like / does**', '2 tính cách trong ngân hàng + chi tiết chứng minh', 'He’s very generous — once he drove me to the hospital at midnight and refused to take any money.'],
+        ['**Explain why**', 'ảnh hưởng tới bạn bây giờ · bạn học được gì · bạn muốn giống họ ở điểm nào', 'Because of him, I’ve learned to help strangers without expecting anything back.'],
+      ],
+    },
+    {
+      t: 'rule',
+      formula: 'Tính cách (2 cách nói) + For example, once + chuyện quá khứ · Ô Who: tên + tuổi + nghề + số năm · Ô How: used to… but moved to…',
+      vi: 'Mỗi tính cách phải đi kèm một việc cụ thể đã xảy ra.',
+    },
+    {
+      t: 'mcq',
+      id: 't2d3-noi-tinh-cach',
+      title: 'Ghép tính cách ↔ chi tiết chứng minh (5 câu)',
+      items: [
+        { q: 'Chi tiết nào chứng minh rõ nhất "She is very **patient**"?', options: ['She has long hair and wears glasses.', 'She taught my grandmother to use a smartphone, step by step, for a whole week, without ever raising her voice.', 'She is a teacher at a big school.'], correct: 1, why: 'B là **một việc cụ thể** cho thấy kiên nhẫn (dạy đi dạy lại cả tuần, không cáu). A là ngoại hình; C là nghề — không chứng minh tính cách.' },
+        { q: 'Chi tiết nào chứng minh "He is **generous**"?', options: ['He gave half of his first salary to his parents and bought his little sister a bike.', 'He works in a bank.', 'He is always busy.'], correct: 0, why: '**generous** = hào phóng, sẵn sàng cho đi → chia lương, mua quà. B, C không liên quan.' },
+        { q: '"My aunt is very **determined**." Câu nào nối tiếp tốt nhất?', options: ['She likes cooking.', 'She is 45 years old.', 'She failed her driving test three times, but she kept practising and finally passed on her fourth try.'], correct: 2, why: '**determined** = quyết tâm, không bỏ cuộc → trượt ba lần vẫn thi tiếp.' },
+        { q: 'Cách nói thứ hai nào thay được cho "**easy-going**" để khỏi lặp?', options: ['laid-back', 'hard-working', 'strict'], correct: 0, why: '**laid-back** ≈ easy-going (thoải mái, dễ tính). hard-working = chăm chỉ; strict = nghiêm khắc (gần như ngược nghĩa).' },
+        { q: 'Câu nào kéo dài ô "**Who**" đúng cách?', options: ['He is a good person and I like him very much.', 'His name is Long, but we call him "Professor" because he knows everything. He’s a doctor and has worked at Bach Mai Hospital for over ten years.', 'He has helped me a lot, which is why he is important to me.'], correct: 1, why: 'B thêm **biệt danh + lý do**, **nghề + số năm** — đúng mẹo ô Who. A chung chung; C là nội dung của ô **explain**, nói sớm thì phần cuối hết ý.' },
       ],
     },
 

@@ -640,6 +640,29 @@ const T2D21_LISTENING: Lesson = {
         "Sau khi chấm, **nghe lại có lời** một lần và gạch dưới **từ báo hiệu** đứng trước mỗi đáp án (but, actually, in the end, above all, the key…).",
       ],
     },
+    {
+      t: "sodo",
+      kind: "flow",
+      title: "Chữa đề này theo 5 bước của Ngày 9 (mục 5) — bản cho Part 3–4",
+      caption: "Part 3–4 lời thoại dài gấp đôi Part 1–2. Người band 4–5 KHÔNG đọc hết: chỉ đọc đoạn quanh câu sai.",
+      steps: [
+        { label: "① Tự tìm lại", sub: "Chưa xem đáp án: nghe lại đoạn của 2–3 câu bạn đoán mò, sửa bằng bút khác màu." },
+        { label: "② Chấm + nghe lại chỗ sai", sub: "Part 4: tua tới câu ngay **trước** câu sai — đáp án thường đứng sau một từ báo hiệu." },
+        { label: "③ Lời thoại: tô câu chứa đáp án", sub: "Part 3: gạch tên **người nói** câu đó (ý của ai?). Part 4: gạch cả từ báo hiệu đứng trước." },
+        { label: "④ Sổ paraphrase", sub: "Part 3 đổi **cả câu** (ý kiến), Part 4 đổi **cụm danh từ** — ghi đủ hai vế." },
+        { label: "⑤ Chép 2 đoạn của Part 4", sub: "Part 4 là điền từ nguyên văn ⇒ chép chính tả câu chứa đáp án giúp nhiều nhất." },
+      ],
+    },
+    {
+      t: "note",
+      title: "Mẹo chữa riêng cho Part 3 và Part 4",
+      items: [
+        "**Part 3 (MCQ, nối)**: với mỗi câu sai, viết ra **ba phương án** và câu trong lời thoại làm **loại** từng phương án sai (được nhắc nhưng bị gạt đi · người khác nói · chỉ là ý định). Bẫy Part 3 lặp lại kiểu cũ — ghi đủ ba dòng là lần sau nhận ra ngay.",
+        "**Part 4 (bài giảng)**: câu sai thường do **lạc chỗ** chứ không do không hiểu. Trong lời thoại, khoanh mọi **tiêu đề ý** giảng viên nói to (Let's turn to… · Another reason… · Finally…) và đối chiếu với tiêu đề trên phiếu.",
+        "Chép chính tả: chọn **hai đoạn** chứa câu 33 và 39 (hai chữ khó viết: tyres, independence) — nghe từng câu, viết, so lời. Âm nào bạn viết sai thì ghi vào sổ cùng phiên âm.",
+        "Bảy ngày sau, **nghe lại đúng đề này** không nhìn lời — đúng nhiều hơn hẳn lượt đầu nghĩa là sổ paraphrase đang phát huy tác dụng.",
+      ],
+    },
   ],
 };
 
@@ -649,8 +672,8 @@ const T2D21_SPEAKING: Lesson = {
   id: "t2d21-noi",
   kind: "speaking",
   title: "Part 3: so sánh quá khứ – hiện tại",
-  goal: "Trả lời câu hỏi Part 3 dạng “How has … changed?” bằng khung Ngày xưa → Bây giờ → Vì sao → Ví dụ → Đánh giá, dùng used to / would cho quá khứ và hiện tại đơn / HTHT cho hiện tại; đọc rõ đuôi -ed (FC · GRA · P band 5).",
-  minutes: 60,
+  goal: "Trả lời câu hỏi Part 3 dạng “How has … changed?” bằng khung Ngày xưa → Bây giờ → Vì sao → Ví dụ → Đánh giá, dùng used to / would cho quá khứ và hiện tại đơn / HTHT cho hiện tại; so sánh được hai nhóm cùng thời bằng whereas / while; đọc rõ đuôi -ed (FC · GRA · P band 5).",
+  minutes: 70,
   blocks: [
     {
       t: "recap",
@@ -661,6 +684,7 @@ const T2D21_SPEAKING: Lesson = {
         "Ngôn ngữ ăn điểm: **Back in my grandparents' day…** · **These days…** · **There has been a shift towards…** · **whereas** · **On the whole, I'd say it's a positive change**.",
         "🔊 **-ed ba cách đọc**: /t/ (worked) · /d/ (played) · /ɪd/ (wanted) — câu quá khứ nói mất đuôi là lỗi ngữ pháp trong tai giám khảo.",
         "Band 5 Part 3: trả lời **3–5 câu**, có lý do + ví dụ; band 6: thêm **đối lập** (whereas) và **đánh giá**.",
+        "Mục 5: so sánh **hai nhóm cùng thời** (người trẻ – người già, thành thị – nông thôn): The main difference is that… · bên A → **whereas** → bên B, thì hiện tại đơn.",
       ],
     },
 
@@ -742,7 +766,7 @@ const T2D21_SPEAKING: Lesson = {
         ["**Fluency & Coherence**", "Mỗi câu 4–5 câu, đi đúng khung Then → Now → Why → Example → Evaluate; từ nối chức năng: **This is mainly because · for example · whereas · On the whole · The downside is that · However**."],
         ["**Lexical Resource**", "Cụm tự nhiên: chatting with neighbours, on the pavement, stay indoors, extra classes, stay in touch, group chat, close contact, make an effort."],
         ["**Grammatical Range & Accuracy**", "**used to / would** (quá khứ) ↔ **hiện tại đơn** + **HTHT** (have changed, has become, we've lost); **When my parents were growing up** (quá khứ tiếp diễn); câu phức với **because / so / whereas / even when / only if**."],
-        ["**Pronunciation**", "Đuôi -ed và /s/ cuối: changed /d/, used to /juːst/, worried /d/, cities /z/, sitting… — xem mục 5."],
+        ["**Pronunciation**", "Đuôi -ed và /s/ cuối: changed /d/, used to /juːst/, worried /d/, cities /z/, sitting… — xem mục 6."],
       ],
     },
 
@@ -774,7 +798,50 @@ const T2D21_SPEAKING: Lesson = {
     },
 
     /* ── 5 ── */
-    { t: "h", text: "5. Thêm: đuôi -ed — ba cách đọc" },
+    { t: "h", text: "5. So sánh hai nhóm CÙNG THỜI: “What are the differences between A and B?”" },
+    {
+      t: "p",
+      text: "Part 3 không chỉ so **xưa – nay**. Một dạng rất hay gặp so **hai nhóm sống cùng lúc**: người trẻ – người già, thành thị – nông thôn, chủ – nhân viên, con trai – con gái. Thì chính lúc này là **hiện tại đơn** (không cần used to). Khung giống xưa – nay nhưng đổi bước 1–2 thành **bên A → bên B**.",
+    },
+    {
+      t: "sodo",
+      kind: "flow",
+      title: "Hai nhóm cùng thời — 4 bước",
+      caption: "Nói hết bên A rồi mới sang bên B — đừng nhảy qua lại từng chi tiết, người nghe sẽ rối.",
+      steps: [
+        { label: "1 · Điểm khác chính", sub: "The main difference is that…" },
+        { label: "2 · Bên A", sub: "Young people tend to…" },
+        { label: "3 · Bên B (nối bằng whereas / while)", sub: "…, whereas older people usually…" },
+        { label: "4 · Lý do / chốt", sub: "This is probably because… · So in short, …" },
+      ],
+    },
+    {
+      t: "dialogue",
+      title: "Mẫu — hai nhóm cùng thời (band 5.5 ước tính)",
+      lines: [
+        { who: "Examiner", role: "examiner", text: "What are the differences between the way young people and older people shop?" },
+        { who: "Candidate", role: "candidate", text: "I think the main difference is that young people prefer shopping online, whereas older people still like going to the market. Young people usually compare prices on their phones and buy things in a few minutes. Older people, on the other hand, want to see and touch the product first, and they enjoy chatting with the sellers. This is probably because they don't trust online payment very much. So in short, it's about convenience for the young and trust for the old.", vi: "Tôi nghĩ khác biệt chính là người trẻ thích mua online, trong khi người lớn tuổi vẫn thích đi chợ. Người trẻ thường so giá trên điện thoại và mua trong vài phút. Còn người lớn tuổi muốn nhìn và sờ món hàng trước, và họ thích trò chuyện với người bán. Có lẽ vì họ không tin lắm vào thanh toán online. Tóm lại, với người trẻ là sự tiện lợi, với người già là lòng tin." },
+        { who: "Examiner", role: "examiner", text: "How is working for a big company different from running your own business?" },
+        { who: "Candidate", role: "candidate", text: "Well, the main difference is security. Employees at a big company get a regular salary and fixed hours, while business owners have to find customers every month and often work at weekends. On the other hand, owners can make their own decisions. So I'd say a company job is safer, but having your own business gives you more freedom.", vi: "À, khác biệt chính là sự ổn định. Nhân viên công ty lớn có lương đều và giờ cố định, trong khi chủ doanh nghiệp phải tự tìm khách mỗi tháng và hay làm cả cuối tuần. Mặt khác, chủ thì được tự quyết. Nên tôi cho là làm công ty an toàn hơn, còn tự kinh doanh thì tự do hơn." },
+      ],
+    },
+    {
+      t: "note",
+      title: "Cẩn thận",
+      items: [
+        "Hai nhóm cùng thời → **hiện tại đơn** (young people **prefer**, older people **like**). ~~Older people used to like markets~~ chỉ đúng khi bạn đang nói về **ngày xưa**.",
+        "**difference between A and B** (không ~~difference of A and B~~) · A **is different from** B (không ~~different with~~).",
+        "Nhóm người nói chung dùng số nhiều, không mạo từ: **young people, older people, city dwellers, employees**; hoặc **the young / the elderly** (luôn số nhiều: the elderly **are**).",
+      ],
+    },
+    {
+      t: "rule",
+      formula: "The main difference is that + A + V(s) …, whereas / while + B + V(s) … This is probably because … So in short, …",
+      vi: "So hai nhóm cùng thời: nói trọn bên A, nối whereas / while, nói bên B, rồi lý do và chốt.",
+    },
+
+    /* ── 6 ── */
+    { t: "h", text: "6. Thêm: đuôi -ed — ba cách đọc" },
     {
       t: "table",
       caption: "Quy tắc theo ÂM CUỐI của động từ gốc (không theo chữ cái)",
@@ -811,8 +878,8 @@ const T2D21_SPEAKING: Lesson = {
       ],
     },
 
-    /* ── 6 ── */
-    { t: "h", text: "6. Luyện nói" },
+    /* ── 7 ── */
+    { t: "h", text: "7. Luyện nói" },
     {
       t: "p",
       text: "Ghi âm từng câu. Mỗi câu **ít nhất 4 câu nói**: Then → Now → Why → Example (hoặc Evaluate). Nghe lại và tự đánh dấu: có **used to** cho quá khứ không? Có **thì hiện tại** cho bây giờ không? Có **because / whereas** không? Đuôi **-ed** có nghe rõ không?",
@@ -828,6 +895,16 @@ const T2D21_SPEAKING: Lesson = {
         "Is shopping more enjoyable now than it was in the past?",
         "Why do you think fewer people read newspapers these days?",
         "Do you think these changes are mostly positive or negative?",
+      ],
+    },
+    {
+      t: "speak",
+      id: "t2d21-noi-p3-hai-nhom",
+      part: "3",
+      questions: [
+        "What are the differences between the way young people and older people use technology?",
+        "How is life in the city different from life in the countryside?",
+        "What are the differences between working for a big company and running your own business?",
       ],
     },
   ],

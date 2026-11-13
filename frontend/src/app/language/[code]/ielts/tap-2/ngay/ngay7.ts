@@ -462,7 +462,7 @@ const T2D7_NGHE: Lesson = {
   kind: "listening",
   title: "Nghe: Listening Part 2 — Map labelling, ngôn ngữ vị trí (giọng Mỹ)",
   goal: "Làm trọn một bài Listening Part 2 (5 câu trắc nghiệm + 5 câu ghi chữ cái lên mặt bằng toà nhà) bằng giọng Mỹ: đổi trái / phải theo hướng đi, hiểu 15 cụm vị trí (diagonally opposite, at the far end, halfway along…), nhận ra từ Mỹ (parking lot, restroom, first floor) — đích 7/10 câu đúng, mức Part 2 của band 5.",
-  minutes: 55,
+  minutes: 65,
   blocks: [
     {
       t: "recap",
@@ -473,6 +473,7 @@ const T2D7_NGHE: Lesson = {
         "15 cụm **vị trí** mức band 5: ==diagonally opposite · at the far end · halfway along · adjacent to · beyond · clockwise / counterclockwise==…",
         "**Giọng Mỹ** lần đầu (lộ trình L17): /r/ đọc rõ ở cuối từ (car, corner), /t/ giữa hai nguyên âm thành âm “đờ” nhẹ (water, theater), và **từ Mỹ** (parking lot = car park, first floor = ground floor).",
         "Đích: **≥ 7/10** câu ở bài Part 2 trọn vẹn — mốc Listening band 5 (Part 1+2 ≥ 14/20).",
+        "Thêm (mục 6): **Diagram labelling** — ghi tên bộ phận trên sơ đồ một thiết bị (bàn xoay làm gốm), 5 câu ONE WORD ONLY.",
       ],
     },
 
@@ -831,6 +832,126 @@ const T2D7_NGHE: Lesson = {
         "Mỗi ngày nghe 5 phút một kênh tin tức hoặc podcast giọng Mỹ, chép lại 2 câu có từ chứa **/r/** cuối hoặc **/t/** giữa hai nguyên âm.",
       ],
     },
+
+    { t: "h", text: "6. Diagram labelling — sơ đồ MỘT vật / thiết bị" },
+    {
+      t: "p",
+      text: "Cùng nhóm với Map / Plan (lộ trình gọi chung là **Plan · Map · Diagram**) nhưng ít người luyện: đề cho **hình một vật** — một cái máy, một dụng cụ, một bộ phận toà nhà — và bạn **ghi tên các bộ phận**. Hay gặp ở **Part 2** (người hướng dẫn giới thiệu thiết bị) và **Part 4** (bài giảng về một phát minh). Phần lớn đề bắt **viết chữ** (ONE WORD / NO MORE THAN TWO WORDS), không chọn chữ cái — nên **chính tả** và **giới hạn từ** quay lại quan trọng như Part 1.",
+    },
+    {
+      t: "table",
+      caption: "Map / Plan (mục 1–5) và Diagram — giống và khác",
+      head: ["", "Map / Plan", "Diagram (sơ đồ vật)"],
+      rows: [
+        ["Hình", "Mặt bằng nhìn từ trên xuống, nhiều nơi", "**Một vật**, thường nhìn ngang (mặt cắt), nhiều **bộ phận**"],
+        ["Ghi gì", "Thường là **chữ cái** A–H", "Thường là **từ nghe được** (đúng chính tả, đúng số từ)"],
+        ["Mốc để bám", "Lối vào, “You are here”", "**Bộ phận đã có tên** trên hình (wheel head, body…)"],
+        ["Ngôn ngữ vị trí", "trái / phải theo hướng đi, góc đông nam…", "**at the very top · underneath · level with · on the left-hand side · attached to · inside · the first / second button**"],
+        ["Thứ tự", "Theo đường đi của người nói", "Thường **trên → dưới** hoặc **ngoài → trong**, hoặc theo cách vật **vận hành**"],
+      ],
+    },
+    {
+      t: "table",
+      caption: "Từ bộ phận hay gặp — đoán trước theo LOẠI thiết bị",
+      head: ["Loại thiết bị", "Từ bộ phận thường nghe"],
+      rows: [
+        ["Máy có điện (máy pha, máy xay, quạt)", "switch · button · dial · lid · handle · plug · cable · motor · base · tray · light"],
+        ["Dụng cụ nước (bể, máy lọc, vòi)", "tank · pipe · tap · valve · filter · pump · container · bucket · drain"],
+        ["Xe, máy kéo (xe đạp, xe đẩy)", "wheel · pedal · chain · brake · frame · seat · handlebar · basket"],
+        ["Công trình (mái, tháp, cầu)", "roof · beam · panel · column · vent · gutter · base · cable"],
+      ],
+    },
+    {
+      t: "sodo",
+      kind: "flow",
+      title: "Làm Diagram labelling trong 30 giây đọc đề",
+      steps: [
+        { label: "Xem hình là vật gì", sub: "đọc tiêu đề; đoán nhóm từ bộ phận (bảng trên)" },
+        { label: "Đánh dấu các bộ phận ĐÃ có tên", sub: "chúng là mốc: người nói sẽ đi qua chúng theo thứ tự" },
+        { label: "Đoán thứ tự các ô số", sub: "trên → dưới? trái → phải? câu hỏi đi theo thứ tự lời nói" },
+        { label: "Khoanh giới hạn từ", sub: "ONE WORD ONLY ⇒ wide plastic tray chỉ ghi **tray**" },
+        { label: "Nghe từ vị trí + tên bộ phận", sub: "“On the left-hand side, level with the tray, there's…” → ghi chữ đứng sau there's / is called" },
+      ],
+    },
+    {
+      t: "canh",
+      anh: ["woman-artist", "amphora", "droplet"],
+      caption: "Ở **xưởng gốm** của Alder Creek Community Center (bài Part 2 ở mục 4), người hướng dẫn **Dana** giới thiệu chiếc **bàn xoay làm gốm** (pottery wheel) mới cho một nhóm thành viên.",
+    },
+    {
+      t: "figure",
+      fig: {
+        kind: "map",
+        title: "A pottery wheel — ghi nhãn 1–5 (ONE WORD ONLY)",
+        note: "Sơ đồ tự vẽ cho bài luyện, nhìn ngang từ phía trước. Các ô có tên là mốc; các ô số cần ghi tên bộ phận.",
+        map: {
+          cols: 12,
+          rows: 9,
+          paths: [{ x: 0, y: 8.0, w: 12, h: 0.4, label: "floor" }],
+          boxes: [
+            { x: 3.6, y: 0.4, w: 4.8, h: 0.8, label: "wheel head" },
+            { x: 2.2, y: 1.3, w: 7.6, h: 1.0, blank: "1" },
+            { x: 0.3, y: 2.0, w: 1.8, h: 0.7, blank: "2" },
+            { x: 3.4, y: 2.4, w: 5.2, h: 3.4, label: "body (motor inside)" },
+            { x: 8.7, y: 2.6, w: 1.4, h: 1.0, blank: "3" },
+            { x: 0.3, y: 5.8, w: 2.6, h: 1.2, label: "stool" },
+            { x: 4.8, y: 6.3, w: 2.4, h: 1.5, blank: "4" },
+            { x: 8.8, y: 7.0, w: 2.8, h: 0.9, blank: "5" },
+          ],
+          pins: [{ x: 6.0, y: 6.0, label: "pipe ↓" }],
+        },
+      },
+    },
+    {
+      t: "listen",
+      id: "t2d7-nghe-so-do-bai",
+      title: "Getting to know the pottery wheel",
+      dan: { so: "Day 7, Recording 2 (Listening Part 2)", boiCanh: "an instructor explaining the parts of a pottery wheel to new members.", cau: [1, 5] },
+      note: "Khoảng 1 phút 30 giây, giọng Mỹ (Dana, nữ). Nghe tối đa 2 lần. Nhớ: ONE WORD ONLY.",
+      lines: [
+        { who: "Dana", voice: "us-nu", text: "OK, before you start, let's look at the wheel itself. You've each got a diagram. The round metal plate at the very top is called the wheel head. That's where you put your clay, and that's the part that spins.", vi: "Được rồi, trước khi bắt đầu, ta xem chính chiếc bàn xoay. Mỗi người có một sơ đồ. Cái đĩa kim loại tròn trên cùng gọi là mặt bàn xoay. Đó là chỗ đặt đất sét, và là phần quay." },
+        { who: "Dana", voice: "us-nu", text: "All the way around the wheel head there's a wide plastic tray. It catches the water and the bits of clay that fly off, so please empty it after every session.", vi: "Bao quanh mặt bàn xoay là một cái khay nhựa rộng. Nó hứng nước và các mẩu đất sét văng ra, nên hãy đổ nó sau mỗi buổi." },
+        { who: "Dana", voice: "us-nu", text: "On the left-hand side, level with the tray, there's a narrow shelf. That's where you keep your tools and your sponge, so everything's within reach.", vi: "Bên tay trái, ngang với cái khay, có một cái kệ hẹp. Đó là chỗ để dụng cụ và miếng bọt biển, cho mọi thứ trong tầm tay." },
+        { who: "Dana", voice: "us-nu", text: "Now, the main body underneath holds the motor. On the right side of the body, near the top, you'll see a switch. That turns the power on and off, and it's the first thing to check if the wheel won't start. The old wheels had a dial there to control the speed, but these new ones don't.", vi: "Giờ, phần thân bên dưới chứa động cơ. Phía bên phải thân, gần trên cùng, các bạn sẽ thấy một công tắc. Nó bật tắt nguồn, và là thứ đầu tiên cần kiểm nếu bàn không chạy. Bàn xoay cũ có một núm vặn ở đó để chỉnh tốc độ, nhưng loại mới thì không." },
+        { who: "Dana", voice: "us-nu", text: "Directly underneath the wheel, there's a bucket. The dirty water from the tray runs down a small pipe into it. Never pour that water into the sink, because the clay blocks the drains.", vi: "Ngay bên dưới bàn xoay có một cái xô. Nước bẩn từ khay chảy theo một ống nhỏ xuống đó. Đừng bao giờ đổ nước đó vào bồn rửa, vì đất sét làm tắc cống." },
+        { who: "Dana", voice: "us-nu", text: "And the speed? You control it with your foot. The pedal sits on the floor on the right, so most people use their right foot. Press down gently to go faster. Oh, and the thing on the left is just the stool you sit on.", vi: "Còn tốc độ? Bạn điều khiển bằng chân. Bàn đạp nằm trên sàn bên phải, nên đa số dùng chân phải. Nhấn nhẹ xuống để quay nhanh hơn. À, cái bên trái chỉ là ghế đẩu để ngồi thôi." },
+      ],
+    },
+    {
+      t: "quiz",
+      id: "t2d7-nghe-so-do",
+      title: "Questions 1–5 — Label the diagram. Write ONE WORD ONLY.",
+      kind: "fill",
+      items: [
+        { q: "1. (vòng quanh wheel head) ___", answers: ["tray"] },
+        { q: "2. (bên trái, ngang với ô 1) ___", answers: ["shelf"] },
+        { q: "3. (bên phải thân máy, gần trên cùng) ___", answers: ["switch"] },
+        { q: "4. (ngay dưới bàn xoay) ___", answers: ["bucket"] },
+        { q: "5. (trên sàn, bên phải) ___", answers: ["pedal"] },
+      ],
+    },
+    {
+      t: "note",
+      title: "Giải thích 1–5 — mốc vị trí + bẫy",
+      items: [
+        "**1 tray** — “**All the way around** the wheel head there's a **wide plastic tray**.” ONE WORD ⇒ chỉ ghi **tray** (wide, plastic là tính từ mô tả).",
+        "**2 shelf** — “On the **left-hand side**, **level with the tray**, there's a **narrow shelf**.” Bẫy: **tools**, **sponge** là thứ **để trên** kệ, không phải tên bộ phận.",
+        "**3 switch** — “On the **right side of the body, near the top**… a **switch**.” Bẫy **dial**: “The **old** wheels **had** a dial there… but these new ones **don't**” (nhóm “từng có ↔ đang có”).",
+        "**4 bucket** — “**Directly underneath** the wheel, there's a **bucket**.” Bẫy: **pipe** đã có sẵn trên hình (mốc), **sink** là nơi **không được** đổ nước.",
+        "**5 pedal** — “The **pedal** sits **on the floor on the right**.” Bẫy **foot** (bộ phận cơ thể, không phải bộ phận máy). Ô bên trái dưới là **stool** — đã có tên, chỉ là mốc.",
+        "Câu hỏi đi **theo thứ tự lời nói** (tray → shelf → switch → bucket → pedal), nhưng trên hình các số **không** xếp gọn trên → dưới hay trái → phải (ô 2 ở bên trái, ô 3 ở bên phải). Nếu bị lạc, bám **mốc đã có tên** (wheel head → body → stool → floor) thay vì dò số trên hình.",
+      ],
+    },
+    {
+      t: "note",
+      title: "Cẩn thận: lỗi hay gặp ở Diagram labelling",
+      items: [
+        "**Ghi cả cụm mô tả**: ~~wide plastic tray~~ khi đề ONE WORD ONLY. Tên bộ phận là **danh từ cuối** cụm.",
+        "**Ghi thứ được đặt lên / chảy qua bộ phận** thay vì chính bộ phận (tools ≠ shelf, water ≠ bucket). Tự hỏi: ô trên hình là **cái gì**, không phải **chứa gì**.",
+        "**Sai số ít / số nhiều**: hình chỉ một cái ⇒ số ít (pedal, không ~~pedals~~).",
+        "Không quen **level with** (ngang hàng với), **directly underneath** (ngay bên dưới), **attached to** (gắn vào) — ba cụm này xuất hiện ở hầu hết đề Diagram. Tập 3 Ngày 12 luyện lại Plan / Map / Diagram ở mức khó hơn.",
+      ],
+    },
   ],
 };
 
@@ -840,8 +961,8 @@ const T2D7_NOI: Lesson = {
   id: "t2d7-noi",
   kind: "speaking",
   title: "Nói: Part 2 — Describe a place",
-  goal: "Nói liền mạch 1,5–2 phút về một địa điểm (nơi đã đến, nơi hay đến, nơi muốn đến) theo dàn 4 phần, chọn đúng thì theo thẻ đề (quá khứ / hiện tại / tương lai), dùng 9 khung câu tả nơi chốn — đẩy Fluency & Coherence và Lexical Resource lên band 5; nhận ra và đọc ổn định /r/ cuối từ và /t/ kiểu Anh khi so với giọng Mỹ.",
-  minutes: 60,
+  goal: "Nói liền mạch 1,5–2 phút về một địa điểm (nơi đã đến, nơi hay đến, nơi muốn đến) theo dàn 4 phần, chọn đúng thì theo thẻ đề (quá khứ / hiện tại / tương lai) và chọn góc nội dung theo động từ của thẻ, dùng 9 khung câu tả nơi chốn — đẩy Fluency & Coherence và Lexical Resource lên band 5; nhận ra và đọc ổn định /r/ cuối từ và /t/ kiểu Anh khi so với giọng Mỹ.",
+  minutes: 70,
   blocks: [
     {
       t: "recap",
@@ -852,6 +973,7 @@ const T2D7_NOI: Lesson = {
         "Dàn **4 phần**: Giới thiệu (10″) → Vị trí & trông thế nào (30″) → Làm gì ở đó / chuyện đáng nhớ (50″) → **Cảm xúc + vì sao** (30″).",
         "9 khung câu tả nơi chốn: ==It's located…== · ==It's surrounded by…== · ==It's famous for…== · ==What I like most about it is…== · ==It's the kind of place where…==",
         "Đẩy **FC** (nói đủ dài, có trình tự) và **LR** (từ tả nơi chốn chính xác hơn “beautiful, good, nice”). Phát âm: **/r/ cuối từ** và **/t/** — giọng Anh và giọng Mỹ.",
+        "**Đọc động từ của thẻ** (visit / live / work / changed you) để chọn góc nội dung; nơi là **công trình** hay **vùng đất** quyết định phần dài nhất tả gì; mẹo kéo dài theo từng ô (mục 4b).",
       ],
     },
 
@@ -989,6 +1111,75 @@ const T2D7_NOI: Lesson = {
         "Làm gì: “I usually **go** there early on Sunday mornings. I **take** a book, **sit** on the same bench and **read** for an hour. Sometimes old people **do** tai chi near the water.”",
         "Cảm xúc: “**What I like most about it is** that nobody **is** in a hurry. It's **the kind of place where** you can hear birds instead of motorbikes. Every time I **leave**, I **feel** calmer.”",
         "Đổi đề là đổi **thì**: cùng một nơi, nhưng thẻ “a place you **visited**” thì toàn bộ câu chuyện sang **quá khứ đơn**.",
+      ],
+    },
+
+    { t: "h", text: "4b. Đọc ĐỘNG TỪ của thẻ · công trình hay vùng đất · kéo dài theo từng ô" },
+    {
+      t: "note",
+      title: "Mẹo — gạch chân động từ của thẻ trước khi ghi chú",
+      items: [
+        "Động từ cho biết **thì** (visited → quá khứ) **và** cho biết **nên nói về khía cạnh nào**. Cùng là “Đà Lạt” nhưng mỗi động từ đòi một góc khác.",
+        "**visit / travel to** ⇒ góc **du lịch**: cảnh, món ăn, hoạt động, chuyện đáng nhớ trong chuyến đi.",
+        "**live in / grow up in** ⇒ góc **đời sống**: hàng xóm, nhịp sống, tiện ích, điều bất tiện.",
+        "**work / study in** ⇒ góc **môi trường làm việc / học tập**: cơ hội, đồng nghiệp, cơ sở vật chất.",
+        "**relax / go to often** ⇒ góc **thói quen + cảm xúc**: bạn hay làm gì ở đó, nó giúp bạn thế nào.",
+        "**changed you / taught you something** ⇒ dòng explain phải nói **điều bạn học được và bạn khác đi thế nào bây giờ**.",
+        "Có sẵn một nơi đã chuẩn bị? Giữ **nơi** đó, nhưng **đổi góc** theo động từ — đừng kể nguyên bài du lịch cho thẻ “a place where you would like to **work**”.",
+      ],
+    },
+    {
+      t: "sodo",
+      kind: "compare",
+      title: "Phần ② dài nhất nói gì — tuỳ nơi là CÔNG TRÌNH hay VÙNG ĐẤT",
+      cols: [
+        {
+          title: "🏛️ Công trình (café, bảo tàng, thư viện, trung tâm thương mại, chùa…)",
+          items: [
+            "Bên ngoài: It’s a three-storey building **made of** red brick.",
+            "Bên trong: The walls are **decorated with** old photos of Hanoi.",
+            "Vị trí trong toà: **There is** a small garden **behind** the main hall.",
+            "Sức chứa: It **can hold** about fifty people.",
+            "Sản phẩm – giá – nhân viên: The drinks are **reasonably priced**, and the staff are really friendly.",
+          ],
+        },
+        {
+          title: "🏞️ Vùng đất (thành phố, làng, đảo, vùng núi…)",
+          items: [
+            "Cảnh: It’s surrounded by terraced rice fields and pine forests.",
+            "Thành thị / nông thôn: Life there is much slower than in Hanoi.",
+            "Ẩm thực: It’s famous for grilled fish, which you can buy at the night market.",
+            "Thời tiết theo **mùa**: In winter it gets quite cold, but in spring it’s cool and sunny.",
+            "Lễ hội: The best time to go is during the flower festival in December.",
+          ],
+        },
+      ],
+      caption: "Chọn đúng cột ⇒ không bao giờ bí phần ②. Mỗi dòng là một câu 5–10 giây.",
+    },
+    {
+      t: "table",
+      caption: "Kéo dài theo từng ô (đề nơi chốn)",
+      head: ["Ô trên thẻ", "Thêm gì", "Câu mẫu"],
+      rows: [
+        ["**Where it is**", "khoảng cách + cách đi · tên dài thì nói nghĩa", "It’s about twenty minutes from my house by motorbike. Its full name is quite long, but locals just call it “the green café”."],
+        ["**What it is like**", "so với nơi khác cùng loại", "**Unlike other** cafés in the area, **this one** has no music, so it’s perfect for reading."],
+        ["**What you do / did there**", "món / hoạt động chưa thử", "I didn’t try the egg coffee last time, but **next time I’ll definitely give it a try**."],
+        ["**Explain why**", "đã giới thiệu cho người khác · họ thấy sao", "I’ve recommended it to a few friends, and **they all loved it** as much as I do."],
+      ],
+    },
+    {
+      t: "rule",
+      formula: "Gạch chân động từ thẻ → chọn thì + chọn góc · Công trình: made of / decorated with / can hold / staff · Vùng đất: scenery / food / seasons / festivals · Unlike other…, this one…",
+      vi: "Động từ quyết định nói gì; loại nơi quyết định phần dài nhất có những chi tiết nào.",
+    },
+    {
+      t: "mcq",
+      id: "t2d7-noi-dong-tu",
+      title: "Đọc động từ của thẻ — chọn góc nội dung (3 câu)",
+      items: [
+        { q: "Thẻ: “Describe a city where you would like to **work** in the future.” Ý nào nên chiếm phần lớn bài nói?", options: ["Các món đặc sản và điểm chụp ảnh đẹp", "Cơ hội việc làm trong ngành của bạn, môi trường làm việc, chi phí sống", "Lịch sử thành lập thành phố"], correct: 1, why: "Động từ **work** ⇒ góc **công việc**: cơ hội, môi trường, chi phí. Món ăn, điểm chụp ảnh là góc **visit**." },
+        { q: "Thẻ: “Describe a café you **often go to**.” Phần ② nên tả gì?", options: ["Trang trí bên trong, đồ uống – giá, nhân viên, chỗ bạn hay ngồi", "Thời tiết theo mùa và lễ hội của thành phố", "Dân số và diện tích của quận"], correct: 0, why: "Café là **công trình** ⇒ cột trái: thiết kế, decorated with, sản phẩm – giá – nhân viên. Mùa, lễ hội là của **vùng đất**." },
+        { q: "Thẻ: “Describe a place that **changed** you.” Dòng explain nên nói gì?", options: ["Nơi đó đẹp thế nào", "Bạn đã học được gì ở đó và bây giờ bạn khác trước ra sao", "Giá vé vào cửa"], correct: 1, why: "Động từ **changed** ⇒ explain phải nói **thay đổi của bạn**: điều học được + bạn bây giờ." },
       ],
     },
 

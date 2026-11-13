@@ -511,8 +511,8 @@ const T2D5_SPEAKING: Lesson = {
   id: 't2d5-noi',
   kind: 'speaking',
   title: 'Speaking Part 1 ôn câu hỏi Wh-: filler học thuật, kéo dài ý',
-  goal: 'Trả lời câu hỏi Wh- của Part 1 trong 20–30 giây bằng khung Trả lời thẳng – Chi tiết – Cảm xúc / lý do, dùng filler học thuật thay cho “ờ, ừm” khi cần thời gian nghĩ, kéo dài ý bằng because / which means / for example, và đọc rõ /z ʒ ŋ h j/.',
-  minutes: 55,
+  goal: 'Trả lời câu hỏi Wh- của Part 1 trong 20–30 giây bằng khung Trả lời thẳng – Chi tiết – Cảm xúc / lý do, dùng filler học thuật thay cho “ờ, ừm” khi cần thời gian nghĩ, kéo dài ý bằng because / which means / for example hoặc bằng mặt đối lập, nhận ra 6 dạng câu hỏi Part 1 (best time, suitable for, easy/difficult, dislike, first/last time, popular) để trả lời đúng ngay câu đầu, và đọc rõ /z ʒ ŋ h j/.',
+  minutes: 75,
   blocks: [
     {
       t: 'recap',
@@ -523,6 +523,8 @@ const T2D5_SPEAKING: Lesson = {
         '**Filler học thuật** (S09): Well, … · Let me think… · I’d say… · To be honest, … · That’s an interesting question. — **dùng 1 lần mỗi câu**, không lạm dụng.',
         '**Kéo dài ý**: because… · which means… · for example… · apart from that… · especially…',
         'Nối Ngữ pháp Ngày 5: **How long have you…? / Have you ever…?** → HTHT rồi kể bằng quá khứ đơn. 🔊 **/z ʒ ŋ h j/**.',
+        '**Part 1 theo DẠNG câu hỏi** (mục 5): best time · suitable for · easy/difficult · dislike · first/last time · popular in your country — mỗi dạng một khung; câu rộng thì **It depends → If… → But if…**; Part 1 **2–3 câu rồi dừng**.',
+        '**Kéo dài bằng đối lập** (mục 6): Generally I love X, but the only thing I don’t like is… · At first…, but after a while… · câu tần suất mở bằng bối cảnh.',
       ],
     },
 
@@ -626,7 +628,180 @@ const T2D5_SPEAKING: Lesson = {
       ],
     },
 
-    { t: 'h', text: '5. Phát âm: /z/ · /ʒ/ · /ŋ/ · /h/ · /j/' },
+    { t: 'h', text: '5. Part 1 theo DẠNG câu hỏi — 6 dạng hay gặp, mỗi dạng một khung' },
+    {
+      t: 'p',
+      text: 'Đề Part 1 thật đổi **chủ đề** liên tục (đồ ăn, thời tiết, đi bộ, ảnh chụp…), nhưng **cách hỏi** chỉ xoay quanh vài dạng. Nhận ra **dạng** trong 1 giây là biết ngay câu đầu tiên phải nói gì — không cần học thuộc câu trả lời cho từng chủ đề.',
+    },
+    {
+      t: 'table',
+      head: ['Dạng câu hỏi', 'Câu 1 (trả lời thẳng)', 'Câu 2–3 (kéo dài)'],
+      rows: [
+        ['**What is the best time to…?**', 'I think the best time to… is + thời điểm.', 'because + lý do · Thời điểm **xấu** thì sao: It’s not a good idea to… at…, because…'],
+        ['**Is X suitable for…?** (children, old people…)', 'Yes, I think it’s suitable for… / Not really, it’s not very suitable for…', 'because + lý do · **but** + ngoại lệ: However, it might not be suitable for…'],
+        ['**Is it easy or difficult to…?**', 'It’s quite easy / fairly difficult to…, actually.', 'lý do · **lúc đầu – về sau**: At first it was hard, but after a while…'],
+        ['**What do you dislike about X?**', 'The only thing I don’t like about X is…', 'vì sao khó chịu + ví dụ nhỏ · có thể chốt: Apart from that, I love it.'],
+        ['**When was the first / last time…?**', 'The last time I… was + thời điểm (quá khứ).', '2 câu **quá khứ đơn**: đi với ai, làm gì, cảm thấy thế nào. **Dừng** — không kể thành Part 2.'],
+        ['**Is X popular in your country?**', 'Yes, it’s very popular in Vietnam, especially among + nhóm người.', 'vì sao phổ biến · xu hướng: These days more and more people…'],
+      ],
+    },
+    {
+      t: 'table',
+      caption: 'Không nhớ rõ thời điểm (dạng first / last time) — 3 câu rào',
+      head: ['Câu rào', 'Ví dụ'],
+      rows: [
+        ['**I can’t remember exactly, but** I think it was…', 'I can’t remember exactly, but I think it was about three years ago.'],
+        ['**It’s been + thời gian + since I last** + V2', 'It’s been ages since I last went to the cinema — maybe six months.'],
+        ['**As far as I can remember,** …', 'As far as I can remember, the first time I swam in the sea was when I was seven.'],
+      ],
+    },
+    {
+      t: 'dialogue',
+      title: 'Sáu dạng câu hỏi — câu trả lời mẫu (band ~5.5, ước tính)',
+      lines: [
+        { who: 'Examiner', role: 'examiner', text: 'What is the best time of day to go for a walk?' },
+        { who: 'Candidate', role: 'candidate', text: "I'd say early morning is the best time, because the air is fresh and the streets are still quiet. Walking at noon isn't a good idea in Vietnam, because it's far too hot.", vi: 'Tôi cho rằng sáng sớm là lúc tốt nhất, vì không khí trong lành và đường phố còn yên tĩnh. Đi bộ buổi trưa ở Việt Nam thì không nên, vì nóng quá.' },
+        { who: 'Examiner', role: 'examiner', text: 'Are video games suitable for young children?' },
+        { who: 'Candidate', role: 'candidate', text: "Some of them are, I think. Simple games can teach kids colours and numbers. However, many popular games are too violent for young children, so parents should check them first.", vi: 'Tôi nghĩ một số trò thì phù hợp. Trò đơn giản có thể dạy trẻ màu sắc và con số. Tuy nhiên, nhiều trò phổ biến quá bạo lực với trẻ nhỏ, nên bố mẹ cần kiểm tra trước.' },
+        { who: 'Examiner', role: 'examiner', text: 'Is it easy to cook Vietnamese food?' },
+        { who: 'Candidate', role: 'candidate', text: "Some dishes are fairly easy, like fried rice. But at first I found it hard to make a good soup, because you need the right balance of fish sauce and sugar. After a few months of practice, it got much easier.", vi: 'Có món khá dễ, như cơm rang. Nhưng lúc đầu tôi thấy nấu canh ngon rất khó, vì phải cân đúng nước mắm và đường. Sau vài tháng tập thì dễ hơn nhiều.' },
+        { who: 'Examiner', role: 'examiner', text: 'What do you dislike about your neighbourhood?' },
+        { who: 'Candidate', role: 'candidate', text: "The only thing I don't like is the noise. There's a karaoke shop at the end of my street, and it's often open until midnight. Apart from that, it's a really nice place to live.", vi: 'Điều duy nhất tôi không thích là tiếng ồn. Cuối phố tôi có một quán karaoke, thường mở đến nửa đêm. Ngoài chuyện đó ra thì đây là nơi rất dễ chịu để sống.' },
+        { who: 'Examiner', role: 'examiner', text: 'When was the last time you took a photo?' },
+        { who: 'Candidate', role: 'candidate', text: "It was just yesterday, actually. I took a photo of a beautiful sunset from my balcony and sent it to my mum. She said it was the best picture I've ever taken.", vi: 'Mới hôm qua thôi. Tôi chụp cảnh hoàng hôn rất đẹp từ ban công và gửi cho mẹ. Mẹ bảo đó là bức ảnh đẹp nhất tôi từng chụp.' },
+        { who: 'Examiner', role: 'examiner', text: 'Is cycling popular in your country?' },
+        { who: 'Candidate', role: 'candidate', text: "Not as popular as it used to be. Most people in big cities ride motorbikes now, because the distances are long. But cycling is coming back among young people, especially for exercise at weekends.", vi: 'Không còn phổ biến như trước. Phần lớn người ở thành phố lớn giờ đi xe máy vì quãng đường xa. Nhưng xe đạp đang trở lại với người trẻ, nhất là để tập thể dục cuối tuần.' },
+      ],
+    },
+    {
+      t: 'table',
+      caption: 'Câu hỏi quá rộng ("What kind of food / clothes / music…?") — khung It depends',
+      head: ['Bước', 'Khung', 'Ví dụ: What kind of clothes do you usually wear?'],
+      rows: [
+        ['1 · Nói "tuỳ"', 'It depends on + điều kiện.', 'It depends on where I’m going.'],
+        ['2 · Trường hợp A', 'If…, I usually…', 'If I’m going to work, I usually wear a shirt and trousers.'],
+        ['3 · Trường hợp B', 'But if… / At weekends, …', 'But at weekends I just wear jeans and a T-shirt, because they’re comfortable.'],
+      ],
+    },
+    {
+      t: 'note',
+      title: 'Cẩn thận — Part 1 ngắn, thẳng, dừng đúng lúc',
+      items: [
+        '**2–3 câu (20–30 giây) là đủ.** Đừng nói đến khi giám khảo phải ngắt lời — Part 1 có khoảng 12 câu trong 4–5 phút, nói quá dài là chiếm giờ và hay lạc ý.',
+        '**Câu đầu tiên trả lời thẳng đúng câu hỏi.** Hỏi "best time" → câu đầu là một thời điểm; hỏi "dislike" → câu đầu là một điều không thích. Đừng mở đầu bằng chuyện khác.',
+        '**Đừng cố nhét từ khó** vào Part 1. Một từ đơn giản dùng đúng tốt hơn một thành ngữ dùng sai — Part 1 chấm sự tự nhiên.',
+        '**Chốt câu dứt khoát**: câu cuối hạ giọng xuống, rồi dừng. Đừng treo "and…", "so…", "but yeah…" rồi im — nghe như bạn chưa nói xong.',
+        'Dạng **first / last time**: kể **2 câu quá khứ** rồi dừng. Nếu kể đủ ai – ở đâu – vì sao – cảm xúc như Part 2 là quá dài.',
+      ],
+    },
+    {
+      t: 'rule',
+      formula: 'Nhận DẠNG câu hỏi → câu 1 trả lời đúng dạng → 1–2 câu lý do / ví dụ / mặt kia → hạ giọng, dừng.',
+      vi: 'Part 1 = 2–3 câu. Biết dạng là biết câu đầu tiên.',
+    },
+    {
+      t: 'mcq',
+      id: 't2d5-noi-dang-chon',
+      title: 'Chọn câu trả lời Part 1 tốt nhất (5 câu)',
+      items: [
+        {
+          q: 'What is the best time to visit your hometown?',
+          options: [
+            'My hometown is in the north and it has a lot of famous dishes, and the people are friendly, and…',
+            'Probably in spring, around March, because the weather is cool and there are flowers everywhere.',
+            'Spring.',
+          ],
+          correct: 1,
+          why: 'B trả lời **thẳng một thời điểm** rồi thêm lý do, 1–2 câu, chốt gọn. A không trả lời câu hỏi và treo "and…". C quá cụt (band 4).',
+        },
+        {
+          q: 'What do you dislike about public transport?',
+          options: [
+            'The only thing I really dislike is that buses are often late, so I can never plan my time properly.',
+            'Public transport is very important for big cities because it reduces traffic and pollution in the long term.',
+            'I dislike it.',
+          ],
+          correct: 0,
+          why: 'Dạng **dislike** → câu đầu nêu **một điều không thích**: "The only thing I really dislike is…". B nói như Part 3 (lợi ích cho xã hội), không trả lời câu hỏi. C cụt.',
+        },
+        {
+          q: 'When was the last time you went to the cinema?',
+          options: [
+            'I go to the cinema twice a month because I love films.',
+            "It's been a while since I last went — probably two months ago. I saw a comedy with my sister and we laughed the whole time.",
+            "Last time I went to the cinema it was a Saturday and I met my friend first and we had coffee and then we bought tickets and then we watched a film and then we went for dinner and then…",
+          ],
+          correct: 1,
+          why: 'B dùng câu rào **It’s been a while since I last went**, 2 câu **quá khứ**, rồi dừng. A sai thì (hiện tại đơn — trả lời "how often"). C kể lê thê như Part 2, toàn "and then".',
+        },
+        {
+          q: 'Is it easy to learn to swim?',
+          options: [
+            'At first it was quite difficult for me, because I was scared of the water, but after a few lessons it became much easier.',
+            'Swimming is a sport.',
+            'Yes. Swimming is good for health. Swimming is good for children. Swimming is popular.',
+          ],
+          correct: 0,
+          why: 'A dùng cách kéo dài **lúc đầu khó → sau dễ**. B lạc đề. C lặp "swimming" ba lần, ba câu rời không nối — FC thấp.',
+        },
+        {
+          q: 'What kind of music do you like?',
+          options: [
+            'Music.',
+            'It depends on my mood. If I’m studying, I listen to soft piano music, but when I’m at the gym I prefer fast pop songs.',
+            'I like music, and music is good, and I listen to music every day, and…',
+          ],
+          correct: 1,
+          why: 'Câu hỏi **rộng** → khung **It depends → If… → but when…**. A cụt; C lặp từ và treo "and…".',
+        },
+      ],
+    },
+
+    { t: 'h', text: '6. Kéo dài bằng đối lập — 4 khung + mở câu tần suất bằng bối cảnh' },
+    {
+      t: 'p',
+      text: 'Ngoài because / for example (mục 3), cách kéo dài **tự nhiên nhất** là nói thêm **mặt kia**: điều mình thích **và** điều chưa thích, lúc đầu **và** bây giờ. Câu nghe chín chắn hơn mà không cần từ khó.',
+    },
+    {
+      t: 'table',
+      head: ['Khung', 'Ví dụ'],
+      rows: [
+        ['**Generally I love X, but the only thing I don’t like is…**', 'Generally I love living in Hanoi, but the only thing I don’t like is the traffic in the rush hour.'],
+        ['**At first… , but after a while…** (lúc đầu – về sau)', 'At first I found online classes boring, but after a while I got used to them.'],
+        ['**X is great at / in…, but not at / in…** (lúc tốt – lúc xấu)', 'The beach is great in the early morning, but not at midday, when it gets really crowded.'],
+        ['**The good thing is…, while the downside is…** (ưu – nhược)', 'The good thing about my phone is the camera, while the downside is the battery — it dies by 4 p.m.'],
+      ],
+    },
+    {
+      t: 'table',
+      caption: 'Câu tần suất dễ cụt ("How often do you…?") — mở bằng bối cảnh',
+      head: ['Cụt (band 4)', 'Có bối cảnh (band 5–5.5)'],
+      rows: [
+        ['I go swimming once a week.', 'These days I’m really busy with work, so I only go swimming once a week, usually on Sunday mornings.'],
+        ['I read books every night.', 'Since I started living alone, I’ve had more free time, so I read for about half an hour every night before bed.'],
+        ['I rarely cook.', 'My office is far from home and I get back quite late, so to be honest I rarely cook — maybe twice a month.'],
+      ],
+    },
+    {
+      t: 'rule',
+      formula: 'Generally I love X, but the only thing I don’t like is… · At first…, but after a while… · Bối cảnh + so + tần suất',
+      vi: 'Kéo dài bằng mặt kia hoặc bằng hoàn cảnh — không cần từ khó.',
+    },
+    {
+      t: 'quiz',
+      id: 't2d5-noi-doi-lap',
+      title: 'Dịch câu kéo dài bằng đối lập (4 câu)',
+      kind: 'translate',
+      grammar: 'Generally I love…, but the only thing I don’t like is… · At first…, but after a while… · …, while the downside is… · These days…, so…',
+      items: [
+        { q: 'Nhìn chung tôi rất thích công việc của mình, nhưng điều duy nhất tôi không thích là phải làm thêm giờ.', hint: 'Generally I love my job, but the only thing I don’t like is, working overtime', answers: ["Generally I love my job, but the only thing I don't like is working overtime.", "Generally, I love my job, but the only thing I don't like is working overtime.", "Generally I love my job, but the only thing I don't like is having to work overtime.", "Generally, I love my job, but the only thing I don't like is having to work overtime.", "Generally I love my job, but the only thing I dislike is working overtime."] },
+        { q: 'Lúc đầu tôi thấy tiếng Anh rất khó, nhưng sau một thời gian thì nó dễ dần.', hint: 'At first I found English very difficult, but after a while, it got easier', answers: ['At first I found English very difficult, but after a while it got easier.', 'At first, I found English very difficult, but after a while it got easier.', 'At first I found English very difficult, but after a while it became easier.', 'At first, I found English very difficult, but after a while, it got easier.', 'At first I found English very hard, but after a while it got easier.'] },
+        { q: 'Điểm hay của xe máy là nhanh, còn điểm dở là không an toàn.', hint: 'The good thing about motorbikes is…, while the downside is…', answers: ["The good thing about motorbikes is that they're fast, while the downside is that they're not safe.", 'The good thing about motorbikes is that they are fast, while the downside is that they are not safe.', 'The good thing about motorbikes is the speed, while the downside is safety.', "The good thing about motorbikes is that they're fast, while the downside is that they aren't safe.", 'The good thing about motorbikes is that they are quick, while the downside is that they are not safe.'] },
+        { q: 'Dạo này tôi khá bận, nên tôi chỉ gặp bạn bè khoảng hai lần một tháng.', hint: "These days I'm quite busy, so I only meet my friends about twice a month", answers: ["These days I'm quite busy, so I only meet my friends about twice a month.", 'These days I am quite busy, so I only meet my friends about twice a month.', "These days I'm quite busy, so I only see my friends about twice a month.", 'These days I am quite busy, so I only see my friends about twice a month.', "These days I'm pretty busy, so I only meet my friends about twice a month."] },
+      ],
+    },
+
+    { t: 'h', text: '7. Phát âm: /z/ · /ʒ/ · /ŋ/ · /h/ · /j/' },
     {
       t: 'table',
       head: ['Âm', 'Cách đọc', 'Lỗi người Việt', 'Từ luyện'],
@@ -655,7 +830,7 @@ const T2D5_SPEAKING: Lesson = {
       ],
     },
 
-    { t: 'h', text: '6. Luyện nói với AI chấm' },
+    { t: 'h', text: '8. Luyện nói với AI chấm' },
     {
       t: 'p',
       text: 'Mỗi câu **D – D – F**, 20–30 giây, **tối đa một filler**. Có câu hỏi **How long / Have you ever** — dùng HTHT rồi kể bằng quá khứ đơn.',
@@ -683,9 +858,27 @@ const T2D5_SPEAKING: Lesson = {
       ],
     },
     {
+      t: 'p',
+      text: 'Bộ thứ ba trộn **đủ 6 dạng câu hỏi** của mục 5 — câu đầu trả lời đúng dạng, 2–3 câu, rồi dừng.',
+    },
+    {
+      t: 'speak',
+      id: 't2d5-noi-dang-cau',
+      part: '1',
+      questions: [
+        'What is the best time of year to visit your city?',
+        'Is your hometown a suitable place for young people to live?',
+        'Is it easy or difficult to find a good job where you live?',
+        'What do you dislike about using your mobile phone?',
+        'When was the last time you went to a restaurant?',
+        'Is street food popular in your country?',
+      ],
+    },
+    {
       t: 'note',
       title: 'Tự chấm',
       items: [
+        'Bộ 6 dạng: câu đầu có trả lời **đúng dạng** không (best time → thời điểm; dislike → một điều không thích; last time → quá khứ)? Có câu nào dài quá 40 giây không?',
         'Mỗi câu ≥ 20 giây? Có đủ **D – D – F**?',
         'Đếm filler: có câu nào ≥ 2 filler? Có chỗ nào **im lặng > 3 giây**?',
         'Câu **How long / Have you ever**: có dùng **have / has + V3** không? Sang chi tiết có đổi sang **quá khứ đơn** không?',

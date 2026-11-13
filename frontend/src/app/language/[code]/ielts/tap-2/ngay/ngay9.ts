@@ -334,6 +334,24 @@ const T2D9_NGU_PHAP: Lesson = {
         ["**Writing Task 2**", "So sánh hai lựa chọn", "Public transport is **far less** harmful to the environment **than** private cars."],
       ],
     },
+    {
+      t: "note",
+      title: "Mẹo — bí ý Task 2 / Part 3? Dùng so sánh để làm sâu một ý",
+      items: [
+        "Một ý thường chỉ được 1–2 câu rồi cạn. Thêm **một phép so sánh** là có ngay 2 câu nữa, lại khoe được ngữ pháp hôm nay. Ba hướng so sánh dễ nhất:",
+        "**Xưa – nay**: Twenty years ago…, whereas today… / … is far more… than it used to be.",
+        "**Nơi này – nơi khác**: In big cities…, while in rural areas… / Compared with…, Vietnam…",
+        "**Nhóm này – nhóm khác**: Young people…, but older people… / … is much harder for low-income families than for…",
+      ],
+    },
+    {
+      t: "examples",
+      items: [
+        { en: "[Ý gốc — 2 câu, cạn ý] Smartphones help students learn. They can find information quickly.", vi: "Điện thoại thông minh giúp học sinh học. Các em tìm thông tin nhanh." },
+        { en: "[Thêm so sánh xưa – nay] Twenty years ago, a student who wanted to check a fact had to go to a library, which could take a whole afternoon. Today the same information is available in a few seconds, so learners can spend far more time understanding ideas than searching for them.", vi: "Hai mươi năm trước, học sinh muốn kiểm tra một thông tin phải đến thư viện, có khi mất cả buổi chiều. Ngày nay cùng thông tin đó có trong vài giây, nên người học dành được nhiều thời gian để hiểu ý hơn là đi tìm." },
+        { en: "[Thêm so sánh nơi này – nơi khác] This benefit is even greater in rural areas, where libraries are much smaller and less well-stocked than those in cities.", vi: "Lợi ích này còn lớn hơn ở vùng nông thôn, nơi thư viện nhỏ hơn và ít sách hơn nhiều so với ở thành phố." },
+      ],
+    },
 
     { t: "h", text: "7. Lỗi người Việt hay mắc + luyện chọn" },
     {
@@ -375,7 +393,7 @@ const T2D9_NGHE: Lesson = {
   kind: "listening",
   title: "Nghe: Đề nhỏ Part 1 + Part 2 (20 câu, đúng giờ) — tự chấm, ghi sổ lỗi",
   goal: "Làm một đề nhỏ 20 câu (Part 1 điền phiếu + Part 2 trắc nghiệm và nối) đúng điều kiện thi thật — đọc trước, nghe MỘT lần, không dừng — rồi tự chấm, xếp lỗi vào 6 loại và ghi sổ lỗi; đích ≥ 14/20 (mốc Listening band 5 của Tập 2).",
-  minutes: 50,
+  minutes: 75,
   blocks: [
     {
       t: "recap",
@@ -385,6 +403,7 @@ const T2D9_NGHE: Lesson = {
         "Ôn mọi bẫy đã học: **đánh vần**, số, **đổi ý** (no, sorry…), **used to… but now**, **giới hạn từ**.",
         "Sau khi chấm: xếp mỗi câu sai vào **6 loại lỗi** (chính tả · số ít / nhiều · bẫy đổi ý · không nhận paraphrase · lỡ nhịp · quá số từ) và ghi vào sổ.",
         "Mục tiêu Tập 2: **Part 1 + Part 2 ≥ 14/20** — tương đương đường tới **Listening band 5** (16/40) khi cộng Part 3–4.",
+        "Mục 5: **chữa đề đúng cách** bằng lời thoại — 5 bước (tự tìm lại → chấm → đọc lời thoại → sổ paraphrase → chép chính tả 2–3 đoạn khó), dùng cho mọi đề từ nay.",
       ],
     },
 
@@ -641,6 +660,119 @@ const T2D9_NGHE: Lesson = {
         "Nghe lại cả bài **một lần nữa có lời thoại** để luyện tai — nhưng điểm tính theo lần nghe đầu.",
       ],
     },
+
+    { t: "h", text: "5. Chữa đề đúng cách — 5 bước với lời thoại (transcript)" },
+    {
+      t: "p",
+      text: "Làm một đề rồi chỉ xem đáp án là **phí đề**. Bạn mới biết mình **sai câu nào**, chưa biết **vì sao sai**. Người lên band nhanh dùng **mỗi đề 2–3 lượt**: lượt 1 làm như thi thật, lượt 2–3 **chữa** bằng lời thoại (transcript — bản chép lời bài nghe). Trên trang này lời thoại nằm sau nút **“Hiện lời thoại (transcript)”** dưới mỗi khối nghe. Chữa một đề nhỏ mất khoảng **25–30 phút** — bằng thời gian làm đề.",
+    },
+    {
+      t: "sodo",
+      kind: "flow",
+      title: "Chữa một đề Listening — làm đúng thứ tự",
+      caption: "Bước 1 làm TRƯỚC khi xem đáp án — đây là bước hay bị bỏ nhất. Bước 2–5 chỉ làm với câu sai và câu đoán mò.",
+      steps: [
+        { label: "① Tự tìm lại", sub: "**Chưa xem đáp án.** Nghe lại đoạn có câu mình không chắc (tối đa 2 lần), sửa bằng **bút khác màu**." },
+        { label: "② Chấm, nghe lại chỗ sai", sub: "Chấm cả hai màu. Mỗi câu sai: nghe lại **chỉ đoạn đó** 3–5 lần — tai nghe ra chữ gì?" },
+        { label: "③ Đọc lời thoại như bài đọc", sub: "Tìm **câu chứa đáp án** → tô vàng. Câu bẫy ngay trước nó → gạch đỏ." },
+        { label: "④ Ghi cặp paraphrase", sub: "Đề viết gì ↔ người nói nói gì. Mỗi cặp một dòng trong **sổ chữa đề**." },
+        { label: "⑤ Chép chính tả 2–3 đoạn khó", sub: "Nghe một câu → dừng → viết → so lời thoại → ghi chữ / âm mình nghe sai." },
+      ],
+    },
+    {
+      t: "table",
+      caption: "Chữa sâu đến đâu — tuỳ trình độ",
+      head: ["Bạn đang ở", "Bước 3–4 làm với", "Bước 5"],
+      rows: [
+        ["Band 4–5 (Tập 2)", "**Chỉ đoạn chứa đáp án** của câu sai + câu bẫy ngay trước nó", "1–2 đoạn ngắn (2–3 câu)"],
+        ["Band 5.5–6", "Cả đoạn quanh mọi câu sai **và** câu đúng nhờ đoán", "2–3 đoạn, mỗi đoạn 4–5 câu"],
+        ["Band 6.5+", "Cả lời thoại: ghi mọi cặp paraphrase, kể cả câu đã đúng", "3 đoạn + đọc nhại (shadowing) cả Part"],
+      ],
+    },
+    {
+      t: "note",
+      title: "Cẩn thận: ba cách chữa đề vô ích",
+      items: [
+        "**Xem đáp án trước, nghe lại sau** — lúc đó tai đã biết chữ cần nghe nên bạn “nghe ra” hết, và không biết mình thật sự kém ở đâu. Luôn làm **bước ① trước**.",
+        "**Đọc lời thoại từ đầu đến cuối như đọc truyện** — mất 15 phút mà không ghi được gì. Đọc **có mục đích**: tìm câu chứa đáp án, tô, ghi cặp.",
+        "**Chép chính tả cả bài** — quá dài, chán, bỏ giữa chừng. Chọn **2–3 đoạn khó nhất** (đoạn có câu sai) là đủ.",
+      ],
+    },
+    {
+      t: "table",
+      caption: "Sổ chữa đề — mẫu, điền từ đề hôm nay",
+      head: ["Câu", "Đề viết", "Người nói nói", "Vì sao mình sai"],
+      rows: [
+        ["12", "a problem with **a bridge**", "engineers found **a fault in the steel** of the new **footbridge**", "Không nhận ra paraphrase (problem = fault); nghe “money” trước nên chọn B"],
+        ["17", "join **a guided walk**", "it's where our **guided walks start**", "Bẫy “used to”: nghe “hire boats” trước rồi ghi luôn A"],
+        ["20", "**take photos** of the whole city", "you can **see right across** Westvale, so **bring your camera**", "Không nhận paraphrase: không có chữ “photo” nào"],
+      ],
+    },
+    {
+      t: "quiz",
+      id: "t2d9-nghe-chua-de",
+      title: "Bước ④ — tìm cụm của người nói ứng với chữ trên đề (6 câu, mở lời thoại Part 2 để làm)",
+      kind: "fill",
+      items: [
+        { q: "(12) Đề: “a **problem** with a bridge” ↔ Tom: “engineers found a ___ in the steel of the new footbridge”", answers: ["fault"], hint: "một từ nghĩa là “lỗi, chỗ hỏng”" },
+        { q: "(14) Đề: “£3 **for the day**” ↔ Tom: “a charge of three pounds for the ___ day”", answers: ["whole"], hint: "cả (ngày)" },
+        { q: "(15) Đề: “Tom **recommends**…” ↔ Tom: “if you ___ me, the best time is early in the morning”", answers: ["ask"], hint: "“nếu bạn hỏi tôi” = ý kiến riêng của người nói" },
+        { q: "(16) Đề: “**see** an exhibition” ↔ Tom: “now it ___ an exhibition about the history of the river”", answers: ["holds"], hint: "động từ “tổ chức, trưng bày” (thêm -s)" },
+        { q: "(17) Đề: “**join** a guided walk” ↔ Tom: “it's where our guided walks ___”", answers: ["start"], hint: "bắt đầu (nơi xuất phát)" },
+        { q: "(19) Đề: “buy **local food**” ↔ Tom: “bread, cheese and vegetables from local ___”", answers: ["farms"], hint: "trang trại (số nhiều)" },
+      ],
+    },
+    {
+      t: "note",
+      title: "Lời giải — và cặp paraphrase nên chép vào sổ",
+      items: [
+        "**fault** — problem ↔ **fault** (đồng nghĩa). Câu bẫy đứng ngay trước: “people assumed we'd **run out of money**, but in fact the funding was **never a problem**”.",
+        "**whole** — for the day ↔ **for the whole day**; bẫy: “There's **no hourly rate**” (loại B £2 an hour).",
+        "**ask** — recommends ↔ **if you ask me, the best time is…** (nêu ý kiến riêng = khuyên). Buổi trưa và buổi tối bị nhắc nhưng chỉ để **chê đông**.",
+        "**holds** — see an exhibition ↔ **it holds an exhibition** (đổi góc nhìn: nơi trưng bày ↔ người xem).",
+        "**start** — join a guided walk ↔ **where our guided walks start**. Câu bẫy trước nó: “you could [hire boats], **years ago**, but…”.",
+        "**farms** — local food ↔ **bread, cheese and vegetables from local farms** (chung ↔ cụ thể: “food” được kể thành từng món).",
+      ],
+    },
+    {
+      t: "listen",
+      id: "t2d9-nghe-chep",
+      title: "Bước ⑤ — hai đoạn khó để chép chính tả",
+      note: "Hai câu trích từ Part 2 (Tom, giọng Anh nam). Nghe từng câu, bấm dừng, viết ra giấy cả câu; rồi làm 6 ô bên dưới để kiểm những chỗ hay nghe sai. Chưa mở lời thoại khi chưa viết xong.",
+      lines: [
+        { who: "Tom", voice: "uk-nam", text: "People always expect to hire boats there, and you could, years ago, but the insurance became too expensive.", vi: "Người ta luôn nghĩ có thể thuê thuyền ở đó, và nhiều năm trước thì được, nhưng tiền bảo hiểm trở nên quá đắt." },
+        { who: "Tom", voice: "uk-nam", text: "There's no grass there, so it isn't really a place to sit down, but on Saturdays there's a farmers' market.", vi: "Ở đó không có cỏ nên không hẳn là chỗ ngồi nghỉ, nhưng thứ Bảy có chợ nông sản." },
+      ],
+    },
+    {
+      t: "quiz",
+      id: "t2d9-nghe-chep-dien",
+      title: "Kiểm bài chép — điền chữ bạn nghe được (6 ô)",
+      kind: "fill",
+      items: [
+        { q: "People always ___ to hire boats there", answers: ["expect"], hint: "/ɪkˈspekt/ — âm /t/ cuối rất nhẹ, dễ nghe thành “expec”" },
+        { q: "and you ___, years ago", answers: ["could"], hint: "/kʊd/ — /d/ cuối gần như nuốt" },
+        { q: "but the ___ became too expensive", answers: ["insurance"], hint: "in-SURE-ance, trọng âm âm tiết 2" },
+        { q: "There's no ___ there", answers: ["grass"], hint: "giọng Anh /ɡrɑːs/ — nguyên âm dài" },
+        { q: "so it ___ really a place to sit down", answers: ["isn't", "is not"], hint: "dạng rút gọn, /t/ cuối nhẹ" },
+        { q: "but on Saturdays there's a ___ market", answers: ["farmers'", "farmers", "farmer's"], hint: "chợ của nông dân — /ˈfɑːməz/" },
+      ],
+    },
+    {
+      t: "note",
+      title: "Sau bước ⑤ — ghi gì vào sổ?",
+      items: [
+        "Ghi **chữ bạn nghe sai và vì sao**: “could” nghe thành “cool” (nuốt /d/) · “isn't really” nghe thành “is really” (mất /nt/ — **đảo nghĩa câu!**).",
+        "Chữ **isn't / aren't / wasn't** là chỗ người mới hay mất nhất: nghe thiếu “n't” là hiểu ngược hoàn toàn. Mỗi lần chép chính tả, soát riêng các chữ phủ định.",
+        "Hôm sau, **nghe lại đúng đề này một lần** (không nhìn lời) trước khi làm đề mới. Lần này bạn nên đúng ≥ 18/20 — nếu chưa, các cặp paraphrase trong sổ chưa “vào tai”, đọc lại sổ.",
+        "Quy trình 5 bước này dùng cho **mọi đề** từ nay: đề nhỏ Ngày 21, đề 40 câu Ngày 23, các đề Online Test.",
+      ],
+    },
+    {
+      t: "rule",
+      formula: "Tự tìm lại → chấm → đọc lời thoại tìm câu chứa đáp án → ghi cặp paraphrase → chép 2–3 đoạn khó",
+      vi: "Đề làm xong mới dùng được một nửa; nửa còn lại là chữa. Người band 4–5 chỉ cần chữa đoạn chứa đáp án của câu sai.",
+    },
   ],
 };
 
@@ -650,8 +782,8 @@ const T2D9_NOI: Lesson = {
   id: "t2d9-noi",
   kind: "speaking",
   title: "Nói: Paraphrase câu hỏi giám khảo + 12 chủ đề Part 1 nhanh",
-  goal: "Mở mỗi câu trả lời Part 1 bằng cách nói lại câu hỏi theo lời mình (không lặp từ giám khảo), trả lời 2–4 câu cho 12 chủ đề Part 1 hay gặp với từ vựng riêng của từng chủ đề — đẩy Lexical Resource (paraphrase) và Fluency lên band 5; đọc trọn cụm phụ âm cuối -sts / -ths / -ngths.",
-  minutes: 60,
+  goal: "Mở mỗi câu trả lời Part 1 bằng cách nói lại câu hỏi theo lời mình (không lặp từ giám khảo), trả lời 2–4 câu cho 12 chủ đề Part 1 hay gặp với từ vựng riêng của từng chủ đề — đẩy Lexical Resource (paraphrase) và Fluency lên band 5; xử lý được chủ đề lạ và lúc quên từ mà không im lặng; đọc trọn cụm phụ âm cuối -sts / -ths / -ngths.",
+  minutes: 75,
   blocks: [
     {
       t: "recap",
@@ -662,6 +794,7 @@ const T2D9_NOI: Lesson = {
         "**12 chủ đề Part 1** hay gặp: thời tiết · âm nhạc · phim · đọc · mua sắm · giao thông công cộng · điện thoại · cuối tuần · giấc ngủ · tiếng ồn · hàng xóm · sinh nhật.",
         "Khung trả lời 2–4 câu (15–25 giây): **Trả lời (đã paraphrase) → Lý do → Ví dụ / chi tiết**.",
         "Đẩy **LR** (band 5 = “paraphrase lúc được lúc không” → hôm nay biến thành thói quen) và **FC**. Phát âm: cụm phụ âm cuối **texts · months · lengths**.",
+        "**Gặp chủ đề lạ** → nói rộng sang chủ đề liền kề hoặc lịch sự nói không hứng thú rồi chuyển hướng; **quên từ** → giải nghĩa bằng mệnh đề (a thing which…, people who…); bộ từ **Reading / sách** (mục 2–2c).",
       ],
     },
 
@@ -693,6 +826,7 @@ const T2D9_NOI: Lesson = {
         ["important", "essential · matters a lot · plays a big role", "Sleep **plays a big role** in my mood."],
         ["good / nice", "pleasant · enjoyable · relaxing · convenient", "The bus is **convenient**."],
         ["a lot of", "plenty of · loads of (nói) · a wide range of", "There are **plenty of** cafés."],
+        ["always / usually / half the time", "24/7 · nine times out of ten · 50-50 · a hundred percent", "My phone is on **24/7**. · **Nine times out of ten** I take the bus. · It's **50-50** whether I cook or eat out."],
       ],
     },
     {
@@ -772,6 +906,83 @@ const T2D9_NOI: Lesson = {
         "Quên đổi **thì** theo câu hỏi: “**Did** you like reading **when you were a child**?” → trả lời bằng **quá khứ**.",
       ],
     },
+    {
+      t: "note",
+      title: "Mẹo — gặp chủ đề lạ hoặc chẳng hứng thú thì sao?",
+      items: [
+        "Đề thật có cả chủ đề “lạ”: chim, cây cảnh, nhặt đồ cũ, mặc đồ màu sắc… Bạn **không cần** yêu thích hay biết nhiều — giám khảo chấm **ngôn ngữ**, không chấm kiến thức. Có hai lối thoát:",
+        "**① Nói rộng ra chủ đề liền kề** mà bạn có từ: Birds? → “I don't know much about birds, but I love being **in nature**, and there are always birds singing in the park near my house in the morning…” (birds → thiên nhiên → công viên).",
+        "**② Nói thật, lịch sự, rồi chuyển sang thứ mình thích**: “To be honest, **it's not something I take a keen interest in**. **I'm more of a** music **person** — I'd rather spend my free time playing the guitar.”",
+        "Đừng trả lời “I don't know.” rồi im — đó mới là lỗi. Thừa nhận + vẫn nói 2 câu là đủ.",
+        "Gặp thứ **đặc thù Việt Nam** (phở, Tết, áo dài…): **giữ tên tiếng Việt** rồi giải thích bằng từ quen: “I love **bánh xèo**, **which is basically a crispy pancake filled with** shrimp and bean sprouts.”",
+      ],
+    },
+    {
+      t: "rule",
+      formula: "Chủ đề lạ: I don't know much about X, but… (chủ đề liền kề) · It's not something I take a keen interest in. I'm more of a … person.",
+      vi: "Không biết thì thừa nhận ngắn, rồi lái sang thứ mình nói được — vẫn đủ 2–3 câu.",
+    },
+
+    { t: "h", text: "2b. Quên từ giữa câu thì làm gì?" },
+    {
+      t: "p",
+      text: "Ai cũng có lúc quên một từ (“cái nồi cơm điện tiếng Anh là gì nhỉ?”). Im lặng hoặc chen tiếng Việt mới mất điểm. **Giải nghĩa từ đó bằng một mệnh đề** thì giám khảo coi là kỹ năng tốt — tiêu chí LR band 5–6 ghi rõ “**paraphrase** được (dù có lúc chưa thành công)”.",
+    },
+    {
+      t: "table",
+      head: ["Khung cứu hộ", "Dùng cho", "Ví dụ (từ bị quên)"],
+      rows: [
+        ["**a thing which / that** + V…", "đồ vật", "I bought **a thing which** cooks rice automatically. (rice cooker)"],
+        ["**people who** + V…", "người, nghề", "I'd like to be one of those **people who** design buildings. (architect)"],
+        ["**a place where** + S + V…", "nơi chốn", "We went to **a place where** you can see lots of fish in big tanks. (aquarium)"],
+        ["**It's a kind of…** / **It's like a…, but…**", "so với thứ quen", "**It's a kind of** small motorbike, but it runs on electricity. (e-scooter)"],
+        ["**the opposite of…**", "tính chất", "He's **the opposite of** shy — he talks to everyone. (outgoing)"],
+        ["**What I mean is…** / **I'm not sure of the word, but…**", "báo trước + sửa", "**I'm not sure of the word, but** it's the feeling you get before an exam. (nervous / anxious)"],
+      ],
+    },
+    {
+      t: "note",
+      title: "Cẩn thận",
+      items: [
+        "**Không** chen tiếng Việt (“…the nồi cơm điện…”) và **không** hỏi giám khảo “How do you say…?” — giám khảo không được giúp bạn.",
+        "Xin nhắc lại **câu hỏi** thì được: Part 1 giám khảo chỉ **đọc lại**; Part 3 giám khảo được **diễn đạt lại** (xem Ngày 5).",
+        "Câu cứu hộ không cần hoàn hảo — giữ mạch nói quan trọng hơn tìm đúng từ.",
+      ],
+    },
+    {
+      t: "quiz",
+      id: "t2d9-noi-quen-tu",
+      title: "Giải nghĩa từ bị quên bằng mệnh đề (5 câu)",
+      kind: "translate",
+      grammar: "a thing which + V · people who + V · a place where + S + V · It's a kind of… · the opposite of…",
+      items: [
+        { q: "Bạn quên từ “máy giặt”. Nói: một thứ giặt quần áo cho bạn.", hint: "a thing which / that washes your clothes", answers: ["It's a thing which washes your clothes.", "It's a thing that washes your clothes.", "A thing which washes your clothes.", "A thing that washes your clothes.", "It's a machine which washes your clothes.", "It's a machine that washes your clothes."] },
+        { q: "Bạn quên từ “thủ thư”. Nói: những người làm việc trong thư viện.", hint: "people who work in a library", answers: ["People who work in a library.", "They are people who work in a library.", "It's people who work in a library.", "The people who work in a library.", "Someone who works in a library.", "A person who works in a library."] },
+        { q: "Bạn quên từ “tiệm bánh”. Nói: một nơi bạn có thể mua bánh mì và bánh ngọt.", hint: "a place where you can buy bread and cakes", answers: ["It's a place where you can buy bread and cakes.", "A place where you can buy bread and cakes.", "It is a place where you can buy bread and cakes.", "It's a shop where you can buy bread and cakes."] },
+        { q: "Bạn quên từ “lười”. Nói: ngược lại với chăm chỉ.", hint: "the opposite of hard-working", answers: ["The opposite of hard-working.", "It's the opposite of hard-working.", "He's the opposite of hard-working.", "She's the opposite of hard-working.", "It is the opposite of hard-working."] },
+        { q: "Bạn quên từ “xe khách giường nằm”. Nói: đó là một loại xe buýt, nhưng bạn có thể nằm ngủ trên đó.", hint: "It's a kind of bus, but you can sleep / lie down on it", answers: ["It's a kind of bus, but you can sleep on it.", "It's a kind of bus, but you can lie down on it.", "It is a kind of bus, but you can sleep on it.", "It's a kind of bus, but you can lie down and sleep on it.", "It's a type of bus, but you can sleep on it."] },
+      ],
+    },
+
+    { t: "h", text: "2c. Chủ đề Reading — từ để nói về sách" },
+    {
+      t: "p",
+      text: "“Do you like reading?”, “What kind of books do you read?”, “Do you prefer paper books or e-books?” xuất hiện rất thường ở Part 1 (và Part 3 hỏi tiếp “Will paper books disappear?”). Dưới đây là bộ từ tối thiểu để không phải lặp “book, book, book”.",
+    },
+    {
+      t: "vocab",
+      items: [
+        { w: "genre", pos: "n", ipa: "/ˈʒɒnrə/", vi: "thể loại (sách, phim, nhạc)", ex: "Crime fiction is my favourite genre.", exVi: "Truyện trinh thám là thể loại tôi thích nhất.", more: "Đọc /ˈʒɒnrə/ — âm đầu /ʒ/ như trong **usually**. Thể loại hay gặp: **crime, fantasy, romance, biography, self-help**." },
+        { w: "fiction / non-fiction", pos: "n (U)", ipa: "/ˈfɪkʃn/ · /ˌnɒn ˈfɪkʃn/", vi: "sách hư cấu (truyện) / sách phi hư cấu (sách thật, kiến thức)", ex: "I mostly read non-fiction, like history and science books.", exVi: "Tôi chủ yếu đọc sách phi hư cấu, như sách lịch sử và khoa học.", more: '**a work of fiction** · ~~a fiction~~ (không đếm được).' },
+        { w: "a bookworm", pos: "n", ipa: "/ə ˈbʊkwɜːm/", vi: "mọt sách (người rất mê đọc)", ex: "My sister is a real bookworm — she reads three books a week.", exVi: "Chị tôi đúng là mọt sách — một tuần đọc ba cuốn.", more: "Ngược lại: **I'm not a big reader.**", anh: "books" },
+        { w: "a page-turner", pos: "n", ipa: "/ə ˈpeɪdʒ tɜːnə(r)/", vi: "cuốn sách hấp dẫn, đọc không dứt ra được", ex: "The novel was a real page-turner; I finished it in one night.", exVi: "Cuốn tiểu thuyết cuốn đến mức tôi đọc hết trong một đêm." },
+        { w: "paperback / e-book", pos: "n", ipa: "/ˈpeɪpəbæk/ · /ˈiː bʊk/", vi: "sách bìa mềm / sách điện tử", ex: "I prefer paperbacks because I can write notes in them.", exVi: "Tôi thích sách bìa mềm hơn vì có thể ghi chú lên đó.", more: "Sách bìa cứng: **hardback**. Đọc trên máy: **read on an e-reader / on my phone**." },
+        { w: "read up on", pos: "phr v", ipa: "/riːd ˈʌp ɒn/", vi: "đọc tìm hiểu kỹ về (một chủ đề)", ex: "Before the trip, I read up on the history of Hue.", exVi: "Trước chuyến đi, tôi đọc tìm hiểu kỹ về lịch sử Huế." },
+        { w: "read between the lines", pos: "idiom", ipa: "/riːd bɪˈtwiːn ðə laɪnz/", vi: "hiểu ý ngầm, đọc được ẩn ý", ex: "In his poems, you have to read between the lines.", exVi: "Trong thơ của ông ấy, bạn phải đọc được ẩn ý.", more: "Thành ngữ — dùng **một lần** là đủ." },
+        { w: "can't put it down", pos: "phr", ipa: "/kɑːnt pʊt ɪt daʊn/", vi: "không thể bỏ xuống (vì quá hay)", ex: "Once I started the book, I couldn't put it down.", exVi: "Bắt đầu đọc là tôi không thể bỏ xuống được." },
+        { w: "an avid reader", pos: "n phr", ipa: "/ən ˈævɪd ˈriːdə(r)/", vi: "người đọc nhiều, ham đọc", ex: "I wasn't an avid reader as a child, but I am now.", exVi: "Hồi nhỏ tôi không ham đọc, nhưng giờ thì có." },
+      ],
+    },
 
     { t: "h", text: "3. Phát âm: cụm phụ âm cuối -sts · -ths · -ngths" },
     {
@@ -834,6 +1045,22 @@ const T2D9_NOI: Lesson = {
         "Is the area where you live noisy?",
         "Do you know your neighbours well?",
         "How do you usually celebrate your birthday?",
+      ],
+    },
+    {
+      t: "p",
+      text: "Bộ thứ ba: **chủ đề lạ** + **Reading** (mục 2–2c). Không biết thì thừa nhận ngắn rồi lái sang chủ đề liền kề; quên từ thì giải nghĩa bằng mệnh đề — đừng im.",
+    },
+    {
+      t: "speak",
+      id: "t2d9-noi-p1-la",
+      part: "1",
+      questions: [
+        "Do you like watching birds?",
+        "Have you ever collected anything, such as stamps or coins?",
+        "What kind of books do you like reading?",
+        "Do you prefer paper books or e-books?",
+        "Is there a traditional food from your country that you would recommend to visitors?",
       ],
     },
   ],

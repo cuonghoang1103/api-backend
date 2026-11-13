@@ -678,8 +678,8 @@ const T2D1_SPEAKING: Lesson = {
   id: 't2d1-noi',
   kind: 'speaking',
   title: 'Speaking Part 1 ôn câu hỏi Yes/No: Work/Study · Hometown · Home',
-  goal: 'Trả lời mọi câu Yes/No của Part 1 về công việc / việc học, quê hương và nhà ở bằng 2–3 câu theo khung A–R–E (trả lời – lý do – ví dụ), không cụt, không học thuộc, phát âm rõ /p b t d k ɡ/ và âm cuối.',
-  minutes: 55,
+  goal: 'Trả lời mọi câu Yes/No của Part 1 về công việc / việc học, quê hương và nhà ở bằng 2–3 câu theo khung A–R–E (trả lời – lý do – ví dụ), không cụt, không học thuộc, có sẵn ngân hàng lý do và cách chia "It depends" theo trục, phát âm rõ /p b t d k ɡ/ và âm cuối.',
+  minutes: 70,
   blocks: [
     {
       t: 'recap',
@@ -689,6 +689,7 @@ const T2D1_SPEAKING: Lesson = {
         'Ôn **vòng 2** của Tập 1 Ngày 4: câu Yes/No **không** trả lời một chữ. Khung **A – R – E**: ==Answer (có / không + mức độ) → Reason (vì sao) → Example / Extra (ví dụ, chi tiết)==.',
         'Ba chủ đề **chắc chắn** gặp ở đầu Part 1: **Work / Study** (hoặc), **Hometown**, **Home / Accommodation** — giám khảo hỏi 1 trong 3 ngay câu đầu.',
         '12 cách nói "có / không" tự nhiên hơn Yes / No; câu trả lời mẫu band 4 → band 5–5.5 để thấy khác ở đâu.',
+        '**Ngân hàng lý do** (mục 1b): thích = giải trí / học hỏi / sức khoẻ; không thích = chán / mệt / bị bắt buộc / hại — mỗi nhóm có khung câu. **It depends** phải nói rõ theo **trục** nào (tuổi, thu nhập, nơi sống, loại, thời điểm).',
         '🔊 Phát âm: **/p t k/ bật hơi** ở đầu từ, **/b d ɡ/ rung**, và **âm cuối** không được nuốt (cap ≠ cab, write ≠ ride).',
       ],
     },
@@ -737,6 +738,16 @@ const T2D1_SPEAKING: Lesson = {
       vi: 'Mỗi câu Part 1: 2–3 câu, 15–25 giây. Không một chữ, không một phút.',
     },
     {
+      t: 'note',
+      title: 'Cẩn thận — dài quá cũng mất điểm',
+      items: [
+        'Band 4 trả lời **một chữ**; nhưng lỗi ngược lại cũng hay gặp: nói **một phút liền** đến khi giám khảo phải ngắt. Part 1 chấm sự **tự nhiên, gọn**, không chấm độ dài.',
+        'Câu cuối **hạ giọng** rồi dừng — đừng treo "and… so… yeah…". Đừng cố nhét thành ngữ khó vào Part 1.',
+        'Ngày 5 (mục 5) học tiếp **6 dạng câu hỏi Part 1** (best time, dislike, last time…) và cách dừng đúng lúc.',
+      ],
+    },
+
+    {
       t: 'vocab',
       items: [
         { w: 'major in', pos: 'v', ipa: '/ˈmeɪdʒər ɪn/', vi: 'học chuyên ngành', ex: 'I major in business administration.', exVi: 'Tôi học chuyên ngành quản trị kinh doanh.', more: 'Danh từ: **my major is…** · Anh-Anh hay nói: **I study / I’m doing a degree in…**' },
@@ -751,6 +762,65 @@ const T2D1_SPEAKING: Lesson = {
         { w: 'cosy', pos: 'adj', ipa: '/ˈkəʊzi/', vi: 'ấm cúng', ex: 'My bedroom is small but cosy.', exVi: 'Phòng ngủ của tôi nhỏ nhưng ấm cúng.', more: 'Mỹ viết **cozy**. Đi với: **a cosy room / café / atmosphere**.', anh: 'couch-and-lamp' },
         { w: 'spacious', pos: 'adj', ipa: '/ˈspeɪʃəs/', vi: 'rộng rãi', ex: 'Our new apartment is much more spacious than the old one.', exVi: 'Căn hộ mới của chúng tôi rộng rãi hơn căn cũ nhiều.', more: 'Trái nghĩa: **cramped** (chật chội).' },
         { w: 'move out (of)', pos: 'phr v', ipa: '/muːv aʊt/', vi: 'dọn ra khỏi (nhà)', ex: 'I’d like to move out of my parents’ house after I graduate.', exVi: 'Tôi muốn dọn ra khỏi nhà bố mẹ sau khi tốt nghiệp.', more: 'Ngược lại: **move in (to)**: We moved into this flat in 2022. · **move house** = chuyển nhà.' },
+      ],
+    },
+
+    { t: 'h', text: '1b. Ngân hàng lý do — chữ "R" của A – R – E không bao giờ cạn' },
+    {
+      t: 'p',
+      text: 'Phần khó nhất của A – R – E là **R (Reason)**: nhiều bạn trả lời "Yes, I like it" rồi bí vì không nghĩ ra lý do. Thật ra lý do của **hầu hết** câu Part 1 chỉ rơi vào vài nhóm. Thuộc **khung câu** của từng nhóm là chủ đề nào cũng có lý do ngay.',
+    },
+    {
+      t: 'table',
+      caption: 'Vì sao THÍCH — 3 nhóm',
+      head: ['Nhóm', 'Khung câu', 'Ví dụ'],
+      rows: [
+        ['**Giải trí, thư giãn**', 'It helps me + V (relax / unwind / forget about work) · It’s a great way to + V · It makes me feel + adj', 'Cooking **helps me forget about** my stressful day.'],
+        ['**Học hỏi, phát triển**', 'It gives me the chance to + V · I can learn a lot about… · It broadens my mind.', 'Travelling **gives me the chance to** try new food.'],
+        ['**Sức khoẻ**', 'It keeps me fit / in shape · It’s good for my health / my eyes / my back · It helps me sleep better.', 'Cycling to school **keeps me fit** without going to the gym.'],
+        ['**Quan hệ** (thêm)', 'It’s a good chance to spend time with… · We can catch up with each other.', 'Family dinners are **a good chance to catch up with** my brother.'],
+      ],
+    },
+    {
+      t: 'table',
+      caption: 'Vì sao KHÔNG THÍCH — 4 nhóm',
+      head: ['Nhóm', 'Khung câu', 'Ví dụ'],
+      rows: [
+        ['**Chán**', 'I find it quite boring / repetitive. · It’s not really my cup of tea.', 'I find shopping malls **quite boring** — they all look the same.'],
+        ['**Mệt, mất thời gian**', 'It’s tiring / time-consuming. · It takes too much time.', 'Cleaning the house is **so time-consuming**.'],
+        ['**Bị bắt buộc**', 'I have to + V, so it doesn’t feel like fun. · I was forced to… as a child.', '**I had to** learn the piano as a child, **so** I never enjoyed it.'],
+        ['**Hại / tốn kém**', 'It’s bad for my health / eyes. · It costs a fortune.', 'Fast food **is bad for my health**, so I avoid it.'],
+      ],
+    },
+    {
+      t: 'table',
+      caption: '"It depends" — 5 TRỤC để chia nhóm (nói rõ phụ thuộc vào cái gì)',
+      head: ['Trục', 'Cách gọi hai nhóm', 'Ví dụ'],
+      rows: [
+        ['**Tuổi**', 'young people / the younger generation ↔ older people / the elderly', 'It depends on age. **Young people** love it, but **the elderly** find it confusing.'],
+        ['**Thu nhập**', 'well-off people / people with high incomes ↔ people on low incomes', '**Well-off families** can afford it, but **people on low incomes** can’t.'],
+        ['**Nơi sống**', 'urban dwellers / city people ↔ people in rural areas / in the countryside', 'It’s popular with **urban dwellers**, but less so **in rural areas**.'],
+        ['**Loại / thể loại**', 'some kinds of… ↔ others · light ones ↔ serious ones', 'It depends on the type. **Some films** are fine for kids, **others** aren’t.'],
+        ['**Thời điểm**', 'on weekdays ↔ at weekends · in summer ↔ in winter', '**On weekdays** I eat at the office, but **at weekends** I cook.'],
+      ],
+    },
+    {
+      t: 'rule',
+      formula: 'Thích: It helps me + V / It gives me the chance to + V / It keeps me fit · Không thích: I find it boring / It’s time-consuming / I have to… · It depends on + trục → A…, but B…',
+      vi: 'Lý do Part 1 chỉ có vài nhóm — thuộc khung câu là không bao giờ bí chữ R.',
+    },
+    {
+      t: 'quiz',
+      id: 't2d1-noi-ly-do',
+      title: 'Dịch câu có lý do (5 câu)',
+      kind: 'translate',
+      grammar: 'It helps me + V · It gives me the chance to + V · It keeps me fit · I find it + adj · It depends on… A…, but B…',
+      items: [
+        { q: 'Nghe nhạc giúp tôi thư giãn sau giờ học.', hint: 'Listening to music, helps me relax / unwind, after school', answers: ['Listening to music helps me relax after school.', 'Listening to music helps me unwind after school.', 'Listening to music helps me relax after class.', 'Listening to music helps me to relax after school.', 'Listening to music helps me unwind after class.'] },
+        { q: 'Làm thêm cho tôi cơ hội gặp nhiều người mới.', hint: 'My part-time job / Working part-time, gives me the chance to meet', answers: ['My part-time job gives me the chance to meet a lot of new people.', 'My part-time job gives me the chance to meet many new people.', 'Working part-time gives me the chance to meet a lot of new people.', 'Working part-time gives me the chance to meet many new people.', 'My part-time job gives me the chance to meet lots of new people.'] },
+        { q: 'Đi bộ đến chỗ làm giúp tôi giữ dáng.', hint: 'Walking to work, keeps me fit / in shape', answers: ['Walking to work keeps me fit.', 'Walking to work keeps me in shape.', 'Walking to work helps me keep fit.', 'Walking to work helps me stay fit.', 'Walking to work helps me stay in shape.'] },
+        { q: 'Tôi thấy việc nhà khá nhàm chán và mất thời gian.', hint: 'I find housework, quite boring and time-consuming', answers: ['I find housework quite boring and time-consuming.', 'I find housework rather boring and time-consuming.', 'I find doing housework quite boring and time-consuming.', 'I find household chores quite boring and time-consuming.', 'I find housework pretty boring and time-consuming.'] },
+        { q: 'Còn tuỳ độ tuổi. Người trẻ thích mua sắm online, nhưng người già thích đi chợ hơn.', hint: 'It depends on age. Young people…, but older people / the elderly prefer…', answers: ['It depends on age. Young people like shopping online, but older people prefer going to the market.', 'It depends on age. Young people love shopping online, but the elderly prefer going to the market.', 'It depends on age. Young people like online shopping, but older people prefer going to the market.', 'It depends on age. Young people like shopping online, but the elderly prefer going to the market.', 'It depends on age. Young people like shopping online, but older people prefer to go to the market.', 'It depends on age. Young people love online shopping, but older people prefer going to the market.'] },
       ],
     },
 
@@ -789,6 +859,21 @@ const T2D1_SPEAKING: Lesson = {
         ['Is your job difficult?', 'It can be. → it’s demanding at the end of the month / deadlines → Last week I worked until 9 p.m. twice.'],
         ['Would you like to change your job in the future?', 'Not right now. → I’m still learning a lot → but in five years I’d like to…'],
         ['Do you work with many people?', 'Yes, I’m in a team of six. → we share tasks → For instance, I handle the customer emails.'],
+      ],
+    },
+    {
+      t: 'p',
+      text: '**Từ về điều kiện làm việc** — giúp bạn có lý do cụ thể khi được hỏi "Do you like your job?" / "What kind of job would you like in the future?" (dùng lại ở Part 3 và Task 2 về việc làm).',
+    },
+    {
+      t: 'vocab',
+      items: [
+        { w: 'a steady job', pos: 'n phr', ipa: '/ə ˈstedi dʒɒb/', vi: 'công việc ổn định', ex: 'My parents want me to find a steady job in a bank.', exVi: 'Bố mẹ muốn tôi tìm một công việc ổn định ở ngân hàng.', more: 'Gần nghĩa: **a secure job**, **job security** (sự ổn định của công việc).' },
+        { w: 'paid leave', pos: 'n', ipa: '/peɪd ˈliːv/', vi: 'nghỉ phép có lương', ex: 'We get twelve days of paid leave a year.', exVi: 'Chúng tôi được mười hai ngày nghỉ phép có lương mỗi năm.', more: '**annual leave** · **be on leave** (đang nghỉ phép) · **sick leave** (nghỉ ốm).' },
+        { w: 'the minimum wage', pos: 'n', ipa: '/ðə ˈmɪnɪməm weɪdʒ/', vi: 'mức lương tối thiểu', ex: 'Many restaurant workers earn just above the minimum wage.', exVi: 'Nhiều nhân viên nhà hàng chỉ kiếm được trên mức lương tối thiểu một chút.', more: '**wage** = tiền công (thường theo giờ/tuần) · **salary** = lương tháng/năm cố định.' },
+        { w: 'internship', pos: 'n', ipa: '/ˈɪntɜːnʃɪp/', vi: 'kỳ thực tập', ex: 'I did a three-month internship at a marketing agency.', exVi: 'Tôi đã thực tập ba tháng ở một công ty marketing.', more: '**do an internship** · người thực tập: **an intern**.' },
+        { w: 'retire', pos: 'v', ipa: '/rɪˈtaɪə(r)/', vi: 'nghỉ hưu', ex: 'My father plans to retire at sixty.', exVi: 'Bố tôi định nghỉ hưu năm sáu mươi tuổi.', more: '**retirement** (n): after retirement · **the retirement age** (tuổi nghỉ hưu) · **retired** (adj): a retired teacher.' },
+        { w: 'work overtime', pos: 'v phr', ipa: '/wɜːk ˈəʊvətaɪm/', vi: 'làm thêm giờ', ex: 'At the end of the month we often have to work overtime.', exVi: 'Cuối tháng chúng tôi thường phải làm thêm giờ.', more: '**overtime pay** (tiền làm thêm giờ). Lý do "không thích" rất hay dùng.' },
       ],
     },
 

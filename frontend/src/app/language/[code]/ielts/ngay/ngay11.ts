@@ -1018,6 +1018,8 @@ const D11_VOCAB: Lesson = {
         "**Động từ + TRẠNG từ** (rose sharply) — **tính từ + DANH từ** (a sharp rise). ~~a sharply rise~~, ~~rose sharp~~ đều sai.",
         "Đừng chồng mức độ: ~~rose very dramatically~~, ~~soared sharply~~, ~~plummeted significantly~~ — động từ mạnh không cần trạng từ mạnh.",
         "**dramatic** trong Task 1 = **rất lớn**, không phải “kịch tính”. Chỉ dùng cho thay đổi thật sự lớn (như 24 → 5), đừng dùng cho 25 → 26.",
+        "**Từ chắc đúng hơn từ kêu.** Phần này sách chưa có: Task 1 ưu tiên bộ an toàn **increase / rise / fall + sharply / slightly / steadily** — đúng ở mọi mức. **soar / rocket / plummet** chỉ dùng khi bạn **chắc** thay đổi rất lớn (gấp đôi trở lên, hoặc rơi quá nửa); dùng cho 40 → 46 là sai mức độ và bị trừ Lexical Resource. Văn phong Task 1 trung tính — tránh ~~skyrocketed like crazy~~, ~~went up a lot~~.",
+        "**million / thousand sau một con số không thêm -s, không có of**: **five million passengers**, **24 million**. Không có số đứng trước mới dùng **millions of** (hàng triệu). ~~five millions passengers~~, ~~five million of passengers~~ đều sai.",
       ],
     },
 

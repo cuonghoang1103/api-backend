@@ -604,6 +604,38 @@ const T2D19_LISTENING: Lesson = {
         "Viết hoa / viết thường **không** ảnh hưởng điểm; **chính tả** thì có.",
       ],
     },
+    {
+      t: "table",
+      caption: "Đoán CÓ CƠ SỞ cho câu đã lỡ (làm trong 2 phút kiểm) — đoán theo loại ô, không đoán bừa",
+      head: ["Ô trống hỏi gì", "Đoán hợp lý nhất", "Vì sao"],
+      rows: [
+        ["Thanh toán: “Payment by ___”", "**card**", "Đề hiện đại gần như luôn trả bằng thẻ; cash hay bị nhắc rồi gạt đi"],
+        ["Phương tiện: “Travel to the site by ___”", "**bus** / **train**", "Đọc cả phiếu: có “station” ⇒ train; có “stop” ⇒ bus"],
+        ["Ngày trong tuần / tháng", "chọn ngày **chưa** xuất hiện ở ô khác", "Một phiếu ít khi lặp cùng một ngày cho hai việc"],
+        ["Số nhiều sau “some / many / several / a number of”", "danh từ **thêm -s** hợp chủ đề", "Ngữ pháp loại sẵn mọi từ số ít"],
+        ["Part 4 bài giảng: “the main cause was ___”", "một danh từ **đã nghe trong bài** (lặp lại nhiều lần)", "Giảng viên hay nhắc lại từ khoá chính của bài"],
+      ],
+    },
+    {
+      t: "note",
+      title: "Mẹo: kiểm từ đoán bằng hai phép thử",
+      items: [
+        "**Ngữ pháp**: đặt từ vào ô rồi đọc cả câu — “a ___” cần danh từ số ít đếm được; “they ___ the samples” cần động từ; “very ___” cần tính từ. Sai loại từ là chắc chắn sai.",
+        "**Giới hạn từ**: ONE WORD ONLY ⇒ loại ngay mọi cụm hai từ, kể cả cụm bạn nghe được (~~credit card~~ → **card**). Viết quá số từ thì **đúng ý vẫn mất điểm**.",
+        "Đoán xong thì **thôi**, đừng quay lại sửa đi sửa lại — lần đoán đầu (dựa trên ngữ cảnh) thường hợp lý nhất.",
+      ],
+    },
+    {
+      t: "mcq",
+      id: "t2d19-nghe-doan",
+      title: "Lỡ câu này — đoán gì? (4 câu)",
+      items: [
+        { q: "Phiếu: “Payment: by ___” · ONE WORD ONLY. Bạn chỉ kịp nghe “…we don't take cash any more…”.", options: ["credit card", "card", "money"], correct: 1, why: "“no cash” ⇒ thẻ. **credit card** = 2 từ, vượt ONE WORD ⇒ sai dù đúng ý. **money** quá chung, không phải hình thức thanh toán." },
+        { q: "Bài giảng: “Farmers released several ___ to control the insects.” · ONE WORD ONLY. Bạn lỡ mất từ.", options: ["bird", "birds", "chemical"], correct: 1, why: "**several** + danh từ **số nhiều** ⇒ birds. “bird” sai số; “chemical” là tính từ / danh từ số ít, và “release chemical” không hợp “several”." },
+        { q: "Phiếu: “Meeting day: ___” · Các ô khác đã có Monday (lớp học) và Friday (nộp bài). Bạn lỡ câu này.", options: ["Monday", "Wednesday", "Friday"], correct: 1, why: "Không có thông tin ⇒ chọn một ngày **chưa dùng** ở ô khác. Đây chỉ là đoán — nhưng đoán có cơ sở vẫn hơn để trống (bỏ trống chắc chắn 0 điểm)." },
+        { q: "Note: “The scientists ___ the water every morning.” · ONE WORD ONLY.", options: ["test", "tests", "testing"], correct: 0, why: "Sau chủ ngữ số nhiều **The scientists** ở hiện tại ⇒ động từ **nguyên mẫu không -s**. “tests” sai hoà hợp chủ–vị, “testing” thiếu “are”." },
+      ],
+    },
 
     /* ── 5 ── */
     { t: "h", text: "5. Practice 1 — Questions 31–40: Rabbits in Australia" },

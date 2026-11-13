@@ -17,7 +17,7 @@ const T2D16_VOCAB: Lesson = {
   id: "t2d16-tu-vung",
   kind: "vocab",
   title: "Từ vựng: Tiền bạc, mua sắm & tiêu dùng + Collocation (kết hợp từ) mở đầu",
-  goal: "Dùng đúng 35 từ và cụm từ về tiền bạc – mua sắm – tiêu dùng, ghép từ theo đúng collocation (make a purchase, take out a loan, high prices…) thay vì dịch từng chữ — đẩy tiêu chí Lexical Resource (LR) của Writing và Speaking từ band 5 lên 5.5–6.",
+  goal: "Dùng đúng 35 từ và cụm từ về tiền bạc – mua sắm – tiêu dùng (thêm 6 cụm kiếm sống – kinh doanh), ghép từ theo đúng collocation (make a purchase, take out a loan, high prices…) thay vì dịch từng chữ — đẩy tiêu chí Lexical Resource (LR) của Writing và Speaking từ band 5 lên 5.5–6.",
   minutes: 75,
   blocks: [
     {
@@ -28,6 +28,7 @@ const T2D16_VOCAB: Lesson = {
         "**10 cụm động từ / cụm cố định**: pay off, save up, splash out, shop around, run out of, cut back on, get into debt, make ends meet…",
         "**Collocation** (kết hợp từ) = những từ **người bản xứ hay đi cùng nhau**: ==take out a loan==, không phải ~~borrow a loan~~. Học **theo cụm**, không học từ lẻ.",
         "**5 họ từ**: consume → consumer · consumption · consumerism; afford → affordable; economy → economic / economical; finance → financial; spend → spending · spender.",
+        "**Nhóm D (thêm)** — 6 cụm **kiếm sống & kinh doanh**: earn a living · run your own business · start-up · revenue · competition · go out of business (cho đề Task 2 \"doanh nghiệp & xã hội\").",
         "Đẩy band nào: **LR band 5** = \"đủ dùng nhưng hạn chế, có lỗi chọn từ\"; **LR band 6** = \"đủ từ cho đề, dám thử từ ít gặp dù còn sai\"; **band 7** = \"có ý thức về văn phong và collocation\". Bài này là bước đầu tiên để nhảy từ 5 lên 6 và đặt nền cho band 7.",
       ],
     },
@@ -89,6 +90,18 @@ const T2D16_VOCAB: Lesson = {
         { w: "essentials", pos: "n (số nhiều)", ipa: "/ɪˈsenʃlz/", vi: "đồ thiết yếu (thứ bắt buộc phải có: ăn, ở, đi lại…)", ex: "When prices rise, poor families can only afford the essentials.", exVi: "Khi giá tăng, gia đình nghèo chỉ đủ tiền mua đồ thiết yếu.", more: "**daily / basic essentials** · tính từ **essential** (thiết yếu). Đối lập: **luxuries**. (necessity — đã học Tập 1 — gần nghĩa.)" },
         { w: "luxury", pos: "n, adj", ipa: "/ˈlʌkʃəri/", vi: "sự xa xỉ; món xa xỉ; (thuộc) cao cấp", ex: "For my grandparents, eating out was a luxury.", exVi: "Với ông bà tôi, ăn ở ngoài là một sự xa xỉ.", more: "a **luxury** car / hotel · **luxury** goods · **luxurious** /lʌɡˈʒʊəriəs/ (adj, sang trọng — chú ý âm đổi!) · ~~a luxury price~~ → **a high price**." },
         { w: "materialistic", pos: "adj", ipa: "/məˌtɪəriəˈlɪstɪk/", vi: "thực dụng, coi trọng của cải vật chất", ex: "Some people think young people have become too materialistic.", exVi: "Một số người cho rằng giới trẻ đã trở nên quá coi trọng vật chất.", more: "Danh từ **materialism** · **a materialistic society / attitude**. Trái nghĩa gần: **value experiences over possessions** (coi trọng trải nghiệm hơn của cải)." },
+      ],
+    },
+    { t: "p", text: "**Nhóm D (thêm) — Kiếm sống & kinh doanh (6 cụm).** Đề Task 2 về **doanh nghiệp và xã hội** (doanh nghiệp nhỏ, quảng cáo, cửa hàng địa phương đóng cửa) và Part 1 \"Work\" cần những cụm này. Chủ đề Business đủ hơn ở Tập 3." },
+    {
+      t: "vocab",
+      items: [
+        { w: "earn a living", pos: "phrase", ipa: "/ˌɜːn ə ˈlɪvɪŋ/", vi: "kiếm sống", ex: "My uncle earns a living by repairing motorbikes.", exVi: "Chú tôi kiếm sống bằng nghề sửa xe máy.", more: "**earn a living by + V-ing / as + nghề** · ~~make a living money~~ ✗ · gần nghĩa: **make a living**." },
+        { w: "run your own business", pos: "phrase", ipa: "/ˌrʌn jɔːr ˌəʊn ˈbɪznəs/", vi: "tự điều hành công việc kinh doanh riêng", ex: "Many young people dream of running their own business.", exVi: "Nhiều người trẻ mơ được tự kinh doanh.", more: "**run** = điều hành (không phải chạy): **run a shop / a company / a café** · **start / set up** a business (thành lập)." },
+        { w: "start-up", pos: "n", ipa: "/ˈstɑːt ʌp/", vi: "công ty khởi nghiệp", ex: "Several tech start-ups in Ho Chi Minh City have grown very quickly.", exVi: "Vài công ty khởi nghiệp công nghệ ở TP.HCM phát triển rất nhanh.", more: "**a tech / small start-up** · **start-up costs** (chi phí ban đầu). Mỹ hay viết **startup**." },
+        { w: "revenue", pos: "n", ipa: "/ˈrevənjuː/", vi: "doanh thu", ex: "Online sales now make up half of the company's revenue.", exVi: "Bán hàng trực tuyến nay chiếm một nửa doanh thu của công ty.", more: "**generate / increase revenue** · **tax revenue** (thu thuế của nhà nước). Khác **profit** (lợi nhuận = doanh thu trừ chi phí)." },
+        { w: "competition", pos: "n (U)", ipa: "/ˌkɒmpəˈtɪʃn/", vi: "sự cạnh tranh", ex: "Small shops face strong competition from supermarkets.", exVi: "Cửa hàng nhỏ chịu cạnh tranh gay gắt từ siêu thị.", more: "**strong / fierce competition from** · **compete with** sb (v) · **competitor** (đối thủ) · **competitive** (adj): **competitive prices** (giá cạnh tranh)." },
+        { w: "go out of business", pos: "phrase", ipa: "/ˌɡəʊ ˌaʊt əv ˈbɪznəs/", vi: "phá sản, đóng cửa (vì làm ăn thua lỗ)", ex: "Many local bookshops have gone out of business since online shopping became popular.", exVi: "Nhiều hiệu sách địa phương đã đóng cửa từ khi mua sắm trực tuyến phổ biến.", more: "Gần nghĩa trang trọng: **go bankrupt** · **close down**. Trái nghĩa: **stay in business**." },
       ],
     },
     {
@@ -519,6 +532,8 @@ const T2D16_READING: Lesson = {
         "**Đọc lướt như headings**: chi tiết thường nằm **giữa đoạn**, đọc câu đầu – cuối sẽ bỏ sót.",
         "**Ép mỗi đoạn một câu**: thấy đoạn C đã dùng thì không dám chọn C lần hai — quên **NB**.",
         "**Bỏ qua loại thông tin**: câu hỏi \"**an explanation of** why…\" mà chọn đoạn chỉ **nêu sự việc**, không có lời giải thích.",
+        "**Dò chính chữ chỉ loại**: câu hỏi \"a **reason** for…\", \"an **example** of…\", \"**evidence** that…\" — rồi đi tìm chữ reason / example / evidence trong bài. Bài gần như **không bao giờ** viết những chữ đó; nó viết **because…**, **in Kenya, for instance…**, **a 2015 survey found…**. Cụm chỉ loại cho biết bạn tìm **loại** gì, không phải tìm **chữ** gì.",
+        "**Làm dạng này đầu tiên.** Matching information **không theo thứ tự** và rải khắp bài — để nó **cuối cùng** trong passage: sau khi làm các dạng theo thứ tự, bạn đã đọc qua mọi đoạn và nhớ đoạn nào nói gì. Trong nhóm câu matching, làm câu có **tên riêng / con số / năm** trước (dò bằng mắt), câu chỉ có ý trừu tượng để sau.",
       ],
     },
 
@@ -680,6 +695,7 @@ const T2D16_WRITING: Lesson = {
         "Quy trình: **đọc bảng** (tiêu đề, đơn vị, hàng, cột, có năm không) → **chọn 3–4 điểm nổi bật** (cao nhất · thấp nhất · chênh lệch / thay đổi lớn nhất · ngoại lệ) → **overview không số** → **2 đoạn thân bài gom nhóm**.",
         "Ngôn ngữ: so sánh (Tập 2 Ngày 8–9) + số liệu: ==account for · compared with · twice as much as · respectively · ranged from… to…==",
         "Bài mẫu trọn bài ~185 từ (**band ước tính 6.0–6.5**) + bảng phân tích 4 tiêu chí; rồi bạn tự viết một bài với bảng khác.",
+        "Thêm 2 câu hỏi khi đọc bảng: **có hàng / cột Total không** (tả tổng trước) và **các cột có khác đơn vị không** (không so ngang). Bảng in sẵn số ⇒ **ghi đúng số**, không thêm about.",
         "Đẩy band nào: **Task Achievement band 5** = \"kể chi tiết máy móc, không có overview rõ\"; **band 6** = \"overview rõ, số liệu chọn đúng và đủ\". Hôm nay luyện đúng khoảng cách đó.",
       ],
     },
@@ -700,6 +716,23 @@ const T2D16_WRITING: Lesson = {
         { label: "Đơn vị là gì?", sub: "%, nghìn người, triệu USD, giờ/tuần…" },
         { label: "Hàng & cột là gì?", sub: "hàng = nước / nhóm; cột = hạng mục / năm" },
         { label: "Có thời gian không?", sub: "một mốc → so sánh; nhiều mốc → xu hướng" },
+      ],
+    },
+    {
+      t: "table",
+      caption: "Hỏi thêm 2 câu khi bảng có hàng / cột đặc biệt",
+      head: ["Câu hỏi", "Nếu CÓ thì…", "Ví dụ"],
+      rows: [
+        ["5. Có hàng / cột **Total** (tổng) không?", "Lấy tổng làm **ý đầu của overview** (tổng lớn nhất / tăng hay giảm), rồi mới nói thành phần nào gây ra. Số tổng đã có — **không tự cộng**.", "Overall, **total** spending was highest in the UK, **mainly because of** its high housing costs."],
+        ["6. Các cột có **khác đơn vị** không?", "**Không so ngang** hai cột khác đơn vị (dân số triệu người ≠ diện tích km² ≠ %). Chỉ so **trong một cột**, và bám cột mà đề hỏi.", "~~Vietnam's population was higher than its area.~~ → So dân số với dân số, diện tích với diện tích."],
+      ],
+    },
+    {
+      t: "note",
+      title: "Mẹo: bảng in sẵn số → ghi đúng số",
+      items: [
+        "Bảng luôn **in sẵn** từng con số ⇒ ghi **đúng số** (38%, 1,250 tonnes), **không** thêm about / around — thêm vào nghe như bạn đọc ẩu.",
+        "Muốn đỡ lặp \"%\" thì **thêm** phân số bên cạnh: 38% — **almost two-fifths**; 24% — **nearly a quarter**. (about / just under chỉ dùng khi phải **đọc theo vạch** ở cột / đường — Ngày 8, 12.)",
       ],
     },
 
@@ -846,6 +879,9 @@ const T2D16_WRITING: Lesson = {
         ["Khoảng giá trị", "N **ranged from** X% **to** Y% · **between** X% and Y%", "Leisure **ranged from** 13% in the UK **to** 5% in Vietnam."],
         ["Gần bằng", "**almost the same as** · **roughly equal**", "Spending on housing was **almost the same as** spending on food."],
         ["Đối lập", "**By contrast,** … · …, **whereas** …", "**By contrast,** Vietnam spent only 18% on housing."],
+        ["Ngoại lệ", "…, **with the notable exception of** + N", "Housing was the largest expense, **with the notable exception of** Vietnam."],
+        ["Giống vậy (mở câu)", "**Likewise,** / **Similarly,** + S + V", "Japanese households spent 11% on transport. **Likewise,** the figure for Vietnam was 12%. (chỉ dùng khi hai ý thật sự giống nhau)"],
+        ["Phần còn lại", "**the remaining** categories / countries", "**The remaining** three countries spent between 9% and 13% on leisure."],
       ],
     },
     {

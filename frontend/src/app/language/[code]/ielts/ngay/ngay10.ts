@@ -113,6 +113,16 @@ const D10_READING: Lesson = {
       ],
     },
     {
+      t: "note",
+      title: "Thứ tự ưu tiên khi làm (phần này sách chưa có)",
+      items: [
+        "**Đọc kỹ phần trích lời cạnh tên** — chỗ có dấu ngoặc kép (“…”) hoặc says / argues / claims ngay sau tên. Ý kiến của người đó **nằm gọn ở đó**, và câu hỏi thường paraphrase đúng câu trích này.",
+        "**Làm người xuất hiện ÍT lần trước.** Một người chỉ được nhắc một lần thì chỉ có một chỗ để đọc — so với câu hỏi rất nhanh, gạch được câu đó khỏi danh sách.",
+        "**Người được trích nhiều lần để sau.** Khi đã làm xong những người dễ, số câu còn lại ít đi → dùng **loại trừ**: câu nào chưa có chủ thì đối chiếu với các đoạn của người đó.",
+        "Ghi chữ cái của người **ngay bên lề** đoạn trích (A, B, C…) khi quét tên lần đầu — lúc đối chiếu chỉ cần nhìn lề, không phải đọc lại tên.",
+      ],
+    },
+    {
       t: "rule",
       formula: "Đọc lệnh (có NB?) → quét & khoanh MỌI chỗ tên xuất hiện → gạch động từ báo cáo + ý chính → đọc 2–3 câu quanh tên → ý đó CỦA AI? → ghi chữ cái",
       vi: "Một chữ cái có thể dùng nhiều lần (NB); có người không được dùng lần nào. Câu hỏi không theo thứ tự bài.",
@@ -803,6 +813,26 @@ const D10_SPEAKING: Lesson = {
         "Có **changed** (Has… changed?) → câu hỏi **so sánh**: nói cả **trước đây** (used to) **và bây giờ** (hiện tại đơn).",
         "Có **How often** → câu đầu tiên phải là **một tần suất** (every day, twice a week…), đừng trả lời ~~Yes, I do.~~",
       ],
+    },
+    {
+      t: "p",
+      text: "Phần này sách chưa có: câu tần suất rất dễ **cụt** — “I go swimming once a week.” rồi hết. Hai thao tác làm nó dài tự nhiên: **mở bằng hoàn cảnh** (vì sao chỉ được chừng ấy lần) và **giải thích liền** điều vừa nói.",
+    },
+    {
+      t: "table",
+      caption: "Câu tần suất — trước và sau",
+      head: ["Trước (cụt, band 4)", "Sau (có hoàn cảnh + giải thích, band 5)"],
+      rows: [
+        ["I go swimming once a week.", "**These days I'm swamped with schoolwork, so** I only go swimming once a week, usually on Saturday afternoons."],
+        ["I cook every day.", "**Since my mum started working late,** I cook dinner every day — **nothing fancy, just rice, soup and some vegetables**."],
+        ["I rarely go to the cinema.", "I rarely go to the cinema **because tickets have become quite expensive**, so I watch most films at home now."],
+        ["I visit my grandparents twice a month.", "**They live about an hour away, so** I visit my grandparents twice a month, **usually with my cousins**."],
+      ],
+    },
+    {
+      t: "rule",
+      formula: "Hoàn cảnh (These days… / Since… / They live…, so) + S + V + tần suất + chi tiết (when / with whom)",
+      vi: "Đừng để câu tần suất đứng một mình: thêm VÌ SAO chỉ chừng ấy lần, hoặc giải thích ngay sau.",
     },
 
     { t: "h", text: "2. Trạng từ tần suất — đặt ở đâu?" },

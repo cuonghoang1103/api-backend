@@ -113,6 +113,43 @@ export const TRA_CONG_THUC_CHANG4: Block[] = [
   { t: 'rule', formula: 'Overall, there are + số + stages in the process, which begins with … and ends with … · First … Next … Following this … Finally … · Chu trình tự nhiên: chủ động (eggs hatch into larvae)', vi: 'Tổng quan = số bước + đầu – cuối; không ý kiến, không chép nhãn.' },
 
   /* ── Ngày 21 ── */
+  { t: "h", text: "Writing Task 1 — process: từ trình tự 3 tầng · mục đích của bước · by / with (Ngày 20 Viết · mục 2b)" },
+  {
+    t: "table",
+    caption: "Từ trình tự chia 3 tầng — mỗi tầng chọn 2–3 cái, xoay vòng để không lặp then / next",
+    head: ["Tầng", "Cụm dùng được", "Ví dụ (quy trình ô liu)"],
+    rows: [
+      ["**Mở quy trình**", "The process **begins / commences with** + N / V-ing · **First of all**, … · **At the first stage**, …", "The process **commences with** the harvesting of the olives."],
+      ["**Giữa quy trình**", "**Subsequently**, … · **After that**, … · **At the next stage**, … · **Once** S + has / have been V3, … · …, **after which** S + is / are + V3", "The olives are crushed into a paste, **after which** it is mixed for 30–40 minutes."],
+      ["**Kết quy trình**", "**Finally**, … · **In the final stage**, … · The process **concludes / ends with** + N / V-ing", "The process **concludes with** the oil being bottled and delivered to shops."],
+    ],
+  },
+  {
+    t: "table",
+    caption: "Thêm MỤC ĐÍCH cho một bước — câu dài hơn, ý rõ hơn (TA + GRA)",
+    head: ["Khung", "Ví dụ"],
+    rows: [
+      ["… **to / in order to** + V", "The olives are washed in cold water **in order to** remove dirt."],
+      ["… **so that** + S + can + V", "The paste is mixed slowly **so that** small drops of oil can join together."],
+      ["… **to ensure that** + S + V", "The oil is filtered **to ensure that** no small particles remain."],
+      ["… **by means of** + công cụ / máy", "The oil is separated from the water **by means of** a centrifuge."],
+    ],
+  },
+  {
+    t: "table",
+    caption: "Bị động: by + NGƯỜI / cách làm ≠ with + DỤNG CỤ cầm tay",
+    head: ["Dùng", "Ví dụ"],
+    rows: [
+      ["**by** + người / tác nhân", "The tea leaves are picked **by** local workers."],
+      ["**by** + cách làm (không mạo từ)", "picked **by hand** · cut **by machine** · sent **by truck**"],
+      ["**with** + dụng cụ / chất (thường có a / the)", "The fruit is cut **with a knife**. · The bottles are cleaned **with hot water**."],
+    ],
+  },
+  {
+    t: "rule",
+    formula: "The process commences with + N / V-ing · …, after which S + is / are + V3 · S + is / are + V3 + so that S + can + V · by + người / by hand · with + a knife",
+    vi: "Mở – giữa – kết bằng ba tầng từ trình tự; mỗi thân bài có ít nhất một câu nêu mục đích; by cho người làm, with cho dụng cụ.",
+  },
   { t: 'h', text: 'used to / would — thói quen ngày xưa (Ngày 21 · mục 2–3)' },
   {
     t: 'table',
@@ -147,6 +184,24 @@ export const TRA_CONG_THUC_CHANG4: Block[] = [
   { t: 'rule', formula: 'In the past / Back in my grandparents\' day, people used to + V …, whereas these days they + V(s) / … has become … This is mainly because … Take my own family, for example. On the whole, I\'d say …', vi: 'Then → Now → Why → Example → Evaluate.' },
 
   /* ── Ngày 22 ── */
+  { t: "h", text: "Speaking Part 3 — so sánh hai nhóm CÙNG THỜI: “The main difference is that…, whereas…” (Ngày 21 Nói · mục 5)" },
+  {
+    t: "sodo",
+    kind: "flow",
+    title: "Hai nhóm cùng thời — 4 bước",
+    caption: "Nói hết bên A rồi mới sang bên B — đừng nhảy qua lại từng chi tiết, người nghe sẽ rối.",
+    steps: [
+      { label: "1 · Điểm khác chính", sub: "The main difference is that…" },
+      { label: "2 · Bên A", sub: "Young people tend to…" },
+      { label: "3 · Bên B (nối bằng whereas / while)", sub: "…, whereas older people usually…" },
+      { label: "4 · Lý do / chốt", sub: "This is probably because… · So in short, …" },
+    ],
+  },
+  {
+    t: "rule",
+    formula: "The main difference is that + A + V(s) …, whereas / while + B + V(s) … This is probably because … So in short, …",
+    vi: "So hai nhóm cùng thời: nói trọn bên A, nối whereas / while, nói bên B, rồi lý do và chốt.",
+  },
   { t: 'h', text: 'Từ vựng gia đình — khung câu ăn điểm (Ngày 22 · mục 4)' },
   { t: 'rule', formula: 'N + play(s) a key role in + V-ing · V-ing + strengthens + N, but it can also lead to + N · S + tend to + V · I get on well with … · I take after … · I was brought up by …', vi: 'Khung câu Task 2 / Part 3 chủ đề gia đình – thế hệ.' },
 
@@ -166,6 +221,46 @@ export const TRA_CONG_THUC_CHANG4: Block[] = [
   { t: 'rule', formula: 'In [year], the [vị trí] was + N, but … it was + V3 (replaced by / converted into / relocated to / demolished / extended) · N + remained (unchanged)', vi: 'Chia thân bài theo vùng (bắc / nam); tổng quan = xu hướng chung.' },
 
   /* ── Ngày 23 ── */
+  { t: "h", text: "Writing Task 1 — map: câu khung nâng cấp · biến thể chọn địa điểm S1 / S2 (Ngày 22 Viết · mục 3b–3c)" },
+  {
+    t: "table",
+    caption: "Khung câu bản đồ band 5.5–6 (dùng 2–3 cái mỗi bài, không cần tất cả)",
+    head: ["Dùng để", "Khung", "Ví dụ (Westbrook)"],
+    rows: [
+      ["**Tổng quan**", "X **underwent a number of changes**, the most important of which **was / were** + N / V-ing", "Westbrook town centre underwent a number of changes, the most important of which was the pedestrianisation of Main Street."],
+      ["Gói 2 thay đổi: **replacing**", "S + was + V3 …, **replacing** + N (cái cũ)", "A shopping centre was built in the north-west, **replacing** the old market."],
+      ["Gói 2 thay đổi: **with + N**", "S + was + V3, **with** + N + V-ing / V3", "The houses were demolished, **with** a block of apartments built in their place."],
+      ["Gói 2 thay đổi: **accompanied by**", "S + was + V3, **which was accompanied by** + N", "The bus station was moved to the south-east, **which was accompanied by** the construction of a library on its old site."],
+      ["Cái cũ → cái mới", "**There used to be** + N + …, **but it was** (later) **redeveloped into** + N", "**There used to be** a car park south of Main Street, **but it was redeveloped into** a public square."],
+      ["**Mở thân bài 2**", "**As can be seen from the map**, … · **Turning to** the southern part, …", "**As can be seen from the map**, the southern side changed even more dramatically."],
+    ],
+  },
+  {
+    t: "rule",
+    formula: "X underwent a number of changes, the most important of which was + N. · S + was + V3 …, replacing + N. · There used to be + N, but it was redeveloped into + N.",
+    vi: "Tổng quan có “the most important of which”; trong thân bài, gói hai thay đổi cùng chỗ vào một câu thay vì hai câu đơn.",
+  },
+  {
+    t: "sodo",
+    kind: "compare",
+    title: "Bản đồ trước – sau ≠ bản đồ chọn địa điểm",
+    cols: [
+      { title: "**Trước – sau** (Westbrook)", items: ["hai mốc thời gian", "**was replaced / was built** (bị động quá khứ)", "tổng quan = xu hướng thay đổi chung", "thân bài chia theo vùng"] },
+      { title: "**Chọn địa điểm** (S1 / S2)", items: ["một bản đồ, hai vị trí", "**is located / lies / is close to** (hiện tại đơn)", "ưu – nhược: **would / could** + V", "tổng quan = khác biệt chính giữa hai vị trí", "thân 1 = S1 · thân 2 = S2"] },
+    ],
+  },
+  {
+    t: "table",
+    caption: "Ngôn ngữ cho bài chọn địa điểm",
+    head: ["Ý", "Cụm"],
+    rows: [
+      ["Vị trí", "S1 **is located / is situated / lies** + in the south of / next to / opposite … · **on the outskirts** (ở rìa thị trấn) · **in the heart of** the town"],
+      ["Gần – xa", "**close to / within walking distance of** · **far from / some distance from**"],
+      ["Ưu điểm (dự đoán)", "A supermarket here **would** be easy to reach · it **could** provide more parking"],
+      ["Nhược điểm (dự đoán)", "**However / On the other hand**, shoppers **would** probably need to drive · there **would** be little room for…"],
+      ["Tổng quan", "Overall, **the main difference is that** S1 is…, **whereas** S2 is…"],
+    ],
+  },
   { t: 'h', text: 'too / enough / so / such / quite (Ngày 23 · mục 1–4)' },
   {
     t: 'patterns',
@@ -210,10 +305,51 @@ export const TRA_CONG_THUC_CHANG4: Block[] = [
     ],
   },
 
+  { t: "h", text: "Chủ ngữ “khó” — chia động từ theo đâu? (Ngày 23 · mục 7)" },
+  {
+    t: "table",
+    caption: "Thêm: chủ ngữ “khó” — chia động từ theo đâu?",
+    head: ["Chủ ngữ", "Chia theo", "Ví dụ"],
+    rows: [
+      ["**Either A or B** · **Neither A nor B** · **A or B**", "danh từ **gần động từ nhất** (B)", "Neither the teacher nor **the students were** ready. · Either the students or **the teacher is** wrong."],
+      ["**The number of** + N số nhiều", "số ít (the number)", "The number of tourists **has** doubled."],
+      ["**A number of** + N số nhiều", "số nhiều (= many)", "A number of students **were** absent."],
+      ["N + **of / in** + N khác", "danh từ **trước** of / in", "The price **of** vegetables **has** risen. · The quality of schools **in** rural areas **is** improving."],
+    ],
+  },
   { t: 'h', text: 'Speaking Part 2 — đề trừu tượng (Ngày 23 Nói · mục 2)' },
   { t: 'rule', formula: 'At …, we had to / weren\'t allowed to + V. · The rule was introduced to + V. · I still remember one day when … · I disliked it because … · They should + V / It would be fairer if …', vi: 'Biến ý trừu tượng thành MỘT cảnh cụ thể: ai · ở đâu · lúc nào · chuyện gì.' },
 
   /* ── Ngày 24 ── */
+  { t: "h", text: "Speaking Part 2 — đề tình huống “Describe a time when you…” (Ngày 23 Nói · mục 4)" },
+  {
+    t: "sodo",
+    kind: "flow",
+    title: "Khung 4 chặng cho đề “a time when…”",
+    caption: "Cảm xúc ĐỔI theo từng chặng — nói rõ cảm xúc ở mỗi chặng là cách kéo dài tự nhiên nhất.",
+    steps: [
+      { label: "1 · Bối cảnh (20″)", sub: "When / where / who · cảm xúc lúc đầu: relaxed, excited" },
+      { label: "2 · Sự cố (40″)", sub: "Then something went wrong… · cảm xúc: worried, panicked" },
+      { label: "3 · Xử lý + kết quả (40″)", sub: "So I decided to… · một câu thoại trực tiếp · cảm xúc: relieved" },
+      { label: "4 · Bài học (20″)", sub: "Since then, I always… · Whenever I think about it, …" },
+    ],
+  },
+  {
+    t: "table",
+    caption: "Dải từ cảm xúc theo chặng — từ đơn giản đến mạnh hơn",
+    head: ["Chặng", "Mức nhẹ", "Mức mạnh hơn"],
+    rows: [
+      ["Lúc đầu", "happy · relaxed", "excited · looking forward to it"],
+      ["Khi có sự cố", "worried · confused", "panicked · completely lost · my heart was racing"],
+      ["Khi được giúp / xong việc", "happy · OK", "relieved · grateful · a huge weight off my shoulders"],
+      ["Nhìn lại", "funny now", "I can laugh about it now · it taught me a lesson"],
+    ],
+  },
+  {
+    t: "rule",
+    formula: "I'd like to talk about a time when … · At first I felt … · Then things went wrong. … · In the end, … I said, “…” · Looking back, … Since then, I always …",
+    vi: "Đề tình huống: bối cảnh → sự cố → xử lý + kết quả → bài học; cảm xúc đổi theo từng chặng.",
+  },
   { t: 'h', text: 'Reading 60 phút — chiến thuật (Ngày 24 Đọc · mục 1)' },
   { t: 'rule', formula: 'Passage 1: 17 phút · Passage 2: 20 phút · Passage 3: 23 phút (20 làm + 3 phút cuối điền hết ô trống) · kẹt > 90 giây → bỏ qua', vi: 'Thi giấy KHÔNG có thêm giờ chép phiếu Reading; sai không bị trừ điểm.' },
 

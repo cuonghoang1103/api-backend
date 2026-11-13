@@ -15,8 +15,8 @@ const T2D15_GRAMMAR: Lesson = {
   id: "t2d15-ngu-phap",
   kind: "grammar",
   title: "Ngữ pháp: Mệnh đề quan hệ xác định — who · which · that · whose · where",
-  goal: "Ghép hai câu đơn thành một câu phức bằng who / which / that / whose / where, biết khi nào lược bỏ được đại từ quan hệ, tránh 5 lỗi người Việt hay mắc — để Writing và Speaking có câu phức đúng (tiêu chí Ngữ pháp GRA band 5 → 5.5).",
-  minutes: 75,
+  goal: "Ghép hai câu đơn thành một câu phức bằng who / which / that / whose / where, biết khi nào lược bỏ được đại từ quan hệ, tránh 5 lỗi người Việt hay mắc — để Writing và Speaking có câu phức đúng (tiêu chí Ngữ pháp GRA band 5 → 5.5); biết ghép chuỗi câu đơn gãy vụn thành câu phức.",
+  minutes: 85,
   blocks: [
     {
       t: "recap",
@@ -27,6 +27,7 @@ const T2D15_GRAMMAR: Lesson = {
         "Đại từ quan hệ làm **tân ngữ** thì **lược bỏ được**: the book (that) I bought. Làm **chủ ngữ** thì **không** bỏ được: the man ~~lives here~~ → the man **who** lives here.",
         "Mệnh đề quan hệ **xác định** (defining) **không có dấu phẩy**; bỏ nó đi thì câu mất nghĩa. Loại **không xác định** (có dấu phẩy) chỉ cần **nhận ra** — học kỹ ở Tập 3.",
         "Đẩy band nào: **Writing & Speaking — GRA** (Grammatical Range & Accuracy). Band 5 = “có **thử** câu phức nhưng sai nhiều”; dùng **đúng** mệnh đề quan hệ là bước lên band 5.5–6. Ở **Reading / Listening**, biết tách mệnh đề giúp tìm đúng **danh từ chính** của câu dài.",
+        "Mục 8: **luyện ghép câu** — thấy ba câu đơn ngắn liền nhau cùng nhắc một danh từ thì ghép lại bằng who / which / where / whose; giữ câu đơn ngắn để **chốt ý**.",
       ],
     },
 
@@ -460,6 +461,71 @@ const T2D15_GRAMMAR: Lesson = {
         { q: "In which sentence can the relative pronoun be left out?", options: ["The girl who sits next to me is from Perth.", "The man who fixed my bike was friendly.", "The festival which we went to was crowded."], correct: 2, why: "Chỉ ở C, sau **which** là **we went to** (chủ ngữ + động từ) → which làm **tân ngữ** (của to) → bỏ được: the festival **we went to**. Ở A, B sau đại từ là động từ (sits, fixed) → làm chủ ngữ → không bỏ được." },
       ],
     },
+
+    /* ── 8 ── */
+    { t: "h", text: "8. Luyện ghép câu: biến chuỗi câu đơn “gãy vụn” thành câu phức" },
+    {
+      t: "p",
+      text: "Bài viết band 4–5 hay có **3–4 câu đơn ngắn liền nhau**, mỗi câu nhắc lại danh từ của câu trước: “I have a cousin. My cousin is a nurse. She works in a big hospital. The hospital is in Hanoi.” Đọc lên nghe **gãy vụn** (choppy), và giám khảo thấy bạn chưa biết nối câu. Mệnh đề quan hệ là cách ghép nhanh nhất: danh từ bị lặp ở câu sau → thay bằng **who / which / where / whose**.",
+    },
+    {
+      t: "table",
+      caption: "Trước – sau: cùng ý, ít câu hơn, rõ hơn",
+      head: ["Câu đơn gãy vụn (band 4–5)", "Ghép bằng mệnh đề quan hệ (band 5.5–6)"],
+      rows: [
+        ["~~I have a cousin. My cousin is a nurse. She works in Hanoi.~~", "I have a cousin **who** is a nurse in Hanoi."],
+        ["~~Many people buy cheap clothes. These clothes are thrown away quickly.~~", "Many people buy cheap clothes **which** are thrown away quickly."],
+        ["~~We visited a village. People make pottery there.~~", "We visited a village **where** people make pottery."],
+        ["~~Some students have part-time jobs. Their marks are often lower.~~", "Students **whose** jobs take up a lot of time often get lower marks."],
+      ],
+    },
+    {
+      t: "note",
+      title: "Mẹo: câu đơn ngắn không xấu — chỉ xấu khi đứng thành chuỗi",
+      items: [
+        "Một câu đơn ngắn **sau** một câu dài là cách **chốt ý** rất mạnh: “Cheap clothes are thrown away after a few months, which creates huge amounts of waste. **This has to change.**”",
+        "Quy tắc tự soát: thấy **ba câu đơn liền nhau** cùng nói về một danh từ → ghép ít nhất hai câu lại. Câu ghép không nên quá ~30 từ.",
+      ],
+    },
+    {
+      t: "rule",
+      formula: "Câu 1 + Câu 2 (lặp danh từ) → N + who / which / where / whose + phần còn lại của câu 2",
+      vi: "Danh từ bị nhắc lại ở câu sau là dấu hiệu ghép được bằng mệnh đề quan hệ.",
+    },
+    {
+      t: "quiz",
+      id: "t2d15-ghep-cau",
+      title: "Ghép thành MỘT câu bằng who / which / where / whose (5 câu)",
+      kind: "translate",
+      grammar: "Bỏ danh từ / đại từ bị lặp ở câu sau, thay bằng who (người) · which / that (vật) · where (nơi + câu đủ) · whose (của…).",
+      items: [
+        {
+          q: "Ghép: My uncle is a farmer. He grows coffee in Dak Lak.",
+          hint: "My uncle is a farmer who…",
+          answers: ["My uncle is a farmer who grows coffee in Dak Lak.", "My uncle is a farmer that grows coffee in Dak Lak.", "My uncle, who is a farmer, grows coffee in Dak Lak.", "My uncle is a farmer who grows coffee in Daklak."],
+        },
+        {
+          q: "Ghép: Many teenagers play online games. These games keep them awake at night.",
+          hint: "Many teenagers play online games which / that…",
+          answers: ["Many teenagers play online games which keep them awake at night.", "Many teenagers play online games that keep them awake at night.", "Many teenagers play online games, which keep them awake at night."],
+        },
+        {
+          q: "Ghép: I grew up in a small town. Everyone knows each other there.",
+          hint: "I grew up in a small town where…",
+          answers: ["I grew up in a small town where everyone knows each other.", "I grew up in a small town in which everyone knows each other.", "I grew up in a small town where everybody knows each other.", "I grew up in a small town where everyone knew each other."],
+        },
+        {
+          q: "Ghép: Workers should get extra pay. Their jobs are dangerous.",
+          hint: "Workers whose jobs…",
+          answers: ["Workers whose jobs are dangerous should get extra pay.", "Workers whose jobs are dangerous should receive extra pay.", "Workers whose jobs are dangerous should be given extra pay."],
+        },
+        {
+          q: "Ghép: The festival was very crowded. We went to it last weekend.",
+          hint: "The festival (which / that) we went to last weekend…",
+          answers: ["The festival we went to last weekend was very crowded.", "The festival which we went to last weekend was very crowded.", "The festival that we went to last weekend was very crowded.", "The festival to which we went last weekend was very crowded."],
+        },
+      ],
+    },
   ],
 };
 
@@ -799,6 +865,48 @@ const T2D15_LISTENING: Lesson = {
       formula: "Giọng lạ ≠ đề khó: bắt TỪ KHOÁ + CON SỐ · chờ thông tin SAU but / instead / actually · trái – phải theo hướng ĐANG ĐI",
       vi: "Đừng dừng lại ở một âm nghe lạ — đi tiếp với câu sau, người nói Part 1 thường nhắc lại số và tên.",
     },
+
+    /* ── 7 ── */
+    { t: "h", text: "7. Thêm: trắc nghiệm ngay trong Part 1" },
+    {
+      t: "p",
+      text: "Đa số Part 1 là **điền phiếu**, nên nhiều người nghĩ trắc nghiệm A/B/C chỉ có ở Part 2–3. Thực tế đề đôi khi cho **vài câu trắc nghiệm ngay trong cuộc gọi Part 1** (thường 2–4 câu, đứng trước hoặc sau phần phiếu). Nội dung vẫn là đời sống — chọn lớp học, chỗ đỗ xe, giấy tờ cần mang — nhưng bẫy là bẫy của trắc nghiệm: **cả ba phương án đều được nhắc**, chỉ một cái được **chốt** (Ngày 11 mục 6, Ngày 13 mục 9).",
+    },
+    {
+      t: "note",
+      title: "Mẹo: làm trắc nghiệm Part 1 như điền một phiếu ngắn",
+      items: [
+        "Phương án Part 1 thường **rất ngắn** (một môn, một mức giá, một giấy tờ) — đọc chúng như **ba ô trên phiếu** và gạch chữ khác nhau giữa chúng.",
+        "Câu hỏi vẫn **đi theo thứ tự** lời thoại và người gọi vẫn **sửa lời** (actually, sorry…) — lấy điều được **chốt cuối cùng**.",
+        "Nghe từ phủ định và điều kiện: **unless**, **don't need**, **used to… but now** — chúng loại phương án nhanh nhất.",
+      ],
+    },
+    {
+      t: "listen",
+      id: "t2d15-nghe-p1-chon-bai",
+      title: "Joining Bayside Fitness",
+      dan: { so: "Day 15, Practice 3 (Listening Part 1)", boiCanh: "a telephone conversation between a woman and a receptionist at a fitness centre.", cau: [1, 3] },
+      note: "Khoảng 1 phút. Shannon (lễ tân, giọng Úc), Linh (giọng Anh). Đọc ba câu hỏi trước, nghe tối đa 2 lần.",
+      lines: [
+        { who: "Shannon", voice: "au-nu", text: "Good morning, Bayside Fitness, Shannon speaking.", vi: "Chào buổi sáng, Bayside Fitness, Shannon nghe." },
+        { who: "Linh", voice: "uk-nu", text: "Hi. I'm thinking of joining one of your classes. I did yoga for years, but I'd like to try something new.", vi: "Chào chị. Tôi đang tính tham gia một lớp bên chị. Tôi tập yoga nhiều năm rồi, nhưng muốn thử thứ gì mới." },
+        { who: "Shannon", voice: "au-nu", text: "Sure. Our pilates class is really popular, but I'm afraid it's full until March. Aqua fitness has heaps of places, and it's easy on the knees.", vi: "Được chứ. Lớp pilates bên tôi rất đông khách, nhưng tiếc là kín chỗ tới tháng Ba. Lớp thể dục dưới nước còn nhiều chỗ, mà lại nhẹ cho đầu gối." },
+        { who: "Linh", voice: "uk-nu", text: "Actually, that sounds perfect. I'll go for that one. And is there parking?", vi: "Thật ra nghe hợp lắm. Tôi chọn lớp đó. Còn có chỗ đỗ xe không ạ?" },
+        { who: "Shannon", voice: "au-nu", text: "There is. It used to be free all day, but now members get the first two hours free, and after that you pay at the machine by the door.", vi: "Có. Trước đây miễn phí cả ngày, nhưng giờ hội viên được miễn phí hai tiếng đầu, sau đó trả tiền ở máy cạnh cửa." },
+        { who: "Linh", voice: "uk-nu", text: "Two hours is plenty. Do I need to bring anything to the first session?", vi: "Hai tiếng là dư rồi. Buổi đầu tôi có cần mang gì không?" },
+        { who: "Shannon", voice: "au-nu", text: "We don't need a doctor's note unless you've had an injury, and we'll take your photo for the membership card here, so don't worry about that. Just bring your bank card, so we can set up the monthly payment.", vi: "Bên tôi không cần giấy bác sĩ trừ khi chị từng bị chấn thương, và bên tôi sẽ chụp ảnh làm thẻ hội viên tại chỗ, nên chị đừng lo. Chị chỉ cần mang thẻ ngân hàng để cài đặt thanh toán hằng tháng." },
+      ],
+    },
+    {
+      t: "mcq",
+      id: "t2d15-nghe-p1-chon",
+      title: "Questions 1–3 — Choose A, B or C",
+      items: [
+        { q: "(1) Which class does the woman decide to join?", options: ["A yoga", "B pilates", "C aqua fitness"], correct: 2, why: "“Aqua fitness has heaps of places…” — “**Actually**, that sounds perfect. **I'll go for that one**.” Yoga = lớp cô **đã tập nhiều năm** (muốn đổi); pilates **full until March**." },
+        { q: "(2) What does the receptionist say about parking?", options: ["A It is free all day.", "B The first two hours are free.", "C Members must always pay at the machine."], correct: 1, why: "“It **used to be** free all day, **but now** members get **the first two hours free**”. A = quy định **cũ**; C sai vì chỉ trả **sau** hai tiếng." },
+        { q: "(3) What should the woman bring to her first session?", options: ["A a photo", "B a doctor's note", "C her bank card"], correct: 2, why: "“**Just bring** your bank card”. Giấy bác sĩ: “**don't need**… **unless** you've had an injury”; ảnh: “we'll **take your photo** here”." },
+      ],
+    },
   ],
 };
 
@@ -809,7 +917,7 @@ const T2D15_SPEAKING: Lesson = {
   kind: "speaking",
   title: "Nói: Part 2 — Describe an event (kể một sự kiện) + Part 3 nối tiếp · âm yếu /ə/",
   goal: "Dùng 1 phút ghi chú để kể liền mạch gần 2 phút về một sự kiện đã dự (đám cưới, lễ hội, lễ tốt nghiệp…) — đủ mọi gạch đầu dòng, đúng thì quá khứ, có mệnh đề quan hệ thêm chi tiết, kết bằng cảm xúc — và đọc đúng dạng yếu của to / for / of / and / a / can (Speaking FC + GRA + P band 5 → 5.5).",
-  minutes: 65,
+  minutes: 75,
   blocks: [
     {
       t: "recap",
@@ -818,6 +926,7 @@ const T2D15_SPEAKING: Lesson = {
         "Thẻ đề **sự kiện** (event): Describe a **celebration / wedding / festival / ceremony / party** you attended… — luôn có 4 dòng: **whose / what** · **when & where** · **what happened** · **and explain why / how you felt**.",
         "1 phút ghi chú bằng **sơ đồ ý**; kể theo **dàn 4 phần**: Mở → Bối cảnh → Diễn biến (dài nhất) → Cảm xúc. Thì **quá khứ đơn** + từ nối thời gian (**First · Then · After that · Later on · In the end**).",
         "Thêm chi tiết bằng **mệnh đề quan hệ** (bài Ngữ pháp hôm nay): the hotel **where** the party took place · the moment **that** I remember most · the relatives **who** came from far away.",
+        "**Gạch chân động từ của thẻ** (enjoyed / surprised / changed you…) để chọn góc kể; cạn ý ở ô nào thì dùng cách kéo dài của ô đó (chiến thuật đổi ý, it turned out that, “Anyway, …” để quay lại).",
         "Phát âm: **âm yếu /ə/** — to /tə/, for /fə/, of /əv/, and /ən/, a /ə/, can /kən/. Nói đúng dạng yếu thì câu **nhanh và tự nhiên** hơn hẳn.",
         "Đẩy band nào: **Speaking 5.0** — FC: nói đủ ~2 phút không ngắt dài · GRA: thử câu phức đúng · P: bắt đầu có **nhịp** tiếng Anh (âm yếu).",
       ],
@@ -851,6 +960,26 @@ const T2D15_SPEAKING: Lesson = {
         ["**when and where** it took place", "thời gian + nơi chốn (quá khứ)", "It **took place** in… , **the city where** my mother grew up."],
         ["**what happened** during it", "trình tự: First / Then / After that", "**First**, there was a ceremony… **Then**, in the evening… **The part that I remember most** was…"],
         ["and **explain why it was memorable**", "cảm xúc + lý do + hiện tại", "**It was memorable because**… I **felt**… **Even now, when** I look at the photos, …"],
+      ],
+    },
+    {
+      t: "table",
+      caption: "Gạch chân ĐỘNG TỪ / tính từ chính của thẻ — nó quyết định bạn kể GÓC nào của cùng một câu chuyện",
+      head: ["Thẻ đề nói", "Phần “explain” phải xoay quanh", "Kể nhiều hơn về"],
+      rows: [
+        ["…an event you **enjoyed**", "vì sao **vui** (hoạt động, không khí, người đi cùng)", "những gì mọi người **làm** trong buổi đó"],
+        ["…an event that **surprised** you", "điều **không ngờ** + phản ứng lúc đó", "lúc **trước** và lúc **sau** điều bất ngờ"],
+        ["…an event that **changed** you / you **learned** from", "**bài học** + bạn **khác đi** thế nào bây giờ", "hệ quả: Since then, I have… (hiện tại hoàn thành)"],
+        ["…an event you **organised** / **helped** with", "**vai trò của bạn**, việc khó nhất", "khâu chuẩn bị (planned, booked, invited…)"],
+        ["…an event you **missed** / **want to go to**", "vì sao lỡ / vì sao muốn đi", "thì **khác**: missed → quá khứ; want to → tương lai (I'd love to…)"],
+      ],
+    },
+    {
+      t: "note",
+      title: "Cẩn thận: dùng lại câu chuyện đã chuẩn bị mà không lạc đề",
+      items: [
+        "Cùng **một** đám cưới dùng được cho “enjoyed”, “surprised”, “learned from” — nhưng phần **explain** phải đổi theo động từ. Kể đám cưới cho đề “changed you” mà chỉ tả đồ ăn, khách mời → **lạc đề**, mất điểm.",
+        "Câu mở nên **nhắc lại động từ của thẻ**: “I'd like to talk about an event that really **surprised** me…” — giám khảo thấy ngay bạn đúng đề.",
       ],
     },
 
@@ -921,6 +1050,26 @@ const T2D15_SPEAKING: Lesson = {
       t: "rule",
       formula: "I'd like to talk about + N + that I went to … · It took place in … · First … Then … After that … · It was memorable because + S + V",
       vi: "Khung 4 phần của đề sự kiện — mở, bối cảnh, diễn biến, cảm xúc; cả bài dùng quá khứ đơn.",
+    },
+    {
+      t: "table",
+      caption: "Cạn ý ở một ô? Mỗi ô của thẻ sự kiện có cách kéo dài riêng",
+      head: ["Ô trên thẻ", "Cách kéo dài", "Câu mẫu"],
+      rows: [
+        ["**when**", "Không nhớ chính xác thì nói thật rồi **ước lượng**", "I can't remember the exact date, but **I think it was** around August, **because** it was really hot."],
+        ["**where**", "Một câu tả nơi đó + **so sánh** với nơi khác", "It was held in a riverside hotel. **Unlike** most wedding venues, it had a huge garden."],
+        ["**what happened**", "**Chiến thuật đổi ý**: kế hoạch ban đầu → điều xảy ra → quyết định", "**At first we planned** to have the party outside, **but then we realised** it was going to rain, **so we decided** to move everything indoors."],
+        ["**what happened**", "Một điều **hoá ra** khác dự đoán", "I thought the speech would be boring, but **it turned out that** my uncle was really funny."],
+        ["**why / how you felt**", "Cảm xúc **lúc đó** → cảm xúc **bây giờ**", "At the time I was exhausted, but **looking back**, it was one of the best days of that year."],
+      ],
+    },
+    {
+      t: "note",
+      title: "Mẹo: kể lạc sang chi tiết phụ thì quay về bằng “Anyway, …”",
+      items: [
+        "Lỡ kể dài về một chi tiết (chiếc xe hỏng trên đường đến tiệc) → **Anyway, as I was saying, …** / **Anyway, back to the wedding, …** rồi nói tiếp ô còn thiếu. Giám khảo thấy bạn **kiểm soát được mạch** (Coherence).",
+        "“**It turned out that** + S + V-ed” = hoá ra là… — câu kể chuyện rất tự nhiên, dùng một lần mỗi bài là đủ.",
+      ],
     },
 
     /* ── 4 ── */

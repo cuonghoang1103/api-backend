@@ -117,6 +117,16 @@ const D4_READING: Lesson = {
       ],
     },
     {
+      t: "note",
+      title: "Mẹo: đánh số câu bên lề (phần này sách chưa có)",
+      items: [
+        "Dạng Sentence Completion đi **theo thứ tự bài**. Tìm được đáp án câu 1 ở đâu, hãy **viết số “1” ngay bên lề** dòng đó (thi máy: tô sáng chỗ đó).",
+        "Câu 2 chỉ cần dò **từ số “1” trở xuống** — không đọc lại từ đầu bài. Cứ thế, các con số bên lề cho bạn biết mình đang ở đâu.",
+        "Lỡ không tìm thấy câu 3? Đừng đứng lại. Tìm **câu 4** trước; đáp án câu 3 chắc chắn nằm **giữa số “2” và số “4”** — vùng đọc lại giờ rất hẹp.",
+        "Mẹo này dùng được cho mọi dạng **đi theo thứ tự**: Short-answer, True / False / Not Given, Sentence Endings. Không dùng cho dạng **không theo thứ tự** như Matching Features (Ngày 10).",
+      ],
+    },
+    {
       t: "mcq",
       id: "d4-doc-nhanh",
       title: "Kiểm tra nhanh — giới hạn số từ & từ loại (5 câu, phần thêm)",
@@ -765,6 +775,49 @@ const D4_SPEAKING: Lesson = {
         { q: "Không hẳn. Tôi không chơi thể thao nhiều vì tôi khá bận.", hint: "Not really, don't play sports much, because, quite busy", answers: ["Not really. I don't play sports much because I'm quite busy.", "Not really. I don't play sports much because I am quite busy.", "Not really. I do not play sports much because I am quite busy.", "Not really. I don't play sports very much because I'm quite busy."] },
         { q: "Có. Hồi nhỏ tôi hay vẽ tranh với chị tôi.", hint: "Yes, I did, when I was a child, used to, draw, with my sister", answers: ["Yes, I did. When I was a child, I used to draw with my sister.", "Yes, I did. When I was a child I used to draw with my sister.", "Yes, I did. I used to draw with my sister when I was a child.", "Yes, I did. When I was a child, I often drew with my sister.", "Yes, I did. When I was little, I used to draw with my sister."] },
         { q: "Tôi thấy phim hài rất thư giãn.", hint: "find, comedy movies, relaxing", answers: ["I find comedy movies very relaxing.", "I find comedy movies relaxing.", "I find comedy films very relaxing.", "I find comedy films relaxing.", "I find comedies very relaxing."] },
+      ],
+    },
+
+    {
+      t: "p",
+      text: "Phần này sách chưa có: **ngân hàng lý do** — bước Reason hay bị bí nhất. Lý do của hầu hết câu Part 1 chỉ rơi vào vài nhóm; thuộc 3 khung mỗi nhóm là chủ đề nào cũng nói được.",
+    },
+    {
+      t: "table",
+      caption: "Ngân hàng lý do rút gọn",
+      head: ["Nhóm lý do", "3 khung câu", "Ví dụ"],
+      rows: [
+        ["😊 **Thích — để giải trí**", "It helps me relax. · It's a great way to have fun. · It makes me happy.", "Watching cartoons **helps me relax** after school."],
+        ["📚 **Thích — để học hỏi**", "I can learn a lot from it. · It gives me the chance to + V. · It's good for my English.", "Films in English **are good for my English**."],
+        ["💪 **Thích — vì sức khoẻ**", "It keeps me fit. · It's good for my health. · It helps me sleep better.", "Swimming **keeps me fit**."],
+        ["😴 **Không thích**", "I find it boring. · It's too tiring. · I have to do it, so it's not fun.", "I don't like running because **I find it boring**."],
+      ],
+    },
+    {
+      t: "note",
+      title: "Mẹo: hai \"phao\" khi bí lý do",
+      items: [
+        "**Phao 1 — trả lời YES mà bí lý do:** nói ngay món mình thích nhất + **ai / khi nào / ở đâu**: “Yes, I do. **My favourite** sport **is** badminton. I play it **with my dad** **every Sunday morning** **in the park** near my house.” — không cần \"because\" vẫn đủ 3 câu.",
+        "**Phao 2 — trả lời NO mà bí lý do:** nói mình **hiếm khi** làm, rồi chuyển sang thứ mình **thích hơn**: “Not really. **I hardly ever** play sports. **I prefer** reading comics or listening to music at home.”",
+        "Hai phao này cũng là cách **mở rộng** khi bạn đã có lý do nhưng còn thời gian.",
+      ],
+    },
+    {
+      t: "rule",
+      formula: "Yes → My favourite… is… + with / every… / in… · No → I hardly ever + V. I prefer + V-ing…",
+      vi: "Bí lý do thì nói chi tiết cụ thể (ai, khi nào, ở đâu) hoặc chuyển sang thứ mình thích hơn — vẫn đủ 2–4 câu.",
+    },
+    {
+      t: "quiz",
+      id: "d4-noi-ly-do-dich",
+      title: "Dịch — lý do và hai phao (4 câu)",
+      kind: "translate",
+      grammar: "It helps me relax · It keeps me fit · I find it boring · My favourite… is… · I hardly ever + V. I prefer + V-ing.",
+      items: [
+        { q: "Bơi giúp tôi giữ dáng.", hint: "Swimming, keeps me fit", answers: ["Swimming keeps me fit.", "Swimming helps me keep fit.", "Swimming helps me stay fit.", "Swimming keeps me in shape."] },
+        { q: "Tôi không thích chạy bộ vì tôi thấy nó chán.", hint: "I don't like running, because, I find it boring", answers: ["I don't like running because I find it boring.", "I do not like running because I find it boring.", "I don't like jogging because I find it boring.", "I don't like running because I think it's boring."] },
+        { q: "Môn thể thao tôi thích nhất là cầu lông. Tôi chơi với bố mỗi sáng Chủ nhật.", hint: "My favourite sport is badminton. I play it with my dad every Sunday morning.", answers: ["My favourite sport is badminton. I play it with my dad every Sunday morning.", "My favourite sport is badminton. I play with my dad every Sunday morning.", "My favourite sport is badminton. I play it with my father every Sunday morning.", "My favourite sport is badminton. I play with my father every Sunday morning.", "My favorite sport is badminton. I play it with my dad every Sunday morning."] },
+        { q: "Tôi hầu như không bao giờ xem phim kinh dị. Tôi thích xem phim hoạt hình hơn.", hint: "I hardly ever watch horror movies. I prefer watching cartoons / animated films.", answers: ["I hardly ever watch horror movies. I prefer watching cartoons.", "I hardly ever watch horror films. I prefer watching cartoons.", "I hardly ever watch horror movies. I prefer watching animated films.", "I hardly ever watch horror movies. I prefer watching animated movies.", "I hardly ever watch horror movies. I prefer to watch cartoons.", "I hardly ever watch horror films. I prefer animated films."] },
       ],
     },
 

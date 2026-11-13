@@ -109,6 +109,7 @@ const D14_READING: Lesson = {
         "**Bỏ qua ý tích cực / tiêu cực.** Hộp gần như luôn có **cặp trái nghĩa**: slow – quick, similarly – differently, advantages – costs, nearby – distant. Đọc sai ý là chọn đúng loại từ mà vẫn sai.",
         "**Quên kiểm tra ngữ pháp.** “an ___” mà chọn từ bắt đầu bằng phụ âm; “were ___” mà chọn danh từ số ít.",
         "**Dùng một chữ cái hai lần.** Nếu hai chỗ trống cùng có vẻ hợp một từ, một trong hai chắc chắn sai — đọc lại.",
+        "**Ghi sai hình thức đáp án** (phần này sách chưa có). Đề ghi “Write the correct letter, **A–H**” thì chỉ ghi **chữ cái** (D), không chép cả từ (~~quickly~~) — bài thi thật chấm sai. Đề tóm tắt **không có hộp** (“Choose ONE WORD ONLY from the passage”) thì ngược lại: chép **từ trong bài**, đúng chính tả, đúng số ít / số nhiều.",
       ],
     },
     {

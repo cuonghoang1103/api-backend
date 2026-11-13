@@ -22,7 +22,7 @@ const T2D10_TU_VUNG: Lesson = {
   kind: "vocab",
   title: "Từ vựng: AWL sublist 2 (phần 1) + ngôn ngữ xu hướng vòng 2",
   goal: "Nhận ra và dùng đúng 30 họ từ học thuật đầu của AWL sublist 2 (achieve, affect, aspect, conduct, consume, impact…) kèm dạng từ và collocation, cùng 14 từ / cụm tả xu hướng mức 2 (a sharp rise in, significantly, plateau, surge, triple, stand at…) — đẩy Lexical Resource của Writing lên band 5–6 và hiểu bài đọc học thuật nhanh hơn.",
-  minutes: 60,
+  minutes: 75,
   blocks: [
     {
       t: "recap",
@@ -33,6 +33,7 @@ const T2D10_TU_VUNG: Lesson = {
         "Mỗi họ có **collocation** dùng được ngay trong Task 2: **conduct research · have an impact on · achieve a goal · every aspect of life**.",
         "**Ngôn ngữ xu hướng vòng 2** (Tập 1 Ngày 11 đã có rise / fall / peak): thêm ==There was a sharp rise in…== · ==rose significantly / marginally== · ==surge · plateau · triple · stand at==.",
         "Đẩy **LR** của Writing: band 5 = “đủ dùng nhưng hạn chế”; dùng đúng 5–8 từ AWL mỗi bài là bước lên band 6.",
+        "Thêm (mục 2b): **bội số / phân số** (increase fourfold, three times as many as, a quarter of the figure for) và **tả trọn một đường trong một câu** (started at…, after which…, before ending at… · with a subsequent + N).",
       ],
     },
     {
@@ -202,6 +203,60 @@ const T2D10_TU_VUNG: Lesson = {
       ],
     },
 
+    { t: "h", text: "2b. Bội số, phân số + tả trọn một đường trong một câu" },
+    {
+      t: "p",
+      text: "Khi một số tăng **rất lớn** (gấp 4, gấp 8), viết “increased dramatically” là chưa chính xác bằng nói thẳng **gấp mấy lần**. Ngược lại, khi so một số **nhỏ** với một số đã nêu, dùng **phân số** (a quarter of…) gọn hơn viết lại cả con số.",
+    },
+    {
+      t: "table",
+      caption: "Bội số & phân số — đủ dùng cho Task 1",
+      head: ["Ý", "Cách viết", "Ví dụ (số tự đặt)"],
+      rows: [
+        ["Tăng gấp N lần (động từ)", "double · triple · quadruple · **increase fourfold / fivefold** · **rise more than eightfold**", "Online sales **increased fourfold**, from 5 to 20 million."],
+        ["Gấp N lần (danh từ)", "**a twofold / threefold / fourfold increase in** + N", "There was **a fourfold increase in** online sales."],
+        ["A gấp N lần B", "A had **three times as many** + N đếm được **as** B · A was **three times as high as** B", "Japan had **three times as many** tourists **as** Korea."],
+        ["Một phần của số đã nêu", "**a fifth of that amount** · **a quarter of the figure for** B · **half the figure for** B", "Bus use stood at 40%, while cycling was **a quarter of that figure** (10%)."],
+      ],
+    },
+    {
+      t: "note",
+      title: "Cẩn thận với bội số và từ “mạnh”",
+      items: [
+        "**Tính lại trước khi viết**: 5 → 20 là gấp **4** (fourfold), không phải “increased by four times” mơ hồ. 20 → 61 ≈ gấp 3 → triple. Sai phép tính là sai Task Achievement.",
+        "**the figure for** + nhóm: “a quarter of **the figure for** buses” — không viết ~~a quarter of buses~~ (nghĩa thành “một phần tư số xe buýt”).",
+        "**soar / plummet / rocket** chỉ dùng khi **chắc chắn** đường dốc đứng. Task 1 ưu tiên **increase / decrease + sharply / significantly** — từ chắc đúng an toàn hơn từ “kêu” mà sai mức.",
+      ],
+    },
+    {
+      t: "table",
+      caption: "Tả trọn một đường trong MỘT câu — 3 khung (số theo biểu đồ du học sinh ở trên)",
+      head: ["Khung", "Ví dụ"],
+      rows: [
+        ["**started at** A, **after which** it rose / fell to B, **before ending at** C", "The number of language-school students **started at** 35,000 in 2000, **after which** it fell to 18,000 in 2010, **before ending at** 30,000 in 2020."],
+        ["rose / fell to B, **with a subsequent** + danh từ (rise / fall / surge / plateau)", "University numbers rose sharply to 60,000 in 2015, **with a subsequent plateau** at around 60,000."],
+        ["rose / fell…, **reaching** B in…, **before** + V-ing…", "University numbers rose rapidly after 2005, **reaching** 60,000 in 2015, **before** levelling off at around 61,000."],
+      ],
+    },
+    {
+      t: "rule",
+      formula: "S + started at A, after which it rose to B, before ending at C · S + rose to B, with a subsequent + N",
+      vi: "Một câu kể cả chặng đường (đầu – giữa – cuối) thay cho ba câu đơn rời — vừa gọn vừa ăn điểm GRA.",
+    },
+    {
+      t: "quiz",
+      id: "t2d10-tu-vung-cau-noi",
+      title: "Dịch — bội số, phân số, câu nối cả chặng (4 câu, theo biểu đồ du học sinh)",
+      kind: "translate",
+      grammar: "triple / increase threefold · half the figure for · started at…, after which…, before ending at… · with a subsequent + N",
+      items: [
+        { q: "Số sinh viên đại học tăng gấp ba trong cả giai đoạn.", hint: "The number of university students, tripled / increased threefold, over the period", answers: ["The number of university students tripled over the period.", "The number of university students increased threefold over the period.", "The number of university students trebled over the period.", "The number of university students tripled over the whole period.", "The number of university students rose threefold over the period.", "Over the period, the number of university students tripled."] },
+        { q: "Năm 2020, số học viên trường ngôn ngữ chỉ bằng khoảng một nửa con số của sinh viên đại học.", hint: "In 2020, the number of language-school students, was only about half the figure for university students", answers: ["In 2020, the number of language-school students was only about half the figure for university students.", "In 2020, the number of language-school students was only around half the figure for university students.", "In 2020, the number of language-school students was about half the figure for university students.", "In 2020 the number of language-school students was only about half the figure for university students.", "In 2020, the number of language-school students was only about half that of university students."] },
+        { q: "Số học viên trường ngôn ngữ bắt đầu ở mức 35.000, sau đó giảm xuống 18.000 năm 2010, trước khi kết thúc ở mức 30.000.", hint: "started at 35,000, after which it fell to 18,000 in 2010, before ending at 30,000", answers: ["The number of language-school students started at 35,000, after which it fell to 18,000 in 2010, before ending at 30,000.", "The number of language-school students started at 35,000, after which it dropped to 18,000 in 2010, before ending at 30,000.", "The number of language-school students started at 35,000, after which it decreased to 18,000 in 2010, before ending at 30,000.", "The number of language-school students started at 35,000, after which it fell to 18,000 in 2010 before ending at 30,000.", "The number of language school students started at 35,000, after which it fell to 18,000 in 2010, before ending at 30,000."] },
+        { q: "Số học viên trường ngôn ngữ giảm xuống 18.000 vào năm 2010, sau đó là một đợt tăng vọt lên 30.000.", hint: "fell to 18,000 by / in 2010, with a subsequent surge to 30,000", answers: ["The number of language-school students fell to 18,000 in 2010, with a subsequent surge to 30,000.", "The number of language-school students fell to 18,000 by 2010, with a subsequent surge to 30,000.", "The number of language-school students dropped to 18,000 in 2010, with a subsequent surge to 30,000.", "The number of language-school students decreased to 18,000 in 2010, with a subsequent surge to 30,000.", "The number of language school students fell to 18,000 in 2010, with a subsequent surge to 30,000."] },
+      ],
+    },
+
     { t: "h", text: "3. Phát âm: /ɜː/ và /ɔː/" },
     {
       t: "table",
@@ -347,6 +402,46 @@ const T2D10_DOC: Lesson = {
       ],
     },
 
+    {
+      t: "h",
+      text: "Thêm: gạch từ khoá PHÂN BIỆT giữa các phương án",
+    },
+    {
+      t: "p",
+      text: "Ở bước 4, đừng gạch cả bốn phương án. Bốn phương án thường **giống nhau một nửa** (cùng chủ ngữ, cùng động từ) và chỉ **khác nhau ở một cụm** — cụm đó mới là thứ bạn phải kiểm trong bài. Gạch **phần khác nhau**, bỏ qua **phần chung**.",
+    },
+    {
+      t: "table",
+      caption: "Ví dụ: phần chung (bỏ qua) và phần phân biệt (gạch)",
+      head: ["Phương án", "Phần chung", "Phần phân biệt — kiểm cái này"],
+      rows: [
+        ["A The city built the tunnel **to reduce flooding**.", "The city built the tunnel", "**reduce flooding**"],
+        ["B The city built the tunnel **to attract tourists**.", "(như trên)", "**attract tourists**"],
+        ["C The city built the tunnel **to shorten journeys to the airport**.", "(như trên)", "**shorten journeys / airport**"],
+        ["D The city built the tunnel **to replace an old bridge**.", "(như trên)", "**replace / old bridge**"],
+      ],
+    },
+    {
+      t: "note",
+      title: "Hai trường hợp đặc biệt",
+      items: [
+        "**Câu “Which of the following is true / NOT mentioned?”** không có từ định vị trong câu hỏi. Đừng đọc lại cả bài một lượt: lấy **cụm phân biệt của từng phương án** làm từ khoá, kiểm **lần lượt A → D** như bốn câu TFNG nhỏ. Câu này thường nằm cuối nhóm — làm sau các câu có vị trí rõ.",
+        "**Câu hỏi có tên / số / năm** (According to Dr Lee…, In 1985…) — dò mỏ neo đó trước, rồi mới so phần phân biệt.",
+        "Dạng **chọn TWO / THREE đáp án** trong năm–bảy phương án (Choose TWO letters, A–E) có ở Reading, cách làm tương tự nhưng mỗi phương án là một câu đúng/sai riêng — sẽ học ở **Tập 3**.",
+      ],
+    },
+    {
+      t: "mcq",
+      id: "t2d10-doc-phan-biet",
+      title: "Phần nào là từ khoá PHÂN BIỆT cần gạch? (4 câu)",
+      items: [
+        { q: "(1) A Farmers in the region grew rice. · B Farmers in the region grew coffee. · C Farmers in the region grew tea. — Gạch gì?", options: ["Farmers in the region", "grew", "rice / coffee / tea"], correct: 2, why: "“Farmers in the region grew” **giống nhau** ở cả ba phương án — kiểm nó không loại được gì. Chỉ **cây trồng** là khác → dò rice / coffee / tea trong bài." },
+        { q: "(2) A The study lasted two years. · B The study involved two schools. · C The study was paid for by two companies. — Gạch gì?", options: ["The study · two", "lasted · involved · paid for by", "years · schools · companies"], correct: 2, why: "“two” xuất hiện ở cả ba — **bẫy số trùng**. Thứ khác nhau là **years / schools / companies** (kèm động từ). Bài có thể có chữ “two” ở cả ba chỗ — phải kiểm **hai cái gì**." },
+        { q: "(3) Câu hỏi: “Which of the following is TRUE about the new library?” — Bạn làm gì trước?", options: ["Đọc lại cả bài từ đầu để tìm chữ “library”", "Lấy cụm phân biệt của từng phương án, kiểm lần lượt A → D", "Chọn phương án dài nhất"], correct: 1, why: "Không có từ định vị riêng → mỗi phương án là **một câu đúng/sai nhỏ**. Kiểm lần lượt bằng cụm phân biệt của nó; phương án nào bài **nói ngược** hoặc **không nói** thì gạch." },
+        { q: "(4) A Most visitors came by train. · B Most visitors came by car. · C Most visitors came in summer. — Phương án C khác A, B ở đâu?", options: ["C hỏi về phương tiện", "C hỏi về thời điểm, không phải phương tiện", "C giống hệt A"], correct: 1, why: "A, B phân biệt nhau ở **phương tiện** (train / car); C đổi hẳn sang **thời điểm** (summer). Khi dò, bạn cần tìm **hai loại** thông tin: phương tiện và mùa." },
+      ],
+    },
+
     { t: "h", text: "2. Bài đọc luyện tập — Questions 1–11" },
     {
       t: "p",
@@ -436,7 +531,7 @@ const T2D10_VIET: Lesson = {
   kind: "writing",
   title: "Viết: Advantages / disadvantages essay (+ “outweigh”)",
   goal: "Nhận ra hai biến thể của đề lợi – hại (chỉ bàn lợi hại / có hỏi “outweigh”), viết đúng thesis cho từng biến thể, triển khai mỗi thân bài 2 ý có giải thích và ví dụ, kết bài khớp thesis — viết trọn bài ≥ 250 từ đạt band 5.5–6 (TR rõ quan điểm khi đề hỏi; CC từ nối đúng vai).",
-  minutes: 70,
+  minutes: 85,
   blocks: [
     {
       t: "recap",
@@ -447,6 +542,7 @@ const T2D10_VIET: Lesson = {
         "Mỗi thân bài: **câu chủ đề** + **2 ý**, mỗi ý có **giải thích** và **ví dụ** (P-E-E như Opinion essay Ngày 2).",
         "Cụm chức năng: ==One major advantage of… is that…== · ==Another benefit is…== · ==The main drawback is…== · ==On balance, …outweigh…==",
         "Đẩy **TR** (biến thể ② không nêu quan điểm = band 5 trần) và **CC** (từ nối đúng chỗ, không lạm dụng Firstly / Moreover).",
+        "Mục 1b: bảng so **3 cách hỏi** (discuss · outweigh · **positive or negative development?**) — mỗi cách một thesis, một cách chia thân bài; dàn ý mẫu cho đề “tốt hay xấu”.",
       ],
     },
 
@@ -483,6 +579,43 @@ const T2D10_VIET: Lesson = {
         { label: "Kết bài (1–2 câu, ~35 từ)", sub: "**On balance, …** nhắc lại thesis bằng lời khác + tóm 2 lý do chính" },
       ],
       caption: "Đặt mặt mạnh hơn ở SAU để kết thúc thân bài bằng lý lẽ thắng — người đọc nhớ đoạn cuối nhất.",
+    },
+
+    { t: "h", text: "1b. Ba cách hỏi lợi – hại, và khi đề hỏi “tốt hay xấu”" },
+    {
+      t: "table",
+      caption: "So 3 cách hỏi — đọc đúng câu hỏi cuối đề trước khi viết thesis",
+      head: ["Câu hỏi", "Ý kiến", "Chia thân bài", "Thesis mẫu"],
+      rows: [
+        ["**Discuss the advantages and disadvantages** of…", "Không bắt buộc (trừ khi có “give your own opinion”)", "TB1 lợi · TB2 hại — **dài ngang nhau**", "This essay will examine both the benefits and the drawbacks of…"],
+        ["**Do the advantages outweigh the disadvantages?**", "**Bắt buộc**: bên nào nặng hơn", "TB1 bên **nhẹ** hơn · TB2 bên **nặng** hơn (dài hơn)", "I believe the advantages clearly outweigh the disadvantages."],
+        ["**Is this a positive or negative development?**", "**Bắt buộc**: xu hướng này tốt hay xấu", "Cách 1: cả hai TB đều nói một phía (2 lý do tốt) · Cách 2: TB1 thừa nhận mặt xấu nhỏ, TB2 mặt tốt lớn", "I believe this is a largely positive development."],
+      ],
+    },
+    {
+      t: "note",
+      title: "Đề “positive or negative development” — khác đề outweigh ở đâu, hay sai gì",
+      items: [
+        "Đề hỏi về một **xu hướng / thay đổi** (development) — mở bài phải nhắc lại xu hướng đó: “**It is becoming increasingly common for** older people **to** use social media.”",
+        "Không bắt buộc phải bàn mặt kia. Viết **cả bài một phía** (2 lý do tích cực) vẫn đạt TR, miễn là lập trường rõ. Cách 2 (thừa nhận mặt xấu ở TB1) giúp bài cân nhắc hơn.",
+        "Từ đúng loại đề: **a positive / negative development · a welcome trend · a worrying trend · beneficial · harmful** — đừng viết “The advantages outweigh…” khi đề không dùng chữ outweigh (vẫn hiểu được nhưng lệch câu hỏi).",
+        "Lỗi hay gặp: ~~I agree that this is positive~~ — đề không hỏi agree. Trả lời thẳng: **I believe this is a positive development.**",
+      ],
+    },
+    {
+      t: "note",
+      title: "Dàn ý mẫu (gạch đầu dòng, 5 phút) — đề: “More and more older people are using smartphones and social media. Is this a positive or negative development?”",
+      items: [
+        "**Mở bài**: người cao tuổi dùng điện thoại, mạng xã hội ngày càng nhiều · thesis: **phần lớn tích cực**.",
+        "**TB1 (thừa nhận mặt xấu nhỏ)**: Admittedly · dễ bị lừa đảo online, tin giả → cần con cháu hướng dẫn.",
+        "**TB2 (mặt tốt lớn)**: giữ liên lạc với con cháu ở xa (gọi video mỗi tuần) → ít cô đơn · tự đặt lịch khám, xem tin tức, học thêm → tự lập hơn.",
+        "**Kết bài**: Overall, a positive development, especially if families help them stay safe online.",
+      ],
+    },
+    {
+      t: "rule",
+      formula: "Discuss adv/disadv → cân bằng · Outweigh → bên nặng hơn ở TB2 · Positive or negative? → I believe this is a (largely) positive / negative development",
+      vi: "Ba câu hỏi nghe giống nhau nhưng thesis khác nhau — đọc câu hỏi cuối đề trước khi viết một chữ nào.",
     },
 
     { t: "h", text: "2. Ngôn ngữ cho đề lợi – hại" },
@@ -607,16 +740,17 @@ const T2D10_BAI_TAP: Lesson = {
   id: "t2d10-bai-tap",
   kind: "homework",
   title: "Bài tập Ngày 10",
-  goal: "Tự kiểm tra Ngày 10: 8 câu họ từ AWL, 6 câu nghĩa / collocation AWL, 6 câu ngôn ngữ xu hướng, 5 câu cách làm trắc nghiệm, 6 câu dịch lợi – hại — 31 câu có đáp án và lời giải.",
-  minutes: 40,
+  goal: "Tự kiểm tra Ngày 10: 8 câu họ từ AWL, 6 câu nghĩa / collocation AWL, 6 câu ngôn ngữ xu hướng, 5 câu cách làm trắc nghiệm, 6 câu dịch lợi – hại, 6 câu tái tạo một đoạn mẫu — 37 câu có đáp án và lời giải.",
+  minutes: 50,
   blocks: [
     {
       t: "recap",
-      title: "Bài tập hôm nay",
+      title: "Bài tập hôm nay (37 câu)",
       items: [
         "**Phần I** (8 câu): viết dạng đúng của từ AWL · **Phần II** (6 câu): chọn từ AWL hợp nghĩa.",
         "**Phần III** (6 câu): đổi câu xu hướng sang cụm danh từ và ngược lại.",
         "**Phần IV** (5 câu): trắc nghiệm trên đoạn ngắn + chiến thuật · **Phần V** (6 câu): dịch câu lợi – hại.",
+        "**Phần VI** (6 câu): **tái tạo một đoạn mẫu** — nghe 2 lần, không xem lời, điền lại khung câu rồi viết lại cả đoạn.",
       ],
     },
     {
@@ -725,6 +859,49 @@ const T2D10_BAI_TAP: Lesson = {
         { q: "Phải thừa nhận rằng một số học sinh cảm thấy cô đơn.", hint: "Admittedly, some students, feel lonely / isolated", answers: ["Admittedly, some students feel lonely.", "Admittedly, some students feel isolated.", "Admittedly, some students may feel lonely.", "Admittedly, some learners feel lonely.", "Admittedly, some learners feel isolated."] },
         { q: "Cân nhắc mọi mặt, lợi ích vượt trội hơn nhược điểm.", hint: "On balance, the advantages / benefits, outweigh, the disadvantages / drawbacks", answers: ["On balance, the advantages outweigh the disadvantages.", "On balance, the benefits outweigh the drawbacks.", "On balance, the advantages outweigh the drawbacks.", "On balance, the benefits outweigh the disadvantages.", "On balance the advantages outweigh the disadvantages."] },
         { q: "Năm 2020 có một sự tăng mạnh về doanh số trực tuyến.", hint: "There was, a sharp / dramatic rise, in online sales, in 2020", answers: ["There was a sharp rise in online sales in 2020.", "There was a dramatic rise in online sales in 2020.", "There was a sharp increase in online sales in 2020.", "There was a dramatic increase in online sales in 2020.", "In 2020, there was a sharp rise in online sales.", "In 2020 there was a sharp increase in online sales.", "There was a significant rise in online sales in 2020."] },
+      ],
+    },
+
+    { t: "h", text: "Phần VI — Tái tạo một đoạn mẫu (6 câu)" },
+    {
+      t: "p",
+      text: "Cách luyện của Ngày 6 (mục 4b), bản ngắn: **nghe đoạn mẫu 2 lần, KHÔNG mở lời**, ghi từ khoá ra giấy. Rồi điền lại các chỗ trống dưới đây theo trí nhớ. Cuối cùng viết lại **cả đoạn** vào vở bằng lời của bạn và mới mở lời để so — học khung câu, không học thuộc.",
+    },
+    {
+      t: "listen",
+      id: "t2d10-bt-tai-tao-nghe",
+      title: "Đoạn mẫu — lợi ích của làm việc ở nhà (khoảng band 6.0, ước tính · 81 từ)",
+      note: "Nghe 2 lần, chỉ ghi từ khoá. Mở lời sau khi đã điền xong 6 câu và viết lại cả đoạn.",
+      lines: [
+        { voice: "uk-nam", text: "One major advantage of working from home is that employees save a great deal of time." },
+        { voice: "uk-nam", text: "This means that they can spend the hours they used to waste in traffic with their families or on exercise." },
+        { voice: "uk-nam", text: "For example, a friend of mine used to spend almost two hours a day commuting, but now she uses that time to cook healthy meals." },
+        { voice: "uk-nam", text: "Admittedly, some people feel lonely without colleagues around them." },
+        { voice: "uk-nam", text: "On balance, however, I believe the benefits clearly outweigh this drawback." },
+      ],
+    },
+    {
+      t: "quiz",
+      id: "t2d10-bt-tai-tao",
+      title: "Phần VI — Điền lại khung câu theo trí nhớ (MỘT từ mỗi chỗ)",
+      kind: "fill",
+      items: [
+        { q: "(1) One major ___ of working from home is that employees save a great deal of time.", answers: ["advantage", "benefit"] },
+        { q: "(2) This ___ that they can spend the hours they used to waste in traffic with their families.", answers: ["means"] },
+        { q: "(3) A friend of mine used to spend almost ___ hours a day commuting.", answers: ["two", "2"] },
+        { q: "(4) ___, some people feel lonely without colleagues around them. (thừa nhận)", answers: ["Admittedly", "admittedly"] },
+        { q: "(5) On ___, however, I believe the benefits clearly outweigh this drawback.", answers: ["balance"] },
+        { q: "(6) …I believe the benefits clearly ___ this drawback.", answers: ["outweigh"] },
+      ],
+    },
+    {
+      t: "note",
+      title: "Lời giải Phần VI — và khung bạn vừa “lấy” được",
+      items: [
+        "**(1) advantage** — khung **One major advantage of + V-ing + is that…** (câu chủ đề). **(2) means** — **This means that…** (giải thích).",
+        "**(3) two** — chi tiết của ví dụ: một người cụ thể + con số + **used to… but now…** (so trước – sau).",
+        "**(4) Admittedly** — thừa nhận mặt kia. **(5) balance** + **(6) outweigh** — **On balance, … outweigh…** chốt bên nặng hơn.",
+        "Viết lại cả đoạn rồi so: bạn có giữ đủ **4 vai** (chủ đề → giải thích → ví dụ → thừa nhận + chốt) không? Thiếu vai nào thì đó là chỗ cần tập.",
       ],
     },
   ],

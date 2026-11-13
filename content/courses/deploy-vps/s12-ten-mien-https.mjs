@@ -281,7 +281,7 @@ sed: cannot rename /etc/sedk9TLIa: Device or resource busy</div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">RFC 8659 — DNS CAA resource record</span><span class="lc-sub">www.rfc-editor.org/rfc/rfc8659 — the one-line record that limits which CA may issue for your name.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">RFC 7208 — SPF, section 4.5</span><span class="lc-sub">www.rfc-editor.org/rfc/rfc7208 — "more than one record" means permerror.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Cloudflare — Proxy status</span><span class="lc-sub">developers.cloudflare.com/dns/proxy-status — which records can be proxied, what IP each answers with, and the fixed 300-second TTL.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash — networking, DNS and SSH to a remote machine</span><span class="lc-sub">/courses/linux-bash/learn${REF} — resolv.conf, nsswitch and getent from the machine's side.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash — networking, DNS and SSH to a remote machine</span><span class="lc-sub">/courses/linux-bash/learn?lessonSlug=lnx-9-1-giao-dien-cong-dns${REF.replace('?', '&')} — resolv.conf, nsswitch and getent from the machine's side.</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 12 · Bài 12.1</span>
@@ -512,7 +512,7 @@ sed: cannot rename /etc/sedk9TLIa: Device or resource busy</div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">RFC 8659 — Bản ghi CAA</span><span class="lc-sub">www.rfc-editor.org/rfc/rfc8659 — một dòng giới hạn CA nào được cấp chứng chỉ cho tên bạn.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">RFC 7208 — SPF, mục 4.5</span><span class="lc-sub">www.rfc-editor.org/rfc/rfc7208 — "hơn một bản ghi" nghĩa là permerror.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Cloudflare — Proxy status</span><span class="lc-sub">developers.cloudflare.com/dns/proxy-status — bản ghi nào bật cam được, mỗi kiểu trả IP nào, và TTL cố định 300 giây.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash — mạng, DNS và SSH vào máy từ xa</span><span class="lc-sub">/courses/linux-bash/learn${REF} — resolv.conf, nsswitch và getent nhìn từ phía máy.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash — mạng, DNS và SSH vào máy từ xa</span><span class="lc-sub">/courses/linux-bash/learn?lessonSlug=lnx-9-1-giao-dien-cong-dns${REF.replace('?', '&')} — resolv.conf, nsswitch và getent nhìn từ phía máy.</span></span></div>
 </div>
 `,
     },
@@ -838,7 +838,7 @@ ${slide('dv-12', 18, 'Giới hạn của Let’s Encrypt: 5 chứng chỉ trùng
 <div class="link-card"><span class="lc-ico">🔧</span><span class="lc-body"><span class="lc-title">Pebble</span><span class="lc-sub">github.com/letsencrypt/pebble — the test ACME server used throughout this lesson.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Certbot user guide</span><span class="lc-sub">eff-certbot.readthedocs.io/en/stable/using.html — webroot, hooks, renewal configuration.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Caddy — Automatic HTTPS</span><span class="lc-sub">caddyserver.com/docs/automatic-https — what Caddy does on its own, and where it stores certificates.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Nginx — TLS, the certificate chain, redirects and HSTS</span><span class="lc-sub">/courses/nginx/learn${REF} — Chapter 6 measures the chain, the handshake and the redirect that silently breaks renewal.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Nginx — TLS, the certificate chain, redirects and HSTS</span><span class="lc-sub">/courses/nginx/learn?lessonSlug=nginx-6-5-chuyen-huong-va-hsts${REF.replace('?', '&')} — Chapter 6 measures the chain, the handshake and the redirect that silently breaks renewal.</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 12 · Bài 12.2</span>
@@ -1154,7 +1154,7 @@ ${slide('dv-12', 18, 'Giới hạn của Let’s Encrypt: 5 chứng chỉ trùng
 <div class="link-card"><span class="lc-ico">🔧</span><span class="lc-body"><span class="lc-title">Pebble</span><span class="lc-sub">github.com/letsencrypt/pebble — máy chủ ACME thử dùng suốt bài này.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Hướng dẫn dùng Certbot</span><span class="lc-sub">eff-certbot.readthedocs.io/en/stable/using.html — webroot, hook, cấu hình gia hạn.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Caddy — HTTPS tự động</span><span class="lc-sub">caddyserver.com/docs/automatic-https — Caddy tự làm gì, và giữ chứng chỉ ở đâu.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Nginx — TLS, chuỗi chứng chỉ, chuyển hướng và HSTS</span><span class="lc-sub">/courses/nginx/learn${REF} — Chương 6 đo chuỗi, cái bắt tay, và cú chuyển hướng lặng lẽ phá việc gia hạn.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Nginx — TLS, chuỗi chứng chỉ, chuyển hướng và HSTS</span><span class="lc-sub">/courses/nginx/learn?lessonSlug=nginx-6-5-chuyen-huong-va-hsts${REF.replace('?', '&')} — Chương 6 đo chuỗi, cái bắt tay, và cú chuyển hướng lặng lẽ phá việc gia hạn.</span></span></div>
 </div>
 `,
     },
@@ -1428,7 +1428,7 @@ com.docke 15848 admin  274u  IPv4 0xd4eaacd3eaf3a556      0t0  TCP 127.0.0.1:191
 <div class="link-card"><span class="lc-ico">🔧</span><span class="lc-body"><span class="lc-title">ufw(8)</span><span class="lc-sub">manpages.ubuntu.com/manpages/noble/man8/ufw.8.html — defaults, rule syntax, routed traffic.</span></span></div>
 <div class="link-card"><span class="lc-ico">🔧</span><span class="lc-body"><span class="lc-title">ss(8)</span><span class="lc-sub">man7.org/linux/man-pages/man8/ss.8.html — every flag and filter.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Nmap — Port scanning basics</span><span class="lc-sub">nmap.org/book/man-port-scanning-basics.html — what open, closed and filtered really mean.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Docker — networks and Compose</span><span class="lc-sub">/courses/docker/learn${REF} — user-defined networks and service names, the basis of fix B.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Docker — networks and Compose</span><span class="lc-sub">/courses/docker/learn?lessonSlug=dk-8-3-goi-nhau${REF.replace('?', '&')} — user-defined networks and service names, the basis of fix B.</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 12 · Bài 12.3</span>
@@ -1692,7 +1692,7 @@ com.docke 15848 admin  274u  IPv4 0xd4eaacd3eaf3a556      0t0  TCP 127.0.0.1:191
 <div class="link-card"><span class="lc-ico">🔧</span><span class="lc-body"><span class="lc-title">ufw(8)</span><span class="lc-sub">manpages.ubuntu.com/manpages/noble/man8/ufw.8.html — mặc định, cú pháp luật, lưu lượng chuyển tiếp.</span></span></div>
 <div class="link-card"><span class="lc-ico">🔧</span><span class="lc-body"><span class="lc-title">ss(8)</span><span class="lc-sub">man7.org/linux/man-pages/man8/ss.8.html — mọi cờ và bộ lọc.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Nmap — Căn bản về quét cổng</span><span class="lc-sub">nmap.org/book/man-port-scanning-basics.html — open, closed và filtered thật ra nghĩa là gì.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Docker — mạng và Compose</span><span class="lc-sub">/courses/docker/learn${REF} — mạng tự tạo và tên dịch vụ, nền của cách B.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Docker — mạng và Compose</span><span class="lc-sub">/courses/docker/learn?lessonSlug=dk-8-3-goi-nhau${REF.replace('?', '&')} — mạng tự tạo và tên dịch vụ, nền của cách B.</span></span></div>
 </div>
 `,
     },
@@ -1888,7 +1888,7 @@ ${slide('dv-12', 28, 'Ảnh người dùng: trình duyệt PUT thẳng vào R2/S
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Cloudflare — Default cache behavior</span><span class="lc-sub">developers.cloudflare.com/cache/concepts/default-cache-behavior — what is cached without any rules.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Cloudflare — Purge cache</span><span class="lc-sub">developers.cloudflare.com/cache/how-to/purge-cache — what a purge can and cannot do.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Cloudflare R2</span><span class="lc-sub">developers.cloudflare.com/r2 — S3-compatible object storage, presigned URLs, public buckets behind a domain.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Nginx — static files, ETag and caching</span><span class="lc-sub">/courses/nginx/learn${REF} — Chapter 4 measures ETag, conditional requests and expires.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Nginx — static files, ETag and caching</span><span class="lc-sub">/courses/nginx/learn?lessonSlug=nginx-4-2-etag-va-bo-dem${REF.replace('?', '&')} — Chapter 4 measures ETag, conditional requests and expires.</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 12 · Bài 12.4</span>
@@ -2074,7 +2074,7 @@ ${slide('dv-12', 28, 'Ảnh người dùng: trình duyệt PUT thẳng vào R2/S
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Cloudflare — Hành vi cache mặc định</span><span class="lc-sub">developers.cloudflare.com/cache/concepts/default-cache-behavior — cái gì được cache khi chưa có luật nào.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Cloudflare — Purge cache</span><span class="lc-sub">developers.cloudflare.com/cache/how-to/purge-cache — purge làm được gì và không làm được gì.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Cloudflare R2</span><span class="lc-sub">developers.cloudflare.com/r2 — kho object tương thích S3, presigned URL, kho công khai sau một tên miền.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Nginx — tệp tĩnh, ETag và bộ đệm</span><span class="lc-sub">/courses/nginx/learn${REF} — Chương 4 đo ETag, request có điều kiện và expires.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Nginx — tệp tĩnh, ETag và bộ đệm</span><span class="lc-sub">/courses/nginx/learn?lessonSlug=nginx-4-2-etag-va-bo-dem${REF.replace('?', '&')} — Chương 4 đo ETag, request có điều kiện và expires.</span></span></div>
 </div>
 `,
     },

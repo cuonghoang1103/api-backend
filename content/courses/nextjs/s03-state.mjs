@@ -8,6 +8,7 @@
 import G03_1 from './giang/nxj-03-1.mjs';
 import G03_3 from './giang/nxj-03-3.mjs';
 import G03_2 from './giang/nxj-03-2.mjs';
+import G03_4 from './giang/nxj-03-4.mjs';
 export default {
   title: 'Chapter 3 — State & the re-render model|||Chương 3 — State & mô hình render lại',
   description: 'useState cho component một trí nhớ. State là một ảnh chụp cho mỗi lần render — hiểu điều này giải thích mọi bug "giá trị bị cũ". Cập nhật object và mảng mà không mutate.',
@@ -999,6 +1000,7 @@ npm run build &amp;&amp; npm start  <span class="tok-comment">  # mở /bat-bien
       isFreePreview: false,
       description: 'Giữ state cục bộ khi được, nâng lên cha chung khi cần chia sẻ, và ĐỪNG lưu vào state cái có thể tính ra từ props/state khác.',
       content: `
+${G03_4}
 <div class="ml-en">
 <span class="eyebrow">Chapter 3 · Lesson 3.4</span>
 <h2>Deciding where each piece of state belongs</h2>
@@ -1024,8 +1026,8 @@ const count = items.length;              <span class="tok-comment">// always cor
   const [query, setQuery] = useState('');           <span class="tok-comment">// the shared state lives here</span>
   return (
     &lt;&gt;
-      &lt;SearchInput value={query} onChange={setQuery} /&gt;   <span class="tok-comment">// writes it</span>
-      &lt;Results query={query} /&gt;                            <span class="tok-comment">// reads it</span>
+      &lt;SearchInput value={query} onChange={setQuery} /&gt;   <span class="tok-comment">{/* writes it */}</span>
+      &lt;Results query={query} /&gt;                            <span class="tok-comment">{/* reads it */}</span>
     &lt;/&gt;
   );
 }</code></pre>
@@ -1045,7 +1047,7 @@ const count = items.length;              <span class="tok-comment">// always cor
   <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Two siblings need it?</b> — Lift it to their closest common parent and pass it down, with a setter for whoever changes it.</div></div>
   <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Half the app needs it?</b> — Context, or a store. But check first that it is not really server data — that belongs in a cache, not in component state.</div></div>
 </div>
-<div class="pitfall"><p><strong>Trap — copying a prop into state so you can edit it.</strong> &#96;const [name, setName] = useState(props.name)&#96; reads the prop once, on the first render, and then ignores it forever: when the parent passes a different user, the input still shows the old name, because &#96;useState&#96;&#39;s argument is an initial value, not a binding. It looks like a caching bug and it is a design one — there are now two sources of truth for the same fact. Either let the parent own the value and pass a change handler down, or, if you deliberately want an editable copy that resets per record, give the component a &#96;key&#96; so React remounts it when the record changes.</p></div>
+<div class="pitfall"><p><strong>Trap — copying a prop into state so you can edit it.</strong> <code>const [name, setName] = useState(props.name)</code> reads the prop once, on the first render, and then ignores it forever: when the parent passes a different user, the input still shows the old name, because <code>useState</code>&#39;s argument is an initial value, not a binding. It looks like a caching bug and it is a design one — there are now two sources of truth for the same fact. Either let the parent own the value and pass a change handler down, or, if you deliberately want an editable copy that resets per record, give the component a <code>key</code> so React remounts it when the record changes.</p></div>
 <a class="link-card dl" href="https://react.dev/learn/choosing-the-state-structure" target="_blank" rel="noopener">
   <span class="lc-ico">🗂️</span>
   <span class="lc-body"><span class="lc-title">react.dev — Choosing the state structure</span><span class="lc-sub">Redundant state, contradictory state, and how to spot both.</span></span>
@@ -1056,6 +1058,208 @@ const count = items.length;              <span class="tok-comment">// always cor
 </a>
 
 
+<h3>🔬 Measured: where the state lives changes what you see (React 19.3.0 · Next.js 16.4.6)</h3>
+<p>Three pages, built with <code>next build</code> and clicked in a real browser under <code>next start</code>. First, a stored count next to a derived one, and an input that copies its prop:</p>
+<pre><code class="language-tsx">'use client';
+import { useState } from 'react';
+
+function GioThua() {
+  const [items, setItems] = useState(['táo', 'cam']);
+  const [count, setCount] = useState(2);            <span class="tok-comment">  // ✗ state thừa</span>
+  return (
+    &lt;div className="rounded border p-2"&gt;
+      &lt;p id="thua"&gt;items: {items.length} · count (state thừa): {count}&lt;/p&gt;
+      &lt;button id="them1" className="mr-2 rounded border px-2" onClick={() =&gt; { setItems([...items, 'lê']); setCount(count + 1); }}&gt;thêm&lt;/button&gt;
+      &lt;button id="xoa1" className="rounded border px-2" onClick={() =&gt; setItems(items.slice(1))}&gt;xoá (quên setCount)&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+
+function GioSuyRa() {
+  const [items, setItems] = useState(['táo', 'cam']);
+  const count = items.length;                       <span class="tok-comment">  // ✓ suy ra lúc render</span>
+  return (
+    &lt;div className="rounded border p-2"&gt;
+      &lt;p id="suy"&gt;items: {items.length} · count (suy ra): {count}&lt;/p&gt;
+      &lt;button id="them2" className="mr-2 rounded border px-2" onClick={() =&gt; setItems([...items, 'lê'])}&gt;thêm&lt;/button&gt;
+      &lt;button id="xoa2" className="rounded border px-2" onClick={() =&gt; setItems(items.slice(1))}&gt;xoá&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+
+function OTen({ name }: { name: string }) {
+  const [ten, setTen] = useState(name);             <span class="tok-comment">  // ✗ chép prop vào state</span>
+  return &lt;input id="o" className="rounded border px-2" value={ten} onChange={(e) =&gt; setTen(e.target.value)} /&gt;;
+}
+
+export default function ODau() {
+  const [nguoi, setNguoi] = useState({ id: 1, name: 'An' });
+  const doi = () =&gt; setNguoi(nguoi.id === 1 ? { id: 2, name: 'Bình' } : { id: 1, name: 'An' });
+  return (
+    &lt;div className="space-y-2 p-6 font-sans text-lg"&gt;
+      &lt;GioThua /&gt;
+      &lt;GioSuyRa /&gt;
+      &lt;p id="dang"&gt;đang chọn: {nguoi.name}&lt;/p&gt;
+      &lt;button id="doi" className="rounded border px-2" onClick={doi}&gt;đổi người&lt;/button&gt;
+      &lt;p&gt;không key: &lt;OTen name={nguoi.name} /&gt;&lt;/p&gt;
+      &lt;p&gt;key=id: &lt;OTen key={nguoi.id} name={nguoi.name} /&gt;&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}</code></pre><div class="out">click thêm, xoá, xoá on both carts:
+  items: 1 · count (state thừa): 3
+  items: 1 · count (suy ra): 1
+
+click "đổi người" (An → Bình):
+  đang chọn: Bình
+  no key:  An
+  key=id:  Bình</div>
+<p>The stored count drifted to 3 while one item is left — the remove button forgot <code>setCount</code>. And after switching people, the input without a key still says <b>An</b>: <code>useState(name)</code> read the prop once. The keyed one is rebuilt and says <b>Bình</b>.</p>
+<p>Second, the same menu with its open flag in two places, and a sibling table that counts its own renders (a module-level counter — fine for a measurement, never for real code):</p>
+<pre><code class="language-tsx">'use client';
+import { useState } from 'react';
+
+const lan = { nang: 0, cucBo: 0 };
+
+function BangA() {
+  lan.nang++;
+  return &lt;p id="bang1"&gt;Bảng (anh em) đã render: {lan.nang} lần&lt;/p&gt;;
+}
+function BangB() {
+  lan.cucBo++;
+  return &lt;p id="bang2"&gt;Bảng (anh em) đã render: {lan.cucBo} lần&lt;/p&gt;;
+}
+
+function Menu({ mo, onDoi, id }: { mo: boolean; onDoi: () =&gt; void; id: string }) {
+  return (
+    &lt;p&gt;
+      &lt;button id={id} className="rounded border px-2" onClick={onDoi}&gt;menu {mo ? '▲' : '▼'}&lt;/button&gt;
+      {mo &amp;&amp; &lt;span&gt; Hồ sơ · Đăng xuất&lt;/span&gt;}
+    &lt;/p&gt;
+  );
+}
+
+<span class="tok-comment">// ✗ cờ mở/đóng của menu đặt ở khối cha</span>
+function KhoiNang() {
+  const [mo, setMo] = useState(false);
+  return (
+    &lt;div className="rounded border p-2"&gt;
+      &lt;p className="text-sm text-gray-500"&gt;✗ state mo ở khối cha&lt;/p&gt;
+      &lt;Menu id="mo1" mo={mo} onDoi={() =&gt; setMo(!mo)} /&gt;
+      &lt;BangA /&gt;
+    &lt;/div&gt;
+  );
+}
+
+<span class="tok-comment">// ✓ cờ nằm ngay trong menu</span>
+function MenuTuGiu() {
+  const [mo, setMo] = useState(false);
+  return &lt;Menu id="mo2" mo={mo} onDoi={() =&gt; setMo(!mo)} /&gt;;
+}
+function KhoiCucBo() {
+  return (
+    &lt;div className="rounded border p-2"&gt;
+      &lt;p className="text-sm text-gray-500"&gt;✓ state mo nằm trong menu&lt;/p&gt;
+      &lt;MenuTuGiu /&gt;
+      &lt;BangB /&gt;
+    &lt;/div&gt;
+  );
+}
+
+export default function CucBo() {
+  return (
+    &lt;div className="space-y-2 p-6 font-sans text-lg"&gt;
+      &lt;KhoiNang /&gt;
+      &lt;KhoiCucBo /&gt;
+    &lt;/div&gt;
+  );
+}</code></pre><div class="out">toggle each menu 3 times:
+  ✗ flag in the parent  ⇒ Bảng (anh em) đã render: 4 lần
+  ✓ flag in the menu    ⇒ Bảng (anh em) đã render: 1 lần</div>
+<p>Third, siblings sharing a search query — first kept inside the input, then lifted to the parent:</p>
+<pre><code class="language-tsx">'use client';
+import { useState } from 'react';
+
+const TEN = ['An', 'Bình', 'Lan', 'Minh'];
+
+<span class="tok-comment">// ✗ query nằm trong ô tìm — anh em không thấy được</span>
+function OTimRieng() {
+  const [query, setQuery] = useState('');
+  return &lt;input id="tim1" className="rounded border px-2" placeholder="tìm…" value={query} onChange={(e) =&gt; setQuery(e.target.value)} /&gt;;
+}
+function KetQuaMu() {
+  return &lt;p id="kq1"&gt;kết quả: {TEN.join(', ')} ({TEN.length})&lt;/p&gt;; <span class="tok-comment">  // không có query để lọc</span>
+}
+
+<span class="tok-comment">// ✓ nâng query lên cha chung gần nhất</span>
+function SearchInput({ value, onChange }: { value: string; onChange: (v: string) =&gt; void }) {
+  return &lt;input id="tim2" className="rounded border px-2" placeholder="tìm…" value={value} onChange={(e) =&gt; onChange(e.target.value)} /&gt;;
+}
+function Results({ query }: { query: string }) {
+  const loc = TEN.filter((t) =&gt; t.toLowerCase().includes(query.toLowerCase())); <span class="tok-comment">  // suy ra, không lưu</span>
+  return &lt;p id="kq2"&gt;kết quả: {loc.join(', ')} ({loc.length})&lt;/p&gt;;
+}
+function FilterablePage() {
+  const [query, setQuery] = useState('');          <span class="tok-comment">  // state chung nằm ở đây</span>
+  return (
+    &lt;div id="ok" className="rounded border p-2"&gt;
+      &lt;p className="text-sm text-gray-500"&gt;✓ query ở cha FilterablePage&lt;/p&gt;
+      &lt;SearchInput value={query} onChange={setQuery} /&gt;
+      &lt;Results query={query} /&gt;
+    &lt;/div&gt;
+  );
+}
+
+export default function Nang() {
+  return (
+    &lt;div className="space-y-2 p-6 font-sans text-lg"&gt;
+      &lt;div id="sai" className="rounded border p-2"&gt;
+        &lt;p className="text-sm text-gray-500"&gt;✗ query nằm trong ô tìm&lt;/p&gt;
+        &lt;OTimRieng /&gt;
+        &lt;KetQuaMu /&gt;
+      &lt;/div&gt;
+      &lt;FilterablePage /&gt;
+    &lt;/div&gt;
+  );
+}</code></pre><div class="out">type "an" into both inputs:
+  ✗ query inside the input    ⇒ kết quả: An, Bình, Lan, Minh (4)
+  ✓ query in FilterablePage   ⇒ kết quả: An, Lan (2)</div>
+<p>Try to let the sibling read the input's state directly and TypeScript stops you — state is private to its component:</p>
+<pre><code class="language-tsx">'use client';
+import { useState } from 'react';
+
+export function OTim() {
+  const [query, setQuery] = useState('');
+  return &lt;input value={query} onChange={(e) =&gt; setQuery(e.target.value)} /&gt;;
+}
+export function KetQua() {
+  return &lt;p&gt;đang tìm: {query}&lt;/p&gt;; <span class="tok-comment">  // ✗ đọc state của anh em</span>
+}</code></pre><pre><code class="language-bash">$ npx tsc --noEmit | grep anh-em</code></pre><div class="out">src/app/nang/anh-em.tsx(9,24): error TS2304: Cannot find name 'query'.</div>
+<pre><code class="language-bash">$ npm run build 2&gt;&amp;1 | grep -E 'Compiled|o-dau|nang|cuc-bo'</code></pre><div class="out">✓ Compiled successfully in 885ms
+├ ○ /cuc-bo
+├ ○ /nang
+├ ○ /o-dau</div>
+<div class="pitfall"><p><strong>A comment between JSX tags is not a comment.</strong> This lesson's <code>FilterablePage</code> snippet used to end its JSX lines with <code>// writes it</code>. Inside JSX children that is <b>text</b>, and it renders on the page. Compiled with TypeScript and rendered with <code>react-dom/server</code>:</p></div>
+<pre><code class="language-bash">$ node chu-jsx.mjs</code></pre><div class="out">chú thích //       ⇒ &lt;input value=""/&gt;   // ghi nó&lt;p&gt;kết quả cho &amp;quot;&amp;quot;&lt;/p&gt;                            // đọc nó
+chú thích {/* */}  ⇒ &lt;input value=""/&gt;   &lt;p&gt;kết quả cho &amp;quot;&amp;quot;&lt;/p&gt;                            </div>
+<p>Inside JSX, write comments as <code>{/* … */}</code> — the snippet above now does.</p>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-bash">npx tsc --noEmit               <span class="tok-comment">  # with anh-em.tsx present: TS2304 Cannot find name 'query'</span>
+npm run build &amp;&amp; npm start     <span class="tok-comment">  # open /o-dau, /cuc-bo, /nang and click as above</span>
+node chu-jsx.mjs               <span class="tok-comment">  # // vs {/* */} inside JSX</span></code></pre>
+<h3>🔗 Go deeper in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-2-4-dat-state" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 2.4 — Where state lives</span><span class="lc-sub">Lifting state, not storing what you can compute (a measured one-keystroke-late bug), copying props into state, keeping state low</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-5-1-context" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 5.1 — Prop drilling and Context</span><span class="lc-sub">When lifting starts to hurt: Context in three steps, the render storm measured</span></span></a>
+<a class="link-card lien-ket-cheo" href="/academy/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-7-3-slot8-props-context-slides" target="_blank" rel="noopener"><span class="lc-ico">🏫</span><span class="lc-body"><span class="lc-title">Academy FER202 · 7.3 — Props, State & Context (Slot 8)</span><span class="lc-sub">The university deck: props vs state, container components, Context against prop drilling</span></span></a>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Derived value</span><span class="v">Computed during render from state/props — never stored.</span></div>
+  <div class="kv"><span class="k">Redundant state</span><span class="v">The same fact stored twice; sooner or later the copies disagree.</span></div>
+  <div class="kv"><span class="k">Single source of truth</span><span class="v">Exactly one owner for each fact.</span></div>
+  <div class="kv"><span class="k">Lifting state up</span><span class="v">Move shared state to the closest common parent and pass it down.</span></div>
+  <div class="kv"><span class="k">Controlled component</span><span class="v">Shows a value it is given and reports changes upward.</span></div>
+  <div class="kv"><span class="k">Prop drilling</span><span class="v">Forwarding a prop through layers that do not use it.</span></div>
+  <div class="kv"><span class="k">Initial value</span><span class="v">useState(x) reads x on the first render only.</span></div>
+</div>
 <h3>🧪 Practice (15–20 min)</h3>
 <div class="callout ok"><ol>
 <li>Find two components that need the same value and lift that state to their closest common parent.</li>
@@ -1094,8 +1298,8 @@ const count = items.length;              <span class="tok-comment">// luôn đú
   const [query, setQuery] = useState('');           <span class="tok-comment">// state chung nằm ở đây</span>
   return (
     &lt;&gt;
-      &lt;SearchInput value={query} onChange={setQuery} /&gt;   <span class="tok-comment">// ghi nó</span>
-      &lt;Results query={query} /&gt;                            <span class="tok-comment">// đọc nó</span>
+      &lt;SearchInput value={query} onChange={setQuery} /&gt;   <span class="tok-comment">{/* ghi nó */}</span>
+      &lt;Results query={query} /&gt;                            <span class="tok-comment">{/* đọc nó */}</span>
     &lt;/&gt;
   );
 }</code></pre>
@@ -1115,7 +1319,7 @@ const count = items.length;              <span class="tok-comment">// luôn đú
   <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Hai anh em cùng cần?</b> — Hãy nâng nó lên phần tử cha chung gần nhất rồi truyền xuống, kèm một setter cho bên nào thay đổi nó.</div></div>
   <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Nửa ứng dụng cần?</b> — Context, hoặc một store. Nhưng hãy kiểm trước xem nó có thật sự là dữ liệu máy chủ không — thứ đó thuộc về một bộ nhớ đệm, không thuộc về state của component.</div></div>
 </div>
-<div class="pitfall"><p><strong>Bẫy — chép một prop vào state để sửa được nó.</strong> &#96;const [name, setName] = useState(props.name)&#96; đọc cái prop đúng một lần, ở lần render đầu, rồi lờ nó đi mãi mãi: khi cha truyền xuống một người dùng khác, ô nhập vẫn hiện cái tên cũ, vì đối số của &#96;useState&#96; là một giá trị KHỞI TẠO chứ không phải một mối ràng buộc. Nó trông như lỗi bộ nhớ đệm mà thật ra là lỗi thiết kế — giờ có hai nguồn sự thật cho cùng một sự việc. Hoặc để cha sở hữu giá trị rồi truyền một handler thay đổi xuống, hoặc, nếu bạn cố tình muốn một bản chép sửa được và đặt lại theo từng bản ghi, hãy cho component một &#96;key&#96; để React dựng lại nó khi bản ghi đổi.</p></div>
+<div class="pitfall"><p><strong>Bẫy — chép một prop vào state để sửa được nó.</strong> <code>const [name, setName] = useState(props.name)</code> đọc cái prop đúng một lần, ở lần render đầu, rồi lờ nó đi mãi mãi: khi cha truyền xuống một người dùng khác, ô nhập vẫn hiện cái tên cũ, vì đối số của <code>useState</code> là một giá trị KHỞI TẠO chứ không phải một mối ràng buộc. Nó trông như lỗi bộ nhớ đệm mà thật ra là lỗi thiết kế — giờ có hai nguồn sự thật cho cùng một sự việc. Hoặc để cha sở hữu giá trị rồi truyền một handler thay đổi xuống, hoặc, nếu bạn cố tình muốn một bản chép sửa được và đặt lại theo từng bản ghi, hãy cho component một <code>key</code> để React dựng lại nó khi bản ghi đổi.</p></div>
 <a class="link-card dl" href="https://react.dev/learn/choosing-the-state-structure" target="_blank" rel="noopener">
   <span class="lc-ico">🗂️</span>
   <span class="lc-body"><span class="lc-title">react.dev — Chọn cấu trúc state</span><span class="lc-sub">State thừa, state mâu thuẫn, và cách nhận ra cả hai.</span></span>
@@ -1126,6 +1330,208 @@ const count = items.length;              <span class="tok-comment">// luôn đú
 </a>
 
 
+<h3>🔬 Đo thật: state nằm ở đâu thì màn hình ra sao (React 19.3.0 · Next.js 16.4.6)</h3>
+<p>Ba trang, dựng bằng <code>next build</code> và bấm trên trình duyệt thật dưới <code>next start</code>. Trang đầu: một count lưu riêng cạnh một count suy ra, và một ô nhập chép prop của nó:</p>
+<pre><code class="language-tsx">'use client';
+import { useState } from 'react';
+
+function GioThua() {
+  const [items, setItems] = useState(['táo', 'cam']);
+  const [count, setCount] = useState(2);            <span class="tok-comment">  // ✗ state thừa</span>
+  return (
+    &lt;div className="rounded border p-2"&gt;
+      &lt;p id="thua"&gt;items: {items.length} · count (state thừa): {count}&lt;/p&gt;
+      &lt;button id="them1" className="mr-2 rounded border px-2" onClick={() =&gt; { setItems([...items, 'lê']); setCount(count + 1); }}&gt;thêm&lt;/button&gt;
+      &lt;button id="xoa1" className="rounded border px-2" onClick={() =&gt; setItems(items.slice(1))}&gt;xoá (quên setCount)&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+
+function GioSuyRa() {
+  const [items, setItems] = useState(['táo', 'cam']);
+  const count = items.length;                       <span class="tok-comment">  // ✓ suy ra lúc render</span>
+  return (
+    &lt;div className="rounded border p-2"&gt;
+      &lt;p id="suy"&gt;items: {items.length} · count (suy ra): {count}&lt;/p&gt;
+      &lt;button id="them2" className="mr-2 rounded border px-2" onClick={() =&gt; setItems([...items, 'lê'])}&gt;thêm&lt;/button&gt;
+      &lt;button id="xoa2" className="rounded border px-2" onClick={() =&gt; setItems(items.slice(1))}&gt;xoá&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+
+function OTen({ name }: { name: string }) {
+  const [ten, setTen] = useState(name);             <span class="tok-comment">  // ✗ chép prop vào state</span>
+  return &lt;input id="o" className="rounded border px-2" value={ten} onChange={(e) =&gt; setTen(e.target.value)} /&gt;;
+}
+
+export default function ODau() {
+  const [nguoi, setNguoi] = useState({ id: 1, name: 'An' });
+  const doi = () =&gt; setNguoi(nguoi.id === 1 ? { id: 2, name: 'Bình' } : { id: 1, name: 'An' });
+  return (
+    &lt;div className="space-y-2 p-6 font-sans text-lg"&gt;
+      &lt;GioThua /&gt;
+      &lt;GioSuyRa /&gt;
+      &lt;p id="dang"&gt;đang chọn: {nguoi.name}&lt;/p&gt;
+      &lt;button id="doi" className="rounded border px-2" onClick={doi}&gt;đổi người&lt;/button&gt;
+      &lt;p&gt;không key: &lt;OTen name={nguoi.name} /&gt;&lt;/p&gt;
+      &lt;p&gt;key=id: &lt;OTen key={nguoi.id} name={nguoi.name} /&gt;&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}</code></pre><div class="out">bấm thêm, xoá, xoá ở cả hai giỏ:
+  items: 1 · count (state thừa): 3
+  items: 1 · count (suy ra): 1
+
+bấm "đổi người" (An → Bình):
+  đang chọn: Bình
+  không key: An
+  key=id:  Bình</div>
+<p>Count lưu riêng trôi lên 3 trong khi chỉ còn một món — nút xoá quên <code>setCount</code>. Và sau khi đổi người, ô không key vẫn ghi <b>An</b>: <code>useState(name)</code> đọc prop đúng một lần. Ô có key được dựng lại và ghi <b>Bình</b>.</p>
+<p>Trang hai: cùng một menu, cờ mở đặt ở hai chỗ, và một bảng anh em tự đếm số lần render (bộ đếm cấp module — được cho phép đo, không dùng trong mã thật):</p>
+<pre><code class="language-tsx">'use client';
+import { useState } from 'react';
+
+const lan = { nang: 0, cucBo: 0 };
+
+function BangA() {
+  lan.nang++;
+  return &lt;p id="bang1"&gt;Bảng (anh em) đã render: {lan.nang} lần&lt;/p&gt;;
+}
+function BangB() {
+  lan.cucBo++;
+  return &lt;p id="bang2"&gt;Bảng (anh em) đã render: {lan.cucBo} lần&lt;/p&gt;;
+}
+
+function Menu({ mo, onDoi, id }: { mo: boolean; onDoi: () =&gt; void; id: string }) {
+  return (
+    &lt;p&gt;
+      &lt;button id={id} className="rounded border px-2" onClick={onDoi}&gt;menu {mo ? '▲' : '▼'}&lt;/button&gt;
+      {mo &amp;&amp; &lt;span&gt; Hồ sơ · Đăng xuất&lt;/span&gt;}
+    &lt;/p&gt;
+  );
+}
+
+<span class="tok-comment">// ✗ cờ mở/đóng của menu đặt ở khối cha</span>
+function KhoiNang() {
+  const [mo, setMo] = useState(false);
+  return (
+    &lt;div className="rounded border p-2"&gt;
+      &lt;p className="text-sm text-gray-500"&gt;✗ state mo ở khối cha&lt;/p&gt;
+      &lt;Menu id="mo1" mo={mo} onDoi={() =&gt; setMo(!mo)} /&gt;
+      &lt;BangA /&gt;
+    &lt;/div&gt;
+  );
+}
+
+<span class="tok-comment">// ✓ cờ nằm ngay trong menu</span>
+function MenuTuGiu() {
+  const [mo, setMo] = useState(false);
+  return &lt;Menu id="mo2" mo={mo} onDoi={() =&gt; setMo(!mo)} /&gt;;
+}
+function KhoiCucBo() {
+  return (
+    &lt;div className="rounded border p-2"&gt;
+      &lt;p className="text-sm text-gray-500"&gt;✓ state mo nằm trong menu&lt;/p&gt;
+      &lt;MenuTuGiu /&gt;
+      &lt;BangB /&gt;
+    &lt;/div&gt;
+  );
+}
+
+export default function CucBo() {
+  return (
+    &lt;div className="space-y-2 p-6 font-sans text-lg"&gt;
+      &lt;KhoiNang /&gt;
+      &lt;KhoiCucBo /&gt;
+    &lt;/div&gt;
+  );
+}</code></pre><div class="out">bấm mỗi menu 3 lần:
+  ✗ cờ ở khối cha      ⇒ Bảng (anh em) đã render: 4 lần
+  ✓ cờ trong menu      ⇒ Bảng (anh em) đã render: 1 lần</div>
+<p>Trang ba: hai anh em dùng chung một từ khoá — trước giữ trong ô tìm, sau nâng lên cha:</p>
+<pre><code class="language-tsx">'use client';
+import { useState } from 'react';
+
+const TEN = ['An', 'Bình', 'Lan', 'Minh'];
+
+<span class="tok-comment">// ✗ query nằm trong ô tìm — anh em không thấy được</span>
+function OTimRieng() {
+  const [query, setQuery] = useState('');
+  return &lt;input id="tim1" className="rounded border px-2" placeholder="tìm…" value={query} onChange={(e) =&gt; setQuery(e.target.value)} /&gt;;
+}
+function KetQuaMu() {
+  return &lt;p id="kq1"&gt;kết quả: {TEN.join(', ')} ({TEN.length})&lt;/p&gt;; <span class="tok-comment">  // không có query để lọc</span>
+}
+
+<span class="tok-comment">// ✓ nâng query lên cha chung gần nhất</span>
+function SearchInput({ value, onChange }: { value: string; onChange: (v: string) =&gt; void }) {
+  return &lt;input id="tim2" className="rounded border px-2" placeholder="tìm…" value={value} onChange={(e) =&gt; onChange(e.target.value)} /&gt;;
+}
+function Results({ query }: { query: string }) {
+  const loc = TEN.filter((t) =&gt; t.toLowerCase().includes(query.toLowerCase())); <span class="tok-comment">  // suy ra, không lưu</span>
+  return &lt;p id="kq2"&gt;kết quả: {loc.join(', ')} ({loc.length})&lt;/p&gt;;
+}
+function FilterablePage() {
+  const [query, setQuery] = useState('');          <span class="tok-comment">  // state chung nằm ở đây</span>
+  return (
+    &lt;div id="ok" className="rounded border p-2"&gt;
+      &lt;p className="text-sm text-gray-500"&gt;✓ query ở cha FilterablePage&lt;/p&gt;
+      &lt;SearchInput value={query} onChange={setQuery} /&gt;
+      &lt;Results query={query} /&gt;
+    &lt;/div&gt;
+  );
+}
+
+export default function Nang() {
+  return (
+    &lt;div className="space-y-2 p-6 font-sans text-lg"&gt;
+      &lt;div id="sai" className="rounded border p-2"&gt;
+        &lt;p className="text-sm text-gray-500"&gt;✗ query nằm trong ô tìm&lt;/p&gt;
+        &lt;OTimRieng /&gt;
+        &lt;KetQuaMu /&gt;
+      &lt;/div&gt;
+      &lt;FilterablePage /&gt;
+    &lt;/div&gt;
+  );
+}</code></pre><div class="out">gõ "an" vào cả hai ô:
+  ✗ query nằm trong ô tìm       ⇒ kết quả: An, Bình, Lan, Minh (4)
+  ✓ query ở cha FilterablePage  ⇒ kết quả: An, Lan (2)</div>
+<p>Thử cho anh em đọc thẳng state của ô tìm thì TypeScript chặn ngay — state là của riêng component sở hữu nó:</p>
+<pre><code class="language-tsx">'use client';
+import { useState } from 'react';
+
+export function OTim() {
+  const [query, setQuery] = useState('');
+  return &lt;input value={query} onChange={(e) =&gt; setQuery(e.target.value)} /&gt;;
+}
+export function KetQua() {
+  return &lt;p&gt;đang tìm: {query}&lt;/p&gt;; <span class="tok-comment">  // ✗ đọc state của anh em</span>
+}</code></pre><pre><code class="language-bash">$ npx tsc --noEmit | grep anh-em</code></pre><div class="out">src/app/nang/anh-em.tsx(9,24): error TS2304: Cannot find name 'query'.</div>
+<pre><code class="language-bash">$ npm run build 2&gt;&amp;1 | grep -E 'Compiled|o-dau|nang|cuc-bo'</code></pre><div class="out">✓ Compiled successfully in 885ms
+├ ○ /cuc-bo
+├ ○ /nang
+├ ○ /o-dau</div>
+<div class="pitfall"><p><strong>Chú thích giữa các thẻ JSX không phải chú thích.</strong> Đoạn <code>FilterablePage</code> của bài này trước đây kết thúc dòng JSX bằng <code>// ghi nó</code>. Nằm giữa các thẻ con của JSX thì đó là <b>chữ</b>, và nó hiện lên trang. Biên dịch bằng TypeScript rồi render bằng <code>react-dom/server</code>:</p></div>
+<pre><code class="language-bash">$ node chu-jsx.mjs</code></pre><div class="out">chú thích //       ⇒ &lt;input value=""/&gt;   // ghi nó&lt;p&gt;kết quả cho &amp;quot;&amp;quot;&lt;/p&gt;                            // đọc nó
+chú thích {/* */}  ⇒ &lt;input value=""/&gt;   &lt;p&gt;kết quả cho &amp;quot;&amp;quot;&lt;/p&gt;                            </div>
+<p>Trong JSX, viết chú thích bằng <code>{/* … */}</code> — đoạn mã phía trên đã sửa như vậy.</p>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-bash">npx tsc --noEmit               <span class="tok-comment">  # khi còn anh-em.tsx: TS2304 Cannot find name 'query'</span>
+npm run build &amp;&amp; npm start     <span class="tok-comment">  # mở /o-dau, /cuc-bo, /nang rồi bấm như trên</span>
+node chu-jsx.mjs               <span class="tok-comment">  # // so với {/* */} trong JSX</span></code></pre>
+<h3>🔗 Học sâu hơn ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-2-4-dat-state" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 2.4 — Đặt state ở đâu</span><span class="lc-sub">Nâng state, không lưu thứ tính được (bug chậm một phím đo thật), chép prop vào state, đặt state thấp để ít render</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-5-1-context" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 5.1 — Prop drilling và Context</span><span class="lc-sub">Khi nâng lên bắt đầu gây đau: Context trong ba bước, đo cơn bão render</span></span></a>
+<a class="link-card lien-ket-cheo" href="/academy/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-7-3-slot8-props-context-slides" target="_blank" rel="noopener"><span class="lc-ico">🏫</span><span class="lc-body"><span class="lc-title">Academy FER202 · 7.3 — Props, State & Context (Slot 8)</span><span class="lc-sub">Bài trên trường: props vs state, container component, Context tránh prop drilling</span></span></a>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Giá trị suy ra</span><span class="v">Tính trong lúc render từ state/props — không bao giờ lưu.</span></div>
+  <div class="kv"><span class="k">State thừa</span><span class="v">Cùng một sự việc lưu hai lần; sớm muộn hai bản sẽ lệch nhau.</span></div>
+  <div class="kv"><span class="k">Một nguồn sự thật</span><span class="v">Mỗi sự việc có đúng một chủ sở hữu.</span></div>
+  <div class="kv"><span class="k">Nâng state lên</span><span class="v">Chuyển state dùng chung lên cha chung gần nhất rồi truyền xuống.</span></div>
+  <div class="kv"><span class="k">Component được kiểm soát</span><span class="v">Hiện giá trị được đưa vào và báo thay đổi lên trên.</span></div>
+  <div class="kv"><span class="k">Prop drilling</span><span class="v">Chuyền một prop qua nhiều tầng không dùng tới nó.</span></div>
+  <div class="kv"><span class="k">Giá trị khởi tạo</span><span class="v">useState(x) chỉ đọc x ở lần render đầu.</span></div>
+</div>
 <h3>🧪 Thực hành (15–20 phút)</h3>
 <div class="callout ok"><ol>
 <li>Tìm hai component cần cùng một giá trị và nâng state đó lên cha chung gần nhất.</li>

@@ -18,6 +18,13 @@ Mẫu một mục:
 
 ---
 
+### 14/11/2026 — Video / máy thuê — Máy Vast đẩy video lên R2 bị 400 "Missing x-amz-content-sha256"
+- **Triệu chứng:** token R2 mới đúng (Mac PUT 200), nhưng trên máy thuê Vast (Ubuntu 22.04) mọi lệnh PUT/HEAD tới R2 trả 400, thêm header tay thì 403.
+- **Nguyên nhân:** `curl --aws-sigv4` bản < 7.86 (Ubuntu 22.04 có 7.81) không gửi và không ký `x-amz-content-sha256` mà R2 bắt buộc. Máy thuê cũ (Ubuntu 24.04, curl 8.5) không dính nên `xuat/len-r2-thue.sh` chưa từng lộ.
+- **Cách sửa:** `xuat/r2-ky.py` (repo video) ký SigV4 bằng thư viện chuẩn Python; `len-r2-thue.sh` tự chọn nó khi curl < 7.86, curl mới giữ đường cũ.
+- **Ảnh hưởng:** chỉ máy thuê Ubuntu 22.04; bắt được bằng tệp thử trước khi chạy thật nên không video nào hỏng.
+- **Bài học:** thử công cụ trên ĐÚNG máy sẽ chạy (bản hệ điều hành, bản curl) bằng một phép thử nhỏ PUT/HEAD/DELETE trước khi giao việc thật.
+
 ### 13/11/2026 — App CT Language — Upload TestFlight báo "Unable to find Apple ID for Bundle ID" (lỗi 19)
 - **Triệu chứng:** `phat-hanh-ctlanguage.sh` dựng + ký + kiểm IPA xanh, tới bước altool thì dừng: không tìm thấy Apple ID cho `com.cuongthai.ctlanguage`, dù app đã có trên App Store Connect (mã 6834209813).
 - **Nguyên nhân:** `ios-app/scripts/phat-hanh-ctlanguage.sh` gọi `altool --upload-app` không kèm `--apple-id`; altool tự tra app theo bundle id và không ra với app mới tạo (tài khoản chưa chấp nhận thoả thuận Apple Developer Program càng không tra được).

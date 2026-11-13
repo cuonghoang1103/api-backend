@@ -317,7 +317,8 @@ const foldEn = (t: string) => t.normalize('NFKC').toLowerCase().replace(/[’‘
 const foldZh = (t: string) => {
   const x = t.normalize('NFKC').toLowerCase().replace(/[\s'’·•,，。.!?！？、:：;；~～〜（）()…-]/g, '');
   if (/[㐀-鿿]/.test(x)) return x;
-  return x.normalize('NFD').replace(/̈/g, 'v').replace(/[̀-ͯ]/g, '').replace(/[0-9]/g, '').replace(/ü/g, 'v');
+  // ü (kể cả ǖǘǚǜ) sau NFD = u + U+0308 ⇒ thay CẢ CẶP thành 'v' (lǜ ⇒ lv, không phải luv).
+  return x.normalize('NFD').replace(/ü/g, 'v').replace(/[̀-ͯ]/g, '').replace(/[0-9]/g, '').replace(/ü/g, 'v');
 };
 const bienTheEn = (w: string) => {
   const ra = new Set<string>();

@@ -209,3 +209,8 @@ Câu hỏi cho user: Pro của CT Language có **dùng chung** với Pro web cuo
     ghim trên tab Hôm nay cho tới khi xong.
   · Việc đầu của "Hôm nay 15 phút" đổi thành luyện chữ nền khi chưa thuộc (người mới chưa có từ nào trong sổ để ôn).
   · Widget **Bảng chữ** (nhỏ · vừa · màn khoá) hiện chữ yếu nhất + tiến độ, chạm mở `ctlanguage://chu-nen`.
+- 13/11 tối (APP): **ôn thẻ cho mọi khoá** (ios-app `6a6f0d2`): `OnTheSH` (dùng chung với app CuongThai) đọc khuôn mới của phiên NỘI DUNG
+  (`ngonNgu`/`giong`/`soKhop`, commit web `e8d908c63`) — giọng đọc theo khoá, chấm gõ en/zh, tên buổi theo `nhom`, tiến độ tách theo
+  khoá. Lối vào: màn chữ nền ⇒ "Ôn thẻ · <khoá>" (ja: dekiru + jp · zh: ch · en: ielts + ielts-tap2). ⚠️ Bộ thẻ jp/ch/ielts CHỈ có
+  sau lượt deploy web kế tiếp — trước đó màn ôn báo "Bộ thẻ chưa có trên máy chủ". Thử cục bộ: preview `sach-hoc-tinh` (cổng 3031,
+  phục vụ `frontend/public`) + `SIMCTL_CHILD_CT_API=http://localhost:3031` + `CT_XEM_MAN=on-the:<khoa>` + `CT_SACHHOC_ONTHE=<chế độ>`.

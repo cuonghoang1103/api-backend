@@ -187,3 +187,6 @@ Câu hỏi cho user: Pro của CT Language có **dùng chung** với Pro web cuo
   Số phiên bản app + widget chung `PhienBanCTL.xcconfig`; **phát hành: `bash scripts/phat-hanh-ctlanguage.sh`** (`--thu` đã xanh —
   archive Release không ký qua mọi phép kiểm). **CHƯA**: deploy backend + nhập từ điển VPS, việc tay trên ASC/Developer portal,
   upload TestFlight (hỏi user), nộp duyệt.
+- 13/11 08:38 (APP): **app CT Language đã tạo trên App Store Connect** (Apple ID `6834209813`, SKU `ctlanguage-ios`, ngôn ngữ chính
+  Vietnamese) và **build 1.0.0 (2) đã upload** (Delivery `da9d81b5-…`). ⚠️ Banner ASC: *Apple Developer Program License Agreement
+  Updated* — chủ tài khoản phải chấp nhận ở developer.apple.com/account trước khi nộp duyệt / cập nhật app.

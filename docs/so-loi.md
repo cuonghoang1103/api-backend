@@ -18,6 +18,13 @@ Mẫu một mục:
 
 ---
 
+### 13/11/2026 — App CT Language — Upload TestFlight báo "Unable to find Apple ID for Bundle ID" (lỗi 19)
+- **Triệu chứng:** `phat-hanh-ctlanguage.sh` dựng + ký + kiểm IPA xanh, tới bước altool thì dừng: không tìm thấy Apple ID cho `com.cuongthai.ctlanguage`, dù app đã có trên App Store Connect (mã 6834209813).
+- **Nguyên nhân:** `ios-app/scripts/phat-hanh-ctlanguage.sh` gọi `altool --upload-app` không kèm `--apple-id`; altool tự tra app theo bundle id và không ra với app mới tạo (tài khoản chưa chấp nhận thoả thuận Apple Developer Program càng không tra được).
+- **Cách sửa:** thêm `--apple-id 6834209813` vào lệnh upload trong script. Lượt sau lỗi đổi thành `FORBIDDEN.REQUIRED_AGREEMENTS_MISSING_OR_EXPIRED` — đó mới là chặn thật, chỉ chủ tài khoản mở developer.apple.com/account chấp nhận được.
+- **Ảnh hưởng:** chỉ bước upload; bản 1.0.0 (4) đã dựng sẵn ở /tmp/ctlanguage-export, chưa lên TestFlight.
+- **Bài học:** script upload luôn ghi thẳng mã app ASC, đừng để altool đoán. Đọc kỹ lỗi thứ HAI — lỗi đầu có khi chỉ che lỗi gốc.
+
 ### 13/11/2026 — Web — Nút "Thử lại" ở trang lỗi bấm mãi vẫn lỗi
 - **Triệu chứng:** trang khoá học / trang bất kỳ gặp lỗi phía máy chủ (API chập chờn), bấm "Thử lại" vẫn hiện trang lỗi dù máy chủ đã ổn.
 - **Nguyên nhân:** `frontend/src/app/error.tsx` và `frontend/src/app/courses/[slug]/error.tsx` chỉ gọi `reset()` — React vẽ lại ở trình duyệt với dữ liệu Server Component CŨ, không xin lại máy chủ.

@@ -25,13 +25,13 @@ export default {
   defaultVideoTrack: 'YT',
   lessons: {
     /* ── Mục 0 — CI thật ra giải quyết vấn đề gì ── */
-    'ga-0-5-bat-dau-tai-day': { yt: 'AknbizcLq4w', credit: "TechWorld with Nana — CI/CD Explained: The DevOps Skill That Makes You 10x More Valuable" },
-    'ga-0-6-bat-dau-khi-khong-co-ci': { yt: '263CooDJZCY', credit: "Daniel Boctor — Dev Loses $440 Million in 28 minutes, Chaos Ensues" },
+    'ga-0-5-bat-dau-tai-day': { yt: 'AknbizcLq4w', credit: "TechWorld with Nana — CI/CD Explained: The DevOps Skill That Makes You 10x More Valuable", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/00-ci-giai-quyet-gi/00-01-bat-dau-tai-day-ce420638.mp4' }, defaultVideoTrack: 'VI'},
+    'ga-0-6-bat-dau-khi-khong-co-ci': { yt: '263CooDJZCY', credit: "Daniel Boctor — Dev Loses $440 Million in 28 minutes, Chaos Ensues", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/00-ci-giai-quyet-gi/00-02-bat-dau-khi-khong-co-ci-312b6f03.mp4' }, defaultVideoTrack: 'VI'},
     'ga-0-0-slides': { yt: '42UP1fxi2SY', credit: "ByteByteGo — CI/CD In 5 Minutes | Is It Worth The Hassle: Crash Course System Design #2" },
-    'ga-0-1-may-toi-chay-duoc': { yt: 'NcU0oEk6z8Y', credit: "Modern Software Engineering — The 10 COMMANDMENTS Of Continuous Integration (CI)" },
-    'ga-0-2-bon-tang': { yt: 'R8_veQiYBjI', credit: "TechWorld with Nana — GitHub Actions Tutorial - Basic Concepts and CI/CD Pipeline with Docker" },
-    'ga-0-3-doc-mot-workflow': { yt: 'ljINpvCvHnQ', credit: "Mickey Gousset — Introduction to GitHub Actions - Part 1 - Your First GitHub Actions Workflow" },
-    'ga-0-4-ban-do': { yt: 'Xwpi0ITkL3U', credit: "DevOps Directive — Complete GitHub Actions Course - From BEGINNER to PRO" },
+    'ga-0-1-may-toi-chay-duoc': { yt: 'NcU0oEk6z8Y', credit: "Modern Software Engineering — The 10 COMMANDMENTS Of Continuous Integration (CI)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/00-ci-giai-quyet-gi/00-04-may-toi-chay-duoc-23e3b9a0.mp4' }, defaultVideoTrack: 'VI'},
+    'ga-0-2-bon-tang': { yt: 'R8_veQiYBjI', credit: "TechWorld with Nana — GitHub Actions Tutorial - Basic Concepts and CI/CD Pipeline with Docker", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/00-ci-giai-quyet-gi/00-05-bon-tang-f2ca835a.mp4' }, defaultVideoTrack: 'VI'},
+    'ga-0-3-doc-mot-workflow': { yt: 'ljINpvCvHnQ', credit: "Mickey Gousset — Introduction to GitHub Actions - Part 1 - Your First GitHub Actions Workflow", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/00-ci-giai-quyet-gi/00-06-doc-mot-workflow-8751cc2b.mp4' }, defaultVideoTrack: 'VI'},
+    'ga-0-4-ban-do': { yt: 'Xwpi0ITkL3U', credit: "DevOps Directive — Complete GitHub Actions Course - From BEGINNER to PRO", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/00-ci-giai-quyet-gi/00-07-ban-do-95cf6fcc.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 1 — Tệp workflow, và những cái bẫy tới từ YAML ── */
     'ga-1-0-slides': { yt: 'PG19_K1300A', credit: "DevTips Daily — Triggers & Events in GitHub Actions (push, pull_request, cron & more)" },

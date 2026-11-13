@@ -17,28 +17,28 @@ export default {
   defaultVideoTrack: 'YT',
   lessons: {
     /* ── Mục 0 — Docker giải quyết gì, và cài đặt ── */
-    'dk-0-5-bat-dau-tai-day': { yt: '3N3n9FzebAA', credit: "dotconferences — dotScale 2013 - Solomon Hykes - Why we built Docker" },
-    'dk-0-6-bat-dau-khi-khong-co': { yt: 'zFa9_K8BS8I', credit: "TechWorld with Nana — Learn Docker in 2026 - Complete Roadmap Beginner to Pro" },
+    'dk-0-5-bat-dau-tai-day': { yt: '3N3n9FzebAA', credit: "dotconferences — dotScale 2013 - Solomon Hykes - Why we built Docker", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/00-intro/00-01-bat-dau-tai-day-e2e7f706.mp4' }, defaultVideoTrack: 'VI'},
+    'dk-0-6-bat-dau-khi-khong-co': { yt: 'zFa9_K8BS8I', credit: "TechWorld with Nana — Learn Docker in 2026 - Complete Roadmap Beginner to Pro", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/00-intro/00-02-bat-dau-khi-khong-co-4af94ed7.mp4' }, defaultVideoTrack: 'VI'},
     'dk-0-0-slides': { yt: 'xfBbLg6-4xY', credit: "Việt Nguyễn AI — Tất tần tật về Docker trong 10 phút" },
-    'dk-0-1-van-de': { yt: 'ZZ10b63xnQc', credit: "KodeKloud — Docker Explained for Absolute Beginners [2026]" },
+    'dk-0-1-van-de': { yt: 'ZZ10b63xnQc', credit: "KodeKloud — Docker Explained for Absolute Beginners [2026]", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/00-intro/00-04-van-de-952a9b4a.mp4' }, defaultVideoTrack: 'VI'},
     'dk-0-2-cai-dat': { yt: 'Ic48-WLhtHg', credit: "Hỏi Dân IT — #2 GETTING STARTED VỚI DOCKER DESKTOP -  CHUẨN BỊ MÔI TRƯỜNG CHO DOCKER |Docker Siêu Dễ Cho Beginner" },
-    'dk-0-3-nam-phut': { yt: 'krHjeCT8g3s', credit: "Hỏi Dân IT — #3 HELLO WORLD VỚI DOCKER - CHẠY ỨNG DỤNG ĐẦU TIÊN BẰNG DOCKER | Docker Siêu Dễ Cho Beginners" },
+    'dk-0-3-nam-phut': { yt: 'krHjeCT8g3s', credit: "Hỏi Dân IT — #3 HELLO WORLD VỚI DOCKER - CHẠY ỨNG DỤNG ĐẦU TIÊN BẰNG DOCKER | Docker Siêu Dễ Cho Beginners", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/00-intro/00-06-nam-phut-c773c026.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 1 — Container & image: mô hình tư duy ── */
     'dk-1-0-slides': { yt: 'sK5i-N34im8', credit: "Docker — Cgroups, namespaces, and beyond: what are containers made from?" },
-    'dk-1-1-container-la-gi': { yt: '8fi7uSYlOdc', credit: "GOTO Conferences — Containers From Scratch • Liz Rice • GOTO 2018" },
-    'dk-1-2-tang-anh': { yt: 'U_9o_KtffNM', credit: "Krish Dinesh — How Docker REALLY Edits Files 😳 | OverlayFS, COW & Whiteout Explained" },
-    'dk-1-3-vong-doi': { yt: 'Orrwfu1lvS8', credit: "CNCF [Cloud Native Computing Foundation] — PID 1, SIG Handling, Hooks & Probes: Managing Container Lifecycle Correctly - Anmol Krishan Sachdeva" },
-    'dk-1-4-tang-ghi-duoc': { yt: 'hXbXSRLXiS8', credit: "WhatsCoding — Understanding OverlayFS | OverlayFS | Docker" },
-    'dk-1-5-ngan-xep-runtime': { yt: 'RyXL1zOa8Bw', credit: "CNCF [Cloud Native Computing Foundation] — OCI, CRI, ??: Making Sense of the Container Runtime Landscape in Kubernetes - Phil Estes, IBM" },
+    'dk-1-1-container-la-gi': { yt: '8fi7uSYlOdc', credit: "GOTO Conferences — Containers From Scratch • Liz Rice • GOTO 2018", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/01-mo-hinh/01-02-container-la-gi-582522a4.mp4' }, defaultVideoTrack: 'VI'},
+    'dk-1-2-tang-anh': { yt: 'U_9o_KtffNM', credit: "Krish Dinesh — How Docker REALLY Edits Files 😳 | OverlayFS, COW & Whiteout Explained", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/01-mo-hinh/01-03-tang-anh-546bf54f.mp4' }, defaultVideoTrack: 'VI'},
+    'dk-1-3-vong-doi': { yt: 'Orrwfu1lvS8', credit: "CNCF [Cloud Native Computing Foundation] — PID 1, SIG Handling, Hooks & Probes: Managing Container Lifecycle Correctly - Anmol Krishan Sachdeva", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/01-mo-hinh/01-04-vong-doi-0a601470.mp4' }, defaultVideoTrack: 'VI'},
+    'dk-1-4-tang-ghi-duoc': { yt: 'hXbXSRLXiS8', credit: "WhatsCoding — Understanding OverlayFS | OverlayFS | Docker", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/01-mo-hinh/01-05-tang-ghi-duoc-e9409b22.mp4' }, defaultVideoTrack: 'VI'},
+    'dk-1-5-ngan-xep-runtime': { yt: 'RyXL1zOa8Bw', credit: "CNCF [Cloud Native Computing Foundation] — OCI, CRI, ??: Making Sense of the Container Runtime Landscape in Kubernetes - Phil Estes, IBM", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/01-mo-hinh/01-06-ngan-xep-runtime-86ec1ed5.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 2 — Chạy container ── */
     'dk-2-0-slides': { yt: 'QTnVztPl2Uw', credit: "Elton Stoneman — Learn Docker in a Month of Lunches: DIAMOL 01" },
-    'dk-2-1-docker-run': { yt: 'pry-Vs4Ew6Y', credit: "DheerajTechInsight — Docker CLI Explained | run, exec, logs & inspect (Daily Docker Commands) | Cloud & Devops" },
-    'dk-2-2-quan-sat': { yt: 'lZvPcj9kMz4', credit: "DevOps Journey — Using Docker Inspection like a Boss" },
-    'dk-2-3-vao-ben-trong': { yt: 'tLK9nNFHWH8', credit: "TechWorld with Nana — Debugging Docker Containers with docker exec and docker logs || Docker Tutorial 5" },
-    'dk-2-4-moi-truong-nguoi-dung': { yt: 'vOoCFxlQIbE', credit: "Bret Fisher — Docker Environment Configs, Variables, and Entrypoints" },
-    'dk-2-5-gioi-han-restart': { yt: 'mgMhQo279Xk', credit: "Leela Web Dev — 45. Docker HEALTHCHECK Instruction Explained with Examples - #docker" },
+    'dk-2-1-docker-run': { yt: 'pry-Vs4Ew6Y', credit: "DheerajTechInsight — Docker CLI Explained | run, exec, logs & inspect (Daily Docker Commands) | Cloud & Devops", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/02-chay-container/02-02-docker-run-4f53f3f3.mp4' }, defaultVideoTrack: 'VI'},
+    'dk-2-2-quan-sat': { yt: 'lZvPcj9kMz4', credit: "DevOps Journey — Using Docker Inspection like a Boss", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/02-chay-container/02-03-quan-sat-ad36fd15.mp4' }, defaultVideoTrack: 'VI'},
+    'dk-2-3-vao-ben-trong': { yt: 'tLK9nNFHWH8', credit: "TechWorld with Nana — Debugging Docker Containers with docker exec and docker logs || Docker Tutorial 5", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/02-chay-container/02-04-vao-ben-trong-11b1897b.mp4' }, defaultVideoTrack: 'VI'},
+    'dk-2-4-moi-truong-nguoi-dung': { yt: 'vOoCFxlQIbE', credit: "Bret Fisher — Docker Environment Configs, Variables, and Entrypoints", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/02-chay-container/02-05-moi-truong-nguoi-dung-4c88dbe0.mp4' }, defaultVideoTrack: 'VI'},
+    'dk-2-5-gioi-han-restart': { yt: 'mgMhQo279Xk', credit: "Leela Web Dev — 45. Docker HEALTHCHECK Instruction Explained with Examples - #docker", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/02-chay-container/02-06-gioi-han-restart-390f318d.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 3 — Image & registry ── */
     'dk-3-0-slides': { yt: 'F1aMrAqUjQk', credit: "Elton Stoneman — DIAMOL 04: Sharing images with Docker Hub and other registries" },

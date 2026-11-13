@@ -25,13 +25,13 @@ export default {
   defaultVideoTrack: 'YT',
   lessons: {
     /* ── Mục 0 — Deploy thật ra là gì ── */
-    'deploy-0-5-bat-dau-tai-day': { yt: 'F-9KWQByeU0', credit: "Dreams of Code — Setting up a production ready VPS is a lot easier than I thought." },
-    'deploy-0-6-bat-dau-khi-khong-co': { yt: '263CooDJZCY', credit: "Daniel Boctor — Dev Loses $440 Million in 28 minutes, Chaos Ensues" },
+    'deploy-0-5-bat-dau-tai-day': { yt: 'F-9KWQByeU0', credit: "Dreams of Code — Setting up a production ready VPS is a lot easier than I thought.", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/deploy-vps/00-mot-lan-deploy-la-gi/00-01-bat-dau-tai-day-890b8c01.mp4' }, defaultVideoTrack: 'VI'},
+    'deploy-0-6-bat-dau-khi-khong-co': { yt: '263CooDJZCY', credit: "Daniel Boctor — Dev Loses $440 Million in 28 minutes, Chaos Ensues", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/deploy-vps/00-mot-lan-deploy-la-gi/00-02-bat-dau-khi-khong-co-8d4cbe69.mp4' }, defaultVideoTrack: 'VI'},
     'deploy-0-0-slides': { yt: '_FErnBwMpj8', credit: "Metics Media — How to Deploy a Web App to a VPS (2026)" },
-    'deploy-0-1-bon-buoc': { yt: 'H5z70EBtEow', credit: 'CodeLucky — Deployment Strategies Explained: Blue-Green vs. Canary vs. Rolling' },        // Deployment Strategies Explained: Blue-Green vs. Canary vs. Rolling
-    'deploy-0-2-may-nhan': { yt: 'IbJMb-qsgaY', credit: '6 Pack Programmer — How to Deploy Node.js App on VPS for Beginners | UltaHost' },        // How to Deploy Node.js App on VPS for Beginners | UltaHost
+    'deploy-0-1-bon-buoc': { yt: 'H5z70EBtEow', credit: 'CodeLucky — Deployment Strategies Explained: Blue-Green vs. Canary vs. Rolling', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/deploy-vps/00-mot-lan-deploy-la-gi/00-04-bon-buoc-c61cbb39.mp4' }, defaultVideoTrack: 'VI'},        // Deployment Strategies Explained: Blue-Green vs. Canary vs. Rolling
+    'deploy-0-2-may-nhan': { yt: 'IbJMb-qsgaY', credit: '6 Pack Programmer — How to Deploy Node.js App on VPS for Beginners | UltaHost', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/deploy-vps/00-mot-lan-deploy-la-gi/00-05-may-nhan-9c13f9c7.mp4' }, defaultVideoTrack: 'VI'},        // How to Deploy Node.js App on VPS for Beginners | UltaHost
     'deploy-0-3-lan-dau-lam-tay': { yt: 'M9gUjO26P94', credit: 'Usama Imdad Sian — Node JS deployment on Ubuntu Server (VPS) using PM2, NGINX & Git' }, // Node JS deployment on Ubuntu Server (VPS) using PM2, NGINX & Git
-    'deploy-0-4-chua-giai-quyet': { yt: 'SPeQJ-fINoU', credit: 'Alexa Fazio — Deploy a Node.js app to Ubuntu Server' }, // Deploy a Node.js app to Ubuntu Server
+    'deploy-0-4-chua-giai-quyet': { yt: 'SPeQJ-fINoU', credit: 'Alexa Fazio — Deploy a Node.js app to Ubuntu Server', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/deploy-vps/00-mot-lan-deploy-la-gi/00-07-chua-giai-quyet-94ba3e87.mp4' }, defaultVideoTrack: 'VI'}, // Deploy a Node.js app to Ubuntu Server
 
     /* ── Chương 1 — Tạo tác: quyết định chính xác cái gì lên máy chủ ── */
     'deploy-1-0-slides': { yt: 'FryJt0Tbt9Q', credit: "Travis Media — Every Developer NEEDS To Know 12-Factor App Principles" },

@@ -25,14 +25,14 @@ export default {
   defaultVideoTrack: 'YT',
   lessons: {
     /* ── Mục 0 — Redis giải quyết gì, và cài đặt ── */
-    'rd-0-1-van-de': { yt: 'OqCK95AS-YE', credit: 'TechWorld with Nana — Redis Crash Course - the What, Why and How to use Redis as your primary database' },  // Redis Crash Course - the What, Why and How to use Redis as your primary database
-    'rd-0-2-cai-dat': { yt: 'qucL1F2YEKE', credit: 'CodeWithRajRanjan — Install Redis using docker and docker compose | Redis Insight docker installation' },   // Install Redis using docker and docker compose | Redis Insight docker installation
-    'rd-0-3-nam-phut': { yt: 'Hbt56gFj998', credit: 'Traversy Media — Redis Crash Course Tutorial' },// Redis Crash Course Tutorial
+    'rd-0-1-van-de': { yt: 'OqCK95AS-YE', credit: 'TechWorld with Nana — Redis Crash Course - the What, Why and How to use Redis as your primary database', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/redis/00-redis-giai-quyet-gi/00-03-redis-giai-quyet-gi-366b58df.mp4' }, defaultVideoTrack: 'VI'},  // Redis Crash Course - the What, Why and How to use Redis as your primary database
+    'rd-0-2-cai-dat': { yt: 'qucL1F2YEKE', credit: 'CodeWithRajRanjan — Install Redis using docker and docker compose | Redis Insight docker installation', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/redis/00-redis-giai-quyet-gi/00-04-cho-redis-chay-len-8d4548a8.mp4' }, defaultVideoTrack: 'VI'},   // Install Redis using docker and docker compose | Redis Insight docker installation
+    'rd-0-3-nam-phut': { yt: 'Hbt56gFj998', credit: 'Traversy Media — Redis Crash Course Tutorial', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/redis/00-redis-giai-quyet-gi/00-05-nam-phut-dau-tien-1d1a6905.mp4' }, defaultVideoTrack: 'VI'},// Redis Crash Course Tutorial
 
     /* ── Chương 1 — Mô hình thực thi ── */
-    'rd-1-1-mot-luong': { yt: 'mNazo-NqHow', credit: 'Lazy Programmer — How Redis Handles 100,000+ Requests with Just ONE Thread' },    // How Redis Handles 100,000+ Requests with Just ONE Thread
-    'rd-1-2-vong-doi-lenh': { yt: 'XJVl6BsV0_0', credit: 'Mayank Joshi — Design Redis System Design Architecture | RESP, Event Loop and Data Storage| By Microsoft SDE' },// Design Redis System Design Architecture | RESP, Event Loop and Data Storage | By Microsoft SDE
-    'rd-1-3-resp': { yt: 'wnHZHGc8tW8', credit: 'Arpit Bhayani — Implementing Redis\' Wire Protocol - RESP | Redis Internals' },         // Implementing Redis' Wire Protocol - RESP | Redis Internals
+    'rd-1-1-mot-luong': { yt: 'mNazo-NqHow', credit: 'Lazy Programmer — How Redis Handles 100,000+ Requests with Just ONE Thread', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/redis/01-mo-hinh-thuc-thi/01-01-mot-luong-98ba377d.mp4' }, defaultVideoTrack: 'VI'},    // How Redis Handles 100,000+ Requests with Just ONE Thread
+    'rd-1-2-vong-doi-lenh': { yt: 'XJVl6BsV0_0', credit: 'Mayank Joshi — Design Redis System Design Architecture | RESP, Event Loop and Data Storage| By Microsoft SDE', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/redis/01-mo-hinh-thuc-thi/01-02-vong-doi-lenh-869c56e2.mp4' }, defaultVideoTrack: 'VI'},// Design Redis System Design Architecture | RESP, Event Loop and Data Storage | By Microsoft SDE
+    'rd-1-3-resp': { yt: 'wnHZHGc8tW8', credit: 'Arpit Bhayani — Implementing Redis\' Wire Protocol - RESP | Redis Internals', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/redis/01-mo-hinh-thuc-thi/01-03-resp-c07d2df8.mp4' }, defaultVideoTrack: 'VI'},         // Implementing Redis' Wire Protocol - RESP | Redis Internals
     'rd-1-4-pipeline': { yt: 'U2IFZ_hw91o', credit: 'Arpit Bhayani — Event Loops Internals And How Redis Handles Multiple Connects on a Single Thread | Redis Internals' },     // Event Loops Internals And How Redis Handles Multiple Connects on a Single Thread | Redis Internals
     'rd-1-5-client-pool': { yt: 'dQV0xzOeGzU', credit: 'Better Stack — Modern Redis Crash Course: Backend with Express, TypeScript and Zod' },  // Modern Redis Crash Course: Backend with Express, TypeScript and Zod
 
@@ -40,8 +40,8 @@ export default {
     'rd-2-1-dat-ten-khoa': { yt: 'Q_ie-hl3GzM', credit: 'Dilruba Köse — Redis Crash Course 🚀 🚀' }, // Redis Crash Course
     'rd-2-2-het-han': { yt: 'Z_NpHS1sw-U', credit: 'Eric Tech — Master Redis EXPIRE and TTL Secrets' },      // Master Redis EXPIRE and TTL Secrets
     'rd-2-3-scan-unlink': { yt: 'JX9Zxk3Evy8', credit: 'LevelUp With Suhail — Access and Delete Keys in Redis | CLI + Java (Ep 04)' },  // 04 Redis Keys Explained: Access & Delete Using CLI and Java (Best Practices)
-    'rd-2-4-thong-bao': { yt: 'enc0b3jpBRA', credit: 'Amazon Web Services — How do I implement Redis keyspace notifications in ElastiCache?' },    // How do I implement Redis keyspace notifications in ElastiCache?
-    'rd-2-5-db-lenh-khoa': { yt: 'I0esXDazvIM', credit: 'Very Academy — Redis | Managing Expiration with EXPIRE, TTL, and Lifetimes' }, // Redis | Managing Expiration with EXPIRE, TTL, and Lifetimes
+    'rd-2-4-thong-bao': { yt: 'enc0b3jpBRA', credit: 'Amazon Web Services — How do I implement Redis keyspace notifications in ElastiCache?', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/redis/02-khoa-ttl-het-han/02-04-thong-bao-4814b0a0.mp4' }, defaultVideoTrack: 'VI'},    // How do I implement Redis keyspace notifications in ElastiCache?
+    'rd-2-5-db-lenh-khoa': { yt: 'I0esXDazvIM', credit: 'Very Academy — Redis | Managing Expiration with EXPIRE, TTL, and Lifetimes', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/redis/02-khoa-ttl-het-han/02-05-db-lenh-khoa-c6c740ed.mp4' }, defaultVideoTrack: 'VI'}, // Redis | Managing Expiration with EXPIRE, TTL, and Lifetimes
 
     /* ── Chương 3 — Chuỗi, bộ đếm, bitmap, HyperLogLog ── */
     'rd-3-1-chuoi': { yt: 'Z1ep4LaDbDc', credit: 'Hustle With Aditya — Redis Tutorial for Beginners - 5 | Redis Data Types' },            // Redis Tutorial for Beginners - 5 | Redis Data Types
@@ -112,5 +112,7 @@ export default {
     'rd-12-3-bo-cong-cu': { yt: 'Ah6EgdtPcLk', credit: 'zz TALK — Redis latency load testing with JMeter' },    // Redis latency load testing with JMeter
     'rd-12-4-giam-sat': { yt: 'DEPYkdnQz5M', credit: 'Jskool — Monitor Redis easily with Grafana  #redis #grafana' },      // Monitor Redis easily with Grafana
     'rd-12-5-ket-khoa': { yt: 'IJkYipYNEtI', credit: 'Harkirat Singh — Complete Redis, Websockets, Pub Subs and Message queues Bootcamp' },      // Complete Redis, Websockets, Pub Subs and Message queues Bootcamp
+    'rd-0-0-start-here-1': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/redis/00-redis-giai-quyet-gi/00-01-bat-dau-tai-day-1-b5ca6a70.mp4' }, defaultVideoTrack: 'VI' },
+    'rd-0-0-start-here-2': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/redis/00-redis-giai-quyet-gi/00-02-bat-dau-tai-day-2-c9a4e21a.mp4' }, defaultVideoTrack: 'VI' },
   },
 };

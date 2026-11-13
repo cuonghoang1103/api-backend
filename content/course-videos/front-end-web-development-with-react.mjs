@@ -136,8 +136,8 @@ export default {
     'fer202-fe7-chua-tron-de': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/front-end-web-development-with-react/21-on-thi-fe/17-fe7-sp2025-tron-cc1b2d1f.mp4' }, defaultVideoTrack: 'VI'},
     'fer202-pe17-su26-chua-tron-de': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/front-end-web-development-with-react/20-on-thi-pe/20-19-pe17-doc-de-tron-6dd08e39.mp4' }, defaultVideoTrack: 'VI'},
     'fer202-pe18-sp26-chua-tron-de': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/front-end-web-development-with-react/20-on-thi-pe/20-25-pe18-doc-de-tron-04e32eeb.mp4' }, defaultVideoTrack: 'VI'},
-    'fer202-final-exam-pe': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/front-end-web-development-with-react/20-on-thi-pe/20-00-huong-dan-thi-pe-e01ccce8.mp4' }, defaultVideoTrack: 'VI' },
-    'fer202-final-exam-fe': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/front-end-web-development-with-react/21-on-thi-fe/00-huong-dan-thi-fe-b39a6805.mp4' }, defaultVideoTrack: 'VI' },
-    'fer202-fe11-su26-chua-tron-de': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/front-end-web-development-with-react/21-on-thi-fe/25-fe11-su26-tron-adfc8c90.mp4' }, defaultVideoTrack: 'VI' },
+    'fer202-final-exam-pe': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/front-end-web-development-with-react/20-on-thi-pe/20-00-huong-dan-thi-pe-e01ccce8.mp4' }, defaultVideoTrack: 'VI'},
+    'fer202-final-exam-fe': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/front-end-web-development-with-react/21-on-thi-fe/00-huong-dan-thi-fe-b39a6805.mp4' }, defaultVideoTrack: 'VI'},
+    'fer202-fe11-su26-chua-tron-de': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/front-end-web-development-with-react/21-on-thi-fe/25-fe11-su26-tron-adfc8c90.mp4' }, defaultVideoTrack: 'VI'},
   },
 };

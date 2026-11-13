@@ -748,7 +748,7 @@ app.use('/api/v1/mobile', mobileRoutes);
 // Mount on the shared HTTP server so the existing trust-proxy /
 // cookie / CORS configuration applies. Idempotent — safe to call
 // from a hot-reload wrapper.
-initSocketServer(server);
+const sio = initSocketServer(server);
 
 // ─── 9c. Notes CRDT collaboration gateway ─────────────
 // Dedicated Hocuspocus/Yjs protocol on /notes-collaboration. It shares the
@@ -815,35 +815,47 @@ app.use(errorHandler);
 // ─── 13. Graceful Shutdown ─────────────────────────────────
 // Xử lý khi container restart hoặc SIGTERM/SIGINT
 function setupGracefulShutdown(): void {
+ let dangTat = false;
  const shutdown = async (signal: string): Promise<void> => {
+ if (dangTat) return;
+ dangTat = true;
  logger.info('shutdown signal received', { signal });
 
- // Ngừng nhận request mới
- server.close(async () => {
- logger.info('HTTP server closed');
-
+ // Dọn dẹp + thoát — dùng chung cho đường êm và đường ép (13/11/2026: trước đây đường ép
+ // thoát thẳng, không đóng Prisma, không đẩy Sentry).
+ let daDon = false;
+ const donVaThoat = async (code: number): Promise<void> => {
+ if (daDon) return;
+ daDon = true;
  try {
- // Đợi request hiện tại hoàn thành (tối đa 10s)
  await prisma.$disconnect();
  logger.info('Database connections closed');
  } catch (err) {
  logger.error('Error during shutdown', { error: err instanceof Error ? err.message : String(err) });
  }
-
- // Flush pending Sentry events before exit. We give it 2s
- // which is enough for in-flight events to ship without
- // delaying shutdown noticeably.
+ // Flush pending Sentry events before exit (2s).
  await flushSentry(2000);
+ logger.info(code === 0 ? 'Graceful shutdown complete' : 'Forced shutdown complete');
+ process.exit(code);
+ };
 
- logger.info('Graceful shutdown complete');
- process.exit(0);
+ // Ngừng nhận request mới
+ server.close(() => {
+ logger.info('HTTP server closed');
+ void donVaThoat(0);
  });
 
- // Force close sau 30s
+ // Đóng mọi kết nối Socket.IO (13/11/2026). WebSocket đã nâng cấp KHÔNG tự kết thúc nên server.close()
+ // chờ mãi ⇒ mỗi lần deploy container bị SIGKILL ở giây 10 (đo ở khoá Socket.IO 5.4). engine.close()
+ // cắt tầng vận chuyển ⇒ client thấy "transport close" và TỰ NỐI LẠI vào container mới (khác
+ // disconnectSockets(true) ⇒ "io server disconnect" ⇒ client KHÔNG tự nối lại).
+ try { sio?.engine?.close(); } catch { /* bỏ qua */ }
+
+ // Còn kết nối dài khác (cộng tác ghi chú…) ⇒ ép sau 8s, vẫn dọn dẹp — trước hạn SIGKILL 10s của Docker.
  setTimeout(() => {
  logger.error('Could not close connections in time, forcefully shutting down');
- process.exit(1);
- }, 30_000);
+ void donVaThoat(1);
+ }, 8_000).unref();
  };
 
   process.on('SIGTERM', () => shutdown('SIGTERM'));

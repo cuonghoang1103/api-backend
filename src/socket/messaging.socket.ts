@@ -260,20 +260,54 @@ export async function phatTrangThaiKhiNgat(
  */
 /** Attach the Redis pub-sub adapter so realtime events fan out across workers.
  *  Best-effort: on any Redis failure we keep the default in-memory adapter. */
-async function attachRedisAdapter(server: IOServer): Promise<void> {
+export async function attachRedisAdapter(
+  server: Pick<IOServer, 'adapter'>,
+  hetGioMs = 5_000,
+  layRedis: () => Promise<{ duplicate(): RedisDup }> = getRedis as unknown as () => Promise<{ duplicate(): RedisDup }>,
+): Promise<boolean> {
+  // ⚠️ 13/11/2026: getRedis() THỬ LẠI MÃI khi Redis tắt (reconnectStrategy) ⇒ trước đây khối catch không bao giờ
+  // chạy, không có WARN, và lúc Redis lên thì adapter MỚI (trống) thay vào ⇒ mọi socket đã nối mất sạch room
+  // (phát user:7 ⇒ 0 người nhận dù socket.rooms vẫn báo user:7). Đo ở khoá Socket.IO 5.3.
+  // Nay: hết giờ ⇒ ở lại adapter trong RAM CẢ ĐỜI tiến trình (một instance vẫn đúng), không bao giờ gắn muộn.
+  let hetGio = false;
+  let henGio: NodeJS.Timeout | undefined;
   try {
-    const base = await getRedis();
-    const pubClient = base.duplicate();
-    const subClient = base.duplicate();
-    await Promise.all([pubClient.connect(), subClient.connect()]);
-    server.adapter(createAdapter(pubClient, subClient));
+    const gan = (async () => {
+      const base = await layRedis();
+      const pubClient = base.duplicate();
+      const subClient = base.duplicate();
+      // Không có listener 'error' ⇒ mỗi sự cố Redis in hàng chục dòng "missing 'error' handler".
+      pubClient.on('error', (e: Error) => logger.warn('redis adapter pub error', { error: e.message }));
+      subClient.on('error', (e: Error) => logger.warn('redis adapter sub error', { error: e.message }));
+      await Promise.all([pubClient.connect(), subClient.connect()]);
+      if (hetGio) {
+        await Promise.allSettled([pubClient.quit(), subClient.quit()]);
+        return null;
+      }
+      return { pubClient, subClient };
+    })();
+    gan.catch(() => undefined); // thua cuộc đua mà sau đó mới lỗi ⇒ không thành unhandledRejection
+    const ketQua = await Promise.race([
+      gan,
+      new Promise<null>((_, reject) => {
+        henGio = setTimeout(() => { hetGio = true; reject(new Error(`Redis chưa sẵn sàng sau ${hetGioMs} ms`)); }, hetGioMs);
+        henGio.unref?.();
+      }),
+    ]);
+    if (!ketQua) return false;
+    server.adapter(createAdapter(ketQua.pubClient as never, ketQua.subClient as never));
     logger.info('Socket.IO Redis adapter attached (cross-worker broadcasts enabled)');
+    return true;
   } catch (err) {
     logger.warn('Socket.IO Redis adapter NOT attached — in-memory only (single instance)', {
       error: err instanceof Error ? err.message : String(err),
     });
+    return false;
+  } finally {
+    if (henGio) clearTimeout(henGio);
   }
 }
+type RedisDup = { on(ev: 'error', cb: (e: Error) => void): unknown; connect(): Promise<unknown>; quit(): Promise<unknown> };
 
 /**
  * Lấy token từ một lượt bắt tay Socket.IO.

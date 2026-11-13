@@ -1,3 +1,8 @@
+import G09_1 from './giang/ngx-09-1.mjs';
+import G09_2 from './giang/ngx-09-2.mjs';
+import G09_3 from './giang/ngx-09-3.mjs';
+import G09_4 from './giang/ngx-09-4.mjs';
+import G09_5 from './giang/ngx-09-5.mjs';
 const REF = '?ref=%2Fcourses%2Fnginx%2Flearn&reflabel=Nginx';
 
 export default {
@@ -12,6 +17,7 @@ export default {
       type: 'LESSON',
       description: 'Ba máy chủ thật, ba mươi request, và một bảng đếm cho mỗi thuật toán. Bốn dòng đo, và một trong số đó gửi cả ba mươi request vào ĐÚNG MỘT máy — điều đó ĐÚNG, và biết vì sao nó đúng là cả bài học.',
       content: `
+${G09_1}
 <div class="ml-en">
 <span class="eyebrow">Chapter 9 · Lesson 9.1</span>
 <h2>The upstream block and four ways to choose</h2>
@@ -55,7 +61,7 @@ server {
 }</code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">down keeps the line and takes the machine out</span><span class="v">Better than deleting the <code>server</code> line: the config still documents that the machine exists, and putting it back is a one-word diff. This is how you drain a node before maintenance.</span></div>
-  <div class="kv"><span class="k">A named upstream re-resolves DNS on reload, not per request</span><span class="v">Same rule as Lesson 3.1. If your backends are containers with changing addresses, a bare hostname is resolved once at startup and then stale forever. The fix is a <code>resolver</code> plus a variable in <code>proxy_pass</code>, which forces re-resolution.</span></div>
+  <div class="kv"><span class="k">A named upstream re-resolves DNS on reload, not per request</span><span class="v">Same rule as Lesson 3.1. If your backends are containers with changing addresses, a hostname — in an <code>upstream</code> block or bare in <code>proxy_pass</code> — is resolved when the config loads and stays stale until the next reload (measured in Lesson 9.5). The fix is a <code>resolver</code> plus a variable in <code>proxy_pass</code>, which forces re-resolution.</span></div>
   <div class="kv"><span class="k">One upstream can be used by many locations</span><span class="v">And each location can have its own timeouts, buffering and caching against it. The upstream is the pool; the location is the policy.</span></div>
   <div class="kv"><span class="k">The block belongs at http level</span><span class="v">Not inside <code>server</code>. That is what lets several server blocks share one pool — and one pool means one shared view of which backends are currently failing, which matters in Lesson 9.3.</span></div>
 </div>
@@ -74,6 +80,83 @@ server {
 <p><strong>How to check the distribution on your own system.</strong> Have each backend put its name in a response header — <code>add_header X-May-Chu "may-1";</code> or the equivalent in your app — then send a few hundred requests and count. That one header turns every question in this chapter into an experiment, and it is worth having permanently: when something behaves oddly for some users and not others, the first useful fact is which backend they reached.</p>
 </div>
 
+<h3>🔬 Run it yourself</h3>
+<p>Three tiny Node backends that return their own name, the four upstream blocks plus <code>random two</code>, <code>down</code> and <code>backup</code>, and a counting script — on nginx/1.24.0. Then one backend made slow (one second per reply):</p>
+<pre><code class="language-bash">// may.js
+// may.js &lt;tên&gt; &lt;cổng&gt; [trễ ms] — backend thí nghiệm: trả TÊN máy (thân + header X-May-Chu), đếm request và kết nối TCP (GET …/dem)
+const [ten, cong, tre = '0'] = process.argv.slice(2);
+let req = 0, conn = 0;
+const s = require('http').createServer((q, r) =&gt; {
+  req++;
+  if (q.url.endsWith('/dem')) return r.end(&#96;req=\${req}  conn=\${conn}\\n&#96;);
+  setTimeout(() =&gt; { r.setHeader('X-May-Chu', ten); r.end(ten + '\\n'); }, +tre);
+});
+s.on('connection', () =&gt; conn++);
+s.keepAliveTimeout = 65000;
+s.listen(+cong, '127.0.0.1');</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># dem.sh</span>
+<span class="tok-comment"># dem.sh &lt;url&gt; &lt;n&gt; [song song] — gửi n request (mặc định LẦN LƯỢT), đếm xem máy nào trả lời</span>
+url=$1; n=$2; p=\${3:-1}
+seq $n | xargs -P $p -I{} curl -s "$url" | sort | uniq -c | awk '{printf "%s=%s  ", $2, $1} END {print ""}'</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  upstream deu      {              server 127.0.0.1:9501; server 127.0.0.1:9502; server 127.0.0.1:9503; }
+  upstream trongso  {              server 127.0.0.1:9501 weight=3; server 127.0.0.1:9502 weight=1; }
+  upstream itketnoi { least_conn;  server 127.0.0.1:9501; server 127.0.0.1:9502; server 127.0.0.1:9503; }
+  upstream theoip   { ip_hash;     server 127.0.0.1:9501; server 127.0.0.1:9502; server 127.0.0.1:9503; }
+  upstream ngaunhien { random two least_conn; server 127.0.0.1:9501; server 127.0.0.1:9502; server 127.0.0.1:9503; }
+  upstream rut {
+    server 127.0.0.1:9501;
+    server 127.0.0.1:9502 down;    <span class="tok-comment">  # rút khỏi vòng, KHÔNG xoá dòng</span>
+    server 127.0.0.1:9503 backup;  <span class="tok-comment">  # chỉ dùng khi MỌI máy chính đã chết</span>
+  }
+  server {
+    listen 8080;
+    location /deu/       { proxy_pass http://deu; }
+    location /trongso/   { proxy_pass http://trongso; }
+    location /itketnoi/  { proxy_pass http://itketnoi; }
+    location /theoip/    { proxy_pass http://theoip; }
+    location /ngaunhien/ { proxy_pass http://ngaunhien; }
+    location /rut/       { proxy_pass http://rut; }
+  }
+}</code></pre>
+<div class="out">$ bash dem.sh http://127.0.0.1:8080/deu/ 30
+may-1=10  may-2=10  may-3=10  
+$ bash dem.sh http://127.0.0.1:8080/trongso/ 30
+may-1=23  may-2=7  
+$ bash dem.sh http://127.0.0.1:8080/itketnoi/ 30
+may-1=10  may-2=10  may-3=10  
+$ bash dem.sh http://127.0.0.1:8080/theoip/ 30
+may-3=30  
+$ bash dem.sh http://127.0.0.1:8080/ngaunhien/ 30
+may-1=7  may-2=14  may-3=9  
+$ bash dem.sh http://127.0.0.1:8080/rut/ 30
+may-1=30  
+$ curl -s -D - -o /dev/null http://127.0.0.1:8080/deu/ | grep -i x-may-chu
+X-May-Chu: may-1
+may-1 nay CHAM: moi phan hoi mat 1 giay (may-2, may-3 van nhanh).
+$ printf 'round robin : '; bash ban.sh /deu/
+round robin : may-1=10  may-2=10  may-3=10  
+$ printf 'least_conn  : '; bash ban.sh /itketnoi/
+least_conn  : may-1=2  may-2=14  may-3=14  </div>
+<p>The four counts match the table above exactly. <code>random two least_conn</code> came out roughly even and different on every run. With may-2 <code>down</code> and may-3 <code>backup</code>, all thirty went to may-1. NEW: with may-1 taking one second per reply and thirty requests fired 50 ms apart, round robin still handed it ten (ten users waited a second) while <code>least_conn</code> gave it two — the trap above, measured.</p>
+<h3>🔗 Related lessons in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-10-1-l4-l7" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking for Developers · 10.1 — L4 vs L7 load balancing</span><span class="lc-sub">Where an nginx upstream sits among load balancers</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-10-2-thuat-toan" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking for Developers · 10.2 — Algorithms and health checks</span><span class="lc-sub">The same algorithms, from the networking side</span></span></a>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>upstream</code></span><span class="v">A named pool of backend servers, declared at the http level and referenced by name in <code>proxy_pass</code>.</span></div>
+  <div class="kv"><span class="k">round robin</span><span class="v">The default method — requests handed out evenly, in turn, with no state.</span></div>
+  <div class="kv"><span class="k"><code>weight=</code></span><span class="v">Give a stronger machine a larger share of requests; it changes the ratio, not the mechanism.</span></div>
+  <div class="kv"><span class="k"><code>least_conn</code></span><span class="v">Send the next request to the server with the fewest connections in flight.</span></div>
+  <div class="kv"><span class="k"><code>ip_hash</code></span><span class="v">Map a client address to a fixed backend — sticky routing keyed on IP.</span></div>
+  <div class="kv"><span class="k"><code>down</code> / <code>backup</code></span><span class="v">Pull a server out of rotation without deleting it, or use it only when every primary is dead.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li>Several backends live in an <code>upstream</code> block referenced by name in <code>proxy_pass</code>, declared at the http level so pools can be shared.</li><li>Round robin is the even default; <code>weight=</code> only changes the ratio.</li><li><code>least_conn</code> balances work rather than request count, and degrades to round robin under uniform load.</li><li><code>ip_hash</code> pins one client to one backend — all thirty requests from one IP went to one machine, by design.</li><li><code>down</code> drains a node without deleting its line; a <code>backup</code> is used only when every primary is gone.</li></ul>
 <h3>Learning sources for this lesson</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_upstream_module.html" target="_blank" rel="noopener"><span class="lc-ico">🏭</span><span class="lc-body"><span class="lc-title">nginx — the upstream module</span><span class="lc-sub">nginx.org · Every parameter of server, and all the balancing methods</span></span></a>
 <a class="link-card" href="https://nginx.org/en/docs/http/load_balancing.html" target="_blank" rel="noopener"><span class="lc-ico">⚖️</span><span class="lc-body"><span class="lc-title">nginx — HTTP load balancing</span><span class="lc-sub">nginx.org · The introductory guide, with the same four methods</span></span></a>
@@ -125,7 +208,7 @@ server {
 }</code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">down giữ lại cái dòng và rút cái máy ra</span><span class="v">Tốt hơn là xoá hẳn dòng <code>server</code>: cấu hình vẫn ghi lại rằng cái máy đó TỒN TẠI, và đưa nó trở lại là một diff MỘT chữ. Đây là cách bạn rút một node ra trước khi bảo trì.</span></div>
-  <div class="kv"><span class="k">Một upstream có tên thì phân giải lại DNS lúc NẠP LẠI, không phải mỗi request</span><span class="v">Vẫn cái luật ở Bài 3.1. Nếu backend của bạn là container mà địa chỉ hay đổi thì một tên miền trần được phân giải MỘT lần lúc khởi động rồi cũ mãi mãi. Cách chữa là một <code>resolver</code> cộng một BIẾN trong <code>proxy_pass</code>, thứ ép nó phân giải lại.</span></div>
+  <div class="kv"><span class="k">Một upstream có tên thì phân giải lại DNS lúc NẠP LẠI, không phải mỗi request</span><span class="v">Vẫn cái luật ở Bài 3.1. Nếu backend của bạn là container mà địa chỉ hay đổi thì một tên miền — trong khối <code>upstream</code> hay viết trần trong <code>proxy_pass</code> — được phân giải lúc NẠP cấu hình rồi cũ luôn cho tới lần nạp lại kế tiếp (đo thật ở Bài 9.5). Cách chữa là một <code>resolver</code> cộng một BIẾN trong <code>proxy_pass</code>, thứ ép nó phân giải lại.</span></div>
   <div class="kv"><span class="k">Một upstream dùng được cho NHIỀU location</span><span class="v">Và mỗi location có timeout, cách đệm và cách cache riêng khi làm việc với nó. Cái upstream là BỂ; cái location là CHÍNH SÁCH.</span></div>
   <div class="kv"><span class="k">Khối này thuộc về tầng http</span><span class="v">Không nằm trong <code>server</code>. Chính điều đó cho phép nhiều khối server dùng chung MỘT bể — và một bể nghĩa là MỘT cái nhìn chung về việc backend nào đang hỏng, điều rất có nghĩa lý ở Bài 9.3.</span></div>
 </div>
@@ -144,6 +227,83 @@ server {
 <p><strong>Kiểm phân bố trên hệ thống của chính bạn thế nào.</strong> Hãy cho mỗi backend đặt TÊN của nó vào một header phản hồi — <code>add_header X-May-Chu "may-1";</code> hoặc thứ tương đương trong ứng dụng của bạn — rồi gửi vài trăm request và ĐẾM. Đúng một cái header đó biến MỌI câu hỏi trong chương này thành một thí nghiệm, và nó đáng giữ VĨNH VIỄN: khi có thứ gì cư xử lạ với một số người mà không lạ với người khác thì sự thật hữu ích đầu tiên là họ đã tới máy nào.</p>
 </div>
 
+<h3>🔬 Tự chạy lại</h3>
+<p>Ba backend Node nhỏ xíu trả về TÊN của chính nó, bốn khối upstream cộng <code>random two</code>, <code>down</code> và <code>backup</code>, và một script đếm — trên nginx/1.24.0. Rồi làm một backend CHẬM (một giây mỗi phản hồi):</p>
+<pre><code class="language-bash">// may.js
+// may.js &lt;tên&gt; &lt;cổng&gt; [trễ ms] — backend thí nghiệm: trả TÊN máy (thân + header X-May-Chu), đếm request và kết nối TCP (GET …/dem)
+const [ten, cong, tre = '0'] = process.argv.slice(2);
+let req = 0, conn = 0;
+const s = require('http').createServer((q, r) =&gt; {
+  req++;
+  if (q.url.endsWith('/dem')) return r.end(&#96;req=\${req}  conn=\${conn}\\n&#96;);
+  setTimeout(() =&gt; { r.setHeader('X-May-Chu', ten); r.end(ten + '\\n'); }, +tre);
+});
+s.on('connection', () =&gt; conn++);
+s.keepAliveTimeout = 65000;
+s.listen(+cong, '127.0.0.1');</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># dem.sh</span>
+<span class="tok-comment"># dem.sh &lt;url&gt; &lt;n&gt; [song song] — gửi n request (mặc định LẦN LƯỢT), đếm xem máy nào trả lời</span>
+url=$1; n=$2; p=\${3:-1}
+seq $n | xargs -P $p -I{} curl -s "$url" | sort | uniq -c | awk '{printf "%s=%s  ", $2, $1} END {print ""}'</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  upstream deu      {              server 127.0.0.1:9501; server 127.0.0.1:9502; server 127.0.0.1:9503; }
+  upstream trongso  {              server 127.0.0.1:9501 weight=3; server 127.0.0.1:9502 weight=1; }
+  upstream itketnoi { least_conn;  server 127.0.0.1:9501; server 127.0.0.1:9502; server 127.0.0.1:9503; }
+  upstream theoip   { ip_hash;     server 127.0.0.1:9501; server 127.0.0.1:9502; server 127.0.0.1:9503; }
+  upstream ngaunhien { random two least_conn; server 127.0.0.1:9501; server 127.0.0.1:9502; server 127.0.0.1:9503; }
+  upstream rut {
+    server 127.0.0.1:9501;
+    server 127.0.0.1:9502 down;    <span class="tok-comment">  # rút khỏi vòng, KHÔNG xoá dòng</span>
+    server 127.0.0.1:9503 backup;  <span class="tok-comment">  # chỉ dùng khi MỌI máy chính đã chết</span>
+  }
+  server {
+    listen 8080;
+    location /deu/       { proxy_pass http://deu; }
+    location /trongso/   { proxy_pass http://trongso; }
+    location /itketnoi/  { proxy_pass http://itketnoi; }
+    location /theoip/    { proxy_pass http://theoip; }
+    location /ngaunhien/ { proxy_pass http://ngaunhien; }
+    location /rut/       { proxy_pass http://rut; }
+  }
+}</code></pre>
+<div class="out">$ bash dem.sh http://127.0.0.1:8080/deu/ 30
+may-1=10  may-2=10  may-3=10  
+$ bash dem.sh http://127.0.0.1:8080/trongso/ 30
+may-1=23  may-2=7  
+$ bash dem.sh http://127.0.0.1:8080/itketnoi/ 30
+may-1=10  may-2=10  may-3=10  
+$ bash dem.sh http://127.0.0.1:8080/theoip/ 30
+may-3=30  
+$ bash dem.sh http://127.0.0.1:8080/ngaunhien/ 30
+may-1=7  may-2=14  may-3=9  
+$ bash dem.sh http://127.0.0.1:8080/rut/ 30
+may-1=30  
+$ curl -s -D - -o /dev/null http://127.0.0.1:8080/deu/ | grep -i x-may-chu
+X-May-Chu: may-1
+may-1 nay CHAM: moi phan hoi mat 1 giay (may-2, may-3 van nhanh).
+$ printf 'round robin : '; bash ban.sh /deu/
+round robin : may-1=10  may-2=10  may-3=10  
+$ printf 'least_conn  : '; bash ban.sh /itketnoi/
+least_conn  : may-1=2  may-2=14  may-3=14  </div>
+<p>Bốn con số khớp đúng bảng ở trên. <code>random two least_conn</code> ra gần đều và mỗi lượt một khác. Với may-2 <code>down</code> và may-3 <code>backup</code>, cả ba mươi vào may-1. MỚI: khi may-1 mất một giây mỗi phản hồi và ba mươi request bắn cách nhau 50 ms, round robin vẫn đưa nó mười cái (mười người chờ một giây) còn <code>least_conn</code> chỉ đưa hai — cái bẫy ở trên, đo thật.</p>
+<h3>🔗 Bài liên quan ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-10-1-l4-l7" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking for Developers · 10.1 — Cân bằng tải L4 và L7</span><span class="lc-sub">Upstream của nginx nằm ở đâu giữa các bộ cân bằng tải</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-10-2-thuat-toan" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking for Developers · 10.2 — Thuật toán chia và kiểm tra sức khoẻ</span><span class="lc-sub">Cùng các thuật toán đó, nhìn từ phía mạng</span></span></a>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>upstream</code></span><span class="v">Một bể máy chủ backend có tên, khai ở tầng http và gọi bằng tên trong <code>proxy_pass</code>.</span></div>
+  <div class="kv"><span class="k">round robin</span><span class="v">Phương pháp mặc định — chia request đều, theo lượt, không giữ trạng thái.</span></div>
+  <div class="kv"><span class="k"><code>weight=</code></span><span class="v">Cho máy khoẻ hơn một phần lớn hơn; nó đổi tỷ lệ, không đổi cơ chế.</span></div>
+  <div class="kv"><span class="k"><code>least_conn</code></span><span class="v">Gửi request kế cho máy đang ít kết nối đang bay nhất.</span></div>
+  <div class="kv"><span class="k"><code>ip_hash</code></span><span class="v">Ánh xạ địa chỉ client tới một backend cố định — định tuyến dính theo IP.</span></div>
+  <div class="kv"><span class="k"><code>down</code> / <code>backup</code></span><span class="v">Rút một máy khỏi vòng mà không xoá nó, hoặc chỉ dùng khi mọi máy chính đã chết.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li>Nhiều backend nằm trong một khối <code>upstream</code>, gọi bằng tên trong <code>proxy_pass</code>, khai ở tầng http nên bể dùng chung được.</li><li>Round robin chia đều là mặc định; <code>weight=</code> chỉ đổi tỷ lệ.</li><li><code>least_conn</code> cân theo khối lượng việc chứ không theo số request, và thoái hoá thành round robin khi tải đồng đều.</li><li><code>ip_hash</code> ghim một client vào một backend — cả ba mươi request từ một IP vào một máy, đúng thiết kế.</li><li><code>down</code> rút một node mà không xoá dòng; một <code>backup</code> chỉ dùng khi mọi máy chính đã mất.</li></ul>
 <h3>Nguồn học cho bài này</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_upstream_module.html" target="_blank" rel="noopener"><span class="lc-ico">🏭</span><span class="lc-body"><span class="lc-title">nginx — module upstream</span><span class="lc-sub">nginx.org · Mọi tham số của server, và tất cả các phương pháp cân bằng</span></span></a>
 <a class="link-card" href="https://nginx.org/en/docs/http/load_balancing.html" target="_blank" rel="noopener"><span class="lc-ico">⚖️</span><span class="lc-body"><span class="lc-title">nginx — Cân bằng tải HTTP</span><span class="lc-sub">nginx.org · Bài hướng dẫn nhập môn, với đúng bốn phương pháp ấy</span></span></a>
@@ -159,8 +319,9 @@ server {
       title: '9.2 — Sticky routing, and the word that saves 47% of your users|||9.2 — Định tuyến dính, và cái chữ cứu được 47% người dùng của bạn',
       slug: 'nginx-9-2-dinh-tuyen-dinh',
       type: 'LESSON',
-      description: 'Thêm MỘT máy vào một bể ba máy. Với hash thường, 73% người dùng bị đổi máy. Với thêm chữ consistent, chỉ 26% — sát con số lý thuyết tối thiểu. Bài này đo cả hai, và cũng đo một chuyện mà cả hai làm GIỐNG nhau, điều đó cũng đáng ngạc nhiên.',
+      description: 'Thêm MỘT máy vào một bể ba máy. Với hash thường, 72% người dùng bị đổi máy. Với thêm chữ consistent, chỉ 25% — sát con số lý thuyết tối thiểu. Bài này đo cả hai, và cũng đo một chuyện mà cả hai làm GIỐNG nhau, điều đó cũng đáng ngạc nhiên.',
       content: `
+${G09_2}
 <div class="ml-en">
 <span class="eyebrow">Chapter 9 · Lesson 9.2</span>
 <h2>Sticky routing, and the word that saves 47% of your users</h2>
@@ -183,12 +344,12 @@ Ca hai dang deu GHIM on dinh. Khac biet chi lo ra khi be MAY CHU doi.</div>
 
   ly thuyet toi thieu: ~25% phai doi (1 trong 4 cho)
 
-  hash thuong     : 44/60 doi may   = 73%
-  hash consistent : 16/60 doi may   = 26%
+  hash thuong     : 43/60 doi may   = 72%
+  hash consistent : 15/60 doi may   = 25%
                     ^^^^^^^^^^^^^ sat con so ly thuyet</div>
 <div class="lz-flow">
-  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Plain hash is key modulo pool size</span><span class="lz-d">Change the pool size and almost every key lands somewhere new — 73% here. With sessions in memory, that is 73% of logged-in users logged out at once, on a deploy that added capacity.</span></div>
-  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">consistent places servers on a ring instead</span><span class="lz-d">Each key belongs to the next server clockwise. Adding a server only steals the arc in front of it, so only the keys in that arc move — 26%, against a theoretical minimum of 25%.</span></div>
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Plain hash is key modulo pool size</span><span class="lz-d">Change the pool size and almost every key lands somewhere new — 72% here. With sessions in memory, that is 72% of logged-in users logged out at once, on a deploy that added capacity.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">consistent places servers on a ring instead</span><span class="lz-d">Each key belongs to the next server clockwise. Adding a server only steals the arc in front of it, so only the keys in that arc move — 25%, against a theoretical minimum of 25%.</span></div>
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">The word costs nothing and is not the default</span><span class="lz-d">Every argument favours it and it is one word, and yet <code>hash \$x;</code> without it is what most configs contain — usually because the difference is invisible until the day you scale the pool.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">It is the same algorithm as memcached's ketama</span><span class="lz-d">Which is why Nginx uses that name in the docs. If you have ever configured a distributed cache, this is the setting you already know under a different name.</span></div>
 </div>
@@ -196,8 +357,8 @@ Ca hai dang deu GHIM on dinh. Khac biet chi lo ra khi be MAY CHU doi.</div>
 <h3>And the thing both forms do identically</h3>
 <div class="out">GIET may-3, roi do lai anh xa cua 60 nguoi dung:
 
-  trong 39 nguoi VON KHONG o may-3 (hash thuong)     : 0 nguoi bi doi may (0%)
-  trong 41 nguoi VON KHONG o may-3 (hash consistent) : 0 nguoi bi doi may (0%)</div>
+  trong 37 nguoi VON KHONG o may-3 (hash thuong)     : 0 nguoi bi doi may (0%)
+  trong 42 nguoi VON KHONG o may-3 (hash consistent) : 0 nguoi bi doi may (0%)</div>
 <div class="callout ok">
 <p><strong>A failed server does not reshuffle anybody else, in either mode.</strong> That is worth knowing because it is the opposite of what the consistent-hashing story leads you to expect. Nginx marks a failed server unavailable but keeps its position in the ring, so only the clients pinned to that server are redistributed and everyone else is untouched. The <code>consistent</code> flag matters when the server <em>list</em> changes — a config edit and a reload — not when a machine simply goes down. Both events feel like "we lost a backend"; only one of them reshuffles your users.</p>
 </div>
@@ -225,6 +386,95 @@ upstream api {
 <p><strong>How to measure this on your own pool.</strong> Have the backend return its name in a header, then request the same URL a few hundred times with a fixed session cookie and confirm you always land on one machine. Then change the pool — add a server, reload — and repeat with the same cookies. The proportion that moved is the number this lesson is about, and it takes about a minute to produce against a real config.</p>
 </div>
 
+<h3>🔬 Run it yourself</h3>
+<p>Two pools on the same three backends (plain <code>hash</code> and <code>consistent</code>), a session-cookie pool and an <code>ip_hash</code> pool behind <code>real_ip</code>, plus a script that maps sixty users before and after a change — on nginx/1.24.0:</p>
+<pre><code class="language-bash"><span class="tok-comment"># anh_xa.py</span>
+<span class="tok-comment"># anh_xa.py luu|so|chet &lt;ten&gt; — ánh xạ 60 "người dùng" -&gt; máy, qua CẢ hai bể (/thuong/ = hash, /bien/ = hash consistent)</span>
+import json, sys, urllib.request
+NGUOI = [f'nguoi-{i}' for i in range(1, 61)]
+def hoi(be, u):
+    return urllib.request.urlopen(f'http://127.0.0.1:8080/{be}/?nguoi={u}').read().decode().strip()
+lenh, ten = sys.argv[1], sys.argv[2]
+moi = {be: {u: hoi(be, u) for u in NGUOI} for be in ('thuong', 'bien')}
+if lenh == 'luu':
+    json.dump(moi, open(f'/tmp/ng/{ten}.json', 'w')); print('da ghi anh xa cua 60 nguoi dung'); sys.exit()
+cu = json.load(open(f'/tmp/ng/{ten}.json'))
+for be, nhan in (('thuong', 'hash thuong    '), ('bien', 'hash consistent')):
+    if lenh == 'so':
+        doi = sum(cu[be][u] != moi[be][u] for u in NGUOI)
+        print(f'  {nhan} : {doi}/60 doi may   = {round(100 * doi / 60)}%')
+    else: <span class="tok-comment">  # chet: chỉ xét những người TRƯỚC ĐÓ không ở may-3</span>
+        ngoai = [u for u in NGUOI if cu[be][u] != 'may-3']
+        doi = sum(cu[be][u] != moi[be][u] for u in ngoai)
+        print(f'  trong {len(ngoai)} nguoi VON KHONG o may-3 ({nhan.strip()}) : {doi} nguoi bi doi may ({round(100 * doi / len(ngoai))}%)')</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  upstream thuong { hash $arg_nguoi;            server 127.0.0.1:9501; server 127.0.0.1:9502; server 127.0.0.1:9503; }
+  upstream bien   { hash $arg_nguoi consistent; server 127.0.0.1:9501; server 127.0.0.1:9502; server 127.0.0.1:9503; }
+  upstream phien  { hash $cookie_phien consistent; server 127.0.0.1:9501; server 127.0.0.1:9502; server 127.0.0.1:9503; }
+  upstream theoip { ip_hash;                    server 127.0.0.1:9501; server 127.0.0.1:9502; server 127.0.0.1:9503; }
+  server {
+    listen 8080;
+    location /thuong/ { proxy_pass http://thuong; }
+    location /bien/   { proxy_pass http://bien; }
+    location /phien/  { proxy_pass http://phien; }
+  }
+  server {                                 <span class="tok-comment">  # 8081: client thật lấy từ X-Forwarded-For (như sau CDN, bài 7.2)</span>
+    listen 8081;
+    set_real_ip_from 127.0.0.1;
+    real_ip_header   X-Forwarded-For;
+    location / { proxy_pass http://theoip; }
+  }
+}</code></pre>
+<div class="out">$ bash ghim.sh thuong
+nguoi=an     -&gt; may-2  may-2  may-2  
+nguoi=binh   -&gt; may-1  may-1  may-1  
+nguoi=cuong  -&gt; may-3  may-3  may-3  
+nguoi=dung   -&gt; may-3  may-3  may-3  
+$ bash ghim.sh bien
+nguoi=an     -&gt; may-3  may-3  may-3  
+nguoi=binh   -&gt; may-1  may-1  may-1  
+nguoi=cuong  -&gt; may-2  may-2  may-2  
+nguoi=dung   -&gt; may-2  may-2  may-2  
+$ python3 anh_xa.py luu truoc
+da ghi anh xa cua 60 nguoi dung
+$ cp bon.conf lb.conf &amp;&amp; nginx -t &amp;&amp; nginx -s reload     # thêm may-4 vào CẢ HAI bể
+$ python3 anh_xa.py so truoc
+  hash thuong     : 43/60 doi may   = 72%
+  hash consistent : 15/60 doi may   = 25%
+$ python3 anh_xa.py luu truoc2
+da ghi anh xa cua 60 nguoi dung
+$ pkill -f 'may.js may-3'     # giết may-3 — cấu hình KHÔNG đổi
+$ python3 anh_xa.py chet truoc2
+  trong 37 nguoi VON KHONG o may-3 (hash thuong) : 0 nguoi bi doi may (0%)
+  trong 42 nguoi VON KHONG o may-3 (hash consistent) : 0 nguoi bi doi may (0%)
+$ bash dem.sh http://127.0.0.1:8080/bien/ 6      # KHÔNG có ?nguoi ⇒ khoá RỖNG
+may-1=2  may-2=2  may-3=2  
+$ for k in 1 2 3 4 5; do printf '%s  ' $(curl -s -b 'phien=abc123' http://127.0.0.1:8080/phien/); done; echo
+may-2  may-2  may-2  may-2  may-2  
+$ bash ip.sh '203.0.113.%d'
+may-1=20  
+$ bash ip.sh '10.%d.0.1'
+may-1=6  may-2=7  may-3=7  </div>
+<p>Both forms pinned all four users. Adding may-4 and reloading moved 43 of 60 users with plain hash (72%) and 15 of 60 with <code>consistent</code> (25%, the theoretical minimum) — the gap is the 47% in the title. Killing may-3 with the config untouched moved nobody else in either mode. An empty key fell back to round robin (2 / 2 / 2) and one cookie always reached may-2. NEW: <code>ip_hash</code> keys on the first three octets of an IPv4 address — twenty clients in 203.0.113.x all landed on may-1, twenty different /24 networks spread 6 / 7 / 7.</p>
+<h3>🔗 Related lessons in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/distributed-systems/learn?lessonSlug=dist-4-2-consistent-hashing" target="_blank" rel="noopener"><span class="lc-ico">🕸️</span><span class="lc-body"><span class="lc-title">Distributed Systems · 4.2 — Consistent hashing and virtual nodes</span><span class="lc-sub">The ring, and why virtual nodes even it out</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/redis/learn?lessonSlug=rd-5-5-hash-thuc-te" target="_blank" rel="noopener"><span class="lc-ico">🟥</span><span class="lc-body"><span class="lc-title">Redis · 5.5 — Hashes in practice: sessions, carts, counters, config</span><span class="lc-sub">Keep sessions in Redis and pin nothing</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-11-4-scale-adapter-backpressure" target="_blank" rel="noopener"><span class="lc-ico">🟢</span><span class="lc-body"><span class="lc-title">Node.js · 11.4 — More than one process: adapters, sticky sessions, backpressure</span><span class="lc-sub">When a WebSocket server really needs stickiness</span></span></a>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Sticky routing</span><span class="v">Forcing a client to keep reaching the same backend — for an in-memory session, a per-node cache, a reconnecting WebSocket.</span></div>
+  <div class="kv"><span class="k"><code>hash</code> on a key</span><span class="v">Pick a backend by hashing a chosen key (a cookie, an argument, a header).</span></div>
+  <div class="kv"><span class="k"><code>consistent</code></span><span class="v">Place servers on a ring so adding one moves only about K/n of keys, not nearly all of them.</span></div>
+  <div class="kv"><span class="k">ketama</span><span class="v">The consistent-hashing scheme memcached uses; nginx implements the same one.</span></div>
+  <div class="kv"><span class="k"><code>ip_hash</code> pitfall</span><span class="v">Keys on the client address — wrong behind NAT or a CDN, and broken when the client changes network.</span></div>
+  <div class="kv"><span class="k">Empty-key fallback</span><span class="v">A request with no value for the hash key falls back to normal round-robin balancing.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li><code>hash</code> on a key pins a client to a backend; add <code>consistent</code> to survive pool changes cheaply.</li><li>Plain hash remapped 72% of users when a fourth server joined; <code>consistent</code> moved only 25% (near the 25% theoretical minimum).</li><li>A failed server reshuffles nobody else in either mode — <code>consistent</code> matters only when the server list changes.</li><li>Prefer hashing a session cookie or an API key over <code>ip_hash</code>, which breaks behind NAT and CDNs.</li><li>Sticky routing is debt; shared session state (Redis, a signed JWT) removes the need for it entirely.</li></ul>
 <h3>Learning sources for this lesson</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_upstream_module.html#hash" target="_blank" rel="noopener"><span class="lc-ico">#️⃣</span><span class="lc-body"><span class="lc-title">nginx — hash and ip_hash</span><span class="lc-sub">nginx.org · The consistent parameter and the ketama reference</span></span></a>
 <a class="link-card" href="https://en.wikipedia.org/wiki/Consistent_hashing" target="_blank" rel="noopener"><span class="lc-ico">⭕</span><span class="lc-body"><span class="lc-title">Consistent hashing</span><span class="lc-sub">wikipedia.org · Why the ring gives you K/n remapping instead of nearly all of it</span></span></a>
@@ -255,12 +505,12 @@ Ca hai dang deu GHIM on dinh. Khac biet chi lo ra khi be MAY CHU doi.</div>
 
   ly thuyet toi thieu: ~25% phai doi (1 trong 4 cho)
 
-  hash thuong     : 44/60 doi may   = 73%
-  hash consistent : 16/60 doi may   = 26%
+  hash thuong     : 43/60 doi may   = 72%
+  hash consistent : 15/60 doi may   = 25%
                     ^^^^^^^^^^^^^ sat con so ly thuyet</div>
 <div class="lz-flow">
-  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">hash thường là khoá CHIA DƯ cho số máy</span><span class="lz-d">Đổi số máy là gần như MỌI khoá rơi vào chỗ mới — 73% ở đây. Với phiên nằm trong bộ nhớ thì đó là 73% người đang đăng nhập bị đá ra CÙNG một lúc, trong một lần deploy vốn chỉ định THÊM năng lực.</span></div>
-  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">consistent đặt các máy chủ lên một VÒNG TRÒN</span><span class="lz-d">Mỗi khoá thuộc về máy chủ kế tiếp theo chiều kim đồng hồ. Thêm một máy chỉ CƯỚP mất cái cung nằm ngay trước nó, nên chỉ những khoá trong cung đó phải dời — 26%, so với mức lý thuyết tối thiểu là 25%.</span></div>
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">hash thường là khoá CHIA DƯ cho số máy</span><span class="lz-d">Đổi số máy là gần như MỌI khoá rơi vào chỗ mới — 72% ở đây. Với phiên nằm trong bộ nhớ thì đó là 72% người đang đăng nhập bị đá ra CÙNG một lúc, trong một lần deploy vốn chỉ định THÊM năng lực.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">consistent đặt các máy chủ lên một VÒNG TRÒN</span><span class="lz-d">Mỗi khoá thuộc về máy chủ kế tiếp theo chiều kim đồng hồ. Thêm một máy chỉ CƯỚP mất cái cung nằm ngay trước nó, nên chỉ những khoá trong cung đó phải dời — 25%, so với mức lý thuyết tối thiểu là 25%.</span></div>
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Cái chữ ấy chẳng tốn gì và nó KHÔNG phải mặc định</span><span class="lz-d">Mọi lý lẽ đều nghiêng về nó và nó chỉ là MỘT chữ, thế mà <code>hash \$x;</code> không kèm nó lại là thứ nằm trong phần lớn các cấu hình — thường là vì khác biệt VÔ HÌNH cho tới đúng cái ngày bạn mở rộng cái bể.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Nó là cùng thuật toán với ketama của memcached</span><span class="lz-d">Và đó là lý do Nginx dùng chính cái tên ấy trong tài liệu. Nếu bạn từng cấu hình một bộ đệm phân tán thì đây chính là thiết lập bạn đã biết dưới một cái tên khác.</span></div>
 </div>
@@ -268,8 +518,8 @@ Ca hai dang deu GHIM on dinh. Khac biet chi lo ra khi be MAY CHU doi.</div>
 <h3>Và cái việc mà CẢ HAI dạng làm GIỐNG HỆT nhau</h3>
 <div class="out">GIET may-3, roi do lai anh xa cua 60 nguoi dung:
 
-  trong 39 nguoi VON KHONG o may-3 (hash thuong)     : 0 nguoi bi doi may (0%)
-  trong 41 nguoi VON KHONG o may-3 (hash consistent) : 0 nguoi bi doi may (0%)</div>
+  trong 37 nguoi VON KHONG o may-3 (hash thuong)     : 0 nguoi bi doi may (0%)
+  trong 42 nguoi VON KHONG o may-3 (hash consistent) : 0 nguoi bi doi may (0%)</div>
 <div class="callout ok">
 <p><strong>Một máy chủ CHẾT thì KHÔNG xáo trộn ai khác cả, ở cả hai dạng.</strong> Điều đó đáng biết vì nó NGƯỢC với thứ mà câu chuyện về consistent hashing khiến bạn chờ đợi. Nginx đánh dấu một máy chủ hỏng là không dùng được nhưng GIỮ NGUYÊN vị trí của nó trên vòng, nên chỉ những client bị ghim vào máy đó mới được phân phối lại còn mọi người khác không hề bị đụng tới. Cái cờ <code>consistent</code> có nghĩa lý khi DANH SÁCH máy chủ thay đổi — một lần sửa cấu hình và nạp lại — chứ không phải khi một cái máy chỉ đơn giản là ngã xuống. Cả hai sự kiện đều cảm thấy như "mình vừa mất một backend"; chỉ MỘT trong hai xáo trộn người dùng của bạn.</p>
 </div>
@@ -297,6 +547,95 @@ upstream api {
 <p><strong>Đo chuyện này trên bể của chính bạn thế nào.</strong> Cho backend trả TÊN của nó trong một header, rồi gọi cùng một URL vài trăm lần với một cookie phiên CỐ ĐỊNH và xác nhận bạn luôn rơi vào MỘT máy. Rồi ĐỔI cái bể — thêm một máy chủ, nạp lại — và lặp lại với đúng đám cookie đó. Tỷ lệ đã dời chính là con số mà bài này nói về nó, và nó tốn chừng một phút để tạo ra trên một cấu hình thật.</p>
 </div>
 
+<h3>🔬 Tự chạy lại</h3>
+<p>Hai bể trên cùng ba backend (<code>hash</code> thường và <code>consistent</code>), một bể theo cookie phiên và một bể <code>ip_hash</code> sau <code>real_ip</code>, cộng một script ghi ánh xạ của sáu mươi người dùng trước và sau một thay đổi — trên nginx/1.24.0:</p>
+<pre><code class="language-bash"><span class="tok-comment"># anh_xa.py</span>
+<span class="tok-comment"># anh_xa.py luu|so|chet &lt;ten&gt; — ánh xạ 60 "người dùng" -&gt; máy, qua CẢ hai bể (/thuong/ = hash, /bien/ = hash consistent)</span>
+import json, sys, urllib.request
+NGUOI = [f'nguoi-{i}' for i in range(1, 61)]
+def hoi(be, u):
+    return urllib.request.urlopen(f'http://127.0.0.1:8080/{be}/?nguoi={u}').read().decode().strip()
+lenh, ten = sys.argv[1], sys.argv[2]
+moi = {be: {u: hoi(be, u) for u in NGUOI} for be in ('thuong', 'bien')}
+if lenh == 'luu':
+    json.dump(moi, open(f'/tmp/ng/{ten}.json', 'w')); print('da ghi anh xa cua 60 nguoi dung'); sys.exit()
+cu = json.load(open(f'/tmp/ng/{ten}.json'))
+for be, nhan in (('thuong', 'hash thuong    '), ('bien', 'hash consistent')):
+    if lenh == 'so':
+        doi = sum(cu[be][u] != moi[be][u] for u in NGUOI)
+        print(f'  {nhan} : {doi}/60 doi may   = {round(100 * doi / 60)}%')
+    else: <span class="tok-comment">  # chet: chỉ xét những người TRƯỚC ĐÓ không ở may-3</span>
+        ngoai = [u for u in NGUOI if cu[be][u] != 'may-3']
+        doi = sum(cu[be][u] != moi[be][u] for u in ngoai)
+        print(f'  trong {len(ngoai)} nguoi VON KHONG o may-3 ({nhan.strip()}) : {doi} nguoi bi doi may ({round(100 * doi / len(ngoai))}%)')</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  upstream thuong { hash $arg_nguoi;            server 127.0.0.1:9501; server 127.0.0.1:9502; server 127.0.0.1:9503; }
+  upstream bien   { hash $arg_nguoi consistent; server 127.0.0.1:9501; server 127.0.0.1:9502; server 127.0.0.1:9503; }
+  upstream phien  { hash $cookie_phien consistent; server 127.0.0.1:9501; server 127.0.0.1:9502; server 127.0.0.1:9503; }
+  upstream theoip { ip_hash;                    server 127.0.0.1:9501; server 127.0.0.1:9502; server 127.0.0.1:9503; }
+  server {
+    listen 8080;
+    location /thuong/ { proxy_pass http://thuong; }
+    location /bien/   { proxy_pass http://bien; }
+    location /phien/  { proxy_pass http://phien; }
+  }
+  server {                                 <span class="tok-comment">  # 8081: client thật lấy từ X-Forwarded-For (như sau CDN, bài 7.2)</span>
+    listen 8081;
+    set_real_ip_from 127.0.0.1;
+    real_ip_header   X-Forwarded-For;
+    location / { proxy_pass http://theoip; }
+  }
+}</code></pre>
+<div class="out">$ bash ghim.sh thuong
+nguoi=an     -&gt; may-2  may-2  may-2  
+nguoi=binh   -&gt; may-1  may-1  may-1  
+nguoi=cuong  -&gt; may-3  may-3  may-3  
+nguoi=dung   -&gt; may-3  may-3  may-3  
+$ bash ghim.sh bien
+nguoi=an     -&gt; may-3  may-3  may-3  
+nguoi=binh   -&gt; may-1  may-1  may-1  
+nguoi=cuong  -&gt; may-2  may-2  may-2  
+nguoi=dung   -&gt; may-2  may-2  may-2  
+$ python3 anh_xa.py luu truoc
+da ghi anh xa cua 60 nguoi dung
+$ cp bon.conf lb.conf &amp;&amp; nginx -t &amp;&amp; nginx -s reload     # thêm may-4 vào CẢ HAI bể
+$ python3 anh_xa.py so truoc
+  hash thuong     : 43/60 doi may   = 72%
+  hash consistent : 15/60 doi may   = 25%
+$ python3 anh_xa.py luu truoc2
+da ghi anh xa cua 60 nguoi dung
+$ pkill -f 'may.js may-3'     # giết may-3 — cấu hình KHÔNG đổi
+$ python3 anh_xa.py chet truoc2
+  trong 37 nguoi VON KHONG o may-3 (hash thuong) : 0 nguoi bi doi may (0%)
+  trong 42 nguoi VON KHONG o may-3 (hash consistent) : 0 nguoi bi doi may (0%)
+$ bash dem.sh http://127.0.0.1:8080/bien/ 6      # KHÔNG có ?nguoi ⇒ khoá RỖNG
+may-1=2  may-2=2  may-3=2  
+$ for k in 1 2 3 4 5; do printf '%s  ' $(curl -s -b 'phien=abc123' http://127.0.0.1:8080/phien/); done; echo
+may-2  may-2  may-2  may-2  may-2  
+$ bash ip.sh '203.0.113.%d'
+may-1=20  
+$ bash ip.sh '10.%d.0.1'
+may-1=6  may-2=7  may-3=7  </div>
+<p>Cả hai dạng đều ghim cả bốn người. Thêm may-4 rồi nạp lại làm 43 trên 60 người đổi máy với hash thường (72%) và 15 trên 60 với <code>consistent</code> (25%, đúng mức tối thiểu lý thuyết) — khoảng chênh chính là con số 47% ở tiêu đề. Giết may-3 mà không đụng cấu hình thì KHÔNG ai khác bị dời, ở cả hai dạng. Khoá rỗng quay về round robin (2 / 2 / 2) và một cookie luôn tới may-2. MỚI: <code>ip_hash</code> băm theo BA số đầu của địa chỉ IPv4 — hai mươi client trong 203.0.113.x đều vào may-1, hai mươi mạng /24 khác nhau thì tản ra 6 / 7 / 7.</p>
+<h3>🔗 Bài liên quan ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/distributed-systems/learn?lessonSlug=dist-4-2-consistent-hashing" target="_blank" rel="noopener"><span class="lc-ico">🕸️</span><span class="lc-body"><span class="lc-title">Distributed Systems · 4.2 — Băm nhất quán và nút ảo</span><span class="lc-sub">Cái vòng, và vì sao nút ảo làm nó đều ra</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/redis/learn?lessonSlug=rd-5-5-hash-thuc-te" target="_blank" rel="noopener"><span class="lc-ico">🟥</span><span class="lc-body"><span class="lc-title">Redis · 5.5 — Hash trong thực tế: phiên, giỏ hàng, bộ đếm, cấu hình</span><span class="lc-sub">Cất phiên trong Redis để khỏi ghim</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-11-4-scale-adapter-backpressure" target="_blank" rel="noopener"><span class="lc-ico">🟢</span><span class="lc-body"><span class="lc-title">Node.js · 11.4 — Nhiều hơn một tiến trình: adapter, sticky session, và áp lực ngược</span><span class="lc-sub">Khi nào một server WebSocket thật sự cần dính</span></span></a>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Sticky routing</span><span class="v">Ép một client luôn chạm tới cùng một backend — cho phiên trong bộ nhớ, bộ đệm theo node, WebSocket nối lại.</span></div>
+  <div class="kv"><span class="k"><code>hash</code> theo một khoá</span><span class="v">Chọn backend bằng cách băm một khoá đã chọn (một cookie, một tham số, một header).</span></div>
+  <div class="kv"><span class="k"><code>consistent</code></span><span class="v">Đặt máy chủ lên một vòng tròn nên thêm một máy chỉ dời khoảng K/n khoá, không phải gần như tất cả.</span></div>
+  <div class="kv"><span class="k">ketama</span><span class="v">Sơ đồ consistent hashing của memcached; nginx cài đặt đúng loại đó.</span></div>
+  <div class="kv"><span class="k">bẫy <code>ip_hash</code></span><span class="v">Khoá theo địa chỉ client — sai khi sau NAT hoặc CDN, và hỏng khi client đổi mạng.</span></div>
+  <div class="kv"><span class="k">khoá rỗng lùi về</span><span class="v">Request không có giá trị cho khoá băm thì rơi về cân bằng round robin bình thường.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li><code>hash</code> theo một khoá ghim client vào một backend; thêm <code>consistent</code> để sống sót qua thay đổi bể một cách rẻ.</li><li>hash thường dời 72% người dùng khi thêm máy thứ tư; <code>consistent</code> chỉ dời 25% (sát mức lý thuyết tối thiểu 25%).</li><li>Một máy chết không xáo trộn ai khác ở cả hai dạng — <code>consistent</code> chỉ có nghĩa khi DANH SÁCH máy đổi.</li><li>Ưu tiên băm theo cookie phiên hay một khoá API hơn <code>ip_hash</code>, thứ hỏng khi sau NAT và CDN.</li><li>Định tuyến dính là nợ; trạng thái phiên dùng chung (Redis, một JWT đã ký) xoá bỏ hoàn toàn nhu cầu đó.</li></ul>
 <h3>Nguồn học cho bài này</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_upstream_module.html#hash" target="_blank" rel="noopener"><span class="lc-ico">#️⃣</span><span class="lc-body"><span class="lc-title">nginx — hash và ip_hash</span><span class="lc-sub">nginx.org · Tham số consistent và phần dẫn chiếu tới ketama</span></span></a>
 <a class="link-card" href="https://en.wikipedia.org/wiki/Consistent_hashing" target="_blank" rel="noopener"><span class="lc-ico">⭕</span><span class="lc-body"><span class="lc-title">Consistent hashing</span><span class="lc-sub">wikipedia.org · Vì sao cái vòng cho bạn K/n phải dời thay vì gần như tất cả</span></span></a>
@@ -314,6 +653,7 @@ upstream api {
       type: 'LESSON',
       description: 'Giết một máy trong ba giữa lúc đang chạy rồi bắn ba mươi request. Không client nào nhận 502. Bài này đo chuyện đó, đo luôn cả việc máy ấy được đưa trở lại sau đúng bao lâu, và chỉ ra cái phép kiểm sức khoẻ mà Nginx bản mã nguồn mở KHÔNG có.',
       content: `
+${G09_3}
 <div class="ml-en">
 <span class="eyebrow">Chapter 9 · Lesson 9.3</span>
 <h2>When a backend dies: thirty requests, zero errors</h2>
@@ -331,7 +671,7 @@ error.log:  1 x connect() failed
             1 x upstream server temporarily disabled</div>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">The first request to the dead server fails and is retried</span><span class="lz-d">Nginx opens a connection, gets refused, and reissues the same request to the next server in the pool. The client sees one response and never learns any of this happened — which is why the count is 15 and 15 rather than 15, 15 and one error.</span></div>
-  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Then the server is marked unavailable</span><span class="lz-d">One error log line: <code>upstream server temporarily disabled</code>. After that no further requests are even attempted against it, so the retry cost is paid once, not once per request.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Then the server is marked unavailable</span><span class="lz-d">One error log line: <code>upstream server temporarily disabled</code> — logged at <code>[warn]</code>, so you only see it with <code>error_log … warn;</code> (the default level, <code>error</code>, hides it). After that no further requests are even attempted against it, so the retry cost is paid once, not once per request.</span></div>
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">This is passive health checking, and it is the default</span><span class="lz-d"><code>max_fails=1 fail_timeout=10s</code> without writing anything. One failure within the window takes a server out for ten seconds. No probes, no extra traffic, no configuration.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Retries are bounded by proxy_next_upstream_tries</span><span class="lz-d">Otherwise a request could walk the entire pool. The default is unlimited within <code>proxy_next_upstream_timeout</code>, which is fine for a small pool and worth capping for a large one.</span></div>
 </div>
@@ -368,8 +708,9 @@ location /api/ {
   proxy_pass http://api/;
 }</code></pre>
 <div class="out">=== backup: do that ===
-ca hai may chinh song, 20 request : may-2=20        (may-3 backup KHONG duoc dung)
-giet may-2 (chinh),   20 request : may-3=20        (backup vao cuoc)</div>
+hai may chinh song,      20 request : may-1=10  may-2=10   (may-3 backup KHONG duoc dung)
+giet may-2 (chinh),      20 request : may-1=20             (backup VAN dung yen)
+giet not may-1 (chinh),  20 request : may-3=20             (backup vao cuoc)</div>
 
 <h3>What the pool cannot save you from</h3>
 <div class="lz-stack">
@@ -382,6 +723,89 @@ giet may-2 (chinh),   20 request : may-3=20        (backup vao cuoc)</div>
 <p><strong>Test it before you need it.</strong> Kill a backend while a request loop is running and count what the clients got. Thirty requests and zero errors is what a healthy pool looks like; anything else means the retry path is misconfigured, and finding that out during an incident is much more expensive than finding it out on a Tuesday.</p>
 </div>
 
+<h3>🔬 Run it yourself</h3>
+<p>The same three backends, an upstream with no health-check settings at all, a pool with a <code>backup</code>, two order pools — one default, one with <code>non_idempotent</code> — in front of a backend that records the order and dies before answering, and a pool where nobody listens — on nginx/1.24.0:</p>
+<pre><code class="language-bash">// don.js
+// don.js &lt;tên&gt; &lt;cổng&gt; [hong] — nhận POST /don: GHI đơn vào /tmp/ng/don.log; "hong" ⇒ ghi xong thì CHẾT giữa chừng (cắt kết nối, không trả lời)
+const [ten, cong, hong] = process.argv.slice(2);
+require('http').createServer((q, r) =&gt; {
+  q.on('data', () =&gt; {}); q.on('end', () =&gt; {
+    require('fs').appendFileSync('/tmp/ng/don.log', &#96;\${ten} da ghi don\\n&#96;);
+    if (hong) return q.socket.destroy();
+    r.end(&#96;\${ten}: da tao don\\n&#96;);
+  });
+}).listen(+cong, '127.0.0.1');</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log warn; <span class="tok-comment">  # mức warn: để thấy dòng "temporarily disabled"</span>
+events {}
+http {
+  access_log off;
+  upstream ba {                            <span class="tok-comment">  # KHÔNG viết gì ⇒ mặc định max_fails=1 fail_timeout=10s</span>
+    server 127.0.0.1:9501; server 127.0.0.1:9502; server 127.0.0.1:9503;
+  }
+  upstream du_phong { server 127.0.0.1:9501; server 127.0.0.1:9502; server 127.0.0.1:9503 backup; }
+  upstream don_a { server 127.0.0.1:9505; server 127.0.0.1:9506; }
+  upstream don_b { server 127.0.0.1:9505; server 127.0.0.1:9506; }
+  upstream chet_het { server 127.0.0.1:9601; server 127.0.0.1:9602; } <span class="tok-comment">  # không ai nghe ở hai cổng này</span>
+  server {
+    listen 8080;
+    location /ba/       { proxy_pass http://ba; }
+    location /du-phong/ { proxy_pass http://du_phong; }
+    location /don-mac-dinh/  { proxy_pass http://don_a/don; }                     <span class="tok-comment">  # mặc định: error timeout</span>
+    location /don-nguy-hiem/ { proxy_next_upstream error timeout non_idempotent;  <span class="tok-comment">  # "cho chắc ăn"</span>
+                               proxy_pass http://don_b/don; }
+    location /chet-het/ { proxy_pass http://chet_het; }
+  }
+}</code></pre>
+<div class="out">$ bash dem.sh http://127.0.0.1:8080/ba/ 30        # trước khi giết
+may-1=10  may-2=10  may-3=10  
+$ pkill -f 'may.js may-2'                       # giết may-2
+$ bash dem.sh http://127.0.0.1:8080/ba/ 30        # sau khi giết
+may-1=15  may-3=15  
+$ grep -oE 'connect\\(\\) failed[^,]*|temporarily disabled' error.log | sort | uniq -c
+      1 connect() failed (111: Connection refused)
+      1 upstream server temporarily disabled
+$ node may.js may-2 9502 &amp;                      # may-2 sống lại
+$ bash dem.sh http://127.0.0.1:8080/ba/ 30        # NGAY sau khi sống lại
+may-1=15  may-3=15  
+$ sleep 11; bash dem.sh http://127.0.0.1:8080/ba/ 30   # sau 11 giây (fail_timeout 10s)
+may-1=10  may-2=9  may-3=11  
+$ bash dem.sh http://127.0.0.1:8080/du-phong/ 20  # hai máy chính sống
+may-1=10  may-2=10  
+$ pkill -f 'may.js may-2'; bash dem.sh http://127.0.0.1:8080/du-phong/ 20
+may-1=20  
+$ pkill -f 'may.js may-1'; bash dem.sh http://127.0.0.1:8080/du-phong/ 20
+may-3=20  
+$ curl -s -o /dev/null -w '%{http_code}\\n' -X POST -d 'sp=ao' http://127.0.0.1:8080/don-mac-dinh/
+502
+$ cat /srv/don.log
+may-hong da ghi don
+$ curl -s -w '%{http_code}\\n' -X POST -d 'sp=ao' http://127.0.0.1:8080/don-nguy-hiem/
+may-tot: da tao don
+200
+$ cat /srv/don.log
+may-hong da ghi don
+may-tot da ghi don
+$ for k in 1 2 3; do curl -s -o /dev/null -w '%{http_code} ' http://127.0.0.1:8080/chet-het/; done; echo
+502 502 502 
+$ grep -o 'no live upstreams' error.log | uniq -c
+      2 no live upstreams</div>
+<p>Killing may-2 gave 15 / 15 and zero errors, with one refused connect and one <code>temporarily disabled</code> line. Restarted, it stayed unused until the ten-second window passed (10 / 9 / 11 after eleven seconds). The backup took over only when BOTH primaries were dead. NEW: the default refused to resend the POST (502, the order written once); <code>non_idempotent</code> returned a clean 200 — and the order was written TWICE. With the whole pool dead: 502 three times and <code>no live upstreams</code>.</p>
+<h3>🔗 Related lessons in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-13-3-thu-lai-va-idempotent" target="_blank" rel="noopener"><span class="lc-ico">🟢</span><span class="lc-body"><span class="lc-title">Node.js · 13.3 — Failure: retries, backoff, and the charge that ran three times</span><span class="lc-sub">Making a retried write safe</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/distributed-systems/learn?lessonSlug=dist-9-2-idempotency-key" target="_blank" rel="noopener"><span class="lc-ico">🕸️</span><span class="lc-body"><span class="lc-title">Distributed Systems · 9.2 — Idempotency keys across services</span><span class="lc-sub">The idempotency key, end to end</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-10-2-thuat-toan" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking for Developers · 10.2 — Algorithms and health checks</span><span class="lc-sub">Passive and active checks in general</span></span></a>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Passive health check</span><span class="v">nginx marks a server unavailable from real request failures — no probes, no extra traffic.</span></div>
+  <div class="kv"><span class="k"><code>max_fails</code> / <code>fail_timeout</code></span><span class="v">How many failures take a server out, and for how long it stays out (default 1 / 10s).</span></div>
+  <div class="kv"><span class="k"><code>proxy_next_upstream</code></span><span class="v">The conditions under which a failed request is retried on the next server.</span></div>
+  <div class="kv"><span class="k"><code>non_idempotent</code></span><span class="v">The dangerous opt-in that also retries POST/PATCH; leave it out so writes are never resent.</span></div>
+  <div class="kv"><span class="k"><code>backup</code></span><span class="v">A server used only when every primary in the pool is down.</span></div>
+  <div class="kv"><span class="k">Active health check</span><span class="v">Scheduled /health probing that inspects the body — NGINX Plus only.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li>Killing one of three backends produced zero 502s: the first request is retried on another server, then the dead one is disabled.</li><li>Passive checks are the default (<code>max_fails=1 fail_timeout=10s</code>); recovery is a timer, not a probe.</li><li>By default POST is not retried — adding <code>non_idempotent</code> can double-charge or double-send.</li><li>Active health checks (body inspection, scheduled probes) are a commercial feature open-source nginx lacks.</li><li>The pool cannot save you from a backend that answers wrongly, or from all backends failing at once.</li></ul>
 <h3>Learning sources for this lesson</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_upstream_module.html#server" target="_blank" rel="noopener"><span class="lc-ico">💔</span><span class="lc-body"><span class="lc-title">nginx — max_fails, fail_timeout, backup, down</span><span class="lc-sub">nginx.org · The passive health-check parameters, on the server directive</span></span></a>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_next_upstream" target="_blank" rel="noopener"><span class="lc-ico">➡️</span><span class="lc-body"><span class="lc-title">nginx — proxy_next_upstream</span><span class="lc-sub">nginx.org · Every condition, and the non_idempotent warning</span></span></a>
@@ -407,7 +831,7 @@ error.log:  1 x connect() failed
             1 x upstream server temporarily disabled</div>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Request ĐẦU TIÊN tới máy đã chết thì hỏng và được THỬ LẠI</span><span class="lz-d">Nginx mở một kết nối, bị từ chối, rồi phát lại ĐÚNG request đó tới máy kế tiếp trong bể. Client nhìn thấy MỘT phản hồi và không bao giờ biết chuyện này đã xảy ra — đó là lý do bảng đếm là 15 và 15 chứ không phải 15, 15 và một cái lỗi.</span></div>
-  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Rồi cái máy đó bị đánh dấu là KHÔNG DÙNG ĐƯỢC</span><span class="lz-d">Một dòng error log: <code>upstream server temporarily disabled</code>. Sau đó thì KHÔNG request nào còn được thử với nó nữa, nên cái giá của việc thử lại chỉ trả MỘT lần, không phải mỗi request một lần.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Rồi cái máy đó bị đánh dấu là KHÔNG DÙNG ĐƯỢC</span><span class="lz-d">Một dòng error log: <code>upstream server temporarily disabled</code> — ghi ở mức <code>[warn]</code>, nên chỉ thấy khi đặt <code>error_log … warn;</code> (mức mặc định <code>error</code> giấu nó đi). Sau đó thì KHÔNG request nào còn được thử với nó nữa, nên cái giá của việc thử lại chỉ trả MỘT lần, không phải mỗi request một lần.</span></div>
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Đây là kiểm sức khoẻ THỤ ĐỘNG, và nó là mặc định</span><span class="lz-d"><code>max_fails=1 fail_timeout=10s</code> mà không phải viết gì cả. MỘT lần hỏng trong cửa sổ đó là rút cái máy ra mười giây. Không thăm dò, không lưu lượng thừa, không cấu hình.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Số lần thử lại bị chặn bởi proxy_next_upstream_tries</span><span class="lz-d">Không thì một request có thể đi hết cả cái bể. Mặc định là KHÔNG giới hạn trong phạm vi <code>proxy_next_upstream_timeout</code>, và thế thì ổn với một bể nhỏ nhưng đáng đặt trần với một bể lớn.</span></div>
 </div>
@@ -444,8 +868,9 @@ location /api/ {
   proxy_pass http://api/;
 }</code></pre>
 <div class="out">=== backup: do that ===
-ca hai may chinh song, 20 request : may-2=20        (may-3 backup KHONG duoc dung)
-giet may-2 (chinh),   20 request : may-3=20        (backup vao cuoc)</div>
+hai may chinh song,      20 request : may-1=10  may-2=10   (may-3 backup KHONG duoc dung)
+giet may-2 (chinh),      20 request : may-1=20             (backup VAN dung yen)
+giet not may-1 (chinh),  20 request : may-3=20             (backup vao cuoc)</div>
 
 <h3>Cái bể KHÔNG cứu bạn khỏi những gì</h3>
 <div class="lz-stack">
@@ -458,6 +883,89 @@ giet may-2 (chinh),   20 request : may-3=20        (backup vao cuoc)</div>
 <p><strong>Hãy thử nó TRƯỚC khi cần tới nó.</strong> Giết một backend trong lúc một vòng lặp request đang chạy rồi đếm xem client nhận được gì. Ba mươi request và KHÔNG lỗi nào là bộ mặt của một cái bể khoẻ mạnh; bất cứ thứ gì khác nghĩa là đường thử-lại đang bị cấu hình sai, mà phát hiện ra điều đó GIỮA một sự cố thì đắt hơn nhiều so với phát hiện ra nó vào một ngày thứ Ba.</p>
 </div>
 
+<h3>🔬 Tự chạy lại</h3>
+<p>Cũng ba backend đó, một upstream KHÔNG có dòng kiểm tra sức khoẻ nào, một bể có <code>backup</code>, hai bể đặt đơn — một mặc định, một có <code>non_idempotent</code> — đứng trước một backend GHI đơn rồi chết trước khi kịp trả lời, và một bể không ai nghe — trên nginx/1.24.0:</p>
+<pre><code class="language-bash">// don.js
+// don.js &lt;tên&gt; &lt;cổng&gt; [hong] — nhận POST /don: GHI đơn vào /tmp/ng/don.log; "hong" ⇒ ghi xong thì CHẾT giữa chừng (cắt kết nối, không trả lời)
+const [ten, cong, hong] = process.argv.slice(2);
+require('http').createServer((q, r) =&gt; {
+  q.on('data', () =&gt; {}); q.on('end', () =&gt; {
+    require('fs').appendFileSync('/tmp/ng/don.log', &#96;\${ten} da ghi don\\n&#96;);
+    if (hong) return q.socket.destroy();
+    r.end(&#96;\${ten}: da tao don\\n&#96;);
+  });
+}).listen(+cong, '127.0.0.1');</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log warn; <span class="tok-comment">  # mức warn: để thấy dòng "temporarily disabled"</span>
+events {}
+http {
+  access_log off;
+  upstream ba {                            <span class="tok-comment">  # KHÔNG viết gì ⇒ mặc định max_fails=1 fail_timeout=10s</span>
+    server 127.0.0.1:9501; server 127.0.0.1:9502; server 127.0.0.1:9503;
+  }
+  upstream du_phong { server 127.0.0.1:9501; server 127.0.0.1:9502; server 127.0.0.1:9503 backup; }
+  upstream don_a { server 127.0.0.1:9505; server 127.0.0.1:9506; }
+  upstream don_b { server 127.0.0.1:9505; server 127.0.0.1:9506; }
+  upstream chet_het { server 127.0.0.1:9601; server 127.0.0.1:9602; } <span class="tok-comment">  # không ai nghe ở hai cổng này</span>
+  server {
+    listen 8080;
+    location /ba/       { proxy_pass http://ba; }
+    location /du-phong/ { proxy_pass http://du_phong; }
+    location /don-mac-dinh/  { proxy_pass http://don_a/don; }                     <span class="tok-comment">  # mặc định: error timeout</span>
+    location /don-nguy-hiem/ { proxy_next_upstream error timeout non_idempotent;  <span class="tok-comment">  # "cho chắc ăn"</span>
+                               proxy_pass http://don_b/don; }
+    location /chet-het/ { proxy_pass http://chet_het; }
+  }
+}</code></pre>
+<div class="out">$ bash dem.sh http://127.0.0.1:8080/ba/ 30        # trước khi giết
+may-1=10  may-2=10  may-3=10  
+$ pkill -f 'may.js may-2'                       # giết may-2
+$ bash dem.sh http://127.0.0.1:8080/ba/ 30        # sau khi giết
+may-1=15  may-3=15  
+$ grep -oE 'connect\\(\\) failed[^,]*|temporarily disabled' error.log | sort | uniq -c
+      1 connect() failed (111: Connection refused)
+      1 upstream server temporarily disabled
+$ node may.js may-2 9502 &amp;                      # may-2 sống lại
+$ bash dem.sh http://127.0.0.1:8080/ba/ 30        # NGAY sau khi sống lại
+may-1=15  may-3=15  
+$ sleep 11; bash dem.sh http://127.0.0.1:8080/ba/ 30   # sau 11 giây (fail_timeout 10s)
+may-1=10  may-2=9  may-3=11  
+$ bash dem.sh http://127.0.0.1:8080/du-phong/ 20  # hai máy chính sống
+may-1=10  may-2=10  
+$ pkill -f 'may.js may-2'; bash dem.sh http://127.0.0.1:8080/du-phong/ 20
+may-1=20  
+$ pkill -f 'may.js may-1'; bash dem.sh http://127.0.0.1:8080/du-phong/ 20
+may-3=20  
+$ curl -s -o /dev/null -w '%{http_code}\\n' -X POST -d 'sp=ao' http://127.0.0.1:8080/don-mac-dinh/
+502
+$ cat /srv/don.log
+may-hong da ghi don
+$ curl -s -w '%{http_code}\\n' -X POST -d 'sp=ao' http://127.0.0.1:8080/don-nguy-hiem/
+may-tot: da tao don
+200
+$ cat /srv/don.log
+may-hong da ghi don
+may-tot da ghi don
+$ for k in 1 2 3; do curl -s -o /dev/null -w '%{http_code} ' http://127.0.0.1:8080/chet-het/; done; echo
+502 502 502 
+$ grep -o 'no live upstreams' error.log | uniq -c
+      2 no live upstreams</div>
+<p>Giết may-2 cho ra 15 / 15 và không lỗi nào, kèm một dòng connect bị từ chối và một dòng <code>temporarily disabled</code>. Bật lại, nó vẫn bị bỏ qua cho tới khi hết cửa sổ mười giây (10 / 9 / 11 sau mười một giây). Backup chỉ vào cuộc khi CẢ HAI máy chính đã chết. MỚI: mặc định không gửi lại POST (502, đơn ghi một lần); <code>non_idempotent</code> trả về 200 sạch sẽ — và đơn bị ghi HAI lần. Cả bể chết: ba lần 502 và <code>no live upstreams</code>.</p>
+<h3>🔗 Bài liên quan ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-13-3-thu-lai-va-idempotent" target="_blank" rel="noopener"><span class="lc-ico">🟢</span><span class="lc-body"><span class="lc-title">Node.js · 13.3 — Thất bại: thử lại, backoff, và cú trừ tiền chạy ba lần</span><span class="lc-sub">Làm cho thao tác ghi bị thử lại vẫn an toàn</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/distributed-systems/learn?lessonSlug=dist-9-2-idempotency-key" target="_blank" rel="noopener"><span class="lc-ico">🕸️</span><span class="lc-body"><span class="lc-title">Distributed Systems · 9.2 — Idempotency key xuyên dịch vụ</span><span class="lc-sub">Idempotency key từ đầu tới cuối</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-10-2-thuat-toan" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking for Developers · 10.2 — Thuật toán chia và kiểm tra sức khoẻ</span><span class="lc-sub">Kiểm tra thụ động và chủ động nói chung</span></span></a>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Passive health check</span><span class="v">nginx đánh dấu một máy không dùng được từ lỗi request thật — không dò, không sinh lưu lượng thêm.</span></div>
+  <div class="kv"><span class="k"><code>max_fails</code> / <code>fail_timeout</code></span><span class="v">Bao nhiêu lỗi thì rút máy ra, và nó ở ngoài bao lâu (mặc định 1 / 10s).</span></div>
+  <div class="kv"><span class="k"><code>proxy_next_upstream</code></span><span class="v">Điều kiện nào khiến một request hỏng được thử lại ở máy kế tiếp.</span></div>
+  <div class="kv"><span class="k"><code>non_idempotent</code></span><span class="v">Tuỳ chọn nguy hiểm thử lại cả POST/PATCH; đừng bật để các lệnh ghi không bao giờ bị gửi lại.</span></div>
+  <div class="kv"><span class="k"><code>backup</code></span><span class="v">Một máy chỉ dùng khi mọi máy chính trong bể đều chết.</span></div>
+  <div class="kv"><span class="k">Active health check</span><span class="v">Dò /health theo lịch và soi thân phản hồi — chỉ có ở NGINX Plus.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li>Giết một trong ba backend mà không sinh cú 502 nào: request đầu được thử lại ở máy khác, rồi máy chết bị vô hiệu.</li><li>Kiểm thụ động là mặc định (<code>max_fails=1 fail_timeout=10s</code>); hồi phục là một đồng hồ, không phải một phép dò.</li><li>Mặc định POST không được thử lại — thêm <code>non_idempotent</code> có thể tính tiền hai lần hoặc gửi hai lần.</li><li>Kiểm sức khoẻ chủ động (soi thân, dò theo lịch) là tính năng thương mại mà nginx mã nguồn mở không có.</li><li>Bể không cứu được bạn khỏi một backend trả lời SAI, hay khỏi mọi backend cùng chết một lúc.</li></ul>
 <h3>Nguồn học cho bài này</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_upstream_module.html#server" target="_blank" rel="noopener"><span class="lc-ico">💔</span><span class="lc-body"><span class="lc-title">nginx — max_fails, fail_timeout, backup, down</span><span class="lc-sub">nginx.org · Các tham số kiểm sức khoẻ thụ động, nằm trên chỉ thị server</span></span></a>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_next_upstream" target="_blank" rel="noopener"><span class="lc-ico">➡️</span><span class="lc-body"><span class="lc-title">nginx — proxy_next_upstream</span><span class="lc-sub">nginx.org · Mọi điều kiện, và lời cảnh báo về non_idempotent</span></span></a>
@@ -475,6 +983,7 @@ giet may-2 (chinh),   20 request : may-3=20        (backup vao cuoc)</div>
       type: 'LESSON',
       description: 'Một upstream biết ĐẾM số kết nối TCP nó nhận được. Không có keepalive: 101 request, 101 kết nối. Có keepalive cộng hai dòng nữa: 101 request tiếp theo chỉ tốn ĐÚNG MỘT kết nối mới. Bài này đo cái đó, và giải thích vì sao ba dòng ấy phải đi cùng nhau.',
       content: `
+${G09_4}
 <div class="ml-en">
 <span class="eyebrow">Chapter 9 · Lesson 9.4</span>
 <h2>101 requests, one TCP connection</h2>
@@ -529,6 +1038,70 @@ location /api/ {
 <p><strong>Why this is worth doing before any other tuning.</strong> It is three lines, it needs no new infrastructure, and the measurement above is a hundredfold reduction in connection setup between two machines that talk constantly. Compared with anything else in this course it has the best ratio of effect to effort — and because the default is silently wasteful rather than broken, nothing will ever tell you it is missing.</p>
 </div>
 
+<h3>🔬 Run it yourself</h3>
+<p>A backend that counts requests AND TCP connections, two upstreams on that same backend (with and without keepalive), three upstreams each missing ONE of the three lines, and a Node backend left at its defaults — on nginx/1.24.0 with one worker:</p>
+<pre><code class="language-bash"><span class="tok-comment"># goi.sh</span>
+<span class="tok-comment"># goi.sh &lt;đường dẫn&gt; &lt;n&gt; — gửi n request qua nginx, rồi hỏi backend đã đếm được bao nhiêu request và bao nhiêu kết nối TCP</span>
+for i in $(seq $2); do curl -s -o /dev/null "http://127.0.0.1:8080$1"; done
+curl -s "http://127.0.0.1:8080$1dem"</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  upstream khong      { server 127.0.0.1:9501; }                <span class="tok-comment">  # KHÔNG keepalive</span>
+  upstream giu        { server 127.0.0.1:9501; keepalive 16; }  <span class="tok-comment">  # CÙNG backend đó, CÓ keepalive</span>
+  upstream thieu_ka   { server 127.0.0.1:9502; }                <span class="tok-comment">  # có 1.1 + Connection "", thiếu keepalive</span>
+  upstream thieu_ver  { server 127.0.0.1:9503; keepalive 16; }  <span class="tok-comment">  # thiếu proxy_http_version 1.1</span>
+  upstream thieu_conn { server 127.0.0.1:9504; keepalive 16; }  <span class="tok-comment">  # thiếu Connection ""</span>
+  upstream node_md    { server 127.0.0.1:9505; keepalive 16; }  <span class="tok-comment">  # đủ ba dòng, backend Node mặc định</span>
+  server {
+    listen 8080;
+    location /dem-khong/ { proxy_pass http://khong/; }
+    location /dem-giu/   { proxy_http_version 1.1; proxy_set_header Connection ""; proxy_pass http://giu/; }
+    location /thieu-ka/  { proxy_http_version 1.1; proxy_set_header Connection ""; proxy_pass http://thieu_ka/; }
+    location /thieu-ver/ {                         proxy_set_header Connection ""; proxy_pass http://thieu_ver/; }
+    location /thieu-conn/ { proxy_http_version 1.1;                                proxy_pass http://thieu_conn/; }
+    location /node-md/   { proxy_http_version 1.1; proxy_set_header Connection ""; proxy_pass http://node_md/; }
+  }
+}</code></pre>
+<div class="out">$ bash goi.sh /dem-khong/ 100        # KHÔNG keepalive
+req=101  conn=101
+$ ss -tan state time-wait '( sport = :9501 or dport = :9501 )' | tail -n +2 | wc -l
+101
+$ bash goi.sh /dem-giu/ 100          # CÓ keepalive — cùng backend đó
+req=202  conn=102
+$ ss -tan state time-wait '( sport = :9501 or dport = :9501 )' | tail -n +2 | wc -l
+101
+$ ss -tn state established '( dport = :9501 )'
+Recv-Q Send-Q Local Address:Port  Peer Address:PortProcess
+0      0          127.0.0.1:51468    127.0.0.1:9501       
+$ bash goi.sh /thieu-ka/ 100         # thiếu keepalive 16
+req=101  conn=101
+$ bash goi.sh /thieu-ver/ 100        # thiếu proxy_http_version 1.1
+req=101  conn=101
+$ bash goi.sh /thieu-conn/ 100       # thiếu proxy_set_header Connection ""
+req=101  conn=101
+$ bash goi.sh /node-md/ 3            # đủ ba dòng, backend Node để mặc định
+req=4  conn=1
+$ sleep 6; bash goi.sh /node-md/ 1   # im 6 giây rồi gọi tiếp
+req=6  conn=2</div>
+<p>Exactly the numbers above: 101 / 101 without keepalive, 202 / 102 with it. NEW: 101 sockets sat in TIME_WAIT after the first hundred and none were added by the second; <code>ss</code> showed the one connection nginx keeps. Leaving out any ONE line — <code>keepalive</code>, <code>proxy_http_version 1.1</code> or <code>Connection ""</code> — gave 101 connections every time. Node with defaults: three requests on one connection, then a six-second pause and a second connection, because its <code>keepAliveTimeout</code> is 5 s.</p>
+<h3>🔗 Related lessons in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-4-4-trang-thai" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking for Developers · 4.4 — Connection states, TIME_WAIT and port exhaustion</span><span class="lc-sub">TIME_WAIT from the TCP side</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-4-5-keepalive-pool" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking for Developers · 4.5 — Keep-alive, connection pools and timeouts in your code</span><span class="lc-sub">The same pool, inside your application</span></span></a>
+<a class="link-card lien-ket-cheo" href="/academy/courses/nwc204-computer-networking/learn?lessonSlug=nwc204-13-2-bat-tay-tin-cay-va-doc-may-chu-that" target="_blank" rel="noopener"><span class="lc-ico">🎓</span><span class="lc-body"><span class="lc-title">Academy NWC204 · 13.2 — The handshake, reliability, and reading a real server</span><span class="lc-sub">The three-way handshake this lesson saves</span></span></a>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>keepalive N</code></span><span class="v">How many idle connections each worker keeps to the upstream pool — not a concurrency cap.</span></div>
+  <div class="kv"><span class="k"><code>proxy_http_version 1.1</code></span><span class="v">Required for upstream keepalive to work at all (the default is 1.0).</span></div>
+  <div class="kv"><span class="k"><code>Connection ""</code></span><span class="v">Removes nginx's default <code>Connection: close</code> so the upstream socket stays open.</span></div>
+  <div class="kv"><span class="k"><code>keepalive_requests</code> / <code>keepalive_timeout</code></span><span class="v">Recycle a connection after N requests, or close it when idle too long.</span></div>
+  <div class="kv"><span class="k"><code>TIME_WAIT</code></span><span class="v">The per-connection socket state that piles up (toward port exhaustion) without keepalive.</span></div>
+  <div class="kv"><span class="k"><code>fastcgi_keep_conn</code></span><span class="v">The FastCGI equivalent of the empty <code>Connection</code> header.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li>Without keepalive, nginx opens one TCP connection per upstream request (101 requests measured as 101 connections).</li><li>Three directives together enable reuse — <code>keepalive N</code>, <code>proxy_http_version 1.1</code>, <code>Connection ""</code>; miss one and it silently does nothing.</li><li><code>keepalive N</code> counts idle connections per worker, so multiply by <code>worker_processes</code> to size it.</li><li>The backend's keepalive timeout must exceed nginx's, or you get sporadic 502s after idle periods.</li><li>Best effort-to-effect ratio in the course: three lines for a hundredfold drop in connection setup.</li></ul>
 <h3>Learning sources for this lesson</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_upstream_module.html#keepalive" target="_blank" rel="noopener"><span class="lc-ico">♻️</span><span class="lc-body"><span class="lc-title">nginx — upstream keepalive</span><span class="lc-sub">nginx.org · Including the note that all three directives are required</span></span></a>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_http_version" target="_blank" rel="noopener"><span class="lc-ico">1️⃣</span><span class="lc-body"><span class="lc-title">nginx — proxy_http_version</span><span class="lc-sub">nginx.org · Why the default is 1.0 and what that costs</span></span></a>
@@ -591,6 +1164,70 @@ location /api/ {
 <p><strong>Vì sao việc này đáng làm TRƯỚC mọi phép chỉnh tinh khác.</strong> Nó là BA dòng, nó không cần hạ tầng mới nào, và phép đo ở trên là mức giảm GẤP TRĂM LẦN chi phí thiết lập kết nối giữa hai cái máy nói chuyện với nhau liên tục. So với mọi thứ khác trong khoá này thì nó có tỷ lệ hiệu quả trên công sức tốt nhất — và vì cái mặc định là LÃNG PHÍ trong im lặng chứ không phải HỎNG, nên sẽ chẳng có gì báo cho bạn biết là nó đang thiếu.</p>
 </div>
 
+<h3>🔬 Tự chạy lại</h3>
+<p>Một backend đếm cả request LẪN kết nối TCP, hai upstream trên chính backend đó (có và không keepalive), ba upstream mỗi cái thiếu MỘT trong ba dòng, và một backend Node để nguyên mặc định — trên nginx/1.24.0 với một worker:</p>
+<pre><code class="language-bash"><span class="tok-comment"># goi.sh</span>
+<span class="tok-comment"># goi.sh &lt;đường dẫn&gt; &lt;n&gt; — gửi n request qua nginx, rồi hỏi backend đã đếm được bao nhiêu request và bao nhiêu kết nối TCP</span>
+for i in $(seq $2); do curl -s -o /dev/null "http://127.0.0.1:8080$1"; done
+curl -s "http://127.0.0.1:8080$1dem"</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  upstream khong      { server 127.0.0.1:9501; }                <span class="tok-comment">  # KHÔNG keepalive</span>
+  upstream giu        { server 127.0.0.1:9501; keepalive 16; }  <span class="tok-comment">  # CÙNG backend đó, CÓ keepalive</span>
+  upstream thieu_ka   { server 127.0.0.1:9502; }                <span class="tok-comment">  # có 1.1 + Connection "", thiếu keepalive</span>
+  upstream thieu_ver  { server 127.0.0.1:9503; keepalive 16; }  <span class="tok-comment">  # thiếu proxy_http_version 1.1</span>
+  upstream thieu_conn { server 127.0.0.1:9504; keepalive 16; }  <span class="tok-comment">  # thiếu Connection ""</span>
+  upstream node_md    { server 127.0.0.1:9505; keepalive 16; }  <span class="tok-comment">  # đủ ba dòng, backend Node mặc định</span>
+  server {
+    listen 8080;
+    location /dem-khong/ { proxy_pass http://khong/; }
+    location /dem-giu/   { proxy_http_version 1.1; proxy_set_header Connection ""; proxy_pass http://giu/; }
+    location /thieu-ka/  { proxy_http_version 1.1; proxy_set_header Connection ""; proxy_pass http://thieu_ka/; }
+    location /thieu-ver/ {                         proxy_set_header Connection ""; proxy_pass http://thieu_ver/; }
+    location /thieu-conn/ { proxy_http_version 1.1;                                proxy_pass http://thieu_conn/; }
+    location /node-md/   { proxy_http_version 1.1; proxy_set_header Connection ""; proxy_pass http://node_md/; }
+  }
+}</code></pre>
+<div class="out">$ bash goi.sh /dem-khong/ 100        # KHÔNG keepalive
+req=101  conn=101
+$ ss -tan state time-wait '( sport = :9501 or dport = :9501 )' | tail -n +2 | wc -l
+101
+$ bash goi.sh /dem-giu/ 100          # CÓ keepalive — cùng backend đó
+req=202  conn=102
+$ ss -tan state time-wait '( sport = :9501 or dport = :9501 )' | tail -n +2 | wc -l
+101
+$ ss -tn state established '( dport = :9501 )'
+Recv-Q Send-Q Local Address:Port  Peer Address:PortProcess
+0      0          127.0.0.1:51468    127.0.0.1:9501       
+$ bash goi.sh /thieu-ka/ 100         # thiếu keepalive 16
+req=101  conn=101
+$ bash goi.sh /thieu-ver/ 100        # thiếu proxy_http_version 1.1
+req=101  conn=101
+$ bash goi.sh /thieu-conn/ 100       # thiếu proxy_set_header Connection ""
+req=101  conn=101
+$ bash goi.sh /node-md/ 3            # đủ ba dòng, backend Node để mặc định
+req=4  conn=1
+$ sleep 6; bash goi.sh /node-md/ 1   # im 6 giây rồi gọi tiếp
+req=6  conn=2</div>
+<p>Đúng các con số ở trên: 101 / 101 khi không keepalive, 202 / 102 khi có. MỚI: 101 socket nằm trong TIME_WAIT sau một trăm request đầu và một trăm request sau không thêm cái nào; <code>ss</code> thấy đúng một kết nối nginx giữ. Bỏ đi MỘT dòng bất kỳ — <code>keepalive</code>, <code>proxy_http_version 1.1</code> hay <code>Connection ""</code> — lần nào cũng 101 kết nối. Node để mặc định: ba request trên một kết nối, rồi nghỉ sáu giây là thành kết nối thứ hai, vì <code>keepAliveTimeout</code> của nó là 5 s.</p>
+<h3>🔗 Bài liên quan ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-4-4-trang-thai" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking for Developers · 4.4 — Trạng thái kết nối, TIME_WAIT và cạn cổng</span><span class="lc-sub">TIME_WAIT nhìn từ phía TCP</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-4-5-keepalive-pool" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking for Developers · 4.5 — Keep-alive, pool kết nối và timeout trong code của bạn</span><span class="lc-sub">Cũng cái hồ đó, nhưng trong ứng dụng</span></span></a>
+<a class="link-card lien-ket-cheo" href="/academy/courses/nwc204-computer-networking/learn?lessonSlug=nwc204-13-2-bat-tay-tin-cay-va-doc-may-chu-that" target="_blank" rel="noopener"><span class="lc-ico">🎓</span><span class="lc-body"><span class="lc-title">Academy NWC204 · 13.2 — Bắt tay, tin cậy, và đọc máy chủ thật</span><span class="lc-sub">Cái bắt tay ba bước mà bài này tiết kiệm</span></span></a>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>keepalive N</code></span><span class="v">Số kết nối RẢNH mỗi worker giữ tới bể upstream — không phải trần số việc đồng thời.</span></div>
+  <div class="kv"><span class="k"><code>proxy_http_version 1.1</code></span><span class="v">Bắt buộc để keepalive upstream chạy được (mặc định là 1.0).</span></div>
+  <div class="kv"><span class="k"><code>Connection ""</code></span><span class="v">Gỡ <code>Connection: close</code> mặc định của nginx để socket upstream ở lại mở.</span></div>
+  <div class="kv"><span class="k"><code>keepalive_requests</code> / <code>keepalive_timeout</code></span><span class="v">Tái chế kết nối sau N request, hoặc đóng nó khi rảnh quá lâu.</span></div>
+  <div class="kv"><span class="k"><code>TIME_WAIT</code></span><span class="v">Trạng thái socket từng kết nối chất đống (tiến tới cạn cổng) khi không có keepalive.</span></div>
+  <div class="kv"><span class="k"><code>fastcgi_keep_conn</code></span><span class="v">Thứ tương đương header <code>Connection</code> rỗng ở phía FastCGI.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li>Không có keepalive, nginx mở một kết nối TCP cho mỗi request upstream (101 request đo ra 101 kết nối).</li><li>Ba chỉ thị cùng nhau bật tái dùng — <code>keepalive N</code>, <code>proxy_http_version 1.1</code>, <code>Connection ""</code>; thiếu một là âm thầm vô dụng.</li><li><code>keepalive N</code> đếm kết nối rảnh mỗi worker, nên nhân với <code>worker_processes</code> để định cỡ.</li><li>keepalive timeout của backend phải lớn hơn của nginx, không thì có 502 rải rác sau lúc rảnh.</li><li>Tỷ lệ hiệu quả trên công sức tốt nhất khoá: ba dòng cho mức giảm gấp trăm lần chi phí dựng kết nối.</li></ul>
 <h3>Nguồn học cho bài này</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_upstream_module.html#keepalive" target="_blank" rel="noopener"><span class="lc-ico">♻️</span><span class="lc-body"><span class="lc-title">nginx — keepalive của upstream</span><span class="lc-sub">nginx.org · Kèm ghi chú rằng cả ba chỉ thị đều bắt buộc</span></span></a>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_http_version" target="_blank" rel="noopener"><span class="lc-ico">1️⃣</span><span class="lc-body"><span class="lc-title">nginx — proxy_http_version</span><span class="lc-sub">nginx.org · Vì sao mặc định là 1.0 và điều đó tốn gì</span></span></a>
@@ -608,6 +1245,7 @@ location /api/ {
       type: 'LESSON',
       description: 'Nạp lại cấu hình BA lần trong khi bốn trăm request đang chạy: bốn trăm cú 200, không lỗi nào. Rồi đổi cả cái bể sang một bộ máy mới ngay giữa lúc có lưu lượng, và đếm lại. Bài này cũng kể về một cú "lỗi" trong phép đo hoá ra là số đếm của chính upstream.',
       content: `
+${G09_5}
 <div class="ml-en">
 <span class="eyebrow">Chapter 9 · Lesson 9.5</span>
 <h2>Deploying without dropping a request</h2>
@@ -630,8 +1268,8 @@ location /api/ {
         -> upstream deu { server 9504; }          va nap lai
 
 200 request bac ngang qua lan doi:
-  may-1=22  may-2=23  may-3=22        (truoc khi nap lai)
-  may-4=133                           (sau khi nap lai)
+  may-1=22  may-2=21  may-3=20        (truoc khi nap lai)
+  may-4=137                           (sau khi nap lai)
   loi: 0</div>
 <div class="callout warn">
 <p><strong>One line in that output looked like an error and was not.</strong> A first pass counted responses containing "502" and found one — which turned out to be <code>may-1 (lan 502)</code>, the backend's own request counter reaching 502. Checking every line against the expected shape found 200 well-formed responses and zero failures. It is a small thing, and it is exactly how a measurement produces a wrong conclusion: the grep was reasonable, the number was real, and the interpretation was nonsense. Verify what a pattern actually matched before reporting what it means.</p>
@@ -655,7 +1293,7 @@ upstream api { include /etc/nginx/be-hien-tai.conf; keepalive 32; }
 <p><strong>Trap — a reload publishes the config, but it does not verify that the new backends actually work.</strong> The measurement above swapped to a pool that happened to be healthy. Point the same edit at a machine that is up but broken — wrong build, missing environment variable, database it cannot reach — and Nginx will happily send it every request, because passive health checks only notice connection failures and the status codes you listed (Lesson 9.3). The step that is missing from most deploy scripts is a direct request to the new backend, bypassing Nginx, checking something that only a correct build would return. That is one <code>curl</code> against the backend's own port, run before the reload rather than after it.</p>
 </div>
 <div class="kv-grid">
-  <div class="kv"><span class="k">Reload does not re-resolve DNS names in proxy_pass</span><span class="v">It does re-resolve names inside an <code>upstream</code> block. If your deploy replaces containers and you use a bare hostname in <code>proxy_pass</code>, a reload will not pick up the new address — Lesson 3.1's caveat, arriving at the worst possible moment.</span></div>
+  <div class="kv"><span class="k">A reload re-resolves names — and only a reload does</span><span class="v">Measured below: a bare hostname in <code>proxy_pass</code> and a name inside an <code>upstream</code> block both kept the old address after it changed, and both picked up the new one on the reload. Between reloads both are stale — Lesson 3.1's caveat. If your deploy replaces containers, reload after the swap, or use a <code>resolver</code> plus a variable in <code>proxy_pass</code>.</span></div>
   <div class="kv"><span class="k">Old workers can linger a long time</span><span class="v">A WebSocket or a long download keeps its worker alive until it finishes. After a reload you will see old worker processes still running, which is correct — <code>worker_shutdown_timeout</code> bounds it if you need them gone.</span></div>
   <div class="kv"><span class="k">Reloading is not restarting</span><span class="v"><code>reload</code> keeps the master, the listening sockets and every open connection. <code>restart</code> drops all of them. Anything in a deploy script that says <code>systemctl restart nginx</code> is causing a brief outage that a reload would not.</span></div>
   <div class="kv"><span class="k">Test the reload path itself</span><span class="v">Run a request loop, reload three times, and count the failures. Four hundred requests and zero errors is what it should look like — and if it does not, that is a finding worth having before a deploy rather than during one.</span></div>
@@ -664,6 +1302,108 @@ upstream api { include /etc/nginx/be-hien-tai.conf; keepalive 32; }
 <p><strong>What makes all of this work.</strong> The upstream block is data, the reload is atomic and non-disruptive, and the two together mean changing which machines serve your traffic is a text edit and a signal. No load balancer to reconfigure, no DNS to wait for, no connection dropped — measured at four hundred requests across three reloads and again across a full pool swap.</p>
 </div>
 
+<h3>🔬 Run it yourself</h3>
+<p>Three backends with a 10 ms reply, a load generator that opens a new connection per request, the pool as one include file behind a symlink, a "new build" that answers 500, a slow download, and a hostname whose address changes — on nginx/1.24.0 with two workers:</p>
+<pre><code class="language-bash"><span class="tok-comment"># tai.py</span>
+<span class="tok-comment"># tai.py &lt;url&gt; &lt;n&gt; &lt;song song&gt; — tải giả: n request, mỗi request MỘT kết nối mới; đếm theo máy trả lời / mã lỗi / lỗi kết nối</span>
+import sys, collections, urllib.request, urllib.error
+from concurrent.futures import ThreadPoolExecutor
+url, n, c = sys.argv[1], int(sys.argv[2]), int(sys.argv[3])
+def mot(_):
+    try:
+        with urllib.request.urlopen(url, timeout=5) as r: return f'{r.status}:{r.read().decode().strip()}'
+    except urllib.error.HTTPError as e: return f'{e.code}:loi-http'
+    except Exception: return 'LOI-KET-NOI'
+kq = list(ThreadPoolExecutor(c).map(mot, range(n)))
+ma = collections.Counter(k.split(':')[0] for k in kq)
+may = collections.Counter(k.split(':', 1)[1] for k in kq if k.startswith('200:'))
+print('  ' + '  '.join(f'{v} x {k}' for k, v in sorted(ma.items())), '  |  ' + '  '.join(f'{k}={v}' for k, v in sorted(may.items())))</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+worker_processes 2;
+events {}
+http {
+  access_log off;
+  upstream deu { include be-hien-tai.conf; } <span class="tok-comment">  # bể = một tệp include, đổi bằng symlink</span>
+  server {
+    listen 8080;
+    location / { proxy_pass http://deu; }
+  }
+}</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># be-cu.conf</span>
+server 127.0.0.1:9501; server 127.0.0.1:9502; server 127.0.0.1:9503;
+<span class="tok-comment"># be-moi.conf</span>
+server 127.0.0.1:9504;</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/dns.pid;
+error_log /srv/logs/dns.log;
+events {}
+http {
+  access_log off;
+  upstream ten { server be.test:9510; }
+  server {
+    listen 8082;
+    location /pp/ { proxy_pass http://be.test:9510; } <span class="tok-comment">  # tên trần TRONG proxy_pass</span>
+    location /up/ { proxy_pass http://ten; }         <span class="tok-comment">  # tên trong khối upstream</span>
+  }
+}</code></pre>
+<div class="out">400 request dang chay (4 luong song song), nap lai cau hinh BA lan giua chung:
+$ (python3 tai.py http://127.0.0.1:8080/ 400 4 &amp;); for k in 1 2 3; do sleep 0.25; nginx -s reload; done
+  400 x 200   |  may-1=135  may-2=133  may-3=132
+200 request bac ngang qua lan doi ca be: be-cu (may-1..3) -&gt; be-moi (may-4):
+$ (python3 tai.py http://127.0.0.1:8080/ 200 2 &amp;); sleep 0.4; ln -sfn be-moi.conf be-hien-tai.conf &amp;&amp; nginx -t &amp;&amp; nginx -s reload
+  200 x 200   |  may-1=22  may-2=21  may-3=20  may-4=137
+Cung tai do, nhung "khoi dong lai" (stop + start) thay vi nap lai:
+$ ln -sfn be-cu.conf be-hien-tai.conf; nginx -s reload       # quay về bể cũ
+$ (python3 tai.py http://127.0.0.1:8080/ 400 4 &amp;); sleep 0.3; nginx -s stop; sleep 0.2; nginx
+  55 x 200  345 x LOI-KET-NOI   |  may-1=19  may-2=18  may-3=18
+Doi sang mot be MOI nhung HONG (song, nghe cong, tra 500):
+$ ln -sfn be-hong.conf be-hien-tai.conf &amp;&amp; nginx -t &amp;&amp; nginx -s reload &amp;&amp; echo "nginx -t: ok, nap lai: ok"
+nginx -t: ok, nap lai: ok
+$ python3 tai.py http://127.0.0.1:8080/ 50 2
+  50 x 500   |  
+$ wc -l &lt; error.log
+0
+Buoc con thieu: hoi THANG backend moi (bo qua nginx) TRUOC khi nap lai:
+$ ln -sfn be-cu.conf be-hien-tai.conf; nginx -s reload       # quay về bể cũ
+$ curl -fsS http://127.0.0.1:9507/ &amp;&amp; ln -sfn be-hong.conf be-hien-tai.conf &amp;&amp; nginx -s reload || echo "=&gt; KHONG doi be: backend moi chua dung"
+curl: (22) The requested URL returned error: 500
+=&gt; KHONG doi be: backend moi chua dung
+$ python3 tai.py http://127.0.0.1:8080/ 50 2
+  50 x 200   |  may-1=17  may-2=17  may-3=16
+Mot luot tai cham (gioi han 200 KB/s) dang chay luc nap lai:
+$ (curl -s -o /dev/null -w 'tai xong: %{http_code} %{size_download} byte\\n' http://127.0.0.1:8081/to.bin &amp;); sleep 1; nginx -s reload; sleep 1; ps -eo pid,cmd | grep '[n]ginx:'
+  19108 nginx: master process nginx -c cham.conf
+  19109 nginx: worker process is shutting down
+  19122 nginx: worker process
+$ sleep 14; cat /srv/tai.txt; ps -eo pid,cmd | grep '[n]ginx:'
+tai xong: 200 3000000 byte
+  19108 nginx: master process nginx -c cham.conf
+  19122 nginx: worker process
+$ grep be.test /etc/hosts; printf 'proxy_pass: %s   upstream: %s\\n' $(curl -s 127.0.0.1:8082/pp/) $(curl -s 127.0.0.1:8082/up/)
+127.0.0.2 be.test
+proxy_pass: o-127.0.0.2   upstream: o-127.0.0.2
+$ echo '127.0.0.3 be.test' &gt; /etc/hosts    # đổi địa chỉ của tên (như container được dựng lại)
+127.0.0.3 be.test
+$ printf 'CHUA nap lai -&gt; proxy_pass: %s   upstream: %s\\n' $(curl -s 127.0.0.1:8082/pp/) $(curl -s 127.0.0.1:8082/up/)
+CHUA nap lai -&gt; proxy_pass: o-127.0.0.2   upstream: o-127.0.0.2
+$ nginx -s reload; printf 'SAU nap lai  -&gt; proxy_pass: %s   upstream: %s\\n' $(curl -s 127.0.0.1:8082/pp/) $(curl -s 127.0.0.1:8082/up/)
+SAU nap lai  -&gt; proxy_pass: o-127.0.0.3   upstream: o-127.0.0.3</div>
+<p>Three reloads under 400 requests: 400 × 200. The pool swap: the old pool answered the first part, may-4 the rest, 200 × 200. NEW: the same load with stop + start instead of reload — most requests got "connection refused". A broken new pool passed <code>nginx -t</code> and the reload and then answered 500 to everything with ZERO lines in error.log; one <code>curl</code> to the new backend first refused the switch. A slow download kept an old worker "shutting down" until it finished with every byte. And the hostname: both the <code>proxy_pass</code> name and the <code>upstream</code> name stayed on the old address until the reload, then both moved.</p>
+<h3>🔗 Related lessons in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-3-3-xanh-lam" target="_blank" rel="noopener"><span class="lc-ico">🚀</span><span class="lc-body"><span class="lc-title">Deploy to a VPS · 3.3 — Blue-green: the same deploy, zero failures</span><span class="lc-sub">The whole blue-green deploy on a real VPS</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-17-5-deploy-khong-gian-doan" target="_blank" rel="noopener"><span class="lc-ico">🟢</span><span class="lc-body"><span class="lc-title">Node.js · 17.5 — Zero downtime: 1,5% lost, or 0%</span><span class="lc-sub">The app side: shutting down gracefully</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/kubernetes/learn?lessonSlug=k8s-2-3-chien-luoc" target="_blank" rel="noopener"><span class="lc-ico">☸️</span><span class="lc-body"><span class="lc-title">Kubernetes · 2.3 — Blue-green and canary</span><span class="lc-sub">The same patterns, one level up</span></span></a>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>reload</code></span><span class="v">The master starts new workers with the new config while old workers finish their in-flight requests.</span></div>
+  <div class="kv"><span class="k">Rolling deploy</span><span class="v">Take one node down, deploy to it, bring it back — one node at a time, no client sees an error.</span></div>
+  <div class="kv"><span class="k">Blue-green</span><span class="v">Two full pools; switch the <code>upstream</code> list and reload to cut over, reverse it to roll back.</span></div>
+  <div class="kv"><span class="k">Canary</span><span class="v">Weight the new build low (e.g. <code>weight=1</code> against <code>weight=9</code>) and watch the error rate.</span></div>
+  <div class="kv"><span class="k"><code>worker_shutdown_timeout</code></span><span class="v">Bounds how long old workers may linger after a reload (long downloads, WebSockets).</span></div>
+  <div class="kv"><span class="k"><code>nginx -t &amp;&amp; nginx -s reload</code></span><span class="v">Test-then-reload as one command, so a broken config never applies.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li><code>reload</code> replaces workers without dropping connections — 400 requests across three reloads, zero errors.</li><li>The <code>upstream</code> block is data: swapping the whole pool mid-traffic is a text edit plus a reload.</li><li>A reload publishes the config but does not verify the new backends work — curl a backend directly first.</li><li>Rolling, blue-green and canary all fall out of editing the upstream list and reloading.</li><li>Verify what a grep actually matched: a "502" in the output was a backend's own request counter, not an error.</li></ul>
 <h3>Learning sources for this lesson</h3>
 <a class="link-card" href="https://nginx.org/en/docs/control.html" target="_blank" rel="noopener"><span class="lc-ico">🎛️</span><span class="lc-body"><span class="lc-title">nginx — Controlling nginx</span><span class="lc-sub">nginx.org · reload, reopen, quit, and what each signal does to the workers</span></span></a>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_upstream_module.html#server" target="_blank" rel="noopener"><span class="lc-ico">🔻</span><span class="lc-body"><span class="lc-title">nginx — the down parameter</span><span class="lc-sub">nginx.org · Draining a node without deleting its configuration</span></span></a>
@@ -694,8 +1434,8 @@ upstream api { include /etc/nginx/be-hien-tai.conf; keepalive 32; }
         -> upstream deu { server 9504; }          va nap lai
 
 200 request bac ngang qua lan doi:
-  may-1=22  may-2=23  may-3=22        (truoc khi nap lai)
-  may-4=133                           (sau khi nap lai)
+  may-1=22  may-2=21  may-3=20        (truoc khi nap lai)
+  may-4=137                           (sau khi nap lai)
   loi: 0</div>
 <div class="callout warn">
 <p><strong>Một dòng trong kết quả đó TRÔNG như một lỗi mà thật ra KHÔNG.</strong> Một lượt đếm ban đầu tìm những phản hồi có chứa "502" và thấy MỘT — hoá ra đó là <code>may-1 (lan 502)</code>, tức là bộ đếm request của chính backend vừa chạm 502. Kiểm lại TỪNG dòng theo đúng hình dạng mong đợi thì thấy 200 phản hồi hoàn chỉnh và KHÔNG thất bại nào. Đó là chuyện nhỏ, và nó ĐÚNG là cách một phép đo sinh ra một kết luận sai: cái lệnh grep hợp lý, con số có thật, và phần diễn giải thì vô nghĩa. Hãy KIỂM xem một cái mẫu thật sự khớp phải cái gì trước khi đi báo cáo nó có nghĩa gì.</p>
@@ -719,7 +1459,7 @@ upstream api { include /etc/nginx/be-hien-tai.conf; keepalive 32; }
 <p><strong>Bẫy — một cú nạp lại CÔNG BỐ cấu hình, nhưng nó KHÔNG kiểm xem đám backend mới có thật sự chạy được không.</strong> Phép đo ở trên đổi sang một cái bể tình cờ khoẻ mạnh. Chĩa đúng cái sửa đó vào một máy đang SỐNG nhưng HỎNG — sai bản dựng, thiếu một biến môi trường, không chạm nổi cơ sở dữ liệu — thì Nginx sẽ vui vẻ gửi cho nó MỌI request, vì kiểm sức khoẻ thụ động chỉ nhận ra lỗi kết nối và những mã trạng thái bạn liệt kê (Bài 9.3). Cái bước thiếu trong phần lớn script deploy là một request TRỰC TIẾP tới backend mới, đi VÒNG QUA Nginx, kiểm một thứ mà chỉ bản dựng ĐÚNG mới trả về được. Đó là MỘT lệnh <code>curl</code> nhắm vào chính cổng của backend, chạy TRƯỚC cú nạp lại chứ không phải sau.</p>
 </div>
 <div class="kv-grid">
-  <div class="kv"><span class="k">Nạp lại KHÔNG phân giải lại tên miền trong proxy_pass</span><span class="v">Nó CÓ phân giải lại những tên nằm TRONG một khối <code>upstream</code>. Nếu lần deploy của bạn thay container mà bạn dùng một tên miền trần trong <code>proxy_pass</code> thì nạp lại sẽ KHÔNG lấy được địa chỉ mới — đúng cái cảnh báo ở Bài 3.1, ập tới vào thời điểm tệ nhất có thể.</span></div>
+  <div class="kv"><span class="k">Nạp lại CÓ phân giải lại tên miền — và chỉ nạp lại mới làm thế</span><span class="v">Đo thật ở dưới: một tên miền trần trong <code>proxy_pass</code> và một tên trong khối <code>upstream</code> đều giữ địa chỉ CŨ sau khi địa chỉ đổi, và cả hai cùng lấy địa chỉ mới khi nạp lại. Giữa hai lần nạp thì cả hai đều cũ — đúng cảnh báo ở Bài 3.1. Nếu lần deploy thay container thì hãy nạp lại sau khi đổi, hoặc dùng <code>resolver</code> cộng một biến trong <code>proxy_pass</code>.</span></div>
   <div class="kv"><span class="k">Worker cũ có thể nán lại RẤT lâu</span><span class="v">Một WebSocket hay một lượt tải lớn giữ cho worker của nó sống tới khi xong. Sau một cú nạp lại bạn sẽ thấy các tiến trình worker cũ vẫn chạy, và thế là ĐÚNG — <code>worker_shutdown_timeout</code> chặn nó lại nếu bạn cần chúng biến mất.</span></div>
   <div class="kv"><span class="k">Nạp lại KHÔNG phải khởi động lại</span><span class="v"><code>reload</code> giữ nguyên master, các socket đang nghe và mọi kết nối đang mở. <code>restart</code> vứt hết. Bất cứ dòng nào trong script deploy viết <code>systemctl restart nginx</code> đều đang gây ra một khoảng chết ngắn mà một cú nạp lại thì không.</span></div>
   <div class="kv"><span class="k">Hãy THỬ chính cái đường nạp lại</span><span class="v">Chạy một vòng lặp request, nạp lại ba lần, rồi đếm số thất bại. Bốn trăm request và không lỗi nào là thứ nó PHẢI trông như thế — và nếu không phải thế thì đó là một phát hiện đáng có TRƯỚC một lần deploy chứ không phải GIỮA một lần deploy.</span></div>
@@ -728,6 +1468,108 @@ upstream api { include /etc/nginx/be-hien-tai.conf; keepalive 32; }
 <p><strong>Cái gì làm cho tất cả chuyện này chạy được.</strong> Khối upstream là DỮ LIỆU, cú nạp lại là NGUYÊN TỬ và không gây gián đoạn, và hai thứ đó cộng lại nghĩa là việc đổi xem máy nào phục vụ lưu lượng của bạn chỉ là một lần sửa văn bản và một tín hiệu. Không có bộ cân bằng tải nào phải cấu hình lại, không có DNS nào phải chờ, không kết nối nào bị rớt — đo được ở bốn trăm request bắc qua ba lần nạp lại và một lần nữa bắc qua một cú đổi trọn cái bể.</p>
 </div>
 
+<h3>🔬 Tự chạy lại</h3>
+<p>Ba backend trả lời trong 10 ms, một bộ tạo tải mở kết nối MỚI cho mỗi request, bể máy là một tệp include đứng sau một symlink, một "bản build mới" trả 500, một lượt tải chậm, và một tên miền bị đổi địa chỉ — trên nginx/1.24.0 với hai worker:</p>
+<pre><code class="language-bash"><span class="tok-comment"># tai.py</span>
+<span class="tok-comment"># tai.py &lt;url&gt; &lt;n&gt; &lt;song song&gt; — tải giả: n request, mỗi request MỘT kết nối mới; đếm theo máy trả lời / mã lỗi / lỗi kết nối</span>
+import sys, collections, urllib.request, urllib.error
+from concurrent.futures import ThreadPoolExecutor
+url, n, c = sys.argv[1], int(sys.argv[2]), int(sys.argv[3])
+def mot(_):
+    try:
+        with urllib.request.urlopen(url, timeout=5) as r: return f'{r.status}:{r.read().decode().strip()}'
+    except urllib.error.HTTPError as e: return f'{e.code}:loi-http'
+    except Exception: return 'LOI-KET-NOI'
+kq = list(ThreadPoolExecutor(c).map(mot, range(n)))
+ma = collections.Counter(k.split(':')[0] for k in kq)
+may = collections.Counter(k.split(':', 1)[1] for k in kq if k.startswith('200:'))
+print('  ' + '  '.join(f'{v} x {k}' for k, v in sorted(ma.items())), '  |  ' + '  '.join(f'{k}={v}' for k, v in sorted(may.items())))</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+worker_processes 2;
+events {}
+http {
+  access_log off;
+  upstream deu { include be-hien-tai.conf; } <span class="tok-comment">  # bể = một tệp include, đổi bằng symlink</span>
+  server {
+    listen 8080;
+    location / { proxy_pass http://deu; }
+  }
+}</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># be-cu.conf</span>
+server 127.0.0.1:9501; server 127.0.0.1:9502; server 127.0.0.1:9503;
+<span class="tok-comment"># be-moi.conf</span>
+server 127.0.0.1:9504;</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/dns.pid;
+error_log /srv/logs/dns.log;
+events {}
+http {
+  access_log off;
+  upstream ten { server be.test:9510; }
+  server {
+    listen 8082;
+    location /pp/ { proxy_pass http://be.test:9510; } <span class="tok-comment">  # tên trần TRONG proxy_pass</span>
+    location /up/ { proxy_pass http://ten; }         <span class="tok-comment">  # tên trong khối upstream</span>
+  }
+}</code></pre>
+<div class="out">400 request dang chay (4 luong song song), nap lai cau hinh BA lan giua chung:
+$ (python3 tai.py http://127.0.0.1:8080/ 400 4 &amp;); for k in 1 2 3; do sleep 0.25; nginx -s reload; done
+  400 x 200   |  may-1=135  may-2=133  may-3=132
+200 request bac ngang qua lan doi ca be: be-cu (may-1..3) -&gt; be-moi (may-4):
+$ (python3 tai.py http://127.0.0.1:8080/ 200 2 &amp;); sleep 0.4; ln -sfn be-moi.conf be-hien-tai.conf &amp;&amp; nginx -t &amp;&amp; nginx -s reload
+  200 x 200   |  may-1=22  may-2=21  may-3=20  may-4=137
+Cung tai do, nhung "khoi dong lai" (stop + start) thay vi nap lai:
+$ ln -sfn be-cu.conf be-hien-tai.conf; nginx -s reload       # quay về bể cũ
+$ (python3 tai.py http://127.0.0.1:8080/ 400 4 &amp;); sleep 0.3; nginx -s stop; sleep 0.2; nginx
+  55 x 200  345 x LOI-KET-NOI   |  may-1=19  may-2=18  may-3=18
+Doi sang mot be MOI nhung HONG (song, nghe cong, tra 500):
+$ ln -sfn be-hong.conf be-hien-tai.conf &amp;&amp; nginx -t &amp;&amp; nginx -s reload &amp;&amp; echo "nginx -t: ok, nap lai: ok"
+nginx -t: ok, nap lai: ok
+$ python3 tai.py http://127.0.0.1:8080/ 50 2
+  50 x 500   |  
+$ wc -l &lt; error.log
+0
+Buoc con thieu: hoi THANG backend moi (bo qua nginx) TRUOC khi nap lai:
+$ ln -sfn be-cu.conf be-hien-tai.conf; nginx -s reload       # quay về bể cũ
+$ curl -fsS http://127.0.0.1:9507/ &amp;&amp; ln -sfn be-hong.conf be-hien-tai.conf &amp;&amp; nginx -s reload || echo "=&gt; KHONG doi be: backend moi chua dung"
+curl: (22) The requested URL returned error: 500
+=&gt; KHONG doi be: backend moi chua dung
+$ python3 tai.py http://127.0.0.1:8080/ 50 2
+  50 x 200   |  may-1=17  may-2=17  may-3=16
+Mot luot tai cham (gioi han 200 KB/s) dang chay luc nap lai:
+$ (curl -s -o /dev/null -w 'tai xong: %{http_code} %{size_download} byte\\n' http://127.0.0.1:8081/to.bin &amp;); sleep 1; nginx -s reload; sleep 1; ps -eo pid,cmd | grep '[n]ginx:'
+  19108 nginx: master process nginx -c cham.conf
+  19109 nginx: worker process is shutting down
+  19122 nginx: worker process
+$ sleep 14; cat /srv/tai.txt; ps -eo pid,cmd | grep '[n]ginx:'
+tai xong: 200 3000000 byte
+  19108 nginx: master process nginx -c cham.conf
+  19122 nginx: worker process
+$ grep be.test /etc/hosts; printf 'proxy_pass: %s   upstream: %s\\n' $(curl -s 127.0.0.1:8082/pp/) $(curl -s 127.0.0.1:8082/up/)
+127.0.0.2 be.test
+proxy_pass: o-127.0.0.2   upstream: o-127.0.0.2
+$ echo '127.0.0.3 be.test' &gt; /etc/hosts    # đổi địa chỉ của tên (như container được dựng lại)
+127.0.0.3 be.test
+$ printf 'CHUA nap lai -&gt; proxy_pass: %s   upstream: %s\\n' $(curl -s 127.0.0.1:8082/pp/) $(curl -s 127.0.0.1:8082/up/)
+CHUA nap lai -&gt; proxy_pass: o-127.0.0.2   upstream: o-127.0.0.2
+$ nginx -s reload; printf 'SAU nap lai  -&gt; proxy_pass: %s   upstream: %s\\n' $(curl -s 127.0.0.1:8082/pp/) $(curl -s 127.0.0.1:8082/up/)
+SAU nap lai  -&gt; proxy_pass: o-127.0.0.3   upstream: o-127.0.0.3</div>
+<p>Ba lần nạp lại giữa 400 request: 400 × 200. Đổi bể: bể cũ trả lời phần đầu, may-4 phần còn lại, 200 × 200. MỚI: cùng tải đó nhưng dừng rồi bật lại thay vì nạp lại — phần lớn request nhận "connection refused". Một bể mới bị HỎNG qua được <code>nginx -t</code> và cú nạp lại rồi trả 500 cho mọi thứ mà error.log KHÔNG có dòng nào; một lệnh <code>curl</code> hỏi thẳng backend mới trước đã chặn cú đổi. Một lượt tải chậm giữ worker cũ ở trạng thái "shutting down" tới khi xong đủ từng byte. Và tên miền: cả tên trong <code>proxy_pass</code> lẫn tên trong <code>upstream</code> đều đứng ở địa chỉ cũ cho tới lần nạp lại, rồi cùng chuyển.</p>
+<h3>🔗 Bài liên quan ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-3-3-xanh-lam" target="_blank" rel="noopener"><span class="lc-ico">🚀</span><span class="lc-body"><span class="lc-title">Deploy lên VPS · 3.3 — Xanh-lam: cùng lần deploy đó, không cái nào hỏng</span><span class="lc-sub">Trọn một lần deploy xanh-lam trên VPS thật</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-17-5-deploy-khong-gian-doan" target="_blank" rel="noopener"><span class="lc-ico">🟢</span><span class="lc-body"><span class="lc-title">Node.js · 17.5 — Deploy không gián đoạn: mất 1,5%, hay mất 0%</span><span class="lc-sub">Phía ứng dụng: tắt êm</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/kubernetes/learn?lessonSlug=k8s-2-3-chien-luoc" target="_blank" rel="noopener"><span class="lc-ico">☸️</span><span class="lc-body"><span class="lc-title">Kubernetes · 2.3 — Blue-green và canary</span><span class="lc-sub">Cùng các kiểu đó, ở tầng cao hơn</span></span></a>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>reload</code></span><span class="v">Master khởi động worker mới với cấu hình mới trong khi worker cũ làm nốt request đang bay.</span></div>
+  <div class="kv"><span class="k">Rolling deploy</span><span class="v">Rút một node, deploy lên nó, đưa về — lần lượt từng node, không client nào thấy lỗi.</span></div>
+  <div class="kv"><span class="k">Blue-green</span><span class="v">Hai bể đầy đủ; đổi danh sách <code>upstream</code> rồi nạp lại để chuyển sang, làm ngược lại để lùi.</span></div>
+  <div class="kv"><span class="k">Canary</span><span class="v">Cho bản dựng mới trọng số thấp (vd <code>weight=1</code> so với <code>weight=9</code>) và theo dõi tỷ lệ lỗi.</span></div>
+  <div class="kv"><span class="k"><code>worker_shutdown_timeout</code></span><span class="v">Chặn thời gian worker cũ được nán lại sau nạp lại (tải lớn, WebSocket).</span></div>
+  <div class="kv"><span class="k"><code>nginx -t &amp;&amp; nginx -s reload</code></span><span class="v">Kiểm-rồi-nạp trong một lệnh, nên cấu hình hỏng không bao giờ áp.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li><code>reload</code> thay worker mà không rớt kết nối — 400 request qua ba lần nạp lại, không lỗi nào.</li><li>Khối <code>upstream</code> là dữ liệu: đổi cả bể giữa lúc có lưu lượng chỉ là sửa văn bản cộng một cú nạp lại.</li><li>Nạp lại công bố cấu hình nhưng không kiểm backend mới có chạy không — hãy curl thẳng một backend trước.</li><li>Rolling, blue-green và canary đều nảy ra từ việc sửa danh sách upstream rồi nạp lại.</li><li>Kiểm xem grep thật sự khớp cái gì: một "502" trong kết quả là bộ đếm request của backend, không phải lỗi.</li></ul>
 <h3>Nguồn học cho bài này</h3>
 <a class="link-card" href="https://nginx.org/en/docs/control.html" target="_blank" rel="noopener"><span class="lc-ico">🎛️</span><span class="lc-body"><span class="lc-title">nginx — Điều khiển nginx</span><span class="lc-sub">nginx.org · reload, reopen, quit, và mỗi tín hiệu làm gì với đám worker</span></span></a>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_upstream_module.html#server" target="_blank" rel="noopener"><span class="lc-ico">🔻</span><span class="lc-body"><span class="lc-title">nginx — tham số down</span><span class="lc-sub">nginx.org · Rút cạn một node mà không xoá cấu hình của nó</span></span></a>
@@ -743,14 +1585,14 @@ upstream api { include /etc/nginx/be-hien-tai.conf; keepalive 32; }
       title: '9.6 — Quiz: load balancing|||9.6 — Quiz: cân bằng tải',
       slug: 'nginx-9-6-quiz',
       type: 'QUIZ',
-      description: 'Tám câu về bốn thuật toán, chuyện 73% so với 26%, cú giết máy giữa chừng không sinh lỗi nào, và 101 request đi qua một kết nối.',
+      description: 'Tám câu về bốn thuật toán, chuyện 72% so với 25%, cú giết máy giữa chừng không sinh lỗi nào, và 101 request đi qua một kết nối.',
       content: `
 <div class="ml-en">
 <span class="eyebrow">Chapter 9 · Lesson 9.6</span>
 <h2>Quiz: load balancing</h2>
 <p class="lead">Eight questions from three real backends and a lot of counting. Two of them describe results that contradict what the theory alone would suggest.</p>
 <div class="callout">
-<p><strong>What this chapter established.</strong> Round robin split thirty requests 10/10/10, <code>weight=3</code> against <code>weight=1</code> gave 23/7, <code>least_conn</code> looked identical because every response was equally fast, and <code>ip_hash</code> from one address sent all thirty to one machine (9.1). Adding a fourth backend to a pool of three moved 73% of users with plain <code>hash</code> and only 26% with <code>hash ... consistent</code> — but a backend simply <em>failing</em> moved nobody in either mode, because the failed server keeps its ring position (9.2). Killing one of three mid-traffic produced thirty responses and zero errors, because Nginx retries the failed request elsewhere and then marks the server down for <code>fail_timeout</code> — and recovery is a timer, not a probe, so the machine sat idle for eleven seconds after it was healthy (9.3). Without upstream keepalive, 101 requests opened 101 TCP connections; with it plus HTTP/1.1 and an empty <code>Connection</code> header, the next 101 needed one (9.4). And three reloads during four hundred live requests produced four hundred <code>200</code>s (9.5).</p>
+<p><strong>What this chapter established.</strong> Round robin split thirty requests 10/10/10, <code>weight=3</code> against <code>weight=1</code> gave 23/7, <code>least_conn</code> looked identical because every response was equally fast, and <code>ip_hash</code> from one address sent all thirty to one machine (9.1). Adding a fourth backend to a pool of three moved 72% of users with plain <code>hash</code> and only 25% with <code>hash ... consistent</code> — but a backend simply <em>failing</em> moved nobody in either mode, because the failed server keeps its ring position (9.2). Killing one of three mid-traffic produced thirty responses and zero errors, because Nginx retries the failed request elsewhere and then marks the server down for <code>fail_timeout</code> — and recovery is a timer, not a probe, so the machine sat idle for eleven seconds after it was healthy (9.3). Without upstream keepalive, 101 requests opened 101 TCP connections; with it plus HTTP/1.1 and an empty <code>Connection</code> header, the next 101 needed one (9.4). And three reloads during four hundred live requests produced four hundred <code>200</code>s (9.5).</p>
 </div>
 </div>
 
@@ -759,7 +1601,7 @@ upstream api { include /etc/nginx/be-hien-tai.conf; keepalive 32; }
 <h2>Quiz: cân bằng tải</h2>
 <p class="lead">Tám câu ra từ ba backend thật và rất nhiều phép đếm. Hai câu mô tả những kết quả MÂU THUẪN với thứ mà chỉ đọc lý thuyết thì sẽ đoán ra.</p>
 <div class="callout">
-<p><strong>Chương này đã xác lập điều gì.</strong> Round robin chia ba mươi request thành 10/10/10, <code>weight=3</code> so với <code>weight=1</code> cho ra 23/7, <code>least_conn</code> trông y hệt vì mọi phản hồi đều nhanh như nhau, còn <code>ip_hash</code> từ MỘT địa chỉ dồn cả ba mươi vào một máy (9.1). Thêm backend thứ tư vào bể ba máy làm 73% người dùng đổi máy với <code>hash</code> thường và chỉ 26% với <code>hash ... consistent</code> — nhưng một backend chỉ đơn giản là CHẾT thì KHÔNG làm ai đổi cả, ở cả hai dạng, vì máy hỏng vẫn giữ vị trí trên vòng (9.2). Giết một trong ba giữa lúc có lưu lượng cho ra ba mươi phản hồi và KHÔNG lỗi nào, vì Nginx thử lại ở chỗ khác rồi đánh dấu máy đó chết trong <code>fail_timeout</code> — và việc hồi phục là một CÁI HẸN GIỜ chứ không phải thăm dò, nên cái máy ngồi chơi mười một giây sau khi đã khoẻ (9.3). Không có keepalive lên upstream thì 101 request mở 101 kết nối TCP; có nó cộng HTTP/1.1 và một header <code>Connection</code> rỗng thì 101 request tiếp theo chỉ cần MỘT (9.4). Và ba lần nạp lại giữa bốn trăm request đang chạy cho ra bốn trăm cú <code>200</code> (9.5).</p>
+<p><strong>Chương này đã xác lập điều gì.</strong> Round robin chia ba mươi request thành 10/10/10, <code>weight=3</code> so với <code>weight=1</code> cho ra 23/7, <code>least_conn</code> trông y hệt vì mọi phản hồi đều nhanh như nhau, còn <code>ip_hash</code> từ MỘT địa chỉ dồn cả ba mươi vào một máy (9.1). Thêm backend thứ tư vào bể ba máy làm 72% người dùng đổi máy với <code>hash</code> thường và chỉ 25% với <code>hash ... consistent</code> — nhưng một backend chỉ đơn giản là CHẾT thì KHÔNG làm ai đổi cả, ở cả hai dạng, vì máy hỏng vẫn giữ vị trí trên vòng (9.2). Giết một trong ba giữa lúc có lưu lượng cho ra ba mươi phản hồi và KHÔNG lỗi nào, vì Nginx thử lại ở chỗ khác rồi đánh dấu máy đó chết trong <code>fail_timeout</code> — và việc hồi phục là một CÁI HẸN GIỜ chứ không phải thăm dò, nên cái máy ngồi chơi mười một giây sau khi đã khoẻ (9.3). Không có keepalive lên upstream thì 101 request mở 101 kết nối TCP; có nó cộng HTTP/1.1 và một header <code>Connection</code> rỗng thì 101 request tiếp theo chỉ cần MỘT (9.4). Và ba lần nạp lại giữa bốn trăm request đang chạy cho ra bốn trăm cú <code>200</code> (9.5).</p>
 </div>
 </div>
 `,
@@ -781,8 +1623,8 @@ upstream api { include /etc/nginx/be-hien-tai.conf; keepalive 32; }
             question: 'Adding a fourth server to a pool of three: how many users are remapped with hash versus hash ... consistent?|||Thêm máy chủ thứ tư vào bể ba máy: bao nhiêu người dùng bị ánh xạ lại với hash so với hash ... consistent?',
             options: [
               'About the same in both|||Xấp xỉ nhau ở cả hai',
-              '73% with plain hash, 26% with consistent — close to the theoretical minimum of 25%|||73% với hash thường, 26% với consistent — sát mức lý thuyết tối thiểu 25%',
-              '25% with plain hash, 73% with consistent|||25% với hash thường, 73% với consistent',
+              '72% with plain hash, 25% with consistent — close to the theoretical minimum of 25%|||72% với hash thường, 25% với consistent — sát mức lý thuyết tối thiểu 25%',
+              '25% with plain hash, 72% with consistent|||25% với hash thường, 72% với consistent',
               'None in either case|||Không ai cả, ở cả hai trường hợp',
             ],
             correctIndex: 1,

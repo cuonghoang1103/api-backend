@@ -1,3 +1,8 @@
+import G07_1 from './giang/ngx-07-1.mjs';
+import G07_2 from './giang/ngx-07-2.mjs';
+import G07_3 from './giang/ngx-07-3.mjs';
+import G07_4 from './giang/ngx-07-4.mjs';
+import G07_5 from './giang/ngx-07-5.mjs';
 const REF = '?ref=%2Fcourses%2Fnginx%2Flearn&reflabel=Nginx';
 
 export default {
@@ -10,8 +15,9 @@ export default {
       title: '7.1 — limit_req: three burst modes, three different sites|||7.1 — limit_req: ba chế độ burst, ba cái site khác hẳn nhau',
       slug: 'nginx-7-1-limit-req',
       type: 'LESSON',
-      description: 'Cùng một mức 2r/s, ba cách viết, và ba kết quả không giống nhau chút nào: một cách đá chín trên mười request, một cách cho qua cả mười nhưng bắt chờ 4,93 giây, một cách cho năm cái đầu đi ngay rồi đá phần còn lại. Bài này đo cả ba rồi chỉ ra cái nào hợp với cái gì.',
+      description: 'Cùng một mức 2r/s, ba cách viết, và ba kết quả không giống nhau chút nào: một cách đá chín trên mười request, một cách cho qua cả mười nhưng bắt chờ 4,51 giây, một cách cho sáu cái đầu đi ngay (một theo mức cộng năm của burst) rồi đá phần còn lại. Bài này đo cả ba rồi chỉ ra cái nào hợp với cái gì.',
       content: `
+${G07_1}
 <div class="ml-en">
 <span class="eyebrow">Chapter 7 · Lesson 7.1</span>
 <h2>limit_req: three burst modes, three different sites</h2>
@@ -26,12 +32,12 @@ location /c/ { limit_req zone=cham burst=5 nodelay; }    <span class="tok-commen
 <div class="out">Ban 10 request lien tiep that nhanh:
 
 A) khong burst    200 503 503 503 503 503 503 503 503 503
-B) burst=5        200 200 200 200 200 200 200 200 200 200   (mat 4,93s)
-C) burst=5 nodelay 200 200 200 200 200 503 503 503 503 503  (mat 0,08s)</div>
+B) burst=5        200 200 200 200 200 200 200 200 200 200   (mat 4,51s)
+C) burst=5 nodelay 200 200 200 200 200 200 503 503 503 503  (mat 0,04s)</div>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">A</span><span class="lz-t">No burst is a leaky bucket with no bucket</span><span class="lz-d">The rate is 2 per second, so requests must arrive at least 500ms apart. Ten in a row means one is served and nine are refused. Almost no real client behaves this politely, which is why this form rejects legitimate users.</span></div>
-  <div class="lz-step"><span class="lz-k">B</span><span class="lz-t">burst= holds them and releases at the rate</span><span class="lz-d">All ten succeeded, spread over 4.93 seconds — which is what 2 per second looks like. Nobody was refused; some people waited. That is a very different user experience from A, from one word of config.</span></div>
-  <div class="lz-step"><span class="lz-k">C</span><span class="lz-t">nodelay serves the burst immediately, then refuses</span><span class="lz-d">Five instant successes in 0.08 seconds, then <code>503</code>. The bucket still refills at 2 per second, so this absorbs a spike without delay and still holds the long-run average.</span></div>
+  <div class="lz-step"><span class="lz-k">B</span><span class="lz-t">burst= holds them and releases at the rate</span><span class="lz-d">All ten succeeded, spread over 4.51 seconds — which is what 2 per second looks like. Nobody was refused; some people waited. That is a very different user experience from A, from one word of config.</span></div>
+  <div class="lz-step"><span class="lz-k">C</span><span class="lz-t">nodelay serves the burst immediately, then refuses</span><span class="lz-d">SIX instant successes in 0.04 seconds — the one the rate allows plus the five of the burst — then <code>503</code>. The bucket still refills at 2 per second, so this absorbs a spike without delay and still holds the long-run average.</span></div>
   <div class="lz-step"><span class="lz-k">·</span><span class="lz-t">The average is identical in all three</span><span class="lz-d">Two requests per second, always. What changes is what happens to the eleventh request in a second — refused, delayed, or served from a bucket that has to refill.</span></div>
 </div>
 <div class="kv-grid">
@@ -45,7 +51,7 @@ C) burst=5 nodelay 200 200 200 200 200 503 503 503 503 503  (mat 0,08s)</div>
 <div class="out">mac dinh                     : 200 503 503 503
 limit_req_status 429         : 200 200 429 429 429
 
-error.log: limiting requests, excess: 0.660 by zone "cham", client: 127.0.0.1</div>
+error.log: limiting requests, excess: 0.990 by zone "cham", client: 127.0.0.1</div>
 <div class="pitfall">
 <p><strong>Trap — the default rejection status is <code>503</code>, which tells the client the wrong thing.</strong> <code>503 Service Unavailable</code> means "the server is having trouble" — monitoring counts it as an error, well-behaved clients back off as if you are down, and a CDN may treat it as an origin failure. What you meant is <code>429 Too Many Requests</code>: the server is fine, this client asked too often. Set <code>limit_req_status 429;</code> and <code>limit_conn_status 429;</code> in every config that limits anything. It costs one line, it makes your own error dashboards honest, and it lets clients implement the retry behaviour the status is designed to trigger. Adding a <code>Retry-After</code> header alongside it is the difference between a client retrying sensibly and a client retrying immediately forever.</p>
 </div>
@@ -81,6 +87,95 @@ error.log: limiting requests, excess: 0.660 by zone "cham", client: 127.0.0.1</d
 <p><strong>How to pick the numbers.</strong> Do not start from a guess — look at your access log and count requests per IP per second at the 99th percentile of normal traffic. Set the rate somewhat above that and the burst to cover one page load. Then watch the rejection count for a week. A limit that never fires is not protecting anything, and a limit that fires on real users is worse than none, and the log tells you which one you have.</p>
 </div>
 
+<h3>🔬 Run it yourself</h3>
+<p>Rate <code>2r/s</code> per IP in front of a STATIC FILE, three spellings on three ports, a script that fires N requests in a row or at once — then the <code>return</code> trap, <code>delay=</code>, and 429 — on nginx/1.24.0:</p>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  root /srv/site;                                           <span class="tok-comment">  # tệp tĩnh: limit_req chạy ở pha preaccess, SAU return</span>
+  limit_req_zone $binary_remote_addr zone=cham:10m rate=2r/s; <span class="tok-comment">  # 2 request/giây mỗi IP = 1 cái mỗi 500 ms</span>
+  server { listen 8080; location / { limit_req zone=cham;                  } } <span class="tok-comment">  # A</span>
+  server { listen 8081; location / { limit_req zone=cham burst=5;          } } <span class="tok-comment">  # B</span>
+  server { listen 8082; location / { limit_req zone=cham burst=5 nodelay;  } } <span class="tok-comment">  # C</span>
+  server { listen 8083; location / { limit_req zone=cham burst=1 nodelay; limit_req_status 429; } }
+}</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># ban.sh</span>
+<span class="tok-comment">#!/bin/bash</span>
+<span class="tok-comment"># ban.sh &lt;cổng&gt; &lt;số request&gt; [song] — bắn N request (lần lượt, hoặc "song" = cùng lúc), in mã trạng thái + tổng thời gian</span>
+p=$1; n=$2; s=$(date +%s%N)
+if [ "$3" = song ]; then for i in $(seq $n); do curl -s -o /dev/null -w '%{http_code}\\n' http://127.0.0.1:$p/ &amp; done | sort | uniq -c | awk '{printf "%s x %s   ", $1, $2}'; wait
+else for i in $(seq $n); do curl -s -o /dev/null -w '%{http_code} ' http://127.0.0.1:$p/; done; fi
+printf '(mat %s s)\\n' $(awk -v a=$s -v b=$(date +%s%N) 'BEGIN{printf "%.2f", (b-a)/1e9}')</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/ret.pid;
+error_log /srv/logs/ret.log;
+events {}
+http {
+  access_log off;
+  limit_req_zone $binary_remote_addr zone=r2:10m rate=2r/s;
+  server { listen 8089; location / { limit_req zone=r2; return 200 "ok\\n"; } }
+}</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/delay.pid;
+error_log /srv/logs/delay.log;
+events {}
+http {
+  access_log off;
+  root /srv/site;
+  limit_req_zone $binary_remote_addr zone=d2:10m rate=2r/s;
+  server { listen 8084; location / { limit_req zone=d2 burst=8 delay=3; } } <span class="tok-comment">  # 3 cái đầu của đợt dồn đi ngay, phần sau xếp hàng</span>
+}</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># tung.sh</span>
+<span class="tok-comment">#!/bin/bash</span>
+<span class="tok-comment"># tung.sh &lt;cổng&gt; &lt;số request&gt; — bắn N request CÙNG LÚC, in thời gian + mã của TỪNG cái (xếp theo thời gian)</span>
+for i in $(seq $2); do curl -s -o /dev/null -w '%{time_total} %{http_code}\\n' http://127.0.0.1:$1/ &amp; done | sort -n | awk '{printf "  #%-2d %5.2f s  %s\\n", NR, $1, $2}'; wait</code></pre>
+<div class="out">$ printf 'limit_req + return 200 : '; bash ban.sh 8089 10
+limit_req + return 200 : 200 200 200 200 200 200 200 200 200 200 (mat 0.04 s)
+$ printf 'A) khong burst      '; bash ban.sh 8080 10; sleep 3
+A) khong burst      200 503 503 503 503 503 503 503 503 503 (mat 0.04 s)
+$ printf 'B) burst=5          '; bash ban.sh 8081 10; sleep 3
+B) burst=5          200 200 200 200 200 200 200 200 200 200 (mat 4.51 s)
+$ printf 'C) burst=5 nodelay  '; bash ban.sh 8082 10; sleep 3
+C) burst=5 nodelay  200 200 200 200 200 200 503 503 503 503 (mat 0.04 s)
+$ printf 'B) burst=5, 10 CUNG LUC         '; bash ban.sh 8081 10 song; sleep 3
+B) burst=5, 10 CUNG LUC         6 x 200   4 x 503   (mat 2.51 s)
+$ printf 'C) burst=5 nodelay, 10 CUNG LUC '; bash ban.sh 8082 10 song; sleep 3
+C) burst=5 nodelay, 10 CUNG LUC 6 x 200   4 x 503   (mat 0.01 s)
+$ echo 'burst=8 delay=3, 10 CUNG LUC:'; bash tung.sh 8084 10
+burst=8 delay=3, 10 CUNG LUC:
+  #1   0.00 s  503
+  #2   0.00 s  200
+  #3   0.00 s  200
+  #4   0.00 s  200
+  #5   0.00 s  200
+  #6   0.51 s  200
+  #7   1.00 s  200
+  #8   1.50 s  200
+  #9   2.00 s  200
+  #10  2.50 s  200
+$ : &gt; /srv/logs/error.log; printf 'mac dinh           : '; bash ban.sh 8080 4; sleep 3
+mac dinh           : 200 503 503 503 (mat 0.04 s)
+$ printf 'limit_req_status 429: '; bash ban.sh 8083 5
+limit_req_status 429: 200 200 429 429 429 (mat 0.02 s)
+$ grep -m1 -o 'limiting requests.*zone "cham"' /srv/logs/error.log
+limiting requests, excess: 0.990 by zone "cham"</div>
+<p>⚠ The first line is the trap: <code>limit_req</code> in the same location as <code>return 200</code> limited NOTHING — 10 of 10 passed — because <code>return</code> answers in the rewrite phase, before the preaccess phase where <code>limit_req</code> runs. Test limits on a real file or a real <code>proxy_pass</code>. In a row: A 1×200 + 9×503; B all ten in 4.51 s; C six at once (1 + burst 5) then 503. At once, B and C both accepted 6 and refused 4 — B took 2.51 s, C 0.01 s. <code>burst=8 delay=3</code>: four answered at once, five released every 0.5 s up to 2.50 s, one refused.</p>
+<h3>🔗 Related lessons in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/ddos-protection/learn?lessonSlug=ddos-10-2-thuat-toan" target="_blank" rel="noopener"><span class="lc-ico">🛡️</span><span class="lc-body"><span class="lc-title">DDoS Protection · 10.2 — Algorithms: fixed window, sliding log, sliding window, token bucket, GCRA</span><span class="lc-sub">How the leaky bucket compares with the other rate-limit algorithms</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-5-3-rate-limit" target="_blank" rel="noopener"><span class="lc-ico">🔌</span><span class="lc-body"><span class="lc-title">API Design · 5.3 — Rate limiting and quotas: token bucket, RateLimit headers, the proxy trap</span><span class="lc-sub">429, Retry-After and RateLimit headers seen from the API</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/ddos-protection/learn?lessonSlug=ddos-9-1-neu-da-hoc-nginx" target="_blank" rel="noopener"><span class="lc-ico">🛡️</span><span class="lc-body"><span class="lc-title">DDoS Protection · 9.1 — If you took the Nginx course: limit_req and limit_conn in one page</span><span class="lc-sub">This chapter condensed, from the defender's side</span></span></a>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>limit_req_zone</code></span><span class="v">Declares a shared-memory zone and the refill rate (e.g. <code>rate=2r/s</code>) a limit draws on.</span></div>
+  <div class="kv"><span class="k"><code>limit_req</code></span><span class="v">Applies a named zone to a location; <code>burst</code> and <code>nodelay</code> change how a spike is handled.</span></div>
+  <div class="kv"><span class="k"><code>burst=</code></span><span class="v">The bucket size — how many over-rate requests are queued instead of refused.</span></div>
+  <div class="kv"><span class="k"><code>nodelay</code></span><span class="v">Serve the whole burst immediately, then refuse, instead of spacing it out.</span></div>
+  <div class="kv"><span class="k"><code>delay=N</code></span><span class="v">Serve the first N of a burst instantly and queue the rest — the middle setting.</span></div>
+  <div class="kv"><span class="k"><code>limit_req_status</code></span><span class="v">The code returned on rejection; set it to <code>429</code>, not the default <code>503</code>.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li>The rate is a leaky-bucket refill rate (one token every 1/rate seconds), not a per-second counter reset.</li><li>Same rate, three forms: no burst refuses almost everyone, <code>burst=</code> queues and delays, <code>burst nodelay</code> serves the spike then refuses.</li><li>The long-run average is identical in all three; only the handling of the over-rate request changes.</li><li>Use <code>nodelay</code> for interactive page loads, queueing for expensive backends, no burst almost never.</li><li>Default rejection is <code>503</code> (looks like an outage) — set <code>limit_req_status 429</code> and add <code>Retry-After</code>.</li></ul>
+
 <h3>Learning sources for this lesson</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_limit_req_module.html" target="_blank" rel="noopener"><span class="lc-ico">🚦</span><span class="lc-body"><span class="lc-title">nginx — the limit_req module</span><span class="lc-sub">nginx.org · burst, nodelay, delay and the leaky-bucket description</span></span></a>
 <a class="link-card" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429" target="_blank" rel="noopener"><span class="lc-ico">🛑</span><span class="lc-body"><span class="lc-title">MDN — 429 Too Many Requests</span><span class="lc-sub">developer.mozilla.org · Including Retry-After and what clients do with it</span></span></a>
@@ -103,12 +198,12 @@ location /c/ { limit_req zone=cham burst=5 nodelay; }    <span class="tok-commen
 <div class="out">Ban 10 request lien tiep that nhanh:
 
 A) khong burst    200 503 503 503 503 503 503 503 503 503
-B) burst=5        200 200 200 200 200 200 200 200 200 200   (mat 4,93s)
-C) burst=5 nodelay 200 200 200 200 200 503 503 503 503 503  (mat 0,08s)</div>
+B) burst=5        200 200 200 200 200 200 200 200 200 200   (mat 4,51s)
+C) burst=5 nodelay 200 200 200 200 200 200 503 503 503 503  (mat 0,04s)</div>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">A</span><span class="lz-t">Không burst là một cái xô rỉ mà KHÔNG có xô</span><span class="lz-d">Mức là 2 mỗi giây, nên request phải tới cách nhau ít nhất 500ms. Mười cái liên tiếp nghĩa là MỘT được phục vụ và CHÍN bị từ chối. Gần như không client thật nào lịch sự tới thế, và đó là lý do dạng này đá cả người dùng hợp lệ.</span></div>
-  <div class="lz-step"><span class="lz-k">B</span><span class="lz-t">burst= GIỮ chúng lại rồi thả ra theo đúng mức</span><span class="lz-d">Cả mười đều thành công, trải trên 4,93 giây — đó chính là hình dáng của "2 mỗi giây". KHÔNG ai bị từ chối; một số người phải chờ. Đó là một trải nghiệm rất khác so với A, chỉ từ MỘT chữ trong cấu hình.</span></div>
-  <div class="lz-step"><span class="lz-k">C</span><span class="lz-t">nodelay phục vụ cả đợt dồn NGAY, rồi mới từ chối</span><span class="lz-d">Năm cú thành công tức thì trong 0,08 giây, rồi tới <code>503</code>. Cái xô vẫn được rót lại ở mức 2 mỗi giây, nên cách này nuốt được một cú dồn mà không bắt ai chờ và vẫn giữ được mức trung bình dài hạn.</span></div>
+  <div class="lz-step"><span class="lz-k">B</span><span class="lz-t">burst= GIỮ chúng lại rồi thả ra theo đúng mức</span><span class="lz-d">Cả mười đều thành công, trải trên 4,51 giây — đó chính là hình dáng của "2 mỗi giây". KHÔNG ai bị từ chối; một số người phải chờ. Đó là một trải nghiệm rất khác so với A, chỉ từ MỘT chữ trong cấu hình.</span></div>
+  <div class="lz-step"><span class="lz-k">C</span><span class="lz-t">nodelay phục vụ cả đợt dồn NGAY, rồi mới từ chối</span><span class="lz-d">SÁU cú thành công tức thì trong 0,04 giây — một cái theo mức cộng năm cái của burst — rồi tới <code>503</code>. Cái xô vẫn được rót lại ở mức 2 mỗi giây, nên cách này nuốt được một cú dồn mà không bắt ai chờ và vẫn giữ được mức trung bình dài hạn.</span></div>
   <div class="lz-step"><span class="lz-k">·</span><span class="lz-t">Mức TRUNG BÌNH thì giống hệt nhau ở cả ba</span><span class="lz-d">Hai request mỗi giây, luôn luôn. Cái ĐỔI là chuyện gì xảy ra với request thứ mười một trong một giây — bị từ chối, bị bắt chờ, hay được phục vụ từ một cái xô rồi phải rót lại.</span></div>
 </div>
 <div class="kv-grid">
@@ -122,7 +217,7 @@ C) burst=5 nodelay 200 200 200 200 200 503 503 503 503 503  (mat 0,08s)</div>
 <div class="out">mac dinh                     : 200 503 503 503
 limit_req_status 429         : 200 200 429 429 429
 
-error.log: limiting requests, excess: 0.660 by zone "cham", client: 127.0.0.1</div>
+error.log: limiting requests, excess: 0.990 by zone "cham", client: 127.0.0.1</div>
 <div class="pitfall">
 <p><strong>Bẫy — mã từ chối MẶC ĐỊNH là <code>503</code>, và nó nói với client một điều SAI.</strong> <code>503 Service Unavailable</code> nghĩa là "máy chủ đang gặp trục trặc" — hệ giám sát đếm nó là LỖI, những client cư xử tử tế thì lùi lại như thể bạn đang chết, và một CDN có thể coi đó là máy gốc hỏng. Thứ bạn MUỐN nói là <code>429 Too Many Requests</code>: máy chủ vẫn ổn, chỉ là client này hỏi quá nhiều. Hãy đặt <code>limit_req_status 429;</code> và <code>limit_conn_status 429;</code> vào MỌI cấu hình có giới hạn bất cứ thứ gì. Nó tốn một dòng, nó làm bảng lỗi của chính bạn thật thà, và nó cho client cài đặt đúng cái hành vi thử-lại mà mã trạng thái ấy sinh ra để kích hoạt. Thêm một header <code>Retry-After</code> đi kèm là khác biệt giữa một client thử lại có ý thức và một client thử lại ngay lập tức mãi mãi.</p>
 </div>
@@ -158,6 +253,95 @@ error.log: limiting requests, excess: 0.660 by zone "cham", client: 127.0.0.1</d
 <p><strong>Chọn con số thế nào.</strong> Đừng bắt đầu từ một phỏng đoán — hãy soi access log và đếm số request theo từng IP theo từng giây ở phân vị 99 của lưu lượng BÌNH THƯỜNG. Đặt mức cao hơn con số đó một chút và đặt burst đủ phủ MỘT lượt nạp trang. Rồi theo dõi số lần từ chối trong một tuần. Một giới hạn KHÔNG BAO GIỜ nổ thì chẳng bảo vệ cái gì, còn một giới hạn nổ vào người dùng thật thì tệ hơn là không có, và cái log nói cho bạn biết mình đang có cái nào.</p>
 </div>
 
+<h3>🔬 Tự chạy lại</h3>
+<p>Mức <code>2r/s</code> mỗi IP đặt trước một TỆP TĨNH, ba cách viết trên ba cổng, một script bắn N request lần lượt hoặc cùng lúc — rồi cái bẫy <code>return</code>, <code>delay=</code>, và 429 — trên nginx/1.24.0:</p>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  root /srv/site;                                           <span class="tok-comment">  # tệp tĩnh: limit_req chạy ở pha preaccess, SAU return</span>
+  limit_req_zone $binary_remote_addr zone=cham:10m rate=2r/s; <span class="tok-comment">  # 2 request/giây mỗi IP = 1 cái mỗi 500 ms</span>
+  server { listen 8080; location / { limit_req zone=cham;                  } } <span class="tok-comment">  # A</span>
+  server { listen 8081; location / { limit_req zone=cham burst=5;          } } <span class="tok-comment">  # B</span>
+  server { listen 8082; location / { limit_req zone=cham burst=5 nodelay;  } } <span class="tok-comment">  # C</span>
+  server { listen 8083; location / { limit_req zone=cham burst=1 nodelay; limit_req_status 429; } }
+}</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># ban.sh</span>
+<span class="tok-comment">#!/bin/bash</span>
+<span class="tok-comment"># ban.sh &lt;cổng&gt; &lt;số request&gt; [song] — bắn N request (lần lượt, hoặc "song" = cùng lúc), in mã trạng thái + tổng thời gian</span>
+p=$1; n=$2; s=$(date +%s%N)
+if [ "$3" = song ]; then for i in $(seq $n); do curl -s -o /dev/null -w '%{http_code}\\n' http://127.0.0.1:$p/ &amp; done | sort | uniq -c | awk '{printf "%s x %s   ", $1, $2}'; wait
+else for i in $(seq $n); do curl -s -o /dev/null -w '%{http_code} ' http://127.0.0.1:$p/; done; fi
+printf '(mat %s s)\\n' $(awk -v a=$s -v b=$(date +%s%N) 'BEGIN{printf "%.2f", (b-a)/1e9}')</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/ret.pid;
+error_log /srv/logs/ret.log;
+events {}
+http {
+  access_log off;
+  limit_req_zone $binary_remote_addr zone=r2:10m rate=2r/s;
+  server { listen 8089; location / { limit_req zone=r2; return 200 "ok\\n"; } }
+}</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/delay.pid;
+error_log /srv/logs/delay.log;
+events {}
+http {
+  access_log off;
+  root /srv/site;
+  limit_req_zone $binary_remote_addr zone=d2:10m rate=2r/s;
+  server { listen 8084; location / { limit_req zone=d2 burst=8 delay=3; } } <span class="tok-comment">  # 3 cái đầu của đợt dồn đi ngay, phần sau xếp hàng</span>
+}</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># tung.sh</span>
+<span class="tok-comment">#!/bin/bash</span>
+<span class="tok-comment"># tung.sh &lt;cổng&gt; &lt;số request&gt; — bắn N request CÙNG LÚC, in thời gian + mã của TỪNG cái (xếp theo thời gian)</span>
+for i in $(seq $2); do curl -s -o /dev/null -w '%{time_total} %{http_code}\\n' http://127.0.0.1:$1/ &amp; done | sort -n | awk '{printf "  #%-2d %5.2f s  %s\\n", NR, $1, $2}'; wait</code></pre>
+<div class="out">$ printf 'limit_req + return 200 : '; bash ban.sh 8089 10
+limit_req + return 200 : 200 200 200 200 200 200 200 200 200 200 (mat 0.04 s)
+$ printf 'A) khong burst      '; bash ban.sh 8080 10; sleep 3
+A) khong burst      200 503 503 503 503 503 503 503 503 503 (mat 0.04 s)
+$ printf 'B) burst=5          '; bash ban.sh 8081 10; sleep 3
+B) burst=5          200 200 200 200 200 200 200 200 200 200 (mat 4.51 s)
+$ printf 'C) burst=5 nodelay  '; bash ban.sh 8082 10; sleep 3
+C) burst=5 nodelay  200 200 200 200 200 200 503 503 503 503 (mat 0.04 s)
+$ printf 'B) burst=5, 10 CUNG LUC         '; bash ban.sh 8081 10 song; sleep 3
+B) burst=5, 10 CUNG LUC         6 x 200   4 x 503   (mat 2.51 s)
+$ printf 'C) burst=5 nodelay, 10 CUNG LUC '; bash ban.sh 8082 10 song; sleep 3
+C) burst=5 nodelay, 10 CUNG LUC 6 x 200   4 x 503   (mat 0.01 s)
+$ echo 'burst=8 delay=3, 10 CUNG LUC:'; bash tung.sh 8084 10
+burst=8 delay=3, 10 CUNG LUC:
+  #1   0.00 s  503
+  #2   0.00 s  200
+  #3   0.00 s  200
+  #4   0.00 s  200
+  #5   0.00 s  200
+  #6   0.51 s  200
+  #7   1.00 s  200
+  #8   1.50 s  200
+  #9   2.00 s  200
+  #10  2.50 s  200
+$ : &gt; /srv/logs/error.log; printf 'mac dinh           : '; bash ban.sh 8080 4; sleep 3
+mac dinh           : 200 503 503 503 (mat 0.04 s)
+$ printf 'limit_req_status 429: '; bash ban.sh 8083 5
+limit_req_status 429: 200 200 429 429 429 (mat 0.02 s)
+$ grep -m1 -o 'limiting requests.*zone "cham"' /srv/logs/error.log
+limiting requests, excess: 0.990 by zone "cham"</div>
+<p>⚠ Dòng đầu là cái bẫy: <code>limit_req</code> đặt cùng location với <code>return 200</code> KHÔNG giới hạn gì cả — 10 trên 10 qua — vì <code>return</code> trả lời ở pha rewrite, trước pha preaccess nơi <code>limit_req</code> chạy. Hãy thử giới hạn trên một tệp thật hoặc một <code>proxy_pass</code> thật. Lần lượt: A 1×200 + 9×503; B cả mười trong 4,51 s; C sáu cái tức thì (1 + burst 5) rồi 503. Cùng lúc, B và C đều nhận 6 từ chối 4 — B mất 2,51 s, C 0,01 s. <code>burst=8 delay=3</code>: bốn cái trả lời ngay, năm cái nhả ra mỗi 0,5 s tới 2,50 s, một cái bị từ chối.</p>
+<h3>🔗 Bài liên quan ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/ddos-protection/learn?lessonSlug=ddos-10-2-thuat-toan" target="_blank" rel="noopener"><span class="lc-ico">🛡️</span><span class="lc-body"><span class="lc-title">DDoS Protection · 10.2 — Thuật toán: cửa sổ cố định, nhật ký trượt, cửa sổ trượt, token bucket, GCRA</span><span class="lc-sub">Cái xô rỉ so với các thuật toán giới hạn tần suất khác</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-5-3-rate-limit" target="_blank" rel="noopener"><span class="lc-ico">🔌</span><span class="lc-body"><span class="lc-title">API Design · 5.3 — Giới hạn tần suất và hạn mức: xô token, header RateLimit, bẫy proxy</span><span class="lc-sub">429, Retry-After và header RateLimit nhìn từ phía API</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/ddos-protection/learn?lessonSlug=ddos-9-1-neu-da-hoc-nginx" target="_blank" rel="noopener"><span class="lc-ico">🛡️</span><span class="lc-body"><span class="lc-title">DDoS Protection · 9.1 — Nếu đã học khoá Nginx: limit_req và limit_conn trong một trang</span><span class="lc-sub">Cả chương này gói lại, nhìn từ phía người phòng thủ</span></span></a>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>limit_req_zone</code></span><span class="v">Khai một vùng bộ nhớ chung và tốc độ rót lại (vd <code>rate=2r/s</code>) mà giới hạn rút từ đó.</span></div>
+  <div class="kv"><span class="k"><code>limit_req</code></span><span class="v">Áp một vùng đã đặt tên vào một location; <code>burst</code> và <code>nodelay</code> đổi cách xử lý một đợt dồn.</span></div>
+  <div class="kv"><span class="k"><code>burst=</code></span><span class="v">Dung tích cái xô — bao nhiêu request vượt mức được xếp hàng thay vì bị từ chối.</span></div>
+  <div class="kv"><span class="k"><code>nodelay</code></span><span class="v">Phục vụ cả đợt dồn ngay lập tức rồi mới từ chối, thay vì giãn ra.</span></div>
+  <div class="kv"><span class="k"><code>delay=N</code></span><span class="v">Phục vụ N cái đầu của đợt dồn tức thì rồi xếp hàng phần còn lại — thiết lập ở giữa.</span></div>
+  <div class="kv"><span class="k"><code>limit_req_status</code></span><span class="v">Mã trả về khi từ chối; đặt <code>429</code> chứ không để mặc định <code>503</code>.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li>Mức là tốc độ rót lại kiểu xô rỉ (một thẻ mỗi 1/rate giây), không phải một bộ đếm đặt lại mỗi giây.</li><li>Cùng một mức, ba dạng: không burst từ chối gần hết, <code>burst=</code> xếp hàng và bắt chờ, <code>burst nodelay</code> phục vụ đợt dồn rồi từ chối.</li><li>Mức trung bình dài hạn giống hệt ở cả ba; chỉ cách xử lý request vượt mức là khác.</li><li>Dùng <code>nodelay</code> cho lượt nạp trang tương tác, xếp hàng cho backend đắt đỏ, không burst gần như không bao giờ.</li><li>Mặc định từ chối là <code>503</code> (trông như sự cố) — đặt <code>limit_req_status 429</code> và thêm <code>Retry-After</code>.</li></ul>
+
 <h3>Nguồn học cho bài này</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_limit_req_module.html" target="_blank" rel="noopener"><span class="lc-ico">🚦</span><span class="lc-body"><span class="lc-title">nginx — module limit_req</span><span class="lc-sub">nginx.org · burst, nodelay, delay và phần mô tả cái xô rỉ</span></span></a>
 <a class="link-card" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429" target="_blank" rel="noopener"><span class="lc-ico">🛑</span><span class="lc-body"><span class="lc-title">MDN — 429 Too Many Requests</span><span class="lc-sub">developer.mozilla.org · Kèm Retry-After và client làm gì với nó</span></span></a>
@@ -175,6 +359,7 @@ error.log: limiting requests, excess: 0.660 by zone "cham", client: 127.0.0.1</d
       type: 'LESSON',
       description: 'Ba phép đo cho thấy hai cách khoá phổ biến nhất đều SAI theo hai hướng ngược nhau: khoá theo địa chỉ TCP thì năm người dùng sau một proxy dùng chung một hạn mức, còn khoá theo X-Forwarded-For thì kẻ tấn công đổi header mỗi request và đi qua tám trên tám lần.',
       content: `
+${G07_2}
 <div class="ml-en">
 <span class="eyebrow">Chapter 7 · Lesson 7.2</span>
 <h2>What to key the limit on, and the key that can be forged</h2>
@@ -183,7 +368,7 @@ error.log: limiting requests, excess: 0.660 by zone "cham", client: 127.0.0.1</d
 <h3>Three measurements, one config each</h3>
 <div class="out">A) limit_req_zone $binary_remote_addr ...
    Nam "nguoi dung" khac nhau, tat ca den qua CUNG mot proxy:
-     A:200  B:200  C:200  D:429  E:429
+     1:200  2:200  3:200  4:429  5:429
      ^ ba nguoi cuoi bi chan vi ho DUNG CHUNG mot khoa
 
 B) limit_req_zone $ip_that ...   (lay tu X-Forwarded-For qua map)
@@ -241,6 +426,79 @@ limit_req_zone \$binary_remote_addr zone=theo-ip:10m rate=10r/s;
 <p><strong>The order to set this up in.</strong> First get <code>\$remote_addr</code> right — <code>real_ip</code> configured with your actual proxy addresses, verified by logging it and checking a request from a known client shows the right value. Only then add limits keyed on it. Doing it the other way round produces a config that enforces something, just not what you intended, and the measurements in this lesson are how you find out which.</p>
 </div>
 
+<h3>🔬 Run it yourself</h3>
+<p>Rate <code>1r/m</code>, <code>burst=2 nodelay</code> (so each key gets three), five "users" with different X-Forwarded-For all through one address, an attacker rotating the header, <code>real_ip</code> trusting one proxy, <code>$uri</code>, an empty key, and <code>real_ip_recursive</code> — on nginx/1.24.0:</p>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  root /srv/site;
+  limit_req_status 429;
+  map $http_x_forwarded_for $ip_that { "" $remote_addr; ~^(?&lt;dau&gt;[^,\\s]+) $dau; } <span class="tok-comment">  # phần tử ĐẦU của X-Forwarded-For</span>
+  limit_req_zone $binary_remote_addr zone=theo_ip:10m  rate=1r/m;
+  limit_req_zone $ip_that            zone=theo_xff:10m rate=1r/m;
+  limit_req_zone $binary_remote_addr zone=theo_ip2:10m rate=1r/m; <span class="tok-comment">  # cùng khoá với A, vùng riêng cho phép đo E</span>
+  limit_req_zone $uri                zone=theo_uri:10m rate=1r/m;
+  server { listen 8080; location / { limit_req zone=theo_ip  burst=2 nodelay; } }                <span class="tok-comment">  # A</span>
+  server { listen 8081; location / { limit_req zone=theo_xff burst=2 nodelay; } }                <span class="tok-comment">  # B, C</span>
+  server { listen 8082; set_real_ip_from 10.9.9.9; real_ip_header X-Forwarded-For;               <span class="tok-comment">  # E: chỉ tin proxy 10.9.9.9</span>
+           location / { limit_req zone=theo_ip2 burst=2 nodelay; } }
+  server { listen 8083; location / { limit_req zone=theo_uri burst=2 nodelay; } }                <span class="tok-comment">  # D</span>
+}</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># nam-nguoi.sh</span>
+<span class="tok-comment">#!/bin/bash</span>
+<span class="tok-comment"># nam-nguoi.sh &lt;cổng&gt; — 5 "người dùng" khác nhau (X-Forwarded-For 203.0.113.1..5), mỗi người MỘT request, đều đi qua cùng máy 127.0.0.1</span>
+for i in 1 2 3 4 5; do printf '%s:%s  ' $i $(curl -s -o /dev/null -w '%{http_code}' -H "X-Forwarded-For: 203.0.113.$i" http://127.0.0.1:$1/); done; echo</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/them.pid;
+error_log /srv/logs/them.log;
+events {}
+http {
+  access_log off;
+  root /srv/site;
+  limit_req_status 429;
+  map $http_x_api_key $gioi_han { default $binary_remote_addr; "khoa-noi-bo" ""; } <span class="tok-comment">  # khoá RỖNG ⇒ không giới hạn</span>
+  limit_req_zone $gioi_han           zone=mien:10m rate=1r/m;
+  limit_req_zone $binary_remote_addr zone=tin:10m  rate=1r/m;
+  server { listen 8084; location / { limit_req zone=mien burst=2 nodelay; } }                   <span class="tok-comment">  # F: miễn trừ bằng khoá rỗng</span>
+  server { listen 8085; set_real_ip_from 127.0.0.1; real_ip_header X-Forwarded-For; real_ip_recursive on; <span class="tok-comment">  # G: proxy tin cậy = 127.0.0.1</span>
+           location / { limit_req zone=tin burst=2 nodelay; } }
+}</code></pre>
+<div class="out">$ printf 'A) khoa $binary_remote_addr : '; bash nam-nguoi.sh 8080
+A) khoa $binary_remote_addr : 1:200  2:200  3:200  4:429  5:429  
+$ printf 'B) khoa $ip_that (tu XFF)   : '; bash nam-nguoi.sh 8081
+B) khoa $ip_that (tu XFF)   : 1:200  2:200  3:200  4:200  5:200  
+$ printf 'C) B + ke tan cong DOI XFF  : '; for i in $(seq 8); do printf '%s ' $(curl -s -o /dev/null -w '%{http_code}' -H "X-Forwarded-For: 198.51.100.$RANDOM" http://127.0.0.1:8081/); done; echo
+C) B + ke tan cong DOI XFF  : 200 200 200 200 200 200 200 200 
+$ printf 'E) real_ip, chi tin proxy 10.9.9.9, ke tan cong doi XFF: '; for i in $(seq 5); do printf '%s ' $(curl -s -o /dev/null -w '%{http_code}' -H "X-Forwarded-For: 198.51.100.$i" http://127.0.0.1:8082/); done; echo
+E) real_ip, chi tin proxy 10.9.9.9, ke tan cong doi XFF: 200 200 200 429 429 
+$ for u in a b; do printf '/uri/%s x4: ' $u; for i in 1 2 3 4; do printf '%s ' $(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8083/uri/$u); done; echo; done
+/uri/a x4: 200 200 200 429 
+/uri/b x4: 200 200 200 429 
+$ printf 'F) khong header         : '; for i in $(seq 5); do printf '%s ' $(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8084/); done; echo
+F) khong header         : 200 200 200 429 429 
+$ printf 'F) X-Api-Key: khoa-noi-bo: '; for i in $(seq 5); do printf '%s ' $(curl -s -o /dev/null -w '%{http_code}' -H 'X-Api-Key: khoa-noi-bo' http://127.0.0.1:8084/); done; echo
+F) X-Api-Key: khoa-noi-bo: 200 200 200 200 200 
+$ printf 'G) gia mao dau XFF, proxy noi IP that vao cuoi: '; for i in $(seq 5); do printf '%s ' $(curl -s -o /dev/null -w '%{http_code}' -H "X-Forwarded-For: 198.51.100.$i, 203.0.113.7" http://127.0.0.1:8085/); done; echo
+G) gia mao dau XFF, proxy noi IP that vao cuoi: 200 200 200 429 429 
+$ grep -m1 'zone "tin"' /srv/logs/them.log | grep -oE 'limiting.*zone "tin", client: [0-9.]+'
+limiting requests, excess: 3.000 by zone "tin", client: 203.0.113.7</div>
+<p>A: users 4 and 5 shared the address and got 429. B: five of five. C: the rotating attacker, eight of eight. E: trusting only <code>10.9.9.9</code>, a request from elsewhere has its header ignored — three, then 429. D: each path its own quota. F: with the internal API key the map returns an EMPTY key and nothing is limited. G: through a trusted proxy with a forged head of the header, <code>real_ip_recursive on</code> reads from the right — three, then 429, and the log names the real client <code>203.0.113.7</code>.</p>
+<h3>🔗 Related lessons in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-5-3-rate-limit" target="_blank" rel="noopener"><span class="lc-ico">🔌</span><span class="lc-body"><span class="lc-title">API Design · 5.3 — Rate limiting and quotas: token bucket, RateLimit headers, the proxy trap</span><span class="lc-sub">The same key problem from the API side</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/redis/learn?lessonSlug=rd-3-5-gioi-han-tan-suat" target="_blank" rel="noopener"><span class="lc-ico">🟥</span><span class="lc-body"><span class="lc-title">Redis · 3.5 — Rate limiting, four ways</span><span class="lc-sub">When the limit must hold across a whole cluster</span></span></a>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Rate-limit key</span><span class="v">The value a limit counts per; everything depends on whether the client can choose it.</span></div>
+  <div class="kv"><span class="k"><code>\$binary_remote_addr</code></span><span class="v">The TCP peer address — compact and unforgeable, the correct key at the edge.</span></div>
+  <div class="kv"><span class="k"><code>X-Forwarded-For</code></span><span class="v">A client-supplied header; keyed on directly it hands the attacker a fresh bucket per request.</span></div>
+  <div class="kv"><span class="k"><code>set_real_ip_from</code> / <code>real_ip_header</code></span><span class="v">Rewrites <code>\$remote_addr</code> to the true client — but only for proxies you actually operate.</span></div>
+  <div class="kv"><span class="k">Empty key</span><span class="v">A key that evaluates to empty disables the limit for that request (the exemption idiom).</span></div>
+  <div class="kv"><span class="k">Zone sizing</span><span class="v"><code>10m</code> holds roughly 160,000 IPv4 entries; the zone is shared across workers, per instance.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li>A rate limit is a counter plus a key, and the key is where limits actually fail.</li><li>Keying on <code>\$binary_remote_addr</code> behind a proxy groups every user under the proxy's address (too strict).</li><li>Keying on raw <code>X-Forwarded-For</code> is forgeable — the limit silently disappears while still looking configured.</li><li>The fix is <code>real_ip</code> with only your own proxy addresses, then key on the corrected <code>\$binary_remote_addr</code>.</li><li>Before trusting any limit, ask: can the client change this value? Test by varying only the key.</li></ul>
+
 <h3>Learning sources for this lesson</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_limit_req_module.html#limit_req_zone" target="_blank" rel="noopener"><span class="lc-ico">🔑</span><span class="lc-body"><span class="lc-title">nginx — limit_req_zone</span><span class="lc-sub">nginx.org · The key expression, zone sizing, and the empty-key rule</span></span></a>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_realip_module.html" target="_blank" rel="noopener"><span class="lc-ico">🎯</span><span class="lc-body"><span class="lc-title">nginx — the real_ip module</span><span class="lc-sub">nginx.org · The fix for row A that does not create row C</span></span></a>
@@ -257,7 +515,7 @@ limit_req_zone \$binary_remote_addr zone=theo-ip:10m rate=10r/s;
 <h3>Ba phép đo, mỗi phép một cấu hình</h3>
 <div class="out">A) limit_req_zone $binary_remote_addr ...
    Nam "nguoi dung" khac nhau, tat ca den qua CUNG mot proxy:
-     A:200  B:200  C:200  D:429  E:429
+     1:200  2:200  3:200  4:429  5:429
      ^ ba nguoi cuoi bi chan vi ho DUNG CHUNG mot khoa
 
 B) limit_req_zone $ip_that ...   (lay tu X-Forwarded-For qua map)
@@ -315,6 +573,79 @@ limit_req_zone \$binary_remote_addr zone=theo-ip:10m rate=10r/s;
 <p><strong>Thứ tự để dựng chuyện này.</strong> TRƯỚC HẾT hãy làm cho <code>\$remote_addr</code> đúng — cấu hình <code>real_ip</code> với đúng địa chỉ proxy của bạn, xác minh bằng cách ghi nó vào log rồi kiểm một request từ một client đã biết xem có ra đúng giá trị không. RỒI mới thêm các giới hạn khoá theo nó. Làm ngược lại thì bạn có một cấu hình đang thi hành một thứ gì đó, chỉ là không phải thứ bạn định, và những phép đo trong bài này là cách bạn phát hiện ra mình đang ở ca nào.</p>
 </div>
 
+<h3>🔬 Tự chạy lại</h3>
+<p>Mức <code>1r/m</code>, <code>burst=2 nodelay</code> (mỗi khoá được ba cái), năm "người dùng" mang X-Forwarded-For khác nhau cùng đi qua một địa chỉ, một kẻ tấn công xoay header, <code>real_ip</code> chỉ tin một proxy, <code>$uri</code>, khoá rỗng, và <code>real_ip_recursive</code> — trên nginx/1.24.0:</p>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  root /srv/site;
+  limit_req_status 429;
+  map $http_x_forwarded_for $ip_that { "" $remote_addr; ~^(?&lt;dau&gt;[^,\\s]+) $dau; } <span class="tok-comment">  # phần tử ĐẦU của X-Forwarded-For</span>
+  limit_req_zone $binary_remote_addr zone=theo_ip:10m  rate=1r/m;
+  limit_req_zone $ip_that            zone=theo_xff:10m rate=1r/m;
+  limit_req_zone $binary_remote_addr zone=theo_ip2:10m rate=1r/m; <span class="tok-comment">  # cùng khoá với A, vùng riêng cho phép đo E</span>
+  limit_req_zone $uri                zone=theo_uri:10m rate=1r/m;
+  server { listen 8080; location / { limit_req zone=theo_ip  burst=2 nodelay; } }                <span class="tok-comment">  # A</span>
+  server { listen 8081; location / { limit_req zone=theo_xff burst=2 nodelay; } }                <span class="tok-comment">  # B, C</span>
+  server { listen 8082; set_real_ip_from 10.9.9.9; real_ip_header X-Forwarded-For;               <span class="tok-comment">  # E: chỉ tin proxy 10.9.9.9</span>
+           location / { limit_req zone=theo_ip2 burst=2 nodelay; } }
+  server { listen 8083; location / { limit_req zone=theo_uri burst=2 nodelay; } }                <span class="tok-comment">  # D</span>
+}</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># nam-nguoi.sh</span>
+<span class="tok-comment">#!/bin/bash</span>
+<span class="tok-comment"># nam-nguoi.sh &lt;cổng&gt; — 5 "người dùng" khác nhau (X-Forwarded-For 203.0.113.1..5), mỗi người MỘT request, đều đi qua cùng máy 127.0.0.1</span>
+for i in 1 2 3 4 5; do printf '%s:%s  ' $i $(curl -s -o /dev/null -w '%{http_code}' -H "X-Forwarded-For: 203.0.113.$i" http://127.0.0.1:$1/); done; echo</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/them.pid;
+error_log /srv/logs/them.log;
+events {}
+http {
+  access_log off;
+  root /srv/site;
+  limit_req_status 429;
+  map $http_x_api_key $gioi_han { default $binary_remote_addr; "khoa-noi-bo" ""; } <span class="tok-comment">  # khoá RỖNG ⇒ không giới hạn</span>
+  limit_req_zone $gioi_han           zone=mien:10m rate=1r/m;
+  limit_req_zone $binary_remote_addr zone=tin:10m  rate=1r/m;
+  server { listen 8084; location / { limit_req zone=mien burst=2 nodelay; } }                   <span class="tok-comment">  # F: miễn trừ bằng khoá rỗng</span>
+  server { listen 8085; set_real_ip_from 127.0.0.1; real_ip_header X-Forwarded-For; real_ip_recursive on; <span class="tok-comment">  # G: proxy tin cậy = 127.0.0.1</span>
+           location / { limit_req zone=tin burst=2 nodelay; } }
+}</code></pre>
+<div class="out">$ printf 'A) khoa $binary_remote_addr : '; bash nam-nguoi.sh 8080
+A) khoa $binary_remote_addr : 1:200  2:200  3:200  4:429  5:429  
+$ printf 'B) khoa $ip_that (tu XFF)   : '; bash nam-nguoi.sh 8081
+B) khoa $ip_that (tu XFF)   : 1:200  2:200  3:200  4:200  5:200  
+$ printf 'C) B + ke tan cong DOI XFF  : '; for i in $(seq 8); do printf '%s ' $(curl -s -o /dev/null -w '%{http_code}' -H "X-Forwarded-For: 198.51.100.$RANDOM" http://127.0.0.1:8081/); done; echo
+C) B + ke tan cong DOI XFF  : 200 200 200 200 200 200 200 200 
+$ printf 'E) real_ip, chi tin proxy 10.9.9.9, ke tan cong doi XFF: '; for i in $(seq 5); do printf '%s ' $(curl -s -o /dev/null -w '%{http_code}' -H "X-Forwarded-For: 198.51.100.$i" http://127.0.0.1:8082/); done; echo
+E) real_ip, chi tin proxy 10.9.9.9, ke tan cong doi XFF: 200 200 200 429 429 
+$ for u in a b; do printf '/uri/%s x4: ' $u; for i in 1 2 3 4; do printf '%s ' $(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8083/uri/$u); done; echo; done
+/uri/a x4: 200 200 200 429 
+/uri/b x4: 200 200 200 429 
+$ printf 'F) khong header         : '; for i in $(seq 5); do printf '%s ' $(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8084/); done; echo
+F) khong header         : 200 200 200 429 429 
+$ printf 'F) X-Api-Key: khoa-noi-bo: '; for i in $(seq 5); do printf '%s ' $(curl -s -o /dev/null -w '%{http_code}' -H 'X-Api-Key: khoa-noi-bo' http://127.0.0.1:8084/); done; echo
+F) X-Api-Key: khoa-noi-bo: 200 200 200 200 200 
+$ printf 'G) gia mao dau XFF, proxy noi IP that vao cuoi: '; for i in $(seq 5); do printf '%s ' $(curl -s -o /dev/null -w '%{http_code}' -H "X-Forwarded-For: 198.51.100.$i, 203.0.113.7" http://127.0.0.1:8085/); done; echo
+G) gia mao dau XFF, proxy noi IP that vao cuoi: 200 200 200 429 429 
+$ grep -m1 'zone "tin"' /srv/logs/them.log | grep -oE 'limiting.*zone "tin", client: [0-9.]+'
+limiting requests, excess: 3.000 by zone "tin", client: 203.0.113.7</div>
+<p>A: người 4 và 5 dùng chung địa chỉ và nhận 429. B: năm trên năm. C: kẻ xoay header, tám trên tám. E: chỉ tin <code>10.9.9.9</code>, request tới từ chỗ khác bị bỏ qua header — ba cái rồi 429. D: mỗi đường dẫn một hạn mức. F: có API key nội bộ thì map trả khoá RỖNG và không gì bị giới hạn. G: đi qua proxy tin cậy với phần đầu header bị giả, <code>real_ip_recursive on</code> đọc từ bên phải — ba cái rồi 429, và log ghi đúng client thật <code>203.0.113.7</code>.</p>
+<h3>🔗 Bài liên quan ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-5-3-rate-limit" target="_blank" rel="noopener"><span class="lc-ico">🔌</span><span class="lc-body"><span class="lc-title">API Design · 5.3 — Giới hạn tần suất và hạn mức: xô token, header RateLimit, bẫy proxy</span><span class="lc-sub">Cùng bài toán cái khoá, nhìn từ phía API</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/redis/learn?lessonSlug=rd-3-5-gioi-han-tan-suat" target="_blank" rel="noopener"><span class="lc-ico">🟥</span><span class="lc-body"><span class="lc-title">Redis · 3.5 — Giới hạn tần suất, bốn cách</span><span class="lc-sub">Khi giới hạn phải đúng cho cả một cụm máy</span></span></a>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Rate-limit key</span><span class="v">Giá trị mà giới hạn đếm theo; tất cả tuỳ vào việc client có chọn được nó không.</span></div>
+  <div class="kv"><span class="k"><code>\$binary_remote_addr</code></span><span class="v">Địa chỉ TCP đối tác — gọn và không giả mạo được, cái khoá đúng ở rìa mạng.</span></div>
+  <div class="kv"><span class="k"><code>X-Forwarded-For</code></span><span class="v">Header do client gửi; khoá thẳng theo nó là cho kẻ tấn công một cái xô mới mỗi request.</span></div>
+  <div class="kv"><span class="k"><code>set_real_ip_from</code> / <code>real_ip_header</code></span><span class="v">Viết lại <code>\$remote_addr</code> thành client thật — nhưng chỉ cho proxy bạn thật sự vận hành.</span></div>
+  <div class="kv"><span class="k">Khoá rỗng</span><span class="v">Khoá tính ra rỗng thì tắt giới hạn cho request đó (cách viết để miễn trừ).</span></div>
+  <div class="kv"><span class="k">Định cỡ vùng</span><span class="v"><code>10m</code> chứa chừng 160.000 mục IPv4; vùng dùng chung giữa các worker, theo từng instance.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li>Một giới hạn tần suất là một bộ đếm cộng một cái khoá, và cái khoá mới là chỗ giới hạn thật sự hỏng.</li><li>Khoá theo <code>\$binary_remote_addr</code> khi đứng sau proxy gom mọi người dùng vào địa chỉ của proxy (quá chặt).</li><li>Khoá theo <code>X-Forwarded-For</code> thô thì giả mạo được — giới hạn âm thầm biến mất mà vẫn trông như đã cấu hình.</li><li>Cách chữa là <code>real_ip</code> với chỉ địa chỉ proxy của chính bạn, rồi khoá theo <code>\$binary_remote_addr</code> đã sửa.</li><li>Trước khi tin bất kỳ giới hạn nào, hãy hỏi: client đổi được giá trị này không? Thử bằng cách chỉ thay cái khoá.</li></ul>
+
 <h3>Nguồn học cho bài này</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_limit_req_module.html#limit_req_zone" target="_blank" rel="noopener"><span class="lc-ico">🔑</span><span class="lc-body"><span class="lc-title">nginx — limit_req_zone</span><span class="lc-sub">nginx.org · Biểu thức khoá, cách định cỡ vùng, và luật về khoá rỗng</span></span></a>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_realip_module.html" target="_blank" rel="noopener"><span class="lc-ico">🎯</span><span class="lc-body"><span class="lc-title">nginx — module real_ip</span><span class="lc-sub">nginx.org · Cách chữa dòng A mà KHÔNG tạo ra dòng C</span></span></a>
@@ -332,6 +663,7 @@ limit_req_zone \$binary_remote_addr zone=theo-ip:10m rate=10r/s;
       type: 'LESSON',
       description: 'Giới hạn số kết nối đồng thời chạy đúng như quảng cáo: sáu request chậm từ một IP thành hai cái 200 và bốn cái 503. Rồi bài này bắn hai mươi kết nối nhỏ giọt vào đúng cái khối đó — và cả hai mươi đều SỐNG, vì limit_conn không đếm chúng.',
       content: `
+${G07_3}
 <div class="ml-en">
 <span class="eyebrow">Chapter 7 · Lesson 7.3</span>
 <h2>limit_conn, and the attack it does not stop</h2>
@@ -406,6 +738,79 @@ gui dong trong ket thuc header (dung khuon mau slowloris):
 <div class="note-ct">
 <p><strong>The lesson underneath the measurement.</strong> Four directives, four different resources, and no overlap between them — but they all get described as "protecting Nginx", so people set one and assume they are covered. The middle row above is what that assumption looks like when tested: a limit correctly configured, correctly enforcing what it enforces, and completely irrelevant to the attack it was deployed against. Before trusting any limit, write down what resource it counts, then ask whether the thing you are worried about consumes that resource.</p>
 </div>
+
+<h3>🔬 Run it yourself</h3>
+<p>An upstream that takes 1.5 s per request, <code>limit_conn 2</code>, six requests at once, the 20-connection dripper with and without <code>limit_conn</code> and with <code>client_header_timeout 2s</code>, then <code>limit_rate</code> on a 6 MB file — on nginx/1.24.0:</p>
+<pre><code class="language-bash"><span class="tok-comment"># cham.js</span>
+// upstream (cổng 9301): mỗi request mất 1,5 giây
+require('http').createServer((req, res) =&gt; setTimeout(() =&gt; res.end('xong\\n'), 1500)).listen(9301, '127.0.0.1');</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events { worker_connections 1024; }
+http {
+  access_log off;
+  limit_conn_zone $binary_remote_addr zone=ketnoi:10m;
+  server { listen 8080; location / { limit_conn ketnoi 2; proxy_pass http://127.0.0.1:9301; } }        <span class="tok-comment">  # có limit_conn</span>
+  server { listen 8081; location / { proxy_pass http://127.0.0.1:9301; } }                             <span class="tok-comment">  # không giới hạn</span>
+  server { listen 8082; limit_conn ketnoi 2; location / { proxy_pass http://127.0.0.1:9301; } }        <span class="tok-comment">  # slowloris + limit_conn</span>
+  server { listen 8083; client_header_timeout 2s; location / { proxy_pass http://127.0.0.1:9301; } }   <span class="tok-comment">  # slowloris + timeout 2s</span>
+}</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># cham-header.py</span>
+<span class="tok-comment"># cham-header.py &lt;cổng&gt; — mở 20 kết nối, mỗi cái gửi MỘT dòng header mỗi 0,5 s, KHÔNG BAO GIỜ gửi dòng trống kết thúc (khuôn slowloris)</span>
+import socket, sys, time
+cong = int(sys.argv[1]); ds = []
+for i in range(20):
+    s = socket.create_connection(('127.0.0.1', cong)); s.send(b'GET / HTTP/1.1\\r\\nHost: x\\r\\n'); ds.append(s)
+t0 = time.time()
+while time.time() - t0 &lt; 8:
+    for s in ds:
+        try: s.send(b'X-a: b\\r\\n')
+        except OSError: pass
+    time.sleep(0.5)
+song = 0
+for s in ds:
+    try:
+        s.settimeout(0.2); s.send(b'X-a: b\\r\\n'); d = s.recv(1)
+        song += 0 if d == b'' else 1
+    except socket.timeout: song += 1
+    except OSError: pass
+print(f'sau 8s: con song {song}, bi dong {20 - song}')</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/rate.pid;
+error_log /srv/logs/rate.log;
+events {}
+http {
+  access_log off;
+  root /srv/site;
+  server { listen 8084; location / { limit_rate_after 2m; limit_rate 1m; } } <span class="tok-comment">  # 2 MB đầu hết tốc lực, phần sau 1 MB/s mỗi kết nối</span>
+  server { listen 8085; }                                                     <span class="tok-comment">  # không bóp</span>
+}</code></pre>
+<div class="out">$ : &gt; /srv/logs/error.log; for p in 8080 8081; do printf 'cong %s: ' $p; for i in $(seq 6); do curl -s -o /dev/null -w '%{http_code}\\n' http://127.0.0.1:$p/ &amp; done | sort | uniq -c | awk '{printf "%s x %s  ", $1, $2}'; wait; echo; done
+cong 8080: 2 x 200  4 x 503  
+cong 8081: 6 x 200  
+$ grep -m1 -o 'limiting connections by zone "ketnoi"' /srv/logs/error.log
+limiting connections by zone "ketnoi"
+$ for p in 8081 8082 8083; do printf 'cong %s: ' $p; python3 cham-header.py $p; done
+cong 8081: sau 8s: con song 20, bi dong 0
+cong 8082: sau 8s: con song 20, bi dong 0
+cong 8083: sau 8s: con song 0, bi dong 20
+$ for p in 8085 8084; do curl -s -o /dev/null -w "cong $p: %{size_download} byte trong %{time_total} s\\n" http://127.0.0.1:$p/to.bin; done
+cong 8085: 6291456 byte trong 0.004147 s
+cong 8084: 6291456 byte trong 4.245322 s</div>
+<p>Two of six passed under <code>limit_conn 2</code>, all six without it. All twenty dripping connections survived 8 s with or without <code>limit_conn</code>; the 2 s header timeout closed all twenty. The 6 MB file took 0.004 s unthrottled and 4.25 s with <code>limit_rate_after 2m</code> + <code>limit_rate 1m</code> — 2 MB at full speed, then 1 MB/s.</p>
+<h3>🔗 Related lessons in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/ddos-protection/learn?lessonSlug=ddos-4-2-slowloris" target="_blank" rel="noopener"><span class="lc-ico">🛡️</span><span class="lc-body"><span class="lc-title">DDoS Protection · 4.2 — Slow attacks: Slowloris and slow POST</span><span class="lc-sub">The attack itself, and its slow-body cousin</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/ddos-protection/learn?lessonSlug=ddos-9-4-nginx-sau" target="_blank" rel="noopener"><span class="lc-ico">🛡️</span><span class="lc-body"><span class="lc-title">DDoS Protection · 9.4 — nginx beyond the basics: timeouts, buffers, keepalive and a 444</span><span class="lc-sub">The timeouts as a defence, one step further</span></span></a>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>limit_conn_zone</code> / <code>limit_conn</code></span><span class="v">Bounds the number of in-flight connections per key — counts concurrency, not frequency.</span></div>
+  <div class="kv"><span class="k">In-flight connection</span><span class="v">One whose request headers are fully read and is being processed — the only kind <code>limit_conn</code> counts.</span></div>
+  <div class="kv"><span class="k">Slowloris</span><span class="v">Many connections that dribble headers forever and never finish, so <code>limit_conn</code> never counts them.</span></div>
+  <div class="kv"><span class="k"><code>client_header_timeout</code></span><span class="v">Cuts a connection that is slow to finish its headers — the actual slowloris defence.</span></div>
+  <div class="kv"><span class="k"><code>limit_rate</code> / <code>limit_rate_after</code></span><span class="v">Caps per-connection bandwidth; lets small files run full speed and throttles the long tail.</span></div>
+  <div class="kv"><span class="k"><code>worker_connections</code></span><span class="v">The real ceiling on total open connections; its exhaustion message is this attack's signature.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li><code>limit_conn</code> bounds concurrent, fully-formed connections per client — right for slow endpoints and downloads.</li><li>It does nothing about slowloris: dribbling connections are never counted because no request has started.</li><li>The slowloris defence is short <code>client_*_timeout</code> values, measured here to close all twenty connections.</li><li>Four directives guard four different resources (frequency, concurrency, duration, size) with no overlap.</li><li>Set <code>limit_conn</code> generously (browsers open up to six); reserve tight limits for download or streaming routes.</li></ul>
 
 <h3>Learning sources for this lesson</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_limit_conn_module.html" target="_blank" rel="noopener"><span class="lc-ico">🔗</span><span class="lc-body"><span class="lc-title">nginx — the limit_conn module</span><span class="lc-sub">nginx.org · Including the sentence about which connections are counted</span></span></a>
@@ -490,6 +895,79 @@ gui dong trong ket thuc header (dung khuon mau slowloris):
 <p><strong>Bài học nằm dưới phép đo.</strong> Bốn chỉ thị, bốn tài nguyên khác nhau, và KHÔNG cái nào chồng lấn cái nào — nhưng tất cả đều được mô tả là "bảo vệ Nginx", nên người ta đặt MỘT cái rồi cho rằng mình đã được che chắn. Dòng giữa ở trên chính là bộ mặt của giả định đó khi đem ra thử: một giới hạn cấu hình ĐÚNG, thi hành ĐÚNG cái nó thi hành, và HOÀN TOÀN không liên quan tới cái đòn mà nó được triển khai để chống. Trước khi tin bất kỳ giới hạn nào, hãy viết ra nó ĐẾM tài nguyên gì, rồi hỏi xem cái thứ bạn đang lo có tiêu thụ tài nguyên đó không.</p>
 </div>
 
+<h3>🔬 Tự chạy lại</h3>
+<p>Một upstream mất 1,5 s mỗi request, <code>limit_conn 2</code>, sáu request cùng lúc, script nhỏ giọt 20 kết nối có và không có <code>limit_conn</code> rồi với <code>client_header_timeout 2s</code>, rồi <code>limit_rate</code> trên một tệp 6 MB — trên nginx/1.24.0:</p>
+<pre><code class="language-bash"><span class="tok-comment"># cham.js</span>
+// upstream (cổng 9301): mỗi request mất 1,5 giây
+require('http').createServer((req, res) =&gt; setTimeout(() =&gt; res.end('xong\\n'), 1500)).listen(9301, '127.0.0.1');</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events { worker_connections 1024; }
+http {
+  access_log off;
+  limit_conn_zone $binary_remote_addr zone=ketnoi:10m;
+  server { listen 8080; location / { limit_conn ketnoi 2; proxy_pass http://127.0.0.1:9301; } }        <span class="tok-comment">  # có limit_conn</span>
+  server { listen 8081; location / { proxy_pass http://127.0.0.1:9301; } }                             <span class="tok-comment">  # không giới hạn</span>
+  server { listen 8082; limit_conn ketnoi 2; location / { proxy_pass http://127.0.0.1:9301; } }        <span class="tok-comment">  # slowloris + limit_conn</span>
+  server { listen 8083; client_header_timeout 2s; location / { proxy_pass http://127.0.0.1:9301; } }   <span class="tok-comment">  # slowloris + timeout 2s</span>
+}</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># cham-header.py</span>
+<span class="tok-comment"># cham-header.py &lt;cổng&gt; — mở 20 kết nối, mỗi cái gửi MỘT dòng header mỗi 0,5 s, KHÔNG BAO GIỜ gửi dòng trống kết thúc (khuôn slowloris)</span>
+import socket, sys, time
+cong = int(sys.argv[1]); ds = []
+for i in range(20):
+    s = socket.create_connection(('127.0.0.1', cong)); s.send(b'GET / HTTP/1.1\\r\\nHost: x\\r\\n'); ds.append(s)
+t0 = time.time()
+while time.time() - t0 &lt; 8:
+    for s in ds:
+        try: s.send(b'X-a: b\\r\\n')
+        except OSError: pass
+    time.sleep(0.5)
+song = 0
+for s in ds:
+    try:
+        s.settimeout(0.2); s.send(b'X-a: b\\r\\n'); d = s.recv(1)
+        song += 0 if d == b'' else 1
+    except socket.timeout: song += 1
+    except OSError: pass
+print(f'sau 8s: con song {song}, bi dong {20 - song}')</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/rate.pid;
+error_log /srv/logs/rate.log;
+events {}
+http {
+  access_log off;
+  root /srv/site;
+  server { listen 8084; location / { limit_rate_after 2m; limit_rate 1m; } } <span class="tok-comment">  # 2 MB đầu hết tốc lực, phần sau 1 MB/s mỗi kết nối</span>
+  server { listen 8085; }                                                     <span class="tok-comment">  # không bóp</span>
+}</code></pre>
+<div class="out">$ : &gt; /srv/logs/error.log; for p in 8080 8081; do printf 'cong %s: ' $p; for i in $(seq 6); do curl -s -o /dev/null -w '%{http_code}\\n' http://127.0.0.1:$p/ &amp; done | sort | uniq -c | awk '{printf "%s x %s  ", $1, $2}'; wait; echo; done
+cong 8080: 2 x 200  4 x 503  
+cong 8081: 6 x 200  
+$ grep -m1 -o 'limiting connections by zone "ketnoi"' /srv/logs/error.log
+limiting connections by zone "ketnoi"
+$ for p in 8081 8082 8083; do printf 'cong %s: ' $p; python3 cham-header.py $p; done
+cong 8081: sau 8s: con song 20, bi dong 0
+cong 8082: sau 8s: con song 20, bi dong 0
+cong 8083: sau 8s: con song 0, bi dong 20
+$ for p in 8085 8084; do curl -s -o /dev/null -w "cong $p: %{size_download} byte trong %{time_total} s\\n" http://127.0.0.1:$p/to.bin; done
+cong 8085: 6291456 byte trong 0.004147 s
+cong 8084: 6291456 byte trong 4.245322 s</div>
+<p>Hai trên sáu qua với <code>limit_conn 2</code>, không có thì cả sáu. Cả hai mươi kết nối nhỏ giọt đều sống sau 8 s, có hay không có <code>limit_conn</code>; timeout header 2 s đóng cả hai mươi. Tệp 6 MB mất 0,004 s khi không bóp và 4,25 s với <code>limit_rate_after 2m</code> + <code>limit_rate 1m</code> — 2 MB đầu hết tốc lực, rồi 1 MB/s.</p>
+<h3>🔗 Bài liên quan ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/ddos-protection/learn?lessonSlug=ddos-4-2-slowloris" target="_blank" rel="noopener"><span class="lc-ico">🛡️</span><span class="lc-body"><span class="lc-title">DDoS Protection · 4.2 — Tấn công chậm: Slowloris và slow POST</span><span class="lc-sub">Chính cái đòn đó, và người anh em gửi thân chậm</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/ddos-protection/learn?lessonSlug=ddos-9-4-nginx-sau" target="_blank" rel="noopener"><span class="lc-ico">🛡️</span><span class="lc-body"><span class="lc-title">DDoS Protection · 9.4 — nginx vượt qua cơ bản: timeout, buffer, keepalive và mã 444</span><span class="lc-sub">Đám timeout như một tuyến phòng thủ, đi xa thêm một bước</span></span></a>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>limit_conn_zone</code> / <code>limit_conn</code></span><span class="v">Chặn số kết nối đang xử lý theo từng khoá — đếm sự đồng thời, không phải tần suất.</span></div>
+  <div class="kv"><span class="k">Kết nối đang xử lý</span><span class="v">Cái đã đọc xong header request và đang được xử lý — loại duy nhất <code>limit_conn</code> đếm.</span></div>
+  <div class="kv"><span class="k">Slowloris</span><span class="v">Nhiều kết nối nhỏ giọt header mãi mãi và không bao giờ xong, nên <code>limit_conn</code> không đếm chúng.</span></div>
+  <div class="kv"><span class="k"><code>client_header_timeout</code></span><span class="v">Cắt một kết nối chậm hoàn tất header — chính là tuyến phòng thủ slowloris thật sự.</span></div>
+  <div class="kv"><span class="k"><code>limit_rate</code> / <code>limit_rate_after</code></span><span class="v">Chặn băng thông mỗi kết nối; cho file nhỏ chạy hết tốc và bóp phần đuôi dài.</span></div>
+  <div class="kv"><span class="k"><code>worker_connections</code></span><span class="v">Trần thật về tổng số kết nối mở; thông báo cạn của nó là dấu hiệu của đòn này.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li><code>limit_conn</code> chặn số kết nối đồng thời đã thành hình theo từng client — đúng cho endpoint chậm và tải xuống.</li><li>Nó chẳng làm gì với slowloris: kết nối nhỏ giọt không bao giờ bị đếm vì chưa request nào bắt đầu.</li><li>Phòng thủ slowloris là đặt <code>client_*_timeout</code> ngắn, đo ở đây đóng được cả hai mươi kết nối.</li><li>Bốn chỉ thị canh bốn tài nguyên khác nhau (tần suất, đồng thời, thời lượng, kích thước), không chồng nhau.</li><li>Đặt <code>limit_conn</code> rộng rãi (trình duyệt mở tới sáu); để dành giới hạn chặt cho tuyến tải xuống hoặc streaming.</li></ul>
+
 <h3>Nguồn học cho bài này</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_limit_conn_module.html" target="_blank" rel="noopener"><span class="lc-ico">🔗</span><span class="lc-body"><span class="lc-title">nginx — module limit_conn</span><span class="lc-sub">nginx.org · Kèm cái câu nói rõ những kết nối NÀO được đếm</span></span></a>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_core_module.html#client_header_timeout" target="_blank" rel="noopener"><span class="lc-ico">⏱️</span><span class="lc-body"><span class="lc-title">nginx — các timeout phía client</span><span class="lc-sub">nginx.org · client_header_timeout, client_body_timeout, send_timeout</span></span></a>
@@ -505,8 +983,9 @@ gui dong trong ket thuc header (dung khuon mau slowloris):
       title: '7.4 — Request size, and the rejection that arrives before the upload|||7.4 — Kích thước request, và cú từ chối tới TRƯỚC lượt tải lên',
       slug: 'nginx-7-4-kich-thuoc-request',
       type: 'LESSON',
-      description: 'client_max_body_size trả về 413 sau khi client mới gửi lên ĐÚNG 0 byte — nếu client khai Content-Length. Bỏ cái header đó đi và cùng một request ấy đẩy được 23,7MB lên dây trước khi bị đá. Bài này đo cả hai, và đó là khác biệt giữa một giới hạn bảo vệ băng thông và một giới hạn chỉ bảo vệ đĩa.',
+      description: 'client_max_body_size trả về 413 sau khi client mới gửi lên ĐÚNG 0 byte — nếu client khai Content-Length. Bỏ cái header đó đi và cùng một request ấy đẩy được 22,8MB lên dây trước khi bị đá. Bài này đo cả hai, và đó là khác biệt giữa một giới hạn bảo vệ băng thông và một giới hạn chỉ bảo vệ đĩa.',
       content: `
+${G07_4}
 <div class="ml-en">
 <span class="eyebrow">Chapter 7 · Lesson 7.4</span>
 <h2>Request size, and the rejection that arrives before the upload</h2>
@@ -515,14 +994,17 @@ gui dong trong ket thuc header (dung khuon mau slowloris):
 <h3>Three uploads against a 20MB limit</h3>
 <div class="out">client_max_body_size 20m;
 
-  25MB, co Content-Length  -> 413, da GUI LEN 0 byte,           mat 0,0006s
-  19MB, co Content-Length  -> 200, da gui len 19.000.000 byte,  mat 0,12s
+  25MB, co Content-Length  -> 413, da GUI LEN 0 byte,           mat 0,0004s
+  19MB, co Content-Length  -> 200, da gui len 19.000.000 byte,  mat 0,047s
   25MB, chunked (KHONG khai do dai)
-                           -> 413, da GUI LEN 23.788.116 byte,  mat 0,17s
-                                   ^^^^^^^^^^^^^^^^^^^^^^^^</div>
+                           -> 413, da GUI LEN 22.805.136 byte,  mat 0,025s
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^
+
+  error.log: client intended to send too large body: 25000000 bytes
+             client intended to send too large chunked body: 20967680+65524 bytes</div>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">With Content-Length, the rejection is instant</span><span class="lz-d">Nginx reads the request headers, compares the declared length to the limit, and answers <code>413</code> before a single byte of body is accepted. Zero bytes uploaded, under a millisecond. The client's own upload is cancelled by the response.</span></div>
-  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">With chunked encoding it cannot know in advance</span><span class="lz-d">There is no declared length, so Nginx reads until the running total crosses the limit and only then rejects. Nearly 24MB had already crossed the network. The limit still holds — nothing oversized reaches your application — but the bandwidth was spent.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">With chunked encoding it cannot know in advance</span><span class="lz-d">There is no declared length, so Nginx reads until the running total crosses the limit and only then rejects. Nearly 23MB (22,805,136 bytes) had already crossed the network. The limit still holds — nothing oversized reaches your application — but the bandwidth was spent.</span></div>
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">So the limit protects the backend always, and bandwidth usually</span><span class="lz-d">Which is the right way to think about it. An attacker who wants to waste your transfer costs simply omits <code>Content-Length</code>. If that matters, the defence is upstream of Nginx — a CDN or firewall rule — not this directive.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">The default is 1MB, and it is the wrong default for uploads</span><span class="lz-d"><code>client_max_body_size 1m;</code> is what you get if you say nothing, and it produces a <code>413</code> on the first photo somebody uploads. It is also the right default for an API that only receives JSON, so this is a per-location decision rather than a global one.</span></div>
 </div>
@@ -563,6 +1045,79 @@ gui dong trong ket thuc header (dung khuon mau slowloris):
 <p><strong>The measurement worth repeating on your own server.</strong> Send one request that exceeds your limit with <code>Content-Length</code>, and one without it, and compare <code>%{size_upload}</code>. The first should be zero. If both transfer the whole body, something between you and Nginx is buffering the request — a CDN, a load balancer — and your size limit is not saving the bandwidth you think it is.</p>
 </div>
 
+<h3>🔬 Run it yourself</h3>
+<p>An upstream that counts the bytes it receives, <code>client_max_body_size 20m</code>, three uploads — then the default 413 vs <code>error_page 413</code>, a 20 KB body, and a 9 KB cookie and URL — on nginx/1.24.0:</p>
+<pre><code class="language-bash"><span class="tok-comment"># nhan.js</span>
+// upstream (cổng 9401): đọc hết thân, trả về số byte đã nhận
+require('http').createServer((req, res) =&gt; { let n = 0; req.on('data', (c) =&gt; n += c.length); req.on('end', () =&gt; res.end(&#96;nhan \${n} byte\\n&#96;)); }).listen(9401, '127.0.0.1');</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  client_body_temp_path /srv/body;
+  server {
+    listen 8080;
+    client_max_body_size 20m;
+    location / { proxy_pass http://127.0.0.1:9401; }
+  }
+}</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/them.pid;
+error_log /srv/logs/them.log warn;
+events {}
+http {
+  access_log off;
+  client_body_temp_path /srv/body2;
+  server {
+    listen 8081;
+    client_max_body_size 20m;
+    location / { proxy_pass http://127.0.0.1:9401; }                       <span class="tok-comment">  # 413 mặc định: trang HTML</span>
+  }
+  server {
+    listen 8082;
+    client_max_body_size 20m;
+    error_page 413 = @qua_lon;                                             <span class="tok-comment">  # 413 thành JSON frontend đọc được</span>
+    location / { proxy_pass http://127.0.0.1:9401; }
+    location @qua_lon { default_type application/json; return 413 '{"loi":"tep_qua_lon","toi_da_mb":20}\\n'; }
+  }
+}</code></pre>
+<div class="out">$ curl -s -o /dev/null -w '25MB, co Content-Length -&gt; %{http_code}, da GUI LEN %{size_upload} byte, mat %{time_total}s\\n' --data-binary @25mb.bin http://127.0.0.1:8080/
+25MB, co Content-Length -&gt; 413, da GUI LEN 0 byte, mat 0.000419s
+$ curl -s -o /dev/null -w '19MB, co Content-Length -&gt; %{http_code}, da GUI LEN %{size_upload} byte, mat %{time_total}s\\n' --data-binary @19mb.bin http://127.0.0.1:8080/
+19MB, co Content-Length -&gt; 200, da GUI LEN 19000000 byte, mat 0.047076s
+$ curl -s -o /dev/null -w '25MB, chunked           -&gt; %{http_code}, da GUI LEN %{size_upload} byte, mat %{time_total}s\\n' -H 'Transfer-Encoding: chunked' --data-binary @25mb.bin http://127.0.0.1:8080/
+25MB, chunked           -&gt; 413, da GUI LEN 22805136 byte, mat 0.024936s
+$ grep -o 'client intended to send too large[^,]*' /srv/logs/error.log | sort | uniq -c
+      1 client intended to send too large body: 25000000 bytes
+      1 client intended to send too large chunked body: 20967680+65524 bytes
+$ curl -s --data-binary @25mb.bin http://127.0.0.1:8081/ | head -3
+&lt;html&gt;
+&lt;head&gt;&lt;title&gt;413 Request Entity Too Large&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;
+$ curl -s --data-binary @25mb.bin http://127.0.0.1:8082/
+{"loi":"tep_qua_lon","toi_da_mb":20}
+$ head -c 20000 /dev/zero &gt; 20kb.bin; curl -s -o /dev/null --data-binary @20kb.bin http://127.0.0.1:8081/; grep -o 'a client request body is buffered to a temporary file[^,]*' /srv/logs/them.log | head -1
+a client request body is buffered to a temporary file /srv/body2/0000000001
+$ printf 'cookie 9KB  -&gt; '; curl -s -o /dev/null -w '%{http_code}\\n' -H "Cookie: a=$(head -c 9000 /dev/zero | tr '\\0' x)" http://127.0.0.1:8081/
+cookie 9KB  -&gt; 400
+$ printf 'URI 9KB     -&gt; '; curl -s -o /dev/null -w '%{http_code}\\n' "http://127.0.0.1:8081/$(head -c 9000 /dev/zero | tr '\\0' a)"
+URI 9KB     -&gt; 414</div>
+<p>25MB with <code>Content-Length</code>: 413 after 0 bytes. 19MB: 200. 25MB chunked: 413 after 22,805,136 bytes — the two log lines tell them apart. The default 413 body is an HTML page (nginx 1.24 titles it <code>413 Request Entity Too Large</code>); with <code>error_page 413 = @qua_lon</code> the client got JSON. A 20 KB body was already written to a temp file. A 9 KB cookie got 400, a 9 KB URL got 414.</p>
+<h3>🔗 Related lessons in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/system-design/learn?lessonSlug=sysd-11-1-upload" target="_blank" rel="noopener"><span class="lc-ico">🏗️</span><span class="lc-body"><span class="lc-title">System Design · 11.1 — Resumable uploads straight to object storage</span><span class="lc-sub">Large files that never pass through your server</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-8-4-gioi-han-cdn" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking for Developers · 8.4 — CDN limits: timeouts, body size and dynamic content</span><span class="lc-sub">The size limit one layer in front of nginx</span></span></a>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>client_max_body_size</code></span><span class="v">The body-size ceiling; over it Nginx returns <code>413</code>. Default 1MB.</span></div>
+  <div class="kv"><span class="k">413 Payload Too Large</span><span class="v">The rejection; it never reaches your app, so it never shows in application logs.</span></div>
+  <div class="kv"><span class="k">Content-Length vs chunked</span><span class="v">With a declared length the <code>413</code> is instant (0 bytes); chunked must be read until it overflows.</span></div>
+  <div class="kv"><span class="k"><code>client_body_buffer_size</code></span><span class="v">Decides whether a body stays in memory or spills to a temp file on disk.</span></div>
+  <div class="kv"><span class="k"><code>proxy_request_buffering</code></span><span class="v">On (default): read the whole body before calling upstream, shielding the backend from slow uploaders.</span></div>
+  <div class="kv"><span class="k"><code>large_client_header_buffers</code></span><span class="v">A separate limit for headers and the URL; over it gives <code>414</code> or <code>400</code>.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li><code>client_max_body_size</code> always protects the backend; it protects bandwidth only when Content-Length is sent.</li><li>With Content-Length the <code>413</code> is instant and zero bytes upload; chunked uploads waste the bandwidth first.</li><li>The default 1MB is right for a JSON API and wrong for uploads — make it a per-location decision.</li><li>A <code>413</code> never reaches the app, so log <code>\$status</code> at Nginx and return a JSON body the frontend can parse.</li><li>The upload limit exists in both Nginx and the framework; the smaller one wins.</li></ul>
+
 <h3>Learning sources for this lesson</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_core_module.html#client_max_body_size" target="_blank" rel="noopener"><span class="lc-ico">📏</span><span class="lc-body"><span class="lc-title">nginx — client_max_body_size and the body buffers</span><span class="lc-sub">nginx.org · Including the note about when 413 is returned</span></span></a>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_request_buffering" target="_blank" rel="noopener"><span class="lc-ico">📥</span><span class="lc-body"><span class="lc-title">nginx — proxy_request_buffering</span><span class="lc-sub">nginx.org · The upload-side mirror of response buffering</span></span></a>
@@ -579,14 +1134,17 @@ gui dong trong ket thuc header (dung khuon mau slowloris):
 <h3>Ba lượt tải lên với trần 20MB</h3>
 <div class="out">client_max_body_size 20m;
 
-  25MB, co Content-Length  -> 413, da GUI LEN 0 byte,           mat 0,0006s
-  19MB, co Content-Length  -> 200, da gui len 19.000.000 byte,  mat 0,12s
+  25MB, co Content-Length  -> 413, da GUI LEN 0 byte,           mat 0,0004s
+  19MB, co Content-Length  -> 200, da gui len 19.000.000 byte,  mat 0,047s
   25MB, chunked (KHONG khai do dai)
-                           -> 413, da GUI LEN 23.788.116 byte,  mat 0,17s
-                                   ^^^^^^^^^^^^^^^^^^^^^^^^</div>
+                           -> 413, da GUI LEN 22.805.136 byte,  mat 0,025s
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^
+
+  error.log: client intended to send too large body: 25000000 bytes
+             client intended to send too large chunked body: 20967680+65524 bytes</div>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Có Content-Length thì cú từ chối là TỨC THÌ</span><span class="lz-d">Nginx đọc header của request, so cái độ dài đã khai với cái trần, rồi đáp <code>413</code> TRƯỚC khi nhận lấy một byte thân nào. Không byte nào được tải lên, chưa tới một mili giây. Lượt tải lên của chính client bị chính cái phản hồi ấy huỷ.</span></div>
-  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Với mã hoá chunked thì nó KHÔNG biết trước được</span><span class="lz-d">Không có độ dài nào được khai, nên Nginx đọc cho tới khi tổng đang chạy vượt trần rồi mới từ chối. Gần 24MB đã kịp băng qua mạng. Cái giới hạn vẫn ĐỨNG — không có gì quá cỡ tới được ứng dụng của bạn — nhưng băng thông thì đã tiêu.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Với mã hoá chunked thì nó KHÔNG biết trước được</span><span class="lz-d">Không có độ dài nào được khai, nên Nginx đọc cho tới khi tổng đang chạy vượt trần rồi mới từ chối. Gần 23MB (22.805.136 byte) đã kịp băng qua mạng. Cái giới hạn vẫn ĐỨNG — không có gì quá cỡ tới được ứng dụng của bạn — nhưng băng thông thì đã tiêu.</span></div>
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Nên giới hạn này LUÔN bảo vệ backend, còn băng thông thì THƯỜNG THƯỜNG</span><span class="lz-d">Đó là cách nghĩ đúng về nó. Một kẻ tấn công muốn đốt phí truyền dữ liệu của bạn chỉ việc BỎ <code>Content-Length</code> đi. Nếu điều đó có nghĩa lý thì tuyến phòng thủ nằm ở TRƯỚC Nginx — một CDN hay một luật tường lửa — chứ không phải ở chỉ thị này.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Mặc định là 1MB, và đó là mặc định SAI cho việc tải file</span><span class="lz-d"><code>client_max_body_size 1m;</code> là thứ bạn nhận nếu không nói gì, và nó sinh ra một cú <code>413</code> ngay tấm ảnh đầu tiên ai đó tải lên. Nó cũng là mặc định ĐÚNG cho một API chỉ nhận JSON, nên đây là quyết định theo TỪNG location chứ không phải toàn cục.</span></div>
 </div>
@@ -627,6 +1185,79 @@ gui dong trong ket thuc header (dung khuon mau slowloris):
 <p><strong>Phép đo đáng lặp lại trên máy chủ của bạn.</strong> Gửi một request vượt trần CÓ <code>Content-Length</code>, và một cái KHÔNG có, rồi so <code>%{size_upload}</code>. Cái đầu tiên PHẢI bằng không. Nếu cả hai đều đẩy trọn cái thân đi thì có thứ gì đó nằm giữa bạn và Nginx đang đệm cái request — một CDN, một bộ cân bằng tải — và cái giới hạn kích thước của bạn không tiết kiệm được lượng băng thông mà bạn tưởng.</p>
 </div>
 
+<h3>🔬 Tự chạy lại</h3>
+<p>Một upstream đếm số byte nó nhận, <code>client_max_body_size 20m</code>, ba lượt tải lên — rồi 413 mặc định so với <code>error_page 413</code>, một thân 20 KB, và cookie cùng URL 9 KB — trên nginx/1.24.0:</p>
+<pre><code class="language-bash"><span class="tok-comment"># nhan.js</span>
+// upstream (cổng 9401): đọc hết thân, trả về số byte đã nhận
+require('http').createServer((req, res) =&gt; { let n = 0; req.on('data', (c) =&gt; n += c.length); req.on('end', () =&gt; res.end(&#96;nhan \${n} byte\\n&#96;)); }).listen(9401, '127.0.0.1');</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  client_body_temp_path /srv/body;
+  server {
+    listen 8080;
+    client_max_body_size 20m;
+    location / { proxy_pass http://127.0.0.1:9401; }
+  }
+}</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/them.pid;
+error_log /srv/logs/them.log warn;
+events {}
+http {
+  access_log off;
+  client_body_temp_path /srv/body2;
+  server {
+    listen 8081;
+    client_max_body_size 20m;
+    location / { proxy_pass http://127.0.0.1:9401; }                       <span class="tok-comment">  # 413 mặc định: trang HTML</span>
+  }
+  server {
+    listen 8082;
+    client_max_body_size 20m;
+    error_page 413 = @qua_lon;                                             <span class="tok-comment">  # 413 thành JSON frontend đọc được</span>
+    location / { proxy_pass http://127.0.0.1:9401; }
+    location @qua_lon { default_type application/json; return 413 '{"loi":"tep_qua_lon","toi_da_mb":20}\\n'; }
+  }
+}</code></pre>
+<div class="out">$ curl -s -o /dev/null -w '25MB, co Content-Length -&gt; %{http_code}, da GUI LEN %{size_upload} byte, mat %{time_total}s\\n' --data-binary @25mb.bin http://127.0.0.1:8080/
+25MB, co Content-Length -&gt; 413, da GUI LEN 0 byte, mat 0.000419s
+$ curl -s -o /dev/null -w '19MB, co Content-Length -&gt; %{http_code}, da GUI LEN %{size_upload} byte, mat %{time_total}s\\n' --data-binary @19mb.bin http://127.0.0.1:8080/
+19MB, co Content-Length -&gt; 200, da GUI LEN 19000000 byte, mat 0.047076s
+$ curl -s -o /dev/null -w '25MB, chunked           -&gt; %{http_code}, da GUI LEN %{size_upload} byte, mat %{time_total}s\\n' -H 'Transfer-Encoding: chunked' --data-binary @25mb.bin http://127.0.0.1:8080/
+25MB, chunked           -&gt; 413, da GUI LEN 22805136 byte, mat 0.024936s
+$ grep -o 'client intended to send too large[^,]*' /srv/logs/error.log | sort | uniq -c
+      1 client intended to send too large body: 25000000 bytes
+      1 client intended to send too large chunked body: 20967680+65524 bytes
+$ curl -s --data-binary @25mb.bin http://127.0.0.1:8081/ | head -3
+&lt;html&gt;
+&lt;head&gt;&lt;title&gt;413 Request Entity Too Large&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;
+$ curl -s --data-binary @25mb.bin http://127.0.0.1:8082/
+{"loi":"tep_qua_lon","toi_da_mb":20}
+$ head -c 20000 /dev/zero &gt; 20kb.bin; curl -s -o /dev/null --data-binary @20kb.bin http://127.0.0.1:8081/; grep -o 'a client request body is buffered to a temporary file[^,]*' /srv/logs/them.log | head -1
+a client request body is buffered to a temporary file /srv/body2/0000000001
+$ printf 'cookie 9KB  -&gt; '; curl -s -o /dev/null -w '%{http_code}\\n' -H "Cookie: a=$(head -c 9000 /dev/zero | tr '\\0' x)" http://127.0.0.1:8081/
+cookie 9KB  -&gt; 400
+$ printf 'URI 9KB     -&gt; '; curl -s -o /dev/null -w '%{http_code}\\n' "http://127.0.0.1:8081/$(head -c 9000 /dev/zero | tr '\\0' a)"
+URI 9KB     -&gt; 414</div>
+<p>25MB có <code>Content-Length</code>: 413 sau 0 byte. 19MB: 200. 25MB chunked: 413 sau 22.805.136 byte — hai dòng log phân biệt được hai ca. Thân 413 mặc định là trang HTML (nginx 1.24 đặt tiêu đề <code>413 Request Entity Too Large</code>); với <code>error_page 413 = @qua_lon</code> client nhận JSON. Thân 20 KB đã bị ghi ra tệp tạm. Cookie 9 KB nhận 400, URL 9 KB nhận 414.</p>
+<h3>🔗 Bài liên quan ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/system-design/learn?lessonSlug=sysd-11-1-upload" target="_blank" rel="noopener"><span class="lc-ico">🏗️</span><span class="lc-body"><span class="lc-title">System Design · 11.1 — Tải lên nối tiếp được thẳng vào lưu trữ đối tượng</span><span class="lc-sub">Tệp lớn không bao giờ đi qua máy chủ của bạn</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-8-4-gioi-han-cdn" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking for Developers · 8.4 — Giới hạn của CDN: timeout, kích thước và nội dung động</span><span class="lc-sub">Giới hạn kích thước ở tầng đứng trước nginx</span></span></a>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>client_max_body_size</code></span><span class="v">Trần kích thước thân; vượt trần Nginx trả <code>413</code>. Mặc định 1MB.</span></div>
+  <div class="kv"><span class="k">413 Payload Too Large</span><span class="v">Cú từ chối; nó không tới được ứng dụng nên không hiện trong log ứng dụng.</span></div>
+  <div class="kv"><span class="k">Content-Length vs chunked</span><span class="v">Có khai độ dài thì <code>413</code> tức thì (0 byte); chunked phải đọc tới khi tràn.</span></div>
+  <div class="kv"><span class="k"><code>client_body_buffer_size</code></span><span class="v">Quyết định thân nằm trong bộ nhớ hay tràn ra tệp tạm trên đĩa.</span></div>
+  <div class="kv"><span class="k"><code>proxy_request_buffering</code></span><span class="v">Bật (mặc định): đọc trọn thân rồi mới gọi upstream, che backend khỏi người tải chậm.</span></div>
+  <div class="kv"><span class="k"><code>large_client_header_buffers</code></span><span class="v">Giới hạn riêng cho header và URL; vượt thì trả <code>414</code> hoặc <code>400</code>.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li><code>client_max_body_size</code> luôn bảo vệ backend; chỉ bảo vệ băng thông khi client gửi Content-Length.</li><li>Có Content-Length thì <code>413</code> tức thì và tải lên 0 byte; tải chunked đốt băng thông trước đã.</li><li>Mặc định 1MB đúng cho API JSON và sai cho tải file — hãy biến nó thành quyết định theo từng location.</li><li>Cú <code>413</code> không tới được ứng dụng, nên ghi <code>\$status</code> ở Nginx và trả thân JSON mà frontend đọc được.</li><li>Giới hạn tải lên tồn tại ở cả Nginx lẫn framework; cái nhỏ hơn thắng.</li></ul>
+
 <h3>Nguồn học cho bài này</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_core_module.html#client_max_body_size" target="_blank" rel="noopener"><span class="lc-ico">📏</span><span class="lc-body"><span class="lc-title">nginx — client_max_body_size và các đệm thân</span><span class="lc-sub">nginx.org · Kèm ghi chú về việc khi nào 413 được trả về</span></span></a>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_request_buffering" target="_blank" rel="noopener"><span class="lc-ico">📥</span><span class="lc-body"><span class="lc-title">nginx — proxy_request_buffering</span><span class="lc-sub">nginx.org · Ảnh soi gương phía tải-lên của việc đệm phản hồi</span></span></a>
@@ -644,6 +1275,7 @@ gui dong trong ket thuc header (dung khuon mau slowloris):
       type: 'LESSON',
       description: 'Ghép cả bốn trục thành một cấu hình cho một API thật rồi đo từng tuyến. Kết quả đúng như thiết kế ở bốn dòng, và ở dòng thứ năm thì một lượt tải file hợp lệ ăn 429 — vì nó dùng CHUNG vùng với API, một chi tiết chỉ lộ ra khi đem đo.',
       content: `
+${G07_5}
 <div class="ml-en">
 <span class="eyebrow">Chapter 7 · Lesson 7.5</span>
 <h2>A protection layer, assembled and measured</h2>
@@ -697,8 +1329,10 @@ gui dong trong ket thuc header (dung khuon mau slowloris):
 }</code></pre>
 
 <h3>Every route, probed</h3>
-<div class="out">/api/ (20r/s, burst 40 nodelay), ban 50 request nhanh
-   -> 200: 48   429: 2
+<div class="out">/api/ (20r/s, burst 40 nodelay), ban 50 request LAN LUOT
+   -> 200: 44   429: 6
+/api/ ban 50 request CUNG LUC (50 ket noi song song)
+   -> 200: 28   429: 22     (16 cai trong do do limit_conn ket 20)
 
 /api/dang-nhap (10r/phut, burst 3 nodelay), ban 8 request
    -> 200 200 200 200 429 429 429 429
@@ -708,14 +1342,14 @@ gui dong trong ket thuc header (dung khuon mau slowloris):
 /tai-len/ voi than 60MB             -> 413, da GUI LEN 0 byte
 /api/ voi than 2MB (tran 1m)        -> 413</div>
 <div class="callout ok">
-<p><strong>Four of the five are exactly what the config says.</strong> The general API absorbs a fifty-request page load and only trims the tail. The login route allows four attempts and then refuses with a <code>Retry-After</code> the client can act on. The upload route accepts a real file and rejects an absurd one before a byte of it leaves the client. And the same absurd file sent to the API route is rejected by the tighter default, because the generous limit is scoped to one location rather than sitting at <code>http</code> level.</p>
+<p><strong>Four of the five are exactly what the config says.</strong> The general API, probed one request after another, let 44 of 50 through and trimmed only the tail. Fired as 50 SIMULTANEOUS connections it let 28 through — and 16 of the 22 refusals came from <code>limit_conn ket 20</code>, not from the rate limit. A browser reuses six connections (one with HTTP/2) rather than opening fifty, so probe the way your clients really connect. The login route allows four attempts and then refuses with a <code>Retry-After</code> the client can act on. The upload route accepts a real file and rejects an absurd one before a byte of it leaves the client. And the same absurd file sent to the API route is rejected by the tighter default, because the generous limit is scoped to one location rather than sitting at <code>http</code> level.</p>
 </div>
 
 <h3>And the row that was not</h3>
 <div class="out">Ban 45 request vao /api/, roi NGAY LAP TUC mot lan tai len 2MB:
 
    /tai-len/  ->  429        &lt;-- mot luot tai len HOP LE bi tu choi
-   error.log: limiting requests, excess: 39.420 by zone "chung",
+   error.log: limiting requests, excess: 40.440 by zone "chung",
               request: "POST /tai-len/x"
 
 Nghi 3 giay cho xo rot lai, roi gui LAI dung request do:
@@ -742,6 +1376,85 @@ Nghi 3 giay cho xo rot lai, roi gui LAI dung request do:
 <div class="note-ct">
 <p><strong>The order to build this in.</strong> Identity first (<code>real_ip</code>), because every limit keyed on the wrong address is wrong in a way that looks like it is working. Then sizes and timeouts, which have no downside and no tuning. Then rate limits, one zone per purpose, with numbers taken from your own access log. Then probe every route — including the failures — and read the error log while you do it, because it names the zone, the excess and the file in words you can act on.</p>
 </div>
+
+<h3>🔬 Run it yourself</h3>
+<p>The whole layer on port 8080 and the shared-zone version on 8081, an upstream that drains the body and answers 200, every route probed — on nginx/1.24.0:</p>
+<pre><code class="language-bash"><span class="tok-comment"># api.js</span>
+// upstream "api" (cổng 9501): đọc hết thân rồi trả 200
+require('http').createServer((req, res) =&gt; { req.on('data', () =&gt; {}); req.on('end', () =&gt; res.end('ok\\n')); }).listen(9501, '127.0.0.1');</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  upstream api { server 127.0.0.1:9501; }
+  set_real_ip_from 10.0.0.0/8;        <span class="tok-comment">  # CHỈ proxy của bạn (ở lab: không ai ⇒ $remote_addr giữ nguyên)</span>
+  real_ip_header    X-Forwarded-For;
+  real_ip_recursive on;
+  limit_req_zone  $binary_remote_addr zone=chung:10m  rate=20r/s;
+  limit_req_zone  $binary_remote_addr zone=login:10m  rate=10r/m;
+  limit_req_zone  $binary_remote_addr zone=upload:10m rate=2r/s;
+  limit_conn_zone $binary_remote_addr zone=ket:10m;
+  limit_req_status  429;
+  limit_conn_status 429;
+  client_header_timeout 10s;
+  client_body_timeout   10s;
+  send_timeout          10s;
+  keepalive_timeout     30s;
+  client_max_body_size 1m;
+  client_body_temp_path /srv/body;
+  server {                                 <span class="tok-comment">  # 8080: ĐÚNG — mỗi mục đích một vùng</span>
+    listen 8080;
+    limit_conn ket 20;
+    location /api/dang-nhap { limit_req zone=login burst=3 nodelay; add_header Retry-After 6 always; proxy_pass http://api; }
+    location /api/          { limit_req zone=chung burst=40 nodelay; proxy_pass http://api; }
+    location /tai-len/      { limit_req zone=upload burst=5; limit_conn ket 2; client_max_body_size 50m; proxy_pass http://api; }
+  }
+  server {                                 <span class="tok-comment">  # 8081: SAI — tải lên dùng CHUNG vùng với /api/</span>
+    listen 8081;
+    location /api/          { limit_req zone=chung burst=40 nodelay; proxy_pass http://api; }
+    location /tai-len/      { limit_req zone=chung burst=40 nodelay; client_max_body_size 50m; proxy_pass http://api; }
+  }
+}</code></pre>
+<div class="out">$ printf '/api/ ban 50 request CUNG LUC      -&gt; '; for i in $(seq 50); do curl -s -o /dev/null -w '%{http_code}\\n' http://127.0.0.1:8080/api/x &amp; done | sort | uniq -c | awk '{printf "%s: %s   ", $2, $1}'; echo
+/api/ ban 50 request CUNG LUC      -&gt; 200: 28   429: 22   
+$ grep -c 'limiting connections by zone "ket"' /srv/logs/error.log | sed 's/^/  ^ tu choi boi limit_conn ket 20: /'; sleep 3
+  ^ tu choi boi limit_conn ket 20: 16
+$ printf '/api/ ban 50 request LAN LUOT     -&gt; '; for i in $(seq 50); do curl -s -o /dev/null -w '%{http_code}\\n' http://127.0.0.1:8080/api/x; done | sort | uniq -c | awk '{printf "%s: %s   ", $2, $1}'; echo; sleep 3
+/api/ ban 50 request LAN LUOT     -&gt; 200: 44   429: 6   
+$ printf '/api/dang-nhap ban 8 request      -&gt; '; for i in $(seq 8); do printf '%s ' $(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8080/api/dang-nhap); done; echo; curl -s -D - -o /dev/null http://127.0.0.1:8080/api/dang-nhap | tr -d '\\r' | grep -i '^retry-after'
+/api/dang-nhap ban 8 request      -&gt; 200 200 200 200 429 429 429 429 
+Retry-After: 6
+$ curl -s -o /dev/null -w '/tai-len/ than 2MB (tran 50m)      -&gt; %{http_code}\\n' --data-binary @2mb.bin http://127.0.0.1:8080/tai-len/x; sleep 1
+/tai-len/ than 2MB (tran 50m)      -&gt; 200
+$ curl -s -o /dev/null -w '/tai-len/ than 60MB                -&gt; %{http_code}, da GUI LEN %{size_upload} byte\\n' --data-binary @60mb.bin http://127.0.0.1:8080/tai-len/x
+/tai-len/ than 60MB                -&gt; 413, da GUI LEN 0 byte
+$ curl -s -o /dev/null -w '/api/ than 2MB (tran 1m)          -&gt; %{http_code}\\n' --data-binary @2mb.bin http://127.0.0.1:8080/api/x
+/api/ than 2MB (tran 1m)          -&gt; 413
+$ sleep 3; : &gt; /srv/logs/error.log; for i in $(seq 45); do curl -s -o /dev/null http://127.0.0.1:8081/api/x &amp; done; wait; curl -s -o /dev/null -w 'cong 8081 (chung vung): 45 request /api/, roi tai len 2MB -&gt; %{http_code}\\n' --data-binary @2mb.bin http://127.0.0.1:8081/tai-len/x
+cong 8081 (chung vung): 45 request /api/, roi tai len 2MB -&gt; 429
+$ grep -m1 -oE 'limiting requests, excess: [0-9.]+ by zone "chung"' /srv/logs/error.log
+limiting requests, excess: 40.440 by zone "chung"
+$ sleep 3; curl -s -o /dev/null -w 'nghi 3 giay, gui LAI                           -&gt; %{http_code}\\n' --data-binary @2mb.bin http://127.0.0.1:8081/tai-len/x
+nghi 3 giay, gui LAI                           -&gt; 200
+$ sleep 3; for i in $(seq 45); do curl -s -o /dev/null http://127.0.0.1:8080/api/x &amp; done; wait; curl -s -o /dev/null -w 'cong 8080 (vung rieng): 45 request /api/, roi tai len 2MB -&gt; %{http_code}\\n' --data-binary @2mb.bin http://127.0.0.1:8080/tai-len/x
+cong 8080 (vung rieng): 45 request /api/, roi tai len 2MB -&gt; 200</div>
+<p>Fifty API requests at once: 28 passed, 22 refused, 16 of them by <code>limit_conn ket 20</code>; in a row: 44 passed, 6 refused. Login: 4×200, 4×429 with <code>Retry-After: 6</code>. Upload 2MB 200, 60MB 413 after 0 bytes; the same 2MB on <code>/api/</code> 413. Shared zone: after 45 API calls a valid upload got 429 (<code>excess: 40.440 by zone "chung"</code>), 200 three seconds later; with its own zone, 200 at once.</p>
+<h3>🔗 Related lessons in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/ddos-protection/learn?lessonSlug=ddos-4-4-logic" target="_blank" rel="noopener"><span class="lc-ico">🛡️</span><span class="lc-body"><span class="lc-title">DDoS Protection · 4.4 — Business-logic DoS: login, OTP, search, export, LLM calls</span><span class="lc-sub">What a per-IP limit cannot see: what the request means</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/ddos-protection/learn?lessonSlug=ddos-14-2-gia-co" target="_blank" rel="noopener"><span class="lc-ico">🛡️</span><span class="lc-body"><span class="lc-title">DDoS Protection · 14.2 — Hardening: edge rules, origin lock-down and app limits</span><span class="lc-sub">This layer as one piece of a whole defence</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/ddos-protection/learn?lessonSlug=ddos-9-1-neu-da-hoc-nginx" target="_blank" rel="noopener"><span class="lc-ico">🛡️</span><span class="lc-body"><span class="lc-title">DDoS Protection · 9.1 — If you took the Nginx course: limit_req and limit_conn in one page</span><span class="lc-sub">The chapter on one page</span></span></a>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Protection layer</span><span class="v">The four axes combined — identity, rate, connection, size — plus the right status code.</span></div>
+  <div class="kv"><span class="k"><code>real_ip</code> (identity first)</span><span class="v">Fixing <code>\$remote_addr</code> must come first, or every limit keyed on it is wrong.</span></div>
+  <div class="kv"><span class="k">Zone per purpose</span><span class="v">One <code>limit_req</code> zone for each concern; two locations sharing a zone share one bucket.</span></div>
+  <div class="kv"><span class="k">Shared-zone exhaustion</span><span class="v">API traffic draining the upload route's limit because both named <code>zone=chung</code>.</span></div>
+  <div class="kv"><span class="k">Probing vs reviewing</span><span class="v">Testing every route found the bug that reading the fully-visible config did not.</span></div>
+  <div class="kv"><span class="k">Per-instance limit</span><span class="v">Each number is enforced once per Nginx server, not across the cluster.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li>Build in order: identity (<code>real_ip</code>), then sizes and timeouts, then rate limits, then probe every route.</li><li>Four of five routes behaved as configured; probing is how you find the fifth.</li><li>The bug: a valid upload got <code>429</code> because <code>/api/</code> and <code>/tai-len/</code> shared one <code>limit_req</code> zone — one word to fix.</li><li>A zone is a shared budget; two things should share one only when you want them to compete.</li><li>The layer stops per-client abuse, not distributed attacks, and protects nothing it does not sit in front of.</li></ul>
 
 <h3>Learning sources for this lesson</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_limit_req_module.html" target="_blank" rel="noopener"><span class="lc-ico">🚦</span><span class="lc-body"><span class="lc-title">nginx — limit_req and limit_conn</span><span class="lc-sub">nginx.org · The two modules the whole layer is built from</span></span></a>
@@ -804,8 +1517,10 @@ Nghi 3 giay cho xo rot lai, roi gui LAI dung request do:
 }</code></pre>
 
 <h3>Từng tuyến, đem dò</h3>
-<div class="out">/api/ (20r/s, burst 40 nodelay), ban 50 request nhanh
-   -> 200: 48   429: 2
+<div class="out">/api/ (20r/s, burst 40 nodelay), ban 50 request LAN LUOT
+   -> 200: 44   429: 6
+/api/ ban 50 request CUNG LUC (50 ket noi song song)
+   -> 200: 28   429: 22     (16 cai trong do do limit_conn ket 20)
 
 /api/dang-nhap (10r/phut, burst 3 nodelay), ban 8 request
    -> 200 200 200 200 429 429 429 429
@@ -815,14 +1530,14 @@ Nghi 3 giay cho xo rot lai, roi gui LAI dung request do:
 /tai-len/ voi than 60MB             -> 413, da GUI LEN 0 byte
 /api/ voi than 2MB (tran 1m)        -> 413</div>
 <div class="callout ok">
-<p><strong>Bốn trên năm dòng đúng CHÍNH XÁC như cấu hình nói.</strong> Cái API chung nuốt trọn một lượt nạp trang năm mươi request và chỉ tỉa mất cái đuôi. Tuyến đăng nhập cho phép bốn lần thử rồi từ chối kèm một cái <code>Retry-After</code> mà client hành động theo được. Tuyến tải file nhận một tệp thật và đá một tệp phi lý TRƯỚC KHI có byte nào của nó rời khỏi client. Và đúng cái tệp phi lý ấy gửi vào tuyến API thì bị đá bởi cái mặc định chặt hơn, vì cái trần rộng rãi được KHOANH vào một location chứ không nằm ở tầng <code>http</code>.</p>
+<p><strong>Bốn trên năm dòng đúng CHÍNH XÁC như cấu hình nói.</strong> Cái API chung, khi dò LẦN LƯỢT, cho 44 trên 50 request qua và chỉ tỉa mất cái đuôi. Bắn thành 50 kết nối CÙNG LÚC thì chỉ 28 qua — và 16 trong 22 cú từ chối là do <code>limit_conn ket 20</code>, không phải do giới hạn tần suất. Trình duyệt dùng lại sáu kết nối (HTTP/2 chỉ một) chứ không mở năm mươi, nên hãy dò đúng cách client của bạn kết nối. Tuyến đăng nhập cho phép bốn lần thử rồi từ chối kèm một cái <code>Retry-After</code> mà client hành động theo được. Tuyến tải file nhận một tệp thật và đá một tệp phi lý TRƯỚC KHI có byte nào của nó rời khỏi client. Và đúng cái tệp phi lý ấy gửi vào tuyến API thì bị đá bởi cái mặc định chặt hơn, vì cái trần rộng rãi được KHOANH vào một location chứ không nằm ở tầng <code>http</code>.</p>
 </div>
 
 <h3>Và cái dòng KHÔNG đúng</h3>
 <div class="out">Ban 45 request vao /api/, roi NGAY LAP TUC mot lan tai len 2MB:
 
    /tai-len/  ->  429        &lt;-- mot luot tai len HOP LE bi tu choi
-   error.log: limiting requests, excess: 39.420 by zone "chung",
+   error.log: limiting requests, excess: 40.440 by zone "chung",
               request: "POST /tai-len/x"
 
 Nghi 3 giay cho xo rot lai, roi gui LAI dung request do:
@@ -850,6 +1565,85 @@ Nghi 3 giay cho xo rot lai, roi gui LAI dung request do:
 <p><strong>Thứ tự để dựng cái này.</strong> DANH TÍNH trước (<code>real_ip</code>), vì mọi giới hạn khoá theo sai địa chỉ đều sai theo kiểu TRÔNG như đang chạy tốt. Rồi tới kích thước và timeout, những thứ không có mặt trái và không cần chỉnh tinh. Rồi tới giới hạn tần suất, MỘT vùng cho MỘT mục đích, với con số lấy từ access log của chính bạn. Rồi ĐEM DÒ mọi tuyến — kể cả các đường hỏng — và vừa dò vừa ĐỌC error log, vì nó gọi tên cái vùng, phần vượt và cái tệp bằng những chữ mà bạn hành động theo được.</p>
 </div>
 
+<h3>🔬 Tự chạy lại</h3>
+<p>Cả lớp phòng thủ ở cổng 8080 và bản dùng chung vùng ở 8081, một upstream hút hết thân rồi trả 200, dò mọi tuyến — trên nginx/1.24.0:</p>
+<pre><code class="language-bash"><span class="tok-comment"># api.js</span>
+// upstream "api" (cổng 9501): đọc hết thân rồi trả 200
+require('http').createServer((req, res) =&gt; { req.on('data', () =&gt; {}); req.on('end', () =&gt; res.end('ok\\n')); }).listen(9501, '127.0.0.1');</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  upstream api { server 127.0.0.1:9501; }
+  set_real_ip_from 10.0.0.0/8;        <span class="tok-comment">  # CHỈ proxy của bạn (ở lab: không ai ⇒ $remote_addr giữ nguyên)</span>
+  real_ip_header    X-Forwarded-For;
+  real_ip_recursive on;
+  limit_req_zone  $binary_remote_addr zone=chung:10m  rate=20r/s;
+  limit_req_zone  $binary_remote_addr zone=login:10m  rate=10r/m;
+  limit_req_zone  $binary_remote_addr zone=upload:10m rate=2r/s;
+  limit_conn_zone $binary_remote_addr zone=ket:10m;
+  limit_req_status  429;
+  limit_conn_status 429;
+  client_header_timeout 10s;
+  client_body_timeout   10s;
+  send_timeout          10s;
+  keepalive_timeout     30s;
+  client_max_body_size 1m;
+  client_body_temp_path /srv/body;
+  server {                                 <span class="tok-comment">  # 8080: ĐÚNG — mỗi mục đích một vùng</span>
+    listen 8080;
+    limit_conn ket 20;
+    location /api/dang-nhap { limit_req zone=login burst=3 nodelay; add_header Retry-After 6 always; proxy_pass http://api; }
+    location /api/          { limit_req zone=chung burst=40 nodelay; proxy_pass http://api; }
+    location /tai-len/      { limit_req zone=upload burst=5; limit_conn ket 2; client_max_body_size 50m; proxy_pass http://api; }
+  }
+  server {                                 <span class="tok-comment">  # 8081: SAI — tải lên dùng CHUNG vùng với /api/</span>
+    listen 8081;
+    location /api/          { limit_req zone=chung burst=40 nodelay; proxy_pass http://api; }
+    location /tai-len/      { limit_req zone=chung burst=40 nodelay; client_max_body_size 50m; proxy_pass http://api; }
+  }
+}</code></pre>
+<div class="out">$ printf '/api/ ban 50 request CUNG LUC      -&gt; '; for i in $(seq 50); do curl -s -o /dev/null -w '%{http_code}\\n' http://127.0.0.1:8080/api/x &amp; done | sort | uniq -c | awk '{printf "%s: %s   ", $2, $1}'; echo
+/api/ ban 50 request CUNG LUC      -&gt; 200: 28   429: 22   
+$ grep -c 'limiting connections by zone "ket"' /srv/logs/error.log | sed 's/^/  ^ tu choi boi limit_conn ket 20: /'; sleep 3
+  ^ tu choi boi limit_conn ket 20: 16
+$ printf '/api/ ban 50 request LAN LUOT     -&gt; '; for i in $(seq 50); do curl -s -o /dev/null -w '%{http_code}\\n' http://127.0.0.1:8080/api/x; done | sort | uniq -c | awk '{printf "%s: %s   ", $2, $1}'; echo; sleep 3
+/api/ ban 50 request LAN LUOT     -&gt; 200: 44   429: 6   
+$ printf '/api/dang-nhap ban 8 request      -&gt; '; for i in $(seq 8); do printf '%s ' $(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8080/api/dang-nhap); done; echo; curl -s -D - -o /dev/null http://127.0.0.1:8080/api/dang-nhap | tr -d '\\r' | grep -i '^retry-after'
+/api/dang-nhap ban 8 request      -&gt; 200 200 200 200 429 429 429 429 
+Retry-After: 6
+$ curl -s -o /dev/null -w '/tai-len/ than 2MB (tran 50m)      -&gt; %{http_code}\\n' --data-binary @2mb.bin http://127.0.0.1:8080/tai-len/x; sleep 1
+/tai-len/ than 2MB (tran 50m)      -&gt; 200
+$ curl -s -o /dev/null -w '/tai-len/ than 60MB                -&gt; %{http_code}, da GUI LEN %{size_upload} byte\\n' --data-binary @60mb.bin http://127.0.0.1:8080/tai-len/x
+/tai-len/ than 60MB                -&gt; 413, da GUI LEN 0 byte
+$ curl -s -o /dev/null -w '/api/ than 2MB (tran 1m)          -&gt; %{http_code}\\n' --data-binary @2mb.bin http://127.0.0.1:8080/api/x
+/api/ than 2MB (tran 1m)          -&gt; 413
+$ sleep 3; : &gt; /srv/logs/error.log; for i in $(seq 45); do curl -s -o /dev/null http://127.0.0.1:8081/api/x &amp; done; wait; curl -s -o /dev/null -w 'cong 8081 (chung vung): 45 request /api/, roi tai len 2MB -&gt; %{http_code}\\n' --data-binary @2mb.bin http://127.0.0.1:8081/tai-len/x
+cong 8081 (chung vung): 45 request /api/, roi tai len 2MB -&gt; 429
+$ grep -m1 -oE 'limiting requests, excess: [0-9.]+ by zone "chung"' /srv/logs/error.log
+limiting requests, excess: 40.440 by zone "chung"
+$ sleep 3; curl -s -o /dev/null -w 'nghi 3 giay, gui LAI                           -&gt; %{http_code}\\n' --data-binary @2mb.bin http://127.0.0.1:8081/tai-len/x
+nghi 3 giay, gui LAI                           -&gt; 200
+$ sleep 3; for i in $(seq 45); do curl -s -o /dev/null http://127.0.0.1:8080/api/x &amp; done; wait; curl -s -o /dev/null -w 'cong 8080 (vung rieng): 45 request /api/, roi tai len 2MB -&gt; %{http_code}\\n' --data-binary @2mb.bin http://127.0.0.1:8080/tai-len/x
+cong 8080 (vung rieng): 45 request /api/, roi tai len 2MB -&gt; 200</div>
+<p>Năm mươi request API cùng lúc: 28 qua, 22 bị từ chối, 16 trong đó do <code>limit_conn ket 20</code>; lần lượt: 44 qua, 6 bị từ chối. Đăng nhập: 4×200, 4×429 kèm <code>Retry-After: 6</code>. Tải lên 2MB 200, 60MB 413 sau 0 byte; cùng 2MB vào <code>/api/</code> thì 413. Chung vùng: sau 45 lượt gọi API, một lượt tải lên hợp lệ nhận 429 (<code>excess: 40.440 by zone "chung"</code>), ba giây sau thì 200; với vùng riêng, 200 ngay.</p>
+<h3>🔗 Bài liên quan ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/ddos-protection/learn?lessonSlug=ddos-4-4-logic" target="_blank" rel="noopener"><span class="lc-ico">🛡️</span><span class="lc-body"><span class="lc-title">DDoS Protection · 4.4 — DoS logic nghiệp vụ: đăng nhập, OTP, tìm kiếm, xuất file, gọi LLM</span><span class="lc-sub">Thứ mà giới hạn theo IP không thấy: request đó có nghĩa gì</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/ddos-protection/learn?lessonSlug=ddos-14-2-gia-co" target="_blank" rel="noopener"><span class="lc-ico">🛡️</span><span class="lc-body"><span class="lc-title">DDoS Protection · 14.2 — Gia cố: luật ở biên, khoá máy gốc và giới hạn trong app</span><span class="lc-sub">Lớp này là một mảnh của cả một hệ phòng thủ</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/ddos-protection/learn?lessonSlug=ddos-9-1-neu-da-hoc-nginx" target="_blank" rel="noopener"><span class="lc-ico">🛡️</span><span class="lc-body"><span class="lc-title">DDoS Protection · 9.1 — Nếu đã học khoá Nginx: limit_req và limit_conn trong một trang</span><span class="lc-sub">Cả chương gói trong một trang</span></span></a>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Lớp phòng thủ</span><span class="v">Bốn trục ghép lại — danh tính, tần suất, kết nối, kích thước — cộng mã trạng thái đúng.</span></div>
+  <div class="kv"><span class="k"><code>real_ip</code> (danh tính trước)</span><span class="v">Sửa <code>\$remote_addr</code> phải làm trước, nếu không mọi giới hạn khoá theo nó đều sai.</span></div>
+  <div class="kv"><span class="k">Vùng theo mục đích</span><span class="v">Một vùng <code>limit_req</code> cho mỗi mối lo; hai location dùng chung vùng thì chung một cái xô.</span></div>
+  <div class="kv"><span class="k">Cạn vùng dùng chung</span><span class="v">Lưu lượng API vét cạn giới hạn của tuyến tải lên vì cả hai cùng <code>zone=chung</code>.</span></div>
+  <div class="kv"><span class="k">Dò vs rà soát</span><span class="v">Thử mọi tuyến tìm ra con bug mà đọc cấu hình (hiện rõ hết) lại không thấy.</span></div>
+  <div class="kv"><span class="k">Giới hạn theo từng instance</span><span class="v">Mỗi con số được thi hành một lần mỗi máy Nginx, không phải cả cụm.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li>Dựng theo thứ tự: danh tính (<code>real_ip</code>), rồi kích thước và timeout, rồi giới hạn tần suất, rồi dò mọi tuyến.</li><li>Bốn trên năm tuyến cư xử đúng như cấu hình; đem dò mới tìm ra cái thứ năm.</li><li>Con bug: một lượt tải hợp lệ ăn <code>429</code> vì <code>/api/</code> và <code>/tai-len/</code> dùng chung một vùng <code>limit_req</code> — chữa bằng một chữ.</li><li>Một vùng là ngân sách dùng chung; hai thứ chỉ nên chung khi bạn muốn chúng cạnh tranh nhau.</li><li>Lớp này chặn lạm dụng theo từng client, không chặn tấn công phân tán, và không bảo vệ thứ nó không đứng trước.</li></ul>
+
 <h3>Nguồn học cho bài này</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_limit_req_module.html" target="_blank" rel="noopener"><span class="lc-ico">🚦</span><span class="lc-body"><span class="lc-title">nginx — limit_req và limit_conn</span><span class="lc-sub">nginx.org · Hai module dựng nên cả cái lớp này</span></span></a>
 <a class="link-card" href="https://blog.nginx.org/blog/rate-limiting-nginx" target="_blank" rel="noopener"><span class="lc-ico">📘</span><span class="lc-body"><span class="lc-title">nginx blog — Giới hạn tần suất với NGINX</span><span class="lc-sub">blog.nginx.org · Bài tham chiếu, kèm các sơ đồ về burst</span></span></a>
@@ -872,7 +1666,7 @@ Nghi 3 giay cho xo rot lai, roi gui LAI dung request do:
 <h2>Quiz: limits</h2>
 <p class="lead">Eight questions. Three of them are about limits that were configured correctly and still failed to do the thing they were deployed for, which is the most useful pattern in the chapter.</p>
 <div class="callout">
-<p><strong>What this chapter established.</strong> The same 2r/s written three ways gave three different sites: no burst refused nine of ten requests, <code>burst=5</code> served all ten over 4.93 seconds, and <code>burst=5 nodelay</code> served five instantly then refused — and the default rejection status is <code>503</code>, which lies to the client (7.1). The key decides everything: <code>$binary_remote_addr</code> behind a proxy made five users share one bucket, and reading <code>X-Forwarded-For</code> directly let an attacker rotate it and pass eight times out of eight — <code>real_ip</code> is the fix that avoids both (7.2). <code>limit_conn</code> held exactly at two of six concurrent slow requests, and then failed to close a single one of twenty slowloris connections, because it only counts connections that finished reading their headers; <code>client_header_timeout</code> closed all twenty (7.3). <code>client_max_body_size</code> returned <code>413</code> after zero bytes when the client declared <code>Content-Length</code>, and after 23.7MB when it did not (7.4). And assembling all of it produced one real bug: two locations sharing a <code>limit_req</code> zone, so API traffic made a legitimate upload fail (7.5).</p>
+<p><strong>What this chapter established.</strong> The same 2r/s written three ways gave three different sites: no burst refused nine of ten requests, <code>burst=5</code> served all ten over 4.51 seconds, and <code>burst=5 nodelay</code> served six instantly then refused — and the default rejection status is <code>503</code>, which lies to the client (7.1). The key decides everything: <code>$binary_remote_addr</code> behind a proxy made five users share one bucket, and reading <code>X-Forwarded-For</code> directly let an attacker rotate it and pass eight times out of eight — <code>real_ip</code> is the fix that avoids both (7.2). <code>limit_conn</code> held exactly at two of six concurrent slow requests, and then failed to close a single one of twenty slowloris connections, because it only counts connections that finished reading their headers; <code>client_header_timeout</code> closed all twenty (7.3). <code>client_max_body_size</code> returned <code>413</code> after zero bytes when the client declared <code>Content-Length</code>, and after 22.8MB when it did not (7.4). And assembling all of it produced one real bug: two locations sharing a <code>limit_req</code> zone, so API traffic made a legitimate upload fail (7.5).</p>
 </div>
 </div>
 
@@ -881,7 +1675,7 @@ Nghi 3 giay cho xo rot lai, roi gui LAI dung request do:
 <h2>Quiz: giới hạn</h2>
 <p class="lead">Tám câu. Ba câu nói về những giới hạn được cấu hình ĐÚNG mà vẫn KHÔNG làm được cái việc chúng được triển khai để làm, và đó là khuôn mẫu hữu ích nhất trong cả chương.</p>
 <div class="callout">
-<p><strong>Chương này đã xác lập điều gì.</strong> Cùng một mức 2r/s viết theo ba cách cho ra ba cái site khác nhau: không burst thì từ chối chín trên mười request, <code>burst=5</code> phục vụ cả mười trải trên 4,93 giây, còn <code>burst=5 nodelay</code> phục vụ năm cái tức thì rồi từ chối — và mã từ chối MẶC ĐỊNH là <code>503</code>, thứ NÓI DỐI với client (7.1). Cái KHOÁ quyết định tất cả: <code>$binary_remote_addr</code> đứng sau một proxy làm năm người dùng dùng chung một cái xô, còn đọc thẳng <code>X-Forwarded-For</code> thì để kẻ tấn công xoay nó và đi qua TÁM trên TÁM — <code>real_ip</code> là cách chữa tránh được CẢ HAI (7.2). <code>limit_conn</code> giữ đúng ở mức hai trên sáu request chậm đồng thời, rồi KHÔNG đóng nổi một cái nào trong hai mươi kết nối slowloris, vì nó chỉ đếm những kết nối đã ĐỌC XONG header; <code>client_header_timeout</code> đóng cả hai mươi (7.3). <code>client_max_body_size</code> trả <code>413</code> sau KHÔNG byte nào khi client khai <code>Content-Length</code>, và sau 23,7MB khi client không khai (7.4). Và ráp tất cả lại thì lòi ra một con lỗi thật: hai location dùng CHUNG một vùng <code>limit_req</code>, nên lưu lượng API làm một lượt tải file hợp lệ thất bại (7.5).</p>
+<p><strong>Chương này đã xác lập điều gì.</strong> Cùng một mức 2r/s viết theo ba cách cho ra ba cái site khác nhau: không burst thì từ chối chín trên mười request, <code>burst=5</code> phục vụ cả mười trải trên 4,51 giây, còn <code>burst=5 nodelay</code> phục vụ sáu cái tức thì rồi từ chối — và mã từ chối MẶC ĐỊNH là <code>503</code>, thứ NÓI DỐI với client (7.1). Cái KHOÁ quyết định tất cả: <code>$binary_remote_addr</code> đứng sau một proxy làm năm người dùng dùng chung một cái xô, còn đọc thẳng <code>X-Forwarded-For</code> thì để kẻ tấn công xoay nó và đi qua TÁM trên TÁM — <code>real_ip</code> là cách chữa tránh được CẢ HAI (7.2). <code>limit_conn</code> giữ đúng ở mức hai trên sáu request chậm đồng thời, rồi KHÔNG đóng nổi một cái nào trong hai mươi kết nối slowloris, vì nó chỉ đếm những kết nối đã ĐỌC XONG header; <code>client_header_timeout</code> đóng cả hai mươi (7.3). <code>client_max_body_size</code> trả <code>413</code> sau KHÔNG byte nào khi client khai <code>Content-Length</code>, và sau 22,8MB khi client không khai (7.4). Và ráp tất cả lại thì lòi ra một con lỗi thật: hai location dùng CHUNG một vùng <code>limit_req</code>, nên lưu lượng API làm một lượt tải file hợp lệ thất bại (7.5).</p>
 </div>
 </div>
 `,
@@ -903,7 +1697,7 @@ Nghi 3 giay cho xo rot lai, roi gui LAI dung request do:
             question: 'What is the difference between burst=5 and burst=5 nodelay, measured?|||Khác biệt giữa burst=5 và burst=5 nodelay, theo phép đo, là gì?',
             options: [
               'nodelay allows more requests through in total|||nodelay cho tổng cộng nhiều request đi qua hơn',
-              'burst=5 served all ten over 4.93s by delaying them; nodelay served five in 0.08s and refused the rest|||burst=5 phục vụ cả mười trong 4,93s bằng cách BẮT CHỜ; nodelay phục vụ năm cái trong 0,08s rồi từ chối phần còn lại',
+              'burst=5 served all ten over 4.51s by delaying them; nodelay served six in 0.04s and refused the rest|||burst=5 phục vụ cả mười trong 4,51s bằng cách BẮT CHỜ; nodelay phục vụ sáu cái trong 0,04s rồi từ chối phần còn lại',
               'nodelay disables the rate limit|||nodelay tắt luôn giới hạn tần suất',
               'They are identical|||Chúng giống hệt nhau',
             ],
@@ -958,7 +1752,7 @@ Nghi 3 giay cho xo rot lai, roi gui LAI dung request do:
             question: 'The same 25MB is sent with Transfer-Encoding: chunked instead. What changes?|||Cũng 25MB đó nhưng gửi bằng Transfer-Encoding: chunked. Cái gì thay đổi?',
             options: [
               'Nothing; the limit works the same way|||Không gì cả; giới hạn chạy y hệt',
-              'There is no declared length, so Nginx reads until the limit is crossed — 23.7MB had already been sent before the 413|||Không có độ dài nào được khai, nên Nginx đọc cho tới khi vượt trần — 23,7MB đã kịp gửi đi trước cú 413',
+              'There is no declared length, so Nginx reads until the limit is crossed — 22.8MB had already been sent before the 413|||Không có độ dài nào được khai, nên Nginx đọc cho tới khi vượt trần — 22,8MB đã kịp gửi đi trước cú 413',
               'Nginx rejects chunked uploads outright|||Nginx từ chối thẳng các lượt tải chunked',
               'The limit no longer applies|||Giới hạn thôi có hiệu lực',
             ],

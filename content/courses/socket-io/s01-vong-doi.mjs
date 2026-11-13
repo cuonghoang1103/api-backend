@@ -1,4 +1,8 @@
 import G01_1 from './giang/sio-01-1.mjs';
+import G01_2 from './giang/sio-01-2.mjs';
+import G01_3 from './giang/sio-01-3.mjs';
+import G01_4 from './giang/sio-01-4.mjs';
+import G01_5 from './giang/sio-01-5.mjs';
 const REF = '?ref=%2Fcourses%2Fsocket-io%2Flearn&reflabel=Socket.IO';
 /**
  * Socket.IO — Chương 1: Vòng đời một connection.
@@ -382,6 +386,7 @@ process.exit(0);</code></pre>
       type: 'VIDEO',
       description: 'Đo bằng probe: `s.disconnect(true)` cho client &quot;io server disconnect&quot;, `c.close()` cho &quot;io client disconnect&quot;, transport close cho &quot;transport close&quot;, ping timeout cho &quot;ping timeout&quot;. Mỗi cái đòi hỏi phản ứng riêng.',
       content: `
+${G01_2}
 <div class="ml-en">
 <span class="eyebrow">Chapter 1 · Lesson 1.2</span>
 <h2>Four disconnect reasons, each with a different response</h2>
@@ -403,7 +408,7 @@ srv.closeAllConnections();
 // -&gt; client sees: 'transport close'
 
 // scenario 4: ping timeout (network dead, no clean close)
-// -&gt; server and client both see: 'ping timeout'  (after 60s)
+// -&gt; only the SURVIVING side sees: 'ping timeout'  (after pingInterval + pingTimeout: 45 s default, 85 s in this repo)
 </code></pre>
 
 <h3>Four reasons and what each means</h3>
@@ -422,7 +427,7 @@ srv.closeAllConnections();
 </div>
 <div class="lz-stage lz-badge">
 <span class="lz-node"><span class="lz-ntitle">ping timeout</span><span class="lz-nsub">the network died quietly</span></span>
-<span class="lz-nbody"><strong>Unexpected — it WILL reconnect on its own.</strong> There is no FIN packet at all — just ping/pong expiring after <code>pingTimeout</code>. This is the slow kind: a 60s wait in this repo. The UI has to choose: wait the full 60s before showing &quot;offline&quot;, or use a shorter timeout for UX purposes.</span>
+<span class="lz-nbody"><strong>Unexpected — it WILL reconnect on its own.</strong> There is no FIN packet at all — just ping/pong expiring after <code>pingTimeout</code>. This is the slow kind: 25 s pingInterval + 60 s pingTimeout = an 85 s wait in this repo (45 s with the defaults). The UI has to choose: wait the full 85 s before showing &quot;offline&quot;, or use a shorter timeout for UX purposes.</span>
 </div>
 </div>
 
@@ -493,6 +498,122 @@ io.on('connection', (socket) =&gt; {
 </ol>
 <p><strong>Done when:</strong> you can predict the reason string for three scenarios and chose cleanup-now versus debounce for each.</p></div>
 
+<h3>🔬 Measured: nine ways to die, the reason on both sides</h3>
+<p>socket.io 4.8.3, Node 22. <code>pingInterval</code>/<code>pingTimeout</code> shortened to 1000/1000 so a frozen peer is detected in seconds. <code>active</code> is <code>socket.active</code> on the client — <code>true</code> means it will reconnect on its own:</p>
+<div class="out">$ node ly-do.mjs
+1) server gọi socket.disconnect(true)
+   server: "server namespace disconnect"
+   client: "io server disconnect"   · active=false (KHÔNG nối lại)
+2) client gọi socket.disconnect()
+   server: "client namespace disconnect"
+   client: "io client disconnect"   · active=false (KHÔNG nối lại)
+3) gửi một packet hỏng lên server
+   server: "forced close"
+   client: "transport close"   · active=true (TỰ nối lại)
+4) middleware io.use() từ chối (auth fail)
+   server: (không có event disconnect)
+   client: "connect_error: unauthorized"   · active=false (KHÔNG nối lại)
+5a) tiến trình CLIENT bị kill -9
+   server: "transport close"
+   client: (không có event disconnect)
+5b) tiến trình SERVER bị kill -9
+   server: (không có event disconnect)
+   client: "transport close"   · active=true (TỰ nối lại)
+6a) CLIENT đông cứng — server chờ ping/pong
+   server: "ping timeout"
+   client: (không có event disconnect)   · sau 2.0 s
+6b) SERVER đông cứng — client chờ ping
+   server: (không có event disconnect)
+   client: "ping timeout"   · active=true (TỰ nối lại)   · sau 2.0 s
+7) server gọi io.close() (deploy, khởi động lại)
+   server: "server shutting down"
+   client: "transport close"   · active=true (TỰ nối lại)</div>
+<p>What the numbers say: deliberate disconnects (1, 2) are <code>active=false</code>. A rejected middleware (4) never produces <code>disconnect</code> — only <code>connect_error</code>. A killed process (5) is noticed at once (the OS closes TCP for it); a frozen one (6) only after <code>pingInterval + pingTimeout</code>, and only by the survivor. A malformed packet (3) made the server close with <code>forced close</code>, and the client reconnected. A graceful <code>io.close()</code> (7, a deploy) is <code>server shutting down</code> on the server and <code>transport close</code> — with reconnect — on the client.</p>
+<p><strong>On the wire, in a real Chromium:</strong> the client disconnects, reconnects by hand, then the server kicks it:</p>
+<div class="out">   38 ms  ↑  2probe
+   40 ms  ↓  3probe
+  142 ms  ↑  5
+ 1240 ms  ↑  41
+ 1256 ms  ×  close
+ 1847 ms  ↑  2probe
+ 1847 ms  ↓  3probe
+ 1950 ms  ↑  5
+ 3047 ms  ↓  41
+ 3047 ms  ×  close</div>
+<p><code>41</code> = engine.io MESSAGE + socket.io DISCONNECT. A deliberate disconnect is announced by that packet; a dead process or a dead network sends nothing.</p>
+<p><strong>One network switch, measured</strong> — a TCP proxy cuts every connection at 1.00 s; <code>minh</code> watches <code>lan</code>'s presence:</p>
+<div class="out">$ node flap.mjs
+── KHÔNG debounce
+ 0.01 s minh thấy: lan 🟢 online
+ 0.01 s lan: connect
+ 1.00 s &gt;&gt;&gt; lan đổi mạng: cắt mọi kết nối TCP
+ 1.00 s server: lan disconnect "transport close"
+ 1.00 s minh thấy: lan ⚪ offline
+ 2.00 s minh thấy: lan 🟢 online
+ 2.00 s lan: connect
+ 4.20 s &gt;&gt;&gt; lan bấm Đăng xuất: lan.disconnect()
+ 4.21 s server: lan disconnect "client namespace disconnect"
+ 4.21 s minh thấy: lan ⚪ offline
+── debounce 2 s cho reason bất ngờ
+ 0.01 s minh thấy: lan 🟢 online
+ 0.01 s lan: connect
+ 1.00 s &gt;&gt;&gt; lan đổi mạng: cắt mọi kết nối TCP
+ 1.00 s server: lan disconnect "transport close"
+ 1.91 s server: lan quay lại kịp — huỷ hẹn giờ offline
+ 1.91 s lan: connect
+ 4.20 s &gt;&gt;&gt; lan bấm Đăng xuất: lan.disconnect()
+ 4.20 s server: lan disconnect "client namespace disconnect"
+ 4.20 s minh thấy: lan ⚪ offline</div>
+<p>Without debounce: offline, then online again a moment later — the flicker. With a 2 s debounce on unexpected reasons: the timer is cancelled on reconnect and nobody sees offline; a real logout still shows offline immediately.</p>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-javascript"><span class="tok-comment">// Đổi mạng (Wi-Fi → 4G) giả lập bằng một proxy TCP cắt mọi kết nối. minh quan sát presence của lan — có và không có debounce 2 s.</span>
+import net from 'node:net';
+import { Server } from 'socket.io';
+import { io as ketNoi } from 'socket.io-client';
+const cho = (ms) =&gt; new Promise((r) =&gt; setTimeout(r, ms));
+let t0; const T = () =&gt; ((Date.now() - t0) / 1000).toFixed(2).padStart(5) + ' s';
+
+async function chay(ten, cong, debounce) {
+  console.log(&#96;── \${ten}&#96;);
+  const io = new Server(cong); const hen = new Map();
+  const bao = (user, online) =&gt; io.to('quan-sat').emit('presence', { user, online });
+  io.on('connection', (s) =&gt; {
+    const u = s.handshake.auth.user;
+    if (u === 'minh') return s.join('quan-sat');
+    if (hen.has(u)) { clearTimeout(hen.get(u)); hen.delete(u); console.log(T(), &#96;server: \${u} quay lại kịp — huỷ hẹn giờ offline&#96;); }
+    else bao(u, true);
+    s.on('disconnect', (ly) =&gt; {
+      console.log(T(), &#96;server: \${u} disconnect "\${ly}"&#96;);
+      const batNgo = ['transport close', 'ping timeout', 'transport error'].includes(ly);
+      if (debounce &amp;&amp; batNgo) hen.set(u, setTimeout(() =&gt; { hen.delete(u); bao(u, false); }, 2000));
+      else bao(u, false);
+    });
+  });
+  <span class="tok-comment">// proxy TCP: lan đi qua đây; doiMang() cắt mọi đường ống, như rớt Wi-Fi rồi bắt 4G</span>
+  const ong = new Set();
+  const proxy = net.createServer((a) =&gt; { const b = net.connect(cong); a.pipe(b).pipe(a); for (const x of [a, b]) { ong.add(x); x.on('error', () =&gt; {}); x.on('close', () =&gt; { a.destroy(); b.destroy(); }); } }).listen(cong + 1);
+  const minh = ketNoi(&#96;http://localhost:\${cong}&#96;, { auth: { user: 'minh' } });
+  minh.on('presence', (p) =&gt; console.log(T(), &#96;minh thấy: \${p.user} \${p.online ? '🟢 online' : '⚪ offline'}&#96;));
+  await cho(300);
+  t0 = Date.now();
+  const lan = ketNoi(&#96;http://localhost:\${cong + 1}&#96;, { auth: { user: 'lan' } });
+  lan.on('connect', () =&gt; console.log(T(), 'lan: connect'));
+  await cho(1000);
+  console.log(T(), '&gt;&gt;&gt; lan đổi mạng: cắt mọi kết nối TCP');
+  for (const x of ong) x.destroy(); ong.clear();
+  await cho(3200);
+  console.log(T(), '&gt;&gt;&gt; lan bấm Đăng xuất: lan.disconnect()');
+  lan.disconnect();
+  await cho(400);
+  minh.close(); io.close(); proxy.close();
+}
+await chay('KHÔNG debounce', 19452, false);
+await chay('debounce 2 s cho reason bất ngờ', 19454, true);
+process.exit(0);</code></pre>
+<h3>🔗 Go deeper in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-4-1-bat-tay" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking · 4.1 — Three-way handshake and closing a connection</span><span class="lc-sub">The FIN a deliberate close sends — and why a frozen peer sends nothing</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-4-5-keepalive-pool" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking · 4.5 — Keep-alive, connection pools and timeouts in your code</span><span class="lc-sub">Why only a timeout can detect a silently dead peer</span></span></a>
+
 <h3>🗂 Key terms</h3>
 <div class="kv-grid">
   <div class="kv"><span class="k">disconnect reason</span><span class="v">The string passed to the <code>disconnect</code> handler explaining why.</span></div>
@@ -532,7 +653,7 @@ srv.closeAllConnections();
 // -&gt; client see: 'transport close'
 
 // scenario 4: ping timeout (mang chet am tham)
-// -&gt; ca server va client see: 'ping timeout'  (sau 60s)
+// -&gt; chi phia CON SONG see: 'ping timeout'  (sau pingInterval + pingTimeout: 45 s mac dinh, 85 s o kho nay)
 </code></pre>
 
 <h3>Bốn reason và ý nghĩa</h3>
@@ -551,7 +672,7 @@ srv.closeAllConnections();
 </div>
 <div class="lz-stage lz-badge">
 <span class="lz-node"><span class="lz-ntitle">ping timeout</span><span class="lz-nsub">network chết âm thầm</span></span>
-<span class="lz-nbody"><strong>Bất ngờ — SẼ tự reconnect.</strong> Không có FIN packet nào — chỉ ping/pong hết hạn sau <code>pingTimeout</code>. Đây là kiểu chậm chạp: đợi 60s ở kho này. UI phải chọn: hoặc chờ 60s để hiện &quot;offline&quot;, hoặc dùng timeout ngắn hơn cho UX.</span>
+<span class="lz-nbody"><strong>Bất ngờ — SẼ tự reconnect.</strong> Không có FIN packet nào — chỉ ping/pong hết hạn sau <code>pingTimeout</code>. Đây là kiểu chậm chạp: 25 s pingInterval + 60 s pingTimeout = đợi 85 s ở kho này (45 s với mặc định). UI phải chọn: hoặc chờ 85 s để hiện &quot;offline&quot;, hoặc dùng timeout ngắn hơn cho UX.</span>
 </div>
 </div>
 
@@ -622,6 +743,122 @@ io.on('connection', (socket) =&gt; {
 </ol>
 <p><strong>Đạt khi:</strong> bạn đoán được chuỗi reason cho ba kịch bản và chọn dọn-ngay hay debounce cho mỗi cái.</p></div>
 
+<h3>🔬 Đo thật: chín cách chết, reason ở cả hai phía</h3>
+<p>socket.io 4.8.3, Node 22. <code>pingInterval</code>/<code>pingTimeout</code> rút còn 1000/1000 để bên đông cứng bị phát hiện trong vài giây. <code>active</code> là <code>socket.active</code> phía client — <code>true</code> nghĩa là nó sẽ tự nối lại:</p>
+<div class="out">$ node ly-do.mjs
+1) server gọi socket.disconnect(true)
+   server: "server namespace disconnect"
+   client: "io server disconnect"   · active=false (KHÔNG nối lại)
+2) client gọi socket.disconnect()
+   server: "client namespace disconnect"
+   client: "io client disconnect"   · active=false (KHÔNG nối lại)
+3) gửi một packet hỏng lên server
+   server: "forced close"
+   client: "transport close"   · active=true (TỰ nối lại)
+4) middleware io.use() từ chối (auth fail)
+   server: (không có event disconnect)
+   client: "connect_error: unauthorized"   · active=false (KHÔNG nối lại)
+5a) tiến trình CLIENT bị kill -9
+   server: "transport close"
+   client: (không có event disconnect)
+5b) tiến trình SERVER bị kill -9
+   server: (không có event disconnect)
+   client: "transport close"   · active=true (TỰ nối lại)
+6a) CLIENT đông cứng — server chờ ping/pong
+   server: "ping timeout"
+   client: (không có event disconnect)   · sau 2.0 s
+6b) SERVER đông cứng — client chờ ping
+   server: (không có event disconnect)
+   client: "ping timeout"   · active=true (TỰ nối lại)   · sau 2.0 s
+7) server gọi io.close() (deploy, khởi động lại)
+   server: "server shutting down"
+   client: "transport close"   · active=true (TỰ nối lại)</div>
+<p>Số đo nói gì: ngắt chủ động (1, 2) cho <code>active=false</code>. Middleware từ chối (4) KHÔNG sinh <code>disconnect</code> — chỉ <code>connect_error</code>. Tiến trình bị giết (5) được biết ngay (hệ điều hành đóng TCP thay nó); tiến trình đông cứng (6) chỉ bị phát hiện sau <code>pingInterval + pingTimeout</code>, và chỉ phía còn sống thấy. Packet hỏng (3) làm server đóng với <code>forced close</code>, client tự nối lại. <code>io.close()</code> có trật tự (7, lúc deploy) là <code>server shutting down</code> ở server và <code>transport close</code> — có nối lại — ở client.</p>
+<p><strong>Trên dây, trong Chromium thật:</strong> client tự ngắt, nối lại bằng tay, rồi server đá ra:</p>
+<div class="out">   38 ms  ↑  2probe
+   40 ms  ↓  3probe
+  142 ms  ↑  5
+ 1240 ms  ↑  41
+ 1256 ms  ×  close
+ 1847 ms  ↑  2probe
+ 1847 ms  ↓  3probe
+ 1950 ms  ↑  5
+ 3047 ms  ↓  41
+ 3047 ms  ×  close</div>
+<p><code>41</code> = engine.io MESSAGE + socket.io DISCONNECT. Ngắt chủ động được báo trước bằng packet này; tiến trình chết hay mạng chết thì không gửi gì.</p>
+<p><strong>Một lần đổi mạng, đo thật</strong> — proxy TCP cắt mọi kết nối ở giây 1,00; <code>minh</code> theo dõi presence của <code>lan</code>:</p>
+<div class="out">$ node flap.mjs
+── KHÔNG debounce
+ 0.01 s minh thấy: lan 🟢 online
+ 0.01 s lan: connect
+ 1.00 s &gt;&gt;&gt; lan đổi mạng: cắt mọi kết nối TCP
+ 1.00 s server: lan disconnect "transport close"
+ 1.00 s minh thấy: lan ⚪ offline
+ 2.00 s minh thấy: lan 🟢 online
+ 2.00 s lan: connect
+ 4.20 s &gt;&gt;&gt; lan bấm Đăng xuất: lan.disconnect()
+ 4.21 s server: lan disconnect "client namespace disconnect"
+ 4.21 s minh thấy: lan ⚪ offline
+── debounce 2 s cho reason bất ngờ
+ 0.01 s minh thấy: lan 🟢 online
+ 0.01 s lan: connect
+ 1.00 s &gt;&gt;&gt; lan đổi mạng: cắt mọi kết nối TCP
+ 1.00 s server: lan disconnect "transport close"
+ 1.91 s server: lan quay lại kịp — huỷ hẹn giờ offline
+ 1.91 s lan: connect
+ 4.20 s &gt;&gt;&gt; lan bấm Đăng xuất: lan.disconnect()
+ 4.20 s server: lan disconnect "client namespace disconnect"
+ 4.20 s minh thấy: lan ⚪ offline</div>
+<p>Không debounce: offline rồi online lại ngay sau đó — nhấp nháy. Debounce 2 s cho reason bất ngờ: hẹn giờ bị huỷ khi nối lại, không ai thấy offline; đăng xuất thật vẫn báo offline ngay.</p>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-javascript"><span class="tok-comment">// Đổi mạng (Wi-Fi → 4G) giả lập bằng một proxy TCP cắt mọi kết nối. minh quan sát presence của lan — có và không có debounce 2 s.</span>
+import net from 'node:net';
+import { Server } from 'socket.io';
+import { io as ketNoi } from 'socket.io-client';
+const cho = (ms) =&gt; new Promise((r) =&gt; setTimeout(r, ms));
+let t0; const T = () =&gt; ((Date.now() - t0) / 1000).toFixed(2).padStart(5) + ' s';
+
+async function chay(ten, cong, debounce) {
+  console.log(&#96;── \${ten}&#96;);
+  const io = new Server(cong); const hen = new Map();
+  const bao = (user, online) =&gt; io.to('quan-sat').emit('presence', { user, online });
+  io.on('connection', (s) =&gt; {
+    const u = s.handshake.auth.user;
+    if (u === 'minh') return s.join('quan-sat');
+    if (hen.has(u)) { clearTimeout(hen.get(u)); hen.delete(u); console.log(T(), &#96;server: \${u} quay lại kịp — huỷ hẹn giờ offline&#96;); }
+    else bao(u, true);
+    s.on('disconnect', (ly) =&gt; {
+      console.log(T(), &#96;server: \${u} disconnect "\${ly}"&#96;);
+      const batNgo = ['transport close', 'ping timeout', 'transport error'].includes(ly);
+      if (debounce &amp;&amp; batNgo) hen.set(u, setTimeout(() =&gt; { hen.delete(u); bao(u, false); }, 2000));
+      else bao(u, false);
+    });
+  });
+  <span class="tok-comment">// proxy TCP: lan đi qua đây; doiMang() cắt mọi đường ống, như rớt Wi-Fi rồi bắt 4G</span>
+  const ong = new Set();
+  const proxy = net.createServer((a) =&gt; { const b = net.connect(cong); a.pipe(b).pipe(a); for (const x of [a, b]) { ong.add(x); x.on('error', () =&gt; {}); x.on('close', () =&gt; { a.destroy(); b.destroy(); }); } }).listen(cong + 1);
+  const minh = ketNoi(&#96;http://localhost:\${cong}&#96;, { auth: { user: 'minh' } });
+  minh.on('presence', (p) =&gt; console.log(T(), &#96;minh thấy: \${p.user} \${p.online ? '🟢 online' : '⚪ offline'}&#96;));
+  await cho(300);
+  t0 = Date.now();
+  const lan = ketNoi(&#96;http://localhost:\${cong + 1}&#96;, { auth: { user: 'lan' } });
+  lan.on('connect', () =&gt; console.log(T(), 'lan: connect'));
+  await cho(1000);
+  console.log(T(), '&gt;&gt;&gt; lan đổi mạng: cắt mọi kết nối TCP');
+  for (const x of ong) x.destroy(); ong.clear();
+  await cho(3200);
+  console.log(T(), '&gt;&gt;&gt; lan bấm Đăng xuất: lan.disconnect()');
+  lan.disconnect();
+  await cho(400);
+  minh.close(); io.close(); proxy.close();
+}
+await chay('KHÔNG debounce', 19452, false);
+await chay('debounce 2 s cho reason bất ngờ', 19454, true);
+process.exit(0);</code></pre>
+<h3>🔗 Học sâu hơn ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-4-1-bat-tay" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking · 4.1 — Bắt tay ba bước và đóng kết nối</span><span class="lc-sub">Gói FIN của một lần đóng chủ động — và vì sao bên bị đông cứng không gửi gì</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-4-5-keepalive-pool" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking · 4.5 — Keep-alive, pool kết nối và timeout trong code của bạn</span><span class="lc-sub">Vì sao chỉ một timeout mới phát hiện được bên kia chết âm thầm</span></span></a>
+
 <h3>🗂 Thuật ngữ trong bài</h3>
 <div class="kv-grid">
   <div class="kv"><span class="k">disconnect reason</span><span class="v">Chuỗi truyền vào handler <code>disconnect</code> giải thích vì sao.</span></div>
@@ -650,6 +887,7 @@ io.on('connection', (socket) =&gt; {
       type: 'VIDEO',
       description: 'Client tự backoff 1s, 2s, 4s (max 5s), vô hạn. Nhưng sid MỚI, rooms TRỐNG, và event trong khoảng disconnect BỊ MẤT. Đo bằng probe kill-restart server.',
       content: `
+${G01_3}
 <div class="ml-en">
 <span class="eyebrow">Chapter 1 · Lesson 1.3</span>
 <h2>Reconnect: what actually happens, and what does not</h2>
@@ -749,8 +987,8 @@ const c = io(url, {
 1         500 - 1500
 2         1000 - 3000
 3         2000 - 5000    &lt;- da cham cap max
-4         2500 - 7500    &lt;- van cham max 5000
-5+        2500 - 7500
+4         4000 - 5000    &lt;- 8000 +/- 4000, roi CAT o 5000
+5+        5000           &lt;- moi client cho DUNG 5000 (tran ap SAU jitter)
 
 Jitter la CO Y — 1000 client cung reconnect KHONG lam DDoS server luc cap dien lai
 </div>
@@ -770,6 +1008,92 @@ Jitter la CO Y — 1000 client cung reconnect KHONG lam DDoS server luc cap dien
 <li>Replace any <code>socket.id</code>-keyed state with <code>userId</code>-keyed state and confirm it survives the reconnect.</li>
 </ol>
 <p><strong>Done when:</strong> you have seen an automatic reconnect and can list the three things that change across it.</p></div>
+
+<h3>🔬 Measured: kill -9, restart, and what really comes back</h3>
+<p>socket.io 4.8.3, Node 22, <code>reconnectionDelay</code> = <code>reconnectionDelayMax</code> = 500 ms. The server is killed at ~0.7 s and restarted 1.2 s later:</p>
+<div class="out">$ node restart.mjs
+server: connection id=-Ne6EQ1wSpGEM0C6AAAA rooms=["-Ne6EQ1wSpGEM0C6AAAA"]
+t= 427 client: connect            id=-Ne6EQ1wSpGEM0C6AAAA
+t= 712 &gt;&gt;&gt; kill -9 server
+t= 714 client: disconnect         transport close
+t=1217 client: reconnect_attempt  1
+t=1222 client: reconnect_error    xhr poll error
+t=1724 client: reconnect_attempt  2
+t=1729 client: reconnect_error    xhr poll error
+t=1914 &gt;&gt;&gt; khởi động lại server
+t=2231 client: reconnect_attempt  3
+t=2241 client: reconnect          3   (c.id lúc này = undefined)
+server: connection id=xybuPyUoMY9eYfakAAAA rooms=["xybuPyUoMY9eYfakAAAA"]
+t=2249 client: connect            id=xybuPyUoMY9eYfakAAAA
+t=3415 client: disconnect         io client disconnect</div>
+<p><code>reconnect</code> (the Manager, layer 2) fires BEFORE <code>connect</code> (the Socket, layer 3) — and <code>c.id</code> is still <code>undefined</code> there. The new connection has a NEW id and only its own room. (On this machine the failed attempts report <code>xhr poll error</code>, not <code>ECONNREFUSED</code>.)</p>
+<p><strong>The real backoff</strong> — 40 clients pointed at a port with no server, default options:</p>
+<div class="out">$ node backoff.mjs
+lần thử   chờ thấp nhất   chờ cao nhất   trung bình   (ms, 40 client)
+   1            563           1480          985
+   2           1124           2983         1923
+   3           2256           5002         4017
+   4           4583           5003         4991
+   5           5000           5003         5002
+   6           5000           5003         5002
+   7           5000           5005         5002</div>
+<p>1000 × 2<sup>n−1</sup> ± 50 %, then capped at 5000 — the cap is applied AFTER the jitter, so attempt 4 is 4000–5000 ms and from attempt 5 every client waits exactly 5 s.</p>
+<p><strong>Three things a reconnect does not restore</strong> — a TCP proxy cuts the client at 1 s while the server emits into <code>thread:42</code> every 100 ms:</p>
+<div class="out">$ node mat.mjs
+── 1) ngây thơ: join một lần lúc đầu
+   server: connection id=6YsoCY6j41Td3bhPAAAA rooms=["6YsoCY6j41Td3bhPAAAA"]
+   server: connection id=N33c2swB0LQV7vAQAAAB rooms=["N33c2swB0LQV7vAQAAAB"]
+   server đã phát 34 tin · client nhận 9 · MẤT 25 (từ #10 tới #34)
+── 2) join lại theo userId trong connection
+   server: connection id=nGg4f9ZPxQiepr0cAAAC rooms=["nGg4f9ZPxQiepr0cAAAC"]
+   server: connection id=JUlTmIzH9C7lSlQiAAAD rooms=["JUlTmIzH9C7lSlQiAAAD","thread:42"]
+   server đã phát 34 tin · client nhận 28 · MẤT 6 (từ #10 tới #15)
+── 3) join lại + hỏi "since" tin cuối đã thấy
+   server: connection id=Wup2MkbrWCA4guRsAAAE rooms=["Wup2MkbrWCA4guRsAAAE"]
+   server: connection id=jtJjBBiJtcPnBBbqAAAF rooms=["jtJjBBiJtcPnBBbqAAAF","thread:42"]
+   client: bù 8 tin đã lỡ
+   server đã phát 34 tin · client nhận 34 · MẤT 0</div>
+<p>Naive: new id + empty rooms ⇒ the stream is gone for good. Re-join by userId: the stream resumes, but what was emitted meanwhile is lost. Re-join + <code>since</code> (fetch-since-last-seen): 0 lost.</p>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-javascript"><span class="tok-comment">// Ba thứ đổi qua một reconnect: id mới · room trống · tin gửi lúc vắng mặt MẤT. Proxy TCP cắt kết nối ở giây 1; server phát tin vào thread:42 mỗi 100 ms.</span>
+import net from 'node:net';
+import { Server } from 'socket.io';
+import { io as ketNoi } from 'socket.io-client';
+const cho = (ms) =&gt; new Promise((r) =&gt; setTimeout(r, ms));
+async function chay(ten, cong, kieu) {
+  const io = new Server(cong); const lichSu = []; let seq = 0; const daJoin = new Map(); <span class="tok-comment">  // daJoin: userId → Set room (KHOÁ THEO USER)</span>
+  const phat = setInterval(() =&gt; { seq++; lichSu.push(seq); io.to('thread:42').emit('msg', seq); }, 100);
+  io.on('connection', (s) =&gt; {
+    const u = s.handshake.auth.userId;
+    if (kieu !== 'ngay-tho') for (const r of daJoin.get(u) ?? []) s.join(r);            <span class="tok-comment">  // join lại theo userId</span>
+    s.on('thread:join', (r) =&gt; { s.join(r); (daJoin.get(u) ?? daJoin.set(u, new Set()).get(u)).add(r); });
+    s.on('since', (tu, ack) =&gt; ack(lichSu.filter((x) =&gt; x &gt; tu)));                        <span class="tok-comment">  // "fetch-since-last-seen"</span>
+    console.log(&#96;   server: connection id=\${s.id} rooms=\${JSON.stringify([...s.rooms])}&#96;);
+  });
+  const ong = new Set();
+  const proxy = net.createServer((a) =&gt; { const b = net.connect(cong); a.pipe(b).pipe(a); for (const x of [a, b]) { ong.add(x); x.on('error', () =&gt; {}); x.on('close', () =&gt; { a.destroy(); b.destroy(); }); } }).listen(cong + 1);
+  const nhan = []; let lan = 0;
+  const c = ketNoi(&#96;http://localhost:\${cong + 1}&#96;, { auth: { userId: 7 } });
+  c.on('msg', (n) =&gt; nhan.push(n));
+  c.on('connect', () =&gt; {
+    lan++;
+    if (lan === 1) c.emit('thread:join', 'thread:42');
+    else if (kieu === 'bu') c.emit('since', Math.max(0, ...nhan), (thieu) =&gt; { nhan.push(...thieu); console.log(&#96;   client: bù \${thieu.length} tin đã lỡ&#96;); });
+  });
+  console.log(&#96;── \${ten}&#96;);
+  await cho(1000); for (const x of ong) x.destroy(); ong.clear();
+  await cho(2500); clearInterval(phat); await cho(300);
+  const coDu = new Set(nhan), mat = lichSu.filter((x) =&gt; !coDu.has(x));
+  console.log(&#96;   server đã phát \${lichSu.length} tin · client nhận \${coDu.size} · MẤT \${mat.length}\${mat.length ? &#96; (từ #\${mat[0]} tới #\${mat.at(-1)})&#96; : ''}&#96;);
+  c.close(); io.close(); proxy.close();
+}
+await chay('1) ngây thơ: join một lần lúc đầu', 19462, 'ngay-tho');
+await chay('2) join lại theo userId trong connection', 19464, 'join-lai');
+await chay('3) join lại + hỏi "since" tin cuối đã thấy', 19466, 'bu');
+process.exit(0);</code></pre>
+<h3>🔗 Go deeper in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-11-3-xac-thuc-phan-quyen-socket" target="_blank" rel="noopener"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Node.js · 11.3 — Authenticate once, authorize every time</span><span class="lc-sub">Measurement 4: what a reconnect restores — and connectionStateRecovery measured four ways</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/socket-io/learn?lessonSlug=io-6-2-ack-retry" target="_blank" rel="noopener"><span class="lc-ico">⚡</span><span class="lc-body"><span class="lc-title">Socket.IO · 6.2 — At-least-once with ack + retry</span><span class="lc-sub">The delivery guarantee that fetch-since-last-seen builds on</span></span></a>
 
 <h3>🗂 Key terms</h3>
 <div class="kv-grid">
@@ -893,8 +1217,8 @@ const c = io(url, {
 1         500 - 1500
 2         1000 - 3000
 3         2000 - 5000    &lt;- da cham cap max
-4         2500 - 7500    &lt;- van cham max 5000
-5+        2500 - 7500
+4         4000 - 5000    &lt;- 8000 +/- 4000, roi CAT o 5000
+5+        5000           &lt;- moi client cho DUNG 5000 (tran ap SAU jitter)
 
 Jitter la CO Y — 1000 client cung reconnect KHONG lam DDoS server luc cap dien lai
 </div>
@@ -914,6 +1238,92 @@ Jitter la CO Y — 1000 client cung reconnect KHONG lam DDoS server luc cap dien
 <li>Thay mọi state khoá theo <code>socket.id</code> bằng state khoá theo <code>userId</code> và xác nhận nó sống sót qua reconnect.</li>
 </ol>
 <p><strong>Đạt khi:</strong> bạn đã thấy một reconnect tự động và liệt kê được ba thứ thay đổi qua nó.</p></div>
+
+<h3>🔬 Đo thật: kill -9, khởi động lại, và cái gì thật sự quay về</h3>
+<p>socket.io 4.8.3, Node 22, <code>reconnectionDelay</code> = <code>reconnectionDelayMax</code> = 500 ms. Server bị giết ở ~0,7 s rồi bật lại sau 1,2 s:</p>
+<div class="out">$ node restart.mjs
+server: connection id=-Ne6EQ1wSpGEM0C6AAAA rooms=["-Ne6EQ1wSpGEM0C6AAAA"]
+t= 427 client: connect            id=-Ne6EQ1wSpGEM0C6AAAA
+t= 712 &gt;&gt;&gt; kill -9 server
+t= 714 client: disconnect         transport close
+t=1217 client: reconnect_attempt  1
+t=1222 client: reconnect_error    xhr poll error
+t=1724 client: reconnect_attempt  2
+t=1729 client: reconnect_error    xhr poll error
+t=1914 &gt;&gt;&gt; khởi động lại server
+t=2231 client: reconnect_attempt  3
+t=2241 client: reconnect          3   (c.id lúc này = undefined)
+server: connection id=xybuPyUoMY9eYfakAAAA rooms=["xybuPyUoMY9eYfakAAAA"]
+t=2249 client: connect            id=xybuPyUoMY9eYfakAAAA
+t=3415 client: disconnect         io client disconnect</div>
+<p><code>reconnect</code> (Manager, tầng 2) chạy TRƯỚC <code>connect</code> (Socket, tầng 3) — và ở đó <code>c.id</code> vẫn là <code>undefined</code>. Kết nối mới có id MỚI và chỉ ở room của chính nó. (Trên máy của khoá, lần thử hỏng báo <code>xhr poll error</code>, không phải <code>ECONNREFUSED</code>.)</p>
+<p><strong>Backoff thật</strong> — 40 client nối vào một cổng không có server, option mặc định:</p>
+<div class="out">$ node backoff.mjs
+lần thử   chờ thấp nhất   chờ cao nhất   trung bình   (ms, 40 client)
+   1            563           1480          985
+   2           1124           2983         1923
+   3           2256           5002         4017
+   4           4583           5003         4991
+   5           5000           5003         5002
+   6           5000           5003         5002
+   7           5000           5005         5002</div>
+<p>1000 × 2<sup>n−1</sup> ± 50 %, rồi chặn trần 5000 — trần áp SAU jitter, nên lần 4 là 4000–5000 ms và từ lần 5 mọi client chờ đúng 5 s.</p>
+<p><strong>Ba thứ reconnect không khôi phục</strong> — proxy TCP cắt client ở giây 1 trong lúc server phát vào <code>thread:42</code> mỗi 100 ms:</p>
+<div class="out">$ node mat.mjs
+── 1) ngây thơ: join một lần lúc đầu
+   server: connection id=6YsoCY6j41Td3bhPAAAA rooms=["6YsoCY6j41Td3bhPAAAA"]
+   server: connection id=N33c2swB0LQV7vAQAAAB rooms=["N33c2swB0LQV7vAQAAAB"]
+   server đã phát 34 tin · client nhận 9 · MẤT 25 (từ #10 tới #34)
+── 2) join lại theo userId trong connection
+   server: connection id=nGg4f9ZPxQiepr0cAAAC rooms=["nGg4f9ZPxQiepr0cAAAC"]
+   server: connection id=JUlTmIzH9C7lSlQiAAAD rooms=["JUlTmIzH9C7lSlQiAAAD","thread:42"]
+   server đã phát 34 tin · client nhận 28 · MẤT 6 (từ #10 tới #15)
+── 3) join lại + hỏi "since" tin cuối đã thấy
+   server: connection id=Wup2MkbrWCA4guRsAAAE rooms=["Wup2MkbrWCA4guRsAAAE"]
+   server: connection id=jtJjBBiJtcPnBBbqAAAF rooms=["jtJjBBiJtcPnBBbqAAAF","thread:42"]
+   client: bù 8 tin đã lỡ
+   server đã phát 34 tin · client nhận 34 · MẤT 0</div>
+<p>Ngây thơ: id mới + room trống ⇒ mất hẳn luồng tin. Join lại theo userId: luồng chảy lại, nhưng tin phát lúc vắng mặt vẫn mất. Join lại + <code>since</code> (fetch-since-last-seen): mất 0.</p>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-javascript"><span class="tok-comment">// Ba thứ đổi qua một reconnect: id mới · room trống · tin gửi lúc vắng mặt MẤT. Proxy TCP cắt kết nối ở giây 1; server phát tin vào thread:42 mỗi 100 ms.</span>
+import net from 'node:net';
+import { Server } from 'socket.io';
+import { io as ketNoi } from 'socket.io-client';
+const cho = (ms) =&gt; new Promise((r) =&gt; setTimeout(r, ms));
+async function chay(ten, cong, kieu) {
+  const io = new Server(cong); const lichSu = []; let seq = 0; const daJoin = new Map(); <span class="tok-comment">  // daJoin: userId → Set room (KHOÁ THEO USER)</span>
+  const phat = setInterval(() =&gt; { seq++; lichSu.push(seq); io.to('thread:42').emit('msg', seq); }, 100);
+  io.on('connection', (s) =&gt; {
+    const u = s.handshake.auth.userId;
+    if (kieu !== 'ngay-tho') for (const r of daJoin.get(u) ?? []) s.join(r);            <span class="tok-comment">  // join lại theo userId</span>
+    s.on('thread:join', (r) =&gt; { s.join(r); (daJoin.get(u) ?? daJoin.set(u, new Set()).get(u)).add(r); });
+    s.on('since', (tu, ack) =&gt; ack(lichSu.filter((x) =&gt; x &gt; tu)));                        <span class="tok-comment">  // "fetch-since-last-seen"</span>
+    console.log(&#96;   server: connection id=\${s.id} rooms=\${JSON.stringify([...s.rooms])}&#96;);
+  });
+  const ong = new Set();
+  const proxy = net.createServer((a) =&gt; { const b = net.connect(cong); a.pipe(b).pipe(a); for (const x of [a, b]) { ong.add(x); x.on('error', () =&gt; {}); x.on('close', () =&gt; { a.destroy(); b.destroy(); }); } }).listen(cong + 1);
+  const nhan = []; let lan = 0;
+  const c = ketNoi(&#96;http://localhost:\${cong + 1}&#96;, { auth: { userId: 7 } });
+  c.on('msg', (n) =&gt; nhan.push(n));
+  c.on('connect', () =&gt; {
+    lan++;
+    if (lan === 1) c.emit('thread:join', 'thread:42');
+    else if (kieu === 'bu') c.emit('since', Math.max(0, ...nhan), (thieu) =&gt; { nhan.push(...thieu); console.log(&#96;   client: bù \${thieu.length} tin đã lỡ&#96;); });
+  });
+  console.log(&#96;── \${ten}&#96;);
+  await cho(1000); for (const x of ong) x.destroy(); ong.clear();
+  await cho(2500); clearInterval(phat); await cho(300);
+  const coDu = new Set(nhan), mat = lichSu.filter((x) =&gt; !coDu.has(x));
+  console.log(&#96;   server đã phát \${lichSu.length} tin · client nhận \${coDu.size} · MẤT \${mat.length}\${mat.length ? &#96; (từ #\${mat[0]} tới #\${mat.at(-1)})&#96; : ''}&#96;);
+  c.close(); io.close(); proxy.close();
+}
+await chay('1) ngây thơ: join một lần lúc đầu', 19462, 'ngay-tho');
+await chay('2) join lại theo userId trong connection', 19464, 'join-lai');
+await chay('3) join lại + hỏi "since" tin cuối đã thấy', 19466, 'bu');
+process.exit(0);</code></pre>
+<h3>🔗 Học sâu hơn ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-11-3-xac-thuc-phan-quyen-socket" target="_blank" rel="noopener"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Node.js · 11.3 — Xác thực một lần, phân quyền mọi lần</span><span class="lc-sub">Phép đo 4: kết nối lại khôi phục gì — và connectionStateRecovery đo bốn cách</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/socket-io/learn?lessonSlug=io-6-2-ack-retry" target="_blank" rel="noopener"><span class="lc-ico">⚡</span><span class="lc-body"><span class="lc-title">Socket.IO · 6.2 — At-least-once bằng ack + retry</span><span class="lc-sub">Bảo đảm giao hàng mà fetch-since-last-seen dựa vào</span></span></a>
 
 <h3>🗂 Thuật ngữ trong bài</h3>
 <div class="kv-grid">
@@ -948,6 +1358,7 @@ Jitter la CO Y — 1000 client cung reconnect KHONG lam DDoS server luc cap dien
       type: 'VIDEO',
       description: 'Kho này đọc JWT từ cookie backend_token, header Authorization, hoặc auth.token — dùng lại extractToken() của Express. Auth fail cho client thấy connect_error, không disconnect.',
       content: `
+${G01_4}
 <div class="ml-en">
 <span class="eyebrow">Chapter 1 · Lesson 1.4</span>
 <h2>Authentication: middleware runs before connection</h2>
@@ -985,8 +1396,8 @@ io.use(async (socket, next) =&gt; {
 <h3>Three auth failure flows on the wire</h3>
 <div class="lz-flow">
 <div class="lz-step"><span class="lz-k">a</span><span class="lz-t"><code>next(new Error(&#39;unauthorized&#39;))</code></span><span class="lz-d">Client sees a <code>connect_error</code> event with <code>err.message === &#39;unauthorized&#39;</code>. Socket does NOT connect. <code>connection</code> does NOT fire on the server; <code>connect</code> does NOT fire on the client.</span></div>
-<div class="lz-step"><span class="lz-k">b</span><span class="lz-t">middleware throws</span><span class="lz-d">Same behaviour — socket.io wraps the throw into <code>connect_error</code>. But the exception is NOT logged on the server automatically; you must <code>logger.error</code> in the catch.</span></div>
-<div class="lz-step"><span class="lz-k">c</span><span class="lz-t">middleware hangs (no next)</span><span class="lz-d">If you forget <code>next()</code> — even in the success branch — the connection stalls. Client sees a timeout after ~20-30s and finally <code>connect_error</code> with timeout. Bug &quot;client never connects&quot; is usually here.</span></div>
+<div class="lz-step"><span class="lz-k">b</span><span class="lz-t">middleware throws</span><span class="lz-d">NOT the same (measured on 4.8.3): a throw — or a rejected promise from an <code>async</code> middleware — is NOT turned into <code>connect_error</code>. It becomes an unhandled rejection, and Node 22 exits the WHOLE server process (exit code 1, every user disconnected). Wrap the body in <code>try/catch</code>, log, and end every path in <code>next()</code>.</span></div>
+<div class="lz-step"><span class="lz-k">c</span><span class="lz-t">middleware hangs (no next)</span><span class="lz-d">If you forget <code>next()</code> — even in the success branch — the connection stalls. Measured: the engine.io pipe opens at once, the socket.io CONNECT is never answered; after the server&#39;s <code>connectTimeout</code> (45 s by default) the client gets <code>disconnect &quot;transport close&quot;</code> with <code>active=true</code>, retries, and waits 45 s again — forever. No <code>connect_error</code> at all. Bug &quot;client never connects&quot; is usually here.</span></div>
 </div>
 
 <h3>Client-side: reading <code>connect_error</code></h3>
@@ -1021,6 +1432,98 @@ c.on('connect_error', (err) =&gt; {
 <li>In the client, branch on the error: an auth failure logs out; a network error keeps retrying.</li>
 </ol>
 <p><strong>Done when:</strong> a bad token surfaces as <code>connect_error</code> and your client logs out only on auth failure.</p></div>
+
+<h3>🔬 Measured: five clients at the door</h3>
+<p>socket.io 4.8.3, Node 22, one <code>extractToken()</code> reading cookie → Authorization → <code>handshake.auth</code>:</p>
+<div class="out">$ node xac-thuc.mjs
+1) auth: { token }
+   server: connection — userId=7
+   client: connect
+2) header Authorization: Bearer …
+   server: connection — userId=7
+   client: connect
+3) cookie token=…
+   server: connection — userId=7
+   client: connect
+4) token sai
+   client: connect_error "unauthorized" · active=false
+5) không có token
+   client: connect_error "missing token" · active=false</div>
+<p>All three places work from Node. A rejection is <code>connect_error</code> with your message and <code>active=false</code> — the server's <code>connection</code> never runs, and there is no <code>disconnect</code>.</p>
+<p><strong>A middleware that throws</strong> (an <code>async</code> middleware calls <code>JSON.parse</code> on a bad token, no try/catch):</p>
+<div class="out">$ node nem.mjs
+ 0.53 s    server stderr: SyntaxError: Unexpected token 'k', "không-phải-json" is not valid JSON
+ 0.53 s    server: TIẾN TRÌNH CHẾT — exit code 1
+ 0.53 s client: connect_error "xhr poll error"
+ 0.53 s client: disconnect "transport error"</div>
+<p><strong>A middleware that forgets <code>next()</code></strong> in the success branch:</p>
+<div class="out">$ node treo.mjs
+  0.0 s client: engine.io đã mở (tầng 2 OK) — chờ socket.io CONNECT…
+ 45.0 s client: disconnect "transport close" · connected=false · active=true
+ 46.2 s client: reconnect_attempt 1 — và vòng lặp bắt đầu lại</div>
+<p><strong>The token in the URL</strong> — behind a logging proxy, like nginx:</p>
+<div class="out">$ node url.mjs
+A) io("…/?token=tok-lan")
+   access.log: GET /socket.io/?token=tok-lan&amp;EIO=4&amp;transport=polling
+   access.log: POST /socket.io/?token=tok-lan&amp;EIO=4&amp;transport=polling&amp;sid=1zsQot5Tub6elJefAAAA
+   access.log: GET /socket.io/?token=tok-lan&amp;EIO=4&amp;transport=websocket&amp;sid=1zsQot5Tub6elJefAAAA
+   access.log: GET /socket.io/?token=tok-lan&amp;EIO=4&amp;transport=polling&amp;sid=1zsQot5Tub6elJefAAAA
+   gói CONNECT (thân request): 0
+   access.log: GET /socket.io/?token=tok-lan&amp;EIO=4&amp;transport=polling&amp;sid=1zsQot5Tub6elJefAAAA
+B) io("…", { auth: { token } })
+   access.log: GET /socket.io/?EIO=4&amp;transport=polling
+   access.log: POST /socket.io/?EIO=4&amp;transport=polling&amp;sid=bzw8zaKQQQU5l638AAAB
+   access.log: GET /socket.io/?EIO=4&amp;transport=websocket&amp;sid=bzw8zaKQQQU5l638AAAB
+   gói CONNECT (thân request): 0{"token":"tok-lan"}
+   access.log: GET /socket.io/?EIO=4&amp;transport=polling&amp;sid=bzw8zaKQQQU5l638AAAB</div>
+<p><strong>In a real Chromium</strong> (this repo's 17/09 outage, commit 110097d08): <code>extraHeaders</code> + <code>transports: ['websocket']</code> — the browser's WebSocket API cannot set headers:</p>
+<div class="out">server: handshake transport=polling · authorization=Bearer tok-lan · auth.token=(KHÔNG CÓ)
+server: handshake transport=websocket · authorization=(KHÔNG CÓ) · auth.token=(KHÔNG CÓ)
+server: handshake transport=websocket · authorization=(KHÔNG CÓ) · auth.token=tok-lan</div>
+<div class="out"> 264 ms  ↓  0{"sid":"rqSfF5KUkn_6PitYAAAB","upgrades":[],"pingInterval":25000,"pingTimeout":20000,"max
+ 264 ms  ↑  40
+ 264 ms  ↓  44{"message":"missing token"}
+ 265 ms  ×  close
+ 468 ms  ↓  0{"sid":"ABqsOh0CBh_rvV1eAAAC","upgrades":[],"pingInterval":25000,"pingTimeout":20000,"max
+ 468 ms  ↑  40{"token":"tok-lan"}
+ 469 ms  ↓  40{"sid":"_d-RP3-VFl9pum9jAAAC"}
+ 469 ms  ↑  41
+ 469 ms  ×  close</div>
+<p><code>44{"message":"missing token"}</code> is the CONNECT_ERROR packet that <code>next(err)</code> produces. With <code>auth: { token }</code> the token rides in the CONNECT body (<code>40{"token":…}</code>) on every transport.</p>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-javascript"><span class="tok-comment">// io.use() đọc token từ BA chỗ qua MỘT hàm (như extractToken() của kho) — rồi xem client thấy gì khi qua và khi bị từ chối</span>
+import { Server } from 'socket.io';
+import { io as ketNoi } from 'socket.io-client';
+const NGUOI = { 'tok-lan': { userId: 7, ten: 'lan' } };                     <span class="tok-comment">  // "cơ sở dữ liệu" token giả</span>
+const docCookie = (h = '') =&gt; Object.fromEntries(h.split(';').filter(Boolean).map((p) =&gt; p.trim().split('=')));
+function extractToken({ cookies, headers, auth }) {                         <span class="tok-comment">  // một hàm, ba chỗ — thứ tự như middleware Express</span>
+  return cookies.token ?? headers.authorization?.replace(/^Bearer /, '') ?? auth?.token;
+}
+const io = new Server(19471);
+io.use((socket, next) =&gt; {
+  const token = extractToken({ cookies: docCookie(socket.request.headers.cookie), headers: socket.request.headers, auth: socket.handshake.auth });
+  if (!token) return next(new Error('missing token'));
+  const u = NGUOI[token];
+  if (!u) return next(new Error('unauthorized'));
+  socket.data.user = u; next();
+});
+io.on('connection', (s) =&gt; console.log(&#96;   server: connection — userId=\${s.data.user.userId}&#96;));
+const thu = (ten, opts) =&gt; new Promise((xong) =&gt; {
+  console.log(ten);
+  const c = ketNoi('http://localhost:19471', { ...opts, reconnectionDelay: 300 });
+  c.on('connect', () =&gt; { console.log('   client: connect'); c.close(); setTimeout(xong, 50); });
+  c.on('connect_error', (e) =&gt; { console.log(&#96;   client: connect_error "\${e.message}" · active=\${c.active}&#96;); setTimeout(() =&gt; { c.close(); xong(); }, 600); });
+  c.on('disconnect', (r) =&gt; r !== 'io client disconnect' &amp;&amp; console.log('   client: disconnect', r));
+});
+await thu('1) auth: { token }', { auth: { token: 'tok-lan' } });
+await thu('2) header Authorization: Bearer …', { extraHeaders: { authorization: 'Bearer tok-lan' } });
+await thu('3) cookie token=…', { extraHeaders: { cookie: 'theme=dark; token=tok-lan' } });
+await thu('4) token sai', { auth: { token: 'tok-gia' } });
+await thu('5) không có token', {});
+io.close(); process.exit(0);</code></pre>
+<h3>🔗 Go deeper in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-4-5-cat-token-o-dau" target="_blank" rel="noopener"><span class="lc-ico">🔐</span><span class="lc-body"><span class="lc-title">Authentication · 4.5 — Where to keep a token in the browser</span><span class="lc-sub">Cookie, memory, storage — and what each one leaks</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nginx/learn?lessonSlug=nginx-10-1-log-mac-dinh-bo-sot" target="_blank" rel="noopener"><span class="lc-ico">🟢</span><span class="lc-body"><span class="lc-title">Nginx · 10.1 — What the default log format leaves out</span><span class="lc-sub">The request line — query string included — is in every access-log line</span></span></a>
 
 <h3>🗂 Key terms</h3>
 <div class="kv-grid">
@@ -1076,8 +1579,8 @@ io.use(async (socket, next) =&gt; {
 <h3>Ba luồng auth failure trên dây</h3>
 <div class="lz-flow">
 <div class="lz-step"><span class="lz-k">a</span><span class="lz-t"><code>next(new Error(&#39;unauthorized&#39;))</code></span><span class="lz-d">Client thấy event <code>connect_error</code> với <code>err.message === &#39;unauthorized&#39;</code>. Socket KHÔNG connect. KHÔNG fire <code>connection</code> ở server, KHÔNG fire <code>connect</code> ở client.</span></div>
-<div class="lz-step"><span class="lz-k">b</span><span class="lz-t">middleware throw</span><span class="lz-d">Cùng vậy — socket.io wrap throw thành <code>connect_error</code>. Nhưng exception KHÔNG log ở server tự động; bạn phải <code>logger.error</code> trong catch.</span></div>
-<div class="lz-step"><span class="lz-k">c</span><span class="lz-t">middleware treo (không next)</span><span class="lz-d">Nếu bạn quên <code>next()</code> — kể cả trong nhánh success — connection kẹt. Client thấy timeout sau ~20-30s và cuối cùng <code>connect_error</code> với timeout. Bug &quot;client mãi không connect&quot; thường là chỗ này.</span></div>
+<div class="lz-step"><span class="lz-k">b</span><span class="lz-t">middleware throw</span><span class="lz-d">KHÔNG giống (đo trên 4.8.3): throw — hay promise bị reject của middleware <code>async</code> — KHÔNG được đổi thành <code>connect_error</code>. Nó thành unhandled rejection, và Node 22 tắt CẢ tiến trình server (exit code 1, mọi người dùng rớt). Bọc thân trong <code>try/catch</code>, ghi log, và kết thúc mọi nhánh bằng <code>next()</code>.</span></div>
+<div class="lz-step"><span class="lz-k">c</span><span class="lz-t">middleware treo (không next)</span><span class="lz-d">Nếu bạn quên <code>next()</code> — kể cả trong nhánh success — connection kẹt. Đo thật: đường ống engine.io mở ngay, packet CONNECT của socket.io không bao giờ được trả lời; sau <code>connectTimeout</code> của server (mặc định 45 s) client nhận <code>disconnect &quot;transport close&quot;</code> với <code>active=true</code>, thử lại, rồi chờ 45 s nữa — mãi mãi. Không có <code>connect_error</code> nào. Bug &quot;client mãi không connect&quot; thường là chỗ này.</span></div>
 </div>
 
 <h3>Client-side: đọc <code>connect_error</code></h3>
@@ -1113,6 +1616,98 @@ c.on('connect_error', (err) =&gt; {
 </ol>
 <p><strong>Đạt khi:</strong> một token sai hiện ra dưới dạng <code>connect_error</code> và client chỉ logout khi auth fail.</p></div>
 
+<h3>🔬 Đo thật: năm client gõ cửa</h3>
+<p>socket.io 4.8.3, Node 22, một <code>extractToken()</code> đọc cookie → Authorization → <code>handshake.auth</code>:</p>
+<div class="out">$ node xac-thuc.mjs
+1) auth: { token }
+   server: connection — userId=7
+   client: connect
+2) header Authorization: Bearer …
+   server: connection — userId=7
+   client: connect
+3) cookie token=…
+   server: connection — userId=7
+   client: connect
+4) token sai
+   client: connect_error "unauthorized" · active=false
+5) không có token
+   client: connect_error "missing token" · active=false</div>
+<p>Cả ba chỗ đều dùng được từ Node. Bị từ chối là <code>connect_error</code> mang thông điệp của bạn, <code>active=false</code> — <code>connection</code> ở server không chạy, và không có <code>disconnect</code> nào.</p>
+<p><strong>Middleware ném lỗi</strong> (middleware <code>async</code> gọi <code>JSON.parse</code> trên token hỏng, không try/catch):</p>
+<div class="out">$ node nem.mjs
+ 0.53 s    server stderr: SyntaxError: Unexpected token 'k', "không-phải-json" is not valid JSON
+ 0.53 s    server: TIẾN TRÌNH CHẾT — exit code 1
+ 0.53 s client: connect_error "xhr poll error"
+ 0.53 s client: disconnect "transport error"</div>
+<p><strong>Middleware quên <code>next()</code></strong> ở nhánh thành công:</p>
+<div class="out">$ node treo.mjs
+  0.0 s client: engine.io đã mở (tầng 2 OK) — chờ socket.io CONNECT…
+ 45.0 s client: disconnect "transport close" · connected=false · active=true
+ 46.2 s client: reconnect_attempt 1 — và vòng lặp bắt đầu lại</div>
+<p><strong>Token trên URL</strong> — sau một proxy ghi log, giống nginx:</p>
+<div class="out">$ node url.mjs
+A) io("…/?token=tok-lan")
+   access.log: GET /socket.io/?token=tok-lan&amp;EIO=4&amp;transport=polling
+   access.log: POST /socket.io/?token=tok-lan&amp;EIO=4&amp;transport=polling&amp;sid=1zsQot5Tub6elJefAAAA
+   access.log: GET /socket.io/?token=tok-lan&amp;EIO=4&amp;transport=websocket&amp;sid=1zsQot5Tub6elJefAAAA
+   access.log: GET /socket.io/?token=tok-lan&amp;EIO=4&amp;transport=polling&amp;sid=1zsQot5Tub6elJefAAAA
+   gói CONNECT (thân request): 0
+   access.log: GET /socket.io/?token=tok-lan&amp;EIO=4&amp;transport=polling&amp;sid=1zsQot5Tub6elJefAAAA
+B) io("…", { auth: { token } })
+   access.log: GET /socket.io/?EIO=4&amp;transport=polling
+   access.log: POST /socket.io/?EIO=4&amp;transport=polling&amp;sid=bzw8zaKQQQU5l638AAAB
+   access.log: GET /socket.io/?EIO=4&amp;transport=websocket&amp;sid=bzw8zaKQQQU5l638AAAB
+   gói CONNECT (thân request): 0{"token":"tok-lan"}
+   access.log: GET /socket.io/?EIO=4&amp;transport=polling&amp;sid=bzw8zaKQQQU5l638AAAB</div>
+<p><strong>Trong Chromium thật</strong> (sự cố 17/09 của kho, commit 110097d08): <code>extraHeaders</code> + <code>transports: ['websocket']</code> — WebSocket của trình duyệt không đặt được header:</p>
+<div class="out">server: handshake transport=polling · authorization=Bearer tok-lan · auth.token=(KHÔNG CÓ)
+server: handshake transport=websocket · authorization=(KHÔNG CÓ) · auth.token=(KHÔNG CÓ)
+server: handshake transport=websocket · authorization=(KHÔNG CÓ) · auth.token=tok-lan</div>
+<div class="out"> 264 ms  ↓  0{"sid":"rqSfF5KUkn_6PitYAAAB","upgrades":[],"pingInterval":25000,"pingTimeout":20000,"max
+ 264 ms  ↑  40
+ 264 ms  ↓  44{"message":"missing token"}
+ 265 ms  ×  close
+ 468 ms  ↓  0{"sid":"ABqsOh0CBh_rvV1eAAAC","upgrades":[],"pingInterval":25000,"pingTimeout":20000,"max
+ 468 ms  ↑  40{"token":"tok-lan"}
+ 469 ms  ↓  40{"sid":"_d-RP3-VFl9pum9jAAAC"}
+ 469 ms  ↑  41
+ 469 ms  ×  close</div>
+<p><code>44{"message":"missing token"}</code> là packet CONNECT_ERROR do <code>next(err)</code> sinh ra. Với <code>auth: { token }</code>, token đi trong thân CONNECT (<code>40{"token":…}</code>) trên mọi transport.</p>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-javascript"><span class="tok-comment">// io.use() đọc token từ BA chỗ qua MỘT hàm (như extractToken() của kho) — rồi xem client thấy gì khi qua và khi bị từ chối</span>
+import { Server } from 'socket.io';
+import { io as ketNoi } from 'socket.io-client';
+const NGUOI = { 'tok-lan': { userId: 7, ten: 'lan' } };                     <span class="tok-comment">  // "cơ sở dữ liệu" token giả</span>
+const docCookie = (h = '') =&gt; Object.fromEntries(h.split(';').filter(Boolean).map((p) =&gt; p.trim().split('=')));
+function extractToken({ cookies, headers, auth }) {                         <span class="tok-comment">  // một hàm, ba chỗ — thứ tự như middleware Express</span>
+  return cookies.token ?? headers.authorization?.replace(/^Bearer /, '') ?? auth?.token;
+}
+const io = new Server(19471);
+io.use((socket, next) =&gt; {
+  const token = extractToken({ cookies: docCookie(socket.request.headers.cookie), headers: socket.request.headers, auth: socket.handshake.auth });
+  if (!token) return next(new Error('missing token'));
+  const u = NGUOI[token];
+  if (!u) return next(new Error('unauthorized'));
+  socket.data.user = u; next();
+});
+io.on('connection', (s) =&gt; console.log(&#96;   server: connection — userId=\${s.data.user.userId}&#96;));
+const thu = (ten, opts) =&gt; new Promise((xong) =&gt; {
+  console.log(ten);
+  const c = ketNoi('http://localhost:19471', { ...opts, reconnectionDelay: 300 });
+  c.on('connect', () =&gt; { console.log('   client: connect'); c.close(); setTimeout(xong, 50); });
+  c.on('connect_error', (e) =&gt; { console.log(&#96;   client: connect_error "\${e.message}" · active=\${c.active}&#96;); setTimeout(() =&gt; { c.close(); xong(); }, 600); });
+  c.on('disconnect', (r) =&gt; r !== 'io client disconnect' &amp;&amp; console.log('   client: disconnect', r));
+});
+await thu('1) auth: { token }', { auth: { token: 'tok-lan' } });
+await thu('2) header Authorization: Bearer …', { extraHeaders: { authorization: 'Bearer tok-lan' } });
+await thu('3) cookie token=…', { extraHeaders: { cookie: 'theme=dark; token=tok-lan' } });
+await thu('4) token sai', { auth: { token: 'tok-gia' } });
+await thu('5) không có token', {});
+io.close(); process.exit(0);</code></pre>
+<h3>🔗 Học sâu hơn ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-4-5-cat-token-o-dau" target="_blank" rel="noopener"><span class="lc-ico">🔐</span><span class="lc-body"><span class="lc-title">Authentication · 4.5 — Cất token ở đâu trong trình duyệt</span><span class="lc-sub">Cookie, bộ nhớ, storage — và mỗi chỗ để lộ gì</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nginx/learn?lessonSlug=nginx-10-1-log-mac-dinh-bo-sot" target="_blank" rel="noopener"><span class="lc-ico">🟢</span><span class="lc-body"><span class="lc-title">Nginx · 10.1 — Định dạng log mặc định bỏ sót cái gì</span><span class="lc-sub">Dòng request — kể cả query string — nằm trong mọi dòng access log</span></span></a>
+
 <h3>🗂 Thuật ngữ trong bài</h3>
 <div class="kv-grid">
   <div class="kv"><span class="k"><code>io.use()</code></span><span class="v">Middleware connection chạy TRƯỚC event <code>connection</code>.</span></div>
@@ -1140,6 +1735,7 @@ c.on('connect_error', (err) =&gt; {
       type: 'VIDEO',
       description: 'Một kết nối mới là một socket mới với room rỗng và data rỗng. Ba pattern lấp khoảng trống đó, mỗi cái đúng cho một loại trạng thái khác nhau.',
       content: `
+${G01_5}
 <div class="ml-en">
 <span class="eyebrow">Chapter 1 · Lesson 1.5</span>
 <h2>State that survives reconnect: three patterns</h2>
@@ -1310,6 +1906,85 @@ socket.on('resume', async ({ conversationId, lastEventId }, ack) =&gt; {
 <li>Implement pattern 3 — have the client send a <code>lastEventId</code> and the server reply with what was missed; confirm a message sent DURING the outage now arrives after reconnect.</li>
 </ol>
 <p><strong>Done when:</strong> a message sent while the client was away is delivered after reconnect via a <code>lastEventId</code> cursor.</p></div>
+
+<h3>🔬 Measured: what one network blip wipes, and what comes back</h3>
+<p>socket.io 4.8.3, Node 22. The client connects through a TCP proxy, joins two rooms; its token is refreshed; then the proxy cuts the connection:</p>
+<div class="out">$ node song.mjs
+A) auth là OBJECT tĩnh
+   middleware chạy lần 1 · socket.data lúc vào = {} · auth={"token":"tok-cu"} · cookie=sid=phien-7
+   connection id=eHfPaz9bQ7AiMz0lAAAA rooms=["eHfPaz9bQ7AiMz0lAAAA"] data={"userId":42}
+   client xin join ⇒ rooms=["room:42","vip"]
+   … token làm mới thành tok-moi, rồi mạng chớp
+   middleware chạy lần 2 · socket.data lúc vào = {} · auth={"token":"tok-cu"} · cookie=sid=phien-7
+   connection id=sNR0jxCAGMaJJOl-AAAB rooms=["sNR0jxCAGMaJJOl-AAAB"] data={"userId":42}
+B) auth là HÀM (gọi lại mỗi lần nối)
+   middleware chạy lần 3 · socket.data lúc vào = {} · auth={"token":"tok-cu"} · cookie=sid=phien-7
+   connection id=OX0tzErkl5oq-CJ_AAAC rooms=["OX0tzErkl5oq-CJ_AAAC"] data={"userId":42}
+   client xin join ⇒ rooms=["room:42","vip"]
+   … token làm mới thành tok-moi, rồi mạng chớp
+   middleware chạy lần 4 · socket.data lúc vào = {} · auth={"token":"tok-moi"} · cookie=sid=phien-7
+   connection id=foRVgF8iElnhZiEGAAAD rooms=["foRVgF8iElnhZiEGAAAD"] data={"userId":42}</div>
+<p>After the reconnect: a new id, <code>rooms</code> back to just its own id, <code>socket.data</code> empty when the middleware starts (it runs again). The cookie and <code>handshake.auth</code> are sent again — <strong>but a static <code>auth</code> object replays the token it was created with</strong> (<code>tok-cu</code>), even after a refresh. Make <code>auth</code> a function — <code>auth: (cb) =&gt; cb({ token: getJwt() })</code> — and it runs on every (re)connect (<code>tok-moi</code>).</p>
+<p><strong>All three patterns in one connection handler</strong>, plus a forged resume:</p>
+<div class="out">$ node ba-pattern.mjs
+   server: connection #LX8mFj rooms=["user:42","conv:1","team:dev"]
+   client: resume từ #0 ⇒ bù 0 tin: 
+1) đang nối: gõ nháp + nhận 2 tin
+   client: nhận tin #1
+   client: nhận tin #2
+2) mạng chớp; server phát thêm 3 tin lúc client vắng
+   server: connection #bf-1cc rooms=["user:42","conv:1","team:dev"] · trả bản nháp "Chào cả nh"
+   client: khôi phục bản nháp "Chào cả nh"
+   client: resume từ #2 ⇒ bù 3 tin: #3 #4 #5
+3) client giả mạo: resume conv:999 (không có quyền)
+   server: connection #k5gFcT rooms=["user:13"]
+   kẻ giả mạo nhận: {"error":"forbidden"}</div>
+<p><strong>Why <code>ready</code></strong> — the server awaits a 50 ms query before joining <code>conv:1</code>:</p>
+<div class="out">$ node ready.mjs
+A) emit lúc connect      ⇒ tin của chính mình vang lại trong conv:1? KHÔNG — rơi vào hư không
+B) emit lúc 'ready'      ⇒ tin của chính mình vang lại trong conv:1? CÓ</div>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-javascript"><span class="tok-comment">// Ba pattern khôi phục qua một lần nối lại, chạy cùng nhau + một client GIẢ MẠO resume cuộc hội thoại không phải của nó</span>
+import net from 'node:net';
+import { Server } from 'socket.io';
+import { io as ketNoi } from 'socket.io-client';
+const cho = (ms) =&gt; new Promise((r) =&gt; setTimeout(r, ms));
+const DB = { phong: { 42: ['conv:1', 'team:dev'] }, quyen: { 42: ['conv:1'] }, tin: [] };        <span class="tok-comment">  // "database" bền</span>
+const nhapTheoUser = new Map();                                                                    <span class="tok-comment">  // pattern 2: khoá theo userId</span>
+const io = new Server(19482);
+io.use((s, next) =&gt; { s.data.userId = s.handshake.auth.userId; next(); });
+io.on('connection', async (s) =&gt; {
+  const uid = s.data.userId;
+  s.on('draft:update', (d) =&gt; nhapTheoUser.set(uid, d));
+  s.on('resume', ({ conv, lastEventId }, ack) =&gt; {
+    if (!DB.quyen[uid]?.includes(conv)) return ack({ error: 'forbidden' });                       <span class="tok-comment">  // kiểm lại quyền, KHÔNG tin client</span>
+    s.join(conv); ack({ missed: DB.tin.filter((t) =&gt; t.conv === conv &amp;&amp; t.id &gt; lastEventId) });
+  });
+  await s.join([&#96;user:\${uid}&#96;, ...(DB.phong[uid] ?? [])]);                                         <span class="tok-comment">  // pattern 1: suy lại từ dữ liệu bền</span>
+  const nhap = nhapTheoUser.get(uid); if (nhap) s.emit('draft:restore', nhap);                   <span class="tok-comment">  // pattern 2</span>
+  console.log(&#96;   server: connection #\${s.id.slice(0, 6)} rooms=\${JSON.stringify([...s.rooms].slice(1))}\${nhap ? &#96; · trả bản nháp "\${nhap}"&#96; : ''}&#96;);
+  s.emit('ready');
+});
+const ong = new Set();
+net.createServer((a) =&gt; { const b = net.connect(19482); a.pipe(b).pipe(a); for (const x of [a, b]) { ong.add(x); x.on('error', () =&gt; {}); x.on('close', () =&gt; { a.destroy(); b.destroy(); }); } }).listen(19483);
+let lastEventId = 0;
+const c = ketNoi('http://localhost:19483', { auth: { userId: 42 }, reconnectionDelay: 300, reconnectionDelayMax: 300 });
+c.on('msg', (t) =&gt; { lastEventId = t.id; console.log(&#96;   client: nhận tin #\${t.id}&#96;); });
+c.on('draft:restore', (d) =&gt; console.log(&#96;   client: khôi phục bản nháp "\${d}"&#96;));
+c.on('ready', () =&gt; c.emit('resume', { conv: 'conv:1', lastEventId }, (r) =&gt; console.log(&#96;   client: resume từ #\${lastEventId} ⇒ \${r.error ?? &#96;bù \${r.missed.length} tin: \${r.missed.map((t) =&gt; '#' + t.id).join(' ')}&#96;}&#96;)));
+const phat = (n) =&gt; { const t = { id: DB.tin.length + 1, conv: 'conv:1' }; DB.tin.push(t); io.to('conv:1').emit('msg', t); };
+await new Promise((r) =&gt; c.once('ready', r)); await cho(100);
+console.log('1) đang nối: gõ nháp + nhận 2 tin'); c.emit('draft:update', 'Chào cả nh'); phat(); phat(); await cho(100);
+console.log('2) mạng chớp; server phát thêm 3 tin lúc client vắng'); for (const x of ong) x.destroy(); ong.clear(); phat(); phat(); phat();
+await new Promise((r) =&gt; c.once('ready', r)); await cho(200);
+console.log('3) client giả mạo: resume conv:999 (không có quyền)');
+const gia = ketNoi('http://localhost:19482', { auth: { userId: 13 } });
+await new Promise((r) =&gt; gia.once('ready', r));
+gia.emit('resume', { conv: 'conv:999', lastEventId: 0 }, (r) =&gt; console.log(&#96;   kẻ giả mạo nhận: \${JSON.stringify(r)}&#96;));
+await cho(200); c.close(); gia.close(); io.close(); process.exit(0);</code></pre>
+<h3>🔗 Go deeper in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/redis/learn?lessonSlug=rd-5-5-hash-thuc-te" target="_blank" rel="noopener"><span class="lc-ico">🟥</span><span class="lc-body"><span class="lc-title">Redis · 5.5 — Hashes in practice: sessions, carts, counters, config</span><span class="lc-sub">Pattern 2 in Redis: one hash per user, with a TTL</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/socket-io/learn?lessonSlug=io-6-1-at-most-once" target="_blank" rel="noopener"><span class="lc-ico">⚡</span><span class="lc-body"><span class="lc-title">Socket.IO · 6.1 — The default is at-most-once</span><span class="lc-sub">Why pattern 3 is the only one that fills the message gap</span></span></a>
 
 <h3>🗂 Key terms</h3>
 <div class="kv-grid">
@@ -1499,6 +2174,85 @@ socket.on('resume', async ({ conversationId, lastEventId }, ack) =&gt; {
 <li>Cài pattern 3 — để client gửi một <code>lastEventId</code> và server trả về phần đã lỡ; xác nhận một tin gửi TRONG lúc mất kết nối giờ tới nơi sau reconnect.</li>
 </ol>
 <p><strong>Đạt khi:</strong> một tin gửi lúc client vắng mặt được giao sau reconnect nhờ con trỏ <code>lastEventId</code>.</p></div>
+
+<h3>🔬 Đo thật: một lần mạng chớp xoá gì, và cái gì quay về</h3>
+<p>socket.io 4.8.3, Node 22. Client nối qua một proxy TCP, join hai room; token được làm mới; rồi proxy cắt kết nối:</p>
+<div class="out">$ node song.mjs
+A) auth là OBJECT tĩnh
+   middleware chạy lần 1 · socket.data lúc vào = {} · auth={"token":"tok-cu"} · cookie=sid=phien-7
+   connection id=eHfPaz9bQ7AiMz0lAAAA rooms=["eHfPaz9bQ7AiMz0lAAAA"] data={"userId":42}
+   client xin join ⇒ rooms=["room:42","vip"]
+   … token làm mới thành tok-moi, rồi mạng chớp
+   middleware chạy lần 2 · socket.data lúc vào = {} · auth={"token":"tok-cu"} · cookie=sid=phien-7
+   connection id=sNR0jxCAGMaJJOl-AAAB rooms=["sNR0jxCAGMaJJOl-AAAB"] data={"userId":42}
+B) auth là HÀM (gọi lại mỗi lần nối)
+   middleware chạy lần 3 · socket.data lúc vào = {} · auth={"token":"tok-cu"} · cookie=sid=phien-7
+   connection id=OX0tzErkl5oq-CJ_AAAC rooms=["OX0tzErkl5oq-CJ_AAAC"] data={"userId":42}
+   client xin join ⇒ rooms=["room:42","vip"]
+   … token làm mới thành tok-moi, rồi mạng chớp
+   middleware chạy lần 4 · socket.data lúc vào = {} · auth={"token":"tok-moi"} · cookie=sid=phien-7
+   connection id=foRVgF8iElnhZiEGAAAD rooms=["foRVgF8iElnhZiEGAAAD"] data={"userId":42}</div>
+<p>Sau khi nối lại: id mới, <code>rooms</code> chỉ còn id của nó, <code>socket.data</code> rỗng lúc middleware bắt đầu (middleware chạy lại). Cookie và <code>handshake.auth</code> được gửi lại — <strong>nhưng <code>auth</code> là object tĩnh thì gửi lại đúng token lúc tạo</strong> (<code>tok-cu</code>), dù đã làm mới. Viết <code>auth</code> thành hàm — <code>auth: (cb) =&gt; cb({ token: getJwt() })</code> — nó chạy lại mỗi lần (nối lại) (<code>tok-moi</code>).</p>
+<p><strong>Cả ba pattern trong một handler connection</strong>, cộng một lần resume giả mạo:</p>
+<div class="out">$ node ba-pattern.mjs
+   server: connection #LX8mFj rooms=["user:42","conv:1","team:dev"]
+   client: resume từ #0 ⇒ bù 0 tin: 
+1) đang nối: gõ nháp + nhận 2 tin
+   client: nhận tin #1
+   client: nhận tin #2
+2) mạng chớp; server phát thêm 3 tin lúc client vắng
+   server: connection #bf-1cc rooms=["user:42","conv:1","team:dev"] · trả bản nháp "Chào cả nh"
+   client: khôi phục bản nháp "Chào cả nh"
+   client: resume từ #2 ⇒ bù 3 tin: #3 #4 #5
+3) client giả mạo: resume conv:999 (không có quyền)
+   server: connection #k5gFcT rooms=["user:13"]
+   kẻ giả mạo nhận: {"error":"forbidden"}</div>
+<p><strong>Vì sao cần <code>ready</code></strong> — server await truy vấn 50 ms rồi mới join <code>conv:1</code>:</p>
+<div class="out">$ node ready.mjs
+A) emit lúc connect      ⇒ tin của chính mình vang lại trong conv:1? KHÔNG — rơi vào hư không
+B) emit lúc 'ready'      ⇒ tin của chính mình vang lại trong conv:1? CÓ</div>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-javascript"><span class="tok-comment">// Ba pattern khôi phục qua một lần nối lại, chạy cùng nhau + một client GIẢ MẠO resume cuộc hội thoại không phải của nó</span>
+import net from 'node:net';
+import { Server } from 'socket.io';
+import { io as ketNoi } from 'socket.io-client';
+const cho = (ms) =&gt; new Promise((r) =&gt; setTimeout(r, ms));
+const DB = { phong: { 42: ['conv:1', 'team:dev'] }, quyen: { 42: ['conv:1'] }, tin: [] };        <span class="tok-comment">  // "database" bền</span>
+const nhapTheoUser = new Map();                                                                    <span class="tok-comment">  // pattern 2: khoá theo userId</span>
+const io = new Server(19482);
+io.use((s, next) =&gt; { s.data.userId = s.handshake.auth.userId; next(); });
+io.on('connection', async (s) =&gt; {
+  const uid = s.data.userId;
+  s.on('draft:update', (d) =&gt; nhapTheoUser.set(uid, d));
+  s.on('resume', ({ conv, lastEventId }, ack) =&gt; {
+    if (!DB.quyen[uid]?.includes(conv)) return ack({ error: 'forbidden' });                       <span class="tok-comment">  // kiểm lại quyền, KHÔNG tin client</span>
+    s.join(conv); ack({ missed: DB.tin.filter((t) =&gt; t.conv === conv &amp;&amp; t.id &gt; lastEventId) });
+  });
+  await s.join([&#96;user:\${uid}&#96;, ...(DB.phong[uid] ?? [])]);                                         <span class="tok-comment">  // pattern 1: suy lại từ dữ liệu bền</span>
+  const nhap = nhapTheoUser.get(uid); if (nhap) s.emit('draft:restore', nhap);                   <span class="tok-comment">  // pattern 2</span>
+  console.log(&#96;   server: connection #\${s.id.slice(0, 6)} rooms=\${JSON.stringify([...s.rooms].slice(1))}\${nhap ? &#96; · trả bản nháp "\${nhap}"&#96; : ''}&#96;);
+  s.emit('ready');
+});
+const ong = new Set();
+net.createServer((a) =&gt; { const b = net.connect(19482); a.pipe(b).pipe(a); for (const x of [a, b]) { ong.add(x); x.on('error', () =&gt; {}); x.on('close', () =&gt; { a.destroy(); b.destroy(); }); } }).listen(19483);
+let lastEventId = 0;
+const c = ketNoi('http://localhost:19483', { auth: { userId: 42 }, reconnectionDelay: 300, reconnectionDelayMax: 300 });
+c.on('msg', (t) =&gt; { lastEventId = t.id; console.log(&#96;   client: nhận tin #\${t.id}&#96;); });
+c.on('draft:restore', (d) =&gt; console.log(&#96;   client: khôi phục bản nháp "\${d}"&#96;));
+c.on('ready', () =&gt; c.emit('resume', { conv: 'conv:1', lastEventId }, (r) =&gt; console.log(&#96;   client: resume từ #\${lastEventId} ⇒ \${r.error ?? &#96;bù \${r.missed.length} tin: \${r.missed.map((t) =&gt; '#' + t.id).join(' ')}&#96;}&#96;)));
+const phat = (n) =&gt; { const t = { id: DB.tin.length + 1, conv: 'conv:1' }; DB.tin.push(t); io.to('conv:1').emit('msg', t); };
+await new Promise((r) =&gt; c.once('ready', r)); await cho(100);
+console.log('1) đang nối: gõ nháp + nhận 2 tin'); c.emit('draft:update', 'Chào cả nh'); phat(); phat(); await cho(100);
+console.log('2) mạng chớp; server phát thêm 3 tin lúc client vắng'); for (const x of ong) x.destroy(); ong.clear(); phat(); phat(); phat();
+await new Promise((r) =&gt; c.once('ready', r)); await cho(200);
+console.log('3) client giả mạo: resume conv:999 (không có quyền)');
+const gia = ketNoi('http://localhost:19482', { auth: { userId: 13 } });
+await new Promise((r) =&gt; gia.once('ready', r));
+gia.emit('resume', { conv: 'conv:999', lastEventId: 0 }, (r) =&gt; console.log(&#96;   kẻ giả mạo nhận: \${JSON.stringify(r)}&#96;));
+await cho(200); c.close(); gia.close(); io.close(); process.exit(0);</code></pre>
+<h3>🔗 Học sâu hơn ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/redis/learn?lessonSlug=rd-5-5-hash-thuc-te" target="_blank" rel="noopener"><span class="lc-ico">🟥</span><span class="lc-body"><span class="lc-title">Redis · 5.5 — Hash trong thực tế: phiên, giỏ hàng, bộ đếm, cấu hình</span><span class="lc-sub">Pattern 2 trong Redis: mỗi user một hash, kèm TTL</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/socket-io/learn?lessonSlug=io-6-1-at-most-once" target="_blank" rel="noopener"><span class="lc-ico">⚡</span><span class="lc-body"><span class="lc-title">Socket.IO · 6.1 — Mặc định là at-most-once</span><span class="lc-sub">Vì sao pattern 3 là cái duy nhất lấp được khoảng trống tin nhắn</span></span></a>
 
 <h3>🗂 Thuật ngữ trong bài</h3>
 <div class="kv-grid">

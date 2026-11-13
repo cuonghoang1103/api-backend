@@ -1,3 +1,4 @@
+import G02_1 from './giang/sio-02-1.mjs';
 const REF = '?ref=%2Fcourses%2Fsocket-io%2Flearn&reflabel=Socket.IO';
 /**
  * Socket.IO — Chương 2: Transport và upgrade sâu.
@@ -18,6 +19,7 @@ export default {
       type: 'VIDEO',
       description: 'Bài 0.2 nói polling overhead 133× websocket. Đo lại bằng probe thật: ở TẦNG socket.io hai transport TỐN CHÍNH XÁC BẰNG NHAU. Overhead thật ở HTTP header của mỗi poll cycle.',
       content: `
+${G02_1}
 <div class="ml-en">
 <span class="eyebrow">Chapter 2 · Lesson 2.1</span>
 <h2>Where the overhead really is</h2>
@@ -103,7 +105,8 @@ polling body:     0{"sid":"...",...}\\x1e\\x1e4["msg",...]\\x1e...
 polling:   client → GET arrive → server hold → server response ← client
            +1 RTT tối thiểu, +N ms hold time (server phải wait for msg to send)
            +1 RTT for reply POST + response
-           Total: 2-3 RTT per bidirectional interaction
+           Total: 2-3 RTT per bidirectional interaction   &lt;- (do that, xem duoi: emit+ack ~1 RTT ca hai khi
+                  GET dang cho san; cai tre THAT la tin KE TIEP: +1 RTT de gui GET moi)
 
 Cho video call signalling (Chuong 7): 200ms trans-Pacific WebSocket
                                       vs 600ms polling
@@ -125,6 +128,92 @@ Cho video call signalling (Chuong 7): 200ms trans-Pacific WebSocket
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">The HTTP headers, if polling</span><span class="lz-d">Every poll carries cookies, user-agent and the rest: hundreds of bytes per request, in both directions, for a payload of forty.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">So the ratio depends on the transport</span><span class="lz-d">On a WebSocket the overhead is the framing and it is negligible. On polling it is the headers and it dominates completely.</span></div>
 </div>
+
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Send the same 20 small messages over polling and over WebSocket and measure the socket.io-layer bytes — confirm they are nearly identical (~681 bytes each).</li>
+<li>Capture one polling request with curl or DevTools and count the HTTP header bytes; that is where polling's real overhead lives, not in the payload.</li>
+<li>Measure round-trip latency for one interaction on each transport and note WebSocket saves 1-2 RTT — the real reason to upgrade.</li>
+</ol>
+<p><strong>Done when:</strong> you can show the payload bytes are equal and point at the HTTP headers and the extra RTT as polling's true cost.</p></div>
+
+<h3>🔬 Measured: bytes on the TCP wire, and time</h3>
+<p>socket.io 4.8.3, Node 22. A proxy counts every TCP byte in both directions, from the moment the connection is up; the client sends browser-like headers (a ~200-byte cookie, a Chrome user-agent). Twenty <code>hello world</code> messages, bursty (all at once) vs sparse (one every 200 ms):</p>
+<div class="out">$ node tren-day.mjs
+transport kiểu       client→server   server→client   tổng trên dây
+polling   dồn cục   ↑   1000 B   ↓   1011 B   tổng   2011 B   =  101 B/tin   (nhận 20/20)
+websocket dồn cục   ↑      0 B   ↓    710 B   tổng    710 B   =   36 B/tin   (nhận 20/20)
+polling   thưa      ↑  10000 B   ↓   3890 B   tổng  13890 B   =  695 B/tin   (nhận 20/20)
+websocket thưa      ↑      0 B   ↓    710 B   tổng    710 B   =   36 B/tin   (nhận 20/20)</div>
+<p>WebSocket: 36 B per message either way (33-byte packet + 2-byte frame header). Polling: ~100 B per message when bursty, ~700 B when sparse — here 2.8× to 19×, and your cookie size moves the second number.</p>
+<p><strong>One poll, verbatim:</strong></p>
+<div class="out">$ node mot-poll.mjs
+── client → server (GET đang chờ, gửi trước):
+GET /socket.io/?EIO=4&amp;transport=polling&amp;t=…&amp;sid=ML1o2Jv-OINj4dUBAAAA HTTP/1.1
+user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36
+Accept: */*
+cookie: backend_token=x…(190 ký tự)…x; theme=dark
+Host: localhost:19513
+Connection: close
+   ⇒ 500 B header, 0 B thân
+── server → client (trả lời khi có tin):
+HTTP/1.1 200 OK
+Content-Type: text/plain; charset=UTF-8
+Content-Length: 33
+cache-control: no-store
+Date: Fri, 13 Nov 2026 05:18:06 GMT
+Connection: close
+
+42["m",{"i":0,"t":"hello world"}]
+   ⇒ 161 B header + 33 B thân (packet socket.io: 42["m",{"i":0,"t":"hello world"}])</div>
+<p><strong>Latency</strong>, with a proxy adding 50 ms each way (RTT 100 ms):</p>
+<div class="out">$ node tre.mjs
+RTT giả lập = 100 ms (mỗi chiều 50 ms)
+polling   emit+ack: TB 109 ms (1.1 RTT)   ·   2 tin cách 10 ms tới sau: 54 ms / 159 ms
+websocket emit+ack: TB 104 ms (1.0 RTT)   ·   2 tin cách 10 ms tới sau: 52 ms / 63 ms</div>
+<p>One emit + ack is ~1 RTT on BOTH transports — the POST goes up and the ack rides down the GET that is already waiting (not the “2–3 RTT” estimated above). The real cost is the <em>next</em> message: after each response the client must send a new GET, so a burst arrives one RTT apart.</p>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-javascript"><span class="tok-comment">// Đếm byte THẬT trên socket TCP (proxy đếm cả hai chiều), header giống trình duyệt (cookie ~200 B, user-agent). 20 tin "hello world":</span>
+<span class="tok-comment">// dồn cục (20 tin một lúc) vs thưa (1 tin / 200 ms, như chat chậm) — polling vs websocket. Chỉ đếm từ SAU khi đã kết nối xong.</span>
+import net from 'node:net';
+import { Server } from 'socket.io';
+import { io as ketNoi } from 'socket.io-client';
+const cho = (ms) =&gt; new Promise((r) =&gt; setTimeout(r, ms));
+const HDR = { cookie: 'backend_token=' + 'x'.repeat(190) + '; theme=dark', 'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36' };
+async function do1(transport, kieu, cong) {
+  const io = new Server(cong); let len = 0, xuong = 0, dem = false;
+  const proxy = net.createServer((a) =&gt; { const b = net.connect(cong); a.on('data', (d) =&gt; { if (dem) len += d.length; b.write(d); }); b.on('data', (d) =&gt; { if (dem) xuong += d.length; a.write(d); }); for (const x of [a, b]) { x.on('error', () =&gt; {}); x.on('close', () =&gt; { a.destroy(); b.destroy(); }); } }).listen(cong + 1);
+  let sk; io.on('connection', (s) =&gt; (sk = s));
+  const c = ketNoi(&#96;http://localhost:\${cong + 1}&#96;, { transports: [transport], extraHeaders: HDR });
+  let got = 0; c.on('m', () =&gt; got++);
+  await new Promise((r) =&gt; c.on('connect', r)); await cho(300); dem = true;
+  if (kieu === 'dồn cục') for (let i = 0; i &lt; 20; i++) sk.emit('m', { i, t: 'hello world' });
+  else for (let i = 0; i &lt; 20; i++) { sk.emit('m', { i, t: 'hello world' }); await cho(200); }
+  await cho(300); dem = false;
+  console.log(&#96;\${transport.padEnd(9)} \${kieu.padEnd(9)} ↑ \${String(len).padStart(6)} B   ↓ \${String(xuong).padStart(6)} B   tổng \${String(len + xuong).padStart(6)} B   = \${String(Math.round((len + xuong) / 20)).padStart(4)} B/tin   (nhận \${got}/20)&#96;);
+  c.close(); io.close(); proxy.close();
+}
+console.log('transport kiểu       client→server   server→client   tổng trên dây');
+await do1('polling', 'dồn cục', 19500); await do1('websocket', 'dồn cục', 19502);
+await do1('polling', 'thưa', 19504); await do1('websocket', 'thưa', 19506);
+process.exit(0);</code></pre>
+<h3>🔗 Go deeper in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-11-1-websocket-co-ban" target="_blank" rel="noopener"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Node.js · 11.1 — From asking again and again to being told: WebSocket</span><span class="lc-sub">The same comparison counted at the TCP socket with real browser headers</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-7-1-http11" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking · 7.1 — HTTP/1.1 on the wire</span><span class="lc-sub">Every header line a poll repeats, and why keep-alive matters</span></span></a>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Payload bytes</span><span class="v">The socket.io-layer size of a message — equal on polling and WebSocket.</span></div>
+  <div class="kv"><span class="k">HTTP header overhead</span><span class="v">The per-request headers polling repeats; 2.7×-133× depending on burstiness.</span></div>
+  <div class="kv"><span class="k">Burstiness</span><span class="v">How bunched messages are; it decides how much the header cost amortizes.</span></div>
+  <div class="kv"><span class="k">RTT</span><span class="v">Round-trip time; polling adds 1-2 extra per interaction.</span></div>
+  <div class="kv"><span class="k">Latency</span><span class="v">The real reason to upgrade — WebSocket removes the extra round trips.</span></div>
+  <div class="kv"><span class="k">Encoding CPU</span><span class="v">The server cost of framing each message, separate from bytes on the wire.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>At the socket.io layer polling and WebSocket cost the same bytes (~681 for 20 messages).</li><li>Polling's real overhead is in the repeated HTTP headers (2.7×-133× with burstiness).</li><li>There is also a CPU cost to encode each message, independent of wire bytes.</li><li>Latency — an extra 1-2 RTT per interaction — is the most important cost polling adds.</li><li>Upgrade to WebSocket for the latency, not for the byte count.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Engine.IO — Transports</span><span class="lc-sub">socket.io/docs/v4/how-it-works/#transports — chi tiết định dạng packet cả hai transport.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">RFC 6455 — WebSocket frame format</span><span class="lc-sub">tools.ietf.org/html/rfc6455#section-5.2 — 2-14 byte overhead per frame là con số chính xác này.</span></span></div>
@@ -220,7 +309,8 @@ polling body:     0{"sid":"...",...}\\x1e\\x1e4["msg",...]\\x1e...
 polling:   client → GET arrive → server hold → server response ← client
            +1 RTT tối thiểu, +N ms hold time (server phải wait for msg to send)
            +1 RTT for reply POST + response
-           Total: 2-3 RTT per bidirectional interaction
+           Total: 2-3 RTT per bidirectional interaction   &lt;- (do that, xem duoi: emit+ack ~1 RTT ca hai khi
+                  GET dang cho san; cai tre THAT la tin KE TIEP: +1 RTT de gui GET moi)
 
 Cho video call signalling (Chuong 7): 200ms trans-Pacific WebSocket
                                       vs 600ms polling
@@ -242,6 +332,92 @@ Cho video call signalling (Chuong 7): 200ms trans-Pacific WebSocket
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Các header HTTP, nếu dùng polling</span><span class="lz-d">Mỗi lượt hỏi đều mang theo cookie, user-agent và phần còn lại: hàng trăm byte mỗi request, ở cả hai chiều, cho một phần dữ liệu bốn mươi byte.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Nên cái tỷ lệ đó phụ thuộc vào transport</span><span class="lz-d">Trên WebSocket thì phần thừa là phần đóng khung và nó không đáng kể. Trên polling thì phần thừa là các header và nó chiếm hoàn toàn.</span></div>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Gửi cùng 20 tin nhỏ qua polling và qua WebSocket rồi đo byte ở tầng socket.io — xác nhận chúng gần như bằng nhau (~681 byte mỗi bên).</li>
+<li>Bắt một request polling bằng curl hoặc DevTools và đếm byte header HTTP; đó là chỗ overhead thật của polling, không phải payload.</li>
+<li>Đo latency khứ hồi cho một interaction trên mỗi transport và để ý WebSocket tiết kiệm 1-2 RTT — lý do thật để upgrade.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn chỉ ra được byte payload bằng nhau và chỉ vào HTTP header cùng RTT dư là chi phí thật của polling.</p></div>
+
+<h3>🔬 Đo thật: byte trên dây TCP, và thời gian</h3>
+<p>socket.io 4.8.3, Node 22. Một proxy đếm mọi byte TCP cả hai chiều, từ lúc kết nối xong; client gửi header giống trình duyệt (cookie ~200 byte, user-agent Chrome). Hai mươi tin <code>hello world</code>, dồn cục (một lúc) vs thưa (mỗi 200 ms một tin):</p>
+<div class="out">$ node tren-day.mjs
+transport kiểu       client→server   server→client   tổng trên dây
+polling   dồn cục   ↑   1000 B   ↓   1011 B   tổng   2011 B   =  101 B/tin   (nhận 20/20)
+websocket dồn cục   ↑      0 B   ↓    710 B   tổng    710 B   =   36 B/tin   (nhận 20/20)
+polling   thưa      ↑  10000 B   ↓   3890 B   tổng  13890 B   =  695 B/tin   (nhận 20/20)
+websocket thưa      ↑      0 B   ↓    710 B   tổng    710 B   =   36 B/tin   (nhận 20/20)</div>
+<p>WebSocket: 36 B mỗi tin dù dồn cục hay thưa (packet 33 byte + header khung 2 byte). Polling: ~100 B mỗi tin khi dồn cục, ~700 B khi thưa — ở đây 2,8× tới 19×, và cỡ cookie của bạn đẩy số thứ hai lên xuống.</p>
+<p><strong>Một lượt poll, nguyên văn:</strong></p>
+<div class="out">$ node mot-poll.mjs
+── client → server (GET đang chờ, gửi trước):
+GET /socket.io/?EIO=4&amp;transport=polling&amp;t=…&amp;sid=ML1o2Jv-OINj4dUBAAAA HTTP/1.1
+user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36
+Accept: */*
+cookie: backend_token=x…(190 ký tự)…x; theme=dark
+Host: localhost:19513
+Connection: close
+   ⇒ 500 B header, 0 B thân
+── server → client (trả lời khi có tin):
+HTTP/1.1 200 OK
+Content-Type: text/plain; charset=UTF-8
+Content-Length: 33
+cache-control: no-store
+Date: Fri, 13 Nov 2026 05:18:06 GMT
+Connection: close
+
+42["m",{"i":0,"t":"hello world"}]
+   ⇒ 161 B header + 33 B thân (packet socket.io: 42["m",{"i":0,"t":"hello world"}])</div>
+<p><strong>Độ trễ</strong>, với proxy làm chậm mỗi chiều 50 ms (RTT 100 ms):</p>
+<div class="out">$ node tre.mjs
+RTT giả lập = 100 ms (mỗi chiều 50 ms)
+polling   emit+ack: TB 109 ms (1.1 RTT)   ·   2 tin cách 10 ms tới sau: 54 ms / 159 ms
+websocket emit+ack: TB 104 ms (1.0 RTT)   ·   2 tin cách 10 ms tới sau: 52 ms / 63 ms</div>
+<p>Một lần emit + ack ~1 RTT trên CẢ HAI transport — POST đi lên, ack đi xuống theo GET đang chờ sẵn (không phải "2–3 RTT" như ước lượng ở trên). Chi phí thật là tin <em>kế tiếp</em>: sau mỗi câu trả lời client phải gửi GET mới, nên một loạt tin tới cách nhau một RTT.</p>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-javascript"><span class="tok-comment">// Đếm byte THẬT trên socket TCP (proxy đếm cả hai chiều), header giống trình duyệt (cookie ~200 B, user-agent). 20 tin "hello world":</span>
+<span class="tok-comment">// dồn cục (20 tin một lúc) vs thưa (1 tin / 200 ms, như chat chậm) — polling vs websocket. Chỉ đếm từ SAU khi đã kết nối xong.</span>
+import net from 'node:net';
+import { Server } from 'socket.io';
+import { io as ketNoi } from 'socket.io-client';
+const cho = (ms) =&gt; new Promise((r) =&gt; setTimeout(r, ms));
+const HDR = { cookie: 'backend_token=' + 'x'.repeat(190) + '; theme=dark', 'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36' };
+async function do1(transport, kieu, cong) {
+  const io = new Server(cong); let len = 0, xuong = 0, dem = false;
+  const proxy = net.createServer((a) =&gt; { const b = net.connect(cong); a.on('data', (d) =&gt; { if (dem) len += d.length; b.write(d); }); b.on('data', (d) =&gt; { if (dem) xuong += d.length; a.write(d); }); for (const x of [a, b]) { x.on('error', () =&gt; {}); x.on('close', () =&gt; { a.destroy(); b.destroy(); }); } }).listen(cong + 1);
+  let sk; io.on('connection', (s) =&gt; (sk = s));
+  const c = ketNoi(&#96;http://localhost:\${cong + 1}&#96;, { transports: [transport], extraHeaders: HDR });
+  let got = 0; c.on('m', () =&gt; got++);
+  await new Promise((r) =&gt; c.on('connect', r)); await cho(300); dem = true;
+  if (kieu === 'dồn cục') for (let i = 0; i &lt; 20; i++) sk.emit('m', { i, t: 'hello world' });
+  else for (let i = 0; i &lt; 20; i++) { sk.emit('m', { i, t: 'hello world' }); await cho(200); }
+  await cho(300); dem = false;
+  console.log(&#96;\${transport.padEnd(9)} \${kieu.padEnd(9)} ↑ \${String(len).padStart(6)} B   ↓ \${String(xuong).padStart(6)} B   tổng \${String(len + xuong).padStart(6)} B   = \${String(Math.round((len + xuong) / 20)).padStart(4)} B/tin   (nhận \${got}/20)&#96;);
+  c.close(); io.close(); proxy.close();
+}
+console.log('transport kiểu       client→server   server→client   tổng trên dây');
+await do1('polling', 'dồn cục', 19500); await do1('websocket', 'dồn cục', 19502);
+await do1('polling', 'thưa', 19504); await do1('websocket', 'thưa', 19506);
+process.exit(0);</code></pre>
+<h3>🔗 Học sâu hơn ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-11-1-websocket-co-ban" target="_blank" rel="noopener"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Node.js · 11.1 — Từ hỏi đi hỏi lại tới được báo: WebSocket</span><span class="lc-sub">Cùng phép so, đếm ở socket TCP với header trình duyệt thật</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-7-1-http11" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking · 7.1 — HTTP/1.1 trên dây</span><span class="lc-sub">Từng dòng header mà một lượt poll lặp lại, và vì sao keep-alive quan trọng</span></span></a>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Byte payload</span><span class="v">Kích thước tin ở tầng socket.io — bằng nhau trên polling và WebSocket.</span></div>
+  <div class="kv"><span class="k">Overhead HTTP header</span><span class="v">Header mỗi request mà polling lặp lại; 2,7×-133× tuỳ burstiness.</span></div>
+  <div class="kv"><span class="k">Burstiness</span><span class="v">Mức dồn cục của tin; quyết định chi phí header được chia nhỏ bao nhiêu.</span></div>
+  <div class="kv"><span class="k">RTT</span><span class="v">Thời gian khứ hồi; polling thêm 1-2 cái mỗi interaction.</span></div>
+  <div class="kv"><span class="k">Latency</span><span class="v">Lý do thật để upgrade — WebSocket bỏ các vòng khứ hồi dư.</span></div>
+  <div class="kv"><span class="k">CPU mã hoá</span><span class="v">Chi phí server để đóng khung mỗi tin, tách khỏi byte trên dây.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Ở tầng socket.io, polling và WebSocket tốn byte bằng nhau (~681 cho 20 tin).</li><li>Overhead thật của polling nằm ở HTTP header lặp lại (2,7×-133× theo burstiness).</li><li>Còn có chi phí CPU để mã hoá mỗi tin, độc lập với byte trên dây.</li><li>Latency — thêm 1-2 RTT mỗi interaction — là chi phí quan trọng nhất polling thêm vào.</li><li>Upgrade lên WebSocket vì latency, không phải vì số byte.</li></ul>
+
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Engine.IO — Transports</span><span class="lc-sub">socket.io/docs/v4/how-it-works/#transports — chi tiết định dạng packet cả hai transport.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">RFC 6455 — WebSocket frame format</span><span class="lc-sub">tools.ietf.org/html/rfc6455#section-5.2 — 2-14 byte overhead per frame là con số chính xác này.</span></span></div>
@@ -327,6 +503,28 @@ Ke ca 100.000 socket, tong ping traffic la 170 KB/s — khong dang ke
 <div class="pitfall">
 <p><strong>Trap — a pingInterval longer than the proxy's idle timeout.</strong> Nginx closes an idle upstream connection after 60 seconds by default; set <code>pingInterval</code> to 25 s and the heartbeat keeps it alive, set it to 90 s and the proxy kills a connection both ends still believe is healthy. The client reconnects, so the app appears to work — with a disconnect and a full handshake every ninety seconds, per client, and a presence list that flickers. Nothing logs an error, because from Socket.IO&#39;s point of view the transport closed normally. Whenever a reconnect loop has a suspiciously round period, compare that number against every timeout between the two ends.</p>
 </div>
+
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Read the OPEN packet of a connection and find <code>pingInterval</code> and <code>pingTimeout</code>; confirm this repo's 25000/60000.</li>
+<li>Kill a client's network and time how long until the server fires <code>disconnect</code> with <code>ping timeout</code> — it is about <code>pingInterval + pingTimeout</code>.</li>
+<li>Lower <code>pingTimeout</code> to, say, 5s and reconnect on flaky wifi; watch the false disconnects appear, showing the trade you are making.</li>
+</ol>
+<p><strong>Done when:</strong> you can predict worst-case detection time from the two numbers and explain why this repo chose 25s/60s.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>pingInterval</code></span><span class="v">How often the server sends a ping (25s here); must be below the proxy read timeout.</span></div>
+  <div class="kv"><span class="k"><code>pingTimeout</code></span><span class="v">How long a missing pong is tolerated before the client is declared gone (60s here).</span></div>
+  <div class="kv"><span class="k">Heartbeat</span><span class="v">The ping/pong exchange that proves a connection is still alive.</span></div>
+  <div class="kv"><span class="k">Proxy read timeout</span><span class="v">The idle limit a proxy enforces; a longer ping interval than it drops the connection.</span></div>
+  <div class="kv"><span class="k">Worst-case detection</span><span class="v">Up to <code>pingInterval + pingTimeout</code> (~85s here) to notice a dead client.</span></div>
+  <div class="kv"><span class="k">False disconnect</span><span class="v">Declaring a live-but-slow client dead; a short timeout causes it.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Two numbers govern the heartbeat: <code>pingInterval</code> (25s) and <code>pingTimeout</code> (60s here).</li><li><code>pingInterval</code> must stay below the proxy read timeout or the connection is dropped idle.</li><li><code>pingTimeout</code> is the longest the server takes to notice a dead client.</li><li>Worst-case detection is their sum (~85s here); a shorter timeout detects faster but false-disconnects more.</li><li>This repo picks 25s/60s to tolerate Vietnamese mobile jitter over faster detection.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Server options</span><span class="lc-sub">socket.io/docs/v4/server-options/#pinginterval — chi tiết cả hai option, default và ý nghĩa.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Nginx — proxy_read_timeout</span><span class="lc-sub">nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_read_timeout — mặc định 60s, đè lên WebSocket idle.</span></span></div>
@@ -402,6 +600,28 @@ Ke ca 100.000 socket, tong ping traffic la 170 KB/s — khong dang ke
 <div class="pitfall">
 <p><strong>Bẫy — một pingInterval dài hơn thời gian chờ nhàn rỗi của proxy.</strong> Nginx mặc định đóng một kết nối upstream nhàn rỗi sau 60 giây; đặt <code>pingInterval</code> là 25 s thì nhịp tim giữ nó sống, đặt là 90 s thì proxy giết một kết nối mà cả hai đầu vẫn tin là khoẻ mạnh. Client kết nối lại, nên ứng dụng trông như vẫn chạy — với một lần rớt và một lần bắt tay đầy đủ cứ chín mươi giây một lần, cho mỗi client, và một danh sách hiện diện nhấp nháy. Chẳng có lỗi nào được ghi, vì theo cách nhìn của Socket.IO thì transport đã đóng một cách bình thường. Hễ một vòng lặp kết nối lại có chu kỳ tròn trịa một cách đáng ngờ thì hãy đem con số đó đối chiếu với MỌI thời gian chờ nằm giữa hai đầu.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Đọc packet OPEN của một connection và tìm <code>pingInterval</code> và <code>pingTimeout</code>; xác nhận 25000/60000 của kho này.</li>
+<li>Ngắt mạng một client và đo bao lâu tới khi server fire <code>disconnect</code> với <code>ping timeout</code> — khoảng <code>pingInterval + pingTimeout</code>.</li>
+<li>Hạ <code>pingTimeout</code> xuống, ví dụ 5s, rồi reconnect trên wifi chập chờn; xem false disconnect xuất hiện, cho thấy cái đánh đổi bạn đang làm.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đoán được thời gian phát hiện tệ nhất từ hai số và giải thích vì sao kho này chọn 25s/60s.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>pingInterval</code></span><span class="v">Server gửi ping mỗi bao lâu (25s ở đây); phải nhỏ hơn proxy read timeout.</span></div>
+  <div class="kv"><span class="k"><code>pingTimeout</code></span><span class="v">Chịu được một pong thiếu bao lâu trước khi coi client mất (60s ở đây).</span></div>
+  <div class="kv"><span class="k">Heartbeat</span><span class="v">Trao đổi ping/pong chứng minh connection còn sống.</span></div>
+  <div class="kv"><span class="k">Proxy read timeout</span><span class="v">Giới hạn rảnh proxy áp; ping interval dài hơn nó thì connection bị rớt.</span></div>
+  <div class="kv"><span class="k">Phát hiện tệ nhất</span><span class="v">Tối đa <code>pingInterval + pingTimeout</code> (~85s ở đây) để nhận ra client chết.</span></div>
+  <div class="kv"><span class="k">False disconnect</span><span class="v">Coi một client còn sống-nhưng-chậm là chết; timeout ngắn gây ra.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Hai số điều khiển heartbeat: <code>pingInterval</code> (25s) và <code>pingTimeout</code> (60s ở đây).</li><li><code>pingInterval</code> phải nhỏ hơn proxy read timeout kẻo connection bị rớt vì rảnh.</li><li><code>pingTimeout</code> là độ trễ tối đa server nhận ra một client đã chết.</li><li>Phát hiện tệ nhất là tổng của chúng (~85s ở đây); timeout ngắn hơn phát hiện nhanh hơn nhưng false-disconnect nhiều hơn.</li><li>Kho này chọn 25s/60s để chịu biến động mạng di động VN thay vì phát hiện nhanh.</li></ul>
+
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Server options</span><span class="lc-sub">socket.io/docs/v4/server-options/#pinginterval — chi tiết cả hai option, default và ý nghĩa.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Nginx — proxy_read_timeout</span><span class="lc-sub">nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_read_timeout — mặc định 60s, đè lên WebSocket idle.</span></span></div>
@@ -478,6 +698,27 @@ done
 <p><strong>One sentence.</strong> A polling handshake is several HTTP requests that must reach the same worker to share a session — without stickiness, 50-75% of requests fail in a cluster — and the fix is <code>ip_hash</code> or <code>hash $cookie_io</code> in nginx (not a socket.io setting); the Redis adapter (lesson 5.1) does NOT replace stickiness, because it shares broadcasts, not sessions.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Run two workers behind a round-robin proxy with NO stickiness and connect over polling; watch the handshake fail as requests land on different workers.</li>
+<li>Add <code>ip_hash</code> (or <code>hash $cookie_io</code>) in nginx and reconnect; confirm the handshake now completes.</li>
+<li>Explain in one line why the Redis adapter does not fix this — it shares broadcasts, not the polling session.</li>
+</ol>
+<p><strong>Done when:</strong> you have reproduced the no-stickiness failure and fixed it with an nginx hash, not a socket.io setting.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Sticky session</span><span class="v">Routing one client's requests to the same worker every time.</span></div>
+  <div class="kv"><span class="k">Polling handshake</span><span class="v">Several HTTP requests that must reach the same worker to share a session.</span></div>
+  <div class="kv"><span class="k"><code>ip_hash</code></span><span class="v">nginx rule pinning a client to a worker by source IP.</span></div>
+  <div class="kv"><span class="k"><code>hash $cookie_io</code></span><span class="v">Pinning by the socket.io cookie instead of IP (better behind NAT).</span></div>
+  <div class="kv"><span class="k">Cluster</span><span class="v">Multiple Node workers sharing one port behind the proxy.</span></div>
+  <div class="kv"><span class="k">Redis adapter</span><span class="v">Shares broadcasts across workers — not sessions, so it is not stickiness.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>A polling handshake is several HTTP requests that must hit the same worker.</li><li>Without stickiness, 50-75% of handshake requests fail in a cluster.</li><li>The fix is <code>ip_hash</code> or <code>hash $cookie_io</code> in nginx — a proxy setting, not a socket.io one.</li><li>The Redis adapter does NOT replace stickiness; it shares broadcasts, not sessions.</li><li>WebSocket-only connections are less affected, but the handshake still starts on polling.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Using multiple nodes</span><span class="lc-sub">socket.io/docs/v4/using-multiple-nodes/#sticky-sessions — giải thích chính thức tại sao cần và các option cấu hình cho từng proxy.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Nginx — hash directive</span><span class="lc-sub">nginx.org/en/docs/http/ngx_http_upstream_module.html#hash — <code>hash</code> hoạt động tốt hơn <code>ip_hash</code> khi client sau NAT.</span></span></div>
@@ -543,6 +784,27 @@ done
 <div class="callout">
 <p><strong>Một câu.</strong> Polling handshake là nhiều HTTP request phải đến cùng worker để chia sẻ session — không sticky = 50-75% requests fail trong cluster — vá là <code>ip_hash</code> hoặc <code>hash $cookie_io</code> ở nginx (không phải cấu hình socket.io); và Redis adapter (bài 5.1) KHÔNG thay thế sticky vì nó chia sẻ broadcast, không chia sẻ session.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Chạy hai worker sau một proxy round-robin KHÔNG sticky và kết nối qua polling; xem handshake fail khi request rơi vào worker khác nhau.</li>
+<li>Thêm <code>ip_hash</code> (hoặc <code>hash $cookie_io</code>) trong nginx và reconnect; xác nhận handshake giờ hoàn tất.</li>
+<li>Giải thích một dòng vì sao Redis adapter không sửa được việc này — nó chia sẻ broadcast, không phải session polling.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn tái hiện được lỗi không-sticky và vá nó bằng một hash nginx, không phải một cấu hình socket.io.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Sticky session</span><span class="v">Định tuyến request của một client về cùng một worker mỗi lần.</span></div>
+  <div class="kv"><span class="k">Polling handshake</span><span class="v">Nhiều HTTP request phải đến cùng worker để chia sẻ session.</span></div>
+  <div class="kv"><span class="k"><code>ip_hash</code></span><span class="v">Luật nginx ghim một client vào một worker theo IP nguồn.</span></div>
+  <div class="kv"><span class="k"><code>hash $cookie_io</code></span><span class="v">Ghim theo cookie socket.io thay vì IP (tốt hơn sau NAT).</span></div>
+  <div class="kv"><span class="k">Cluster</span><span class="v">Nhiều worker Node chia sẻ một port sau proxy.</span></div>
+  <div class="kv"><span class="k">Redis adapter</span><span class="v">Chia sẻ broadcast qua worker — không phải session, nên không phải sticky.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Một polling handshake là nhiều HTTP request phải trúng cùng một worker.</li><li>Không sticky, 50-75% request handshake fail trong cụm.</li><li>Vá là <code>ip_hash</code> hoặc <code>hash $cookie_io</code> trong nginx — một cấu hình proxy, không phải socket.io.</li><li>Redis adapter KHÔNG thay sticky; nó chia sẻ broadcast, không phải session.</li><li>Connection WebSocket-only ít ảnh hưởng hơn, nhưng handshake vẫn bắt đầu bằng polling.</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Using multiple nodes</span><span class="lc-sub">socket.io/docs/v4/using-multiple-nodes/#sticky-sessions — giải thích chính thức tại sao cần và các option cấu hình cho từng proxy.</span></span></div>
@@ -634,6 +896,27 @@ $ curl -s 'https://api.example.com/socket.io/?EIO=4&transport=polling&sid=XYZ'
 <p><strong>One sentence.</strong> Three curl commands reproduce socket.io's handshake without a browser — verifying that the config shipped (pingTimeout appears in the OPEN body), verifying stickiness (the loop returns all 200s or alternates with 400s), and verifying auth (a CONNECT_ERROR packet <code>44</code>) — enough to debug 80% of production socket.io bugs.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Run command 1: curl the engine.io handshake and read the OPEN body — confirm your shipped <code>pingTimeout</code> actually appears.</li>
+<li>Run command 2: loop the handshake against the cluster and check it returns all 200s (sticky) or alternates with 400s (not sticky).</li>
+<li>Run command 3: curl with a bad token and spot the CONNECT_ERROR packet starting <code>44</code>.</li>
+</ol>
+<p><strong>Done when:</strong> you can reproduce a socket.io handshake with curl alone and read config, stickiness and auth off the responses.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Handshake</span><span class="v">The first HTTP exchange that opens an engine.io session.</span></div>
+  <div class="kv"><span class="k">OPEN body</span><span class="v">The <code>0{...}</code> JSON carrying sid and the ping timings you shipped.</span></div>
+  <div class="kv"><span class="k">EIO / transport query</span><span class="v"><code>?EIO=4&amp;transport=polling</code> — the parameters curl must send.</span></div>
+  <div class="kv"><span class="k">Sticky check</span><span class="v">Looping the handshake: all 200s = sticky, 400s mixed in = not.</span></div>
+  <div class="kv"><span class="k">CONNECT_ERROR</span><span class="v">The <code>44</code> packet an auth rejection produces.</span></div>
+  <div class="kv"><span class="k">Reproduce without a browser</span><span class="v">curl drives the handshake so you debug the server in isolation.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Three curl commands reproduce the socket.io handshake with no browser.</li><li>Command 1 proves the config shipped — <code>pingTimeout</code> shows up in the OPEN body.</li><li>Command 2 proves stickiness — the loop returns all 200s or alternates with 400s.</li><li>Command 3 proves auth — a bad token yields a CONNECT_ERROR packet <code>44</code>.</li><li>Those three cover about 80% of production socket.io bugs.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Engine.IO protocol packet types</span><span class="lc-sub">github.com/socketio/engine.io-protocol#packet — bảng số ứng with chuỗi để giải mã output curl.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">curl manual — output formatting</span><span class="lc-sub">everything.curl.dev/usingcurl/verbose — cách kiểm soát output, đặc biệt <code>-w</code> format string.</span></span></div>
@@ -708,6 +991,27 @@ $ curl -s 'https://api.example.com/socket.io/?EIO=4&transport=polling&sid=XYZ'
 <div class="callout">
 <p><strong>Một câu.</strong> Ba curl command reproduce handshake của socket.io mà không cần trình duyệt — kiểm cấu hình đã lên (pingTimeout hiện ra trong body OPEN), kiểm sticky (loop trả toàn 200 hay xen kẽ 400), và kiểm auth (CONNECT_ERROR packet <code>44</code>) — đủ để debug 80% các bug production socket.io.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Chạy command 1: curl handshake engine.io và đọc body OPEN — xác nhận <code>pingTimeout</code> bạn đã deploy thật sự hiện ra.</li>
+<li>Chạy command 2: lặp handshake vào cụm và kiểm nó trả toàn 200 (sticky) hay xen kẽ 400 (không sticky).</li>
+<li>Chạy command 3: curl với token sai và tìm packet CONNECT_ERROR bắt đầu bằng <code>44</code>.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn tái hiện được một handshake socket.io chỉ bằng curl và đọc được cấu hình, sticky và auth từ các response.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Handshake</span><span class="v">Lượt HTTP đầu tiên mở một session engine.io.</span></div>
+  <div class="kv"><span class="k">Body OPEN</span><span class="v">JSON <code>0{...}</code> mang sid và các số ping bạn đã deploy.</span></div>
+  <div class="kv"><span class="k">Query EIO / transport</span><span class="v"><code>?EIO=4&amp;transport=polling</code> — các tham số curl phải gửi.</span></div>
+  <div class="kv"><span class="k">Kiểm sticky</span><span class="v">Lặp handshake: toàn 200 = sticky, lẫn 400 = không.</span></div>
+  <div class="kv"><span class="k">CONNECT_ERROR</span><span class="v">Packet <code>44</code> mà một lần từ chối auth tạo ra.</span></div>
+  <div class="kv"><span class="k">Tái hiện không cần trình duyệt</span><span class="v">curl chạy handshake để bạn debug server một cách cô lập.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Ba command curl tái hiện handshake socket.io mà không cần trình duyệt.</li><li>Command 1 chứng minh cấu hình đã lên — <code>pingTimeout</code> hiện trong body OPEN.</li><li>Command 2 chứng minh sticky — loop trả toàn 200 hoặc xen kẽ 400.</li><li>Command 3 chứng minh auth — token sai cho ra packet CONNECT_ERROR <code>44</code>.</li><li>Ba cái đó bao khoảng 80% bug production socket.io.</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Engine.IO protocol packet types</span><span class="lc-sub">github.com/socketio/engine.io-protocol#packet — bảng số ứng với chuỗi để giải mã output curl.</span></span></div>
@@ -797,6 +1101,27 @@ Overhead: 33% cho base64 encoding + 2 request extra (attach + data)
 <p><strong>One sentence.</strong> A Buffer/ArrayBuffer over a socket.io WebSocket is a native binary frame (NO base64, no ~33% overhead), but over polling it must be base64-encoded and split across two HTTP requests — so binary use cases need WebSocket; large file uploads (&gt;1 MB) belong on a dedicated HTTP endpoint, because <code>maxHttpBufferSize</code> defaults to 1 MB and raising it opens a DDoS surface.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Emit a <code>Buffer</code> over a WebSocket connection and, in DevTools → WS, confirm the frame is binary (no base64, no ~33% bloat).</li>
+<li>Force the same emit over polling and observe it is base64-encoded and split across HTTP requests.</li>
+<li>Send a payload larger than 1 MB and watch it be rejected by the default <code>maxHttpBufferSize</code>; reason about why raising it is a DDoS surface, and route big uploads to an HTTP endpoint instead.</li>
+</ol>
+<p><strong>Done when:</strong> you have seen a native binary frame on WebSocket, base64 on polling, and the 1 MB rejection.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Binary frame</span><span class="v">A native WebSocket frame carrying bytes with no base64 overhead.</span></div>
+  <div class="kv"><span class="k">base64 on polling</span><span class="v">Polling cannot send binary — it encodes to base64 (~33% bigger).</span></div>
+  <div class="kv"><span class="k"><code>Buffer</code> / <code>ArrayBuffer</code></span><span class="v">The binary types socket.io sends as-is over WebSocket.</span></div>
+  <div class="kv"><span class="k"><code>maxHttpBufferSize</code></span><span class="v">The per-message cap, 1 MB by default.</span></div>
+  <div class="kv"><span class="k">DDoS surface</span><span class="v">Raising the cap lets one request allocate huge memory — an attack vector.</span></div>
+  <div class="kv"><span class="k">Dedicated upload endpoint</span><span class="v">Large files belong on plain HTTP, not a socket emit.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>A Buffer over WebSocket is a native binary frame — no base64, no ~33% overhead.</li><li>Over polling the same payload must be base64-encoded and split across two HTTP requests.</li><li>Binary use cases therefore want WebSocket.</li><li><code>maxHttpBufferSize</code> defaults to 1 MB; raising it opens a DDoS surface.</li><li>Large uploads (&gt;1 MB) belong on a dedicated HTTP endpoint, not a socket emit.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Binary support</span><span class="lc-sub">socket.io/docs/v4/emitting-events/#binary — chi tiết Buffer, ArrayBuffer, Blob types và cách chúng được encode.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — maxHttpBufferSize</span><span class="lc-sub">socket.io/docs/v4/server-options/#maxhttpbuffersize — trade off giữa payload lớn hỗ trợ vs DDoS resistance.</span></span></div>
@@ -874,6 +1199,27 @@ Overhead: 33% cho base64 encoding + 2 request extra (attach + data)
 <div class="callout">
 <p><strong>Một câu.</strong> Buffer/ArrayBuffer qua WebSocket socket.io là native binary frame (KHÔNG base64, không ~33% overhead), nhưng qua polling phải base64 và chia hai HTTP request — nên với binary use case cần WebSocket; upload file lớn (&gt;1 MB) đi HTTP endpoint riêng vì <code>maxHttpBufferSize</code> mặc định là 1 MB và tăng nó là mở DDoS surface.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Emit một <code>Buffer</code> qua một connection WebSocket và, trong DevTools → WS, xác nhận frame là binary (không base64, không phình ~33%).</li>
+<li>Ép cùng emit đó qua polling và quan sát nó bị base64 và chia qua các HTTP request.</li>
+<li>Gửi một payload lớn hơn 1 MB và xem nó bị từ chối bởi <code>maxHttpBufferSize</code> mặc định; lập luận vì sao tăng nó là một DDoS surface, và chuyển upload lớn sang một HTTP endpoint.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đã thấy một native binary frame trên WebSocket, base64 trên polling, và cú từ chối ở 1 MB.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Binary frame</span><span class="v">Một native WebSocket frame chở byte không có overhead base64.</span></div>
+  <div class="kv"><span class="k">base64 trên polling</span><span class="v">Polling không gửi được binary — nó mã hoá base64 (lớn hơn ~33%).</span></div>
+  <div class="kv"><span class="k"><code>Buffer</code> / <code>ArrayBuffer</code></span><span class="v">Các kiểu binary mà socket.io gửi nguyên trạng qua WebSocket.</span></div>
+  <div class="kv"><span class="k"><code>maxHttpBufferSize</code></span><span class="v">Trần mỗi tin, mặc định 1 MB.</span></div>
+  <div class="kv"><span class="k">DDoS surface</span><span class="v">Tăng trần cho một request cấp phát bộ nhớ khổng lồ — một hướng tấn công.</span></div>
+  <div class="kv"><span class="k">Endpoint upload riêng</span><span class="v">File lớn thuộc về HTTP thuần, không phải một socket emit.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Một Buffer qua WebSocket là một native binary frame — không base64, không overhead ~33%.</li><li>Qua polling, cùng payload phải base64 và chia qua hai HTTP request.</li><li>Vì vậy các use case binary muốn WebSocket.</li><li><code>maxHttpBufferSize</code> mặc định 1 MB; tăng nó mở một DDoS surface.</li><li>Upload lớn (&gt;1 MB) thuộc về một HTTP endpoint riêng, không phải một socket emit.</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Binary support</span><span class="lc-sub">socket.io/docs/v4/emitting-events/#binary — chi tiết Buffer, ArrayBuffer, Blob types và cách chúng được encode.</span></span></div>

@@ -1,6 +1,8 @@
 import G07_1 from './giang/sio-07-1.mjs';
 import G07_2 from './giang/sio-07-2.mjs';
 import G07_3 from './giang/sio-07-3.mjs';
+import G07_4 from './giang/sio-07-4.mjs';
+import G07_5 from './giang/sio-07-5.mjs';
 const REF = '?ref=%2Fcourses%2Fsocket-io%2Flearn&reflabel=Socket.IO';
 /**
  * Socket.IO — Chương 7: WebRTC signalling.
@@ -1256,6 +1258,7 @@ await trinh.close(); process.exit(0);</code></pre>
       type: 'VIDEO',
       description: 'Symmetric NAT (một số corp/mobile network) chặn P2P. Cần TURN server relay media — đó là service riêng, không phải socket.io. Cost đáng kể vì server phải handle media bytes.',
       content: `
+${G07_4}
 <div class="ml-en">
 <span class="eyebrow">Chapter 7 · Lesson 7.4</span>
 <h2>TURN and NAT: when peer-to-peer fails</h2>
@@ -1274,6 +1277,7 @@ await trinh.close(); process.exit(0);</code></pre>
   Port-restricted:        10-15% users
   Symmetric:              5-15% users (cao hon o corporate + mobile)
 </div>
+<p><em>These shares are estimates. The repo&#39;s <code>coturn/turnserver.conf</code> header says &quot;about 10–20% of calls need it&quot;. Neither number is measured in this lesson — what we measure below is what a relayed call costs.</em></p>
 
 <h3>TURN — Traversal Using Relays around NAT</h3>
 <pre><code class="language-text">Khi P2P fail, TURN relay:
@@ -1286,6 +1290,7 @@ Cost: TURN server nhan + resend TOAN BO media bytes.
 1 call = ~2 Mbps qua TURN server.
 1.000 calls = 2 Gbps.
 </code></pre>
+<p><strong>Measured (13/11/2026, coturn 4.6, this repo&#39;s call code):</strong> one relayed video call, both directions, as seen on coturn&#39;s network card (in + out): <strong>1.68 Mbit/s</strong> with a calm picture, <strong>7.53 Mbit/s</strong> with a high-motion 720p source and no cap. Billed egress is half of that. &quot;~2 Mbps per call&quot; is the right order for a calm call; busy video costs several times more.</p>
 
 <h3>The real cost of a TURN service</h3>
 <div class="lz-map">
@@ -1328,6 +1333,7 @@ socket.on('call:request-ice-servers', async (ack) =&gt; {
   ]});
 });
 </code></pre>
+<p><strong>Correction (measured against a real coturn 4.6):</strong> this username is not the format coturn&#39;s <code>use-auth-secret</code> reads — the allocation gets <strong>401 Unauthorized</strong>. coturn expects <code>username = &quot;&lt;expiry in SECONDS&gt;:&lt;user&gt;&quot;</code> and <code>credential = base64(HMAC-SHA1(secret, username))</code>. This repo does exactly that — over HTTP, <code>GET /api/v1/messages/ice-servers</code> (<code>messages.routes.ts:451-453</code>), not a socket event. And if the expiry is <code>Date.now()</code> (milliseconds), coturn reads it as seconds: the key is <strong>accepted</strong> and expires in the year 58,838.</p>
 
 <div class="callout ok">
 <p><strong>Never share a static TURN credential.</strong> Generate short-lived ones (10 minutes) per user. If one leaks, it is useless soon after. coturn supports HMAC-based auth.</p>
@@ -1348,6 +1354,163 @@ socket.on('call:request-ice-servers', async (ack) =&gt; {
 <li>Issue short-lived, rotating TURN credentials and reason about the abuse that static credentials invite.</li>
 </ol>
 <p><strong>Done when:</strong> you can explain why ~15% of users need TURN and name the cost and credential-rotation trade-offs.</p></div>
+
+<h3>🔬 Measured: one call, three paths — and what the relay costs</h3>
+<p>socket.io 4.8.3 · this repo&#39;s <code>call.socket.ts</code> + <code>cuocGoi.ts</code> · Chromium 149 with a fake camera · coturn 4.6 in Docker. Where the repo signs TURN keys, caps the relay, runs coturn and watches ICE:</p>
+<div class="out">$ cd ~/api-backend &amp;&amp; grep -n "const hetHan\\|createHmac\\|transport=udp" src/routes/messages.routes.ts
+451:      const hetHan = Math.floor(Date.now() / 1000) + 600;   // 10 phút
+453:      const credential = crypto.createHmac('sha1', secret).update(username).digest('base64');
+456:          &#96;turn:\${host}:3478?transport=udp&#96;,
+$ grep -n "^use-auth-secret\\|^denied-peer-ip=172\\|^user-quota\\|^max-bps" coturn/turnserver.conf
+35:use-auth-secret
+59:denied-peer-ip=172.16.0.0-172.31.255.255
+66:user-quota=12
+68:max-bps=128000
+$ grep -n "network_mode: host" docker-compose.yml
+360:    network_mode: host
+$ grep -n "oniceconnectionstatechange = \\|if (t === 'failed')\\|onconnectionstatechange" frontend/src/lib/webrtc/cuocGoi.ts
+98:    pc.oniceconnectionstatechange = () =&gt; {
+104:      if (t === 'failed') {</div>
+<p><strong>The same video call, three networks.</strong> <code>ep.html?nat=1</code> rewrites the other side&#39;s direct addresses to an unroutable range — a stand-in for two strict NATs:</p>
+<div class="out">$ CONG=19830 TURN_URL=turn:127.0.0.1:19820 TURN_SECRET=$TURN_SECRET npx tsx may.ts &amp;   CONG=19831 npx tsx may.ts &amp;   node ep.mjs
+Chromium 149.0.7827.55
+── 1) mặc định · có STUN + TURN
+  nối được sau 1225 ms · cặp ICE thắng (An): host 192.168.1.100:62300/udp ⇄ host 192.168.1.100:53161/udp
+  An gửi trong 15 s: video 204 kbps + tiếng 24 kbps · hình Bình nhận 640×360 @ 20 khung/s
+  card mạng sio-turn: nhận 0.00 MB · gửi 0.00 MB (3 kbps cả hai chiều)
+── 2) NAT chặt (giả) · có TURN (coturn sio-turn)
+  nối được sau 747 ms · cặp ICE thắng (An): relay 172.17.0.7:49162/udp ⇄ relay 172.17.0.7:49167/udp
+  An gửi trong 15 s: video 334 kbps + tiếng 24 kbps · hình Bình nhận 960×540 @ 19 khung/s
+  card mạng sio-turn: nhận 1.67 MB · gửi 1.67 MB (1680 kbps cả hai chiều)
+── 3) NAT chặt (giả) · KHÔNG có TURN (như kho khi thiếu TURN_SECRET)
+  An: 0.0 s state dang-goi · 0.0 s call:ringing · 0.1 s call:answered · 0.1 s iceConnectionState checking · 0.1 s connectionState connecting · 15.6 s iceConnectionState disconnected · 15.6 s connectionState failed
+  Bình: 0.0 s call:incoming from An · 0.0 s state do-chuong · 0.1 s iceConnectionState checking · 0.1 s connectionState connecting · 15.6 s iceConnectionState disconnected · 15.6 s connectionState failed
+  card mạng sio-turn: 0.01 MB · 68.5 s sau khi bấm gọi, An: dang-goi</div>
+<div class="callout warn"><p><strong>A bug in this repo (measured):</strong> with no relay, ICE gives up after ~15.6 s but the legacy <code>iceConnectionState</code> stops at <code>disconnected</code> while <code>connectionState</code> says <code>failed</code>. <code>cuocGoi.ts:98-104</code> only reacts to <code>iceConnectionState === &#39;failed&#39;</code>, so it never restarts ICE, never shows an error and never hangs up: the caller stays on &quot;calling&quot; (68 s and counting). Listening to <code>onconnectionstatechange</code> as well fixes it.</p></div>
+<p><strong>The Docker NAT trap.</strong> coturn in a bridge network advertises its internal address; a peer without its own TURN must send there and cannot. Advertising a reachable address (<code>--external-ip</code> + publishing the relay port range — the repo uses <code>network_mode: host</code>) fixes it:</p>
+<div class="out">$ docker run -d --name sio-turn-ngoai -p 127.0.0.1:19835:3478/udp -p 127.0.0.1:19836-19845:19836-19845/udp -v ./turn/ngoai.conf:/etc/coturn/turnserver.conf:ro coturn/coturn:4.6-alpine -c /etc/coturn/turnserver.conf --static-auth-secret=$TURN_SECRET --external-ip=127.0.0.1
+sio-turn-ngoai  127.0.0.1:19836-19845-&gt;19836-19845/udp, 127.0.0.1:19835-&gt;3478/tcp, 127.0.0.1:19835-&gt;3478/udp
+$ node tram.mjs
+── 1) coturn sau NAT Docker (sio-turn) · An: chỉ relay · Bình: không TURN
+  An: 0.0 s state dang-goi · 0.0 s call:ringing · 0.1 s call:answered · 0.1 s iceConnectionState checking · 0.1 s connectionState connecting · 15.5 s iceConnectionState disconnected · 15.5 s connectionState failed
+  Bình: 0.0 s call:incoming from An · 0.0 s state do-chuong · 0.1 s iceConnectionState checking · 0.1 s connectionState connecting · 15.3 s iceConnectionState disconnected · 15.3 s connectionState failed
+  card mạng sio-turn: 0.09 MB · 49.4 s sau khi bấm gọi, An: dang-goi
+── 2) coturn khai địa chỉ ngoài (sio-turn-ngoai) · An: chỉ relay · Bình: không TURN
+  nối được sau 389 ms · cặp ICE thắng (An): relay 127.0.0.1:19842/udp ⇄ prflx (địa chỉ ẩn):55948/udp
+  An gửi trong 15 s: video 235 kbps + tiếng 24 kbps · hình Bình nhận 960×540 @ 20 khung/s
+  card mạng sio-turn-ngoai: nhận 1.26 MB · gửi 1.28 MB (1312 kbps cả hai chiều)</div>
+<p><strong>Six TURN keys against a real coturn:</strong></p>
+<div class="out">$ TURN_SECRET=$TURN_SECRET node khoa.mjs
+đúng như kho: hết hạn sau 600 s          user "1794582388:7"
+  ⇒ 1 ứng viên relay (đầu tiên +112 ms: 172.17.0.7:49161)
+đã hết hạn 60 s trước                    user "1794581728:7"
+  ⇒ 0 ứng viên relay · lỗi: 401 Unauthorized.
+ký bằng bí mật KHÁC                      user "1794582388:7"
+  ⇒ 0 ứng viên relay · lỗi: 401 Unauthorized.
+mẫu bài web: &#96;\${userId}-\${Date.now()}&#96;   user "7-1794581788458"
+  ⇒ 0 ứng viên relay · lỗi: 401 Unauthorized.
+hạn bằng Date.now() (mili giây)          user "1794582388458:7"
+  ⇒ 1 ứng viên relay (đầu tiên +112 ms: 172.17.0.7:49164)
+khoá của user 7, người khác cầm dùng     user "1794582388:7"
+  ⇒ 1 ứng viên relay (đầu tiên +110 ms: 172.17.0.7:49168)
+(hạn tính bằng mili giây ⇒ coturn đọc là GIÂY ⇒ hết hạn vào năm 58.838)
+— log coturn trong lúc chạy (lọc dòng lỗi xác thực):
+  ERROR: session …: check_stun_auth: Cannot find credentials of user &lt;1794581728:7&gt;
+  ERROR: session …: check_stun_auth: Cannot find credentials of user &lt;1794582388:7&gt;
+  ERROR: session …: check_stun_auth: Cannot find credentials of user &lt;7-1794581788458&gt;</div>
+<p><strong>max-bps=128000 on a video call.</strong> The unit is <em>bytes</em> per second, per session, per direction (≈ 1.02 Mbit/s). Camera = a high-motion 720p clip:</p>
+<div class="out">$ tail -4 turn/tran.conf
+# trần y kho (coturn/turnserver.conf): mỗi phiên, mỗi chiều — ĐƠN VỊ LÀ BYTE/GIÂY
+user-quota=12
+total-quota=100
+max-bps=128000
+$ node tran.mjs
+── coturn KHÔNG trần (sio-turn)
+   5 s  An gửi  1452 kbps · Bình nhận 640×360 @ 29 khung/s · mất 0 gói/919 · giới hạn: bandwidth · ước lượng băng thông 3458 kbps
+  10 s  An gửi  1737 kbps · Bình nhận 640×360 @ 30 khung/s · mất 0 gói/1985 · giới hạn: bandwidth · ước lượng băng thông 3458 kbps
+  15 s  An gửi  1755 kbps · Bình nhận 640×360 @ 30 khung/s · mất 0 gói/3063 · giới hạn: bandwidth · ước lượng băng thông 3458 kbps
+  20 s  An gửi  1753 kbps · Bình nhận 640×360 @ 29 khung/s · mất 0 gói/4137 · giới hạn: bandwidth · ước lượng băng thông 3458 kbps
+  25 s  An gửi  1743 kbps · Bình nhận 640×360 @ 30 khung/s · mất 0 gói/5206 · giới hạn: bandwidth · ước lượng băng thông 3458 kbps
+  30 s  An gửi  1753 kbps · Bình nhận 640×360 @ 31 khung/s · mất 0 gói/6282 · giới hạn: bandwidth · ước lượng băng thông 3458 kbps
+  35 s  An gửi  1761 kbps · Bình nhận 640×360 @ 30 khung/s · mất 0 gói/7362 · giới hạn: bandwidth · ước lượng băng thông 3458 kbps
+  40 s  An gửi  1743 kbps · Bình nhận 640×360 @ 30 khung/s · mất 0 gói/8431 · giới hạn: bandwidth · ước lượng băng thông 3458 kbps
+  TB 40 s: An gửi video 1671 kbps · card mạng sio-turn 7529 kbps · 38.6 MB
+── coturn max-bps=128000 — y kho (sio-turn-tran)
+   5 s  An gửi  1164 kbps · Bình nhận 640×360 @ 25 khung/s · mất 147 gói/559 · giới hạn: bandwidth
+  10 s  An gửi   742 kbps · Bình nhận 320×180 @ 34 khung/s · mất 147 gói/1065 · giới hạn: bandwidth
+  15 s  An gửi  1112 kbps · Bình nhận 320×180 @ 32 khung/s · mất 218 gói/1669 · giới hạn: bandwidth
+  20 s  An gửi   676 kbps · Bình nhận 320×180 @ 30 khung/s · mất 218 gói/2177 · giới hạn: bandwidth
+  25 s  An gửi   717 kbps · Bình nhận 320×180 @ 30 khung/s · mất 227 gói/2677 · giới hạn: bandwidth
+  30 s  An gửi   747 kbps · Bình nhận 320×180 @ 30 khung/s · mất 242 gói/3190 · giới hạn: bandwidth
+  35 s  An gửi   619 kbps · Bình nhận 320×180 @ 30 khung/s · mất 242 gói/3649 · giới hạn: bandwidth
+  40 s  An gửi   718 kbps · Bình nhận 320×180 @ 30 khung/s · mất 251 gói/4160 · giới hạn: bandwidth
+  TB 40 s: An gửi video 791 kbps · card mạng sio-turn-tran 3553 kbps · 18.2 MB
+── coturn max-bps=16000 — nếu hiểu 128000 là bit (sio-turn-tran16)
+   5 s  An gửi  1587 kbps · Bình nhận 640×360 @ 0 khung/s · mất 175 gói/86 · giới hạn: bandwidth
+  10 s  An gửi  1526 kbps · Bình nhận 480×270 @ 0 khung/s · mất 423 gói/176 · giới hạn: bandwidth
+  15 s  An gửi   685 kbps · Bình nhận 480×270 @ 0 khung/s · mất 490 gói/252 · giới hạn: bandwidth
+  20 s  An gửi   109 kbps · Bình nhận 480×270 @ 0 khung/s · mất 565 gói/314 · giới hạn: bandwidth
+  25 s  An gửi    44 kbps · Bình nhận 320×180 @ 0 khung/s · mất 566 gói/386 · giới hạn: bandwidth
+  30 s  An gửi    63 kbps · Bình nhận 320×180 @ 21 khung/s · mất 573 gói/480 · giới hạn: bandwidth
+  35 s  An gửi    79 kbps · Bình nhận 320×180 @ 16 khung/s · mất 581 gói/581 · giới hạn: bandwidth
+  40 s  An gửi    63 kbps · Bình nhận 320×180 @ 16 khung/s · mất 584 gói/659 · giới hạn: bandwidth
+  TB 40 s: An gửi video 508 kbps · card mạng sio-turn-tran16 1262 kbps · 6.5 MB</div>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-bash"><span class="tok-comment"># lab c7: server = call.socket.ts của kho; /ice-servers ký khoá TURN y messages.routes.ts; coturn trong Docker (không TLS, cho phép địa chỉ nội bộ)</span>
+docker run -d --name sio-turn -p 127.0.0.1:19820:3478/udp -p 127.0.0.1:19820:3478/tcp \\
+  -v ./turn/turnserver.conf:/etc/coturn/turnserver.conf:ro coturn/coturn:4.6-alpine \\
+  -c /etc/coturn/turnserver.conf --static-auth-secret=$TURN_SECRET
+CONG=19830 STUN=stun:127.0.0.1:19820 TURN_URL=turn:127.0.0.1:19820 TURN_SECRET=$TURN_SECRET npx tsx may.ts &amp;
+CONG=19831 STUN=stun:127.0.0.1:19820 npx tsx may.ts &amp;    <span class="tok-comment">  # không TURN (như kho khi thiếu TURN_SECRET)</span>
+node ep.mjs   <span class="tok-comment">  # một cuộc gọi, ba kiểu mạng (ep.html?nat=1 giả NAT chặt: địa chỉ thẳng của bên kia không đi được)</span>
+node tram.mjs <span class="tok-comment">  # coturn quảng bá 172.17.x vs --external-ip + mở dải cổng relay</span>
+TURN_SECRET=$TURN_SECRET node khoa.mjs <span class="tok-comment">  # sáu kiểu khoá</span>
+node tran.mjs <span class="tok-comment">  # max-bps với gọi video (camera giả = video nhiễu 720p)</span>
+<span class="tok-comment"># muốn ép relay trong ứng dụng thật để thử TURN: new RTCPeerConnection({ iceServers, iceTransportPolicy: 'relay' })</span></code></pre>
+<pre><code class="language-javascript"><span class="tok-comment">// khoa.mjs — khoá TURN tạm (coturn use-auth-secret): username = "&lt;giây hết hạn&gt;:&lt;userId&gt;", password = base64(HMAC-SHA1(bí mật, username)).</span>
+<span class="tok-comment">// Mỗi dòng: một RTCPeerConnection CHỈ relay trong Chromium, xin cấp phát ở coturn sio-turn bằng một kiểu khoá; đếm ứng viên relay + lỗi coturn trả về.</span>
+import http from 'node:http';
+import crypto from 'node:crypto';
+import { execSync } from 'node:child_process';
+import { chromium } from '/Users/admin/Downloads/api-backend/node_modules/playwright/index.mjs';
+const BI_MAT = process.env.TURN_SECRET, URL_TURN = 'turn:127.0.0.1:19820';
+const ky = (u, s = BI_MAT) =&gt; ({ urls: URL_TURN, username: u, credential: crypto.createHmac('sha1', s).update(u).digest('base64') });
+const giay = Math.floor(Date.now() / 1000);
+const CA = [
+  ['đúng như kho: hết hạn sau 600 s', ky(&#96;\${giay + 600}:7&#96;)],
+  ['đã hết hạn 60 s trước', ky(&#96;\${giay - 60}:7&#96;)],
+  ['ký bằng bí mật KHÁC', ky(&#96;\${giay + 600}:7&#96;, 'khac')],
+  ['mẫu bài web: &#96;\${userId}-\${Date.now()}&#96;', ky(&#96;7-\${Date.now()}&#96;)],
+  ['hạn bằng Date.now() (mili giây)', ky(&#96;\${Date.now() + 600_000}:7&#96;)],
+  ['khoá của user 7, người khác cầm dùng', ky(&#96;\${giay + 600}:7&#96;)],
+];
+const sv = http.createServer((q, s) =&gt; s.end('&lt;!doctype html&gt;&lt;title&gt;khoa&lt;/title&gt;')).listen(19832);
+const b = await chromium.launch({ channel: 'chromium' });
+const p = await b.newPage(); await p.goto('http://localhost:19832/');
+const tu = new Date().toISOString();
+for (const [ten, s] of CA) {
+  const r = await p.evaluate(async (s) =&gt; {
+    const pc = new RTCPeerConnection({ iceServers: [s], iceTransportPolicy: 'relay' }), t0 = performance.now(), relay = [], loi = [];
+    pc.onicecandidate = (e) =&gt; e.candidate &amp;&amp; relay.push([Math.round(performance.now() - t0), e.candidate.address + ':' + e.candidate.port]);
+    pc.onicecandidateerror = (e) =&gt; loi.push(&#96;\${e.errorCode} \${e.errorText}&#96;);
+    pc.createDataChannel('x'); await pc.setLocalDescription(await pc.createOffer());
+    await new Promise((r) =&gt; { pc.onicegatheringstatechange = () =&gt; pc.iceGatheringState === 'complete' &amp;&amp; r(); setTimeout(r, 6000); });
+    pc.close(); return { relay, loi: [...new Set(loi)] };
+  }, s);
+  const ten2 = s.username.replace(/^\\d{13}/, (x) =&gt; &#96;\${x}&#96;);
+  console.log(&#96;\${ten.padEnd(40)} user "\${ten2}"&#96;);
+  console.log(&#96;  ⇒ \${r.relay.length ? &#96;\${r.relay.length} ứng viên relay (đầu tiên +\${r.relay[0][0]} ms: \${r.relay[0][1]})&#96; : '0 ứng viên relay'}\${r.loi.length ? ' · lỗi: ' + r.loi.join(' / ') : ''}&#96;);
+}
+const nam = new Date((Date.now() + 600_000) * 1000).getUTCFullYear();
+console.log(&#96;(hạn tính bằng mili giây ⇒ coturn đọc là GIÂY ⇒ hết hạn vào năm \${nam.toLocaleString('vi-VN')})&#96;);
+console.log('— log coturn trong lúc chạy (lọc dòng lỗi xác thực):');
+const log = execSync(&#96;/usr/local/bin/docker logs sio-turn --since \${tu} 2&gt;&amp;1&#96;).toString().split('\\n').filter((l) =&gt; /401|expired|incorrect|cannot find|wrong|error/i.test(l));
+for (const l of [...new Set(log.map((l) =&gt; l.replace(/^\\d+: \\(\\d+\\): /, '').replace(/session \\d+/, 'session …').replace(/remote [\\d.:]+/, 'remote …')))].slice(0, 6)) console.log('  ' + l);
+await b.close(); sv.close(); process.exit(0);</code></pre>
+<h3>🔗 Go deeper in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-2-3-nat" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking · 2.3 — NAT, private IP ranges and Docker networks</span><span class="lc-sub">Where the 172.17.x relay address comes from</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-9-4-webrtc" target="_blank" rel="noopener"><span class="lc-ico">📡</span><span class="lc-body"><span class="lc-title">Networking · 9.4 — WebRTC at a glance: through NAT with STUN and TURN</span><span class="lc-sub">The network side of this chapter</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-12-3-cong-mo-ra-internet" target="_blank" rel="noopener"><span class="lc-ico">🖥️</span><span class="lc-body"><span class="lc-title">Deploy VPS · 12.3 — Open only the ports you need</span><span class="lc-sub">TURN needs 3478 plus a UDP range — and Docker can bypass your firewall</span></span></a>
 
 <h3>🗂 Key terms</h3>
 <div class="kv-grid">
@@ -1384,6 +1547,7 @@ socket.on('call:request-ice-servers', async (ack) =&gt; {
   Port-restricted:        10-15% users
   Symmetric:              5-15% users (cao hon o corporate + mobile)
 </div>
+<p><em>Các tỉ lệ này là ước lượng. Đầu tệp <code>coturn/turnserver.conf</code> của kho ghi &quot;khoảng 10–20% cuộc gọi cần tới nó&quot;. Bài này không đo tỉ lệ — cái đo ở dưới là một cuộc gọi đi qua relay tốn bao nhiêu.</em></p>
 
 <h3>TURN — Traversal Using Relays around NAT</h3>
 <pre><code class="language-text">Khi P2P fail, TURN relay:
@@ -1396,6 +1560,7 @@ Cost: TURN server nhan + resend TOAN BO media bytes.
 1 call = ~2 Mbps qua TURN server.
 1.000 calls = 2 Gbps.
 </code></pre>
+<p><strong>Đo thật (13/11/2026, coturn 4.6, mã gọi của kho):</strong> một cuộc gọi video đi qua relay, cả hai chiều, nhìn từ card mạng của coturn (vào + ra): <strong>1,68 Mbit/s</strong> khi hình êm, <strong>7,53 Mbit/s</strong> khi nguồn 720p nhiều chuyển động, không trần. Phần đi ra (bị tính tiền) bằng một nửa. &quot;~2 Mbps mỗi cuộc gọi&quot; đúng cỡ cho cuộc gọi hình êm; video nhiều chuyển động tốn gấp mấy lần.</p>
 
 <h3>Cost thật của TURN service</h3>
 <div class="lz-map">
@@ -1438,6 +1603,7 @@ socket.on('call:request-ice-servers', async (ack) =&gt; {
   ]});
 });
 </code></pre>
+<p><strong>Sửa theo đo thật (với coturn 4.6):</strong> tên đăng nhập này không phải định dạng <code>use-auth-secret</code> của coturn đọc — xin cấp phát nhận <strong>401 Unauthorized</strong>. coturn chờ <code>username = &quot;&lt;giây hết hạn&gt;:&lt;user&gt;&quot;</code> và <code>credential = base64(HMAC-SHA1(bí mật, username))</code>. Kho làm đúng như vậy — qua HTTP, <code>GET /api/v1/messages/ice-servers</code> (<code>messages.routes.ts:451-453</code>), không qua event socket. Và nếu lấy <code>Date.now()</code> (mili giây) làm hạn, coturn đọc nó là giây: khoá <strong>được nhận</strong> và hết hạn vào năm 58.838.</p>
 
 <div class="callout ok">
 <p><strong>Không share TURN credential static.</strong> Sinh short-lived (10 phút) per user. Nếu leak, không dùng được lâu. coturn hỗ trợ HMAC-based auth.</p>
@@ -1458,6 +1624,163 @@ socket.on('call:request-ice-servers', async (ack) =&gt; {
 <li>Cấp TURN credential ngắn hạn, xoay vòng và lập luận về việc lạm dụng mà credential tĩnh mời gọi.</li>
 </ol>
 <p><strong>Đạt khi:</strong> bạn giải thích được vì sao ~15% user cần TURN và nêu các đánh đổi về chi phí và xoay credential.</p></div>
+
+<h3>🔬 Đo thật: một cuộc gọi, ba con đường — và relay tốn bao nhiêu</h3>
+<p>socket.io 4.8.3 · <code>call.socket.ts</code> + <code>cuocGoi.ts</code> của kho · Chromium 149 camera giả · coturn 4.6 trong Docker. Chỗ kho ký khoá TURN, đặt trần relay, chạy coturn và theo dõi ICE:</p>
+<div class="out">$ cd ~/api-backend &amp;&amp; grep -n "const hetHan\\|createHmac\\|transport=udp" src/routes/messages.routes.ts
+451:      const hetHan = Math.floor(Date.now() / 1000) + 600;   // 10 phút
+453:      const credential = crypto.createHmac('sha1', secret).update(username).digest('base64');
+456:          &#96;turn:\${host}:3478?transport=udp&#96;,
+$ grep -n "^use-auth-secret\\|^denied-peer-ip=172\\|^user-quota\\|^max-bps" coturn/turnserver.conf
+35:use-auth-secret
+59:denied-peer-ip=172.16.0.0-172.31.255.255
+66:user-quota=12
+68:max-bps=128000
+$ grep -n "network_mode: host" docker-compose.yml
+360:    network_mode: host
+$ grep -n "oniceconnectionstatechange = \\|if (t === 'failed')\\|onconnectionstatechange" frontend/src/lib/webrtc/cuocGoi.ts
+98:    pc.oniceconnectionstatechange = () =&gt; {
+104:      if (t === 'failed') {</div>
+<p><strong>Cùng một cuộc gọi video, ba kiểu mạng.</strong> <code>ep.html?nat=1</code> đổi địa chỉ thẳng của bên kia sang một dải không định tuyến được — thay cho hai NAT chặt:</p>
+<div class="out">$ CONG=19830 TURN_URL=turn:127.0.0.1:19820 TURN_SECRET=$TURN_SECRET npx tsx may.ts &amp;   CONG=19831 npx tsx may.ts &amp;   node ep.mjs
+Chromium 149.0.7827.55
+── 1) mặc định · có STUN + TURN
+  nối được sau 1225 ms · cặp ICE thắng (An): host 192.168.1.100:62300/udp ⇄ host 192.168.1.100:53161/udp
+  An gửi trong 15 s: video 204 kbps + tiếng 24 kbps · hình Bình nhận 640×360 @ 20 khung/s
+  card mạng sio-turn: nhận 0.00 MB · gửi 0.00 MB (3 kbps cả hai chiều)
+── 2) NAT chặt (giả) · có TURN (coturn sio-turn)
+  nối được sau 747 ms · cặp ICE thắng (An): relay 172.17.0.7:49162/udp ⇄ relay 172.17.0.7:49167/udp
+  An gửi trong 15 s: video 334 kbps + tiếng 24 kbps · hình Bình nhận 960×540 @ 19 khung/s
+  card mạng sio-turn: nhận 1.67 MB · gửi 1.67 MB (1680 kbps cả hai chiều)
+── 3) NAT chặt (giả) · KHÔNG có TURN (như kho khi thiếu TURN_SECRET)
+  An: 0.0 s state dang-goi · 0.0 s call:ringing · 0.1 s call:answered · 0.1 s iceConnectionState checking · 0.1 s connectionState connecting · 15.6 s iceConnectionState disconnected · 15.6 s connectionState failed
+  Bình: 0.0 s call:incoming from An · 0.0 s state do-chuong · 0.1 s iceConnectionState checking · 0.1 s connectionState connecting · 15.6 s iceConnectionState disconnected · 15.6 s connectionState failed
+  card mạng sio-turn: 0.01 MB · 68.5 s sau khi bấm gọi, An: dang-goi</div>
+<div class="callout warn"><p><strong>Lỗi thật của kho (đo được):</strong> không có relay, ICE bỏ cuộc sau ~15,6 s nhưng <code>iceConnectionState</code> kiểu cũ dừng ở <code>disconnected</code>, còn <code>connectionState</code> báo <code>failed</code>. <code>cuocGoi.ts:98-104</code> chỉ xử lý <code>iceConnectionState === &#39;failed&#39;</code>, nên không thử lại ICE, không báo lỗi, không cúp: người gọi ở &quot;đang gọi&quot; mãi (68 s vẫn chưa thôi). Nghe thêm <code>onconnectionstatechange</code> là vá được.</p></div>
+<p><strong>Bẫy NAT của Docker.</strong> coturn trong mạng bridge quảng bá địa chỉ nội bộ; người không có TURN riêng phải gửi tới đó và không tới được. Khai địa chỉ tới được (<code>--external-ip</code> + mở dải cổng relay — kho dùng <code>network_mode: host</code>) là hết:</p>
+<div class="out">$ docker run -d --name sio-turn-ngoai -p 127.0.0.1:19835:3478/udp -p 127.0.0.1:19836-19845:19836-19845/udp -v ./turn/ngoai.conf:/etc/coturn/turnserver.conf:ro coturn/coturn:4.6-alpine -c /etc/coturn/turnserver.conf --static-auth-secret=$TURN_SECRET --external-ip=127.0.0.1
+sio-turn-ngoai  127.0.0.1:19836-19845-&gt;19836-19845/udp, 127.0.0.1:19835-&gt;3478/tcp, 127.0.0.1:19835-&gt;3478/udp
+$ node tram.mjs
+── 1) coturn sau NAT Docker (sio-turn) · An: chỉ relay · Bình: không TURN
+  An: 0.0 s state dang-goi · 0.0 s call:ringing · 0.1 s call:answered · 0.1 s iceConnectionState checking · 0.1 s connectionState connecting · 15.5 s iceConnectionState disconnected · 15.5 s connectionState failed
+  Bình: 0.0 s call:incoming from An · 0.0 s state do-chuong · 0.1 s iceConnectionState checking · 0.1 s connectionState connecting · 15.3 s iceConnectionState disconnected · 15.3 s connectionState failed
+  card mạng sio-turn: 0.09 MB · 49.4 s sau khi bấm gọi, An: dang-goi
+── 2) coturn khai địa chỉ ngoài (sio-turn-ngoai) · An: chỉ relay · Bình: không TURN
+  nối được sau 389 ms · cặp ICE thắng (An): relay 127.0.0.1:19842/udp ⇄ prflx (địa chỉ ẩn):55948/udp
+  An gửi trong 15 s: video 235 kbps + tiếng 24 kbps · hình Bình nhận 960×540 @ 20 khung/s
+  card mạng sio-turn-ngoai: nhận 1.26 MB · gửi 1.28 MB (1312 kbps cả hai chiều)</div>
+<p><strong>Sáu kiểu khoá TURN với một coturn thật:</strong></p>
+<div class="out">$ TURN_SECRET=$TURN_SECRET node khoa.mjs
+đúng như kho: hết hạn sau 600 s          user "1794582388:7"
+  ⇒ 1 ứng viên relay (đầu tiên +112 ms: 172.17.0.7:49161)
+đã hết hạn 60 s trước                    user "1794581728:7"
+  ⇒ 0 ứng viên relay · lỗi: 401 Unauthorized.
+ký bằng bí mật KHÁC                      user "1794582388:7"
+  ⇒ 0 ứng viên relay · lỗi: 401 Unauthorized.
+mẫu bài web: &#96;\${userId}-\${Date.now()}&#96;   user "7-1794581788458"
+  ⇒ 0 ứng viên relay · lỗi: 401 Unauthorized.
+hạn bằng Date.now() (mili giây)          user "1794582388458:7"
+  ⇒ 1 ứng viên relay (đầu tiên +112 ms: 172.17.0.7:49164)
+khoá của user 7, người khác cầm dùng     user "1794582388:7"
+  ⇒ 1 ứng viên relay (đầu tiên +110 ms: 172.17.0.7:49168)
+(hạn tính bằng mili giây ⇒ coturn đọc là GIÂY ⇒ hết hạn vào năm 58.838)
+— log coturn trong lúc chạy (lọc dòng lỗi xác thực):
+  ERROR: session …: check_stun_auth: Cannot find credentials of user &lt;1794581728:7&gt;
+  ERROR: session …: check_stun_auth: Cannot find credentials of user &lt;1794582388:7&gt;
+  ERROR: session …: check_stun_auth: Cannot find credentials of user &lt;7-1794581788458&gt;</div>
+<p><strong>max-bps=128000 với gọi video.</strong> Đơn vị là <em>byte</em> mỗi giây, mỗi phiên, mỗi chiều (≈ 1,02 Mbit/s). Camera = đoạn video 720p nhiều chuyển động:</p>
+<div class="out">$ tail -4 turn/tran.conf
+# trần y kho (coturn/turnserver.conf): mỗi phiên, mỗi chiều — ĐƠN VỊ LÀ BYTE/GIÂY
+user-quota=12
+total-quota=100
+max-bps=128000
+$ node tran.mjs
+── coturn KHÔNG trần (sio-turn)
+   5 s  An gửi  1452 kbps · Bình nhận 640×360 @ 29 khung/s · mất 0 gói/919 · giới hạn: bandwidth · ước lượng băng thông 3458 kbps
+  10 s  An gửi  1737 kbps · Bình nhận 640×360 @ 30 khung/s · mất 0 gói/1985 · giới hạn: bandwidth · ước lượng băng thông 3458 kbps
+  15 s  An gửi  1755 kbps · Bình nhận 640×360 @ 30 khung/s · mất 0 gói/3063 · giới hạn: bandwidth · ước lượng băng thông 3458 kbps
+  20 s  An gửi  1753 kbps · Bình nhận 640×360 @ 29 khung/s · mất 0 gói/4137 · giới hạn: bandwidth · ước lượng băng thông 3458 kbps
+  25 s  An gửi  1743 kbps · Bình nhận 640×360 @ 30 khung/s · mất 0 gói/5206 · giới hạn: bandwidth · ước lượng băng thông 3458 kbps
+  30 s  An gửi  1753 kbps · Bình nhận 640×360 @ 31 khung/s · mất 0 gói/6282 · giới hạn: bandwidth · ước lượng băng thông 3458 kbps
+  35 s  An gửi  1761 kbps · Bình nhận 640×360 @ 30 khung/s · mất 0 gói/7362 · giới hạn: bandwidth · ước lượng băng thông 3458 kbps
+  40 s  An gửi  1743 kbps · Bình nhận 640×360 @ 30 khung/s · mất 0 gói/8431 · giới hạn: bandwidth · ước lượng băng thông 3458 kbps
+  TB 40 s: An gửi video 1671 kbps · card mạng sio-turn 7529 kbps · 38.6 MB
+── coturn max-bps=128000 — y kho (sio-turn-tran)
+   5 s  An gửi  1164 kbps · Bình nhận 640×360 @ 25 khung/s · mất 147 gói/559 · giới hạn: bandwidth
+  10 s  An gửi   742 kbps · Bình nhận 320×180 @ 34 khung/s · mất 147 gói/1065 · giới hạn: bandwidth
+  15 s  An gửi  1112 kbps · Bình nhận 320×180 @ 32 khung/s · mất 218 gói/1669 · giới hạn: bandwidth
+  20 s  An gửi   676 kbps · Bình nhận 320×180 @ 30 khung/s · mất 218 gói/2177 · giới hạn: bandwidth
+  25 s  An gửi   717 kbps · Bình nhận 320×180 @ 30 khung/s · mất 227 gói/2677 · giới hạn: bandwidth
+  30 s  An gửi   747 kbps · Bình nhận 320×180 @ 30 khung/s · mất 242 gói/3190 · giới hạn: bandwidth
+  35 s  An gửi   619 kbps · Bình nhận 320×180 @ 30 khung/s · mất 242 gói/3649 · giới hạn: bandwidth
+  40 s  An gửi   718 kbps · Bình nhận 320×180 @ 30 khung/s · mất 251 gói/4160 · giới hạn: bandwidth
+  TB 40 s: An gửi video 791 kbps · card mạng sio-turn-tran 3553 kbps · 18.2 MB
+── coturn max-bps=16000 — nếu hiểu 128000 là bit (sio-turn-tran16)
+   5 s  An gửi  1587 kbps · Bình nhận 640×360 @ 0 khung/s · mất 175 gói/86 · giới hạn: bandwidth
+  10 s  An gửi  1526 kbps · Bình nhận 480×270 @ 0 khung/s · mất 423 gói/176 · giới hạn: bandwidth
+  15 s  An gửi   685 kbps · Bình nhận 480×270 @ 0 khung/s · mất 490 gói/252 · giới hạn: bandwidth
+  20 s  An gửi   109 kbps · Bình nhận 480×270 @ 0 khung/s · mất 565 gói/314 · giới hạn: bandwidth
+  25 s  An gửi    44 kbps · Bình nhận 320×180 @ 0 khung/s · mất 566 gói/386 · giới hạn: bandwidth
+  30 s  An gửi    63 kbps · Bình nhận 320×180 @ 21 khung/s · mất 573 gói/480 · giới hạn: bandwidth
+  35 s  An gửi    79 kbps · Bình nhận 320×180 @ 16 khung/s · mất 581 gói/581 · giới hạn: bandwidth
+  40 s  An gửi    63 kbps · Bình nhận 320×180 @ 16 khung/s · mất 584 gói/659 · giới hạn: bandwidth
+  TB 40 s: An gửi video 508 kbps · card mạng sio-turn-tran16 1262 kbps · 6.5 MB</div>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-bash"><span class="tok-comment"># lab c7: server = call.socket.ts của kho; /ice-servers ký khoá TURN y messages.routes.ts; coturn trong Docker (không TLS, cho phép địa chỉ nội bộ)</span>
+docker run -d --name sio-turn -p 127.0.0.1:19820:3478/udp -p 127.0.0.1:19820:3478/tcp \\
+  -v ./turn/turnserver.conf:/etc/coturn/turnserver.conf:ro coturn/coturn:4.6-alpine \\
+  -c /etc/coturn/turnserver.conf --static-auth-secret=$TURN_SECRET
+CONG=19830 STUN=stun:127.0.0.1:19820 TURN_URL=turn:127.0.0.1:19820 TURN_SECRET=$TURN_SECRET npx tsx may.ts &amp;
+CONG=19831 STUN=stun:127.0.0.1:19820 npx tsx may.ts &amp;    <span class="tok-comment">  # không TURN (như kho khi thiếu TURN_SECRET)</span>
+node ep.mjs   <span class="tok-comment">  # một cuộc gọi, ba kiểu mạng (ep.html?nat=1 giả NAT chặt: địa chỉ thẳng của bên kia không đi được)</span>
+node tram.mjs <span class="tok-comment">  # coturn quảng bá 172.17.x vs --external-ip + mở dải cổng relay</span>
+TURN_SECRET=$TURN_SECRET node khoa.mjs <span class="tok-comment">  # sáu kiểu khoá</span>
+node tran.mjs <span class="tok-comment">  # max-bps với gọi video (camera giả = video nhiễu 720p)</span>
+<span class="tok-comment"># muốn ép relay trong ứng dụng thật để thử TURN: new RTCPeerConnection({ iceServers, iceTransportPolicy: 'relay' })</span></code></pre>
+<pre><code class="language-javascript"><span class="tok-comment">// khoa.mjs — khoá TURN tạm (coturn use-auth-secret): username = "&lt;giây hết hạn&gt;:&lt;userId&gt;", password = base64(HMAC-SHA1(bí mật, username)).</span>
+<span class="tok-comment">// Mỗi dòng: một RTCPeerConnection CHỈ relay trong Chromium, xin cấp phát ở coturn sio-turn bằng một kiểu khoá; đếm ứng viên relay + lỗi coturn trả về.</span>
+import http from 'node:http';
+import crypto from 'node:crypto';
+import { execSync } from 'node:child_process';
+import { chromium } from '/Users/admin/Downloads/api-backend/node_modules/playwright/index.mjs';
+const BI_MAT = process.env.TURN_SECRET, URL_TURN = 'turn:127.0.0.1:19820';
+const ky = (u, s = BI_MAT) =&gt; ({ urls: URL_TURN, username: u, credential: crypto.createHmac('sha1', s).update(u).digest('base64') });
+const giay = Math.floor(Date.now() / 1000);
+const CA = [
+  ['đúng như kho: hết hạn sau 600 s', ky(&#96;\${giay + 600}:7&#96;)],
+  ['đã hết hạn 60 s trước', ky(&#96;\${giay - 60}:7&#96;)],
+  ['ký bằng bí mật KHÁC', ky(&#96;\${giay + 600}:7&#96;, 'khac')],
+  ['mẫu bài web: &#96;\${userId}-\${Date.now()}&#96;', ky(&#96;7-\${Date.now()}&#96;)],
+  ['hạn bằng Date.now() (mili giây)', ky(&#96;\${Date.now() + 600_000}:7&#96;)],
+  ['khoá của user 7, người khác cầm dùng', ky(&#96;\${giay + 600}:7&#96;)],
+];
+const sv = http.createServer((q, s) =&gt; s.end('&lt;!doctype html&gt;&lt;title&gt;khoa&lt;/title&gt;')).listen(19832);
+const b = await chromium.launch({ channel: 'chromium' });
+const p = await b.newPage(); await p.goto('http://localhost:19832/');
+const tu = new Date().toISOString();
+for (const [ten, s] of CA) {
+  const r = await p.evaluate(async (s) =&gt; {
+    const pc = new RTCPeerConnection({ iceServers: [s], iceTransportPolicy: 'relay' }), t0 = performance.now(), relay = [], loi = [];
+    pc.onicecandidate = (e) =&gt; e.candidate &amp;&amp; relay.push([Math.round(performance.now() - t0), e.candidate.address + ':' + e.candidate.port]);
+    pc.onicecandidateerror = (e) =&gt; loi.push(&#96;\${e.errorCode} \${e.errorText}&#96;);
+    pc.createDataChannel('x'); await pc.setLocalDescription(await pc.createOffer());
+    await new Promise((r) =&gt; { pc.onicegatheringstatechange = () =&gt; pc.iceGatheringState === 'complete' &amp;&amp; r(); setTimeout(r, 6000); });
+    pc.close(); return { relay, loi: [...new Set(loi)] };
+  }, s);
+  const ten2 = s.username.replace(/^\\d{13}/, (x) =&gt; &#96;\${x}&#96;);
+  console.log(&#96;\${ten.padEnd(40)} user "\${ten2}"&#96;);
+  console.log(&#96;  ⇒ \${r.relay.length ? &#96;\${r.relay.length} ứng viên relay (đầu tiên +\${r.relay[0][0]} ms: \${r.relay[0][1]})&#96; : '0 ứng viên relay'}\${r.loi.length ? ' · lỗi: ' + r.loi.join(' / ') : ''}&#96;);
+}
+const nam = new Date((Date.now() + 600_000) * 1000).getUTCFullYear();
+console.log(&#96;(hạn tính bằng mili giây ⇒ coturn đọc là GIÂY ⇒ hết hạn vào năm \${nam.toLocaleString('vi-VN')})&#96;);
+console.log('— log coturn trong lúc chạy (lọc dòng lỗi xác thực):');
+const log = execSync(&#96;/usr/local/bin/docker logs sio-turn --since \${tu} 2&gt;&amp;1&#96;).toString().split('\\n').filter((l) =&gt; /401|expired|incorrect|cannot find|wrong|error/i.test(l));
+for (const l of [...new Set(log.map((l) =&gt; l.replace(/^\\d+: \\(\\d+\\): /, '').replace(/session \\d+/, 'session …').replace(/remote [\\d.:]+/, 'remote …')))].slice(0, 6)) console.log('  ' + l);
+await b.close(); sv.close(); process.exit(0);</code></pre>
+<h3>🔗 Học sâu hơn ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-2-3-nat" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking · 2.3 — NAT, dải IP riêng và mạng Docker</span><span class="lc-sub">Địa chỉ relay 172.17.x đến từ đâu</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-9-4-webrtc" target="_blank" rel="noopener"><span class="lc-ico">📡</span><span class="lc-body"><span class="lc-title">Networking · 9.4 — Lướt qua WebRTC: xuyên NAT bằng STUN và TURN</span><span class="lc-sub">Phía mạng của chương này</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-12-3-cong-mo-ra-internet" target="_blank" rel="noopener"><span class="lc-ico">🖥️</span><span class="lc-body"><span class="lc-title">Deploy VPS · 12.3 — Chỉ mở đúng cổng: ss, ufw, và Docker</span><span class="lc-sub">TURN cần 3478 và một dải UDP — và Docker có thể đi vòng tường lửa</span></span></a>
 
 <h3>🗂 Thuật ngữ trong bài</h3>
 <div class="kv-grid">
@@ -1484,6 +1807,7 @@ socket.on('call:request-ice-servers', async (ack) =&gt; {
       type: 'VIDEO',
       description: 'P2P mesh với N=4 là 12 connection và 8 Mbps upload per peer. Group calls cần SFU (Selective Forwarding Unit) — server nhận N stream, forward N-1 lần. Không phải socket.io.',
       content: `
+${G07_5}
 <div class="ml-en">
 <span class="eyebrow">Chapter 7 · Lesson 7.5</span>
 <h2>Group calls: SFU is a different beast</h2>
@@ -1493,11 +1817,11 @@ socket.on('call:request-ice-servers', async (ack) =&gt; {
 <div class="lz-map">
 <div class="lz-stage lz-badge">
 <span class="lz-node"><span class="lz-ntitle">Mesh (P2P full)</span><span class="lz-nsub">N=2 OK, N=4 lag</span></span>
-<span class="lz-nbody">Every peer connects directly to every other peer. N peers means N*(N-1) connections. The upload cost is (N-1) × stream bitrate PER PEER. At N=4, each peer uploads 3 streams = ~6-9 Mbps. Consumer internet cannot take it.</span>
+<span class="lz-nbody">Every peer connects directly to every other peer. N peers means N*(N-1) connections <em>(measured: each person holds N−1 RTCPeerConnections, the room N(N−1)/2; N(N−1) is the number of one-way video <strong>streams</strong>)</em>. The upload cost is (N-1) × stream bitrate PER PEER. At N=4, each peer uploads 3 streams = ~6-9 Mbps. Consumer internet cannot take it.</span>
 </div>
 <div class="lz-stage lz-badge">
 <span class="lz-node"><span class="lz-ntitle">SFU (Selective Forwarding Unit)</span><span class="lz-nsub">the standard for small groups</span></span>
-<span class="lz-nbody">Each peer uploads 1 stream to the SFU. The server FORWARDS that stream to the other N-1 peers. It never encodes or decodes — it only routes. Server cost: N × stream × 2 (in + out). 10 groups × 10 peers × 1 Mbps = 200 Mbps.</span>
+<span class="lz-nbody">Each peer uploads 1 stream to the SFU. The server FORWARDS that stream to the other N-1 peers. It never encodes or decodes — it only routes. Server cost: N × stream × 2 (in + out). <strong>Correction (measured, mediasoup, N = 5):</strong> in is N × stream (8,125 kbps), but out is N(N−1) × stream (32,603 kbps) — every stream goes to N−1 people. 10 groups × 10 peers × 1 Mbps = 200 Mbps.</span>
 </div>
 <div class="lz-stage lz-badge">
 <span class="lz-node"><span class="lz-ntitle">MCU (Multipoint Conferencing Unit)</span><span class="lz-nsub">large groups, high server cost</span></span>
@@ -1544,7 +1868,7 @@ socket.on('room:join', async ({ roomId }) =&gt; {
 <p>Socket.io is the control plane (joining rooms, publish/subscribe transports). The SFU is the data plane (media). Two separate components.</p>
 
 <div class="pitfall">
-<p><strong>Trap — attempting to build an SFU from scratch.</strong> A WebRTC SFU requires understanding RTP, RTCP, DTLS-SRTP and codec-specific packet handling. Tens of thousands of lines of C++. Use mediasoup, Janus or LiveKit. Do not rewrite it.</p>
+<p><strong>Trap — attempting to build an SFU from scratch.</strong> A WebRTC SFU requires understanding RTP, RTCP, DTLS-SRTP and codec-specific packet handling. Tens of thousands of lines of C++ <em>(measured: the mediasoup worker alone is 116,784 lines of C++)</em>. Use mediasoup, Janus or LiveKit. Do not rewrite it.</p>
 </div>
 
 <div class="callout">
@@ -1558,6 +1882,85 @@ socket.on('room:join', async ({ roomId }) =&gt; {
 <li>Confirm that in either case socket.io stays the signalling channel — only the media path changes.</li>
 </ol>
 <p><strong>Done when:</strong> you can explain why group calls need an SFU and what role socket.io keeps.</p></div>
+
+<h3>🔬 Measured: mesh vs a real SFU, N = 2…5</h3>
+<p>Chromium 149, one tab per person, fake camera fed a high-motion clip, the same 1.5 Mbit/s cap per video stream for both architectures. The SFU is a real <strong>mediasoup</strong> router; signalling for both goes over socket.io. Where the repo stands — one-to-one only:</p>
+<div class="out">$ cd ~/api-backend &amp;&amp; grep -n "const dangGoi = \\|function benKia\\|toUserId: number" src/socket/call.socket.ts
+30:const dangGoi = new Map&lt;number, CuocGoi&gt;();
+42:function benKia(c: CuocGoi, toi: number): number {
+135:  socket.on('call:offer', (p: { threadId: number; toUserId: number; sdp: unknown; coVideo?: boolean }) =&gt; {
+$ grep -rlwE "mediasoup|livekit|janus|SFU" src/ frontend/src/ package.json | wc -l    # thư viện gọi nhóm trong kho
+       0</div>
+<div class="out">$ npm i mediasoup@3 mediasoup-client@3   # đã chạy trước: 44 s, có bản dựng sẵn cho Mac ARM (không phải biên dịch C++)
+$ node -p "['mediasoup', 'mediasoup-client'].map((p) =&gt; p + '@' + require('./node_modules/' + p + '/package.json').version).join('   ')"
+mediasoup@3.32.2   mediasoup-client@3.26.0
+$ ls -la node_modules/mediasoup/worker/out/Release/mediasoup-worker | awk '{print $5, $9}'
+6976096 node_modules/mediasoup/worker/out/Release/mediasoup-worker
+$ find node_modules/mediasoup/worker/src node_modules/mediasoup/worker/include -name '*.[ch]pp' | xargs cat | wc -l   # mã C++ của worker
+  116784</div>
+<p>Each person&#39;s upload/download (getStats), the SFU&#39;s own counters (<code>transport.getStats()</code>), CPU of all tabs, and the socket.io bytes of the whole room:</p>
+<div class="out">$ npx tsx may.ts &amp;   node nhom.mjs 2 3 4 5
+mesh N=2: mỗi người LÊN  1532 kbps · XUỐNG  1532 kbps · 1 kết nối · mã hoá 1 luồng video (49 ms/giây) · CPU Chromium 36% · báo hiệu socket.io cả phòng 28.0 KB
+mesh N=3: mỗi người LÊN  3036 kbps · XUỐNG  3036 kbps · 2 kết nối · mã hoá 2 luồng video (137 ms/giây) · CPU Chromium 94% · báo hiệu socket.io cả phòng 83.7 KB
+mesh N=4: mỗi người LÊN  4579 kbps · XUỐNG  4579 kbps · 3 kết nối · mã hoá 3 luồng video (222 ms/giây) · CPU Chromium 168% · báo hiệu socket.io cả phòng 167.3 KB
+mesh N=5: mỗi người LÊN  6114 kbps · XUỐNG  6114 kbps · 4 kết nối · mã hoá 4 luồng video (289 ms/giây) · CPU Chromium 259% · báo hiệu socket.io cả phòng 278.7 KB
+sfu  N=2: mỗi người LÊN  1527 kbps · XUỐNG  1536 kbps · 2 kết nối · mã hoá 1 luồng video (62 ms/giây) · server nhận 3226 / gửi 3269 kbps · CPU Chromium 38% · báo hiệu socket.io cả phòng 29.0 KB
+sfu  N=3: mỗi người LÊN  1532 kbps · XUỐNG  3082 kbps · 2 kết nối · mã hoá 1 luồng video (58 ms/giây) · server nhận 4863 / gửi 9813 kbps · CPU Chromium 66% · báo hiệu socket.io cả phòng 62.2 KB
+sfu  N=4: mỗi người LÊN  1527 kbps · XUỐNG  4612 kbps · 2 kết nối · mã hoá 1 luồng video (59 ms/giây) · server nhận 6473 / gửi 19560 kbps · CPU Chromium 99% · báo hiệu socket.io cả phòng 108.1 KB
+sfu  N=5: mỗi người LÊN  1527 kbps · XUỐNG  6134 kbps · 2 kết nối · mã hoá 1 luồng video (58 ms/giây) · server nhận 8125 / gửi 32603 kbps · CPU Chromium 135% · báo hiệu socket.io cả phòng 166.4 KB
+$ # log server
+[sfu] nghe :19850 · mediasoup 3.32.2 · worker pid 64107</div>
+<div class="callout ok"><p><strong>Read it:</strong> mesh upload per person is (N−1) streams — 4,579 kbps at N = 4 — and each copy is encoded again. Through the SFU it stays one stream; the server receives N and sends N(N−1). socket.io carried only the control plane. <strong>Download is not reduced</strong>: everyone still receives N−1 streams (N = 4: mesh 4,579 vs SFU 4,612 kbps) — large rooms use simulcast and forward only active speakers (not measured here).</p></div>
+<p>The control plane — the socket.io events of the SFU server:</p>
+<div class="out">$ sed -n '/SFU: mediasoup worker/,/server.listen/p' may.ts
+/* ── SFU: mediasoup worker + router; socket.io chở thông số transport/producer/consumer ── */
+const worker = await mediasoup.createWorker({ rtcMinPort: 19860, rtcMaxPort: 19899, logLevel: 'warn' });
+const router = await worker.createRouter({ mediaCodecs: [
+  { kind: 'audio', mimeType: 'audio/opus', clockRate: 48000, channels: 2 },
+  { kind: 'video', mimeType: 'video/VP8', clockRate: 90000 },
+] });
+const transports = new Map&lt;string, mediasoup.types.WebRtcTransport&gt;();
+const producers = new Map&lt;string, { p: mediasoup.types.Producer; ai: string }&gt;();
+async function demSfu() {                                                        // byte server THẬT nhận/gửi trên mọi transport
+  let vao = 0, ra = 0;
+  for (const t of transports.values()) for (const s of await t.getStats()) { vao += s.bytesReceived; ra += s.bytesSent; }
+  return { vao, ra, transports: transports.size, producers: producers.size, baoHieu: bao.vao + bao.ra };
+}
+io.of('/sfu').on('connection', (s) =&gt; {
+  const cua: string[] = [];
+  s.on('sfu:join', (ack) =&gt; { s.join('phong'); ack({ caps: router.rtpCapabilities, co: [...producers].filter(([, v]) =&gt; v.ai !== s.id).map(([id]) =&gt; id) }); });
+  s.on('sfu:transport', async (ack) =&gt; {
+    const t = await router.createWebRtcTransport({ listenInfos: [{ protocol: 'udp', ip: '127.0.0.1' }], enableUdp: true, initialAvailableOutgoingBitrate: 2_000_000 });
+    transports.set(t.id, t); cua.push(t.id);
+    ack({ id: t.id, iceParameters: t.iceParameters, iceCandidates: t.iceCandidates, dtlsParameters: t.dtlsParameters });
+  });
+  s.on('sfu:connect', async ({ id, dtlsParameters }, ack) =&gt; { await transports.get(id)!.connect({ dtlsParameters }); ack(); });
+  s.on('sfu:produce', async ({ id, kind, rtpParameters }, ack) =&gt; {
+    const p = await transports.get(id)!.produce({ kind, rtpParameters });
+    producers.set(p.id, { p, ai: s.id }); ack(p.id);
+    s.to('phong').emit('sfu:co-luong-moi', p.id);                              // báo mọi người khác: có luồng mới để nhận
+  });
+  s.on('sfu:consume', async ({ id, producerId, caps }, ack) =&gt; {
+    if (!router.canConsume({ producerId, rtpCapabilities: caps })) return ack(null);
+    const c = await transports.get(id)!.consume({ producerId, rtpCapabilities: caps, paused: true });
+    ack({ id: c.id, producerId, kind: c.kind, rtpParameters: c.rtpParameters });
+    s.once(&#96;sfu:resume:\${c.id}&#96;, () =&gt; void c.resume());
+  });
+  s.on('disconnect', () =&gt; { for (const id of cua) { transports.get(id)?.close(); transports.delete(id); }
+    for (const [id, v] of producers) if (v.ai === s.id) producers.delete(id); });
+});
+server.listen(CONG, () =&gt; console.log(&#96;[sfu] nghe :\${CONG} · mediasoup \${mediasoup.version} · worker pid \${worker.pid}&#96;));</div>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-bash"><span class="tok-comment"># lab c7/sfu: một socket.io (control plane) cho hai kiến trúc — /mesh (chuyển SDP/ICE từng cặp) và /sfu (mediasoup thật)</span>
+npm i mediasoup@3 mediasoup-client@3        <span class="tok-comment">  # có bản dựng sẵn cho Mac ARM / Linux x64 — không phải biên dịch</span>
+npx esbuild khach.js --bundle --format=iife --outfile=pub/khach.js
+npx tsx may.ts &amp;                            <span class="tok-comment">  # :19850 · mediasoup worker dùng UDP 19860–19899</span>
+node nhom.mjs 2 3 4 5                       <span class="tok-comment">  # N trang Chromium mỗi lượt: mesh rồi SFU; đọc getStats + transport.getStats()</span>
+<span class="tok-comment"># camera giả = video nhiễu (nhiều chuyển động), cùng trần 1,5 Mbit/s mỗi luồng cho cả hai kiến trúc</span></code></pre>
+<h3>🔗 Go deeper in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-9-4-webrtc" target="_blank" rel="noopener"><span class="lc-ico">📡</span><span class="lc-body"><span class="lc-title">Networking · 9.4 — WebRTC at a glance: through NAT with STUN and TURN</span><span class="lc-sub">The network side of media</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-2-5-worker-threads" target="_blank" rel="noopener"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Node.js · 2.5 — Moving heavy work off the event loop</span><span class="lc-sub">mediasoup runs its media work in a separate C++ worker process</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-14-4-chi-phi-doi-nha-cung-cap" target="_blank" rel="noopener"><span class="lc-ico">💸</span><span class="lc-body"><span class="lc-title">Deploy VPS · 14.4 — Cost, and moving to a new server</span><span class="lc-sub">An SFU&#39;s bandwidth is a server bill</span></span></a>
 
 <h3>🗂 Key terms</h3>
 <div class="kv-grid">
@@ -1585,11 +1988,11 @@ socket.on('room:join', async ({ roomId }) =&gt; {
 <div class="lz-map">
 <div class="lz-stage lz-badge">
 <span class="lz-node"><span class="lz-ntitle">Mesh (P2P full)</span><span class="lz-nsub">N=2 OK, N=4 lag</span></span>
-<span class="lz-nbody">Mỗi peer connect trực tiếp với mọi peer khác. N peers = N*(N-1) connections. Upload cost: (N-1) × stream bitrate PER peer. Với N=4, mỗi peer upload 3 stream = ~6-9 Mbps. Consumer internet không chịu nổi.</span>
+<span class="lz-nbody">Mỗi peer connect trực tiếp với mọi peer khác. N peers = N*(N-1) connections <em>(đo: mỗi người giữ N−1 RTCPeerConnection, cả phòng N(N−1)/2; N(N−1) là số <strong>luồng</strong> video một chiều)</em>. Upload cost: (N-1) × stream bitrate PER peer. Với N=4, mỗi peer upload 3 stream = ~6-9 Mbps. Consumer internet không chịu nổi.</span>
 </div>
 <div class="lz-stage lz-badge">
 <span class="lz-node"><span class="lz-ntitle">SFU</span><span class="lz-nsub">chuẩn cho small groups</span></span>
-<span class="lz-nbody">Mỗi peer upload 1 stream lên server SFU. Server FORWARD stream đó đến N-1 peers khác. Server không encode/decode — chỉ route. Cost server: N × stream × 2 (in + out).</span>
+<span class="lz-nbody">Mỗi peer upload 1 stream lên server SFU. Server FORWARD stream đó đến N-1 peers khác. Server không encode/decode — chỉ route. Cost server: N × stream × 2 (in + out). <strong>Sửa theo đo thật (mediasoup. N = 5):</strong> vào là N × stream (8.125 kbps). nhưng ra là N(N−1) × stream (32.603 kbps).</span>
 </div>
 <div class="lz-stage lz-badge">
 <span class="lz-node"><span class="lz-ntitle">MCU</span><span class="lz-nsub">large groups, high server cost</span></span>
@@ -1636,7 +2039,7 @@ socket.on('room:join', async ({ roomId }) =&gt; {
 <p>Socket.io là control plane. SFU là data plane. Hai component riêng.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — thử build SFU từ đầu.</strong> WebRTC SFU cần hiểu RTP, RTCP, DTLS-SRTP, codec-specific packet handling. Vài chục nghìn dòng C++. Dùng mediasoup, Janus, LiveKit. Đừng viết lại.</p>
+<p><strong>Bẫy — thử build SFU từ đầu.</strong> WebRTC SFU cần hiểu RTP, RTCP, DTLS-SRTP, codec-specific packet handling. Vài chục nghìn dòng C++ <em>(đo: riêng worker của mediasoup là 116.784 dòng C++)</em>. Dùng mediasoup, Janus, LiveKit. Đừng viết lại.</p>
 </div>
 
 <div class="callout">
@@ -1650,6 +2053,85 @@ socket.on('room:join', async ({ roomId }) =&gt; {
 <li>Xác nhận rằng trong cả hai ca socket.io vẫn là kênh signalling — chỉ đường media đổi.</li>
 </ol>
 <p><strong>Đạt khi:</strong> bạn giải thích được vì sao group call cần một SFU và socket.io giữ vai trò gì.</p></div>
+
+<h3>🔬 Đo thật: mesh và một SFU thật, N = 2…5</h3>
+<p>Chromium 149, mỗi người một tab, camera giả phát một đoạn video nhiều chuyển động, cùng trần 1,5 Mbit/s mỗi luồng video cho cả hai kiến trúc. SFU là router <strong>mediasoup</strong> thật; báo hiệu của cả hai đi qua socket.io. Kho hiện ở đâu — chỉ gọi một-một:</p>
+<div class="out">$ cd ~/api-backend &amp;&amp; grep -n "const dangGoi = \\|function benKia\\|toUserId: number" src/socket/call.socket.ts
+30:const dangGoi = new Map&lt;number, CuocGoi&gt;();
+42:function benKia(c: CuocGoi, toi: number): number {
+135:  socket.on('call:offer', (p: { threadId: number; toUserId: number; sdp: unknown; coVideo?: boolean }) =&gt; {
+$ grep -rlwE "mediasoup|livekit|janus|SFU" src/ frontend/src/ package.json | wc -l    # thư viện gọi nhóm trong kho
+       0</div>
+<div class="out">$ npm i mediasoup@3 mediasoup-client@3   # đã chạy trước: 44 s, có bản dựng sẵn cho Mac ARM (không phải biên dịch C++)
+$ node -p "['mediasoup', 'mediasoup-client'].map((p) =&gt; p + '@' + require('./node_modules/' + p + '/package.json').version).join('   ')"
+mediasoup@3.32.2   mediasoup-client@3.26.0
+$ ls -la node_modules/mediasoup/worker/out/Release/mediasoup-worker | awk '{print $5, $9}'
+6976096 node_modules/mediasoup/worker/out/Release/mediasoup-worker
+$ find node_modules/mediasoup/worker/src node_modules/mediasoup/worker/include -name '*.[ch]pp' | xargs cat | wc -l   # mã C++ của worker
+  116784</div>
+<p>Mỗi người tải lên/tải xuống (getStats), bộ đếm của chính SFU (<code>transport.getStats()</code>), CPU của mọi tab, và số byte socket.io của cả phòng:</p>
+<div class="out">$ npx tsx may.ts &amp;   node nhom.mjs 2 3 4 5
+mesh N=2: mỗi người LÊN  1532 kbps · XUỐNG  1532 kbps · 1 kết nối · mã hoá 1 luồng video (49 ms/giây) · CPU Chromium 36% · báo hiệu socket.io cả phòng 28.0 KB
+mesh N=3: mỗi người LÊN  3036 kbps · XUỐNG  3036 kbps · 2 kết nối · mã hoá 2 luồng video (137 ms/giây) · CPU Chromium 94% · báo hiệu socket.io cả phòng 83.7 KB
+mesh N=4: mỗi người LÊN  4579 kbps · XUỐNG  4579 kbps · 3 kết nối · mã hoá 3 luồng video (222 ms/giây) · CPU Chromium 168% · báo hiệu socket.io cả phòng 167.3 KB
+mesh N=5: mỗi người LÊN  6114 kbps · XUỐNG  6114 kbps · 4 kết nối · mã hoá 4 luồng video (289 ms/giây) · CPU Chromium 259% · báo hiệu socket.io cả phòng 278.7 KB
+sfu  N=2: mỗi người LÊN  1527 kbps · XUỐNG  1536 kbps · 2 kết nối · mã hoá 1 luồng video (62 ms/giây) · server nhận 3226 / gửi 3269 kbps · CPU Chromium 38% · báo hiệu socket.io cả phòng 29.0 KB
+sfu  N=3: mỗi người LÊN  1532 kbps · XUỐNG  3082 kbps · 2 kết nối · mã hoá 1 luồng video (58 ms/giây) · server nhận 4863 / gửi 9813 kbps · CPU Chromium 66% · báo hiệu socket.io cả phòng 62.2 KB
+sfu  N=4: mỗi người LÊN  1527 kbps · XUỐNG  4612 kbps · 2 kết nối · mã hoá 1 luồng video (59 ms/giây) · server nhận 6473 / gửi 19560 kbps · CPU Chromium 99% · báo hiệu socket.io cả phòng 108.1 KB
+sfu  N=5: mỗi người LÊN  1527 kbps · XUỐNG  6134 kbps · 2 kết nối · mã hoá 1 luồng video (58 ms/giây) · server nhận 8125 / gửi 32603 kbps · CPU Chromium 135% · báo hiệu socket.io cả phòng 166.4 KB
+$ # log server
+[sfu] nghe :19850 · mediasoup 3.32.2 · worker pid 64107</div>
+<div class="callout ok"><p><strong>Đọc:</strong> mesh mỗi người tải lên (N−1) luồng — 4.579 kbps ở N = 4 — và mỗi bản sao được mã hoá lại. Qua SFU nó chỉ còn một luồng; server nhận N, gửi N(N−1). socket.io chỉ chở control plane. <strong>Chiều tải xuống không giảm</strong>: ai cũng vẫn nhận N−1 luồng (N = 4: mesh 4.579, SFU 4.612 kbps) — phòng lớn dùng simulcast và chỉ chuyển người đang nói (bài không đo).</p></div>
+<p>Control plane — các event socket.io của server SFU:</p>
+<div class="out">$ sed -n '/SFU: mediasoup worker/,/server.listen/p' may.ts
+/* ── SFU: mediasoup worker + router; socket.io chở thông số transport/producer/consumer ── */
+const worker = await mediasoup.createWorker({ rtcMinPort: 19860, rtcMaxPort: 19899, logLevel: 'warn' });
+const router = await worker.createRouter({ mediaCodecs: [
+  { kind: 'audio', mimeType: 'audio/opus', clockRate: 48000, channels: 2 },
+  { kind: 'video', mimeType: 'video/VP8', clockRate: 90000 },
+] });
+const transports = new Map&lt;string, mediasoup.types.WebRtcTransport&gt;();
+const producers = new Map&lt;string, { p: mediasoup.types.Producer; ai: string }&gt;();
+async function demSfu() {                                                        // byte server THẬT nhận/gửi trên mọi transport
+  let vao = 0, ra = 0;
+  for (const t of transports.values()) for (const s of await t.getStats()) { vao += s.bytesReceived; ra += s.bytesSent; }
+  return { vao, ra, transports: transports.size, producers: producers.size, baoHieu: bao.vao + bao.ra };
+}
+io.of('/sfu').on('connection', (s) =&gt; {
+  const cua: string[] = [];
+  s.on('sfu:join', (ack) =&gt; { s.join('phong'); ack({ caps: router.rtpCapabilities, co: [...producers].filter(([, v]) =&gt; v.ai !== s.id).map(([id]) =&gt; id) }); });
+  s.on('sfu:transport', async (ack) =&gt; {
+    const t = await router.createWebRtcTransport({ listenInfos: [{ protocol: 'udp', ip: '127.0.0.1' }], enableUdp: true, initialAvailableOutgoingBitrate: 2_000_000 });
+    transports.set(t.id, t); cua.push(t.id);
+    ack({ id: t.id, iceParameters: t.iceParameters, iceCandidates: t.iceCandidates, dtlsParameters: t.dtlsParameters });
+  });
+  s.on('sfu:connect', async ({ id, dtlsParameters }, ack) =&gt; { await transports.get(id)!.connect({ dtlsParameters }); ack(); });
+  s.on('sfu:produce', async ({ id, kind, rtpParameters }, ack) =&gt; {
+    const p = await transports.get(id)!.produce({ kind, rtpParameters });
+    producers.set(p.id, { p, ai: s.id }); ack(p.id);
+    s.to('phong').emit('sfu:co-luong-moi', p.id);                              // báo mọi người khác: có luồng mới để nhận
+  });
+  s.on('sfu:consume', async ({ id, producerId, caps }, ack) =&gt; {
+    if (!router.canConsume({ producerId, rtpCapabilities: caps })) return ack(null);
+    const c = await transports.get(id)!.consume({ producerId, rtpCapabilities: caps, paused: true });
+    ack({ id: c.id, producerId, kind: c.kind, rtpParameters: c.rtpParameters });
+    s.once(&#96;sfu:resume:\${c.id}&#96;, () =&gt; void c.resume());
+  });
+  s.on('disconnect', () =&gt; { for (const id of cua) { transports.get(id)?.close(); transports.delete(id); }
+    for (const [id, v] of producers) if (v.ai === s.id) producers.delete(id); });
+});
+server.listen(CONG, () =&gt; console.log(&#96;[sfu] nghe :\${CONG} · mediasoup \${mediasoup.version} · worker pid \${worker.pid}&#96;));</div>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-bash"><span class="tok-comment"># lab c7/sfu: một socket.io (control plane) cho hai kiến trúc — /mesh (chuyển SDP/ICE từng cặp) và /sfu (mediasoup thật)</span>
+npm i mediasoup@3 mediasoup-client@3        <span class="tok-comment">  # có bản dựng sẵn cho Mac ARM / Linux x64 — không phải biên dịch</span>
+npx esbuild khach.js --bundle --format=iife --outfile=pub/khach.js
+npx tsx may.ts &amp;                            <span class="tok-comment">  # :19850 · mediasoup worker dùng UDP 19860–19899</span>
+node nhom.mjs 2 3 4 5                       <span class="tok-comment">  # N trang Chromium mỗi lượt: mesh rồi SFU; đọc getStats + transport.getStats()</span>
+<span class="tok-comment"># camera giả = video nhiễu (nhiều chuyển động), cùng trần 1,5 Mbit/s mỗi luồng cho cả hai kiến trúc</span></code></pre>
+<h3>🔗 Học sâu hơn ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-9-4-webrtc" target="_blank" rel="noopener"><span class="lc-ico">📡</span><span class="lc-body"><span class="lc-title">Networking · 9.4 — Lướt qua WebRTC: xuyên NAT bằng STUN và TURN</span><span class="lc-sub">Phía mạng của media</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-2-5-worker-threads" target="_blank" rel="noopener"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Node.js · 2.5 — Đưa việc nặng ra khỏi event loop</span><span class="lc-sub">mediasoup chạy phần media trong một tiến trình worker C++ riêng</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-14-4-chi-phi-doi-nha-cung-cap" target="_blank" rel="noopener"><span class="lc-ico">💸</span><span class="lc-body"><span class="lc-title">Deploy VPS · 14.4 — Chi phí, và chuyển sang máy chủ mới</span><span class="lc-sub">Băng thông của SFU là hoá đơn máy chủ</span></span></a>
 
 <h3>🗂 Thuật ngữ trong bài</h3>
 <div class="kv-grid">

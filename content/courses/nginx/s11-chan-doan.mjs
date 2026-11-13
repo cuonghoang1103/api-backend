@@ -1,3 +1,8 @@
+import G11_1 from './giang/ngx-11-1.mjs';
+import G11_2 from './giang/ngx-11-2.mjs';
+import G11_3 from './giang/ngx-11-3.mjs';
+import G11_4 from './giang/ngx-11-4.mjs';
+import G11_5 from './giang/ngx-11-5.mjs';
 const REF = '?ref=%2Fcourses%2Fnginx%2Flearn&reflabel=Nginx';
 
 export default {
@@ -12,6 +17,7 @@ export default {
       type: 'LESSON',
       description: 'Kỹ thuật gỡ lỗi hữu ích nhất trong cả khoá, và cái bẫy làm hỏng phiên bản ngây thơ của nó — bẫy đó đã bắt chính tôi trong lúc dựng bài này.',
       content: `
+${G11_1}
 <div class="ml-en">
 <span class="eyebrow">Chapter 11 · Lesson 11.1</span>
 <h2>Making Nginx tell you which block handled the request</h2>
@@ -27,43 +33,49 @@ export default {
     location /api/v1     { add_header X-Kh-Loc "/api/v1 (tien to)" always; ... }
     location /           { add_header X-Kh-Loc "/ (tien to)" always; ... }
 }</code></pre>
-<p>Measured against four requests, that gives:</p>
-<div class="out">shop.vidu        /gio-hang              → X-Kh-Loc: = /gio-hang
-shop.vidu        /api/v1/nguoi-dung     → X-Kh-Loc: ~ ^/api
-shop.vidu        /gioi-thieu            → X-Kh-Loc: / (tien to)
-khong-biet.vidu  /api/v1                → X-Kh-Loc: /</div>
-<p>The location header is there. <code>X-Kh-Server</code> is not — on any of the four. It was declared, the config passed <code>nginx -t</code>, and it silently did not appear.</p>
+<p>Measured against five requests (one to a name no server block claims):</p>
+<div class="out">$ bash hoi.sh 8080 X-Kh-Loc
+shop.vidu        /gio-hang              -&gt; X-Kh-Loc: = /gio-hang
+shop.vidu        /api/v1/nguoi-dung     -&gt; X-Kh-Loc: ~ ^/api
+shop.vidu        /api/v1                -&gt; X-Kh-Loc: ~ ^/api
+shop.vidu        /gioi-thieu            -&gt; (khong co X-Kh-Loc)
+khong-biet.vidu  /bat-ky                -&gt; X-Kh-Loc: / (tien to)
+$ bash hoi.sh 8080 X-Kh-Server
+shop.vidu        /gio-hang              -&gt; (khong co X-Kh-Server)
+shop.vidu        /api/v1/nguoi-dung     -&gt; (khong co X-Kh-Server)
+shop.vidu        /api/v1                -&gt; (khong co X-Kh-Server)
+shop.vidu        /gioi-thieu            -&gt; X-Kh-Server: shop.vidu
+khong-biet.vidu  /bat-ky                -&gt; (khong co X-Kh-Server)</div>
+<p>The location header is there. <code>X-Kh-Server</code> appears on exactly ONE of the five — <code>/gioi-thieu</code>, the only location that declares no header of its own. It was declared, the config passed <code>nginx -t</code>, and it silently did not appear.</p>
 
 <h3>The trap: <code>add_header</code> replaces, it does not accumulate</h3>
 <p>This is the single most surprising inheritance rule in Nginx, and it broke the debugging tool I was building for this lesson before it broke anything else. Isolating it — one request to a location that declares its own <code>add_header</code>, one to a location that does not:</p>
-<div class="out">=== location KHONG co add_header rieng (ke thua duoc muc server) ===
+<div class="out">$ curl -s -D- -o /dev/null -H 'Host: shop.vidu' http://127.0.0.1:8080/gioi-thieu | grep -i '^x-kh'   # location KHÔNG có add_header riêng
 X-Kh-Server: shop.vidu
-
-=== location CO add_header rieng (che mat muc server) ===
+$ curl -s -D- -o /dev/null -H 'Host: shop.vidu' http://127.0.0.1:8080/gio-hang | grep -i '^x-kh'     # location CÓ add_header riêng
 X-Kh-Loc: = /gio-hang</div>
 <div class="pitfall"><strong>Trap — one <code>add_header</code> in a location discards every <code>add_header</code> from above it.</strong> Not the one with the same name — <em>all</em> of them. The rule is the same one Chapter 10 measured for <code>error_log</code>: directives of this kind inherit only while the child context declares none of them. Declare one and the whole inherited set is gone. This is how a <code>Strict-Transport-Security</code> or <code>X-Frame-Options</code> header set once at server level quietly stops being sent on exactly the routes that later grew a <code>Cache-Control</code> header of their own — and nothing warns you.</div>
 <p>It is worth pausing on how that failure looks from outside. The config is valid. The headers you can see are correct. The header that vanished is one you were not looking at, on a subset of routes you did not test. Chapter 6 built a TLS configuration whose security headers live at server level; every location added later is a chance to lose them.</p>
 
 <h3>The version that works</h3>
 <p>Keep exactly one <code>add_header</code>, at server level, and have each location write into a variable that the header reads:</p>
-<pre><code class="language-bash">server {
-    listen 127.0.0.1:9370;
-    server_name shop.vidu;
-    set \$khop "(khong dat)";
-    <span class="tok-comment"># MOT add_header duy nhat — khong location nao che duoc no</span>
-    add_header X-Kh "server=\$server_name loc=\$khop" always;
-
-    location = /gio-hang { set \$khop "= /gio-hang";        return 200 "chinh xac\\n"; }
-    location ~ ^/api     { set \$khop "~ ^/api";            return 200 "regex\\n"; }
-    location /api/v1     { set \$khop "/api/v1 (tien to)";  return 200 "tien to\\n"; }
-    location /           { set \$khop "/ (tien to)";        return 200 "goc\\n"; }
-}</code></pre>
+<pre><code class="language-bash">    location / { return 404; }
+  }
+  <span class="tok-comment"># 8082: thiếu always ⇒ header không có trên 404</span>
+  server {
+    listen 8082; server_name shop.vidu;
+    add_header X-Kh-Khong-Always "co" ;
+    add_header X-Kh-Always "co" always;
+    location = /ok { return 200 "ok\\n"; }
+    location /     { return 404; }
+  }
+  <span class="tok-comment"># 8083: KHOÁ bằng map — chỉ địa chỉ 127.0.0.1 thấy header</span></code></pre>
 <p>Headers are rendered when the response is sent, after the location has run, so the server-level header sees whatever the matched location assigned. Five requests, including one to a hostname no <code>server_name</code> claims:</p>
-<div class="out">shop.vidu        /gio-hang              → X-Kh: server=shop.vidu loc== /gio-hang
-shop.vidu        /api/v1/nguoi-dung     → X-Kh: server=shop.vidu loc=~ ^/api
-shop.vidu        /api/v1                → X-Kh: server=shop.vidu loc=~ ^/api
-shop.vidu        /gioi-thieu            → X-Kh: server=shop.vidu loc=/ (tien to)
-khong-biet.vidu  /bat-ky                → X-Kh: server=_ loc=/</div>
+<div class="out">shop.vidu        /gio-hang              -&gt; X-Kh: server=shop.vidu loc== /gio-hang up=
+shop.vidu        /api/v1/nguoi-dung     -&gt; X-Kh: server=shop.vidu loc=~ ^/api up=127.0.0.1:9601
+shop.vidu        /api/v1                -&gt; X-Kh: server=shop.vidu loc=~ ^/api up=127.0.0.1:9602
+shop.vidu        /gioi-thieu            -&gt; X-Kh: server=shop.vidu loc=/ (tien to) up=
+khong-biet.vidu  /bat-ky                -&gt; X-Kh: server=_ loc=/</div>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">The last line proves the default-server rule</span><span class="lz-d"><code>server=_</code> means an unmatched hostname fell through to the <code>default_server</code>, exactly as Chapter 1 measured. In production this is the fastest way to find out that a new domain was pointed at your IP without a <code>server</code> block being written for it.</span></div>
   <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Lines 2 and 3 prove a block is dead code</span><span class="lz-d">Both <code>/api/v1/nguoi-dung</code> and <code>/api/v1</code> report <code>~ ^/api</code>. The regex is tried after the longest prefix and wins, so <code>location /api/v1</code> can never be reached by anything. Chapter 2 explained the rule; this header found the instance.</span></div>
@@ -97,6 +109,119 @@ server {
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">ngx_http_rewrite_module — set</span><span class="lc-sub">nginx.org/en/docs/http/ngx_http_rewrite_module.html — when <code>set</code> runs relative to the location match, which is why the trick above works.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chapter 1 — how a request finds a server block</span><span class="lc-sub">The rule behind <code>server=_</code> on the last measured line.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chapter 2 — which location wins</span><span class="lc-sub">The rule that makes <code>location /api/v1</code> unreachable when a regex matches first.</span></span></div>
+<h3>🔬 Run it yourself</h3>
+<p>Two backends, the naive config (one header per block), the working one (one <code>add_header … always</code> + <code>set $khop</code>, plus <code>$upstream_addr</code>), a server with and without <code>always</code>, and a <code>map</code>-locked one — on nginx/1.24.0:</p>
+<pre><code class="language-bash"><span class="tok-comment"># hoi.sh</span>
+<span class="tok-comment"># hoi.sh &lt;cổng&gt; &lt;tên header&gt; — 4–5 request, in đúng dòng header chẩn đoán (hoặc "(khong co)")</span>
+c=$1; h=$2; shift 2
+for x in "shop.vidu /gio-hang" "shop.vidu /api/v1/nguoi-dung" "shop.vidu /api/v1" "shop.vidu /gioi-thieu" "khong-biet.vidu /bat-ky"; do
+  set -- $x; v=$(curl -s -D- -o /dev/null -H "Host: $1" http://127.0.0.1:$c$2 | grep -i "^$h:" | tr -d '\\r')
+  printf '%-16s %-22s -&gt; %s\\n' $1 $2 "\${v:-(khong co $h)}"
+done</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  upstream be { server 127.0.0.1:9601; server 127.0.0.1:9602; }
+  <span class="tok-comment"># 8080: phiên bản NGÂY THƠ — một header ở mức server + một header trong mỗi location</span>
+  server {
+    listen 8080 default_server; server_name shop.vidu;
+    add_header X-Kh-Server "shop.vidu" always;
+    location = /gio-hang { add_header X-Kh-Loc "= /gio-hang" always;         return 200 "chinh xac\\n"; }
+    location ~ ^/api     { add_header X-Kh-Loc "~ ^/api" always;             return 200 "regex\\n"; }
+    location /api/v1     { add_header X-Kh-Loc "/api/v1 (tien to)" always;   return 200 "tien to\\n"; }
+    location /gioi-thieu {                                                    return 200 "khong add_header rieng\\n"; }
+    location /           { add_header X-Kh-Loc "/ (tien to)" always;         return 200 "goc\\n"; }
+  }
+  <span class="tok-comment"># 8081: phiên bản CHẠY ĐƯỢC — MỘT add_header ở mức server, mỗi location chỉ set $khop</span>
+  server {
+    listen 8081; server_name shop.vidu;
+    set $khop "(khong dat)";
+    add_header X-Kh "server=$server_name loc=$khop up=$upstream_addr" always;
+    location = /gio-hang { set $khop "= /gio-hang";       return 200 "chinh xac\\n"; }
+    location ~ ^/api     { set $khop "~ ^/api";           proxy_pass http://be; }
+    location /api/v1     { set $khop "/api/v1 (tien to)"; return 200 "tien to\\n"; }
+    location /           { set $khop "/ (tien to)";       return 200 "goc\\n"; }
+  }
+  server {
+    listen 8081 default_server; server_name _;
+    set $khop "/";
+    add_header X-Kh "server=_ loc=$khop" always;
+    location / { return 404; }
+  }
+  <span class="tok-comment"># 8082: thiếu always ⇒ header không có trên 404</span>
+  server {
+    listen 8082; server_name shop.vidu;
+    add_header X-Kh-Khong-Always "co" ;
+    add_header X-Kh-Always "co" always;
+    location = /ok { return 200 "ok\\n"; }
+    location /     { return 404; }
+  }
+  <span class="tok-comment"># 8083: KHOÁ bằng map — chỉ địa chỉ 127.0.0.1 thấy header</span>
+  map $remote_addr $kh_debug { default ""; "127.0.0.1" "server=$server_name loc=$khop"; }
+  server {
+    listen 8083; server_name shop.vidu;
+    set $khop "/ (tien to)";
+    add_header X-Kh $kh_debug always;
+    location / { return 200 "goc\\n"; }
+  }
+}</code></pre>
+<div class="out">$ nginx -t -c kh.conf 2&gt;&amp;1 | tail -1
+nginx: configuration file kh.conf test is successful
+$ bash hoi.sh 8080 X-Kh-Loc
+shop.vidu        /gio-hang              -&gt; X-Kh-Loc: = /gio-hang
+shop.vidu        /api/v1/nguoi-dung     -&gt; X-Kh-Loc: ~ ^/api
+shop.vidu        /api/v1                -&gt; X-Kh-Loc: ~ ^/api
+shop.vidu        /gioi-thieu            -&gt; (khong co X-Kh-Loc)
+khong-biet.vidu  /bat-ky                -&gt; X-Kh-Loc: / (tien to)
+$ bash hoi.sh 8080 X-Kh-Server
+shop.vidu        /gio-hang              -&gt; (khong co X-Kh-Server)
+shop.vidu        /api/v1/nguoi-dung     -&gt; (khong co X-Kh-Server)
+shop.vidu        /api/v1                -&gt; (khong co X-Kh-Server)
+shop.vidu        /gioi-thieu            -&gt; X-Kh-Server: shop.vidu
+khong-biet.vidu  /bat-ky                -&gt; (khong co X-Kh-Server)
+$ curl -s -D- -o /dev/null -H 'Host: shop.vidu' http://127.0.0.1:8080/gioi-thieu | grep -i '^x-kh'   # location KHÔNG có add_header riêng
+X-Kh-Server: shop.vidu
+$ curl -s -D- -o /dev/null -H 'Host: shop.vidu' http://127.0.0.1:8080/gio-hang | grep -i '^x-kh'     # location CÓ add_header riêng
+X-Kh-Loc: = /gio-hang
+$ bash hoi.sh 8081 X-Kh
+shop.vidu        /gio-hang              -&gt; X-Kh: server=shop.vidu loc== /gio-hang up=
+shop.vidu        /api/v1/nguoi-dung     -&gt; X-Kh: server=shop.vidu loc=~ ^/api up=127.0.0.1:9601
+shop.vidu        /api/v1                -&gt; X-Kh: server=shop.vidu loc=~ ^/api up=127.0.0.1:9602
+shop.vidu        /gioi-thieu            -&gt; X-Kh: server=shop.vidu loc=/ (tien to) up=
+khong-biet.vidu  /bat-ky                -&gt; X-Kh: server=_ loc=/
+$ for i in 1 2 3; do curl -s -D- -o /dev/null -H 'Host: shop.vidu' http://127.0.0.1:8081/api/don-hang | grep -i '^x-kh' | tr -d '\\r'; done
+X-Kh: server=shop.vidu loc=~ ^/api up=127.0.0.1:9601
+X-Kh: server=shop.vidu loc=~ ^/api up=127.0.0.1:9602
+X-Kh: server=shop.vidu loc=~ ^/api up=127.0.0.1:9601
+$ for p in /ok /khong-co; do echo "== $p"; curl -s -D- -o /dev/null -H 'Host: shop.vidu' http://127.0.0.1:8082$p | grep -iE '^HTTP|^x-kh' | tr -d '\\r'; done
+== /ok
+HTTP/1.1 200 OK
+X-Kh-Khong-Always: co
+X-Kh-Always: co
+== /khong-co
+HTTP/1.1 404 Not Found
+X-Kh-Always: co
+$ curl -s -D- -o /dev/null http://127.0.0.1:8083/ | grep -i '^x-kh'                          # từ 127.0.0.1 (địa chỉ của mình)
+X-Kh: server=shop.vidu loc=/ (tien to)
+$ curl -s -D- -o /dev/null --interface 127.0.0.2 http://127.0.0.1:8083/ | grep -ic '^x-kh'   # từ địa chỉ KHÁC
+0</div>
+<p>The naive version: <code>X-Kh-Server</code> only on <code>/gioi-thieu</code>. The working version: <code>/api/v1</code> reported <code>~ ^/api</code> (the prefix block is dead code), the unknown name fell to <code>server=_</code>, and <code>up=</code> alternated 9601 / 9602 / 9601. Without <code>always</code> the header vanished on the 404. With the <code>map</code> lock, <code>127.0.0.1</code> saw it and <code>127.0.0.2</code> saw zero headers.</p>
+<h3>🔗 Related lessons in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-9-2-curl" target="_blank" rel="noopener"><span class="lc-ico">🐧</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash · 9.2 — curl: the flags that matter</span><span class="lc-sub">-D-, -o /dev/null, -H Host</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-8-3-nginx-nuot-header" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking for Developers · 8.3 — When your proxy overrides your cache headers</span><span class="lc-sub">The same add_header inheritance, from the HTTP side</span></span></a>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>add_header</code></span><span class="v">Emits any variable into a response header, so it can print which block handled the request.</span></div>
+  <div class="kv"><span class="k"><code>set</code> + <code>\$khop</code></span><span class="v">A per-location variable the single server-level header reads after the location has matched.</span></div>
+  <div class="kv"><span class="k"><code>always</code></span><span class="v">The flag that makes the header appear on 4xx and 5xx too, not only on 2xx/3xx.</span></div>
+  <div class="kv"><span class="k"><code>server=_</code></span><span class="v">In the debug header, means the hostname matched no block and fell through to the default server.</span></div>
+  <div class="kv"><span class="k"><code>\$upstream_addr</code></span><span class="v">One more field that answers which backend actually served the request.</span></div>
+  <div class="kv"><span class="k"><code>map</code> gate</span><span class="v">Emits the debug header only for your own address; an empty value sends nothing.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li>Almost every Nginx problem reduces to two questions: which <code>server</code> block, and which <code>location</code>.</li><li>Keep exactly one server-level <code>add_header</code> reading a per-location <code>set</code> variable — a header inside a location discards every inherited one.</li><li>Use <code>always</code> so the 404s, 502s and 403s you most need to explain also carry the answer.</li><li><code>server=_</code> exposes a default-server fall-through; two routes reporting the same regex expose a dead block.</li><li>These headers are free reconnaissance — gate them with a <code>map</code> on <code>\$remote_addr</code>, or remove them once the question is answered.</li></ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 11 · Bài 11.1</span>
@@ -113,43 +238,49 @@ server {
     location /api/v1     { add_header X-Kh-Loc "/api/v1 (tien to)" always; ... }
     location /           { add_header X-Kh-Loc "/ (tien to)" always; ... }
 }</code></pre>
-<p>Đo với bốn request thì ra thế này:</p>
-<div class="out">shop.vidu        /gio-hang              → X-Kh-Loc: = /gio-hang
-shop.vidu        /api/v1/nguoi-dung     → X-Kh-Loc: ~ ^/api
-shop.vidu        /gioi-thieu            → X-Kh-Loc: / (tien to)
-khong-biet.vidu  /api/v1                → X-Kh-Loc: /</div>
-<p>Header của location thì có. <code>X-Kh-Server</code> thì KHÔNG — không có ở cái nào trong bốn cái. Nó đã được khai, cấu hình qua được <code>nginx -t</code>, và nó lặng lẽ không xuất hiện.</p>
+<p>Đo với năm request (một cái tới tên miền không khối server nào nhận) thì ra thế này:</p>
+<div class="out">$ bash hoi.sh 8080 X-Kh-Loc
+shop.vidu        /gio-hang              -&gt; X-Kh-Loc: = /gio-hang
+shop.vidu        /api/v1/nguoi-dung     -&gt; X-Kh-Loc: ~ ^/api
+shop.vidu        /api/v1                -&gt; X-Kh-Loc: ~ ^/api
+shop.vidu        /gioi-thieu            -&gt; (khong co X-Kh-Loc)
+khong-biet.vidu  /bat-ky                -&gt; X-Kh-Loc: / (tien to)
+$ bash hoi.sh 8080 X-Kh-Server
+shop.vidu        /gio-hang              -&gt; (khong co X-Kh-Server)
+shop.vidu        /api/v1/nguoi-dung     -&gt; (khong co X-Kh-Server)
+shop.vidu        /api/v1                -&gt; (khong co X-Kh-Server)
+shop.vidu        /gioi-thieu            -&gt; X-Kh-Server: shop.vidu
+khong-biet.vidu  /bat-ky                -&gt; (khong co X-Kh-Server)</div>
+<p>Header của location thì có. <code>X-Kh-Server</code> chỉ có ở ĐÚNG MỘT trong năm cái — <code>/gioi-thieu</code>, location duy nhất không khai header riêng. Nó đã được khai, cấu hình qua được <code>nginx -t</code>, và nó lặng lẽ không xuất hiện.</p>
 
 <h3>Cái bẫy: <code>add_header</code> THAY THẾ, chứ không cộng dồn</h3>
 <p>Đây là luật kế thừa gây bất ngờ nhất trong Nginx, và nó đã làm hỏng chính cái công cụ gỡ lỗi tôi đang dựng cho bài này trước khi nó kịp làm hỏng thứ gì khác. Tách riêng nó ra — một request tới location CÓ khai <code>add_header</code> riêng, một request tới location KHÔNG khai:</p>
-<div class="out">=== location KHONG co add_header rieng (ke thua duoc muc server) ===
+<div class="out">$ curl -s -D- -o /dev/null -H 'Host: shop.vidu' http://127.0.0.1:8080/gioi-thieu | grep -i '^x-kh'   # location KHÔNG có add_header riêng
 X-Kh-Server: shop.vidu
-
-=== location CO add_header rieng (che mat muc server) ===
+$ curl -s -D- -o /dev/null -H 'Host: shop.vidu' http://127.0.0.1:8080/gio-hang | grep -i '^x-kh'     # location CÓ add_header riêng
 X-Kh-Loc: = /gio-hang</div>
 <div class="pitfall"><strong>Bẫy — một <code>add_header</code> trong location vứt bỏ MỌI <code>add_header</code> ở cấp trên nó.</strong> Không phải chỉ cái trùng tên — mà <em>tất cả</em>. Luật này y hệt luật mà Chương 10 đã đo với <code>error_log</code>: những chỉ thị loại này chỉ được kế thừa chừng nào ngữ cảnh con KHÔNG khai cái nào. Khai một cái là cả bộ kế thừa biến mất. Đây chính là cách mà một header <code>Strict-Transport-Security</code> hay <code>X-Frame-Options</code> đặt một lần ở mức server lặng lẽ ngừng được gửi trên đúng những tuyến về sau mọc thêm một header <code>Cache-Control</code> riêng — và chẳng có gì cảnh báo bạn.</div>
 <p>Đáng dừng lại một chút ở chỗ kiểu hỏng đó trông như thế nào từ bên ngoài. Cấu hình hợp lệ. Những header bạn NHÌN THẤY đều đúng. Cái header biến mất lại là cái bạn không để ý, trên một nhóm tuyến bạn không thử. Chương 6 đã dựng một cấu hình TLS mà các header bảo mật nằm ở mức server; mỗi location thêm vào sau đó là một cơ hội đánh mất chúng.</p>
 
 <h3>Phiên bản chạy được</h3>
 <p>Giữ ĐÚNG một <code>add_header</code>, ở mức server, và để mỗi location ghi vào một biến mà cái header đó đọc:</p>
-<pre><code class="language-bash">server {
-    listen 127.0.0.1:9370;
-    server_name shop.vidu;
-    set \$khop "(khong dat)";
-    <span class="tok-comment"># MOT add_header duy nhat — khong location nao che duoc no</span>
-    add_header X-Kh "server=\$server_name loc=\$khop" always;
-
-    location = /gio-hang { set \$khop "= /gio-hang";        return 200 "chinh xac\\n"; }
-    location ~ ^/api     { set \$khop "~ ^/api";            return 200 "regex\\n"; }
-    location /api/v1     { set \$khop "/api/v1 (tien to)";  return 200 "tien to\\n"; }
-    location /           { set \$khop "/ (tien to)";        return 200 "goc\\n"; }
-}</code></pre>
+<pre><code class="language-bash">    location / { return 404; }
+  }
+  <span class="tok-comment"># 8082: thiếu always ⇒ header không có trên 404</span>
+  server {
+    listen 8082; server_name shop.vidu;
+    add_header X-Kh-Khong-Always "co" ;
+    add_header X-Kh-Always "co" always;
+    location = /ok { return 200 "ok\\n"; }
+    location /     { return 404; }
+  }
+  <span class="tok-comment"># 8083: KHOÁ bằng map — chỉ địa chỉ 127.0.0.1 thấy header</span></code></pre>
 <p>Header được dựng lúc phản hồi được gửi đi, tức là SAU khi location đã chạy, nên cái header ở mức server nhìn thấy bất cứ giá trị nào mà location khớp đã gán. Năm request, trong đó có một cái tới tên miền chẳng <code>server_name</code> nào nhận:</p>
-<div class="out">shop.vidu        /gio-hang              → X-Kh: server=shop.vidu loc== /gio-hang
-shop.vidu        /api/v1/nguoi-dung     → X-Kh: server=shop.vidu loc=~ ^/api
-shop.vidu        /api/v1                → X-Kh: server=shop.vidu loc=~ ^/api
-shop.vidu        /gioi-thieu            → X-Kh: server=shop.vidu loc=/ (tien to)
-khong-biet.vidu  /bat-ky                → X-Kh: server=_ loc=/</div>
+<div class="out">shop.vidu        /gio-hang              -&gt; X-Kh: server=shop.vidu loc== /gio-hang up=
+shop.vidu        /api/v1/nguoi-dung     -&gt; X-Kh: server=shop.vidu loc=~ ^/api up=127.0.0.1:9601
+shop.vidu        /api/v1                -&gt; X-Kh: server=shop.vidu loc=~ ^/api up=127.0.0.1:9602
+shop.vidu        /gioi-thieu            -&gt; X-Kh: server=shop.vidu loc=/ (tien to) up=
+khong-biet.vidu  /bat-ky                -&gt; X-Kh: server=_ loc=/</div>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Dòng cuối chứng minh luật default_server</span><span class="lz-d"><code>server=_</code> nghĩa là một tên miền không khớp đã rơi xuống <code>default_server</code>, đúng như Chương 1 đã đo. Trên production đây là cách nhanh nhất để phát hiện có người trỏ một tên miền mới vào IP của bạn mà chưa ai viết khối <code>server</code> cho nó.</span></div>
   <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Dòng 2 và 3 chứng minh một khối là mã chết</span><span class="lz-d">Cả <code>/api/v1/nguoi-dung</code> lẫn <code>/api/v1</code> đều báo <code>~ ^/api</code>. Regex được thử sau tiền tố dài nhất và nó THẮNG, nên <code>location /api/v1</code> không bao giờ có thứ gì với tới được. Chương 2 giải thích luật; cái header này tìm ra ca cụ thể.</span></div>
@@ -183,6 +314,119 @@ server {
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">ngx_http_rewrite_module — set</span><span class="lc-sub">nginx.org/en/docs/http/ngx_http_rewrite_module.html — <code>set</code> chạy vào lúc nào so với việc khớp location, và đó là lý do mẹo ở trên chạy được.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chương 1 — một request tìm ra khối server thế nào</span><span class="lc-sub">Cái luật nằm sau <code>server=_</code> ở dòng đo cuối cùng.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chương 2 — location nào thắng</span><span class="lc-sub">Cái luật làm cho <code>location /api/v1</code> không thể với tới được khi có một regex khớp trước.</span></span></div>
+<h3>🔬 Tự chạy lại</h3>
+<p>Hai backend, cấu hình ngây thơ (mỗi khối một header), cấu hình chạy được (một <code>add_header … always</code> + <code>set $khop</code>, thêm <code>$upstream_addr</code>), một server có và không có <code>always</code>, và một server khoá bằng <code>map</code> — trên nginx/1.24.0:</p>
+<pre><code class="language-bash"><span class="tok-comment"># hoi.sh</span>
+<span class="tok-comment"># hoi.sh &lt;cổng&gt; &lt;tên header&gt; — 4–5 request, in đúng dòng header chẩn đoán (hoặc "(khong co)")</span>
+c=$1; h=$2; shift 2
+for x in "shop.vidu /gio-hang" "shop.vidu /api/v1/nguoi-dung" "shop.vidu /api/v1" "shop.vidu /gioi-thieu" "khong-biet.vidu /bat-ky"; do
+  set -- $x; v=$(curl -s -D- -o /dev/null -H "Host: $1" http://127.0.0.1:$c$2 | grep -i "^$h:" | tr -d '\\r')
+  printf '%-16s %-22s -&gt; %s\\n' $1 $2 "\${v:-(khong co $h)}"
+done</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  upstream be { server 127.0.0.1:9601; server 127.0.0.1:9602; }
+  <span class="tok-comment"># 8080: phiên bản NGÂY THƠ — một header ở mức server + một header trong mỗi location</span>
+  server {
+    listen 8080 default_server; server_name shop.vidu;
+    add_header X-Kh-Server "shop.vidu" always;
+    location = /gio-hang { add_header X-Kh-Loc "= /gio-hang" always;         return 200 "chinh xac\\n"; }
+    location ~ ^/api     { add_header X-Kh-Loc "~ ^/api" always;             return 200 "regex\\n"; }
+    location /api/v1     { add_header X-Kh-Loc "/api/v1 (tien to)" always;   return 200 "tien to\\n"; }
+    location /gioi-thieu {                                                    return 200 "khong add_header rieng\\n"; }
+    location /           { add_header X-Kh-Loc "/ (tien to)" always;         return 200 "goc\\n"; }
+  }
+  <span class="tok-comment"># 8081: phiên bản CHẠY ĐƯỢC — MỘT add_header ở mức server, mỗi location chỉ set $khop</span>
+  server {
+    listen 8081; server_name shop.vidu;
+    set $khop "(khong dat)";
+    add_header X-Kh "server=$server_name loc=$khop up=$upstream_addr" always;
+    location = /gio-hang { set $khop "= /gio-hang";       return 200 "chinh xac\\n"; }
+    location ~ ^/api     { set $khop "~ ^/api";           proxy_pass http://be; }
+    location /api/v1     { set $khop "/api/v1 (tien to)"; return 200 "tien to\\n"; }
+    location /           { set $khop "/ (tien to)";       return 200 "goc\\n"; }
+  }
+  server {
+    listen 8081 default_server; server_name _;
+    set $khop "/";
+    add_header X-Kh "server=_ loc=$khop" always;
+    location / { return 404; }
+  }
+  <span class="tok-comment"># 8082: thiếu always ⇒ header không có trên 404</span>
+  server {
+    listen 8082; server_name shop.vidu;
+    add_header X-Kh-Khong-Always "co" ;
+    add_header X-Kh-Always "co" always;
+    location = /ok { return 200 "ok\\n"; }
+    location /     { return 404; }
+  }
+  <span class="tok-comment"># 8083: KHOÁ bằng map — chỉ địa chỉ 127.0.0.1 thấy header</span>
+  map $remote_addr $kh_debug { default ""; "127.0.0.1" "server=$server_name loc=$khop"; }
+  server {
+    listen 8083; server_name shop.vidu;
+    set $khop "/ (tien to)";
+    add_header X-Kh $kh_debug always;
+    location / { return 200 "goc\\n"; }
+  }
+}</code></pre>
+<div class="out">$ nginx -t -c kh.conf 2&gt;&amp;1 | tail -1
+nginx: configuration file kh.conf test is successful
+$ bash hoi.sh 8080 X-Kh-Loc
+shop.vidu        /gio-hang              -&gt; X-Kh-Loc: = /gio-hang
+shop.vidu        /api/v1/nguoi-dung     -&gt; X-Kh-Loc: ~ ^/api
+shop.vidu        /api/v1                -&gt; X-Kh-Loc: ~ ^/api
+shop.vidu        /gioi-thieu            -&gt; (khong co X-Kh-Loc)
+khong-biet.vidu  /bat-ky                -&gt; X-Kh-Loc: / (tien to)
+$ bash hoi.sh 8080 X-Kh-Server
+shop.vidu        /gio-hang              -&gt; (khong co X-Kh-Server)
+shop.vidu        /api/v1/nguoi-dung     -&gt; (khong co X-Kh-Server)
+shop.vidu        /api/v1                -&gt; (khong co X-Kh-Server)
+shop.vidu        /gioi-thieu            -&gt; X-Kh-Server: shop.vidu
+khong-biet.vidu  /bat-ky                -&gt; (khong co X-Kh-Server)
+$ curl -s -D- -o /dev/null -H 'Host: shop.vidu' http://127.0.0.1:8080/gioi-thieu | grep -i '^x-kh'   # location KHÔNG có add_header riêng
+X-Kh-Server: shop.vidu
+$ curl -s -D- -o /dev/null -H 'Host: shop.vidu' http://127.0.0.1:8080/gio-hang | grep -i '^x-kh'     # location CÓ add_header riêng
+X-Kh-Loc: = /gio-hang
+$ bash hoi.sh 8081 X-Kh
+shop.vidu        /gio-hang              -&gt; X-Kh: server=shop.vidu loc== /gio-hang up=
+shop.vidu        /api/v1/nguoi-dung     -&gt; X-Kh: server=shop.vidu loc=~ ^/api up=127.0.0.1:9601
+shop.vidu        /api/v1                -&gt; X-Kh: server=shop.vidu loc=~ ^/api up=127.0.0.1:9602
+shop.vidu        /gioi-thieu            -&gt; X-Kh: server=shop.vidu loc=/ (tien to) up=
+khong-biet.vidu  /bat-ky                -&gt; X-Kh: server=_ loc=/
+$ for i in 1 2 3; do curl -s -D- -o /dev/null -H 'Host: shop.vidu' http://127.0.0.1:8081/api/don-hang | grep -i '^x-kh' | tr -d '\\r'; done
+X-Kh: server=shop.vidu loc=~ ^/api up=127.0.0.1:9601
+X-Kh: server=shop.vidu loc=~ ^/api up=127.0.0.1:9602
+X-Kh: server=shop.vidu loc=~ ^/api up=127.0.0.1:9601
+$ for p in /ok /khong-co; do echo "== $p"; curl -s -D- -o /dev/null -H 'Host: shop.vidu' http://127.0.0.1:8082$p | grep -iE '^HTTP|^x-kh' | tr -d '\\r'; done
+== /ok
+HTTP/1.1 200 OK
+X-Kh-Khong-Always: co
+X-Kh-Always: co
+== /khong-co
+HTTP/1.1 404 Not Found
+X-Kh-Always: co
+$ curl -s -D- -o /dev/null http://127.0.0.1:8083/ | grep -i '^x-kh'                          # từ 127.0.0.1 (địa chỉ của mình)
+X-Kh: server=shop.vidu loc=/ (tien to)
+$ curl -s -D- -o /dev/null --interface 127.0.0.2 http://127.0.0.1:8083/ | grep -ic '^x-kh'   # từ địa chỉ KHÁC
+0</div>
+<p>Bản ngây thơ: <code>X-Kh-Server</code> chỉ có ở <code>/gioi-thieu</code>. Bản chạy được: <code>/api/v1</code> báo <code>~ ^/api</code> (khối tiền tố là mã chết), tên lạ rơi xuống <code>server=_</code>, và <code>up=</code> xen kẽ 9601 / 9602 / 9601. Thiếu <code>always</code> thì header biến mất trên cú 404. Khoá bằng <code>map</code>: <code>127.0.0.1</code> thấy, <code>127.0.0.2</code> không thấy header nào.</p>
+<h3>🔗 Bài liên quan ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-9-2-curl" target="_blank" rel="noopener"><span class="lc-ico">🐧</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash · 9.2 — curl: những cờ thật sự quan trọng</span><span class="lc-sub">-D-, -o /dev/null, -H Host</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-8-3-nginx-nuot-header" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking for Developers · 8.3 — Khi proxy ghi đè header cache của bạn</span><span class="lc-sub">Cùng luật kế thừa add_header, nhìn từ phía HTTP</span></span></a>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>add_header</code></span><span class="v">Phát được bất kỳ biến nào vào một header phản hồi, nên in ra được khối nào đã xử lý request.</span></div>
+  <div class="kv"><span class="k"><code>set</code> + <code>\$khop</code></span><span class="v">Một biến theo từng location mà cái header duy nhất ở mức server đọc sau khi location đã khớp.</span></div>
+  <div class="kv"><span class="k"><code>always</code></span><span class="v">Cờ làm header xuất hiện cả trên 4xx và 5xx, không chỉ 2xx/3xx.</span></div>
+  <div class="kv"><span class="k"><code>server=_</code></span><span class="v">Trong header chẩn đoán, nghĩa là tên miền không khớp khối nào và rơi xuống default server.</span></div>
+  <div class="kv"><span class="k"><code>\$upstream_addr</code></span><span class="v">Một trường nữa trả lời backend nào thật sự đã phục vụ request.</span></div>
+  <div class="kv"><span class="k"><code>map</code> khoá</span><span class="v">Chỉ phát header chẩn đoán cho riêng địa chỉ của bạn; giá trị rỗng thì không gửi gì.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li>Gần như mọi sự cố Nginx quy về hai câu: khối <code>server</code> nào, và <code>location</code> nào.</li><li>Giữ đúng một <code>add_header</code> ở mức server đọc một biến <code>set</code> theo location — một header trong location sẽ vứt mọi header kế thừa.</li><li>Dùng <code>always</code> để những cú 404, 502, 403 bạn cần giải thích nhất cũng mang theo câu trả lời.</li><li><code>server=_</code> lộ ra cú rơi xuống default server; hai tuyến cùng báo một regex lộ ra một khối chết.</li><li>Mấy header này là trinh sát miễn phí — khoá bằng <code>map</code> trên <code>\$remote_addr</code>, hoặc gỡ khi đã trả lời xong.</li></ul>
 </div>
 `,
     },
@@ -194,31 +438,36 @@ server {
       type: 'LESSON',
       description: 'Tám kiểu lỗi đưa qua nginx -t, đo xem cái nào bị chặn và cái nào lọt. Rồi hai phép đo về chuyện reload — trong đó một cái là lý do bạn không bao giờ nên restart Nginx trên production.',
       content: `
+${G11_2}
 <div class="ml-en">
 <span class="eyebrow">Chapter 11 · Lesson 11.2</span>
 <h2>What <code>nginx -t</code> proves, and what it does not</h2>
 <p class="lead"><code>nginx -t</code> is the last thing everyone runs before a reload, and it is worth knowing exactly what its "test is successful" means. It parses the configuration, resolves hostnames it can resolve, and opens files it must open. It does not run a single request.</p>
 
 <h3>Eight faults, put through it</h3>
-<div class="out">thieu dau cham phay                                  -t CHAN
-proxy_pass toi mot host KHONG PHAN GIAI DUOC         -t CHAN
-hai location TRUNG HET nhau                          -t CHAN
-ssl_certificate tro vao tep KHONG TON TAI            -t CHAN
+<div class="out">1-thieu-cham-phay        -t CHAN  [emerg] 22600#22600: unexpected "}"
+2-host-khong-phan-giai   -t CHAN  [emerg] 22611#22611: host not found in upstream "khong-he-co-ten-may-n
+3-location-trung         -t CHAN  [emerg] 22622#22622: duplicate location "/a"
+4-thieu-chung-chi        -t CHAN  [emerg] 22633#22633: cannot load certificate "/tmp/ng/khong-co.crt": B
+5-root-khong-ton-tai     -t QUA
+6-ip-cong-chet           -t QUA
+7-bien-khong-phan-giai   -t QUA
+8-location-bi-che        -t QUA
 
-root tro vao thu muc KHONG TON TAI                   -t QUA (khong bat duoc)
-proxy_pass toi IP:cong CHET (khong ai nghe)          -t QUA (khong bat duoc)
-proxy_pass qua BIEN (ten khong phan giai duoc)       -t QUA (khong bat duoc)
-location tien to bi regex dung truoc che mat         -t QUA (khong bat duoc)</div>
+5-root-khong-ton-tai     -&gt; 404  [error] 22674#22674: *1 "/tmp/ng/khong-ton-tai/index.html" is not found (2: No s
+6-ip-cong-chet           -&gt; 502  [error] 22689#22689: *1 connect() failed (111: Connection refused) while connect
+7-bien-khong-phan-giai   -&gt; 502  [error] 22704#22704: *1 khong-he-co-ten-may-nay.invalid could not be resolved (3
+8-location-bi-che        -&gt; 200  than: regex</div>
 <p>The split is not arbitrary. Everything in the first group is knowable by reading the config and touching the filesystem. Everything in the second depends on the state of the world at the moment a request arrives — and <code>-t</code> deliberately does not go looking.</p>
 
 <h3>The four it catches</h3>
 <div class="kv-grid">
   <div class="kv"><span class="k">Syntax</span><span class="v"><code>[emerg] unexpected "}" in /tmp/nxdiag/a.conf:11</code> — with the file and line. This is the case everyone knows, and it is the least interesting.</span></div>
-  <div class="kv"><span class="k">Unresolvable upstream name</span><span class="v"><code>[emerg] host not found in upstream "khong-he-co-ten-may-nay.invalid"</code>. Nginx resolves literal hostnames in <code>proxy_pass</code> and <code>upstream</code> at <em>parse</em> time, once, and keeps the address forever.</span></div>
+  <div class="kv"><span class="k">Unresolvable upstream name</span><span class="v"><code>[emerg] host not found in upstream "khong-he-co-ten-may-nay.invalid"</code>. Nginx resolves literal hostnames in <code>proxy_pass</code> and <code>upstream</code> at <em>parse</em> time, once, and keeps the address until the next reload (measured in Lesson 9.5).</span></div>
   <div class="kv"><span class="k">Duplicate location</span><span class="v"><code>[emerg] duplicate location "/a"</code> — two locations with identical matchers in one server block.</span></div>
   <div class="kv"><span class="k">Missing certificate file</span><span class="v">Blocked, because Nginx opens and parses the certificate during configuration load. A file that exists but has expired is a different matter — see below.</span></div>
 </div>
-<div class="pitfall"><strong>Trap — resolving at parse time means DNS can stop your reload.</strong> Because <code>proxy_pass http://api.noi-bo.vidu</code> is resolved once, at load, a DNS outage does not degrade your proxy — it prevents Nginx from reloading at all, and the error is <code>host not found in upstream</code>, which reads like a config typo rather than a network problem. It also means a backend whose IP changes (a container that was recreated, a service behind a rotating DNS record) is <em>never</em> re-resolved. Nginx keeps dialling the old address until someone reloads.</div>
+<div class="pitfall"><strong>Trap — resolving at parse time means DNS can stop your reload.</strong> Because <code>proxy_pass http://api.noi-bo.vidu</code> is resolved once, at load, a DNS outage does not degrade your proxy — it prevents Nginx from reloading at all, and the error is <code>host not found in upstream</code>, which reads like a config typo rather than a network problem. It also means a backend whose IP changes (a container that was recreated, a service behind a rotating DNS record) is not re-resolved between reloads. Nginx keeps dialling the old address until someone reloads.</div>
 <p>The escape hatch is to put the hostname in a variable, which forces resolution at request time and requires a <code>resolver</code>:</p>
 <pre><code class="language-bash">resolver 127.0.0.53 valid=30s;
 set \$backend "http://api.noi-bo.vidu:3000";
@@ -236,24 +485,33 @@ location /api/ { proxy_pass \$backend; }</code></pre>
 
 <h3>The larger trap: <code>-t</code> reads the disk, the server runs memory</h3>
 <p>This one catches experienced people, because the output is reassuring and wrong. A running server, a file edited on disk, and no reload:</p>
-<div class="out">1) dang chay:                    PHIEN BAN 1
-2) da sua tep tren dia, CHUA reload
-   nginx -t noi:                 successful
-   nhung may chu van tra ve:     PHIEN BAN 1
-3) sau khi reload:                PHIEN BAN 2</div>
+<div class="out">$ curl -s 127.0.0.1:8080/
+PHIEN BAN 1
+$ sed -i 's/PHIEN BAN 1/PHIEN BAN 2/' v.conf; nginx -t -c v.conf 2&gt;&amp;1 | tail -1
+nginx: configuration file v.conf test is successful
+$ curl -s 127.0.0.1:8080/      # đã sửa đĩa, CHƯA reload
+PHIEN BAN 1
+$ echo "master khoi dong: $(ps -o lstart= -p $(cat /srv/logs/nginx.pid))"; echo "tep sua luc     : $(date -r v.conf)"
+master khoi dong: Fri Nov 13 01:48:43 2026
+tep sua luc     : Fri Nov 13 01:48:44 UTC 2026
+$ nginx -s reload -c v.conf 2&gt;/dev/null; sleep 0.5; curl -s 127.0.0.1:8080/
+PHIEN BAN 2</div>
 <p>"Test is successful" described a file the running Nginx had never read. The same applies to <code>nginx -T</code>: it dumps the configuration <em>on disk</em>, not the one in memory. If you are debugging a live server and the dump does not explain the behaviour you are seeing, the most likely reason is that nobody reloaded after the last edit — and that can be weeks ago.</p>
 <div class="note-ct">There is no built-in way to dump what the running workers actually hold. The nearest practical check is the master process start time against the file mtime: <code>ps -o lstart= -p \$(cat /run/nginx.pid)</code> next to <code>stat -c %y /etc/nginx/nginx.conf</code>. If the file is newer than the process, the running config is not the one you are reading.</div>
 
 <h3><code>reload</code> versus <code>restart</code>: the measurement that decides an outage</h3>
 <p>A running server, a deliberately broken config, and a reload:</p>
-<div class="out">=== reload voi cau hinh hong: may chu SONG ===
-   PHIEN BAN 2
-   error log: [emerg] 914#914: unexpected "}" in /tmp/nxd2/v1.conf:11</div>
+<div class="out">$ sed -i 's/PHIEN BAN 2\\\\n"; }/PHIEN BAN 3\\\\n"; }}/' v.conf; nginx -s reload -c v.conf 2&gt;&amp;1 | grep -o '\\[emerg\\].*'; echo "ma thoat cua lenh reload: \${PIPESTATUS[0]}"
+[emerg] 22809#22809: unexpected "}" in v.conf:4
+ma thoat cua lenh reload: 1
+$ curl -s 127.0.0.1:8080/      # reload với cấu hình hỏng: máy chủ vẫn SỐNG, vẫn bản 2
+PHIEN BAN 2</div>
 <p>Nginx read the new file, rejected it, logged <code>[emerg]</code>, and <em>kept the old configuration running</em>. Not one request was lost. The master process only starts new workers once the new configuration parses; if it does not, the existing workers carry on untouched.</p>
 <p>Now the same broken config, but with a stop and start instead:</p>
-<div class="out">=== nhung RESTART voi cau hinh hong thi sao? ===
-   khoi dong lai: [emerg] 1670#1670: unexpected "}" in /tmp/nxd2/hong.conf:11
-   may chu bay gio:  CHET — khong ai tra loi</div>
+<div class="out">$ pkill nginx; sleep 0.5; nginx -c v.conf 2&gt;&amp;1 | grep -o '\\[emerg\\].*'     # RESTART = dừng rồi bật lại
+[emerg] 22830#22830: unexpected "}" in v.conf:4
+$ curl -s -o /dev/null -w 'ma: %{http_code}\\n' --max-time 3 127.0.0.1:8080/   # không ai trả lời nữa
+ma: 000</div>
 <div class="callout warn"><strong>This is why you reload and never restart.</strong> A reload with a broken config is a no-op with a log line. A restart with the same broken config is an outage that lasts until a human notices and fixes the file. The failure is identical; only the recovery differs, and one of them has no automatic recovery at all.</div>
 <p>Chapter 9 measured the other half of this: three reloads during four hundred live requests produced four hundred <code>200</code>s, because old workers finish their in-flight requests before exiting. A reload is safe both when the config is broken and when it is fine.</p>
 
@@ -268,6 +526,84 @@ location /api/ { proxy_pass \$backend; }</code></pre>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">ngx_http_core_module — resolver</span><span class="lc-sub">nginx.org/en/docs/http/ngx_http_core_module.html#resolver — required for the variable form of <code>proxy_pass</code>, including the <code>valid=</code> TTL override.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chapter 9 — reloading under live traffic</span><span class="lc-sub">The four-hundred-request measurement that shows a reload costs nothing when the config is good.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Docker — why a container restart is not a reload</span><span class="lc-sub">/courses/docker/learn${REF} — in a container the process is the container, so the reload-versus-restart distinction changes shape.</span></span></div>
+<h3>🔬 Run it yourself</h3>
+<p>A script that writes eight configs with exactly one mistake each, one that runs <code>nginx -t</code> on each, one that starts the four that pass and sends one request — plus a running server whose file is edited, reloaded broken, and restarted broken — on nginx/1.24.0:</p>
+<pre><code class="language-bash"><span class="tok-comment"># lam_tep.sh</span>
+<span class="tok-comment"># lam_tep.sh — sinh 8 cấu hình, mỗi cái MỘT lỗi; khung chung giống nhau</span>
+khung() { printf 'pid /tmp/ng/logs/t.pid;\\nerror_log /tmp/ng/logs/t-error.log;\\nevents {}\\nhttp {\\n  access_log off;\\n  server {\\n    listen 8090;\\n%b\\n  }\\n}\\n' "$1" &gt; /tmp/ng/t/$2.conf; }
+khung '    location / { return 200 "ok\\\\n" }'                                            1-thieu-cham-phay
+khung '    location / { proxy_pass http://khong-he-co-ten-may-nay.invalid; }'                2-host-khong-phan-giai
+khung '    location /a { return 200; }\\n    location /a { return 204; }'                    3-location-trung
+khung '    listen 8443 ssl; ssl_certificate /tmp/ng/khong-co.crt; ssl_certificate_key /tmp/ng/khong-co.key;' 4-thieu-chung-chi
+khung '    location / { root /tmp/ng/khong-ton-tai; }'                                      5-root-khong-ton-tai
+khung '    location / { proxy_pass http://127.0.0.1:9999; }'                                6-ip-cong-chet
+khung '    resolver 192.168.65.7 valid=30s; resolver_timeout 2s;\\n    location / { set $be "http://khong-he-co-ten-may-nay.invalid"; proxy_pass $be; }' 7-bien-khong-phan-giai
+khung '    location ~ ^/api { return 200 "regex\\\\n"; }\\n    location /api/v1 { return 200 "tien to - khong bao gio toi\\\\n"; }' 8-location-bi-che</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># thu_t.sh</span>
+<span class="tok-comment"># thu_t.sh — đưa từng cấu hình qua nginx -t: CHẶN (in dòng [emerg]) hay QUA</span>
+for f in /tmp/ng/t/*.conf; do
+  ten=$(basename $f .conf); r=$(nginx -t -c $f 2&gt;&amp;1)
+  if echo "$r" | grep -q 'successful'; then printf '%-24s -t QUA\\n' $ten
+  else printf '%-24s -t CHAN  %s\\n' $ten "$(echo "$r" | grep -o '\\[emerg\\].*' | head -1 | sed 's/ in \\/tmp.*//' | cut -c1-70)"; fi
+done</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># chay_qua.sh</span>
+<span class="tok-comment"># chay_qua.sh — 4 cấu hình QUA -t: chạy thật từng cái, gửi một request, in mã + dòng error.log</span>
+for ten in 5-root-khong-ton-tai 6-ip-cong-chet 7-bien-khong-phan-giai 8-location-bi-che; do
+  pkill -f 'nginx: master.*t/' 2&gt;/dev/null; sleep 0.3; : &gt; /tmp/ng/logs/t-error.log
+  nginx -c /tmp/ng/t/$ten.conf; sleep 0.3
+  p=/; [ $ten = 8-location-bi-che ] &amp;&amp; p=/api/v1/x
+  ma=$(curl -s -o /tmp/ng/than -w '%{http_code}' --max-time 5 http://127.0.0.1:8090$p)
+  printf '%-24s -&gt; %s  %s\\n' $ten $ma "$(grep -o '\\[error\\].*' /tmp/ng/logs/t-error.log | head -1 | sed 's/, client.*//' | cut -c1-80)$( [ $ten = 8-location-bi-che ] &amp;&amp; echo "than: $(cat /tmp/ng/than)")"
+  nginx -s stop -c /tmp/ng/t/$ten.conf 2&gt;/dev/null; sleep 0.3
+done</code></pre>
+<div class="out">$ bash thu_t.sh
+1-thieu-cham-phay        -t CHAN  [emerg] 22600#22600: unexpected "}"
+2-host-khong-phan-giai   -t CHAN  [emerg] 22611#22611: host not found in upstream "khong-he-co-ten-may-n
+3-location-trung         -t CHAN  [emerg] 22622#22622: duplicate location "/a"
+4-thieu-chung-chi        -t CHAN  [emerg] 22633#22633: cannot load certificate "/srv/khong-co.crt": B
+5-root-khong-ton-tai     -t QUA
+6-ip-cong-chet           -t QUA
+7-bien-khong-phan-giai   -t QUA
+8-location-bi-che        -t QUA
+$ bash chay_qua.sh
+5-root-khong-ton-tai     -&gt; 404  [error] 22674#22674: *1 "/srv/khong-ton-tai/index.html" is not found (2: No s
+6-ip-cong-chet           -&gt; 502  [error] 22689#22689: *1 connect() failed (111: Connection refused) while connect
+7-bien-khong-phan-giai   -&gt; 502  [error] 22704#22704: *1 khong-he-co-ten-may-nay.invalid could not be resolved (3
+8-location-bi-che        -&gt; 200  than: regex
+$ curl -s 127.0.0.1:8080/
+PHIEN BAN 1
+$ sed -i 's/PHIEN BAN 1/PHIEN BAN 2/' v.conf; nginx -t -c v.conf 2&gt;&amp;1 | tail -1
+nginx: configuration file v.conf test is successful
+$ curl -s 127.0.0.1:8080/      # đã sửa đĩa, CHƯA reload
+PHIEN BAN 1
+$ echo "master khoi dong: $(ps -o lstart= -p $(cat /srv/logs/nginx.pid))"; echo "tep sua luc     : $(date -r v.conf)"
+master khoi dong: Fri Nov 13 01:48:43 2026
+tep sua luc     : Fri Nov 13 01:48:44 UTC 2026
+$ nginx -s reload -c v.conf 2&gt;/dev/null; sleep 0.5; curl -s 127.0.0.1:8080/
+PHIEN BAN 2
+$ sed -i 's/PHIEN BAN 2\\\\n"; }/PHIEN BAN 3\\\\n"; }}/' v.conf; nginx -s reload -c v.conf 2&gt;&amp;1 | grep -o '\\[emerg\\].*'; echo "ma thoat cua lenh reload: \${PIPESTATUS[0]}"
+[emerg] 22809#22809: unexpected "}" in v.conf:4
+ma thoat cua lenh reload: 1
+$ curl -s 127.0.0.1:8080/      # reload với cấu hình hỏng: máy chủ vẫn SỐNG, vẫn bản 2
+PHIEN BAN 2
+$ pkill nginx; sleep 0.5; nginx -c v.conf 2&gt;&amp;1 | grep -o '\\[emerg\\].*'     # RESTART = dừng rồi bật lại
+[emerg] 22830#22830: unexpected "}" in v.conf:4
+$ curl -s -o /dev/null -w 'ma: %{http_code}\\n' --max-time 3 127.0.0.1:8080/   # không ai trả lời nữa
+ma: 000</div>
+<p><code>-t</code> blocked four (missing <code>;</code>, unresolvable upstream, duplicate location, missing certificate) and passed four. Run for real, the four that pass gave 404, 502, 502 (<code>could not be resolved</code>) and a 200 from the WRONG block. Edited on disk: <code>test is successful</code>, still <code>PHIEN BAN 1</code> — the master started at 01:48:43, the file was changed at 01:48:44. A broken reload exited 1 and kept serving; a broken restart left nothing listening (000).</p>
+<h3>🔗 Related lessons in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-7-4-kiem-khoi" target="_blank" rel="noopener"><span class="lc-ico">🚀</span><span class="lc-body"><span class="lc-title">Deploy to a VPS · 7.4 — Proving it worked, and checking the checker</span><span class="lc-sub">The smoke test that answers "will it serve"</span></span></a>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>nginx -t</code></span><span class="v">Parses the config, resolves literal names, opens required files — but runs no request.</span></div>
+  <div class="kv"><span class="k"><code>nginx -T</code></span><span class="v">The same test plus a print of the whole effective config with every include expanded.</span></div>
+  <div class="kv"><span class="k">host not found in upstream</span><span class="v">A parse-time failure: literal upstream names are resolved at load and kept until the next reload.</span></div>
+  <div class="kv"><span class="k"><code>resolver</code> + variable <code>proxy_pass</code></span><span class="v">Moves the DNS lookup to request time so a backend address can change.</span></div>
+  <div class="kv"><span class="k">reload vs restart</span><span class="v">A bad config reloaded keeps the old one running; restarted, it is an outage.</span></div>
+  <div class="kv"><span class="k">smoke test</span><span class="v">Sending real requests — the only check for the four faults <code>-t</code> misses.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li><code>nginx -t</code> answers "can this configuration be loaded", not "will it serve traffic correctly".</li><li>It catches syntax, unresolvable upstream names, duplicate locations and missing certificate files.</li><li>It misses shadowed locations, dead proxy targets, bad <code>root</code> paths and expired certificates.</li><li>Both <code>-t</code> and <code>-T</code> read the disk, not what the running workers hold — reload after every edit.</li><li>Always reload, never restart: a broken config reloaded is a no-op with a log line; restarted it has no automatic recovery.</li></ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 11 · Bài 11.2</span>
@@ -275,25 +611,29 @@ location /api/ { proxy_pass \$backend; }</code></pre>
 <p class="lead"><code>nginx -t</code> là thứ ai cũng chạy cuối cùng trước khi reload, và rất đáng biết chính xác cái câu "test is successful" của nó có nghĩa gì. Nó phân tích cấu hình, phân giải những tên nó phân giải được, và mở những tệp nó buộc phải mở. Nó KHÔNG chạy lấy một request nào.</p>
 
 <h3>Tám kiểu lỗi, đưa qua nó</h3>
-<div class="out">thieu dau cham phay                                  -t CHAN
-proxy_pass toi mot host KHONG PHAN GIAI DUOC         -t CHAN
-hai location TRUNG HET nhau                          -t CHAN
-ssl_certificate tro vao tep KHONG TON TAI            -t CHAN
+<div class="out">1-thieu-cham-phay        -t CHAN  [emerg] 22600#22600: unexpected "}"
+2-host-khong-phan-giai   -t CHAN  [emerg] 22611#22611: host not found in upstream "khong-he-co-ten-may-n
+3-location-trung         -t CHAN  [emerg] 22622#22622: duplicate location "/a"
+4-thieu-chung-chi        -t CHAN  [emerg] 22633#22633: cannot load certificate "/tmp/ng/khong-co.crt": B
+5-root-khong-ton-tai     -t QUA
+6-ip-cong-chet           -t QUA
+7-bien-khong-phan-giai   -t QUA
+8-location-bi-che        -t QUA
 
-root tro vao thu muc KHONG TON TAI                   -t QUA (khong bat duoc)
-proxy_pass toi IP:cong CHET (khong ai nghe)          -t QUA (khong bat duoc)
-proxy_pass qua BIEN (ten khong phan giai duoc)       -t QUA (khong bat duoc)
-location tien to bi regex dung truoc che mat         -t QUA (khong bat duoc)</div>
+5-root-khong-ton-tai     -&gt; 404  [error] 22674#22674: *1 "/tmp/ng/khong-ton-tai/index.html" is not found (2: No s
+6-ip-cong-chet           -&gt; 502  [error] 22689#22689: *1 connect() failed (111: Connection refused) while connect
+7-bien-khong-phan-giai   -&gt; 502  [error] 22704#22704: *1 khong-he-co-ten-may-nay.invalid could not be resolved (3
+8-location-bi-che        -&gt; 200  than: regex</div>
 <p>Cách chia đó không tuỳ tiện. Mọi thứ ở nhóm đầu đều biết được bằng cách ĐỌC cấu hình và sờ vào hệ tệp. Mọi thứ ở nhóm sau đều phụ thuộc vào trạng thái của thế giới tại thời điểm một request tới — và <code>-t</code> CỐ Ý không đi tìm hiểu chuyện đó.</p>
 
 <h3>Bốn cái nó bắt được</h3>
 <div class="kv-grid">
   <div class="kv"><span class="k">Cú pháp</span><span class="v"><code>[emerg] unexpected "}" in /tmp/nxdiag/a.conf:11</code> — kèm tên tệp và số dòng. Đây là ca ai cũng biết, và cũng là ca ít thú vị nhất.</span></div>
-  <div class="kv"><span class="k">Tên upstream không phân giải được</span><span class="v"><code>[emerg] host not found in upstream "khong-he-co-ten-may-nay.invalid"</code>. Nginx phân giải tên máy dạng chữ trong <code>proxy_pass</code> và <code>upstream</code> ngay lúc PHÂN TÍCH cấu hình, đúng một lần, rồi giữ cái địa chỉ đó mãi mãi.</span></div>
+  <div class="kv"><span class="k">Tên upstream không phân giải được</span><span class="v"><code>[emerg] host not found in upstream "khong-he-co-ten-may-nay.invalid"</code>. Nginx phân giải tên máy dạng chữ trong <code>proxy_pass</code> và <code>upstream</code> ngay lúc PHÂN TÍCH cấu hình, đúng một lần, rồi giữ cái địa chỉ đó cho tới lần reload kế tiếp (đo thật ở Bài 9.5).</span></div>
   <div class="kv"><span class="k">Location trùng nhau</span><span class="v"><code>[emerg] duplicate location "/a"</code> — hai location có bộ khớp y hệt nhau trong cùng một khối server.</span></div>
   <div class="kv"><span class="k">Thiếu tệp chứng chỉ</span><span class="v">Bị chặn, vì Nginx mở và phân tích chứng chỉ ngay trong lúc nạp cấu hình. Còn một tệp CÓ tồn tại nhưng đã hết hạn thì lại là chuyện khác — xem bên dưới.</span></div>
 </div>
-<div class="pitfall"><strong>Bẫy — phân giải lúc nạp cấu hình nghĩa là DNS có thể chặn đứng lần reload của bạn.</strong> Vì <code>proxy_pass http://api.noi-bo.vidu</code> được phân giải một lần lúc nạp, một sự cố DNS KHÔNG làm proxy của bạn yếu đi — nó làm Nginx không reload được chút nào, và thông báo lại là <code>host not found in upstream</code>, nghe như một lỗi gõ nhầm trong cấu hình chứ không phải chuyện mạng. Nó còn nghĩa là một backend đổi IP (một container vừa được dựng lại, một dịch vụ nấp sau bản ghi DNS xoay vòng) sẽ KHÔNG BAO GIỜ được phân giải lại. Nginx cứ gọi mãi vào địa chỉ cũ cho tới khi có người reload.</div>
+<div class="pitfall"><strong>Bẫy — phân giải lúc nạp cấu hình nghĩa là DNS có thể chặn đứng lần reload của bạn.</strong> Vì <code>proxy_pass http://api.noi-bo.vidu</code> được phân giải một lần lúc nạp, một sự cố DNS KHÔNG làm proxy của bạn yếu đi — nó làm Nginx không reload được chút nào, và thông báo lại là <code>host not found in upstream</code>, nghe như một lỗi gõ nhầm trong cấu hình chứ không phải chuyện mạng. Nó còn nghĩa là một backend đổi IP (một container vừa được dựng lại, một dịch vụ nấp sau bản ghi DNS xoay vòng) sẽ KHÔNG được phân giải lại giữa hai lần reload. Nginx cứ gọi mãi vào địa chỉ cũ cho tới khi có người reload.</div>
 <p>Cửa thoát là đặt tên máy vào một BIẾN, việc đó ép phân giải xảy ra lúc có request và đòi phải khai một <code>resolver</code>:</p>
 <pre><code class="language-bash">resolver 127.0.0.53 valid=30s;
 set \$backend "http://api.noi-bo.vidu:3000";
@@ -311,24 +651,33 @@ location /api/ { proxy_pass \$backend; }</code></pre>
 
 <h3>Cái bẫy lớn hơn: <code>-t</code> đọc ĐĨA, còn máy chủ chạy BỘ NHỚ</h3>
 <p>Cái này bẫy cả người có kinh nghiệm, vì kết quả in ra vừa yên lòng vừa sai. Một máy chủ đang chạy, một tệp vừa sửa trên đĩa, và chưa reload:</p>
-<div class="out">1) dang chay:                    PHIEN BAN 1
-2) da sua tep tren dia, CHUA reload
-   nginx -t noi:                 successful
-   nhung may chu van tra ve:     PHIEN BAN 1
-3) sau khi reload:                PHIEN BAN 2</div>
+<div class="out">$ curl -s 127.0.0.1:8080/
+PHIEN BAN 1
+$ sed -i 's/PHIEN BAN 1/PHIEN BAN 2/' v.conf; nginx -t -c v.conf 2&gt;&amp;1 | tail -1
+nginx: configuration file v.conf test is successful
+$ curl -s 127.0.0.1:8080/      # đã sửa đĩa, CHƯA reload
+PHIEN BAN 1
+$ echo "master khoi dong: $(ps -o lstart= -p $(cat /srv/logs/nginx.pid))"; echo "tep sua luc     : $(date -r v.conf)"
+master khoi dong: Fri Nov 13 01:48:43 2026
+tep sua luc     : Fri Nov 13 01:48:44 UTC 2026
+$ nginx -s reload -c v.conf 2&gt;/dev/null; sleep 0.5; curl -s 127.0.0.1:8080/
+PHIEN BAN 2</div>
 <p>Câu "test is successful" đang mô tả một tệp mà con Nginx đang chạy CHƯA TỪNG đọc. Điều tương tự đúng với <code>nginx -T</code>: nó đổ ra cấu hình <em>trên đĩa</em>, không phải cái đang nằm trong bộ nhớ. Nếu bạn đang gỡ lỗi một máy chủ sống mà bản đổ ra không giải thích được hành vi bạn đang thấy, lý do khả dĩ nhất là chẳng ai reload sau lần sửa gần nhất — và lần đó có thể là mấy tuần trước.</p>
 <div class="note-ct">Không có cách có sẵn nào để đổ ra thứ mà các worker đang chạy thật sự đang giữ. Phép kiểm thực dụng gần nhất là so giờ khởi động của tiến trình master với giờ sửa tệp: <code>ps -o lstart= -p \$(cat /run/nginx.pid)</code> đặt cạnh <code>stat -c %y /etc/nginx/nginx.conf</code>. Nếu tệp mới hơn tiến trình, thì cấu hình đang chạy không phải cái bạn đang đọc.</div>
 
 <h3><code>reload</code> so với <code>restart</code>: phép đo quyết định một sự cố</h3>
 <p>Một máy chủ đang chạy, một cấu hình cố tình làm hỏng, và một lệnh reload:</p>
-<div class="out">=== reload voi cau hinh hong: may chu SONG ===
-   PHIEN BAN 2
-   error log: [emerg] 914#914: unexpected "}" in /tmp/nxd2/v1.conf:11</div>
+<div class="out">$ sed -i 's/PHIEN BAN 2\\\\n"; }/PHIEN BAN 3\\\\n"; }}/' v.conf; nginx -s reload -c v.conf 2&gt;&amp;1 | grep -o '\\[emerg\\].*'; echo "ma thoat cua lenh reload: \${PIPESTATUS[0]}"
+[emerg] 22809#22809: unexpected "}" in v.conf:4
+ma thoat cua lenh reload: 1
+$ curl -s 127.0.0.1:8080/      # reload với cấu hình hỏng: máy chủ vẫn SỐNG, vẫn bản 2
+PHIEN BAN 2</div>
 <p>Nginx đã đọc tệp mới, TỪ CHỐI nó, ghi một dòng <code>[emerg]</code>, và <em>giữ nguyên cấu hình cũ đang chạy</em>. Không mất lấy một request. Tiến trình master chỉ dựng worker mới KHI cấu hình mới phân tích được; nếu không thì đám worker đang có cứ thế chạy tiếp, không hề bị đụng tới.</p>
 <p>Giờ vẫn cấu hình hỏng đó, nhưng thay bằng dừng rồi khởi động lại:</p>
-<div class="out">=== nhung RESTART voi cau hinh hong thi sao? ===
-   khoi dong lai: [emerg] 1670#1670: unexpected "}" in /tmp/nxd2/hong.conf:11
-   may chu bay gio:  CHET — khong ai tra loi</div>
+<div class="out">$ pkill nginx; sleep 0.5; nginx -c v.conf 2&gt;&amp;1 | grep -o '\\[emerg\\].*'     # RESTART = dừng rồi bật lại
+[emerg] 22830#22830: unexpected "}" in v.conf:4
+$ curl -s -o /dev/null -w 'ma: %{http_code}\\n' --max-time 3 127.0.0.1:8080/   # không ai trả lời nữa
+ma: 000</div>
 <div class="callout warn"><strong>Đây chính là lý do bạn reload và không bao giờ restart.</strong> Reload với cấu hình hỏng là một hành động không làm gì kèm một dòng log. Restart với đúng cấu hình hỏng đó là một sự cố kéo dài cho tới khi có người phát hiện và sửa tệp. Chỗ hỏng y hệt nhau; chỉ khác cách hồi phục, và một trong hai cái thì KHÔNG có hồi phục tự động nào cả.</div>
 <p>Chương 9 đã đo nửa còn lại của chuyện này: ba lần reload giữa bốn trăm request đang chạy cho ra bốn trăm cú <code>200</code>, vì worker cũ làm nốt request đang dở trước khi thoát. Reload an toàn cả khi cấu hình hỏng lẫn khi cấu hình tốt.</p>
 
@@ -343,6 +692,84 @@ location /api/ { proxy_pass \$backend; }</code></pre>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">ngx_http_core_module — resolver</span><span class="lc-sub">nginx.org/en/docs/http/ngx_http_core_module.html#resolver — bắt buộc phải có cho dạng <code>proxy_pass</code> dùng biến, kể cả tham số <code>valid=</code> để ghi đè TTL.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chương 9 — nạp lại cấu hình giữa lúc có lưu lượng</span><span class="lc-sub">Phép đo bốn trăm request cho thấy một lần reload chẳng tốn gì khi cấu hình tốt.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Docker — vì sao khởi động lại container không phải là reload</span><span class="lc-sub">/courses/docker/learn${REF} — trong container thì tiến trình CHÍNH LÀ container, nên phân biệt reload/restart mang hình dạng khác.</span></span></div>
+<h3>🔬 Tự chạy lại</h3>
+<p>Một script viết tám cấu hình mỗi cái đúng một lỗi, một script chạy <code>nginx -t</code> từng cái, một script bật bốn cái lọt qua và gửi một request — cộng một máy đang chạy bị sửa tệp, nạp lại tệp hỏng, và khởi động lại với tệp hỏng — trên nginx/1.24.0:</p>
+<pre><code class="language-bash"><span class="tok-comment"># lam_tep.sh</span>
+<span class="tok-comment"># lam_tep.sh — sinh 8 cấu hình, mỗi cái MỘT lỗi; khung chung giống nhau</span>
+khung() { printf 'pid /tmp/ng/logs/t.pid;\\nerror_log /tmp/ng/logs/t-error.log;\\nevents {}\\nhttp {\\n  access_log off;\\n  server {\\n    listen 8090;\\n%b\\n  }\\n}\\n' "$1" &gt; /tmp/ng/t/$2.conf; }
+khung '    location / { return 200 "ok\\\\n" }'                                            1-thieu-cham-phay
+khung '    location / { proxy_pass http://khong-he-co-ten-may-nay.invalid; }'                2-host-khong-phan-giai
+khung '    location /a { return 200; }\\n    location /a { return 204; }'                    3-location-trung
+khung '    listen 8443 ssl; ssl_certificate /tmp/ng/khong-co.crt; ssl_certificate_key /tmp/ng/khong-co.key;' 4-thieu-chung-chi
+khung '    location / { root /tmp/ng/khong-ton-tai; }'                                      5-root-khong-ton-tai
+khung '    location / { proxy_pass http://127.0.0.1:9999; }'                                6-ip-cong-chet
+khung '    resolver 192.168.65.7 valid=30s; resolver_timeout 2s;\\n    location / { set $be "http://khong-he-co-ten-may-nay.invalid"; proxy_pass $be; }' 7-bien-khong-phan-giai
+khung '    location ~ ^/api { return 200 "regex\\\\n"; }\\n    location /api/v1 { return 200 "tien to - khong bao gio toi\\\\n"; }' 8-location-bi-che</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># thu_t.sh</span>
+<span class="tok-comment"># thu_t.sh — đưa từng cấu hình qua nginx -t: CHẶN (in dòng [emerg]) hay QUA</span>
+for f in /tmp/ng/t/*.conf; do
+  ten=$(basename $f .conf); r=$(nginx -t -c $f 2&gt;&amp;1)
+  if echo "$r" | grep -q 'successful'; then printf '%-24s -t QUA\\n' $ten
+  else printf '%-24s -t CHAN  %s\\n' $ten "$(echo "$r" | grep -o '\\[emerg\\].*' | head -1 | sed 's/ in \\/tmp.*//' | cut -c1-70)"; fi
+done</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># chay_qua.sh</span>
+<span class="tok-comment"># chay_qua.sh — 4 cấu hình QUA -t: chạy thật từng cái, gửi một request, in mã + dòng error.log</span>
+for ten in 5-root-khong-ton-tai 6-ip-cong-chet 7-bien-khong-phan-giai 8-location-bi-che; do
+  pkill -f 'nginx: master.*t/' 2&gt;/dev/null; sleep 0.3; : &gt; /tmp/ng/logs/t-error.log
+  nginx -c /tmp/ng/t/$ten.conf; sleep 0.3
+  p=/; [ $ten = 8-location-bi-che ] &amp;&amp; p=/api/v1/x
+  ma=$(curl -s -o /tmp/ng/than -w '%{http_code}' --max-time 5 http://127.0.0.1:8090$p)
+  printf '%-24s -&gt; %s  %s\\n' $ten $ma "$(grep -o '\\[error\\].*' /tmp/ng/logs/t-error.log | head -1 | sed 's/, client.*//' | cut -c1-80)$( [ $ten = 8-location-bi-che ] &amp;&amp; echo "than: $(cat /tmp/ng/than)")"
+  nginx -s stop -c /tmp/ng/t/$ten.conf 2&gt;/dev/null; sleep 0.3
+done</code></pre>
+<div class="out">$ bash thu_t.sh
+1-thieu-cham-phay        -t CHAN  [emerg] 22600#22600: unexpected "}"
+2-host-khong-phan-giai   -t CHAN  [emerg] 22611#22611: host not found in upstream "khong-he-co-ten-may-n
+3-location-trung         -t CHAN  [emerg] 22622#22622: duplicate location "/a"
+4-thieu-chung-chi        -t CHAN  [emerg] 22633#22633: cannot load certificate "/srv/khong-co.crt": B
+5-root-khong-ton-tai     -t QUA
+6-ip-cong-chet           -t QUA
+7-bien-khong-phan-giai   -t QUA
+8-location-bi-che        -t QUA
+$ bash chay_qua.sh
+5-root-khong-ton-tai     -&gt; 404  [error] 22674#22674: *1 "/srv/khong-ton-tai/index.html" is not found (2: No s
+6-ip-cong-chet           -&gt; 502  [error] 22689#22689: *1 connect() failed (111: Connection refused) while connect
+7-bien-khong-phan-giai   -&gt; 502  [error] 22704#22704: *1 khong-he-co-ten-may-nay.invalid could not be resolved (3
+8-location-bi-che        -&gt; 200  than: regex
+$ curl -s 127.0.0.1:8080/
+PHIEN BAN 1
+$ sed -i 's/PHIEN BAN 1/PHIEN BAN 2/' v.conf; nginx -t -c v.conf 2&gt;&amp;1 | tail -1
+nginx: configuration file v.conf test is successful
+$ curl -s 127.0.0.1:8080/      # đã sửa đĩa, CHƯA reload
+PHIEN BAN 1
+$ echo "master khoi dong: $(ps -o lstart= -p $(cat /srv/logs/nginx.pid))"; echo "tep sua luc     : $(date -r v.conf)"
+master khoi dong: Fri Nov 13 01:48:43 2026
+tep sua luc     : Fri Nov 13 01:48:44 UTC 2026
+$ nginx -s reload -c v.conf 2&gt;/dev/null; sleep 0.5; curl -s 127.0.0.1:8080/
+PHIEN BAN 2
+$ sed -i 's/PHIEN BAN 2\\\\n"; }/PHIEN BAN 3\\\\n"; }}/' v.conf; nginx -s reload -c v.conf 2&gt;&amp;1 | grep -o '\\[emerg\\].*'; echo "ma thoat cua lenh reload: \${PIPESTATUS[0]}"
+[emerg] 22809#22809: unexpected "}" in v.conf:4
+ma thoat cua lenh reload: 1
+$ curl -s 127.0.0.1:8080/      # reload với cấu hình hỏng: máy chủ vẫn SỐNG, vẫn bản 2
+PHIEN BAN 2
+$ pkill nginx; sleep 0.5; nginx -c v.conf 2&gt;&amp;1 | grep -o '\\[emerg\\].*'     # RESTART = dừng rồi bật lại
+[emerg] 22830#22830: unexpected "}" in v.conf:4
+$ curl -s -o /dev/null -w 'ma: %{http_code}\\n' --max-time 3 127.0.0.1:8080/   # không ai trả lời nữa
+ma: 000</div>
+<p><code>-t</code> chặn bốn (thiếu <code>;</code>, upstream không phân giải được, location trùng, thiếu chứng chỉ) và cho qua bốn. Chạy thật, bốn cái lọt qua cho 404, 502, 502 (<code>could not be resolved</code>) và một cú 200 từ khối SAI. Sửa trên đĩa: <code>test is successful</code> mà vẫn <code>PHIEN BAN 1</code> — master khởi động 01:48:43, tệp sửa lúc 01:48:44. Nạp lại tệp hỏng: thoát mã 1, máy vẫn phục vụ; khởi động lại với tệp hỏng: không còn ai nghe (000).</p>
+<h3>🔗 Bài liên quan ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-7-4-kiem-khoi" target="_blank" rel="noopener"><span class="lc-ico">🚀</span><span class="lc-body"><span class="lc-title">Deploy lên VPS · 7.4 — Chứng minh nó chạy, và kiểm lại chính bộ kiểm</span><span class="lc-sub">Phép smoke test trả lời "có phục vụ đúng không"</span></span></a>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>nginx -t</code></span><span class="v">Phân tích cấu hình, phân giải tên dạng chữ, mở tệp bắt buộc — nhưng không chạy request nào.</span></div>
+  <div class="kv"><span class="k"><code>nginx -T</code></span><span class="v">Vẫn kiểm như trên, cộng in ra toàn bộ cấu hình hiệu lực với mọi include đã bung.</span></div>
+  <div class="kv"><span class="k">host not found in upstream</span><span class="v">Lỗi lúc phân tích: tên upstream dạng chữ chỉ phân giải một lần lúc nạp rồi giữ mãi.</span></div>
+  <div class="kv"><span class="k"><code>resolver</code> + <code>proxy_pass</code> dùng biến</span><span class="v">Dời việc tra DNS sang lúc có request để địa chỉ backend đổi được.</span></div>
+  <div class="kv"><span class="k">reload so với restart</span><span class="v">Cấu hình hỏng mà reload thì giữ bản cũ chạy; restart thì thành một sự cố.</span></div>
+  <div class="kv"><span class="k">smoke test</span><span class="v">Gửi request thật — phép kiểm duy nhất bắt được bốn lỗi mà <code>-t</code> bỏ sót.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li><code>nginx -t</code> trả lời "cấu hình này có nạp được không", không phải "nó phục vụ lưu lượng có đúng không".</li><li>Nó bắt cú pháp, tên upstream không phân giải nổi, location trùng và thiếu tệp chứng chỉ.</li><li>Nó bỏ sót location bị che, đích proxy đã chết, <code>root</code> trỏ sai và chứng chỉ hết hạn.</li><li>Cả <code>-t</code> lẫn <code>-T</code> đọc trên đĩa, không phải thứ worker đang chạy giữ — hãy reload sau mỗi lần sửa.</li><li>Luôn reload, không bao giờ restart: cấu hình hỏng reload là hành động vô hại kèm một dòng log; restart thì không có hồi phục tự động.</li></ul>
 </div>
 `,
     },
@@ -354,13 +781,14 @@ location /api/ { proxy_pass \$backend; }</code></pre>
       type: 'LESSON',
       description: 'nginx -T bung hết include ra thành một tệp. Bài này dùng nó để tìm mã chết, tìm tệp sao lưu đang chạy thật, và đo cái luật kế thừa làm backend mất sạch IP thật của người dùng trên đúng một tuyến.',
       content: `
+${G11_3}
 <div class="ml-en">
 <span class="eyebrow">Chapter 11 · Lesson 11.3</span>
 <h2>Reading a configuration you did not write</h2>
 <p class="lead">A production Nginx configuration is rarely one file. It is <code>nginx.conf</code> including <code>conf.d/*.conf</code> including <code>snippets/*</code>, written by several people over several years. Before changing anything in it you need to know what it actually says — which is not the same as what any one file says.</p>
 
 <h3><code>nginx -T</code>: the whole thing, expanded</h3>
-<p><code>-t</code> tests. <code>-T</code> tests <em>and prints the complete effective configuration</em> with every <code>include</code> resolved in place. A 16-line main file that includes one snippet comes out as 25 lines, and each included file is announced:</p>
+<p><code>-t</code> tests. <code>-T</code> tests <em>and prints the complete effective configuration</em> with every <code>include</code> resolved in place. A 7-line main file that includes a directory (and one more include inside it) comes out as 29 lines, and each included file is announced:</p>
 <div class="out">$ nginx -T -c main.conf
 
 # configuration file /tmp/nxdiag/conf.d/api.conf:
@@ -370,22 +798,22 @@ location /api/ {
     proxy_set_header Host $host;
 }</div>
 <p>Those <code># configuration file</code> lines are the most useful part of the output, because they answer a question nobody thinks to ask: <em>which files are actually being read?</em></p>
-<div class="out">=== liet ke MOI tep dang thuc su duoc nap ===
-  # configuration file /tmp/nxinc/main.conf:
-  # configuration file /tmp/nxinc/conf.d/10-shop.conf:
-  # configuration file /tmp/nxinc/conf.d/20-cu.conf:</div>
+<div class="out">$ nginx -T -c /tmp/ng/conf/main.conf 2&gt;/dev/null | grep '^# configuration file'
+# configuration file /tmp/ng/conf/main.conf:
+# configuration file /tmp/ng/conf/conf.d/10-shop.conf:
+# configuration file /tmp/ng/conf/conf.d/api.inc:
+# configuration file /tmp/ng/conf/conf.d/20-cu.conf:</div>
 <p>The directory in that measurement also contained <code>conf.d/nginx.conf.bak</code>. It is absent from the list, because the glob is <code>*.conf</code> and <code>.bak</code> does not match. That is the good case.</p>
 <div class="pitfall"><strong>Trap — the backup that <em>does</em> match the glob.</strong> <code>cp site.conf site.conf.old</code> is harmless. <code>cp site.conf site-old.conf</code> loads a complete second copy of every <code>server</code> block in it. So does <code>site.conf.save</code> from an editor that appends rather than prepends, and so does anything a colleague left behind called <code>test.conf</code>. The list of loaded files above is the only reliable way to see it — the directory listing tells you what exists, not what Nginx read.</div>
 
 <h3>What happens when two files claim the same name</h3>
 <p>The measurement had two <code>server</code> blocks in different files, both with <code>server_name shop.vidu</code> on the same address:</p>
-<div class="out">=== nginx -t voi hai server_name TRUNG nhau ===
-  [warn] 3204#3204: conflicting server name "shop.vidu" on 127.0.0.1:9380, ignored
-  nginx: configuration file /tmp/nxinc/main.conf syntax is ok
-  nginx: configuration file /tmp/nxinc/main.conf test is successful
-
-=== ai thang? ===
-  SHOP (10-shop.conf)</div>
+<div class="out">$ nginx -t -c /tmp/ng/conf/main.conf 2&gt;&amp;1 | sed 's/^nginx: //'
+2026/11/13 01:49:24 [warn] 22968#22968: conflicting server name "shop.vidu" on 0.0.0.0:8080, ignored
+the configuration file /tmp/ng/conf/main.conf syntax is ok
+configuration file /tmp/ng/conf/main.conf test is successful
+$ curl -s -H 'Host: shop.vidu' 127.0.0.1:8080/      # ai thắng?
+SHOP (10-shop.conf)</div>
 <div class="callout warn"><strong>A <code>[warn]</code>, and "test is successful".</strong> Nginx does not refuse a duplicate <code>server_name</code> the way it refuses a duplicate <code>location</code> — it keeps the first one it parsed and discards the rest. Includes are expanded in glob order, which is alphabetical, so <code>10-shop.conf</code> beat <code>20-cu.conf</code>. Rename a file and the winner changes. Everything in the losing block — its routes, its TLS settings, its rate limits — is dead, and the only sign is one warning line that scrolls past during a reload nobody watched.</div>
 <p>Two greps find this in any configuration, and they are worth running on a machine you have just inherited:</p>
 <pre><code class="language-bash"><span class="tok-comment"># moi canh bao lan nay — trong do co "conflicting server name"</span>
@@ -408,16 +836,21 @@ nginx -T 2&gt;/dev/null | grep -E '^# configuration file|server_name' </code></p
     }
 }</code></pre>
 <p>Measured at the backend, printing what it actually received:</p>
-<div class="out">=== location KE THUA (khong khai proxy_set_header nao) ===
+<div class="out">$ for p in ke-thua rieng snippet; do echo "=== /$p/"; curl -s -H 'Host: shop.vidu' 127.0.0.1:8081/$p/; done
+=== /ke-thua/
   host                = shop.vidu
   x-real-ip           = 127.0.0.1
   x-forwarded-proto   = http
   x-yeu-cau-rieng     = (KHONG CO)
-
-=== location CO khai MOT proxy_set_header rieng ===
+=== /rieng/
   host                = 127.0.0.1:9601
   x-real-ip           = (KHONG CO)
   x-forwarded-proto   = (KHONG CO)
+  x-yeu-cau-rieng     = co
+=== /snippet/
+  host                = shop.vidu
+  x-real-ip           = 127.0.0.1
+  x-forwarded-proto   = http
   x-yeu-cau-rieng     = co</div>
 <div class="pitfall"><strong>Trap — one <code>proxy_set_header</code> costs you all three of the ones above it.</strong> The second location added a single unrelated header and lost <code>X-Real-IP</code>, lost <code>X-Forwarded-Proto</code>, and had <code>Host</code> revert to Nginx's default of the upstream's own address. The backend on that route now believes every visitor comes from nowhere in particular over plain HTTP, and any absolute URL it builds from <code>Host</code> points at <code>127.0.0.1:9601</code>.</div>
 <p>Everything else keeps working, which is what makes it dangerous. Rate limits keyed on <code>X-Real-IP</code> stop distinguishing users. Audit logs record no client address. A redirect after login sends the browser to an internal address. And it happens on exactly one route — the one someone edited last — so it presents as "the login page is broken but the rest of the site is fine".</p>
@@ -440,6 +873,119 @@ nginx -T 2&gt;/dev/null | grep -E '^# configuration file|server_name' </code></p
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">ngx_http_proxy_module — proxy_set_header</span><span class="lc-sub">nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_set_header — the inheritance sentence, and the two headers Nginx sets by default when you declare none.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Server names — how conflicts are resolved</span><span class="lc-sub">nginx.org/en/docs/http/server_names.html — why a duplicate is a warning rather than an error, and which copy survives.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chapter 3 — what actually reaches your application</span><span class="lc-sub">The chapter that first measured <code>Host</code> being replaced by the upstream address. This lesson shows the second way to lose it.</span></span></div>
+<h3>🔬 Run it yourself</h3>
+<p>A main file that includes <code>conf.d/*.conf</code>, two blocks claiming <code>shop.vidu</code>, a <code>.bak</code> and a <code>-old.conf</code> backup, and a backend that prints the headers it receives — on nginx/1.24.0:</p>
+<pre><code class="language-bash">// soi.js
+// soi.js — backend cổng 9601: in đúng 4 header nó NHẬN được (thiếu ⇒ "(KHONG CO)")
+require('http').createServer((q, r) =&gt; {
+  const h = ['host', 'x-real-ip', 'x-forwarded-proto', 'x-yeu-cau-rieng'];
+  r.end(h.map((k) =&gt; &#96;  \${k.padEnd(19)} = \${q.headers[k] ?? '(KHONG CO)'}&#96;).join('\\n') + '\\n');
+}).listen(9601, '127.0.0.1');</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  include conf.d/*.conf;
+}</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  server {
+    listen 8081; server_name shop.vidu;
+    proxy_set_header Host              $host;
+    proxy_set_header X-Real-IP         $remote_addr;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    location /ke-thua/ { proxy_pass http://127.0.0.1:9601/; }
+    location /rieng/ {
+        proxy_set_header X-Yeu-Cau-Rieng "co"; <span class="tok-comment">  # MOT header rieng</span>
+        proxy_pass http://127.0.0.1:9601/;
+    }
+    location /snippet/ {
+        include snippets/proxy-headers.conf; <span class="tok-comment">  # ba dong chung, include lai</span>
+        proxy_set_header X-Yeu-Cau-Rieng "co";
+        proxy_pass http://127.0.0.1:9601/;
+    }
+  }
+}</code></pre>
+<div class="out">$ ls conf.d/
+10-shop.conf
+20-cu.conf
+api.inc
+nginx.conf.bak
+$ nginx -T -c main.conf 2&gt;/dev/null | wc -l; wc -l &lt; main.conf
+29
+7
+$ nginx -T -c main.conf 2&gt;/dev/null | grep '^# configuration file'
+# configuration file main.conf:
+# configuration file conf.d/10-shop.conf:
+# configuration file conf.d/api.inc:
+# configuration file conf.d/20-cu.conf:
+$ nginx -T -c main.conf 2&gt;/dev/null | sed -n '/api.inc:/,/^}/p'
+# configuration file conf.d/api.inc:
+# tep nay do "ai do" them vao 8 thang truoc
+location /api/ {
+    proxy_pass http://127.0.0.1:9601/;
+    proxy_set_header Host $host;
+}
+$ nginx -t -c main.conf 2&gt;&amp;1 | sed 's/^nginx: //'
+2026/11/13 01:49:24 [warn] 22968#22968: conflicting server name "shop.vidu" on 0.0.0.0:8080, ignored
+the configuration file main.conf syntax is ok
+configuration file main.conf test is successful
+$ curl -s -H 'Host: shop.vidu' 127.0.0.1:8080/      # ai thắng?
+SHOP (10-shop.conf)
+$ cp conf.d/10-shop.conf conf.d/shop-old.conf     # sao lưu kiểu "-old.conf": KHỚP mẫu *.conf
+$ nginx -t -c main.conf 2&gt;&amp;1 | grep -c '\\[warn\\]'; nginx -T -c main.conf 2&gt;/dev/null | grep '^# configuration file'
+2
+# configuration file main.conf:
+# configuration file conf.d/10-shop.conf:
+# configuration file conf.d/api.inc:
+# configuration file conf.d/20-cu.conf:
+# configuration file conf.d/shop-old.conf:
+$ nginx -T -c main.conf 2&gt;/dev/null | grep -E '^# configuration file|server_name'
+# configuration file main.conf:
+# configuration file conf.d/10-shop.conf:
+  listen 8080; server_name shop.vidu;
+# configuration file conf.d/api.inc:
+# configuration file conf.d/20-cu.conf:
+  listen 8080; server_name shop.vidu;
+# configuration file conf.d/shop-old.conf:
+  listen 8080; server_name shop.vidu;
+$ mv 10-shop.conf 30-shop.conf      # đổi tên tệp
+CU (20-cu.conf)
+$ for p in ke-thua rieng snippet; do echo "=== /$p/"; curl -s -H 'Host: shop.vidu' 127.0.0.1:8081/$p/; done
+=== /ke-thua/
+  host                = shop.vidu
+  x-real-ip           = 127.0.0.1
+  x-forwarded-proto   = http
+  x-yeu-cau-rieng     = (KHONG CO)
+=== /rieng/
+  host                = 127.0.0.1:9601
+  x-real-ip           = (KHONG CO)
+  x-forwarded-proto   = (KHONG CO)
+  x-yeu-cau-rieng     = co
+=== /snippet/
+  host                = shop.vidu
+  x-real-ip           = 127.0.0.1
+  x-forwarded-proto   = http
+  x-yeu-cau-rieng     = co</div>
+<p><code>nginx -T</code>: 7 lines ⇒ 29, four files read, <code>nginx.conf.bak</code> not among them. Duplicate name: one <code>[warn]</code>, <code>test is successful</code>, <code>10-shop.conf</code> wins; a <code>shop-old.conf</code> copy turned it into two warnings and five files; renaming <code>10-shop</code> to <code>30-shop</code> made the old site win. NEW: the <code>/snippet/</code> location, which includes the shared lines and adds its own, received all four headers.</p>
+<h3>🔗 Related lessons in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-7-5-proxy-header" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking for Developers · 7.5 — Proxies in the path: X-Forwarded-For, Host and the real client IP</span><span class="lc-sub">What those three headers are for</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-3-3-grep-regex" target="_blank" rel="noopener"><span class="lc-ico">🐧</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash · 3.3 — grep, and just enough regular expression</span><span class="lc-sub">The two greps worth running</span></span></a>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>nginx -T</code></span><span class="v">Dumps the full effective config; its <code># configuration file</code> lines list every file actually read.</span></div>
+  <div class="kv"><span class="k">glob include order</span><span class="v"><code>*.conf</code> is loaded alphabetically; a <code>.bak</code> is skipped, a <code>*-old.conf</code> is loaded as a second copy.</span></div>
+  <div class="kv"><span class="k">conflicting server name</span><span class="v">A duplicate <code>server_name</code> is only a warning — the first parsed wins and the rest are dead.</span></div>
+  <div class="kv"><span class="k"><code>proxy_set_header</code> inheritance</span><span class="v">Declaring one in a child context discards every one inherited from above.</span></div>
+  <div class="kv"><span class="k">array-valued directives</span><span class="v"><code>add_header</code>, <code>proxy_set_header</code>, <code>access_log</code>, <code>limit_req</code>… inherit all-or-nothing.</span></div>
+  <div class="kv"><span class="k">snippet / <code>include</code></span><span class="v">Shared lines in one file, included everywhere, beats hand-repeating them.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li>A production config is many files — read the expanded <code>nginx -T</code> dump, never the individual files.</li><li>The <code># configuration file</code> lines reveal stray backups that match the glob and load silently.</li><li>A duplicate <code>server_name</code> only warns; includes expand alphabetically, so renaming a file changes the winner.</li><li>One <code>proxy_set_header</code> in a location drops <code>Host</code>, <code>X-Real-IP</code> and <code>X-Forwarded-Proto</code> from above it.</li><li>Trace the array directives up the tree, and verify from the backend — not from the config text.</li></ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 11 · Bài 11.3</span>
@@ -447,7 +993,7 @@ nginx -T 2&gt;/dev/null | grep -E '^# configuration file|server_name' </code></p
 <p class="lead">Một cấu hình Nginx chạy production hiếm khi là một tệp. Nó là <code>nginx.conf</code> include <code>conf.d/*.conf</code> include tiếp <code>snippets/*</code>, do vài người viết trong vài năm. Trước khi đổi bất cứ thứ gì trong đó, bạn cần biết nó THẬT SỰ nói gì — mà cái đó không giống với những gì bất kỳ một tệp riêng lẻ nào nói.</p>
 
 <h3><code>nginx -T</code>: toàn bộ, đã bung ra</h3>
-<p><code>-t</code> thì kiểm. <code>-T</code> thì kiểm <em>và in ra toàn bộ cấu hình hiệu lực</em> với mọi <code>include</code> đã được thay thế tại chỗ. Một tệp chính 16 dòng có include một mẩu thì ra 25 dòng, và mỗi tệp được kéo vào đều được xướng tên:</p>
+<p><code>-t</code> thì kiểm. <code>-T</code> thì kiểm <em>và in ra toàn bộ cấu hình hiệu lực</em> với mọi <code>include</code> đã được thay thế tại chỗ. Một tệp chính 7 dòng include cả một thư mục (và thêm một include bên trong) thì ra 29 dòng, và mỗi tệp được kéo vào đều được xướng tên:</p>
 <div class="out">$ nginx -T -c main.conf
 
 # configuration file /tmp/nxdiag/conf.d/api.conf:
@@ -457,22 +1003,22 @@ location /api/ {
     proxy_set_header Host $host;
 }</div>
 <p>Mấy dòng <code># configuration file</code> đó mới là phần hữu ích nhất của kết quả, vì chúng trả lời một câu hỏi chẳng ai nghĩ tới việc hỏi: <em>rốt cuộc những tệp nào đang được đọc?</em></p>
-<div class="out">=== liet ke MOI tep dang thuc su duoc nap ===
-  # configuration file /tmp/nxinc/main.conf:
-  # configuration file /tmp/nxinc/conf.d/10-shop.conf:
-  # configuration file /tmp/nxinc/conf.d/20-cu.conf:</div>
+<div class="out">$ nginx -T -c /tmp/ng/conf/main.conf 2&gt;/dev/null | grep '^# configuration file'
+# configuration file /tmp/ng/conf/main.conf:
+# configuration file /tmp/ng/conf/conf.d/10-shop.conf:
+# configuration file /tmp/ng/conf/conf.d/api.inc:
+# configuration file /tmp/ng/conf/conf.d/20-cu.conf:</div>
 <p>Thư mục trong phép đo đó còn chứa cả <code>conf.d/nginx.conf.bak</code>. Nó VẮNG MẶT trong danh sách, vì mẫu glob là <code>*.conf</code> mà <code>.bak</code> thì không khớp. Đó là trường hợp may.</p>
 <div class="pitfall"><strong>Bẫy — cái bản sao lưu MÀ LẠI khớp mẫu glob.</strong> <code>cp site.conf site.conf.old</code> thì vô hại. <code>cp site.conf site-old.conf</code> thì nạp nguyên một bản sao thứ hai của MỌI khối <code>server</code> nằm trong đó. <code>site.conf.save</code> từ một trình soạn thảo chèn hậu tố kiểu khác cũng vậy, và bất cứ thứ gì đồng nghiệp bỏ lại tên là <code>test.conf</code> cũng vậy. Danh sách tệp được nạp ở trên là cách ĐÁNG TIN DUY NHẤT để thấy chuyện đó — lệnh liệt kê thư mục cho bạn biết cái gì TỒN TẠI, chứ không cho biết Nginx đã ĐỌC cái gì.</div>
 
 <h3>Chuyện gì xảy ra khi hai tệp cùng nhận một cái tên</h3>
 <p>Phép đo có hai khối <code>server</code> ở hai tệp khác nhau, cả hai đều <code>server_name shop.vidu</code> trên cùng một địa chỉ:</p>
-<div class="out">=== nginx -t voi hai server_name TRUNG nhau ===
-  [warn] 3204#3204: conflicting server name "shop.vidu" on 127.0.0.1:9380, ignored
-  nginx: configuration file /tmp/nxinc/main.conf syntax is ok
-  nginx: configuration file /tmp/nxinc/main.conf test is successful
-
-=== ai thang? ===
-  SHOP (10-shop.conf)</div>
+<div class="out">$ nginx -t -c /tmp/ng/conf/main.conf 2&gt;&amp;1 | sed 's/^nginx: //'
+2026/11/13 01:49:24 [warn] 22968#22968: conflicting server name "shop.vidu" on 0.0.0.0:8080, ignored
+the configuration file /tmp/ng/conf/main.conf syntax is ok
+configuration file /tmp/ng/conf/main.conf test is successful
+$ curl -s -H 'Host: shop.vidu' 127.0.0.1:8080/      # ai thắng?
+SHOP (10-shop.conf)</div>
 <div class="callout warn"><strong>Một dòng <code>[warn]</code>, và "test is successful".</strong> Nginx KHÔNG từ chối một <code>server_name</code> trùng theo cách nó từ chối một <code>location</code> trùng — nó giữ cái đầu tiên nó phân tích được rồi vứt phần còn lại. Include được bung ra theo thứ tự glob, tức là theo bảng chữ cái, nên <code>10-shop.conf</code> thắng <code>20-cu.conf</code>. Đổi tên một tệp thì kẻ thắng đổi theo. Mọi thứ trong cái khối thua — các tuyến của nó, thiết lập TLS của nó, giới hạn tốc độ của nó — đều CHẾT, và dấu hiệu duy nhất là một dòng cảnh báo trôi qua trong một lần reload chẳng ai ngồi xem.</div>
 <p>Hai lệnh grep tìm ra chuyện này trong bất kỳ cấu hình nào, và chúng đáng được chạy trên một cái máy bạn vừa tiếp quản:</p>
 <pre><code class="language-bash"><span class="tok-comment"># moi canh bao lan nay — trong do co "conflicting server name"</span>
@@ -495,16 +1041,21 @@ nginx -T 2&gt;/dev/null | grep -E '^# configuration file|server_name' </code></p
     }
 }</code></pre>
 <p>Đo ngay tại backend, in ra đúng những gì nó thật sự nhận được:</p>
-<div class="out">=== location KE THUA (khong khai proxy_set_header nao) ===
+<div class="out">$ for p in ke-thua rieng snippet; do echo "=== /$p/"; curl -s -H 'Host: shop.vidu' 127.0.0.1:8081/$p/; done
+=== /ke-thua/
   host                = shop.vidu
   x-real-ip           = 127.0.0.1
   x-forwarded-proto   = http
   x-yeu-cau-rieng     = (KHONG CO)
-
-=== location CO khai MOT proxy_set_header rieng ===
+=== /rieng/
   host                = 127.0.0.1:9601
   x-real-ip           = (KHONG CO)
   x-forwarded-proto   = (KHONG CO)
+  x-yeu-cau-rieng     = co
+=== /snippet/
+  host                = shop.vidu
+  x-real-ip           = 127.0.0.1
+  x-forwarded-proto   = http
   x-yeu-cau-rieng     = co</div>
 <div class="pitfall"><strong>Bẫy — một dòng <code>proxy_set_header</code> làm bạn mất cả ba dòng ở trên nó.</strong> Location thứ hai thêm đúng một header chẳng liên quan và mất <code>X-Real-IP</code>, mất <code>X-Forwarded-Proto</code>, còn <code>Host</code> thì quay về giá trị mặc định của Nginx là chính địa chỉ của upstream. Backend trên tuyến đó bây giờ tin rằng mọi khách tới từ hư không qua HTTP trần, và mọi URL tuyệt đối nó dựng từ <code>Host</code> đều trỏ về <code>127.0.0.1:9601</code>.</div>
 <p>Mọi thứ khác vẫn chạy, và đó chính là điều làm nó nguy hiểm. Giới hạn tốc độ khoá theo <code>X-Real-IP</code> thôi phân biệt được người dùng. Log kiểm toán không ghi được địa chỉ khách nào. Một cú chuyển hướng sau khi đăng nhập đẩy trình duyệt tới một địa chỉ nội bộ. Và nó xảy ra trên ĐÚNG MỘT tuyến — cái tuyến vừa có người sửa gần nhất — nên nó hiện ra dưới dạng "trang đăng nhập hỏng còn phần còn lại của web thì bình thường".</p>
@@ -527,6 +1078,119 @@ nginx -T 2&gt;/dev/null | grep -E '^# configuration file|server_name' </code></p
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">ngx_http_proxy_module — proxy_set_header</span><span class="lc-sub">nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_set_header — câu về kế thừa, và hai header mà Nginx tự đặt khi bạn không khai cái nào.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Server names — xung đột được giải quyết thế nào</span><span class="lc-sub">nginx.org/en/docs/http/server_names.html — vì sao trùng tên là cảnh báo chứ không phải lỗi, và bản nào sống sót.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chương 3 — thứ gì thật sự tới được ứng dụng của bạn</span><span class="lc-sub">Chương đầu tiên đo chuyện <code>Host</code> bị thay bằng địa chỉ upstream. Bài này cho thấy cách thứ HAI để đánh mất nó.</span></span></div>
+<h3>🔬 Tự chạy lại</h3>
+<p>Một tệp chính include <code>conf.d/*.conf</code>, hai khối cùng nhận <code>shop.vidu</code>, một bản sao <code>.bak</code> và một bản <code>-old.conf</code>, và một backend in ra những header nó nhận được — trên nginx/1.24.0:</p>
+<pre><code class="language-bash">// soi.js
+// soi.js — backend cổng 9601: in đúng 4 header nó NHẬN được (thiếu ⇒ "(KHONG CO)")
+require('http').createServer((q, r) =&gt; {
+  const h = ['host', 'x-real-ip', 'x-forwarded-proto', 'x-yeu-cau-rieng'];
+  r.end(h.map((k) =&gt; &#96;  \${k.padEnd(19)} = \${q.headers[k] ?? '(KHONG CO)'}&#96;).join('\\n') + '\\n');
+}).listen(9601, '127.0.0.1');</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  include conf.d/*.conf;
+}</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  server {
+    listen 8081; server_name shop.vidu;
+    proxy_set_header Host              $host;
+    proxy_set_header X-Real-IP         $remote_addr;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    location /ke-thua/ { proxy_pass http://127.0.0.1:9601/; }
+    location /rieng/ {
+        proxy_set_header X-Yeu-Cau-Rieng "co"; <span class="tok-comment">  # MOT header rieng</span>
+        proxy_pass http://127.0.0.1:9601/;
+    }
+    location /snippet/ {
+        include snippets/proxy-headers.conf; <span class="tok-comment">  # ba dong chung, include lai</span>
+        proxy_set_header X-Yeu-Cau-Rieng "co";
+        proxy_pass http://127.0.0.1:9601/;
+    }
+  }
+}</code></pre>
+<div class="out">$ ls conf.d/
+10-shop.conf
+20-cu.conf
+api.inc
+nginx.conf.bak
+$ nginx -T -c main.conf 2&gt;/dev/null | wc -l; wc -l &lt; main.conf
+29
+7
+$ nginx -T -c main.conf 2&gt;/dev/null | grep '^# configuration file'
+# configuration file main.conf:
+# configuration file conf.d/10-shop.conf:
+# configuration file conf.d/api.inc:
+# configuration file conf.d/20-cu.conf:
+$ nginx -T -c main.conf 2&gt;/dev/null | sed -n '/api.inc:/,/^}/p'
+# configuration file conf.d/api.inc:
+# tep nay do "ai do" them vao 8 thang truoc
+location /api/ {
+    proxy_pass http://127.0.0.1:9601/;
+    proxy_set_header Host $host;
+}
+$ nginx -t -c main.conf 2&gt;&amp;1 | sed 's/^nginx: //'
+2026/11/13 01:49:24 [warn] 22968#22968: conflicting server name "shop.vidu" on 0.0.0.0:8080, ignored
+the configuration file main.conf syntax is ok
+configuration file main.conf test is successful
+$ curl -s -H 'Host: shop.vidu' 127.0.0.1:8080/      # ai thắng?
+SHOP (10-shop.conf)
+$ cp conf.d/10-shop.conf conf.d/shop-old.conf     # sao lưu kiểu "-old.conf": KHỚP mẫu *.conf
+$ nginx -t -c main.conf 2&gt;&amp;1 | grep -c '\\[warn\\]'; nginx -T -c main.conf 2&gt;/dev/null | grep '^# configuration file'
+2
+# configuration file main.conf:
+# configuration file conf.d/10-shop.conf:
+# configuration file conf.d/api.inc:
+# configuration file conf.d/20-cu.conf:
+# configuration file conf.d/shop-old.conf:
+$ nginx -T -c main.conf 2&gt;/dev/null | grep -E '^# configuration file|server_name'
+# configuration file main.conf:
+# configuration file conf.d/10-shop.conf:
+  listen 8080; server_name shop.vidu;
+# configuration file conf.d/api.inc:
+# configuration file conf.d/20-cu.conf:
+  listen 8080; server_name shop.vidu;
+# configuration file conf.d/shop-old.conf:
+  listen 8080; server_name shop.vidu;
+$ mv 10-shop.conf 30-shop.conf      # đổi tên tệp
+CU (20-cu.conf)
+$ for p in ke-thua rieng snippet; do echo "=== /$p/"; curl -s -H 'Host: shop.vidu' 127.0.0.1:8081/$p/; done
+=== /ke-thua/
+  host                = shop.vidu
+  x-real-ip           = 127.0.0.1
+  x-forwarded-proto   = http
+  x-yeu-cau-rieng     = (KHONG CO)
+=== /rieng/
+  host                = 127.0.0.1:9601
+  x-real-ip           = (KHONG CO)
+  x-forwarded-proto   = (KHONG CO)
+  x-yeu-cau-rieng     = co
+=== /snippet/
+  host                = shop.vidu
+  x-real-ip           = 127.0.0.1
+  x-forwarded-proto   = http
+  x-yeu-cau-rieng     = co</div>
+<p><code>nginx -T</code>: 7 dòng ⇒ 29, bốn tệp được đọc, <code>nginx.conf.bak</code> không có. Tên trùng: một <code>[warn]</code>, <code>test is successful</code>, <code>10-shop.conf</code> thắng; thêm bản sao <code>shop-old.conf</code> thành hai cảnh báo và năm tệp; đổi tên <code>10-shop</code> thành <code>30-shop</code> thì trang cũ thắng. MỚI: location <code>/snippet/</code>, include các dòng chung rồi thêm header riêng, nhận đủ cả bốn header.</p>
+<h3>🔗 Bài liên quan ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-7-5-proxy-header" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking for Developers · 7.5 — Proxy trên đường đi: X-Forwarded-For, Host và IP thật</span><span class="lc-sub">Ba header đó để làm gì</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-3-3-grep-regex" target="_blank" rel="noopener"><span class="lc-ico">🐧</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash · 3.3 — grep, và vừa đủ biểu thức chính quy</span><span class="lc-sub">Hai lệnh grep đáng chạy</span></span></a>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>nginx -T</code></span><span class="v">In ra toàn bộ cấu hình hiệu lực; các dòng <code># configuration file</code> liệt kê mọi tệp thật sự được đọc.</span></div>
+  <div class="kv"><span class="k">thứ tự glob include</span><span class="v"><code>*.conf</code> nạp theo bảng chữ cái; <code>.bak</code> bị bỏ qua, còn <code>*-old.conf</code> bị nạp thành bản sao thứ hai.</span></div>
+  <div class="kv"><span class="k">conflicting server name</span><span class="v">Trùng <code>server_name</code> chỉ là cảnh báo — cái phân tích đầu tiên thắng, phần còn lại chết.</span></div>
+  <div class="kv"><span class="k">kế thừa <code>proxy_set_header</code></span><span class="v">Khai một cái ở ngữ cảnh con sẽ vứt bỏ mọi cái kế thừa từ trên.</span></div>
+  <div class="kv"><span class="k">chỉ thị dạng mảng</span><span class="v"><code>add_header</code>, <code>proxy_set_header</code>, <code>access_log</code>, <code>limit_req</code>… kế thừa toàn bộ hoặc không gì cả.</span></div>
+  <div class="kv"><span class="k">snippet / <code>include</code></span><span class="v">Các dòng dùng chung trong một tệp, include khắp nơi, hơn hẳn việc chép tay.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li>Cấu hình production là nhiều tệp — đọc bản bung của <code>nginx -T</code>, đừng bao giờ đọc từng tệp rời.</li><li>Các dòng <code># configuration file</code> lộ ra tệp sao lưu lạc khớp mẫu glob và nạp âm thầm.</li><li>Trùng <code>server_name</code> chỉ cảnh báo; include bung theo bảng chữ cái nên đổi tên tệp là đổi kẻ thắng.</li><li>Một <code>proxy_set_header</code> trong location làm mất <code>Host</code>, <code>X-Real-IP</code> và <code>X-Forwarded-Proto</code> ở trên nó.</li><li>Truy ngược các chỉ thị dạng mảng lên cây, và kiểm từ phía backend — không kiểm từ văn bản cấu hình.</li></ul>
 </div>
 `,
     },
@@ -538,36 +1202,35 @@ nginx -T 2&gt;/dev/null | grep -E '^# configuration file|server_name' </code></p
       type: 'LESSON',
       description: 'Bảy request, bảy kết cục, mỗi cái kèm đúng dòng error log của nó. Trong đó có một cú 502 mà backend hoàn toàn khoẻ mạnh và đã trả về 200 — nó phá vỡ giả định phổ biến nhất về mã 502.',
       content: `
+${G11_4}
 <div class="ml-en">
 <span class="eyebrow">Chapter 11 · Lesson 11.4</span>
 <h2>From a status code to the cause</h2>
 <p class="lead">A status code narrows the problem to a family. It never identifies the fault, because several unrelated faults share a code. The error log line is what separates them — and one of the cases below is a <code>502</code> produced by a backend that was working perfectly.</p>
 
 <h3>Seven requests against one server</h3>
-<div class="out">  /tep/cong-khai.txt         → 200
-  /tep/khong-co.txt          → 404
-  /tep/kin/kho.txt           → 403
-  /up/binh-thuong            → 200
-  /up/header-to              → 502
-  /chet/x                    → 502
-  /khong-co-location-nao     → 404
-
+<div class="out">  /tep/cong-khai.txt         -&gt; 200
+  /tep/khong-co.txt          -&gt; 404
+  /tep/kin/kho.txt           -&gt; 403
+  /up/binh-thuong            -&gt; 200
+  /up/header-to              -&gt; 502
+  /chet/x                    -&gt; 502
+  /khong-co-location-nao     -&gt; 404
 --- error log ---
-    open() "/tmp/nxfail/web/khong-co.txt" failed (2: No such file or directory)
-    open() "/tmp/nxfail/web/kin/kho.txt" failed (13: Permission denied)
-    upstream sent too big header while reading response header from upstream
-    connect() failed (111: Connection refused) while connecting to upstream
-    open() "/tmp/nxfail/web/khong-co-location-nao" failed (2: No such file or directory)</div>
+open() "/srv/web/khong-co.txt" failed (2: No such file or directory)
+open() "/srv/web/kin/kho.txt" failed (13: Permission denied)
+upstream sent too big header while reading response header from upstream
+connect() failed (111: Connection refused) while connecting to upstream
+open() "/srv/web/khong-co-location-nao" failed (2: No such file or directory)</div>
 <p>Two <code>404</code>s from different causes with the same message, two <code>502</code>s from completely different causes, and a <code>403</code> whose message does not say which of two things went wrong. Taking them in turn.</p>
 
 <h3>The <code>502</code> that is not the backend's fault</h3>
 <p><code>/up/header-to</code> reached a backend that was running, accepted the connection, and answered <code>200</code>. The client got <code>502</code>. The route sends one deliberately oversized response header:</p>
-<div class="out">=== truoc: proxy_buffer_size mac dinh ===
-  /up/header-to → 502
-=== sau: proxy_buffer_size 32k ===
-  /up/header-to → 200  (header 12KB)
-=== kich thuoc header that ma backend gui ===
-  tong header phan hoi: 12148 byte</div>
+<div class="out">$ curl -s -D- -o /dev/null http://127.0.0.1:9610/header-to | wc -c      # backend thật sự gửi bao nhiêu byte header
+12142
+$ for p in /up/header-to /up32/header-to; do printf '%-18s -&gt; %s\\n' $p $(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8080$p); done
+/up/header-to      -&gt; 502
+/up32/header-to    -&gt; 200</div>
 <div class="pitfall"><strong>Trap — <code>502</code> does not mean "the backend is down".</strong> Here the backend was healthy and its response was valid HTTP. Nginx reads the response header into a single fixed buffer — <code>proxy_buffer_size</code>, 4 KB or 8 KB depending on platform — and if the header does not fit, it gives up and returns <code>502</code>. Twelve kilobytes of headers is not exotic: a large <code>Set-Cookie</code>, a JWT in a header, a long <code>Link</code> or CSP header, or an error page from a framework that echoes the request back. The symptom is a route that works in development, where the session cookie is small, and fails in production once it is not.</div>
 <p>The tell is the error text: <code>upstream sent too big header</code>. If you only look at the status you will restart a backend that was never broken. The fix is to size the buffer for the largest header you actually emit, on that location:</p>
 <pre><code class="language-bash">location /up/ {
@@ -587,22 +1250,26 @@ nginx -T 2&gt;/dev/null | grep -E '^# configuration file|server_name' </code></p
 
 <h3>The <code>403</code> that does not say which permission</h3>
 <p><code>13: Permission denied</code> has two quite different causes, and Nginx prints the same line for both. Measured by breaking each one separately:</p>
-<div class="out">=== thu muc DOC/THUC THI duoc, TEP thi khong ===
-  /tep/kin/kho.txt → 403
-=== TEP doc duoc, nhung THU MUC mat quyen x ===
-  /tep/kin/kho.txt → 403
---- hai dong error log cuoi ---
-    open() "/tmp/nxfail/web/kin/kho.txt" failed (13: Permission denied)
-    open() "/tmp/nxfail/web/kin/kho.txt" failed (13: Permission denied)</div>
+<div class="out">$ ps -o user= -p $(pgrep -f 'nginx: worker' | head -1)        # worker chạy dưới người dùng nào
+nobody
+$ ls -l /srv/web/kin/kho.txt; curl -s -o /dev/null -w '/tep/kin/kho.txt -&gt; %{http_code}\\n' http://127.0.0.1:8080/tep/kin/kho.txt     # TỆP mất quyền đọc
+-rw------- 1 root root 7 Nov 13 01:50 /srv/web/kin/kho.txt
+/tep/kin/kho.txt -&gt; 403
+$ chmod 644 /srv/web/kin/kho.txt; chmod 644 /srv/web/kin; ls -ld /srv/web/kin; curl -s -o /dev/null -w '/tep/kin/kho.txt -&gt; %{http_code}\\n' http://127.0.0.1:8080/tep/kin/kho.txt     # THƯ MỤC mất quyền x
+drw-r--r-- 2 root root 4096 Nov 13 01:50 /srv/web/kin
+/tep/kin/kho.txt -&gt; 403
+$ sed -E 's/^.*\\*[0-9]+ //; s/, client.*//' /srv/logs/error.log</div>
 <p>Byte for byte the same message. The worker needs read permission on the file <em>and</em> execute permission on every directory along the path — and a missing <code>x</code> on a directory three levels up produces a message naming only the file. <code>namei -l</code> resolves it in one line:</p>
-<div class="out">$ namei -l /tmp/nxfail/web/kin/kho.txt
-  f: /tmp/nxfail/web/kin/kho.txt
-  drwxr-xr-x root root /
-  drwxrwxrwt root root tmp
-  drwxr-xr-x root root nxfail
-  drwxr-xr-x root root web
-  drw-r--r-- root root kin        ← thieu quyen x
-  -rw-r--r-- root root kho.txt</div>
+<div class="out">open() "/srv/web/kin/kho.txt" failed (13: Permission denied)
+open() "/srv/web/kin/kho.txt" failed (13: Permission denied)
+$ namei -l /srv/web/kin/kho.txt
+f: /srv/web/kin/kho.txt
+drwxr-xr-x root root /
+drwxrwxrwt root root tmp
+drwxr-xr-x root root ng
+drwxr-xr-x root root web
+drw-r--r-- root root kin
+-rw-r--r-- root root kho.txt</div>
 <p>Every component listed with its mode, so the offending one is visible at a glance. Pair it with the worker's identity — <code>ps -o user= -p &lt;worker-pid&gt;</code> returned <code>nobody</code> on this machine — because the permissions that matter are the ones that apply to <em>that</em> user, not to the one running the shell.</p>
 
 <h3><code>502</code> versus <code>504</code></h3>
@@ -626,6 +1293,95 @@ nginx -T 2&gt;/dev/null | grep -E '^# configuration file|server_name' </code></p
 <div class="link-card"><span class="lc-ico">🔧</span><span class="lc-body"><span class="lc-title">namei(1)</span><span class="lc-sub">man7.org/linux/man-pages/man1/namei.1.html — resolves a whole path with the mode of every component, which is what the 403 message will not tell you.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">RFC 9110 §15.6 — Server Error 5xx</span><span class="lc-sub">datatracker.ietf.org/doc/html/rfc9110#section-15.6 — what 502 and 504 are defined to mean, which is narrower than how they are usually read.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chapter 4 — static files: from URI to bytes</span><span class="lc-sub">The chapter that measured how <code>root</code> and <code>alias</code> build the path that appears in a 404 message.</span></span></div>
+<h3>🔬 Run it yourself</h3>
+<p>A healthy Node backend (one route answers 200 with a 12 KB cookie, one sleeps 3 s), a server with a static tree, an <code>alias</code>, a dead upstream and <code>proxy_read_timeout 1s</code> — seven requests, then the permission and timeout cases — on nginx/1.24.0:</p>
+<pre><code class="language-bash">// up.js
+// up.js — backend cổng 9610 khoẻ mạnh: /binh-thuong nhỏ; /header-to trả 200 với một header 12 KB (cookie to); /cham ngủ 3 s
+require('http').createServer((q, r) =&gt; {
+  if (q.url.startsWith('/header-to')) { r.setHeader('Set-Cookie', 'phien=' + 'x'.repeat(12000)); return r.end('ok\\n'); }
+  if (q.url.startsWith('/cham')) return setTimeout(() =&gt; r.end('cham\\n'), 3000);
+  r.end('ok binh thuong\\n');
+}).listen(9610, '127.0.0.1');</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log /srv/logs/access.log;
+  server {
+    listen 8080;
+    root /srv/web;
+    location /tep/  { alias /srv/web/; }
+    location /up/   { proxy_read_timeout 1s; proxy_pass http://127.0.0.1:9610/; }
+    location /up32/ { proxy_buffer_size 32k; proxy_buffers 8 32k; proxy_busy_buffers_size 64k; proxy_pass http://127.0.0.1:9610/; }
+    location /chet/ { proxy_pass http://127.0.0.1:9999/; }
+  }
+}</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># bay.sh</span>
+<span class="tok-comment"># bay.sh — bảy request vào cùng một máy chủ, in mã; rồi phần thông báo của error log (bỏ ngày giờ/pid/client)</span>
+for p in /tep/cong-khai.txt /tep/khong-co.txt /tep/kin/kho.txt /up/binh-thuong /up/header-to /chet/x /khong-co-location-nao; do
+  printf '  %-26s -&gt; %s\\n' $p $(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8080$p)
+done
+echo '--- error log ---'
+sed -E 's/^.*\\*[0-9]+ //; s/, client.*//' /tmp/ng/logs/error.log</code></pre>
+<div class="out">$ bash bay.sh
+  /tep/cong-khai.txt         -&gt; 200
+  /tep/khong-co.txt          -&gt; 404
+  /tep/kin/kho.txt           -&gt; 403
+  /up/binh-thuong            -&gt; 200
+  /up/header-to              -&gt; 502
+  /chet/x                    -&gt; 502
+  /khong-co-location-nao     -&gt; 404
+--- error log ---
+open() "/srv/web/khong-co.txt" failed (2: No such file or directory)
+open() "/srv/web/kin/kho.txt" failed (13: Permission denied)
+upstream sent too big header while reading response header from upstream
+connect() failed (111: Connection refused) while connecting to upstream
+open() "/srv/web/khong-co-location-nao" failed (2: No such file or directory)
+$ curl -s -D- -o /dev/null http://127.0.0.1:9610/header-to | wc -c      # backend thật sự gửi bao nhiêu byte header
+12142
+$ for p in /up/header-to /up32/header-to; do printf '%-18s -&gt; %s\\n' $p $(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8080$p); done
+/up/header-to      -&gt; 502
+/up32/header-to    -&gt; 200
+$ ps -o user= -p $(pgrep -f 'nginx: worker' | head -1)        # worker chạy dưới người dùng nào
+nobody
+$ ls -l /srv/web/kin/kho.txt; curl -s -o /dev/null -w '/tep/kin/kho.txt -&gt; %{http_code}\\n' http://127.0.0.1:8080/tep/kin/kho.txt     # TỆP mất quyền đọc
+-rw------- 1 root root 7 Nov 13 01:50 /srv/web/kin/kho.txt
+/tep/kin/kho.txt -&gt; 403
+$ chmod 644 /srv/web/kin/kho.txt; chmod 644 /srv/web/kin; ls -ld /srv/web/kin; curl -s -o /dev/null -w '/tep/kin/kho.txt -&gt; %{http_code}\\n' http://127.0.0.1:8080/tep/kin/kho.txt     # THƯ MỤC mất quyền x
+drw-r--r-- 2 root root 4096 Nov 13 01:50 /srv/web/kin
+/tep/kin/kho.txt -&gt; 403
+$ sed -E 's/^.*\\*[0-9]+ //; s/, client.*//' /srv/logs/error.log
+open() "/srv/web/kin/kho.txt" failed (13: Permission denied)
+open() "/srv/web/kin/kho.txt" failed (13: Permission denied)
+$ namei -l /srv/web/kin/kho.txt
+f: /srv/web/kin/kho.txt
+drwxr-xr-x root root /
+drwxrwxrwt root root tmp
+drwxr-xr-x root root ng
+drwxr-xr-x root root web
+drw-r--r-- root root kin
+-rw-r--r-- root root kho.txt
+$ curl -s -o /dev/null -w '/up/cham -&gt; %{http_code}  (%{time_total} s)\\n' http://127.0.0.1:8080/up/cham
+/up/cham -&gt; 504  (1.002754 s)
+$ sed -E 's/^.*\\*[0-9]+ //; s/, client.*//' /srv/logs/error.log
+upstream timed out (110: Connection timed out) while reading response header from upstream
+$ curl -s -o /dev/null --max-time 0.5 http://127.0.0.1:8080/up/cham; sleep 1.2; tail -1 /srv/logs/access.log | awk '{print "access log:", $7, "-&gt;", $9}'    # client bỏ cuộc trước
+access log: /up/cham -&gt; 499</div>
+<p>Seven requests: 200 404 403 200 502 502 404 and five error lines. The 12,142-byte header: 502 <code>too big header</code>; with <code>proxy_buffer_size 32k</code>: 200. The worker is <code>nobody</code>; an unreadable file and a directory without <code>x</code> both gave 403 with the same line, and <code>namei -l</code> showed <code>drw-r--r-- kin</code>. NEW: <code>proxy_read_timeout 1s</code> against a 3 s backend ⇒ 504 after 1.0 s; a client that gives up after 0.5 s ⇒ <code>499</code> in the access log.</p>
+<h3>🔗 Related lessons in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-4-5-chan-doan-permission-denied" target="_blank" rel="noopener"><span class="lc-ico">🐧</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash · 4.5 — Diagnosing "Permission denied" instead of reaching for sudo</span><span class="lc-sub">namei, and the x bit on directories</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-11-5-lab-chan-doan" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking for Developers · Lab 11 — Diagnosing an incident by layers</span><span class="lc-sub">The same ladder, one layer wider</span></span></a>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">error log line</span><span class="v">The text that separates two faults sharing one status code.</span></div>
+  <div class="kv"><span class="k"><code>proxy_buffer_size</code></span><span class="v">The fixed buffer for the response header; overflow is a 502 from a healthy backend.</span></div>
+  <div class="kv"><span class="k">two kinds of 404</span><span class="v">A missing file under <code>root</code> versus a route-shaped path that matched no location.</span></div>
+  <div class="kv"><span class="k"><code>namei -l</code></span><span class="v">Lists every path component with its mode; finds the missing <code>x</code> behind a 403.</span></div>
+  <div class="kv"><span class="k">502 vs 504</span><span class="v">502 = no usable response; 504 = a timeout, and the message names which one.</span></div>
+  <div class="kv"><span class="k">499</span><span class="v">Client closed first — a latency alarm, visible only in the access log.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li>A status code names a family of faults; the error log line names the actual one.</li><li>A 502 does not mean the backend is down — an oversized response header trips <code>proxy_buffer_size</code>.</li><li>The resolved path in a 404 tells you whether a file is missing or no location matched (a stale build).</li><li>A 403's identical message hides whether the file or a parent directory lacks permission — use <code>namei -l</code>.</li><li>Work the ladder: is Nginx answering, which block, the error log for that request, reproduce at the backend, then change config.</li></ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 11 · Bài 11.4</span>
@@ -633,30 +1389,28 @@ nginx -T 2&gt;/dev/null | grep -E '^# configuration file|server_name' </code></p
 <p class="lead">Một mã trạng thái thu hẹp vấn đề về một HỌ. Nó không bao giờ chỉ đích danh sự cố, vì nhiều sự cố chẳng liên quan gì tới nhau lại dùng chung một mã. Dòng error log mới là thứ tách chúng ra — và một trong những ca dưới đây là cú <code>502</code> sinh ra bởi một backend hoạt động hoàn hảo.</p>
 
 <h3>Bảy request vào cùng một máy chủ</h3>
-<div class="out">  /tep/cong-khai.txt         → 200
-  /tep/khong-co.txt          → 404
-  /tep/kin/kho.txt           → 403
-  /up/binh-thuong            → 200
-  /up/header-to              → 502
-  /chet/x                    → 502
-  /khong-co-location-nao     → 404
-
+<div class="out">  /tep/cong-khai.txt         -&gt; 200
+  /tep/khong-co.txt          -&gt; 404
+  /tep/kin/kho.txt           -&gt; 403
+  /up/binh-thuong            -&gt; 200
+  /up/header-to              -&gt; 502
+  /chet/x                    -&gt; 502
+  /khong-co-location-nao     -&gt; 404
 --- error log ---
-    open() "/tmp/nxfail/web/khong-co.txt" failed (2: No such file or directory)
-    open() "/tmp/nxfail/web/kin/kho.txt" failed (13: Permission denied)
-    upstream sent too big header while reading response header from upstream
-    connect() failed (111: Connection refused) while connecting to upstream
-    open() "/tmp/nxfail/web/khong-co-location-nao" failed (2: No such file or directory)</div>
+open() "/srv/web/khong-co.txt" failed (2: No such file or directory)
+open() "/srv/web/kin/kho.txt" failed (13: Permission denied)
+upstream sent too big header while reading response header from upstream
+connect() failed (111: Connection refused) while connecting to upstream
+open() "/srv/web/khong-co-location-nao" failed (2: No such file or directory)</div>
 <p>Hai cú <code>404</code> từ hai nguyên nhân khác nhau mà cùng một thông báo, hai cú <code>502</code> từ hai nguyên nhân hoàn toàn khác nhau, và một cú <code>403</code> mà thông báo của nó không nói rõ trong hai chuyện thì chuyện nào đã hỏng. Lần lượt từng cái.</p>
 
 <h3>Cú <code>502</code> không phải lỗi của backend</h3>
 <p><code>/up/header-to</code> đã tới được một backend đang chạy, backend đó nhận kết nối, và trả lời <code>200</code>. Client nhận <code>502</code>. Cái tuyến đó gửi ra một header phản hồi cố tình làm cho quá cỡ:</p>
-<div class="out">=== truoc: proxy_buffer_size mac dinh ===
-  /up/header-to → 502
-=== sau: proxy_buffer_size 32k ===
-  /up/header-to → 200  (header 12KB)
-=== kich thuoc header that ma backend gui ===
-  tong header phan hoi: 12148 byte</div>
+<div class="out">$ curl -s -D- -o /dev/null http://127.0.0.1:9610/header-to | wc -c      # backend thật sự gửi bao nhiêu byte header
+12142
+$ for p in /up/header-to /up32/header-to; do printf '%-18s -&gt; %s\\n' $p $(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8080$p); done
+/up/header-to      -&gt; 502
+/up32/header-to    -&gt; 200</div>
 <div class="pitfall"><strong>Bẫy — <code>502</code> KHÔNG có nghĩa là "backend chết".</strong> Ở đây backend khoẻ mạnh và phản hồi của nó là HTTP hợp lệ. Nginx đọc header phản hồi vào một bộ đệm cố định duy nhất — <code>proxy_buffer_size</code>, 4 KB hoặc 8 KB tuỳ nền tảng — và nếu header không lọt vào đó, nó bỏ cuộc và trả <code>502</code>. Mười hai kilobyte header không phải chuyện kỳ dị: một <code>Set-Cookie</code> lớn, một JWT nằm trong header, một header <code>Link</code> hay CSP dài, hoặc một trang lỗi của framework dội lại nguyên cái request. Triệu chứng là một tuyến chạy ngon trên máy phát triển, nơi cookie phiên còn nhỏ, rồi hỏng trên production khi nó không còn nhỏ nữa.</div>
 <p>Dấu hiệu nhận biết nằm ở chữ trong thông báo: <code>upstream sent too big header</code>. Nếu bạn chỉ nhìn mã trạng thái thì bạn sẽ đi khởi động lại một backend chưa từng hỏng. Cách sửa là chỉnh bộ đệm cho vừa cái header lớn nhất bạn thật sự phát ra, ngay tại location đó:</p>
 <pre><code class="language-bash">location /up/ {
@@ -676,22 +1430,26 @@ nginx -T 2&gt;/dev/null | grep -E '^# configuration file|server_name' </code></p
 
 <h3>Cú <code>403</code> không nói rõ là thiếu quyền nào</h3>
 <p><code>13: Permission denied</code> có hai nguyên nhân khá khác nhau, và Nginx in ra CÙNG một dòng cho cả hai. Đo bằng cách phá riêng từng cái:</p>
-<div class="out">=== thu muc DOC/THUC THI duoc, TEP thi khong ===
-  /tep/kin/kho.txt → 403
-=== TEP doc duoc, nhung THU MUC mat quyen x ===
-  /tep/kin/kho.txt → 403
---- hai dong error log cuoi ---
-    open() "/tmp/nxfail/web/kin/kho.txt" failed (13: Permission denied)
-    open() "/tmp/nxfail/web/kin/kho.txt" failed (13: Permission denied)</div>
+<div class="out">$ ps -o user= -p $(pgrep -f 'nginx: worker' | head -1)        # worker chạy dưới người dùng nào
+nobody
+$ ls -l /srv/web/kin/kho.txt; curl -s -o /dev/null -w '/tep/kin/kho.txt -&gt; %{http_code}\\n' http://127.0.0.1:8080/tep/kin/kho.txt     # TỆP mất quyền đọc
+-rw------- 1 root root 7 Nov 13 01:50 /srv/web/kin/kho.txt
+/tep/kin/kho.txt -&gt; 403
+$ chmod 644 /srv/web/kin/kho.txt; chmod 644 /srv/web/kin; ls -ld /srv/web/kin; curl -s -o /dev/null -w '/tep/kin/kho.txt -&gt; %{http_code}\\n' http://127.0.0.1:8080/tep/kin/kho.txt     # THƯ MỤC mất quyền x
+drw-r--r-- 2 root root 4096 Nov 13 01:50 /srv/web/kin
+/tep/kin/kho.txt -&gt; 403
+$ sed -E 's/^.*\\*[0-9]+ //; s/, client.*//' /srv/logs/error.log</div>
 <p>Giống nhau tới từng byte. Worker cần quyền ĐỌC trên cái tệp <em>và</em> quyền THỰC THI trên mọi thư mục dọc đường — mà một thư mục thiếu chữ <code>x</code> ở tận ba tầng phía trên vẫn sinh ra thông báo chỉ nêu tên cái tệp. <code>namei -l</code> giải quyết chuyện đó trong một dòng lệnh:</p>
-<div class="out">$ namei -l /tmp/nxfail/web/kin/kho.txt
-  f: /tmp/nxfail/web/kin/kho.txt
-  drwxr-xr-x root root /
-  drwxrwxrwt root root tmp
-  drwxr-xr-x root root nxfail
-  drwxr-xr-x root root web
-  drw-r--r-- root root kin        ← thieu quyen x
-  -rw-r--r-- root root kho.txt</div>
+<div class="out">open() "/srv/web/kin/kho.txt" failed (13: Permission denied)
+open() "/srv/web/kin/kho.txt" failed (13: Permission denied)
+$ namei -l /srv/web/kin/kho.txt
+f: /srv/web/kin/kho.txt
+drwxr-xr-x root root /
+drwxrwxrwt root root tmp
+drwxr-xr-x root root ng
+drwxr-xr-x root root web
+drw-r--r-- root root kin
+-rw-r--r-- root root kho.txt</div>
 <p>Mỗi thành phần được liệt kê kèm quyền của nó, nên cái thành phần có tội hiện ra ngay trong một cái liếc. Hãy ghép nó với danh tính của worker — <code>ps -o user= -p &lt;worker-pid&gt;</code> trả về <code>nobody</code> trên máy này — vì quyền có ý nghĩa là quyền áp cho <em>người dùng đó</em>, không phải cho người đang gõ lệnh trong shell.</p>
 
 <h3><code>502</code> so với <code>504</code></h3>
@@ -715,6 +1473,95 @@ nginx -T 2&gt;/dev/null | grep -E '^# configuration file|server_name' </code></p
 <div class="link-card"><span class="lc-ico">🔧</span><span class="lc-body"><span class="lc-title">namei(1)</span><span class="lc-sub">man7.org/linux/man-pages/man1/namei.1.html — giải quyết cả một đường dẫn kèm quyền của từng thành phần, đúng thứ mà thông báo 403 sẽ không nói cho bạn.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">RFC 9110 §15.6 — Lỗi máy chủ 5xx</span><span class="lc-sub">datatracker.ietf.org/doc/html/rfc9110#section-15.6 — 502 và 504 được ĐỊNH NGHĨA là gì, hẹp hơn hẳn cách người ta thường hiểu.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chương 4 — tệp tĩnh: từ URI tới byte</span><span class="lc-sub">Chương đã đo chuyện <code>root</code> và <code>alias</code> dựng ra cái đường dẫn xuất hiện trong thông báo 404.</span></span></div>
+<h3>🔬 Tự chạy lại</h3>
+<p>Một backend Node khoẻ mạnh (một tuyến trả 200 kèm cookie 12 KB, một tuyến ngủ 3 s), một server có cây tệp tĩnh, một <code>alias</code>, một upstream chết và <code>proxy_read_timeout 1s</code> — bảy request, rồi các ca quyền và timeout — trên nginx/1.24.0:</p>
+<pre><code class="language-bash">// up.js
+// up.js — backend cổng 9610 khoẻ mạnh: /binh-thuong nhỏ; /header-to trả 200 với một header 12 KB (cookie to); /cham ngủ 3 s
+require('http').createServer((q, r) =&gt; {
+  if (q.url.startsWith('/header-to')) { r.setHeader('Set-Cookie', 'phien=' + 'x'.repeat(12000)); return r.end('ok\\n'); }
+  if (q.url.startsWith('/cham')) return setTimeout(() =&gt; r.end('cham\\n'), 3000);
+  r.end('ok binh thuong\\n');
+}).listen(9610, '127.0.0.1');</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log /srv/logs/access.log;
+  server {
+    listen 8080;
+    root /srv/web;
+    location /tep/  { alias /srv/web/; }
+    location /up/   { proxy_read_timeout 1s; proxy_pass http://127.0.0.1:9610/; }
+    location /up32/ { proxy_buffer_size 32k; proxy_buffers 8 32k; proxy_busy_buffers_size 64k; proxy_pass http://127.0.0.1:9610/; }
+    location /chet/ { proxy_pass http://127.0.0.1:9999/; }
+  }
+}</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># bay.sh</span>
+<span class="tok-comment"># bay.sh — bảy request vào cùng một máy chủ, in mã; rồi phần thông báo của error log (bỏ ngày giờ/pid/client)</span>
+for p in /tep/cong-khai.txt /tep/khong-co.txt /tep/kin/kho.txt /up/binh-thuong /up/header-to /chet/x /khong-co-location-nao; do
+  printf '  %-26s -&gt; %s\\n' $p $(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8080$p)
+done
+echo '--- error log ---'
+sed -E 's/^.*\\*[0-9]+ //; s/, client.*//' /tmp/ng/logs/error.log</code></pre>
+<div class="out">$ bash bay.sh
+  /tep/cong-khai.txt         -&gt; 200
+  /tep/khong-co.txt          -&gt; 404
+  /tep/kin/kho.txt           -&gt; 403
+  /up/binh-thuong            -&gt; 200
+  /up/header-to              -&gt; 502
+  /chet/x                    -&gt; 502
+  /khong-co-location-nao     -&gt; 404
+--- error log ---
+open() "/srv/web/khong-co.txt" failed (2: No such file or directory)
+open() "/srv/web/kin/kho.txt" failed (13: Permission denied)
+upstream sent too big header while reading response header from upstream
+connect() failed (111: Connection refused) while connecting to upstream
+open() "/srv/web/khong-co-location-nao" failed (2: No such file or directory)
+$ curl -s -D- -o /dev/null http://127.0.0.1:9610/header-to | wc -c      # backend thật sự gửi bao nhiêu byte header
+12142
+$ for p in /up/header-to /up32/header-to; do printf '%-18s -&gt; %s\\n' $p $(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8080$p); done
+/up/header-to      -&gt; 502
+/up32/header-to    -&gt; 200
+$ ps -o user= -p $(pgrep -f 'nginx: worker' | head -1)        # worker chạy dưới người dùng nào
+nobody
+$ ls -l /srv/web/kin/kho.txt; curl -s -o /dev/null -w '/tep/kin/kho.txt -&gt; %{http_code}\\n' http://127.0.0.1:8080/tep/kin/kho.txt     # TỆP mất quyền đọc
+-rw------- 1 root root 7 Nov 13 01:50 /srv/web/kin/kho.txt
+/tep/kin/kho.txt -&gt; 403
+$ chmod 644 /srv/web/kin/kho.txt; chmod 644 /srv/web/kin; ls -ld /srv/web/kin; curl -s -o /dev/null -w '/tep/kin/kho.txt -&gt; %{http_code}\\n' http://127.0.0.1:8080/tep/kin/kho.txt     # THƯ MỤC mất quyền x
+drw-r--r-- 2 root root 4096 Nov 13 01:50 /srv/web/kin
+/tep/kin/kho.txt -&gt; 403
+$ sed -E 's/^.*\\*[0-9]+ //; s/, client.*//' /srv/logs/error.log
+open() "/srv/web/kin/kho.txt" failed (13: Permission denied)
+open() "/srv/web/kin/kho.txt" failed (13: Permission denied)
+$ namei -l /srv/web/kin/kho.txt
+f: /srv/web/kin/kho.txt
+drwxr-xr-x root root /
+drwxrwxrwt root root tmp
+drwxr-xr-x root root ng
+drwxr-xr-x root root web
+drw-r--r-- root root kin
+-rw-r--r-- root root kho.txt
+$ curl -s -o /dev/null -w '/up/cham -&gt; %{http_code}  (%{time_total} s)\\n' http://127.0.0.1:8080/up/cham
+/up/cham -&gt; 504  (1.002754 s)
+$ sed -E 's/^.*\\*[0-9]+ //; s/, client.*//' /srv/logs/error.log
+upstream timed out (110: Connection timed out) while reading response header from upstream
+$ curl -s -o /dev/null --max-time 0.5 http://127.0.0.1:8080/up/cham; sleep 1.2; tail -1 /srv/logs/access.log | awk '{print "access log:", $7, "-&gt;", $9}'    # client bỏ cuộc trước
+access log: /up/cham -&gt; 499</div>
+<p>Bảy request: 200 404 403 200 502 502 404 và năm dòng error log. Header 12.142 byte: 502 <code>too big header</code>; với <code>proxy_buffer_size 32k</code>: 200. Worker chạy bằng <code>nobody</code>; tệp không đọc được và thư mục thiếu <code>x</code> đều cho 403 với cùng một dòng, và <code>namei -l</code> chỉ ra <code>drw-r--r-- kin</code>. MỚI: <code>proxy_read_timeout 1s</code> với backend 3 s ⇒ 504 sau 1,0 s; client bỏ cuộc sau 0,5 s ⇒ <code>499</code> trong access log.</p>
+<h3>🔗 Bài liên quan ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-4-5-chan-doan-permission-denied" target="_blank" rel="noopener"><span class="lc-ico">🐧</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash · 4.5 — Chẩn đoán "Permission denied" thay vì vớ lấy sudo</span><span class="lc-sub">namei, và bit x trên thư mục</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-11-5-lab-chan-doan" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking for Developers · Lab 11 — Chẩn đoán một sự cố theo tầng</span><span class="lc-sub">Cùng cái thang, rộng ra một tầng</span></span></a>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">dòng error log</span><span class="v">Chữ tách được hai sự cố cùng chung một mã trạng thái.</span></div>
+  <div class="kv"><span class="k"><code>proxy_buffer_size</code></span><span class="v">Bộ đệm cố định cho header phản hồi; tràn là một cú 502 từ backend khoẻ mạnh.</span></div>
+  <div class="kv"><span class="k">hai kiểu 404</span><span class="v">Thiếu tệp dưới <code>root</code> so với một đường dẫn dạng tuyến không khớp location nào.</span></div>
+  <div class="kv"><span class="k"><code>namei -l</code></span><span class="v">Liệt kê mọi thành phần đường dẫn kèm quyền; tìm ra chữ <code>x</code> thiếu đứng sau một cú 403.</span></div>
+  <div class="kv"><span class="k">502 so với 504</span><span class="v">502 = không có phản hồi dùng được; 504 = một cái hạn giờ, và thông báo nói rõ là cái nào.</span></div>
+  <div class="kv"><span class="k">499</span><span class="v">Client bỏ cuộc trước — một chuông báo độ trễ, chỉ thấy trong access log.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li>Một mã trạng thái nêu tên một họ sự cố; dòng error log nêu đúng cái sự cố.</li><li>Một cú 502 không có nghĩa backend chết — một header phản hồi quá cỡ làm tràn <code>proxy_buffer_size</code>.</li><li>Đường dẫn đã giải quyết trong 404 cho biết là thiếu tệp hay không location nào khớp (bản dựng cũ).</li><li>Thông báo 403 giống hệt nhau giấu đi chuyện là tệp hay một thư mục cha thiếu quyền — dùng <code>namei -l</code>.</li><li>Đi theo cái thang: Nginx có trả lời không, khối nào, error log cho đúng request đó, tái hiện tại backend, rồi mới sửa cấu hình.</li></ul>
 </div>
 `,
     },
@@ -726,6 +1573,7 @@ nginx -T 2&gt;/dev/null | grep -E '^# configuration file|server_name' </code></p
       type: 'LESSON',
       description: 'Toàn bộ khoá học gộp thành một tệp cấu hình, chạy thật với TLS thật và một backend thật. Rồi mười phép nghiệm thu chạy trên chính nó — và phép thứ sáu tìm ra một lỗ bảo mật trong chính cấu hình tôi vừa viết ngay sau bài học cảnh báo về nó.',
       content: `
+${G11_5}
 <div class="ml-en">
 <span class="eyebrow">Chapter 11 · Lesson 11.5</span>
 <h2>A production configuration, and the test that proves it</h2>
@@ -837,69 +1685,66 @@ add_header X-Frame-Options SAMEORIGIN always;</code></pre>
 
 <h3>The acceptance test</h3>
 <p>The configuration above was run against a self-signed certificate for <code>cuongthai.test</code> and a small Node backend that echoes the headers it receives. Every claim, checked:</p>
-<div class="out">1) HTTP → chuyen huong HTTPS
+<div class="out">1) HTTP -&gt; chuyen huong HTTPS
      HTTP/1.1 301 Moved Permanently
      Location: https://cuongthai.test/bat-ky
-2) ten mien LA tren 443 → return 444
-     ket noi bi dong giua chung — dung nhu thiet ke
+2) ten mien LA tren 443 -&gt; return 444
+     curl thoat ma 92 — ket noi bi dong, khong co phan hoi nao
 3) trang chu + header bao mat
-     HTTP/2 200
+     HTTP/2 200 
      server: nginx
      strict-transport-security: max-age=31536000
      x-content-type-options: nosniff
      x-frame-options: SAMEORIGIN
 4) health                          ma=200
 5) API — backend nhan duoc gi
-     {"duong_dan":"/api/nguoi-dung","host":"cuongthai.test",
-      "ip_that":"127.0.0.1","giao_thuc":"https","lan":1}
+     {"duong_dan":"/api/nguoi-dung","host":"cuongthai.test","ip_that":"127.0.0.1","giao_thuc":"https","lan":1}
 6) tep tinh
-     expires: Mon, 23 Aug 2027 19:32:16 GMT
+     expires: Sat, 13 Nov 2027 01:51:40 GMT
      cache-control: max-age=31536000
      cache-control: public, immutable</div>
 <p>Line 5 is the one that matters most: the backend received the real hostname, the real client address and the real scheme. Chapter 3 measured how easily all three are lost.</p>
 
 <h3>Test 6 found a hole — in this configuration</h3>
 <p>Look at what line 6 does <em>not</em> print. Counting the security headers per route:</p>
-<div class="out">=== so header bao mat: / so voi /tinh/ ===
-  /                        : 3 / 3 header bao mat
+<div class="out">  /                        : 3 / 3 header bao mat
   /tinh/app.a1b2c3.css     : 1 / 3 header bao mat
+  /api/nguoi-dung          : 3 / 3 header bao mat
 
 === cu the /tinh/ CO nhung gi ===
-    x-content-type-options: nosniff
-  → thieu: Strict-Transport-Security, X-Frame-Options</div>
+x-content-type-options: nosniff</div>
 <div class="pitfall"><strong>Trap — the trap from Lesson 11.3, in the config written immediately after it.</strong> The original <code>/tinh/</code> block declared <code>add_header Cache-Control</code> and <code>add_header X-Content-Type-Options</code>. That single act discarded all three server-level security headers, and the one that was re-declared by hand came back while the other two did not. Every stylesheet, script and image on the site was served without HSTS and without clickjacking protection — and the config loaded cleanly, <code>nginx -t</code> approved it, and the pages rendered perfectly.</div>
 <p>The fix is the snippet, and the reason it is a snippet rather than three repeated lines is precisely this: hand-repeating a list means eventually repeating it incompletely. After replacing both copies with <code>include snippets/headers-baomat.conf</code>:</p>
-<div class="out">=== sau khi sua ===
-  /                        : 3 / 3 header bao mat
+<div class="out">  /                        : 3 / 3 header bao mat
   /tinh/app.a1b2c3.css     : 3 / 3 header bao mat
   /api/nguoi-dung          : 3 / 3 header bao mat</div>
 <div class="callout warn"><strong>This is the argument for the acceptance test, made better than any assertion could.</strong> The trap had been measured, written up, and published four screens earlier. It still made it into the next configuration, because knowing a rule is not the same as applying it under the load of forty other decisions. What caught it was not knowledge — it was a loop that counted headers on every route.</div>
 
 <h3>The rest of the test</h3>
-<div class="out">7) limit_req zone=dangnhap rate=5r/m burst=3 — ban 8 phat lien
-     200 200 200 200 503 503 503 503
+<div class="out">7) limit_req zone=login rate=5r/m burst=3 — ban 8 phat lien
+     200 200 200 200 503 503 503 503 
 8) /api/ thuong (rate=30r/s burst=20) — ban 8 phat
-     200 200 200 200 200 200 200 200
+     200 200 200 200 200 200 200 200 
+9) gzip: CSS lon hon 256 byte thi nen, trang chu nho hon thi khong
+     /tinh/app.a1b2c3.css    1851 byte tren dia -&gt; content-encoding: gzip
+     /index.html               19 byte tren dia -&gt; content-encoding: 
 10) stub_status
-     Active connections: 1
+     Active connections: 1 
      server accepts handled requests
-      32 32 32
-     Reading: 0 Writing: 1 Waiting: 0
+      25 25 25 
+     Reading: 0 Writing: 1 Waiting: 0 
 
-=== loi.log chi giu request DANG CHU Y ===
-  access.log: 26 dong   loi.log: 6 dong
-  ma trong loi.log: [444, 503]
-  tat ca 26 dong deu phan tich duoc: OK
-
-=== /health va /tinh/ co bi ghi log khong? ===
-  so dong /health : 0
-  so dong /tinh/  : 0
-  so dong /api/   : 19</div>
+access.log: 25 dong   loi.log: 5 dong
+ma trong loi.log: [444, 503]
+moi dong access.log deu phan tich duoc: OK
+so dong /health : 0
+so dong /tinh/  : 0
+so dong /api/   : 19</div>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">7</span><span class="lz-t">Login limiting: four through, then refusals</span><span class="lz-d">One at the rate plus a burst of three, exactly as Chapter 7 measured. Note the code is <code>503</code>; if you want <code>429</code> — which is what a client library will understand as "retry later" — set <code>limit_req_status 429</code>.</span></div>
   <div class="lz-step"><span class="lz-k">8</span><span class="lz-t">The general API limit did not fire</span><span class="lz-d">Eight requests against 30r/s with a burst of 20. A limit that never fires in testing is the correct outcome — it is there for the abnormal case, and a rate limit you can trip by hand is set too low.</span></div>
   <div class="lz-step"><span class="lz-k">10</span><span class="lz-t"><code>accepts</code> equals <code>handled</code></span><span class="lz-d">Thirty-two and thirty-two: nothing was dropped. Lesson 10.5 measured what the other case looks like.</span></div>
-  <div class="lz-step"><span class="lz-k">✓</span><span class="lz-t">The logs behave as designed</span><span class="lz-d">Twenty-six lines, all valid JSON; six in the errors-only file, carrying exactly the <code>444</code>s and <code>503</code>s the test generated; zero lines for <code>/health</code> and <code>/tinh/</code>, which is <code>access_log off</code> doing its job.</span></div>
+  <div class="lz-step"><span class="lz-k">✓</span><span class="lz-t">The logs behave as designed</span><span class="lz-d">Twenty-five lines, all valid JSON; five in the errors-only file, carrying exactly the <code>444</code>s and <code>503</code>s the test generated; zero lines for <code>/health</code> and <code>/tinh/</code>, which is <code>access_log off</code> doing its job.</span></div>
 </div>
 
 <h3>What is deliberately not here</h3>
@@ -913,6 +1758,197 @@ add_header X-Frame-Options SAMEORIGIN always;</code></pre>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">nginx documentation — full directive index</span><span class="lc-sub">nginx.org/en/docs/dirindex.html — every directive in the configuration above, with its default and its valid contexts.</span></span></div>
 <div class="link-card"><span class="lc-ico">🔧</span><span class="lc-body"><span class="lc-title">Mozilla Observatory / SSL Labs</span><span class="lc-sub">developer.mozilla.org/en-US/observatory and ssllabs.com/ssltest — an external acceptance test for the headers and the TLS configuration, run against the real domain.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Docker — running this configuration in a container</span><span class="lc-sub">/courses/docker/learn${REF} — where the log paths, the certificate mounts and the reload story all change shape.</span></span></div>
+<h3>🔬 Run it yourself</h3>
+<p>The whole configuration (with <code>cuongthai.test</code>, a self-signed certificate and <code>include mime.types</code> added for the lab), the two snippets, an echo backend, and the ten-test script plus the per-route header count — on nginx/1.24.0. The <code>#BAN_DAU</code> / <code>#DA_SUA</code> markers switch between the first (broken) and the fixed <code>/tinh/</code> block:</p>
+<pre><code class="language-bash">pid /tmp/ng/logs/nginx.pid;
+worker_processes  auto;
+worker_rlimit_nofile 65535;                   <span class="tok-comment">  # phai nang cung worker_connections (10.5)</span>
+error_log  /var/log/nginx/error.log warn;     <span class="tok-comment">  # warn, khong bao gio debug (10.4)</span>
+events { worker_connections 4096; }
+
+http {
+    include /etc/nginx/mime.types;
+    <span class="tok-comment"># ── Log (Chuong 10) ──</span>
+    log_format json escape=json '{"tg":"$time_iso8601","ip":"$remote_addr","ma":$status,'
+        '"tgian":$request_time,"tgian_up":"$upstream_response_time","up":"$upstream_addr",'
+        '"uri":"$request_uri","dem":"$upstream_cache_status","byte":$body_bytes_sent}';
+    map $status $dang_chu_y { ~^[23] 0; default 1; }
+    access_log /var/log/nginx/access.log json;
+    access_log /var/log/nginx/loi.log    json if=$dang_chu_y;
+
+    sendfile on; tcp_nopush on; server_tokens off;
+    keepalive_timeout 65;
+    client_max_body_size 20m;                  <span class="tok-comment">  # Chuong 7</span>
+
+    gzip on; gzip_vary on; gzip_comp_level 5; gzip_min_length 256;
+    gzip_types text/plain text/css application/json application/javascript image/svg+xml;
+
+    limit_req_zone  $binary_remote_addr zone=chung:10m rate=30r/s;
+    limit_req_zone  $binary_remote_addr zone=login:10m rate=5r/m;
+    limit_conn_zone $binary_remote_addr zone=conn:10m;
+    proxy_cache_path /var/cache/nginx levels=1:2 keys_zone=web:10m max_size=500m inactive=60m;
+
+    upstream ung_dung {
+        server 127.0.0.1:3000 max_fails=3 fail_timeout=10s;
+        keepalive 32;                          <span class="tok-comment">  # Chuong 9</span>
+    }
+
+    <span class="tok-comment"># 1. Cong 80: CHI de chuyen huong (Chuong 6)</span>
+    server {
+        listen 80 default_server;
+        server_name _;
+        location / { return 301 https://$host$request_uri; }
+    }
+    <span class="tok-comment"># 2. Cong 443 mac dinh: tu choi ten mien la (Chuong 1)</span>
+    server {
+        listen 443 ssl default_server;
+        ssl_certificate     /etc/letsencrypt/live/cuongthai.test/fullchain.pem;
+        ssl_certificate_key /etc/letsencrypt/live/cuongthai.test/privkey.pem;
+        return 444;
+    }
+    <span class="tok-comment"># 3. Site that</span>
+    server {
+        listen 443 ssl http2;                  <span class="tok-comment">  # nginx &lt; 1.25.1 — xem 6.4</span>
+        server_name cuongthai.test;
+        root /var/www/cuongthai;
+        ssl_certificate     /etc/letsencrypt/live/cuongthai.test/fullchain.pem;
+        ssl_certificate_key /etc/letsencrypt/live/cuongthai.test/privkey.pem;
+        ssl_protocols TLSv1.2 TLSv1.3;
+        ssl_session_cache shared:SSL:10m;
+        ssl_session_timeout 1d;
+        include /etc/nginx/snippets/headers-baomat.conf;
+        limit_conn conn 20;
+
+        location = /health     { access_log off; return 200 "ok\\n"; }
+        location = /trang-thai { stub_status; access_log off; allow 127.0.0.1; deny all; }
+
+        location /tinh/ {
+            expires 1y;
+            <span class="tok-comment">#BAN_DAU add_header X-Content-Type-Options nosniff always;</span>
+            <span class="tok-comment">#BAN_DAU add_header Cache-Control "public, immutable";</span>
+            <span class="tok-comment">#DA_SUA include /etc/nginx/snippets/headers-baomat.conf;   # BAT BUOC — xem duoi</span>
+            <span class="tok-comment">#DA_SUA add_header Cache-Control "public, immutable";</span>
+            access_log off;
+        }
+        location = /api/dang-nhap {
+            limit_req zone=login burst=3 nodelay;
+            include /etc/nginx/snippets/proxy.conf;
+            proxy_pass http://ung_dung;
+        }
+        location /api/ {
+            limit_req zone=chung burst=20 nodelay;
+            include /etc/nginx/snippets/proxy.conf;
+            proxy_pass http://ung_dung;
+        }
+        location / { try_files $uri $uri/ /index.html; }
+    }
+}</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># snippets/proxy.conf</span>
+proxy_http_version 1.1;
+proxy_set_header Connection          "";      <span class="tok-comment">  # bat buoc cho keepalive (9.4)</span>
+proxy_set_header Host                $host;
+proxy_set_header X-Real-IP           $remote_addr;
+proxy_set_header X-Forwarded-For     $proxy_add_x_forwarded_for;
+proxy_set_header X-Forwarded-Proto   $scheme;
+proxy_connect_timeout 3s;
+proxy_read_timeout   30s;
+proxy_buffer_size    32k;                     <span class="tok-comment">  # cai 502 o bai 11.4</span>
+proxy_buffers      8 32k;
+<span class="tok-comment"># snippets/headers-baomat.conf</span>
+add_header Strict-Transport-Security "max-age=31536000" always;
+add_header X-Content-Type-Options nosniff always;
+add_header X-Frame-Options SAMEORIGIN always;</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># nghiem_thu.sh</span>
+<span class="tok-comment"># nghiem_thu.sh — mười phép nghiệm thu cho cấu hình production (chạy ngay trên máy chủ)</span>
+H=cuongthai.test; R="--resolve $H:443:127.0.0.1 --resolve la.vidu:443:127.0.0.1 -k"
+echo '1) HTTP -&gt; chuyen huong HTTPS'; curl -s -D- -o /dev/null -H "Host: $H" http://127.0.0.1/bat-ky | grep -iE '^HTTP|^location' | tr -d '\\r' | sed 's/^/     /'
+echo '2) ten mien LA tren 443 -&gt; return 444'; curl -s $R -o /dev/null https://la.vidu/ ; echo "     curl thoat ma $? — ket noi bi dong, khong co phan hoi nao"
+echo '3) trang chu + header bao mat'; curl -s $R -D- -o /dev/null https://$H/ | grep -iE '^HTTP|^server|^strict|^x-content|^x-frame' | tr -d '\\r' | sed 's/^/     /'
+echo "4) health                          ma=$(curl -s $R -o /dev/null -w '%{http_code}' https://$H/health)"
+echo '5) API — backend nhan duoc gi'; curl -s $R https://$H/api/nguoi-dung | sed 's/^/     /'
+echo '6) tep tinh'; curl -s $R -D- -o /dev/null https://$H/tinh/app.a1b2c3.css | grep -iE '^expires|^cache-control' | tr -d '\\r' | sed 's/^/     /'
+echo '7) limit_req zone=login rate=5r/m burst=3 — ban 8 phat lien'; printf '     '; for i in $(seq 8); do printf '%s ' $(curl -s $R -o /dev/null -w '%{http_code}' https://$H/api/dang-nhap); done; echo
+echo '8) /api/ thuong (rate=30r/s burst=20) — ban 8 phat'; printf '     '; for i in $(seq 8); do printf '%s ' $(curl -s $R -o /dev/null -w '%{http_code}' https://$H/api/x); done; echo
+echo '9) gzip: CSS lon hon 256 byte thi nen, trang chu nho hon thi khong'; for p in /tinh/app.a1b2c3.css /index.html; do printf '     %-22s %5s byte tren dia -&gt; content-encoding: %s\\n' $p $(stat -c %s /var/www/cuongthai$p) "$(curl -s $R -H 'Accept-Encoding: gzip' -D- -o /dev/null https://$H$p | grep -i '^content-encoding' | tr -d '\\r' | awk '{print $2}')"; done
+echo '10) stub_status'; curl -s $R https://$H/trang-thai | sed 's/^/     /'</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># dem_header.sh</span>
+<span class="tok-comment"># dem_header.sh — đếm 3 header bảo mật trên TỪNG tuyến</span>
+H=cuongthai.test; R="--resolve $H:443:127.0.0.1 -k"
+for p in / /tinh/app.a1b2c3.css /api/nguoi-dung; do
+  n=$(curl -s $R -D- -o /dev/null https://$H$p | grep -ciE '^(strict-transport-security|x-content-type-options|x-frame-options):')
+  printf '  %-24s : %s / 3 header bao mat\\n' $p $n
+done</code></pre>
+<div class="out">$ nginx -t -c /tmp/ng/dang.conf 2&gt;&amp;1 | sed 's/^nginx: //'
+the configuration file /tmp/ng/dang.conf syntax is ok
+configuration file /tmp/ng/dang.conf test is successful
+$ bash nghiem_thu.sh
+1) HTTP -&gt; chuyen huong HTTPS
+     HTTP/1.1 301 Moved Permanently
+     Location: https://cuongthai.test/bat-ky
+2) ten mien LA tren 443 -&gt; return 444
+     curl thoat ma 92 — ket noi bi dong, khong co phan hoi nao
+3) trang chu + header bao mat
+     HTTP/2 200 
+     server: nginx
+     strict-transport-security: max-age=31536000
+     x-content-type-options: nosniff
+     x-frame-options: SAMEORIGIN
+4) health                          ma=200
+5) API — backend nhan duoc gi
+     {"duong_dan":"/api/nguoi-dung","host":"cuongthai.test","ip_that":"127.0.0.1","giao_thuc":"https","lan":1}
+6) tep tinh
+     expires: Sat, 13 Nov 2027 01:51:40 GMT
+     cache-control: max-age=31536000
+     cache-control: public, immutable
+7) limit_req zone=login rate=5r/m burst=3 — ban 8 phat lien
+     200 200 200 200 503 503 503 503 
+8) /api/ thuong (rate=30r/s burst=20) — ban 8 phat
+     200 200 200 200 200 200 200 200 
+9) gzip: CSS lon hon 256 byte thi nen, trang chu nho hon thi khong
+     /tinh/app.a1b2c3.css    1851 byte tren dia -&gt; content-encoding: gzip
+     /index.html               19 byte tren dia -&gt; content-encoding: 
+10) stub_status
+     Active connections: 1 
+     server accepts handled requests
+      25 25 25 
+     Reading: 0 Writing: 1 Waiting: 0 
+$ bash dem_header.sh
+  /                        : 3 / 3 header bao mat
+  /tinh/app.a1b2c3.css     : 1 / 3 header bao mat
+  /api/nguoi-dung          : 3 / 3 header bao mat
+$ curl -s --resolve cuongthai.test:443:127.0.0.1 -k -D- -o /dev/null https://cuongthai.test/tinh/app.a1b2c3.css | grep -iE '^(strict|x-content|x-frame)' | tr -d '\\r'
+x-content-type-options: nosniff
+$ nginx -t -c /tmp/ng/dang.conf 2&gt;&amp;1 | tail -1 | sed 's/^nginx: //'; nginx -s reload -c /tmp/ng/dang.conf 2&gt;/dev/null; sleep 0.6
+configuration file /tmp/ng/dang.conf test is successful
+$ bash dem_header.sh
+  /                        : 3 / 3 header bao mat
+  /tinh/app.a1b2c3.css     : 3 / 3 header bao mat
+  /api/nguoi-dung          : 3 / 3 header bao mat
+$ echo "access.log: $(wc -l &lt; /var/log/nginx/access.log) dong   loi.log: $(wc -l &lt; /var/log/nginx/loi.log) dong"
+access.log: 25 dong   loi.log: 5 dong
+$ python3 -c "import json; L=[json.loads(l) for l in open('/var/log/nginx/loi.log')]; print('ma trong loi.log:', sorted({x['ma'] for x in L}))"
+ma trong loi.log: [444, 503]
+$ python3 -c "import json; [json.loads(l) for l in open('/var/log/nginx/access.log')]; print('moi dong access.log deu phan tich duoc: OK')"
+moi dong access.log deu phan tich duoc: OK
+$ for p in /health /tinh/ /api/; do printf 'so dong %-8s: %s\\n' $p $(grep -c "\\"uri\\":\\"$p" /var/log/nginx/access.log); done
+so dong /health : 0
+so dong /tinh/  : 0
+so dong /api/   : 19</div>
+<p>All ten checks pass (the 444 shows as curl exit 92 — the connection closed with no response). NEW, test 9: gzip compressed the 1,851-byte CSS and left the 19-byte home page alone, as <code>gzip_min_length 256</code> says. The header count found <code>/tinh/</code> at 1 / 3 with the first version and 3 / 3 everywhere after the snippet. Logs: 25 lines, all JSON; the errors-only log holds 5 lines, only 444 and 503; <code>/health</code> and <code>/tinh/</code> wrote nothing.</p>
+<h3>🔗 Related lessons in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-7-4-kiem-khoi" target="_blank" rel="noopener"><span class="lc-ico">🚀</span><span class="lc-body"><span class="lc-title">Deploy to a VPS · 7.4 — Proving it worked, and checking the checker</span><span class="lc-sub">Acceptance tests after every deploy</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-7-4-header-quan-trong" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking for Developers · 7.4 — Headers that change behaviour: caching, compression, CORS, security</span><span class="lc-sub">What each security header in the snippet does</span></span></a>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">default_server <code>return 444</code></span><span class="v">Closes the connection for any hostname no <code>server</code> block claims.</span></div>
+  <div class="kv"><span class="k">proxy.conf / headers-baomat.conf</span><span class="v">Shared proxy headers and security headers in snippets, included wherever needed.</span></div>
+  <div class="kv"><span class="k">acceptance test</span><span class="v">A loop that checks every claim in the config by sending real requests.</span></div>
+  <div class="kv"><span class="k">header-counting check</span><span class="v">Counts security headers per route; it caught the dropped-header trap here.</span></div>
+  <div class="kv"><span class="k">two access logs / <code>if=</code></span><span class="v">A full log plus an errors-only log kept longer — at no measurable cost.</span></div>
+  <div class="kv"><span class="k"><code>server_tokens off</code></span><span class="v">Hides the Nginx patch version in the <code>Server</code> header.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li>The whole course as one running file: HTTP redirect, a refusing default, and the real site with TLS, limits and logs.</li><li>The acceptance test found the Lesson 11.3 trap again — <code>/tinh/</code> added one <code>add_header</code> and lost two security headers.</li><li>Knowing a rule is not applying it; a loop counting headers per route caught what knowledge did not.</li><li>Fix shared header and proxy lists with an <code>include</code>, never by hand-repeating them.</li><li>Every directive here appears in a test result — an untested directive is a guess with good syntax.</li></ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 11 · Bài 11.5</span>
@@ -1025,69 +2061,66 @@ add_header X-Frame-Options SAMEORIGIN always;</code></pre>
 
 <h3>Phép nghiệm thu</h3>
 <p>Cấu hình trên được chạy thật với một chứng chỉ tự ký cho <code>cuongthai.test</code> và một backend Node nhỏ dội lại những header nó nhận được. Mọi lời khẳng định, đều kiểm:</p>
-<div class="out">1) HTTP → chuyen huong HTTPS
+<div class="out">1) HTTP -&gt; chuyen huong HTTPS
      HTTP/1.1 301 Moved Permanently
      Location: https://cuongthai.test/bat-ky
-2) ten mien LA tren 443 → return 444
-     ket noi bi dong giua chung — dung nhu thiet ke
+2) ten mien LA tren 443 -&gt; return 444
+     curl thoat ma 92 — ket noi bi dong, khong co phan hoi nao
 3) trang chu + header bao mat
-     HTTP/2 200
+     HTTP/2 200 
      server: nginx
      strict-transport-security: max-age=31536000
      x-content-type-options: nosniff
      x-frame-options: SAMEORIGIN
 4) health                          ma=200
 5) API — backend nhan duoc gi
-     {"duong_dan":"/api/nguoi-dung","host":"cuongthai.test",
-      "ip_that":"127.0.0.1","giao_thuc":"https","lan":1}
+     {"duong_dan":"/api/nguoi-dung","host":"cuongthai.test","ip_that":"127.0.0.1","giao_thuc":"https","lan":1}
 6) tep tinh
-     expires: Mon, 23 Aug 2027 19:32:16 GMT
+     expires: Sat, 13 Nov 2027 01:51:40 GMT
      cache-control: max-age=31536000
      cache-control: public, immutable</div>
 <p>Dòng 5 mới là dòng quan trọng nhất: backend đã nhận được đúng tên miền thật, đúng địa chỉ khách thật và đúng giao thức thật. Chương 3 đã đo chuyện cả ba thứ đó dễ mất tới mức nào.</p>
 
 <h3>Phép thử số 6 tìm ra một lỗ hổng — ngay trong cấu hình này</h3>
 <p>Hãy nhìn vào thứ mà dòng 6 <em>KHÔNG</em> in ra. Đếm số header bảo mật trên từng tuyến:</p>
-<div class="out">=== so header bao mat: / so voi /tinh/ ===
-  /                        : 3 / 3 header bao mat
+<div class="out">  /                        : 3 / 3 header bao mat
   /tinh/app.a1b2c3.css     : 1 / 3 header bao mat
+  /api/nguoi-dung          : 3 / 3 header bao mat
 
 === cu the /tinh/ CO nhung gi ===
-    x-content-type-options: nosniff
-  → thieu: Strict-Transport-Security, X-Frame-Options</div>
+x-content-type-options: nosniff</div>
 <div class="pitfall"><strong>Bẫy — đúng cái bẫy ở Bài 11.3, trong cấu hình viết NGAY SAU bài đó.</strong> Khối <code>/tinh/</code> bản đầu có khai <code>add_header Cache-Control</code> và <code>add_header X-Content-Type-Options</code>. Chỉ riêng hành động đó đã vứt sạch cả ba header bảo mật ở mức server, và cái được khai lại bằng tay thì quay về còn hai cái kia thì không. Mọi tệp CSS, script và ảnh trên website đều được phục vụ mà không có HSTS và không có bảo vệ chống clickjacking — trong khi cấu hình nạp sạch sẽ, <code>nginx -t</code> phê duyệt, và các trang hiển thị hoàn hảo.</div>
 <p>Cách sửa là cái tệp snippet, và lý do nó là snippet chứ không phải ba dòng chép lại chính là chỗ này: chép tay một danh sách nghĩa là sớm muộn cũng có lần chép thiếu. Sau khi thay cả hai bản bằng <code>include snippets/headers-baomat.conf</code>:</p>
-<div class="out">=== sau khi sua ===
-  /                        : 3 / 3 header bao mat
+<div class="out">  /                        : 3 / 3 header bao mat
   /tinh/app.a1b2c3.css     : 3 / 3 header bao mat
   /api/nguoi-dung          : 3 / 3 header bao mat</div>
 <div class="callout warn"><strong>Đây là lý lẽ cho phép nghiệm thu, và nó được nêu ra hay hơn bất cứ lời khẳng định nào.</strong> Cái bẫy đó đã được đo, được viết ra và được đăng cách đây bốn màn hình. Nó VẪN lọt vào cấu hình kế tiếp, vì BIẾT một cái luật không giống với ÁP DỤNG nó dưới sức nặng của bốn mươi quyết định khác. Thứ bắt được nó không phải là kiến thức — mà là một vòng lặp đi đếm header trên từng tuyến.</div>
 
 <h3>Phần còn lại của phép thử</h3>
-<div class="out">7) limit_req zone=dangnhap rate=5r/m burst=3 — ban 8 phat lien
-     200 200 200 200 503 503 503 503
+<div class="out">7) limit_req zone=login rate=5r/m burst=3 — ban 8 phat lien
+     200 200 200 200 503 503 503 503 
 8) /api/ thuong (rate=30r/s burst=20) — ban 8 phat
-     200 200 200 200 200 200 200 200
+     200 200 200 200 200 200 200 200 
+9) gzip: CSS lon hon 256 byte thi nen, trang chu nho hon thi khong
+     /tinh/app.a1b2c3.css    1851 byte tren dia -&gt; content-encoding: gzip
+     /index.html               19 byte tren dia -&gt; content-encoding: 
 10) stub_status
-     Active connections: 1
+     Active connections: 1 
      server accepts handled requests
-      32 32 32
-     Reading: 0 Writing: 1 Waiting: 0
+      25 25 25 
+     Reading: 0 Writing: 1 Waiting: 0 
 
-=== loi.log chi giu request DANG CHU Y ===
-  access.log: 26 dong   loi.log: 6 dong
-  ma trong loi.log: [444, 503]
-  tat ca 26 dong deu phan tich duoc: OK
-
-=== /health va /tinh/ co bi ghi log khong? ===
-  so dong /health : 0
-  so dong /tinh/  : 0
-  so dong /api/   : 19</div>
+access.log: 25 dong   loi.log: 5 dong
+ma trong loi.log: [444, 503]
+moi dong access.log deu phan tich duoc: OK
+so dong /health : 0
+so dong /tinh/  : 0
+so dong /api/   : 19</div>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">7</span><span class="lz-t">Giới hạn đăng nhập: bốn cái lọt, rồi từ chối</span><span class="lz-d">Một cái theo tốc độ cộng một burst bằng ba, đúng như Chương 7 đã đo. Để ý mã là <code>503</code>; nếu bạn muốn <code>429</code> — thứ mà thư viện client hiểu là "thử lại sau" — thì đặt <code>limit_req_status 429</code>.</span></div>
   <div class="lz-step"><span class="lz-k">8</span><span class="lz-t">Giới hạn API chung KHÔNG kích hoạt</span><span class="lz-d">Tám request đấu với 30r/s và burst 20. Một giới hạn không bao giờ kích hoạt trong lúc thử mới là kết quả ĐÚNG — nó ở đó cho tình huống bất thường, và một giới hạn tốc độ mà bạn gõ tay cũng chạm được là đặt quá thấp.</span></div>
   <div class="lz-step"><span class="lz-k">10</span><span class="lz-t"><code>accepts</code> bằng <code>handled</code></span><span class="lz-d">Ba mươi hai và ba mươi hai: không cái nào bị vứt. Bài 10.5 đã đo trường hợp ngược lại trông ra sao.</span></div>
-  <div class="lz-step"><span class="lz-k">✓</span><span class="lz-t">Log cư xử đúng thiết kế</span><span class="lz-d">Hai mươi sáu dòng, tất cả đều là JSON hợp lệ; sáu dòng trong tệp chỉ-có-lỗi, chở đúng mấy cú <code>444</code> và <code>503</code> mà phép thử sinh ra; không dòng nào cho <code>/health</code> và <code>/tinh/</code>, tức là <code>access_log off</code> đang làm việc của nó.</span></div>
+  <div class="lz-step"><span class="lz-k">✓</span><span class="lz-t">Log cư xử đúng thiết kế</span><span class="lz-d">Hai mươi lăm dòng, tất cả đều là JSON hợp lệ; năm dòng trong tệp chỉ-có-lỗi, chở đúng mấy cú <code>444</code> và <code>503</code> mà phép thử sinh ra; không dòng nào cho <code>/health</code> và <code>/tinh/</code>, tức là <code>access_log off</code> đang làm việc của nó.</span></div>
 </div>
 
 <h3>Thứ CỐ Ý không có ở đây</h3>
@@ -1101,6 +2134,197 @@ add_header X-Frame-Options SAMEORIGIN always;</code></pre>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Tài liệu nginx — danh mục chỉ thị đầy đủ</span><span class="lc-sub">nginx.org/en/docs/dirindex.html — mọi chỉ thị trong cấu hình trên, kèm giá trị mặc định và các ngữ cảnh hợp lệ của nó.</span></span></div>
 <div class="link-card"><span class="lc-ico">🔧</span><span class="lc-body"><span class="lc-title">Mozilla Observatory / SSL Labs</span><span class="lc-sub">developer.mozilla.org/en-US/observatory và ssllabs.com/ssltest — một phép nghiệm thu TỪ BÊN NGOÀI cho phần header và phần TLS, chạy thẳng vào tên miền thật.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Docker — chạy cấu hình này trong container</span><span class="lc-sub">/courses/docker/learn${REF} — nơi đường dẫn log, cách gắn chứng chỉ và câu chuyện reload đều mang hình dạng khác.</span></span></div>
+<h3>🔬 Tự chạy lại</h3>
+<p>Toàn bộ cấu hình (dùng <code>cuongthai.test</code>, chứng chỉ tự ký và thêm <code>include mime.types</code> cho lab), hai snippet, một backend dội lại header, và script mười phép thử cộng phép đếm header từng tuyến — trên nginx/1.24.0. Dấu <code>#BAN_DAU</code> / <code>#DA_SUA</code> chuyển giữa khối <code>/tinh/</code> bản đầu (hỏng) và bản đã sửa:</p>
+<pre><code class="language-bash">pid /tmp/ng/logs/nginx.pid;
+worker_processes  auto;
+worker_rlimit_nofile 65535;                   <span class="tok-comment">  # phai nang cung worker_connections (10.5)</span>
+error_log  /var/log/nginx/error.log warn;     <span class="tok-comment">  # warn, khong bao gio debug (10.4)</span>
+events { worker_connections 4096; }
+
+http {
+    include /etc/nginx/mime.types;
+    <span class="tok-comment"># ── Log (Chuong 10) ──</span>
+    log_format json escape=json '{"tg":"$time_iso8601","ip":"$remote_addr","ma":$status,'
+        '"tgian":$request_time,"tgian_up":"$upstream_response_time","up":"$upstream_addr",'
+        '"uri":"$request_uri","dem":"$upstream_cache_status","byte":$body_bytes_sent}';
+    map $status $dang_chu_y { ~^[23] 0; default 1; }
+    access_log /var/log/nginx/access.log json;
+    access_log /var/log/nginx/loi.log    json if=$dang_chu_y;
+
+    sendfile on; tcp_nopush on; server_tokens off;
+    keepalive_timeout 65;
+    client_max_body_size 20m;                  <span class="tok-comment">  # Chuong 7</span>
+
+    gzip on; gzip_vary on; gzip_comp_level 5; gzip_min_length 256;
+    gzip_types text/plain text/css application/json application/javascript image/svg+xml;
+
+    limit_req_zone  $binary_remote_addr zone=chung:10m rate=30r/s;
+    limit_req_zone  $binary_remote_addr zone=login:10m rate=5r/m;
+    limit_conn_zone $binary_remote_addr zone=conn:10m;
+    proxy_cache_path /var/cache/nginx levels=1:2 keys_zone=web:10m max_size=500m inactive=60m;
+
+    upstream ung_dung {
+        server 127.0.0.1:3000 max_fails=3 fail_timeout=10s;
+        keepalive 32;                          <span class="tok-comment">  # Chuong 9</span>
+    }
+
+    <span class="tok-comment"># 1. Cong 80: CHI de chuyen huong (Chuong 6)</span>
+    server {
+        listen 80 default_server;
+        server_name _;
+        location / { return 301 https://$host$request_uri; }
+    }
+    <span class="tok-comment"># 2. Cong 443 mac dinh: tu choi ten mien la (Chuong 1)</span>
+    server {
+        listen 443 ssl default_server;
+        ssl_certificate     /etc/letsencrypt/live/cuongthai.test/fullchain.pem;
+        ssl_certificate_key /etc/letsencrypt/live/cuongthai.test/privkey.pem;
+        return 444;
+    }
+    <span class="tok-comment"># 3. Site that</span>
+    server {
+        listen 443 ssl http2;                  <span class="tok-comment">  # nginx &lt; 1.25.1 — xem 6.4</span>
+        server_name cuongthai.test;
+        root /var/www/cuongthai;
+        ssl_certificate     /etc/letsencrypt/live/cuongthai.test/fullchain.pem;
+        ssl_certificate_key /etc/letsencrypt/live/cuongthai.test/privkey.pem;
+        ssl_protocols TLSv1.2 TLSv1.3;
+        ssl_session_cache shared:SSL:10m;
+        ssl_session_timeout 1d;
+        include /etc/nginx/snippets/headers-baomat.conf;
+        limit_conn conn 20;
+
+        location = /health     { access_log off; return 200 "ok\\n"; }
+        location = /trang-thai { stub_status; access_log off; allow 127.0.0.1; deny all; }
+
+        location /tinh/ {
+            expires 1y;
+            <span class="tok-comment">#BAN_DAU add_header X-Content-Type-Options nosniff always;</span>
+            <span class="tok-comment">#BAN_DAU add_header Cache-Control "public, immutable";</span>
+            <span class="tok-comment">#DA_SUA include /etc/nginx/snippets/headers-baomat.conf;   # BAT BUOC — xem duoi</span>
+            <span class="tok-comment">#DA_SUA add_header Cache-Control "public, immutable";</span>
+            access_log off;
+        }
+        location = /api/dang-nhap {
+            limit_req zone=login burst=3 nodelay;
+            include /etc/nginx/snippets/proxy.conf;
+            proxy_pass http://ung_dung;
+        }
+        location /api/ {
+            limit_req zone=chung burst=20 nodelay;
+            include /etc/nginx/snippets/proxy.conf;
+            proxy_pass http://ung_dung;
+        }
+        location / { try_files $uri $uri/ /index.html; }
+    }
+}</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># snippets/proxy.conf</span>
+proxy_http_version 1.1;
+proxy_set_header Connection          "";      <span class="tok-comment">  # bat buoc cho keepalive (9.4)</span>
+proxy_set_header Host                $host;
+proxy_set_header X-Real-IP           $remote_addr;
+proxy_set_header X-Forwarded-For     $proxy_add_x_forwarded_for;
+proxy_set_header X-Forwarded-Proto   $scheme;
+proxy_connect_timeout 3s;
+proxy_read_timeout   30s;
+proxy_buffer_size    32k;                     <span class="tok-comment">  # cai 502 o bai 11.4</span>
+proxy_buffers      8 32k;
+<span class="tok-comment"># snippets/headers-baomat.conf</span>
+add_header Strict-Transport-Security "max-age=31536000" always;
+add_header X-Content-Type-Options nosniff always;
+add_header X-Frame-Options SAMEORIGIN always;</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># nghiem_thu.sh</span>
+<span class="tok-comment"># nghiem_thu.sh — mười phép nghiệm thu cho cấu hình production (chạy ngay trên máy chủ)</span>
+H=cuongthai.test; R="--resolve $H:443:127.0.0.1 --resolve la.vidu:443:127.0.0.1 -k"
+echo '1) HTTP -&gt; chuyen huong HTTPS'; curl -s -D- -o /dev/null -H "Host: $H" http://127.0.0.1/bat-ky | grep -iE '^HTTP|^location' | tr -d '\\r' | sed 's/^/     /'
+echo '2) ten mien LA tren 443 -&gt; return 444'; curl -s $R -o /dev/null https://la.vidu/ ; echo "     curl thoat ma $? — ket noi bi dong, khong co phan hoi nao"
+echo '3) trang chu + header bao mat'; curl -s $R -D- -o /dev/null https://$H/ | grep -iE '^HTTP|^server|^strict|^x-content|^x-frame' | tr -d '\\r' | sed 's/^/     /'
+echo "4) health                          ma=$(curl -s $R -o /dev/null -w '%{http_code}' https://$H/health)"
+echo '5) API — backend nhan duoc gi'; curl -s $R https://$H/api/nguoi-dung | sed 's/^/     /'
+echo '6) tep tinh'; curl -s $R -D- -o /dev/null https://$H/tinh/app.a1b2c3.css | grep -iE '^expires|^cache-control' | tr -d '\\r' | sed 's/^/     /'
+echo '7) limit_req zone=login rate=5r/m burst=3 — ban 8 phat lien'; printf '     '; for i in $(seq 8); do printf '%s ' $(curl -s $R -o /dev/null -w '%{http_code}' https://$H/api/dang-nhap); done; echo
+echo '8) /api/ thuong (rate=30r/s burst=20) — ban 8 phat'; printf '     '; for i in $(seq 8); do printf '%s ' $(curl -s $R -o /dev/null -w '%{http_code}' https://$H/api/x); done; echo
+echo '9) gzip: CSS lon hon 256 byte thi nen, trang chu nho hon thi khong'; for p in /tinh/app.a1b2c3.css /index.html; do printf '     %-22s %5s byte tren dia -&gt; content-encoding: %s\\n' $p $(stat -c %s /var/www/cuongthai$p) "$(curl -s $R -H 'Accept-Encoding: gzip' -D- -o /dev/null https://$H$p | grep -i '^content-encoding' | tr -d '\\r' | awk '{print $2}')"; done
+echo '10) stub_status'; curl -s $R https://$H/trang-thai | sed 's/^/     /'</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># dem_header.sh</span>
+<span class="tok-comment"># dem_header.sh — đếm 3 header bảo mật trên TỪNG tuyến</span>
+H=cuongthai.test; R="--resolve $H:443:127.0.0.1 -k"
+for p in / /tinh/app.a1b2c3.css /api/nguoi-dung; do
+  n=$(curl -s $R -D- -o /dev/null https://$H$p | grep -ciE '^(strict-transport-security|x-content-type-options|x-frame-options):')
+  printf '  %-24s : %s / 3 header bao mat\\n' $p $n
+done</code></pre>
+<div class="out">$ nginx -t -c /tmp/ng/dang.conf 2&gt;&amp;1 | sed 's/^nginx: //'
+the configuration file /tmp/ng/dang.conf syntax is ok
+configuration file /tmp/ng/dang.conf test is successful
+$ bash nghiem_thu.sh
+1) HTTP -&gt; chuyen huong HTTPS
+     HTTP/1.1 301 Moved Permanently
+     Location: https://cuongthai.test/bat-ky
+2) ten mien LA tren 443 -&gt; return 444
+     curl thoat ma 92 — ket noi bi dong, khong co phan hoi nao
+3) trang chu + header bao mat
+     HTTP/2 200 
+     server: nginx
+     strict-transport-security: max-age=31536000
+     x-content-type-options: nosniff
+     x-frame-options: SAMEORIGIN
+4) health                          ma=200
+5) API — backend nhan duoc gi
+     {"duong_dan":"/api/nguoi-dung","host":"cuongthai.test","ip_that":"127.0.0.1","giao_thuc":"https","lan":1}
+6) tep tinh
+     expires: Sat, 13 Nov 2027 01:51:40 GMT
+     cache-control: max-age=31536000
+     cache-control: public, immutable
+7) limit_req zone=login rate=5r/m burst=3 — ban 8 phat lien
+     200 200 200 200 503 503 503 503 
+8) /api/ thuong (rate=30r/s burst=20) — ban 8 phat
+     200 200 200 200 200 200 200 200 
+9) gzip: CSS lon hon 256 byte thi nen, trang chu nho hon thi khong
+     /tinh/app.a1b2c3.css    1851 byte tren dia -&gt; content-encoding: gzip
+     /index.html               19 byte tren dia -&gt; content-encoding: 
+10) stub_status
+     Active connections: 1 
+     server accepts handled requests
+      25 25 25 
+     Reading: 0 Writing: 1 Waiting: 0 
+$ bash dem_header.sh
+  /                        : 3 / 3 header bao mat
+  /tinh/app.a1b2c3.css     : 1 / 3 header bao mat
+  /api/nguoi-dung          : 3 / 3 header bao mat
+$ curl -s --resolve cuongthai.test:443:127.0.0.1 -k -D- -o /dev/null https://cuongthai.test/tinh/app.a1b2c3.css | grep -iE '^(strict|x-content|x-frame)' | tr -d '\\r'
+x-content-type-options: nosniff
+$ nginx -t -c /tmp/ng/dang.conf 2&gt;&amp;1 | tail -1 | sed 's/^nginx: //'; nginx -s reload -c /tmp/ng/dang.conf 2&gt;/dev/null; sleep 0.6
+configuration file /tmp/ng/dang.conf test is successful
+$ bash dem_header.sh
+  /                        : 3 / 3 header bao mat
+  /tinh/app.a1b2c3.css     : 3 / 3 header bao mat
+  /api/nguoi-dung          : 3 / 3 header bao mat
+$ echo "access.log: $(wc -l &lt; /var/log/nginx/access.log) dong   loi.log: $(wc -l &lt; /var/log/nginx/loi.log) dong"
+access.log: 25 dong   loi.log: 5 dong
+$ python3 -c "import json; L=[json.loads(l) for l in open('/var/log/nginx/loi.log')]; print('ma trong loi.log:', sorted({x['ma'] for x in L}))"
+ma trong loi.log: [444, 503]
+$ python3 -c "import json; [json.loads(l) for l in open('/var/log/nginx/access.log')]; print('moi dong access.log deu phan tich duoc: OK')"
+moi dong access.log deu phan tich duoc: OK
+$ for p in /health /tinh/ /api/; do printf 'so dong %-8s: %s\\n' $p $(grep -c "\\"uri\\":\\"$p" /var/log/nginx/access.log); done
+so dong /health : 0
+so dong /tinh/  : 0
+so dong /api/   : 19</div>
+<p>Cả mười phép đều qua (cú 444 hiện thành curl thoát mã 92 — kết nối bị đóng, không phản hồi). MỚI, phép 9: gzip nén tệp CSS 1.851 byte và để nguyên trang chủ 19 byte, đúng như <code>gzip_min_length 256</code>. Phép đếm header thấy <code>/tinh/</code> 1 / 3 ở bản đầu và 3 / 3 mọi nơi sau khi dùng snippet. Log: 25 dòng, toàn JSON; log chỉ lỗi có 5 dòng, chỉ 444 và 503; <code>/health</code> và <code>/tinh/</code> không ghi dòng nào.</p>
+<h3>🔗 Bài liên quan ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-7-4-kiem-khoi" target="_blank" rel="noopener"><span class="lc-ico">🚀</span><span class="lc-body"><span class="lc-title">Deploy lên VPS · 7.4 — Chứng minh nó chạy, và kiểm lại chính bộ kiểm</span><span class="lc-sub">Phép nghiệm thu sau mỗi lần deploy</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-7-4-header-quan-trong" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking for Developers · 7.4 — Các header đổi hành vi: cache, nén, CORS, bảo mật</span><span class="lc-sub">Từng header bảo mật trong snippet làm gì</span></span></a>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">default_server <code>return 444</code></span><span class="v">Đóng kết nối với bất kỳ tên miền nào không khối <code>server</code> nào nhận.</span></div>
+  <div class="kv"><span class="k">proxy.conf / headers-baomat.conf</span><span class="v">Header proxy và header bảo mật dùng chung để trong snippet, include khắp nơi cần.</span></div>
+  <div class="kv"><span class="k">phép nghiệm thu</span><span class="v">Một vòng lặp kiểm mọi lời khẳng định trong cấu hình bằng cách gửi request thật.</span></div>
+  <div class="kv"><span class="k">kiểm đếm header</span><span class="v">Đếm số header bảo mật trên từng tuyến; chính nó bắt được cái bẫy rụng header ở đây.</span></div>
+  <div class="kv"><span class="k">hai access log / <code>if=</code></span><span class="v">Một log đầy đủ cộng một log chỉ-có-lỗi giữ lâu hơn — mà không tốn gì đo được.</span></div>
+  <div class="kv"><span class="k"><code>server_tokens off</code></span><span class="v">Giấu số hiệu bản vá Nginx trong header <code>Server</code>.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li>Cả khoá học gộp vào một tệp đang chạy: chuyển hướng HTTP, một default từ chối, và site thật với TLS, giới hạn và log.</li><li>Phép nghiệm thu tìm lại đúng cái bẫy ở Bài 11.3 — <code>/tinh/</code> thêm một <code>add_header</code> và mất hai header bảo mật.</li><li>Biết một luật không phải là áp dụng nó; một vòng lặp đếm header trên từng tuyến bắt được thứ mà kiến thức không bắt.</li><li>Sửa danh sách header và proxy dùng chung bằng <code>include</code>, đừng bao giờ chép tay.</li><li>Mọi chỉ thị ở đây đều xuất hiện trong một kết quả đo — một chỉ thị chưa thử là một phỏng đoán có cú pháp đẹp.</li></ul>
 </div>
 `,
     },

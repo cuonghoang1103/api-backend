@@ -59,6 +59,7 @@ Mẫu một mục:
 - **Cách sửa:** đóng Socket.IO engine ngay khi nhận SIGTERM (client thấy "transport close" và TỰ NỐI LẠI vào container mới — khác `disconnectSockets(true)` làm client KHÔNG nối lại); đường ép 8 giây vẫn dọn dẹp (commit 82084b1e2).
 - **Ảnh hưởng:** mọi lần deploy; chậm tráo thêm ~10 giây, mất sự kiện Sentry cuối.
 - **Bài học:** "graceful shutdown" phải tính cả kết nối dài (WebSocket, SSE); hạn ép của mình phải NGẮN HƠN hạn của Docker/systemd.
+- **Bổ sung 14/11:** bản sửa đầu chỉ đóng Socket.IO — hai kênh đồng soạn thảo Hocuspocus (ghi chú + Docs CT Work) vẫn giữ WebSocket ⇒ vẫn chờ hết 8 s, mã 1. Nay gọi `closeConnections()` cả hai (`dongKetNoiCongTacGhiChu/Docs`) — đo ở khoá Socket.IO 8.4: 8.003 ms ⇒ 2 ms, lưu ngay. Bài học: liệt kê MỌI máy chủ WebSocket gắn vào cùng HTTP server (kho có 4) trước khi tuyên bố đã tắt êm.
 
 ### 13/11/2026 — Messenger — Tab ẩn vẫn gửi "đã xem"
 - **Triệu chứng:** mở cuộc trò chuyện rồi chuyển sang tab khác / thu nhỏ app, tin mới tới thì người gửi thấy "đã xem" sau ~3 ms dù chưa ai nhìn.

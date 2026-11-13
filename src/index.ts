@@ -165,9 +165,9 @@ const notesDatabaseRoutes = (await import(path.join(__dirname, 'routes', 'notesD
 const noteSyncedBlockRoutes = (await import(path.join(__dirname, 'routes', 'noteSyncedBlock.routes.js'))).default;
 const mobileRoutes = (await import(path.join(__dirname, 'routes', 'mobile.routes.js'))).default;
 const { initSocketServer } = await import(path.join(__dirname, 'socket', 'messaging.socket.js'));
-const { initNotesCollaborationGateway } = await import(path.join(__dirname, 'socket', 'notes-collaboration.gateway.js'));
+const { initNotesCollaborationGateway, dongKetNoiCongTacGhiChu } = await import(path.join(__dirname, 'socket', 'notes-collaboration.gateway.js'));
 // CTW K-3b: đồng soạn thảo Docs của CT Work (Hocuspocus/Yjs) trên /notes-collaboration/work-docs
-const { initWorkDocsCollaborationGateway } = await import(path.join(__dirname, 'socket', 'work-docs-collaboration.gateway.js'));
+const { initWorkDocsCollaborationGateway, dongKetNoiCongTacDocs } = await import(path.join(__dirname, 'socket', 'work-docs-collaboration.gateway.js'));
 // Maker Lab — hardware/embedded hub + raw-WebSocket gateway for physical devices
 const makerLabModule = await import(path.join(__dirname, 'routes', 'makerLab.routes.js'));
 const makerLabRoutes = makerLabModule.default;
@@ -850,6 +850,10 @@ function setupGracefulShutdown(): void {
  // cắt tầng vận chuyển ⇒ client thấy "transport close" và TỰ NỐI LẠI vào container mới (khác
  // disconnectSockets(true) ⇒ "io server disconnect" ⇒ client KHÔNG tự nối lại).
  try { sio?.engine?.close(); } catch { /* bỏ qua */ }
+ // Hai kênh đồng soạn thảo (Hocuspocus: ghi chú + Docs CT Work) cũng giữ WebSocket dài ⇒ đóng luôn; client tự nối lại,
+ // tài liệu đang dở được lưu ngay khi kết nối cuối rời (14/11/2026, khoá Socket.IO 8.4).
+ try { dongKetNoiCongTacGhiChu(); } catch { /* bỏ qua */ }
+ try { dongKetNoiCongTacDocs(); } catch { /* bỏ qua */ }
 
  // Còn kết nối dài khác (cộng tác ghi chú…) ⇒ ép sau 8s, vẫn dọn dẹp — trước hạn SIGKILL 10s của Docker.
  setTimeout(() => {

@@ -66,6 +66,11 @@ export interface WorkCollabHooks {
 }
 
 let server: Hocuspocus | null = null;
+
+/** Đóng mọi kết nối đồng soạn thảo Docs CT Work khi tắt máy chủ (14/11/2026) — xem dongKetNoiCongTacGhiChu. */
+export function dongKetNoiCongTacDocs(): void {
+  server?.closeConnections();
+}
 let hooks: WorkCollabHooks | null = null;
 const pending = new Map<number, { count: number; actor: number | null; clients: Map<number, number> }>();
 

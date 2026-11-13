@@ -29,6 +29,12 @@ const resetEpochs = new Map<number, number>();
 let initialized = false;
 let collaborationServer: Hocuspocus | null = null;
 
+/** Đóng mọi kết nối đồng soạn thảo khi tắt máy chủ (14/11/2026) — để `server.close()` xong được và lần lưu còn treo
+ *  chạy ngay, thay vì chờ tới đường ép 8 giây (đo ở khoá Socket.IO 8.4: 8.003 ms mã 1 ⇒ 2 ms mã 0). */
+export function dongKetNoiCongTacGhiChu(): void {
+  collaborationServer?.closeConnections();
+}
+
 /** Force active clients to reconnect and re-run live permission checks. */
 export function invalidateNoteCollaborationDocument(noteId: number) {
   if (!Number.isInteger(noteId) || noteId <= 0) return;

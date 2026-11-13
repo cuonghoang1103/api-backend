@@ -11,6 +11,9 @@
 
 import G01_1 from './giang/nxj-01-1.mjs';
 import G01_2 from './giang/nxj-01-2.mjs';
+import G01_3 from './giang/nxj-01-3.mjs';
+import G01_4 from './giang/nxj-01-4.mjs';
+import G01_5 from './giang/nxj-01-5.mjs';
 export default {
   title: 'Chapter 1 — JSX & the rendering model|||Chương 1 — JSX & mô hình render',
   description: 'React thật sự làm gì: bạn mô tả giao diện, React đưa màn hình tới đó. JSX là JavaScript trá hình, và element chỉ là một object thuần.',
@@ -513,6 +516,7 @@ NODE_ENV=development node cls.cjs</code></pre>
       isFreePreview: false,
       description: '{ } mở một cửa sổ trở lại JavaScript bên trong JSX. Thuộc tính là camelCase, className thay class, và style là một object.',
       content: `
+${G01_3}
 <div class="ml-en">
 <span class="eyebrow">Chapter 1 · Lesson 1.3</span>
 <h2>Curly braces: a window back into JavaScript</h2>
@@ -554,7 +558,7 @@ NODE_ENV=development node cls.cjs</code></pre>
 <div class="lz-map">
   <div class="lz-stage">Four places, one rule: a JavaScript expression</div>
   <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">In text: {value}</div><div class="lz-nsub">Renders the value. Strings and numbers print; &#96;null&#96;, &#96;undefined&#96;, &#96;false&#96; and &#96;true&#96; render nothing at all — which is what makes conditional rendering work.</div></div></div>
-  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">In an attribute: prop={expr}</div><div class="lz-nsub">No quotes around the braces. &#96;title={&#39;Hi&#39;}&#96; and &#96;title="Hi"&#96; are the same; &#96;title="{x}"&#96; passes the literal five characters.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">In an attribute: prop={expr}</div><div class="lz-nsub">No quotes around the braces. &#96;title={&#39;Hi&#39;}&#96; and &#96;title="Hi"&#96; are the same; &#96;title="{x}"&#96; passes the literal three characters <code>{x}</code> — measured: the server HTML really contains <code>title="{x}"</code>.</div></div></div>
   <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Double braces: style={{…}}</div><div class="lz-nsub">Not special syntax — the outer pair is the expression slot, the inner pair is an object literal. Same for &#96;data={{ id: 1 }}&#96;.</div></div></div>
   <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Expressions only, never statements</div><div class="lz-nsub">&#96;{if (x) …}&#96; is a syntax error. Use a ternary, &#96;&amp;&amp;&#96;, or compute the value in a variable above the &#96;return&#96;.</div></div></div>
 </div>
@@ -576,6 +580,91 @@ NODE_ENV=development node cls.cjs</code></pre>
 <li>Pass a value into an attribute with braces (<code>src={url}</code>) and note the difference from a string attribute.</li>
 </ol>
 <p><strong>Done when:</strong> you can embed any expression in JSX and know why statements are not allowed inside the braces.</p></div>
+
+<h3>🔬 Measured: what the braces really do (Next.js 16.4.6 · React 19.3.0)</h3>
+<p>A statement inside braces — the page does not even compile. TypeScript and the production build:</p>
+<pre><code class="language-tsx">const user = { name: 'Bình', age: 20 };
+
+export default function Loi() {
+  return (
+    &lt;div&gt;
+      {if (user.age &gt;= 18) { 'Người lớn' }}
+    &lt;/div&gt;
+  );
+}</code></pre><pre><code class="language-bash">$ npx tsc --noEmit</code></pre><div class="out">src/app/loi/page.tsx(6,8): error TS1109: Expression expected.
+src/app/loi/page.tsx(6,21): error TS1382: Unexpected token. Did you mean &#96;{'&gt;'}&#96; or &#96;&amp;gt;&#96;?
+src/app/loi/page.tsx(6,43): error TS1381: Unexpected token. Did you mean &#96;{'}'}&#96; or &#96;&amp;rbrace;&#96;?</div><pre><code class="language-bash">$ npm run build 2&gt;&amp;1 | grep -A12 'Build error'</code></pre><div class="out">&gt; Build error occurred
+Error: Turbopack build failed with 1 error:
+./src/app/loi/page.tsx:6:8
+Error: Expected '&lt;/', got 'if'
+  4 |   return (
+  5 |     &lt;div&gt;
+&gt; 6 |       {if (user.age &gt;= 18) { 'Người lớn' }}
+    |        ^^
+  7 |     &lt;/div&gt;
+  8 |   );
+  9 | }
+
+Parsing ecmascript source code failed</div>
+<p>In <code>next dev</code> the whole page becomes a <b>Build Error</b> overlay with the same message, pointing at line 6.</p>
+<p>What React prints and what it skips, rendered for real with react-dom/server (a browser shows the same):</p>
+<pre><code class="language-javascript">const React = require('react');
+const { renderToStaticMarkup } = require('react-dom/server');
+const thu = [["'Bình'", 'Bình'], ['42', 42], ['0', 0], ['NaN', NaN], ["''", ''], ['null', null],
+  ['undefined', undefined], ['true', true], ['false', false], ["['a', null, 'b']", ['a', null, 'b']]];
+for (const [nhan, v] of thu) {
+  console.log(&#96;{\${nhan}}&#96;.padEnd(19) + '→ ' + renderToStaticMarkup(React.createElement('p', null, v)));
+}
+try { renderToStaticMarkup(React.createElement('p', null, { a: 1 })); }
+catch (e) { console.log('{{ a: 1 }}'.padEnd(19) + '→ ' + e.message.split('.')[0]); }</code></pre><pre><code class="language-bash">$ node hien.cjs</code></pre><div class="out">{'Bình'}           → &lt;p&gt;Bình&lt;/p&gt;
+{42}               → &lt;p&gt;42&lt;/p&gt;
+{0}                → &lt;p&gt;0&lt;/p&gt;
+{NaN}              → &lt;p&gt;NaN&lt;/p&gt;
+{''}               → &lt;p&gt;&lt;/p&gt;
+{null}             → &lt;p&gt;&lt;/p&gt;
+{undefined}        → &lt;p&gt;&lt;/p&gt;
+{true}             → &lt;p&gt;&lt;/p&gt;
+{false}            → &lt;p&gt;&lt;/p&gt;
+{['a', null, 'b']} → &lt;p&gt;ab&lt;/p&gt;
+{{ a: 1 }}         → Objects are not valid as a React child (found: object with keys {a})
+Received NaN for the &#96;children&#96; attribute. If this is expected, cast the value to a string.</div>
+<p>Quotes vs braces — the real server HTML of a page with four <code>title</code> attributes and a styled button:</p>
+<pre><code class="language-tsx">'use client';
+const x = 'Hi';
+
+export default function Thuoc() {
+  const handleSave = () =&gt; alert('Đã lưu');
+  return (
+    &lt;div className="space-y-2 p-8 font-mono text-lg"&gt;
+      &lt;p id="a" title="Hi"&gt;title="Hi"&lt;/p&gt;
+      &lt;p id="b" title={'Hi'}&gt;title={"{'Hi'}"}&lt;/p&gt;
+      &lt;p id="c" title="{x}"&gt;title="{'{x}'}"&lt;/p&gt;
+      &lt;p id="d" title={x}&gt;title={'{x}'}&lt;/p&gt;
+      &lt;button className="btn rounded border px-3" onClick={handleSave} style={{ marginTop: 8 }}&gt;
+        Save
+      &lt;/button&gt;
+    &lt;/div&gt;
+  );
+}</code></pre><pre><code class="language-bash">$ curl -s localhost:3000/thuoc | grep -oE '&lt;(p id|button)[^&gt;]*&gt;'</code></pre><div class="out">&lt;p id="a" title="Hi"&gt;
+&lt;p id="b" title="Hi"&gt;
+&lt;p id="c" title="{x}"&gt;
+&lt;p id="d" title="Hi"&gt;
+&lt;button class="btn rounded border px-3" style="margin-top:8px"&gt;</div>
+<p>style as an object (React adds px) vs a CSS string, and the same mistakes in a .tsx file:</p>
+<pre><code class="language-bash">$ node style.cjs</code></pre><div class="out">&lt;button class="btn" style="margin-top:8px;font-size:16px;color:red"&gt;Save&lt;/button&gt;
+The &#96;style&#96; prop expects a mapping from style properties to values, not a string</div><pre><code class="language-bash">$ npx tsc --noEmit</code></pre><div class="out">src/app/sai/page.tsx(3,13): error TS2322: Type 'string' is not assignable to type 'MouseEventHandler&lt;HTMLButtonElement&gt;'.
+src/app/sai/page.tsx(3,36): error TS2559: Type 'string' has no properties in common with type 'Properties&lt;string | number, string &amp; {}&gt;'.</div>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-bash"><span class="tok-comment"># in any Next.js app (React + react-dom are installed)</span>
+node hien.cjs
+node style.cjs
+<span class="tok-comment"># put {if (…) …} in a page, then:</span>
+npx tsc --noEmit
+npm run build</code></pre>
+<h3>🔗 Go deeper in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-0-2-jsx" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 0.2 — JSX, explained</span><span class="lc-sub">The "What shows up inside { }" part: 0 shows, true/null vanish, strings are escaped</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-0-3-js-cho-react" target="_blank" rel="noopener"><span class="lc-ico">🧠</span><span class="lc-body"><span class="lc-title">React · 0.3 — JavaScript for React</span><span class="lc-sub">Truthy and falsy, ?. and ?? — the basis of every expression inside braces</span></span></a>
+<a class="link-card lien-ket-cheo" href="/academy/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-3-1-jsx-basics" target="_blank" rel="noopener"><span class="lc-ico">🏫</span><span class="lc-body"><span class="lc-title">Academy · FER202 · 3.1 — JSX basics</span><span class="lc-sub">The university-course view</span></span></a>
 
 <h3>🗂 Key terms</h3>
 <div class="kv-grid">
@@ -633,7 +722,7 @@ NODE_ENV=development node cls.cjs</code></pre>
 <div class="lz-map">
   <div class="lz-stage">Bốn chỗ, một luật: một biểu thức JavaScript</div>
   <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Trong chữ: {value}</div><div class="lz-nsub">Vẽ ra giá trị. Chuỗi và số thì in ra; &#96;null&#96;, &#96;undefined&#96;, &#96;false&#96; và &#96;true&#96; chẳng vẽ ra gì cả — và chính điều đó làm phép vẽ có điều kiện chạy được.</div></div></div>
-  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Trong thuộc tính: prop={expr}</div><div class="lz-nsub">Không có dấu nháy bọc quanh ngoặc. &#96;title={&#39;Hi&#39;}&#96; và &#96;title="Hi"&#96; là một; còn &#96;title="{x}"&#96; truyền đúng năm ký tự đó.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Trong thuộc tính: prop={expr}</div><div class="lz-nsub">Không có dấu nháy bọc quanh ngoặc. &#96;title={&#39;Hi&#39;}&#96; và &#96;title="Hi"&#96; là một; còn &#96;title="{x}"&#96; truyền đúng ba ký tự <code>{x}</code> đó — đo thật: HTML máy chủ trả về chứa nguyên <code>title="{x}"</code>.</div></div></div>
   <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Hai lớp ngoặc: style={{…}}</div><div class="lz-nsub">Không phải cú pháp đặc biệt — lớp ngoài là ô biểu thức, lớp trong là một object literal. Với &#96;data={{ id: 1 }}&#96; cũng vậy.</div></div></div>
   <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Chỉ biểu thức, không bao giờ là câu lệnh</div><div class="lz-nsub">&#96;{if (x) …}&#96; là lỗi cú pháp. Hãy dùng toán tử ba ngôi, &#96;&amp;&amp;&#96;, hoặc tính giá trị ra một biến ở trên &#96;return&#96;.</div></div></div>
 </div>
@@ -655,6 +744,91 @@ NODE_ENV=development node cls.cjs</code></pre>
 <li>Truyền giá trị vào thuộc tính bằng ngoặc nhọn (<code>src={url}</code>) và để ý khác với thuộc tính dạng chuỗi.</li>
 </ol>
 <p><strong>Đạt khi:</strong> bạn nhúng được biểu thức bất kỳ vào JSX và biết vì sao câu lệnh không được phép trong ngoặc.</p></div>
+
+<h3>🔬 Đo thật: ngoặc nhọn thật sự làm gì (Next.js 16.4.6 · React 19.3.0)</h3>
+<p>Một câu lệnh trong ngoặc — trang không hề biên dịch. TypeScript và bản build:</p>
+<pre><code class="language-tsx">const user = { name: 'Bình', age: 20 };
+
+export default function Loi() {
+  return (
+    &lt;div&gt;
+      {if (user.age &gt;= 18) { 'Người lớn' }}
+    &lt;/div&gt;
+  );
+}</code></pre><pre><code class="language-bash">$ npx tsc --noEmit</code></pre><div class="out">src/app/loi/page.tsx(6,8): error TS1109: Expression expected.
+src/app/loi/page.tsx(6,21): error TS1382: Unexpected token. Did you mean &#96;{'&gt;'}&#96; or &#96;&amp;gt;&#96;?
+src/app/loi/page.tsx(6,43): error TS1381: Unexpected token. Did you mean &#96;{'}'}&#96; or &#96;&amp;rbrace;&#96;?</div><pre><code class="language-bash">$ npm run build 2&gt;&amp;1 | grep -A12 'Build error'</code></pre><div class="out">&gt; Build error occurred
+Error: Turbopack build failed with 1 error:
+./src/app/loi/page.tsx:6:8
+Error: Expected '&lt;/', got 'if'
+  4 |   return (
+  5 |     &lt;div&gt;
+&gt; 6 |       {if (user.age &gt;= 18) { 'Người lớn' }}
+    |        ^^
+  7 |     &lt;/div&gt;
+  8 |   );
+  9 | }
+
+Parsing ecmascript source code failed</div>
+<p>Ở <code>next dev</code> cả trang thành lớp phủ <b>Build Error</b> với đúng thông báo đó, chỉ vào dòng 6.</p>
+<p>React in gì và bỏ qua gì, render thật bằng react-dom/server (trình duyệt cho kết quả y hệt):</p>
+<pre><code class="language-javascript">const React = require('react');
+const { renderToStaticMarkup } = require('react-dom/server');
+const thu = [["'Bình'", 'Bình'], ['42', 42], ['0', 0], ['NaN', NaN], ["''", ''], ['null', null],
+  ['undefined', undefined], ['true', true], ['false', false], ["['a', null, 'b']", ['a', null, 'b']]];
+for (const [nhan, v] of thu) {
+  console.log(&#96;{\${nhan}}&#96;.padEnd(19) + '→ ' + renderToStaticMarkup(React.createElement('p', null, v)));
+}
+try { renderToStaticMarkup(React.createElement('p', null, { a: 1 })); }
+catch (e) { console.log('{{ a: 1 }}'.padEnd(19) + '→ ' + e.message.split('.')[0]); }</code></pre><pre><code class="language-bash">$ node hien.cjs</code></pre><div class="out">{'Bình'}           → &lt;p&gt;Bình&lt;/p&gt;
+{42}               → &lt;p&gt;42&lt;/p&gt;
+{0}                → &lt;p&gt;0&lt;/p&gt;
+{NaN}              → &lt;p&gt;NaN&lt;/p&gt;
+{''}               → &lt;p&gt;&lt;/p&gt;
+{null}             → &lt;p&gt;&lt;/p&gt;
+{undefined}        → &lt;p&gt;&lt;/p&gt;
+{true}             → &lt;p&gt;&lt;/p&gt;
+{false}            → &lt;p&gt;&lt;/p&gt;
+{['a', null, 'b']} → &lt;p&gt;ab&lt;/p&gt;
+{{ a: 1 }}         → Objects are not valid as a React child (found: object with keys {a})
+Received NaN for the &#96;children&#96; attribute. If this is expected, cast the value to a string.</div>
+<p>Dấu nháy và ngoặc nhọn — HTML thật máy chủ trả về cho một trang có bốn thuộc tính <code>title</code> và một nút có style:</p>
+<pre><code class="language-tsx">'use client';
+const x = 'Hi';
+
+export default function Thuoc() {
+  const handleSave = () =&gt; alert('Đã lưu');
+  return (
+    &lt;div className="space-y-2 p-8 font-mono text-lg"&gt;
+      &lt;p id="a" title="Hi"&gt;title="Hi"&lt;/p&gt;
+      &lt;p id="b" title={'Hi'}&gt;title={"{'Hi'}"}&lt;/p&gt;
+      &lt;p id="c" title="{x}"&gt;title="{'{x}'}"&lt;/p&gt;
+      &lt;p id="d" title={x}&gt;title={'{x}'}&lt;/p&gt;
+      &lt;button className="btn rounded border px-3" onClick={handleSave} style={{ marginTop: 8 }}&gt;
+        Save
+      &lt;/button&gt;
+    &lt;/div&gt;
+  );
+}</code></pre><pre><code class="language-bash">$ curl -s localhost:3000/thuoc | grep -oE '&lt;(p id|button)[^&gt;]*&gt;'</code></pre><div class="out">&lt;p id="a" title="Hi"&gt;
+&lt;p id="b" title="Hi"&gt;
+&lt;p id="c" title="{x}"&gt;
+&lt;p id="d" title="Hi"&gt;
+&lt;button class="btn rounded border px-3" style="margin-top:8px"&gt;</div>
+<p>style là object (React tự thêm px) và style là chuỗi CSS, cùng hai lỗi đó trong tệp .tsx:</p>
+<pre><code class="language-bash">$ node style.cjs</code></pre><div class="out">&lt;button class="btn" style="margin-top:8px;font-size:16px;color:red"&gt;Save&lt;/button&gt;
+The &#96;style&#96; prop expects a mapping from style properties to values, not a string</div><pre><code class="language-bash">$ npx tsc --noEmit</code></pre><div class="out">src/app/sai/page.tsx(3,13): error TS2322: Type 'string' is not assignable to type 'MouseEventHandler&lt;HTMLButtonElement&gt;'.
+src/app/sai/page.tsx(3,36): error TS2559: Type 'string' has no properties in common with type 'Properties&lt;string | number, string &amp; {}&gt;'.</div>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-bash"><span class="tok-comment"># trong dự án Next.js bất kỳ (đã có react + react-dom)</span>
+node hien.cjs
+node style.cjs
+<span class="tok-comment"># đặt {if (…) …} vào một trang, rồi:</span>
+npx tsc --noEmit
+npm run build</code></pre>
+<h3>🔗 Học sâu hơn ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-0-2-jsx" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 0.2 — JSX, giải thích cho rõ</span><span class="lc-sub">Phần "Cái gì hiện ra trong { }": số 0 hiện, true/null biến mất, chuỗi bị thoát</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-0-3-js-cho-react" target="_blank" rel="noopener"><span class="lc-ico">🧠</span><span class="lc-body"><span class="lc-title">React · 0.3 — JavaScript cho React</span><span class="lc-sub">Truthy và falsy, ?. và ?? — nền của mọi biểu thức trong ngoặc nhọn</span></span></a>
+<a class="link-card lien-ket-cheo" href="/academy/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-3-1-jsx-basics" target="_blank" rel="noopener"><span class="lc-ico">🏫</span><span class="lc-body"><span class="lc-title">Academy · FER202 · 3.1 — JSX cơ bản</span><span class="lc-sub">Góc nhìn môn học ở trường</span></span></a>
 
 <h3>🗂 Thuật ngữ trong bài</h3>
 <div class="kv-grid">
@@ -681,6 +855,7 @@ NODE_ENV=development node cls.cjs</code></pre>
       isFreePreview: false,
       description: 'Render danh sách bằng .map() (và key), điều kiện bằng && và ternary — và cái bẫy kinh điển: số 0.',
       content: `
+${G01_4}
 <div class="ml-en">
 <span class="eyebrow">Chapter 1 · Lesson 1.4</span>
 <h2>Rendering many things, and rendering sometimes</h2>
@@ -751,6 +926,109 @@ NODE_ENV=development node cls.cjs</code></pre>
 <li>Combine both: map a list and conditionally render a &quot;no items&quot; message when it is empty.</li>
 </ol>
 <p><strong>Done when:</strong> you can render a list with proper keys and handle conditions with ternary and <code>&&</code> without the <code>0</code> trap.</p></div>
+
+<h3>🔬 Measured: lists and conditions (Next.js 16.4.6 · React 19.3.0)</h3>
+<p>map vs forEach vs a map that forgets its return, plus the 0 trap — rendered with react-dom/server:</p>
+<pre><code class="language-javascript">const React = require('react');
+const { renderToStaticMarkup } = require('react-dom/server');
+const h = React.createElement;
+const items = ['a', 'b', 'c'];
+const r = (nhan, el) =&gt; console.log(nhan.padEnd(18) + renderToStaticMarkup(el));
+r('map', h('ul', null, items.map((t) =&gt; h('li', { key: t }, t))));
+r('forEach', h('ul', null, items.forEach((t) =&gt; h('li', { key: t }, t))));
+r('map, quên return', h('ul', null, items.map((t) =&gt; { h('li', { key: t }, t); })));
+r('{0}', h('div', null, 0, h('span', null, 'x')));
+r('{false}', h('div', null, false, h('span', null, 'x')));</code></pre><pre><code class="language-bash">$ node ds.cjs</code></pre><div class="out">map               &lt;ul&gt;&lt;li&gt;a&lt;/li&gt;&lt;li&gt;b&lt;/li&gt;&lt;li&gt;c&lt;/li&gt;&lt;/ul&gt;
+forEach           &lt;ul&gt;&lt;/ul&gt;
+map, quên return  &lt;ul&gt;&lt;/ul&gt;
+{0}               &lt;div&gt;0&lt;span&gt;x&lt;/span&gt;&lt;/div&gt;
+{false}           &lt;div&gt;&lt;span&gt;x&lt;/span&gt;&lt;/div&gt;</div>
+<p>The same two mistakes in a .tsx file — TypeScript refuses both:</p>
+<pre><code class="language-tsx">const items = ['a', 'b', 'c'];
+
+export default function DanhSach() {
+  return (
+    &lt;&gt;
+      &lt;ul&gt;{items.forEach((t) =&gt; &lt;li key={t}&gt;{t}&lt;/li&gt;)}&lt;/ul&gt;
+      &lt;ul&gt;{items.map((t) =&gt; { &lt;li key={t}&gt;{t}&lt;/li&gt;; })}&lt;/ul&gt;
+    &lt;/&gt;
+  );
+}</code></pre><pre><code class="language-bash">$ npx tsc --noEmit</code></pre><div class="out">src/app/map/page.tsx(6,11): error TS2322: Type 'void' is not assignable to type 'ReactNode'.
+src/app/map/page.tsx(7,11): error TS2322: Type 'void[]' is not assignable to type 'ReactNode'.
+  Type 'void[]' is not assignable to type 'Iterable&lt;ReactNode&gt;'.</div>
+<p>A list without keys in <code>next dev</code> — the real browser console:</p>
+<div class="out">Each child in a list should have a unique "key" prop. See https://react.dev/link/warning-keys for more information.
+Check the render method of &#96;ThieuKey&#96;.</div>
+<p>Index keys, measured in Chromium: two lists of <code>An, Bình, Chi</code> with a checkbox per row (left <code>key={i}</code>, right <code>key={p.id}</code>). Tick “An” in both, click “Xoá dòng đầu” in both, then read the checkboxes:</p>
+<pre><code class="language-tsx">'use client';
+import { useState } from 'react';
+
+const DS = [{ id: 'an', ten: 'An' }, { id: 'binh', ten: 'Bình' }, { id: 'chi', ten: 'Chi' }];
+
+function Danh({ tieuDe, theoChiSo }: { tieuDe: string; theoChiSo: boolean }) {
+  const [ds, setDs] = useState(DS);
+  return (
+    &lt;section className="rounded-xl border p-4"&gt;
+      &lt;h2 className="mb-2 font-bold"&gt;{tieuDe}&lt;/h2&gt;
+      {ds.map((p, i) =&gt; (
+        &lt;label key={theoChiSo ? i : p.id} className="flex gap-2"&gt;
+          &lt;input type="checkbox" /&gt; {p.ten}
+        &lt;/label&gt;
+      ))}
+      &lt;button className="mt-2 rounded border px-2" onClick={() =&gt; setDs(ds.slice(1))}&gt;Xoá dòng đầu&lt;/button&gt;
+    &lt;/section&gt;
+  );
+}
+
+export default function Key() {
+  return (
+    &lt;div className="grid grid-cols-2 gap-4 p-5 font-sans"&gt;
+      &lt;Danh tieuDe="✗ key={i}" theoChiSo /&gt;
+      &lt;Danh tieuDe="✓ key={p.id}" theoChiSo={false} /&gt;
+    &lt;/div&gt;
+  );
+}</code></pre><div class="out">key={i}    ⇒ Bình ☑, Chi ☐   ← the tick moved to Bình
+key={p.id} ⇒ Bình ☐, Chi ☐</div>
+<p>The 0 trap in a real browser: a cart page with both versions side by side, after clicking “Xoá hết” (innerHTML read back from the page):</p>
+<pre><code class="language-tsx">'use client';
+import { useState } from 'react';
+
+const BAN_DAU = [{ id: 1, ten: 'Bàn phím' }, { id: 2, ten: 'Chuột' }, { id: 3, ten: 'Lót chuột' }];
+
+export default function Gio() {
+  const [items, setItems] = useState(BAN_DAU);
+  return (
+    &lt;div className="grid grid-cols-2 gap-4 p-5 font-sans"&gt;
+      &lt;section id="sai" className="rounded-xl border p-4"&gt;
+        &lt;h2 className="font-bold"&gt;✗ items.length &amp;amp;&amp;amp; …&lt;/h2&gt;
+        {items.length &amp;&amp; &lt;ul className="list-disc pl-5"&gt;{items.map((m) =&gt; &lt;li key={m.id}&gt;{m.ten}&lt;/li&gt;)}&lt;/ul&gt;}
+      &lt;/section&gt;
+      &lt;section id="dung" className="rounded-xl border p-4"&gt;
+        &lt;h2 className="font-bold"&gt;✓ items.length &amp;gt; 0 ? … : …&lt;/h2&gt;
+        {items.length &gt; 0 ? (
+          &lt;ul className="list-disc pl-5"&gt;{items.map((m) =&gt; &lt;li key={m.id}&gt;{m.ten}&lt;/li&gt;)}&lt;/ul&gt;
+        ) : (
+          &lt;p className="text-gray-500"&gt;Giỏ hàng trống&lt;/p&gt;
+        )}
+      &lt;/section&gt;
+      &lt;button className="col-span-2 rounded border px-3 py-1" onClick={() =&gt; setItems([])}&gt;Xoá hết&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}</code></pre><div class="out">#sai  ⇒ &lt;h2 class="font-bold"&gt;✗ items.length &amp;amp;&amp;amp; …&lt;/h2&gt;0
+#dung ⇒ &lt;h2 class="font-bold"&gt;✓ items.length &amp;gt; 0 ? … : …&lt;/h2&gt;&lt;p class="text-gray-500"&gt;Giỏ hàng trống&lt;/p&gt;</div>
+<p>The Feed pattern (if/else above return), rendered in its three states:</p>
+<pre><code class="language-bash">$ node feed.cjs</code></pre><div class="out">&lt;section&gt;&lt;p&gt;Đang tải…&lt;/p&gt;&lt;/section&gt;
+&lt;section&gt;&lt;p&gt;Chưa có bài nào&lt;/p&gt;&lt;/section&gt;
+&lt;section&gt;&lt;article&gt;Bài 1&lt;/article&gt;&lt;article&gt;Bài 2&lt;/article&gt;&lt;/section&gt;</div>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-bash"><span class="tok-comment"># in any Next.js app</span>
+node ds.cjs
+node feed.cjs
+<span class="tok-comment"># pages above under src/app/gio and src/app/key, then:</span>
+npm run dev  <span class="tok-comment">  # open /gio, click “Xoá hết”; open /key, tick An, delete the first row</span></code></pre>
+<h3>🔗 Go deeper in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-1-3-danh-sach" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 1.3 — Lists</span><span class="lc-sub">map, the missing-key warning, the key={index} bug captured in a real browser</span></span></a>
+<a class="link-card lien-ket-cheo" href="/academy/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-3-2-fragments-conditional" target="_blank" rel="noopener"><span class="lc-ico">🏫</span><span class="lc-body"><span class="lc-title">Academy · FER202 · 3.2 — Fragments and conditional rendering</span><span class="lc-sub">The university-course view</span></span></a>
 
 <h3>🗂 Key terms</h3>
 <div class="kv-grid">
@@ -838,6 +1116,109 @@ NODE_ENV=development node cls.cjs</code></pre>
 </ol>
 <p><strong>Đạt khi:</strong> bạn render được danh sách với key đúng và xử lý điều kiện bằng ternary và <code>&&</code> mà không dính bẫy số <code>0</code>.</p></div>
 
+<h3>🔬 Đo thật: danh sách và điều kiện (Next.js 16.4.6 · React 19.3.0)</h3>
+<p>map, forEach, và map quên return, kèm bẫy số 0 — render bằng react-dom/server:</p>
+<pre><code class="language-javascript">const React = require('react');
+const { renderToStaticMarkup } = require('react-dom/server');
+const h = React.createElement;
+const items = ['a', 'b', 'c'];
+const r = (nhan, el) =&gt; console.log(nhan.padEnd(18) + renderToStaticMarkup(el));
+r('map', h('ul', null, items.map((t) =&gt; h('li', { key: t }, t))));
+r('forEach', h('ul', null, items.forEach((t) =&gt; h('li', { key: t }, t))));
+r('map, quên return', h('ul', null, items.map((t) =&gt; { h('li', { key: t }, t); })));
+r('{0}', h('div', null, 0, h('span', null, 'x')));
+r('{false}', h('div', null, false, h('span', null, 'x')));</code></pre><pre><code class="language-bash">$ node ds.cjs</code></pre><div class="out">map               &lt;ul&gt;&lt;li&gt;a&lt;/li&gt;&lt;li&gt;b&lt;/li&gt;&lt;li&gt;c&lt;/li&gt;&lt;/ul&gt;
+forEach           &lt;ul&gt;&lt;/ul&gt;
+map, quên return  &lt;ul&gt;&lt;/ul&gt;
+{0}               &lt;div&gt;0&lt;span&gt;x&lt;/span&gt;&lt;/div&gt;
+{false}           &lt;div&gt;&lt;span&gt;x&lt;/span&gt;&lt;/div&gt;</div>
+<p>Cùng hai lỗi đó trong tệp .tsx — TypeScript từ chối cả hai:</p>
+<pre><code class="language-tsx">const items = ['a', 'b', 'c'];
+
+export default function DanhSach() {
+  return (
+    &lt;&gt;
+      &lt;ul&gt;{items.forEach((t) =&gt; &lt;li key={t}&gt;{t}&lt;/li&gt;)}&lt;/ul&gt;
+      &lt;ul&gt;{items.map((t) =&gt; { &lt;li key={t}&gt;{t}&lt;/li&gt;; })}&lt;/ul&gt;
+    &lt;/&gt;
+  );
+}</code></pre><pre><code class="language-bash">$ npx tsc --noEmit</code></pre><div class="out">src/app/map/page.tsx(6,11): error TS2322: Type 'void' is not assignable to type 'ReactNode'.
+src/app/map/page.tsx(7,11): error TS2322: Type 'void[]' is not assignable to type 'ReactNode'.
+  Type 'void[]' is not assignable to type 'Iterable&lt;ReactNode&gt;'.</div>
+<p>Danh sách thiếu key ở <code>next dev</code> — console thật của trình duyệt:</p>
+<div class="out">Each child in a list should have a unique "key" prop. See https://react.dev/link/warning-keys for more information.
+Check the render method of &#96;ThieuKey&#96;.</div>
+<p>Key bằng chỉ số, đo trên Chromium: hai danh sách <code>An, Bình, Chi</code>, mỗi dòng một ô tích (trái <code>key={i}</code>, phải <code>key={p.id}</code>). Tích “An” ở cả hai, bấm “Xoá dòng đầu” ở cả hai, rồi đọc các ô tích:</p>
+<pre><code class="language-tsx">'use client';
+import { useState } from 'react';
+
+const DS = [{ id: 'an', ten: 'An' }, { id: 'binh', ten: 'Bình' }, { id: 'chi', ten: 'Chi' }];
+
+function Danh({ tieuDe, theoChiSo }: { tieuDe: string; theoChiSo: boolean }) {
+  const [ds, setDs] = useState(DS);
+  return (
+    &lt;section className="rounded-xl border p-4"&gt;
+      &lt;h2 className="mb-2 font-bold"&gt;{tieuDe}&lt;/h2&gt;
+      {ds.map((p, i) =&gt; (
+        &lt;label key={theoChiSo ? i : p.id} className="flex gap-2"&gt;
+          &lt;input type="checkbox" /&gt; {p.ten}
+        &lt;/label&gt;
+      ))}
+      &lt;button className="mt-2 rounded border px-2" onClick={() =&gt; setDs(ds.slice(1))}&gt;Xoá dòng đầu&lt;/button&gt;
+    &lt;/section&gt;
+  );
+}
+
+export default function Key() {
+  return (
+    &lt;div className="grid grid-cols-2 gap-4 p-5 font-sans"&gt;
+      &lt;Danh tieuDe="✗ key={i}" theoChiSo /&gt;
+      &lt;Danh tieuDe="✓ key={p.id}" theoChiSo={false} /&gt;
+    &lt;/div&gt;
+  );
+}</code></pre><div class="out">key={i}    ⇒ Bình ☑, Chi ☐   ← dấu tích nhảy sang Bình
+key={p.id} ⇒ Bình ☐, Chi ☐</div>
+<p>Bẫy số 0 trên trình duyệt thật: trang giỏ hàng có cả hai cách cạnh nhau, sau khi bấm “Xoá hết” (innerHTML đọc lại từ trang):</p>
+<pre><code class="language-tsx">'use client';
+import { useState } from 'react';
+
+const BAN_DAU = [{ id: 1, ten: 'Bàn phím' }, { id: 2, ten: 'Chuột' }, { id: 3, ten: 'Lót chuột' }];
+
+export default function Gio() {
+  const [items, setItems] = useState(BAN_DAU);
+  return (
+    &lt;div className="grid grid-cols-2 gap-4 p-5 font-sans"&gt;
+      &lt;section id="sai" className="rounded-xl border p-4"&gt;
+        &lt;h2 className="font-bold"&gt;✗ items.length &amp;amp;&amp;amp; …&lt;/h2&gt;
+        {items.length &amp;&amp; &lt;ul className="list-disc pl-5"&gt;{items.map((m) =&gt; &lt;li key={m.id}&gt;{m.ten}&lt;/li&gt;)}&lt;/ul&gt;}
+      &lt;/section&gt;
+      &lt;section id="dung" className="rounded-xl border p-4"&gt;
+        &lt;h2 className="font-bold"&gt;✓ items.length &amp;gt; 0 ? … : …&lt;/h2&gt;
+        {items.length &gt; 0 ? (
+          &lt;ul className="list-disc pl-5"&gt;{items.map((m) =&gt; &lt;li key={m.id}&gt;{m.ten}&lt;/li&gt;)}&lt;/ul&gt;
+        ) : (
+          &lt;p className="text-gray-500"&gt;Giỏ hàng trống&lt;/p&gt;
+        )}
+      &lt;/section&gt;
+      &lt;button className="col-span-2 rounded border px-3 py-1" onClick={() =&gt; setItems([])}&gt;Xoá hết&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}</code></pre><div class="out">#sai  ⇒ &lt;h2 class="font-bold"&gt;✗ items.length &amp;amp;&amp;amp; …&lt;/h2&gt;0
+#dung ⇒ &lt;h2 class="font-bold"&gt;✓ items.length &amp;gt; 0 ? … : …&lt;/h2&gt;&lt;p class="text-gray-500"&gt;Giỏ hàng trống&lt;/p&gt;</div>
+<p>Khuôn Feed (if/else phía trên return), render ở cả ba trạng thái:</p>
+<pre><code class="language-bash">$ node feed.cjs</code></pre><div class="out">&lt;section&gt;&lt;p&gt;Đang tải…&lt;/p&gt;&lt;/section&gt;
+&lt;section&gt;&lt;p&gt;Chưa có bài nào&lt;/p&gt;&lt;/section&gt;
+&lt;section&gt;&lt;article&gt;Bài 1&lt;/article&gt;&lt;article&gt;Bài 2&lt;/article&gt;&lt;/section&gt;</div>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-bash"><span class="tok-comment"># trong dự án Next.js bất kỳ</span>
+node ds.cjs
+node feed.cjs
+<span class="tok-comment"># đặt hai trang trên vào src/app/gio và src/app/key, rồi:</span>
+npm run dev  <span class="tok-comment">  # mở /gio, bấm “Xoá hết”; mở /key, tích An, xoá dòng đầu</span></code></pre>
+<h3>🔗 Học sâu hơn ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-1-3-danh-sach" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 1.3 — Danh sách</span><span class="lc-sub">map, cảnh báo thiếu key, bug key={index} chụp thật trên trình duyệt</span></span></a>
+<a class="link-card lien-ket-cheo" href="/academy/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-3-2-fragments-conditional" target="_blank" rel="noopener"><span class="lc-ico">🏫</span><span class="lc-body"><span class="lc-title">Academy · FER202 · 3.2 — Fragment và vẽ có điều kiện</span><span class="lc-sub">Góc nhìn môn học ở trường</span></span></a>
+
 <h3>🗂 Thuật ngữ trong bài</h3>
 <div class="kv-grid">
   <div class="kv"><span class="k">.map()</span><span class="v">Biến mảng dữ liệu thành mảng element để render.</span></div>
@@ -863,6 +1244,7 @@ NODE_ENV=development node cls.cjs</code></pre>
       isFreePreview: false,
       description: 'Một gốc duy nhất (hoặc Fragment), đóng mọi thẻ, props camelCase — và tại sao mọi luật này đều suy ra từ "JSX là lời gọi hàm".',
       content: `
+${G01_5}
 <div class="ml-en">
 <span class="eyebrow">Chapter 1 · Lesson 1.5</span>
 <h2>Every JSX rule is really a JavaScript rule</h2>
@@ -914,7 +1296,7 @@ return &lt;Header title="Feed" action={badge} /&gt;;</code></pre>
   <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Component names start uppercase</b> — &#96;&lt;card /&gt;&#96; compiles to the string &quot;card&quot; — an unknown DOM tag that renders empty. &#96;&lt;Card /&gt;&#96; compiles to the variable.</div></div>
   <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Whitespace between tags is dropped</b> — Newlines and indentation vanish. If you need a space between two elements, write &#96;{&#39; &#39;}&#96; explicitly.</div></div>
 </div>
-<div class="pitfall"><p><strong>Trap — a lowercase component name renders nothing, with no error.</strong> &#96;&lt;userCard name={n} /&gt;&#96; does not call your function. JSX treats a lowercase tag as a DOM element name, so this compiles to &#96;createElement(&#39;userCard&#39;, …)&#96; — a custom element the browser knows nothing about, which renders as an empty node. No error, no warning, just a gap in the page where your component should be. It usually appears after a rename or a copy-paste, and people go hunting in the component&#39;s own code. Check the capital letter first: it is the difference between a variable reference and a string.</p></div>
+<div class="pitfall"><p><strong>Trap — a lowercase component name renders nothing, and the clues are easy to miss.</strong> &#96;&lt;userCard name={n} /&gt;&#96; does not call your function. JSX treats a lowercase tag as a DOM element name, so this compiles to &#96;createElement(&#39;userCard&#39;, …)&#96; — a custom element the browser knows nothing about, which renders as an empty node. Measured on React 19.3.0 it is not completely silent: in a <code>.tsx</code> file TypeScript refuses it (<em>TS2339 Property 'userCard' does not exist on type 'JSX.IntrinsicElements'</em>), and <code>next dev</code> prints <em>&lt;userCard /&gt; is using incorrect casing. Use PascalCase for React components…</em> — in the dev-server terminal, not the browser. In a plain <code>.jsx</code> file that terminal line is the only clue; the page just shows a gap where your component should be (the browser gets an empty <code>&lt;usercard&gt;</code>, 0×0). It usually appears after a rename or a copy-paste, and people go hunting in the component&#39;s own code. Check the capital letter first: it is the difference between a variable reference and a string.</p></div>
 <a class="link-card dl" href="https://react.dev/learn/writing-markup-with-jsx#the-rules-of-jsx" target="_blank" rel="noopener">
   <span class="lc-ico">📏</span>
   <span class="lc-body"><span class="lc-title">react.dev — The rules of JSX</span><span class="lc-sub">The three hard rules, with the error each one produces.</span></span>
@@ -932,6 +1314,85 @@ return &lt;Header title="Feed" action={badge} /&gt;;</code></pre>
 <li>Write one component that violates three JSX rules on purpose, then fix each and note which error message pointed at which rule.</li>
 </ol>
 <p><strong>Done when:</strong> you can state the core JSX rules and fix each from its error message.</p></div>
+
+<h3>🔬 Measured: each rule and the error it produces (Next.js 16.4.6 · React 19.3.0)</h3>
+<p>Rule 1 — two siblings with no wrapper. TypeScript is clear; the SWC parser of <code>next build</code> reads the slash of <code>&lt;/p&gt;</code> as a regex:</p>
+<pre><code class="language-tsx">export default function AnhEm() {
+  return (
+    &lt;h1&gt;Title&lt;/h1&gt;
+    &lt;p&gt;Body&lt;/p&gt;
+  );
+}</code></pre><pre><code class="language-bash">$ npx tsc --noEmit</code></pre><div class="out">src/app/anhem/page.tsx(3,5): error TS2657: JSX expressions must have one parent element.</div><pre><code class="language-bash">$ npm run build 2&gt;&amp;1 | grep -A12 'Build error'</code></pre><div class="out">&gt; Build error occurred
+Error: Turbopack build failed with 1 error:
+./src/app/anhem/page.tsx:4:13
+Error: Unterminated regexp literal
+  2 |   return (
+  3 |     &lt;h1&gt;Title&lt;/h1&gt;
+&gt; 4 |     &lt;p&gt;Body&lt;/p&gt;
+    |             ^^^
+  5 |   );
+  6 | }
+  7 |
+
+Parsing ecmascript source code failed</div>
+<p>div vs Fragment, rendered with react-dom/server — the Fragment leaves no node behind:</p>
+<pre><code class="language-bash">$ node frag.cjs</code></pre><div class="out">&lt;div&gt;      &lt;div&gt;&lt;h1&gt;Title&lt;/h1&gt;&lt;p&gt;Body&lt;/p&gt;&lt;/div&gt;
+&lt;&gt;…&lt;/&gt;     &lt;h1&gt;Title&lt;/h1&gt;&lt;p&gt;Body&lt;/p&gt;</div>
+<p>Rule 2 — <code>&lt;br&gt;</code> and <code>&lt;img&gt;</code> left open: one mistake, five errors:</p>
+<pre><code class="language-tsx">export default function Dong() {
+  return (
+    &lt;div&gt;
+      Dòng một&lt;br&gt;
+      &lt;img src="/next.svg" alt="logo"&gt;
+    &lt;/div&gt;
+  );
+}</code></pre><pre><code class="language-bash">$ npx tsc --noEmit</code></pre><div class="out">src/app/dong/page.tsx(3,6): error TS17008: JSX element 'div' has no corresponding closing tag.
+src/app/dong/page.tsx(4,16): error TS17008: JSX element 'br' has no corresponding closing tag.
+src/app/dong/page.tsx(6,7): error TS17002: Expected corresponding JSX closing tag for 'img'.
+src/app/dong/page.tsx(8,1): error TS1381: Unexpected token. Did you mean &#96;{'}'}&#96; or &#96;&amp;rbrace;&#96;?
+src/app/dong/page.tsx(9,1): error TS1005: '&lt;/' expected.</div>
+<p>Rule 4 — whitespace: the real server HTML of two paragraphs, without and with <code>{' '}</code>:</p>
+<pre><code class="language-tsx">export default function Khoang() {
+  return (
+    &lt;div className="space-y-3 p-6 font-sans text-2xl"&gt;
+      &lt;p id="mot"&gt;
+        &lt;b&gt;Xin&lt;/b&gt;
+        &lt;i&gt;chào&lt;/i&gt;
+      &lt;/p&gt;
+      &lt;p id="hai"&gt;
+        &lt;b&gt;Xin&lt;/b&gt;{' '}
+        &lt;i&gt;chào&lt;/i&gt;
+      &lt;/p&gt;
+    &lt;/div&gt;
+  );
+}</code></pre><pre><code class="language-bash">$ curl -s localhost:3000/khoang | grep -oE '&lt;p id="(mot|hai)"&gt;.*?&lt;/p&gt;'</code></pre><div class="out">&lt;p id="mot"&gt;&lt;b&gt;Xin&lt;/b&gt;&lt;i&gt;chào&lt;/i&gt;&lt;/p&gt;
+&lt;p id="hai"&gt;&lt;b&gt;Xin&lt;/b&gt; &lt;i&gt;chào&lt;/i&gt;&lt;/p&gt;</div>
+<p>The lowercase trap — TypeScript, the dev-server terminal, and what the browser actually received:</p>
+<pre><code class="language-tsx">'use client';
+function userCard({ name }: { name: string }) {
+  return &lt;p className="rounded border p-3"&gt;Thẻ của {name}&lt;/p&gt;;
+}
+
+export default function Thuong() {
+  return (
+    &lt;div className="p-6 font-sans"&gt;
+      &lt;h2 className="text-xl font-bold"&gt;Danh sách&lt;/h2&gt;
+      &lt;userCard name="An" /&gt;
+    &lt;/div&gt;
+  );
+}</code></pre><pre><code class="language-bash">$ npx tsc --noEmit</code></pre><div class="out">src/app/thuong/page.tsx(10,7): error TS2339: Property 'userCard' does not exist on type 'JSX.IntrinsicElements'.</div><div class="out"># next dev terminal
+&lt;userCard /&gt; is using incorrect casing. Use PascalCase for React components, or lowercase for HTML elements.</div><div class="out"># innerHTML in Chromium
+&lt;h2 class="text-xl font-bold"&gt;Danh sách&lt;/h2&gt;&lt;usercard name="An"&gt;&lt;/usercard&gt;</div>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-bash"><span class="tok-comment"># put each broken page under src/app/&lt;name&gt;/page.tsx, then:</span>
+npx tsc --noEmit
+npm run build
+node frag.cjs
+npm run dev  <span class="tok-comment">  # watch the terminal for the casing warning</span></code></pre>
+<h3>🔗 Go deeper in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-0-2-jsx" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 0.2 — JSX, explained</span><span class="lc-sub">Four JSX rules, each with the real tsc error</span></span></a>
+<a class="link-card lien-ket-cheo" href="/academy/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-3-1-jsx-basics" target="_blank" rel="noopener"><span class="lc-ico">🏫</span><span class="lc-body"><span class="lc-title">Academy · FER202 · 3.1 — JSX basics</span><span class="lc-sub">The university-course view</span></span></a>
+<a class="link-card lien-ket-cheo" href="/academy/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-3-2-fragments-conditional" target="_blank" rel="noopener"><span class="lc-ico">🏫</span><span class="lc-body"><span class="lc-title">Academy · FER202 · 3.2 — Fragments and conditional rendering</span><span class="lc-sub">Fragments in the university course</span></span></a>
 
 <h3>🗂 Key terms</h3>
 <div class="kv-grid">
@@ -999,7 +1460,7 @@ return &lt;Header title="Feed" action={badge} /&gt;;</code></pre>
   <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Tên component viết hoa chữ đầu</b> — &#96;&lt;card /&gt;&#96; biên dịch thành chuỗi &quot;card&quot; — một thẻ DOM lạ, vẽ ra rỗng. &#96;&lt;Card /&gt;&#96; mới biên dịch thành cái biến.</div></div>
   <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Khoảng trắng giữa các thẻ bị bỏ</b> — Xuống dòng và thụt lề biến mất. Nếu bạn cần một dấu cách giữa hai phần tử, hãy viết &#96;{&#39; &#39;}&#96; tường minh.</div></div>
 </div>
-<div class="pitfall"><p><strong>Bẫy — tên component viết thường thì chẳng vẽ ra gì, mà cũng chẳng báo lỗi.</strong> &#96;&lt;userCard name={n} /&gt;&#96; không hề gọi hàm của bạn. JSX coi một thẻ viết thường là tên một phần tử DOM, nên nó biên dịch thành &#96;createElement(&#39;userCard&#39;, …)&#96; — một thẻ tuỳ chỉnh mà trình duyệt chẳng biết là gì, và nó vẽ ra một nút rỗng. Không lỗi, không cảnh báo, chỉ có một khoảng trống trên trang ở đúng chỗ component của bạn lẽ ra phải nằm. Nó thường xuất hiện sau một lần đổi tên hay chép-dán, và người ta lao đi lùng trong chính mã của component. Hãy kiểm chữ hoa đầu tiên trước: đó là khác biệt giữa một tham chiếu biến và một chuỗi.</p></div>
+<div class="pitfall"><p><strong>Bẫy — tên component viết thường thì chẳng vẽ ra gì, và manh mối rất dễ bỏ lỡ.</strong> &#96;&lt;userCard name={n} /&gt;&#96; không hề gọi hàm của bạn. JSX coi một thẻ viết thường là tên một phần tử DOM, nên nó biên dịch thành &#96;createElement(&#39;userCard&#39;, …)&#96; — một thẻ tuỳ chỉnh mà trình duyệt chẳng biết là gì, và nó vẽ ra một nút rỗng. Đo trên React 19.3.0 thì nó không hoàn toàn im lặng: trong tệp <code>.tsx</code>, TypeScript từ chối (<em>TS2339 Property 'userCard' does not exist on type 'JSX.IntrinsicElements'</em>), và <code>next dev</code> in <em>&lt;userCard /&gt; is using incorrect casing. Use PascalCase for React components…</em> — ở terminal của máy chủ dev, không phải trình duyệt. Với tệp <code>.jsx</code> thường, dòng terminal đó là manh mối duy nhất; trang chỉ có một khoảng trống ở đúng chỗ component lẽ ra phải nằm (trình duyệt nhận một thẻ <code>&lt;usercard&gt;</code> rỗng, 0×0). Nó thường xuất hiện sau một lần đổi tên hay chép-dán, và người ta lao đi lùng trong chính mã của component. Hãy kiểm chữ hoa đầu tiên trước: đó là khác biệt giữa một tham chiếu biến và một chuỗi.</p></div>
 <a class="link-card dl" href="https://react.dev/learn/writing-markup-with-jsx#the-rules-of-jsx" target="_blank" rel="noopener">
   <span class="lc-ico">📏</span>
   <span class="lc-body"><span class="lc-title">react.dev — Các luật của JSX</span><span class="lc-sub">Ba luật cứng, kèm lỗi mà mỗi cái sinh ra.</span></span>
@@ -1017,6 +1478,85 @@ return &lt;Header title="Feed" action={badge} /&gt;;</code></pre>
 <li>Viết một component cố tình vi phạm ba luật JSX, rồi sửa từng cái và ghi lại lỗi nào chỉ vào luật nào.</li>
 </ol>
 <p><strong>Đạt khi:</strong> bạn nói được các luật JSX cốt lõi và sửa từng cái dựa trên thông báo lỗi.</p></div>
+
+<h3>🔬 Đo thật: mỗi luật và lỗi nó sinh ra (Next.js 16.4.6 · React 19.3.0)</h3>
+<p>Luật 1 — hai anh em không vỏ bọc. TypeScript nói rõ; trình phân tích SWC của <code>next build</code> đọc dấu gạch của <code>&lt;/p&gt;</code> thành biểu thức chính quy:</p>
+<pre><code class="language-tsx">export default function AnhEm() {
+  return (
+    &lt;h1&gt;Title&lt;/h1&gt;
+    &lt;p&gt;Body&lt;/p&gt;
+  );
+}</code></pre><pre><code class="language-bash">$ npx tsc --noEmit</code></pre><div class="out">src/app/anhem/page.tsx(3,5): error TS2657: JSX expressions must have one parent element.</div><pre><code class="language-bash">$ npm run build 2&gt;&amp;1 | grep -A12 'Build error'</code></pre><div class="out">&gt; Build error occurred
+Error: Turbopack build failed with 1 error:
+./src/app/anhem/page.tsx:4:13
+Error: Unterminated regexp literal
+  2 |   return (
+  3 |     &lt;h1&gt;Title&lt;/h1&gt;
+&gt; 4 |     &lt;p&gt;Body&lt;/p&gt;
+    |             ^^^
+  5 |   );
+  6 | }
+  7 |
+
+Parsing ecmascript source code failed</div>
+<p>div và Fragment, render bằng react-dom/server — Fragment không để lại nút nào:</p>
+<pre><code class="language-bash">$ node frag.cjs</code></pre><div class="out">&lt;div&gt;      &lt;div&gt;&lt;h1&gt;Title&lt;/h1&gt;&lt;p&gt;Body&lt;/p&gt;&lt;/div&gt;
+&lt;&gt;…&lt;/&gt;     &lt;h1&gt;Title&lt;/h1&gt;&lt;p&gt;Body&lt;/p&gt;</div>
+<p>Luật 2 — <code>&lt;br&gt;</code> và <code>&lt;img&gt;</code> không đóng: một lỗi, năm thông báo:</p>
+<pre><code class="language-tsx">export default function Dong() {
+  return (
+    &lt;div&gt;
+      Dòng một&lt;br&gt;
+      &lt;img src="/next.svg" alt="logo"&gt;
+    &lt;/div&gt;
+  );
+}</code></pre><pre><code class="language-bash">$ npx tsc --noEmit</code></pre><div class="out">src/app/dong/page.tsx(3,6): error TS17008: JSX element 'div' has no corresponding closing tag.
+src/app/dong/page.tsx(4,16): error TS17008: JSX element 'br' has no corresponding closing tag.
+src/app/dong/page.tsx(6,7): error TS17002: Expected corresponding JSX closing tag for 'img'.
+src/app/dong/page.tsx(8,1): error TS1381: Unexpected token. Did you mean &#96;{'}'}&#96; or &#96;&amp;rbrace;&#96;?
+src/app/dong/page.tsx(9,1): error TS1005: '&lt;/' expected.</div>
+<p>Luật 4 — khoảng trắng: HTML thật máy chủ trả về cho hai đoạn, không có và có <code>{' '}</code>:</p>
+<pre><code class="language-tsx">export default function Khoang() {
+  return (
+    &lt;div className="space-y-3 p-6 font-sans text-2xl"&gt;
+      &lt;p id="mot"&gt;
+        &lt;b&gt;Xin&lt;/b&gt;
+        &lt;i&gt;chào&lt;/i&gt;
+      &lt;/p&gt;
+      &lt;p id="hai"&gt;
+        &lt;b&gt;Xin&lt;/b&gt;{' '}
+        &lt;i&gt;chào&lt;/i&gt;
+      &lt;/p&gt;
+    &lt;/div&gt;
+  );
+}</code></pre><pre><code class="language-bash">$ curl -s localhost:3000/khoang | grep -oE '&lt;p id="(mot|hai)"&gt;.*?&lt;/p&gt;'</code></pre><div class="out">&lt;p id="mot"&gt;&lt;b&gt;Xin&lt;/b&gt;&lt;i&gt;chào&lt;/i&gt;&lt;/p&gt;
+&lt;p id="hai"&gt;&lt;b&gt;Xin&lt;/b&gt; &lt;i&gt;chào&lt;/i&gt;&lt;/p&gt;</div>
+<p>Bẫy chữ thường — TypeScript, terminal máy chủ dev, và thứ trình duyệt thật sự nhận được:</p>
+<pre><code class="language-tsx">'use client';
+function userCard({ name }: { name: string }) {
+  return &lt;p className="rounded border p-3"&gt;Thẻ của {name}&lt;/p&gt;;
+}
+
+export default function Thuong() {
+  return (
+    &lt;div className="p-6 font-sans"&gt;
+      &lt;h2 className="text-xl font-bold"&gt;Danh sách&lt;/h2&gt;
+      &lt;userCard name="An" /&gt;
+    &lt;/div&gt;
+  );
+}</code></pre><pre><code class="language-bash">$ npx tsc --noEmit</code></pre><div class="out">src/app/thuong/page.tsx(10,7): error TS2339: Property 'userCard' does not exist on type 'JSX.IntrinsicElements'.</div><div class="out"># terminal của next dev
+&lt;userCard /&gt; is using incorrect casing. Use PascalCase for React components, or lowercase for HTML elements.</div><div class="out"># innerHTML trên Chromium
+&lt;h2 class="text-xl font-bold"&gt;Danh sách&lt;/h2&gt;&lt;usercard name="An"&gt;&lt;/usercard&gt;</div>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-bash"><span class="tok-comment"># đặt từng trang lỗi vào src/app/&lt;tên&gt;/page.tsx, rồi:</span>
+npx tsc --noEmit
+npm run build
+node frag.cjs
+npm run dev  <span class="tok-comment">  # xem terminal: cảnh báo casing</span></code></pre>
+<h3>🔗 Học sâu hơn ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-0-2-jsx" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 0.2 — JSX, giải thích cho rõ</span><span class="lc-sub">Bốn luật JSX, mỗi luật kèm lỗi tsc thật</span></span></a>
+<a class="link-card lien-ket-cheo" href="/academy/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-3-1-jsx-basics" target="_blank" rel="noopener"><span class="lc-ico">🏫</span><span class="lc-body"><span class="lc-title">Academy · FER202 · 3.1 — JSX cơ bản</span><span class="lc-sub">Góc nhìn môn học ở trường</span></span></a>
+<a class="link-card lien-ket-cheo" href="/academy/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-3-2-fragments-conditional" target="_blank" rel="noopener"><span class="lc-ico">🏫</span><span class="lc-body"><span class="lc-title">Academy · FER202 · 3.2 — Fragment và vẽ có điều kiện</span><span class="lc-sub">Fragment trong môn học ở trường</span></span></a>
 
 <h3>🗂 Thuật ngữ trong bài</h3>
 <div class="kv-grid">

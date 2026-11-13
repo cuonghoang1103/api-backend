@@ -5,6 +5,9 @@
  */
 
 import G02_1 from './giang/nxj-02-1.mjs';
+import G02_2 from './giang/nxj-02-2.mjs';
+import G02_3 from './giang/nxj-02-3.mjs';
+import G02_4 from './giang/nxj-02-4.mjs';
 export default {
   title: 'Chapter 2 — Components, props & composition|||Chương 2 — Component, props & ghép',
   description: 'Props là đầu vào của component, chảy một chiều từ cha xuống con và chỉ đọc. children biến component thành cái khuôn. Dựng UI to từ những mảnh nhỏ mỗi mảnh một việc.',
@@ -342,6 +345,7 @@ npm run build &amp;&amp; npm start  <span class="tok-comment">  # mở /memo, b�
       isFreePreview: false,
       description: 'Prop children biến một component thành cái khuôn nhận nội dung. Ghép thay cho kế thừa: dựng cái to bằng cách lồng cái nhỏ.',
       content: `
+${G02_2}
 <div class="ml-en">
 <span class="eyebrow">Chapter 2 · Lesson 2.2</span>
 <h2>Components as containers: the <code>children</code> prop</h2>
@@ -414,6 +418,180 @@ npm run build &amp;&amp; npm start  <span class="tok-comment">  # mở /memo, b�
 <li>Refactor a component that took ten props down to one that takes <code>children</code> — note how composition beats configuration.</li>
 </ol>
 <p><strong>Done when:</strong> you can pass JSX via <code>children</code> and a named prop, and prefer composition over a pile of props.</p></div>
+
+<h3>🔬 Measured: children on React 19.3.0 / Next.js 16.4.6</h3>
+<p>The Panel example above, rendered for real — the output matches:</p>
+<pre><code class="language-javascript">const React = require('react');
+const { renderToStaticMarkup } = require('react-dom/server');
+const h = React.createElement;
+function Panel({ title, children }) {
+  return h('section', { className: 'panel' }, h('h2', null, title), h('div', { className: 'body' }, children));
+}
+<span class="tok-comment">// &lt;Panel title="Hi"&gt;&lt;p&gt;inner text&lt;/p&gt;&lt;button&gt;OK&lt;/button&gt;&lt;/Panel&gt;</span>
+console.log(renderToStaticMarkup(h(Panel, { title: 'Hi' }, h('p', null, 'inner text'), h('button', null, 'OK'))));</code></pre><pre><code class="language-bash">$ node panel.cjs</code></pre><div class="out">&lt;section class="panel"&gt;&lt;h2&gt;Hi&lt;/h2&gt;&lt;div class="body"&gt;&lt;p&gt;inner text&lt;/p&gt;&lt;button&gt;OK&lt;/button&gt;&lt;/div&gt;&lt;/section&gt;</div>
+<p>You have used <code>children</code> since lesson 0.3: the root layout that <code>create-next-app</code> generated receives it, and Next.js passes the page for each URL as <code>children</code>:</p>
+<pre><code class="language-bash">$ grep -n -A9 'export default function RootLayout' src/app/layout.tsx</code></pre><div class="out">20:export default function RootLayout({ children }: LayoutProps&lt;"/"&gt;) {
+21-  return (
+22-    &lt;html
+23-      lang="en"
+24-      className={&#96;\${geistSans.variable} \${geistMono.variable} h-full antialiased&#96;}
+25-    &gt;
+26-      &lt;body className="min-h-full flex flex-col"&gt;{children}&lt;/body&gt;
+27-    &lt;/html&gt;
+28-  );
+29-}</div>
+<p>What a component actually receives — it is <b>not always an array</b>. Never call <code>children.map</code>; render it, or use the <code>React.Children</code> helpers:</p>
+<pre><code class="language-javascript">const React = require('react');
+const { renderToStaticMarkup } = require('react-dom/server');
+const h = React.createElement;             <span class="tok-comment">  // JSX &lt;X a="1"&gt;…&lt;/X&gt;  =  h(X, { a: '1' }, …)</span>
+let nhan;
+function Hop({ children }) {
+  nhan = children;                         <span class="tok-comment">  // ghi lại đúng thứ component nhận được</span>
+  return null;
+}
+const ta = (c) =&gt; c === undefined ? 'undefined' : Array.isArray(c) ? &#96;mảng \${c.length} phần tử&#96; : typeof c === 'object' ? &#96;1 element &lt;\${c.type}&gt;&#96; : &#96;\${typeof c} '\${c}'&#96;;
+const thu = [
+  ['&lt;Hop /&gt;', h(Hop)],
+  ['&lt;Hop&gt;chào&lt;/Hop&gt;', h(Hop, null, 'chào')],
+  ['&lt;Hop&gt;&lt;p /&gt;&lt;/Hop&gt;', h(Hop, null, h('p'))],
+  ['&lt;Hop&gt;&lt;p /&gt;&lt;b /&gt;&lt;/Hop&gt;', h(Hop, null, h('p'), h('b'))],
+  ['&lt;Hop children={&lt;p /&gt;} /&gt;', h(Hop, { children: h('p') })],
+];
+for (const [jsx, el] of thu) {
+  renderToStaticMarkup(el);
+  console.log(jsx.padEnd(26), '→', ta(nhan), '· Children.count =', React.Children.count(nhan));
+}</code></pre><pre><code class="language-bash">$ node children.cjs</code></pre><div class="out">&lt;Hop /&gt;                    → undefined · Children.count = 0
+&lt;Hop&gt;chào&lt;/Hop&gt;            → string 'chào' · Children.count = 1
+&lt;Hop&gt;&lt;p /&gt;&lt;/Hop&gt;           → 1 element &lt;p&gt; · Children.count = 1
+&lt;Hop&gt;&lt;p /&gt;&lt;b /&gt;&lt;/Hop&gt;      → mảng 2 phần tử · Children.count = 2
+&lt;Hop children={&lt;p /&gt;} /&gt;   → 1 element &lt;p&gt; · Children.count = 1</div>
+<p>Two silent traps. A Panel that forgets <code>{{children}}</code> drops the content with no error (exit code 0); TypeScript catches the shape mistakes — undeclared children (TS2322), children given twice (TS2710), required children missing (TS2741):</p>
+<pre><code class="language-javascript">const React = require('react');
+const { renderToStaticMarkup } = require('react-dom/server');
+const h = React.createElement;
+function Panel({ title }) {                <span class="tok-comment">  // ✗ quên {children}</span>
+  return h('section', null, h('h2', null, title));
+}
+console.log(renderToStaticMarkup(h(Panel, { title: 'Hi' }, h('p', null, 'inner text'), h('button', null, 'OK'))));</code></pre><pre><code class="language-bash">$ node quen.cjs 2&gt;&amp;1; echo "exit=$?"</code></pre><div class="out">&lt;section&gt;&lt;h2&gt;Hi&lt;/h2&gt;&lt;/section&gt;
+exit=0</div>
+<pre><code class="language-tsx">function Title({ text }: { text: string }) {
+  return &lt;h2&gt;{text}&lt;/h2&gt;;
+}
+function Hop({ children }: { children: React.ReactNode }) {
+  return &lt;div&gt;{children}&lt;/div&gt;;
+}
+export const a = &lt;Title text="Hi"&gt;thêm chữ&lt;/Title&gt;;
+export const b = &lt;Hop children={&lt;p&gt;A&lt;/p&gt;}&gt;&lt;p&gt;B&lt;/p&gt;&lt;/Hop&gt;;
+export const c = &lt;Hop /&gt;;</code></pre><pre><code class="language-bash">$ npx tsc --noEmit</code></pre><div class="out">src/thu22/bay.tsx(7,19): error TS2322: Type '{ children: string; text: string; }' is not assignable to type 'IntrinsicAttributes &amp; { text: string; }'.
+  Property 'children' does not exist on type 'IntrinsicAttributes &amp; { text: string; }'.
+src/thu22/bay.tsx(8,23): error TS2710: 'children' are specified twice. The attribute named 'children' will be overwritten.
+src/thu22/bay.tsx(9,19): error TS2741: Property 'children' is missing in type '{}' but required in type '{ children: ReactNode; }'.</div>
+<p>In a real browser (<code>next build</code> + <code>next start</code>): one Panel wrapping three different contents, and a Layout with two named slots:</p>
+<pre><code class="language-tsx">type Co = { children: React.ReactNode };
+
+function Panel({ title, children }: { title: string } &amp; Co) {
+  return (
+    &lt;section className="panel rounded-xl border-2 border-sky-500 bg-white shadow"&gt;
+      &lt;h2 className="rounded-t-lg bg-sky-500 px-4 py-1 font-bold text-white"&gt;{title}&lt;/h2&gt;
+      &lt;div className="body p-4"&gt;{children}&lt;/div&gt;
+    &lt;/section&gt;
+  );
+}
+
+type Slots = { sidebar: React.ReactNode; main: React.ReactNode };
+
+function Layout({ sidebar, main }: Slots) {
+  return (
+    &lt;div className="grid grid-cols-[150px_1fr] gap-3"&gt;
+      &lt;aside className="rounded-xl bg-slate-100 p-3"&gt;{sidebar}&lt;/aside&gt;
+      &lt;main&gt;{main}&lt;/main&gt;
+    &lt;/div&gt;
+  );
+}
+
+export default function Ghep() {
+  return (
+    &lt;div className="space-y-3 bg-slate-50 p-5 font-sans text-sm text-slate-900"&gt;
+      &lt;div className="grid grid-cols-3 gap-3"&gt;
+        &lt;Panel title="Tin nhắn"&gt;
+          &lt;p&gt;An: tối nay họp nhé?&lt;/p&gt;
+          &lt;p className="text-right"&gt;Bình: ok 8h&lt;/p&gt;
+        &lt;/Panel&gt;
+        &lt;Panel title="Cài đặt"&gt;
+          &lt;label className="block"&gt;&lt;input type="checkbox" defaultChecked /&gt; Thông báo&lt;/label&gt;
+          &lt;label className="block"&gt;&lt;input type="checkbox" /&gt; Chế độ tối&lt;/label&gt;
+        &lt;/Panel&gt;
+        &lt;Panel title="Quiz"&gt;
+          &lt;p&gt;2 + 2 = ?&lt;/p&gt;
+          &lt;button className="mt-1 rounded bg-sky-500 px-3 text-white"&gt;4&lt;/button&gt;
+        &lt;/Panel&gt;
+      &lt;/div&gt;
+      &lt;Layout
+        sidebar={&lt;nav className="space-y-1"&gt;&lt;p&gt;🏠 Trang chủ&lt;/p&gt;&lt;p&gt;📚 Khoá học&lt;/p&gt;&lt;/nav&gt;}
+        main={&lt;Panel title="Bảng tin"&gt;&lt;p&gt;Hai khe: sidebar và main&lt;/p&gt;&lt;/Panel&gt;}
+      /&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+<p>Bonus — children skip the wrapper's re-render. Each wrapper has its own counter; each button clicked 3 times:</p>
+<pre><code class="language-tsx">'use client';
+import { useState } from 'react';
+
+let demTrong = 0;
+let demNgoai = 0;
+
+function ChamTrong() {
+  demTrong++;
+  return &lt;p id="trong"&gt;ChamTrong (vẽ TRONG KhungA) render: {demTrong}&lt;/p&gt;;
+}
+function ChamNgoai() {
+  demNgoai++;
+  return &lt;p id="ngoai"&gt;ChamNgoai (truyền làm children) render: {demNgoai}&lt;/p&gt;;
+}
+
+function KhungA() {
+  const [n, setN] = useState(0);
+  return (
+    &lt;div className="rounded border p-2"&gt;
+      &lt;button id="a" className="rounded border px-3" onClick={() =&gt; setN(n + 1)}&gt;KhungA state: {n}&lt;/button&gt;
+      &lt;ChamTrong /&gt;
+    &lt;/div&gt;
+  );
+}
+function KhungB({ children }: { children: React.ReactNode }) {
+  const [n, setN] = useState(0);
+  return (
+    &lt;div className="rounded border p-2"&gt;
+      &lt;button id="b" className="rounded border px-3" onClick={() =&gt; setN(n + 1)}&gt;KhungB state: {n}&lt;/button&gt;
+      {children}
+    &lt;/div&gt;
+  );
+}
+
+export default function Vo() {
+  return (
+    &lt;div className="space-y-2 p-6 font-sans text-lg"&gt;
+      &lt;KhungA /&gt;
+      &lt;KhungB&gt;
+        &lt;ChamNgoai /&gt;
+      &lt;/KhungB&gt;
+    &lt;/div&gt;
+  );
+}</code></pre><div class="out">KhungA state: 3
+ChamTrong (vẽ TRONG KhungA) render: 4
+KhungB state: 3
+ChamNgoai (truyền làm children) render: 1</div>
+<p><code>ChamNgoai</code>'s element was created by the parent, which never re-rendered, so React skipped it. Chapter 7 explains the mechanism; Chapter 9 reuses this exact pattern to put Server Components inside Client Components.</p>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-bash">node panel.cjs
+node children.cjs
+node quen.cjs; echo "exit=$?"
+npx tsc --noEmit
+npm run build &amp;&amp; npm start  <span class="tok-comment">  # open /ghep, then /vo and click each button 3 times</span></code></pre>
+<h3>🔗 Go deeper in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-1-2-props" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 1.2 — Props, TypeScript types, children</span><span class="lc-sub">The same topic in the React course, deeper</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-8-2-memo" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 8.2 — memo, useMemo, useCallback</span><span class="lc-sub">Measure re-renders before optimising — ties to the bonus above</span></span></a>
+<a class="link-card lien-ket-cheo" href="/academy/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-5-1-components-props" target="_blank" rel="noopener"><span class="lc-ico">🏫</span><span class="lc-body"><span class="lc-title">Academy · FER202 · 5.1 — Components and props</span><span class="lc-sub">The university-course view: children and composition</span></span></a>
 
 <h3>🗂 Key terms</h3>
 <div class="kv-grid">
@@ -503,6 +681,180 @@ npm run build &amp;&amp; npm start  <span class="tok-comment">  # mở /memo, b�
 </ol>
 <p><strong>Đạt khi:</strong> bạn truyền được JSX qua <code>children</code> và một prop có tên, và ưu tiên ghép hơn một đống prop.</p></div>
 
+<h3>🔬 Đo thật: children trên React 19.3.0 / Next.js 16.4.6</h3>
+<p>Ví dụ Panel ở trên, render thật — kết quả khớp:</p>
+<pre><code class="language-javascript">const React = require('react');
+const { renderToStaticMarkup } = require('react-dom/server');
+const h = React.createElement;
+function Panel({ title, children }) {
+  return h('section', { className: 'panel' }, h('h2', null, title), h('div', { className: 'body' }, children));
+}
+<span class="tok-comment">// &lt;Panel title="Hi"&gt;&lt;p&gt;inner text&lt;/p&gt;&lt;button&gt;OK&lt;/button&gt;&lt;/Panel&gt;</span>
+console.log(renderToStaticMarkup(h(Panel, { title: 'Hi' }, h('p', null, 'inner text'), h('button', null, 'OK'))));</code></pre><pre><code class="language-bash">$ node panel.cjs</code></pre><div class="out">&lt;section class="panel"&gt;&lt;h2&gt;Hi&lt;/h2&gt;&lt;div class="body"&gt;&lt;p&gt;inner text&lt;/p&gt;&lt;button&gt;OK&lt;/button&gt;&lt;/div&gt;&lt;/section&gt;</div>
+<p>Bạn đã dùng <code>children</code> từ bài 0.3: layout gốc do <code>create-next-app</code> sinh ra nhận nó, và Next.js truyền trang của mỗi địa chỉ vào làm <code>children</code>:</p>
+<pre><code class="language-bash">$ grep -n -A9 'export default function RootLayout' src/app/layout.tsx</code></pre><div class="out">20:export default function RootLayout({ children }: LayoutProps&lt;"/"&gt;) {
+21-  return (
+22-    &lt;html
+23-      lang="en"
+24-      className={&#96;\${geistSans.variable} \${geistMono.variable} h-full antialiased&#96;}
+25-    &gt;
+26-      &lt;body className="min-h-full flex flex-col"&gt;{children}&lt;/body&gt;
+27-    &lt;/html&gt;
+28-  );
+29-}</div>
+<p>Component thật sự nhận được gì — <b>không phải lúc nào cũng là mảng</b>. Đừng gọi <code>children.map</code>; cứ render nó, hoặc dùng bộ hàm <code>React.Children</code>:</p>
+<pre><code class="language-javascript">const React = require('react');
+const { renderToStaticMarkup } = require('react-dom/server');
+const h = React.createElement;             <span class="tok-comment">  // JSX &lt;X a="1"&gt;…&lt;/X&gt;  =  h(X, { a: '1' }, …)</span>
+let nhan;
+function Hop({ children }) {
+  nhan = children;                         <span class="tok-comment">  // ghi lại đúng thứ component nhận được</span>
+  return null;
+}
+const ta = (c) =&gt; c === undefined ? 'undefined' : Array.isArray(c) ? &#96;mảng \${c.length} phần tử&#96; : typeof c === 'object' ? &#96;1 element &lt;\${c.type}&gt;&#96; : &#96;\${typeof c} '\${c}'&#96;;
+const thu = [
+  ['&lt;Hop /&gt;', h(Hop)],
+  ['&lt;Hop&gt;chào&lt;/Hop&gt;', h(Hop, null, 'chào')],
+  ['&lt;Hop&gt;&lt;p /&gt;&lt;/Hop&gt;', h(Hop, null, h('p'))],
+  ['&lt;Hop&gt;&lt;p /&gt;&lt;b /&gt;&lt;/Hop&gt;', h(Hop, null, h('p'), h('b'))],
+  ['&lt;Hop children={&lt;p /&gt;} /&gt;', h(Hop, { children: h('p') })],
+];
+for (const [jsx, el] of thu) {
+  renderToStaticMarkup(el);
+  console.log(jsx.padEnd(26), '→', ta(nhan), '· Children.count =', React.Children.count(nhan));
+}</code></pre><pre><code class="language-bash">$ node children.cjs</code></pre><div class="out">&lt;Hop /&gt;                    → undefined · Children.count = 0
+&lt;Hop&gt;chào&lt;/Hop&gt;            → string 'chào' · Children.count = 1
+&lt;Hop&gt;&lt;p /&gt;&lt;/Hop&gt;           → 1 element &lt;p&gt; · Children.count = 1
+&lt;Hop&gt;&lt;p /&gt;&lt;b /&gt;&lt;/Hop&gt;      → mảng 2 phần tử · Children.count = 2
+&lt;Hop children={&lt;p /&gt;} /&gt;   → 1 element &lt;p&gt; · Children.count = 1</div>
+<p>Hai bẫy im lặng. Panel quên <code>{{children}}</code> làm mất nội dung mà không lỗi (mã thoát 0); TypeScript bắt các lỗi hình dạng — không khai children (TS2322), children hai lần (TS2710), thiếu children bắt buộc (TS2741):</p>
+<pre><code class="language-javascript">const React = require('react');
+const { renderToStaticMarkup } = require('react-dom/server');
+const h = React.createElement;
+function Panel({ title }) {                <span class="tok-comment">  // ✗ quên {children}</span>
+  return h('section', null, h('h2', null, title));
+}
+console.log(renderToStaticMarkup(h(Panel, { title: 'Hi' }, h('p', null, 'inner text'), h('button', null, 'OK'))));</code></pre><pre><code class="language-bash">$ node quen.cjs 2&gt;&amp;1; echo "exit=$?"</code></pre><div class="out">&lt;section&gt;&lt;h2&gt;Hi&lt;/h2&gt;&lt;/section&gt;
+exit=0</div>
+<pre><code class="language-tsx">function Title({ text }: { text: string }) {
+  return &lt;h2&gt;{text}&lt;/h2&gt;;
+}
+function Hop({ children }: { children: React.ReactNode }) {
+  return &lt;div&gt;{children}&lt;/div&gt;;
+}
+export const a = &lt;Title text="Hi"&gt;thêm chữ&lt;/Title&gt;;
+export const b = &lt;Hop children={&lt;p&gt;A&lt;/p&gt;}&gt;&lt;p&gt;B&lt;/p&gt;&lt;/Hop&gt;;
+export const c = &lt;Hop /&gt;;</code></pre><pre><code class="language-bash">$ npx tsc --noEmit</code></pre><div class="out">src/thu22/bay.tsx(7,19): error TS2322: Type '{ children: string; text: string; }' is not assignable to type 'IntrinsicAttributes &amp; { text: string; }'.
+  Property 'children' does not exist on type 'IntrinsicAttributes &amp; { text: string; }'.
+src/thu22/bay.tsx(8,23): error TS2710: 'children' are specified twice. The attribute named 'children' will be overwritten.
+src/thu22/bay.tsx(9,19): error TS2741: Property 'children' is missing in type '{}' but required in type '{ children: ReactNode; }'.</div>
+<p>Trên trình duyệt thật (<code>next build</code> + <code>next start</code>): một Panel bọc ba nội dung khác nhau, và một Layout có hai khe có tên:</p>
+<pre><code class="language-tsx">type Co = { children: React.ReactNode };
+
+function Panel({ title, children }: { title: string } &amp; Co) {
+  return (
+    &lt;section className="panel rounded-xl border-2 border-sky-500 bg-white shadow"&gt;
+      &lt;h2 className="rounded-t-lg bg-sky-500 px-4 py-1 font-bold text-white"&gt;{title}&lt;/h2&gt;
+      &lt;div className="body p-4"&gt;{children}&lt;/div&gt;
+    &lt;/section&gt;
+  );
+}
+
+type Slots = { sidebar: React.ReactNode; main: React.ReactNode };
+
+function Layout({ sidebar, main }: Slots) {
+  return (
+    &lt;div className="grid grid-cols-[150px_1fr] gap-3"&gt;
+      &lt;aside className="rounded-xl bg-slate-100 p-3"&gt;{sidebar}&lt;/aside&gt;
+      &lt;main&gt;{main}&lt;/main&gt;
+    &lt;/div&gt;
+  );
+}
+
+export default function Ghep() {
+  return (
+    &lt;div className="space-y-3 bg-slate-50 p-5 font-sans text-sm text-slate-900"&gt;
+      &lt;div className="grid grid-cols-3 gap-3"&gt;
+        &lt;Panel title="Tin nhắn"&gt;
+          &lt;p&gt;An: tối nay họp nhé?&lt;/p&gt;
+          &lt;p className="text-right"&gt;Bình: ok 8h&lt;/p&gt;
+        &lt;/Panel&gt;
+        &lt;Panel title="Cài đặt"&gt;
+          &lt;label className="block"&gt;&lt;input type="checkbox" defaultChecked /&gt; Thông báo&lt;/label&gt;
+          &lt;label className="block"&gt;&lt;input type="checkbox" /&gt; Chế độ tối&lt;/label&gt;
+        &lt;/Panel&gt;
+        &lt;Panel title="Quiz"&gt;
+          &lt;p&gt;2 + 2 = ?&lt;/p&gt;
+          &lt;button className="mt-1 rounded bg-sky-500 px-3 text-white"&gt;4&lt;/button&gt;
+        &lt;/Panel&gt;
+      &lt;/div&gt;
+      &lt;Layout
+        sidebar={&lt;nav className="space-y-1"&gt;&lt;p&gt;🏠 Trang chủ&lt;/p&gt;&lt;p&gt;📚 Khoá học&lt;/p&gt;&lt;/nav&gt;}
+        main={&lt;Panel title="Bảng tin"&gt;&lt;p&gt;Hai khe: sidebar và main&lt;/p&gt;&lt;/Panel&gt;}
+      /&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+<p>Phần thưởng — children không vẽ lại theo khung. Mỗi khung có bộ đếm riêng; bấm mỗi nút 3 lần:</p>
+<pre><code class="language-tsx">'use client';
+import { useState } from 'react';
+
+let demTrong = 0;
+let demNgoai = 0;
+
+function ChamTrong() {
+  demTrong++;
+  return &lt;p id="trong"&gt;ChamTrong (vẽ TRONG KhungA) render: {demTrong}&lt;/p&gt;;
+}
+function ChamNgoai() {
+  demNgoai++;
+  return &lt;p id="ngoai"&gt;ChamNgoai (truyền làm children) render: {demNgoai}&lt;/p&gt;;
+}
+
+function KhungA() {
+  const [n, setN] = useState(0);
+  return (
+    &lt;div className="rounded border p-2"&gt;
+      &lt;button id="a" className="rounded border px-3" onClick={() =&gt; setN(n + 1)}&gt;KhungA state: {n}&lt;/button&gt;
+      &lt;ChamTrong /&gt;
+    &lt;/div&gt;
+  );
+}
+function KhungB({ children }: { children: React.ReactNode }) {
+  const [n, setN] = useState(0);
+  return (
+    &lt;div className="rounded border p-2"&gt;
+      &lt;button id="b" className="rounded border px-3" onClick={() =&gt; setN(n + 1)}&gt;KhungB state: {n}&lt;/button&gt;
+      {children}
+    &lt;/div&gt;
+  );
+}
+
+export default function Vo() {
+  return (
+    &lt;div className="space-y-2 p-6 font-sans text-lg"&gt;
+      &lt;KhungA /&gt;
+      &lt;KhungB&gt;
+        &lt;ChamNgoai /&gt;
+      &lt;/KhungB&gt;
+    &lt;/div&gt;
+  );
+}</code></pre><div class="out">KhungA state: 3
+ChamTrong (vẽ TRONG KhungA) render: 4
+KhungB state: 3
+ChamNgoai (truyền làm children) render: 1</div>
+<p>Element <code>ChamNgoai</code> do cha tạo, mà cha không vẽ lại, nên React bỏ qua nó. Chương 7 giải thích cơ chế; Chương 9 dùng đúng mẫu này để đặt Server Component bên trong Client Component.</p>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-bash">node panel.cjs
+node children.cjs
+node quen.cjs; echo "exit=$?"
+npx tsc --noEmit
+npm run build &amp;&amp; npm start  <span class="tok-comment">  # mở /ghep, rồi /vo và bấm mỗi nút 3 lần</span></code></pre>
+<h3>🔗 Học sâu hơn ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-1-2-props" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 1.2 — Props, kiểu TypeScript, children</span><span class="lc-sub">Cùng chủ đề trong khoá React, đi sâu hơn</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-8-2-memo" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 8.2 — memo, useMemo, useCallback</span><span class="lc-sub">Đo lần vẽ lại trước khi tối ưu — nối với phần thưởng bên trên</span></span></a>
+<a class="link-card lien-ket-cheo" href="/academy/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-5-1-components-props" target="_blank" rel="noopener"><span class="lc-ico">🏫</span><span class="lc-body"><span class="lc-title">Academy · FER202 · 5.1 — Component và props</span><span class="lc-sub">Góc nhìn môn học ở trường: children và ghép</span></span></a>
+
 <h3>🗂 Thuật ngữ trong bài</h3>
 <div class="kv-grid">
   <div class="kv"><span class="k">children</span><span class="v">Prop đặc biệt chứa bất kỳ JSX nào mà một component bọc quanh.</span></div>
@@ -528,6 +880,7 @@ npm run build &amp;&amp; npm start  <span class="tok-comment">  # mở /memo, b�
       isFreePreview: false,
       description: 'Giá trị mặc định, spread {...props}, truyền hàm để con báo lên cha, và gõ kiểu props bằng TypeScript.',
       content: `
+${G02_3}
 <div class="ml-en">
 <span class="eyebrow">Chapter 2 · Lesson 2.3</span>
 <h2>The four prop patterns you use every day</h2>
@@ -579,7 +932,7 @@ function Badge({ label = 'New', tone }: BadgeProps) {
 <h3>Typing a component's props</h3>
 <div class="lz-flow">
   <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Name the shape once</b> — &#96;type CardProps = { title: string; onClose?: () =&gt; void }&#96;. One declaration checks every call site in the project.</div></div>
-  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Annotate the parameter, not the function</b> — &#96;function Card({ title }: CardProps)&#96;. Avoid &#96;React.FC&#96;: it implicitly adds a &#96;children&#96; prop your component may not render.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Annotate the parameter, not the function</b> — &#96;function Card({ title }: CardProps)&#96;. You will often read “avoid &#96;React.FC&#96;, it implicitly adds &#96;children&#96;” — that was true for @types/react 17; with today's React 19 types &#96;FC&lt;{ title: string }&gt;&#96; has <b>no</b> &#96;children&#96; (nesting content is TS2322, measured below). Annotating the parameter is still simpler.</div></div>
   <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Optional props need a default</b> — &#96;{ size = &#39;md&#39; }&#96; in the destructuring. The type says it may be absent; the default means the body never has to check.</div></div>
   <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>children is React.ReactNode</b> — The widest renderable type — elements, strings, numbers, arrays, &#96;null&#96;. Only add it when the component actually renders it.</div></div>
 </div>
@@ -601,6 +954,125 @@ function Badge({ label = 'New', tone }: BadgeProps) {
 <li>Spread a props object into a child (<code>&lt;Btn {...rest} /&gt;</code>) and explain one risk of spreading unknown props.</li>
 </ol>
 <p><strong>Done when:</strong> you can type props, pass callbacks up, and spread props while knowing the risk.</p></div>
+
+<h3>🔬 Measured: props patterns on React 19.3.0</h3>
+<p>Defaults fire <b>only for <code>undefined</code></b> — <code>null</code> and <code>""</code> are values the parent passed, so the badge comes out empty. If <code>null</code> must fall back too, write <code>label ?? 'New'</code> in the body:</p>
+<pre><code class="language-javascript">const React = require('react');
+const { renderToStaticMarkup } = require('react-dom/server');
+const h = React.createElement;
+function Badge({ label = 'New' }) {
+  return h('span', { className: 'badge' }, label);
+}
+const thu = [
+  ['&lt;Badge /&gt;', {}],
+  ['&lt;Badge label="Hot" /&gt;', { label: 'Hot' }],
+  ['&lt;Badge label={undefined} /&gt;', { label: undefined }],
+  ['&lt;Badge label={null} /&gt;', { label: null }],
+  ['&lt;Badge label="" /&gt;', { label: '' }],
+];
+for (const [jsx, props] of thu) console.log(jsx.padEnd(28), '→', renderToStaticMarkup(h(Badge, props)));</code></pre><pre><code class="language-bash">$ node badge.cjs</code></pre><div class="out">&lt;Badge /&gt;                    → &lt;span class="badge"&gt;New&lt;/span&gt;
+&lt;Badge label="Hot" /&gt;        → &lt;span class="badge"&gt;Hot&lt;/span&gt;
+&lt;Badge label={undefined} /&gt;  → &lt;span class="badge"&gt;New&lt;/span&gt;
+&lt;Badge label={null} /&gt;       → &lt;span class="badge"&gt;&lt;/span&gt;
+&lt;Badge label="" /&gt;           → &lt;span class="badge"&gt;&lt;/span&gt;</div>
+<p>Spread, in development: an unknown prop leaks to the DOM element (React warns and drops it), and whatever is written <b>last</b> wins:</p>
+<pre><code class="language-javascript">const React = require('react');
+const { renderToStaticMarkup } = require('react-dom/server');
+const h = React.createElement;
+function Input({ label, ...rest }) {
+  return h('label', null, label, h('input', rest));        <span class="tok-comment">  // &lt;input {...rest} /&gt;</span>
+}
+console.log(renderToStaticMarkup(h(Input, { label: 'Email', type: 'email', placeholder: 'you@site.com' })));
+console.log(renderToStaticMarkup(h(Input, { label: 'Email', isActive: true }))); <span class="tok-comment">  // prop lạ lọt xuống &lt;input&gt;</span>
+function NutA(props) { return h('button', { ...props, type: 'button' }); }     <span class="tok-comment">  // &lt;button {...props} type="button"&gt;</span>
+function NutB(props) { return h('button', { type: 'button', ...props }); }     <span class="tok-comment">  // &lt;button type="button" {...props}&gt;</span>
+console.log('NutA:', renderToStaticMarkup(h(NutA, { type: 'submit' }, 'Gửi')));
+console.log('NutB:', renderToStaticMarkup(h(NutB, { type: 'submit' }, 'Gửi')));</code></pre><pre><code class="language-bash">$ NODE_ENV=development node spread.cjs 2&gt;&amp;1</code></pre><div class="out">&lt;label&gt;Email&lt;input type="email" placeholder="you@site.com"/&gt;&lt;/label&gt;
+React does not recognize the &#96;isActive&#96; prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase &#96;isactive&#96; instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+&lt;label&gt;Email&lt;input/&gt;&lt;/label&gt;
+NutA: &lt;button type="button"&gt;Gửi&lt;/button&gt;
+NutB: &lt;button type="submit"&gt;Gửi&lt;/button&gt;</div>
+<p>Typing props — four real tsc errors: missing required <code>tone</code> (TS2741), a value outside the union (TS2322), <code>React.FC</code> without <code>children</code> (TS2322 — the old “FC adds children” advice is outdated), and <code>unknown</code> forcing a check (TS18046). Note: the <code>any</code> line compiles silently:</p>
+<pre><code class="language-tsx">import type { FC } from 'react';
+
+type BadgeProps = {
+  label?: string;        <span class="tok-comment">  // tuỳ chọn</span>
+  tone: 'info' | 'warn'; <span class="tok-comment">  // bắt buộc, chỉ hai giá trị này</span>
+};
+function Badge({ label = 'New', tone }: BadgeProps) {
+  return &lt;span className={&#96;badge badge-\${tone}&#96;}&gt;{label}&lt;/span&gt;;
+}
+export const a = &lt;Badge /&gt;;
+export const b = &lt;Badge tone="danger" /&gt;;
+export const c = &lt;Badge tone="info" /&gt;;
+
+const Card: FC&lt;{ title: string }&gt; = ({ title }) =&gt; &lt;h2&gt;{title}&lt;/h2&gt;;
+export const d = &lt;Card title="Hi"&gt;nội dung&lt;/Card&gt;;
+
+function Chart({ data }: { data: any }) {
+  return &lt;p&gt;{data.points.map((p: number) =&gt; p * 2).join(',')}&lt;/p&gt;;
+}
+export const e = &lt;Chart data={{}} /&gt;;
+
+function Chart2({ data }: { data: unknown }) {
+  return &lt;p&gt;{data.points.join(',')}&lt;/p&gt;;
+}</code></pre><pre><code class="language-bash">$ npx tsc --noEmit</code></pre><div class="out">src/thu23/kieu.tsx(10,19): error TS2741: Property 'tone' is missing in type '{}' but required in type 'BadgeProps'.
+src/thu23/kieu.tsx(11,25): error TS2322: Type '"danger"' is not assignable to type '"info" | "warn"'.
+src/thu23/kieu.tsx(15,19): error TS2322: Type '{ children: string; title: string; }' is not assignable to type 'IntrinsicAttributes &amp; { title: string; }'.
+  Property 'children' does not exist on type 'IntrinsicAttributes &amp; { title: string; }'.
+src/thu23/kieu.tsx(23,14): error TS18046: 'data' is of type 'unknown'.</div>
+<p>…and then crashes at runtime:</p>
+<pre><code class="language-javascript">const React = require('react');
+const { renderToStaticMarkup } = require('react-dom/server');
+function Chart({ data }) {                  <span class="tok-comment">  // data: any — tsc không kiểm gì</span>
+  return React.createElement('p', null, data.points.map((p) =&gt; p * 2).join(','));
+}
+try {
+  console.log(renderToStaticMarkup(React.createElement(Chart, { data: {} })));
+} catch (e) {
+  console.log(e.constructor.name + ': ' + e.message);
+}</code></pre><pre><code class="language-bash">$ node any.cjs</code></pre><div class="out">TypeError: Cannot read properties of undefined (reading 'map')</div>
+<p>A callback prop in a real browser (<code>next build</code> + <code>next start</code>), clicked react · next · react:</p>
+<pre><code class="language-tsx">'use client';
+import { useState } from 'react';
+
+type Props = { onSearch: (q: string) =&gt; void };
+
+function SearchBar({ onSearch }: Props) {
+  return (
+    &lt;div className="flex gap-2"&gt;
+      &lt;button id="r" className="rounded border px-3" onClick={() =&gt; onSearch('react')}&gt;Search react&lt;/button&gt;
+      &lt;button id="n" className="rounded border px-3" onClick={() =&gt; onSearch('next')}&gt;Search next&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+
+export default function Tim() {
+  const [log, setLog] = useState&lt;string[]&gt;([]);
+  return (
+    &lt;div className="space-y-2 p-6 font-sans text-lg"&gt;
+      &lt;SearchBar onSearch={(q) =&gt; setLog((cu) =&gt; [...cu, &#96;searching \${q}&#96;])} /&gt;
+      &lt;p id="dem"&gt;Page nhận {log.length} lần gọi&lt;/p&gt;
+      &lt;ol id="log" className="list-decimal pl-6"&gt;
+        {log.map((x, i) =&gt; &lt;li key={i}&gt;{x}&lt;/li&gt;)}
+      &lt;/ol&gt;
+    &lt;/div&gt;
+  );
+}</code></pre><div class="out">Page nhận 3 lần gọi
+searching react
+searching next
+searching react</div>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-bash">node badge.cjs
+NODE_ENV=development node spread.cjs 2&gt;&amp;1
+npx tsc --noEmit
+node any.cjs
+npm run build &amp;&amp; npm start  <span class="tok-comment">  # open /tim and click the buttons</span></code></pre>
+<h3>🔗 Go deeper in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-1-2-props" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 1.2 — Props and their TypeScript types</span><span class="lc-sub">The same topic in the React course, deeper</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-3-1-tham-so" target="_blank" rel="noopener"><span class="lc-ico">🔷</span><span class="lc-body"><span class="lc-title">TypeScript · 3.1 — Typing parameters: required, optional, default, rest</span><span class="lc-sub">The ground under defaults and ...rest</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-1-4-any-unknown" target="_blank" rel="noopener"><span class="lc-ico">🔷</span><span class="lc-body"><span class="lc-title">TypeScript · 1.4 — any, unknown</span><span class="lc-sub">Why unknown is the honest choice</span></span></a>
+<a class="link-card lien-ket-cheo" href="/academy/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-5-4-slot13-proptypes-slides" target="_blank" rel="noopener"><span class="lc-ico">🏫</span><span class="lc-body"><span class="lc-title">Academy · FER202 · 5.4 — PropTypes (Slot 13)</span><span class="lc-sub">The university-course view: validating props</span></span></a>
 
 <h3>🗂 Key terms</h3>
 <div class="kv-grid">
@@ -668,7 +1140,7 @@ function Badge({ label = 'New', tone }: BadgeProps) {
 <h3>Gán kiểu cho props của một component</h3>
 <div class="lz-flow">
   <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Đặt tên cho cái dáng một lần</b> — &#96;type CardProps = { title: string; onClose?: () =&gt; void }&#96;. Một khai báo kiểm mọi chỗ gọi trong dự án.</div></div>
-  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Chú thích cho tham số, đừng chú thích cho hàm</b> — &#96;function Card({ title }: CardProps)&#96;. Hãy tránh &#96;React.FC&#96;: nó ngầm thêm một prop &#96;children&#96; mà component của bạn có thể chẳng vẽ ra.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Chú thích cho tham số, đừng chú thích cho hàm</b> — &#96;function Card({ title }: CardProps)&#96;. Bạn sẽ hay đọc “tránh &#96;React.FC&#96; vì nó ngầm thêm &#96;children&#96;” — điều đó đúng với @types/react 17; với bộ kiểu React 19 hiện nay, &#96;FC&lt;{ title: string }&gt;&#96; <b>không</b> có &#96;children&#96; (lồng nội dung là lỗi TS2322, đo bên dưới). Chú thích thẳng cho tham số vẫn gọn hơn.</div></div>
   <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Prop tuỳ chọn cần một giá trị mặc định</b> — &#96;{ size = &#39;md&#39; }&#96; ngay trong phép rã. Kiểu nói nó có thể vắng; giá trị mặc định làm phần thân chẳng bao giờ phải kiểm.</div></div>
   <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>children là React.ReactNode</b> — Kiểu vẽ-được rộng nhất — element, chuỗi, số, mảng, &#96;null&#96;. Chỉ thêm nó khi component thật sự vẽ nó ra.</div></div>
 </div>
@@ -690,6 +1162,125 @@ function Badge({ label = 'New', tone }: BadgeProps) {
 <li>Spread một object prop vào con (<code>&lt;Btn {...rest} /&gt;</code>) và nêu một rủi ro của việc spread prop lạ.</li>
 </ol>
 <p><strong>Đạt khi:</strong> bạn gõ kiểu được prop, truyền callback lên trên, và spread prop mà vẫn biết rủi ro.</p></div>
+
+<h3>🔬 Đo thật: khuôn props trên React 19.3.0</h3>
+<p>Giá trị mặc định <b>chỉ áp cho <code>undefined</code></b> — <code>null</code> và <code>""</code> là giá trị cha đã truyền, nên badge ra rỗng. Muốn <code>null</code> cũng lùi về mặc định, viết <code>label ?? 'New'</code> trong thân:</p>
+<pre><code class="language-javascript">const React = require('react');
+const { renderToStaticMarkup } = require('react-dom/server');
+const h = React.createElement;
+function Badge({ label = 'New' }) {
+  return h('span', { className: 'badge' }, label);
+}
+const thu = [
+  ['&lt;Badge /&gt;', {}],
+  ['&lt;Badge label="Hot" /&gt;', { label: 'Hot' }],
+  ['&lt;Badge label={undefined} /&gt;', { label: undefined }],
+  ['&lt;Badge label={null} /&gt;', { label: null }],
+  ['&lt;Badge label="" /&gt;', { label: '' }],
+];
+for (const [jsx, props] of thu) console.log(jsx.padEnd(28), '→', renderToStaticMarkup(h(Badge, props)));</code></pre><pre><code class="language-bash">$ node badge.cjs</code></pre><div class="out">&lt;Badge /&gt;                    → &lt;span class="badge"&gt;New&lt;/span&gt;
+&lt;Badge label="Hot" /&gt;        → &lt;span class="badge"&gt;Hot&lt;/span&gt;
+&lt;Badge label={undefined} /&gt;  → &lt;span class="badge"&gt;New&lt;/span&gt;
+&lt;Badge label={null} /&gt;       → &lt;span class="badge"&gt;&lt;/span&gt;
+&lt;Badge label="" /&gt;           → &lt;span class="badge"&gt;&lt;/span&gt;</div>
+<p>Spread, ở chế độ development: prop lạ lọt xuống thẻ DOM (React cảnh báo và gạt nó ra), và thứ viết <b>sau</b> thắng:</p>
+<pre><code class="language-javascript">const React = require('react');
+const { renderToStaticMarkup } = require('react-dom/server');
+const h = React.createElement;
+function Input({ label, ...rest }) {
+  return h('label', null, label, h('input', rest));        <span class="tok-comment">  // &lt;input {...rest} /&gt;</span>
+}
+console.log(renderToStaticMarkup(h(Input, { label: 'Email', type: 'email', placeholder: 'you@site.com' })));
+console.log(renderToStaticMarkup(h(Input, { label: 'Email', isActive: true }))); <span class="tok-comment">  // prop lạ lọt xuống &lt;input&gt;</span>
+function NutA(props) { return h('button', { ...props, type: 'button' }); }     <span class="tok-comment">  // &lt;button {...props} type="button"&gt;</span>
+function NutB(props) { return h('button', { type: 'button', ...props }); }     <span class="tok-comment">  // &lt;button type="button" {...props}&gt;</span>
+console.log('NutA:', renderToStaticMarkup(h(NutA, { type: 'submit' }, 'Gửi')));
+console.log('NutB:', renderToStaticMarkup(h(NutB, { type: 'submit' }, 'Gửi')));</code></pre><pre><code class="language-bash">$ NODE_ENV=development node spread.cjs 2&gt;&amp;1</code></pre><div class="out">&lt;label&gt;Email&lt;input type="email" placeholder="you@site.com"/&gt;&lt;/label&gt;
+React does not recognize the &#96;isActive&#96; prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase &#96;isactive&#96; instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+&lt;label&gt;Email&lt;input/&gt;&lt;/label&gt;
+NutA: &lt;button type="button"&gt;Gửi&lt;/button&gt;
+NutB: &lt;button type="submit"&gt;Gửi&lt;/button&gt;</div>
+<p>Gõ kiểu props — bốn lỗi tsc thật: thiếu <code>tone</code> bắt buộc (TS2741), giá trị ngoài union (TS2322), <code>React.FC</code> không có <code>children</code> (TS2322 — lời khuyên “FC thêm children” đã cũ), và <code>unknown</code> bắt kiểm (TS18046). Để ý: dòng <code>any</code> biên dịch im lặng:</p>
+<pre><code class="language-tsx">import type { FC } from 'react';
+
+type BadgeProps = {
+  label?: string;        <span class="tok-comment">  // tuỳ chọn</span>
+  tone: 'info' | 'warn'; <span class="tok-comment">  // bắt buộc, chỉ hai giá trị này</span>
+};
+function Badge({ label = 'New', tone }: BadgeProps) {
+  return &lt;span className={&#96;badge badge-\${tone}&#96;}&gt;{label}&lt;/span&gt;;
+}
+export const a = &lt;Badge /&gt;;
+export const b = &lt;Badge tone="danger" /&gt;;
+export const c = &lt;Badge tone="info" /&gt;;
+
+const Card: FC&lt;{ title: string }&gt; = ({ title }) =&gt; &lt;h2&gt;{title}&lt;/h2&gt;;
+export const d = &lt;Card title="Hi"&gt;nội dung&lt;/Card&gt;;
+
+function Chart({ data }: { data: any }) {
+  return &lt;p&gt;{data.points.map((p: number) =&gt; p * 2).join(',')}&lt;/p&gt;;
+}
+export const e = &lt;Chart data={{}} /&gt;;
+
+function Chart2({ data }: { data: unknown }) {
+  return &lt;p&gt;{data.points.join(',')}&lt;/p&gt;;
+}</code></pre><pre><code class="language-bash">$ npx tsc --noEmit</code></pre><div class="out">src/thu23/kieu.tsx(10,19): error TS2741: Property 'tone' is missing in type '{}' but required in type 'BadgeProps'.
+src/thu23/kieu.tsx(11,25): error TS2322: Type '"danger"' is not assignable to type '"info" | "warn"'.
+src/thu23/kieu.tsx(15,19): error TS2322: Type '{ children: string; title: string; }' is not assignable to type 'IntrinsicAttributes &amp; { title: string; }'.
+  Property 'children' does not exist on type 'IntrinsicAttributes &amp; { title: string; }'.
+src/thu23/kieu.tsx(23,14): error TS18046: 'data' is of type 'unknown'.</div>
+<p>…rồi sập lúc chạy:</p>
+<pre><code class="language-javascript">const React = require('react');
+const { renderToStaticMarkup } = require('react-dom/server');
+function Chart({ data }) {                  <span class="tok-comment">  // data: any — tsc không kiểm gì</span>
+  return React.createElement('p', null, data.points.map((p) =&gt; p * 2).join(','));
+}
+try {
+  console.log(renderToStaticMarkup(React.createElement(Chart, { data: {} })));
+} catch (e) {
+  console.log(e.constructor.name + ': ' + e.message);
+}</code></pre><pre><code class="language-bash">$ node any.cjs</code></pre><div class="out">TypeError: Cannot read properties of undefined (reading 'map')</div>
+<p>Prop callback trên trình duyệt thật (<code>next build</code> + <code>next start</code>), bấm react · next · react:</p>
+<pre><code class="language-tsx">'use client';
+import { useState } from 'react';
+
+type Props = { onSearch: (q: string) =&gt; void };
+
+function SearchBar({ onSearch }: Props) {
+  return (
+    &lt;div className="flex gap-2"&gt;
+      &lt;button id="r" className="rounded border px-3" onClick={() =&gt; onSearch('react')}&gt;Search react&lt;/button&gt;
+      &lt;button id="n" className="rounded border px-3" onClick={() =&gt; onSearch('next')}&gt;Search next&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+
+export default function Tim() {
+  const [log, setLog] = useState&lt;string[]&gt;([]);
+  return (
+    &lt;div className="space-y-2 p-6 font-sans text-lg"&gt;
+      &lt;SearchBar onSearch={(q) =&gt; setLog((cu) =&gt; [...cu, &#96;searching \${q}&#96;])} /&gt;
+      &lt;p id="dem"&gt;Page nhận {log.length} lần gọi&lt;/p&gt;
+      &lt;ol id="log" className="list-decimal pl-6"&gt;
+        {log.map((x, i) =&gt; &lt;li key={i}&gt;{x}&lt;/li&gt;)}
+      &lt;/ol&gt;
+    &lt;/div&gt;
+  );
+}</code></pre><div class="out">Page nhận 3 lần gọi
+searching react
+searching next
+searching react</div>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-bash">node badge.cjs
+NODE_ENV=development node spread.cjs 2&gt;&amp;1
+npx tsc --noEmit
+node any.cjs
+npm run build &amp;&amp; npm start  <span class="tok-comment">  # mở /tim và bấm các nút</span></code></pre>
+<h3>🔗 Học sâu hơn ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-1-2-props" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 1.2 — Props và kiểu TypeScript</span><span class="lc-sub">Cùng chủ đề trong khoá React, đi sâu hơn</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-3-1-tham-so" target="_blank" rel="noopener"><span class="lc-ico">🔷</span><span class="lc-body"><span class="lc-title">TypeScript · 3.1 — Gõ kiểu tham số: bắt buộc, optional, mặc định, rest</span><span class="lc-sub">Nền của giá trị mặc định và ...rest</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-1-4-any-unknown" target="_blank" rel="noopener"><span class="lc-ico">🔷</span><span class="lc-body"><span class="lc-title">TypeScript · 1.4 — any, unknown</span><span class="lc-sub">Vì sao unknown là lựa chọn thành thật</span></span></a>
+<a class="link-card lien-ket-cheo" href="/academy/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-5-4-slot13-proptypes-slides" target="_blank" rel="noopener"><span class="lc-ico">🏫</span><span class="lc-body"><span class="lc-title">Academy · FER202 · 5.4 — PropTypes (Slot 13)</span><span class="lc-sub">Góc nhìn môn học ở trường: kiểm tra props</span></span></a>
 
 <h3>🗂 Thuật ngữ trong bài</h3>
 <div class="kv-grid">
@@ -716,6 +1307,7 @@ function Badge({ label = 'New', tone }: BadgeProps) {
       isFreePreview: false,
       description: 'Cắt một giao diện thành component: mỗi component một việc, đặt tên theo dữ liệu, và giữ component thuần.',
       content: `
+${G02_4}
 <div class="ml-en">
 <span class="eyebrow">Chapter 2 · Lesson 2.4</span>
 <h2>Breaking a screen into components</h2>
@@ -764,6 +1356,121 @@ function Badge({ label = 'New', tone }: BadgeProps) {
 </a>
 
 
+<h3>🔬 Measured: boxes, purity and hydration on Next.js 16.4.6</h3>
+<p>The comment thread, cut into the components named above (the boxes in the slides are drawn on this real page):</p>
+<pre><code class="language-tsx">type BinhLuan = { id: number; tacGia: string; luc: string; noiDung: string };
+
+const DS: BinhLuan[] = [
+  { id: 1, tacGia: 'An', luc: '2 phút trước', noiDung: 'Bài này dễ hiểu quá!' },
+  { id: 2, tacGia: 'Bình', luc: '5 phút trước', noiDung: 'Cho mình hỏi children có phải mảng không?' },
+  { id: 3, tacGia: 'Chi', luc: '9 phút trước', noiDung: 'Không phải lúc nào cũng là mảng nhé.' },
+];
+
+function AuthorLine({ tacGia, luc }: { tacGia: string; luc: string }) {
+  return (
+    &lt;div data-c="AuthorLine" className="text-sm text-slate-500"&gt;
+      &lt;b className="text-slate-900"&gt;{tacGia}&lt;/b&gt; · {luc}
+    &lt;/div&gt;
+  );
+}
+
+function Comment({ bl }: { bl: BinhLuan }) {
+  return (
+    &lt;li data-c="Comment" className="rounded-lg bg-white p-3 shadow-sm"&gt;
+      &lt;AuthorLine tacGia={bl.tacGia} luc={bl.luc} /&gt;
+      &lt;p&gt;{bl.noiDung}&lt;/p&gt;
+    &lt;/li&gt;
+  );
+}
+
+function CommentList({ ds }: { ds: BinhLuan[] }) {
+  return (
+    &lt;ul data-c="CommentList" className="space-y-2"&gt;
+      {ds.map((bl) =&gt; &lt;Comment key={bl.id} bl={bl} /&gt;)}
+    &lt;/ul&gt;
+  );
+}
+
+function ReplyBox() {
+  return (
+    &lt;form data-c="ReplyBox" className="flex gap-2"&gt;
+      &lt;input className="flex-1 rounded border px-2" placeholder="Viết trả lời…" /&gt;
+      &lt;button className="rounded bg-sky-500 px-3 text-white"&gt;Gửi&lt;/button&gt;
+    &lt;/form&gt;
+  );
+}
+
+export default function Thread() {
+  return (
+    &lt;section data-c="Thread" className="space-y-3 bg-slate-100 p-5 font-sans"&gt;
+      &lt;h2 className="text-lg font-bold"&gt;Bình luận (3)&lt;/h2&gt;
+      &lt;CommentList ds={DS} /&gt;
+      &lt;ReplyBox /&gt;
+    &lt;/section&gt;
+  );
+}</code></pre>
+<p>An impure component next to a pure one, same page, opened under <code>next dev</code> and <code>next start</code>, button clicked twice:</p>
+<pre><code class="language-tsx">'use client';
+import { useState } from 'react';
+
+let lanVe = 0;                      <span class="tok-comment">  // biến NGOÀI component</span>
+const daXem: string[] = [];
+
+function KhongThuan() {
+  lanVe++;                          <span class="tok-comment">  // ✗ đổi biến bên ngoài trong lúc render</span>
+  daXem.push('x');                  <span class="tok-comment">  // ✗ mảng dài thêm mỗi lần render</span>
+  return &lt;p id="kt"&gt;KhongThuan: lanVe = {lanVe} · daXem dài {daXem.length}&lt;/p&gt;;
+}
+
+function Thuan({ n }: { n: number }) {
+  return &lt;p id="t"&gt;Thuan: n × 2 = {n * 2}&lt;/p&gt;;
+}
+
+export default function Trang() {
+  const [n, setN] = useState(0);
+  return (
+    &lt;div className="space-y-2 p-6 font-sans text-lg"&gt;
+      &lt;button className="rounded border px-3" onClick={() =&gt; setN(n + 1)}&gt;Cha render lại: {n}&lt;/button&gt;
+      &lt;KhongThuan /&gt;
+      &lt;Thuan n={n} /&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+<div class="out">next dev   — on load: KhongThuan: lanVe = 2 · daXem dài 2
+next dev   — after 2 clicks: Cha render lại: 2 · KhongThuan: lanVe = 6 · daXem dài 6 · Thuan: n × 2 = 4
+next start — on load: KhongThuan: lanVe = 1 · daXem dài 1
+next start — after 2 clicks: Cha render lại: 2 · KhongThuan: lanVe = 3 · daXem dài 3 · Thuan: n × 2 = 4</div>
+<p>In development React Strict Mode (on by default in the App Router) calls each component twice per render to expose impurity — <code>KhongThuan</code> counted twice as fast; <code>Thuan</code> could not tell the difference. Production does not double-render.</p>
+<p>Impurity in a Next.js client component — <code>Math.random()</code> while rendering:</p>
+<pre><code class="language-tsx">'use client';
+
+export default function NgauNhien() {
+  const so = Math.random().toFixed(4); <span class="tok-comment">  // ✗ đọc thứ bên ngoài: mỗi lần render một số khác</span>
+  return &lt;p id="so" className="p-6 font-sans text-xl"&gt;Số may mắn: {so}&lt;/p&gt;;
+}</code></pre>
+<pre><code class="language-bash">$ curl -s localhost:19324/ngau-nhien | grep -o 'Số may mắn: &lt;!-- --&gt;[0-9.]*'</code></pre><div class="out">Số may mắn: &lt;!-- --&gt;0.8469</div><pre><code class="language-bash">$ curl -s localhost:19324/ngau-nhien | grep -o 'Số may mắn: &lt;!-- --&gt;[0-9.]*'</code></pre><div class="out">Số may mắn: &lt;!-- --&gt;0.8469</div>
+<p>The page is static (○), so <code>next build</code> froze one number into the HTML — every request gets the same one. The browser then renders a different number, and hydration fails:</p>
+<div class="out">next dev   (overlay): Hydration failed because the server rendered text didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+next start (console): Minified React error #418; visit https://react.dev/errors/418?args[]=text&amp;args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.</div>
+<p>Fix: create random values, timestamps and the like in an event handler or an effect (Chapter 5), never during render.</p>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-bash">npm run build &amp;&amp; npm start  <span class="tok-comment">  # open /binh-luan, /thuan (click twice), /ngau-nhien</span>
+curl -s localhost:3000/ngau-nhien | grep -o "Số may mắn: &lt;!-- --&gt;[0-9.]*"  <span class="tok-comment">  # twice — same number</span>
+npm run dev                 <span class="tok-comment">  # /thuan again: the counter doubles; /ngau-nhien: Hydration failed</span></code></pre>
+<h3>🔗 Go deeper in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-1-4-chia-nho" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 1.4 — Thinking in components: from mock-up to a tested tree</span><span class="lc-sub">The same method, all the way to tests</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-1-1-component" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 1.1 — Components are functions: staying pure</span><span class="lc-sub">Pure renders, in more depth</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-11-3-strict-mode-ref" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 11.3 — StrictMode, useRef, useLayoutEffect</span><span class="lc-sub">Why development runs twice</span></span></a>
+<a class="link-card lien-ket-cheo" href="/academy/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-5-3-slot6-component-slides" target="_blank" rel="noopener"><span class="lc-ico">🏫</span><span class="lc-body"><span class="lc-title">Academy · FER202 · 5.3 — All about Components (Slot 6)</span><span class="lc-sub">The university-course view</span></span></a>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Component tree</span><span class="v">The nested boxes of a screen, as components.</span></div>
+  <div class="kv"><span class="k">Single responsibility</span><span class="v">One component, one job — if it needs an “and”, it is two.</span></div>
+  <div class="kv"><span class="k">Pure render</span><span class="v">Same props/state in ⇒ same UI out, and nothing outside changes.</span></div>
+  <div class="kv"><span class="k">Strict Mode</span><span class="v">Development-only double render that exposes impure components.</span></div>
+  <div class="kv"><span class="k">Hydration mismatch</span><span class="v">The server HTML differs from the browser's first render.</span></div>
+  <div class="kv"><span class="k">Side effect</span><span class="v">Work outside rendering — belongs in event handlers or useEffect.</span></div>
+</div>
 <h3>🧪 Practice (15–20 min)</h3>
 <div class="callout ok"><ol>
 <li>Take a screenshot of a page (any app) and draw boxes to break it into a component tree; name each component.</li>
@@ -825,6 +1532,121 @@ function Badge({ label = 'New', tone }: BadgeProps) {
 </a>
 
 
+<h3>🔬 Đo thật: vẽ hộp, độ thuần và hydration trên Next.js 16.4.6</h3>
+<p>Luồng bình luận, cắt thành đúng các component đã đặt tên ở trên (hộp trong slide vẽ trên chính trang thật này):</p>
+<pre><code class="language-tsx">type BinhLuan = { id: number; tacGia: string; luc: string; noiDung: string };
+
+const DS: BinhLuan[] = [
+  { id: 1, tacGia: 'An', luc: '2 phút trước', noiDung: 'Bài này dễ hiểu quá!' },
+  { id: 2, tacGia: 'Bình', luc: '5 phút trước', noiDung: 'Cho mình hỏi children có phải mảng không?' },
+  { id: 3, tacGia: 'Chi', luc: '9 phút trước', noiDung: 'Không phải lúc nào cũng là mảng nhé.' },
+];
+
+function AuthorLine({ tacGia, luc }: { tacGia: string; luc: string }) {
+  return (
+    &lt;div data-c="AuthorLine" className="text-sm text-slate-500"&gt;
+      &lt;b className="text-slate-900"&gt;{tacGia}&lt;/b&gt; · {luc}
+    &lt;/div&gt;
+  );
+}
+
+function Comment({ bl }: { bl: BinhLuan }) {
+  return (
+    &lt;li data-c="Comment" className="rounded-lg bg-white p-3 shadow-sm"&gt;
+      &lt;AuthorLine tacGia={bl.tacGia} luc={bl.luc} /&gt;
+      &lt;p&gt;{bl.noiDung}&lt;/p&gt;
+    &lt;/li&gt;
+  );
+}
+
+function CommentList({ ds }: { ds: BinhLuan[] }) {
+  return (
+    &lt;ul data-c="CommentList" className="space-y-2"&gt;
+      {ds.map((bl) =&gt; &lt;Comment key={bl.id} bl={bl} /&gt;)}
+    &lt;/ul&gt;
+  );
+}
+
+function ReplyBox() {
+  return (
+    &lt;form data-c="ReplyBox" className="flex gap-2"&gt;
+      &lt;input className="flex-1 rounded border px-2" placeholder="Viết trả lời…" /&gt;
+      &lt;button className="rounded bg-sky-500 px-3 text-white"&gt;Gửi&lt;/button&gt;
+    &lt;/form&gt;
+  );
+}
+
+export default function Thread() {
+  return (
+    &lt;section data-c="Thread" className="space-y-3 bg-slate-100 p-5 font-sans"&gt;
+      &lt;h2 className="text-lg font-bold"&gt;Bình luận (3)&lt;/h2&gt;
+      &lt;CommentList ds={DS} /&gt;
+      &lt;ReplyBox /&gt;
+    &lt;/section&gt;
+  );
+}</code></pre>
+<p>Một component không thuần cạnh một component thuần, cùng trang, mở dưới <code>next dev</code> và <code>next start</code>, bấm nút hai lần:</p>
+<pre><code class="language-tsx">'use client';
+import { useState } from 'react';
+
+let lanVe = 0;                      <span class="tok-comment">  // biến NGOÀI component</span>
+const daXem: string[] = [];
+
+function KhongThuan() {
+  lanVe++;                          <span class="tok-comment">  // ✗ đổi biến bên ngoài trong lúc render</span>
+  daXem.push('x');                  <span class="tok-comment">  // ✗ mảng dài thêm mỗi lần render</span>
+  return &lt;p id="kt"&gt;KhongThuan: lanVe = {lanVe} · daXem dài {daXem.length}&lt;/p&gt;;
+}
+
+function Thuan({ n }: { n: number }) {
+  return &lt;p id="t"&gt;Thuan: n × 2 = {n * 2}&lt;/p&gt;;
+}
+
+export default function Trang() {
+  const [n, setN] = useState(0);
+  return (
+    &lt;div className="space-y-2 p-6 font-sans text-lg"&gt;
+      &lt;button className="rounded border px-3" onClick={() =&gt; setN(n + 1)}&gt;Cha render lại: {n}&lt;/button&gt;
+      &lt;KhongThuan /&gt;
+      &lt;Thuan n={n} /&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+<div class="out">next dev   — lúc tải: KhongThuan: lanVe = 2 · daXem dài 2
+next dev   — sau 2 lần bấm: Cha render lại: 2 · KhongThuan: lanVe = 6 · daXem dài 6 · Thuan: n × 2 = 4
+next start — lúc tải: KhongThuan: lanVe = 1 · daXem dài 1
+next start — sau 2 lần bấm: Cha render lại: 2 · KhongThuan: lanVe = 3 · daXem dài 3 · Thuan: n × 2 = 4</div>
+<p>Ở development, Strict Mode của React (mặc định bật trong App Router) gọi mỗi component hai lần mỗi lượt render để lộ chỗ không thuần — <code>KhongThuan</code> đếm nhanh gấp đôi; <code>Thuan</code> không phân biệt được. Production không render đôi.</p>
+<p>Không thuần trong một client component của Next.js — <code>Math.random()</code> ngay lúc render:</p>
+<pre><code class="language-tsx">'use client';
+
+export default function NgauNhien() {
+  const so = Math.random().toFixed(4); <span class="tok-comment">  // ✗ đọc thứ bên ngoài: mỗi lần render một số khác</span>
+  return &lt;p id="so" className="p-6 font-sans text-xl"&gt;Số may mắn: {so}&lt;/p&gt;;
+}</code></pre>
+<pre><code class="language-bash">$ curl -s localhost:19324/ngau-nhien | grep -o 'Số may mắn: &lt;!-- --&gt;[0-9.]*'</code></pre><div class="out">Số may mắn: &lt;!-- --&gt;0.8469</div><pre><code class="language-bash">$ curl -s localhost:19324/ngau-nhien | grep -o 'Số may mắn: &lt;!-- --&gt;[0-9.]*'</code></pre><div class="out">Số may mắn: &lt;!-- --&gt;0.8469</div>
+<p>Trang là tĩnh (○), nên <code>next build</code> đã nướng một con số vào HTML — mọi request nhận đúng số đó. Rồi trình duyệt render ra số khác, và hydration hỏng:</p>
+<div class="out">next dev   (overlay): Hydration failed because the server rendered text didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+next start (console): Minified React error #418; visit https://react.dev/errors/418?args[]=text&amp;args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.</div>
+<p>Cách sửa: tạo giá trị ngẫu nhiên, thời gian hiện tại… trong hàm xử lý sự kiện hoặc effect (Chương 5), không bao giờ lúc render.</p>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-bash">npm run build &amp;&amp; npm start  <span class="tok-comment">  # mở /binh-luan, /thuan (bấm hai lần), /ngau-nhien</span>
+curl -s localhost:3000/ngau-nhien | grep -o "Số may mắn: &lt;!-- --&gt;[0-9.]*"  <span class="tok-comment">  # hai lần — cùng số</span>
+npm run dev                 <span class="tok-comment">  # /thuan lần nữa: số đếm gấp đôi; /ngau-nhien: Hydration failed</span></code></pre>
+<h3>🔗 Học sâu hơn ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-1-4-chia-nho" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 1.4 — Tư duy theo component: từ mock-up tới cây component</span><span class="lc-sub">Cùng phương pháp, đi tới cây component có test</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-1-1-component" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 1.1 — Component là hàm: giữ cho thuần khiết</span><span class="lc-sub">Render thuần, nói kỹ hơn</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-11-3-strict-mode-ref" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 11.3 — StrictMode, useRef, useLayoutEffect</span><span class="lc-sub">Vì sao dev chạy hai lần</span></span></a>
+<a class="link-card lien-ket-cheo" href="/academy/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-5-3-slot6-component-slides" target="_blank" rel="noopener"><span class="lc-ico">🏫</span><span class="lc-body"><span class="lc-title">Academy · FER202 · 5.3 — Tất cả về Component (Slot 6)</span><span class="lc-sub">Góc nhìn môn học ở trường</span></span></a>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Cây component</span><span class="v">Các hộp lồng nhau của một màn hình, mỗi hộp là một component.</span></div>
+  <div class="kv"><span class="k">Một trách nhiệm</span><span class="v">Một component, một việc — cần chữ “và” thì là hai.</span></div>
+  <div class="kv"><span class="k">Render thuần</span><span class="v">Cùng props/state vào ⇒ cùng giao diện ra, và không đổi gì bên ngoài.</span></div>
+  <div class="kv"><span class="k">Strict Mode</span><span class="v">Chỉ ở development: render hai lần để lộ component không thuần.</span></div>
+  <div class="kv"><span class="k">Lệch hydration</span><span class="v">HTML máy chủ khác lần render đầu ở trình duyệt.</span></div>
+  <div class="kv"><span class="k">Tác dụng phụ</span><span class="v">Việc nằm ngoài render — thuộc về hàm xử lý sự kiện hoặc useEffect.</span></div>
+</div>
 <h3>🧪 Thực hành (15–20 phút)</h3>
 <div class="callout ok"><ol>
 <li>Chụp màn hình một trang (app bất kỳ) và vẽ các hộp để tách nó thành cây component; đặt tên từng cái.</li>

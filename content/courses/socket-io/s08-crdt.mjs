@@ -1341,7 +1341,7 @@ $ grep -n "sio?.engine?.close\\|8_000\\|Hocuspocus\\|closeConnections" src/index
 754:// Dedicated Hocuspocus/Yjs protocol on /notes-collaboration. It shares the
 852: try { sio?.engine?.close(); } catch { /* bỏ qua */ }
 858: }, 8_000).unref();</div>
-<div class="callout bad"><p><strong>Latent issue in this repo:</strong> <code>src/index.ts:816-858</code> never closes the Hocuspocus connections, so with any note open <code>server.close()</code> never finishes and every deploy ends with the forced exit after 8 s, exit code 1. The pending save only happens if the debounce fires inside those 8 s. Fix: call <code>closeConnections()</code> on both Hocuspocus instances before <code>server.close()</code>.</p></div>
+<div class="callout bad"><p><strong>Latent issue in this repo:</strong> <code>src/index.ts:816-858</code> never closes the Hocuspocus connections, so with any note open <code>server.close()</code> never finishes and every deploy ends with the forced exit after 8 s, exit code 1. The pending save only happens if the debounce fires inside those 8 s. Fix: call <code>closeConnections()</code> on both Hocuspocus instances before <code>server.close()</code>. <em>(Fixed in the repo on 14/11/2026, commit <code>ce69e2c7f</code>: shutdown now closes both Hocuspocus channels before the forced-exit timer.)</em></p></div>
 <p>Two workers with the Redis extension:</p>
 <div class="out">$ REDIS=1 node hp84.mjs (:19906 wA, :19907 wB) &amp;   node do84.mjs tre 19906 19907   # An ở worker A, Bình ở worker B
 [khách] An gõ ⇒ Bình thấy (An :19906, Bình :19907): p50 6.5 ms · max 36.1 ms · 20 lần
@@ -1557,7 +1557,7 @@ $ grep -n "sio?.engine?.close\\|8_000\\|Hocuspocus\\|closeConnections" src/index
 754:// Dedicated Hocuspocus/Yjs protocol on /notes-collaboration. It shares the
 852: try { sio?.engine?.close(); } catch { /* bỏ qua */ }
 858: }, 8_000).unref();</div>
-<div class="callout bad"><p><strong>Điểm yếu tiềm ẩn của kho:</strong> <code>src/index.ts:816-858</code> không đóng kết nối Hocuspocus, nên chỉ cần một ghi chú đang mở là <code>server.close()</code> không bao giờ xong và mỗi lần deploy kết thúc bằng ép thoát sau 8 s, mã 1. Lần lưu còn treo chỉ xảy ra nếu debounce kịp chạy trong 8 s đó. Sửa: gọi <code>closeConnections()</code> của cả hai Hocuspocus trước <code>server.close()</code>.</p></div>
+<div class="callout bad"><p><strong>Điểm yếu tiềm ẩn của kho:</strong> <code>src/index.ts:816-858</code> không đóng kết nối Hocuspocus, nên chỉ cần một ghi chú đang mở là <code>server.close()</code> không bao giờ xong và mỗi lần deploy kết thúc bằng ép thoát sau 8 s, mã 1. Lần lưu còn treo chỉ xảy ra nếu debounce kịp chạy trong 8 s đó. Sửa: gọi <code>closeConnections()</code> của cả hai Hocuspocus trước <code>server.close()</code>. <em>(Kho đã vá ngày 14/11/2026, commit <code>ce69e2c7f</code>: tắt máy giờ đóng cả hai kênh Hocuspocus trước hạn ép thoát.)</em></p></div>
 <p>Hai worker với extension Redis:</p>
 <div class="out">$ REDIS=1 node hp84.mjs (:19906 wA, :19907 wB) &amp;   node do84.mjs tre 19906 19907   # An ở worker A, Bình ở worker B
 [khách] An gõ ⇒ Bình thấy (An :19906, Bình :19907): p50 6.5 ms · max 36.1 ms · 20 lần

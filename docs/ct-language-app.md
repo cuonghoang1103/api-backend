@@ -232,3 +232,5 @@ Câu hỏi cho user: Pro của CT Language có **dùng chung** với Pro web cuo
     cai-dat-hoc`. Kiểm thử: `SoTayCaiDatTests` (pinyin số, cấp nhớ, tệp cũ, mốc giờ nhắc, đổi từ của bộ).
   · CÒN THIẾU so với Hanzii: tab Cộng đồng/Thi thử kiểu Hanzii đã có tương đương; chưa có "Bài học AI" sinh từ sổ tay, game luyện chữ
     theo sổ, chọn NHIỀU bộ thành phần cùng lúc (Hanzii ghép bộ — cần dữ liệu IDS), font chữ tuỳ chọn, đồng bộ sổ tay lên máy chủ.
+- 13/11 đêm (APP): **tiếng Nhật gộp về Dekiru** (ios-app `41f8a80`, user chốt "Gộp về Dekiru"). Tab Học (ja) chỉ còn Bảng chữ cái +
+  できる日本語; ôn thẻ (ja) chỉ còn `dekiru`. Khoá `jp` vẫn xuất + vẫn có trên web, app không liệt kê nữa (`HocCTL.KHOA`, `KhoaCoTheOn`).

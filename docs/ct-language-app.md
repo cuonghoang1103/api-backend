@@ -234,3 +234,22 @@ Câu hỏi cho user: Pro của CT Language có **dùng chung** với Pro web cuo
     theo sổ, chọn NHIỀU bộ thành phần cùng lúc (Hanzii ghép bộ — cần dữ liệu IDS), font chữ tuỳ chọn, đồng bộ sổ tay lên máy chủ.
 - 13/11 đêm (APP): **tiếng Nhật gộp về Dekiru** (ios-app `41f8a80`, user chốt "Gộp về Dekiru"). Tab Học (ja) chỉ còn Bảng chữ cái +
   できる日本語; ôn thẻ (ja) chỉ còn `dekiru`. Khoá `jp` vẫn xuất + vẫn có trên web, app không liệt kê nữa (`HocCTL.KHOA`, `KhoaCoTheOn`).
+- 14/11 (APP): **Gấu sống động + thông báo có Gấu + widget lật thẻ + Chia sẻ vào sổ** (user chọn "A + C + widget/Share").
+  · Gấu (`CTLanguageApp/LinhVat/`): `CoVuGau` — Gấu nhỏ ở đầu ôn thẻ, trò 60 giây, nghe-chọn nghĩa/chính tả, luyện chữ nền; đúng ⇒ vui
+    (khen bằng ngôn ngữ đang học ~1/3 lần), 5/10/15 câu liền ⇒ mừng rỡ + kèn + Gấu ĐỌC TO; sai ⇒ buồn + "không sao đâu" (âm `sai.caf`
+    mềm). `GauPixel(chamDuoc:)` — chạm Gấu: "bíp" (`gau.caf`) + một câu bằng ngôn ngữ đang học (giọng máy, `GiongGau`) + bong bóng
+    nghĩa; chạm 5 lần liền ⇒ nhảy. Tắt giọng: Tôi › Âm thanh › "Gấu nói". Đầu tab Hôm nay: tâm trạng + lời theo ngữ cảnh (`LoiGau.chao`:
+    khuya · vắng hôm qua · đã học · thẻ đến hạn · giữ chuỗi · theo buổi). Trang phục (`TrangPhucGau`, Tôi › Trang phục Gấu): khăn 3 ·
+    kính 7 · mũ len 14 · mũ tốt nghiệp/hachimaki/mũ Tết 30 · vương miện 100 — theo CHUỖI KỶ LỤC (đứt chuỗi không mất đồ); Gấu ở mọi màn
+    mặc đồ đang chọn. Mừng mốc (`KhoMungMoc`, lớp phủ `.lopMungMoc()`): chuỗi 3/7/14/30/50/100/200/365 + nhớ sâu 10/50/100/250/500/1000,
+    mỗi mốc một lần; lần đầu chạy bản này đánh dấu im các mốc đã qua. Âm mới tạo bằng `scripts/tao-am-ctlanguage.py` (tệp có rồi thì giữ).
+  · Thông báo (`App/NhacHocCTL.swift`): 14 thông báo riêng cho 14 ngày (không `repeats`), >30 mẫu/ngôn ngữ (`LoiGau.mauNhac`), ảnh
+    Gấu đính kèm đúng tâm trạng + trang phục; 21:00 "chuỗi sắp tắt" khi chưa học; Chủ nhật 19:00 tổng kết tuần; nút "Ôn 5 thẻ ngay"
+    (mở `OnTuCTL(gioiHan: 5)`, không thẻ đến hạn ⇒ học trước) + "Nhắc lại sau 1 giờ". Xếp lại mỗi lần app active và khi vừa học xong
+    ngày. Deep link mới `ctlanguage://on-tu`. CHƯA có nghe phát âm ngay trên thông báo (cần Notification Content Extension).
+  · Widget "Lật thẻ cùng Gấu" (`ctl.latthe`, small/medium, iOS 17 AppIntent): lật + Quên/Nhớ(/Dễ) ngay trên màn hình chính; kết quả
+    vào hàng đợi App Group (`HangDoiWidgetCTL`), app áp khi active (`NhanChamWidgetCTL.ap`, chống chấm đúp).
+  · Share extension `CTLanguageShare` (bundle `com.cuongthai.ctlanguage.share`, App Group): bôi chữ ở app khác → Chia sẻ → CT Language
+    → chọn ngôn ngữ + sổ → Lưu; app tra nghĩa khi active (`NhanChiaSeCTL.ap`, lỗi mạng giữ lại ≤3 lần rồi lưu thẻ tối thiểu).
+    ⚠️ Lần archive đầu cần App ID mới có App Group — ký Automatic thường tự tạo; báo thiếu profile thì bật App Group cho bundle đó.
+  · Test: `GauVaNhacTests`, `WidgetLatTheTests`, `HangDoiChiaSeTests`. DEBUG `CT_XEM_MAN`: `trang-phuc`, `on-tu`, `tro-choi-60`, `mung:<n>`.

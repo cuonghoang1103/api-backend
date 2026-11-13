@@ -18,6 +18,13 @@ Mẫu một mục:
 
 ---
 
+### 14/11/2026 — App CT Language — Tab Hôm nay chào "Chào buổi sáng!" lúc nửa đêm
+- **Triệu chứng:** mở app lúc 00:21, đầu tab Hôm nay ghi "Chào buổi sáng!" — ngay cạnh lời Gấu mới "Khuya rồi…".
+- **Nguyên nhân:** `ios-app/CuongThaiApp/CTLanguageApp/Modules/HomNay/HomNayCTL.swift` `loiChao` chỉ xét `h < 11` ⇒ 0–4 giờ sáng rơi vào "buổi sáng".
+- **Cách sửa:** 23:00–04:59 ⇒ "Khuya rồi", khớp `LoiGau.chao` (ios-app `48dd18d`). Kèm: `HangDoiChiaSeCTL.traLai` khử trùng cả trong danh sách trả lại (test bắt trước khi phát hành).
+- **Ảnh hưởng:** mọi người mở app sau nửa đêm, từ bản đầu tới bản 1.0.0 (4); chỉ là chữ.
+- **Bài học:** chào theo giờ phải có khung "khuya"; hai chỗ cùng nói về giờ (tiêu đề + lời Gấu) phải dùng chung một ngưỡng — chụp màn hình lúc nửa đêm mới thấy.
+
 ### 14/11/2026 — Video / máy thuê — Máy Vast đẩy video lên R2 bị 400 "Missing x-amz-content-sha256"
 - **Triệu chứng:** token R2 mới đúng (Mac PUT 200), nhưng trên máy thuê Vast (Ubuntu 22.04) mọi lệnh PUT/HEAD tới R2 trả 400, thêm header tay thì 403.
 - **Nguyên nhân:** `curl --aws-sigv4` bản < 7.86 (Ubuntu 22.04 có 7.81) không gửi và không ký `x-amz-content-sha256` mà R2 bắt buộc. Máy thuê cũ (Ubuntu 24.04, curl 8.5) không dính nên `xuat/len-r2-thue.sh` chưa từng lộ.

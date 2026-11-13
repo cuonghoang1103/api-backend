@@ -1,3 +1,8 @@
+import G00_8 from './giang/sio-00-8.mjs';
+import G00_9 from './giang/sio-00-9.mjs';
+import G00_1 from './giang/sio-00-1.mjs';
+import G00_2 from './giang/sio-00-2.mjs';
+import G00_3 from './giang/sio-00-3.mjs';
 const REF = '?ref=%2Fcourses%2Fsocket-io%2Flearn&reflabel=Socket.IO';
 /**
  * Socket.IO — Mục 0: Cái Socket.IO THẬT SỰ LÀ.
@@ -11,6 +16,420 @@ export default {
   description: 'Bốn bài dựng mô hình tinh thần đúng trước khi làm bất cứ thứ gì với socket.io. Đây KHÔNG phải WebSocket + npm — nó là engine.io được bọc bởi namespace và room, và mọi thứ gây bất ngờ về nó đều suy ra từ câu đó.',
   sortOrder: 1,
   lessons: [
+    /* ───────────────────── Bắt đầu tại đây 1 ───────────────────── */
+    {
+      title: 'Start here (1/2) — What realtime is, and why Socket.IO|||Bắt đầu tại đây (1/2) — Realtime là gì, và vì sao Socket.IO',
+      slug: 'io-0-0-start-here-1',
+      type: 'VIDEO',
+      isFreePreview: true,
+      description: 'Bài mở cửa cho người mới: realtime (server đẩy dữ liệu tới client ngay khi có việc) khác gì request/response HTTP, vì sao cần một thư viện thay vì WebSocket thuần, và Socket.IO đứng ở đâu trong kho mã này.',
+      content: `
+${G00_8}
+<div class="ml-en">
+<span class="eyebrow">Section 0 · Start here</span>
+<h2>What realtime is, and why Socket.IO</h2>
+<p class="lead">If you have only ever built request/response HTTP APIs, this course fills the gap to the other half of the web: the server pushing data to the client the instant something happens. Realtime is a chat message appearing with no refresh, a presence dot turning green, a cursor moving in a shared document, a video call connecting. Socket.IO is the library this codebase uses for almost all of it, and this first lesson is about the shape of the problem before any code.</p>
+<h3>Request/response vs realtime</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Request/response</span><span class="v">The client asks, the server answers, the connection closes. Right for &quot;load my profile&quot;.</span></div>
+  <div class="kv"><span class="k">Realtime</span><span class="v">A connection stays open and either side can send at any moment. Right for &quot;tell me the instant a message arrives&quot;.</span></div>
+  <div class="kv"><span class="k">Short polling</span><span class="v">The old fake-realtime: the client re-asks every few seconds — wasteful and always a little late.</span></div>
+  <div class="kv"><span class="k">WebSocket</span><span class="v">One long-lived two-way connection; the wire that real realtime is built on.</span></div>
+</div>
+<h3>Why a library, not raw WebSocket</h3>
+<p>A raw browser WebSocket gives you a pipe and nothing else — no reconnect when the wifi blinks, no heartbeat to tell a dead connection from a quiet one, no rooms to broadcast to a group, no fallback for proxies that block the upgrade. Socket.IO adds all four. This repo runs 3,935 lines of gateways on top of Socket.IO (8 files under <code>src/socket/</code>, tests excluded, measured 13/11/2026 — it was 2,430 when the course was first written) and has exactly one place — the Maker Lab device channel — that pays the full price of hand-writing raw <code>ws</code> (1,113 lines for one job). Chapter 9 is the honest account of when that trade is worth it.</p>
+<h3>What this course covers</h3>
+<p>Section 0 is this mental model. Chapters 1-2 are the connection lifecycle and transports. Chapter 3 is rooms, Chapter 4 presence. Chapter 5 is scaling across a cluster with Redis. Chapter 6 is acknowledgements and delivery. Chapter 7 is WebRTC signalling, Chapter 8 collaborative editing with CRDTs (Yjs), Chapter 9 raw WebSocket. Chapter 10 is diagnosis, and Chapter 11 is what survived measurement plus the final exam. Every table in the course is a number someone ran against this repo, not a guess.</p>
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Open a chat or notification app you already use. Send a message from one device and watch it appear on another WITHOUT a refresh — that is a server push, not a request/response.</li>
+<li>Open DevTools → Network and filter on &quot;WS&quot;. Find the single long-lived WebSocket connection carrying all the live traffic, and note it never closes while the page is open.</li>
+<li>Write down two features in that app that need realtime and one that is plain request/response, and say why each belongs where it is.</li>
+</ol>
+<p><strong>Done when:</strong> you can point at a real open WebSocket in DevTools and name, for one app, what belongs to realtime and what does not.</p></div>
+<h3>🔬 Measured: short polling vs a server push</h3>
+<p>Five events happen at fixed moments inside 10.5 seconds (socket.io 4.8.3, Node 22, one machine). Client A asks again every 2 s; client B receives a Socket.IO push:</p>
+<div class="out">tin  xảy ra lúc   short polling (2 s)   Socket.IO đẩy
+#1     700 ms     trễ  1318 ms         trễ 4 ms
+#2    2900 ms     trễ  1107 ms         trễ 3 ms
+#3    4100 ms     trễ  1909 ms         trễ 1 ms
+#4    6600 ms     trễ  1410 ms         trễ 3 ms
+#5    8300 ms     trễ  1712 ms         trễ 2 ms
+trung bình            1491 ms              3 ms
+request HTTP trong 10,5 s: short polling 5 · Socket.IO 0 (1 kết nối mở suốt)</div>
+<p>The poller saw every event 1.1–1.9 s late (it waits for the next tick) and paid 5 HTTP requests; the push arrived within milliseconds over one open connection.</p>
+<h3>🔬 Measured: a raw WebSocket is only a pipe</h3>
+<p>A raw <code>ws</code> server and a Socket.IO server in one process; the process is killed at ~2 s and started again at ~4.5 s:</p>
+<div class="out">  518 ms ws thô     open
+  530 ms socket.io  connect  id=Y_Dna2onqbhSG928AAAA
+ 2014 ms ── GIẾT server (SIGKILL)
+ 2019 ms socket.io  disconnect: transport close
+ 2019 ms ws thô     close 1006 — readyState 3 (CLOSED)
+ 3396 ms socket.io  reconnect_attempt #1
+ 4514 ms ── BẬT LẠI server
+ 5132 ms socket.io  reconnect_attempt #2
+ 5141 ms socket.io  reconnect sau 2 lần thử
+ 5145 ms socket.io  connect  id=8b4koOm48IU2GpakAAAA
+ 9513 ms kết quả: ws thô readyState=3 (vẫn chết) · socket.io connected=true</div>
+<p>The raw client got close code 1006 and stayed at <code>readyState 3</code> for good. Socket.IO retried by itself and reconnected — with a new id — as soon as the server was back.</p>
+<h3>📜 A short history, checked on npm</h3>
+<div class="out">$ npm view socket.io time --json | grep -E '"(created|0\\.6\\.0|1\\.0\\.0|2\\.0\\.0|3\\.0\\.0|4\\.0\\.0|4\\.8\\.3|4\\.8\\.4)"'
+  "0.6.0": "2010-12-24T04:53:35.445Z",
+  "1.0.0": "2014-05-28T17:18:37.764Z",
+  "2.0.0": "2017-05-08T23:16:09.507Z",
+  "3.0.0": "2020-11-05T21:08:44.084Z",
+  "4.0.0": "2021-03-10T11:45:02.546Z",
+  "4.8.3": "2025-12-23T16:42:13.022Z",
+  "4.8.4": "2026-09-25T08:51:53.015Z"
+$ npm view socket.io@0.6.0 author
+LearnBoost
+$ npm view engine.io time.created
+2012-07-03T22:35:39.760Z
+$ npm view socket.io version
+4.8.4</div>
+<p>0.6.0 was published in December 2010 by LearnBoost; engine.io (the connection layer) was split out in 2012 and 1.0 (2014) sits on it. This course measures <strong>4.8.3</strong> — the version in this repo's <code>package.json</code>; npm's latest on 13/11/2026 is 4.8.4.</p>
+<h3>🔁 Run it yourself</h3>
+<p>In a scratch folder: <code>npm init -y && npm pkg set type=module && npm i socket.io@4.8.3 socket.io-client@4.8.3</code>, save this as <code>poll-vs-push.mjs</code>, run <code>node poll-vs-push.mjs</code>. Your milliseconds will differ; the shape will not.</p>
+<pre><code class="language-javascript"><span class="tok-comment">// Tin xảy ra ở 5 thời điểm CỐ ĐỊNH; client A hỏi lại mỗi 2 giây (short polling), client B nhận đẩy qua Socket.IO.</span>
+import http from 'node:http';
+import { Server } from 'socket.io';
+import { io as ketNoi } from 'socket.io-client';
+const MOC = [700, 2900, 4100, 6600, 8300];          <span class="tok-comment">  // ms kể từ lúc bắt đầu</span>
+const tin = [];                                       <span class="tok-comment">  // [{ i, luc }]</span>
+const srv = http.createServer((req, res) =&gt; {         <span class="tok-comment">  // GET /tin?sau=n ⇒ các tin có chỉ số &gt;= n</span>
+  const sau = Number(new URL(req.url, 'http://x').searchParams.get('sau') ?? 0);
+  res.end(JSON.stringify(tin.filter((t) =&gt; t.i &gt;= sau)));
+});
+const io = new Server(srv);
+await new Promise((r) =&gt; srv.listen(19401, r));
+const t0 = Date.now(), tre = { poll: [], push: [] };
+let soRequest = 0, daCo = 0;
+const cho = setInterval(async () =&gt; {                 <span class="tok-comment">  // A: short polling mỗi 2000 ms</span>
+  soRequest++;
+  const ds = await (await fetch(&#96;http://localhost:19401/tin?sau=\${daCo}&#96;)).json();
+  for (const t of ds) { tre.poll.push(Date.now() - t0 - t.luc); daCo = t.i + 1; }
+}, 2000);
+const b = ketNoi('http://localhost:19401');          <span class="tok-comment">  // B: Socket.IO, server đẩy</span>
+b.on('tin', (t) =&gt; tre.push.push(Date.now() - t0 - t.luc));
+await new Promise((r) =&gt; b.on('connect', r));
+MOC.forEach((ms, i) =&gt; setTimeout(() =&gt; { const t = { i, luc: ms }; tin.push(t); io.emit('tin', t); }, ms - (Date.now() - t0)));
+await new Promise((r) =&gt; setTimeout(r, 10500));
+clearInterval(cho); b.close(); io.close();
+console.log('tin  xảy ra lúc   short polling (2 s)   Socket.IO đẩy');
+MOC.forEach((ms, i) =&gt; console.log(&#96;#\${i + 1}   \${String(ms).padStart(5)} ms     trễ \${String(tre.poll[i]).padStart(5)} ms         trễ \${tre.push[i]} ms&#96;));
+const tb = (a) =&gt; Math.round(a.reduce((x, y) =&gt; x + y, 0) / a.length);
+console.log(&#96;trung bình            \${tb(tre.poll)} ms              \${tb(tre.push)} ms&#96;);
+console.log(&#96;request HTTP trong 10,5 s: short polling \${soRequest} · Socket.IO 0 (1 kết nối mở suốt)&#96;);</code></pre>
+<h3>🔗 Go deeper in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-11-1-websocket-co-ban" target="_blank" rel="noopener"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Node.js · 11.1 — From asking again and again to being told: WebSocket</span><span class="lc-sub">The same idea from the Node.js side, with ws and Socket.IO</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-9-2-websocket" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking for Developers · 9.2 — WebSocket: upgrade, frames, heartbeat</span><span class="lc-sub">What the wire looks like below Socket.IO</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-10-3-realtime" target="_blank" rel="noopener"><span class="lc-ico">🧩</span><span class="lc-body"><span class="lc-title">API Design · 10.4 — Realtime APIs: polling, SSE or WebSocket</span><span class="lc-sub">Choosing the contract, with measured latency and request counts</span></span></a>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Realtime</span><span class="v">The server sending data to the client the moment it happens, over an open connection.</span></div>
+  <div class="kv"><span class="k">Request/response</span><span class="v">The classic HTTP cycle: ask, answer, close.</span></div>
+  <div class="kv"><span class="k">WebSocket</span><span class="v">A single long-lived two-way connection — the transport under realtime.</span></div>
+  <div class="kv"><span class="k">Socket.IO</span><span class="v">The library that adds reconnect, heartbeat, rooms and fallback on top of WebSocket.</span></div>
+  <div class="kv"><span class="k">Gateway</span><span class="v">A server-side module that owns one realtime feature (chat, calls, presence).</span></div>
+  <div class="kv"><span class="k">Raw <code>ws</code></span><span class="v">The bare WebSocket library — a pipe with none of Socket.IO's extras.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li>Realtime is the server pushing to the client the instant something happens — the other half of the web from request/response.</li><li>WebSocket is the long-lived two-way wire; short polling only fakes realtime.</li><li>Raw WebSocket is just a pipe — you would rebuild reconnect, heartbeat, rooms and fallback yourself.</li><li>Socket.IO gives you those four for free; this repo runs ~3,935 lines of gateways on it.</li><li>Every number in this course was measured against this codebase, not guessed.</li></ul>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 0 · Bắt đầu tại đây</span>
+<h2>Realtime là gì, và vì sao Socket.IO</h2>
+<p class="lead">Nếu bạn mới chỉ dựng API HTTP kiểu request/response, khoá này lấp đúng khoảng sang nửa còn lại của web: server đẩy dữ liệu tới client ngay khoảnh khắc có việc. Realtime là một tin nhắn chat hiện ra mà không cần tải lại, một chấm hiện diện chuyển xanh, một con trỏ di chuyển trong tài liệu chung, một cuộc gọi video kết nối. Socket.IO là thư viện mà kho mã này dùng cho gần hết những việc đó, và bài đầu tiên này nói về hình dạng của bài toán trước khi có dòng mã nào.</p>
+<h3>Request/response vs realtime</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Request/response</span><span class="v">Client hỏi, server đáp, connection đóng. Đúng cho &quot;tải hồ sơ của tôi&quot;.</span></div>
+  <div class="kv"><span class="k">Realtime</span><span class="v">Một connection mở suốt và cả hai phía gửi bất cứ lúc nào. Đúng cho &quot;báo tôi ngay khi có tin&quot;.</span></div>
+  <div class="kv"><span class="k">Short polling</span><span class="v">Realtime giả kiểu cũ: client hỏi lại mỗi vài giây — tốn và luôn trễ một nhịp.</span></div>
+  <div class="kv"><span class="k">WebSocket</span><span class="v">Một connection hai chiều sống lâu; cái dây mà realtime thật dựng lên trên.</span></div>
+</div>
+<h3>Vì sao dùng thư viện, không phải WebSocket thuần</h3>
+<p>Một WebSocket thô của trình duyệt cho bạn một cái ống và không gì khác — không reconnect khi wifi chớp, không heartbeat để phân biệt connection chết với connection im, không room để broadcast cho một nhóm, không fallback cho proxy chặn upgrade. Socket.IO thêm đủ cả bốn. Kho này chạy 3.935 dòng gateway trên Socket.IO (8 tệp trong <code>src/socket/</code>, không tính test, đo 13/11/2026 — lúc mới soạn khoá là 2.430) và có đúng một chỗ — kênh thiết bị Maker Lab — trả đủ cái giá của việc tự viết <code>ws</code> thô (1.113 dòng cho một việc). Chương 9 là bản trình bày trung thực về khi nào cái đánh đổi ấy đáng.</p>
+<h3>Khoá này gồm những gì</h3>
+<p>Mục 0 là mô hình tư duy này. Chương 1-2 là vòng đời connection và transport. Chương 3 là room, Chương 4 là presence. Chương 5 là mở rộng ra cụm nhiều worker với Redis. Chương 6 là ack và bảo đảm giao tin. Chương 7 là signalling WebRTC, Chương 8 là soạn thảo cộng tác bằng CRDT (Yjs), Chương 9 là WebSocket thô. Chương 10 là chẩn đoán, và Chương 11 là cái sống qua đo lường cùng đề thi cuối. Mọi bảng trong khoá là một con số có người chạy trên chính kho này, không phải suy đoán.</p>
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Mở một app chat hoặc thông báo bạn đang dùng. Gửi một tin từ một máy và xem nó hiện trên máy khác MÀ KHÔNG tải lại — đó là server push, không phải request/response.</li>
+<li>Mở DevTools → Network và lọc &quot;WS&quot;. Tìm cái connection WebSocket sống lâu duy nhất đang chở mọi lưu lượng trực tiếp, và để ý nó không đóng suốt khi trang còn mở.</li>
+<li>Ghi lại hai tính năng trong app đó cần realtime và một tính năng chỉ là request/response, và nói vì sao mỗi cái thuộc về đâu.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn chỉ được vào một WebSocket thật đang mở trong DevTools và nêu được, với một app, cái gì thuộc realtime và cái gì không.</p></div>
+<h3>🔬 Đo thật: short polling so với server đẩy</h3>
+<p>Năm tin xảy ra ở năm thời điểm cố định trong 10,5 giây (socket.io 4.8.3, Node 22, một máy). Client A hỏi lại mỗi 2 giây; client B nhận đẩy qua Socket.IO:</p>
+<div class="out">tin  xảy ra lúc   short polling (2 s)   Socket.IO đẩy
+#1     700 ms     trễ  1318 ms         trễ 4 ms
+#2    2900 ms     trễ  1107 ms         trễ 3 ms
+#3    4100 ms     trễ  1909 ms         trễ 1 ms
+#4    6600 ms     trễ  1410 ms         trễ 3 ms
+#5    8300 ms     trễ  1712 ms         trễ 2 ms
+trung bình            1491 ms              3 ms
+request HTTP trong 10,5 s: short polling 5 · Socket.IO 0 (1 kết nối mở suốt)</div>
+<p>Bên hỏi lại thấy mỗi tin trễ 1,1–1,9 giây (tin phải chờ tới lượt hỏi kế) và tốn 5 request HTTP; bên được đẩy nhận trong vài mili giây qua một kết nối mở suốt.</p>
+<h3>🔬 Đo thật: WebSocket thô chỉ là cái ống</h3>
+<p>Một server <code>ws</code> thô và một server Socket.IO trong cùng một tiến trình; giết tiến trình ở khoảng giây thứ 2, bật lại ở khoảng giây 4,5:</p>
+<div class="out">  518 ms ws thô     open
+  530 ms socket.io  connect  id=Y_Dna2onqbhSG928AAAA
+ 2014 ms ── GIẾT server (SIGKILL)
+ 2019 ms socket.io  disconnect: transport close
+ 2019 ms ws thô     close 1006 — readyState 3 (CLOSED)
+ 3396 ms socket.io  reconnect_attempt #1
+ 4514 ms ── BẬT LẠI server
+ 5132 ms socket.io  reconnect_attempt #2
+ 5141 ms socket.io  reconnect sau 2 lần thử
+ 5145 ms socket.io  connect  id=8b4koOm48IU2GpakAAAA
+ 9513 ms kết quả: ws thô readyState=3 (vẫn chết) · socket.io connected=true</div>
+<p>Client thô nhận mã đóng 1006 và nằm yên ở <code>readyState 3</code> luôn. Socket.IO tự thử lại và nối lại — với id mới — ngay khi server sống lại.</p>
+<h3>📜 Lịch sử ngắn, kiểm bằng npm</h3>
+<div class="out">$ npm view socket.io time --json | grep -E '"(created|0\\.6\\.0|1\\.0\\.0|2\\.0\\.0|3\\.0\\.0|4\\.0\\.0|4\\.8\\.3|4\\.8\\.4)"'
+  "0.6.0": "2010-12-24T04:53:35.445Z",
+  "1.0.0": "2014-05-28T17:18:37.764Z",
+  "2.0.0": "2017-05-08T23:16:09.507Z",
+  "3.0.0": "2020-11-05T21:08:44.084Z",
+  "4.0.0": "2021-03-10T11:45:02.546Z",
+  "4.8.3": "2025-12-23T16:42:13.022Z",
+  "4.8.4": "2026-09-25T08:51:53.015Z"
+$ npm view socket.io@0.6.0 author
+LearnBoost
+$ npm view engine.io time.created
+2012-07-03T22:35:39.760Z
+$ npm view socket.io version
+4.8.4</div>
+<p>Bản 0.6.0 lên npm tháng 12/2010, tác giả LearnBoost; engine.io (tầng quản lý kết nối) tách ra năm 2012 và bản 1.0 (2014) ngồi trên nó. Khoá này đo trên <strong>4.8.3</strong> — đúng bản trong <code>package.json</code> của kho; bản mới nhất trên npm ngày 13/11/2026 là 4.8.4.</p>
+<h3>🔁 Tự chạy lại</h3>
+<p>Trong một thư mục nháp: <code>npm init -y && npm pkg set type=module && npm i socket.io@4.8.3 socket.io-client@4.8.3</code>, lưu đoạn dưới thành <code>poll-vs-push.mjs</code>, chạy <code>node poll-vs-push.mjs</code>. Số mili giây của bạn sẽ khác; hình dạng thì không.</p>
+<pre><code class="language-javascript"><span class="tok-comment">// Tin xảy ra ở 5 thời điểm CỐ ĐỊNH; client A hỏi lại mỗi 2 giây (short polling), client B nhận đẩy qua Socket.IO.</span>
+import http from 'node:http';
+import { Server } from 'socket.io';
+import { io as ketNoi } from 'socket.io-client';
+const MOC = [700, 2900, 4100, 6600, 8300];          <span class="tok-comment">  // ms kể từ lúc bắt đầu</span>
+const tin = [];                                       <span class="tok-comment">  // [{ i, luc }]</span>
+const srv = http.createServer((req, res) =&gt; {         <span class="tok-comment">  // GET /tin?sau=n ⇒ các tin có chỉ số &gt;= n</span>
+  const sau = Number(new URL(req.url, 'http://x').searchParams.get('sau') ?? 0);
+  res.end(JSON.stringify(tin.filter((t) =&gt; t.i &gt;= sau)));
+});
+const io = new Server(srv);
+await new Promise((r) =&gt; srv.listen(19401, r));
+const t0 = Date.now(), tre = { poll: [], push: [] };
+let soRequest = 0, daCo = 0;
+const cho = setInterval(async () =&gt; {                 <span class="tok-comment">  // A: short polling mỗi 2000 ms</span>
+  soRequest++;
+  const ds = await (await fetch(&#96;http://localhost:19401/tin?sau=\${daCo}&#96;)).json();
+  for (const t of ds) { tre.poll.push(Date.now() - t0 - t.luc); daCo = t.i + 1; }
+}, 2000);
+const b = ketNoi('http://localhost:19401');          <span class="tok-comment">  // B: Socket.IO, server đẩy</span>
+b.on('tin', (t) =&gt; tre.push.push(Date.now() - t0 - t.luc));
+await new Promise((r) =&gt; b.on('connect', r));
+MOC.forEach((ms, i) =&gt; setTimeout(() =&gt; { const t = { i, luc: ms }; tin.push(t); io.emit('tin', t); }, ms - (Date.now() - t0)));
+await new Promise((r) =&gt; setTimeout(r, 10500));
+clearInterval(cho); b.close(); io.close();
+console.log('tin  xảy ra lúc   short polling (2 s)   Socket.IO đẩy');
+MOC.forEach((ms, i) =&gt; console.log(&#96;#\${i + 1}   \${String(ms).padStart(5)} ms     trễ \${String(tre.poll[i]).padStart(5)} ms         trễ \${tre.push[i]} ms&#96;));
+const tb = (a) =&gt; Math.round(a.reduce((x, y) =&gt; x + y, 0) / a.length);
+console.log(&#96;trung bình            \${tb(tre.poll)} ms              \${tb(tre.push)} ms&#96;);
+console.log(&#96;request HTTP trong 10,5 s: short polling \${soRequest} · Socket.IO 0 (1 kết nối mở suốt)&#96;);</code></pre>
+<h3>🔗 Học sâu hơn ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-11-1-websocket-co-ban" target="_blank" rel="noopener"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Node.js · 11.1 — Từ hỏi đi hỏi lại tới được báo: WebSocket</span><span class="lc-sub">Cùng ý tưởng nhìn từ phía Node.js, với ws và Socket.IO</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-9-2-websocket" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking for Developers · 9.2 — WebSocket: nâng cấp, frame và nhịp tim</span><span class="lc-sub">Dây trông ra sao ở bên dưới Socket.IO</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-10-3-realtime" target="_blank" rel="noopener"><span class="lc-ico">🧩</span><span class="lc-body"><span class="lc-title">API Design · 10.4 — API thời gian thực: polling, SSE hay WebSocket</span><span class="lc-sub">Chọn hợp đồng, có số đo trễ và số request</span></span></a>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Realtime</span><span class="v">Server gửi dữ liệu tới client ngay lúc nó xảy ra, qua một connection mở.</span></div>
+  <div class="kv"><span class="k">Request/response</span><span class="v">Chu trình HTTP cổ điển: hỏi, đáp, đóng.</span></div>
+  <div class="kv"><span class="k">WebSocket</span><span class="v">Một connection hai chiều sống lâu — transport dưới realtime.</span></div>
+  <div class="kv"><span class="k">Socket.IO</span><span class="v">Thư viện thêm reconnect, heartbeat, room và fallback lên trên WebSocket.</span></div>
+  <div class="kv"><span class="k">Gateway</span><span class="v">Một module phía server lo một tính năng realtime (chat, gọi, presence).</span></div>
+  <div class="kv"><span class="k"><code>ws</code> thô</span><span class="v">Thư viện WebSocket trần — một cái ống không có phần thêm nào của Socket.IO.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li>Realtime là server đẩy tới client ngay khi có việc — nửa còn lại của web so với request/response.</li><li>WebSocket là cái dây hai chiều sống lâu; short polling chỉ giả realtime.</li><li>WebSocket thô chỉ là cái ống — bạn sẽ phải tự dựng lại reconnect, heartbeat, room và fallback.</li><li>Socket.IO cho bạn bốn thứ đó miễn phí; kho này chạy ~3.935 dòng gateway trên nó.</li><li>Mọi con số trong khoá được đo trên chính kho mã này, không phải đoán.</li></ul>
+</div>
+`,
+    },
+
+    /* ───────────────────── Bắt đầu tại đây 2 ───────────────────── */
+    {
+      title: 'Start here (2/2) — The four-layer model and how to study this course|||Bắt đầu tại đây (2/2) — Mô hình bốn tầng và cách học khoá này',
+      slug: 'io-0-0-start-here-2',
+      type: 'VIDEO',
+      isFreePreview: true,
+      description: 'Bài thứ hai của cặp mở đầu: mô hình bốn tầng mà cả khoá dựa vào (dây → engine.io → socket.io → mã của bạn), ba thói quen lặp lại, bản đồ các chương, và cách học hiệu quả là chạy các probe chứ không chỉ đọc.',
+      content: `
+${G00_9}
+<div class="ml-en">
+<span class="eyebrow">Section 0 · Start here</span>
+<h2>The four-layer model and how to study this course</h2>
+<p class="lead">Lesson 1 said what realtime is. This one hands you the single mental model the whole course leans on — four stacked layers — plus three habits that repeat under different names, and an honest way to study a course built from measured packets: run the probes and read the wire. Reading code is not the same as running it, and this course was written by running it.</p>
+<h3>The four layers every connection stacks</h3>
+<div class="lz-stack">
+<div class="lz-layer"><span class="lz-lname">layer 4 — your code</span><span class="lz-lnote">Named events and JSON: <code>socket.on('chat:message', ...)</code>. This is <code>src/socket/*.ts</code>.</span></div>
+<div class="lz-layer"><span class="lz-lname">layer 3 — socket.io</span><span class="lz-lnote">Namespaces, rooms, acks, binary, and a per-connection sid.</span></div>
+<div class="lz-layer"><span class="lz-lname">layer 2 — engine.io</span><span class="lz-lnote">The connection itself: heartbeats, transport upgrades, its own sid.</span></div>
+<div class="lz-layer"><span class="lz-lname">layer 1 — the wire</span><span class="lz-lnote">An HTTP long-poll or a WebSocket, chosen (and upgraded) by engine.io.</span></div>
+</div>
+<h3>Three habits that repeat</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Measure, do not guess</span><span class="v">Every table here is a number someone ran; your own measurement beats any default.</span></div>
+  <div class="kv"><span class="k">Name the layer first</span><span class="v">Before debugging, decide which of the four layers owns the symptom — that picks the tool.</span></div>
+  <div class="kv"><span class="k">Let the library do the hard parts</span><span class="v">Reconnect and heartbeat are layer 2/3; you never hand-write them at layer 4.</span></div>
+</div>
+<h3>The map</h3>
+<p>Chapters 1-2 are lifecycle and transports (layers 1-2). Chapter 3 rooms and Chapter 4 presence (layer 3). Chapter 5 scales across workers with the Redis adapter. Chapter 6 is acks and delivery. Chapter 7 is WebRTC signalling, Chapter 8 collaborative editing with CRDTs (Yjs), Chapter 9 raw WebSocket. Chapter 10 is diagnosis, Chapter 11 what survived measurement plus the final exam. When a surprise shows up, the course always names the layer responsible for it.</p>
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>In a scratch folder, install both libraries: <code>npm i socket.io socket.io-client ws</code>.</li>
+<li>Run a one-liner that proves they load and print their versions, then write a 15-line server + client that emits one event and logs it on the other side.</li>
+<li>In the client's <code>connect</code> handler log <code>socket.io.engine.transport.name</code>, and in the server's connection handler log <code>socket.conn.transport.name</code> — watch both and map what you see onto the four layers.</li>
+</ol>
+<pre><code class="language-bash">node -e "console.log('socket.io', require('socket.io/package.json').version, '| ws', require('ws/package.json').version)"</code></pre>
+<p><strong>Done when:</strong> both libraries run on your machine, one event travels end to end, and you can redraw the four layers from memory.</p></div>
+<h3>🔬 Measured: one event, end to end</h3>
+<p>The 15-line probe from the Practice block, run for real (socket.io 4.8.3, Node 22):</p>
+<pre><code class="language-javascript"><span class="tok-comment">// server + client trong 15 dòng: một event đi trọn hai đầu, in transport ở CẢ hai phía</span>
+const { Server } = require('socket.io');
+const { io } = require('socket.io-client');
+const server = new Server(19404);
+server.on('connection', (socket) =&gt; {
+  console.log('SERVER connection · transport =', socket.conn.transport.name);
+  socket.conn.on('upgrade', (t) =&gt; console.log('SERVER upgrade   · transport =', t.name));
+  socket.on('chao', (msg) =&gt; { console.log('SERVER nhận chao:', msg); client.close(); server.close(); });
+});
+const client = io('http://localhost:19404');
+client.on('connect', () =&gt; {
+  console.log('CLIENT connect    · transport =', client.io.engine.transport.name);
+  setTimeout(() =&gt; client.emit('chao', { tu: 'client', luc: 'sau 300 ms' }), 300);
+});</code></pre><div class="out">$ node probe.js
+SERVER connection · transport = polling
+CLIENT connect    · transport = polling
+SERVER upgrade   · transport = websocket
+SERVER nhận chao: { tu: 'client', luc: 'sau 300 ms' }</div>
+<p>Both sides start on <strong>polling</strong> (layer 1); engine.io upgrades to <strong>websocket</strong> (layer 2); the named event arrives with its JSON (layers 3–4). The same event, printed by each layer:</p>
+<div class="out">$ node tang.js
+tầng 4 client: socket.emit('chao', { tu: 'client' })
+tầng 2 engine.io: type=message data=2["chao",{"tu":"client"}] · tầng 1 dây: websocket gửi "42["chao",{"tu":"client"}]"
+tầng 4 handler chao nhận: {"tu":"client"}</div>
+<p>Layer 3 writes <code>2["chao",…]</code> (2 = EVENT); layer 2 prefixes <code>4</code> (MESSAGE); the wire carries <code>42[…]</code>. Lesson 0.3 decodes every digit.</p>
+<h3>🧯 Five real incidents from this repo</h3>
+<p>Straight from <code>git log</code> — each one silent, each one owned by a single layer:</p>
+<div class="out">2026-08-21 0852eb4ed fix(call): gọi người KHÔNG online thì im lặng đổ chuông vào hư không
+2026-09-17 110097d08 fix(tin nhắn): app desktop "ngoại tuyến mãi" — socket CHƯA TỪNG nối được lần nào
+2026-10-15 8a87e3298 fix(messages): một người một hội thoại với admin + mỗi sự kiện socket chỉ tới một lần
+2026-10-22 39eb43755 fix(privacy): một luật trạng thái hoạt động cho mọi chỗ — khách/người lạ/chặn/đối ứng không thấy; socket không phát toàn cục
+2026-11-01 e9ed78dc6 fix(socket): trần 500 phòng post:&lt;id&gt; tính theo MỖI SOCKET thay vì mỗi lượt post:subscribe — gọi lặp từng cho một socket vào 100.000 phòng (~58 MB, đo ở bài Node.js 11.2); tách vaoPhongBaiViet + test</div>
+<ul><li><strong>Call to an offline user</strong> — <code>io.to(room).emit</code> into an EMPTY room is valid and says nothing; the caller watched "Calling…" for 45 s with clean logs (layer 3, lesson 7.3).</li>
+<li><strong>Desktop app "offline forever"</strong> — <code>transports: ['websocket']</code> + token in <code>extraHeaders</code>: a browser WebSocket cannot set headers, so the token never arrived (layers 1–2; fix: <code>auth: { token }</code>, lesson 1.4).</li>
+<li><strong>Every message twice</strong> — two emits to two rooms that every device was in (layer 3, lesson 3.4).</li>
+<li><strong>Presence leaked</strong> — an error path fell back to a GLOBAL broadcast (layers 3–4, Chapter 4).</li>
+<li><strong>100,000 rooms in one socket</strong> — a limit counted per call instead of per socket (~58 MB; lesson 3.3).</li></ul>
+<h3>🔁 Run it yourself</h3>
+<p>Copy the probe above into <code>probe.js</code> in a folder where you ran <code>npm i socket.io@4.8.3 socket.io-client@4.8.3</code>, then <code>node probe.js</code>. Add <code>socket.conn.on('packet', (p) =&gt; console.log(p.type, p.data))</code> on the server to print what layer 2 sees.</p>
+<h3>🔗 Go deeper in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-11-3-xac-thuc-phan-quyen-socket" target="_blank" rel="noopener"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Node.js · 11.3 — Authenticate once, authorise every time</span><span class="lc-sub">Handshake auth vs the extraHeaders trap, measured</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/socket-io/learn?lessonSlug=io-1-4-auth" target="_blank" rel="noopener"><span class="lc-ico">⚡</span><span class="lc-body"><span class="lc-title">Socket.IO · 1.4 — Authentication: middleware runs before connection</span><span class="lc-sub">Where the token should travel, in this course</span></span></a>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Four layers</span><span class="v">wire, engine.io, socket.io, your code — the model the whole course uses.</span></div>
+  <div class="kv"><span class="k">engine.io</span><span class="v">Layer 2: heartbeats, transport upgrades, its own sid.</span></div>
+  <div class="kv"><span class="k">socket.io</span><span class="v">Layer 3: namespaces, rooms, acks, binary.</span></div>
+  <div class="kv"><span class="k">Probe</span><span class="v">A tiny throwaway script that connects and prints the wire so you can read it.</span></div>
+  <div class="kv"><span class="k">Transport</span><span class="v">The layer-1 wire (polling or WebSocket) a connection currently uses.</span></div>
+  <div class="kv"><span class="k">Measured vs reasoned</span><span class="v">A number you ran versus one you inferred — the course labels which.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li>One model runs the whole course: four layers — wire, engine.io, socket.io, your code.</li><li>Three habits repeat: measure not guess, name the layer first, let the library do reconnect and heartbeat.</li><li>Chapters 1-2 lifecycle/transports, 3 rooms, 4 presence, 5 cluster, 6 acks, 7 WebRTC, 8 CRDT (Yjs), 9 raw ws, 10-11 diagnosis and exam.</li><li>Study by running the probes; reading the code is not the same as running it.</li><li>Every surprise in the course is traced back to the exact layer responsible.</li></ul>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 0 · Bắt đầu tại đây</span>
+<h2>Mô hình bốn tầng và cách học khoá này</h2>
+<p class="lead">Bài 1 nói realtime là gì. Bài này trao cho bạn mô hình tư duy duy nhất mà cả khoá dựa vào — bốn tầng xếp chồng — cộng ba thói quen lặp lại dưới những cái tên khác nhau, và một cách học trung thực cho một khoá dựng từ các packet đo được: chạy probe và đọc dây. Đọc mã không giống chạy mã, và khoá này được viết bằng cách chạy nó.</p>
+<h3>Bốn tầng mà mọi connection xếp chồng</h3>
+<div class="lz-stack">
+<div class="lz-layer"><span class="lz-lname">tầng 4 — mã của bạn</span><span class="lz-lnote">Sự kiện có tên và JSON: <code>socket.on('chat:message', ...)</code>. Đây là <code>src/socket/*.ts</code>.</span></div>
+<div class="lz-layer"><span class="lz-lname">tầng 3 — socket.io</span><span class="lz-lnote">Namespace, room, ack, binary, và một sid trên mỗi connection.</span></div>
+<div class="lz-layer"><span class="lz-lname">tầng 2 — engine.io</span><span class="lz-lnote">Bản thân connection: heartbeat, upgrade transport, sid riêng.</span></div>
+<div class="lz-layer"><span class="lz-lname">tầng 1 — dây</span><span class="lz-lnote">Một HTTP long-poll hoặc một WebSocket, do engine.io chọn (và upgrade).</span></div>
+</div>
+<h3>Ba thói quen lặp lại</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Đo, đừng đoán</span><span class="v">Mọi bảng ở đây là một con số có người chạy; phép đo của bạn thắng mọi mặc định.</span></div>
+  <div class="kv"><span class="k">Gọi tên tầng trước</span><span class="v">Trước khi debug, quyết xem triệu chứng thuộc tầng nào trong bốn tầng — điều đó chọn công cụ.</span></div>
+  <div class="kv"><span class="k">Để thư viện làm phần khó</span><span class="v">Reconnect và heartbeat là tầng 2/3; bạn không bao giờ viết tay chúng ở tầng 4.</span></div>
+</div>
+<h3>Bản đồ</h3>
+<p>Chương 1-2 là vòng đời và transport (tầng 1-2). Chương 3 room và Chương 4 presence (tầng 3). Chương 5 mở rộng ra nhiều worker với Redis adapter. Chương 6 là ack và giao tin. Chương 7 là signalling WebRTC, Chương 8 là soạn thảo cộng tác bằng CRDT (Yjs), Chương 9 là WebSocket thô. Chương 10 chẩn đoán, Chương 11 là cái sống qua đo lường cùng đề thi cuối. Khi một bất ngờ xuất hiện, khoá luôn gọi tên tầng chịu trách nhiệm cho nó.</p>
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Trong một thư mục nháp, cài cả hai thư viện: <code>npm i socket.io socket.io-client ws</code>.</li>
+<li>Chạy một dòng chứng minh chúng nạp được và in phiên bản, rồi viết một server + client 15 dòng emit một event và log nó ở phía bên kia.</li>
+<li>Trong handler <code>connect</code> của client log <code>socket.io.engine.transport.name</code>, và trong handler connection của server log <code>socket.conn.transport.name</code> — xem cả hai và gán thứ bạn thấy vào bốn tầng.</li>
+</ol>
+<pre><code class="language-bash">node -e "console.log('socket.io', require('socket.io/package.json').version, '| ws', require('ws/package.json').version)"</code></pre>
+<p><strong>Đạt khi:</strong> cả hai thư viện chạy trên máy bạn, một event đi trọn hai đầu, và bạn vẽ lại được bốn tầng từ trí nhớ.</p></div>
+<h3>🔬 Đo thật: một event, hai đầu</h3>
+<p>Đoạn probe 15 dòng của phần Thực hành, chạy thật (socket.io 4.8.3, Node 22):</p>
+<pre><code class="language-javascript"><span class="tok-comment">// server + client trong 15 dòng: một event đi trọn hai đầu, in transport ở CẢ hai phía</span>
+const { Server } = require('socket.io');
+const { io } = require('socket.io-client');
+const server = new Server(19404);
+server.on('connection', (socket) =&gt; {
+  console.log('SERVER connection · transport =', socket.conn.transport.name);
+  socket.conn.on('upgrade', (t) =&gt; console.log('SERVER upgrade   · transport =', t.name));
+  socket.on('chao', (msg) =&gt; { console.log('SERVER nhận chao:', msg); client.close(); server.close(); });
+});
+const client = io('http://localhost:19404');
+client.on('connect', () =&gt; {
+  console.log('CLIENT connect    · transport =', client.io.engine.transport.name);
+  setTimeout(() =&gt; client.emit('chao', { tu: 'client', luc: 'sau 300 ms' }), 300);
+});</code></pre><div class="out">$ node probe.js
+SERVER connection · transport = polling
+CLIENT connect    · transport = polling
+SERVER upgrade   · transport = websocket
+SERVER nhận chao: { tu: 'client', luc: 'sau 300 ms' }</div>
+<p>Cả hai phía bắt đầu bằng <strong>polling</strong> (tầng 1); engine.io nâng cấp lên <strong>websocket</strong> (tầng 2); event có tên tới cùng JSON của nó (tầng 3–4). Cùng event đó, in ra ở từng tầng:</p>
+<div class="out">$ node tang.js
+tầng 4 client: socket.emit('chao', { tu: 'client' })
+tầng 2 engine.io: type=message data=2["chao",{"tu":"client"}] · tầng 1 dây: websocket gửi "42["chao",{"tu":"client"}]"
+tầng 4 handler chao nhận: {"tu":"client"}</div>
+<p>Tầng 3 viết <code>2["chao",…]</code> (2 = EVENT); tầng 2 thêm <code>4</code> phía trước (MESSAGE); dây chở <code>42[…]</code>. Bài 0.3 giải mã từng chữ số.</p>
+<h3>🧯 Năm sự cố thật của kho này</h3>
+<p>Lấy thẳng từ <code>git log</code> — cái nào cũng im lặng, cái nào cũng thuộc về đúng một tầng:</p>
+<div class="out">2026-08-21 0852eb4ed fix(call): gọi người KHÔNG online thì im lặng đổ chuông vào hư không
+2026-09-17 110097d08 fix(tin nhắn): app desktop "ngoại tuyến mãi" — socket CHƯA TỪNG nối được lần nào
+2026-10-15 8a87e3298 fix(messages): một người một hội thoại với admin + mỗi sự kiện socket chỉ tới một lần
+2026-10-22 39eb43755 fix(privacy): một luật trạng thái hoạt động cho mọi chỗ — khách/người lạ/chặn/đối ứng không thấy; socket không phát toàn cục
+2026-11-01 e9ed78dc6 fix(socket): trần 500 phòng post:&lt;id&gt; tính theo MỖI SOCKET thay vì mỗi lượt post:subscribe — gọi lặp từng cho một socket vào 100.000 phòng (~58 MB, đo ở bài Node.js 11.2); tách vaoPhongBaiViet + test</div>
+<ul><li><strong>Gọi người không online</strong> — <code>io.to(room).emit</code> vào một room RỖNG là lệnh hợp lệ và không báo gì; người gọi nhìn "Đang gọi…" 45 giây, log sạch (tầng 3, bài 7.3).</li>
+<li><strong>App desktop "ngoại tuyến mãi"</strong> — <code>transports: ['websocket']</code> + token trong <code>extraHeaders</code>: WebSocket của trình duyệt không cho đặt header nên token không bao giờ tới (tầng 1–2; sửa: <code>auth: { token }</code>, bài 1.4).</li>
+<li><strong>Mỗi tin tới hai lần</strong> — hai lượt emit vào hai room mà máy nào cũng ở cả hai (tầng 3, bài 3.4).</li>
+<li><strong>Lộ trạng thái online</strong> — một đường lỗi rơi về phát TOÀN CỤC (tầng 3–4, Chương 4).</li>
+<li><strong>100.000 room trong một socket</strong> — giới hạn đếm theo lượt gọi thay vì theo socket (~58 MB; bài 3.3).</li></ul>
+<h3>🔁 Tự chạy lại</h3>
+<p>Chép probe ở trên vào <code>probe.js</code> trong thư mục đã chạy <code>npm i socket.io@4.8.3 socket.io-client@4.8.3</code>, rồi <code>node probe.js</code>. Thêm <code>socket.conn.on('packet', (p) =&gt; console.log(p.type, p.data))</code> ở server để in thứ tầng 2 thấy.</p>
+<h3>🔗 Học sâu hơn ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-11-3-xac-thuc-phan-quyen-socket" target="_blank" rel="noopener"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Node.js · 11.3 — Xác thực một lần, phân quyền mọi lần</span><span class="lc-sub">Xác thực lúc bắt tay và bẫy extraHeaders, có số đo</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/socket-io/learn?lessonSlug=io-1-4-auth" target="_blank" rel="noopener"><span class="lc-ico">⚡</span><span class="lc-body"><span class="lc-title">Socket.IO · 1.4 — Xác thực: middleware chạy TRƯỚC connection</span><span class="lc-sub">Token nên đi đường nào, ngay trong khoá này</span></span></a>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Bốn tầng</span><span class="v">dây, engine.io, socket.io, mã của bạn — mô hình cả khoá dùng.</span></div>
+  <div class="kv"><span class="k">engine.io</span><span class="v">Tầng 2: heartbeat, upgrade transport, sid riêng.</span></div>
+  <div class="kv"><span class="k">socket.io</span><span class="v">Tầng 3: namespace, room, ack, binary.</span></div>
+  <div class="kv"><span class="k">Probe</span><span class="v">Một script nháp nhỏ kết nối rồi in dây ra để bạn đọc được.</span></div>
+  <div class="kv"><span class="k">Transport</span><span class="v">Cái dây tầng 1 (polling hoặc WebSocket) mà connection đang dùng.</span></div>
+  <div class="kv"><span class="k">Đo vs suy luận</span><span class="v">Con số bạn chạy so với con số bạn suy ra — khoá ghi rõ cái nào.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li>Một mô hình chạy suốt khoá: bốn tầng — dây, engine.io, socket.io, mã của bạn.</li><li>Ba thói quen lặp lại: đo đừng đoán, gọi tên tầng trước, để thư viện lo reconnect và heartbeat.</li><li>Chương 1-2 vòng đời/transport, 3 room, 4 presence, 5 cụm, 6 ack, 7 WebRTC, 8 CRDT (Yjs), 9 ws thô, 10-11 chẩn đoán và thi.</li><li>Học bằng cách chạy probe; đọc mã không giống chạy mã.</li><li>Mọi bất ngờ trong khoá đều được truy về đúng tầng chịu trách nhiệm.</li></ul>
+</div>
+`,
+    },
+
     /* ─────────────────────────── 0.1 ─────────────────────────── */
     {
       title: '0.1 — Socket.IO is engine.io wrapped in namespaces and rooms|||0.1 — Socket.IO là engine.io được BỌC bởi namespace và room',
@@ -18,6 +437,7 @@ export default {
       type: 'VIDEO',
       description: 'Câu duy nhất cần nhớ. Sau đó là bảng đối chiếu bốn tầng: HTTP/WebSocket → engine.io → socket.io → mã của bạn. Mọi mỗi hành vi lạ đều suy ra từ tầng nào chịu trách nhiệm.',
       content: `
+${G00_1}
 <div class="ml-en">
 <span class="eyebrow">Section 0 · Lesson 0.1</span>
 <h2>Socket.IO is engine.io wrapped in namespaces and rooms</h2>
@@ -28,7 +448,7 @@ export default {
 <div class="lz-layer"><span class="lz-lname">layer 4 — your code</span><span class="lz-lnote"><code>io.on(&#39;connection&#39;, s =&gt; s.on(&#39;chat:message&#39;, ...))</code>. Named events, JSON payloads, rooms. This is the part in <code>src/socket/*.ts</code></span></div>
 <div class="lz-layer"><span class="lz-lname">layer 3 — socket.io</span><span class="lz-lnote">Adds namespaces, rooms, acks, binary handling, and a per-connection sid. Speaks its own packet format on top of layer 2. This is <code>socket.io</code> 4.8.3 in <code>package.json</code></span></div>
 <div class="lz-layer"><span class="lz-lname">layer 2 — engine.io</span><span class="lz-lnote">Manages the connection itself — heartbeats, transport upgrades, its OWN sid. Bundled with socket.io; you never install it directly, but you WILL see its packet types in DevTools</span></div>
-<div class="lz-layer"><span class="lz-lname">layer 1 — the wire</span><span class="lz-lnote">Either an HTTP long-poll or a WebSocket, chosen by engine.io. Not one or the other for the life of the connection — the same connection can START as HTTP and UPGRADE to WebSocket 200ms later</span></div>
+<div class="lz-layer"><span class="lz-lname">layer 1 — the wire</span><span class="lz-lnote">Either an HTTP long-poll or a WebSocket, chosen by engine.io. Not one or the other for the life of the connection — the same connection can START as HTTP and UPGRADE to WebSocket one round-trip later (39 ms on the course machine)</span></div>
 </div>
 
 <h3>Measured on this repo</h3>
@@ -36,17 +456,20 @@ export default {
 "@socket.io/redis-adapter": "^8.3.0",
 "socket.io": "^4.8.3",
 
-$ ls src/socket/
-call.socket.ts        &lt;-  275 dong  (video call signalling)
-device.gateway.ts     &lt;- 1.035 dong  (Maker Lab, raw WebSocket)
-listen-together.ts    &lt;-  302 dong  (dong bo phat nhac)
-messaging.socket.ts   &lt;-  518 dong  (chat, presence, entry point)
-notes-collaboration.gateway.ts  &lt;- 300 dong  (Yjs CRDT)
+$ wc -l $(ls src/socket/*.ts | grep -v test)
+     281 src/socket/call.socket.ts
+    1113 src/socket/device.gateway.ts
+     680 src/socket/doiKhang.socket.ts
+     362 src/socket/listen-together.ts
+     614 src/socket/messaging.socket.ts
+     300 src/socket/notes-collaboration.gateway.ts
+     410 src/socket/work-docs-collaboration.gateway.ts
+     175 src/socket/work.socket.ts
+    3935 total
 </code></pre>
 
-<div class="out">2.430 dong gateway thật, TAT CA deu ngoi tren socket.io layer 3
-CONG THEM device.gateway.ts (Maker Lab) doi khi dung WebSocket THUAN,
-       KHONG qua socket.io — mot bai hoc rieng cua Chuong 8
+<div class="out">3,935 lines of gateway (8 files, tests excluded, measured 13/11/2026) — it was 2,430 when the course was first written
+ALL of them sit on socket.io layer 3 EXCEPT device.gateway.ts (Maker Lab): raw WebSocket, NOT socket.io — Chapter 9
 </div>
 
 <h3>Who does what — a side-by-side</h3>
@@ -61,7 +484,7 @@ CONG THEM device.gateway.ts (Maker Lab) doi khi dung WebSocket THUAN,
 </div>
 <div class="lz-stage lz-badge">
 <span class="lz-node"><span class="lz-ntitle">reconnect</span><span class="lz-nsub">layer 3 (client)</span></span>
-<span class="lz-nbody">The client reconnects on its own with exponential backoff — 1s, 2s, 4s by default, capped at 5s. Layer 4 only receives <code>&#39;connect&#39;</code>/<code>&#39;disconnect&#39;</code> events; you never write the loop.</span>
+<span class="lz-nbody">The client reconnects on its own with exponential backoff — about 1 s, 2 s, 4 s, capped at 5 s, each randomised ±50 % (measured below: 1.4 / 3.0 / 4.3 / 5.0 / 5.0 s). Layer 4 only receives <code>&#39;connect&#39;</code>/<code>&#39;disconnect&#39;</code> events; you never write the loop.</span>
 </div>
 <div class="lz-stage lz-badge">
 <span class="lz-node"><span class="lz-ntitle">room broadcast</span><span class="lz-nsub">layer 3</span></span>
@@ -80,7 +503,7 @@ CONG THEM device.gateway.ts (Maker Lab) doi khi dung WebSocket THUAN,
 <h3>Four surprising behaviours and the layer responsible for each</h3>
 <div class="lz-flow">
 <div class="lz-step"><span class="lz-k">a</span><span class="lz-t">&quot;the initial connection is an HTTP POST&quot;</span><span class="lz-d"><strong>Layers 1 and 2.</strong> The client tries HTTP long-poll first by default, then upgrades to WebSocket. Look at the DevTools Network tab — you will see a few requests to <code>/socket.io/?EIO=4&amp;transport=polling</code> before any WS frame shows up. Not a bug; a feature (Chapter 2).</span></div>
-<div class="lz-step"><span class="lz-k">b</span><span class="lz-t">&quot;the disconnect takes 60 seconds&quot;</span><span class="lz-d"><strong>Layer 2.</strong> That is <code>pingTimeout</code>. The server only learns the client is gone when a ping goes unanswered. For that entire 60s, <code>io.sockets.adapter.rooms</code> still believes the client is there. Shorten it by lowering <code>pingTimeout</code>, not by writing more code.</span></div>
+<div class="lz-step"><span class="lz-k">b</span><span class="lz-t">&quot;the disconnect takes 60 seconds&quot;</span><span class="lz-d"><strong>Layer 2.</strong> That is <code>pingInterval</code> + <code>pingTimeout</code> — measured: <strong>45.0 s</strong> with the defaults (25 + 20), <strong>85.0 s</strong> with this repo's 25 + 60. The server only learns the client is gone when a ping goes unanswered. For that entire window, <code>io.sockets.adapter.rooms</code> still believes the client is there. Shorten it by lowering <code>pingTimeout</code>, not by writing more code.</span></div>
 <div class="lz-step"><span class="lz-k">c</span><span class="lz-t">&quot;the broadcast never reaches the other workers&quot;</span><span class="lz-d"><strong>Layer 3 + Redis adapter.</strong> Cluster mode runs 4 Node workers, and a WebSocket connects to exactly ONE of them and stays there (sticky sessions in nginx). <code>io.emit</code> by default reaches only that worker. The Redis adapter carries messages across workers over pub/sub. Chapter 5.</span></div>
 <div class="lz-step"><span class="lz-k">d</span><span class="lz-t">&quot;the client is using 2 different sids&quot;</span><span class="lz-d"><strong>Layers 2 and 3.</strong> The engine.io sid is not the socket.io sid — one engine.io connection can carry several namespaces, and each namespace issues its own sid. Lesson 0.3 measures this by connecting with a raw WebSocket.</span></div>
 </div>
@@ -98,12 +521,95 @@ CONG THEM device.gateway.ts (Maker Lab) doi khi dung WebSocket THUAN,
 </div>
 
 <div class="pitfall">
-<p><strong>Trap — installing <code>ws</code> instead of <code>socket.io</code> because it is &quot;lighter&quot;.</strong> Yes, the <code>ws</code> library is ~20 KB and socket.io is ~150 KB. Then you write reconnect yourself (hard — how long? which backoff?), heartbeat (hard — a dead server and a dead client are not the same thing), room broadcast (easy but slow to build), and a fallback for proxies that strip the upgrade (very hard). Three months later you have a worse socket.io with no documentation. This repo DOES have one place that uses <code>ws</code> raw — <code>device.gateway.ts</code> — and it takes 1,035 lines to do its job; Chapter 8 teaches when that trade is worth making.</p>
+<p><strong>Trap — installing <code>ws</code> instead of <code>socket.io</code> because it is &quot;lighter&quot;.</strong> Measured: in the browser a raw WebSocket costs 0 bytes (built in) and the socket.io client is 46,822 B minified, 14,722 B gzipped; on the server <code>ws</code> already ships inside socket.io (via engine.io). Then you write reconnect yourself (hard — how long? which backoff?), heartbeat (hard — a dead server and a dead client are not the same thing), room broadcast (easy but slow to build), and a fallback for proxies that strip the upgrade (very hard). Three months later you have a worse socket.io with no documentation. This repo DOES have one place that uses <code>ws</code> raw — <code>device.gateway.ts</code> — and it takes 1,113 lines to do its job; Chapter 9 teaches when that trade is worth making.</p>
 </div>
 
 <div class="callout">
 <p><strong>One sentence.</strong> Socket.IO is engine.io (a connection manager with pings and transport upgrades) wrapped in namespaces and rooms (a per-event routing layer) — four layers matching four different debugging surfaces, and every surprise in this course traces back to exactly which layer is responsible.</p>
 </div>
+
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Start any Socket.IO server and open the client page; in DevTools → Network → WS watch the first requests go to <code>/socket.io/?EIO=4&amp;transport=polling</code> before a WebSocket frame ever appears (layers 1-2).</li>
+<li>Take three annoying behaviours — &quot;the disconnect takes 85 s&quot;, &quot;a broadcast never reaches the other worker&quot;, &quot;the client has two different sids&quot; — and label each with the one layer responsible (2, 3+Redis, 2-and-3).</li>
+<li>List the files under <code>src/socket/</code> and mark which sit on socket.io (layer 3) and the one that uses raw WebSocket.</li>
+</ol>
+<p><strong>Done when:</strong> you can map at least three surprising behaviours to the exact layer that owns them, rather than &quot;debugging Socket.IO&quot; as one thing.</p></div>
+
+<h3>🔬 Measured: the four surprises, on socket.io 4.8.3</h3>
+<p><strong>Two sids on one connection</strong> — two namespaces through one Manager:</p>
+<div class="out">server /       socket.id=xrny6KHyzkE-3ZbfAAAA  conn.id=5_DeLghS1q2391KLAAAA  transport=polling  (+31 ms)
+server /admin  socket.id=j3s5f38_vbS4mRTZAAAB  conn.id=5_DeLghS1q2391KLAAAA  transport=polling  (+37 ms)
+server /       upgrade → websocket  (+39 ms)
+server /admin  upgrade → websocket  (+39 ms)
+client: hai socket dùng chung MỘT engine: true · engine.id=5_DeLghS1q2391KLAAAA</div>
+<p>Same <code>conn.id</code> (layer 2, the connection), different <code>socket.id</code> per namespace (layer 3).</p>
+<p><strong>How long until the server notices a dead client</strong> — the client is frozen with SIGSTOP right after connecting (no FIN, like a laptop lid):</p>
+<div class="out">kho này 25000/60000: client đã nối rồi bị đông cứng (SIGSTOP)
+mặc định 25000/20000: client đã nối rồi bị đông cứng (SIGSTOP)
+mặc định 25000/20000: server thấy disconnect "ping timeout" sau 45.0 s
+kho này 25000/60000: server thấy disconnect "ping timeout" sau 85.0 s</div>
+<p>Worst case ≈ <code>pingInterval</code> + <code>pingTimeout</code>. During that window the socket is still in its rooms and presence still says online.</p>
+<p><strong>Reconnect backoff</strong> — server down for 14 s:</p>
+<div class="out">  0.63 s connect
+  1.61 s ── server chết
+  1.61 s disconnect: transport close
+  3.01 s reconnect_attempt #1  (cách lần trước 1395 ms)
+  5.99 s reconnect_attempt #2  (cách lần trước 2977 ms)
+ 10.29 s reconnect_attempt #3  (cách lần trước 4308 ms)
+ 15.30 s reconnect_attempt #4  (cách lần trước 5007 ms)
+ 15.61 s ── server sống lại
+ 20.31 s reconnect_attempt #5  (cách lần trước 5009 ms)
+ 20.33 s connect
+ 21.61 s disconnect: io client disconnect</div>
+<p><strong>A broadcast stops at the worker</strong> — two server processes, no adapter:</p>
+<div class="out">worker A gọi io.emit("tin") …
+client nối worker A nhận: từ worker 19412
+… client của worker B: KHÔNG nhận gì (không có Redis adapter)</div>
+<p><strong>The "ws is lighter" numbers:</strong></p>
+<div class="out">$ for p in ws@8.21.2 socket.io@4.8.3 engine.io@6.6.11 socket.io-client@4.8.3; do printf '%-24s %8s byte (unpacked)\\n' $p "$(npm view $p dist.unpackedSize)"; done
+ws@8.21.2                  150792 byte (unpacked)
+socket.io@4.8.3           1416999 byte (unpacked)
+engine.io@6.6.11           162973 byte (unpacked)
+socket.io-client@4.8.3    1417815 byte (unpacked)
+$ wc -c node_modules/socket.io-client/dist/socket.io.min.js node_modules/socket.io-client/dist/socket.io.js | head -2
+   46822 node_modules/socket.io-client/dist/socket.io.min.js
+  155836 node_modules/socket.io-client/dist/socket.io.js
+$ gzip -c node_modules/socket.io-client/dist/socket.io.min.js | wc -c
+   14722</div>
+<h3>🔁 Run it yourself</h3>
+<p>The two-sids probe (needs <code>npm i socket.io@4.8.3 socket.io-client@4.8.3</code> and <code>"type": "module"</code>):</p>
+<pre><code class="language-javascript"><span class="tok-comment">// MỘT connection engine.io, HAI namespace ⇒ một conn.id (tầng 2), hai socket.id (tầng 3)</span>
+import { Server } from 'socket.io';
+import { io as ketNoi, Manager } from 'socket.io-client';
+const io = new Server(19410);
+const t0 = Date.now();
+for (const ns of ['/', '/admin']) io.of(ns).on('connection', (s) =&gt; {
+  console.log(&#96;server \${ns.padEnd(7)} socket.id=\${s.id}  conn.id=\${s.conn.id}  transport=\${s.conn.transport.name}  (+\${Date.now() - t0} ms)&#96;);
+  s.conn.once('upgrade', (t) =&gt; console.log(&#96;server \${ns.padEnd(7)} upgrade → \${t.name}  (+\${Date.now() - t0} ms)&#96;));
+});
+const m = new Manager('http://localhost:19410');
+const a = m.socket('/'), b = m.socket('/admin');
+await new Promise((r) =&gt; setTimeout(r, 1200));
+console.log(&#96;client: hai socket dùng chung MỘT engine: \${a.io.engine === b.io.engine} · engine.id=\${m.engine.id}&#96;);
+a.disconnect(); b.disconnect(); io.close(); process.exit(0);</code></pre>
+<p>To see the disconnect window yourself: start a client in its own process, then <code>kill -STOP &lt;pid&gt;</code> and time the server's <code>disconnect</code> event. Lower <code>pingInterval</code>/<code>pingTimeout</code> (e.g. 2000/2000) to wait seconds instead of a minute.</p>
+<h3>🔗 Go deeper in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-11-4-scale-adapter-backpressure" target="_blank" rel="noopener"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Node.js · 11.4 — More than one process: adapter, sticky sessions, backpressure</span><span class="lc-sub">The cluster story of surprise (c), measured from the Node side</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/redis/learn?lessonSlug=rd-8-1-pubsub" target="_blank" rel="noopener"><span class="lc-ico">🟥</span><span class="lc-body"><span class="lc-title">Redis · 8.1 — Pub/Sub: fire and forget, and its price</span><span class="lc-sub">The mechanism the Redis adapter is built on</span></span></a>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">engine.io</span><span class="v">Layer 2 — the connection manager: heartbeats, transport upgrades, its own sid.</span></div>
+  <div class="kv"><span class="k">socket.io</span><span class="v">Layer 3 — adds namespaces, rooms, acks, binary and a per-connection sid.</span></div>
+  <div class="kv"><span class="k">Namespace</span><span class="v">A logical channel on one connection; each issues its own sid.</span></div>
+  <div class="kv"><span class="k">Room</span><span class="v">A layer-3 grouping sockets join; <code>io.to(room).emit()</code> targets only its members.</span></div>
+  <div class="kv"><span class="k">Transport</span><span class="v">The layer-1 wire (HTTP long-poll or WebSocket) engine.io chooses and upgrades.</span></div>
+  <div class="kv"><span class="k">Redis adapter</span><span class="v">Carries a broadcast across cluster workers over pub/sub (Chapter 5).</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Socket.IO is two libraries on two transports: engine.io (layer 2) wrapped by socket.io (layer 3).</li><li>Layer 1 is the wire (poll or WS); layer 4 is your named-event code in <code>src/socket/*.ts</code>.</li><li>Every surprise maps to one layer: ping timeout = layer 2, wrong room = layer 3, blocked upgrade = layer 1.</li><li>Rooms and namespaces are layer-3 abstractions; they do not exist at layer 2.</li><li>A broadcast reaches other cluster workers only through the Redis adapter.</li></ul>
 
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — How it works</span><span class="lc-sub">socket.io/docs/v4/how-it-works — tài liệu chính thức mô tả bốn tầng, ngắn hơn bài này nhưng dùng làm nguồn thứ hai.</span></span></div>
@@ -121,7 +627,7 @@ CONG THEM device.gateway.ts (Maker Lab) doi khi dung WebSocket THUAN,
 <div class="lz-layer"><span class="lz-lname">tầng 4 — mã của bạn</span><span class="lz-lnote"><code>io.on(&#39;connection&#39;, s =&gt; s.on(&#39;chat:message&#39;, ...))</code>. Sự kiện có tên, payload JSON, room. Phần này ở <code>src/socket/*.ts</code></span></div>
 <div class="lz-layer"><span class="lz-lname">tầng 3 — socket.io</span><span class="lz-lnote">Thêm namespace, room, ack, xử lý binary, và một sid trên mỗi connection. Nói packet format riêng trên đầu tầng 2. Đây là <code>socket.io</code> 4.8.3 trong <code>package.json</code></span></div>
 <div class="lz-layer"><span class="lz-lname">tầng 2 — engine.io</span><span class="lz-lnote">Quản lý bản thân connection — heartbeat, upgrade transport, sid RIÊNG. Được bundle với socket.io; bạn không cài trực tiếp nhưng SẼ thấy packet type của nó trong DevTools</span></div>
-<div class="lz-layer"><span class="lz-lname">tầng 1 — dây</span><span class="lz-lnote">Hoặc HTTP long-poll, hoặc WebSocket, do engine.io chọn. KHÔNG phải một trong hai suốt đời — cùng một connection có thể BẮT ĐẦU bằng HTTP rồi UPGRADE sang WebSocket 200ms sau đó</span></div>
+<div class="lz-layer"><span class="lz-lname">tầng 1 — dây</span><span class="lz-lnote">Hoặc HTTP long-poll, hoặc WebSocket, do engine.io chọn. KHÔNG phải một trong hai suốt đời — cùng một connection có thể BẮT ĐẦU bằng HTTP rồi UPGRADE sang WebSocket sau một vòng đi-về (39 ms trên máy của khoá)</span></div>
 </div>
 
 <h3>Đo trên kho này</h3>
@@ -129,17 +635,20 @@ CONG THEM device.gateway.ts (Maker Lab) doi khi dung WebSocket THUAN,
 "@socket.io/redis-adapter": "^8.3.0",
 "socket.io": "^4.8.3",
 
-$ ls src/socket/
-call.socket.ts        &lt;-  275 dong  (video call signalling)
-device.gateway.ts     &lt;- 1.035 dong  (Maker Lab, raw WebSocket)
-listen-together.ts    &lt;-  302 dong  (dong bo phat nhac)
-messaging.socket.ts   &lt;-  518 dong  (chat, presence, entry point)
-notes-collaboration.gateway.ts  &lt;- 300 dong  (Yjs CRDT)
+$ wc -l $(ls src/socket/*.ts | grep -v test)
+     281 src/socket/call.socket.ts
+    1113 src/socket/device.gateway.ts
+     680 src/socket/doiKhang.socket.ts
+     362 src/socket/listen-together.ts
+     614 src/socket/messaging.socket.ts
+     300 src/socket/notes-collaboration.gateway.ts
+     410 src/socket/work-docs-collaboration.gateway.ts
+     175 src/socket/work.socket.ts
+    3935 total
 </code></pre>
 
-<div class="out">2.430 dong gateway thật, TAT CA deu ngoi tren socket.io layer 3
-CONG THEM device.gateway.ts (Maker Lab) doi khi dung WebSocket THUAN,
-       KHONG qua socket.io — mot bai hoc rieng cua Chuong 8
+<div class="out">3.935 dòng gateway (8 tệp, không tính test, đo 13/11/2026) — lúc mới soạn khoá là 2.430
+TẤT CẢ ngồi trên socket.io tầng 3, TRỪ device.gateway.ts (Maker Lab): WebSocket THUẦN, không qua socket.io — Chương 9
 </div>
 
 <h3>Đối chiếu ai làm gì</h3>
@@ -154,7 +663,7 @@ CONG THEM device.gateway.ts (Maker Lab) doi khi dung WebSocket THUAN,
 </div>
 <div class="lz-stage lz-badge">
 <span class="lz-node"><span class="lz-ntitle">reconnect</span><span class="lz-nsub">tầng 3 (client)</span></span>
-<span class="lz-nbody">Client tự động reconnect với exponential backoff — mặc định 1s, 2s, 4s... tối đa 5s. Tầng 4 chỉ nhận <code>&#39;connect&#39;</code>/<code>&#39;disconnect&#39;</code> events; không cần viết loop.</span>
+<span class="lz-nbody">Client tự động reconnect với exponential backoff — khoảng 1 s, 2 s, 4 s, tối đa 5 s, mỗi khoảng ngẫu nhiên ±50 % (đo bên dưới: 1,4 / 3,0 / 4,3 / 5,0 / 5,0 s). Tầng 4 chỉ nhận <code>&#39;connect&#39;</code>/<code>&#39;disconnect&#39;</code> events; không cần viết loop.</span>
 </div>
 <div class="lz-stage lz-badge">
 <span class="lz-node"><span class="lz-ntitle">broadcast room</span><span class="lz-nsub">tầng 3</span></span>
@@ -173,7 +682,7 @@ CONG THEM device.gateway.ts (Maker Lab) doi khi dung WebSocket THUAN,
 <h3>Bốn hành vi bất ngờ và tầng chịu trách nhiệm</h3>
 <div class="lz-flow">
 <div class="lz-step"><span class="lz-k">a</span><span class="lz-t">&quot;kết nối ban đầu là POST HTTP&quot;</span><span class="lz-d"><strong>Tầng 1 và 2.</strong> Client mặc định thử HTTP long-poll trước, sau đó nâng cấp lên WebSocket. Xem DevTools Network tab — bạn sẽ thấy vài request đến <code>/socket.io/?EIO=4&amp;transport=polling</code> trước khi frame WS xuất hiện. Không phải bug; là feature (Chương 2).</span></div>
-<div class="lz-step"><span class="lz-k">b</span><span class="lz-t">&quot;disconnect mất 60 giây&quot;</span><span class="lz-d"><strong>Tầng 2.</strong> Đó là <code>pingTimeout</code>. Server chỉ biết client mất khi ping không trả lời. Tất cả 60s ấy, <code>io.sockets.adapter.rooms</code> vẫn tin client còn ở đó. Cắt ngắn bằng cách hạ <code>pingTimeout</code>, không phải bằng cách viết code thêm.</span></div>
+<div class="lz-step"><span class="lz-k">b</span><span class="lz-t">&quot;disconnect mất 60 giây&quot;</span><span class="lz-d"><strong>Tầng 2.</strong> Đó là <code>pingInterval</code> + <code>pingTimeout</code> — đo thật: <strong>45,0 s</strong> với mặc định (25 + 20), <strong>85,0 s</strong> với 25 + 60 của kho. Server chỉ biết client mất khi ping không trả lời. Suốt khoảng ấy, <code>io.sockets.adapter.rooms</code> vẫn tin client còn ở đó. Cắt ngắn bằng cách hạ <code>pingTimeout</code>, không phải bằng cách viết code thêm.</span></div>
 <div class="lz-step"><span class="lz-k">c</span><span class="lz-t">&quot;broadcast không tới worker khác&quot;</span><span class="lz-d"><strong>Tầng 3 + Redis adapter.</strong> Cluster mode chạy 4 worker Node, và WebSocket connect vào MỘT worker cố định (sticky session ở nginx). <code>io.emit</code> mặc định chỉ đến worker đó. Redis adapter phát tin cross-worker qua pub/sub. Chương 5.</span></div>
 <div class="lz-step"><span class="lz-k">d</span><span class="lz-t">&quot;client dùng 2 sid khác nhau&quot;</span><span class="lz-d"><strong>Tầng 2 và 3.</strong> Engine.io sid ≠ socket.io sid — engine.io connection có thể nuôi nhiều namespace, mỗi namespace phát sid riêng. Bài 0.3 đo chuyện này bằng cách kết nối WebSocket thô.</span></div>
 </div>
@@ -191,12 +700,95 @@ CONG THEM device.gateway.ts (Maker Lab) doi khi dung WebSocket THUAN,
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — cài <code>ws</code> thay vì <code>socket.io</code> vì &quot;nhẹ hơn&quot;.</strong> Vâng, thư viện <code>ws</code> là ~20 KB và socket.io là ~150 KB. Rồi bạn tự viết reconnect (khó — bao lâu? backoff nào?), heartbeat (khó — server chết vs client chết khác nhau), room broadcast (dễ nhưng tốn thời gian), fallback cho proxy strip upgrade (rất khó). Sau ba tháng bạn có một socket.io tệ hơn và không có tài liệu. Kho này CÓ một chỗ dùng <code>ws</code> thuần — <code>device.gateway.ts</code> — và nó cần 1.035 dòng để làm việc; Chương 8 dạy khi nào cái đánh đổi ấy đáng.</p>
+<p><strong>Bẫy — cài <code>ws</code> thay vì <code>socket.io</code> vì &quot;nhẹ hơn&quot;.</strong> Đo thật: ở trình duyệt WebSocket thô tốn 0 byte (có sẵn), client socket.io bản min là 46.822 B, gzip còn 14.722 B; ở server <code>ws</code> vốn đã nằm trong socket.io (qua engine.io). Rồi bạn tự viết reconnect (khó — bao lâu? backoff nào?), heartbeat (khó — server chết vs client chết khác nhau), room broadcast (dễ nhưng tốn thời gian), fallback cho proxy strip upgrade (rất khó). Sau ba tháng bạn có một socket.io tệ hơn và không có tài liệu. Kho này CÓ một chỗ dùng <code>ws</code> thuần — <code>device.gateway.ts</code> — và nó cần 1.113 dòng để làm việc; Chương 9 dạy khi nào cái đánh đổi ấy đáng.</p>
 </div>
 
 <div class="callout">
 <p><strong>Một câu.</strong> Socket.IO là engine.io (một trình quản lý connection có ping và upgrade transport) được bọc bởi namespace và room (một layer routing per-event) — bốn tầng ứng với bốn lớp gỡ lỗi khác nhau, và mọi thứ gây bất ngờ trong khoá này đều truy được về đúng tầng nào chịu trách nhiệm.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Khởi động một server Socket.IO bất kỳ và mở trang client; trong DevTools → Network → WS xem các request đầu đi tới <code>/socket.io/?EIO=4&amp;transport=polling</code> trước khi có bất kỳ frame WebSocket nào (tầng 1-2).</li>
+<li>Lấy ba hành vi gây khó chịu — &quot;disconnect mất 85 s&quot;, &quot;broadcast không tới worker khác&quot;, &quot;client có hai sid khác nhau&quot; — và gán mỗi cái với đúng một tầng chịu trách nhiệm (2, 3+Redis, 2-và-3).</li>
+<li>Liệt kê các file dưới <code>src/socket/</code> và đánh dấu cái nào ngồi trên socket.io (tầng 3) và cái nào dùng WebSocket thô.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn gán được ít nhất ba hành vi bất ngờ vào đúng tầng sở hữu chúng, thay vì &quot;debug Socket.IO&quot; như một khối.</p></div>
+
+<h3>🔬 Đo thật: bốn bất ngờ, trên socket.io 4.8.3</h3>
+<p><strong>Hai sid trên một kết nối</strong> — hai namespace qua cùng một Manager:</p>
+<div class="out">server /       socket.id=xrny6KHyzkE-3ZbfAAAA  conn.id=5_DeLghS1q2391KLAAAA  transport=polling  (+31 ms)
+server /admin  socket.id=j3s5f38_vbS4mRTZAAAB  conn.id=5_DeLghS1q2391KLAAAA  transport=polling  (+37 ms)
+server /       upgrade → websocket  (+39 ms)
+server /admin  upgrade → websocket  (+39 ms)
+client: hai socket dùng chung MỘT engine: true · engine.id=5_DeLghS1q2391KLAAAA</div>
+<p>Cùng <code>conn.id</code> (tầng 2, cái kết nối), khác <code>socket.id</code> theo namespace (tầng 3).</p>
+<p><strong>Server mất bao lâu mới biết client đã chết</strong> — client bị đông cứng bằng SIGSTOP ngay sau khi nối (không gửi FIN, như gập nắp laptop):</p>
+<div class="out">kho này 25000/60000: client đã nối rồi bị đông cứng (SIGSTOP)
+mặc định 25000/20000: client đã nối rồi bị đông cứng (SIGSTOP)
+mặc định 25000/20000: server thấy disconnect "ping timeout" sau 45.0 s
+kho này 25000/60000: server thấy disconnect "ping timeout" sau 85.0 s</div>
+<p>Trường hợp tệ nhất ≈ <code>pingInterval</code> + <code>pingTimeout</code>. Suốt khoảng đó socket vẫn nằm trong các room và presence vẫn báo online.</p>
+<p><strong>Reconnect giãn cách</strong> — server chết 14 giây:</p>
+<div class="out">  0.63 s connect
+  1.61 s ── server chết
+  1.61 s disconnect: transport close
+  3.01 s reconnect_attempt #1  (cách lần trước 1395 ms)
+  5.99 s reconnect_attempt #2  (cách lần trước 2977 ms)
+ 10.29 s reconnect_attempt #3  (cách lần trước 4308 ms)
+ 15.30 s reconnect_attempt #4  (cách lần trước 5007 ms)
+ 15.61 s ── server sống lại
+ 20.31 s reconnect_attempt #5  (cách lần trước 5009 ms)
+ 20.33 s connect
+ 21.61 s disconnect: io client disconnect</div>
+<p><strong>Broadcast dừng ở worker</strong> — hai tiến trình server, không có adapter:</p>
+<div class="out">worker A gọi io.emit("tin") …
+client nối worker A nhận: từ worker 19412
+… client của worker B: KHÔNG nhận gì (không có Redis adapter)</div>
+<p><strong>Số đo cho câu "ws nhẹ hơn":</strong></p>
+<div class="out">$ for p in ws@8.21.2 socket.io@4.8.3 engine.io@6.6.11 socket.io-client@4.8.3; do printf '%-24s %8s byte (unpacked)\\n' $p "$(npm view $p dist.unpackedSize)"; done
+ws@8.21.2                  150792 byte (unpacked)
+socket.io@4.8.3           1416999 byte (unpacked)
+engine.io@6.6.11           162973 byte (unpacked)
+socket.io-client@4.8.3    1417815 byte (unpacked)
+$ wc -c node_modules/socket.io-client/dist/socket.io.min.js node_modules/socket.io-client/dist/socket.io.js | head -2
+   46822 node_modules/socket.io-client/dist/socket.io.min.js
+  155836 node_modules/socket.io-client/dist/socket.io.js
+$ gzip -c node_modules/socket.io-client/dist/socket.io.min.js | wc -c
+   14722</div>
+<h3>🔁 Tự chạy lại</h3>
+<p>Probe hai sid (cần <code>npm i socket.io@4.8.3 socket.io-client@4.8.3</code> và <code>"type": "module"</code>):</p>
+<pre><code class="language-javascript"><span class="tok-comment">// MỘT connection engine.io, HAI namespace ⇒ một conn.id (tầng 2), hai socket.id (tầng 3)</span>
+import { Server } from 'socket.io';
+import { io as ketNoi, Manager } from 'socket.io-client';
+const io = new Server(19410);
+const t0 = Date.now();
+for (const ns of ['/', '/admin']) io.of(ns).on('connection', (s) =&gt; {
+  console.log(&#96;server \${ns.padEnd(7)} socket.id=\${s.id}  conn.id=\${s.conn.id}  transport=\${s.conn.transport.name}  (+\${Date.now() - t0} ms)&#96;);
+  s.conn.once('upgrade', (t) =&gt; console.log(&#96;server \${ns.padEnd(7)} upgrade → \${t.name}  (+\${Date.now() - t0} ms)&#96;));
+});
+const m = new Manager('http://localhost:19410');
+const a = m.socket('/'), b = m.socket('/admin');
+await new Promise((r) =&gt; setTimeout(r, 1200));
+console.log(&#96;client: hai socket dùng chung MỘT engine: \${a.io.engine === b.io.engine} · engine.id=\${m.engine.id}&#96;);
+a.disconnect(); b.disconnect(); io.close(); process.exit(0);</code></pre>
+<p>Muốn tự thấy khoảng chờ ngắt kết nối: chạy client trong một tiến trình riêng, rồi <code>kill -STOP &lt;pid&gt;</code> và bấm giờ sự kiện <code>disconnect</code> ở server. Hạ <code>pingInterval</code>/<code>pingTimeout</code> (vd 2000/2000) để chờ vài giây thay vì cả phút.</p>
+<h3>🔗 Học sâu hơn ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-11-4-scale-adapter-backpressure" target="_blank" rel="noopener"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Node.js · 11.4 — Nhiều hơn một tiến trình: adapter, sticky session, áp lực ngược</span><span class="lc-sub">Câu chuyện cụm của bất ngờ (c), đo từ phía Node</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/redis/learn?lessonSlug=rd-8-1-pubsub" target="_blank" rel="noopener"><span class="lc-ico">🟥</span><span class="lc-body"><span class="lc-title">Redis · 8.1 — Pub/Sub: bắn rồi quên, và cái giá của nó</span><span class="lc-sub">Cơ chế mà Redis adapter dựng lên trên</span></span></a>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">engine.io</span><span class="v">Tầng 2 — trình quản lý connection: heartbeat, upgrade transport, sid riêng.</span></div>
+  <div class="kv"><span class="k">socket.io</span><span class="v">Tầng 3 — thêm namespace, room, ack, binary và một sid trên mỗi connection.</span></div>
+  <div class="kv"><span class="k">Namespace</span><span class="v">Một kênh logic trên một connection; mỗi cái phát sid riêng.</span></div>
+  <div class="kv"><span class="k">Room</span><span class="v">Một nhóm ở tầng 3 mà socket join vào; <code>io.to(room).emit()</code> chỉ tới thành viên của nó.</span></div>
+  <div class="kv"><span class="k">Transport</span><span class="v">Cái dây tầng 1 (HTTP long-poll hoặc WebSocket) mà engine.io chọn và upgrade.</span></div>
+  <div class="kv"><span class="k">Redis adapter</span><span class="v">Chở một broadcast qua các worker trong cụm bằng pub/sub (Chương 5).</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Socket.IO là hai thư viện trên hai transport: engine.io (tầng 2) được bọc bởi socket.io (tầng 3).</li><li>Tầng 1 là dây (poll hoặc WS); tầng 4 là mã sự kiện có tên của bạn trong <code>src/socket/*.ts</code>.</li><li>Mọi bất ngờ ứng với một tầng: ping timeout = tầng 2, sai room = tầng 3, upgrade bị chặn = tầng 1.</li><li>Room và namespace là abstraction tầng 3; chúng không tồn tại ở tầng 2.</li><li>Một broadcast tới worker khác trong cụm chỉ qua Redis adapter.</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — How it works</span><span class="lc-sub">socket.io/docs/v4/how-it-works — tài liệu chính thức mô tả bốn tầng, ngắn hơn bài này nhưng dùng làm nguồn thứ hai.</span></span></div>
@@ -214,13 +806,14 @@ CONG THEM device.gateway.ts (Maker Lab) doi khi dung WebSocket THUAN,
       type: 'VIDEO',
       description: 'Kho này cấu hình `transports: [&quot;websocket&quot;, &quot;polling&quot;]` cố ý. Bài này chỉ ra ai vẫn đang lọt qua long-polling và tại sao tắt polling là một dòng cấu hình có thể chặn 3-5% users.',
       content: `
+${G00_2}
 <div class="ml-en">
 <span class="eyebrow">Section 0 · Lesson 0.2</span>
 <h2>Why long-polling is still not dead in 2026</h2>
 <p class="lead">Every modern browser supports WebSocket. Every modern OS supports WebSocket. So why does <code>src/socket/messaging.socket.ts</code> keep <code>transports: [&#39;websocket&#39;, &#39;polling&#39;]</code> in 2026? The comment right above it says &quot;WebSocket-only would break users behind corporate proxies that strip the upgrade header&quot;. This lesson measures who those users are and what &quot;break&quot; means.</p>
 
 <h3>The real config in this repo</h3>
-<pre><code class="language-ts">// src/socket/messaging.socket.ts:220-232
+<pre><code class="language-ts">// src/socket/messaging.socket.ts:286-299 (đo 13/11/2026)
 io = new IOServer(httpServer, {
   cors: { origin: true, credentials: true },
   // Long-poll fallback is enabled by default; WebSocket-only would
@@ -290,12 +883,15 @@ Do la MOT huong. Voi chat song phuong thi tang gap doi cho client.
 </div>
 
 <h3>Watching the transport upgrade with your own eyes</h3>
-<pre><code class="language-bash"># chay socket.io test server
-$ node probe1.mjs
-listen on 44187
-SERVER received connection, transport= polling      &lt;- bat dau
-CLIENT connected, transport= websocket
-SERVER upgrade to websocket                          &lt;- upgrade ~200ms sau
+<pre><code class="language-bash">$ node probe.js          # probe 15 dòng của bài Bắt đầu tại đây (2/2), chạy thật
+SERVER connection · transport = polling
+CLIENT connect    · transport = polling
+SERVER upgrade   · transport = websocket
+SERVER nhận chao: { tu: 'client', luc: 'sau 300 ms' }
+$ node thu-tu.mjs
+client mặc định: server thấy transport ĐẦU TIÊN = polling
+client mặc định: upgrade → websocket sau 6 ms
+client transports:['websocket','polling']: server thấy transport ĐẦU TIÊN = websocket
 </code></pre>
 
 <p>One &quot;connection&quot; as far as the client is concerned, two different layer-1 transports. The server reads <code>socket.conn.transport.name</code> to know who is where.</p>
@@ -324,8 +920,86 @@ io.on('connection', socket => {
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> <code>transports: [&#39;websocket&#39;, &#39;polling&#39;]</code> is the right default for a public web app — the client always starts on polling and upgrades to WebSocket within ~200ms if it gets through the proxy, while the 3-5% of the audience sitting behind an upgrade-stripping proxy stay on polling (133× the overhead, but still working) — and turning polling off is a decision you measure, not one you take on StackOverflow's advice.</p>
+<p><strong>One sentence.</strong> <code>transports: [&#39;websocket&#39;, &#39;polling&#39;]</code> is the right default for a public web app — the client always starts on polling and upgrades to WebSocket one round-trip later if it gets through the proxy (6 ms on the course machine), while the 3-5% of the audience sitting behind an upgrade-stripping proxy stay on polling (133× the overhead, but still working) — and turning polling off is a decision you measure, not one you take on StackOverflow's advice.</p>
 </div>
+
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Start a server with <code>transports: ['websocket', 'polling']</code> and, in the connection handler, log <code>socket.conn.transport.name</code> plus a <code>socket.conn.on('upgrade', ...)</code> listener.</li>
+<li>Connect a client and watch the connection begin on <code>polling</code> and switch to <code>websocket</code> one round-trip later (6 ms on one machine) — the upgrade you just logged.</li>
+<li>Now set <code>transports: ['websocket']</code> and connect through something that blocks the upgrade (or simply block it). See the socket fail where polling would have carried it.</li>
+</ol>
+<p><strong>Done when:</strong> you have logged one real transport upgrade and can name who the 3-5% stuck on polling are.</p></div>
+
+<h3>🔬 Measured: order, cost, and a proxy that strips Upgrade</h3>
+<p><strong>What the client starts on</strong> (server with the repo's <code>['websocket', 'polling']</code>):</p>
+<div class="out">$ node thu-tu.mjs
+client mặc định: server thấy transport ĐẦU TIÊN = polling
+client mặc định: upgrade → websocket sau 6 ms
+client transports:['websocket','polling']: server thấy transport ĐẦU TIÊN = websocket</div>
+<p>A default client starts on polling no matter what the server lists; only a client that sets <code>transports</code> itself starts on websocket.</p>
+<p><strong>Bytes per message</strong> — a TCP proxy counting every byte, 100 small messages server → client, one transport at a time:</p>
+<div class="out">$ node dem-byte.mjs
+polling  : 100 tin ⇒ client→server  17600 B · server→client  19592 B · tổng  37192 B · 371.9 B/tin
+websocket: 100 tin ⇒ client→server      0 B · server→client   3692 B · tổng   3692 B · 36.9 B/tin
+phần CHỮ của 100 tin (42["tin",{"i":N,"chu":"xin chao"}]): 3492 B ⇒ phần còn lại là overhead</div>
+<p>So polling spends ~337 B of overhead around a 35 B message, websocket 2 B — about 10× the total bytes. The hand estimate above (800 vs 6 B, "133×") has the right shape; this is the measured version, with a Node client (a browser adds cookies and a User-Agent, so real polling is heavier).</p>
+<p><strong>A proxy that removes <code>Upgrade</code> and <code>Connection</code></strong>, then two clients:</p>
+<div class="out">$ node proxy-chan.mjs
+  proxy: chặn upgrade ⇒ server trả 400 {"code":3,"message":"Bad request"}
+mac-dinh: NHẬN "chào mac-dinh" qua transport polling
+mac-dinh: sau 4 s — connected=true · transport=polling · connect_error 0 lần
+  proxy: chặn upgrade ⇒ server trả 400 {"code":3,"message":"Bad request"}
+  proxy: chặn upgrade ⇒ server trả 400 {"code":3,"message":"Bad request"}
+  proxy: chặn upgrade ⇒ server trả 400 {"code":3,"message":"Bad request"}
+chi-websocket: sau 4 s — connected=false · transport=websocket · connect_error 3 lần</div>
+<p>The default client stays on polling and still gets its message; the websocket-only client never connects. That is what "WebSocket-only would break users behind corporate proxies" means.</p>
+<p><em>Note:</em> the audience percentages earlier in this lesson are illustrative estimates, not measurements — there is no trustworthy public number. Measure your own with <code>socket.conn.transport.name</code>.</p>
+<h3>🔁 Run it yourself</h3>
+<p>The header-stripping proxy (save as <code>proxy-chan.mjs</code> next to <code>npm i socket.io@4.8.3 socket.io-client@4.8.3</code>, <code>"type": "module"</code>):</p>
+<pre><code class="language-javascript"><span class="tok-comment">// Proxy "văn phòng" XOÁ header Upgrade (chuyển tiếp như GET thường). Hai client: mặc định vs transports:['websocket'].</span>
+import http from 'node:http';
+import { Server } from 'socket.io';
+import { io as ketNoi } from 'socket.io-client';
+const io = new Server(19423);
+io.on('connection', (s) =&gt; setTimeout(() =&gt; s.emit('tin', 'chào ' + s.handshake.query.ten), 1500));
+const proxy = http.createServer((req, res) =&gt; {
+  const u = http.request({ port: 19423, path: req.url, method: req.method, headers: req.headers }, (r) =&gt; { res.writeHead(r.statusCode, r.headers); r.pipe(res); });
+  req.pipe(u);
+});
+proxy.on('upgrade', (req, sock) =&gt; {                     <span class="tok-comment">  // xoá Upgrade + Connection, gửi như GET thường</span>
+  const { upgrade, connection, ...h } = req.headers;
+  http.get({ port: 19423, path: req.url, headers: h }, (r) =&gt; {
+    let b = ''; r.on('data', (d) =&gt; (b += d)); r.on('end', () =&gt; { sock.end(&#96;HTTP/1.1 \${r.statusCode} \${r.statusMessage}\\r\\nContent-Length: \${Buffer.byteLength(b)}\\r\\n\\r\\n\${b}&#96;); console.log(&#96;  proxy: chặn upgrade ⇒ server trả \${r.statusCode} \${b}&#96;); });
+  });
+});
+proxy.listen(19424);
+for (const [ten, opt] of [['mac-dinh', {}], ['chi-websocket', { transports: ['websocket'] }]]) {
+  const c = ketNoi('http://localhost:19424', { query: { ten }, ...opt });
+  let loi = 0;
+  c.on('connect_error', () =&gt; loi++);
+  c.on('tin', (x) =&gt; console.log(&#96;\${ten}: NHẬN "\${x}" qua transport \${c.io.engine.transport.name}&#96;));
+  await new Promise((r) =&gt; setTimeout(r, 4000));
+  console.log(&#96;\${ten}: sau 4 s — connected=\${c.connected} · transport=\${c.io.engine?.transport?.name ?? '—'} · connect_error \${loi} lần&#96;);
+  c.close();
+}
+process.exit(0);</code></pre>
+<h3>🔗 Go deeper in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nginx/learn?lessonSlug=nginx-3-5-websocket" target="_blank" rel="noopener"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Nginx · 3.5 — WebSocket: the upgrade Nginx deliberately strips</span><span class="lc-sub">The two Upgrade lines, measured with and without</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-10-3-realtime" target="_blank" rel="noopener"><span class="lc-ico">🧩</span><span class="lc-body"><span class="lc-title">API Design · 10.4 — Realtime APIs: polling, SSE or WebSocket</span><span class="lc-sub">Latency and request counts for each contract</span></span></a>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Long-polling</span><span class="v">The HTTP fallback transport — repeated request/response that passes through any proxy.</span></div>
+  <div class="kv"><span class="k">Transport upgrade</span><span class="v">Switching an already-open connection from polling to WebSocket.</span></div>
+  <div class="kv"><span class="k"><code>transports</code> array</span><span class="v">Which transports are PERMITTED — not the order they are tried.</span></div>
+  <div class="kv"><span class="k"><code>Upgrade: websocket</code></span><span class="v">The handshake header a corporate proxy may strip.</span></div>
+  <div class="kv"><span class="k">Overhead</span><span class="v">Per-message bytes: ~800 (polling) vs ~6 (WebSocket) — about 133×.</span></div>
+  <div class="kv"><span class="k"><code>conn.transport.name</code></span><span class="v">Server-side read of the transport a given socket is on right now.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>The client ALWAYS starts on polling and upgrades to WebSocket; the array only lists allowed transports, not an order.</li><li>About 3-5% of real users stay on polling — proxies that strip the upgrade, or weak mobile NAT.</li><li>Polling costs ~133× the per-message overhead but keeps those users connected at all.</li><li>A misconfigured nginx silently keeps everyone on polling — the two <code>proxy_set_header</code> upgrade lines are mandatory.</li><li>Turn polling off only after measuring <code>transport.name</code> over time, never on advice alone.</li></ul>
 
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Transports</span><span class="lc-sub">socket.io/docs/v4/how-it-works/#transports — hai transport được hỗ trợ, các chỉnh option client-side.</span></span></div>
@@ -339,7 +1013,7 @@ io.on('connection', socket => {
 <p class="lead">Mọi trình duyệt hiện đại hỗ trợ WebSocket. Mọi OS hiện đại hỗ trợ WebSocket. Vậy tại sao <code>src/socket/messaging.socket.ts</code> vẫn giữ <code>transports: [&#39;websocket&#39;, &#39;polling&#39;]</code> trong năm 2026? Comment ngay trên nó nói &quot;WebSocket-only would break users behind corporate proxies that strip the upgrade header&quot;. Bài này đo xem những người đó là ai và &quot;break&quot; nghĩa là gì.</p>
 
 <h3>Config thật trong kho này</h3>
-<pre><code class="language-ts">// src/socket/messaging.socket.ts:220-232
+<pre><code class="language-ts">// src/socket/messaging.socket.ts:286-299 (đo 13/11/2026)
 io = new IOServer(httpServer, {
   cors: { origin: true, credentials: true },
   // Long-poll fallback is enabled by default; WebSocket-only would
@@ -409,12 +1083,15 @@ Do la MOT huong. Voi chat song phuong thi tang gap doi cho client.
 </div>
 
 <h3>Nhìn transport upgrade bằng mắt</h3>
-<pre><code class="language-bash"># chay socket.io test server
-$ node probe1.mjs
-listen on 44187
-SERVER received connection, transport= polling      &lt;- bat dau
-CLIENT connected, transport= websocket
-SERVER upgrade to websocket                          &lt;- upgrade ~200ms sau
+<pre><code class="language-bash">$ node probe.js          # probe 15 dòng của bài Bắt đầu tại đây (2/2), chạy thật
+SERVER connection · transport = polling
+CLIENT connect    · transport = polling
+SERVER upgrade   · transport = websocket
+SERVER nhận chao: { tu: 'client', luc: 'sau 300 ms' }
+$ node thu-tu.mjs
+client mặc định: server thấy transport ĐẦU TIÊN = polling
+client mặc định: upgrade → websocket sau 6 ms
+client transports:['websocket','polling']: server thấy transport ĐẦU TIÊN = websocket
 </code></pre>
 
 <p>Cùng một &quot;connection&quot; theo góc nhìn client, hai transport khác nhau ở tầng 1. Server nhìn <code>socket.conn.transport.name</code> để biết ai đang ở đâu.</p>
@@ -443,8 +1120,86 @@ io.on('connection', socket => {
 </div>
 
 <div class="callout">
-<p><strong>Một câu.</strong> <code>transports: [&#39;websocket&#39;, &#39;polling&#39;]</code> là mặc định đúng cho public web app — client luôn bắt đầu bằng polling và upgrade lên WebSocket trong ~200ms nếu qua được proxy, còn 3-5% audience ngồi sau proxy strip upgrade thì tiếp tục polling (đắt 133× overhead nhưng vẫn chạy) — và tắt polling là quyết định phải đo, không phải quyết định theo hướng dẫn của StackOverflow.</p>
+<p><strong>Một câu.</strong> <code>transports: [&#39;websocket&#39;, &#39;polling&#39;]</code> là mặc định đúng cho public web app — client luôn bắt đầu bằng polling và upgrade lên WebSocket sau một vòng đi-về nếu qua được proxy (6 ms trên máy của khoá), còn 3-5% audience ngồi sau proxy strip upgrade thì tiếp tục polling (đắt 133× overhead nhưng vẫn chạy) — và tắt polling là quyết định phải đo, không phải quyết định theo hướng dẫn của StackOverflow.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Khởi động một server với <code>transports: ['websocket', 'polling']</code> và, trong handler connection, log <code>socket.conn.transport.name</code> cùng một listener <code>socket.conn.on('upgrade', ...)</code>.</li>
+<li>Kết nối một client và xem connection bắt đầu bằng <code>polling</code> rồi chuyển sang <code>websocket</code> sau một vòng đi-về (6 ms trên một máy) — đúng cái upgrade bạn vừa log.</li>
+<li>Giờ đặt <code>transports: ['websocket']</code> và kết nối qua một thứ chặn upgrade (hoặc tự chặn). Thấy socket hỏng ở chỗ mà polling lẽ ra đã chở qua.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đã log được một transport upgrade thật và gọi tên được ai là 3-5% kẹt lại trên polling.</p></div>
+
+<h3>🔬 Đo thật: thứ tự, chi phí, và proxy xoá Upgrade</h3>
+<p><strong>Client bắt đầu bằng gì</strong> (server khai <code>['websocket', 'polling']</code> như kho):</p>
+<div class="out">$ node thu-tu.mjs
+client mặc định: server thấy transport ĐẦU TIÊN = polling
+client mặc định: upgrade → websocket sau 6 ms
+client transports:['websocket','polling']: server thấy transport ĐẦU TIÊN = websocket</div>
+<p>Client mặc định bắt đầu bằng polling bất kể server khai gì; chỉ client tự đặt <code>transports</code> mới bắt đầu bằng websocket.</p>
+<p><strong>Byte mỗi tin</strong> — proxy TCP đếm từng byte, 100 tin nhỏ server → client, mỗi lần một transport:</p>
+<div class="out">$ node dem-byte.mjs
+polling  : 100 tin ⇒ client→server  17600 B · server→client  19592 B · tổng  37192 B · 371.9 B/tin
+websocket: 100 tin ⇒ client→server      0 B · server→client   3692 B · tổng   3692 B · 36.9 B/tin
+phần CHỮ của 100 tin (42["tin",{"i":N,"chu":"xin chao"}]): 3492 B ⇒ phần còn lại là overhead</div>
+<p>Vậy polling tốn ~337 B vỏ bọc quanh một tin 35 B, websocket 2 B — tổng byte gấp khoảng 10 lần. Ước tính tay ở trên (800 vs 6 B, "133×") đúng hình dạng; đây là bản đo thật, với client Node (trình duyệt còn gửi cookie và User-Agent, nên polling thật nặng hơn).</p>
+<p><strong>Một proxy xoá <code>Upgrade</code> và <code>Connection</code></strong>, rồi hai client:</p>
+<div class="out">$ node proxy-chan.mjs
+  proxy: chặn upgrade ⇒ server trả 400 {"code":3,"message":"Bad request"}
+mac-dinh: NHẬN "chào mac-dinh" qua transport polling
+mac-dinh: sau 4 s — connected=true · transport=polling · connect_error 0 lần
+  proxy: chặn upgrade ⇒ server trả 400 {"code":3,"message":"Bad request"}
+  proxy: chặn upgrade ⇒ server trả 400 {"code":3,"message":"Bad request"}
+  proxy: chặn upgrade ⇒ server trả 400 {"code":3,"message":"Bad request"}
+chi-websocket: sau 4 s — connected=false · transport=websocket · connect_error 3 lần</div>
+<p>Client mặc định ở lại polling và vẫn nhận tin; client chỉ-websocket không bao giờ nối được. Đó chính là nghĩa của câu "WebSocket-only would break users behind corporate proxies".</p>
+<p><em>Lưu ý:</em> các tỉ lệ % nhóm người dùng ở trên là ước lượng minh hoạ, không phải số đo — không có con số công khai đáng tin. Tự đo bằng <code>socket.conn.transport.name</code>.</p>
+<h3>🔁 Tự chạy lại</h3>
+<p>Proxy xoá header (lưu thành <code>proxy-chan.mjs</code> cạnh <code>npm i socket.io@4.8.3 socket.io-client@4.8.3</code>, <code>"type": "module"</code>):</p>
+<pre><code class="language-javascript"><span class="tok-comment">// Proxy "văn phòng" XOÁ header Upgrade (chuyển tiếp như GET thường). Hai client: mặc định vs transports:['websocket'].</span>
+import http from 'node:http';
+import { Server } from 'socket.io';
+import { io as ketNoi } from 'socket.io-client';
+const io = new Server(19423);
+io.on('connection', (s) =&gt; setTimeout(() =&gt; s.emit('tin', 'chào ' + s.handshake.query.ten), 1500));
+const proxy = http.createServer((req, res) =&gt; {
+  const u = http.request({ port: 19423, path: req.url, method: req.method, headers: req.headers }, (r) =&gt; { res.writeHead(r.statusCode, r.headers); r.pipe(res); });
+  req.pipe(u);
+});
+proxy.on('upgrade', (req, sock) =&gt; {                     <span class="tok-comment">  // xoá Upgrade + Connection, gửi như GET thường</span>
+  const { upgrade, connection, ...h } = req.headers;
+  http.get({ port: 19423, path: req.url, headers: h }, (r) =&gt; {
+    let b = ''; r.on('data', (d) =&gt; (b += d)); r.on('end', () =&gt; { sock.end(&#96;HTTP/1.1 \${r.statusCode} \${r.statusMessage}\\r\\nContent-Length: \${Buffer.byteLength(b)}\\r\\n\\r\\n\${b}&#96;); console.log(&#96;  proxy: chặn upgrade ⇒ server trả \${r.statusCode} \${b}&#96;); });
+  });
+});
+proxy.listen(19424);
+for (const [ten, opt] of [['mac-dinh', {}], ['chi-websocket', { transports: ['websocket'] }]]) {
+  const c = ketNoi('http://localhost:19424', { query: { ten }, ...opt });
+  let loi = 0;
+  c.on('connect_error', () =&gt; loi++);
+  c.on('tin', (x) =&gt; console.log(&#96;\${ten}: NHẬN "\${x}" qua transport \${c.io.engine.transport.name}&#96;));
+  await new Promise((r) =&gt; setTimeout(r, 4000));
+  console.log(&#96;\${ten}: sau 4 s — connected=\${c.connected} · transport=\${c.io.engine?.transport?.name ?? '—'} · connect_error \${loi} lần&#96;);
+  c.close();
+}
+process.exit(0);</code></pre>
+<h3>🔗 Học sâu hơn ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nginx/learn?lessonSlug=nginx-3-5-websocket" target="_blank" rel="noopener"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Nginx · 3.5 — WebSocket: cú nâng cấp mà Nginx CỐ Ý gỡ đi</span><span class="lc-sub">Hai dòng Upgrade, đo khi có và khi thiếu</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-10-3-realtime" target="_blank" rel="noopener"><span class="lc-ico">🧩</span><span class="lc-body"><span class="lc-title">API Design · 10.4 — API thời gian thực: polling, SSE hay WebSocket</span><span class="lc-sub">Độ trễ và số request của từng hợp đồng</span></span></a>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Long-polling</span><span class="v">Transport fallback bằng HTTP — request/response lặp lại, qua được mọi proxy.</span></div>
+  <div class="kv"><span class="k">Transport upgrade</span><span class="v">Chuyển một connection đang mở từ polling sang WebSocket.</span></div>
+  <div class="kv"><span class="k">Mảng <code>transports</code></span><span class="v">Transport nào ĐƯỢC PHÉP — không phải thứ tự thử.</span></div>
+  <div class="kv"><span class="k"><code>Upgrade: websocket</code></span><span class="v">Header bắt tay mà proxy văn phòng có thể strip.</span></div>
+  <div class="kv"><span class="k">Overhead</span><span class="v">Byte mỗi tin: ~800 (polling) vs ~6 (WebSocket) — khoảng 133×.</span></div>
+  <div class="kv"><span class="k"><code>conn.transport.name</code></span><span class="v">Đọc phía server xem một socket đang ở transport nào ngay lúc này.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Client LUÔN bắt đầu bằng polling rồi upgrade lên WebSocket; mảng chỉ liệt kê transport được phép, không phải thứ tự.</li><li>Khoảng 3-5% người dùng thật ở lại polling — proxy strip upgrade, hoặc NAT di động yếu.</li><li>Polling đắt ~133× overhead mỗi tin nhưng giữ cho những người đó còn kết nối được.</li><li>Nginx cấu hình sai âm thầm giữ mọi người trên polling — hai dòng <code>proxy_set_header</code> upgrade là bắt buộc.</li><li>Chỉ tắt polling sau khi đo <code>transport.name</code> theo thời gian, không bao giờ chỉ theo lời khuyên.</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Transports</span><span class="lc-sub">socket.io/docs/v4/how-it-works/#transports — hai transport được hỗ trợ, các chỉnh option client-side.</span></span></div>
@@ -462,6 +1217,7 @@ io.on('connection', socket => {
       type: 'VIDEO',
       description: 'Kết nối WebSocket thô bằng thư viện `ws`, không qua socket.io-client. Đọc ba frame đầu và biết mỗi ký tự nghĩa gì — từ đó DevTools tab WS đọc được như tiếng mẹ đẻ.',
       content: `
+${G00_3}
 <div class="ml-en">
 <span class="eyebrow">Section 0 · Lesson 0.3</span>
 <h2>What is on the wire: three real packets</h2>
@@ -502,7 +1258,7 @@ WIRE: "42[\\"hello\\",{\\"world\\":42}]"
 <div class="lz-layer"><span class="lz-lname"><code>upgrades: []</code></span><span class="lz-lnote">Empty because this client connected over WebSocket from the start. Had it connected by polling, this list would read <code>[&quot;websocket&quot;]</code> to say &quot;you may upgrade to WebSocket whenever you like&quot;</span></div>
 <div class="lz-layer"><span class="lz-lname"><code>pingInterval: 25000</code></span><span class="lz-lnote">The server will send a ping every 25 seconds. This is the default; this repo sets the same 25000</span></div>
 <div class="lz-layer"><span class="lz-lname"><code>pingTimeout: 20000</code></span><span class="lz-lnote">If the server gets no pong within 20 seconds, the client is considered gone. Default is 20s; this repo sets 60000 (60s, higher to absorb mobile-network jitter)</span></div>
-<div class="lz-layer"><span class="lz-lname"><code>maxPayload: 1000000</code></span><span class="lz-lnote">Maximum size of a single message: 1 MB. Anything larger is rejected at layer 2 before it ever reaches your code</span></div>
+<div class="lz-layer"><span class="lz-lname"><code>maxPayload: 1000000</code></span><span class="lz-lnote">Maximum size of a single message: 1 MB. Anything larger closes the WHOLE connection at layer 2 (measured below: server "transport error", client "transport close")</span></div>
 </div>
 
 <h3>Frame 2 — socket.io CONNECT packet</h3>
@@ -561,13 +1317,12 @@ socket.io packet types (chu so THU HAI, sau khi engine.io la 4)
 </div>
 
 <h3>An ack on the wire</h3>
-<pre><code class="language-text">Server:  421["chat:message",{"text":"hi"}]
-                │
-                └── ack id = 1
+<pre><code class="language-text"># đo thật trong Chromium (socket.io 4.8.3) — id đếm từ 0, mỗi phía một bộ đếm riêng
+Client → Server:  420["chat:message",{"text":"hi"}]     (ack id 0)
+Server → Client:  430[{"ok":true,"nhan":"hi"}]           (trả lời id 0)
 
-Client:  431[{"ok":true}]
-         │
-         └── ack response, khop id 1
+Server → Client:  420["hoi","còn đó không?"]            (ack id 0 của SERVER)
+Client → Server:  430["vẫn ở đây"]
 </code></pre>
 
 <p>Only when you <code>emit</code> with a callback does an ack id get assigned. No callback → no ack id → no &quot;at-least-once&quot; guarantee — Chapter 6 measures exactly this.</p>
@@ -580,11 +1335,78 @@ Client:  431[{"ok":true}]
 <p><strong>One sentence.</strong> The first three packets of every socket.io connection are OPEN (engine.io <code>0</code> mang sid + timings), CONNECT (engine.io <code>4</code> + socket.io <code>0</code> carrying the namespace sid) and EVENT (engine.io <code>4</code> + socket.io <code>2</code> mang <code>[&quot;name&quot;, ...args]</code>) — know those three and DevTools&#39; Network → WS tab becomes a packet list you can actually read, and every &quot;did the event go out?&quot; question turns into &quot;is there a <code>42[&quot;name&quot;,...]</code> in the tab?&quot;.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Connect to a Socket.IO server with raw <code>ws</code> at <code>/socket.io/?EIO=4&amp;transport=websocket</code> and log every frame as a string.</li>
+<li>Decode the first three frames by their leading digits: OPEN (<code>0{...}</code>), CONNECT (<code>40{...}</code>), EVENT (<code>42[...]</code>) — and find the TWO different sids inside them.</li>
+<li>Open DevTools → Network → WS → Messages and match each row to the packet-type table: <code>2</code> alone is a ping, <code>3</code> a pong, <code>42[...]</code> an event.</li>
+</ol>
+<p><strong>Done when:</strong> you can read a wire frame's leading digits and name both the engine.io and the socket.io packet type.</p></div>
+
+<h3>🔬 Measured: the same packets over polling, and in a real browser</h3>
+<p><strong>Over polling, with curl</strong> — note <code>upgrades</code> is no longer empty:</p>
+<pre><code class="language-bash">$ curl -s 'http://localhost:19432/socket.io/?EIO=4&amp;transport=polling'; echo</code></pre><div class="out">0{"sid":"EvCrVv0JqKt_j6OgAAAA","upgrades":["websocket"],"pingInterval":25000,"pingTimeout":20000,"maxPayload":1000000}</div>
+<p><strong>A real Chromium page</strong> (Playwright, socket.io 4.8.3, <code>pingInterval: 2000</code> on the test server). Polling phase — request bodies and responses:</p>
+<div class="out">↓ GET  0{"sid":"uPrY2c-RnVM5ml82AAAA","upgrades":["websocket"],"pingInterval":2000,"pingTimeout":2000,"maxPayload":1000000}
+↑ POST 40   → "ok"
+↓ GET  40{"sid":"iRQrTYYia_9yrUI3AAAA"}␞42["hello",{"world":42}]
+↑ POST 420["chat:message",{"text":"hi"}]   → "ok"
+↓ GET  430[{"ok":true,"nhan":"hi"}]</div>
+<p>The third GET carried TWO packets separated by <code>\\x1e</code> (shown as ␞): polling batches whatever is queued. The page's first emit with a callback went out as <code>420</code> — ack ids count from <strong>0</strong>.</p>
+<p>WebSocket phase — frames as DevTools shows them:</p>
+<div class="out">↑ 2probe                             (35 ms)
+↓ 3probe                             (37 ms)
+↑ 5                                  (38 ms)
+↓ 420["hoi","còn đó không?"]         (1234 ms)
+↑ 430["vẫn ở đây"]                   (1234 ms)
+↓ 2                                  (2026 ms)
+↑ 3                                  (2026 ms)
+↓ 2                                  (4027 ms)
+↑ 3                                  (4027 ms)</div>
+<p><code>2probe</code>/<code>3probe</code> test the new pipe, <code>5</code> switches to it, then only events, acks, and a ping (<code>2</code>) / pong (<code>3</code>) every <code>pingInterval</code>.</p>
+<p><strong>maxPayload, measured:</strong></p>
+<div class="out">$ node to-qua.mjs
+server NHẬN chuỗi 999.000 ký tự
+gửi 1.100.000 ký tự …
+server: disconnect "transport error"
+client: disconnect "transport close"</div>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-javascript"><span class="tok-comment">// Bỏ socket.io-client: nối bằng ws THÔ rồi in từng khung đúng như trên dây</span>
+import { Server } from 'socket.io';
+import { WebSocket } from 'ws';
+import http from 'node:http';
+const srv = http.createServer();
+const io = new Server(srv);
+io.on('connection', (s) =&gt; s.emit('hello', { world: 42 }));
+await new Promise((r) =&gt; srv.listen(19430, r));
+const ws = new WebSocket('ws://localhost:19430/socket.io/?EIO=4&amp;transport=websocket');
+ws.on('message', (d) =&gt; console.log('WIRE:', JSON.stringify(d.toString())));
+await new Promise((r) =&gt; ws.on('open', r));
+ws.send('40'); <span class="tok-comment">  // tự tay gửi: engine.io MESSAGE (4) + socket.io CONNECT (0)</span>
+setTimeout(() =&gt; { ws.close(); io.close(); process.exit(0); }, 500);</code></pre>
+<p>Run with <code>node probe3.mjs</code> (in a folder with <code>npm i socket.io@4.8.3 ws</code> and <code>"type": "module"</code>). Then <code>curl -s 'http://localhost:&lt;port&gt;/socket.io/?EIO=4&amp;transport=polling'</code> against any Socket.IO server.</p>
+<h3>🔗 Go deeper in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-9-2-websocket" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking for Developers · 9.2 — WebSocket: upgrade, frames and heartbeat</span><span class="lc-sub">The layer-1 frame below these digits: masking, opcodes, close codes</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-11-1-tcpdump" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking for Developers · 11.1 — tcpdump on a headless server</span><span class="lc-sub">Capture the same frames where there is no DevTools</span></span></a>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">engine.io packet type</span><span class="v">The FIRST digit: <code>0</code> OPEN, <code>2</code> PING, <code>3</code> PONG, <code>4</code> MESSAGE.</span></div>
+  <div class="kv"><span class="k">socket.io packet type</span><span class="v">The SECOND digit (after a <code>4</code>): <code>0</code> CONNECT, <code>2</code> EVENT, <code>3</code> ACK.</span></div>
+  <div class="kv"><span class="k">OPEN packet</span><span class="v"><code>0{...}</code> — carries sid, <code>pingInterval</code>, <code>pingTimeout</code>, <code>maxPayload</code>.</span></div>
+  <div class="kv"><span class="k">Two sids</span><span class="v">engine.io sid (<code>socket.conn.id</code>) vs socket.io sid (<code>socket.id</code>) — different values.</span></div>
+  <div class="kv"><span class="k">EVENT frame</span><span class="v"><code>42[&quot;name&quot;, ...args]</code> — your emit as it travels on the wire.</span></div>
+  <div class="kv"><span class="k">ack id</span><span class="v">A number assigned only when you emit WITH a callback (Chapter 6).</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>The first three frames of any connection are always OPEN, CONNECT, EVENT.</li><li>The first digit is engine.io; the second (after a <code>4</code>) is socket.io.</li><li>One connection carries two sids: engine.io (<code>conn.id</code>) and socket.io (<code>socket.id</code>).</li><li><code>42[&quot;name&quot;,args]</code> is your emit on the wire — its absence in the WS tab answers &quot;did it send?&quot;.</li><li>ping/pong are <code>2</code>/<code>3</code> at layer 2; at layer 3 those same digits mean EVENT/ACK.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Engine.IO protocol spec</span><span class="lc-sub">github.com/socketio/engine.io-protocol — nguồn cho bảng packet type ở layer 2. Ngắn (dưới 300 dòng markdown) và bắt buộc đọc một lần.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO protocol spec</span><span class="lc-sub">github.com/socketio/socket.io-protocol — nguồn cho bảng packet type ở layer 3, kèm định nghĩa ack và binary attachments.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Chrome DevTools — WebSocket frame inspection</span><span class="lc-sub">developer.chrome.com/docs/devtools/network#websocket — cách mở tab WS, lọc frame, và xem payload trong bảng.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chapter 11 — diagnosing realtime bugs</span><span class="lc-sub">/courses/socket-io/learn${REF} — cây quyết định dùng chính bảng packet của bài này ở bước một: có frame <code>42[...]</code> trên dây không?</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chapter 10 — diagnosing realtime bugs</span><span class="lc-sub">/courses/socket-io/learn${REF} — cây quyết định dùng chính bảng packet của bài này ở bước một: có frame <code>42[...]</code> trên dây không?</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Mục 0 · Bài 0.3</span>
@@ -626,7 +1448,7 @@ WIRE: "42[\\"hello\\",{\\"world\\":42}]"
 <div class="lz-layer"><span class="lz-lname"><code>upgrades: []</code></span><span class="lz-lnote">Trống vì client này đã kết nối bằng WebSocket ngay từ đầu. Nếu kết nối bằng polling, list này sẽ là <code>[&quot;websocket&quot;]</code> để nói &quot;bạn có thể upgrade lên WebSocket bất cứ lúc nào&quot;</span></div>
 <div class="lz-layer"><span class="lz-lname"><code>pingInterval: 25000</code></span><span class="lz-lnote">Server sẽ gửi ping mỗi 25 giây. Đây là default; kho này đặt cùng số 25000</span></div>
 <div class="lz-layer"><span class="lz-lname"><code>pingTimeout: 20000</code></span><span class="lz-lnote">Nếu server không nhận pong trong 20 giây, client bị coi là mất. Default 20s; kho này đặt 60000 (60s, cao hơn để chịu được biến động mạng di động)</span></div>
-<div class="lz-layer"><span class="lz-lname"><code>maxPayload: 1000000</code></span><span class="lz-lnote">Kích thước tối đa một tin nhắn: 1 MB. Vượt qua sẽ bị từ chối ở tầng 2 trước khi đến code của bạn</span></div>
+<div class="lz-layer"><span class="lz-lname"><code>maxPayload: 1000000</code></span><span class="lz-lnote">Kích thước tối đa một tin nhắn: 1 MB. Vượt qua thì CẢ kết nối bị đóng ở tầng 2 (đo bên dưới: server "transport error", client "transport close")</span></div>
 </div>
 
 <h3>Frame 2 — socket.io CONNECT packet</h3>
@@ -685,13 +1507,12 @@ socket.io packet types (chu so THU HAI, sau khi engine.io la 4)
 </div>
 
 <h3>Ack trên dây</h3>
-<pre><code class="language-text">Server:  421["chat:message",{"text":"hi"}]
-                │
-                └── ack id = 1
+<pre><code class="language-text"># đo thật trong Chromium (socket.io 4.8.3) — id đếm từ 0, mỗi phía một bộ đếm riêng
+Client → Server:  420["chat:message",{"text":"hi"}]     (ack id 0)
+Server → Client:  430[{"ok":true,"nhan":"hi"}]           (trả lời id 0)
 
-Client:  431[{"ok":true}]
-         │
-         └── ack response, khop id 1
+Server → Client:  420["hoi","còn đó không?"]            (ack id 0 của SERVER)
+Client → Server:  430["vẫn ở đây"]
 </code></pre>
 
 <p>Chỉ khi bạn <code>emit</code> có callback là ack id được gán. Không có callback → không có ack id → không có &quot;at-least-once&quot; guarantee — Chương 6 sẽ đo cái này.</p>
@@ -704,11 +1525,78 @@ Client:  431[{"ok":true}]
 <p><strong>Một câu.</strong> Ba packet đầu tiên của mọi connection socket.io là OPEN (engine.io <code>0</code> mang sid + timings), CONNECT (engine.io <code>4</code> + socket.io <code>0</code> mang sid namespace) và EVENT (engine.io <code>4</code> + socket.io <code>2</code> mang <code>[&quot;name&quot;, ...args]</code>) — biết ba cái này thì tab DevTools&#39; Network → WS là một danh sách packet bạn đọc được, và mọi câu hỏi &quot;event có đi không&quot; trở thành câu hỏi &quot;có <code>42[&quot;name&quot;,...]</code> trong tab không&quot;.</p>
 </div>
 
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Kết nối tới một server Socket.IO bằng <code>ws</code> thô ở <code>/socket.io/?EIO=4&amp;transport=websocket</code> và log mỗi frame dưới dạng chuỗi.</li>
+<li>Giải mã ba frame đầu theo chữ số dẫn đầu: OPEN (<code>0{...}</code>), CONNECT (<code>40{...}</code>), EVENT (<code>42[...]</code>) — và tìm HAI sid khác nhau bên trong chúng.</li>
+<li>Mở DevTools → Network → WS → Messages và khớp mỗi hàng với bảng packet type: <code>2</code> một mình là ping, <code>3</code> là pong, <code>42[...]</code> là event.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đọc được các chữ số dẫn đầu của một frame trên dây và gọi tên cả packet type engine.io lẫn socket.io.</p></div>
+
+<h3>🔬 Đo thật: cùng các packet qua polling, và trong trình duyệt thật</h3>
+<p><strong>Qua polling, bằng curl</strong> — để ý <code>upgrades</code> không còn rỗng:</p>
+<pre><code class="language-bash">$ curl -s 'http://localhost:19432/socket.io/?EIO=4&amp;transport=polling'; echo</code></pre><div class="out">0{"sid":"EvCrVv0JqKt_j6OgAAAA","upgrades":["websocket"],"pingInterval":25000,"pingTimeout":20000,"maxPayload":1000000}</div>
+<p><strong>Một trang Chromium thật</strong> (Playwright, socket.io 4.8.3, server thử đặt <code>pingInterval: 2000</code>). Pha polling — thân request và response:</p>
+<div class="out">↓ GET  0{"sid":"uPrY2c-RnVM5ml82AAAA","upgrades":["websocket"],"pingInterval":2000,"pingTimeout":2000,"maxPayload":1000000}
+↑ POST 40   → "ok"
+↓ GET  40{"sid":"iRQrTYYia_9yrUI3AAAA"}␞42["hello",{"world":42}]
+↑ POST 420["chat:message",{"text":"hi"}]   → "ok"
+↓ GET  430[{"ok":true,"nhan":"hi"}]</div>
+<p>GET thứ ba chở HAI packet, ngăn bằng <code>\\x1e</code> (hiện là ␞): polling gom mọi thứ đang chờ. Lần emit có callback đầu tiên của trang đi ra là <code>420</code> — ack id đếm từ <strong>0</strong>.</p>
+<p>Pha WebSocket — các khung như DevTools hiện:</p>
+<div class="out">↑ 2probe                             (35 ms)
+↓ 3probe                             (37 ms)
+↑ 5                                  (38 ms)
+↓ 420["hoi","còn đó không?"]         (1234 ms)
+↑ 430["vẫn ở đây"]                   (1234 ms)
+↓ 2                                  (2026 ms)
+↑ 3                                  (2026 ms)
+↓ 2                                  (4027 ms)
+↑ 3                                  (4027 ms)</div>
+<p><code>2probe</code>/<code>3probe</code> thử đường mới, <code>5</code> chuyển hẳn sang, sau đó chỉ còn event, ack, và ping (<code>2</code>) / pong (<code>3</code>) mỗi <code>pingInterval</code>.</p>
+<p><strong>maxPayload, đo thật:</strong></p>
+<div class="out">$ node to-qua.mjs
+server NHẬN chuỗi 999.000 ký tự
+gửi 1.100.000 ký tự …
+server: disconnect "transport error"
+client: disconnect "transport close"</div>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-javascript"><span class="tok-comment">// Bỏ socket.io-client: nối bằng ws THÔ rồi in từng khung đúng như trên dây</span>
+import { Server } from 'socket.io';
+import { WebSocket } from 'ws';
+import http from 'node:http';
+const srv = http.createServer();
+const io = new Server(srv);
+io.on('connection', (s) =&gt; s.emit('hello', { world: 42 }));
+await new Promise((r) =&gt; srv.listen(19430, r));
+const ws = new WebSocket('ws://localhost:19430/socket.io/?EIO=4&amp;transport=websocket');
+ws.on('message', (d) =&gt; console.log('WIRE:', JSON.stringify(d.toString())));
+await new Promise((r) =&gt; ws.on('open', r));
+ws.send('40'); <span class="tok-comment">  // tự tay gửi: engine.io MESSAGE (4) + socket.io CONNECT (0)</span>
+setTimeout(() =&gt; { ws.close(); io.close(); process.exit(0); }, 500);</code></pre>
+<p>Chạy <code>node probe3.mjs</code> (trong thư mục đã <code>npm i socket.io@4.8.3 ws</code> và có <code>"type": "module"</code>). Rồi <code>curl -s 'http://localhost:&lt;cổng&gt;/socket.io/?EIO=4&amp;transport=polling'</code> vào một server Socket.IO bất kỳ.</p>
+<h3>🔗 Học sâu hơn ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-9-2-websocket" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking for Developers · 9.2 — WebSocket: nâng cấp, frame và nhịp tim</span><span class="lc-sub">Frame tầng 1 bên dưới các chữ số này: mặt nạ, opcode, mã đóng</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-11-1-tcpdump" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking for Developers · 11.1 — tcpdump: bắt gói trên máy chủ không giao diện</span><span class="lc-sub">Bắt chính các khung này ở nơi không có DevTools</span></span></a>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">packet type engine.io</span><span class="v">Chữ số ĐẦU: <code>0</code> OPEN, <code>2</code> PING, <code>3</code> PONG, <code>4</code> MESSAGE.</span></div>
+  <div class="kv"><span class="k">packet type socket.io</span><span class="v">Chữ số THỨ HAI (sau một <code>4</code>): <code>0</code> CONNECT, <code>2</code> EVENT, <code>3</code> ACK.</span></div>
+  <div class="kv"><span class="k">OPEN packet</span><span class="v"><code>0{...}</code> — mang sid, <code>pingInterval</code>, <code>pingTimeout</code>, <code>maxPayload</code>.</span></div>
+  <div class="kv"><span class="k">Hai sid</span><span class="v">sid engine.io (<code>socket.conn.id</code>) vs sid socket.io (<code>socket.id</code>) — khác giá trị.</span></div>
+  <div class="kv"><span class="k">EVENT frame</span><span class="v"><code>42[&quot;name&quot;, ...args]</code> — chính cái emit của bạn khi đi trên dây.</span></div>
+  <div class="kv"><span class="k">ack id</span><span class="v">Một số chỉ được gán khi bạn emit CÓ callback (Chương 6).</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Ba frame đầu của mọi connection luôn là OPEN, CONNECT, EVENT.</li><li>Chữ số đầu là engine.io; chữ số thứ hai (sau một <code>4</code>) là socket.io.</li><li>Một connection mang hai sid: engine.io (<code>conn.id</code>) và socket.io (<code>socket.id</code>).</li><li><code>42[&quot;name&quot;,args]</code> là emit của bạn trên dây — vắng nó trong tab WS trả lời câu &quot;đã gửi chưa?&quot;.</li><li>ping/pong là <code>2</code>/<code>3</code> ở tầng 2; ở tầng 3 chính hai chữ số đó nghĩa là EVENT/ACK.</li></ul>
+
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Engine.IO protocol spec</span><span class="lc-sub">github.com/socketio/engine.io-protocol — nguồn cho bảng packet type ở tầng 2. Ngắn (dưới 300 dòng markdown) và bắt buộc đọc một lần.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO protocol spec</span><span class="lc-sub">github.com/socketio/socket.io-protocol — nguồn cho bảng packet type ở tầng 3, kèm định nghĩa ack và binary attachments.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Chrome DevTools — WebSocket frame inspection</span><span class="lc-sub">developer.chrome.com/docs/devtools/network#websocket — cách mở tab WS, lọc frame, và xem payload trong bảng.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chương 11 — chẩn đoán realtime bug</span><span class="lc-sub">/courses/socket-io/learn${REF} — cây quyết định dùng chính bảng packet của bài này ở bước một: có frame <code>42[...]</code> trên dây không?</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chương 10 — chẩn đoán realtime bug</span><span class="lc-sub">/courses/socket-io/learn${REF} — cây quyết định dùng chính bảng packet của bài này ở bước một: có frame <code>42[...]</code> trên dây không?</span></span></div>
 </div>
 `,
     },

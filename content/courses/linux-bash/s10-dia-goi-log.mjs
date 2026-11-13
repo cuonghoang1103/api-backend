@@ -784,6 +784,43 @@ exit</code></pre>
 <div class="pitfall"><strong>Bẫy:</strong> chạy <code>rm</code> lên một file log mà một tiến trình đang mở. Cái đĩa vẫn đầy y như cũ — <code>df</code> không nhúc nhích — vì dữ liệu chỉ được giải phóng khi cái tay cầm cuối cùng đóng lại (Bài 2.4). Trong khi đó tiến trình vẫn ghi tiếp vào một file không còn tên, nên bạn mất cả file log <em>LẪN</em> chỗ trống. Rồi người ta xoá thêm nhiều thứ nữa, cũng chẳng ăn thua, và cuối cùng khởi động lại máy. <code>truncate -s 0 file</code> mới là hành động đúng: tức thì, giữ nguyên inode, không cần restart, và tiến trình không hề hay biết.</div>
 <p class="note-ct"><strong>Hãy chạy <code>df -h</code> và <code>df -i</code> cùng nhau, luôn luôn.</strong> Một trong hai kiểu hỏng của bài này là vô hình với lệnh đầu tiên, và kiểm cả hai chỉ tốn thêm một giây. Sau đó, <code>du --max-depth=1</code> lần xuống theo nhánh lớn nhất sẽ tìm ra nguyên nhân trong ba bốn bước — còn nếu <code>du</code> và <code>df</code> chênh nhau quá vài phần trăm thì câu trả lời là một file đã xoá mà vẫn mở, và <code>lsof +L1</code> gọi tên nó ngay lập tức.</p>
 </div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-2-4-dia-io" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 2.4 — Disk full and slow I/O: df, du, inodes, lsof and the night Postgres died</span><span class="lc-sub">Disk full and slow I/O: df, du, inodes, lsof — and the night Postgres died.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-8-4-day-dia" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy to a VPS · 8.4 — ENOSPC, and the two disks that are full without being full</span><span class="lc-sub">ENOSPC, and the two disks that are full without being full — on that course's own server.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-3-5-don-dia" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 3.5 — Keeping /var/lib/docker from eating the disk</span><span class="lc-sub">Keeping /var/lib/docker from eating the whole disk.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-2-4-dia-io" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 2.4 — Đầy đĩa và I/O chậm: df, du, inode, lsof và đêm Postgres chết</span><span class="lc-sub">Đầy đĩa và I/O chậm: df, du, inode, lsof — và đêm Postgres chết.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-8-4-day-dia" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 8.4 — ENOSPC, và hai cái đĩa ĐẦY mà không đầy</span><span class="lc-sub">ENOSPC, và hai cái đĩa đầy mà không đầy — trên chính máy chủ của dự án khoá đó.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-3-5-don-dia" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 3.5 — Giữ cho /var/lib/docker khỏi nuốt cả cái đĩa</span><span class="lc-sub">Giữ cho /var/lib/docker khỏi nuốt cả cái đĩa.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 10.2 ─────────────────────────── */
@@ -1590,6 +1627,43 @@ exit</code></pre>
 
 <div class="pitfall"><strong>Bẫy:</strong> chạy <code>apt install</code> mà không <code>apt update</code> trước, trong một Dockerfile. Lớp ảnh lưu tạm danh sách gói từ lần dựng ảnh gần nhất, nên một lần dựng sau đó đi lấy một phiên bản từ lúc ấy đã bị thay thế và hỏng với mã 404 — một bản dựng hôm qua chạy được và hôm nay thì hỏng mà chẳng có thay đổi mã nào. Cách chữa là dòng lệnh chuẩn mực: <code>apt-get update &amp;&amp; apt-get install -y --no-install-recommends … &amp;&amp; rm -rf /var/lib/apt/lists/*</code>, tất cả trong MỘT lệnh <code>RUN</code> duy nhất để phần update và phần install dùng chung một lớp và bộ đệm không đi theo vào trong ảnh.</div>
 <p class="note-ct"><strong>Hai quy tắc gánh phần lớn bài này.</strong> Hãy để trình quản lý gói sở hữu thứ nó đã cài — đừng bao giờ tự tay ghi vào <code>/usr</code>, và đừng bao giờ <code>sudo pip</code> hay <code>sudo npm -g</code>, vì chỗ hỏng do đó gây ra sẽ hiện ra sau nhiều tháng với một thông báo lỗi gọi tên nhầm thủ phạm. Và hãy biết rõ những kho bên thứ ba của mình: <code>ls /etc/apt/sources.list.d/</code> liệt kê mọi bên có thể cài phần mềm với quyền root lên máy bạn, và trên một máy chủ bạn vừa tiếp quản thì cái danh sách ấy đáng để đọc.</p>
+</div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-4-1-dockerfile-dau-tien" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 4.1 — Your first Dockerfile, and the build context</span><span class="lc-sub">Your first Dockerfile — where update, install and cleaning the lists belong in one RUN.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-4-3-bao-mat-npm" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 4.3 — Supply chain safety</span><span class="lc-sub">Supply-chain safety: why an npm package's install scripts are a real risk.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-6-5-quet-chuoi-cung-ung" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 6.5 — Scanning, SBOMs and supply chain</span><span class="lc-sub">Scanning, SBOMs and the supply chain for a whole image.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-4-1-dockerfile-dau-tien" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 4.1 — Dockerfile đầu tiên, và ngữ cảnh dựng</span><span class="lc-sub">Dockerfile đầu tiên — nơi update, install và xoá danh mục phải nằm chung một lệnh RUN.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-4-3-bao-mat-npm" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 4.3 — An toàn chuỗi cung ứng</span><span class="lc-sub">An toàn chuỗi cung ứng: vì sao mã của gói npm chạy lúc cài là rủi ro thật.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-6-5-quet-chuoi-cung-ung" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 6.5 — Quét lỗ hổng, SBOM và chuỗi cung ứng</span><span class="lc-sub">Quét lỗ hổng, SBOM và chuỗi cung ứng cho cả một image.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -2421,6 +2495,43 @@ systemctl --user reset-failed lx10-thu</code></pre>
 
 <div class="pitfall"><strong>Bẫy:</strong> một cái journal chỉ nằm trong bộ nhớ, và bạn phát hiện ra điều đó SAU khi đã khởi động lại. Nếu <code>/var/log/journal</code> không tồn tại, journald lưu mọi thứ trong bộ nhớ và toàn bộ lịch sử biến mất ngay khoảnh khắc máy khởi động lại — nên cái phản ứng sự cố tiêu chuẩn "khởi động lại đi rồi điều tra sau" chính là thứ huỷ mất bằng chứng. Đây là mặc định trong nhiều ảnh container và vài bản cài tối giản. Hãy kiểm cái thư mục đó trên mọi máy chủ bạn tiếp quản, tạo nó nếu chưa có, và nhớ rằng trên một cái máy mà log chỉ nằm trong bộ nhớ thì bạn phải chép journal ra ngoài (<code>journalctl -b &gt; /tmp/boot.log</code>) <em>TRƯỚC KHI</em> khởi động lại bất cứ thứ gì.</div>
 <p class="note-ct"><strong>Hai thói quen.</strong> Hãy luôn chặn một truy vấn journal theo thời gian và mức ưu tiên trước mọi thứ khác — <code>-u UNIT --since '30 min ago' -p err</code> biến một dòng chảy không dùng nổi thành một trang đọc được. Và khi log của một ứng dụng dừng lại mà không có lỗi nào, hãy đi thẳng tới <code>journalctl -k</code>: nhân mới là nơi ghi lại những lần OOM giết, những lỗi đĩa và những lần gắn lại chỉ-đọc mà ứng dụng thì đã không còn sống để mà báo cáo.</p>
+</div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-2-6-nhat-ky" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 2.6 — The logs the system keeps: systemctl, journalctl, dmesg and logs that eat the disk</span><span class="lc-sub">The system's own logs: systemctl, journalctl, dmesg, and logs that eat the disk.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-2-2-xoay-vong" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Observability &amp; Monitoring · 2.2 — Rotation, or a full disk</span><span class="lc-sub">Rotation or a full disk, seen from the application's side.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-11-3-log" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 11.3 — Logs, rotation, and the disk that fills</span><span class="lc-sub">Logs, rotation and the disk that fills when you run in containers.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-2-6-nhat-ky" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 2.6 — Nhật ký của hệ thống: systemctl, journalctl, dmesg và log ăn hết đĩa</span><span class="lc-sub">Nhật ký của hệ thống: systemctl, journalctl, dmesg và log ăn hết đĩa.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-2-2-xoay-vong" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Observability &amp; Monitoring · 2.2 — Xoay vòng, hoặc là đĩa đầy</span><span class="lc-sub">Xoay vòng hoặc đĩa đầy, nhìn từ phía ứng dụng.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-11-3-log" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 11.3 — Log, xoay log, và cái đĩa đầy</span><span class="lc-sub">Log, xoay log và cái đĩa đầy khi chạy trong container.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

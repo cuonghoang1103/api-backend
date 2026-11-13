@@ -1441,6 +1441,33 @@ crw-rw-rw- 1 root root 1, 5 Sep 28 08:39 /dev/zero
 <div class="pitfall"><strong>Bẫy:</strong> cài phần mềm của chính bạn vào <code>/usr/bin</code> vì các lệnh khác đều ở đó. Trình quản lý gói sở hữu thư mục đó và sẽ vui vẻ ghi đè hoặc gỡ bỏ file của bạn trong một lần nâng cấp, không hề cảnh báo — và bạn sẽ mất một giờ thắc mắc vì sao một script chạy tốt suốt nhiều tháng bỗng biến mất. <code>/usr/local/bin</code> tồn tại chính xác cho việc này, và nó đã nằm sẵn trong <code>PATH</code>.</div>
 <p class="note-ct"><strong>Vì sao điều này sinh lời ở Chương 12:</strong> chẩn đoán một máy chủ lạ bắt đầu bằng việc biết phải nhìn vào đâu. Cấu hình ở <code>/etc</code>, log ở <code>/var/log</code>, dữ liệu của dịch vụ ở <code>/var/lib</code>, và thứ đang chạy thì nhìn thấy được trong <code>/proc</code>. Tấm bản đồ đó biến "tôi chẳng biết cái gì nằm ở đâu" thành bốn thư mục cần kiểm.</p>
 </div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-lab-1" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · Lab 1 — Linux commands and the file system: navigation, permissions, find and grep, pipes, logs, archives, links, disk space</span><span class="lc-sub">Lab 1 had you move around the tree with commands; this lesson explains why the tree is laid out the way it is.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-11-7-proc-sys" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 11.6 — /proc and /sys: the kernel’s other API, and a first look at eBPF</span><span class="lc-sub">What /proc and /sys really are: the kernel's second API, read file by file.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-lab-1" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · Lab 1 — Lệnh Linux và hệ thống tệp: điều hướng, quyền, find và grep, pipe, xem log, nén, liên kết, dung lượng đĩa</span><span class="lc-sub">Lab 1 đã cho bạn đi lại trong cây thư mục bằng lệnh; bài này giải thích vì sao cây được xếp như vậy.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-11-7-proc-sys" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 11.6 — /proc và /sys: API thứ hai của nhân, và xem trước eBPF</span><span class="lc-sub">/proc và /sys thật ra là gì: API thứ hai của nhân, đọc từng tệp một.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
 
@@ -1915,6 +1942,33 @@ sleep   4087 root    3w   REG   0,68 524288000     0 61724 /srv/log/access.log (
 
 <div class="pitfall"><strong>Bẫy:</strong> tin vào phần đuôi tên file. Linux không dùng nó để quyết định bất cứ điều gì — <code>chmod +x</code> và dòng shebang mới làm cho một file chạy được (Chương 7), chứ không phải cái đuôi <code>.sh</code>. Một file tải về tên <code>invoice.pdf.exe</code>, một <code>.jpg</code> thật ra là script, một <code>.txt</code> thật ra là một bản đổ lõi 2 GB: <code>file</code> nói cho bạn biết trong một lệnh, và đáng chạy nó với mọi thứ không do chính bạn tạo ra.</div>
 <p class="note-ct"><strong>Ba lệnh cần giữ lại từ bài này:</strong> <code>ls -ltrh</code> cho câu "ở đây có gì và gần đây cái gì đổi", <code>file</code> cho câu "cái này thật ra là gì", và <code>stat</code> cho câu "hệ thống file biết những gì về nó". Cùng nhau chúng trả lời gần như mọi câu hỏi về một file mà không liên quan tới nội dung — còn nội dung thì Chương 3 lo.</p>
+</div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-slide-osg4-1" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · 4.A — 📑 Slide by slide · File Systems: files, directories, FAT, i-nodes, links, journaling, VFS (slides 1–28)</span><span class="lc-sub">OSG202 Chapter 4 taught i-nodes in theory; here you looked at that very inode with stat.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-9-1-inode" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 9.1 — A file name is only a pointer: VFS, inodes, dentries and links</span><span class="lc-sub">Going deeper: a file name is only a pointer — VFS, inodes, dentries and links.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-slide-osg4-1" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · 4.A — 📑 Học theo từng slide · File Systems: tệp, thư mục, FAT, i-node, liên kết, nhật ký, VFS (slide 1–28)</span><span class="lc-sub">Chương 4 của OSG202 dạy i-node trên lý thuyết; ở đây bạn vừa nhìn chính inode đó bằng lệnh stat.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-9-1-inode" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 9.1 — Tên file chỉ là con trỏ: VFS, inode, dentry và liên kết</span><span class="lc-sub">Đi sâu hơn: tên tệp chỉ là một con trỏ — VFS, inode, dentry và liên kết.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

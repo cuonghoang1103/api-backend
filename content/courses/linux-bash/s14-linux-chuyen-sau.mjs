@@ -655,6 +655,53 @@ rc=124
 <div class="pitfall co-tieu-de"><strong>"Nó bị giết" chưa phải là chẩn đoán khi bạn chưa biết AI giết.</strong> Mã 137 chỉ nói là SIGKILL. Có thể là trần của cgroup (<code>memory.events</code> → <code>oom_kill</code>), OOM killer của cả máy (<code>journalctl -k | grep -i "out of memory"</code>), <code>docker stop</code> hết kiên nhẫn sau 10 giây (Bài 5.3), hay một người gõ <code>kill -9</code>. Hãy đọc bộ đếm trước khi nâng giới hạn — một tiến trình rò rỉ bộ nhớ được cho gấp đôi RAM thì chỉ chết thưa đi một nửa.</div>
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> Đếm trước khi đoán: <code>strace -c</code> và <code>cpu.stat</code> biến "cảm thấy chậm" thành con số. Container không phải máy ảo — nó là nhân của bạn với tầm nhìn hẹp hơn, và đó là lý do một container <code>--privileged</code> có thể đổi được máy chủ của bạn. Và bằng chứng của mọi cú giết đều được ghi lại ở đâu đó: <code>memory.events</code>, log của nhân, hoặc <code>docker inspect</code>.</p>
 </div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-slide-cs6-2" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · ⭐ CS.6 — 📑 Slide by slide · Containers (2/2): cgroup v2, OOM 137, overlayfs, capabilities, a tiny container (slides 12–28)</span><span class="lc-sub">OSG202 CS.6 (2/2): cgroup v2, OOM 137 and capabilities at school.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-2-3-vao-ben-trong" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 2.3 — Getting inside, even when there is no shell</span><span class="lc-sub">Getting inside a container even with no shell — where today's nsenter is used for real.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-2-5-gioi-han-restart" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 2.5 — Limits, restart policies and healthchecks</span><span class="lc-sub">Limits, restart policies and healthchecks: cgroups seen from Docker's side.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-12-4-mini" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 12.4 — Build a mini container by hand: an Alpine rootfs, overlayfs, a cgroup, six namespaces and pivot_root</span><span class="lc-sub">Build it yourself: a mini container by hand — rootfs, overlayfs, a cgroup and six namespaces.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-slide-cs6-2" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · ⭐ CS.6 — 📑 Học theo từng slide · Container (2/2): cgroup v2, OOM 137, overlayfs, capability, container tí hon (slide 12–28)</span><span class="lc-sub">CS.6 (2/2) của OSG202: cgroup v2, OOM 137 và capability ở trường.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-2-3-vao-ben-trong" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 2.3 — Vào bên trong, kể cả khi không có shell nào</span><span class="lc-sub">Vào bên trong container kể cả khi không có shell — nơi nsenter hôm nay được dùng thật.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-2-5-gioi-han-restart" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 2.5 — Giới hạn, chính sách khởi động lại và healthcheck</span><span class="lc-sub">Giới hạn, chính sách khởi động lại và healthcheck: cgroup nhìn từ phía Docker.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-12-4-mini" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 12.4 — Tự dựng một mini container bằng tay: rootfs Alpine, overlayfs, một cgroup, sáu namespace và pivot_root</span><span class="lc-sub">Tự tay dựng: một mini container — rootfs, overlayfs, cgroup và sáu namespace.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 14.2 ─────────────────────────── */
@@ -1086,6 +1133,53 @@ TcpExtListenOverflows           0                  0.0</div>
 
 <div class="pitfall co-tieu-de"><strong>Đo trên máy dùng chung là đo luôn cả hàng xóm.</strong> Mốc nền <code>mpstat</code> trên máy thử đã cho thấy một lõi ở 72% trước khi thí nghiệm nào bắt đầu — các container khác đang chạy trên cùng máy ảo. Luôn lấy mốc nền khi chưa có gì của bạn chạy, giữ phép thử tải thật ngắn, và đừng bao giờ chạy <code>stress-ng</code> hay <code>fio</code> trên máy chủ production: "thí nghiệm" sẽ trở thành sự cố.</div>
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> Số trung bình giấu vấn đề: hãy nhìn theo từng lõi, từng giây, từng phân vị. Bão hoà (một hàng chờ, một lần treo) quan trọng hơn mức dùng (một con số phần trăm). Và dừng ở tầng trả lời được câu hỏi — thường <code>pidstat</code> là đủ; chỉ với tới <code>perf</code> khi bạn phải chọn viết lại hàm nào.</p>
+</div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-slide-cs7-2" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · ⭐ CS.7 — 📑 Slide by slide · Performance toolkit (2/2): flame graphs, USE, 60-second checklist, 3 diagnoses (slides 15–27)</span><span class="lc-sub">OSG202 CS.7 (2/2): flame graphs, USE and the 60-second checklist.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-12-3-no-cham" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 12.3 — Cookbook: it is slow</span><span class="lc-sub">Already covered: the "it is slow" cookbook, where you read vmstat and iostat mid-incident.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-15-1-perf" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 15.2 — perf and flame graphs: sample the CPU, read the hot path, fix it, re-measure</span><span class="lc-sub">perf and flame graphs: sample the CPU, read the hot path, fix it, re-measure.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-11-3-do-duong" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Networking for Developers · 11.3 — Measuring the path: mtr, ping, iperf3 and curl -w</span><span class="lc-sub">Measuring the network path: mtr, ping, iperf3 and curl -w.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-slide-cs7-2" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · ⭐ CS.7 — 📑 Học theo từng slide · Công cụ hiệu năng (2/2): flame graph, USE, danh sách 60 giây, 3 ca chẩn đoán (slide 15–27)</span><span class="lc-sub">CS.7 (2/2) của OSG202: flame graph, USE và danh sách sáu mươi giây.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-12-3-no-cham" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 12.3 — Sách công thức: nó chậm</span><span class="lc-sub">Đã học: sách công thức "nó chậm", nơi bạn đọc vmstat và iostat giữa sự cố.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-15-1-perf" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 15.2 — perf và flame graph: lấy mẫu CPU, đọc đường nóng, sửa, đo lại</span><span class="lc-sub">perf và flame graph: lấy mẫu, đọc đường nóng, sửa rồi đo lại.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-11-3-do-duong" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Networking for Developers · 11.3 — Đo đường đi: mtr, ping, iperf3 và curl -w</span><span class="lc-sub">Đo đường đi trên mạng: mtr, ping, iperf3 và curl -w.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -1648,6 +1742,53 @@ PORT=4000</div>
 
 <div class="pitfall co-tieu-de"><strong>Nới LV không phải là nới hệ thống file.</strong> <code>lvextend -L +10G vg/lv</code> thiếu <code>-r</code> vẫn báo thành công, và <code>df</code> vẫn hiện cỡ cũ và 100% — phần thêm nằm trong ổ logic, ext4 không nhìn thấy. Hoặc luôn truyền <code>-r</code>, hoặc làm tiếp <code>resize2fs /dev/vg/lv</code> (ext4) hay <code>xfs_growfs /điểm/gắn</code> (XFS — để ý nó nhận điểm gắn, không nhận thiết bị).</div>
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> Tập mọi thao tác phá đĩa trên một file loop trước — không tốn gì và giống hệt đồ thật. Gắn bằng UUID kèm <code>nofail</code>, và kiểm fstab trước khi khởi động lại, không phải sau. Và "chép xong rồi" không phải là "chép đúng rồi": chỉ checksum mới là bằng chứng.</p>
+</div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-10-1-dia-day" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 10.1 — The disk is full: finding out what filled it</span><span class="lc-sub">Already covered: the full disk, where you met inode exhaustion and the 5% reserved for root.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-9-3-journaling" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 9.4 — Journaling and crash consistency: what ext4 writes before it writes</span><span class="lc-sub">Journaling: what ext4 writes before it writes, so a power cut does not corrupt it.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-8-3-swap" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy to a VPS · 8.3 — Swap: what it buys and what it costs</span><span class="lc-sub">Swap on a small machine: what it buys and what it costs.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-10-3-noi-doi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy to a VPS · 10.3 — The backup that failed and the restore that lied</span><span class="lc-sub">The backup that failed and the restore that lied — where a checksum is the proof.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-10-1-dia-day" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 10.1 — Đĩa đầy: tìm ra cái gì làm nó đầy</span><span class="lc-sub">Đã học: đĩa đầy, nơi bạn gặp hết inode và 5% dự trữ cho root.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-9-3-journaling" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 9.4 — Journaling và nhất quán khi sập: ext4 ghi gì trước khi ghi</span><span class="lc-sub">Journaling: ext4 ghi gì trước khi ghi, để không hỏng khi sập điện.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-8-3-swap" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 8.3 — Swap: mua được gì và trả giá gì</span><span class="lc-sub">Swap trên một máy nhỏ: mua được gì và trả giá gì.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-10-3-noi-doi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 10.3 — Bản sao lưu HỎNG và cú phục hồi NÓI DỐI</span><span class="lc-sub">Bản sao lưu hỏng và cú phục hồi nói dối — nơi checksum là bằng chứng.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -2344,6 +2485,53 @@ ${slide('lx-14', 28, 'lynis và auditd')}
 
 <div class="pitfall co-tieu-de"><strong>Tự khoá mình ở ngoài là thất bại gia cố phổ biến nhất.</strong> <code>AllowGroups ssh-users</code> mà quên thêm chính mình vào nhóm, <code>policy drop</code> đặt trước luật SSH, gõ sai <code>sshd_config</code> rồi khởi động lại — mỗi cái đều là cưa cành mình đang ngồi. Giữ một phiên đang mở, áp thay đổi từ phiên thứ hai, thử đăng nhập mới từ phiên thứ ba, và với tường lửa thì đặt lịch tự gỡ (<code>(sleep 300; nft flush ruleset) &amp;</code>) trước khi nạp luật mới.</div>
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> File cấu hình là ý định; <code>sshd -T</code>, <code>nft list ruleset</code>, <code>ls -Z</code> và một lần thử thật mới là bằng chứng. Cấp ít nhất có thể: một dòng lệnh trong sudo, một cổng trong tường lửa, một capability thay cho root. Và đọc lời khuyên của công cụ trước khi làm theo — cả thứ hạng của setroubleshoot lẫn gợi ý của lynis đều có thể sai với cái máy của bạn.</p>
+</div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-11-3-gia-co-may-chu" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 11.3 — Hardening a server: the first hour, and the routine after</span><span class="lc-sub">Already covered: hardening a server in the first hour — sshd -T, ufw and default fail2ban.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-9-5-tuong-lua" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 9.5 — Firewalls, and where the packet actually stops</span><span class="lc-sub">Already covered: where the packet really stops — ufw is a front end to nftables.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-12-3-cong-mo-ra-internet" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy to a VPS · 12.3 — Open only the right ports: ss, ufw, and how Docker walks around your firewall</span><span class="lc-sub">The ports that are really open to the internet on your server.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-13-3-leo-thang" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 13.3 — Privilege: SUID, capabilities, permissions, TOCTOU and /proc leaks</span><span class="lc-sub">Privilege: SUID, capabilities and escalation, seen from the OS.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-11-3-gia-co-may-chu" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 11.3 — Gia cố một máy chủ: giờ đầu tiên, và nếp thường ngày sau đó</span><span class="lc-sub">Đã học: gia cố máy chủ trong giờ đầu tiên — sshd -T, ufw và fail2ban mặc định.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-9-5-tuong-lua" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 9.5 — Tường lửa, và gói tin thật ra dừng ở đâu</span><span class="lc-sub">Đã học: gói tin thật ra dừng ở đâu — ufw là giao diện phía trước của nftables.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-12-3-cong-mo-ra-internet" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 12.3 — Chỉ mở đúng cổng: ss, ufw, và cách Docker đi vòng qua tường lửa của bạn</span><span class="lc-sub">Những cổng thật sự mở ra internet trên máy chủ của bạn.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-13-3-leo-thang" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 13.3 — Đặc quyền: SUID, capabilities, quyền file, TOCTOU và rò qua /proc</span><span class="lc-sub">Đặc quyền: SUID, capability và leo thang đặc quyền, nhìn từ hệ điều hành.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

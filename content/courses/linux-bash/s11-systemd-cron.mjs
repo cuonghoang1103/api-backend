@@ -973,6 +973,43 @@ NRestarts=1</div>
 <div class="pitfall"><strong>Bẫy:</strong> một đường dẫn tương đối hoặc một cấu trúc của shell nằm trong <code>ExecStart=</code>. systemd KHÔNG chạy shell, nên <code>ExecStart=node dist/index.js</code> hỏng với <code>203/EXEC</code> ngay khi node không nằm trong bốn thư mục chuẩn (cài bằng nvm chẳng hạn — systemd chỉ tra một danh sách cố định, không tra <code>PATH</code> của bạn, Bài 8.1), còn <code>ExecStart=/usr/bin/node app.js &gt;&gt; /var/log/app.log</code> thì truyền <code>&gt;&gt;</code> và cái tên file cho node dưới dạng THAM SỐ chứ không chuyển hướng gì cả. Hãy luôn dùng đường dẫn tuyệt đối, để journal hứng stdout thay vì tự chuyển hướng, và khi bạn thật sự cần cú pháp của shell thì hãy nói rõ ra bằng <code>/bin/bash -c '…'</code>.</div>
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> Phải <code>daemon-reload</code> sau mỗi lần sửa unit, không thì bạn đang thử cái file cũ. <code>enable</code> và <code>start</code> là hai chuyện khác nhau — <code>--now</code> làm cả hai, và quên <code>enable</code> nghĩa là ứng dụng biến mất sau lần khởi động lại kế tiếp. Và khi một dịch vụ không khởi động được, hãy chạy đúng cái <code>ExecStart</code> của nó bằng tay với đúng cái <code>User=</code> của nó: riêng lệnh đó phân tách "systemd cấu hình sai" với "ứng dụng hỏng" trong khoảng năm giây.</p>
 </div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-1-5-pid1" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 1.5 — PID 1, init systems and processes in containers</span><span class="lc-sub">PID 1, the first process, and why the kernel treats it specially.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-3-4-trinh-quan-ly-dich-vu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy to a VPS · 3.4 — Keeping it running: a service manager instead of nohup</span><span class="lc-sub">A service manager in practice: a unit like this one on that course's real server.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-14-2-cong-cu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 14.3 — Services and observability: systemd vs launchd vs Windows Services, top vs Activity Monitor vs Task Manager</span><span class="lc-sub">systemd vs launchd vs Windows Services: one idea on three operating systems.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-1-5-pid1" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 1.5 — PID 1, hệ thống init và tiến trình trong container</span><span class="lc-sub">PID 1, tiến trình đầu tiên, và vì sao nó đặc biệt với nhân.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-3-4-trinh-quan-ly-dich-vu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 3.4 — Giữ cho nó chạy: một trình quản lý dịch vụ thay cho nohup</span><span class="lc-sub">Trình quản lý dịch vụ trong thực tế: một unit như thế này trên máy chủ thật của dự án khoá đó.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-14-2-cong-cu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 14.3 — Dịch vụ và quan sát: systemd vs launchd vs Windows Services, top vs Activity Monitor vs Task Manager</span><span class="lc-sub">systemd so với launchd và Windows Services: cùng một ý ở ba hệ điều hành.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 11.2 ─────────────────────────── */
@@ -1329,7 +1366,7 @@ $ echo \$?
 </table>
 <div class="out">$ flock -w 2 -E 75 /tmp/backup.lock echo hi; echo "exit=$?"
 exit=75</div>
-<p><strong>One measured detail:</strong> the lock is tied to a <em>file descriptor</em>, and child processes inherit file descriptors. Run <code>flock -n /tmp/backup.lock sleep 30 &amp;</code> then <code>kill %1</code> — what gets killed is <code>flock</code>, while <code>sleep</code> (its child) lives on and still holds the lock: the next <code>flock -n</code> keeps failing until <code>sleep</code> dies. A systemd service does not have this problem because <code>systemctl stop</code> kills the whole cgroup; with cron an orphaned child can hold the lock and block every later run — check with <code>fuser -v /var/lock/backup.lock</code> or <code>lsof /var/lock/backup.lock</code>.</p>
+<p><strong>One measured detail:</strong> the lock is tied to a <em>file descriptor</em>, and child processes inherit file descriptors. Run <code>flock -n /tmp/backup.lock sleep 300 &amp;</code>, then kill <em>only the flock process</em> with <code>kill \$!</code> — <code>flock</code> dies, while <code>sleep</code> (its child) lives on and still holds the lock: the next <code>flock -n</code> keeps failing (<code>exit=1</code>) until <code>sleep</code> dies. Measured on Ubuntu 24.04, 13/11/2026; an earlier version of this page wrote <code>kill %1</code> here, and that is a different experiment: in an interactive shell with job control, <code>%1</code> addresses the job's whole <em>process group</em>, so <code>sleep</code> dies too and the lock is released at once (the third <code>flock -n</code> succeeds, <code>exit=0</code>). Same lock rule, different kill. A systemd service does not have this problem because <code>systemctl stop</code> kills the whole cgroup; with cron an orphaned child can hold the lock and block every later run — check with <code>fuser -v /var/lock/backup.lock</code> or <code>lsof /var/lock/backup.lock</code>.</p>
 
 <h3>A complete example</h3>
 <pre><code class="language-bash"><span class="tok-comment"># /usr/local/bin/backup.sh — quiet on success, loud on failure</span>
@@ -1817,7 +1854,7 @@ $ echo \$?
 </table>
 <div class="out">$ flock -w 2 -E 75 /tmp/backup.lock echo hi; echo "exit=$?"
 exit=75</div>
-<p><strong>Một chi tiết đo thật:</strong> khoá gắn với <em>bộ mô tả file</em>, mà tiến trình con thừa hưởng bộ mô tả file. Chạy <code>flock -n /tmp/backup.lock sleep 30 &amp;</code> rồi <code>kill %1</code> — thứ bị giết là <code>flock</code>, còn <code>sleep</code> (con của nó) vẫn sống và vẫn giữ khoá: lần <code>flock -n</code> kế tiếp vẫn thất bại cho tới khi <code>sleep</code> chết. Với dịch vụ systemd chuyện này không xảy ra vì <code>systemctl stop</code> giết cả cgroup; với cron thì một tiến trình con mồ côi có thể giữ khoá và chặn mọi lượt sau — kiểm bằng <code>fuser -v /var/lock/backup.lock</code> hoặc <code>lsof /var/lock/backup.lock</code>.</p>
+<p><strong>Một chi tiết đo thật:</strong> khoá gắn với <em>bộ mô tả file</em>, mà tiến trình con thừa hưởng bộ mô tả file. Chạy <code>flock -n /tmp/backup.lock sleep 300 &amp;</code>, rồi giết <em>RIÊNG tiến trình flock</em> bằng <code>kill \$!</code> — <code>flock</code> chết, còn <code>sleep</code> (con của nó) vẫn sống và vẫn giữ khoá: lần <code>flock -n</code> kế tiếp vẫn thất bại (<code>exit=1</code>) cho tới khi <code>sleep</code> chết. Đo trên Ubuntu 24.04 ngày 13/11/2026; bản cũ của trang này viết <code>kill %1</code> ở đây, và đó là một thí nghiệm KHÁC: trong shell tương tác có điều khiển job, <code>%1</code> nhắm vào cả <em>nhóm tiến trình</em> của job, nên <code>sleep</code> chết theo và khoá được nhả ngay (lần <code>flock -n</code> thứ ba thành công, <code>exit=0</code>). Cùng một luật về khoá, khác cú giết. Với dịch vụ systemd chuyện này không xảy ra vì <code>systemctl stop</code> giết cả cgroup; với cron thì một tiến trình con mồ côi có thể giữ khoá và chặn mọi lượt sau — kiểm bằng <code>fuser -v /var/lock/backup.lock</code> hoặc <code>lsof /var/lock/backup.lock</code>.</p>
 
 <h3>Một ví dụ hoàn chỉnh</h3>
 <pre><code class="language-bash"><span class="tok-comment"># /usr/local/bin/backup.sh — im khi thành công, ồn khi thất bại</span>
@@ -1957,6 +1994,43 @@ Sep 28 15:25:48 vps-1 systemd[1]: Finished backup.service - Nightly backup.</div
 
 <div class="pitfall"><strong>Bẫy:</strong> <code>crontab -r</code> xoá sạch crontab của bạn, ngay lập tức, không hỏi lại — và trên bàn phím nó nằm cách <code>crontab -e</code> đúng một phím. Không có hoàn tác, không có file sao lưu nào. Hai thói quen giúp bạn sống sót: giữ lịch thật trong <code>/etc/cron.d/</code> hoặc trong các unit timer nằm dưới quản lý phiên bản, và nếu buộc phải dùng crontab cá nhân thì chạy <code>crontab -l &gt; ~/crontab.bak</code> trước mỗi lần sửa. Trên vài hệ thống <code>crontab -i -r</code> có hỏi lại; đừng trông vào việc nó đã được cấu hình sẵn.</div>
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> Cái lịch gần như không bao giờ là con bọ — MÔI TRƯỜNG mới là, nên hãy thử mọi công việc bằng <code>env -i</code> hoặc <code>systemctl start</code> trước khi bạn tin vào cái đồng hồ. Hãy chuyển output tới một nơi bạn thật sự sẽ nhìn, vì <code>&gt;/dev/null 2&gt;&amp;1</code> biến một công việc đang hỏng thành một công việc im lặng. Và với bất cứ thứ gì KHÔNG được bỏ sót sau khi máy tắt hay KHÔNG được chồng lên chính nó, hãy dùng timer với <code>Persistent=true</code> và bọc câu lệnh trong <code>flock</code> — hai dòng đó là khác biệt giữa một cái lịch và một lời hứa.</p>
+</div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-1-3-lich-cron" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">GitHub Actions · 1.3 — schedule, and how late it actually is</span><span class="lc-sub">schedule: cron on GitHub's machines, and how late it really runs.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-15-1-pg-dump" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">PostgreSQL · 15.1 — Logical backups with pg_dump</span><span class="lc-sub">Logical backups with pg_dump — the command a backup timer like this one calls.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-16-4-van-hanh-su-co" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 16.4 — The first week in production: backups, logs and eight classic incidents</span><span class="lc-sub">The first week in production: backups, logs and eight classic incidents.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-1-3-lich-cron" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">GitHub Actions · 1.3 — schedule, và nó THẬT SỰ trễ tới đâu</span><span class="lc-sub">schedule: cron trên máy của GitHub, và nó thật sự trễ tới đâu.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-15-1-pg-dump" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">PostgreSQL · 15.1 — Sao lưu logic bằng pg_dump</span><span class="lc-sub">Sao lưu logic bằng pg_dump — chính lệnh mà một timer sao lưu như thế này sẽ gọi.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-16-4-van-hanh-su-co" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 16.4 — Tuần đầu trên production: sao lưu, log và tám sự cố kinh điển</span><span class="lc-sub">Tuần đầu trên production: sao lưu, log và tám sự cố kinh điển.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -2808,6 +2882,43 @@ passwordauthentication no</div>
 
 <div class="pitfall"><strong>Bẫy:</strong> cách nhanh nhất để mất một máy chủ là đổi cấu hình SSH và luật tường lửa trong cùng một hơi, rồi ngắt kết nối. <code>ufw enable</code> mà không có luật SSH, một dòng <code>AllowUsers</code> gõ sai, một lần đổi <code>Port</code> mà tường lửa không biết — mỗi thứ đó chỉ chí mạng VÌ bạn đã đóng cái phiên lẽ ra sửa được nó. Cái luật khiến tất cả chúng đều sống sót được: <strong>đừng bao giờ đóng một phiên SSH đang chạy được cho tới khi một phiên MỚI đã kết nối thành công</strong>. Nếu buộc phải tự động hoá một thay đổi rủi ro thì hãy hẹn sẵn một cú hoàn tác trước: <code>echo 'ufw disable' | sudo at now + 10 minutes</code>, rồi huỷ nó khi bạn đã xác nhận mình vẫn còn ở trong.</div>
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> Xác thực chỉ bằng khoá là thay đổi duy nhất chấm dứt những cuộc tấn công bạn thấy trong journal ở đầu bài này — mọi thứ khác trong danh sách là phòng thủ nhiều lớp nằm SAU nó. Hãy xác nhận bằng <code>sshd -T</code> chứ đừng xác nhận bằng cách đọc một file cấu hình, vì drop-in và cái luật "đầu tiên thắng" khiến mấy file đó nói dối. Và khác biệt giữa một máy chủ đã gia cố với một máy chủ đã gia cố mà ngày mai vẫn còn sống nằm ở đúng một thói quen: một terminal thứ hai, đang mở, đang kết nối, TRƯỚC khi bạn đụng vào bất cứ thứ gì.</p>
+</div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-12-3-cong-mo-ra-internet" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy to a VPS · 12.3 — Open only the right ports: ss, ufw, and how Docker walks around your firewall</span><span class="lc-sub">Open only the right ports: ss, ufw, and how Docker walks around the firewall.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-8-3-swap" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy to a VPS · 8.3 — Swap: what it buys and what it costs</span><span class="lc-sub">Swap: what it buys and what it costs, with measurements.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-13-4-container-escape" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 13.4 — Containers from a security view, and a hardening checklist</span><span class="lc-sub">Containers from a security point of view, and a hardening checklist.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-12-3-cong-mo-ra-internet" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 12.3 — Chỉ mở đúng cổng: ss, ufw, và cách Docker đi vòng qua tường lửa của bạn</span><span class="lc-sub">Chỉ mở đúng cổng: ss, ufw, và cách Docker đi vòng qua tường lửa.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-8-3-swap" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 8.3 — Swap: mua được gì và trả giá gì</span><span class="lc-sub">Swap mua được gì và trả giá gì, có số đo.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-13-4-container-escape" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 13.4 — Container nhìn từ bảo mật, và danh sách kiểm tra cứng hoá</span><span class="lc-sub">Container nhìn từ bảo mật, và danh sách kiểm tra gia cố.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

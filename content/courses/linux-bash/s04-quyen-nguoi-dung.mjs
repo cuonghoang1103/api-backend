@@ -448,6 +448,33 @@ hunter2</div>
 <div class="pitfall"><strong>Bẫy:</strong> tưởng rằng quyền cộng dồn. Nếu một file là <code>rw-r-----</code> thuộc <code>root:developers</code> và bạn vừa là root <em>VỪA</em> ở trong nhóm <code>developers</code>, chỉ các bit <strong>user</strong> áp dụng, vì lớp chủ sở hữu khớp trước. Việc bạn ở trong một nhóm có nhiều quyền hơn chẳng thay đổi gì một khi lớp chủ sở hữu đã khớp. Cùng logic đó làm <code>chmod o+r</code> trở nên vô ích với một thành viên nhóm, và đó là lý do câu "nhưng tôi đã thêm mình vào nhóm rồi mà" lại thường không sửa được gì cả.</div>
 <p class="note-ct"><strong>Một câu duy nhất cần nhớ từ bài này:</strong> <code>x</code> trên một thư mục nghĩa là "bạn được phép đi xuyên qua", và MỌI thư mục trên đường dẫn đều cần nó. Khi câu đó nằm sẵn trong đầu, nửa rắc rối của hệ thống quyền Linux biến mất — và <code>namei -l &lt;đường-dẫn&gt;</code> trở thành lệnh đầu tiên bạn chạy mỗi khi bị từ chối truy cập.</p>
 </div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-lab-1" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · Lab 1 — Linux commands and the file system: navigation, permissions, find and grep, pipes, logs, archives, links, disk space</span><span class="lc-sub">Lab 1 had you use chmod and read ls -l; this lesson explains how the kernel decides, and what x means on a directory.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-9-4-quyen" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 9.6 — How the kernel says no: rwx, umask, owners, who may delete, setuid, setgid and sticky</span><span class="lc-sub">Next: umask, who may delete, and the special bits — measured on a real kernel.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-lab-1" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · Lab 1 — Lệnh Linux và hệ thống tệp: điều hướng, quyền, find và grep, pipe, xem log, nén, liên kết, dung lượng đĩa</span><span class="lc-sub">Lab 1 đã cho bạn dùng chmod và đọc ls -l; bài này giải thích nhân quyết định ra sao, và x trên thư mục nghĩa là gì.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-9-4-quyen" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 9.6 — Nhân nói "không" thế nào: rwx, umask, chủ sở hữu, ai được xoá, setuid, setgid và sticky</span><span class="lc-sub">Đi tiếp: umask, ai được xoá, và các bit đặc biệt — đo trên nhân thật.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 4.2 ─────────────────────────── */
@@ -890,6 +917,33 @@ chown: changing ownership of 'f022': Operation not permitted</div>
 <div class="pitfall"><strong>Bẫy:</strong> lấy <code>chmod -R 777</code> làm cách chữa. Nó TRÔNG như chạy được, và đó mới là vấn đề — ứng dụng lên được, nên nguyên nhân thật chẳng bao giờ được tìm ra, còn bạn thì vừa cấp quyền ghi vào ứng dụng của mình cho mọi người dùng và mọi tiến trình trên máy. Trên một máy chủ chạy bất cứ thứ gì hướng ra Internet, việc đó biến một lỗi thành một lối vào. Hãy dùng <code>namei -l</code> để tìm ra thành phần thật sự đang hỏng, rồi đổi đúng một thứ đó. Nếu bạn thật sự cần quyền ghi dùng chung, câu trả lời là một nhóm cộng với setgid (Bài 4.3), không bao giờ là <code>777</code>.</div>
 <p class="note-ct"><strong>Hai thói quen:</strong> dùng <code>stat -c '%a %U:%G %n'</code> thay vì nheo mắt nhìn <code>ls -l</code> — con số hệ tám chính là thứ bạn gõ vào <code>chmod</code>, nên đọc nó ở cùng một dạng sẽ bỏ được một bước phiên dịch. Và trước mọi lệnh <code>chmod</code> hay <code>chown</code> đệ quy, hãy chạy đúng lệnh đó với <code>find … -print</code> để xem danh sách; đổi quyền đệ quy thì không thể hoàn tác y như <code>rm</code>, mà lại còn im lặng hơn nhiều.</p>
 </div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-lab-1" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · Lab 1 — Linux commands and the file system: navigation, permissions, find and grep, pipes, logs, archives, links, disk space</span><span class="lc-sub">Lab 1 used numeric chmod; this lesson adds capital X, umask and chown.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-4-1-cau-hinh-song-ngoai-tao-tac" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy to a VPS · 4.1 — Configuration lives outside the artifact</span><span class="lc-sub">At work: the server's .env file set to mode 600 — exactly the number you just learned.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-lab-1" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · Lab 1 — Lệnh Linux và hệ thống tệp: điều hướng, quyền, find và grep, pipe, xem log, nén, liên kết, dung lượng đĩa</span><span class="lc-sub">Lab 1 đã dùng chmod với con số; bài này thêm chữ X hoa, umask và chown.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-4-1-cau-hinh-song-ngoai-tao-tac" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 4.1 — Cấu hình sống ngoài tạo tác</span><span class="lc-sub">Khi đi làm: tệp .env trên máy chủ đặt chế độ 600, đúng con số bạn vừa học.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 4.3 ─────────────────────────── */
@@ -1298,6 +1352,43 @@ total 4
 
 <div class="pitfall"><strong>Bẫy:</strong> đặt setuid lên một script shell rồi tưởng là nó đã có tác dụng. Linux <strong>BỎ QUA</strong> bit setuid trên script thông dịch — <code>ls -l</code> vẫn hiện chữ <code>s</code>, <code>chmod</code> không báo lỗi nào, và script đơn giản là chạy với đặc quyền của chính bạn. Lý do là một tình huống tranh chấp có thật giữa lúc nhân kiểm file và lúc trình thông dịch mở nó ra, và tình huống đó không bịt được. Nên ở đây cái bit không phải một rủi ro an ninh tinh vi; nó chỉ là vô tác dụng. Hãy dùng <code>sudo</code> với một luật cụ thể thay vào.</div>
 <p class="note-ct"><strong>Hai thứ nên mang theo từ bài này.</strong> Với bất kỳ máy chủ nào bạn tiếp quản, hãy chạy <code>find / -perm -4000 -type f 2&gt;/dev/null</code> một lần và ĐỌC danh sách — mất mười giây, và đó là một trong số ít phép kiểm tìm ra cửa hậu chứ không phải tìm ra lỗi. Và mỗi khi một đội dùng chung thư mục, hãy nhớ bộ ba: <strong>chgrp, chmod 2775, umask 002</strong>. Làm hai trong ba thì ra một thư mục TRÔNG như đã cấu hình và lặng lẽ thì không.</p>
+</div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-slide-osg9-1" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · 9.A — 📑 Slide by slide · Security by design: domains, ACLs, capabilities, models, cryptography, authentication (slides 1–28)</span><span class="lc-sub">OSG202 Chapter 9 taught ACLs and capabilities as security theory; here you ran them for real.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-9-7-capabilities" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 9.7 — Beyond rwx: capabilities, ACLs, container users — and four permission incidents</span><span class="lc-sub">Capabilities, ACLs and users inside containers — plus four real permission incidents.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-13-3-leo-thang" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 13.3 — Privilege: SUID, capabilities, permissions, TOCTOU and /proc leaks</span><span class="lc-sub">Privilege escalation through setuid, capabilities and TOCTOU, seen from the OS.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-slide-osg9-1" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · 9.A — 📑 Học theo từng slide · Bảo mật bằng thiết kế: miền, ACL, capability, mô hình, mật mã, xác thực (slide 1–28)</span><span class="lc-sub">Chương 9 của OSG202 dạy ACL và capability trên lý thuyết bảo mật; ở đây bạn vừa chạy chúng thật.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-9-7-capabilities" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 9.7 — Vượt khỏi rwx: capabilities, ACL, người dùng trong container — và bốn sự cố về quyền</span><span class="lc-sub">Capability, ACL và người dùng trong container — kèm bốn sự cố quyền có thật.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-13-3-leo-thang" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 13.3 — Đặc quyền: SUID, capabilities, quyền file, TOCTOU và rò qua /proc</span><span class="lc-sub">Leo thang đặc quyền qua setuid, capability và TOCTOU, nhìn từ hệ điều hành.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -1808,6 +1899,33 @@ sudo: a password is required</div>
 <div class="pitfall"><strong>Bẫy:</strong> <code>sudo lệnh &gt; /etc/mộtfile</code>. Phép chuyển hướng do <em>SHELL CỦA BẠN</em> thực hiện, trước khi <code>sudo</code> kịp chạy bất cứ thứ gì, nên nó hỏng với "Permission denied" trong khi <code>sudo</code> trông như thủ phạm. Bạn đã gặp chuyện này ở Bài 3.1; nó thuộc về cả chỗ này nữa, vì đây là nơi người ta kết luận rằng "sudo bị hỏng". Cách chữa là <code>lệnh | sudo tee /etc/mộtfile</code> hoặc <code>sudo bash -c 'lệnh &gt; /etc/mộtfile'</code>. Tương tự với <code>sudo cd /root</code> — <code>cd</code> là lệnh dựng sẵn của shell, nên chẳng có chương trình nào để <code>sudo</code> nâng quyền cả; hãy dùng <code>sudo -i</code>.</div>
 <p class="note-ct"><strong>Hai lệnh nên với tay lấy đầu tiên.</strong> <code>id</code> trả lời "ngay lúc này tôi thật sự mang danh tính và những nhóm nào" — và so <code>id</code> với <code>id \$USER</code> bắt được ngay chuyện nhóm bị cũ. <code>sudo -l</code> trả lời "tôi được phép chạy những gì", tốt hơn nhiều so với việc phát hiện ra từng chút một qua mỗi lệnh bị từ chối. Cả hai đều chỉ đọc, nên cứ chạy thoải mái.</p>
 </div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-slide-osg9-1" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · 9.A — 📑 Slide by slide · Security by design: domains, ACLs, capabilities, models, cryptography, authentication (slides 1–28)</span><span class="lc-sub">OSG202 Chapter 9 taught protection domains and user authentication in theory; this lesson is the real files and commands behind them.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-15-1-may-ten-mien-https" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy to a VPS · 15.1 — Day 1: from a bare server to a “coming soon” page over HTTPS</span><span class="lc-sub">At work: that course's capstone creates a deploy account with exactly one NOPASSWD rule for the release script.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-slide-osg9-1" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · 9.A — 📑 Học theo từng slide · Bảo mật bằng thiết kế: miền, ACL, capability, mô hình, mật mã, xác thực (slide 1–28)</span><span class="lc-sub">Chương 9 của OSG202 dạy miền bảo vệ và xác thực người dùng trên lý thuyết; bài này là các tệp và lệnh thật đứng sau.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-15-1-may-ten-mien-https" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 15.1 — Ngày 1: từ một máy trần tới trang “sắp ra mắt” qua HTTPS</span><span class="lc-sub">Khi đi làm: dự án cuối khoá đó tạo tài khoản deploy với đúng một luật NOPASSWD cho script phát hành.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 4.5 ─────────────────────────── */
@@ -1872,7 +1990,7 @@ NOT readable</div>
   <div class="kv"><span class="k">Immutable attribute</span><span class="v"><code>lsattr file</code> showing <code>----i---------</code>. Even root cannot write it until <code>sudo chattr -i file</code>. Rare, and utterly baffling if you do not know the attribute exists.</span></div>
   <div class="kv"><span class="k">Disk or inodes full</span><span class="v"><code>df -h</code> and <code>df -i</code>. A full disk usually says "No space left", but some programs report the failed write as a permission problem. Inode exhaustion is worse: <code>df -h</code> shows free space while every create fails.</span></div>
   <div class="kv"><span class="k">Missing execute bit</span><span class="v"><code>./script.sh: Permission denied</code> with the file plainly there. <code>chmod +x</code>. This is the most common one of all, and Chapter 1 met it already.</span></div>
-  <div class="kv"><span class="k">Bad interpreter</span><span class="v"><code>bad interpreter: No such file or directory</code> on a script that exists. Usually Windows line endings — the shebang reads <code>#!/bin/bash\\r</code>. <code>tr -d '\\r'</code> or <code>dos2unix</code> (Lesson 3.4).</span></div>
+  <div class="kv"><span class="k">CRLF / bad interpreter</span><span class="v"><code>cannot execute: required file not found</code> (bash 5.2, Ubuntu 24.04 — measured) or, on older bash, <code>bad interpreter: No such file or directory</code>, on a script that exists. Usually Windows line endings — the shebang reads <code>#!/bin/bash\\r</code>. <code>tr -d '\\r'</code> or <code>dos2unix</code> (Lesson 3.4).</span></div>
   <div class="kv"><span class="k">noexec mount</span><span class="v">Scripts in <code>/tmp</code> refusing to run on a hardened server. <code>mount | grep /tmp</code> shows <code>noexec</code> — the filesystem forbids execution regardless of the mode bits.</span></div>
 </div>
 
@@ -1921,7 +2039,7 @@ getenforce                                               <span class="tok-commen
 <h3>Ten symptoms and their real fixes</h3>
 <div class="kv-grid">
   <div class="kv"><span class="k">./deploy.sh: Permission denied</span><span class="v">Missing <code>x</code>. → <code>chmod +x deploy.sh</code></span></div>
-  <div class="kv"><span class="k">bad interpreter: No such file or directory</span><span class="v">CRLF line endings, or the shebang path is wrong. → <code>dos2unix</code>, or check <code>head -1</code>.</span></div>
+  <div class="kv"><span class="k">cannot execute: required file not found (older bash: bad interpreter)</span><span class="v">CRLF line endings, or the shebang path is wrong. → <code>dos2unix</code>, or check <code>head -1</code>.</span></div>
   <div class="kv"><span class="k">WARNING: UNPROTECTED PRIVATE KEY FILE</span><span class="v">SSH key readable by others. → <code>chmod 600 ~/.ssh/id_ed25519 &amp;&amp; chmod 700 ~/.ssh</code></span></div>
   <div class="kv"><span class="k">docker: permission denied … docker.sock</span><span class="v">Not in the <code>docker</code> group, or in it but not re-logged-in. → <code>usermod -aG docker \$USER</code>, then log out and back in.</span></div>
   <div class="kv"><span class="k">EACCES: permission denied, mkdir '/usr/lib/node_modules'</span><span class="v">npm installing globally without root. → use a Node version manager, or <code>npm config set prefix ~/.npm-global</code>. Do NOT <code>sudo npm i -g</code>.</span></div>
@@ -2094,7 +2212,7 @@ KHÔNG đọc được</div>
   <div class="kv"><span class="k">Thuộc tính bất biến</span><span class="v"><code>lsattr file</code> hiện ra <code>----i---------</code>. Ngay cả root cũng không ghi được cho tới khi <code>sudo chattr -i file</code>. Hiếm, và cực kỳ khó hiểu nếu bạn không biết là có cái thuộc tính đó.</span></div>
   <div class="kv"><span class="k">Hết đĩa hoặc hết inode</span><span class="v"><code>df -h</code> và <code>df -i</code>. Đĩa đầy thường báo "No space left", nhưng vài chương trình báo lần ghi hỏng đó thành vấn đề quyền. Hết inode còn tệ hơn: <code>df -h</code> hiện ra vẫn còn chỗ trống trong khi mọi lệnh tạo file đều hỏng.</span></div>
   <div class="kv"><span class="k">Thiếu bit chạy</span><span class="v"><code>./script.sh: Permission denied</code> trong khi file rành rành ở đó. <code>chmod +x</code>. Đây là cái phổ biến nhất trong tất cả, và Chương 1 đã gặp rồi.</span></div>
-  <div class="kv"><span class="k">Sai trình thông dịch</span><span class="v"><code>bad interpreter: No such file or directory</code> trên một script có thật. Thường là kết thúc dòng kiểu Windows — dòng shebang đọc ra thành <code>#!/bin/bash\\r</code>. Dùng <code>tr -d '\\r'</code> hoặc <code>dos2unix</code> (Bài 3.4).</span></div>
+  <div class="kv"><span class="k">CRLF / sai trình thông dịch</span><span class="v"><code>cannot execute: required file not found</code> (bash 5.2, Ubuntu 24.04 — đo thật) hoặc, với bash cũ hơn, <code>bad interpreter: No such file or directory</code>, trên một script có thật. Thường là kết thúc dòng kiểu Windows — dòng shebang đọc ra thành <code>#!/bin/bash\\r</code>. Dùng <code>tr -d '\\r'</code> hoặc <code>dos2unix</code> (Bài 3.4).</span></div>
   <div class="kv"><span class="k">Gắn với cờ noexec</span><span class="v">Script trong <code>/tmp</code> từ chối chạy trên một máy chủ đã gia cố. <code>mount | grep /tmp</code> hiện ra <code>noexec</code> — hệ thống file CẤM chạy bất kể các bit chế độ.</span></div>
 </div>
 
@@ -2143,7 +2261,7 @@ getenforce                                               <span class="tok-commen
 <h3>Mười triệu chứng và cách chữa thật của chúng</h3>
 <div class="kv-grid">
   <div class="kv"><span class="k">./deploy.sh: Permission denied</span><span class="v">Thiếu <code>x</code>. → <code>chmod +x deploy.sh</code></span></div>
-  <div class="kv"><span class="k">bad interpreter: No such file or directory</span><span class="v">Kết thúc dòng CRLF, hoặc đường dẫn shebang sai. → <code>dos2unix</code>, hoặc kiểm <code>head -1</code>.</span></div>
+  <div class="kv"><span class="k">cannot execute: required file not found (bash cũ: bad interpreter)</span><span class="v">Kết thúc dòng CRLF, hoặc đường dẫn shebang sai. → <code>dos2unix</code>, hoặc kiểm <code>head -1</code>.</span></div>
   <div class="kv"><span class="k">WARNING: UNPROTECTED PRIVATE KEY FILE</span><span class="v">Khoá SSH người khác đọc được. → <code>chmod 600 ~/.ssh/id_ed25519 &amp;&amp; chmod 700 ~/.ssh</code></span></div>
   <div class="kv"><span class="k">docker: permission denied … docker.sock</span><span class="v">Không ở trong nhóm <code>docker</code>, hoặc đã ở trong mà chưa đăng nhập lại. → <code>usermod -aG docker \$USER</code>, rồi đăng xuất và vào lại.</span></div>
   <div class="kv"><span class="k">EACCES: permission denied, mkdir '/usr/lib/node_modules'</span><span class="v">npm cài toàn cục mà không có root. → dùng một trình quản lý phiên bản Node, hoặc <code>npm config set prefix ~/.npm-global</code>. ĐỪNG <code>sudo npm i -g</code>.</span></div>
@@ -2260,6 +2378,33 @@ ${slide('lx-04', 28, 'macOS và Fedora khác gì: ACL, dscl, nhãn SELinux')}
 
 <div class="pitfall"><strong>Bẫy:</strong> thử bằng <code>sudo</code> rồi kết luận file không sao. <code>sudo cat /srv/app/config/db.yml</code> chạy được vì root bỏ qua hoàn toàn mọi phép kiểm quyền — nó chẳng nói cho bạn biết gì về việc <code>www-data</code> có đọc được hay không. Mọi phép thử đều phải chạy <em>VỚI ĐÚNG DANH TÍNH ĐANG HỎNG</em>: <code>sudo -u www-data cat …</code>. Dùng root để kiểm một vấn đề quyền cũng như dùng chìa khoá vạn năng để thử xem chìa của người ta có mở được không.</div>
 <p class="note-ct"><strong>Hai lệnh giải quyết phần lớn những chuyện này:</strong> <code>namei -l &lt;đường-dẫn&gt;</code> để thấy cuộc đi dừng ở đâu, và <code>sudo -u &lt;người-dùng&gt; &lt;lệnh&gt;</code> để dựng lại chỗ hỏng với đúng danh tính. Hãy chạy hai cái đó TRƯỚC KHI đổi bất cứ thứ gì, rồi bạn sẽ thấy cách chữa gần như luôn là đúng một lệnh <code>chmod</code> hoặc <code>chgrp</code> trên một thư mục — và bạn sẽ BIẾT vì sao nó chạy được, và chính điều đó làm nó ở nguyên trạng thái đã chữa.</p>
+</div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-9-7-capabilities" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 9.7 — Beyond rwx: capabilities, ACLs, container users — and four permission incidents</span><span class="lc-sub">Four real permission incidents dissected, including users inside containers.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-11-4-seccomp" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 11.7 — Filtering syscalls with seccomp: EPERM, ENOSYS, SIGSYS and Docker’s profile</span><span class="lc-sub">Why root inside a container still gets Operation not permitted: seccomp and Docker's default profile.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-9-7-capabilities" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 9.7 — Vượt khỏi rwx: capabilities, ACL, người dùng trong container — và bốn sự cố về quyền</span><span class="lc-sub">Mổ xẻ bốn sự cố quyền có thật, kể cả người dùng trong container.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-11-4-seccomp" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 11.7 — Lọc syscall bằng seccomp: EPERM, ENOSYS, SIGSYS và hồ sơ của Docker</span><span class="lc-sub">Vì sao root trong container vẫn nhận Operation not permitted: seccomp và hồ sơ mặc định của Docker.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

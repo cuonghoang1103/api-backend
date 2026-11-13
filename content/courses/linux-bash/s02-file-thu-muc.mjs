@@ -273,11 +273,14 @@ tail -F /var/log/nginx/access.log  <span class="tok-comment"># follow, and survi
 <div class="callout ok"><code>tail -F</code> (capital F) is the one to use on a server. Lowercase <code>-f</code> follows the file <em>descriptor</em>, so when log rotation renames the file (Chapter 10) it keeps watching a file nobody writes to any more and appears to hang. Capital <code>-F</code> follows the <em>name</em> and reopens it.</div>
 
 <h3>Watching what a command is doing</h3>
-<pre><code>cp -rv src/ /tmp/backup/           <span class="tok-comment"># -v prints each file as it goes</span>
-cp -r src/ /tmp/backup/ &amp;&amp; <span class="tok-keyword">echo</span> <span class="tok-string">"done"</span>   <span class="tok-comment"># only echo if cp succeeded</span></code></pre>
-<div class="out">'src/app.ts' -> '/tmp/backup/src/app.ts'
-'src/auth.ts' -> '/tmp/backup/src/auth.ts'
+<pre><code>cp -rv src/ /tmp/backup/           <span class="tok-comment"># -v prints each file as it goes (/tmp/backup does not exist yet)</span>
+cp -r src/ /tmp/backup2/ &amp;&amp; <span class="tok-keyword">echo</span> <span class="tok-string">"done"</span>  <span class="tok-comment"># only echo if cp succeeded</span></code></pre>
+<div class="out">'src/' -> '/tmp/backup/'
+'src/app.ts' -> '/tmp/backup/app.ts'
+'src/auth.ts' -> '/tmp/backup/auth.ts'
+…
 done</div>
+<p>Read the <code>-v</code> lines, because they answer the trailing-slash question before you ask it. Measured on Ubuntu 24.04: <code>/tmp/backup</code> did not exist, so the first line is <code>'src/' -&gt; '/tmp/backup/'</code> — the directory itself <em>became</em> <code>/tmp/backup</code>, and the files land at <code>/tmp/backup/app.ts</code>, not <code>/tmp/backup/src/app.ts</code>. Run the same command a second time and <code>/tmp/backup</code> now exists, so <code>src</code> goes <em>inside</em> it. That is the subject of the next section.</p>
 <p>The <code>&amp;&amp;</code> is a preview of Chapter 6: run the second command only if the first succeeded. On a long copy it is the difference between knowing it worked and assuming it did.</p>
 
 <h3>The trailing slash, which changes what cp and rsync mean</h3>
@@ -552,11 +555,14 @@ tail -F /var/log/nginx/access.log  <span class="tok-comment"># theo dõi, và s�
 <div class="callout ok"><code>tail -F</code> (chữ F hoa) là thứ nên dùng trên máy chủ. Chữ <code>-f</code> thường bám theo <em>mô tả file</em>, nên khi việc xoay vòng log đổi tên file (Chương 10) thì nó tiếp tục canh một file không ai còn ghi vào nữa và trông như bị treo. Chữ <code>-F</code> hoa bám theo <em>CÁI TÊN</em> và mở lại file.</div>
 
 <h3>Theo dõi một lệnh đang làm gì</h3>
-<pre><code>cp -rv src/ /tmp/backup/           <span class="tok-comment"># -v in ra từng file khi nó đi qua</span>
-cp -r src/ /tmp/backup/ &amp;&amp; <span class="tok-keyword">echo</span> <span class="tok-string">"xong"</span>   <span class="tok-comment"># chỉ echo nếu cp thành công</span></code></pre>
-<div class="out">'src/app.ts' -> '/tmp/backup/src/app.ts'
-'src/auth.ts' -> '/tmp/backup/src/auth.ts'
+<pre><code>cp -rv src/ /tmp/backup/           <span class="tok-comment"># -v in ra từng file khi nó đi qua (/tmp/backup CHƯA có)</span>
+cp -r src/ /tmp/backup2/ &amp;&amp; <span class="tok-keyword">echo</span> <span class="tok-string">"xong"</span>  <span class="tok-comment"># chỉ echo nếu cp thành công</span></code></pre>
+<div class="out">'src/' -> '/tmp/backup/'
+'src/app.ts' -> '/tmp/backup/app.ts'
+'src/auth.ts' -> '/tmp/backup/auth.ts'
+…
 xong</div>
+<p>Hãy đọc các dòng của <code>-v</code>, vì chúng trả lời câu hỏi về dấu gạch chéo cuối trước khi bạn kịp hỏi. Đo trên Ubuntu 24.04: <code>/tmp/backup</code> chưa tồn tại, nên dòng đầu là <code>'src/' -&gt; '/tmp/backup/'</code> — chính thư mục <code>src</code> TRỞ THÀNH <code>/tmp/backup</code>, và các file nằm ở <code>/tmp/backup/app.ts</code>, KHÔNG phải <code>/tmp/backup/src/app.ts</code>. Chạy lại đúng lệnh đó lần hai thì <code>/tmp/backup</code> đã có, nên <code>src</code> chui VÀO TRONG nó. Đó là chuyện của mục ngay sau đây.</p>
 <p>Dấu <code>&amp;&amp;</code> là một hé lộ của Chương 6: chỉ chạy lệnh thứ hai nếu lệnh đầu thành công. Với một lần chép lâu, đó là khác biệt giữa BIẾT rằng nó chạy được và CHO RẰNG nó chạy được.</p>
 
 <h3>Dấu gạch chéo cuối, thứ làm đổi nghĩa của cp và rsync</h3>
@@ -618,6 +624,23 @@ bash: D: parameter null or not set</div>
 
 <div class="pitfall"><strong>Bẫy:</strong> <code>mv</code> âm thầm huỷ một file. <code>mv config.new config.yml</code> khi <code>config.yml</code> đã tồn tại sẽ ghi đè lên nó, không hỏi và không sao lưu — và khác với <code>rm</code>, lệnh này không <em>CÓ CẢM GIÁC</em> phá huỷ, nên nó bắt được nhiều người. Hãy dùng <code>mv -i</code> khi đích có thể đã tồn tại, hoặc <code>mv -n</code> trong script, nơi âm thầm bỏ qua an toàn hơn âm thầm đè lên.</div>
 <p class="note-ct"><strong>Thói quen ngăn được gần như toàn bộ những chuyện trên:</strong> chạy <code>ls</code> với đúng cái mẫu đó trước khi chạy <code>rm</code>, <code>mv</code> hay <code>cp</code> với nó. Shell khai triển cái mẫu y hệt cho cả hai, nên thứ <code>ls</code> liệt kê chính xác là thứ mà lệnh phá huỷ sẽ tác động vào. Hai giây, và nó biến một phỏng đoán thành một sự thật.</p>
+</div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-lab-1" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · Lab 1 — Linux commands and the file system: navigation, permissions, find and grep, pipes, logs, archives, links, disk space</span><span class="lc-sub">Lab 1 practises navigating and handling files at an introductory level; this lesson adds the trailing-slash trap and safe-delete habits.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-lab-1" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · Lab 1 — Lệnh Linux và hệ thống tệp: điều hướng, quyền, find và grep, pipe, xem log, nén, liên kết, dung lượng đĩa</span><span class="lc-sub">Lab 1 thực hành đi lại và thao tác tệp ở mức nhập môn; bài này thêm cái bẫy dấu gạch chéo cuối và thói quen xoá an toàn.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -750,11 +773,11 @@ echo src/**/*.ts     <span class="tok-comment"># every .ts at any depth under sr
 <div class="out">src/index.ts
 src/index.ts src/api/user.ts src/api/v2/admin.ts src/lib/db.ts</div>
 <p><code>globstar</code> is off by default in bash (it is on by default in zsh, which is why macOS users often assume it always works). Put <code>shopt -s globstar</code> in your <code>~/.bashrc</code> — Chapter 3 covers that file.</p>
-<div class="callout warn"><strong>Corrected:</strong> in current bash, <code>**</code> does <em>not</em> descend into symbolic links to directories, so a link pointing back up the tree cannot make it loop — measured on bash 5.2 below (an earlier version of this lesson said the opposite). What remains true: bash builds the whole list in memory before the command even starts, and a huge list can fail with "Argument list too long". For large or untrusted trees, <code>find</code> — the next lesson — is both faster and safer.</div>
-<pre><code class="language-bash">ln -s ../../g/src src/lib/vong    <span class="tok-comment"># a link pointing back up to src/</span>
+<div class="callout warn"><strong>Corrected:</strong> in current bash, <code>**</code> does <em>not</em> recurse through symbolic links to directories, so a link pointing back up the tree cannot make it loop — measured on bash 5.2 below (an earlier version of this lesson said the opposite). It is not invisible either: the link is entered exactly one level, so the files directly inside it show up once more as duplicates. What remains true: bash builds the whole list in memory before the command even starts, and a huge list can fail with "Argument list too long". For large or untrusted trees, <code>find</code> — the next lesson — is both faster and safer.</div>
+<pre><code class="language-bash">ln -s ../../src src/lib/vong      <span class="tok-comment"># a link pointing back up to src/ (resolved from src/lib/)</span>
 echo src/**/*.ts</code></pre>
-<div class="out">src/api/user.ts src/api/v2/admin.ts src/index.ts src/lib/db.ts</div>
-<p>Same four files, no <code>src/lib/vong/…</code> repeats. And note what happens when you forget <code>shopt -s globstar</code>: <code>**</code> silently behaves like a single <code>*</code>, so <code>echo src/**/*.ts</code> prints only <code>src/api/user.ts src/lib/db.ts</code> — one level, no error.</p>
+<div class="out">src/api/user.ts src/api/v2/admin.ts src/index.ts src/lib/db.ts src/lib/vong/index.ts</div>
+<p>The four real files plus exactly one extra, <code>src/lib/vong/index.ts</code>: bash looked one level into the link and stopped — no <code>src/lib/vong/api/…</code>, no infinite loop, but one duplicate. (A relative link target is resolved from the <em>link's</em> directory; an earlier version of this lesson wrote <code>../../g/src</code>, which from <code>src/lib</code> is a broken link — it matches nothing and hides this effect. Check with <code>readlink -f src/lib/vong</code> before trusting a measurement.) And note what happens when you forget <code>shopt -s globstar</code>: <code>**</code> silently behaves like a single <code>*</code>, so <code>echo src/**/*.ts</code> prints only <code>src/api/user.ts src/lib/db.ts</code> — one level, no error.</p>
 
 <h3>extglob: patterns that can say "except"</h3>
 <p>The four wildcards cannot express "everything except the logs". Bash has a second, optional pattern language for that — <em>extended globs</em> — switched on with <code>shopt -s extglob</code>. Each form wraps a list of alternatives separated by <code>|</code>:</p>
@@ -1021,11 +1044,11 @@ echo src/**/*.ts     <span class="tok-comment"># mọi file .ts ở mọi độ 
 <div class="out">src/index.ts
 src/index.ts src/api/user.ts src/api/v2/admin.ts src/lib/db.ts</div>
 <p><code>globstar</code> mặc định TẮT trong bash (nó mặc định bật trong zsh, và đó là lý do người dùng macOS hay tưởng nó luôn chạy). Hãy đặt <code>shopt -s globstar</code> vào <code>~/.bashrc</code> — Chương 3 nói về file đó.</p>
-<div class="callout warn"><strong>Đã sửa:</strong> với bash hiện nay, <code>**</code> <em>KHÔNG</em> đi xuống các liên kết tượng trưng trỏ tới thư mục, nên một link trỏ ngược lên cây không làm nó lặp được — đo thật trên bash 5.2 ngay dưới (bản cũ của bài nói ngược lại). Điều vẫn đúng: bash dựng TOÀN BỘ danh sách trong bộ nhớ trước khi lệnh kịp khởi động, và một danh sách khổng lồ có thể hỏng với lỗi "Argument list too long". Với cây lớn hoặc cây không tin được, <code>find</code> — bài kế tiếp — vừa nhanh hơn vừa an toàn hơn.</div>
-<pre><code class="language-bash">ln -s ../../g/src src/lib/vong    <span class="tok-comment"># một link trỏ ngược lên src/</span>
+<div class="callout warn"><strong>Đã sửa:</strong> với bash hiện nay, <code>**</code> <em>KHÔNG</em> đệ quy xuyên qua các liên kết tượng trưng trỏ tới thư mục, nên một link trỏ ngược lên cây không làm nó lặp được — đo thật trên bash 5.2 ngay dưới (bản cũ của bài nói ngược lại). Nhưng nó cũng không vô hình: link được ghé vào đúng MỘT tầng, nên các file nằm ngay trong nó hiện thêm một lần nữa thành bản trùng. Điều vẫn đúng: bash dựng TOÀN BỘ danh sách trong bộ nhớ trước khi lệnh kịp khởi động, và một danh sách khổng lồ có thể hỏng với lỗi "Argument list too long". Với cây lớn hoặc cây không tin được, <code>find</code> — bài kế tiếp — vừa nhanh hơn vừa an toàn hơn.</div>
+<pre><code class="language-bash">ln -s ../../src src/lib/vong      <span class="tok-comment"># một link trỏ ngược lên src/ (tính từ src/lib/)</span>
 echo src/**/*.ts</code></pre>
-<div class="out">src/api/user.ts src/api/v2/admin.ts src/index.ts src/lib/db.ts</div>
-<p>Vẫn đúng bốn file, không có <code>src/lib/vong/…</code> lặp lại. Và để ý chuyện xảy ra khi bạn quên <code>shopt -s globstar</code>: <code>**</code> lặng lẽ cư xử như một dấu <code>*</code> đơn, nên <code>echo src/**/*.ts</code> chỉ in <code>src/api/user.ts src/lib/db.ts</code> — một tầng, không báo lỗi gì.</p>
+<div class="out">src/api/user.ts src/api/v2/admin.ts src/index.ts src/lib/db.ts src/lib/vong/index.ts</div>
+<p>Bốn file thật cộng ĐÚNG MỘT file thừa, <code>src/lib/vong/index.ts</code>: bash nhìn vào link một tầng rồi dừng — không có <code>src/lib/vong/api/…</code>, không lặp vô hạn, nhưng có một bản trùng. (Đích tương đối của link được tính từ thư mục CHỨA LINK; bản cũ của bài viết <code>../../g/src</code>, mà từ <code>src/lib</code> đó là một link GÃY — nó không khớp gì và che mất hiệu ứng này. Kiểm bằng <code>readlink -f src/lib/vong</code> trước khi tin một phép đo.) Và để ý chuyện xảy ra khi bạn quên <code>shopt -s globstar</code>: <code>**</code> lặng lẽ cư xử như một dấu <code>*</code> đơn, nên <code>echo src/**/*.ts</code> chỉ in <code>src/api/user.ts src/lib/db.ts</code> — một tầng, không báo lỗi gì.</p>
 
 <h3>extglob: mẫu biết nói "trừ ra"</h3>
 <p>Bốn ký tự đại diện không diễn đạt được "mọi thứ trừ các file log". Bash có một ngôn ngữ mẫu thứ hai, tuỳ chọn, cho việc đó — <em>glob mở rộng</em> (extended glob) — bật bằng <code>shopt -s extglob</code>. Mỗi dạng bọc một danh sách lựa chọn cách nhau bởi <code>|</code>:</p>
@@ -1169,6 +1192,23 @@ vòng lặp xong
 
 <div class="pitfall"><strong>Bẫy:</strong> <code>rm *.log</code> so với <code>rm * .log</code>. Một dấu cách lạc chỗ biến "xoá các file log" thành "xoá <em>MỌI THỨ</em>, rồi than phiền thêm rằng <code>.log</code> không tồn tại". Lời than phiền đến SAU khi đã xoá. Không có nút hoàn tác. Đây chính là tai nạn mà thói quen <code>echo</code>-trước ngăn được, và là lý do nên xây thói quen đó trước khi bạn cần đến nó.</div>
 <p class="note-ct"><strong>Quy tắc làm cho tất cả những thứ trên trở nên an toàn:</strong> chạy <code>ls</code> hoặc <code>echo</code> với đúng cái mẫu đó trước, đọc kết quả, rồi mới chạy lại với lệnh phá huỷ. Shell khai triển cái mẫu y hệt nhau cả hai lần, nên thứ bạn vừa nhìn thấy chính xác là thứ sẽ bị tác động. Đó là phép kiểm chứng rẻ nhất trong ngành máy tính.</p>
+</div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-lab-1" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · Lab 1 — Linux commands and the file system: navigation, permissions, find and grep, pipes, logs, archives, links, disk space</span><span class="lc-sub">Lab 1 already used wildcards like *.log; this lesson shows who expands them — the shell, before the command runs.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-lab-1" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · Lab 1 — Lệnh Linux và hệ thống tệp: điều hướng, quyền, find và grep, pipe, xem log, nén, liên kết, dung lượng đĩa</span><span class="lc-sub">Lab 1 đã dùng ký tự đại diện như *.log; bài này chỉ ra ai khai triển chúng: chính shell, trước khi lệnh chạy.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -1738,6 +1778,33 @@ logs/app-5.log</div>
 
 <div class="pitfall"><strong>Bẫy:</strong> <code>-delete</code> là một HÀNH ĐỘNG, và hành động được tính <em>THEO ĐÚNG THỨ TỰ VIẾT RA</em>. <code>find . -delete -name "*.log"</code> xoá sạch cả cây rồi mới đi kiểm tra tên của những thứ nó vừa xoá. find của GNU <em>KHÔNG</em> chặn — đo thật với findutils 4.9.0 (Ubuntu 24.04), lệnh xoá sạch mọi file và thư mục con rồi thoát với mã 0 (bản cũ của bài ghi rằng nó từ chối; không phải vậy). Bài học: đặt <code>-delete</code> ở cuối, và chạy lệnh y hệt với <code>-print</code> trước — MỖI LẦN, kể cả những lần bạn chắc chắn.</div>
 <p class="note-ct"><strong>Hai thói quen làm find trở nên an toàn:</strong> (1) dựng lệnh bằng <code>-print</code>, đọc danh sách, rồi mới tráo hành động vào — các phép thử không đổi nên danh sách cũng không đổi; (2) nếu lệnh đụng tới bất cứ thứ gì ngoài thư mục dự án của bạn, hãy thêm <code>-maxdepth</code> như một cái hạn chế bán kính nổ, kể cả khi bạn không cần tới nó. Cả hai đều không tốn gì, và cả hai đều từng cứu những hệ thống production.</p>
+</div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-lab-1" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · Lab 1 — Linux commands and the file system: navigation, permissions, find and grep, pipes, logs, archives, links, disk space</span><span class="lc-sub">Lab 1 used find and grep at a basic level; this lesson adds -exec +, xargs -0 and -prune.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-2-4-dia-io" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 2.4 — Disk full and slow I/O: df, du, inodes, lsof and the night Postgres died</span><span class="lc-sub">When a server disk really fills up: df, du, inodes and lsof to find the culprit — and the night Postgres died.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-lab-1" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · Lab 1 — Lệnh Linux và hệ thống tệp: điều hướng, quyền, find và grep, pipe, xem log, nén, liên kết, dung lượng đĩa</span><span class="lc-sub">Lab 1 đã dùng find và grep ở mức cơ bản; bài này thêm -exec +, xargs -0 và -prune.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-2-4-dia-io" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 2.4 — Đầy đĩa và I/O chậm: df, du, inode, lsof và đêm Postgres chết</span><span class="lc-sub">Khi đĩa máy chủ đầy thật: df, du, inode và lsof để tìm thủ phạm — và đêm Postgres chết.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -2477,6 +2544,33 @@ releases/2026-09-27</div>
 
 <div class="pitfall"><strong>Bẫy:</strong> <code>tar -czf backup.tar.gz *</code> âm thầm bỏ sót MỌI file ẩn — <code>.env</code>, <code>.gitignore</code>, <code>.github/</code> — vì shell khai triển dấu <code>*</code> TRƯỚC khi tar kịp chạy, và glob thì bỏ qua dấu chấm đứng đầu (Bài 2.2). Kho nén trông vẫn ổn, liệt kê vẫn ổn, và khôi phục ra một ứng dụng không khởi động được. Hãy đóng gói cả <em>THƯ MỤC</em>: <code>tar -czf backup.tar.gz ./project</code>, hoặc từ bên trong nó, <code>tar -czf ../backup.tar.gz .</code> — dấu chấm đơn là một đường dẫn chứ không phải glob, nên không sót gì cả.</div>
 <p class="note-ct"><strong>Luôn liệt kê trước khi bung.</strong> <code>tar -tzf archive.tar.gz | head</code> tốn một giây và cho bạn biết kho nén chứa <code>project/…</code> hay bốn trăm file rời sắp phun tung toé khắp thư mục hiện tại — cái gọi là "bom tar". Nhân tiện, hãy kiểm luôn xem có dấu <code>/</code> đứng đầu không: tar của GNU cắt nó đi và cảnh báo, nhưng lời cảnh báo trôi qua rất nhanh, còn một kho nén dựng bằng <code>-P</code> thì thật sự ghi được vào đường dẫn tuyệt đối.</p>
+</div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-slide-osg4-1" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · 4.A — 📑 Slide by slide · File Systems: files, directories, FAT, i-nodes, links, journaling, VFS (slides 1–28)</span><span class="lc-sub">OSG202 Chapter 4 taught hard and symbolic links in theory; here you watched them work.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-6-1-lui-chay-duoc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy to a VPS · 6.1 — The rollback that works</span><span class="lc-sub">At work: the same ln -sfn + mv -T, used to roll back a release with one atomic rename.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-slide-osg4-1" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · 4.A — 📑 Học theo từng slide · File Systems: tệp, thư mục, FAT, i-node, liên kết, nhật ký, VFS (slide 1–28)</span><span class="lc-sub">Chương 4 của OSG202 dạy liên kết cứng và liên kết mềm trên lý thuyết; ở đây bạn đã thấy chúng chạy thật.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-6-1-lui-chay-duoc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 6.1 — Cú lùi CHẠY ĐƯỢC</span><span class="lc-sub">Khi đi làm: đúng ln -sfn với mv -T, dùng để lùi bản bằng một lệnh đổi tên nguyên tử.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

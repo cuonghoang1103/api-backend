@@ -645,6 +645,43 @@ ${slide('lx-07', 28, 'Trên Mac: bash 3.2, mktemp và sed kiểu BSD, không có
 <div class="pitfall"><strong>Bẫy:</strong> thêm <code>set -e</code> vào một script đang có rồi cho rằng nó đã an toàn. Nó đổi hành vi một cách hồi tố — đoạn mã vốn dựa vào việc chạy tiếp qua một lệnh <code>grep</code> hỏng giờ sẽ làm script chết, còn đoạn mã <em>ĐÁNG LẼ</em> phải chết thì vẫn không chết, vì ba ngoại lệ ở trên. Hãy thêm chế độ nghiêm ngặt vào một script <strong>MỚI</strong> ngay từ dòng đầu. Khi lắp ngược vào một script cũ, hãy chạy nó từ đầu tới cuối rồi ĐỌC output: kết cục thường gặp là một script giờ thoát ra trong im lặng ở lệnh <code>grep</code> đầu tiên không tìm thấy gì, và đó là một thay đổi hành vi mà không ai nhận ra cho tới khi công việc chạy đêm ngừng làm nửa phần việc của nó.</div>
 <p class="note-ct"><strong>Hãy chép bộ khung ở trên và bắt đầu mọi script từ nó.</strong> Sáu dòng khuôn mẫu biến "chạy được lúc tôi thử" thành "hỏng một cách ồn ào và nói rõ vì sao". Thói quen giá trị nhất của chương này là: một script phải hoặc làm trọn phần việc của nó, hoặc dừng lại kèm một thông điệp trên stderr và một mã thoát khác 0 — không bao giờ làm nửa việc rồi báo cáo thành công.</p>
 </div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-lab-2" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · Lab 2 — Shell scripting: quoting, tests, loops, functions, exit codes, trap, backup, health check, awk and sed</span><span class="lc-sub">Lab 2 wrote scripts with trap and exit codes; this chapter turns them into scripts that survive 3 a.m.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-7-1-co-shell" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy to a VPS · 7.1 — What each shell flag actually catches</span><span class="lc-sub">Measured: what each shell flag really catches in a deploy script.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/git/learn?lessonSlug=git-14-4-windows-crlf" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Git &amp; GitHub · 14.4 — Working with Windows teammates: CRLF/LF, .gitattributes, case and exec bits</span><span class="lc-sub">Stop CRLF at the source with a .gitattributes file.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-lab-2" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · Lab 2 — Shell script: dấu nháy, điều kiện, vòng lặp, hàm, mã thoát, trap, sao lưu, kiểm tra sức khoẻ, awk và sed</span><span class="lc-sub">Lab 2 đã viết script có trap và mã thoát; chương này biến nó thành script chạy được lúc 3 giờ sáng.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-7-1-co-shell" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 7.1 — Mỗi cờ của shell THẬT SỰ bắt được gì</span><span class="lc-sub">Đo thật: mỗi cờ của shell thật sự bắt được gì trong một script deploy.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/git/learn?lessonSlug=git-14-4-windows-crlf" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Git &amp; GitHub · 14.4 — Làm nhóm với bạn dùng Windows: CRLF/LF, .gitattributes, hoa/thường và quyền chạy</span><span class="lc-sub">Chặn CRLF từ gốc bằng tệp .gitattributes.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 7.2 ─────────────────────────── */
@@ -1302,6 +1339,33 @@ mã=2</div>
 <div class="pitfall"><strong>Bẫy:</strong> quên <code>shift \$((OPTIND - 1))</code> sau một vòng <code>getopts</code>. Mọi thứ TRÔNG như chạy đúng — các cờ được phân tích chuẩn — nhưng <code>"\$@"</code> vẫn còn chứa chúng, nên vòng lặp qua "các file" cũng lặp luôn qua <code>-v</code> và <code>-o</code>. Script rồi sẽ tìm cách mở một file tên là <code>-v</code>, và thông báo lỗi chĩa vào đoạn xử lý file chứ không chĩa vào chỗ thiếu lệnh shift. Hễ một script nói "no such file: -v", lý do là đây.</div>
 <p class="note-ct"><strong>Cấu trúc làm cho script an toàn khi chạy:</strong> phân tích tham số, rồi kiểm mọi giá trị, rồi kiểm mọi điều kiện tiên quyết, và chỉ tới lúc đó mới bắt tay vào việc. Mỗi giai đoạn đều thoát ra với một thông điệp riêng trên stderr và một mã khác 0. Một script dựng theo lối này thì người chưa từng đọc nó vẫn chạy được, vì nó NÓI cho họ biết nó cần gì thay vì hỏng giữa chừng rồi để họ ngồi đoán.</p>
 </div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-7-3-tu-choi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy to a VPS · 7.3 — Refusing to run</span><span class="lc-sub">A deploy script that knows how to refuse, built from exactly these checks.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-2-5-hong-nua-chung" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy to a VPS · 2.5 — When the transport fails halfway</span><span class="lc-sub">When the transport fails halfway: what a half-finished state looks like in real life.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-7-3-tu-choi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 7.3 — TỪ CHỐI chạy</span><span class="lc-sub">Script deploy biết từ chối chạy, dựng từ đúng những cửa kiểm này.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-2-5-hong-nua-chung" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 2.5 — Khi đường vận chuyển hỏng nửa chừng</span><span class="lc-sub">Khi đường vận chuyển hỏng nửa chừng: trạng thái dở dang trông thế nào ngoài đời.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 7.3 ─────────────────────────── */
@@ -1544,7 +1608,9 @@ exit=7</div>
 <p>The "Putting it together" script above was run for real in a container (with a stand-in <code>pg_dump</code>). The original version failed on its first run:</p>
 <div class="out">mv: target '/srv/backups/2026-09-28/': No such file or directory
 ERROR at line 25: mv "\$tmpdir"/*.{sql,tar.gz} "/srv/backups/\$(date +%F)/"
-backup failed (1)</div>
+backup failed (1)
+ERROR at line 1: mv "\$tmpdir"/*.{sql,tar.gz} "/srv/backups/\$(date +%F)/"</div>
+<p>Note the <strong>fourth</strong> line (an earlier version of this page showed only three; a re-run on 12/11/2026 prints all four). It is the ERR trap firing a second time: <code>cleanup</code> ends with <code>return \$rc</code>, a non-zero status, so the EXIT trap itself "fails" — and <code>\$BASH_COMMAND</code> still holds the old <code>mv</code>, now blamed on "line 1". Starting <code>cleanup</code> with <code>trap - ERR</code> silences it; Lesson 7.5 measures the same effect on the full deploy script.</p>
 <p>It created <code>/srv/backups</code> but never the dated folder that <code>mv</code> writes into. The listing above is now fixed (<code>mkdir -p "/srv/backups/\$(date +%F)"</code>), and the <code>find</code> gained <code>-mindepth 1 -maxdepth 1</code> so it can only ever delete the dated sub-folders, never <code>/srv/backups</code> itself or something nested inside today's backup. After the fix: <code>backup complete</code>, and a second copy started while the first held the lock printed <code>backup already running</code> with exit 0. The lesson for your own scripts: a script you have only read is a script you have not tested.</p>
 
 <h3>Run it step by step</h3>
@@ -1858,7 +1924,9 @@ mã=7</div>
 <p>Script "Ghép lại với nhau" ở trên đã được chạy thật trong container (với một <code>pg_dump</code> giả). Bản gốc hỏng ngay lần chạy đầu:</p>
 <div class="out">mv: target '/srv/backups/2026-09-28/': No such file or directory
 ERROR at line 25: mv "\$tmpdir"/*.{sql,tar.gz} "/srv/backups/\$(date +%F)/"
-backup failed (1)</div>
+backup failed (1)
+ERROR at line 1: mv "\$tmpdir"/*.{sql,tar.gz} "/srv/backups/\$(date +%F)/"</div>
+<p>Để ý dòng <strong>THỨ TƯ</strong> (bản cũ của trang này chỉ in ba dòng; chạy lại ngày 12/11/2026 in đủ bốn). Đó là bẫy ERR nổ LẦN THỨ HAI: <code>cleanup</code> kết thúc bằng <code>return \$rc</code>, một mã khác 0, nên chính cái bẫy EXIT "hỏng" — mà <code>\$BASH_COMMAND</code> vẫn còn giữ lệnh <code>mv</code> cũ, giờ bị đổ cho "line 1". Mở đầu <code>cleanup</code> bằng <code>trap - ERR</code> là dòng đó im; Bài 7.5 đo cùng hiệu ứng này trên cả script deploy.</p>
 <p>Nó tạo <code>/srv/backups</code> nhưng không bao giờ tạo thư mục theo ngày mà <code>mv</code> ghi vào. Đoạn mã ở trên giờ đã được sửa (<code>mkdir -p "/srv/backups/\$(date +%F)"</code>), và lệnh <code>find</code> được thêm <code>-mindepth 1 -maxdepth 1</code> để nó chỉ có thể xoá các thư mục con theo ngày, không bao giờ xoá chính <code>/srv/backups</code> hay thứ gì lồng bên trong bản sao lưu hôm nay. Sau khi sửa: <code>backup complete</code>, và một bản thứ hai khởi động lúc bản đầu đang giữ khoá in <code>backup already running</code> với mã 0. Bài học cho script của chính bạn: một script mới chỉ ĐỌC là một script chưa được kiểm.</p>
 
 <h3>Chạy thử từng bước</h3>
@@ -1938,6 +2006,43 @@ mã=130
 
 <div class="pitfall"><strong>Bẫy:</strong> đăng ký trap trước khi tạo ra thứ mà nó dọn, hoặc sau đó. Cả hai đều hỏng. Viết <code>trap 'rm -rf "\$tmpdir"' EXIT</code> ở <em>TRƯỚC</em> dòng <code>tmpdir=\$(mktemp -d)</code> thì nó chạy <code>rm -rf ""</code> nếu script chết ở khoảng giữa — vô hại, nhưng cũng nghĩa là một lần hỏng sớm sẽ để lại cái thư mục. Viết ở vài dòng <em>SAU</em> lệnh <code>mktemp</code> thì mọi thất bại trong khoảng trống đó sẽ rò rỉ thư mục vĩnh viễn. Hãy TẠO, rồi TRAP, ở đúng dòng ngay kế tiếp — và bên trong bộ xử lý thì luôn chốt bằng <code>\${tmpdir:-}</code> để <code>set -u</code> không biến việc dọn dẹp của bạn thành một lỗi thứ hai.</div>
 <p class="note-ct"><strong>Ba dòng thuộc về phần lớn script production:</strong> <code>tmpdir=\$(mktemp -d)</code> rồi ngay lập tức <code>trap 'rm -rf "\$tmpdir"' EXIT</code>, và <code>flock -n 9</code> cho mọi thứ mà cron với tới được. Chúng chẳng tốn gì, chúng vô hình khi mọi thứ chạy tốt, và mỗi cái ngăn được một kiểu hỏng chỉ lộ ra sau nhiều tuần — một cái đĩa đầy, hay hai bản sao lưu cùng ghi vào một file.</p>
+</div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-slide-cs1-2" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · ⭐ CS.1 — 📑 Slide by slide · Linux processes (2/2): signals, graceful shutdown, PID 1 in containers, systemd (slides 14–28)</span><span class="lc-sub">The second half of OSG202 CS.1 teaches signals and graceful shutdown from the kernel's side; trap is the script's side of that story.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-7-2-chay-lai-duoc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy to a VPS · 7.2 — Safe to run twice</span><span class="lc-sub">Safe to run twice — on a real deploy script.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-10-1-tao-sao-luu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy to a VPS · 10.1 — What a backup costs to make</span><span class="lc-sub">What a real backup costs to make, and what must be in it.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-slide-cs1-2" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · ⭐ CS.1 — 📑 Học theo từng slide · Tiến trình Linux (2/2): tín hiệu, tắt êm, PID 1 trong container, systemd (slide 14–28)</span><span class="lc-sub">Nửa sau CS.1 của OSG202 dạy tín hiệu và tắt êm nhìn từ nhân; trap là phía script của câu chuyện đó.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-7-2-chay-lai-duoc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 7.2 — Chạy hai lần vẫn an toàn</span><span class="lc-sub">Chạy hai lần vẫn an toàn — trên một script deploy thật.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-10-1-tao-sao-luu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 10.1 — Làm một bản sao lưu tốn bao nhiêu</span><span class="lc-sub">Một bản sao lưu thật tốn bao nhiêu, và cái gì phải có trong nó.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -2628,6 +2733,43 @@ shellcheck -S warning sc.sh | grep -c '^In'            <span class="tok-comment"
 <div class="pitfall"><strong>Bẫy:</strong> để quên <code>set -x</code> bật trên production. Vệt lần theo đi ra stderr, mà trong một dịch vụ systemd thì nó rơi vào journal còn trong cron thì nó thành một email — mỗi lần chạy, mãi mãi. Tệ hơn, nó in ra các giá trị <em>ĐÃ KHAI TRIỂN</em>, nên một script xử lý một token hay một chuỗi kết nối cơ sở dữ liệu sẽ ghi thẳng cái bí mật đó vào log dưới dạng chữ thường, rồi cái log ấy được sao lưu và chuyển tới bất cứ hệ thống nào đang gom log của bạn. Hãy đặt việc lần theo sau một chốt <code>\${DEBUG:-0}</code>, và đừng bao giờ lần theo một đoạn đang xử lý thông tin xác thực.</div>
 <p class="note-ct"><strong>Thứ tự nên với tay lấy chúng:</strong> <code>shellcheck</code> trước, vì nó tìm ra cả lớp lỗi trong một giây mà không cần chạy gì; rồi <code>bash -n</code> cho cú pháp; rồi <code>bash -x</code> với một <code>PS4</code> hữu ích để nhìn xem shell thật sự đã dựng ra cái gì. Thêm mấy dòng <code>echo</code> nên là phương án cuối chứ không phải phương án đầu — và một khi dòng <code>PS4</code> đã nằm trong <code>~/.bashrc</code> của bạn thì nó thường chẳng bao giờ đến lượt.</p>
 </div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-0-1-kim-tu-thap" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Testing · 0.2 — The test pyramid (and the trophy), measured on LabFlow Lite</span><span class="lc-sub">The test pyramid: bats is the test layer for your scripts.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-7-4-kiem-khoi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy to a VPS · 7.4 — Proving it worked, and checking the checker</span><span class="lc-sub">Proving a deploy script worked — and checking the checker.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-0-1-may-toi-chay-duoc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">GitHub Actions · 0.1 — "It works on my machine" is not a claim you can check</span><span class="lc-sub">"It works on my machine" is not a claim anyone can check.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-0-1-kim-tu-thap" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Testing · 0.2 — Kim tự tháp test (và chiếc cúp), đo thật trên LabFlow Lite</span><span class="lc-sub">Kim tự tháp test: bats là tầng kiểm thử cho script của bạn.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-7-4-kiem-khoi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 7.4 — Chứng minh nó chạy, và KIỂM LẠI CHÍNH BỘ KIỂM</span><span class="lc-sub">Chứng minh script deploy chạy được — và kiểm lại chính bộ kiểm.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-0-1-may-toi-chay-duoc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">GitHub Actions · 0.1 — "Máy tôi chạy được" KHÔNG phải một lời khẳng định kiểm chứng được</span><span class="lc-sub">"Máy tôi chạy được" không phải một lời khẳng định kiểm chứng được.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 7.5 ─────────────────────────── */
@@ -2653,7 +2795,7 @@ set -Eeuo pipefail            <span class="tok-comment"># -E: the ERR trap also 
 IFS=\$'\\n\\t'
 
 <span class="tok-comment">#─── constants ────────────────────────────────────────────────</span>
-readonly SCRIPT_DIR=\$(cd "\$(dirname "\${BASH_SOURCE[0]}")" &amp;&amp; pwd)
+SCRIPT_DIR=\$(cd "\$(dirname "\${BASH_SOURCE[0]}")" &amp;&amp; pwd); readonly SCRIPT_DIR  <span class="tok-comment"># assign, THEN readonly: SC2155 (fixed 13/11/2026, see below)</span>
 readonly SCRIPT_NAME=\${0##*/}
 readonly LOCKFILE=/var/lock/\${SCRIPT_NAME%.sh}.lock
 readonly REGISTRY=ghcr.io/cuonghoang1103
@@ -2874,7 +3016,14 @@ ghcr.io/cuonghoang1103/myapp:v1.4
 <div class="out">10:20:23 [ERROR] line 117: cut -d= -f2
 10:20:23 [ERROR] line 117: host=\$(grep -m1 '^DEPLOY_HOST=' "\$SCRIPT_DIR/.env.\$env" | cut -d= -f2)
 10:20:23 [WARN] deploy failed with exit code 1</div>
-<p>Now it names the line and the command (twice: once from inside the <code>\$( )</code> subshell, once from the assignment — <code>-E</code> reaches both). <strong>Bug 3</strong> appeared only after fixing bug 2: with <code>-E</code>, the ERR trap also fired when <code>cleanup</code> returned the non-zero code, adding a confusing <code>[ERROR] line 1: exit 1</code>. <code>trap - ERR</code> as the first action in <code>cleanup</code> removed it. Finally, the original listing showed the <code>ssh</code> line of the dry run as <code>docker pull '...'</code>; the real line keeps the image name and the four spaces left by the backslash-newline inside the double-quoted string, as now shown.</p>
+<p>Now it names the line and the command (twice: once from inside the <code>\$( )</code> subshell, once from the assignment — <code>-E</code> reaches both). <strong>Bug 3</strong> appeared only after fixing bug 2: with <code>-E</code>, the ERR trap also fired when <code>cleanup</code> returned the non-zero code, adding a confusing fourth line <em>after</em> the WARN — re-run on 13/11/2026 by deleting the <code>trap - ERR</code> line, it reads <code>[ERROR] line 1: host=\$(grep -m1 '^DEPLOY_HOST=' "\$SCRIPT_DIR/.env.\$env" | cut -d= -f2)</code>: "line 1" and a command that had already been reported. <code>trap - ERR</code> as the first action in <code>cleanup</code> removed it. Finally, the original listing showed the <code>ssh</code> line of the dry run as <code>docker pull '...'</code>; the real line keeps the image name and the four spaces left by the backslash-newline inside the double-quoted string, as now shown.</p>
+<p><strong>Bug 4 — "ShellCheck clean" was not true.</strong> Re-run on 13/11/2026 against the listing exactly as published (ShellCheck 0.9.0, Ubuntu 24.04):</p>
+<pre><code>shellcheck -S warning deploy.sh; echo "exit=\$?"</code></pre>
+<div class="out">In deploy.sh line 10:
+readonly SCRIPT_DIR=\$(cd "\$(dirname "\${BASH_SOURCE[0]}")" &amp;&amp; pwd)
+         ^--------^ SC2155 (warning): Declare and assign separately to avoid masking return values.
+exit=1</div>
+<p><code>readonly x=\$(cmd)</code> is the same trap as <code>local x=\$(cmd)</code> from Lesson 7.1: the status you get is <code>readonly</code>'s (always 0), so a failing <code>cd</code> would leave <code>SCRIPT_DIR</code> empty and <code>set -e</code> would never notice. The listing now assigns first and marks it read-only second, on the same line so every line number quoted on this page still matches; with that change ShellCheck exits 0. The lesson for the checklist below: "runs clean" is a measurement, not a feeling — run it on the exact file you ship.</p>
 <p>The same run also confirmed the guard rails, each exiting before anything was touched:</p>
 <div class="out">$ ./deploy.sh production
 10:49:25 [ERROR] refusing to deploy 'latest' to production — pass an explicit --tag
@@ -2995,7 +3144,7 @@ set -Eeuo pipefail            <span class="tok-comment"># -E: bẫy ERR nổ đ�
 IFS=\$'\\n\\t'
 
 <span class="tok-comment">#─── hằng số ──────────────────────────────────────────────────</span>
-readonly SCRIPT_DIR=\$(cd "\$(dirname "\${BASH_SOURCE[0]}")" &amp;&amp; pwd)
+SCRIPT_DIR=\$(cd "\$(dirname "\${BASH_SOURCE[0]}")" &amp;&amp; pwd); readonly SCRIPT_DIR  <span class="tok-comment"># gán XONG rồi mới readonly: SC2155 (sửa 13/11/2026, xem dưới)</span>
 readonly SCRIPT_NAME=\${0##*/}
 readonly LOCKFILE=/var/lock/\${SCRIPT_NAME%.sh}.lock
 readonly REGISTRY=ghcr.io/cuonghoang1103
@@ -3216,7 +3365,14 @@ ghcr.io/cuonghoang1103/myapp:v1.4
 <div class="out">10:51:36 [ERROR] dòng 117: cut -d= -f2
 10:51:36 [ERROR] dòng 117: host=\$(grep -m1 '^DEPLOY_HOST=' "\$SCRIPT_DIR/.env.\$env" | cut -d= -f2)
 10:51:36 [WARN] deploy hỏng với mã thoát 1</div>
-<p>Giờ nó gọi tên dòng và câu lệnh (hai lần: một lần từ bên trong shell con của <code>\$( )</code>, một lần từ phép gán — <code>-E</code> vươn tới cả hai). <strong>Lỗi 3</strong> chỉ lộ ra sau khi sửa lỗi 2: có <code>-E</code> thì bẫy ERR còn nổ khi <code>cleanup</code> trả về mã khác 0, thêm một dòng khó hiểu <code>[ERROR] line 1: exit 1</code>. Đặt <code>trap - ERR</code> làm việc đầu tiên trong <code>cleanup</code> là hết. Cuối cùng, đoạn mã gốc in dòng <code>ssh</code> của lần chạy thử là <code>docker pull '...'</code>; dòng thật giữ nguyên tên ảnh và bốn dấu cách còn lại sau cặp gạch-chéo-xuống-dòng trong chuỗi nháy kép, như giờ đã sửa.</p>
+<p>Giờ nó gọi tên dòng và câu lệnh (hai lần: một lần từ bên trong shell con của <code>\$( )</code>, một lần từ phép gán — <code>-E</code> vươn tới cả hai). <strong>Lỗi 3</strong> chỉ lộ ra sau khi sửa lỗi 2: có <code>-E</code> thì bẫy ERR còn nổ khi <code>cleanup</code> trả về mã khác 0, thêm một dòng thứ tư khó hiểu nằm <em>SAU</em> dòng WARN — chạy lại ngày 13/11/2026 bằng cách xoá dòng <code>trap - ERR</code>, nó là <code>[ERROR] dòng 1: host=\$(grep -m1 '^DEPLOY_HOST=' "\$SCRIPT_DIR/.env.\$env" | cut -d= -f2)</code>: "dòng 1" cùng một câu lệnh vốn đã được báo rồi. Đặt <code>trap - ERR</code> làm việc đầu tiên trong <code>cleanup</code> là hết. Cuối cùng, đoạn mã gốc in dòng <code>ssh</code> của lần chạy thử là <code>docker pull '...'</code>; dòng thật giữ nguyên tên ảnh và bốn dấu cách còn lại sau cặp gạch-chéo-xuống-dòng trong chuỗi nháy kép, như giờ đã sửa.</p>
+<p><strong>Lỗi 4 — "ShellCheck sạch" là KHÔNG đúng.</strong> Chạy lại ngày 13/11/2026 trên đúng đoạn mã đã đăng (ShellCheck 0.9.0, Ubuntu 24.04):</p>
+<pre><code>shellcheck -S warning deploy.sh; echo "mã=\$?"</code></pre>
+<div class="out">In deploy.sh line 10:
+readonly SCRIPT_DIR=\$(cd "\$(dirname "\${BASH_SOURCE[0]}")" &amp;&amp; pwd)
+         ^--------^ SC2155 (warning): Declare and assign separately to avoid masking return values.
+mã=1</div>
+<p><code>readonly x=\$(lệnh)</code> là cùng cái bẫy với <code>local x=\$(lệnh)</code> ở Bài 7.1: mã bạn nhận được là của <code>readonly</code> (luôn bằng 0), nên một lệnh <code>cd</code> hỏng sẽ để <code>SCRIPT_DIR</code> rỗng mà <code>set -e</code> không bao giờ hay biết. Đoạn mã giờ GÁN trước rồi mới đánh dấu chỉ-đọc sau, trên cùng một dòng để mọi số dòng trích trong trang này vẫn khớp; với thay đổi đó ShellCheck thoát mã 0. Bài học cho bảng kiểm bên dưới: "chạy sạch" là một PHÉP ĐO, không phải một cảm giác — hãy chạy nó trên đúng cái file bạn sẽ giao đi.</p>
 <p>Cùng lần chạy đó cũng xác nhận các chốt chặn, cái nào cũng thoát trước khi đụng vào bất cứ gì:</p>
 <div class="out">$ ./deploy.sh production
 10:49:25 [ERROR] refusing to deploy 'latest' to production — pass an explicit --tag
@@ -3320,6 +3476,43 @@ ${slide('lx-07', 32, 'Thực hành Chương 7 (45 phút): gia cố backup.sh c�
 
 <div class="pitfall"><strong>Bẫy:</strong> một script báo cáo thành công sau khi chỉ làm được một phần việc. Phiên bản kinh điển là: nó deploy ảnh mới, không khởi động lại được container, rồi thoát ra với mã 0 vì lệnh cuối trong chuỗi ống tình cờ thành công. Người dùng thấy chữ "đã deploy" rồi đi tiếp; production vẫn đang chạy mã cũ. Hai lớp phòng thủ: <code>set -euo pipefail</code> để một thất bại ở giữa làm dừng mọi thứ, và một bước xác minh ở cuối — chính là cái chốt kiểm ở trên — kiểm KẾT QUẢ chứ không kiểm các BƯỚC. <strong>Dòng cuối của một script deploy nên kiểm thứ mà NGƯỜI DÙNG sẽ thấy, chứ không phải báo cáo thứ mà script đã làm.</strong></div>
 <p class="note-ct"><strong>Hãy giữ script này làm khuôn mẫu của bạn.</strong> Nó không dài, và mỗi khối đều xứng đáng có mặt: chế độ nghiêm ngặt, ghi log ra stderr, phân tích tham số, kiểm tính hợp lệ, tiền kiểm, một cái khoá, một trap dọn dẹp, một hàm bọc chạy thử, và một bước xác minh ở cuối. Bắt đầu từ nó thì nhanh hơn bắt đầu từ một file trống, và những phần bạn không cần thì xoá đi nhanh hơn nhiều so với những phần mà nếu không có nó bạn sẽ quên thêm vào.</p>
+</div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-lab-2" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · Lab 2 — Shell scripting: quoting, tests, loops, functions, exit codes, trap, backup, health check, awk and sed</span><span class="lc-sub">Lab 2 ends with a backup and health-check script; Chapter 7 is its production version.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-7-5-ca-script" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy to a VPS · 7.5 — The whole script, and the two bugs testing found in it</span><span class="lc-sub">The whole deploy script on that course's project, and the two bugs that test runs found in it.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-13-3-github-actions-deploy" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy to a VPS · 13.3 — Deploying from GitHub Actions over SSH: one key, one command, one deploy at a time</span><span class="lc-sub">Calling this kind of script from GitHub Actions over SSH.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-lab-2" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · Lab 2 — Shell script: dấu nháy, điều kiện, vòng lặp, hàm, mã thoát, trap, sao lưu, kiểm tra sức khoẻ, awk và sed</span><span class="lc-sub">Lab 2 kết thúc bằng script sao lưu và kiểm tra sức khoẻ; Chương 7 là phiên bản production của nó.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-7-5-ca-script" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 7.5 — Cả cái script, và HAI con bọ mà việc chạy thử tìm ra trong nó</span><span class="lc-sub">Cả cái script deploy trên dự án của khoá đó, và hai con bọ mà chạy thử tìm ra.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-13-3-github-actions-deploy" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 13.3 — Deploy từ GitHub Actions qua SSH: một khoá, một lệnh, mỗi lần một deploy</span><span class="lc-sub">Gọi chính loại script này từ GitHub Actions qua SSH.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

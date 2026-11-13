@@ -607,6 +607,43 @@ Connection to lx09-srv (172.21.0.6) 19091 port [tcp/*] succeeded!
 <div class="pitfall"><strong>Bẫy:</strong> kiểm một dịch vụ bằng <code>curl localhost:3000</code> ngay trên máy chủ rồi kết luận là nó với tới được. Loopback đi tắt qua cả giao diện, cả tường lửa và cả địa chỉ gắn, nên phép thử đó VẪN QUA với một dịch vụ gắn vào <code>127.0.0.1</code> mà bên ngoài không ai với tới — và đó chính xác là chỗ hỏng bạn đang đi tìm. Hãy kiểm từ <em>MỘT MÁY KHÁC</em>, hoặc ít nhất là dùng địa chỉ thật của máy chủ: <code>curl 203.0.113.42:3000</code>. Và hãy kiểm địa chỉ gắn bằng <code>ss -tulpn</code> TRƯỚC KHI đổ lỗi cho tường lửa, vì không luật tường lửa nào làm cho một dịch vụ gắn vào loopback trở nên với tới được.</div>
 <p class="note-ct"><strong>Hai lệnh phủ gần hết chương này:</strong> <code>sudo ss -tulpn</code> cho câu "cái gì đang lắng nghe, trên địa chỉ nào, do tiến trình nào giữ", và cái thang bốn bước <code>ping IP → ping tên → nc -z cổng → curl</code> cho câu "chính xác thì nó vỡ ở đâu". Cái thang quan trọng hơn bất kỳ công cụ đơn lẻ nào, vì nó biến một triệu chứng mơ hồ thành một cái tầng có tên — và mỗi tầng có một cách chữa khác nhau.</p>
 </div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-8-4-toi-may-chu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 8.4 — localhost, the host, and --network host</span><span class="lc-sub">localhost, the host and --network host: the 127.0.0.1-inside-a-container case, in depth.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-3-1-phan-giai" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Networking for Developers · 3.1 — Resolution: stub, recursive resolver, root, TLD, authoritative</span><span class="lc-sub">The full resolution journey: stub, recursive resolver, root, TLD, authoritative server.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-2-5-mang-fd" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 2.5 — Ports and file descriptors: ss, lsof, EADDRINUSE and EMFILE</span><span class="lc-sub">Ports and file descriptors from the OS side: ss, lsof and "address already in use".</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-8-4-toi-may-chu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 8.4 — localhost, máy chủ, và --network host</span><span class="lc-sub">localhost, máy chủ và --network host: ca 127.0.0.1 trong container, giảng kỹ hơn.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-3-1-phan-giai" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Networking for Developers · 3.1 — Phân giải: stub, recursive resolver, root, TLD, authoritative</span><span class="lc-sub">Hành trình phân giải: stub, resolver đệ quy, gốc, TLD và máy chủ có thẩm quyền.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-2-5-mang-fd" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 2.5 — Cổng và file descriptor: ss, lsof, EADDRINUSE và EMFILE</span><span class="lc-sub">Cổng và file descriptor nhìn từ phía hệ điều hành: ss, lsof và lỗi "address already in use".</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 9.2 ─────────────────────────── */
@@ -1259,6 +1296,43 @@ exit=1</div>
 
 <div class="pitfall"><strong>Bẫy:</strong> dùng <code>curl -k</code> (hay <code>--insecure</code>) để "chữa" một lỗi chứng chỉ. Nó tắt hẳn việc xác minh, nên kết nối vẫn được mã hoá nhưng bạn KHÔNG BIẾT mình đang nói chuyện với ai — mà đó mới là phần có ý nghĩa. Thông báo lỗi đang nói với bạn một điều có thật: chứng chỉ hết hạn, thiếu chứng chỉ trung gian, sai tên máy, hoặc một proxy đang chặn giữa TLS. <code>curl -v</code> gọi tên xem là cái nào trong ba dòng. Chỉ với tay lấy <code>-k</code> khi đối tượng là một chứng chỉ tự ký do chính bạn tạo ra, và đừng bao giờ để nó nằm lại trong một script có đụng tới production, vì nó sẽ vẫn nằm đó rất lâu sau khi vấn đề gốc đã bị quên.</div>
 <p class="note-ct"><strong>Hãy xây phản xạ cho <code>curl -sSfL</code>.</strong> Im lặng nhưng vẫn báo lỗi; hỏng khi gặp lỗi HTTP thay vì lưu chúng lại làm dữ liệu; đi theo chuyển hướng. Thêm <code>--max-time</code> vào mọi thứ chạy tự động, và <code>-o /dev/null -w '%{http_code}'</code> mỗi khi bạn muốn CÂU TRẢ LỜI chứ không muốn cái trang. Bốn thói quen đó biến curl từ một thứ thường thì chạy được thành một thứ mà script tin được.</p>
+</div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-6-4-loi-tls" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Networking for Developers · 6.4 — Diagnosing TLS errors</span><span class="lc-sub">Diagnosing TLS errors: reading the certificate chain that curl -v just showed you.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nginx/learn?lessonSlug=nginx-3-4-timeout" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nginx · 3.4 — Timeouts: what each one measures, and the 200 that is a lie</span><span class="lc-sub">Timeouts on the server side: what each one measures, and the 200 that lies.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-15-6-health-check-canh-bao" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 15.6 — Health checks, alerts, and being woken at 3am</span><span class="lc-sub">Health checks and alerts: this kind of check, built into a real application.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-6-4-loi-tls" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Networking for Developers · 6.4 — Chẩn đoán lỗi TLS</span><span class="lc-sub">Chẩn đoán lỗi TLS: đọc chuỗi chứng chỉ mà curl -v vừa cho bạn thấy.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nginx/learn?lessonSlug=nginx-3-4-timeout" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nginx · 3.4 — Timeout: mỗi cái đo cái gì, và cú 200 nói dối</span><span class="lc-sub">Timeout phía máy chủ: mỗi cái đo cái gì, và cú 200 nói dối.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-15-6-health-check-canh-bao" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 15.6 — Health check, cảnh báo, và chuyện bị gọi dậy lúc 3 giờ sáng</span><span class="lc-sub">Health check và cảnh báo: phép kiểm sức khoẻ này đặt vào một ứng dụng thật.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -2003,6 +2077,43 @@ port 22</div>
 <div class="pitfall"><strong>Bẫy:</strong> tắt <code>PasswordAuthentication</code> TRƯỚC KHI xác nhận là khoá của bạn chạy được. Trình tự khoá người ta ra ngoài là: sửa cấu hình, khởi động lại sshd, đóng terminal, rồi phát hiện ra cái khoá chưa bao giờ được cài đúng — và giờ thì không còn phương án lùi bằng mật khẩu và cũng không có console. Hãy luôn theo thứ tự này: cài khoá, mở một terminal <em>THỨ HAI</em> rồi đăng nhập bằng nó, và chỉ tới lúc đó mới tắt mật khẩu ở cái đầu tiên. Hãy giữ phiên đầu tiên mở cho tới khi phiên thứ hai đã tự chứng minh được. Các nhà cung cấp đám mây có sẵn console trên web đúng cho kiểu hỏng này, nhưng một cái máy tự dựng thì có thể không.</div>
 <p class="note-ct"><strong>File duy nhất cần viết ngay hôm nay là <code>~/.ssh/config</code>.</strong> Mười dòng cho mỗi máy biến mọi lệnh <code>ssh</code>, <code>scp</code>, <code>rsync</code> và <code>git</code> sau đó thành đúng một chữ ngắn, còn khối <code>Host *</code> cho bạn việc dùng lại kết nối và giữ nhịp ở khắp nơi cùng một lúc. Sau đó, <code>ssh -L</code> là kỹ thuật đáng biết nhất: nó gỡ bỏ chính cái lý do khiến người ta đi mở cổng cơ sở dữ liệu ra internet.</p>
 </div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/git/learn?lessonSlug=git-5-2-xac-thuc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Git &amp; GitHub · 5.2 — Authenticating with GitHub: SSH, tokens, credentials</span><span class="lc-sub">Authenticating with GitHub over SSH, tokens or credentials — where the Host github.com block belongs.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-13-3-github-actions-deploy" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy to a VPS · 13.3 — Deploying from GitHub Actions over SSH: one key, one command, one deploy at a time</span><span class="lc-sub">Deploying from GitHub Actions over SSH: one key, one command.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-15-3-deploy-an-toan" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">GitHub Actions · 15.3 — Deploying safely: environment, SSH, a lock, a smoke test, automatic rollback</span><span class="lc-sub">Deploying safely: environment, SSH, a lock, a smoke test and automatic rollback.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/git/learn?lessonSlug=git-5-2-xac-thuc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Git &amp; GitHub · 5.2 — Xác thực với GitHub: SSH, token, chứng chỉ</span><span class="lc-sub">Xác thực với GitHub bằng SSH, token hay chứng chỉ — khối Host github.com trong config chính là chỗ đó.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-13-3-github-actions-deploy" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 13.3 — Deploy từ GitHub Actions qua SSH: một khoá, một lệnh, mỗi lần một deploy</span><span class="lc-sub">Deploy từ GitHub Actions qua SSH: một khoá, một lệnh.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-15-3-deploy-an-toan" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">GitHub Actions · 15.3 — Deploy an toàn: environment, SSH, khoá, smoke test, tự quay lui</span><span class="lc-sub">Deploy an toàn: environment, SSH, khoá, smoke test và tự động lùi bản.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 9.4 ─────────────────────────── */
@@ -2557,6 +2668,33 @@ deploy/uploads/a.jpg</div>
 
 <div class="pitfall"><strong>Bẫy:</strong> chạy <code>rsync -avz --delete ./build/ vps:/srv/app/</code> khi <code>./build/</code> đang rỗng vì bản dựng vừa hỏng. rsync làm đúng y những gì được bảo — nó làm cho đích khớp với nguồn — và thư mục ứng dụng bị dọn sạch, bởi một cái lệnh đã báo cáo thành công. Hai dòng ngăn được chuyện đó: kiểm rằng nguồn khác rỗng trước khi đồng bộ, và truyền vào <code>--max-delete=50</code> để một lần xoá hàng loạt sẽ dừng lại. Và đừng bao giờ chĩa <code>--delete</code> vào một thư mục có chứa bất cứ thứ gì mà rsync không phải nguồn sự thật — file tải lên, log, hay file <code>.env</code> của production.</div>
 <p class="note-ct"><strong>Ba thói quen và bài này coi như xong:</strong> đặt dấu gạch chéo cuối ở NGUỒN khi bạn muốn nói "nội dung của"; chạy mọi lệnh rsync mới một lần với <code>--dry-run</code> rồi THẬT SỰ đọc các đường dẫn; và coi <code>--delete</code> là một lệnh phá huỷ cần có chốt chặn, y hệt như <code>rm -rf</code>. Mọi thứ còn lại chỉ là những cái cờ mà bạn tra ra được.</p>
+</div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-2-1-rsync-va-hai-moi-nguy" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy to a VPS · 2.1 — rsync: the delta algorithm, and its two dangers</span><span class="lc-sub">rsync's delta algorithm, and its two dangers during a deploy.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-2-5-hong-nua-chung" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy to a VPS · 2.5 — When the transport fails halfway</span><span class="lc-sub">When the transport fails halfway and the server runs half old, half new.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-2-1-rsync-va-hai-moi-nguy" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 2.1 — rsync: thuật toán chênh lệch, và hai mối nguy của nó</span><span class="lc-sub">Thuật toán chênh lệch của rsync, và hai mối nguy của nó khi deploy.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-2-5-hong-nua-chung" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 2.5 — Khi đường vận chuyển hỏng nửa chừng</span><span class="lc-sub">Khi đường vận chuyển hỏng nửa chừng, máy chủ chạy bản nửa cũ nửa mới.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -3156,6 +3294,43 @@ nft list chain ip filter ufw-user-input</code></pre>
 
 <div class="pitfall"><strong>Bẫy:</strong> tin <code>ufw status</code> là toàn bộ sự thật trên một cái máy có chạy Docker. Nó báo cáo bảng <code>filter</code> mà nó quản lý, trong khi các cổng do Docker công bố lại được xử lý sớm hơn ở bảng <code>nat</code> — nên một cơ sở dữ liệu mà bạn tin là đã có tường lửa che thì thật ra đã với tới được từ internet kể từ ngày bạn khởi động cái container. Phép kiểm nói đúng sự thật là <code>sudo ss -tulpn | grep '0.0.0.0'</code>, thứ cho thấy cái gì THẬT SỰ đang lắng nghe trên một địa chỉ công khai, bất kể công cụ nào đã viết luật nào. Hãy chạy nó trên mọi máy chủ bạn tiếp quản, trước mọi thứ khác.</div>
 <p class="note-ct"><strong>Thứ tự quan trọng hơn bất kỳ lệnh đơn lẻ nào.</strong> Địa chỉ gắn, rồi dịch vụ ở cục bộ, rồi từ bên ngoài, rồi <code>tcpdump</code>, rồi tường lửa của máy, rồi nhà cung cấp. Phần lớn mọi người bắt đầu từ TƯỜNG LỬA — bước thứ năm — trong khi câu trả lời thường nằm ở bước đầu tiên. Mười giây <code>ss -tulpn</code> trước khi đụng vào một luật tường lửa là thói quen giá trị nhất của chương này.</p>
+</div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-12-3-cong-mo-ra-internet" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy to a VPS · 12.3 — Open only the right ports: ss, ufw, and how Docker walks around your firewall</span><span class="lc-sub">Open only the right ports with ss and ufw — and how Docker walks around your firewall.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-8-2-cong-bo-cong" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 8.2 — Publishing ports, and the firewall trap</span><span class="lc-sub">Publishing ports and the firewall trap, told from Docker's side.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-12-5-mang" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 12.5 — Container networking by hand: veth pairs, a bridge, NAT and a published port</span><span class="lc-sub">Container networking by hand — veth, a bridge and NAT — to see where the nat rules live.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-12-3-cong-mo-ra-internet" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 12.3 — Chỉ mở đúng cổng: ss, ufw, và cách Docker đi vòng qua tường lửa của bạn</span><span class="lc-sub">Chỉ mở đúng cổng bằng ss và ufw — và cách Docker đi vòng qua tường lửa.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-8-2-cong-bo-cong" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 8.2 — Công bố cổng, và cái bẫy tường lửa</span><span class="lc-sub">Công bố cổng và cái bẫy tường lửa, kể từ phía Docker.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-12-5-mang" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 12.5 — Mạng container bằng tay: cặp veth, bridge, NAT và một cổng publish</span><span class="lc-sub">Tự dựng mạng container bằng tay — veth, bridge và NAT — để thấy luật nat nằm ở đâu.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

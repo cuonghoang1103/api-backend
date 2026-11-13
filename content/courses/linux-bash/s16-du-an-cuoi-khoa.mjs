@@ -288,7 +288,7 @@ real	0m0.510s</div>
     sshd -T: allowusers deploy
 6/7 Tường lửa
   → bật ufw: chặn mọi cổng vào, trừ SSH và HTTP
-7/7 Hẹn giờ
+7/7 Dịch vụ và hẹn giờ
   → bật datlich-saoluu.timer
   → bật datlich-giamsat.timer
   → bật datlich-baocao.timer
@@ -705,7 +705,7 @@ real	0m0.510s</div>
     sshd -T: allowusers deploy
 6/7 Tường lửa
   → bật ufw: chặn mọi cổng vào, trừ SSH và HTTP
-7/7 Hẹn giờ
+7/7 Dịch vụ và hẹn giờ
   → bật datlich-saoluu.timer
   → bật datlich-giamsat.timer
   → bật datlich-baocao.timer
@@ -886,6 +886,63 @@ docker rm -f lx16-srv &amp;&amp; docker rmi lx16-img</code></pre>
   <span class="lc-body"><span class="lc-title">Code Lab — Linux &amp; Bash</span><span class="lc-sub">Bài tập có chấm điểm của khoá; ôn lại phần quyền và script trước bài thi cuối khoá.</span></span>
 </a>
 <p class="note-ct"><strong>Thói quen mang về:</strong> đừng bao giờ sửa máy chủ bằng tay mà không sửa cái script mô tả nó — rồi chạy lại script đó tới khi nó nói "0 thay đổi".</p>
+</div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-11-3-gia-co-may-chu" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 11.3 — Hardening a server: the first hour, and the routine after</span><span class="lc-sub">Already covered: hardening, where we measured sshd's first-value-wins rule and set up ufw.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-4-4-nguoi-dung-nhom-sudo" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 4.4 — Users, groups and sudo</span><span class="lc-sub">Already covered: users, groups and sudo — the basis of today's three-user table.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-7-2-chay-lai-duoc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy to a VPS · 7.2 — Safe to run twice</span><span class="lc-sub">Safe to run twice — the property bootstrap.sh is built around.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-15-1-may-ten-mien-https" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy to a VPS · 15.1 — Day 1: from a bare server to a “coming soon” page over HTTPS</span><span class="lc-sub">Day 1 of that course's capstone: from a bare server to a page over HTTPS.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-8-2-cong-bo-cong" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 8.2 — Publishing ports, and the firewall trap</span><span class="lc-sub">Publishing ports, and the firewall trap Docker walks around.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-11-3-gia-co-may-chu" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 11.3 — Gia cố một máy chủ: giờ đầu tiên, và nếp thường ngày sau đó</span><span class="lc-sub">Đã học: gia cố máy chủ, nơi ta đo luật giá trị đầu tiên thắng của sshd và dựng ufw.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-4-4-nguoi-dung-nhom-sudo" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 4.4 — Người dùng, nhóm và sudo</span><span class="lc-sub">Đã học: người dùng, nhóm và sudo — nền của bảng ba người dùng hôm nay.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-7-2-chay-lai-duoc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 7.2 — Chạy hai lần vẫn an toàn</span><span class="lc-sub">Chạy hai lần vẫn an toàn — tính chất mà bootstrap.sh được dựng quanh nó.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-15-1-may-ten-mien-https" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 15.1 — Ngày 1: từ một máy trần tới trang “sắp ra mắt” qua HTTPS</span><span class="lc-sub">Ngày 1 trong dự án cuối của khoá đó: từ máy trần tới một trang chạy HTTPS.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-8-2-cong-bo-cong" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 8.2 — Công bố cổng, và cái bẫy tường lửa</span><span class="lc-sub">Công bố cổng, và cái bẫy tường lửa mà Docker đi vòng qua.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -1764,6 +1821,63 @@ systemctl status datlich --no-pager -n 0</code></pre>
   <span class="lc-body"><span class="lc-title">Code Lab — Linux &amp; Bash</span><span class="lc-sub">Bài tập có chấm điểm của khoá; phần script và systemd là bài khởi động cho bài này.</span></span>
 </a>
 <p class="note-ct"><strong>Thói quen mang về:</strong> đừng bao giờ ghi đè lên thứ đang chạy — đặt bản mới bên cạnh, dời một mũi tên, và để health check quyết định mũi tên có được ở lại không.</p>
+</div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-7-3-trap-don-dep" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 7.3 — trap, temp files and locks: cleaning up no matter what</span><span class="lc-sub">Already covered: trap, temp files and locks — the three bricks of the deploy script's armour.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-11-1-systemd-unit" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 11.1 — systemd units: running your app as a service</span><span class="lc-sub">Already covered: running your app as a systemd service.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-3-5-script-trao-hoan-chinh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy to a VPS · 3.5 — The complete swap script</span><span class="lc-sub">The complete swap script, on that course's project.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-6-1-lui-chay-duoc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy to a VPS · 6.1 — The rollback that works</span><span class="lc-sub">The rollback that works: one atomic rename back to the previous release.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-13-3-github-actions-deploy" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy to a VPS · 13.3 — Deploying from GitHub Actions over SSH: one key, one command, one deploy at a time</span><span class="lc-sub">Deploying from GitHub Actions over SSH: one key, one command, one deploy at a time.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-7-3-trap-don-dep" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 7.3 — trap, file tạm và khoá: dọn dẹp bất kể chuyện gì xảy ra</span><span class="lc-sub">Đã học: trap, tệp tạm và khoá — ba viên gạch của bộ giáp cho script deploy.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-11-1-systemd-unit" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 11.1 — Unit của systemd: chạy ứng dụng của bạn như một dịch vụ</span><span class="lc-sub">Đã học: chạy ứng dụng như một dịch vụ systemd.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-3-5-script-trao-hoan-chinh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 3.5 — Script tráo hoàn chỉnh</span><span class="lc-sub">Script tráo hoàn chỉnh, trên dự án của khoá đó.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-6-1-lui-chay-duoc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 6.1 — Cú lùi CHẠY ĐƯỢC</span><span class="lc-sub">Cú lùi chạy được: một lệnh đổi tên nguyên tử về bản trước.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-13-3-github-actions-deploy" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 13.3 — Deploy từ GitHub Actions qua SSH: một khoá, một lệnh, mỗi lần một deploy</span><span class="lc-sub">Deploy từ GitHub Actions qua SSH: một khoá, một lệnh, mỗi lần một deploy.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -2655,6 +2769,63 @@ sudo systemctl start datlich-baocao.service; journalctl -u datlich-baocao -o cat
 </a>
 <p class="note-ct"><strong>Thói quen mang về:</strong> với mỗi việc một timer chạy, hỏi hai câu — "nếu nó hỏng thì tôi biết bằng cách nào?" và "tôi đã từng cố ý làm nó hỏng để xem chưa?"</p>
 </div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-11-2-cron-timer" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 11.2 — Scheduling: cron and systemd timers</span><span class="lc-sub">Already covered: cron and systemd timers.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-10-3-log-journalctl" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 10.3 — Logs: journalctl, /var/log and rotation</span><span class="lc-sub">Already covered: journalctl, /var/log and rotation.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-10-4-kiem-chung" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy to a VPS · 10.4 — The only proof is a restore</span><span class="lc-sub">The only proof of a backup is a restore.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-10-7-ra-khoi-may" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy to a VPS · 10.7 — Off the machine: 3-2-1, pulling instead of pushing, age, and rotation</span><span class="lc-sub">Off the machine: the 3-2-1 rule, pulling instead of pushing, and rotation.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-15-1-pg-dump" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">PostgreSQL · 15.1 — Logical backups with pg_dump</span><span class="lc-sub">pg_dump: what replaces .backup when the database is PostgreSQL.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-11-2-cron-timer" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 11.2 — Hẹn giờ: cron và timer của systemd</span><span class="lc-sub">Đã học: cron và timer của systemd.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-10-3-log-journalctl" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 10.3 — Log: journalctl, /var/log và việc xoay vòng</span><span class="lc-sub">Đã học: journalctl, /var/log và việc xoay vòng.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-10-4-kiem-chung" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 10.4 — Bằng chứng DUY NHẤT là một cú phục hồi</span><span class="lc-sub">Bằng chứng duy nhất của một bản sao lưu là một cú phục hồi.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-10-7-ra-khoi-may" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 10.7 — Ra khỏi máy: 3-2-1, kéo chứ đừng đẩy, age, và xoay vòng</span><span class="lc-sub">Ra khỏi máy: luật 3-2-1, kéo thay vì đẩy, và xoay vòng.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-15-1-pg-dump" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">PostgreSQL · 15.1 — Sao lưu logic bằng pg_dump</span><span class="lc-sub">pg_dump: thứ thay cho .backup khi CSDL là PostgreSQL.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 16.4 ─────────────────────────── */
@@ -3464,6 +3635,63 @@ sed -i 's/$/\\r/' ops/giam-sat.sh &amp;&amp; sudo ./ops/bootstrap.sh ~/.ssh/id_e
   <span class="lc-body"><span class="lc-title">Code Lab — Linux &amp; Bash</span><span class="lc-sub">Bài tập có chấm điểm của khoá; làm phần chẩn đoán, rồi vào bài thi cuối khoá.</span></span>
 </a>
 <p class="note-ct"><strong>Thói quen mang về:</strong> khi có gì hỏng, chạy lệnh đầu tiên trước khi kịp có ý kiến — và khi đã sửa xong, thêm cách phòng vào kho mã trước khi gập laptop.</p>
+</div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-12-1-phuong-phap" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 12.1 — A method for a machine you have never seen</span><span class="lc-sub">Already covered: a method for a machine you have never seen.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-10-1-dia-day" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 10.1 — The disk is full: finding out what filled it</span><span class="lc-sub">Already covered: the full disk — finding out what filled it.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-15-4-ra-mat-tuan-dau" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy to a VPS · 15.4 — Launch and the first week: a one-page runbook and eight classic incidents, rebuilt</span><span class="lc-sub">A one-page runbook and that course's eight classic incidents, rebuilt.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-11-1-nam-phut-dau" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy to a VPS · 11.1 — The first five minutes</span><span class="lc-sub">The first five minutes of an incident.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-8-4-exit137" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 8.4 — The exit-137 incident, measured: parallel builds, memory.high and the kill</span><span class="lc-sub">Exit code 137: what the kernel records when the OOM killer acts.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-12-1-phuong-phap" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 12.1 — Một phương pháp cho cái máy bạn chưa từng thấy</span><span class="lc-sub">Đã học: một phương pháp cho cái máy bạn chưa từng thấy.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-10-1-dia-day" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 10.1 — Đĩa đầy: tìm ra cái gì làm nó đầy</span><span class="lc-sub">Đã học: đĩa đầy — tìm ra cái gì làm nó đầy.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-15-4-ra-mat-tuan-dau" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 15.4 — Ra mắt và tuần đầu: runbook một trang và tám sự cố kinh điển, dựng lại thật</span><span class="lc-sub">Runbook một trang và tám sự cố kinh điển của chính khoá đó, dựng lại.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-11-1-nam-phut-dau" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 11.1 — Năm phút đầu tiên</span><span class="lc-sub">Năm phút đầu tiên của một sự cố.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-8-4-exit137" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 8.4 — Sự cố exit 137, đo thật: build song song, memory.high và cú giết</span><span class="lc-sub">Mã thoát 137: thứ nhân ghi lại khi OOM killer ra tay.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

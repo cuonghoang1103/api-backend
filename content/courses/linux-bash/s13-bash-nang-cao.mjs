@@ -653,6 +653,53 @@ declare -l thuong="hello world"</div>
 </a>
 <p class="note-ct"><strong>Thói quen mang về:</strong> hễ script cần một cái bảng, viết <code>declare -A</code> trước rồi kiểm bằng <code>declare -p</code> — và hễ script cần nghiền một file lớn, hãy với tới <code>awk</code> thay vì một vòng lặp bash.</p>
 </div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-6-2-dau-nhay" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 6.2 — Quoting: the one rule that stops scripts breaking</span><span class="lc-sub">Already covered: the quoting rule, which applies to arrays exactly as it does here.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-3-6-awk" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 3.6 — awk: a whole language in one line</span><span class="lc-sub">Already covered: awk — the tool that beat the bash loop here by about 30×.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nginx/learn?lessonSlug=nginx-8-3-map" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nginx · 8.3 — map: the lookup table that replaces every if</span><span class="lc-sub">The same lookup-table idea as an associative array, living inside nginx configuration.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-13-4-script-chuyen-nghiep" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 13.4 — Expert-level scripts: long options, stack traces, logging, tests and linting</span><span class="lc-sub">Later in this chapter: when a script should move to Python.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-6-2-dau-nhay" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 6.2 — Dấu nháy: luật duy nhất làm script thôi vỡ</span><span class="lc-sub">Đã học: luật dấu nháy, áp vào mảng đúng như ở đây.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-3-6-awk" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 3.6 — awk: cả một ngôn ngữ gói trong một dòng</span><span class="lc-sub">Đã học: awk — thứ thắng vòng lặp bash ở bài này cỡ 30 lần.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nginx/learn?lessonSlug=nginx-8-3-map" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nginx · 8.3 — map: cái bảng tra thay thế mọi cái if</span><span class="lc-sub">Cùng ý tưởng bảng tra như mảng kết hợp, nhưng nằm trong cấu hình nginx.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-13-4-script-chuyen-nghiep" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 13.4 — Script mức chuyên gia: cờ dài, stack trace, log có mức, kiểm thử và lint</span><span class="lc-sub">Cuối chương này: khi nào một script nên chuyển sang Python.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 13.2 ─────────────────────────── */
@@ -889,7 +936,7 @@ web,db,cache redis</div>
 <tr><td><code>exec {log}&gt;&gt;f</code></td><td>fd 10</td><td><code>exec: {log}: not found</code></td></tr>
 <tr><td><code>exec 3&gt;f</code>, swaps, <code>&lt;(…)</code>, heredocs, <code>&lt;&lt;&lt;</code></td><td>work</td><td>work</td></tr>
 <tr><td><code>/dev/tcp/127.0.0.1/PORT</code></td><td>works</td><td>works in bash; zsh: <code>no such file or directory</code></td></tr>
-<tr><td><code>coproc</code></td><td>works</td><td><code>coproc: command not found</code></td></tr>
+<tr><td><code>coproc BC { bc -l; }</code></td><td>works</td><td><code>syntax error near unexpected token \`}'</code> — bash 3.2 has no <code>coproc</code> keyword</td></tr>
 <tr><td><code>shopt -s lastpipe</code></td><td>works</td><td><code>invalid shell option name</code></td></tr>
 <tr><td><code>read -r -d ''</code></td><td>works</td><td>works — the portable choice</td></tr>
 <tr><td><code>mapfile -d ''</code></td><td>works</td><td>no <code>mapfile</code> at all</td></tr>
@@ -1179,7 +1226,7 @@ web,db,cache redis</div>
 <tr><td><code>exec {log}&gt;&gt;f</code></td><td>fd 10</td><td><code>exec: {log}: not found</code></td></tr>
 <tr><td><code>exec 3&gt;f</code>, đổi chỗ fd, <code>&lt;(…)</code>, heredoc, <code>&lt;&lt;&lt;</code></td><td>chạy được</td><td>chạy được</td></tr>
 <tr><td><code>/dev/tcp/127.0.0.1/CỔNG</code></td><td>chạy được</td><td>chạy được trong bash; zsh: <code>no such file or directory</code></td></tr>
-<tr><td><code>coproc</code></td><td>chạy được</td><td><code>coproc: command not found</code></td></tr>
+<tr><td><code>coproc BC { bc -l; }</code></td><td>chạy được</td><td><code>syntax error near unexpected token \`}'</code> — bash 3.2 không có từ khoá <code>coproc</code></td></tr>
 <tr><td><code>shopt -s lastpipe</code></td><td>chạy được</td><td><code>invalid shell option name</code></td></tr>
 <tr><td><code>read -r -d ''</code></td><td>chạy được</td><td>chạy được — lựa chọn chạy khắp nơi</td></tr>
 <tr><td><code>mapfile -d ''</code></td><td>chạy được</td><td>không có <code>mapfile</code></td></tr>
@@ -1242,6 +1289,53 @@ web,db,cache redis</div>
   <span class="lc-body"><span class="lc-title">fifo(7) — man7.org</span><span class="lc-sub">Ống có tên dưới con mắt của nhân, và vì sao mở nó lại bị chặn.</span></span>
 </a>
 <p class="note-ct"><strong>Thói quen mang về:</strong> hình dung bảng fd trước khi viết một phép chuyển hướng. Mọi <code>&gt;</code>, <code>2&gt;&amp;1</code>, <code>&lt;(…)</code> hay <code>exec</code> chỉ là "cho hàng N trỏ tới chỗ kia" — đọc chúng từ trái sang phải là hết thấy phép màu.</p>
+</div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-3-1-dong-chuan-chuyen-huong" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 3.1 — Three streams, and every way to redirect them</span><span class="lc-sub">Already covered: the three standard streams and exec 3&gt;.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-3-2-ong-dan" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 3.2 — Pipes: two programs, running at the same time</span><span class="lc-sub">Already covered: pipes — and why while read at the end of a pipe loses its variables.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-9-5-fd" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 9.2 — File descriptors and the open-file table: who shares an offset</span><span class="lc-sub">File descriptors and the open-file table from the kernel's side: who shares an offset.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-17-1-shell" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 17.1 — Project 1: a mini shell in C — pipes, redirection, background jobs and signals</span><span class="lc-sub">Project 1 of that course: write a mini shell in C with pipes, redirection and background jobs.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-3-1-dong-chuan-chuyen-huong" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 3.1 — Ba dòng chuẩn, và mọi cách chuyển hướng chúng</span><span class="lc-sub">Đã học: ba dòng chuẩn và exec 3&gt;.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-3-2-ong-dan" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 3.2 — Ống dẫn: hai chương trình, chạy cùng một lúc</span><span class="lc-sub">Đã học: ống dẫn — và vì sao while read ở cuối ống làm mất biến.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-9-5-fd" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 9.2 — File descriptor và bảng file mở: ai dùng chung offset</span><span class="lc-sub">File descriptor và bảng tệp mở nhìn từ phía nhân: ai dùng chung offset.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-17-1-shell" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 17.1 — Dự án 1: mini shell bằng C — ống dẫn, chuyển hướng, việc chạy nền và tín hiệu</span><span class="lc-sub">Dự án 1 của khoá đó: tự viết một mini shell bằng C với ống dẫn, chuyển hướng và chạy nền.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -1888,6 +1982,43 @@ Summary
   <span class="lc-body"><span class="lc-title">Bash Variables — EPOCHREALTIME, BASH_VERSINFO…</span><span class="lc-sub">Danh sách chính thức các biến bash đặt sẵn cho bạn.</span></span>
 </a>
 <p class="note-ct"><strong>Thói quen mang về:</strong> trước khi song song hoá một script, hãy đếm số lần fork của nó. Phần lớn bash chậm là một vòng lặp gọi chương trình cho từng dòng; chữa cái đó trước, rồi mới thêm <code>-P</code> — và chứng minh từng bước bằng <code>hyperfine</code>, không bằng cảm giác.</p>
+</div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-6-5-vong-lap-ham" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 6.5 — Loops and functions</span><span class="lc-sub">Already covered: the first measurement of four sleep 1 jobs — one after another, &amp; with wait, and xargs -P.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-1-2-fork-exec" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 1.2 — fork, exec, wait: how every process is born</span><span class="lc-sub">fork, exec and wait: how every process is born — the cost you just measured.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-15-8-benchmark" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 15.6 — Benchmarking honestly: warm-up, percentiles, coordinated omission</span><span class="lc-sub">Benchmarking honestly: warm-up, percentiles, and the traps of a single measurement.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-6-5-vong-lap-ham" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 6.5 — Vòng lặp và hàm</span><span class="lc-sub">Đã học: lần đầu đo bốn việc sleep 1 — nối đuôi, chạy nền với wait, và xargs -P.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-1-2-fork-exec" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 1.2 — fork, exec, wait: mọi tiến trình ra đời thế nào</span><span class="lc-sub">fork, exec và wait: mọi tiến trình ra đời thế nào — chính cái giá bạn vừa đo.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-15-8-benchmark" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 15.6 — Đo hiệu năng trung thực: làm nóng, phân vị, coordinated omission</span><span class="lc-sub">Đo hiệu năng trung thực: làm nóng, phân vị, và những cái bẫy của một phép đo lẻ.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -2686,6 +2817,53 @@ for ip, n in dem.most_common(3):
   <span class="lc-body"><span class="lc-title">Google Shell Style Guide</span><span class="lc-sub">Nguồn gốc luật "100 dòng", cùng quy ước đặt tên, <code>main</code>, và cách in lỗi.</span></span>
 </a>
 <p class="note-ct"><strong>Thói quen mang về:</strong> một script chỉ xong khi nó chỉ được cho người lạ biết nó hỏng ở đâu, giữ một log đọc được, có một <code>lint.sh</code> lên màu xanh — và khi bạn đã tự hỏi, thật lòng, liệu tính năng kế tiếp có nên nằm trong Python hay không.</p>
+</div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-7-2-tham-so-kiem-tra" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 7.2 — Arguments, options and validation</span><span class="lc-sub">Already covered: arguments, validation and the while/case loop for long options.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-7-3-trap-don-dep" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 7.3 — trap, temp files and locks: cleaning up no matter what</span><span class="lc-sub">Already covered: trap, temp files and flock — the base of today's lock on a self-allocated fd.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-3-1-phan-loai" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Testing · 3.1 — Stub, mock, spy, fake: what each one is</span><span class="lc-sub">Stub, mock, spy, fake — your fake gzip is a stub.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-14-1-cong-chat-luong" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">GitHub Actions · 14.1 — Quality gates: required checks, the summary job, paths, rulesets and merge queues</span><span class="lc-sub">Quality gates: where lint.sh becomes a required check before merging.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-7-2-tham-so-kiem-tra" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 7.2 — Tham số, tuỳ chọn và kiểm tính hợp lệ</span><span class="lc-sub">Đã học: tham số, kiểm tính hợp lệ và vòng while case cho cờ dài.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-7-3-trap-don-dep" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 7.3 — trap, file tạm và khoá: dọn dẹp bất kể chuyện gì xảy ra</span><span class="lc-sub">Đã học: trap, tệp tạm và flock — nền của chiếc khoá trên fd tự cấp hôm nay.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-3-1-phan-loai" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Testing · 3.1 — Stub, mock, spy, fake: mỗi loại là gì</span><span class="lc-sub">Stub, mock, spy và fake — gzip giả của bạn chính là một stub.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-14-1-cong-chat-luong" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">GitHub Actions · 14.1 — Cổng chất lượng: check bắt buộc, job tổng hợp, paths, ruleset và merge queue</span><span class="lc-sub">Cổng chất lượng: nơi lint.sh trở thành phép kiểm bắt buộc trước khi gộp.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

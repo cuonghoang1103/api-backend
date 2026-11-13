@@ -181,11 +181,19 @@ ${slide('lx-06', 7, 'Biến đặc biệt shell tự điền')}
   <div class="kv"><span class="k"><code>\$RANDOM</code> · <code>\$SECONDS</code></span><span class="v">A random 0–32767 · seconds since the shell started. Handy for timing a script.</span></div>
   <div class="kv"><span class="k"><code>\$LINENO</code> · <code>\$BASH_SOURCE</code></span><span class="v">Current line number · the path of the running script. The pair used in error messages and <code>trap ERR</code> (Chapter 7).</span></div>
 </div>
-<pre><code class="language-bash"><span class="tok-comment"># The idiom for "where is this script, really" — works via symlinks</span>
+<pre><code class="language-bash"><span class="tok-comment"># The idiom for "which folder is this script in" — works from any working directory</span>
 SCRIPT_DIR=\$(cd "\$(dirname "\${BASH_SOURCE[0]}")" &amp;&amp; pwd)
 echo "\$SCRIPT_DIR"</code></pre>
 <div class="out">/srv/app/scripts</div>
-<p>That line appears at the top of a great many production scripts, and it is worth reading carefully: <code>dirname</code> of the script's own path, <code>cd</code> into it, then <code>pwd</code> to get the absolute resolved form. It means the script can find its own sibling files regardless of where it was invoked from — the alternative, a relative path, breaks the moment someone runs it from another directory or via <code>cron</code>.</p>
+<p>That line appears at the top of a great many production scripts, and it is worth reading carefully: <code>dirname</code> of the script's own path, <code>cd</code> into it, then <code>pwd</code> to get the absolute form. It means the script can find its own sibling files regardless of where it was invoked from — the alternative, a relative path, breaks the moment someone runs it from another directory or via <code>cron</code>.</p>
+<div class="callout warn"><strong>Corrected, measured on Ubuntu 24.04:</strong> an earlier version of this lesson said this line "works via symlinks". It does not, when the symlink points at the <em>file</em>. Call the script through <code>/tmp/goi-tat → ~/thu-linux/ch6/dau.sh</code> and <code>BASH_SOURCE[0]</code> is the link's path, so the line answers the link's folder:</div>
+<pre><code class="language-bash">SCRIPT_DIR=\$(cd "\$(dirname "\${BASH_SOURCE[0]}")" &amp;&amp; pwd)
+echo "SCRIPT_DIR=\$SCRIPT_DIR"
+THAT=\$(dirname "\$(readlink -f "\${BASH_SOURCE[0]}")")    <span class="tok-comment"># resolve the link first</span>
+echo "readlink -f  =\$THAT"</code></pre>
+<div class="out">SCRIPT_DIR=/tmp
+readlink -f  =/home/an/thu-linux/ch6</div>
+<p>A script that then reads <code>\$SCRIPT_DIR/.env</code> would look in <code>/tmp</code>. If your script may be reached through a link — a command dropped into <code>~/.local/bin</code> or <code>/usr/local/bin</code> is the usual case — resolve it with <code>readlink -f</code> first. Lesson 7.1 measures both forms side by side, next to the script skeleton.</p>
 
 <h3>Reading input</h3>
 <pre><code>read -r -p "Branch to deploy: " branch
@@ -405,11 +413,19 @@ ${slide('lx-06', 7, 'Biến đặc biệt shell tự điền')}
   <div class="kv"><span class="k"><code>\$RANDOM</code> · <code>\$SECONDS</code></span><span class="v">Một số ngẫu nhiên 0–32767 · số giây kể từ khi shell khởi động. Tiện để đo thời gian một script.</span></div>
   <div class="kv"><span class="k"><code>\$LINENO</code> · <code>\$BASH_SOURCE</code></span><span class="v">Số dòng hiện tại · đường dẫn của script đang chạy. Cặp này dùng trong thông báo lỗi và <code>trap ERR</code> (Chương 7).</span></div>
 </div>
-<pre><code class="language-bash"><span class="tok-comment"># Lối viết cho câu "script này thật ra nằm ở đâu" — chạy được cả qua liên kết tượng trưng</span>
+<pre><code class="language-bash"><span class="tok-comment"># Lối viết cho câu "script này nằm ở thư mục nào" — gọi từ thư mục làm việc nào cũng được</span>
 SCRIPT_DIR=\$(cd "\$(dirname "\${BASH_SOURCE[0]}")" &amp;&amp; pwd)
 echo "\$SCRIPT_DIR"</code></pre>
 <div class="out">/srv/app/scripts</div>
-<p>Dòng đó xuất hiện ở đầu rất nhiều script production, và nó đáng đọc kỹ: lấy <code>dirname</code> của đường dẫn chính script, <code>cd</code> vào đó, rồi <code>pwd</code> để có dạng tuyệt đối đã giải hết liên kết. Nó nghĩa là script tìm được những file nằm cạnh nó bất kể được gọi từ đâu — còn phương án kia, một đường dẫn tương đối, vỡ ngay khoảnh khắc có người chạy nó từ thư mục khác hoặc chạy qua <code>cron</code>.</p>
+<p>Dòng đó xuất hiện ở đầu rất nhiều script production, và nó đáng đọc kỹ: lấy <code>dirname</code> của đường dẫn chính script, <code>cd</code> vào đó, rồi <code>pwd</code> để có dạng tuyệt đối. Nó nghĩa là script tìm được những file nằm cạnh nó bất kể được gọi từ đâu — còn phương án kia, một đường dẫn tương đối, vỡ ngay khoảnh khắc có người chạy nó từ thư mục khác hoặc chạy qua <code>cron</code>.</p>
+<div class="callout warn"><strong>Đã sửa, đo trên Ubuntu 24.04:</strong> bản cũ của bài ghi dòng này "chạy được cả qua liên kết tượng trưng". KHÔNG đúng, khi liên kết trỏ tới chính <em>FILE</em> script. Gọi script qua <code>/tmp/goi-tat → ~/thu-linux/ch6/dau.sh</code> thì <code>BASH_SOURCE[0]</code> là đường dẫn của LIÊN KẾT, nên dòng này trả lời thư mục chứa liên kết:</div>
+<pre><code class="language-bash">SCRIPT_DIR=\$(cd "\$(dirname "\${BASH_SOURCE[0]}")" &amp;&amp; pwd)
+echo "SCRIPT_DIR=\$SCRIPT_DIR"
+THAT=\$(dirname "\$(readlink -f "\${BASH_SOURCE[0]}")")    <span class="tok-comment"># giải liên kết trước</span>
+echo "readlink -f  =\$THAT"</code></pre>
+<div class="out">SCRIPT_DIR=/tmp
+readlink -f  =/home/an/thu-linux/ch6</div>
+<p>Một script sau đó đọc <code>\$SCRIPT_DIR/.env</code> sẽ đi tìm trong <code>/tmp</code>. Nếu script của bạn có thể được gọi qua một liên kết — một lệnh thả vào <code>~/.local/bin</code> hay <code>/usr/local/bin</code> là trường hợp hay gặp nhất — hãy giải nó bằng <code>readlink -f</code> trước. Bài 7.1 đo cả hai dạng đặt cạnh nhau, ngay bên bộ khung script.</p>
 
 <h3>Đọc dữ liệu vào</h3>
 <pre><code>read -r -p "Nhánh cần deploy: " branch
@@ -509,6 +525,43 @@ rc=2 y=[]
 
 <div class="pitfall"><strong>Bẫy:</strong> <code>var=\$(cmd)</code> làm mất mã thoát nếu bạn kiểm sai chỗ. <code>output=\$(risky-command)</code> đặt <code>\$?</code> theo <code>risky-command</code> — tốt — nhưng <code>local output=\$(risky-command)</code> bên trong một hàm lại đặt <code>\$?</code> theo lệnh <code>local</code>, thứ luôn thành công. Chỗ hỏng biến mất. Hãy khai báo và gán trên hai dòng riêng: <code>local output; output=\$(risky-command) || return 1</code>. Cái này vô hình khi soát mã, và đó chính xác là lý do ShellCheck tồn tại.</div>
 <p class="note-ct"><strong>Hai mặc định nên nhận ngay bây giờ, trước cả khi bài sau giải thích chúng:</strong> viết <code>"\${var}"</code> có ngoặc nhọn và nháy kép, lần nào cũng vậy; và viết <code>\$(…)</code> thay cho dấu huyền, lần nào cũng vậy. Không cái nào đòi bạn phải cân nhắc, cả hai đều xoá sổ một loại lỗi, và chính sự nhất quán đó làm script đọc được với người sau — mà người sau thường là chính bạn, sáu tháng sau, lúc 3 giờ sáng.</p>
+</div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-lab-2" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · Lab 2 — Shell scripting: quoting, tests, loops, functions, exit codes, trap, backup, health check, awk and sed</span><span class="lc-sub">Lab 2 had you write your first shell script; this lesson explains why exactly that syntax works.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-1-2-fork-exec" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 1.2 — fork, exec, wait: how every process is born</span><span class="lc-sub">Where the copy of the environment is made: fork, exec and wait.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-2-4-moi-truong-nguoi-dung" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 2.4 — Environment, users and arguments</span><span class="lc-sub">Passing environment variables into a container — the same export rule.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-lab-2" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · Lab 2 — Shell script: dấu nháy, điều kiện, vòng lặp, hàm, mã thoát, trap, sao lưu, kiểm tra sức khoẻ, awk và sed</span><span class="lc-sub">Lab 2 đã cho bạn viết shell script đầu tiên; bài này giải thích vì sao đúng cú pháp đó mới chạy.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-1-2-fork-exec" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 1.2 — fork, exec, wait: mọi tiến trình ra đời thế nào</span><span class="lc-sub">Bản sao môi trường được tạo ở đâu: fork, exec và wait.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-2-4-moi-truong-nguoi-dung" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 2.4 — Môi trường, người dùng và tham số</span><span class="lc-sub">Truyền biến môi trường vào container — cùng một luật export đó.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -975,6 +1028,33 @@ a[1]=x a[0]=[]</div>
 <div class="pitfall"><strong>Bẫy:</strong> việc thiếu nháy vẫn chạy ổn cho tới ngày nó không ổn nữa, và cái ngày đó do DỮ LIỆU của bạn chọn. Một script chạy hoàn hảo suốt một năm sẽ vỡ ngay lần đầu có người tải lên <code>Bao cao Q3.pdf</code>, hoặc một giá trị cấu hình hoá ra rỗng, hoặc một tên file bắt đầu bằng dấu gạch ngang. Vì lỗi phụ thuộc vào ĐẦU VÀO chứ không phải vào mã, việc thử với những tên file gọn gàng của chính bạn chẳng chứng minh được gì. Hai thói quen bịt lại chỗ này: chạy <code>shellcheck</code> với mọi script, và thử trên một thư mục cố tình hiểm ác — <code>touch 'a b.txt' '-rf' '*' "it's"</code> — trước khi bạn tin nó.</div>
 <p class="note-ct"><strong>Cái luật, nén lại:</strong> nháy kép quanh mọi phép khai triển <code>\$</code>; nháy đơn cho mọi thứ phải giữ nguyên văn; <code>"\$@"</code> và <code>"\${arr[@]}"</code> luôn có cả dấu nháy lẫn dấu <code>@</code>. Đó là toàn bộ bài học, và việc tuân theo nó một cách máy móc — không cân nhắc lại mỗi lần — chính là thứ làm script shell thôi mong manh.</p>
 </div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-lab-2" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · Lab 2 — Shell scripting: quoting, tests, loops, functions, exit codes, trap, backup, health check, awk and sed</span><span class="lc-sub">Lab 2 opens with quoting; this lesson gives you the expansion order behind the rule.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-4-3-cmd-entrypoint" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 4.3 — CMD, ENTRYPOINT and entrypoint scripts</span><span class="lc-sub">Entrypoint scripts — whose last line is exactly exec "$@".</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-lab-2" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · Lab 2 — Shell script: dấu nháy, điều kiện, vòng lặp, hàm, mã thoát, trap, sao lưu, kiểm tra sức khoẻ, awk và sed</span><span class="lc-sub">Lab 2 mở đầu bằng dấu nháy; bài này cho bạn thứ tự khai triển đứng sau luật đó.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-4-3-cmd-entrypoint" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 4.3 — CMD, ENTRYPOINT và script entrypoint</span><span class="lc-sub">Script entrypoint — dòng cuối của nó chính là exec "$@".</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 6.3 ─────────────────────────── */
@@ -1114,7 +1194,7 @@ Deployment</div>
 <div class="callout warn">The space in <code>\${s: -4}</code> is required. Without it, <code>\${s:-4}</code> is the <em>default-value</em> operator from the top of this lesson and means "use 4 if <code>s</code> is empty" — a completely different result that will not error. Two syntaxes, one character apart, and only a space distinguishes them.</div>
 
 <h3>Replacing external commands</h3>
-${slide('lx-06', 18, 'Không fork thì nhanh gấp ~200 lần; bash 3.2 của Mac')}
+${slide('lx-06', 18, 'Không fork thì nhanh gấp hàng trăm lần (slide đo ≈200×, thân bài 126×); bash 3.2 của Mac')}
 <pre><code class="language-bash">path="/srv/app/config/db.yml"
 
 <span class="tok-comment"># Each of these launches a process — ~1-3 ms and a fork</span>
@@ -1129,7 +1209,7 @@ echo "\${path%/*}"</code></pre>
 real  0m11.204s
 $ time for i in {1..10000}; do echo "\${path##*/}" &gt;/dev/null; done
 real  0m0.089s</div>
-<p>Measured: 126× faster over ten thousand iterations. In a one-off command the difference is invisible; in a loop over a few thousand files it is the difference between a script that takes eleven seconds and one that feels instant. The habit is worth forming because it costs nothing once you know the syntax.</p>
+<p>Measured: 126× faster over ten thousand iterations. The slide above comes from a different run — 2,000 iterations, 6.06 s against 0.031 s, about 200× — and the re-run for the video on 12/11/2026 gave, again for 2,000 iterations, 1.30 s against 0.016 s, about 81×. The factor moves with the machine and the run; the conclusion does not: a fork costs milliseconds, an expansion costs microseconds. In a one-off command the difference is invisible; in a loop over a few thousand files it is the difference between a script that takes eleven seconds and one that feels instant. The habit is worth forming because it costs nothing once you know the syntax.</p>
 <div class="callout ok">There is one caveat worth knowing: <code>\${path##*/}</code> and <code>basename</code> disagree on edge cases. For <code>/srv/app/</code> with a trailing slash, <code>basename</code> gives <code>app</code>, while <code>\${path##*/}</code> gives an empty string. If you are handling paths you did not construct, <code>basename</code>'s edge-case handling may be worth the fork.</div>
 
 <h3>Indirection and listing</h3>
@@ -1251,7 +1331,7 @@ DEPLOY DEPLOY</div>
 <li><code>#</code>/<code>##</code> trim from the left, <code>%</code>/<code>%%</code> from the right; patterns are globs, never regexes.</li>
 <li><code>/</code> replaces the first match, <code>//</code> all; in bash 5.2 an unquoted <code>&amp;</code> in the replacement means the matched text.</li>
 <li><code>\${#v}</code> and slicing count characters only in a UTF-8 locale; <code>\${s: -4}</code> needs its space.</li>
-<li>Replacing <code>basename</code>/<code>sed</code> in loops is ~200× faster, but <code>^^</code>, <code>@Q</code> and negative indexes do not exist in the Mac's bash 3.2.</li>
+<li>Replacing <code>basename</code>/<code>sed</code> in loops is roughly a hundred times faster (126× measured here; the factor depends on the machine), but <code>^^</code>, <code>@Q</code> and negative indexes do not exist in the Mac's bash 3.2.</li>
 </ul>
 <a class="link-card" href="https://www.gnu.org/software/bash/manual/html_node/Shell-Parameter-Expansion.html" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
@@ -1403,7 +1483,7 @@ Deployment</div>
 <div class="callout warn">Dấu cách trong <code>\${s: -4}</code> là BẮT BUỘC. Thiếu nó, <code>\${s:-4}</code> chính là toán tử <em>GIÁ TRỊ MẶC ĐỊNH</em> ở đầu bài này và nghĩa là "dùng 4 nếu <code>s</code> rỗng" — một kết quả hoàn toàn khác mà lại không báo lỗi. Hai cú pháp, cách nhau một ký tự, và chỉ một dấu cách phân biệt chúng.</div>
 
 <h3>Thay thế các lệnh bên ngoài</h3>
-${slide('lx-06', 18, 'Không fork thì nhanh gấp ~200 lần; bash 3.2 của Mac')}
+${slide('lx-06', 18, 'Không fork thì nhanh gấp hàng trăm lần (slide đo ≈200×, thân bài 126×); bash 3.2 của Mac')}
 <pre><code class="language-bash">path="/srv/app/config/db.yml"
 
 <span class="tok-comment"># Mỗi dòng dưới đây khởi chạy một tiến trình — chừng 1-3 mili giây và một lần fork</span>
@@ -1418,7 +1498,7 @@ echo "\${path%/*}"</code></pre>
 real  0m11.204s
 $ time for i in {1..10000}; do echo "\${path##*/}" &gt;/dev/null; done
 real  0m0.089s</div>
-<p>Đo thật: nhanh hơn 126 lần qua mười nghìn vòng lặp. Với một lệnh chạy một lần thì khác biệt là vô hình; trong một vòng lặp qua vài nghìn file thì nó là khác biệt giữa một script mất mười một giây và một script cho cảm giác tức thì. Thói quen này đáng xây vì một khi đã thuộc cú pháp thì nó chẳng tốn gì.</p>
+<p>Đo thật: nhanh hơn 126 lần qua mười nghìn vòng lặp. Slide phía trên là một lần đo KHÁC — 2.000 vòng, 6,06 s so với 0,031 s, cỡ 200 lần — còn lần chạy lại cho video ngày 12/11/2026, cũng 2.000 vòng, ra 1,30 s so với 0,016 s, cỡ 81 lần. Hệ số xê dịch theo máy và theo lần chạy; kết luận thì không: một lần fork tốn cỡ mili giây, một phép khai triển tốn cỡ micro giây. Với một lệnh chạy một lần thì khác biệt là vô hình; trong một vòng lặp qua vài nghìn file thì nó là khác biệt giữa một script mất mười một giây và một script cho cảm giác tức thì. Thói quen này đáng xây vì một khi đã thuộc cú pháp thì nó chẳng tốn gì.</p>
 <div class="callout ok">Có một điểm cần lưu ý: <code>\${path##*/}</code> và <code>basename</code> bất đồng ở các ca biên. Với <code>/srv/app/</code> có dấu gạch chéo cuối, <code>basename</code> cho <code>app</code>, còn <code>\${path##*/}</code> cho chuỗi rỗng. Nếu bạn đang xử lý những đường dẫn không phải do mình dựng nên, cách xử lý ca biên của <code>basename</code> có thể đáng để tốn một lần fork.</div>
 
 <h3>Gián tiếp và liệt kê</h3>
@@ -1540,7 +1620,7 @@ DEPLOY DEPLOY</div>
 <li><code>#</code>/<code>##</code> xén từ trái, <code>%</code>/<code>%%</code> xén từ phải; mẫu là glob, không bao giờ là regex.</li>
 <li><code>/</code> thay chỗ khớp đầu, <code>//</code> thay tất cả; ở bash 5.2 dấu <code>&amp;</code> không nháy trong phần thay là đoạn vừa khớp.</li>
 <li><code>\${#v}</code> và cắt lát chỉ đếm ký tự khi locale là UTF-8; <code>\${s: -4}</code> cần dấu cách của nó.</li>
-<li>Thay <code>basename</code>/<code>sed</code> trong vòng lặp nhanh ~200 lần, nhưng <code>^^</code>, <code>@Q</code> và chỉ số âm không có trong bash 3.2 của Mac.</li>
+<li>Thay <code>basename</code>/<code>sed</code> trong vòng lặp nhanh cỡ trăm lần (đo ở đây 126 lần; hệ số tuỳ máy), nhưng <code>^^</code>, <code>@Q</code> và chỉ số âm không có trong bash 3.2 của Mac.</li>
 </ul>
 <a class="link-card" href="https://www.gnu.org/software/bash/manual/html_node/Shell-Parameter-Expansion.html" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
@@ -1561,6 +1641,33 @@ DEPLOY DEPLOY</div>
 
 <div class="pitfall"><strong>Bẫy:</strong> quên rằng đây là <strong>GLOB, không phải regex</strong>. <code>\${file%%[0-9]*}</code> chạy được vì khoảng trong ngoặc vuông là cú pháp glob, nhưng <code>\${file%%\\d*}</code> thì âm thầm chẳng làm gì — <code>\\d</code> không phải glob, nên không khớp gì cả, nên giá trị trả về nguyên xi mà không có lỗi nào. Điều tương tự đúng với <code>+</code>, <code>|</code> và <code>()</code>. Khi một phép khai triển tham số "không chạy", hãy kiểm xem có phải bạn vừa viết một regex theo phản xạ không; nếu bạn thật sự cần regex thì đó là việc của <code>sed</code> hoặc <code>[[ =~ ]]</code>.</div>
 <p class="note-ct"><strong>Học bốn cái này trước là bạn đã có phần lớn giá trị:</strong> <code>\${var:-mặc định}</code> cho phương án lùi, <code>\${var:?msg}</code> cho cấu hình bắt buộc, <code>\${path##*/}</code> cho basename, và <code>\${file%.*}</code> để bỏ phần đuôi. Chúng bao phủ đại đa số các nhu cầu thực tế, và mỗi cái gỡ đi một lần khởi chạy tiến trình khỏi vòng lặp của bạn.</p>
+</div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-14-5-tien-trinh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 14.2 — Processes, threads and signals: fork vs posix_spawn vs CreateProcess, measured</span><span class="lc-sub">Why a fork is expensive, measured on three operating systems.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-4-3-env-khong-phai-mot-dinh-dang" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy to a VPS · 4.3 — The .env file is not one format</span><span class="lc-sub">Configuration in practice: the .env file is not one format.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-14-5-tien-trinh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 14.2 — Tiến trình, luồng và tín hiệu: fork vs posix_spawn vs CreateProcess, đo thật</span><span class="lc-sub">Vì sao một lần fork lại đắt, đo thật trên ba hệ điều hành.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-4-3-env-khong-phai-mot-dinh-dang" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 4.3 — Tệp .env không phải MỘT định dạng</span><span class="lc-sub">Cấu hình trong thực tế: tệp .env không phải một định dạng.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -2092,6 +2199,43 @@ a*
 
 <div class="pitfall"><strong>Bẫy:</strong> <code>if [ \$var = "yes" ]</code> với <code>var</code> rỗng. Shell khai triển nó thành <code>[ = "yes" ]</code>, và đó là một lỗi cú pháp — <code>unary operator expected</code> — nên nhánh đó vừa không chạy vừa không hỏng một cách sạch sẽ. Cách chữa đời cũ là <code>[ "x\$var" = "xyes" ]</code>, thứ bạn vẫn còn thấy trong những script viết cho <code>sh</code>. Trong bash thì câu trả lời đơn giản là <code>[[ \$var == "yes" ]]</code>: bên trong <code>[[ ]]</code> không có cắt từ, nên một biến rỗng chỉ là một chuỗi rỗng và phép thử cho kết quả sai.</div>
 <p class="note-ct"><strong>Ba mặc định cho phần còn lại của khoá này:</strong> <code>[[ ]]</code> cho các phép thử, <code>(( ))</code> cho mọi thứ liên quan tới số, và <code>case</code> thay cho quá hai lần <code>elif</code>. Và hãy viết những chốt chặn thoát sớm kèm thông điệp ra <code>&gt;&amp;2</code> — một script từ chối khởi động và nói rõ vì sao thì đáng giá hơn nhiều so với một script chạy được nửa đường rồi để bạn ngồi đoán.</p>
+</div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-lab-2" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · Lab 2 — Shell scripting: quoting, tests, loops, functions, exit codes, trap, backup, health check, awk and sed</span><span class="lc-sub">Lab 2 used if, conditions and exit codes; this lesson shows that if actually runs a command.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-2-4-buoc-ma-thoat" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">GitHub Actions · 2.4 — Steps, exit codes, and the flag that hides a failure</span><span class="lc-sub">Every CI step is red or green by its exit code — and one flag can hide a failure.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-1-4-vong-doi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 1.4 — Process states, signals and exit codes (why exit 137 = OOM)</span><span class="lc-sub">Exit codes from the kernel's side, and why 137 means OOM.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-lab-2" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · Lab 2 — Shell script: dấu nháy, điều kiện, vòng lặp, hàm, mã thoát, trap, sao lưu, kiểm tra sức khoẻ, awk và sed</span><span class="lc-sub">Lab 2 đã dùng if, điều kiện và mã thoát; bài này chỉ ra if thật ra chạy một lệnh.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-2-4-buoc-ma-thoat" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">GitHub Actions · 2.4 — Bước, mã thoát, và cái cờ giấu mất cú hỏng</span><span class="lc-sub">Mỗi bước CI đỏ hay xanh chính là nhờ mã thoát — và một cái cờ có thể giấu mất cú hỏng.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-1-4-vong-doi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 1.4 — Trạng thái tiến trình, tín hiệu và mã thoát (vì sao exit 137 = OOM)</span><span class="lc-sub">Mã thoát nhìn từ phía nhân, và vì sao 137 là OOM.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -2653,6 +2797,43 @@ zsh:1: no matches found: *.csv</div>
 
 <div class="pitfall"><strong>Bẫy:</strong> quên <code>local</code>. Một hàm dùng <code>i</code>, <code>tmp</code> hay <code>file</code> mà không khai báo sẽ ghi vào một biến <em>TOÀN CỤC</em> — nên gọi hàm đó từ bên trong một vòng lặp chạy trên <code>i</code> sẽ âm thầm đặt lại biến đếm, và bạn nhận được một vòng lặp vô tận hoặc một khoảng bị nhảy cóc, chẳng có lỗi nào ở đâu cả. Đây là lỗi phổ biến nhất trong những script bash dài, và nó ẩn mình vì chỉ lộ ra khi hai đoạn mã tình cờ chọn trùng tên biến. Hãy khai báo mọi biến cục bộ của hàm bằng <code>local</code>, không ngoại lệ.</div>
 <p class="note-ct"><strong>Thuộc hai dòng này thì bạn sẽ không viết ra một vòng lặp hỏng nữa:</strong> <code>for f in *.log; do … done</code> cho file, và <code>while IFS= read -r line; do … done &lt; file</code> cho dòng. Mọi sai lệch khỏi hai dạng đó — <code>\$(ls)</code>, một lệnh <code>read</code> trần, một cái ống dẫn vào vòng lặp — đều đưa trở lại một lỗi mà hai dạng này đã giải xong.</p>
+</div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-lab-2" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · Lab 2 — Shell scripting: quoting, tests, loops, functions, exit codes, trap, backup, health check, awk and sed</span><span class="lc-sub">Lab 2 wrote loops and functions; this lesson shows how to write them without losing data.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/git/learn?lessonSlug=git-14-4-windows-crlf" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Git &amp; GitHub · 14.4 — Working with Windows teammates: CRLF/LF, .gitattributes, case and exec bits</span><span class="lc-sub">Stop the stray carriage return at the source: .gitattributes for teams with Windows machines.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-8-4-exit137" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 8.4 — The exit-137 incident, measured: parallel builds, memory.high and the kill</span><span class="lc-sub">What unlimited parallelism looks like on a real machine: the exit-137 incident.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-lab-2" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · Lab 2 — Shell script: dấu nháy, điều kiện, vòng lặp, hàm, mã thoát, trap, sao lưu, kiểm tra sức khoẻ, awk và sed</span><span class="lc-sub">Lab 2 đã viết vòng lặp và hàm; bài này cho bạn cách viết không mất dữ liệu.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/git/learn?lessonSlug=git-14-4-windows-crlf" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Git &amp; GitHub · 14.4 — Làm nhóm với bạn dùng Windows: CRLF/LF, .gitattributes, hoa/thường và quyền chạy</span><span class="lc-sub">Chặn ký tự CR từ gốc: tệp .gitattributes cho nhóm có bạn dùng Windows.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-8-4-exit137" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 8.4 — Sự cố exit 137, đo thật: build song song, memory.high và cú giết</span><span class="lc-sub">Song song không giới hạn trông ra sao trên máy thật: sự cố mã 137.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

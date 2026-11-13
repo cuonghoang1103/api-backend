@@ -587,6 +587,43 @@ real	0m0.031s</div>
 <div class="pitfall"><strong>Bẫy:</strong> sửa cái đầu tiên bạn nhìn thấy. Cuộc quét ở trên cho ra một backend hỏng, một cú giết OOM, một cái đĩa 96% và không có swap — bốn phát hiện, trong đó đúng MỘT cái là nguyên nhân gốc còn lại là hệ quả hoặc điều kiện góp phần. Khởi động lại backend "sửa" được nó trong chín mươi giây. Thói quen chặn chuyện này: với mỗi phát hiện, hãy hỏi "cái này có thể do một trong mấy cái kia gây ra không?" và gạt nó sang bên nếu câu trả lời là có. Nguyên nhân gốc là phát hiện KHÔNG CÓ GÌ ĐỨNG TRƯỚC nó — ở đây là một file log gỡ lỗi 41GB đã làm đầy đĩa.</div>
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> Quan sát trước khi đụng vào: một cuộc quét bốn giây, lưu ra file, đáng giá hơn hai mươi phút đoán mò đầu tiên. Hãy hỏi CÁI GÌ ĐÃ ĐỔI trước khi hỏi CÁI GÌ ĐANG HỎNG, vì <code>ls -lt /etc</code> và nhật ký deploy giải được nhiều sự cố hơn bất kỳ lượng mã nguồn nào bạn đọc. Và hãy đổi đúng một thứ mỗi lần rồi ghi lại — không thì sự cố kết thúc mà không ai học được gì, tức là nó chưa thật sự kết thúc.</p>
 </div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-2-1-phuong-phap" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 2.1 — "Slow" is not a diagnosis: the USE method and the first five minutes</span><span class="lc-sub">"Slow" is not a diagnosis: the USE method and the first five minutes.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-12-2-cgroups" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 12.2 — cgroups v2 by hand: memory.max, cpu.max, pids.max and io.max, each one hit on purpose</span><span class="lc-sub">cgroups by hand: hitting memory.max, cpu.max and pids.max on purpose.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-17-4-bao-cao" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 17.4 — Write the postmortem and your interview story: blameless, measured, with the whole-course checklist</span><span class="lc-sub">Writing a blameless, measured incident report.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-2-1-phuong-phap" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 2.1 — "Chậm" không phải chẩn đoán: phương pháp USE và năm phút đầu tiên</span><span class="lc-sub">"Chậm" không phải chẩn đoán: phương pháp USE và năm phút đầu tiên.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-12-2-cgroups" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 12.2 — cgroup v2 bằng tay: memory.max, cpu.max, pids.max và io.max, chạm từng trần một</span><span class="lc-sub">cgroup bằng tay: cố ý chạm từng trần memory.max, cpu.max, pids.max.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-17-4-bao-cao" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 17.4 — Viết báo cáo sự cố và câu chuyện phỏng vấn: không đổ lỗi, có số đo, kèm checklist của cả khoá</span><span class="lc-sub">Viết báo cáo sự cố không đổ lỗi, có số đo.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 12.2 ─────────────────────────── */
@@ -708,7 +745,7 @@ $ docker inspect cuonghoangdev_backend --format '{{.State.ExitCode}} {{.State.OO
   <div class="kv"><span class="k">ExitCode 1, OOMKilled false</span><span class="v">The application itself is failing at startup. <code>docker logs</code> has the reason — usually a missing env var or an unreachable dependency.</span></div>
   <div class="kv"><span class="k">OOMKilled true (exit 137)</span><span class="v">The container hit its memory limit, or the host ran out. <code>docker stats</code> and the host's <code>dmesg -T</code>. Raise the limit or fix the leak — a restart just repeats it.</span></div>
   <div class="kv"><span class="k">Exit 127</span><span class="v">Command not found INSIDE the image. The entrypoint references a binary the image does not have — very common after switching base images.</span></div>
-  <div class="kv"><span class="k">Exit 126</span><span class="v">Found but not executable: a missing <code>+x</code> on an entrypoint script, or a filesystem mounted <code>noexec</code>. (A script with CRLF line endings is a different failure: the kernel looks for an interpreter named <code>/bin/sh\\r</code>, does not find it, and reports "no such file or directory" — exit 127 in a shell, not 126. An earlier version of this card lumped the two together. On Docker 29 both of these entrypoint mistakes show up as exit <strong>255</strong>; see the measured table below.)</span></div>
+  <div class="kv"><span class="k">Exit 126</span><span class="v">Found but not executable: a missing <code>+x</code> on an entrypoint script, or a filesystem mounted <code>noexec</code>. (A script with CRLF line endings is a different failure: the kernel looks for an interpreter named <code>/bin/sh\\r</code>, does not find it, and reports "no such file or directory" — exit 127 in a shell, not 126. An earlier version of this card lumped the two together. In Docker the two entrypoint mistakes also look different: a CRLF entrypoint dies with <strong>255</strong>, a missing <code>+x</code> makes <code>docker run</code> itself exit <strong>126</strong>; see the measured table below.)</span></div>
   <div class="kv"><span class="k">Starts, then dies with no log</span><span class="v">The wrong architecture or libc. This project's own history: an image built from the wrong <code>Dockerfile</code> put glibc Prisma engines on a musl Alpine base — green build, green push, endless restarts, API down for seven minutes.</span></div>
 </div>
 <pre><code class="language-bash"><span class="tok-comment"># Get a shell in the image WITHOUT the entrypoint — the fastest way to look around</span>
@@ -734,9 +771,9 @@ Error: DATABASE_URL is not set
 <tr><td><code>--memory 64m</code> + a shell loop doubling a string</td><td><code>Exited (137) 5 seconds ago</code></td><td><code>137 true</code></td><td>the memory limit; <code>docker logs</code> shows only the last normal line</td></tr>
 <tr><td><code>docker run ubuntu:24.04 node dist/index.js</code></td><td><code>exec: "node": executable file not found in \$PATH</code></td><td>CLI exit <code>127</code></td><td>the binary is not in the image</td></tr>
 <tr><td>entrypoint script with CRLF</td><td><code>exec /entry.sh: no such file or directory</code></td><td><code>255</code></td><td>the <code>\\r</code> in the shebang — <code>cat -A</code> (12.4)</td></tr>
-<tr><td>entrypoint script without <code>+x</code></td><td><code>exec /entry.sh: permission denied</code></td><td><code>255</code></td><td><code>chmod +x</code> in the Dockerfile</td></tr>
+<tr><td>entrypoint script without <code>+x</code></td><td><code>OCI runtime create failed … exec: "/entry.sh": permission denied</code></td><td>CLI exit <code>126</code></td><td><code>chmod +x</code> in the Dockerfile</td></tr>
 </table>
-<p>Two things surprised us when measuring. First, a shell script that dies from <code>\${DATABASE_URL:?}</code> exits with <strong>127</strong>, not 1 — so "127 = command not found" is a strong hint, not a law; read <code>docker logs</code> before concluding. Second, on current Docker the two entrypoint mistakes both surface as <strong>255</strong> with only the <code>exec …</code> line to tell them apart; older tables that promise 126 for "not executable" describe older Docker versions. The error text is the reliable part.</p>
+<p>Two things surprised us when measuring. First, a shell script that dies from <code>\${DATABASE_URL:?}</code> exits with <strong>127</strong>, not 1 — so "127 = command not found" is a strong hint, not a law; read <code>docker logs</code> before concluding. Second, the two entrypoint mistakes fail at different moments. A CRLF script gets as far as starting and dies with <strong>255</strong> and the line <code>exec /entry.sh: no such file or directory</code>; a script without <code>+x</code> is refused while the container is being created, so there is no container exit code at all — <code>docker run</code> prints the long <code>OCI runtime create failed</code> message and exits <strong>126</strong> itself. (Re-measured on Docker 29.8.0 on 13/11/2026; an earlier version of this page recorded 255 for both.) Exit codes move between Docker versions; the error text is the reliable part.</p>
 <h3>Recipe 6 — you cannot SSH in at all</h3>
 ${slide('lx-12', 14, 'Không SSH được: phía máy chủ nói rõ')}
 <div class="lz-flow">
@@ -851,7 +888,7 @@ ControlCe  1307 admin   11u  IPv4 0x38e6a7466b04f758      0t0  TCP *:5000 (LISTE
 <li>Refused = server, timed out = network, name not known = DNS, reset = the application — and <code>nc -z</code> cannot see a reset.</li>
 <li>Always put a timeout on probes (<code>nc -w 3</code>, <code>curl -m 5</code>); without one, a drop costs you over a minute.</li>
 <li>502 with <code>111: Connection refused</code> is a dead app; 504 is a slow one; <code>localhost</code> upstreams log <code>[::1]</code> errors.</li>
-<li>For containers read ExitCode + OOMKilled + logs together: <code>137 true</code> is memory, <code>1 false</code> is the app, 255 is a broken entrypoint.</li>
+<li>For containers read ExitCode + OOMKilled + logs together: <code>137 true</code> is memory, <code>1 false</code> is the app, 255 (CRLF) or a <code>docker run</code> that exits 126 (no <code>+x</code>) is a broken entrypoint.</li>
 </ul>
 <a class="link-card" href="https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html#Process%20Exit%20Codes" target="_blank" rel="noopener">
   <span class="lc-ico">🔢</span>
@@ -981,7 +1018,7 @@ $ docker inspect cuonghoangdev_backend --format '{{.State.ExitCode}} {{.State.OO
   <div class="kv"><span class="k">ExitCode 1, OOMKilled false</span><span class="v">Chính ứng dụng hỏng lúc khởi động. <code>docker logs</code> có lý do — thường là thiếu một biến môi trường hoặc một thứ phụ thuộc không nối tới được.</span></div>
   <div class="kv"><span class="k">OOMKilled true (thoát 137)</span><span class="v">Container chạm trần bộ nhớ của nó, hoặc máy chủ hết RAM. Xem <code>docker stats</code> và <code>dmesg -T</code> của máy chủ. Hãy nâng trần hoặc sửa chỗ rò — khởi động lại chỉ lặp lại y hệt.</span></div>
   <div class="kv"><span class="k">Thoát 127</span><span class="v">Không tìm thấy câu lệnh BÊN TRONG ảnh. Entrypoint trỏ tới một chương trình mà ảnh không có — rất hay gặp sau khi đổi ảnh nền.</span></div>
-  <div class="kv"><span class="k">Thoát 126</span><span class="v">Tìm thấy nhưng không chạy được: thiếu <code>+x</code> trên script entrypoint, hoặc hệ thống file được gắn <code>noexec</code>. (Script có ký tự xuống dòng CRLF là một cú hỏng KHÁC: nhân đi tìm trình thông dịch tên là <code>/bin/sh\\r</code>, không thấy, và báo "no such file or directory" — trong shell là mã 127, không phải 126. Bản trước của ô này gộp hai thứ làm một. Trên Docker 29 cả hai lỗi entrypoint này đều hiện ra thành mã <strong>255</strong>; xem bảng đo thật ở dưới.)</span></div>
+  <div class="kv"><span class="k">Thoát 126</span><span class="v">Tìm thấy nhưng không chạy được: thiếu <code>+x</code> trên script entrypoint, hoặc hệ thống file được gắn <code>noexec</code>. (Script có ký tự xuống dòng CRLF là một cú hỏng KHÁC: nhân đi tìm trình thông dịch tên là <code>/bin/sh\\r</code>, không thấy, và báo "no such file or directory" — trong shell là mã 127, không phải 126. Bản trước của ô này gộp hai thứ làm một. Trong Docker hai lỗi entrypoint này cũng trông khác nhau: entrypoint dính CRLF chết với mã <strong>255</strong>, còn thiếu <code>+x</code> thì chính <code>docker run</code> thoát mã <strong>126</strong>; xem bảng đo thật ở dưới.)</span></div>
   <div class="kv"><span class="k">Lên rồi chết mà không có log</span><span class="v">Sai kiến trúc hoặc sai libc. Chính lịch sử của dự án này: một ảnh dựng từ nhầm <code>Dockerfile</code> đã đặt engine Prisma bản glibc lên nền Alpine musl — build xanh, đẩy xanh, restart vô tận, và API chết bảy phút.</span></div>
 </div>
 <pre><code class="language-bash"><span class="tok-comment"># Mở một shell trong ảnh mà KHÔNG chạy entrypoint — cách nhanh nhất để ngó quanh</span>
@@ -1007,9 +1044,9 @@ Error: DATABASE_URL is not set
 <tr><td><code>--memory 64m</code> + vòng lặp shell nhân đôi một chuỗi</td><td><code>Exited (137) 5 seconds ago</code></td><td><code>137 true</code></td><td>trần bộ nhớ; <code>docker logs</code> chỉ còn dòng bình thường cuối cùng</td></tr>
 <tr><td><code>docker run ubuntu:24.04 node dist/index.js</code></td><td><code>exec: "node": executable file not found in \$PATH</code></td><td>dòng lệnh thoát <code>127</code></td><td>chương trình không có trong ảnh</td></tr>
 <tr><td>script entrypoint dính CRLF</td><td><code>exec /entry.sh: no such file or directory</code></td><td><code>255</code></td><td><code>\\r</code> trong dòng shebang — <code>cat -A</code> (12.4)</td></tr>
-<tr><td>script entrypoint thiếu <code>+x</code></td><td><code>exec /entry.sh: permission denied</code></td><td><code>255</code></td><td><code>chmod +x</code> trong Dockerfile</td></tr>
+<tr><td>script entrypoint thiếu <code>+x</code></td><td><code>OCI runtime create failed … exec: "/entry.sh": permission denied</code></td><td>CLI thoát mã <code>126</code></td><td><code>chmod +x</code> trong Dockerfile</td></tr>
 </table>
-<p>Hai điều làm chúng tôi bất ngờ khi đo. Một, script shell chết vì <code>\${DATABASE_URL:?}</code> thoát với mã <strong>127</strong>, không phải 1 — nên "127 = không tìm thấy lệnh" là một gợi ý mạnh chứ không phải định luật; hãy đọc <code>docker logs</code> trước khi kết luận. Hai, trên Docker hiện nay cả hai lỗi entrypoint đều hiện thành <strong>255</strong>, chỉ có dòng <code>exec …</code> là phân biệt được; những bảng cũ hứa 126 cho "không chạy được" là mô tả các bản Docker cũ. Phần chữ của thông báo lỗi mới là phần đáng tin.</p>
+<p>Hai điều làm chúng tôi bất ngờ khi đo. Một, script shell chết vì <code>\${DATABASE_URL:?}</code> thoát với mã <strong>127</strong>, không phải 1 — nên "127 = không tìm thấy lệnh" là một gợi ý mạnh chứ không phải định luật; hãy đọc <code>docker logs</code> trước khi kết luận. Hai, hai lỗi entrypoint hỏng ở hai thời điểm khác nhau. Script dính CRLF đi được tới lúc khởi động rồi chết với mã <strong>255</strong> và dòng <code>exec /entry.sh: no such file or directory</code>; script thiếu <code>+x</code> bị từ chối ngay lúc container đang được TẠO, nên chẳng có mã thoát container nào cả — <code>docker run</code> in thông báo dài <code>OCI runtime create failed</code> rồi chính nó thoát mã <strong>126</strong>. (Đo lại trên Docker 29.8.0 ngày 13/11/2026; bản cũ của trang này ghi 255 cho cả hai.) Mã thoát xê dịch giữa các bản Docker; phần chữ của thông báo lỗi mới là phần đáng tin.</p>
 <h3>Công thức 6 — bạn không SSH vào được</h3>
 ${slide('lx-12', 14, 'Không SSH được: phía máy chủ nói rõ')}
 <div class="lz-flow">
@@ -1124,7 +1161,7 @@ ControlCe  1307 admin   11u  IPv4 0x38e6a7466b04f758      0t0  TCP *:5000 (LISTE
 <li>Refused = máy chủ, timed out = mạng, name not known = DNS, reset = ứng dụng — và <code>nc -z</code> không thấy được reset.</li>
 <li>Luôn đặt hạn giờ cho phép thử (<code>nc -w 3</code>, <code>curl -m 5</code>); không có thì một gói bị vứt tốn của bạn hơn một phút.</li>
 <li>502 kèm <code>111: Connection refused</code> là app chết; 504 là app chậm; upstream <code>localhost</code> đẻ ra dòng lỗi <code>[::1]</code>.</li>
-<li>Với container, đọc ExitCode + OOMKilled + log cùng lúc: <code>137 true</code> là bộ nhớ, <code>1 false</code> là app, 255 là entrypoint hỏng.</li>
+<li>Với container, đọc ExitCode + OOMKilled + log cùng lúc: <code>137 true</code> là bộ nhớ, <code>1 false</code> là app, 255 (CRLF) hoặc một lệnh <code>docker run</code> tự thoát 126 (thiếu <code>+x</code>) là entrypoint hỏng.</li>
 </ul>
 <a class="link-card" href="https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html#Process%20Exit%20Codes" target="_blank" rel="noopener">
   <span class="lc-ico">🔢</span>
@@ -1141,6 +1178,43 @@ ControlCe  1307 admin   11u  IPv4 0x38e6a7466b04f758      0t0  TCP *:5000 (LISTE
 
 <div class="pitfall"><strong>Bẫy:</strong> coi "chạy được từ trên máy chủ" là bằng chứng dịch vụ vẫn ổn. <code>curl http://127.0.0.1:3000</code> thành công trong khi thế giới bên ngoài không nhận được gì thường có nghĩa là ứng dụng chỉ bind vào giao diện loopback. Hãy nhìn cột Address của <code>ss -tlnp</code>: <code>127.0.0.1:3000</code> chỉ tới được từ chính cái máy và không từ đâu khác, còn <code>0.0.0.0:3000</code> thì tới được từ mọi nơi. Nằm sau nginx thì chỉ-loopback là ĐÚNG và có chủ ý; không có proxy đứng trước thì đó chính là con bọ.</div>
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> Mã thoát chính là chẩn đoán — 203/EXEC và 217/USER nói cho bạn biết cái unit sai và log thì rỗng, nên đừng đi tìm một thông báo lỗi chưa từng được viết ra. Refused, timed out và reset là ba vấn đề khác nhau ở ba tầng khác nhau; một lệnh <code>nc -vz</code> nói cho bạn biết là cái nào, và nó tốn bốn giây. Và khi thông báo lỗi phía máy khách mơ hồ, hãy tới log của máy chủ — <code>Permission denied (publickey)</code> chẳng nghĩa gì, còn <code>bad ownership or modes for directory /home/deploy/.ssh</code> là trọn vẹn câu trả lời.</p>
+</div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-2-5-mang-fd" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 2.5 — Ports and file descriptors: ss, lsof, EADDRINUSE and EMFILE</span><span class="lc-sub">Ports and file descriptors: ss, lsof, EADDRINUSE and EMFILE.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-8-4-exit137" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 8.4 — The exit-137 incident, measured: parallel builds, memory.high and the kill</span><span class="lc-sub">The exit-137 incident, measured: from parallel builds to the kill.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-8-5-chan-doan-mang" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 8.5 — Diagnosing container networks</span><span class="lc-sub">Diagnosing container networks, step by step.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-2-5-mang-fd" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 2.5 — Cổng và file descriptor: ss, lsof, EADDRINUSE và EMFILE</span><span class="lc-sub">Cổng và file descriptor: ss, lsof, EADDRINUSE và EMFILE.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-8-4-exit137" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 8.4 — Sự cố exit 137, đo thật: build song song, memory.high và cú giết</span><span class="lc-sub">Sự cố exit 137, đo thật: từ build song song tới cú giết.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-8-5-chan-doan-mang" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 8.5 — Chẩn đoán mạng container</span><span class="lc-sub">Chẩn đoán mạng container, từng bước.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -1763,6 +1837,53 @@ connect=7.199762 ttfb=24.818435 total=24.818498</div>
 <div class="pitfall"><strong>Bẫy:</strong> tối ưu cái bạn NHÌN THẤY thay vì cái đang chậm. Một CPU ở mức 60% trong một request tám giây không phải nguyên nhân — đó là thứ cái máy làm trong lúc chờ. Trước khi tinh chỉnh bất cứ thứ gì, hãy lấy bản chẻ pha từ <code>curl -w</code> và xác nhận tầng nào đang giữ thời gian. Phần lớn sự cố "máy chủ chậm" kết thúc ở một truy vấn cơ sở dữ liệu, một API bên trên, hoặc một bể kết nối, và mỗi giờ bỏ ra chỉnh tham số nhân trước là một giờ nguyên nhân thật vẫn đang chạy.</div>
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> Load average không phải CPU — hãy đọc <code>/proc/pressure</code> hoặc cột <code>%wa</code> để biết cái máy đang TÍNH hay đang CHỜ. Hãy đọc <code>available</code>, đừng đọc <code>free</code>: bộ đệm trang không phải bộ nhớ bạn đã mất, và chữ ký thật của rắc rối bộ nhớ là <code>si</code>/<code>so</code> khác 0 liên tục trong <code>vmstat</code>. Và khi chẳng có gì bận mà mọi thứ đều chậm, hãy thôi nhìn tài nguyên và bắt đầu ĐẾM KẾT NỐI — câu trả lời gần như luôn là một thứ cái máy đang chờ, chứ không phải một thứ nó đang làm.</p>
 </div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-slide-cs7-1" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · ⭐ CS.7 — 📑 Slide by slide · Performance toolkit (1/2): load average, top, vmstat, pidstat, ss, strace, perf (slides 1–14)</span><span class="lc-sub">OSG202 CS.7 part 1 taught load average, top and vmstat at school; this lesson applies them to a real machine.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-8-1-page-cache" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 8.1 — Page cache and why "free" memory is near zero</span><span class="lc-sub">The page cache, and why "free" memory is close to zero.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-10-1-fd" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 10.1 — A connection is a file descriptor: sockets, the accept queue, the cost</span><span class="lc-sub">A connection is a file descriptor: sockets and the accept queue.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-2-4-chan-event-loop" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 2.4 — Blocking the loop: measured</span><span class="lc-sub">Blocking the event loop, measured with real numbers.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-slide-cs7-1" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · ⭐ CS.7 — 📑 Học theo từng slide · Công cụ hiệu năng (1/2): load average, top, vmstat, pidstat, ss, strace, perf (slide 1–14)</span><span class="lc-sub">CS.7 phần 1 của OSG202 dạy load average, top, vmstat ở trường; bài này áp chúng vào máy thật.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-8-1-page-cache" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 8.1 — Page cache và vì sao bộ nhớ "free" gần bằng 0</span><span class="lc-sub">Bộ đệm trang, và vì sao bộ nhớ "free" gần bằng không.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-10-1-fd" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 10.1 — Một kết nối là một file descriptor: socket, hàng chờ accept, chi phí</span><span class="lc-sub">Một kết nối là một file descriptor: socket và hàng chờ accept.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-2-4-chan-event-loop" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 2.4 — Chặn event loop: đo bằng số thật</span><span class="lc-sub">Chặn vòng lặp sự kiện, đo bằng số thật.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 12.4 ─────────────────────────── */
@@ -2354,6 +2475,53 @@ exit=0</div>
 <div class="pitfall"><strong>Bẫy:</strong> kết luận "cái máy hỏng rồi" hoặc "chắc tại bộ đệm gì đó". Không cái nào từng là một phát hiện cả. Mọi công thức ở đây đều là một cơ chế TẦM THƯỜNG, chỉ là nó vô hình từ cái chỗ bạn đang đứng nhìn — một bit quyền cách hai thư mục, một ký tự về đầu dòng, một tiến trình già hơn chính mã của nó, một cái đồng hồ. Khi một hệ thống có vẻ đang hành xử bất khả thi thì một giả định nào đó của bạn đang sai, và cách đi tiếp nhanh nhất là kiểm chính cái giả định bạn chưa kiểm vì nó "hiển nhiên" đúng.</div>
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> Hãy <code>namei -l</code> trước khi tranh cãi về quyền — câu trả lời thường là một thư mục cha, và <code>ls -l</code> lên cái file không cho thấy được. Trước khi gỡ lỗi hành vi, hãy CHỨNG MINH tiến trình đang chạy đúng cái mã bạn nghĩ: <code>/proc/PID/cwd</code>, <code>/proc/PID/exe</code> và thời điểm khởi động trả lời chuyện đó bằng ba câu lệnh. Và khi một chuyện là bất khả thi thì giả định sai chính là cái bạn chưa bao giờ kiểm — cái đồng hồ, ký tự xuống dòng, trình phân giải tên, hay chữ hoa chữ thường của một cái tên file.</p>
 </div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/git/learn?lessonSlug=git-14-4-windows-crlf" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Git &amp; GitHub · 14.4 — Working with Windows teammates: CRLF/LF, .gitattributes, case and exec bits</span><span class="lc-sub">Working with Windows teammates: CRLF, .gitattributes, letter case and the exec bit.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-1-4-dat-ten-ban-phat-hanh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy to a VPS · 1.4 — Naming a release, and making the server admit what it is</span><span class="lc-sub">Naming a release, and making the server admit which one it runs.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-6-4-loi-tls" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Networking for Developers · 6.4 — Diagnosing TLS errors</span><span class="lc-sub">Diagnosing TLS errors in depth — the certificate side of this cookbook.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-1-5-pid1" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 1.5 — PID 1, init systems and processes in containers</span><span class="lc-sub">PID 1, init systems and processes inside containers — the zombie case in this cookbook.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/git/learn?lessonSlug=git-14-4-windows-crlf" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Git &amp; GitHub · 14.4 — Làm nhóm với bạn dùng Windows: CRLF/LF, .gitattributes, hoa/thường và quyền chạy</span><span class="lc-sub">Làm nhóm với bạn dùng Windows: CRLF, .gitattributes, hoa thường và quyền chạy.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-1-4-dat-ten-ban-phat-hanh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 1.4 — Đặt tên bản phát hành, và bắt máy chủ khai nó là bản nào</span><span class="lc-sub">Đặt tên bản phát hành, và bắt máy chủ khai nó đang chạy bản nào.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-6-4-loi-tls" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Networking for Developers · 6.4 — Chẩn đoán lỗi TLS</span><span class="lc-sub">Chẩn đoán lỗi TLS cho kỹ — phía chứng chỉ của sách công thức này.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-1-5-pid1" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 1.5 — PID 1, hệ thống init và tiến trình trong container</span><span class="lc-sub">PID 1, hệ thống init và tiến trình trong container — ca xác sống của sách công thức này.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 12.5 ─────────────────────────── */
@@ -2650,6 +2818,43 @@ ${slide('lx-12', 29, 'Sai lầm hay gặp — mặt trái của năm thói quen'
 
 <div class="pitfall"><strong>Bẫy:</strong> coi "tôi học xong khoá rồi" là vạch đích. Kỹ năng này rơi rụng nếu không dùng, và nó đóng rắn rất nhanh nếu có dùng: hai tuần vận hành một thứ có thật sẽ chữa được nhiều chỗ còn mờ hơn là đọc lại bất cứ chương nào. Kiểu hỏng ở đây không phải quên câu lệnh — câu lệnh thì tra được. Nó là mất đi sự tự tin để mở một terminal trên một cái máy lạ và bắt đầu nhìn, và thứ đó chỉ quay lại bằng cách LÀM.</div>
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> GHÉP NỐI là toàn bộ ý tưởng: công cụ nhỏ, mỗi cái một việc, nối với nhau bằng ống dẫn — đó là lý do sáu mươi bài học gói gọn trong vài chục câu lệnh. Trạng thái đã kiểm chứng thắng cấu hình mà bạn tin tưởng, dù đó là <code>sshd -T</code>, <code>systemctl cat</code> hay một lệnh <code>curl</code> không xác thực. Và thói quen giá trị nhất trong cả khoá này tốn hai giây: nhìn trước khi đổi, và giữ cái terminal thứ hai luôn mở.</p>
+</div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-0-1-van-de" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 0.1 — What Docker actually solves</span><span class="lc-sub">Running things: a container is a process with a restricted view, so Chapters 11 and 12 apply unchanged.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-0-1-gioi-thieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">PostgreSQL · 0.1 — About this course &amp; the full roadmap</span><span class="lc-sub">Storing things: its operations half — backups and connection pools — is where recipe 6 of Lesson 12.3 comes back.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-0-1-vi-sao" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Observability &amp; Monitoring · 0.1 — The outage you cannot see from inside</span><span class="lc-sub">Seeing things: every "why did nothing alert me?" is answered there — the course to take right after this one.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-0-1-van-de" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 0.1 — Docker thật sự giải quyết cái gì</span><span class="lc-sub">Chạy các thứ: một container là một tiến trình với tầm nhìn bị hạn chế, nên Chương 11 và 12 áp nguyên vẹn.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-0-1-gioi-thieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">PostgreSQL · 0.1 — Về khoá học này &amp; bản đồ toàn khoá</span><span class="lc-sub">Lưu các thứ: nửa vận hành của nó — sao lưu và bể kết nối — là chỗ công thức 6 của Bài 12.3 quay lại.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-0-1-vi-sao" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Observability &amp; Monitoring · 0.1 — Cú sự cố bạn không nhìn thấy từ bên trong</span><span class="lc-sub">Nhìn thấy các thứ: mọi câu "sao không có gì báo cho mình?" đều được trả lời ở đó — khoá nên học ngay sau khoá này.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

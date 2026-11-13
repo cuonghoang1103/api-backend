@@ -561,6 +561,33 @@ toi o /home/an/b2/xin</div>
 <div class="pitfall"><strong>Bẫy:</strong> <code>sudo</code> dùng một <code>PATH</code> <em>KHÁC</em> với của bạn. Vì lý do an ninh, <code>sudo</code> đặt lại nó về <code>secure_path</code> lấy từ <code>/etc/sudoers</code> — thường là <code>/usr/sbin:/usr/bin:/sbin:/bin</code>, không có bất kỳ phần bổ sung nào của bạn. Nên <code>node --version</code> chạy được còn <code>sudo node --version</code> lại nói "command not found", thứ TRÔNG như một vấn đề quyền mà không phải. Hãy dùng đường dẫn tuyệt đối (<code>sudo "\$(command -v node)" …</code>) hoặc <code>sudo env "PATH=\$PATH" node …</code>. <code>sudo -E</code> KHÔNG phải cách chữa: nó giữ các biến khác của bạn, nhưng <code>secure_path</code> vẫn thay mất <code>PATH</code> — trên Ubuntu 24.04, <code>sudo -E node --version</code> vẫn in <code>sudo: node: command not found</code>. Đừng sửa <code>secure_path</code> để thêm thư mục nhà của bạn vào — làm thế là trao cho root một thư mục mà bạn ghi được, và đó chính xác là thứ mà thiết lập đó sinh ra để ngăn chặn.</div>
 <p class="note-ct"><strong>Ba lệnh đáng giữ:</strong> <code>type -a &lt;lệnh&gt;</code> để thấy mọi thứ có thể chạy dưới cái tên đó và theo thứ tự nào; <code>echo "\$PATH" | tr ':' '\\n'</code> để đọc một danh sách dưới dạng danh sách; và <code>hash -r</code> khi một lệnh bạn vừa di chuyển vẫn bị tra cứu ở chỗ cũ. Ba cái đó cùng nhau trả lời gần như mọi câu hỏi "vì sao nó chạy nhầm thứ" trong chưa tới mười giây.</p>
 </div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-0-3-cai-dat" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 0.3 — Setting up your environment</span><span class="lc-sub">Setting up Node.js: nvm puts node at the front of PATH — the mechanism from this lesson.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-3-4-trinh-quan-ly-dich-vu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy to a VPS · 3.4 — Keeping it running: a service manager instead of nohup</span><span class="lc-sub">A service manager does not read ~/.bashrc — so it needs absolute paths.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-0-3-cai-dat" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 0.3 — Cài đặt môi trường làm việc</span><span class="lc-sub">Cài môi trường Node.js: nvm thêm node vào đầu PATH, đúng cơ chế của bài này.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-3-4-trinh-quan-ly-dich-vu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 3.4 — Giữ cho nó chạy: một trình quản lý dịch vụ thay cho nohup</span><span class="lc-sub">Trình quản lý dịch vụ không đọc ~/.bashrc, nên phải ghi đường dẫn tuyệt đối.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 8.2 ─────────────────────────── */
@@ -1110,6 +1137,33 @@ HOME=\$H bash -l -c true</code></pre>
 <div class="pitfall"><strong>Bẫy:</strong> đặt <code>export PATH=…</code> vào <code>~/.bashrc</code> rồi kết luận là nó chạy được, vì terminal của bạn có đọc file đó. Rồi một công việc cron, một unit systemd hay lệnh <code>ssh host 'cmd'</code> hỏng với "command not found" — cả ba đều bỏ qua <code>~/.bashrc</code> hoàn toàn. Trong khi đó, một terminal trên máy để bàn thì đọc nó, một lần đăng nhập SSH thì đọc <code>~/.profile</code> mà file này thường source nó, còn một script thì chẳng đọc gì: ba môi trường, ba kết quả, từ một thiết lập duy nhất. Hãy đặt môi trường vào profile, và với mọi thứ chạy tự động thì đừng dựa vào file shell chút nào — hãy khai báo nó ngay trong crontab, trong file unit, hoặc trong chính script.</div>
 <p class="note-ct"><strong>Hai dòng trả lời được mọi biến thể của câu hỏi này:</strong> <code>shopt -q login_shell &amp;&amp; echo đăng nhập</code> và <code>[[ \$- == *i* ]] &amp;&amp; echo tương tác</code>. Hãy chạy chúng trong đúng cái ngữ cảnh đang cư xử lạ — một terminal, một lệnh <code>ssh host 'cmd'</code>, một công việc cron ghi ra file — và cái bảng quyết định ở trên lập tức nói cho bạn biết ngữ cảnh đó đã đọc file nào, và do đó thiết lập của bạn cần nằm ở đâu.</p>
 </div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-13-3-github-actions-deploy" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy to a VPS · 13.3 — Deploying from GitHub Actions over SSH: one key, one command, one deploy at a time</span><span class="lc-sub">CI runs commands on the server over SSH — a non-interactive ssh, so use absolute paths.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-3-4-trinh-quan-ly-dich-vu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy to a VPS · 3.4 — Keeping it running: a service manager instead of nohup</span><span class="lc-sub">A systemd unit reads no shell startup file; variables go in Environment=.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-13-3-github-actions-deploy" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 13.3 — Deploy từ GitHub Actions qua SSH: một khoá, một lệnh, mỗi lần một deploy</span><span class="lc-sub">CI chạy lệnh trên máy chủ qua SSH — ssh kèm lệnh, không tương tác, nên dùng đường dẫn tuyệt đối.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-3-4-trinh-quan-ly-dich-vu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 3.4 — Giữ cho nó chạy: một trình quản lý dịch vụ thay cho nohup</span><span class="lc-sub">Unit systemd không đọc tệp khởi động shell nào; biến khai bằng Environment=.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 8.3 ─────────────────────────── */
@@ -1206,7 +1260,8 @@ env \$(grep -v '^#' .env | xargs) sh -c 'echo "[\$DB_URL]"'
 . ./.env; echo "exit=\$? DB_URL=[\$DB_URL]"</code></pre>
 <div class="out">env: 'khau@localhost/app': No such file or directory
 ./.env: line 1: khau@localhost/app: No such file or directory
-exit=127 DB_URL=[]</div>
+exit=0 DB_URL=[]</div>
+<p>Look at <code>exit=0</code>. The <code>.</code> command returns the status of the <em>last</em> command in the file, and the last line, <code>PORT=3000</code>, succeeded — so the failure on line 1 is invisible to <code>\$?</code> and to <code>set -e</code>. (An earlier version of this page showed <code>exit=127</code>; re-measured on Ubuntu 24.04 on 12/11/2026 it is 0.) A sourced file that half-fails tells you nothing through its exit code: check the variables you need afterwards, e.g. <code>: "\${DB_URL:?missing}"</code>.</p>
 <p>The <code>xargs</code> form split the value at the space and handed <code>env</code> a "command" called <code>khau@localhost/app</code>. <code>source</code> read the line as bash would: <code>DB_URL=postgres://app:mat</code> as a one-command prefix, then <code>khau@localhost/app</code> as the command — so the assignment never even reached your shell. Quote the value (<code>DB_URL="postgres://app:mat khau@localhost/app"</code>) and <code>set -a; . ./.env; set +a</code> gives a child the full string; without <code>set -a</code>, your shell has the variables but a child sees nothing, because they were never exported.</p>
 <pre><code class="language-bash"><span class="tok-comment"># And source only trusted files: .env is EXECUTED as shell code</span>
 echo 'rm -rf /tmp/important' &gt;&gt; .env
@@ -1483,7 +1538,8 @@ env \$(grep -v '^#' .env | xargs) sh -c 'echo "[\$DB_URL]"'
 . ./.env; echo "exit=\$? DB_URL=[\$DB_URL]"</code></pre>
 <div class="out">env: 'khau@localhost/app': No such file or directory
 ./.env: line 1: khau@localhost/app: No such file or directory
-exit=127 DB_URL=[]</div>
+exit=0 DB_URL=[]</div>
+<p>Nhìn <code>exit=0</code>. Lệnh <code>.</code> trả về mã của lệnh <em>CUỐI CÙNG</em> trong file, mà dòng cuối, <code>PORT=3000</code>, thành công — nên cú hỏng ở dòng 1 vô hình với <code>\$?</code> lẫn với <code>set -e</code>. (Bản cũ của trang này in <code>exit=127</code>; đo lại trên Ubuntu 24.04 ngày 12/11/2026 thì là 0.) Một file được source mà hỏng nửa chừng không nói gì với bạn qua mã thoát: hãy kiểm chính các biến bạn cần ngay sau đó, ví dụ <code>: "\${DB_URL:?thiếu}"</code>.</p>
 <p>Cách <code>xargs</code> cắt giá trị ở dấu cách và đưa cho <code>env</code> một "lệnh" tên <code>khau@localhost/app</code>. <code>source</code> đọc dòng đó y như bash đọc: <code>DB_URL=postgres://app:mat</code> là một tiền tố cho-một-lệnh, rồi <code>khau@localhost/app</code> là cái lệnh — nên phép gán còn chẳng tới được shell của bạn. Bọc giá trị trong nháy (<code>DB_URL="postgres://app:mat khau@localhost/app"</code>) rồi <code>set -a; . ./.env; set +a</code> thì tiến trình con nhận trọn chuỗi; thiếu <code>set -a</code> thì shell của bạn có biến nhưng tiến trình con chẳng thấy gì, vì chúng chưa bao giờ được export.</p>
 <pre><code class="language-bash"><span class="tok-comment"># Và chỉ source những file tin được: .env được THỰC THI như mã shell</span>
 echo 'rm -rf /tmp/important' &gt;&gt; .env
@@ -1672,6 +1728,43 @@ X=1</div>
 
 <div class="pitfall"><strong>Bẫy:</strong> nối thêm một biến vào file <code>.env</code> của production trong khi một lần deploy ĐANG chạy. Lần deploy đó đã nạp môi trường lúc nó khởi động, nên giá trị mới không nằm trong container đang chạy — nhưng cái file thì <em>CÓ</em> chứa nó, nên mọi phép kiểm bạn làm sau đó đều nói cấu hình là đúng trong khi ứng dụng cư xử như thể nó đang thiếu. Cách chữa là dựng lại container (<code>docker compose up -d --no-build &lt;dịch vụ&gt;</code> với env đã nạp) hoặc deploy lại. Hễ một thiết lập "rõ ràng là có mà chẳng có tác dụng gì", hãy kiểm xem tiến trình có được khởi động TRƯỚC khi giá trị đó tồn tại hay không.</div>
 <p class="note-ct"><strong>Câu hỏi cần đặt ra luôn là "TIẾN TRÌNH NÀO, và nó đã thừa kế được gì".</strong> Một biến không được đặt lên một cái máy hay lên một người dùng — nó được đặt lên một TIẾN TRÌNH, được chép sang các tiến trình con lúc <code>fork</code>, và đóng băng từ khoảnh khắc đó (Bài 5.1). Lệnh <code>tr '\\0' '\\n' &lt; /proc/&lt;pid&gt;/environ</code> cho thấy sự thật với mọi tiến trình, và nó luôn thắng việc ngồi suy luận xem file nào lẽ ra đã được đọc.</p>
+</div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-4-3-env-khong-phai-mot-dinh-dang" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy to a VPS · 4.3 — The .env file is not one format</span><span class="lc-sub">The .env file is not one format: every tool reads it its own way.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-4-4-bi-mat-trong-lich-su-git" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy to a VPS · 4.4 — A secret in git history is a leaked secret</span><span class="lc-sub">A secret that reached git history is already leaked — and how to rotate it.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-4-4-arg-env" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 4.4 — ARG and ENV: build time versus run time</span><span class="lc-sub">ARG and ENV: why a secret must never be baked into an image.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-4-3-env-khong-phai-mot-dinh-dang" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 4.3 — Tệp .env không phải MỘT định dạng</span><span class="lc-sub">Tệp .env không phải một định dạng: mỗi công cụ đọc một kiểu.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-4-4-bi-mat-trong-lich-su-git" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 4.4 — Bí mật lỡ vào lịch sử git là bí mật ĐÃ LỘ</span><span class="lc-sub">Bí mật lỡ vào lịch sử git là bí mật đã lộ — và cách xoay nó.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-4-4-arg-env" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 4.4 — ARG và ENV: lúc dựng so với lúc chạy</span><span class="lc-sub">ARG và ENV: vì sao bí mật không được nằm trong image.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -2247,6 +2340,33 @@ sk-live-lan-hai
 
 <div class="pitfall"><strong>Bẫy:</strong> đặt bất cứ thứ gì có <em>IN RA</em> vào <code>~/.bashrc</code> — một lời chào mừng, <code>neofetch</code>, một câu danh ngôn, một dòng "bạn có N bản cập nhật". Đăng nhập tương tác thì trông vẫn ổn, rồi <code>scp</code>, <code>rsync</code> và <code>git push</code> qua SSH bắt đầu hỏng với lỗi giao thức, vì mấy công cụ đó chờ đợi dòng dữ liệu chỉ chứa đúng dữ liệu của chúng (Bài 8.2). Cái chốt tương tác ở đầu file mới là thứ bảo vệ bạn, nên mọi thứ có in ra đều phải nằm <em>DƯỚI</em> nó — và tốt nhất là nằm trong <code>~/.profile</code>, thứ mà các phiên không tương tác không bao giờ đọc.</div>
 <p class="note-ct"><strong>Nếu bạn chỉ lấy ba thứ từ bài này:</strong> <code>shopt -s histappend</code> đi cùng <code>PROMPT_COMMAND='history -a'</code>, để lịch sử sống sót qua một terminal bị giết và qua nhiều phiên cùng lúc; hai dòng <code>history-search-backward</code> trong <code>~/.inputrc</code>, để phím Lên lọc theo đúng thứ bạn đã gõ; và một dấu nhắc có màu hoặc có dải băng trên mọi máy production. Hai cái đầu bạn sẽ thấy tác dụng trong vòng một ngày, còn cái thứ ba thì thấy đúng một lần — cái lần mà nó quan trọng.</p>
+</div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/git/learn?lessonSlug=git-14-3-cau-hinh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Git &amp; GitHub · 14.3 — A better .gitconfig: aliases, two identities with includeIf, --show-origin</span><span class="lc-sub">Git's own aliases in .gitconfig, and two identities with includeIf.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-14-8-shell" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 14.7 — Shells and package managers: Bash and zsh vs PowerShell (objects, not text), apt vs brew vs winget</span><span class="lc-sub">Bash, zsh and PowerShell side by side — and why PowerShell passes objects, not text.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/git/learn?lessonSlug=git-14-3-cau-hinh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Git &amp; GitHub · 14.3 — .gitconfig nâng cao: alias, hai danh tính với includeIf, --show-origin</span><span class="lc-sub">Bí danh riêng của git trong tệp cấu hình, và hai danh tính với includeIf.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-14-8-shell" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 14.7 — Shell và trình quản lý gói: Bash, zsh vs PowerShell (đối tượng, không phải văn bản), apt vs brew vs winget</span><span class="lc-sub">Bash, zsh và PowerShell đặt cạnh nhau — và vì sao PowerShell truyền đối tượng chứ không truyền văn bản.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

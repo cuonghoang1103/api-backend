@@ -575,6 +575,53 @@ khong co timeout</div>
 
 <p class="note-ct"><strong>Ba lệnh trả lời câu "sao trên Mac nó cư xử khác?":</strong> <code>uname -s</code> (họ nhân nào), <code>sed --version</code> (GNU thì trả lời, BSD thì báo lỗi — mẹo này dùng được cho cả <code>date</code> và <code>stat</code>), và <code>echo \$BASH_VERSION</code> đặt bên trong script (bash nào thật sự đã chạy nó). Gần như mọi bất ngờ khi chuyển máy đều là một trong ba câu trả lời đó khác với điều bạn đã giả định.</p>
 </div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-0-3-cai-dat" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 0.3 — Getting a real Linux shell on any machine</span><span class="lc-sub">Already covered: getting a real Linux shell on any machine — where you first met declare -A failing on a Mac.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-3-5-sed" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 3.5 — sed: editing a stream you never open</span><span class="lc-sub">Already covered: sed — your first encounter with the Mac's sed -i ''.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-14-1-nhan" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 14.1 — Three kernels: Linux, XNU and Windows NT — one question, three answers</span><span class="lc-sub">Three kernels — Linux, XNU and Windows NT: one question, three answers.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-14-8-shell" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 14.7 — Shells and package managers: Bash and zsh vs PowerShell (objects, not text), apt vs brew vs winget</span><span class="lc-sub">Shells and package managers on three systems: bash, zsh and PowerShell; apt, brew and winget.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-0-3-cai-dat" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 0.3 — Có một shell Linux thật trên mọi loại máy</span><span class="lc-sub">Đã học: có một shell Linux thật trên mọi loại máy — nơi bạn lần đầu gặp lỗi declare -A trên Mac.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-3-5-sed" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 3.5 — sed: sửa một dòng dữ liệu mà bạn không hề mở ra</span><span class="lc-sub">Đã học: sed — lần đầu bạn gặp sed -i '' của Mac.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-14-1-nhan" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 14.1 — Ba nhân: Linux, XNU và Windows NT — một câu hỏi, ba câu trả lời</span><span class="lc-sub">Ba nhân — Linux, XNU và Windows NT: một câu hỏi, ba câu trả lời.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-14-8-shell" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 14.7 — Shell và trình quản lý gói: Bash, zsh vs PowerShell (đối tượng, không phải văn bản), apt vs brew vs winget</span><span class="lc-sub">Shell và trình quản lý gói trên ba hệ: bash, zsh, PowerShell; apt, brew, winget.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 15.2 ─────────────────────────── */
@@ -1237,6 +1284,53 @@ date | pbcopy -pboard ruler; pbpaste -pboard ruler</code></pre>
 
 <p class="note-ct"><strong>Một thói quen của bài này:</strong> trước khi tin bất kỳ việc chạy nền nào trên Mac, hãy chạy đúng lệnh của nó dưới <code>env -i PATH=/usr/bin:/bin:/usr/sbin:/sbin</code>. Đó là cùng phép thử bạn đã học cho cron ở Chương 8 và cho systemd ở Chương 11 — ba trình hẹn giờ, một luật: việc chạy nền nhận một môi trường trống trơn, không bao giờ là môi trường shell của bạn.</p>
 </div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-11-1-systemd-unit" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 11.1 — systemd units: running your app as a service</span><span class="lc-sub">Already covered: systemd units — compare each key with a launchd plist.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-8-1-path" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 8.1 — PATH, and why "command not found"</span><span class="lc-sub">Already covered: PATH and "command not found" — the trap behind two git versions and an agent without Homebrew.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-14-2-cong-cu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 14.3 — Services and observability: systemd vs launchd vs Windows Services, top vs Activity Monitor vs Task Manager</span><span class="lc-sub">Services and observability: systemd, launchd and Windows Services side by side.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-13-4-mac-windows" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 13.4 — Docker on Mac and Windows is really a Linux VM</span><span class="lc-sub">Docker on Mac and Windows is really a Linux virtual machine.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-11-1-systemd-unit" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 11.1 — Unit của systemd: chạy ứng dụng của bạn như một dịch vụ</span><span class="lc-sub">Đã học: unit của systemd — so từng khoá với plist của launchd.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-8-1-path" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 8.1 — PATH, và vì sao có "command not found"</span><span class="lc-sub">Đã học: PATH và "command not found" — cái bẫy đứng sau hai phiên bản git và agent thiếu Homebrew.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-14-2-cong-cu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 14.3 — Dịch vụ và quan sát: systemd vs launchd vs Windows Services, top vs Activity Monitor vs Task Manager</span><span class="lc-sub">Dịch vụ và quan sát: systemd, launchd và Windows Services đặt cạnh nhau.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-13-4-mac-windows" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Docker · 13.4 — Docker trên Mac &amp; Windows thật ra là một máy ảo Linux</span><span class="lc-sub">Docker trên Mac và Windows thật ra là một máy ảo Linux.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 15.3 ─────────────────────────── */
@@ -1744,6 +1838,53 @@ git ls-files --eol; file deploy.sh</code></pre>
 </a>
 
 <p class="note-ct"><strong>Nếu một script "có đó mà không tìm thấy", hãy chạy MỘT lệnh trước mọi thứ khác:</strong> <code>file script.sh</code>. Nếu nó nói <code>with CRLF line terminators</code>, bạn chẩn đoán xong rồi. Sau đó sửa cái repo, không chỉ sửa cái file — một dòng trong <code>.gitattributes</code> tiết kiệm cho người tiếp theo đúng một giờ đó.</p>
+</div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-7-1-khung-script" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 7.1 — The skeleton: shebang, strict mode, and its traps</span><span class="lc-sub">Already covered: the script skeleton, where set -euo pipefail plus a carriage return printed garbage on the terminal.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-12-4-no-la" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 12.4 — Cookbook: it is weird</span><span class="lc-sub">Already covered: the "it is weird" cookbook — "required file not found" from the diagnosis side.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/git/learn?lessonSlug=git-14-4-windows-crlf" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Git &amp; GitHub · 14.4 — Working with Windows teammates: CRLF/LF, .gitattributes, case and exec bits</span><span class="lc-sub">Working with Windows teammates: CRLF/LF, .gitattributes, letter case and exec bits.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-14-3-wsl" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 14.6 — WSL2 and Docker Desktop: why Linux on a Mac or a Windows laptop is a virtual machine, measured</span><span class="lc-sub">WSL2 and Docker Desktop: why Linux on a Windows laptop is a virtual machine, measured.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-7-1-khung-script" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 7.1 — Bộ khung: shebang, chế độ nghiêm ngặt, và những cái bẫy của nó</span><span class="lc-sub">Đã học: bộ khung script, nơi set -euo pipefail dính ký tự CR in ra lộn xộn trên terminal.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-12-4-no-la" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 12.4 — Sách công thức: nó lạ</span><span class="lc-sub">Đã học: sách công thức "nó lạ" — "required file not found" nhìn từ phía chẩn đoán.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/git/learn?lessonSlug=git-14-4-windows-crlf" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Git &amp; GitHub · 14.4 — Làm nhóm với bạn dùng Windows: CRLF/LF, .gitattributes, hoa/thường và quyền chạy</span><span class="lc-sub">Làm nhóm với bạn dùng Windows: CRLF/LF, .gitattributes, hoa thường và quyền chạy.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-14-3-wsl" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 14.6 — WSL2 và Docker Desktop: vì sao Linux trên Mac hay laptop Windows là một máy ảo, đo thật</span><span class="lc-sub">WSL2 và Docker Desktop: vì sao Linux trên laptop Windows là một máy ảo, đo thật.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -2270,6 +2411,53 @@ x=5, x+1=6
 </a>
 
 <p class="note-ct"><strong>Cách nhanh nhất để vào một đoạn PowerShell lạ:</strong> <code>Get-Command *từ-khoá*</code> để tìm cmdlet, <code>Get-Help Tên -Examples</code> để xem cách dùng, và <code>… | Get-Member</code> để xem thứ gì vừa đi ra. Ba lệnh đó với PowerShell giống như <code>apropos</code>, <code>man</code> và "chuyền sang <code>head</code> rồi nhìn" với bash.</p>
+</div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-3-6-awk" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 3.6 — awk: a whole language in one line</span><span class="lc-sub">Already covered: awk, the column cutter that PowerShell replaces with property names.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-6-4-ma-thoat-dieu-kien" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 6.4 — Exit codes, conditions and case</span><span class="lc-sub">Already covered: exit codes and conditions — why bash's &amp;&amp; works with [ ].</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-7-2-tham-so-kiem-tra" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 7.2 — Arguments, options and validation</span><span class="lc-sub">Already covered: arguments and validation — getopts versus PowerShell's param().</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-14-8-shell" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 14.7 — Shells and package managers: Bash and zsh vs PowerShell (objects, not text), apt vs brew vs winget</span><span class="lc-sub">Bash and zsh versus PowerShell, plus apt, brew and winget.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-3-6-awk" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 3.6 — awk: cả một ngôn ngữ gói trong một dòng</span><span class="lc-sub">Đã học: awk, cái kéo cắt cột mà PowerShell thay bằng tên thuộc tính.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-6-4-ma-thoat-dieu-kien" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 6.4 — Mã thoát, điều kiện và case</span><span class="lc-sub">Đã học: mã thoát và điều kiện — vì sao &amp;&amp; của bash chạy đúng với [ ].</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-7-2-tham-so-kiem-tra" target="_blank" rel="noopener">
+  <span class="lc-ico">↩️</span>
+  <span class="lc-body"><span class="lc-title">Linux &amp; Bash · 7.2 — Tham số, tuỳ chọn và kiểm tính hợp lệ</span><span class="lc-sub">Đã học: tham số và kiểm tính hợp lệ — getopts so với param() của PowerShell.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-14-8-shell" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 14.7 — Shell và trình quản lý gói: Bash, zsh vs PowerShell (đối tượng, không phải văn bản), apt vs brew vs winget</span><span class="lc-sub">Bash và zsh so với PowerShell, cùng apt, brew và winget.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

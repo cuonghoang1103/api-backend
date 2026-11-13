@@ -557,6 +557,33 @@ chmod +x build.sh</code></pre></li>
 <div class="pitfall"><strong>Bẫy:</strong> <code>sudo echo "text" &gt;&gt; /etc/hosts</code> thất bại, và thông báo lỗi thì gây hiểu nhầm. <code>sudo</code> chạy <code>echo</code> với quyền root, nhưng shell của bạn — vẫn đang chạy với quyền của chính bạn — mới là thứ đi mở <code>/etc/hosts</code> để ghi thêm, và nó không có quyền. Không có gì bạn thêm vào <code>echo</code> chữa được. Hãy dùng <code>echo "text" | sudo tee -a /etc/hosts</code>, hoặc <code>sudo bash -c 'echo "text" &gt;&gt; /etc/hosts'</code>, cách này đưa việc chuyển hướng vào BÊN TRONG cái shell đã được nâng quyền.</div>
 <p class="note-ct"><strong>Ý tưởng duy nhất cần mang theo:</strong> một chương trình KHÔNG BIẾT output của nó đi đâu. Đó chính là toàn bộ lý do ống dẫn hoạt động, lý do cùng một lệnh có thể in ra màn hình, vào một file, hay vào một chương trình khác mà không phải đổi một dòng mã nào của nó, và lý do <code>2&gt;&amp;1</code> là chuyện <em>CHĨA VÀO ĐÂU</em> chứ không phải chuyện <em>GỘP LẠI</em>. Bài kế tiếp đẩy ý này đi thêm một bước và nối thẳng hai chương trình với nhau.</p>
 </div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-slide-cs2-1" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · ⭐ CS.2 — 📑 Slide by slide · File descriptors (1/2): the fd table, redirection, pipes, a mini shell in C, sockets (slides 1–13)</span><span class="lc-sub">OSG202 CS.2 drew the fd table and wrote a mini shell in C; this lesson is the shell user's side of the same mechanism.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-9-5-fd" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 9.2 — File descriptors and the open-file table: who shares an offset</span><span class="lc-sub">Which processes share a file offset: the kernel's open-file table, opened up.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-slide-cs2-1" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · ⭐ CS.2 — 📑 Học theo từng slide · File descriptor (1/2): bảng fd, chuyển hướng, ống, mini shell C, socket (slide 1–13)</span><span class="lc-sub">CS.2 của OSG202 vẽ bảng fd và viết một mini shell bằng C; bài này là phía người dùng shell của cùng cơ chế đó.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-9-5-fd" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 9.2 — File descriptor và bảng file mở: ai dùng chung offset</span><span class="lc-sub">Những tiến trình nào dùng chung một offset: mở bảng tệp đang mở của nhân ra xem.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 3.2 ─────────────────────────── */
@@ -1071,6 +1098,33 @@ ls: cannot access '/nope': No such file or directory
 
 <div class="pitfall"><strong>Bẫy:</strong> dùng <code>uniq</code> mà không có <code>sort</code>. <code>uniq</code> chỉ gộp những dòng giống nhau NẰM KỀ NHAU — nó giữ đúng một dòng trong bộ nhớ, không giữ cả một tập hợp. Với đầu vào chưa sắp xếp, nó âm thầm đếm THIẾU, và kết quả nhìn hoàn toàn hợp lý: bạn vẫn có những con số, chỉ là chúng sai. <code>sort | uniq -c</code> mới là cặp đúng, luôn luôn. (<code>sort -u</code> là lối tắt khi bạn muốn các dòng duy nhất mà không cần số đếm.)</div>
 <p class="note-ct"><strong>Hai thói quen khi dựng chuỗi ống:</strong> dựng nó từ trái sang phải, mỗi lần thêm đúng một khâu rồi NHÌN output sau mỗi lần — một chuỗi ống sai ở giữa sẽ đẻ ra rác trông rất hợp lý ở cuối. Và hãy cho chảy qua <code>head</code> trong lúc thử nghiệm: nó làm mỗi vòng thử trở nên tức thì trên một file khổng lồ, và nhờ SIGPIPE bạn không âm thầm đọc 10 GB mỗi lần nhấn Enter.</p>
+</div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-slide-cs2-1" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · ⭐ CS.2 — 📑 Slide by slide · File descriptors (1/2): the fd table, redirection, pipes, a mini shell in C, sockets (slides 1–13)</span><span class="lc-sub">OSG202 CS.2 built pipes with pipe() and dup2() in C; here you use the same mechanism from the shell.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-11-6-errno-tin-hieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 11.5 — errno and signals: EINTR, SA_RESTART, EAGAIN, EPIPE</span><span class="lc-sub">SIGPIPE and EPIPE explained properly, together with EINTR, SA_RESTART and EAGAIN.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-slide-cs2-1" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · ⭐ CS.2 — 📑 Học theo từng slide · File descriptor (1/2): bảng fd, chuyển hướng, ống, mini shell C, socket (slide 1–13)</span><span class="lc-sub">CS.2 của OSG202 dựng ống dẫn bằng pipe() và dup2() trong C; ở đây bạn dùng chính cơ chế đó từ shell.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-11-6-errno-tin-hieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 11.5 — errno và tín hiệu: EINTR, SA_RESTART, EAGAIN, EPIPE</span><span class="lc-sub">SIGPIPE và EPIPE được giải thích kỹ, cùng EINTR, SA_RESTART và EAGAIN.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -1589,6 +1643,33 @@ a/keep.txt</div>
 <div class="pitfall"><strong>Bẫy:</strong> một cái mẫu không đặt trong nháy. <code>grep *.log app.log</code> để shell khai triển <code>*.log</code> trước (Bài 2.2), nên grep đi tìm cái TÊN của một file tình cờ nằm trong thư mục của bạn. Tệ hơn, <code>grep $var file</code> với <code>var</code> rỗng biến thành <code>grep file</code> — grep coi <code>file</code> là cái mẫu rồi ngồi chờ stdin, và script của bạn trông như bị treo. <strong>Luôn đặt mẫu trong nháy:</strong> <code>grep "\$var" file</code>.</div>
 <p class="note-ct"><strong>Hãy dựng mẫu từng nấc một.</strong> Bắt đầu bằng một mẩu nguyên văn mà bạn BIẾT chắc là có, xác nhận có kết quả, rồi mỗi lần thêm đúng một mảnh regex — kèm <code>--color=always</code> để nhìn thấy chính xác những ký tự nào đã khớp. Một regex viết một lèo mà không ra gì thì chẳng cho bạn thông tin nào về việc nửa nào sai; một regex mọc lên từng nấc thì báo cho bạn biết ngay khoảnh khắc bạn làm nó hỏng.</p>
 </div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-lab-1" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · Lab 1 — Linux commands and the file system: navigation, permissions, find and grep, pipes, logs, archives, links, disk space</span><span class="lc-sub">Lab 1 used grep to filter logs; this lesson goes deep into regex and the flags worth remembering.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-9-3-log" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy to a VPS · 9.3 — Logs that answer questions</span><span class="lc-sub">At work: writing logs so that a single grep answers the question.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-lab-1" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · Lab 1 — Lệnh Linux và hệ thống tệp: điều hướng, quyền, find và grep, pipe, xem log, nén, liên kết, dung lượng đĩa</span><span class="lc-sub">Lab 1 dùng grep để lọc log; bài này đi sâu vào regex và các cờ đáng nhớ.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-9-3-log" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 9.3 — Log TRẢ LỜI ĐƯỢC câu hỏi</span><span class="lc-sub">Khi đi làm: viết log sao cho một dòng grep trả lời được câu hỏi.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 3.4 ─────────────────────────── */
@@ -1655,12 +1736,12 @@ sort data.csv | uniq -f1           <span class="tok-comment"># ignore the first 
 
 <h3>tr — translate or delete characters</h3>
 <pre><code>tr 'a-z' 'A-Z' &lt; notes.txt         <span class="tok-comment"># uppercase</span>
-tr -d '\\r' &lt; windows.txt &gt; unix.txt <span class="tok-comment"># strip CR — fixes "bad interpreter" errors</span>
+tr -d '\\r' &lt; windows.txt &gt; unix.txt <span class="tok-comment"># strip CR — fixes "required file not found" / "bad interpreter"</span>
 tr -s ' ' &lt; padded.txt             <span class="tok-comment"># -s squeeze: collapse runs into one</span>
 tr ',' '\\n' &lt; list.csv              <span class="tok-comment"># one item per line</span>
 tr -cd '[:print:]\\n' &lt; messy.log    <span class="tok-comment"># -c complement, -d delete: keep only printable</span></code></pre>
 <p><code>tr</code> works on <em>characters</em>, not words or patterns — it has no concept of a match. That makes it the fastest tool in this list, and the right one for "delete every carriage return" or "turn commas into newlines". It reads only stdin, never a filename, so <code>&lt;</code> or a pipe is mandatory.</p>
-<div class="callout ok"><code>tr -d '\\r'</code> deserves a note of its own. A shell script edited on Windows carries <code>\\r\\n</code> line endings, so the shebang line reads <code>#!/bin/bash\\r</code> and the kernel looks for an interpreter whose name ends in a carriage return. The error — <code>bad interpreter: No such file or directory</code> — names a file that visibly exists, which is why it puzzles people for so long. <code>dos2unix</code> does the same job with a better name.</div>
+<div class="callout ok"><code>tr -d '\\r'</code> deserves a note of its own. A shell script edited on Windows carries <code>\\r\\n</code> line endings, so the shebang line reads <code>#!/bin/bash\\r</code> and the kernel looks for an interpreter whose name ends in a carriage return. Measured on Ubuntu 24.04 (bash 5.2), the error reads <code>bash: ./deploy.sh: cannot execute: required file not found</code>; older bash versions word it <code>bad interpreter: No such file or directory</code>. Either way it complains about a file that visibly exists, which is why it puzzles people for so long. <code>dos2unix</code> does the same job with a better name.</div>
 
 <h3>wc, head, tail</h3>
 <pre><code>wc -l access.log         <span class="tok-comment"># lines</span>
@@ -2032,12 +2113,12 @@ sort data.csv | uniq -f1           <span class="tok-comment"># bỏ qua trườn
 
 <h3>tr — dịch hoặc xoá ký tự</h3>
 <pre><code>tr 'a-z' 'A-Z' &lt; notes.txt         <span class="tok-comment"># viết hoa</span>
-tr -d '\\r' &lt; windows.txt &gt; unix.txt <span class="tok-comment"># bỏ CR — chữa lỗi "bad interpreter"</span>
+tr -d '\\r' &lt; windows.txt &gt; unix.txt <span class="tok-comment"># bỏ CR — chữa lỗi "required file not found" / "bad interpreter"</span>
 tr -s ' ' &lt; padded.txt             <span class="tok-comment"># -s ép lại: gộp chuỗi lặp thành một</span>
 tr ',' '\\n' &lt; list.csv              <span class="tok-comment"># mỗi mục một dòng</span>
 tr -cd '[:print:]\\n' &lt; messy.log    <span class="tok-comment"># -c lấy phần bù, -d xoá: chỉ giữ ký tự in được</span></code></pre>
 <p><code>tr</code> làm việc trên <em>KÝ TỰ</em>, không phải trên từ hay trên mẫu — nó không có khái niệm "khớp". Điều đó làm nó nhanh nhất trong danh sách này, và là công cụ đúng cho việc "xoá mọi ký tự về đầu dòng" hay "biến dấu phẩy thành ký tự xuống dòng". Nó chỉ đọc stdin, không bao giờ nhận tên file, nên <code>&lt;</code> hoặc một cái ống là bắt buộc.</p>
-<div class="callout ok"><code>tr -d '\\r'</code> đáng có một ghi chú riêng. Một script shell soạn trên Windows mang kết thúc dòng <code>\\r\\n</code>, nên dòng shebang đọc ra thành <code>#!/bin/bash\\r</code> và nhân đi tìm một trình thông dịch có tên kết thúc bằng ký tự về đầu dòng. Thông báo lỗi — <code>bad interpreter: No such file or directory</code> — lại nêu tên một file mà nhìn rõ ràng là CÓ, và đó là lý do nó làm người ta bối rối lâu đến thế. <code>dos2unix</code> làm đúng việc đó với một cái tên dễ hiểu hơn.</div>
+<div class="callout ok"><code>tr -d '\\r'</code> đáng có một ghi chú riêng. Một script shell soạn trên Windows mang kết thúc dòng <code>\\r\\n</code>, nên dòng shebang đọc ra thành <code>#!/bin/bash\\r</code> và nhân đi tìm một trình thông dịch có tên kết thúc bằng ký tự về đầu dòng. Đo trên Ubuntu 24.04 (bash 5.2), thông báo lỗi là <code>bash: ./deploy.sh: cannot execute: required file not found</code>; các bản bash cũ hơn viết thành <code>bad interpreter: No such file or directory</code>. Kiểu nào thì nó cũng than phiền về một file mà nhìn rõ ràng là CÓ, và đó là lý do nó làm người ta bối rối lâu đến thế. <code>dos2unix</code> làm đúng việc đó với một cái tên dễ hiểu hơn.</div>
 
 <h3>wc, head, tail</h3>
 <pre><code>wc -l access.log         <span class="tok-comment"># số dòng</span>
@@ -2351,6 +2432,33 @@ v1.2 v1.9 v1.10
 
 <div class="pitfall"><strong>Bẫy:</strong> locale của <code>sort</code>. Với <code>en_US.UTF-8</code>, <code>sort</code> bỏ qua hoa thường và dấu câu theo những cách gây bất ngờ: chạy <code>sort</code> rồi <code>uniq</code> có thể cho ra cách gộp nhóm khác với bạn tưởng, và <code>comm</code> — vốn đòi cả hai đầu vào phải sắp xếp <em>THEO CÙNG MỘT KIỂU</em> — sẽ âm thầm báo sai phần khác biệt nếu một file được sắp xếp dưới một locale khác. Khi thứ tự byte chính xác là quan trọng, hãy đặt <code>LC_ALL=C</code> cho mọi lệnh sort trong chuỗi ống. Nó còn nhanh hơn một cách đo được.</div>
 <p class="note-ct"><strong>Thói quen làm mấy công cụ này bật ra trong đầu:</strong> vừa dựng vừa cho chảy qua <code>head</code> và NHÌN sau từng khâu một. Mấy lệnh này nhỏ tới mức bạn giữ được hành vi của chúng trong đầu, nhưng chỉ khi bạn nhìn thấy nó — chuyện <code>cut -d' ' -f3</code> trả về chuỗi rỗng, hay <code>sort</code> xếp 100 trước 9, hiển nhiên ngay khoảnh khắc bạn nhìn và vô hình khi bạn không nhìn.</p>
+</div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/git/learn?lessonSlug=git-2-2-show-va-diff" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Git &amp; GitHub · 2.2 — git show and diffing any two points in time</span><span class="lc-sub">diff -u and patch are the foundation of Git: git diff compares any two points in time.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/git/learn?lessonSlug=git-14-4-windows-crlf" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Git &amp; GitHub · 14.4 — Working with Windows teammates: CRLF/LF, .gitattributes, case and exec bits</span><span class="lc-sub">The CRLF error from this lesson, stopped at the source with a .gitattributes file.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/git/learn?lessonSlug=git-2-2-show-va-diff" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Git &amp; GitHub · 2.2 — git show và so sánh hai thời điểm bất kỳ</span><span class="lc-sub">diff -u và patch là nền của Git: git diff so hai thời điểm bất kỳ.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/git/learn?lessonSlug=git-14-4-windows-crlf" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Git &amp; GitHub · 14.4 — Làm nhóm với bạn dùng Windows: CRLF/LF, .gitattributes, hoa/thường và quyền chạy</span><span class="lc-sub">Lỗi CRLF trong bài này, chặn từ gốc bằng tệp .gitattributes.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -2846,6 +2954,33 @@ MaxAuthTries 3' sshd.test</code></pre></li>
 
 <div class="pitfall"><strong>Bẫy:</strong> <code>sed -i</code> với một mẫu không neo, chạy đệ quy. Lệnh <code>find . -name "*.ts" -print0 | xargs -0 sed -i 's/id/uuid/g'</code> trông như một phép đổi tên, và nó viết lại chữ <code>id</code> nằm bên trong <code>width</code>, <code>valid</code>, <code>hidden</code> cùng mọi đường dẫn import có chứa những chữ cái đó — trên mọi file, không sao lưu và không in ra gì. Hãy neo bằng ranh giới từ (<code>s/\\bid\\b/uuid/g</code>), chạy không có <code>-i</code> trước, và làm trên một cây git sạch để <code>git diff</code> chính là nút hoàn tác của bạn.</div>
 <p class="note-ct"><strong>Ba thói quen:</strong> dựng biểu thức mà KHÔNG có <code>-i</code> rồi đọc kết quả; commit trước, để bản diff của hệ quản lý phiên bản làm lưới đỡ thay cho một file <code>.bak</code> mà bạn sẽ quên xoá; và đổi sang dấu phân cách <code>|</code> hoặc <code>#</code> ngay khoảnh khắc có một đường dẫn xuất hiện. Mỗi việc chỉ tốn vài giây, và cùng nhau chúng biến <code>sed</code> từ một công cụ nguy hiểm thành một công cụ thường ngày.</p>
+</div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-lab-2" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · Lab 2 — Shell scripting: quoting, tests, loops, functions, exit codes, trap, backup, health check, awk and sed</span><span class="lc-sub">Lab 2 used sed for quick edits; this lesson adds addresses, capture groups and a dry run before -i.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-9-6-mount" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 9.5 — Mount points and bind mounts: why sed -i did not reach the container</span><span class="lc-sub">Why sed -i did not reach the container, measured: mount points and bind mounts.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-lab-2" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · Lab 2 — Shell script: dấu nháy, điều kiện, vòng lặp, hàm, mã thoát, trap, sao lưu, kiểm tra sức khoẻ, awk và sed</span><span class="lc-sub">Lab 2 dùng sed để sửa nhanh; bài này thêm địa chỉ, nhóm bắt giữ, và chạy thử trước khi sửa thật.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-9-6-mount" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 9.5 — Điểm gắn và bind mount: vì sao sed -i không tới được container</span><span class="lc-sub">Vì sao sed -i không tới được container, đo thật: điểm gắn và bind mount.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -3353,6 +3488,33 @@ awk '!seen[\$7]++ {print \$7}' access.log</code></pre>
 
 <div class="pitfall"><strong>Bẫy:</strong> dấu nháy. Chương trình awk PHẢI nằm trong nháy <strong>ĐƠN</strong>, vì <code>\$1</code> nghĩa là "trường 1" với awk và là "biến shell số 1" với bash. Viết <code>awk "{print \$1}"</code> trong nháy kép thì shell thay thế trước, nên awk không bao giờ thấy <code>\$1</code>. Ở dấu nhắc tương tác, <code>\$1</code> rỗng, awk nhận được <code>{print }</code>, mà một lệnh <code>print</code> trơn thì in <strong>CẢ DÒNG</strong> — lệnh âm thầm hành xử như <code>cat</code>. Bên trong một script chạy bằng <code>./report.sh deploy</code>, awk nhận được <code>{print deploy}</code> — một biến awk chưa gán — và in ra những dòng trống. Cả hai đều đã kiểm trên Ubuntu 24.04; không trường hợp nào báo lỗi. Muốn truyền một biến shell vào cho đúng, hãy dùng <code>-v</code>: <code>awk -v nguong="\$limit" '\$3 &gt; nguong' file</code>. Đừng bao giờ dựng một chương trình awk bằng cách nối chuỗi.</div>
 <p class="note-ct"><strong>Học theo thứ tự này thì trong một tiếng bạn có 95% giá trị:</strong> <code>{print \$1}</code>, rồi <code>-F</code>, rồi <code>NR</code>/<code>NF</code>, rồi <code>END {}</code> với một biến đếm, rồi mảng liên kết. Mọi thứ sau đó là tinh chỉnh. Và khi một chuỗi bốn công cụ nhỏ bắt đầu cần tới cái thứ năm, đó thường là khoảnh khắc awk thay được cả năm.</p>
+</div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-lab-2" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · Lab 2 — Shell scripting: quoting, tests, loops, functions, exit codes, trap, backup, health check, awk and sed</span><span class="lc-sub">Lab 2 introduced awk and sed; this lesson goes further — arrays, END, and the quoting trap.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-9-2-trung-binh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy to a VPS · 9.2 — The average lies too</span><span class="lc-sub">At work: the same sort and awk computing p95 from a real log, because the average lies.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-lab-2" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · Lab 2 — Shell script: dấu nháy, điều kiện, vòng lặp, hàm, mã thoát, trap, sao lưu, kiểm tra sức khoẻ, awk và sed</span><span class="lc-sub">Lab 2 cho bạn dùng awk và sed ở mức nhập môn; bài này đi sâu hơn: mảng, END, và bẫy dấu nháy.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-9-2-trung-binh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 9.2 — Trung bình cũng NÓI DỐI</span><span class="lc-sub">Khi đi làm: chính sort và awk tính phân vị p95 từ log thật, vì trung bình hay nói dối.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

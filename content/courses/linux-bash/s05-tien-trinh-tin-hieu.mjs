@@ -564,6 +564,43 @@ kill \$!; exit</code></pre>
 <div class="pitfall"><strong>Bẫy:</strong> đọc cột <code>TIME</code> trong <code>ps aux</code> như thời gian sống. Một tiến trình hiện <code>0:31</code> đã tiêu 31 giây <em>CPU</em>, mà quãng đó có thể trải suốt ba tháng theo đồng hồ. Ngược lại một tiến trình khởi động mười giây trước vẫn có thể hiện <code>0:38</code> nếu nó chạy trên bốn nhân. Muốn biết "cái này lên được bao lâu rồi", hãy dùng <code>ps -o etime= -p &lt;pid&gt;</code> hoặc <code>ps -eo pid,etime,cmd</code>. Lẫn lộn hai cột là cách người ta kết luận một daemon khoẻ mạnh đang quay cuồng.</div>
 <p class="note-ct"><strong>Ba lệnh nên giữ:</strong> <code>ps aux --sort=-%cpu | head</code> cho câu "cái gì đang ăn cái máy này", <code>pgrep -a &lt;tên&gt;</code> cho câu "nó có chạy không và chạy với tham số gì", và <code>sudo ss -tulpn</code> cho câu "cái gì đang nằm trên cổng đó". Ba cái đó trả lời được phần lớn câu hỏi về tiến trình mà không cần mở một công cụ tương tác — điều đó quan trọng khi bạn đang ở trên một đường SSH chậm, và còn quan trọng hơn khi bạn muốn có câu trả lời ngay trong một script.</p>
 </div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-slide-cs1-1" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · ⭐ CS.1 — 📑 Slide by slide · Linux processes (1/2): process tree, /proc, fork–exec–wait, exit codes, zombies (slides 1–13)</span><span class="lc-sub">OSG202 CS.1 taught the process tree, fork–exec–wait and zombies; this lesson is the command-line side of the same model.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-1-2-fork-exec" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 1.2 — fork, exec, wait: how every process is born</span><span class="lc-sub">How every process is born: fork, exec and wait, in depth.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-1-5-pid1" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 1.5 — PID 1, init systems and processes in containers</span><span class="lc-sub">PID 1, init systems, and what changes for processes inside a container.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-slide-cs1-1" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · ⭐ CS.1 — 📑 Học theo từng slide · Tiến trình Linux (1/2): cây tiến trình, /proc, fork–exec–wait, mã thoát, zombie (slide 1–13)</span><span class="lc-sub">CS.1 của OSG202 dạy cây tiến trình, fork–exec–wait và xác sống; bài này là phía dòng lệnh của cùng mô hình.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-1-2-fork-exec" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 1.2 — fork, exec, wait: mọi tiến trình ra đời thế nào</span><span class="lc-sub">Mọi tiến trình ra đời thế nào: fork, exec và wait, đi sâu.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-1-5-pid1" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 1.5 — PID 1, hệ thống init và tiến trình trong container</span><span class="lc-sub">PID 1, hệ thống init, và điều gì thay đổi với tiến trình trong container.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 5.2 ─────────────────────────── */
@@ -1044,6 +1081,43 @@ Max open files            1048576              1048576              files</div>
 
 <div class="pitfall"><strong>Bẫy:</strong> so tải trung bình giữa các máy mà không chia cho số nhân, hoặc coi nó là phần trăm. "Tải 8" là khủng hoảng trên một VPS 2 nhân và là một buổi chiều yên ả trên máy chủ 32 nhân. Tệ hơn, tải 12 với CPU rỗi 95% thì hoàn toàn không phải chuyện CPU — đó là chờ đĩa, và mọi "tối ưu" áp vào ứng dụng sẽ chẳng thay đổi được gì. Hãy đọc tải, <code>nproc</code> và cột <code>wa</code> CÙNG NHAU, không thì thà đừng đọc.</div>
 <p class="note-ct"><strong>Phân loại nhanh trong 30 giây:</strong> <code>uptime</code> (tải, và xu hướng của nó), <code>nproc</code> (cái tải đó nghĩa là gì), <code>top -bn1 | head -5</code> (thời gian đổ đi đâu — nhìn <code>wa</code> và <code>st</code>), <code>free -h</code> (đọc <code>available</code>, không đọc <code>free</code>), và <code>dmesg -T | tail</code> (nhân có giết thứ gì không). Năm lệnh, và chúng phân tách được "nghẽn CPU", "nghẽn I/O", "hết bộ nhớ" và "bị máy chủ vật lý bóp" — bốn thứ có bốn cách chữa hoàn toàn khác nhau.</p>
+</div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-slide-cs5-1" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · ⭐ CS.5 — 📑 Slide by slide · Memory on a real server (1/2): VSZ, RSS, PSS, free -m, swap, overcommit, OOM killer (slides 1–13)</span><span class="lc-sub">OSG202 CS.5 covered memory on a real server: RSS, PSS, swap and the OOM killer.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-2-2-cpu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 2.2 — Who eats the CPU: top, ps, pidstat and the load average</span><span class="lc-sub">Who is eating the CPU, and how to read the load average.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-8-3-oom" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 8.3 — The OOM killer: overcommit, oom_score and how it picks a victim</span><span class="lc-sub">How the OOM killer picks its victim: overcommit and oom_score.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-slide-cs5-1" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · ⭐ CS.5 — 📑 Học theo từng slide · Bộ nhớ server thật (1/2): VSZ, RSS, PSS, free -m, swap, overcommit, OOM killer (slide 1–13)</span><span class="lc-sub">CS.5 của OSG202 dạy bộ nhớ trên máy chủ thật: RSS, PSS, swap và OOM killer.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-2-2-cpu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 2.2 — Ai ăn CPU: top, ps, pidstat và tải trung bình</span><span class="lc-sub">Ai đang ăn CPU, và cách đọc tải trung bình.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-8-3-oom" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 8.3 — OOM killer: overcommit, oom_score và cách nó chọn nạn nhân</span><span class="lc-sub">OOM killer chọn nạn nhân thế nào: overcommit và oom_score.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -1542,6 +1616,43 @@ ls: cannot access '/tmp/deploy.lock': No such file or directory</div>
 <div class="pitfall"><strong>Bẫy:</strong> với tay lấy <code>kill -9</code> đầu tiên vì nó "lúc nào cũng ăn". Nó KHÔNG phải lúc nào cũng ăn — một tiến trình đang ngủ không ngắt được thì lờ nó đi, còn một xác sống thì chết rồi — và khi nó ăn thật thì nó bỏ qua mọi việc dọn dẹp mà chương trình định làm. Thói quen đó trả giá bằng dữ liệu thật: file ghi dở, cơ sở dữ liệu phải khôi phục ở lần khởi động sau, và file khoá chặn lần chạy kế tiếp. Hãy <code>kill</code>, chờ năm giây, kiểm bằng <code>kill -0</code>, rồi mới leo thang. Nếu bạn thấy mình phải dùng <code>-9</code> như cơm bữa thì lỗi nằm ở chỗ chương trình không xử lý SIGTERM — hãy sửa chỗ đó.</div>
 <p class="note-ct"><strong>Hai thứ đáng học thuộc hẳn.</strong> <strong>128 + N</strong>: một mã thoát lớn hơn 128 gọi tên chính cái tín hiệu đã giết tiến trình — 130 Ctrl-C, 137 SIGKILL/OOM, 143 SIGTERM — và riêng phép tính ấy giải mã được một phần lớn những lỗi "bí ẩn" của CI và container. Và <strong><code>pgrep</code> trước <code>pkill</code></strong>: tham số giống hệt nhau, nên danh sách bạn vừa đọc chính xác là danh sách bạn sắp giết.</p>
 </div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-slide-cs1-2" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · ⭐ CS.1 — 📑 Slide by slide · Linux processes (2/2): signals, graceful shutdown, PID 1 in containers, systemd (slides 14–28)</span><span class="lc-sub">The second half of OSG202 CS.1 taught signals, graceful shutdown and PID 1 in containers; this lesson gives you the commands.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-1-4-vong-doi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 1.4 — Process states, signals and exit codes (why exit 137 = OOM)</span><span class="lc-sub">Exit codes from the kernel's side, and why 137 means OOM.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-3-2-tat-tu-te" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy to a VPS · 3.2 — Graceful shutdown, and the drain I got wrong</span><span class="lc-sub">Graceful shutdown written for a real service — including the drain that was first written wrong.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-slide-cs1-2" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · ⭐ CS.1 — 📑 Học theo từng slide · Tiến trình Linux (2/2): tín hiệu, tắt êm, PID 1 trong container, systemd (slide 14–28)</span><span class="lc-sub">Nửa sau CS.1 của OSG202 dạy tín hiệu, tắt êm và PID 1 trong container; bài này là các lệnh để làm chuyện đó.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-1-4-vong-doi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 1.4 — Trạng thái tiến trình, tín hiệu và mã thoát (vì sao exit 137 = OOM)</span><span class="lc-sub">Mã thoát nhìn từ phía nhân, và vì sao 137 là OOM.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-3-2-tat-tu-te" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 3.2 — Tắt tử tế, và cái bước xả tôi viết sai</span><span class="lc-sub">Tắt êm viết cho một dịch vụ thật — kể cả bước xả từng viết sai.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 5.4 ─────────────────────────── */
@@ -1608,7 +1719,18 @@ test hỏng
 build-web xong
 PID 3680 hỏng, mã 3
 tổng kết → 1</div>
-<p>Now insert a plain <code>wait; echo "wait trần → \$?"</code> <em>before</em> the <code>for</code> loop and run it again. It prints <code>wait trần  → 0</code>, and then every <code>wait "\$p"</code> fails with <code>bash: line 7: wait: pid 3665 is not a child of this shell</code> and status 127: a bare <code>wait</code> not only returns 0, it also makes bash <em>forget</em> the jobs it collected, so the per-PID statuses are gone for good. Wait on each PID, and only on each PID. (Ubuntu 24.04 container, both versions run for real.)</p>
+<p>Now insert a plain <code>wait; echo "wait trần → \$?"</code> <em>before</em> the <code>for</code> loop and run it again (saved as <code>cho2.sh</code>):</p>
+<div class="out">test hỏng
+build-api xong
+build-web xong
+wait trần → 0
+cho2.sh: line 7: wait: pid 314 is not a child of this shell
+PID 314 hỏng, mã 127
+cho2.sh: line 7: wait: pid 315 is not a child of this shell
+PID 315 hỏng, mã 127
+PID 317 hỏng, mã 3
+tổng kết → 1</div>
+<p>A bare <code>wait</code> not only returns 0, it also makes bash <em>forget</em> the jobs it collected. The two builds that <em>succeeded</em> now come back as "not a child of this shell", status 127 — reported as failures, with their real status gone for good. Only the last PID still returns its 3, because bash keeps the status of the most recent background job (<code>\$!</code>) separately — which is exactly why this bug survives a quick test: the job you happen to check last looks right. Wait on each PID, and only on each PID. (Ubuntu 24.04 container, both versions run for real; PIDs and line order vary from run to run.)</p>
 <h3>Why closing the terminal kills it</h3>
 ${slide('lx-05', 23, 'SIGHUP cho cả phiên: ai sống sót')}
 <p>Background is not detached. The job is still a child of your shell, in your shell's <em>session</em>, attached to your terminal:</p>
@@ -1830,7 +1952,18 @@ test hỏng
 build-web xong
 PID 3680 hỏng, mã 3
 tổng kết → 1</div>
-<p>Giờ chèn một dòng <code>wait; echo "wait trần → \$?"</code> trơn <em>TRƯỚC</em> vòng <code>for</code> rồi chạy lại. Nó in <code>wait trần  → 0</code>, và sau đó mọi <code>wait "\$p"</code> đều hỏng với <code>bash: line 7: wait: pid 3665 is not a child of this shell</code> cùng trạng thái 127: một lệnh <code>wait</code> trần không chỉ trả về 0, nó còn làm bash <em>QUÊN</em> những job nó đã thu về, nên trạng thái của từng PID mất vĩnh viễn. Hãy chờ từng PID, và chỉ chờ từng PID. (Container Ubuntu 24.04, cả hai phiên bản đều chạy thật.)</p>
+<p>Giờ chèn một dòng <code>wait; echo "wait trần → \$?"</code> trơn <em>TRƯỚC</em> vòng <code>for</code> rồi chạy lại (lưu thành <code>cho2.sh</code>):</p>
+<div class="out">test hỏng
+build-api xong
+build-web xong
+wait trần → 0
+cho2.sh: line 7: wait: pid 314 is not a child of this shell
+PID 314 hỏng, mã 127
+cho2.sh: line 7: wait: pid 315 is not a child of this shell
+PID 315 hỏng, mã 127
+PID 317 hỏng, mã 3
+tổng kết → 1</div>
+<p>Một lệnh <code>wait</code> trần không chỉ trả về 0, nó còn làm bash <em>QUÊN</em> những job nó đã thu về. Hai bản build đã THÀNH CÔNG giờ quay về với "not a child of this shell", trạng thái 127 — bị báo thành hỏng, còn trạng thái thật thì mất vĩnh viễn. Chỉ PID CUỐI vẫn trả đúng mã 3, vì bash giữ riêng trạng thái của job nền gần nhất (<code>\$!</code>) — và đó chính là lý do con bọ này sống sót qua một lần thử vội: cái job bạn tình cờ kiểm cuối cùng trông vẫn đúng. Hãy chờ từng PID, và chỉ chờ từng PID. (Container Ubuntu 24.04, cả hai phiên bản đều chạy thật; PID và thứ tự dòng đổi theo từng lần chạy.)</p>
 <h3>Vì sao đóng terminal lại giết nó</h3>
 ${slide('lx-05', 23, 'SIGHUP cho cả phiên: ai sống sót')}
 <p>Chạy nền KHÔNG phải là tách rời. Cái job vẫn là con của shell của bạn, vẫn nằm trong <em>PHIÊN</em> của shell đó, và vẫn gắn vào terminal của bạn:</p>
@@ -1995,6 +2128,43 @@ sleep 300
 <div class="pitfall"><strong>Bẫy:</strong> tưởng <code>&amp;</code> nghĩa là "đã tách rời". Nó nghĩa là "đừng chặn shell của tôi", không hơn — cái job vẫn là con của shell bạn, vẫn nằm trong phiên của bạn, và vẫn lãnh SIGHUP khi terminal đóng. Phiên bản gây đau của chuyện này là <code>ssh vps './deploy.sh &amp;'</code>: lệnh SSH trả về ngay, shell ở đầu kia thoát, SIGHUP bay ra, và lần deploy chết giữa chừng — để lại một máy chủ cập nhật dở dang cùng một lệnh SSH đã báo thành công. Hãy dùng <code>ssh vps 'nohup ./deploy.sh &gt; deploy.log 2&gt;&amp;1 &amp;'</code>, hoặc tốt hơn, <code>ssh vps 'tmux new -d -s deploy ./deploy.sh'</code> để sau đó gắn vào xem chuyện gì đã xảy ra.</div>
 <p class="note-ct"><strong>Một thói quen thay được cả bài này:</strong> gõ <code>tmux attach || tmux new</code> làm lệnh đầu tiên sau mỗi lần đăng nhập SSH. Mọi thứ bạn khởi động sau đó đều miễn nhiễm với việc rớt mạng, với tới lại được từ bất cứ đâu, và cuộn lại xem được sau khi sự đã rồi. Hãy giữ <code>Ctrl-Z</code> / <code>fg</code> / <code>bg</code> cho việc xoay xở bên trong một terminal, và giữ <code>nohup</code> cho cái ngày bạn lỡ quên — nhưng mặc định thì nên là tmux.</p>
 </div>
+
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-lab-4" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · Lab 4 — Observing a Linux system: ps, top, /proc, memory, signals, job control, systemd, cron, and a process doctor</span><span class="lc-sub">Lab 4 used jobs, fg and bg; this lesson adds sessions, SIGHUP, and surviving a dropped connection.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-3-4-trinh-quan-ly-dich-vu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy to a VPS · 3.4 — Keeping it running: a service manager instead of nohup</span><span class="lc-sub">The next step: replace nohup with a real service manager.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-1-5-pid1" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 1.5 — PID 1, init systems and processes in containers</span><span class="lc-sub">PID 1, and why zombies pile up inside containers.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/operating-systems/learn?lessonSlug=osg202-lab-4" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · OSG202 · Lab 4 — Quan sát hệ thống Linux: ps, top, /proc, bộ nhớ, tín hiệu, điều khiển job, systemd, cron, và bác sĩ tiến trình</span><span class="lc-sub">Lab 4 đã cho bạn dùng jobs, fg và bg; bài này thêm phiên, SIGHUP, và cách sống sót khi mạng rớt.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-3-4-trinh-quan-ly-dich-vu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 3.4 — Giữ cho nó chạy: một trình quản lý dịch vụ thay cho nohup</span><span class="lc-sub">Học tiếp: thay nohup bằng một trình quản lý dịch vụ thật.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-1-5-pid1" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">OS for Developers · 1.5 — PID 1, hệ thống init và tiến trình trong container</span><span class="lc-sub">PID 1, và vì sao xác sống nằm lại trong container.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 5.5 Quiz ─────────────────────────── */
@@ -2137,16 +2307,16 @@ ${slide('lx-05', 29, 'Bảng tra nhanh Chương 5 (2/2)')}
             explanation: 'EN: Recorded in a real pty: bash forwards SIGHUP to its jobs; nohup makes 502 ignore it, disown -h stops bash from sending it to 503, and setsid put 504 in a session of its own. Only 501 died. "All four" is the classic misconception that & means detached.|||VI: Ghi trong một pty thật: bash chuyển tiếp SIGHUP tới các job của nó; nohup làm 502 lờ nó đi, disown -h khiến bash không gửi nó tới 503, còn setsid đặt 504 vào một phiên riêng. Chỉ 501 chết. "Cả bốn" là ngộ nhận kinh điển rằng & nghĩa là đã tách rời.',
           },
           {
-            question: 'A script starts three background jobs saving p1, p2, p3 from $!, then runs a bare "wait", then "wait $p3" (p3 exited with status 3). What does "wait $p3" do?|||Một script khởi động ba job nền, lưu p1, p2, p3 từ $!, rồi chạy "wait" trần, rồi "wait $p3" (p3 đã thoát với trạng thái 3). "wait $p3" làm gì?',
+            question: 'A script starts three background jobs saving p1, p2, p3 from $! (in that order; p1 succeeded, p3 exited with status 3), then runs a bare "wait", then "wait $p1". What does "wait $p1" do?|||Một script khởi động ba job nền, lưu p1, p2, p3 từ $! (theo thứ tự đó; p1 thành công, p3 thoát với trạng thái 3), rồi chạy "wait" trần, rồi "wait $p1". "wait $p1" làm gì?',
             options: [
-              'Returns 3, the status of p3|||Trả về 3, trạng thái của p3',
+              'Returns 0, the status of p1|||Trả về 0, trạng thái của p1',
               'Prints "wait: pid … is not a child of this shell" and returns 127|||In "wait: pid … is not a child of this shell" và trả về 127',
-              'Returns 0, like the bare wait|||Trả về 0, giống wait trần',
-              'Blocks forever, because p3 has already finished|||Chặn mãi mãi, vì p3 đã xong từ trước',
+              'Returns 3, the status of the failed job p3|||Trả về 3, trạng thái của job hỏng p3',
+              'Blocks forever, because p1 has already finished|||Chặn mãi mãi, vì p1 đã xong từ trước',
             ],
             correctIndex: 1,
             points: 1,
-            explanation: 'EN: Measured: the bare wait returned 0 and made bash forget the jobs it collected, so the later wait $p3 failed with "not a child of this shell", status 127. Without the bare wait, wait $p3 does return 3 — the tempting answer. Wait on each PID, and only on each PID.|||VI: Đo thật: wait trần trả 0 và làm bash quên những job nó đã thu về, nên wait $p3 sau đó hỏng với "not a child of this shell", trạng thái 127. Không có wait trần thì wait $p3 đúng là trả về 3 — đáp án hấp dẫn. Hãy chờ từng PID, và chỉ chờ từng PID.',
+            explanation: 'EN: Measured: the bare wait returned 0 and made bash forget the jobs it collected, so wait $p1 — a job that succeeded — failed with "not a child of this shell", status 127. Only the most recent background job ($!, here p3) keeps its status: wait $p3 still returned 3, which is why the bug hides from a quick check. Without the bare wait, wait $p1 does return 0 — the tempting answer. Wait on each PID, and only on each PID.|||VI: Đo thật: wait trần trả 0 và làm bash quên những job nó đã thu về, nên wait $p1 — một job đã THÀNH CÔNG — hỏng với "not a child of this shell", trạng thái 127. Chỉ job nền gần nhất ($!, ở đây là p3) giữ được trạng thái: wait $p3 vẫn trả 3, và đó là lý do con bọ trốn được một lần kiểm vội. Không có wait trần thì wait $p1 đúng là trả về 0 — đáp án hấp dẫn. Hãy chờ từng PID, và chỉ chờ từng PID.',
           },
           {
             question: 'A container whose PID 1 is "sleep 300" (no --init, no signal handler) is stopped with "docker stop -t 10". What do you observe?|||Một container có PID 1 là "sleep 300" (không --init, không bộ xử lý tín hiệu) bị dừng bằng "docker stop -t 10". Bạn quan sát thấy gì?',

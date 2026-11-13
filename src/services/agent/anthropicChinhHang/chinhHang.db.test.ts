@@ -240,6 +240,23 @@ test('hetCredit tự mở lại khi qua ngày làm mới; chạm ngân sách th�
   assert.deepEqual((await kho.keyKhaDung()).map((k) => k.id), []);
 });
 
+test('key "tắt" (admin bấm Tắt): chặn mọi việc, TRỪ CuongMini ngôn ngữ + CT Work (13/11/2026)', { skip: !BAT }, async () => {
+  const { prisma } = await import('../../../config/database.js');
+  const kho = await import('./khoKey.js');
+  const [a] = await themKeys(['t', 'ok']);
+  await prisma.anthropicKey.update({ where: { id: a }, data: { trangThai: 'tat' } });
+  kho.xoaNho();
+  assert.deepEqual((await kho.keyKhaDung()).map((k) => k.id), [], 'việc thường không thấy key tắt');
+  assert.equal(await kho.coKeyKhaDung(), false);
+  assert.equal(await kho.coKeyKhaDung('agent_code'), false);
+  assert.deepEqual((await kho.keyKhaDung(new Date(), { keCaTat: true })).map((k) => k.id), [a]);
+  for (const v of ['language_tutor', 'work_ai', 'work_setup']) assert.equal(await kho.coKeyKhaDung(v), true, v);
+  // Key lỗi (401) vẫn bị bỏ qua kể cả với việc được miễn.
+  await prisma.anthropicKey.update({ where: { id: a }, data: { trangThai: 'loi' } });
+  kho.xoaNho();
+  assert.equal(await kho.coKeyKhaDung('language_tutor'), false);
+});
+
 test('nạp lần đầu từ ANTHROPIC_CHINH_HANG_KEYS — chỉ khi bảng rỗng, khoá lưu mã hoá', { skip: !BAT }, async (t) => {
   const { prisma } = await import('../../../config/database.js');
   const kho = await import('./khoKey.js');

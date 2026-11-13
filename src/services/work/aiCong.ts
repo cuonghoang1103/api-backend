@@ -196,7 +196,7 @@ async function chinhHangSanSangThat(userId: number, bac: 'sonnet' | 'haiku' = 's
   const { congDangHong } = await import('../agent/bangModel.js');
   if (congDangHong('anthropic')) return false;
   const { coKeyKhaDung } = await import('../agent/anthropicChinhHang/khoKey.js');
-  if (!(await coKeyKhaDung())) return false;
+  if (!(await coKeyKhaDung('work_ai'))) return false;
   try {
     const { prisma } = await import('../../config/database.js');
     const { dauNgayVn } = await import('../agent/anthropicChinhHang/hanMuc.js');

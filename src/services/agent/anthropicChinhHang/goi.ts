@@ -16,7 +16,7 @@ import { prisma } from '../../../config/database.js';
 import { logger } from '../../../utils/logger.js';
 import { PHIEN_BAN_API, gocChinhHang, type HangChinhHang } from './cauHinh.js';
 import { tinhUsd, type DungToken } from './gia.js';
-import { danhDauKey, keyKhaDung, type KeyDungDuoc } from './khoKey.js';
+import { danhDauKey, keyKhaDung, type KeyDungDuoc, VIEC_DUNG_CA_KEY_TAT } from './khoKey.js';
 
 /** 400 này có phải do một tham số beta/thinking của mình không (⇒ thử lại bản tối giản)? */
 export function loiDoThamSoBeta(thong: string): boolean {
@@ -81,7 +81,7 @@ export async function guiChinhHang(o: {
    */
   banAnToan?: () => Record<string, unknown>;
 }): Promise<KetQuaGui> {
-  const ds = await keyKhaDung();
+  const ds = await keyKhaDung(new Date(), { keCaTat: VIEC_DUNG_CA_KEY_TAT.has(o.nguCanh.viec) });
   if (!ds.length) {
     throw new CongAnthropicLoi(
       'Cổng Claude chính hãng chưa có key nào dùng được (hết credit, hết ngân sách tháng, lỗi hoặc đã tắt).',

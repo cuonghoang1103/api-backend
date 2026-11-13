@@ -9,7 +9,7 @@
  *
  * Bản này:
  *  1. Whisper (Groq) — gửi thẳng tệp nén của trình duyệt (webm/mp4), không đổi WAV.
- *  2. Model CHẢY CHỮ: Claude chính hãng **CuongMini Heshin 5.5** (`claude-haiku-5-5`),
+ *  2. Model CHẢY CHỮ: Claude chính hãng **Sonnet 5.5** (`modelTroChuyen()`, 13/11/2026 — trước là Haiku 5.5),
  *     không nghĩ (`thinking: disabled`, effort `low`) — lượt nói ngắn không cần nghĩ.
  *     Hỏng / hết credit / chạm trần $/người/ngày ⇒ tự lùi modelapi `gpt-6-sol`
  *     effort `low` (cũng chảy chữ). Cả hai có HẠN CHỮ ĐẦU — quá hạn là bỏ, không treo.
@@ -36,6 +36,12 @@ import {
 } from './luong.js';
 
 export const MODEL_HESHIN = 'claude-haiku-5-5';
+/**
+ * Model cổng chính hãng cho CuongMini ngoại ngữ (13/11/2026, chủ app: "lấy cổng chính của Anthropic, model nhanh và
+ * tốt nhất như Sonnet 5.5; không chạy thì về gpt-6-sol"). Đo 17/10: chữ đầu sonnet-5-5 ~1,8 s (haiku-5-5 ~1,3 s) — vẫn
+ * nhanh hơn hẳn gpt-6-sol dự phòng (đo prod 13/11: 7,8 s). Đổi không cần deploy: `LANGUAGE_TUTOR_MODEL_CHINH_HANG`.
+ */
+export const modelTroChuyen = () => process.env.LANGUAGE_TUTOR_MODEL_CHINH_HANG?.trim() || 'claude-sonnet-5-5';
 const KHOA_CAI_DAT = 'cuongmini_ngon_ngu';
 const HAN_CHU_DAU_MS = 10_000;
 const HAN_TONG_MS = 30_000;
@@ -179,7 +185,7 @@ const THAT: PhuThuocTC = {
   chinhHang: goiVanBanChinhHang,
   duPhong: llmComplete,
   caiDat: caiDatTroChuyen,
-  coKey: coKeyKhaDung,
+  coKey: () => coKeyKhaDung('language_tutor'),
   daChi: daChiHomNay,
   aiSan: () => isAiAvailable(),
 };
@@ -264,7 +270,7 @@ export async function chayLuot(userId: number, v: VaoLuot, gui: (e: SuKienTC) =>
     const don = hanChe(ctl);
     try {
       const kq = await pt.chinhHang({
-        system, messages, model: MODEL_HESHIN, hang: 'free', maxTokens: 600, userId, viec: 'language_tutor',
+        system, messages, model: modelTroChuyen(), hang: 'free', maxTokens: 600, userId, viec: 'language_tutor',
         onToken, signal: ctl.signal, nhanh: { effort: 'low' },
       });
       usd = kq.usd;
@@ -322,7 +328,7 @@ export async function traLoiNhanhLanguage(o: { userId: number; system: string; c
     const hen = setTimeout(() => ctl.abort(), HAN_TONG_MS);
     try {
       await pt.chinhHang({
-        system: o.system, messages, model: MODEL_HESHIN, hang: 'free', maxTokens: o.maxTokens ?? 400, userId: o.userId,
+        system: o.system, messages, model: modelTroChuyen(), hang: 'free', maxTokens: o.maxTokens ?? 400, userId: o.userId,
         viec: 'language_tutor', onToken: (d: string) => { text += d; }, signal: ctl.signal, nhanh: { effort: 'low' },
       } as Parameters<typeof goiVanBanChinhHang>[0]);
       if (text.trim()) return { text, duong: 'chinh-hang' };
@@ -397,13 +403,13 @@ export async function chamBuoi(userId: number, b: { ngonNgu?: unknown; chuDeId?:
   ].join('\n');
   const user = luot.map((t) => `${t.ai ? 'Giám khảo' : 'Người học'}: ${t.text.replace(/\[\/?en\]/gi, '')}`).join('\n');
   const cd = await caiDatTroChuyen();
-  const [coKey, daChi] = await Promise.all([coKeyKhaDung(), daChiHomNay(userId)]);
+  const [coKey, daChi] = await Promise.all([coKeyKhaDung('language_tutor'), daChiHomNay(userId)]);
   const { duong } = chonDuong({ bat: cd.bat, coKey, daDungNgayUsd: daChi, tranNgayUsd: cd.tranNgayUsd });
   let raw = '';
   if (duong === 'chinh-hang') {
     try {
       raw = (await goiVanBanChinhHang({
-        system, messages: [{ role: 'user', content: user }], model: MODEL_HESHIN, hang: 'free', maxTokens: 1500,
+        system, messages: [{ role: 'user', content: user }], model: modelTroChuyen(), hang: 'free', maxTokens: 1500,
         userId, viec: 'language_tutor', nhanh: { effort: 'medium' }, signal: AbortSignal.timeout(40_000),
       })).text;
     } catch (e) { logger.warn('[tro-chuyen] chấm buổi: Heshin lỗi — lùi', { error: (e as Error).message }); }

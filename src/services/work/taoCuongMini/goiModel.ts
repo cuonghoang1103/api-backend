@@ -86,7 +86,7 @@ const THAT: PhuThuocModel = {
     });
     return { text: r.text, model: r.model, inputTokens: r.inputTokens, outputTokens: r.outputTokens, biCat: r.biCat };
   },
-  coKey: async () => (await import('../../agent/anthropicChinhHang/khoKey.js')).coKeyKhaDung(),
+  coKey: async () => (await import('../../agent/anthropicChinhHang/khoKey.js')).coKeyKhaDung('work_setup'),
   congHong: () => congDangHong('anthropic'),
   baoHong: () => baoCongHong('anthropic'),
   hanMuc: hanMucThat,

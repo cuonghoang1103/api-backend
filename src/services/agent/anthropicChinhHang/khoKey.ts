@@ -159,19 +159,31 @@ export interface KeyDungDuoc {
 }
 
 let nho: { luc: number; ds: KeyDungDuoc[] } | null = null;
+let nhoCaTat: { luc: number; ds: KeyDungDuoc[] } | null = null;
 const NHO_MS = 10_000;
 
-export function xoaNho(): void { nho = null; }
+/**
+ * Việc được dùng cả key admin đã bấm TẮT (13/11/2026 — chủ app: "bật tắt key cổng đó thì chặn mọi thứ, KHÔNG chặn
+ * CuongMini trên app CT Language, CT Work, mục My Language và CT Work trên web + app desktop").
+ *   · `language_tutor` — gọi/trò chuyện CuongMini của khoá ngoại ngữ (app CT Language + My Language web/desktop).
+ *   · `work_ai` / `work_setup` — trợ lý CuongMini của CT Work (web, app desktop, app CT Work).
+ * Key HẾT CREDIT / LỖI / HẾT HẠN / CHẠM NGÂN SÁCH THÁNG vẫn bị bỏ — "Tắt" chỉ là công tắc của người, không phải
+ * tình trạng của key. Trần $/ngày riêng của từng việc vẫn áp như cũ.
+ */
+export const VIEC_DUNG_CA_KEY_TAT: ReadonlySet<string> = new Set(['language_tutor', 'work_ai', 'work_setup']);
+
+export function xoaNho(): void { nho = null; nhoCaTat = null; }
 
 /**
  * Các key ĐANG DÙNG ĐƯỢC, theo thứ tự ưu tiên. Tự mở lại key `hetCredit` đã
  * qua ngày làm mới. Nhớ 10 giây (mọi lần đánh dấu đều xoá nhớ).
  */
-export async function keyKhaDung(luc = new Date()): Promise<KeyDungDuoc[]> {
-  if (nho && Date.now() - nho.luc < NHO_MS) return nho.ds;
+export async function keyKhaDung(luc = new Date(), o: { keCaTat?: boolean } = {}): Promise<KeyDungDuoc[]> {
+  const bo = o.keCaTat ? nhoCaTat : nho;
+  if (bo && Date.now() - bo.luc < NHO_MS) return bo.ds;
   await napTuMoiTruong();
   const rows = await prisma.anthropicKey.findMany({
-    where: { trangThai: { in: ['hoatDong', 'hetCredit'] } },
+    where: { trangThai: { in: o.keCaTat ? ['hoatDong', 'hetCredit', 'tat'] : ['hoatDong', 'hetCredit'] } },
     orderBy: [{ thuTu: 'asc' }, { id: 'asc' }],
   });
   const ds: KeyDungDuoc[] = [];
@@ -193,13 +205,14 @@ export async function keyKhaDung(luc = new Date()): Promise<KeyDungDuoc[]> {
     }
     ds.push({ id: r.id, nhan: r.nhan, khoa });
   }
-  nho = { luc: Date.now(), ds };
+  if (o.keCaTat) nhoCaTat = { luc: Date.now(), ds }; else nho = { luc: Date.now(), ds };
   return ds;
 }
 
 /** Có ít nhất một key dùng được? Không ném — CSDL hỏng ⇒ false. */
-export async function coKeyKhaDung(): Promise<boolean> {
-  try { return (await keyKhaDung()).length > 0; } catch { return false; }
+/** `viec` thuộc `VIEC_DUNG_CA_KEY_TAT` ⇒ tính cả key admin đã bấm Tắt. */
+export async function coKeyKhaDung(viec?: string): Promise<boolean> {
+  try { return (await keyKhaDung(new Date(), { keCaTat: !!viec && VIEC_DUNG_CA_KEY_TAT.has(viec) })).length > 0; } catch { return false; }
 }
 
 /**

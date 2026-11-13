@@ -1,0 +1,32 @@
+/** Giảng theo slide — bài 2.4 Chẩn đoán transport bằng curl (deck sio-02-4, 9 slide). VI = lời giảng video sio-2-4; EN = ghi chú `en` của deck. SINH bằng scratchpad/sio/giang.mjs — sửa ở deck/kichban rồi sinh lại. */
+import { walkSio } from '../_slides.mjs';
+
+export default walkSio('sio-02-4', "Diagnosing the transport with curl", "Chẩn đoán transport bằng curl", [
+  [1, "Diagnosing the transport with curl",
+    "<p>Lesson two point four: diagnosing the transport with curl. No browser: a few commands that read the config, the routing, the upgrade and the auth straight off the wire.</p>",
+    "<p>Bài 2.4: chẩn đoán transport bằng curl.</p>"],
+  [2, "What you will take away from this lesson",
+    "<p>Five takeaways: the handshake and its OPEN body; what two hundred, four oh four and zero zero zero tell you; the upgrade check; auth by hand and the real forty-four packet; and a decision path for chat broke after the deploy.</p>",
+    "<p>Năm điều: lệnh bắt tay đọc cấu hình đang chạy, các mã hai trăm, bốn trăm lẻ bốn, ba số không nói gì. Phép kiểm nâng cấp, xác thực bằng tay với packet bốn mươi bốn thật, và một lối chẩn đoán khi chat hỏng sau deploy.</p>"],
+  [3, "Command 1: the handshake reads the deployed config",
+    "<p>Command one: the handshake. Through the correct nginx it returns OPEN with twenty-five thousand and sixty thousand: the config you see is the config that is deployed. Through a server block that only routes slash api, it is four oh four. And with nothing listening, curl prints zero zero zero and exits with code seven.</p>",
+    "<p>Lệnh một, curl bắt tay qua nginx đúng: body OPEN có hai mươi lăm nghìn và sáu mươi nghìn. Đó là cấu hình đang chạy thật, không phải cấu hình bạn tưởng. Qua một server block chỉ chuyển đường dẫn api: bốn trăm lẻ bốn. Cổng không ai nghe: ba số không, mã thoát bảy.</p>"],
+  [4, "The upgrade check: OPEN lies about the proxy",
+    "<p>The upgrade check. The web lesson says an empty upgrades list means the proxy headers are wrong. Measured: behind an nginx with no upgrade headers, OPEN still advertises websocket, because the server writes that list and cannot see the proxy. Test the upgrade itself: one hundred one means the proxy passes it, four hundred means it strips it.</p>",
+    "<p>Bài web nói: upgrades rỗng nghĩa là header Upgrade của nginx sai. Đo thật: sau một nginx không có header Upgrade, OPEN vẫn ghi websocket. Danh sách đó do server viết, server không nhìn thấy proxy. Muốn biết, hãy thử chính cú nâng cấp: gửi bốn header bắt tay WebSocket bằng curl. Nginx đúng trả một trăm lẻ một. Nginx thiếu header trả bốn trăm, và client sẽ nằm lại polling mà không báo gì.</p>"],
+  [5, "Command 3: auth by hand",
+    "<p>Command three: auth by hand. The handshake is two hundred even without a token, because the middleware only runs on the CONNECT packet. POST a CONNECT with a bad token: the POST answers ok, and the next GET returns forty-four with a message object. With the right token the next GET returns forty with the namespace sid.</p>",
+    "<p>Slide này giữ đủ bốn bước. Middleware chỉ chạy khi có packet CONNECT, như bài 1.4 đã đo.</p>"],
+  [6, "Why curl, not the browser",
+    "<p>Why curl and not the browser: it runs on the server or inside the container, it shows every header and byte, and you can start with just the status code, then the body, then verbose. Every answer is a packet you can decode with the table from lesson zero point three.</p>",
+    "<p>Vì sao curl: chạy được trên VPS hay trong container, thấy mọi header và byte. Bắt đầu nhỏ: chỉ in mã trạng thái, rồi tới body, rồi mới tới chế độ verbose. Mỗi câu trả lời là một packet bạn giải mã được bằng bảng của bài 0.3.</p>"],
+  [7, "A decision path for “chat broke after the deploy”",
+    "<p>A decision path. Chat dead for everyone: run the handshake; four oh four means the nginx location, zero zero zero means the backend is down. Works but laggy: test the upgrade. Random users fail in a cluster: one sid, ten requests. Everyone logged out: command three. Ping timeout storms: read the numbers in OPEN; if they are not yours, the new image is not deployed.</p>",
+    "<p>Lối chẩn đoán: chat chết với mọi người, chạy lệnh bắt tay. Chạy mà chậm, kiểm cú nâng cấp. Trong cụm, người dùng hỏng ngẫu nhiên: một sid, mười request. Mọi người bị đăng xuất: lệnh ba. Bão ping timeout: đọc hai số trong OPEN. Không phải số của bạn nghĩa là ảnh mới chưa lên.</p>"],
+  [8, "Key terms of this lesson",
+    "<p>Key terms: the handshake; the OPEN body; one hundred one switching protocols; curl exit code seven; CONNECT error; and the browserless reproduction.</p>",
+    "<p>Thuật ngữ: bắt tay, body OPEN, mã một trăm lẻ một, curl thoát mã bảy, CONNECT_ERROR, và tái hiện không cần trình duyệt.</p>"],
+  [9, "Your turn — and what to keep",
+    "<p>Your turn: handshake your server and read the numbers; break nginx three ways; test the upgrade through a good and a bad proxy; and post a CONNECT with a bad token. Keep: OPEN is the config that is really running; four oh four is nginx, zero zero zero is the backend, four hundred on upgrade is the proxy; auth errors come as forty-four with a message.</p>",
+    "<p>Tới lượt bạn: bắt tay server của bạn bằng curl và đọc hai số. Làm hỏng nginx ba kiểu và xem mỗi kiểu cho mã gì. Thử cú nâng cấp qua nginx tốt và nginx thiếu header. Rồi POST một CONNECT với token sai và đọc bốn mươi bốn. Tóm lại: OPEN là cấu hình đang chạy. Bốn trăm lẻ bốn là nginx, ba số không là backend, bốn trăm lúc nâng cấp là proxy. Lỗi xác thực là bốn mươi bốn. Bạn mở Code Lab Socket.IO, mô đun test và debug realtime để luyện. Bài sau: binary payload, không phải base64.</p>"],
+]);

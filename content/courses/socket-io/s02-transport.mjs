@@ -1,4 +1,8 @@
 import G02_1 from './giang/sio-02-1.mjs';
+import G02_2 from './giang/sio-02-2.mjs';
+import G02_3 from './giang/sio-02-3.mjs';
+import G02_4 from './giang/sio-02-4.mjs';
+import G02_5 from './giang/sio-02-5.mjs';
 const REF = '?ref=%2Fcourses%2Fsocket-io%2Flearn&reflabel=Socket.IO';
 /**
  * Socket.IO — Chương 2: Transport và upgrade sâu.
@@ -438,6 +442,7 @@ process.exit(0);</code></pre>
       type: 'VIDEO',
       description: 'Kho này đặt 25s/60s. Bốn kết hợp có nghĩa khác nhau: aggressive (low both), lazy (high both), fast-fail (low timeout), heartbeat-heavy (low interval).',
       content: `
+${G02_2}
 <div class="ml-en">
 <span class="eyebrow">Chapter 2 · Lesson 2.2</span>
 <h2>pingInterval and pingTimeout: two numbers, four modes</h2>
@@ -511,6 +516,61 @@ Ke ca 100.000 socket, tong ping traffic la 170 KB/s — khong dang ke
 <li>Lower <code>pingTimeout</code> to, say, 5s and reconnect on flaky wifi; watch the false disconnects appear, showing the trade you are making.</li>
 </ol>
 <p><strong>Done when:</strong> you can predict worst-case detection time from the two numbers and explain why this repo chose 25s/60s.</p></div>
+
+<h3>🔬 Measured: the two numbers, four modes, and a real nginx</h3>
+<p>socket.io 4.8.3, Node 22. The OPEN packet of this repo's configuration:</p>
+<div class="out">$ node open.mjs
+0{"sid":"UXkqsN2Z1S5r-E1nAAAA","upgrades":["websocket"],"pingInterval":25000,"pingTimeout":60000,"maxPayload":1000000}</div>
+<p>Four modes in parallel, each with a client frozen (SIGSTOP) right after connecting:</p>
+<div class="out">$ node bon-mode.mjs
+hung dữ    5 s +  10 s  ⇒ server thấy "ping timeout" sau  15.0 s
+mặc định  25 s +  20 s  ⇒ server thấy "ping timeout" sau  45.0 s
+kho này   25 s +  60 s  ⇒ server thấy "ping timeout" sau  85.0 s
+lười     60 s + 120 s  ⇒ server thấy "ping timeout" sau 180.0 s</div>
+<p>A 1.5 s network stall (a proxy holds every byte, then delivers them) with a short and a longer <code>pingTimeout</code> (<code>pingInterval</code> 1 s):</p>
+<div class="out">$ node nghen.mjs
+pingTimeout  500 ms + nghẽn 1500 ms ⇒ server: disconnect "ping timeout" — CHẾT NHẦM (client vẫn sống)
+pingTimeout 3000 ms + nghẽn 1500 ms ⇒ kết nối sống sót</div>
+<p>A real <code>nginx:1.27-alpine</code> with <code>proxy_read_timeout 5s</code> (the 60 s default, scaled down) in front of the server:</p>
+<div class="out">$ node qua-nginx.mjs
+── pingInterval 8 s, nginx proxy_read_timeout 5 s
+     0.0 s  client: connect
+     5.0 s  server: disconnect "transport close"
+     5.0 s  client: disconnect "transport close"
+     6.5 s  client: connect
+    11.5 s  client: disconnect "transport close"
+    11.5 s  server: disconnect "transport close"
+    12.4 s  client: connect
+    17.0 s  client: disconnect "io client disconnect"
+    17.0 s  server: disconnect "server shutting down"
+── pingInterval 3 s, nginx proxy_read_timeout 5 s
+     0.0 s  client: connect
+    17.0 s  client: disconnect "io client disconnect"
+    17.0 s  server: disconnect "server shutting down"</div>
+<p>With <code>pingInterval</code> longer than the proxy's idle timeout, nginx closes the connection after exactly 5 s of silence — both sides see a plain <code>transport close</code>, and the reconnect loop repeats. Shorter than it: no drops.</p>
+<p>What heartbeats cost on the wire:</p>
+<div class="out">$ node gia-ping.mjs
+9 ping trong 10 s · server→client 27 B (3.0 B/ping) · client→server 63 B (7.0 B/pong)
+10.000 socket, pingInterval 25 s ⇒ 400 cặp/s ⇒ 3.9 KB/s ở tầng TCP payload (chưa tính header TCP/IP ~40 B mỗi gói)</div>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-javascript"><span class="tok-comment">// Bốn mode, chạy SONG SONG: client bị ĐÔNG CỨNG (SIGSTOP) ngay sau khi nối — server mất bao lâu mới biết?</span>
+import { spawn } from 'node:child_process';
+import { Server } from 'socket.io';
+const CL = "const s=require('socket.io-client').io('http://localhost:'+process.argv[1],{transports:['websocket']});s.on('connect',()=&gt;process.send('ok'))";
+const MODE = [['hung dữ ', 5000, 10000, 19521], ['mặc định', 25000, 20000, 19522], ['kho này ', 25000, 60000, 19523], ['lười   ', 60000, 120000, 19524]];
+const con = []; let xong = 0;
+for (const [ten, pi, pt, cong] of MODE) {
+  const io = new Server(cong, { pingInterval: pi, pingTimeout: pt }); let t0;
+  io.on('connection', (s) =&gt; s.on('disconnect', (ly) =&gt; {
+    console.log(&#96;\${ten}  \${String(pi / 1000).padStart(2)} s + \${String(pt / 1000).padStart(3)} s  ⇒ server thấy "\${ly}" sau \${((Date.now() - t0) / 1000).toFixed(1).padStart(5)} s&#96;);
+    io.close(); if (++xong === MODE.length) { con.forEach((c) =&gt; c.kill('SIGKILL')); process.exit(0); }
+  }));
+  const c = spawn('node', ['-e', CL, String(cong)], { stdio: ['ignore', 'ignore', 'ignore', 'ipc'] }); con.push(c);
+  c.on('message', () =&gt; { t0 = Date.now(); c.kill('SIGSTOP'); });
+}</code></pre>
+<h3>🔗 Go deeper in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nginx/learn?lessonSlug=nginx-3-5-websocket" target="_blank" rel="noopener"><span class="lc-ico">🟢</span><span class="lc-body"><span class="lc-title">Nginx · 3.5 — WebSocket: the upgrade nginx deliberately strips</span><span class="lc-sub">Upgrade/Connection headers and proxy_read_timeout for WebSocket routes</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-11-3-xac-thuc-phan-quyen-socket" target="_blank" rel="noopener"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Node.js · 11.3 — A connection that is dead without knowing it</span><span class="lc-sub">The same 45 s / 85 s measured through a proxy that silently stops forwarding</span></span></a>
 
 <h3>🗂 Key terms</h3>
 <div class="kv-grid">
@@ -609,6 +669,61 @@ Ke ca 100.000 socket, tong ping traffic la 170 KB/s — khong dang ke
 </ol>
 <p><strong>Đạt khi:</strong> bạn đoán được thời gian phát hiện tệ nhất từ hai số và giải thích vì sao kho này chọn 25s/60s.</p></div>
 
+<h3>🔬 Đo thật: hai con số, bốn mode, và một nginx thật</h3>
+<p>socket.io 4.8.3, Node 22. Packet OPEN với cấu hình của kho:</p>
+<div class="out">$ node open.mjs
+0{"sid":"UXkqsN2Z1S5r-E1nAAAA","upgrades":["websocket"],"pingInterval":25000,"pingTimeout":60000,"maxPayload":1000000}</div>
+<p>Bốn mode chạy song song, mỗi mode một client bị đông cứng (SIGSTOP) ngay sau khi nối:</p>
+<div class="out">$ node bon-mode.mjs
+hung dữ    5 s +  10 s  ⇒ server thấy "ping timeout" sau  15.0 s
+mặc định  25 s +  20 s  ⇒ server thấy "ping timeout" sau  45.0 s
+kho này   25 s +  60 s  ⇒ server thấy "ping timeout" sau  85.0 s
+lười     60 s + 120 s  ⇒ server thấy "ping timeout" sau 180.0 s</div>
+<p>Mạng khựng 1,5 s (proxy giữ mọi byte rồi mới chuyển) với <code>pingTimeout</code> ngắn và dài hơn (<code>pingInterval</code> 1 s):</p>
+<div class="out">$ node nghen.mjs
+pingTimeout  500 ms + nghẽn 1500 ms ⇒ server: disconnect "ping timeout" — CHẾT NHẦM (client vẫn sống)
+pingTimeout 3000 ms + nghẽn 1500 ms ⇒ kết nối sống sót</div>
+<p>Một <code>nginx:1.27-alpine</code> thật với <code>proxy_read_timeout 5s</code> (thang rút ngắn của 60 s mặc định) đứng trước server:</p>
+<div class="out">$ node qua-nginx.mjs
+── pingInterval 8 s, nginx proxy_read_timeout 5 s
+     0.0 s  client: connect
+     5.0 s  server: disconnect "transport close"
+     5.0 s  client: disconnect "transport close"
+     6.5 s  client: connect
+    11.5 s  client: disconnect "transport close"
+    11.5 s  server: disconnect "transport close"
+    12.4 s  client: connect
+    17.0 s  client: disconnect "io client disconnect"
+    17.0 s  server: disconnect "server shutting down"
+── pingInterval 3 s, nginx proxy_read_timeout 5 s
+     0.0 s  client: connect
+    17.0 s  client: disconnect "io client disconnect"
+    17.0 s  server: disconnect "server shutting down"</div>
+<p><code>pingInterval</code> dài hơn timeout nhàn rỗi của proxy thì nginx đóng kết nối đúng sau 5 s im lặng — cả hai phía chỉ thấy <code>transport close</code>, và vòng nối lại cứ lặp. Ngắn hơn thì không rớt lần nào.</p>
+<p>Nhịp tim tốn bao nhiêu trên dây:</p>
+<div class="out">$ node gia-ping.mjs
+9 ping trong 10 s · server→client 27 B (3.0 B/ping) · client→server 63 B (7.0 B/pong)
+10.000 socket, pingInterval 25 s ⇒ 400 cặp/s ⇒ 3.9 KB/s ở tầng TCP payload (chưa tính header TCP/IP ~40 B mỗi gói)</div>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-javascript"><span class="tok-comment">// Bốn mode, chạy SONG SONG: client bị ĐÔNG CỨNG (SIGSTOP) ngay sau khi nối — server mất bao lâu mới biết?</span>
+import { spawn } from 'node:child_process';
+import { Server } from 'socket.io';
+const CL = "const s=require('socket.io-client').io('http://localhost:'+process.argv[1],{transports:['websocket']});s.on('connect',()=&gt;process.send('ok'))";
+const MODE = [['hung dữ ', 5000, 10000, 19521], ['mặc định', 25000, 20000, 19522], ['kho này ', 25000, 60000, 19523], ['lười   ', 60000, 120000, 19524]];
+const con = []; let xong = 0;
+for (const [ten, pi, pt, cong] of MODE) {
+  const io = new Server(cong, { pingInterval: pi, pingTimeout: pt }); let t0;
+  io.on('connection', (s) =&gt; s.on('disconnect', (ly) =&gt; {
+    console.log(&#96;\${ten}  \${String(pi / 1000).padStart(2)} s + \${String(pt / 1000).padStart(3)} s  ⇒ server thấy "\${ly}" sau \${((Date.now() - t0) / 1000).toFixed(1).padStart(5)} s&#96;);
+    io.close(); if (++xong === MODE.length) { con.forEach((c) =&gt; c.kill('SIGKILL')); process.exit(0); }
+  }));
+  const c = spawn('node', ['-e', CL, String(cong)], { stdio: ['ignore', 'ignore', 'ignore', 'ipc'] }); con.push(c);
+  c.on('message', () =&gt; { t0 = Date.now(); c.kill('SIGSTOP'); });
+}</code></pre>
+<h3>🔗 Học sâu hơn ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nginx/learn?lessonSlug=nginx-3-5-websocket" target="_blank" rel="noopener"><span class="lc-ico">🟢</span><span class="lc-body"><span class="lc-title">Nginx · 3.5 — WebSocket: cú nâng cấp mà Nginx CỐ Ý gỡ đi</span><span class="lc-sub">Header Upgrade/Connection và proxy_read_timeout cho route WebSocket</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-11-3-xac-thuc-phan-quyen-socket" target="_blank" rel="noopener"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Node.js · 11.3 — kết nối đã chết mà không biết mình chết</span><span class="lc-sub">Cùng 45 s / 85 s, đo qua một proxy lặng lẽ ngừng chuyển byte</span></span></a>
+
 <h3>🗂 Thuật ngữ trong bài</h3>
 <div class="kv-grid">
   <div class="kv"><span class="k"><code>pingInterval</code></span><span class="v">Server gửi ping mỗi bao lâu (25s ở đây); phải nhỏ hơn proxy read timeout.</span></div>
@@ -642,6 +757,7 @@ Ke ca 100.000 socket, tong ping traffic la 170 KB/s — khong dang ke
       type: 'VIDEO',
       description: 'Polling gồm nhiều HTTP request phải đến cùng worker để chia sẻ state. Không có sticky = client nào cũng lỗi trong cluster. Nginx `ip_hash` hoặc <code>hash</code>-by-cookie giải quyết.',
       content: `
+${G02_3}
 <div class="ml-en">
 <span class="eyebrow">Chapter 2 · Lesson 2.3</span>
 <h2>Sticky sessions: why one client goes to one worker</h2>
@@ -675,7 +791,7 @@ upstream backend {
 }
 </code></pre>
 
-<p><code>ip_hash</code> is simple, but two users behind the same NAT (an office) pile onto the same worker. <code>hash $cookie_io</code> is better — socket.io-client sets the <code>io</code> cookie automatically, so the distribution stays even.</p>
+<p><code>ip_hash</code> is simple, but two users behind the same NAT (an office) pile onto the same worker. <code>hash $cookie_io</code> looks better — but measured on 4.8.3 it is NOT: nobody sets the <code>io</code> cookie by default (only the server does, with <code>new Server({ cookie: true })</code>), and even then the handshake request carries no cookie yet, so nginx hashes an empty key (round-robin) — 3 of 5 sessions got 400. See the measurement below.</p>
 
 <h3>Verifying that stickiness actually works</h3>
 <pre><code class="language-bash">for i in 1 2 3 4 5 6 7 8 9 10; do
@@ -685,6 +801,8 @@ upstream backend {
 done
 # 200 200 200 200 200 200 200 200 200 200    &lt;- sticky OK
 # 200 400 200 400 200 400 200 400 200 400    &lt;- KHONG sticky, luan phien
+# (do that: vong nay chi goi BAT TAY nen LUON 200 ke ca khi khong sticky — xem "Do that" ben duoi:
+#  lay MOT sid roi gui nhieu request kem sid do moi thay 400 200 400 200)
 </code></pre>
 
 <h3>Cluster mode in this repo</h3>
@@ -705,6 +823,77 @@ done
 <li>Explain in one line why the Redis adapter does not fix this — it shares broadcasts, not the polling session.</li>
 </ol>
 <p><strong>Done when:</strong> you have reproduced the no-stickiness failure and fixed it with an nginx hash, not a socket.io setting.</p></div>
+
+<h3>🔬 Measured: a real nginx in front of two workers</h3>
+<p>socket.io 4.8.3, Node 22, <code>nginx:1.27-alpine</code> in a container, two independent socket.io processes, three ports: round-robin, <code>ip_hash</code>, <code>hash $cookie_io</code>:</p>
+<div class="out"># transport mặc định (polling trước), server KHÔNG bật cookie
+$ node thu.mjs
+round-robin      ⇒ connect_error "xhr poll error" ✗
+ip_hash          ⇒ connect ✓ (transport websocket)
+hash $cookie_io  ⇒ connect_error "xhr post error" ✗
+# ép transports: ['websocket'] — một request duy nhất, không cần sticky
+$ node thu.mjs websocket
+round-robin      ⇒ connect ✓ (transport websocket)
+ip_hash          ⇒ connect ✓ (transport websocket)
+hash $cookie_io  ⇒ connect ✓ (transport websocket)
+[A] connection 2C6Xr8
+[A] connection PkSkJi
+[A] connection crdea1
+[B] 400 Session ID unknown (sid lạ)
+[B] 400 Session ID unknown (sid lạ)
+[B] 400 Session ID unknown (sid lạ)
+[B] 400 Session ID unknown (sid lạ)
+[B] connection ZnkIFN
+[B] connection XjIv16</div>
+<p>Default transports: only <code>ip_hash</code> connects; worker B logs “Session ID unknown” for sids created by A. Forcing <code>transports: ['websocket']</code>: all three connect — a single upgrade request, nothing to share — at the price of the polling fallback.</p>
+<p><strong>A check that detects it</strong> (and one that cannot):</p>
+<div class="out"># Cách kiểm của bài web: chỉ gọi BẮT TAY 10 lần (không có sid) — luôn 200 kể cả khi KHÔNG sticky
+$ for i in $(seq 10); do curl -s -o /dev/null -w '%{http_code} ' 'localhost:19542/socket.io/?EIO=4&amp;transport=polling'; done; echo
+200 200 200 200 200 200 200 200 200 200 
+# Cách kiểm đúng: lấy sid MỘT lần, rồi gửi 10 POST (gói noop "6") CÓ sid
+$ SID=$(curl -s 'localhost:19542/socket.io/?EIO=4&amp;transport=polling' | grep -o '"sid":"[^"]*"' | cut -d'"' -f4); echo "sid=$SID"
+sid=cd2SIKRb1EG68D-pAAAF
+400 200 400 200 400 200 400 200 400 200 
+$ SID=$(curl -s 'localhost:19543/socket.io/?EIO=4&amp;transport=polling' | grep -o '"sid":"[^"]*"' | cut -d'"' -f4); echo "ip_hash sid=$SID"; for i in $(seq 10); do curl -s -X POST -d 6 -o /dev/null -w '%{http_code} ' "localhost:19543/socket.io/?EIO=4&amp;transport=polling&amp;sid=$SID"; done; echo
+ip_hash sid=ueOEb1DLUGW7junLAAAG
+200 200 200 200 200 200 200 200 200 200 </div>
+<p><strong>The io cookie</strong> — default vs <code>{ cookie: true }</code>, then <code>hash $cookie_io</code>:</p>
+<div class="out"># socket.io-client có TỰ đặt cookie io không? — xem header trả lời của server, mặc định vs { cookie: true }
+$ curl -s -D - -o /dev/null 'localhost:19540/socket.io/?EIO=4&amp;transport=polling' | grep -iE '^(HTTP|set-cookie)' || true
+HTTP/1.1 200 OK
+$ curl -s -D - -o /dev/null 'localhost:19540/socket.io/?EIO=4&amp;transport=polling' | grep -iE '^(HTTP|set-cookie)'
+HTTP/1.1 200 OK
+Set-Cookie: io=6ueGu0qaDHAX7OOcAAAA; Path=/; HttpOnly; SameSite=Lax
+# hash $cookie_io: request ĐẦU (bắt tay) chưa có cookie ⇒ băm chuỗi rỗng; request sau có io=&lt;sid&gt; ⇒ băm ra worker khác?
+$ for i in 1 2 3 4 5; do curl -s -c j$i -b j$i -o /dev/null 'localhost:19544/socket.io/?EIO=4&amp;transport=polling'; SID=$(grep -o 'io.*' j$i | awk '{print $2}'); printf "sid=%s → " \${SID:0:6}; for k in 1 2 3; do curl -s -b j$i -X POST -d 6 -o /dev/null -w '%{http_code} ' "localhost:19544/socket.io/?EIO=4&amp;transport=polling&amp;sid=$SID"; done; echo; done; rm -f j?
+sid=jgGkJi → 200 200 200 
+sid=tIGnWJ → 400 400 400 
+sid=wq_Cfs → 400 400 400 
+sid=B46jg2 → 400 400 400 
+sid=PY9Eml → 200 200 200 
+[A] 400 Session ID unknown (sid lạ)
+[A] 400 Session ID unknown (sid lạ)
+[A] 400 Session ID unknown (sid lạ)
+[A] 400 Session ID unknown (sid lạ)
+[A] 400 Session ID unknown (sid lạ)
+[A] 400 Session ID unknown (sid lạ)
+[B] 400 Session ID unknown (sid lạ)
+[B] 400 Session ID unknown (sid lạ)
+[B] 400 Session ID unknown (sid lạ)</div>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-nginx">events {}
+http {
+  map $http_upgrade $connection_upgrade { default upgrade; '' close; }
+  upstream rr     { server host.docker.internal:19540; server host.docker.internal:19541; }          <span class="tok-comment">  # round-robin (mặc định)</span>
+  upstream iphash { ip_hash; server host.docker.internal:19540; server host.docker.internal:19541; }
+  upstream cookie { hash $cookie_io; server host.docker.internal:19540; server host.docker.internal:19541; }
+  server { listen 8001; location /socket.io/ { proxy_pass http://rr;     proxy_http_version 1.1; proxy_set_header Upgrade $http_upgrade; proxy_set_header Connection $connection_upgrade; } }
+  server { listen 8002; location /socket.io/ { proxy_pass http://iphash; proxy_http_version 1.1; proxy_set_header Upgrade $http_upgrade; proxy_set_header Connection $connection_upgrade; } }
+  server { listen 8003; location /socket.io/ { proxy_pass http://cookie; proxy_http_version 1.1; proxy_set_header Upgrade $http_upgrade; proxy_set_header Connection $connection_upgrade; } }
+}</code></pre>
+<h3>🔗 Go deeper in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nginx/learn?lessonSlug=nginx-9-1-khoi-upstream" target="_blank" rel="noopener"><span class="lc-ico">🟢</span><span class="lc-body"><span class="lc-title">Nginx · 9.1 — The upstream block and four ways to pick a server</span><span class="lc-sub">round-robin, ip_hash, hash — what each one keys on</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-11-4-scale-adapter-backpressure" target="_blank" rel="noopener"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Node.js · 11.4 — More than one process: adapter, sticky session, backpressure</span><span class="lc-sub">The same failure with a hand-built round-robin balancer</span></span></a>
 
 <h3>🗂 Key terms</h3>
 <div class="kv-grid">
@@ -762,7 +951,7 @@ upstream backend {
 }
 </code></pre>
 
-<p><code>ip_hash</code> đơn giản nhưng hai user cùng NAT (văn phòng) dồn vào cùng worker. <code>hash $cookie_io</code> tốt hơn — socket.io-client set cookie <code>io</code> tự động, nó phân phối cân đối.</p>
+<p><code>ip_hash</code> đơn giản nhưng hai user cùng NAT (văn phòng) dồn vào cùng worker. <code>hash $cookie_io</code> nghe tốt hơn — nhưng đo trên 4.8.3 thì KHÔNG: mặc định không ai đặt cookie <code>io</code> (chỉ server đặt, khi <code>new Server({ cookie: true })</code>), và kể cả khi đó request bắt tay chưa mang cookie, nên nginx băm khoá rỗng (luân phiên) — 3/5 phiên nhận 400. Xem phép đo bên dưới.</p>
 
 <h3>Verify sticky đang hoạt động</h3>
 <pre><code class="language-bash">for i in 1 2 3 4 5 6 7 8 9 10; do
@@ -772,6 +961,8 @@ upstream backend {
 done
 # 200 200 200 200 200 200 200 200 200 200    &lt;- sticky OK
 # 200 400 200 400 200 400 200 400 200 400    &lt;- KHONG sticky, luan phien
+# (do that: vong nay chi goi BAT TAY nen LUON 200 ke ca khi khong sticky — xem "Do that" ben duoi:
+#  lay MOT sid roi gui nhieu request kem sid do moi thay 400 200 400 200)
 </code></pre>
 
 <h3>Cluster mode ở kho này</h3>
@@ -792,6 +983,77 @@ done
 <li>Giải thích một dòng vì sao Redis adapter không sửa được việc này — nó chia sẻ broadcast, không phải session polling.</li>
 </ol>
 <p><strong>Đạt khi:</strong> bạn tái hiện được lỗi không-sticky và vá nó bằng một hash nginx, không phải một cấu hình socket.io.</p></div>
+
+<h3>🔬 Đo thật: nginx thật trước hai worker</h3>
+<p>socket.io 4.8.3, Node 22, <code>nginx:1.27-alpine</code> trong container, hai tiến trình socket.io độc lập, ba cổng: round-robin, <code>ip_hash</code>, <code>hash $cookie_io</code>:</p>
+<div class="out"># transport mặc định (polling trước), server KHÔNG bật cookie
+$ node thu.mjs
+round-robin      ⇒ connect_error "xhr poll error" ✗
+ip_hash          ⇒ connect ✓ (transport websocket)
+hash $cookie_io  ⇒ connect_error "xhr post error" ✗
+# ép transports: ['websocket'] — một request duy nhất, không cần sticky
+$ node thu.mjs websocket
+round-robin      ⇒ connect ✓ (transport websocket)
+ip_hash          ⇒ connect ✓ (transport websocket)
+hash $cookie_io  ⇒ connect ✓ (transport websocket)
+[A] connection 2C6Xr8
+[A] connection PkSkJi
+[A] connection crdea1
+[B] 400 Session ID unknown (sid lạ)
+[B] 400 Session ID unknown (sid lạ)
+[B] 400 Session ID unknown (sid lạ)
+[B] 400 Session ID unknown (sid lạ)
+[B] connection ZnkIFN
+[B] connection XjIv16</div>
+<p>Transport mặc định: chỉ <code>ip_hash</code> nối được; worker B ghi "Session ID unknown" cho sid do A tạo. Ép <code>transports: ['websocket']</code>: cả ba đều nối — một request nâng cấp, không có gì cần chia sẻ — đổi lại mất đường lùi polling.</p>
+<p><strong>Phép kiểm phát hiện được lỗi</strong> (và phép kiểm không phát hiện được):</p>
+<div class="out"># Cách kiểm của bài web: chỉ gọi BẮT TAY 10 lần (không có sid) — luôn 200 kể cả khi KHÔNG sticky
+$ for i in $(seq 10); do curl -s -o /dev/null -w '%{http_code} ' 'localhost:19542/socket.io/?EIO=4&amp;transport=polling'; done; echo
+200 200 200 200 200 200 200 200 200 200 
+# Cách kiểm đúng: lấy sid MỘT lần, rồi gửi 10 POST (gói noop "6") CÓ sid
+$ SID=$(curl -s 'localhost:19542/socket.io/?EIO=4&amp;transport=polling' | grep -o '"sid":"[^"]*"' | cut -d'"' -f4); echo "sid=$SID"
+sid=cd2SIKRb1EG68D-pAAAF
+400 200 400 200 400 200 400 200 400 200 
+$ SID=$(curl -s 'localhost:19543/socket.io/?EIO=4&amp;transport=polling' | grep -o '"sid":"[^"]*"' | cut -d'"' -f4); echo "ip_hash sid=$SID"; for i in $(seq 10); do curl -s -X POST -d 6 -o /dev/null -w '%{http_code} ' "localhost:19543/socket.io/?EIO=4&amp;transport=polling&amp;sid=$SID"; done; echo
+ip_hash sid=ueOEb1DLUGW7junLAAAG
+200 200 200 200 200 200 200 200 200 200 </div>
+<p><strong>Cookie io</strong> — mặc định vs <code>{ cookie: true }</code>, rồi <code>hash $cookie_io</code>:</p>
+<div class="out"># socket.io-client có TỰ đặt cookie io không? — xem header trả lời của server, mặc định vs { cookie: true }
+$ curl -s -D - -o /dev/null 'localhost:19540/socket.io/?EIO=4&amp;transport=polling' | grep -iE '^(HTTP|set-cookie)' || true
+HTTP/1.1 200 OK
+$ curl -s -D - -o /dev/null 'localhost:19540/socket.io/?EIO=4&amp;transport=polling' | grep -iE '^(HTTP|set-cookie)'
+HTTP/1.1 200 OK
+Set-Cookie: io=6ueGu0qaDHAX7OOcAAAA; Path=/; HttpOnly; SameSite=Lax
+# hash $cookie_io: request ĐẦU (bắt tay) chưa có cookie ⇒ băm chuỗi rỗng; request sau có io=&lt;sid&gt; ⇒ băm ra worker khác?
+$ for i in 1 2 3 4 5; do curl -s -c j$i -b j$i -o /dev/null 'localhost:19544/socket.io/?EIO=4&amp;transport=polling'; SID=$(grep -o 'io.*' j$i | awk '{print $2}'); printf "sid=%s → " \${SID:0:6}; for k in 1 2 3; do curl -s -b j$i -X POST -d 6 -o /dev/null -w '%{http_code} ' "localhost:19544/socket.io/?EIO=4&amp;transport=polling&amp;sid=$SID"; done; echo; done; rm -f j?
+sid=jgGkJi → 200 200 200 
+sid=tIGnWJ → 400 400 400 
+sid=wq_Cfs → 400 400 400 
+sid=B46jg2 → 400 400 400 
+sid=PY9Eml → 200 200 200 
+[A] 400 Session ID unknown (sid lạ)
+[A] 400 Session ID unknown (sid lạ)
+[A] 400 Session ID unknown (sid lạ)
+[A] 400 Session ID unknown (sid lạ)
+[A] 400 Session ID unknown (sid lạ)
+[A] 400 Session ID unknown (sid lạ)
+[B] 400 Session ID unknown (sid lạ)
+[B] 400 Session ID unknown (sid lạ)
+[B] 400 Session ID unknown (sid lạ)</div>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-nginx">events {}
+http {
+  map $http_upgrade $connection_upgrade { default upgrade; '' close; }
+  upstream rr     { server host.docker.internal:19540; server host.docker.internal:19541; }          <span class="tok-comment">  # round-robin (mặc định)</span>
+  upstream iphash { ip_hash; server host.docker.internal:19540; server host.docker.internal:19541; }
+  upstream cookie { hash $cookie_io; server host.docker.internal:19540; server host.docker.internal:19541; }
+  server { listen 8001; location /socket.io/ { proxy_pass http://rr;     proxy_http_version 1.1; proxy_set_header Upgrade $http_upgrade; proxy_set_header Connection $connection_upgrade; } }
+  server { listen 8002; location /socket.io/ { proxy_pass http://iphash; proxy_http_version 1.1; proxy_set_header Upgrade $http_upgrade; proxy_set_header Connection $connection_upgrade; } }
+  server { listen 8003; location /socket.io/ { proxy_pass http://cookie; proxy_http_version 1.1; proxy_set_header Upgrade $http_upgrade; proxy_set_header Connection $connection_upgrade; } }
+}</code></pre>
+<h3>🔗 Học sâu hơn ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nginx/learn?lessonSlug=nginx-9-1-khoi-upstream" target="_blank" rel="noopener"><span class="lc-ico">🟢</span><span class="lc-body"><span class="lc-title">Nginx · 9.1 — Khối upstream và bốn cách chọn máy</span><span class="lc-sub">round-robin, ip_hash, hash — mỗi cách băm theo cái gì</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-11-4-scale-adapter-backpressure" target="_blank" rel="noopener"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Node.js · 11.4 — Nhiều hơn một tiến trình: adapter, sticky session, và áp lực ngược</span><span class="lc-sub">Cùng lỗi này với một bộ cân bằng luân phiên tự dựng</span></span></a>
 
 <h3>🗂 Thuật ngữ trong bài</h3>
 <div class="kv-grid">
@@ -826,6 +1088,7 @@ done
       type: 'VIDEO',
       description: 'Ba lệnh curl reproduce chính handshake của socket.io. Hữu ích khi debug production mà không mở trình duyệt được — bạn tự xác nhận HTTP polling, upgrade, và sticky đều đúng.',
       content: `
+${G02_4}
 <div class="ml-en">
 <span class="eyebrow">Chapter 2 · Lesson 2.4</span>
 <h2>Diagnosing transports with curl</h2>
@@ -840,7 +1103,7 @@ done
 <div class="lz-step"><span class="lz-k">a</span><span class="lz-t">200 OK, body starts with <code>0{...}</code></span><span class="lz-d">Socket.IO is up and a sid has been issued. The live configuration is readable right here — you can see <code>pingTimeout: 60000</code> against the default 20000, which confirms your config actually reached production.</span></div>
 <div class="lz-step"><span class="lz-k">b</span><span class="lz-t">404</span><span class="lz-d">Nginx is not routing <code>/socket.io/</code> to the backend. Check the <code>location /socket.io/</code>.</span></div>
 <div class="lz-step"><span class="lz-k">c</span><span class="lz-t">timeout</span><span class="lz-d">The backend is down or a firewall is blocking. Check whether <code>curl https://api.example.com/health</code> is healthy.</span></div>
-<div class="lz-step"><span class="lz-k">d</span><span class="lz-t"><code>upgrades:[]</code> is empty</span><span class="lz-d">The server cannot tell the client about WebSocket. Most likely nginx's <code>proxy_set_header Upgrade</code> is not right yet.</span></div>
+<div class="lz-step"><span class="lz-k">d</span><span class="lz-t"><code>upgrades:[]</code> is empty</span><span class="lz-d">The SERVER has WebSocket disabled (<code>transports: ['polling']</code>) — this list is written by the server and cannot see the proxy. Measured: behind an nginx with NO Upgrade headers, OPEN still says <code>"upgrades":["websocket"]</code>. To test the proxy, try the upgrade itself (see the measurement below: 101 vs 400).</span></div>
 </div>
 
 <h3>Command 2 — checking sticky sessions</h3>
@@ -865,7 +1128,7 @@ $ curl -s 'https://api.example.com/socket.io/?EIO=4&transport=polling&sid=XYZ' \
 # server tra ok, sau do gui error packet vao poll ke tiep
 
 $ curl -s 'https://api.example.com/socket.io/?EIO=4&transport=polling&sid=XYZ'
-44"unauthorized"    &lt;- engine.io 4 + socket.io 4 (CONNECT_ERROR) + message
+44{"message":"unauthorized"}    &lt;- engine.io 4 + socket.io 4 (CONNECT_ERROR) + object {message} (do that 4.8.3)
 </code></pre>
 
 <div class="callout ok">
@@ -904,6 +1167,56 @@ $ curl -s 'https://api.example.com/socket.io/?EIO=4&transport=polling&sid=XYZ'
 </ol>
 <p><strong>Done when:</strong> you can reproduce a socket.io handshake with curl alone and read config, stickiness and auth off the responses.</p></div>
 
+<h3>🔬 Measured: the three commands against a real nginx</h3>
+<p>socket.io 4.8.3 (pingInterval 25000 / pingTimeout 60000, an auth middleware) behind <code>nginx:1.27-alpine</code> with three server blocks: correct (19551), no Upgrade headers (19552), wrong location (19553); nothing on 19559:</p>
+<div class="out"># Lệnh 1 — bắt tay engine.io: đọc cấu hình ĐANG CHẠY từ body OPEN
+$ curl -s 'localhost:19551/socket.io/?EIO=4&amp;transport=polling'; echo
+0{"sid":"BA9xPjuyZWTR-1JwAAAA","upgrades":["websocket"],"pingInterval":25000,"pingTimeout":60000,"maxPayload":1000000}
+# nginx route sai location ⇒ 404
+$ curl -s -o /dev/null -w '%{http_code}\\n' 'localhost:19553/socket.io/?EIO=4&amp;transport=polling'
+404
+# không có gì nghe ở cổng ⇒ curl exit 7, mã 000
+$ curl -s -m 2 -o /dev/null -w '%{http_code}\\n' 'localhost:19559/socket.io/?EIO=4&amp;transport=polling'; echo "exit=$?"
+000
+exit=7
+# nginx THIẾU header Upgrade: body OPEN VẪN quảng cáo websocket…
+$ curl -s 'localhost:19552/socket.io/?EIO=4&amp;transport=polling' | grep -o '"upgrades":\\[[^]]*\\]'
+"upgrades":["websocket"]
+# …nhưng chính cú nâng cấp mới hỏng: thử bắt tay WebSocket bằng curl (101 = qua, khác = hỏng)
+$ for p in 19551 19552; do curl -s -o /dev/null -m 2 -w "cổng $p ⇒ %{http_code}\\n" -H 'Connection: Upgrade' -H 'Upgrade: websocket' -H 'Sec-WebSocket-Version: 13' -H 'Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==' "localhost:$p/socket.io/?EIO=4&amp;transport=websocket"; done
+cổng 19551 ⇒ 101
+cổng 19552 ⇒ 400
+# Lệnh 3 — xác thực: bắt tay, gửi CONNECT với token sai, rồi đọc lượt poll kế tiếp
+$ SID=$(curl -s 'localhost:19551/socket.io/?EIO=4&amp;transport=polling' | grep -o '"sid":"[^"]*"' | cut -d'"' -f4)
+sid=vid9QfKoHWtys-P-AAAD
+ok   ← POST trả
+44{"message":"unauthorized"}   ← GET kế tiếp
+# cùng ba bước, token đúng
+$ SID=$(curl -s 'localhost:19551/socket.io/?EIO=4&amp;transport=polling' | grep -o '"sid":"[^"]*"' | cut -d'"' -f4); curl -s -X POST -H 'Content-Type: text/plain' --data-binary '40{"token":"tok-lan"}' "localhost:19551/socket.io/?EIO=4&amp;transport=polling&amp;sid=$SID" &gt;/dev/null; curl -s "localhost:19551/socket.io/?EIO=4&amp;transport=polling&amp;sid=$SID"; echo "   ← GET kế tiếp"
+40{"sid":"gCGCdGSchaxHxA6bAAAB"}   ← GET kế tiếp
+connection gCGCdGSchaxHxA6bAAAB</div>
+<p>OPEN shows the config that is really running. 404 = nginx routing, 000 + exit 7 = nothing listening. The upgrades list in OPEN does NOT reveal a broken proxy — the WebSocket handshake test does (101 vs 400). A rejected CONNECT comes back as <code>44{"message":"unauthorized"}</code> on the next GET.</p>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-nginx">events {}
+http {
+  map $http_upgrade $connection_upgrade { default upgrade; '' close; }
+  server { <span class="tok-comment">  # 8001: ĐÚNG — route /socket.io/ + header nâng cấp</span>
+    listen 8001;
+    location /socket.io/ { proxy_pass http://host.docker.internal:19550; proxy_http_version 1.1; proxy_set_header Upgrade $http_upgrade; proxy_set_header Connection $connection_upgrade; }
+  }
+  server { <span class="tok-comment">  # 8002: THIẾU header nâng cấp</span>
+    listen 8002;
+    location /socket.io/ { proxy_pass http://host.docker.internal:19550; }
+  }
+  server { <span class="tok-comment">  # 8003: SAI location (chỉ route /api/)</span>
+    listen 8003;
+    location /api/ { proxy_pass http://host.docker.internal:19550; }
+  }
+}</code></pre>
+<h3>🔗 Go deeper in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-7-1-http11" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking · 7.1 — HTTP/1.1 on the wire</span><span class="lc-sub">Reading request lines, status codes and headers by eye</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nginx/learn?lessonSlug=nginx-3-5-websocket" target="_blank" rel="noopener"><span class="lc-ico">🟢</span><span class="lc-body"><span class="lc-title">Nginx · 3.5 — WebSocket: the upgrade nginx deliberately strips</span><span class="lc-sub">Why the upgrade test returns 400 without Upgrade/Connection headers</span></span></a>
+
 <h3>🗂 Key terms</h3>
 <div class="kv-grid">
   <div class="kv"><span class="k">Handshake</span><span class="v">The first HTTP exchange that opens an engine.io session.</span></div>
@@ -920,7 +1233,7 @@ $ curl -s 'https://api.example.com/socket.io/?EIO=4&transport=polling&sid=XYZ'
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Engine.IO protocol packet types</span><span class="lc-sub">github.com/socketio/engine.io-protocol#packet — bảng số ứng with chuỗi để giải mã output curl.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">curl manual — output formatting</span><span class="lc-sub">everything.curl.dev/usingcurl/verbose — cách kiểm soát output, đặc biệt <code>-w</code> format string.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chapter 11 — diagnosing realtime bugs</span><span class="lc-sub">/courses/socket-io/learn${REF} — cây quyết định dùng ba lệnh này ở các nhánh khác nhau.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chapter 10 — diagnosing realtime bugs</span><span class="lc-sub">/courses/socket-io/learn${REF} — cây quyết định dùng ba lệnh này ở các nhánh khác nhau.</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 2 · Bài 2.4</span>
@@ -936,7 +1249,7 @@ $ curl -s 'https://api.example.com/socket.io/?EIO=4&transport=polling&sid=XYZ'
 <div class="lz-step"><span class="lz-k">a</span><span class="lz-t">200 OK, body bắt đầu bằng <code>0{...}</code></span><span class="lz-d">Socket.IO đang chạy, sid được cấp. Cấu hình chuẩn đọc được thẳng — bạn thấy <code>pingTimeout: 60000</code> vs default 20000 giúp verify config đã lên production.</span></div>
 <div class="lz-step"><span class="lz-k">b</span><span class="lz-t">404</span><span class="lz-d">Nginx không route <code>/socket.io/</code> vào backend. Kiểm cấu hình <code>location /socket.io/</code>.</span></div>
 <div class="lz-step"><span class="lz-k">c</span><span class="lz-t">timeout</span><span class="lz-d">Backend down hoặc firewall chặn. Kiểm <code>curl https://api.example.com/health</code> có ok không.</span></div>
-<div class="lz-step"><span class="lz-k">d</span><span class="lz-t"><code>upgrades:[]</code> trống</span><span class="lz-d">Server không tell client được về WebSocket. Có thể nginx <code>proxy_set_header Upgrade</code> chưa đúng.</span></div>
+<div class="lz-step"><span class="lz-k">d</span><span class="lz-t"><code>upgrades:[]</code> trống</span><span class="lz-d">SERVER đã tắt WebSocket (<code>transports: ['polling']</code>) — danh sách này do server viết và không nhìn thấy proxy. Đo thật: sau một nginx KHÔNG có header Upgrade, OPEN vẫn ghi <code>"upgrades":["websocket"]</code>. Muốn kiểm proxy, hãy thử chính cú nâng cấp (xem phép đo bên dưới: 101 vs 400).</span></div>
 </div>
 
 <h3>Command 2 — kiểm sticky sessions</h3>
@@ -948,7 +1261,7 @@ $ curl -s 'https://api.example.com/socket.io/?EIO=4&transport=polling&sid=XYZ'
 200 200 200 200 200 200 200 200 200 200
 </code></pre>
 
-<p>Mọi request 200 = sticky đang OK (hoặc single worker). Xen kẽ 200/400 = round-robin đang lộn xộn — thấy 2.3.</p>
+<p>Mọi request 200 = sticky đang OK (hoặc single worker). Xen kẽ 200/400 = round-robin đang lộn xộn — thấy 2.3. <strong>Đo thật (2.3):</strong> vòng này chỉ gọi BẮT TAY nên luôn 200 kể cả khi KHÔNG sticky; phải lấy một sid rồi gửi nhiều request kèm sid đó.</p>
 
 <h3>Command 3 — kiểm auth</h3>
 <pre><code class="language-bash"># khong cookie auth
@@ -961,7 +1274,7 @@ $ curl -s 'https://api.example.com/socket.io/?EIO=4&transport=polling&sid=XYZ' \
 # server tra ok, sau do gui error packet vao poll ke tiep
 
 $ curl -s 'https://api.example.com/socket.io/?EIO=4&transport=polling&sid=XYZ'
-44"unauthorized"    &lt;- engine.io 4 + socket.io 4 (CONNECT_ERROR) + message
+44{"message":"unauthorized"}    &lt;- engine.io 4 + socket.io 4 (CONNECT_ERROR) + object {message} (do that 4.8.3)
 </code></pre>
 
 <div class="callout ok">
@@ -1000,6 +1313,56 @@ $ curl -s 'https://api.example.com/socket.io/?EIO=4&transport=polling&sid=XYZ'
 </ol>
 <p><strong>Đạt khi:</strong> bạn tái hiện được một handshake socket.io chỉ bằng curl và đọc được cấu hình, sticky và auth từ các response.</p></div>
 
+<h3>🔬 Đo thật: ba lệnh trên một nginx thật</h3>
+<p>socket.io 4.8.3 (pingInterval 25000 / pingTimeout 60000, có middleware xác thực) sau <code>nginx:1.27-alpine</code> với ba server block: đúng (19551), thiếu header Upgrade (19552), sai location (19553); cổng 19559 không ai nghe:</p>
+<div class="out"># Lệnh 1 — bắt tay engine.io: đọc cấu hình ĐANG CHẠY từ body OPEN
+$ curl -s 'localhost:19551/socket.io/?EIO=4&amp;transport=polling'; echo
+0{"sid":"BA9xPjuyZWTR-1JwAAAA","upgrades":["websocket"],"pingInterval":25000,"pingTimeout":60000,"maxPayload":1000000}
+# nginx route sai location ⇒ 404
+$ curl -s -o /dev/null -w '%{http_code}\\n' 'localhost:19553/socket.io/?EIO=4&amp;transport=polling'
+404
+# không có gì nghe ở cổng ⇒ curl exit 7, mã 000
+$ curl -s -m 2 -o /dev/null -w '%{http_code}\\n' 'localhost:19559/socket.io/?EIO=4&amp;transport=polling'; echo "exit=$?"
+000
+exit=7
+# nginx THIẾU header Upgrade: body OPEN VẪN quảng cáo websocket…
+$ curl -s 'localhost:19552/socket.io/?EIO=4&amp;transport=polling' | grep -o '"upgrades":\\[[^]]*\\]'
+"upgrades":["websocket"]
+# …nhưng chính cú nâng cấp mới hỏng: thử bắt tay WebSocket bằng curl (101 = qua, khác = hỏng)
+$ for p in 19551 19552; do curl -s -o /dev/null -m 2 -w "cổng $p ⇒ %{http_code}\\n" -H 'Connection: Upgrade' -H 'Upgrade: websocket' -H 'Sec-WebSocket-Version: 13' -H 'Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==' "localhost:$p/socket.io/?EIO=4&amp;transport=websocket"; done
+cổng 19551 ⇒ 101
+cổng 19552 ⇒ 400
+# Lệnh 3 — xác thực: bắt tay, gửi CONNECT với token sai, rồi đọc lượt poll kế tiếp
+$ SID=$(curl -s 'localhost:19551/socket.io/?EIO=4&amp;transport=polling' | grep -o '"sid":"[^"]*"' | cut -d'"' -f4)
+sid=vid9QfKoHWtys-P-AAAD
+ok   ← POST trả
+44{"message":"unauthorized"}   ← GET kế tiếp
+# cùng ba bước, token đúng
+$ SID=$(curl -s 'localhost:19551/socket.io/?EIO=4&amp;transport=polling' | grep -o '"sid":"[^"]*"' | cut -d'"' -f4); curl -s -X POST -H 'Content-Type: text/plain' --data-binary '40{"token":"tok-lan"}' "localhost:19551/socket.io/?EIO=4&amp;transport=polling&amp;sid=$SID" &gt;/dev/null; curl -s "localhost:19551/socket.io/?EIO=4&amp;transport=polling&amp;sid=$SID"; echo "   ← GET kế tiếp"
+40{"sid":"gCGCdGSchaxHxA6bAAAB"}   ← GET kế tiếp
+connection gCGCdGSchaxHxA6bAAAB</div>
+<p>OPEN cho thấy cấu hình đang chạy thật. 404 = định tuyến nginx, 000 + exit 7 = không ai nghe. Danh sách upgrades trong OPEN KHÔNG lộ proxy hỏng — phép thử bắt tay WebSocket mới lộ (101 vs 400). CONNECT bị từ chối trả về <code>44{"message":"unauthorized"}</code> ở lượt GET kế tiếp.</p>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-nginx">events {}
+http {
+  map $http_upgrade $connection_upgrade { default upgrade; '' close; }
+  server { <span class="tok-comment">  # 8001: ĐÚNG — route /socket.io/ + header nâng cấp</span>
+    listen 8001;
+    location /socket.io/ { proxy_pass http://host.docker.internal:19550; proxy_http_version 1.1; proxy_set_header Upgrade $http_upgrade; proxy_set_header Connection $connection_upgrade; }
+  }
+  server { <span class="tok-comment">  # 8002: THIẾU header nâng cấp</span>
+    listen 8002;
+    location /socket.io/ { proxy_pass http://host.docker.internal:19550; }
+  }
+  server { <span class="tok-comment">  # 8003: SAI location (chỉ route /api/)</span>
+    listen 8003;
+    location /api/ { proxy_pass http://host.docker.internal:19550; }
+  }
+}</code></pre>
+<h3>🔗 Học sâu hơn ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-7-1-http11" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking · 7.1 — HTTP/1.1 trên dây</span><span class="lc-sub">Đọc dòng request, mã trạng thái và header bằng mắt</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nginx/learn?lessonSlug=nginx-3-5-websocket" target="_blank" rel="noopener"><span class="lc-ico">🟢</span><span class="lc-body"><span class="lc-title">Nginx · 3.5 — WebSocket: cú nâng cấp mà Nginx CỐ Ý gỡ đi</span><span class="lc-sub">Vì sao phép kiểm nâng cấp trả 400 khi thiếu header Upgrade/Connection</span></span></a>
+
 <h3>🗂 Thuật ngữ trong bài</h3>
 <div class="kv-grid">
   <div class="kv"><span class="k">Handshake</span><span class="v">Lượt HTTP đầu tiên mở một session engine.io.</span></div>
@@ -1016,7 +1379,7 @@ $ curl -s 'https://api.example.com/socket.io/?EIO=4&transport=polling&sid=XYZ'
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Engine.IO protocol packet types</span><span class="lc-sub">github.com/socketio/engine.io-protocol#packet — bảng số ứng với chuỗi để giải mã output curl.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">curl manual — output formatting</span><span class="lc-sub">everything.curl.dev/usingcurl/verbose — cách kiểm soát output, đặc biệt <code>-w</code> format string.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chương 11 — chẩn đoán realtime bug</span><span class="lc-sub">/courses/socket-io/learn${REF} — cây quyết định dùng ba lệnh này ở các nhánh khác nhau.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chương 10 — chẩn đoán realtime bug</span><span class="lc-sub">/courses/socket-io/learn${REF} — cây quyết định dùng ba lệnh này ở các nhánh khác nhau.</span></span></div>
 </div>
 `,
     },
@@ -1028,6 +1391,7 @@ $ curl -s 'https://api.example.com/socket.io/?EIO=4&transport=polling&sid=XYZ'
       type: 'VIDEO',
       description: 'Buffer/ArrayBuffer được gửi qua WebSocket binary frame native — không encode qua base64. Kích thước bằng payload, không có ~33% overhead. Đo bằng probe.',
       content: `
+${G02_5}
 <div class="ml-en">
 <span class="eyebrow">Chapter 2 · Lesson 2.5</span>
 <h2>Binary payloads: not base64</h2>
@@ -1051,6 +1415,8 @@ c.on('binary', (data) =&gt; {
   [opcode=0x02 (binary), len=1024, payload=&lt;1024 byte thuc te&gt;]
   
 Total bytes: 1024 payload + 2-14 byte overhead = 1026-1038 byte
+(do that 4.8.3, Chromium: HAI khung — khung chu 451-["binary",{"_placeholder":true,"num":0}]
+ roi khung nhi phan 1024 B; tren day TCP 1074 B — xem "Do that" ben duoi)
 </code></pre>
 
 <p>If socket.io encoded via base64, the size would be 1024 × 4/3 ≈ 1365 bytes plus JSON braces = ~1400 bytes. The measured result of 1026 bytes confirms a native binary frame.</p>
@@ -1059,6 +1425,8 @@ Total bytes: 1024 payload + 2-14 byte overhead = 1026-1038 byte
 <pre><code class="language-text">polling body la text/plain:
   4b1{"_placeholder":true,"num":0}
   &lt;- + attachment binary trong request tiep theo o base64
+  (do that EIO=4: GET #1 = 451-["binary",{"_placeholder":true,"num":0}] (44 B),
+   GET #2 = "b" + base64 (1369 B))
 
 Overhead: 33% cho base64 encoding + 2 request extra (attach + data)
 </code></pre>
@@ -1091,7 +1459,7 @@ Overhead: 33% cho base64 encoding + 2 request extra (attach + data)
 });
 </code></pre>
 
-<p>This repo keeps the 1 MB default. If a payload larger than 1 MB arrives, engine.io closes the connection with <code>disconnect(&quot;forced close&quot;)</code>.</p>
+<p>This repo keeps the 1 MB default. If a payload larger than 1 MB arrives, engine.io closes the WHOLE connection — measured on 4.8.3: on WebSocket the server sees <code>transport error</code> and the client <code>transport close</code> (not &quot;forced close&quot;), the handler never runs, and the client reconnects.</p>
 
 <div class="pitfall">
 <p><strong>Trap — using a socket.io emit to upload a 10 MB file.</strong> You get <code>disconnect(forced close)</code> because you exceeded <code>maxHttpBufferSize</code>. Or you raise it to 100 MB — and then a single emit request holds 100 MB of server RAM. The fix: chunk the file, use a dedicated HTTP upload endpoint, and let socket.io ONLY announce &quot;upload finished&quot; in realtime.</p>
@@ -1108,6 +1476,58 @@ Overhead: 33% cho base64 encoding + 2 request extra (attach + data)
 <li>Send a payload larger than 1 MB and watch it be rejected by the default <code>maxHttpBufferSize</code>; reason about why raising it is a DDoS surface, and route big uploads to an HTTP endpoint instead.</li>
 </ol>
 <p><strong>Done when:</strong> you have seen a native binary frame on WebSocket, base64 on polling, and the 1 MB rejection.</p></div>
+
+<h3>🔬 Measured: one Buffer, on both transports</h3>
+<p>socket.io 4.8.3. The server emits <code>Buffer.alloc(1024, 42)</code>; a counting proxy measures server→client bytes on the TCP wire:</p>
+<div class="out">$ node nhi-phan.mjs
+websocket client nhận: Buffer 1024 byte, byte đầu = 42
+websocket trên dây server→client: 1074 B · mẫu: ",451-[\\"binary\\",{\\"_placeholder\\":true,\\"num\\":0}]~··********************"…
+polling   client nhận: Buffer 1024 byte, byte đầu = 42
+polling   trên dây server→client: 1737 B · mẫu: "451-[\\"binary\\",{\\"_placeholder\\":true,\\"num\\":0}]HTTP/1.1 200 OK·\\nContent-T"…</div>
+<p><strong>In a real Chromium, WebSocket frames:</strong></p>
+<div class="out">  35 ms  ↑  2probe
+  36 ms  ↓  3probe
+ 139 ms  ↑  5
+ 436 ms  ↓  451-["binary",{"_placeholder":true,"num":0}]
+ 436 ms  ↓  &lt;binary 1024 B&gt;</div>
+<p><strong>Polling-only, the XHR bodies:</strong></p>
+<div class="out">  20 ms  GET    118 B  0{"sid":"prrUHSIx6mCPlyDUAAAB","upgrades":["websocket"],"pin
+  20 ms  POST     2 B  ok
+  20 ms  GET     32 B  40{"sid":"T_ZZeerupLkSfk19AAAB"}
+ 422 ms  GET     44 B  451-["binary",{"_placeholder":true,"num":0}]
+ 430 ms  GET   1369 B  bKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKio</div>
+<p>WebSocket: a text placeholder frame (<code>451-</code> = MESSAGE + BINARY_EVENT + 1 attachment) and a native binary frame. Polling: the same placeholder, then <code>b</code> + base64 in the next response (+33 %, one more round trip).</p>
+<p><strong>Above <code>maxHttpBufferSize</code></strong> — the client emits 1.1 MB:</p>
+<div class="out">$ node tran.mjs
+websocket server: disconnect "transport error"
+websocket client: disconnect "transport close" · active=true
+websocket handler 'to' có chạy? KHÔNG
+polling   client: disconnect "transport error" · active=true
+polling   server: disconnect "transport close"
+polling   handler 'to' có chạy? KHÔNG</div>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-javascript"><span class="tok-comment">// Server emit một Buffer 1 KB (toàn 0x2a): client nhận gì, và trên dây TCP tốn bao nhiêu byte — websocket vs polling (proxy đếm byte, chỉ đếm sau khi đã nối)</span>
+import net from 'node:net';
+import { Server } from 'socket.io';
+import { io as ketNoi } from 'socket.io-client';
+const cho = (ms) =&gt; new Promise((r) =&gt; setTimeout(r, ms));
+async function do1(transport, cong) {
+  const io = new Server(cong); let sk, xuong = 0, dem = false, mau = '';
+  io.on('connection', (s) =&gt; (sk = s));
+  net.createServer((a) =&gt; { const b = net.connect(cong); a.pipe(b); b.on('data', (d) =&gt; { if (dem) { xuong += d.length; mau += d.toString('latin1'); } a.write(d); }); for (const x of [a, b]) x.on('error', () =&gt; {}); }).listen(cong + 1);
+  const c = ketNoi(&#96;http://localhost:\${cong + 1}&#96;, { transports: [transport] });
+  c.on('binary', (data) =&gt; console.log(&#96;\${transport.padEnd(9)} client nhận: \${data.constructor.name} \${data.length} byte, byte đầu = \${data[0]}&#96;));
+  await new Promise((r) =&gt; c.on('connect', r)); await cho(300);
+  dem = true; sk.emit('binary', Buffer.alloc(1024, 42)); await cho(300); dem = false;
+  const chu = mau.includes('\\r\\n\\r\\n') ? mau.split('\\r\\n\\r\\n').slice(1).join('') : mau;
+  console.log(&#96;\${transport.padEnd(9)} trên dây server→client: \${xuong} B · mẫu: \${JSON.stringify(chu.replace(/[\\x00-\\x09\\x0b-\\x1f]/g, (x) =&gt; (x === '\\x1e' ? '␞' : '·')).slice(0, 70))}…&#96;);
+  c.close(); io.close(); await cho(100);
+}
+await do1('websocket', 19560); await do1('polling', 19562);
+process.exit(0);</code></pre>
+<h3>🔗 Go deeper in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-10-1-nhan-file-multipart" target="_blank" rel="noopener"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Node.js · 10.1 — Receiving files: multipart, base64, and the RAM bill</span><span class="lc-sub">Where big uploads belong instead of a socket emit</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/socket-io/learn?lessonSlug=io-7-1-signalling" target="_blank" rel="noopener"><span class="lc-ico">⚡</span><span class="lc-body"><span class="lc-title">Socket.IO · 7.1 — Signalling: what socket.io does in a video call</span><span class="lc-sub">Media goes over WebRTC; socket.io carries only small signalling packets</span></span></a>
 
 <h3>🗂 Key terms</h3>
 <div class="kv-grid">
@@ -1150,6 +1570,8 @@ c.on('binary', (data) =&gt; {
   [opcode=0x02 (binary), len=1024, payload=&lt;1024 byte thuc te&gt;]
   
 Total bytes: 1024 payload + 2-14 byte overhead = 1026-1038 byte
+(do that 4.8.3, Chromium: HAI khung — khung chu 451-["binary",{"_placeholder":true,"num":0}]
+ roi khung nhi phan 1024 B; tren day TCP 1074 B — xem "Do that" ben duoi)
 </code></pre>
 
 <p>Nếu socket.io encode qua base64, kích thước sẽ là 1024 × 4/3 ≈ 1365 byte + JSON braces = ~1400 byte. Kết quả đo được 1026 byte → khẳng định binary frame native.</p>
@@ -1158,6 +1580,8 @@ Total bytes: 1024 payload + 2-14 byte overhead = 1026-1038 byte
 <pre><code class="language-text">polling body la text/plain:
   4b1{"_placeholder":true,"num":0}
   &lt;- + attachment binary trong request tiep theo o base64
+  (do that EIO=4: GET #1 = 451-["binary",{"_placeholder":true,"num":0}] (44 B),
+   GET #2 = "b" + base64 (1369 B))
 
 Overhead: 33% cho base64 encoding + 2 request extra (attach + data)
 </code></pre>
@@ -1190,7 +1614,7 @@ Overhead: 33% cho base64 encoding + 2 request extra (attach + data)
 });
 </code></pre>
 
-<p>Kho này giữ default 1 MB. Nếu bạn nhận payload &gt; 1 MB, engine.io đóng connection với <code>disconnect(&quot;forced close&quot;)</code>.</p>
+<p>Kho này giữ default 1 MB. Nếu bạn nhận payload &gt; 1 MB, engine.io đóng CẢ connection — đo trên 4.8.3: qua WebSocket server thấy <code>transport error</code>, client thấy <code>transport close</code> (không phải &quot;forced close&quot;), handler không chạy, và client tự nối lại.</p>
 
 <div class="pitfall">
 <p><strong>Bẫy — dùng socket.io emit cho upload file 10 MB.</strong> Bạn nhận <code>disconnect(forced close)</code> vì vượt <code>maxHttpBufferSize</code>. Hoặc bạn tăng lên 100 MB — thì một request emit chiếm 100 MB RAM của server. Vá: chunk file, dùng HTTP upload endpoint riêng, socket.io CHỈ báo &quot;upload xong&quot; realtime.</p>
@@ -1207,6 +1631,58 @@ Overhead: 33% cho base64 encoding + 2 request extra (attach + data)
 <li>Gửi một payload lớn hơn 1 MB và xem nó bị từ chối bởi <code>maxHttpBufferSize</code> mặc định; lập luận vì sao tăng nó là một DDoS surface, và chuyển upload lớn sang một HTTP endpoint.</li>
 </ol>
 <p><strong>Đạt khi:</strong> bạn đã thấy một native binary frame trên WebSocket, base64 trên polling, và cú từ chối ở 1 MB.</p></div>
+
+<h3>🔬 Đo thật: một Buffer, trên cả hai transport</h3>
+<p>socket.io 4.8.3. Server emit <code>Buffer.alloc(1024, 42)</code>; một proxy đếm byte server→client trên dây TCP:</p>
+<div class="out">$ node nhi-phan.mjs
+websocket client nhận: Buffer 1024 byte, byte đầu = 42
+websocket trên dây server→client: 1074 B · mẫu: ",451-[\\"binary\\",{\\"_placeholder\\":true,\\"num\\":0}]~··********************"…
+polling   client nhận: Buffer 1024 byte, byte đầu = 42
+polling   trên dây server→client: 1737 B · mẫu: "451-[\\"binary\\",{\\"_placeholder\\":true,\\"num\\":0}]HTTP/1.1 200 OK·\\nContent-T"…</div>
+<p><strong>Trong Chromium thật, khung WebSocket:</strong></p>
+<div class="out">  35 ms  ↑  2probe
+  36 ms  ↓  3probe
+ 139 ms  ↑  5
+ 436 ms  ↓  451-["binary",{"_placeholder":true,"num":0}]
+ 436 ms  ↓  &lt;binary 1024 B&gt;</div>
+<p><strong>Chỉ polling, thân XHR:</strong></p>
+<div class="out">  20 ms  GET    118 B  0{"sid":"prrUHSIx6mCPlyDUAAAB","upgrades":["websocket"],"pin
+  20 ms  POST     2 B  ok
+  20 ms  GET     32 B  40{"sid":"T_ZZeerupLkSfk19AAAB"}
+ 422 ms  GET     44 B  451-["binary",{"_placeholder":true,"num":0}]
+ 430 ms  GET   1369 B  bKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKio</div>
+<p>WebSocket: một khung chữ giữ chỗ (<code>451-</code> = MESSAGE + BINARY_EVENT + 1 gói kèm) và một khung nhị phân thật. Polling: cùng khung giữ chỗ, rồi <code>b</code> + base64 ở lượt trả lời sau (+33 %, thêm một vòng đi về).</p>
+<p><strong>Vượt <code>maxHttpBufferSize</code></strong> — client emit 1,1 MB:</p>
+<div class="out">$ node tran.mjs
+websocket server: disconnect "transport error"
+websocket client: disconnect "transport close" · active=true
+websocket handler 'to' có chạy? KHÔNG
+polling   client: disconnect "transport error" · active=true
+polling   server: disconnect "transport close"
+polling   handler 'to' có chạy? KHÔNG</div>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-javascript"><span class="tok-comment">// Server emit một Buffer 1 KB (toàn 0x2a): client nhận gì, và trên dây TCP tốn bao nhiêu byte — websocket vs polling (proxy đếm byte, chỉ đếm sau khi đã nối)</span>
+import net from 'node:net';
+import { Server } from 'socket.io';
+import { io as ketNoi } from 'socket.io-client';
+const cho = (ms) =&gt; new Promise((r) =&gt; setTimeout(r, ms));
+async function do1(transport, cong) {
+  const io = new Server(cong); let sk, xuong = 0, dem = false, mau = '';
+  io.on('connection', (s) =&gt; (sk = s));
+  net.createServer((a) =&gt; { const b = net.connect(cong); a.pipe(b); b.on('data', (d) =&gt; { if (dem) { xuong += d.length; mau += d.toString('latin1'); } a.write(d); }); for (const x of [a, b]) x.on('error', () =&gt; {}); }).listen(cong + 1);
+  const c = ketNoi(&#96;http://localhost:\${cong + 1}&#96;, { transports: [transport] });
+  c.on('binary', (data) =&gt; console.log(&#96;\${transport.padEnd(9)} client nhận: \${data.constructor.name} \${data.length} byte, byte đầu = \${data[0]}&#96;));
+  await new Promise((r) =&gt; c.on('connect', r)); await cho(300);
+  dem = true; sk.emit('binary', Buffer.alloc(1024, 42)); await cho(300); dem = false;
+  const chu = mau.includes('\\r\\n\\r\\n') ? mau.split('\\r\\n\\r\\n').slice(1).join('') : mau;
+  console.log(&#96;\${transport.padEnd(9)} trên dây server→client: \${xuong} B · mẫu: \${JSON.stringify(chu.replace(/[\\x00-\\x09\\x0b-\\x1f]/g, (x) =&gt; (x === '\\x1e' ? '␞' : '·')).slice(0, 70))}…&#96;);
+  c.close(); io.close(); await cho(100);
+}
+await do1('websocket', 19560); await do1('polling', 19562);
+process.exit(0);</code></pre>
+<h3>🔗 Học sâu hơn ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-10-1-nhan-file-multipart" target="_blank" rel="noopener"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Node.js · 10.1 — Nhận file: multipart, base64, và cái giá phải trả bằng RAM</span><span class="lc-sub">Chỗ của upload lớn thay vì một socket emit</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/socket-io/learn?lessonSlug=io-7-1-signalling" target="_blank" rel="noopener"><span class="lc-ico">⚡</span><span class="lc-body"><span class="lc-title">Socket.IO · 7.1 — Signalling: socket.io làm gì trong video call</span><span class="lc-sub">Media đi qua WebRTC; socket.io chỉ chở gói signalling nhỏ</span></span></a>
 
 <h3>🗂 Thuật ngữ trong bài</h3>
 <div class="kv-grid">

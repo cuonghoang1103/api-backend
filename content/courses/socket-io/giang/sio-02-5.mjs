@@ -1,0 +1,32 @@
+/** Giảng theo slide — bài 2.5 Binary payload: KHÔNG phải base64 (deck sio-02-5, 9 slide). VI = lời giảng video sio-2-5; EN = ghi chú `en` của deck. SINH bằng scratchpad/sio/giang.mjs — sửa ở deck/kichban rồi sinh lại. */
+import { walkSio } from '../_slides.mjs';
+
+export default walkSio('sio-02-5', "Binary payloads: NOT base64", "Binary payload: KHÔNG phải base64", [
+  [1, "Binary payloads: NOT base64",
+    "<p>Lesson two point five: binary payloads are not base64. One Buffer becomes two frames on WebSocket and two requests on polling, and there is a one megabyte wall.</p>",
+    "<p>Bài 2.5: binary payload, không phải base64.</p>"],
+  [2, "What you will take away from this lesson",
+    "<p>Five takeaways: emitting a Buffer gives a Buffer or ArrayBuffer back; on WebSocket it is a placeholder frame plus a native binary frame; on polling the bytes come as base64 in the next response; the bytes on the wire, measured; and what really happens above the one megabyte limit.</p>",
+    "<p>Năm điều: gửi Buffer thì nhận lại Buffer. Trên WebSocket là một khung chữ giữ chỗ cộng một khung nhị phân thật. Trên polling là base64 ở lượt trả lời sau. Số byte trên dây đo thật, và chuyện gì xảy ra khi vượt một megabyte.</p>"],
+  [3, "In a real Chromium: two frames, not one",
+    "<p>In a real Chromium: two frames, not one. The first is text: four five one dash, meaning engine.io message, socket.io binary event, one attachment follows, with a placeholder object where the Buffer was. The second frame is the Buffer itself, one thousand twenty-four raw bytes. The web lesson drew only the second.</p>",
+    "<p>Trong Chromium thật: server emit một Buffer một kilobyte. Trên WebSocket có hai khung. Khung đầu là chữ: bốn năm một gạch. Bốn là message của engine.io, năm là BINARY_EVENT, một là có một gói kèm. Chỗ của Buffer là một object placeholder. Khung sau chính là Buffer, một nghìn không trăm hai mươi tư byte thô. Bài web chỉ vẽ khung thứ hai.</p>"],
+  [4, "On polling: base64, in the next response",
+    "<p>On polling: the same placeholder arrives in one GET, forty-four bytes. The bytes themselves arrive in the next GET as the letter b plus base64: one thousand three hundred sixty-nine bytes for one thousand twenty-four, a third more, and one more round trip.</p>",
+    "<p>Ép chỉ dùng polling: lượt GET đầu trả packet giữ chỗ, bốn mươi bốn byte. Lượt GET sau trả chữ b, rồi base64: một nghìn ba trăm sáu mươi chín byte cho một nghìn không trăm hai mươi tư byte. Thêm một phần ba, thêm một vòng đi về.</p>"],
+  [5, "Measured: bytes on the TCP wire for 1 KB",
+    "<p>Measured on the TCP wire for one kilobyte: WebSocket one thousand seventy-four bytes, the payload plus a small placeholder frame and two frame headers. Polling one thousand seven hundred thirty-seven bytes: base64 plus two sets of HTTP headers.</p>",
+    "<p>Đếm byte trên dây TCP cho một kilobyte: WebSocket một nghìn không trăm bảy mươi tư, polling một nghìn bảy trăm ba mươi bảy. Phần chênh là base64 cộng hai bộ header HTTP.</p>"],
+  [6, "Measured: above maxHttpBufferSize (1 MB)",
+    "<p>Measured above the one megabyte limit. The client emitted one point one megabytes; the handler never ran, and the whole connection closed. On WebSocket the server saw transport error and the client transport close, then reconnected. Not forced close as the web lesson says.</p>",
+    "<p>Slide này giữ output đó. Nếu client cứ gửi lại tin quá to, nó sẽ lặp: nối, gửi, chết, nối lại.</p>"],
+  [7, "When NOT to send binary through socket.io",
+    "<p>When not to send binary through socket.io: uploads over a megabyte go to a plain HTTP endpoint with progress and chunks; video and voice go over WebRTC; thumbnails and small protobufs are fine. And raising the buffer limit to one hundred megabytes lets any client make the server buffer a hundred megabytes.</p>",
+    "<p>Khi nào không dùng: tải tệp lớn hơn một megabyte, hãy dùng một endpoint HTTP có tiến độ và chia khúc. Video, giọng nói đi qua WebRTC, Socket.IO chỉ lo signalling. Ảnh nhỏ, avatar, protobuf vài chục kilobyte thì dùng tốt. Và đừng nâng giới hạn lên một trăm megabyte: mỗi emit có thể bắt server đệm một trăm megabyte, một cửa cho tấn công.</p>"],
+  [8, "Key terms of this lesson",
+    "<p>Key terms: binary event; the placeholder; the binary frame; b plus base64 on polling; max HTTP buffer size; and the upload endpoint.</p>",
+    "<p>Thuật ngữ: BINARY_EVENT, placeholder, khung nhị phân, chữ b cộng base64, maxHttpBufferSize, và endpoint tải lên riêng.</p>"],
+  [9, "Your turn — and what to keep",
+    "<p>Your turn: emit a one kilobyte Buffer and find both frames; force polling and find the base64 response; count bytes on the wire; and emit one point one megabytes and log the reason on both sides. Keep: WebSocket sends a placeholder plus a native binary frame; polling sends base64 in an extra response; above one megabyte the connection dies.</p>",
+    "<p>Tới lượt bạn: emit một Buffer, tìm cả hai khung trong DevTools. Ép polling và tìm lượt GET bắt đầu bằng chữ b. Đếm byte trên dây cho hai transport, rồi gửi một phẩy một megabyte và in reason ở cả hai phía. Tóm lại: WebSocket gửi khung giữ chỗ cộng khung nhị phân thật. Polling gửi base64 ở lượt sau. Quá một megabyte là kết nối chết. Tệp lớn đi HTTP. Bạn mở Code Lab Socket.IO, mô đun emit và nhận event để luyện. Chương sau: room, thứ bạn thật sự cần.</p>"],
+]);

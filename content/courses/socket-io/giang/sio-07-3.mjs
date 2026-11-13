@@ -1,0 +1,32 @@
+/** Giảng theo slide — bài 7.3 Room semantics: incoming, ringing, busy (deck sio-07-3, 9 slide). VI = lời giảng video sio-7-3; EN = ghi chú `en` của deck. SINH bằng scratchpad/sio/giang.mjs — sửa ở deck/kichban rồi sinh lại. */
+import { walkSio } from '../_slides.mjs';
+
+export default walkSio('sio-07-3', "Room semantics: incoming, ringing, busy", "Room semantics: incoming, ringing, busy", [
+  [1, "Room semantics: incoming, ringing, busy",
+    "<p>Lesson seven point three: room semantics, incoming, ringing and busy. A call goes to a person, not a socket, and a person can have three tabs open.</p>",
+    "<p>Bài 7.3: room cho cuộc gọi. Incoming, ringing, busy. Cuộc gọi tới một người, không phải tới một socket.</p>"],
+  [2, "What you will take away from this lesson",
+    "<p>Five takeaways: who rings and what the thread check really checks; the real states, measured; before and after the fix for calling someone offline; the ringing tab that hangs up your call; and the ghost call that cleanup misses.</p>",
+    "<p>Năm điều. Ai reo: room user, tức mọi tab, và phép kiểm room thread thật ra kiểm gì. Các trạng thái thật: reo, bận, không online, không ai nghe, đo bằng chính mã của kho. Trước và sau bản vá gọi người không online. Hai tab: tab cứ reo mãi, và cúp luôn cuộc gọi khi bạn đóng nó. Cuối cùng là cuộc gọi ma mà phần dọn dẹp bỏ sót.</p>"],
+  [3, "A call goes to a person: every tab rings",
+    "<p>A call goes to a person, so every tab rings. The web page says the repo filters by thread so only one tab rings. In the real code, the thread check runs on the caller’s socket as a permission check, every socket joins all of its thread rooms when it connects, and the incoming event goes to the user room: every tab.</p>",
+    "<p>Mã của kho: mỗi socket vừa nối thì vào room user, rồi sau một lượt hỏi cơ sở dữ liệu, vào mọi room thread của người đó. Sửa bài web: bài nói kho lọc bằng room thread để chỉ tab đang mở hội thoại mới reo. Không phải vậy. Phép kiểm đó chạy trên socket của người gọi, hỏi: bạn có thuộc hội thoại này không. Đó là kiểm quyền. Còn call incoming đi vào room user, nên mọi tab đều reo.</p>"],
+  [4, "The real states of a call",
+    "<p>The real states of a call. Online and free: the server creates a call id and starts a forty five second timer. Offline: nothing is created, the caller gets call end, not online. Busy is only when someone is already in a call. The ring timeout is on the server, forty five seconds, not thirty on the client.</p>",
+    "<p>Bảng trạng thái theo mã thật. Người nhận online và rảnh: server sinh mã cuộc gọi, hẹn giờ bốn mươi lăm giây, báo ringing cho người gọi. Sửa bài web lần nữa: bài coi busy là không online. Trong kho đó là hai event khác nhau. Không online thì nhận call end với lý do không trực tuyến. Busy chỉ khi có người đang trong cuộc gọi khác. Và hẹn giờ đổ chuông nằm ở server, bốn mươi lăm giây, không phải ba mươi giây ở trình duyệt.</p>"],
+  [5, "Measured: offline, busy, no answer",
+    "<p>Measured. Calling someone offline today ends in about a tenth of a second with not online. With the code from before the fix, the call rang into the void for forty five seconds. Busy comes back immediately, with who is busy. And an unanswered call ends after forty five seconds on both sides.</p>",
+    "<p>Biểu đồ: không online thì một phẩy một giây sau khi bấm gọi là có câu trả lời, phần lớn là thời gian xin micro và tạo offer. Trước bản vá: bốn mươi lăm phẩy một giây im lặng. Lý do: emit vào một room rỗng là lệnh hợp lệ, không lỗi, không giá trị trả về, không log. Người gọi nhìn màn hình đang gọi, còn log server trông như bên kia cố tình không nghe. Bản vá kiểm room trước khi phát.</p>"],
+  [6, "Two tabs: the tab that keeps ringing",
+    "<p>Two tabs, measured. Binh answers in tab one; tab two keeps ringing for the whole call because nothing tells it. When Binh closes tab two, its before unload handler hangs up with the same call id, and the server ends the conversation running in tab one.</p>",
+    "<p>Vì sao? Không event nào báo cho tab hai rằng cuộc gọi đã được nhận ở tab khác, nên nó giữ trạng thái đổ chuông. Khi đóng tab, CuocGoiOverlay chạy beforeunload ở dòng một trăm bảy mươi hai: trạng thái khác rỗi thì gọi cupMay. cupMay gửi call end cùng mã cuộc gọi, và server cúp đúng cuộc Bình đang nói. Đây là lỗi thật của kho, mình ghi vào báo cáo.</p>"],
+  [7, "Disconnect cleanup — and the ghost call",
+    "<p>Disconnect cleanup, and the ghost call. The server only ends a call when the user has no other socket. Binh’s talking tab crashed while tab two stayed open, so nothing was cleaned up. An’s connection went disconnected after about seven seconds and never reached failed in a minute, and the client only reacts to failed.</p>",
+    "<p>Handler disconnect của kho chỉ kết thúc khi người dùng không còn socket nào khác. Ý định đúng: đóng một tab không được cúp máy tab kia. Nhưng nó không phân biệt tab đang nói với tab chỉ đang mở. Phía trình duyệt, cuocGoi.ts chỉ xử lý trạng thái failed, mà ICE nằm ở disconnected mãi. Cách vá: kết thúc khi đúng socket đã bắt máy rớt, coi disconnected quá vài giây là cúp máy, và báo các tab khác rằng cuộc gọi đã được nhận.</p>"],
+  [8, "Key terms of this lesson",
+    "<p>Key terms: the user room; incoming; ringing; busy; not online; the ring timeout; the ghost call; and per tab state.</p>",
+    "<p>Thuật ngữ: room user, incoming, ringing, busy, không trực tuyến, hẹn giờ đổ chuông, cuộc gọi ma, và trạng thái riêng từng tab.</p>"],
+  [9, "Your turn — and what to keep",
+    "<p>Your turn: count the tabs that ring; try offline, busy and no answer; answer in tab one and close tab two; and crash the talking tab while another tab is open.</p>",
+    "<p>Tới lượt bạn: đếm tab reo, thử ba trạng thái, đóng tab còn reo, cho tab đang nói sập. Tóm lại: cuộc gọi vào room user, mọi tab reo. Không online khác bận. Room rỗng thì im lặng, phải tự kiểm. Báo các tab khác khi một tab bắt máy. Dọn theo socket, không chỉ theo người. Bạn mở Code Lab Socket.IO, mô đun rooms and namespaces để luyện room theo người dùng. Bài sau: TURN và NAT, khi hai trình duyệt không nối thẳng được.</p>"],
+]);

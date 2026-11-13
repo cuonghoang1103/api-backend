@@ -194,7 +194,7 @@ export function quotaMiddleware() {
       if (status.used.minute > status.limit.minute) {
         return res.status(429).json({
           success: false,
-          message: `Quota exceeded: max ${status.limit.minute} requests/minute. Try again in ${status.resetIn.minute}s.`,
+          message: `Bạn hỏi hơi nhanh — tối đa ${status.limit.minute} câu/phút. Thử lại sau ${status.resetIn.minute} giây.`,
           code: 'QUOTA_EXCEEDED_MINUTE',
           quota: status,
         });
@@ -202,7 +202,7 @@ export function quotaMiddleware() {
       if (status.used.day > status.limit.day) {
         return res.status(429).json({
           success: false,
-          message: `Daily quota exceeded (${status.limit.day}/day). Resets at ${status.resetAt.day} (${status.resetIn.day}s).`,
+          message: `Đã hết lượt hỏi hôm nay (${status.limit.day} câu/ngày). Lượt mới mở lại sau khoảng ${Math.max(1, Math.ceil(status.resetIn.day / 3600))} giờ.`,
           code: 'QUOTA_EXCEEDED_DAY',
           quota: status,
         });
@@ -210,7 +210,7 @@ export function quotaMiddleware() {
       if (status.used.month > status.limit.month) {
         return res.status(429).json({
           success: false,
-          message: `Monthly quota exceeded (${status.limit.month}/month). Resets at ${status.resetAt.month}.`,
+          message: `Đã hết lượt hỏi tháng này (${status.limit.month} câu/tháng). Lượt mới mở lại vào ${new Date(status.resetAt.month).toLocaleDateString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' })}.`,
           code: 'QUOTA_EXCEEDED_MONTH',
           quota: status,
         });

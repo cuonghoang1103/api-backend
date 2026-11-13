@@ -155,6 +155,8 @@ interface ClaudeCallParams {
   messages: ClaudeMessage[];
   maxTokens?: number;
   timeoutMs?: number;
+  /** Huỷ từ nơi gọi (khách đóng kết nối — `khiKhachDong` ở route). */
+  signal?: AbortSignal;
   /**
    * Bật phần SUY LUẬN của model (`reasoning_effort` của tuyến OpenAI).
    *
@@ -317,6 +319,10 @@ export async function* streamClaudeChat(p: ClaudeCallParams): AsyncGenerator<str
   const noi = noiGuiAnthropic(p.model);
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), p.timeoutMs ?? claudeTimeoutMs());
+  if (p.signal) {
+    if (p.signal.aborted) ctrl.abort();
+    else p.signal.addEventListener('abort', () => ctrl.abort(), { once: true });
+  }
   try {
     const res = await fetch(noi.url, {
       method: 'POST',
@@ -362,6 +368,9 @@ export async function* streamClaudeChat(p: ClaudeCallParams): AsyncGenerator<str
     throw e;
   } finally {
     clearTimeout(timer);
+    // Nơi gọi thôi đọc giữa chừng (người dùng bấm Dừng ⇒ route thoát `for await`) ⇒ đóng luồng upstream, không để
+    // model sinh tiếp phần không ai đọc. Đã đọc hết thì abort là no-op.
+    ctrl.abort();
   }
 }
 

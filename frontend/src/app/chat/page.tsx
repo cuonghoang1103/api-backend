@@ -492,6 +492,15 @@ export default function ChatPage() {
             const data = JSON.parse(raw);
             if (data.type === 'connected') { if (data.sessionId) resolvedSessionId = data.sessionId; continue; }
             if (data.type === 'model') {
+              if (!data.fellBack && data.reason === 'nang_bac_tep') {
+                // Lượt có ảnh/tệp mà đang ở CuongMini 3.11 (vd. ảnh tự kèm lại từ lượt trước) ⇒ máy chủ đã chạy bậc đọc
+                // được tệp. Đổi nút chọn theo, như ô soạn làm khi đính kèm — lượt sau khỏi nâng ngầm lại.
+                const bac = getChatModel(data.effective);
+                if (useChatModelStore.getState().modelId !== bac.id) {
+                  useChatModelStore.getState().setModelId(bac.id);
+                  toast.info(`Đã dùng ${bac.label} để đọc ảnh/tài liệu`);
+                }
+              }
               if (data.fellBack) {
                 const requested = getChatModel(data.requested);
                 const laGroq = data.effective === 'cuongmini-groq' || data.reason === 'groq_fallback';

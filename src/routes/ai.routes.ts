@@ -37,6 +37,7 @@ import type { ChatMessageDto } from '../types/index.js';
 import { getGenStats, getFeatureUsers } from '../services/genStats.service.js';
 import { laAppIos } from '../utils/appIos.js';
 import { docKyNang } from '../services/troLy/kyNangTroLy.js';
+import { khiKhachDong } from '../utils/khachDong.js';
 
 const router = Router();
 
@@ -72,28 +73,34 @@ interface ParsedImage { media_type: string; data: string }
 function parseChatImages(raw: unknown): ParsedImage[] {
   if (raw == null) return [];
   if (!Array.isArray(raw)) {
-    throw new AppError('images must be an array of data URLs', 400, 'INVALID_IMAGES');
+    throw new AppError('Ảnh đính kèm không hợp lệ (phải là danh sách ảnh).', 400, 'INVALID_IMAGES');
   }
   if (raw.length > MAX_CHAT_IMAGES) {
-    throw new AppError(`Too many images (max ${MAX_CHAT_IMAGES})`, 400, 'TOO_MANY_IMAGES');
+    throw new AppError(`Quá nhiều ảnh — tối đa ${MAX_CHAT_IMAGES} ảnh mỗi tin.`, 400, 'TOO_MANY_IMAGES');
   }
   const out: ParsedImage[] = [];
   for (const item of raw) {
     if (typeof item !== 'string') {
-      throw new AppError('Each image must be a data URL string', 400, 'INVALID_IMAGE');
+      throw new AppError('Ảnh đính kèm không hợp lệ.', 400, 'INVALID_IMAGE');
     }
     const match = /^data:([^;,]+);base64,(.+)$/s.exec(item.trim());
     if (!match) {
-      throw new AppError('Image must be a base64 data URL', 400, 'INVALID_IMAGE_FORMAT');
+      throw new AppError('Ảnh đính kèm không đọc được — hãy chọn lại ảnh.', 400, 'INVALID_IMAGE_FORMAT');
     }
     const mediaType = match[1].toLowerCase();
     const data = match[2];
     if (!ALLOWED_IMAGE_TYPES.has(mediaType)) {
-      throw new AppError(`Unsupported image type ${mediaType} (png/jpeg/webp/gif only)`, 400, 'UNSUPPORTED_IMAGE_TYPE');
+      throw new AppError(
+        mediaType === 'image/heic' || mediaType === 'image/heif'
+          ? 'Ảnh HEIC (iPhone) chưa đọc được — hãy chụp màn hình ảnh đó hoặc lưu lại thành JPG/PNG rồi gửi.'
+          : `Định dạng ảnh ${mediaType.replace(/^image\//, '').toUpperCase()} chưa hỗ trợ — chỉ nhận PNG, JPG, WEBP hoặc GIF.`,
+        400,
+        'UNSUPPORTED_IMAGE_TYPE',
+      );
     }
     // base64 decodes to ~3/4 of its length; guard against oversized payloads.
     if (Math.floor((data.length * 3) / 4) > MAX_IMAGE_BYTES) {
-      throw new AppError('Image too large (max 4MB each)', 400, 'IMAGE_TOO_LARGE');
+      throw new AppError('Ảnh quá lớn — tối đa 4MB mỗi ảnh.', 400, 'IMAGE_TOO_LARGE');
     }
     out.push({ media_type: mediaType, data });
   }
@@ -182,21 +189,21 @@ interface ParsedDoc { media_type: string; data: string; name?: string }
 function parseChatDocuments(raw: unknown, names?: unknown): ParsedDoc[] {
   if (raw == null) return [];
   if (!Array.isArray(raw)) {
-    throw new AppError('documents must be an array of data URLs', 400, 'INVALID_DOCUMENTS');
+    throw new AppError('Tệp đính kèm không hợp lệ (phải là danh sách tệp).', 400, 'INVALID_DOCUMENTS');
   }
   if (raw.length > MAX_CHAT_DOCS) {
-    throw new AppError(`Too many files (max ${MAX_CHAT_DOCS})`, 400, 'TOO_MANY_DOCUMENTS');
+    throw new AppError(`Quá nhiều tệp — tối đa ${MAX_CHAT_DOCS} tệp mỗi tin.`, 400, 'TOO_MANY_DOCUMENTS');
   }
   const nameList = Array.isArray(names) ? names : [];
   const out: ParsedDoc[] = [];
   for (let i = 0; i < raw.length; i++) {
     const item = raw[i];
     if (typeof item !== 'string') {
-      throw new AppError('Each file must be a data URL string', 400, 'INVALID_DOCUMENT');
+      throw new AppError('Tệp đính kèm không hợp lệ.', 400, 'INVALID_DOCUMENT');
     }
     const match = /^data:([^;,]+);base64,(.+)$/s.exec(item.trim());
     if (!match) {
-      throw new AppError('File must be a base64 data URL', 400, 'INVALID_DOCUMENT_FORMAT');
+      throw new AppError('Tệp đính kèm không đọc được — hãy chọn lại tệp.', 400, 'INVALID_DOCUMENT_FORMAT');
     }
     const mediaType = match[1].toLowerCase();
     if (!ALLOWED_DOC_TYPES.has(mediaType)) {
@@ -209,7 +216,7 @@ function parseChatDocuments(raw: unknown, names?: unknown): ParsedDoc[] {
     }
     const data = match[2];
     if (Math.floor((data.length * 3) / 4) > MAX_DOC_BYTES) {
-      throw new AppError('File too large (max 6MB each)', 400, 'DOCUMENT_TOO_LARGE');
+      throw new AppError('Tệp quá lớn — tối đa 6MB mỗi tệp.', 400, 'DOCUMENT_TOO_LARGE');
     }
     const rawName = nameList[i];
     const name = typeof rawName === 'string' && rawName.trim()
@@ -303,6 +310,9 @@ const SSE_TIMEOUT_MS = 900_000;           // 15 phút — chốt chặn cuối
  * chứng minh model còn sống.
  */
 const SSE_IDLE_MS = 150_000;              // 2,5 phút không có gói nào từ model
+/** Trần số mẩu / ký tự của một câu trả lời — trên trần ra bậc Max (32k token, `maxTokensCuaBac`). */
+const MAX_MAU_SSE = 60_000;
+const MAX_KY_TU_SSE = 160_000;
 
 // ════════════════════════════════════════════════════════════════
 // POST /api/v1/ai/chat
@@ -333,7 +343,7 @@ router.post('/chat', optionalAuth, quotaMiddleware(), async (req: any, res: Resp
       res.status(err.statusCode).json({ success: false, message: err.message, code: err.code });
       return;
     }
-    res.status(400).json({ success: false, message: 'Invalid attachments', code: 'INVALID_ATTACHMENTS' });
+    res.status(400).json({ success: false, message: 'Tệp đính kèm không hợp lệ.', code: 'INVALID_ATTACHMENTS' });
     return;
   }
 
@@ -342,7 +352,7 @@ router.post('/chat', optionalAuth, quotaMiddleware(), async (req: any, res: Resp
     // Cannot throw to next() here — headers not set yet
     res.status(400).json({
       success: false,
-      message: 'Message is required',
+      message: 'Hãy nhập câu hỏi hoặc đính kèm ảnh/tệp.',
       code: 'MISSING_MESSAGE',
     });
     return;
@@ -351,7 +361,7 @@ router.post('/chat', optionalAuth, quotaMiddleware(), async (req: any, res: Resp
   if (message && message.length > 10000) {
     res.status(400).json({
       success: false,
-      message: 'Message too long (max 10000 characters)',
+      message: 'Tin nhắn quá dài — tối đa 10.000 ký tự. Hãy đính kèm thành tệp .txt/.md nếu cần gửi nội dung dài.',
       code: 'MESSAGE_TOO_LONG',
     });
     return;
@@ -453,9 +463,17 @@ router.post('/chat', optionalAuth, quotaMiddleware(), async (req: any, res: Resp
   timeoutTimer = setTimeout(() => batLoiHetGio('trần'), SSE_TIMEOUT_MS);
 
   // ─── 5. Handle client disconnect ──────────────────────
-  // When user navigates away or closes tab
-  req.on('close', () => {
+  /*
+   * ⛔ KHÔNG dùng `req.on('close')` (13/11/2026): từ Node 16 `req` tự huỷ ngay khi `express.json()` đọc xong thân, và
+   * `optionalAuth`/`quotaMiddleware` còn `await` trước handler ⇒ sự kiện đó bắn XONG trước khi listener được gắn, không
+   * bao giờ chạy. Hậu quả cũ: bấm Dừng thì đồng hồ không dọn, lời gọi model chạy tới cùng và vẫn tính tiền.
+   * `khiKhachDong` nghe `close` của `res` (chỉ khi ta chưa `end()` xong) ⇒ dọn đồng hồ + huỷ lời gọi model ngay, kể cả
+   * lúc model đang im (chưa có mẩu nào để vòng lặp bên dưới kịp thấy `clientDaDong()`).
+   */
+  const huyLuot = new AbortController();
+  khiKhachDong(res, () => {
     clearTimers();
+    huyLuot.abort();
   });
 
   // ─── 6. Stream response from Gemini ────────────────────
@@ -471,6 +489,8 @@ router.post('/chat', optionalAuth, quotaMiddleware(), async (req: any, res: Resp
       : undefined,
     images: images.length > 0 ? images : undefined,
     documents: documents.length > 0 ? documents : undefined,
+    // Khách đóng kết nối ⇒ huỷ lời gọi model đang chạy (xem `khiKhachDong` ở trên).
+    signal: huyLuot.signal,
     // Chế độ GỌI: câu trả lời sẽ được đọc thành tiếng nên phải ngắn và
     // KHÔNG markdown — xem `VOICE_RULES` trong ai.service.ts.
     voice: (req.body as { voice?: unknown }).voice === true,
@@ -536,10 +556,28 @@ router.post('/chat', optionalAuth, quotaMiddleware(), async (req: any, res: Resp
 
   let tokenCount = 0;
   let accumulated = '';
+  /** Người dùng bấm Dừng / đóng tab / mất mạng — xem chốt đầu vòng lặp. */
+  const clientDaDong = (): boolean => res.destroyed || res.writableEnded;
+  /** Dừng giữa chừng ⇒ generator không tới đoạn lưu ⇒ lưu phần đã chảy ở đây (`aiService.luuPhanDo`). */
+  const luuPhanDo = async (lyDo: string): Promise<void> => {
+    try { await aiService.luuPhanDo(chatContext, modelMeta, accumulated); }
+    catch (e) { logger.warn('Không lưu được phần trả lời dở', { lyDo, sessionId, error: e instanceof Error ? e.message : String(e) }); }
+  };
 
   try {
     // async generator: yields each text chunk from Gemini stream
     for await (const part of aiService.streamChat(chatContext, modelMeta)) {
+      /*
+       * ⛔ CLIENT ĐÃ ĐÓNG (13/11/2026). Sau khi trình duyệt/app huỷ kết nối, `res.write` trả `false` và `'drain'`
+       * KHÔNG BAO GIỜ tới (đo thật bằng Node) ⇒ trước bản vá vòng lặp treo vĩnh viễn ở `await drain`: câu trả lời
+       * không được lưu (mở lại cuộc chỉ thấy câu hỏi), ví chat không trừ, và luồng model bị giữ mở. Nay: thôi đọc
+       * (thoát `for await` ⇒ generator đóng luồng upstream) rồi lưu phần đã chảy.
+       */
+      if (clientDaDong()) {
+        clearTimers();
+        await luuPhanDo('client_dong');
+        return;
+      }
       // Emit the resolved model once (before the first token) so the client can
       // revert the picker immediately if a Claude tier fell back to default.
       sendModelFrame();
@@ -567,14 +605,16 @@ router.post('/chat', optionalAuth, quotaMiddleware(), async (req: any, res: Resp
       }
       const chunk = part;
 
-      // Safety: max 10000 tokens
+      // Chốt an toàn số MẨU (không phải token). Phải nằm TRÊN trần ra của bậc Max (32k token ≈ 100k+ ký tự, mỗi
+      // mẩu vài ký tự): trước 13/11 là 10.000 mẩu / 50.000 ký tự ⇒ cắt ngang lời giải dài của chính bậc trả phí.
       tokenCount++;
-      if (tokenCount > 10000) {
+      if (tokenCount > MAX_MAU_SSE) {
         clearTimers();
+        await luuPhanDo('tran_mau');
         res.write(
           `data: ${JSON.stringify({
             type: 'error',
-            error: 'Response too long, truncated.',
+            error: 'Câu trả lời quá dài nên đã dừng ở đây — phần trên đã được lưu. Gõ "viết tiếp" để CuongMini viết nốt.',
             done: true,
           })}\n\n`,
         );
@@ -587,21 +627,26 @@ router.post('/chat', optionalAuth, quotaMiddleware(), async (req: any, res: Resp
       const sseFrame = JSON.stringify({ type: 'chunk', text: chunk, done: false });
       const ok = res.write(`data: ${sseFrame}\n\n`);
 
-      // If buffer is full (network slow), wait for drain
+      accumulated += chunk;
+
+      // If buffer is full (network slow), wait for drain — HOẶC client đóng (khi đó 'drain' không bao giờ tới).
       if (!ok) {
         await new Promise<void>((resolve) => {
-          res.once('drain', resolve);
+          if (clientDaDong()) { resolve(); return; }
+          const xong = (): void => { res.off('drain', xong); res.off('close', xong); resolve(); };
+          res.once('drain', xong);
+          res.once('close', xong);
         });
       }
 
       // Safety: accumulated text too long
-      accumulated += chunk;
-      if (accumulated.length > 50000) {
+      if (accumulated.length > MAX_KY_TU_SSE) {
         clearTimers();
+        await luuPhanDo('tran_ky_tu');
         res.write(
           `data: ${JSON.stringify({
             type: 'error',
-            error: 'Response too long, truncated at 50000 chars.',
+            error: 'Câu trả lời quá dài nên đã dừng ở đây — phần trên đã được lưu. Gõ "viết tiếp" để CuongMini viết nốt.',
             done: true,
           })}\n\n`,
         );
@@ -612,6 +657,11 @@ router.post('/chat', optionalAuth, quotaMiddleware(), async (req: any, res: Resp
 
     // ─── 7. Send completion frame ───────────────────────
     clearTimers();
+    // Khách đã đóng và lượt kết thúc vì bị huỷ (`huyLuot`) mà nhánh đó chưa tự lưu (vd. Groq) ⇒ lưu phần đã chảy.
+    if (clientDaDong()) {
+      if (!modelMeta.savedMessageId) await luuPhanDo('huy_luot');
+      return;
+    }
     sendModelFrame(); // ensure the client learns the effective model even if 0 chunks streamed
     res.write(
       `data: ${JSON.stringify({ type: 'done', text: '', done: true, tokens: tokenCount, model: modelMeta.effective, fellBack: modelMeta.fellBack, messageId: modelMeta.savedMessageId })}\n\n`,

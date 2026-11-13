@@ -52,7 +52,7 @@ import './chatClaude.css';
 import { CtcSoan } from './CtcSoan';
 import { CtcDau } from './CtcDau';
 import { HanhDongMay, HanhDongNguoi } from './CtcHanhDong';
-import { MODEL_MAC_DINH, modelHopLe, tenModel, type MaModel } from './CtcChonModel';
+import { MODEL_CHAT, MODEL_MAC_DINH, modelHopLe, tenModel, type MaModel } from './CtcChonModel';
 import { useCtcChu } from './CtcChu';
 
 /** Một trang web đã dùng để trả lời. */
@@ -793,7 +793,7 @@ export function ChatMode({ pro, onLapTrinh }: { pro: boolean; onLapTrinh?: () =>
           if (!d.startsWith('data: ')) continue;
           let e: {
             type?: string; text?: string; error?: string; fellBack?: boolean; reason?: string;
-            requested?: string; viec?: string; chu?: string; nguon?: unknown; title?: string; sessionId?: string;
+            requested?: string; effective?: string; viec?: string; chu?: string; nguon?: unknown; title?: string; sessionId?: string;
           };
           try { e = JSON.parse(d.slice(6)); } catch { continue; }
 
@@ -855,6 +855,15 @@ export function ChatMode({ pro, onLapTrinh }: { pro: boolean; onLapTrinh?: () =>
             datRoiBac(tep.length ? cau + c(' File đính kèm có thể không được đọc.') : cau);
             // Trả bộ chọn về bậc mặc định — để nguyên bậc cao thì lượt sau lại rơi y hệt.
             datBac(MODEL_MAC_DINH);
+          } else if (e.type === 'model' && e.reason === 'nang_bac_tep') {
+            /* Máy chủ (13/11/2026) tự chạy bậc ĐỌC ĐƯỢC ảnh/tệp khi lượt có tệp mà đang chọn CuongMini 3.11 — trước đó
+               ảnh rơi im lặng và model đáp "chưa thấy ảnh được đính kèm". Đổi bộ chọn theo (như web) để người dùng
+               thấy đúng model đã trả lời, và lượt hỏi tiếp về ảnh đó không bị nâng ngầm lại. */
+            const moi = MODEL_CHAT.find((m) => m.id === e.effective)?.id;
+            if (moi && moi !== bac) {
+              datBac(moi);
+              toast.info(cP('Lượt có ảnh/tệp — đã dùng {ten} để đọc (CuongMini 3.11 không xem được ảnh/tệp).', { ten: tenModel(moi) }));
+            }
           }
           // 'connected' | 'model' | 'reasoning' | 'figure_fix' | 'done' — bản
           // này không dùng tới, bỏ qua im lặng là đúng: thêm khung mới ở máy

@@ -189,6 +189,9 @@ interface ChatModalProps {
   onClose: () => void;
 }
 
+/** Máy chủ trả lỗi có câu giải thích (không phải mất mạng) — hiện nguyên câu, không thay bằng câu trả lời tĩnh. */
+class LoiMayChuChat extends Error {}
+
 export default function ChatModal({ onClose }: ChatModalProps) {
   const { isAuthenticated: isBackendAuth } = useAuthStore();
   const { status } = useSession();
@@ -301,13 +304,15 @@ finished: true,
   // Tài liệu cần Pro + model đọc được file; đang ở bậc mặc định thì tự lên Pro 2 và nói ra.
   const baoDamDocFile = (): boolean => {
     if (!isPro) {
-      toast.info('Gửi tài liệu cần tài khoản Pro', { action: { label: 'Nâng cấp', onClick: () => router.push('/pro') } });
+      toast.info('Gửi ảnh và tài liệu cần tài khoản Pro', { action: { label: 'Nâng cấp', onClick: () => router.push('/pro') } });
       return false;
     }
     const st = useChatModelStore.getState();
-    if (getChatModel(st.modelId).tier === 'default') {
+    // Chỉ bậc pro/max đọc được tệp — bản dự phòng ẩn `cuongmini-groq` (tier 'groq') cũng KHÔNG (máy chủ chạy bậc mặc định).
+    const tier = getChatModel(st.modelId).tier;
+    if (tier !== 'pro' && tier !== 'max') {
       st.setModelId('cuongmini-pro-2');
-      toast.info('Đã chuyển sang CuongMini Pro 2 để đọc tài liệu');
+      toast.info('Đã chuyển sang CuongMini Pro 2 để đọc ảnh/tài liệu');
     }
     return true;
   };
@@ -340,7 +345,7 @@ finished: true,
     if (conLai.length - imgs.length - ds.length > 0) toast.error('Chỉ nhận ảnh, .zip, folder, PDF, Word, Excel, PowerPoint hoặc .txt/.md/.csv');
     setDangGoi(true);
     try {
-      if (imgs.length) {
+      if (imgs.length && baoDamDocFile()) {
         const room = Math.max(0, MAX_IMAGES - anh.length);
         if (imgs.length > room) toast.info(`Tối đa ${MAX_IMAGES} ảnh mỗi tin`);
         const out = await Promise.all(imgs.slice(0, room).map(compressImage));
@@ -396,16 +401,14 @@ finished: true,
       .filter((x): x is File => x !== null);
     if (tep.length === 0) return;
     e.preventDefault();
-    const con = 4 - anh.length;
-    if (con <= 0) { toast.error('Tối đa 4 ảnh một lượt.'); return; }
-    for (const f of tep.slice(0, con)) {
-      const doc = new FileReader();
-      doc.onload = () => {
-        const u = typeof doc.result === 'string' ? doc.result : '';
-        if (u.startsWith('data:image/')) setAnh((c) => [...c, u].slice(0, 4));
-      };
-      doc.readAsDataURL(f);
-    }
+    if (!baoDamDocFile()) return;
+    const con = MAX_IMAGES - anh.length;
+    if (con <= 0) { toast.error(`Tối đa ${MAX_IMAGES} ảnh một lượt.`); return; }
+    /* Nén như đường chọn tệp (cạnh dài ≤1568px, JPEG): ảnh chụp màn hình PNG dán thẳng dễ vượt trần 4MB/ảnh của máy
+       chủ ⇒ 400 và cả lượt hỏng. */
+    void Promise.all(tep.slice(0, con).map(compressImage)).then((out) => {
+      setAnh((c) => [...c, ...out.filter((u) => u.startsWith('data:image/'))].slice(0, MAX_IMAGES));
+    });
   };
 
   // No auto-scroll — user controls their own scroll position entirely.
@@ -493,7 +496,15 @@ finished: true,
         }),
       });
 
-      if (!res.ok) throw new Error('Stream failed');
+      if (!res.ok) {
+        // 429 hết ví chat / 400 ảnh quá lớn…: máy chủ trả JSON có câu tiếng Việt — hiện đúng câu đó.
+        let loi = `Máy chủ trả lỗi ${res.status}`;
+        try {
+          const j = await res.json();
+          loi = j?.error?.message || j?.message || (typeof j?.error === 'string' ? j.error : loi);
+        } catch { /* thân không phải JSON */ }
+        throw new LoiMayChuChat(loi);
+      }
 
       const reader = res.body?.getReader();
       if (!reader) throw new Error('No reader');
@@ -569,7 +580,19 @@ finished: true,
                   toast.warning(`${requested.label} không phản hồi — đã trả lời bằng CuongMini Groq (dự phòng, có thể kém hơn)`, { duration: 7000 });
                 } else {
                   useChatModelStore.getState().setModelId(DEFAULT_CHAT_MODEL_ID);
-                  toast.info(`${requested.label} không phản hồi — đã chuyển về ${getChatModel(DEFAULT_CHAT_MODEL_ID).label}`);
+                  const macDinh = getChatModel(DEFAULT_CHAT_MODEL_ID).label;
+                  const r = String(data.reason ?? '');
+                  toast.info(r === 'pro_required' ? `${requested.label} dành cho tài khoản Pro — đã trả lời bằng ${macDinh}`
+                    : r === 'claude_cham_tran' ? `${requested.label} đã chạm hạn mức hôm nay — đã trả lời bằng ${macDinh}`
+                      : r === 'claude_khach' ? `Đăng nhập để dùng ${requested.label} — đã trả lời bằng ${macDinh}`
+                        : `${requested.label} không phản hồi — đã chuyển về ${macDinh}`);
+                }
+              } else if (data.reason === 'nang_bac_tep') {
+                // Máy chủ tự chạy bậc đọc được ảnh/tệp (đang ở 3.11) ⇒ đổi nút chọn theo.
+                const bac = getChatModel(data.effective);
+                if (useChatModelStore.getState().modelId !== bac.id) {
+                  useChatModelStore.getState().setModelId(bac.id);
+                  toast.info(`Đã dùng ${bac.label} để đọc ảnh/tài liệu`);
                 }
               }
               continue;
@@ -636,8 +659,11 @@ finished: true,
         return; // user pressed Stop — partial reply already kept
       }
       console.error('Chat error:', err);
-      const staticResp = findStaticResponse(text);
-      if (staticResp) {
+      const staticResp = err instanceof LoiMayChuChat ? null : findStaticResponse(text);
+      if (err instanceof LoiMayChuChat) {
+        toast.error(err.message);
+        setRobotEmotion('sad');
+      } else if (staticResp) {
         const fallbackMsg: ChatMessage = {
           id: tempId + 2,
           sessionId,
@@ -647,7 +673,7 @@ finished: true,
         };
         addMessage(sessionId, fallbackMsg);
       } else {
-        toast.error('AI connection error. Please check if backend is running.');
+        toast.error('Không kết nối được AI — kiểm tra mạng rồi thử lại.');
         setRobotEmotion('sad');
       }
       setMessages(sessionId, (messages[sessionId] || []).filter(m => m.id !== tempId && m.id !== (tempId + 1)));

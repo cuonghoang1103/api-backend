@@ -49,6 +49,16 @@ function useClickOutside(open: boolean, ref: React.RefObject<HTMLElement | null>
   }, [open, ref, close]);
 }
 
+/**
+ * Chỉ bậc Claude (pro/max) đọc được ảnh/tệp. Bản dự phòng ẩn `cuongmini-groq` (tier 'groq', web tự đặt sau khi máy chủ
+ * lùi Groq) KHÔNG đọc được: trước 13/11/2026 nó lọt qua phép `!== 'default'` ⇒ đính ảnh được nhưng máy chủ chạy bậc mặc
+ * định và ảnh rơi ("chưa thấy ảnh được đính kèm").
+ */
+function docDuocTep(id: string): boolean {
+  const t = getChatModel(id).tier;
+  return t === 'pro' || t === 'max';
+}
+
 export function CtcModelPicker({ isPro, disabled, placement = 'up' }: { isPro: boolean; disabled?: boolean; placement?: 'up' | 'down' }) {
   const router = useRouter();
   const { modelId, setModelId } = useChatModelStore();
@@ -128,7 +138,7 @@ export const CtcComposer = forwardRef<CtcComposerHandle, Props>(function CtcComp
 
   const modelId = useChatModelStore((s) => s.modelId);
   const setModelId = useChatModelStore((s) => s.setModelId);
-  const isVision = isPro && getChatModel(modelId).tier !== 'default';
+  const isVision = isPro && docDuocTep(modelId);
 
   useImperativeHandle(ref, () => ({
     focus: () => taRef.current?.focus(),
@@ -155,7 +165,7 @@ export const CtcComposer = forwardRef<CtcComposerHandle, Props>(function CtcComp
       toast.info('Gửi ảnh và tài liệu cần tài khoản Pro', { action: { label: 'Nâng cấp', onClick: () => router.push('/pro') } });
       return false;
     }
-    if (getChatModel(modelId).tier === 'default') {
+    if (!docDuocTep(modelId)) {
       // CuongMini 3.11 không đọc được file ⇒ tự chuyển lên Pro 2 và nói ra.
       setModelId('cuongmini-pro-2');
       toast.info('Đã chuyển sang CuongMini Pro 2 để đọc ảnh/tài liệu');

@@ -114,6 +114,48 @@ function resolveChatModel(id?: string): ChatModelDef {
 }
 
 /**
+ * Bậc tự nâng lên khi lượt có ẢNH/TỆP mà người dùng đang ở bậc mặc định. Khớp với web
+ * (`CtcComposer › baoDamProDocFile` tự chuyển lên Pro 2).
+ */
+export const BAC_DOC_TEP = 'cuongmini-pro-2';
+
+/**
+ * Lượt có ảnh/tệp ⇒ chọn bậc ĐỌC ĐƯỢC tệp. THUẦN — test đọc.
+ *
+ * ⛔ 13/11/2026 (app desktop 0.5.228, Windows): chủ kênh chọn "CuongMini 3.11", gửi ảnh chụp + "nội dung có gì
+ * sai" ⇒ AI đáp "Mình vẫn chưa thấy ảnh được đính kèm", gửi lại vẫn vậy. Bậc mặc định (gpt-6-luna → Groq) chỉ nhận
+ * `message` dạng CHỮ — `context.images`/`documents` bị bỏ im lặng. Web né được vì ô soạn tự đổi lên Pro 2 trước khi
+ * gửi; app desktop, robot và web khi TỰ KÈM LẠI ảnh lượt trước (`anhGui`) thì không ⇒ ảnh rơi. Chữa ở MÁY CHỦ để
+ * mọi client (kể cả bản app đã cài) đều đúng:
+ *   - Pro (gồm admin) ⇒ lượt này chạy `BAC_DOC_TEP` (`lyDo: 'nang_bac_tep'`, không phải hạ bậc).
+ *   - Không Pro ⇒ giữ bậc mặc định, báo `pro_required` (client hiện "… cần tài khoản Pro") và model được dặn
+ *     nói thật là ảnh/tệp đã tới nhưng bậc này không xem được (`ghiChuTepKhongDoc`).
+ */
+export function chonBacChoTep(
+  modelId: string | undefined,
+  coTep: boolean,
+  laPro: boolean,
+): { bac: string; lyDo?: 'nang_bac_tep' | 'pro_required' } {
+  const chon = resolveChatModel(modelId);
+  if (!coTep || chon.tier !== 'default') return { bac: chon.id };
+  return laPro ? { bac: BAC_DOC_TEP, lyDo: 'nang_bac_tep' } : { bac: chon.id, lyDo: 'pro_required' };
+}
+
+/**
+ * Dặn model của bậc mặc định khi lượt có ảnh/tệp mà nó KHÔNG nhận được (người dùng chưa Pro, hoặc cả hai lớp Claude
+ * đều hỏng rồi lùi xuống đây). Không dặn thì model trả lời "chưa thấy ảnh được đính kèm" — người dùng tưởng app lỗi
+ * và gửi lại mãi. THUẦN — test đọc.
+ */
+export function ghiChuTepKhongDoc(soAnh: number, soTep: number): string {
+  if (soAnh <= 0 && soTep <= 0) return '';
+  const cai = [soAnh > 0 ? `${soAnh} ảnh` : '', soTep > 0 ? `${soTep} tệp` : ''].filter(Boolean).join(' và ');
+  return '\n\n## Tệp đính kèm lượt này\n'
+    + `Người dùng ĐÃ gửi kèm ${cai}, nhưng ở lượt này bạn KHÔNG nhận được nội dung của chúng (bậc model hiện tại không xem được ảnh/tệp). `
+    + 'Đừng nói kiểu "chưa thấy ảnh được đính kèm" hay bảo họ gửi lại — họ đã gửi đúng. Hãy nói ngắn gọn rằng bạn không xem được ảnh/tệp ở lượt này '
+    + '(xem ảnh/tệp cần tài khoản Pro, hoặc dịch vụ đọc ảnh đang tạm bận), rồi mời họ mô tả hoặc dán nội dung dạng chữ; nếu câu hỏi trả lời được mà không cần tệp thì cứ trả lời.\n';
+}
+
+/**
  * Bộ lọc dòng chảy: nuốt khối ```check trên đường ra màn hình.
  *
  * Khối đó là dữ liệu cho máy kiểm hình, không phải cho người đọc. Không lọc
@@ -504,6 +546,11 @@ interface ChatContext {
   images?: ChatImageInput[];
   /** Attached PDFs (base64) for the document-capable Pro/Max tiers only. */
   documents?: ChatDocumentInput[];
+  /**
+   * Khách đóng kết nối (bấm Dừng / đóng tab) — route nối từ `khiKhachDong`. Bị huỷ ⇒ mọi lời gọi model dừng ngay và
+   * KHÔNG lùi sang lớp sau (không phải cổng hỏng; lùi tiếp là gọi model mới cho một người đã bỏ đi).
+   */
+  signal?: AbortSignal;
   /** Lượt hỏi đến từ chế độ GỌI — câu trả lời sẽ được đọc thành tiếng. */
   voice?: boolean;
   /** "YYYY-MM-DD" theo máy NGƯỜI DÙNG. Có nó thì trợ lý biết lịch hôm nay. */
@@ -674,7 +721,7 @@ async function documentsAsText(documents: ChatDocumentInput[], budgetChars: numb
  * chảy về một file mà model chưa từng thấy. Mở kênh Claude thì cờ này bật lại
  * và đường gốc quay về, không phải sửa gì thêm.
  */
-async function buildUserContent(
+export async function buildUserContent(
   message: string,
   images?: ChatImageInput[],
   documents?: ChatDocumentInput[],
@@ -888,6 +935,19 @@ export class AIService {
       select: { id: true },
     });
     return msg;
+  }
+
+  /**
+   * Lưu PHẦN ĐÃ CHẢY khi lượt bị dừng giữa chừng ở ROUTE (người dùng bấm Dừng / đóng tab, hoặc chạm trần độ dài).
+   *
+   * Khi route thôi đọc `streamChat`, generator dừng ngay tại `yield` ⇒ mọi nhánh lưu/ghi sổ nằm SAU vòng chảy chữ
+   * không bao giờ chạy: mở lại cuộc thấy câu hỏi mà không có câu trả lời, và ví chat không trừ phần đã sinh.
+   */
+  async luuPhanDo(context: ChatContext, meta: ChatModelMeta | undefined, phanDo: string): Promise<void> {
+    const text = goKhoiCheck(phanDo);
+    if (!context.sessionId || !text.trim()) return;
+    await this.saveAssistantAndTrack(context.sessionId, text, meta);
+    this.ghiChiPhiChat(context, meta, context.message, text);
   }
 
   /** Save the assistant message AND record its id on meta (for client feedback). */
@@ -1257,7 +1317,16 @@ export class AIService {
     //
     // Phải chọn model TRƯỚC khi dựng system prompt: hai bậc trả phí được gắn
     // thêm luật toán/code (`MATH_CODE_RULES`), bậc mặc định thì không.
-    const selected = resolveChatModel(context.model);
+    // Lượt có ảnh/tệp ở bậc mặc định ⇒ tự nâng lên bậc đọc được tệp (Pro), hoặc báo cần Pro — xem `chonBacChoTep`.
+    const soAnh = context.images?.length ?? 0;
+    const soTep = context.documents?.length ?? 0;
+    const coTep = soAnh + soTep > 0;
+    const chonTep = chonBacChoTep(
+      context.model,
+      coTep,
+      coTep && resolveChatModel(context.model).tier === 'default' ? await isProEffective(context.userId) : false,
+    );
+    const selected = resolveChatModel(chonTep.bac);
 
     /*
      * TÌM WEB — phải chạy TRƯỚC khi dựng system prompt, vì kết quả đi thẳng
@@ -1282,6 +1351,11 @@ export class AIService {
     }
     const history = sanitizeHistory(context.history);
     if (meta) { meta.requested = selected.id; meta.effective = selected.id; meta.fellBack = false; }
+    if (meta && chonTep.lyDo === 'nang_bac_tep') meta.reason = 'nang_bac_tep';
+    if (meta && chonTep.lyDo === 'pro_required') {
+      // Báo như một lượt Pro 2 bị hạ bậc: client đã có sẵn câu "… cần tài khoản Pro — lượt này dùng CuongMini 3.11".
+      meta.requested = BAC_DOC_TEP; meta.effective = DEFAULT_CHAT_MODEL_ID; meta.fellBack = true; meta.reason = 'pro_required';
+    }
 
     if (selected.tier === 'claude') {
       // Pro/Pro 2/Max are a Pro perk. Non-Pro (incl. guests) silently get the
@@ -1308,7 +1382,7 @@ export class AIService {
           let streamed = '';
           const loc = taoBoLocCheck();
           try {
-            for await (const phan of streamClaudeChat({ model: bacModel, system: systemPrompt, messages: claudeMessages })) {
+            for await (const phan of streamClaudeChat({ model: bacModel, system: systemPrompt, messages: claudeMessages, signal: context.signal })) {
               streamed += phan;
               const hien = loc.day(phan);
               if (hien) yield hien;
@@ -1331,6 +1405,7 @@ export class AIService {
               logger.warn('[web-chat] gwai gãy giữa chừng — giữ phần đã có', { model: selected.id, error: err instanceof Error ? err.message : String(err) });
               return;
             }
+            if (context.signal?.aborted) return; // khách đã đi — không phải gwai hỏng, không lùi
             baoRamboHong();
             logger.warn('[web-chat] gwai lỗi trước chữ đầu — lùi cổng chính hãng', { model: selected.id, error: err instanceof Error ? err.message : String(err) });
             // rơi xuống cổng chính hãng bên dưới
@@ -1351,6 +1426,7 @@ export class AIService {
               system: systemPrompt,
               messages: claudeMessages as Array<{ role: 'user' | 'assistant'; content: string | Array<Record<string, unknown>> }>,
               userId: context.userId!,
+              signal: context.signal,
             });
             let r = await g.next();
             while (!r.done) {
@@ -1378,6 +1454,7 @@ export class AIService {
               logger.warn('[web-chat] luồng chính hãng gãy giữa chừng — giữ phần đã có', { model: selected.id, error: err instanceof Error ? err.message : String(err) });
               return;
             }
+            if (context.signal?.aborted) return; // khách đã đi — không lùi Groq
             logger.warn('[web-chat] cổng chính hãng lỗi trước chữ đầu — lùi CuongMini 3.11', { model: selected.id, error: err instanceof Error ? err.message : String(err) });
             if (meta) { meta.fellBack = true; meta.effective = DEFAULT_CHAT_MODEL_ID; meta.reason = 'claude_error'; }
             // fall through to Groq default
@@ -1385,6 +1462,9 @@ export class AIService {
         }
       }
     }
+
+    // Ảnh/tệp KHÔNG đi tới bậc mặc định (chỉ nhận chữ) ⇒ dặn model nói thật thay vì "chưa thấy ảnh" (xem `ghiChuTepKhongDoc`).
+    const systemMacDinh = coTep ? systemPrompt + ghiChuTepKhongDoc(soAnh, soTep) : systemPrompt;
 
     // ─── 10/11/2026: "CuongMini 3.11" (free mặc định) thử modelapi gpt-6-luna TRƯỚC ───
     // Thông minh + rẻ hơn Groq Llama, vẫn chảy dần (SSE). Lỗi / timeout / TRỐNG trước khi
@@ -1400,14 +1480,14 @@ export class AIService {
         const lunaStream = await lunaClient.chat.completions.create({
           model: 'gpt-6-luna',
           messages: [
-            { role: 'system', content: systemPrompt },
+            { role: 'system', content: systemMacDinh },
             ...history,
             { role: 'user', content: message },
           ],
           max_tokens: config.aiMaxTokens,
           temperature: config.aiTemperature,
           stream: true,
-        });
+        }, { signal: context.signal });
         const LUNA_IDLE_MS = 8_000;
         let lunaTimer: ReturnType<typeof setTimeout> | null = null;
         const lunaArm = () => {
@@ -1433,6 +1513,11 @@ export class AIService {
         }
         // trống ⇒ rơi xuống Groq bên dưới
       } catch (err) {
+        if (context.signal?.aborted) {
+          // Khách bấm Dừng — luna KHÔNG hỏng (đừng mở cầu dao), và không lùi Groq. Lưu phần đã chảy.
+          if (sessionId && lunaFull) { await this.saveAssistantAndTrack(sessionId, lunaFull, meta); this.ghiChiPhiChat(context, meta, message, lunaFull); }
+          return;
+        }
         logger.warn('[web-chat] gpt-6-luna streaming lỗi — lùi Groq', { error: err instanceof Error ? err.message : String(err) });
         _lunaHongToi = Date.now() + 60_000;
         if (lunaDaChay) {
@@ -1456,6 +1541,7 @@ export class AIService {
       groqAvailable = false;
     }
 
+    if (context.signal?.aborted) return; // khách đã đi trong lúc chờ luna — không gọi thêm model nào
     // Tới được đây nghĩa là luna đã hỏng/trống ⇒ câu trả lời SẼ do Groq (model kém hơn) sinh ra.
     // Đánh dấu để client HIỆN RÕ "CuongMini Groq" + báo "model chính không phản hồi" (không im lặng dùng model kém).
     if (meta) { meta.fellBack = true; meta.effective = 'cuongmini-groq'; if (!meta.reason) meta.reason = 'groq_fallback'; }
@@ -1467,14 +1553,14 @@ export class AIService {
           // chat bậc mặc định đều ăn 404 rồi rơi sang nhánh KHÔNG chảy dần.
           model: modelGroqConSong(config.groqChatModel),
           messages: [
-            { role: 'system', content: systemPrompt },
+            { role: 'system', content: systemMacDinh },
             ...history,
             { role: 'user', content: message },
           ],
           max_tokens: config.aiMaxTokens,
           temperature: config.aiTemperature,
           stream: true,
-        });
+        }, { signal: context.signal });
 
         let fullResponse = '';
         // Idle-watchdog: if no chunk arrives within 8s, abort the stream
@@ -1527,8 +1613,9 @@ export class AIService {
         }
         return;
       } catch (err) {
+        if (context.signal?.aborted) return; // khách bấm Dừng — không lùi sang đường không chảy dần
         const errMsg = err instanceof Error ? err.message : String(err);
- logger.warn('AIService Groq streaming failed', { error: errMsg });
+        logger.warn('AIService Groq streaming failed', { error: errMsg });
         // Groq stream failed — fall through to non-stream fallback below.
         // Do NOT throw; let the chatWithFallback path handle it.
       }
@@ -1540,7 +1627,7 @@ export class AIService {
     try {
       const result = await chatWithFallback({
         messages: [
-          { role: 'system', content: systemPrompt },
+          { role: 'system', content: systemMacDinh },
           ...history,
           { role: 'user', content: message },
         ],
@@ -1555,7 +1642,10 @@ export class AIService {
       }
 
       if (sessionId && result.text) {
-        await this.saveAssistantMessage(sessionId, result.text);
+        // Track (meta.savedMessageId) để route biết đã lưu, và GHI SỔ như mọi nhánh khác — trước 13/11 nhánh lùi này
+        // không ghi chi phí, đúng lúc đang có trục trặc (xem chú thích `sendChat`).
+        await this.saveAssistantAndTrack(sessionId, result.text, meta);
+        this.ghiChiPhiChat(context, meta, message, result.text);
       }
     } catch (err) {
       const errMsg = err instanceof Error ? err.message : String(err);

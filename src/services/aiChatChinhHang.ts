@@ -125,6 +125,13 @@ export async function* streamChatChinhHang(o: {
   let loi: unknown = null;
   let usd = 0;
   const bao = () => { const f = danhThuc; danhThuc = null; f?.(); };
+  /* Nơi gọi thôi đọc giữa chừng (người dùng bấm Dừng ⇒ route thoát `for await` ⇒ generator `return()` tại `yield`)
+     ⇒ huỷ lời gọi cổng. Trước 13/11/2026 lời gọi chạy tiếp tới hết câu và tính tiền phần không ai đọc. */
+  const ctl = new AbortController();
+  if (o.signal) {
+    if (o.signal.aborted) ctl.abort();
+    else o.signal.addEventListener('abort', () => ctl.abort(), { once: true });
+  }
 
   void goiVanBanChinhHang({
     system: o.system,
@@ -134,14 +141,18 @@ export async function* streamChatChinhHang(o: {
     maxTokens: maxTokensCuaBac(o.bac),
     userId: o.userId,
     viec: 'web_chat',
-    signal: o.signal,
+    signal: ctl.signal,
     onToken: (d) => { hang_doi.push(d); bao(); },
   }).then((r) => { usd = r.usd; }).catch((e) => { loi = e; }).finally(() => { xong = true; bao(); });
 
-  for (;;) {
-    if (hang_doi.length) { yield hang_doi.splice(0, hang_doi.length).join(''); continue; }
-    if (xong) break;
-    await new Promise<void>((r) => { danhThuc = r; });
+  try {
+    for (;;) {
+      if (hang_doi.length) { yield hang_doi.splice(0, hang_doi.length).join(''); continue; }
+      if (xong) break;
+      await new Promise<void>((r) => { danhThuc = r; });
+    }
+  } finally {
+    if (!xong) ctl.abort();
   }
   if (loi) throw loi;
   return { usd, model };

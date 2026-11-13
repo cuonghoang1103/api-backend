@@ -175,6 +175,7 @@ const EN: Record<string, string> = {
   '{ten} đang tạm bận — lượt này dùng {thuong}.': '{ten} is busy right now — this reply used {thuong}.',
   '{ten} đã chạm hạn mức hôm nay — lượt này dùng {thuong}.': '{ten} hit today\'s limit — this reply used {thuong}.',
   ' File đính kèm có thể không được đọc.': ' Attachments may not have been read.',
+  'Lượt có ảnh/tệp — đã dùng {ten} để đọc (CuongMini 3.11 không xem được ảnh/tệp).': 'This message has images/files — used {ten} to read them (CuongMini 3.11 cannot view images/files).',
   'Cuộc này chưa được lưu nên chưa tách nhánh được — hãy gửi một câu trước.':
     'This chat is not saved yet, so it cannot be branched — send a message first.',
   'Không cắt được trên máy chủ: {loi}': 'Could not trim the chat on the server: {loi}',

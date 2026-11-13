@@ -4,6 +4,7 @@
  * Output React đã chạy thật: scratchpad/nextjs-verify/c2.mjs.
  */
 
+import G02_1 from './giang/nxj-02-1.mjs';
 export default {
   title: 'Chapter 2 — Components, props & composition|||Chương 2 — Component, props & ghép',
   description: 'Props là đầu vào của component, chảy một chiều từ cha xuống con và chỉ đọc. children biến component thành cái khuôn. Dựng UI to từ những mảnh nhỏ mỗi mảnh một việc.',
@@ -16,6 +17,7 @@ export default {
       isFreePreview: false,
       description: 'Props là đối số của một component, chảy một chiều từ cha xuống con, và chỉ đọc. Sửa props là một bug.',
       content: `
+${G02_1}
 <div class="ml-en">
 <div class="callout ok"><strong>Already took the React course?</strong> This chapter is a quick React refresher &mdash; the same topic is taught in depth in the <a href="/courses/react">React</a> course (Chapter 1). Skim it or skip ahead to <strong>Chapter 8</strong>, where the Next.js-specific material starts. Remember: Next.js is a <em>framework built on React</em> &mdash; every component, prop, state and hook here is still plain React.</div>
 <span class="eyebrow">Chapter 2 · Lesson 2.1</span>
@@ -37,7 +39,7 @@ function UserCard({ user }) {
   );
 }</code></pre>
 <p>Render <code>&lt;UserCard user={{ name: 'An', avatar: '/a.png' }} /&gt;</code> and you get exactly what the tree says — verified through <code>react-dom/server</code>:</p>
-<div class="out">&lt;div class="card"&gt;&lt;img src="/a.png" alt="An"/&gt;&lt;h3&gt;An&lt;/h3&gt;&lt;/div&gt;</div>
+<div class="out">&lt;link rel="preload" as="image" href="/a.png"/&gt;&lt;div class="card"&gt;&lt;img src="/a.png" alt="An"/&gt;&lt;h3&gt;An&lt;/h3&gt;&lt;/div&gt;</div>
 <p><code>UserCard</code> receives a <code>user</code> prop and hands pieces of it down to <code>Avatar</code>. That is the shape of every React app: a tree of components, each taking props from its parent and passing props to its children.</p>
 
 <h3>Props flow one way: down</h3>
@@ -58,7 +60,7 @@ function UserCard({ user }) {
 <h3>How data moves through a React tree</h3>
 <div class="lz-flow">
   <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Props go down, only down</b> — A parent passes values to a child. There is no way for a child to reach up and read its parent&#39;s variables — that one-way rule is what makes a tree predictable.</div></div>
-  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Props are read-only</b> — Assigning to &#96;props.title&#96; is an error in strict mode and a lie everywhere else: the parent will overwrite it on the next render anyway.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Props are read-only</b> — Assigning to &#96;props.title&#96; throws in development — React freezes the props object, so you get <em>TypeError: Cannot assign to read only property</em> — and in production (no freeze) it silently “works” until the parent overwrites it on the next render. Measured below.</div></div>
   <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>To send data up, pass a function down</b> — The parent owns the state and hands the child a callback. The child calls it; the parent decides what changes.</div></div>
   <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Two children share by lifting</b> — When two siblings need the same value, it moves to their closest common parent. This is the single most common refactor in React.</div></div>
 </div>
@@ -71,6 +73,105 @@ function UserCard({ user }) {
   <span class="lc-ico">⬆️</span>
   <span class="lc-body"><span class="lc-title">react.dev — Sharing state between components</span><span class="lc-sub">The lifting-state refactor, step by step, with the code before and after.</span></span>
 </a>
+
+
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Build a <code>&lt;Greeting name=... /&gt;</code> component and render it three times with different names from a parent.</li>
+<li>Try to reassign a prop inside the child (<code>props.name = &quot;x&quot;</code>) and note why props are read-only; lift the change to the parent instead.</li>
+<li>Add a second prop with a default value and render the component once without passing it.</li>
+</ol>
+<p><strong>Done when:</strong> you can pass props down, treat them as read-only, and give a prop a default.</p></div>
+
+<h3>🔬 Measured: props on React 19.3.0</h3>
+<p>The UserCard example through react-dom/server — note the image preload React 19 hoists in front of your tree:</p>
+<pre><code class="language-javascript">const React = require('react');
+const { renderToStaticMarkup } = require('react-dom/server');
+const h = React.createElement;
+function Avatar({ src, alt }) {
+  return h('img', { src, alt });
+}
+function UserCard({ user }) {
+  return h('div', { className: 'card' }, h(Avatar, { src: user.avatar, alt: user.name }), h('h3', null, user.name));
+}
+console.log(renderToStaticMarkup(h(UserCard, { user: { name: 'An', avatar: '/a.png' } })));</code></pre><pre><code class="language-bash">$ node usercard.cjs</code></pre><div class="out">&lt;link rel="preload" as="image" href="/a.png"/&gt;&lt;div class="card"&gt;&lt;img src="/a.png" alt="An"/&gt;&lt;h3&gt;An&lt;/h3&gt;&lt;/div&gt;</div>
+<p>Writing to a prop: development vs production:</p>
+<pre><code class="language-javascript">'use strict';
+const React = require('react');
+const { renderToStaticMarkup } = require('react-dom/server');
+function Greeting(props) {
+  props.name = 'x';                     <span class="tok-comment">  // ✗ sửa prop</span>
+  return React.createElement('p', null, 'Hi ', props.name);
+}
+try {
+  console.log(renderToStaticMarkup(React.createElement(Greeting, { name: 'An' })));
+} catch (e) {
+  console.log('TypeError: ' + e.message);
+}</code></pre><pre><code class="language-bash">$ NODE_ENV=development node props.cjs</code></pre><div class="out">TypeError: Cannot assign to read only property 'name' of object '#&lt;Object&gt;'</div><pre><code class="language-bash">$ NODE_ENV=production node props.cjs</code></pre><div class="out">&lt;p&gt;Hi x&lt;/p&gt;</div>
+<p>In <code>next dev</code> the same mistake shows a <b>Runtime TypeError</b> overlay pointing at the assignment line. The freeze is shallow — mutating an array inside props corrupts the parent:</p>
+<pre><code class="language-javascript">const React = require('react');
+const { renderToStaticMarkup } = require('react-dom/server');
+function Total({ items }) {
+  items.push({ price: 0 });             <span class="tok-comment">  // ✗ mutate mảng của cha</span>
+  return React.createElement('p', null, items.length, ' items');
+}
+const gio = [{ price: 10 }, { price: 20 }]; <span class="tok-comment">  // dữ liệu của CHA: 2 món</span>
+for (let lan = 1; lan &lt;= 3; lan++) {
+  const html = renderToStaticMarkup(React.createElement(Total, { items: gio }));
+  console.log(&#96;render #\${lan}: \${html}   · mảng của cha giờ có \${gio.length} món&#96;);
+}</code></pre><pre><code class="language-bash">$ node total.cjs</code></pre><div class="out">render #1: &lt;p&gt;3 items&lt;/p&gt;   · mảng của cha giờ có 3 món
+render #2: &lt;p&gt;4 items&lt;/p&gt;   · mảng của cha giờ có 4 món
+render #3: &lt;p&gt;5 items&lt;/p&gt;   · mảng của cha giờ có 5 món</div>
+<p>The inline <code>[]</code> trap in a real browser (production build): two <code>React.memo</code> children, parent re-rendered 3 times:</p>
+<pre><code class="language-tsx">'use client';
+import { memo, useState } from 'react';
+
+let demA = 0;
+let demB = 0;
+const RONG: string[] = [];
+
+const ListA = memo(function ListA({ items }: { items: string[] }) {
+  demA++;
+  return &lt;p id="a"&gt;ListA (items={'{[]}'}) render: {demA} · {items.length} món&lt;/p&gt;;
+});
+const ListB = memo(function ListB({ items }: { items: string[] }) {
+  demB++;
+  return &lt;p id="b"&gt;ListB (items={'{RONG}'}) render: {demB} · {items.length} món&lt;/p&gt;;
+});
+
+export default function Memo() {
+  const [n, setN] = useState(0);
+  return (
+    &lt;div className="space-y-2 p-6 font-sans text-lg"&gt;
+      &lt;button className="rounded border px-3" onClick={() =&gt; setN(n + 1)}&gt;Cha render lại: {n}&lt;/button&gt;
+      &lt;ListA items={[]} /&gt;
+      &lt;ListB items={RONG} /&gt;
+    &lt;/div&gt;
+  );
+}</code></pre><div class="out">ListA (items={[]}) render: 4 · 0 món
+ListB (items={RONG}) render: 1 · 0 món</div>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-bash">node usercard.cjs
+NODE_ENV=development node props.cjs
+NODE_ENV=production node props.cjs
+node total.cjs
+npm run build &amp;&amp; npm start  <span class="tok-comment">  # open /memo, click 3 times</span></code></pre>
+<h3>🔗 Go deeper in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-1-2-props" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 1.2 — Props</span><span class="lc-sub">The same topic in the React course, deeper</span></span></a>
+<a class="link-card lien-ket-cheo" href="/academy/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-5-1-components-props" target="_blank" rel="noopener"><span class="lc-ico">🏫</span><span class="lc-body"><span class="lc-title">Academy · FER202 · 5.1 — Components and props</span><span class="lc-sub">The university-course view</span></span></a>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Props</span><span class="v">A component's inputs, passed from its parent as attributes.</span></div>
+  <div class="kv"><span class="k">Read-only</span><span class="v">A child must never mutate its props; data flows one way.</span></div>
+  <div class="kv"><span class="k">One-way data flow</span><span class="v">Data goes parent → child; changes go back up via callbacks.</span></div>
+  <div class="kv"><span class="k">Default prop</span><span class="v">A fallback value used when the parent passes nothing.</span></div>
+  <div class="kv"><span class="k">Props object</span><span class="v">All props arrive as one object; destructure it for clarity.</span></div>
+  <div class="kv"><span class="k">Reusable component</span><span class="v">Same component, different props — the core of composition.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Props are a component's inputs, passed down from the parent like attributes.</li><li>Props are read-only — a child never mutates them; data flows one way, parent to child.</li><li>Destructure the props object and give defaults where a prop is optional.</li><li>To change data, a child calls a callback prop so the parent updates and re-renders.</li></ul>
 
 </div>
 
@@ -95,7 +196,7 @@ function UserCard({ user }) {
   );
 }</code></pre>
 <p>Render <code>&lt;UserCard user={{ name: 'An', avatar: '/a.png' }} /&gt;</code> và bạn được đúng cái cây mô tả — đã kiểm qua <code>react-dom/server</code>:</p>
-<div class="out">&lt;div class="card"&gt;&lt;img src="/a.png" alt="An"/&gt;&lt;h3&gt;An&lt;/h3&gt;&lt;/div&gt;</div>
+<div class="out">&lt;link rel="preload" as="image" href="/a.png"/&gt;&lt;div class="card"&gt;&lt;img src="/a.png" alt="An"/&gt;&lt;h3&gt;An&lt;/h3&gt;&lt;/div&gt;</div>
 <p><code>UserCard</code> nhận một prop <code>user</code> và trao từng mảnh của nó xuống <code>Avatar</code>. Đó là hình dạng của mọi app React: một cây component, mỗi cái nhận props từ cha và truyền props xuống con.</p>
 
 <h3>Props chảy một chiều: xuống</h3>
@@ -116,7 +217,7 @@ function UserCard({ user }) {
 <h3>Dữ liệu di chuyển thế nào trong một cây React</h3>
 <div class="lz-flow">
   <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Props đi xuống, chỉ đi xuống</b> — Cha truyền giá trị cho con. Con không có cách nào với ngược lên đọc biến của cha — chính luật một chiều đó làm cái cây trở nên đoán được.</div></div>
-  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Props là chỉ-đọc</b> — Gán vào &#96;props.title&#96; là lỗi trong chế độ nghiêm ngặt và là một lời nói dối ở mọi nơi khác: dù sao cha cũng sẽ ghi đè nó ở lần render sau.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Props là chỉ-đọc</b> — Gán vào &#96;props.title&#96; ném lỗi ở chế độ development — React đông cứng object props, nên bạn nhận <em>TypeError: Cannot assign to read only property</em> — còn ở production (không đông cứng) thì lặng lẽ “chạy được” cho tới khi cha ghi đè ở lần render sau. Đo thật bên dưới.</div></div>
   <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Muốn gửi dữ liệu lên thì truyền một hàm xuống</b> — Cha sở hữu state và đưa cho con một callback. Con gọi nó; cha quyết định cái gì thay đổi.</div></div>
   <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Hai đứa con chia sẻ bằng cách nâng state lên</b> — Khi hai anh em cần cùng một giá trị, nó dời lên phần tử cha chung gần nhất. Đây là phép tái cấu trúc phổ biến nhất trong React.</div></div>
 </div>
@@ -129,6 +230,105 @@ function UserCard({ user }) {
   <span class="lc-ico">⬆️</span>
   <span class="lc-body"><span class="lc-title">react.dev — Chia sẻ state giữa các component</span><span class="lc-sub">Phép nâng state lên, từng bước, kèm mã trước và sau.</span></span>
 </a>
+
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Dựng một component <code>&lt;Greeting name=... /&gt;</code> và render ba lần với các tên khác nhau từ component cha.</li>
+<li>Thử gán lại một prop trong con (<code>props.name = &quot;x&quot;</code>) và để ý vì sao prop là chỉ-đọc; đưa thay đổi lên cha.</li>
+<li>Thêm một prop thứ hai có giá trị mặc định và render component một lần mà không truyền nó.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn truyền được prop xuống, coi prop là chỉ-đọc, và đặt được giá trị mặc định cho prop.</p></div>
+
+<h3>🔬 Đo thật: props trên React 19.3.0</h3>
+<p>Ví dụ UserCard qua react-dom/server — để ý thẻ preload ảnh mà React 19 tự chèn trước cây của bạn:</p>
+<pre><code class="language-javascript">const React = require('react');
+const { renderToStaticMarkup } = require('react-dom/server');
+const h = React.createElement;
+function Avatar({ src, alt }) {
+  return h('img', { src, alt });
+}
+function UserCard({ user }) {
+  return h('div', { className: 'card' }, h(Avatar, { src: user.avatar, alt: user.name }), h('h3', null, user.name));
+}
+console.log(renderToStaticMarkup(h(UserCard, { user: { name: 'An', avatar: '/a.png' } })));</code></pre><pre><code class="language-bash">$ node usercard.cjs</code></pre><div class="out">&lt;link rel="preload" as="image" href="/a.png"/&gt;&lt;div class="card"&gt;&lt;img src="/a.png" alt="An"/&gt;&lt;h3&gt;An&lt;/h3&gt;&lt;/div&gt;</div>
+<p>Ghi vào prop: development và production:</p>
+<pre><code class="language-javascript">'use strict';
+const React = require('react');
+const { renderToStaticMarkup } = require('react-dom/server');
+function Greeting(props) {
+  props.name = 'x';                     <span class="tok-comment">  // ✗ sửa prop</span>
+  return React.createElement('p', null, 'Hi ', props.name);
+}
+try {
+  console.log(renderToStaticMarkup(React.createElement(Greeting, { name: 'An' })));
+} catch (e) {
+  console.log('TypeError: ' + e.message);
+}</code></pre><pre><code class="language-bash">$ NODE_ENV=development node props.cjs</code></pre><div class="out">TypeError: Cannot assign to read only property 'name' of object '#&lt;Object&gt;'</div><pre><code class="language-bash">$ NODE_ENV=production node props.cjs</code></pre><div class="out">&lt;p&gt;Hi x&lt;/p&gt;</div>
+<p>Ở <code>next dev</code>, cùng lỗi đó hiện lớp phủ <b>Runtime TypeError</b> chỉ đúng dòng gán. Phép đông cứng chỉ ở lớp ngoài — sửa mảng bên trong props làm hỏng dữ liệu của cha:</p>
+<pre><code class="language-javascript">const React = require('react');
+const { renderToStaticMarkup } = require('react-dom/server');
+function Total({ items }) {
+  items.push({ price: 0 });             <span class="tok-comment">  // ✗ mutate mảng của cha</span>
+  return React.createElement('p', null, items.length, ' items');
+}
+const gio = [{ price: 10 }, { price: 20 }]; <span class="tok-comment">  // dữ liệu của CHA: 2 món</span>
+for (let lan = 1; lan &lt;= 3; lan++) {
+  const html = renderToStaticMarkup(React.createElement(Total, { items: gio }));
+  console.log(&#96;render #\${lan}: \${html}   · mảng của cha giờ có \${gio.length} món&#96;);
+}</code></pre><pre><code class="language-bash">$ node total.cjs</code></pre><div class="out">render #1: &lt;p&gt;3 items&lt;/p&gt;   · mảng của cha giờ có 3 món
+render #2: &lt;p&gt;4 items&lt;/p&gt;   · mảng của cha giờ có 4 món
+render #3: &lt;p&gt;5 items&lt;/p&gt;   · mảng của cha giờ có 5 món</div>
+<p>Bẫy <code>[]</code> viết thẳng trên trình duyệt thật (bản build production): hai con bọc <code>React.memo</code>, cha vẽ lại 3 lần:</p>
+<pre><code class="language-tsx">'use client';
+import { memo, useState } from 'react';
+
+let demA = 0;
+let demB = 0;
+const RONG: string[] = [];
+
+const ListA = memo(function ListA({ items }: { items: string[] }) {
+  demA++;
+  return &lt;p id="a"&gt;ListA (items={'{[]}'}) render: {demA} · {items.length} món&lt;/p&gt;;
+});
+const ListB = memo(function ListB({ items }: { items: string[] }) {
+  demB++;
+  return &lt;p id="b"&gt;ListB (items={'{RONG}'}) render: {demB} · {items.length} món&lt;/p&gt;;
+});
+
+export default function Memo() {
+  const [n, setN] = useState(0);
+  return (
+    &lt;div className="space-y-2 p-6 font-sans text-lg"&gt;
+      &lt;button className="rounded border px-3" onClick={() =&gt; setN(n + 1)}&gt;Cha render lại: {n}&lt;/button&gt;
+      &lt;ListA items={[]} /&gt;
+      &lt;ListB items={RONG} /&gt;
+    &lt;/div&gt;
+  );
+}</code></pre><div class="out">ListA (items={[]}) render: 4 · 0 món
+ListB (items={RONG}) render: 1 · 0 món</div>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-bash">node usercard.cjs
+NODE_ENV=development node props.cjs
+NODE_ENV=production node props.cjs
+node total.cjs
+npm run build &amp;&amp; npm start  <span class="tok-comment">  # mở /memo, bấm 3 lần</span></code></pre>
+<h3>🔗 Học sâu hơn ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-1-2-props" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 1.2 — Props</span><span class="lc-sub">Cùng chủ đề trong khoá React, đi sâu hơn</span></span></a>
+<a class="link-card lien-ket-cheo" href="/academy/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-5-1-components-props" target="_blank" rel="noopener"><span class="lc-ico">🏫</span><span class="lc-body"><span class="lc-title">Academy · FER202 · 5.1 — Component và props</span><span class="lc-sub">Góc nhìn môn học ở trường</span></span></a>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Props</span><span class="v">Đầu vào của một component, truyền từ cha dưới dạng thuộc tính.</span></div>
+  <div class="kv"><span class="k">Chỉ-đọc</span><span class="v">Con không bao giờ được sửa prop của nó; dữ liệu chảy một chiều.</span></div>
+  <div class="kv"><span class="k">Dòng dữ liệu một chiều</span><span class="v">Dữ liệu đi cha → con; thay đổi quay lên qua callback.</span></div>
+  <div class="kv"><span class="k">Prop mặc định</span><span class="v">Giá trị dự phòng dùng khi cha không truyền gì.</span></div>
+  <div class="kv"><span class="k">Object props</span><span class="v">Mọi prop đến như một object; destructure cho rõ.</span></div>
+  <div class="kv"><span class="k">Component tái dùng</span><span class="v">Cùng component, khác prop — cốt lõi của việc ghép (composition).</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Props là đầu vào của component, truyền từ cha xuống như các thuộc tính.</li><li>Props là chỉ-đọc — con không bao giờ sửa; dữ liệu chảy một chiều, cha xuống con.</li><li>Destructure object props và đặt mặc định ở nơi prop là tuỳ chọn.</li><li>Để đổi dữ liệu, con gọi một prop callback để cha cập nhật và render lại.</li></ul>
 
 </div>
 `,
@@ -206,6 +406,28 @@ function UserCard({ user }) {
   <span class="lc-body"><span class="lc-title">react.dev — Thinking in React</span><span class="lc-sub">Where component boundaries come from, and how to spot one that is wrong.</span></span>
 </a>
 
+
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Build a <code>&lt;Card&gt;</code> that renders <code>{children}</code> inside a styled box, then wrap three different chunks of JSX with it.</li>
+<li>Add a named slot by passing JSX through a prop (for example <code>header={...}</code>) alongside <code>children</code>.</li>
+<li>Refactor a component that took ten props down to one that takes <code>children</code> — note how composition beats configuration.</li>
+</ol>
+<p><strong>Done when:</strong> you can pass JSX via <code>children</code> and a named prop, and prefer composition over a pile of props.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">children</span><span class="v">The special prop holding whatever JSX a component wraps.</span></div>
+  <div class="kv"><span class="k">Composition</span><span class="v">Building UI by nesting components, not by adding more props.</span></div>
+  <div class="kv"><span class="k">Slot</span><span class="v">A named place to pass JSX in (via a prop) beyond <code>children</code>.</span></div>
+  <div class="kv"><span class="k">Wrapper component</span><span class="v">A component whose job is to frame its <code>children</code>.</span></div>
+  <div class="kv"><span class="k">Configuration vs composition</span><span class="v">Many boolean props vs passing the pieces directly.</span></div>
+  <div class="kv"><span class="k">Render prop</span><span class="v">A prop that is a function returning JSX (an advanced slot).</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li><code>children</code> is a built-in prop holding the JSX a component wraps.</li><li>Composition — nesting components — scales better than adding ever more props.</li><li>Pass extra JSX through named props when you need more than one slot.</li><li>Reach for composition before a long list of configuration props.</li></ul>
+
 </div>
 
 <div class="ml-vi">
@@ -271,6 +493,28 @@ function UserCard({ user }) {
   <span class="lc-ico">🧠</span>
   <span class="lc-body"><span class="lc-title">react.dev — Tư duy kiểu React</span><span class="lc-sub">Ranh giới component đến từ đâu, và làm sao nhận ra một ranh giới đặt sai.</span></span>
 </a>
+
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Dựng một <code>&lt;Card&gt;</code> render <code>{children}</code> trong một hộp có style, rồi bọc ba mảng JSX khác nhau bằng nó.</li>
+<li>Thêm một khe (slot) có tên bằng cách truyền JSX qua một prop (ví dụ <code>header={...}</code>) song song với <code>children</code>.</li>
+<li>Tái cấu trúc một component nhận mười prop xuống còn một cái nhận <code>children</code> — để ý vì sao ghép thắng cấu hình.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn truyền được JSX qua <code>children</code> và một prop có tên, và ưu tiên ghép hơn một đống prop.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">children</span><span class="v">Prop đặc biệt chứa bất kỳ JSX nào mà một component bọc quanh.</span></div>
+  <div class="kv"><span class="k">Ghép (composition)</span><span class="v">Dựng UI bằng cách lồng component, không phải thêm prop.</span></div>
+  <div class="kv"><span class="k">Slot (khe)</span><span class="v">Một chỗ có tên để truyền JSX vào (qua prop) ngoài <code>children</code>.</span></div>
+  <div class="kv"><span class="k">Component vỏ bọc</span><span class="v">Component có nhiệm vụ đóng khung cho <code>children</code> của nó.</span></div>
+  <div class="kv"><span class="k">Cấu hình vs ghép</span><span class="v">Nhiều prop boolean so với truyền thẳng các mảnh vào.</span></div>
+  <div class="kv"><span class="k">Render prop</span><span class="v">Một prop là hàm trả về JSX (một slot nâng cao).</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li><code>children</code> là prop có sẵn chứa JSX mà component bọc quanh.</li><li>Ghép — lồng component — mở rộng tốt hơn là thêm mãi prop.</li><li>Truyền JSX phụ qua prop có tên khi bạn cần nhiều hơn một khe.</li><li>Hãy nghĩ đến ghép trước khi dựng một danh sách dài prop cấu hình.</li></ul>
 
 </div>
 `,
@@ -349,6 +593,28 @@ function Badge({ label = 'New', tone }: BadgeProps) {
   <span class="lc-body"><span class="lc-title">React TypeScript Cheatsheet</span><span class="lc-sub">The community reference for &quot;how do I type this?&quot; — searchable, and current.</span></span>
 </a>
 
+
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Type a component's props with a TypeScript <code>type</code>, marking one prop optional and giving it a default.</li>
+<li>Pass a handler prop (<code>onSelect</code>) from parent to child and call it from the child on click.</li>
+<li>Spread a props object into a child (<code>&lt;Btn {...rest} /&gt;</code>) and explain one risk of spreading unknown props.</li>
+</ol>
+<p><strong>Done when:</strong> you can type props, pass callbacks up, and spread props while knowing the risk.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Prop types</span><span class="v">A TypeScript <code>type</code>/<code>interface</code> describing a component's inputs.</span></div>
+  <div class="kv"><span class="k">Optional prop</span><span class="v"><code>prop?: T</code> — may be omitted; often paired with a default.</span></div>
+  <div class="kv"><span class="k">Default value</span><span class="v">A fallback set via destructuring (<code>{ size = &quot;md&quot; }</code>).</span></div>
+  <div class="kv"><span class="k">Callback prop</span><span class="v">A function prop a child calls to send events/data up.</span></div>
+  <div class="kv"><span class="k">Spread props</span><span class="v"><code>{...rest}</code> forwards many props at once.</span></div>
+  <div class="kv"><span class="k">Prop drilling</span><span class="v">Passing a prop through layers that do not use it (a smell).</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Type props with a TypeScript <code>type</code>; mark optional ones with <code>?</code> and give defaults when destructuring.</li><li>Children talk back to parents through callback props (<code>onSelect</code>, <code>onChange</code>).</li><li><code>{...rest}</code> forwards props in bulk — convenient, but spreading unknown props can leak invalid attributes.</li><li>Too much prop drilling is a sign to use composition or context (Chapter 6).</li></ul>
+
 </div>
 
 <div class="ml-vi">
@@ -416,6 +682,28 @@ function Badge({ label = 'New', tone }: BadgeProps) {
   <span class="lc-body"><span class="lc-title">React TypeScript Cheatsheet</span><span class="lc-sub">Tài liệu tra cứu của cộng đồng cho câu &quot;cái này gán kiểu sao?&quot; — tìm được và cập nhật.</span></span>
 </a>
 
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Gõ kiểu cho prop của một component bằng <code>type</code> TypeScript, đánh dấu một prop tuỳ chọn và cho nó mặc định.</li>
+<li>Truyền một prop handler (<code>onSelect</code>) từ cha xuống con và gọi nó trong con khi click.</li>
+<li>Spread một object prop vào con (<code>&lt;Btn {...rest} /&gt;</code>) và nêu một rủi ro của việc spread prop lạ.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn gõ kiểu được prop, truyền callback lên trên, và spread prop mà vẫn biết rủi ro.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Kiểu prop</span><span class="v">Một <code>type</code>/<code>interface</code> TypeScript mô tả đầu vào của component.</span></div>
+  <div class="kv"><span class="k">Prop tuỳ chọn</span><span class="v"><code>prop?: T</code> — có thể bỏ; thường đi với một mặc định.</span></div>
+  <div class="kv"><span class="k">Giá trị mặc định</span><span class="v">Dự phòng đặt qua destructuring (<code>{ size = &quot;md&quot; }</code>).</span></div>
+  <div class="kv"><span class="k">Prop callback</span><span class="v">Một prop là hàm mà con gọi để gửi sự kiện/dữ liệu lên trên.</span></div>
+  <div class="kv"><span class="k">Spread props</span><span class="v"><code>{...rest}</code> chuyển tiếp nhiều prop một lúc.</span></div>
+  <div class="kv"><span class="k">Prop drilling</span><span class="v">Truyền một prop qua nhiều tầng không dùng tới nó (một mùi xấu).</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Gõ kiểu prop bằng <code>type</code> TypeScript; đánh dấu tuỳ chọn bằng <code>?</code> và đặt mặc định khi destructure.</li><li>Con nói chuyện ngược lên cha qua prop callback (<code>onSelect</code>, <code>onChange</code>).</li><li><code>{...rest}</code> chuyển tiếp prop hàng loạt — tiện, nhưng spread prop lạ có thể lọt thuộc tính không hợp lệ.</li><li>Prop drilling quá nhiều là dấu hiệu nên dùng ghép hoặc context (Chương 6).</li></ul>
+
 </div>
 `,
     },
@@ -475,6 +763,18 @@ function Badge({ label = 'New', tone }: BadgeProps) {
   <span class="lc-body"><span class="lc-title">react.dev — Choosing the state structure</span><span class="lc-sub">How to avoid redundant and contradictory state — the root of most component confusion.</span></span>
 </a>
 
+
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Take a screenshot of a page (any app) and draw boxes to break it into a component tree; name each component.</li>
+<li>Decide for each piece of data whether it is a prop (passed in) or state (owned here), and where it should live.</li>
+<li>Rebuild one small section as components, lifting shared state to the closest common parent.</li>
+</ol>
+<p><strong>Done when:</strong> you can decompose a UI into a component tree and place each piece of data correctly.</p></div>
+
+<h3>📌 Summary</h3>
+<ul><li>Think in components: break a UI into a tree of small, single-purpose pieces.</li><li>For each piece of data decide prop (from above) vs state (owned here).</li><li>When two components need the same state, lift it to their closest common parent.</li><li>Parents own state and pass it down; children send changes up through callbacks.</li></ul>
+
 </div>
 
 <div class="ml-vi">
@@ -523,6 +823,18 @@ function Badge({ label = 'New', tone }: BadgeProps) {
   <span class="lc-ico">🗂️</span>
   <span class="lc-body"><span class="lc-title">react.dev — Chọn cấu trúc state</span><span class="lc-sub">Cách tránh state thừa và state mâu thuẫn — gốc rễ của phần lớn nhầm lẫn về component.</span></span>
 </a>
+
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Chụp màn hình một trang (app bất kỳ) và vẽ các hộp để tách nó thành cây component; đặt tên từng cái.</li>
+<li>Với mỗi mẩu dữ liệu, quyết định nó là prop (truyền vào) hay state (sở hữu tại đây), và nên nằm ở đâu.</li>
+<li>Dựng lại một mảng nhỏ thành component, nâng state dùng chung lên cha chung gần nhất.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn tách được UI thành cây component và đặt đúng chỗ cho từng mẩu dữ liệu.</p></div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Tư duy theo component: tách UI thành một cây gồm các mảnh nhỏ, một nhiệm vụ.</li><li>Với mỗi mẩu dữ liệu, quyết định prop (từ trên) hay state (sở hữu tại đây).</li><li>Khi hai component cần cùng một state, nâng nó lên cha chung gần nhất.</li><li>Cha sở hữu state và truyền xuống; con gửi thay đổi lên qua callback.</li></ul>
 
 </div>
 `,

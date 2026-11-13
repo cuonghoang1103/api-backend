@@ -94,6 +94,46 @@ export async function chuHan(chu: string, nnGoc: string) {
   return { ...han, tu };
 }
 
+// ─── Tra theo bộ thủ ─────────────────────────────────────────
+
+export interface ChuTheoBo {
+  chu: string;
+  soNet: number | null;
+  hanViet: string | null;
+  pinyin: string | null;
+  onYomi: string | null;
+  kunYomi: string | null;
+  tanSuat: number | null;
+}
+
+/** Số bộ Khang Hy hợp lệ (1–214) — tách riêng để test không cần CSDL. */
+export function kiemSoBo(so: unknown): number {
+  const n = typeof so === 'number' ? so : Number(String(so ?? '').trim() || NaN);
+  if (!Number.isInteger(n) || n < 1 || n > 214) throw new BadRequestError('Số bộ thủ phải từ 1 đến 214', 'CTL_BO_THU_SAI');
+  return n;
+}
+
+/**
+ * Các chữ thuộc bộ Khang Hy `so` dùng trong ngôn ngữ `nn`: zh ⇒ chữ có pinyin; ja ⇒ chữ có âm on hoặc kun.
+ * Sắp số nét tăng dần, cùng số nét thì chữ hay gặp trước (tanSuat nhỏ = hay gặp; không có thứ hạng xếp cuối). Tối đa 800 (bộ 木 · 水 · 艸 có 630–710 chữ — trần 600 cắt mất chữ hay gặp).
+ */
+export async function theoBoThu(nnGoc: string, so: number): Promise<ChuTheoBo[]> {
+  const nn = kiemNn(nnGoc);
+  const bo = kiemSoBo(so);
+  if (nn === 'en') throw new BadRequestError('Tra theo bộ thủ chỉ dành cho tiếng Trung và tiếng Nhật', 'CTL_NN_SAI');
+  return prisma.ctlChuHan.findMany({
+    where: {
+      boThu: bo,
+      ...(nn === 'zh'
+        ? { pinyin: { not: null }, NOT: { pinyin: '' } }
+        : { OR: [{ AND: [{ onYomi: { not: null } }, { NOT: { onYomi: '' } }] }, { AND: [{ kunYomi: { not: null } }, { NOT: { kunYomi: '' } }] }] }),
+    },
+    select: { chu: true, soNet: true, hanViet: true, pinyin: true, onYomi: true, kunYomi: true, tanSuat: true },
+    orderBy: [{ soNet: { sort: 'asc', nulls: 'last' } }, { tanSuat: { sort: 'asc', nulls: 'last' } }, { chu: 'asc' }],
+    take: 800,
+  });
+}
+
 // ─── Viết tay ⇒ ứng viên chữ ─────────────────────────────────
 
 let hangTanSuat: Promise<Map<string, number>> | null = null;

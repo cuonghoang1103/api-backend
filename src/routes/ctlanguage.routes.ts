@@ -14,7 +14,7 @@ import { logger } from '../utils/logger.js';
 import { isProEffective } from '../services/pro.service.js';
 import type { ApiResponse } from '../types/index.js';
 import { docHoSo, luuHoSo } from '../services/ctlanguage/hoSo.js';
-import { chiTiet, chuCuaNgay, chuHan, deTroChoi, goiOffline, tra, vietTay } from '../services/ctlanguage/tuDien.js';
+import { chiTiet, chuCuaNgay, chuHan, deTroChoi, goiOffline, theoBoThu, tra, vietTay } from '../services/ctlanguage/tuDien.js';
 import { baoCao, boChan, chan, chiTietBai, dangBai, dsBai, dsDaChan, traLoi, xoaCuaToi } from '../services/ctlanguage/congDong.js';
 import { chamBuoiGoi, chayLuotGoi, luotGoi } from '../services/ctlanguage/goiCuongMini.js';
 import { dsChoWeb, docNN } from '../services/ielts/troChuyen/chuDe.js';
@@ -67,6 +67,14 @@ router.get('/tu-dien/:nn/chu/:chu', gioiHanTra, async (req: Request, res: Respon
   try {
     res.setHeader('Cache-Control', 'public, max-age=3600');
     res.json({ success: true, data: await chuHan(req.params.chu, req.params.nn) });
+  } catch (e) { next(e); }
+});
+
+/** Tra theo bộ thủ: các chữ thuộc bộ Khang Hy `so` (1–214) của ngôn ngữ `nn` (zh/ja), sắp số nét rồi độ hay gặp. */
+router.get('/tu-dien/:nn/bo-thu/:so', gioiHanTra, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.setHeader('Cache-Control', 'public, max-age=86400');
+    res.json({ success: true, data: await theoBoThu(req.params.nn, Number(req.params.so)) });
   } catch (e) { next(e); }
 });
 

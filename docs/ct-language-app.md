@@ -214,3 +214,21 @@ Câu hỏi cho user: Pro của CT Language có **dùng chung** với Pro web cuo
   khoá. Lối vào: màn chữ nền ⇒ "Ôn thẻ · <khoá>" (ja: dekiru + jp · zh: ch · en: ielts + ielts-tap2). ⚠️ Bộ thẻ jp/ch/ielts CHỈ có
   sau lượt deploy web kế tiếp — trước đó màn ôn báo "Bộ thẻ chưa có trên máy chủ". Thử cục bộ: preview `sach-hoc-tinh` (cổng 3031,
   phục vụ `frontend/public`) + `SIMCTL_CHILD_CT_API=http://localhost:3031` + `CT_XEM_MAN=on-the:<khoa>` + `CT_SACHHOC_ONTHE=<chế độ>`.
+- 13/11 đêm (APP + 1 tuyến backend): **bộ công cụ kiểu Hanzii, cả 3 ngôn ngữ** (ios-app `794f507`). User đưa ảnh Hanzii và nhờ bổ sung
+  chức năng/trang còn thiếu. Đã làm:
+  · **Dịch văn bản** (`Modules/Dich/`) — Apple Translation TRÊN MÁY (iOS 18: `TranslationSession` dịch theo đoạn; 17.4–17.x: lớp phủ hệ
+    thống), nn ⇄ Việt, nguồn: gõ/dán · tệp .txt/.pdf · link https · ảnh (Vision OCR). Không gửi chữ người dùng lên máy chủ nào.
+    ⚠️ Chưa thử trên máy thật — bộ dịch Apple không chạy trên simulator.
+  · **Tra bộ thủ** (`Modules/BoThu/`, zh/ja) — 214 bộ Khang Hy đóng trong app (tên Hán Việt + nghĩa + biến thể 氵扌亻…), tab số nét 1–17,
+    chạm bộ ⇒ chữ nhóm theo số nét còn lại ⇒ thẻ chữ Hán. **Tuyến mới `GET /api/v1/ctlanguage/tu-dien/:nn/bo-thu/:so`** (≤ 800 chữ) —
+    CHƯA deploy ⇒ trên app bản thật màn này báo lỗi mạng cho tới lượt deploy backend kế tiếp.
+  · **Sổ tay nhiều sổ** (`Modules/SoTay/`) — tạo/đổi tên/xoá sổ, một từ nằm nhiều sổ (`TheTu.so`, tệp cũ đọc được), biểu đồ **cấp nhớ**
+    (Mới · Cấp 1–4 · Nhớ sâu, suy từ khoảng ôn SM-2), ôn theo sổ / theo cấp / "học trước". Nút 📁 ở chi tiết từ ⇒ chọn sổ.
+  · **Bộ từ có sẵn** — dùng API công khai có sẵn của web (`/my-language/<nn>/vocab/categories` + `/vocab?categoryId=`): HSK1–5,
+    N5–N2, A1–C2 theo chủ đề; thêm cả bộ vào sổ / "Học thẻ ngay". Thẻ của bộ mang id ÂM; `ChiTietTuCTL` tự tra lại theo chữ.
+  · **Cài đặt tra từ & ôn tập** (Tôi › …) — tự đọc khi mở từ · tự tra chữ vừa sao chép · Hán Việt · giản/phồn/cả hai · pinyin dấu/số ·
+    cỡ chữ · tốc độ giọng · **nhắc ôn từ vựng** n lần/ngày trong khung giờ, theo thứ, theo sổ (thông báo cục bộ, xoay từ mỗi lần mở app).
+  · Soi màn DEBUG: `CT_NN_THU=zh|ja|en` (bỏ qua làm quen) + `CT_XEM_MAN=so-tay | bo-tu | bo-tu:<id nhóm> | bo-thu | bo-thu:<số> | dich |
+    cai-dat-hoc`. Kiểm thử: `SoTayCaiDatTests` (pinyin số, cấp nhớ, tệp cũ, mốc giờ nhắc, đổi từ của bộ).
+  · CÒN THIẾU so với Hanzii: tab Cộng đồng/Thi thử kiểu Hanzii đã có tương đương; chưa có "Bài học AI" sinh từ sổ tay, game luyện chữ
+    theo sổ, chọn NHIỀU bộ thành phần cùng lúc (Hanzii ghép bộ — cần dữ liệu IDS), font chữ tuỳ chọn, đồng bộ sổ tay lên máy chủ.

@@ -231,6 +231,30 @@ export async function phatTrangThaiKhiNoi(
 }
 
 /**
+ * Phát "đã offline" lúc ngắt kết nối cuối (13/11/2026). Audience chốt lúc NỐI có thể đã cũ: ai chặn nhau GIỮA phiên
+ * (hoặc người kia vừa tắt trạng thái / bị khoá) vẫn nằm trong đó ⇒ người đã bị chặn vẫn nhận gói offline. Nên LỌC LẠI
+ * bằng đúng luật `presenceAudience` ngay lúc ngắt. Đọc lại công tắc của chính người dùng: vừa TẮT trong phiên thì
+ * không phát. Lỗi ở bất kỳ bước nào ⇒ KHÔNG phát gì. Trả về tập đã phát (để test).
+ */
+export async function phatTrangThaiKhiNgat(
+  opts: { userId: number; audience: number[]; lastSeen: number },
+  dich: PhongPhat | null = io,
+  loc: (userId: number, ids: number[]) => Promise<number[]> = presenceAudience,
+  congTac: (userId: number) => Promise<boolean> = async (id) =>
+    (await prisma.user.findUnique({ where: { id }, select: { showActiveStatus: true } }))?.showActiveStatus ?? false,
+): Promise<number[]> {
+  try {
+    if (!opts.audience.length || !(await congTac(opts.userId))) return [];
+    const audience = await loc(opts.userId, opts.audience);
+    emitPresenceTo(audience, { userId: opts.userId, online: false, lastSeen: opts.lastSeen }, dich);
+    return audience;
+  } catch (err) {
+    logger.error('presence-offline failed — không phát trạng thái', { error: err instanceof Error ? err.message : String(err) });
+    return [];
+  }
+}
+
+/**
  * Attach a Socket.IO server to the existing HTTP server. Idempotent
  * — calling twice is a no-op so hot reload doesn't double-bind.
  */
@@ -563,15 +587,11 @@ export function initSocketServer(httpServer: HttpServer): IOServer {
         // Emit "went offline" only to this user's presence audience (friends ∪ thread peers, đã lọc chặn + đối ứng)
         // computed at connect. Chưa tính được audience (ngắt sớm / lỗi lúc nối) ⇒ KHÔNG phát gì — không bao giờ
         // `io.emit` toàn cục (21/10/2026).
-        const payload = { userId: user.id, online: false, lastSeen: Date.now() };
         const audience = socket.data.presenceAudience as number[] | undefined;
         if (user.showActiveStatus && audience && audience.length > 0) {
           // Không phát "đã online" thì cũng không được phát "đã offline": một tin offline lẻ loi cũng nói cho người
-          // khác biết mình vừa đóng app. Đọc lại công tắc lúc ngắt: người vừa TẮT trong phiên thì thôi phát.
-          void prisma.user
-            .findUnique({ where: { id: user.id }, select: { showActiveStatus: true } })
-            .then((u) => { if (u?.showActiveStatus) emitPresenceTo(audience, payload); })
-            .catch(() => undefined);
+          // khác biết mình vừa đóng app. Lọc lại audience + đọc lại công tắc ngay lúc ngắt (phatTrangThaiKhiNgat).
+          void phatTrangThaiKhiNgat({ userId: user.id, audience, lastSeen: Date.now() });
         }
       }
     });

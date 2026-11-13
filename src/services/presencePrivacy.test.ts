@@ -99,6 +99,26 @@ describe('socket presence — không bao giờ phát toàn cục', () => {
     assert.equal(io.sent.length, 0);
   });
 
+  it('ngắt kết nối ⇒ LỌC LẠI audience: người vừa chặn giữa phiên không nhận "đã offline" (13/11/2026)', async () => {
+    const { phatTrangThaiKhiNgat } = await import('../socket/messaging.socket.js');
+    const io = fakeIo();
+    // audience chốt lúc nối có 2 và 7; giữa phiên 7 chặn ⇒ bộ lọc lúc ngắt bỏ 7.
+    const daPhat = await phatTrangThaiKhiNgat(
+      { userId: 1, audience: [2, 7], lastSeen: 123 }, io, async (_u, ids) => ids.filter((id) => id !== 7), async () => true,
+    );
+    assert.deepEqual(daPhat, [2]);
+    assert.deepEqual(io.sent.map((s) => s.room), ['user:2']);
+    assert.equal(io.sent[0].payload.online, false);
+  });
+
+  it('ngắt kết nối: vừa tắt trạng thái trong phiên, hoặc lọc lỗi ⇒ không phát gì', async () => {
+    const { phatTrangThaiKhiNgat } = await import('../socket/messaging.socket.js');
+    const io = fakeIo();
+    await phatTrangThaiKhiNgat({ userId: 1, audience: [2], lastSeen: 1 }, io, async (_u, ids) => ids, async () => false);
+    await phatTrangThaiKhiNgat({ userId: 1, audience: [2], lastSeen: 1 }, io, async () => { throw new Error('db down'); }, async () => true);
+    assert.equal(io.sent.length, 0);
+  });
+
   it('mã nguồn socket không còn đường phát presence toàn cục', () => {
     const here = path.dirname(fileURLToPath(import.meta.url));
     const src = readFileSync(path.join(here, '../socket/messaging.socket.ts'), 'utf8');

@@ -799,6 +799,10 @@ Thiết kế: `docs/ct-work-ai-agents-thiet-ke.md` · hợp đồng API đợt 2
 
 ## Known Error Patterns (History)
 
+🐞 **LUẬT CHỦ CHỐT (13/11/2026): gặp + sửa xong BẤT KỲ lỗi nào (app, web, tính năng, deploy, hạ tầng, video) ⇒ thêm
+ngay một mục 5 dòng vào `docs/so-loi.md`** (triệu chứng · nguyên nhân tệp:dòng · cách sửa + commit · ảnh hưởng · bài học),
+commit cùng bản sửa. Bảng dưới chỉ giữ bài học lớn về quy trình; sổ lỗi gom MỌI lỗi, kể cả nhỏ.
+
 Condensed log of past failures — do not repeat:
 
 | Date | Error | Lesson |

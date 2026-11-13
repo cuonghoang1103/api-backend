@@ -389,6 +389,9 @@ function ganNgheSocket(socket: Socket): void {
   });
 }
 
+/** Hội thoại đang mở nhận tin lúc tab ẩn ⇒ hoãn "đã xem" tới khi tab hiện lại (13/11/2026). */
+let choDaXemKhiHien: number | null = null;
+
 export const useMessagingStore = create<MessagingState>((set, get) => ({
   threads: [],
   threadsLoaded: false,
@@ -1332,9 +1335,14 @@ export const useMessagingStore = create<MessagingState>((set, get) => ({
     if (!hang?.peer) {
       void get().refreshThreadSummary(threadId);
     }
-    // If the message came in for the open thread, also mark read
-    if (get().currentThreadId === threadId && !isOwn) {
-      get().markRead(threadId);
+    // Tin tới đúng hội thoại đang mở ⇒ đánh dấu đã đọc — CHỈ khi tab đang hiện (13/11/2026). Trước đây thiếu kiểm
+    // `visibilityState` ⇒ hội thoại mở ở tab ẩn / app thu nhỏ vẫn báo "đã xem" cho người gửi sau ~3 ms dù chưa ai
+    // nhìn. Tab ẩn thì để chưa đọc; quay lại tab ⇒ listener visibilitychange cuối tệp gọi markRead.
+    const dangNhinBayGio = get().currentThreadId === threadId
+      && (typeof document === 'undefined' || document.visibilityState === 'visible');
+    if (!isOwn && get().currentThreadId === threadId) {
+      if (dangNhinBayGio) get().markRead(threadId);
+      else choDaXemKhiHien = threadId;
     }
     // Mirror the new state to IndexedDB so the conversation
     // survives a hard refresh. Best-effort, silent on failure.
@@ -1821,9 +1829,14 @@ if (typeof window !== 'undefined') {
   let anLuc = 0;
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'hidden') { anLuc = Date.now(); return; }
-    if (anLuc && Date.now() - anLuc > 30_000 && useMessagingStore.getState().threadsLoaded) {
-      void useMessagingStore.getState().batKip();
+    const st = useMessagingStore.getState();
+    if (anLuc && Date.now() - anLuc > 30_000 && st.threadsLoaded) {
+      void st.batKip(); // batKip tự markRead hội thoại đang mở
+    } else if (choDaXemKhiHien != null && choDaXemKhiHien === st.currentThreadId) {
+      // Tin tới lúc tab ẩn được để chưa báo (applyIncomingMessage) ⇒ giờ người dùng nhìn thấy mới báo "đã xem".
+      void st.markRead(choDaXemKhiHien);
     }
+    choDaXemKhiHien = null;
     anLuc = 0;
   });
 }

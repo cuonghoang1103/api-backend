@@ -194,3 +194,18 @@ Câu hỏi cho user: Pro của CT Language có **dùng chung** với Pro web cuo
   132 s). ⚠️ `--tai` KHÔNG chạy được trong container (ảnh `node:22-slim` không có `unzip` cho Unihan.zip) ⇒ cách đã dùng: tar bộ
   dữ liệu đã giải nén ở máy → `ssh vps` → `docker cp` vào `/tmp/ctl-du-lieu` (chown 1001) → `docker exec cuonghoangdev_backend npx tsx
   scripts/ctlanguage/nhap-tu-dien.mts --thu-muc /tmp/ctl-du-lieu` → kiểm curl (tra, chữ ngày, trò chơi, viết tay) → xoá thư mục tạm.
+- 13/11 chiều (APP): **BỘ LUYỆN CHỮ NỀN + trọn gói người mới** (ios-app `780e3e4`). User chỉ ra app thiếu đúng thứ người mới cần
+  nhất — bộ luyện bảng chữ mà web ghim ở đầu mục lục Dekiru ("CuongMini_Kana Practice"). Nguyên nhân + cách xử lý: `docs/so-loi.md`
+  13/11. Đã thêm, **không cần backend mới**:
+  · `Modules/ChuNen/` — dữ liệu đóng trong app (chạy offline): **Nhật** hiragana + katakana 104 chữ/bảng (port `kanaData.ts`, giữ
+    nguyên cách gõ Kunrei + mẹo nhớ tiếng Việt + cặp dễ nhầm), **Trung** pinyin 61 mục (thanh mẫu · vận mẫu · 4 thanh + thanh nhẹ,
+    mỗi mục đọc bằng một chữ Hán thật vì TTS không đọc được "zh" trần), **Anh** 44 âm IPA (mỗi âm một từ ví dụ + mẹo đặt lưỡi).
+  · 5 cách luyện: nhìn chữ → gõ (tự sang chữ khi đúng, kiểu Tofugu) · nhìn âm → chọn chữ (nhiễu ưu tiên chữ DỄ NHẦM) · nghe → chọn ·
+    **viết theo nét** (dùng lại `Shared/NgonNgu/LuyenVietView.swift`, đã thêm vào target) · bảng tiến độ 4 mức. Chữ yếu ra nhiều hơn;
+    sai thì hiện mẹo nhớ + đọc chữ lên. Tiến độ từng chữ lưu máy (`chu-nen-ctl.json`).
+  · Phần ② **Ôn thẻ theo bài** — `OnTheKhoaCTL` dựng `SachHocVM` riêng rồi hiện thẳng khối `onthe` (8 cách ôn, 202 thẻ Bài 1–5).
+    CHỈ `dekiru` có `on-the.json`; **xin phiên NỘI DUNG xuất bộ thẻ cho `ch` · `jp` · `ielts`** thì app tự có ngay, không cần sửa app.
+  · **Bắt đầu tại đây** (`Modules/BatDau/`) — 7 bước đầu cho từng ngôn ngữ, tick theo tiến độ THẬT (số chữ thuộc, số thẻ trong sổ),
+    ghim trên tab Hôm nay cho tới khi xong.
+  · Việc đầu của "Hôm nay 15 phút" đổi thành luyện chữ nền khi chưa thuộc (người mới chưa có từ nào trong sổ để ôn).
+  · Widget **Bảng chữ** (nhỏ · vừa · màn khoá) hiện chữ yếu nhất + tiến độ, chạm mở `ctlanguage://chu-nen`.

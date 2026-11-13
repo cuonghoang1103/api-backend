@@ -153,6 +153,22 @@ QUEUED
 </a>
 
 <p class="note-ct"><strong>Three things to remember.</strong> <code>MULTI</code> gives you exactly one guarantee — no other client's command interleaves with your block — and explicitly no rollback: a runtime error at index 3 fails that command and lets the rest run. There are two error kinds with opposite outcomes: a queue-time error (unknown command, bad arity) aborts everything with <code>EXECABORT</code>, while a runtime error (wrong type) leaves you with a partial result you must find by checking every element of the reply array. And commands queue before any of them run, so you cannot read a value inside the block and branch on it — the moment you want <code>if</code>, you need <code>WATCH</code> or Lua.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">MULTI</span><span class="v">Starts a block; commands are queued, not run, until <code>EXEC</code>.</span></div>
+  <div class="kv"><span class="k">EXEC / DISCARD</span><span class="v">Run the whole queued block atomically, or throw it away.</span></div>
+  <div class="kv"><span class="k">No rollback</span><span class="v">A runtime error on one command does not undo the others — unlike a SQL transaction.</span></div>
+  <div class="kv"><span class="k">EXECABORT</span><span class="v">A queue-time error (bad command or arity) aborts the whole block before anything runs.</span></div>
+  <div class="kv"><span class="k">Runtime error</span><span class="v">A wrong-type error at EXEC leaves a partial result you must find in the reply array.</span></div>
+  <div class="kv"><span class="k">Atomic block</span><span class="v">The one guarantee: no other client's command interleaves between your queued commands.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li><code>MULTI</code> queues commands and <code>EXEC</code> runs them with no other client interleaving.</li>
+<li>There is no rollback: a runtime error fails that one command and lets the rest run.</li>
+<li>Queue-time errors abort everything (<code>EXECABORT</code>); runtime errors give a partial result.</li>
+<li>You cannot read a value and branch inside the block — for that you need <code>WATCH</code> or Lua.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 7 · Bài 7.1</span>
@@ -288,6 +304,38 @@ QUEUED
 </a>
 
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> <code>MULTI</code> cho bạn đúng một bảo đảm — không lệnh nào của khách khác xen vào khối của bạn — và tường minh không có quay lui: một lỗi lúc chạy ở vị trí thứ 3 làm hỏng lệnh đó và để phần còn lại chạy tiếp. Có hai loại lỗi với kết cục ngược nhau: lỗi lúc xếp hàng (lệnh lạ, sai số tham số) huỷ tất cả bằng <code>EXECABORT</code>, còn lỗi lúc chạy (sai kiểu) để lại cho bạn một kết quả nửa vời mà bạn phải tự tìm bằng cách kiểm mọi phần tử của mảng trả về. Và các lệnh được xếp hàng trước khi bất kỳ cái nào chạy, nên bạn không thể đọc một giá trị trong khối rồi rẽ nhánh theo nó — ngay khoảnh khắc bạn muốn <code>if</code> là bạn cần <code>WATCH</code> hoặc Lua.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">MULTI</span><span class="v">Mở một khối; các lệnh được xếp hàng, chưa chạy, cho tới <code>EXEC</code>.</span></div>
+  <div class="kv"><span class="k">EXEC / DISCARD</span><span class="v">Chạy cả khối đã xếp hàng một cách nguyên tử, hoặc vứt nó đi.</span></div>
+  <div class="kv"><span class="k">Không quay lui</span><span class="v">Lỗi lúc chạy ở một lệnh không hoàn tác các lệnh khác — khác giao dịch SQL.</span></div>
+  <div class="kv"><span class="k">EXECABORT</span><span class="v">Lỗi lúc xếp hàng (lệnh lạ hoặc sai số tham số) huỷ cả khối trước khi bất cứ gì chạy.</span></div>
+  <div class="kv"><span class="k">Lỗi lúc chạy</span><span class="v">Lỗi sai kiểu tại EXEC để lại một kết quả nửa vời mà bạn phải tìm trong mảng trả về.</span></div>
+  <div class="kv"><span class="k">Khối nguyên tử</span><span class="v">Bảo đảm duy nhất: không lệnh của khách khác xen vào giữa các lệnh đã xếp hàng của bạn.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li><code>MULTI</code> xếp hàng các lệnh và <code>EXEC</code> chạy chúng mà không khách nào xen vào.</li>
+<li>Không có quay lui: một lỗi lúc chạy làm hỏng đúng lệnh đó và để phần còn lại chạy tiếp.</li>
+<li>Lỗi lúc xếp hàng huỷ tất cả (<code>EXECABORT</code>); lỗi lúc chạy cho một kết quả nửa vời.</li>
+<li>Bạn không thể đọc một giá trị rồi rẽ nhánh trong khối — muốn vậy phải dùng <code>WATCH</code> hoặc Lua.</li>
+</ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-4-nguyen-tu-rate-limit-lock" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.4 — Atomicity: rate limiting and locks done right</span><span class="lc-sub">Atomicity in real application code: rate limiting and distributed locks.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-4-nguyen-tu-rate-limit-lock" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.4 — Tính nguyên tử: giới hạn tần suất và khoá phân tán làm cho đúng</span><span class="lc-sub">Tính nguyên tử trong mã ứng dụng thật: giới hạn tần suất và khoá phân tán.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -439,6 +487,22 @@ LUA:   wall 4.1s · 12195 ops/s</div>
 </a>
 
 <p class="note-ct"><strong>Three things to remember.</strong> <code>WATCH</code> turns <code>EXEC</code> into compare-and-swap: a <code>nil</code> reply means a watched key changed and nothing ran, so the retry loop — <code>WATCH</code>, read, decide, <code>MULTI</code>, <code>EXEC</code>, check for nil — is the pattern, and it must re-watch from the top on every attempt. Watch before you read, <code>UNWATCH</code> when you decide not to write (an abandoned watch travels with a pooled connection and breaks someone else's transaction), and bound your retries with jitter or contention becomes livelock. And optimistic concurrency is a bet that conflicts are rare — on a genuinely hot key it collapses into retry amplification, and the answer is a single atomic command, a Lua script, or sharding the key.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">WATCH</span><span class="v">Marks keys so <code>EXEC</code> aborts if any of them changed since you watched.</span></div>
+  <div class="kv"><span class="k">Optimistic concurrency</span><span class="v">Bet that conflicts are rare; detect and retry rather than lock up front.</span></div>
+  <div class="kv"><span class="k">Compare-and-swap</span><span class="v">What <code>WATCH</code> + <code>EXEC</code> becomes — the write lands only if the watched state held.</span></div>
+  <div class="kv"><span class="k">nil EXEC reply</span><span class="v">Signals a watched key changed and nothing ran — the trigger to retry.</span></div>
+  <div class="kv"><span class="k">UNWATCH</span><span class="v">Clears watches when you decide not to write; an abandoned watch breaks a pooled connection.</span></div>
+  <div class="kv"><span class="k">Livelock</span><span class="v">Unbounded retries on a hot key; bound them with jitter or switch to Lua/sharding.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li><code>WATCH</code> turns <code>EXEC</code> into compare-and-swap: a <code>nil</code> reply means a watched key changed and nothing ran.</li>
+<li>The pattern is a retry loop — watch, read, decide, <code>MULTI</code>, <code>EXEC</code>, check nil — re-watching from the top each attempt.</li>
+<li>Watch before you read, <code>UNWATCH</code> when you abandon a write, and bound retries with jitter.</li>
+<li>Optimistic concurrency collapses on a genuinely hot key — use one atomic command, Lua, or sharding instead.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 7 · Bài 7.2</span>
@@ -581,6 +645,38 @@ LUA:   wall 4.1s · 12195 ops/s</div>
 </a>
 
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> <code>WATCH</code> biến <code>EXEC</code> thành so-sánh-rồi-tráo: một câu trả lời <code>nil</code> nghĩa là một khoá được canh đã đổi và không có gì chạy cả, nên vòng lặp thử lại — <code>WATCH</code>, đọc, quyết, <code>MULTI</code>, <code>EXEC</code>, kiểm nil — chính là cái khuôn, và nó phải canh lại từ đầu ở mỗi lần thử. Hãy canh trước khi đọc, hãy <code>UNWATCH</code> khi bạn quyết định không ghi (một phép canh bị bỏ rơi đi theo kết nối dùng chung và phá hỏng giao dịch của người khác), và hãy chặn số lần thử lại kèm nhiễu, nếu không tranh chấp sẽ thành khoá sống. Và kiểm soát đồng thời lạc quan là một ván cược rằng xung đột hiếm — trên một khoá thật sự nóng thì nó sụp thành khuếch đại thử lại, và đáp án là một lệnh nguyên tử duy nhất, một script Lua, hoặc chia nhỏ cái khoá.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">WATCH</span><span class="v">Đánh dấu khoá để <code>EXEC</code> huỷ nếu bất kỳ khoá nào đổi kể từ lúc canh.</span></div>
+  <div class="kv"><span class="k">Đồng thời lạc quan</span><span class="v">Cược rằng xung đột hiếm; phát hiện và thử lại thay vì khoá trước.</span></div>
+  <div class="kv"><span class="k">So-sánh-rồi-tráo</span><span class="v">Thứ mà <code>WATCH</code> + <code>EXEC</code> trở thành — ghi chỉ thành nếu trạng thái được canh vẫn giữ.</span></div>
+  <div class="kv"><span class="k">EXEC trả nil</span><span class="v">Báo một khoá được canh đã đổi và không gì chạy — tín hiệu để thử lại.</span></div>
+  <div class="kv"><span class="k">UNWATCH</span><span class="v">Xoá phép canh khi bạn quyết không ghi; một phép canh bị bỏ rơi phá kết nối dùng chung.</span></div>
+  <div class="kv"><span class="k">Khoá sống (livelock)</span><span class="v">Thử lại không chặn trên khoá nóng; hãy chặn bằng nhiễu hoặc chuyển sang Lua/chia khoá.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li><code>WATCH</code> biến <code>EXEC</code> thành so-sánh-rồi-tráo: trả <code>nil</code> nghĩa là khoá được canh đã đổi và không gì chạy.</li>
+<li>Khuôn là một vòng thử lại — canh, đọc, quyết, <code>MULTI</code>, <code>EXEC</code>, kiểm nil — canh lại từ đầu mỗi lần.</li>
+<li>Canh trước khi đọc, <code>UNWATCH</code> khi bỏ ý định ghi, và chặn số lần thử lại kèm nhiễu.</li>
+<li>Đồng thời lạc quan sụp trên một khoá thật sự nóng — hãy dùng một lệnh nguyên tử, Lua, hoặc chia khoá.</li>
+</ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-4-nguyen-tu-rate-limit-lock" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.4 — Atomicity: rate limiting and locks done right</span><span class="lc-sub">Optimistic and atomic updates in real application code: rate limiting and distributed locks.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-4-nguyen-tu-rate-limit-lock" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.4 — Tính nguyên tử: giới hạn tần suất và khoá phân tán làm cho đúng</span><span class="lc-sub">Cập nhật lạc quan và nguyên tử trong mã ứng dụng thật: giới hạn tần suất và khoá phân tán.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -752,6 +848,22 @@ OK
 </a>
 
 <p class="note-ct"><strong>Three things to remember.</strong> A Lua script is a critical section you get for free — read, branch and write in one atomic unit with one round trip — which is why it beats <code>WATCH</code> on any contended key. Declare every key in <code>KEYS</code>, never build key names inside the script and never interpolate user input into the body: the first breaks Cluster routing, the last is injection. And the conversion rules are where scripts actually go wrong: floats truncate, <code>false</code> becomes nil, tables stop at the first nil, and a missing key reads as <code>false</code> — so return <code>tostring(x)</code> for anything fractional and <code>1</code>/<code>0</code> for anything boolean.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">EVAL</span><span class="v">Runs a Lua script on the server as one atomic unit, in one round trip.</span></div>
+  <div class="kv"><span class="k">EVALSHA / SCRIPT LOAD</span><span class="v">Cache a script by its SHA and call it by hash to save bandwidth.</span></div>
+  <div class="kv"><span class="k">KEYS / ARGV</span><span class="v">Declare every key in <code>KEYS</code>; pass data in <code>ARGV</code> — never build key names inside.</span></div>
+  <div class="kv"><span class="k">Critical section</span><span class="v">Read, branch and write with no interleaving — why Lua beats <code>WATCH</code> on contended keys.</span></div>
+  <div class="kv"><span class="k">Type conversion</span><span class="v">Floats truncate, <code>false</code> becomes nil, tables stop at the first nil, a missing key reads as <code>false</code>.</span></div>
+  <div class="kv"><span class="k">Script injection</span><span class="v">Never interpolate user input into the script body — treat it like SQL injection.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>A Lua script is a free critical section: read, branch and write atomically in one round trip.</li>
+<li>Declare keys in <code>KEYS</code> for Cluster routing; never build key names or interpolate user input inside.</li>
+<li>Conversion rules bite — return <code>tostring(x)</code> for fractional values and <code>1</code>/<code>0</code> for booleans.</li>
+<li>Lua beats <code>WATCH</code> whenever a key is contended, because there is nothing to retry.</li>
+</ul>
 <a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-12-5-chia-se" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Applied in API Design — lesson 12.4: a Lua token bucket shared by two instances</span><span class="lc-sub">This lesson’s rules in a production script: the key passed in KEYS, the clock from Redis TIME instead of each server’s clock, tokens returned with tostring — measured on two API instances: 5 × 201, then 429.</span></span>
@@ -919,6 +1031,22 @@ OK
 </a>
 
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Một script Lua là một vùng tới hạn bạn có được miễn phí — đọc, rẽ nhánh và ghi trong một khối nguyên tử với một vòng đi-về — đó là lý do nó thắng <code>WATCH</code> trên mọi khoá bị tranh chấp. Hãy khai báo mọi khoá trong <code>KEYS</code>, đừng bao giờ ghép tên khoá bên trong script và đừng bao giờ nhét dữ liệu người dùng vào thân script: cái đầu phá vỡ định tuyến Cluster, cái cuối là tiêm mã. Và các luật chuyển đổi mới là chỗ script thật sự hỏng: số thực bị cắt cụt, <code>false</code> thành nil, bảng dừng ở nil đầu tiên, và một khoá vắng mặt đọc ra thành <code>false</code> — nên hãy trả về <code>tostring(x)</code> cho mọi thứ có phần lẻ và <code>1</code>/<code>0</code> cho mọi thứ mang tính đúng-sai.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">EVAL</span><span class="v">Chạy một script Lua trên máy chủ như một khối nguyên tử, trong một vòng đi-về.</span></div>
+  <div class="kv"><span class="k">EVALSHA / SCRIPT LOAD</span><span class="v">Lưu script theo SHA và gọi bằng băm để tiết kiệm băng thông.</span></div>
+  <div class="kv"><span class="k">KEYS / ARGV</span><span class="v">Khai mọi khoá trong <code>KEYS</code>; truyền dữ liệu qua <code>ARGV</code> — đừng ghép tên khoá bên trong.</span></div>
+  <div class="kv"><span class="k">Vùng tới hạn</span><span class="v">Đọc, rẽ nhánh và ghi không xen kẽ — vì sao Lua thắng <code>WATCH</code> trên khoá bị tranh chấp.</span></div>
+  <div class="kv"><span class="k">Luật chuyển đổi</span><span class="v">Số thực bị cắt, <code>false</code> thành nil, bảng dừng ở nil đầu, khoá vắng đọc ra <code>false</code>.</span></div>
+  <div class="kv"><span class="k">Tiêm script</span><span class="v">Đừng bao giờ nhét dữ liệu người dùng vào thân script — coi như tiêm SQL.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Một script Lua là một vùng tới hạn miễn phí: đọc, rẽ nhánh và ghi nguyên tử trong một vòng đi-về.</li>
+<li>Khai khoá trong <code>KEYS</code> cho định tuyến Cluster; đừng ghép tên khoá hay nhét dữ liệu người dùng bên trong.</li>
+<li>Luật chuyển đổi dễ cắn — trả <code>tostring(x)</code> cho giá trị có phần lẻ và <code>1</code>/<code>0</code> cho đúng-sai.</li>
+<li>Lua thắng <code>WATCH</code> mỗi khi một khoá bị tranh chấp, vì không có gì phải thử lại.</li>
+</ul>
 <a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-12-5-chia-se" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Áp vào API Design — bài 12.4: token bucket Lua dùng chung cho hai instance</span><span class="lc-sub">Các luật của bài này trong một script chạy thật: khoá truyền qua KEYS, giờ lấy từ TIME của Redis thay vì đồng hồ từng máy, số token trả bằng tostring — đo trên hai instance API: 5 × 201, rồi 429.</span></span>
@@ -1069,6 +1197,22 @@ await redis.fCall('reserve', { keys: ['stock:4201', 'reserved:4201'],
 </a>
 
 <p class="note-ct"><strong>Three things to remember.</strong> Functions are Lua with a different lifecycle: named libraries that persist in the RDB, replicate to replicas and survive restarts and failovers — which removes SHA management and the entire <code>NOSCRIPT</code> fallback path. The syntax differences are small but real: a <code>#!lua name=…</code> shebang on line one, callbacks taking <code>(keys, args)</code> as parameters instead of the <code>KEYS</code>/<code>ARGV</code> globals, and <code>register_function</code> to expose them. And the choice is about ownership, not size: <code>EVAL</code> for logic one service owns, Functions for logic several services depend on — with a version check on every environment, because 7.0 is recent and managed hosts often disable programmability outright.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Redis Functions</span><span class="v">Named Lua libraries that persist in the RDB, replicate and survive restarts and failovers.</span></div>
+  <div class="kv"><span class="k">FUNCTION LOAD</span><span class="v">Registers a library on the server once; no per-call SHA management.</span></div>
+  <div class="kv"><span class="k">Shebang line</span><span class="v"><code>#!lua name=…</code> on line one declares the library name.</span></div>
+  <div class="kv"><span class="k">register_function</span><span class="v">Exposes a callback that takes <code>(keys, args)</code> instead of the <code>KEYS</code>/<code>ARGV</code> globals.</span></div>
+  <div class="kv"><span class="k">FCALL</span><span class="v">Invokes a registered function by name — the Functions equivalent of <code>EVALSHA</code>.</span></div>
+  <div class="kv"><span class="k">Version floor 7.0</span><span class="v">Functions arrived in 7.0; check it, as managed hosts often disable programmability.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>Functions are Lua with a lifecycle: named libraries that persist, replicate and survive restarts.</li>
+<li>They remove SHA management and the entire <code>NOSCRIPT</code> fallback path.</li>
+<li>Syntax differs: a <code>#!lua name=…</code> shebang, callbacks taking <code>(keys, args)</code>, and <code>register_function</code>.</li>
+<li>Choose by ownership: <code>EVAL</code> for logic one service owns, Functions for logic several services share — and check for 7.0.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 7 · Bài 7.4</span>
@@ -1205,6 +1349,38 @@ await redis.fCall('reserve', { keys: ['stock:4201', 'reserved:4201'],
 </a>
 
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Functions là Lua với một vòng đời khác: những thư viện có tên tồn tại lâu dài trong RDB, nhân bản sang bản sao và sống sót qua khởi động lại cùng chuyển đổi — điều đó gỡ bỏ việc quản lý SHA và trọn cái nhánh lùi cho <code>NOSCRIPT</code>. Khác biệt cú pháp thì nhỏ mà có thật: một dòng shebang <code>#!lua name=…</code> ở dòng một, hàm gọi lại nhận <code>(keys, args)</code> làm tham số thay cho các biến toàn cục <code>KEYS</code>/<code>ARGV</code>, và <code>register_function</code> để phơi chúng ra. Và lựa chọn nằm ở quyền sở hữu chứ không nằm ở kích thước: <code>EVAL</code> cho logic mà một dịch vụ sở hữu, Functions cho logic mà nhiều dịch vụ phụ thuộc vào — kèm một phép kiểm phiên bản trên mọi môi trường, vì 7.0 còn mới và các dịch vụ có quản lý thường tắt hẳn khả năng lập trình.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Redis Functions</span><span class="v">Thư viện Lua có tên tồn tại trong RDB, nhân bản và sống sót qua khởi động lại cùng chuyển đổi.</span></div>
+  <div class="kv"><span class="k">FUNCTION LOAD</span><span class="v">Đăng ký một thư viện trên máy chủ một lần; không phải quản lý SHA mỗi lần gọi.</span></div>
+  <div class="kv"><span class="k">Dòng shebang</span><span class="v"><code>#!lua name=…</code> ở dòng một khai tên thư viện.</span></div>
+  <div class="kv"><span class="k">register_function</span><span class="v">Phơi một hàm gọi lại nhận <code>(keys, args)</code> thay cho biến toàn cục <code>KEYS</code>/<code>ARGV</code>.</span></div>
+  <div class="kv"><span class="k">FCALL</span><span class="v">Gọi một function đã đăng ký theo tên — tương đương <code>EVALSHA</code> của Functions.</span></div>
+  <div class="kv"><span class="k">Sàn phiên bản 7.0</span><span class="v">Functions có từ 7.0; hãy kiểm, vì dịch vụ có quản lý hay tắt khả năng lập trình.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Functions là Lua với một vòng đời: thư viện có tên tồn tại lâu dài, nhân bản và sống sót qua khởi động lại.</li>
+<li>Chúng gỡ bỏ việc quản lý SHA và trọn nhánh lùi <code>NOSCRIPT</code>.</li>
+<li>Cú pháp khác: shebang <code>#!lua name=…</code>, hàm gọi lại nhận <code>(keys, args)</code>, và <code>register_function</code>.</li>
+<li>Chọn theo quyền sở hữu: <code>EVAL</code> cho logic một dịch vụ sở hữu, Functions cho logic nhiều dịch vụ dùng chung — và kiểm 7.0.</li>
+</ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-4-nguyen-tu-rate-limit-lock" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.4 — Atomicity: rate limiting and locks done right</span><span class="lc-sub">Server-side atomic logic used from a Node application: rate limiting and distributed locks.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-4-nguyen-tu-rate-limit-lock" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.4 — Tính nguyên tử: giới hạn tần suất và khoá phân tán làm cho đúng</span><span class="lc-sub">Logic nguyên tử phía máy chủ dùng từ một ứng dụng Node: giới hạn tần suất và khoá phân tán.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -1332,6 +1508,22 @@ const timer = setInterval(async () =&gt; {
 </a>
 
 <p class="note-ct"><strong>Three things to remember.</strong> Before writing a lock, check whether a single atomic command, a Lua script, or the database's own transaction already does the job — most locks in the wild are guarding something Redis or Postgres was already guarding. When you do write one, it is <code>SET key token NX PX ttl</code> to acquire and a Lua compare-and-delete to release, never a bare <code>DEL</code>. And the guarantee is a lease, not mutual exclusion: a paused process wakes up believing it still holds an expired lock, which no TTL, no Redlock and no configuration prevents — so use locks for efficiency and get correctness from fencing tokens, unique constraints or idempotency keys.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">SET NX PX</span><span class="v">Acquire a lock atomically: set only if absent (<code>NX</code>) with a millisecond TTL (<code>PX</code>).</span></div>
+  <div class="kv"><span class="k">Unique token</span><span class="v">A random value stored as the lock, so only the holder can release it.</span></div>
+  <div class="kv"><span class="k">Compare-and-delete</span><span class="v">Release with a Lua check-then-<code>DEL</code>, never a bare <code>DEL</code> that could free someone else's lock.</span></div>
+  <div class="kv"><span class="k">Lease, not mutual exclusion</span><span class="v">A TTL lock is a timed lease; a paused process can wake believing it still holds it.</span></div>
+  <div class="kv"><span class="k">Redlock</span><span class="v">The multi-node lock algorithm — still a lease, not a correctness guarantee.</span></div>
+  <div class="kv"><span class="k">Fencing token</span><span class="v">A monotonic number the protected resource checks, giving the correctness a lock cannot.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>First check whether an atomic command, a Lua script, or a DB transaction already does the job.</li>
+<li>Acquire with <code>SET key token NX PX ttl</code>; release with a Lua compare-and-delete, never a bare <code>DEL</code>.</li>
+<li>A TTL lock is a lease, not mutual exclusion — a paused process can wake holding an expired lock.</li>
+<li>No TTL, Redlock or config fixes that — get correctness from fencing tokens, unique constraints or idempotency keys.</li>
+</ul>
 <a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-4-nguyen-tu-rate-limit-lock" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 12.4: locks done right, measured</span><span class="lc-sub">A 300 ms lock and a 400 ms job: worker-1's DEL removes worker-2's lock; with a random token and a Lua compare-and-delete it deletes 0. Plus 500 parallel requests through a limit of 100 with GET→SET, and three Lua rate limiters (0.34–0.37 ms each).</span></span>
@@ -1455,6 +1647,22 @@ const timer = setInterval(async () =&gt; {
 </a>
 
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Trước khi viết một cái khoá, hãy kiểm xem một lệnh nguyên tử đơn, một script Lua, hay chính giao dịch của cơ sở dữ liệu đã làm được việc đó chưa — phần lớn khoá ngoài đời đang canh gác thứ mà Redis hoặc Postgres vốn đã canh sẵn. Khi bạn thật sự viết một cái, nó là <code>SET key token NX PX ttl</code> để giành và một phép so-sánh-rồi-xoá bằng Lua để nhả, không bao giờ là một lệnh <code>DEL</code> trơn. Và cái bảo đảm ở đây là một hợp đồng thuê, không phải loại trừ lẫn nhau: một tiến trình bị tạm dừng tỉnh dậy và tin rằng nó vẫn giữ một cái khoá đã hết hạn, điều mà không TTL nào, không Redlock nào và không cấu hình nào ngăn được — nên hãy dùng khoá cho hiệu quả và lấy tính đúng đắn từ mã hàng rào, ràng buộc duy nhất hoặc khoá chống trùng.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">SET NX PX</span><span class="v">Giành khoá nguyên tử: đặt chỉ khi vắng (<code>NX</code>) kèm TTL tính bằng mili giây (<code>PX</code>).</span></div>
+  <div class="kv"><span class="k">Token duy nhất</span><span class="v">Một giá trị ngẫu nhiên lưu làm khoá, để chỉ người giữ mới nhả được.</span></div>
+  <div class="kv"><span class="k">So-sánh-rồi-xoá</span><span class="v">Nhả bằng Lua kiểm-rồi-<code>DEL</code>, không bao giờ một <code>DEL</code> trơn làm nhả nhầm khoá người khác.</span></div>
+  <div class="kv"><span class="k">Hợp đồng thuê, không loại trừ</span><span class="v">Khoá có TTL là một hợp đồng thuê có hạn; tiến trình bị dừng có thể tỉnh dậy tin mình vẫn giữ.</span></div>
+  <div class="kv"><span class="k">Redlock</span><span class="v">Thuật toán khoá nhiều nút — vẫn là hợp đồng thuê, không phải bảo đảm tính đúng.</span></div>
+  <div class="kv"><span class="k">Mã hàng rào</span><span class="v">Một con số tăng đều mà tài nguyên được bảo vệ kiểm, cho tính đúng mà khoá không cho được.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Trước hết kiểm xem một lệnh nguyên tử, một script Lua, hay một giao dịch DB đã làm được việc chưa.</li>
+<li>Giành bằng <code>SET key token NX PX ttl</code>; nhả bằng Lua so-sánh-rồi-xoá, không bao giờ một <code>DEL</code> trơn.</li>
+<li>Khoá có TTL là hợp đồng thuê, không phải loại trừ lẫn nhau — tiến trình bị dừng có thể tỉnh dậy giữ một khoá đã hết hạn.</li>
+<li>Không TTL, Redlock hay cấu hình nào sửa được điều đó — lấy tính đúng từ mã hàng rào, ràng buộc duy nhất hoặc khoá chống trùng.</li>
+</ul>
 <a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-4-nguyen-tu-rate-limit-lock" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 12.4: khoá làm cho đúng, đo thật</span><span class="lc-sub">Khoá 300 ms, việc 400 ms: DEL của worker-1 xoá khoá của worker-2; có token ngẫu nhiên và Lua so-rồi-xoá thì xoá 0. Kèm 500 request song song lọt giới hạn 100 với GET→SET, và ba bộ giới hạn bằng Lua (0,34–0,37 ms mỗi lần).</span></span>

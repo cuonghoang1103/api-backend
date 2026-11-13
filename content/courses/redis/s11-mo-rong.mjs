@@ -137,6 +137,23 @@ OK
 </a>
 
 <p class="note-ct"><strong>Three things to remember.</strong> <code>REPLICAOF</code> is one runtime command, but the first sync forks the primary exactly like a <code>BGSAVE</code> and buffers every write made during the transfer — so attaching a replica to a nearly-full primary at peak traffic is a capacity event, not a configuration change. The replication backlog is 1 MB by default, which covers about one second of disconnection on a busy instance: raise it, and watch <code>sync_full</code> against <code>sync_partial_ok</code> to know whether reconnects are cheap. And the best reason to run a replica even without failover is that backups can fork there instead of on the primary.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">REPLICAOF</span><span class="v">The runtime command that makes a server a replica of another; <code>REPLICAOF NO ONE</code> promotes it back to a primary.</span></div>
+  <div class="kv"><span class="k">PSYNC</span><span class="v">The sync handshake: the replica offers a replication ID so the primary can answer with a partial resync when possible.</span></div>
+  <div class="kv"><span class="k">Full resync</span><span class="v">Primary forks, writes an RDB and streams it — the same fork cost as a <code>BGSAVE</code>.</span></div>
+  <div class="kv"><span class="k">Replication backlog</span><span class="v">A ring buffer of recent writes (<code>repl-backlog-size</code>, 1 MB default) that decides whether a reconnect is partial or full.</span></div>
+  <div class="kv"><span class="k">Diskless sync</span><span class="v">The forked child streams the RDB straight to the socket instead of a file; the default since 7.0.</span></div>
+  <div class="kv"><span class="k">Replication offset</span><span class="v">The byte position in the write stream; primary offset minus replica offset is the lag.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li><code>REPLICAOF</code> is one command, but the first sync forks the primary like a <code>BGSAVE</code> and buffers every write during the transfer.</li>
+<li>The backlog is 1 MB by default — about one second of writes on a busy instance; raise it so reconnects stay partial.</li>
+<li>Watch <code>sync_full</code> against <code>sync_partial_ok</code>: a rising <code>sync_full</code> means the backlog or the output buffer is too small.</li>
+<li>Attach replicas during a quiet period and keep 60–70% of RAM free for the fork, because the first sync is a capacity event.</li>
+<li>A replica is worth running even without failover, because backups can fork there instead of on the primary.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 11 · Bài 11.1</span>
@@ -256,6 +273,39 @@ OK
 </a>
 
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> <code>REPLICAOF</code> chỉ là một lệnh chạy lúc đang chạy, nhưng lần đồng bộ đầu tiên fork bản chính đúng như một lệnh <code>BGSAVE</code> và đệm lại mọi lượt ghi thực hiện trong lúc truyền — nên gắn một bản sao vào một bản chính gần đầy lúc cao điểm là một sự kiện về dung lượng chứ không phải một thay đổi cấu hình. Bộ đệm nhân bản mặc định là 1 MB, phủ được khoảng một giây mất kết nối trên một máy bận: hãy nâng nó lên, và theo dõi <code>sync_full</code> đối chiếu <code>sync_partial_ok</code> để biết các lần nối lại có rẻ không. Và lý do hay nhất để chạy một bản sao kể cả khi không cần chuyển đổi tự động là việc sao lưu có thể fork ở đó thay vì fork trên bản chính.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">REPLICAOF</span><span class="v">Lệnh chạy lúc đang chạy biến một máy chủ thành bản sao của máy khác; <code>REPLICAOF NO ONE</code> thăng nó trở lại thành bản chính.</span></div>
+  <div class="kv"><span class="k">PSYNC</span><span class="v">Cú bắt tay đồng bộ: bản sao chìa ra một replication ID để bản chính trả lời bằng đồng bộ một phần khi có thể.</span></div>
+  <div class="kv"><span class="k">Full resync</span><span class="v">Bản chính fork, ghi một tệp RDB rồi đổ đi — đúng chi phí fork của một lệnh <code>BGSAVE</code>.</span></div>
+  <div class="kv"><span class="k">Replication backlog</span><span class="v">Bộ đệm vòng chứa các lượt ghi gần đây (<code>repl-backlog-size</code>, mặc định 1 MB) quyết định một lần nối lại là một phần hay đầy đủ.</span></div>
+  <div class="kv"><span class="k">Diskless sync</span><span class="v">Tiến trình con fork ra đổ RDB thẳng vào socket thay vì ghi tệp; mặc định từ bản 7.0.</span></div>
+  <div class="kv"><span class="k">Replication offset</span><span class="v">Vị trí byte trong dòng ghi; offset bản chính trừ offset bản sao là độ trễ.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li><code>REPLICAOF</code> chỉ là một lệnh, nhưng lần đồng bộ đầu tiên fork bản chính như một <code>BGSAVE</code> và đệm mọi lượt ghi trong lúc truyền.</li>
+<li>Bộ đệm nhân bản mặc định 1 MB — khoảng một giây lượt ghi trên máy bận; hãy nâng nó để các lần nối lại giữ được là một phần.</li>
+<li>Theo dõi <code>sync_full</code> đối chiếu <code>sync_partial_ok</code>: <code>sync_full</code> tăng nghĩa là bộ đệm nhân bản hoặc bộ đệm đầu ra quá nhỏ.</li>
+<li>Gắn bản sao lúc vắng và chừa 60–70% RAM cho cú fork, vì lần đồng bộ đầu tiên là một sự kiện về dung lượng.</li>
+<li>Một bản sao đáng chạy kể cả khi không cần chuyển đổi, vì việc sao lưu có thể fork ở đó thay vì trên bản chính.</li>
+</ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-12-5-chia-se" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">API Design · 12.4 — Two instances, one truth: rate limits, idempotency, ETags and tickets shared</span><span class="lc-sub">Two API instances sharing one Redis for rate limits and duplicate protection — the reason that Redis must not lose data.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-12-5-chia-se" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">API Design · 12.4 — Hai instance, một sự thật: dùng chung rate limit, idempotency, ETag và vé</span><span class="lc-sub">Hai bản API dùng chung một Redis cho giới hạn tần suất và chống trùng — lý do Redis ấy không được mất dữ liệu.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -359,6 +409,23 @@ slave0:ip=127.0.0.1,port=6380,state=online,offset=1841204,lag=0
 </a>
 
 <p class="note-ct"><strong>Three things to remember.</strong> Replication is asynchronous, so a write that returned <code>+OK</code> can be lost if the primary dies before it reaches a replica — <code>WAIT</code> and <code>WAITAOF</code> narrow that window and do not close it, and their return values are answers your code must actually check. <code>min-replicas-to-write</code> is a CAP decision written into the config file: the primary refuses writes rather than accept ones that may not survive, which is right for orders and wrong for a cache. And a replica is not high availability: nothing promotes it, nothing tells your clients, so without Sentinel or Cluster a primary failure is a manual runbook executed at 3am.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Asynchronous replication</span><span class="v">The primary acknowledges a write before sending it to replicas, so a failover can lose an acknowledged write.</span></div>
+  <div class="kv"><span class="k">WAIT</span><span class="v"><code>WAIT numreplicas timeout</code> blocks until that many replicas confirm the current offset and returns how many did.</span></div>
+  <div class="kv"><span class="k">WAITAOF</span><span class="v">Waits for the local and replicas' AOF fsync (7.0); the strongest guarantee, at a disk round trip per call.</span></div>
+  <div class="kv"><span class="k">min-replicas-to-write</span><span class="v">The primary refuses writes when too few replicas have pinged recently — a CAP decision in the config file.</span></div>
+  <div class="kv"><span class="k">Replica read</span><span class="v">Reading from a lagging replica can return a stale value and break read-your-writes.</span></div>
+  <div class="kv"><span class="k">replica-serve-stale-data</span><span class="v">A replica keeps serving what it has while the primary link is down (default <code>yes</code>).</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>Replication is asynchronous: a write that returned <code>+OK</code> can vanish in a failover before it reaches a replica.</li>
+<li><code>WAIT</code> and <code>WAITAOF</code> narrow that window and return counts your code must check — they are not synchronous replication.</li>
+<li><code>min-replicas-to-write</code> trades availability for safety: right for orders, wrong for a cache.</li>
+<li>Replicas do not expire keys themselves and can serve stale reads, so pin reads after a write or do not cache from a replica.</li>
+<li>A replica is not high availability — without Sentinel or Cluster nothing promotes it and nothing retargets your clients.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 11 · Bài 11.2</span>
@@ -453,6 +520,39 @@ slave0:ip=127.0.0.1,port=6380,state=online,offset=1841204,lag=0
 </a>
 
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Nhân bản là bất đồng bộ, nên một lượt ghi đã trả về <code>+OK</code> vẫn mất được nếu bản chính chết trước khi nó tới bản sao — <code>WAIT</code> và <code>WAITAOF</code> thu hẹp cửa sổ ấy chứ không đóng nó, và giá trị chúng trả về là những câu trả lời mà mã của bạn phải thật sự kiểm. <code>min-replicas-to-write</code> là một quyết định CAP viết thẳng vào tệp cấu hình: bản chính từ chối lượt ghi thay vì nhận những lượt có thể không sống sót, điều đó đúng cho đơn hàng và sai cho một bộ đệm. Và một bản sao không phải là sẵn sàng cao: không gì thăng cấp nó, không gì báo cho các thư viện khách của bạn, nên nếu không có Sentinel hay Cluster thì một cú hỏng của bản chính là một cuốn sổ tay thi hành bằng tay lúc 3 giờ sáng.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Asynchronous replication</span><span class="v">Bản chính xác nhận một lượt ghi trước khi gửi sang bản sao, nên một lần chuyển đổi có thể làm mất lượt ghi đã xác nhận.</span></div>
+  <div class="kv"><span class="k">WAIT</span><span class="v"><code>WAIT numreplicas timeout</code> chặn cho tới khi chừng ấy bản sao xác nhận offset hiện tại rồi trả về con số đã xác nhận.</span></div>
+  <div class="kv"><span class="k">WAITAOF</span><span class="v">Chờ lần fsync AOF tại chỗ và của các bản sao (7.0); bảo đảm mạnh nhất, tốn một vòng xuống đĩa mỗi lời gọi.</span></div>
+  <div class="kv"><span class="k">min-replicas-to-write</span><span class="v">Bản chính từ chối ghi khi quá ít bản sao vừa ping — một quyết định CAP ngay trong tệp cấu hình.</span></div>
+  <div class="kv"><span class="k">Replica read</span><span class="v">Đọc từ một bản sao đang tụt lại có thể trả giá trị ôi và làm hỏng đọc-thấy-cái-mình-vừa-ghi.</span></div>
+  <div class="kv"><span class="k">replica-serve-stale-data</span><span class="v">Bản sao vẫn phục vụ thứ nó có khi mất liên kết với bản chính (mặc định <code>yes</code>).</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Nhân bản là bất đồng bộ: một lượt ghi đã trả <code>+OK</code> vẫn mất được trong một lần chuyển đổi trước khi tới bản sao.</li>
+<li><code>WAIT</code> và <code>WAITAOF</code> thu hẹp cửa sổ ấy và trả về con số mã của bạn phải kiểm — chúng không phải nhân bản đồng bộ.</li>
+<li><code>min-replicas-to-write</code> đổi tính sẵn sàng lấy an toàn: đúng cho đơn hàng, sai cho một bộ đệm.</li>
+<li>Bản sao không tự cho khoá hết hạn và có thể phục vụ dữ liệu ôi, nên hãy ghim lượt đọc sau một lượt ghi hoặc đừng nạp bộ đệm từ bản sao.</li>
+<li>Một bản sao không phải sẵn sàng cao — không có Sentinel hay Cluster thì không gì thăng cấp nó và không gì trỏ lại các thư viện khách.</li>
+</ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-2-cache-aside" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.2 — Cache-aside: the pattern and its four betrayals</span><span class="lc-sub">The four betrayals of cache-aside — including refilling the cache from a stale value.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-2-cache-aside" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.2 — Cache-aside: khuôn mẫu và bốn lần nó phản chủ</span><span class="lc-sub">Bốn lần cache-aside phản chủ — có cả nạp lại bộ đệm từ một giá trị ôi.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -569,6 +669,23 @@ await client.connect();</code></pre>
 </a>
 
 <p class="note-ct"><strong>Three things to remember.</strong> Sentinel does four things and the fourth — being the configuration provider clients ask for the current primary — is the one that makes the other three useful; a failover nobody is told about is an outage. Quorum and majority are different numbers: <code>quorum</code> decides when the primary is declared objectively down, while a majority of the whole Sentinel set must authorise the leader that performs the failover, which is why three Sentinels on three separate hosts is the minimum and why <code>quorum 1</code> does not let a lone Sentinel act. And rehearse with <code>SENTINEL failover</code> before you need it — it is a real failover on demand, and it is the only test that proves your clients follow the switch.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Sentinel</span><span class="v">A separate Redis process that monitors the primary, notifies, fails over, and tells clients the current primary.</span></div>
+  <div class="kv"><span class="k">SDOWN</span><span class="v">Subjectively down: one Sentinel's private opinion that the primary is unreachable.</span></div>
+  <div class="kv"><span class="k">ODOWN</span><span class="v">Objectively down: a quorum of Sentinels agree, which starts a failover attempt.</span></div>
+  <div class="kv"><span class="k">Quorum</span><span class="v">How many Sentinels must agree on ODOWN — the trailing number in <code>sentinel monitor</code>.</span></div>
+  <div class="kv"><span class="k">Majority</span><span class="v">A majority of the whole Sentinel set must authorise the leader that actually performs the failover.</span></div>
+  <div class="kv"><span class="k">Configuration provider</span><span class="v">Clients ask a Sentinel for the current primary instead of connecting to a fixed address.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>Sentinel does four jobs, and being the configuration provider is the one that makes failover useful.</li>
+<li>Quorum declares the primary objectively down; a majority of all Sentinels must authorise the leader — different numbers.</li>
+<li>Three Sentinels on three hosts is the minimum, and <code>quorum 1</code> still needs 2 of 3 to act.</li>
+<li>Clients must query Sentinel or sit behind a proxy that does; a hard-coded primary IP defeats a perfect failover, and DNS does not work.</li>
+<li>Rehearse with <code>SENTINEL failover</code> — a real failover on demand, and the only test that proves clients follow the switch.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 11 · Bài 11.3</span>
@@ -676,6 +793,39 @@ await client.connect();</code></pre>
 </a>
 
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Sentinel làm bốn việc và việc thứ tư — làm nơi cung cấp cấu hình để thư viện khách hỏi bản chính hiện tại — mới là thứ khiến ba việc kia có ích; một lần chuyển đổi mà không ai được báo là một sự cố. Quorum và đa số là hai con số khác nhau: <code>quorum</code> quyết định khi nào bản chính bị tuyên là chết một cách khách quan, còn đa số của toàn bộ tập Sentinel phải cho phép cái trưởng nhóm thực hiện chuyển đổi, đó là lý do ba Sentinel trên ba máy riêng biệt là mức tối thiểu và là lý do <code>quorum 1</code> không cho một Sentinel đơn độc hành động. Và hãy diễn tập bằng <code>SENTINEL failover</code> trước khi bạn cần tới — nó là một lần chuyển đổi thật theo yêu cầu, và là phép thử duy nhất chứng minh các thư viện khách của bạn bám theo được cú chuyển.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Sentinel</span><span class="v">Một tiến trình Redis riêng canh bản chính, thông báo, chuyển đổi, và báo cho thư viện khách bản chính hiện tại.</span></div>
+  <div class="kv"><span class="k">SDOWN</span><span class="v">Chết theo cảm nhận riêng: ý kiến riêng của một Sentinel rằng bản chính không với tới được.</span></div>
+  <div class="kv"><span class="k">ODOWN</span><span class="v">Chết một cách khách quan: một quorum Sentinel đồng ý, việc này khởi động một lần thử chuyển đổi.</span></div>
+  <div class="kv"><span class="k">Quorum</span><span class="v">Bao nhiêu Sentinel phải đồng ý về ODOWN — con số ở cuối dòng <code>sentinel monitor</code>.</span></div>
+  <div class="kv"><span class="k">Majority</span><span class="v">Đa số của toàn bộ tập Sentinel phải cho phép cái trưởng nhóm thật sự thực hiện chuyển đổi.</span></div>
+  <div class="kv"><span class="k">Configuration provider</span><span class="v">Thư viện khách hỏi một Sentinel bản chính hiện tại thay vì nối vào một địa chỉ cố định.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Sentinel làm bốn việc, và làm nơi cung cấp cấu hình mới là thứ khiến chuyển đổi có ích.</li>
+<li>Quorum tuyên bản chính chết khách quan; đa số của toàn bộ Sentinel phải cho phép trưởng nhóm — hai con số khác nhau.</li>
+<li>Ba Sentinel trên ba máy là mức tối thiểu, và <code>quorum 1</code> vẫn cần 2 trên 3 để hành động.</li>
+<li>Thư viện khách phải hỏi Sentinel hoặc đứng sau một proxy làm việc đó; ghim cứng IP bản chính phá hỏng một lần chuyển đổi hoàn hảo, và DNS thì không chạy.</li>
+<li>Hãy diễn tập bằng <code>SENTINEL failover</code> — một lần chuyển đổi thật theo yêu cầu, và là phép thử duy nhất chứng minh thư viện khách bám theo.</li>
+</ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-12-5-chia-se" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">API Design · 12.4 — Two instances, one truth: rate limits, idempotency, ETags and tickets shared</span><span class="lc-sub">Two API instances share one Redis — which needs Sentinel so it does not become a single point of failure.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-12-5-chia-se" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">API Design · 12.4 — Hai instance, một sự thật: dùng chung rate limit, idempotency, ETag và vé</span><span class="lc-sub">Hai bản API dùng chung một Redis — Redis ấy cần Sentinel để không thành điểm chết duy nhất.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -793,6 +943,23 @@ Moving 4096 slots from 10.0.1.5:6379 to 10.0.1.11:6379
 </a>
 
 <p class="note-ct"><strong>Three things to remember.</strong> Cluster maps every key to one of 16384 slots with <code>CRC16(key) mod 16384</code>, nodes own slot ranges, and clients compute the slot locally and connect straight to the right node — <code>MOVED</code> and <code>ASK</code> are the correction mechanism, not the normal path, so a cluster-aware client is mandatory. Multi-key commands require all keys in one slot: <code>MGET</code>, <code>SINTER</code>, <code>MULTI</code> and multi-key Lua all fail with <code>CROSSSLOT</code>, and hash tags <code>{…}</code> are the escape hatch that re-creates the problem if you choose them too broadly. And Cluster answers one question — a dataset bigger than one machine — so check TTLs, encodings and stream retention before accepting <code>CROSSSLOT</code>, per-node <code>SCAN</code> and resharding as permanent costs.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Hash slot</span><span class="v">One of 16384 buckets each key maps to; each node owns a range of slots.</span></div>
+  <div class="kv"><span class="k">CRC16</span><span class="v"><code>CRC16(key) mod 16384</code> gives a key's slot deterministically, computed by the client.</span></div>
+  <div class="kv"><span class="k">MOVED</span><span class="v">A permanent redirect: the slot lives on another node, so refresh the whole slot map.</span></div>
+  <div class="kv"><span class="k">ASK</span><span class="v">A one-time redirect during a slot migration; send <code>ASKING</code> first and do not update the map.</span></div>
+  <div class="kv"><span class="k">Hash tag</span><span class="v">Braces in a key force keys into one slot, so a multi-key command on them is legal.</span></div>
+  <div class="kv"><span class="k">CROSSSLOT</span><span class="v">The error when a multi-key command's keys do not hash to the same slot.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>Every key maps to one of 16384 slots by <code>CRC16(key) mod 16384</code>; a cluster-aware client computes it and connects directly.</li>
+<li><code>MOVED</code> and <code>ASK</code> are the correction mechanism, not the normal path — a non-cluster client "works, badly".</li>
+<li>Multi-key commands require one slot; hash tags are the escape hatch, but a tag chosen too broadly puts the whole dataset back on one node.</li>
+<li>Cluster also costs one database, cheap Pub/Sub, whole-keyspace operations, and a six-node minimum.</li>
+<li>Cluster solves only "bigger than one machine" — try TTLs, encodings and stream retention first.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 11 · Bài 11.4</span>
@@ -901,6 +1068,39 @@ Moving 4096 slots from 10.0.1.5:6379 to 10.0.1.11:6379
 </a>
 
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Cluster ánh xạ mọi khoá về một trong 16384 ô bằng <code>CRC16(khoá) chia dư 16384</code>, các nút sở hữu những dải ô, và thư viện khách tự tính ô tại chỗ rồi nối thẳng vào đúng nút — <code>MOVED</code> và <code>ASK</code> là cơ chế sửa sai chứ không phải đường đi bình thường, nên một thư viện khách hiểu cụm là bắt buộc. Các lệnh nhiều khoá đòi mọi khoá nằm trong một ô: <code>MGET</code>, <code>SINTER</code>, <code>MULTI</code> và Lua nhiều khoá đều hỏng với <code>CROSSSLOT</code>, còn nhãn băm <code>{…}</code> là lối thoát, và nó dựng lại chính cái bài toán ấy nếu bạn chọn nhãn quá rộng. Và Cluster trả lời đúng một câu hỏi — một tập dữ liệu lớn hơn một cái máy — nên hãy kiểm TTL, kiểu mã hoá và thời gian lưu của stream trước khi chấp nhận <code>CROSSSLOT</code>, <code>SCAN</code> theo từng nút và việc chia lại ô làm những chi phí vĩnh viễn.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Hash slot</span><span class="v">Một trong 16384 ô mà mỗi khoá ánh xạ về; mỗi nút sở hữu một dải ô.</span></div>
+  <div class="kv"><span class="k">CRC16</span><span class="v"><code>CRC16(khoá) chia dư 16384</code> cho ra ô của một khoá một cách tất định, do thư viện khách tự tính.</span></div>
+  <div class="kv"><span class="k">MOVED</span><span class="v">Chuyển hướng vĩnh viễn: cái ô nằm ở nút khác, nên hãy làm mới cả bản đồ ô.</span></div>
+  <div class="kv"><span class="k">ASK</span><span class="v">Chuyển hướng một lần trong lúc một ô đang di trú; gửi <code>ASKING</code> trước và đừng cập nhật bản đồ.</span></div>
+  <div class="kv"><span class="k">Hash tag</span><span class="v">Cặp ngoặc nhọn trong khoá ép các khoá về một ô, để một lệnh nhiều khoá trên chúng hợp lệ.</span></div>
+  <div class="kv"><span class="k">CROSSSLOT</span><span class="v">Lỗi khi các khoá của một lệnh nhiều khoá không băm về cùng một ô.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Mọi khoá ánh xạ về một trong 16384 ô bằng <code>CRC16(khoá) chia dư 16384</code>; một thư viện khách hiểu cụm tự tính rồi nối thẳng.</li>
+<li><code>MOVED</code> và <code>ASK</code> là cơ chế sửa sai, không phải đường đi bình thường — một thư viện không hiểu cụm "chạy, nhưng tệ".</li>
+<li>Lệnh nhiều khoá đòi một ô; nhãn băm là lối thoát, nhưng một nhãn quá rộng đưa cả tập dữ liệu về lại một nút.</li>
+<li>Cluster còn lấy đi nhiều cơ sở dữ liệu, Pub/Sub giá rẻ, các phép trên toàn bộ không gian khoá, và tối thiểu sáu nút.</li>
+<li>Cluster chỉ giải "lớn hơn một cái máy" — hãy thử TTL, kiểu mã hoá và thời gian lưu stream trước.</li>
+</ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-3-cau-truc-du-lieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.3 — Picking the right structure is worth 95× the RAM</span><span class="lc-sub">The right data structure can save far more RAM than adding nodes — try it before moving to Cluster.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-3-cau-truc-du-lieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.3 — Chọn đúng cấu trúc dữ liệu đáng giá 95 lần RAM</span><span class="lc-sub">Đúng cấu trúc dữ liệu có thể tiết kiệm RAM hơn hẳn việc thêm nút — thử trước khi lên Cluster.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -991,6 +1191,23 @@ db0:keys=1842033,expires=1799210,avg_ttl=241833</div>
 </a>
 
 <p class="note-ct"><strong>Three things to remember.</strong> One ordinary instance does roughly 120,000 operations a second unpipelined and close to a million pipelined, so a service at 20,000 ops/s has an order of magnitude of headroom and almost certainly a different problem. Work the decision in order — does it fit in RAM, are you near the throughput ceiling, is a manual failover acceptable, do you want to operate this at all — and note that replicas add read capacity and failover material but never write capacity. And before Cluster, do the arithmetic and try the cheap fixes: TTLs, encodings and stream retention routinely reclaim half an instance, while <code>CROSSSLOT</code> and hash tags are permanent additions to your application code.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">redis-benchmark</span><span class="v">Measures what one instance does — roughly 120k ops/s unpipelined, near a million pipelined.</span></div>
+  <div class="kv"><span class="k">instantaneous_ops_per_sec</span><span class="v">Your live throughput; compare it to the benchmark before deciding to scale.</span></div>
+  <div class="kv"><span class="k">Pipelining</span><span class="v">Batching commands so one round trip carries many, lifting throughput toward a million ops/s.</span></div>
+  <div class="kv"><span class="k">Managed Redis</span><span class="v">A provider runs it; removes operations but not the design work, and often lags on version.</span></div>
+  <div class="kv"><span class="k">Capacity planning</span><span class="v">Bytes-per-item times item count, at peak, sized to 60–70% of machine RAM.</span></div>
+  <div class="kv"><span class="k">used_memory_peak</span><span class="v">The peak figure to size against, not the average, because a fork needs the headroom.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>One ordinary instance does ~120k ops/s unpipelined and near a million pipelined — most services have an order of magnitude of headroom.</li>
+<li>Work the decision in order: fits in RAM, near the throughput ceiling, manual failover acceptable, want to operate it at all.</li>
+<li>Replicas add read capacity and failover material, never write capacity; only Cluster adds write throughput.</li>
+<li>Do the capacity arithmetic from a measured per-item size at peak, and shrink before you shard.</li>
+<li>Cluster is a one-way door — set a measured trigger instead of adopting it for an unmeasured future.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 11 · Bài 11.5</span>
@@ -1072,6 +1289,39 @@ db0:keys=1842033,expires=1799210,avg_ttl=241833</div>
 </a>
 
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Một máy bình thường làm được khoảng 120.000 phép mỗi giây khi không pipeline và gần một triệu khi có pipeline, nên một dịch vụ ở mức 20.000 phép/giây còn thừa cả một bậc độ lớn và gần như chắc chắn đang gặp một vấn đề khác. Hãy làm quyết định theo thứ tự — có vừa RAM không, có gần trần thông lượng không, chuyển đổi thủ công có chấp nhận được không, bạn có muốn vận hành thứ này chút nào không — và hãy nhớ rằng bản sao thêm dung lượng đọc cùng vật liệu để chuyển đổi chứ không bao giờ thêm dung lượng ghi. Và trước khi tới Cluster, hãy làm phép tính và thử những cách chữa rẻ: TTL, kiểu mã hoá và thời gian lưu stream thường xuyên đòi lại được nửa cái máy, trong khi <code>CROSSSLOT</code> và nhãn băm là những thứ thêm vào vĩnh viễn trong mã ứng dụng của bạn.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">redis-benchmark</span><span class="v">Đo một máy làm được bao nhiêu — khoảng 120k phép/giây khi không pipeline, gần một triệu khi có.</span></div>
+  <div class="kv"><span class="k">instantaneous_ops_per_sec</span><span class="v">Thông lượng trực tiếp của bạn; so với benchmark trước khi quyết định mở rộng.</span></div>
+  <div class="kv"><span class="k">Pipelining</span><span class="v">Gộp nhiều lệnh để một vòng đi-về chở được nhiều, nâng thông lượng về gần một triệu phép/giây.</span></div>
+  <div class="kv"><span class="k">Managed Redis</span><span class="v">Một nhà cung cấp chạy nó; gỡ phần vận hành chứ không gỡ phần thiết kế, và thường chậm phiên bản.</span></div>
+  <div class="kv"><span class="k">Capacity planning</span><span class="v">Số byte mỗi mục nhân số mục, ở mức đỉnh, chọn cỡ bằng 60–70% RAM của máy.</span></div>
+  <div class="kv"><span class="k">used_memory_peak</span><span class="v">Con số đỉnh để chọn cỡ, không phải trung bình, vì một cú fork cần chỗ trống.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Một máy bình thường làm ~120k phép/giây khi không pipeline và gần một triệu khi có — phần lớn dịch vụ còn thừa cả một bậc độ lớn.</li>
+<li>Làm quyết định theo thứ tự: có vừa RAM không, có gần trần thông lượng không, chuyển đổi thủ công chấp nhận được không, có muốn vận hành không.</li>
+<li>Bản sao thêm dung lượng đọc và vật liệu chuyển đổi, không bao giờ thêm dung lượng ghi; chỉ Cluster thêm thông lượng ghi.</li>
+<li>Làm phép tính dung lượng từ kích thước mỗi mục đã đo ở mức đỉnh, và thu nhỏ trước khi chia mảnh.</li>
+<li>Cluster là một cánh cửa một chiều — đặt một mốc kích hoạt đã đo thay vì nhận nó cho một tương lai chưa đo.</li>
+</ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-1-redis-co-ban" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.1 — What Redis really is, and where the time goes</span><span class="lc-sub">Where the time goes, and why pipelining is so much faster — worth knowing before you scale out.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-1-redis-co-ban" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.1 — Redis thực chất là gì, và thời gian trôi đi đâu</span><span class="lc-sub">Thời gian trôi đi đâu, và vì sao pipeline nhanh hơn nhiều — nên biết trước khi mở rộng.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

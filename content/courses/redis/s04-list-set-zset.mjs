@@ -311,6 +311,22 @@ OK
 <li>Đừng phân trang một list dài theo vị trí; hãy dùng một sorted set chấm điểm theo thời gian.</li>
 </ul>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-13-2-bullmq-co-ban" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 13.2 — BullMQ: Queue, Worker, and what a job is in Redis</span><span class="lc-sub">A real job queue built on Redis: acknowledgements and retries that a bare LIST does not give you.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-13-2-bullmq-co-ban" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 13.2 — BullMQ: Queue, Worker, và một job thực chất là gì trong Redis</span><span class="lc-sub">Một hàng đợi việc thật dựng trên Redis: xác nhận và thử lại mà một LIST trần không cho bạn.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 4.2 ─────────────────────────── */
@@ -697,6 +713,22 @@ redis-cli SINTER tag:redis tag:docker</code></pre>
 <li>Các biến thể …STORE giữ kết quả lớn khỏi đường truyền, nhưng khoá đích không có TTL.</li>
 <li>Một set chỉ bị chặn bởi thời gian (một khoá "đã thấy" sống mãi) là một chỗ rò bộ nhớ; hãy dùng khoá từng mục kèm TTL.</li>
 </ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-3-cau-truc-du-lieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.3 — Picking the right structure is worth 95× the RAM</span><span class="lc-sub">Sets against the other structures, with RAM measured from Node.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-3-cau-truc-du-lieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.3 — Chọn đúng cấu trúc dữ liệu đáng giá 95 lần RAM</span><span class="lc-sub">Set so với các cấu trúc khác, có đo RAM từ Node.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -1404,6 +1436,22 @@ redis-cli ZLEXCOUNT ac "[ha" "[ha\\xff"</code></pre>
 <li>Mọi khoá đều cần một trần: ZREMRANGEBYRANK cho bảng, ZREMRANGEBYSCORE cộng EXPIRE cho cửa sổ, một script dựng lại cho chỉ mục.</li>
 </ul>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-13-4-lich-trinh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 13.4 — Scheduling: delays, priority, throttling and cron</span><span class="lc-sub">A real scheduler: delayed jobs, priorities and repeatable jobs — the sorted-set patterns of this lesson inside a queue library.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-13-4-lich-trinh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 13.4 — Lịch trình: hẹn giờ, ưu tiên, bóp tốc độ và job định kỳ</span><span class="lc-sub">Bộ hẹn giờ thật: job trễ, ưu tiên và job định kỳ — các khuôn sorted set của bài này nằm bên trong một thư viện hàng đợi.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 4.5 ─────────────────────────── */
@@ -1642,6 +1690,22 @@ zset
 <li>Một khoá geo đúng nghĩa đen là một sorted set với geohash làm điểm, nên mọi lệnh Z và mọi cái bẫy đều áp.</li>
 <li>Khoá geo không có TTL theo từng thành viên; hãy tự quét bằng một sorted set đồng hành ghi thời điểm thấy lần cuối.</li>
 </ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-3-cau-truc-du-lieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.3 — Picking the right structure is worth 95× the RAM</span><span class="lc-sub">Lists, sets and sorted sets with RAM measured from Node — the choice from this lesson, on a memory bill.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-3-cau-truc-du-lieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.3 — Chọn đúng cấu trúc dữ liệu đáng giá 95 lần RAM</span><span class="lc-sub">List, set và sorted set có đo RAM từ Node — lựa chọn của bài này, hiện ra trên hoá đơn bộ nhớ.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

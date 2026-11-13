@@ -125,6 +125,22 @@ redis-cli MEMORY USAGE "$(redis-cli --scan | awk '{print length($0), $0}' | sort
 
 <div class="pitfall"><strong>Pitfall:</strong> building keys from unbounded user input — <code>cache:search:{query}</code>, <code>cache:url:{full-url}</code>, <code>ratelimit:ua:{user-agent}</code>. Each distinct input creates a key that persists until it expires, so a crawler, a fuzzer or an ordinary user with a search box will steadily fill your memory with keys that will never be read again. With <code>maxmemory-policy noeviction</code> the instance eventually starts refusing writes; with an eviction policy it starts evicting the keys you actually wanted. Two habits prevent it entirely: hash the input to a fixed length so one key cannot be enormous, and set a TTL on <em>every</em> key derived from user input, without exception. If you cannot name a TTL for a key, that is a strong signal it should not be keyed on user input at all.</div>
 <p class="note-ct"><strong>Three things to remember.</strong> The key name is the schema, and it is the one thing in Redis that is expensive to change — write down your patterns before you have a million keys. Encode disposability in the prefix (<code>cache:</code> can be dropped, <code>session:</code> cannot) and a version in anything whose shape may change, so a format migration is a bumped constant rather than a script. And every key built from user input needs a hashed, bounded name <em>and</em> a TTL, or it is a memory leak with a friendly interface.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Key name as schema</span><span class="v">Redis has no tables or migrations — the key name encodes meaning and is the one thing expensive to change later.</span></div>
+  <div class="kv"><span class="k">Colon convention</span><span class="v"><code>user:1042:profile</code> is one flat string; the colons are for humans and glob patterns, not folders.</span></div>
+  <div class="kv"><span class="k">Namespace prefix</span><span class="v"><code>cache:</code>, <code>session:</code>, <code>ratelimit:</code> — how you decide what can be flushed and set per-namespace TTL policy.</span></div>
+  <div class="kv"><span class="k">Version prefix</span><span class="v"><code>cache:v2:</code> → <code>cache:v3:</code> makes a format change a bumped constant instead of a migration.</span></div>
+  <div class="kv"><span class="k">WRONGTYPE</span><span class="v">The error when two features pick the same key for different types — prevented by naming, not defensive code.</span></div>
+  <div class="kv"><span class="k">Per-key overhead</span><span class="v">Each key carries ~83 bytes of structure; millions of tiny keys mean fewer keys, not shorter names.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>The key name is the schema and the one thing in Redis expensive to change — write your patterns down before you have a million keys.</li>
+<li>Encode disposability in the prefix (<code>cache:</code> can be dropped, <code>session:</code> cannot) and a version in anything whose shape may change.</li>
+<li>A <code>WRONGTYPE</code> comes from two features sharing a key; the fix is a naming convention, not defensive code.</li>
+<li>Every key built from user input needs a hashed, bounded name and a TTL, or it is a memory leak with a friendly interface.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 2 · Bài 2.1</span>
@@ -233,6 +249,38 @@ redis-cli MEMORY USAGE "$(redis-cli --scan | awk '{print length($0), $0}' | sort
 
 <div class="pitfall"><strong>Bẫy:</strong> dựng khoá từ đầu vào không giới hạn của người dùng — <code>cache:search:{query}</code>, <code>cache:url:{full-url}</code>, <code>ratelimit:ua:{user-agent}</code>. Mỗi đầu vào khác nhau tạo ra một cái khoá tồn tại tới khi nó hết hạn, nên một con bot thu thập dữ liệu, một bộ fuzz hay một người dùng bình thường với một ô tìm kiếm sẽ đều đặn làm đầy bộ nhớ của bạn bằng những khoá không bao giờ được đọc lại. Với <code>maxmemory-policy noeviction</code> thì instance đó rốt cuộc bắt đầu từ chối lệnh ghi; với một chính sách đẩy khoá thì nó bắt đầu đẩy đi đúng những khoá bạn cần. Hai thói quen ngăn được hoàn toàn: BĂM đầu vào về một độ dài cố định để một cái khoá không thể khổng lồ, và đặt TTL trên MỌI khoá dẫn xuất từ đầu vào người dùng, không ngoại lệ. Nếu bạn không gọi tên được một TTL cho một cái khoá thì đó là dấu hiệu mạnh rằng nó không nên được đặt khoá theo đầu vào người dùng chút nào.</div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Tên khoá CHÍNH LÀ schema, và nó là thứ duy nhất trong Redis mà đổi về sau thì tốn kém — hãy viết ra các mẫu của bạn TRƯỚC khi có một triệu khoá. Hãy mã hoá tính vứt-được vào tiền tố (<code>cache:</code> bỏ được, <code>session:</code> thì không) và một số phiên bản vào mọi thứ có thể đổi hình dạng, để một lần đổi định dạng chỉ là nâng một hằng số chứ không phải chạy một script. Và mọi khoá dựng từ đầu vào người dùng đều cần một cái tên đã băm, có giới hạn, <em>và</em> một TTL, không thì nó là một chỗ rò bộ nhớ với giao diện thân thiện.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Tên khoá chính là schema</span><span class="v">Redis không có bảng hay migration — tên khoá mã hoá ý nghĩa và là thứ duy nhất đổi về sau thì tốn kém.</span></div>
+  <div class="kv"><span class="k">Quy ước dấu hai chấm</span><span class="v"><code>user:1042:profile</code> là một chuỗi phẳng; dấu hai chấm là cho con người và mẫu glob, không phải thư mục.</span></div>
+  <div class="kv"><span class="k">Tiền tố không gian tên</span><span class="v"><code>cache:</code>, <code>session:</code>, <code>ratelimit:</code> — cách bạn quyết cái gì xoá được và đặt chính sách TTL theo không gian tên.</span></div>
+  <div class="kv"><span class="k">Tiền tố phiên bản</span><span class="v"><code>cache:v2:</code> → <code>cache:v3:</code> biến một lần đổi định dạng thành nâng một hằng số thay vì một cuộc di chuyển.</span></div>
+  <div class="kv"><span class="k">WRONGTYPE</span><span class="v">Lỗi khi hai tính năng chọn trùng một khoá cho hai kiểu khác nhau — ngăn bằng cách đặt tên, không bằng mã phòng thủ.</span></div>
+  <div class="kv"><span class="k">Chi phí mỗi khoá</span><span class="v">Mỗi khoá mang ~83 byte cấu trúc; hàng triệu khoá tí hon nghĩa là ít khoá hơn, không phải tên ngắn hơn.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Tên khoá chính là schema và là thứ duy nhất trong Redis đổi về sau thì tốn kém — hãy viết ra các mẫu trước khi có một triệu khoá.</li>
+<li>Hãy mã hoá tính vứt-được vào tiền tố (<code>cache:</code> bỏ được, <code>session:</code> thì không) và một số phiên bản vào mọi thứ có thể đổi hình dạng.</li>
+<li>Một lỗi <code>WRONGTYPE</code> tới từ hai tính năng dùng chung một khoá; cách chữa là một quy ước đặt tên, không phải mã phòng thủ.</li>
+<li>Mọi khoá dựng từ đầu vào người dùng đều cần một tên đã băm, có giới hạn, và một TTL, không thì nó là một chỗ rò bộ nhớ với giao diện thân thiện.</li>
+</ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-3-cau-truc-du-lieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.3 — Picking the right structure is worth 95× the RAM</span><span class="lc-sub">Keys and structures from Node, with RAM measured: naming and layout show up in the memory bill.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-3-cau-truc-du-lieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.3 — Chọn đúng cấu trúc dữ liệu đáng giá 95 lần RAM</span><span class="lc-sub">Khoá và cấu trúc từ Node, có đo RAM: cách đặt tên và bố trí hiện ra ngay trên hoá đơn bộ nhớ.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -349,6 +397,22 @@ redis-cli HPERSIST cart:1042 FIELDS 1 item:1</code></pre>
 
 <div class="pitfall"><strong>Pitfall:</strong> refreshing a session with a plain <code>SET</code>. The code reads naturally — load the session, update <code>lastSeen</code>, write it back — and it removes the TTL every single time, so each active user's session key becomes permanent. Nothing breaks that day. What you see weeks later is memory climbing steadily with no obvious cause, and in <code>INFO keyspace</code> a <code>keys</code> count that keeps growing while <code>expires</code> stays flat: that divergence is the diagnostic, and it is worth graphing. There are three correct forms and you should pick one deliberately: <code>SET key value KEEPTTL</code> to preserve the remaining time, <code>SET key value EX 1800</code> to restart the window (usually what a session actually wants), or <code>EXPIRE key 1800 GT</code> to extend without ever shortening. The same trap exists with <code>GETSET</code> and with any <code>RENAME</code> onto an existing key.</div>
 <p class="note-ct"><strong>Three things to remember.</strong> A key with a TTL is removed lazily on access or by a sampled background job — not on time — so <code>DBSIZE</code> and memory lag a mass expiry by seconds, which is normal. <code>SET</code> and <code>GETSET</code> clear the TTL while <code>INCR</code>, <code>APPEND</code>, <code>HSET</code> and friends preserve it; watch <code>keys</code> versus <code>expires</code> in <code>INFO keyspace</code> to catch the leak. And a replica never expires anything itself — it waits for a <code>DEL</code> from the primary, which is why its key count can legitimately be higher.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Logical vs physical expiry</span><span class="v">A key becomes expired at its TTL but is physically removed later, at an unpredictable moment.</span></div>
+  <div class="kv"><span class="k">Lazy expiration</span><span class="v">On access, a read checks the TTL and deletes the key if it is past — costs nothing when nobody looks.</span></div>
+  <div class="kv"><span class="k">Active expiration</span><span class="v">A sampled job, 10× per second, removes a fraction of expired keys and deliberately spreads the work.</span></div>
+  <div class="kv"><span class="k">KEEPTTL</span><span class="v">The <code>SET</code> option that preserves the remaining TTL; a plain <code>SET</code> clears it.</span></div>
+  <div class="kv"><span class="k">EXPIRE GT/NX/XX</span><span class="v">Conditional TTL changes (7.0+) — <code>EXPIRE k 3600 GT</code> extends without ever shortening.</span></div>
+  <div class="kv"><span class="k">HEXPIRE</span><span class="v">Per-field TTL on a hash (7.4), avoiding one key per item and its per-key overhead.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>A key with a TTL is removed lazily on access or by a sampled background job, not on time — so <code>DBSIZE</code> and memory lag a mass expiry by seconds.</li>
+<li><code>SET</code> and <code>GETSET</code> clear the TTL while <code>INCR</code>, <code>APPEND</code>, <code>HSET</code> and friends preserve it — watch <code>keys</code> versus <code>expires</code> to catch the leak.</li>
+<li>A replica never expires anything itself; it waits for a <code>DEL</code> from the primary, so its key count can legitimately be higher.</li>
+<li>Redis 7.4 adds per-field hash TTL (<code>HEXPIRE</code>), which replaces one-key-per-item for expiring parts of a collection.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 2 · Bài 2.2</span>
@@ -455,6 +519,38 @@ redis-cli HPERSIST cart:1042 FIELDS 1 item:1</code></pre>
 
 <div class="pitfall"><strong>Bẫy:</strong> làm mới một phiên đăng nhập bằng một lệnh <code>SET</code> trơn. Đoạn mã đọc lên rất tự nhiên — nạp phiên, cập nhật <code>lastSeen</code>, ghi ngược lại — và nó XOÁ TTL ở từng lần một, nên khoá phiên của mỗi người dùng đang hoạt động trở thành vĩnh viễn. Hôm đó chẳng có gì hỏng. Thứ bạn thấy vài tuần sau là bộ nhớ leo lên đều đặn không rõ nguyên nhân, và trong <code>INFO keyspace</code> là một con số <code>keys</code> cứ tăng trong khi <code>expires</code> nằm im: chính khoảng phân kỳ đó là phép chẩn đoán, và nó đáng được vẽ lên biểu đồ. Có ba dạng đúng và bạn nên chọn một cách có chủ đích: <code>SET key value KEEPTTL</code> để giữ nguyên thời gian còn lại, <code>SET key value EX 1800</code> để khởi động lại cửa sổ (thường là thứ một phiên đăng nhập thật sự cần), hoặc <code>EXPIRE key 1800 GT</code> để gia hạn mà không bao giờ rút ngắn. Cùng cái bẫy đó tồn tại với <code>GETSET</code> và với mọi lệnh <code>RENAME</code> đè lên một khoá đã có.</div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Một khoá có TTL bị gỡ đi một cách LƯỜI khi có người truy cập hoặc bởi một việc nền lấy mẫu — không phải đúng giờ — nên <code>DBSIZE</code> với bộ nhớ tụt lại sau một đợt hết hạn hàng loạt vài giây, và đó là bình thường. <code>SET</code> với <code>GETSET</code> xoá TTL còn <code>INCR</code>, <code>APPEND</code>, <code>HSET</code> và đồng bọn thì giữ; hãy canh <code>keys</code> so với <code>expires</code> trong <code>INFO keyspace</code> để bắt chỗ rò. Và một bản sao không bao giờ tự làm hết hạn thứ gì — nó chờ một lệnh <code>DEL</code> từ máy chính, và đó là lý do số khoá của nó có thể cao hơn một cách chính đáng.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Hết hạn lô-gíc so với vật lý</span><span class="v">Một khoá trở nên hết hạn ở TTL nhưng bị gỡ vật lý muộn hơn, vào một khoảnh khắc không đoán trước.</span></div>
+  <div class="kv"><span class="k">Hết hạn lười</span><span class="v">Khi truy cập, một lệnh đọc kiểm TTL rồi xoá khoá nếu đã quá hạn — không tốn gì khi không ai ngó.</span></div>
+  <div class="kv"><span class="k">Hết hạn chủ động</span><span class="v">Một việc lấy mẫu, 10 lần mỗi giây, gỡ một phần khoá đã hết hạn và cố ý rải công việc ra.</span></div>
+  <div class="kv"><span class="k">KEEPTTL</span><span class="v">Tuỳ chọn của <code>SET</code> giữ nguyên TTL còn lại; một lệnh <code>SET</code> trơn thì xoá nó.</span></div>
+  <div class="kv"><span class="k">EXPIRE GT/NX/XX</span><span class="v">Đổi TTL có điều kiện (7.0+) — <code>EXPIRE k 3600 GT</code> gia hạn mà không bao giờ rút ngắn.</span></div>
+  <div class="kv"><span class="k">HEXPIRE</span><span class="v">TTL cho từng trường của một hash (7.4), tránh mỗi món một khoá và chi phí mỗi khoá của nó.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Một khoá có TTL bị gỡ một cách lười khi truy cập hoặc bởi một việc nền lấy mẫu, không phải đúng giờ — nên <code>DBSIZE</code> và bộ nhớ tụt lại sau một đợt hết hạn hàng loạt vài giây.</li>
+<li><code>SET</code> và <code>GETSET</code> xoá TTL còn <code>INCR</code>, <code>APPEND</code>, <code>HSET</code> và đồng bọn thì giữ — hãy canh <code>keys</code> so với <code>expires</code> để bắt chỗ rò.</li>
+<li>Một bản sao không bao giờ tự làm hết hạn thứ gì; nó chờ một lệnh <code>DEL</code> từ máy chính, nên số khoá của nó có thể cao hơn một cách chính đáng.</li>
+<li>Redis 7.4 thêm TTL theo từng trường hash (<code>HEXPIRE</code>), thay cho kiểu mỗi món một khoá khi cần cho một phần của tập hợp hết hạn.</li>
+</ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-2-cache-aside" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.2 — Cache-aside: the pattern and its four betrayals</span><span class="lc-sub">TTLs in a Node application's cache, and the cache-aside failures they do and do not prevent.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-2-cache-aside" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.2 — Cache-aside: khuôn mẫu và bốn lần nó phản chủ</span><span class="lc-sub">TTL trong bộ đệm của ứng dụng Node, và những lỗi cache-aside mà TTL chặn được hay không chặn được.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -602,6 +698,22 @@ lazyfreed_objects:0</div>
 
 <div class="pitfall"><strong>Pitfall:</strong> writing a <code>SCAN</code> loop that stops on an empty batch. The code looks reasonable — scan, get keys, if there are none we must be done — and it is wrong, because <code>MATCH</code> filters <em>after</em> the batch is fetched. Scanning a million keys for <code>MATCH 'lock:*'</code> will return empty batches for most of the iteration while the cursor is still marching through the hash table, so a loop with <code>while (keys.length)</code> exits after the first batch and silently processes a fraction of the keyspace. The termination condition is the cursor and only the cursor: loop until <code>SCAN</code> returns <code>"0"</code>. The same mistake in reverse is a loop that never terminates because it stores the cursor as a number and drops a large value's precision — cursors are 64-bit and must be treated as opaque strings in JavaScript.</div>
 <p class="note-ct"><strong>Three things to remember.</strong> <code>SCAN</code> guarantees only that keys present for the whole iteration appear at least once — duplicates happen, and an empty batch means nothing because <code>MATCH</code> filters after fetching. Terminate on a cursor of <code>"0"</code>, never on an empty result. And make <code>UNLINK</code> your default over <code>DEL</code>: deleting one five-million-element set froze the server for 412ms, versus 2ms — then turn on all four <code>lazyfree-*</code> settings so the same protection applies to expiry, eviction and code you did not write.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">SCAN</span><span class="v">A cursor-based walk of the keyspace that never blocks; start at 0, stop at a cursor of 0.</span></div>
+  <div class="kv"><span class="k">Cursor</span><span class="v">An opaque 64-bit position that survives rehashing — not an offset; treat it as a string.</span></div>
+  <div class="kv"><span class="k">COUNT</span><span class="v">A hint about work per call (100–1000 useful), not the number of results returned.</span></div>
+  <div class="kv"><span class="k">MATCH filters after fetching</span><span class="v">Empty batches are normal mid-iteration — only a cursor of 0 means done.</span></div>
+  <div class="kv"><span class="k">DEL vs UNLINK</span><span class="v"><code>DEL</code> frees inline on the main thread; <code>UNLINK</code> hands the memory to a background thread — make it your default.</span></div>
+  <div class="kv"><span class="k">lazyfree-* settings</span><span class="v">Four options that free deletes, expiry, eviction and implicit deletes in the background.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li><code>SCAN</code> guarantees only that keys present for the whole iteration appear at least once — duplicates happen and an empty batch means nothing.</li>
+<li>Terminate a <code>SCAN</code> loop on a cursor of <code>"0"</code>, never on an empty result, and keep <code>COUNT</code> in the 100–1000 range.</li>
+<li>Make <code>UNLINK</code> your default over <code>DEL</code>: deleting one five-million-element set froze the server for 412ms versus 2ms.</li>
+<li>Turn on all four <code>lazyfree-*</code> settings and never pipe <code>KEYS</code> into <code>DEL</code>; prefer a TTL or a version bump over pattern deletion.</li>
+</ul>
 <a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-6-van-hanh-production" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 12.6: the commands that freeze everything</span><span class="lc-sub">Measured from a second connection: KEYS vs SCAN, DEL vs UNLINK, maxmemory with noeviction (writes OOM, reads fine), allkeys-lru (128,140 keys evicted, 0 errors), volatile-lru with no TTLs, and a restart with and without AOF (1,000 → 0 vs 1,000 → 1,000).</span></span>
@@ -745,6 +857,22 @@ lazyfreed_objects:0</div>
 
 <div class="pitfall"><strong>Bẫy:</strong> viết một vòng lặp <code>SCAN</code> dừng lại khi gặp một mẻ RỖNG. Đoạn mã trông có vẻ hợp lý — quét, lấy khoá, nếu không có cái nào thì chắc là xong — và nó SAI, vì <code>MATCH</code> lọc <em>SAU</em> khi mẻ dữ liệu đã được lấy về. Quét một triệu khoá với <code>MATCH 'lock:*'</code> sẽ trả về những mẻ rỗng suốt phần lớn lượt duyệt trong khi con trỏ vẫn đang đi qua bảng băm, nên một vòng lặp với <code>while (keys.length)</code> sẽ thoát ngay sau mẻ đầu tiên và lặng lẽ xử lý được một phần nhỏ của không gian khoá. Điều kiện dừng là CON TRỎ và chỉ con trỏ: hãy lặp cho tới khi <code>SCAN</code> trả về <code>"0"</code>. Sai lầm ngược lại là một vòng lặp không bao giờ dừng vì nó lưu con trỏ dưới dạng SỐ rồi làm mất độ chính xác với một giá trị lớn — con trỏ là 64 bit và trong JavaScript phải được xử lý như một chuỗi mờ.</div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> <code>SCAN</code> chỉ bảo đảm rằng những khoá có mặt suốt lượt duyệt sẽ xuất hiện ít nhất một lần — trùng lặp là chuyện có thật, và một mẻ rỗng chẳng nói lên điều gì vì <code>MATCH</code> lọc sau khi lấy về. Hãy dừng khi con trỏ bằng <code>"0"</code>, đừng bao giờ dừng vì kết quả rỗng. Và hãy lấy <code>UNLINK</code> làm mặc định thay cho <code>DEL</code>: xoá một cái set năm triệu phần tử làm đông cứng máy chủ 412ms, so với 2ms — rồi bật cả bốn thiết lập <code>lazyfree-*</code> để cùng lớp bảo vệ đó áp cho việc hết hạn, việc đẩy khoá, và cả mã không phải bạn viết.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">SCAN</span><span class="v">Một lượt đi qua không gian khoá theo con trỏ, không bao giờ chặn; bắt đầu ở 0, dừng khi con trỏ bằng 0.</span></div>
+  <div class="kv"><span class="k">Con trỏ</span><span class="v">Một vị trí 64 bit mờ, sống sót qua việc băm lại — không phải offset; hãy xử như một chuỗi.</span></div>
+  <div class="kv"><span class="k">COUNT</span><span class="v">Gợi ý về khối lượng việc mỗi lời gọi (100–1000 hữu dụng), không phải số kết quả trả về.</span></div>
+  <div class="kv"><span class="k">MATCH lọc sau khi lấy về</span><span class="v">Mẻ rỗng là bình thường ở giữa lượt duyệt — chỉ con trỏ bằng 0 mới nghĩa là xong.</span></div>
+  <div class="kv"><span class="k">DEL so với UNLINK</span><span class="v"><code>DEL</code> giải phóng ngay tại chỗ trên luồng chính; <code>UNLINK</code> giao bộ nhớ cho luồng nền — hãy lấy làm mặc định.</span></div>
+  <div class="kv"><span class="k">Các thiết lập lazyfree-*</span><span class="v">Bốn tuỳ chọn khiến việc xoá, hết hạn, đẩy khoá và xoá ngầm được giải phóng ở luồng nền.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li><code>SCAN</code> chỉ bảo đảm những khoá có mặt suốt lượt duyệt xuất hiện ít nhất một lần — trùng lặp là chuyện có thật và một mẻ rỗng chẳng nói lên gì.</li>
+<li>Hãy dừng một vòng lặp <code>SCAN</code> khi con trỏ bằng <code>"0"</code>, đừng bao giờ dừng vì kết quả rỗng, và giữ <code>COUNT</code> trong khoảng 100–1000.</li>
+<li>Hãy lấy <code>UNLINK</code> làm mặc định thay cho <code>DEL</code>: xoá một set năm triệu phần tử làm đông cứng máy chủ 412ms so với 2ms.</li>
+<li>Bật cả bốn thiết lập <code>lazyfree-*</code> và đừng bao giờ đút <code>KEYS</code> vào <code>DEL</code>; hãy ưu tiên một TTL hoặc nâng phiên bản hơn là xoá theo mẫu.</li>
+</ul>
 <a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-6-van-hanh-production" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 12.6: những lệnh làm đứng hình tất cả</span><span class="lc-sub">Đo từ một kết nối thứ hai: KEYS vs SCAN, DEL vs UNLINK, maxmemory với noeviction (ghi lỗi OOM, đọc vẫn chạy), allkeys-lru (vứt 128.140 khoá, 0 lỗi), volatile-lru khi không có TTL, và khởi động lại có/không AOF (1.000 → 0 vs 1.000 → 1.000).</span></span>
@@ -872,6 +1000,22 @@ normal 0 0 0 slave 268435456 67108864 60 pubsub 33554432 8388608 60
 
 <div class="pitfall"><strong>Pitfall:</strong> using the <code>expired</code> event to release a resource — closing a websocket, refunding a held inventory item, removing a user from a room. It works perfectly in testing, where you have one subscriber that never disconnects, and it fails in production in two ways at once. First, the event fires when Redis <em>deletes</em> the key, which can be seconds after the TTL elapsed — so the resource is held longer than intended. Second and worse, Pub/Sub is at-most-once: every deploy restarts your subscriber, and every event published during those few seconds is gone forever, leaving resources held permanently with nothing in any log to explain it. The pattern that survives contact with production is to treat the notification as a <em>hint</em> and add a sweep: a periodic job that scans for resources whose expiry has passed and cleans them up regardless. The notification makes it fast; the sweep makes it correct.</div>
 <p class="note-ct"><strong>Three things to remember.</strong> Notifications are off by default and the flag string needs <code>K</code> or <code>E</code> plus a class — <code>x</code> alone silently produces nothing. The <code>expired</code> event fires when the key is actually deleted, not when the TTL elapses, so it can be seconds late. And delivery is at-most-once Pub/Sub: a subscriber that reconnects has permanently missed everything sent while it was away, so anything that must not be missed belongs in a Stream, or needs a periodic sweep behind it.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Keyspace notification</span><span class="v">A Pub/Sub event Redis publishes when a key is written, deleted or expires.</span></div>
+  <div class="kv"><span class="k">__keyspace@db__ vs __keyevent@db__</span><span class="v">One names the key (payload is the event), the other names the event (payload is the key).</span></div>
+  <div class="kv"><span class="k">notify-keyspace-events flags</span><span class="v"><code>K</code> or <code>E</code> plus a class; a flag string of <code>x</code> alone produces nothing.</span></div>
+  <div class="kv"><span class="k">expired event timing</span><span class="v">Fires when the key is actually deleted, not when the TTL elapses — so it can be seconds late.</span></div>
+  <div class="kv"><span class="k">At-most-once delivery</span><span class="v">Pub/Sub — a disconnected subscriber permanently and silently misses everything sent while away.</span></div>
+  <div class="kv"><span class="k">Stream as the alternative</span><span class="v">A persistent, replayable log with consumer groups and acknowledgements (Chapter 8).</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>Notifications are off by default and the flag string needs <code>K</code> or <code>E</code> plus a class — <code>x</code> alone silently produces nothing.</li>
+<li>The two channels differ: <code>__keyspace</code> names the key, <code>__keyevent</code> names the event, and both carry the database number.</li>
+<li>The <code>expired</code> event fires when the key is deleted, not when the TTL elapses, so it can arrive seconds late.</li>
+<li>Delivery is at-most-once Pub/Sub — anything that must not be missed belongs in a Stream, or needs a periodic sweep behind it.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 2 · Bài 2.4</span>
@@ -985,6 +1129,38 @@ normal 0 0 0 slave 268435456 67108864 60 pubsub 33554432 8388608 60
 
 <div class="pitfall"><strong>Bẫy:</strong> dùng sự kiện <code>expired</code> để nhả một tài nguyên — đóng một websocket, hoàn lại một món hàng đang giữ trong kho, gỡ một người dùng khỏi một phòng. Nó chạy hoàn hảo khi kiểm thử, nơi bạn có một bên đăng ký không bao giờ mất kết nối, và nó hỏng trên production theo HAI cách cùng lúc. Thứ nhất, sự kiện nổ khi Redis <em>XOÁ</em> khoá, thứ có thể diễn ra hàng giây sau khi TTL trôi qua — nên tài nguyên bị giữ lâu hơn dự định. Thứ hai và tệ hơn, Pub/Sub là nhiều-nhất-một-lần: mỗi lượt deploy đều khởi động lại bên đăng ký của bạn, và mọi sự kiện phát ra trong vài giây đó đi mất vĩnh viễn, để lại những tài nguyên bị giữ mãi mãi mà không có dòng log nào giải thích. Cái mẫu sống sót được khi va vào production là coi thông báo như một <em>GỢI Ý</em> rồi thêm một lượt quét dọn: một việc định kỳ rà tìm những tài nguyên đã quá hạn rồi dọn chúng bất kể có nhận được sự kiện hay không. Thông báo làm cho nó NHANH; lượt quét làm cho nó ĐÚNG.</div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Thông báo mặc định tắt và chuỗi cờ cần có <code>K</code> hoặc <code>E</code> cộng với một lớp — chỉ mình <code>x</code> thì lặng lẽ chẳng sinh ra gì. Sự kiện <code>expired</code> nổ khi khoá thật sự bị xoá chứ không phải khi TTL trôi qua, nên nó có thể muộn hàng giây. Và giao hàng là Pub/Sub kiểu nhiều-nhất-một-lần: một bên đăng ký kết nối lại đã VĨNH VIỄN bỏ lỡ mọi thứ gửi trong lúc nó vắng, nên bất cứ thứ gì không được phép bỏ lỡ đều thuộc về một Stream, hoặc cần một lượt quét dọn định kỳ đứng sau.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Thông báo không gian khoá</span><span class="v">Một sự kiện Pub/Sub Redis phát ra khi một khoá được ghi, bị xoá hoặc hết hạn.</span></div>
+  <div class="kv"><span class="k">__keyspace@db__ so với __keyevent@db__</span><span class="v">Một cái đặt tên theo khoá (nội dung là sự kiện), cái kia theo sự kiện (nội dung là khoá).</span></div>
+  <div class="kv"><span class="k">Cờ notify-keyspace-events</span><span class="v"><code>K</code> hoặc <code>E</code> cộng một lớp; một chuỗi cờ chỉ có <code>x</code> thì chẳng sinh ra gì.</span></div>
+  <div class="kv"><span class="k">Thời điểm sự kiện expired</span><span class="v">Nổ khi khoá thật sự bị xoá, không phải khi TTL trôi qua — nên có thể muộn hàng giây.</span></div>
+  <div class="kv"><span class="k">Giao hàng nhiều-nhất-một-lần</span><span class="v">Pub/Sub — một bên đăng ký mất kết nối sẽ vĩnh viễn và lặng lẽ bỏ lỡ mọi thứ gửi lúc vắng.</span></div>
+  <div class="kv"><span class="k">Stream là phương án thay thế</span><span class="v">Một nhật ký lưu lâu dài, phát lại được, có nhóm tiêu thụ và xác nhận (Chương 8).</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Thông báo mặc định tắt và chuỗi cờ cần <code>K</code> hoặc <code>E</code> cộng một lớp — chỉ mình <code>x</code> thì lặng lẽ chẳng sinh ra gì.</li>
+<li>Hai kênh khác nhau: <code>__keyspace</code> đặt tên theo khoá, <code>__keyevent</code> đặt tên theo sự kiện, và cả hai đều mang số cơ sở dữ liệu.</li>
+<li>Sự kiện <code>expired</code> nổ khi khoá bị xoá, không phải khi TTL trôi qua, nên nó có thể tới muộn hàng giây.</li>
+<li>Giao hàng là Pub/Sub nhiều-nhất-một-lần — bất cứ thứ gì không được phép bỏ lỡ đều thuộc về một Stream, hoặc cần một lượt quét dọn định kỳ đứng sau.</li>
+</ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-5-pubsub-streams" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.5 — Pub/Sub and Streams: the message that vanished</span><span class="lc-sub">Keyspace notifications ride on Pub/Sub, which is at-most-once: why messages vanish, and what Streams change.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-5-pubsub-streams" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.5 — Pub/Sub và Streams: tin nhắn đã biến mất</span><span class="lc-sub">Thông báo keyspace đi trên Pub/Sub, vốn chỉ giao nhiều nhất một lần: vì sao tin biến mất, và Streams thay đổi điều gì.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -1116,6 +1292,22 @@ Biggest     zset found 'leaderboard:global' has 1284419 members
 
 <div class="pitfall"><strong>Pitfall:</strong> using numbered databases as namespaces because they look like the obvious tool for it. Everything works in development, where each application has its own database and the separation feels clean. Three problems arrive later, all at once. <code>SELECT</code> is connection state, so with a shared or pooled client one forgotten <code>SELECT</code> leaves that connection pointing at db3 for every subsequent command in the process — and the symptom is data appearing in the wrong place, intermittently, depending on which pooled connection served the request. Redis Cluster supports only database 0, so the day you outgrow one node, every <code>SELECT</code> in the codebase is a migration. And nothing is actually isolated: one memory limit, one thread, one <code>maxmemory-policy</code>, so a runaway in db3 evicts keys in db0. Key prefixes give you the separation you actually wanted, work everywhere, and show up in your logs.</div>
 <p class="note-ct"><strong>Three things to remember.</strong> Numbered databases are not namespaces — one thread, one memory limit, no Cluster support, and <code>SELECT</code> is per-connection state that leaks through a shared client. Use key prefixes instead. <code>COPY</code>, <code>RENAME</code> and <code>MOVE</code> preserve the TTL because they move the object rather than replacing the value, unlike <code>SET</code>. And when memory is unexplained, <code>redis-cli --bigkeys</code> and <code>--memkeys</code> answer it safely on production because they are built on <code>SCAN</code>.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Numbered databases</span><span class="v">16 logical databases sharing one process, thread, memory limit and AOF — not namespaces.</span></div>
+  <div class="kv"><span class="k">SELECT</span><span class="v">Per-connection state that leaks through a shared or pooled client, pointing it at the wrong database.</span></div>
+  <div class="kv"><span class="k">COPY / RENAME / MOVE</span><span class="v">Key-moving commands that preserve the TTL because they move the object, not the value.</span></div>
+  <div class="kv"><span class="k">DUMP / RESTORE</span><span class="v">Serialise a key (RDB value, version and CRC64) and recreate it on another server; how <code>MIGRATE</code> works.</span></div>
+  <div class="kv"><span class="k">OBJECT ENCODING</span><span class="v">The internal representation (<code>listpack</code> vs <code>hashtable</code>, <code>intset</code>, <code>embstr</code>) — check it first when memory surprises you.</span></div>
+  <div class="kv"><span class="k">--bigkeys / --memkeys</span><span class="v">SCAN-based samplers, safe on production, that find the keys eating your memory.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>Numbered databases are not namespaces — one thread, one memory limit, no Cluster support, and <code>SELECT</code> leaks through a shared client; use key prefixes instead.</li>
+<li><code>COPY</code>, <code>RENAME</code> and <code>MOVE</code> preserve the TTL because they move the object rather than replacing the value, unlike <code>SET</code>.</li>
+<li><code>DUMP</code> and <code>RESTORE</code> move a single key between servers, checking version and CRC64 so a mismatched value is refused rather than corrupted.</li>
+<li>When memory is unexplained, <code>redis-cli --bigkeys</code> and <code>--memkeys</code> answer it safely on production because they are built on <code>SCAN</code>.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 2 · Bài 2.5</span>
@@ -1238,6 +1430,38 @@ Biggest     zset found 'leaderboard:global' has 1284419 members
 
 <div class="pitfall"><strong>Bẫy:</strong> dùng cơ sở dữ liệu đánh số làm không gian tên vì chúng trông đúng là công cụ hiển nhiên cho việc đó. Mọi thứ chạy tốt lúc phát triển, nơi mỗi ứng dụng có cơ sở dữ liệu riêng và sự phân tách cảm giác gọn gàng. Ba vấn đề tới về sau, và tới cùng lúc. <code>SELECT</code> là trạng thái của KẾT NỐI, nên với một client dùng chung hoặc có bể, một lệnh <code>SELECT</code> bị quên sẽ để kết nối đó trỏ vào db3 cho mọi câu lệnh về sau trong tiến trình — và triệu chứng là dữ liệu xuất hiện ở nhầm chỗ, lúc có lúc không, tuỳ theo kết nối nào trong bể phục vụ request đó. Redis Cluster chỉ hỗ trợ cơ sở dữ liệu 0, nên cái ngày bạn vượt quá một nút, mọi lệnh <code>SELECT</code> trong mã nguồn đều là một cuộc di chuyển. Và thật ra chẳng có gì được cách ly cả: một hạn mức bộ nhớ, một luồng, một <code>maxmemory-policy</code>, nên một thứ chạy loạn ở db3 sẽ đẩy mất khoá ở db0. Tiền tố khoá cho bạn đúng sự phân tách bạn thật sự muốn, chạy ở mọi nơi, và hiện ra trong log của bạn.</div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Cơ sở dữ liệu đánh số KHÔNG phải không gian tên — một luồng, một hạn mức bộ nhớ, không hỗ trợ Cluster, và <code>SELECT</code> là trạng thái theo kết nối rò rỉ qua một client dùng chung. Hãy dùng tiền tố khoá thay thế. <code>COPY</code>, <code>RENAME</code> và <code>MOVE</code> giữ nguyên TTL vì chúng chuyển ĐỐI TƯỢNG chứ không thay thế giá trị, khác với <code>SET</code>. Và khi bộ nhớ không giải thích được, <code>redis-cli --bigkeys</code> với <code>--memkeys</code> trả lời được một cách an toàn ngay trên production vì chúng dựng trên <code>SCAN</code>.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Cơ sở dữ liệu đánh số</span><span class="v">16 cơ sở dữ liệu lô-gíc dùng chung một tiến trình, luồng, hạn mức bộ nhớ và AOF — không phải không gian tên.</span></div>
+  <div class="kv"><span class="k">SELECT</span><span class="v">Trạng thái theo kết nối rò rỉ qua một client dùng chung hoặc có bể, làm nó trỏ vào nhầm cơ sở dữ liệu.</span></div>
+  <div class="kv"><span class="k">COPY / RENAME / MOVE</span><span class="v">Các câu lệnh chuyển khoá giữ nguyên TTL vì chúng chuyển đối tượng, không phải giá trị.</span></div>
+  <div class="kv"><span class="k">DUMP / RESTORE</span><span class="v">Tuần tự hoá một khoá (giá trị RDB, phiên bản và CRC64) rồi dựng lại ở máy chủ khác; cách <code>MIGRATE</code> hoạt động.</span></div>
+  <div class="kv"><span class="k">OBJECT ENCODING</span><span class="v">Cách biểu diễn nội bộ (<code>listpack</code> so với <code>hashtable</code>, <code>intset</code>, <code>embstr</code>) — kiểm nó đầu tiên khi bộ nhớ làm bạn bất ngờ.</span></div>
+  <div class="kv"><span class="k">--bigkeys / --memkeys</span><span class="v">Bộ lấy mẫu dựa trên SCAN, an toàn trên production, tìm ra những khoá đang ăn bộ nhớ.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Cơ sở dữ liệu đánh số không phải không gian tên — một luồng, một hạn mức bộ nhớ, không hỗ trợ Cluster, và <code>SELECT</code> rò rỉ qua một client dùng chung; hãy dùng tiền tố khoá thay thế.</li>
+<li><code>COPY</code>, <code>RENAME</code> và <code>MOVE</code> giữ nguyên TTL vì chúng chuyển đối tượng chứ không thay thế giá trị, khác với <code>SET</code>.</li>
+<li><code>DUMP</code> và <code>RESTORE</code> chuyển một khoá đơn giữa các máy chủ, kiểm phiên bản và CRC64 nên một giá trị lệch bị từ chối thay vì làm hỏng.</li>
+<li>Khi bộ nhớ không giải thích được, <code>redis-cli --bigkeys</code> và <code>--memkeys</code> trả lời được một cách an toàn trên production vì chúng dựng trên <code>SCAN</code>.</li>
+</ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-6-van-hanh-production" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.6 — Running Redis: the commands that freeze everything</span><span class="lc-sub">Dangerous commands on production, measured from Node code — KEYS, big DELs and what to use instead.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-6-van-hanh-production" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.6 — Vận hành Redis: những lệnh làm đứng hình tất cả</span><span class="lc-sub">Lệnh nguy hiểm trên production, đo từ mã Node — KEYS, DEL khoá lớn và thứ nên dùng thay.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

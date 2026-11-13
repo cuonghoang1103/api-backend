@@ -138,6 +138,22 @@ redis-cli HEXISTS cfg nothing</code></pre>
 </a>
 
 <p class="note-ct"><strong>Three things to remember.</strong> A hash lets two writers update two fields of the same object concurrently without losing either write — that is the property a JSON string cannot give you without a transaction. <code>HGETALL</code> is O(N) and blocks the server, so ask for the fields you need with <code>HMGET</code> and iterate with <code>HSCAN</code>; the only safe <code>HGETALL</code> is one on a hash whose field count is bounded by design. And every value is a string on the way out, so booleans, numbers and "unset vs empty" are your problem — put the coercion in one function and use it everywhere.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">HSET</span><span class="v">Sets many field/value pairs under one key in a single atomic write; returns the count of new fields.</span></div>
+  <div class="kv"><span class="k">HMGET</span><span class="v">Fetches only the named fields — what you want instead of pulling every field with HGETALL.</span></div>
+  <div class="kv"><span class="k">HGETALL</span><span class="v">Reads every field of a hash; O(N) and blocks the single-threaded server on a large hash.</span></div>
+  <div class="kv"><span class="k">HINCRBY</span><span class="v">Atomic integer arithmetic on one field, so a counter can live inside the object.</span></div>
+  <div class="kv"><span class="k">HSETNX</span><span class="v">Sets a field only if it is absent — initialise-if-missing with no read and no race.</span></div>
+  <div class="kv"><span class="k">Lost update</span><span class="v">Read-modify-write on a JSON string where one writer silently overwrites another's change.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>A hash stores an object's fields under one key, and two writers can update different fields concurrently without losing either — the property a JSON string lacks without a transaction.</li>
+<li>Prefer HMGET for the fields a page needs; HGETALL on a big hash is O(N) and stalls the server, so reserve it for hashes bounded by design.</li>
+<li>HINCRBY and HSETNX give atomic per-field arithmetic and initialise-if-absent with no read and no race.</li>
+<li>Every value returns as a string, so booleans, numbers and "unset vs empty" are your code's problem — coerce in one place.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 5 · Bài 5.1</span>
@@ -258,6 +274,38 @@ redis-cli HEXISTS cfg nothing</code></pre>
 </a>
 
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Hash cho phép hai người ghi cùng cập nhật hai trường của cùng một đối tượng mà không mất lần ghi nào — đó là tính chất mà một chuỗi JSON không cho bạn được nếu không có giao dịch. <code>HGETALL</code> là O(N) và chặn máy chủ, nên hãy xin đúng những trường bạn cần bằng <code>HMGET</code> và duyệt bằng <code>HSCAN</code>; <code>HGETALL</code> chỉ an toàn trên một hash mà số trường bị chặn trên ngay từ thiết kế. Và mọi giá trị đều là chuỗi trên đường ra, nên boolean, số và chuyện "chưa đặt hay rỗng" là việc của bạn — hãy đặt phần ép kiểu vào một hàm duy nhất rồi dùng nó ở mọi nơi.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">HSET</span><span class="v">Đặt nhiều cặp trường/giá trị dưới một khoá trong một lần ghi nguyên tử; trả về số trường mới.</span></div>
+  <div class="kv"><span class="k">HMGET</span><span class="v">Lấy đúng các trường được nêu tên — thứ bạn cần thay vì kéo cả hash về bằng HGETALL.</span></div>
+  <div class="kv"><span class="k">HGETALL</span><span class="v">Đọc mọi trường của hash; O(N) và chặn máy chủ đơn luồng khi hash lớn.</span></div>
+  <div class="kv"><span class="k">HINCRBY</span><span class="v">Phép toán số nguyên nguyên tử trên một trường, cho bộ đếm sống bên trong đối tượng.</span></div>
+  <div class="kv"><span class="k">HSETNX</span><span class="v">Chỉ đặt một trường khi nó chưa có — khởi tạo-nếu-thiếu mà không cần đọc và không có đua.</span></div>
+  <div class="kv"><span class="k">Lost update</span><span class="v">Đọc-sửa-ghi trên chuỗi JSON khiến một bên ghi âm thầm đè mất thay đổi của bên kia.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Hash lưu các trường của một đối tượng dưới một khoá, và hai bên ghi có thể cập nhật hai trường khác nhau cùng lúc mà không mất lần ghi nào — tính chất mà chuỗi JSON không có nếu thiếu giao dịch.</li>
+<li>Hãy dùng HMGET cho đúng các trường trang cần; HGETALL trên hash lớn là O(N) và làm đứng máy chủ, nên chỉ để dành cho hash bị chặn trên từ thiết kế.</li>
+<li>HINCRBY và HSETNX cho phép cộng nguyên tử theo trường và khởi tạo-nếu-thiếu mà không cần đọc, không có đua.</li>
+<li>Mọi giá trị trả về đều là chuỗi, nên boolean, số và chuyện "chưa đặt hay rỗng" là việc của mã bạn — hãy ép kiểu ở một chỗ.</li>
+</ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-3-cau-truc-du-lieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.3 — Picking the right structure is worth 95× the RAM</span><span class="lc-sub">Hashes for objects, measured from Node against the alternatives.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-3-cau-truc-du-lieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.3 — Chọn đúng cấu trúc dữ liệu đáng giá 95 lần RAM</span><span class="lc-sub">Hash cho đối tượng, đo từ Node so với các cách khác.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -383,6 +431,22 @@ mem_fragmentation_ratio:1.53</div>
 </a>
 
 <p class="note-ct"><strong>Three things to remember.</strong> A hash is a listpack until it has more than 128 fields <em>or</em> any field/value longer than 64 bytes, and after that it is a hashtable costing 60–100 bytes per field forever — the conversion never reverses. Bucketing many small objects into fewer hashes cut a real million-object dataset from 89 MB to 26 MB, because you stop paying top-level key overhead a million times. And measure before you optimise: <code>--memkeys</code> ranks by actual memory, <code>MEMORY USAGE</code> is sampled unless you say <code>SAMPLES 0</code>, and raising the listpack thresholds to force the win converts a visible memory problem into an invisible latency one.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">listpack</span><span class="v">The compact encoding for a small hash: one contiguous block, roughly data size plus a few bytes per entry.</span></div>
+  <div class="kv"><span class="k">hashtable</span><span class="v">The general encoding: true O(1) lookups but 60–100 bytes of overhead per field, and the conversion is one-way.</span></div>
+  <div class="kv"><span class="k">hash-max-listpack-entries</span><span class="v">The field-count threshold (128) above which a hash flips from listpack to hashtable.</span></div>
+  <div class="kv"><span class="k">hash-max-listpack-value</span><span class="v">The value-length threshold (64 bytes); one long field or value flips the whole hash.</span></div>
+  <div class="kv"><span class="k">Bucketing</span><span class="v">Grouping many small objects into fewer hashes so you pay top-level key overhead once per bucket (the Instagram trick).</span></div>
+  <div class="kv"><span class="k">MEMORY USAGE</span><span class="v">Reports a key's byte cost; sampled by default, exact only with SAMPLES 0.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>A hash is a listpack until it has more than 128 fields or any field/value over 64 bytes, then it becomes a hashtable costing 60–100 bytes per field forever — the conversion never reverses.</li>
+<li>Bucketing a million objects into 10,000 hashes cut memory from 89 MB to 26 MB by paying top-level key overhead once per bucket, not once per object.</li>
+<li>Keep a bucket under 128 entries and its values under 64 bytes, or it silently converts to a hashtable and its memory jumps about 5×.</li>
+<li>Measure first: --memkeys ranks by real memory, MEMORY USAGE is sampled unless you say SAMPLES 0, and raising the thresholds trades a visible memory problem for an invisible latency one.</li>
+</ul>
 <a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-3-cau-truc-du-lieu" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 12.3: the same data, a fraction of the RAM</span><span class="lc-sub">100,000 sessions stored three ways (11.91 / 11.67 / 5.92 MB), the saving that comes from FEWER KEYS, the 513th field cliff measured with MEMORY USAGE … SAMPLES 0, bitmaps (1,000,000 users in 131,136 bytes) and sorted-set leaderboards.</span></span>
@@ -504,6 +568,22 @@ mem_fragmentation_ratio:1.53</div>
 </a>
 
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Một hash là listpack cho tới khi nó có hơn 128 trường <em>hoặc</em> có trường/giá trị nào dài hơn 64 byte, sau đó nó là hashtable tốn 60–100 byte mỗi trường mãi mãi — việc chuyển kiểu không bao giờ đảo ngược. Gom nhiều đối tượng nhỏ vào ít hash hơn đã cắt một tập dữ liệu một triệu đối tượng thật từ 89 MB xuống 26 MB, vì bạn thôi trả chi phí khoá cấp cao nhất một triệu lần. Và hãy đo trước khi tối ưu: <code>--memkeys</code> xếp hạng theo bộ nhớ thật, <code>MEMORY USAGE</code> là lấy mẫu trừ khi bạn nói <code>SAMPLES 0</code>, và nâng ngưỡng listpack lên để ép lấy phần thắng chỉ biến một vấn đề bộ nhớ nhìn thấy được thành một vấn đề độ trễ vô hình.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">listpack</span><span class="v">Kiểu mã hoá gọn cho hash nhỏ: một khối liền mạch, xấp xỉ bằng kích thước dữ liệu cộng vài byte mỗi mục.</span></div>
+  <div class="kv"><span class="k">hashtable</span><span class="v">Kiểu mã hoá tổng quát: tra cứu O(1) thật nhưng tốn 60–100 byte mỗi trường, và chuyển kiểu là một chiều.</span></div>
+  <div class="kv"><span class="k">hash-max-listpack-entries</span><span class="v">Ngưỡng số trường (128); vượt qua là hash lật từ listpack sang hashtable.</span></div>
+  <div class="kv"><span class="k">hash-max-listpack-value</span><span class="v">Ngưỡng độ dài giá trị (64 byte); một trường hay giá trị dài là lật cả hash.</span></div>
+  <div class="kv"><span class="k">Chia gáo (bucketing)</span><span class="v">Gom nhiều đối tượng nhỏ vào ít hash hơn để trả chi phí khoá cấp cao nhất một lần mỗi gáo (mẹo của Instagram).</span></div>
+  <div class="kv"><span class="k">MEMORY USAGE</span><span class="v">Báo chi phí byte của một khoá; mặc định lấy mẫu, chỉ chính xác với SAMPLES 0.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Một hash là listpack cho tới khi có hơn 128 trường hoặc trường/giá trị nào dài hơn 64 byte, sau đó thành hashtable tốn 60–100 byte mỗi trường mãi mãi — việc chuyển kiểu không đảo ngược.</li>
+<li>Gom một triệu đối tượng vào 10.000 hash đã cắt bộ nhớ từ 89 MB xuống 26 MB vì trả chi phí khoá cấp cao nhất một lần mỗi gáo, không phải mỗi đối tượng.</li>
+<li>Giữ mỗi gáo dưới 128 mục và giá trị dưới 64 byte, nếu không nó âm thầm chuyển sang hashtable và bộ nhớ nhảy khoảng 5 lần.</li>
+<li>Đo trước: --memkeys xếp theo bộ nhớ thật, MEMORY USAGE là lấy mẫu trừ khi bạn nói SAMPLES 0, và nâng ngưỡng chỉ đổi một vấn đề bộ nhớ thấy được lấy một vấn đề độ trễ vô hình.</li>
+</ul>
 <a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-3-cau-truc-du-lieu" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 12.3: cùng dữ liệu, một phần RAM</span><span class="lc-sub">100.000 phiên lưu ba cách (11,91 / 11,67 / 5,92 MB), khoản tiết kiệm đến từ ÍT KHOÁ hơn, vách trường thứ 513 đo bằng MEMORY USAGE … SAMPLES 0, bitmap (1.000.000 người trong 131.136 byte) và bảng xếp hạng bằng sorted set.</span></span>
@@ -611,6 +691,22 @@ redis-cli MEMORY USAGE user:1042</code></pre>
 </a>
 
 <p class="note-ct"><strong>Three things to remember.</strong> Answer three questions and the model chooses itself: partial <em>writes</em> mean a hash, whole-object reads with no partial writes make a JSON string smaller and simpler, and genuinely different lifetimes per field mean separate keys or <code>HEXPIRE</code>. Nesting is where hashes lose — flatten with dotted field names to keep atomicity, or store a sub-object as a JSON field and accept the read-modify-write race inside it. And agree a key naming scheme on day one, because <code>SCAN MATCH</code>, migrations and 2am cleanups all depend on the pattern being real.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">JSON string</span><span class="v">Whole object in one key: smallest and one GET, but changing a field is a read-modify-write that races.</span></div>
+  <div class="kv"><span class="k">Hash</span><span class="v">Per-field atomic writes and HMGET that transfers only what a page needs — the right default in almost every case.</span></div>
+  <div class="kv"><span class="k">Separate keys</span><span class="v">One key per field; buys independent per-field TTLs at the cost of more memory and more round trips.</span></div>
+  <div class="kv"><span class="k">RedisJSON</span><span class="v">A module (not core Redis) giving real nesting and JSONPath, unavailable on most managed hosting.</span></div>
+  <div class="kv"><span class="k">Flattening</span><span class="v">Dotted field names like <code>address.city</code> to keep a nested object in a flat hash and preserve atomicity.</span></div>
+  <div class="kv"><span class="k">Key naming scheme</span><span class="v">An agreed <code>type:id:aspect</code> convention so SCAN MATCH, migrations and cleanups can work by pattern.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>Three questions decide the model: partial writes mean a hash, whole-object reads with no partial writes make a JSON string smaller and simpler, and different lifetimes per field mean separate keys or HEXPIRE.</li>
+<li>A hash is flat, so nesting means dotted field names (which keep atomicity) or a JSON string inside a field (which reintroduces the race, but scoped to that sub-object).</li>
+<li>Do not split one object across many keys "for flexibility" — it costs five key overheads, loses atomic multi-field writes, and leaks whatever a DEL forgot.</li>
+<li>Agree a colon-separated key naming scheme on day one, because SCAN MATCH, migrations and 2am cleanups all depend on the pattern being real.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 5 · Bài 5.3</span>
@@ -704,6 +800,38 @@ redis-cli MEMORY USAGE user:1042</code></pre>
 </a>
 
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Trả lời ba câu hỏi là mô hình tự chọn lấy nó: có <em>ghi</em> một phần thì dùng hash, đọc nguyên đối tượng mà không ghi một phần thì chuỗi JSON nhỏ hơn và đơn giản hơn, còn các trường thật sự có tuổi thọ khác nhau thì dùng khoá rời hoặc <code>HEXPIRE</code>. Lồng nhau là chỗ hash thua — hãy làm phẳng bằng tên trường có dấu chấm để giữ tính nguyên tử, hoặc lưu đối tượng con thành một trường JSON và chấp nhận cuộc đua đọc-sửa-ghi bên trong nó. Và hãy thống nhất lược đồ đặt tên khoá ngay ngày đầu, vì <code>SCAN MATCH</code>, các lần di trú và những đợt dọn dẹp lúc 2 giờ sáng đều phụ thuộc vào việc cái mẫu ấy có thật.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">JSON string</span><span class="v">Nguyên đối tượng trong một khoá: nhỏ nhất và một GET, nhưng đổi một trường là đọc-sửa-ghi có đua.</span></div>
+  <div class="kv"><span class="k">Hash</span><span class="v">Ghi nguyên tử theo trường và HMGET chỉ chuyển đúng thứ trang cần — mặc định đúng trong gần như mọi trường hợp.</span></div>
+  <div class="kv"><span class="k">Khoá rời</span><span class="v">Mỗi trường một khoá; mua được TTL độc lập cho từng trường, đổi lại tốn bộ nhớ và nhiều vòng đi-về hơn.</span></div>
+  <div class="kv"><span class="k">RedisJSON</span><span class="v">Một module (không phải Redis lõi) cho lồng nhau thật và JSONPath, không có trên phần lớn dịch vụ có quản lý.</span></div>
+  <div class="kv"><span class="k">Làm phẳng</span><span class="v">Tên trường có dấu chấm như <code>address.city</code> để giữ đối tượng lồng trong một hash phẳng mà vẫn giữ tính nguyên tử.</span></div>
+  <div class="kv"><span class="k">Lược đồ đặt tên khoá</span><span class="v">Quy ước <code>type:id:aspect</code> đã thống nhất để SCAN MATCH, di trú và dọn dẹp làm việc được theo mẫu.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Ba câu hỏi quyết định mô hình: có ghi một phần thì dùng hash, đọc nguyên đối tượng mà không ghi một phần thì chuỗi JSON nhỏ và đơn giản hơn, và các trường có tuổi thọ khác nhau thì dùng khoá rời hoặc HEXPIRE.</li>
+<li>Hash thì phẳng, nên lồng nhau nghĩa là tên trường có dấu chấm (giữ tính nguyên tử) hoặc một chuỗi JSON nằm trong một trường (dựng lại cuộc đua, nhưng thu hẹp trong đối tượng con đó).</li>
+<li>Đừng xé một đối tượng ra nhiều khoá "cho linh hoạt" — nó tốn năm lần chi phí khoá, mất phép ghi nhiều trường nguyên tử, và rò rỉ những gì lệnh DEL quên.</li>
+<li>Hãy thống nhất lược đồ đặt tên khoá ngăn bằng dấu hai chấm ngay ngày đầu, vì SCAN MATCH, di trú và dọn dẹp lúc 2 giờ sáng đều phụ thuộc vào việc cái mẫu ấy có thật.</li>
+</ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-3-cau-truc-du-lieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.3 — Picking the right structure is worth 95× the RAM</span><span class="lc-sub">Hash or JSON string for an object: the RAM difference measured from Node.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-3-cau-truc-du-lieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.3 — Chọn đúng cấu trúc dữ liệu đáng giá 95 lần RAM</span><span class="lc-sub">Hash hay chuỗi JSON cho một đối tượng: chênh lệch RAM đo từ Node.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -839,6 +967,22 @@ redis-cli HEXPIREAT flags 1756512000 FIELDS 1 new-editor</code></pre>
 </a>
 
 <p class="note-ct"><strong>Three things to remember.</strong> Redis 7.4 made TTL a property of a field, not just a key — <code>HEXPIRE</code> and its seven siblings, all requiring the odd-looking mandatory <code>FIELDS numfields …</code> clause. The return codes <em>are</em> the API: <code>-2</code> no such field, <code>-1</code> no TTL, <code>0</code> your condition refused it, <code>1</code> set, <code>2</code> deleted on the spot — and code that treats <code>-1</code> and <code>-2</code> as the same thing is wrong in the interesting case. And the biggest thing this unlocks is Lesson 5.2's bucketing trick for caches: you can finally have many objects in one hash and give each its own lifetime, which was the one constraint that ruled it out.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">HEXPIRE</span><span class="v">Sets a TTL on specific hash fields, new in Redis 7.4 — TTL finally belongs to a field, not just a key.</span></div>
+  <div class="kv"><span class="k">FIELDS numfields</span><span class="v">The mandatory clause naming how many field names follow; required even for one field, or you get an error.</span></div>
+  <div class="kv"><span class="k">HTTL</span><span class="v">Reports a field's remaining TTL: -1 means the field exists with no TTL, -2 means no such field.</span></div>
+  <div class="kv"><span class="k">HPERSIST</span><span class="v">Removes a field's TTL so it lives forever again — not the same as an HEXPIRE with a negative time.</span></div>
+  <div class="kv"><span class="k">listpackex</span><span class="v">The 7.4 listpack variant that stores a TTL beside each entry, so small hashes with field TTLs stay cheap.</span></div>
+  <div class="kv"><span class="k">hexpired</span><span class="v">The keyspace-notification event fired when a single field expires, carrying the field name.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>Redis 7.4 made TTL a property of a field, not just a key: HEXPIRE and seven siblings, all requiring the FIELDS numfields clause even for one field.</li>
+<li>The return codes are the API — -2 no such field, -1 no TTL, 0 condition refused, 1 set, 2 deleted now — and treating -1 and -2 alike is the classic bug.</li>
+<li>An empty hash cannot exist, so a hash whose every field has a TTL is a self-deleting key, and a new hexpired notification lets a listener react per field.</li>
+<li>This unlocks bucketed caches with per-object lifetimes — but check the server version, because on older Redis HEXPIRE is ERR unknown command at runtime, failing open.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 5 · Bài 5.4</span>
@@ -965,6 +1109,38 @@ redis-cli HEXPIREAT flags 1756512000 FIELDS 1 new-editor</code></pre>
 </a>
 
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Redis 7.4 biến TTL thành thuộc tính của một trường, không chỉ của một khoá — <code>HEXPIRE</code> cùng bảy lệnh anh em, tất cả đều đòi cái mệnh đề <code>FIELDS numfields …</code> trông kỳ quặc nhưng bắt buộc. Các mã trả về <em>chính là</em> giao diện: <code>-2</code> không có trường đó, <code>-1</code> không có TTL, <code>0</code> điều kiện của bạn đã từ chối, <code>1</code> đã đặt, <code>2</code> xoá ngay tại chỗ — và mã coi <code>-1</code> với <code>-2</code> là một thứ thì sai đúng ở trường hợp thú vị nhất. Và thứ lớn nhất chuyện này mở khoá là mẹo chia gáo của Bài 5.2 dành cho bộ đệm: cuối cùng bạn cũng có thể nhét nhiều đối tượng vào một hash mà vẫn cho mỗi cái một tuổi thọ riêng, vốn là ràng buộc duy nhất đã loại nó ra.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">HEXPIRE</span><span class="v">Đặt TTL cho các trường hash cụ thể, mới có ở Redis 7.4 — TTL cuối cùng thuộc về một trường, không chỉ một khoá.</span></div>
+  <div class="kv"><span class="k">FIELDS numfields</span><span class="v">Mệnh đề bắt buộc nêu có bao nhiêu tên trường theo sau; cần cả khi chỉ một trường, nếu không sẽ lỗi.</span></div>
+  <div class="kv"><span class="k">HTTL</span><span class="v">Báo TTL còn lại của trường: -1 nghĩa là trường tồn tại nhưng không có TTL, -2 nghĩa là không có trường đó.</span></div>
+  <div class="kv"><span class="k">HPERSIST</span><span class="v">Gỡ TTL của một trường để nó sống mãi trở lại — khác với HEXPIRE đặt thời gian âm.</span></div>
+  <div class="kv"><span class="k">listpackex</span><span class="v">Biến thể listpack của 7.4 lưu một TTL cạnh mỗi mục, nên hash nhỏ có TTL theo trường vẫn rẻ.</span></div>
+  <div class="kv"><span class="k">hexpired</span><span class="v">Sự kiện thông báo không gian khoá bắn ra khi một trường hết hạn, kèm tên trường.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Redis 7.4 biến TTL thành thuộc tính của một trường, không chỉ của một khoá: HEXPIRE cùng bảy lệnh anh em, tất cả đòi mệnh đề FIELDS numfields kể cả cho một trường.</li>
+<li>Các mã trả về chính là giao diện — -2 không có trường, -1 không có TTL, 0 điều kiện từ chối, 1 đã đặt, 2 xoá ngay — và coi -1 với -2 là một thứ là lỗi kinh điển.</li>
+<li>Một hash rỗng không thể tồn tại, nên hash mà mọi trường đều có TTL là một khoá tự xoá, và sự kiện hexpired mới cho phép người nghe phản ứng theo từng trường.</li>
+<li>Chuyện này mở khoá bộ đệm chia gáo có tuổi thọ riêng từng đối tượng — nhưng hãy kiểm phiên bản máy chủ, vì trên Redis cũ HEXPIRE là ERR unknown command lúc chạy, hỏng kiểu mở toang.</li>
+</ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-3-cau-truc-du-lieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.3 — Picking the right structure is worth 95× the RAM</span><span class="lc-sub">Hashes and expiry inside a Node application.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-3-cau-truc-du-lieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.3 — Chọn đúng cấu trúc dữ liệu đáng giá 95 lần RAM</span><span class="lc-sub">Hash và hết hạn bên trong một ứng dụng Node.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -1119,6 +1295,22 @@ await sub.pSubscribe('__keyspace@0__:config:app', () =&gt; loadConfig());</code>
 </a>
 
 <p class="note-ct"><strong>Three things to remember.</strong> A session is a hash plus a reverse index — the hash holds the data and slides its own TTL on every read; the <code>user:N:sessions</code> set is the only thing that makes "log out everywhere" possible. <code>HINCRBY</code> has no constraints, so a cart quantity will go negative and no read-then-validate can stop it — that is the first problem in this course that genuinely needs Lua. And every one of these patterns is safe only because something bounds it: an expiring key, a fixed dimension list, twenty hand-written config fields. Add one user-supplied dimension and the "safe" <code>HGETALL</code> becomes an outage.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Sliding expiry</span><span class="v">Re-EXPIRE the session on every read so activity keeps it alive, instead of dying a fixed time after login.</span></div>
+  <div class="kv"><span class="k">Reverse index</span><span class="v">The <code>user:N:sessions</code> set that makes "log out everywhere" and "show my active devices" possible.</span></div>
+  <div class="kv"><span class="k">HINCRBY (cart)</span><span class="v">Atomic quantity change with no constraint — a cart field can go negative, and no read-then-validate stops it.</span></div>
+  <div class="kv"><span class="k">One hash per day</span><span class="v">Analytics counters with a bounded dimension list, one TTL and one safe HGETALL per day.</span></div>
+  <div class="kv"><span class="k">Unbounded dimension</span><span class="v">A field whose values come from users (a URL path, a referrer) that grows with traffic and converts the hash.</span></div>
+  <div class="kv"><span class="k">Keyspace notifications</span><span class="v">Pub/Sub messages on key changes used to reload hot config without a deploy — at-most-once, so pair with a timer.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>A session is a hash plus a reverse index: the hash slides its own TTL on every read, and the <code>user:N:sessions</code> set is the only thing that makes revocation possible.</li>
+<li>HINCRBY has no constraints, so a cart quantity goes negative — clamping after the increment, atomically, is the first problem in this course that genuinely needs Lua.</li>
+<li>Analytics as one hash per day gives one TTL and the only safe HGETALL, because you control the dimension list and it cannot grow with traffic.</li>
+<li>Every pattern here is safe only because something bounds it — an expiring key, a fixed dimension list, twenty hand-written config fields; add one user-supplied dimension and the "safe" HGETALL becomes an outage.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 5 · Bài 5.5</span>
@@ -1264,6 +1456,48 @@ await sub.pSubscribe('__keyspace@0__:config:app', () =&gt; loadConfig());</code>
 </a>
 
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Một phiên là một hash cộng một chỉ mục ngược — hash giữ dữ liệu và tự đẩy TTL của mình ở mỗi lượt đọc; cái tập <code>user:N:sessions</code> là thứ duy nhất làm cho "đăng xuất mọi nơi" khả thi. <code>HINCRBY</code> không có ràng buộc nào, nên số lượng trong giỏ sẽ xuống âm và không phép đọc-rồi-kiểm nào ngăn được — đó là bài toán đầu tiên trong khoá này thật sự cần Lua. Và mọi khuôn ở đây chỉ an toàn vì có thứ gì đó chặn chúng lại: một khoá biết hết hạn, một danh sách chiều cố định, hai mươi trường cấu hình viết tay. Thêm một chiều do người dùng cung cấp là cái <code>HGETALL</code> "an toàn" biến thành một sự cố.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Sliding expiry (hạn trượt)</span><span class="v">Gọi lại EXPIRE ở mỗi lượt đọc để hoạt động giữ phiên sống, thay vì chết sau đăng nhập một khoảng cố định.</span></div>
+  <div class="kv"><span class="k">Chỉ mục ngược</span><span class="v">Tập <code>user:N:sessions</code> làm cho "đăng xuất mọi nơi" và "xem thiết bị đang hoạt động" khả thi.</span></div>
+  <div class="kv"><span class="k">HINCRBY (giỏ hàng)</span><span class="v">Đổi số lượng nguyên tử mà không có ràng buộc — một trường giỏ có thể xuống âm, không phép đọc-rồi-kiểm nào ngăn được.</span></div>
+  <div class="kv"><span class="k">Một hash mỗi ngày</span><span class="v">Bộ đếm phân tích với danh sách chiều bị chặn trên, một TTL và một HGETALL an toàn mỗi ngày.</span></div>
+  <div class="kv"><span class="k">Chiều không chặn trên</span><span class="v">Một trường có giá trị đến từ người dùng (đường dẫn URL, nguồn giới thiệu) phình theo lưu lượng và chuyển kiểu cả hash.</span></div>
+  <div class="kv"><span class="k">Keyspace notifications</span><span class="v">Thông báo Pub/Sub khi khoá đổi, dùng để nạp lại cấu hình nóng không cần deploy — nhiều nhất một lần, nên ghép thêm bộ hẹn giờ.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Một phiên là một hash cộng một chỉ mục ngược: hash tự đẩy TTL ở mỗi lượt đọc, còn tập <code>user:N:sessions</code> là thứ duy nhất làm cho việc thu hồi khả thi.</li>
+<li>HINCRBY không có ràng buộc, nên số lượng giỏ xuống âm — kẹp lại sau khi tăng, một cách nguyên tử, là bài toán đầu tiên trong khoá thật sự cần Lua.</li>
+<li>Phân tích dạng một hash mỗi ngày cho một TTL và HGETALL an toàn duy nhất, vì bạn kiểm soát danh sách chiều và nó không phình theo lưu lượng.</li>
+<li>Mọi khuôn ở đây chỉ an toàn vì có thứ chặn chúng lại — một khoá biết hết hạn, một danh sách chiều cố định, hai mươi trường cấu hình viết tay; thêm một chiều do người dùng cung cấp là cái HGETALL "an toàn" biến thành một sự cố.</li>
+</ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/java-web-application-development/learn?lessonSlug=prj301-slide-cs4-2" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · PRJ301 ⭐ CS.4 — Security (2): CSRF, CORS, JWT, refresh tokens, OAuth2</span><span class="lc-sub">Sessions versus JWT, revocation, and why sessions need a shared store such as Redis once you run two servers.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-3-cau-truc-du-lieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.3 — Picking the right structure is worth 95× the RAM</span><span class="lc-sub">Hashes, sets and sorted sets built in complete Node code, with real RAM measurements.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/java-web-application-development/learn?lessonSlug=prj301-slide-cs4-2" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · PRJ301 ⭐ CS.4 — Bảo mật (2): CSRF, CORS, JWT, refresh token, OAuth2</span><span class="lc-sub">Phiên so với JWT, thu hồi, và vì sao phiên cần một kho dùng chung như Redis khi bạn chạy từ hai máy chủ.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-3-cau-truc-du-lieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.3 — Chọn đúng cấu trúc dữ liệu đáng giá 95 lần RAM</span><span class="lc-sub">Hash, set và sorted set dựng bằng mã Node đầy đủ, có đo RAM thật.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

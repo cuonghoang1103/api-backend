@@ -84,6 +84,22 @@ keyspace_misses:9117</div>
 </a>
 
 <p class="note-ct"><strong>Three things to remember.</strong> Cache-aside is what you have and what you should default to: the application owns the cache, only requested data is stored, and a dead Redis degrades to a slow request — <em>provided</em> you catch the error and treat it as a miss. The five-line version everyone writes is missing four things: error handling, negative caching, TTL jitter and stampede protection, and the next four lessons are those four things. And write-behind is the one pattern that can lose committed data, so use it only where you can say out loud "if Redis dies we lose the last few seconds of this" and nobody objects.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Cache-aside</span><span class="v">The app checks the cache, loads from the DB on a miss and fills the cache — the default pattern, and the one you have.</span></div>
+  <div class="kv"><span class="k">Read-through</span><span class="v">Your code talks only to the cache; the cache layer itself loads from the DB on a miss.</span></div>
+  <div class="kv"><span class="k">Write-through</span><span class="v">Every write goes to cache and DB together, synchronously, so reads after a write are never stale.</span></div>
+  <div class="kv"><span class="k">Write-behind</span><span class="v">Write to the cache and flush to the DB later; very fast, and the only pattern that can lose committed data.</span></div>
+  <div class="kv"><span class="k">Lazy loading</span><span class="v">Another name for cache-aside — nothing is cached until someone requests it.</span></div>
+  <div class="kv"><span class="k">Cache warming</span><span class="v">Pre-loading hot keys after a deploy; a job you run, not a pattern you pick, and it composes with any of the four.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>Almost every cache is cache-aside: the application owns the cache, only requested data is stored, and a dead Redis degrades to a slow request — provided you catch the error and treat it as a miss.</li>
+<li>The five-line cache-aside everyone writes is missing four things: error handling, negative caching, TTL jitter and stampede protection — the next four lessons.</li>
+<li>Read-through centralises caching policy; write-through keeps the cache never-stale at the cost of a Redis dependency on every write.</li>
+<li>Write-behind is the only pattern that can lose committed data, so use it only where losing the last few seconds is genuinely acceptable.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 6 · Bài 6.1</span>
@@ -150,6 +166,48 @@ keyspace_misses:9117</div>
 </a>
 
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Cache-aside là cái bạn đang có và là cái bạn nên chọn mặc định: ứng dụng sở hữu bộ đệm, chỉ dữ liệu được yêu cầu mới được lưu, và một Redis chết chỉ làm yêu cầu chậm đi — <em>với điều kiện</em> bạn bắt lỗi và coi nó như một lần trượt. Bản năm dòng ai cũng viết còn thiếu bốn thứ: xử lý lỗi, đệm kết quả rỗng, rắc nhiễu vào TTL và chống giẫm đạp, và bốn bài tiếp theo chính là bốn thứ đó. Và write-behind là khuôn duy nhất có thể làm mất dữ liệu đã ghi nhận, nên chỉ dùng nó ở nơi bạn nói to được câu "nếu Redis chết ta mất mấy giây cuối của thứ này" mà không ai phản đối.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Cache-aside</span><span class="v">App tìm trong bộ đệm, trượt thì nạp từ CSDL rồi nạp vào bộ đệm — khuôn mặc định, và là cái bạn đang dùng.</span></div>
+  <div class="kv"><span class="k">Read-through</span><span class="v">Mã của bạn chỉ nói chuyện với bộ đệm; chính tầng bộ đệm nạp từ CSDL khi trượt.</span></div>
+  <div class="kv"><span class="k">Write-through</span><span class="v">Mỗi lần ghi đi vào cả bộ đệm và CSDL cùng lúc, đồng bộ, nên đọc sau ghi không bao giờ ôi.</span></div>
+  <div class="kv"><span class="k">Write-behind</span><span class="v">Ghi vào bộ đệm rồi đẩy xuống CSDL sau; rất nhanh, và là khuôn duy nhất có thể làm mất dữ liệu đã ghi nhận.</span></div>
+  <div class="kv"><span class="k">Lazy loading (nạp lười)</span><span class="v">Một tên khác của cache-aside — không gì được đệm cho tới khi có người yêu cầu.</span></div>
+  <div class="kv"><span class="k">Cache warming (làm ấm)</span><span class="v">Nạp sẵn khoá nóng sau một lần deploy; một việc bạn chạy, không phải khuôn bạn chọn, và ghép được với cả bốn.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Gần như mọi bộ đệm là cache-aside: ứng dụng sở hữu bộ đệm, chỉ dữ liệu được yêu cầu mới lưu, và một Redis chết chỉ làm yêu cầu chậm đi — với điều kiện bạn bắt lỗi và coi nó như một lần trượt.</li>
+<li>Bản năm dòng ai cũng viết còn thiếu bốn thứ: xử lý lỗi, đệm kết quả rỗng, rắc nhiễu vào TTL và chống giẫm đạp — chính là bốn bài tiếp theo.</li>
+<li>Read-through gom chính sách về một chỗ; write-through giữ bộ đệm không bao giờ ôi, đổi lại đường ghi phụ thuộc vào Redis.</li>
+<li>Write-behind là khuôn duy nhất có thể làm mất dữ liệu đã ghi nhận, nên chỉ dùng ở nơi mất mấy giây cuối là thật sự chấp nhận được.</li>
+</ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/java-web-application-development/learn?lessonSlug=prj301-slide-cs5-2" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · PRJ301 ⭐ CS.5 — Architecture (2): config, logs, jobs, cache, REST</span><span class="lc-sub">@Cacheable in Spring: once you need expiry or several servers, the choice becomes Caffeine or Redis.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-2-cache-aside" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.2 — Cache-aside: the pattern and its four betrayals</span><span class="lc-sub">Cache-aside written in Node, and the four ways it turns against you.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/java-web-application-development/learn?lessonSlug=prj301-slide-cs5-2" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · PRJ301 ⭐ CS.5 — Kiến trúc (2): cấu hình, log, job, cache, REST</span><span class="lc-sub">@Cacheable trong Spring: khi cần hết hạn hay nhiều máy chủ, lựa chọn trở thành Caffeine hoặc Redis.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-2-cache-aside" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.2 — Cache-aside: khuôn mẫu và bốn lần nó phản chủ</span><span class="lc-sub">Cache-aside viết bằng Node, và bốn lần nó quay sang phản chủ.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -279,6 +337,22 @@ OK
 </a>
 
 <p class="note-ct"><strong>Three things to remember.</strong> Try TTL alone first — it has no invalidation bugs because it has no invalidation code, and it should stay as a backstop under every other strategy. When you do invalidate, <em>delete</em> rather than update (deleting is idempotent and self-correcting), use <code>UNLINK</code> rather than <code>DEL</code>, and write to the database <em>before</em> invalidating. And the hard case is never the entity — it is the listing, the search page and the aggregate that also changed, which is what versioned keys, tags and generation counters exist for. A hand-maintained dependency graph is already wrong.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">TTL-only</span><span class="v">Let keys expire and reload; no invalidation code means no invalidation bug, so it stays as a backstop.</span></div>
+  <div class="kv"><span class="k">Delete-on-write</span><span class="v">Remove the key when the DB changes — delete, do not update, because a write can race and a delete cannot.</span></div>
+  <div class="kv"><span class="k">UNLINK</span><span class="v">Non-blocking delete that frees a large key on a background thread; prefer it to DEL by default.</span></div>
+  <div class="kv"><span class="k">Versioned keys</span><span class="v">Bump a tiny version counter so old data keys are orphaned and expire on their own, with one atomic INCR.</span></div>
+  <div class="kv"><span class="k">Tags (surrogate keys)</span><span class="v">A set recording which cached pages depend on an entity, so one change drops every page that declared it.</span></div>
+  <div class="kv"><span class="k">Namespace generation</span><span class="v">One INCR on a generation counter orphans the whole cache in O(1) without touching sessions or queues.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>Try TTL alone first — it has no invalidation bug because it has no invalidation code, and it should stay as a backstop under every other strategy.</li>
+<li>When you invalidate, delete rather than update (idempotent and self-correcting), use UNLINK rather than DEL, and write the database before invalidating.</li>
+<li>Versioned keys and a generation counter invalidate whole groups with one atomic INCR; tags express a genuinely irregular dependency graph at the cost of bookkeeping.</li>
+<li>The hard case is never the entity but the listing, search page and aggregate that also changed — a hand-maintained dependency graph is already wrong.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 6 · Bài 6.2</span>
@@ -399,6 +473,38 @@ OK
 </a>
 
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Hãy thử chỉ dùng TTL trước — nó không có lỗi đẩy khoá vì nó không có mã đẩy khoá, và nó nên nằm lại làm lưới đỡ dưới mọi chiến lược khác. Khi bạn thật sự vô hiệu hoá, hãy <em>xoá</em> chứ đừng cập nhật (xoá thì gọi bao nhiêu lần cũng ra một kết quả và tự sửa được), hãy dùng <code>UNLINK</code> chứ đừng dùng <code>DEL</code>, và hãy ghi xuống cơ sở dữ liệu <em>trước</em> rồi mới vô hiệu hoá. Và trường hợp khó không bao giờ là cái thực thể — mà là danh sách, trang tìm kiếm và con số tổng cũng vừa đổi theo, đó chính là lý do khoá có phiên bản, nhãn và bộ đếm thế hệ tồn tại. Một đồ thị phụ thuộc duy trì bằng tay là một đồ thị đã sai sẵn.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Chỉ dùng TTL</span><span class="v">Để khoá hết hạn rồi nạp lại; không có mã đẩy khoá nghĩa là không có lỗi đẩy khoá, nên nó ở lại làm lưới đỡ.</span></div>
+  <div class="kv"><span class="k">Xoá khi ghi</span><span class="v">Bỏ khoá khi CSDL đổi — hãy xoá chứ đừng cập nhật, vì ghi có thể đua còn xoá thì không.</span></div>
+  <div class="kv"><span class="k">UNLINK</span><span class="v">Xoá không chặn, giải phóng khoá lớn ở luồng nền; hãy ưu tiên nó hơn DEL theo mặc định.</span></div>
+  <div class="kv"><span class="k">Khoá có phiên bản</span><span class="v">Tăng một bộ đếm phiên bản tí hon để các khoá dữ liệu cũ thành mồ côi và tự hết hạn, bằng một lệnh INCR nguyên tử.</span></div>
+  <div class="kv"><span class="k">Nhãn (surrogate key)</span><span class="v">Một set ghi lại những trang đã đệm phụ thuộc vào một thực thể, nên một thay đổi bỏ mọi trang đã khai báo nó.</span></div>
+  <div class="kv"><span class="k">Đổi thế hệ không gian tên</span><span class="v">Một lệnh INCR trên bộ đếm thế hệ làm cả bộ đệm thành mồ côi trong O(1) mà không đụng phiên hay hàng đợi.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Hãy thử chỉ dùng TTL trước — nó không có lỗi đẩy khoá vì không có mã đẩy khoá, và nên ở lại làm lưới đỡ dưới mọi chiến lược khác.</li>
+<li>Khi vô hiệu hoá, hãy xoá chứ đừng cập nhật (gọi bao nhiêu lần cũng ra một kết quả và tự sửa được), dùng UNLINK chứ đừng DEL, và ghi cơ sở dữ liệu trước rồi mới vô hiệu hoá.</li>
+<li>Khoá có phiên bản và bộ đếm thế hệ vô hiệu hoá cả nhóm bằng một lệnh INCR nguyên tử; nhãn diễn đạt một đồ thị phụ thuộc bất quy tắc, đổi lại phần ghi sổ.</li>
+<li>Trường hợp khó không bao giờ là cái thực thể mà là danh sách, trang tìm kiếm và con số tổng cũng vừa đổi — một đồ thị phụ thuộc duy trì bằng tay là một đồ thị đã sai sẵn.</li>
+</ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-2-cache-aside" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.2 — Cache-aside: the pattern and its four betrayals</span><span class="lc-sub">The four betrayals of cache-aside, including invalidation done in the wrong order.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-2-cache-aside" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.2 — Cache-aside: khuôn mẫu và bốn lần nó phản chủ</span><span class="lc-sub">Bốn lần cache-aside phản chủ, có cả chuyện vô hiệu hoá khoá sai thứ tự.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -526,6 +632,22 @@ redis-cli SET lock:page:home 1 NX EX 30</code></pre>
 </a>
 
 <p class="note-ct"><strong>Three things to remember.</strong> Three different problems share the name: synchronised expiry (fix with jitter, one line), one hot key with concurrent misses (fix with single-flight), and a cold cache (fix by warming before taking traffic) — and jitter, which everyone reaches for first, does nothing for the second and third. A lock must have a TTL <em>and</em> a token, because releasing with a plain <code>DEL</code> can delete someone else's lock and leave two workers inside the critical section. And the best-feeling fix is serving stale while one worker refreshes behind it: nobody ever waits, at the price of a product decision about how old is too old.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Cache stampede</span><span class="v">Many concurrent misses on the same value all hit the database at once the instant a hot key expires.</span></div>
+  <div class="kv"><span class="k">Synchronised expiry</span><span class="v">Many keys written in the same second share one deadline and expire together; the fix is jitter.</span></div>
+  <div class="kv"><span class="k">Jitter</span><span class="v">Randomising the TTL slightly (10–20%) so deadlines spread out; fixes synchronised expiry and nothing else.</span></div>
+  <div class="kv"><span class="k">Single-flight</span><span class="v">A SET NX EX lock so one caller recomputes while others wait briefly and then read again.</span></div>
+  <div class="kv"><span class="k">XFetch</span><span class="v">Probabilistic early recompute: readers refresh slightly early, weighted by compute cost, so no herd forms.</span></div>
+  <div class="kv"><span class="k">Cache penetration</span><span class="v">Repeated misses for values that do not exist; fixed by caching a negative sentinel or a Bloom filter.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>Three different problems share the name: synchronised expiry (fix with jitter, one line), one hot key with concurrent misses (fix with single-flight), and a cold cache (fix by warming) — jitter helps only the first.</li>
+<li>A single-flight lock must be SET NX EX and carry a token, released only by a conditional Lua check, or you delete someone else's lock and let two workers into the critical section.</li>
+<li>Probabilistic early recompute and serve-stale-while-revalidate mean nobody waits and the key is never absent — the best-feeling fixes.</li>
+<li>Penetration is the sibling problem: misses for keys that do not exist, which every stampede fix is useless against — cache a negative sentinel with a short TTL, or add a Bloom filter.</li>
+</ul>
 <a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-2-cache-aside" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 12.2: the stampede, measured</span><span class="lc-sub">200 concurrent requests the moment the key expired, Postgres pool of 10: plain cache-aside 200 queries / 4,178 ms, single-flight (a Map of promises) 1 / 69.1 ms, SET NX lock 1 / 80.6 ms, warm cache 0 / 2.9 ms.</span></span>
@@ -649,6 +771,22 @@ redis-cli SET lock:page:home 1 NX EX 30</code></pre>
 </a>
 
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Ba vấn đề khác nhau dùng chung cái tên: hết hạn đồng loạt (chữa bằng rắc nhiễu, một dòng), một khoá nóng bị trượt đồng thời (chữa bằng một-lượt-duy-nhất), và bộ đệm nguội (chữa bằng làm ấm trước khi nhận lưu lượng) — và rắc nhiễu, thứ ai cũng với tay lấy đầu tiên, chẳng làm được gì cho hai cái sau. Một cái khoá phải có TTL <em>và</em> một mã thông báo, vì nhả bằng <code>DEL</code> trơn có thể xoá mất khoá của người khác và để hai worker cùng nằm trong vùng tới hạn. Và cách chữa cho cảm giác tốt nhất là phục vụ đồ ôi trong lúc một worker làm mới phía sau: không ai phải chờ, với cái giá là một quyết định về sản phẩm rằng cũ tới đâu thì là quá cũ.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Cache stampede (giẫm đạp)</span><span class="v">Nhiều lần trượt đồng thời trên cùng một giá trị cùng lúc đánh xuống CSDL ngay khoảnh khắc một khoá nóng hết hạn.</span></div>
+  <div class="kv"><span class="k">Hết hạn đồng loạt</span><span class="v">Nhiều khoá ghi trong cùng một giây chung một hạn và hết hạn cùng nhau; cách chữa là rắc nhiễu.</span></div>
+  <div class="kv"><span class="k">Jitter (rắc nhiễu)</span><span class="v">Ngẫu nhiên hoá TTL một chút (10–20%) để các hạn trải ra; chữa hết hạn đồng loạt và không chữa gì khác.</span></div>
+  <div class="kv"><span class="k">Single-flight (một lượt)</span><span class="v">Một khoá SET NX EX để một bên tính lại trong khi những bên khác chờ ngắn rồi đọc lại.</span></div>
+  <div class="kv"><span class="k">XFetch</span><span class="v">Tính lại sớm theo xác suất: các bên đọc làm mới hơi sớm, có trọng số theo chi phí tính, nên không thành đàn.</span></div>
+  <div class="kv"><span class="k">Cache penetration (xuyên thủng)</span><span class="v">Trượt lặp lại cho các giá trị không tồn tại; chữa bằng đệm một dấu hiệu rỗng hoặc một bộ lọc Bloom.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Ba vấn đề khác nhau dùng chung cái tên: hết hạn đồng loạt (chữa bằng rắc nhiễu, một dòng), một khoá nóng bị trượt đồng thời (chữa bằng một-lượt), và bộ đệm nguội (chữa bằng làm ấm) — rắc nhiễu chỉ giúp cái đầu.</li>
+<li>Một khoá một-lượt phải là SET NX EX và mang một mã thông báo, chỉ nhả bằng một phép kiểm Lua có điều kiện, nếu không bạn xoá mất khoá của người khác và để hai worker vào vùng tới hạn.</li>
+<li>Tính lại sớm theo xác suất và phục vụ-đồ-ôi-trong-lúc-làm-mới nghĩa là không ai phải chờ và khoá không bao giờ vắng mặt — những cách chữa cho cảm giác tốt nhất.</li>
+<li>Xuyên thủng là vấn đề anh em: trượt cho các khoá không tồn tại, mà mọi cách chữa giẫm đạp đều vô dụng với nó — hãy đệm một dấu hiệu rỗng với TTL ngắn, hoặc thêm một bộ lọc Bloom.</li>
+</ul>
 <a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-2-cache-aside" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 12.2: cơn giẫm đạp, đo thật</span><span class="lc-sub">200 request cùng lúc đúng khi khoá hết hạn, pool Postgres 10: cache-aside thường 200 truy vấn / 4.178 ms, single-flight (Map các promise) 1 / 69,1 ms, khoá SET NX 1 / 80,6 ms, cache ấm 0 / 2,9 ms.</span></span>
@@ -751,6 +889,22 @@ if (!pinned) await redis.set(key, JSON.stringify(row), { EX: ttl });</code></pre
 </a>
 
 <p class="note-ct"><strong>Three things to remember.</strong> Write the database first and <em>delete</em> the cache second — deleting is idempotent so concurrent writers cannot order themselves wrongly, while writing values into a cache always can. That ordering still leaves one rare race, where a slow reader writes back a pre-write value, which is exactly why the TTL must stay as a backstop under every explicit invalidation. And when a "the cache is broken" report arrives on a system with read replicas, suspect replica lag before your invalidation code: a read that misses, queries a lagging replica and caches the pre-write row is correct at every step and wrong for the whole TTL.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Write-then-delete</span><span class="v">Update the DB, then delete the cache key — the best ordering, because delete is idempotent.</span></div>
+  <div class="kv"><span class="k">Delete-then-write</span><span class="v">The wrong ordering: a reader in the gap reads the old row and caches it for the full TTL.</span></div>
+  <div class="kv"><span class="k">Delayed double delete</span><span class="v">A second delete after the write-back window closes, to catch a slow reader's stale fill.</span></div>
+  <div class="kv"><span class="k">Version guard</span><span class="v">Store a row version and refuse to overwrite a newer cache entry with an older one; needs Lua.</span></div>
+  <div class="kv"><span class="k">Replica lag</span><span class="v">A read served by a lagging replica caches a pre-write row for the full TTL though every step was correct.</span></div>
+  <div class="kv"><span class="k">CDC (change data capture)</span><span class="v">Derive invalidations from the database commit log (Debezium) so every write path is covered automatically.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>There is no transaction across cache and database, so every write has a window; the best ordering is update the DB then delete the cache, because delete is idempotent and concurrent writers cannot order themselves wrongly.</li>
+<li>That ordering still leaves one rare race — a slow reader writes back a pre-write value — which is exactly why the TTL must stay as a backstop under every explicit invalidation.</li>
+<li>On systems with read replicas, "the cache is broken" is usually replica lag, not your invalidation code — pin a user's reads to the primary briefly after their own write.</li>
+<li>Do not over-build: a short TTL and write-then-delete is correct for most fields; reserve CDC and version guards for the few that genuinely cannot be stale.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 6 · Bài 6.4</span>
@@ -839,6 +993,38 @@ if (!pinned) await redis.set(key, JSON.stringify(row), { EX: ttl });</code></pre
 </a>
 
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Hãy ghi cơ sở dữ liệu trước và <em>xoá</em> bộ đệm sau — xoá thì gọi bao nhiêu lần cũng ra một kết quả nên các bên ghi đồng thời không thể tự xếp sai thứ tự, trong khi ghi giá trị vào bộ đệm thì luôn có thể. Thứ tự đó vẫn để hở đúng một cuộc đua hiếm, nơi một bên đọc chậm ghi ngược một giá trị trước-khi-ghi, và đó chính xác là lý do TTL phải nằm lại làm lưới đỡ dưới mọi phép vô hiệu hoá tường minh. Và khi một phiếu báo "bộ đệm hỏng" tới trên một hệ thống có bản sao đọc, hãy nghi độ trễ bản sao trước khi nghi mã vô hiệu hoá của bạn: một lượt đọc bị trượt, truy vấn một bản sao đang chậm rồi đệm dòng trước-khi-ghi là đúng ở mọi bước và sai suốt trọn TTL.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Ghi-rồi-xoá</span><span class="v">Cập nhật CSDL rồi xoá khoá bộ đệm — thứ tự tốt nhất, vì xoá gọi bao nhiêu lần cũng ra một kết quả.</span></div>
+  <div class="kv"><span class="k">Xoá-rồi-ghi</span><span class="v">Thứ tự sai: một bên đọc trong khe hở đọc dòng cũ rồi đệm nó suốt cả TTL.</span></div>
+  <div class="kv"><span class="k">Xoá đôi có trễ</span><span class="v">Một lần xoá thứ hai sau khi khe ghi-ngược đóng lại, để bắt lần đệm ôi của một bên đọc chậm.</span></div>
+  <div class="kv"><span class="k">Version guard (chốt phiên bản)</span><span class="v">Lưu phiên bản của dòng và từ chối ghi đè một mục mới hơn bằng một mục cũ hơn; cần Lua.</span></div>
+  <div class="kv"><span class="k">Replica lag (độ trễ bản sao)</span><span class="v">Một lượt đọc do bản sao đang chậm phục vụ sẽ đệm dòng trước-khi-ghi suốt cả TTL dù mọi bước đều đúng.</span></div>
+  <div class="kv"><span class="k">CDC (change data capture)</span><span class="v">Suy ra lệnh vô hiệu hoá từ nhật ký commit của CSDL (Debezium), nên mọi đường ghi được phủ tự động.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Không có giao dịch nào bắc qua bộ đệm và cơ sở dữ liệu, nên mỗi lượt ghi có một khe hở; thứ tự tốt nhất là cập nhật CSDL rồi xoá bộ đệm, vì xoá là nguyên tố và các bên ghi đồng thời không thể tự xếp sai.</li>
+<li>Thứ tự đó vẫn để hở đúng một cuộc đua hiếm — một bên đọc chậm ghi ngược một giá trị trước-khi-ghi — và đó chính là lý do TTL phải nằm lại làm lưới đỡ dưới mọi phép vô hiệu hoá tường minh.</li>
+<li>Trên hệ thống có bản sao đọc, "bộ đệm hỏng" thường là độ trễ bản sao chứ không phải mã vô hiệu hoá của bạn — hãy ghim lượt đọc của người dùng vào bản chính một lúc ngắn sau khi họ tự ghi.</li>
+<li>Đừng dựng quá tay: một TTL ngắn kèm ghi-rồi-xoá là đúng cho phần lớn trường; hãy để dành CDC và chốt phiên bản cho vài trường thật sự không được phép ôi.</li>
+</ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-2-cache-aside" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.2 — Cache-aside: the pattern and its four betrayals</span><span class="lc-sub">The four betrayals of cache-aside, including deleting in the wrong order and caching a stale value.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-2-cache-aside" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.2 — Cache-aside: khuôn mẫu và bốn lần nó phản chủ</span><span class="lc-sub">Bốn lần cache-aside phản chủ, có cả xoá sai thứ tự và nạp vào bộ đệm một giá trị ôi.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -971,6 +1157,22 @@ OK
 </a>
 
 <p class="note-ct"><strong>Three things to remember.</strong> <code>keyspace_hits</code>/<code>keyspace_misses</code> are cumulative and instance-wide, so a single reading is a lifetime average and a healthy-looking 95% is often sessions hiding a product cache at 20% — per-cache numbers exist only if your code counts them. Hit ratio has no units and is trivially gameable; the number that supports a decision is work avoided, which is hits multiplied by the real cost of a miss. And when latency spikes, <code>--latency</code> tells you the server is busy and <code>SLOWLOG</code> tells you which command and which client made it busy — usually a <code>KEYS</code> or an <code>HGETALL</code> that was fine when the data was small.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">keyspace_hits / keyspace_misses</span><span class="v">Cumulative, instance-wide hit and miss counters; a single reading is a lifetime average, so sample twice and subtract.</span></div>
+  <div class="kv"><span class="k">Hit ratio</span><span class="v">hits / (hits + misses); unitless and trivially gameable, so it rarely supports a decision on its own.</span></div>
+  <div class="kv"><span class="k">Work avoided</span><span class="v">hits × the real cost of a miss — the number in seconds that actually justifies a cache.</span></div>
+  <div class="kv"><span class="k">evicted_keys</span><span class="v">Keys Redis threw away at maxmemory before they expired; above zero means the instance is undersized.</span></div>
+  <div class="kv"><span class="k">SLOWLOG</span><span class="v">An in-memory log (microseconds) naming the slow command and the client that ran it; gone on restart.</span></div>
+  <div class="kv"><span class="k">Per-cache metrics</span><span class="v">Hit/miss counters tagged by cache name in your code, since Redis cannot break its counters down by prefix.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>keyspace_hits and keyspace_misses are cumulative and instance-wide, so a healthy-looking 95% is often sessions hiding a product cache running at 20%.</li>
+<li>Hit ratio has no units and is gameable; measure work avoided (hits × the real cost of a miss) and the latency your users actually see.</li>
+<li>Per-cache numbers exist only if your code counts them — two counters and two histograms tagged by cache name turn "95%" into a sentence you can act on.</li>
+<li>When latency spikes, --latency shows the server is busy and SLOWLOG names the command and client — usually a KEYS or an HGETALL that was fine when the data was small.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 6 · Bài 6.5</span>
@@ -1094,6 +1296,38 @@ OK
 </a>
 
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> <code>keyspace_hits</code>/<code>keyspace_misses</code> là cộng dồn và tính cho cả máy, nên một lần đọc là trung bình cả đời và một con số 95% trông khoẻ mạnh thường là phiên đang che giấu một bộ đệm sản phẩm chạy ở 20% — số liệu theo từng bộ đệm chỉ tồn tại nếu mã của bạn tự đếm. Tỉ lệ trúng không mang đơn vị và dễ gian lận tới mức tầm thường; con số chống đỡ được cho một quyết định là khối việc tránh được, tức số lượt trúng nhân với giá thật của một lượt trượt. Và khi độ trễ vọt lên, <code>--latency</code> nói cho bạn biết máy chủ đang bận còn <code>SLOWLOG</code> nói cho bạn biết lệnh nào và máy khách nào làm nó bận — thường là một lệnh <code>KEYS</code> hay một <code>HGETALL</code> vốn vẫn ổn hồi dữ liệu còn nhỏ.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">keyspace_hits / keyspace_misses</span><span class="v">Bộ đếm trúng/trượt cộng dồn, tính cho cả máy; một lần đọc là trung bình cả đời, nên lấy mẫu hai lần rồi trừ.</span></div>
+  <div class="kv"><span class="k">Hit ratio (tỉ lệ trúng)</span><span class="v">trúng / (trúng + trượt); không mang đơn vị và dễ gian lận, nên hiếm khi tự nó chống đỡ được một quyết định.</span></div>
+  <div class="kv"><span class="k">Work avoided (khối việc tránh được)</span><span class="v">số lượt trúng × giá thật của một lượt trượt — con số theo giây thật sự biện minh cho một bộ đệm.</span></div>
+  <div class="kv"><span class="k">evicted_keys</span><span class="v">Các khoá Redis vứt đi khi chạm maxmemory trước khi hết hạn; trên 0 nghĩa là máy quá nhỏ.</span></div>
+  <div class="kv"><span class="k">SLOWLOG</span><span class="v">Một nhật ký trong bộ nhớ (micro giây) nêu tên lệnh chậm và máy khách đã chạy nó; mất khi khởi động lại.</span></div>
+  <div class="kv"><span class="k">Số liệu theo từng bộ đệm</span><span class="v">Bộ đếm trúng/trượt gắn nhãn theo tên bộ đệm trong mã bạn, vì Redis không tách bộ đếm của nó theo tiền tố.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>keyspace_hits và keyspace_misses là cộng dồn và tính cho cả máy, nên một con số 95% trông khoẻ mạnh thường là phiên đang che giấu một bộ đệm sản phẩm chạy ở 20%.</li>
+<li>Tỉ lệ trúng không mang đơn vị và dễ gian lận; hãy đo khối việc tránh được (số trúng × giá thật của một lượt trượt) và độ trễ người dùng thật sự thấy.</li>
+<li>Số liệu theo từng bộ đệm chỉ tồn tại nếu mã của bạn tự đếm — hai bộ đếm và hai histogram gắn nhãn theo tên bộ đệm biến "95%" thành một câu bạn hành động được.</li>
+<li>Khi độ trễ vọt lên, --latency cho biết máy chủ đang bận còn SLOWLOG nêu tên lệnh và máy khách — thường là một lệnh KEYS hay một HGETALL vốn vẫn ổn hồi dữ liệu còn nhỏ.</li>
+</ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-6-van-hanh-production" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.6 — Running Redis: the commands that freeze everything</span><span class="lc-sub">The commands that freeze everything — KEYS among them — when you go looking inside a cache.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-6-van-hanh-production" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.6 — Vận hành Redis: những lệnh làm đứng hình tất cả</span><span class="lc-sub">Những lệnh làm đứng hình tất cả — có KEYS — khi bạn đi soi bên trong một bộ đệm.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

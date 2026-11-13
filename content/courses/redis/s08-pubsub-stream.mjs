@@ -287,6 +287,22 @@ await redis.publish('metrics:tick', JSON.stringify({ rps, p99 }));</code></pre>
 <li>Dùng khi thông điệp là lời mách hồi phục được; khi thông điệp <em>chính là</em> công việc, hãy dùng Stream.</li>
 </ul>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-5-pubsub-streams" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.5 — Pub/Sub and Streams: the message that vanished</span><span class="lc-sub">Pub/Sub and Streams from Node code — the message that vanished, reproduced.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-5-pubsub-streams" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.5 — Pub/Sub và Streams: tin nhắn đã biến mất</span><span class="lc-sub">Pub/Sub và Streams từ mã Node — tái hiện tin nhắn đã biến mất.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 8.2 ─────────────────────────── */
@@ -671,6 +687,22 @@ redis-cli MEMORY USAGE big</code></pre>
 <li>Một bên tiêu thụ vừa khởi động lại nối tiếp chứ không mất một cửa sổ — tính chất Pub/Sub không cho được.</li>
 <li>Stream phình mãi trừ khi bị chặn: đặt <code>MAXLEN ~ N</code> hoặc <code>MINID</code> lên mỗi <code>XADD</code>.</li>
 </ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-5-pubsub-streams" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.5 — Pub/Sub and Streams: the message that vanished</span><span class="lc-sub">Streams from Node code: what a persisted log changes compared with Pub/Sub.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-5-pubsub-streams" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.5 — Pub/Sub và Streams: tin nhắn đã biến mất</span><span class="lc-sub">Streams từ mã Node: một nhật ký được lưu lại thay đổi điều gì so với Pub/Sub.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -1634,6 +1666,22 @@ redis-cli EVAL "return redis.call('MEMORY','USAGE',KEYS[1]) / redis.call('XLEN',
 <li>"Bền" với một stream là đúng những gì cấu hình lưu lâu dài và đẩy khoá của bạn nói.</li>
 <li>Kiểm <code>appendonly</code> và <code>maxmemory-policy</code> trước khi giao cho một stream dữ liệu bạn không thể mất.</li>
 </ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-13-4-lich-trinh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 13.4 — Scheduling: delays, priority, throttling and cron</span><span class="lc-sub">Delays, priorities and repeatable jobs — the part a queue library handles for you.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-13-4-lich-trinh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 13.4 — Lịch trình: hẹn giờ, ưu tiên, bóp tốc độ và job định kỳ</span><span class="lc-sub">Hẹn giờ, ưu tiên, job định kỳ — phần một thư viện hàng đợi lo hộ bạn.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

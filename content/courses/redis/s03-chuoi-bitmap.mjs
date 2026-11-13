@@ -283,6 +283,22 @@ min: 0, max: 31, avg: 4.18 (412 samples)</div>
 <li>Giữ chuỗi cho những giá trị đọc trọn ghi trọn; ngay khi phải phân tích để đổi một trường, hãy dùng hash.</li>
 </ul>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-3-cau-truc-du-lieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.3 — Picking the right structure is worth 95× the RAM</span><span class="lc-sub">Strings next to hashes and sets, driven from ioredis with memory measured.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-3-cau-truc-du-lieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.3 — Chọn đúng cấu trúc dữ liệu đáng giá 95 lần RAM</span><span class="lc-sub">Chuỗi đặt cạnh hash và set, điều khiển bằng ioredis và có đo bộ nhớ.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 3.2 ─────────────────────────── */
@@ -571,6 +587,22 @@ db0:keys=142811,expires=14417,avg_ttl=1841203</div>
 <li>Đặt ô thời gian vào tên khoá và đặt TTL bằng EXPIRE … NX ở mọi lượt tăng.</li>
 <li>Canh tỷ lệ keys so với expires trong INFO keyspace để bắt rò rỉ TTL từ sớm.</li>
 </ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-4-nguyen-tu-rate-limit-lock" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.4 — Atomicity: rate limiting and locks done right</span><span class="lc-sub">INCR in application code: rate limiting and distributed locks written in Node.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-4-nguyen-tu-rate-limit-lock" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.4 — Tính nguyên tử: giới hạn tần suất và khoá phân tán làm cho đúng</span><span class="lc-sub">INCR trong mã ứng dụng: giới hạn tần suất và khoá phân tán viết bằng Node.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -867,6 +899,22 @@ export async function monthlyActive() {
 <li>Chỉ dùng bitmap cho ID dày đặc, trạng thái luận lý và truy vấn chỉ cần đếm; đừng dùng để lấy lại thành viên hay nhiều trạng thái.</li>
 </ul>
 </div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-3-cau-truc-du-lieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.3 — Picking the right structure is worth 95× the RAM</span><span class="lc-sub">Bitmaps against the other structures, measured from Node — why the right type is worth so much RAM.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-3-cau-truc-du-lieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.3 — Chọn đúng cấu trúc dữ liệu đáng giá 95 lần RAM</span><span class="lc-sub">Bitmap so với các cấu trúc khác, đo từ Node — vì sao chọn đúng kiểu tiết kiệm nhiều RAM đến thế.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 3.4 ─────────────────────────── */
@@ -1131,6 +1179,22 @@ sitewide uniques today:    412884  (union of 1,284 page HLLs, 41ms)</div>
 <li>Không có phép kiểm thành viên và không có phép xoá — HLL chỉ lớn lên, nên dùng khoá theo ngày kèm TTL rồi hợp chúng.</li>
 <li>Nó sai mỗi khi một con người đối chiếu được con số với một danh sách, hoặc nó xuất hiện trên một hoá đơn.</li>
 </ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-3-cau-truc-du-lieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.3 — Picking the right structure is worth 95× the RAM</span><span class="lc-sub">Memory-frugal counting measured from Node, alongside the exact structures it replaces.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-3-cau-truc-du-lieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.3 — Chọn đúng cấu trúc dữ liệu đáng giá 95 lần RAM</span><span class="lc-sub">Đếm tiết kiệm bộ nhớ đo từ Node, đặt cạnh các cấu trúc chính xác mà nó thay thế.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -1462,6 +1526,32 @@ if (!allowed) return res.status(429).set('Retry-After', String(retryAfter)).json
 <li>Kiểm-rồi-tăng là một cuộc đua dưới đúng cái tải bạn đang giới hạn; hãy làm cho lệnh INCR chính là phép kiểm.</li>
 <li>Chọn khoá một cách có chủ đích: theo người dùng và theo điểm cuối, để một lời gọi rẻ không bỏ đói một lời gọi đắt.</li>
 </ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-4-nguyen-tu-rate-limit-lock" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.4 — Atomicity: rate limiting and locks done right</span><span class="lc-sub">Rate limiting inside a Node application, done atomically.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-12-5-chia-se" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">API Design · 12.4 — Two instances, one truth: rate limits, idempotency, ETags and tickets shared</span><span class="lc-sub">A rate limit shared across several API instances, so the limit holds no matter which instance answers.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-4-nguyen-tu-rate-limit-lock" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.4 — Tính nguyên tử: giới hạn tần suất và khoá phân tán làm cho đúng</span><span class="lc-sub">Giới hạn tần suất bên trong ứng dụng Node, làm cho nguyên tử.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-12-5-chia-se" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">API Design · 12.4 — Hai instance, một sự thật: dùng chung rate limit, idempotency, ETag và vé</span><span class="lc-sub">Rate limit dùng chung giữa nhiều instance API, để giới hạn vẫn giữ dù instance nào trả lời.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

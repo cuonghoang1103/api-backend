@@ -11,6 +11,228 @@ export default {
   title: 'Section 0 — What Redis solves, and getting set up|||Mục 0 — Redis giải quyết gì, và cài đặt',
   description: 'Vì sao một cơ sở dữ liệu sống trong RAM lại đáng có, Redis KHÔNG phải cái gì, cài trong hai mươi giây bằng Docker hoặc trực tiếp, năm phút đầu tiên với redis-cli, và bản đồ mười ba chương phía trước.',
   lessons: [
+    /* ──────────────────── Bắt đầu tại đây 1/2 ──────────────────── */
+    {
+      title: 'Start here (1/2) — What Redis is, and why it is worth learning|||Bắt đầu tại đây (1/2) — Redis là gì, và vì sao đáng học',
+      slug: 'rd-0-0-start-here-1',
+      type: 'LESSON',
+      isFreePreview: true,
+      description: 'Bài mở cửa cho người chưa từng chạm Redis: Redis là gì (một cơ sở dữ liệu sống trong RAM), vì sao nó nhanh tới mức mạng mới là cái giá, nó thật ra là một hộp công cụ cấu trúc dữ liệu chứ không chỉ là cache chuỗi, và vì sao nó là bạn đồng hành của PostgreSQL chứ không phải thứ thay thế.',
+      content: `
+<div class="ml-en">
+<span class="eyebrow">Section 0 · Start here</span>
+<h2>What Redis is, and why it is worth learning</h2>
+<p class="lead">If you have only ever reached for a database that writes to disk, Redis will feel like a different kind of tool — because it is. Redis keeps all of its data in memory, answers in microseconds, and gives you real data structures instead of rows and columns. This first lesson is the orientation: what Redis actually is, the one number that explains its speed, and where it fits next to the database you already have.</p>
+<h3>A database that lives in memory</h3>
+<p>Every ordinary database eventually waits on the disk. Redis does not, because it holds everything in RAM — roughly a thousand times faster than an SSD. The practical effect is startling: a Redis command typically finishes in a few microseconds, which is faster than the network round trip used to deliver it. For most workloads the network is the cost and Redis itself is effectively free.</p>
+<h3>Really a toolbox of data structures</h3>
+<p>Redis is often called "a cache", and it can be one, but that undersells it. It stores strings, lists, sets, sorted sets, hashes, streams and more — and it offers commands that operate on them atomically. A leaderboard, a rate limiter, a job queue, a set of "who liked this": each is one or two commands in Redis, and each is awkward in SQL. Choosing the right structure is most of the skill, and Chapters 3 to 5 are entirely about that.</p>
+<h3>A companion, not a replacement</h3>
+<p>Redis does not replace PostgreSQL. RAM is expensive and finite, Redis has no joins or query planner, and its default settings favour speed over durability. The useful mental model is: your real database holds the truth, and Redis holds what benefits from being fast. Nearly every production system runs both, and the interesting design question is always which data belongs where.</p>
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Name three features in an app you use that are almost certainly backed by something like Redis — a view counter, a "trending" list, a rate limit, a login session.</li>
+<li>For one of them, write one sentence on why a disk-based database would be a poor fit (the same answer recomputed constantly, or an operation that is awkward in SQL).</li>
+<li>Write down, in your own words, the difference between "the database that holds the truth" and "the store that holds what benefits from being fast".</li>
+</ol>
+<p><strong>Done when:</strong> you can name three Redis-shaped problems and say, for one, why SQL is the wrong tool for it.</p></div>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">In-memory store</span><span class="v">A database that keeps its data in RAM, not on disk — the reason Redis answers in microseconds.</span></div>
+  <div class="kv"><span class="k">Data structure server</span><span class="v">Redis's real nature: strings, lists, sets, sorted sets and hashes with commands that act on them.</span></div>
+  <div class="kv"><span class="k">Atomic command</span><span class="v">An operation that either happens completely or not at all, with no locks needed.</span></div>
+  <div class="kv"><span class="k">Cache</span><span class="v">A fast copy of an answer that is expensive to recompute.</span></div>
+  <div class="kv"><span class="k">Source of truth</span><span class="v">The durable database (here PostgreSQL) that owns the authoritative data.</span></div>
+  <div class="kv"><span class="k">Redis vs Memcached</span><span class="v">Memcached is a pure string cache; Redis adds structures, persistence and more.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>Redis is a database that lives in memory, so it answers in microseconds — often faster than the network that carries the request.</li>
+<li>Its real value is data structures: problems that are awkward in SQL become one or two commands.</li>
+<li>It is a companion to a durable database, not a replacement — the question is always which data belongs where.</li>
+<li>Memcached is a pure string cache; Redis does far more.</li>
+</ul>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 0 · Bắt đầu tại đây</span>
+<h2>Redis là gì, và vì sao đáng học</h2>
+<p class="lead">Nếu bạn mới chỉ quen những cơ sở dữ liệu ghi xuống đĩa, Redis sẽ cho cảm giác là một loại công cụ khác — vì nó đúng là vậy. Redis giữ toàn bộ dữ liệu trong bộ nhớ, trả lời trong micro giây, và cho bạn những cấu trúc dữ liệu thật thay vì hàng và cột. Bài đầu tiên này là phần định hướng: Redis thật sự là gì, con số duy nhất giải thích tốc độ của nó, và nó nằm ở đâu bên cạnh cơ sở dữ liệu bạn đang có.</p>
+<h3>Một cơ sở dữ liệu sống trong bộ nhớ</h3>
+<p>Mọi cơ sở dữ liệu thường rốt cuộc đều phải chờ cái đĩa. Redis thì không, vì nó giữ mọi thứ trong RAM — nhanh gấp khoảng một nghìn lần một cái SSD. Hệ quả thực tế thì gây sửng sốt: một câu lệnh Redis thường xong trong vài micro giây, nhanh hơn cả một vòng mạng đi-về để chuyển nó. Với phần lớn khối lượng công việc, mạng mới là cái giá còn bản thân Redis gần như miễn phí.</p>
+<h3>Thật ra là một hộp công cụ cấu trúc dữ liệu</h3>
+<p>Redis hay bị gọi là "một cái cache", và nó làm được việc đó, nhưng nói vậy là hạ thấp nó. Nó lưu chuỗi, list, set, sorted set, hash, stream và hơn nữa — và nó cho những câu lệnh thao tác trên chúng một cách nguyên tử. Một bảng xếp hạng, một bộ giới hạn tần suất, một hàng đợi việc, một tập "ai đã thích cái này": mỗi cái là một hoặc hai câu lệnh trong Redis, và mỗi cái đều vụng về trong SQL. Chọn đúng cấu trúc là phần lớn của kỹ năng, và Chương 3 tới 5 nói trọn về điều đó.</p>
+<h3>Bạn đồng hành, không phải thứ thay thế</h3>
+<p>Redis không thay thế PostgreSQL. RAM thì đắt và hữu hạn, Redis không có join hay bộ lập kế hoạch truy vấn, và thiết lập mặc định của nó ưu tiên tốc độ hơn độ bền. Mô hình tư duy hữu ích là: cơ sở dữ liệu thật giữ sự thật, còn Redis giữ những gì được lợi khi nhanh. Gần như mọi hệ thống production đều chạy cả hai, và câu hỏi thiết kế thú vị luôn là dữ liệu nào thuộc về đâu.</p>
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Kể tên ba tính năng trong một app bạn dùng mà gần như chắc chắn được chống lưng bởi thứ gì đó như Redis — một bộ đếm lượt xem, một danh sách "đang thịnh hành", một giới hạn tần suất, một phiên đăng nhập.</li>
+<li>Với một trong số đó, viết một câu vì sao một cơ sở dữ liệu dựa trên đĩa sẽ không hợp (cùng một câu trả lời được tính đi tính lại liên tục, hoặc một thao tác vụng về trong SQL).</li>
+<li>Viết ra, bằng lời của bạn, khác biệt giữa "cơ sở dữ liệu giữ sự thật" và "kho giữ những gì được lợi khi nhanh".</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn kể được ba bài toán có hình dạng hợp Redis và nói được, với một cái, vì sao SQL là công cụ sai cho nó.</p></div>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">In-memory store</span><span class="v">Một cơ sở dữ liệu giữ dữ liệu trong RAM, không phải trên đĩa — lý do Redis trả lời trong micro giây.</span></div>
+  <div class="kv"><span class="k">Data structure server</span><span class="v">Bản chất thật của Redis: chuỗi, list, set, sorted set và hash kèm câu lệnh thao tác trên chúng.</span></div>
+  <div class="kv"><span class="k">Atomic command</span><span class="v">Một thao tác hoặc xảy ra trọn vẹn hoặc không, không cần khoá.</span></div>
+  <div class="kv"><span class="k">Cache</span><span class="v">Một bản sao nhanh của một câu trả lời tốn kém khi tính lại.</span></div>
+  <div class="kv"><span class="k">Source of truth</span><span class="v">Cơ sở dữ liệu bền (ở đây là PostgreSQL) sở hữu dữ liệu có thẩm quyền.</span></div>
+  <div class="kv"><span class="k">Redis so với Memcached</span><span class="v">Memcached là cache chuỗi thuần; Redis thêm cấu trúc, lưu lâu dài và hơn nữa.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Redis là một cơ sở dữ liệu sống trong bộ nhớ, nên trả lời trong micro giây — thường nhanh hơn cả cái mạng chở yêu cầu.</li>
+<li>Giá trị thật của nó là cấu trúc dữ liệu: những bài toán vụng về trong SQL trở thành một hoặc hai câu lệnh.</li>
+<li>Nó là bạn đồng hành của một cơ sở dữ liệu bền, không phải thứ thay thế — câu hỏi luôn là dữ liệu nào thuộc về đâu.</li>
+<li>Memcached là cache chuỗi thuần; Redis làm nhiều hơn thế rất nhiều.</li>
+</ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-1-redis-co-ban" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.1 — What Redis really is, and where the time goes</span><span class="lc-sub">The same Redis seen from a Node application: latency measured from the client side, and where each millisecond goes.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/academy/courses/java-web-application-development/learn?lessonSlug=prj301-slide-cs5-2" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · PRJ301 ⭐ CS.5 — Architecture (2): config, logs, jobs, cache, REST</span><span class="lc-sub">If you build with Spring at the Academy: @Cacheable, and when Caffeine stops being enough and Redis takes over.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-1-redis-co-ban" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.1 — Redis thực chất là gì, và thời gian trôi đi đâu</span><span class="lc-sub">Cũng Redis ấy nhìn từ một ứng dụng Node: độ trễ đo từ phía client, và từng mili giây trôi đi đâu.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/academy/courses/java-web-application-development/learn?lessonSlug=prj301-slide-cs5-2" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · PRJ301 ⭐ CS.5 — Kiến trúc (2): cấu hình, log, job, cache, REST</span><span class="lc-sub">Nếu bạn làm Spring ở Academy: @Cacheable, và lúc nào Caffeine không còn đủ để Redis vào thay.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
+`,
+    },
+    /* ──────────────────── Bắt đầu tại đây 2/2 ──────────────────── */
+    {
+      title: 'Start here (2/2) — What you need to know first, and how to study this course|||Bắt đầu tại đây (2/2) — Nền tảng cần biết, và cách học khoá này',
+      slug: 'rd-0-0-start-here-2',
+      type: 'LESSON',
+      isFreePreview: true,
+      description: 'Bài thứ hai của cặp mở đầu: bạn cần biết gì trước (mở terminal, một ngôn ngữ lập trình ở mức đọc hiểu, Docker để chạy Redis trong hai mươi giây), mô hình tư duy một luồng và khoá-giá-trị, bản đồ mười ba chương, và cách học hiệu quả nhất là tự gõ redis-cli chứ không phải đọc.',
+      content: `
+<div class="ml-en">
+<span class="eyebrow">Section 0 · Start here</span>
+<h2>What you need to know first, and how to study this course</h2>
+<p class="lead">The previous lesson said what Redis is. This one gets you ready to use it: the small amount you need to know before Chapter 1, the mental model that makes every later chapter click, the map of the thirteen chapters, and one honest piece of advice — type the commands yourself, because this course was written by running them.</p>
+<h3>What you need before Chapter 1</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">A terminal</span><span class="v">You should be comfortable opening a shell and running a command. That is the whole prerequisite for the tooling.</span></div>
+  <div class="kv"><span class="k">One programming language, at reading level</span><span class="v">Examples lean on JavaScript and Node, but only enough that you can read them; you do not need to be fluent.</span></div>
+  <div class="kv"><span class="k">Docker, ideally</span><span class="v">It runs a real Redis in twenty seconds (next lesson). A direct install works too.</span></div>
+  <div class="kv"><span class="k">No Redis knowledge</span><span class="v">Section 0 builds the model from zero; nothing here assumes you have used it before.</span></div>
+</div>
+<h3>The mental model to carry through</h3>
+<p>Three ideas underpin everything that follows. Redis is <strong>single-threaded</strong>: it runs one command at a time, which is why commands are atomic and also why one slow command freezes everyone. The keyspace is <strong>one flat dictionary</strong>: a key is just a string, and the colons in <code>user:1042:name</code> are a human convention, not folders. And most keys should carry a <strong>TTL</strong> — an expiry — because memory is finite and data that lives forever is usually a bug.</p>
+<h3>The thirteen chapters ahead</h3>
+<p>Section 0 gets Redis running. Chapter 1 is the execution model (one thread, the RESP protocol). Chapter 2 is keys, TTL and expiry. Chapters 3 to 5 are the data structures — strings and bitmaps, then lists/sets/sorted sets, then hashes. Chapter 6 is caching done properly. Chapter 7 is atomicity (<code>MULTI</code>, <code>WATCH</code>, Lua). Chapter 8 is Pub/Sub and Streams. Chapter 9 is memory, eviction and persistence. Chapter 10 is running Redis safely. Chapter 11 is scaling (replication, Sentinel, Cluster). Chapter 12 is diagnosis and where to go next.</p>
+<h3>How to study this course</h3>
+<p>Keep a <code>redis-cli</code> open and run every command as you read it. Reading a command and running it are not the same thing — the return values, the errors, and the way the output changes as data grows are the lesson. Every number and every output block in this course came from a real Redis, and you learn it fastest by reproducing them.</p>
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Confirm your prerequisites: open a terminal and check that you can run a command, and decide now whether you will use Docker or a direct install (the next lesson covers both).</li>
+<li>Write the three-part mental model in your own words — one thread, one flat keyspace, a TTL on most keys — and one consequence of each.</li>
+<li>Skim the chapter map and mark the two chapters you most want to reach; it keeps the early chapters motivated.</li>
+</ol>
+<p><strong>Done when:</strong> your terminal is ready, you can restate the three-part model, and you know which chapters you are aiming for.</p></div>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Single-threaded</span><span class="v">Redis runs one command at a time — the source of its atomicity and of the "one slow command" danger.</span></div>
+  <div class="kv"><span class="k">Keyspace</span><span class="v">The one flat dictionary of all keys; the colon convention is for humans, not folders.</span></div>
+  <div class="kv"><span class="k">TTL</span><span class="v">Time-to-live, an expiry on a key so memory is reclaimed automatically.</span></div>
+  <div class="kv"><span class="k">redis-cli</span><span class="v">The command-line client you keep open to run and observe commands.</span></div>
+  <div class="kv"><span class="k">RESP</span><span class="v">The simple wire protocol Redis speaks, covered in Chapter 1.</span></div>
+  <div class="kv"><span class="k">Prerequisite</span><span class="v">A terminal, one readable programming language, and ideally Docker — no prior Redis.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>You need a terminal, one programming language at reading level, and ideally Docker — no prior Redis knowledge.</li>
+<li>Carry three ideas through the course: single-threaded execution, one flat keyspace, and a TTL on most keys.</li>
+<li>The thirteen chapters run from the execution model to data structures, caching, atomicity, persistence, scaling and diagnosis.</li>
+<li>Study by keeping <code>redis-cli</code> open and running every command — reading is not running.</li>
+</ul>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 0 · Bắt đầu tại đây</span>
+<h2>Nền tảng cần biết, và cách học khoá này</h2>
+<p class="lead">Bài trước nói Redis là gì. Bài này giúp bạn sẵn sàng dùng nó: phần nhỏ bạn cần biết trước Chương 1, mô hình tư duy khiến mọi chương sau khớp vào, bản đồ mười ba chương, và một lời khuyên thành thật — hãy tự gõ các câu lệnh, vì khoá này được viết bằng cách chạy chúng.</p>
+<h3>Bạn cần gì trước Chương 1</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Một terminal</span><span class="v">Bạn nên thoải mái mở một shell và chạy một câu lệnh. Đó là toàn bộ điều kiện tiên quyết cho phần công cụ.</span></div>
+  <div class="kv"><span class="k">Một ngôn ngữ lập trình, ở mức đọc hiểu</span><span class="v">Ví dụ dựa vào JavaScript và Node, nhưng chỉ đủ để bạn đọc được; bạn không cần thành thạo.</span></div>
+  <div class="kv"><span class="k">Docker, lý tưởng nhất</span><span class="v">Nó chạy một Redis thật trong hai mươi giây (bài kế). Cài trực tiếp cũng được.</span></div>
+  <div class="kv"><span class="k">Không cần biết Redis</span><span class="v">Mục 0 dựng mô hình từ số 0; không chỗ nào ở đây giả định bạn từng dùng nó.</span></div>
+</div>
+<h3>Mô hình tư duy mang theo suốt khoá</h3>
+<p>Ba ý tưởng nâng đỡ mọi thứ phía sau. Redis chạy <strong>một luồng</strong>: nó chạy một câu lệnh tại một thời điểm, đó là vì sao các câu lệnh là nguyên tử và cũng là vì sao một câu lệnh chậm làm đông cứng tất cả mọi người. Không gian khoá là <strong>một cuốn từ điển phẳng</strong>: một khoá chỉ là một chuỗi, và mấy dấu hai chấm trong <code>user:1042:name</code> là quy ước của con người, không phải thư mục. Và phần lớn khoá nên mang một <strong>TTL</strong> — một thời hạn — vì bộ nhớ hữu hạn và dữ liệu sống mãi thường là một lỗi.</p>
+<h3>Mười ba chương phía trước</h3>
+<p>Mục 0 cho Redis chạy lên. Chương 1 là mô hình thực thi (một luồng, giao thức RESP). Chương 2 là khoá, TTL và hết hạn. Chương 3 tới 5 là các cấu trúc dữ liệu — chuỗi và bitmap, rồi list/set/sorted set, rồi hash. Chương 6 là cache cho đúng. Chương 7 là tính nguyên tử (<code>MULTI</code>, <code>WATCH</code>, Lua). Chương 8 là Pub/Sub và Streams. Chương 9 là bộ nhớ, đẩy khoá và lưu lâu dài. Chương 10 là vận hành Redis an toàn. Chương 11 là mở rộng (nhân bản, Sentinel, Cluster). Chương 12 là chẩn đoán và đi tiếp về đâu.</p>
+<h3>Cách học khoá này</h3>
+<p>Hãy mở sẵn một <code>redis-cli</code> và chạy mọi câu lệnh ngay khi bạn đọc nó. Đọc một câu lệnh và chạy nó không phải một chuyện — các giá trị trả về, các lỗi, và cách output đổi khi dữ liệu phình ra mới là bài học. Mọi con số và mọi khối output trong khoá này đều tới từ một Redis thật, và bạn học nhanh nhất bằng cách tái tạo lại chúng.</p>
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Xác nhận điều kiện tiên quyết: mở một terminal và kiểm rằng bạn chạy được một câu lệnh, và quyết ngay bây giờ bạn sẽ dùng Docker hay cài trực tiếp (bài kế bao cả hai).</li>
+<li>Viết mô hình tư duy ba phần bằng lời của bạn — một luồng, một không gian khoá phẳng, một TTL trên phần lớn khoá — kèm một hệ quả của mỗi cái.</li>
+<li>Lướt bản đồ các chương và đánh dấu hai chương bạn muốn tới nhất; nó giữ cho mấy chương đầu có động lực.</li>
+</ol>
+<p><strong>Đạt khi:</strong> terminal của bạn đã sẵn sàng, bạn nhắc lại được mô hình ba phần, và bạn biết mình đang nhắm tới những chương nào.</p></div>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Single-threaded</span><span class="v">Redis chạy một câu lệnh tại một thời điểm — nguồn gốc của tính nguyên tử và của mối nguy "một câu lệnh chậm".</span></div>
+  <div class="kv"><span class="k">Keyspace</span><span class="v">Cuốn từ điển phẳng duy nhất chứa mọi khoá; quy ước dấu hai chấm là cho con người, không phải thư mục.</span></div>
+  <div class="kv"><span class="k">TTL</span><span class="v">Time-to-live, một thời hạn trên một khoá để bộ nhớ được thu hồi tự động.</span></div>
+  <div class="kv"><span class="k">redis-cli</span><span class="v">Client dòng lệnh bạn mở sẵn để chạy và quan sát các câu lệnh.</span></div>
+  <div class="kv"><span class="k">RESP</span><span class="v">Giao thức đường truyền đơn giản mà Redis nói, bàn ở Chương 1.</span></div>
+  <div class="kv"><span class="k">Điều kiện tiên quyết</span><span class="v">Một terminal, một ngôn ngữ lập trình đọc được, và lý tưởng là Docker — không cần biết Redis trước.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Bạn cần một terminal, một ngôn ngữ lập trình ở mức đọc hiểu, và lý tưởng là Docker — không cần biết Redis trước.</li>
+<li>Mang ba ý tưởng theo suốt khoá: thực thi một luồng, một không gian khoá phẳng, và một TTL trên phần lớn khoá.</li>
+<li>Mười ba chương đi từ mô hình thực thi tới các cấu trúc dữ liệu, cache, tính nguyên tử, lưu lâu dài, mở rộng và chẩn đoán.</li>
+<li>Học bằng cách mở sẵn <code>redis-cli</code> và chạy mọi câu lệnh — đọc không phải là chạy.</li>
+</ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-1-redis-co-ban" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.1 — What Redis really is, and where the time goes</span><span class="lc-sub">Redis from inside a Node application — a good second stop once this course has given you the foundations.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/academy/courses/java-web-application-development/learn?lessonSlug=prj301-slide-cs5-2" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · PRJ301 ⭐ CS.5 — Architecture (2): config, logs, jobs, cache, REST</span><span class="lc-sub">Caching in Spring for your PRJ301 project — and how to tell when you actually need Redis.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-1-redis-co-ban" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.1 — Redis thực chất là gì, và thời gian trôi đi đâu</span><span class="lc-sub">Redis nhìn từ bên trong một ứng dụng Node — trạm thứ hai hợp lý khi khoá này đã cho bạn phần nền.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/academy/courses/java-web-application-development/learn?lessonSlug=prj301-slide-cs5-2" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · PRJ301 ⭐ CS.5 — Kiến trúc (2): cấu hình, log, job, cache, REST</span><span class="lc-sub">Cache trong Spring cho đồ án PRJ301 — và cách biết khi nào bạn thật sự cần Redis.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
+`,
+    },
     /* ─────────────────────────── 0.1 ─────────────────────────── */
     {
       title: '0.1 — What Redis solves|||0.1 — Redis giải quyết gì',
@@ -106,6 +328,23 @@ redis-cli ZREVRANK lb carol</code></pre>
 
 <div class="pitfall"><strong>Pitfall:</strong> reaching for Redis because something is slow, without measuring where the time goes. The usual outcome is a cache in front of a query that was never the bottleneck, and now you have two sources of truth and a cache invalidation problem you did not have before. Measure first: if a page takes 800ms and 40ms of that is the database, Redis can save you at most 40ms and will cost you correctness. The workloads Redis transforms are the ones where the <em>same</em> expensive answer is computed thousands of times, or where the operation itself is a poor fit for SQL — a counter incremented on every request, a leaderboard read constantly and written constantly, a rate limit checked before every call. If your problem is not one of those shapes, the fix is probably an index.</div>
 <p class="note-ct"><strong>Three things to remember.</strong> Redis lives in RAM, which is roughly a thousand times faster than an SSD — fast enough that for most workloads the network, not Redis, is the cost. Its real value is not raw speed but <em>data structures</em>: problems that are awkward in SQL become one command with a known complexity. And it is a companion to a real database, not a replacement — the interesting question is always which data belongs where.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">In-memory store</span><span class="v">Redis keeps data in RAM (~100 ns) rather than on an SSD (~100 µs), which is where its speed comes from.</span></div>
+  <div class="kv"><span class="k">Latency ladder</span><span class="v">L1 → RAM → SSD → disk → network; a Redis op is often faster than the network round trip around it.</span></div>
+  <div class="kv"><span class="k">Data structure server</span><span class="v">Lists, sets, sorted sets and hashes with atomic commands — not just a string cache.</span></div>
+  <div class="kv"><span class="k">Sorted set (ZSET)</span><span class="v">A set where each member has a score, kept ordered — a leaderboard in one command, O(log N).</span></div>
+  <div class="kv"><span class="k">Valkey</span><span class="v">A 2024 fork of Redis, largely command-compatible; this course applies to both.</span></div>
+  <div class="kv"><span class="k">Measure first</span><span class="v">Add a cache only where the same expensive answer is recomputed — not in front of a query that was never the bottleneck.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>Redis lives in RAM, ~1000× faster than an SSD — fast enough that the network, not Redis, is usually the cost.</li>
+<li>Its real value is data structures: a leaderboard, a counter or a rate limit becomes one command with a known complexity.</li>
+<li>It is three things at once done well: structured caching, operations that are hard in SQL, and atomic coordination.</li>
+<li>It is a companion to a durable database (Postgres holds the truth), never your only one.</li>
+<li>Reach for Redis only after measuring — a cache over a non-bottleneck buys nothing and costs correctness.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Mục 0 · Bài 0.1</span>
@@ -194,6 +433,49 @@ redis-cli ZREVRANK lb carol</code></pre>
 
 <div class="pitfall"><strong>Bẫy:</strong> với tay lấy Redis vì có cái gì đó chậm, mà chưa đo xem thời gian đi đâu. Kết cục thường thấy là một cái cache đặt trước một truy vấn vốn chưa bao giờ là nút thắt, và giờ bạn có hai nguồn sự thật cùng một bài toán vô hiệu hoá cache mà trước đó bạn không có. Hãy đo trước: nếu một trang mất 800ms và 40ms trong đó là cơ sở dữ liệu, thì Redis nhiều nhất cứu được cho bạn 40ms và bắt bạn trả bằng tính đúng đắn. Những khối lượng công việc mà Redis biến đổi là những cái mà CÙNG một câu trả lời tốn kém được tính đi tính lại hàng nghìn lần, hoặc bản thân thao tác đó vốn không hợp với SQL — một bộ đếm tăng ở mọi yêu cầu, một bảng xếp hạng vừa đọc vừa ghi liên tục, một giới hạn tần suất kiểm trước mọi lời gọi. Nếu vấn đề của bạn không có hình dạng nào trong đó thì cách chữa nhiều khả năng là một cái chỉ mục.</div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Redis sống trong RAM, thứ nhanh gấp khoảng một nghìn lần một cái SSD — nhanh tới mức với phần lớn khối lượng công việc thì MẠNG mới là cái giá, chứ không phải Redis. Giá trị thật của nó không nằm ở tốc độ thô mà nằm ở <em>CẤU TRÚC DỮ LIỆU</em>: những bài toán vụng về trong SQL trở thành một câu lệnh có độ phức tạp đã biết. Và nó là bạn đồng hành của một cơ sở dữ liệu thật, không phải thứ thay thế — câu hỏi thú vị luôn là dữ liệu nào thuộc về đâu.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">In-memory store</span><span class="v">Redis giữ dữ liệu trong RAM (~100 ns) thay vì trên SSD (~100 µs) — chỗ tốc độ của nó sinh ra.</span></div>
+  <div class="kv"><span class="k">Thang độ trễ</span><span class="v">L1 → RAM → SSD → đĩa → mạng; một thao tác Redis thường nhanh hơn vòng mạng quanh nó.</span></div>
+  <div class="kv"><span class="k">Data structure server</span><span class="v">List, set, sorted set và hash kèm câu lệnh nguyên tử — không chỉ là cache chuỗi.</span></div>
+  <div class="kv"><span class="k">Sorted set (ZSET)</span><span class="v">Một tập hợp mà mỗi thành viên có điểm số, luôn sắp xếp — một bảng xếp hạng trong một câu lệnh, O(log N).</span></div>
+  <div class="kv"><span class="k">Valkey</span><span class="v">Bản rẽ nhánh năm 2024 của Redis, phần lớn tương thích câu lệnh; khoá này áp cho cả hai.</span></div>
+  <div class="kv"><span class="k">Đo trước</span><span class="v">Chỉ thêm cache ở chỗ cùng một câu trả lời đắt bị tính lại — không đặt trước một truy vấn chưa từng là nút thắt.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Redis sống trong RAM, nhanh gấp ~1000 lần một SSD — đủ nhanh để mạng, chứ không phải Redis, thường là cái giá.</li>
+<li>Giá trị thật của nó là cấu trúc dữ liệu: một bảng xếp hạng, một bộ đếm hay một giới hạn tần suất thành một câu lệnh với độ phức tạp đã biết.</li>
+<li>Nó làm tốt ba việc cùng lúc: cache có cấu trúc, các thao tác khó trong SQL, và phối hợp nguyên tử.</li>
+<li>Nó là bạn đồng hành của một cơ sở dữ liệu bền (Postgres giữ sự thật), không bao giờ là cái duy nhất của bạn.</li>
+<li>Chỉ với tay lấy Redis sau khi đã đo — một cache trên thứ không phải nút thắt không mua được gì mà còn mất tính đúng.</li>
+</ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-1-redis-co-ban" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.1 — What Redis really is, and where the time goes</span><span class="lc-sub">The latency problem this lesson describes, measured from a real Node application.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/academy/courses/java-web-application-development/learn?lessonSlug=prj301-slide-cs5-2" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · PRJ301 ⭐ CS.5 — Architecture (2): config, logs, jobs, cache, REST</span><span class="lc-sub">@Cacheable in Spring: an in-process cache (Caffeine) or a shared one (Redis) — the same choice from the Java side.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-1-redis-co-ban" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.1 — Redis thực chất là gì, và thời gian trôi đi đâu</span><span class="lc-sub">Bài toán độ trễ mà bài này kể, đo từ một ứng dụng Node thật.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/academy/courses/java-web-application-development/learn?lessonSlug=prj301-slide-cs5-2" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · PRJ301 ⭐ CS.5 — Kiến trúc (2): cấu hình, log, job, cache, REST</span><span class="lc-sub">@Cacheable trong Spring: cache trong tiến trình (Caffeine) hay cache dùng chung (Redis) — cùng một lựa chọn, nhìn từ phía Java.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -322,6 +604,23 @@ OK
 
 <div class="pitfall"><strong>Pitfall:</strong> starting Redis with the default configuration on a machine with a public IP. There is no password by default, and until Redis 3.2 there was not even a protected mode — which is why "open Redis instances" remain one of the most reliably exploited things on the internet. The attack does not stop at reading your data: an unauthenticated Redis can be told to write its dump file into <code>~/.ssh/authorized_keys</code>, which turns a cache into a shell. Modern Redis refuses external connections when it has no password and no bind directive, but that protection disappears the moment someone sets <code>bind 0.0.0.0</code> to "make it work". Bind to loopback, put it on a private container network (Docker course, Chapter 8), and set a password anyway.</div>
 <p class="note-ct"><strong>Three things to remember.</strong> Publish Redis on <code>127.0.0.1</code> only — a container port published on all interfaces bypasses your firewall entirely, and an open Redis is compromised in hours. Set <code>maxmemory</code> and a <code>maxmemory-policy</code> the day you start, not the day it OOMs. And <code>CONFIG SET</code> changes the running server while <code>CONFIG REWRITE</code> makes it survive a restart — forgetting the second is how settings quietly disappear.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Loopback bind</span><span class="v">Publishing on <code>127.0.0.1</code> only; a container port on all interfaces bypasses the firewall entirely.</span></div>
+  <div class="kv"><span class="k">Protected mode</span><span class="v">Redis refuses external connections with no password and no bind — but only until someone sets <code>bind 0.0.0.0</code>.</span></div>
+  <div class="kv"><span class="k">maxmemory + policy</span><span class="v"><code>maxmemory</code> caps RAM; <code>maxmemory-policy</code> (e.g. <code>allkeys-lru</code>) decides what to evict instead of being OOM-killed.</span></div>
+  <div class="kv"><span class="k">appendonly (AOF)</span><span class="v">Durable persistence; the default snapshotting is neither fast nor durable — pick one on purpose.</span></div>
+  <div class="kv"><span class="k">CONFIG SET vs REWRITE</span><span class="v"><code>SET</code> changes the running server; <code>REWRITE</code> writes it back to <code>redis.conf</code> so it survives a restart.</span></div>
+  <div class="kv"><span class="k">REDISCLI_AUTH</span><span class="v">Pass the password via env, not <code>-a</code> — <code>-a</code> leaks it into shell history and <code>ps</code>.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>Redis is one dependency-free binary; the work is the four settings, not the install.</li>
+<li>Publish on <code>127.0.0.1</code> only — a Docker port on all interfaces bypasses UFW, and an open Redis is compromised in hours.</li>
+<li>Set <code>maxmemory</code> and a <code>maxmemory-policy</code> on day one, not the day it OOMs.</li>
+<li>Decide persistence deliberately (AOF or none) and restrict dangerous commands (<code>FLUSHALL</code>, <code>KEYS</code>) by ACL.</li>
+<li><code>CONFIG SET</code> changes the running server; <code>CONFIG REWRITE</code> makes it survive a restart.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Mục 0 · Bài 0.2</span>
@@ -441,6 +740,39 @@ OK
 
 <div class="pitfall"><strong>Bẫy:</strong> khởi động Redis với cấu hình mặc định trên một cái máy có IP công khai. Mặc định KHÔNG có mật khẩu, và mãi tới Redis 3.2 mới có chế độ bảo vệ — đó là lý do "những instance Redis mở toang" vẫn là một trong những thứ bị khai thác đều đặn nhất trên Internet. Cuộc tấn công không dừng ở việc đọc dữ liệu của bạn: một Redis không xác thực có thể bị bảo ghi file dump của nó vào <code>~/.ssh/authorized_keys</code>, thứ biến một cái cache thành một cái shell. Redis đời mới từ chối kết nối từ ngoài khi nó không có mật khẩu và không có chỉ thị bind, nhưng lớp bảo vệ đó biến mất ngay khoảnh khắc có người đặt <code>bind 0.0.0.0</code> để "cho nó chạy". Hãy gắn vào loopback, đặt nó lên một mạng container riêng (khoá Docker, Chương 8), và cứ đặt mật khẩu.</div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Chỉ công bố Redis ở <code>127.0.0.1</code> — một cổng container công bố trên mọi giao diện đi vòng hẳn qua tường lửa của bạn, và một Redis mở toang bị chiếm trong vài giờ. Hãy đặt <code>maxmemory</code> cùng một <code>maxmemory-policy</code> ngay ngày bạn bắt đầu, đừng đợi tới ngày nó chết OOM. Và <code>CONFIG SET</code> đổi máy chủ đang chạy còn <code>CONFIG REWRITE</code> khiến nó sống sót qua khởi động lại — quên cái thứ hai là cách các thiết lập lặng lẽ biến mất.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Gắn loopback</span><span class="v">Chỉ công bố ở <code>127.0.0.1</code>; một cổng container trên mọi giao diện đi vòng hẳn qua tường lửa.</span></div>
+  <div class="kv"><span class="k">Chế độ bảo vệ</span><span class="v">Redis từ chối kết nối ngoài khi không có mật khẩu và không bind — nhưng chỉ tới khi ai đó đặt <code>bind 0.0.0.0</code>.</span></div>
+  <div class="kv"><span class="k">maxmemory + chính sách</span><span class="v"><code>maxmemory</code> chặn RAM; <code>maxmemory-policy</code> (vd <code>allkeys-lru</code>) quyết đẩy gì thay vì bị OOM giết.</span></div>
+  <div class="kv"><span class="k">appendonly (AOF)</span><span class="v">Lưu lâu dài bền; chụp ảnh mặc định vừa không nhanh vừa không bền — hãy chọn một cái có chủ đích.</span></div>
+  <div class="kv"><span class="k">CONFIG SET vs REWRITE</span><span class="v"><code>SET</code> đổi máy chủ đang chạy; <code>REWRITE</code> ghi ngược vào <code>redis.conf</code> để sống sót qua khởi động lại.</span></div>
+  <div class="kv"><span class="k">REDISCLI_AUTH</span><span class="v">Truyền mật khẩu qua biến môi trường, không dùng <code>-a</code> — <code>-a</code> lọt vào lịch sử shell và <code>ps</code>.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Redis là một tệp nhị phân không phụ thuộc gì; phần việc là bốn thiết lập, không phải phần cài.</li>
+<li>Chỉ công bố ở <code>127.0.0.1</code> — một cổng Docker trên mọi giao diện đi vòng qua UFW, và một Redis mở toang bị chiếm trong vài giờ.</li>
+<li>Đặt <code>maxmemory</code> cùng một <code>maxmemory-policy</code> ngay ngày đầu, đừng đợi tới ngày nó chết OOM.</li>
+<li>Quyết chuyện lưu lâu dài có chủ đích (AOF hoặc không) và hạn chế các câu lệnh nguy hiểm (<code>FLUSHALL</code>, <code>KEYS</code>) bằng ACL.</li>
+<li><code>CONFIG SET</code> đổi máy chủ đang chạy; <code>CONFIG REWRITE</code> khiến nó sống sót qua khởi động lại.</li>
+</ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-1-redis-co-ban" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.1 — What Redis really is, and where the time goes</span><span class="lc-sub">Redis in Docker next to a Node application: the setup from this lesson, wired into real code.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-1-redis-co-ban" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.1 — Redis thực chất là gì, và thời gian trôi đi đâu</span><span class="lc-sub">Redis trong Docker cạnh một ứng dụng Node: phần cài đặt của bài này, nối vào mã thật.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -598,6 +930,23 @@ db0:keys=7,expires=1,avg_ttl=27412</div>
 
 <div class="pitfall"><strong>Pitfall:</strong> running <code>KEYS *</code> "just to see what is in there". It is the first command everyone tries, it works instantly on a development box with forty keys, and it is a genuine outage on a production instance with two million. Redis is single-threaded: <code>KEYS</code> walks the entire keyspace in one uninterruptible operation, and every other client — your API, your workers, your healthcheck — waits behind it. Several seconds of total freeze is normal at a million keys, which is long enough for connection pools to time out and for your monitoring to declare the site down. Use <code>redis-cli --scan --pattern 'user:*'</code>, which does the same job in cursor-sized bites, or <code>DBSIZE</code> when all you want is the count. This is the first instance of a theme that runs through the whole course: <em>in a single-threaded server, one slow command is everyone's slow command.</em></div>
 <p class="note-ct"><strong>Three things to remember.</strong> The keyspace is one flat dictionary — the colons in <code>user:1042:name</code> are a human convention, and picking one on day one saves you later. <code>TTL</code> returns seconds, or <code>-1</code> for no expiry, or <code>-2</code> for a key that does not exist; those last two are different and code often conflates them. And Redis silently switches its internal encoding as data grows, which is why a small hash costs a fraction of what you would expect — and why <code>OBJECT ENCODING</code> is worth checking when memory surprises you.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Flat keyspace</span><span class="v">The colons in <code>user:1042:name</code> are a human convention for <code>SCAN</code>, not namespaces.</span></div>
+  <div class="kv"><span class="k">TTL return values</span><span class="v">Seconds remaining, <code>-1</code> = exists with no expiry, <code>-2</code> = key does not exist (the two are often conflated).</span></div>
+  <div class="kv"><span class="k">Atomic INCR</span><span class="v">Read-modify-write in one command; ten thousand concurrent clients still produce exactly ten thousand.</span></div>
+  <div class="kv"><span class="k">The five core types</span><span class="v">String, hash, list, set, sorted set — pick by the question you ask of the data.</span></div>
+  <div class="kv"><span class="k">OBJECT ENCODING</span><span class="v">Reveals the internal representation (e.g. <code>listpack</code> vs <code>hashtable</code>) Redis switches as data grows.</span></div>
+  <div class="kv"><span class="k">KEYS vs SCAN</span><span class="v"><code>KEYS *</code> blocks the whole server; <code>SCAN</code> iterates in cursor-sized batches and is safe.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>The keyspace is one flat dictionary; the colon convention is for humans, and choosing one on day one pays off later.</li>
+<li><code>TTL</code> returns seconds, <code>-1</code> (no expiry) or <code>-2</code> (no key) — the last two mean different things.</li>
+<li><code>INCR</code> is atomic because the server runs one command at a time; no locks, no lost updates.</li>
+<li>Pick a data structure by the question you ask; Redis silently switches its internal encoding as data grows.</li>
+<li>Never run <code>KEYS *</code> or <code>FLUSHALL</code> on production — use <code>SCAN</code> and <code>UNLINK</code> instead.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Mục 0 · Bài 0.3</span>
@@ -746,6 +1095,39 @@ db0:keys=7,expires=1,avg_ttl=27412</div>
 
 <div class="pitfall"><strong>Bẫy:</strong> chạy <code>KEYS *</code> "chỉ để xem trong đó có gì". Đó là câu lệnh đầu tiên ai cũng thử, nó chạy tức thì trên một máy phát triển có bốn chục khoá, và nó là một sự cố THẬT trên một instance production có hai triệu khoá. Redis chạy một luồng: <code>KEYS</code> đi hết không gian khoá trong một thao tác không ngắt được, và mọi client khác — API của bạn, đám worker, cái healthcheck — nằm xếp hàng sau nó. Vài giây đông cứng toàn phần là bình thường ở mức một triệu khoá, đủ lâu để các bể kết nối hết giờ và để hệ giám sát tuyên bố trang web đã chết. Hãy dùng <code>redis-cli --scan --pattern 'user:*'</code>, thứ làm cùng công việc theo từng miếng cỡ con trỏ, hoặc <code>DBSIZE</code> khi tất cả những gì bạn cần là con số. Đây là lần đầu tiên xuất hiện một chủ đề chạy xuyên cả khoá học: <em>trong một máy chủ một luồng, một câu lệnh chậm là câu lệnh chậm của TẤT CẢ MỌI NGƯỜI.</em></div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Không gian khoá là một cuốn từ điển phẳng — mấy dấu hai chấm trong <code>user:1042:name</code> là quy ước của con người, và chọn một quy ước ngay ngày đầu là tiết kiệm về sau. <code>TTL</code> trả về số giây, hoặc <code>-1</code> khi không có hạn, hoặc <code>-2</code> khi khoá không tồn tại; hai cái sau khác nhau và mã nguồn hay gộp chúng làm một. Và Redis lặng lẽ đổi cách mã hoá nội bộ khi dữ liệu phình ra, đó là lý do một hash nhỏ tốn một phần nhỏ so với bạn tưởng — và là lý do <code>OBJECT ENCODING</code> đáng kiểm khi bộ nhớ làm bạn bất ngờ.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Không gian khoá phẳng</span><span class="v">Mấy dấu hai chấm trong <code>user:1042:name</code> là quy ước của con người cho <code>SCAN</code>, không phải không gian tên.</span></div>
+  <div class="kv"><span class="k">Giá trị trả về của TTL</span><span class="v">Số giây còn lại, <code>-1</code> = tồn tại không hạn, <code>-2</code> = khoá không tồn tại (hai cái hay bị gộp làm một).</span></div>
+  <div class="kv"><span class="k">INCR nguyên tử</span><span class="v">Đọc-sửa-ghi trong một câu lệnh; mười nghìn client đồng thời vẫn cho ra đúng mười nghìn.</span></div>
+  <div class="kv"><span class="k">Năm kiểu cốt lõi</span><span class="v">String, hash, list, set, sorted set — chọn theo câu hỏi bạn hỏi về dữ liệu.</span></div>
+  <div class="kv"><span class="k">OBJECT ENCODING</span><span class="v">Cho thấy cách biểu diễn nội bộ (vd <code>listpack</code> so với <code>hashtable</code>) mà Redis đổi khi dữ liệu phình ra.</span></div>
+  <div class="kv"><span class="k">KEYS so với SCAN</span><span class="v"><code>KEYS *</code> chặn cả máy chủ; <code>SCAN</code> duyệt theo từng mẻ cỡ con trỏ và an toàn.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Không gian khoá là một cuốn từ điển phẳng; quy ước dấu hai chấm là cho con người, và chọn một cái ngay ngày đầu là có lợi về sau.</li>
+<li><code>TTL</code> trả về số giây, <code>-1</code> (không hạn) hoặc <code>-2</code> (không có khoá) — hai cái sau có nghĩa khác nhau.</li>
+<li><code>INCR</code> nguyên tử vì máy chủ chạy một câu lệnh tại một thời điểm; không khoá, không mất cập nhật.</li>
+<li>Chọn cấu trúc dữ liệu theo câu hỏi bạn hỏi; Redis lặng lẽ đổi cách mã hoá nội bộ khi dữ liệu phình ra.</li>
+<li>Đừng bao giờ chạy <code>KEYS *</code> hay <code>FLUSHALL</code> trên production — hãy dùng <code>SCAN</code> và <code>UNLINK</code>.</li>
+</ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-3-cau-truc-du-lieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.3 — Picking the right structure is worth 95× the RAM</span><span class="lc-sub">The data types you just tried, driven from ioredis with their memory cost measured.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-3-cau-truc-du-lieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.3 — Chọn đúng cấu trúc dữ liệu đáng giá 95 lần RAM</span><span class="lc-sub">Các kiểu dữ liệu bạn vừa thử, điều khiển bằng ioredis và đo luôn chi phí bộ nhớ.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

@@ -11,6 +11,611 @@ export default {
   description: 'Vì sao khoá này tồn tại, ba trụ cột và cái thứ tư người ta quên, dựng môi trường đo, và cách học.',
   sortOrder: 1,
   lessons: [
+    /* ──────────────────── Bắt đầu tại đây 1/2 ──────────────────── */
+    {
+      title: 'Start here (1/2) — What observability is, where it came from, and why it matters to you|||Bắt đầu tại đây (1/2) — Observability là gì, ra đời thế nào, và vì sao nó quan trọng với bạn',
+      slug: 'obs-0-8-bat-dau-tai-day',
+      type: 'LESSON',
+      isFreePreview: true,
+      description: 'Bài mở cửa cho người mới: observability là gì qua hình ảnh phòng hồi sức, phân biệt monitoring/observability, log/chỉ số/trace/lỗi, health check/kiểm từ ngoài, SLI/SLO/SLA; lịch sử có nguồn từ Kálmán 1960 tới OpenTelemetry 2019; vì sao nó ra đời; nó giúp gì cho đồ án, phỏng vấn, công việc; lộ trình 13 mục và cần gì trước khi học.',
+      content: `
+<div class="ml-en">
+<span class="eyebrow">Section 0 · Start here (1/2)</span>
+<h2>What observability is, where it came from, and why it matters to you</h2>
+<p class="lead">Hello, and welcome. If you have ever deployed a backend, you have probably lived this moment: someone says "the site is broken", you open the server, the process is running, nothing is red — and you have no idea what happened. This course is about closing that gap. Not making your system perfect, but making it <em>tell you</em> what it is doing, especially when you are not looking. We start without any tool to install, and we go slowly.</p>
+
+<h3>Observability in one sentence — then in a hospital ward</h3>
+<p><strong>Observability</strong> is how well you can work out what is happening inside a running system from the signals it gives off — without adding new code and redeploying every time you have a new question.</p>
+<p>Picture an intensive-care ward. Each patient has a <strong>monitor</strong> showing heart rate and oxygen as numbers over time — those are <em>metrics</em>. Nurses write <strong>notes</strong> each time something happens: "14:02, gave 5 mg, patient complained of pain" — those are <em>logs</em>. When a patient is moved from emergency to X-ray to surgery, someone can follow the <strong>path</strong> and see where the hours went — that is a <em>trace</em>. The chart also records <strong>changes</strong>: a new drug, a new dose — and when the heart rate jumps, the first question is "what changed just before?". Finally there is an <strong>alarm</strong> that beeps when oxygen falls below a line, so the nurse does not have to stare at the screen all night.</p>
+<p>A good ward can answer a question nobody wrote down in advance — "why does this patient get worse only after lunch?" — because the notes, the numbers and the changes are all there. A backend is the same. That ability is what this course builds.</p>
+
+<h3>Words people mix up</h3>
+<table>
+  <thead><tr><th>Pair</th><th>The difference</th><th>Where in the course</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Monitoring</strong> vs <strong>observability</strong></td><td>Monitoring checks questions you wrote down in advance ("is the process up?"). Observability lets you ask new questions afterwards ("why only this user, only above 4 MB?").</td><td>0.1</td></tr>
+    <tr><td><strong>Log</strong> vs <strong>metric</strong> vs <strong>trace</strong></td><td>A log is one event in full detail. A metric is many events summarised into a number. A trace is one request followed across every step, with timing.</td><td>0.2, Ch 1, 4, 6</td></tr>
+    <tr><td><strong>Error tracking</strong> vs <strong>logging</strong></td><td>A tool such as Sentry groups thousands of identical exceptions into one issue with a stack trace and a release; a log just records lines.</td><td>Ch 7</td></tr>
+    <tr><td><strong>Health check</strong> vs <strong>checking from outside</strong></td><td>A health endpoint reports only what it tests, from inside. An external check hits the site the way a user does, from somewhere else.</td><td>Ch 8</td></tr>
+    <tr><td><strong>Alert</strong> vs <strong>notification</strong></td><td>An alert is a promise to wake a person, so it must be rare and actionable. A message that nobody is expected to read is not an alert.</td><td>Ch 9</td></tr>
+    <tr><td><strong>SLI</strong> vs <strong>SLO</strong> vs <strong>SLA</strong></td><td>SLI: the number you measure (share of requests under 500 ms). SLO: the target you set yourself (99% of them). SLA: a promise in a contract, with a penalty.</td><td>9.3</td></tr>
+    <tr><td><strong>APM</strong> vs <strong>observability</strong></td><td>APM (application performance monitoring) is a product category that bundles several pillars behind one vendor. Observability is the property; a product is one way to get some of it.</td><td>7.5, 12.2</td></tr>
+  </tbody>
+</table>
+
+<h3>A short history — with sources</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1960</span><span class="lz-t">The word comes from control theory</span><span class="lz-d">Rudolf E. Kalman defines a system as "observable" if its internal state can be worked out from its outputs (Kalman, "On the general theory of control systems", 1960). Software borrowed the word decades later.</span></div>
+  <div class="lz-step"><span class="lz-k">1980s</span><span class="lz-t">syslog: every program writes lines to one place</span><span class="lz-d">Eric Allman writes syslog as part of the Sendmail project. The IETF documents it in RFC 3164 (August 2001) and standardises it as RFC 5424 (March 2009). The log line is the oldest pillar.</span></div>
+  <div class="lz-step"><span class="lz-k">1999–2002</span><span class="lz-t">Checks that say OK, WARNING, CRITICAL</span><span class="lz-d">Ethan Galstad releases NetSaint on 14 March 1999; it is renamed Nagios in 2002. Plug-ins test hosts and services every few minutes and send email or pager alerts — classic monitoring of questions written in advance.</span></div>
+  <div class="lz-step"><span class="lz-k">2010</span><span class="lz-t">Following one request through many servers</span><span class="lz-d">Google publishes "Dapper, a Large-Scale Distributed Systems Tracing Infrastructure" (Sigelman et al.). The span-and-trace model it describes is the one you will use in Chapter 6.</span></div>
+  <div class="lz-step"><span class="lz-k">2012–2018</span><span class="lz-t">Metrics as time series with labels</span><span class="lz-d">Prometheus starts at SoundCloud in 2012, after its StatsD- and Graphite-based tools could not keep up. It is announced publicly in January 2015, accepted by the CNCF in May 2016 as its second project after Kubernetes, and graduates in August 2018.</span></div>
+  <div class="lz-step"><span class="lz-k">2016</span><span class="lz-t">The four golden signals</span><span class="lz-d">Google's Site Reliability Engineering book names latency, traffic, errors and saturation: "If you can only measure four metrics of your user-facing system, focus on these four." Chapter 4 starts from there.</span></div>
+  <div class="lz-step"><span class="lz-k">2019</span><span class="lz-t">One open standard instead of two</span><span class="lz-d">The OpenTracing and OpenCensus projects merge into OpenTelemetry under the CNCF (announced May 2019). It is what Chapter 6 installs in Node.</span></div>
+</div>
+<p>Notice the direction: from "write a line somewhere" and "check a list of things every five minutes" to "record enough, in an open format, that you can ask a question nobody predicted". That is exactly the direction of this course.</p>
+
+<h3>Why it was born</h3>
+<p>Three changes made "is the server up?" stop being enough:</p>
+<ul>
+  <li><strong>One request stopped living in one place.</strong> A click now goes through a proxy, a Node process, a database, a queue and a worker. A failure in the middle shows up somewhere else, and only something that links the steps — a correlation id, a trace — can connect cause to symptom.</li>
+  <li><strong>Failures stopped being "down".</strong> The usual outage today is "slow for some users", "broken for one feature", "wrong for anyone with a long name". A process-alive check is green through all of them.</li>
+  <li><strong>The person fixing it is not the person who wrote it — and it is 2 a.m.</strong> Without recorded detail, every investigation starts from guessing. With it, the investigation starts from evidence.</li>
+</ul>
+
+<div class="pitfall"><p><strong>Trap — "we installed Grafana, so we have observability".</strong> A dashboard over the wrong numbers is decoration. If your logs cannot be tied to one request, if your only metric is CPU, and if nobody is woken when users see errors, a beautiful tool changes nothing. This course teaches the mechanism first — what each signal costs and what it can prove — and the tool second, because tools are replaceable and the mechanism is not.</p></div>
+
+<h3>What this does for you — concretely</h3>
+<ul>
+  <li><strong>Team projects (SWP391, capstone):</strong> when the demo breaks the night before, you can open one log line with a request id and say exactly which request failed and why — instead of restarting everything and hoping.</li>
+  <li><strong>Internship and junior interviews:</strong> typical questions are "What is the difference between monitoring and observability?", "Why is the average response time misleading?", "How would you debug an endpoint that is slow only in production?", "What would you alert on?", "What is a correlation id?". Lessons 0.1, 4.2, 11.1, 9.1 and 3.1 answer each one.</li>
+  <li><strong>Backend work:</strong> real tickets look like "users say the upload sometimes hangs" or "the server restarts at night". Those are observability questions disguised as coding tasks — and being the person who can answer them is noticed.</li>
+  <li><strong>Your own VPS:</strong> this course is built around one Node.js service on one machine — the setup students and small teams actually run — not a cluster you do not have.</li>
+</ul>
+
+<h3>What you will be able to do by the end</h3>
+<ul>
+  <li>Write structured JSON logs, know what a log line costs, and keep stdout from blocking your process (Chapter 1).</li>
+  <li>Get logs off the machine with rotation and retention that will not fill the disk, and query them with LogQL (Chapter 2).</li>
+  <li>Follow one request through every log line with AsyncLocalStorage and W3C Trace Context (Chapter 3).</li>
+  <li>Choose the right kind of metric, use histograms for percentiles, and avoid the label that takes down your monitoring (Chapters 4–5).</li>
+  <li>Read a trace waterfall, and know when tracing is not worth its cost (Chapter 6).</li>
+  <li>Track errors without leaking personal data, and tie them to releases (Chapter 7).</li>
+  <li>Write health checks that mean something, and alerts derived from SLOs instead of guesses (Chapters 8–9).</li>
+  <li>Build three dashboards people read, and go from alert to cause in a calm first five minutes (Chapters 10–11).</li>
+  <li>Decide what to build first for a real service, in order (Chapter 12).</li>
+</ul>
+
+<h3>The roadmap</h3>
+<table>
+  <thead><tr><th>Phase</th><th>Sections</th><th>You can then…</th></tr></thead>
+  <tbody>
+    <tr><td><strong>1 · See one request</strong></td><td>0 Before you measure · 1 Structured logs · 2 The log pipeline · 3 Correlation</td><td>find every line of one failing request</td></tr>
+    <tr><td><strong>2 · Count and time</strong></td><td>4 Metrics · 5 Node.js metrics · 6 Tracing</td><td>know p99 latency, error rate, and where the time went</td></tr>
+    <tr><td><strong>3 · Errors and health</strong></td><td>7 Errors and Sentry · 8 Health checks</td><td>see each bug once, with its release, and trust your probes</td></tr>
+    <tr><td><strong>4 · Act on it</strong></td><td>9 Alerting · 10 Dashboards · 11 Diagnosis</td><td>be woken only when users are hurting, and find the cause fast</td></tr>
+    <tr><td><strong>5 · Decide</strong></td><td>12 What survived measurement</td><td>plan what to build first for any Node service</td></tr>
+  </tbody>
+</table>
+
+<h3>What you need before you start</h3>
+<ul>
+  <li><strong>Needed:</strong> basic JavaScript and a little Express (a route, a middleware), comfort typing commands in a terminal, and Node.js 22 installed — the course's measurements were run on Node 22.22.2.</li>
+  <li><strong>Helpful later:</strong> Docker, from Chapter 2 on, to see what it does with your log lines. A VPS is useful but not required; every early measurement runs on your laptop.</li>
+  <li><strong>Not needed:</strong> any account or vendor. Lesson 0.3 builds the measuring rig from tools that ship inside Node; Prometheus, Grafana, Loki, OpenTelemetry and Sentry arrive only in the chapters that need them.</li>
+</ul>
+
+<h3>🧪 Practice (10 min)</h3>
+<div class="callout ok"><ol>
+  <li>Run <code>node -v</code> in a terminal and note the version. Anything from 22 upwards will reproduce the course's numbers closely.</li>
+  <li>Pick a backend you know — your team project, or any app you use every day.</li>
+  <li>Write three questions you would want answered at 2 a.m. if it broke ("which requests failed?", "since when?", "what changed?").</li>
+  <li>Next to each question, write which signal would answer it: log, metric, trace, or change event. Use the ward picture above if you are unsure.</li>
+</ol>
+<p><strong>Done when:</strong> you have your Node version and three questions, each matched to one signal. There is no wrong answer yet — lesson 0.2 shows how to check your choices.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Observability</span><span class="v">How well you can work out what is happening inside a system from what it emits, including questions nobody predicted.</span></div>
+  <div class="kv"><span class="k">Monitoring</span><span class="v">Checking, again and again, conditions you decided in advance.</span></div>
+  <div class="kv"><span class="k">Telemetry</span><span class="v">Everything a system emits about itself: logs, metrics, traces, error reports, change events.</span></div>
+  <div class="kv"><span class="k">Log</span><span class="v">One event recorded in full detail, ideally as structured JSON.</span></div>
+  <div class="kv"><span class="k">Metric</span><span class="v">Many events summarised as a number over time, such as requests per second.</span></div>
+  <div class="kv"><span class="k">Trace / span</span><span class="v">One request followed across every step; each step is a timed span with a parent.</span></div>
+  <div class="kv"><span class="k">Golden signals</span><span class="v">Latency, traffic, errors, saturation — the four numbers Google's SRE book says to watch first.</span></div>
+  <div class="kv"><span class="k">SLI / SLO / SLA</span><span class="v">What you measure / the target you set / the target you promised in a contract.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul>
+  <li>Observability is being able to explain a running system from its signals, including for questions you never planned.</li>
+  <li>Monitoring answers fixed questions; logs, metrics, traces, errors and change events each answer a different kind of question at a different cost.</li>
+  <li>The history runs from Kalman's control theory (1960) and syslog (1980s) through Nagios checks, Dapper traces and Prometheus metrics to the open OpenTelemetry standard (2019).</li>
+  <li>It was born because requests span many processes, failures became partial, and the person fixing them needs evidence instead of guesses.</li>
+  <li>You need basic JavaScript, a terminal and Node 22 — no vendor accounts — and the course moves from one request to metrics, health, alerts and diagnosis.</li>
+</ul>
+
+<h3>Sources</h3>
+<ul>
+  <li>Observability in control theory, Kalman (1960): <a href="https://en.wikipedia.org/wiki/Observability" target="_blank" rel="noopener">en.wikipedia.org/wiki/Observability</a></li>
+  <li>syslog history, RFC 3164 and RFC 5424: <a href="https://en.wikipedia.org/wiki/Syslog" target="_blank" rel="noopener">en.wikipedia.org/wiki/Syslog</a> · <a href="https://www.rfc-editor.org/rfc/rfc5424" target="_blank" rel="noopener">rfc-editor.org/rfc/rfc5424</a></li>
+  <li>NetSaint and Nagios: <a href="https://en.wikipedia.org/wiki/Nagios" target="_blank" rel="noopener">en.wikipedia.org/wiki/Nagios</a></li>
+  <li>Dapper (Google, 2010): <a href="https://research.google/pubs/dapper-a-large-scale-distributed-systems-tracing-infrastructure/" target="_blank" rel="noopener">research.google/pubs/dapper-a-large-scale-distributed-systems-tracing-infrastructure</a></li>
+  <li>Prometheus history: <a href="https://prometheus.io/docs/introduction/overview/" target="_blank" rel="noopener">prometheus.io/docs/introduction/overview</a> · <a href="https://en.wikipedia.org/wiki/Prometheus_(software)" target="_blank" rel="noopener">en.wikipedia.org/wiki/Prometheus_(software)</a></li>
+  <li>The four golden signals: <a href="https://sre.google/sre-book/monitoring-distributed-systems/" target="_blank" rel="noopener">sre.google/sre-book/monitoring-distributed-systems</a></li>
+  <li>OpenTelemetry history (CNCF, May 2019): <a href="https://www.cncf.io/blog/2019/05/21/a-brief-history-of-opentelemetry-so-far/" target="_blank" rel="noopener">cncf.io/blog/2019/05/21/a-brief-history-of-opentelemetry-so-far</a></li>
+</ul>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 0 · Bắt đầu tại đây (1/2)</span>
+<h2>Observability là gì, ra đời thế nào, và vì sao nó quan trọng với bạn</h2>
+<p class="lead">Chào bạn. Nếu bạn từng deploy một backend, chắc bạn đã gặp khoảnh khắc này: có người nhắn "web hỏng rồi", bạn mở máy chủ ra, tiến trình vẫn chạy, không có gì đỏ — và bạn hoàn toàn không biết chuyện gì đã xảy ra. Khoá này là để lấp khoảng trống đó. Không phải làm hệ thống hoàn hảo, mà làm cho nó <em>tự kể</em> cho bạn nghe nó đang làm gì, nhất là lúc bạn không nhìn. Ta bắt đầu mà chưa cần cài công cụ nào, và đi chậm thôi.</p>
+
+<h3>Observability trong một câu — rồi trong một phòng hồi sức</h3>
+<p><strong>Observability</strong> (khả năng quan sát) là mức độ bạn suy ra được điều gì đang diễn ra bên trong một hệ thống đang chạy từ những tín hiệu nó phát ra — mà không phải thêm code rồi deploy lại mỗi lần nảy ra một câu hỏi mới.</p>
+<p>Hãy hình dung một phòng hồi sức. Mỗi bệnh nhân có một <strong>màn hình</strong> hiện nhịp tim và nồng độ oxy thành con số theo thời gian — đó là <em>chỉ số</em> (metric). Y tá ghi <strong>sổ</strong> mỗi lần có chuyện: "14:02, tiêm 5 mg, bệnh nhân kêu đau" — đó là <em>log</em>. Khi bệnh nhân được chuyển từ cấp cứu sang chụp X-quang rồi sang phòng mổ, ai đó lần theo được <strong>đường đi</strong> và thấy thời gian trôi vào đâu — đó là <em>trace</em>. Bệnh án còn ghi lại <strong>các thay đổi</strong>: thuốc mới, liều mới — và khi nhịp tim vọt lên, câu hỏi đầu tiên luôn là "ngay trước đó đã đổi gì?". Cuối cùng có một <strong>chuông báo</strong> kêu khi oxy tụt dưới một vạch, để y tá không phải nhìn chằm chằm vào màn hình cả đêm.</p>
+<p>Một phòng hồi sức tốt trả lời được cả câu hỏi chưa ai viết ra từ trước — "sao bệnh nhân này chỉ xấu đi sau bữa trưa?" — vì sổ ghi, con số và các thay đổi đều còn đó. Backend cũng vậy. Khả năng ấy chính là thứ khoá này dựng cho bạn.</p>
+
+<h3>Những cặp từ hay bị dùng lẫn</h3>
+<table>
+  <thead><tr><th>Cặp</th><th>Khác nhau ở đâu</th><th>Học ở đâu</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Monitoring</strong> và <strong>observability</strong></td><td>Monitoring (giám sát) kiểm những câu hỏi bạn đã viết sẵn ("tiến trình còn sống không?"). Observability cho bạn hỏi câu mới sau khi sự việc đã xảy ra ("sao chỉ người này, chỉ khi tệp trên 4 MB?").</td><td>0.1</td></tr>
+    <tr><td><strong>Log</strong>, <strong>chỉ số</strong> và <strong>trace</strong></td><td>Log là một sự kiện ghi đầy đủ chi tiết. Chỉ số là rất nhiều sự kiện gộp thành một con số. Trace là một request được lần theo qua từng bước, có đo thời gian.</td><td>0.2, Ch 1, 4, 6</td></tr>
+    <tr><td><strong>Theo dõi lỗi</strong> và <strong>ghi log</strong></td><td>Công cụ như Sentry gom hàng nghìn ngoại lệ giống nhau thành một vấn đề, kèm stack trace và phiên bản phát hành; log thì chỉ ghi từng dòng.</td><td>Ch 7</td></tr>
+    <tr><td><strong>Health check</strong> và <strong>kiểm từ bên ngoài</strong></td><td>Endpoint kiểm sức khoẻ chỉ báo đúng những gì nó kiểm, từ bên trong. Phép kiểm bên ngoài gọi vào trang như một người dùng thật, từ một nơi khác.</td><td>Ch 8</td></tr>
+    <tr><td><strong>Cảnh báo</strong> và <strong>thông báo</strong></td><td>Cảnh báo là lời hứa sẽ đánh thức một người, nên phải hiếm và làm được gì đó ngay. Một tin nhắn không ai được kỳ vọng đọc thì không phải cảnh báo.</td><td>Ch 9</td></tr>
+    <tr><td><strong>SLI</strong>, <strong>SLO</strong> và <strong>SLA</strong></td><td>SLI: con số bạn đo (tỷ lệ request dưới 500 ms). SLO: mục tiêu bạn tự đặt (99% trong số đó). SLA: lời hứa ghi trong hợp đồng, sai thì bị phạt.</td><td>9.3</td></tr>
+    <tr><td><strong>APM</strong> và <strong>observability</strong></td><td>APM (giám sát hiệu năng ứng dụng) là một loại sản phẩm gói nhiều trụ cột vào một nhà cung cấp. Observability là một tính chất; sản phẩm chỉ là một cách để có được một phần của nó.</td><td>7.5, 12.2</td></tr>
+  </tbody>
+</table>
+
+<h3>Một chút lịch sử — có nguồn</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1960</span><span class="lz-t">Chữ này đến từ lý thuyết điều khiển</span><span class="lz-d">Rudolf E. Kálmán gọi một hệ là "quan sát được" nếu suy ra được trạng thái bên trong từ những gì nó xuất ra (Kalman, "On the general theory of control systems", 1960). Ngành phần mềm mượn chữ này mấy chục năm sau.</span></div>
+  <div class="lz-step"><span class="lz-k">Thập niên 1980</span><span class="lz-t">syslog: mọi chương trình ghi dòng về một chỗ</span><span class="lz-d">Eric Allman viết syslog trong dự án Sendmail. IETF ghi nhận nó ở RFC 3164 (8/2001) và chuẩn hoá thành RFC 5424 (3/2009). Dòng log là trụ cột lâu đời nhất.</span></div>
+  <div class="lz-step"><span class="lz-k">1999–2002</span><span class="lz-t">Những phép kiểm báo OK, WARNING, CRITICAL</span><span class="lz-d">Ethan Galstad phát hành NetSaint ngày 14/3/1999; năm 2002 nó đổi tên thành Nagios. Các plug-in kiểm máy và dịch vụ vài phút một lần rồi gửi email hoặc nhắn máy nhắn tin — giám sát kiểu cổ điển, chỉ cho những câu hỏi viết sẵn.</span></div>
+  <div class="lz-step"><span class="lz-k">2010</span><span class="lz-t">Lần theo một request qua nhiều máy chủ</span><span class="lz-d">Google công bố "Dapper, a Large-Scale Distributed Systems Tracing Infrastructure" (Sigelman và cộng sự). Mô hình span và trace trong đó chính là mô hình bạn dùng ở Chương 6.</span></div>
+  <div class="lz-step"><span class="lz-k">2012–2018</span><span class="lz-t">Chỉ số thành chuỗi thời gian có nhãn</span><span class="lz-d">Prometheus bắt đầu ở SoundCloud năm 2012, khi bộ công cụ dựa trên StatsD và Graphite không theo kịp. Nó công bố rộng rãi tháng 1/2015, được CNCF nhận tháng 5/2016 làm dự án thứ hai sau Kubernetes, và "tốt nghiệp" tháng 8/2018.</span></div>
+  <div class="lz-step"><span class="lz-k">2016</span><span class="lz-t">Bốn tín hiệu vàng</span><span class="lz-d">Cuốn Site Reliability Engineering của Google gọi tên độ trễ, lưu lượng, lỗi và độ bão hoà: "nếu chỉ đo được bốn chỉ số của hệ thống phục vụ người dùng, hãy tập trung vào bốn cái này". Chương 4 xuất phát từ đó.</span></div>
+  <div class="lz-step"><span class="lz-k">2019</span><span class="lz-t">Một chuẩn mở thay cho hai</span><span class="lz-d">Hai dự án OpenTracing và OpenCensus nhập làm một thành OpenTelemetry dưới CNCF (công bố tháng 5/2019). Đây là thứ Chương 6 cài vào Node.</span></div>
+</div>
+<p>Để ý hướng đi: từ "ghi một dòng ở đâu đó" và "năm phút kiểm một danh sách" tới "ghi đủ, theo một định dạng mở, để hỏi được cả câu chưa ai đoán trước". Đó cũng đúng là hướng đi của khoá này.</p>
+
+<h3>Vì sao nó ra đời</h3>
+<p>Ba thay đổi khiến câu "máy chủ còn sống không?" không còn đủ:</p>
+<ul>
+  <li><strong>Một request không còn sống ở một chỗ.</strong> Một cú bấm giờ đi qua proxy, tiến trình Node, cơ sở dữ liệu, hàng đợi và worker. Hỏng ở giữa thì triệu chứng hiện ra ở chỗ khác, và chỉ thứ gì nối được các bước — correlation id, trace — mới nối được nguyên nhân với triệu chứng.</li>
+  <li><strong>Sự cố không còn là "sập".</strong> Sự cố thường gặp bây giờ là "chậm với một số người", "hỏng đúng một tính năng", "sai với ai có tên dài". Phép kiểm "tiến trình còn sống" vẫn xanh suốt những lúc đó.</li>
+  <li><strong>Người sửa không phải người viết — và lúc ấy là 2 giờ sáng.</strong> Không có chi tiết được ghi lại thì mọi cuộc điều tra bắt đầu bằng đoán mò. Có chi tiết thì nó bắt đầu bằng bằng chứng.</li>
+</ul>
+
+<div class="pitfall"><p><strong>Bẫy — "đã cài Grafana rồi, vậy là có observability".</strong> Bảng theo dõi vẽ trên con số sai chỉ là đồ trang trí. Nếu log không nối được về một request, nếu chỉ số duy nhất là CPU, và nếu không ai bị đánh thức khi người dùng gặp lỗi, thì công cụ đẹp đến đâu cũng không đổi được gì. Khoá này dạy cơ chế trước — mỗi tín hiệu tốn bao nhiêu và chứng minh được gì — rồi mới tới công cụ, vì công cụ thay được còn cơ chế thì không.</p></div>
+
+<h3>Nó giúp gì cho bạn — cụ thể</h3>
+<ul>
+  <li><strong>Đồ án nhóm (SWP391, đồ án tốt nghiệp):</strong> khi đêm trước buổi bảo vệ bản demo hỏng, bạn mở được đúng một dòng log có request id và nói chính xác request nào lỗi, vì sao — thay vì khởi động lại tất cả rồi cầu may.</li>
+  <li><strong>Phỏng vấn thực tập và junior:</strong> câu hay gặp: "Monitoring khác observability thế nào?", "Vì sao thời gian phản hồi trung bình gây hiểu lầm?", "Một endpoint chỉ chậm trên production thì bạn gỡ thế nào?", "Bạn sẽ đặt cảnh báo cho cái gì?", "Correlation id là gì?". Các bài 0.1, 4.2, 11.1, 9.1 và 3.1 trả lời lần lượt từng câu.</li>
+  <li><strong>Đi làm backend:</strong> ticket thật thường là "người dùng bảo thỉnh thoảng tải tệp bị treo" hay "máy chủ tự khởi động lại ban đêm". Đó là câu hỏi observability đội lốt việc viết code — và người trả lời được chúng sẽ được để ý.</li>
+  <li><strong>VPS của chính bạn:</strong> khoá này xoay quanh một dịch vụ Node.js trên một máy — đúng kiểu sinh viên và nhóm nhỏ thật sự chạy — chứ không phải một cụm máy bạn không có.</li>
+</ul>
+
+<h3>Học xong bạn tự làm được gì</h3>
+<ul>
+  <li>Ghi log JSON có cấu trúc, biết một dòng log tốn bao nhiêu, và không để stdout chặn tiến trình (Chương 1).</li>
+  <li>Đưa log ra khỏi máy, xoay vòng và lưu giữ sao cho không đầy đĩa, và hỏi log bằng LogQL (Chương 2).</li>
+  <li>Lần theo một request qua mọi dòng log bằng AsyncLocalStorage và W3C Trace Context (Chương 3).</li>
+  <li>Chọn đúng loại chỉ số, dùng histogram để có phân vị, và tránh cái nhãn đánh sập chính hệ thống giám sát (Chương 4–5).</li>
+  <li>Đọc biểu đồ thác của một trace, và biết khi nào trace không đáng cái giá của nó (Chương 6).</li>
+  <li>Theo dõi lỗi mà không làm lộ dữ liệu cá nhân, và gắn lỗi với từng bản phát hành (Chương 7).</li>
+  <li>Viết health check nói được điều gì đó, và cảnh báo suy ra từ SLO thay vì đoán (Chương 8–9).</li>
+  <li>Dựng ba bảng theo dõi mà người ta thật sự đọc, và đi từ cảnh báo tới nguyên nhân trong năm phút đầu bình tĩnh (Chương 10–11).</li>
+  <li>Quyết định nên dựng gì trước, theo thứ tự, cho một dịch vụ thật (Chương 12).</li>
+</ul>
+
+<h3>Lộ trình</h3>
+<table>
+  <thead><tr><th>Chặng</th><th>Các mục</th><th>Xong chặng bạn sẽ…</th></tr></thead>
+  <tbody>
+    <tr><td><strong>1 · Thấy một request</strong></td><td>0 Trước khi đo · 1 Log có cấu trúc · 2 Đường ống log · 3 Correlation</td><td>tìm được mọi dòng log của một request bị lỗi</td></tr>
+    <tr><td><strong>2 · Đếm và đo giờ</strong></td><td>4 Chỉ số · 5 Chỉ số riêng của Node.js · 6 Trace</td><td>biết độ trễ p99, tỷ lệ lỗi, và thời gian trôi vào đâu</td></tr>
+    <tr><td><strong>3 · Lỗi và sức khoẻ</strong></td><td>7 Lỗi và Sentry · 8 Health check</td><td>thấy mỗi lỗi đúng một lần, kèm phiên bản, và tin được phép thăm dò của mình</td></tr>
+    <tr><td><strong>4 · Hành động</strong></td><td>9 Cảnh báo · 10 Bảng theo dõi · 11 Chẩn đoán</td><td>chỉ bị đánh thức khi người dùng thật sự khổ, và tìm ra nguyên nhân nhanh</td></tr>
+    <tr><td><strong>5 · Quyết định</strong></td><td>12 Những gì sống sót qua phép đo</td><td>lập kế hoạch dựng gì trước cho bất kỳ dịch vụ Node nào</td></tr>
+  </tbody>
+</table>
+
+<h3>Cần gì trước khi học</h3>
+<ul>
+  <li><strong>Cần:</strong> JavaScript cơ bản và một chút Express (một route, một middleware), quen gõ lệnh trong terminal, và đã cài Node.js 22 — các phép đo trong khoá chạy trên Node 22.22.2.</li>
+  <li><strong>Có thì tốt (về sau):</strong> Docker, từ Chương 2, để xem nó làm gì với dòng log của bạn. VPS có thì hay nhưng không bắt buộc; mọi phép đo ở các chương đầu chạy được trên laptop.</li>
+  <li><strong>Không cần:</strong> tài khoản hay nhà cung cấp nào. Bài 0.3 dựng bộ đồ nghề đo từ những thứ có sẵn trong Node; Prometheus, Grafana, Loki, OpenTelemetry và Sentry chỉ xuất hiện ở chương cần tới chúng.</li>
+</ul>
+
+<h3>🧪 Thực hành (10 phút)</h3>
+<div class="callout ok"><ol>
+  <li>Chạy <code>node -v</code> trong terminal và ghi lại phiên bản. Từ 22 trở lên là tái tạo được các con số của khoá khá sát.</li>
+  <li>Chọn một backend bạn biết — đồ án nhóm, hoặc một app bạn dùng hằng ngày.</li>
+  <li>Viết ba câu hỏi bạn muốn có câu trả lời nếu nó hỏng lúc 2 giờ sáng ("request nào lỗi?", "từ lúc nào?", "đã đổi gì?").</li>
+  <li>Cạnh mỗi câu, ghi tín hiệu nào trả lời được nó: log, chỉ số, trace hay sự kiện thay đổi. Phân vân thì nhớ lại phòng hồi sức ở trên.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn có phiên bản Node và ba câu hỏi, mỗi câu gắn với một tín hiệu. Chưa có đáp án sai — bài 0.2 sẽ chỉ cách tự kiểm lựa chọn của bạn.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Observability (khả năng quan sát)</span><span class="v">Mức độ suy ra được điều đang diễn ra bên trong hệ thống từ những gì nó phát ra, kể cả câu hỏi chưa ai đoán trước.</span></div>
+  <div class="kv"><span class="k">Monitoring (giám sát)</span><span class="v">Kiểm đi kiểm lại những điều kiện bạn đã quyết từ trước.</span></div>
+  <div class="kv"><span class="k">Telemetry (dữ liệu đo từ xa)</span><span class="v">Mọi thứ hệ thống phát ra về chính nó: log, chỉ số, trace, báo cáo lỗi, sự kiện thay đổi.</span></div>
+  <div class="kv"><span class="k">Log</span><span class="v">Một sự kiện được ghi đầy đủ chi tiết, tốt nhất là JSON có cấu trúc.</span></div>
+  <div class="kv"><span class="k">Metric (chỉ số)</span><span class="v">Nhiều sự kiện gộp thành một con số theo thời gian, ví dụ số request mỗi giây.</span></div>
+  <div class="kv"><span class="k">Trace / span</span><span class="v">Một request được lần theo qua mọi bước; mỗi bước là một span có đo giờ và có cha.</span></div>
+  <div class="kv"><span class="k">Golden signals (tín hiệu vàng)</span><span class="v">Độ trễ, lưu lượng, lỗi, độ bão hoà — bốn con số sách SRE của Google bảo nhìn trước tiên.</span></div>
+  <div class="kv"><span class="k">SLI / SLO / SLA</span><span class="v">Thứ bạn đo / mục tiêu bạn tự đặt / mục tiêu bạn đã hứa trong hợp đồng.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul>
+  <li>Observability là giải thích được một hệ thống đang chạy từ tín hiệu của nó, kể cả với câu hỏi bạn chưa từng lường trước.</li>
+  <li>Monitoring trả lời câu hỏi cố định; log, chỉ số, trace, lỗi và sự kiện thay đổi mỗi thứ trả lời một kiểu câu hỏi với một mức chi phí khác nhau.</li>
+  <li>Lịch sử đi từ lý thuyết điều khiển của Kálmán (1960) và syslog (thập niên 1980), qua phép kiểm của Nagios, trace của Dapper, chỉ số của Prometheus, tới chuẩn mở OpenTelemetry (2019).</li>
+  <li>Nó ra đời vì request đi qua nhiều tiến trình, sự cố trở nên cục bộ, và người sửa cần bằng chứng chứ không cần đoán.</li>
+  <li>Bạn cần JavaScript cơ bản, một terminal và Node 22 — không cần tài khoản nhà cung cấp nào — và khoá đi từ một request tới chỉ số, sức khoẻ, cảnh báo và chẩn đoán.</li>
+</ul>
+
+<h3>Nguồn</h3>
+<ul>
+  <li>Khả năng quan sát trong lý thuyết điều khiển, Kálmán (1960): <a href="https://en.wikipedia.org/wiki/Observability" target="_blank" rel="noopener">en.wikipedia.org/wiki/Observability</a></li>
+  <li>Lịch sử syslog, RFC 3164 và RFC 5424: <a href="https://en.wikipedia.org/wiki/Syslog" target="_blank" rel="noopener">en.wikipedia.org/wiki/Syslog</a> · <a href="https://www.rfc-editor.org/rfc/rfc5424" target="_blank" rel="noopener">rfc-editor.org/rfc/rfc5424</a></li>
+  <li>NetSaint và Nagios: <a href="https://en.wikipedia.org/wiki/Nagios" target="_blank" rel="noopener">en.wikipedia.org/wiki/Nagios</a></li>
+  <li>Dapper (Google, 2010): <a href="https://research.google/pubs/dapper-a-large-scale-distributed-systems-tracing-infrastructure/" target="_blank" rel="noopener">research.google/pubs/dapper-a-large-scale-distributed-systems-tracing-infrastructure</a></li>
+  <li>Lịch sử Prometheus: <a href="https://prometheus.io/docs/introduction/overview/" target="_blank" rel="noopener">prometheus.io/docs/introduction/overview</a> · <a href="https://en.wikipedia.org/wiki/Prometheus_(software)" target="_blank" rel="noopener">en.wikipedia.org/wiki/Prometheus_(software)</a></li>
+  <li>Bốn tín hiệu vàng: <a href="https://sre.google/sre-book/monitoring-distributed-systems/" target="_blank" rel="noopener">sre.google/sre-book/monitoring-distributed-systems</a></li>
+  <li>Lịch sử OpenTelemetry (CNCF, 5/2019): <a href="https://www.cncf.io/blog/2019/05/21/a-brief-history-of-opentelemetry-so-far/" target="_blank" rel="noopener">cncf.io/blog/2019/05/21/a-brief-history-of-opentelemetry-so-far</a></li>
+</ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-15-1-log-co-cau-truc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 15.1 — Three pillars, and why console.log runs out</span><span class="lc-sub">The same three pillars from inside a Node application course — a shorter first pass if you want one before Chapter 1.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-9-1-do-cai-gi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy VPS · 9.1 — What to measure, and the number that lies</span><span class="lc-sub">Monitoring seen from the server you deploy to: which numbers matter on a real VPS.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-15-1-log-co-cau-truc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 15.1 — Ba trụ cột, và điểm dừng của console.log</span><span class="lc-sub">Cũng ba trụ cột ấy, nhìn từ khoá Node.js — một vòng làm quen ngắn hơn nếu bạn muốn trước Chương 1.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-9-1-do-cai-gi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 9.1 — Đo cái gì, và con số NÓI DỐI</span><span class="lc-sub">Giám sát nhìn từ chính máy chủ bạn deploy lên: con số nào thật sự quan trọng trên một VPS.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
+`,
+    },
+    /* ──────────────────── Bắt đầu tại đây 2/2 ──────────────────── */
+    {
+      title: 'Start here (2/2) — Flying blind: real incidents, and how to learn this without giving up|||Bắt đầu tại đây (2/2) — Khi bay mù: những sự cố thật, và cách học để không bỏ cuộc',
+      slug: 'obs-0-9-bat-dau-khi-khong-co',
+      type: 'LESSON',
+      isFreePreview: true,
+      description: 'Bốn sự cố có nguồn (Knight Capital 2012, AWS S3 2017, GitLab 2017, Facebook 2021) và các sự cố thật của chính kho này — mỗi cái: chuyện gì xảy ra, cái gì lẽ ra phải phát hiện, học ở chương nào; một tình huống minh hoạ đêm trước buổi bảo vệ đồ án; vì sao người mới hay nản và cách sửa; nhịp mỗi buổi học, lộ trình tối thiểu/đầy đủ, cách hỏi khi bí, các mốc tự đánh dấu.',
+      content: `
+<div class="ml-en">
+<span class="eyebrow">Section 0 · Start here (2/2)</span>
+<h2>Flying blind: real incidents, and how to learn this without giving up</h2>
+<p class="lead">Advice about logs and alerts can sound like paperwork: add an id here, a counter there, a rule for this. This lesson shows where that advice comes from — real incidents, with sources you can open, where the system was failing and the people running it could not see it, or saw it and did not know it mattered. Then we turn to you: a typical student-project disaster, why people give up on this topic, and a study plan that keeps you going.</p>
+
+<h3>How to read the stories</h3>
+<p>Every incident below links to a source: the company's own post-mortem or a regulator's filing. Numbers are the ones those sources give. For each story we ask three questions: <strong>what happened</strong>, <strong>what should have noticed it — and what actually did</strong>, and <strong>which chapter teaches the defence</strong>.</p>
+
+<h3>1 · Knight Capital, 2012 — 97 emails that were not alerts</h3>
+<p>On 1 August 2012, Knight Capital deployed new trading code, but one of its servers still ran an old, retired function. According to the US Securities and Exchange Commission's order (October 2013), in about 45 minutes the system sent orders that produced some 4 million executions in 154 stocks, and Knight lost more than $460 million. The detail that matters for this course: from about 8:01 a.m., before the market opened at 9:30, an internal system sent <strong>97 automated emails</strong> to a group of staff mentioning an error, "Power Peg disabled". In the SEC's words, Knight "did not design these types of messages to be system alerts, and Knight personnel generally did not review them".</p>
+<p><strong>What it teaches:</strong> a message nobody is responsible for reading is not an alert, no matter how many you send. An alert needs an owner, a clear meaning, and few enough siblings that each one is read. Chapter 9 (an alert is a promise to wake someone; alert fatigue).</p>
+
+<h3>2 · GitLab, 2017 — the backups that failed silently</h3>
+<p>On 31 January 2017, while fighting a load problem, a GitLab engineer accidentally deleted the data directory of the production PostgreSQL primary. Restoring should have been routine. GitLab's post-mortem (10 February 2017) explains why it was not: the regular <code>pg_dump</code> backup "failed silently because it was using PostgreSQL 9.2, while GitLab.com runs on PostgreSQL 9.6". The job did send failure emails — but they "were rejected by the receiver" because of an email-authentication (DMARC) setting, so nobody saw them. Data created between 17:20 and 23:30 UTC was lost; GitLab estimated at least 5,000 projects, 5,000 comments and about 700 users.</p>
+<p><strong>What it teaches:</strong> "no news" is not "good news". A job that can fail silently needs a signal when it <em>succeeds</em>, and an alert when that signal stops arriving — and the path that delivers alerts must itself be tested. Chapters 8 and 9.</p>
+
+<h3>3 · Amazon S3, 2017 — the status page that depended on what it reported</h3>
+<p>On 28 February 2017 at 9:37 a.m. PST, an S3 engineer following an established playbook ran a command with one input entered incorrectly, and far more servers were removed than intended. Two core S3 subsystems needed a full restart; S3 in the US-EAST-1 region finished recovering at 1:54 p.m. PST. AWS's own summary adds the part every monitoring engineer remembers: until 11:37 a.m. it could not update the individual services' status on its Service Health Dashboard "because of a dependency the SHD administration console has on Amazon S3".</p>
+<p><strong>What it teaches:</strong> the thing that watches must not share a failure with the thing it watches. Check from outside, from somewhere the outage cannot reach. Lesson 8.5 (checking from outside, where the users are).</p>
+
+<h3>4 · Facebook, 2021 — a health check that switched itself off</h3>
+<p>On 4 October 2021, during routine maintenance, a command meant to assess backbone capacity "unintentionally took down all the connections in our backbone network", wrote Santosh Janardhan in Facebook's engineering post the next day. Then a safety mechanism made it worse: the DNS servers "disable those BGP advertisements if they themselves can not speak to our data centers" — a health check that acts — so the whole of Facebook vanished from the internet. And "the total loss of DNS broke many of the internal tools we'd normally use to investigate and resolve outages like this"; with primary and out-of-band access down, engineers had to be sent onsite.</p>
+<p><strong>What it teaches:</strong> a probe that <em>does</em> something (withdraws traffic, restarts a process) needs as much care as the code it protects, and your diagnostic tools must not depend on the system being healthy. Lessons 8.1–8.2 (four probes; the liveness probe that restarts a healthy service) and Chapter 11.</p>
+
+<h3>5 · This repository — every failure found by a human</h3>
+<p>Lesson 0.1 opens with four incidents from this website's own history, recorded in the project's notes. The pattern is the same as above, only smaller: a route was never mounted because a stale build was deployed, and the health check stayed green the whole time because it only ran <code>SELECT 1</code>; after a bad image swap the backend restarted in a loop and users saw a 502 page for seven minutes. In every case the thing that noticed was a person using the site.</p>
+<p><strong>What it teaches:</strong> you do not need to be Amazon for this to happen to you. Chapters 1, 8 and 11 take these incidents apart.</p>
+
+<h3>The pattern</h3>
+<table>
+  <thead><tr><th>Incident</th><th>What really failed</th><th>The defence</th><th>Where</th></tr></thead>
+  <tbody>
+    <tr><td>Knight 2012</td><td>warnings sent, nobody owned them</td><td>few alerts, each with an owner and a meaning</td><td>Ch 9</td></tr>
+    <tr><td>GitLab 2017</td><td>failure was silent, the alert path was broken</td><td>alert on missing success; test the alert path</td><td>Ch 8, 9</td></tr>
+    <tr><td>AWS S3 2017</td><td>the monitor depended on the monitored</td><td>check from outside</td><td>8.5</td></tr>
+    <tr><td>Facebook 2021</td><td>a probe acted, and the tools died with the network</td><td>careful probes; tools that work during the outage</td><td>8.1–8.2, Ch 11</td></tr>
+    <tr><td>This repo</td><td>green health check, broken feature</td><td>health checks that test what users use</td><td>0.1, Ch 8</td></tr>
+  </tbody>
+</table>
+<p>None of these needed exotic technology to prevent. They needed someone to ask, in advance, "how would we know?". That question is what you are about to practise.</p>
+
+<h3>Closer to home: the night before the defence</h3>
+<div class="callout warn"><p><strong>Illustrative scenario — not a real event.</strong> Each piece of it, though, is a failure this course reproduces on purpose.</p></div>
+<p>A team of four runs its project API in Docker on a small VPS. The night before the defence:</p>
+<ol>
+  <li>The API prints a debug line for every request with <code>console.log</code>, and Docker's default log driver keeps every line with no rotation. The disk fills; PostgreSQL can no longer write, and bookings start failing with 500.</li>
+  <li>The health endpoint only answers "ok" if the process is alive, so the uptime page stays green.</li>
+  <li>The error lines that do get written have no request id, so nobody can tell which user, which route, or since when.</li>
+  <li>Nothing is configured to tell anyone. The first person to notice is the lecturer pressing "Book" during the demo.</li>
+</ol>
+<p>Four small gaps, one ruined demo. Lesson 2.2 fixes the rotation, Chapter 8 the health check, Chapter 3 the request id, and Chapter 9 the silence.</p>
+
+<h3>Why people give up on this topic — and the fix</h3>
+<ul>
+  <li><strong>Too many tools at once</strong> — Prometheus, Grafana, Loki, OpenTelemetry, Sentry. <em>Fix:</em> this course starts with tools that ship inside Node (lesson 0.3) and adds each product only in the chapter that needs it, after you have measured the thing by hand.</li>
+  <li><strong>Your numbers do not match the lesson.</strong> <em>Fix:</em> absolute numbers depend on hardware; ratios are the lesson. Lesson 0.4 explains which differences matter.</li>
+  <li><strong>It does not feel like "building a feature".</strong> <em>Fix:</em> every chapter ends with a failure you can reproduce and then see. Watching your own tool catch a bug you planted is the moment it clicks.</li>
+  <li><strong>English terms pile up</strong> — cardinality, saturation, burn rate. <em>Fix:</em> every lesson ends with a 🗂 key-terms box in Vietnamese.</li>
+</ul>
+
+<h3>One study session, five steps</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Read the question first — 5 minutes</span><span class="lz-d">Each lesson exists to settle one question. Find it before reading the numbers.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Read the lesson — 20 minutes</span><span class="lz-d">The mechanism, the trap, the real output.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Run it yourself — 15 minutes</span><span class="lz-d">Type the script, run it, compare with the out block. Change one thing and predict before you run again.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">🧪 Practice — 15–20 minutes</span><span class="lz-d">A small task with a "done when" you can check yourself.</span></div>
+  <div class="lz-step"><span class="lz-k">5</span><span class="lz-t">Quiz, at the end of each section</span><span class="lz-d">Missed a question? Re-read the lesson it points to before moving on.</span></div>
+</div>
+<p>One rule: <strong>never paste a command you cannot explain</strong>. Read it, say what each part does, then run it.</p>
+
+<h3>How long it takes</h3>
+<table>
+  <thead><tr><th>Plan</th><th>What you study</th><th>You finish with</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Minimum · about 4–5 weeks</strong></td><td>Section 0, Chapter 1, Chapter 3, Chapter 4, lesson 5.5, Chapter 8, Chapter 9, lesson 12.2</td><td>one request traceable end to end, the core metrics, honest health checks and the one alert that matters</td></tr>
+    <tr><td><strong>Full · about 9–10 weeks</strong></td><td>all thirteen sections and quizzes</td><td>everything above, plus the log pipeline, Node runtime metrics, tracing, error tracking, dashboards and diagnosis</td></tr>
+  </tbody>
+</table>
+<p>These are estimates at roughly one lesson per day, about an hour each. Behind on the plan? Do not skip ahead — drop the extra experiments instead. Chapter 3 needs the logs from Chapter 1, and Chapter 9 needs the metrics from Chapter 4.</p>
+
+<h3>When you are stuck</h3>
+<ol>
+  <li><strong>Check the version.</strong> <code>node -v</code> — the course was measured on Node 22.22.2. A very different version can change a number.</li>
+  <li><strong>Read the conditions.</strong> Each measurement states what it was taken under: payload size, number of iterations, warm-up. Match them before comparing.</li>
+  <li><strong>Compare ratios, not absolutes.</strong> If yours are half of mine across the board, your machine is simply faster.</li>
+  <li><strong>Read the output line by line</strong> against the lesson's out block, and find the first line that differs.</li>
+  <li><strong>Still stuck?</strong> Ask with four things: the exact command, the full output, your Node version and OS, and what you expected instead.</li>
+</ol>
+
+<h3>Milestones to tick</h3>
+<ul>
+  <li>☐ I can explain monitoring versus observability to a friend.</li>
+  <li>☐ My service writes one JSON log line per request.</li>
+  <li>☐ I can find every log line of one request by its id.</li>
+  <li>☐ I know my p99 latency, not just the average.</li>
+  <li>☐ My health check fails when a dependency users need is down.</li>
+  <li>☐ One alert would wake me if users saw errors — and I have tested that it arrives.</li>
+  <li>☐ I have written a blameless write-up of one incident, even a small one.</li>
+</ul>
+<p>Write the date next to each tick. On a slow evening, that list is proof that you are moving.</p>
+
+<h3>🧪 Practice (10 min)</h3>
+<div class="callout ok"><ol>
+  <li>Open one of the four incident sources below and read it for five minutes.</li>
+  <li>In one sentence, write what should have noticed the problem — and what actually did.</li>
+  <li>Write the chapter of this course that teaches the defence, using the pattern table.</li>
+  <li>Choose your plan (4–5 weeks or 9–10 weeks) and put the first three study sessions in your calendar.</li>
+</ol>
+<p><strong>Done when:</strong> you have one "what should have noticed" sentence, one chapter number, and three dated sessions in your calendar.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Post-mortem</span><span class="v">A written account of an incident: timeline, cause, what helped, what will change.</span></div>
+  <div class="kv"><span class="k">Silent failure</span><span class="v">A failure that produces no signal anyone sees, like a backup job whose error emails are dropped.</span></div>
+  <div class="kv"><span class="k">Heartbeat</span><span class="v">A signal sent on success; an alert fires when it stops arriving.</span></div>
+  <div class="kv"><span class="k">Alert fatigue</span><span class="v">So many alerts that people stop reading them — the state Knight's 97 emails describe.</span></div>
+  <div class="kv"><span class="k">Shared fate</span><span class="v">When the monitor depends on the thing it monitors, so both fail together.</span></div>
+  <div class="kv"><span class="k">Out-of-band access</span><span class="v">A way into your systems that does not depend on the systems being healthy.</span></div>
+  <div class="kv"><span class="k">Probe</span><span class="v">An automatic check that can also act: remove a server from traffic, restart a process.</span></div>
+  <div class="kv"><span class="k">Blameless write-up</span><span class="v">An incident report that looks for causes in the system, not for a person to blame.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul>
+  <li>Big incidents are usually ordinary gaps in seeing, not exotic technology: unread warnings, silent jobs, monitors that share fate, probes that act.</li>
+  <li>An alert needs an owner and a meaning; a job that can fail silently needs a success signal; the monitor must survive what it monitors.</li>
+  <li>Student projects fail the same way: a full disk from unrotated logs, a health check that only says "alive", errors with no request id, and nobody told.</li>
+  <li>Study loop: find the question → read → run it yourself → 🧪 → quiz; never paste a command you cannot explain.</li>
+  <li>Choose the minimum (about 4–5 weeks) or full plan (about 9–10 weeks) and tick the milestones with dates.</li>
+</ul>
+
+<h3>Sources</h3>
+<ul>
+  <li>Knight Capital: SEC order, Release No. 34-70694, 16 Oct 2013 — <a href="https://www.sec.gov/litigation/admin/2013/34-70694.pdf" target="_blank" rel="noopener">sec.gov/litigation/admin/2013/34-70694.pdf</a></li>
+  <li>GitLab: post-mortem, 10 Feb 2017 — <a href="https://about.gitlab.com/blog/2017/02/10/postmortem-of-database-outage-of-january-31/" target="_blank" rel="noopener">about.gitlab.com/blog/2017/02/10/postmortem-of-database-outage-of-january-31</a></li>
+  <li>Amazon S3: AWS summary of the 28 Feb 2017 disruption — <a href="https://aws.amazon.com/message/41926/" target="_blank" rel="noopener">aws.amazon.com/message/41926</a></li>
+  <li>Facebook: "More details about the October 4 outage", 5 Oct 2021 — <a href="https://engineering.fb.com/2021/10/05/networking-traffic/outage-details/" target="_blank" rel="noopener">engineering.fb.com/2021/10/05/networking-traffic/outage-details</a></li>
+</ul>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 0 · Bắt đầu tại đây (2/2)</span>
+<h2>Khi bay mù: những sự cố thật, và cách học để không bỏ cuộc</h2>
+<p class="lead">Lời khuyên về log và cảnh báo nghe có thể giống thủ tục giấy tờ: thêm cái id chỗ này, cái bộ đếm chỗ kia, một luật cho chỗ nọ. Bài này cho bạn thấy những lời khuyên ấy từ đâu ra — từ những sự cố có thật, có nguồn bạn mở ra đọc được, khi hệ thống đang hỏng mà người vận hành không nhìn thấy, hoặc thấy mà không biết là quan trọng. Sau đó ta quay sang bạn: một "thảm hoạ" điển hình của đồ án sinh viên, vì sao người ta hay bỏ ngang chủ đề này, và một kế hoạch học giữ cho bạn đi tiếp.</p>
+
+<h3>Đọc các câu chuyện thế nào</h3>
+<p>Mỗi sự cố dưới đây đều dẫn nguồn: bản phân tích sau sự cố của chính công ty, hoặc văn bản của cơ quan quản lý. Con số là con số các nguồn đó đưa. Với mỗi chuyện ta hỏi ba câu: <strong>chuyện gì đã xảy ra</strong>, <strong>lẽ ra cái gì phải phát hiện ra nó — và thực tế cái gì đã phát hiện</strong>, và <strong>chương nào dạy cách phòng</strong>.</p>
+
+<h3>1 · Knight Capital, 2012 — 97 email không phải cảnh báo</h3>
+<p>Ngày 1/8/2012, Knight Capital deploy code giao dịch mới, nhưng một máy chủ vẫn chạy một chức năng cũ đã bỏ. Theo quyết định của Uỷ ban Chứng khoán Mỹ (SEC, tháng 10/2013), trong khoảng 45 phút hệ thống gửi ra những lệnh tạo thành chừng 4 triệu lần khớp lệnh trên 154 mã cổ phiếu, và Knight mất hơn 460 triệu đô-la. Chi tiết đáng kể cho khoá này: từ khoảng 8:01 sáng, trước giờ mở cửa thị trường 9:30, một hệ thống nội bộ đã gửi <strong>97 email tự động</strong> tới một nhóm nhân viên, nhắc tới một lỗi "Power Peg disabled". Theo lời SEC, Knight "không thiết kế loại tin nhắn này để làm cảnh báo hệ thống, và nhân viên Knight nhìn chung không đọc chúng khi nhận được".</p>
+<p><strong>Bài học:</strong> một tin nhắn không ai có trách nhiệm đọc thì không phải cảnh báo, gửi bao nhiêu cũng vậy. Cảnh báo cần một người chịu trách nhiệm, một ý nghĩa rõ ràng, và đủ ít để cái nào cũng được đọc. Chương 9 (cảnh báo là lời hứa đánh thức ai đó; mệt mỏi vì cảnh báo).</p>
+
+<h3>2 · GitLab, 2017 — bản sao lưu hỏng trong im lặng</h3>
+<p>Ngày 31/1/2017, trong lúc chống đỡ một sự cố tải, một kỹ sư GitLab lỡ tay xoá thư mục dữ liệu của máy PostgreSQL chính trên production. Khôi phục lẽ ra là việc thường ngày. Bản phân tích sau sự cố của GitLab (10/2/2017) giải thích vì sao không phải vậy: bản sao lưu <code>pg_dump</code> định kỳ "hỏng trong im lặng vì dùng PostgreSQL 9.2, trong khi GitLab.com chạy PostgreSQL 9.6". Công việc ấy có gửi email báo lỗi — nhưng email "bị phía nhận từ chối" vì một thiết lập xác thực email (DMARC), nên không ai thấy. Dữ liệu tạo ra từ 17:20 tới 23:30 UTC bị mất; GitLab ước tính ít nhất 5.000 dự án, 5.000 bình luận và khoảng 700 người dùng.</p>
+<p><strong>Bài học:</strong> "không có tin gì" không có nghĩa là "tin tốt". Một công việc có thể hỏng trong im lặng cần phát tín hiệu khi nó <em>thành công</em>, và một cảnh báo khi tín hiệu ấy ngừng tới — và chính đường đi của cảnh báo cũng phải được thử. Chương 8 và 9.</p>
+
+<h3>3 · Amazon S3, 2017 — trang trạng thái phụ thuộc vào thứ nó báo cáo</h3>
+<p>Ngày 28/2/2017, lúc 9:37 sáng giờ PST, một kỹ sư S3 làm theo quy trình có sẵn đã chạy một lệnh với một tham số gõ sai, và số máy chủ bị gỡ ra nhiều hơn dự định rất nhiều. Hai phân hệ lõi của S3 phải khởi động lại toàn bộ; S3 ở vùng US-EAST-1 hồi phục xong lúc 1:54 chiều PST. Bản tóm tắt của chính AWS có thêm chi tiết mà người làm giám sát nào cũng nhớ: tới 11:37 sáng họ không cập nhật được trạng thái từng dịch vụ trên Service Health Dashboard "vì trang quản trị của SHD phụ thuộc vào Amazon S3".</p>
+<p><strong>Bài học:</strong> thứ đứng canh không được hỏng cùng với thứ nó canh. Hãy kiểm từ bên ngoài, từ một nơi sự cố không với tới được. Bài 8.5 (kiểm từ bên ngoài, nơi người dùng đứng).</p>
+
+<h3>4 · Facebook, 2021 — một phép kiểm sức khoẻ tự tắt chính mình</h3>
+<p>Ngày 4/10/2021, trong một lần bảo trì định kỳ, một lệnh nhằm đánh giá dung lượng đường trục "vô tình cắt mọi kết nối trong mạng đường trục của chúng tôi", Santosh Janardhan viết trên blog kỹ thuật của Facebook hôm sau. Rồi một cơ chế an toàn làm mọi thứ tệ hơn: các máy chủ DNS "tắt các thông báo BGP đó nếu chính chúng không nói chuyện được với các trung tâm dữ liệu" — một phép kiểm sức khoẻ có hành động — thế là toàn bộ Facebook biến mất khỏi Internet. Và "việc mất hoàn toàn DNS làm hỏng nhiều công cụ nội bộ chúng tôi thường dùng để điều tra và xử lý những sự cố như thế này"; khi cả đường vào chính lẫn đường vào dự phòng đều sập, họ phải cử kỹ sư tới tận nơi.</p>
+<p><strong>Bài học:</strong> một phép thăm dò mà <em>làm</em> một việc gì đó (rút lưu lượng, khởi động lại tiến trình) cần được chăm chút như chính đoạn code nó bảo vệ, và công cụ chẩn đoán của bạn không được phụ thuộc vào việc hệ thống đang khoẻ. Bài 8.1–8.2 (bốn kiểu thăm dò; phép kiểm liveness khởi động lại một dịch vụ đang khoẻ) và Chương 11.</p>
+
+<h3>5 · Chính kho mã này — sự cố nào cũng do con người phát hiện</h3>
+<p>Bài 0.1 mở đầu bằng bốn sự cố trong lịch sử của chính website này, ghi lại trong sổ tay dự án. Khuôn mẫu y như trên, chỉ nhỏ hơn: một route không bao giờ được gắn vì deploy nhầm một bản build cũ, và health check vẫn xanh suốt vì nó chỉ chạy <code>SELECT 1</code>; sau một lần tráo ảnh hỏng, backend khởi động lại liên tục và người dùng thấy trang 502 trong bảy phút. Lần nào thứ phát hiện ra cũng là một người đang dùng trang.</p>
+<p><strong>Bài học:</strong> bạn không cần là Amazon thì chuyện này mới xảy ra với bạn. Chương 1, 8 và 11 mổ xẻ các sự cố này.</p>
+
+<h3>Khuôn mẫu chung</h3>
+<table>
+  <thead><tr><th>Sự cố</th><th>Thật ra hỏng ở đâu</th><th>Cách phòng</th><th>Học ở</th></tr></thead>
+  <tbody>
+    <tr><td>Knight 2012</td><td>có cảnh báo gửi đi, không ai nhận trách nhiệm</td><td>ít cảnh báo, cái nào cũng có người nhận và có ý nghĩa</td><td>Ch 9</td></tr>
+    <tr><td>GitLab 2017</td><td>hỏng trong im lặng, đường báo lỗi cũng hỏng</td><td>cảnh báo khi thiếu tín hiệu thành công; thử đường cảnh báo</td><td>Ch 8, 9</td></tr>
+    <tr><td>AWS S3 2017</td><td>thứ canh phụ thuộc thứ bị canh</td><td>kiểm từ bên ngoài</td><td>8.5</td></tr>
+    <tr><td>Facebook 2021</td><td>phép thăm dò tự hành động, công cụ chết theo mạng</td><td>thăm dò cẩn thận; công cụ vẫn dùng được giữa sự cố</td><td>8.1–8.2, Ch 11</td></tr>
+    <tr><td>Kho này</td><td>health check xanh, tính năng hỏng</td><td>health check kiểm đúng thứ người dùng dùng</td><td>0.1, Ch 8</td></tr>
+  </tbody>
+</table>
+<p>Không chuyện nào cần công nghệ cao siêu để phòng. Chúng chỉ cần có người hỏi trước một câu: "lỡ hỏng thì mình biết bằng cách nào?". Câu hỏi đó chính là thứ bạn sắp luyện.</p>
+
+<h3>Gần với bạn hơn: đêm trước buổi bảo vệ</h3>
+<div class="callout warn"><p><strong>Tình huống minh hoạ — không phải chuyện có thật.</strong> Tuy vậy, từng mảnh của nó đều là kiểu hỏng mà khoá này cố tình tái hiện.</p></div>
+<p>Một nhóm bốn người chạy API đồ án trong Docker trên một VPS nhỏ. Đêm trước buổi bảo vệ:</p>
+<ol>
+  <li>API in một dòng debug cho mọi request bằng <code>console.log</code>, và trình ghi log mặc định của Docker giữ mọi dòng mà không xoay vòng. Đĩa đầy; PostgreSQL không ghi được nữa, và các lượt đặt chỗ bắt đầu lỗi 500.</li>
+  <li>Endpoint kiểm sức khoẻ chỉ trả "ok" nếu tiến trình còn sống, nên trang theo dõi uptime vẫn xanh.</li>
+  <li>Những dòng lỗi được ghi ra thì không có request id, nên không ai biết người dùng nào, route nào, hay từ lúc nào.</li>
+  <li>Không có gì được cấu hình để báo cho ai. Người đầu tiên phát hiện là thầy cô bấm "Đặt" giữa buổi demo.</li>
+</ol>
+<p>Bốn lỗ hổng nhỏ, một buổi demo đổ bể. Bài 2.2 sửa chuyện xoay vòng, Chương 8 sửa health check, Chương 3 sửa request id, và Chương 9 sửa sự im lặng.</p>
+
+<h3>Vì sao người ta hay bỏ ngang chủ đề này — và cách sửa</h3>
+<ul>
+  <li><strong>Quá nhiều công cụ một lúc</strong> — Prometheus, Grafana, Loki, OpenTelemetry, Sentry. <em>Cách sửa:</em> khoá này bắt đầu bằng công cụ có sẵn trong Node (bài 0.3) và chỉ thêm từng sản phẩm ở chương cần tới nó, sau khi bạn đã tự đo bằng tay.</li>
+  <li><strong>Số của bạn không khớp với bài.</strong> <em>Cách sửa:</em> số tuyệt đối phụ thuộc phần cứng; tỷ lệ mới là bài học. Bài 0.4 giải thích chênh lệch nào đáng để ý.</li>
+  <li><strong>Cảm giác không phải "làm tính năng".</strong> <em>Cách sửa:</em> chương nào cũng kết bằng một kiểu hỏng bạn tự tái hiện rồi tự nhìn thấy. Khoảnh khắc công cụ của chính bạn bắt được con lỗi bạn vừa cài vào là lúc mọi thứ "vào".</li>
+  <li><strong>Thuật ngữ tiếng Anh dồn dập</strong> — cardinality, saturation, burn rate. <em>Cách sửa:</em> bài nào cũng kết bằng ô 🗂 thuật ngữ giải nghĩa tiếng Việt.</li>
+</ul>
+
+<h3>Một buổi học, năm bước</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Tìm câu hỏi trước — 5 phút</span><span class="lz-d">Bài nào cũng tồn tại để trả lời một câu hỏi. Tìm ra nó trước khi đọc các con số.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Đọc bài — 20 phút</span><span class="lz-d">Cơ chế, cái bẫy, output thật.</span></div>
+  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Tự chạy — 15 phút</span><span class="lz-d">Gõ lại script, chạy, so với khối output. Đổi một thứ và đoán trước khi chạy lại.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">🧪 Thực hành — 15–20 phút</span><span class="lz-d">Một việc nhỏ có tiêu chí "Đạt khi" bạn tự kiểm được.</span></div>
+  <div class="lz-step"><span class="lz-k">5</span><span class="lz-t">Trắc nghiệm, cuối mỗi mục</span><span class="lz-d">Sai câu nào thì đọc lại bài câu đó chỉ tới rồi mới đi tiếp.</span></div>
+</div>
+<p>Một luật duy nhất: <strong>không bao giờ dán một lệnh bạn chưa giải thích được</strong>. Đọc nó, nói từng phần làm gì, rồi mới chạy.</p>
+
+<h3>Mất bao lâu</h3>
+<table>
+  <thead><tr><th>Kế hoạch</th><th>Học những gì</th><th>Xong bạn có</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Tối thiểu · khoảng 4–5 tuần</strong></td><td>Mục 0, Chương 1, Chương 3, Chương 4, bài 5.5, Chương 8, Chương 9, bài 12.2</td><td>một request lần theo được từ đầu tới cuối, các chỉ số cốt lõi, health check trung thực và một cảnh báo thật sự quan trọng</td></tr>
+    <tr><td><strong>Đầy đủ · khoảng 9–10 tuần</strong></td><td>cả mười ba mục và các bài trắc nghiệm</td><td>tất cả những thứ trên, cộng đường ống log, chỉ số của runtime Node, trace, theo dõi lỗi, bảng theo dõi và chẩn đoán</td></tr>
+  </tbody>
+</table>
+<p>Đây là ước lượng với nhịp chừng một bài mỗi ngày, mỗi bài khoảng một giờ. Bị chậm so với kế hoạch? Đừng nhảy cóc — hãy bỏ bớt các thí nghiệm thêm. Chương 3 cần log của Chương 1, và Chương 9 cần chỉ số của Chương 4.</p>
+
+<h3>Khi bị bí</h3>
+<ol>
+  <li><strong>Kiểm phiên bản.</strong> <code>node -v</code> — khoá được đo trên Node 22.22.2. Phiên bản khác hẳn có thể làm đổi một con số.</li>
+  <li><strong>Đọc điều kiện đo.</strong> Mỗi phép đo đều ghi rõ được đo trong điều kiện nào: kích thước dữ liệu, số vòng lặp, có chạy nóng máy không. Khớp điều kiện rồi mới so.</li>
+  <li><strong>So tỷ lệ, đừng so số tuyệt đối.</strong> Nếu mọi số của bạn đều bằng một nửa của bài, chỉ là máy bạn nhanh hơn.</li>
+  <li><strong>Đọc output từng dòng</strong> so với khối output của bài, và tìm dòng đầu tiên khác nhau.</li>
+  <li><strong>Vẫn bí?</strong> Hỏi kèm bốn thứ: lệnh chính xác, toàn bộ output, phiên bản Node và hệ điều hành, và bạn đã mong thấy gì.</li>
+</ol>
+
+<h3>Các mốc để tự đánh dấu</h3>
+<ul>
+  <li>☐ Tôi giải thích được monitoring khác observability cho một người bạn.</li>
+  <li>☐ Dịch vụ của tôi ghi một dòng log JSON cho mỗi request.</li>
+  <li>☐ Tôi tìm được mọi dòng log của một request theo id của nó.</li>
+  <li>☐ Tôi biết độ trễ p99 của mình, không chỉ con số trung bình.</li>
+  <li>☐ Health check của tôi báo hỏng khi một phụ thuộc người dùng cần bị sập.</li>
+  <li>☐ Một cảnh báo sẽ đánh thức tôi nếu người dùng gặp lỗi — và tôi đã thử là nó tới thật.</li>
+  <li>☐ Tôi đã viết một bản ghi lại không đổ lỗi cho một sự cố, dù nhỏ.</li>
+</ul>
+<p>Ghi ngày bên cạnh mỗi dấu tích. Vào một buổi tối uể oải, danh sách đó là bằng chứng bạn đang tiến lên.</p>
+
+<h3>🧪 Thực hành (10 phút)</h3>
+<div class="callout ok"><ol>
+  <li>Mở một trong bốn nguồn sự cố ở dưới và đọc trong năm phút.</li>
+  <li>Viết một câu: lẽ ra cái gì phải phát hiện ra sự cố — và thực tế cái gì đã phát hiện.</li>
+  <li>Ghi chương nào của khoá này dạy cách phòng, dựa vào bảng khuôn mẫu chung.</li>
+  <li>Chọn kế hoạch (4–5 tuần hay 9–10 tuần) và ghi ba buổi học đầu tiên vào lịch.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn có một câu "lẽ ra cái gì phải phát hiện", một số chương, và ba buổi học đã ghi ngày trong lịch.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Post-mortem (phân tích sau sự cố)</span><span class="v">Bản viết lại một sự cố: diễn biến, nguyên nhân, cái gì đã giúp, cái gì sẽ đổi.</span></div>
+  <div class="kv"><span class="k">Silent failure (hỏng im lặng)</span><span class="v">Lỗi không sinh ra tín hiệu nào ai thấy, như việc sao lưu mà email báo lỗi bị chặn.</span></div>
+  <div class="kv"><span class="k">Heartbeat (nhịp tim)</span><span class="v">Tín hiệu gửi khi thành công; cảnh báo nổ khi nó ngừng tới.</span></div>
+  <div class="kv"><span class="k">Alert fatigue (mệt mỏi vì cảnh báo)</span><span class="v">Cảnh báo nhiều tới mức người ta thôi đọc — đúng trạng thái 97 email của Knight cho thấy.</span></div>
+  <div class="kv"><span class="k">Shared fate (chung số phận)</span><span class="v">Khi thứ canh phụ thuộc thứ bị canh, nên cả hai hỏng cùng lúc.</span></div>
+  <div class="kv"><span class="k">Out-of-band access (đường vào dự phòng)</span><span class="v">Một lối vào hệ thống không phụ thuộc vào việc hệ thống đang khoẻ.</span></div>
+  <div class="kv"><span class="k">Probe (phép thăm dò)</span><span class="v">Phép kiểm tự động có thể kèm hành động: rút máy khỏi lưu lượng, khởi động lại tiến trình.</span></div>
+  <div class="kv"><span class="k">Blameless write-up (bản ghi không đổ lỗi)</span><span class="v">Báo cáo sự cố đi tìm nguyên nhân trong hệ thống, không đi tìm người để trách.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul>
+  <li>Sự cố lớn thường là những lỗ hổng bình thường trong việc nhìn thấy, không phải công nghệ cao siêu: cảnh báo không ai đọc, công việc hỏng im lặng, thứ canh chung số phận với thứ bị canh, phép thăm dò tự hành động.</li>
+  <li>Cảnh báo cần người nhận và ý nghĩa; công việc có thể hỏng im lặng cần tín hiệu thành công; thứ canh phải sống sót qua sự cố của thứ bị canh.</li>
+  <li>Đồ án sinh viên hỏng y như vậy: đĩa đầy vì log không xoay vòng, health check chỉ biết "còn sống", lỗi không có request id, và không ai được báo.</li>
+  <li>Nhịp học: tìm câu hỏi → đọc → tự chạy → 🧪 → trắc nghiệm; không dán lệnh mình chưa giải thích được.</li>
+  <li>Chọn kế hoạch tối thiểu (khoảng 4–5 tuần) hoặc đầy đủ (khoảng 9–10 tuần) và đánh dấu các mốc kèm ngày.</li>
+</ul>
+
+<h3>Nguồn</h3>
+<ul>
+  <li>Knight Capital: quyết định của SEC, Release No. 34-70694, 16/10/2013 — <a href="https://www.sec.gov/litigation/admin/2013/34-70694.pdf" target="_blank" rel="noopener">sec.gov/litigation/admin/2013/34-70694.pdf</a></li>
+  <li>GitLab: phân tích sau sự cố, 10/2/2017 — <a href="https://about.gitlab.com/blog/2017/02/10/postmortem-of-database-outage-of-january-31/" target="_blank" rel="noopener">about.gitlab.com/blog/2017/02/10/postmortem-of-database-outage-of-january-31</a></li>
+  <li>Amazon S3: bản tóm tắt của AWS về sự cố 28/2/2017 — <a href="https://aws.amazon.com/message/41926/" target="_blank" rel="noopener">aws.amazon.com/message/41926</a></li>
+  <li>Facebook: "More details about the October 4 outage", 5/10/2021 — <a href="https://engineering.fb.com/2021/10/05/networking-traffic/outage-details/" target="_blank" rel="noopener">engineering.fb.com/2021/10/05/networking-traffic/outage-details</a></li>
+</ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-11-1-nam-phut-dau" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy VPS · 11.1 — The first five minutes</span><span class="lc-sub">What to do in the first minutes of an incident on a real VPS — the practical side of the stories above.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-15-6-health-check-canh-bao" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 15.6 — Health checks, alerts, and being woken at 3am</span><span class="lc-sub">Health checks and alerts written in a Node application, from the Node.js course.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-11-1-nam-phut-dau" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Deploy lên VPS · 11.1 — Năm phút đầu tiên</span><span class="lc-sub">Làm gì trong những phút đầu của một sự cố trên VPS thật — mặt thực hành của các câu chuyện ở trên.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-15-6-health-check-canh-bao" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 15.6 — Health check, cảnh báo, và chuyện bị gọi dậy lúc 3 giờ sáng</span><span class="lc-sub">Health check và cảnh báo viết trong một ứng dụng Node, ở khoá Node.js.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
+`,
+    },
+
 
     {
       title: '0.1 — The outage you cannot see from inside|||0.1 — Cú sự cố bạn không nhìn thấy từ bên trong',

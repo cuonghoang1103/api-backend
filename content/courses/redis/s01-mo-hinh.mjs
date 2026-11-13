@@ -112,6 +112,22 @@ real	0m3.014s</div>
 
 <div class="pitfall"><strong>Pitfall:</strong> assuming a bigger server will fix Redis latency. Extra cores do nothing for command execution — the single thread uses one, and the other fifteen sit idle while your slow <code>SMEMBERS</code> holds everyone up. What actually helps, in order: stop running O(N) commands on large collections, split hot data across more Redis instances (Chapter 11), and only then look at faster single-core clock speed or a better NIC. This inverts the usual scaling instinct and it is the correct one here: Redis scales by <em>keeping every command short</em>, not by adding hardware. A useful diagnostic habit is to treat <code>SLOWLOG</code> (Chapter 12) as the first place to look whenever latency rises, because in a single-threaded server the slow command and the latency spike are always the same event.</div>
 <p class="note-ct"><strong>Three things to remember.</strong> One thread executing commands means every command is atomic for free — no locks, no transactions, no lost updates — and that is what makes <code>INCR</code> and rate limiters correct by construction. The price is that one slow command blocks everybody, so the complexity line in the command reference is an operational fact rather than trivia. And the background threads that do exist (<code>fsync</code>, lazy free, optional io-threads) never execute commands: adding cores does not make Redis faster.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Single-threaded</span><span class="v">One thread executes every command, one at a time — the source of atomicity and of the "one slow command" risk.</span></div>
+  <div class="kv"><span class="k">Event loop (epoll)</span><span class="v">One syscall asks the kernel which of thousands of sockets are ready, so ten thousand idle connections cost almost nothing.</span></div>
+  <div class="kv"><span class="k">Atomic by construction</span><span class="v">Nothing else runs during a command, so each is all-or-nothing with no locks, atomics or contention.</span></div>
+  <div class="kv"><span class="k">io-threads</span><span class="v">An optional feature (6.0+) that parallelises socket reads and writes only — never command execution.</span></div>
+  <div class="kv"><span class="k">Background threads (bio)</span><span class="v"><code>fsync</code>, file close and lazy free run off the main thread; none of them execute commands.</span></div>
+  <div class="kv"><span class="k">Command complexity</span><span class="v">O(1) vs O(N) is how long a command holds the single thread — the operational reason the reference states it.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>Redis runs every command on one thread, which makes each command atomic for free — no locks, no lost updates.</li>
+<li>Removing threads made it faster: no context switches, no lock contention, and the bottleneck is memory and network, not CPU.</li>
+<li>The price is that one slow command blocks every client, so the complexity line in the reference is an operational fact.</li>
+<li>The threads that do exist — <code>fsync</code>, lazy free, optional io-threads — never run commands, so adding cores does not speed Redis up.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 1 · Bài 1.1</span>
@@ -206,6 +222,38 @@ real	0m3.014s</div>
 
 <div class="pitfall"><strong>Bẫy:</strong> tưởng rằng một máy chủ to hơn sẽ chữa được độ trễ của Redis. Thêm nhân KHÔNG làm gì cho việc thực thi câu lệnh — cái luồng duy nhất dùng một nhân, còn mười lăm nhân kia ngồi chơi trong lúc lệnh <code>SMEMBERS</code> chậm của bạn giữ chân tất cả mọi người. Thứ thật sự giúp được, theo thứ tự: ngừng chạy các câu lệnh O(N) trên tập hợp lớn, tách dữ liệu nóng ra nhiều instance Redis (Chương 11), và chỉ sau đó mới ngó tới xung nhịp một nhân cao hơn hay một card mạng tốt hơn. Điều này lật ngược bản năng mở rộng thông thường và ở đây thì lật ngược mới là đúng: Redis mở rộng bằng cách <em>GIỮ CHO MỌI CÂU LỆNH ĐỀU NGẮN</em>, không phải bằng cách thêm phần cứng. Một thói quen chẩn đoán hữu ích là coi <code>SLOWLOG</code> (Chương 12) là chỗ đầu tiên phải nhìn mỗi khi độ trễ tăng, vì trong một máy chủ một luồng thì câu lệnh chậm và cú vọt độ trễ luôn luôn là CÙNG một sự kiện.</div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Một luồng thực thi câu lệnh nghĩa là mọi câu lệnh đều nguyên tử miễn phí — không khoá, không giao dịch, không mất cập nhật — và đó là thứ khiến <code>INCR</code> với các bộ giới hạn tần suất đúng theo cấu tạo. Cái giá là một câu lệnh chậm chặn tất cả mọi người, nên dòng độ phức tạp trong trang tra cứu là một sự thật VẬN HÀNH chứ không phải chuyện vặt. Và những luồng nền có tồn tại (<code>fsync</code>, giải phóng lười, io-threads tuỳ chọn) không bao giờ thực thi câu lệnh: thêm nhân không làm Redis nhanh hơn.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Single-threaded</span><span class="v">Một luồng chạy mọi câu lệnh, từng cái một — nguồn gốc của tính nguyên tử và mối nguy "một câu lệnh chậm".</span></div>
+  <div class="kv"><span class="k">Event loop (epoll)</span><span class="v">Một lời gọi hệ thống hỏi nhân xem socket nào sẵn sàng, nên mười nghìn kết nối nhàn rỗi gần như không tốn gì.</span></div>
+  <div class="kv"><span class="k">Nguyên tử theo cấu tạo</span><span class="v">Không gì khác chạy trong lúc một câu lệnh chạy, nên mỗi câu lệnh được-ăn-cả-ngã-về-không, không cần khoá hay tranh chấp.</span></div>
+  <div class="kv"><span class="k">io-threads</span><span class="v">Tính năng tuỳ chọn (6.0+) chỉ song song hoá đọc và ghi socket — không bao giờ song song hoá việc thực thi câu lệnh.</span></div>
+  <div class="kv"><span class="k">Luồng nền (bio)</span><span class="v"><code>fsync</code>, đóng file và giải phóng lười chạy ngoài luồng chính; không cái nào thực thi câu lệnh.</span></div>
+  <div class="kv"><span class="k">Độ phức tạp câu lệnh</span><span class="v">O(1) so với O(N) là chuyện câu lệnh giữ cái luồng duy nhất bao lâu — lý do vận hành mà trang tra cứu ghi rõ nó.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Redis chạy mọi câu lệnh trên một luồng, khiến mỗi câu lệnh nguyên tử miễn phí — không khoá, không mất cập nhật.</li>
+<li>Bỏ luồng đi lại làm nó nhanh hơn: không chuyển ngữ cảnh, không tranh chấp khoá, và nút thắt là bộ nhớ với mạng chứ không phải CPU.</li>
+<li>Cái giá là một câu lệnh chậm chặn mọi client, nên dòng độ phức tạp trong trang tra cứu là một sự thật vận hành.</li>
+<li>Những luồng có tồn tại — <code>fsync</code>, giải phóng lười, io-threads tuỳ chọn — không bao giờ chạy câu lệnh, nên thêm nhân không làm Redis nhanh hơn.</li>
+</ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-6-van-hanh-production" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.6 — Running Redis: the commands that freeze everything</span><span class="lc-sub">What blocking the single thread looks like from a Node service: the commands that freeze every client at once.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-6-van-hanh-production" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.6 — Vận hành Redis: những lệnh làm đứng hình tất cả</span><span class="lc-sub">Chặn luồng duy nhất trông ra sao từ một dịch vụ Node: những lệnh làm mọi client đứng hình cùng lúc.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -322,6 +370,22 @@ keyspace_misses:1</div>
 
 <div class="pitfall"><strong>Pitfall:</strong> treating a successful reply as a durability guarantee. Redis returns <code>OK</code> when the command has been applied to the in-memory data structure — before the AOF is flushed and before any replica has acknowledged. Under the default settings that leaves two distinct windows in which an acknowledged write can vanish: up to one second of AOF buffer on a power loss, and the entire replication lag on a primary failure. Neither is a defect, and for a cache neither matters. They matter enormously the moment somebody stores something in Redis that has no other copy — a payment reference, a one-time token, the only record that an email was sent. The rule that keeps you out of trouble: if losing it would be a bug, either it lives in PostgreSQL, or you have deliberately configured <code>appendfsync always</code> and understood what it costs (Chapter 9).</div>
 <p class="note-ct"><strong>Three things to remember.</strong> A command is parsed, executed, propagated to replicas and the AOF buffer, and only then written into an output buffer — the reply reaches your client before any of it is on disk. The output buffer is where a slow client becomes a server problem, and <code>client-output-buffer-limit</code> silently disconnects subscribers and replicas that fall behind. And <code>CLIENT LIST</code>'s <code>omem</code>, <code>qbuf</code> and <code>cmd</code> fields are how you find the one connection causing trouble.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Query buffer (qbuf)</span><span class="v">Bytes received from a client but not yet executed; capped by <code>proto-max-bulk-len</code> (512MB default).</span></div>
+  <div class="kv"><span class="k">Output buffer (omem)</span><span class="v">Where replies queue; it grows when Redis produces faster than the client reads — the field that matters.</span></div>
+  <div class="kv"><span class="k">client-output-buffer-limit</span><span class="v">Per-class soft and hard caps that silently disconnect replicas and subscribers that fall behind.</span></div>
+  <div class="kv"><span class="k">appendfsync everysec</span><span class="v">The default: writes are buffered and flushed up to a second later, so <code>OK</code> precedes durability.</span></div>
+  <div class="kv"><span class="k">WAIT</span><span class="v">Blocks until N replicas acknowledge, turning async replication into something closer to synchronous, at a latency cost.</span></div>
+  <div class="kv"><span class="k">CLIENT LIST</span><span class="v">Per-connection diagnostics — <code>omem</code>, <code>qbuf</code> and <code>cmd</code> locate the connection causing trouble.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>A command is parsed, executed, propagated to replicas and the AOF buffer, then written to an output buffer — the reply reaches the client before any of it is on disk.</li>
+<li><code>OK</code> is not a durability guarantee: under defaults, up to a second of AOF buffer and the whole replication lag can lose an acknowledged write.</li>
+<li>The output buffer is where a slow client becomes a server problem; <code>client-output-buffer-limit</code> drops subscribers and replicas that lag.</li>
+<li><code>CLIENT LIST</code>'s <code>omem</code>, <code>qbuf</code> and <code>cmd</code> fields are how you find the one connection causing trouble.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 1 · Bài 1.2</span>
@@ -429,6 +493,38 @@ keyspace_misses:1</div>
 
 <div class="pitfall"><strong>Bẫy:</strong> coi một câu trả lời thành công là một bảo đảm về ĐỘ BỀN. Redis trả <code>OK</code> khi câu lệnh đã được áp lên cấu trúc dữ liệu trong bộ nhớ — trước khi AOF được đẩy xuống đĩa và trước khi có bản sao nào xác nhận. Với thiết lập mặc định, điều đó để lại HAI khoảng trống riêng biệt mà trong đó một lệnh ghi đã được xác nhận vẫn có thể biến mất: tối đa một giây bộ đệm AOF khi mất điện, và toàn bộ độ trễ nhân bản khi máy chính chết. Không cái nào là khuyết tật, và với một cái cache thì cả hai đều không quan trọng. Chúng cực kỳ quan trọng ngay khoảnh khắc có ai đó cất vào Redis một thứ không có bản sao nào khác — một mã tham chiếu thanh toán, một token dùng một lần, bản ghi DUY NHẤT rằng một email đã được gửi. Cái luật giữ bạn khỏi rắc rối: nếu mất nó là một cái lỗi, thì hoặc nó sống trong PostgreSQL, hoặc bạn đã CỐ Ý cấu hình <code>appendfsync always</code> và hiểu cái giá của nó (Chương 9).</div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Một câu lệnh được phân tích, thực thi, lan truyền tới bản sao và bộ đệm AOF, rồi mới được ghi vào bộ đệm ra — câu trả lời tới client của bạn TRƯỚC khi bất cứ phần nào trong đó nằm trên đĩa. Bộ đệm ra là chỗ một client chậm trở thành vấn đề của máy chủ, và <code>client-output-buffer-limit</code> lặng lẽ ngắt những bên đăng ký với bản sao bị tụt lại. Và ba trường <code>omem</code>, <code>qbuf</code> với <code>cmd</code> của <code>CLIENT LIST</code> là cách bạn tìm ra đúng cái kết nối đang gây chuyện.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Query buffer (qbuf)</span><span class="v">Số byte đã nhận từ client nhưng chưa thực thi; bị chặn trần bởi <code>proto-max-bulk-len</code> (mặc định 512MB).</span></div>
+  <div class="kv"><span class="k">Output buffer (omem)</span><span class="v">Chỗ câu trả lời xếp hàng; nó phình khi Redis sinh nhanh hơn client đọc — trường quan trọng nhất.</span></div>
+  <div class="kv"><span class="k">client-output-buffer-limit</span><span class="v">Trần mềm và cứng theo từng lớp, lặng lẽ ngắt bản sao và bên đăng ký bị tụt lại.</span></div>
+  <div class="kv"><span class="k">appendfsync everysec</span><span class="v">Mặc định: lệnh ghi được đệm rồi đẩy xuống đĩa muộn nhất một giây, nên <code>OK</code> đến trước độ bền.</span></div>
+  <div class="kv"><span class="k">WAIT</span><span class="v">Chặn tới khi N bản sao xác nhận, biến nhân bản bất đồng bộ thành thứ gần đồng bộ hơn, đổi bằng độ trễ.</span></div>
+  <div class="kv"><span class="k">CLIENT LIST</span><span class="v">Chẩn đoán theo từng kết nối — <code>omem</code>, <code>qbuf</code> và <code>cmd</code> định vị cái kết nối đang gây chuyện.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Một câu lệnh được phân tích, thực thi, lan tới bản sao và bộ đệm AOF, rồi mới ghi vào bộ đệm ra — câu trả lời tới client trước khi bất cứ phần nào nằm trên đĩa.</li>
+<li><code>OK</code> không phải bảo đảm độ bền: với mặc định, tối đa một giây bộ đệm AOF và toàn bộ độ trễ nhân bản đều có thể làm mất một lệnh ghi đã xác nhận.</li>
+<li>Bộ đệm ra là chỗ một client chậm trở thành vấn đề của máy chủ; <code>client-output-buffer-limit</code> ngắt bản sao và bên đăng ký bị tụt lại.</li>
+<li>Các trường <code>omem</code>, <code>qbuf</code> và <code>cmd</code> của <code>CLIENT LIST</code> là cách bạn tìm ra đúng cái kết nối đang gây chuyện.</li>
+</ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-6-van-hanh-production" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.6 — Running Redis: the commands that freeze everything</span><span class="lc-sub">The operational side of a command's life: slow commands, output buffers and connections in production.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-6-van-hanh-production" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.6 — Vận hành Redis: những lệnh làm đứng hình tất cả</span><span class="lc-sub">Mặt vận hành của vòng đời một lệnh: lệnh chậm, bộ đệm ra và kết nối trên production.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -542,6 +638,22 @@ tcp_port:6380</div>
 
 <div class="pitfall"><strong>Pitfall:</strong> matching on the human-readable part of an error message. Client code that checks <code>err.message === 'WRONGTYPE Operation against a key holding the wrong kind of value'</code> works until a version bump rewords the sentence, and then silently stops handling the case it was written for. The first word is the contract: <code>WRONGTYPE</code>, <code>NOSCRIPT</code>, <code>OOM</code>, <code>READONLY</code>, <code>MOVED</code>, <code>LOADING</code> are the machine-readable codes, and only they are stable across versions. Two of them matter for correctness rather than debugging: <code>LOADING</code> means the server is still reading its dataset from disk after a restart, and <code>READONLY</code> means you sent a write to a replica after a failover. Both are temporary and both should be retried — a client that treats them as fatal turns a routine restart into an outage.</div>
 <p class="note-ct"><strong>Three things to remember.</strong> RESP is length-prefixed and binary-safe, which is why it is both trivially parseable and able to carry a JPEG — and why lengths are counted in <em>bytes</em>, not characters. Every command you send is an array of bulk strings; replies use whichever of the five types fits. And an error's first word is the stable machine-readable code — match on that, and retry <code>LOADING</code> and <code>READONLY</code> instead of failing.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">RESP2</span><span class="v">The five-type text protocol Redis has spoken since 2009 — simple string, error, integer, bulk string, array.</span></div>
+  <div class="kv"><span class="k">Bulk string</span><span class="v">A length-prefixed, binary-safe byte sequence; lengths count bytes, not characters.</span></div>
+  <div class="kv"><span class="k">Length-prefixed framing</span><span class="v">The parser knows exactly how many bytes to read, so it never scans for a terminator or escapes anything.</span></div>
+  <div class="kv"><span class="k">RESP3</span><span class="v">An opt-in upgrade (<code>HELLO 3</code>) adding map, double and set types, push messages and client-side caching.</span></div>
+  <div class="kv"><span class="k">Error code</span><span class="v">The first word of an error (<code>WRONGTYPE</code>, <code>LOADING</code>, <code>READONLY</code>) — the stable, machine-readable part.</span></div>
+  <div class="kv"><span class="k">STRLEN counts bytes</span><span class="v">"Cường" is five characters but seven UTF-8 bytes, and Redis counts bytes, not text.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>RESP is length-prefixed and binary-safe, which makes it both trivial to parse and able to carry a JPEG — and why lengths are counted in bytes.</li>
+<li>Every command you send is an array of bulk strings; replies use whichever of the five RESP2 types fits.</li>
+<li>RESP3 is an opt-in per-connection upgrade adding typed replies, push messages and client-side caching; most libraries still default to RESP2.</li>
+<li>An error's first word is the stable code — match on that, and retry <code>LOADING</code> and <code>READONLY</code> rather than treating them as fatal.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 1 · Bài 1.3</span>
@@ -646,6 +758,38 @@ tcp_port:6380</div>
 
 <div class="pitfall"><strong>Bẫy:</strong> so khớp theo phần chữ dành cho con người trong một thông báo lỗi. Mã client kiểm <code>err.message === 'WRONGTYPE Operation against a key holding the wrong kind of value'</code> chạy được cho tới khi một lần nâng phiên bản viết lại câu đó, rồi nó lặng lẽ ngừng xử lý đúng trường hợp nó được viết ra để xử lý. TỪ ĐẦU TIÊN mới là hợp đồng: <code>WRONGTYPE</code>, <code>NOSCRIPT</code>, <code>OOM</code>, <code>READONLY</code>, <code>MOVED</code>, <code>LOADING</code> là các mã máy đọc được, và chỉ chúng mới ổn định qua các phiên bản. Hai trong số đó quan trọng cho tính ĐÚNG ĐẮN chứ không chỉ cho việc gỡ lỗi: <code>LOADING</code> nghĩa là máy chủ vẫn đang đọc tập dữ liệu từ đĩa sau một lần khởi động lại, và <code>READONLY</code> nghĩa là bạn vừa gửi một lệnh ghi tới một bản sao sau một lần chuyển dự phòng. Cả hai đều tạm thời và cả hai đều nên được thử lại — một client coi chúng là chí mạng sẽ biến một lần khởi động lại bình thường thành một sự cố.</div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> RESP dùng tiền tố độ dài và an toàn nhị phân, đó là lý do nó vừa dễ phân tích tới mức tầm thường vừa chở được một tấm JPEG — và là lý do độ dài đếm bằng <em>BYTE</em>, không phải ký tự. Mọi câu lệnh bạn gửi đi đều là một mảng các chuỗi khối; câu trả lời dùng kiểu nào trong năm kiểu mà hợp. Và từ đầu tiên của một lỗi là mã máy đọc được ổn định — hãy so khớp theo nó, và hãy THỬ LẠI với <code>LOADING</code> cùng <code>READONLY</code> thay vì báo hỏng.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">RESP2</span><span class="v">Giao thức văn bản năm kiểu mà Redis nói từ 2009 — chuỗi đơn giản, lỗi, số nguyên, chuỗi khối, mảng.</span></div>
+  <div class="kv"><span class="k">Chuỗi khối</span><span class="v">Một dãy byte an toàn nhị phân có tiền tố độ dài; độ dài đếm byte, không đếm ký tự.</span></div>
+  <div class="kv"><span class="k">Khung theo tiền tố độ dài</span><span class="v">Bộ phân tích biết chính xác đọc bao nhiêu byte, nên không bao giờ quét tìm ký tự kết thúc hay thoát ký tự.</span></div>
+  <div class="kv"><span class="k">RESP3</span><span class="v">Bản nâng bật-theo-ý (<code>HELLO 3</code>) thêm kiểu map, double và set, tin đẩy và cache phía client.</span></div>
+  <div class="kv"><span class="k">Mã lỗi</span><span class="v">Từ đầu tiên của một lỗi (<code>WRONGTYPE</code>, <code>LOADING</code>, <code>READONLY</code>) — phần ổn định, máy đọc được.</span></div>
+  <div class="kv"><span class="k">STRLEN đếm byte</span><span class="v">"Cường" là năm ký tự nhưng bảy byte UTF-8, và Redis đếm byte, không đếm văn bản.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>RESP dùng tiền tố độ dài và an toàn nhị phân, khiến nó vừa dễ phân tích vừa chở được một tấm JPEG — và là lý do độ dài đếm bằng byte.</li>
+<li>Mọi câu lệnh bạn gửi đều là một mảng các chuỗi khối; câu trả lời dùng kiểu nào trong năm kiểu RESP2 mà hợp.</li>
+<li>RESP3 là bản nâng bật theo từng kết nối, thêm câu trả lời có kiểu, tin đẩy và cache phía client; phần lớn thư viện vẫn mặc định RESP2.</li>
+<li>Từ đầu tiên của một lỗi là mã ổn định — hãy so khớp theo nó, và thử lại với <code>LOADING</code> cùng <code>READONLY</code> thay vì coi chúng là chí mạng.</li>
+</ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-1-redis-co-ban" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.1 — What Redis really is, and where the time goes</span><span class="lc-sub">Round trips measured from Node: why the protocol cost adds up per request.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-1-redis-co-ban" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.1 — Redis thực chất là gì, và thời gian trôi đi đâu</span><span class="lc-sub">Vòng đi về đo từ Node: vì sao chi phí giao thức cộng dồn theo từng yêu cầu.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -775,6 +919,22 @@ real	0m4.812s</div>
 
 <div class="pitfall"><strong>Pitfall:</strong> a loop of <code>await redis.get(...)</code> inside a request handler. It looks completely ordinary, it passes review, and each iteration costs a full network round trip — so fetching fifty cached user records takes fifty round trips and turns a 2ms operation into 15ms of waiting. The tell is easy to spot once you know it: any <code>for</code> or <code>map</code> loop with an <code>await</code> on a Redis call inside it. The fix is one of three, in order of preference: use the variadic command if one exists (<code>MGET</code>, <code>HMGET</code>), use a pipeline if the commands differ, or restructure so you need one key instead of fifty — a hash, or a JSON blob, or a sorted set range. This is the same shape as the N+1 query problem in SQL, it is just less visible because each individual call is genuinely fast.</div>
 <p class="note-ct"><strong>Three things to remember.</strong> Without pipelining you pay one network round trip per command, and for most applications that is where nearly all the time goes — 1,000 sequential commands took 8.4 seconds where a pipeline took 0.16. Batch 100–1000 at a time, not 100,000: every queued reply sits in the server's output buffer, and the batch blocks everyone else while it runs. And a pipeline is <em>not</em> a transaction — other clients interleave between your commands, and one failure does not stop the rest.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Round-trip time (RTT)</span><span class="v">The network latency paid once per command without pipelining — usually where nearly all the time goes.</span></div>
+  <div class="kv"><span class="k">Pipelining</span><span class="v">Sending many commands before reading replies, so one batch costs one round trip instead of N.</span></div>
+  <div class="kv"><span class="k">Variadic command</span><span class="v">A single command taking many arguments (<code>MGET</code>, <code>MSET</code>, <code>HMGET</code>) — beats a pipeline when one exists.</span></div>
+  <div class="kv"><span class="k">Batch size</span><span class="v">100–1000 per batch; larger builds too many replies in the output buffer and blocks other clients.</span></div>
+  <div class="kv"><span class="k">--pipe (bulk loading)</span><span class="v"><code>redis-cli</code> reads raw RESP and streams it, loading a million keys in seconds.</span></div>
+  <div class="kv"><span class="k">Pipeline is not a transaction</span><span class="v">Other clients' commands can interleave, and one failing reply does not stop the rest.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>Without pipelining you pay one round trip per command; 1,000 sequential commands took 8.4s where a pipeline took 0.16s.</li>
+<li>Prefer a variadic command (<code>MGET</code>, <code>MSET</code>) when one exists; reach for a pipeline when the commands genuinely differ.</li>
+<li>Batch 100–1000 at a time, not 100,000: queued replies sit in the server's output buffer and the batch blocks everyone while it runs.</li>
+<li>A pipeline is not a transaction — other clients interleave between your commands and one failing reply does not stop the others.</li>
+</ul>
 <a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-1-redis-co-ban" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 12.1: where the time goes</span><span class="lc-sub">The same pipeline measured from a Node process with ioredis: 165× for 10,000 SETs, enableAutoPipelining, why batches of 100–1,000 beat "send everything", and the 200-GET loop (84.0 ms) that made Redis slower than one Postgres query (1.3 ms).</span></span>
@@ -900,6 +1060,22 @@ real	0m4.812s</div>
 
 <div class="pitfall"><strong>Bẫy:</strong> một vòng lặp <code>await redis.get(...)</code> nằm trong một hàm xử lý request. Nó trông hoàn toàn bình thường, nó qua được review, và mỗi lượt lặp tốn trọn một vòng mạng — nên lấy năm mươi bản ghi người dùng đã cache tốn năm mươi vòng mạng và biến một thao tác 2ms thành 15ms ngồi chờ. Dấu hiệu rất dễ nhận ra khi bạn đã biết: bất kỳ vòng <code>for</code> hay <code>map</code> nào có một lệnh <code>await</code> gọi Redis bên trong. Cách chữa là một trong ba, theo thứ tự ưu tiên: dùng câu lệnh nhiều tham số nếu có (<code>MGET</code>, <code>HMGET</code>), dùng pipeline nếu các câu lệnh khác nhau, hoặc tái cấu trúc để bạn chỉ cần MỘT khoá thay vì năm mươi — một cái hash, hoặc một khối JSON, hoặc một dải sorted set. Đây cùng hình dạng với bài toán truy vấn N+1 trong SQL, chỉ khó thấy hơn vì từng lời gọi riêng lẻ đúng là nhanh thật.</div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Không có pipeline thì bạn trả một vòng mạng cho MỖI câu lệnh, và với phần lớn ứng dụng thì gần như toàn bộ thời gian đi vào đó — 1.000 câu lệnh tuần tự mất 8,4 giây trong khi một pipeline mất 0,16. Hãy gom lô 100–1000 một lần, đừng 100.000: mọi câu trả lời xếp hàng đều nằm trong bộ đệm ra của máy chủ, và cả lô chặn mọi người khác trong lúc nó chạy. Và một pipeline KHÔNG phải giao dịch — client khác xen được vào giữa các câu lệnh của bạn, và một cái hỏng không chặn phần còn lại.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Thời gian vòng mạng (RTT)</span><span class="v">Độ trễ mạng trả một lần cho mỗi câu lệnh khi không pipeline — thường là nơi gần như toàn bộ thời gian đi vào.</span></div>
+  <div class="kv"><span class="k">Pipeline</span><span class="v">Gửi nhiều câu lệnh trước khi đọc câu trả lời, nên một lô tốn một vòng mạng thay vì N.</span></div>
+  <div class="kv"><span class="k">Câu lệnh nhiều tham số</span><span class="v">Một câu lệnh nhận nhiều tham số (<code>MGET</code>, <code>MSET</code>, <code>HMGET</code>) — thắng pipeline khi nó tồn tại.</span></div>
+  <div class="kv"><span class="k">Kích thước lô</span><span class="v">100–1000 mỗi lô; lớn hơn thì dựng quá nhiều câu trả lời trong bộ đệm ra và chặn client khác.</span></div>
+  <div class="kv"><span class="k">--pipe (nạp hàng loạt)</span><span class="v"><code>redis-cli</code> đọc RESP thô rồi phun ra, nạp một triệu khoá trong vài giây.</span></div>
+  <div class="kv"><span class="k">Pipeline không phải giao dịch</span><span class="v">Câu lệnh của client khác xen vào được, và một câu trả lời hỏng không chặn phần còn lại.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Không pipeline thì bạn trả một vòng mạng cho mỗi câu lệnh; 1.000 câu lệnh tuần tự mất 8,4 giây trong khi pipeline mất 0,16.</li>
+<li>Hãy ưu tiên câu lệnh nhiều tham số (<code>MGET</code>, <code>MSET</code>) khi có; với tới pipeline khi các câu lệnh thật sự khác nhau.</li>
+<li>Gom lô 100–1000 một lần, đừng 100.000: câu trả lời xếp hàng nằm trong bộ đệm ra của máy chủ và cả lô chặn mọi người lúc chạy.</li>
+<li>Một pipeline không phải giao dịch — client khác xen được vào giữa các câu lệnh của bạn và một câu trả lời hỏng không chặn những cái khác.</li>
+</ul>
 <a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-1-redis-co-ban" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 12.1: thời gian trôi đi đâu</span><span class="lc-sub">Cùng pipeline đo từ một tiến trình Node với ioredis: nhanh 165× cho 10.000 SET, enableAutoPipelining, vì sao lô 100–1.000 thắng "gửi tất", và vòng lặp 200 GET (84,0 ms) làm Redis chậm hơn một truy vấn Postgres (1,3 ms).</span></span>
@@ -1042,6 +1218,22 @@ blocked_clients:412
 
 <div class="pitfall"><strong>Pitfall:</strong> calling <code>SUBSCRIBE</code> on the client you also use for normal commands. On RESP2 the connection enters subscribe mode and refuses every other command with <code>ERR Can't execute 'get': only (P|S)SUBSCRIBE …</code> — so the moment your invalidation listener starts, every cache read in the process begins failing. What makes it genuinely nasty is the timing: it usually works in development, where the subscription is set up in a different file and the failure only appears under a code path you exercise later. The fix is one line — <code>const sub = redis.duplicate()</code> — and the diagnostic is <code>CLIENT LIST | grep 'sub=[1-9]'</code>, which shows you the connection that has been taken over. The same applies to any blocking consumer: <code>BLPOP</code> and <code>XREAD BLOCK</code> hold their connection for the duration, so each worker gets its own.</div>
 <p class="note-ct"><strong>Three things to remember.</strong> One shared connection is usually right — commands are microseconds and the client pipelines automatically — while a connection per request exhausts <code>maxclients</code> under load. <code>SUBSCRIBE</code> and the blocking commands take a connection hostage, so they each need a dedicated one via <code>duplicate()</code>. And a cache wrapper must survive Redis being unavailable: catch the read, fall through to the source, and never let a failed cache <em>write</em> fail the request.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Shared single connection</span><span class="v">Usually enough — the client pipelines automatically and each command is microseconds.</span></div>
+  <div class="kv"><span class="k">Connection pool</span><span class="v">A set of sockets; needed only at very high throughput or with a blocking client, and multiplied by instance count.</span></div>
+  <div class="kv"><span class="k">duplicate()</span><span class="v">Creates a second connection for a subscriber or blocking consumer, so the shared client stays usable.</span></div>
+  <div class="kv"><span class="k">Subscribe mode</span><span class="v">On RESP2 a <code>SUBSCRIBE</code> connection refuses other commands — the most common client bug.</span></div>
+  <div class="kv"><span class="k">Blocking commands</span><span class="v"><code>BLPOP</code> and <code>XREAD BLOCK</code> hold their connection for the duration; each worker needs its own.</span></div>
+  <div class="kv"><span class="k">maxclients / timeout</span><span class="v">The 10,000-connection ceiling and the idle timeout (default 0 = never) behind connection-leak outages.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>One shared connection is usually right — commands are microseconds and pipeline automatically — while a connection per request exhausts <code>maxclients</code> under load.</li>
+<li><code>SUBSCRIBE</code> and the blocking commands take a connection hostage, so each needs a dedicated one via <code>duplicate()</code>.</li>
+<li>Set timeouts in both directions, and remember a client timeout does not cancel the command on the server.</li>
+<li>A cache wrapper must survive Redis being down: catch the read, fall through to the source, and never let a failed cache write fail the request.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 1 · Bài 1.5</span>
@@ -1170,6 +1362,38 @@ blocked_clients:412
 
 <div class="pitfall"><strong>Bẫy:</strong> gọi <code>SUBSCRIBE</code> trên chính cái client bạn cũng dùng cho câu lệnh thường. Trên RESP2, kết nối chuyển sang chế độ đăng ký và từ chối mọi câu lệnh khác với <code>ERR Can't execute 'get': only (P|S)SUBSCRIBE …</code> — nên ngay khoảnh khắc bộ lắng nghe vô hiệu hoá cache của bạn khởi động, mọi lệnh đọc cache trong tiến trình đó bắt đầu hỏng. Thứ khiến nó thật sự khó chịu là thời điểm: nó thường chạy tốt lúc phát triển, khi đăng ký được thiết lập ở một file khác và cái hỏng chỉ lộ ra dưới một đường mã bạn chạy tới muộn hơn. Cách chữa gọn một dòng — <code>const sub = redis.duplicate()</code> — và phép chẩn đoán là <code>CLIENT LIST | grep 'sub=[1-9]'</code>, thứ chỉ cho bạn thấy cái kết nối đã bị chiếm. Điều tương tự áp cho mọi bên tiêu thụ có tính chặn: <code>BLPOP</code> và <code>XREAD BLOCK</code> giữ kết nối của chúng suốt thời gian chạy, nên mỗi worker cần một kết nối riêng.</div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Một kết nối dùng chung thường là đúng — câu lệnh chỉ vài micro giây và client tự đóng pipeline — trong khi mỗi request một kết nối sẽ vét cạn <code>maxclients</code> khi có tải. <code>SUBSCRIBE</code> và các câu lệnh chặn bắt cóc một kết nối, nên mỗi cái cần một kết nối riêng qua <code>duplicate()</code>. Và một lớp bọc cache phải sống sót khi Redis không sẵn sàng: bắt lỗi lúc đọc, rơi xuống nguồn gốc, và đừng bao giờ để một lần GHI cache hỏng làm hỏng cả request.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Một kết nối dùng chung</span><span class="v">Thường là đủ — client tự đóng pipeline và mỗi câu lệnh chỉ vài micro giây.</span></div>
+  <div class="kv"><span class="k">Bể kết nối</span><span class="v">Một tập socket; chỉ cần khi thông lượng rất cao hoặc client có tính chặn, và nhân lên theo số instance.</span></div>
+  <div class="kv"><span class="k">duplicate()</span><span class="v">Tạo một kết nối thứ hai cho bên đăng ký hoặc bên tiêu thụ có tính chặn, để client dùng chung vẫn dùng được.</span></div>
+  <div class="kv"><span class="k">Chế độ đăng ký</span><span class="v">Trên RESP2, kết nối đã <code>SUBSCRIBE</code> từ chối các câu lệnh khác — lỗi client phổ biến nhất.</span></div>
+  <div class="kv"><span class="k">Câu lệnh chặn</span><span class="v"><code>BLPOP</code> và <code>XREAD BLOCK</code> giữ kết nối suốt thời gian chạy; mỗi worker cần một kết nối riêng.</span></div>
+  <div class="kv"><span class="k">maxclients / timeout</span><span class="v">Trần 10.000 kết nối và thời gian chờ nhàn rỗi (mặc định 0 = không bao giờ) đứng sau các sự cố rò rỉ kết nối.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Một kết nối dùng chung thường là đúng — câu lệnh chỉ vài micro giây và tự đóng pipeline — trong khi mỗi request một kết nối sẽ vét cạn <code>maxclients</code> khi có tải.</li>
+<li><code>SUBSCRIBE</code> và các câu lệnh chặn bắt cóc một kết nối, nên mỗi cái cần một kết nối riêng qua <code>duplicate()</code>.</li>
+<li>Hãy đặt thời gian chờ ở cả hai phía, và nhớ rằng thời gian chờ của client không huỷ được câu lệnh ở máy chủ.</li>
+<li>Một lớp bọc cache phải sống sót khi Redis chết: bắt lỗi lúc đọc, rơi xuống nguồn gốc, và đừng bao giờ để một lần ghi cache hỏng làm hỏng cả request.</li>
+</ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-1-redis-co-ban" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.1 — What Redis really is, and where the time goes</span><span class="lc-sub">Client libraries inside a Node application: one connection, many requests, and where the time goes.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-1-redis-co-ban" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.1 — Redis thực chất là gì, và thời gian trôi đi đâu</span><span class="lc-sub">Thư viện khách bên trong ứng dụng Node: một kết nối, nhiều yêu cầu, và thời gian trôi đi đâu.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

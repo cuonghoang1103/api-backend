@@ -104,6 +104,22 @@ redis-cli CLIENT LIST | awk '{print $2, $4}' | sort | uniq -c | sort -rn | head<
 </a>
 
 <p class="note-ct"><strong>Three things to remember.</strong> Run the whole triage block before chasing anything — <code>PING</code>, <code>--latency</code>, three <code>INFO</code> sections, <code>SLOWLOG</code> — because one paste routinely contains two or three independent findings that you would miss by following the first symptom. Ask the four questions in order: is it alive, is it busy, is it full, can anything connect; the combination of high latency with <em>low</em> ops/s is the signature of a single blocking command, and the error text (<code>OOM</code>, <code>MISCONF</code>, <code>NOREPLICAS</code>) is itself the diagnosis. And do not restart first: it erases the slowlog, the latency history and every counter, it can lose data, and loading a large AOF turns a partial outage into a full one.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Triage block</span><span class="v">The four commands run first as one paste: <code>PING</code>, <code>--latency</code>, three <code>INFO</code> sections and <code>SLOWLOG</code>.</span></div>
+  <div class="kv"><span class="k">PING</span><span class="v">The first question: <code>PONG</code> means the process is up and answering.</span></div>
+  <div class="kv"><span class="k">--latency</span><span class="v">High latency with low ops/s is the signature of one command blocking the single thread.</span></div>
+  <div class="kv"><span class="k">SLOWLOG</span><span class="v">Names the slow command and the client address that issued it.</span></div>
+  <div class="kv"><span class="k">rejected_connections</span><span class="v">A non-zero value means <code>maxclients</code> is exhausted, usually a leak rather than growth.</span></div>
+  <div class="kv"><span class="k">-LOADING</span><span class="v">The instance is up but reading an AOF or RDB after a restart — a wait, not an outage.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>Run the whole triage block before chasing anything — one paste routinely holds two or three independent findings.</li>
+<li>Ask four questions in order: is it alive, is it busy, is it full, can anything connect.</li>
+<li>High latency with low ops/s points to a single blocking command; the error text (<code>OOM</code>, <code>MISCONF</code>, <code>NOREPLICAS</code>) is itself the diagnosis.</li>
+<li>Do not restart first — it erases the slowlog, latency history and counters, can lose data, and a large AOF load turns a partial outage into a full one.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 12 · Bài 12.1</span>
@@ -190,6 +206,38 @@ redis-cli CLIENT LIST | awk '{print $2, $4}' | sort | uniq -c | sort -rn | head<
 </a>
 
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Hãy chạy trọn khối phân loại trước khi đuổi theo bất cứ thứ gì — <code>PING</code>, <code>--latency</code>, ba mục <code>INFO</code>, <code>SLOWLOG</code> — vì một lần dán thường xuyên chứa hai ba phát hiện độc lập mà bạn sẽ bỏ lỡ nếu đi theo triệu chứng đầu tiên. Hãy hỏi bốn câu theo thứ tự: nó còn sống không, có bận không, có đầy không, có gì kết nối được không; tổ hợp độ trễ cao với ops/giây <em>thấp</em> là chữ ký của một lệnh chặn duy nhất, và chính chữ trong thông báo lỗi (<code>OOM</code>, <code>MISCONF</code>, <code>NOREPLICAS</code>) đã là lời chẩn đoán. Và đừng khởi động lại trước: nó xoá sạch slowlog, lịch sử độ trễ và mọi bộ đếm, nó làm mất dữ liệu được, và nạp một AOF lớn biến một sự cố cục bộ thành một sự cố toàn phần.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Triage block</span><span class="v">Bốn lệnh chạy trước như một lần dán: <code>PING</code>, <code>--latency</code>, ba mục <code>INFO</code> và <code>SLOWLOG</code>.</span></div>
+  <div class="kv"><span class="k">PING</span><span class="v">Câu hỏi đầu tiên: <code>PONG</code> nghĩa là tiến trình còn chạy và còn trả lời.</span></div>
+  <div class="kv"><span class="k">--latency</span><span class="v">Độ trễ cao kèm ops/giây thấp là chữ ký của một lệnh chặn cái luồng đơn.</span></div>
+  <div class="kv"><span class="k">SLOWLOG</span><span class="v">Gọi tên lệnh chậm và địa chỉ khách đã gõ nó.</span></div>
+  <div class="kv"><span class="k">rejected_connections</span><span class="v">Giá trị khác 0 nghĩa là <code>maxclients</code> đã cạn, thường là một chỗ rò chứ không phải tăng trưởng.</span></div>
+  <div class="kv"><span class="k">-LOADING</span><span class="v">Máy còn chạy nhưng đang đọc một AOF hay RDB sau khởi động lại — một khoảng chờ, không phải sự cố.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Hãy chạy trọn khối phân loại trước khi đuổi theo gì — một lần dán thường chứa hai ba phát hiện độc lập.</li>
+<li>Hỏi bốn câu theo thứ tự: nó còn sống không, có bận không, có đầy không, có gì kết nối được không.</li>
+<li>Độ trễ cao kèm ops/giây thấp chỉ tới một lệnh chặn duy nhất; chính chữ trong lỗi (<code>OOM</code>, <code>MISCONF</code>, <code>NOREPLICAS</code>) đã là lời chẩn đoán.</li>
+<li>Đừng khởi động lại trước — nó xoá slowlog, lịch sử độ trễ và các bộ đếm, có thể mất dữ liệu, và nạp một AOF lớn biến sự cố cục bộ thành toàn phần.</li>
+</ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-6-van-hanh-production" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.6 — Running Redis: the commands that freeze everything</span><span class="lc-sub">The commands that freeze everything — the same kind SLOWLOG has just caught.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-6-van-hanh-production" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.6 — Vận hành Redis: những lệnh làm đứng hình tất cả</span><span class="lc-sub">Những lệnh làm đứng hình tất cả — đúng loại mà SLOWLOG vừa bắt được.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -307,6 +355,22 @@ aof_rewrite_in_progress:0
 </a>
 
 <p class="note-ct"><strong>Three things to remember.</strong> The shapes are distinguishable by numbers, not by the report: latency up with ops/s <em>down</em> is a blocking command, latency spikes with an empty slowlog is a fork, <code>connected_clients</code> that only rises is a leak, and <code>OOM</code> with reads working is the memory wall. Three of the seven are not Redis at all — a stampede, a silently stale cache and a stopped queue all show green Redis metrics, which is exactly why they take longest to diagnose. And do not stop at the first plausible cause: the findings usually form a chain, and the loud one at the end is rarely the one that started it.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Blocking command</span><span class="v">Latency up while ops/s drops — one O(N) command on a collection that grew.</span></div>
+  <div class="kv"><span class="k">Memory wall</span><span class="v">Writes return <code>OOM</code> while reads work, or <code>evicted_keys</code> climbs silently.</span></div>
+  <div class="kv"><span class="k">Connection leak</span><span class="v"><code>connected_clients</code> only rising, with a non-zero <code>rejected_connections</code>.</span></div>
+  <div class="kv"><span class="k">Fork stall</span><span class="v">Periodic multi-second stalls with an empty slowlog; <code>latest_fork_usec</code> high, THP on.</span></div>
+  <div class="kv"><span class="k">Stampede</span><span class="v">Redis idle while the database spikes on a cycle that matches a TTL.</span></div>
+  <div class="kv"><span class="k">Causal chain</span><span class="v">The findings link together; the loud one at the end is rarely what started it.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>The shapes are told apart by numbers: latency up with ops/s down is blocking, spikes with an empty slowlog are a fork, ever-rising clients is a leak, <code>OOM</code> with reads working is the memory wall.</li>
+<li>Three of the seven are not Redis at all — a stampede, a silently stale cache and a stopped queue show green Redis metrics, so they take longest.</li>
+<li>Each shape has a fix for now (kill the client, <code>UNLINK</code>, restart the service) and a fix for never again (an ACL, an alert, separate instances).</li>
+<li>Do not stop at the first plausible cause: the findings form a chain, so record the whole chain, not the last link.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 12 · Bài 12.2</span>
@@ -415,6 +479,38 @@ aof_rewrite_in_progress:0
 </a>
 
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Các hình dáng phân biệt được bằng con số chứ không bằng lời báo cáo: độ trễ lên mà ops/giây <em>xuống</em> là một lệnh chặn, độ trễ vọt lên mà slowlog trống là một cú fork, <code>connected_clients</code> chỉ có tăng là một chỗ rò, và <code>OOM</code> kèm các lượt đọc vẫn chạy là bức tường bộ nhớ. Ba trong bảy cái hoàn toàn không phải chuyện của Redis — một cú giẫm đạp, một bộ đệm ôi âm thầm và một hàng đợi đã dừng đều cho thấy các chỉ số Redis màu xanh, và đó chính xác là lý do chúng mất nhiều thời gian chẩn đoán nhất. Và đừng dừng ở nguyên nhân có lý đầu tiên: các phát hiện thường tạo thành một chuỗi, và cái ồn ào ở cuối hiếm khi là cái đã khởi đầu mọi chuyện.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Blocking command</span><span class="v">Độ trễ lên trong khi ops/giây tụt — một lệnh O(N) trên một tập hợp đã lớn lên.</span></div>
+  <div class="kv"><span class="k">Memory wall</span><span class="v">Các lượt ghi trả <code>OOM</code> trong khi đọc vẫn chạy, hoặc <code>evicted_keys</code> leo lên âm thầm.</span></div>
+  <div class="kv"><span class="k">Connection leak</span><span class="v"><code>connected_clients</code> chỉ có tăng, kèm <code>rejected_connections</code> khác 0.</span></div>
+  <div class="kv"><span class="k">Fork stall</span><span class="v">Những cú khựng vài giây theo chu kỳ mà slowlog trống; <code>latest_fork_usec</code> cao, THP bật.</span></div>
+  <div class="kv"><span class="k">Stampede</span><span class="v">Redis nhàn rỗi trong khi cơ sở dữ liệu vọt lên theo một chu kỳ khớp với một TTL.</span></div>
+  <div class="kv"><span class="k">Causal chain</span><span class="v">Các phát hiện nối với nhau; cái ồn ào ở cuối hiếm khi là cái khởi đầu.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Các hình dáng phân biệt bằng con số: độ trễ lên mà ops/giây xuống là lệnh chặn, vọt lên mà slowlog trống là fork, khách chỉ có tăng là rò, <code>OOM</code> kèm đọc vẫn chạy là bức tường bộ nhớ.</li>
+<li>Ba trong bảy cái không phải chuyện của Redis — giẫm đạp, bộ đệm ôi âm thầm và hàng đợi đã dừng đều cho chỉ số Redis màu xanh, nên mất lâu nhất.</li>
+<li>Mỗi hình dáng có một cách chữa cho ngay lúc này (giết khách, <code>UNLINK</code>, khởi động lại dịch vụ) và một cách để đừng tái diễn (một ACL, một cảnh báo, tách máy).</li>
+<li>Đừng dừng ở nguyên nhân có lý đầu tiên: các phát hiện tạo thành một chuỗi, nên hãy ghi cả chuỗi chứ không chỉ mắt xích cuối.</li>
+</ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-2-cache-aside" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.2 — Cache-aside: the pattern and its four betrayals</span><span class="lc-sub">The four betrayals of cache-aside — stampedes and stale caches seen from the application.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-2-cache-aside" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.2 — Cache-aside: khuôn mẫu và bốn lần nó phản chủ</span><span class="lc-sub">Bốn lần cache-aside phản chủ — giẫm đạp và bộ đệm ôi nhìn từ phía ứng dụng.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -564,6 +660,22 @@ diff /tmp/a /tmp/b | grep '^&gt;' | head -4</code></pre>
 </a>
 
 <p class="note-ct"><strong>Three things to remember.</strong> Nearly every diagnostic ships with Redis and is safe on production because it uses <code>SCAN</code> — <code>--scan</code>, <code>--bigkeys</code>, <code>--memkeys</code>, <code>--hotkeys</code>, <code>--stat</code>, <code>--latency</code> — and <code>--intrinsic-latency</code> is the one that settles whether the problem is Redis or the machine underneath it. Set <code>latency-monitor-threshold</code> on every instance today, because <code>LATENCY</code> attributes spikes by <em>cause</em> — command, fork, expire cycle — and it records nothing until you turn it on. And do not reach for <code>MONITOR</code>: it costs real throughput, fills a client buffer that counts toward <code>maxmemory</code>, and exposes every value — while two samples of <code>INFO commandstats</code> answer the same question for free.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">--intrinsic-latency</span><span class="v">Measures the host's own latency floor, settling whether the problem is Redis or the machine.</span></div>
+  <div class="kv"><span class="k">--bigkeys / --memkeys</span><span class="v">The biggest key by element count versus by bytes — two different questions.</span></div>
+  <div class="kv"><span class="k">LATENCY</span><span class="v">Tracks spikes by event type (command, fork, expire-cycle); needs <code>latency-monitor-threshold</code> set.</span></div>
+  <div class="kv"><span class="k">OBJECT ENCODING</span><span class="v">Says whether a key is a cheap flat structure or the expensive general one — the fastest memory check.</span></div>
+  <div class="kv"><span class="k">COMMAND GETKEYS</span><span class="v">Reports which arguments of a command are keys, even for <code>movablekeys</code> commands.</span></div>
+  <div class="kv"><span class="k">MONITOR</span><span class="v">Streams every command; costly and revealing, so prefer two <code>INFO commandstats</code> samples.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>Nearly every diagnostic ships with Redis and is safe on production because it uses <code>SCAN</code>: <code>--scan</code>, <code>--bigkeys</code>, <code>--memkeys</code>, <code>--hotkeys</code>, <code>--stat</code>, <code>--latency</code>.</li>
+<li><code>--intrinsic-latency</code> settles whether the problem is Redis or the host underneath it.</li>
+<li>Set <code>latency-monitor-threshold</code> on every instance now, because <code>LATENCY</code> attributes spikes by cause and records nothing until it is on.</li>
+<li>Do not reach for <code>MONITOR</code> on a busy instance — two samples of <code>INFO commandstats</code> answer the same question for free.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 12 · Bài 12.3</span>
@@ -704,6 +816,38 @@ diff /tmp/a /tmp/b | grep '^&gt;' | head -4</code></pre>
 </a>
 
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Gần như mọi công cụ chẩn đoán đều đi kèm sẵn với Redis và an toàn trên production vì chúng dùng <code>SCAN</code> — <code>--scan</code>, <code>--bigkeys</code>, <code>--memkeys</code>, <code>--hotkeys</code>, <code>--stat</code>, <code>--latency</code> — và <code>--intrinsic-latency</code> là cái phân định xem vấn đề nằm ở Redis hay ở cái máy bên dưới nó. Hãy đặt <code>latency-monitor-threshold</code> trên mọi máy ngay hôm nay, vì <code>LATENCY</code> quy các đợt vọt theo <em>nguyên nhân</em> — lệnh, fork, chu kỳ hết hạn — và nó không ghi gì cho tới khi bạn bật lên. Và đừng với tay lấy <code>MONITOR</code>: nó tốn thông lượng thật, làm đầy một bộ đệm khách được tính vào <code>maxmemory</code>, và phơi ra mọi giá trị — trong khi hai lần lấy mẫu <code>INFO commandstats</code> trả lời đúng câu hỏi đó mà miễn phí.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">--intrinsic-latency</span><span class="v">Đo sàn độ trễ của chính máy chủ, phân định xem vấn đề ở Redis hay ở cái máy.</span></div>
+  <div class="kv"><span class="k">--bigkeys / --memkeys</span><span class="v">Khoá lớn nhất theo số phần tử so với theo số byte — hai câu hỏi khác nhau.</span></div>
+  <div class="kv"><span class="k">LATENCY</span><span class="v">Theo dõi các đợt vọt theo loại sự kiện (lệnh, fork, chu kỳ hết hạn); cần đặt <code>latency-monitor-threshold</code>.</span></div>
+  <div class="kv"><span class="k">OBJECT ENCODING</span><span class="v">Cho biết một khoá là cấu trúc phẳng rẻ hay cấu trúc tổng quát đắt — phép kiểm bộ nhớ nhanh nhất.</span></div>
+  <div class="kv"><span class="k">COMMAND GETKEYS</span><span class="v">Báo tham số nào của một lệnh là khoá, kể cả với các lệnh <code>movablekeys</code>.</span></div>
+  <div class="kv"><span class="k">MONITOR</span><span class="v">Đổ mọi lệnh ra; tốn và lộ, nên hãy ưu tiên hai lần lấy mẫu <code>INFO commandstats</code>.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Gần như mọi công cụ chẩn đoán đi kèm sẵn với Redis và an toàn trên production vì dùng <code>SCAN</code>: <code>--scan</code>, <code>--bigkeys</code>, <code>--memkeys</code>, <code>--hotkeys</code>, <code>--stat</code>, <code>--latency</code>.</li>
+<li><code>--intrinsic-latency</code> phân định xem vấn đề ở Redis hay ở cái máy bên dưới.</li>
+<li>Hãy đặt <code>latency-monitor-threshold</code> trên mọi máy ngay, vì <code>LATENCY</code> quy các đợt vọt theo nguyên nhân và không ghi gì cho tới khi bật.</li>
+<li>Đừng với tay lấy <code>MONITOR</code> trên máy bận — hai lần lấy mẫu <code>INFO commandstats</code> trả lời đúng câu đó mà miễn phí.</li>
+</ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-1-redis-co-ban" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.1 — What Redis really is, and where the time goes</span><span class="lc-sub">Where the time goes — the background you need to read latency numbers correctly.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-1-redis-co-ban" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.1 — Redis thực chất là gì, và thời gian trôi đi đâu</span><span class="lc-sub">Thời gian trôi đi đâu — phần nền để đọc đúng các con số độ trễ.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -826,6 +970,22 @@ diff /tmp/a /tmp/b | grep '^&gt;' | head -4</code></pre>
 </a>
 
 <p class="note-ct"><strong>Three things to remember.</strong> Twelve metrics cover every failure shape in this chapter, and the useful ones come in pairs — latency <em>with</em> throughput, memory <em>against</em> maxmemory, lag <em>with</em> pending — because the combination is the diagnosis and either number alone is not. Alert at 75% rather than 100%, on counters <em>moving</em> rather than on their cumulative value, and delete any alert that has never corresponded to something a human had to do: a team trained to dismiss Redis pages will dismiss the one that mattered. And server-side metrics cannot see a stampede, a silently stale cache or a dead worker pool — those need your application's own counters, which is a few dozen lines and the difference between a two-minute incident and a two-hour one.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Saturation ratio</span><span class="v"><code>used_memory</code>/<code>maxmemory</code> and <code>connected_clients</code>/<code>maxclients</code> as percentages — the most predictive numbers.</span></div>
+  <div class="kv"><span class="k">blocked_clients</span><span class="v">Your consumer count made visible; zero when it should be twenty means dead workers.</span></div>
+  <div class="kv"><span class="k">for: clause</span><span class="v">An alert must stay true for a window, so a transient spike pages nobody.</span></div>
+  <div class="kv"><span class="k">increase()</span><span class="v">Alert on a cumulative counter moving over an interval, not on its raw value.</span></div>
+  <div class="kv"><span class="k">Runbook</span><span class="v">Every alert links to the triage block and the specific failure shape it points at.</span></div>
+  <div class="kv"><span class="k">Application metrics</span><span class="v">Per-cache hit/miss, queue depth and consumer heartbeat — the only view of the three green-metric failures.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>Twelve metrics cover every failure shape, and the useful ones come in pairs because the combination is the diagnosis.</li>
+<li>Alert at 75% rather than 100%, on counters moving rather than their cumulative value, and give each alert a runbook.</li>
+<li>Delete alerts that never corresponded to human action — a team trained to dismiss pages will dismiss the one that mattered.</li>
+<li>Server-side metrics cannot see a stampede, a stale cache or a dead worker pool — those need your application's own counters.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 12 · Bài 12.4</span>
@@ -939,6 +1099,38 @@ diff /tmp/a /tmp/b | grep '^&gt;' | head -4</code></pre>
 </a>
 
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Mười hai chỉ số phủ hết mọi hình dáng hỏng hóc trong chương này, và những cái hữu ích đi thành cặp — độ trễ <em>cùng với</em> thông lượng, bộ nhớ <em>đối chiếu</em> maxmemory, lag <em>cùng với</em> pending — vì tổ hợp mới là lời chẩn đoán còn từng con số đứng một mình thì không. Hãy cảnh báo ở 75% chứ đừng ở 100%, cảnh báo khi bộ đếm <em>nhích lên</em> chứ đừng theo giá trị cộng dồn của nó, và hãy xoá mọi cảnh báo chưa từng tương ứng với việc mà một con người phải làm: một đội được huấn luyện để gạt đi các lời gọi từ Redis sẽ gạt luôn cái quan trọng. Và các chỉ số phía máy chủ không nhìn thấy được một cú giẫm đạp, một bộ đệm ôi âm thầm hay một dàn worker đã chết — những cái đó cần bộ đếm của chính ứng dụng bạn, chỉ vài chục dòng và là khác biệt giữa một sự cố hai phút với một sự cố hai tiếng.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Saturation ratio</span><span class="v"><code>used_memory</code>/<code>maxmemory</code> và <code>connected_clients</code>/<code>maxclients</code> theo phần trăm — những con số dự báo tốt nhất.</span></div>
+  <div class="kv"><span class="k">blocked_clients</span><span class="v">Số bên tiêu thụ của bạn, hiện ra; bằng 0 khi đáng lẽ phải 20 nghĩa là worker đã chết.</span></div>
+  <div class="kv"><span class="k">for: clause</span><span class="v">Một cảnh báo phải đúng suốt một cửa sổ, để một đợt vọt thoáng qua không gọi ai dậy.</span></div>
+  <div class="kv"><span class="k">increase()</span><span class="v">Cảnh báo khi một bộ đếm cộng dồn nhích lên trong một khoảng, không theo giá trị thô.</span></div>
+  <div class="kv"><span class="k">Runbook</span><span class="v">Mọi cảnh báo trỏ tới khối phân loại và đúng cái hình dáng hỏng hóc nó chỉ về.</span></div>
+  <div class="kv"><span class="k">Application metrics</span><span class="v">Trúng/trượt theo từng bộ đệm, độ sâu hàng đợi và nhịp tim bên tiêu thụ — cách duy nhất thấy ba cú hỏng chỉ-số-xanh.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Mười hai chỉ số phủ hết mọi hình dáng hỏng hóc, và những cái hữu ích đi thành cặp vì tổ hợp mới là lời chẩn đoán.</li>
+<li>Cảnh báo ở 75% chứ đừng 100%, khi bộ đếm nhích lên chứ đừng theo giá trị cộng dồn, và cho mỗi cảnh báo một cuốn sổ tay.</li>
+<li>Xoá những cảnh báo chưa từng tương ứng với việc một con người phải làm — đội quen gạt lời gọi sẽ gạt luôn cái quan trọng.</li>
+<li>Chỉ số phía máy chủ không thấy được một cú giẫm đạp, một bộ đệm ôi hay một dàn worker chết — những cái đó cần bộ đếm của chính ứng dụng.</li>
+</ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-13-2-bullmq-co-ban" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 13.2 — BullMQ: Queue, Worker, and what a job is in Redis</span><span class="lc-sub">Queue and Worker — the very workers that blocked_clients is counting.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-13-2-bullmq-co-ban" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 13.2 — BullMQ: Queue, Worker, và một job thực chất là gì trong Redis</span><span class="lc-sub">Queue và Worker — chính những worker mà blocked_clients đang đếm.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -1048,6 +1240,23 @@ diff /tmp/a /tmp/b | grep '^&gt;' | head -4</code></pre>
 </a>
 
 <p class="note-ct"><strong>Three things to take with you.</strong> Almost everything in this course follows from one fact — one thread, one command at a time — so when something is slow, ask what is blocking rather than what is misconfigured. Redis will do exactly what you ask, including the destructive things: there are no constraints, no rollback and no schema, so the correctness lives in your design, and every guardrail in these seventy lessons is one you have to place yourself. And the ten rules above are worth more than the command reference: bound every collection, TTL every key, choose the structure by the question, and measure before you scale.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Single-threaded model</span><span class="v">One thread, one command at a time — the root of every latency and atomicity point in the course.</span></div>
+  <div class="kv"><span class="k">TTL discipline</span><span class="v">Every key gets a TTL or a written reason; unbounded keys cause most memory incidents.</span></div>
+  <div class="kv"><span class="k">Capstone project</span><span class="v">A URL shortener with analytics that exercises eight chapters end to end.</span></div>
+  <div class="kv"><span class="k">Valkey</span><span class="v">The 2024 Linux Foundation fork from Redis 7.2; everything in this course applies to both.</span></div>
+  <div class="kv"><span class="k">HEXPIRE</span><span class="v">Per-field hash TTL, new in 7.4 — the obvious feature to verify on a managed provider.</span></div>
+  <div class="kv"><span class="k">redis.conf</span><span class="v">The annotated config file, the fastest way to discover features you did not know to ask about.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>Almost everything follows from one fact — one thread, one command at a time — so when something is slow, ask what is blocking.</li>
+<li>Redis does exactly what you ask, including destructive things: no rollback and no schema, so correctness lives in your design.</li>
+<li>The ten rules outweigh the command reference: bound every collection, TTL every key, choose the structure by the question, measure before you scale.</li>
+<li>Everything learned applies to Valkey too; verify post-7.2 features such as <code>HEXPIRE</code> on a managed provider.</li>
+<li>Build the capstone and break it on purpose — the lessons stick when they cost you an evening.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 12 · Bài 12.5</span>
@@ -1148,6 +1357,39 @@ diff /tmp/a /tmp/b | grep '^&gt;' | head -4</code></pre>
 </a>
 
 <p class="note-ct"><strong>Ba điều mang theo.</strong> Gần như mọi thứ trong khoá học này đều suy ra từ một sự thật — một luồng, mỗi lúc một lệnh — nên khi có thứ gì chậm thì hãy hỏi cái gì đang chặn chứ đừng hỏi cái gì đang cấu hình sai. Redis sẽ làm đúng cái bạn bảo, kể cả những thứ có sức phá huỷ: không có ràng buộc, không có quay lui và không có lược đồ, nên tính đúng đắn sống trong thiết kế của bạn, và mọi thanh chắn trong bảy mươi bài này là thanh chắn bạn phải tự đặt lấy. Và mười cái luật ở trên đáng giá hơn cả cuốn tra cứu lệnh: chặn trần mọi tập hợp, cho mọi khoá một TTL, chọn cấu trúc theo câu hỏi, và đo trước khi mở rộng.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Single-threaded model</span><span class="v">Một luồng, mỗi lúc một lệnh — gốc rễ của mọi điểm về độ trễ và tính nguyên tử trong khoá.</span></div>
+  <div class="kv"><span class="k">TTL discipline</span><span class="v">Mọi khoá có một TTL hoặc một lý do ghi ra giấy; khoá không trần gây phần lớn sự cố bộ nhớ.</span></div>
+  <div class="kv"><span class="k">Capstone project</span><span class="v">Một dịch vụ rút gọn URL kèm phân tích, dùng tám chương từ đầu tới cuối.</span></div>
+  <div class="kv"><span class="k">Valkey</span><span class="v">Bản rẽ nhánh năm 2024 do Linux Foundation bảo trợ từ Redis 7.2; mọi thứ trong khoá áp cho cả hai.</span></div>
+  <div class="kv"><span class="k">HEXPIRE</span><span class="v">TTL cho từng trường của hash, mới ở 7.4 — tính năng hiển nhiên cần xác minh trên một nhà cung cấp có quản lý.</span></div>
+  <div class="kv"><span class="k">redis.conf</span><span class="v">Tệp cấu hình có chú giải, cách nhanh nhất để khám phá những tính năng bạn chưa biết để hỏi.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Gần như mọi thứ suy ra từ một sự thật — một luồng, mỗi lúc một lệnh — nên khi có gì chậm, hãy hỏi cái gì đang chặn.</li>
+<li>Redis làm đúng cái bạn bảo, kể cả những thứ phá huỷ: không quay lui, không lược đồ, nên tính đúng đắn sống trong thiết kế của bạn.</li>
+<li>Mười luật đáng giá hơn cuốn tra cứu lệnh: chặn trần mọi tập hợp, cho mọi khoá một TTL, chọn cấu trúc theo câu hỏi, đo trước khi mở rộng.</li>
+<li>Mọi thứ đã học áp cho cả Valkey; hãy xác minh các tính năng sau 7.2 như <code>HEXPIRE</code> trên một nhà cung cấp có quản lý.</li>
+<li>Hãy dựng dự án tổng kết rồi cố ý làm nó hỏng — các bài học ngấm khi chúng lấy của bạn một buổi tối.</li>
+</ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/java-web-application-development/learn?lessonSlug=prj301-slide-cs5-2" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · PRJ301 ⭐ CS.5 — Architecture (2): config, logs, jobs, cache, REST</span><span class="lc-sub">Caffeine or Redis — a question you can now answer for your own Spring project.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/java-web-application-development/learn?lessonSlug=prj301-slide-cs5-2" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · PRJ301 ⭐ CS.5 — Kiến trúc (2): cấu hình, log, job, cache, REST</span><span class="lc-sub">Caffeine hay Redis — câu hỏi giờ bạn đã tự trả lời được cho dự án Spring của mình.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

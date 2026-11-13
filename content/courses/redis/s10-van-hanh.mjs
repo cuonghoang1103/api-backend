@@ -132,6 +132,22 @@ redis-cli -p 7777 SHUTDOWN NOSAVE 2&gt;/dev/null</code></pre>
 </a>
 
 <p class="note-ct"><strong>Three things to remember.</strong> Configuration arrives from four places in order — the file, command-line flags, <code>CONFIG SET</code>, and <code>CONFIG REWRITE</code> writing back — and <code>INFO server</code> tells you which file this process actually loaded, which is not always the one you edited. About a dozen directives are real decisions (bind, auth, maxmemory and its policy, durability, dir and logfile, timeouts) and the rest are defaults chosen carefully enough that changing them without a measurement makes things worse. And the running config drifts from the file every time someone fixes something with <code>CONFIG SET</code> during an incident — follow it with <code>CONFIG REWRITE</code>, and monitor a handful of critical values so the drift surfaces before the next restart.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">redis.conf</span><span class="v">The annotated config file; every directive has a paragraph explaining its trade-off.</span></div>
+  <div class="kv"><span class="k">Config precedence</span><span class="v">File → command-line flags → <code>CONFIG SET</code> → <code>CONFIG REWRITE</code> writing back.</span></div>
+  <div class="kv"><span class="k">INFO server</span><span class="v">Tells you which config file this process actually loaded — not always the one you edited.</span></div>
+  <div class="kv"><span class="k">The dozen decisions</span><span class="v">bind, auth, maxmemory + policy, durability, dir, logfile, timeouts — the rest are tuned defaults.</span></div>
+  <div class="kv"><span class="k">Config drift</span><span class="v">The running config diverges from the file every time someone fixes something with <code>CONFIG SET</code>.</span></div>
+  <div class="kv"><span class="k">CONFIG REWRITE</span><span class="v">Persists a live change back to the file so it survives a restart.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>Config arrives from four places in order; <code>INFO server</code> reveals which file was actually loaded.</li>
+<li>Only about a dozen directives are real decisions — changing the rest without a measurement makes things worse.</li>
+<li>The running config drifts from the file during incidents; follow every <code>CONFIG SET</code> with <code>CONFIG REWRITE</code>.</li>
+<li>Monitor a handful of critical values so drift surfaces before the next restart exposes it.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 10 · Bài 10.1</span>
@@ -246,6 +262,38 @@ redis-cli -p 7777 SHUTDOWN NOSAVE 2&gt;/dev/null</code></pre>
 </a>
 
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Cấu hình tới từ bốn nơi theo thứ tự — cái tệp, cờ dòng lệnh, <code>CONFIG SET</code>, và <code>CONFIG REWRITE</code> ghi ngược trở lại — và <code>INFO server</code> nói cho bạn biết tiến trình này thật sự nạp tệp nào, vốn không phải lúc nào cũng là cái tệp bạn vừa sửa. Cỡ một tá chỉ thị là quyết định thật (bind, xác thực, maxmemory và chính sách của nó, độ bền, dir và logfile, các hạn giờ) còn số còn lại là những mặc định được chọn đủ kỹ để việc đổi chúng mà không đo đạc chỉ làm mọi thứ tệ hơn. Và cấu hình đang chạy trôi khỏi cái tệp mỗi lần có người chữa cháy bằng <code>CONFIG SET</code> giữa sự cố — hãy theo sau bằng <code>CONFIG REWRITE</code>, và hãy giám sát vài giá trị then chốt để sự trôi dạt lộ ra trước lần khởi động lại kế tiếp.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">redis.conf</span><span class="v">Tệp cấu hình có chú giải; mọi chỉ thị có một đoạn giải thích sự đánh đổi.</span></div>
+  <div class="kv"><span class="k">Thứ tự ưu tiên cấu hình</span><span class="v">Tệp → cờ dòng lệnh → <code>CONFIG SET</code> → <code>CONFIG REWRITE</code> ghi ngược.</span></div>
+  <div class="kv"><span class="k">INFO server</span><span class="v">Nói cho bạn tiến trình thật sự nạp tệp nào — không phải lúc nào cũng là tệp bạn vừa sửa.</span></div>
+  <div class="kv"><span class="k">Một tá quyết định</span><span class="v">bind, xác thực, maxmemory + chính sách, độ bền, dir, logfile, hạn giờ — còn lại là mặc định đã tinh chỉnh.</span></div>
+  <div class="kv"><span class="k">Trôi dạt cấu hình</span><span class="v">Cấu hình đang chạy lệch khỏi tệp mỗi lần có người chữa cháy bằng <code>CONFIG SET</code>.</span></div>
+  <div class="kv"><span class="k">CONFIG REWRITE</span><span class="v">Ghi một thay đổi đang chạy ngược vào tệp để nó sống sót qua khởi động lại.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Cấu hình tới từ bốn nơi theo thứ tự; <code>INFO server</code> cho biết tệp nào thật sự được nạp.</li>
+<li>Chỉ cỡ một tá chỉ thị là quyết định thật — đổi phần còn lại mà không đo chỉ làm tệ hơn.</li>
+<li>Cấu hình đang chạy trôi khỏi tệp giữa sự cố; theo sau mỗi <code>CONFIG SET</code> bằng <code>CONFIG REWRITE</code>.</li>
+<li>Giám sát vài giá trị then chốt để sự trôi dạt lộ ra trước khi lần khởi động lại kế tiếp phơi nó ra.</li>
+</ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-6-van-hanh-production" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.6 — Running Redis: the commands that freeze everything</span><span class="lc-sub">Running Redis in production from the application side.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-6-van-hanh-production" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.6 — Vận hành Redis: những lệnh làm đứng hình tất cả</span><span class="lc-sub">Vận hành Redis trên production, nhìn từ phía ứng dụng.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -360,6 +408,22 @@ PONG</div>
 </a>
 
 <p class="note-ct"><strong>Three things to remember.</strong> An open Redis is not only a data leak: <code>CONFIG SET</code> makes <code>dir</code> and <code>dbfilename</code> runtime-settable, and <code>REPLICAOF</code> can be pointed at an attacker's server — so reachability plus no authentication is a full compromise, not a disclosure. The real defence is not being reachable: bind to loopback or a private address, firewall to your application hosts, and verify with <code>ss -lntp</code> rather than trusting the config. And because Redis will happily process 158,000 <code>AUTH</code> attempts a second with no lockout, a password must come from <code>ACL GENPASS</code> and never from your imagination — and it should be set even on instances you are sure nothing can reach.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Reachability = compromise</span><span class="v">With no auth, being reachable is a full takeover, not just a data leak.</span></div>
+  <div class="kv"><span class="k">REPLICAOF attack</span><span class="v">An open instance can be told to replicate from the attacker's server.</span></div>
+  <div class="kv"><span class="k">Runtime dir / dbfilename</span><span class="v"><code>CONFIG SET</code> makes these settable at runtime — the basis of the dump-file exploits.</span></div>
+  <div class="kv"><span class="k">bind + firewall</span><span class="v">The real defence: loopback or a private address, plus a firewall to your app hosts.</span></div>
+  <div class="kv"><span class="k">ss -lntp</span><span class="v">Verify what is actually listening rather than trusting the config file.</span></div>
+  <div class="kv"><span class="k">ACL GENPASS</span><span class="v">Generate the password — Redis processes ~158k <code>AUTH</code> tries/sec with no lockout.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>An open Redis is a full compromise: <code>REPLICAOF</code> and runtime <code>dir</code>/<code>dbfilename</code> turn reachability into takeover.</li>
+<li>The real defence is not being reachable — bind to loopback or private, firewall to app hosts, verify with <code>ss -lntp</code>.</li>
+<li>There is no <code>AUTH</code> lockout, so passwords come from <code>ACL GENPASS</code>, never from your imagination.</li>
+<li>Set a password even on instances you are sure nothing can reach.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 10 · Bài 10.2</span>
@@ -465,6 +529,38 @@ PONG</div>
 </a>
 
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Một Redis mở toang không chỉ là rò rỉ dữ liệu: <code>CONFIG SET</code> làm cho <code>dir</code> và <code>dbfilename</code> đặt được lúc chạy, còn <code>REPLICAOF</code> thì trỏ được về máy chủ của kẻ tấn công — nên với tới được cộng không xác thực là một cú chiếm quyền trọn vẹn, không phải một vụ lộ dữ liệu. Cách phòng thủ thật là việc không với tới được: hãy gắn vào loopback hoặc một địa chỉ riêng, dựng tường lửa chỉ cho các máy ứng dụng của bạn, và xác minh bằng <code>ss -lntp</code> chứ đừng tin cấu hình. Và vì Redis vui vẻ xử lý 158.000 lượt <code>AUTH</code> mỗi giây mà không khoá tài khoản, mật khẩu phải đến từ <code>ACL GENPASS</code> chứ đừng bao giờ từ trí tưởng tượng của bạn — và nó nên được đặt ngay cả trên những máy bạn chắc chắn không gì với tới được.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Với tới được = chiếm quyền</span><span class="v">Không xác thực thì với tới được là một cú chiếm quyền trọn vẹn, không chỉ rò rỉ dữ liệu.</span></div>
+  <div class="kv"><span class="k">Tấn công REPLICAOF</span><span class="v">Một máy mở toang có thể bị bảo nhân bản từ máy chủ của kẻ tấn công.</span></div>
+  <div class="kv"><span class="k">dir / dbfilename lúc chạy</span><span class="v"><code>CONFIG SET</code> làm chúng đặt được lúc chạy — nền của các khai thác ghi file dump.</span></div>
+  <div class="kv"><span class="k">bind + tường lửa</span><span class="v">Phòng thủ thật: loopback hoặc địa chỉ riêng, cộng tường lửa chỉ cho các máy ứng dụng.</span></div>
+  <div class="kv"><span class="k">ss -lntp</span><span class="v">Xác minh cái gì thật sự đang nghe thay vì tin vào tệp cấu hình.</span></div>
+  <div class="kv"><span class="k">ACL GENPASS</span><span class="v">Sinh mật khẩu — Redis xử lý ~158k lượt <code>AUTH</code>/giây mà không khoá tài khoản.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Một Redis mở toang là một cú chiếm quyền trọn vẹn: <code>REPLICAOF</code> và <code>dir</code>/<code>dbfilename</code> lúc chạy biến với-tới-được thành chiếm quyền.</li>
+<li>Phòng thủ thật là không với tới được — gắn vào loopback hoặc riêng, tường lửa cho máy ứng dụng, xác minh bằng <code>ss -lntp</code>.</li>
+<li>Không có khoá tài khoản khi <code>AUTH</code> sai, nên mật khẩu đến từ <code>ACL GENPASS</code>, không bao giờ từ trí tưởng tượng.</li>
+<li>Đặt mật khẩu ngay cả trên những máy bạn chắc chắn không gì với tới được.</li>
+</ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/java-web-application-development/learn?lessonSlug=prj301-slide-cs4-2" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · PRJ301 ⭐ CS.4 — Security (2): CSRF, CORS, JWT, refresh tokens, OAuth2</span><span class="lc-sub">CSRF, CORS, JWT — and why sessions need a shared store, which is exactly the Redis you must not expose.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/java-web-application-development/learn?lessonSlug=prj301-slide-cs4-2" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · PRJ301 ⭐ CS.4 — Bảo mật (2): CSRF, CORS, JWT, refresh token, OAuth2</span><span class="lc-sub">CSRF, CORS, JWT — và vì sao phiên cần một kho dùng chung, cũng chính là Redis bạn không được phơi ra mạng.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -617,6 +713,22 @@ OK</div>
 </a>
 
 <p class="note-ct"><strong>Three things to remember.</strong> The <code>default</code> user is <code>on nopass ~* &amp;* +@all</code>, and <code>requirepass</code> only adds a password to it — the permissions stay total, so a leaked credential is a full compromise until you create scoped users and retire <code>default</code>. Rules are applied left to right and a user starts with nothing, so <code>+@read +@write -@dangerous</code> plus <code>~prefix:*</code> is the shape of almost every application user, with <code>%R~</code> and selectors for the cases a flat rule set cannot express. And <code>ACL LOG</code> is what makes this deployable: roll out the user you think is right, then read the log to find every permission you got wrong, with the username, command and client address attached.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">default user</span><span class="v"><code>on nopass ~* &amp;* +@all</code> — total access; <code>requirepass</code> only adds a password.</span></div>
+  <div class="kv"><span class="k">ACL SETUSER</span><span class="v">Creates a scoped user; a user starts with no permissions at all.</span></div>
+  <div class="kv"><span class="k">Command categories</span><span class="v"><code>+@read +@write -@dangerous</code> grant and revoke by group, applied left to right.</span></div>
+  <div class="kv"><span class="k">Key patterns</span><span class="v"><code>~prefix:*</code> limits which keys a user can touch; <code>%R~</code> and selectors refine it further.</span></div>
+  <div class="kv"><span class="k">Retire default</span><span class="v">A leaked credential is a full compromise until you scope users and disable <code>default</code>.</span></div>
+  <div class="kv"><span class="k">ACL LOG</span><span class="v">Records every denied command with username, command and client address — the rollout tool.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>The <code>default</code> user has total access; <code>requirepass</code> only adds a password, so create scoped users and retire it.</li>
+<li>Rules apply left to right from nothing: <code>+@read +@write -@dangerous</code> plus <code>~prefix:*</code> fits almost every app user.</li>
+<li>Use <code>%R~</code> and selectors for cases a flat rule set cannot express.</li>
+<li><code>ACL LOG</code> makes ACLs deployable — roll out the user, then read the log to find the permissions you got wrong.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 10 · Bài 10.3</span>
@@ -760,6 +872,38 @@ OK</div>
 </a>
 
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Người dùng <code>default</code> là <code>on nopass ~* &amp;* +@all</code>, và <code>requirepass</code> chỉ thêm cho nó một mật khẩu — quyền hạn vẫn là toàn phần, nên một thông tin xác thực bị lộ là một cú chiếm quyền trọn vẹn cho tới khi bạn tạo ra những người dùng có phạm vi và cho <code>default</code> nghỉ hưu. Các luật áp từ trái sang phải và người dùng bắt đầu với con số không, nên <code>+@read +@write -@dangerous</code> cộng <code>~tiền_tố:*</code> là hình dáng của gần như mọi người dùng ứng dụng, với <code>%R~</code> và selector cho những trường hợp mà một tập luật phẳng không diễn đạt nổi. Và <code>ACL LOG</code> là thứ khiến chuyện này triển khai được: hãy đưa người dùng mà bạn nghĩ là đúng vào chạy, rồi đọc nhật ký để tìm ra mọi quyền bạn đoán sai, kèm sẵn tên người dùng, cái lệnh và địa chỉ khách.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Người dùng default</span><span class="v"><code>on nopass ~* &amp;* +@all</code> — quyền toàn phần; <code>requirepass</code> chỉ thêm mật khẩu.</span></div>
+  <div class="kv"><span class="k">ACL SETUSER</span><span class="v">Tạo một người dùng có phạm vi; người dùng bắt đầu với không quyền nào.</span></div>
+  <div class="kv"><span class="k">Nhóm lệnh</span><span class="v"><code>+@read +@write -@dangerous</code> cấp và thu quyền theo nhóm, áp từ trái sang phải.</span></div>
+  <div class="kv"><span class="k">Mẫu khoá</span><span class="v"><code>~tiền_tố:*</code> giới hạn khoá người dùng chạm được; <code>%R~</code> và selector tinh chỉnh thêm.</span></div>
+  <div class="kv"><span class="k">Cho default nghỉ hưu</span><span class="v">Một thông tin xác thực bị lộ là cú chiếm quyền trọn vẹn tới khi bạn tạo người dùng có phạm vi.</span></div>
+  <div class="kv"><span class="k">ACL LOG</span><span class="v">Ghi mọi lệnh bị từ chối kèm tên người dùng, lệnh và địa chỉ khách — công cụ để triển khai.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Người dùng <code>default</code> có quyền toàn phần; <code>requirepass</code> chỉ thêm mật khẩu — hãy tạo người dùng có phạm vi và cho nó nghỉ hưu.</li>
+<li>Luật áp từ trái sang phải, bắt đầu từ không: <code>+@read +@write -@dangerous</code> cộng <code>~tiền_tố:*</code> hợp gần như mọi người dùng ứng dụng.</li>
+<li>Dùng <code>%R~</code> và selector cho những trường hợp một tập luật phẳng không diễn đạt nổi.</li>
+<li><code>ACL LOG</code> khiến ACL triển khai được — đưa người dùng vào chạy rồi đọc log để tìm quyền bạn đoán sai.</li>
+</ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/java-web-application-development/learn?lessonSlug=prj301-slide-cs4-2" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · PRJ301 ⭐ CS.4 — Security (2): CSRF, CORS, JWT, refresh tokens, OAuth2</span><span class="lc-sub">Authorisation, JWT, and sessions that need a shared store — the application-side view of who may touch what.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/java-web-application-development/learn?lessonSlug=prj301-slide-cs4-2" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · PRJ301 ⭐ CS.4 — Bảo mật (2): CSRF, CORS, JWT, refresh token, OAuth2</span><span class="lc-sub">Phân quyền, JWT, và phiên cần kho dùng chung — góc nhìn phía ứng dụng về ai được chạm vào đâu.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -918,6 +1062,22 @@ redis_version:7.4.1</div>
 </a>
 
 <p class="note-ct"><strong>Three things to remember.</strong> Use ACLs rather than <code>rename-command</code> to remove dangerous commands: same protection, per-identity, changeable at runtime, and visible — while renaming is global, breaks tooling, and hides the new name in the config file. Most hardening is outside Redis: a non-root user, <code>ProtectSystem=strict</code> with two writable paths, <code>NoNewPrivileges</code>, and <code>0750</code> on the data directory do more against the historical attacks than any Redis setting. And in containers the two things that bite are the mounted <code>redis.conf</code> being ignored unless passed as an argument, and <code>ports: 6379:6379</code> publishing to every host interface no matter what <code>bind</code> says.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">ACL over rename-command</span><span class="v">Same protection but per-identity, runtime-changeable and visible — renaming is global and hides the new name.</span></div>
+  <div class="kv"><span class="k">Non-root user</span><span class="v">Run the process as an unprivileged user, not root.</span></div>
+  <div class="kv"><span class="k">ProtectSystem=strict</span><span class="v">A systemd setting that permits writes only to a couple of declared paths.</span></div>
+  <div class="kv"><span class="k">NoNewPrivileges</span><span class="v">Stops the process gaining more privileges after it starts.</span></div>
+  <div class="kv"><span class="k">0750 data dir</span><span class="v">Locking down the data directory does more against the historical attacks than any Redis setting.</span></div>
+  <div class="kv"><span class="k">Container traps</span><span class="v">A mounted <code>redis.conf</code> is ignored unless passed as an argument; <code>ports</code> publishes to every interface.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>Use ACLs rather than <code>rename-command</code>: same protection, per-identity, runtime-changeable and visible.</li>
+<li>Most hardening is outside Redis: non-root user, <code>ProtectSystem=strict</code>, <code>NoNewPrivileges</code>, <code>0750</code> on the data dir.</li>
+<li>In containers a mounted <code>redis.conf</code> is ignored unless passed as an argument.</li>
+<li><code>ports: 6379:6379</code> publishes to every host interface no matter what <code>bind</code> says — bind the port to loopback.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 10 · Bài 10.4</span>
@@ -1067,6 +1227,38 @@ redis_version:7.4.1</div>
 </a>
 
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Hãy dùng ACL thay cho <code>rename-command</code> để gỡ các lệnh nguy hiểm: cùng mức bảo vệ, theo từng danh tính, đổi được lúc đang chạy, và nhìn thấy được — trong khi đổi tên thì toàn cục, làm hỏng công cụ, và giấu cái tên mới ngay trong tệp cấu hình. Phần lớn việc làm cứng nằm ngoài Redis: một người dùng không phải root, <code>ProtectSystem=strict</code> với hai đường dẫn ghi được, <code>NoNewPrivileges</code>, và quyền <code>0750</code> trên thư mục dữ liệu làm được nhiều hơn mọi thiết lập Redis trước các vụ tấn công trong lịch sử. Và trong container thì hai thứ hay cắn là cái <code>redis.conf</code> đã gắn vào bị phớt lờ nếu không truyền làm tham số, và <code>ports: 6379:6379</code> công bố ra mọi giao diện của máy chủ bất kể <code>bind</code> nói gì.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">ACL thay rename-command</span><span class="v">Cùng mức bảo vệ nhưng theo từng danh tính, đổi được lúc chạy, và nhìn thấy được.</span></div>
+  <div class="kv"><span class="k">Người dùng không root</span><span class="v">Chạy tiến trình bằng người dùng thường, không phải root.</span></div>
+  <div class="kv"><span class="k">ProtectSystem=strict</span><span class="v">Thiết lập systemd chỉ cho ghi vào vài đường dẫn định sẵn.</span></div>
+  <div class="kv"><span class="k">NoNewPrivileges</span><span class="v">Chặn tiến trình giành thêm quyền sau khi khởi động.</span></div>
+  <div class="kv"><span class="k">0750 trên thư mục dữ liệu</span><span class="v">Khoá quyền truy cập thư mục dữ liệu — làm nhiều hơn mọi thiết lập Redis trước các vụ tấn công.</span></div>
+  <div class="kv"><span class="k">Bẫy container</span><span class="v"><code>redis.conf</code> gắn vào bị phớt lờ nếu không truyền làm tham số; <code>ports</code> công bố ra mọi giao diện bất kể <code>bind</code>.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Dùng ACL thay <code>rename-command</code> để gỡ lệnh nguy hiểm: cùng mức bảo vệ, theo danh tính, đổi lúc chạy, nhìn thấy được.</li>
+<li>Phần lớn việc làm cứng nằm ngoài Redis: người dùng không root, <code>ProtectSystem=strict</code>, <code>NoNewPrivileges</code>, <code>0750</code> trên thư mục dữ liệu.</li>
+<li>Trong container, <code>redis.conf</code> gắn vào bị phớt lờ trừ khi truyền làm tham số.</li>
+<li><code>ports: 6379:6379</code> công bố ra mọi giao diện của máy chủ bất kể <code>bind</code> — hãy gắn cổng vào loopback.</li>
+</ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/java-web-application-development/learn?lessonSlug=prj301-slide-cs5-2" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · PRJ301 ⭐ CS.5 — Architecture (2): config, logs, jobs, cache, REST</span><span class="lc-sub">Configuration, jobs and cache in a Spring project — and when Redis earns its place.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/academy/courses/java-web-application-development/learn?lessonSlug=prj301-slide-cs5-2" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">Academy · PRJ301 ⭐ CS.5 — Kiến trúc (2): cấu hình, log, job, cache, REST</span><span class="lc-sub">Cấu hình, job và cache trong một dự án Spring — và khi nào Redis đáng có mặt.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -1188,6 +1380,22 @@ const sub      = redis.duplicate();     <span class="tok-comment">// SUBSCRIBE (
 </a>
 
 <p class="note-ct"><strong>Three things to remember.</strong> Three limits must agree — <code>maxclients</code>, the process file-descriptor limit and <code>tcp-backlog</code>/<code>somaxconn</code> — and the OS limit wins silently, lowering <code>maxclients</code> with only a startup log line to say so. <code>timeout 0</code> is right for pooled clients but wrong behind a load balancer that drops idle TCP, so set <code>tcp-keepalive</code> below that threshold or your pool hands out dead sockets. And a rising <code>connected_clients</code> that never falls is a leak, not growth: name your connections, group <code>CLIENT LIST</code> by <code>addr</code> to find the owner, and alert at half of <code>maxclients</code> so you see it as a graph rather than an outage.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">maxclients</span><span class="v">The cap on simultaneous connections; the OS fd limit can lower it silently.</span></div>
+  <div class="kv"><span class="k">File-descriptor limit</span><span class="v">The process ulimit wins over <code>maxclients</code>, with only a startup log line to say so.</span></div>
+  <div class="kv"><span class="k">tcp-backlog / somaxconn</span><span class="v">The accept queue; both must agree or connections are dropped under a burst.</span></div>
+  <div class="kv"><span class="k">timeout 0</span><span class="v">Right for pooled clients; behind an idle-dropping load balancer it hands out dead sockets.</span></div>
+  <div class="kv"><span class="k">tcp-keepalive</span><span class="v">Set it below the load balancer's idle threshold so dead sockets are detected.</span></div>
+  <div class="kv"><span class="k">Connection leak</span><span class="v">A <code>connected_clients</code> that rises and never falls — name connections and group <code>CLIENT LIST</code> by <code>addr</code>.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>Three limits must agree — <code>maxclients</code>, the fd limit and <code>tcp-backlog</code>/<code>somaxconn</code> — and the OS limit wins silently.</li>
+<li><code>timeout 0</code> suits pooled clients but needs <code>tcp-keepalive</code> behind a load balancer that drops idle TCP.</li>
+<li>A <code>connected_clients</code> that only rises is a leak — name connections and group <code>CLIENT LIST</code> by address to find the owner.</li>
+<li>Alert at half of <code>maxclients</code> so you see the leak as a graph, not an outage.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 10 · Bài 10.5</span>
@@ -1300,6 +1508,38 @@ const sub      = redis.duplicate();     <span class="tok-comment">// SUBSCRIBE (
 </a>
 
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Ba giới hạn phải khớp nhau — <code>maxclients</code>, giới hạn mô tả tệp của tiến trình và <code>tcp-backlog</code>/<code>somaxconn</code> — và giới hạn của hệ điều hành thắng một cách âm thầm, hạ <code>maxclients</code> xuống mà chỉ có một dòng nhật ký lúc khởi động nói ra chuyện đó. <code>timeout 0</code> đúng cho thư viện dùng gáo nhưng sai khi phía sau có một bộ cân tải bỏ TCP rảnh, nên hãy đặt <code>tcp-keepalive</code> dưới ngưỡng đó không thì cái gáo của bạn phát ra những socket đã chết. Và một <code>connected_clients</code> chỉ tăng mà không bao giờ tụt là một chỗ rò chứ không phải sự tăng trưởng: hãy đặt tên cho kết nối, gom <code>CLIENT LIST</code> theo <code>addr</code> để tìm chủ sở hữu, và đặt cảnh báo ở mức nửa <code>maxclients</code> để bạn thấy nó dưới dạng một cái đồ thị chứ không phải một sự cố.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">maxclients</span><span class="v">Trần số kết nối đồng thời; giới hạn mô tả tệp của hệ điều hành có thể hạ nó âm thầm.</span></div>
+  <div class="kv"><span class="k">Giới hạn mô tả tệp</span><span class="v">ulimit của tiến trình thắng <code>maxclients</code>, chỉ có một dòng log lúc khởi động báo.</span></div>
+  <div class="kv"><span class="k">tcp-backlog / somaxconn</span><span class="v">Hàng đợi accept; cả hai phải khớp không thì kết nối bị bỏ khi có cú dồn.</span></div>
+  <div class="kv"><span class="k">timeout 0</span><span class="v">Đúng cho thư viện dùng gáo; sau một bộ cân tải bỏ TCP rảnh thì nó phát ra socket đã chết.</span></div>
+  <div class="kv"><span class="k">tcp-keepalive</span><span class="v">Đặt dưới ngưỡng rảnh của bộ cân tải để phát hiện socket đã chết.</span></div>
+  <div class="kv"><span class="k">Rò kết nối</span><span class="v">Một <code>connected_clients</code> chỉ tăng không tụt — đặt tên kết nối và gom <code>CLIENT LIST</code> theo <code>addr</code>.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Ba giới hạn phải khớp — <code>maxclients</code>, giới hạn mô tả tệp và <code>tcp-backlog</code>/<code>somaxconn</code> — và giới hạn hệ điều hành thắng âm thầm.</li>
+<li><code>timeout 0</code> hợp thư viện dùng gáo nhưng cần <code>tcp-keepalive</code> khi sau có bộ cân tải bỏ TCP rảnh.</li>
+<li>Một <code>connected_clients</code> chỉ tăng là một chỗ rò — đặt tên kết nối và gom <code>CLIENT LIST</code> theo địa chỉ để tìm chủ.</li>
+<li>Cảnh báo ở mức nửa <code>maxclients</code> để bạn thấy chỗ rò dưới dạng đồ thị, không phải một sự cố.</li>
+</ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-6-van-hanh-production" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.6 — Running Redis: the commands that freeze everything</span><span class="lc-sub">Running Redis: connection limits and connection pools from the application side.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-6-van-hanh-production" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.6 — Vận hành Redis: những lệnh làm đứng hình tất cả</span><span class="lc-sub">Vận hành Redis: giới hạn kết nối và gáo kết nối nhìn từ phía ứng dụng.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

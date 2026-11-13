@@ -125,6 +125,22 @@ db0:keys=1842033,expires=1799210,avg_ttl=241833</div>
 </a>
 
 <p class="note-ct"><strong>Three things to remember.</strong> Four numbers mean four things: <code>used_memory</code> is what eviction is measured against, <code>used_memory_rss</code> is what the OS sees, <code>used_memory_dataset</code> is your actual data, and <code>used_memory_peak</code> is what you should size the machine from. Overhead is not free and nobody owns it — the keyspace dictionary, the replication backlog and client output buffers all count toward <code>maxmemory</code>, and they scale with key count rather than data size. And the fragmentation ratio is a three-way signal: near 1.1 is healthy, above 1.5 is fragmentation that <code>activedefrag</code> can reclaim, and <em>below 1.0</em> means Redis is swapping, which is an emergency rather than a tuning opportunity.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">used_memory</span><span class="v">The allocator's total — the number eviction is measured against.</span></div>
+  <div class="kv"><span class="k">used_memory_rss</span><span class="v">What the OS sees as resident; compared to <code>used_memory</code> it gives fragmentation.</span></div>
+  <div class="kv"><span class="k">used_memory_dataset</span><span class="v">Your actual data, with overhead removed.</span></div>
+  <div class="kv"><span class="k">used_memory_peak</span><span class="v">The high-water mark — size the machine from this, not the current value.</span></div>
+  <div class="kv"><span class="k">Overhead</span><span class="v">Keyspace dictionary, replication backlog and client buffers all count toward <code>maxmemory</code>.</span></div>
+  <div class="kv"><span class="k">Fragmentation ratio</span><span class="v">~1.1 healthy, &gt;1.5 reclaimable with <code>activedefrag</code>, &lt;1.0 means swapping — an emergency.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>Four numbers, four meanings: <code>used_memory</code> (eviction), <code>_rss</code> (OS view), <code>_dataset</code> (real data), <code>_peak</code> (sizing).</li>
+<li>Overhead is not free — the keyspace dictionary, replication backlog and client buffers scale with key count.</li>
+<li>Fragmentation ~1.1 is fine; above 1.5 <code>activedefrag</code> helps; below 1.0 Redis is swapping.</li>
+<li>Size the machine from the peak, and treat a ratio under 1.0 as an incident, not tuning.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 9 · Bài 9.1</span>
@@ -232,6 +248,38 @@ db0:keys=1842033,expires=1799210,avg_ttl=241833</div>
 </a>
 
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Bốn con số mang bốn nghĩa: <code>used_memory</code> là thứ việc đẩy khoá đem ra đo, <code>used_memory_rss</code> là thứ hệ điều hành nhìn thấy, <code>used_memory_dataset</code> là dữ liệu thật của bạn, còn <code>used_memory_peak</code> là thứ bạn nên dùng để chọn cỡ máy. Chi phí phụ không miễn phí và chẳng ai nhận nó — từ điển không gian khoá, bộ đệm nhân bản và bộ đệm đầu ra của các khách đều tính vào <code>maxmemory</code>, và chúng lớn theo số khoá chứ không theo kích thước dữ liệu. Và tỉ lệ phân mảnh là một tín hiệu ba chiều: quanh 1,1 là lành mạnh, trên 1,5 là phân mảnh mà <code>activedefrag</code> đòi lại được, còn <em>dưới 1,0</em> nghĩa là Redis đang bị tráo ra đĩa, và đó là tình huống khẩn cấp chứ không phải một cơ hội tinh chỉnh.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">used_memory</span><span class="v">Tổng của bộ cấp phát — con số việc đẩy khoá đem ra đo.</span></div>
+  <div class="kv"><span class="k">used_memory_rss</span><span class="v">Thứ hệ điều hành thấy là thường trú; so với <code>used_memory</code> ra tỉ lệ phân mảnh.</span></div>
+  <div class="kv"><span class="k">used_memory_dataset</span><span class="v">Dữ liệu thật của bạn, đã trừ chi phí phụ.</span></div>
+  <div class="kv"><span class="k">used_memory_peak</span><span class="v">Mốc cao nhất — chọn cỡ máy từ đây, không phải giá trị hiện tại.</span></div>
+  <div class="kv"><span class="k">Chi phí phụ</span><span class="v">Từ điển khoá, bộ đệm nhân bản và bộ đệm khách đều tính vào <code>maxmemory</code>.</span></div>
+  <div class="kv"><span class="k">Tỉ lệ phân mảnh</span><span class="v">~1,1 lành mạnh, &gt;1,5 <code>activedefrag</code> đòi lại được, &lt;1,0 là tráo ra đĩa — khẩn cấp.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Bốn con số, bốn nghĩa: <code>used_memory</code> (đẩy khoá), <code>_rss</code> (hệ điều hành thấy), <code>_dataset</code> (dữ liệu thật), <code>_peak</code> (chọn cỡ).</li>
+<li>Chi phí phụ không miễn phí — từ điển khoá, bộ đệm nhân bản và bộ đệm khách lớn theo số khoá.</li>
+<li>Phân mảnh ~1,1 là ổn; trên 1,5 thì <code>activedefrag</code> giúp; dưới 1,0 là Redis đang tráo ra đĩa.</li>
+<li>Chọn cỡ máy từ mốc đỉnh, và coi tỉ lệ dưới 1,0 là một sự cố, không phải việc tinh chỉnh.</li>
+</ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-3-cau-truc-du-lieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.3 — Picking the right structure is worth 95× the RAM</span><span class="lc-sub">Picking the right data structure — the memory saving measured from Node.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-3-cau-truc-du-lieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.3 — Chọn đúng cấu trúc dữ liệu đáng giá 95 lần RAM</span><span class="lc-sub">Chọn đúng cấu trúc dữ liệu — mức tiết kiệm bộ nhớ đo từ Node.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -343,6 +391,22 @@ redis-cli OBJECT FREQ cold</code></pre>
 </a>
 
 <p class="note-ct"><strong>Three things to remember.</strong> The default <code>noeviction</code> fails writes while reads keep working — correct for Redis-as-a-database and wrong for Redis-as-a-cache, and the asymmetry is what makes the incident confusing. Every <code>volatile-*</code> policy degrades silently into <code>noeviction</code> when no key has a TTL, so a "safe-looking" configuration can hard-fail the first time it fills. And eviction does not know what a key is for: on a shared instance, <code>allkeys-lru</code> will delete a held lock, an unprocessed queue or a live session as readily as a cache entry — separate the instances, or enforce that only cache keys carry TTLs and use <code>volatile-*</code>.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">maxmemory</span><span class="v">The RAM cap; when reached, the policy decides what happens next.</span></div>
+  <div class="kv"><span class="k">noeviction</span><span class="v">The default — fails writes, keeps reads working; right for a database, wrong for a cache.</span></div>
+  <div class="kv"><span class="k">allkeys-* vs volatile-*</span><span class="v"><code>allkeys</code> can evict any key; <code>volatile</code> only keys with a TTL.</span></div>
+  <div class="kv"><span class="k">LRU vs LFU</span><span class="v">Evict least-recently-used vs least-frequently-used; LFU resists one-off scans.</span></div>
+  <div class="kv"><span class="k">Silent degrade</span><span class="v">A <code>volatile-*</code> policy acts like <code>noeviction</code> when no key has a TTL.</span></div>
+  <div class="kv"><span class="k">Eviction is blind</span><span class="v">It does not know a key is a lock, queue or session — on a shared instance it deletes them.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>Default <code>noeviction</code> fails writes while reads keep working — the asymmetry makes the incident confusing.</li>
+<li>Every <code>volatile-*</code> policy silently becomes <code>noeviction</code> when no key carries a TTL.</li>
+<li>Eviction does not know a key's purpose: <code>allkeys-lru</code> deletes a lock or session as readily as a cache entry.</li>
+<li>Separate instances by role, or give only cache keys a TTL and use a <code>volatile-*</code> policy.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 9 · Bài 9.2</span>
@@ -445,6 +509,38 @@ redis-cli OBJECT FREQ cold</code></pre>
 </a>
 
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Mặc định <code>noeviction</code> làm hỏng các lệnh ghi trong khi các lệnh đọc vẫn chạy — đúng cho Redis-làm-cơ-sở-dữ-liệu và sai cho Redis-làm-bộ-đệm, và chính sự bất đối xứng ấy làm cho sự cố trở nên rối rắm. Mọi chính sách <code>volatile-*</code> âm thầm thoái hoá thành <code>noeviction</code> khi không khoá nào có TTL, nên một cấu hình "nhìn có vẻ an toàn" có thể hỏng cứng ngay lần đầu nó đầy. Và việc đẩy khoá không biết một khoá dùng để làm gì: trên một máy dùng chung, <code>allkeys-lru</code> sẽ xoá một cái khoá đang được giữ, một hàng đợi chưa xử lý hay một phiên đang sống dễ dàng như xoá một mục bộ đệm — hãy tách máy ra, hoặc bắt buộc chỉ khoá bộ đệm mới mang TTL rồi dùng <code>volatile-*</code>.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">maxmemory</span><span class="v">Trần RAM; khi chạm trần, chính sách quyết điều xảy ra tiếp.</span></div>
+  <div class="kv"><span class="k">noeviction</span><span class="v">Mặc định — làm hỏng ghi, giữ đọc chạy; đúng cho database, sai cho cache.</span></div>
+  <div class="kv"><span class="k">allkeys-* so với volatile-*</span><span class="v"><code>allkeys</code> đẩy được khoá bất kỳ; <code>volatile</code> chỉ khoá có TTL.</span></div>
+  <div class="kv"><span class="k">LRU so với LFU</span><span class="v">Đẩy ít-dùng-gần-đây so với ít-dùng-thường-xuyên; LFU chống một lượt quét nhất thời.</span></div>
+  <div class="kv"><span class="k">Thoái hoá âm thầm</span><span class="v">Một chính sách <code>volatile-*</code> hành xử như <code>noeviction</code> khi không khoá nào có TTL.</span></div>
+  <div class="kv"><span class="k">Đẩy khoá mù</span><span class="v">Nó không biết khoá là khoá-giữ, hàng đợi hay phiên — trên máy dùng chung nó xoá cả.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Mặc định <code>noeviction</code> làm hỏng ghi trong khi đọc vẫn chạy — sự bất đối xứng khiến sự cố rối rắm.</li>
+<li>Mọi chính sách <code>volatile-*</code> âm thầm thành <code>noeviction</code> khi không khoá nào mang TTL.</li>
+<li>Đẩy khoá không biết mục đích của khoá: <code>allkeys-lru</code> xoá một khoá-giữ hay phiên dễ như xoá mục cache.</li>
+<li>Tách máy theo vai trò, hoặc chỉ cho khoá cache một TTL rồi dùng chính sách <code>volatile-*</code>.</li>
+</ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-6-van-hanh-production" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.6 — Running Redis: the commands that freeze everything</span><span class="lc-sub">Running Redis in production, including what happens when it hits the memory ceiling.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-6-van-hanh-production" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.6 — Vận hành Redis: những lệnh làm đứng hình tất cả</span><span class="lc-sub">Vận hành Redis trên production, có cả chuyện xảy ra khi chạm trần bộ nhớ.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -569,6 +665,22 @@ OK</div>
 </a>
 
 <p class="note-ct"><strong>Three things to remember.</strong> An RDB snapshot means you lose everything since the last one — read your <code>save</code> line and say the number out loud, because on a busy instance the default is up to a minute of writes. The fork itself is cheap but copy-on-write is not: RSS can rise 30–50% transiently during a save on a write-heavy instance, which is why <code>maxmemory</code> belongs at 60–70% of machine RAM and not 95%. And two host settings are mandatory rather than advisory — <code>vm.overcommit_memory=1</code> so the fork can happen at all, and Transparent Huge Pages set to <code>never</code> so copy-on-write copies 4 KB instead of 2 MB.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">RDB snapshot</span><span class="v">A point-in-time dump of the dataset; you lose everything written since the last one.</span></div>
+  <div class="kv"><span class="k">save line</span><span class="v">The config that triggers snapshots — read it and know your worst-case data loss.</span></div>
+  <div class="kv"><span class="k">fork</span><span class="v">Redis forks a child to write the snapshot; the fork itself is cheap.</span></div>
+  <div class="kv"><span class="k">Copy-on-write</span><span class="v">Pages are shared until written; a write-heavy save can spike RSS 30–50%.</span></div>
+  <div class="kv"><span class="k">vm.overcommit_memory=1</span><span class="v">Required so the fork can allocate and the snapshot can happen at all.</span></div>
+  <div class="kv"><span class="k">THP = never</span><span class="v">Transparent Huge Pages make copy-on-write copy 2 MB instead of 4 KB — turn them off.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>An RDB snapshot loses everything since the last one — read your <code>save</code> line and say the number out loud.</li>
+<li>The fork is cheap but copy-on-write is not: RSS can rise 30–50% during a save on a write-heavy instance.</li>
+<li>Keep <code>maxmemory</code> at 60–70% of machine RAM, not 95%, to leave room for that spike.</li>
+<li>Two host settings are mandatory: <code>vm.overcommit_memory=1</code> and Transparent Huge Pages set to <code>never</code>.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 9 · Bài 9.3</span>
@@ -684,6 +796,38 @@ OK</div>
 </a>
 
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Một ảnh chụp RDB nghĩa là bạn mất mọi thứ kể từ ảnh chụp trước — hãy đọc dòng <code>save</code> của bạn rồi nói con số đó thành lời, vì trên một máy bận thì mặc định là mất tới một phút lượt ghi. Bản thân cú fork thì rẻ nhưng sao-chép-khi-ghi thì không: RSS có thể tăng tạm thời 30–50% trong lúc lưu trên một máy nặng ghi, đó là lý do <code>maxmemory</code> nên nằm ở 60–70% RAM của máy chứ không phải 95%. Và hai thiết lập của máy chủ là bắt buộc chứ không phải khuyến nghị — <code>vm.overcommit_memory=1</code> để cú fork xảy ra được, và Transparent Huge Pages đặt thành <code>never</code> để sao-chép-khi-ghi chép 4 KB thay vì 2 MB.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Ảnh chụp RDB</span><span class="v">Một bản dump dữ liệu tại một thời điểm; bạn mất mọi thứ ghi kể từ ảnh trước.</span></div>
+  <div class="kv"><span class="k">Dòng save</span><span class="v">Cấu hình kích hoạt chụp ảnh — đọc nó và biết mức mất dữ liệu tệ nhất của bạn.</span></div>
+  <div class="kv"><span class="k">fork</span><span class="v">Redis fork một tiến trình con để ghi ảnh chụp; bản thân cú fork thì rẻ.</span></div>
+  <div class="kv"><span class="k">Sao-chép-khi-ghi</span><span class="v">Trang được chia sẻ tới khi bị ghi; một lần lưu nặng ghi có thể vọt RSS 30–50%.</span></div>
+  <div class="kv"><span class="k">vm.overcommit_memory=1</span><span class="v">Bắt buộc để cú fork cấp phát được và ảnh chụp xảy ra được.</span></div>
+  <div class="kv"><span class="k">THP = never</span><span class="v">Transparent Huge Pages làm sao-chép-khi-ghi chép 2 MB thay vì 4 KB — hãy tắt.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Một ảnh chụp RDB mất mọi thứ kể từ ảnh trước — đọc dòng <code>save</code> và nói con số đó thành lời.</li>
+<li>Cú fork rẻ nhưng sao-chép-khi-ghi thì không: RSS có thể tăng 30–50% trong lúc lưu trên máy nặng ghi.</li>
+<li>Giữ <code>maxmemory</code> ở 60–70% RAM máy, không phải 95%, để chừa chỗ cho cú vọt đó.</li>
+<li>Hai thiết lập máy chủ là bắt buộc: <code>vm.overcommit_memory=1</code> và Transparent Huge Pages đặt thành <code>never</code>.</li>
+</ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-6-van-hanh-production" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.6 — Running Redis: the commands that freeze everything</span><span class="lc-sub">Running Redis in production: the commands that freeze everything, SAVE among them.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-6-van-hanh-production" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.6 — Vận hành Redis: những lệnh làm đứng hình tất cả</span><span class="lc-sub">Vận hành Redis trên production: những lệnh làm đứng hình tất cả, như SAVE.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -824,6 +968,22 @@ async_loading:0
 </a>
 
 <p class="note-ct"><strong>Three things to remember.</strong> <code>appendfsync everysec</code> is the answer for almost everyone: at most one second lost on a crash, at essentially no throughput cost, while <code>always</code> was 16× slower in the measurement above. An AOF grows without bound because it records commands rather than state, so rewriting is mandatory — and a rewrite is a second fork with the same copy-on-write bill as a snapshot. And loading an AOF means re-executing every command, which took 8 seconds against 1.2 for the equivalent RDB base file: that difference is your restart downtime, so measure it on real data and keep the incr file small.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">AOF</span><span class="v">Append-only file: a log of every write command, replayed on restart.</span></div>
+  <div class="kv"><span class="k">appendfsync everysec</span><span class="v">Fsync once a second — at most one second lost, at near-zero throughput cost.</span></div>
+  <div class="kv"><span class="k">appendfsync always</span><span class="v">Fsync every write — fully durable but ~16× slower in the measurement here.</span></div>
+  <div class="kv"><span class="k">AOF rewrite</span><span class="v">Compacts the log; a second fork with the same copy-on-write bill as a snapshot.</span></div>
+  <div class="kv"><span class="k">Command log vs state</span><span class="v">AOF records commands, not state, which is why it grows and must be rewritten.</span></div>
+  <div class="kv"><span class="k">Load = replay</span><span class="v">Restart re-executes every command (8s vs 1.2s for the RDB base here) — your downtime.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li><code>appendfsync everysec</code> is right for almost everyone: at most one second lost at near-zero cost.</li>
+<li><code>always</code> is fully durable but was ~16× slower; <code>no</code> leaves fsync to the OS.</li>
+<li>An AOF records commands so it grows without bound — rewriting is mandatory and is a second fork.</li>
+<li>Loading replays every command, so restart downtime scales with the file — measure it and keep the incr file small.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 9 · Bài 9.4</span>
@@ -955,6 +1115,38 @@ async_loading:0
 </a>
 
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> <code>appendfsync everysec</code> là đáp án cho gần như tất cả mọi người: mất nhiều nhất một giây khi sập, với chi phí thông lượng gần như bằng 0, trong khi <code>always</code> chậm hơn 16 lần trong phép đo ở trên. Một AOF phình vô hạn vì nó ghi lệnh chứ không ghi trạng thái, nên việc ghi lại là bắt buộc — và một lần ghi lại là một cú fork thứ hai với đúng hoá đơn sao-chép-khi-ghi như một lần chụp ảnh. Và nạp một AOF nghĩa là thực thi lại từng lệnh, mất 8 giây so với 1,2 giây của tệp base RDB tương đương: khoảng chênh đó chính là thời gian chết lúc khởi động lại của bạn, nên hãy đo nó trên dữ liệu thật và giữ tệp incr luôn nhỏ.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">AOF</span><span class="v">Tệp chỉ ghi thêm: một nhật ký mọi lệnh ghi, phát lại khi khởi động.</span></div>
+  <div class="kv"><span class="k">appendfsync everysec</span><span class="v">Fsync mỗi giây — mất nhiều nhất một giây, với chi phí thông lượng gần như 0.</span></div>
+  <div class="kv"><span class="k">appendfsync always</span><span class="v">Fsync mỗi lượt ghi — bền hoàn toàn nhưng chậm ~16 lần trong phép đo ở đây.</span></div>
+  <div class="kv"><span class="k">Ghi lại AOF</span><span class="v">Nén nhật ký; một cú fork thứ hai với đúng hoá đơn sao-chép-khi-ghi như một ảnh chụp.</span></div>
+  <div class="kv"><span class="k">Ghi lệnh so với ghi trạng thái</span><span class="v">AOF ghi lệnh, không ghi trạng thái, nên nó phình và phải ghi lại.</span></div>
+  <div class="kv"><span class="k">Nạp = phát lại</span><span class="v">Khởi động chạy lại mọi lệnh (8 giây so với 1,2 giây của base RDB) — chính là thời gian chết.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li><code>appendfsync everysec</code> đúng cho gần như tất cả: mất nhiều nhất một giây với chi phí gần như 0.</li>
+<li><code>always</code> bền hoàn toàn nhưng chậm ~16 lần; <code>no</code> để việc fsync cho hệ điều hành.</li>
+<li>Một AOF ghi lệnh nên phình vô hạn — ghi lại là bắt buộc và là một cú fork thứ hai.</li>
+<li>Nạp phát lại mọi lệnh, nên thời gian chết lúc khởi động lớn theo tệp — hãy đo nó và giữ tệp incr nhỏ.</li>
+</ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-6-van-hanh-production" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.6 — Running Redis: the commands that freeze everything</span><span class="lc-sub">Running Redis in production: fork, and reloading data at start-up.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-6-van-hanh-production" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.6 — Vận hành Redis: những lệnh làm đứng hình tất cả</span><span class="lc-sub">Vận hành Redis trên production: fork, và nạp lại dữ liệu khi khởi động.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -1074,6 +1266,22 @@ rdb_last_load_keys_loaded:1842033</div>
 </a>
 
 <p class="note-ct"><strong>Three things to remember.</strong> Persistence is an RPO/RTO budget, not a switch: no persistence loses everything and starts instantly, RDB loses your save window, AOF <code>everysec</code> loses a second but starts slowly, and enabling both — AOF for durability, RDB for backups and replica syncs — is the correct default for data you cannot rebuild. <code>CONFIG SET</code> only changes the running server, so <code>CONFIG REWRITE</code> or an edited <code>redis.conf</code> is what makes it survive a restart. And when restoring, move <code>appendonlydir</code> aside first: with AOF enabled Redis loads it and ignores the <code>dump.rdb</code> you just carefully put in place.</p>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">RPO</span><span class="v">Recovery Point Objective — how much data you can afford to lose on a crash.</span></div>
+  <div class="kv"><span class="k">RTO</span><span class="v">Recovery Time Objective — how long a restart or restore may take.</span></div>
+  <div class="kv"><span class="k">No persistence</span><span class="v">Loses everything on crash but starts instantly — fine for a pure cache.</span></div>
+  <div class="kv"><span class="k">AOF + RDB</span><span class="v">AOF for durability, RDB for backups and replica syncs — the default for data you cannot rebuild.</span></div>
+  <div class="kv"><span class="k">CONFIG REWRITE</span><span class="v"><code>CONFIG SET</code> changes the running server; <code>REWRITE</code> (or editing redis.conf) survives a restart.</span></div>
+  <div class="kv"><span class="k">appendonlydir precedence</span><span class="v">With AOF enabled Redis loads the AOF and ignores a restored <code>dump.rdb</code> — move it aside first.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul>
+<li>Persistence is an RPO/RTO budget, not a switch: none, RDB, AOF <code>everysec</code>, or both.</li>
+<li>Enabling both — AOF for durability, RDB for backups/syncs — is the correct default for data you cannot rebuild.</li>
+<li><code>CONFIG SET</code> only changes the running server; use <code>CONFIG REWRITE</code> or edit <code>redis.conf</code> to survive a restart.</li>
+<li>When restoring, move <code>appendonlydir</code> aside first, or Redis loads the AOF and ignores your <code>dump.rdb</code>.</li>
+</ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 9 · Bài 9.5</span>
@@ -1184,6 +1392,38 @@ rdb_last_load_keys_loaded:1842033</div>
 </a>
 
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Lưu lâu dài là một khoản ngân sách RPO/RTO chứ không phải một cái công tắc: không lưu gì thì mất sạch và khởi động tức thì, RDB thì mất bằng cửa sổ save của bạn, AOF <code>everysec</code> mất một giây nhưng khởi động chậm, còn bật cả hai — AOF cho độ bền, RDB cho sao lưu và đồng bộ bản sao — là mặc định đúng cho dữ liệu bạn không dựng lại được. <code>CONFIG SET</code> chỉ đổi máy chủ đang chạy, nên <code>CONFIG REWRITE</code> hoặc một tệp <code>redis.conf</code> đã sửa mới là thứ giúp nó sống sót qua khởi động lại. Và khi khôi phục, hãy dời <code>appendonlydir</code> sang bên trước đã: với AOF đang bật thì Redis nạp nó và phớt lờ cái <code>dump.rdb</code> bạn vừa cẩn thận đặt vào chỗ.</p>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">RPO</span><span class="v">Mục tiêu điểm hồi phục — bạn chịu mất bao nhiêu dữ liệu khi sập.</span></div>
+  <div class="kv"><span class="k">RTO</span><span class="v">Mục tiêu thời gian hồi phục — một lần khởi động lại hay khôi phục được phép mất bao lâu.</span></div>
+  <div class="kv"><span class="k">Không lưu</span><span class="v">Mất sạch khi sập nhưng khởi động tức thì — ổn cho một cache thuần.</span></div>
+  <div class="kv"><span class="k">AOF + RDB</span><span class="v">AOF cho độ bền, RDB cho sao lưu và đồng bộ bản sao — mặc định cho dữ liệu không dựng lại được.</span></div>
+  <div class="kv"><span class="k">CONFIG REWRITE</span><span class="v"><code>CONFIG SET</code> đổi máy đang chạy; <code>REWRITE</code> (hoặc sửa redis.conf) sống sót qua khởi động lại.</span></div>
+  <div class="kv"><span class="k">Ưu tiên appendonlydir</span><span class="v">Với AOF bật, Redis nạp AOF và phớt lờ <code>dump.rdb</code> vừa khôi phục — dời nó sang bên trước.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Lưu lâu dài là một khoản ngân sách RPO/RTO, không phải một công tắc: không lưu, RDB, AOF <code>everysec</code>, hay cả hai.</li>
+<li>Bật cả hai — AOF cho độ bền, RDB cho sao lưu/đồng bộ — là mặc định đúng cho dữ liệu bạn không dựng lại được.</li>
+<li><code>CONFIG SET</code> chỉ đổi máy đang chạy; dùng <code>CONFIG REWRITE</code> hoặc sửa <code>redis.conf</code> để sống sót qua khởi động lại.</li>
+<li>Khi khôi phục, dời <code>appendonlydir</code> sang bên trước, kẻo Redis nạp AOF và phớt lờ <code>dump.rdb</code> của bạn.</li>
+</ul>
+</div>
+<div class="ml-en">
+<h3>🔗 Connected lessons</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-6-van-hanh-production" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.6 — Running Redis: the commands that freeze everything</span><span class="lc-sub">Running Redis in production, seen from the application that depends on it.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+</div>
+<div class="ml-vi">
+<h3>🔗 Bài liên quan</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-6-van-hanh-production" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Node.js · 12.6 — Vận hành Redis: những lệnh làm đứng hình tất cả</span><span class="lc-sub">Vận hành Redis trên production, nhìn từ phía ứng dụng phụ thuộc vào nó.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

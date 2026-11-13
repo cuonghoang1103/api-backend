@@ -9,6 +9,8 @@
  * render ra HTML đúng như in.
  */
 
+import G01_1 from './giang/nxj-01-1.mjs';
+import G01_2 from './giang/nxj-01-2.mjs';
 export default {
   title: 'Chapter 1 — JSX & the rendering model|||Chương 1 — JSX & mô hình render',
   description: 'React thật sự làm gì: bạn mô tả giao diện, React đưa màn hình tới đó. JSX là JavaScript trá hình, và element chỉ là một object thuần.',
@@ -21,6 +23,7 @@ export default {
       isFreePreview: true,
       description: 'Cách làm mệnh lệnh (tự sờ vào DOM) so với cách khai báo của React: bạn mô tả kết quả, React lo cách đạt tới.',
       content: `
+${G01_1}
 <div class="ml-en">
 <div class="callout ok"><strong>Already took the React course?</strong> This chapter is a quick React refresher &mdash; the same topic is taught in depth in the <a href="/courses/react">React</a> course (Section 0, the JSX lesson, and Chapter 1). Skim it or skip ahead to <strong>Chapter 8</strong>, where the Next.js-specific material starts. Remember: Next.js is a <em>framework built on React</em> &mdash; every component, prop, state and hook here is still plain React.</div>
 <span class="eyebrow">Chapter 1 · Lesson 1.1</span>
@@ -86,6 +89,70 @@ document.body.append(p, button);</code></pre>
   <span class="lc-ico">🔄</span>
   <span class="lc-body"><span class="lc-title">react.dev — Render and commit</span><span class="lc-sub">The two phases in detail: what React computes, and when it touches the DOM.</span></span>
 </a>
+
+
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Write a tiny page with plain DOM calls (<code>document.createElement</code>, <code>textContent</code>) that shows a counter and a button; note every line where you manually keep the screen in sync with the number.</li>
+<li>Rewrite the same counter as a React component that just describes the UI for the current count; compare how many lines you spend on &quot;syncing&quot;.</li>
+<li>In one sentence, state the difference between <em>commanding</em> the DOM and <em>describing</em> the UI.</li>
+</ol>
+<p><strong>Done when:</strong> you have felt manual DOM syncing, seen React remove it, and can state describe-vs-command in your own words.</p></div>
+
+<h3>🔬 Measured: what React really touches</h3>
+<p>The counter above, built with Next.js 16.4.6 / React 19.3.0 and opened in Chromium (Playwright). A <code>MutationObserver</code> recorded every DOM change while the button was clicked three times:</p>
+<div class="out">#1  characterData  #text  '0' → '1'
+#2  characterData  #text  '1' → '2'
+#3  characterData  #text  '2' → '3'</div>
+<p>Three clicks, exactly three mutations — each a <code>characterData</code> edit of a single text node. The <code>&lt;p&gt;</code> and the <code>&lt;button&gt;</code> were never rebuilt: React re-ran <code>Counter()</code> three times but committed only the difference.</p>
+<p><strong>An element is a plain object</strong> — React called directly from Node:</p>
+<pre><code class="language-bash">$ node -e "console.log(React.createElement('p', null, 'Count: 0'))"</code></pre><div class="out">{
+  '$$typeof': Symbol(react.transitional.element),
+  type: 'p',
+  key: null,
+  props: { children: 'Count: 0' },
+  _owner: null,
+  _store: {}
+}</div>
+<p><strong>The trap, measured.</strong> A button that writes into the DOM by hand, next to one that calls <code>setState</code>:</p>
+<pre><code class="language-typescript">'use client';
+import { useState } from 'react';
+
+export default function Tong() {
+  const [sum, setSum] = useState(100);
+  return (
+    &lt;div className="p-8 font-sans"&gt;
+      &lt;p&gt;Tổng: &lt;b id="total"&gt;{sum}&lt;/b&gt;&lt;/p&gt;
+      &lt;button className="mr-2 rounded border px-3" onClick={() =&gt; {
+        document.getElementById('total')!.textContent = '999'; <span class="tok-comment">  // ✗ với tay vào DOM</span>
+      }}&gt;Sửa tay DOM&lt;/button&gt;
+      &lt;button className="rounded border px-3" onClick={() =&gt; setSum(sum + 1)}&gt;+1 (setState)&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+<p>Clicking "Sửa tay DOM" showed <strong>999</strong> while the state was still 100; the next <code>setSum</code> made React render <strong>101</strong> and the 999 vanished.</p>
+<h3>🔁 Run it yourself</h3>
+<p>Open any React page, paste this into the DevTools console, click around, then type <code>m</code>:</p>
+<pre><code class="language-javascript">const m = [];
+new MutationObserver((ds) =&gt; ds.forEach((x) =&gt; m.push([x.type, x.target.nodeName, x.oldValue, x.target.textContent])))
+  .observe(document.body, { subtree: true, childList: true, characterData: true, characterDataOldValue: true, attributes: true });
+<span class="tok-comment">// click a few times, then type: m</span></code></pre>
+<h3>🔗 Go deeper in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-4-5-dom-events" target="_blank" rel="noopener"><span class="lc-ico">🧱</span><span class="lc-body"><span class="lc-title">Web Foundations · 4.5 — DOM and events</span><span class="lc-sub">The "command the DOM" style React replaced — from the ground up</span></span></a>
+<a class="link-card lien-ket-cheo" href="/academy/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-3-1-jsx-basics" target="_blank" rel="noopener"><span class="lc-ico">🏫</span><span class="lc-body"><span class="lc-title">Academy · FER202 · 3.1 — JSX basics</span><span class="lc-sub">The university-course view of JSX and elements</span></span></a>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Declarative</span><span class="v">You describe the UI for the current data; React figures out the DOM changes.</span></div>
+  <div class="kv"><span class="k">Imperative</span><span class="v">You command the DOM step by step (the old jQuery / raw-DOM way).</span></div>
+  <div class="kv"><span class="k">React element</span><span class="v">A plain object describing what to render — not a DOM node yet.</span></div>
+  <div class="kv"><span class="k">Virtual tree</span><span class="v">React's in-memory picture of the UI it diffs against the previous one.</span></div>
+  <div class="kv"><span class="k">Render</span><span class="v">Calling your components to produce elements for the current state.</span></div>
+  <div class="kv"><span class="k">Component</span><span class="v">A function that returns elements describing a piece of UI.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>React's one job: given the data, produce the UI — and update the DOM for you when the data changes.</li><li>You write declarative code (describe) instead of imperative DOM commands (step-by-step).</li><li>Components return React elements — plain objects — which React diffs to make minimal DOM changes.</li><li>This removes the manual sync that made pre-React UIs drift out of step with their data.</li></ul>
 
 </div>
 
@@ -155,6 +222,70 @@ document.body.append(p, button);</code></pre>
   <span class="lc-body"><span class="lc-title">react.dev — Render và commit</span><span class="lc-sub">Hai giai đoạn, chi tiết: React tính gì, và khi nào nó chạm vào DOM.</span></span>
 </a>
 
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Viết một trang nhỏ bằng lệnh DOM trần (<code>document.createElement</code>, <code>textContent</code>) hiện một counter và một nút; ghi lại mọi dòng bạn phải TỰ giữ màn hình đồng bộ với con số.</li>
+<li>Viết lại counter đó thành một component React chỉ mô tả UI cho giá trị hiện tại; so xem bạn tốn bao nhiêu dòng cho việc &quot;đồng bộ&quot;.</li>
+<li>Nói một câu khác biệt giữa <em>ra lệnh</em> cho DOM và <em>mô tả</em> UI.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đã thấm việc tự đồng bộ DOM, thấy React bỏ nó đi, và nói được mô-tả-so-với-ra-lệnh bằng lời của bạn.</p></div>
+
+<h3>🔬 Đo thật: React thật sự chạm vào gì</h3>
+<p>Chính counter ở trên, dựng bằng Next.js 16.4.6 / React 19.3.0 và mở trong Chromium (Playwright). Một <code>MutationObserver</code> ghi lại mọi thay đổi DOM trong lúc bấm nút ba lần:</p>
+<div class="out">#1  characterData  #text  '0' → '1'
+#2  characterData  #text  '1' → '2'
+#3  characterData  #text  '2' → '3'</div>
+<p>Ba lần bấm, đúng ba thay đổi — mỗi cái là một lần sửa <code>characterData</code> trên một nút văn bản duy nhất. <code>&lt;p&gt;</code> và <code>&lt;button&gt;</code> không bị dựng lại lần nào: React gọi lại <code>Counter()</code> ba lần nhưng chỉ commit đúng phần khác biệt.</p>
+<p><strong>Element là một object thuần</strong> — gọi React thẳng từ Node:</p>
+<pre><code class="language-bash">$ node -e "console.log(React.createElement('p', null, 'Count: 0'))"</code></pre><div class="out">{
+  '$$typeof': Symbol(react.transitional.element),
+  type: 'p',
+  key: null,
+  props: { children: 'Count: 0' },
+  _owner: null,
+  _store: {}
+}</div>
+<p><strong>Cái bẫy, đo thật.</strong> Một nút ghi tay vào DOM, cạnh một nút gọi <code>setState</code>:</p>
+<pre><code class="language-typescript">'use client';
+import { useState } from 'react';
+
+export default function Tong() {
+  const [sum, setSum] = useState(100);
+  return (
+    &lt;div className="p-8 font-sans"&gt;
+      &lt;p&gt;Tổng: &lt;b id="total"&gt;{sum}&lt;/b&gt;&lt;/p&gt;
+      &lt;button className="mr-2 rounded border px-3" onClick={() =&gt; {
+        document.getElementById('total')!.textContent = '999'; <span class="tok-comment">  // ✗ với tay vào DOM</span>
+      }}&gt;Sửa tay DOM&lt;/button&gt;
+      &lt;button className="rounded border px-3" onClick={() =&gt; setSum(sum + 1)}&gt;+1 (setState)&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+<p>Bấm "Sửa tay DOM" thì màn hình hiện <strong>999</strong> trong khi state vẫn là 100; lần <code>setSum</code> kế tiếp làm React vẽ <strong>101</strong> và số 999 biến mất.</p>
+<h3>🔁 Tự chạy lại</h3>
+<p>Mở một trang React bất kỳ, dán đoạn này vào console của DevTools, bấm vài lần, rồi gõ <code>m</code>:</p>
+<pre><code class="language-javascript">const m = [];
+new MutationObserver((ds) =&gt; ds.forEach((x) =&gt; m.push([x.type, x.target.nodeName, x.oldValue, x.target.textContent])))
+  .observe(document.body, { subtree: true, childList: true, characterData: true, characterDataOldValue: true, attributes: true });
+<span class="tok-comment">// bấm nút vài lần, rồi gõ: m</span></code></pre>
+<h3>🔗 Học sâu hơn ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-4-5-dom-events" target="_blank" rel="noopener"><span class="lc-ico">🧱</span><span class="lc-body"><span class="lc-title">Nền tảng Lập trình Web · 4.5 — DOM và sự kiện</span><span class="lc-sub">Kiểu "ra lệnh cho DOM" mà React thay thế — học từ gốc</span></span></a>
+<a class="link-card lien-ket-cheo" href="/academy/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-3-1-jsx-basics" target="_blank" rel="noopener"><span class="lc-ico">🏫</span><span class="lc-body"><span class="lc-title">Academy · FER202 · 3.1 — JSX cơ bản</span><span class="lc-sub">Góc nhìn môn học ở trường về JSX và element</span></span></a>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Khai báo (declarative)</span><span class="v">Bạn mô tả UI cho dữ liệu hiện tại; React tự tính thay đổi DOM.</span></div>
+  <div class="kv"><span class="k">Mệnh lệnh (imperative)</span><span class="v">Bạn ra lệnh cho DOM từng bước (kiểu jQuery / DOM trần cũ).</span></div>
+  <div class="kv"><span class="k">React element</span><span class="v">Một object thuần mô tả cái cần render — chưa phải node DOM.</span></div>
+  <div class="kv"><span class="k">Cây ảo</span><span class="v">Bức tranh UI trong bộ nhớ của React để so với bản trước đó.</span></div>
+  <div class="kv"><span class="k">Render</span><span class="v">Gọi component của bạn để sinh ra element cho state hiện tại.</span></div>
+  <div class="kv"><span class="k">Component</span><span class="v">Một hàm trả về element mô tả một mảnh UI.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Nhiệm vụ duy nhất của React: với dữ liệu này, sinh ra UI — và tự cập nhật DOM khi dữ liệu đổi.</li><li>Bạn viết code khai báo (mô tả) thay cho lệnh DOM mệnh lệnh (từng bước).</li><li>Component trả về React element — object thuần — rồi React so sánh để đổi DOM tối thiểu.</li><li>Điều này bỏ đi việc tự đồng bộ vốn làm UI trước-React trôi lệch khỏi dữ liệu.</li></ul>
+
 </div>
 `,
     },
@@ -167,6 +298,7 @@ document.body.append(p, button);</code></pre>
       isFreePreview: true,
       description: 'JSX không phải HTML. Nó biên dịch ra lời gọi hàm, và một element React chỉ là một object thuần { type, props }.',
       content: `
+${G01_2}
 <div class="ml-en">
 <span class="eyebrow">Chapter 1 · Lesson 1.2</span>
 <h2>The angle brackets are a lie your build tool tells</h2>
@@ -206,7 +338,7 @@ console.log(JSON.stringify({ type: el.type, props: el.props }));</code></pre>
   <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Children become an argument</b> — Whatever sits between the tags is passed along as &#96;props.children&#96;, which is what makes wrapper components possible.</div></div>
   <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>So a component is just a function</b> — It takes props and returns elements. Everything you know about functions — defaults, destructuring, early returns — applies unchanged.</div></div>
 </div>
-<div class="pitfall"><p><strong>Trap — writing &#96;class&#96; instead of &#96;className&#96;, and getting no error.</strong> React silently ignores an unknown DOM attribute in most cases, so &#96;&lt;div class="card"&gt;&#96; renders a div with no class and no styling — and the console warning is easy to scroll past. The same applies to &#96;for&#96; on a label, which quietly breaks the click-to-focus behaviour that made you write the label in the first place. Both are a consequence of JSX being JavaScript: &#96;class&#96; and &#96;for&#96; are keywords. Turn on the React ESLint plugin and it flags these as you type.</p></div>
+<div class="pitfall"><p><strong>Trap — writing &#96;class&#96; instead of &#96;className&#96;.</strong> Measured on React 19.3.0: it does <em>not</em> fail loudly — React passes &#96;class="card"&#96; and &#96;for="email"&#96; through to the HTML and only prints a dev warning, <em>Invalid DOM property &#96;class&#96;. Did you mean &#96;className&#96;?</em>, which is easy to scroll past (older advice says the class is dropped; not on this version). In a &#96;.tsx&#96; file TypeScript refuses it outright: <em>TS2322 … Property 'class' does not exist … Did you mean 'className'?</em> (output below). Both are a consequence of JSX being JavaScript: &#96;class&#96; and &#96;for&#96; are keywords. Turn on the React ESLint plugin and it flags these as you type.</p></div>
 <a class="link-card dl" href="https://react.dev/learn/writing-markup-with-jsx" target="_blank" rel="noopener">
   <span class="lc-ico">📝</span>
   <span class="lc-body"><span class="lc-title">react.dev — Writing markup with JSX</span><span class="lc-sub">The rules, and the three that catch everyone.</span></span>
@@ -215,6 +347,57 @@ console.log(JSON.stringify({ type: el.type, props: el.props }));</code></pre>
   <span class="lc-ico">🔧</span>
   <span class="lc-body"><span class="lc-title">Babel REPL — see what JSX compiles to</span><span class="lc-sub">Paste a component, watch it become plain function calls. Ten minutes here removes most JSX confusion.</span></span>
 </a>
+
+
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Take a small JSX snippet and paste it into the Babel REPL (or the SWC playground) to see what it compiles to — note the <code>React.createElement</code> / <code>jsx(...)</code> calls.</li>
+<li>Rewrite one JSX element by hand as the equivalent function call, then back to JSX; confirm they are the same thing.</li>
+<li>Explain why JSX can appear anywhere a JavaScript expression can (a variable, an argument, a return value).</li>
+</ol>
+<p><strong>Done when:</strong> you have seen JSX compile to function calls and can convert a small element both ways.</p></div>
+
+<h3>🔬 Measured: run the compiler yourself</h3>
+<p>One line of JSX through the TypeScript compiler (the same rewrite Next.js does with SWC), both runtimes:</p>
+<pre><code class="language-javascript">import ts from 'typescript';
+const src = &#96;const el = &lt;h1 className="title"&gt;Hello&lt;/h1&gt;;&#96;;
+for (const jsx of ['react', 'react-jsx']) {
+  const out = ts.transpileModule(src, { compilerOptions: { jsx: jsx === 'react' ? ts.JsxEmit.React : ts.JsxEmit.ReactJSX, target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext } });
+  console.log(&#96;--- jsx: \${jsx}\\n\${out.outputText.trim()}&#96;);
+}</code></pre><pre><code class="language-bash">$ node jsx-demo.mjs</code></pre><div class="out">--- jsx: react
+const el = React.createElement("h1", { className: "title" }, "Hello");
+--- jsx: react-jsx
+import { jsx as _jsx } from "react/jsx-runtime";
+const el = _jsx("h1", { className: "title", children: "Hello" });</div>
+<p>Capital vs lowercase, rendered for real with react-dom/server — the lowercase one becomes an unknown tag and your component never runs:</p>
+<pre><code class="language-bash">$ node greet.cjs</code></pre><div class="out">&lt;p&gt;Hi, Bình!&lt;/p&gt;
+&lt;greeting name="Bình"&gt;&lt;/greeting&gt;</div>
+<p>class / for on React 19, and the same thing in a .tsx file:</p>
+<pre><code class="language-bash">$ NODE_ENV=development node cls.cjs</code></pre><div class="out">&lt;div class="card"&gt;Thẻ&lt;/div&gt;
+&lt;label for="email"&gt;Email&lt;/label&gt;
+Invalid DOM property &#96;class&#96;. Did you mean &#96;className&#96;?
+Invalid DOM property &#96;for&#96;. Did you mean &#96;htmlFor&#96;?</div><pre><code class="language-bash">$ npx tsc --noEmit</code></pre><div class="out">src/app/cls/page.tsx(2,15): error TS2322: Type '{ children: string; class: string; }' is not assignable to type 'DetailedHTMLProps&lt;HTMLAttributes&lt;HTMLDivElement&gt;, HTMLDivElement&gt;'.
+  Property 'class' does not exist on type 'DetailedHTMLProps&lt;HTMLAttributes&lt;HTMLDivElement&gt;, HTMLDivElement&gt;'. Did you mean 'className'?</div>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-bash">node jsx-demo.mjs      <span class="tok-comment">  # needs typescript installed (any Next.js app has it)</span>
+node greet.cjs
+NODE_ENV=development node cls.cjs</code></pre>
+<h3>🔗 Go deeper in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-0-2-jsx" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 0.2 — JSX, explained</span><span class="lc-sub">What JSX becomes and what appears on screen — the same topic, deeper</span></span></a>
+<a class="link-card lien-ket-cheo" href="/academy/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-3-1-jsx-basics" target="_blank" rel="noopener"><span class="lc-ico">🏫</span><span class="lc-body"><span class="lc-title">Academy · FER202 · 3.1 — JSX basics</span><span class="lc-sub">The university-course view</span></span></a>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">JSX</span><span class="v">HTML-like syntax that compiles to JavaScript function calls.</span></div>
+  <div class="kv"><span class="k">React.createElement</span><span class="v">The call JSX compiles to (classic runtime); builds an element object.</span></div>
+  <div class="kv"><span class="k">Transpiler</span><span class="v">A tool (Babel/SWC) that turns JSX into plain JavaScript before it runs.</span></div>
+  <div class="kv"><span class="k">Expression</span><span class="v">A piece of code that produces a value; JSX is one, so it goes anywhere a value can.</span></div>
+  <div class="kv"><span class="k">Element object</span><span class="v">The <code>{ type, props, children }</code> object a JSX tag becomes.</span></div>
+  <div class="kv"><span class="k">Fragment</span><span class="v"><code>&lt;&gt;...&lt;/&gt;</code> — group elements without adding a DOM node.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>JSX is not HTML and not magic — it compiles to plain JavaScript (<code>React.createElement</code> / <code>jsx()</code> calls).</li><li>Because the result is an expression, JSX can be stored in a variable, passed as an argument, or returned.</li><li>A JSX tag becomes a <code>{ type, props, children }</code> object, not a DOM node — React turns that into DOM later.</li><li>Seeing the compiled output removes the mystery and explains most JSX rules.</li></ul>
 
 </div>
 
@@ -257,7 +440,7 @@ console.log(JSON.stringify({ type: el.type, props: el.props }));</code></pre>
   <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Phần con thành một đối số</b> — Bất cứ thứ gì nằm giữa hai thẻ đều được truyền tiếp dưới dạng &#96;props.children&#96;, và chính điều đó cho phép có component bọc.</div></div>
   <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Nên một component chỉ là một hàm</b> — Nó nhận props và trả về element. Mọi thứ bạn biết về hàm — giá trị mặc định, phép rã, trả về sớm — đều áp dụng nguyên vẹn.</div></div>
 </div>
-<div class="pitfall"><p><strong>Bẫy — viết &#96;class&#96; thay vì &#96;className&#96;, và chẳng nhận được lỗi nào.</strong> React lặng lẽ bỏ qua một thuộc tính DOM lạ trong phần lớn trường hợp, nên &#96;&lt;div class="card"&gt;&#96; vẽ ra một div không có class và không được tô — còn cảnh báo trong console thì rất dễ lướt qua. Chuyện tương tự với &#96;for&#96; trên một label, nó âm thầm làm hỏng hành vi bấm-để-focus, đúng cái lý do bạn viết label ra. Cả hai đều là hệ quả của việc JSX là JavaScript: &#96;class&#96; và &#96;for&#96; là từ khoá. Hãy bật plugin ESLint của React và nó báo ngay lúc bạn gõ.</p></div>
+<div class="pitfall"><p><strong>Bẫy — viết &#96;class&#96; thay vì &#96;className&#96;.</strong> Đo trên React 19.3.0: nó <em>không</em> hỏng ầm ĩ — React vẫn đưa &#96;class="card"&#96; và &#96;for="email"&#96; ra HTML và chỉ in một cảnh báo lúc dev, <em>Invalid DOM property &#96;class&#96;. Did you mean &#96;className&#96;?</em>, rất dễ lướt qua (lời khuyên cũ nói class bị bỏ đi; với bản này thì không). Trong tệp &#96;.tsx&#96;, TypeScript từ chối luôn: <em>TS2322 … Property 'class' does not exist … Did you mean 'className'?</em> (output bên dưới). Cả hai đều là hệ quả của việc JSX là JavaScript: &#96;class&#96; và &#96;for&#96; là từ khoá. Hãy bật plugin ESLint của React và nó báo ngay lúc bạn gõ.</p></div>
 <a class="link-card dl" href="https://react.dev/learn/writing-markup-with-jsx" target="_blank" rel="noopener">
   <span class="lc-ico">📝</span>
   <span class="lc-body"><span class="lc-title">react.dev — Viết markup bằng JSX</span><span class="lc-sub">Các luật, và ba luật bắt hụt chân tất cả mọi người.</span></span>
@@ -266,6 +449,57 @@ console.log(JSON.stringify({ type: el.type, props: el.props }));</code></pre>
   <span class="lc-ico">🔧</span>
   <span class="lc-body"><span class="lc-title">Babel REPL — xem JSX biên dịch ra gì</span><span class="lc-sub">Dán một component vào, xem nó thành các lời gọi hàm thuần. Mười phút ở đây gỡ được phần lớn nhầm lẫn về JSX.</span></span>
 </a>
+
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Lấy một đoạn JSX nhỏ và dán vào Babel REPL (hoặc sân chơi SWC) để xem nó biên dịch thành gì — để ý các lời gọi <code>React.createElement</code> / <code>jsx(...)</code>.</li>
+<li>Viết tay một element JSX thành lời gọi hàm tương đương, rồi đổi ngược lại; xác nhận chúng là một.</li>
+<li>Giải thích vì sao JSX xuất hiện được ở bất cứ đâu một biểu thức JavaScript xuất hiện được (biến, tham số, giá trị trả về).</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đã thấy JSX biên dịch thành lời gọi hàm và chuyển qua lại được một element nhỏ.</p></div>
+
+<h3>🔬 Đo thật: tự chạy trình biên dịch</h3>
+<p>Một dòng JSX qua trình biên dịch TypeScript (cùng phép viết lại Next.js làm bằng SWC), cả hai runtime:</p>
+<pre><code class="language-javascript">import ts from 'typescript';
+const src = &#96;const el = &lt;h1 className="title"&gt;Hello&lt;/h1&gt;;&#96;;
+for (const jsx of ['react', 'react-jsx']) {
+  const out = ts.transpileModule(src, { compilerOptions: { jsx: jsx === 'react' ? ts.JsxEmit.React : ts.JsxEmit.ReactJSX, target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext } });
+  console.log(&#96;--- jsx: \${jsx}\\n\${out.outputText.trim()}&#96;);
+}</code></pre><pre><code class="language-bash">$ node jsx-demo.mjs</code></pre><div class="out">--- jsx: react
+const el = React.createElement("h1", { className: "title" }, "Hello");
+--- jsx: react-jsx
+import { jsx as _jsx } from "react/jsx-runtime";
+const el = _jsx("h1", { className: "title", children: "Hello" });</div>
+<p>Chữ hoa và chữ thường, render thật bằng react-dom/server — bản viết thường thành một thẻ lạ và component của bạn không hề chạy:</p>
+<pre><code class="language-bash">$ node greet.cjs</code></pre><div class="out">&lt;p&gt;Hi, Bình!&lt;/p&gt;
+&lt;greeting name="Bình"&gt;&lt;/greeting&gt;</div>
+<p>class / for trên React 19, và cùng điều đó trong tệp .tsx:</p>
+<pre><code class="language-bash">$ NODE_ENV=development node cls.cjs</code></pre><div class="out">&lt;div class="card"&gt;Thẻ&lt;/div&gt;
+&lt;label for="email"&gt;Email&lt;/label&gt;
+Invalid DOM property &#96;class&#96;. Did you mean &#96;className&#96;?
+Invalid DOM property &#96;for&#96;. Did you mean &#96;htmlFor&#96;?</div><pre><code class="language-bash">$ npx tsc --noEmit</code></pre><div class="out">src/app/cls/page.tsx(2,15): error TS2322: Type '{ children: string; class: string; }' is not assignable to type 'DetailedHTMLProps&lt;HTMLAttributes&lt;HTMLDivElement&gt;, HTMLDivElement&gt;'.
+  Property 'class' does not exist on type 'DetailedHTMLProps&lt;HTMLAttributes&lt;HTMLDivElement&gt;, HTMLDivElement&gt;'. Did you mean 'className'?</div>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-bash">node jsx-demo.mjs      <span class="tok-comment">  # cần typescript (dự án Next.js nào cũng có)</span>
+node greet.cjs
+NODE_ENV=development node cls.cjs</code></pre>
+<h3>🔗 Học sâu hơn ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-0-2-jsx" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 0.2 — JSX, giải thích cho rõ</span><span class="lc-sub">JSX thành gì và cái gì hiện lên màn hình — cùng chủ đề, đi sâu hơn</span></span></a>
+<a class="link-card lien-ket-cheo" href="/academy/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-3-1-jsx-basics" target="_blank" rel="noopener"><span class="lc-ico">🏫</span><span class="lc-body"><span class="lc-title">Academy · FER202 · 3.1 — JSX cơ bản</span><span class="lc-sub">Góc nhìn môn học ở trường</span></span></a>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">JSX</span><span class="v">Cú pháp giống HTML, biên dịch thành lời gọi hàm JavaScript.</span></div>
+  <div class="kv"><span class="k">React.createElement</span><span class="v">Lời gọi mà JSX biên dịch ra (runtime cổ điển); dựng object element.</span></div>
+  <div class="kv"><span class="k">Transpiler</span><span class="v">Công cụ (Babel/SWC) biến JSX thành JavaScript thuần trước khi chạy.</span></div>
+  <div class="kv"><span class="k">Biểu thức</span><span class="v">Đoạn code sinh ra một giá trị; JSX là một biểu thức nên đặt được ở bất cứ đâu.</span></div>
+  <div class="kv"><span class="k">Object element</span><span class="v">Object <code>{ type, props, children }</code> mà một thẻ JSX trở thành.</span></div>
+  <div class="kv"><span class="k">Fragment</span><span class="v"><code>&lt;&gt;...&lt;/&gt;</code> — gom element mà không thêm node DOM.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>JSX không phải HTML và không phải phép thuật — nó biên dịch thành JavaScript thuần (lời gọi <code>React.createElement</code> / <code>jsx()</code>).</li><li>Vì kết quả là một biểu thức, JSX lưu được vào biến, truyền làm tham số, hoặc trả về.</li><li>Một thẻ JSX thành object <code>{ type, props, children }</code>, không phải node DOM — React dựng DOM sau.</li><li>Nhìn bản biên dịch gỡ bỏ sự huyền bí và giải thích hầu hết luật JSX.</li></ul>
 
 </div>
 `,
@@ -334,6 +568,28 @@ console.log(JSON.stringify({ type: el.type, props: el.props }));</code></pre>
   <span class="lc-body"><span class="lc-title">react.dev — Conditional rendering</span><span class="lc-sub">Ternary, &amp;&amp;, and early return — with the falsy-value trap called out.</span></span>
 </a>
 
+
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Render a variable, a math expression, and a function call inside JSX using <code>{ }</code>; confirm each prints its value.</li>
+<li>Try putting a statement (an <code>if</code>, a <code>for</code>) inside the braces and read the error — then rewrite it as an expression (ternary, <code>.map</code>).</li>
+<li>Pass a value into an attribute with braces (<code>src={url}</code>) and note the difference from a string attribute.</li>
+</ol>
+<p><strong>Done when:</strong> you can embed any expression in JSX and know why statements are not allowed inside the braces.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Curly braces { }</span><span class="v">An escape hatch to put a JavaScript expression inside JSX.</span></div>
+  <div class="kv"><span class="k">Expression vs statement</span><span class="v">Braces take expressions (produce a value), not statements (<code>if</code>, <code>for</code>).</span></div>
+  <div class="kv"><span class="k">Interpolation</span><span class="v">Dropping a computed value into the markup.</span></div>
+  <div class="kv"><span class="k">Attribute value</span><span class="v"><code>attr={expr}</code> passes a real value; quotes pass a literal string.</span></div>
+  <div class="kv"><span class="k">Falsy render</span><span class="v"><code>false</code>, <code>null</code>, <code>undefined</code> render nothing; <code>0</code> and <code>&quot;&quot;</code> can surprise you.</span></div>
+  <div class="kv"><span class="k">Children expression</span><span class="v">Text and <code>{expr}</code> between tags become the element's children.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Curly braces <code>{ }</code> embed any JavaScript expression into JSX — values, math, function calls.</li><li>Braces take expressions, not statements: no <code>if</code> or <code>for</code> inside — use a ternary or <code>.map</code>.</li><li><code>attr={expr}</code> passes a real value; <code>attr=&quot;x&quot;</code> passes a literal string.</li><li>Falsy values render nothing, but <code>0</code> and empty strings can leak onto the screen — guard them.</li></ul>
+
 </div>
 
 <div class="ml-vi">
@@ -390,6 +646,28 @@ console.log(JSON.stringify({ type: el.type, props: el.props }));</code></pre>
   <span class="lc-ico">🔀</span>
   <span class="lc-body"><span class="lc-title">react.dev — Vẽ có điều kiện</span><span class="lc-sub">Ba ngôi, &amp;&amp;, và trả về sớm — có nêu rõ cái bẫy giá trị falsy.</span></span>
 </a>
+
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Render một biến, một biểu thức toán, và một lời gọi hàm trong JSX bằng <code>{ }</code>; xác nhận mỗi cái in ra giá trị.</li>
+<li>Thử đặt một câu lệnh (<code>if</code>, <code>for</code>) trong ngoặc và đọc lỗi — rồi viết lại thành biểu thức (ternary, <code>.map</code>).</li>
+<li>Truyền giá trị vào thuộc tính bằng ngoặc nhọn (<code>src={url}</code>) và để ý khác với thuộc tính dạng chuỗi.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn nhúng được biểu thức bất kỳ vào JSX và biết vì sao câu lệnh không được phép trong ngoặc.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Ngoặc nhọn { }</span><span class="v">Cửa thoát để đặt một biểu thức JavaScript vào trong JSX.</span></div>
+  <div class="kv"><span class="k">Biểu thức vs câu lệnh</span><span class="v">Ngoặc nhận biểu thức (sinh giá trị), không nhận câu lệnh (<code>if</code>, <code>for</code>).</span></div>
+  <div class="kv"><span class="k">Nội suy</span><span class="v">Thả một giá trị đã tính vào markup.</span></div>
+  <div class="kv"><span class="k">Giá trị thuộc tính</span><span class="v"><code>attr={expr}</code> truyền giá trị thật; dấu nháy truyền chuỗi literal.</span></div>
+  <div class="kv"><span class="k">Render falsy</span><span class="v"><code>false</code>, <code>null</code>, <code>undefined</code> render ra rỗng; <code>0</code> và <code>&quot;&quot;</code> dễ gây bất ngờ.</span></div>
+  <div class="kv"><span class="k">Biểu thức con</span><span class="v">Chữ và <code>{expr}</code> giữa các thẻ trở thành children của element.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Ngoặc nhọn <code>{ }</code> nhúng biểu thức JavaScript bất kỳ vào JSX — giá trị, phép toán, lời gọi hàm.</li><li>Ngoặc nhận biểu thức, không nhận câu lệnh: không <code>if</code> hay <code>for</code> bên trong — dùng ternary hoặc <code>.map</code>.</li><li><code>attr={expr}</code> truyền giá trị thật; <code>attr=&quot;x&quot;</code> truyền chuỗi literal.</li><li>Giá trị falsy render ra rỗng, nhưng <code>0</code> và chuỗi rỗng có thể lọt lên màn hình — hãy chặn.</li></ul>
 
 </div>
 `,
@@ -465,6 +743,28 @@ console.log(JSON.stringify({ type: el.type, props: el.props }));</code></pre>
   <span class="lc-body"><span class="lc-title">react.dev — Preserving and resetting state</span><span class="lc-sub">What a key actually controls: whether React keeps a component's state or throws it away.</span></span>
 </a>
 
+
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Render an array of items with <code>.map()</code>, giving each a stable <code>key</code> (not the array index); watch the console warning disappear.</li>
+<li>Show one of three states with a ternary, and show-or-hide a badge with <code>&&</code>; then break it by using <code>count && ...</code> where count can be <code>0</code> and see the stray <code>0</code>.</li>
+<li>Combine both: map a list and conditionally render a &quot;no items&quot; message when it is empty.</li>
+</ol>
+<p><strong>Done when:</strong> you can render a list with proper keys and handle conditions with ternary and <code>&&</code> without the <code>0</code> trap.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">.map()</span><span class="v">Turn an array of data into an array of elements to render.</span></div>
+  <div class="kv"><span class="k">key</span><span class="v">A stable identity per list item so React tracks it across renders.</span></div>
+  <div class="kv"><span class="k">Ternary</span><span class="v"><code>cond ? a : b</code> — the expression way to choose between two outputs.</span></div>
+  <div class="kv"><span class="k">Logical &&</span><span class="v"><code>cond && element</code> — render the element only when cond is truthy.</span></div>
+  <div class="kv"><span class="k">The 0 trap</span><span class="v"><code>0 && ...</code> renders <code>0</code>; coerce to boolean (<code>count &gt; 0 && ...</code>).</span></div>
+  <div class="kv"><span class="k">Empty state</span><span class="v">The branch you render when a list has no items.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Render lists with <code>.map()</code> and give each item a stable <code>key</code> — never the array index when the list can change.</li><li>Choose between outputs with a ternary; show-or-nothing with <code>&&</code>.</li><li>Watch the <code>&&</code> trap: a left side of <code>0</code> renders a stray <code>0</code> — coerce to boolean.</li><li>Always handle the empty-list state explicitly.</li></ul>
+
 </div>
 
 <div class="ml-vi">
@@ -528,6 +828,28 @@ console.log(JSON.stringify({ type: el.type, props: el.props }));</code></pre>
   <span class="lc-ico">🔑</span>
   <span class="lc-body"><span class="lc-title">react.dev — Giữ và đặt lại state</span><span class="lc-sub">Key thật ra điều khiển cái gì: React giữ state của một component hay vứt nó đi.</span></span>
 </a>
+
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Render một mảng item bằng <code>.map()</code>, cho mỗi cái một <code>key</code> ổn định (không phải chỉ số mảng); xem cảnh báo console biến mất.</li>
+<li>Hiện một trong ba trạng thái bằng ternary, và hiện/ẩn một badge bằng <code>&&</code>; rồi phá nó bằng <code>count && ...</code> khi count có thể là <code>0</code> và thấy số <code>0</code> lạc lên màn hình.</li>
+<li>Ghép cả hai: map một danh sách và render có điều kiện thông báo &quot;không có item&quot; khi rỗng.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn render được danh sách với key đúng và xử lý điều kiện bằng ternary và <code>&&</code> mà không dính bẫy số <code>0</code>.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">.map()</span><span class="v">Biến mảng dữ liệu thành mảng element để render.</span></div>
+  <div class="kv"><span class="k">key</span><span class="v">Một danh tính ổn định cho mỗi item để React theo dõi qua các lần render.</span></div>
+  <div class="kv"><span class="k">Ternary</span><span class="v"><code>cond ? a : b</code> — cách biểu thức để chọn giữa hai kết quả.</span></div>
+  <div class="kv"><span class="k">Logical &&</span><span class="v"><code>cond && element</code> — chỉ render element khi cond truthy.</span></div>
+  <div class="kv"><span class="k">Bẫy số 0</span><span class="v"><code>0 && ...</code> render ra <code>0</code>; ép sang boolean (<code>count &gt; 0 && ...</code>).</span></div>
+  <div class="kv"><span class="k">Trạng thái rỗng</span><span class="v">Nhánh bạn render khi danh sách không có item.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Render danh sách bằng <code>.map()</code> và cho mỗi item một <code>key</code> ổn định — đừng dùng chỉ số mảng khi danh sách có thể đổi.</li><li>Chọn giữa các kết quả bằng ternary; hiện-hoặc-không bằng <code>&&</code>.</li><li>Coi chừng bẫy <code>&&</code>: vế trái là <code>0</code> sẽ render ra số <code>0</code> lạc — hãy ép sang boolean.</li><li>Luôn xử lý rõ trạng thái danh sách rỗng.</li></ul>
 
 </div>
 `,
@@ -602,6 +924,28 @@ return &lt;Header title="Feed" action={badge} /&gt;;</code></pre>
   <span class="lc-body"><span class="lc-title">transform.tools — HTML to JSX</span><span class="lc-sub">Paste HTML from anywhere and get valid JSX back, with the attribute renames applied.</span></span>
 </a>
 
+
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Return two sibling elements without a wrapper and read the error; fix it with a <code>&lt;div&gt;</code> and then with a Fragment <code>&lt;&gt;...&lt;/&gt;</code>.</li>
+<li>Rename HTML attributes to their JSX form: <code>class</code> → <code>className</code>, <code>for</code> → <code>htmlFor</code>, <code>onclick</code> → <code>onClick</code>, and self-close an <code>&lt;img /&gt;</code>.</li>
+<li>Write one component that violates three JSX rules on purpose, then fix each and note which error message pointed at which rule.</li>
+</ol>
+<p><strong>Done when:</strong> you can state the core JSX rules and fix each from its error message.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Single root</span><span class="v">A component must return one root element (use a Fragment to avoid an extra div).</span></div>
+  <div class="kv"><span class="k">className</span><span class="v">JSX uses <code>className</code>, not <code>class</code> (a reserved word in JS).</span></div>
+  <div class="kv"><span class="k">htmlFor</span><span class="v">JSX uses <code>htmlFor</code> instead of the HTML <code>for</code> attribute.</span></div>
+  <div class="kv"><span class="k">camelCase events</span><span class="v"><code>onClick</code>, <code>onChange</code> — event props are camelCased.</span></div>
+  <div class="kv"><span class="k">Self-closing</span><span class="v">Void tags must close: <code>&lt;img /&gt;</code>, <code>&lt;br /&gt;</code>.</span></div>
+  <div class="kv"><span class="k">Mental model</span><span class="v">JSX is JS, so attributes map to object props — HTML names change to valid JS names.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>A component returns a single root — wrap siblings in a Fragment to avoid an extra DOM node.</li><li>HTML names become JS-safe: <code>class</code> → <code>className</code>, <code>for</code> → <code>htmlFor</code>, events are camelCased.</li><li>Void elements self-close (<code>&lt;img /&gt;</code>).</li><li>The rules all follow from one fact: JSX is JavaScript, and attributes are object properties.</li></ul>
+
 </div>
 
 <div class="ml-vi">
@@ -664,6 +1008,28 @@ return &lt;Header title="Feed" action={badge} /&gt;;</code></pre>
   <span class="lc-ico">🔄</span>
   <span class="lc-body"><span class="lc-title">transform.tools — HTML sang JSX</span><span class="lc-sub">Dán HTML từ bất cứ đâu và nhận lại JSX hợp lệ, đã đổi sẵn tên thuộc tính.</span></span>
 </a>
+
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Trả về hai element anh em không có vỏ bọc và đọc lỗi; sửa bằng một <code>&lt;div&gt;</code> rồi bằng Fragment <code>&lt;&gt;...&lt;/&gt;</code>.</li>
+<li>Đổi tên thuộc tính HTML sang dạng JSX: <code>class</code> → <code>className</code>, <code>for</code> → <code>htmlFor</code>, <code>onclick</code> → <code>onClick</code>, và tự đóng một <code>&lt;img /&gt;</code>.</li>
+<li>Viết một component cố tình vi phạm ba luật JSX, rồi sửa từng cái và ghi lại lỗi nào chỉ vào luật nào.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn nói được các luật JSX cốt lõi và sửa từng cái dựa trên thông báo lỗi.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Một gốc duy nhất</span><span class="v">Component phải trả về một element gốc (dùng Fragment để khỏi thêm div thừa).</span></div>
+  <div class="kv"><span class="k">className</span><span class="v">JSX dùng <code>className</code>, không phải <code>class</code> (từ khoá trong JS).</span></div>
+  <div class="kv"><span class="k">htmlFor</span><span class="v">JSX dùng <code>htmlFor</code> thay cho thuộc tính HTML <code>for</code>.</span></div>
+  <div class="kv"><span class="k">Sự kiện camelCase</span><span class="v"><code>onClick</code>, <code>onChange</code> — prop sự kiện viết camelCase.</span></div>
+  <div class="kv"><span class="k">Tự đóng thẻ</span><span class="v">Thẻ rỗng phải đóng: <code>&lt;img /&gt;</code>, <code>&lt;br /&gt;</code>.</span></div>
+  <div class="kv"><span class="k">Mô hình tư duy</span><span class="v">JSX là JS, nên thuộc tính ánh xạ sang prop của object — tên HTML đổi thành tên JS hợp lệ.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Component trả về một gốc duy nhất — bọc các anh em trong Fragment để khỏi thêm node DOM thừa.</li><li>Tên HTML đổi thành tên JS hợp lệ: <code>class</code> → <code>className</code>, <code>for</code> → <code>htmlFor</code>, sự kiện viết camelCase.</li><li>Thẻ rỗng tự đóng (<code>&lt;img /&gt;</code>).</li><li>Mọi luật đều ra từ một sự thật: JSX là JavaScript, và thuộc tính là property của object.</li></ul>
 
 </div>
 `,

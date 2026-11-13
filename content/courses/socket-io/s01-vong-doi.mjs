@@ -1,3 +1,4 @@
+import G01_1 from './giang/sio-01-1.mjs';
 const REF = '?ref=%2Fcourses%2Fsocket-io%2Flearn&reflabel=Socket.IO';
 /**
  * Socket.IO — Chương 1: Vòng đời một connection.
@@ -18,6 +19,7 @@ export default {
       type: 'VIDEO',
       description: 'Đo bằng probe thật: server thấy connection ở 26ms, client thấy connect ở 35ms, upgrade sang WebSocket ở cùng 35ms. Ba event đó do ai phát ra và có gì bảo đảm về thứ tự.',
       content: `
+${G01_1}
 <div class="ml-en">
 <span class="eyebrow">Chapter 1 · Lesson 1.1</span>
 <h2>Connect: five events in nine milliseconds</h2>
@@ -120,6 +122,73 @@ io.on('connection', async (socket) =&gt; {
 <div class="callout">
 <p><strong>One sentence.</strong> The &quot;connect&quot; lifecycle is three events inside ~9ms — server <code>connection</code> (transport is polling, middleware has passed, no rooms joined), client <code>connect</code> (sid received), server <code>upgrade</code> (switched to WebSocket) — and the standard shape of the <code>connection</code> handler is join rooms → update presence → register handlers → attach disconnect, in exactly that order, with no <code>await</code> between the registration steps.</p>
 </div>
+
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Log a timestamp at server <code>connection</code>, client <code>connect</code>, and server <code>upgrade</code>; measure the ~9ms window between them.</li>
+<li>Inside the <code>connection</code> handler, print <code>socket.conn.transport.name</code> (it is <code>polling</code>) and <code>socket.rooms</code> (only the socket's own id) to confirm what you may assume there.</li>
+<li>Write the handler in the canonical order — join rooms, update presence, register handlers, attach <code>disconnect</code> — then add an <code>await</code> between two registrations and reason about the event that could now slip through.</li>
+</ol>
+<p><strong>Done when:</strong> you have measured the three-event window and can state why no <code>await</code> sits between the registration steps.</p></div>
+
+<h3>🔬 Measured: five events, and an order that is not fixed</h3>
+<p>socket.io 4.8.3, Node 22, milliseconds from the call to <code>io()</code> — engine open, middleware, connection, client upgrade/connect:</p>
+<div class="out"> 12 client: gọi io()  c.id = undefined  connected = false
+ 28 client: engine open (tầng 2)
+ 35 server: middleware io.use        transport=polling
+ 36 server: connection   id=weYKClRjO8LngmXyAAAA  transport=polling  rooms=["weYKClRjO8LngmXyAAAA"]
+ 39 client: upgrade → websocket
+ 40 client: connect      id=weYKClRjO8LngmXyAAAA  transport=websocket
+ 40 client: nhận init — gửi ngay trong handler connection
+ 40 server: upgrade → websocket</div>
+<p>Five events from engine open to client connect in about 12 ms on the course machine. The client received <code>init</code> (emitted inside the connection handler) together with <code>connect</code>. <code>c.id</code> is <code>undefined</code> until then.</p>
+<p>The same probe five times, printing only the client's transport at <code>connect</code>:</p>
+<div class="out"> 34 client: connect      id=oetr6F_YHqIFctyiAAAA  transport=websocket
+ 36 client: connect      id=5KpZ0KyCkQweasgzAAAA  transport=websocket
+ 34 client: connect      id=DtoEYg6tFHp0aGD2AAAA  transport=websocket
+ 68 client: connect      id=tDb0JZsiPKNOL3w1AAAA  transport=polling
+ 39 client: connect      id=bwiUW8oIHsp_d5iGAAAA  transport=websocket</div>
+<p>Websocket 4 times, polling once: client <code>connect</code> and the upgrade race each other. On the server, <code>connection</code> always fires on polling.</p>
+<p><strong>The race, measured</strong> — the client emits <code>thread:join</code> at <code>connect</code>:</p>
+<div class="out">$ node race.mjs
+SAI  (await rồi mới on):
+ĐÚNG (on trước, await bên trong):
+   server nhận thread:join { id: 7 }
+(dòng nào không có "server nhận" là event đã RƠI MẤT — không lỗi, không log)</div>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-javascript"><span class="tok-comment">// BẪY: handler connection await 50 ms rồi mới đăng ký on('thread:join'); client emit NGAY khi connect</span>
+import { Server } from 'socket.io';
+import { io as ketNoi } from 'socket.io-client';
+const cho = (ms) =&gt; new Promise((r) =&gt; setTimeout(r, ms));
+for (const [ten, cong, handler] of [
+  ['SAI  (await rồi mới on)', 19441, async (s) =&gt; { await cho(50); s.on('thread:join', (d) =&gt; console.log('   server nhận thread:join', d)); }],
+  ['ĐÚNG (on trước, await bên trong)', 19442, (s) =&gt; { s.on('thread:join', async (d) =&gt; { await cho(50); console.log('   server nhận thread:join', d); }); }],
+]) {
+  const io = new Server(cong); io.on('connection', handler);
+  const c = ketNoi('http://localhost:' + cong);
+  c.on('connect', () =&gt; c.emit('thread:join', { id: 7 }));
+  console.log(ten + ':');
+  await cho(400);
+  c.close(); io.close();
+}
+console.log('(dòng nào không có "server nhận" là event đã RƠI MẤT — không lỗi, không log)');
+process.exit(0);</code></pre>
+<h3>🔗 Go deeper in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-3-4-eventemitter" target="_blank" rel="noopener"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Node.js · 3.4 — EventEmitter</span><span class="lc-sub">Why an event with no listener is simply not delivered</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/socket-io/learn?lessonSlug=io-1-4-auth" target="_blank" rel="noopener"><span class="lc-ico">⚡</span><span class="lc-body"><span class="lc-title">Socket.IO · 1.4 — Authentication: middleware runs before connection</span><span class="lc-sub">What io.use() can reject before connection ever fires</span></span></a>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>connection</code> event</span><span class="v">Server-side, fires once per socket after middleware passes.</span></div>
+  <div class="kv"><span class="k"><code>connect</code> event</span><span class="v">Client-side, fires when the sid has been received.</span></div>
+  <div class="kv"><span class="k"><code>upgrade</code> event</span><span class="v">The transport switched from polling to WebSocket.</span></div>
+  <div class="kv"><span class="k"><code>socket.rooms</code></span><span class="v">The set of rooms a socket is in; at connect, only its own id.</span></div>
+  <div class="kv"><span class="k">Registration order</span><span class="v">join rooms → presence → handlers → disconnect, in that order.</span></div>
+  <div class="kv"><span class="k">Synchronous body</span><span class="v">No <code>await</code> between registrations, so no early event is missed.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>&quot;Connect&quot; is three events in ~9ms: server <code>connection</code>, client <code>connect</code>, server <code>upgrade</code>.</li><li>At <code>connection</code> time the transport is polling, middleware has passed, and only the socket's own room is joined.</li><li>The canonical handler order is join rooms → update presence → register handlers → attach <code>disconnect</code>.</li><li>Keep the registration steps synchronous — an <code>await</code> between them can drop an event that arrives first.</li><li>Do not assume WebSocket yet; the upgrade lands a few ms later.</li></ul>
 
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Server API</span><span class="lc-sub">socket.io/docs/v4/server-api — <code>io.on(&#39;connection&#39;)</code>, <code>socket.data</code>, <code>socket.join</code>. Tra khi cần.</span></span></div>
@@ -229,6 +298,73 @@ io.on('connection', async (socket) =&gt; {
 <div class="callout">
 <p><strong>Một câu.</strong> Vòng đời &quot;connect&quot; là ba event trong ~9ms — server <code>connection</code> (transport là polling, middleware đã pass, chưa join room), client <code>connect</code> (nhận sid), server <code>upgrade</code> (chuyển sang WebSocket) — và pattern chuẩn của handler <code>connection</code> là join room → cập nhật presence → đăng ký handler → gắn disconnect, theo đúng thứ tự đó, không có <code>await</code> giữa các bước đăng ký.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Log một mốc thời gian ở server <code>connection</code>, client <code>connect</code>, và server <code>upgrade</code>; đo cửa sổ ~9ms giữa chúng.</li>
+<li>Trong handler <code>connection</code>, in <code>socket.conn.transport.name</code> (là <code>polling</code>) và <code>socket.rooms</code> (chỉ có id của chính socket) để xác nhận cái bạn được phép giả định ở đó.</li>
+<li>Viết handler theo đúng thứ tự chuẩn — join room, cập nhật presence, đăng ký handler, gắn <code>disconnect</code> — rồi chèn một <code>await</code> giữa hai bước đăng ký và lập luận về event giờ có thể lọt qua.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đã đo được cửa sổ ba event và nói được vì sao không có <code>await</code> giữa các bước đăng ký.</p></div>
+
+<h3>🔬 Đo thật: năm event, và một thứ tự không cố định</h3>
+<p>socket.io 4.8.3, Node 22, mili giây tính từ lúc gọi <code>io()</code> — engine open, middleware, connection, client upgrade/connect:</p>
+<div class="out"> 12 client: gọi io()  c.id = undefined  connected = false
+ 28 client: engine open (tầng 2)
+ 35 server: middleware io.use        transport=polling
+ 36 server: connection   id=weYKClRjO8LngmXyAAAA  transport=polling  rooms=["weYKClRjO8LngmXyAAAA"]
+ 39 client: upgrade → websocket
+ 40 client: connect      id=weYKClRjO8LngmXyAAAA  transport=websocket
+ 40 client: nhận init — gửi ngay trong handler connection
+ 40 server: upgrade → websocket</div>
+<p>Năm event từ engine open tới client connect trong khoảng 12 ms trên máy của khoá. Client nhận <code>init</code> (emit ngay trong handler connection) cùng lúc với <code>connect</code>. Trước đó <code>c.id</code> là <code>undefined</code>.</p>
+<p>Cùng probe chạy năm lần, chỉ in transport của client lúc <code>connect</code>:</p>
+<div class="out"> 34 client: connect      id=oetr6F_YHqIFctyiAAAA  transport=websocket
+ 36 client: connect      id=5KpZ0KyCkQweasgzAAAA  transport=websocket
+ 34 client: connect      id=DtoEYg6tFHp0aGD2AAAA  transport=websocket
+ 68 client: connect      id=tDb0JZsiPKNOL3w1AAAA  transport=polling
+ 39 client: connect      id=bwiUW8oIHsp_d5iGAAAA  transport=websocket</div>
+<p>Websocket 4 lần, polling 1 lần: <code>connect</code> ở client và cú upgrade đua nhau. Ở server, <code>connection</code> luôn chạy khi còn polling.</p>
+<p><strong>Race, đo thật</strong> — client emit <code>thread:join</code> ngay lúc <code>connect</code>:</p>
+<div class="out">$ node race.mjs
+SAI  (await rồi mới on):
+ĐÚNG (on trước, await bên trong):
+   server nhận thread:join { id: 7 }
+(dòng nào không có "server nhận" là event đã RƠI MẤT — không lỗi, không log)</div>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-javascript"><span class="tok-comment">// BẪY: handler connection await 50 ms rồi mới đăng ký on('thread:join'); client emit NGAY khi connect</span>
+import { Server } from 'socket.io';
+import { io as ketNoi } from 'socket.io-client';
+const cho = (ms) =&gt; new Promise((r) =&gt; setTimeout(r, ms));
+for (const [ten, cong, handler] of [
+  ['SAI  (await rồi mới on)', 19441, async (s) =&gt; { await cho(50); s.on('thread:join', (d) =&gt; console.log('   server nhận thread:join', d)); }],
+  ['ĐÚNG (on trước, await bên trong)', 19442, (s) =&gt; { s.on('thread:join', async (d) =&gt; { await cho(50); console.log('   server nhận thread:join', d); }); }],
+]) {
+  const io = new Server(cong); io.on('connection', handler);
+  const c = ketNoi('http://localhost:' + cong);
+  c.on('connect', () =&gt; c.emit('thread:join', { id: 7 }));
+  console.log(ten + ':');
+  await cho(400);
+  c.close(); io.close();
+}
+console.log('(dòng nào không có "server nhận" là event đã RƠI MẤT — không lỗi, không log)');
+process.exit(0);</code></pre>
+<h3>🔗 Học sâu hơn ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-3-4-eventemitter" target="_blank" rel="noopener"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Node.js · 3.4 — EventEmitter</span><span class="lc-sub">Vì sao event không có ai nghe thì không được giao</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/socket-io/learn?lessonSlug=io-1-4-auth" target="_blank" rel="noopener"><span class="lc-ico">⚡</span><span class="lc-body"><span class="lc-title">Socket.IO · 1.4 — Xác thực: middleware chạy TRƯỚC connection</span><span class="lc-sub">io.use() từ chối được gì trước khi connection kịp chạy</span></span></a>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">event <code>connection</code></span><span class="v">Phía server, fire một lần mỗi socket sau khi middleware pass.</span></div>
+  <div class="kv"><span class="k">event <code>connect</code></span><span class="v">Phía client, fire khi đã nhận được sid.</span></div>
+  <div class="kv"><span class="k">event <code>upgrade</code></span><span class="v">Transport đã chuyển từ polling sang WebSocket.</span></div>
+  <div class="kv"><span class="k"><code>socket.rooms</code></span><span class="v">Tập room một socket đang ở; lúc connect chỉ có id của chính nó.</span></div>
+  <div class="kv"><span class="k">Thứ tự đăng ký</span><span class="v">join room → presence → handler → disconnect, theo thứ tự đó.</span></div>
+  <div class="kv"><span class="k">Thân handler đồng bộ</span><span class="v">Không <code>await</code> giữa các bước đăng ký, để không bỏ lỡ event sớm.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>&quot;Connect&quot; là ba event trong ~9ms: server <code>connection</code>, client <code>connect</code>, server <code>upgrade</code>.</li><li>Lúc <code>connection</code>, transport là polling, middleware đã pass, và chỉ room của chính socket được join.</li><li>Thứ tự handler chuẩn: join room → cập nhật presence → đăng ký handler → gắn <code>disconnect</code>.</li><li>Giữ các bước đăng ký đồng bộ — một <code>await</code> ở giữa có thể làm rớt event tới trước.</li><li>Chưa được giả định WebSocket; upgrade tới vài ms sau.</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Server API</span><span class="lc-sub">socket.io/docs/v4/server-api — <code>io.on(&#39;connection&#39;)</code>, <code>socket.data</code>, <code>socket.join</code>. Tra khi cần.</span></span></div>
@@ -349,6 +485,27 @@ io.on('connection', (socket) =&gt; {
 <p><strong>One sentence.</strong> The six reasons of <code>disconnect</code> split into two groups — the deliberate ones (io server/client disconnect, parse error) do not reconnect and need cleanup IMMEDIATELY, while the unexpected ones (transport close, ping timeout, transport error) reconnect AUTOMATICALLY and need a 2s presence debounce plus 60s state cleanup so the UI does not flap when a user changes networks.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Trigger as many reasons as you can and log them in <code>socket.on('disconnect', reason =&gt; ...)</code>: close the tab (transport close), call <code>socket.disconnect()</code> on the server (io server disconnect), kill the network (ping timeout).</li>
+<li>Sort each reason into deliberate (no reconnect, clean up now) versus unexpected (auto-reconnect, debounce).</li>
+<li>Implement a ~2s presence debounce plus a ~60s state cleanup and watch the presence dot stop flapping when you toggle wifi off and on.</li>
+</ol>
+<p><strong>Done when:</strong> you can predict the reason string for three scenarios and chose cleanup-now versus debounce for each.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">disconnect reason</span><span class="v">The string passed to the <code>disconnect</code> handler explaining why.</span></div>
+  <div class="kv"><span class="k">io server disconnect</span><span class="v">Server called <code>socket.disconnect()</code> — no auto-reconnect.</span></div>
+  <div class="kv"><span class="k">io client disconnect</span><span class="v">Client called <code>socket.disconnect()</code> — no auto-reconnect.</span></div>
+  <div class="kv"><span class="k">transport close / ping timeout / transport error</span><span class="v">Unexpected — the client auto-reconnects.</span></div>
+  <div class="kv"><span class="k">Presence debounce</span><span class="v">Wait ~2s before marking offline so a quick reconnect does not flap.</span></div>
+  <div class="kv"><span class="k">State cleanup delay</span><span class="v">~60s before tearing down server state, in case the user returns.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li><code>disconnect</code> hands you a reason, not an error — the reason decides your response.</li><li>Deliberate reasons (io server/client disconnect, parse error) do not reconnect: clean up immediately.</li><li>Unexpected reasons (transport close, ping timeout, transport error) auto-reconnect: debounce instead.</li><li>Use ~2s presence debounce plus ~60s state cleanup so the UI does not flap on network changes.</li><li>There is no error object because most disconnects are normal, not failures.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — disconnect reasons</span><span class="lc-sub">socket.io/docs/v4/client-socket-instance/#disconnect — sáu chuỗi reason, mỗi cái có định nghĩa chính xác về khi nào fire và có reconnect không.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">MDN — Page Visibility API</span><span class="lc-sub">developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API — <code>visibilitychange</code> event, cho bạn biết tab đang khuất — hữu ích cho debounce chuyển tab thay vì network</span></span></div>
@@ -456,6 +613,27 @@ io.on('connection', (socket) =&gt; {
 <div class="callout">
 <p><strong>Một câu.</strong> Sáu reason của <code>disconnect</code> chia hai nhóm — chủ động (io server/client disconnect, parse error) không tự reconnect và cần dọn NGAY, còn bất ngờ (transport close, ping timeout, transport error) TỰ ĐỘNG reconnect và cần debounce presence 2s + state cleanup 60s để tránh UI flap khi user chuyển mạng.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Kích hoạt càng nhiều reason càng tốt và log trong <code>socket.on('disconnect', reason =&gt; ...)</code>: đóng tab (transport close), gọi <code>socket.disconnect()</code> ở server (io server disconnect), ngắt mạng (ping timeout).</li>
+<li>Xếp mỗi reason vào chủ động (không reconnect, dọn ngay) hay bất ngờ (tự reconnect, debounce).</li>
+<li>Cài một debounce presence ~2s cộng một state cleanup ~60s và xem chấm presence ngừng nhấp nháy khi bạn tắt rồi bật lại wifi.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đoán được chuỗi reason cho ba kịch bản và chọn dọn-ngay hay debounce cho mỗi cái.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">disconnect reason</span><span class="v">Chuỗi truyền vào handler <code>disconnect</code> giải thích vì sao.</span></div>
+  <div class="kv"><span class="k">io server disconnect</span><span class="v">Server gọi <code>socket.disconnect()</code> — không tự reconnect.</span></div>
+  <div class="kv"><span class="k">io client disconnect</span><span class="v">Client gọi <code>socket.disconnect()</code> — không tự reconnect.</span></div>
+  <div class="kv"><span class="k">transport close / ping timeout / transport error</span><span class="v">Bất ngờ — client tự reconnect.</span></div>
+  <div class="kv"><span class="k">Debounce presence</span><span class="v">Chờ ~2s trước khi đánh dấu offline để một reconnect nhanh không nhấp nháy.</span></div>
+  <div class="kv"><span class="k">Độ trễ dọn state</span><span class="v">~60s trước khi phá state phía server, phòng khi user quay lại.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li><code>disconnect</code> trao cho bạn một reason, không phải error — reason quyết định phản ứng.</li><li>Reason chủ động (io server/client disconnect, parse error) không reconnect: dọn ngay.</li><li>Reason bất ngờ (transport close, ping timeout, transport error) tự reconnect: debounce.</li><li>Dùng debounce presence ~2s cộng dọn state ~60s để UI không nhấp nháy khi đổi mạng.</li><li>Không có object error vì hầu hết disconnect là bình thường, không phải lỗi.</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — disconnect reasons</span><span class="lc-sub">socket.io/docs/v4/client-socket-instance/#disconnect — sáu chuỗi reason, mỗi cái có định nghĩa chính xác về khi nào fire và có reconnect không.</span></span></div>
@@ -585,6 +763,27 @@ Jitter la CO Y — 1000 client cung reconnect KHONG lam DDoS server luc cap dien
 <p><strong>One sentence.</strong> Reconnection is automatic at LAYER 2 (exponential backoff 1-5s, ±50% jitter, unlimited attempts), but at LAYERS 3 &amp; 4 the sid changes, the rooms are empty and pending events are lost — so application state must be tracked by <code>userId</code> and never by <code>socket.id</code>, and anything that matters needs a &quot;fetch-since-last-seen&quot; pattern rather than faith that the emit arrived.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Run a client, then kill and restart the server; log the reconnect attempts and watch the client recover on its own.</li>
+<li>Across the reconnect, confirm the three things that change: a new <code>socket.id</code>, empty <code>socket.rooms</code>, and pending emits lost — then re-join the rooms inside the <code>connection</code> handler.</li>
+<li>Replace any <code>socket.id</code>-keyed state with <code>userId</code>-keyed state and confirm it survives the reconnect.</li>
+</ol>
+<p><strong>Done when:</strong> you have seen an automatic reconnect and can list the three things that change across it.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Reconnection</span><span class="v">Layer-2 automatic retry after the connection drops.</span></div>
+  <div class="kv"><span class="k">Exponential backoff</span><span class="v">1s, 2s, 4s… capped ~5s, with ±50% jitter, unlimited attempts.</span></div>
+  <div class="kv"><span class="k">New sid</span><span class="v">The reconnected socket has a new <code>socket.id</code>; the old rooms are gone.</span></div>
+  <div class="kv"><span class="k">Re-join on connect</span><span class="v">The server re-adds the socket to its rooms on every <code>connection</code>.</span></div>
+  <div class="kv"><span class="k">userId keying</span><span class="v">Track application state by <code>userId</code>, never <code>socket.id</code>.</span></div>
+  <div class="kv"><span class="k">fetch-since-last-seen</span><span class="v">Pull what was missed rather than trust an in-flight emit.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Reconnect is automatic at layer 2: exponential backoff 1-5s, jitter, unlimited attempts.</li><li>Across a reconnect the sid changes, the rooms are empty, and pending events are lost.</li><li>Re-join rooms in the <code>connection</code> handler every time; never rely on the old membership.</li><li>Track state by <code>userId</code>, not <code>socket.id</code>, so it survives the new socket.</li><li>Anything important needs a fetch-since-last-seen, not faith that the emit arrived.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Manager options</span><span class="lc-sub">socket.io/docs/v4/client-options/#manager-options — mọi option reconnect, cùng default và ý nghĩa.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Connection state recovery</span><span class="lc-sub">socket.io/docs/v4/connection-state-recovery — feature 4.6+ để server GIỮ state (rooms + missed events) trong RAM một khoảng — trade off: memory. Không dùng ở kho này</span></span></div>
@@ -708,6 +907,27 @@ Jitter la CO Y — 1000 client cung reconnect KHONG lam DDoS server luc cap dien
 <p><strong>Một câu.</strong> Reconnect tự động ở TẦNG 2 (backoff exponential 1-5s, jitter ±50%, vô hạn attempts), nhưng ở TẦNG 3 &amp; 4 sid đổi + rooms trống + pending events mất — nên state của app phải track theo <code>userId</code> chứ không theo <code>socket.id</code>, và data quan trọng phải có pattern &quot;fetch-since-last-seen&quot; hơn là dựa vào emit đến đúng.</p>
 </div>
 
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Chạy một client, rồi kill và restart server; log các lần reconnect và xem client tự hồi phục.</li>
+<li>Qua lần reconnect, xác nhận ba thứ thay đổi: <code>socket.id</code> mới, <code>socket.rooms</code> rỗng, và pending emit mất — rồi re-join room trong handler <code>connection</code>.</li>
+<li>Thay mọi state khoá theo <code>socket.id</code> bằng state khoá theo <code>userId</code> và xác nhận nó sống sót qua reconnect.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đã thấy một reconnect tự động và liệt kê được ba thứ thay đổi qua nó.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Reconnection</span><span class="v">Thử lại tự động ở tầng 2 sau khi connection rớt.</span></div>
+  <div class="kv"><span class="k">Exponential backoff</span><span class="v">1s, 2s, 4s… trần ~5s, jitter ±50%, vô hạn attempt.</span></div>
+  <div class="kv"><span class="k">sid mới</span><span class="v">Socket reconnect có <code>socket.id</code> mới; room cũ mất.</span></div>
+  <div class="kv"><span class="k">Re-join lúc connect</span><span class="v">Server thêm lại socket vào room ở mỗi <code>connection</code>.</span></div>
+  <div class="kv"><span class="k">Khoá theo userId</span><span class="v">Track state app theo <code>userId</code>, không bao giờ theo <code>socket.id</code>.</span></div>
+  <div class="kv"><span class="k">fetch-since-last-seen</span><span class="v">Kéo về phần đã lỡ thay vì tin vào một emit đang bay.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Reconnect tự động ở tầng 2: backoff exponential 1-5s, jitter, vô hạn attempt.</li><li>Qua một reconnect, sid đổi, room rỗng, và pending event mất.</li><li>Re-join room trong handler <code>connection</code> mỗi lần; đừng dựa vào membership cũ.</li><li>Track state theo <code>userId</code>, không theo <code>socket.id</code>, để nó sống sót qua socket mới.</li><li>Thứ gì quan trọng cần fetch-since-last-seen, không phải niềm tin emit đã đến.</li></ul>
+
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Manager options</span><span class="lc-sub">socket.io/docs/v4/client-options/#manager-options — mọi option reconnect, cùng default và ý nghĩa.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Connection state recovery</span><span class="lc-sub">socket.io/docs/v4/connection-state-recovery — feature 4.6+ để server GIỮ state (rooms + missed events) trong RAM một khoảng — trade off: memory. Không dùng ở kho này</span></span></div>
@@ -794,6 +1014,27 @@ c.on('connect_error', (err) =&gt; {
 <p><strong>One sentence.</strong> <code>io.use()</code> middleware runs BEFORE the <code>connection</code> event, reads the JWT from three places (cookie, <code>Authorization</code> header, <code>handshake.auth.token</code>) through the shared <code>extractToken()</code> helper, and its failure surfaces as <code>connect_error</code> (not <code>disconnect</code>) — client code must distinguish auth failure (log out) from network error (do not log out).</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Add an <code>io.use()</code> middleware that reads the JWT via <code>extractToken()</code> (cookie, <code>Authorization</code> header, <code>handshake.auth.token</code>) and calls <code>next(err)</code> on failure.</li>
+<li>Connect with a bad token and confirm the client sees <code>connect_error</code>, NOT <code>disconnect</code>.</li>
+<li>In the client, branch on the error: an auth failure logs out; a network error keeps retrying.</li>
+</ol>
+<p><strong>Done when:</strong> a bad token surfaces as <code>connect_error</code> and your client logs out only on auth failure.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>io.use()</code></span><span class="v">Connection middleware that runs BEFORE the <code>connection</code> event.</span></div>
+  <div class="kv"><span class="k"><code>extractToken()</code></span><span class="v">Shared helper reading the JWT from cookie, header, or <code>handshake.auth</code>.</span></div>
+  <div class="kv"><span class="k"><code>handshake.auth.token</code></span><span class="v">The client-supplied token field in the handshake.</span></div>
+  <div class="kv"><span class="k"><code>connect_error</code></span><span class="v">The client event an auth failure surfaces as.</span></div>
+  <div class="kv"><span class="k"><code>next(err)</code></span><span class="v">How middleware rejects a connection before it is established.</span></div>
+  <div class="kv"><span class="k">Auth vs network error</span><span class="v">Log out on the first; keep retrying on the second.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li><code>io.use()</code> middleware runs before the <code>connection</code> event — reject here and connection never fires.</li><li>Read the JWT through the shared <code>extractToken()</code>: cookie, <code>Authorization</code> header, or <code>handshake.auth.token</code>.</li><li>A rejected connection surfaces as <code>connect_error</code> on the client, not <code>disconnect</code>.</li><li>Client code must distinguish auth failure (log out) from network error (keep retrying).</li><li>Same token extraction as Express, so one auth rule covers both.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Middleware</span><span class="lc-sub">socket.io/docs/v4/middlewares — API details with JWT examples.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Authentication course</span><span class="lc-sub">/courses/authentication/learn${REF} — the source of <code>extractToken()</code> and the httpOnly cookie pattern this lesson re-uses.</span></span></div>
@@ -863,6 +1104,27 @@ c.on('connect_error', (err) =&gt; {
 <div class="callout">
 <p><strong>Một câu.</strong> Middleware <code>io.use()</code> chạy TRƯỚC event <code>connection</code>, đọc JWT từ ba nơi (cookie, header <code>Authorization</code>, <code>handshake.auth.token</code>) qua hàm <code>extractToken()</code> dùng chung với Express, và fail cho client thấy <code>connect_error</code> (không phải <code>disconnect</code>) — phải phân biệt trong client giữa auth fail (logout) và network error (không logout).</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Thêm một middleware <code>io.use()</code> đọc JWT qua <code>extractToken()</code> (cookie, header <code>Authorization</code>, <code>handshake.auth.token</code>) và gọi <code>next(err)</code> khi fail.</li>
+<li>Kết nối với token sai và xác nhận client thấy <code>connect_error</code>, KHÔNG phải <code>disconnect</code>.</li>
+<li>Trong client, rẽ nhánh theo lỗi: auth fail thì logout; network error thì tiếp tục thử lại.</li>
+</ol>
+<p><strong>Đạt khi:</strong> một token sai hiện ra dưới dạng <code>connect_error</code> và client chỉ logout khi auth fail.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>io.use()</code></span><span class="v">Middleware connection chạy TRƯỚC event <code>connection</code>.</span></div>
+  <div class="kv"><span class="k"><code>extractToken()</code></span><span class="v">Hàm dùng chung đọc JWT từ cookie, header, hoặc <code>handshake.auth</code>.</span></div>
+  <div class="kv"><span class="k"><code>handshake.auth.token</code></span><span class="v">Trường token do client cấp trong handshake.</span></div>
+  <div class="kv"><span class="k"><code>connect_error</code></span><span class="v">Event client mà một auth failure hiện ra dưới dạng đó.</span></div>
+  <div class="kv"><span class="k"><code>next(err)</code></span><span class="v">Cách middleware từ chối một connection trước khi nó được thiết lập.</span></div>
+  <div class="kv"><span class="k">Auth vs network error</span><span class="v">Logout với cái đầu; tiếp tục thử lại với cái sau.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Middleware <code>io.use()</code> chạy trước event <code>connection</code> — từ chối ở đây thì connection không bao giờ fire.</li><li>Đọc JWT qua <code>extractToken()</code> dùng chung: cookie, header <code>Authorization</code>, hoặc <code>handshake.auth.token</code>.</li><li>Một connection bị từ chối hiện ra dưới dạng <code>connect_error</code> ở client, không phải <code>disconnect</code>.</li><li>Client phải phân biệt auth fail (logout) với network error (tiếp tục thử lại).</li><li>Cùng cách rút token như Express, nên một luật auth bao cả hai.</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Middleware</span><span class="lc-sub">socket.io/docs/v4/middlewares — API chính xác, kèm ví dụ cho JWT.</span></span></div>
@@ -1041,6 +1303,27 @@ socket.on('resume', async ({ conversationId, lastEventId }, ack) =&gt; {
 <p><strong>One sentence.</strong> A reconnect is a new socket with a new id, empty rooms and empty <code>data</code>, and only the HTTP-layer facts (cookies, <code>handshake.auth</code>) survive — so restore with one of three patterns chosen by what the state <em>is</em>: re-derive it from durable data (default, never stale, costs a query), keep it server-side keyed by user id rather than socket id (in Redis once you have more than one worker, with a TTL), or have the client replay a <code>lastEventId</code> cursor so the server can answer with what was missed — and only the third closes the message gap, because socket.io's default delivery guarantee drops anything sent while the client was away.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>On a reconnect, log what survived (<code>handshake.auth</code>, cookies) versus what reset (<code>socket.id</code>, <code>socket.rooms</code>, <code>socket.data</code>).</li>
+<li>Implement pattern 1 — re-derive the user's rooms from the database in the <code>connection</code> handler.</li>
+<li>Implement pattern 3 — have the client send a <code>lastEventId</code> and the server reply with what was missed; confirm a message sent DURING the outage now arrives after reconnect.</li>
+</ol>
+<p><strong>Done when:</strong> a message sent while the client was away is delivered after reconnect via a <code>lastEventId</code> cursor.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Lost on reconnect</span><span class="v"><code>socket.id</code>, <code>socket.rooms</code> and <code>socket.data</code> all reset.</span></div>
+  <div class="kv"><span class="k">Survives</span><span class="v">HTTP-layer facts: cookies and <code>handshake.auth</code>.</span></div>
+  <div class="kv"><span class="k">Re-derive pattern</span><span class="v">Rebuild state from durable data on every connect (the default).</span></div>
+  <div class="kv"><span class="k">Server-side session</span><span class="v">State keyed by <code>userId</code> (in Redis with a TTL once multi-worker).</span></div>
+  <div class="kv"><span class="k">Client replay</span><span class="v">The client holds a <code>lastEventId</code> cursor and replays it.</span></div>
+  <div class="kv"><span class="k">Delivery gap</span><span class="v">socket.io drops events sent while the client was disconnected.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>A reconnect is a brand-new socket: new id, empty rooms, empty <code>data</code>.</li><li>Only HTTP-layer facts (cookies, <code>handshake.auth</code>) survive.</li><li>Re-derive from durable data is the default — never stale, costs a query.</li><li>Keep server-side state keyed by <code>userId</code> (Redis + TTL when multi-worker) for speed.</li><li>Only a client-replayed <code>lastEventId</code> cursor closes the message gap of the default delivery guarantee.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Connection state recovery</span><span class="lc-sub">socket.io/docs/v4/connection-state-recovery — bản dựng sẵn của Pattern 3, và giới hạn của nó.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Middlewares</span><span class="lc-sub">socket.io/docs/v4/middlewares — vì sao xác thực chạy trước sự kiện connection.</span></span></div>
@@ -1208,6 +1491,27 @@ socket.on('resume', async ({ conversationId, lastEventId }, ack) =&gt; {
 <div class="callout">
 <p><strong>Một câu.</strong> Một lần kết nối lại là một socket mới với id mới, room rỗng và <code>data</code> rỗng, và chỉ những dữ kiện ở tầng HTTP (cookie, <code>handshake.auth</code>) sống sót — nên hãy khôi phục bằng một trong ba pattern, chọn theo bản chất của trạng thái: suy lại từ dữ liệu bền (mặc định, không bao giờ cũ, tốn một truy vấn), giữ phía server khoá theo user id thay vì socket id (trong Redis một khi bạn có hơn một worker, kèm TTL), hoặc để client phát lại một con trỏ <code>lastEventId</code> để server trả lời bằng phần đã bỏ lỡ — và chỉ cái thứ ba lấp được khoảng trống thông điệp, vì bảo đảm giao nhận mặc định của socket.io vứt bỏ bất cứ thứ gì gửi trong lúc client vắng mặt.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Khi reconnect, log cái gì sống sót (<code>handshake.auth</code>, cookie) so với cái gì reset (<code>socket.id</code>, <code>socket.rooms</code>, <code>socket.data</code>).</li>
+<li>Cài pattern 1 — suy lại room của user từ cơ sở dữ liệu trong handler <code>connection</code>.</li>
+<li>Cài pattern 3 — để client gửi một <code>lastEventId</code> và server trả về phần đã lỡ; xác nhận một tin gửi TRONG lúc mất kết nối giờ tới nơi sau reconnect.</li>
+</ol>
+<p><strong>Đạt khi:</strong> một tin gửi lúc client vắng mặt được giao sau reconnect nhờ con trỏ <code>lastEventId</code>.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Mất khi reconnect</span><span class="v"><code>socket.id</code>, <code>socket.rooms</code> và <code>socket.data</code> đều reset.</span></div>
+  <div class="kv"><span class="k">Sống sót</span><span class="v">Dữ kiện tầng HTTP: cookie và <code>handshake.auth</code>.</span></div>
+  <div class="kv"><span class="k">Pattern suy lại</span><span class="v">Dựng lại state từ dữ liệu bền ở mỗi lần connect (mặc định).</span></div>
+  <div class="kv"><span class="k">Phiên phía server</span><span class="v">State khoá theo <code>userId</code> (trong Redis kèm TTL khi đã nhiều worker).</span></div>
+  <div class="kv"><span class="k">Client phát lại</span><span class="v">Client giữ một con trỏ <code>lastEventId</code> và phát lại nó.</span></div>
+  <div class="kv"><span class="k">Khoảng trống giao tin</span><span class="v">socket.io vứt event gửi trong lúc client mất kết nối.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Một reconnect là một socket hoàn toàn mới: id mới, room rỗng, <code>data</code> rỗng.</li><li>Chỉ dữ kiện tầng HTTP (cookie, <code>handshake.auth</code>) sống sót.</li><li>Suy lại từ dữ liệu bền là mặc định — không bao giờ cũ, tốn một truy vấn.</li><li>Giữ state phía server khoá theo <code>userId</code> (Redis + TTL khi nhiều worker) cho nhanh.</li><li>Chỉ con trỏ <code>lastEventId</code> do client phát lại mới lấp được khoảng trống giao tin của bảo đảm mặc định.</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Connection state recovery</span><span class="lc-sub">socket.io/docs/v4/connection-state-recovery — bản dựng sẵn của Pattern 3, và giới hạn của nó.</span></span></div>

@@ -258,7 +258,8 @@ export function goiTomTatBangModel(muc: MucModel, userId: number, step?: string,
       return await thu(muc);
     } catch (e) {
       const msg = (e as Error).message || '';
-      /* `khongLui` (tài khoản Free): không có đường lùi sang model tốn tiền. */
+      /* `khongLui` (tài khoản Free, và 13/11/2026 cả HẠN MỨC NHÓM): không lùi sang model tốn tiền — đích lùi của `cm-solid`
+         là CuongMini Pro CHÍNH HÃNG, mà nhóm chỉ trả cổng modelapi (lời gọi tóm tắt không qua trần chính hãng nào). */
       const thay = !o.khongLui && laLoiCongHong(msg, (e as { code?: string }).code) ? tuongDuongFree(muc) : null;
       if (!thay) throw e;
       logger.warn('tóm tắt lượt cũ: cổng hỏng — dùng model tương đương', { tu: muc.id, sang: thay.id });

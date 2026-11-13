@@ -22,6 +22,7 @@ import { config } from '../config/env.js';
 import { prisma } from '../config/database.js';
 import { errorHandler } from '../middleware/errorHandler.js';
 import { emailService } from '../services/email.service.js';
+import { logger } from '../utils/logger.js';
 
 const RUN = process.env.WORK_DB_TEST === '1';
 const tag = `nh${Date.now().toString(36)}`;
@@ -185,13 +186,46 @@ describe('CuongMini — hạn mức NHÓM (HTTP + DB thật)', { skip: !RUN }, (
     assert.equal(get.status, 403);
   });
 
+  it('13/11/2026 — /agent/compact bằng hạn mức NHÓM chạy đích ngầm cm-solid (modelapi), KHÔNG chạy key chính hãng', async () => {
+    /* Trước: route tự giải `timModel(undefined)` = CuongMini Pro = Haiku CHÍNH HÃNG ⇒ tóm tắt của thành viên không Pro chạy
+       key của chủ app, không qua trần nào (khác `/turn` vốn đi cm-solid). Chặn mọi lời gọi ra ngoài: ghi URL + model. */
+    const goc = globalThis.fetch;
+    /* Máy thử không có key chính hãng ⇒ bản lỗi THỬ Haiku trước, hỏng, rồi mới tự lùi cm-solid (che mất lỗi: prod CÓ key nên
+       nó chạy Haiku thật). Bắt dấu vết lần thử đó qua dòng log "dùng model tương đương". */
+    const warnGoc = logger.warn.bind(logger);
+    const luiTu: unknown[] = [];
+    (logger as any).warn = (msg: string, meta?: any) => { if (/tóm tắt lượt cũ: cổng hỏng/.test(String(msg))) luiTu.push(meta?.tu); return warnGoc(msg, meta); };
+    const ra: Array<{ url: string; model?: string }> = [];
+    globalThis.fetch = (async (url: any, init: any) => {
+      const u = String(url);
+      if (u.startsWith(base)) return goc(url, init);
+      const b = JSON.parse(String(init?.body ?? '{}'));
+      ra.push({ url: u, model: b.model });
+      return new Response(JSON.stringify({ choices: [{ message: { content: 'TÓM TẮT nhóm: đã đọc src/, sửa đăng nhập, còn chạy test và cập nhật README.' } }], usage: { prompt_tokens: 10, completion_tokens: 3 } }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+    }) as typeof fetch;
+    try {
+      const messages: Array<{ role: string; content: string }> = [{ role: 'user', content: 'ĐỀ BÀI nhóm' }];
+      for (let i = 0; i < 6; i++) messages.push({ role: 'assistant', content: `bước ${i}` }, { role: 'user', content: `tiếp ${i}` });
+      const r = await call(mem, 'POST', '/agent/compact', { ctworkDuAn: pid, model: 'cm-default', messages, giuLuot: 1 });
+      assert.equal(r.status, 200, JSON.stringify({ r: r.raw, ra }));
+      assert.ok(ra.length >= 1, 'phải gọi model tóm tắt');
+      assert.ok(ra.every((x) => !/anthropic\.com/.test(x.url) && x.model === 'gpt-6-sol'), `nhóm chỉ đi modelapi cm-solid: ${JSON.stringify(ra)}`);
+      assert.deepEqual(luiTu, [], `nhóm không được THỬ model chính hãng trước: ${JSON.stringify(luiTu)}`);
+    } finally {
+      globalThis.fetch = goc;
+      (logger as any).warn = warnGoc;
+    }
+  });
+
   it('/agent/tools: thành viên không Pro ⇒ nhom:[NT] + chỉ model free; trưởng nhóm hết Pro ⇒ 403 NHOM_KHONG_CHU', async () => {
     const t = await call(mem, 'GET', '/agent/tools?bang=cm');
     assert.equal(t.status, 200);
     assert.equal(t.data.pro, false);
     assert.deepEqual(t.data.nhom, [{ projectId: pid, key: 'NT' }]);
-    /* QA đợt 6: chỉ model FREE của cổng web — Sonic/Heshin (cổng chính hãng) không chạy được bằng hạn mức nhóm. */
-    assert.ok((t.data.models as any[]).length > 0 && (t.data.models as any[]).every((m) => m.khoa === 'free' && m.cong === 'modelapi'), JSON.stringify(t.data.models));
+    /* QA đợt 6: chỉ model FREE — model cần khoá không chạy được bằng hạn mức nhóm. 27/10/2026: danh sách nhóm = đúng
+       CuongMini Pro (app thấy nó là mục chính hãng, nhưng lượt nhóm chạy đích ngầm cm-solid — xem phép kiểm compact ở trên
+       và `bangModel.ts › mucChoNhom`), không còn mục `cong: 'modelapi'` hiện cho app. */
+    assert.ok((t.data.models as any[]).length === 1 && (t.data.models as any[]).every((m) => m.khoa === 'free' && m.ten === 'CuongMini Pro' && !m.canMoKhoa), JSON.stringify(t.data.models));
     assert.ok(!(t.data.models as any[]).some((m) => /Sonic|Heshin/.test(m.ten)));
     assert.deepEqual((await call(out, 'GET', '/agent/tools')).data.nhom, []);
     await prisma.user.update({ where: { id: lead.id }, data: { isPro: false } });

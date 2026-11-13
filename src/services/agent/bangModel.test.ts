@@ -6,7 +6,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   MA_DEFAULT, MA_SOLID, anTenThat, bangChoApp, bangClassic, bangModel, dungChoNhom, laDefault, laMaCuongMini, maChoApp,
-  maMacDinhCho, timModel, tuongDuongFree, giaiDefault, chuanHoaMaTuApp,
+  maMacDinhCho, timModel, tuongDuongFree, giaiDefault, chuanHoaMaTuApp, mucChoNhom,
 } from './bangModel.js';
 
 // 10/11/2026: cổng Claude rẻ (gwai) đọc `GWAI_*` ⇒ `ramboBat()` mặc định BẬT khi có khoá. `.env` thật lọt vào
@@ -62,6 +62,16 @@ test('hạn mức nhóm chỉ Pro (+ dự phòng)', () => {
   assert.ok(dungChoNhom({ id: MA_DEFAULT }));
   assert.ok(dungChoNhom({ id: MA_SOLID }));
   assert.ok(!dungChoNhom({ id: 'cm-sonic' }));
+});
+
+test('13/11/2026: lượt HẠN MỨC NHÓM luôn chạy đích ngầm cm-solid (modelapi) — kể cả /compact', () => {
+  /* CuongMini Pro = Haiku CHÍNH HÃNG ⇒ nhóm (người không gói) không được chạy key chính hãng của chủ app. */
+  assert.equal(mucChoNhom(timModel(MA_DEFAULT)).id, MA_SOLID);
+  assert.equal(mucChoNhom(timModel(MA_DEFAULT)).cong, 'modelapi');
+  assert.equal(mucChoNhom(timModel(undefined)).id, MA_SOLID, 'mã trống ⇒ Pro ⇒ cm-solid');
+  assert.equal(mucChoNhom(timModel(MA_SOLID)).id, MA_SOLID);
+  /* Model ngoài danh sách nhóm (cần khoá) ⇒ cũng về cm-solid, không bao giờ chính hãng. */
+  for (const id of ['cm-sonic', 'cm-optimum', 'cm-invisible']) assert.equal(mucChoNhom(timModel(id)).cong, 'modelapi', id);
 });
 
 test('app đời cũ nhận mã nó hiểu', () => {

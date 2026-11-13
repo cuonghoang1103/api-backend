@@ -6,9 +6,22 @@
  */
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import { prisma } from '../../config/database.js';
 
 // 10/11/2026: cổng Claude rẻ (gwai) đọc GWAI_* (ưu tiên hơn AGENT_GATEWAY_*). Xoá khoá thật .env để test dùng cổng giả.
 delete process.env.GWAI_BASE_URL; delete process.env.GWAI_API_KEY;
+
+/**
+ * Ghim gói người thử (user 1) = ADMIN, ĐỪNG đọc CSDL thật — cùng lý do `chongLap.test.ts › ghimGoiAdmin` (20/10/2026):
+ * máy có CSDL local thì user 1 là tài khoản thường ⇒ trần model 0 $ ⇒ lượt chết `CUONGMINI_HET_TRAN` trước khi gọi cổng
+ * (CI không CSDL ⇒ tra lỗi ⇒ cho qua). Phép kiểm này đo vòng lặp agent, không đo trần.
+ */
+function ghimGoiAdmin(t: { after: (f: () => void) => void }): void {
+  const u = prisma.user as any;
+  const goc = u.findUnique;
+  u.findUnique = async () => ({ isPro: true, proExpiresAt: null, proSince: null, proSource: null, roles: [{ role: { name: 'ADMIN' } }] });
+  t.after(() => { u.findUnique = goc; });
+}
 
 const { buildSystemPrompt, catGhiChu, voHieuRaoGhiChu } = await import('./prompt.js');
 
@@ -36,6 +49,7 @@ test('sơ đồ vẽ bằng ─── giữa dòng không bị đụng', () => {
 // ─── Nén sớm 55% (1c33d89a) — chạy THẬT runAgentTurn với cổng giả ─────────────
 test('nén theo ngưỡng cổng (đợt 8A): hội thoại vượt ngưỡng ⇒ tóm tắt bằng CHÍNH model của cuộc, ghim đề bài, thân gửi dưới trần (không 400)', async (t) => {
   const { runAgentTurn, tranKyTuCua } = await import('./turn.js');
+  ghimGoiAdmin(t);
   const luu = ['LLM_GATEWAY_API_KEY', 'LLM_GATEWAY_API_KEY_GPT', 'LLM_GATEWAY_BASE_URL', 'AGENT_GATEWAY_BASE_URL', 'AGENT_GATEWAY_API_KEY', 'RAMBO_BAT', 'AGENT_NEN_SOM_TI_LE'].map((k) => [k, process.env[k]] as const);
   process.env.LLM_GATEWAY_API_KEY = 'sk-gia-lap-cho-kiem-thu';
   process.env.LLM_GATEWAY_API_KEY_GPT = 'sk-gia-lap-cho-kiem-thu';

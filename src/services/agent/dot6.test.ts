@@ -10,6 +10,7 @@
  */
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import { prisma } from '../../config/database.js';
 
 import { MAC_DINH_NHOM, chamTranNhom, docCauHinhNhom, docDuAnId, stepNhom } from './hanMucNhom.js';
 import { CHU_DE_CUONGMINI, diemKhop, khoChuDe, traLoiHuongDan } from './ctworkKyNang.js';
@@ -19,6 +20,18 @@ import { runAgentTurn, type AgentEvent } from './turn.js';
 
 // 10/11/2026: cổng Claude rẻ (gwai) đọc GWAI_* (ưu tiên hơn AGENT_GATEWAY_*). Xoá khoá thật .env để test dùng cổng giả.
 delete process.env.GWAI_BASE_URL; delete process.env.GWAI_API_KEY;
+
+/**
+ * Ghim gói người thử (user 1) = ADMIN, ĐỪNG đọc CSDL thật — cùng lý do `chongLap.test.ts › ghimGoiAdmin` (20/10/2026):
+ * máy có CSDL local thì user 1 là tài khoản thường ⇒ trần model 0 $ ⇒ lượt chết `CUONGMINI_HET_TRAN` trước khi gọi cổng
+ * (CI không CSDL ⇒ tra lỗi ⇒ cho qua). Phép kiểm này đo vòng lặp agent, không đo trần.
+ */
+function ghimGoiAdmin(t: { after: (f: () => void) => void }): void {
+  const u = prisma.user as any;
+  const goc = u.findUnique;
+  u.findUnique = async () => ({ isPro: true, proExpiresAt: null, proSince: null, proSource: null, roles: [{ role: { name: 'ADMIN' } }] });
+  t.after(() => { u.findUnique = goc; });
+}
 
 test('hạn mức nhóm: mặc định BẬT, kẹp trần, dấu sổ, chạm trần', () => {
   assert.deepEqual(docCauHinhNhom({}), MAC_DINH_NHOM);
@@ -130,6 +143,7 @@ const TOOL_CTW = ['my_work', 'get_issue', 'comment'].map((t) => ({ name: `mcp__c
 
 test('runAgentTurn: mục lục + luật dẫn đường vào prompt (ổn định), nap_tool_mcp + ctwork_huong_dan chỉ khi cần', async (t) => {
   const { daGui } = moiTruong(t);
+  ghimGoiAdmin(t);
   const chay = async (o: Record<string, unknown>) => {
     const sk: AgentEvent[] = [];
     await runAgentTurn({ userId: 1, messages: [{ role: 'user', content: 'hôm nay làm gì' }], mucNoLuc: 'vua', ngayGio, ...o } as any, (e) => sk.push(e), new AbortController().signal);
@@ -179,6 +193,7 @@ test('runAgentTurn: hạn mức NHÓM chỉ model free — model cần khoá b�
 
 test('LỖI ĐỢT TRƯỚC: tự chuyển từ model 1M sang GPT 400K mà hội thoại vượt cửa sổ ⇒ CẮT lượt cũ trước khi gọi (không 400)', async (t) => {
   const { daGui } = moiTruong(t);
+  ghimGoiAdmin(t);
   // Hội thoại ~1,3 triệu ký tự (vừa cửa sổ 1M = 2,4M ký tự; vượt 400K = 960K ký tự): 26 lượt × 50k.
   const messages: Array<{ role: string; content: string }> = [];
   for (let i = 0; i < 26; i += 1) {

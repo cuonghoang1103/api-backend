@@ -23,6 +23,7 @@ import { authenticate } from '../middleware/auth.js';
 import { isProEffective, cauChanPro } from '../services/pro.service.js';
 import { coKeyTerminalHieuLuc } from '../services/agent/keyTerminal.js';
 import { logger } from '../utils/logger.js';
+import { khiKhachDong } from '../utils/khachDong.js';
 import { AppError } from '../middleware/errorHandler.js';
 import type { ApiResponse } from '../types/index.js';
 import { AGENT_TOOLS, ALL_CAPABILITIES } from '../services/agent/tools.js';
@@ -31,7 +32,7 @@ import { AgentInputError, runAgentTurn, type AgentEvent } from '../services/agen
 import { congAgent, gatewayConfigured, kiemRamboSong, ramboDangNghi } from '../services/llm/gateway.js';
 import { MODEL_DU_PHONG, MoKhoaLoi, congDuPhong, daCoMatKhau, modelDuPhongAgent, moKhoaDuPhong, tenDuPhong, veDuPhongHopLe } from '../services/agent/congDuPhong.js';
 import {
-  TEN_CONG, bangModel, chuanHoaMaTuApp, docBanApp, dungChoNhom, laDefault, laMaCuongMini, maChoApp, maMacDinhCho, timModel,
+  TEN_CONG, bangModel, chuanHoaMaTuApp, docBanApp, dungChoNhom, laDefault, laMaCuongMini, maChoApp, maMacDinhCho, mucChoNhom, timModel,
 } from '../services/agent/bangModel.js';
 import { ipChongSpam, kiemVaGhiBuocFree, kiemVaGhiLuotDefault } from '../services/agent/defaultGioiHan.js';
 import { CAU_BAO_TRI_FREE } from '../services/agent/turn.js';
@@ -713,8 +714,10 @@ router.post('/compact', chiProHoacNhomHoacFree, compactLimiter, async (req: any,
       /* Free: chỉ Default trên rambo (gói trọn); rambo vừa sập ⇒ bảo trì. */
       if (muc.cong !== 'rambo') throw new AppError(CAU_BAO_TRI_FREE, 503, 'CUONGMINI_BAO_TRI');
     } else if (nhom) {
-      /* Đợt 6: hạn mức nhóm chỉ model free của cổng web (modelapi). */
-      if (!dungChoNhom(muc)) muc = timModel(undefined);
+      /* Đợt 6: hạn mức nhóm chỉ model free của cổng web (modelapi). 13/11/2026: trước đây về `timModel(undefined)` =
+         CuongMini Pro = Haiku CHÍNH HÃNG ⇒ tóm tắt của nhóm chạy key chính hãng của chủ app, không qua trần nào; nay cùng
+         đích với `/turn` (`mucChoNhom` ⇒ cm-solid). */
+      muc = mucChoNhom(muc);
     } else if (muc.khoa !== 'free') {
       const q = await quyenChinhHang(req.userId, b.congAnthropicVe).catch(() => ({ laAdmin: false, modelCao: false, invisible: false }));
       if (!daMoKhoa(muc, q)) muc = timModel(undefined);
@@ -727,7 +730,7 @@ router.post('/compact', chiProHoacNhomHoacFree, compactLimiter, async (req: any,
           gh.ui ? { giaHanTien: gh.ui as unknown as Record<string, unknown> } : undefined);
       }
     }
-    const kq = await compactChuDong(b.messages, { giuLuot: b.giuLuot, ghiChu: b.ghiChu, goi: goiTomTatBangModel(muc, req.userId, taiTro ? stepTaiTro(taiTro.projectId, taiTro.nhaTaiTro.id) : nhom ? stepNhom(nhom.projectId, nhom.chu.id) : undefined, { khongLui: laFree }) });
+    const kq = await compactChuDong(b.messages, { giuLuot: b.giuLuot, ghiChu: b.ghiChu, goi: goiTomTatBangModel(muc, req.userId, taiTro ? stepTaiTro(taiTro.projectId, taiTro.nhaTaiTro.id) : nhom ? stepNhom(nhom.projectId, nhom.chu.id) : undefined, { khongLui: laFree || Boolean(nhom) }) });
     logger.info('[agent/compact] tóm tắt chủ động', {
       userId: req.userId, soTinDaGop: kq.soTinDaGop, daGoiModel: kq.daGoiModel,
     });
@@ -915,7 +918,10 @@ router.post('/turn', chiProHoacNhomHoacFree, async (req: any, res: Response) => 
   // dòng này thì lượt vẫn chạy tiếp tới cùng và vẫn bị tính tiền, chỉ khác là
   // không ai đọc kết quả.
   const dungLai = new AbortController();
-  req.on('close', () => {
+  /* 13/11/2026: nghe `res`, KHÔNG nghe `req` — `close` của `req` đã bắn xong (express.json đọc hết thân + middleware
+     `await` CSDL) trước khi tới đây, nên bản cũ không bao giờ huỷ: bấm Dừng mà lượt vẫn chạy + tính tiền tới cùng.
+     Xem `utils/khachDong.ts`. */
+  khiKhachDong(res, () => {
     clearInterval(nhipTim);
     dungLai.abort();
   });

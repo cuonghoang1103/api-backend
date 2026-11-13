@@ -257,6 +257,16 @@ export function maMacDinhCho(ban: BanApp): string {
 export function dungChoNhom(m: { khoa?: string; cong?: string; id?: string }): boolean {
   return m.id === MA_DEFAULT || m.id === MA_SOLID;
 }
+/**
+ * Mục SẼ CHẠY khi lượt đi bằng HẠN MỨC NHÓM: CuongMini Pro (mặc định, Haiku chính hãng) ⇒ đích ngầm `cm-solid` (modelapi,
+ * tiền trưởng nhóm — người không gói có hạn mức chính hãng = 0); model ngoài danh sách nhóm ⇒ cũng `cm-solid`.
+ * MỘT chỗ cho cả `/agent/turn` (`turn.ts`) lẫn `/agent/compact` — 13/11/2026: compact của nhóm từng chạy Haiku CHÍNH HÃNG
+ * (key của chủ app, không qua trần nào) vì route tự giải `timModel(undefined)` = CuongMini Pro.
+ */
+export function mucChoNhom(m: MucModel): MucModel {
+  if (m.id !== MA_DEFAULT && dungChoNhom(m)) return m;
+  return BANG.find((x) => x.id === MA_SOLID) ?? m;
+}
 /** Tên các model dùng được bằng hạn mức nhóm (câu báo lỗi / giao diện). */
 export function tenModelNhom(): string {
   return TEN_DEFAULT;

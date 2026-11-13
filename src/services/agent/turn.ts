@@ -51,7 +51,7 @@ import { MAX_VIET_TIEP, gopVietTiep } from './vietTiep.js';
 import { chuPdfKhongDoc, sangAnthropic, stopSangFinish, toolSangAnthropic } from './anthropic.js';
 import {
   anTenThat, baoCongHong, cauDoiCong, congDangHong, hangSo, laDefault, laLoiCongHong, modelapiGoiDuoc,
-  timModel, tuongDuongFree, type MucModel, dungChoNhom, tenModelNhom, MA_DEFAULT, MA_SOLID, mucTheoId,
+  timModel, tuongDuongFree, type MucModel, dungChoNhom, tenModelNhom, MA_DEFAULT, mucChoNhom,
 } from './bangModel.js';
 import { loiHetTranModel, xemTranModel } from './tranModel.js';
 import { type HangChinhHang } from './anthropicChinhHang/cauHinh.js';
@@ -1015,7 +1015,8 @@ export async function runAgentTurn(
      (rambo sống ⇒ Classic Sonic, không ⇒ Solid) và mã cũ (bí danh ⇒ Classic). Không còn nhánh "bảng rambo cũ". */
   /* 27/10/2026: CuongMini Pro chạy cổng chính hãng; lượt HẠN MỨC NHÓM (tiền trưởng nhóm, người không gói — hạn mức chính
      hãng = 0) đi đích ngầm `cm-solid` như thiết kế đợt 6 (nhóm chỉ trả cổng modelapi). */
-  const mucDuKien = input.nhom && timModel(input.model).id === MA_DEFAULT ? (mucTheoId(MA_SOLID) ?? timModel(input.model)) : timModel(input.model);
+  /* Model ngoài danh sách nhóm giữ nguyên ở đây để `chuyenSang` báo đúng câu (cần khoá / NHOM_CHI_MODEL_FREE). */
+  const mucDuKien = input.nhom && timModel(input.model).id === MA_DEFAULT ? mucChoNhom(timModel(input.model)) : timModel(input.model);
   let tranKyTu = tranKyTuCua(mucDuKien);
   /** Cửa sổ ngữ cảnh (token) để tính "context %" từ usage thật. */
   let cuaSoToken = mucDuKien.cuaSoToken || CUA_SO_THAN_TRONG;
@@ -1312,7 +1313,7 @@ export async function runAgentTurn(
      tiết. Vẫn đệm theo băm (khoá có model) ⇒ chỉ tốn một lời gọi khi phần bỏ đổi. */
   if (boLuot.soLuotDaBo > 0) {
     const ghiNho = await ghiNhoLuotDaBo(messagesGoc, boLuot.messages.length, undefined,
-      goiTomTatBangModel(muc, input.userId, stepSo, { khongLui: laFree }));
+      goiTomTatBangModel(muc, input.userId, stepSo, { khongLui: laFree || Boolean(input.nhom) }));
     if (ghiNho.daGoiModel) {
       emit({ type: 'server_tool', name: 'tóm tắt ngữ cảnh', summary: `ghi nhớ ${boLuot.soLuotDaBo} lượt cũ` });
     }
@@ -1441,7 +1442,7 @@ export async function runAgentTurn(
       boLuot.soLuotDaBo = cat.soLuotDaBo;
       boLuot.messages = cat.messages;
       const ghiNho = await ghiNhoLuotDaBo(messagesGoc, cat.messages.length, undefined,
-        goiTomTatBangModel(muc, input.userId, stepSo, { khongLui: laFree })).catch(() => undefined);
+        goiTomTatBangModel(muc, input.userId, stepSo, { khongLui: laFree || Boolean(input.nhom) })).catch(() => undefined);
       messages = [loiNhacDaCat(cat.soLuotDaBo, ghiNho), ...cat.messages];
     }
     epCatTo = true;

@@ -18,6 +18,20 @@ Mẫu một mục:
 
 ---
 
+### 13/11/2026 — Realtime — Redis lên muộn lúc khởi động ⇒ tin realtime biến mất, không log
+- **Triệu chứng:** backend khởi động khi Redis chưa sẵn sàng; vài giây sau Redis lên thì người đang online không nhận tin nhắn/thông báo realtime nữa, log không có cảnh báo nào.
+- **Nguyên nhân:** `src/socket/messaging.socket.ts` attachRedisAdapter chờ `getRedis()` — mà `src/config/redis.ts` thử lại MÃI (reconnectStrategy) nên khối catch không bao giờ chạy. Khi Redis lên, `io.adapter(...)` thay bằng adapter MỚI trống ⇒ mọi socket đã nối mất room (`socket.rooms` vẫn báo `user:7` nhưng phát vào `user:7` ⇒ 0 người nhận).
+- **Cách sửa:** hạn 5 giây; quá hạn ⇒ ở lại adapter trong RAM cả đời tiến trình (một instance vẫn đúng), bản sao tạo muộn bị đóng, không bao giờ gắn muộn; thêm listener `error` cho bản sao pub/sub. Test `src/socket/redisAdapterGan.test.ts` (commit 82084b1e2).
+- **Ảnh hưởng:** mỗi lần Redis khởi động chậm hơn backend (deploy, khởi động lại VPS).
+- **Bài học:** thay "bộ máy" bên dưới một hệ đang chạy (adapter, pool, client) là mất trạng thái của nó. Lời gọi có thử lại vô hạn phải có hạn giờ ở chỗ gọi. Phát hiện nhờ khoá Socket.IO 5.3 tắt Redis thật trong lab.
+
+### 13/11/2026 — Deploy — Backend bị giết cưỡng bức (SIGKILL) mỗi lần deploy
+- **Triệu chứng:** mỗi lần tráo container, backend cũ chờ đủ 10 giây rồi bị Docker giết; không đóng Prisma, không đẩy Sentry.
+- **Nguyên nhân:** `src/index.ts` (setupGracefulShutdown) gọi `server.close()` — nhưng WebSocket đã nâng cấp không tự kết thúc nên callback không bao giờ chạy; hạn ép 30 giây lại dài hơn hạn 10 giây của Docker.
+- **Cách sửa:** đóng Socket.IO engine ngay khi nhận SIGTERM (client thấy "transport close" và TỰ NỐI LẠI vào container mới — khác `disconnectSockets(true)` làm client KHÔNG nối lại); đường ép 8 giây vẫn dọn dẹp (commit 82084b1e2).
+- **Ảnh hưởng:** mọi lần deploy; chậm tráo thêm ~10 giây, mất sự kiện Sentry cuối.
+- **Bài học:** "graceful shutdown" phải tính cả kết nối dài (WebSocket, SSE); hạn ép của mình phải NGẮN HƠN hạn của Docker/systemd.
+
 ### 13/11/2026 — Messenger — Tab ẩn vẫn gửi "đã xem"
 - **Triệu chứng:** mở cuộc trò chuyện rồi chuyển sang tab khác / thu nhỏ app, tin mới tới thì người gửi thấy "đã xem" sau ~3 ms dù chưa ai nhìn.
 - **Nguyên nhân:** `frontend/src/store/messagingStore.ts` (applyIncomingMessage) gọi `markRead` chỉ dựa vào "đang mở đúng hội thoại", không kiểm `document.visibilityState`. Phép kiểm đó có sẵn vài dòng trên nhưng chỉ dùng cho tiếng báo.

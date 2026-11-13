@@ -140,3 +140,25 @@ export function cay(goc, con, opts = {}) {
   });
   return s + '</svg>';
 }
+
+/**
+ * Dòng thời gian THẬT (đo bằng log có mili-giây): rows = [[nhãn, bắt đầu ms, kết thúc ms, màu?, ghi?]] — thanh đặt đúng chỗ bắt đầu,
+ * trục ms ở dưới (vạch mỗi `buoc` ms). Dùng cho waterfall vs song song, streaming (byte đầu ↔ nội dung). (thêm 13/11, Chương 10)
+ * opts: { w=1110, rh=44, nhan=300, fs=18, max (ms, mặc định = kết thúc lớn nhất), buoc=100, don='ms' }
+ */
+export function gantt(rows, opts = {}) {
+  const { w = 1110, rh = 44, nhan = 300, fs = 18, buoc = 100, don = 'ms' } = opts;
+  const max = opts.max ?? Math.max(...rows.map((r) => r[2]));
+  const bw = w - nhan - 30, X = (t) => nhan + (t / max) * bw, h = rows.length * rh + 40;
+  let s = `<svg viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" font-family="Arial">`;
+  for (let t = 0; t <= max + 0.5; t += buoc) s += `<line x1="${X(t)}" y1="0" x2="${X(t)}" y2="${h - 30}" stroke="#e2e8f0" stroke-width="1.5"/><text x="${X(t)}" y="${h - 10}" text-anchor="middle" font-size="${fs - 4}" fill="#64748b">${t}${t === 0 ? '' : ''}</text>`;
+  s += `<text x="${w - 4}" y="${h - 10}" text-anchor="end" font-size="${fs - 4}" fill="#64748b">${don}</text>`;
+  rows.forEach(([t, a, b, mau = XANH, ghi = ''], i) => {
+    const y = 4 + i * rh;
+    s += `<text x="${nhan - 12}" y="${y + rh / 2 + 6}" text-anchor="end" font-size="${fs}" fill="#262626">${esc(t)}</text>`;
+    s += `<rect x="${X(a)}" y="${y + 7}" width="${Math.max(4, X(b) - X(a))}" height="${rh - 16}" rx="5" fill="${mau}"/>`;
+    const vua = X(b) + 10 + ghi.length * (fs - 2) * 0.56 <= w;   // chữ ghi vừa bên phải thanh? không ⇒ ghi TRONG thanh (chữ trắng, căn phải)
+    if (ghi) s += `<text x="${vua ? X(b) + 8 : X(b) - 10}" y="${y + rh / 2 + 6}" text-anchor="${vua ? 'start' : 'end'}" font-size="${fs - 2}" font-weight="700" fill="${vua ? mau : '#fff'}">${esc(ghi)}</text>`;
+  });
+  return s + '</svg>';
+}

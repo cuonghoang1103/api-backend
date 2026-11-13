@@ -1,0 +1,120 @@
+/*DU_LIEU*/
+const DU_LIEU = {
+ "n10-5:api": "$ curl -s -H 'Cookie: u=an' 127.0.0.1:19385/ho-so; echo; curl -s -H 'Cookie: u=binh' 127.0.0.1:19385/ho-so; echo\n{\"ten\":\"an\",\"soDu\":1500000}\n{\"ten\":\"binh\",\"soDu\":20000}",
+ "n10-5:file:src/app/bang-gia/page.tsx": "// \"tôi đã sửa DB rồi mà trang vẫn cũ\" — trang tĩnh, fetch không tuỳ chọn\nexport default async function BangGia() {\n  const d = await (await fetch('http://127.0.0.1:19385/gia?bang=1')).json();\n  return <p id=\"gia\">giá {d.gia}</p>;\n}\n",
+ "n10-5:file:src/app/toi/cookies/page.tsx": "import { cookies } from 'next/headers';\n// đọc cookie ⇒ Next.js tự chuyển route sang động (lá chắn)\nexport default async function ToiCookies() {\n  const u = (await cookies()).get('u')?.value ?? '';\n  const d = await (await fetch('http://127.0.0.1:19385/ho-so?p=cookies', { headers: { cookie: `u=${u}` } })).json();\n  return <p id=\"toi\">xin chào {d.ten} · số dư {d.soDu}</p>;\n}\n",
+ "n10-5:file:src/app/toi/revalidate/page.tsx": "import { cookies } from 'next/headers';\n// đọc cookie + fetch CÓ cache 60 s, cookie đi trong header của fetch\nexport default async function ToiRevalidate() {\n  const u = (await cookies()).get('u')?.value ?? '';\n  const d = await (await fetch('http://127.0.0.1:19385/ho-so?p=revalidate', { headers: { cookie: `u=${u}` }, next: { revalidate: 60 } })).json();\n  return <p id=\"toi\">xin chào {d.ten} · số dư {d.soDu}</p>;\n}\n",
+ "n10-5:file:src/app/toi/unstable/page.tsx": "import { cookies } from 'next/headers';\nimport { unstable_cache } from 'next/cache';\n// cache TỰ QUẢN: bọc lời gọi bằng unstable_cache, khoá cache chỉ là ['ho-so'] — QUÊN người dùng\nexport default async function ToiUnstable() {\n  const u = (await cookies()).get('u')?.value ?? '';\n  const layHoSo = unstable_cache(\n    async () => (await fetch('http://127.0.0.1:19385/ho-so?p=unstable', { headers: { cookie: `u=${u}` } })).json(),\n    ['ho-so'],\n    { revalidate: 60 },\n  );\n  const d = await layHoSo();\n  return <p id=\"toi\">xin chào {d.ten} · số dư {d.soDu}</p>;\n}\n",
+ "n10-5:trang": "$ npm run build\n├ ○ /bang-gia\n├ ƒ /toi/cookies\n├ ƒ /toi/revalidate\n├ ƒ /toi/unstable\n○  (Static)   prerendered as static content\nƒ  (Dynamic)  server-rendered on demand",
+ "n10-5:cu": "$ curl -s -XPOST '127.0.0.1:19385/gia?v=250'; echo '   ← \"đã sửa DB\"'\n{\"gia\":250}   ← \"đã sửa DB\"\n$ curl -s -D - localhost:19386/bang-gia | sed 's/<!-- -->//g' | grep -oE 'x-nextjs-cache: [A-Z]+|giá [0-9]+'\nx-nextjs-cache: HIT\ngiá 100\n$ curl -s -D - -o /dev/null 'https://cuongthai.com/api/v1/courses/chuong-trinh' | grep -iE '^HTTP|cache-control'\nHTTP/2 200 \ncache-control: public, max-age=120, stale-while-revalidate=600\n$ grep -n \"max-age=120\" ~/Downloads/api-backend/src/routes/course.routes.ts | head -3 | cut -c1-110\n931:      res.set('Cache-Control', req.userId ? 'private, no-store' : 'public, max-age=120, stale-while-revali\n1123:      : 'public, max-age=120, stale-while-revalidate=600');\n1333:      res.set('Cache-Control', 'public, max-age=120, stale-while-revalidate=600');\n$ grep -n \"revalidate: 120\" ~/Downloads/api-backend/frontend/src/app/courses/page.tsx\n18:      next: { revalidate: 120 },",
+ "n10-5:cdn": "$ K=images/thu-cdn-404/<tên-chưa-từng-có>.webp   (khoá ngẫu nhiên, KHÔNG bao giờ dùng)\nHTTP/2 404   cf-cache-status: MISS  \nHTTP/2 404   cf-cache-status: HIT  \n$ K=$(cat /tmp/nxj-k404.txt); curl -s -D - -o /dev/null \"https://media.cuongthai.com/$K?cb=$(date +%s)\" | grep -iE '^HTTP|cf-cache-status' | tr '\\r\\n' '  '; echo\nHTTP/2 404   cf-cache-status: MISS  ",
+ "n10-5:nguoi": "$ for p in cookies revalidate unstable; do for u in an binh; do echo \"/toi/$p · cookie u=$u ⇒ $(curl -s -H \"Cookie: u=$u\" localhost:19386/toi/$p | sed 's/<!-- -->//g' | grep -o 'xin chào [^<]*')\"; done; done\n/toi/cookies · cookie u=an ⇒ xin chào an · số dư 1500000\nxin chào \\\",\\\"an\\\",\\\" · số dư \\\",1500000]}]\\n\"])\n/toi/cookies · cookie u=binh ⇒ xin chào binh · số dư 20000\nxin chào \\\",\\\"binh\\\",\\\" · số dư \\\",20000]}]\\n\"])\n/toi/revalidate · cookie u=an ⇒ xin chào an · số dư 1500000\nxin chào \\\",\\\"an\\\",\\\" · số dư \\\",1500000]}]\\n\"])\n/toi/revalidate · cookie u=binh ⇒ xin chào binh · số dư 20000\nxin chào \\\",\\\"binh\\\",\\\" · số dư \\\",20000]}]\\n\"])\n/toi/unstable · cookie u=an ⇒ xin chào an · số dư 1500000\nxin chào \\\",\\\"an\\\",\\\" · số dư \\\",1500000]}]\\n\"])\n/toi/unstable · cookie u=binh ⇒ xin chào an · số dư 1500000\nxin chào \\\",\\\"an\\\",\\\" · số dư \\\",1500000]}]\\nf:[[\\\"$\\\",\\\"meta\\\",\\\"0\\\",{\\\"charSet\\\":\\\"utf-8\\\"}],[\\\"$\\\",\\\"meta\\\",\\\"1\\\",{\\\"name\\\":\\\"viewport\\\",\\\"content\\\":\\\"width=device-width, initial-scale=1\\\"}]]\\n14:I[27201,[\\\"$2\\\"],\\\"IconMark\\\"]\\nc:null\\n12:[[\\\"$\\\",\\\"title\\\",\\\"0\\\",{\\\"children\\\":\\\"Create Next App\\\"}],[\\\"$\\\",\\\"meta\\\",\\\"1\\\",{\\\"name\\\":\\\"description\\\",\\\"content\\\":\\\"Generated by create next app\\\"}],[\\\"$\\\",\\\"link\\\",\\\"2\\\",{\\\"rel\\\":\\\"icon\\\",\\\"href\\\":\\\"/favicon.ico?favicon.117ezoe8m31dk.ico\\\",\\\"sizes\\\":\\\"48x48\\\",\\\"type\\\":\\\"image/x-icon\\\"}],[\\\"$\\\",\\\"$L14\\\",\\\"3\\\",{}]]\\n\"])",
+ "n10-5:file:app/toi/page.jsx": "// đúng khuôn của frontend/src/app/courses/[slug]/page.tsx (Next 14.2.35): force-dynamic + cookie trong header + next.revalidate\nimport { headers } from 'next/headers';\nexport const dynamic = 'force-dynamic';\nexport default async function Toi() {\n  const res = await fetch('http://127.0.0.1:19385/ho-so?p=v14', {\n    headers: { cookie: headers().get('cookie') ?? '' },\n    next: { revalidate: 300 },\n  });\n  const d = await res.json();\n  return <p id=\"toi\">xin chào {d.ten} · số dư {d.soDu}</p>;\n}\n",
+ "n10-5:v14": "$ npx next --version\nNext.js v14.2.35\n$ for u in an binh an; do echo \"cookie u=$u ⇒ $(curl -s -H \"Cookie: u=$u\" localhost:19387/toi | sed 's/<!-- -->//g' | grep -o 'xin chào [^<]*')\"; done\ncookie u=an ⇒ xin chào an · số dư 1500000\nxin chào \\\",\\\"an\\\",\\\" · số dư \\\",1500000]}]\\n\"])\ncookie u=binh ⇒ xin chào binh · số dư 20000\nxin chào \\\",\\\"binh\\\",\\\" · số dư \\\",20000]}]\\n\"])\ncookie u=an ⇒ xin chào an · số dư 1500000\nxin chào \\\",\\\"an\\\",\\\" · số dư \\\",1500000]}]\\n6:[[\\\"$\\\",\\\"meta\\\",\\\"0\\\",{\\\"name\\\":\\\"viewport\\\",\\\"content\\\":\\\"width=device-width, initial-scale=1\\\"}],[\\\"$\\\",\\\"meta\\\",\\\"1\\\",{\\\"charSet\\\":\\\"utf-8\\\"}]]\\n2:null\\n\"])\n$ curl -s 127.0.0.1:19385/dem | grep -o '\"/ho-so?p=v14\":[0-9]*'\n\"/ho-so?p=v14\":2\n$ ls .next/cache/fetch-cache | wc -l | sed 's/^ */mục trong fetch-cache: /'\nmục trong fetch-cache: 3",
+ "n10-5:dung": ""
+};
+/*HET_DU_LIEU*/
+import { lamDeck, tsx, tn, box, two, steps, kw, c, cmp, icards } from './_nxj-chung.mjs';
+
+export const deck = { key: 'nxj-10-5', code: 'NXJ 10.5', title: 'When the cache bites: stale data in practice', sub: 'Chapter 10 · Lesson 10.5' };
+const O = (k) => { const v = DU_LIEU[`n10-5:${k}`]; if (v === undefined) throw new Error('thiếu ' + k); return v; };
+const D = (...a) => `<div>${a.join('')}</div>`;
+const F = (p) => O(`file:${p}`).trim();
+const bo = (s) => s.split('\n').filter((l) => !l.trim().startsWith('//')).join('\n').replace(/'http:\/\/127\.0\.0\.1:19385(\/[^'?]*)[^']*'/g, "API + '$1'");
+const gon = (l) => l.replace(' · cookie ', ' · ').replace('xin chào ', '').replace(' · số dư ', ': ');
+const doan = (k, dau) => { const ls = O(k).split('\n'); const i = ls.findIndex((l) => l.startsWith('$ ') && l.includes(dau)); if (i < 0) throw new Error('không thấy ' + dau); const r = []; for (let j = i + 1; j < ls.length && !ls[j].startsWith('$ '); j++) r.push(ls[j]); return r; };
+
+// ── số đo (chặn)
+const BANG = doan('cu', 'bang-gia');
+const CC = doan('cu', 'chuong-trinh').find((l) => /cache-control/i.test(l)).trim();
+const DONG_API = doan('cu', 'max-age=120').map((l) => l.replace(/^(\d+):\s+/, 'course.routes.ts:$1  ').replace(/\s{2,}/g, ' '));
+const FE = doan('cu', 'revalidate: 120')[0].trim();
+const CDN = doan('cdn', 'K=images').map((l) => l.replace(/\s+/g, ' ').trim()), CB = doan('cdn', 'cb=')[0].replace(/\s+/g, ' ').trim();
+const NG0 = doan('nguoi', 'for p in').filter((l) => l.startsWith('/toi/'));
+const NG = NG0;
+const ai = (p, u) => NG.find((l) => l.startsWith(`/toi/${p} · cookie u=${u}`)).split('⇒ ')[1];
+const V14 = doan('v14', 'for u in').filter((l) => l.startsWith('cookie'));
+const H14 = doan('v14', '/dem')[0], FC14 = doan('v14', 'fetch-cache')[0];
+const BUILD = doan('trang', 'npm run build').filter((l) => /\/bang-gia|\/toi\//.test(l));
+if (!BANG.join().includes('HIT') || !BANG.join().includes('giá 100') || !/max-age=120, stale-while-revalidate=600/.test(CC)) throw new Error('số đo tầng cache đổi');
+if (!/MISS/.test(CDN[0]) || !/HIT/.test(CDN[1]) || !/404/.test(CDN[1]) || !/MISS/.test(CB)) throw new Error('số đo CDN 404 đổi');
+if (ai('cookies', 'binh') !== 'xin chào binh · số dư 20000' || ai('revalidate', 'binh') !== 'xin chào binh · số dư 20000' || ai('unstable', 'binh') !== 'xin chào an · số dư 1500000') throw new Error('số đo theo người dùng đổi');
+if (!/binh · số dư 20000/.test(V14[1]) || !/"\/ho-so\?p=v14":2/.test(H14) || !BUILD.some((l) => /ƒ \/toi\/unstable/.test(l))) throw new Error('số đo Next 14 đổi');
+
+export const S = [
+  { cover: true, nhan: 'Chapter 10 · Lesson 10.5', t: 'When the cache bites:<br>stale data in practice', sub: '"I changed it, the page still shows the old value." Where the old copy lives, how to find it with curl — and the one that serves one user\'s data to another',
+    en: 'Lesson ten point five: when the cache bites. I changed it and the page still shows the old value — nothing is broken, a cache is doing its job. We find where the old copy lives with curl, measure this site\'s own caches, and catch the worst case: one user\'s data served to another.' },
+  { t: 'What you will take away from this lesson', to: true, giua: true, body: `<ul>
+    <li>The symptom, reproduced — and diagnosed from response headers, not from the code</li>
+    <li>Every layer that can hold an old copy, and the header that gives each one away</li>
+    <li>This site, measured: a list endpoint cached 120 s (+ 600 s stale), a CDN that caches 404s</li>
+    <li>Per-user data: the automatic guard, and the self-made cache that leaks a balance to another user</li>
+    <li>A staleness budget per screen, and a checklist for after every write</li></ul>`,
+    en: 'Five takeaways: the symptom, reproduced and diagnosed from response headers; every layer that can hold an old copy and the header that gives it away; this site measured — a list endpoint cached for two minutes plus ten more stale, and a CDN that caches 404s; per-user data, with the guard and the leak; and a staleness budget per screen.' },
+  { t: 'The symptom: "I changed the DB, the page is still old"', body: two(D(tsx(bo(F('src/app/bang-gia/page.tsx')), { sm: true, hl: [2] }),
+      tn('$ curl -XPOST …/gia?v=250      # "the DB was edited"\n$ curl -s -D - localhost:3000/bang-gia | grep …\n' + BANG.join('\n'), { fs: 16, title: 'curl (real)' })),
+    D(box('Nothing is broken', 'The page is static: its fetch ran at build time and the HTML is served from the Full Route Cache. The database is right; the copy is old.', 'lam'),
+      box('Diagnose by curl, not by reading code', 'The response <b>tells you</b> who answered: <code>x-nextjs-cache: HIT</code> = Next.js served a stored copy. Look at the headers first — then decide which cache to clear.', 'xanh')), ''),
+    en: 'The symptom, reproduced. The database is edited — the price becomes two fifty — and the page still says one hundred. Nothing is broken: this page is static, so the fetch ran at build time. Do not read the code to guess; ask the response. curl shows x-nextjs-cache HIT: Next.js answered from a stored copy.' },
+  { t: 'Where the old copy lives — and its tell', body: cmp(['Layer', 'Who holds the copy', 'The tell (measured with curl / DevTools)', 'Clear it with'], [
+      ['Next.js Data / Full Route Cache', 'your Next server', '<code>x-nextjs-cache: HIT</code> / <code>STALE</code>', '<code>revalidatePath</code> / <code>revalidateTag</code> (10.3)'],
+      ['Your own API', 'the backend, or a shared cache in front of it', '<code>Cache-Control: max-age=…</code>, <code>Age:</code>', 'the API\'s own invalidation'],
+      ['The CDN', 'Cloudflare (or another edge)', '<code>cf-cache-status: HIT</code>, <code>age:</code>', 'purge, or change the URL'],
+      ['The browser Router Cache', 'the visitor\'s tab', 'no request at all on Back (10.2)', '<code>router.refresh()</code>, Server Action'],
+      ['(nothing cached)', '—', 'fresh value, <code>MISS</code> / no cache header', 'look elsewhere: maybe the write failed'],
+    ], { hl: [0] }),
+    en: 'Where the old copy can live, and the header that gives it away. The Next.js caches: x-nextjs-cache HIT or STALE. Your own API: Cache-Control and Age. The CDN: cf-cache-status HIT. The browser Router Cache: no request at all when you press Back. And if nothing is cached, the value is fresh — then maybe the write really failed.' },
+  { t: 'This site, measured: the list API is cached 120 s + 600 s', body: tn('$ curl -s -D - https://cuongthai.com/api/v1/courses/chuong-trinh\n' + CC + '\n$ grep -n "max-age=120" src/routes/course.routes.ts\n' + DONG_API.map((l) => l.slice(0, 104)).join('\n') + '\n$ grep -n "revalidate: 120" frontend/src/app/courses/page.tsx\n' + FE, { fs: 13, title: 'cuongthai.com + this repo (real, 13/11/2026)' }) +
+    two(D(box('Correction', 'The lesson\'s note says "about 60 seconds". Measured: <b><code>max-age=120</code></b> + <b><code>stale-while-revalidate=600</code></b> (old list up to 10 more minutes). The <code>/courses</code> page also revalidates every <b>120 s</b>.', 'do2'),
+      box('So the DB is the source of truth', 'After editing, the <i>list</i> can lag by minutes; the detail endpoint is fresh. Logged-in users get <code>private, no-store</code> (line 931).', 'lam')), ''),
+    en: 'This site, measured today. The public curriculum list answers with Cache-Control public, max-age one hundred twenty, stale-while-revalidate six hundred — set in course routes, and the courses page also revalidates every one hundred twenty seconds. The written lesson says about sixty seconds; the real window is two minutes, plus up to ten more minutes of stale copies. So after editing content, trust the database and the detail endpoint, not the list.' },
+  { t: 'A CDN caches 404s too — measured', body: tn('$ K=images/thu-cdn-404/<a-key-that-never-existed>.webp\n$ curl -D - https://media.cuongthai.com/$K   # twice\n' + CDN.join('\n') + '\n$ curl -D - "https://media.cuongthai.com/$K?cb=$(date +%s)"\n' + CB, { fs: 17, title: 'Cloudflare in front of R2 (real)' }) +
+    two(box('The trap', 'Request a file <b>before</b> it is uploaded: the 404 itself is cached (<code>cf-cache-status: HIT</code>). Upload it — the URL keeps saying "not found" for hours. The file is in storage; the edge is stale.', 'do2'),
+      box('What to do', 'Verify with a cache-busting query (<code>?cb=…</code>: <code>MISS</code>). If a URL is already poisoned, change the URL (<code>?v=2</code>, a new prefix — this course\'s slides use <code>NXJ/v1</code> for exactly this reason).', 'xanh'), ''),
+    en: 'A CDN caches 404s too — measured on this site\'s media domain with a key that never existed. First request: 404, MISS. Second: 404, HIT — the not-found itself is now cached. With a cache-busting query: MISS again. So never request a file before it is uploaded; and if a URL is poisoned, change the URL — that is why this course\'s slides live under a versioned prefix.' },
+  { t: 'Per-user data: the guard Next.js gives you', body: two(D(tsx(bo(F('src/app/toi/cookies/page.tsx')).replace('{ headers: { cookie: `u=${u}` } }', '{\n    headers: { cookie: `u=${u}` } }'), { sm: true, hl: [3] }),
+      tsx(bo(F('src/app/toi/revalidate/page.tsx')).replace("{ headers: { cookie: `u=${u}` }, next: { revalidate: 60 } }", "{\n    headers: { cookie: `u=${u}` },\n    next: { revalidate: 60 } }"), { sm: true, hl: [5, 6] })),
+    D(tn(BUILD.join('\n'), { fs: 15, title: 'npm run build (real)' }),
+      tn(NG.filter((l) => /cookies|revalidate/.test(l)).map(gon).join('\n'), { fs: 15, title: 'two users, two cookies (real)' }),
+      box('Two guards, measured', 'Reading <code>cookies()</code> made every <code>/toi</code> route <b>ƒ</b> — rendered per request. And a cached <code>fetch</code> that sends the cookie in its headers is cached <b>per header value</b>: An and Bình each got their own balance.', 'xanh')), ''),
+    en: 'Per-user data: the guards Next.js gives you. Reading cookies makes the route dynamic — the build marks every profile route with an f. And even a cached fetch that sends the cookie in its headers is cached per header value: user An and user Bình each saw their own balance.' },
+  { t: 'The leak: a cache you manage yourself', body: two(tsx(bo(F('src/app/toi/unstable/page.tsx')).replace("(await fetch(API + '/ho-so', { headers", "(await fetch(API + '/ho-so',\n      { headers"), { sm: true, hl: [6, 7, 8] }),
+    D(tn(NG.filter((l) => /unstable/.test(l)).map(gon).join('\n'), { fs: 15, title: 'two users (real)' }),
+      box('Bình sees An\'s balance', `The key is <code>['ho-so']</code> — it forgot <i>who</i> is asking. An came first; his result was stored; Bình got <b>${ai('unstable', 'binh').replace('xin chào ', 'An\'s: ')}</b>. No error, no warning — the guard is gone the moment you cache by hand.`, 'do2'),
+      box('Fix', 'Put the user in the key (pass the id as an argument: arguments are part of an <code>unstable_cache</code> key), or do not cache personal data at all. Test it on purpose: two browsers, two accounts, compare.', 'xanh')), 'r64'),
+    en: 'The leak: a cache you manage yourself. This page wraps the profile call in unstable cache with the key ho-so — it forgot who is asking. An asked first; his result was stored; Bình then got An\'s balance: one million five hundred thousand. No error, no warning. Put the user in the key, or do not cache personal data — and test it on purpose with two accounts.' },
+  { t: 'This repo\'s pattern, on Next.js 14.2.35', body: two(D(tsx(bo(F('app/toi/page.jsx')), { sm: true, hl: [5, 6] }),
+      box('Mirrors frontend/src/app/courses/[slug]/page.tsx', '<code>force-dynamic</code> + the visitor\'s cookie forwarded in the fetch headers + <code>next: { revalidate }</code>. Is it safe?', 'lam')),
+    D(tn('$ npx next --version\nNext.js v14.2.35\n' + V14.join('\n') + '\n$ curl /dem\n' + H14 + '\n' + FC14, { fs: 15, title: 'three requests, two users (real)' }),
+      box('Measured: no leak', 'Each cookie value got its own cache entry (An\'s second visit was served from cache: 2 API calls for 3 requests). Correct — but every distinct cookie (every login session) creates a new entry. In the real file the data only feeds <code>generateMetadata</code>, so it is harmless there.', 'xanh')), ''),
+    en: 'This repo\'s own pattern, on Next.js fourteen: force-dynamic, the visitor\'s cookie forwarded in the fetch headers, and a revalidate window — the same shape as the course page\'s metadata fetch. Measured: no leak. Each cookie value gets its own cache entry; An\'s second visit came from the cache, two API calls for three requests. Correct — but one entry per login session.' },
+  { t: 'Pick a staleness budget per screen', body: icards([
+      ['page', 'A blog post', 'Stale for hours is fine. Static, revalidated on publish (<code>revalidatePath</code>). Fastest and cheapest.'],
+      ['list', 'A product listing', 'Stale for a minute is fine: <code>revalidate: 60</code>. The price is never more than one visit + 60 s old.'],
+      ['gauge', 'A user\'s dashboard', 'Must be current for that user: dynamic, or cached <b>per user</b> with on-demand revalidation after their writes.'],
+      ['pulse', 'A live count', 'No server cache — maybe not even server rendering: a client poll or a socket is the honest answer.'],
+    ], 4) + box('The question is not "cache or not"', 'It is <b>how wrong may this screen be, and for how long?</b> Answer it per screen, write it down, then pick the tool.', 'lam'),
+    en: 'Pick a staleness budget per screen. A blog post may be hours old: static, revalidated on publish. A product listing: a minute is fine, revalidate sixty. A user\'s dashboard must be current for that user. A live count: no server cache at all. The question is not cache or not; it is how wrong may this screen be, and for how long.' },
+  { t: 'Checklist: after a write, and when it is stale', body: two(steps([
+      'After a write: which <b>route</b> shows this data? <code>revalidatePath</code> it — or <code>revalidateTag</code> the tag its fetch carries',
+      'Personal data: is the user part of every cache key? (two browsers, two accounts)',
+      '"It did not update": <code>curl -D -</code> the page and the API — <code>x-nextjs-cache</code>, <code>Cache-Control</code>, <code>Age</code>, <code>cf-cache-status</code>',
+      'Fresh at every layer? Then check the write itself — the DB is the truth',
+    ]), box('Start uncached, add on purpose', 'While building, leave data uncached so you always see the latest. Add caching only where a source is measured slow or hit often — and give every cache a revalidation story, so "it went stale" is never a mystery.', 'lam'), ''),
+    en: 'A checklist. After every write: which route shows this data? Revalidate that path or tag. For personal data: is the user part of every cache key? When it did not update: curl the page and the API and read the cache headers, layer by layer. Fresh everywhere? Then check the write itself. And while building, start uncached and add caching on purpose.' },
+  { t: 'Key terms of this lesson', body: `<div style="display:flex;flex-wrap:wrap;gap:12px">${[
+      kw('Staleness', 'serving an old copy after the source changed'), kw('Cache invalidation', 'telling a layer to drop its copy'),
+      kw('Source of truth', 'the DB changed; the caches did not know'), kw('Diagnose by curl', 'read cache headers, do not guess from code'),
+      kw('cf-cache-status', 'the CDN\'s tell: HIT / MISS / …'), kw('Cache key', 'what makes two requests "the same" — must include the user for personal data'),
+      kw('Cache-busting', '?cb=… to bypass a stale or poisoned URL'), kw('Staleness budget', 'how old each screen may be, decided on purpose'),
+    ].join('')}</div>`, to: true,
+    en: 'Key terms: staleness; cache invalidation; source of truth; diagnose by curl; cf-cache-status; cache key; cache-busting; and the staleness budget.' },
+  { t: 'Your turn — and what to keep', body: two(steps([
+      `Make a static page with a fetch; change the source; find ${c('x-nextjs-cache: HIT')} with ${c('curl -D -')}`,
+      `${c('curl -D -')} one of your own API endpoints: is there a ${c('Cache-Control')}? How old may it be?`,
+      `Build a per-user page with ${c('unstable_cache')} and a key without the user: log in as two users, compare`,
+      `Write your staleness budget for three screens of your app`,
+    ]), box('Keep these', `<ul><li>Old value ⇒ a cache doing its job</li><li>Ask the headers, not the code</li><li>This site: list 120 s + 600 s stale; CDN caches 404s</li><li>Hand-made caches forget the user</li><li>Budget per screen, then the tool</li></ul>`, 'lam'), ''),
+    en: 'Your turn: reproduce the stale static page and find the HIT header; curl your own API and read its Cache-Control; build a per-user page with a key that forgets the user and log in as two users; and write a staleness budget for three screens. Keep: an old value means a cache doing its job; ask the headers; hand-made caches forget the user; budget per screen, then the tool.' },
+];
+export const slides = lamDeck({ chuong: 'Chapter 10 — Data fetching, caching and revalidating', bai: '10.5' }, S);

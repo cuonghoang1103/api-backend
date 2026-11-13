@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import * as Sentry from '@sentry/nextjs';
 import { AlertTriangle, RotateCw } from 'lucide-react';
+import { useThuLai } from '@/lib/thuLai';
 
 /**
  * App-wide error boundary. Any client-side exception that bubbles up
@@ -20,6 +21,7 @@ export default function GlobalError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const thuLai = useThuLai(reset);
   useEffect(() => {
     // Forward to the browser console so devs can still see the stack
     // even though we're rendering a friendly fallback.
@@ -58,7 +60,7 @@ export default function GlobalError({
           <p className="text-xs text-text-muted font-mono mb-6">Mã lỗi: {error.digest}</p>
         )}
         <button
-          onClick={reset}
+          onClick={thuLai}
           className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-medium text-sm hover:opacity-90 transition-opacity"
         >
           <RotateCw className="w-4 h-4" /> Thử lại

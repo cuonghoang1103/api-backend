@@ -18,6 +18,13 @@ Mẫu một mục:
 
 ---
 
+### 13/11/2026 — Web — Nút "Thử lại" ở trang lỗi bấm mãi vẫn lỗi
+- **Triệu chứng:** trang khoá học / trang bất kỳ gặp lỗi phía máy chủ (API chập chờn), bấm "Thử lại" vẫn hiện trang lỗi dù máy chủ đã ổn.
+- **Nguyên nhân:** `frontend/src/app/error.tsx` và `frontend/src/app/courses/[slug]/error.tsx` chỉ gọi `reset()` — React vẽ lại ở trình duyệt với dữ liệu Server Component CŨ, không xin lại máy chủ.
+- **Cách sửa:** hook `useThuLai` (`frontend/src/lib/thuLai.ts`): `startTransition(() => { router.refresh(); reset(); })`.
+- **Ảnh hưởng:** mọi trang dùng hai ranh giới lỗi đó; người dùng phải tự tải lại trang.
+- **Bài học:** `reset()` chỉ gỡ ranh giới lỗi, không lấy dữ liệu mới. Lỗi máy chủ cần `router.refresh()`. Phát hiện nhờ khoá Next.js 8.2 đo thật (trên Next 16; repo chạy 14 — cùng cơ chế).
+
 ### 13/11/2026 — Realtime — Redis lên muộn lúc khởi động ⇒ tin realtime biến mất, không log
 - **Triệu chứng:** backend khởi động khi Redis chưa sẵn sàng; vài giây sau Redis lên thì người đang online không nhận tin nhắn/thông báo realtime nữa, log không có cảnh báo nào.
 - **Nguyên nhân:** `src/socket/messaging.socket.ts` attachRedisAdapter chờ `getRedis()` — mà `src/config/redis.ts` thử lại MÃI (reconnectStrategy) nên khối catch không bao giờ chạy. Khi Redis lên, `io.adapter(...)` thay bằng adapter MỚI trống ⇒ mọi socket đã nối mất room (`socket.rooms` vẫn báo `user:7` nhưng phát vào `user:7` ⇒ 0 người nhận).

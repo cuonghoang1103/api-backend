@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import Link from 'next/link';
+import { useThuLai } from '@/lib/thuLai';
 
 export default function CourseError({
   error,
@@ -10,6 +11,7 @@ export default function CourseError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const thuLai = useThuLai(reset);
   useEffect(() => {
     // eslint-disable-next-line no-console
     console.error('[course-detail] Error boundary caught', error);
@@ -32,7 +34,7 @@ export default function CourseError({
         )}
         <div className="flex gap-3 justify-center">
           <button
-            onClick={reset}
+            onClick={thuLai}
             className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-medium text-sm hover:opacity-90 transition-opacity"
           >
             Thử lại

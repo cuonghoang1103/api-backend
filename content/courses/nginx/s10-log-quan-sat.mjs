@@ -1,3 +1,8 @@
+import G10_1 from './giang/ngx-10-1.mjs';
+import G10_2 from './giang/ngx-10-2.mjs';
+import G10_3 from './giang/ngx-10-3.mjs';
+import G10_4 from './giang/ngx-10-4.mjs';
+import G10_5 from './giang/ngx-10-5.mjs';
 const REF = '?ref=%2Fcourses%2Fnginx%2Flearn&reflabel=Nginx';
 
 export default {
@@ -12,6 +17,7 @@ export default {
       type: 'LESSON',
       description: 'Cùng ba request, ghi ra bằng định dạng combined và bằng một định dạng viết cho một con proxy. Cái đầu nói được request nào chậm; cái sau nói được chậm ở ĐÂU, máy nào trả lời, và có phải nó tới từ bộ đệm không.',
       content: `
+${G10_1}
 <div class="ml-en">
 <span class="eyebrow">Chapter 10 · Lesson 10.1</span>
 <h2>What the default log leaves out</h2>
@@ -49,7 +55,7 @@ access_log /var/log/nginx/access.log huu_dung;</code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">$upstream_cache_status makes the cache visible</span><span class="v">Chapter 5's whole diagnostic problem — "the user saw old data and the application is correct" — is one field. With it in every line, your hit rate is an <code>awk</code> away and a cache bug is obvious rather than invisible.</span></div>
   <div class="kv"><span class="k">$host tells you which site was asked for</span><span class="v">Chapter 1: one server can answer for many names. Without <code>\$host</code>, a log line from a multi-site server does not say which site it belongs to — and it also shows you the forged hostnames scanners send.</span></div>
-  <div class="kv"><span class="k">$upstream_response_time can be a list</span><span class="v">When <code>proxy_next_upstream</code> retried (Lesson 9.3), the field contains several values separated by commas — one per attempt. A comma in that field is the signature of a retry, which is otherwise invisible.</span></div>
+  <div class="kv"><span class="k">$upstream_response_time can be a list</span><span class="v">When <code>proxy_next_upstream</code> retried (Lesson 9.3), the field contains several values separated by commas — one per attempt. A comma in that field is the signature of a retry, which is otherwise invisible. And because the separator is a comma <em>and a space</em>, every awk column after it shifts on that line (measured below: <code>$5</code> printed <code>0.001</code>, <code>$12</code> printed <code>-&gt;</code>) — the strongest argument for the JSON format of Lesson 10.2.</span></div>
   <div class="kv"><span class="k">Do not log $request unless you also log the method separately</span><span class="v"><code>\$request</code> is method, URI and protocol in one quoted string, which is awkward to parse. Splitting it into <code>\$request_method</code> and <code>\$request_uri</code> costs nothing and makes every later query simpler.</span></div>
 </div>
 <div class="pitfall">
@@ -66,6 +72,86 @@ access_log /var/log/nginx/access.log huu_dung;</code></pre>
 <div class="note-ct">
 <p><strong>Change this before you need it.</strong> A log format is only useful retroactively — the incident you want to investigate happened before you improved the format. It costs one line in <code>nginx.conf</code> and a reload, it has no measurable performance cost (Lesson 10.3 measures exactly that), and the difference between the two blocks above is the difference between "the API was slow at 3am" and "the API was slow at 3am on backend 2, which was also serving cache misses".</p>
 </div>
+
+<h3>🔬 Run it yourself</h3>
+<p>A Node backend (fast, 600 ms slow, 500), one server that writes <code>combined</code> AND the proxy-aware format at the same time, plus a rewrite, a dead first backend (retry), an <code>error_page</code>, a cache and a forged <code>Host</code> — on nginx/1.24.0:</p>
+<pre><code class="language-bash">// app.js
+// app.js — backend cổng 9600: /binh-thuong nhanh · /cham 600 ms · /loi 500
+require('http').createServer((q, r) =&gt; {
+  if (q.url.startsWith('/cham')) return setTimeout(() =&gt; r.end('ok nhung cham\\n'), 600);
+  if (q.url.startsWith('/loi')) { r.statusCode = 500; return r.end('loi ung dung\\n'); }
+  r.end('ok binh thuong\\n');
+}).listen(9600, '127.0.0.1');</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  log_format huu_dung '$remote_addr $status $request_time $upstream_response_time '
+                      '$upstream_addr $upstream_status "$request_method $request_uri" -&gt; "$uri" '
+                      '$body_bytes_sent $upstream_cache_status "$http_user_agent" $host';
+  proxy_cache_path /srv/cache keys_zone=c:1m;
+  upstream app { server 127.0.0.1:9600; }
+  upstream hai { server 127.0.0.1:9601; server 127.0.0.1:9600; } <span class="tok-comment">  # 9601: không ai nghe</span>
+  server {
+    listen 8080;
+    access_log /srv/logs/combined.log combined; <span class="tok-comment">  # mặc định</span>
+    access_log /srv/logs/huu.log huu_dung;      <span class="tok-comment">  # viết cho một con PROXY — cùng lúc</span>
+    location /        { proxy_pass http://app; }
+    location /cu/     { rewrite ^/cu/(.*)$ /$1 last; }                <span class="tok-comment">  # $request_uri ≠ $uri</span>
+    location /thu-lai/ { proxy_pass http://hai/; }                     <span class="tok-comment">  # thử lại ⇒ danh sách</span>
+    location /trang-loi { proxy_intercept_errors on; error_page 500 = @dep; proxy_pass http://app/loi; }
+    location @dep     { return 200 "trang loi dep\\n"; }               <span class="tok-comment">  # $status 200, upstream 500</span>
+    location /anh/    { proxy_cache c; proxy_cache_valid 200 1m; proxy_pass http://app/binh-thuong; }
+  }
+}</code></pre>
+<div class="out">$ for p in binh-thuong cham loi; do curl -s -o /dev/null http://127.0.0.1:8080/$p; done
+$ cat /srv/logs/combined.log
+127.0.0.1 - - [13/Nov/2026:00:38:08 +0000] "GET /binh-thuong HTTP/1.1" 200 25 "-" "curl/8.5.0"
+127.0.0.1 - - [13/Nov/2026:00:38:09 +0000] "GET /cham HTTP/1.1" 200 24 "-" "curl/8.5.0"
+127.0.0.1 - - [13/Nov/2026:00:38:09 +0000] "GET /loi HTTP/1.1" 500 23 "-" "curl/8.5.0"
+$ cat /srv/logs/huu.log
+127.0.0.1 200 0.008 0.008 127.0.0.1:9600 200 "GET /binh-thuong" -&gt; "/binh-thuong" 25 - "curl/8.5.0" 127.0.0.1
+127.0.0.1 200 0.605 0.604 127.0.0.1:9600 200 "GET /cham" -&gt; "/cham" 24 - "curl/8.5.0" 127.0.0.1
+127.0.0.1 500 0.002 0.001 127.0.0.1:9600 500 "GET /loi" -&gt; "/loi" 23 - "curl/8.5.0" 127.0.0.1
+$ curl -s -o /dev/null http://127.0.0.1:8080/cu/binh-thuong          # rewrite … last
+$ curl -s -o /dev/null http://127.0.0.1:8080/thu-lai/binh-thuong     # máy đầu chết ⇒ thử lại
+$ curl -s -o /dev/null http://127.0.0.1:8080/trang-loi               # error_page chen vào
+$ for k in 1 2; do curl -s -o /dev/null http://127.0.0.1:8080/anh/x; done   # bộ đệm: lần 1, lần 2
+$ curl -s -o /dev/null -H 'Host: may-quet.invalid' -A 'quet/1.0' http://127.0.0.1:8080/binh-thuong
+$ cat huu.log
+127.0.0.1 200 0.001 0.001 127.0.0.1:9600 200 "GET /cu/binh-thuong" -&gt; "/binh-thuong" 25 - "curl/8.5.0" 127.0.0.1
+127.0.0.1 200 0.002 0.000, 0.001 127.0.0.1:9601, 127.0.0.1:9600 502, 200 "GET /thu-lai/binh-thuong" -&gt; "/thu-lai/binh-thuong" 25 - "curl/8.5.0" 127.0.0.1
+127.0.0.1 200 0.001 0.001 127.0.0.1:9600 500 "GET /trang-loi" -&gt; "/trang-loi" 14 - "curl/8.5.0" 127.0.0.1
+127.0.0.1 200 0.002 0.001 127.0.0.1:9600 200 "GET /anh/x" -&gt; "/anh/x" 25 MISS "curl/8.5.0" 127.0.0.1
+127.0.0.1 200 0.000 - - - "GET /anh/x" -&gt; "/anh/x" 25 HIT "curl/8.5.0" 127.0.0.1
+127.0.0.1 200 0.002 0.002 127.0.0.1:9600 200 "GET /binh-thuong" -&gt; "/binh-thuong" 25 - "quet/1.0" may-quet.invalid
+$ # (gui them 6 request nhanh + 1 request /cham roi hoi bang awk)
+$ awk '$3 &gt; 0.5' huu.log                         # request nào chậm hơn nửa giây?
+127.0.0.1 200 0.608 0.608 127.0.0.1:9600 200 "GET /cham" -&gt; "/cham" 24 - "curl/8.5.0" 127.0.0.1
+$ awk '{ print $12 }' huu.log | sort | uniq -c     # bộ đệm: HIT hay MISS? (- = không qua cache)
+     10 -
+      1 -&gt;
+      1 HIT
+      1 MISS
+$ awk '{ print $5 }' huu.log | sort | uniq -c      # máy nào trả lời bao nhiêu?
+      1 -
+      1 0.001
+     11 127.0.0.1:9600</div>
+<p>The slow request: 0.605 s for the client, 0.604 s at the backend — the backend is the whole delay, and <code>combined</code> only says "200". The five odd requests each explain themselves in the proxy format. NEW: the awk questions at the end — the retry line wrote <code>0.000, 0.001</code> and <code>127.0.0.1:9601, 127.0.0.1:9600</code>, so on that line <code>$5</code> is <code>0.001</code> and <code>$12</code> is <code>-&gt;</code>: one "machine" named <code>0.001</code>, one cache status that is an arrow. The counts are silently wrong.</p>
+<h3>🔗 Related lessons in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-1-2-cai-gi-thuoc-ve" target="_blank" rel="noopener"><span class="lc-ico">🔭</span><span class="lc-body"><span class="lc-title">Observability & Monitoring · 1.2 — What belongs on a log line, and what does not</span><span class="lc-sub">The same question from the application side</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-2-4-logql" target="_blank" rel="noopener"><span class="lc-ico">🔭</span><span class="lc-body"><span class="lc-title">Observability & Monitoring · 2.4 — LogQL: asking a question and getting an answer</span><span class="lc-sub">Ask the log with LogQL instead of awk</span></span></a>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>combined</code></span><span class="v">The default Apache-style access format — built for a file server, blind to everything a proxy does.</span></div>
+  <div class="kv"><span class="k"><code>log_format</code></span><span class="v">Directive that defines a named line layout out of variables; <code>access_log</code> then points at it.</span></div>
+  <div class="kv"><span class="k">\$request_time vs \$upstream_response_time</span><span class="v">Total time the client waited versus the time the backend took; the gap between them is the part Nginx owns.</span></div>
+  <div class="kv"><span class="k">\$upstream_addr</span><span class="v">Which backend answered — the field that turns "the API is sometimes slow" into a per-machine question.</span></div>
+  <div class="kv"><span class="k">\$upstream_status vs \$status</span><span class="v">The code upstream returned versus the code the client got; the pair reveals an <code>error_page</code> or a failed connection.</span></div>
+  <div class="kv"><span class="k">\$upstream_cache_status</span><span class="v">HIT / MISS / EXPIRED — the one field that makes the cache visible in every line.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li>The <code>combined</code> format logs nothing specific to a proxy; switch to a proxy-aware <code>log_format</code>.</li><li><code>\$request_time</code> minus <code>\$upstream_response_time</code> isolates Nginx's own latency from the backend's.</li><li>Log <code>\$upstream_addr</code>, <code>\$upstream_status</code> and <code>\$upstream_cache_status</code> to diagnose per-backend and cache problems from logs alone.</li><li>A comma inside <code>\$upstream_response_time</code> is the signature of a <code>proxy_next_upstream</code> retry.</li><li>Improve the format before an incident — a log only helps retroactively.</li></ul>
 
 <h3>Learning sources for this lesson</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_log_module.html" target="_blank" rel="noopener"><span class="lc-ico">📝</span><span class="lc-body"><span class="lc-title">nginx — the log module</span><span class="lc-sub">nginx.org · log_format, access_log, buffering and the escape parameter</span></span></a>
@@ -112,7 +198,7 @@ access_log /var/log/nginx/access.log huu_dung;</code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">$upstream_cache_status làm cho BỘ ĐỆM hiện ra</span><span class="v">Toàn bộ bài toán chẩn đoán của Chương 5 — "người dùng thấy dữ liệu cũ mà ứng dụng thì đúng" — gói trong MỘT trường. Có nó ở mọi dòng thì tỷ lệ trúng của bạn chỉ cách một lệnh <code>awk</code>, và một con lỗi về cache trở nên HIỂN NHIÊN thay vì vô hình.</span></div>
   <div class="kv"><span class="k">$host nói cho bạn biết SITE nào được hỏi</span><span class="v">Chương 1: một máy chủ trả lời cho nhiều cái tên. Thiếu <code>\$host</code> thì một dòng log từ một máy chủ nhiều site KHÔNG nói nó thuộc site nào — và nó cũng cho bạn thấy những tên miền giả mà đám quét dạo gửi tới.</span></div>
-  <div class="kv"><span class="k">$upstream_response_time có thể là một DANH SÁCH</span><span class="v">Khi <code>proxy_next_upstream</code> đã thử lại (Bài 9.3), cái trường đó chứa nhiều giá trị ngăn bằng dấu phẩy — mỗi lần thử một giá trị. Một dấu phẩy trong trường đó là CHỮ KÝ của một lần thử lại, thứ mà nếu không thì vô hình.</span></div>
+  <div class="kv"><span class="k">$upstream_response_time có thể là một DANH SÁCH</span><span class="v">Khi <code>proxy_next_upstream</code> đã thử lại (Bài 9.3), cái trường đó chứa nhiều giá trị ngăn bằng dấu phẩy — mỗi lần thử một giá trị. Một dấu phẩy trong trường đó là CHỮ KÝ của một lần thử lại, thứ mà nếu không thì vô hình. Và vì dấu ngăn là một dấu phẩy CỘNG một khoảng trắng, mọi cột awk phía sau nó trên dòng đó bị LỆCH (đo thật ở dưới: <code>$5</code> in ra <code>0.001</code>, <code>$12</code> in ra <code>-&gt;</code>) — lý do mạnh nhất để chuyển sang định dạng JSON ở Bài 10.2.</span></div>
   <div class="kv"><span class="k">Đừng ghi $request trừ khi bạn cũng ghi riêng phương thức</span><span class="v"><code>\$request</code> gộp phương thức, URI và giao thức vào MỘT chuỗi trong ngoặc, thứ rất khó phân tích. Tách nó thành <code>\$request_method</code> và <code>\$request_uri</code> chẳng tốn gì và làm mọi câu truy vấn sau này đơn giản hơn.</span></div>
 </div>
 <div class="pitfall">
@@ -129,6 +215,86 @@ access_log /var/log/nginx/access.log huu_dung;</code></pre>
 <div class="note-ct">
 <p><strong>Hãy đổi cái này TRƯỚC khi cần tới nó.</strong> Một định dạng log chỉ hữu ích theo kiểu HỒI TỐ — cái sự cố bạn muốn điều tra đã xảy ra TRƯỚC khi bạn cải thiện định dạng. Nó tốn một dòng trong <code>nginx.conf</code> và một cú nạp lại, nó không có chi phí hiệu năng đo được nào (Bài 10.3 đo đúng chuyện đó), và khác biệt giữa hai khối ở trên là khác biệt giữa "API chậm lúc 3 giờ sáng" và "API chậm lúc 3 giờ sáng ở backend 2, mà máy đó cũng đang phục vụ toàn cache trượt".</p>
 </div>
+
+<h3>🔬 Tự chạy lại</h3>
+<p>Một backend Node (nhanh, chậm 600 ms, lỗi 500), một server ghi CÙNG LÚC <code>combined</code> và định dạng viết cho proxy, cộng một rewrite, một backend đầu đã chết (thử lại), một <code>error_page</code>, một bộ đệm và một <code>Host</code> giả — trên nginx/1.24.0:</p>
+<pre><code class="language-bash">// app.js
+// app.js — backend cổng 9600: /binh-thuong nhanh · /cham 600 ms · /loi 500
+require('http').createServer((q, r) =&gt; {
+  if (q.url.startsWith('/cham')) return setTimeout(() =&gt; r.end('ok nhung cham\\n'), 600);
+  if (q.url.startsWith('/loi')) { r.statusCode = 500; return r.end('loi ung dung\\n'); }
+  r.end('ok binh thuong\\n');
+}).listen(9600, '127.0.0.1');</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  log_format huu_dung '$remote_addr $status $request_time $upstream_response_time '
+                      '$upstream_addr $upstream_status "$request_method $request_uri" -&gt; "$uri" '
+                      '$body_bytes_sent $upstream_cache_status "$http_user_agent" $host';
+  proxy_cache_path /srv/cache keys_zone=c:1m;
+  upstream app { server 127.0.0.1:9600; }
+  upstream hai { server 127.0.0.1:9601; server 127.0.0.1:9600; } <span class="tok-comment">  # 9601: không ai nghe</span>
+  server {
+    listen 8080;
+    access_log /srv/logs/combined.log combined; <span class="tok-comment">  # mặc định</span>
+    access_log /srv/logs/huu.log huu_dung;      <span class="tok-comment">  # viết cho một con PROXY — cùng lúc</span>
+    location /        { proxy_pass http://app; }
+    location /cu/     { rewrite ^/cu/(.*)$ /$1 last; }                <span class="tok-comment">  # $request_uri ≠ $uri</span>
+    location /thu-lai/ { proxy_pass http://hai/; }                     <span class="tok-comment">  # thử lại ⇒ danh sách</span>
+    location /trang-loi { proxy_intercept_errors on; error_page 500 = @dep; proxy_pass http://app/loi; }
+    location @dep     { return 200 "trang loi dep\\n"; }               <span class="tok-comment">  # $status 200, upstream 500</span>
+    location /anh/    { proxy_cache c; proxy_cache_valid 200 1m; proxy_pass http://app/binh-thuong; }
+  }
+}</code></pre>
+<div class="out">$ for p in binh-thuong cham loi; do curl -s -o /dev/null http://127.0.0.1:8080/$p; done
+$ cat /srv/logs/combined.log
+127.0.0.1 - - [13/Nov/2026:00:38:08 +0000] "GET /binh-thuong HTTP/1.1" 200 25 "-" "curl/8.5.0"
+127.0.0.1 - - [13/Nov/2026:00:38:09 +0000] "GET /cham HTTP/1.1" 200 24 "-" "curl/8.5.0"
+127.0.0.1 - - [13/Nov/2026:00:38:09 +0000] "GET /loi HTTP/1.1" 500 23 "-" "curl/8.5.0"
+$ cat /srv/logs/huu.log
+127.0.0.1 200 0.008 0.008 127.0.0.1:9600 200 "GET /binh-thuong" -&gt; "/binh-thuong" 25 - "curl/8.5.0" 127.0.0.1
+127.0.0.1 200 0.605 0.604 127.0.0.1:9600 200 "GET /cham" -&gt; "/cham" 24 - "curl/8.5.0" 127.0.0.1
+127.0.0.1 500 0.002 0.001 127.0.0.1:9600 500 "GET /loi" -&gt; "/loi" 23 - "curl/8.5.0" 127.0.0.1
+$ curl -s -o /dev/null http://127.0.0.1:8080/cu/binh-thuong          # rewrite … last
+$ curl -s -o /dev/null http://127.0.0.1:8080/thu-lai/binh-thuong     # máy đầu chết ⇒ thử lại
+$ curl -s -o /dev/null http://127.0.0.1:8080/trang-loi               # error_page chen vào
+$ for k in 1 2; do curl -s -o /dev/null http://127.0.0.1:8080/anh/x; done   # bộ đệm: lần 1, lần 2
+$ curl -s -o /dev/null -H 'Host: may-quet.invalid' -A 'quet/1.0' http://127.0.0.1:8080/binh-thuong
+$ cat huu.log
+127.0.0.1 200 0.001 0.001 127.0.0.1:9600 200 "GET /cu/binh-thuong" -&gt; "/binh-thuong" 25 - "curl/8.5.0" 127.0.0.1
+127.0.0.1 200 0.002 0.000, 0.001 127.0.0.1:9601, 127.0.0.1:9600 502, 200 "GET /thu-lai/binh-thuong" -&gt; "/thu-lai/binh-thuong" 25 - "curl/8.5.0" 127.0.0.1
+127.0.0.1 200 0.001 0.001 127.0.0.1:9600 500 "GET /trang-loi" -&gt; "/trang-loi" 14 - "curl/8.5.0" 127.0.0.1
+127.0.0.1 200 0.002 0.001 127.0.0.1:9600 200 "GET /anh/x" -&gt; "/anh/x" 25 MISS "curl/8.5.0" 127.0.0.1
+127.0.0.1 200 0.000 - - - "GET /anh/x" -&gt; "/anh/x" 25 HIT "curl/8.5.0" 127.0.0.1
+127.0.0.1 200 0.002 0.002 127.0.0.1:9600 200 "GET /binh-thuong" -&gt; "/binh-thuong" 25 - "quet/1.0" may-quet.invalid
+$ # (gui them 6 request nhanh + 1 request /cham roi hoi bang awk)
+$ awk '$3 &gt; 0.5' huu.log                         # request nào chậm hơn nửa giây?
+127.0.0.1 200 0.608 0.608 127.0.0.1:9600 200 "GET /cham" -&gt; "/cham" 24 - "curl/8.5.0" 127.0.0.1
+$ awk '{ print $12 }' huu.log | sort | uniq -c     # bộ đệm: HIT hay MISS? (- = không qua cache)
+     10 -
+      1 -&gt;
+      1 HIT
+      1 MISS
+$ awk '{ print $5 }' huu.log | sort | uniq -c      # máy nào trả lời bao nhiêu?
+      1 -
+      1 0.001
+     11 127.0.0.1:9600</div>
+<p>Request chậm: client chờ 0,605 s, backend mất 0,604 s — backend là toàn bộ cái chậm, còn <code>combined</code> chỉ nói "200". Năm request lạ, mỗi cái tự giải thích trong định dạng cho proxy. MỚI: mấy câu hỏi awk ở cuối — dòng thử lại ghi <code>0.000, 0.001</code> và <code>127.0.0.1:9601, 127.0.0.1:9600</code>, nên trên dòng đó <code>$5</code> là <code>0.001</code> và <code>$12</code> là <code>-&gt;</code>: một "máy" tên <code>0.001</code>, một trạng thái bộ đệm là mũi tên. Số đếm sai mà không báo lỗi.</p>
+<h3>🔗 Bài liên quan ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-1-2-cai-gi-thuoc-ve" target="_blank" rel="noopener"><span class="lc-ico">🔭</span><span class="lc-body"><span class="lc-title">Observability & Monitoring · 1.2 — Cái gì thuộc về một dòng log, và cái gì không</span><span class="lc-sub">Cùng câu hỏi đó, nhìn từ phía ứng dụng</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-2-4-logql" target="_blank" rel="noopener"><span class="lc-ico">🔭</span><span class="lc-body"><span class="lc-title">Observability & Monitoring · 2.4 — LogQL: hỏi một câu và nhận được câu trả lời</span><span class="lc-sub">Hỏi log bằng LogQL thay cho awk</span></span></a>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>combined</code></span><span class="v">Định dạng access log mặc định kiểu Apache — viết cho máy chủ tệp, mù với mọi thứ một con proxy làm.</span></div>
+  <div class="kv"><span class="k"><code>log_format</code></span><span class="v">Chỉ thị định nghĩa một bố cục dòng có tên từ các biến; rồi <code>access_log</code> trỏ vào nó.</span></div>
+  <div class="kv"><span class="k">\$request_time vs \$upstream_response_time</span><span class="v">Thời gian client đã chờ so với thời gian backend tốn; khoảng cách giữa hai cái là phần thuộc về Nginx.</span></div>
+  <div class="kv"><span class="k">\$upstream_addr</span><span class="v">Backend nào đã trả lời — trường biến "API thỉnh thoảng chậm" thành câu hỏi theo từng máy.</span></div>
+  <div class="kv"><span class="k">\$upstream_status vs \$status</span><span class="v">Mã upstream trả về so với mã client nhận được; cặp này lộ ra một <code>error_page</code> hoặc một kết nối hỏng.</span></div>
+  <div class="kv"><span class="k">\$upstream_cache_status</span><span class="v">HIT / MISS / EXPIRED — trường duy nhất làm bộ đệm hiện ra ở mọi dòng.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li>Định dạng <code>combined</code> không ghi gì riêng cho proxy; hãy đổi sang một <code>log_format</code> hiểu proxy.</li><li><code>\$request_time</code> trừ <code>\$upstream_response_time</code> tách độ trễ của chính Nginx khỏi của backend.</li><li>Ghi <code>\$upstream_addr</code>, <code>\$upstream_status</code> và <code>\$upstream_cache_status</code> để chẩn đoán vấn đề theo backend và theo cache chỉ bằng log.</li><li>Một dấu phẩy trong <code>\$upstream_response_time</code> là chữ ký của một lần thử lại <code>proxy_next_upstream</code>.</li><li>Cải thiện định dạng TRƯỚC khi có sự cố — log chỉ hữu ích theo kiểu hồi tố.</li></ul>
 
 <h3>Nguồn học cho bài này</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_log_module.html" target="_blank" rel="noopener"><span class="lc-ico">📝</span><span class="lc-body"><span class="lc-title">nginx — module log</span><span class="lc-sub">nginx.org · log_format, access_log, việc đệm và tham số escape</span></span></a>
@@ -147,6 +313,7 @@ access_log /var/log/nginx/access.log huu_dung;</code></pre>
       type: 'LESSON',
       description: 'Một dòng log JSON chỉ đáng giá khi TẤT CẢ các dòng đều phân tích được. Bài này đo ba chế độ escape, tìm ra một cấu hình qua được nginx -t nhưng sinh ra JSON hỏng cú pháp, và đo luôn cái giá phải trả bằng byte.',
       content: `
+${G10_2}
 <div class="ml-en">
 <span class="eyebrow">Chapter 10 · Lesson 10.2</span>
 <h2>JSON logs, and the escape that decides if a machine can read them</h2>
@@ -165,8 +332,9 @@ access_log /var/log/nginx/access.log huu_dung;</code></pre>
 "ua":"tieng Viet: Chào bạn"
 
 === escape=none ===
-curl/8.5.0
-ngoac "kep" va \\ backslash</div>
+"ua":"Trinh duyet "co ngoac""
+"ua":"co\\backslash va "ngoac""
+"ua":"tieng Viet: Chào bạn"</div>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">escape=default</span><span class="lz-lnote">Anything outside printable ASCII becomes <code>\\xNN</code> — one hex pair per BYTE. Safe to read by eye, not valid JSON: a JSON parser rejects <code>\\x22</code> because JSON has no <code>\\x</code> escape.</span></div>
   <div class="lz-layer"><span class="lz-lname">escape=json</span><span class="lz-lnote">Escapes exactly what the JSON spec requires: <code>"</code> becomes <code>\\"</code>, a backslash becomes <code>\\\\</code>, control characters become <code>\\u00NN</code>. UTF-8 passes through untouched.</span></div>
@@ -180,19 +348,22 @@ ngoac "kep" va \\ backslash</div>
 
 <h3>The pitfall: a number without quotes</h3>
 <p>The natural way to write a JSON log format is to quote the strings and leave the numbers bare, so that a parser gives you numbers rather than text you must convert:</p>
-<pre><code class="language-bash"><span class="tok-comment"># dinh dang JSON — trong nhin RAT hop ly</span>
-log_format json_sai escape=json '{"ma":\$status,"tgian_up":\$upstream_response_time,'
-    '"ref":"\$http_referer","rong":"\$http_x_khong_co"}';</code></pre>
-<p>That passes <code>nginx -t</code>. It produces valid JSON for every request that goes through a proxy. Here it is against two requests — one proxied, one answered by Nginx itself with a <code>return</code>:</p>
-<div class="out">$ curl -s -o /dev/null http://127.0.0.1:9100/noi-bo        # KHONG qua upstream
-$ curl -s -o /dev/null http://127.0.0.1:9100/binh-thuong   # co upstream
-
-{"ma":200,"tgian_up":,"ref":"","rong":""}
-{"ma":200,"tgian_up":0.002,"ref":"","rong":""}
-
---- thu doc bang trinh phan tich JSON that ---
-json.decoder.JSONDecodeError: Expecting value: line 1 column 22 (char 21)
-  OK   {"ma":200,"tgian_up":0.002,"ref":"","rong":""}</div>
+<pre><code class="language-bash"><span class="tok-comment"># dinh dang JSON — trong nhin RAT hop ly (so de tran)</span>
+log_format json_sai escape=json '{"ma":$status,"tgian_up":$upstream_response_time,"ref":"$http_referer"}';</code></pre>
+<p>That passes <code>nginx -t</code>. It produces valid JSON for every request that goes through a proxy. Here it is against three requests — one answered by Nginx itself with a <code>return</code>, one proxied, and one retried across two backends (the first one dead):</p>
+<div class="out">$ curl -s -o /dev/null http://127.0.0.1:8081/noi-bo              # KHÔNG qua upstream
+$ curl -s -o /dev/null http://127.0.0.1:8081/binh-thuong         # có upstream
+$ curl -s -o /dev/null http://127.0.0.1:8081/thu-lai/binh-thuong # thử lại hai máy
+$ cat json-sai.log
+{"ma":200,"tgian_up":,"ref":""}
+{"ma":200,"tgian_up":0.011,"ref":""}
+{"ma":200,"tgian_up":0.000, 0.001,"ref":""}
+$ python3 doc_json.py json-sai.log
+  HONG {"ma":200,"tgian_up":,"ref":""} 
+       JSONDecodeError: Expecting value: line 1 column 22 (char 21)
+  HONG {"ma":200,"tgian_up":0.000, 0.001,"ref":""} 
+       JSONDecodeError: Expecting property name enclosed in double quotes: line 1 column 29 (char 28)
+  hop le: 1   hong: 2</div>
 <p>The first line is <code>"tgian_up":,</code> — a key with no value at all. When there is no upstream, <code>\$upstream_response_time</code> is empty, and an empty variable between a colon and a comma is not a JSON value. The line is syntactically broken.</p>
 <div class="pitfall"><strong>Trap — the broken lines are exactly the ones you do not test.</strong> Every request you send through the proxy while building this produces valid JSON. The lines that break are the health checks, the redirects, the static files, the <code>return 404</code>s — everything Nginx answers by itself. Those arrive in production, at a low rate, forever, and depending on the shipper they are dropped silently or they stop the pipeline.</div>
 <p>The fix is one character on each side, and it costs nothing: quote it, and convert to a number at query time.</p>
@@ -205,7 +376,7 @@ log_format json escape=json '{"tg":"\$time_iso8601","ip":"\$remote_addr","ma":\$
   <div class="kv"><span class="k">Must be quoted</span><span class="v"><code>\$upstream_response_time</code>, <code>\$upstream_connect_time</code>, <code>\$upstream_header_time</code>, <code>\$upstream_status</code>, <code>\$upstream_bytes_received</code> — all empty when no upstream was contacted.</span></div>
   <div class="kv"><span class="k">Always quoted anyway</span><span class="v">Anything from the client: <code>\$request_uri</code>, <code>\$http_*</code>, <code>\$remote_addr</code>, <code>\$uri</code>.</span></div>
 </div>
-<p>There is a second reason those upstream timers must be quoted even when they are not empty. With <code>proxy_next_upstream</code> (Chapter 9), a request that tried two backends logs <code>0.002, 0.501</code> — a comma-separated list, in one field. Bare, that is broken JSON <em>and</em> a lost measurement; quoted, it is a string you can split later.</p>
+<p>There is a second reason those upstream timers must be quoted even when they are not empty. With <code>proxy_next_upstream</code> (Chapter 9), a request that tried two backends logs <code>0.000, 0.001</code> (the third line above — 2 of 3 lines broken) — a comma-separated list, in one field. Bare, that is broken JSON <em>and</em> a lost measurement; quoted, it is a string you can split later.</p>
 
 <h3>Empty is <code>""</code>, not <code>-</code></h3>
 <p>Notice <code>"ref":""</code> in the measured output above. The request had no Referer. In the <code>combined</code> format a missing value is written as <code>-</code>, which is why every Apache-style log is full of dashes. Under <code>escape=json</code> it is an empty string instead.</p>
@@ -213,24 +384,22 @@ log_format json escape=json '{"tg":"\$time_iso8601","ip":"\$remote_addr","ma":\$
 
 <h3>What it costs, measured</h3>
 <p>JSON repeats every field name on every line, so it is bigger. Two hundred requests with varied paths, user agents and status codes, written simultaneously in all three formats:</p>
-<div class="out">=== 200 dong luu luong DA DANG ===
-ket-hop   113.3 byte/dong tho  →  nen con  7.1%  (  8.1 byte/dong)
-huu-dung   80.2 byte/dong tho  →  nen con  5.9%  (  4.7 byte/dong)
-json      161.3 byte/dong tho  →  nen con  6.1%  (  9.8 byte/dong)</div>
-<p>Raw, JSON is 42% larger than <code>combined</code>. After gzip — and rotated logs are always compressed — the gap narrows to about 21%, because the repeated key names are exactly what a compressor is best at. On a million requests a day that is roughly 154 MB against 108 MB uncompressed, or 9.3 MB against 7.7 MB once rotated.</p>
+<div class="out">$ python3 kich_thuoc.py
+  ket-hop    150.7 byte/dong tho  -&gt;  gzip con  5.8%  ( 8.8 byte/dong)
+  huu-dung   126.8 byte/dong tho  -&gt;  gzip con  6.4%  ( 8.1 byte/dong)
+  json       174.9 byte/dong tho  -&gt;  gzip con  4.9%  ( 8.6 byte/dong)</div>
+<p>Raw, JSON is about 16% larger than <code>combined</code> (174.9 against 150.7 bytes a line). After gzip — and rotated logs are always compressed — the gap disappears: 8.6 against 8.8 bytes a line, because the repeated key names are exactly what a compressor is best at. On a million requests a day that is roughly 175 MB against 151 MB uncompressed, and about 9 MB either way once rotated. Real traffic compresses worse than a generated loop, so trust the raw number more.</p>
 <div class="callout warn"><strong>Read that measurement with its limits.</strong> The 200 requests were generated by a loop, so their paths and user agents are far more repetitive than real traffic. Real logs compress worse than this, and the raw-size ratio is the more trustworthy of the two numbers. What the measurement does establish is the direction and the rough scale: JSON costs tens of percent, not multiples.</div>
 <p>The first attempt at this measurement sent the same request 200 times. Gzip crushed all three formats to about 1% of their size and reported JSON as <em>cheaper per line after compression</em> than it deserved. A benchmark whose input has no entropy measures the compressor, not the format.</p>
 
 <h3>Does it actually parse?</h3>
 <p>The only test that counts. Two hundred lines of the corrected format, through a real JSON parser, plus a query that would be painful against a text log:</p>
-<div class="out">=== 200 dong json co doc duoc bang trinh phan tich that khong? ===
+<div class="out">$ python3 doc_json.py kt-json.log
   hop le: 200   hong: 0
-
-=== chi lay request cham ===
-   0.603s  200  /cham
-   0.603s  200  /cham
-   0.602s  200  /cham
-  --- tong 200 dong, tat ca deu phan tich duoc</div>
+$ jq -c 'select(.tgian &gt; 0.5) | [.tgian, .ma, .uri]' kt-json.log | head -3
+[0.606,200,"/cham"]
+[0.604,200,"/cham"]
+[0.605,200,"/cham"]</div>
 <div class="note-ct">Run this against your own log before you trust the pipeline that consumes it, and run it again after any change to <code>log_format</code>. It is one line: <code>while read l; do echo "\$l" | jq -e . &gt;/dev/null || echo "HONG: \$l"; done &lt; access.log</code>. A format that has been valid for a year can start emitting broken lines the day you add a <code>return</code> block.</div>
 
 <h3>Timestamps: <code>$time_iso8601</code>, not <code>$time_local</code></h3>
@@ -246,12 +415,137 @@ json      161.3 byte/dong tho  →  nen con  6.1%  (  9.8 byte/dong)</div>
 </div>
 
 <h3>Should you log JSON at all?</h3>
-<p>If something downstream ingests the logs — Loki, Elasticsearch, Vector, CloudWatch — then yes, and the 21% is not worth arguing about. If you read your logs with <code>grep</code>, <code>awk</code> and your eyes on a single server, the aligned text format from Lesson 10.1 is easier to scan and a third smaller, and JSON buys nothing.</p>
+<p>If something downstream ingests the logs — Loki, Elasticsearch, Vector, CloudWatch — then yes, and the 16% is not worth arguing about. If you read your logs with <code>grep</code>, <code>awk</code> and your eyes on a single server, the aligned text format from Lesson 10.1 is easier to scan and smaller still (126.8 bytes a line here), and JSON buys nothing.</p>
 <p>The one thing not worth doing is a text format that a tool then re-parses with a regular expression. That regex is a second copy of your log format, kept in a different file, and it breaks silently the day someone adds a field.</p>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">ngx_http_log_module — log_format, escape, access_log</span><span class="lc-sub">nginx.org/en/docs/http/ngx_http_log_module.html — the reference for all three escape modes and the buffering parameters used in Lesson 10.3.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">RFC 8259 — The JSON Data Interchange Format, §7 Strings</span><span class="lc-sub">datatracker.ietf.org/doc/html/rfc8259#section-7 — the two-page section that says why <code>\\x22</code> is rejected and raw UTF-8 accepted.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Alphabetical index of Nginx variables</span><span class="lc-sub">nginx.org/en/docs/varindex.html — the fastest way to check whether a variable can be empty before you leave it unquoted.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Load balancing — where the comma-separated timings come from</span><span class="lc-sub">Chapter 9 measured a retry across two backends. That is the request that turns a bare <code>\$upstream_response_time</code> into broken JSON.</span></span></div>
+<h3>🔬 Run it yourself</h3>
+<p>Three escape modes on the same three user agents, a bare-number JSON format next to the quoted one (with a dead backend to force a retry), a real JSON parser, and 200 varied requests to measure size — on nginx/1.24.0:</p>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  log_format ua_mac_dinh             '"$http_user_agent"';
+  log_format ua_json   escape=json   '"ua":"$http_user_agent"';
+  log_format ua_none   escape=none   '"ua":"$http_user_agent"';
+  <span class="tok-comment"># dinh dang JSON — trong nhin RAT hop ly (so de tran)</span>
+  log_format json_sai  escape=json '{"ma":$status,"tgian_up":$upstream_response_time,"ref":"$http_referer"}';
+  <span class="tok-comment"># sua: cai gi CO THE rong thi boc ngoac kep</span>
+  log_format json      escape=json '{"tg":"$time_iso8601","ip":"$remote_addr","ma":$status,'
+                                   '"tgian":$request_time,"tgian_up":"$upstream_response_time",'
+                                   '"uri":"$request_uri","ua":"$http_user_agent","byte":$body_bytes_sent}';
+  log_format huu_dung  '$remote_addr $status $request_time $upstream_response_time $upstream_addr '
+                       '$upstream_status "$request_method $request_uri" -&gt; "$uri" $body_bytes_sent "$http_user_agent"';
+  upstream app { server 127.0.0.1:9600; }
+  upstream hai { server 127.0.0.1:9601; server 127.0.0.1:9600; }     <span class="tok-comment">  # 9601 chết ⇒ thử lại</span>
+  server {                                                           <span class="tok-comment">  # 8080: ba kiểu escape</span>
+    listen 8080;
+    access_log /srv/logs/mac-dinh.log ua_mac_dinh;
+    access_log /srv/logs/esc-json.log ua_json;
+    access_log /srv/logs/esc-none.log ua_none;
+    location / { return 200 "ok\\n"; }
+  }
+  server {                                                           <span class="tok-comment">  # 8081: JSON sai vs JSON đúng</span>
+    listen 8081;
+    access_log /srv/logs/json-sai.log json_sai;
+    access_log /srv/logs/json.log     json;
+    location = /noi-bo { return 200 "nginx tu tra loi\\n"; }          <span class="tok-comment">  # KHÔNG qua upstream</span>
+    location /thu-lai/ { proxy_pass http://hai/; }
+    location /         { proxy_pass http://app; }
+  }
+  server {                                                           <span class="tok-comment">  # 8082: đo kích thước 3 định dạng</span>
+    listen 8082;
+    access_log /srv/logs/kt-ket-hop.log combined;
+    access_log /srv/logs/kt-huu-dung.log huu_dung;
+    access_log /srv/logs/kt-json.log json;
+    location / { proxy_pass http://app; }
+  }
+}</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># doc_json.py</span>
+<span class="tok-comment"># doc_json.py &lt;tệp&gt; — đưa TỪNG dòng qua trình phân tích JSON thật; in dòng hỏng + lỗi, đếm hợp lệ / hỏng</span>
+import json, sys
+ok = hong = 0
+for l in open(sys.argv[1]):
+    try: json.loads(l); ok += 1
+    except json.JSONDecodeError as e: hong += 1; print('  HONG', l.strip(), '\\n      ', type(e).__name__ + ':', e)
+print(f'  hop le: {ok}   hong: {hong}')</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># tao_tai.py</span>
+<span class="tok-comment"># tao_tai.py — 200 request ĐA DẠNG (đường dẫn, user agent, referer khác nhau; seed cố định) vào cổng 8082</span>
+import random, subprocess
+random.seed(7)
+ua = ['Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/131.0', 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_1) Safari/604.1', 'curl/8.5.0', 'Googlebot/2.1 (+http://www.google.com/bot.html)']
+p = ['/binh-thuong', '/san-pham/%d', '/tim?q=ao+so+mi+%d', '/loi', '/cham', '/anh/%d.webp']
+for i in range(200):
+    u = random.choice(p); u = u % random.randint(1, 9999) if '%d' in u else u
+    subprocess.run(['curl', '-s', '-o', '/dev/null', '-A', random.choice(ua), '-e', 'https://vidu.com/trang-%d' % random.randint(1, 50), 'http://127.0.0.1:8082' + u])</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># kich_thuoc.py</span>
+<span class="tok-comment"># kich_thuoc.py — so kích thước mỗi dòng của ba định dạng, thô và sau gzip</span>
+import gzip, os
+for ten in ('ket-hop', 'huu-dung', 'json'):
+    b = open(f'/tmp/ng/logs/kt-{ten}.log', 'rb').read(); n = b.count(b'\\n'); z = len(gzip.compress(b))
+    print(f'  {ten:9} {len(b) / n:6.1f} byte/dong tho  -&gt;  gzip con {100 * z / len(b):4.1f}%  ({z / n:4.1f} byte/dong)')</code></pre>
+<div class="out">$ curl -s -o /dev/null -A 'Trinh duyet "co ngoac"' http://127.0.0.1:8080/
+$ curl -s -o /dev/null -A 'co\\backslash va "ngoac"' http://127.0.0.1:8080/
+$ curl -s -o /dev/null -A 'tieng Viet: Chào bạn' http://127.0.0.1:8080/
+$ for f in mac-dinh esc-json esc-none; do echo "=== $f ==="; cat $f.log; done
+=== mac-dinh ===
+"Trinh duyet \\x22co ngoac\\x22"
+"co\\x5Cbackslash va \\x22ngoac\\x22"
+"tieng Viet: Ch\\xC3\\xA0o b\\xE1\\xBA\\xA1n"
+=== esc-json ===
+"ua":"Trinh duyet \\"co ngoac\\""
+"ua":"co\\\\backslash va \\"ngoac\\""
+"ua":"tieng Viet: Chào bạn"
+=== esc-none ===
+"ua":"Trinh duyet "co ngoac""
+"ua":"co\\backslash va "ngoac""
+"ua":"tieng Viet: Chào bạn"
+$ curl -s -o /dev/null http://127.0.0.1:8081/noi-bo              # KHÔNG qua upstream
+$ curl -s -o /dev/null http://127.0.0.1:8081/binh-thuong         # có upstream
+$ curl -s -o /dev/null http://127.0.0.1:8081/thu-lai/binh-thuong # thử lại hai máy
+$ cat json-sai.log
+{"ma":200,"tgian_up":,"ref":""}
+{"ma":200,"tgian_up":0.011,"ref":""}
+{"ma":200,"tgian_up":0.000, 0.001,"ref":""}
+$ python3 doc_json.py json-sai.log
+  HONG {"ma":200,"tgian_up":,"ref":""} 
+       JSONDecodeError: Expecting value: line 1 column 22 (char 21)
+  HONG {"ma":200,"tgian_up":0.000, 0.001,"ref":""} 
+       JSONDecodeError: Expecting property name enclosed in double quotes: line 1 column 29 (char 28)
+  hop le: 1   hong: 2
+$ python3 doc_json.py json.log
+  hop le: 3   hong: 0
+$ cat json.log
+{"tg":"2026-11-13T00:39:49+00:00","ip":"127.0.0.1","ma":200,"tgian":0.000,"tgian_up":"","uri":"/noi-bo","ua":"curl/8.5.0","byte":17}
+{"tg":"2026-11-13T00:39:49+00:00","ip":"127.0.0.1","ma":200,"tgian":0.012,"tgian_up":"0.011","uri":"/binh-thuong","ua":"curl/8.5.0","byte":25}
+{"tg":"2026-11-13T00:39:49+00:00","ip":"127.0.0.1","ma":200,"tgian":0.002,"tgian_up":"0.000, 0.001","uri":"/thu-lai/binh-thuong","ua":"curl/8.5.0","byte":25}
+$ python3 kich_thuoc.py
+  ket-hop    150.7 byte/dong tho  -&gt;  gzip con  5.8%  ( 8.8 byte/dong)
+  huu-dung   126.8 byte/dong tho  -&gt;  gzip con  6.4%  ( 8.1 byte/dong)
+  json       174.9 byte/dong tho  -&gt;  gzip con  4.9%  ( 8.6 byte/dong)
+$ python3 doc_json.py kt-json.log
+  hop le: 200   hong: 0
+$ jq -c 'select(.tgian &gt; 0.5) | [.tgian, .ma, .uri]' kt-json.log | head -3
+[0.606,200,"/cham"]
+[0.604,200,"/cham"]
+[0.605,200,"/cham"]</div>
+<p>Default escape: <code>\\x22</code> and <code>Ch\\xC3\\xA0o</code>. <code>escape=json</code>: <code>\\"</code>, <code>\\\\</code> and <code>Chào bạn</code> untouched. <code>escape=none</code>: <code>"ua":"Trinh duyet "co ngoac""</code> — the quote ends the string, broken JSON. The bare-number format: 2 of 3 lines broken (empty, and a retry list); the quoted one: 3 of 3 valid. Size over 200 varied requests: JSON +16% raw, about the same after gzip; all 200 lines parse.</p>
+<h3>🔗 Related lessons in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-1-1-tu-console-toi-json" target="_blank" rel="noopener"><span class="lc-ico">🔭</span><span class="lc-body"><span class="lc-title">Observability & Monitoring · 1.1 — From console.log to a line a machine can read</span><span class="lc-sub">Structured logs from the application side</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-2-3-trinh-thu-log" target="_blank" rel="noopener"><span class="lc-ico">🔭</span><span class="lc-body"><span class="lc-title">Observability & Monitoring · 2.3 — The shipper: getting logs off the machine</span><span class="lc-sub">What reads these lines next</span></span></a>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>escape=json</code></span><span class="v">The <code>log_format</code> escape mode that produces valid JSON and leaves UTF-8 (Vietnamese) readable.</span></div>
+  <div class="kv"><span class="k"><code>escape=default</code></span><span class="v">Turns every non-ASCII byte into <code>\\xNN</code> — safe to read, but not valid JSON.</span></div>
+  <div class="kv"><span class="k"><code>escape=none</code></span><span class="v">Writes raw bytes; inside JSON a client's quote can end the string early.</span></div>
+  <div class="kv"><span class="k">Bare vs quoted field</span><span class="v">Numbers Nginx always sets may be bare; any field that can be empty must be quoted.</span></div>
+  <div class="kv"><span class="k">\$time_iso8601</span><span class="v">Sortable timestamp (<code>2026-08-23T18:46:31+00:00</code>) every ingester reads without a custom pattern.</span></div>
+  <div class="kv"><span class="k">Empty is "" not -</span><span class="v">Under <code>escape=json</code> a missing value is an empty string, not the <code>-</code> of combined logs.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li>JSON logging only pays off if every line parses — <code>escape=json</code> is mandatory, not optional.</li><li>An empty upstream timer left bare (<code>"tgian_up":,</code>) is broken JSON; quote anything that can be empty.</li><li>The lines that break are the ones Nginx answers itself — health checks, redirects, <code>return</code> — exactly the ones you never test.</li><li>JSON is ~42% bigger raw and ~21% after gzip; verify with a real parser, since <code>nginx -t</code> knows nothing about JSON.</li><li>For a Vietnamese site, <code>escape=json</code> is the only mode that keeps your own logs legible.</li></ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 10 · Bài 10.2</span>
@@ -271,8 +565,9 @@ json      161.3 byte/dong tho  →  nen con  6.1%  (  9.8 byte/dong)</div>
 "ua":"tieng Viet: Chào bạn"
 
 === escape=none ===
-curl/8.5.0
-ngoac "kep" va \\ backslash</div>
+"ua":"Trinh duyet "co ngoac""
+"ua":"co\\backslash va "ngoac""
+"ua":"tieng Viet: Chào bạn"</div>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">escape=default</span><span class="lz-lnote">Mọi thứ nằm ngoài ASCII in được đều thành <code>\\xNN</code> — mỗi cặp hex cho một BYTE. Nhìn mắt thì an toàn, nhưng không phải JSON hợp lệ: trình phân tích JSON từ chối <code>\\x22</code> vì JSON không có escape kiểu <code>\\x</code>.</span></div>
   <div class="lz-layer"><span class="lz-lname">escape=json</span><span class="lz-lnote">Bọc đúng những gì đặc tả JSON đòi: <code>"</code> thành <code>\\"</code>, dấu chéo ngược thành <code>\\\\</code>, ký tự điều khiển thành <code>\\u00NN</code>. UTF-8 đi qua nguyên vẹn.</span></div>
@@ -286,19 +581,22 @@ ngoac "kep" va \\ backslash</div>
 
 <h3>Cái bẫy: một con số không đặt trong ngoặc kép</h3>
 <p>Cách tự nhiên để viết một định dạng log JSON là bọc ngoặc cho chuỗi và để số trần, sao cho trình phân tích trả về SỐ chứ không phải chữ mà bạn phải tự chuyển đổi:</p>
-<pre><code class="language-bash"><span class="tok-comment"># dinh dang JSON — trong nhin RAT hop ly</span>
-log_format json_sai escape=json '{"ma":\$status,"tgian_up":\$upstream_response_time,'
-    '"ref":"\$http_referer","rong":"\$http_x_khong_co"}';</code></pre>
-<p>Nó qua được <code>nginx -t</code>. Nó sinh ra JSON hợp lệ cho MỌI request đi qua proxy. Đây là nó chạy với hai request — một cái đi qua proxy, một cái do chính Nginx trả lời bằng <code>return</code>:</p>
-<div class="out">$ curl -s -o /dev/null http://127.0.0.1:9100/noi-bo        # KHONG qua upstream
-$ curl -s -o /dev/null http://127.0.0.1:9100/binh-thuong   # co upstream
-
-{"ma":200,"tgian_up":,"ref":"","rong":""}
-{"ma":200,"tgian_up":0.002,"ref":"","rong":""}
-
---- thu doc bang trinh phan tich JSON that ---
-json.decoder.JSONDecodeError: Expecting value: line 1 column 22 (char 21)
-  OK   {"ma":200,"tgian_up":0.002,"ref":"","rong":""}</div>
+<pre><code class="language-bash"><span class="tok-comment"># dinh dang JSON — trong nhin RAT hop ly (so de tran)</span>
+log_format json_sai escape=json '{"ma":$status,"tgian_up":$upstream_response_time,"ref":"$http_referer"}';</code></pre>
+<p>Nó qua được <code>nginx -t</code>. Nó sinh ra JSON hợp lệ cho MỌI request đi qua proxy. Đây là nó chạy với ba request — một cái do chính Nginx trả lời bằng <code>return</code>, một cái đi qua proxy, và một cái thử lại qua hai backend (máy đầu đã chết):</p>
+<div class="out">$ curl -s -o /dev/null http://127.0.0.1:8081/noi-bo              # KHÔNG qua upstream
+$ curl -s -o /dev/null http://127.0.0.1:8081/binh-thuong         # có upstream
+$ curl -s -o /dev/null http://127.0.0.1:8081/thu-lai/binh-thuong # thử lại hai máy
+$ cat json-sai.log
+{"ma":200,"tgian_up":,"ref":""}
+{"ma":200,"tgian_up":0.011,"ref":""}
+{"ma":200,"tgian_up":0.000, 0.001,"ref":""}
+$ python3 doc_json.py json-sai.log
+  HONG {"ma":200,"tgian_up":,"ref":""} 
+       JSONDecodeError: Expecting value: line 1 column 22 (char 21)
+  HONG {"ma":200,"tgian_up":0.000, 0.001,"ref":""} 
+       JSONDecodeError: Expecting property name enclosed in double quotes: line 1 column 29 (char 28)
+  hop le: 1   hong: 2</div>
 <p>Dòng đầu là <code>"tgian_up":,</code> — một cái khoá chẳng có giá trị nào theo sau. Khi không có upstream, <code>\$upstream_response_time</code> rỗng, và một biến rỗng nằm giữa dấu hai chấm với dấu phẩy thì không phải một giá trị JSON. Dòng đó hỏng cú pháp.</p>
 <div class="pitfall"><strong>Bẫy — những dòng hỏng chính là những dòng bạn KHÔNG thử.</strong> Mọi request bạn bắn qua proxy trong lúc dựng cái này đều sinh JSON hợp lệ. Những dòng hỏng là health check, là redirect, là tệp tĩnh, là mấy cái <code>return 404</code> — tất cả những gì Nginx tự trả lời. Chúng tới trên production, với tần suất thấp, mãi mãi, và tuỳ công cụ thu gom mà chúng bị vứt lặng lẽ hoặc làm dừng cả đường ống.</div>
 <p>Cách sửa là một ký tự mỗi bên, và nó chẳng tốn gì: bọc ngoặc lại, rồi chuyển sang số lúc truy vấn.</p>
@@ -311,7 +609,7 @@ log_format json escape=json '{"tg":"\$time_iso8601","ip":"\$remote_addr","ma":\$
   <div class="kv"><span class="k">Bắt buộc bọc ngoặc</span><span class="v"><code>\$upstream_response_time</code>, <code>\$upstream_connect_time</code>, <code>\$upstream_header_time</code>, <code>\$upstream_status</code>, <code>\$upstream_bytes_received</code> — tất cả đều rỗng khi không có upstream nào được liên hệ.</span></div>
   <div class="kv"><span class="k">Vốn dĩ luôn bọc</span><span class="v">Mọi thứ tới từ client: <code>\$request_uri</code>, <code>\$http_*</code>, <code>\$remote_addr</code>, <code>\$uri</code>.</span></div>
 </div>
-<p>Còn một lý do thứ hai để bọc ngoặc mấy cái đồng hồ upstream ngay cả khi chúng không rỗng. Với <code>proxy_next_upstream</code> (Chương 9), một request đã thử hai backend sẽ ghi ra <code>0.002, 0.501</code> — một danh sách ngăn bằng dấu phẩy, nằm trong MỘT trường. Để trần thì đó là JSON hỏng <em>và</em> là một phép đo bị mất; bọc ngoặc thì nó là một chuỗi mà bạn tách ra được về sau.</p>
+<p>Còn một lý do thứ hai để bọc ngoặc mấy cái đồng hồ upstream ngay cả khi chúng không rỗng. Với <code>proxy_next_upstream</code> (Chương 9), một request đã thử hai backend sẽ ghi ra <code>0.000, 0.001</code> (dòng thứ ba ở trên — 2 trên 3 dòng hỏng) — một danh sách ngăn bằng dấu phẩy, nằm trong MỘT trường. Để trần thì đó là JSON hỏng <em>và</em> là một phép đo bị mất; bọc ngoặc thì nó là một chuỗi mà bạn tách ra được về sau.</p>
 
 <h3>Rỗng là <code>""</code>, không phải <code>-</code></h3>
 <p>Để ý <code>"ref":""</code> trong kết quả đo ở trên. Request đó không có Referer. Trong định dạng <code>combined</code>, một giá trị thiếu được ghi thành <code>-</code>, đó là lý do mọi log kiểu Apache đầy dấu gạch ngang. Dưới <code>escape=json</code> thì nó thành chuỗi rỗng.</p>
@@ -319,24 +617,22 @@ log_format json escape=json '{"tg":"\$time_iso8601","ip":"\$remote_addr","ma":\$
 
 <h3>Nó tốn bao nhiêu, đo thật</h3>
 <p>JSON lặp lại tên mọi trường trên mọi dòng, nên nó to hơn. Hai trăm request với đường dẫn, user-agent và mã trạng thái khác nhau, ghi đồng thời ra cả ba định dạng:</p>
-<div class="out">=== 200 dong luu luong DA DANG ===
-ket-hop   113.3 byte/dong tho  →  nen con  7.1%  (  8.1 byte/dong)
-huu-dung   80.2 byte/dong tho  →  nen con  5.9%  (  4.7 byte/dong)
-json      161.3 byte/dong tho  →  nen con  6.1%  (  9.8 byte/dong)</div>
-<p>Ở dạng thô, JSON lớn hơn <code>combined</code> 42%. Sau khi nén gzip — mà log xoay vòng thì luôn được nén — khoảng cách rút xuống còn khoảng 21%, vì mấy cái tên khoá lặp đi lặp lại chính là thứ mà bộ nén giỏi nhất. Với một triệu request mỗi ngày, đó là khoảng 154 MB so với 108 MB chưa nén, hoặc 9,3 MB so với 7,7 MB sau khi xoay vòng.</p>
+<div class="out">$ python3 kich_thuoc.py
+  ket-hop    150.7 byte/dong tho  -&gt;  gzip con  5.8%  ( 8.8 byte/dong)
+  huu-dung   126.8 byte/dong tho  -&gt;  gzip con  6.4%  ( 8.1 byte/dong)
+  json       174.9 byte/dong tho  -&gt;  gzip con  4.9%  ( 8.6 byte/dong)</div>
+<p>Ở dạng thô, JSON lớn hơn <code>combined</code> khoảng 16% (174,9 so với 150,7 byte mỗi dòng). Sau khi nén gzip — mà log xoay vòng thì luôn được nén — khoảng cách BIẾN MẤT: 8,6 so với 8,8 byte mỗi dòng, vì mấy cái tên khoá lặp đi lặp lại chính là thứ mà bộ nén giỏi nhất. Với một triệu request mỗi ngày, đó là khoảng 175 MB so với 151 MB chưa nén, và cỡ 9 MB cho cả hai sau khi xoay vòng. Lưu lượng thật nén kém hơn một vòng lặp sinh ra, nên hãy tin con số thô hơn.</p>
 <div class="callout warn"><strong>Đọc phép đo đó kèm giới hạn của nó.</strong> 200 request được sinh ra bằng một vòng lặp, nên đường dẫn và user-agent của chúng lặp lại nhiều hơn hẳn lưu lượng thật. Log thật nén kém hơn thế này, và con số tỉ lệ ở dạng THÔ mới là con số đáng tin hơn trong hai cái. Cái mà phép đo này khẳng định được là hướng và thang độ lớn: JSON tốn thêm vài chục phần trăm, chứ không phải gấp mấy lần.</div>
 <p>Lần đo đầu tiên bắn cùng một request 200 lần. Gzip nghiền cả ba định dạng xuống còn khoảng 1% kích thước và báo rằng JSON <em>rẻ hơn tính trên mỗi dòng sau khi nén</em> so với thực tế nó đáng được. Một phép đo mà đầu vào không có entropy thì nó đang đo bộ nén, không đo định dạng.</p>
 
 <h3>Nó có phân tích được thật không?</h3>
 <p>Đây mới là phép thử duy nhất có giá trị. Hai trăm dòng của định dạng đã sửa, chạy qua một trình phân tích JSON thật, cộng thêm một truy vấn mà làm trên log dạng chữ thì rất cực:</p>
-<div class="out">=== 200 dong json co doc duoc bang trinh phan tich that khong? ===
+<div class="out">$ python3 doc_json.py kt-json.log
   hop le: 200   hong: 0
-
-=== chi lay request cham ===
-   0.603s  200  /cham
-   0.603s  200  /cham
-   0.602s  200  /cham
-  --- tong 200 dong, tat ca deu phan tich duoc</div>
+$ jq -c 'select(.tgian &gt; 0.5) | [.tgian, .ma, .uri]' kt-json.log | head -3
+[0.606,200,"/cham"]
+[0.604,200,"/cham"]
+[0.605,200,"/cham"]</div>
 <div class="note-ct">Chạy phép này trên log của chính bạn TRƯỚC khi tin vào cái đường ống tiêu thụ nó, và chạy lại sau mỗi lần đổi <code>log_format</code>. Nó chỉ một dòng: <code>while read l; do echo "\$l" | jq -e . &gt;/dev/null || echo "HONG: \$l"; done &lt; access.log</code>. Một định dạng đã hợp lệ suốt một năm vẫn có thể bắt đầu sinh dòng hỏng đúng cái ngày bạn thêm một khối <code>return</code>.</div>
 
 <h3>Dấu thời gian: <code>$time_iso8601</code>, không phải <code>$time_local</code></h3>
@@ -352,12 +648,137 @@ json      161.3 byte/dong tho  →  nen con  6.1%  (  9.8 byte/dong)</div>
 </div>
 
 <h3>Có nên ghi log JSON không?</h3>
-<p>Nếu có thứ gì đó ở phía sau thu nạp log — Loki, Elasticsearch, Vector, CloudWatch — thì có, và 21% kia không đáng đem ra cãi. Nếu bạn đọc log bằng <code>grep</code>, <code>awk</code> và bằng mắt trên đúng một máy chủ, thì định dạng chữ căn cột ở Bài 10.1 dễ nhìn hơn và nhỏ hơn một phần ba, còn JSON chẳng mua được gì.</p>
+<p>Nếu có thứ gì đó ở phía sau thu nạp log — Loki, Elasticsearch, Vector, CloudWatch — thì có, và 16% kia không đáng đem ra cãi. Nếu bạn đọc log bằng <code>grep</code>, <code>awk</code> và bằng mắt trên đúng một máy chủ, thì định dạng chữ căn cột ở Bài 10.1 dễ nhìn hơn và còn nhỏ hơn nữa (ở đây 126,8 byte mỗi dòng), còn JSON chẳng mua được gì.</p>
 <p>Thứ duy nhất không đáng làm là một định dạng chữ mà rồi một công cụ lại phân tích nó bằng biểu thức chính quy. Cái regex đó là một bản sao thứ hai của định dạng log, nằm ở một tệp khác, và nó vỡ lặng lẽ đúng cái ngày có người thêm một trường.</p>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">ngx_http_log_module — log_format, escape, access_log</span><span class="lc-sub">nginx.org/en/docs/http/ngx_http_log_module.html — tài liệu gốc cho cả ba chế độ escape và các tham số đệm dùng ở Bài 10.3.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">RFC 8259 — Đặc tả JSON, §7 Strings</span><span class="lc-sub">datatracker.ietf.org/doc/html/rfc8259#section-7 — mục hai trang nói vì sao <code>\\x22</code> bị từ chối còn UTF-8 thô thì được chấp nhận.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Danh mục biến của Nginx xếp theo bảng chữ cái</span><span class="lc-sub">nginx.org/en/docs/varindex.html — cách nhanh nhất để kiểm xem một biến có thể rỗng hay không TRƯỚC khi bạn để nó trần.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Cân bằng tải — mấy con số ngăn bằng dấu phẩy tới từ đâu</span><span class="lc-sub">Chương 9 đã đo một lần thử lại qua hai backend. Đó chính là cái request biến một <code>\$upstream_response_time</code> để trần thành JSON hỏng.</span></span></div>
+<h3>🔬 Tự chạy lại</h3>
+<p>Ba kiểu escape trên cùng ba user agent, một định dạng JSON để số trần đặt cạnh định dạng bọc ngoặc (có một backend chết để ép thử lại), một trình phân tích JSON thật, và 200 request đa dạng để đo kích thước — trên nginx/1.24.0:</p>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  log_format ua_mac_dinh             '"$http_user_agent"';
+  log_format ua_json   escape=json   '"ua":"$http_user_agent"';
+  log_format ua_none   escape=none   '"ua":"$http_user_agent"';
+  <span class="tok-comment"># dinh dang JSON — trong nhin RAT hop ly (so de tran)</span>
+  log_format json_sai  escape=json '{"ma":$status,"tgian_up":$upstream_response_time,"ref":"$http_referer"}';
+  <span class="tok-comment"># sua: cai gi CO THE rong thi boc ngoac kep</span>
+  log_format json      escape=json '{"tg":"$time_iso8601","ip":"$remote_addr","ma":$status,'
+                                   '"tgian":$request_time,"tgian_up":"$upstream_response_time",'
+                                   '"uri":"$request_uri","ua":"$http_user_agent","byte":$body_bytes_sent}';
+  log_format huu_dung  '$remote_addr $status $request_time $upstream_response_time $upstream_addr '
+                       '$upstream_status "$request_method $request_uri" -&gt; "$uri" $body_bytes_sent "$http_user_agent"';
+  upstream app { server 127.0.0.1:9600; }
+  upstream hai { server 127.0.0.1:9601; server 127.0.0.1:9600; }     <span class="tok-comment">  # 9601 chết ⇒ thử lại</span>
+  server {                                                           <span class="tok-comment">  # 8080: ba kiểu escape</span>
+    listen 8080;
+    access_log /srv/logs/mac-dinh.log ua_mac_dinh;
+    access_log /srv/logs/esc-json.log ua_json;
+    access_log /srv/logs/esc-none.log ua_none;
+    location / { return 200 "ok\\n"; }
+  }
+  server {                                                           <span class="tok-comment">  # 8081: JSON sai vs JSON đúng</span>
+    listen 8081;
+    access_log /srv/logs/json-sai.log json_sai;
+    access_log /srv/logs/json.log     json;
+    location = /noi-bo { return 200 "nginx tu tra loi\\n"; }          <span class="tok-comment">  # KHÔNG qua upstream</span>
+    location /thu-lai/ { proxy_pass http://hai/; }
+    location /         { proxy_pass http://app; }
+  }
+  server {                                                           <span class="tok-comment">  # 8082: đo kích thước 3 định dạng</span>
+    listen 8082;
+    access_log /srv/logs/kt-ket-hop.log combined;
+    access_log /srv/logs/kt-huu-dung.log huu_dung;
+    access_log /srv/logs/kt-json.log json;
+    location / { proxy_pass http://app; }
+  }
+}</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># doc_json.py</span>
+<span class="tok-comment"># doc_json.py &lt;tệp&gt; — đưa TỪNG dòng qua trình phân tích JSON thật; in dòng hỏng + lỗi, đếm hợp lệ / hỏng</span>
+import json, sys
+ok = hong = 0
+for l in open(sys.argv[1]):
+    try: json.loads(l); ok += 1
+    except json.JSONDecodeError as e: hong += 1; print('  HONG', l.strip(), '\\n      ', type(e).__name__ + ':', e)
+print(f'  hop le: {ok}   hong: {hong}')</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># tao_tai.py</span>
+<span class="tok-comment"># tao_tai.py — 200 request ĐA DẠNG (đường dẫn, user agent, referer khác nhau; seed cố định) vào cổng 8082</span>
+import random, subprocess
+random.seed(7)
+ua = ['Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/131.0', 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_1) Safari/604.1', 'curl/8.5.0', 'Googlebot/2.1 (+http://www.google.com/bot.html)']
+p = ['/binh-thuong', '/san-pham/%d', '/tim?q=ao+so+mi+%d', '/loi', '/cham', '/anh/%d.webp']
+for i in range(200):
+    u = random.choice(p); u = u % random.randint(1, 9999) if '%d' in u else u
+    subprocess.run(['curl', '-s', '-o', '/dev/null', '-A', random.choice(ua), '-e', 'https://vidu.com/trang-%d' % random.randint(1, 50), 'http://127.0.0.1:8082' + u])</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># kich_thuoc.py</span>
+<span class="tok-comment"># kich_thuoc.py — so kích thước mỗi dòng của ba định dạng, thô và sau gzip</span>
+import gzip, os
+for ten in ('ket-hop', 'huu-dung', 'json'):
+    b = open(f'/tmp/ng/logs/kt-{ten}.log', 'rb').read(); n = b.count(b'\\n'); z = len(gzip.compress(b))
+    print(f'  {ten:9} {len(b) / n:6.1f} byte/dong tho  -&gt;  gzip con {100 * z / len(b):4.1f}%  ({z / n:4.1f} byte/dong)')</code></pre>
+<div class="out">$ curl -s -o /dev/null -A 'Trinh duyet "co ngoac"' http://127.0.0.1:8080/
+$ curl -s -o /dev/null -A 'co\\backslash va "ngoac"' http://127.0.0.1:8080/
+$ curl -s -o /dev/null -A 'tieng Viet: Chào bạn' http://127.0.0.1:8080/
+$ for f in mac-dinh esc-json esc-none; do echo "=== $f ==="; cat $f.log; done
+=== mac-dinh ===
+"Trinh duyet \\x22co ngoac\\x22"
+"co\\x5Cbackslash va \\x22ngoac\\x22"
+"tieng Viet: Ch\\xC3\\xA0o b\\xE1\\xBA\\xA1n"
+=== esc-json ===
+"ua":"Trinh duyet \\"co ngoac\\""
+"ua":"co\\\\backslash va \\"ngoac\\""
+"ua":"tieng Viet: Chào bạn"
+=== esc-none ===
+"ua":"Trinh duyet "co ngoac""
+"ua":"co\\backslash va "ngoac""
+"ua":"tieng Viet: Chào bạn"
+$ curl -s -o /dev/null http://127.0.0.1:8081/noi-bo              # KHÔNG qua upstream
+$ curl -s -o /dev/null http://127.0.0.1:8081/binh-thuong         # có upstream
+$ curl -s -o /dev/null http://127.0.0.1:8081/thu-lai/binh-thuong # thử lại hai máy
+$ cat json-sai.log
+{"ma":200,"tgian_up":,"ref":""}
+{"ma":200,"tgian_up":0.011,"ref":""}
+{"ma":200,"tgian_up":0.000, 0.001,"ref":""}
+$ python3 doc_json.py json-sai.log
+  HONG {"ma":200,"tgian_up":,"ref":""} 
+       JSONDecodeError: Expecting value: line 1 column 22 (char 21)
+  HONG {"ma":200,"tgian_up":0.000, 0.001,"ref":""} 
+       JSONDecodeError: Expecting property name enclosed in double quotes: line 1 column 29 (char 28)
+  hop le: 1   hong: 2
+$ python3 doc_json.py json.log
+  hop le: 3   hong: 0
+$ cat json.log
+{"tg":"2026-11-13T00:39:49+00:00","ip":"127.0.0.1","ma":200,"tgian":0.000,"tgian_up":"","uri":"/noi-bo","ua":"curl/8.5.0","byte":17}
+{"tg":"2026-11-13T00:39:49+00:00","ip":"127.0.0.1","ma":200,"tgian":0.012,"tgian_up":"0.011","uri":"/binh-thuong","ua":"curl/8.5.0","byte":25}
+{"tg":"2026-11-13T00:39:49+00:00","ip":"127.0.0.1","ma":200,"tgian":0.002,"tgian_up":"0.000, 0.001","uri":"/thu-lai/binh-thuong","ua":"curl/8.5.0","byte":25}
+$ python3 kich_thuoc.py
+  ket-hop    150.7 byte/dong tho  -&gt;  gzip con  5.8%  ( 8.8 byte/dong)
+  huu-dung   126.8 byte/dong tho  -&gt;  gzip con  6.4%  ( 8.1 byte/dong)
+  json       174.9 byte/dong tho  -&gt;  gzip con  4.9%  ( 8.6 byte/dong)
+$ python3 doc_json.py kt-json.log
+  hop le: 200   hong: 0
+$ jq -c 'select(.tgian &gt; 0.5) | [.tgian, .ma, .uri]' kt-json.log | head -3
+[0.606,200,"/cham"]
+[0.604,200,"/cham"]
+[0.605,200,"/cham"]</div>
+<p>Escape mặc định: <code>\\x22</code> và <code>Ch\\xC3\\xA0o</code>. <code>escape=json</code>: <code>\\"</code>, <code>\\\\</code> và <code>Chào bạn</code> giữ nguyên. <code>escape=none</code>: <code>"ua":"Trinh duyet "co ngoac""</code> — dấu nháy cắt chuỗi, JSON hỏng. Định dạng số trần: 2 trên 3 dòng hỏng (rỗng, và danh sách thử lại); định dạng bọc ngoặc: 3 trên 3 hợp lệ. Kích thước trên 200 request đa dạng: JSON +16% khi thô, gần như ngang sau gzip; cả 200 dòng đều phân tích được.</p>
+<h3>🔗 Bài liên quan ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-1-1-tu-console-toi-json" target="_blank" rel="noopener"><span class="lc-ico">🔭</span><span class="lc-body"><span class="lc-title">Observability & Monitoring · 1.1 — Từ console.log tới một dòng máy đọc được</span><span class="lc-sub">Log có cấu trúc, nhìn từ phía ứng dụng</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-2-3-trinh-thu-log" target="_blank" rel="noopener"><span class="lc-ico">🔭</span><span class="lc-body"><span class="lc-title">Observability & Monitoring · 2.3 — Trình thu log: đưa log rời khỏi cái máy</span><span class="lc-sub">Thứ đọc những dòng này ngay sau đó</span></span></a>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>escape=json</code></span><span class="v">Chế độ escape của <code>log_format</code> sinh ra JSON hợp lệ và giữ UTF-8 (tiếng Việt) đọc được.</span></div>
+  <div class="kv"><span class="k"><code>escape=default</code></span><span class="v">Biến mọi byte ngoài ASCII thành <code>\\xNN</code> — đọc bằng mắt thì được, nhưng không phải JSON hợp lệ.</span></div>
+  <div class="kv"><span class="k"><code>escape=none</code></span><span class="v">Ghi byte thô; đặt trong JSON thì một dấu ngoặc kép của client có thể kết thúc chuỗi sớm.</span></div>
+  <div class="kv"><span class="k">Để trần vs bọc ngoặc</span><span class="v">Số Nginx luôn đặt thì để trần được; mọi trường CÓ THỂ rỗng thì phải bọc ngoặc.</span></div>
+  <div class="kv"><span class="k">\$time_iso8601</span><span class="v">Dấu thời gian sắp xếp được (<code>2026-08-23T18:46:31+00:00</code>) mà mọi bộ thu nạp đọc được không cần mẫu riêng.</span></div>
+  <div class="kv"><span class="k">Rỗng là "" không phải -</span><span class="v">Dưới <code>escape=json</code> giá trị thiếu là chuỗi rỗng, không phải dấu <code>-</code> của log combined.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li>Log JSON chỉ đáng khi MỌI dòng phân tích được — <code>escape=json</code> là bắt buộc, không phải tuỳ chọn.</li><li>Một đồng hồ upstream rỗng để trần (<code>"tgian_up":,</code>) là JSON hỏng; hãy bọc ngoặc mọi thứ có thể rỗng.</li><li>Những dòng hỏng là những dòng Nginx tự trả lời — health check, redirect, <code>return</code> — đúng những dòng bạn không bao giờ thử.</li><li>JSON lớn hơn ~42% ở dạng thô và ~21% sau gzip; kiểm bằng trình phân tích thật, vì <code>nginx -t</code> không biết gì về JSON.</li><li>Với một website tiếng Việt, <code>escape=json</code> là chế độ duy nhất giữ cho log của chính bạn đọc được.</li></ul>
 </div>
 `,
     },
@@ -369,6 +790,7 @@ json      161.3 byte/dong tho  →  nen con  6.1%  (  9.8 byte/dong)</div>
       type: 'LESSON',
       description: 'Ba cách ghi ít log đi, đo bằng số lần gọi syscall thật. Rồi đo xem tắt log có nhanh lên không — kết quả bác bỏ một lời khuyên bạn sẽ gặp ở mọi hướng dẫn tối ưu Nginx.',
       content: `
+${G10_3}
 <div class="ml-en">
 <span class="eyebrow">Chapter 10 · Lesson 10.3</span>
 <h2>Not logging: <code>off</code>, <code>if=</code>, <code>buffer=</code>, and what logging really costs</h2>
@@ -387,50 +809,57 @@ access_log /var/log/nginx/access.log huu_dung buffer=64k flush=5s;</code></pre>
 <p>They do different things and are not interchangeable. The first destroys the data, the second filters it, the third keeps all of it and only changes when it reaches the disk.</p>
 
 <h3><code>access_log off</code> — measured</h3>
-<p>Three requests to a location with <code>access_log off</code>, against a server that has <em>four</em> <code>access_log</code> directives declared at server level:</p>
-<div class="out">=== 3 request toi /health (access_log off) ===
-  so dong moi them vao huu-dung.log: 0</div>
-<div class="pitfall"><strong>Trap — <code>off</code> is all-or-nothing, not a subtraction.</strong> The server block above declares four different log files. A single <code>access_log off;</code> in a location silences every one of them, not just the one you had in mind. There is no way to say "keep the JSON log, drop the text one" — <code>off</code> is a full stop for that context. If you want to keep one, re-declare it inside the location instead of using <code>off</code>.</div>
+<p>Three requests to a location with <code>access_log off</code>, against a server that has <em>three</em> <code>access_log</code> directives declared at server level — then a second location that re-declares just one of them:</p>
+<div class="out">$ for k in 1 2 3; do curl -s -o /dev/null http://127.0.0.1:8080/health; done; wc -l /srv/logs/huu-dung.log /srv/logs/json.log
+0 /srv/logs/huu-dung.log
+0 /srv/logs/json.log
+0 total
+$ for k in 1 2 3; do curl -s -o /dev/null http://127.0.0.1:8080/health2; done; wc -l /srv/logs/huu-dung.log /srv/logs/json.log
+ 0 /srv/logs/huu-dung.log
+ 3 /srv/logs/json.log
+ 3 total</div>
+<div class="pitfall"><strong>Trap — <code>off</code> is all-or-nothing, not a subtraction.</strong> The server block above declares three different log files. A single <code>access_log off;</code> in a location silences every one of them, not just the one you had in mind. There is no way to say "keep the JSON log, drop the text one" — <code>off</code> is a full stop for that context. If you want to keep one, re-declare it inside the location instead of using <code>off</code>.</div>
 <p>The usual target is the health check, and that is a reasonable target: a load balancer polling <code>/health</code> every second writes 86,400 lines a day that describe nothing. But be careful what else lives under that prefix — Chapter 2 measured how a prefix <code>location /health</code> also captures <code>/health-report</code> and anything else that starts with those characters. Use <code>location = /health</code> when you mean exactly one URI.</p>
 
 <h3><code>if=</code> — keep the interesting lines only</h3>
 <p>The <code>if=</code> parameter takes a variable. Nginx writes the line unless the variable is empty or the literal string <code>0</code>. Combined with <code>map</code> from Chapter 8, that gives you a filter with no <code>if</code> block and no runtime cost worth measuring. Four requests — three successful, one that returned 500 — against a full log and a filtered one:</p>
-<div class="out">=== log DAY DU (huu-dung.log) ===
-127.0.0.1 200 0.001 0.001 127.0.0.1:9600 200 "/binh-thuong" -> "/binh-thuong" 13 -
-127.0.0.1 200 0.602 0.602 127.0.0.1:9600 200 "/cham" -> "/cham" 15 -
-127.0.0.1 500 0.001 0.001 127.0.0.1:9600 500 "/loi" -> "/loi" 14 -
-127.0.0.1 200 0.000 0.001 127.0.0.1:9600 200 "/khong-co-dau" -> "/khong-co-dau" 13 -
-
-=== log CHI LOI  (loi.log, if=$dang_chu_y) ===
-127.0.0.1 500 0.001 0.001 127.0.0.1:9600 500 "/loi" -> "/loi" 14 -</div>
+<div class="out">$ for p in binh-thuong cham loi khong-co-dau; do curl -s -o /dev/null http://127.0.0.1:8080/$p; done
+$ echo '=== huu-dung.log (DAY DU) ==='; cat huu-dung.log; echo '=== loi.log (if=$dang_chu_y) ==='; cat loi.log
+=== huu-dung.log (DAY DU) ===
+127.0.0.1 200 0.006 0.006 127.0.0.1:9600 200 "/binh-thuong" -&gt; "/binh-thuong" 15
+127.0.0.1 200 0.601 0.601 127.0.0.1:9600 200 "/cham" -&gt; "/cham" 14
+127.0.0.1 500 0.001 0.000 127.0.0.1:9600 500 "/loi" -&gt; "/loi" 13
+127.0.0.1 200 0.001 0.001 127.0.0.1:9600 200 "/khong-co-dau" -&gt; "/khong-co-dau" 15
+=== loi.log (if=$dang_chu_y) ===
+127.0.0.1 500 0.001 0.000 127.0.0.1:9600 500 "/loi" -&gt; "/loi" 13</div>
 <p>Four lines in one file, one in the other, from the same four requests — because both <code>access_log</code> directives are active at once. That is the pattern worth stealing: keep the full log for the last few days, and a small errors-only file you can keep for a year and <code>grep</code> instantly.</p>
 <div class="note-ct">The <code>map</code> is <code>~^[23]</code> → <code>0</code>, <code>default</code> → <code>1</code>: anything in the 2xx and 3xx families is uninteresting, everything else is kept. Add <code>~^499</code> to the uninteresting side if your clients abort often, or map on <code>\$request_time</code> instead to build a slow-request log.</div>
 
 <h3><code>buffer=</code> — the syscalls, counted</h3>
 <p>This is where the wall-clock stops being useful and <code>strace</code> starts. Nine hundred requests over a single keepalive connection, against three locations that are identical except for their logging, with the worker process traced:</p>
-<div class="out">worker pid=10780
-/log-tat/    writev=900 calls
-/log-thuong/ writev=900 calls  write=900 calls
-/log-dem/    writev=900 calls</div>
-<p>The <code>writev</code> calls are the HTTP responses — 900 requests, 900 responses, in all three. The <code>write</code> calls are the log. Unbuffered logging is exactly one extra <code>write()</code> syscall per request. Buffered logging made none at all inside the trace window. Extending that window past the <code>flush=5s</code> deadline shows where they went:</p>
-<div class="out">=== /log-dem/ : 900 request, ke ca sau khi flush=5s da chay ===
-  so lan goi write(): 1
-  so dong thuc su trong log: 900
-  kich thuoc log: 51300 byte</div>
-<p>Nine hundred lines, 51,300 bytes, delivered in a <em>single</em> <code>write()</code> call. The buffer is 64 KB and the data fit inside it, so the worker accumulated everything in memory and wrote once. Against 900 syscalls unbuffered, that is a 900-fold reduction, and no lines were lost.</p>
+<div class="out">$ for p in /log-tat/ /log-thuong/ /log-dem/; do bash dem_syscall.sh $p; done
+/log-tat/    writev=1800 calls  
+/log-thuong/ writev=1800 calls  write=900 calls  
+/log-dem/    writev=1800 calls  write=1 calls  </div>
+<p>The <code>writev</code> calls are the traffic itself — 1,800 in all three: 900 responses to the client and 900 requests to the backend, because this is a proxy. The <code>write</code> calls are the log. Unbuffered logging is exactly one extra <code>write()</code> syscall per request. Buffered logging made just one inside the trace window. Extending that window past the <code>flush=5s</code> deadline shows where they went:</p>
+<div class="out">$ strace -e trace=write -c -p $W &amp;  ab -k -n 900 -c 1 http://127.0.0.1:8081/log-dem/; sleep 6   # đợi qua flush=5s
+so lan goi write(): 2
+$ echo "so dong trong log: $(wc -l &lt; /srv/logs/dem.log)   kich thuoc: $(stat -c %s /srv/logs/dem.log) byte"
+so dong trong log: 900   kich thuoc: 67500 byte</div>
+<p>Nine hundred lines, 67,500 bytes, delivered in <em>two</em> <code>write()</code> calls. The buffer is 64 KB and 67,500 bytes do not fit, so the worker wrote once when the buffer filled and once more at the <code>flush=5s</code> deadline. Against 900 syscalls unbuffered, that is a 450-fold reduction, and no lines were lost.</p>
 
 <h3>So how much faster is it?</h3>
 <p>It is not. Five rounds of 900 requests against each of the three locations, same connection, same response body:</p>
-<div class="out">=== 5 luot x 900 request cho moi cau hinh ===
-  /log-tat/      37.1  39.1  36.7  36.8  36.7   → TB  37.3 us  (do lech chuan 1.0)
-  /log-thuong/   37.3  37.1  37.1  36.7  37.4   → TB  37.1 us  (do lech chuan 0.3)
-  /log-dem/      36.8  37.5  39.3  37.9  40.0   → TB  38.3 us  (do lech chuan 1.3)</div>
-<div class="callout warn"><strong>Logging off was not faster than logging on.</strong> It came out 0.2 µs <em>slower</em> than the unbuffered log, and the buffered version — the one doing 900× fewer syscalls — came out slowest of the three. All three differences are smaller than the run-to-run spread of a single configuration. The 900 syscalls are real, and they cost less than the noise floor of the measurement.</div>
-<p>That is not a claim that a <code>write()</code> is free. It is a claim about proportion. Serving a request through a proxy costs about 37 µs here, and a buffered append to a page-cached file costs on the order of a microsecond. One part in thirty, on a benchmark with a 1 µs standard deviation, is not visible.</p>
+<div class="out">$ for p in /log-tat/ /log-thuong/ /log-dem/; do printf '%-13s' $p; bash do_tg.sh $p; echo; done
+/log-tat/      143   131   138   129   125 -&gt; TB 133 us (do lech chuan 6)
+/log-thuong/   128   129   150   154   134 -&gt; TB 139 us (do lech chuan 11)
+/log-dem/      138   130   131   128   125 -&gt; TB 130 us (do lech chuan 4)</div>
+<div class="callout warn"><strong>Logging off was not measurably faster than logging on.</strong> Off averaged 133 µs, unbuffered 139 µs, buffered 130 µs — while a single configuration varied by up to 11 µs between rounds. All three differences are smaller than the run-to-run spread of a single configuration. The 900 syscalls are real, and they cost less than the noise floor of the measurement.</div>
+<p>That is not a claim that a <code>write()</code> is free. It is a claim about proportion. Serving a request through a proxy costs about 130–140 µs in this course's lab, and an append to a page-cached file costs on the order of a microsecond. One part in a hundred, on a benchmark whose spread reaches 11 µs, is not visible.</p>
 
 <h3>Read the null result honestly</h3>
 <div class="kv-grid">
-  <div class="kv"><span class="k">What was measured</span><span class="v">One worker, one keepalive connection, ext4 on a virtual disk with the page cache warm, a 13-byte response, no TLS, loopback.</span></div>
+  <div class="kv"><span class="k">What was measured</span><span class="v">One worker, one keepalive connection, ext4 on a virtual disk with the page cache warm, a 15-byte response, no TLS, loopback.</span></div>
   <div class="kv"><span class="k">Where it would show</span><span class="v">A log on a network filesystem, a disk already saturated by something else, a synchronous-write mount, or a machine where the log partition is full — there the <code>write()</code> stops being a memcpy into page cache and starts being I/O.</span></div>
   <div class="kv"><span class="k">What it does establish</span><span class="v">On an ordinary server with an ordinary local disk, "turn off the access log for performance" is advice with no measurable benefit, and it costs you the ability to answer questions about production.</span></div>
 </div>
@@ -462,6 +891,98 @@ access_log /var/log/nginx/access.log huu_dung buffer=64k flush=5s;</code></pre>
 <div class="link-card"><span class="lc-ico">🔧</span><span class="lc-body"><span class="lc-title">strace(1) — counting syscalls with -c</span><span class="lc-sub">man7.org/linux/man-pages/man1/strace.1.html — the tool that made the buffering visible when the stopwatch could not see it.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash — syscalls, page cache and what a write() really does</span><span class="lc-sub">/courses/linux-bash/learn${REF} — why an append to a local file is a memcpy and not a disk seek, which is the whole reason this benchmark found nothing.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Rewriting and mapping — where this <code>map</code> comes from</span><span class="lc-sub">Chapter 8 built the <code>map</code> directive used here for <code>if=</code>. It is evaluated lazily, so an unused map costs nothing.</span></span></div>
+<h3>🔬 Run it yourself</h3>
+<p>One worker, a keepalive upstream, three logs at server level (one errors-only via <code>map</code> + <code>if=</code>), three locations identical except for logging, a script that <code>strace</code>s the worker while <code>ab</code> sends 900 requests on one connection, and a timing script — on nginx/1.24.0:</p>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+worker_processes 1;
+events {}
+http {
+  log_format huu_dung '$remote_addr $status $request_time $upstream_response_time $upstream_addr '
+                      '$upstream_status "$request_uri" -&gt; "$uri" $body_bytes_sent';
+  log_format json escape=json '{"ma":$status,"uri":"$request_uri"}';
+  map $status $dang_chu_y { ~^[23] 0; default 1; }        <span class="tok-comment">  # 2xx/3xx: không đáng chú ý</span>
+  upstream app { server 127.0.0.1:9600; keepalive 8; }
+  server {                                                 <span class="tok-comment">  # 8080: off và if=</span>
+    listen 8080;
+    access_log /srv/logs/huu-dung.log huu_dung;         <span class="tok-comment">  # khai ở server: HAI log</span>
+    access_log /srv/logs/json.log json;
+    access_log /srv/logs/loi.log huu_dung if=$dang_chu_y; # và một log CHỈ LỖI
+    location = /health  { access_log off; return 200 "ok\\n"; }
+    location = /health2 { access_log /srv/logs/json.log json; return 200 "ok\\n"; } <span class="tok-comment">  # giữ MỘT log: khai lại</span>
+    location / { proxy_http_version 1.1; proxy_set_header Connection ""; proxy_pass http://app; }
+  }
+  server {                                                 <span class="tok-comment">  # 8081: ba cách ghi, còn lại giống hệt</span>
+    listen 8081;
+    proxy_http_version 1.1; proxy_set_header Connection "";
+    location /log-tat/    { access_log off;                                        proxy_pass http://app/binh-thuong; }
+    location /log-thuong/ { access_log /srv/logs/thuong.log huu_dung;           proxy_pass http://app/binh-thuong; }
+    location /log-dem/    { access_log /srv/logs/dem.log huu_dung buffer=64k flush=5s; proxy_pass http://app/binh-thuong; }
+  }
+}</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># dem_syscall.sh</span>
+<span class="tok-comment"># dem_syscall.sh &lt;đường dẫn&gt; — strace worker trong lúc ab gửi 900 request trên MỘT kết nối keepalive; đếm write/writev</span>
+W=$(pgrep -f 'nginx: worker' | head -1)
+strace -f -e trace=write,writev -c -p $W -o /tmp/ng/st.txt 2&gt;/dev/null &amp; S=$!; sleep 0.5
+ab -q -k -n 900 -c 1 "http://127.0.0.1:8081$1" &gt; /dev/null 2&gt;&amp;1; sleep 0.3; kill -INT $S; wait $S 2&gt;/dev/null
+printf '%-13s' "$1"; awk '$NF=="writev"||$NF=="write"{printf "%s=%s calls  ", $NF, $4}' /tmp/ng/st.txt; echo</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># do_tg.sh</span>
+<span class="tok-comment"># do_tg.sh &lt;đường dẫn&gt; — 5 lượt × 900 request (ab -k, một kết nối): thời gian TB mỗi request (µs)</span>
+for k in 1 2 3 4 5; do ab -q -k -n 900 -c 1 "http://127.0.0.1:8081$1" 2&gt;/dev/null | awk '/Time per request.*\\(mean\\)$/{print $4*1000}'; done | awk '{a[NR]=$1; s+=$1; printf "%5.0f ", $1} END {m=s/NR; for(i in a) v+=(a[i]-m)^2; printf "-&gt; TB %.0f us (do lech chuan %.0f)", m, sqrt(v/NR)}'</code></pre>
+<div class="out">$ for k in 1 2 3; do curl -s -o /dev/null http://127.0.0.1:8080/health; done; wc -l /srv/logs/huu-dung.log /srv/logs/json.log
+0 /srv/logs/huu-dung.log
+0 /srv/logs/json.log
+0 total
+$ for k in 1 2 3; do curl -s -o /dev/null http://127.0.0.1:8080/health2; done; wc -l /srv/logs/huu-dung.log /srv/logs/json.log
+ 0 /srv/logs/huu-dung.log
+ 3 /srv/logs/json.log
+ 3 total
+$ for p in binh-thuong cham loi khong-co-dau; do curl -s -o /dev/null http://127.0.0.1:8080/$p; done
+$ echo '=== huu-dung.log (DAY DU) ==='; cat huu-dung.log; echo '=== loi.log (if=$dang_chu_y) ==='; cat loi.log
+=== huu-dung.log (DAY DU) ===
+127.0.0.1 200 0.006 0.006 127.0.0.1:9600 200 "/binh-thuong" -&gt; "/binh-thuong" 15
+127.0.0.1 200 0.601 0.601 127.0.0.1:9600 200 "/cham" -&gt; "/cham" 14
+127.0.0.1 500 0.001 0.000 127.0.0.1:9600 500 "/loi" -&gt; "/loi" 13
+127.0.0.1 200 0.001 0.001 127.0.0.1:9600 200 "/khong-co-dau" -&gt; "/khong-co-dau" 15
+=== loi.log (if=$dang_chu_y) ===
+127.0.0.1 500 0.001 0.000 127.0.0.1:9600 500 "/loi" -&gt; "/loi" 13
+$ for p in /log-tat/ /log-thuong/ /log-dem/; do bash dem_syscall.sh $p; done
+/log-tat/    writev=1800 calls  
+/log-thuong/ writev=1800 calls  write=900 calls  
+/log-dem/    writev=1800 calls  write=1 calls  
+$ strace -e trace=write -c -p $W &amp;  ab -k -n 900 -c 1 http://127.0.0.1:8081/log-dem/; sleep 6   # đợi qua flush=5s
+so lan goi write(): 2
+$ echo "so dong trong log: $(wc -l &lt; /srv/logs/dem.log)   kich thuoc: $(stat -c %s /srv/logs/dem.log) byte"
+so dong trong log: 900   kich thuoc: 67500 byte
+$ for p in /log-tat/ /log-thuong/ /log-dem/; do printf '%-13s' $p; bash do_tg.sh $p; echo; done
+/log-tat/      143   131   138   129   125 -&gt; TB 133 us (do lech chuan 6)
+/log-thuong/   128   129   150   154   134 -&gt; TB 139 us (do lech chuan 11)
+/log-dem/      138   130   131   128   125 -&gt; TB 130 us (do lech chuan 4)
+$ curl -s -o /dev/null http://127.0.0.1:8081/log-dem/; for s in 0 1 2 3 4 5 6 7; do echo "t=\${s}s  so dong trong log: $(wc -l &lt; /srv/logs/dem.log)"; sleep 1; done
+t=0s  so dong trong log: 0
+t=1s  so dong trong log: 0
+t=2s  so dong trong log: 0
+t=3s  so dong trong log: 0
+t=4s  so dong trong log: 0
+t=5s  so dong trong log: 1
+t=6s  so dong trong log: 1
+t=7s  so dong trong log: 1</div>
+<p><code>access_log off</code> silenced both logs it was checked against; re-declaring one inside the location kept exactly that one. The errors-only log got 1 line of 4. <code>writev</code> = 1,800 everywhere (traffic), <code>write</code> = 900 unbuffered and 2 buffered (64 KB full + flush). Timing: 133 / 139 / 130 µs, inside the noise. And one request through <code>flush=5s</code> appeared only at t = 5 s.</p>
+<h3>🔗 Related lessons in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-1-4-chi-phi-that" target="_blank" rel="noopener"><span class="lc-ico">🔭</span><span class="lc-body"><span class="lc-title">Observability & Monitoring · 1.4 — What a log line actually costs, measured</span><span class="lc-sub">The same measurement on the application side</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-9-2-fsync" target="_blank" rel="noopener"><span class="lc-ico">🧠</span><span class="lc-body"><span class="lc-title">OS for Developers · 9.3 — write() is not on disk: buffering, fsync, O_DIRECT</span><span class="lc-sub">Why a write() is a memcpy into page cache</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-11-2-strace-ltrace" target="_blank" rel="noopener"><span class="lc-ico">🧠</span><span class="lc-body"><span class="lc-title">OS for Developers · 11.3 — strace and ltrace in anger</span><span class="lc-sub">The tool that counted the syscalls</span></span></a>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>access_log off</code></span><span class="v">All-or-nothing silence for a context — it kills every log file declared there, not just one.</span></div>
+  <div class="kv"><span class="k"><code>if=</code> parameter</span><span class="v">Write a line only when a variable is non-empty and not the string <code>0</code>; pairs with a <code>map</code>.</span></div>
+  <div class="kv"><span class="k"><code>buffer=</code> / <code>flush=</code></span><span class="v">Accumulate log lines in worker memory and write occasionally, trading freshness for fewer syscalls.</span></div>
+  <div class="kv"><span class="k"><code>map</code> (for <code>if=</code>)</span><span class="v">A lazily-evaluated lookup (Chapter 8) that builds the filter variable; an unused map costs nothing.</span></div>
+  <div class="kv"><span class="k"><code>strace</code></span><span class="v">The tool that counted the per-request <code>write()</code> the stopwatch could not see.</span></div>
+  <div class="kv"><span class="k">Page cache</span><span class="v">Why an append <code>write()</code> to a local file is a memcpy, not disk I/O — the reason the benchmark found nothing.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li>Three ways to write less: <code>off</code> destroys, <code>if=</code> filters, <code>buffer=</code> delays — they are not interchangeable.</li><li>"Turn off the access log for speed" shows no measurable benefit on an ordinary local disk.</li><li>Unbuffered logging is one extra <code>write()</code> per request; buffering cut 900 writes to 2, yet wall-clock did not move.</li><li><code>buffer=</code> costs a flush delay and a loss window on <code>SIGKILL</code> or power loss — never use it for an audit log.</li><li>The one logging setting that can truly hurt a server is <code>error_log debug</code> (Lesson 10.4).</li></ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 10 · Bài 10.3</span>
@@ -481,50 +1002,57 @@ access_log /var/log/nginx/access.log huu_dung buffer=64k flush=5s;</code></pre>
 <p>Ba cái làm ba việc khác nhau và không thay thế cho nhau được. Cái thứ nhất PHÁ HUỶ dữ liệu, cái thứ hai LỌC nó, cái thứ ba giữ nguyên tất cả và chỉ đổi thời điểm nó xuống tới đĩa.</p>
 
 <h3><code>access_log off</code> — đo thật</h3>
-<p>Ba request tới một location có <code>access_log off</code>, trên một server đã khai báo <em>bốn</em> chỉ thị <code>access_log</code> ở mức server:</p>
-<div class="out">=== 3 request toi /health (access_log off) ===
-  so dong moi them vao huu-dung.log: 0</div>
-<div class="pitfall"><strong>Bẫy — <code>off</code> là tắt SẠCH, không phải trừ bớt.</strong> Khối server ở trên khai báo bốn tệp log khác nhau. Một dòng <code>access_log off;</code> duy nhất trong một location làm câm hết cả bốn, chứ không riêng cái bạn đang nghĩ tới. Không có cách nào nói "giữ log JSON, bỏ log chữ" — <code>off</code> là dấu chấm hết cho ngữ cảnh đó. Muốn giữ lại một cái thì khai báo lại nó BÊN TRONG location, đừng dùng <code>off</code>.</div>
+<p>Ba request tới một location có <code>access_log off</code>, trên một server đã khai báo <em>ba</em> chỉ thị <code>access_log</code> ở mức server — rồi một location thứ hai khai lại đúng một cái trong số đó:</p>
+<div class="out">$ for k in 1 2 3; do curl -s -o /dev/null http://127.0.0.1:8080/health; done; wc -l /srv/logs/huu-dung.log /srv/logs/json.log
+0 /srv/logs/huu-dung.log
+0 /srv/logs/json.log
+0 total
+$ for k in 1 2 3; do curl -s -o /dev/null http://127.0.0.1:8080/health2; done; wc -l /srv/logs/huu-dung.log /srv/logs/json.log
+ 0 /srv/logs/huu-dung.log
+ 3 /srv/logs/json.log
+ 3 total</div>
+<div class="pitfall"><strong>Bẫy — <code>off</code> là tắt SẠCH, không phải trừ bớt.</strong> Khối server ở trên khai báo ba tệp log khác nhau. Một dòng <code>access_log off;</code> duy nhất trong một location làm câm hết cả ba, chứ không riêng cái bạn đang nghĩ tới. Không có cách nào nói "giữ log JSON, bỏ log chữ" — <code>off</code> là dấu chấm hết cho ngữ cảnh đó. Muốn giữ lại một cái thì khai báo lại nó BÊN TRONG location, đừng dùng <code>off</code>.</div>
 <p>Đích ngắm thường thấy là health check, và đó là đích hợp lý: một bộ cân bằng tải hỏi <code>/health</code> mỗi giây sẽ ghi 86.400 dòng mỗi ngày mà chẳng mô tả điều gì. Nhưng phải để ý xem còn thứ gì nằm dưới cái tiền tố đó — Chương 2 đã đo chuyện một <code>location /health</code> dạng tiền tố cũng tóm luôn <code>/health-report</code> và mọi thứ khác bắt đầu bằng chừng ấy ký tự. Dùng <code>location = /health</code> khi bạn muốn nói ĐÚNG một URI.</p>
 
 <h3><code>if=</code> — chỉ giữ lại những dòng đáng chú ý</h3>
 <p>Tham số <code>if=</code> nhận một biến. Nginx ghi dòng đó ra trừ khi biến rỗng hoặc bằng đúng chuỗi <code>0</code>. Kết hợp với <code>map</code> ở Chương 8, bạn có một bộ lọc không cần khối <code>if</code> và không tốn chi phí lúc chạy đáng để đo. Bốn request — ba cái thành công, một cái trả 500 — chạy song song vào một log đầy đủ và một log đã lọc:</p>
-<div class="out">=== log DAY DU (huu-dung.log) ===
-127.0.0.1 200 0.001 0.001 127.0.0.1:9600 200 "/binh-thuong" -> "/binh-thuong" 13 -
-127.0.0.1 200 0.602 0.602 127.0.0.1:9600 200 "/cham" -> "/cham" 15 -
-127.0.0.1 500 0.001 0.001 127.0.0.1:9600 500 "/loi" -> "/loi" 14 -
-127.0.0.1 200 0.000 0.001 127.0.0.1:9600 200 "/khong-co-dau" -> "/khong-co-dau" 13 -
-
-=== log CHI LOI  (loi.log, if=$dang_chu_y) ===
-127.0.0.1 500 0.001 0.001 127.0.0.1:9600 500 "/loi" -> "/loi" 14 -</div>
+<div class="out">$ for p in binh-thuong cham loi khong-co-dau; do curl -s -o /dev/null http://127.0.0.1:8080/$p; done
+$ echo '=== huu-dung.log (DAY DU) ==='; cat huu-dung.log; echo '=== loi.log (if=$dang_chu_y) ==='; cat loi.log
+=== huu-dung.log (DAY DU) ===
+127.0.0.1 200 0.006 0.006 127.0.0.1:9600 200 "/binh-thuong" -&gt; "/binh-thuong" 15
+127.0.0.1 200 0.601 0.601 127.0.0.1:9600 200 "/cham" -&gt; "/cham" 14
+127.0.0.1 500 0.001 0.000 127.0.0.1:9600 500 "/loi" -&gt; "/loi" 13
+127.0.0.1 200 0.001 0.001 127.0.0.1:9600 200 "/khong-co-dau" -&gt; "/khong-co-dau" 15
+=== loi.log (if=$dang_chu_y) ===
+127.0.0.1 500 0.001 0.000 127.0.0.1:9600 500 "/loi" -&gt; "/loi" 13</div>
 <p>Bốn dòng trong tệp này, một dòng trong tệp kia, từ cùng bốn request — vì cả hai chỉ thị <code>access_log</code> đều đang hoạt động cùng lúc. Đó mới là cái khuôn đáng lấy về dùng: giữ log đầy đủ cho vài ngày gần nhất, cộng thêm một tệp chỉ-có-lỗi đủ nhỏ để giữ cả năm và <code>grep</code> ra trong tích tắc.</p>
 <div class="note-ct">Cái <code>map</code> ở đây là <code>~^[23]</code> → <code>0</code>, <code>default</code> → <code>1</code>: mọi thứ thuộc họ 2xx và 3xx là không đáng chú ý, còn lại thì giữ. Thêm <code>~^499</code> vào phía không-đáng-chú-ý nếu client của bạn hay ngắt giữa chừng, hoặc map trên <code>\$request_time</code> thay vì mã trạng thái để dựng một log request-chậm.</div>
 
 <h3><code>buffer=</code> — đếm syscall</h3>
 <p>Đây là chỗ mà đồng hồ bấm giờ hết tác dụng và <code>strace</code> bắt đầu có ích. Chín trăm request trên một kết nối keepalive duy nhất, vào ba location giống hệt nhau trừ phần ghi log, với tiến trình worker bị theo dõi:</p>
-<div class="out">worker pid=10780
-/log-tat/    writev=900 calls
-/log-thuong/ writev=900 calls  write=900 calls
-/log-dem/    writev=900 calls</div>
-<p>Mấy lời gọi <code>writev</code> là phần trả lời HTTP — 900 request, 900 phản hồi, ở cả ba. Mấy lời gọi <code>write</code> mới là log. Ghi log không đệm tốn ĐÚNG một syscall <code>write()</code> phụ cho mỗi request. Ghi log có đệm không tốn cái nào trong khoảng thời gian theo dõi. Kéo dài khoảng đó qua khỏi mốc <code>flush=5s</code> thì thấy chúng đi đâu:</p>
-<div class="out">=== /log-dem/ : 900 request, ke ca sau khi flush=5s da chay ===
-  so lan goi write(): 1
-  so dong thuc su trong log: 900
-  kich thuoc log: 51300 byte</div>
-<p>Chín trăm dòng, 51.300 byte, giao trong MỘT lời gọi <code>write()</code> duy nhất. Bộ đệm là 64 KB và dữ liệu vừa lọt vào đó, nên worker gom hết trong bộ nhớ rồi ghi một lần. So với 900 syscall khi không đệm, đó là giảm 900 lần, và không mất dòng nào.</p>
+<div class="out">$ for p in /log-tat/ /log-thuong/ /log-dem/; do bash dem_syscall.sh $p; done
+/log-tat/    writev=1800 calls  
+/log-thuong/ writev=1800 calls  write=900 calls  
+/log-dem/    writev=1800 calls  write=1 calls  </div>
+<p>Mấy lời gọi <code>writev</code> là chính lưu lượng — 1.800 ở cả ba: 900 phản hồi về client và 900 request gửi lên backend, vì đây là một con proxy. Mấy lời gọi <code>write</code> mới là log. Ghi log không đệm tốn ĐÚNG một syscall <code>write()</code> phụ cho mỗi request. Ghi log có đệm chỉ tốn đúng một lần trong khoảng thời gian theo dõi. Kéo dài khoảng đó qua khỏi mốc <code>flush=5s</code> thì thấy chúng đi đâu:</p>
+<div class="out">$ strace -e trace=write -c -p $W &amp;  ab -k -n 900 -c 1 http://127.0.0.1:8081/log-dem/; sleep 6   # đợi qua flush=5s
+so lan goi write(): 2
+$ echo "so dong trong log: $(wc -l &lt; /srv/logs/dem.log)   kich thuoc: $(stat -c %s /srv/logs/dem.log) byte"
+so dong trong log: 900   kich thuoc: 67500 byte</div>
+<p>Chín trăm dòng, 67.500 byte, giao trong HAI lời gọi <code>write()</code>. Bộ đệm là 64 KB mà 67.500 byte không lọt hết, nên worker ghi một lần khi bộ đệm đầy và một lần nữa lúc tới hạn <code>flush=5s</code>. So với 900 syscall khi không đệm, đó là giảm 450 lần, và không mất dòng nào.</p>
 
 <h3>Vậy nó nhanh hơn bao nhiêu?</h3>
 <p>Không nhanh hơn. Năm lượt, mỗi lượt 900 request, vào từng location trong ba cái, cùng một kết nối, cùng một thân phản hồi:</p>
-<div class="out">=== 5 luot x 900 request cho moi cau hinh ===
-  /log-tat/      37.1  39.1  36.7  36.8  36.7   → TB  37.3 us  (do lech chuan 1.0)
-  /log-thuong/   37.3  37.1  37.1  36.7  37.4   → TB  37.1 us  (do lech chuan 0.3)
-  /log-dem/      36.8  37.5  39.3  37.9  40.0   → TB  38.3 us  (do lech chuan 1.3)</div>
-<div class="callout warn"><strong>Tắt log KHÔNG nhanh hơn bật log.</strong> Nó ra chậm hơn cái log không đệm 0,2 µs, còn bản có đệm — cái đang làm ít hơn 900 lần syscall — lại ra chậm nhất trong ba cái. Cả ba khoảng chênh đều nhỏ hơn độ dao động giữa các lượt của CÙNG một cấu hình. 900 syscall kia là có thật, và chúng tốn ít hơn cả ngưỡng nhiễu của phép đo.</div>
-<p>Đây không phải là khẳng định rằng một lời gọi <code>write()</code> là miễn phí. Đây là khẳng định về TỈ LỆ. Phục vụ một request qua proxy tốn khoảng 37 µs trên máy này, còn một lần ghi nối vào tệp đang nằm trong page cache tốn cỡ một micro giây. Một phần ba mươi, trên một phép đo có độ lệch chuẩn 1 µs, thì không nhìn thấy được.</p>
+<div class="out">$ for p in /log-tat/ /log-thuong/ /log-dem/; do printf '%-13s' $p; bash do_tg.sh $p; echo; done
+/log-tat/      143   131   138   129   125 -&gt; TB 133 us (do lech chuan 6)
+/log-thuong/   128   129   150   154   134 -&gt; TB 139 us (do lech chuan 11)
+/log-dem/      138   130   131   128   125 -&gt; TB 130 us (do lech chuan 4)</div>
+<div class="callout warn"><strong>Tắt log KHÔNG nhanh hơn bật log một cách đo được.</strong> Tắt log trung bình 133 µs, ghi thường 139 µs, ghi đệm 130 µs — trong khi riêng một cấu hình đã dao động tới 11 µs giữa các lượt. Cả ba khoảng chênh đều nhỏ hơn độ dao động giữa các lượt của CÙNG một cấu hình. 900 syscall kia là có thật, và chúng tốn ít hơn cả ngưỡng nhiễu của phép đo.</div>
+<p>Đây không phải là khẳng định rằng một lời gọi <code>write()</code> là miễn phí. Đây là khẳng định về TỈ LỆ. Phục vụ một request qua proxy tốn khoảng 130–140 µs trên máy lab của khoá, còn một lần ghi nối vào tệp đang nằm trong page cache tốn cỡ một micro giây. Một phần một trăm, trên một phép đo dao động tới 11 µs, thì không nhìn thấy được.</p>
 
 <h3>Đọc kết quả rỗng này cho trung thực</h3>
 <div class="kv-grid">
-  <div class="kv"><span class="k">Cái đã đo</span><span class="v">Một worker, một kết nối keepalive, ext4 trên đĩa ảo với page cache đang nóng, thân phản hồi 13 byte, không TLS, chạy trên loopback.</span></div>
+  <div class="kv"><span class="k">Cái đã đo</span><span class="v">Một worker, một kết nối keepalive, ext4 trên đĩa ảo với page cache đang nóng, thân phản hồi 15 byte, không TLS, chạy trên loopback.</span></div>
   <div class="kv"><span class="k">Chỗ nó SẼ lộ ra</span><span class="v">Log nằm trên hệ tệp mạng, đĩa đã bị thứ khác làm bão hoà, phân vùng gắn ở chế độ ghi đồng bộ, hoặc máy có phân vùng log đã đầy — ở đó <code>write()</code> thôi là một phép memcpy và trở thành I/O thật.</span></div>
   <div class="kv"><span class="k">Cái nó KHẲNG ĐỊNH được</span><span class="v">Trên một máy chủ bình thường với một cái đĩa cục bộ bình thường, "tắt access log cho nhanh" là lời khuyên không đem lại lợi ích đo được, và nó lấy đi của bạn khả năng trả lời câu hỏi về production.</span></div>
 </div>
@@ -556,6 +1084,98 @@ access_log /var/log/nginx/access.log huu_dung buffer=64k flush=5s;</code></pre>
 <div class="link-card"><span class="lc-ico">🔧</span><span class="lc-body"><span class="lc-title">strace(1) — đếm syscall bằng -c</span><span class="lc-sub">man7.org/linux/man-pages/man1/strace.1.html — công cụ đã làm lộ ra chuyện đệm log khi cái đồng hồ bấm giờ không nhìn thấy gì.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash — syscall, page cache và một write() thật sự làm gì</span><span class="lc-sub">/courses/linux-bash/learn${REF} — vì sao ghi nối vào một tệp cục bộ là một phép memcpy chứ không phải một lần quay đầu đọc đĩa, và đó chính là lý do phép đo này không tìm thấy gì.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Viết lại và ánh xạ — cái <code>map</code> này tới từ đâu</span><span class="lc-sub">Chương 8 đã dựng chỉ thị <code>map</code> dùng ở đây cho <code>if=</code>. Nó được tính toán lười, nên một cái map không dùng tới thì không tốn gì.</span></span></div>
+<h3>🔬 Tự chạy lại</h3>
+<p>Một worker, một upstream có keepalive, ba log ở mức server (một cái chỉ lỗi bằng <code>map</code> + <code>if=</code>), ba location giống hệt nhau trừ phần ghi log, một script <code>strace</code> worker trong lúc <code>ab</code> gửi 900 request trên một kết nối, và một script bấm giờ — trên nginx/1.24.0:</p>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+worker_processes 1;
+events {}
+http {
+  log_format huu_dung '$remote_addr $status $request_time $upstream_response_time $upstream_addr '
+                      '$upstream_status "$request_uri" -&gt; "$uri" $body_bytes_sent';
+  log_format json escape=json '{"ma":$status,"uri":"$request_uri"}';
+  map $status $dang_chu_y { ~^[23] 0; default 1; }        <span class="tok-comment">  # 2xx/3xx: không đáng chú ý</span>
+  upstream app { server 127.0.0.1:9600; keepalive 8; }
+  server {                                                 <span class="tok-comment">  # 8080: off và if=</span>
+    listen 8080;
+    access_log /srv/logs/huu-dung.log huu_dung;         <span class="tok-comment">  # khai ở server: HAI log</span>
+    access_log /srv/logs/json.log json;
+    access_log /srv/logs/loi.log huu_dung if=$dang_chu_y; # và một log CHỈ LỖI
+    location = /health  { access_log off; return 200 "ok\\n"; }
+    location = /health2 { access_log /srv/logs/json.log json; return 200 "ok\\n"; } <span class="tok-comment">  # giữ MỘT log: khai lại</span>
+    location / { proxy_http_version 1.1; proxy_set_header Connection ""; proxy_pass http://app; }
+  }
+  server {                                                 <span class="tok-comment">  # 8081: ba cách ghi, còn lại giống hệt</span>
+    listen 8081;
+    proxy_http_version 1.1; proxy_set_header Connection "";
+    location /log-tat/    { access_log off;                                        proxy_pass http://app/binh-thuong; }
+    location /log-thuong/ { access_log /srv/logs/thuong.log huu_dung;           proxy_pass http://app/binh-thuong; }
+    location /log-dem/    { access_log /srv/logs/dem.log huu_dung buffer=64k flush=5s; proxy_pass http://app/binh-thuong; }
+  }
+}</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># dem_syscall.sh</span>
+<span class="tok-comment"># dem_syscall.sh &lt;đường dẫn&gt; — strace worker trong lúc ab gửi 900 request trên MỘT kết nối keepalive; đếm write/writev</span>
+W=$(pgrep -f 'nginx: worker' | head -1)
+strace -f -e trace=write,writev -c -p $W -o /tmp/ng/st.txt 2&gt;/dev/null &amp; S=$!; sleep 0.5
+ab -q -k -n 900 -c 1 "http://127.0.0.1:8081$1" &gt; /dev/null 2&gt;&amp;1; sleep 0.3; kill -INT $S; wait $S 2&gt;/dev/null
+printf '%-13s' "$1"; awk '$NF=="writev"||$NF=="write"{printf "%s=%s calls  ", $NF, $4}' /tmp/ng/st.txt; echo</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># do_tg.sh</span>
+<span class="tok-comment"># do_tg.sh &lt;đường dẫn&gt; — 5 lượt × 900 request (ab -k, một kết nối): thời gian TB mỗi request (µs)</span>
+for k in 1 2 3 4 5; do ab -q -k -n 900 -c 1 "http://127.0.0.1:8081$1" 2&gt;/dev/null | awk '/Time per request.*\\(mean\\)$/{print $4*1000}'; done | awk '{a[NR]=$1; s+=$1; printf "%5.0f ", $1} END {m=s/NR; for(i in a) v+=(a[i]-m)^2; printf "-&gt; TB %.0f us (do lech chuan %.0f)", m, sqrt(v/NR)}'</code></pre>
+<div class="out">$ for k in 1 2 3; do curl -s -o /dev/null http://127.0.0.1:8080/health; done; wc -l /srv/logs/huu-dung.log /srv/logs/json.log
+0 /srv/logs/huu-dung.log
+0 /srv/logs/json.log
+0 total
+$ for k in 1 2 3; do curl -s -o /dev/null http://127.0.0.1:8080/health2; done; wc -l /srv/logs/huu-dung.log /srv/logs/json.log
+ 0 /srv/logs/huu-dung.log
+ 3 /srv/logs/json.log
+ 3 total
+$ for p in binh-thuong cham loi khong-co-dau; do curl -s -o /dev/null http://127.0.0.1:8080/$p; done
+$ echo '=== huu-dung.log (DAY DU) ==='; cat huu-dung.log; echo '=== loi.log (if=$dang_chu_y) ==='; cat loi.log
+=== huu-dung.log (DAY DU) ===
+127.0.0.1 200 0.006 0.006 127.0.0.1:9600 200 "/binh-thuong" -&gt; "/binh-thuong" 15
+127.0.0.1 200 0.601 0.601 127.0.0.1:9600 200 "/cham" -&gt; "/cham" 14
+127.0.0.1 500 0.001 0.000 127.0.0.1:9600 500 "/loi" -&gt; "/loi" 13
+127.0.0.1 200 0.001 0.001 127.0.0.1:9600 200 "/khong-co-dau" -&gt; "/khong-co-dau" 15
+=== loi.log (if=$dang_chu_y) ===
+127.0.0.1 500 0.001 0.000 127.0.0.1:9600 500 "/loi" -&gt; "/loi" 13
+$ for p in /log-tat/ /log-thuong/ /log-dem/; do bash dem_syscall.sh $p; done
+/log-tat/    writev=1800 calls  
+/log-thuong/ writev=1800 calls  write=900 calls  
+/log-dem/    writev=1800 calls  write=1 calls  
+$ strace -e trace=write -c -p $W &amp;  ab -k -n 900 -c 1 http://127.0.0.1:8081/log-dem/; sleep 6   # đợi qua flush=5s
+so lan goi write(): 2
+$ echo "so dong trong log: $(wc -l &lt; /srv/logs/dem.log)   kich thuoc: $(stat -c %s /srv/logs/dem.log) byte"
+so dong trong log: 900   kich thuoc: 67500 byte
+$ for p in /log-tat/ /log-thuong/ /log-dem/; do printf '%-13s' $p; bash do_tg.sh $p; echo; done
+/log-tat/      143   131   138   129   125 -&gt; TB 133 us (do lech chuan 6)
+/log-thuong/   128   129   150   154   134 -&gt; TB 139 us (do lech chuan 11)
+/log-dem/      138   130   131   128   125 -&gt; TB 130 us (do lech chuan 4)
+$ curl -s -o /dev/null http://127.0.0.1:8081/log-dem/; for s in 0 1 2 3 4 5 6 7; do echo "t=\${s}s  so dong trong log: $(wc -l &lt; /srv/logs/dem.log)"; sleep 1; done
+t=0s  so dong trong log: 0
+t=1s  so dong trong log: 0
+t=2s  so dong trong log: 0
+t=3s  so dong trong log: 0
+t=4s  so dong trong log: 0
+t=5s  so dong trong log: 1
+t=6s  so dong trong log: 1
+t=7s  so dong trong log: 1</div>
+<p><code>access_log off</code> làm câm cả hai log được kiểm; khai lại một cái bên trong location thì giữ được đúng cái đó. Log chỉ lỗi có 1 trên 4 dòng. <code>writev</code> = 1.800 ở mọi nơi (lưu lượng), <code>write</code> = 900 khi không đệm và 2 khi đệm (64 KB đầy + flush). Bấm giờ: 133 / 139 / 130 µs, nằm trong nhiễu. Và một request qua <code>flush=5s</code> chỉ hiện ra ở giây thứ 5.</p>
+<h3>🔗 Bài liên quan ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-1-4-chi-phi-that" target="_blank" rel="noopener"><span class="lc-ico">🔭</span><span class="lc-body"><span class="lc-title">Observability & Monitoring · 1.4 — Một dòng log thật sự tốn bao nhiêu, đo thật</span><span class="lc-sub">Cùng phép đo đó, phía ứng dụng</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-9-2-fsync" target="_blank" rel="noopener"><span class="lc-ico">🧠</span><span class="lc-body"><span class="lc-title">OS for Developers · 9.3 — write() chưa phải đã lên đĩa: đệm, fsync, O_DIRECT</span><span class="lc-sub">Vì sao một write() chỉ là chép vào page cache</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/operating-systems-for-developers/learn?lessonSlug=os-11-2-strace-ltrace" target="_blank" rel="noopener"><span class="lc-ico">🧠</span><span class="lc-body"><span class="lc-title">OS for Developers · 11.3 — strace và ltrace thực chiến</span><span class="lc-sub">Công cụ đã đếm được syscall</span></span></a>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>access_log off</code></span><span class="v">Tắt sạch cho một ngữ cảnh — nó làm câm MỌI tệp log khai ở đó, không riêng một cái.</span></div>
+  <div class="kv"><span class="k">Tham số <code>if=</code></span><span class="v">Chỉ ghi một dòng khi một biến khác rỗng và khác chuỗi <code>0</code>; đi cặp với một <code>map</code>.</span></div>
+  <div class="kv"><span class="k"><code>buffer=</code> / <code>flush=</code></span><span class="v">Gom các dòng log trong bộ nhớ worker rồi thỉnh thoảng mới ghi, đổi độ tươi lấy ít syscall hơn.</span></div>
+  <div class="kv"><span class="k"><code>map</code> (cho <code>if=</code>)</span><span class="v">Một bảng tra tính lười (Chương 8) dựng ra biến lọc; một map không dùng tới thì không tốn gì.</span></div>
+  <div class="kv"><span class="k"><code>strace</code></span><span class="v">Công cụ đã đếm được lời gọi <code>write()</code> mỗi request mà đồng hồ bấm giờ không thấy.</span></div>
+  <div class="kv"><span class="k">Page cache</span><span class="v">Vì sao một lần <code>write()</code> ghi nối vào tệp cục bộ là memcpy chứ không phải I/O đĩa — lý do phép đo không tìm thấy gì.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li>Ba cách ghi ít đi: <code>off</code> phá huỷ, <code>if=</code> lọc, <code>buffer=</code> hoãn — không thay thế cho nhau được.</li><li>"Tắt access log cho nhanh" không đem lại lợi ích đo được trên một đĩa cục bộ bình thường.</li><li>Ghi không đệm tốn một <code>write()</code> phụ mỗi request; đệm giảm 900 lần ghi còn 2, mà đồng hồ vẫn không nhúc nhích.</li><li><code>buffer=</code> tốn độ trễ xả đệm và một cửa sổ mất dữ liệu khi <code>SIGKILL</code> hay mất điện — tuyệt đối không dùng cho log kiểm toán.</li><li>Thiết lập ghi log duy nhất có thể thật sự làm đau máy chủ là <code>error_log debug</code> (Bài 10.4).</li></ul>
 </div>
 `,
     },
@@ -567,6 +1187,7 @@ access_log /var/log/nginx/access.log huu_dung buffer=64k flush=5s;</code></pre>
       type: 'LESSON',
       description: 'Access log nói chuyện gì đã xảy ra; error log nói vì sao nó hỏng. Bài này mổ một dòng error log ra từng trường, đo lượng chữ mà từng mức sinh ra, và đo mức debug — thứ tốn gấp 52 lần một dòng access log cho MỘT request tầm thường.',
       content: `
+${G10_4}
 <div class="ml-en">
 <span class="eyebrow">Chapter 10 · Lesson 10.4</span>
 <h2>The error log: levels, anatomy, and the one setting that fills a disk</h2>
@@ -574,66 +1195,64 @@ access_log /var/log/nginx/access.log huu_dung buffer=64k flush=5s;</code></pre>
 
 <h3>One line, taken apart</h3>
 <p>Here is a real line, produced by pointing <code>proxy_pass</code> at a port with nothing listening on it:</p>
-<div class="out">2026/08/23 19:04:49 [error] 20965#20965: *1 connect() failed (111: Connection refused) while connecting to upstream, client: 127.0.0.1, server: _, request: "GET /chet HTTP/1.1", upstream: "http://127.0.0.1:9999/chet", host: "127.0.0.1:9300"</div>
+<div class="out">2026/11/13 00:45:29 [error] 20646#20646: *7 connect() failed (111: Connection refused) while connecting to upstream, client: 127.0.0.1, server: _, request: "GET /chet HTTP/1.1", upstream: "http://127.0.0.1:9999/chet", host: "127.0.0.1:8080"</div>
 <div class="kv-grid">
-  <div class="kv"><span class="k">2026/08/23 19:04:49</span><span class="v">Local time, always this format. Unlike the access log there is no <code>log_format</code> for the error log — you cannot change any of this.</span></div>
+  <div class="kv"><span class="k">2026/11/13 00:45:29</span><span class="v">Local time, always this format. Unlike the access log there is no <code>log_format</code> for the error log — you cannot change any of this.</span></div>
   <div class="kv"><span class="k">[error]</span><span class="v">The severity. This line was written because the configured level was <code>error</code> or lower.</span></div>
-  <div class="kv"><span class="k">20965#20965</span><span class="v">Process ID and thread ID. With several workers this tells you which one; it is also how you match a line to a worker that later crashed.</span></div>
-  <div class="kv"><span class="k">*1</span><span class="v"><strong>The connection number.</strong> The single most useful field on the line, and the one nobody uses — see below.</span></div>
+  <div class="kv"><span class="k">20646#20646</span><span class="v">Process ID and thread ID. With several workers this tells you which one; it is also how you match a line to a worker that later crashed.</span></div>
+  <div class="kv"><span class="k">*7</span><span class="v"><strong>The connection number.</strong> The single most useful field on the line, and the one nobody uses — see below.</span></div>
   <div class="kv"><span class="k">connect() failed (111: …)</span><span class="v">The syscall that failed and its errno. <code>111</code> is <code>ECONNREFUSED</code>: something answered the TCP handshake with a refusal, so the port is closed and reachable.</span></div>
   <div class="kv"><span class="k">upstream: "http://…"</span><span class="v">The exact URL Nginx tried, after all rewriting. Comparing this against what you expected settles most <code>proxy_pass</code> arguments in one glance.</span></div>
 </div>
-<div class="note-ct"><strong>The <code>*1</code> is a handle, not decoration.</strong> Every line Nginx writes about one client connection carries the same connection number, across every module and every phase. <code>grep '\\*1 ' error.log</code> gives you that one request's whole story in order — the rewrite, the upstream choice, the failure, the retry. At <code>debug</code> level it is the only way to read the file at all.</div>
+<div class="note-ct"><strong>The <code>*7</code> is a handle, not decoration.</strong> Every line Nginx writes about one client connection carries the same connection number, across every module and every phase. <code>grep '\\*7 ' error.log</code> gives you that one request's whole story in order — the rewrite, the upstream choice, the failure, the retry. At <code>debug</code> level it is the only way to read the file at all.</div>
 
-<h3>The three messages you will actually meet</h3>
-<div class="out">=== 1. upstream khong co ai nghe ===
-[error] *1 connect() failed (111: Connection refused) while connecting to upstream,
-        upstream: "http://127.0.0.1:9999/chet"
-
-=== 2. upstream qua cham (proxy_read_timeout 300ms vs backend ngu 600ms) ===
-[error] *1 upstream timed out (110: Connection timed out) while reading response header
-        from upstream, upstream: "http://127.0.0.1:9600/cham"
-        → client nhan: 504
-
-=== 3. tep khong ton tai ===
-[error] *3 open() "/tmp/nxerr/khong-ton-tai/thieu/khong-co.txt" failed
-        (2: No such file or directory)</div>
+<h3>The four messages you will actually meet</h3>
+<div class="out">$ for p in chet cham khong-co.txt kin/bi-mat.txt; do curl -s -o /dev/null -w "$p -&gt; %{http_code}\\n" http://127.0.0.1:8080/$p; done
+chet -&gt; 502
+cham -&gt; 504
+khong-co.txt -&gt; 404
+kin/bi-mat.txt -&gt; 403
+$ grep -oE '\\[error\\] [0-9#]+: \\*[0-9]+ [^,]+' error.log
+[error] 20646#20646: *9 connect() failed (111: Connection refused) while connecting to upstream
+[error] 20646#20646: *11 upstream timed out (110: Connection timed out) while reading response header from upstream
+[error] 20646#20646: *13 open() "/srv/www/khong-co.txt" failed (2: No such file or directory)
+[error] 20646#20646: *14 open() "/srv/kin/bi-mat.txt" failed (13: Permission denied)</div>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">111</span><span class="lz-t">Connection refused → the client gets 502</span><span class="lz-d">The backend is not running, or is bound to a different address than the one you wrote. Reachable but closed. Check that the process is up and that it listens on the interface Nginx is dialling — a backend bound to <code>127.0.0.1</code> is invisible to an Nginx in another container.</span></div>
   <div class="lz-step"><span class="lz-k">110</span><span class="lz-t">Connection timed out → the client gets 504</span><span class="lz-d">The backend accepted the connection and then did not answer in time. <em>Which</em> timeout matters: "while connecting" is <code>proxy_connect_timeout</code> (a network or firewall problem), "while reading response header" is <code>proxy_read_timeout</code> (a slow application). The message names which one.</span></div>
   <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">No such file or directory → the client gets 404</span><span class="lz-d">The path in the message is the fully resolved one, after <code>root</code> or <code>alias</code> and after every rewrite. Chapter 4 measured how often that path is not what the author expected; this line is the answer, printed for free.</span></div>
-  <div class="lz-step"><span class="lz-k">13</span><span class="lz-t">Permission denied → the client gets 403</span><span class="lz-d">Not in the measurements above but the fourth one you will meet. Nginx's worker runs as a different user than the one that deployed the files, and needs execute permission on <em>every</em> directory in the path, not just read on the file.</span></div>
+  <div class="lz-step"><span class="lz-k">13</span><span class="lz-t">Permission denied → the client gets 403</span><span class="lz-d">Measured above too — <code>kin/</code> is a directory the worker user cannot enter. Nginx's worker runs as a different user than the one that deployed the files, and needs execute permission on <em>every</em> directory in the path, not just read on the file.</span></div>
 </div>
 
 <h3>The levels, measured</h3>
-<p>Eight levels, from least to most verbose: <code>emerg</code>, <code>alert</code>, <code>crit</code>, <code>error</code>, <code>warn</code>, <code>notice</code>, <code>info</code>, <code>debug</code>. Setting one means "this and everything more severe". Here is the same set of four requests — one success, one dead upstream, one missing file, one timeout — replayed at five levels:</p>
-<div class="out">crit     0 dong,     0 byte
-error    2 dong,   449 byte
-warn     2 dong,   449 byte
-notice  14 dong,  1266 byte
-info    18 dong,  1618 byte</div>
-<p>Two things worth noticing. <code>error</code> and <code>warn</code> produced identical output, because none of these failures is a warning — the gap between the levels is real but nothing in this test lands in it. And <code>crit</code> produced <em>nothing at all</em>: a backend that is completely down, a missing file and a timeout are all invisible at that level. A server configured with <code>error_log … crit</code> looks perfectly healthy while returning 502s.</p>
+<p>Eight levels, from least to most verbose: <code>emerg</code>, <code>alert</code>, <code>crit</code>, <code>error</code>, <code>warn</code>, <code>notice</code>, <code>info</code>, <code>debug</code>. Setting one means "this and everything more severe". Here is the same set of four requests — one success, one dead upstream, one missing file, one timeout — replayed at five levels, counting only what was written <em>after</em> startup:</p>
+<div class="out">$ for m in crit error warn notice info; do bash chay_muc.sh $m; done
+crit      0 dong,     0 byte
+error     3 dong,   710 byte
+warn      3 dong,   710 byte
+notice    3 dong,   710 byte
+info      7 dong,  1062 byte</div>
+<p>Two things worth noticing. <code>error</code>, <code>warn</code> and <code>notice</code> produced identical output (3 lines, 710 bytes), because none of these failures is a warning — the gap between the levels is real but nothing in this test lands in it. And <code>crit</code> produced <em>nothing at all</em>: a backend that is completely down, a missing file and a timeout are all invisible at that level. A server configured with <code>error_log … crit</code> looks perfectly healthy while returning 502s.</p>
 <div class="callout"><strong><code>warn</code> is the right default</strong> for a production server, and it is what the distribution packages ship. <code>notice</code> and <code>info</code> add lifecycle chatter — reloads, worker starts, signals — which is useful while you are changing things and noise afterwards.</div>
 
 <h3><code>debug</code>: measured, because the number is the argument</h3>
 <p>Debug output requires a build with <code>--with-debug</code> (<code>nginx -V</code> will tell you; the Ubuntu package has it). The measurement is one request to <code>location /ok { return 200 "ok"; }</code> — no proxying, no TLS, no file access, the cheapest request this server can serve:</p>
-<div class="out">=== muc debug: chi phi cua DUNG MOT request 'ok' ===
-  luc khoi dong xong : 25 dong / 1777 byte
-  sau 1 request /ok  : 111 dong / 7690 byte
-  → MOT request ton  : 86 dong / 5913 byte
-  → so voi 1 dong access log combined (113 byte): gap 52 lan
-  → 1 trieu request/ngay: 5.5 GB/ngay</div>
-<div class="pitfall"><strong>Trap — <code>debug</code> left on is how a disk fills.</strong> Eighty-six lines for a request that does nothing. A real request — TLS handshake, proxy, upstream headers, buffering — produces several times that. At a million requests a day this one setting writes gigabytes onto the partition that, on a small VPS, is usually the same one holding your database. Chapter 10 opened by measuring that the <em>access</em> log costs nothing; the error log at <code>debug</code> is the exception, by three orders of magnitude.</div>
+<div class="out">$ nginx -V 2&gt;&amp;1 | grep -o with-debug
+with-debug
+$ pkill nginx; sleep 0.3; sed -e 's/@MUC@/debug/' -e 's|@THEM@||' mau.conf &gt; dbg.conf; nginx -c dbg.conf; sleep 0.5; a=$(wc -l &lt; /srv/logs/error.log); b=$(stat -c %s /srv/logs/error.log); curl -s -o /dev/null http://127.0.0.1:8080/ok; sleep 0.3; c=$(wc -l &lt; /srv/logs/error.log); d=$(stat -c %s /srv/logs/error.log); echo "MOT request /ok o muc debug: $((c-a)) dong / $((d-b)) byte"
+MOT request /ok o muc debug: 85 dong / 5853 byte</div>
+<div class="pitfall"><strong>Trap — <code>debug</code> left on is how a disk fills.</strong> Eighty-five lines, 5,853 bytes, for a request that does nothing — about 60× a combined access-log line. A real request — TLS handshake, proxy, upstream headers, buffering — produces several times that. At a million requests a day this one setting writes gigabytes onto the partition that, on a small VPS, is usually the same one holding your database. Chapter 10 opened by measuring that the <em>access</em> log costs nothing; the error log at <code>debug</code> is the exception, by three orders of magnitude.</div>
 <p>It is still the right tool when you need it. Nothing else shows you the location match, the rewrite phase, the buffer allocations and the upstream selection in sequence. The rule is simply that it goes on to answer one question and comes off immediately afterwards.</p>
 
 <h3><code>debug_connection</code> grants debug — it does not restrict it</h3>
 <p>The obvious way to avoid the flood is to debug only your own IP. The directive exists, it lives in the <code>events</code> block, and it does not work the way the name suggests. Both of these were measured:</p>
-<div class="out">error_log debug + debug_connection 10.99.99.99
-  → 5 request tu 127.0.0.1 sinh ra: 430 dong / 29553 byte   (KHONG loc gi ca)
-
-error_log info  + debug_connection 10.99.99.99  → 1 request sinh   1 dong /    88 byte
-error_log info  + debug_connection 127.0.0.1    → 1 request sinh  72 dong /  5005 byte</div>
-<p>With the base level already at <code>debug</code>, adding <code>debug_connection</code> changed nothing — 86 lines per request, exactly as before. The directive does not subtract. It <em>raises</em> matching connections to debug from whatever the base level is, so it only does anything when the base is <em>not</em> debug.</p>
+<div class="out">$ bash chay_muc.sh debug 'debug_connection 10.99.99.99;'   # nền debug + debug_connection IP khác
+debug   518 dong, 35831 byte
+$ bash chay_muc.sh info  'debug_connection 10.99.99.99;'   # nền info + IP khác
+info      7 dong,  1062 byte
+$ bash chay_muc.sh info  'debug_connection 127.0.0.1;'     # nền info + ĐÚNG IP của mình
+info    448 dong, 31311 byte</div>
+<p>With the base level already at <code>debug</code>, adding <code>debug_connection</code> changed nothing — 518 lines for four requests, no filtering at all. With base <code>info</code>: another IP gave 7 lines, your own IP 448. The directive does not subtract. It <em>raises</em> matching connections to debug from whatever the base level is, so it only does anything when the base is <em>not</em> debug.</p>
 <pre><code class="language-bash"><span class="tok-comment"># DUNG: nen la warn, chi IP cua ban duoc nang len debug</span>
 error_log /var/log/nginx/error.log warn;
 events {
@@ -644,12 +1263,14 @@ events {
 <div class="callout ok">That is the configuration to reach for on a production box: everyone else keeps <code>warn</code>, your own address gets full debug, and the disk is safe. It is also the only way to debug a problem that only one client can reproduce.</div>
 
 <h3>Inheritance: a lower <code>error_log</code> replaces, it does not add</h3>
-<p>Two server blocks on one port. Server A declares no <code>error_log</code>; server B declares its own. Both were made to fail identically:</p>
-<div class="out">=== goc.log (khai o muc chinh — server A ke thua) ===
-server: a.vidu, request: "GET /x HTTP/1.1"
-=== rieng-b.log (khai rieng trong server B) ===
-server: b.vidu, request: "GET /y HTTP/1.1"</div>
-<p>Server A's failure went to the inherited main-level log. Server B's went to its own file <em>and nowhere else</em> — it is absent from <code>goc.log</code>. Declaring <code>error_log</code> in a context discards the inherited one for everything in that context.</p>
+<p>Three server blocks on one port. Server A declares no <code>error_log</code>; server B declares its own; server C declares two in the same context (<code>warn</code> and <code>crit</code>). All three were made to fail identically:</p>
+<div class="out">$ pkill nginx; sleep 0.3; nginx -c ke.conf; sleep 0.3; for h in a b c; do curl -s -o /dev/null -H "Host: $h.vidu" http://127.0.0.1:8080/x; done
+$ for f in goc rieng-b c-du c-nghiem-trong; do printf '%-15s %s dong: ' $f.log $(wc -l &lt; /srv/logs/$f.log); grep -o 'server: [a-z.]*' /srv/logs/$f.log | tr '\\n' ' '; echo; done
+goc.log         1 dong: server: a.vidu 
+rieng-b.log     1 dong: server: b.vidu 
+c-du.log        1 dong: server: c.vidu 
+c-nghiem-trong.log 0 dong: </div>
+<p>Server A's failure went to the inherited main-level log. Server B's went to its own file <em>and nowhere else</em> — it is absent from <code>goc.log</code>. Declaring <code>error_log</code> in a context discards the inherited one for everything in that context. Server C's failure reached the <code>warn</code> file and not the <code>crit</code> one — several in one context each get messages at their own level.</p>
 <p>Since 1.5.2 you can list several <code>error_log</code> directives in the same context and every one of them receives the messages, each at its own level. That is how you keep a full <code>warn</code> file alongside a small <code>crit</code>-only file, or ship to syslog while keeping a local copy:</p>
 <pre><code class="language-bash">error_log /var/log/nginx/error.log warn;
 error_log /var/log/nginx/nghiem-trong.log crit;
@@ -664,6 +1285,94 @@ error_log stderr warn;   <span class="tok-comment"># quan trong trong container 
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">A debugging log — the official guide</span><span class="lc-sub">nginx.org/en/docs/debugging_log.html — how to check for <code>--with-debug</code> and how to read the output once you have it.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">errno(3) — the numbers in the parentheses</span><span class="lc-sub">man7.org/linux/man-pages/man3/errno.3.html — 111 ECONNREFUSED, 110 ETIMEDOUT, 2 ENOENT, 13 EACCES. Nginx prints the number and the text; this is where both come from.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Docker — logs, stdout and why files inside a container disappear</span><span class="lc-sub">/courses/docker/learn${REF} — the reason <code>error_log stderr</code> is the right choice in a container, and what happens to a log file when the container is replaced.</span></span></div>
+<h3>🔬 Run it yourself</h3>
+<p>One template config with four failure routes (dead upstream, slow upstream, missing file, a directory the worker cannot enter), a script that restarts nginx at a given level, clears the log after startup and replays four requests, plus a three-server inheritance config — on nginx/1.24.0 (Ubuntu package, built <code>--with-debug</code>):</p>
+<pre><code class="language-bash"><span class="tok-comment"># mau.conf</span>
+<span class="tok-comment"># mẫu cấu hình: @MUC@ = mức error_log, @THEM@ = dòng thêm trong events</span>
+pid       /tmp/ng/logs/nginx.pid;
+error_log /tmp/ng/logs/error.log @MUC@;
+events { @THEM@ }
+http {
+  access_log off;
+  server {
+    listen 8080 default_server;
+    server_name _;
+    root /tmp/ng/www;
+    location /chet  { proxy_pass http://127.0.0.1:9999; }                            <span class="tok-comment">  # không ai nghe</span>
+    location /cham  { proxy_read_timeout 300ms; proxy_pass http://127.0.0.1:9600; }  <span class="tok-comment">  # backend ngủ 600 ms</span>
+    location /kin/  { alias /tmp/ng/kin/; }                                          <span class="tok-comment">  # worker (nobody) không vào được</span>
+    location = /ok  { return 200 "ok\\n"; }
+  }
+}</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># chay_muc.sh</span>
+<span class="tok-comment"># chay_muc.sh &lt;mức&gt; [dòng events] — khởi động nginx ở mức đó, XOÁ log sau khi khởi động, gửi 4 request</span>
+<span class="tok-comment"># (ok · upstream chết · tệp không có · quá giờ), in số dòng + byte của error.log</span>
+pkill nginx 2&gt;/dev/null; sleep 0.3
+sed -e "s/@MUC@/$1/" -e "s|@THEM@|$2|" /root/mau.conf &gt; /tmp/ng/conf/muc.conf
+nginx -c /tmp/ng/conf/muc.conf; sleep 0.3; : &gt; /tmp/ng/logs/error.log
+for p in ok.txt chet khong-co.txt cham; do curl -s -o /dev/null --max-time 2 http://127.0.0.1:8080/$p; done; sleep 0.2
+printf '%-7s %3s dong, %5s byte\\n' $1 $(wc -l &lt; /tmp/ng/logs/error.log) $(stat -c %s /tmp/ng/logs/error.log)</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/goc.log;                <span class="tok-comment">  # mức chính</span>
+events {}
+http {
+  access_log off;
+  server { listen 8080; server_name a.vidu;                                              location / { proxy_pass http://127.0.0.1:9999; } }
+  server { listen 8080; server_name b.vidu; error_log /srv/logs/rieng-b.log;           location / { proxy_pass http://127.0.0.1:9999; } }
+  server { listen 8080; server_name c.vidu; error_log /srv/logs/c-du.log warn;
+                                            error_log /srv/logs/c-nghiem-trong.log crit; location / { proxy_pass http://127.0.0.1:9999; } }
+}</code></pre>
+<div class="out">$ curl -s -o /dev/null -w '%{http_code}\\n' http://127.0.0.1:8080/chet; tail -1 error.log
+502
+2026/11/13 00:45:29 [error] 20646#20646: *7 connect() failed (111: Connection refused) while connecting to upstream, client: 127.0.0.1, server: _, request: "GET /chet HTTP/1.1", upstream: "http://127.0.0.1:9999/chet", host: "127.0.0.1:8080"
+$ for p in chet cham khong-co.txt kin/bi-mat.txt; do curl -s -o /dev/null -w "$p -&gt; %{http_code}\\n" http://127.0.0.1:8080/$p; done
+chet -&gt; 502
+cham -&gt; 504
+khong-co.txt -&gt; 404
+kin/bi-mat.txt -&gt; 403
+$ grep -oE '\\[error\\] [0-9#]+: \\*[0-9]+ [^,]+' error.log
+[error] 20646#20646: *9 connect() failed (111: Connection refused) while connecting to upstream
+[error] 20646#20646: *11 upstream timed out (110: Connection timed out) while reading response header from upstream
+[error] 20646#20646: *13 open() "/srv/www/khong-co.txt" failed (2: No such file or directory)
+[error] 20646#20646: *14 open() "/srv/kin/bi-mat.txt" failed (13: Permission denied)
+$ for m in crit error warn notice info; do bash chay_muc.sh $m; done
+crit      0 dong,     0 byte
+error     3 dong,   710 byte
+warn      3 dong,   710 byte
+notice    3 dong,   710 byte
+info      7 dong,  1062 byte
+$ nginx -V 2&gt;&amp;1 | grep -o with-debug
+with-debug
+$ pkill nginx; sleep 0.3; sed -e 's/@MUC@/debug/' -e 's|@THEM@||' mau.conf &gt; dbg.conf; nginx -c dbg.conf; sleep 0.5; a=$(wc -l &lt; /srv/logs/error.log); b=$(stat -c %s /srv/logs/error.log); curl -s -o /dev/null http://127.0.0.1:8080/ok; sleep 0.3; c=$(wc -l &lt; /srv/logs/error.log); d=$(stat -c %s /srv/logs/error.log); echo "MOT request /ok o muc debug: $((c-a)) dong / $((d-b)) byte"
+MOT request /ok o muc debug: 85 dong / 5853 byte
+$ bash chay_muc.sh debug 'debug_connection 10.99.99.99;'   # nền debug + debug_connection IP khác
+debug   518 dong, 35831 byte
+$ bash chay_muc.sh info  'debug_connection 10.99.99.99;'   # nền info + IP khác
+info      7 dong,  1062 byte
+$ bash chay_muc.sh info  'debug_connection 127.0.0.1;'     # nền info + ĐÚNG IP của mình
+info    448 dong, 31311 byte
+$ pkill nginx; sleep 0.3; nginx -c ke.conf; sleep 0.3; for h in a b c; do curl -s -o /dev/null -H "Host: $h.vidu" http://127.0.0.1:8080/x; done
+$ for f in goc rieng-b c-du c-nghiem-trong; do printf '%-15s %s dong: ' $f.log $(wc -l &lt; /srv/logs/$f.log); grep -o 'server: [a-z.]*' /srv/logs/$f.log | tr '\\n' ' '; echo; done
+goc.log         1 dong: server: a.vidu 
+rieng-b.log     1 dong: server: b.vidu 
+c-du.log        1 dong: server: c.vidu 
+c-nghiem-trong.log 0 dong: </div>
+<p>One <code>[error] … *7 … (111: Connection refused)</code> line for a 502; four errno for four statuses (111→502, 110→504, 2→404, 13→403). Levels after startup: crit 0, error/warn/notice 3 lines, info 7. One <code>/ok</code> at debug: 85 lines, 5,853 bytes. <code>debug_connection</code>: 518 (debug base, other IP), 7 (info base, other IP), 448 (info base, your IP). Inheritance: a → <code>goc.log</code>, b → only its own file, c → the <code>warn</code> file, nothing in the <code>crit</code> one.</p>
+<h3>🔗 Related lessons in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-1-3-muc-log" target="_blank" rel="noopener"><span class="lc-ico">🔭</span><span class="lc-body"><span class="lc-title">Observability & Monitoring · 1.3 — Levels, and why everyone gets them wrong</span><span class="lc-sub">The same levels in your application</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-2-1-docker-bat-log" target="_blank" rel="noopener"><span class="lc-ico">🔭</span><span class="lc-body"><span class="lc-title">Observability & Monitoring · 2.1 — What Docker does with your log line</span><span class="lc-sub">Why error_log stderr in a container</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-10-1-dia-day" target="_blank" rel="noopener"><span class="lc-ico">🐧</span><span class="lc-body"><span class="lc-title">Linux & Bash · 10.1 — The disk is full: finding out what filled it</span><span class="lc-sub">When debug was left on</span></span></a>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>error_log</code></span><span class="v">Records why a request failed; it has no <code>log_format</code> — the layout is fixed.</span></div>
+  <div class="kv"><span class="k">Severity levels</span><span class="v"><code>emerg</code> → <code>debug</code>; setting one means "this and everything more severe". <code>warn</code> is the production default.</span></div>
+  <div class="kv"><span class="k">Connection number (<code>*1</code>)</span><span class="v">A handle that tags every line about one connection; grep it to rebuild one request's whole story in order.</span></div>
+  <div class="kv"><span class="k">errno</span><span class="v">The number in parentheses: <code>111</code> refused → 502, <code>110</code> timed out → 504, <code>2</code> no such file → 404, <code>13</code> denied → 403.</span></div>
+  <div class="kv"><span class="k"><code>debug</code> level</span><span class="v">~60× an access line per request — gigabytes a day; turn it on for one question, off right after.</span></div>
+  <div class="kv"><span class="k"><code>debug_connection</code></span><span class="v">Raises matching IPs to debug; it grants debug, it does not restrict it — useless when the base level is already <code>debug</code>.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li>The error-log layout is fixed; <code>grep</code> the connection number <code>*1</code> to read one request's whole story in order.</li><li>The errno in parentheses maps the failure to the client status (111→502, 110→504, 2→404, 13→403).</li><li><code>warn</code> is the right default; <code>crit</code> hides dead upstreams, missing files and timeouts entirely.</li><li><code>error_log debug</code> writes ~52× per request — set <code>debug_connection</code> on your own IP with a <code>warn</code> base instead.</li><li>A lower-level <code>error_log</code> replaces the inherited one; list several in a context to keep multiple destinations.</li></ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 10 · Bài 10.4</span>
@@ -672,66 +1381,64 @@ error_log stderr warn;   <span class="tok-comment"># quan trong trong container 
 
 <h3>Một dòng, mổ ra từng mảnh</h3>
 <p>Đây là một dòng thật, sinh ra bằng cách trỏ <code>proxy_pass</code> vào một cổng chẳng có ai lắng nghe:</p>
-<div class="out">2026/08/23 19:04:49 [error] 20965#20965: *1 connect() failed (111: Connection refused) while connecting to upstream, client: 127.0.0.1, server: _, request: "GET /chet HTTP/1.1", upstream: "http://127.0.0.1:9999/chet", host: "127.0.0.1:9300"</div>
+<div class="out">2026/11/13 00:45:29 [error] 20646#20646: *7 connect() failed (111: Connection refused) while connecting to upstream, client: 127.0.0.1, server: _, request: "GET /chet HTTP/1.1", upstream: "http://127.0.0.1:9999/chet", host: "127.0.0.1:8080"</div>
 <div class="kv-grid">
-  <div class="kv"><span class="k">2026/08/23 19:04:49</span><span class="v">Giờ địa phương, luôn đúng định dạng này. Khác access log, error log KHÔNG có <code>log_format</code> — bạn không đổi được thứ gì trong đây.</span></div>
+  <div class="kv"><span class="k">2026/11/13 00:45:29</span><span class="v">Giờ địa phương, luôn đúng định dạng này. Khác access log, error log KHÔNG có <code>log_format</code> — bạn không đổi được thứ gì trong đây.</span></div>
   <div class="kv"><span class="k">[error]</span><span class="v">Mức nghiêm trọng. Dòng này được ghi vì mức đang cấu hình là <code>error</code> hoặc thấp hơn.</span></div>
-  <div class="kv"><span class="k">20965#20965</span><span class="v">Mã tiến trình và mã luồng. Khi có nhiều worker thì đây là cách biết worker nào; nó cũng là cách khớp một dòng với một worker về sau bị chết.</span></div>
-  <div class="kv"><span class="k">*1</span><span class="v"><strong>Số hiệu kết nối.</strong> Trường hữu ích nhất trên cả dòng, và cũng là trường không ai dùng — xem ngay dưới.</span></div>
+  <div class="kv"><span class="k">20646#20646</span><span class="v">Mã tiến trình và mã luồng. Khi có nhiều worker thì đây là cách biết worker nào; nó cũng là cách khớp một dòng với một worker về sau bị chết.</span></div>
+  <div class="kv"><span class="k">*7</span><span class="v"><strong>Số hiệu kết nối.</strong> Trường hữu ích nhất trên cả dòng, và cũng là trường không ai dùng — xem ngay dưới.</span></div>
   <div class="kv"><span class="k">connect() failed (111: …)</span><span class="v">Lời gọi hệ thống đã hỏng cùng mã errno của nó. <code>111</code> là <code>ECONNREFUSED</code>: có thứ gì đó đã đáp lại bắt tay TCP bằng một lời từ chối, tức là cổng đóng nhưng vẫn tới được.</span></div>
   <div class="kv"><span class="k">upstream: "http://…"</span><span class="v">Chính xác cái URL mà Nginx đã thử, sau toàn bộ viết lại. Đối chiếu cái này với thứ bạn TƯỞNG là gì thì giải quyết được gần hết mọi tranh cãi về <code>proxy_pass</code> chỉ trong một cái liếc mắt.</span></div>
 </div>
-<div class="note-ct"><strong>Cái <code>*1</code> là một cái tay nắm, không phải đồ trang trí.</strong> Mọi dòng Nginx ghi về CÙNG một kết nối client đều mang cùng số hiệu đó, xuyên qua mọi module và mọi giai đoạn. <code>grep '\\*1 ' error.log</code> cho bạn toàn bộ câu chuyện của đúng request ấy theo đúng thứ tự — viết lại đường dẫn, chọn upstream, hỏng, thử lại. Ở mức <code>debug</code> thì đó là cách DUY NHẤT đọc nổi cái tệp.</div>
+<div class="note-ct"><strong>Cái <code>*7</code> là một cái tay nắm, không phải đồ trang trí.</strong> Mọi dòng Nginx ghi về CÙNG một kết nối client đều mang cùng số hiệu đó, xuyên qua mọi module và mọi giai đoạn. <code>grep '\\*7 ' error.log</code> cho bạn toàn bộ câu chuyện của đúng request ấy theo đúng thứ tự — viết lại đường dẫn, chọn upstream, hỏng, thử lại. Ở mức <code>debug</code> thì đó là cách DUY NHẤT đọc nổi cái tệp.</div>
 
-<h3>Ba thông báo bạn sẽ thật sự gặp</h3>
-<div class="out">=== 1. upstream khong co ai nghe ===
-[error] *1 connect() failed (111: Connection refused) while connecting to upstream,
-        upstream: "http://127.0.0.1:9999/chet"
-
-=== 2. upstream qua cham (proxy_read_timeout 300ms vs backend ngu 600ms) ===
-[error] *1 upstream timed out (110: Connection timed out) while reading response header
-        from upstream, upstream: "http://127.0.0.1:9600/cham"
-        → client nhan: 504
-
-=== 3. tep khong ton tai ===
-[error] *3 open() "/tmp/nxerr/khong-ton-tai/thieu/khong-co.txt" failed
-        (2: No such file or directory)</div>
+<h3>Bốn thông báo bạn sẽ thật sự gặp</h3>
+<div class="out">$ for p in chet cham khong-co.txt kin/bi-mat.txt; do curl -s -o /dev/null -w "$p -&gt; %{http_code}\\n" http://127.0.0.1:8080/$p; done
+chet -&gt; 502
+cham -&gt; 504
+khong-co.txt -&gt; 404
+kin/bi-mat.txt -&gt; 403
+$ grep -oE '\\[error\\] [0-9#]+: \\*[0-9]+ [^,]+' error.log
+[error] 20646#20646: *9 connect() failed (111: Connection refused) while connecting to upstream
+[error] 20646#20646: *11 upstream timed out (110: Connection timed out) while reading response header from upstream
+[error] 20646#20646: *13 open() "/srv/www/khong-co.txt" failed (2: No such file or directory)
+[error] 20646#20646: *14 open() "/srv/kin/bi-mat.txt" failed (13: Permission denied)</div>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">111</span><span class="lz-t">Connection refused → client nhận 502</span><span class="lz-d">Backend không chạy, hoặc nó gắn vào một địa chỉ khác cái bạn viết. Tới được nhưng cổng đóng. Kiểm xem tiến trình có sống không, và nó lắng nghe trên đúng giao diện mà Nginx đang gọi — một backend gắn vào <code>127.0.0.1</code> thì vô hình với một con Nginx nằm ở container khác.</span></div>
   <div class="lz-step"><span class="lz-k">110</span><span class="lz-t">Connection timed out → client nhận 504</span><span class="lz-d">Backend đã nhận kết nối rồi im, không trả lời kịp. Quan trọng là timeout NÀO: "while connecting" là <code>proxy_connect_timeout</code> (vấn đề mạng hoặc tường lửa), "while reading response header" là <code>proxy_read_timeout</code> (ứng dụng chậm). Chính thông báo đó nói rõ là cái nào.</span></div>
   <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">No such file or directory → client nhận 404</span><span class="lz-d">Đường dẫn trong thông báo là đường dẫn đã giải quyết đầy đủ, sau <code>root</code> hoặc <code>alias</code> và sau mọi lần viết lại. Chương 4 đã đo xem cái đường dẫn đó thường KHÁC ý tác giả tới mức nào; dòng này là câu trả lời, in ra miễn phí.</span></div>
-  <div class="lz-step"><span class="lz-k">13</span><span class="lz-t">Permission denied → client nhận 403</span><span class="lz-d">Không có trong mấy phép đo trên nhưng là cái thứ tư bạn sẽ gặp. Worker của Nginx chạy dưới một người dùng khác với người đã triển khai tệp, và nó cần quyền thực thi trên <em>MỌI</em> thư mục trong đường dẫn, chứ không chỉ quyền đọc trên cái tệp.</span></div>
+  <div class="lz-step"><span class="lz-k">13</span><span class="lz-t">Permission denied → client nhận 403</span><span class="lz-d">Cũng đo thật ở trên — <code>kin/</code> là một thư mục mà người dùng của worker không vào được. Worker của Nginx chạy dưới một người dùng khác với người đã triển khai tệp, và nó cần quyền thực thi trên <em>MỌI</em> thư mục trong đường dẫn, chứ không chỉ quyền đọc trên cái tệp.</span></div>
 </div>
 
 <h3>Các mức, đo thật</h3>
-<p>Tám mức, từ ít nói nhất tới nhiều lời nhất: <code>emerg</code>, <code>alert</code>, <code>crit</code>, <code>error</code>, <code>warn</code>, <code>notice</code>, <code>info</code>, <code>debug</code>. Đặt một mức nghĩa là "mức này và mọi thứ nghiêm trọng hơn". Đây là CÙNG bốn request — một cái thành công, một upstream chết, một tệp thiếu, một cái quá hạn — phát lại ở năm mức:</p>
-<div class="out">crit     0 dong,     0 byte
-error    2 dong,   449 byte
-warn     2 dong,   449 byte
-notice  14 dong,  1266 byte
-info    18 dong,  1618 byte</div>
-<p>Có hai chỗ đáng để ý. <code>error</code> và <code>warn</code> cho ra y hệt nhau, vì không sự cố nào trong đám này là một cảnh báo — khoảng cách giữa hai mức là có thật nhưng phép thử này không có gì rơi vào đó. Và <code>crit</code> cho ra <em>KHÔNG GÌ CẢ</em>: một backend chết hẳn, một tệp thiếu và một cái quá hạn đều vô hình ở mức đó. Một máy chủ cấu hình <code>error_log … crit</code> trông khoẻ mạnh hoàn hảo trong lúc nó đang trả 502.</p>
+<p>Tám mức, từ ít nói nhất tới nhiều lời nhất: <code>emerg</code>, <code>alert</code>, <code>crit</code>, <code>error</code>, <code>warn</code>, <code>notice</code>, <code>info</code>, <code>debug</code>. Đặt một mức nghĩa là "mức này và mọi thứ nghiêm trọng hơn". Đây là CÙNG bốn request — một cái thành công, một upstream chết, một tệp thiếu, một cái quá hạn — phát lại ở năm mức, chỉ đếm những gì được ghi SAU khi khởi động:</p>
+<div class="out">$ for m in crit error warn notice info; do bash chay_muc.sh $m; done
+crit      0 dong,     0 byte
+error     3 dong,   710 byte
+warn      3 dong,   710 byte
+notice    3 dong,   710 byte
+info      7 dong,  1062 byte</div>
+<p>Có hai chỗ đáng để ý. <code>error</code>, <code>warn</code> và <code>notice</code> cho ra y hệt nhau (3 dòng, 710 byte), vì không sự cố nào trong đám này là một cảnh báo — khoảng cách giữa hai mức là có thật nhưng phép thử này không có gì rơi vào đó. Và <code>crit</code> cho ra <em>KHÔNG GÌ CẢ</em>: một backend chết hẳn, một tệp thiếu và một cái quá hạn đều vô hình ở mức đó. Một máy chủ cấu hình <code>error_log … crit</code> trông khoẻ mạnh hoàn hảo trong lúc nó đang trả 502.</p>
 <div class="callout"><strong><code>warn</code> mới là mặc định đúng</strong> cho một máy chủ production, và đó cũng là mức mà các gói của bản phân phối đặt sẵn. <code>notice</code> và <code>info</code> thêm vào mấy lời tán gẫu về vòng đời — nạp lại, worker khởi động, tín hiệu — hữu ích trong lúc bạn đang sửa đổi và là tiếng ồn sau đó.</div>
 
 <h3><code>debug</code>: đo thật, vì chính con số mới là lý lẽ</h3>
 <p>Ghi log debug đòi bản dựng có <code>--with-debug</code> (<code>nginx -V</code> sẽ cho biết; gói của Ubuntu thì có). Phép đo là MỘT request tới <code>location /ok { return 200 "ok"; }</code> — không proxy, không TLS, không đụng tệp, cái request rẻ nhất mà máy chủ này phục vụ được:</p>
-<div class="out">=== muc debug: chi phi cua DUNG MOT request 'ok' ===
-  luc khoi dong xong : 25 dong / 1777 byte
-  sau 1 request /ok  : 111 dong / 7690 byte
-  → MOT request ton  : 86 dong / 5913 byte
-  → so voi 1 dong access log combined (113 byte): gap 52 lan
-  → 1 trieu request/ngay: 5.5 GB/ngay</div>
-<div class="pitfall"><strong>Bẫy — quên tắt <code>debug</code> chính là cách một cái đĩa bị làm đầy.</strong> Tám mươi sáu dòng cho một request chẳng làm gì. Một request thật — bắt tay TLS, proxy, header upstream, đệm — sinh ra gấp mấy lần chừng ấy. Với một triệu request mỗi ngày, riêng thiết lập này ghi hàng gigabyte lên cái phân vùng mà trên một con VPS nhỏ thường cũng chính là phân vùng chứa cơ sở dữ liệu của bạn. Chương 10 mở đầu bằng phép đo cho thấy log TRUY CẬP chẳng tốn gì; error log ở mức <code>debug</code> là ngoại lệ, lệch tới ba bậc độ lớn.</div>
+<div class="out">$ nginx -V 2&gt;&amp;1 | grep -o with-debug
+with-debug
+$ pkill nginx; sleep 0.3; sed -e 's/@MUC@/debug/' -e 's|@THEM@||' mau.conf &gt; dbg.conf; nginx -c dbg.conf; sleep 0.5; a=$(wc -l &lt; /srv/logs/error.log); b=$(stat -c %s /srv/logs/error.log); curl -s -o /dev/null http://127.0.0.1:8080/ok; sleep 0.3; c=$(wc -l &lt; /srv/logs/error.log); d=$(stat -c %s /srv/logs/error.log); echo "MOT request /ok o muc debug: $((c-a)) dong / $((d-b)) byte"
+MOT request /ok o muc debug: 85 dong / 5853 byte</div>
+<div class="pitfall"><strong>Bẫy — quên tắt <code>debug</code> chính là cách một cái đĩa bị làm đầy.</strong> Tám mươi lăm dòng, 5.853 byte, cho một request chẳng làm gì — cỡ 60 lần một dòng access log combined. Một request thật — bắt tay TLS, proxy, header upstream, đệm — sinh ra gấp mấy lần chừng ấy. Với một triệu request mỗi ngày, riêng thiết lập này ghi hàng gigabyte lên cái phân vùng mà trên một con VPS nhỏ thường cũng chính là phân vùng chứa cơ sở dữ liệu của bạn. Chương 10 mở đầu bằng phép đo cho thấy log TRUY CẬP chẳng tốn gì; error log ở mức <code>debug</code> là ngoại lệ, lệch tới ba bậc độ lớn.</div>
 <p>Nó vẫn là công cụ đúng khi bạn cần tới. Chẳng có thứ gì khác cho bạn thấy chuyện khớp location, giai đoạn viết lại, việc cấp phát bộ đệm và việc chọn upstream nối tiếp nhau theo thứ tự. Luật chỉ đơn giản là: bật lên để trả lời MỘT câu hỏi, rồi tắt ngay sau đó.</p>
 
 <h3><code>debug_connection</code> CẤP quyền debug — nó không HẠN CHẾ</h3>
 <p>Cách hiển nhiên để tránh cơn lụt là chỉ debug đúng IP của mình. Chỉ thị đó có tồn tại, nó nằm trong khối <code>events</code>, và nó KHÔNG hoạt động như cái tên gợi ý. Cả hai trường hợp dưới đây đều đo thật:</p>
-<div class="out">error_log debug + debug_connection 10.99.99.99
-  → 5 request tu 127.0.0.1 sinh ra: 430 dong / 29553 byte   (KHONG loc gi ca)
-
-error_log info  + debug_connection 10.99.99.99  → 1 request sinh   1 dong /    88 byte
-error_log info  + debug_connection 127.0.0.1    → 1 request sinh  72 dong /  5005 byte</div>
-<p>Với mức nền đã là <code>debug</code>, thêm <code>debug_connection</code> vào chẳng đổi gì — vẫn 86 dòng mỗi request, y như trước. Chỉ thị này không TRỪ đi. Nó NÂNG những kết nối khớp lên mức debug từ bất kỳ mức nền nào đang có, nên nó chỉ làm được việc gì khi mức nền KHÔNG phải debug.</p>
+<div class="out">$ bash chay_muc.sh debug 'debug_connection 10.99.99.99;'   # nền debug + debug_connection IP khác
+debug   518 dong, 35831 byte
+$ bash chay_muc.sh info  'debug_connection 10.99.99.99;'   # nền info + IP khác
+info      7 dong,  1062 byte
+$ bash chay_muc.sh info  'debug_connection 127.0.0.1;'     # nền info + ĐÚNG IP của mình
+info    448 dong, 31311 byte</div>
+<p>Với mức nền đã là <code>debug</code>, thêm <code>debug_connection</code> vào chẳng đổi gì — 518 dòng cho bốn request, không lọc gì cả. Với nền <code>info</code>: IP khác ra 7 dòng, đúng IP của mình ra 448. Chỉ thị này không TRỪ đi. Nó NÂNG những kết nối khớp lên mức debug từ bất kỳ mức nền nào đang có, nên nó chỉ làm được việc gì khi mức nền KHÔNG phải debug.</p>
 <pre><code class="language-bash"><span class="tok-comment"># DUNG: nen la warn, chi IP cua ban duoc nang len debug</span>
 error_log /var/log/nginx/error.log warn;
 events {
@@ -742,12 +1449,14 @@ events {
 <div class="callout ok">Đó là cấu hình đáng dùng trên một máy production: mọi người khác vẫn ở <code>warn</code>, riêng địa chỉ của bạn được debug đầy đủ, và cái đĩa vẫn an toàn. Nó cũng là cách DUY NHẤT để gỡ một lỗi mà chỉ đúng một client tái hiện được.</div>
 
 <h3>Kế thừa: một <code>error_log</code> ở mức thấp hơn THAY THẾ, chứ không cộng thêm</h3>
-<p>Hai khối server trên cùng một cổng. Server A không khai <code>error_log</code>; server B khai riêng một cái. Cả hai đều bị làm cho hỏng y hệt nhau:</p>
-<div class="out">=== goc.log (khai o muc chinh — server A ke thua) ===
-server: a.vidu, request: "GET /x HTTP/1.1"
-=== rieng-b.log (khai rieng trong server B) ===
-server: b.vidu, request: "GET /y HTTP/1.1"</div>
-<p>Sự cố của server A đi vào cái log mức chính mà nó kế thừa. Sự cố của server B đi vào tệp riêng của nó <em>và không đi đâu khác nữa</em> — nó vắng mặt trong <code>goc.log</code>. Khai <code>error_log</code> trong một ngữ cảnh là vứt bỏ cái đã kế thừa, cho mọi thứ thuộc ngữ cảnh đó.</p>
+<p>Ba khối server trên cùng một cổng. Server A không khai <code>error_log</code>; server B khai riêng một cái; server C khai HAI cái trong cùng ngữ cảnh (<code>warn</code> và <code>crit</code>). Cả ba đều bị làm cho hỏng y hệt nhau:</p>
+<div class="out">$ pkill nginx; sleep 0.3; nginx -c ke.conf; sleep 0.3; for h in a b c; do curl -s -o /dev/null -H "Host: $h.vidu" http://127.0.0.1:8080/x; done
+$ for f in goc rieng-b c-du c-nghiem-trong; do printf '%-15s %s dong: ' $f.log $(wc -l &lt; /srv/logs/$f.log); grep -o 'server: [a-z.]*' /srv/logs/$f.log | tr '\\n' ' '; echo; done
+goc.log         1 dong: server: a.vidu 
+rieng-b.log     1 dong: server: b.vidu 
+c-du.log        1 dong: server: c.vidu 
+c-nghiem-trong.log 0 dong: </div>
+<p>Sự cố của server A đi vào cái log mức chính mà nó kế thừa. Sự cố của server B đi vào tệp riêng của nó <em>và không đi đâu khác nữa</em> — nó vắng mặt trong <code>goc.log</code>. Khai <code>error_log</code> trong một ngữ cảnh là vứt bỏ cái đã kế thừa, cho mọi thứ thuộc ngữ cảnh đó. Sự cố của server C vào tệp <code>warn</code> mà không vào tệp <code>crit</code> — nhiều cái trong cùng một ngữ cảnh thì mỗi cái nhận thông báo ở đúng mức của nó.</p>
 <p>Từ bản 1.5.2 bạn được liệt kê nhiều chỉ thị <code>error_log</code> trong CÙNG một ngữ cảnh và tất cả đều nhận thông báo, mỗi cái ở mức riêng của nó. Đó là cách giữ một tệp <code>warn</code> đầy đủ song song với một tệp nhỏ chỉ chứa <code>crit</code>, hoặc gửi sang syslog mà vẫn giữ một bản cục bộ:</p>
 <pre><code class="language-bash">error_log /var/log/nginx/error.log warn;
 error_log /var/log/nginx/nghiem-trong.log crit;
@@ -762,6 +1471,94 @@ error_log stderr warn;   <span class="tok-comment"># quan trong trong container 
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">A debugging log — hướng dẫn chính thức</span><span class="lc-sub">nginx.org/en/docs/debugging_log.html — cách kiểm xem có <code>--with-debug</code> không và cách đọc kết quả khi đã có nó.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">errno(3) — mấy con số trong ngoặc đơn</span><span class="lc-sub">man7.org/linux/man-pages/man3/errno.3.html — 111 ECONNREFUSED, 110 ETIMEDOUT, 2 ENOENT, 13 EACCES. Nginx in ra cả số lẫn chữ; đây là chỗ cả hai tới từ đó.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Docker — log, stdout và vì sao tệp trong container biến mất</span><span class="lc-sub">/courses/docker/learn${REF} — lý do <code>error_log stderr</code> là lựa chọn đúng trong container, và chuyện gì xảy ra với một tệp log khi container bị thay.</span></span></div>
+<h3>🔬 Tự chạy lại</h3>
+<p>Một cấu hình mẫu với bốn tuyến hỏng (upstream chết, upstream chậm, tệp thiếu, một thư mục worker không vào được), một script khởi động lại nginx ở một mức cho trước, xoá log SAU khi khởi động rồi phát lại bốn request, cộng một cấu hình kế thừa ba server — trên nginx/1.24.0 (gói Ubuntu, dựng <code>--with-debug</code>):</p>
+<pre><code class="language-bash"><span class="tok-comment"># mau.conf</span>
+<span class="tok-comment"># mẫu cấu hình: @MUC@ = mức error_log, @THEM@ = dòng thêm trong events</span>
+pid       /tmp/ng/logs/nginx.pid;
+error_log /tmp/ng/logs/error.log @MUC@;
+events { @THEM@ }
+http {
+  access_log off;
+  server {
+    listen 8080 default_server;
+    server_name _;
+    root /tmp/ng/www;
+    location /chet  { proxy_pass http://127.0.0.1:9999; }                            <span class="tok-comment">  # không ai nghe</span>
+    location /cham  { proxy_read_timeout 300ms; proxy_pass http://127.0.0.1:9600; }  <span class="tok-comment">  # backend ngủ 600 ms</span>
+    location /kin/  { alias /tmp/ng/kin/; }                                          <span class="tok-comment">  # worker (nobody) không vào được</span>
+    location = /ok  { return 200 "ok\\n"; }
+  }
+}</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># chay_muc.sh</span>
+<span class="tok-comment"># chay_muc.sh &lt;mức&gt; [dòng events] — khởi động nginx ở mức đó, XOÁ log sau khi khởi động, gửi 4 request</span>
+<span class="tok-comment"># (ok · upstream chết · tệp không có · quá giờ), in số dòng + byte của error.log</span>
+pkill nginx 2&gt;/dev/null; sleep 0.3
+sed -e "s/@MUC@/$1/" -e "s|@THEM@|$2|" /root/mau.conf &gt; /tmp/ng/conf/muc.conf
+nginx -c /tmp/ng/conf/muc.conf; sleep 0.3; : &gt; /tmp/ng/logs/error.log
+for p in ok.txt chet khong-co.txt cham; do curl -s -o /dev/null --max-time 2 http://127.0.0.1:8080/$p; done; sleep 0.2
+printf '%-7s %3s dong, %5s byte\\n' $1 $(wc -l &lt; /tmp/ng/logs/error.log) $(stat -c %s /tmp/ng/logs/error.log)</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/goc.log;                <span class="tok-comment">  # mức chính</span>
+events {}
+http {
+  access_log off;
+  server { listen 8080; server_name a.vidu;                                              location / { proxy_pass http://127.0.0.1:9999; } }
+  server { listen 8080; server_name b.vidu; error_log /srv/logs/rieng-b.log;           location / { proxy_pass http://127.0.0.1:9999; } }
+  server { listen 8080; server_name c.vidu; error_log /srv/logs/c-du.log warn;
+                                            error_log /srv/logs/c-nghiem-trong.log crit; location / { proxy_pass http://127.0.0.1:9999; } }
+}</code></pre>
+<div class="out">$ curl -s -o /dev/null -w '%{http_code}\\n' http://127.0.0.1:8080/chet; tail -1 error.log
+502
+2026/11/13 00:45:29 [error] 20646#20646: *7 connect() failed (111: Connection refused) while connecting to upstream, client: 127.0.0.1, server: _, request: "GET /chet HTTP/1.1", upstream: "http://127.0.0.1:9999/chet", host: "127.0.0.1:8080"
+$ for p in chet cham khong-co.txt kin/bi-mat.txt; do curl -s -o /dev/null -w "$p -&gt; %{http_code}\\n" http://127.0.0.1:8080/$p; done
+chet -&gt; 502
+cham -&gt; 504
+khong-co.txt -&gt; 404
+kin/bi-mat.txt -&gt; 403
+$ grep -oE '\\[error\\] [0-9#]+: \\*[0-9]+ [^,]+' error.log
+[error] 20646#20646: *9 connect() failed (111: Connection refused) while connecting to upstream
+[error] 20646#20646: *11 upstream timed out (110: Connection timed out) while reading response header from upstream
+[error] 20646#20646: *13 open() "/srv/www/khong-co.txt" failed (2: No such file or directory)
+[error] 20646#20646: *14 open() "/srv/kin/bi-mat.txt" failed (13: Permission denied)
+$ for m in crit error warn notice info; do bash chay_muc.sh $m; done
+crit      0 dong,     0 byte
+error     3 dong,   710 byte
+warn      3 dong,   710 byte
+notice    3 dong,   710 byte
+info      7 dong,  1062 byte
+$ nginx -V 2&gt;&amp;1 | grep -o with-debug
+with-debug
+$ pkill nginx; sleep 0.3; sed -e 's/@MUC@/debug/' -e 's|@THEM@||' mau.conf &gt; dbg.conf; nginx -c dbg.conf; sleep 0.5; a=$(wc -l &lt; /srv/logs/error.log); b=$(stat -c %s /srv/logs/error.log); curl -s -o /dev/null http://127.0.0.1:8080/ok; sleep 0.3; c=$(wc -l &lt; /srv/logs/error.log); d=$(stat -c %s /srv/logs/error.log); echo "MOT request /ok o muc debug: $((c-a)) dong / $((d-b)) byte"
+MOT request /ok o muc debug: 85 dong / 5853 byte
+$ bash chay_muc.sh debug 'debug_connection 10.99.99.99;'   # nền debug + debug_connection IP khác
+debug   518 dong, 35831 byte
+$ bash chay_muc.sh info  'debug_connection 10.99.99.99;'   # nền info + IP khác
+info      7 dong,  1062 byte
+$ bash chay_muc.sh info  'debug_connection 127.0.0.1;'     # nền info + ĐÚNG IP của mình
+info    448 dong, 31311 byte
+$ pkill nginx; sleep 0.3; nginx -c ke.conf; sleep 0.3; for h in a b c; do curl -s -o /dev/null -H "Host: $h.vidu" http://127.0.0.1:8080/x; done
+$ for f in goc rieng-b c-du c-nghiem-trong; do printf '%-15s %s dong: ' $f.log $(wc -l &lt; /srv/logs/$f.log); grep -o 'server: [a-z.]*' /srv/logs/$f.log | tr '\\n' ' '; echo; done
+goc.log         1 dong: server: a.vidu 
+rieng-b.log     1 dong: server: b.vidu 
+c-du.log        1 dong: server: c.vidu 
+c-nghiem-trong.log 0 dong: </div>
+<p>Một dòng <code>[error] … *7 … (111: Connection refused)</code> cho một cú 502; bốn errno cho bốn mã (111→502, 110→504, 2→404, 13→403). Các mức sau khởi động: crit 0, error/warn/notice 3 dòng, info 7. Một <code>/ok</code> ở debug: 85 dòng, 5.853 byte. <code>debug_connection</code>: 518 (nền debug, IP khác), 7 (nền info, IP khác), 448 (nền info, đúng IP). Kế thừa: a → <code>goc.log</code>, b → chỉ tệp riêng, c → tệp <code>warn</code>, tệp <code>crit</code> không có gì.</p>
+<h3>🔗 Bài liên quan ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-1-3-muc-log" target="_blank" rel="noopener"><span class="lc-ico">🔭</span><span class="lc-body"><span class="lc-title">Observability & Monitoring · 1.3 — Mức log, và vì sao ai cũng dùng sai</span><span class="lc-sub">Cùng các mức đó trong ứng dụng</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-2-1-docker-bat-log" target="_blank" rel="noopener"><span class="lc-ico">🔭</span><span class="lc-body"><span class="lc-title">Observability & Monitoring · 2.1 — Docker làm gì với dòng log của bạn</span><span class="lc-sub">Vì sao error_log stderr trong container</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-10-1-dia-day" target="_blank" rel="noopener"><span class="lc-ico">🐧</span><span class="lc-body"><span class="lc-title">Linux & Bash · 10.1 — Đĩa đầy: tìm ra cái gì làm nó đầy</span><span class="lc-sub">Khi lỡ để debug bật</span></span></a>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>error_log</code></span><span class="v">Ghi VÌ SAO một request hỏng; nó không có <code>log_format</code> — bố cục là cố định.</span></div>
+  <div class="kv"><span class="k">Các mức nghiêm trọng</span><span class="v"><code>emerg</code> → <code>debug</code>; đặt một mức nghĩa là "mức này và mọi thứ nghiêm trọng hơn". <code>warn</code> là mặc định cho production.</span></div>
+  <div class="kv"><span class="k">Số hiệu kết nối (<code>*1</code>)</span><span class="v">Một cái tay nắm gắn vào mọi dòng về cùng một kết nối; grep nó để dựng lại toàn bộ câu chuyện một request theo thứ tự.</span></div>
+  <div class="kv"><span class="k">errno</span><span class="v">Con số trong ngoặc: <code>111</code> từ chối → 502, <code>110</code> quá hạn → 504, <code>2</code> không có tệp → 404, <code>13</code> bị cấm → 403.</span></div>
+  <div class="kv"><span class="k">Mức <code>debug</code></span><span class="v">~60× một dòng access log mỗi request — hàng gigabyte mỗi ngày; bật để trả lời một câu rồi tắt ngay.</span></div>
+  <div class="kv"><span class="k"><code>debug_connection</code></span><span class="v">Nâng các IP khớp lên debug; nó CẤP debug chứ không HẠN CHẾ — vô dụng khi mức nền đã là <code>debug</code>.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li>Bố cục error log là cố định; <code>grep</code> số hiệu kết nối <code>*1</code> để đọc toàn bộ câu chuyện một request theo thứ tự.</li><li>Con số errno trong ngoặc ánh xạ lỗi tới mã trả về cho client (111→502, 110→504, 2→404, 13→403).</li><li><code>warn</code> là mặc định đúng; <code>crit</code> giấu hẳn upstream chết, tệp thiếu và quá hạn.</li><li><code>error_log debug</code> ghi ~52× mỗi request — thay vào đó đặt <code>debug_connection</code> vào IP của bạn với mức nền <code>warn</code>.</li><li>Một <code>error_log</code> khai ở tầng dưới sẽ THAY cái kế thừa; liệt kê nhiều dòng trong một ngữ cảnh để giữ nhiều đích.</li></ul>
 </div>
 `,
     },
@@ -773,6 +1570,7 @@ error_log stderr warn;   <span class="tok-comment"># quan trong trong container 
       type: 'LESSON',
       description: 'stub_status chỉ cho bảy con số và không có gì hơn. Bài này đo từng con số dưới tải thật, ép cho accepts tách khỏi handled để thấy chính xác cái khoảnh khắc Nginx bắt đầu vứt kết nối, và tính ra một tỉ số nói ngay keepalive có đang chạy không.',
       content: `
+${G10_5}
 <div class="ml-en">
 <span class="eyebrow">Chapter 10 · Lesson 10.5</span>
 <h2><code>stub_status</code>: seven numbers, and the one that says you are dropping traffic</h2>
@@ -786,14 +1584,13 @@ error_log stderr warn;   <span class="tok-comment"># quan trong trong container 
     deny all;
 }</code></pre>
 <p>Use <code>location =</code>, not a prefix — Chapter 2 measured how a prefix location quietly captures everything beneath it. The <code>allow</code>/<code>deny</code> pair is not optional; the endpoint tells an attacker your live connection count and your traffic rate. Measured from an address outside the allowed range:</p>
-<div class="out">ma tra ve khi 127.0.0.1 hoi /trang-thai (chi cho phep 10.0.0.0/8): 403
-sau khi go allow/deny: 200</div>
+<div class="out">127.0.0.1 hoi /trang-thai (chi cho 10.0.0.0/8): 403</div>
 
 <h3>The whole output</h3>
-<div class="out">Active connections: 1
+<div class="out">Active connections: 1 
 server accepts handled requests
- 463 463 31629
-Reading: 0 Writing: 1 Waiting: 0</div>
+ 2 2 2 
+Reading: 0 Writing: 1 Waiting: 0 </div>
 <div class="kv-grid">
   <div class="kv"><span class="k">Active connections</span><span class="v">Open client connections right now, including idle keepalive ones and including the request asking for this page.</span></div>
   <div class="kv"><span class="k">accepts</span><span class="v">Total connections Nginx has accepted since it started. Monotonic — you read it as a rate by differencing two samples.</span></div>
@@ -830,23 +1627,19 @@ Reading: 0 Writing: 1 Waiting: 0</div>
 
 <h3><code>accepts</code> ≠ <code>handled</code>: the number nobody looks at</h3>
 <p>On a healthy server these two are always equal, which is exactly why the gap is easy to miss — it reads as a duplicate. To show what it means, here is a server deliberately configured with <code>worker_connections 4</code>, hit with forty concurrent slow requests:</p>
-<div class="out">=== truoc khi ep tai (worker_connections 4) ===
-Active connections: 1
+<div class="out">$ curl -s 127.0.0.1:8081/tt | sed -n '2,3p'     # worker_connections 4
+=== truoc khi ep tai (worker_connections 4) ===
 server accepts handled requests
- 1 1 1
-
---- ban 40 ket noi song song vao /cham (600ms) ---
-[6]   Exit 52   curl -s -o /dev/null --max-time 4 http://127.0.0.1:9350/cham
-
+ 1 1 1 
+$ for i in $(seq 40); do curl -s -o /dev/null --max-time 4 -w '%{http_code}\\n' 127.0.0.1:8081/cham &amp; done | sort | uniq -c
+40 client nhan:  39 000  1 200    (000 = khong co phan hoi nao)
+$ echo '=== sau khi ep tai ==='; curl -s http://127.0.0.1:8081/tt | sed -n '2,3p'
 === sau khi ep tai ===
 server accepts handled requests
- 42 3 3
-
---- error log ---
-[alert] 24333#24333: 4 worker_connections are not enough
-[alert] 24333#24333: 4 worker_connections are not enough
-[alert] 24333#24333: 4 worker_connections are not enough</div>
-<div class="callout warn"><strong>Forty-two accepted, three handled.</strong> Thirty-nine connections were taken off the kernel's queue and then dropped, because there was no connection slot to put them in. The clients saw <code>curl: (52) Empty reply from server</code> — no status code, no error page, nothing to log an HTTP response for. In the access log those requests <em>do not exist</em>. The only two places this is visible are the <code>accepts</code>/<code>handled</code> gap and the <code>[alert]</code> in the error log.</div>
+ 42 4 3 
+$ grep -o 'worker_connections are not enough' nho.log | uniq -c
+     38 worker_connections are not enough</div>
+<div class="callout warn"><strong>Forty-two accepted, four handled.</strong> Thirty-eight connections were taken off the kernel's queue and then dropped, because there was no connection slot to put them in — and the error log said <code>worker_connections are not enough</code> exactly 38 times. Thirty-nine of the forty clients got no response at all (curl reports <code>000</code>) — no status code, no error page, nothing to log an HTTP response for. In the access log those requests <em>do not exist</em>. The only two places this is visible are the <code>accepts</code>/<code>handled</code> gap and the <code>[alert]</code> in the error log.</div>
 <p>That is why this pair matters more than anything else on the page. Every other number describes work that succeeded. This one is the only built-in counter for work that silently did not.</p>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Alert on the difference, not the values</span><span class="lz-d">Sample both, subtract, and alert if <code>accepts - handled</code> increases at all between two samples. The absolute values are meaningless; any growth in the gap is an outage in progress.</span></div>
@@ -884,6 +1677,102 @@ server accepts handled requests
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">ngx_core_module — worker_connections, worker_rlimit_nofile</span><span class="lc-sub">nginx.org/en/docs/ngx_core_module.html — the two directives behind the <code>accepts</code>/<code>handled</code> gap measured above.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">ngx_http_access_module — allow / deny</span><span class="lc-sub">nginx.org/en/docs/http/ngx_http_access_module.html — evaluation order for the rules that returned 403 in the first measurement.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">TLS and HTTP/2 — why a 1.0 requests-per-connection ratio is expensive</span><span class="lc-sub">Chapter 6 measured the cost of a handshake. That measurement is what makes this ratio worth watching.</span></span></div>
+<h3>🔬 Run it yourself</h3>
+<p>A protected status page and an open copy, a 600 ms backend, a script that holds keepalive connections open and silent, a second server deliberately limited to <code>worker_connections 4</code>, and a script that diffs the counters around 30 requests — on nginx/1.24.0:</p>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+worker_processes 1;
+events {}
+http {
+  access_log off;
+  keepalive_timeout 60s;
+  server {
+    listen 8080;
+    location = /trang-thai {
+      stub_status;
+      allow 10.0.0.0/8;        <span class="tok-comment">  # chỉ mạng nội bộ</span>
+      deny all;
+    }
+    location = /tt { stub_status; }                     <span class="tok-comment">  # bản không chặn — để đo trong lab</span>
+    location / { proxy_pass http://127.0.0.1:9600; }
+  }
+}</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/nho.pid;
+error_log /srv/logs/nho.log;
+worker_processes 1;
+events { worker_connections 4; }                        <span class="tok-comment">  # CỐ Ý quá nhỏ</span>
+http {
+  access_log off;
+  server { listen 8081; location = /tt { stub_status; } location / { proxy_pass http://127.0.0.1:9600; } }
+}</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># giu_mo.py</span>
+<span class="tok-comment"># giu_mo.py &lt;n&gt; &lt;giây&gt; — mở n kết nối keepalive, mỗi cái gửi MỘT request rồi giữ im lặng</span>
+import socket, sys, time
+ds = []
+for i in range(int(sys.argv[1])):
+    s = socket.create_connection(('127.0.0.1', 8080))
+    s.sendall(b'GET /binh-thuong HTTP/1.1\\r\\nHost: x\\r\\n\\r\\n'); s.recv(4096); ds.append(s)
+time.sleep(float(sys.argv[2]))</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># tile.sh</span>
+<span class="tok-comment"># tile.sh — đếm accepts/handled/requests TRƯỚC và SAU 30 request: rời rạc, rồi trên MỘT kết nối keepalive</span>
+so() { curl -s http://127.0.0.1:8080/tt | sed -n 3p; }
+a=($(so)); for i in $(seq 30); do curl -s -o /dev/null http://127.0.0.1:8080/binh-thuong; done; b=($(so))
+echo "30 request, KHONG keepalive: accepts +$((b[0]-a[0]))  handled +$((b[1]-a[1]))  requests +$((b[2]-a[2]))  -&gt; $(echo "scale=1; ($((b[2]-a[2])))/($((b[0]-a[0])))" | bc) request/ket noi"
+a=($(so)); curl -s $(for i in $(seq 30); do printf 'http://127.0.0.1:8080/binh-thuong '; done) &gt; /dev/null; b=($(so))
+echo "30 request, CO keepalive  : accepts +$((b[0]-a[0]))  handled +$((b[1]-a[1]))  requests +$((b[2]-a[2]))  -&gt; $(echo "scale=1; ($((b[2]-a[2])))/($((b[0]-a[0])))" | bc) request/ket noi"</code></pre>
+<div class="out">$ curl -s -o /dev/null -w '127.0.0.1 hoi /trang-thai (chi cho 10.0.0.0/8): %{http_code}\\n' http://127.0.0.1:8080/trang-thai
+127.0.0.1 hoi /trang-thai (chi cho 10.0.0.0/8): 403
+$ curl -s http://127.0.0.1:8080/tt
+Active connections: 1 
+server accepts handled requests
+ 2 2 2 
+Reading: 0 Writing: 1 Waiting: 0 
+$ curl -s 127.0.0.1:8080/tt | sed -n '1p;4p'     # nhàn rỗi
+=== nhan roi ===
+Active connections: 1 
+Reading: 0 Writing: 1 Waiting: 0 
+$ for i in $(seq 20); do curl -s -o /dev/null 127.0.0.1:8080/cham &amp; done; sleep 0.3; curl -s 127.0.0.1:8080/tt | sed -n '1p;4p'
+=== 20 request song song toi /cham (600 ms) ===
+Active connections: 21 
+Reading: 0 Writing: 21 Waiting: 0 
+$ python3 giu_mo.py 8 3 &amp; sleep 1; curl -s 127.0.0.1:8080/tt | sed -n '1p;4p'
+=== 8 ket noi keepalive DANG MO nhung im lang ===
+Active connections: 9 
+Reading: 0 Writing: 1 Waiting: 8 
+$ sleep 3; echo '=== sau khi dong het ==='; curl -s http://127.0.0.1:8080/tt | sed -n '1p;4p'
+=== sau khi dong het ===
+Active connections: 1 
+Reading: 0 Writing: 1 Waiting: 0 
+$ curl -s 127.0.0.1:8081/tt | sed -n '2,3p'     # worker_connections 4
+=== truoc khi ep tai (worker_connections 4) ===
+server accepts handled requests
+ 1 1 1 
+$ for i in $(seq 40); do curl -s -o /dev/null --max-time 4 -w '%{http_code}\\n' 127.0.0.1:8081/cham &amp; done | sort | uniq -c
+40 client nhan:  39 000  1 200    (000 = khong co phan hoi nao)
+$ echo '=== sau khi ep tai ==='; curl -s http://127.0.0.1:8081/tt | sed -n '2,3p'
+=== sau khi ep tai ===
+server accepts handled requests
+ 42 4 3 
+$ grep -o 'worker_connections are not enough' nho.log | uniq -c
+     38 worker_connections are not enough
+$ bash tile.sh
+30 request, KHONG keepalive: accepts +31  handled +31  requests +31  -&gt; 1.0 request/ket noi
+30 request, CO keepalive  : accepts +2  handled +2  requests +31  -&gt; 15.5 request/ket noi</div>
+<p>403 from outside the allowed range; seven numbers on the open copy. Twenty slow requests: Active 21, Writing 21. Eight silent keepalive connections: Waiting 8. Forty requests into four connection slots: 39 clients with no response, <code>accepts 42 handled 4</code>, 38 <code>[alert]</code> lines. Requests per connection: 1.0 without keepalive, 15.5 with it — the true value is 30, the status page counted itself.</p>
+<h3>🔗 Related lessons in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-4-1-bon-loai-chi-so" target="_blank" rel="noopener"><span class="lc-ico">🔭</span><span class="lc-body"><span class="lc-title">Observability & Monitoring · 4.1 — What a metric is, and the four kinds</span><span class="lc-sub">Counters vs gauges — the seven numbers, classified</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-9-3-slo-va-toc-do-dot" target="_blank" rel="noopener"><span class="lc-ico">🔭</span><span class="lc-body"><span class="lc-title">Observability & Monitoring · 9.3 — SLO, error budget, burn rate</span><span class="lc-sub">Turning accepts − handled into an alert</span></span></a>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>stub_status</code></span><span class="v">Built-in endpoint giving seven integers; guard it with <code>location =</code> plus <code>allow</code>/<code>deny</code>.</span></div>
+  <div class="kv"><span class="k">Active connections</span><span class="v">Open client connections right now, idle keepalive ones included.</span></div>
+  <div class="kv"><span class="k"><code>accepts</code> vs <code>handled</code></span><span class="v">Connections accepted versus actually served; any gap means traffic is being dropped.</span></div>
+  <div class="kv"><span class="k"><code>requests</code> / <code>accepts</code></span><span class="v">Requests per connection — a direct readout of whether keepalive is working.</span></div>
+  <div class="kv"><span class="k">Reading / Writing / Waiting</span><span class="v">Reading the request header / sending-or-waiting-on-upstream / idle keepalive.</span></div>
+  <div class="kv"><span class="k"><code>worker_connections</code></span><span class="v">Per-worker slot cap; a proxied request uses two slots, so the real ceiling is halved.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li><code>stub_status</code> gives connection-level health in seven numbers — no status codes, no latency.</li><li><code>accepts</code> ≠ <code>handled</code> is the only built-in counter for silently dropped connections; alert on the growing gap, not the values.</li><li>A proxied request uses two connection slots, so the ceiling is <code>worker_processes × worker_connections</code>, halved.</li><li>A <code>requests</code>/<code>accepts</code> ratio near 1.0 means keepalive is not working — a fresh handshake per request.</li><li>The endpoint counts its own polls, so poll over keepalive or subtract them; pair it with the access log for request-level health.</li></ul>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 10 · Bài 10.5</span>
@@ -898,14 +1787,13 @@ server accepts handled requests
     deny all;
 }</code></pre>
 <p>Dùng <code>location =</code>, đừng dùng tiền tố — Chương 2 đã đo chuyện một location tiền tố lặng lẽ tóm hết mọi thứ nằm dưới nó. Cặp <code>allow</code>/<code>deny</code> không phải tuỳ chọn; cái endpoint này khai với kẻ tấn công số kết nối đang sống và tốc độ lưu lượng của bạn. Đo từ một địa chỉ nằm ngoài dải được phép:</p>
-<div class="out">ma tra ve khi 127.0.0.1 hoi /trang-thai (chi cho phep 10.0.0.0/8): 403
-sau khi go allow/deny: 200</div>
+<div class="out">127.0.0.1 hoi /trang-thai (chi cho 10.0.0.0/8): 403</div>
 
 <h3>Toàn bộ kết quả</h3>
-<div class="out">Active connections: 1
+<div class="out">Active connections: 1 
 server accepts handled requests
- 463 463 31629
-Reading: 0 Writing: 1 Waiting: 0</div>
+ 2 2 2 
+Reading: 0 Writing: 1 Waiting: 0 </div>
 <div class="kv-grid">
   <div class="kv"><span class="k">Active connections</span><span class="v">Số kết nối client đang mở NGAY LÚC NÀY, tính cả kết nối keepalive đang nhàn rỗi và tính cả chính cái request đang hỏi trang này.</span></div>
   <div class="kv"><span class="k">accepts</span><span class="v">Tổng số kết nối Nginx đã nhận từ lúc khởi động. Chỉ tăng — bạn đọc nó thành tốc độ bằng cách lấy hiệu của hai lần lấy mẫu.</span></div>
@@ -942,23 +1830,19 @@ Reading: 0 Writing: 1 Waiting: 0</div>
 
 <h3><code>accepts</code> ≠ <code>handled</code>: con số chẳng ai nhìn</h3>
 <p>Trên một máy chủ khoẻ mạnh thì hai con số này LUÔN bằng nhau, và chính vì thế mà khoảng cách giữa chúng rất dễ bị bỏ sót — nhìn cứ tưởng là một cái lặp lại. Để cho thấy nó có nghĩa gì, đây là một máy chủ cố tình cấu hình <code>worker_connections 4</code>, rồi ăn bốn mươi request chậm song song:</p>
-<div class="out">=== truoc khi ep tai (worker_connections 4) ===
-Active connections: 1
+<div class="out">$ curl -s 127.0.0.1:8081/tt | sed -n '2,3p'     # worker_connections 4
+=== truoc khi ep tai (worker_connections 4) ===
 server accepts handled requests
- 1 1 1
-
---- ban 40 ket noi song song vao /cham (600ms) ---
-[6]   Exit 52   curl -s -o /dev/null --max-time 4 http://127.0.0.1:9350/cham
-
+ 1 1 1 
+$ for i in $(seq 40); do curl -s -o /dev/null --max-time 4 -w '%{http_code}\\n' 127.0.0.1:8081/cham &amp; done | sort | uniq -c
+40 client nhan:  39 000  1 200    (000 = khong co phan hoi nao)
+$ echo '=== sau khi ep tai ==='; curl -s http://127.0.0.1:8081/tt | sed -n '2,3p'
 === sau khi ep tai ===
 server accepts handled requests
- 42 3 3
-
---- error log ---
-[alert] 24333#24333: 4 worker_connections are not enough
-[alert] 24333#24333: 4 worker_connections are not enough
-[alert] 24333#24333: 4 worker_connections are not enough</div>
-<div class="callout warn"><strong>Bốn mươi hai cái được nhận, ba cái được phục vụ.</strong> Ba mươi chín kết nối đã bị nhấc khỏi hàng đợi của nhân rồi bị VỨT, vì không còn chỗ kết nối nào để đặt chúng vào. Phía client thấy <code>curl: (52) Empty reply from server</code> — không mã trạng thái, không trang lỗi, không có gì để ghi một phản hồi HTTP nào cả. Trong access log, mấy request đó <em>KHÔNG TỒN TẠI</em>. Chỉ có đúng hai chỗ nhìn thấy được chuyện này: khoảng cách <code>accepts</code>/<code>handled</code>, và dòng <code>[alert]</code> trong error log.</div>
+ 42 4 3 
+$ grep -o 'worker_connections are not enough' nho.log | uniq -c
+     38 worker_connections are not enough</div>
+<div class="callout warn"><strong>Bốn mươi hai cái được nhận, bốn cái được phục vụ.</strong> Ba mươi tám kết nối đã bị nhấc khỏi hàng đợi của nhân rồi bị VỨT, vì không còn chỗ kết nối nào để đặt chúng vào — và error log ghi <code>worker_connections are not enough</code> đúng 38 lần. Ba mươi chín trên bốn mươi client không nhận được phản hồi nào (curl báo <code>000</code>) — không mã trạng thái, không trang lỗi, không có gì để ghi một phản hồi HTTP nào cả. Trong access log, mấy request đó <em>KHÔNG TỒN TẠI</em>. Chỉ có đúng hai chỗ nhìn thấy được chuyện này: khoảng cách <code>accepts</code>/<code>handled</code>, và dòng <code>[alert]</code> trong error log.</div>
 <p>Đó là lý do cặp số này quan trọng hơn mọi thứ khác trên trang. Mọi con số còn lại đều mô tả công việc ĐÃ thành công. Cặp này là bộ đếm có sẵn DUY NHẤT cho phần công việc đã lặng lẽ không thành.</p>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Cảnh báo trên HIỆU SỐ, đừng cảnh báo trên giá trị</span><span class="lz-d">Lấy mẫu cả hai, trừ đi, và báo động nếu <code>accepts - handled</code> tăng lên dù chỉ một chút giữa hai lần lấy mẫu. Giá trị tuyệt đối vô nghĩa; bất kỳ mức tăng nào của khoảng cách đó đều là một sự cố đang diễn ra.</span></div>
@@ -996,6 +1880,102 @@ server accepts handled requests
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">ngx_core_module — worker_connections, worker_rlimit_nofile</span><span class="lc-sub">nginx.org/en/docs/ngx_core_module.html — hai chỉ thị nằm sau khoảng cách <code>accepts</code>/<code>handled</code> đo ở trên.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">ngx_http_access_module — allow / deny</span><span class="lc-sub">nginx.org/en/docs/http/ngx_http_access_module.html — thứ tự đánh giá của mấy luật đã trả về 403 ở phép đo đầu bài.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">TLS và HTTP/2 — vì sao tỉ số 1,0 request mỗi kết nối là đắt</span><span class="lc-sub">Chương 6 đã đo cái giá của một lần bắt tay. Chính phép đo đó làm cho tỉ số này đáng theo dõi.</span></span></div>
+<h3>🔬 Tự chạy lại</h3>
+<p>Một trang trạng thái có bảo vệ và một bản mở, một backend 600 ms, một script giữ các kết nối keepalive mở mà im lặng, một server thứ hai cố tình chỉ có <code>worker_connections 4</code>, và một script lấy hiệu các bộ đếm quanh 30 request — trên nginx/1.24.0:</p>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+worker_processes 1;
+events {}
+http {
+  access_log off;
+  keepalive_timeout 60s;
+  server {
+    listen 8080;
+    location = /trang-thai {
+      stub_status;
+      allow 10.0.0.0/8;        <span class="tok-comment">  # chỉ mạng nội bộ</span>
+      deny all;
+    }
+    location = /tt { stub_status; }                     <span class="tok-comment">  # bản không chặn — để đo trong lab</span>
+    location / { proxy_pass http://127.0.0.1:9600; }
+  }
+}</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/nho.pid;
+error_log /srv/logs/nho.log;
+worker_processes 1;
+events { worker_connections 4; }                        <span class="tok-comment">  # CỐ Ý quá nhỏ</span>
+http {
+  access_log off;
+  server { listen 8081; location = /tt { stub_status; } location / { proxy_pass http://127.0.0.1:9600; } }
+}</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># giu_mo.py</span>
+<span class="tok-comment"># giu_mo.py &lt;n&gt; &lt;giây&gt; — mở n kết nối keepalive, mỗi cái gửi MỘT request rồi giữ im lặng</span>
+import socket, sys, time
+ds = []
+for i in range(int(sys.argv[1])):
+    s = socket.create_connection(('127.0.0.1', 8080))
+    s.sendall(b'GET /binh-thuong HTTP/1.1\\r\\nHost: x\\r\\n\\r\\n'); s.recv(4096); ds.append(s)
+time.sleep(float(sys.argv[2]))</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># tile.sh</span>
+<span class="tok-comment"># tile.sh — đếm accepts/handled/requests TRƯỚC và SAU 30 request: rời rạc, rồi trên MỘT kết nối keepalive</span>
+so() { curl -s http://127.0.0.1:8080/tt | sed -n 3p; }
+a=($(so)); for i in $(seq 30); do curl -s -o /dev/null http://127.0.0.1:8080/binh-thuong; done; b=($(so))
+echo "30 request, KHONG keepalive: accepts +$((b[0]-a[0]))  handled +$((b[1]-a[1]))  requests +$((b[2]-a[2]))  -&gt; $(echo "scale=1; ($((b[2]-a[2])))/($((b[0]-a[0])))" | bc) request/ket noi"
+a=($(so)); curl -s $(for i in $(seq 30); do printf 'http://127.0.0.1:8080/binh-thuong '; done) &gt; /dev/null; b=($(so))
+echo "30 request, CO keepalive  : accepts +$((b[0]-a[0]))  handled +$((b[1]-a[1]))  requests +$((b[2]-a[2]))  -&gt; $(echo "scale=1; ($((b[2]-a[2])))/($((b[0]-a[0])))" | bc) request/ket noi"</code></pre>
+<div class="out">$ curl -s -o /dev/null -w '127.0.0.1 hoi /trang-thai (chi cho 10.0.0.0/8): %{http_code}\\n' http://127.0.0.1:8080/trang-thai
+127.0.0.1 hoi /trang-thai (chi cho 10.0.0.0/8): 403
+$ curl -s http://127.0.0.1:8080/tt
+Active connections: 1 
+server accepts handled requests
+ 2 2 2 
+Reading: 0 Writing: 1 Waiting: 0 
+$ curl -s 127.0.0.1:8080/tt | sed -n '1p;4p'     # nhàn rỗi
+=== nhan roi ===
+Active connections: 1 
+Reading: 0 Writing: 1 Waiting: 0 
+$ for i in $(seq 20); do curl -s -o /dev/null 127.0.0.1:8080/cham &amp; done; sleep 0.3; curl -s 127.0.0.1:8080/tt | sed -n '1p;4p'
+=== 20 request song song toi /cham (600 ms) ===
+Active connections: 21 
+Reading: 0 Writing: 21 Waiting: 0 
+$ python3 giu_mo.py 8 3 &amp; sleep 1; curl -s 127.0.0.1:8080/tt | sed -n '1p;4p'
+=== 8 ket noi keepalive DANG MO nhung im lang ===
+Active connections: 9 
+Reading: 0 Writing: 1 Waiting: 8 
+$ sleep 3; echo '=== sau khi dong het ==='; curl -s http://127.0.0.1:8080/tt | sed -n '1p;4p'
+=== sau khi dong het ===
+Active connections: 1 
+Reading: 0 Writing: 1 Waiting: 0 
+$ curl -s 127.0.0.1:8081/tt | sed -n '2,3p'     # worker_connections 4
+=== truoc khi ep tai (worker_connections 4) ===
+server accepts handled requests
+ 1 1 1 
+$ for i in $(seq 40); do curl -s -o /dev/null --max-time 4 -w '%{http_code}\\n' 127.0.0.1:8081/cham &amp; done | sort | uniq -c
+40 client nhan:  39 000  1 200    (000 = khong co phan hoi nao)
+$ echo '=== sau khi ep tai ==='; curl -s http://127.0.0.1:8081/tt | sed -n '2,3p'
+=== sau khi ep tai ===
+server accepts handled requests
+ 42 4 3 
+$ grep -o 'worker_connections are not enough' nho.log | uniq -c
+     38 worker_connections are not enough
+$ bash tile.sh
+30 request, KHONG keepalive: accepts +31  handled +31  requests +31  -&gt; 1.0 request/ket noi
+30 request, CO keepalive  : accepts +2  handled +2  requests +31  -&gt; 15.5 request/ket noi</div>
+<p>403 khi hỏi từ ngoài dải cho phép; bảy con số ở bản mở. Hai mươi request chậm: Active 21, Writing 21. Tám kết nối keepalive im lặng: Waiting 8. Bốn mươi request vào bốn chỗ kết nối: 39 client không có phản hồi, <code>accepts 42 handled 4</code>, 38 dòng <code>[alert]</code>. Request mỗi kết nối: 1,0 khi không keepalive, 15,5 khi có — giá trị đúng là 30, trang trạng thái đã tự đếm chính nó.</p>
+<h3>🔗 Bài liên quan ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-4-1-bon-loai-chi-so" target="_blank" rel="noopener"><span class="lc-ico">🔭</span><span class="lc-body"><span class="lc-title">Observability & Monitoring · 4.1 — Chỉ số là gì, và bốn loại của nó</span><span class="lc-sub">Bộ đếm và số đo tức thời — bảy con số, phân loại</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-9-3-slo-va-toc-do-dot" target="_blank" rel="noopener"><span class="lc-ico">🔭</span><span class="lc-body"><span class="lc-title">Observability & Monitoring · 9.3 — SLO, ngân sách lỗi, tốc độ đốt</span><span class="lc-sub">Biến accepts − handled thành một cảnh báo</span></span></a>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>stub_status</code></span><span class="v">Endpoint có sẵn cho bảy số nguyên; canh nó bằng <code>location =</code> cộng <code>allow</code>/<code>deny</code>.</span></div>
+  <div class="kv"><span class="k">Active connections</span><span class="v">Số kết nối client đang mở ngay lúc này, tính cả kết nối keepalive nhàn rỗi.</span></div>
+  <div class="kv"><span class="k"><code>accepts</code> vs <code>handled</code></span><span class="v">Số kết nối đã nhận so với số thật sự phục vụ; bất kỳ khoảng cách nào nghĩa là đang mất lưu lượng.</span></div>
+  <div class="kv"><span class="k"><code>requests</code> / <code>accepts</code></span><span class="v">Số request trên mỗi kết nối — đọc trực tiếp xem keepalive có chạy không.</span></div>
+  <div class="kv"><span class="k">Reading / Writing / Waiting</span><span class="v">Đang đọc header request / đang gửi-hoặc-chờ-upstream / keepalive nhàn rỗi.</span></div>
+  <div class="kv"><span class="k"><code>worker_connections</code></span><span class="v">Trần số chỗ mỗi worker; một request qua proxy dùng hai chỗ, nên trần thật bị chia đôi.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li><code>stub_status</code> cho sức khoẻ ở mức kết nối trong bảy con số — không có mã trạng thái, không có độ trễ.</li><li><code>accepts</code> ≠ <code>handled</code> là bộ đếm có sẵn DUY NHẤT cho kết nối bị vứt lặng lẽ; cảnh báo trên khoảng cách đang tăng, đừng trên giá trị.</li><li>Một request qua proxy dùng hai chỗ kết nối, nên trần là <code>worker_processes × worker_connections</code>, chia đôi.</li><li>Tỉ số <code>requests</code>/<code>accepts</code> quanh 1,0 nghĩa là keepalive không chạy — mỗi request một lần bắt tay mới.</li><li>Endpoint tự đếm chính các lần hỏi của nó, nên hãy hỏi qua keepalive hoặc trừ chúng ra; ghép nó với access log để có sức khoẻ ở mức request.</li></ul>
 </div>
 `,
     },
@@ -1012,7 +1992,7 @@ server accepts handled requests
 <h2>Quiz: logs and observability</h2>
 <p class="lead">Eight questions from a chapter where two measurements disagreed with each other and a third disagreed with the advice in every tuning guide.</p>
 <div class="callout">
-<p><strong>What this chapter established.</strong> The <code>combined</code> format records none of what a proxy does — no upstream address, no upstream timing, no cache status — and the same three requests through a proxy-aware format showed that 0.603 s of a 0.603 s request belonged entirely to the backend (10.1). <code>escape=json</code> is not cosmetic: the default escape turns <code>Chào bạn</code> into <code>Ch\\xC3\\xA0o b\\xE1\\xBA\\xA1n</code>, one hex pair per byte, and a bare <code>\$upstream_response_time</code> produces <code>"tgian_up":,</code> — broken JSON — on every request Nginx answers without an upstream, while passing <code>nginx -t</code> and working perfectly for everything proxied (10.2). Unbuffered logging costs exactly one <code>write()</code> syscall per request, <code>buffer=64k</code> collapsed 900 of them into 1 with no lines lost, and five rounds of 900 requests found <em>no measurable time difference</em> between logging off, logging on, and logging buffered (10.3). At <code>debug</code>, one trivial request wrote 86 lines and 5,913 bytes — 52× a combined access-log line, 5.5 GB per million requests — and <code>debug_connection</code> filters nothing unless the base level is something other than <code>debug</code>, because it grants debug rather than restricting it (10.4). And <code>stub_status</code> under a deliberate <code>worker_connections 4</code> reported <code>accepts 42, handled 3</code>: thirty-nine dropped connections that appear nowhere in the access log at all (10.5).</p>
+<p><strong>What this chapter established.</strong> The <code>combined</code> format records none of what a proxy does — no upstream address, no upstream timing, no cache status — and the same three requests through a proxy-aware format showed that 0.603 s of a 0.603 s request belonged entirely to the backend (10.1). <code>escape=json</code> is not cosmetic: the default escape turns <code>Chào bạn</code> into <code>Ch\\xC3\\xA0o b\\xE1\\xBA\\xA1n</code>, one hex pair per byte, and a bare <code>\$upstream_response_time</code> produces <code>"tgian_up":,</code> — broken JSON — on every request Nginx answers without an upstream, while passing <code>nginx -t</code> and working perfectly for everything proxied (10.2). Unbuffered logging costs exactly one <code>write()</code> syscall per request, <code>buffer=64k</code> collapsed 900 of them into 2 with no lines lost, and five rounds of 900 requests found <em>no measurable time difference</em> between logging off, logging on, and logging buffered (10.3). At <code>debug</code>, one trivial request wrote 85 lines and 5,853 bytes — about 60× a combined access-log line, nearly 6 GB per million requests — and <code>debug_connection</code> filters nothing unless the base level is something other than <code>debug</code>, because it grants debug rather than restricting it (10.4). And <code>stub_status</code> under a deliberate <code>worker_connections 4</code> reported <code>accepts 42, handled 4</code>: thirty-eight dropped connections that appear nowhere in the access log at all (10.5).</p>
 </div>
 </div>
 
@@ -1021,7 +2001,7 @@ server accepts handled requests
 <h2>Quiz: log và quan sát</h2>
 <p class="lead">Tám câu ra từ một chương mà hai phép đo mâu thuẫn với nhau, còn phép đo thứ ba mâu thuẫn với lời khuyên trong mọi cuốn hướng dẫn tối ưu.</p>
 <div class="callout">
-<p><strong>Chương này đã xác lập điều gì.</strong> Định dạng <code>combined</code> không ghi lại gì trong những việc một con proxy làm — không địa chỉ upstream, không thời gian upstream, không trạng thái bộ đệm — và cùng ba request ấy qua một định dạng viết cho proxy cho thấy 0,603 giây trong một request 0,603 giây thuộc trọn về backend (10.1). <code>escape=json</code> không phải chuyện hình thức: escape mặc định biến <code>Chào bạn</code> thành <code>Ch\\xC3\\xA0o b\\xE1\\xBA\\xA1n</code>, mỗi byte một cặp hex, còn một <code>\$upstream_response_time</code> để trần sinh ra <code>"tgian_up":,</code> — JSON hỏng cú pháp — trên MỌI request mà Nginx tự trả lời không qua upstream, trong khi vẫn qua được <code>nginx -t</code> và chạy hoàn hảo với mọi thứ đi qua proxy (10.2). Ghi log không đệm tốn đúng một syscall <code>write()</code> mỗi request, <code>buffer=64k</code> gom 900 cái đó thành 1 mà không mất dòng nào, và năm lượt 900 request KHÔNG tìm ra <em>khác biệt thời gian đo được nào</em> giữa tắt log, bật log, và log có đệm (10.3). Ở mức <code>debug</code>, một request tầm thường ghi ra 86 dòng và 5.913 byte — gấp 52 lần một dòng access log combined, 5,5 GB cho mỗi triệu request — còn <code>debug_connection</code> chẳng lọc gì cả trừ khi mức nền là thứ khác <code>debug</code>, vì nó CẤP quyền debug chứ không hạn chế (10.4). Và <code>stub_status</code> dưới một <code>worker_connections 4</code> cố tình đặt chật báo <code>accepts 42, handled 3</code>: ba mươi chín kết nối bị vứt mà chẳng xuất hiện ở đâu trong access log (10.5).</p>
+<p><strong>Chương này đã xác lập điều gì.</strong> Định dạng <code>combined</code> không ghi lại gì trong những việc một con proxy làm — không địa chỉ upstream, không thời gian upstream, không trạng thái bộ đệm — và cùng ba request ấy qua một định dạng viết cho proxy cho thấy 0,603 giây trong một request 0,603 giây thuộc trọn về backend (10.1). <code>escape=json</code> không phải chuyện hình thức: escape mặc định biến <code>Chào bạn</code> thành <code>Ch\\xC3\\xA0o b\\xE1\\xBA\\xA1n</code>, mỗi byte một cặp hex, còn một <code>\$upstream_response_time</code> để trần sinh ra <code>"tgian_up":,</code> — JSON hỏng cú pháp — trên MỌI request mà Nginx tự trả lời không qua upstream, trong khi vẫn qua được <code>nginx -t</code> và chạy hoàn hảo với mọi thứ đi qua proxy (10.2). Ghi log không đệm tốn đúng một syscall <code>write()</code> mỗi request, <code>buffer=64k</code> gom 900 cái đó thành 2 mà không mất dòng nào, và năm lượt 900 request KHÔNG tìm ra <em>khác biệt thời gian đo được nào</em> giữa tắt log, bật log, và log có đệm (10.3). Ở mức <code>debug</code>, một request tầm thường ghi ra 85 dòng và 5.853 byte — cỡ 60 lần một dòng access log combined, gần 6 GB cho mỗi triệu request — còn <code>debug_connection</code> chẳng lọc gì cả trừ khi mức nền là thứ khác <code>debug</code>, vì nó CẤP quyền debug chứ không hạn chế (10.4). Và <code>stub_status</code> dưới một <code>worker_connections 4</code> cố tình đặt chật báo <code>accepts 42, handled 4</code>: ba mươi tám kết nối bị vứt mà chẳng xuất hiện ở đâu trong access log (10.5).</p>
 </div>
 </div>
 `,
@@ -1065,7 +2045,7 @@ server accepts handled requests
             question: 'strace showed unbuffered logging costs one extra write() per request, yet five rounds of 900 requests found no time difference between logging on and off. What is the right conclusion?|||strace cho thấy ghi log không đệm tốn thêm một write() mỗi request, nhưng năm lượt 900 request không tìm ra khác biệt thời gian nào giữa bật và tắt log. Kết luận đúng là gì?',
             options: [
               'The strace measurement was wrong|||Phép đo bằng strace sai',
-              'Both are right — the syscall is real but costs far less than the ~37 µs of serving a request, so "turn off the access log for speed" has no measurable benefit here|||Cả hai đều đúng — cái syscall là có thật nhưng tốn ít hơn hẳn so với ~37 µs để phục vụ một request, nên "tắt access log cho nhanh" không đem lại lợi ích đo được ở đây',
+              'Both are right — the syscall is real but costs far less than the ~130 µs of serving a request, so "turn off the access log for speed" has no measurable benefit here|||Cả hai đều đúng — cái syscall là có thật nhưng tốn ít hơn hẳn so với ~130 µs để phục vụ một request, nên "tắt access log cho nhanh" không đem lại lợi ích đo được ở đây',
               'The benchmark should have used more requests|||Phép đo lẽ ra phải dùng nhiều request hơn',
               'Logging is free on every system|||Ghi log là miễn phí trên mọi hệ thống',
             ],
@@ -1106,12 +2086,12 @@ server accepts handled requests
             points: 10,
           },
           {
-            question: 'stub_status reports accepts 42, handled 3. What happened, and where else can you see it?|||stub_status báo accepts 42, handled 3. Chuyện gì đã xảy ra, và còn nhìn thấy nó ở đâu nữa?',
+            question: 'stub_status reports accepts 42, handled 4. What happened, and where else can you see it?|||stub_status báo accepts 42, handled 4. Chuyện gì đã xảy ra, và còn nhìn thấy nó ở đâu nữa?',
             options: [
-              'Thirty-nine requests returned 502 — visible in the access log|||Ba mươi chín request trả về 502 — thấy được trong access log',
-              'Thirty-nine connections were accepted then dropped for lack of a connection slot; they produce no HTTP response at all, so the only other trace is the [alert] worker_connections are not enough in the error log|||Ba mươi chín kết nối được nhận rồi bị vứt vì hết chỗ kết nối; chúng không sinh ra phản hồi HTTP nào, nên dấu vết duy nhất còn lại là dòng [alert] worker_connections are not enough trong error log',
+              'Thirty-eight requests returned 502 — visible in the access log|||Ba mươi tám request trả về 502 — thấy được trong access log',
+              'Thirty-eight connections were accepted then dropped for lack of a connection slot; they produce no HTTP response at all, so the only other trace is the [alert] worker_connections are not enough in the error log|||Ba mươi tám kết nối được nhận rồi bị vứt vì hết chỗ kết nối; chúng không sinh ra phản hồi HTTP nào, nên dấu vết duy nhất còn lại là dòng [alert] worker_connections are not enough trong error log',
               'The counters simply reset|||Các bộ đếm chỉ bị đặt lại thôi',
-              'Thirty-nine were served from cache|||Ba mươi chín cái được phục vụ từ bộ đệm',
+              'Thirty-eight were served from cache|||Ba mươi tám cái được phục vụ từ bộ đệm',
             ],
             correctIndex: 1,
             points: 15,

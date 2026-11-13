@@ -174,3 +174,9 @@ Câu hỏi cho user: Pro của CT Language có **dùng chung** với Pro web cuo
   ios-app `f75ce9e`: Trò chơi, Cộng đồng, Gọi CuongMini (tab Luyện; "Nói một câu" ở Hôm nay). ⚠️ Máy local không có khoá
   Groq/Azure ⇒ chưa nghe thật lượt nói + tiếng của CuongMini — **thử trên TestFlight/production**. Đấu PK chưa làm (cần thời
   gian thực). Còn tấm "đang xây" (`SapCoCTL`) ở Luyện nghe · Luyện viết chữ · Thi thử ⇒ phải xong trước khi nộp (bước 7).
+- 13/11 (APP): **ba màn "đang xây" XONG — app không còn `SapCoCTL`** (ios-app `4da8d19`, không cần backend mới). Luyện viết chữ =
+  màn Luyện viết của từng khoá (`Shared/SachHoc/LuyenVietSH`, chấm từng nét) + chính tả nghe–gõ; Luyện nghe = nghe–chọn nghĩa,
+  chép chính tả, "nghe khi đi đường" (AVSpeech, `UIBackgroundModes: audio` — đã ghi lý do trong review notes), bài `kind:
+  listening` của các khoá; Thi thử = thi nhanh 30 câu/12 phút/3 phần (free 1 lần/ngày, tổng điểm; Pro: phiếu điểm từng phần +
+  từ cần ôn) + đề kiểm tra trong khoá (lọc tiêu đề "Đề tổng hợp/kiểm tra…", "Kiểm tra chặng", "Bài kiểm tra"). Đề nhanh dùng
+  `/tu-dien/:nn/tro-choi` (bước 6) ⇒ cần deploy. IELTS thi máy 4 đề của web CHƯA lên app (trình vẽ riêng — để bản sau).

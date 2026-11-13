@@ -169,7 +169,14 @@ export async function uploadAudio(
 
 export async function uploadDocument(
   input: UploadInput,
-  options: { userId?: number; scope?: 'chat' | 'lesson' } = {},
+  options: {
+    userId?: number;
+    scope?: 'chat' | 'lesson';
+    /** Content-Type do máy chủ quyết (vd. theo đuôi). Thiếu ⇒ dùng MIME client khai như trước. */
+    contentType?: string;
+    /** `attachment; …` ⇒ trình duyệt luôn tải về. Chỉ R2 lưu. */
+    contentDisposition?: string;
+  } = {},
 ): Promise<UploadResult> {
   if (input.size === 0) {
     throw new UploadError('Empty file', 'EMPTY_FILE', 400);
@@ -187,7 +194,12 @@ export async function uploadDocument(
       ? buildChatAttachmentKey(input.originalName, options)
       : buildKey('documents/lesson', input.originalName, options);
 
-  const stored = await getStorageProvider().put(key, input.buffer, input.mimetype);
+  const stored = await getStorageProvider().put(
+    key,
+    input.buffer,
+    options.contentType ?? input.mimetype,
+    options.contentDisposition ? { contentDisposition: options.contentDisposition } : undefined,
+  );
   logger.info(`[upload] document ${stored.url} (${input.size}B)`);
   return stored;
 }

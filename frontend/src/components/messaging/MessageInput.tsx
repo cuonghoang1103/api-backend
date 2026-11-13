@@ -10,6 +10,7 @@ import EmojiPickerPopover from './EmojiPickerPopover';
 import GifPicker from './GifPicker';
 import StickerPicker from './StickerPicker';
 import { dongHo, GIAY_TOI_DA, useGhiAm } from './useGhiAm';
+import { kiemTepGui } from '@/lib/tinNhan/tepDinhKem';
 
 type ActivePicker = 'emoji' | 'gif' | 'sticker' | null;
 
@@ -23,18 +24,11 @@ interface PendingAttachment {
   error?: string;
 }
 
-const MAX_SIZE = 10 * 1024 * 1024;
 const MAX_FILES = 5;
-/* `audio/` có ở đây vì tin nhắn thoại đi qua ĐÚNG đường tải tệp này. Máy chủ
-   nhận sẵn: `/messages/upload` đẩy mọi thứ không phải ảnh sang `uploadDocument`,
-   và hàm đó không lọc theo MIME. */
-const ALLOWED_PREFIXES = ['image/', 'audio/', 'video/', 'application/pdf', 'text/', 'application/zip', 'application/x-zip-compressed'];
-const ALLOWED_EXACT = new Set([
-  'application/msword',
-  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-  'application/vnd.ms-excel',
-  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-]);
+/* Loại tệp: KHÔNG lọc theo `file.type` nữa (13/11/2026) — Windows để MIME RỖNG cho
+   .md/.rar/.7z… nên danh sách trắng theo MIME chặn gần hết tệp thường. Luật mới
+   (chặn tệp chạy được theo đuôi + trần cỡ) ở `lib/tinNhan/tepDinhKem.ts`; máy chủ
+   kiểm lại y hệt và quyết Content-Type + buộc tải về. */
 
 export default function MessageInput({ disabled = false }: { disabled?: boolean }) {
   const store = useMessagingStore();
@@ -75,12 +69,9 @@ export default function MessageInput({ disabled = false }: { disabled?: boolean 
         toast.error(`Tối đa ${MAX_FILES} file mỗi tin nhắn`);
         break;
       }
-      if (file.size > MAX_SIZE) {
-        toast.error(`${file.name}: vượt quá 10MB`);
-        continue;
-      }
-      if (!isAllowed(file.type)) {
-        toast.error(`${file.name}: định dạng không được hỗ trợ`);
+      const kiem = kiemTepGui(file);
+      if (!kiem.ok) {
+        toast.error(kiem.lyDo);
         continue;
       }
       const id = `${file.name}-${file.size}-${Date.now()}-${Math.random()}`;
@@ -97,7 +88,9 @@ export default function MessageInput({ disabled = false }: { disabled?: boolean 
         setPending((p) =>
           p.map((x) => (x.id === id ? { ...x, uploading: false, error: 'Upload thất bại' } : x)),
         );
-        toast.error(`${file.name}: upload thất bại`);
+        // Nói rõ máy chủ từ chối vì sao (tệp chạy được, quá cỡ…) thay vì "thất bại" chung chung.
+        const lyDo = e?.response?.data?.message ?? e?.userFriendlyMessage;
+        toast.error(`${file.name}: ${typeof lyDo === 'string' && lyDo ? lyDo : 'upload thất bại'}`);
       }
     }
   }, [pending.length]);
@@ -468,7 +461,6 @@ export default function MessageInput({ disabled = false }: { disabled?: boolean 
           type="file"
           className="hidden"
           multiple
-          accept="image/*,application/pdf,text/*,.doc,.docx,.xls,.xlsx,.zip"
           onChange={(e) => handleFiles(e.target.files)}
         />
         <textarea
@@ -501,12 +493,6 @@ export default function MessageInput({ disabled = false }: { disabled?: boolean 
       </div>
     </div>
   );
-}
-
-function isAllowed(mime: string): boolean {
-  if (!mime) return false;
-  if (ALLOWED_EXACT.has(mime)) return true;
-  return ALLOWED_PREFIXES.some((p) => mime.startsWith(p));
 }
 
 function formatBytes(bytes: number): string {

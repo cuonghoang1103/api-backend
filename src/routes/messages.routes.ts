@@ -27,18 +27,35 @@ import { AppError } from '../middleware/errorHandler.js';
 import { messagesService } from '../services/messages.service.js';
 import { messagingSafetyService } from '../services/messaging-safety.service.js';
 import { uploadImage, uploadDocument, UploadError } from '../storage/uploadService.js';
+import { attachmentDisposition, checkChatAttachment, CHAT_MAX_BYTES } from '../storage/chatAttachmentPolicy.js';
+import { config } from '../config/env.js';
 import type { ApiResponse } from '../types/index.js';
 import { damBaoMfaAdmin } from '../services/mfa/adminMfa.js';
 
 const router = Router();
 
 // ─── Multer config for chat attachments ─────────────────
-// 10MB hard cap per file, in-memory storage; service does
-// the actual file-type whitelist via uploadService.uploadFile.
+// In-memory, trần CHAT_MAX_BYTES (25MB) một tệp. Luật loại tệp (chặn tệp chạy
+// được, Content-Type theo đuôi, tải về bằng Content-Disposition) nằm ở
+// `storage/chatAttachmentPolicy.ts`.
 const chatUpload = multer({
   storage: multer.memoryStorage(),
-  limits: { fileSize: 10 * 1024 * 1024 },
+  limits: { fileSize: CHAT_MAX_BYTES, files: 1 },
 });
+
+/** multer ném MulterError (LIMIT_FILE_SIZE…) — không bọc thì errorHandler trả 500 "upload thất bại" mơ hồ. */
+function chatUploadSingle(req: Request, res: Response, next: NextFunction) {
+  chatUpload.single('file')(req, res, (err: unknown) => {
+    if (!err) return next();
+    if (err instanceof multer.MulterError) {
+      if (err.code === 'LIMIT_FILE_SIZE') {
+        return next(new AppError(`Tệp vượt quá ${CHAT_MAX_BYTES / 1024 / 1024}MB`, 413, 'FILE_TOO_LARGE'));
+      }
+      return next(new AppError(err.message, 400, err.code));
+    }
+    next(err);
+  });
+}
 
 // ─── All routes require auth ───────────────────────────
 router.use(authenticate);
@@ -267,31 +284,60 @@ router.get('/nicknames', async (req: Request, res: Response, next: NextFunction)
 });
 
 // ─── POST /api/v1/messages/upload ─────────────────────
-// 10MB cap. Reuses the shared upload service so the same
-// whitelist + storage path conventions apply; we just
-// override the per-category size limit to 10MB.
+// Trần 25MB. Mọi loại tệp trừ tệp chạy được (xem chatAttachmentPolicy.ts):
+//  • ảnh (jpg/png/gif/webp/avif ≤ trần ảnh) → sharp → webp, có xem trước;
+//  • âm thanh/video (tin thoại) → giữ MIME, phát tại chỗ;
+//  • còn lại (md, zip, rar, 7z, pdf, Office, mã nguồn, đuôi lạ…) → Content-Type do
+//    MÁY CHỦ quyết theo đuôi + `Content-Disposition: attachment` ⇒ luôn tải về.
+// MIME client có thể RỖNG (Windows không biết .md/.rar) — không phải lý do từ chối.
 router.post(
   '/upload',
-  chatUpload.single('file'),
+  chatUploadSingle,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       if (!req.file) {
         throw new AppError('No file provided', 400, 'NO_FILE');
       }
-      // 10MB hard cap (mirrors the multer limit)
-      if (req.file.size > 10 * 1024 * 1024) {
-        throw new AppError('File exceeds 10MB limit', 413, 'FILE_TOO_LARGE');
-      }
-      // Auto-detect bucket from mime: image → optimize, else → document.
-      const input = {
-        buffer: req.file.buffer,
+      const check = checkChatAttachment({
         originalName: req.file.originalname,
         mimetype: req.file.mimetype,
+        buffer: req.file.buffer,
+        size: req.file.size,
+        maxImageBytes: config.maxFileSizeImages,
+      });
+      if (!check.ok) {
+        logger.warn(`[messages/upload] từ chối ${check.code}: ${check.message} | mime=${req.file.mimetype} user=${req.userId}`);
+        throw new AppError(check.message, check.status, check.code);
+      }
+      // Khoá R2 chỉ lấy đuôi đã lọc ([a-z0-9]); tên hiển thị giữ nguyên (đã sửa UTF-8) trong CSDL.
+      const safeExt = /^[a-z0-9]{1,16}$/.test(check.ext) ? `.${check.ext}` : '';
+      const input = {
+        buffer: req.file.buffer,
+        originalName: `f${safeExt}`,
+        mimetype: check.contentType,
         size: req.file.size,
       };
-      const result = req.file.mimetype.startsWith('image/')
-        ? await uploadImage(input, 'images/chat', { userId: req.userId })
-        : await uploadDocument(input, { userId: req.userId, scope: 'chat' });
+
+      let result;
+      let isImage = check.kind === 'image';
+      if (isImage) {
+        try {
+          result = await uploadImage(input, 'images/chat', { userId: req.userId });
+        } catch (err) {
+          // sharp không đọc được (ảnh hỏng/định dạng lạ khai là image/*) ⇒ vẫn gửi được, như một tệp tải về.
+          if (!(err instanceof UploadError) || err.status !== 400) throw err;
+          isImage = false;
+        }
+      }
+      if (!result) {
+        result = await uploadDocument(input, {
+          userId: req.userId,
+          scope: 'chat',
+          contentType: check.kind === 'image' ? 'application/octet-stream' : check.contentType,
+          contentDisposition: check.contentDisposition
+            ?? (check.kind === 'image' ? attachmentDisposition(check.fileName) : undefined),
+        });
+      }
 
       // Persist a FileAttachment row so the message can later
       // reference the file by numeric id (the messenger stores
@@ -299,13 +345,13 @@ router.post(
       const stored = await import('../config/database.js').then(({ prisma }) =>
         prisma.fileAttachment.create({
           data: {
-            originalName: input.originalName,
-            storedName: result.key.split('/').pop() ?? input.originalName,
+            originalName: check.fileName,
+            storedName: result.key.split('/').pop() ?? check.fileName,
             filePath: result.key,
             contentType: result.contentType,
             fileSize: BigInt(result.size),
             uploadedBy: req.userId,
-            fileCategory: input.mimetype.startsWith('image/') ? 'images' : 'documents',
+            fileCategory: isImage ? 'images' : 'documents',
           },
         }),
       );
@@ -315,7 +361,7 @@ router.post(
         data: {
           fileId: stored.id,
           url: result.url,
-          fileName: input.originalName,
+          fileName: check.fileName,
           fileSize: result.size,
           mimeType: result.contentType,
         },

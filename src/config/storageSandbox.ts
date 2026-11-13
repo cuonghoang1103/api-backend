@@ -118,7 +118,7 @@ export function applyStorageSandbox<T extends R2ConfigShape>(real: T, env: NodeJ
 
 // ─── Kho giả ─────────────────────────────────────────────────────
 
-export interface SandboxObject { body: Buffer; contentType: string; cacheControl?: string; etag: string; lastModified: Date }
+export interface SandboxObject { body: Buffer; contentType: string; cacheControl?: string; contentDisposition?: string; etag: string; lastModified: Date }
 
 export interface SandboxStore {
   put(key: string, o: SandboxObject): void;
@@ -143,14 +143,14 @@ class DirStore implements SandboxStore {
   private p(k: string) { return path.join(this.dir, encodeURIComponent(k)); }
   put(k: string, o: SandboxObject) {
     writeFileSync(this.p(k), o.body);
-    writeFileSync(`${this.p(k)}.meta.json`, JSON.stringify({ contentType: o.contentType, cacheControl: o.cacheControl, etag: o.etag, lastModified: o.lastModified.toISOString() }));
+    writeFileSync(`${this.p(k)}.meta.json`, JSON.stringify({ contentType: o.contentType, cacheControl: o.cacheControl, contentDisposition: o.contentDisposition, etag: o.etag, lastModified: o.lastModified.toISOString() }));
   }
   get(k: string): SandboxObject | undefined {
     if (!existsSync(this.p(k))) return undefined;
-    let meta: { contentType?: string; cacheControl?: string; etag?: string; lastModified?: string } = {};
+    let meta: { contentType?: string; cacheControl?: string; contentDisposition?: string; etag?: string; lastModified?: string } = {};
     try { meta = JSON.parse(readFileSync(`${this.p(k)}.meta.json`, 'utf8')); } catch { /* thiếu meta ⇒ mặc định */ }
     const body = readFileSync(this.p(k));
-    return { body, contentType: meta.contentType || 'application/octet-stream', cacheControl: meta.cacheControl, etag: meta.etag || etagOf(body), lastModified: meta.lastModified ? new Date(meta.lastModified) : new Date() };
+    return { body, contentType: meta.contentType || 'application/octet-stream', cacheControl: meta.cacheControl, contentDisposition: meta.contentDisposition, etag: meta.etag || etagOf(body), lastModified: meta.lastModified ? new Date(meta.lastModified) : new Date() };
   }
   delete(k: string) { rmSync(this.p(k), { force: true }); rmSync(`${this.p(k)}.meta.json`, { force: true }); }
   keys() { return readdirSync(this.dir).filter((n) => !n.endsWith('.meta.json')).map((n) => decodeURIComponent(n)).sort(); }
@@ -274,7 +274,7 @@ export async function handleSandboxRequest(req: HttpReq, s: SandboxStore = sandb
     let body = await bodyBuffer(req.body);
     if ((header(req.headers, 'content-encoding') ?? '').includes('aws-chunked')) body = decodeAwsChunked(body);
     const etag = etagOf(body);
-    s.put(key, { body, contentType: header(req.headers, 'content-type') || 'application/octet-stream', cacheControl: header(req.headers, 'cache-control'), etag, lastModified: new Date() });
+    s.put(key, { body, contentType: header(req.headers, 'content-type') || 'application/octet-stream', cacheControl: header(req.headers, 'cache-control'), contentDisposition: header(req.headers, 'content-disposition'), etag, lastModified: new Date() });
     sandboxStats.put++;
     return res(200, '', { etag });
   }
@@ -287,6 +287,7 @@ export async function handleSandboxRequest(req: HttpReq, s: SandboxStore = sandb
     const base: Record<string, string> = {
       'content-type': o.contentType, etag: o.etag, 'last-modified': o.lastModified.toUTCString(), 'accept-ranges': 'bytes',
       ...(o.cacheControl ? { 'cache-control': o.cacheControl } : {}),
+      ...(o.contentDisposition ? { 'content-disposition': o.contentDisposition } : {}),
     };
     const range = /^bytes=(\d*)-(\d*)$/.exec(header(req.headers, 'range') ?? '');
     if (range && !head) {

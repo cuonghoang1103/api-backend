@@ -77,10 +77,15 @@ export interface ReadStreamOptions {
   range?: string;
 }
 
+export interface PutOptions {
+  /** Ví dụ `attachment; filename="a.zip"` — buộc trình duyệt tải về thay vì hiển thị. */
+  contentDisposition?: string;
+}
+
 export interface StorageProvider {
   readonly kind: StorageKind;
-  /** Upload a buffer to the given key */
-  put(key: string, body: Buffer, contentType: string): Promise<StoredObject>;
+  /** Upload a buffer to the given key. `opts.contentDisposition` chỉ R2 lưu (local bỏ qua). */
+  put(key: string, body: Buffer, contentType: string, opts?: PutOptions): Promise<StoredObject>;
   /** Delete a single object by key. No-op if missing. */
   delete(key: string): Promise<void>;
   /** Delete a batch of objects by key. No-op if missing. */
@@ -254,8 +259,8 @@ function parseRangeHeader(
 class R2StorageProvider implements StorageProvider {
   readonly kind = 'r2' as const;
 
-  async put(key: string, body: Buffer, contentType: string): Promise<StoredObject> {
-    const res = await r2Put(key, body, contentType);
+  async put(key: string, body: Buffer, contentType: string, opts?: PutOptions): Promise<StoredObject> {
+    const res = await r2Put(key, body, contentType, undefined, opts?.contentDisposition);
     return {
       key,
       url: res.url,

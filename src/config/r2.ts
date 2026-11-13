@@ -102,12 +102,17 @@ export function getR2Client(): S3Client {
  * `cacheControl` is forwarded to the CDN so we can tune cache
  * lifetimes per content type (e.g. 1 year for immutable images,
  * 1 hour for the audio streaming endpoints).
+ *
+ * `contentDisposition` (tuỳ chọn) được R2 lưu cùng object và trả lại ở mọi
+ * lượt GET qua tên miền công khai — `attachment; …` buộc trình duyệt TẢI VỀ
+ * thay vì hiển thị (tệp đính kèm Messenger, xem `chatAttachmentPolicy.ts`).
  */
 export async function putObject(
   key: string,
   body: Buffer,
   contentType: string,
   cacheControl: string = 'public, max-age=31536000, immutable',
+  contentDisposition?: string,
 ): Promise<{ key: string; url: string; etag?: string }> {
   const client = getR2Client();
   const cmd = new PutObjectCommand({
@@ -116,6 +121,7 @@ export async function putObject(
     Body: body,
     ContentType: contentType,
     CacheControl: cacheControl,
+    ...(contentDisposition ? { ContentDisposition: contentDisposition } : {}),
   });
   const res = await client.send(cmd);
   return {

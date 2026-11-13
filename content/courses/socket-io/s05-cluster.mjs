@@ -1,3 +1,8 @@
+import G05_1 from './giang/sio-05-1.mjs';
+import G05_2 from './giang/sio-05-2.mjs';
+import G05_3 from './giang/sio-05-3.mjs';
+import G05_4 from './giang/sio-05-4.mjs';
+import G05_5 from './giang/sio-05-5.mjs';
 const REF = '?ref=%2Fcourses%2Fsocket-io%2Flearn&reflabel=Socket.IO';
 /**
  * Socket.IO — Chương 5: Redis adapter và cluster.
@@ -18,6 +23,7 @@ export default {
       type: 'VIDEO',
       description: '`io.to(room).emit(...)` mặc định chỉ đến worker hiện tại. Trong cluster nhiều worker, bạn thấy 25-75% users không nhận. Redis adapter phát tin qua pub/sub giữa workers.',
       content: `
+${G05_1}
 <div class="ml-en">
 <span class="eyebrow">Chapter 5 · Lesson 5.1</span>
 <h2>Why Redis adapter: cross-worker broadcast</h2>
@@ -31,7 +37,7 @@ export default {
 </div>
 
 <h3>This repo — the code that attaches the adapter</h3>
-<pre><code class="language-ts">// messaging.socket.ts:182-215
+<pre><code class="language-ts">// messaging.socket.ts:263-276 (13/11/2026)
 async function attachRedisAdapter(server: IOServer): Promise&lt;void&gt; {
   try {
     const base = await getRedis();
@@ -49,10 +55,11 @@ async function attachRedisAdapter(server: IOServer): Promise&lt;void&gt; {
 </code></pre>
 
 <div class="callout ok">
-<p><strong>BEST-EFFORT — if Redis dies, socket.io STILL runs as a single instance.</strong> The fallback does not throw. It only logs a warning. The reason: this repo is single-instance today and the adapter is preparation for a future cluster. If Redis pauses during a DB restart, the sockets should not have to die with it.</p>
+<p><strong>BEST-EFFORT — if Redis dies, socket.io STILL runs as a single instance.</strong> The fallback does not throw. It only logs a warning. The reason: this repo is single-instance today and the adapter is preparation for a future cluster. If Redis pauses during a DB restart, the sockets should not have to die with it. <strong>Measured — the warning only fires if <code>connect()</code> throws, and here it never does:</strong> <code>getRedis()</code> uses node-redis 4 with a <code>reconnectStrategy</code>, so with Redis down at boot it retries forever. A copy of this code waited 10 s, swallowed 21 connection errors and printed <strong>0</strong> warnings; the adapter stayed the in-memory <code>Adapter</code>. And <code>attachRedisAdapter(io)</code> is called with <code>void</code> — nobody awaits it.</p>
 </div>
 
 <h3>The overhead of pub/sub</h3>
+<p><strong>Measured (13/11/2026, Redis 7 in Docker on the course machine, 2,000 sends on one clock):</strong> same-worker socket p50 0.072 ms / p99 0.242 ms; socket on another worker via Redis p50 0.552 ms / p99 1.540 ms — about <strong>+0.48 ms</strong>. The &quot;~100-400μs&quot; and &quot;4 * 50ms&quot; figures above are estimates, not measurements; measure your own network.</p>
 <pre><code class="language-text">Cost cho MOI broadcast:
   1. Serialize packet: ~1μs
   2. Redis PUBLISH: ~50-200μs (RTT den Redis)
@@ -89,6 +96,7 @@ Pattern la: socket.io#&lt;namespace&gt;#&lt;room-name&gt;
 </code></pre>
 
 <div class="callout warn">
+<p><strong>Measured with <code>redis-cli MONITOR</code>:</strong> the real channel has a trailing <code>#</code> — <code>socket.io#/#thread:42#</code>. The room appears in the channel name only when the emit targets <strong>exactly one</strong> room; <code>io.emit</code> and <code>io.to([&#39;a&#39;,&#39;b&#39;])</code> both publish to <code>socket.io#/#</code>, and <code>except</code> travels inside the payload. Every worker <code>psubscribe</code>s <code>socket.io#/#*</code>, so <strong>every worker receives every broadcast</strong> — workers without the room drop it by channel name without decoding (0.4 ms per 1,000 messages measured). One measured message: msgpack 90 bytes vs the same content as JSON 125 bytes.</p>
 <p><strong>The Redis adapter uses msgpack, not JSON.</strong> So looking at it through <code>redis-cli</code> shows binary — not directly readable. Use the adapter&#39;s debug tools, or parse the msgpack yourself.</p>
 </div>
 
@@ -99,6 +107,172 @@ Pattern la: socket.io#&lt;namespace&gt;#&lt;room-name&gt;
 <div class="callout">
 <p><strong>One sentence.</strong> Without the Redis adapter, a cluster-mode broadcast reaches only 1/N of your users (worker-local); with it, every <code>io.to(room).emit</code> goes through Redis pub/sub, adding ~100-400μs of latency but reaching everyone; this repo attaches it best-effort — if Redis is down it falls back to the in-memory single-instance adapter.</p>
 </div>
+
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Run two workers WITHOUT the Redis adapter, join a room from a socket on worker A, and emit from worker B — confirm only ~1/N of users receive it.</li>
+<li>Attach <code>@socket.io/redis-adapter</code> and repeat; confirm every worker's sockets now receive the broadcast.</li>
+<li>Measure the added latency (pub/sub round trip, ~100-400μs) and then stop Redis to see the best-effort fallback to the in-memory adapter.</li>
+</ol>
+<p><strong>Done when:</strong> a cross-worker broadcast reaches everyone with the adapter, and you have seen the fallback when Redis is down.</p></div>
+
+<h3>🔬 Measured: four workers, eight users</h3>
+<p>socket.io 4.8.3 · @socket.io/redis-adapter 8.3.0 · redis 4.7.1 · Redis 7 — four real processes (fork), eight users in <code>thread:42</code> round-robin, worker 2 emits:</p>
+<div class="out">$ node bon.mjs
+— KHÔNG adapter (mặc định) · worker 2 gọi io.to('thread:42').emit —
+  adapter = Adapter · rooms.get('thread:42').size = 2 · fetchSockets() = 2
+  An(w1) ✗  Bình(w2) ✓  Chi(w3) ✗  Dũng(w4) ✗  Hà(w1) ✗  Khoa(w2) ✓  Lan(w3) ✗  Minh(w4) ✗
+  ⇒ 2/8 người nhận
+— CÓ Redis adapter · worker 2 gọi io.to('thread:42').emit —
+  adapter = RedisAdapter · rooms.get('thread:42').size = 2 · fetchSockets() = 8
+  An(w1) ✓  Bình(w2) ✓  Chi(w3) ✓  Dũng(w4) ✓  Hà(w1) ✓  Khoa(w2) ✓  Lan(w3) ✓  Minh(w4) ✓
+  ⇒ 8/8 người nhận</div>
+<p><strong>In Chromium</strong> — one page, An&#39;s frame on worker 1, Binh&#39;s on worker 2 (event frames only). No adapter, then Redis adapter:</p>
+<div class="out">An    ↑ 42["gui","Chào cả phòng 42!"]   (751 ms)
+An    ↓ 42["tin",{"tu":"An","text":"Chào cả phòng 42!","worker":1}]   (752 ms)</div>
+<div class="out">An    ↑ 42["gui","Chào cả phòng 42!"]   (734 ms)
+An    ↓ 42["tin",{"tu":"An","text":"Chào cả phòng 42!","worker":1}]   (736 ms)
+Bình  ↓ 42["tin",{"tu":"An","text":"Chào cả phòng 42!","worker":1}]   (739 ms)</div>
+<p><strong>On Redis</strong> — <code>redis-cli MONITOR</code> while two workers start and emit four ways:</p>
+<div class="out">$ node kenh.mjs
+PUBSUB NUMSUB socket.io-request#/# = 2 (số worker đang nghe)
+PUBSUB NUMPAT = 1 (mẫu socket.io#/#* — hai worker cùng một mẫu)
+một lần phát: msgpack 90 byte · cùng nội dung bằng JSON 125 byte
+$ redis-cli MONITOR | grep -iE 'subscribe|publish'
+"psubscribe" "socket.io#/#*"
+"subscribe" "socket.io-request#/#" "socket.io-response#/#" "socket.io-response#/#i4E2ss#"
+"psubscribe" "socket.io#/#*"
+"subscribe" "socket.io-request#/#" "socket.io-response#/#" "socket.io-response#/#qedTJX#"
+"PUBLISH" "socket.io#/#thread:42#" "\\x93\\xa6i4E2ss\\x83\\xa4type\\x02\\xa4data\\x92\\xa3tin\\x82\\xa2id\\x01\\xa4text\\xafch\\xc3\\
+"PUBLISH" "socket.io#/#" "\\x93\\xa6i4E2ss\\x83\\xa4type\\x02\\xa4data\\x92\\xa8he-thong\\xb3b\\xe1\\xba\\xa3o tr\\xc3\\xac l\\xc3\\xb
+"PUBLISH" "socket.io#/#" "\\x93\\xa6i4E2ss\\x83\\xa4type\\x02\\xa4data\\x92\\xa3tin\\x81\\xa2id\\x02\\xa3nsp\\xa1/\\x83\\xa5rooms\\x92
+"PUBLISH" "socket.io#/#user:7#" "\\x93\\xa6i4E2ss\\x83\\xa4type\\x02\\xa4data\\x92\\xa8presence\\x81\\xa6online\\xc3\\xa3nsp\\xa1/\\</div>
+<p><strong>Every worker hears every broadcast</strong> — the room lives on worker 1 only, 1,000 emits:</p>
+<div class="out">$ node moi.mjs
+worker 1: socket trong thread:42 = 1 · nhận từ Redis 1.000 tin · thời gian trong onmessage   4,1 ms
+worker 2: socket trong thread:42 = 0 · nhận từ Redis 1.000 tin · thời gian trong onmessage   0,5 ms
+worker 3: socket trong thread:42 = 0 · nhận từ Redis 1.000 tin · thời gian trong onmessage   0,4 ms
+worker 4: socket trong thread:42 = 0 · nhận từ Redis 1.000 tin · thời gian trong onmessage   0,4 ms
+client ở worker 1 nhận 1.000 tin</div>
+<p><strong>Latency</strong>:</p>
+<div class="out">$ node tre.mjs
+A (cùng worker 1, đường local) · p50 0,072 ms · p99 0,242 ms
+B (worker 2, qua Redis)        · p50 0,552 ms · p99 1,540 ms
+⇒ Redis thêm ≈ 0,480 ms ở p50 (Redis 7 trong Docker trên chính máy này)</div>
+<p><strong>This repo&#39;s fallback, with Redis down at boot</strong> (a copy of <code>getRedis</code> + <code>attachRedisAdapter</code>):</p>
+<div class="out">$ node chet.mjs
+1,0 s  adapter = Adapter · lỗi kết nối đã nuốt: 7 · dòng WARN: 0
+5,0 s  adapter = Adapter · lỗi kết nối đã nuốt: 15 · dòng WARN: 0
+10,0 s  adapter = Adapter · lỗi kết nối đã nuốt: 21 · dòng WARN: 0</div>
+<p><strong>This repo:</strong></p>
+<div class="out">$ grep -n "async function attachRedisAdapter" -A14 src/socket/messaging.socket.ts
+263:async function attachRedisAdapter(server: IOServer): Promise&lt;void&gt; {
+264-  try {
+265-    const base = await getRedis();
+266-    const pubClient = base.duplicate();
+267-    const subClient = base.duplicate();
+268-    await Promise.all([pubClient.connect(), subClient.connect()]);
+269-    server.adapter(createAdapter(pubClient, subClient));
+270-    logger.info('Socket.IO Redis adapter attached (cross-worker broadcasts enabled)');
+271-  } catch (err) {
+272-    logger.warn('Socket.IO Redis adapter NOT attached — in-memory only (single instance)', {
+273-      error: err instanceof Error ? err.message : String(err),
+274-    });
+275-  }
+276-}
+277-
+$ grep -n "void attachRedisAdapter\\|reconnectStrategy" src/socket/messaging.socket.ts src/config/redis.ts
+src/socket/messaging.socket.ts:330: void attachRedisAdapter(io);
+src/config/redis.ts:31: reconnectStrategy: (retries) =&gt; Math.min(retries * 50, 2000),
+$ grep -n "container_name: cuonghoangdev_backend" docker-compose.yml ; grep -c "replicas" docker-compose.yml
+114: container_name: cuonghoangdev_backend
+0</div>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-javascript"><span class="tok-comment">// BỐN worker = bốn TIẾN TRÌNH Node (fork), mỗi cái một cổng, như 4 container sau proxy. 8 người vào phòng thread:42, chia vòng tròn 2 người/worker.</span>
+<span class="tok-comment">// Worker 2 gọi io.to('thread:42').emit(...). Lần 1: adapter mặc định (in-memory). Lần 2: @socket.io/redis-adapter qua Redis sio-redis.</span>
+import { fork } from 'node:child_process';
+import { Server } from 'socket.io';
+import { io as ketNoi } from 'socket.io-client';
+import { createAdapter } from '@socket.io/redis-adapter';
+import { createClient } from 'redis';
+const [, , vai, so, che] = process.argv;
+if (vai === 'worker') {
+  const opts = {};
+  if (che === 'redis') {
+    const pub = createClient({ url: 'redis://127.0.0.1:19661' }), sub = pub.duplicate();
+    await Promise.all([pub.connect(), sub.connect()]);
+    opts.adapter = createAdapter(pub, sub);
+  }
+  const io = new Server(19700 + +so, opts);
+  io.on('connection', (s) =&gt; s.join('thread:42'));
+  process.on('message', async () =&gt; {
+    io.to('thread:42').emit('tin', &#96;worker \${so} gửi&#96;);
+    process.send({ adapter: io.of('/').adapter.constructor.name, local: io.of('/').adapter.rooms.get('thread:42')?.size ?? 0,
+      toan: (await io.in('thread:42').fetchSockets()).length });
+  });
+  process.send('san-sang');
+} else {
+  const cho = (ms) =&gt; new Promise((r) =&gt; setTimeout(r, ms));
+  const TEN = ['An', 'Bình', 'Chi', 'Dũng', 'Hà', 'Khoa', 'Lan', 'Minh'];
+  for (const che of ['memory', 'redis']) {
+    const ws = [1, 2, 3, 4].map((so) =&gt; fork(new URL(import.meta.url).pathname, ['worker', so, che]));
+    await Promise.all(ws.map((w) =&gt; new Promise((ok) =&gt; w.once('message', ok))));
+    const nhan = new Set();
+    const cs = TEN.map((t, i) =&gt; { const w = (i % 4) + 1;
+      const c = ketNoi(&#96;http://localhost:\${19700 + w}&#96;, { transports: ['websocket'], forceNew: true });
+      c.on('tin', () =&gt; nhan.add(t)); return { t, w, c }; });
+    await Promise.all(cs.map(({ c }) =&gt; new Promise((ok) =&gt; c.once('connect', ok)))); await cho(300);
+    ws[1].send('phat'); const kq = await new Promise((ok) =&gt; ws[1].once('message', ok)); await cho(400);
+    console.log(&#96;— \${che === 'memory' ? 'KHÔNG adapter (mặc định)' : 'CÓ Redis adapter'} · worker 2 gọi io.to('thread:42').emit —&#96;);
+    console.log(&#96;  adapter = \${kq.adapter} · rooms.get('thread:42').size = \${kq.local} · fetchSockets() = \${kq.toan}&#96;);
+    console.log('  ' + cs.map(({ t, w }) =&gt; &#96;\${t}(w\${w}) \${nhan.has(t) ? '✓' : '✗'}&#96;).join('  '));
+    console.log(&#96;  ⇒ \${nhan.size}/\${TEN.length} người nhận&#96;);
+    cs.forEach(({ c }) =&gt; c.close()); ws.forEach((w) =&gt; w.kill()); await cho(300);
+  }
+  process.exit(0);
+}</code></pre>
+<pre><code class="language-javascript"><span class="tok-comment">// Chép đúng cách kho gắn adapter: getRedis() (node-redis 4, reconnectStrategy) rồi attachRedisAdapter() có try/catch + logger.warn.</span>
+<span class="tok-comment">// Lần này Redis KHÔNG chạy (cổng 19699 không ai nghe), như lúc backend khởi động mà container Redis chưa lên.</span>
+import { Server } from 'socket.io';
+import { createAdapter } from '@socket.io/redis-adapter';
+import { createClient } from 'redis';
+const t0 = performance.now(); const s = () =&gt; ((performance.now() - t0) / 1000).toFixed(1).replace('.', ',') + ' s';
+let loi = 0;
+async function getRedis() {
+  const client = createClient({ socket: { port: 19699, reconnectStrategy: (retries) =&gt; Math.min(retries * 50, 2000) } });
+  client.on('error', () =&gt; loi++);
+  await client.connect(); return client;
+}
+async function attachRedisAdapter(server) {
+  try {
+    const base = await getRedis(); const pub = base.duplicate(), sub = base.duplicate();
+    await Promise.all([pub.connect(), sub.connect()]);
+    server.adapter(createAdapter(pub, sub)); console.log(&#96;\${s()}  INFO Socket.IO Redis adapter attached&#96;);
+  } catch (err) { console.log(&#96;\${s()}  WARN Redis adapter NOT attached — in-memory only: \${err.message}&#96;); }
+}
+const io = new Server(19713);
+void attachRedisAdapter(io);
+for (const giay of [1, 5, 10]) {
+  await new Promise((ok) =&gt; setTimeout(ok, giay * 1000 - (performance.now() - t0)));
+  console.log(&#96;\${s()}  adapter = \${io.of('/').adapter.constructor.name} · lỗi kết nối đã nuốt: \${loi} · dòng WARN: 0&#96;);
+}
+process.exit(0);</code></pre>
+<h3>🔗 Go deeper in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/redis/learn?lessonSlug=rd-8-1-pubsub" target="_blank" rel="noopener"><span class="lc-ico">🟥</span><span class="lc-body"><span class="lc-title">Redis · 8.1 — Pub/Sub: fire and forget, and its price</span><span class="lc-sub">The delivery guarantee the adapter inherits</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-11-4-scale-adapter-backpressure" target="_blank" rel="noopener"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Node.js · 11.4 — More than one process: adapter, sticky session, backpressure</span><span class="lc-sub">Two processes with the adapter, and the shared-connection trap</span></span></a>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Cluster mode</span><span class="v">N Node workers sharing one port behind the proxy.</span></div>
+  <div class="kv"><span class="k">Worker-local broadcast</span><span class="v">Default <code>io.emit</code> reaches only the sockets on the current worker (1/N).</span></div>
+  <div class="kv"><span class="k">Redis adapter</span><span class="v">Carries broadcasts between workers over Redis pub/sub.</span></div>
+  <div class="kv"><span class="k">pub/sub</span><span class="v">Redis publish/subscribe — the channel the adapter uses.</span></div>
+  <div class="kv"><span class="k">Adapter latency</span><span class="v">~100-400μs added per cross-worker broadcast.</span></div>
+  <div class="kv"><span class="k">Best-effort fallback</span><span class="v">If Redis is down, drop to the in-memory single-instance adapter.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Without the Redis adapter, a cluster broadcast reaches only 1/N of your users (worker-local).</li><li>With it, every <code>io.to(room).emit</code> goes through Redis pub/sub and reaches everyone.</li><li>The cost is ~100-400μs of added latency per broadcast.</li><li>This repo attaches it best-effort.</li><li>If Redis is down it falls back to the in-memory single-instance adapter.</li></ul>
 
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">@socket.io/redis-adapter</span><span class="lc-sub">github.com/socketio/socket.io-redis-adapter — API, protocol, và caveats.</span></span></div>
@@ -123,7 +297,7 @@ Pattern la: socket.io#&lt;namespace&gt;#&lt;room-name&gt;
 </div>
 
 <h3>Kho này — code attach adapter</h3>
-<pre><code class="language-ts">// messaging.socket.ts:182-215
+<pre><code class="language-ts">// messaging.socket.ts:263-276 (13/11/2026)
 async function attachRedisAdapter(server: IOServer): Promise&lt;void&gt; {
   try {
     const base = await getRedis();
@@ -141,10 +315,11 @@ async function attachRedisAdapter(server: IOServer): Promise&lt;void&gt; {
 </code></pre>
 
 <div class="callout ok">
-<p><strong>BEST-EFFORT — nếu Redis chết, socket.io VẪN chạy đơn máy.</strong> Fallback không throw. Chỉ log warning. Lý do: kho này hiện single instance, adapter là chuẩn bị cho future cluster. Nếu Redis pause trong DB restart, socket không phải cùng chết.</p>
+<p><strong>BEST-EFFORT — nếu Redis chết, socket.io VẪN chạy đơn máy.</strong> Fallback không throw. Chỉ log warning. Lý do: kho này hiện single instance, adapter là chuẩn bị cho future cluster. Nếu Redis pause trong DB restart, socket không phải cùng chết. <strong>Đo thật — warning chỉ in khi <code>connect()</code> ném lỗi, mà ở đây nó không bao giờ ném:</strong> <code>getRedis()</code> dùng node-redis 4 có <code>reconnectStrategy</code>, nên Redis tắt lúc khởi động thì nó thử lại mãi. Bản chép đoạn mã này chờ 10 s, nuốt 21 lỗi nối, in <strong>0</strong> dòng warning; adapter vẫn là <code>Adapter</code> trong bộ nhớ. Và <code>attachRedisAdapter(io)</code> được gọi với <code>void</code> — không ai chờ nó.</p>
 </div>
 
 <h3>Overhead của pub/sub</h3>
+<p><strong>Đo thật (13/11/2026, Redis 7 trong Docker trên máy của khoá, 2.000 lần phát, một đồng hồ):</strong> socket cùng worker p50 0,072 ms / p99 0,242 ms; socket ở worker khác qua Redis p50 0,552 ms / p99 1,540 ms — thêm khoảng <strong>0,48 ms</strong>. Các con số &quot;~100-400μs&quot; và &quot;4 * 50ms&quot; ở trên là ước lượng, không phải số đo; hãy đo mạng của bạn.</p>
 <pre><code class="language-text">Cost cho MOI broadcast:
   1. Serialize packet: ~1μs
   2. Redis PUBLISH: ~50-200μs (RTT den Redis)
@@ -181,6 +356,7 @@ Pattern la: socket.io#&lt;namespace&gt;#&lt;room-name&gt;
 </code></pre>
 
 <div class="callout warn">
+<p><strong>Đo bằng <code>redis-cli MONITOR</code>:</strong> kênh thật có dấu <code>#</code> ở cuối — <code>socket.io#/#thread:42#</code>. Tên room chỉ nằm trong tên kênh khi phát vào <strong>đúng một</strong> room; <code>io.emit</code> và <code>io.to([&#39;a&#39;,&#39;b&#39;])</code> đều PUBLISH vào <code>socket.io#/#</code>, còn <code>except</code> nằm trong payload. Mọi worker <code>psubscribe</code> mẫu <code>socket.io#/#*</code>, nên <strong>worker nào cũng nhận mọi broadcast</strong> — worker không có room thì bỏ qua theo tên kênh mà không giải mã (đo: 0,4 ms cho 1.000 tin). Một tin đo được: msgpack 90 byte, cùng nội dung bằng JSON 125 byte.</p>
 <p><strong>Redis adapter dùng msgpack, không JSON.</strong> Nên xem qua <code>redis-cli</code> thấy binary — không đọc trực tiếp. Dùng adapter&#39;s debug tools hoặc parse msgpack.</p>
 </div>
 
@@ -191,6 +367,172 @@ Pattern la: socket.io#&lt;namespace&gt;#&lt;room-name&gt;
 <div class="callout">
 <p><strong>Một câu.</strong> Không có Redis adapter, cluster mode broadcast chỉ đến 1/N user (worker-local); với adapter, mỗi <code>io.to(room).emit</code> qua Redis pub/sub thêm ~100-400μs latency nhưng đến đầy đủ; kho này attach best-effort — Redis down thì fallback in-memory single-instance.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Chạy hai worker KHÔNG có Redis adapter, join một room từ một socket ở worker A, và emit từ worker B — xác nhận chỉ ~1/N user nhận.</li>
+<li>Gắn <code>@socket.io/redis-adapter</code> và lặp lại; xác nhận socket của mọi worker giờ đều nhận broadcast.</li>
+<li>Đo latency thêm vào (khứ hồi pub/sub, ~100-400μs) rồi dừng Redis để thấy best-effort fallback về in-memory adapter.</li>
+</ol>
+<p><strong>Đạt khi:</strong> một broadcast qua worker tới mọi người khi có adapter, và bạn đã thấy fallback khi Redis chết.</p></div>
+
+<h3>🔬 Đo thật: bốn worker, tám người</h3>
+<p>socket.io 4.8.3 · @socket.io/redis-adapter 8.3.0 · redis 4.7.1 · Redis 7 — bốn tiến trình thật (fork), tám người vào <code>thread:42</code> chia vòng tròn, worker 2 phát:</p>
+<div class="out">$ node bon.mjs
+— KHÔNG adapter (mặc định) · worker 2 gọi io.to('thread:42').emit —
+  adapter = Adapter · rooms.get('thread:42').size = 2 · fetchSockets() = 2
+  An(w1) ✗  Bình(w2) ✓  Chi(w3) ✗  Dũng(w4) ✗  Hà(w1) ✗  Khoa(w2) ✓  Lan(w3) ✗  Minh(w4) ✗
+  ⇒ 2/8 người nhận
+— CÓ Redis adapter · worker 2 gọi io.to('thread:42').emit —
+  adapter = RedisAdapter · rooms.get('thread:42').size = 2 · fetchSockets() = 8
+  An(w1) ✓  Bình(w2) ✓  Chi(w3) ✓  Dũng(w4) ✓  Hà(w1) ✓  Khoa(w2) ✓  Lan(w3) ✓  Minh(w4) ✓
+  ⇒ 8/8 người nhận</div>
+<p><strong>Trong Chromium</strong> — một trang, khung của An nối worker 1, khung của Bình nối worker 2 (chỉ khung sự kiện). Không adapter, rồi có Redis adapter:</p>
+<div class="out">An    ↑ 42["gui","Chào cả phòng 42!"]   (751 ms)
+An    ↓ 42["tin",{"tu":"An","text":"Chào cả phòng 42!","worker":1}]   (752 ms)</div>
+<div class="out">An    ↑ 42["gui","Chào cả phòng 42!"]   (734 ms)
+An    ↓ 42["tin",{"tu":"An","text":"Chào cả phòng 42!","worker":1}]   (736 ms)
+Bình  ↓ 42["tin",{"tu":"An","text":"Chào cả phòng 42!","worker":1}]   (739 ms)</div>
+<p><strong>Trên Redis</strong> — <code>redis-cli MONITOR</code> trong lúc hai worker khởi động và phát bốn kiểu:</p>
+<div class="out">$ node kenh.mjs
+PUBSUB NUMSUB socket.io-request#/# = 2 (số worker đang nghe)
+PUBSUB NUMPAT = 1 (mẫu socket.io#/#* — hai worker cùng một mẫu)
+một lần phát: msgpack 90 byte · cùng nội dung bằng JSON 125 byte
+$ redis-cli MONITOR | grep -iE 'subscribe|publish'
+"psubscribe" "socket.io#/#*"
+"subscribe" "socket.io-request#/#" "socket.io-response#/#" "socket.io-response#/#i4E2ss#"
+"psubscribe" "socket.io#/#*"
+"subscribe" "socket.io-request#/#" "socket.io-response#/#" "socket.io-response#/#qedTJX#"
+"PUBLISH" "socket.io#/#thread:42#" "\\x93\\xa6i4E2ss\\x83\\xa4type\\x02\\xa4data\\x92\\xa3tin\\x82\\xa2id\\x01\\xa4text\\xafch\\xc3\\
+"PUBLISH" "socket.io#/#" "\\x93\\xa6i4E2ss\\x83\\xa4type\\x02\\xa4data\\x92\\xa8he-thong\\xb3b\\xe1\\xba\\xa3o tr\\xc3\\xac l\\xc3\\xb
+"PUBLISH" "socket.io#/#" "\\x93\\xa6i4E2ss\\x83\\xa4type\\x02\\xa4data\\x92\\xa3tin\\x81\\xa2id\\x02\\xa3nsp\\xa1/\\x83\\xa5rooms\\x92
+"PUBLISH" "socket.io#/#user:7#" "\\x93\\xa6i4E2ss\\x83\\xa4type\\x02\\xa4data\\x92\\xa8presence\\x81\\xa6online\\xc3\\xa3nsp\\xa1/\\</div>
+<p><strong>Worker nào cũng nghe mọi broadcast</strong> — room chỉ ở worker 1, phát 1.000 lần:</p>
+<div class="out">$ node moi.mjs
+worker 1: socket trong thread:42 = 1 · nhận từ Redis 1.000 tin · thời gian trong onmessage   4,1 ms
+worker 2: socket trong thread:42 = 0 · nhận từ Redis 1.000 tin · thời gian trong onmessage   0,5 ms
+worker 3: socket trong thread:42 = 0 · nhận từ Redis 1.000 tin · thời gian trong onmessage   0,4 ms
+worker 4: socket trong thread:42 = 0 · nhận từ Redis 1.000 tin · thời gian trong onmessage   0,4 ms
+client ở worker 1 nhận 1.000 tin</div>
+<p><strong>Độ trễ</strong>:</p>
+<div class="out">$ node tre.mjs
+A (cùng worker 1, đường local) · p50 0,072 ms · p99 0,242 ms
+B (worker 2, qua Redis)        · p50 0,552 ms · p99 1,540 ms
+⇒ Redis thêm ≈ 0,480 ms ở p50 (Redis 7 trong Docker trên chính máy này)</div>
+<p><strong>Đường lùi của kho khi Redis tắt lúc khởi động</strong> (chép <code>getRedis</code> + <code>attachRedisAdapter</code>):</p>
+<div class="out">$ node chet.mjs
+1,0 s  adapter = Adapter · lỗi kết nối đã nuốt: 7 · dòng WARN: 0
+5,0 s  adapter = Adapter · lỗi kết nối đã nuốt: 15 · dòng WARN: 0
+10,0 s  adapter = Adapter · lỗi kết nối đã nuốt: 21 · dòng WARN: 0</div>
+<p><strong>Kho này:</strong></p>
+<div class="out">$ grep -n "async function attachRedisAdapter" -A14 src/socket/messaging.socket.ts
+263:async function attachRedisAdapter(server: IOServer): Promise&lt;void&gt; {
+264-  try {
+265-    const base = await getRedis();
+266-    const pubClient = base.duplicate();
+267-    const subClient = base.duplicate();
+268-    await Promise.all([pubClient.connect(), subClient.connect()]);
+269-    server.adapter(createAdapter(pubClient, subClient));
+270-    logger.info('Socket.IO Redis adapter attached (cross-worker broadcasts enabled)');
+271-  } catch (err) {
+272-    logger.warn('Socket.IO Redis adapter NOT attached — in-memory only (single instance)', {
+273-      error: err instanceof Error ? err.message : String(err),
+274-    });
+275-  }
+276-}
+277-
+$ grep -n "void attachRedisAdapter\\|reconnectStrategy" src/socket/messaging.socket.ts src/config/redis.ts
+src/socket/messaging.socket.ts:330: void attachRedisAdapter(io);
+src/config/redis.ts:31: reconnectStrategy: (retries) =&gt; Math.min(retries * 50, 2000),
+$ grep -n "container_name: cuonghoangdev_backend" docker-compose.yml ; grep -c "replicas" docker-compose.yml
+114: container_name: cuonghoangdev_backend
+0</div>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-javascript"><span class="tok-comment">// BỐN worker = bốn TIẾN TRÌNH Node (fork), mỗi cái một cổng, như 4 container sau proxy. 8 người vào phòng thread:42, chia vòng tròn 2 người/worker.</span>
+<span class="tok-comment">// Worker 2 gọi io.to('thread:42').emit(...). Lần 1: adapter mặc định (in-memory). Lần 2: @socket.io/redis-adapter qua Redis sio-redis.</span>
+import { fork } from 'node:child_process';
+import { Server } from 'socket.io';
+import { io as ketNoi } from 'socket.io-client';
+import { createAdapter } from '@socket.io/redis-adapter';
+import { createClient } from 'redis';
+const [, , vai, so, che] = process.argv;
+if (vai === 'worker') {
+  const opts = {};
+  if (che === 'redis') {
+    const pub = createClient({ url: 'redis://127.0.0.1:19661' }), sub = pub.duplicate();
+    await Promise.all([pub.connect(), sub.connect()]);
+    opts.adapter = createAdapter(pub, sub);
+  }
+  const io = new Server(19700 + +so, opts);
+  io.on('connection', (s) =&gt; s.join('thread:42'));
+  process.on('message', async () =&gt; {
+    io.to('thread:42').emit('tin', &#96;worker \${so} gửi&#96;);
+    process.send({ adapter: io.of('/').adapter.constructor.name, local: io.of('/').adapter.rooms.get('thread:42')?.size ?? 0,
+      toan: (await io.in('thread:42').fetchSockets()).length });
+  });
+  process.send('san-sang');
+} else {
+  const cho = (ms) =&gt; new Promise((r) =&gt; setTimeout(r, ms));
+  const TEN = ['An', 'Bình', 'Chi', 'Dũng', 'Hà', 'Khoa', 'Lan', 'Minh'];
+  for (const che of ['memory', 'redis']) {
+    const ws = [1, 2, 3, 4].map((so) =&gt; fork(new URL(import.meta.url).pathname, ['worker', so, che]));
+    await Promise.all(ws.map((w) =&gt; new Promise((ok) =&gt; w.once('message', ok))));
+    const nhan = new Set();
+    const cs = TEN.map((t, i) =&gt; { const w = (i % 4) + 1;
+      const c = ketNoi(&#96;http://localhost:\${19700 + w}&#96;, { transports: ['websocket'], forceNew: true });
+      c.on('tin', () =&gt; nhan.add(t)); return { t, w, c }; });
+    await Promise.all(cs.map(({ c }) =&gt; new Promise((ok) =&gt; c.once('connect', ok)))); await cho(300);
+    ws[1].send('phat'); const kq = await new Promise((ok) =&gt; ws[1].once('message', ok)); await cho(400);
+    console.log(&#96;— \${che === 'memory' ? 'KHÔNG adapter (mặc định)' : 'CÓ Redis adapter'} · worker 2 gọi io.to('thread:42').emit —&#96;);
+    console.log(&#96;  adapter = \${kq.adapter} · rooms.get('thread:42').size = \${kq.local} · fetchSockets() = \${kq.toan}&#96;);
+    console.log('  ' + cs.map(({ t, w }) =&gt; &#96;\${t}(w\${w}) \${nhan.has(t) ? '✓' : '✗'}&#96;).join('  '));
+    console.log(&#96;  ⇒ \${nhan.size}/\${TEN.length} người nhận&#96;);
+    cs.forEach(({ c }) =&gt; c.close()); ws.forEach((w) =&gt; w.kill()); await cho(300);
+  }
+  process.exit(0);
+}</code></pre>
+<pre><code class="language-javascript"><span class="tok-comment">// Chép đúng cách kho gắn adapter: getRedis() (node-redis 4, reconnectStrategy) rồi attachRedisAdapter() có try/catch + logger.warn.</span>
+<span class="tok-comment">// Lần này Redis KHÔNG chạy (cổng 19699 không ai nghe), như lúc backend khởi động mà container Redis chưa lên.</span>
+import { Server } from 'socket.io';
+import { createAdapter } from '@socket.io/redis-adapter';
+import { createClient } from 'redis';
+const t0 = performance.now(); const s = () =&gt; ((performance.now() - t0) / 1000).toFixed(1).replace('.', ',') + ' s';
+let loi = 0;
+async function getRedis() {
+  const client = createClient({ socket: { port: 19699, reconnectStrategy: (retries) =&gt; Math.min(retries * 50, 2000) } });
+  client.on('error', () =&gt; loi++);
+  await client.connect(); return client;
+}
+async function attachRedisAdapter(server) {
+  try {
+    const base = await getRedis(); const pub = base.duplicate(), sub = base.duplicate();
+    await Promise.all([pub.connect(), sub.connect()]);
+    server.adapter(createAdapter(pub, sub)); console.log(&#96;\${s()}  INFO Socket.IO Redis adapter attached&#96;);
+  } catch (err) { console.log(&#96;\${s()}  WARN Redis adapter NOT attached — in-memory only: \${err.message}&#96;); }
+}
+const io = new Server(19713);
+void attachRedisAdapter(io);
+for (const giay of [1, 5, 10]) {
+  await new Promise((ok) =&gt; setTimeout(ok, giay * 1000 - (performance.now() - t0)));
+  console.log(&#96;\${s()}  adapter = \${io.of('/').adapter.constructor.name} · lỗi kết nối đã nuốt: \${loi} · dòng WARN: 0&#96;);
+}
+process.exit(0);</code></pre>
+<h3>🔗 Học sâu hơn ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/redis/learn?lessonSlug=rd-8-1-pubsub" target="_blank" rel="noopener"><span class="lc-ico">🟥</span><span class="lc-body"><span class="lc-title">Redis · 8.1 — Pub/Sub: bắn rồi quên, và cái giá của nó</span><span class="lc-sub">Mức bảo đảm mà adapter thừa hưởng</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-11-4-scale-adapter-backpressure" target="_blank" rel="noopener"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Node.js · 11.4 — Nhiều hơn một tiến trình: adapter, sticky session, và áp lực ngược</span><span class="lc-sub">Hai tiến trình với adapter, và bẫy dùng chung kết nối</span></span></a>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Cluster mode</span><span class="v">N worker Node chia sẻ một port sau proxy.</span></div>
+  <div class="kv"><span class="k">Broadcast worker-local</span><span class="v"><code>io.emit</code> mặc định chỉ tới socket trên worker hiện tại (1/N).</span></div>
+  <div class="kv"><span class="k">Redis adapter</span><span class="v">Chở broadcast giữa các worker qua Redis pub/sub.</span></div>
+  <div class="kv"><span class="k">pub/sub</span><span class="v">Publish/subscribe của Redis — kênh adapter dùng.</span></div>
+  <div class="kv"><span class="k">Latency adapter</span><span class="v">~100-400μs thêm vào mỗi broadcast qua worker.</span></div>
+  <div class="kv"><span class="k">Best-effort fallback</span><span class="v">Nếu Redis chết, lùi về in-memory single-instance adapter.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Không có Redis adapter, một cluster broadcast chỉ tới 1/N user (worker-local).</li><li>Với nó, mỗi <code>io.to(room).emit</code> đi qua Redis pub/sub và tới mọi người.</li><li>Cái giá là ~100-400μs latency thêm mỗi broadcast.</li><li>Kho này gắn nó best-effort.</li><li>Nếu Redis chết nó lùi về in-memory single-instance adapter.</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">@socket.io/redis-adapter</span><span class="lc-sub">github.com/socketio/socket.io-redis-adapter — API, protocol, và caveats.</span></span></div>
@@ -213,6 +555,7 @@ Pattern la: socket.io#&lt;namespace&gt;#&lt;room-name&gt;
       type: 'VIDEO',
       description: 'fetchSockets, socketsJoin/Leave, serverSideEmit và disconnectSockets — bốn method chỉ đúng khi có adapter, và bốn method tương ứng của socket.io thuần sẽ nói dối trong cluster.',
       content: `
+${G05_2}
 <div class="ml-en">
 <span class="eyebrow">Chapter 5 · Lesson 5.2</span>
 <h2>Adapter API: the four methods that cross workers</h2>
@@ -303,6 +646,8 @@ async function isOnline(userId: number) {
 // of those socket objects.
 
 await io.in('user:42').socketsJoin('vip');     // all three, anywhere
+// ⚠ MEASURED: socketsJoin returns undefined — the await waits for nothing; right after it even the
+//   local socket was not in 'vip' yet (the Redis adapter applies it when the request comes back): 0, then 3/3 after 50 ms
 await io.in('old-room').socketsLeave('old-room');
 
 // Also accepts an array
@@ -329,6 +674,8 @@ io.serverSideEmit('get-stats', (err, responses) =&gt; {
   if (err) {
     // At least one worker did not answer before the timeout.
     // responses is NOT populated — you get the error instead.
+    // ⚠ MEASURED (13/11/2026): wrong — on timeout responses HOLDS the answers that arrived
+    //   (err "timeout reached: only 1 responses received out of 2", responses = [{…worker 2}])
     logger.warn('serverSideEmit timed out', { err: err.message });
     return;
   }
@@ -351,6 +698,8 @@ io.on('get-stats', (cb) =&gt; {
   2. The callback is all-or-nothing.
      One slow worker means an error and NO partial results. There is
      no "here are the 2 that answered". Design for the error path.
+     ⚠ MEASURED: there IS a partial result — the callback gets (err, responses-so-far);
+     serverSideEmitWithAck rejects and puts them on err.responses.
 
   3. Arguments must be serializable.
      Same constraint as .on() above: no functions, no class instances
@@ -368,6 +717,8 @@ await io.in(\`user:\${userId}\`).disconnectSockets(true);
 //                                              ^^^^
 // true  = close the underlying transport too (the client sees a real
 //         disconnect and its reconnect logic runs)
+// ⚠ MEASURED: the client gets "io server disconnect", socket.active = false and makes 0 reconnect
+//   attempts — a server-side disconnect is final; your app must call socket.connect() itself.
 // false = leave the low-level connection open (rarely what you want)
 </code></pre>
 
@@ -402,7 +753,7 @@ logger.info('[socket] adapter', {
 </div>
 
 <div class="pitfall">
-<p><strong>Trap — treating <code>serverSideEmit</code>'s callback as partial-results.</strong> If any worker misses the timeout you get an error and no responses at all, not the subset that answered. A monitoring endpoint written assuming partial results will show &quot;0 users online&quot; during a slow moment rather than a slightly stale number.</p>
+<p><strong>Trap — treating <code>serverSideEmit</code>'s callback as partial-results.</strong> If any worker misses the timeout you get an error and no responses at all, not the subset that answered. A monitoring endpoint written assuming partial results will show &quot;0 users online&quot; during a slow moment rather than a slightly stale number. <strong>Measured (13/11/2026) — the premise is wrong for @socket.io/redis-adapter 8.3.0:</strong> with one of three workers 6 s late, the callback fired at 5,001.9 ms with <code>err</code> AND <code>responses</code> holding the one answer that arrived; <code>serverSideEmitWithAck</code> rejected with the same partial array on <code>err.responses</code>. The real trap is the opposite: treating that partial array as the total.</p>
 </div>
 
 <div class="callout">
@@ -419,6 +770,161 @@ logger.info('[socket] adapter', {
 <div class="pitfall">
 <p><strong>Trap — a presence count read from the local socket map.</strong> <code>io.sockets.size</code> returns the sockets on the worker that happened to handle the request, so in a four-worker cluster it reports roughly a quarter of the real number — and it varies per request, because the load balancer picks a different worker each time. The bug reads as &quot;the online count is wrong and keeps changing&quot;, which sounds like a race condition rather than a topology problem. It is also invisible in development, where there is one worker and the number is exactly right. Anything that must see every user goes through the adapter: <code>fetchSockets</code>, or a count kept in Redis.</p>
 </div>
+
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Call <code>await io.fetchSockets()</code> in a cluster and compare its count to <code>io.sockets.size</code> — the local map reports only one worker's share.</li>
+<li>Use <code>socketsJoin</code>/<code>socketsLeave</code> to move a socket held by ANOTHER worker into a room, and confirm the local equivalent silently fails for it.</li>
+<li>Use <code>disconnectSockets</code> to implement &quot;log out everywhere&quot; and note that token revocation alone cannot drop the live connections.</li>
+</ol>
+<p><strong>Done when:</strong> you can show a local-map count lying in a cluster and fix it with a cluster-wide adapter method.</p></div>
+
+<h3>🔬 Measured: the four methods on a real cluster</h3>
+<p>socket.io 4.8.3 · @socket.io/redis-adapter 8.3.0 · Redis 7 — three worker processes (fork). The helper that builds the cluster and runs code <em>inside</em> one worker:</p>
+<pre><code class="language-javascript"><span class="tok-comment">// Dựng một CỤM thật: N worker = N tiến trình Node (fork), Redis adapter qua sio-redis, cổng 19721…; client nối worker nào tuỳ ý.</span>
+<span class="tok-comment">// Mỗi worker: middleware đặt socket.data.userId, vào phòng user:&lt;id&gt;; nghe sự kiện server-side 'get-stats' (trả lời sau &#96;cham&#96; ms).</span>
+<span class="tok-comment">// goi(k, 'mã JS') chạy một đoạn mã TRONG worker k (biến io có sẵn) và trả kết quả về — để bài đo đứng ở đúng một worker.</span>
+import { fork } from 'node:child_process';
+import { Server } from 'socket.io';
+import { io as ketNoi } from 'socket.io-client';
+import { createAdapter } from '@socket.io/redis-adapter';
+import { createClient } from 'redis';
+if (process.argv[2] === 'worker') {
+  const so = +process.argv[3], cham = +process.argv[4];
+  const pub = createClient({ url: 'redis://127.0.0.1:19661' }), sub = pub.duplicate();
+  await Promise.all([pub.connect(), sub.connect()]);
+  const io = new Server(19720 + so, { adapter: createAdapter(pub, sub) });
+  io.use((s, next) =&gt; { s.data.userId = s.handshake.auth.userId; s.data.worker = so; next(); });
+  io.on('connection', (s) =&gt; s.join(&#96;user:\${s.data.userId}&#96;));
+  io.on('get-stats', (cb) =&gt; setTimeout(() =&gt; cb({ worker: so, count: io.of('/').sockets.size }), cham));
+  const AsyncFn = (async () =&gt; {}).constructor;
+  process.on('message', async ({ id, ma }) =&gt; process.send({ id, kq: await new AsyncFn('io', ma)(io) }));
+  process.send('san-sang');
+}
+export async function moCum(n, cham = {}) {
+  const ws = Array.from({ length: n }, (_, i) =&gt; fork(new URL(import.meta.url).pathname, ['worker', i + 1, cham[i + 1] ?? 0]));
+  await Promise.all(ws.map((w) =&gt; new Promise((ok) =&gt; w.once('message', ok))));
+  let dem = 0;
+  const goi = (k, ma) =&gt; new Promise((ok) =&gt; { const id = ++dem; const nghe = (m) =&gt; { if (m.id === id) { ws[k - 1].off('message', nghe); ok(m.kq); } }; ws[k - 1].on('message', nghe); ws[k - 1].send({ id, ma }); });
+  const ket = (k, userId) =&gt; new Promise((ok) =&gt; { const c = ketNoi(&#96;http://localhost:\${19720 + k}&#96;, { auth: { userId }, transports: ['websocket'], forceNew: true }); c.once('connect', () =&gt; ok(c)); });
+  return { goi, ket, dong: () =&gt; ws.forEach((w) =&gt; w.kill()) };
+}</code></pre>
+<p><strong>Counting on worker 1</strong> (user 42 has a tab on each worker, 9 other users):</p>
+<div class="out">$ node dem.mjs
+worker 1 · adapter = RedisAdapter
+worker 1 · io.of("/").sockets.size        = 4
+worker 1 · (await io.fetchSockets()).length = 12
+worker 1 · io.in('user:42').fetchSockets()  = 3 tab
+worker 1 · fetchSockets 200 lần: p50 1,92 ms · p99 4,98 ms (local sockets.size: ~0,001 ms)</div>
+<p><strong>RemoteSocket</strong> — what comes back, what is routed, and <code>data</code> as a snapshot:</p>
+<div class="out">$ node remote.mjs
+Socket · worker 1 · rooms ["user:42"] · auth {"userId":42} · typeof s.on = function
+RemoteSocket · worker 2 · rooms ["user:42"] · auth {"userId":42} · typeof s.on = undefined
+RemoteSocket · worker 3 · rooms ["user:42"] · auth {"userId":42} · typeof s.on = undefined
+  tab ở worker 1 nhận 'nhac': lệnh từ worker 1 tới socket ở worker 1
+  tab ở worker 3 nhận 'nhac': lệnh từ worker 1 tới socket ở worker 3
+  tab ở worker 2 nhận 'nhac': lệnh từ worker 1 tới socket ở worker 2
+sửa s.data.vip = true rồi hỏi lại ⇒ data.vip = undefined (data là BẢN CHỤP, không phải con trỏ)</div>
+<p><strong>socketsJoin</strong> — local loop vs cluster, and what <code>await</code> really waits for:</p>
+<div class="out">$ node join.mjs
+local: lặp io.of("/").sockets ở worker 1 rồi join  ⇒ vip có 1 / 3 tab
+cụm: socketsJoin trả về undefined · ngay sau đó vip ở worker 1 có 0 socket · 50 ms sau toàn cụm có 3 / 3 tab</div>
+<p><strong>This repo&#39;s call check</strong> (call.socket.ts:161 reads the local room map) with the callee on another worker:</p>
+<div class="out">$ node goi.mjs
+worker 1 · rooms.get(user:9) = undefined ⇒ gọi hụt — 'khong-truc-tuyen'
+worker 1 · fetchSockets(user:9) = 1 ⇒ đổ chuông</div>
+<p><strong>serverSideEmit</strong> — healthy, then one worker 6 s late:</p>
+<div class="out">$ node rpc.mjs
+— 3 worker khoẻ —
+  callback sau 4,8 ms · err = null · responses = [{"worker":2,"count":0},{"worker":3,"count":0}]
+  serverSideEmitWithAck ⇒ [{"worker":3,"count":0},{"worker":2,"count":0}]
+— worker 3 chậm 6 s —
+  callback sau 5001,9 ms · err = "timeout reached: only 1 responses received out of 2" · responses = [{"worker":2,"count":0}]
+  serverSideEmitWithAck ⇒ ném lỗi · e.responses = [{"worker":2,"count":0}]</div>
+<p><strong>Banning user 42</strong> — local disconnect vs <code>disconnectSockets(true)</code>, then a private message:</p>
+<div class="out">$ node dis.mjs
+— ngắt kiểu local —
+  tab ở worker 1: ⛔ đã ngắt · lý do "io server disconnect" · active false · thử nối lại 0 lần · nhận 0 tin sau lệnh cấm
+  tab ở worker 2: 🟢 vẫn nối · lý do "—" · active true · thử nối lại 0 lần · nhận 1 tin sau lệnh cấm
+  tab ở worker 3: 🟢 vẫn nối · lý do "—" · active true · thử nối lại 0 lần · nhận 1 tin sau lệnh cấm
+— ngắt kiểu cụm —
+  tab ở worker 1: ⛔ đã ngắt · lý do "io server disconnect" · active false · thử nối lại 0 lần · nhận 0 tin sau lệnh cấm
+  tab ở worker 2: ⛔ đã ngắt · lý do "io server disconnect" · active false · thử nối lại 0 lần · nhận 0 tin sau lệnh cấm
+  tab ở worker 3: ⛔ đã ngắt · lý do "io server disconnect" · active false · thử nối lại 0 lần · nhận 0 tin sau lệnh cấm</div>
+<p><strong>In Chromium</strong> — three tabs on three workers, frames after the ban (local, then cluster-wide):</p>
+<div class="out">w1 ↓ 41   (1223 ms)
+w1 × close   (1226 ms)
+w2 ↓ 42["tin","tin nhắn riêng gửi SAU lệnh cấm"]   (1526 ms)
+w3 ↓ 42["tin","tin nhắn riêng gửi SAU lệnh cấm"]   (1528 ms)</div>
+<div class="out">w1 ↓ 41   (1214 ms)
+w2 ↓ 41   (1214 ms)
+w3 ↓ 41   (1214 ms)
+w1 × close   (1215 ms)
+w2 × close   (1215 ms)
+w3 × close   (1215 ms)</div>
+<p><strong>This repo:</strong> locking (kiemDuyetAdmin.service.ts:120) and deleting an account (dataRights.service.ts:137) already call <code>disconnectSockets(true)</code>; <code>changePassword</code> disconnects no socket.</p>
+<div class="out">$ grep -rn "disconnectSockets\\|socketsLeave\\|fetchSockets\\|adapter.rooms.get" src --include=*.ts | grep -v test
+src/services/kiemDuyetAdmin.service.ts:120: getIO()?.in(&#96;user:\${userId}&#96;).disconnectSockets(true);
+src/services/dataRights.service.ts:137: getIO()?.in(&#96;user:\${userId}&#96;).disconnectSockets(true);
+src/services/work/chat.service.ts:51: if (channelId) { io.in(&#96;user:\${userId}&#96;).socketsLeave(chatRoom(projectId, channelId)); return; }
+src/services/work/chat.service.ts:52: void io.in(&#96;user:\${userId}&#96;).fetchSockets().then((ss) =&gt; {
+src/services/work/events.ts:134: getIO()?.in(&#96;user:\${userId}&#96;).socketsLeave(projectRoom(projectId));
+src/services/work/events.ts:135: getIO()?.in(&#96;user:\${userId}&#96;).socketsLeave(clientRoom(projectId));
+src/services/work/events.ts:137: void getIO()?.in(&#96;user:\${userId}&#96;).fetchSockets().then((ss) =&gt; {
+src/socket/doiKhang.socket.ts:337: io.in(khoa(p.ma)).socketsLeave(khoa(p.ma));
+src/socket/doiKhang.socket.ts:452: const soThietBi = (await io.in(&#96;user:\${den}&#96;).fetchSockets().catch(() =&gt; [])).length;
+src/socket/call.socket.ts:161: const phongBenKia = io.sockets.adapter.rooms.get(phong(p.toUserId));
+$ grep -n "async changePassword" -A40 src/services/auth.service.ts | grep -c "disconnectSockets"
+0</div>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-javascript"><span class="tok-comment">// serverSideEmit — worker 1 hỏi mọi worker KHÁC. Lượt 1: 3 worker khoẻ. Lượt 2: worker 3 trả lời chậm 6 s (requestsTimeout mặc định 5 s).</span>
+import { moCum } from './cum52.mjs';
+for (const [ten, cham] of [['3 worker khoẻ', {}], ['worker 3 chậm 6 s', { 3: 6000 }]]) {
+  const { goi, dong } = await moCum(3, cham);
+  console.log(&#96;— \${ten} —&#96;);
+  console.log(await goi(1, &#96;const t = performance.now();
+    const [err, res] = await new Promise((ok) =&gt; io.serverSideEmit('get-stats', (e, r) =&gt; ok([e, r])));
+    const ms = (performance.now() - t).toFixed(1).replace('.', ',');
+    return '  callback sau ' + ms + ' ms · err = ' + (err ? JSON.stringify(err.message) : 'null') + ' · responses = ' + JSON.stringify(res);&#96;));
+  console.log(await goi(1, &#96;try { const r = await io.serverSideEmitWithAck('get-stats'); return '  serverSideEmitWithAck ⇒ ' + JSON.stringify(r); }
+    catch (e) { return '  serverSideEmitWithAck ⇒ ném lỗi · e.responses = ' + JSON.stringify(e.responses); }&#96;));
+  dong();
+}
+process.exit(0);</code></pre>
+<pre><code class="language-javascript"><span class="tok-comment">// "Đăng xuất mọi nơi": user 42 có 3 tab ở 3 worker. Lượt 1: worker 1 ngắt kiểu LOCAL (socket.disconnect(true) với socket của mình).</span>
+<span class="tok-comment">// Lượt 2: io.in('user:42').disconnectSockets(true). Mỗi tab ghi lý do ngắt, và 3 s sau còn tự nối lại không.</span>
+import { moCum } from './cum52.mjs';
+for (const kieu of ['local', 'cụm']) {
+  const { goi, ket, dong } = await moCum(3);
+  const tab = [];
+  for (const k of [1, 2, 3]) { const c = await ket(k, 42); const st = { k, ly: '—', thu: 0, tin: 0 };
+    c.on('disconnect', (r) =&gt; { st.ly = r; }); c.io.on('reconnect_attempt', () =&gt; st.thu++); c.on('tin', () =&gt; st.tin++); tab.push([c, st]); }
+  await goi(1, kieu === 'local' ? "for (const s of io.of('/').sockets.values()) if (s.data.userId === 42) s.disconnect(true);" : "io.in('user:42').disconnectSockets(true);");
+  await new Promise((ok) =&gt; setTimeout(ok, 300));
+  await goi(2, "io.to('user:42').emit('tin', 'tin nhắn riêng sau khi bị cấm')");
+  await new Promise((ok) =&gt; setTimeout(ok, 3000));
+  console.log(&#96;— ngắt kiểu \${kieu} —&#96;);
+  for (const [c, st] of tab) console.log(&#96;  tab ở worker \${st.k}: \${c.connected ? '🟢 vẫn nối' : '⛔ đã ngắt'} · lý do \${JSON.stringify(st.ly)} · active \${c.active} · thử nối lại \${st.thu} lần · nhận \${st.tin} tin sau lệnh cấm&#96;);
+  dong(); tab.forEach(([c]) =&gt; c.close());
+}
+process.exit(0);</code></pre>
+<h3>🔗 Go deeper in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-5-4-danh-sach-thiet-bi" target="_blank" rel="noopener"><span class="lc-ico">🔐</span><span class="lc-body"><span class="lc-title">Authentication · 5.4 — The device list: revocation the user can SEE</span><span class="lc-sub">The token half of “log out everywhere”</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-11-4-scale-adapter-backpressure" target="_blank" rel="noopener"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Node.js · 11.4 — More than one process: adapter, sticky session, backpressure</span><span class="lc-sub">fetchSockets finding a socket in another process</span></span></a>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>fetchSockets</code></span><span class="v">Aggregate across workers; returns command-only <code>RemoteSocket</code>s.</span></div>
+  <div class="kv"><span class="k"><code>socketsJoin</code>/<code>socketsLeave</code></span><span class="v">Change room membership for sockets you do not hold.</span></div>
+  <div class="kv"><span class="k"><code>serverSideEmit</code></span><span class="v">All-or-nothing RPC to the OTHER workers.</span></div>
+  <div class="kv"><span class="k"><code>disconnectSockets</code></span><span class="v">The half of &quot;log out everywhere&quot; token revocation cannot do.</span></div>
+  <div class="kv"><span class="k"><code>RemoteSocket</code></span><span class="v">A cross-process handle: commands only, no listeners (not serializable).</span></div>
+  <div class="kv"><span class="k">Local counterpart</span><span class="v">The non-adapter method that answers for one worker without error.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>The adapter adds four cluster-wide methods: <code>fetchSockets</code>, <code>socketsJoin</code>/<code>socketsLeave</code>, <code>serverSideEmit</code>, <code>disconnectSockets</code>.</li><li><code>fetchSockets</code> returns command-only <code>RemoteSocket</code>s because listeners cannot cross processes.</li><li>The danger is the LOCAL counterparts — in a cluster they answer for one worker out of N, with no error.</li><li>A presence count from <code>io.sockets.size</code> is the classic silent bug.</li><li>Anything that must see every user goes through the adapter or a Redis-kept count.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Server API</span><span class="lc-sub">socket.io/docs/v4/server-api#serverfetchsockets — bảng đầy đủ, kèm phần RemoteSocket.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Adapter</span><span class="lc-sub">socket.io/docs/v4/adapter — method nào đi qua adapter và method nào không.</span></span></div>
@@ -513,6 +1019,8 @@ async function isOnline(userId: number) {
 // muốn cả ba vào room "vip". Bạn không cầm object socket nào trong số đó.
 
 await io.in('user:42').socketsJoin('vip');     // cả ba, ở bất kỳ đâu
+// ⚠ ĐO THẬT: socketsJoin trả về undefined — await không chờ gì; ngay sau đó cả socket local cũng
+//   chưa vào 'vip' (Redis adapter áp dụng khi yêu cầu quay về): 0, rồi 3/3 sau 50 ms
 await io.in('old-room').socketsLeave('old-room');
 
 // Cũng nhận một mảng
@@ -539,6 +1047,8 @@ io.serverSideEmit('get-stats', (err, responses) =&gt; {
   if (err) {
     // Ít nhất một worker không trả lời kịp timeout.
     // responses KHÔNG được điền — bạn nhận lỗi thay vào đó.
+    // ⚠ ĐO THẬT (13/11/2026): sai — khi quá giờ responses VẪN chứa các trả lời đã về
+    //   (err "timeout reached: only 1 responses received out of 2", responses = [{…worker 2}])
     logger.warn('serverSideEmit timed out', { err: err.message });
     return;
   }
@@ -561,6 +1071,8 @@ io.on('get-stats', (cb) =&gt; {
   2. Callback là được-tất-cả-hoặc-không-gì.
      Một worker chậm nghĩa là một lỗi và KHÔNG có kết quả từng phần.
      Không có chuyện "đây là 2 cái đã trả lời". Hãy thiết kế cho nhánh lỗi.
+     ⚠ ĐO THẬT: CÓ kết quả từng phần — callback nhận (err, các trả lời đã về);
+     serverSideEmitWithAck ném lỗi và để chúng ở err.responses.
 
   3. Tham số phải serialize được.
      Cùng ràng buộc với .on() ở trên: không hàm, không instance class
@@ -579,6 +1091,8 @@ await io.in(\`user:\${userId}\`).disconnectSockets(true);
 //                                              ^^^^
 // true  = đóng luôn transport bên dưới (client thấy một lần ngắt thật
 //         và logic reconnect của nó chạy)
+// ⚠ ĐO THẬT: client nhận "io server disconnect", socket.active = false, 0 lần thử nối lại —
+//   server chủ động ngắt là ngắt hẳn; ứng dụng phải tự gọi socket.connect().
 // false = để kết nối tầng thấp mở (hiếm khi là thứ bạn muốn)
 </code></pre>
 
@@ -613,7 +1127,7 @@ logger.info('[socket] adapter', {
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — coi callback của <code>serverSideEmit</code> là kết quả từng phần.</strong> Nếu bất kỳ worker nào lỡ timeout, bạn nhận một lỗi và hoàn toàn không có response nào, chứ không phải cái tập con đã trả lời. Một endpoint giám sát viết theo giả định có kết quả từng phần sẽ hiện &quot;0 người online&quot; trong một khoảnh khắc chậm thay vì một con số hơi cũ.</p>
+<p><strong>Bẫy — coi callback của <code>serverSideEmit</code> là kết quả từng phần.</strong> Nếu bất kỳ worker nào lỡ timeout, bạn nhận một lỗi và hoàn toàn không có response nào, chứ không phải cái tập con đã trả lời. Một endpoint giám sát viết theo giả định có kết quả từng phần sẽ hiện &quot;0 người online&quot; trong một khoảnh khắc chậm thay vì một con số hơi cũ. <strong>Đo thật (13/11/2026) — tiền đề sai với @socket.io/redis-adapter 8.3.0:</strong> một trong ba worker trễ 6 s, callback chạy ở 5.001,9 ms với <code>err</code> VÀ <code>responses</code> chứa đúng một trả lời đã về; <code>serverSideEmitWithAck</code> ném lỗi kèm mảng đó ở <code>err.responses</code>. Bẫy thật là ngược lại: coi mảng thiếu đó là tổng.</p>
 </div>
 
 <div class="callout">
@@ -630,6 +1144,161 @@ logger.info('[socket] adapter', {
 <div class="pitfall">
 <p><strong>Bẫy — một con số hiện diện đọc từ bản đồ socket cục bộ.</strong> <code>io.sockets.size</code> trả về số socket trên đúng cái worker tình cờ xử lý request đó, nên trong một cụm bốn worker nó báo khoảng một phần tư con số thật — và nó thay đổi theo từng request, vì bộ cân bằng tải chọn một worker khác mỗi lần. Lỗi đọc lên thành &quot;số người online sai và cứ nhảy lung tung&quot;, nghe như một điều kiện tranh chấp chứ không phải một vấn đề về hình trạng hệ thống. Nó cũng vô hình ở môi trường phát triển, nơi chỉ có một worker và con số hoàn toàn chính xác. Mọi thứ phải nhìn thấy MỌI người dùng đều phải đi qua adapter: <code>fetchSockets</code>, hoặc một con số đếm giữ trong Redis.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Gọi <code>await io.fetchSockets()</code> trong một cụm và so số của nó với <code>io.sockets.size</code> — bản đồ local chỉ báo phần của một worker.</li>
+<li>Dùng <code>socketsJoin</code>/<code>socketsLeave</code> để đưa một socket do worker KHÁC giữ vào một room, và xác nhận bản local lặng lẽ hỏng với nó.</li>
+<li>Dùng <code>disconnectSockets</code> để làm &quot;đăng xuất mọi nơi&quot; và để ý rằng chỉ thu hồi token không thể rớt các kết nối còn sống.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn chỉ ra một bộ đếm từ bản đồ local nói dối trong cụm và sửa nó bằng một method adapter toàn-cụm.</p></div>
+
+<h3>🔬 Đo thật: bốn method trên một cụm thật</h3>
+<p>socket.io 4.8.3 · @socket.io/redis-adapter 8.3.0 · Redis 7 — ba tiến trình worker (fork). Tệp dựng cụm và chạy mã <em>ngay trong</em> một worker:</p>
+<pre><code class="language-javascript"><span class="tok-comment">// Dựng một CỤM thật: N worker = N tiến trình Node (fork), Redis adapter qua sio-redis, cổng 19721…; client nối worker nào tuỳ ý.</span>
+<span class="tok-comment">// Mỗi worker: middleware đặt socket.data.userId, vào phòng user:&lt;id&gt;; nghe sự kiện server-side 'get-stats' (trả lời sau &#96;cham&#96; ms).</span>
+<span class="tok-comment">// goi(k, 'mã JS') chạy một đoạn mã TRONG worker k (biến io có sẵn) và trả kết quả về — để bài đo đứng ở đúng một worker.</span>
+import { fork } from 'node:child_process';
+import { Server } from 'socket.io';
+import { io as ketNoi } from 'socket.io-client';
+import { createAdapter } from '@socket.io/redis-adapter';
+import { createClient } from 'redis';
+if (process.argv[2] === 'worker') {
+  const so = +process.argv[3], cham = +process.argv[4];
+  const pub = createClient({ url: 'redis://127.0.0.1:19661' }), sub = pub.duplicate();
+  await Promise.all([pub.connect(), sub.connect()]);
+  const io = new Server(19720 + so, { adapter: createAdapter(pub, sub) });
+  io.use((s, next) =&gt; { s.data.userId = s.handshake.auth.userId; s.data.worker = so; next(); });
+  io.on('connection', (s) =&gt; s.join(&#96;user:\${s.data.userId}&#96;));
+  io.on('get-stats', (cb) =&gt; setTimeout(() =&gt; cb({ worker: so, count: io.of('/').sockets.size }), cham));
+  const AsyncFn = (async () =&gt; {}).constructor;
+  process.on('message', async ({ id, ma }) =&gt; process.send({ id, kq: await new AsyncFn('io', ma)(io) }));
+  process.send('san-sang');
+}
+export async function moCum(n, cham = {}) {
+  const ws = Array.from({ length: n }, (_, i) =&gt; fork(new URL(import.meta.url).pathname, ['worker', i + 1, cham[i + 1] ?? 0]));
+  await Promise.all(ws.map((w) =&gt; new Promise((ok) =&gt; w.once('message', ok))));
+  let dem = 0;
+  const goi = (k, ma) =&gt; new Promise((ok) =&gt; { const id = ++dem; const nghe = (m) =&gt; { if (m.id === id) { ws[k - 1].off('message', nghe); ok(m.kq); } }; ws[k - 1].on('message', nghe); ws[k - 1].send({ id, ma }); });
+  const ket = (k, userId) =&gt; new Promise((ok) =&gt; { const c = ketNoi(&#96;http://localhost:\${19720 + k}&#96;, { auth: { userId }, transports: ['websocket'], forceNew: true }); c.once('connect', () =&gt; ok(c)); });
+  return { goi, ket, dong: () =&gt; ws.forEach((w) =&gt; w.kill()) };
+}</code></pre>
+<p><strong>Đếm ở worker 1</strong> (user 42 có một tab ở mỗi worker, thêm 9 người khác):</p>
+<div class="out">$ node dem.mjs
+worker 1 · adapter = RedisAdapter
+worker 1 · io.of("/").sockets.size        = 4
+worker 1 · (await io.fetchSockets()).length = 12
+worker 1 · io.in('user:42').fetchSockets()  = 3 tab
+worker 1 · fetchSockets 200 lần: p50 1,92 ms · p99 4,98 ms (local sockets.size: ~0,001 ms)</div>
+<p><strong>RemoteSocket</strong> — cái gì trả về, cái gì định tuyến được, và <code>data</code> là bản chụp:</p>
+<div class="out">$ node remote.mjs
+Socket · worker 1 · rooms ["user:42"] · auth {"userId":42} · typeof s.on = function
+RemoteSocket · worker 2 · rooms ["user:42"] · auth {"userId":42} · typeof s.on = undefined
+RemoteSocket · worker 3 · rooms ["user:42"] · auth {"userId":42} · typeof s.on = undefined
+  tab ở worker 1 nhận 'nhac': lệnh từ worker 1 tới socket ở worker 1
+  tab ở worker 3 nhận 'nhac': lệnh từ worker 1 tới socket ở worker 3
+  tab ở worker 2 nhận 'nhac': lệnh từ worker 1 tới socket ở worker 2
+sửa s.data.vip = true rồi hỏi lại ⇒ data.vip = undefined (data là BẢN CHỤP, không phải con trỏ)</div>
+<p><strong>socketsJoin</strong> — lặp local vs cả cụm, và <code>await</code> thật ra chờ gì:</p>
+<div class="out">$ node join.mjs
+local: lặp io.of("/").sockets ở worker 1 rồi join  ⇒ vip có 1 / 3 tab
+cụm: socketsJoin trả về undefined · ngay sau đó vip ở worker 1 có 0 socket · 50 ms sau toàn cụm có 3 / 3 tab</div>
+<p><strong>Chỗ kiểm cuộc gọi của kho</strong> (call.socket.ts:161 đọc bảng room local) khi người nhận ở worker khác:</p>
+<div class="out">$ node goi.mjs
+worker 1 · rooms.get(user:9) = undefined ⇒ gọi hụt — 'khong-truc-tuyen'
+worker 1 · fetchSockets(user:9) = 1 ⇒ đổ chuông</div>
+<p><strong>serverSideEmit</strong> — cụm khoẻ, rồi một worker trễ 6 s:</p>
+<div class="out">$ node rpc.mjs
+— 3 worker khoẻ —
+  callback sau 4,8 ms · err = null · responses = [{"worker":2,"count":0},{"worker":3,"count":0}]
+  serverSideEmitWithAck ⇒ [{"worker":3,"count":0},{"worker":2,"count":0}]
+— worker 3 chậm 6 s —
+  callback sau 5001,9 ms · err = "timeout reached: only 1 responses received out of 2" · responses = [{"worker":2,"count":0}]
+  serverSideEmitWithAck ⇒ ném lỗi · e.responses = [{"worker":2,"count":0}]</div>
+<p><strong>Cấm user 42</strong> — ngắt local vs <code>disconnectSockets(true)</code>, rồi gửi một tin riêng:</p>
+<div class="out">$ node dis.mjs
+— ngắt kiểu local —
+  tab ở worker 1: ⛔ đã ngắt · lý do "io server disconnect" · active false · thử nối lại 0 lần · nhận 0 tin sau lệnh cấm
+  tab ở worker 2: 🟢 vẫn nối · lý do "—" · active true · thử nối lại 0 lần · nhận 1 tin sau lệnh cấm
+  tab ở worker 3: 🟢 vẫn nối · lý do "—" · active true · thử nối lại 0 lần · nhận 1 tin sau lệnh cấm
+— ngắt kiểu cụm —
+  tab ở worker 1: ⛔ đã ngắt · lý do "io server disconnect" · active false · thử nối lại 0 lần · nhận 0 tin sau lệnh cấm
+  tab ở worker 2: ⛔ đã ngắt · lý do "io server disconnect" · active false · thử nối lại 0 lần · nhận 0 tin sau lệnh cấm
+  tab ở worker 3: ⛔ đã ngắt · lý do "io server disconnect" · active false · thử nối lại 0 lần · nhận 0 tin sau lệnh cấm</div>
+<p><strong>Trong Chromium</strong> — ba tab ở ba worker, khung sau lệnh cấm (local, rồi toàn cụm):</p>
+<div class="out">w1 ↓ 41   (1223 ms)
+w1 × close   (1226 ms)
+w2 ↓ 42["tin","tin nhắn riêng gửi SAU lệnh cấm"]   (1526 ms)
+w3 ↓ 42["tin","tin nhắn riêng gửi SAU lệnh cấm"]   (1528 ms)</div>
+<div class="out">w1 ↓ 41   (1214 ms)
+w2 ↓ 41   (1214 ms)
+w3 ↓ 41   (1214 ms)
+w1 × close   (1215 ms)
+w2 × close   (1215 ms)
+w3 × close   (1215 ms)</div>
+<p><strong>Kho này:</strong> khoá tài khoản (kiemDuyetAdmin.service.ts:120) và xoá tài khoản (dataRights.service.ts:137) đã gọi <code>disconnectSockets(true)</code>; <code>changePassword</code> không ngắt socket nào.</p>
+<div class="out">$ grep -rn "disconnectSockets\\|socketsLeave\\|fetchSockets\\|adapter.rooms.get" src --include=*.ts | grep -v test
+src/services/kiemDuyetAdmin.service.ts:120: getIO()?.in(&#96;user:\${userId}&#96;).disconnectSockets(true);
+src/services/dataRights.service.ts:137: getIO()?.in(&#96;user:\${userId}&#96;).disconnectSockets(true);
+src/services/work/chat.service.ts:51: if (channelId) { io.in(&#96;user:\${userId}&#96;).socketsLeave(chatRoom(projectId, channelId)); return; }
+src/services/work/chat.service.ts:52: void io.in(&#96;user:\${userId}&#96;).fetchSockets().then((ss) =&gt; {
+src/services/work/events.ts:134: getIO()?.in(&#96;user:\${userId}&#96;).socketsLeave(projectRoom(projectId));
+src/services/work/events.ts:135: getIO()?.in(&#96;user:\${userId}&#96;).socketsLeave(clientRoom(projectId));
+src/services/work/events.ts:137: void getIO()?.in(&#96;user:\${userId}&#96;).fetchSockets().then((ss) =&gt; {
+src/socket/doiKhang.socket.ts:337: io.in(khoa(p.ma)).socketsLeave(khoa(p.ma));
+src/socket/doiKhang.socket.ts:452: const soThietBi = (await io.in(&#96;user:\${den}&#96;).fetchSockets().catch(() =&gt; [])).length;
+src/socket/call.socket.ts:161: const phongBenKia = io.sockets.adapter.rooms.get(phong(p.toUserId));
+$ grep -n "async changePassword" -A40 src/services/auth.service.ts | grep -c "disconnectSockets"
+0</div>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-javascript"><span class="tok-comment">// serverSideEmit — worker 1 hỏi mọi worker KHÁC. Lượt 1: 3 worker khoẻ. Lượt 2: worker 3 trả lời chậm 6 s (requestsTimeout mặc định 5 s).</span>
+import { moCum } from './cum52.mjs';
+for (const [ten, cham] of [['3 worker khoẻ', {}], ['worker 3 chậm 6 s', { 3: 6000 }]]) {
+  const { goi, dong } = await moCum(3, cham);
+  console.log(&#96;— \${ten} —&#96;);
+  console.log(await goi(1, &#96;const t = performance.now();
+    const [err, res] = await new Promise((ok) =&gt; io.serverSideEmit('get-stats', (e, r) =&gt; ok([e, r])));
+    const ms = (performance.now() - t).toFixed(1).replace('.', ',');
+    return '  callback sau ' + ms + ' ms · err = ' + (err ? JSON.stringify(err.message) : 'null') + ' · responses = ' + JSON.stringify(res);&#96;));
+  console.log(await goi(1, &#96;try { const r = await io.serverSideEmitWithAck('get-stats'); return '  serverSideEmitWithAck ⇒ ' + JSON.stringify(r); }
+    catch (e) { return '  serverSideEmitWithAck ⇒ ném lỗi · e.responses = ' + JSON.stringify(e.responses); }&#96;));
+  dong();
+}
+process.exit(0);</code></pre>
+<pre><code class="language-javascript"><span class="tok-comment">// "Đăng xuất mọi nơi": user 42 có 3 tab ở 3 worker. Lượt 1: worker 1 ngắt kiểu LOCAL (socket.disconnect(true) với socket của mình).</span>
+<span class="tok-comment">// Lượt 2: io.in('user:42').disconnectSockets(true). Mỗi tab ghi lý do ngắt, và 3 s sau còn tự nối lại không.</span>
+import { moCum } from './cum52.mjs';
+for (const kieu of ['local', 'cụm']) {
+  const { goi, ket, dong } = await moCum(3);
+  const tab = [];
+  for (const k of [1, 2, 3]) { const c = await ket(k, 42); const st = { k, ly: '—', thu: 0, tin: 0 };
+    c.on('disconnect', (r) =&gt; { st.ly = r; }); c.io.on('reconnect_attempt', () =&gt; st.thu++); c.on('tin', () =&gt; st.tin++); tab.push([c, st]); }
+  await goi(1, kieu === 'local' ? "for (const s of io.of('/').sockets.values()) if (s.data.userId === 42) s.disconnect(true);" : "io.in('user:42').disconnectSockets(true);");
+  await new Promise((ok) =&gt; setTimeout(ok, 300));
+  await goi(2, "io.to('user:42').emit('tin', 'tin nhắn riêng sau khi bị cấm')");
+  await new Promise((ok) =&gt; setTimeout(ok, 3000));
+  console.log(&#96;— ngắt kiểu \${kieu} —&#96;);
+  for (const [c, st] of tab) console.log(&#96;  tab ở worker \${st.k}: \${c.connected ? '🟢 vẫn nối' : '⛔ đã ngắt'} · lý do \${JSON.stringify(st.ly)} · active \${c.active} · thử nối lại \${st.thu} lần · nhận \${st.tin} tin sau lệnh cấm&#96;);
+  dong(); tab.forEach(([c]) =&gt; c.close());
+}
+process.exit(0);</code></pre>
+<h3>🔗 Học sâu hơn ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-5-4-danh-sach-thiet-bi" target="_blank" rel="noopener"><span class="lc-ico">🔐</span><span class="lc-body"><span class="lc-title">Authentication · 5.4 — Danh sách thiết bị: thu hồi mà người dùng NHÌN THẤY</span><span class="lc-sub">Nửa token của “đăng xuất mọi nơi”</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-11-4-scale-adapter-backpressure" target="_blank" rel="noopener"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Node.js · 11.4 — Nhiều hơn một tiến trình: adapter, sticky session, và áp lực ngược</span><span class="lc-sub">fetchSockets thấy socket ở tiến trình khác</span></span></a>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>fetchSockets</code></span><span class="v">Gộp qua các worker; trả về <code>RemoteSocket</code> chỉ-nhận-lệnh.</span></div>
+  <div class="kv"><span class="k"><code>socketsJoin</code>/<code>socketsLeave</code></span><span class="v">Đổi thành viên room cho các socket bạn không cầm.</span></div>
+  <div class="kv"><span class="k"><code>serverSideEmit</code></span><span class="v">RPC được-tất-cả-hoặc-không tới các worker KHÁC.</span></div>
+  <div class="kv"><span class="k"><code>disconnectSockets</code></span><span class="v">Nửa của &quot;đăng xuất mọi nơi&quot; mà thu hồi token không làm được.</span></div>
+  <div class="kv"><span class="k"><code>RemoteSocket</code></span><span class="v">Một handle xuyên tiến trình: chỉ lệnh, không listener (không serialize được).</span></div>
+  <div class="kv"><span class="k">Bản local tương ứng</span><span class="v">Method không-adapter trả lời thay cho một worker mà không lỗi.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Adapter thêm bốn method toàn-cụm: <code>fetchSockets</code>, <code>socketsJoin</code>/<code>socketsLeave</code>, <code>serverSideEmit</code>, <code>disconnectSockets</code>.</li><li><code>fetchSockets</code> trả về <code>RemoteSocket</code> chỉ-nhận-lệnh vì listener không qua tiến trình được.</li><li>Mối nguy là các bản LOCAL — trong cụm chúng trả lời thay cho một worker trên N, không lỗi.</li><li>Một presence count từ <code>io.sockets.size</code> là bug âm thầm kinh điển.</li><li>Mọi thứ phải thấy mọi user đều đi qua adapter hoặc một con số giữ trong Redis.</li></ul>
+
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Server API</span><span class="lc-sub">socket.io/docs/v4/server-api#serverfetchsockets — bảng đầy đủ, kèm phần RemoteSocket.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Adapter</span><span class="lc-sub">socket.io/docs/v4/adapter — method nào đi qua adapter và method nào không.</span></span></div>
@@ -646,6 +1315,7 @@ logger.info('[socket] adapter', {
       type: 'VIDEO',
       description: 'Khi Redis mất, adapter tạm gián đoạn cross-worker broadcast. Kho này chọn best-effort: log warning, in-process broadcast vẫn hoạt động, cluster fanout mất tạm thời.',
       content: `
+${G05_3}
 <div class="ml-en">
 <span class="eyebrow">Chapter 5 · Lesson 5.3</span>
 <h2>Failure mode: Redis down</h2>
@@ -658,6 +1328,7 @@ logger.info('[socket] adapter', {
 <div class="lz-step"><span class="lz-k">c</span><span class="lz-t">Redis completely unreachable</span><span class="lz-d">A connection error. ioredis retries in the background. The adapter emits a warning; the broadcast is ATTEMPTED but goes nowhere. Cluster fanout is entirely lost. Within a single worker things still work.</span></div>
 </div>
 
+<p><strong>Measured (13/11/2026, Redis 7.4, adapter wired like this repo, 20 emits/s):</strong> quick restart (~0.4 s down) lost 6 of 131 messages to the other worker; a 2 s stall (<code>CLIENT PAUSE</code>) lost <strong>none</strong> — they arrived up to ~2 s late, in order; stopping Redis for 10 s, twice with the same script, gave run 1 <strong>0 lost but up to 11.2 s late</strong> and run 2 <strong>139 lost</strong>. So &quot;no replay after reconnect&quot; is wrong both ways: node-redis keeps publishes in its offline queue and flushes them on reconnect, and whether the other worker has re-subscribed by then is a race. Two more things the list above misses: a <code>PUBLISH</code> in flight when the socket closes is rejected and the adapter never catches it — without a <code>process.on(&#39;unhandledRejection&#39;)</code> handler Node 22 <strong>exits with code 1</strong> (this repo keeps the process alive at src/index.ts:866); and <code>fetchSockets()</code> hung 8.1 s for the whole outage (its first step, <code>PUBSUB NUMSUB</code>, has no timeout), then answered 1 socket where there were 2.</p>
 <h3>This repo — the fallback code</h3>
 <pre><code class="language-ts">// attachRedisAdapter (5.1) log warning, KHONG throw
 // -&gt; io van khoi dong, in-memory adapter mac dinh chay
@@ -676,6 +1347,7 @@ logger.info('[socket] adapter', {
 <div class="lz-layer"><span class="lz-lname">Redis Serverless (Upstash, ElastiCache)</span><span class="lz-lnote">Pub/sub is often NOT supported (Redis-compatible is not the same as Redis). Read the docs before choosing a service</span></div>
 </div>
 
+<p><strong>Not measured here — from documentation:</strong> Sentinel only starts a failover after <code>down-after-milliseconds</code> (30 s in the sample sentinel.conf), so &quot;5-10s&quot; assumes a tuned config. For Redis Cluster, @socket.io/redis-adapter 8.3 ships <code>createShardedAdapter</code> (Redis 7 sharded pub/sub).</p>
 <h3>Alternatives when Redis is not a good fit</h3>
 <pre><code class="language-text">Postgres adapter (@socket.io/postgres-adapter):
   Dung Postgres LISTEN/NOTIFY. Cost cao hon (~5-10ms), gioi han payload 8KB.
@@ -694,6 +1366,188 @@ Cluster adapter (khong dung Redis):
 <p><strong>One sentence.</strong> All three Redis failure modes (a quick restart, slowness, total death) cost you cluster broadcast for a while — this repo chooses a best-effort fallback (the in-memory adapter, fine while single-instance), while cluster mode needs monitoring of the adapter's status; the alternatives are the Postgres adapter (5-10ms slower, 8KB payloads) or the Node cluster adapter (which does not scale across VMs).</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Reproduce the three Redis failure modes against a running cluster: a quick restart, artificial slowness, and a full stop; log what happens to cross-worker broadcast in each.</li>
+<li>Confirm this repo's best-effort fallback keeps the single instance working while cluster broadcast is down.</li>
+<li>Add a check on the adapter's status so monitoring can alert when cluster broadcast degrades.</li>
+</ol>
+<p><strong>Done when:</strong> you can describe the effect of each failure mode and name the signal you would monitor.</p></div>
+
+<h3>🔬 Measured: three failure modes on a real Redis</h3>
+<p>socket.io 4.8.3 · @socket.io/redis-adapter 8.3.0 · redis 4.7.1 · Redis 7.4 — two workers, A on worker 1, B on worker 2, worker 1 emits every 50 ms. First run without an <code>unhandledRejection</code> handler, then like this repo:</p>
+<div class="out">$ node chet3.mjs restart khong-bat   # KHÔNG có process.on('unhandledRejection')
+1,0 s  ⚡ docker restart sio-redis
+1,0 s  pub.isReady = false
+/Users/admin/.rtq-sio/lab/node_modules/@redis/client/dist/lib/client/socket.js:194
+
+SocketClosedUnexpectedlyError: Socket closed unexpectedly
+
+exit code: 1
+$ node chet3.mjs restart
+1,0 s  ⚡ docker restart sio-redis
+1,0 s  pub.isReady = false
+1,4 s  pub.isReady = true (nối lại)
+— restart · worker 1 phát 131 tin (mỗi 50 ms) —
+  A (cùng worker 1): nhận 131/131
+  B (worker 2, qua Redis): nhận 125/131 · MẤT 6 — tin phát trong 1,0 s–1,3 s
+  độ trễ tới B: p50 2 ms · lớn nhất 12 ms
+  console.warn "missing 'error' handler on this Redis client": 32 lần
+  unhandledRejection (PUBLISH đang bay bị huỷ, không ai .catch): 1 lần SocketClosedUnexpectedlyError · tiến trình vẫn sống nhờ handler kiểu kho
+$ node chet3.mjs pause
+1,0 s  ⚡ redis-cli CLIENT PAUSE 2000 ALL (Redis treo 2 s)
+1,3 s  fetchSockets() gọi ở worker 1 ⇒ trả 2 socket sau 1,8 s
+— pause · worker 1 phát 111 tin (mỗi 50 ms) —
+  A (cùng worker 1): nhận 111/111
+  B (worker 2, qua Redis): nhận 111/111 · MẤT 0
+  độ trễ tới B: p50 3 ms · lớn nhất 2033 ms
+  console.warn "missing 'error' handler on this Redis client": 0 lần
+  unhandledRejection (PUBLISH đang bay bị huỷ, không ai .catch): 0 lần  · tiến trình vẫn sống nhờ handler kiểu kho
+$ node chet3.mjs stop
+1,0 s  ⚡ docker stop sio-redis … 10 s … docker start
+1,0 s  pub.isReady = false
+11,6 s  pub.isReady = true (nối lại)
+3,5 s  fetchSockets() gọi ở worker 1 ⇒ trả 2 socket sau 8,1 s
+— stop · worker 1 phát 347 tin (mỗi 50 ms) —
+  A (cùng worker 1): nhận 347/347
+  B (worker 2, qua Redis): nhận 347/347 · MẤT 0
+  độ trễ tới B: p50 1811 ms · lớn nhất 11229 ms
+  console.warn "missing 'error' handler on this Redis client": 100 lần
+  unhandledRejection (PUBLISH đang bay bị huỷ, không ai .catch): 1 lần SocketClosedUnexpectedlyError · tiến trình vẫn sống nhờ handler kiểu kho
+$ node chet3.mjs stop   # lượt 2, y hệt
+1,0 s  ⚡ docker stop sio-redis … 10 s … docker start
+1,0 s  pub.isReady = false
+3,5 s  fetchSockets() gọi ở worker 1 ⇒ trả 1 socket sau 8,1 s
+11,6 s  pub.isReady = true (nối lại)
+— stop · worker 1 phát 347 tin (mỗi 50 ms) —
+  A (cùng worker 1): nhận 347/347
+  B (worker 2, qua Redis): nhận 208/347 · MẤT 139 — tin phát trong 1,1 s–8,1 s
+  độ trễ tới B: p50 3 ms · lớn nhất 11269 ms
+  console.warn "missing 'error' handler on this Redis client": 100 lần
+  unhandledRejection (PUBLISH đang bay bị huỷ, không ai .catch): 1 lần SocketClosedUnexpectedlyError · tiến trình vẫn sống nhờ handler kiểu kho</div>
+<p><strong>This repo&#39;s boot order with Redis down</strong> (<code>new Server</code> then <code>void attachRedisAdapter(io)</code>): the late attach swaps in a new, empty adapter.</p>
+<div class="out">$ node muon.mjs
+0,2 s  client nối, server cho vào room user:7 · adapter = Adapter
+0,4 s  phát vào user:7 ⇒ client nhận 1
+4,0 s  docker start sio-redis
+4,1 s  INFO Socket.IO Redis adapter attached
+4,8 s  phát lại vào user:7 ⇒ client nhận thêm 0 · adapter.rooms.get('user:7') = undefined · socket.rooms vẫn nói ["user:7"] · client.connected = true</div>
+<p><strong>This repo:</strong></p>
+<div class="out">$ grep -n "void attachRedisAdapter\\|io = new IOServer" src/socket/messaging.socket.ts ; grep -n "initSocketServer(server)\\|server.listen(config.port" src/index.ts
+310: io = new IOServer(httpServer, {
+330: void attachRedisAdapter(io);
+751:initSocketServer(server);
+994: server.listen(config.port, () =&gt; {
+$ grep -n "maxmemory\\|condition: service_healthy" docker-compose.yml
+91: command: redis-server --maxmemory 256mb --maxmemory-policy allkeys-lru --appendonly yes
+203: condition: service_healthy
+205: condition: service_healthy</div>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-javascript"><span class="tok-comment">// Ba kiểu Redis hỏng, đo THẬT trên container sio-redis. Hai worker (hai Server trong một tiến trình, một đồng hồ) gắn adapter ĐÚNG KIỂU KHO:</span>
+<span class="tok-comment">// client gốc có reconnectStrategy (retries*50, trần 2 s) + listener 'error'; pub/sub = base.duplicate() (KHÔNG listener riêng, như kho).</span>
+<span class="tok-comment">// A nối worker 1, B nối worker 2, cùng phòng r. Worker 1 phát tin số k mỗi 50 ms. Lúc 1 s: gây sự cố. Ghi: B nhận tin nào, trễ bao nhiêu.</span>
+import { spawn } from 'node:child_process';
+import { Server } from 'socket.io';
+import { io as ketNoi } from 'socket.io-client';
+import { createAdapter } from '@socket.io/redis-adapter';
+import { createClient } from 'redis';
+const kieu = process.argv[2];
+<span class="tok-comment">// Kho có process.on('unhandledRejection') ghi log rồi GIỮ tiến trình sống (src/index.ts:866). 'khong-bat' = ứng dụng thường, không có handler đó.</span>
+let tuChoi = 0; const loaiTuChoi = new Set();
+if (process.argv[3] !== 'khong-bat') process.on('unhandledRejection', (e) =&gt; { tuChoi++; loaiTuChoi.add(e?.constructor?.name); });
+const t0 = Date.now(); const s = (ms = Date.now() - t0) =&gt; (ms / 1000).toFixed(1).replace('.', ',') + ' s';
+const cho = (ms) =&gt; new Promise((r) =&gt; setTimeout(r, ms));
+const docker = (...a) =&gt; new Promise((ok) =&gt; spawn('/usr/local/bin/docker', a, { stdio: 'ignore' }).on('exit', ok));
+let canhBao = 0; const goc = console.warn; console.warn = (...a) =&gt; { if (String(a[0]).includes("missing 'error' handler")) canhBao++; else goc(...a); };
+const moi = async (cong) =&gt; {
+  const base = createClient({ url: 'redis://127.0.0.1:19661', socket: { reconnectStrategy: (r) =&gt; Math.min(r * 50, 2000) } });
+  base.on('error', () =&gt; {}); await base.connect();
+  const pub = base.duplicate(), sub = base.duplicate(); await Promise.all([pub.connect(), sub.connect()]);
+  const io = new Server(cong, { adapter: createAdapter(pub, sub) }); io.on('connection', (x) =&gt; x.join('r'));
+  return { io, pub };
+};
+const w1 = await moi(19741), w2 = await moi(19742);
+const ket = (c) =&gt; ketNoi(&#96;http://localhost:\${c}&#96;, { transports: ['websocket'], forceNew: true });
+const A = ket(19741), B = ket(19742);
+await Promise.all([A, B].map((c) =&gt; new Promise((ok) =&gt; c.once('connect', ok)))); await cho(300);
+const nhanA = new Set(), nhanB = new Map();
+A.on('tin', (m) =&gt; nhanA.add(m.k)); B.on('tin', (m) =&gt; nhanB.set(m.k, Date.now() - m.t));
+let k = 0; const gui = new Map();
+const nhip = setInterval(() =&gt; { const t = Date.now(); gui.set(k, t); w1.io.to('r').emit('tin', { k: k++, t }); }, 50);
+const SU_CO = { restart: ['docker restart sio-redis', 1000, () =&gt; docker('restart', '-t', '0', 'sio-redis'), 6000],
+  pause: ['redis-cli CLIENT PAUSE 2000 ALL (Redis treo 2 s)', 1000, () =&gt; docker('exec', 'sio-redis', 'redis-cli', 'CLIENT', 'PAUSE', '2000', 'ALL'), 5000],
+  stop: ['docker stop sio-redis … 10 s … docker start', 1000, async () =&gt; { await docker('stop', '-t', '0', 'sio-redis'); await cho(10000); await docker('start', 'sio-redis'); }, 17000] }[kieu];
+await cho(SU_CO[1] - (Date.now() - t0));
+console.log(&#96;\${s()}  ⚡ \${SU_CO[0]}&#96;);
+const xong = SU_CO[2]();
+const fsT = Date.now();
+if (kieu !== 'restart') setTimeout(() =&gt; { const a = Date.now(); w1.io.in('r').fetchSockets().then((x) =&gt; console.log(&#96;\${s(a - t0)}  fetchSockets() gọi ở worker 1 ⇒ trả \${x.length} socket sau \${s(Date.now() - a)}&#96;), (e) =&gt; console.log(&#96;\${s(a - t0)}  fetchSockets() ⇒ lỗi sau \${s(Date.now() - a)}: \${e.message}&#96;)); }, kieu === 'stop' ? 2500 : 300);
+const theo = setInterval(() =&gt; { if (!w1.pub.isReady &amp;&amp; !theo.daIn) { theo.daIn = true; console.log(&#96;\${s()}  pub.isReady = false&#96;); } if (w1.pub.isReady &amp;&amp; theo.daIn &amp;&amp; !theo.lai) { theo.lai = true; console.log(&#96;\${s()}  pub.isReady = true (nối lại)&#96;); } }, 20);
+await xong; await cho(SU_CO[3] - (Date.now() - fsT));
+clearInterval(nhip); await cho(2500); clearInterval(theo);
+const mat = [...gui.keys()].filter((x) =&gt; !nhanB.has(x));
+const tre = [...nhanB.values()].sort((a, b) =&gt; a - b);
+const doan = []; for (const x of mat) { const d = doan.at(-1); if (d &amp;&amp; x === d[1] + 1) d[1] = x; else doan.push([x, x]); }
+const vao = (x) =&gt; s(gui.get(x) - t0);
+console.log(&#96;— \${kieu} · worker 1 phát \${gui.size} tin (mỗi 50 ms) —&#96;);
+console.log(&#96;  A (cùng worker 1): nhận \${nhanA.size}/\${gui.size}&#96;);
+console.log(&#96;  B (worker 2, qua Redis): nhận \${nhanB.size}/\${gui.size} · MẤT \${mat.length}\${doan.length ? ' — tin phát trong ' + doan.map(([a, b]) =&gt; &#96;\${vao(a)}–\${vao(b)}&#96;).join(', ') : ''}&#96;);
+console.log(&#96;  độ trễ tới B: p50 \${tre[Math.floor(tre.length / 2)]} ms · lớn nhất \${tre.at(-1)} ms&#96;);
+console.log(&#96;  console.warn "missing 'error' handler on this Redis client": \${canhBao} lần&#96;);
+console.log(&#96;  unhandledRejection (PUBLISH đang bay bị huỷ, không ai .catch): \${tuChoi} lần \${[...loaiTuChoi].join(' ')} · tiến trình vẫn sống nhờ handler kiểu kho&#96;);
+process.exit(0);</code></pre>
+<pre><code class="language-javascript"><span class="tok-comment">// Chép đúng thứ tự của kho: new Server(...) rồi &#96;void attachRedisAdapter(io)&#96; — getRedis() có reconnectStrategy nên KHÔNG BAO GIỜ ném.</span>
+<span class="tok-comment">// Redis đang tắt lúc khởi động. Client nối vào, join room user:7. 4 s sau Redis lên ⇒ adapter gắn MUỘN. Rồi phát vào user:7.</span>
+import { spawn } from 'node:child_process';
+import { Server } from 'socket.io';
+import { io as ketNoi } from 'socket.io-client';
+import { createAdapter } from '@socket.io/redis-adapter';
+import { createClient } from 'redis';
+const t0 = Date.now(); const s = () =&gt; ((Date.now() - t0) / 1000).toFixed(1).replace('.', ',') + ' s';
+const docker = (...a) =&gt; new Promise((ok) =&gt; spawn('/usr/local/bin/docker', a, { stdio: 'ignore' }).on('exit', ok));
+async function getRedis() {
+  const c = createClient({ url: 'redis://127.0.0.1:19661', socket: { reconnectStrategy: (r) =&gt; Math.min(r * 50, 2000) } });
+  c.on('error', () =&gt; {}); await c.connect(); return c;
+}
+async function attachRedisAdapter(server) {
+  try { const base = await getRedis(); const pub = base.duplicate(), sub = base.duplicate(); await Promise.all([pub.connect(), sub.connect()]);
+    server.adapter(createAdapter(pub, sub)); console.log(&#96;\${s()}  INFO Socket.IO Redis adapter attached&#96;);
+  } catch (e) { console.log(&#96;\${s()}  WARN NOT attached: \${e.message}&#96;); }
+}
+await docker('stop', '-t', '0', 'sio-redis');
+const io = new Server(19743);
+io.on('connection', (x) =&gt; x.join('user:7'));
+void attachRedisAdapter(io);
+const c = ketNoi('http://localhost:19743', { transports: ['websocket'] }); let nhan = 0; c.on('tin', () =&gt; nhan++);
+await new Promise((ok) =&gt; c.once('connect', ok));
+console.log(&#96;\${s()}  client nối, server cho vào room user:7 · adapter = \${io.of('/').adapter.constructor.name}&#96;);
+io.to('user:7').emit('tin'); await new Promise((ok) =&gt; setTimeout(ok, 200));
+console.log(&#96;\${s()}  phát vào user:7 ⇒ client nhận \${nhan}&#96;);
+await new Promise((ok) =&gt; setTimeout(ok, 3500)); await docker('start', 'sio-redis'); console.log(&#96;\${s()}  docker start sio-redis&#96;);
+while (io.of('/').adapter.constructor.name !== 'RedisAdapter') await new Promise((ok) =&gt; setTimeout(ok, 100));
+await new Promise((ok) =&gt; setTimeout(ok, 300));
+const sk = [...io.of('/').sockets.values()][0];
+io.to('user:7').emit('tin'); await new Promise((ok) =&gt; setTimeout(ok, 300));
+console.log(&#96;\${s()}  phát lại vào user:7 ⇒ client nhận thêm \${nhan - 1} · adapter.rooms.get('user:7') = \${io.of('/').adapter.rooms.get('user:7')?.size ?? 'undefined'} · socket.rooms vẫn nói \${JSON.stringify([...sk.rooms].slice(1))} · client.connected = \${c.connected}&#96;);
+process.exit(0);</code></pre>
+<h3>🔗 Go deeper in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/redis/learn?lessonSlug=rd-8-1-pubsub" target="_blank" rel="noopener"><span class="lc-ico">🟥</span><span class="lc-body"><span class="lc-title">Redis · 8.1 — Pub/Sub: fire and forget, and its price</span><span class="lc-sub">Why a message with no live subscriber is gone</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/redis/learn?lessonSlug=rd-11-3-sentinel" target="_blank" rel="noopener"><span class="lc-ico">🟥</span><span class="lc-body"><span class="lc-title">Redis · 11.3 — Sentinel: automatic failover</span><span class="lc-sub">The failover window this lesson only cites</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-4-5-thu-thap-cai-gi" target="_blank" rel="noopener"><span class="lc-ico">📈</span><span class="lc-body"><span class="lc-title">Observability · 4.5 — Which metrics to actually collect</span><span class="lc-sub">Where the adapter health signal belongs</span></span></a>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Quick restart</span><span class="v">Redis bounces; broadcast is lost briefly, then recovers.</span></div>
+  <div class="kv"><span class="k">Slowness</span><span class="v">Redis is up but slow; broadcasts lag or queue.</span></div>
+  <div class="kv"><span class="k">Total death</span><span class="v">Redis is gone; cross-worker broadcast stops entirely.</span></div>
+  <div class="kv"><span class="k">Best-effort fallback</span><span class="v">The in-memory adapter — fine while single-instance.</span></div>
+  <div class="kv"><span class="k">Adapter status</span><span class="v">The signal cluster mode must monitor to catch degradation.</span></div>
+  <div class="kv"><span class="k">Postgres adapter</span><span class="v">An alternative: 5-10ms slower, 8KB payload cap.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>All three Redis failure modes (quick restart, slowness, total death) cost you cluster broadcast for a while.</li><li>This repo chooses a best-effort fallback — the in-memory adapter, fine while single-instance.</li><li>Cluster mode must monitor the adapter's status to notice degradation.</li><li>The Postgres adapter is an alternative: 5-10ms slower, 8KB payloads.</li><li>The Node cluster adapter is another, but it does not scale across VMs.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">@socket.io/redis-adapter — Reliability</span><span class="lc-sub">github.com/socketio/socket.io-redis-adapter#reliability — chính thức nói về failure modes.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">@socket.io/postgres-adapter</span><span class="lc-sub">github.com/socketio/socket.io-postgres-adapter — alternative dùng LISTEN/NOTIFY.</span></span></div>
@@ -710,6 +1564,7 @@ Cluster adapter (khong dung Redis):
 <div class="lz-step"><span class="lz-k">c</span><span class="lz-t">Redis hoàn toàn không reachable</span><span class="lz-d">Connection error. ioredis retry background. Adapter emit warning; broadcast được TRY nhưng đến nowhere. Cluster fanout hoàn toàn mất. Trong-worker vẫn OK.</span></div>
 </div>
 
+<p><strong>Đo thật (13/11/2026, Redis 7.4, adapter gắn đúng kiểu kho, 20 tin/s):</strong> restart nhanh (~0,4 s) mất 6/131 tin sang worker kia; treo 2 s (<code>CLIENT PAUSE</code>) <strong>không mất</strong> tin nào — tới trễ tới ~2 s, đúng thứ tự; tắt Redis 10 s, hai lượt cùng một script: lượt 1 <strong>mất 0 nhưng trễ tới 11,2 s</strong>, lượt 2 <strong>mất 139</strong>. Nên &quot;sau reconnect không replay&quot; sai cả hai chiều: node-redis giữ lệnh PUBLISH trong hàng đợi offline và đẩy đi khi nối lại, còn worker kia đã kịp subscribe lại chưa là một cuộc đua. Hai điều danh sách trên bỏ sót: lệnh <code>PUBLISH</code> đang bay khi kết nối đứt bị từ chối và adapter không bao giờ catch — thiếu handler <code>process.on(&#39;unhandledRejection&#39;)</code> thì Node 22 <strong>thoát mã 1</strong> (kho này giữ tiến trình sống ở src/index.ts:866); và <code>fetchSockets()</code> treo 8,1 s suốt lúc Redis chết (bước đầu <code>PUBSUB NUMSUB</code> không có timeout), rồi trả 1 socket trong khi có 2.</p>
 <h3>Kho này — code fallback</h3>
 <pre><code class="language-ts">// attachRedisAdapter (5.1) log warning, KHONG throw
 // -&gt; io van khoi dong, in-memory adapter mac dinh chay
@@ -728,6 +1583,7 @@ Cluster adapter (khong dung Redis):
 <div class="lz-layer"><span class="lz-lname">Redis Serverless (Upstash, ElastiCache)</span><span class="lz-lnote">Pub/sub thường KHÔNG hỗ trợ (khác từ Redis-compatible). Đọc doc trước khi chọn service</span></div>
 </div>
 
+<p><strong>Không đo ở đây — theo tài liệu:</strong> Sentinel chỉ bắt đầu chuyển đổi sau <code>down-after-milliseconds</code> (30 s trong sentinel.conf mẫu), nên &quot;5-10s&quot; là cấu hình đã chỉnh. Với Redis Cluster, @socket.io/redis-adapter 8.3 có <code>createShardedAdapter</code> (sharded pub/sub của Redis 7).</p>
 <h3>Alternatives khi Redis không phù hợp</h3>
 <pre><code class="language-text">Postgres adapter (@socket.io/postgres-adapter):
   Dung Postgres LISTEN/NOTIFY. Cost cao hon (~5-10ms), gioi han payload 8KB.
@@ -746,6 +1602,188 @@ Cluster adapter (khong dung Redis):
 <p><strong>Một câu.</strong> Ba failure mode của Redis (restart nhanh, chậm, chết hoàn toàn) đều làm cluster broadcast mất tạm thời — kho này chọn best-effort fallback (in-memory adapter mà single-instance OK), cluster mode cần monitoring adapter status; alternatives Postgres adapter (chậm hơn 5-10ms, 8KB payload) hoặc Node cluster adapter (không scale qua VM).</p>
 </div>
 
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Tái hiện ba failure mode của Redis trên một cụm đang chạy: restart nhanh, chậm giả, và dừng hẳn; log chuyện gì xảy ra với broadcast qua worker ở mỗi cái.</li>
+<li>Xác nhận best-effort fallback của kho này giữ single instance chạy trong khi cluster broadcast mất.</li>
+<li>Thêm một check trạng thái adapter để monitoring có thể cảnh báo khi cluster broadcast suy giảm.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn mô tả được tác động của mỗi failure mode và gọi tên tín hiệu bạn sẽ monitor.</p></div>
+
+<h3>🔬 Đo thật: ba failure mode trên Redis thật</h3>
+<p>socket.io 4.8.3 · @socket.io/redis-adapter 8.3.0 · redis 4.7.1 · Redis 7.4 — hai worker, A ở worker 1, B ở worker 2, worker 1 phát mỗi 50 ms. Lượt đầu không có handler <code>unhandledRejection</code>, các lượt sau giống kho:</p>
+<div class="out">$ node chet3.mjs restart khong-bat   # KHÔNG có process.on('unhandledRejection')
+1,0 s  ⚡ docker restart sio-redis
+1,0 s  pub.isReady = false
+/Users/admin/.rtq-sio/lab/node_modules/@redis/client/dist/lib/client/socket.js:194
+
+SocketClosedUnexpectedlyError: Socket closed unexpectedly
+
+exit code: 1
+$ node chet3.mjs restart
+1,0 s  ⚡ docker restart sio-redis
+1,0 s  pub.isReady = false
+1,4 s  pub.isReady = true (nối lại)
+— restart · worker 1 phát 131 tin (mỗi 50 ms) —
+  A (cùng worker 1): nhận 131/131
+  B (worker 2, qua Redis): nhận 125/131 · MẤT 6 — tin phát trong 1,0 s–1,3 s
+  độ trễ tới B: p50 2 ms · lớn nhất 12 ms
+  console.warn "missing 'error' handler on this Redis client": 32 lần
+  unhandledRejection (PUBLISH đang bay bị huỷ, không ai .catch): 1 lần SocketClosedUnexpectedlyError · tiến trình vẫn sống nhờ handler kiểu kho
+$ node chet3.mjs pause
+1,0 s  ⚡ redis-cli CLIENT PAUSE 2000 ALL (Redis treo 2 s)
+1,3 s  fetchSockets() gọi ở worker 1 ⇒ trả 2 socket sau 1,8 s
+— pause · worker 1 phát 111 tin (mỗi 50 ms) —
+  A (cùng worker 1): nhận 111/111
+  B (worker 2, qua Redis): nhận 111/111 · MẤT 0
+  độ trễ tới B: p50 3 ms · lớn nhất 2033 ms
+  console.warn "missing 'error' handler on this Redis client": 0 lần
+  unhandledRejection (PUBLISH đang bay bị huỷ, không ai .catch): 0 lần  · tiến trình vẫn sống nhờ handler kiểu kho
+$ node chet3.mjs stop
+1,0 s  ⚡ docker stop sio-redis … 10 s … docker start
+1,0 s  pub.isReady = false
+11,6 s  pub.isReady = true (nối lại)
+3,5 s  fetchSockets() gọi ở worker 1 ⇒ trả 2 socket sau 8,1 s
+— stop · worker 1 phát 347 tin (mỗi 50 ms) —
+  A (cùng worker 1): nhận 347/347
+  B (worker 2, qua Redis): nhận 347/347 · MẤT 0
+  độ trễ tới B: p50 1811 ms · lớn nhất 11229 ms
+  console.warn "missing 'error' handler on this Redis client": 100 lần
+  unhandledRejection (PUBLISH đang bay bị huỷ, không ai .catch): 1 lần SocketClosedUnexpectedlyError · tiến trình vẫn sống nhờ handler kiểu kho
+$ node chet3.mjs stop   # lượt 2, y hệt
+1,0 s  ⚡ docker stop sio-redis … 10 s … docker start
+1,0 s  pub.isReady = false
+3,5 s  fetchSockets() gọi ở worker 1 ⇒ trả 1 socket sau 8,1 s
+11,6 s  pub.isReady = true (nối lại)
+— stop · worker 1 phát 347 tin (mỗi 50 ms) —
+  A (cùng worker 1): nhận 347/347
+  B (worker 2, qua Redis): nhận 208/347 · MẤT 139 — tin phát trong 1,1 s–8,1 s
+  độ trễ tới B: p50 3 ms · lớn nhất 11269 ms
+  console.warn "missing 'error' handler on this Redis client": 100 lần
+  unhandledRejection (PUBLISH đang bay bị huỷ, không ai .catch): 1 lần SocketClosedUnexpectedlyError · tiến trình vẫn sống nhờ handler kiểu kho</div>
+<p><strong>Thứ tự khởi động của kho khi Redis tắt</strong> (<code>new Server</code> rồi <code>void attachRedisAdapter(io)</code>): gắn muộn thay vào một adapter mới, trống.</p>
+<div class="out">$ node muon.mjs
+0,2 s  client nối, server cho vào room user:7 · adapter = Adapter
+0,4 s  phát vào user:7 ⇒ client nhận 1
+4,0 s  docker start sio-redis
+4,1 s  INFO Socket.IO Redis adapter attached
+4,8 s  phát lại vào user:7 ⇒ client nhận thêm 0 · adapter.rooms.get('user:7') = undefined · socket.rooms vẫn nói ["user:7"] · client.connected = true</div>
+<p><strong>Kho này:</strong></p>
+<div class="out">$ grep -n "void attachRedisAdapter\\|io = new IOServer" src/socket/messaging.socket.ts ; grep -n "initSocketServer(server)\\|server.listen(config.port" src/index.ts
+310: io = new IOServer(httpServer, {
+330: void attachRedisAdapter(io);
+751:initSocketServer(server);
+994: server.listen(config.port, () =&gt; {
+$ grep -n "maxmemory\\|condition: service_healthy" docker-compose.yml
+91: command: redis-server --maxmemory 256mb --maxmemory-policy allkeys-lru --appendonly yes
+203: condition: service_healthy
+205: condition: service_healthy</div>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-javascript"><span class="tok-comment">// Ba kiểu Redis hỏng, đo THẬT trên container sio-redis. Hai worker (hai Server trong một tiến trình, một đồng hồ) gắn adapter ĐÚNG KIỂU KHO:</span>
+<span class="tok-comment">// client gốc có reconnectStrategy (retries*50, trần 2 s) + listener 'error'; pub/sub = base.duplicate() (KHÔNG listener riêng, như kho).</span>
+<span class="tok-comment">// A nối worker 1, B nối worker 2, cùng phòng r. Worker 1 phát tin số k mỗi 50 ms. Lúc 1 s: gây sự cố. Ghi: B nhận tin nào, trễ bao nhiêu.</span>
+import { spawn } from 'node:child_process';
+import { Server } from 'socket.io';
+import { io as ketNoi } from 'socket.io-client';
+import { createAdapter } from '@socket.io/redis-adapter';
+import { createClient } from 'redis';
+const kieu = process.argv[2];
+<span class="tok-comment">// Kho có process.on('unhandledRejection') ghi log rồi GIỮ tiến trình sống (src/index.ts:866). 'khong-bat' = ứng dụng thường, không có handler đó.</span>
+let tuChoi = 0; const loaiTuChoi = new Set();
+if (process.argv[3] !== 'khong-bat') process.on('unhandledRejection', (e) =&gt; { tuChoi++; loaiTuChoi.add(e?.constructor?.name); });
+const t0 = Date.now(); const s = (ms = Date.now() - t0) =&gt; (ms / 1000).toFixed(1).replace('.', ',') + ' s';
+const cho = (ms) =&gt; new Promise((r) =&gt; setTimeout(r, ms));
+const docker = (...a) =&gt; new Promise((ok) =&gt; spawn('/usr/local/bin/docker', a, { stdio: 'ignore' }).on('exit', ok));
+let canhBao = 0; const goc = console.warn; console.warn = (...a) =&gt; { if (String(a[0]).includes("missing 'error' handler")) canhBao++; else goc(...a); };
+const moi = async (cong) =&gt; {
+  const base = createClient({ url: 'redis://127.0.0.1:19661', socket: { reconnectStrategy: (r) =&gt; Math.min(r * 50, 2000) } });
+  base.on('error', () =&gt; {}); await base.connect();
+  const pub = base.duplicate(), sub = base.duplicate(); await Promise.all([pub.connect(), sub.connect()]);
+  const io = new Server(cong, { adapter: createAdapter(pub, sub) }); io.on('connection', (x) =&gt; x.join('r'));
+  return { io, pub };
+};
+const w1 = await moi(19741), w2 = await moi(19742);
+const ket = (c) =&gt; ketNoi(&#96;http://localhost:\${c}&#96;, { transports: ['websocket'], forceNew: true });
+const A = ket(19741), B = ket(19742);
+await Promise.all([A, B].map((c) =&gt; new Promise((ok) =&gt; c.once('connect', ok)))); await cho(300);
+const nhanA = new Set(), nhanB = new Map();
+A.on('tin', (m) =&gt; nhanA.add(m.k)); B.on('tin', (m) =&gt; nhanB.set(m.k, Date.now() - m.t));
+let k = 0; const gui = new Map();
+const nhip = setInterval(() =&gt; { const t = Date.now(); gui.set(k, t); w1.io.to('r').emit('tin', { k: k++, t }); }, 50);
+const SU_CO = { restart: ['docker restart sio-redis', 1000, () =&gt; docker('restart', '-t', '0', 'sio-redis'), 6000],
+  pause: ['redis-cli CLIENT PAUSE 2000 ALL (Redis treo 2 s)', 1000, () =&gt; docker('exec', 'sio-redis', 'redis-cli', 'CLIENT', 'PAUSE', '2000', 'ALL'), 5000],
+  stop: ['docker stop sio-redis … 10 s … docker start', 1000, async () =&gt; { await docker('stop', '-t', '0', 'sio-redis'); await cho(10000); await docker('start', 'sio-redis'); }, 17000] }[kieu];
+await cho(SU_CO[1] - (Date.now() - t0));
+console.log(&#96;\${s()}  ⚡ \${SU_CO[0]}&#96;);
+const xong = SU_CO[2]();
+const fsT = Date.now();
+if (kieu !== 'restart') setTimeout(() =&gt; { const a = Date.now(); w1.io.in('r').fetchSockets().then((x) =&gt; console.log(&#96;\${s(a - t0)}  fetchSockets() gọi ở worker 1 ⇒ trả \${x.length} socket sau \${s(Date.now() - a)}&#96;), (e) =&gt; console.log(&#96;\${s(a - t0)}  fetchSockets() ⇒ lỗi sau \${s(Date.now() - a)}: \${e.message}&#96;)); }, kieu === 'stop' ? 2500 : 300);
+const theo = setInterval(() =&gt; { if (!w1.pub.isReady &amp;&amp; !theo.daIn) { theo.daIn = true; console.log(&#96;\${s()}  pub.isReady = false&#96;); } if (w1.pub.isReady &amp;&amp; theo.daIn &amp;&amp; !theo.lai) { theo.lai = true; console.log(&#96;\${s()}  pub.isReady = true (nối lại)&#96;); } }, 20);
+await xong; await cho(SU_CO[3] - (Date.now() - fsT));
+clearInterval(nhip); await cho(2500); clearInterval(theo);
+const mat = [...gui.keys()].filter((x) =&gt; !nhanB.has(x));
+const tre = [...nhanB.values()].sort((a, b) =&gt; a - b);
+const doan = []; for (const x of mat) { const d = doan.at(-1); if (d &amp;&amp; x === d[1] + 1) d[1] = x; else doan.push([x, x]); }
+const vao = (x) =&gt; s(gui.get(x) - t0);
+console.log(&#96;— \${kieu} · worker 1 phát \${gui.size} tin (mỗi 50 ms) —&#96;);
+console.log(&#96;  A (cùng worker 1): nhận \${nhanA.size}/\${gui.size}&#96;);
+console.log(&#96;  B (worker 2, qua Redis): nhận \${nhanB.size}/\${gui.size} · MẤT \${mat.length}\${doan.length ? ' — tin phát trong ' + doan.map(([a, b]) =&gt; &#96;\${vao(a)}–\${vao(b)}&#96;).join(', ') : ''}&#96;);
+console.log(&#96;  độ trễ tới B: p50 \${tre[Math.floor(tre.length / 2)]} ms · lớn nhất \${tre.at(-1)} ms&#96;);
+console.log(&#96;  console.warn "missing 'error' handler on this Redis client": \${canhBao} lần&#96;);
+console.log(&#96;  unhandledRejection (PUBLISH đang bay bị huỷ, không ai .catch): \${tuChoi} lần \${[...loaiTuChoi].join(' ')} · tiến trình vẫn sống nhờ handler kiểu kho&#96;);
+process.exit(0);</code></pre>
+<pre><code class="language-javascript"><span class="tok-comment">// Chép đúng thứ tự của kho: new Server(...) rồi &#96;void attachRedisAdapter(io)&#96; — getRedis() có reconnectStrategy nên KHÔNG BAO GIỜ ném.</span>
+<span class="tok-comment">// Redis đang tắt lúc khởi động. Client nối vào, join room user:7. 4 s sau Redis lên ⇒ adapter gắn MUỘN. Rồi phát vào user:7.</span>
+import { spawn } from 'node:child_process';
+import { Server } from 'socket.io';
+import { io as ketNoi } from 'socket.io-client';
+import { createAdapter } from '@socket.io/redis-adapter';
+import { createClient } from 'redis';
+const t0 = Date.now(); const s = () =&gt; ((Date.now() - t0) / 1000).toFixed(1).replace('.', ',') + ' s';
+const docker = (...a) =&gt; new Promise((ok) =&gt; spawn('/usr/local/bin/docker', a, { stdio: 'ignore' }).on('exit', ok));
+async function getRedis() {
+  const c = createClient({ url: 'redis://127.0.0.1:19661', socket: { reconnectStrategy: (r) =&gt; Math.min(r * 50, 2000) } });
+  c.on('error', () =&gt; {}); await c.connect(); return c;
+}
+async function attachRedisAdapter(server) {
+  try { const base = await getRedis(); const pub = base.duplicate(), sub = base.duplicate(); await Promise.all([pub.connect(), sub.connect()]);
+    server.adapter(createAdapter(pub, sub)); console.log(&#96;\${s()}  INFO Socket.IO Redis adapter attached&#96;);
+  } catch (e) { console.log(&#96;\${s()}  WARN NOT attached: \${e.message}&#96;); }
+}
+await docker('stop', '-t', '0', 'sio-redis');
+const io = new Server(19743);
+io.on('connection', (x) =&gt; x.join('user:7'));
+void attachRedisAdapter(io);
+const c = ketNoi('http://localhost:19743', { transports: ['websocket'] }); let nhan = 0; c.on('tin', () =&gt; nhan++);
+await new Promise((ok) =&gt; c.once('connect', ok));
+console.log(&#96;\${s()}  client nối, server cho vào room user:7 · adapter = \${io.of('/').adapter.constructor.name}&#96;);
+io.to('user:7').emit('tin'); await new Promise((ok) =&gt; setTimeout(ok, 200));
+console.log(&#96;\${s()}  phát vào user:7 ⇒ client nhận \${nhan}&#96;);
+await new Promise((ok) =&gt; setTimeout(ok, 3500)); await docker('start', 'sio-redis'); console.log(&#96;\${s()}  docker start sio-redis&#96;);
+while (io.of('/').adapter.constructor.name !== 'RedisAdapter') await new Promise((ok) =&gt; setTimeout(ok, 100));
+await new Promise((ok) =&gt; setTimeout(ok, 300));
+const sk = [...io.of('/').sockets.values()][0];
+io.to('user:7').emit('tin'); await new Promise((ok) =&gt; setTimeout(ok, 300));
+console.log(&#96;\${s()}  phát lại vào user:7 ⇒ client nhận thêm \${nhan - 1} · adapter.rooms.get('user:7') = \${io.of('/').adapter.rooms.get('user:7')?.size ?? 'undefined'} · socket.rooms vẫn nói \${JSON.stringify([...sk.rooms].slice(1))} · client.connected = \${c.connected}&#96;);
+process.exit(0);</code></pre>
+<h3>🔗 Học sâu hơn ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/redis/learn?lessonSlug=rd-8-1-pubsub" target="_blank" rel="noopener"><span class="lc-ico">🟥</span><span class="lc-body"><span class="lc-title">Redis · 8.1 — Pub/Sub: bắn rồi quên, và cái giá của nó</span><span class="lc-sub">Vì sao không ai nghe thì tin mất</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/redis/learn?lessonSlug=rd-11-3-sentinel" target="_blank" rel="noopener"><span class="lc-ico">🟥</span><span class="lc-body"><span class="lc-title">Redis · 11.3 — Sentinel: tự động chuyển đổi</span><span class="lc-sub">Khoảng chuyển đổi mà bài này chỉ trích tài liệu</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-4-5-thu-thap-cai-gi" target="_blank" rel="noopener"><span class="lc-ico">📈</span><span class="lc-body"><span class="lc-title">Observability · 4.5 — Thật ra thì nên thu thập chỉ số nào</span><span class="lc-sub">Chỗ đặt tín hiệu sức khoẻ adapter</span></span></a>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Restart nhanh</span><span class="v">Redis bật lại; broadcast mất một chút rồi hồi.</span></div>
+  <div class="kv"><span class="k">Chậm</span><span class="v">Redis còn sống nhưng chậm; broadcast trễ hoặc dồn hàng.</span></div>
+  <div class="kv"><span class="k">Chết hoàn toàn</span><span class="v">Redis mất; broadcast qua worker dừng hẳn.</span></div>
+  <div class="kv"><span class="k">Best-effort fallback</span><span class="v">In-memory adapter — ổn khi single-instance.</span></div>
+  <div class="kv"><span class="k">Trạng thái adapter</span><span class="v">Tín hiệu cluster mode phải monitor để bắt suy giảm.</span></div>
+  <div class="kv"><span class="k">Postgres adapter</span><span class="v">Một lựa chọn: chậm hơn 5-10ms, trần payload 8KB.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Cả ba failure mode của Redis (restart nhanh, chậm, chết hoàn toàn) làm mất cluster broadcast một thời gian.</li><li>Kho này chọn best-effort fallback — in-memory adapter, ổn khi single-instance.</li><li>Cluster mode phải monitor trạng thái adapter để nhận ra suy giảm.</li><li>Postgres adapter là một lựa chọn: chậm hơn 5-10ms, payload 8KB.</li><li>Node cluster adapter là một cái khác, nhưng không scale qua VM.</li></ul>
+
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">@socket.io/redis-adapter — Reliability</span><span class="lc-sub">github.com/socketio/socket.io-redis-adapter#reliability — chính thức nói về failure modes.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">@socket.io/postgres-adapter</span><span class="lc-sub">github.com/socketio/socket.io-postgres-adapter — alternative dùng LISTEN/NOTIFY.</span></span></div>
@@ -760,6 +1798,7 @@ Cluster adapter (khong dung Redis):
       type: 'VIDEO',
       description: 'Trước khi bật cluster: sticky sessions, Redis adapter, presence state theo userId (không sid), monitoring per-worker, graceful shutdown.',
       content: `
+${G05_4}
 <div class="ml-en">
 <span class="eyebrow">Chapter 5 · Lesson 5.4</span>
 <h2>Scaling checklist: five things before adding a worker</h2>
@@ -767,11 +1806,11 @@ Cluster adapter (khong dung Redis):
 
 <h3>Checklist</h3>
 <div class="lz-flow">
-<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Sticky sessions at the proxy</span><span class="lz-d">Nginx <code>hash $cookie_io</code>. Without stickiness, polling breaks 50-75% of requests. Lesson 2.3.</span></div>
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Sticky sessions at the proxy</span><span class="lz-d">Nginx <code>hash $cookie_io</code>. Without stickiness, polling breaks 50-75% of requests. Lesson 2.3. <strong>Measured in 2.3: <code>hash $cookie_io</code> itself breaks</strong> — the first handshake has no cookie, so nginx hashes an empty key (3 of 5 sessions got 400). Use <code>ip_hash</code>, or WebSocket-only clients.</span></div>
 <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Redis adapter attached</span><span class="lz-d">Check for the &quot;Redis adapter attached&quot; log line. If it says &quot;NOT attached&quot;, cluster fanout is gone. Lesson 5.1.</span></div>
 <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">State keyed by userId, not sid</span><span class="lz-d">With reconnects and a cluster, the sid changes and the socket may land on a different worker. Cache state by userId (Redis-backed). Lessons 1.5 and 4.3.</span></div>
 <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Monitoring per-worker</span><span class="lz-d">Metrics <code>socket.io.connected_count</code> per worker. An imbalance means stickiness is burying someone. Track it on a Grafana dashboard.</span></div>
-<div class="lz-step"><span class="lz-k">5</span><span class="lz-t">Graceful shutdown</span><span class="lz-d">A worker about to restart: <code>io.close()</code> before exiting, so sockets disconnect cleanly (the client sees <code>&quot;io server disconnect&quot;</code> vs <code>&quot;transport close&quot;</code>). Lesson 1.2.</span></div>
+<div class="lz-step"><span class="lz-k">5</span><span class="lz-t">Graceful shutdown</span><span class="lz-d">A worker about to restart: <code>io.close()</code> before exiting, so sockets disconnect cleanly (the client sees <code>&quot;io server disconnect&quot;</code> vs <code>&quot;transport close&quot;</code>). Lesson 1.2. <strong>Measured:</strong> after <code>io.close()</code> the client sees <code>&quot;transport close&quot;</code> and reconnects at once — which is what a rolling deploy needs; <code>&quot;io server disconnect&quot;</code> would stop auto-reconnect.</span></div>
 </div>
 
 <h3>Graceful shutdown code</h3>
@@ -822,9 +1861,112 @@ Cluster-level:
 <p><strong>One sentence.</strong> Before going from 1 worker to N, five things must be done in order: sticky sessions, the Redis adapter attached, state keyed by userId, per-worker metrics, and graceful shutdown — miss any one of them and you get silent bugs at medium scale and a crisis at large scale.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Write the five-item checklist in order — sticky sessions, Redis adapter attached, state keyed by userId, per-worker metrics, graceful shutdown — and tick each against a sample service.</li>
+<li>Remove one item (say, skip stickiness) and predict the specific bug it causes at medium scale.</li>
+<li>Add per-worker metrics (connection count, event rate) so you can see imbalance across workers.</li>
+</ol>
+<p><strong>Done when:</strong> you can recite the five items in order and name the failure each one prevents.</p></div>
+
+<h3>🔬 Measured: item 5 and item 4</h3>
+<p>socket.io 4.8.3 · Node 22.23.3 — a server process with 20 WebSocket clients gets SIGTERM like <code>docker stop</code>, then SIGKILL after docker&#39;s default 10 s. First this repo&#39;s handler (src/index.ts: <code>server.close(cb)</code> + a 30 s timer, no <code>io.close()</code>), then <code>io.close()</code> first:</p>
+<div class="out">$ node tat.mjs cha kho
+— chép src/index.ts: server.close(cb), không io.close() —
+1,10 s ⚡ docker stop ⇒ SIGTERM
+  [server] SIGTERM · 20 client đang nối
+3,10 s client 0 hỏi ping-app trong lúc chờ ⇒ pong
+11,10 s ⚡ hết 10 s ân hạn ⇒ docker gửi SIGKILL
+11,11 s tiến trình server kết thúc · code null · signal SIGKILL
+  client: ngắt lần đầu lúc 11,11 s · lý do {"transport close":20} · sau đó 20/20 đang tự nối lại
+$ node tat.mjs cha dung
+— io.close() trước —
+1,11 s ⚡ docker stop ⇒ SIGTERM
+  [server] SIGTERM · 20 client đang nối
+  [server] io.close xong sau 4 ms ⇒ exit(0)
+3,61 s client 0 hỏi ping-app trong lúc chờ ⇒ lỗi: operation has timed out
+1,11 s tiến trình server kết thúc · code 0 · signal null
+  client: ngắt lần đầu lúc 1,11 s · lý do {"transport close":20} · sau đó 20/20 đang tự nối lại</div>
+<p><code>server.close()</code> waits for every open connection, and a WebSocket never ends on its own — so the callback never fired; the backend service in docker-compose has no <code>stop_grace_period</code> (only nginx does), so SIGKILL at 10 s always beats the repo&#39;s 30 s timer.</p>
+<p><strong>A rolling restart with sticky clients</strong> — only a per-worker gauge sees it:</p>
+<div class="out">$ node lech.mjs
+đầu ngày                           socket_io_connected w1=100 w2=100 w3=100 · max/min = 1,0
+worker 2 đang deploy (tắt)         socket_io_connected w1=150 w2=  0 w3=150 · max/min = ∞
+worker 2 lên lại                   socket_io_connected w1=150 w2=  0 w3=150 · max/min = ∞
+5 s sau                            socket_io_connected w1=150 w2=  0 w3=150 · max/min = ∞</div>
+<p><strong>This repo:</strong></p>
+<div class="out">$ grep -n "upstream backend" -A3 nginx/nginx.conf
+128: upstream backend {
+129- server cuonghoangdev_backend:3001;
+130- keepalive 32;
+131- }
+$ grep -n "io.close\\|stop_grace_period\\|clientsCount\\|prom-client" -r src docker-compose.yml package.json | grep -v test
+410: stop_grace_period: 30s
+0
+$ grep -n "server.close(async\\|30_000\\|process.on('SIGTERM'" src/index.ts
+822: server.close(async () =&gt; {
+846: }, 30_000);
+849: process.on('SIGTERM', () =&gt; shutdown('SIGTERM'));</div>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-javascript"><span class="tok-comment">// Graceful shutdown, đo THẬT. Tiến trình con = server Socket.IO, 20 client WebSocket nối vào. Lúc 1 s gửi SIGTERM như &#96;docker stop&#96;;</span>
+<span class="tok-comment">// docker mặc định chờ 10 s rồi SIGKILL (compose của kho không đặt stop_grace_period cho backend).</span>
+<span class="tok-comment">// kieu 'kho' = chép src/index.ts: server.close(cb) + hẹn 30 s exit(1), KHÔNG io.close(). kieu 'dung' = io.close() trước.</span>
+import { fork } from 'node:child_process';
+import http from 'node:http';
+import { Server } from 'socket.io';
+const [, , vai, kieu] = process.argv;
+if (vai === 'con') {
+  const t0 = Date.now(); const s = () =&gt; ((Date.now() - t0) / 1000).toFixed(2).replace('.', ',') + ' s';
+  const server = http.createServer(); const io = new Server(server);
+  io.on('connection', (x) =&gt; x.on('ping-app', (cb) =&gt; cb('pong')));
+  server.listen(19751, () =&gt; process.send('san-sang'));
+  process.on('SIGTERM', () =&gt; {
+    console.log(&#96;  [server] SIGTERM · \${io.engine.clientsCount} client đang nối&#96;);
+    const t = Date.now();
+    if (kieu === 'dung') io.close(() =&gt; { console.log(&#96;  [server] io.close xong sau \${Date.now() - t} ms ⇒ exit(0)&#96;); process.exit(0); });
+    else server.close(() =&gt; { console.log(&#96;  [server] HTTP server closed sau \${Date.now() - t} ms ⇒ exit(0)&#96;); process.exit(0); });
+    setTimeout(() =&gt; { console.log('  [server] Could not close connections in time ⇒ exit(1)'); process.exit(1); }, 30_000);
+  });
+} else {
+  const { io: ketNoi } = await import('socket.io-client');
+  const t0 = Date.now(); const s = (ms = Date.now() - t0) =&gt; (ms / 1000).toFixed(2).replace('.', ',') + ' s';
+  const con = fork(new URL(import.meta.url).pathname, ['con', kieu], { stdio: ['inherit', 'inherit', 'inherit', 'ipc'] });
+  await new Promise((ok) =&gt; con.once('message', ok));
+  const ds = Array.from({ length: 20 }, () =&gt; ketNoi('http://localhost:19751', { transports: ['websocket'], forceNew: true, reconnectionDelayMax: 1000 }));
+  await Promise.all(ds.map((c) =&gt; new Promise((ok) =&gt; c.once('connect', ok))));
+  const ly = new Map(); let lucDau = null;
+  ds.forEach((c) =&gt; c.on('disconnect', (r) =&gt; { lucDau ??= Date.now() - t0; ly.set(r, (ly.get(r) ?? 0) + 1); }));
+  let ketThuc = null; con.on('exit', (code, sig) =&gt; { ketThuc = &#96;\${s()} tiến trình server kết thúc · code \${code} · signal \${sig}&#96;; });
+  console.log(&#96;— \${kieu === 'dung' ? 'io.close() trước' : 'chép src/index.ts: server.close(cb), không io.close()'} —&#96;);
+  setTimeout(() =&gt; { console.log(&#96;\${s()} ⚡ docker stop ⇒ SIGTERM&#96;); con.kill('SIGTERM'); }, 1000);
+  setTimeout(async () =&gt; { const r = await ds[0].timeout(500).emitWithAck('ping-app').catch((e) =&gt; 'lỗi: ' + e.message); console.log(&#96;\${s()} client 0 hỏi ping-app trong lúc chờ ⇒ \${r}&#96;); }, 3000);
+  setTimeout(() =&gt; { if (con.exitCode === null) { console.log(&#96;\${s()} ⚡ hết 10 s ân hạn ⇒ docker gửi SIGKILL&#96;); con.kill('SIGKILL'); } }, 11000);
+  await new Promise((ok) =&gt; setTimeout(ok, 12500));
+  console.log(ketThuc);
+  console.log(&#96;  client: ngắt lần đầu lúc \${lucDau === null ? '—' : s(lucDau)} · lý do \${JSON.stringify(Object.fromEntries(ly))} · sau đó \${ds.filter((c) =&gt; c.active).length}/20 đang tự nối lại&#96;);
+  ds.forEach((c) =&gt; c.close()); process.exit(0);
+}</code></pre>
+<h3>🔗 Go deeper in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nginx/learn?lessonSlug=nginx-9-1-khoi-upstream" target="_blank" rel="noopener"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Nginx · 9.1 — The upstream block and four ways to pick a server</span><span class="lc-sub">ip_hash for item 1</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-3-2-tat-tu-te" target="_blank" rel="noopener"><span class="lc-ico">🚀</span><span class="lc-body"><span class="lc-title">Deploy VPS · 3.2 — Shutting down politely, and the drain step I got wrong</span><span class="lc-sub">Item 5 from the deploy side</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-4-5-thu-thap-cai-gi" target="_blank" rel="noopener"><span class="lc-ico">📈</span><span class="lc-body"><span class="lc-title">Observability · 4.5 — Which metrics to actually collect</span><span class="lc-sub">Item 4: per-worker gauges</span></span></a>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Sticky sessions</span><span class="v">Pin a client to one worker so the polling handshake completes.</span></div>
+  <div class="kv"><span class="k">Redis adapter</span><span class="v">Cross-worker broadcast — required before a second worker.</span></div>
+  <div class="kv"><span class="k">userId-keyed state</span><span class="v">State that survives reconnect and is worker-independent.</span></div>
+  <div class="kv"><span class="k">Per-worker metrics</span><span class="v">Connection and event counts per worker to spot imbalance.</span></div>
+  <div class="kv"><span class="k">Graceful shutdown</span><span class="v">Draining a worker's sockets before it exits on deploy.</span></div>
+  <div class="kv"><span class="k">Silent bug</span><span class="v">A missed item that works in dev and breaks only at scale.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Before going from 1 worker to N, five things must be done in order.</li><li>Sticky sessions, then the Redis adapter attached.</li><li>Then state keyed by userId, then per-worker metrics, then graceful shutdown.</li><li>Order matters — each depends on the ones before it.</li><li>Miss any one and you get silent bugs at medium scale and a crisis at large scale.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Using multiple nodes</span><span class="lc-sub">socket.io/docs/v4/using-multiple-nodes — checklist chính thức, phần này diễn giải cho use case kho này.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chapter 10 — Observability</span><span class="lc-sub">/courses/observability/learn${REF} — cách monitor metrics ở trên.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chapter 10 — Observability</span><span class="lc-sub">/courses/observability-monitoring/learn${REF} — cách monitor metrics ở trên.</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 5 · Bài 5.4</span>
@@ -833,11 +1975,11 @@ Cluster-level:
 
 <h3>Checklist</h3>
 <div class="lz-flow">
-<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Sticky sessions ở proxy</span><span class="lz-d">Nginx <code>hash $cookie_io</code>. Không sticky = polling break 50-75% requests. Bài 2.3.</span></div>
+<div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Sticky sessions ở proxy</span><span class="lz-d">Nginx <code>hash $cookie_io</code>. Không sticky = polling break 50-75% requests. Bài 2.3. <strong>Bài 2.3 đã đo: chính <code>hash $cookie_io</code> hỏng</strong> — lần bắt tay đầu chưa có cookie nên nginx băm khoá rỗng (3/5 phiên bị 400). Dùng <code>ip_hash</code>, hoặc client chỉ WebSocket.</span></div>
 <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Redis adapter attached</span><span class="lz-d">Kiểm log &quot;Redis adapter attached&quot;. Nếu &quot;NOT attached&quot;, cluster fanout mất. Bài 5.1.</span></div>
 <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">State theo userId, không sid</span><span class="lz-d">Với reconnect + cluster, sid đổi và socket có thể ở worker khác. State cache theo userId (Redis-backed). Bài 1.5 + 4.3.</span></div>
 <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Monitoring per-worker</span><span class="lz-d">Metrics <code>socket.io.connected_count</code> per worker. Không cân bằng = sticky đang chôn ai đó. Grafana dashboard track.</span></div>
-<div class="lz-step"><span class="lz-k">5</span><span class="lz-t">Graceful shutdown</span><span class="lz-d">Worker sắp restart: <code>io.close()</code> trước exit, cho socket disconnect sạch (client thấy <code>&quot;io server disconnect&quot;</code> vs <code>&quot;transport close&quot;</code>). Bài 1.2.</span></div>
+<div class="lz-step"><span class="lz-k">5</span><span class="lz-t">Graceful shutdown</span><span class="lz-d">Worker sắp restart: <code>io.close()</code> trước exit, cho socket disconnect sạch (client thấy <code>&quot;io server disconnect&quot;</code> vs <code>&quot;transport close&quot;</code>). Bài 1.2. <strong>Đo thật:</strong> sau <code>io.close()</code> client thấy <code>&quot;transport close&quot;</code> và tự nối lại ngay — đúng thứ deploy cuốn chiếu cần; <code>&quot;io server disconnect&quot;</code> mới là lý do làm client ngừng tự nối lại.</span></div>
 </div>
 
 <h3>Code graceful shutdown</h3>
@@ -888,9 +2030,112 @@ Cluster-level:
 <p><strong>Một câu.</strong> Trước khi từ 1 worker lên N, năm việc phải xong theo thứ tự: sticky sessions, Redis adapter attached, state theo userId, per-worker metrics, graceful shutdown — thiếu bất cứ cái nào cũng tạo bug âm thầm ở scale trung bình và crisis ở scale lớn.</p>
 </div>
 
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Viết checklist năm mục theo thứ tự — sticky sessions, Redis adapter attached, state theo userId, per-worker metrics, graceful shutdown — và tick từng cái với một service mẫu.</li>
+<li>Bỏ một mục (ví dụ bỏ sticky) và đoán đúng bug cụ thể nó gây ra ở scale trung bình.</li>
+<li>Thêm per-worker metrics (số connection, event rate) để bạn thấy mất cân bằng giữa các worker.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đọc được năm mục theo thứ tự và gọi tên kiểu hỏng mà mỗi cái ngăn.</p></div>
+
+<h3>🔬 Đo thật: mục 5 và mục 4</h3>
+<p>socket.io 4.8.3 · Node 22.23.3 — một tiến trình server với 20 client WebSocket nhận SIGTERM như <code>docker stop</code>, rồi SIGKILL sau 10 s mặc định của docker. Trước là handler của kho (src/index.ts: <code>server.close(cb)</code> + hẹn 30 s, không <code>io.close()</code>), sau là gọi <code>io.close()</code> trước:</p>
+<div class="out">$ node tat.mjs cha kho
+— chép src/index.ts: server.close(cb), không io.close() —
+1,10 s ⚡ docker stop ⇒ SIGTERM
+  [server] SIGTERM · 20 client đang nối
+3,10 s client 0 hỏi ping-app trong lúc chờ ⇒ pong
+11,10 s ⚡ hết 10 s ân hạn ⇒ docker gửi SIGKILL
+11,11 s tiến trình server kết thúc · code null · signal SIGKILL
+  client: ngắt lần đầu lúc 11,11 s · lý do {"transport close":20} · sau đó 20/20 đang tự nối lại
+$ node tat.mjs cha dung
+— io.close() trước —
+1,11 s ⚡ docker stop ⇒ SIGTERM
+  [server] SIGTERM · 20 client đang nối
+  [server] io.close xong sau 4 ms ⇒ exit(0)
+3,61 s client 0 hỏi ping-app trong lúc chờ ⇒ lỗi: operation has timed out
+1,11 s tiến trình server kết thúc · code 0 · signal null
+  client: ngắt lần đầu lúc 1,11 s · lý do {"transport close":20} · sau đó 20/20 đang tự nối lại</div>
+<p><code>server.close()</code> chờ mọi kết nối đang mở, mà WebSocket không tự kết thúc — nên callback không bao giờ chạy; service backend trong docker-compose không có <code>stop_grace_period</code> (chỉ nginx có), nên SIGKILL ở giây 10 luôn tới trước hẹn 30 s của kho.</p>
+<p><strong>Khởi động lại cuốn chiếu với client sticky</strong> — chỉ số liệu từng worker mới thấy:</p>
+<div class="out">$ node lech.mjs
+đầu ngày                           socket_io_connected w1=100 w2=100 w3=100 · max/min = 1,0
+worker 2 đang deploy (tắt)         socket_io_connected w1=150 w2=  0 w3=150 · max/min = ∞
+worker 2 lên lại                   socket_io_connected w1=150 w2=  0 w3=150 · max/min = ∞
+5 s sau                            socket_io_connected w1=150 w2=  0 w3=150 · max/min = ∞</div>
+<p><strong>Kho này:</strong></p>
+<div class="out">$ grep -n "upstream backend" -A3 nginx/nginx.conf
+128: upstream backend {
+129- server cuonghoangdev_backend:3001;
+130- keepalive 32;
+131- }
+$ grep -n "io.close\\|stop_grace_period\\|clientsCount\\|prom-client" -r src docker-compose.yml package.json | grep -v test
+410: stop_grace_period: 30s
+0
+$ grep -n "server.close(async\\|30_000\\|process.on('SIGTERM'" src/index.ts
+822: server.close(async () =&gt; {
+846: }, 30_000);
+849: process.on('SIGTERM', () =&gt; shutdown('SIGTERM'));</div>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-javascript"><span class="tok-comment">// Graceful shutdown, đo THẬT. Tiến trình con = server Socket.IO, 20 client WebSocket nối vào. Lúc 1 s gửi SIGTERM như &#96;docker stop&#96;;</span>
+<span class="tok-comment">// docker mặc định chờ 10 s rồi SIGKILL (compose của kho không đặt stop_grace_period cho backend).</span>
+<span class="tok-comment">// kieu 'kho' = chép src/index.ts: server.close(cb) + hẹn 30 s exit(1), KHÔNG io.close(). kieu 'dung' = io.close() trước.</span>
+import { fork } from 'node:child_process';
+import http from 'node:http';
+import { Server } from 'socket.io';
+const [, , vai, kieu] = process.argv;
+if (vai === 'con') {
+  const t0 = Date.now(); const s = () =&gt; ((Date.now() - t0) / 1000).toFixed(2).replace('.', ',') + ' s';
+  const server = http.createServer(); const io = new Server(server);
+  io.on('connection', (x) =&gt; x.on('ping-app', (cb) =&gt; cb('pong')));
+  server.listen(19751, () =&gt; process.send('san-sang'));
+  process.on('SIGTERM', () =&gt; {
+    console.log(&#96;  [server] SIGTERM · \${io.engine.clientsCount} client đang nối&#96;);
+    const t = Date.now();
+    if (kieu === 'dung') io.close(() =&gt; { console.log(&#96;  [server] io.close xong sau \${Date.now() - t} ms ⇒ exit(0)&#96;); process.exit(0); });
+    else server.close(() =&gt; { console.log(&#96;  [server] HTTP server closed sau \${Date.now() - t} ms ⇒ exit(0)&#96;); process.exit(0); });
+    setTimeout(() =&gt; { console.log('  [server] Could not close connections in time ⇒ exit(1)'); process.exit(1); }, 30_000);
+  });
+} else {
+  const { io: ketNoi } = await import('socket.io-client');
+  const t0 = Date.now(); const s = (ms = Date.now() - t0) =&gt; (ms / 1000).toFixed(2).replace('.', ',') + ' s';
+  const con = fork(new URL(import.meta.url).pathname, ['con', kieu], { stdio: ['inherit', 'inherit', 'inherit', 'ipc'] });
+  await new Promise((ok) =&gt; con.once('message', ok));
+  const ds = Array.from({ length: 20 }, () =&gt; ketNoi('http://localhost:19751', { transports: ['websocket'], forceNew: true, reconnectionDelayMax: 1000 }));
+  await Promise.all(ds.map((c) =&gt; new Promise((ok) =&gt; c.once('connect', ok))));
+  const ly = new Map(); let lucDau = null;
+  ds.forEach((c) =&gt; c.on('disconnect', (r) =&gt; { lucDau ??= Date.now() - t0; ly.set(r, (ly.get(r) ?? 0) + 1); }));
+  let ketThuc = null; con.on('exit', (code, sig) =&gt; { ketThuc = &#96;\${s()} tiến trình server kết thúc · code \${code} · signal \${sig}&#96;; });
+  console.log(&#96;— \${kieu === 'dung' ? 'io.close() trước' : 'chép src/index.ts: server.close(cb), không io.close()'} —&#96;);
+  setTimeout(() =&gt; { console.log(&#96;\${s()} ⚡ docker stop ⇒ SIGTERM&#96;); con.kill('SIGTERM'); }, 1000);
+  setTimeout(async () =&gt; { const r = await ds[0].timeout(500).emitWithAck('ping-app').catch((e) =&gt; 'lỗi: ' + e.message); console.log(&#96;\${s()} client 0 hỏi ping-app trong lúc chờ ⇒ \${r}&#96;); }, 3000);
+  setTimeout(() =&gt; { if (con.exitCode === null) { console.log(&#96;\${s()} ⚡ hết 10 s ân hạn ⇒ docker gửi SIGKILL&#96;); con.kill('SIGKILL'); } }, 11000);
+  await new Promise((ok) =&gt; setTimeout(ok, 12500));
+  console.log(ketThuc);
+  console.log(&#96;  client: ngắt lần đầu lúc \${lucDau === null ? '—' : s(lucDau)} · lý do \${JSON.stringify(Object.fromEntries(ly))} · sau đó \${ds.filter((c) =&gt; c.active).length}/20 đang tự nối lại&#96;);
+  ds.forEach((c) =&gt; c.close()); process.exit(0);
+}</code></pre>
+<h3>🔗 Học sâu hơn ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nginx/learn?lessonSlug=nginx-9-1-khoi-upstream" target="_blank" rel="noopener"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Nginx · 9.1 — Khối upstream và bốn cách chọn máy</span><span class="lc-sub">ip_hash cho mục 1</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-3-2-tat-tu-te" target="_blank" rel="noopener"><span class="lc-ico">🚀</span><span class="lc-body"><span class="lc-title">Deploy VPS · 3.2 — Tắt tử tế, và cái bước xả tôi viết sai</span><span class="lc-sub">Mục 5 nhìn từ phía deploy</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-4-5-thu-thap-cai-gi" target="_blank" rel="noopener"><span class="lc-ico">📈</span><span class="lc-body"><span class="lc-title">Observability · 4.5 — Thật ra thì nên thu thập chỉ số nào</span><span class="lc-sub">Mục 4: số liệu từng worker</span></span></a>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Sticky sessions</span><span class="v">Ghim một client vào một worker để polling handshake hoàn tất.</span></div>
+  <div class="kv"><span class="k">Redis adapter</span><span class="v">Broadcast qua worker — bắt buộc trước khi có worker thứ hai.</span></div>
+  <div class="kv"><span class="k">State theo userId</span><span class="v">State sống sót qua reconnect và độc lập với worker.</span></div>
+  <div class="kv"><span class="k">Per-worker metrics</span><span class="v">Số connection và event mỗi worker để phát hiện mất cân bằng.</span></div>
+  <div class="kv"><span class="k">Graceful shutdown</span><span class="v">Rút socket của một worker trước khi nó thoát lúc deploy.</span></div>
+  <div class="kv"><span class="k">Bug âm thầm</span><span class="v">Một mục bị lỡ, chạy được ở dev và chỉ vỡ ở scale.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Trước khi từ 1 worker lên N, năm việc phải xong theo thứ tự.</li><li>Sticky sessions, rồi Redis adapter attached.</li><li>Rồi state theo userId, rồi per-worker metrics, rồi graceful shutdown.</li><li>Thứ tự quan trọng — mỗi cái phụ thuộc cái trước.</li><li>Thiếu bất cứ cái nào cũng tạo bug âm thầm ở scale trung bình và crisis ở scale lớn.</li></ul>
+
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Using multiple nodes</span><span class="lc-sub">socket.io/docs/v4/using-multiple-nodes — checklist chính thức, phần này diễn giải cho use case kho này.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chương 10 — Observability</span><span class="lc-sub">/courses/observability/learn${REF} — cách monitor metrics ở trên.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Chương 10 — Observability</span><span class="lc-sub">/courses/observability-monitoring/learn${REF} — cách monitor metrics ở trên.</span></span></div>
 </div>
 `,
     },
@@ -902,6 +2147,7 @@ Cluster-level:
       type: 'VIDEO',
       description: 'Bốn cách khác để broadcast xuyên worker — cluster adapter, Postgres, MongoDB, và không cluster gì cả — kèm điều kiện khiến mỗi cái là lựa chọn đúng.',
       content: `
+${G05_5}
 <div class="ml-en">
 <span class="eyebrow">Chapter 5 · Lesson 5.5</span>
 <h2>Alternatives to the Redis adapter</h2>
@@ -962,6 +2208,7 @@ if (cluster.isPrimary) {
   const httpServer = http.createServer();
   setupMaster(httpServer, { loadBalancingMethod: 'least-connection' });
   setupPrimary();                       // routes adapter messages between workers
+  cluster.setupPrimary({ serialization: 'advanced' });  // ⚠ MEASURED: required by the README — without it clients loop on "xhr poll error"
   httpServer.listen(3000);
   for (let i = 0; i &lt; os.cpus().length; i++) cluster.fork();
 } else {
@@ -1019,6 +2266,7 @@ It is a poor choice for a chat-heavy app, because you have put your
 message bus on the same box as your durable data.
 </code></pre>
 
+<p><strong>Measured (13/11/2026, one Mac, Redis 7.4 and Postgres 16 in Docker, no query load):</strong> the same bench — A sends from worker 1, B receives on worker 2, 1,000 times — gave cross-worker p50 / p99 of <strong>0.24 / 0.71 ms</strong> for the cluster adapter, <strong>0.84 / 2.16 ms</strong> for Redis and <strong>0.98 / 2.64 ms</strong> for Postgres. An idle Postgres is not &quot;5-10 ms slower&quot;; the real Postgres costs are elsewhere: two workers held <strong>5</strong> Postgres connections (one a permanent <code>LISTEN &quot;socket.io#/&quot;</code>), and the attachments table is <strong>not</strong> created by the adapter — a 10 KB message sent before <code>CREATE TABLE socket_io_attachments …</code> was <strong>lost with nothing logged</strong>. Two official options this page does not list: <code>@socket.io/redis-streams-adapter</code> (a Redis stream instead of pub/sub, so a short outage can be caught up) and <code>createShardedAdapter</code> for Redis 7 sharded pub/sub — neither measured here.</p>
 <h3>Deciding, in three questions</h3>
 <div class="lz-flow">
 <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Will you ever run more than one machine?</span><span class="lz-d">If genuinely no — and be honest, because &quot;we might scale later&quot; is not the same as a plan — the cluster adapter is strictly better than Redis: less to run, lower latency, and it solves stickiness in the same configuration.</span></div>
@@ -1059,6 +2307,134 @@ logger.info('[socket] adapter', { configured: adapter, actual: io.of('/').adapte
 <div class="callout">
 <p><strong>One sentence.</strong> Four adapters exist and each is selected by one condition — in-memory when you genuinely run one process (dangerous only because it is the silent default), <code>cluster-adapter</code> when every worker is on one machine under <code>node:cluster</code> (lower latency than Redis, no service to operate, and it pairs with <code>@socket.io/sticky</code>), <code>redis-adapter</code> once there is a second machine or you already run Redis, and <code>postgres-adapter</code> when realtime traffic is modest and operational simplicity beats milliseconds — and because swapping them is a one-line change, the real decision is only ever &quot;what is true today&quot;.</p>
 </div>
+
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>For four scenarios — one process, all workers on one machine, a second machine, modest traffic wanting simplicity — pick the right adapter (in-memory, cluster, redis, postgres).</li>
+<li>Swap one adapter for another and confirm it is a one-line change, so the decision is only &quot;what is true today&quot;.</li>
+<li>Note that in-memory is the silent default — reason about the bug it causes the first time you add a second process.</li>
+</ol>
+<p><strong>Done when:</strong> you can match each of the four adapters to its one selecting condition.</p></div>
+
+<h3>🔬 Measured: one bench, three adapters</h3>
+<p>socket.io 4.8.3 · @socket.io/cluster-adapter 0.3.0 · @socket.io/sticky 2.0.1 · @socket.io/redis-adapter 8.3.0 · @socket.io/postgres-adapter 0.5.0:</p>
+<div class="out">$ node do55.mjs cluster
+cluster   A ở worker 1, B ở worker 2 · B nhận 1000/1000 · p50 0,24 ms · p99 0,71 ms
+$ node do55.mjs redis
+redis     A ở worker 1, B ở worker 2 · B nhận 1000/1000 · p50 0,84 ms · p99 2,16 ms
+$ node do55.mjs postgres
+postgres  A ở worker 1, B ở worker 2 · B nhận 1000/1000 · p50 0,98 ms · p99 2,64 ms</div>
+<p><strong>The forgotten line</strong> of the cluster-adapter setup:</p>
+<div class="out">$ node thieu.mjs
+thiếu: connect_error "xhr poll error" × 3 — không bao giờ nối được
+$ node thieu.mjs du
+du: connect ✓ (websocket)</div>
+<p><strong>Postgres adapter</strong> — connections, and a 10 KB message before and after creating the table:</p>
+<div class="out">$ node lon.mjs
+kết nối Postgres của 2 worker: 5 · LISTEN "socket.io#/" | SELECT pg_notify($1, $2)
+phát 1 KB từ worker 1 ⇒ B ở worker 2 nhận: 1000 ký tự
+phát 10 KB, chưa có bảng từ worker 1 ⇒ B ở worker 2 nhận: KHÔNG
+tạo bảng rồi phát 10 KB ⇒ B nhận: 10000 ký tự · số dòng trong socket_io_attachments: 1</div>
+<p><strong>Swapping by one environment variable</strong>, logging configured and actual:</p>
+<div class="out">$ node doi.mjs
+{"msg":"[socket] adapter","configured":"memory","actual":"Adapter"}
+$ SOCKET_ADAPTER=redis REDIS_URL=redis://127.0.0.1:19661 node doi.mjs
+{"msg":"[socket] adapter","configured":"redis","actual":"RedisAdapter"}
+$ SOCKET_ADAPTER=postgres DATABASE_URL=postgres://postgres:lab@127.0.0.1:19660/postgres node doi.mjs
+{"msg":"[socket] adapter","configured":"postgres","actual":"PostgresAdapter"}
+$ SOCKET_ADAPTER=redis REDIS_URL=redis://127.0.0.1:19699 node doi.mjs   # REDIS_URL gõ nhầm cổng
+{"msg":"[socket] adapter","configured":"redis","actual":"Adapter"}</div>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-javascript"><span class="tok-comment">// MỘT phép đo cho mọi adapter: A nối worker 1, B nối worker 2 (cùng phòng r). A gửi 'phat' kèm giờ gửi; worker 1 io.to('r').emit('tin');</span>
+<span class="tok-comment">// B nhận — A và B cùng một tiến trình nên dùng chung đồng hồ. 1.000 lượt nối tiếp. che = memory (một server) | cluster | redis | postgres.</span>
+import cluster from 'node:cluster';
+import http from 'node:http';
+import { Server } from 'socket.io';
+import { io as ketNoi } from 'socket.io-client';
+const che = process.argv[2];
+const CONG = 19761;
+async function lamServer(cong, so) {
+  let opts = {};
+  if (che === 'redis') { const { createAdapter } = await import('@socket.io/redis-adapter'); const { createClient } = await import('redis');
+    const pub = createClient({ url: 'redis://127.0.0.1:19661' }), sub = pub.duplicate(); await Promise.all([pub.connect(), sub.connect()]); opts.adapter = createAdapter(pub, sub); }
+  if (che === 'postgres') { const { createAdapter } = await import('@socket.io/postgres-adapter'); const pg = (await import('pg')).default;
+    opts.adapter = createAdapter(new pg.Pool({ connectionString: 'postgres://postgres:lab@127.0.0.1:19660/postgres' })); }
+  if (che === 'cluster') { const { createAdapter } = await import('@socket.io/cluster-adapter'); opts.adapter = createAdapter(); }
+  const srv = http.createServer(); const io = new Server(srv, opts);
+  if (che === 'cluster') { const { setupWorker } = await import('@socket.io/sticky'); setupWorker(io); } else srv.listen(cong);
+  io.on('connection', (s) =&gt; { s.join('r'); s.emit('ban-la', so); s.on('phat', (t) =&gt; io.to('r').emit('tin', t)); });
+  return io;
+}
+const t0 = performance.timeOrigin;
+async function do1000(cong1, cong2) {
+  const ket = (cong) =&gt; ketNoi(&#96;http://localhost:\${cong}&#96;, { transports: ['websocket'], forceNew: true });
+  let A, B, wA, wB;
+  for (;;) { A ??= ket(cong1); wA ??= await new Promise((ok) =&gt; A.once('ban-la', ok));
+    const c = ket(cong2); const w = await new Promise((ok) =&gt; c.once('ban-la', ok)); if (w !== wA) { B = c; wB = w; break; } c.close(); }
+  await new Promise((ok) =&gt; setTimeout(ok, 500));
+  const d = []; let nhan = 0;
+  for (let k = 0; k &lt; 1000; k++) { const p = new Promise((ok) =&gt; B.once('tin', (t) =&gt; { nhan++; d.push(performance.now() - t); ok(); })); A.emit('phat', performance.now()); await p; }
+  d.sort((a, b) =&gt; a - b); const f = (x) =&gt; x.toFixed(2).replace('.', ',');
+  console.log(&#96;\${che.padEnd(9)} A ở worker \${wA}, B ở worker \${wB} · B nhận \${nhan}/1000 · p50 \${f(d[500])} ms · p99 \${f(d[990])} ms&#96;);
+}
+if (che === 'cluster') {
+  if (cluster.isPrimary) {
+    const { setupMaster } = await import('@socket.io/sticky'); const { setupPrimary } = await import('@socket.io/cluster-adapter');
+    const srv = http.createServer(); setupMaster(srv, { loadBalancingMethod: 'least-connection' }); setupPrimary(); srv.listen(CONG);
+    cluster.setupPrimary({ serialization: 'advanced' });         <span class="tok-comment">  // README: giữ Buffer nguyên vẹn qua IPC</span>
+    const ws = [cluster.fork({ SO: 1 }), cluster.fork({ SO: 2 })];
+    await Promise.all(ws.map((w) =&gt; new Promise((ok) =&gt; w.once('online', ok)))); await new Promise((ok) =&gt; setTimeout(ok, 800));
+    await do1000(CONG, CONG); ws.forEach((w) =&gt; w.kill()); process.exit(0);
+  } else await lamServer(CONG, +process.env.SO);
+} else if (che === 'memory') { await lamServer(CONG, 1); await do1000(CONG, CONG).catch(() =&gt; {}); process.exit(0); }
+else if (process.argv[3] === 'worker') { await lamServer(+process.argv[4], +process.argv[5]); process.send('san-sang'); }
+else {
+  const { fork } = await import('node:child_process');
+  const ws = [1, 2].map((so) =&gt; fork(new URL(import.meta.url).pathname, [che, 'worker', CONG + so, so]));
+  await Promise.all(ws.map((w) =&gt; new Promise((ok) =&gt; w.once('message', ok))));
+  await do1000(CONG + 1, CONG + 2); ws.forEach((w) =&gt; w.kill()); process.exit(0);
+}</code></pre>
+<pre><code class="language-javascript"><span class="tok-comment">// Postgres adapter: NOTIFY chỉ chở được &lt; 8000 byte. Tin 10 KB thì sao? Lượt 1: chưa tạo bảng socket_io_attachments. Lượt 2: tạo bảng rồi phát lại.</span>
+<span class="tok-comment">// Đếm thêm: adapter giữ bao nhiêu kết nối Postgres, và đang LISTEN kênh nào.</span>
+import { Server } from 'socket.io';
+import { io as ketNoi } from 'socket.io-client';
+import { createAdapter } from '@socket.io/postgres-adapter';
+import pg from 'pg';
+const URL_PG = 'postgres://postgres:lab@127.0.0.1:19660/postgres';
+const q = new pg.Client(URL_PG); await q.connect(); await q.query('DROP TABLE IF EXISTS socket_io_attachments');
+process.on('unhandledRejection', (e) =&gt; console.log(&#96;  unhandledRejection: \${e.message}&#96;));
+const moi = (cong) =&gt; { const io = new Server(cong, { adapter: createAdapter(new pg.Pool({ connectionString: URL_PG }), { errorHandler: (e) =&gt; console.log(&#96;  errorHandler: \${e.message}&#96;) }) }); io.on('connection', (s) =&gt; s.join('r')); return io; };
+const w1 = moi(19763), w2 = moi(19764);
+const B = ketNoi('http://localhost:19764', { transports: ['websocket'] }); let nhan = [];
+B.on('tin', (x) =&gt; nhan.push(x.length));
+await new Promise((ok) =&gt; B.once('connect', ok)); await new Promise((ok) =&gt; setTimeout(ok, 800));
+const r = await q.query("SELECT count(*)::int AS n, string_agg(DISTINCT left(query, 40), ' | ') AS q FROM pg_stat_activity WHERE datname = 'postgres' AND pid &lt;&gt; pg_backend_pid()");
+console.log(&#96;kết nối Postgres của 2 worker: \${r.rows[0].n} · \${r.rows[0].q}&#96;);
+for (const [ten, kt] of [['1 KB', 1000], ['10 KB, chưa có bảng', 10000]]) {
+  nhan = []; w1.to('r').emit('tin', 'x'.repeat(kt)); await new Promise((ok) =&gt; setTimeout(ok, 800));
+  console.log(&#96;phát \${ten} từ worker 1 ⇒ B ở worker 2 nhận: \${nhan.length ? nhan[0] + ' ký tự' : 'KHÔNG'}&#96;);
+}
+await q.query('CREATE TABLE socket_io_attachments (id bigserial UNIQUE, created_at timestamptz DEFAULT NOW(), payload bytea)');
+nhan = []; w1.to('r').emit('tin', 'x'.repeat(10000)); await new Promise((ok) =&gt; setTimeout(ok, 800));
+console.log(&#96;tạo bảng rồi phát 10 KB ⇒ B nhận: \${nhan.length ? nhan[0] + ' ký tự' : 'KHÔNG'} · số dòng trong socket_io_attachments: \${(await q.query('SELECT count(*)::int AS n FROM socket_io_attachments')).rows[0].n}&#96;);
+process.exit(0);</code></pre>
+<h3>🔗 Go deeper in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-16-4-cluster-mo-rong" target="_blank" rel="noopener"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Node.js · 16.4 — Scaling out: 3.4× for CPU work, 1.06× for I/O work</span><span class="lc-sub">node:cluster, the base of the cluster adapter</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/redis/learn?lessonSlug=rd-8-2-stream" target="_blank" rel="noopener"><span class="lc-ico">🟥</span><span class="lc-body"><span class="lc-title">Redis · 8.2 — Stream: the log that remembers</span><span class="lc-sub">The base of the streams adapter</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/redis/learn?lessonSlug=rd-8-5-chon-cong-cu" target="_blank" rel="noopener"><span class="lc-ico">🟥</span><span class="lc-body"><span class="lc-title">Redis · 8.5 — Choosing: Pub/Sub, Stream, list or a real broker</span><span class="lc-sub">The same decision one layer down</span></span></a>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">in-memory adapter</span><span class="v">The silent default; correct only with a single process.</span></div>
+  <div class="kv"><span class="k">cluster-adapter</span><span class="v">All workers on one machine under <code>node:cluster</code>; pairs with <code>@socket.io/sticky</code>.</span></div>
+  <div class="kv"><span class="k">redis-adapter</span><span class="v">Needed once there is a second machine, or you already run Redis.</span></div>
+  <div class="kv"><span class="k">postgres-adapter</span><span class="v">Modest realtime traffic where operational simplicity beats milliseconds.</span></div>
+  <div class="kv"><span class="k">One-line swap</span><span class="v">Changing adapters is a single line, so the choice is reversible.</span></div>
+  <div class="kv"><span class="k">Selecting condition</span><span class="v">Each adapter is chosen by one fact about your deployment today.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Four adapters exist, each selected by one condition.</li><li>in-memory for a single real process (dangerous only as the silent default).</li><li>cluster-adapter when every worker is on one machine under <code>node:cluster</code>.</li><li>redis-adapter once there is a second machine; postgres-adapter when simplicity beats milliseconds.</li><li>Swapping is a one-line change, so the real decision is only &quot;what is true today&quot;.</li></ul>
 
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Adapter</span><span class="lc-sub">socket.io/docs/v4/adapter — danh sách adapter chính thức và giao diện chung.</span></span></div>
@@ -1125,6 +2501,7 @@ if (cluster.isPrimary) {
   const httpServer = http.createServer();
   setupMaster(httpServer, { loadBalancingMethod: 'least-connection' });
   setupPrimary();                       // định tuyến thông điệp adapter giữa worker
+  cluster.setupPrimary({ serialization: 'advanced' });  // ⚠ ĐO THẬT: README bắt buộc — thiếu dòng này client báo "xhr poll error" mãi
   httpServer.listen(3000);
   for (let i = 0; i &lt; os.cpus().length; i++) cluster.fork();
 } else {
@@ -1182,6 +2559,7 @@ là lựa chọn tệ cho một app nặng chat, vì bạn vừa đặt bus thô
 lên cùng cái máy với dữ liệu bền của mình.
 </code></pre>
 
+<p><strong>Đo thật (13/11/2026, một máy Mac, Redis 7.4 và Postgres 16 trong Docker, không tải truy vấn):</strong> cùng một bàn đo — A gửi từ worker 1, B nhận ở worker 2, 1.000 lượt — cho p50 / p99 qua worker là <strong>0,24 / 0,71 ms</strong> với cluster adapter, <strong>0,84 / 2,16 ms</strong> với Redis và <strong>0,98 / 2,64 ms</strong> với Postgres. Postgres lúc rảnh không &quot;chậm hơn 5-10 ms&quot;; cái giá thật của Postgres nằm chỗ khác: hai worker giữ <strong>5</strong> kết nối Postgres (một cái <code>LISTEN &quot;socket.io#/&quot;</code> thường trực), và adapter <strong>không</strong> tự tạo bảng attachments — tin 10 KB gửi trước khi <code>CREATE TABLE socket_io_attachments …</code> <strong>mất mà không có dòng log nào</strong>. Hai lựa chọn chính thức trang này chưa liệt kê: <code>@socket.io/redis-streams-adapter</code> (Redis stream thay pub/sub, Redis gián đoạn ngắn có thể đọc bù) và <code>createShardedAdapter</code> cho sharded pub/sub của Redis 7 — cả hai chưa đo ở đây.</p>
 <h3>Quyết định, bằng ba câu hỏi</h3>
 <div class="lz-flow">
 <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Bạn có bao giờ chạy nhiều hơn một máy không?</span><span class="lz-d">Nếu thật sự không — và hãy trung thực, vì &quot;có thể sau này chúng ta sẽ scale&quot; không giống một kế hoạch — thì cluster adapter tốt hơn Redis một cách dứt khoát: ít thứ phải chạy hơn, độ trễ thấp hơn, và nó giải quyết luôn chuyện sticky trong cùng một lần cấu hình.</span></div>
@@ -1222,6 +2600,134 @@ logger.info('[socket] adapter', { configured: adapter, actual: io.of('/').adapte
 <div class="callout">
 <p><strong>Một câu.</strong> Có bốn adapter và mỗi cái được chọn bởi một điều kiện — in-memory khi bạn thật sự chạy một tiến trình (nguy hiểm chỉ vì nó là mặc định im lặng), <code>cluster-adapter</code> khi mọi worker nằm trên một máy dưới <code>node:cluster</code> (độ trễ thấp hơn Redis, không dịch vụ nào phải vận hành, và nó đi cặp với <code>@socket.io/sticky</code>), <code>redis-adapter</code> một khi có máy thứ hai hoặc bạn vốn đã chạy Redis, và <code>postgres-adapter</code> khi traffic realtime khiêm tốn và sự đơn giản vận hành thắng vài mili giây — và vì việc tráo chúng chỉ là một dòng, quyết định thật sự luôn chỉ là &quot;hôm nay điều gì đang đúng&quot;.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Với bốn kịch bản — một tiến trình, mọi worker trên một máy, một máy thứ hai, traffic khiêm tốn muốn đơn giản — chọn đúng adapter (in-memory, cluster, redis, postgres).</li>
+<li>Tráo một adapter sang cái khác và xác nhận đó là một thay đổi một dòng, nên quyết định chỉ là &quot;hôm nay điều gì đang đúng&quot;.</li>
+<li>Để ý in-memory là mặc định im lặng — lập luận về bug nó gây ra lần đầu bạn thêm một tiến trình thứ hai.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn khớp được mỗi trong bốn adapter với điều kiện chọn duy nhất của nó.</p></div>
+
+<h3>🔬 Đo thật: một bàn đo, ba adapter</h3>
+<p>socket.io 4.8.3 · @socket.io/cluster-adapter 0.3.0 · @socket.io/sticky 2.0.1 · @socket.io/redis-adapter 8.3.0 · @socket.io/postgres-adapter 0.5.0:</p>
+<div class="out">$ node do55.mjs cluster
+cluster   A ở worker 1, B ở worker 2 · B nhận 1000/1000 · p50 0,24 ms · p99 0,71 ms
+$ node do55.mjs redis
+redis     A ở worker 1, B ở worker 2 · B nhận 1000/1000 · p50 0,84 ms · p99 2,16 ms
+$ node do55.mjs postgres
+postgres  A ở worker 1, B ở worker 2 · B nhận 1000/1000 · p50 0,98 ms · p99 2,64 ms</div>
+<p><strong>Dòng hay bị quên</strong> khi dựng cluster-adapter:</p>
+<div class="out">$ node thieu.mjs
+thiếu: connect_error "xhr poll error" × 3 — không bao giờ nối được
+$ node thieu.mjs du
+du: connect ✓ (websocket)</div>
+<p><strong>Postgres adapter</strong> — số kết nối, và tin 10 KB trước/sau khi tạo bảng:</p>
+<div class="out">$ node lon.mjs
+kết nối Postgres của 2 worker: 5 · LISTEN "socket.io#/" | SELECT pg_notify($1, $2)
+phát 1 KB từ worker 1 ⇒ B ở worker 2 nhận: 1000 ký tự
+phát 10 KB, chưa có bảng từ worker 1 ⇒ B ở worker 2 nhận: KHÔNG
+tạo bảng rồi phát 10 KB ⇒ B nhận: 10000 ký tự · số dòng trong socket_io_attachments: 1</div>
+<p><strong>Tráo bằng một biến môi trường</strong>, log cả định dùng lẫn thật sự chạy:</p>
+<div class="out">$ node doi.mjs
+{"msg":"[socket] adapter","configured":"memory","actual":"Adapter"}
+$ SOCKET_ADAPTER=redis REDIS_URL=redis://127.0.0.1:19661 node doi.mjs
+{"msg":"[socket] adapter","configured":"redis","actual":"RedisAdapter"}
+$ SOCKET_ADAPTER=postgres DATABASE_URL=postgres://postgres:lab@127.0.0.1:19660/postgres node doi.mjs
+{"msg":"[socket] adapter","configured":"postgres","actual":"PostgresAdapter"}
+$ SOCKET_ADAPTER=redis REDIS_URL=redis://127.0.0.1:19699 node doi.mjs   # REDIS_URL gõ nhầm cổng
+{"msg":"[socket] adapter","configured":"redis","actual":"Adapter"}</div>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-javascript"><span class="tok-comment">// MỘT phép đo cho mọi adapter: A nối worker 1, B nối worker 2 (cùng phòng r). A gửi 'phat' kèm giờ gửi; worker 1 io.to('r').emit('tin');</span>
+<span class="tok-comment">// B nhận — A và B cùng một tiến trình nên dùng chung đồng hồ. 1.000 lượt nối tiếp. che = memory (một server) | cluster | redis | postgres.</span>
+import cluster from 'node:cluster';
+import http from 'node:http';
+import { Server } from 'socket.io';
+import { io as ketNoi } from 'socket.io-client';
+const che = process.argv[2];
+const CONG = 19761;
+async function lamServer(cong, so) {
+  let opts = {};
+  if (che === 'redis') { const { createAdapter } = await import('@socket.io/redis-adapter'); const { createClient } = await import('redis');
+    const pub = createClient({ url: 'redis://127.0.0.1:19661' }), sub = pub.duplicate(); await Promise.all([pub.connect(), sub.connect()]); opts.adapter = createAdapter(pub, sub); }
+  if (che === 'postgres') { const { createAdapter } = await import('@socket.io/postgres-adapter'); const pg = (await import('pg')).default;
+    opts.adapter = createAdapter(new pg.Pool({ connectionString: 'postgres://postgres:lab@127.0.0.1:19660/postgres' })); }
+  if (che === 'cluster') { const { createAdapter } = await import('@socket.io/cluster-adapter'); opts.adapter = createAdapter(); }
+  const srv = http.createServer(); const io = new Server(srv, opts);
+  if (che === 'cluster') { const { setupWorker } = await import('@socket.io/sticky'); setupWorker(io); } else srv.listen(cong);
+  io.on('connection', (s) =&gt; { s.join('r'); s.emit('ban-la', so); s.on('phat', (t) =&gt; io.to('r').emit('tin', t)); });
+  return io;
+}
+const t0 = performance.timeOrigin;
+async function do1000(cong1, cong2) {
+  const ket = (cong) =&gt; ketNoi(&#96;http://localhost:\${cong}&#96;, { transports: ['websocket'], forceNew: true });
+  let A, B, wA, wB;
+  for (;;) { A ??= ket(cong1); wA ??= await new Promise((ok) =&gt; A.once('ban-la', ok));
+    const c = ket(cong2); const w = await new Promise((ok) =&gt; c.once('ban-la', ok)); if (w !== wA) { B = c; wB = w; break; } c.close(); }
+  await new Promise((ok) =&gt; setTimeout(ok, 500));
+  const d = []; let nhan = 0;
+  for (let k = 0; k &lt; 1000; k++) { const p = new Promise((ok) =&gt; B.once('tin', (t) =&gt; { nhan++; d.push(performance.now() - t); ok(); })); A.emit('phat', performance.now()); await p; }
+  d.sort((a, b) =&gt; a - b); const f = (x) =&gt; x.toFixed(2).replace('.', ',');
+  console.log(&#96;\${che.padEnd(9)} A ở worker \${wA}, B ở worker \${wB} · B nhận \${nhan}/1000 · p50 \${f(d[500])} ms · p99 \${f(d[990])} ms&#96;);
+}
+if (che === 'cluster') {
+  if (cluster.isPrimary) {
+    const { setupMaster } = await import('@socket.io/sticky'); const { setupPrimary } = await import('@socket.io/cluster-adapter');
+    const srv = http.createServer(); setupMaster(srv, { loadBalancingMethod: 'least-connection' }); setupPrimary(); srv.listen(CONG);
+    cluster.setupPrimary({ serialization: 'advanced' });         <span class="tok-comment">  // README: giữ Buffer nguyên vẹn qua IPC</span>
+    const ws = [cluster.fork({ SO: 1 }), cluster.fork({ SO: 2 })];
+    await Promise.all(ws.map((w) =&gt; new Promise((ok) =&gt; w.once('online', ok)))); await new Promise((ok) =&gt; setTimeout(ok, 800));
+    await do1000(CONG, CONG); ws.forEach((w) =&gt; w.kill()); process.exit(0);
+  } else await lamServer(CONG, +process.env.SO);
+} else if (che === 'memory') { await lamServer(CONG, 1); await do1000(CONG, CONG).catch(() =&gt; {}); process.exit(0); }
+else if (process.argv[3] === 'worker') { await lamServer(+process.argv[4], +process.argv[5]); process.send('san-sang'); }
+else {
+  const { fork } = await import('node:child_process');
+  const ws = [1, 2].map((so) =&gt; fork(new URL(import.meta.url).pathname, [che, 'worker', CONG + so, so]));
+  await Promise.all(ws.map((w) =&gt; new Promise((ok) =&gt; w.once('message', ok))));
+  await do1000(CONG + 1, CONG + 2); ws.forEach((w) =&gt; w.kill()); process.exit(0);
+}</code></pre>
+<pre><code class="language-javascript"><span class="tok-comment">// Postgres adapter: NOTIFY chỉ chở được &lt; 8000 byte. Tin 10 KB thì sao? Lượt 1: chưa tạo bảng socket_io_attachments. Lượt 2: tạo bảng rồi phát lại.</span>
+<span class="tok-comment">// Đếm thêm: adapter giữ bao nhiêu kết nối Postgres, và đang LISTEN kênh nào.</span>
+import { Server } from 'socket.io';
+import { io as ketNoi } from 'socket.io-client';
+import { createAdapter } from '@socket.io/postgres-adapter';
+import pg from 'pg';
+const URL_PG = 'postgres://postgres:lab@127.0.0.1:19660/postgres';
+const q = new pg.Client(URL_PG); await q.connect(); await q.query('DROP TABLE IF EXISTS socket_io_attachments');
+process.on('unhandledRejection', (e) =&gt; console.log(&#96;  unhandledRejection: \${e.message}&#96;));
+const moi = (cong) =&gt; { const io = new Server(cong, { adapter: createAdapter(new pg.Pool({ connectionString: URL_PG }), { errorHandler: (e) =&gt; console.log(&#96;  errorHandler: \${e.message}&#96;) }) }); io.on('connection', (s) =&gt; s.join('r')); return io; };
+const w1 = moi(19763), w2 = moi(19764);
+const B = ketNoi('http://localhost:19764', { transports: ['websocket'] }); let nhan = [];
+B.on('tin', (x) =&gt; nhan.push(x.length));
+await new Promise((ok) =&gt; B.once('connect', ok)); await new Promise((ok) =&gt; setTimeout(ok, 800));
+const r = await q.query("SELECT count(*)::int AS n, string_agg(DISTINCT left(query, 40), ' | ') AS q FROM pg_stat_activity WHERE datname = 'postgres' AND pid &lt;&gt; pg_backend_pid()");
+console.log(&#96;kết nối Postgres của 2 worker: \${r.rows[0].n} · \${r.rows[0].q}&#96;);
+for (const [ten, kt] of [['1 KB', 1000], ['10 KB, chưa có bảng', 10000]]) {
+  nhan = []; w1.to('r').emit('tin', 'x'.repeat(kt)); await new Promise((ok) =&gt; setTimeout(ok, 800));
+  console.log(&#96;phát \${ten} từ worker 1 ⇒ B ở worker 2 nhận: \${nhan.length ? nhan[0] + ' ký tự' : 'KHÔNG'}&#96;);
+}
+await q.query('CREATE TABLE socket_io_attachments (id bigserial UNIQUE, created_at timestamptz DEFAULT NOW(), payload bytea)');
+nhan = []; w1.to('r').emit('tin', 'x'.repeat(10000)); await new Promise((ok) =&gt; setTimeout(ok, 800));
+console.log(&#96;tạo bảng rồi phát 10 KB ⇒ B nhận: \${nhan.length ? nhan[0] + ' ký tự' : 'KHÔNG'} · số dòng trong socket_io_attachments: \${(await q.query('SELECT count(*)::int AS n FROM socket_io_attachments')).rows[0].n}&#96;);
+process.exit(0);</code></pre>
+<h3>🔗 Học sâu hơn ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-16-4-cluster-mo-rong" target="_blank" rel="noopener"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Node.js · 16.4 — Mở rộng theo chiều ngang: 3,4× với việc CPU, 1,06× với việc I/O</span><span class="lc-sub">node:cluster, nền của cluster adapter</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/redis/learn?lessonSlug=rd-8-2-stream" target="_blank" rel="noopener"><span class="lc-ico">🟥</span><span class="lc-body"><span class="lc-title">Redis · 8.2 — Stream: cuốn nhật ký biết nhớ</span><span class="lc-sub">Nền của streams adapter</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/redis/learn?lessonSlug=rd-8-5-chon-cong-cu" target="_blank" rel="noopener"><span class="lc-ico">🟥</span><span class="lc-body"><span class="lc-title">Redis · 8.5 — Chọn: Pub/Sub, Stream, list hay một broker thật</span><span class="lc-sub">Cùng quyết định, ở tầng dưới</span></span></a>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">in-memory adapter</span><span class="v">Mặc định im lặng; chỉ đúng với một tiến trình duy nhất.</span></div>
+  <div class="kv"><span class="k">cluster-adapter</span><span class="v">Mọi worker trên một máy dưới <code>node:cluster</code>; đi cặp với <code>@socket.io/sticky</code>.</span></div>
+  <div class="kv"><span class="k">redis-adapter</span><span class="v">Cần một khi có máy thứ hai, hoặc bạn vốn đã chạy Redis.</span></div>
+  <div class="kv"><span class="k">postgres-adapter</span><span class="v">Traffic realtime khiêm tốn, nơi đơn giản vận hành thắng mili giây.</span></div>
+  <div class="kv"><span class="k">Tráo một dòng</span><span class="v">Đổi adapter chỉ một dòng, nên lựa chọn đảo được.</span></div>
+  <div class="kv"><span class="k">Điều kiện chọn</span><span class="v">Mỗi adapter được chọn bởi một dữ kiện về deployment hôm nay.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Có bốn adapter, mỗi cái được chọn bởi một điều kiện.</li><li>in-memory cho một tiến trình thật (nguy hiểm chỉ vì là mặc định im lặng).</li><li>cluster-adapter khi mọi worker trên một máy dưới <code>node:cluster</code>.</li><li>redis-adapter một khi có máy thứ hai; postgres-adapter khi đơn giản thắng mili giây.</li><li>Tráo là một thay đổi một dòng, nên quyết định thật sự chỉ là &quot;hôm nay điều gì đang đúng&quot;.</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO — Adapter</span><span class="lc-sub">socket.io/docs/v4/adapter — danh sách adapter chính thức và giao diện chung.</span></span></div>

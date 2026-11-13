@@ -23,7 +23,8 @@
  *                    tính bằng chính `conjugate`/`conjugateAdj` của web
  *   tu-vung.json     từ vựng CẢ khoá (khối `vocabAll`) — lấy từ `course.summary(d).vocab`
  *                    như TraTuVung.tsx, bỏ trùng như web
- *   on-the.json      (Dekiru) bộ thẻ "Ôn tập bằng thẻ" (khối `onthe`): thẻ + câu trắc nghiệm,
+ *   on-the.json      bộ thẻ "Ôn tập bằng thẻ" (khối `onthe`): thẻ + câu trắc nghiệm — Dekiru dùng
+ *                    onTheData riêng; khoá khác dựng từ tu-vung + mcq bài ngữ pháp/từ vựng (boTheChung),
  *                    đáp án chấp nhận (ansJp/ansVi) TÍNH SẴN bằng hàm của web (onThe.ts)
  *   net.json         (khoá tiếng Nhật) thứ tự nét KanjiVG của MỌI chữ xuất hiện trong khoá —
  *                    tập con của public/kanjivg/strokes.json (khối `write`, thẻ chữ Hán)
@@ -206,6 +207,7 @@ async function xuatKhoa(spec: Spec): Promise<string> {
   }
   if (tuVung.length) them.tuVung = ghi('tu-vung.json', { schema: SCHEMA, khoa: spec.khoa, tu: tuVung });
   if (spec.khoa === 'dekiru') them.onThe = ghi('on-the.json', await boThe());
+  else if (tuVung.length) them.onThe = ghi('on-the.json', await boTheChung(c, spec.khoa, tuVung));
 
   // Thứ tự nét (KanjiVG) — ghi SAU CÙNG để gom đủ chữ của mọi tệp trên.
   if (c.lang === 'ja') {
@@ -296,6 +298,73 @@ async function boThe() {
   });
   const cau = (d.CAU as [number, string, 'np' | 'han', string, string[], number, string, string][]).map(([n, id, loai, q, opts, correct, why, title]) => ({ id: `q:${id}`, loai, n, q, opts, correct, why, title }));
   return { schema: SCHEMA, the, cau };
+}
+
+/**
+ * Bộ thẻ ôn cho khoá KHÔNG có `onTheData` riêng (IELTS, Tập 2, JP, CH) — app CT Language xin 13/11/2026.
+ * Thẻ `tu` = từ vựng cả khoá (đúng danh sách tu-vung.json); câu `cau` = khối `mcq` của bài ngữ pháp /
+ * từ vựng (bài nghe/đọc bỏ — câu hỏi dựa vào đoạn văn, tách ra là vô nghĩa).
+ *
+ * Cùng khuôn on-the.json của Dekiru, THÊM ở gốc: `ngonNgu` (en|ja|zh), `giong` (giọng TTS của khoá),
+ * `soKhop` — luật fold câu gõ tiếng ngoại để so với `ansJp`:
+ *   'ja'     foldJp (như Dekiru)
+ *   'en'     NFKC, chữ thường, ’→', bỏ mọi ký tự ngoài a-z 0-9 ' và khoảng trắng, gộp khoảng trắng
+ *   'zh'     chữ Hán giữ nguyên (bỏ khoảng trắng/dấu câu); pinyin: bỏ dấu thanh + số thanh + khoảng trắng + ', ü→v
+ * Với en/zh: `kana` rỗng; câu đọc to = chữ trần của `jp` (bỏ ruby {漢|pinyin}) bằng `giong`.
+ */
+const foldEn = (t: string) => t.normalize('NFKC').toLowerCase().replace(/[’‘`]/g, "'")
+  .replace(/[^a-z0-9' ]+/g, ' ').replace(/\s+/g, ' ').trim();
+const foldZh = (t: string) => {
+  const x = t.normalize('NFKC').toLowerCase().replace(/[\s'’·•,，。.!?！？、:：;；~～〜（）()…-]/g, '');
+  if (/[㐀-鿿]/.test(x)) return x;
+  return x.normalize('NFD').replace(/̈/g, 'v').replace(/[̀-ͯ]/g, '').replace(/[0-9]/g, '').replace(/ü/g, 'v');
+};
+const bienTheEn = (w: string) => {
+  const ra = new Set<string>();
+  for (const p of w.split(/\s*\/\s*|\s*,\s*|\s*;\s*/)) {
+    const keep = p.replace(/[()]/g, '');
+    const drop = p.replace(/\([^)]*\)/g, '');
+    for (const v of [keep, drop, drop.replace(/\b(sb|sth|somebody|something|one's|oneself)\b/g, '')]) { const f = foldEn(v); if (f) ra.add(f); }
+  }
+  return [...ra];
+};
+
+async function boTheChung(c: { lang: string; voice: string; dayName: (n: number) => string; days: Day[]; load: (n: number) => Promise<Lesson[]> }, khoa: string,
+  tuVung: { w: string; pos: string; ipa: string; vi: string; n: number }[]) {
+  const ch = await load(join(ROOT, 'src/components/sach-hoc/nhat/chia.ts'));
+  const ot = await load(join(ROOT, 'src/components/sach-hoc/nhat/onThe.ts'));
+  const nn = c.lang === 'ja' ? 'ja' : c.lang === 'zh' ? 'zh' : 'en';
+  const daId = new Set<string>();
+  const the = tuVung.map((v) => {
+    let id = `t:${v.n}:${ch.bare(v.w)}`;
+    while (daId.has(id)) id += "'";
+    daId.add(id);
+    const ans = nn === 'ja' ? ot.jpVariants(v.w, v.ipa)
+      : nn === 'zh' ? [...new Set([ch.bare(v.w), ch.reading(v.w), v.ipa].map(foldZh).filter(Boolean))]
+      : bienTheEn(ch.bare(v.w));
+    return {
+      id, loai: 'tu', n: v.n, nhom: c.dayName(v.n), jp: v.w,
+      kana: nn === 'ja' ? ch.reading(v.w).replace(/[（）()]/g, '').replace(/[～〜]/g, '').trim() : '',
+      ro: v.ipa, vi: v.vi, meta: v.pos, ansJp: ans,
+      // Bỏ phần giải thích trong ngoặc TRƯỚC khi tách theo dấu phẩy — "tôi (dùng cho cả nam, nữ)" ⇒ ["toi"].
+      ansVi: ot.viAnswers(v.vi.replace(/\([^)]*\)|（[^）]*）/g, '')),
+    };
+  });
+  type Mcq = { t: string; id: string; title?: string; items?: { q: string; options: string[]; correct: number; why?: string }[] };
+  const cau: Record<string, unknown>[] = [];
+  for (const d of c.days) {
+    for (const l of await c.load(d.n)) {
+      if (l.kind !== 'grammar' && l.kind !== 'vocab') continue;
+      for (const b of (l.blocks ?? []) as Mcq[]) {
+        if (b?.t !== 'mcq' || !Array.isArray(b.items)) continue;
+        b.items.forEach((it, i) => {
+          if (!it?.q || !Array.isArray(it.options) || typeof it.correct !== 'number' || !it.options[it.correct]) return;
+          cau.push({ id: `q:${b.id}:${i}`, loai: l.kind === 'vocab' ? 'tu' : 'np', n: d.n, q: it.q, opts: it.options, correct: it.correct, why: it.why ?? '', title: b.title ?? l.title });
+        });
+      }
+    }
+  }
+  return { schema: SCHEMA, khoa, ngonNgu: nn, giong: c.voice, soKhop: nn, the, cau };
 }
 
 const args = process.argv.slice(2);

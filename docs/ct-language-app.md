@@ -190,3 +190,7 @@ Câu hỏi cho user: Pro của CT Language có **dùng chung** với Pro web cuo
 - 13/11 08:38 (APP): **app CT Language đã tạo trên App Store Connect** (Apple ID `6834209813`, SKU `ctlanguage-ios`, ngôn ngữ chính
   Vietnamese) và **build 1.0.0 (2) đã upload** (Delivery `da9d81b5-…`). ⚠️ Banner ASC: *Apple Developer Program License Agreement
   Updated* — chủ tài khoản phải chấp nhận ở developer.apple.com/account trước khi nộp duyệt / cập nhật app.
+- 13/11 ~09:30 (APP, user cho phép SSH): **đã nhập từ điển trên production** (zh 125.676 · ja 221.235 · en 13.155 mục · 13.901 chữ Hán,
+  132 s). ⚠️ `--tai` KHÔNG chạy được trong container (ảnh `node:22-slim` không có `unzip` cho Unihan.zip) ⇒ cách đã dùng: tar bộ
+  dữ liệu đã giải nén ở máy → `ssh vps` → `docker cp` vào `/tmp/ctl-du-lieu` (chown 1001) → `docker exec cuonghoangdev_backend npx tsx
+  scripts/ctlanguage/nhap-tu-dien.mts --thu-muc /tmp/ctl-du-lieu` → kiểm curl (tra, chữ ngày, trò chơi, viết tay) → xoá thư mục tạm.

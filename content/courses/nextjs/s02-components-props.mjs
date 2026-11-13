@@ -899,7 +899,7 @@ ${G02_3}
   return (
     &lt;label&gt;
       {label}
-      &lt;input {...rest} /&gt;   <span class="tok-comment">// type, placeholder, value, onChange… all forwarded</span>
+      &lt;input {...rest} /&gt;   <span class="tok-comment">{/* type, placeholder, value, onChange… all forwarded */}</span>
     &lt;/label&gt;
   );
 }
@@ -1107,7 +1107,7 @@ npm run build &amp;&amp; npm start  <span class="tok-comment">  # open /tim and 
   return (
     &lt;label&gt;
       {label}
-      &lt;input {...rest} /&gt;   <span class="tok-comment">// type, placeholder, value, onChange… đều được chuyển tiếp</span>
+      &lt;input {...rest} /&gt;   <span class="tok-comment">{/* type, placeholder, value, onChange… đều được chuyển tiếp */}</span>
     &lt;/label&gt;
   );
 }

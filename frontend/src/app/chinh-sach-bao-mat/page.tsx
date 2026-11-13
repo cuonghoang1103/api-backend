@@ -3,18 +3,18 @@ import LegalShell from '@/components/legal/LegalShell';
 
 export const metadata: Metadata = {
   title: 'Chính sách bảo mật',
-  description: 'Chính sách bảo mật thông tin của CuongThai và ứng dụng CT Work theo Luật Bảo vệ dữ liệu cá nhân 91/2025/QH15 và Nghị định 356/2025/NĐ-CP: dữ liệu thu thập, tin nhắn riêng, Bảng tin, ảnh động GIF (GIPHY), lọc nội dung, đăng nhập bằng Apple, trạng thái hoạt động, trợ lý AI, phiên âm giọng nói, thông báo đẩy, thời hạn lưu trữ, xoá tài khoản và quyền của chủ thể dữ liệu. Có bản tóm tắt tiếng Anh.',
+  description: 'Chính sách bảo mật thông tin của CuongThai, ứng dụng CT Work và CT Language theo Luật Bảo vệ dữ liệu cá nhân 91/2025/QH15 và Nghị định 356/2025/NĐ-CP: dữ liệu thu thập, tin nhắn riêng, Bảng tin, ảnh động GIF (GIPHY), lọc nội dung, đăng nhập bằng Apple, trạng thái hoạt động, trợ lý AI, phiên âm giọng nói, thông báo đẩy, thời hạn lưu trữ, xoá tài khoản và quyền của chủ thể dữ liệu. Có bản tóm tắt tiếng Anh.',
   alternates: { canonical: 'https://cuongthai.com/chinh-sach-bao-mat' },
 };
 
 export default function Page() {
   return (
-    <LegalShell title="Chính sách bảo mật" activeHref="/chinh-sach-bao-mat" updated="2026-10-22">
+    <LegalShell title="Chính sách bảo mật" activeHref="/chinh-sach-bao-mat" updated="2026-11-13">
       <p>
         CuongThai tôn trọng và bảo vệ thông tin cá nhân của người dùng, tuân thủ
         <b> Luật Bảo vệ dữ liệu cá nhân số 91/2025/QH15</b> và <b>Nghị định 356/2025/NĐ-CP</b> (hiệu lực từ 01/01/2026, thay thế Nghị định 13/2023/NĐ-CP). Chính sách này
         mô tả cách chúng tôi thu thập, sử dụng, lưu trữ và bảo vệ dữ liệu của Quý khách trên website cuongthai.com và các ứng dụng
-        của CuongThai, trong đó có ứng dụng <b>CT Work</b> trên iOS.
+        của CuongThai, trong đó có ứng dụng <b>CT Work</b> và ứng dụng học ngoại ngữ <b>CT Language</b> trên iOS (mục <a href="#ct-language">14</a>).
       </p>
       <p lang="en">
         <i>An English summary of this policy is available in <a href="#english">section 13</a>.</i>
@@ -393,6 +393,45 @@ export default function Page() {
           <b>Your rights and contact.</b> You can download a copy of your data (JSON) in Settings → Account &amp; Data, edit your profile, withdraw consent for individual
           features in the app, and contact us using the seller information below.
         </p>
+      </div>
+
+      <h2 id="ct-language">14. Ứng dụng CT Language (học tiếng Anh, Nhật, Trung trên iOS)</h2>
+      <ul>
+        <li><b>Không cần tài khoản</b> để học bài và tra từ điển. Sổ từ, lịch ôn, chuỗi ngày học, kỷ lục trò chơi, lịch sử tra và gói từ điển ngoại tuyến
+          được lưu <b>trên máy</b> của Quý khách (widget đọc một bản sao nhỏ qua nhóm ứng dụng trên chính máy đó) và không gửi về máy chủ.</li>
+        <li><b>Khi đăng nhập</b> (tài khoản CuongThai hoặc Đăng nhập bằng Apple): máy chủ lưu hồ sơ học (ngôn ngữ đang học, trình độ, mục tiêu, số phút mỗi ngày,
+          giờ nhắc) và tiến độ bài học để đồng bộ với cuongthai.com.</li>
+        <li><b>Micro</b> chỉ bật khi Quý khách bấm nút micro:
+          (a) <b>tra từ bằng giọng nói</b> — xử lý bằng dịch vụ nhận giọng nói của Apple (trên máy nếu máy hỗ trợ);
+          (b) <b>gọi CuongMini luyện nói</b> và <b>chấm phát âm</b> trong bài — bản ghi được gửi qua máy chủ CuongThai tới Groq (chuyển giọng nói thành chữ)
+          và Microsoft Azure Speech (chấm phát âm); bản chữ cùng vài lượt hội thoại gần nhất được gửi tới nhà cung cấp AI (Anthropic, OpenAI qua cổng modelapi.vn /
+          rambo.ai.vn) để tạo câu trả lời, câu trả lời được đọc thành tiếng bằng Microsoft Azure. <b>Bản ghi âm không được lưu</b> trên máy chủ; ứng dụng hỏi ý kiến
+          đồng ý trước lần gửi dữ liệu tới AI đầu tiên và Quý khách rút lại được trong Tôi › CuongMini · AI.</li>
+        <li><b>Máy ảnh</b> chỉ dùng khi Quý khách bấm "Chụp ảnh" để tra chữ; ảnh được đọc ngay trên máy (Apple Vision), không gửi đi.
+          <b>Viết tay</b> chữ Hán/kana: chỉ toạ độ các nét được gửi tới máy chủ để so với dữ liệu nét chữ, không lưu.</li>
+        <li><b>Cộng đồng hỏi đáp</b>: câu hỏi và trả lời Quý khách đăng hiển thị công khai với người dùng ứng dụng (kể cả khách chưa đăng nhập) kèm tên hiển thị.
+          Nội dung có từ ngữ xúc phạm bị chặn lúc đăng; báo cáo được gửi tới đội kiểm duyệt và xử lý trong 24 giờ; danh sách người Quý khách chặn được lưu để ẩn nội dung
+          hai chiều. Quý khách xoá được bài của mình bất cứ lúc nào; xoá tài khoản thì bài và trả lời bị xoá theo.</li>
+        <li><b>Mua Pro</b>: Apple xử lý thanh toán — chúng tôi không nhận thông tin thẻ. Máy chủ nhận thông tin giao dịch đã ký của Apple (mã giao dịch, gói, ngày bắt đầu/hết hạn,
+          hoàn tiền) để bật hoặc thu hồi quyền Pro.</li>
+        <li>Nhắc học là <b>thông báo cục bộ</b> do máy tự đặt theo giờ Quý khách chọn. Ứng dụng <b>không có quảng cáo</b> và <b>không theo dõi</b> Quý khách qua ứng dụng
+          hay website của bên khác.</li>
+        <li>Xoá tài khoản ngay trong ứng dụng: Tôi › Xoá tài khoản (giống mục 5).</li>
+      </ul>
+      <div lang="en">
+        <p><b>CT Language (iOS) — English summary.</b></p>
+        <ul>
+          <li>Lessons and the dictionary work without an account. Your word notebook, review schedule, streak, game records, search history and offline dictionary packs stay
+            on your device. Signed in, we store your learning profile (languages, level, goal, minutes per day, reminder time) and lesson progress to sync with cuongthai.com.</li>
+          <li>The microphone is used only when you tap it: voice lookup uses Apple speech recognition; CuongMini voice practice and pronunciation scoring send the recording
+            through our server to Groq (speech-to-text) and Microsoft Azure Speech, and the transcript with recent turns to an AI provider (Anthropic, OpenAI via modelapi.vn /
+            rambo.ai.vn); replies are voiced by Microsoft Azure. Recordings are not stored. The app asks for consent before the first AI request; you can withdraw it in
+            Me › CuongMini · AI.</li>
+          <li>Camera lookup is processed on device (Apple Vision) and never uploaded. Handwriting lookup sends stroke coordinates only, which are not stored.</li>
+          <li>Community Q&amp;A posts and replies are public to app users with your display name; abusive words are blocked, reports are reviewed within 24 hours, and you can block
+            users, delete your posts, or delete your account (which deletes them).</li>
+          <li>Purchases are processed by Apple; we receive Apple-signed transaction details to grant or revoke Pro. Reminders are local notifications. No ads, no tracking.</li>
+        </ul>
       </div>
 
     </LegalShell>

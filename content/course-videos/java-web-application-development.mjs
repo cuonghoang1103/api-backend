@@ -89,7 +89,7 @@ export default {
     "prj301-slide-cs4-1": { yt: "RI3UpqUZq50", credit: "Telusko — #34 Spring Security | Bcrypt Password Encoder" },
     "prj301-slide-cs4-2": { yt: "8QDORHQvdu8", credit: "Telusko — #31 Spring Security | CSRF Token" },
     "prj301-slide-cs6-2": { yt: "6rGMvws--kk", credit: "Marco Behler — Packaging your .jar or .war files into a Docker container | Docker & Java" },
-    'prj301-hoc-the-nao': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/java-web-application-development/00-gioi-thieu-huong-dan-hoc/00-02-hoc-prj301-the-nao-ff527251.mp4' }, defaultVideoTrack: 'VI' },
-    'prj301-dieu-kien-qua-mon': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/java-web-application-development/00-gioi-thieu-huong-dan-hoc/00-07-dieu-kien-qua-mon-bcef847b.mp4' }, defaultVideoTrack: 'VI' },
+    'prj301-hoc-the-nao': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/java-web-application-development/00-gioi-thieu-huong-dan-hoc/00-02-hoc-prj301-the-nao-ff527251.mp4' }, defaultVideoTrack: 'VI'},
+    'prj301-dieu-kien-qua-mon': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/java-web-application-development/00-gioi-thieu-huong-dan-hoc/00-07-dieu-kien-qua-mon-bcef847b.mp4' }, defaultVideoTrack: 'VI'},
   },
 };

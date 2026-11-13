@@ -112,7 +112,7 @@ export default {
     'rd-12-3-bo-cong-cu': { yt: 'Ah6EgdtPcLk', credit: 'zz TALK — Redis latency load testing with JMeter' },    // Redis latency load testing with JMeter
     'rd-12-4-giam-sat': { yt: 'DEPYkdnQz5M', credit: 'Jskool — Monitor Redis easily with Grafana  #redis #grafana' },      // Monitor Redis easily with Grafana
     'rd-12-5-ket-khoa': { yt: 'IJkYipYNEtI', credit: 'Harkirat Singh — Complete Redis, Websockets, Pub Subs and Message queues Bootcamp' },      // Complete Redis, Websockets, Pub Subs and Message queues Bootcamp
-    'rd-0-0-start-here-1': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/redis/00-redis-giai-quyet-gi/00-01-bat-dau-tai-day-1-b5ca6a70.mp4' }, defaultVideoTrack: 'VI' },
-    'rd-0-0-start-here-2': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/redis/00-redis-giai-quyet-gi/00-02-bat-dau-tai-day-2-c9a4e21a.mp4' }, defaultVideoTrack: 'VI' },
+    'rd-0-0-start-here-1': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/redis/00-redis-giai-quyet-gi/00-01-bat-dau-tai-day-1-b5ca6a70.mp4' }, defaultVideoTrack: 'VI'},
+    'rd-0-0-start-here-2': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/redis/00-redis-giai-quyet-gi/00-02-bat-dau-tai-day-2-c9a4e21a.mp4' }, defaultVideoTrack: 'VI'},
   },
 };

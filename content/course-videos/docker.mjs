@@ -74,15 +74,15 @@ export default {
 
     /* ── Chương 7 — Dữ liệu: volume, bind mount, tmpfs ── */
     'dk-7-0-slides': { yt: 'aEqxUnZuh8A', credit: "Elton Stoneman — DIAMOL 05: Using Docker volumes for persistent storage" },
-    'dk-7-1-ba-cach-gan': { yt: 'BJ-KwdBvbVE', credit: "Pål-Kristian Hamre — Docker Volumes Explained: Bind Mount vs Named Volume vs tmpfs" },
+    'dk-7-1-ba-cach-gan': { yt: 'BJ-KwdBvbVE', credit: "Pål-Kristian Hamre — Docker Volumes Explained: Bind Mount vs Named Volume vs tmpfs", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/07-du-lieu/07-02-ba-cach-gan-e64b0f8f.mp4' }, defaultVideoTrack: 'VI'},
     'dk-7-2-volume': { yt: 'r1tIdACdJeE', credit: "Network Direction — Learn Docker Storage (Volumes & Bind Mounts) | Docker Tutorial" },
-    'dk-7-3-bind-mount': { yt: 'g76hYK4rTxw', credit: "Hỏi Dân IT — #8 DEV SERVER VỚI DOCKER BIND MOUNTS - LIVE RELOADING CODE | Docker Siêu Dễ Cho Beginners Từ A đến Z" },
-    'dk-7-4-tmpfs-bi-mat': { yt: 'oU2nNBwlOTA', credit: "Infisical — The Best Way to Manage .env Variables in Docker (Compose, Secrets & More)" },
-    'dk-7-5-sao-luu': { yt: 'ZEy8iFbgbPA', credit: "Christian Lempa — Migrate Docker Volumes from one Host to another // backup and restore" },
+    'dk-7-3-bind-mount': { yt: 'g76hYK4rTxw', credit: "Hỏi Dân IT — #8 DEV SERVER VỚI DOCKER BIND MOUNTS - LIVE RELOADING CODE | Docker Siêu Dễ Cho Beginners Từ A đến Z", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/07-du-lieu/07-04-bind-mount-ed8caad2.mp4' }, defaultVideoTrack: 'VI'},
+    'dk-7-4-tmpfs-bi-mat': { yt: 'oU2nNBwlOTA', credit: "Infisical — The Best Way to Manage .env Variables in Docker (Compose, Secrets & More)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/07-du-lieu/07-05-tmpfs-bi-mat-eab8c7f0.mp4' }, defaultVideoTrack: 'VI'},
+    'dk-7-5-sao-luu': { yt: 'ZEy8iFbgbPA', credit: "Christian Lempa — Migrate Docker Volumes from one Host to another // backup and restore", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/07-du-lieu/07-06-sao-luu-d8575a60.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 8 — Mạng ── */
     'dk-8-0-slides': { yt: 'k1SwXOxvMdE', credit: "XuanThuLab — D05 - Mạng | Networking trong Docker, tạo và quản lý network trong container Docker" },
-    'dk-8-1-mang-bridge': { yt: 'bKFMS5C4CG0', credit: "NetworkChuck — Docker networking is CRAZY!! (you NEED to learn it)" },
+    'dk-8-1-mang-bridge': { yt: 'bKFMS5C4CG0', credit: "NetworkChuck — Docker networking is CRAZY!! (you NEED to learn it)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/08-mang/08-02-mang-bridge-f92fe76f.mp4' }, defaultVideoTrack: 'VI'},
     'dk-8-2-cong-bo-cong': { yt: 'bpWytcz4uMw', credit: "Awesome Open Source — Docker and Firewalls - Docker wants to punch holes in the local firewall, let's mitigate that issue" },
     'dk-8-3-goi-nhau': { yt: 'itZ_x_nDBxU', credit: "Matt Williams — Docker Networking Made Simple: Connecting Containers Like a Pro" },
     'dk-8-4-toi-may-chu': { yt: 'NZGu-9KQVsE', credit: "anthonywritescode — docker: connecting to localhost outside the container (intermediate) anthony explains #555" },
@@ -90,17 +90,17 @@ export default {
 
     /* ── Chương 9 — Docker Compose ── */
     'dk-9-0-slides': { yt: 'WX0YLs1Jnjs', credit: "Hỏi Dân IT — #10 DOCKER COMPOSE -  Dung Hợp Ứng Dụng Docker Thành Duy Nhất | Docker Siêu Dễ Cho Beginners" },
-    'dk-9-1-file-dau-tien': { yt: 'HGKfE-cn9y4', credit: "typecraft — Master Docker Compose the Way I Wish I Did – Docker for Newbs EP 2" },
+    'dk-9-1-file-dau-tien': { yt: 'HGKfE-cn9y4', credit: "typecraft — Master Docker Compose the Way I Wish I Did – Docker for Newbs EP 2", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/09-compose/09-02-file-dau-tien-f123364f.mp4' }, defaultVideoTrack: 'VI'},
     'dk-9-2-tra-cuu-dich-vu': { yt: 'n7fuMqisdR4', credit: "Sarvin Style Coding — Docker Compose Tutorial for Beginners (2026) | Run Multiple Containers with YAML" },
-    'dk-9-3-thu-tu-khoi-dong': { yt: 'jf6sQsz0M1M', credit: "TECH SCHOOL — [Backend #25] How to write docker-compose file and control service start-up orders with wait-for.sh" },
-    'dk-9-4-bien-profile': { yt: 'pgf0Tc1ugEY', credit: "Nick Janetakis — Docker Compose v2 and Profiles Are the Best Thing Ever" },
-    'dk-9-5-nhieu-file': { yt: 'VOyyGX1MOU0', credit: "Docker — Docker Compose to the Rescue for Complex Projects (DockerCon 2023)" },
+    'dk-9-3-thu-tu-khoi-dong': { yt: 'jf6sQsz0M1M', credit: "TECH SCHOOL — [Backend #25] How to write docker-compose file and control service start-up orders with wait-for.sh", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/09-compose/09-04-thu-tu-khoi-dong-4107d086.mp4' }, defaultVideoTrack: 'VI'},
+    'dk-9-4-bien-profile': { yt: 'pgf0Tc1ugEY', credit: "Nick Janetakis — Docker Compose v2 and Profiles Are the Best Thing Ever", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/09-compose/09-05-bien-profile-b5f98792.mp4' }, defaultVideoTrack: 'VI'},
+    'dk-9-5-nhieu-file': { yt: 'VOyyGX1MOU0', credit: "Docker — Docker Compose to the Rescue for Complex Projects (DockerCon 2023)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/09-compose/09-06-nhieu-file-c8832626.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 10 — Compose trong đời thật ── */
     'dk-10-0-slides': { yt: 'YMBT1NguJJw', credit: "Anton Putra — Docker Compose Tutorial for Beginners (Networks - Volumes - Secrets - Postgres - Letsencrypt)" },
-    'dk-10-1-ban-ve': { yt: 'SXwC9fSwct8', credit: "TechWorld with Nana — Ultimate Docker Compose Tutorial" },
+    'dk-10-1-ban-ve': { yt: 'SXwC9fSwct8', credit: "TechWorld with Nana — Ultimate Docker Compose Tutorial", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/10-stack-that/10-02-ban-ve-f1944fe0.mp4' }, defaultVideoTrack: 'VI'},
     'dk-10-2-tang-du-lieu': { yt: 'aetqo2nkQcA', credit: "Ben Awad — Docker Compose Node.js, Redis, and PostgreSQL" },
-    'dk-10-3-api-migration': { yt: 'OzU3rh0ROt8', credit: "OpenJS Foundation — Master Production-grade Best Practices to Build your Node.js Docker Images - Liran Tal, Snyk" },
+    'dk-10-3-api-migration': { yt: 'OzU3rh0ROt8', credit: "OpenJS Foundation — Master Production-grade Best Practices to Build your Node.js Docker Images - Liran Tal, Snyk", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/10-stack-that/10-04-api-migration-4ff61bf3.mp4' }, defaultVideoTrack: 'VI'},
     'dk-10-4-frontend': { yt: '-XiPUoCIKSw', credit: "ByteGrad — Docker + Next.js Best Practices (Depot)" },
     'dk-10-5-nginx-lap-rap': { yt: 'J9jKKeV1XVE', credit: "Programonaut — How to Secure Your Applications with HTTPS Using Docker, NGINX, and Let's Encrypt" },
 

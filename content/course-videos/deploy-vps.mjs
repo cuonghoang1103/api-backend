@@ -75,14 +75,14 @@ export default {
 
     /* ── Chương 6 — Lùi bản, và cái không lùi được ── */
     'deploy-6-0-slides': { yt: 'AWVTKBUnoIg', credit: "ByteByteGo — Top 5 Most-Used Deployment Strategies" },
-    'deploy-6-1-lui-chay-duoc': { yt: 'sQJq-MGEyB8', credit: 'CodeLucky — Rollback Procedures: Fix Deployments Fast' },  // Rollback Procedures: Fix Deployments Fast
+    'deploy-6-1-lui-chay-duoc': { yt: 'sQJq-MGEyB8', credit: 'CodeLucky — Rollback Procedures: Fix Deployments Fast', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/deploy-vps/06-lui-ban/06-02-lui-chay-duoc-a36db9f5.mp4' }, defaultVideoTrack: 'VI'},  // Rollback Procedures: Fix Deployments Fast
     'deploy-6-2-lui-noi-doi': { yt: 'w-1nqcigsm4', credit: 'Cloud Stack Studio — What Is A Successful Rollback Strategy In CI/CD Pipelines? - Cloud Stack Studio' },    // What Is A Successful Rollback Strategy In CI/CD Pipelines?
     'deploy-6-3-du-lieu-hong': { yt: 'ka-PLyjV3AI', credit: 'DevOps Unicorns — Michiel Rook - Database schema migrations with zero downtime' },   // Michiel Rook - Database schema migrations with zero downtime
     'deploy-6-4-cua-mot-chieu': { yt: 'cw5K2O4AHJc', credit: 'Web Dev Cody — How do software projects achieve zero downtime database migrations?' },  // How do software projects achieve zero downtime database migrations?
     'deploy-6-5-chung-minh': { yt: 'fFsWbOdseFw', credit: 'GitLab — Auto rollback in case of failure' },     // Auto rollback in case of failure
 
     /* ── Chương 7 — Script deploy: hỏng phải kêu, và chạy hai lần vẫn an toàn ── */
-    'deploy-7-1-co-shell': { yt: 'Cbv3PY6YCXQ', credit: 'vlogize — Understanding set -eo pipefail: Why Your Shell Script Might Not Work as Expected' },       // Understanding set -eo pipefail: Why Your Shell Script Might Not Work as Expected
+    'deploy-7-1-co-shell': { yt: 'Cbv3PY6YCXQ', credit: 'vlogize — Understanding set -eo pipefail: Why Your Shell Script Might Not Work as Expected', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/deploy-vps/07-script-deploy/07-02-co-shell-441a21f7.mp4' }, defaultVideoTrack: 'VI'},       // Understanding set -eo pipefail: Why Your Shell Script Might Not Work as Expected
     'deploy-7-2-chay-lai-duoc': { yt: 'F3UzOrEtMYI', credit: 'Learn Linux TV — How to Automate Linux Backups Using rsync and systemd' },  // How to Automate Linux Backups Using rsync and systemd
     'deploy-7-3-tu-choi': { yt: 's9DBQ585MvI', credit: 'vlogize — Understanding the Importance of set -o pipefail in Bash Scripts' },        // Understanding the Importance of set -o pipefail in Bash Scripts
     'deploy-7-4-kiem-khoi': { yt: 'cDyDv0laDZA', credit: 'Semaphore — Smoke Testing: Stop Bugs Early and Fast' },      // Smoke Testing: Stop Bugs Early and Fast

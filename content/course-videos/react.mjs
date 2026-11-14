@@ -48,24 +48,24 @@ export default {
 
     /* ── Chương 4 — Effect ── */
     'rx-4-0-slides': { yt: '-4XpG5_Lj_o', credit: "Cosden Solutions — Learn React Hooks: useEffect - Simply Explained!" },
-    'rx-4-1-use-effect': { yt: 'dH6i3GurZW8', credit: "Jack Herrington — Mastering React's useEffect" },
-    'rx-4-2-khong-can': { yt: 'V1f8MOQiHRw', credit: "Academind — You might not need useEffect() ..." },
-    'rx-4-3-vong-lap': { yt: 'hT2yWeHU37U', credit: "Jack Herrington — React 19.2 New useEffectEvent Hook: Game Changer or Gimmick?" },
-    'rx-4-4-custom-hook': { yt: '6ThXsUwLWvc', credit: "Web Dev Simplified — Learn Custom Hooks In 10 Minutes" },
+    'rx-4-1-use-effect': { yt: 'dH6i3GurZW8', credit: "Jack Herrington — Mastering React's useEffect", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/04-effect/04-02-use-effect-adfde3cd.mp4' }, defaultVideoTrack: 'VI'},
+    'rx-4-2-khong-can': { yt: 'V1f8MOQiHRw', credit: "Academind — You might not need useEffect() ...", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/04-effect/04-03-khong-can-9394d33f.mp4' }, defaultVideoTrack: 'VI'},
+    'rx-4-3-vong-lap': { yt: 'hT2yWeHU37U', credit: "Jack Herrington — React 19.2 New useEffectEvent Hook: Game Changer or Gimmick?", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/04-effect/04-04-vong-lap-0c9f78bd.mp4' }, defaultVideoTrack: 'VI'},
+    'rx-4-4-custom-hook': { yt: '6ThXsUwLWvc', credit: "Web Dev Simplified — Learn Custom Hooks In 10 Minutes", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/04-effect/04-05-custom-hook-98172737.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 5 — Chia sẻ state ── */
     'rx-5-0-slides': { yt: 'MpdFj8MEuJA', credit: "Jack Herrington — Mastering React Context: Do you NEED a state manager?" },
-    'rx-5-1-context': { yt: '16yMmAJSGek', credit: "ByteGrad — This Context API Mistake Ruins Your Whole React App (All Components Re-Render)" },
+    'rx-5-1-context': { yt: '16yMmAJSGek', credit: "ByteGrad — This Context API Mistake Ruins Your Whole React App (All Components Re-Render)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/05-chia-se-state/05-02-context-ad6166b1.mp4' }, defaultVideoTrack: 'VI'},
     'rx-5-2-reducer': { yt: 'rgp_iCVS8ys', credit: "Cosden Solutions — Learn React Hooks: useReducer - Simply Explained!" },
-    'rx-5-3-zustand': { yt: '_ngCLZ5Iz-0', credit: "Cosden Solutions — Zustand - Complete Tutorial" },
-    'rx-5-4-url-state': { yt: 'ukpgxEemXsk', credit: "ByteGrad — STOP using useState, instead put state in URL (in React & Next.js)" },
-    'rx-5-5-du-an': { yt: 'vKJe95pqn8E', credit: "Cosden Solutions — Build a Multi-Step Form in React Like a Pro" },
+    'rx-5-3-zustand': { yt: '_ngCLZ5Iz-0', credit: "Cosden Solutions — Zustand - Complete Tutorial", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/05-chia-se-state/05-04-zustand-5a132d77.mp4' }, defaultVideoTrack: 'VI'},
+    'rx-5-4-url-state': { yt: 'ukpgxEemXsk', credit: "ByteGrad — STOP using useState, instead put state in URL (in React & Next.js)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/05-chia-se-state/05-05-url-state-b93e1845.mp4' }, defaultVideoTrack: 'VI'},
+    'rx-5-5-du-an': { yt: 'vKJe95pqn8E', credit: "Cosden Solutions — Build a Multi-Step Form in React Like a Pro", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/05-chia-se-state/05-06-du-an-f2cf8504.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 6 — Lấy dữ liệu ── */
     'rx-6-0-slides': { yt: 'lVLz_ASqAio', credit: "Web Dev Simplified — React Query Makes Writing React Code 200% Better" },
-    'rx-6-1-fetch': { yt: 'bGzanfKVFeU', credit: "BeJS — Goodbye, useEffect - David Khourshid" },
-    'rx-6-2-tanstack': { yt: 'mPaCnwpFvZY', credit: "Austin Davis — TanStack Query - How to become a React Query God" },
-    'rx-6-3-mutation': { yt: 'e74rB-14-m8', credit: "PedroTech — React Query Crash Course - Learn Queries, Mutations, Caching, Optimistic Updates..." },
+    'rx-6-1-fetch': { yt: 'bGzanfKVFeU', credit: "BeJS — Goodbye, useEffect - David Khourshid", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/06-lay-du-lieu/06-02-fetch-41cd527c.mp4' }, defaultVideoTrack: 'VI'},
+    'rx-6-2-tanstack': { yt: 'mPaCnwpFvZY', credit: "Austin Davis — TanStack Query - How to become a React Query God", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/06-lay-du-lieu/06-03-tanstack-a0c2a10a.mp4' }, defaultVideoTrack: 'VI'},
+    'rx-6-3-mutation': { yt: 'e74rB-14-m8', credit: "PedroTech — React Query Crash Course - Learn Queries, Mutations, Caching, Optimistic Updates...", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/06-lay-du-lieu/06-04-mutation-26ec8cbf.mp4' }, defaultVideoTrack: 'VI'},
     'rx-6-4-loi-api': { yt: 'OQQAv8t3bfc', credit: "Cosden Solutions — Error Handling in React (Complete Tutorial)" },
 
     /* ── Chương 7 — Định tuyến và cấu trúc ── */
@@ -123,6 +123,6 @@ export default {
     'rx-14-2-api-that': { yt: 'XAccGbtl3Z8', credit: "Alex Hyett — Idempotency - What it is and How to Implement it" },
     'rx-14-3-build-deploy': { yt: '9c4HLqk1ExA', credit: "Alexander Lichter — Vite Bundle Inspection made EASY" },
     'rx-14-4-phong-van': { yt: '3BN-YHcJfOY', credit: "CoderOne — The React Interview Questions You need to Know" },
-    'rx-3-4-tieng-viet': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/03-form/03-05-tieng-viet-f312feb5.mp4' }, defaultVideoTrack: 'VI' },
+    'rx-3-4-tieng-viet': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/03-form/03-05-tieng-viet-f312feb5.mp4' }, defaultVideoTrack: 'VI'},
   },
 };

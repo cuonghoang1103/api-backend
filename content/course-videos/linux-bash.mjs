@@ -92,20 +92,20 @@ export default {
     'lnx-8-1-path': { yt: 'rJMFxIbDe-g', credit: 'tutoriaLinux — Everything You Need to Know About $PATH in Bash', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/linux-bash/08-moi-truong-path-khoi-dong/08-02-path-94d84be7.mp4' }, defaultVideoTrack: 'VI'},                   // Everything You Need to Know About $PATH in Bash
     'lnx-8-2-file-khoi-dong': { yt: 'FeMwbigYa9M', credit: 'Brodie Robertson — What Do All These Bash Files Do (bashrc, bash_profile, bash_logout)' },         // What Do All These Bash Files Do (bashrc, bash_profile, bash_logout)
     'lnx-8-3-bien-moi-truong-bi-mat': { yt: 'AgPd5kM7Sn4', credit: 'CodeLucky — Linux Environment Variables: env & export Commands Explained!' }, // Linux Environment Variables: env & export Commands Explained!
-    'lnx-8-4-tuy-bien-shell': { yt: '74SmxwCYykg', credit: 'Learn Linux TV — How to Customize Your Bash Prompt (PS1) - Complete Linux Tutorial' },         // How to Customize Your Bash Prompt (PS1) - Complete Linux Tutorial
+    'lnx-8-4-tuy-bien-shell': { yt: '74SmxwCYykg', credit: 'Learn Linux TV — How to Customize Your Bash Prompt (PS1) - Complete Linux Tutorial', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/linux-bash/08-moi-truong-path-khoi-dong/08-05-tuy-bien-shell-65dcfbfe.mp4' }, defaultVideoTrack: 'VI'},         // How to Customize Your Bash Prompt (PS1) - Complete Linux Tutorial
 
     /* ── Chương 9 — Mạng & máy từ xa ── */
     'lnx-9-0-slides': { yt: '5JvLV2-ngCI', credit: "Mental Outlaw — How SSH Works" },
     'lnx-9-1-giao-dien-cong-dns': { yt: 'rCdQnnaWZlA', credit: 'Verbose DevOps — Linux Network Troubleshooting Commands (ip, ifconfig, netstat, ufw, traceroute, dig)' },// Linux Network Troubleshooting Commands (ip, ifconfig, netstat, ufw, traceroute, dig)
-    'lnx-9-2-curl': { yt: 'Q3_3saEQiSA', credit: 'Navek — curl: A Practical Guide' },              // curl: A Practical Guide
-    'lnx-9-3-ssh': { yt: '5KKP8qPHrP0', credit: 'Automation Avenue — SSH Tunneling explained ( with local port forwarding examples ! )' },               // SSH Tunneling explained (with local port forwarding examples!)
+    'lnx-9-2-curl': { yt: 'Q3_3saEQiSA', credit: 'Navek — curl: A Practical Guide', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/linux-bash/09-mang-may-tu-xa/09-03-curl-97b01ec9.mp4' }, defaultVideoTrack: 'VI'},              // curl: A Practical Guide
+    'lnx-9-3-ssh': { yt: '5KKP8qPHrP0', credit: 'Automation Avenue — SSH Tunneling explained ( with local port forwarding examples ! )', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/linux-bash/09-mang-may-tu-xa/09-04-ssh-04e0775c.mp4' }, defaultVideoTrack: 'VI'},               // SSH Tunneling explained (with local port forwarding examples!)
     'lnx-9-4-scp-rsync': { yt: 'Pygr_TpZRpM', credit: 'Tony Teaches Tech — How to Use rsync to Reliably Copy Files Fast (many examples)' },         // How to Use rsync to Reliably Copy Files Fast (many examples)
-    'lnx-9-5-tuong-lua': { yt: 'GQcrRhcZMF8', credit: '3CodeCamp — Lock down your Linux VPS using UFW and Fail2Ban' },         // Lock down your Linux VPS using UFW and Fail2Ban
+    'lnx-9-5-tuong-lua': { yt: 'GQcrRhcZMF8', credit: '3CodeCamp — Lock down your Linux VPS using UFW and Fail2Ban', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/linux-bash/09-mang-may-tu-xa/09-06-tuong-lua-5edeaa2f.mp4' }, defaultVideoTrack: 'VI'},         // Lock down your Linux VPS using UFW and Fail2Ban
 
     /* ── Chương 10 — Đĩa, gói phần mềm & log ── */
     'lnx-10-0-slides': { yt: 'ZRs5zVv_1UU', credit: "Learn Linux TV — Linux Crash Course - The df and du Commands" },
-    'lnx-10-1-dia-day': { yt: 'Tky5uCQUZPQ', credit: 'Red Hat Enterprise Linux — Troubleshooting Linux Disk Space Issues at 2 AM?' },      // Troubleshooting Linux Disk Space Issues at 2 AM?
-    'lnx-10-2-goi-phan-mem': { yt: 'oNfy6QYmq7g', credit: 'Tech Taught by Her — Linux Package Management Tutorial | apt vs yum vs dnf Explained' },  // Linux Package Management Tutorial | apt vs yum vs dnf Explained
+    'lnx-10-1-dia-day': { yt: 'Tky5uCQUZPQ', credit: 'Red Hat Enterprise Linux — Troubleshooting Linux Disk Space Issues at 2 AM?', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/linux-bash/10-dia-goi-phan-mem-log/10-02-dia-day-c78d70e4.mp4' }, defaultVideoTrack: 'VI'},      // Troubleshooting Linux Disk Space Issues at 2 AM?
+    'lnx-10-2-goi-phan-mem': { yt: 'oNfy6QYmq7g', credit: 'Tech Taught by Her — Linux Package Management Tutorial | apt vs yum vs dnf Explained', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/linux-bash/10-dia-goi-phan-mem-log/10-03-goi-phan-mem-2ed94c8d.mp4' }, defaultVideoTrack: 'VI'},  // Linux Package Management Tutorial | apt vs yum vs dnf Explained
     'lnx-10-3-log-journalctl': { yt: 'J1XhNXWhCKU', credit: 'Devops_world — Linux Log Analysis Explained | /var/log, tail, grep & journalctl' },// Linux Log Analysis Explained | /var/log, tail, grep & journalctl
 
     /* ── Chương 11 — systemd, cron & quản trị ── */

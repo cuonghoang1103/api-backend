@@ -557,3 +557,42 @@ sàn số điểm mỗi cấp, kiểm chéo, tìm "てもいい" / "了" / "pres
   viên**; gói vs máy chủ thật: hạng 1 **164/164**, top-3 163/164, cả 12 ứng viên 156/164 (đuôi danh sách lệch do lượng tử).
 - **Hiệu năng** (máy ảo iPhone 17 Pro, bản Debug): TB 11,9 ms / chậm nhất 61 ms mỗi lượt gợi ý (260 lượt) — dưới 100 ms.
 - ⚠️ Đổi thuật toán `vietTay.ts` ⇒ sửa `NhanNetMayCTL.swift` + chạy lại script (sinh lại gói + `CTLanguageTests/Fixtures/viet-tay-mau.json`).
+
+## 16. Sổ tay đồng bộ theo tài khoản + Sổ tay chuyên ngành (15/11/2026, CHƯA deploy, CHƯA lên TestFlight)
+
+### 16a. ☁️ Đồng bộ sổ tay
+- **Máy chủ:** bảng `ctl_so_tu_muc` (migration `20261115230000_ctlanguage_so_tu_dong_bo`, CHỈ THÊM). Một dòng = một bản ghi
+  của `KhoSoTu`: `so` (sổ, khoa = id sổ) · `the` (thẻ + SM-2: heSo, khoangNgay, lanDung, lanQuen, denHan, lanOnCuoi, các sổ
+  chứa nó; khoa = `<nn>-<id mục>`, id âm = từ ngoài từ điển) · `ngay` (ngày đã học — chuỗi ngày; chỉ thêm). Xoá = bia mộ.
+- **Tuyến** (`routes/ctlanguage.soTu.routes.ts`, cần đăng nhập, 60 lượt/phút/người): `GET /ctlanguage/so-tu/trang-thai` ·
+  `GET /ctlanguage/so-tu?tu=<mốc>` (≤ 2.000/lần, `conNua`) · `POST /ctlanguage/so-tu {muc:[…]}` (≤ 500/lô).
+- **Luật** (`soTuDongBoThuan.ts`): bản MỚI HƠN thắng theo từng bản ghi (`capNhat` app ghi lúc sửa; bằng ⇒ giữ bản cũ);
+  `capNhat` tương lai > 2 phút kéo về giờ máy chủ; kéo theo `phien_ban` (BIGSERIAL, mọi lần ghi của một người tuần tự bằng
+  `pg_advisory_xact_lock`) chứ không theo giờ. Trần: 20.000 thẻ · 500 sổ · 4.000 ngày còn sống / người, 40.000 dòng cả bia
+  mộ (chạm 90% ⇒ dọn bia mộ > 90 ngày). Bản sai bị bỏ từng bản, không hỏng cả lô.
+- **Xoá tài khoản:** `anonymizeAccount` (không xoá hẳn user ⇒ FK CASCADE không chạy) nay `deleteMany` cả `ctl_so_tu_muc`
+  lẫn `ctlanguage_profiles`.
+- **App** (`App/DongBoSoTuCTL.swift`): mọi thao tác của `KhoSoTu` ghi `capNhat` + hàng chờ `dongBo.cho` ("loai|khoa" → giờ);
+  đẩy sau 5 s (gom thao tác), đồng bộ đủ (kéo → đẩy → kéo) lúc đăng nhập, mở app, về tiền cảnh (> 60 s), nút "Đồng bộ ngay".
+  Mất mạng ⇒ hàng chờ nằm yên. Đăng nhập LẦN ĐẦU trên máy có sổ khách ⇒ `GopSoTu.gopLanDau`: sổ trùng (cùng nn + cùng nguồn
+  bộ, hoặc cùng tên) nhập vào sổ máy chủ, thẻ có ở hai bên giữ SM-2 mới hơn + HỢP các sổ. Đổi tài khoản khác trên cùng máy
+  ⇒ sổ tài khoản cũ cất `so-tu-ctl-tk<id>.json`, đăng nhập lại thì lấy về (không trộn sổ hai người). Đăng xuất giữ sổ trên
+  máy (thay đổi lúc đó vào hàng chờ, đăng nhập lại cùng tài khoản thì đẩy). Dòng "Đã đồng bộ lúc …" ở đầu màn Sổ tay + tab Tôi.
+- **Test:** `npx tsx --test src/services/ctlanguage/soTuDongBoThuan.test.ts` ·
+  `WORK_DB_TEST=1 npx tsx --test src/services/ctlanguage/soTuDongBo.db.test.ts` · app `DongBoSoTuTests`.
+
+### 16b. 💼 Sổ tay chuyên ngành
+- **Nội dung tĩnh** `content/ctlanguage/so-chuyen-nganh/<nn>/<ma>.json` (khuôn `_KHUON.md`): 8 bộ × 3 ngôn ngữ — `cntt`,
+  `van-phong`, `nha-may` (ja: thực tập sinh — 5S, 報連相, biển báo xưởng), `nha-hang-khach-san`, `y-te-dieu-duong` (ja: kaigo),
+  `xay-dung`, `tmdt-logistics`, `du-lich-san-bay`. en 723 từ · ja 711 · zh 689 (2.123), mỗi bộ 81–100 từ, ≥ 81% có câu ví dụ.
+  Tệp KHÔNG ghi id `ctl_tu` (nhập lại từ điển đổi id) — máy chủ khớp CHỮ lúc phục vụ, không khớp ⇒ `idAm`. Độ phủ từ điển
+  local: en 60% · ja 87% · zh 91%.
+- **Kiểm:** `npx tsx scripts/ctlanguage-kiem-so-chuyen-nganh.mts [nn]` (kana / pinyin có dấu / IPA, 60–150 từ, không trùng,
+  ≥ 60% ví dụ, ≥ 8 bộ/ngôn ngữ, + độ phủ từ điển nếu nối được CSDL) · `npx tsx --test src/services/ctlanguage/soChuyenNganh.test.ts`.
+- **Tuyến công khai** (`routes/ctlanguage.soChuyenNganh.routes.ts`): `GET /ctlanguage/so-chuyen-nganh[?nn=]` ·
+  `GET /ctlanguage/so-chuyen-nganh/<nn>/<ma>` (id gắn theo chữ, nhớ 6 giờ).
+- **App** (`Modules/SoTay/SoChuyenNganhCTL.swift`): thẻ "Sổ tay chuyên ngành" trong màn Sổ tay → danh sách bộ → chi tiết chia
+  theo `nhom`; nghe từ + câu ví dụ (`DocToCTL`), lưu từng từ (`ChonSoTayCTL`), "Thêm cả bộ" (sổ nguồn `cn:<ma>`), "Học thẻ
+  ngay" (luồng ôn `OnTuCTL`). Free xem + nghe đủ; thêm vào sổ theo trần 200 từ của bản miễn phí như bộ từ có sẵn.
+- **Chưa soát bởi người bản ngữ:** IPA vài từ en có biến thể; ja 玉掛け ghi たまかけ (từ điển ghi たまがけ); âm Hán Việt bỏ trống
+  khi không chắc.

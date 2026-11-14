@@ -1024,6 +1024,8 @@ for route in \
     ctlanguage/kham-pha/su-kien/thuong \
     ctlanguage/bai-ai/luot \
     ctlanguage/hoi-gau/luot \
+    ctlanguage/so-tu/trang-thai \
+    ctlanguage/so-chuyen-nganh \
     ctlanguage/phat-am/luot \
     xuong-3d/bo-phan \
     gifs \

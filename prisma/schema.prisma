@@ -528,6 +528,7 @@ model User {
   // CT Language Đợt C + E (14/11/2026): phút học theo ngày · ẩn khỏi xếp hạng · bài học AI · thưởng sự kiện
   ctlHoatDongNgay          CtlHoatDongNgay[]         @relation("CtlHoatDongNguoi")
   ctlXepHangAn             CtlXepHangAn?             @relation("CtlXepHangAnNguoi")
+  ctlSoTuMuc               CtlSoTuMuc[]              @relation("CtlSoTuNguoi")
   ctlBaiAi                 CtlBaiAi[]                @relation("CtlBaiAiNguoiTao")
   ctlBaiAiHoc              CtlBaiAiHoc[]             @relation("CtlBaiAiHocNguoi")
   ctlSuKienThuong          CtlSuKienThuong[]         @relation("CtlSuKienThuongNguoi")
@@ -18157,6 +18158,27 @@ model CtlXepHangAn {
   user User @relation("CtlXepHangAnNguoi", fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("ctl_xep_hang_an")
+}
+
+/// SỔ TAY đồng bộ theo tài khoản (15/11/2026). Một dòng = một bản ghi của `KhoSoTu` trên app: `so` (sổ tay, khoa = id
+/// sổ) · `the` (thẻ từ + SRS, khoa = `<nn>-<id mục>`) · `ngay` (ngày đã học, khoa = yyyy-MM-dd). Xoá = bia mộ `xoa`.
+/// `cap_nhat` = giờ app sửa (bản mới hơn thắng); `phien_ban` = dãy số máy chủ cấp mỗi lần ghi (app kéo `?tu=<mốc>`).
+/// Luật + trần: `src/services/ctlanguage/soTuDongBoThuan.ts`. Xoá tài khoản ⇒ `anonymizeAccount` xoá hết dòng.
+model CtlSoTuMuc {
+  userId   Int      @map("user_id")
+  /// so | the | ngay
+  loai     String   @db.VarChar(8)
+  khoa     String   @db.VarChar(100)
+  duLieu   Json?    @map("du_lieu") @db.JsonB
+  capNhat  DateTime @map("cap_nhat") @db.Timestamptz(3)
+  xoa      Boolean  @default(false)
+  phienBan BigInt   @default(autoincrement()) @map("phien_ban")
+
+  user User @relation("CtlSoTuNguoi", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, loai, khoa])
+  @@index([userId, phienBan], map: "idx_ctl_so_tu_phien_ban")
+  @@map("ctl_so_tu_muc")
 }
 
 /// BÀI HỌC AI theo chủ đề (Đợt E): từ vựng + hội thoại + mẫu câu + quiz, `noiDung` đã kiểm ở `baiAiThuan.ts › kiemBaiAi`.

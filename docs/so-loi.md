@@ -18,6 +18,20 @@ Mẫu một mục:
 
 ---
 
+### 15/11/2026 — Xoá tài khoản — hồ sơ học CT Language không bị xoá dù màn Xoá tài khoản của app hứa xoá
+- **Triệu chứng:** app CT Language (Tôi › Xoá tài khoản) ghi "Dữ liệu cá nhân bị xoá: … hồ sơ học, tiến độ, sổ từ", nhưng sau khi yêu cầu có hiệu lực dòng `ctlanguage_profiles` của người đó vẫn còn.
+- **Nguyên nhân:** `anonymizeAccount` (`src/services/dataRights.service.ts`) chỉ ẩn danh hoá user (không xoá hàng `users`) ⇒ mọi FK `onDelete: Cascade` KHÔNG chạy; bảng nào không được liệt kê `deleteMany` trong giao dịch thì nằm lại. `ctlanguage_profiles` còn không có FK.
+- **Cách sửa:** thêm `ctlSoTuMuc.deleteMany` (sổ tay đồng bộ mới) + `ctLanguageProfile.deleteMany` vào giao dịch; test `soTuDongBo.db.test.ts` gọi `anonymizeAccount` rồi kiểm sổ trống (commit đồng bộ sổ tay 15/11).
+- **Ảnh hưởng:** người dùng app CT Language đã xoá tài khoản trước 15/11 (hồ sơ học còn trên máy chủ); không lộ ra ngoài.
+- **Bài học:** bảng dữ liệu NGƯỜI DÙNG mới ⇒ thêm vào `anonymizeAccount` cùng commit — "FK CASCADE" không cứu được vì tài khoản không bị xoá hẳn.
+
+### 15/11/2026 — Prisma / migration viết tay — cột `nextval` của dãy số rời bị `migrate diff` đòi xoá dãy số
+- **Triệu chứng:** sau `migrate deploy` migration `ctl_so_tu_muc`, `npx prisma migrate diff --from-schema-datasource … --to-schema-datamodel …` vẫn in `ALTER COLUMN "phien_ban" DROP DEFAULT; DROP SEQUENCE "ctl_so_tu_phien_ban_seq"` (lệch).
+- **Nguyên nhân:** SQL tạo `CREATE SEQUENCE` riêng + `DEFAULT nextval(...)`, schema khai `@default(dbgenerated("nextval(...)"))` — Prisma đọc dãy số KHÔNG thuộc (OWNED BY) cột nên coi là lệch.
+- **Cách sửa:** migration chưa deploy nơi nào ⇒ gỡ ở CSDL local, viết lại cột thành `BIGSERIAL` + schema `@default(autoincrement())` (dãy `ctl_so_tu_muc_phien_ban_seq` thuộc cột) ⇒ diff không còn dòng nào của bảng này.
+- **Ảnh hưởng:** chỉ CSDL local trong lúc làm; production chưa nhận migration.
+- **Bài học:** cột số tăng không phải khoá chính ⇒ `BIGSERIAL` + `autoincrement()`; viết tay migration xong LUÔN chạy `migrate diff` (khuôn trong CLAUDE.md) trước khi coi là xong.
+
 ### 15/11/2026 — Video bài giảng (công cụ demo chay.py) — tệp Markdown trong @file làm vỡ kịch bản demo (IndexError)
 - **Triệu chứng:** `python3 scratchpad/aic/chay.py n0-9` chết giữa chừng `IndexError: list index out of range` ở vòng tìm `@end`; khối demo trước đó đã chạy nhưng `demo/out/n0-9.json` KHÔNG được ghi (json chỉ ghi cuối hàm) ⇒ mất cả output khối đã chạy.
 - **Nguyên nhân:** `scratchpad/obj/chay.py` (và mọi bản chép: sio/obj/aic) tách khối bằng MỌI dòng bắt đầu `## ` TRƯỚC khi đọc `@file…@end` ⇒ tiêu đề `## Cài đặt` của README.md viết trong `@file` bị coi là khối mới, `@file` mất `@end`.
@@ -403,3 +417,11 @@ Mẫu một mục:
 - **Cách sửa:** dựng lại commit bằng chỉ mục tạm (`GIT_INDEX_FILE`: HEAD~1 + đúng 3 dòng của mình) ⇒ `commit-tree` + `update-ref` có kiểm giá trị cũ ⇒ c393136d8; trả mục `src/index.ts` của chỉ mục chung về HEAD (dòng của agent kia vẫn nằm nguyên trong cây làm việc).
 - **Ảnh hưởng:** không — bắt bằng `git show --stat` ngay sau commit, trước mọi push/deploy.
 - **Bài học:** tệp chung đang có phiên khác sửa thì kiểm diff NGAY trong cùng lệnh commit và đọc `git show --stat HEAD` sau commit; số dòng lệch là dấu hiệu đã kéo theo đồ của người khác.
+
+### 15/11/2026 — CT Language (Thư viện ngữ pháp) — lời giải quiz nhắc "câu 1 / hai câu đầu" sai sau lần xáo lựa chọn trước
+- **Triệu chứng:** 3 câu quiz (`ja-n3-tame-ni-nguyen-nhan`, `ja-n4-ka-dou-ka`, `ja-n4-demo-reiji`) giải thích "Hai câu đầu là mục đích…", "Câu 1 có từ để hỏi… Câu 3 đúng" trong khi đáp án đúng đang nằm ở vị trí khác — người học đọc lời giải thấy ngược với đáp án.
+- **Nguyên nhân:** lần xáo 318d06e39 quét lời nhắc vị trí bằng mẫu "phương án A / cả hai…" nên sót dạng "câu 1", "hai câu đầu", "câu thứ ba" trong `content/ctlanguage/ngu-phap/ja/n3-3.json`, `n4-4.json`; không có script xáo nằm trong repo để chặn lại.
+- **Cách sửa:** viết lại 4 lời giải theo NỘI DUNG (trích chữ của lựa chọn); thêm `scripts/ctlanguage-xao-quiz-ngu-phap.mts` + `xaoQuizDiem` (hạt giống cố định, idempotent) DỪNG khi lời giải / lựa chọn nhắc vị trí; bộ kiểm thêm phép kiểm phân bố vị trí đáp án theo cấp (≥ 15%); test đỏ nếu có điểm chưa xáo. Cùng commit với đợt ngữ pháp cấp cao.
+- **Ảnh hưởng:** 3 câu trong bản nội dung từ 318d06e39 (lời giải khó hiểu, đáp án chấm vẫn đúng).
+- **Bài học:** dữ liệu sẽ bị máy đảo thứ tự thì lời văn không được tham chiếu thứ tự — và phép chặn phải nằm TRONG công cụ đảo, không dựa vào một lần quét tay.
+

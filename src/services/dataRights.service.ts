@@ -114,6 +114,10 @@ export async function anonymizeAccount(userId: number): Promise<{ anonymized: tr
     // Hội thoại AI riêng (AI Chat web): tin nhắn + thống kê xoá theo (onDelete: Cascade).
     prisma.chatSession.deleteMany({ where: { userId } }),
     prisma.chatFolder.deleteMany({ where: { userId } }),
+    // CT Language (app iOS): sổ tay đồng bộ (sổ, thẻ từ + lịch ôn, ngày học) + hồ sơ học — màn Xoá tài khoản của app
+    // hứa xoá "hồ sơ học, tiến độ, sổ từ". User không bị xoá hẳn nên FK CASCADE không tự dọn.
+    prisma.ctlSoTuMuc.deleteMany({ where: { userId } }),
+    prisma.ctLanguageProfile.deleteMany({ where: { userId } }),
     // Hội thoại AI CT Work "Riêng tư" do họ tạo — chỉ họ đọc được, nên xoá mềm (như nút Xoá hội thoại).
     prisma.workAiThread.updateMany({
       where: { createdById: userId, visibility: 'PRIVATE', deletedAt: null },

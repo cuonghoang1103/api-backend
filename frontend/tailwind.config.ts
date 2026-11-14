@@ -5,6 +5,9 @@ const config: Config = {
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    // 14/11/2026: lớp màu khai trong src/lib (repos.ts huy hiệu ngôn ngữ, studio-meta.ts) trước đây KHÔNG được quét
+    // ⇒ 8 lớp không có trong CSS prod (huy hiệu Shell/Swift/C++/C#/JavaScript ở /repos mất màu; ring ở /creator).
+    "./src/lib/**/*.{js,ts,jsx,tsx}",
   ],
   darkMode: "class",
   // Support multiple theme classes: 'dark', 'light'

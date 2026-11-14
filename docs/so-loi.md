@@ -18,6 +18,13 @@ Mẫu một mục:
 
 ---
 
+### 14/11/2026 — Web (CSS) — Huy hiệu ngôn ngữ ở /repos và vòng ở /creator mất màu
+- **Triệu chứng:** trang /repos: huy hiệu Shell mất cả 3 màu, Swift/C++/C# mất màu nền, JavaScript mất màu chữ; /creator thiếu vòng `ring-cyan-500/30`.
+- **Nguyên nhân:** `frontend/tailwind.config.ts` chỉ quét `src/pages|components|app` — lớp Tailwind khai trong `src/lib/repos.ts`, `src/lib/studio-meta.ts` không bao giờ được sinh ra CSS (8 lớp vắng khỏi CSS prod).
+- **Cách sửa:** thêm `./src/lib/**/*.{js,ts,jsx,tsx}` vào `content`.
+- **Ảnh hưởng:** /repos và /creator, từ khi bảng màu dời sang src/lib.
+- **Bài học:** Tailwind 3 chỉ sinh lớp nó THẤY trong đường quét — dời chuỗi lớp sang thư mục mới phải thêm đường quét; kiểm bằng cách grep lớp đó trong CSS build. Phát hiện nhờ khoá Next.js 13.x (`doi-css-kho.py`).
+
 ### 14/11/2026 — Realtime (frontend) — Sau proxy bỏ header Upgrade, client không bao giờ lùi về polling
 - **Triệu chứng:** người dùng sau mạng/proxy chặn WebSocket (trường, công ty) không có tin nhắn, thông báo, gọi thoại realtime; console lặp "websocket error" 400.
 - **Nguyên nhân:** `frontend/src/lib/socket.ts:117` đặt `transports: ['websocket','polling']` mà không bật `tryAllTransports` ⇒ engine.io-client chỉ thử lại websocket, không chuyển sang polling (trái chú thích ở `src/socket/messaging.socket.ts`). Đo bằng chính engine.io-client 6.6.5 của frontend: 3 lần/8 s đều lỗi.

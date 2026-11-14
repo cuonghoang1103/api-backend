@@ -284,3 +284,17 @@ Mẫu một mục:
 - **Cách sửa:** bỏ `always` ở 3 dòng đó (nginx mặc định chỉ thêm header cho 200/201/204/206/301/302/303/304/307/308). Kiểm cú pháp bằng `nginx -t` trong container (chỉ còn lỗi thiếu chứng chỉ — bình thường ngoài VPS); deploy-nha bước 6c tự `nginx -t` trên VPS và trả bản cũ nếu hỏng.
 - **Ảnh hưởng:** mọi người dùng tải tệp tĩnh `/_next/static`, ảnh/tài nguyên bất biến.
 - **Bài học:** `always` chỉ dùng cho header phải có ở cả trang lỗi (CORS, bảo mật); header cache dài hạn tuyệt đối không `always`. Kiểm bằng `curl -I` một URL 404, đừng chỉ kiểm URL 200.
+
+### 14/11/2026 — Prisma (CT Language Đợt C+E) — migration viết tay hỏng cú pháp ⇒ CSDL local kẹt P3009
+- **Triệu chứng:** `npx prisma migrate deploy` trên CSDL local báo `42601 syntax error at or near "CREATE"` ở `20261114220000_ctlanguage_kham_pha_bai_ai_su_kien`; từ đó mọi `migrate deploy` local (kể cả migration thi thử của Đợt B) bị chặn P3009.
+- **Nguyên nhân:** script tách đầu ra `migrate diff --script` theo dòng trống (`split('\n\n')`) — `CREATE TABLE` có dòng trống trước `CONSTRAINT … PRIMARY KEY` nên bị cắt đôi, câu sau dính vào câu trước. 0 câu được áp (`applied_steps_count = 0`, không bảng nào được tạo).
+- **Cách sửa:** tách theo tiêu đề khối `-- CreateTable` / `-- AddForeignKey` (`re.split(r'\n(?=-- [A-Z][A-Za-z]+\n)')`); kiểm trên CSDL TRẮNG bằng `node scripts/db-test-tu-migration.mjs` (cả 20261114200000 lẫn 20261114220000 áp sạch). Bản ghi hỏng trên CSDL local CHƯA gỡ: `prisma migrate resolve` cần người dùng duyệt (CLAUDE.md).
+- **Ảnh hưởng:** chỉ CSDL local (migration chưa deploy); chặn `migrate deploy` local của mọi phiên tới khi gỡ bản ghi hỏng.
+- **Bài học:** migration viết tay phải chạy thử trên CSDL TRẮNG (`db-test-tu-migration.mjs`) TRƯỚC khi `migrate deploy` lên CSDL dùng chung; đừng chế biến SQL bằng tách chuỗi ngây thơ.
+
+### 14/11/2026 — App CT Language (Đợt C) — khối trên Hôm nay không bao giờ gọi máy chủ
+- **Triệu chứng:** trên máy ảo, khối Sự kiện / Từ vựng theo chủ đề / Từ được tra nhiều không hiện; nhật ký máy chủ không có lấy một lượt gọi `kham-pha/*` từ app.
+- **Nguyên nhân:** `KhoiSuKienCTL`, `KhoiChuDeTuCTL`, `KhoiTraNhieuCTL` gắn `.task` lên `Group { if !ds.isEmpty { … } }` — khi chưa có dữ liệu Group rỗng không bao giờ "xuất hiện" nên `.task` không chạy, dữ liệu không bao giờ tới (con gà – quả trứng).
+- **Cách sửa:** dữ liệu vào kho dùng chung (`KhoKhamPhaCTL`, `KhoSuKienCTL`), tải từ `.task(id: nn)` của `HomNayCTL` (và Cộng đồng cho thẻ sự kiện); khối chỉ đọc kho. Kiểm lại trên máy ảo trỏ backend local: đủ khối, có dữ liệu.
+- **Ảnh hưởng:** chưa phát hành (bắt khi tự soát ảnh chụp).
+- **Bài học:** đừng đặt `.task`/`.onAppear` lên view có thể rỗng; tải dữ liệu ở view cha luôn hiện, hoặc ở kho.

@@ -524,6 +524,12 @@ model User {
   ctlNguoiTheoDoi          CtlTheoDoi[]              @relation("CtlTheoDoiDuoc")
   ctlThongBaoNhan          CtlThongBao[]             @relation("CtlThongBaoNhan")
   ctlThongBaoGui           CtlThongBao[]             @relation("CtlThongBaoTu")
+  // CT Language Đợt C + E (14/11/2026): phút học theo ngày · ẩn khỏi xếp hạng · bài học AI · thưởng sự kiện
+  ctlHoatDongNgay          CtlHoatDongNgay[]         @relation("CtlHoatDongNguoi")
+  ctlXepHangAn             CtlXepHangAn?             @relation("CtlXepHangAnNguoi")
+  ctlBaiAi                 CtlBaiAi[]                @relation("CtlBaiAiNguoiTao")
+  ctlBaiAiHoc              CtlBaiAiHoc[]             @relation("CtlBaiAiHocNguoi")
+  ctlSuKienThuong          CtlSuKienThuong[]         @relation("CtlSuKienThuongNguoi")
 
   @@index([email], name: "idx_users_email")
   @@map("users")
@@ -18073,4 +18079,128 @@ model CtlChuHan {
   gianThe String? @map("gian_the") @db.VarChar(16)
 
   @@map("ctl_chu_han")
+}
+
+/// CT Language — KHÁM PHÁ (Đợt C, 14/11/2026): lượt MỞ mục từ điển theo ngày, ẨN DANH (không lưu ai tra). Khoá theo CHỮ
+/// (không theo `ctl_tu.id`: nhập lại từ điển xoá rồi nạp lại cả bảng ⇒ id đổi). Dòng > 10 ngày được dọn lúc ghi.
+model CtlLuotTra {
+  nn   String   @db.VarChar(2)
+  chu  String   @db.VarChar(160)
+  ngay DateTime @db.Date
+  so   Int      @default(0)
+
+  @@id([nn, chu, ngay])
+  @@index([nn, ngay], name: "idx_ctl_luot_tra_nn_ngay")
+  @@map("ctl_luot_tra")
+}
+
+/// Hoạt động học của một người trong một ngày (theo ngày trên máy người học, máy chủ chỉ nhận ±7 ngày quanh hôm nay
+/// giờ VN). `giay` = thời gian app ở tiền cảnh trong màn học/luyện; `theOn` = thẻ đã chấm; `thi` = đề thi thử đã nộp —
+/// app gửi TỔNG của ngày, máy chủ giữ GREATEST (gửi lại không cộng dồn). `goi` = cuộc gọi CuongMini, MÁY CHỦ tự đếm.
+model CtlHoatDongNgay {
+  userId    Int      @map("user_id")
+  nn        String   @db.VarChar(2)
+  ngay      DateTime @db.Date
+  giay      Int      @default(0)
+  theOn     Int      @default(0) @map("the_on")
+  goi       Int      @default(0)
+  thi       Int      @default(0)
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user User @relation("CtlHoatDongNguoi", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, nn, ngay])
+  @@index([nn, ngay], name: "idx_ctl_hoat_dong_nn_ngay")
+  @@map("ctl_hoat_dong_ngay")
+}
+
+/// Người chọn KHÔNG hiện trên bảng xếp hạng phút học (có dòng = ẩn).
+model CtlXepHangAn {
+  userId    Int      @id @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation("CtlXepHangAnNguoi", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("ctl_xep_hang_an")
+}
+
+/// BÀI HỌC AI theo chủ đề (Đợt E): từ vựng + hội thoại + mẫu câu + quiz, `noiDung` đã kiểm ở `baiAiThuan.ts › kiemBaiAi`.
+/// `goiYMa` có ⇒ bài GỢI Ý dùng chung (sinh MỘT lần, `userId` null); không ⇒ bài người dùng tự tạo (chỉ người tạo thấy).
+model CtlBaiAi {
+  id        Int       @id @default(autoincrement())
+  nn        String    @db.VarChar(2)
+  userId    Int?      @map("user_id")
+  goiYMa    String?   @map("goi_y_ma") @db.VarChar(60)
+  chuDe     String    @map("chu_de") @db.VarChar(160)
+  trinhDo   String    @map("trinh_do") @db.VarChar(8)
+  noiDung   Json      @map("noi_dung") @db.JsonB
+  /// Admin gỡ sau báo cáo ⇒ không ai thấy nữa.
+  anLuc     DateTime? @map("an_luc")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  user User?         @relation("CtlBaiAiNguoiTao", fields: [userId], references: [id], onDelete: Cascade)
+  hoc  CtlBaiAiHoc[]
+
+  @@unique([nn, goiYMa], map: "uk_ctl_bai_ai_goi_y")
+  @@index([userId, createdAt], name: "idx_ctl_bai_ai_user")
+  @@map("ctl_bai_ai")
+}
+
+/// "Bài của tôi": người đã lưu / đã học một bài AI (cả bài gợi ý). `xongLuc` = đã làm xong quiz (trạm sự kiện).
+model CtlBaiAiHoc {
+  userId    Int       @map("user_id")
+  baiId     Int       @map("bai_id")
+  createdAt DateTime  @default(now()) @map("created_at")
+  xongLuc   DateTime? @map("xong_luc")
+  diem      Int?
+
+  user User     @relation("CtlBaiAiHocNguoi", fields: [userId], references: [id], onDelete: Cascade)
+  bai  CtlBaiAi @relation(fields: [baiId], references: [id], onDelete: Cascade)
+
+  @@id([userId, baiId])
+  @@index([baiId], name: "idx_ctl_bai_ai_hoc_bai")
+  @@map("ctl_bai_ai_hoc")
+}
+
+/// SỰ KIỆN THÁNG (Đợt E): trạm nhiệm vụ + thưởng TRANG PHỤC Gấu độc quyền (không thưởng tiền). `tram` kiểm ở
+/// `khamPhaThuan.ts › kiemTram`. Thưởng Pro (`thuongProNgay`) CHỈ có hiệu lực khi env `CTL_SU_KIEN_THUONG_PRO=1`.
+model CtlSuKien {
+  id            Int      @id @default(autoincrement())
+  ma            String   @unique(map: "uk_ctl_su_kien_ma") @db.VarChar(60)
+  tieuDe        String   @map("tieu_de") @db.VarChar(120)
+  moTa          String   @map("mo_ta") @db.Text
+  /// null = mọi ngôn ngữ (tiến độ cộng cả ba)
+  nn            String?  @db.VarChar(2)
+  batDau        DateTime @map("bat_dau")
+  ketThuc       DateTime @map("ket_thuc")
+  tram          Json     @db.JsonB
+  /// Số trạm cần xong để nhận thưởng; null = tất cả
+  soTramCan     Int?     @map("so_tram_can")
+  /// rawValue `TrangPhucGau` trong app (skLaPhong · skMuNoel · skHuyChuong)
+  trangPhuc     String   @map("trang_phuc") @db.VarChar(40)
+  thuongProNgay Int      @default(0) @map("thuong_pro_ngay")
+  bat           Boolean  @default(true)
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  thuong CtlSuKienThuong[]
+
+  @@index([batDau, ketThuc], name: "idx_ctl_su_kien_khoang")
+  @@map("ctl_su_kien")
+}
+
+/// Người đã nhận thưởng của một sự kiện (mỗi người một lần).
+model CtlSuKienThuong {
+  suKienId  Int      @map("su_kien_id")
+  userId    Int      @map("user_id")
+  trangPhuc String   @map("trang_phuc") @db.VarChar(40)
+  proNgay   Int      @default(0) @map("pro_ngay")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  suKien CtlSuKien @relation(fields: [suKienId], references: [id], onDelete: Cascade)
+  user   User      @relation("CtlSuKienThuongNguoi", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([suKienId, userId])
+  @@index([userId], name: "idx_ctl_su_kien_thuong_user")
+  @@map("ctl_su_kien_thuong")
 }

@@ -365,3 +365,26 @@ Câu hỏi cho user: Pro của CT Language có **dùng chung** với Pro web cuo
   khách — luật Y HỆT `chamDe`; test hai bên dùng chung đề mẫu `mau-de-1`). Máy ảo: `CT_XEM_MAN` chưa có nhánh thi; dùng
   `CT_THI_THU=lam | lam-im | lam:<n> | phieu` sau khi mở một đề.
 - **Deploy:** `migrate deploy` (bảng mới) — không cần seed, không biến môi trường mới; đề đi theo `content/` trong ảnh.
+- 14/11 (APP + BACKEND): **Đợt C — trang chủ "khám phá" + Đợt E — Bài học AI theo chủ đề + sự kiện tháng** (docs/ct-language-khao-sat-hanzii.md
+  mục 3; CHƯA deploy). Migration `20261114220000_ctlanguage_kham_pha_bai_ai_su_kien` (chỉ THÊM 7 bảng: `ctl_luot_tra` · `ctl_hoat_dong_ngay` ·
+  `ctl_xep_hang_an` · `ctl_bai_ai` · `ctl_bai_ai_hoc` · `ctl_su_kien` · `ctl_su_kien_thuong`, FK CASCADE về users).
+  · Router RIÊNG gắn TRƯỚC `/api/v1/ctlanguage`: `ctlanguage.khamPha.routes.ts` (`/kham-pha`: chủ đề, tra nhiều, phút học + xếp hạng
+    ngày/tuần, ẩn khỏi bảng, sự kiện + nhận thưởng, admin sự kiện) và `ctlanguage.baiAi.routes.ts` (`/bai-ai`: gợi ý, tạo `/:nn/ai/tao`,
+    mở gợi ý `/:nn/ai/goi-y/:ma`, Bài của tôi, lưu, xong quiz, xoá, báo cáo, admin gỡ). Router chung thêm 2 dòng: mở mục từ điển ⇒
+    `ghiLuotTra` (ẩn danh, gom RAM ghi dồn 30 s) · lượt MỞ ĐẦU cuộc gọi ⇒ `demCuocGoi` (trạm "Gọi CuongMini"). Smoke-test deploy.sh thêm
+    `kham-pha/su-kien/thuong` + `bai-ai/luot` (401).
+  · Từ vựng theo chủ đề: 14 chủ đề × 12 từ × 3 ngôn ngữ soạn tay (`chuDeTu.ts`), gắn id từ điển khi khớp chữ (không khớp ⇒ id âm ổn định).
+    Phút học: app đo thời gian ở tab Học/Luyện/Từ điển + màn học mở từ Hôm nay (`DongHoHocCTL`), gửi TỔNG ngày (máy chủ GREATEST);
+    xếp hạng loại người chặn nhau (user_blocks hai chiều), người tự ẩn, tài khoản khoá. Mẹo học: 60/61/60 mẹo đóng trong app (`MeoHocCTL`).
+    Trò mới "Ghép cặp" (`GhepCapCTL`, 3 lượt × 6 cặp, cũng chơi theo từ của một chủ đề). Lối tắt cấp mở `BoTuCoSanCTL(capDau:)`.
+  · Bài học AI: `llmComplete` purpose `language_tutor`, JSON kiểm bằng `kiemBaiAi` (≥ 10 từ, ≥ 4 câu thoại 2 vai, ≥ 3 mẫu, ≥ 5 quiz hợp lệ),
+    lọc `kiemNoiDung` cả chủ đề lẫn bài; free 1 · Pro 20 bài tự tạo/ngày (đếm dòng CSDL, xoá bài không trả lượt); 32 bài gợi ý/ngôn ngữ
+    sinh MỘT lần dùng chung (hai người mở cùng lúc ⇒ model chạy một lần, trần 150 bài gợi ý mới/ngày). Đo 14/11 bằng model thật: zh HSK3
+    45,8 s · ja N5 36,3 s, JSON hợp lệ lượt đầu. "Gọi CuongMini luyện chủ đề này" mở `GoiCuongMiniCTL` với chủ đề tự do (`tenBai`).
+  · Sự kiện tháng: chưa có sự kiện ⇒ máy chủ tự tạo "Thử thách N ngày tháng M" (6 trạm: chuỗi 7 ngày, ôn 200 thẻ, gọi 3 lần, cộng đồng 3
+    điểm, 2 bài AI, 240 phút; tắt bằng `CTL_SU_KIEN_TU_TAO=0`). Thưởng = trang phục độc quyền `TrangPhucGau.skLaPhong/skMuNoel/skHuyChuong`
+    (chỉ mở khi máy chủ xác nhận thưởng). Thưởng Pro chỉ khi admin đặt `thuongProNgay` VÀ env `CTL_SU_KIEN_THUONG_PRO=1` (mặc định tắt).
+    Trạm `thi-thu` có sẵn nhưng KHÔNG nằm trong sự kiện mặc định: màn thi (Đợt B) cần gọi `DongHoHocCTL.shared.ghiThi(nn)` khi nộp đề.
+  · Test: `npx tsx --test src/services/ctlanguage/khamPhaThuan.test.ts src/services/ctlanguage/baiAiThuan.test.ts
+    src/routes/ctlanguage.khamPha.routes.test.ts` + (CSDL) `src/services/ctlanguage/khamPhaBaiAi.db.test.ts`; iOS `KhamPhaBaiAiTests`.
+    DEBUG `CT_XEM_MAN`: `kham-pha-duoi`, `kham-pha-duoi2`, `bai-ai`, `bai-ai-mau`, `bai-ai:<id>`, `su-kien`, `xep-hang-phut`, `chu-de:<mã>`, `ghep-cap`.

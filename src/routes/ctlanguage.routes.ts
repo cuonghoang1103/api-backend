@@ -22,6 +22,7 @@ import {
 import { docThongBao, dsTheoDoi, dsThongBao, hoSoNguoi, soChuaDoc, theoDoi, xepHang } from '../services/ctlanguage/congDongNguoi.js';
 import { luotGau, nhoGauTraLoi } from '../services/ctlanguage/congDongGau.js';
 import { chamBuoiGoi, chayLuotGoi, luotGoi } from '../services/ctlanguage/goiCuongMini.js';
+import { demCuocGoi, ghiLuotTra } from '../services/ctlanguage/khamPha.js';
 import { dsChoWeb, docNN } from '../services/ielts/troChuyen/chuDe.js';
 import type { SuKienTC } from '../services/ielts/troChuyen/troChuyenLuong.service.js';
 
@@ -63,7 +64,9 @@ router.get('/tu-dien/:nn/tra', gioiHanTra, async (req: Request, res: Response<Ap
 router.get('/tu-dien/muc/:id', gioiHanTra, async (req: Request, res: Response<ApiResponse>, next) => {
   try {
     res.setHeader('Cache-Control', 'public, max-age=3600');
-    res.json({ success: true, data: await chiTiet(idSo(req.params.id)) });
+    const muc = await chiTiet(idSo(req.params.id));
+    ghiLuotTra(muc.nn, muc.chu);   // "Từ được tra nhiều" (Đợt C) — ẩn danh, ghi dồn, không chặn yêu cầu
+    res.json({ success: true, data: muc });
   } catch (e) { next(e); }
 });
 
@@ -300,6 +303,8 @@ router.post('/ai/goi/luong', audioGoi.single('audio'), async (req: Request, res)
   try {
     let tt: Record<string, unknown> = {};
     try { tt = JSON.parse(String(req.body?.trangThai ?? '{}')) as Record<string, unknown>; } catch { /* lượt mở đầu */ }
+    // Lượt MỞ ĐẦU (không âm thanh, chưa có lịch sử) = một cuộc gọi mới ⇒ trạm "Gọi CuongMini" của sự kiện tháng (Đợt E).
+    if (!req.file && !(Array.isArray(tt.lichSu) && tt.lichSu.length)) void demCuocGoi(req.userId!, tt.nn);
     await chayLuotGoi(req.userId!, { audio: req.file?.buffer, mime: req.file?.mimetype, ...tt }, gui, ctl.signal);
   } catch (e) {
     gui({ type: 'loi', lyDo: 'loi', message: (e as Error)?.message?.slice(0, 200) || 'Có lỗi, bạn thử lại nhé.' });

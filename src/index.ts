@@ -195,6 +195,9 @@ const ctLanguageRoutes = (await import(path.join(__dirname, 'routes', 'ctlanguag
 const ctLanguageTuDienSauRoutes = (await import(path.join(__dirname, 'routes', 'ctlanguage.tuDienSau.routes.js'))).default;
 // CT Language — Đợt D màn Dịch: AI sửa bài viết (gắn TRƯỚC /ctlanguage — router kia có `router.use(authenticate)` + `/:nn`)
 const ctLanguageDichRoutes = (await import(path.join(__dirname, 'routes', 'ctlanguage.dich.routes.js'))).default;
+// CT Language — Đợt C (trang chủ khám phá + sự kiện tháng) + Đợt E (bài học AI theo chủ đề). Gắn TRƯỚC /ctlanguage như router dịch.
+const ctLanguageKhamPhaRoutes = (await import(path.join(__dirname, 'routes', 'ctlanguage.khamPha.routes.js'))).default;
+const ctLanguageBaiAiRoutes = (await import(path.join(__dirname, 'routes', 'ctlanguage.baiAi.routes.js'))).default;
 // CT Language — Đợt B Thi thử chuẩn (HSK · HSKK · JLPT · IELTS mini · xếp lớp · vinh danh tuần) — cũng gắn TRƯỚC /ctlanguage
 const ctLanguageThiRoutes = (await import(path.join(__dirname, 'routes', 'ctlanguage.thi.routes.js'))).default;
 const booksRoutes = (await import(path.join(__dirname, 'routes', 'books.routes.js'))).default;
@@ -713,6 +716,8 @@ app.use('/api/v1/admin/landing', landingAdminRoutes);
 app.use('/api/v1/finance', financeRoutes);
 app.use('/api/v1/ielts', ieltsRoutes);
 app.use('/api/v1/ctlanguage/dich', ctLanguageDichRoutes);
+app.use('/api/v1/ctlanguage/kham-pha', ctLanguageKhamPhaRoutes);
+app.use('/api/v1/ctlanguage/bai-ai', ctLanguageBaiAiRoutes);
 app.use('/api/v1/ctlanguage/thi', ctLanguageThiRoutes);
 // PHẢI đứng TRƯỚC router chung: router chung có `router.use(authenticate)` chặn mọi đường không khớp của khách.
 app.use('/api/v1/ctlanguage/tu-dien-sau', ctLanguageTuDienSauRoutes);

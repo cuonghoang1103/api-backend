@@ -193,3 +193,10 @@ Mẫu một mục:
 - **Cách sửa:** thêm `group` vào className của nút dòng 95.
 - **Ảnh hưởng:** chỉ admin, thẩm mỹ/phản hồi khi chọn user.
 - **Bài học:** `group-*` cần tổ tiên có `group` — Tailwind không báo lỗi khi thiếu; grep `group-hover` rồi đối chiếu tổ tiên khi sửa giao diện.
+
+### 14/11/2026 — Web (nhạc) — khung danh sách phát của trình phát nhạc lệch thêm 24px trên màn ≥ sm
+- **Triệu chứng:** từ 640px trở lên, khung danh sách phát nổi phía trên thanh nhạc thụt vào 24px so với ý đồ dính mép phải (đo Chromium 800px: margin 24px).
+- **Nguyên nhân:** `frontend/src/components/music/GlobalMusicPlayer.tsx:178` có cả `sm:mx-6` lẫn `sm:mx-0` trong một className. Hai lớp cùng biến thể, cùng thuộc tính ⇒ thắng theo THỨ TỰ TRONG CSS chứ không theo thứ tự viết; Tailwind 3 sắp `mx-0` trước `mx-6` ⇒ `sm:mx-6` thắng, `sm:mx-0` chết (bắt khi soạn khoá Tailwind Ch3).
+- **Cách sửa:** bỏ `sm:mx-6` (giữ `mx-3` cho mobile, `sm:mx-0` + `sm:right-6` cho màn lớn).
+- **Ảnh hưởng:** mọi người dùng trình phát nhạc trên máy tính/tablet — lệch bố cục nhẹ.
+- **Bài học:** hai lớp xung đột cùng biến thể trong một className là lỗi chắc chắn — thứ tự viết KHÔNG quyết định. Dùng `tailwind-merge`/lint xung đột (eslint-plugin-tailwindcss `no-contradicting-classname`) để bắt sớm.

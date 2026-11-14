@@ -175,7 +175,7 @@ function QueuePopover({ onClose }: { onClose: () => void }) {
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: 10, scale: 0.98 }}
       transition={{ type: 'spring', stiffness: 320, damping: 28 }}
-      className="absolute bottom-full left-0 right-0 mb-2 mx-3 sm:mx-6 max-w-3xl sm:left-auto sm:right-6 sm:mx-0 bg-darkcard/95 backdrop-blur-md border border-darkborder rounded-2xl shadow-2xl z-[65] overflow-hidden"
+      className="absolute bottom-full left-0 right-0 mb-2 mx-3 max-w-3xl sm:left-auto sm:right-6 sm:mx-0 bg-darkcard/95 backdrop-blur-md border border-darkborder rounded-2xl shadow-2xl z-[65] overflow-hidden"
       role="dialog"
       aria-label="Play queue"
     >

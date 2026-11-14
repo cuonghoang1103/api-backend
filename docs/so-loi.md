@@ -18,6 +18,27 @@ Mẫu một mục:
 
 ---
 
+### 15/11/2026 — App CT Language (thi thử) — Bài nghe chung của nhóm tắt khi lật sang câu kế, không nghe lại được
+- **Triệu chứng:** IELTS Mini Listening (một băng cho 10 câu, nghe MỘT lần): vừa bấm "Sau" sang câu 2 là băng tắt, nút nghe báo "Đã hết lượt nghe" ⇒ không cách nào nghe hết part trừ khi đứng yên ở câu 1.
+- **Nguyên nhân:** `LamBaiThiVM.den()` gọi `GiongSachHoc.chung.dung()` VÔ ĐIỀU KIỆN mỗi lần lật câu, kể cả khi câu mới dùng chung bài nghe của nhóm (`thi-g-…`) mà lượt nghe đã bị trừ.
+- **Cách sửa:** chỉ dừng khi câu mới KHÁC bài nghe (so `baiNghe(...).khoa`) — commit ios-app đợt mở rộng thi thử 15/11.
+- **Ảnh hưởng:** 2 đề IELTS Mini trên TestFlight build 7 (đề HSK/JLPT nghe theo từng câu nên không dính); đề IELTS đủ 40 câu mới thêm sẽ hỏng hoàn toàn nếu không sửa.
+- **Bài học:** đề có bài nghe CHUNG phải được thử bằng cách lật câu trong lúc băng chạy; "nghe được câu 1" chưa phải là nghe được bài.
+
+### 15/11/2026 — Backend CT Language (thi thử) — Đề mang cấp chưa khai trong danh mục sẽ vỡ SAU khi đã lưu bài nộp
+- **Triệu chứng:** (bắt được lúc soát mã, chưa lên prod) thêm đề với `cap` mới mà quên khai `CAP_THEO_NN` ⇒ đề qua `kiemDe`, không hiện ở phòng thi, và nếu nộp được thì `nop()` ném 400 "Cấp độ không hợp lệ" từ `vinhDanh` SAU khi đã ghi điểm.
+- **Nguyên nhân:** `thi.ts › phieu()` gọi `vinhDanh(nn, cap)` — hàm này từ chối cấp ngoài `CAP_THEO_NN`; `kiemDe` không đối chiếu cấp với danh mục.
+- **Cách sửa:** thêm `kiemCap` (thiThuan.ts) — `napDe` bỏ đề cấp lạ, script `ctlanguage-kiem-de-thi.mts` báo đỏ; khai đủ HSK4 / N3 / IELTS / IELTS-VIET (66d079b93).
+- **Ảnh hưởng:** không (chặn trước khi thêm 14 đề mới).
+- **Bài học:** hai bảng phải khớp nhau (đề ↔ danh mục cấp) thì cho máy kiểm ngay lúc nạp, đừng để lộ ra ở bước cuối của người dùng.
+
+### 15/11/2026 — Nội dung thi thử CT Language — 70 câu phải sửa sau khi soát đủ 1.247 câu tự soạn
+- **Triệu chứng:** soát từng câu 16 đề cũ (843 câu) + 4 đề mới (404 câu): không đáp án nào ghi sai, nhưng 4 câu có phương án nhiễu cũng đúng / dữ kiện hở, 6 câu sắp xếp thiếu hoặc thừa trật tự chấp nhận, 8 câu điền nhận biến thể vượt giới hạn từ, 14 giải thích chép lệch lời nghe, 16 câu dùng kanji/từ vượt cấp, 22 câu trùng ý giữa hai đề soạn song song, 4 chỗ TTS dễ đọc nhầm (十分, 方が, 辛い).
+- **Nguyên nhân:** đề soạn một lượt không có người đọc lại độc lập; hai đề cùng cấp soạn song song không thấy nhau; `kiemDe` chỉ kiểm khuôn, không kiểm nội dung.
+- **Cách sửa:** sửa tại chỗ (88e8bc8e0, 66d079b93) + script `scripts/ctlanguage-soat-de-thi.mts` (giải thích ngược đáp án, lời nghe lẫn chữ lạ, đáp án điền không có trong bài, câu trùng giữa các đề, pinyin/kana lệch từ điển `ctl_tu`).
+- **Ảnh hưởng:** 16 đề đã lên TestFlight build 7 mang các lỗi nhỏ trên tới lần deploy kế.
+- **Bài học:** đề mới = soạn → máy soát → MỘT lượt người/agent khác làm bài như thí sinh rồi mới so đáp án; đề cùng cấp soạn song song phải chạy bộ soát trùng trước khi nhận.
+
 ### 15/11/2026 — App CT Language — Bấm giữa nút Gấu nổi không ăn
 - **Triệu chứng:** máy ảo: chạm vào hình Gấu ở nút nổi (trợ lý theo màn; có thể cả nút "Đặt câu hỏi" ở Cộng đồng) không mở gì, chỉ chạm mép viền mới ăn.
 - **Nguyên nhân:** `LinhVat/GauPixel.swift` LUÔN gắn `.contentShape(Rectangle()).onTapGesture { if chamDuoc {…} }` — kể cả `chamDuoc = false` cử chỉ vẫn nằm đó và nuốt cú chạm của `Button` bọc ngoài.

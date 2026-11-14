@@ -427,6 +427,35 @@ Câu hỏi cho user: Pro của CT Language có **dùng chung** với Pro web cuo
     `STORAGE_SANDBOX=1 npx tsx --test src/services/ctlanguage/congDongAnh.db.test.ts`; iOS `TroLyGauTests`.
   · Deploy: `migrate deploy` (bảng mới); không env mới.
 
+## 13b. Thi thử — mở rộng + soát (15/11/2026, CHƯA deploy, CHƯA lên TestFlight)
+
+- **Soát nội dung:** đã đọc từng câu 16 đề cũ (843 câu, sửa 40) + 4 đề mới (404 câu, sửa 48 lúc soát độc lập). Máy soát:
+  `npx tsx scripts/ctlanguage-soat-de-thi.mts [id…] [--tu-dien]` (✗ lỗi / `!` nghi; `--tu-dien` đối chiếu pinyin + kana với `ctl_tu` local).
+- **Đề mới — 30 đề · 1.657 câu:** HSK 4 ×2 (100 câu: nghe 45 · đọc 40 · viết 15; phần viết 2 đổi thành "chọn câu khớp hình + dùng đúng từ"
+  vì chấm máy), JLPT N3 ×2 (102 câu: 35 · 39 · 28), **IELTS Academic ×5** (`ielts-de-1…5`: Listening 40 + Reading 40, phiếu điểm quy band),
+  **IELTS Writing ×5** (`ielts-viet-de-*`: Task 1 + Task 2). Đề IELTS là tệp SINH RA từ đề phòng thi web bằng
+  `npx tsx scripts/ctlanguage-ielts-tu-web.mts` (đừng sửa tay). CHƯA thêm đề thứ ba cho HSK 1–3 / N5 / N4.
+- **Khuôn mới** (`_KHUON.md` mục "Bổ sung 15/11"): tới 10 lựa chọn, `kieu: viet`, `hinh` (bản đồ / sơ đồ vẽ bằng Canvas — `HinhThiView`),
+  `band` theo phần, `kiemCap`. Id câu IELTS: `L1…L40`, `R1…R40`. Mỗi part Listening = MỘT nhóm, một băng liền.
+- **IELTS Writing:** gõ bài trong app; lúc NỘP gửi máy chấm Writing của web (`/ielts/thi-may/cham-viet`, chấm nền ~1–2 phút/bài, cần đăng
+  nhập + đồng ý AI + ≥ 40 từ) ⇒ band 4 tiêu chí, lỗi, bản viết lại, bài mẫu. Điểm phần = band × 10 (thang 90, Task 2 hệ số 2). Task 1 hiện
+  SỐ LIỆU DẠNG CHỮ thay biểu đồ (app chưa vẽ biểu đồ).
+- **Thi nói với giám khảo AI** (`Modules/ThiThu/ThiNoiGiamKhaoCTL.swift`, lối vào: khối cuối danh sách cấp ở Phòng thi): IELTS Speaking
+  Part 1–2–3 ×5 (`content/ctlanguage/de-thi-noi/`) + HSKK sơ cấp (dựng từ `hskk-so-de-1`). Kịch bản do MÁY CHỦ đọc (không gọi model):
+  app gọi `/ctlanguage/ai/goi/luong` kèm `luotThi` + `buoc` ⇒ `goiCuongMini.ts` lấy câu từ `thiNoi.ts › loiGiamKhao` ⇒ `chayLuot(loiSan)`.
+  App giữ nhịp (`NhipThiNoi`): micro tự mở sau câu hỏi, trần giây mỗi câu, Part 1/3 tối đa 5 phút (hết giờ bỏ câu còn lại), Part 2 thẻ đề +
+  60 giây chuẩn bị + nói ≤ 120 giây; HSKK phần 3 chuẩn bị 2 phút. Tuyến `/ctlanguage/thi/noi/{danh-muc, de/:id, de/:id/bat-dau,
+  luot/:id/cham, cham/:viecId}`. Chấm: IELTS = `ielts/thiNoi.service.ts › chamNoi` (FC · LR · GRA · P, chấm nền, trần 4 bài/ngày của web);
+  HSKK = nhắc lại 30% (độ khớp chữ) + nghe–trả lời 30% + trả lời 40% (một lời gọi `goiChamNoi`). Free 1 đề nói/cấp/tuần (đếm riêng với
+  thi viết), Pro không giới hạn; không lên bảng xếp hạng. ⚠️ Phát âm chỉ ƯỚC LƯỢNG từ chữ máy nghe ra (luồng gọi gửi m4a, không qua Azure).
+- **Phiếu điểm:** nút "Làm lại N câu sai" (`DeThiCTL.chiCau` ⇒ `LamBaiThiCTL(deSan:)`: không tính lượt, không nộp máy chủ, không lưu lịch
+  sử); nút Gấu trợ lý với ngữ cảnh kết quả; band cho IELTS. Sửa lỗi bài nghe chung tắt khi lật câu (sổ lỗi 15/11).
+- **Máy ảo:** `CT_XEM_MAN=thi` (phòng thi) · `CT_XEM_MAN=thi-de:<id>` + `CT_THI_THU=lam:<n> | lam-im | phieu` (mở thẳng một đề).
+- **Đã kiểm:** test thuần + CSDL backend (`thiThuan`, `thiNoiThuan`, `thi.db` 7/7 gồm vinh danh tuần), `tsc` gốc + seed; iOS build + 10 test
+  `ThiThuCTLTests`; máy ảo: phòng thi, câu bản đồ IELTS, phiếu điểm có band + nút ôn câu sai. **CHƯA kiểm:** thi nói đầu-cuối với tiếng thật
+  (máy ảo không micro, local thiếu khoá AI/Whisper), AI chấm Writing/Speaking chạy thật, TTS đọc đề mới trên prod, màn làm lại câu sai và màn
+  viết trên máy thật. Deploy: KHÔNG migration mới, không biến môi trường mới.
+
 ## 14. Thư viện ngữ pháp (15/11/2026)
 
 Lấp khoảng trống LỚN của bảng khảo sát Hanzii/Mazii ("chưa có tra / thư viện ngữ pháp").

@@ -99,10 +99,10 @@ export default {
     /* ── Chương 10 — Compose trong đời thật ── */
     'dk-10-0-slides': { yt: 'YMBT1NguJJw', credit: "Anton Putra — Docker Compose Tutorial for Beginners (Networks - Volumes - Secrets - Postgres - Letsencrypt)" },
     'dk-10-1-ban-ve': { yt: 'SXwC9fSwct8', credit: "TechWorld with Nana — Ultimate Docker Compose Tutorial", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/10-stack-that/10-02-ban-ve-f1944fe0.mp4' }, defaultVideoTrack: 'VI'},
-    'dk-10-2-tang-du-lieu': { yt: 'aetqo2nkQcA', credit: "Ben Awad — Docker Compose Node.js, Redis, and PostgreSQL" },
+    'dk-10-2-tang-du-lieu': { yt: 'aetqo2nkQcA', credit: "Ben Awad — Docker Compose Node.js, Redis, and PostgreSQL", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/10-stack-that/10-03-tang-du-lieu-0a9f01bf.mp4' }, defaultVideoTrack: 'VI'},
     'dk-10-3-api-migration': { yt: 'OzU3rh0ROt8', credit: "OpenJS Foundation — Master Production-grade Best Practices to Build your Node.js Docker Images - Liran Tal, Snyk", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/10-stack-that/10-04-api-migration-4ff61bf3.mp4' }, defaultVideoTrack: 'VI'},
-    'dk-10-4-frontend': { yt: '-XiPUoCIKSw', credit: "ByteGrad — Docker + Next.js Best Practices (Depot)" },
-    'dk-10-5-nginx-lap-rap': { yt: 'J9jKKeV1XVE', credit: "Programonaut — How to Secure Your Applications with HTTPS Using Docker, NGINX, and Let's Encrypt" },
+    'dk-10-4-frontend': { yt: '-XiPUoCIKSw', credit: "ByteGrad — Docker + Next.js Best Practices (Depot)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/10-stack-that/10-05-frontend-5dc8c2de.mp4' }, defaultVideoTrack: 'VI'},
+    'dk-10-5-nginx-lap-rap': { yt: 'J9jKKeV1XVE', credit: "Programonaut — How to Secure Your Applications with HTTPS Using Docker, NGINX, and Let's Encrypt", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/10-stack-that/10-06-nginx-lap-rap-9c924fd7.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 11 — Chạy trên production ── */
     'dk-11-0-slides': { yt: 'F-9KWQByeU0', credit: "Dreams of Code — Setting up a production ready VPS is a lot easier than I thought." },

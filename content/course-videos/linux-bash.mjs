@@ -106,12 +106,12 @@ export default {
     'lnx-10-0-slides': { yt: 'ZRs5zVv_1UU', credit: "Learn Linux TV — Linux Crash Course - The df and du Commands" },
     'lnx-10-1-dia-day': { yt: 'Tky5uCQUZPQ', credit: 'Red Hat Enterprise Linux — Troubleshooting Linux Disk Space Issues at 2 AM?', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/linux-bash/10-dia-goi-phan-mem-log/10-02-dia-day-c78d70e4.mp4' }, defaultVideoTrack: 'VI'},      // Troubleshooting Linux Disk Space Issues at 2 AM?
     'lnx-10-2-goi-phan-mem': { yt: 'oNfy6QYmq7g', credit: 'Tech Taught by Her — Linux Package Management Tutorial | apt vs yum vs dnf Explained', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/linux-bash/10-dia-goi-phan-mem-log/10-03-goi-phan-mem-2ed94c8d.mp4' }, defaultVideoTrack: 'VI'},  // Linux Package Management Tutorial | apt vs yum vs dnf Explained
-    'lnx-10-3-log-journalctl': { yt: 'J1XhNXWhCKU', credit: 'Devops_world — Linux Log Analysis Explained | /var/log, tail, grep & journalctl' },// Linux Log Analysis Explained | /var/log, tail, grep & journalctl
+    'lnx-10-3-log-journalctl': { yt: 'J1XhNXWhCKU', credit: 'Devops_world — Linux Log Analysis Explained | /var/log, tail, grep & journalctl', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/linux-bash/10-dia-goi-phan-mem-log/10-04-log-journalctl-8d1488ee.mp4' }, defaultVideoTrack: 'VI'},// Linux Log Analysis Explained | /var/log, tail, grep & journalctl
 
     /* ── Chương 11 — systemd, cron & quản trị ── */
     'lnx-11-0-slides': { yt: 'Kzpm-rGAXos', credit: "Learn Linux TV — Systemd Explained: How to Manage Linux Services Easily" },
     'lnx-11-1-systemd-unit': { yt: 'C4a7jxlMTfo', credit: 'tutoriaLinux — How to Create a systemd Linux Service' },   // How to Create a systemd Linux Service
-    'lnx-11-2-cron-timer': { yt: 'DixhIrgMy3M', credit: 'tutoriaLinux — Introduction to systemd timers' },     // Introduction to systemd timers
+    'lnx-11-2-cron-timer': { yt: 'DixhIrgMy3M', credit: 'tutoriaLinux — Introduction to systemd timers', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/linux-bash/11-systemd-cron-quan-tri/11-03-cron-timer-227d5e27.mp4' }, defaultVideoTrack: 'VI'},     // Introduction to systemd timers
     'lnx-11-3-gia-co-may-chu': { yt: '1PljaLoTZ28', credit: 'TechSky - Ethical Hacking — How to Harden Linux Server using Auditd, UFW & Fail2Ban?' }, // How to Harden Linux Server using Auditd, UFW & Fail2Ban?
 
     /* ── Chương 12 — Chẩn đoán một máy chủ thật ── */

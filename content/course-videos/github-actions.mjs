@@ -95,7 +95,7 @@ export default {
     'ga-8-2-flake': { yt: 'Mhe-quHWe60', credit: "Semaphore — 3 Steps to Fix Flaky Tests", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/08-khi-ci-do/08-03-flake-c7792bf8.mp4' }, defaultVideoTrack: 'VI'},
     'ga-8-3-tai-lap': { yt: 'OW121yjV1IM', credit: "Society of Research Software Engineering — Pascal Führlich: Debugging GitHub Actions Locally", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/08-khi-ci-do/08-04-tai-lap-b927aaf7.mp4' }, defaultVideoTrack: 'VI'},
     'ga-8-4-thu-tu-doc': { yt: 'RIeLtfGdB3w', credit: "bdougie — 3 Tips for Debugging GitHub Actions" },
-    'ga-8-5-kiem-ban-va': { yt: 'Oqq-_QZWzhg', credit: "Cypress.io — GitHub Actions + Cypress: Debugging Test Failures in CI" },
+    'ga-8-5-kiem-ban-va': { yt: 'Oqq-_QZWzhg', credit: "Cypress.io — GitHub Actions + Cypress: Debugging Test Failures in CI", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/08-khi-ci-do/08-06-kiem-ban-va-e5dc2da6.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 9 — Deploy từ CI, và vì sao kho này ĐÃ THÔI ── */
     'ga-9-0-slides': { yt: 'w_37LDOy4sI', credit: "CoderDave — GitHub Actions: Approvals, Environments and Visualization DEEP DIVE" },

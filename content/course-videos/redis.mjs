@@ -87,15 +87,15 @@ export default {
 
     /* ── Chương 9 — Bộ nhớ, đẩy khoá và lưu lâu dài ── */
     'rd-9-1-bo-nho-di-dau': { yt: 'QemEy97fiY0', credit: 'ScyllaDB — End-To-End Performance Testing, Profiling, and Analysis at Redis' }, // End-To-End Performance Testing, Profiling, and Analysis at Redis
-    'rd-9-2-day-khoa': { yt: 'I4TXUbQoaNg', credit: 'Kartikeya Sharma — Redis Expiration & Eviction Policies | TTL, LRU, LFU, RANDOM' },      // Redis Expiration & Eviction Policies | TTL, LRU, LFU, RANDOM
+    'rd-9-2-day-khoa': { yt: 'I4TXUbQoaNg', credit: 'Kartikeya Sharma — Redis Expiration & Eviction Policies | TTL, LRU, LFU, RANDOM', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/redis/09-bo-nho-va-luu-lau-dai/09-02-day-khoa-ef37f6ad.mp4' }, defaultVideoTrack: 'VI'},      // Redis Expiration & Eviction Policies | TTL, LRU, LFU, RANDOM
     'rd-9-3-rdb': { yt: 'KOC3SXfYyIc', credit: 'Geeky Shows — Redis Persistence RDB AOF' },   // Redis Persistence RDB AOF
-    'rd-9-4-aof': { yt: '5SnkVoatBpA', credit: 'Arpit Bhayani — Implementing AOF Persistence | Redis Internals' },           // Implementing AOF Persistence | Redis Internals
+    'rd-9-4-aof': { yt: '5SnkVoatBpA', credit: 'Arpit Bhayani — Implementing AOF Persistence | Redis Internals', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/redis/09-bo-nho-va-luu-lau-dai/09-04-aof-f1b6a995.mp4' }, defaultVideoTrack: 'VI'},           // Implementing AOF Persistence | Redis Internals
     'rd-9-5-tu-the-ben': { yt: '1pfvz24BAUs', credit: 'Coding with Raphael De Lio — Understanding Redis Persistence - AOF & RDB + Docker' },    // Understanding Redis Persistence - AOF & RDB + Docker
 
     /* ── Chương 10 — Vận hành Redis: cấu hình, bảo mật và ACL ── */
-    'rd-10-1-cau-hinh': { yt: 'X01gn5a2WQ0', credit: 'Scale Your Code — Configure Redis for Production - Redis Series Episode 9' },    // Configure Redis for Production - Redis Series Episode 9
-    'rd-10-2-phoi-ra-mang': { yt: 'oD8k3ymbfkY', credit: 'Redis — RedisConf 2020: Rediscover Redis Security' },// Rediscover Redis Security - RedisConf 2020
-    'rd-10-3-acl': { yt: 'tWJqx_5C-cM', credit: 'Liv4IT — Introduction to Redis ACL access control lists' },         // Introduction to Redis ACL access control lists
+    'rd-10-1-cau-hinh': { yt: 'X01gn5a2WQ0', credit: 'Scale Your Code — Configure Redis for Production - Redis Series Episode 9', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/redis/10-van-hanh-bao-mat-acl/10-01-cau-hinh-da5f25fc.mp4' }, defaultVideoTrack: 'VI'},    // Configure Redis for Production - Redis Series Episode 9
+    'rd-10-2-phoi-ra-mang': { yt: 'oD8k3ymbfkY', credit: 'Redis — RedisConf 2020: Rediscover Redis Security', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/redis/10-van-hanh-bao-mat-acl/10-02-phoi-ra-mang-88888de2.mp4' }, defaultVideoTrack: 'VI'},// Rediscover Redis Security - RedisConf 2020
+    'rd-10-3-acl': { yt: 'tWJqx_5C-cM', credit: 'Liv4IT — Introduction to Redis ACL access control lists', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/redis/10-van-hanh-bao-mat-acl/10-03-acl-adb0e8c9.mp4' }, defaultVideoTrack: 'VI'},         // Introduction to Redis ACL access control lists
     'rd-10-4-lam-cung': { yt: 'Gl59KCln0Sw', credit: 'All Hacking Cons — Securing Redis with Sedona  Will Urbanski' },    // Securing Redis with Sedona — Will Urbanski
     'rd-10-5-ket-noi': { yt: 'qX2Eq-M6LDU', credit: 'Knowledge Thrusters — Monitor in Redis | Redis In Laravel | Knowledge Thrusters' },     // Monitor in Redis | Redis In Laravel | Knowledge Thrusters
 

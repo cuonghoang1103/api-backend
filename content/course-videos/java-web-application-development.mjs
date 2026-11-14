@@ -42,8 +42,8 @@ export default {
     "prj301-slide-prj5-1": { yt: "g0k1d5BlXR0", credit: "Telusko — Servlet Java Tutorial Part 8 How to use Cookie for session Management" },
     "prj301-scope": { yt: "CzlZGHAGHbk", credit: "Telusko — Servlet Java Tutorial Part 7 How to use HttpSession Session Management", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/java-web-application-development/04-bon-pham-vi-scope/04-02-bon-pham-vi-3a72c3db.mp4' }, defaultVideoTrack: 'VI'},
     "prj301-application-scope": { yt: "oWqrMXfQbo0", credit: "Telusko — JSP Hit Counter using Session and Application Implicit Object Example", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/java-web-application-development/04-bon-pham-vi-scope/04-04-pham-vi-application-servletcontext-81a36344.mp4' }, defaultVideoTrack: 'VI'},
-    "prj301-on-ch4": { yt: "2HurrgxlTmg", credit: "Telusko — #9 Servlet and JSP Tutorial | sendRedirect | URL Rewriting" },
-    "prj301-slide-prj2-1": { yt: "5vzCjvUwMXg", credit: "Telusko — 16.2 Java Database Connectivity Practical" },
+    "prj301-on-ch4": { yt: "2HurrgxlTmg", credit: "Telusko — #9 Servlet and JSP Tutorial | sendRedirect | URL Rewriting", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/java-web-application-development/04-bon-pham-vi-scope/04-05-thuc-hanh-chuong-4-e588d9cd.mp4' }, defaultVideoTrack: 'VI'},
+    "prj301-slide-prj2-1": { yt: "5vzCjvUwMXg", credit: "Telusko — 16.2 Java Database Connectivity Practical", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/java-web-application-development/05-jdbc-mau-dao/05-01-slide-prj2-1-jdbc-driver-dfe1e62f.mp4' }, defaultVideoTrack: 'VI'},
     "prj301-slide-prj2-2": { yt: "gU3DLOsw0Eg", credit: "luv2code — Java JDBC Tutorial - Part 5: Prepared Statements" },
     "prj301-transaction-pool": { yt: "IqnxrRIy99w", credit: "Ram N Java — JDBC Transaction Management: Real-world Scenario Demo" },
     "prj301-on-ch5": { yt: "8QOjN89wA-Y", credit: "Telusko — 16.6 Java Database Connectivity with DAO Example" },
@@ -91,6 +91,6 @@ export default {
     "prj301-slide-cs6-2": { yt: "6rGMvws--kk", credit: "Marco Behler — Packaging your .jar or .war files into a Docker container | Docker & Java" },
     'prj301-hoc-the-nao': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/java-web-application-development/00-gioi-thieu-huong-dan-hoc/00-02-hoc-prj301-the-nao-ff527251.mp4' }, defaultVideoTrack: 'VI'},
     'prj301-dieu-kien-qua-mon': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/java-web-application-development/00-gioi-thieu-huong-dan-hoc/00-07-dieu-kien-qua-mon-bcef847b.mp4' }, defaultVideoTrack: 'VI'},
-    'prj301-slide-prj7-2': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/java-web-application-development/03-jsp-el-jstl/03-05-slide-prj7-2-jstl-url-fmt-fn-326c71f9.mp4' }, defaultVideoTrack: 'VI' },
+    'prj301-slide-prj7-2': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/java-web-application-development/03-jsp-el-jstl/03-05-slide-prj7-2-jstl-url-fmt-fn-326c71f9.mp4' }, defaultVideoTrack: 'VI'},
   },
 };

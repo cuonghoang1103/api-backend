@@ -51,12 +51,12 @@
         {
           "h": "I'm tired. Let's stop ___ a rest.",
           "lc": [
-            "to have",
-            "had",
             "having",
+            "had",
+            "to have",
             "have"
           ],
-          "da": 0,
+          "da": 2,
           "gt": "Dừng lại ĐỂ nghỉ ⇒ stop + to V (stop having = thôi không nghỉ nữa)."
         },
         {
@@ -64,21 +64,21 @@
           "lc": [
             "locked",
             "to lock",
-            "locking",
-            "lock"
+            "lock",
+            "locking"
           ],
-          "da": 2,
+          "da": 3,
           "gt": "Nhớ lại việc đã làm ⇒ remember + V-ing."
         },
         {
           "h": "Don't forget ___ the lights when you leave.",
           "lc": [
-            "turning off",
             "to turn off",
+            "turn off",
             "turned off",
-            "turn off"
+            "turning off"
           ],
-          "da": 1,
+          "da": 0,
           "gt": "Việc cần làm (chưa làm) ⇒ forget + to V."
         }
       ]
@@ -134,34 +134,34 @@
         {
           "h": "My parents want ___ a doctor.",
           "lc": [
-            "me become",
-            "that I become",
+            "me to become",
             "I to become",
-            "me to become"
+            "that I become",
+            "me become"
           ],
-          "da": 3,
+          "da": 0,
           "gt": "want + tân ngữ (me) + to V."
         },
         {
           "h": "The doctor advised me ___ more water.",
           "lc": [
-            "drink",
-            "that drink",
             "drinking",
-            "to drink"
+            "to drink",
+            "drink",
+            "that drink"
           ],
-          "da": 3,
+          "da": 1,
           "gt": "advise + người + to V."
         },
         {
           "h": "Câu nào đúng?",
           "lc": [
             "I want you help me.",
-            "I want you to help me.",
             "I want to you help me.",
+            "I want you to help me.",
             "I want that you help me."
           ],
-          "da": 1,
+          "da": 2,
           "gt": "Cấu trúc đúng là want + người + to + V."
         }
       ]
@@ -217,30 +217,30 @@
           "h": "My parents let me ___ out late.",
           "lc": [
             "to stay",
+            "stay",
             "stayed",
-            "staying",
-            "stay"
+            "staying"
           ],
-          "da": 3,
+          "da": 1,
           "gt": "let + tân ngữ + V nguyên mẫu không to."
         },
         {
           "h": "The movie made me ___.",
           "lc": [
-            "cry",
-            "to cry",
             "cried",
+            "to cry",
+            "cry",
             "crying"
           ],
-          "da": 0,
+          "da": 2,
           "gt": "make + tân ngữ + V nguyên mẫu không to."
         },
         {
           "h": "We aren't ___ to use phones in class.",
           "lc": [
-            "made",
             "allow",
             "let",
+            "made",
             "allowed"
           ],
           "da": 3,
@@ -296,31 +296,31 @@
         {
           "h": "Could you look ___ my cat while I'm away?",
           "lc": [
-            "after",
             "off",
+            "after",
             "on",
             "up"
           ],
-          "da": 0,
+          "da": 1,
           "gt": "look after = trông nom, chăm sóc."
         },
         {
           "h": "Your shoes are dirty. Please ___.",
           "lc": [
-            "take off they",
-            "take them off",
+            "them take off",
             "take off them",
-            "them take off"
+            "take them off",
+            "take off they"
           ],
-          "da": 1,
+          "da": 2,
           "gt": "Tân ngữ là đại từ thì phải đứng giữa động từ và tiểu từ."
         },
         {
           "h": "Câu nào SAI?",
           "lc": [
             "Turn the light off.",
-            "Turn off the light.",
             "Turn it off.",
+            "Turn off the light.",
             "Turn off it."
           ],
           "da": 3,
@@ -379,12 +379,12 @@
         {
           "h": "Câu nào đúng?",
           "lc": [
-            "Despite he is rich, he isn't happy.",
             "Although he is rich, he isn't happy.",
-            "In spite he is rich, he isn't happy.",
-            "Although he is rich, but he isn't happy."
+            "Although he is rich, but he isn't happy.",
+            "Despite he is rich, he isn't happy.",
+            "In spite he is rich, he isn't happy."
           ],
-          "da": 1,
+          "da": 0,
           "gt": "although + mệnh đề và không dùng thêm but; despite / in spite of không đi thẳng với mệnh đề."
         },
         {
@@ -401,12 +401,12 @@
         {
           "h": "___ the rain, we went out.",
           "lc": [
-            "Although",
-            "Even though",
             "Despite of",
-            "Despite"
+            "Although",
+            "Despite",
+            "Even though"
           ],
-          "da": 3,
+          "da": 2,
           "gt": "Theo sau là danh từ (the rain) nên dùng Despite; không có 'despite of'."
         }
       ]
@@ -461,10 +461,10 @@
         {
           "h": "We stayed home ___ it was raining.",
           "lc": [
+            "due to",
             "despite",
-            "because of",
             "because",
-            "due to"
+            "because of"
           ],
           "da": 2,
           "gt": "Theo sau là mệnh đề (it was raining) nên dùng because."
@@ -472,22 +472,22 @@
         {
           "h": "The match was canceled ___ the bad weather.",
           "lc": [
-            "because of",
-            "so",
+            "although",
             "because",
-            "although"
+            "so",
+            "because of"
           ],
-          "da": 0,
+          "da": 3,
           "gt": "Theo sau là cụm danh từ nên dùng because of."
         },
         {
           "h": "Câu nào đúng?",
           "lc": [
-            "Because of I was sick, I stayed home.",
+            "Because I was sick, I stayed home.",
             "Because I was sick, so I stayed home.",
-            "Because I was sick, I stayed home."
+            "Because of I was sick, I stayed home."
           ],
-          "da": 2,
+          "da": 0,
           "gt": "Đã dùng because thì không thêm so; because of không đi với mệnh đề."
         }
       ]
@@ -544,9 +544,9 @@
           "h": "She spoke slowly so that everyone ___ understand.",
           "lc": [
             "could",
+            "for",
             "to",
-            "in order",
-            "for"
+            "in order"
           ],
           "da": 0,
           "gt": "so that + chủ ngữ + could + V (mục đích trong quá khứ)."
@@ -555,19 +555,19 @@
           "h": "I got up early ___ catch the first bus.",
           "lc": [
             "so that",
-            "for",
+            "in order to",
             "because",
-            "in order to"
+            "for"
           ],
-          "da": 3,
+          "da": 1,
           "gt": "Theo sau là động từ nguyên mẫu nên dùng in order to."
         },
         {
           "h": "Câu nào đúng?",
           "lc": [
             "I'm learning English to get a better job.",
-            "I'm learning English for to get a better job.",
-            "I'm learning English for get a better job."
+            "I'm learning English for get a better job.",
+            "I'm learning English for to get a better job."
           ],
           "da": 0,
           "gt": "Mục đích dùng to + V, không dùng for + V."
@@ -625,33 +625,33 @@
           "h": "The soup was ___ hot that I couldn't eat it.",
           "lc": [
             "such",
-            "so",
+            "such a",
             "enough",
-            "such a"
+            "so"
           ],
-          "da": 1,
+          "da": 3,
           "gt": "Sau chỗ trống chỉ có tính từ (hot) nên dùng so."
         },
         {
           "h": "It was ___ a boring movie that I fell asleep.",
           "lc": [
-            "so",
             "such",
-            "too",
-            "very"
+            "so",
+            "very",
+            "too"
           ],
-          "da": 1,
+          "da": 0,
           "gt": "Cụm 'a boring movie' có danh từ nên dùng such."
         },
         {
           "h": "They are ___ nice people that everyone likes them.",
           "lc": [
-            "very",
-            "such a",
             "so",
-            "such"
+            "such",
+            "such a",
+            "very"
           ],
-          "da": 3,
+          "da": 1,
           "gt": "Danh từ số nhiều (people) nên dùng such, không có a."
         }
       ]
@@ -703,21 +703,21 @@
         {
           "h": "Both Nam ___ Lan are students.",
           "lc": [
-            "nor",
-            "but",
             "and",
-            "or"
+            "but",
+            "or",
+            "nor"
           ],
-          "da": 2,
+          "da": 0,
           "gt": "both luôn đi với and."
         },
         {
           "h": "You can have either tea ___ coffee.",
           "lc": [
-            "but",
+            "nor",
             "or",
             "and",
-            "nor"
+            "but"
           ],
           "da": 1,
           "gt": "either đi với or (một trong hai)."
@@ -725,10 +725,10 @@
         {
           "h": "Neither my father ___ my mother speaks English.",
           "lc": [
-            "or",
             "and",
+            "either",
             "nor",
-            "either"
+            "or"
           ],
           "da": 2,
           "gt": "neither đi với nor."
@@ -786,19 +786,19 @@
           "h": "The box is ___ heavy for me to carry.",
           "lc": [
             "very much",
+            "such",
             "too",
-            "enough",
-            "such"
+            "enough"
           ],
-          "da": 1,
+          "da": 2,
           "gt": "too + tính từ + for sb + to V = quá… nên không thể."
         },
         {
           "h": "He isn't ___ to drive.",
           "lc": [
-            "enough of old",
-            "enough old",
             "too old enough",
+            "enough old",
+            "enough of old",
             "old enough"
           ],
           "da": 3,
@@ -807,12 +807,12 @@
         {
           "h": "We don't have ___ for everyone.",
           "lc": [
-            "enough of chairs",
             "enough chairs",
-            "chairs enough",
-            "too chairs"
+            "enough of chairs",
+            "too chairs",
+            "chairs enough"
           ],
-          "da": 1,
+          "da": 0,
           "gt": "enough đứng trước danh từ: enough chairs."
         }
       ]
@@ -865,34 +865,34 @@
         {
           "h": "The more you practice, ___ you get.",
           "lc": [
+            "better",
             "more better",
             "the better",
-            "the best",
-            "better"
+            "the best"
           ],
-          "da": 1,
+          "da": 2,
           "gt": "Mẫu the + so sánh hơn…, the + so sánh hơn…"
         },
         {
           "h": "This phone is ___ more expensive than that one.",
           "lc": [
-            "many",
             "very",
-            "much",
-            "too"
+            "too",
+            "many",
+            "much"
           ],
-          "da": 2,
+          "da": 3,
           "gt": "Nhấn mạnh so sánh hơn dùng much (hoặc far, a lot), không dùng very."
         },
         {
           "h": "The weather is getting ___.",
           "lc": [
+            "hotter and hotter",
             "the hotter",
             "hot and hot",
-            "more hot and hot",
-            "hotter and hotter"
+            "more hot and hot"
           ],
-          "da": 3,
+          "da": 0,
           "gt": "Ngày càng… = so sánh hơn + and + so sánh hơn."
         }
       ]
@@ -943,33 +943,33 @@
           "h": "I'm ___ in history.",
           "lc": [
             "interests",
+            "interest",
             "interested",
-            "interesting",
-            "interest"
+            "interesting"
           ],
-          "da": 1,
+          "da": 2,
           "gt": "Chủ ngữ là người, nói về cảm nhận ⇒ interested (in)."
         },
         {
           "h": "The movie was really ___.",
           "lc": [
-            "bored",
-            "boring",
             "boredom",
-            "bore"
+            "bored",
+            "bore",
+            "boring"
           ],
-          "da": 1,
+          "da": 3,
           "gt": "Bộ phim là thứ gây ra cảm giác chán ⇒ boring."
         },
         {
           "h": "'I am boring' có nghĩa là gì?",
           "lc": [
+            "Tôi là người nhàm chán.",
             "Tôi đang thấy chán.",
             "Tôi bị làm phiền.",
-            "Tôi đang bận.",
-            "Tôi là người nhàm chán."
+            "Tôi đang bận."
           ],
-          "da": 3,
+          "da": 0,
           "gt": "-ing tả tính chất gây ra cảm giác: tôi làm người khác chán. 'Tôi đang chán' là I am bored."
         }
       ]
@@ -1019,8 +1019,8 @@
         {
           "h": "She bought a ___ bag.",
           "lc": [
-            "leather small beautiful",
             "small leather beautiful",
+            "leather small beautiful",
             "leather beautiful small",
             "beautiful small leather"
           ],
@@ -1030,21 +1030,21 @@
         {
           "h": "He drives a ___ car.",
           "lc": [
-            "red new Japanese",
+            "new red Japanese",
             "Japanese new red",
             "red Japanese new",
-            "new red Japanese"
+            "red new Japanese"
           ],
-          "da": 3,
+          "da": 0,
           "gt": "Tuổi (new) → màu sắc (red) → nguồn gốc (Japanese)."
         },
         {
           "h": "They live in a ___ house.",
           "lc": [
-            "wooden old big",
-            "big old wooden",
             "big wooden old",
-            "old big wooden"
+            "big old wooden",
+            "old big wooden",
+            "wooden old big"
           ],
           "da": 1,
           "gt": "Kích thước (big) → tuổi (old) → chất liệu (wooden)."
@@ -1104,8 +1104,8 @@
           "lc": [
             "Every",
             "Most",
-            "Both",
-            "All"
+            "All",
+            "Both"
           ],
           "da": 0,
           "gt": "Danh từ số ít + động từ số ít (student has) ⇒ Every."
@@ -1113,21 +1113,21 @@
         {
           "h": "Most ___ my friends live in Hanoi.",
           "lc": [
+            "(không cần từ nào)",
             "of",
             "from",
-            "(không cần từ nào)",
             "in"
           ],
-          "da": 0,
+          "da": 1,
           "gt": "Trước từ sở hữu my cần of: most of my friends."
         },
         {
           "h": "Câu nào đúng?",
           "lc": [
-            "The most people like music.",
+            "Most of people like music.",
             "Most the people like music.",
             "Most people like music.",
-            "Most of people like music."
+            "The most people like music."
           ],
           "da": 2,
           "gt": "Nói chung chung: most + danh từ, không có of và không có the."
@@ -1186,9 +1186,9 @@
           "h": "___ Mekong River flows through several countries.",
           "lc": [
             "The",
-            "(không cần mạo từ)",
             "A",
-            "An"
+            "An",
+            "(không cần mạo từ)"
           ],
           "da": 0,
           "gt": "Tên sông luôn đi với the."
@@ -1196,20 +1196,20 @@
         {
           "h": "Câu nào đúng khi nói chung về loài chó?",
           "lc": [
-            "The dogs are friendly animals.",
             "Dogs are friendly animals.",
-            "Dog is friendly animal."
+            "Dog is friendly animal.",
+            "The dogs are friendly animals."
           ],
-          "da": 1,
+          "da": 0,
           "gt": "Nói chung chung dùng danh từ số nhiều không mạo từ."
         },
         {
           "h": "I saw a dog and a cat. ___ dog was chasing the cat.",
           "lc": [
-            "A",
             "(không cần mạo từ)",
+            "An",
             "The",
-            "An"
+            "A"
           ],
           "da": 2,
           "gt": "Con chó đã được nhắc ở câu trước nên lần sau dùng the."

@@ -1,0 +1,983 @@
+{
+  "nn": "en",
+  "cap": "B2",
+  "diem": [
+    {
+      "id": "en-b2-inversion-so-such",
+      "nhom": "Đảo ngữ – nhấn mạnh",
+      "tieuDe": "Đảo ngữ với so / such: So tired was he that…",
+      "mau": "So + adj / adv + trợ động từ / be + S (+ V) + that + mệnh đề · Such + be + N + that + mệnh đề",
+      "nghia": "~ đến mức / đến nỗi mà ~ (nhấn mạnh, văn trang trọng)",
+      "giaiThich": "Đây là dạng nhấn mạnh của so… that / such… that: đưa So + tính từ / trạng từ (hoặc Such) lên đầu câu rồi đảo trợ động từ hoặc be lên trước chủ ngữ, giống trật tự câu hỏi. Chủ yếu gặp trong văn viết trang trọng, văn kể chuyện và báo chí; hội thoại hằng ngày dùng trật tự thường. Mệnh đề sau that giữ trật tự bình thường, không đảo.",
+      "cachGhep": [
+        "So + adj + be + S + that…: So tired was he that he fell asleep at his desk.",
+        "So + adv + do / does / did + S + V nguyên mẫu + that…: So quickly did the fire spread that nobody could stop it.",
+        "So + adj / adv + have / has / had + S + V3 + that…: So popular has the course become that there is a waiting list.",
+        "Such + be + (the) N + that…: Such was the noise that we couldn't hear each other (= The noise was so great that…)."
+      ],
+      "viDu": [
+        {
+          "c": "So tired was he that he fell asleep at his desk.",
+          "v": "Anh ấy mệt đến nỗi ngủ gục ngay tại bàn làm việc."
+        },
+        {
+          "c": "So quickly did the fire spread that nobody had time to save anything.",
+          "v": "Ngọn lửa lan nhanh đến mức không ai kịp cứu được thứ gì."
+        },
+        {
+          "c": "Such was the force of the storm that trees were pulled out of the ground.",
+          "v": "Cơn bão mạnh đến mức cây cối bị bật cả gốc."
+        },
+        {
+          "c": "So popular has the course become that there is now a waiting list.",
+          "v": "Khoá học trở nên được ưa chuộng đến mức giờ phải có danh sách chờ."
+        }
+      ],
+      "luuY": [
+        "Chỉ đảo ở mệnh đề chính; sau that là trật tự thường: 'So tired was he that he fell asleep', không phải '…that did he fall asleep'.",
+        "Với động từ thường phải mượn do / does / did và đưa động từ về nguyên mẫu: 'So badly did they play…', không phải 'So badly played they…'.",
+        "Khác so… that / such… that thường (en-b1-so-such-that): nghĩa như nhau, nhưng dạng đảo trang trọng và nhấn mạnh hơn hẳn, đừng dùng khi nói chuyện bình thường. Khác đảo ngữ phủ định (Never have I…): ở đây từ đứng đầu không mang nghĩa phủ định mà chỉ mức độ."
+      ],
+      "soSanh": [
+        "en-b1-so-such-that",
+        "en-b2-inversion-negative",
+        "en-c1-so-such-advanced"
+      ],
+      "tuKhoa": [
+        "so tired was he",
+        "such was",
+        "đảo ngữ so such",
+        "dao ngu so such",
+        "inversion so that",
+        "đến nỗi mà"
+      ],
+      "quiz": [
+        {
+          "h": "So tired ___ that he fell asleep at his desk.",
+          "lc": [
+            "he was",
+            "did he",
+            "was he",
+            "he did"
+          ],
+          "da": 2,
+          "gt": "So + tính từ đứng đầu câu ⇒ đảo be lên trước chủ ngữ: So tired was he. Tired đi với be chứ không đi với did, và giữ trật tự 'he was' thì không còn là cấu trúc đảo ngữ."
+        },
+        {
+          "h": "So badly ___ the team play that the coach left before the end.",
+          "lc": [
+            "were",
+            "was",
+            "has",
+            "did"
+          ],
+          "da": 3,
+          "gt": "Play là động từ thường ở dạng nguyên mẫu nên phải mượn did: So badly did the team play. Was / were / has không đi với động từ nguyên mẫu play."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "Such was her anger that she couldn't speak.",
+            "So was her anger that she couldn't speak.",
+            "Such angry was she that she couldn't speak.",
+            "Such her anger was that she couldn't speak."
+          ],
+          "da": 0,
+          "gt": "Mẫu là Such + be + danh từ + that…: Such was her anger that… Sau Such phải đảo be lên trước danh từ; So và Such + tính từ (such angry) không dùng được ở đây — với tính từ phải nói 'So angry was she that…'."
+        }
+      ]
+    },
+    {
+      "id": "en-b2-get-passive",
+      "nhom": "Bị động",
+      "tieuDe": "Get-passive: get paid / get stolen",
+      "mau": "S + get (chia thì) + V3 (+ by + tác nhân)",
+      "nghia": "bị / được ~ (bị động với get, thân mật, hay nói việc bất ngờ)",
+      "giaiThich": "Trong văn nói và văn viết thân mật, get có thể thay be để tạo câu bị động. Get-passive nhấn vào sự việc xảy ra (một thay đổi), hay dùng cho chuyện bất ngờ, không may hoặc một kết quả đạt được: get stolen, get hurt, get caught, get fired, get paid, get promoted, get invited. Không dùng với động từ chỉ trạng thái (know, own, like, believe) và nên tránh trong văn bản trang trọng, học thuật.",
+      "cachGhep": [
+        "Khẳng định: S + get / gets / got / will get / have got + V3: He got promoted last month.",
+        "Phủ định, câu hỏi mượn do / does / did: Did anyone get hurt? · She didn't get invited.",
+        "Tiếp diễn: be + getting + V3: More and more people are getting vaccinated.",
+        "Cụm quen thuộc (nghĩa gần chủ động): get married, get divorced, get dressed, get lost, get stuck"
+      ],
+      "viDu": [
+        {
+          "c": "My bike got stolen while I was in the shop.",
+          "v": "Xe đạp của tôi bị lấy trộm trong lúc tôi đang ở trong cửa hàng."
+        },
+        {
+          "c": "How much do you get paid per hour?",
+          "v": "Bạn được trả bao nhiêu tiền một giờ?"
+        },
+        {
+          "c": "He got promoted after only a year in the company.",
+          "v": "Anh ấy được thăng chức chỉ sau một năm vào công ty."
+        },
+        {
+          "c": "Be careful with that knife, or you might get hurt.",
+          "v": "Cẩn thận với con dao đó, không thì bạn có thể bị thương đấy."
+        }
+      ],
+      "luuY": [
+        "Get ở đây là động từ thường nên câu hỏi, phủ định phải dùng do / did: 'Did your phone get damaged?', không phải 'Got your phone damaged?'.",
+        "Không dùng cho trạng thái kéo dài: 'The house was owned by my uncle', không phải 'got owned'; 'He is known for his kindness', không phải 'gets known'.",
+        "Khác be-passive (en-b1-passive-simple): be-passive trung tính, dùng được ở mọi văn phong; get-passive thân mật và nhấn vào việc xảy ra. Khác causative get sth done (en-b2-causative-get): 'I got my bike repaired' = tôi nhờ người sửa xe; 'My bike got repaired' = xe được sửa (bị động)."
+      ],
+      "soSanh": [
+        "en-b2-causative-get",
+        "en-b1-passive-simple",
+        "en-b1-passive-other-tenses",
+        "en-b1-have-something-done"
+      ],
+      "tuKhoa": [
+        "get passive",
+        "get paid",
+        "get stolen",
+        "bị động với get",
+        "bi dong voi get",
+        "got promoted"
+      ],
+      "quiz": [
+        {
+          "h": "My bike ___ stolen while I was in the shop.",
+          "lc": [
+            "got",
+            "had",
+            "did",
+            "has"
+          ],
+          "da": 0,
+          "gt": "Bị động thân mật: get + V3 ⇒ got stolen (bị lấy trộm). Did không đi với V3; has / had stolen là thể chủ động, sẽ thành ra chiếc xe đi lấy trộm."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "Was your phone get damaged in the accident?",
+            "Did your phone get damaged in the accident?",
+            "Got your phone damaged in the accident?",
+            "Did your phone got damaged in the accident?"
+          ],
+          "da": 1,
+          "gt": "Get trong get-passive là động từ thường nên câu hỏi mượn did và get về nguyên mẫu: Did… get damaged? Không đảo got lên đầu, không dùng was cùng get, và sau did không dùng got."
+        },
+        {
+          "h": "The castle ___ owned by the same family for three hundred years.",
+          "lc": [
+            "got",
+            "get",
+            "was",
+            "did"
+          ],
+          "da": 2,
+          "gt": "Own là động từ chỉ trạng thái (sở hữu kéo dài) nên chỉ dùng be-passive: was owned. Get-passive chỉ dùng cho sự việc xảy ra, không dùng cho trạng thái; did không đi với V3."
+        }
+      ]
+    },
+    {
+      "id": "en-b2-passive-gerund-infinitive",
+      "nhom": "Bị động",
+      "tieuDe": "Bị động với V-ing và to V: being told / to be told",
+      "mau": "being + V3 (danh động từ bị động) · to be + V3 (nguyên mẫu bị động)",
+      "nghia": "việc bị / được ~ (dạng bị động của V-ing và to V)",
+      "giaiThich": "Khi chủ ngữ của câu là người chịu tác động của hành động đứng sau, V-ing và to V phải đổi sang bị động. Chỗ nào bình thường dùng V-ing (sau giới từ, sau like, hate, enjoy, avoid, mind, remember…) thì dùng being + V3; chỗ nào bình thường dùng to V (sau want, expect, hope, need, agree, deserve…) thì dùng to be + V3. Sau động từ khuyết thiếu dùng be + V3 không có to.",
+      "cachGhep": [
+        "Động từ + being + V3: I hate being told what to do. · She enjoys being photographed.",
+        "Giới từ + being + V3: He left without being seen. · I'm tired of being ignored.",
+        "Động từ + to be + V3: She expects to be promoted. · He wants to be left alone.",
+        "Danh từ + to be + V3: There is a lot of work to be done.",
+        "Động từ khuyết thiếu + be + V3 (không to): This door must be kept closed.",
+        "Being + V3 làm chủ ngữ: Being criticised in public is never pleasant."
+      ],
+      "viDu": [
+        {
+          "c": "I hate being told what to do.",
+          "v": "Tôi ghét bị người khác bảo phải làm gì."
+        },
+        {
+          "c": "She expects to be promoted next year.",
+          "v": "Cô ấy mong sẽ được thăng chức vào năm sau."
+        },
+        {
+          "c": "He left the building without being seen by anyone.",
+          "v": "Anh ta rời khỏi toà nhà mà không bị ai nhìn thấy."
+        },
+        {
+          "c": "The report needs to be finished by Friday.",
+          "v": "Bản báo cáo cần được hoàn thành trước thứ Sáu."
+        },
+        {
+          "c": "Nobody likes being laughed at.",
+          "v": "Không ai thích bị cười nhạo cả."
+        }
+      ],
+      "luuY": [
+        "Người Việt hay quên đổi sang bị động vì tiếng Việt chỉ thêm 'bị / được': 'I don't like telling what to do' là sai → 'I don't like being told what to do'.",
+        "Giữ nguyên giới từ của động từ ở cuối: 'being laughed at', 'to be looked after', 'being talked about'.",
+        "Khác need + V-ing (en-b2-regret-mean-go-on): 'The car needs washing' đã mang nghĩa bị động (= needs to be washed), không nói 'needs being washed'. Dạng hoàn thành (having been told, to have been told) thuộc trình độ cao hơn."
+      ],
+      "soSanh": [
+        "en-b1-passive-other-tenses",
+        "en-b1-gerund-vs-infinitive",
+        "en-b2-regret-mean-go-on",
+        "en-c1-gerund-perfect-passive"
+      ],
+      "tuKhoa": [
+        "being told",
+        "to be told",
+        "passive gerund",
+        "passive infinitive",
+        "bị động với v-ing",
+        "bi dong to be v3"
+      ],
+      "quiz": [
+        {
+          "h": "I hate ___ what to do.",
+          "lc": [
+            "be told",
+            "telling",
+            "to tell",
+            "being told"
+          ],
+          "da": 3,
+          "gt": "Tôi là người bị bảo nên cần dạng bị động của V-ing: being told. To tell / telling là chủ động (tôi bảo người khác) và còn thiếu tân ngữ; be told thiếu to hoặc -ing sau hate."
+        },
+        {
+          "h": "She expects ___ next year.",
+          "lc": [
+            "to be promoted",
+            "to promote",
+            "being promoted",
+            "be promoted"
+          ],
+          "da": 0,
+          "gt": "Expect đi với to V, và cô ấy là người được thăng chức ⇒ to be promoted. To promote là chủ động (cô ấy thăng chức cho ai đó, thiếu tân ngữ); expect không đi với V-ing hay nguyên mẫu không to."
+        },
+        {
+          "h": "He left the building without ___ by anyone.",
+          "lc": [
+            "been seen",
+            "being seen",
+            "to be seen",
+            "seeing"
+          ],
+          "da": 1,
+          "gt": "Sau giới từ without dùng V-ing; anh ta là người bị nhìn thấy (by anyone) ⇒ being seen. Sau giới từ không dùng to be seen; seeing là chủ động; been seen thiếu having."
+        }
+      ]
+    },
+    {
+      "id": "en-b2-ellipsis-substitution",
+      "nhom": "Đảo ngữ – nhấn mạnh",
+      "tieuDe": "Ellipsis & substitution: so, not, do so, one, lược từ",
+      "mau": "I think so / I hope not · do so · one / ones · lược phần lặp sau trợ động từ, sau to, sau and / but",
+      "nghia": "thay thế hoặc lược bỏ phần đã nói để khỏi lặp lại",
+      "giaiThich": "Tiếng Anh tránh lặp lại nguyên một cụm từ vừa nói. Có hai cách: thay thế (substitution) bằng so, not, do so, one / ones; hoặc lược bỏ (ellipsis) phần lặp, chỉ giữ lại trợ động từ hay to. Cả hai đều rất phổ biến trong hội thoại lẫn văn viết; riêng do so mang sắc thái trang trọng.",
+      "cachGhep": [
+        "so thay cho cả mệnh đề sau think, hope, expect, suppose, guess, believe, be afraid: 'Is he coming?' – 'I think so.'",
+        "Phủ định: I hope not / I'm afraid not / I guess not; riêng think thường nói I don't think so",
+        "do so (trang trọng) thay cho động từ + tân ngữ: He was asked to leave, and he did so at once.",
+        "one / ones thay danh từ đếm được: I'd like the blue one.",
+        "Lược sau trợ động từ: I haven't finished yet, but Lan has. · Lược sau to: You can come if you want to.",
+        "Lược chủ ngữ / trợ động từ lặp sau and, but, or: She opened the door and (she) went in."
+      ],
+      "viDu": [
+        {
+          "c": "\"Is it going to rain this afternoon?\" – \"I hope not.\"",
+          "v": "“Chiều nay trời có mưa không nhỉ?” – “Mong là không.”"
+        },
+        {
+          "c": "\"Will Minh be at the meeting?\" – \"I think so.\"",
+          "v": "“Minh có dự cuộc họp không?” – “Tôi nghĩ là có.”"
+        },
+        {
+          "c": "Customers who wish to cancel their order may do so within fourteen days.",
+          "v": "Khách hàng muốn huỷ đơn có thể làm việc đó trong vòng mười bốn ngày."
+        },
+        {
+          "c": "He asked me to stay a bit longer, but I didn't want to.",
+          "v": "Anh ấy bảo tôi ở lại thêm một lát nhưng tôi không muốn."
+        },
+        {
+          "c": "I haven't read the report yet, but my manager has.",
+          "v": "Tôi chưa đọc bản báo cáo, nhưng quản lý của tôi thì đọc rồi."
+        }
+      ],
+      "luuY": [
+        "Người Việt hay dịch thẳng 'tôi nghĩ là có / tôi mong là không' thành 'I think yes', 'I think it', 'I don't hope so'. Đúng là 'I think so', 'I hope not'.",
+        "Khi lược, phải giữ đúng trợ động từ của thì đang dùng: 'She can swim, but I can't', 'He said he would call, but he didn't'. Sau to thì giữ to: 'I'd love to', không nói trống 'I'd love'.",
+        "Khác So do I / Neither do I (en-b1-so-neither): ở đó so đứng đầu và có đảo ngữ, nghĩa là 'tôi cũng vậy'; còn 'I think so' thì so đứng cuối, thay cho cả mệnh đề vừa nói."
+      ],
+      "soSanh": [
+        "en-b1-so-neither",
+        "en-a2-one-ones",
+        "en-c1-cohesion-reference"
+      ],
+      "tuKhoa": [
+        "ellipsis",
+        "substitution",
+        "i think so",
+        "i hope not",
+        "do so",
+        "lược từ",
+        "luoc tu",
+        "phép thế"
+      ],
+      "quiz": [
+        {
+          "h": "\"Is the shop still open?\" – \"I'm afraid ___. It closed at six.\"",
+          "lc": [
+            "it not",
+            "so not",
+            "no",
+            "not"
+          ],
+          "da": 3,
+          "gt": "Thay cho cả mệnh đề phủ định (the shop isn't open) dùng not: I'm afraid not. Tiếng Anh không nói 'I'm afraid no', và không có cách ghép 'so not' hay 'it not' ở đây."
+        },
+        {
+          "h": "\"Do you think they'll win?\" – \"___. They've trained really hard.\"",
+          "lc": [
+            "I hope so",
+            "I don't hope so",
+            "I hope it",
+            "I hope yes"
+          ],
+          "da": 0,
+          "gt": "So thay cho mệnh đề 'that they'll win': I hope so. Không dùng yes hay it sau hope, và hope không có dạng 'I don't hope so' (phủ định là 'I hope not')."
+        },
+        {
+          "h": "I haven't read the report yet, but Lan ___.",
+          "lc": [
+            "has so",
+            "has",
+            "is",
+            "does"
+          ],
+          "da": 1,
+          "gt": "Phần lặp (read the report) được lược đi, chỉ giữ lại trợ động từ của thì hiện tại hoàn thành: Lan has. Is / does không khớp với 'haven't read', và sau trợ động từ không thêm so."
+        }
+      ]
+    },
+    {
+      "id": "en-b2-neednt-have-vs-didnt-need-to",
+      "nhom": "Động từ khuyết thiếu",
+      "tieuDe": "needn't have done vs didn't need to do",
+      "mau": "S + needn't have + V3 · S + didn't need to + V",
+      "nghia": "đã làm nhưng hoá ra không cần · (đã) không cần làm",
+      "giaiThich": "Cả hai đều nói về một việc không cần thiết trong quá khứ nhưng khác nhau ở chỗ việc đó có được làm hay không. needn't have + V3: việc ĐÃ làm, sau mới biết là thừa, công cốc. didn't need to + V: việc không cần làm, người nói biết trước điều đó, nên thường là đã không làm. needn't have chủ yếu dùng trong tiếng Anh Anh; tiếng Anh Mỹ thường dùng didn't need to / didn't have to rồi để ngữ cảnh làm rõ.",
+      "cachGhep": [
+        "needn't have + V3 (đã làm, hoá ra thừa): You needn't have bought milk.",
+        "didn't need to + V (không cần, thường là không làm): I didn't need to buy milk, so I went straight home.",
+        "didn't have to + V: nghĩa như didn't need to",
+        "Hiện tại / tương lai: needn't + V = don't need to + V: You needn't wait for me."
+      ],
+      "viDu": [
+        {
+          "c": "You needn't have bought milk. We already had two cartons in the fridge.",
+          "v": "Lẽ ra bạn không cần mua sữa đâu. Trong tủ lạnh đã có sẵn hai hộp rồi."
+        },
+        {
+          "c": "I didn't need to get up early this morning, so I stayed in bed until ten.",
+          "v": "Sáng nay tôi không cần dậy sớm nên nằm trên giường đến mười giờ."
+        },
+        {
+          "c": "We needn't have hurried. The train was half an hour late.",
+          "v": "Lẽ ra chúng tôi không cần vội. Tàu trễ tận nửa tiếng."
+        },
+        {
+          "c": "She didn't need to pay for the ticket because her company covered it.",
+          "v": "Cô ấy không cần trả tiền vé vì công ty đã chi rồi."
+        }
+      ],
+      "luuY": [
+        "Lỗi cách ghép: 'needn't have to buy', 'needn't have buy', 'didn't need buy' đều sai. Đúng: needn't have bought · didn't need to buy.",
+        "needn't have luôn hàm ý việc đã làm rồi. didn't need to thường hàm ý không làm, nhưng đôi khi vẫn gặp cho việc đã làm; muốn nói rõ 'làm rồi mới biết là thừa' thì dùng needn't have.",
+        "Khác shouldn't have + V3 (en-b2-should-have): shouldn't have là trách — làm việc đó là sai; needn't have chỉ nói việc đó thừa, không sai. 'You shouldn't have told her' (nói ra là không nên) ↔ 'You needn't have told her' (cô ấy biết rồi, nói cũng thừa)."
+      ],
+      "soSanh": [
+        "en-b2-should-have",
+        "en-b1-modals-obligation",
+        "en-a2-have-to",
+        "en-c1-dare-need"
+      ],
+      "tuKhoa": [
+        "needn't have",
+        "neednt have",
+        "didn't need to",
+        "didnt need to",
+        "không cần thiết trong quá khứ",
+        "lẽ ra không cần"
+      ],
+      "quiz": [
+        {
+          "h": "You ___ so much food. Half of it is still on the table!",
+          "lc": [
+            "needn't have cooked",
+            "needn't have cook",
+            "didn't need cooking",
+            "needn't cook"
+          ],
+          "da": 0,
+          "gt": "Đồ ăn đã nấu rồi và hoá ra thừa ⇒ needn't have + V3: needn't have cooked. Needn't cook nói về hiện tại / tương lai; sau have phải là V3 (cooked); 'didn't need cooking' không phải cách ghép của mẫu này."
+        },
+        {
+          "h": "I ___ wait at all: the doctor saw me as soon as I arrived.",
+          "lc": [
+            "needn't have",
+            "didn't need to",
+            "needn't to",
+            "didn't need"
+          ],
+          "da": 1,
+          "gt": "Không phải chờ và thực tế đã không chờ ⇒ didn't need to + V. Needn't have phải đi với V3 (waited) và lại mang nghĩa 'đã chờ'; needn't không đi với to; didn't need thiếu to trước động từ."
+        },
+        {
+          "h": "'We needn't have booked a table' cho biết điều gì?",
+          "lc": [
+            "Chúng tôi không đặt bàn vì biết là không cần.",
+            "Lẽ ra chúng tôi phải đặt bàn mà đã không đặt.",
+            "Chúng tôi đã đặt bàn, nhưng hoá ra không cần.",
+            "Chúng tôi không được phép đặt bàn."
+          ],
+          "da": 2,
+          "gt": "Needn't have + V3 = việc đã làm rồi mới biết là thừa. 'Không đặt vì không cần' là nghĩa của didn't need to; 'lẽ ra phải đặt mà không đặt' là should have booked; còn cấm đoán là mustn't / weren't allowed to."
+        }
+      ]
+    },
+    {
+      "id": "en-b2-be-to-be-due-to",
+      "nhom": "Các thì",
+      "tieuDe": "be to / be due to / be on the verge of",
+      "mau": "S + be + to + V · S + be + due to + V · S + be + on the verge of + V-ing / N",
+      "nghia": "sẽ (theo sắp xếp chính thức) · dự kiến ~ · sắp sửa, bên bờ ~",
+      "giaiThich": "Ba cách nói về tương lai gần mang sắc thái riêng. be to + V: việc đã được sắp xếp chính thức hoặc một mệnh lệnh, chỉ thị — văn phong trang trọng, hay gặp trong tin tức và thông báo. be due to + V: việc được chờ đợi sẽ xảy ra vào một giờ, một ngày đã định theo lịch. be on the verge of + V-ing / danh từ: sắp sửa xảy ra đến nơi, thường là chuyện lớn hoặc không hay (gần nghĩa: be on the point of + V-ing).",
+      "cachGhep": [
+        "am / is / are to + V (sắp xếp chính thức): The Prime Minister is to visit Japan next month.",
+        "be (not) to + V (chỉ thị, cấm đoán): You are not to leave the building without permission.",
+        "was / were to + V (việc về sau mới xảy ra, văn kể): He was to become one of the country's best-known writers.",
+        "am / is / are / was / were due to + V + mốc thời gian: The train is due to arrive at 6.15. · The baby is due in May.",
+        "be on the verge of + V-ing / N: on the verge of collapsing · on the verge of tears"
+      ],
+      "viDu": [
+        {
+          "c": "The Prime Minister is to visit Japan next month.",
+          "v": "Thủ tướng sẽ thăm Nhật Bản vào tháng tới."
+        },
+        {
+          "c": "The train is due to arrive at 6.15.",
+          "v": "Tàu dự kiến đến lúc 6 giờ 15."
+        },
+        {
+          "c": "The company was on the verge of going bankrupt when a new investor appeared.",
+          "v": "Công ty đang bên bờ phá sản thì một nhà đầu tư mới xuất hiện."
+        },
+        {
+          "c": "You are not to leave the building without permission.",
+          "v": "Các anh chị không được rời khỏi toà nhà khi chưa được phép."
+        },
+        {
+          "c": "She looked as though she was on the verge of tears.",
+          "v": "Trông cô ấy như sắp khóc đến nơi."
+        }
+      ],
+      "luuY": [
+        "Sau on the verge of là V-ing hoặc danh từ, không phải to V: 'on the verge of giving up', không phải 'on the verge to give up'.",
+        "Đừng nhầm due to + V (dự kiến) với due to + danh từ (bởi vì, xem en-b1-because-because-of): 'The flight is due to land at noon' ↔ 'The delay was due to bad weather'.",
+        "Khác be about to (en-b2-be-supposed-to): be about to trung tính, nói việc sắp xảy ra ngay, không kèm mốc giờ; be due to gắn với lịch và thường có mốc thời gian; be to trang trọng, mang tính sắp xếp chính thức hoặc mệnh lệnh."
+      ],
+      "soSanh": [
+        "en-b2-be-supposed-to",
+        "en-b1-future-forms",
+        "en-b2-future-in-the-past",
+        "en-b1-because-because-of"
+      ],
+      "tuKhoa": [
+        "be to do",
+        "is to visit",
+        "be due to",
+        "on the verge of",
+        "on the point of",
+        "dự kiến",
+        "sắp sửa"
+      ],
+      "quiz": [
+        {
+          "h": "The new stadium is ___ open in May.",
+          "lc": [
+            "due to",
+            "due for",
+            "due",
+            "on the verge of"
+          ],
+          "da": 0,
+          "gt": "Việc dự kiến theo lịch, trước động từ nguyên mẫu open ⇒ be due to + V. Due và due for không nối trực tiếp với động từ nguyên mẫu; on the verge of phải đi với V-ing."
+        },
+        {
+          "h": "She was on the verge of ___ when the phone rang.",
+          "lc": [
+            "gave up",
+            "giving up",
+            "to give up",
+            "give up"
+          ],
+          "da": 1,
+          "gt": "Of là giới từ nên sau on the verge of phải là V-ing: giving up. To V, động từ nguyên mẫu và động từ chia thì đều không đứng sau giới từ."
+        },
+        {
+          "h": "(Thông báo chính thức của trường) All students ___ report to the main hall at 9 a.m.",
+          "lc": [
+            "are on the verge of",
+            "is to",
+            "are to",
+            "are to be"
+          ],
+          "da": 2,
+          "gt": "Chỉ thị chính thức dùng be to + V; chủ ngữ số nhiều ⇒ are to report. Is to sai hoà hợp chủ – vị; on the verge of cần V-ing và sai nghĩa; 'are to be report' sai cách ghép."
+        }
+      ]
+    },
+    {
+      "id": "en-b2-first-time-present-perfect",
+      "nhom": "Các thì",
+      "tieuDe": "It's the first time + present perfect",
+      "mau": "It / This is the first (second…) time (that) + S + have / has + V3 · It was the first time + S + had + V3",
+      "nghia": "đây là lần đầu tiên (lần thứ hai…) ~",
+      "giaiThich": "Sau It's / This is the first, second, third… time, tiếng Anh dùng hiện tại hoàn thành vì ta đang đếm số lần trong quãng thời gian kéo dài tới bây giờ. Khi kể lại quá khứ (It was the first time…) thì lùi thành quá khứ hoàn thành. Quy tắc tương tự áp dụng sau so sánh nhất: the best film I've ever seen.",
+      "cachGhep": [
+        "It's / This is the first time (that) + S + have / has (ever) + V3: This is the first time I've eaten Korean food.",
+        "It's the second / third… time + S + have / has + V3: It's the second time you've been late this week.",
+        "It was the first time (that) + S + had (ever) + V3: It was the first time she had flown.",
+        "So sánh nhất + S + have / has ever + V3: It's the best meal I've ever had."
+      ],
+      "viDu": [
+        {
+          "c": "This is the first time I've eaten Korean food.",
+          "v": "Đây là lần đầu tiên tôi ăn món Hàn."
+        },
+        {
+          "c": "It's the second time you've been late this week.",
+          "v": "Đây là lần thứ hai trong tuần bạn đi trễ rồi đấy."
+        },
+        {
+          "c": "It was the first time she had ever flown, so she was a bit nervous.",
+          "v": "Đó là lần đầu tiên cô ấy đi máy bay nên cô hơi hồi hộp."
+        },
+        {
+          "c": "Is this the first time you've visited Hanoi?",
+          "v": "Đây có phải lần đầu bạn đến thăm Hà Nội không?"
+        }
+      ],
+      "luuY": [
+        "Lỗi rất hay gặp của người Việt: dịch 'Đây là lần đầu tôi ăn…' thành 'This is the first time I eat / I'm eating…'. Phải là 'I've eaten'.",
+        "Không nói 'It's the first time for me to eat…'; cách nói tự nhiên là 'It's the first time I've eaten…' hoặc 'It's my first time here'.",
+        "Khác 'The first time + quá khứ đơn' dùng như mệnh đề thời gian: 'The first time I met her, she was only twenty' (kể một lần cụ thể trong quá khứ) ↔ 'It's the first time I've met her' (lần gặp đang diễn ra bây giờ)."
+      ],
+      "soSanh": [
+        "en-b1-present-perfect",
+        "en-a2-present-perfect-ever-never",
+        "en-b1-past-perfect"
+      ],
+      "tuKhoa": [
+        "the first time",
+        "it's the first time",
+        "this is the first time",
+        "lần đầu tiên",
+        "lan dau tien",
+        "first time present perfect"
+      ],
+      "quiz": [
+        {
+          "h": "This is the first time I ___ sushi.",
+          "lc": [
+            "will try",
+            "try",
+            "have tried",
+            "am trying"
+          ],
+          "da": 2,
+          "gt": "Sau This is the first time dùng hiện tại hoàn thành: have tried. Hiện tại đơn, hiện tại tiếp diễn hay will đều là lỗi do dịch thẳng từ tiếng Việt."
+        },
+        {
+          "h": "It was the first time he ___ a horse.",
+          "lc": [
+            "rides",
+            "is riding",
+            "has ridden",
+            "had ridden"
+          ],
+          "da": 3,
+          "gt": "Mệnh đề chính ở quá khứ (It was…) nên lùi thành quá khứ hoàn thành: had ridden. Has ridden, rides, is riding đều là thì hiện tại, không khớp với It was."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "It's the third time she has called today.",
+            "It's the third time she is calling today.",
+            "It's the third time for her calling today.",
+            "It's the third time she calls today."
+          ],
+          "da": 0,
+          "gt": "Sau It's the third time dùng hiện tại hoàn thành: she has called. Hiện tại đơn (calls), hiện tại tiếp diễn (is calling) và 'for her calling' đều không đúng mẫu."
+        }
+      ]
+    },
+    {
+      "id": "en-b2-would-rather-past",
+      "nhom": "Câu điều kiện – ước muốn",
+      "tieuDe": "would rather / would sooner + S + past",
+      "mau": "S1 + would rather / would sooner + S2 + V2 (hiện tại, tương lai) · + S2 + had + V3 (quá khứ)",
+      "nghia": "muốn (người khác) làm / đừng làm ~ thì hơn",
+      "giaiThich": "Khi muốn NGƯỜI KHÁC làm hay không làm một việc, sau would rather là một mệnh đề có chủ ngữ riêng và động từ lùi thì: quá khứ đơn cho việc ở hiện tại hoặc tương lai, quá khứ hoàn thành cho việc đã xảy ra (mang ý tiếc). Thì quá khứ ở đây không chỉ thời gian quá khứ mà chỉ điều mong muốn, giống sau wish. Đây là cách từ chối hoặc yêu cầu lịch sự, nhẹ nhàng. would sooner cùng nghĩa nhưng ít gặp hơn.",
+      "cachGhep": [
+        "S1 + 'd rather + S2 + V2: I'd rather you came tomorrow.",
+        "S1 + 'd rather + S2 + didn't + V: I'd rather you didn't tell anyone.",
+        "S1 + 'd rather + S2 + had (not) + V3 (tiếc về quá khứ): I'd rather you hadn't said that.",
+        "Trả lời ngắn: 'Do you mind if I smoke?' – 'I'd rather you didn't.'",
+        "Cùng một chủ ngữ thì dùng động từ nguyên mẫu: I'd rather stay at home."
+      ],
+      "viDu": [
+        {
+          "c": "I'd rather you didn't tell anyone about this.",
+          "v": "Tôi mong bạn đừng nói chuyện này với ai."
+        },
+        {
+          "c": "I'd rather you came tomorrow. I'm really busy today.",
+          "v": "Tôi muốn bạn đến vào ngày mai thì hơn. Hôm nay tôi bận lắm."
+        },
+        {
+          "c": "She'd rather her son had studied medicine.",
+          "v": "Bà ấy vẫn ước giá mà con trai mình đã học ngành y."
+        },
+        {
+          "c": "\"Shall I open the window?\" – \"I'd rather you didn't. It's freezing outside.\"",
+          "v": "“Tôi mở cửa sổ nhé?” – “Bạn đừng mở thì hơn. Ngoài trời lạnh cóng.”"
+        },
+        {
+          "c": "I'd sooner we stayed at home tonight.",
+          "v": "Tối nay tôi muốn chúng ta ở nhà hơn."
+        }
+      ],
+      "luuY": [
+        "Không dùng to V hay tân ngữ + to V sau would rather: 'I'd rather you to come' và 'I'd rather him come' đều sai → 'I'd rather you came', 'I'd rather he came'.",
+        "'d trong I'd rather là would, không phải had. Quá khứ đơn sau đó nói về hiện tại / tương lai: 'I'd rather you came tomorrow' vẫn đúng dù có tomorrow.",
+        "Khác would rather + V (en-b1-would-rather-prefer): cùng một chủ ngữ thì dùng nguyên mẫu ('I'd rather go'); khác chủ ngữ mới dùng mệnh đề lùi thì ('I'd rather you went'). Khác prefer: 'I'd prefer you to come' hoặc 'I'd prefer it if you came'."
+      ],
+      "soSanh": [
+        "en-b1-would-rather-prefer",
+        "en-b1-its-time",
+        "en-b1-wish-past-simple",
+        "en-c1-unreal-past"
+      ],
+      "tuKhoa": [
+        "would rather you",
+        "i'd rather you didn't",
+        "would sooner",
+        "would rather past",
+        "muốn ai đó làm gì hơn",
+        "thà rằng"
+      ],
+      "quiz": [
+        {
+          "h": "I'd rather you ___ in here. It's a non-smoking area.",
+          "lc": [
+            "won't smoke",
+            "didn't smoke",
+            "aren't smoking",
+            "not to smoke"
+          ],
+          "da": 1,
+          "gt": "Would rather + chủ ngữ khác ⇒ động từ lùi về quá khứ đơn dù nói về hiện tại: didn't smoke. Sau would rather không dùng to V, không dùng will, cũng không dùng hiện tại tiếp diễn."
+        },
+        {
+          "h": "I'm really tired. I'd rather ___ at home tonight.",
+          "lc": [
+            "stayed",
+            "to stay",
+            "stay",
+            "staying"
+          ],
+          "da": 2,
+          "gt": "Ở đây không có chủ ngữ thứ hai (chính tôi ở nhà) nên dùng động từ nguyên mẫu không to: I'd rather stay. Stayed chỉ dùng khi có chủ ngữ khác (I'd rather you stayed); to stay và staying sai cách ghép."
+        },
+        {
+          "h": "The house was sold last year. She'd rather her parents ___ her first.",
+          "lc": [
+            "have asked",
+            "ask",
+            "would ask",
+            "had asked"
+          ],
+          "da": 3,
+          "gt": "Việc đã xảy ra trong quá khứ (last year) và người nói tiếc ⇒ would rather + S + had + V3: had asked. Would ask, have asked và ask đều không diễn tả được điều trái với quá khứ sau would rather."
+        }
+      ]
+    },
+    {
+      "id": "en-b2-unless-otherwise",
+      "nhom": "Câu điều kiện – ước muốn",
+      "tieuDe": "unless / otherwise / or else",
+      "mau": "Mệnh đề chính + unless + S + V (khẳng định) · Câu 1. Otherwise, + câu 2 · Câu 1, or else + câu 2",
+      "nghia": "trừ khi ~ · nếu không thì ~",
+      "giaiThich": "unless nghĩa là 'trừ khi', gần bằng if… not, và đứng đầu mệnh đề điều kiện. otherwise và or else nghĩa là 'nếu không thì', đứng đầu mệnh đề nêu HẬU QUẢ khi điều vừa nói không được thực hiện. otherwise là trạng từ, hơi trang trọng hơn, thường mở đầu một câu mới hoặc đứng sau dấu chấm phẩy. or else thân mật hơn và có thể dùng một mình như lời đe doạ.",
+      "cachGhep": [
+        "unless + S + V hiện tại, S + will + V: Unless it rains, we'll eat in the garden.",
+        "Mệnh đề chính + unless + mệnh đề: I won't go unless you come with me.",
+        "Câu / mệnh lệnh. Otherwise, + hậu quả: Write it down. Otherwise, you'll forget it.",
+        "Câu / mệnh lệnh, or else + hậu quả: Hurry up, or else we'll miss the bus.",
+        "Or else! (đe doạ, nói thân mật): Give it back, or else!"
+      ],
+      "viDu": [
+        {
+          "c": "I won't go to the party unless you come with me.",
+          "v": "Tôi sẽ không đi dự tiệc trừ khi bạn đi cùng tôi."
+        },
+        {
+          "c": "Unless it rains, we'll eat in the garden.",
+          "v": "Trừ khi trời mưa, còn không chúng ta sẽ ăn ngoài vườn."
+        },
+        {
+          "c": "Write the address down. Otherwise, you'll forget it.",
+          "v": "Ghi địa chỉ lại đi. Nếu không bạn sẽ quên mất."
+        },
+        {
+          "c": "Hurry up, or else we'll miss the bus.",
+          "v": "Nhanh lên, không thì chúng ta lỡ xe buýt đấy."
+        }
+      ],
+      "luuY": [
+        "Sau unless dùng động từ khẳng định và thì hiện tại, không dùng will: 'unless you will leave' và 'unless you don't leave' (thành phủ định hai lần) đều sai với nghĩa 'trừ khi bạn đi'.",
+        "unless không thay được if… not khi nói về điều không có thật hoặc khi mệnh đề chính nói về cảm xúc: 'I'd be happier if I didn't have to work on Sundays' (không dùng unless).",
+        "Khác nhau về vị trí: unless đứng trước ĐIỀU KIỆN ('You'll be late unless you leave now'), otherwise / or else đứng trước HẬU QUẢ ('Leave now. Otherwise, you'll be late'). Khác in case (en-b2-in-case): in case là 'phòng khi', không phải 'trừ khi'."
+      ],
+      "soSanh": [
+        "en-b1-first-conditional",
+        "en-b2-provided-as-long-as",
+        "en-b2-in-case",
+        "en-c1-implied-conditionals"
+      ],
+      "tuKhoa": [
+        "unless",
+        "otherwise",
+        "or else",
+        "trừ khi",
+        "tru khi",
+        "nếu không thì",
+        "neu khong thi"
+      ],
+      "quiz": [
+        {
+          "h": "You can't enter the building ___ you have an ID card.",
+          "lc": [
+            "in case",
+            "unless",
+            "otherwise",
+            "or else"
+          ],
+          "da": 1,
+          "gt": "Phần sau chỗ trống là điều kiện ngoại lệ (trừ khi có thẻ) ⇒ unless. Otherwise / or else phải đứng trước hậu quả chứ không đứng trước điều kiện; in case nghĩa là 'phòng khi', không hợp nghĩa."
+        },
+        {
+          "h": "Put your coat on. ___, you'll catch a cold.",
+          "lc": [
+            "Unless",
+            "Even if",
+            "Otherwise",
+            "Although"
+          ],
+          "da": 2,
+          "gt": "Câu sau nêu hậu quả nếu không mặc áo ⇒ Otherwise (nếu không thì). Unless, Although, Even if là liên từ mở đầu mệnh đề phụ, không đứng riêng trước dấu phẩy như vậy và cũng sai nghĩa."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "Unless you don't leave now, you'll be late.",
+            "Unless you left now, you'll be late.",
+            "Unless you will leave now, you'll be late.",
+            "Unless you leave now, you'll be late."
+          ],
+          "da": 3,
+          "gt": "Sau unless dùng thì hiện tại đơn, dạng khẳng định: Unless you leave now. Không dùng will sau unless; thêm don't thành phủ định hai lần làm sai nghĩa; left không khớp với you'll be late."
+        }
+      ]
+    },
+    {
+      "id": "en-b2-even-if-even-though",
+      "nhom": "Liên từ – câu phức",
+      "tieuDe": "even if vs even though",
+      "mau": "Even though + S + V (sự thật) · Even if + S + V (giả định) , mệnh đề chính",
+      "nghia": "mặc dù (sự thật) ~ · cho dù / kể cả nếu (chưa chắc, giả định) ~",
+      "giaiThich": "Cả hai đều nêu một điều không ngăn được việc ở mệnh đề chính, nhưng khác nhau về độ thật. even though = although nhưng mạnh hơn: điều đứng sau là SỰ THẬT, đã hoặc đang xảy ra. even if: điều đứng sau CHƯA CHẮC xảy ra hoặc chỉ là giả định; có xảy ra hay không thì kết quả vẫn thế. Sau even if chia thì như câu điều kiện (hiện tại đơn cho tương lai; quá khứ đơn + would cho điều không thật).",
+      "cachGhep": [
+        "Even though + S + V (sự thật), S + V: Even though it was raining, we went for a walk.",
+        "Even if + S + V hiện tại, S + will + V: Even if it rains, we'll go for a walk.",
+        "Even if + S + V2, S + would + V (không thật): I wouldn't sell it even if you offered me a fortune.",
+        "Mệnh đề even if / even though đứng trước (có dấu phẩy) hoặc sau mệnh đề chính đều được"
+      ],
+      "viDu": [
+        {
+          "c": "Even though it was raining, we went for a walk.",
+          "v": "Mặc dù trời đang mưa, chúng tôi vẫn đi dạo."
+        },
+        {
+          "c": "Even if it rains tomorrow, we'll go for a walk.",
+          "v": "Cho dù ngày mai trời có mưa, chúng tôi vẫn sẽ đi dạo."
+        },
+        {
+          "c": "I wouldn't sell that painting even if you offered me a million dollars.",
+          "v": "Kể cả bạn có trả tôi một triệu đô, tôi cũng không bán bức tranh đó."
+        },
+        {
+          "c": "She still looks tired even though she slept for ten hours.",
+          "v": "Trông cô ấy vẫn mệt dù đã ngủ mười tiếng."
+        }
+      ],
+      "luuY": [
+        "even không phải liên từ, không đứng một mình trước mệnh đề: 'Even it rained, we went out' là sai → 'Even though it rained…'.",
+        "Không thêm but ở mệnh đề chính (lỗi dịch 'mặc dù… nhưng…'): 'Even though he was tired, but he kept working' là sai.",
+        "Khác nhau cốt lõi: 'Even though he's rich, he isn't happy' (anh ấy giàu thật) ↔ 'Even if he's rich, I won't marry him' (tôi không biết hoặc không quan tâm anh ấy có giàu không). Khác even so: even so là trạng từ, nghĩa 'dù vậy', mở đầu câu mới."
+      ],
+      "soSanh": [
+        "en-b1-although-despite",
+        "en-a2-so-because-although",
+        "en-b1-first-vs-second-conditional",
+        "en-c1-concession-advanced"
+      ],
+      "tuKhoa": [
+        "even if",
+        "even though",
+        "cho dù",
+        "mặc dù",
+        "mac du",
+        "kể cả nếu"
+      ],
+      "quiz": [
+        {
+          "h": "___ he is my brother, I rarely see him. We live in different countries.",
+          "lc": [
+            "Despite",
+            "Even though",
+            "Even",
+            "Even so"
+          ],
+          "da": 1,
+          "gt": "Điều đứng sau là sự thật (anh ấy đúng là anh trai tôi) và cần một liên từ ⇒ Even though. Even không phải liên từ; Even so là trạng từ đứng riêng; Despite phải đi với danh từ / V-ing chứ không đi với mệnh đề."
+        },
+        {
+          "h": "I'll finish this report tonight ___ it takes me until midnight.",
+          "lc": [
+            "even so",
+            "in spite of",
+            "even if",
+            "even"
+          ],
+          "da": 2,
+          "gt": "Chưa biết có mất tới nửa đêm hay không, nhưng dù thế nào cũng làm xong ⇒ even if. Even và even so không nối được hai mệnh đề; in spite of phải đi với danh từ / V-ing."
+        },
+        {
+          "h": "Câu nào cho thấy người nói CHƯA biết trời có mưa hay không?",
+          "lc": [
+            "It is raining, but the match will go ahead.",
+            "Even though it is raining, the match will go ahead.",
+            "Although it is raining, the match is going ahead.",
+            "Even if it rains, the match will go ahead."
+          ],
+          "da": 3,
+          "gt": "Even if nêu một khả năng chưa chắc xảy ra. Even though, although và câu nối bằng but đều khẳng định trời đang mưa thật."
+        }
+      ]
+    },
+    {
+      "id": "en-b2-whether-if-noun-clauses",
+      "nhom": "Liên từ – câu phức",
+      "tieuDe": "whether / if và mệnh đề danh từ: the fact that…",
+      "mau": "V + whether / if + S + V · giới từ + whether + S + V · whether + to V · the fact that + S + V",
+      "nghia": "liệu ~ hay không · việc ~, sự thật là ~",
+      "giaiThich": "Mệnh đề danh từ là cả một mệnh đề đóng vai chủ ngữ hoặc tân ngữ. Với nội dung có / không, dùng whether hoặc if ('liệu… hay không'); với một sự việc, dùng that hoặc the fact that. Sau động từ như know, ask, wonder, whether và if thay nhau được (if thân mật hơn), nhưng nhiều vị trí chỉ dùng whether. Trong mệnh đề danh từ luôn dùng trật tự câu kể, không đảo như câu hỏi.",
+      "cachGhep": [
+        "know / ask / wonder / not sure + whether / if + S + V: I'm not sure whether (if) she's coming.",
+        "Chỉ dùng whether sau giới từ: We talked about whether we should move.",
+        "Chỉ dùng whether trước to V: I can't decide whether to accept the job.",
+        "Thường dùng whether khi mệnh đề làm chủ ngữ hoặc đứng ngay trước or not: Whether he comes or not doesn't matter. · whether or not…",
+        "the fact that + S + V làm chủ ngữ: The fact that he apologised doesn't change anything.",
+        "giới từ + the fact that + S + V: despite the fact that… · because of the fact that…"
+      ],
+      "viDu": [
+        {
+          "c": "I'm not sure whether she's coming or not.",
+          "v": "Tôi không chắc cô ấy có đến hay không."
+        },
+        {
+          "c": "We talked about whether we should move to Da Nang.",
+          "v": "Chúng tôi đã bàn xem có nên chuyển vào Đà Nẵng hay không."
+        },
+        {
+          "c": "I can't decide whether to accept the job.",
+          "v": "Tôi chưa quyết được có nên nhận công việc đó không."
+        },
+        {
+          "c": "The fact that he apologised doesn't change anything.",
+          "v": "Việc anh ta đã xin lỗi cũng không thay đổi được gì."
+        },
+        {
+          "c": "Despite the fact that it was late, he kept working.",
+          "v": "Mặc dù đã muộn, anh ấy vẫn tiếp tục làm việc."
+        }
+      ],
+      "luuY": [
+        "Giữ trật tự câu kể sau whether / if: 'I wonder whether the shop is open', không phải 'whether is the shop open'.",
+        "Không dùng if trước to V ('I don't know if to go' là sai), và trong văn viết cẩn thận không dùng if ngay sau giới từ ('about if' → 'about whether').",
+        "Giới từ không đi thẳng với that: 'despite that he was ill' là sai → 'despite the fact that he was ill' (hoặc 'although he was ill', xem en-b1-although-despite). Khác if điều kiện: 'Tell me if you need help' có thể hiểu là 'nếu cần thì báo'; 'Tell me whether you need help' chỉ có nghĩa 'cho tôi biết có cần hay không'."
+      ],
+      "soSanh": [
+        "en-b1-indirect-questions",
+        "en-b1-reported-questions",
+        "en-b1-although-despite",
+        "en-c1-noun-clauses-subject"
+      ],
+      "tuKhoa": [
+        "whether",
+        "whether or not",
+        "the fact that",
+        "mệnh đề danh từ",
+        "menh de danh tu",
+        "noun clause",
+        "liệu có hay không"
+      ],
+      "quiz": [
+        {
+          "h": "We haven't decided ___ to go by train or by plane.",
+          "lc": [
+            "what",
+            "whether",
+            "that",
+            "if"
+          ],
+          "da": 1,
+          "gt": "Trước to V chỉ dùng whether: whether to go. If không đứng trước to V; that không đi với to V; what không hợp vì câu đang nêu hai lựa chọn có / không (train or plane)."
+        },
+        {
+          "h": "___ he was the youngest player in the team didn't worry the coach.",
+          "lc": [
+            "If",
+            "The fact",
+            "The fact that",
+            "Whether that"
+          ],
+          "da": 2,
+          "gt": "Cả mệnh đề làm chủ ngữ và nêu một sự thật ⇒ The fact that + mệnh đề. The fact thiếu that; 'whether that' không tồn tại; if không mở đầu mệnh đề chủ ngữ."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "She asked me whether to I had seen the film.",
+            "She asked me whether had I seen the film.",
+            "She asked me whether did I see the film.",
+            "She asked me whether I had seen the film."
+          ],
+          "da": 3,
+          "gt": "Sau whether dùng trật tự câu kể: chủ ngữ + động từ (whether I had seen). Đảo 'had I' hay mượn 'did I' là trật tự câu hỏi trực tiếp; 'whether to I had seen' sai cách ghép."
+        }
+      ]
+    }
+  ]
+}

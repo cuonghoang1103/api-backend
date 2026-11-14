@@ -1,0 +1,929 @@
+{
+  "nn": "zh",
+  "cap": "HSK5",
+  "diem": [
+    {
+      "id": "zh-hsk5-yu-gioi-tu",
+      "nhom": "Giới từ",
+      "tieuDe": "于 (giới từ văn viết)",
+      "mau": "V / Adj + 于 + N · S + 于 + thời gian / nơi chốn + V",
+      "nghia": "(văn viết) ở, vào, đối với, từ, hơn ~",
+      "giaiThich": "于 là giới từ của văn viết, đảm nhận nhiều vai mà khẩu ngữ chia cho 在, 对, 从, 比. Bốn cách dùng chính: (1) thời gian, nơi chốn = 在: 出生于上海, 于下周举行; (2) đối tượng = 对: 有利于健康, 有助于; (3) nguồn gốc = 从: 来源于生活; (4) so sánh = 比: 高于去年. Điểm dễ nhận ra: cụm 于… thường đứng SAU động từ hoặc tính từ.",
+      "cachGhep": [
+        "V + 于 + nơi chốn / thời gian: 出生于1990年, 毕业于北京大学, 位于市中心",
+        "S + 于 + thời gian + V: 会议将于明天举行",
+        "有利 / 有助 / 习惯 + 于 + N / V: 有利于健康, 习惯于早起",
+        "来源 + 于 + N (nguồn gốc, = 从): 来源于生活",
+        "Adj + 于 + N (so sánh): 高于, 低于, 大于, 多于"
+      ],
+      "viDu": [
+        {
+          "c": "他1990年出生于上海。",
+          "d": "Tā yī jiǔ jiǔ líng nián chūshēng yú Shànghǎi.",
+          "v": "Anh ấy sinh năm 1990 tại Thượng Hải."
+        },
+        {
+          "c": "她毕业于北京大学中文系。",
+          "d": "Tā bìyè yú Běijīng Dàxué Zhōngwén xì.",
+          "v": "Cô ấy tốt nghiệp khoa Trung văn Đại học Bắc Kinh."
+        },
+        {
+          "c": "多运动有利于身体健康。",
+          "d": "Duō yùndòng yǒulì yú shēntǐ jiànkāng.",
+          "v": "Vận động nhiều có lợi cho sức khoẻ."
+        },
+        {
+          "c": "今年的收入高于去年。",
+          "d": "Jīnnián de shōurù gāo yú qùnián.",
+          "v": "Thu nhập năm nay cao hơn năm ngoái."
+        },
+        {
+          "c": "会议将于下周一举行。",
+          "d": "Huìyì jiāng yú xià zhōuyī jǔxíng.",
+          "v": "Hội nghị sẽ được tổ chức vào thứ Hai tuần sau."
+        }
+      ],
+      "luuY": [
+        "Khác 在: 在 + nơi chốn đứng TRƯỚC động từ (在上海出生), còn 于 + nơi chốn thường đứng SAU động từ (出生于上海). Nói chuyện hằng ngày dùng 在.",
+        "Lỗi hay gặp: bỏ 于 hoặc dùng thừa 在 — 我毕业北京大学 ✗, 我毕业于在北京大学 ✗ → 我毕业于北京大学 ✓.",
+        "So sánh: A 高于 B = A 比 B 高. Không trộn hai cách: A 比 B 高于 ✗.",
+        "Đừng nhầm chữ 于 (yú, giới từ) với 与 (yǔ, 'và, với')."
+      ],
+      "soSanh": [
+        "zh-hsk1-zai-gioi-tu",
+        "zh-hsk2-bi",
+        "zh-hsk4-yu",
+        "zh-hsk5-yi-gioi-tu"
+      ],
+      "tuKhoa": [
+        "yu gioi tu",
+        "biye yu",
+        "youli yu",
+        "gaoyu",
+        "văn viết",
+        "ở",
+        "vào",
+        "hơn"
+      ],
+      "quiz": [
+        {
+          "h": "这家公司成立（　）2005年。",
+          "lc": [
+            "以",
+            "于",
+            "替",
+            "把"
+          ],
+          "da": 1,
+          "gt": "Động từ + 于 + thời gian (văn viết): thành lập vào năm 2005. 以 nêu phương thức, 把 và 替 không dẫn thời gian."
+        },
+        {
+          "h": "今年的产量高于去年 nghĩa là gì?",
+          "lc": [
+            "sản lượng năm ngoái cao hơn năm nay",
+            "sản lượng năm nay tính từ năm ngoái",
+            "sản lượng năm nay cao hơn năm ngoái",
+            "sản lượng năm nay bằng năm ngoái"
+          ],
+          "da": 2,
+          "gt": "Adj + 于 + N là so sánh: A 高于 B = A 比 B 高."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "他于毕业清华大学。",
+            "他毕业于在清华大学。",
+            "他毕业清华大学于。",
+            "他毕业于清华大学。"
+          ],
+          "da": 3,
+          "gt": "毕业 + 于 + trường: 于 đứng ngay sau động từ và không dùng thêm 在."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-yi-gioi-tu",
+      "nhom": "Giới từ",
+      "tieuDe": "以 (bằng, lấy, để)",
+      "mau": "S + 以 + N (phương thức / tư cách / tiêu chuẩn) + V · … ，以 + V (mục đích)",
+      "nghia": "(văn viết) bằng, với, lấy ~ ; để ~",
+      "giaiThich": "以 là hư từ văn viết với ba cách dùng thường gặp ở HSK5: (1) giới từ nêu phương thức, tư cách, tiêu chuẩn: 以…的速度, 以…的身份, 以…的成绩; (2) nêu lý do nổi tiếng: 以…闻名 / 著称; (3) liên từ đứng đầu vế sau, nêu mục đích 'để': 增加人手，以提高效率. Khung 以 A 为 B (lấy A làm B) là một điểm riêng.",
+      "cachGhep": [
+        "以 + … 的 + 速度 / 方式 / 成绩 / 价格 + V: 以每小时三百公里的速度前进",
+        "以 + … 的 + 身份 / 名义 + V: 以朋友的身份劝你",
+        "以 + N + 闻名 / 著称: 以美食闻名",
+        "Vế 1，以 + V (để): …，以提高效率"
+      ],
+      "viDu": [
+        {
+          "c": "他以第一名的成绩考上了大学。",
+          "d": "Tā yǐ dì-yī míng de chéngjì kǎoshàng le dàxué.",
+          "v": "Anh ấy đỗ đại học với thành tích đứng đầu."
+        },
+        {
+          "c": "火车以每小时三百公里的速度前进。",
+          "d": "Huǒchē yǐ měi xiǎoshí sānbǎi gōnglǐ de sùdù qiánjìn.",
+          "v": "Tàu chạy với tốc độ ba trăm cây số một giờ."
+        },
+        {
+          "c": "我以朋友的身份劝你，别再这样做了。",
+          "d": "Wǒ yǐ péngyou de shēnfèn quàn nǐ, bié zài zhèyàng zuò le.",
+          "v": "Tôi khuyên bạn với tư cách một người bạn: đừng làm thế nữa."
+        },
+        {
+          "c": "公司决定增加人手，以提高工作效率。",
+          "d": "Gōngsī juédìng zēngjiā rénshǒu, yǐ tígāo gōngzuò xiàolǜ.",
+          "v": "Công ty quyết định tăng nhân lực để nâng cao hiệu suất làm việc."
+        },
+        {
+          "c": "这座城市以美食闻名。",
+          "d": "Zhè zuò chéngshì yǐ měishí wénmíng.",
+          "v": "Thành phố này nổi tiếng về ẩm thực."
+        }
+      ],
+      "luuY": [
+        "Khác 用: 用 đi với công cụ cụ thể và dùng khi nói (用筷子吃饭); 以 đi với phương thức, tư cách, tiêu chuẩn trừu tượng và là văn viết. Nói 以筷子吃饭 là lạc phong cách.",
+        "Khác 为了: 为了 + mục đích thường đứng ĐẦU câu (为了提高效率，公司…); 以 nghĩa 'để' đứng đầu VẾ SAU, nối tiếp việc vừa nêu.",
+        "Khác 凭: 凭 nhấn cái mình dựa vào để làm được việc (凭经验, 凭票); 以 nêu cách thức, mức độ, danh nghĩa khi thực hiện.",
+        "Cụm 以… đứng trước động từ: 他考上了大学以第一名的成绩 ✗."
+      ],
+      "soSanh": [
+        "zh-hsk4-yi-wei",
+        "zh-hsk3-weile",
+        "zh-hsk5-yibian",
+        "zh-hsk5-ping"
+      ],
+      "tuKhoa": [
+        "yi gioi tu",
+        "yi de shenfen",
+        "yi de sudu",
+        "bằng",
+        "với tư cách",
+        "để",
+        "văn viết"
+      ],
+      "quiz": [
+        {
+          "h": "他（　）优秀的成绩从大学毕业了。",
+          "lc": [
+            "于",
+            "以",
+            "沿着",
+            "替"
+          ],
+          "da": 1,
+          "gt": "Nêu thành tích, tiêu chuẩn đạt được khi làm việc gì: 以…的成绩. 于 dẫn thời gian / nơi chốn, 替 là thay cho, 沿着 là dọc theo."
+        },
+        {
+          "h": "我们应该多听大家的意见，（　）改进工作。",
+          "lc": [
+            "被",
+            "于",
+            "以",
+            "自"
+          ],
+          "da": 2,
+          "gt": "Đầu vế sau, nêu mục đích 'để' → 以 + V. 于, 自 là giới từ dẫn danh từ; 被 là bị động."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "她以参加了记者的身份这次会议。",
+            "她记者的身份以参加了这次会议。",
+            "她参加了这次会议以记者的身份。",
+            "她以记者的身份参加了这次会议。"
+          ],
+          "da": 3,
+          "gt": "Cụm 以 + … 的身份 làm trạng ngữ, đứng sau chủ ngữ và trước động từ."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-ti",
+      "nhom": "Giới từ",
+      "tieuDe": "替",
+      "mau": "S + 替 + người + V",
+      "nghia": "thay ~ (làm việc gì); vì ~, cho ~",
+      "giaiThich": "替 có hai nghĩa. (1) Làm một việc thay cho người khác: 替我上课 (dạy thay tôi), 替我问好 (hỏi thăm giúp tôi). (2) Giống 为: nêu người mà mình cảm thấy vui, lo… thay cho, hoặc lo liệu cho: 替你高兴, 替他担心. 替 cũng là động từ: 我替你 (tôi thay bạn). Dùng nhiều trong khẩu ngữ.",
+      "cachGhep": [
+        "替 + người + V (làm thay): 替我请假, 替他值班",
+        "替 + người + 高兴 / 担心 / 着急 / 难过: 替你高兴",
+        "Phủ định, năng nguyện đứng trước 替: 不用替我…, 能替我…吗？"
+      ],
+      "viDu": [
+        {
+          "c": "我今天有事，你能替我上一节课吗？",
+          "d": "Wǒ jīntiān yǒu shì, nǐ néng tì wǒ shàng yì jié kè ma?",
+          "v": "Hôm nay tôi có việc, bạn dạy thay tôi một tiết được không?"
+        },
+        {
+          "c": "请替我向你父母问好。",
+          "d": "Qǐng tì wǒ xiàng nǐ fùmǔ wènhǎo.",
+          "v": "Cho tôi gửi lời hỏi thăm bố mẹ bạn nhé."
+        },
+        {
+          "c": "你找到了好工作，我真替你高兴。",
+          "d": "Nǐ zhǎodào le hǎo gōngzuò, wǒ zhēn tì nǐ gāoxìng.",
+          "v": "Bạn tìm được việc tốt, tôi thật mừng cho bạn."
+        },
+        {
+          "c": "别替我担心，我会照顾好自己的。",
+          "d": "Bié tì wǒ dānxīn, wǒ huì zhàogù hǎo zìjǐ de.",
+          "v": "Đừng lo cho tôi, tôi sẽ tự chăm sóc tốt cho mình."
+        }
+      ],
+      "luuY": [
+        "Khác 给: 给 + người là người NHẬN (给他打电话 = gọi điện cho anh ấy); 替 + người là người được làm THAY (替他打电话 = gọi điện thay anh ấy).",
+        "Khác 为: 为 nêu đối tượng được phục vụ hoặc mục đích, trang trọng hơn (为人民服务), không có nghĩa 'làm thay'. Chỉ với cảm xúc thì hai từ thay nhau được: 替你高兴 = 为你高兴.",
+        "Cụm 替 + người đứng trước động từ: 你不用付钱替我 ✗ → 你不用替我付钱 ✓."
+      ],
+      "soSanh": [
+        "zh-hsk2-gei",
+        "zh-hsk3-weile"
+      ],
+      "tuKhoa": [
+        "ti gioi tu",
+        "ti wo",
+        "thay",
+        "làm thay",
+        "hộ",
+        "giùm",
+        "mừng cho"
+      ],
+      "quiz": [
+        {
+          "h": "小王病了，今天我（　）他值班。",
+          "lc": [
+            "沿着",
+            "替",
+            "于",
+            "朝"
+          ],
+          "da": 1,
+          "gt": "Trực ca thay cho người bị ốm → 替. 朝 chỉ hướng, 于 là giới từ văn viết chỉ thời gian / nơi chốn, 沿着 là dọc theo."
+        },
+        {
+          "h": "我替他写了一封信 nghĩa là gì?",
+          "lc": [
+            "tôi viết một bức thư gửi cho anh ấy",
+            "tôi và anh ấy cùng viết thư",
+            "tôi viết một bức thư thay anh ấy",
+            "anh ấy viết thư cho tôi"
+          ],
+          "da": 2,
+          "gt": "替 + người = làm thay người đó. Viết thư gửi cho anh ấy thì dùng 给他写信."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "你替不用我付钱。",
+            "你替我不用付钱。",
+            "你不用付钱替我。",
+            "你不用替我付钱。"
+          ],
+          "da": 3,
+          "gt": "不用 đứng trước 替, và cụm 替我 đứng trước động từ 付钱."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-yanzhe",
+      "nhom": "Giới từ",
+      "tieuDe": "沿着",
+      "mau": "(S) + 沿着 + N (đường / sông / tường / phương hướng) + V",
+      "nghia": "dọc theo ~, men theo ~, theo (hướng) ~",
+      "giaiThich": "沿着 nêu tuyến mà động tác đi theo: một vật có chiều dài như con đường, bờ sông, bức tường, bờ biển. Cũng dùng theo nghĩa trừu tượng: 沿着这个方向努力 (cố gắng theo hướng này). Dạng một chữ 沿 gặp trong các tổ hợp ngắn như 沿路, 沿街, 沿河.",
+      "cachGhep": [
+        "沿着 + đường / sông / bờ / tường + V: 沿着这条路走, 沿着河边散步",
+        "沿着 + phương hướng / con đường trừu tượng + V: 沿着正确的方向前进",
+        "沿 + danh từ một âm tiết: 沿路, 沿街, 沿河, 沿海"
+      ],
+      "viDu": [
+        {
+          "c": "沿着这条路一直走，就到图书馆了。",
+          "d": "Yánzhe zhè tiáo lù yìzhí zǒu, jiù dào túshūguǎn le.",
+          "v": "Cứ đi thẳng dọc theo con đường này là tới thư viện."
+        },
+        {
+          "c": "我们沿着河边散了一会儿步。",
+          "d": "Wǒmen yánzhe hé biān sàn le yíhuìr bù.",
+          "v": "Chúng tôi đi dạo một lát dọc bờ sông."
+        },
+        {
+          "c": "他沿着墙种了一排树。",
+          "d": "Tā yánzhe qiáng zhòng le yì pái shù.",
+          "v": "Anh ấy trồng một hàng cây men theo bức tường."
+        },
+        {
+          "c": "只要沿着这个方向努力，一定会成功。",
+          "d": "Zhǐyào yánzhe zhège fāngxiàng nǔlì, yídìng huì chénggōng.",
+          "v": "Chỉ cần cố gắng theo hướng này thì nhất định sẽ thành công."
+        }
+      ],
+      "luuY": [
+        "Khác 朝 / 向 / 往: ba từ này chỉ hướng nhắm tới đích (朝前走: đi về phía trước); 沿着 chỉ tuyến đi dọc theo, không nói đích đến.",
+        "Sau 沿着 phải là vật có chiều dài hoặc một hướng đi; một điểm thì không dùng được: 沿着学校走 ✗ → 沿着学校的围墙走 ✓.",
+        "Khác 随着: 随着 là 'cùng với sự thay đổi của…' (随着经济的发展), không nói về đường đi."
+      ],
+      "soSanh": [
+        "zh-hsk5-chao",
+        "zh-hsk2-wang-xiang",
+        "zh-hsk4-suizhe"
+      ],
+      "tuKhoa": [
+        "yanzhe",
+        "yan zhe",
+        "dọc theo",
+        "men theo",
+        "theo hướng"
+      ],
+      "quiz": [
+        {
+          "h": "我们（　）海边的小路慢慢地走着。",
+          "lc": [
+            "自从",
+            "替",
+            "于",
+            "沿着"
+          ],
+          "da": 3,
+          "gt": "Đi men theo một con đường → 沿着. 自从 nêu mốc thời gian, 替 là thay cho, 于 là giới từ văn viết đứng sau động từ."
+        },
+        {
+          "h": "沿着 nghĩa là gì?",
+          "lc": [
+            "dọc theo, men theo",
+            "nhân lúc",
+            "thay cho",
+            "kể từ khi"
+          ],
+          "da": 0,
+          "gt": "沿着 + tuyến đường: đi dọc theo tuyến đó. 'Thay cho' là 替, 'kể từ khi' là 自从, 'nhân lúc' là 趁."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "这条街沿着往前走，有一家银行。",
+            "沿着这条街往前走，有一家银行。",
+            "往前走这条街沿着，有一家银行。",
+            "沿着明天往前走，有一家银行。"
+          ],
+          "da": 1,
+          "gt": "沿着 + tuyến đường (这条街) đứng trước động từ; sau 沿着 không thể là từ chỉ thời gian như 明天."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-bu-guo-bo-ngu",
+      "nhom": "Bổ ngữ",
+      "tieuDe": "V + 不过 (说不过 / 比不过)",
+      "mau": "S + V + 不过 / 得过 + O (đối thủ)",
+      "nghia": "(làm gì) không lại, không thắng nổi, không bằng ~",
+      "giaiThich": "不过 đứng sau động từ làm bổ ngữ khả năng, nói rằng khi đọ sức thì không thắng được, không vượt qua được đối phương: 说不过他 (nói không lại anh ấy), 跑不过他 (chạy không lại). Dạng khẳng định là V + 得过, thường gặp trong câu hỏi: 你打得过他吗？ Dùng nhiều trong khẩu ngữ.",
+      "cachGhep": [
+        "V + 不过 + người / vật: 说不过他, 比不过别人, 打不过, 跑不过, 吵不过",
+        "Khẳng định / câu hỏi: V + 得过 + O: 你跑得过他吗？",
+        "Cố định: 信得过 / 信不过 (tin được / không tin được)"
+      ],
+      "viDu": [
+        {
+          "c": "他太会说话了，我说不过他。",
+          "d": "Tā tài huì shuōhuà le, wǒ shuō bu guò tā.",
+          "v": "Anh ấy khéo ăn nói quá, tôi nói không lại."
+        },
+        {
+          "c": "我跑不过你，你每天都锻炼。",
+          "d": "Wǒ pǎo bu guò nǐ, nǐ měi tiān dōu duànliàn.",
+          "v": "Tôi chạy không lại bạn, ngày nào bạn cũng tập luyện."
+        },
+        {
+          "c": "在做菜方面，谁也比不过我妈妈。",
+          "d": "Zài zuò cài fāngmiàn, shéi yě bǐ bu guò wǒ māma.",
+          "v": "Về khoản nấu ăn thì không ai bì được mẹ tôi."
+        },
+        {
+          "c": "你一个人打得过他们三个吗？",
+          "d": "Nǐ yí gè rén dǎ de guò tāmen sān gè ma?",
+          "v": "Một mình bạn đánh lại nổi ba người họ không?"
+        }
+      ],
+      "luuY": [
+        "Đối thủ đặt SAU 不过: 我说他不过 ✗ → 我说不过他 ✓.",
+        "Khác 不过 liên từ 'nhưng' và phó từ 'chỉ': V + 不过 dính liền sau động từ, đọc nhẹ (shuō bu guò).",
+        "Khác 不如: A 不如 B là so sánh tĩnh 'A không bằng B'; V + 不过 hàm ý hai bên đọ sức trong một hành động cụ thể.",
+        "Khác 再…不过了: đó là khung chỉ mức độ cao nhất với tính từ (再好不过了), không liên quan tới thắng thua."
+      ],
+      "soSanh": [
+        "zh-hsk3-bo-ngu-kha-nang",
+        "zh-hsk5-buru-so-sanh",
+        "zh-hsk4-buguo-keshi",
+        "zh-hsk5-zai-buguo-le"
+      ],
+      "tuKhoa": [
+        "shuo bu guo",
+        "bi bu guo",
+        "da bu guo",
+        "v buguo",
+        "không lại",
+        "không thắng nổi",
+        "không bằng"
+      ],
+      "quiz": [
+        {
+          "h": "他是游泳冠军，我当然游（　）他。",
+          "lc": [
+            "不下",
+            "不起",
+            "不过",
+            "不见"
+          ],
+          "da": 2,
+          "gt": "Đọ sức mà không thắng được → V + 不过. 不起, 不下, 不见 là các bổ ngữ khả năng mang nghĩa khác (không đủ tiền / không chứa nổi / không thấy)."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "我不吵过她。",
+            "我吵过不她。",
+            "我吵她不过。",
+            "我吵不过她。"
+          ],
+          "da": 3,
+          "gt": "Trật tự: V + 不过 + đối thủ; 不 nằm giữa động từ và 过."
+        },
+        {
+          "h": "Dạng khẳng định của 打不过 là gì?",
+          "lc": [
+            "打得过",
+            "打不得",
+            "打过了",
+            "得打过"
+          ],
+          "da": 0,
+          "gt": "Bổ ngữ khả năng: khẳng định V + 得 + bổ ngữ, phủ định V + 不 + bổ ngữ → 打得过 / 打不过."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-guolai-guoqu",
+      "nhom": "Bổ ngữ",
+      "tieuDe": "过来 / 过去 (nghĩa mở rộng)",
+      "mau": "V + 过来 (trở lại bình thường) · V + 过去 (mất trạng thái bình thường) · V + 得 / 不 + 过来 (xuể / không xuể)",
+      "nghia": "~ lại (tỉnh lại, sửa lại); ~ đi (ngất đi); làm (không) xuể",
+      "giaiThich": "Ngoài nghĩa di chuyển, 过来 và 过去 còn có nghĩa mở rộng. V + 过来: trở về trạng thái bình thường, tốt, đúng (醒过来, 改过来, 明白过来, 恢复过来). V + 过去: rời khỏi trạng thái bình thường, thường là mất ý thức (晕过去, 昏过去). V + 得 / 不 + 过来: có / không đủ sức, đủ thời gian làm cho hết (忙不过来, 数不过来).",
+      "cachGhep": [
+        "V + 过来 (về trạng thái tốt): 醒过来, 改过来, 明白过来, 恢复过来, 救过来",
+        "V + 过去 (mất ý thức): 晕过去, 昏过去",
+        "V + 得 / 不 + 过来 (xuể): 忙不过来, 数不过来, 照顾得过来",
+        "了 thường chen giữa: 晕了过去, 醒了过来"
+      ],
+      "viDu": [
+        {
+          "c": "他睡了十个小时才醒过来。",
+          "d": "Tā shuì le shí gè xiǎoshí cái xǐng guòlái.",
+          "v": "Anh ấy ngủ mười tiếng mới tỉnh lại."
+        },
+        {
+          "c": "听到这个消息，她一下子晕了过去。",
+          "d": "Tīngdào zhège xiāoxi, tā yíxiàzi yūn le guòqù.",
+          "v": "Nghe tin này, cô ấy lập tức ngất đi."
+        },
+        {
+          "c": "你把写错的字改过来吧。",
+          "d": "Nǐ bǎ xiěcuò de zì gǎi guòlái ba.",
+          "v": "Bạn sửa lại những chữ viết sai đi."
+        },
+        {
+          "c": "事情太多了，我一个人忙不过来。",
+          "d": "Shìqing tài duō le, wǒ yí gè rén máng bu guòlái.",
+          "v": "Việc nhiều quá, một mình tôi làm không xuể."
+        },
+        {
+          "c": "经过老师的解释，我才明白过来。",
+          "d": "Jīngguò lǎoshī de jiěshì, wǒ cái míngbai guòlái.",
+          "v": "Nhờ thầy giải thích, tôi mới vỡ lẽ ra."
+        }
+      ],
+      "luuY": [
+        "过来 hướng về trạng thái bình thường / tốt, 过去 rời khỏi trạng thái đó — không đổi chỗ: 醒过去 ✗, 晕过来 ✗.",
+        "Khác V + 不了: V + 不了 nói chung là không làm được hoặc làm không hết; V + 不过来 nói rõ lý do là việc quá nhiều, sức và thời gian không kham xuể (忙不过来, 照顾不过来).",
+        "Khác V + 不过 (说不过他: nói không lại anh ấy): thiếu chữ 来 là thành nghĩa 'không thắng nổi'.",
+        "Khác V + 起来 / 下来: 起来 là bắt đầu (笑起来), 下来 là dần chuyển sang yên, ổn định (安静下来); 过来 nhấn việc quay về mức bình thường."
+      ],
+      "soSanh": [
+        "zh-hsk3-xu-huong-kep",
+        "zh-hsk3-qilai-mo-rong",
+        "zh-hsk4-xialai-mo-rong",
+        "zh-hsk5-bu-guo-bo-ngu"
+      ],
+      "tuKhoa": [
+        "guolai",
+        "guoqu",
+        "xing guolai",
+        "yun guoqu",
+        "mang bu guolai",
+        "tỉnh lại",
+        "ngất đi",
+        "không xuể"
+      ],
+      "quiz": [
+        {
+          "h": "他昏迷了三天，今天终于醒（　）了。",
+          "lc": [
+            "过去",
+            "过来",
+            "出去",
+            "下去"
+          ],
+          "da": 1,
+          "gt": "Trở về trạng thái bình thường (tỉnh lại) → 过来. 过去 dùng cho việc mất ý thức; 下去 là tiếp tục, 出去 là đi ra ngoài."
+        },
+        {
+          "h": "客人太多，服务员忙不（　）。",
+          "lc": [
+            "出来",
+            "上去",
+            "过来",
+            "过去"
+          ],
+          "da": 2,
+          "gt": "V + 不过来: việc quá nhiều, làm không xuể. Các bổ ngữ khác không có nghĩa này."
+        },
+        {
+          "h": "晕过去 nghĩa là gì?",
+          "lc": [
+            "tỉnh lại",
+            "hết chóng mặt",
+            "đi ngang qua",
+            "ngất đi, mất ý thức"
+          ],
+          "da": 3,
+          "gt": "V + 过去 theo nghĩa mở rộng là rời khỏi trạng thái bình thường: 晕过去 = ngất đi. 'Tỉnh lại' là 醒过来."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-chizao",
+      "nhom": "Phó từ thời gian – cách thức",
+      "tieuDe": "迟早",
+      "mau": "S + 迟早 + 会 / 要 / 得 + V (+ 的)",
+      "nghia": "sớm muộn gì cũng ~, trước sau gì cũng ~",
+      "giaiThich": "Phó từ 迟早 nói một việc chắc chắn sẽ xảy ra, chỉ chưa biết lúc nào. Vì là phán đoán về tương lai nên sau nó thường có 会, 要, 得 và cuối câu hay thêm 的 để tăng giọng khẳng định. Dùng được cả khi nói lẫn khi viết; khẩu ngữ còn có 早晚 cùng nghĩa.",
+      "cachGhep": [
+        "S + 迟早 + 会 + V + (的): 迟早会知道的",
+        "S + 迟早 + 要 / 得 + V: 迟早要出事, 迟早得面对",
+        "迟早 đứng sau chủ ngữ, trước trợ động từ"
+      ],
+      "viDu": [
+        {
+          "c": "这件事他迟早会知道的。",
+          "d": "Zhè jiàn shì tā chízǎo huì zhīdào de.",
+          "v": "Chuyện này sớm muộn gì anh ấy cũng sẽ biết."
+        },
+        {
+          "c": "只要坚持下去，你迟早会成功。",
+          "d": "Zhǐyào jiānchí xiàqù, nǐ chízǎo huì chénggōng.",
+          "v": "Chỉ cần kiên trì tiếp, sớm muộn gì bạn cũng thành công."
+        },
+        {
+          "c": "你这样开车，迟早要出事。",
+          "d": "Nǐ zhèyàng kāichē, chízǎo yào chūshì.",
+          "v": "Bạn lái xe kiểu này thì trước sau gì cũng xảy ra chuyện."
+        },
+        {
+          "c": "孩子迟早要离开父母，自己生活。",
+          "d": "Háizi chízǎo yào líkāi fùmǔ, zìjǐ shēnghuó.",
+          "v": "Con cái sớm muộn gì cũng phải rời cha mẹ, tự sống cuộc sống của mình."
+        }
+      ],
+      "luuY": [
+        "迟早 chỉ dùng cho việc CHƯA xảy ra: 他去年迟早知道了 ✗.",
+        "Khác 终于: 终于 nói việc ĐÃ xảy ra sau một thời gian dài chờ đợi (他终于知道了); 迟早 là dự đoán việc sẽ xảy ra.",
+        "Khác 总算: 总算 cũng nói việc đã thành, kèm cảm giác nhẹ nhõm; không dùng để dự đoán tương lai.",
+        "Người Việt hay đặt 迟早 cuối câu theo thói quen 'thôi, sớm muộn gì'; tiếng Trung phải đặt trước động từ: 你会后悔的迟早 ✗."
+      ],
+      "soSanh": [
+        "zh-hsk3-zhongyu",
+        "zh-hsk5-zongsuan"
+      ],
+      "tuKhoa": [
+        "chizao",
+        "chi zao",
+        "zaowan",
+        "sớm muộn",
+        "trước sau gì cũng"
+      ],
+      "quiz": [
+        {
+          "h": "别着急，问题（　）会解决的。",
+          "lc": [
+            "刚才",
+            "曾经",
+            "迟早",
+            "从来"
+          ],
+          "da": 2,
+          "gt": "Dự đoán việc chắc chắn sẽ xảy ra trong tương lai, đi với 会…的 → 迟早. 曾经, 刚才 nói quá khứ; 从来 đi với phủ định."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "他去年迟早后悔了。",
+            "迟早你了会后悔。",
+            "你会后悔的迟早。",
+            "你不努力，迟早会后悔的。"
+          ],
+          "da": 3,
+          "gt": "迟早 đứng trước 会 + V và chỉ dùng cho việc chưa xảy ra; không đi với mốc quá khứ như 去年."
+        },
+        {
+          "h": "迟早 khác 终于 ở điểm nào?",
+          "lc": [
+            "迟早 nói việc chưa xảy ra nhưng chắc chắn sẽ xảy ra; 终于 nói việc đã xảy ra sau khi chờ lâu",
+            "迟早 chỉ dùng trong câu phủ định",
+            "hai từ giống hệt nhau, thay nhau tuỳ ý",
+            "迟早 nói việc đã xảy ra; 终于 nói việc chưa xảy ra"
+          ],
+          "da": 0,
+          "gt": "迟早 là dự đoán về tương lai, 终于 là kết quả đã thành hiện thực."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-bai-uong-cong",
+      "nhom": "Phó từ thời gian – cách thức",
+      "tieuDe": "白 + V (uổng công / miễn phí)",
+      "mau": "S + 白 + V (+ 了 + bổ ngữ số lượng) · 没(有) + 白 + V",
+      "nghia": "(làm) uổng công, vô ích; (được) không mất tiền, không công",
+      "giaiThich": "Phó từ 白 đứng ngay trước động từ, có hai nghĩa: (1) làm mà không được kết quả, uổng công: 白跑一趟 (đi mất công một chuyến), 白等 (chờ uổng); (2) được hưởng mà không phải trả giá: 白吃 (ăn không mất tiền), 白拿 (lấy không). Dạng lặp 白白 nhấn mạnh sự uổng phí. Khẩu ngữ.",
+      "cachGhep": [
+        "白 + V + 了 + số lượng: 白跑了一趟, 白等了两个小时",
+        "白 + V (không mất tiền): 白吃, 白拿, 白看, 白送",
+        "Phủ định 没(有) + 白 + V = không uổng: 没白来, 没白学",
+        "白白 (+ 地) + V hai âm tiết: 白白浪费, 白白地错过"
+      ],
+      "viDu": [
+        {
+          "c": "商店关门了，我白跑了一趟。",
+          "d": "Shāngdiàn guānmén le, wǒ bái pǎo le yí tàng.",
+          "v": "Cửa hàng đóng cửa rồi, tôi đi mất công một chuyến."
+        },
+        {
+          "c": "他没来，我白等了两个小时。",
+          "d": "Tā méi lái, wǒ bái děng le liǎng gè xiǎoshí.",
+          "v": "Anh ấy không đến, tôi chờ uổng hai tiếng đồng hồ."
+        },
+        {
+          "c": "世界上没有白吃的午餐。",
+          "d": "Shìjiè shang méiyǒu bái chī de wǔcān.",
+          "v": "Trên đời không có bữa trưa nào miễn phí."
+        },
+        {
+          "c": "这些年的汉语没有白学，现在都用上了。",
+          "d": "Zhèxiē nián de Hànyǔ méiyǒu bái xué, xiànzài dōu yòngshàng le.",
+          "v": "Mấy năm học tiếng Trung không hề uổng, bây giờ đều dùng được cả."
+        },
+        {
+          "c": "这么好的机会，别白白浪费了。",
+          "d": "Zhème hǎo de jīhuì, bié báibái làngfèi le.",
+          "v": "Cơ hội tốt thế này, đừng để phí hoài."
+        }
+      ],
+      "luuY": [
+        "白 ở đây là phó từ, không phải tính từ 'trắng'; nó đứng TRƯỚC động từ: 我跑白了一趟 ✗ → 我白跑了一趟 ✓.",
+        "Phủ định dùng 没(有)白 + V (không uổng công): 这次没白来. Không nói 白没来.",
+        "Khác 免费: 免费 là 'miễn phí' trung tính (免费参观); 白吃, 白拿 thường có ý chê là hưởng không, ăn chực."
+      ],
+      "soSanh": [],
+      "tuKhoa": [
+        "bai uong cong",
+        "bai pao",
+        "bai chi",
+        "baibai",
+        "uổng công",
+        "vô ích",
+        "không mất tiền",
+        "phí hoài"
+      ],
+      "quiz": [
+        {
+          "h": "电影票卖完了，我们（　）来了。",
+          "lc": [
+            "白",
+            "倒",
+            "光",
+            "替"
+          ],
+          "da": 0,
+          "gt": "Đến mà không được việc gì → 白 + V. 光 là 'chỉ', 倒 là 'trái lại', 替 là 'thay cho', đều không hợp."
+        },
+        {
+          "h": "白跑一趟 nghĩa là gì?",
+          "lc": [
+            "chạy miễn phí một chuyến",
+            "đi mất công một chuyến, không được việc gì",
+            "chạy vào ban ngày",
+            "chạy rất nhanh một chuyến"
+          ],
+          "da": 1,
+          "gt": "白 + V với các động từ như 跑, 等, 忙 mang nghĩa uổng công, không thu được kết quả."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "这次我来白了，学到了很多东西。",
+            "这次我白没来，学到了很多东西。",
+            "这次我没白来，学到了很多东西。",
+            "这次我来了白没，学到了很多东西。"
+          ],
+          "da": 2,
+          "gt": "Phủ định là 没 + 白 + V: 没白来 = đến không uổng công, khớp với vế sau 'học được nhiều thứ'."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-xiangdang-jiqi-gewai",
+      "nhom": "Phó từ mức độ",
+      "tieuDe": "相当 / 极其 / 格外",
+      "mau": "S + 相当 / 极其 / 格外 + Adj / động từ tâm lý",
+      "nghia": "相当: khá, tương đối cao; 极其: cực kỳ; 格外: đặc biệt, hơn hẳn thường lệ",
+      "giaiThich": "Ba phó từ mức độ của HSK5. 相当 nói mức độ khá cao, là nhận xét khách quan (相当难: khá khó). 极其 là mức cao nhất, văn viết, chỉ đi với từ hai âm tiết trở lên (极其重要). 格外 nói mức độ vượt hẳn lúc bình thường, luôn ngầm so với mức thường ngày (今天格外冷: hôm nay lạnh khác thường).",
+      "cachGhep": [
+        "相当 + Adj / V: 相当难, 相当不错, 相当满意",
+        "极其 + Adj / V hai âm tiết: 极其重要, 极其复杂 (một âm tiết dùng 极: 极好, 极大)",
+        "格外 + Adj / V: 格外新鲜, 格外小心, 格外想家"
+      ],
+      "viDu": [
+        {
+          "c": "这次考试相当难，很多人没及格。",
+          "d": "Zhè cì kǎoshì xiāngdāng nán, hěn duō rén méi jígé.",
+          "v": "Kỳ thi lần này khá khó, nhiều người không đạt."
+        },
+        {
+          "c": "他的汉语说得相当不错。",
+          "d": "Tā de Hànyǔ shuō de xiāngdāng búcuò.",
+          "v": "Anh ấy nói tiếng Trung khá là tốt."
+        },
+        {
+          "c": "这个问题极其复杂，需要认真研究。",
+          "d": "Zhège wèntí jíqí fùzá, xūyào rènzhēn yánjiū.",
+          "v": "Vấn đề này cực kỳ phức tạp, cần nghiên cứu nghiêm túc."
+        },
+        {
+          "c": "下过雨以后，空气格外新鲜。",
+          "d": "Xià guo yǔ yǐhòu, kōngqì géwài xīnxiān.",
+          "v": "Sau cơn mưa, không khí trong lành lạ thường."
+        },
+        {
+          "c": "晚上一个人走路要格外小心。",
+          "d": "Wǎnshang yí gè rén zǒulù yào géwài xiǎoxīn.",
+          "v": "Buổi tối đi một mình phải hết sức cẩn thận."
+        }
+      ],
+      "luuY": [
+        "极其 không đi với tính từ một âm tiết: 极其好 ✗ → 极好 / 极其出色 ✓.",
+        "Khác Adj + 极了: 极了 đứng SAU tính từ và là khẩu ngữ (好极了); 极其 đứng TRƯỚC và là văn viết.",
+        "Khác 特别: 特别 vừa là phó từ vừa là tính từ (很特别), lại có nghĩa 'nhất là' (特别是…); 格外 chỉ là phó từ và luôn hàm ý 'hơn mức bình thường'.",
+        "相当 còn là động từ 'tương đương' trong 相当于 (一公里相当于一千米) — đừng nhầm với phó từ mức độ."
+      ],
+      "soSanh": [
+        "zh-hsk3-tebie",
+        "zh-hsk3-jile",
+        "zh-hsk2-zhen-feichang-ting",
+        "zh-hsk4-youqi"
+      ],
+      "tuKhoa": [
+        "xiangdang",
+        "jiqi",
+        "gewai",
+        "khá",
+        "cực kỳ",
+        "đặc biệt",
+        "khác thường",
+        "phó từ mức độ"
+      ],
+      "quiz": [
+        {
+          "h": "这是一个（　）重要的决定，必须认真考虑。",
+          "lc": [
+            "得很",
+            "极了",
+            "不得了",
+            "极其"
+          ],
+          "da": 3,
+          "gt": "Trước tính từ hai âm tiết 重要 dùng phó từ 极其. 极了, 得很, 不得了 đều phải đứng SAU tính từ."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "今晚的月亮格外圆。",
+            "今晚格外的月亮圆。",
+            "今晚的月亮圆格外。",
+            "今晚的月亮圆得格外了。"
+          ],
+          "da": 0,
+          "gt": "格外 là phó từ, đứng ngay trước tính từ: 格外 + 圆."
+        },
+        {
+          "h": "雨后的空气格外新鲜 hàm ý gì?",
+          "lc": [
+            "không khí ở bên ngoài mới trong lành",
+            "không khí trong lành hơn hẳn lúc bình thường",
+            "không khí chỉ hơi trong lành",
+            "không khí không trong lành"
+          ],
+          "da": 1,
+          "gt": "格外 nói mức độ vượt hẳn mức thường ngày; chữ 外 ở đây không có nghĩa 'bên ngoài'."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-ouran",
+      "nhom": "Phó từ thời gian – cách thức",
+      "tieuDe": "偶然",
+      "mau": "S + 偶然 + V · 偶然的 + N · S + 很偶然",
+      "nghia": "tình cờ, ngẫu nhiên",
+      "giaiThich": "偶然 vừa là tính từ vừa là phó từ, nói một việc xảy ra ngoài dự liệu, không theo quy luật tất yếu — trái nghĩa với 必然 (tất nhiên). Làm trạng ngữ: 偶然遇到 (tình cờ gặp); làm định ngữ: 偶然的机会 (một dịp tình cờ); làm vị ngữ: 这很偶然. Dùng được cả khi nói và khi viết.",
+      "cachGhep": [
+        "偶然 + V: 偶然遇到, 偶然发现, 偶然听说",
+        "偶然的 + N: 偶然的机会, 偶然的现象",
+        "Vị ngữ / sau 是…的: 很偶然, 不是偶然的",
+        "偶然间 + V: 偶然间看到"
+      ],
+      "viDu": [
+        {
+          "c": "我在街上偶然遇到了一位老同学。",
+          "d": "Wǒ zài jiē shang ǒurán yùdào le yí wèi lǎo tóngxué.",
+          "v": "Tôi tình cờ gặp một người bạn học cũ trên phố."
+        },
+        {
+          "c": "一个偶然的机会，他认识了现在的妻子。",
+          "d": "Yí gè ǒurán de jīhuì, tā rènshi le xiànzài de qīzi.",
+          "v": "Trong một dịp tình cờ, anh ấy quen người vợ hiện tại."
+        },
+        {
+          "c": "他的成功并不是偶然的。",
+          "d": "Tā de chénggōng bìng bú shì ǒurán de.",
+          "v": "Thành công của anh ấy hoàn toàn không phải ngẫu nhiên."
+        },
+        {
+          "c": "这件事发生得很偶然。",
+          "d": "Zhè jiàn shì fāshēng de hěn ǒurán.",
+          "v": "Việc này xảy ra rất tình cờ."
+        }
+      ],
+      "luuY": [
+        "Khác 偶尔: 偶尔 nói TẦN SUẤT thấp, 'thỉnh thoảng', trái với 经常 (我偶尔去看电影); 偶然 nói việc xảy ra TÌNH CỜ, trái với 必然 (我偶然看到了那部电影).",
+        "偶然 là tính từ nên làm được định ngữ, vị ngữ, nhận 很; 偶尔 thì không: 很偶尔 ✗, 偶尔的机会 ✗.",
+        "Khác 突然: 突然 là 'đột ngột' — xảy ra nhanh, không báo trước; 偶然 là 'tình cờ' — không sắp đặt, không tất yếu."
+      ],
+      "soSanh": [
+        "zh-hsk4-ouer",
+        "zh-hsk3-turan"
+      ],
+      "tuKhoa": [
+        "ouran",
+        "ou ran",
+        "tình cờ",
+        "ngẫu nhiên",
+        "偶然 偶尔"
+      ],
+      "quiz": [
+        {
+          "h": "这个发现完全是（　）的，科学家们本来在研究别的问题。",
+          "lc": [
+            "格外",
+            "偶尔",
+            "迟早",
+            "偶然"
+          ],
+          "da": 3,
+          "gt": "Việc xảy ra ngoài dự liệu, làm vị ngữ trong 是…的 → 偶然. 偶尔 chỉ tần suất và không đứng được ở vị trí này; 迟早, 格外 là phó từ, không hợp nghĩa."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "我们是在火车上偶然认识的。",
+            "我们偶然是的在火车上认识。",
+            "我们在火车上很偶尔的机会认识。",
+            "我们是在火车上认识偶然的。"
+          ],
+          "da": 0,
+          "gt": "Phó từ 偶然 đứng ngay trước động từ 认识. 偶尔 không làm định ngữ và không nhận 很."
+        },
+        {
+          "h": "偶然 trái nghĩa với từ nào?",
+          "lc": [
+            "经常",
+            "必然",
+            "当然",
+            "突然"
+          ],
+          "da": 1,
+          "gt": "偶然 (ngẫu nhiên) đối với 必然 (tất yếu). 经常 là từ trái nghĩa của 偶尔 (thỉnh thoảng)."
+        }
+      ]
+    }
+  ]
+}

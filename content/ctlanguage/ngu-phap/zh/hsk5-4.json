@@ -1,0 +1,1238 @@
+{
+  "nn": "zh",
+  "cap": "HSK5",
+  "diem": [
+    {
+      "id": "zh-hsk5-shizhong",
+      "nhom": "Phó từ thời gian – cách thức",
+      "tieuDe": "始终",
+      "mau": "S + 始终 + V / Adj… | S + 始终 + 不 / 没(有) + V…",
+      "nghia": "từ đầu đến cuối, trước sau vẫn ~",
+      "giaiThich": "Phó từ cho biết một trạng thái, thái độ hay hành động được giữ nguyên suốt cả quá trình, từ lúc bắt đầu đến lúc nói (hoặc đến khi kết thúc). Hay dùng với dạng phủ định (始终没…, 始终不…) và các động từ chỉ thái độ như 相信, 坚持, 保持. Thiên về văn viết.",
+      "cachGhep": [
+        "S + 始终 + V…: 我始终相信他",
+        "S + 始终 + 没(有) / 不 + V…: 他始终没有放弃",
+        "始终 đứng sau chủ ngữ, trước vị ngữ"
+      ],
+      "viDu": [
+        {
+          "c": "他始终没有放弃自己的梦想。",
+          "d": "Tā shǐzhōng méiyǒu fàngqì zìjǐ de mèngxiǎng.",
+          "v": "Anh ấy từ đầu đến cuối chưa hề từ bỏ ước mơ của mình."
+        },
+        {
+          "c": "我始终相信他是对的。",
+          "d": "Wǒ shǐzhōng xiāngxìn tā shì duì de.",
+          "v": "Tôi trước sau vẫn tin anh ấy đúng."
+        },
+        {
+          "c": "会议中，他始终一句话也没说。",
+          "d": "Huìyì zhōng, tā shǐzhōng yí jù huà yě méi shuō.",
+          "v": "Trong cuộc họp, từ đầu đến cuối anh ấy không nói một lời."
+        },
+        {
+          "c": "这么多年，她对工作的热情始终没有变。",
+          "d": "Zhème duō nián, tā duì gōngzuò de rèqíng shǐzhōng méiyǒu biàn.",
+          "v": "Bao nhiêu năm nay, nhiệt tình của cô ấy với công việc trước sau không đổi."
+        }
+      ],
+      "luuY": [
+        "Sau 始终 không đi với thời lượng hay mốc kết thúc: 始终等到十点 ✗, 始终学了三年 ✗ → dùng 一直.",
+        "Khác 一直: 一直 khẩu ngữ, dùng rộng hơn — đi được với mốc thời gian (一直等到十点), với kế hoạch tương lai (一直住下去), và còn chỉ hướng \"đi thẳng\" (一直往前走); 始终 nhấn \"suốt từ đầu đến cuối không đổi\".",
+        "Khác 一向: 一向 nói thói quen, tính cách ổn định xưa nay; 始终 nói trong phạm vi một quá trình cụ thể."
+      ],
+      "soSanh": [
+        "zh-hsk3-yizhi",
+        "zh-hsk5-yixiang",
+        "zh-hsk5-yiran-rengran",
+        "zh-hsk4-conglai"
+      ],
+      "tuKhoa": [
+        "shizhong",
+        "shi zhong",
+        "từ đầu đến cuối",
+        "trước sau",
+        "luôn luôn"
+      ],
+      "quiz": [
+        {
+          "h": "不管遇到什么困难，他（　）保持乐观。",
+          "lc": [
+            "始终",
+            "曾经",
+            "陆续",
+            "连忙"
+          ],
+          "da": 0,
+          "gt": "Thái độ giữ nguyên suốt quá trình → 始终. 曾经 là \"đã từng\" (nay không còn), 连忙 là \"vội vàng\", 陆续 là \"lần lượt\" (cần nhiều chủ thể)."
+        },
+        {
+          "h": "Câu nào SAI?",
+          "lc": [
+            "我一直等到晚上十点。",
+            "我始终等到晚上十点。",
+            "他始终不同意。",
+            "他一直不同意。"
+          ],
+          "da": 1,
+          "gt": "始终 không đi với mốc kết thúc kiểu 等到十点; trường hợp này phải dùng 一直."
+        },
+        {
+          "h": "（　）往前走，就到银行了。Điền từ nào?",
+          "lc": [
+            "曾经",
+            "至今",
+            "一直",
+            "始终"
+          ],
+          "da": 2,
+          "gt": "Chỉ hướng \"cứ đi thẳng\" là cách dùng riêng của 一直; 始终, 曾经, 至今 chỉ nói về thời gian."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-yixiang",
+      "nhom": "Phó từ thời gian – cách thức",
+      "tieuDe": "一向",
+      "mau": "S + 一向 + (很) Adj / V…",
+      "nghia": "xưa nay, trước giờ vẫn luôn ~",
+      "giaiThich": "Phó từ cho biết một thói quen, tính cách, thái độ hoặc tình trạng ổn định từ trước đến nay. Dùng được với cả khẳng định lẫn phủ định. Thường dùng khi nhận xét về người hay sự vật, đôi khi để đối chiếu với một lần khác thường.",
+      "cachGhep": [
+        "S + 一向 + (很) + Adj: 他一向很准时",
+        "S + 一向 + 不 + V: 我一向不喜欢吃辣的",
+        "N + 一向 + Adj: 服务一向不错"
+      ],
+      "viDu": [
+        {
+          "c": "他一向很准时，今天怎么迟到了？",
+          "d": "Tā yíxiàng hěn zhǔnshí, jīntiān zěnme chídào le?",
+          "v": "Anh ấy xưa nay rất đúng giờ, sao hôm nay lại đến muộn?"
+        },
+        {
+          "c": "我一向不喜欢吃辣的。",
+          "d": "Wǒ yíxiàng bù xǐhuan chī là de.",
+          "v": "Tôi trước giờ không thích ăn cay."
+        },
+        {
+          "c": "她做事一向认真。",
+          "d": "Tā zuòshì yíxiàng rènzhēn.",
+          "v": "Cô ấy làm việc xưa nay luôn nghiêm túc."
+        },
+        {
+          "c": "这家店的服务一向不错。",
+          "d": "Zhè jiā diàn de fúwù yíxiàng búcuò.",
+          "v": "Dịch vụ của cửa hàng này trước giờ vẫn tốt."
+        }
+      ],
+      "luuY": [
+        "一 trước 向 (thanh 4) đọc thanh 2: yíxiàng.",
+        "Khác 一直: 一直 dùng cho một hành động / trạng thái cụ thể kéo dài liên tục trong một khoảng thời gian (昨天我一直在家); 一向 chỉ nói thói quen, đặc điểm lâu dài nên 昨天我一向在家 ✗, và không dùng cho tương lai.",
+        "Khác 从来: 从来 chủ yếu đi với phủ định (从来不 / 从来没); 一向 dùng thoải mái trong câu khẳng định."
+      ],
+      "soSanh": [
+        "zh-hsk3-yizhi",
+        "zh-hsk4-conglai",
+        "zh-hsk5-shizhong",
+        "zh-hsk6-xianglai"
+      ],
+      "tuKhoa": [
+        "yixiang",
+        "yi xiang",
+        "xưa nay",
+        "trước giờ",
+        "luôn luôn"
+      ],
+      "quiz": [
+        {
+          "h": "他（　）爱干净，房间总是收拾得很整齐。",
+          "lc": [
+            "曾经",
+            "一向",
+            "连忙",
+            "陆续"
+          ],
+          "da": 1,
+          "gt": "Nói về thói quen, tính cách ổn định → 一向. 曾经 hàm ý nay không còn, 连忙 là \"vội vàng\", 陆续 là \"lần lượt\"."
+        },
+        {
+          "h": "Câu nào SAI?",
+          "lc": [
+            "他一向起得很早。",
+            "昨天我一直在图书馆看书。",
+            "昨天我一向在图书馆看书。",
+            "我一向不喝酒。"
+          ],
+          "da": 2,
+          "gt": "一向 chỉ thói quen lâu dài, không dùng cho một hành động cụ thể kéo dài trong ngày hôm qua; trường hợp đó dùng 一直."
+        },
+        {
+          "h": "一向 diễn tả điều gì?",
+          "lc": [
+            "việc vừa mới xảy ra",
+            "việc đã từng có nhưng nay không còn",
+            "việc sẽ xảy ra ngay lập tức",
+            "thói quen, đặc điểm ổn định từ trước đến nay"
+          ],
+          "da": 3,
+          "gt": "一向 = \"xưa nay vẫn thế\": nói về nếp quen, tính cách, tình trạng lâu dài."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-cengjing",
+      "nhom": "Phó từ thời gian – cách thức",
+      "tieuDe": "曾经",
+      "mau": "S + 曾经 + V + 过 / 了… | S + 曾经 + 是 / Adj + 过…",
+      "nghia": "đã từng ~",
+      "giaiThich": "Phó từ cho biết một hành động hay tình trạng đã có trong quá khứ và nay đã kết thúc. Động từ phía sau thường mang 过 (hoặc 了). Dạng rút gọn 曾 dùng trong văn viết. Phủ định không dùng 曾经 mà nói 没(有) + V + 过, hoặc 不曾 / 未曾 trong văn viết.",
+      "cachGhep": [
+        "S + 曾经 + V + 过 + (O / thời lượng): 曾经工作过三年",
+        "S + 曾经 + 是 + N: 曾经是运动员",
+        "Phủ định: S + 没(有) + V + 过 / S + 不曾 + V + 过"
+      ],
+      "viDu": [
+        {
+          "c": "我曾经在北京工作过三年。",
+          "d": "Wǒ céngjīng zài Běijīng gōngzuò guo sān nián.",
+          "v": "Tôi đã từng làm việc ở Bắc Kinh ba năm."
+        },
+        {
+          "c": "他曾经是一名足球运动员。",
+          "d": "Tā céngjīng shì yì míng zúqiú yùndòngyuán.",
+          "v": "Anh ấy từng là một cầu thủ bóng đá."
+        },
+        {
+          "c": "这里曾经是一片森林。",
+          "d": "Zhèlǐ céngjīng shì yí piàn sēnlín.",
+          "v": "Nơi đây từng là một khu rừng."
+        },
+        {
+          "c": "我们曾经见过面，你还记得吗？",
+          "d": "Wǒmen céngjīng jiàn guo miàn, nǐ hái jìde ma?",
+          "v": "Chúng ta từng gặp nhau rồi, bạn còn nhớ không?"
+        }
+      ],
+      "luuY": [
+        "Phát âm: 曾 trong 曾经 đọc céng. Không nói 不曾经 / 没曾经: phủ định là 没去过 hoặc 不曾去过.",
+        "Khác 已经: 已经 nói việc đã hoàn thành và kết quả / trạng thái có thể vẫn còn (我已经在这儿住了三年 — vẫn đang ở); 曾经 nói việc đã qua hẳn (我曾经在这儿住过三年 — nay không ở nữa).",
+        "曾经 không dùng cho tương lai; 已经 thì dùng được (明天这个时候我已经到了)."
+      ],
+      "soSanh": [
+        "zh-hsk2-yijing",
+        "zh-hsk2-guo",
+        "zh-hsk3-guo-nang-cao",
+        "zh-hsk6-yidu"
+      ],
+      "tuKhoa": [
+        "cengjing",
+        "ceng jing",
+        "đã từng",
+        "từng",
+        "kinh nghiệm quá khứ"
+      ],
+      "quiz": [
+        {
+          "h": "他年轻的时候（　）当过兵。",
+          "lc": [
+            "连忙",
+            "陆续",
+            "始终",
+            "曾经"
+          ],
+          "da": 3,
+          "gt": "Việc đã có trong quá khứ, động từ mang 过 → 曾经. 始终 là \"từ đầu đến cuối\", 陆续 là \"lần lượt\", 连忙 là \"vội vàng\"."
+        },
+        {
+          "h": "我曾经在上海住过五年 hàm ý gì?",
+          "lc": [
+            "bây giờ không còn ở Thượng Hải nữa",
+            "sắp chuyển đến Thượng Hải",
+            "chưa bao giờ đến Thượng Hải",
+            "bây giờ vẫn đang ở Thượng Hải"
+          ],
+          "da": 0,
+          "gt": "曾经 + V 过 nói một trải nghiệm đã kết thúc; muốn nói vẫn còn ở thì dùng 已经…住了五年."
+        },
+        {
+          "h": "Câu phủ định nào đúng?",
+          "lc": [
+            "我不曾经去过那个地方。",
+            "我没去过那个地方。",
+            "我没曾经去那个地方。",
+            "我曾经不去过那个地方。"
+          ],
+          "da": 1,
+          "gt": "Phủ định của 曾经…过 là 没(有) + V + 过; không ghép 不 / 没 với 曾经."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-zhujian",
+      "nhom": "Phó từ thời gian – cách thức",
+      "tieuDe": "逐渐 / 逐步",
+      "mau": "S + 逐渐 + V / Adj (+ 起来 / 下来 / 了) | S + 逐步 + V",
+      "nghia": "dần dần ~; từng bước ~",
+      "giaiThich": "Hai phó từ chỉ sự thay đổi diễn ra từ từ. 逐渐: thay đổi chậm, liên tục, thường là tự nhiên; đi được với cả động từ lẫn tính từ. 逐步: thay đổi theo từng bước, từng giai đoạn, thường do con người chủ động, có kế hoạch; chỉ đi với động từ. Cả hai thiên về văn viết.",
+      "cachGhep": [
+        "S + 逐渐 + Adj + 起来 / 下来 / 了: 天气逐渐暖和起来了",
+        "S + 逐渐 + V + 了: 逐渐习惯了",
+        "S + 逐步 + V (hai âm tiết): 逐步提高, 逐步扩大, 逐步解决"
+      ],
+      "viDu": [
+        {
+          "c": "天气逐渐暖和起来了。",
+          "d": "Tiānqì zhújiàn nuǎnhuo qǐlái le.",
+          "v": "Thời tiết dần dần ấm lên."
+        },
+        {
+          "c": "来中国以后，我逐渐习惯了这里的生活。",
+          "d": "Lái Zhōngguó yǐhòu, wǒ zhújiàn xíguàn le zhèlǐ de shēnghuó.",
+          "v": "Sau khi đến Trung Quốc, tôi dần quen với cuộc sống ở đây."
+        },
+        {
+          "c": "我们要逐步提高产品的质量。",
+          "d": "Wǒmen yào zhúbù tígāo chǎnpǐn de zhìliàng.",
+          "v": "Chúng ta phải từng bước nâng cao chất lượng sản phẩm."
+        },
+        {
+          "c": "公司计划逐步扩大市场。",
+          "d": "Gōngsī jìhuà zhúbù kuòdà shìchǎng.",
+          "v": "Công ty có kế hoạch từng bước mở rộng thị trường."
+        }
+      ],
+      "luuY": [
+        "逐步 không đi với tính từ hay biến đổi tự nhiên: 天气逐步冷了 ✗ → 天气逐渐冷了 ✓.",
+        "Khác 渐渐: 渐渐 nghĩa như 逐渐, thường gặp hơn trong khẩu ngữ và văn miêu tả, có thể đứng đầu câu kèm 地 (渐渐地，…).",
+        "Khác 越来越: 越来越 + Adj nhấn MỨC ĐỘ tăng dần; 逐渐 nhấn QUÁ TRÌNH thay đổi từ từ."
+      ],
+      "soSanh": [
+        "zh-hsk3-yuelaiyue",
+        "zh-hsk5-buduan",
+        "zh-hsk4-suizhe",
+        "zh-hsk5-luxu"
+      ],
+      "tuKhoa": [
+        "zhujian",
+        "zhu jian",
+        "zhubu",
+        "jianjian",
+        "dần dần",
+        "từng bước"
+      ],
+      "quiz": [
+        {
+          "h": "太阳下山了，天色（　）暗了下来。",
+          "lc": [
+            "亲自",
+            "逐渐",
+            "曾经",
+            "分别"
+          ],
+          "da": 1,
+          "gt": "Thay đổi tự nhiên, từ từ, đi với tính từ + 下来 → 逐渐. 曾经 là \"đã từng\", 亲自 là \"đích thân\", 分别 là \"riêng rẽ\"."
+        },
+        {
+          "h": "Câu nào dùng 逐步 hợp lý?",
+          "lc": [
+            "天气逐步冷了。",
+            "他的头发逐步白了。",
+            "政府将逐步解决住房问题。",
+            "我逐步饿了。"
+          ],
+          "da": 2,
+          "gt": "逐步 dùng cho việc con người chủ động làm theo từng bước và đi với động từ (解决); thay đổi tự nhiên như lạnh đi, bạc tóc, đói thì dùng 逐渐."
+        },
+        {
+          "h": "逐渐 nghĩa là gì?",
+          "lc": [
+            "lần lượt từng người",
+            "đã từng",
+            "ngay lập tức",
+            "dần dần"
+          ],
+          "da": 3,
+          "gt": "逐渐 chỉ sự thay đổi diễn ra chậm và liên tục. \"Ngay lập tức\" là 立刻, \"đã từng\" là 曾经, \"lần lượt\" là 陆续."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-buduan",
+      "nhom": "Phó từ thời gian – cách thức",
+      "tieuDe": "不断",
+      "mau": "S + 不断 + (地) + V (hai âm tiết)",
+      "nghia": "không ngừng, liên tục ~",
+      "giaiThich": "Phó từ cho biết hành động, thay đổi diễn ra liên tiếp, không gián đoạn hoặc lặp lại nhiều lần trong một quá trình. Thường đi với động từ hai âm tiết chỉ sự phát triển, biến đổi: 发展, 提高, 增加, 努力, 出现. Dùng nhiều trong văn viết, tin tức.",
+      "cachGhep": [
+        "S + 不断 + V: 不断发展, 不断提高, 不断出现",
+        "S + 不断 + 地 + V: 不断地为他加油",
+        "S + 在 + 不断 + V: 科技在不断发展"
+      ],
+      "viDu": [
+        {
+          "c": "科技在不断发展。",
+          "d": "Kējì zài búduàn fāzhǎn.",
+          "v": "Khoa học kỹ thuật đang không ngừng phát triển."
+        },
+        {
+          "c": "只有不断学习，才能不断进步。",
+          "d": "Zhǐyǒu búduàn xuéxí, cái néng búduàn jìnbù.",
+          "v": "Chỉ có không ngừng học tập thì mới không ngừng tiến bộ."
+        },
+        {
+          "c": "最近几年，这里的房价不断上涨。",
+          "d": "Zuìjìn jǐ nián, zhèlǐ de fángjià búduàn shàngzhǎng.",
+          "v": "Mấy năm gần đây, giá nhà ở đây liên tục tăng."
+        },
+        {
+          "c": "比赛中，观众不断地为他加油。",
+          "d": "Bǐsài zhōng, guānzhòng búduàn de wèi tā jiāyóu.",
+          "v": "Trong trận đấu, khán giả không ngừng cổ vũ anh ấy."
+        }
+      ],
+      "luuY": [
+        "不 trước 断 (thanh 4) đọc thanh 2: búduàn.",
+        "Khác 不停: 不停 nhấn một động tác cụ thể làm mãi không nghỉ (不停地咳嗽) và có thể đứng sau làm bổ ngữ (说个不停); 不断 nhấn sự liên tiếp, nối tiếp trong một quá trình, không dùng kiểu 说个不断.",
+        "Khác 一直: 一直 nói một trạng thái kéo dài không đổi; 不断 nói sự việc cứ tiếp tục xảy ra, tiếp tục tăng tiến."
+      ],
+      "soSanh": [
+        "zh-hsk3-yizhi",
+        "zh-hsk5-zhujian",
+        "zh-hsk3-zongshi",
+        "zh-hsk5-yizai-zaisan"
+      ],
+      "tuKhoa": [
+        "buduan",
+        "bu duan",
+        "không ngừng",
+        "liên tục",
+        "liên tiếp"
+      ],
+      "quiz": [
+        {
+          "h": "随着经济的发展，人们的生活水平（　）提高。",
+          "lc": [
+            "连忙",
+            "曾经",
+            "亲自",
+            "不断"
+          ],
+          "da": 3,
+          "gt": "Sự tăng tiến liên tục trong một quá trình → 不断 + 提高. 曾经 là \"đã từng\", 亲自 là \"đích thân\", 连忙 là \"vội vàng\"."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "新问题不断出现。",
+            "新问题不断很多。",
+            "不断新问题的出现了。",
+            "新问题出现个不断。"
+          ],
+          "da": 0,
+          "gt": "不断 đứng trước động từ (出现); nó không làm bổ ngữ sau 个 và không đứng trước 很 + tính từ."
+        },
+        {
+          "h": "不断 nghĩa là gì?",
+          "lc": [
+            "chưa bao giờ",
+            "không ngừng, liên tục",
+            "không còn nữa",
+            "không cần thiết"
+          ],
+          "da": 1,
+          "gt": "不断 (không đứt) = liên tục, không gián đoạn."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-lianmang",
+      "nhom": "Phó từ thời gian – cách thức",
+      "tieuDe": "连忙 / 急忙 / 赶紧",
+      "mau": "S + 连忙 / 急忙 / 赶紧 + V…",
+      "nghia": "vội vàng, liền vội ~; mau chóng ~",
+      "giaiThich": "Ba phó từ chỉ hành động được làm nhanh, gấp. 连忙: phản ứng ngay sau một tình huống, chỉ dùng để thuật lại việc đã xảy ra. 急忙: nhấn tâm trạng sốt ruột, hấp tấp; có dạng lặp 急急忙忙. 赶紧: tranh thủ làm ngay không chậm trễ; dùng được cả khi thuật lại lẫn khi giục, ra lệnh.",
+      "cachGhep": [
+        "Tình huống，S + 连忙 + V: 他连忙站起来",
+        "S + 急忙 + V: 她急忙跑了过去",
+        "(你) + 赶紧 + V + 吧: 你赶紧走吧"
+      ],
+      "viDu": [
+        {
+          "c": "看见老人上车，他连忙站起来让座。",
+          "d": "Kànjiàn lǎorén shàng chē, tā liánmáng zhàn qǐlái ràngzuò.",
+          "v": "Thấy cụ già lên xe, anh ấy vội đứng dậy nhường ghế."
+        },
+        {
+          "c": "听到孩子的哭声，她急忙跑了过去。",
+          "d": "Tīngdào háizi de kūshēng, tā jímáng pǎo le guòqù.",
+          "v": "Nghe tiếng con khóc, cô ấy vội vàng chạy tới."
+        },
+        {
+          "c": "快迟到了，你赶紧走吧！",
+          "d": "Kuài chídào le, nǐ gǎnjǐn zǒu ba!",
+          "v": "Sắp muộn rồi, bạn mau đi đi!"
+        },
+        {
+          "c": "他发现自己说错了，连忙道歉。",
+          "d": "Tā fāxiàn zìjǐ shuō cuò le, liánmáng dàoqiàn.",
+          "v": "Anh ấy phát hiện mình nói sai, vội xin lỗi."
+        }
+      ],
+      "luuY": [
+        "连忙 KHÔNG dùng trong câu cầu khiến hay cho việc chưa xảy ra: 你连忙走吧 ✗ → 你赶紧 / 赶快走吧 ✓.",
+        "Khác nhau: 连忙 = phản ứng tức thì (thuật lại); 急忙 = vội vì sốt ruột (thuật lại là chính); 赶紧 = tranh thủ thời gian (thuật lại + cầu khiến).",
+        "Khác 立刻 / 马上: hai từ này chỉ nói \"ngay lập tức\" về thời gian, dùng được trong mệnh lệnh và cho tương lai; 连忙 còn hàm ý vội vã của người làm."
+      ],
+      "soSanh": [
+        "zh-hsk5-liji",
+        "zh-hsk3-mashang",
+        "zh-hsk6-suiji"
+      ],
+      "tuKhoa": [
+        "lianmang",
+        "lian mang",
+        "jimang",
+        "ganjin",
+        "vội vàng",
+        "mau chóng"
+      ],
+      "quiz": [
+        {
+          "h": "时间不多了，你（　）决定吧！",
+          "lc": [
+            "陆续",
+            "连忙",
+            "曾经",
+            "赶紧"
+          ],
+          "da": 3,
+          "gt": "Câu giục giã (có 吧) → 赶紧. 连忙 chỉ dùng thuật lại việc đã xảy ra nên không dùng trong câu cầu khiến; 曾经 và 陆续 sai nghĩa."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "电话响了，他连忙去接。",
+            "明天你连忙来吧。",
+            "你连忙吃，菜要凉了。",
+            "请连忙通知大家。"
+          ],
+          "da": 0,
+          "gt": "连忙 dùng để kể lại phản ứng tức thì đã xảy ra; trong câu đề nghị, mệnh lệnh hoặc việc tương lai phải dùng 赶紧 / 赶快."
+        },
+        {
+          "h": "急忙 nhấn mạnh điều gì?",
+          "lc": [
+            "làm một cách từ tốn, cẩn thận",
+            "tâm trạng sốt ruột, hấp tấp khi làm",
+            "làm nhiều lần liên tiếp",
+            "làm đích thân, không nhờ ai"
+          ],
+          "da": 1,
+          "gt": "急 (gấp, sốt ruột) + 忙 (vội): làm việc trong trạng thái vội vàng, cuống quýt."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-liji",
+      "nhom": "Phó từ thời gian – cách thức",
+      "tieuDe": "立即 / 立刻",
+      "mau": "S + 立即 / 立刻 + V…",
+      "nghia": "lập tức, ngay tức khắc ~",
+      "giaiThich": "Hai phó từ cho biết hành động xảy ra ngay sau một thời điểm hay sự việc nào đó, gần như không có khoảng cách. 立刻 dùng được trong cả khẩu ngữ lẫn văn viết; 立即 trang trọng hơn, hay gặp trong thông báo, mệnh lệnh, văn bản. Cả hai dùng được để thuật lại lẫn để yêu cầu.",
+      "cachGhep": [
+        "S + 立刻 / 立即 + V: 他立刻回了电话",
+        "请 + 立即 / 立刻 + V: 请立即离开",
+        "一…，S + 立刻 + V: 老师一进教室，大家立刻安静了下来"
+      ],
+      "viDu": [
+        {
+          "c": "收到消息后，他立刻给我回了电话。",
+          "d": "Shōudào xiāoxi hòu, tā lìkè gěi wǒ huí le diànhuà.",
+          "v": "Nhận được tin, anh ấy lập tức gọi lại cho tôi."
+        },
+        {
+          "c": "请立即离开这里！",
+          "d": "Qǐng lìjí líkāi zhèlǐ!",
+          "v": "Xin hãy rời khỏi đây ngay lập tức!"
+        },
+        {
+          "c": "老师一进教室，大家立刻安静了下来。",
+          "d": "Lǎoshī yí jìn jiàoshì, dàjiā lìkè ānjìng le xiàlái.",
+          "v": "Thầy giáo vừa vào lớp, mọi người lập tức im lặng."
+        },
+        {
+          "c": "发现问题要立即向经理报告。",
+          "d": "Fāxiàn wèntí yào lìjí xiàng jīnglǐ bàogào.",
+          "v": "Phát hiện vấn đề phải lập tức báo cáo với giám đốc."
+        }
+      ],
+      "luuY": [
+        "Khác 马上: 马上 khẩu ngữ, và khoảng thời gian có thể dài hơn — nói được 马上就要毕业了, 春节马上就到了; 立刻 / 立即 chỉ dùng khi việc xảy ra tức thì nên các câu ấy không dùng 立刻.",
+        "Khác 连忙: 连忙 chỉ thuật lại việc đã xảy ra, không dùng trong mệnh lệnh; 立刻 / 立即 dùng được trong mệnh lệnh.",
+        "Chọn từ theo văn phong: nói chuyện thường ngày dùng 马上 / 立刻; biển báo, thông báo, quy định dùng 立即."
+      ],
+      "soSanh": [
+        "zh-hsk3-mashang",
+        "zh-hsk5-lianmang",
+        "zh-hsk6-suiji",
+        "zh-hsk6-dunshi"
+      ],
+      "tuKhoa": [
+        "liji",
+        "li ji",
+        "like",
+        "lập tức",
+        "ngay tức khắc"
+      ],
+      "quiz": [
+        {
+          "h": "听到这个消息，他（　）赶回了家。",
+          "lc": [
+            "立刻",
+            "曾经",
+            "一向",
+            "逐渐"
+          ],
+          "da": 0,
+          "gt": "Hành động xảy ra ngay sau khi nghe tin → 立刻. 曾经 là \"đã từng\", 逐渐 là \"dần dần\", 一向 là \"xưa nay\"."
+        },
+        {
+          "h": "Câu nào KHÔNG tự nhiên?",
+          "lc": [
+            "他立刻明白了我的意思。",
+            "新年立刻就要到了。",
+            "请立刻出发。",
+            "新年马上就要到了。"
+          ],
+          "da": 1,
+          "gt": "立刻 chỉ dùng cho việc xảy ra tức thì; nói một dịp \"sắp đến\" trong khoảng thời gian ngắn thì dùng 马上."
+        },
+        {
+          "h": "立即 thường gặp trong văn phong nào?",
+          "lc": [
+            "thơ ca cổ",
+            "chuyện trò thân mật với bạn bè",
+            "thông báo, mệnh lệnh, văn bản trang trọng",
+            "lời nói của trẻ nhỏ"
+          ],
+          "da": 2,
+          "gt": "立即 là từ trang trọng nhất trong nhóm 马上 / 立刻 / 立即, hay dùng trong thông báo và quy định."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-luxu",
+      "nhom": "Phó từ thời gian – cách thức",
+      "tieuDe": "陆续",
+      "mau": "S (số nhiều) + 陆续 + V…",
+      "nghia": "lần lượt, lục tục ~",
+      "giaiThich": "Phó từ cho biết hành động của nhiều người, nhiều vật (hoặc nhiều lần hành động) diễn ra kẻ trước người sau, lúc có lúc ngừng, chứ không cùng một lúc. Chủ thể hoặc đối tượng của hành động phải là số nhiều. Dạng lặp 陆陆续续 dùng trong khẩu ngữ.",
+      "cachGhep": [
+        "S (nhiều người / vật) + 陆续 + V + 了: 客人们陆续到了",
+        "S + 陆续 + V + số lượng + O: 陆续发表了十几篇文章",
+        "陆陆续续 + (地) + V"
+      ],
+      "viDu": [
+        {
+          "c": "客人们陆续到了。",
+          "d": "Kèrénmen lùxù dào le.",
+          "v": "Khách khứa lần lượt đến."
+        },
+        {
+          "c": "下课以后，学生们陆续离开了教室。",
+          "d": "Xiàkè yǐhòu, xuéshengmen lùxù líkāi le jiàoshì.",
+          "v": "Sau giờ học, học sinh lần lượt rời khỏi lớp."
+        },
+        {
+          "c": "春天来了，花儿陆续开了。",
+          "d": "Chūntiān lái le, huār lùxù kāi le.",
+          "v": "Mùa xuân đến, hoa lần lượt nở."
+        },
+        {
+          "c": "这几年，他陆续发表了十几篇文章。",
+          "d": "Zhè jǐ nián, tā lùxù fābiǎo le shí jǐ piān wénzhāng.",
+          "v": "Mấy năm nay, anh ấy lần lượt công bố hơn chục bài viết."
+        }
+      ],
+      "luuY": [
+        "Một người làm một việc một lần thì không dùng 陆续: 他陆续走进了教室 ✗ (trừ khi việc được làm nhiều lần, nhiều đối tượng như 陆续发表了十几篇文章).",
+        "Khác 纷纷: 纷纷 = nhiều người cùng dồn dập làm, gần như đồng loạt; 陆续 = trước sau nối nhau, có ngắt quãng.",
+        "Khác 连续: 连续 = liên tục không gián đoạn (连续三天下雨); 陆续 thì có gián đoạn."
+      ],
+      "soSanh": [
+        "zh-hsk5-fenfen",
+        "zh-hsk5-zhujian",
+        "zh-hsk5-buduan"
+      ],
+      "tuKhoa": [
+        "luxu",
+        "lu xu",
+        "lululuxu",
+        "lần lượt",
+        "lục tục"
+      ],
+      "quiz": [
+        {
+          "h": "电影快开始了，观众（　）走进了电影院。",
+          "lc": [
+            "一向",
+            "曾经",
+            "陆续",
+            "亲自"
+          ],
+          "da": 2,
+          "gt": "Nhiều người kẻ trước người sau đi vào → 陆续. 曾经 là \"đã từng\", 一向 là \"xưa nay\", 亲自 là \"đích thân\"."
+        },
+        {
+          "h": "陆续 hàm ý gì?",
+          "lc": [
+            "một người làm một lần duy nhất",
+            "làm một cách miễn cưỡng",
+            "tất cả cùng làm trong một khoảnh khắc",
+            "kẻ trước người sau, nối tiếp nhau có ngắt quãng"
+          ],
+          "da": 3,
+          "gt": "陆续 chỉ nhiều chủ thể / nhiều lần hành động nối tiếp nhau, không đồng thời."
+        },
+        {
+          "h": "Câu nào SAI?",
+          "lc": [
+            "他一个人陆续走进了教室。",
+            "订的书陆续寄到了。",
+            "同学们陆续交了作业。",
+            "代表们陆续发了言。"
+          ],
+          "da": 0,
+          "gt": "Một người bước vào lớp một lần thì không có sự \"lần lượt\"; 陆续 cần nhiều chủ thể hoặc nhiều lần hành động."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-fenfen",
+      "nhom": "Phó từ thời gian – cách thức",
+      "tieuDe": "纷纷",
+      "mau": "S (số nhiều) + 纷纷 + V… | N + 纷纷",
+      "nghia": "ùn ùn, tới tấp, nhao nhao ~",
+      "giaiThich": "Làm phó từ, 纷纷 cho biết nhiều người hoặc nhiều vật nối nhau dồn dập làm cùng một việc. Chủ ngữ phải là số nhiều. Làm tính từ, 纷纷 tả sự nhiều và lộn xộn (lời bàn tán, vật rơi), thường đứng sau: 议论纷纷, 大雪纷纷.",
+      "cachGhep": [
+        "S (số nhiều) + 纷纷 + V: 大家纷纷表示祝贺",
+        "N (vật) + 纷纷 + V: 树叶纷纷落下",
+        "N + 纷纷 (vị ngữ): 议论纷纷"
+      ],
+      "viDu": [
+        {
+          "c": "听到这个好消息，大家纷纷表示祝贺。",
+          "d": "Tīngdào zhège hǎo xiāoxi, dàjiā fēnfēn biǎoshì zhùhè.",
+          "v": "Nghe tin vui này, mọi người tới tấp chúc mừng."
+        },
+        {
+          "c": "下课铃一响，同学们纷纷跑出教室。",
+          "d": "Xiàkè líng yì xiǎng, tóngxuémen fēnfēn pǎo chū jiàoshì.",
+          "v": "Chuông tan học vừa reo, các bạn học sinh ùa ra khỏi lớp."
+        },
+        {
+          "c": "秋天到了，树叶纷纷落下。",
+          "d": "Qiūtiān dào le, shùyè fēnfēn luòxià.",
+          "v": "Mùa thu đến, lá cây lả tả rơi."
+        },
+        {
+          "c": "对于这件事，大家议论纷纷。",
+          "d": "Duìyú zhè jiàn shì, dàjiā yìlùn fēnfēn.",
+          "v": "Về việc này, mọi người bàn tán xôn xao."
+        }
+      ],
+      "luuY": [
+        "Chủ ngữ số ít không dùng 纷纷: 小王纷纷举手 ✗.",
+        "Khác 陆续: 陆续 = lần lượt, trước sau, có ngắt quãng; 纷纷 = nhiều người dồn dập, gần như cùng lúc, không theo thứ tự.",
+        "Khác 都: 都 chỉ nói \"tất cả đều\"; 纷纷 còn tả khí thế đông đảo, tới tấp."
+      ],
+      "soSanh": [
+        "zh-hsk5-luxu",
+        "zh-hsk5-fenbie",
+        "zh-hsk1-dou"
+      ],
+      "tuKhoa": [
+        "fenfen",
+        "fen fen",
+        "tới tấp",
+        "ùn ùn",
+        "nhao nhao",
+        "xôn xao"
+      ],
+      "quiz": [
+        {
+          "h": "比赛结束后，记者们（　）向冠军提问。",
+          "lc": [
+            "纷纷",
+            "一向",
+            "至今",
+            "曾经"
+          ],
+          "da": 0,
+          "gt": "Nhiều phóng viên dồn dập đặt câu hỏi → 纷纷. 曾经 là \"đã từng\", 一向 là \"xưa nay\", 至今 là \"đến nay\"."
+        },
+        {
+          "h": "Câu nào SAI?",
+          "lc": [
+            "同学们纷纷举手回答问题。",
+            "小王纷纷举手回答问题。",
+            "人们纷纷议论这件事。",
+            "雪花纷纷落下。"
+          ],
+          "da": 1,
+          "gt": "纷纷 đòi chủ ngữ số nhiều; một mình 小王 thì không thể \"tới tấp\" giơ tay."
+        },
+        {
+          "h": "纷纷 khác 陆续 thế nào?",
+          "lc": [
+            "纷纷 dùng cho một người; 陆续 dùng cho nhiều người",
+            "hai từ hoàn toàn như nhau",
+            "纷纷: nhiều người dồn dập gần như cùng lúc; 陆续: lần lượt trước sau",
+            "纷纷 chỉ dùng cho tương lai; 陆续 chỉ dùng cho quá khứ"
+          ],
+          "da": 2,
+          "gt": "Cả hai đều cần nhiều chủ thể, nhưng 纷纷 nhấn sự đông đảo, dồn dập còn 陆续 nhấn thứ tự trước sau có ngắt quãng."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-qinzi",
+      "nhom": "Phó từ thời gian – cách thức",
+      "tieuDe": "亲自",
+      "mau": "S + 亲自 + V…",
+      "nghia": "đích thân, tự mình ~",
+      "giaiThich": "Phó từ nhấn mạnh rằng chính người đó trực tiếp làm chứ không giao cho người khác, thường vì coi trọng việc ấy; hay dùng với người có vị trí cao hoặc bận rộn. Chỉ đứng trước động từ.",
+      "cachGhep": [
+        "S + 亲自 + V…: 校长亲自迎接",
+        "S + 得 / 要 / 会 + 亲自 + V: 我得亲自去一趟",
+        "是 + S + 亲自 + V + 的: 是奶奶亲自做的"
+      ],
+      "viDu": [
+        {
+          "c": "校长亲自到机场迎接客人。",
+          "d": "Xiàozhǎng qīnzì dào jīchǎng yíngjiē kèrén.",
+          "v": "Hiệu trưởng đích thân ra sân bay đón khách."
+        },
+        {
+          "c": "这件事很重要，我得亲自去一趟。",
+          "d": "Zhè jiàn shì hěn zhòngyào, wǒ děi qīnzì qù yí tàng.",
+          "v": "Việc này rất quan trọng, tôi phải đích thân đi một chuyến."
+        },
+        {
+          "c": "这顿饭是奶奶亲自做的。",
+          "d": "Zhè dùn fàn shì nǎinai qīnzì zuò de.",
+          "v": "Bữa cơm này do chính tay bà nấu."
+        },
+        {
+          "c": "经理亲自给每位员工发了奖金。",
+          "d": "Jīnglǐ qīnzì gěi měi wèi yuángōng fā le jiǎngjīn.",
+          "v": "Giám đốc đích thân phát tiền thưởng cho từng nhân viên."
+        }
+      ],
+      "luuY": [
+        "亲自 là phó từ, chỉ đứng trước động từ: 亲自的信 ✗.",
+        "Khác 自己: 自己 trung tính \"tự mình\" (我自己做饭); 亲自 thêm ý trang trọng, coi trọng. Việc sinh hoạt thường ngày của bản thân không cần 亲自 (我亲自吃饭 nghe buồn cười).",
+        "Cùng họ: 亲手 (tự tay), 亲眼 (tận mắt), 亲耳 (chính tai), 亲口 (chính miệng) — chọn theo bộ phận thực hiện. Khác 特意: 特意 nhấn làm riêng vì một mục đích."
+      ],
+      "soSanh": [
+        "zh-hsk5-teyi",
+        "zh-hsk5-ti",
+        "zh-hsk5-fenbie"
+      ],
+      "tuKhoa": [
+        "qinzi",
+        "qin zi",
+        "qinshou",
+        "qinyan",
+        "đích thân",
+        "tự mình"
+      ],
+      "quiz": [
+        {
+          "h": "为了表示感谢，总经理（　）给他打了电话。",
+          "lc": [
+            "纷纷",
+            "至今",
+            "陆续",
+            "亲自"
+          ],
+          "da": 3,
+          "gt": "Người có vị trí cao trực tiếp gọi điện → 亲自. 陆续 và 纷纷 cần nhiều chủ thể, 至今 là \"đến nay\"."
+        },
+        {
+          "h": "我亲眼看见的 nghĩa là gì?",
+          "lc": [
+            "tôi tận mắt nhìn thấy",
+            "tôi nghe người khác kể lại",
+            "tôi chưa nhìn thấy bao giờ",
+            "tôi nhắm mắt cũng thấy"
+          ],
+          "da": 0,
+          "gt": "亲眼 = tận mắt, cùng họ với 亲自 (đích thân), 亲手 (tự tay), 亲耳 (chính tai)."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "他写亲自了这封信。",
+            "这封信是他亲自写的。",
+            "这封信亲自他是写的。",
+            "这是他亲自的信。"
+          ],
+          "da": 1,
+          "gt": "亲自 là phó từ, đứng ngay trước động từ (写); không làm định ngữ cho danh từ và không đứng sau động từ."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-fenbie",
+      "nhom": "Phó từ thời gian – cách thức",
+      "tieuDe": "分别",
+      "mau": "S + 分别 + V… | A、B + 分别 + 是 / V + X、Y",
+      "nghia": "riêng rẽ, lần lượt từng ~; tương ứng là ~",
+      "giaiThich": "Làm phó từ, 分别 có hai cách dùng. (1) Làm riêng với từng đối tượng, không làm chung: 分别谈话, 分别处理. (2) \"Lần lượt tương ứng\": hai dãy khớp nhau theo thứ tự (A ứng với X, B ứng với Y). Ngoài ra 分别 còn là động từ \"chia tay, xa nhau\" và danh từ \"sự khác biệt\".",
+      "cachGhep": [
+        "S + 分别 + V + (từng đối tượng): 分别跟每个学生谈话",
+        "A 和 B + 分别 + V + X 和 Y: 分别来自北京和上海",
+        "Động từ: (跟 + người) + 分别; danh từ: 有什么分别"
+      ],
+      "viDu": [
+        {
+          "c": "老师分别跟每个学生谈了话。",
+          "d": "Lǎoshī fēnbié gēn měi gè xuésheng tán le huà.",
+          "v": "Thầy giáo nói chuyện riêng với từng học sinh."
+        },
+        {
+          "c": "小王和小李分别来自北京和上海。",
+          "d": "Xiǎo Wáng hé Xiǎo Lǐ fēnbié láizì Běijīng hé Shànghǎi.",
+          "v": "Tiểu Vương và Tiểu Lý lần lượt đến từ Bắc Kinh và Thượng Hải."
+        },
+        {
+          "c": "这两个问题要分别处理。",
+          "d": "Zhè liǎng gè wèntí yào fēnbié chǔlǐ.",
+          "v": "Hai vấn đề này phải xử lý riêng từng cái."
+        },
+        {
+          "c": "我们分别已经十年了。",
+          "d": "Wǒmen fēnbié yǐjīng shí nián le.",
+          "v": "Chúng tôi xa nhau đã mười năm rồi."
+        }
+      ],
+      "luuY": [
+        "Ở nghĩa \"tương ứng\", hai dãy phải khớp thứ tự: 小王和小李分别来自北京和上海 = Vương – Bắc Kinh, Lý – Thượng Hải.",
+        "Khác 各自: 各自 là đại từ \"mỗi người tự mình\" (我们各自回家); 分别 là phó từ nhấn việc được làm tách riêng với từng đối tượng.",
+        "Khác 纷纷: 纷纷 = nhiều người dồn dập cùng làm; 分别 = tách ra, từng cái một."
+      ],
+      "soSanh": [
+        "zh-hsk5-fenfen",
+        "zh-hsk5-qinzi",
+        "zh-hsk5-lingwai"
+      ],
+      "tuKhoa": [
+        "fenbie",
+        "fen bie",
+        "riêng rẽ",
+        "lần lượt tương ứng",
+        "chia tay"
+      ],
+      "quiz": [
+        {
+          "h": "我的两个姐姐（　）在医院和银行工作。",
+          "lc": [
+            "至今",
+            "分别",
+            "纷纷",
+            "陆续"
+          ],
+          "da": 1,
+          "gt": "Hai người ứng với hai nơi theo thứ tự → 分别. 纷纷 và 陆续 tả nhiều người nối nhau làm một việc, 至今 là \"đến nay\"."
+        },
+        {
+          "h": "Trong câu 分别十年后，他们又见面了, 分别 nghĩa là gì?",
+          "lc": [
+            "sự khác nhau",
+            "lần lượt từng người",
+            "chia tay, xa cách",
+            "phân biệt đúng sai"
+          ],
+          "da": 2,
+          "gt": "Ở đây 分别 là động từ \"xa nhau\": sau mười năm xa cách, họ gặp lại."
+        },
+        {
+          "h": "A 和 B 分别是老师和医生 nghĩa là gì?",
+          "lc": [
+            "A và B không phải giáo viên cũng không phải bác sĩ",
+            "A và B đều vừa là giáo viên vừa là bác sĩ",
+            "A là bác sĩ, B là giáo viên",
+            "A là giáo viên, B là bác sĩ"
+          ],
+          "da": 3,
+          "gt": "分别 khớp hai dãy theo đúng thứ tự: A – 老师, B – 医生."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-yizai-zaisan",
+      "nhom": "Phó từ thời gian – cách thức",
+      "tieuDe": "一再 / 再三",
+      "mau": "S + 一再 / 再三 + V… | V + 再三",
+      "nghia": "hết lần này đến lần khác, nhiều lần ~",
+      "giaiThich": "Hai phó từ cho biết một hành động được lặp lại nhiều lần. 再三 thường đi với hành động có chủ ý bằng lời nói hoặc suy nghĩ (考虑, 强调, 请求, 叮嘱, 解释) và có thể đứng SAU động từ: 考虑再三. 一再 chỉ đứng trước động từ, dùng được cả cho việc không mong muốn lặp lại (一再出错, 一再推迟).",
+      "cachGhep": [
+        "S + 一再 + V: 一再提醒, 一再表示, 一再推迟",
+        "S + 再三 + V: 再三考虑, 再三强调",
+        "V + 再三: 考虑再三, 叮嘱再三"
+      ],
+      "viDu": [
+        {
+          "c": "妈妈一再提醒我出门要带钥匙。",
+          "d": "Māma yízài tíxǐng wǒ chūmén yào dài yàoshi.",
+          "v": "Mẹ nhắc đi nhắc lại tôi ra ngoài phải mang chìa khoá."
+        },
+        {
+          "c": "他一再表示感谢。",
+          "d": "Tā yízài biǎoshì gǎnxiè.",
+          "v": "Anh ấy nhiều lần bày tỏ lời cảm ơn."
+        },
+        {
+          "c": "我再三考虑，最后决定接受这份工作。",
+          "d": "Wǒ zàisān kǎolǜ, zuìhòu juédìng jiēshòu zhè fèn gōngzuò.",
+          "v": "Tôi cân nhắc nhiều lần, cuối cùng quyết định nhận công việc này."
+        },
+        {
+          "c": "考虑再三，她还是拒绝了。",
+          "d": "Kǎolǜ zàisān, tā háishi jùjué le.",
+          "v": "Sau khi cân nhắc nhiều lần, cô ấy vẫn từ chối."
+        }
+      ],
+      "luuY": [
+        "一 trước 再 (thanh 4) đọc thanh 2: yízài.",
+        "Vị trí: 考虑再三 ✓ nhưng 考虑一再 ✗ — chỉ 再三 mới đứng sau động từ.",
+        "Khác 又 / 再: 又 / 再 chỉ thêm MỘT lần nữa (又来了, 再说一遍); 一再 / 再三 nói đã lặp NHIỀU lần và có ý nhấn mạnh. Khác 不断: 不断 là liên tục không ngừng trong một quá trình."
+      ],
+      "soSanh": [
+        "zh-hsk5-buduan",
+        "zh-hsk2-zai-you",
+        "zh-hsk6-luci"
+      ],
+      "tuKhoa": [
+        "yizai",
+        "yi zai",
+        "zaisan",
+        "nhiều lần",
+        "hết lần này đến lần khác",
+        "nhắc đi nhắc lại"
+      ],
+      "quiz": [
+        {
+          "h": "我（　）考虑，还是决定不去了。",
+          "lc": [
+            "至今",
+            "再三",
+            "纷纷",
+            "陆续"
+          ],
+          "da": 1,
+          "gt": "Suy nghĩ đi suy nghĩ lại nhiều lần → 再三考虑. 纷纷 và 陆续 cần nhiều chủ thể, 至今 là \"đến nay\"."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "他考虑一再，才做了决定。",
+            "他考虑了一再三。",
+            "他考虑再三，才做了决定。",
+            "他再三的考虑决定才。"
+          ],
+          "da": 2,
+          "gt": "Chỉ 再三 mới có thể đứng sau động từ (考虑再三); 一再 luôn đứng trước động từ."
+        },
+        {
+          "h": "一再 nghĩa là gì?",
+          "lc": [
+            "chỉ một lần duy nhất",
+            "từ từ từng bước",
+            "ngay lập tức",
+            "hết lần này đến lần khác"
+          ],
+          "da": 3,
+          "gt": "一再 = lặp đi lặp lại nhiều lần (一再提醒: nhắc đi nhắc lại)."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-yiran-rengran",
+      "nhom": "Phó từ thời gian – cách thức",
+      "tieuDe": "依然 / 仍然",
+      "mau": "S + 依然 / 仍然 + V / Adj…",
+      "nghia": "vẫn, vẫn cứ ~ (như cũ)",
+      "giaiThich": "Hai phó từ cho biết tình trạng tiếp tục như trước, không thay đổi dù thời gian trôi qua hoặc dù có điều kiện bất lợi. Hay dùng sau vế nhượng bộ (虽然 / 尽管…). 仍然 là từ văn viết thông dụng; 依然 mang màu sắc văn chương hơn. Khẩu ngữ dùng 还是 / 还.",
+      "cachGhep": [
+        "S + 仍然 / 依然 + V / Adj: 这里依然很美",
+        "虽然 / 尽管…，S + 仍然 / 依然 + …",
+        "S + 仍然 + 没(有) / 不 + V: 仍然没有放弃"
+      ],
+      "viDu": [
+        {
+          "c": "十年过去了，这里依然很美。",
+          "d": "Shí nián guòqù le, zhèlǐ yīrán hěn měi.",
+          "v": "Mười năm trôi qua, nơi đây vẫn rất đẹp."
+        },
+        {
+          "c": "虽然失败了很多次，他仍然没有放弃。",
+          "d": "Suīrán shībài le hěn duō cì, tā réngrán méiyǒu fàngqì.",
+          "v": "Tuy thất bại rất nhiều lần, anh ấy vẫn không bỏ cuộc."
+        },
+        {
+          "c": "下班以后，他仍然在办公室工作。",
+          "d": "Xiàbān yǐhòu, tā réngrán zài bàngōngshì gōngzuò.",
+          "v": "Sau giờ tan làm, anh ấy vẫn làm việc ở văn phòng."
+        },
+        {
+          "c": "尽管已经八十岁了，爷爷依然每天早起锻炼。",
+          "d": "Jǐnguǎn yǐjīng bāshí suì le, yéye yīrán měi tiān zǎo qǐ duànliàn.",
+          "v": "Dù đã tám mươi tuổi, ông vẫn dậy sớm tập thể dục mỗi ngày."
+        }
+      ],
+      "luuY": [
+        "Mức trang trọng: 还 / 还是 (khẩu ngữ) → 仍然 (văn viết) → 依然 (văn viết, văn chương). Nói chuyện thường ngày dùng 依然 nghe hơi kiểu cách.",
+        "Khác 一直 / 始终: hai từ này nhấn sự liên tục suốt một khoảng thời gian; 仍然 / 依然 nhấn \"đến thời điểm sau vẫn như trước\", thường đối chiếu với một thay đổi được chờ đợi.",
+        "Vị trí: đứng sau chủ ngữ, trước vị ngữ; không đứng đầu câu trước chủ ngữ."
+      ],
+      "soSanh": [
+        "zh-hsk2-hai",
+        "zh-hsk5-shizhong",
+        "zh-hsk3-yizhi",
+        "zh-hsk4-jinguan"
+      ],
+      "tuKhoa": [
+        "yiran",
+        "yi ran",
+        "rengran",
+        "reng ran",
+        "vẫn",
+        "vẫn như cũ"
+      ],
+      "quiz": [
+        {
+          "h": "吃了三天药，他的感冒（　）没好。",
+          "lc": [
+            "亲自",
+            "陆续",
+            "曾经",
+            "仍然"
+          ],
+          "da": 3,
+          "gt": "Tình trạng tiếp tục như trước dù đã uống thuốc → 仍然. 曾经 là \"đã từng\", 陆续 là \"lần lượt\", 亲自 là \"đích thân\"."
+        },
+        {
+          "h": "Từ khẩu ngữ nào tương đương 仍然?",
+          "lc": [
+            "还是",
+            "立刻",
+            "连忙",
+            "曾经"
+          ],
+          "da": 0,
+          "gt": "还是 / 还 là cách nói thường ngày của 仍然 (vẫn). 连忙 là \"vội vàng\", 曾经 là \"đã từng\", 立刻 là \"lập tức\"."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "依然虽然很累，他坚持工作。",
+            "虽然很累，他依然坚持工作。",
+            "虽然很累，他坚持工作依然了。",
+            "虽然很累，他坚持依然工作吗。"
+          ],
+          "da": 1,
+          "gt": "依然 đứng sau chủ ngữ của vế sau và trước động từ (坚持); không đứng trước 虽然 và không chen sau động từ."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-zhijin",
+      "nhom": "Phó từ thời gian – cách thức",
+      "tieuDe": "至今",
+      "mau": "S + 至今 + (还 / 仍 / 仍然 / 没 / 未) + V…",
+      "nghia": "cho đến nay, đến giờ (vẫn) ~",
+      "giaiThich": "Phó từ văn viết, nghĩa là \"cho tới bây giờ\" (= 到现在). Cho biết một tình trạng bắt đầu từ trước và kéo dài đến lúc nói; hay đi với 还 / 仍然 (vẫn còn) hoặc phủ định 没(有) / 未 (vẫn chưa). Đứng trước hoặc sau chủ ngữ.",
+      "cachGhep": [
+        "S + 至今 + 还 / 仍然 + V: 至今还在使用",
+        "S + 至今 + 没(有) + V: 至今没有消息",
+        "(从 / 自) + thời điểm + 至今: 从去年至今"
+      ],
+      "viDu": [
+        {
+          "c": "这座桥是一百年前建的，至今还在使用。",
+          "d": "Zhè zuò qiáo shì yìbǎi nián qián jiàn de, zhìjīn hái zài shǐyòng.",
+          "v": "Cây cầu này xây từ một trăm năm trước, đến nay vẫn đang sử dụng."
+        },
+        {
+          "c": "他去年出国了，至今没有消息。",
+          "d": "Tā qùnián chūguó le, zhìjīn méiyǒu xiāoxi.",
+          "v": "Anh ấy ra nước ngoài năm ngoái, đến nay không có tin tức gì."
+        },
+        {
+          "c": "那件事我至今还记得很清楚。",
+          "d": "Nà jiàn shì wǒ zhìjīn hái jìde hěn qīngchu.",
+          "v": "Việc đó đến giờ tôi vẫn nhớ rất rõ."
+        },
+        {
+          "c": "这个问题至今仍然没有答案。",
+          "d": "Zhège wèntí zhìjīn réngrán méiyǒu dá'àn.",
+          "v": "Vấn đề này đến nay vẫn chưa có lời giải."
+        }
+      ],
+      "luuY": [
+        "至 đã nghĩa là \"đến\" nên không thêm 到: 到至今 ✗.",
+        "Khác 到现在: cùng nghĩa, 到现在 khẩu ngữ; 至今 dùng trong văn viết, tin tức.",
+        "Khác 曾经: 曾经 nói việc đã qua và đã kết thúc; 至今 nói tình trạng còn kéo dài tới hiện tại. Khác 自从: 自从 nêu mốc bắt đầu, 至今 nêu điểm đến là hiện tại (自从毕业以后，至今没见过面)."
+      ],
+      "soSanh": [
+        "zh-hsk5-yiran-rengran",
+        "zh-hsk5-cengjing",
+        "zh-hsk5-shizhong",
+        "zh-hsk5-zicong"
+      ],
+      "tuKhoa": [
+        "zhijin",
+        "zhi jin",
+        "dao xianzai",
+        "đến nay",
+        "cho đến giờ"
+      ],
+      "quiz": [
+        {
+          "h": "他十年前离开了家乡，（　）没有回去过。",
+          "lc": [
+            "至今",
+            "连忙",
+            "纷纷",
+            "逐步"
+          ],
+          "da": 0,
+          "gt": "Tình trạng kéo dài từ trước tới bây giờ, đi với phủ định → 至今. 连忙 là \"vội vàng\", 逐步 là \"từng bước\", 纷纷 cần nhiều chủ thể."
+        },
+        {
+          "h": "至今 nghĩa là gì?",
+          "lc": [
+            "từ nay về sau",
+            "cho đến nay",
+            "ngay bây giờ",
+            "hồi trước"
+          ],
+          "da": 1,
+          "gt": "至 (đến) + 今 (nay) = cho đến bây giờ."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "这个习惯他保持着至今还。",
+            "这个习惯他至今明年还保持着。",
+            "这个习惯他至今还保持着。",
+            "这个习惯他到至今还保持着。"
+          ],
+          "da": 2,
+          "gt": "至今 đứng trước vị ngữ (还保持着), không thêm 到 phía trước, không đi cùng mốc tương lai và không đặt sau động từ."
+        }
+      ]
+    }
+  ]
+}

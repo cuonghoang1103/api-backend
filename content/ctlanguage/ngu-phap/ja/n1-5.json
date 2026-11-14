@@ -1,0 +1,1252 @@
+{
+  "nn": "ja",
+  "cap": "N1",
+  "diem": [
+    {
+      "id": "ja-n1-yue-ni",
+      "nhom": "Nguyên nhân – mục đích",
+      "tieuDe": "〜ゆえ（に）／〜ゆえの",
+      "mau": "N（の）／thể thường（Aな: な・である; N: である）+（が）ゆえ（に） ・ N1 + ゆえの + N2",
+      "nghia": "vì ~, do ~ (nêu nguyên nhân, văn viết trang trọng, hơi cổ)",
+      "giaiThich": "ゆえ（故）nghĩa là \"lý do\". 〜ゆえに nêu nguyên nhân giống 〜ために／〜から nhưng mang giọng văn viết cứng, cổ, gặp trong bài luận, diễn văn, thư từ trang trọng. Thường thêm が phía trước để nhấn (〜がゆえに). Khi bổ nghĩa danh từ dùng ゆえの. Đầu câu có thể dùng それゆえ（に） = \"vì thế\".",
+      "cachGhep": [
+        "N +（の）+ ゆえ（に）: 貧しさゆえに ・ 病気のゆえに",
+        "Thể thường +（が）+ ゆえ（に）: 経験が浅いゆえ ・ 女性であるがゆえに",
+        "Aな + な／である +（が）ゆえに: 未熟なゆえに ・ 未熟であるがゆえに",
+        "N1 + ゆえの + N2: 若さゆえの過ち",
+        "Đầu câu: それゆえ（に）、〜"
+      ],
+      "viDu": [
+        {
+          "c": "貧しさゆえに、彼は進学をあきらめざるを得なかった。",
+          "d": "まずしさゆえに、かれは しんがくを あきらめざるを えなかった。",
+          "v": "Vì nghèo, anh ấy đành phải từ bỏ việc học lên."
+        },
+        {
+          "c": "若さゆえの過ちは、誰にでもあるものだ。",
+          "d": "わかさゆえの あやまちは、だれにでも あるものだ。",
+          "v": "Sai lầm do tuổi trẻ thì ai cũng có."
+        },
+        {
+          "c": "経験が浅いゆえ、ご迷惑をおかけすることもあるかと存じます。",
+          "d": "けいけんが あさいゆえ、ごめいわくを おかけすることも あるかと ぞんじます。",
+          "v": "Vì kinh nghiệm còn non nên tôi e rằng sẽ có lúc làm phiền quý vị."
+        },
+        {
+          "c": "女性であるがゆえに差別されることがあってはならない。",
+          "d": "じょせいで あるが ゆえに さべつされることが あっては ならない。",
+          "v": "Không được phép để xảy ra chuyện bị phân biệt đối xử chỉ vì là phụ nữ."
+        }
+      ],
+      "luuY": [
+        "Không dùng trong hội thoại thường ngày: nói chuyện dùng 〜から／〜ので／〜ために. Dùng ゆえに với bạn bè nghe rất kịch.",
+        "Khác 〜こととて: こととて là nêu lý do để XIN LỖI, xin thông cảm; còn ゆえに chỉ nêu nguyên nhân một cách khách quan, vế sau là kết quả gì cũng được.",
+        "Bổ nghĩa danh từ phải là ゆえの + N (若さゆえの過ち), không viết ゆえにの."
+      ],
+      "soSanh": [
+        "ja-n3-tame-ni-nguyen-nhan",
+        "ja-n1-koto-tote",
+        "ja-n2-dake-ni"
+      ],
+      "tuKhoa": [
+        "yue ni",
+        "yueni",
+        "yue no",
+        "ga yue ni",
+        "sore yue",
+        "vì",
+        "nguyên nhân",
+        "văn viết"
+      ],
+      "quiz": [
+        {
+          "h": "彼は責任感が強い（　）、一人で悩みを抱え込んでしまった。",
+          "lc": [
+            "ゆえに",
+            "べく",
+            "まじき",
+            "ゆえの"
+          ],
+          "da": 0,
+          "gt": "Sau chỗ trống là một mệnh đề kết quả nên dùng ゆえに \"vì ~\". ゆえの phải đứng trước danh từ; べく chỉ mục đích và ghép với V-る; まじき đứng trước danh từ với nghĩa \"không được phép\"."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "若いなゆえに、失敗した。",
+            "若さゆえの失敗は、許されることが多い。",
+            "若さゆえにの失敗は、許されることが多い。",
+            "若さにゆえ、失敗した。"
+          ],
+          "da": 1,
+          "gt": "Bổ nghĩa danh từ dùng N + ゆえの + N (若さゆえの失敗). Không có dạng ゆえにの; tính từ い nối thẳng (若いゆえに), không thêm な; ゆえ đứng ngay sau danh từ, không chen に vào trước."
+        },
+        {
+          "h": "〜ゆえに thích hợp nhất với văn phong nào?",
+          "lc": [
+            "Tin nhắn cho bạn thân",
+            "Nói chuyện với trẻ nhỏ",
+            "Bài luận, diễn văn, thư từ trang trọng",
+            "Lời rao bán hàng ngoài chợ"
+          ],
+          "da": 2,
+          "gt": "ゆえに là cách nói cổ, cứng của văn viết trang trọng. Trong giao tiếp thân mật người ta dùng から, ので."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-koto-tote",
+      "nhom": "Nguyên nhân – mục đích",
+      "tieuDe": "〜こととて",
+      "mau": "Thể thường（N: の; Aな: な）+ こととて",
+      "nghia": "vì ~ nên (xin thông cảm, xin lượng thứ)",
+      "giaiThich": "Nêu hoàn cảnh làm lý do để xin lỗi hoặc xin người nghe thông cảm cho một điều chưa chu đáo. Là cách nói cổ, trang trọng, hay gặp trong thư từ, lời chào hỏi lịch sự. Vế sau thường là lời xin lỗi, lời xin lượng thứ hoặc việc không hay đã xảy ra. Hay đi với dạng phủ định cổ 〜ぬ (知らぬこととて, 慣れぬこととて).",
+      "cachGhep": [
+        "N + の + こととて: 子供のこととて ・ 休み中のこととて",
+        "V thể thường + こととて: 子供のやったこととて",
+        "V-ない → V-ぬ + こととて: 知らぬこととて ・ 慣れぬこととて",
+        "Aな + な + こととて: 急なこととて"
+      ],
+      "viDu": [
+        {
+          "c": "子供のやったこととて、どうか大目に見てやってください。",
+          "d": "こどもの やったこととて、どうか おおめに みてやってください。",
+          "v": "Vì là việc trẻ con làm, xin anh chị rộng lòng bỏ qua cho."
+        },
+        {
+          "c": "慣れぬこととて、不手際が多く、申し訳ございません。",
+          "d": "なれぬこととて、ふてぎわが おおく、もうしわけございません。",
+          "v": "Vì chưa quen việc nên có nhiều sơ suất, tôi thành thật xin lỗi."
+        },
+        {
+          "c": "休み中のこととて、連絡がつかず、ご返事が遅くなりました。",
+          "d": "やすみちゅうの こととて、れんらくが つかず、ごへんじが おそく なりました。",
+          "v": "Vì đang trong kỳ nghỉ nên không liên lạc được, tôi đã trả lời chậm."
+        },
+        {
+          "c": "何分にも急なこととて、十分な準備ができませんでした。",
+          "d": "なにぶんにも きゅうな こととて、じゅうぶんな じゅんびが できませんでした。",
+          "v": "Dù sao cũng vì việc quá gấp nên tôi đã không chuẩn bị được chu đáo."
+        }
+      ],
+      "luuY": [
+        "Vế sau không phải kết quả bất kỳ: gần như luôn là lời xin lỗi, xin thông cảm hoặc một điều không như ý. Không dùng để nêu nguyên nhân của việc tốt.",
+        "Khác 〜ゆえに: ゆえに nêu nguyên nhân khách quan cho mọi loại kết quả; こととて là \"vì hoàn cảnh là thế nên mong được thông cảm\".",
+        "Danh từ phải có の (新人のこととて), không nối thẳng 新人こととて."
+      ],
+      "soSanh": [
+        "ja-n1-yue-ni",
+        "ja-n2-mono-dakara",
+        "ja-n3-tame-ni-nguyen-nhan"
+      ],
+      "tuKhoa": [
+        "koto tote",
+        "kototote",
+        "vì nên",
+        "xin thông cảm",
+        "xin lỗi",
+        "lý do"
+      ],
+      "quiz": [
+        {
+          "h": "知らぬ（　）、大変失礼いたしました。",
+          "lc": [
+            "ともなく",
+            "ものを",
+            "べく",
+            "こととて"
+          ],
+          "da": 3,
+          "gt": "知らぬこととて = \"vì không biết nên…\", theo sau là lời xin lỗi. ものを diễn tả tiếc nuối \"giá mà\"; ともなく là \"một cách vô thức\"; べく chỉ mục đích và phải ghép với V-る."
+        },
+        {
+          "h": "Vế sau của 〜こととて thường là gì?",
+          "lc": [
+            "Lời xin lỗi, lời xin thông cảm",
+            "Lời rủ rê cùng làm",
+            "Lời khoe thành tích",
+            "Mệnh lệnh cho người nghe"
+          ],
+          "da": 0,
+          "gt": "こととて nêu hoàn cảnh để xin người nghe lượng thứ, nên vế sau là lời xin lỗi hoặc một điều chưa chu đáo; không đi với mệnh lệnh, lời rủ hay việc tốt."
+        },
+        {
+          "h": "Cách ghép nào đúng?",
+          "lc": [
+            "新人なのこととて、ご迷惑をおかけしました。",
+            "新人のこととて、ご迷惑をおかけしました。",
+            "新人こととて、ご迷惑をおかけしました。",
+            "新人だこととて、ご迷惑をおかけしました。"
+          ],
+          "da": 1,
+          "gt": "Danh từ nối với こととて bằng の: 新人のこととて. Không nối thẳng, không dùng だ hay なの."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-temae",
+      "nhom": "Nguyên nhân – mục đích",
+      "tieuDe": "〜手前",
+      "mau": "V-る／V-た／V-ている + 手前 ・ N + の + 手前",
+      "nghia": "vì đã (lỡ) ~ nên…; trước mặt ~ nên… (giữ thể diện)",
+      "giaiThich": "Diễn tả: vì mình đã nói / đã làm một việc, hoặc vì đang ở trước mặt ai đó, nên xét về thể diện không thể làm khác. Vế sau thường là 〜わけにはいかない, 〜ざるを得ない, 〜なければならない, 〜ない. Dùng được cả trong hội thoại lẫn văn viết.",
+      "cachGhep": [
+        "V-た + 手前: 約束した手前 ・ 言った手前",
+        "V-る／V-ている + 手前: 部下に勧めている手前",
+        "N + の + 手前: 子供の手前 ・ 客の手前"
+      ],
+      "viDu": [
+        {
+          "c": "「任せてください」と言った手前、今さらできないとは言えない。",
+          "d": "「まかせてください」と いった てまえ、いまさら できないとは いえない。",
+          "v": "Đã lỡ nói \"cứ giao cho tôi\" rồi, giờ không thể bảo là không làm được."
+        },
+        {
+          "c": "子供の手前、夫婦げんかはしたくない。",
+          "d": "こどもの てまえ、ふうふげんかは したくない。",
+          "v": "Trước mặt con cái, tôi không muốn vợ chồng cãi nhau."
+        },
+        {
+          "c": "部下に禁煙を勧めている手前、自分が吸うわけにはいかない。",
+          "d": "ぶかに きんえんを すすめている てまえ、じぶんが すうわけには いかない。",
+          "v": "Vì đang khuyên cấp dưới bỏ thuốc nên bản thân tôi không thể hút được."
+        },
+        {
+          "c": "必ず行くと約束した手前、雨でも出かけざるを得なかった。",
+          "d": "かならず いくと やくそくした てまえ、あめでも でかけざるを えなかった。",
+          "v": "Vì đã hứa chắc chắn sẽ đi nên dù mưa tôi vẫn buộc phải ra khỏi nhà."
+        }
+      ],
+      "luuY": [
+        "手前 ở đây không phải nghĩa vị trí \"phía trước\" (駅の手前 = ngay trước ga). Dịch là \"vì đã lỡ…\", \"trước mặt…\".",
+        "Khác 〜以上（は）／〜からには: hai mẫu đó nêu lý do để khẳng định nghĩa vụ, quyết tâm nói chung (\"đã ~ thì đương nhiên phải\"); còn 〜手前 nhấn vào THỂ DIỆN, sự ngại với người khác.",
+        "Danh từ cần の: 客の手前 (không viết 客手前)."
+      ],
+      "soSanh": [
+        "ja-n2-ijou-wa",
+        "ja-n2-kara-niwa",
+        "ja-n2-ue-wa",
+        "ja-n3-wake-niwa-ikanai"
+      ],
+      "tuKhoa": [
+        "temae",
+        "te mae",
+        "vì đã lỡ",
+        "trước mặt",
+        "thể diện",
+        "giữ thể diện"
+      ],
+      "quiz": [
+        {
+          "h": "手伝うと言った（　）、途中でやめるわけにはいかない。",
+          "lc": [
+            "あっての",
+            "ゆえの",
+            "手前の",
+            "手前"
+          ],
+          "da": 3,
+          "gt": "V-た + 手前 + mệnh đề: \"vì đã lỡ nói sẽ giúp nên…\". 手前の, あっての, ゆえの đều phải có danh từ theo sau nên không nối được với mệnh đề."
+        },
+        {
+          "h": "Cách ghép nào đúng?",
+          "lc": [
+            "客の手前、怒るわけにはいかなかった。",
+            "客手前、怒るわけにはいかなかった。",
+            "客に手前、怒るわけにはいかなかった。",
+            "客な手前、怒るわけにはいかなかった。"
+          ],
+          "da": 0,
+          "gt": "Danh từ nối với 手前 bằng の: 客の手前 \"trước mặt khách\". Không nối thẳng, không dùng な hay に."
+        },
+        {
+          "h": "〜手前 nhấn mạnh điều gì?",
+          "lc": [
+            "Mục đích của hành động",
+            "Vì thể diện, vì ngại với người khác nên không thể làm khác",
+            "Việc xảy ra ngay trước một thời điểm",
+            "Một việc không thể thực hiện về mặt vật lý"
+          ],
+          "da": 1,
+          "gt": "〜手前 nêu lý do gắn với thể diện: đã nói, đã làm, hoặc đang ở trước mặt ai nên buộc phải giữ lời, giữ ý. Nó không chỉ thời điểm, mục đích hay khả năng."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-atte-no",
+      "nhom": "Nguyên nhân – mục đích",
+      "tieuDe": "〜あっての",
+      "mau": "N1 +（が）あっての + N2",
+      "nghia": "chính nhờ có N1 mới có N2; có N1 thì mới có N2",
+      "giaiThich": "Nhấn mạnh rằng N2 chỉ tồn tại, chỉ thành được là nhờ có N1; hàm ý nếu không có N1 thì không có N2. Thường dùng để bày tỏ sự trân trọng, biết ơn hoặc nhắc nhở điều cốt lõi. N2 hay là もの／こと khi không cần nhắc lại danh từ.",
+      "cachGhep": [
+        "N1 + あっての + N2: お客様あっての商売",
+        "N1 + あっての + もの／こと + だ: 皆さんの協力あってのものです",
+        "Có thể thêm が: 努力があっての成功"
+      ],
+      "viDu": [
+        {
+          "c": "お客様あっての商売ですから、サービスには手を抜けません。",
+          "d": "おきゃくさま あっての しょうばいですから、サービスには てを ぬけません。",
+          "v": "Có khách hàng mới có việc buôn bán, nên không thể làm qua loa khâu phục vụ."
+        },
+        {
+          "c": "今日の成功は、皆さんの協力あってのものです。",
+          "d": "きょうの せいこうは、みなさんの きょうりょく あっての ものです。",
+          "v": "Thành công hôm nay có được chính là nhờ sự hợp tác của mọi người."
+        },
+        {
+          "c": "健康あっての人生だ。無理をしてはいけない。",
+          "d": "けんこう あっての じんせいだ。むりを しては いけない。",
+          "v": "Có sức khoẻ mới có cuộc đời. Không được làm quá sức."
+        },
+        {
+          "c": "どんな名選手の活躍も、日々の練習あってのことだ。",
+          "d": "どんな めいせんしゅの かつやくも、ひびの れんしゅう あっての ことだ。",
+          "v": "Thành tích của bất kỳ tuyển thủ giỏi nào cũng đều nhờ có luyện tập hằng ngày."
+        }
+      ],
+      "luuY": [
+        "Trước và sau あっての đều là DANH TỪ. Không ghép với động từ: 支えるあっての ✗ → 支えあっての.",
+        "Khác 〜おかげで: おかげで nối hai mệnh đề \"nhờ ~ mà (kết quả tốt)\"; 〜あっての là cụm bổ nghĩa danh từ, nhấn \"không có N1 thì không có N2\".",
+        "Khác 〜なくして（は）／〜なしに（は）: hai mẫu đó nói theo chiều phủ định \"không có N1 thì không thể…\"; あっての nói theo chiều khẳng định."
+      ],
+      "soSanh": [
+        "ja-n1-nakushite",
+        "ja-n1-nashi-ni",
+        "ja-n3-okage-de",
+        "ja-n1-ba-koso"
+      ],
+      "tuKhoa": [
+        "atte no",
+        "atteno",
+        "nhờ có",
+        "có mới có",
+        "chính nhờ"
+      ],
+      "quiz": [
+        {
+          "h": "読者（　）作家だ。読者を大切にしなければならない。",
+          "lc": [
+            "あってに",
+            "あっての",
+            "あるの",
+            "ありの"
+          ],
+          "da": 1,
+          "gt": "N1 + あっての + N2: \"có độc giả mới có nhà văn\". Các dạng あるの, あってに, ありの không tạo thành mẫu này."
+        },
+        {
+          "h": "「健康あっての仕事だ」 có nghĩa là gì?",
+          "lc": [
+            "Công việc không liên quan đến sức khoẻ",
+            "Dù khoẻ vẫn phải làm việc",
+            "Có sức khoẻ thì mới làm việc được",
+            "Làm việc để có sức khoẻ"
+          ],
+          "da": 2,
+          "gt": "N1 あっての N2 = N2 có được là nhờ N1; không có sức khoẻ thì không có công việc. Mẫu này không mang nghĩa \"dù\", cũng không chỉ mục đích."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "家族の支えあってに成功した。",
+            "家族が支えるあっての成功だ。",
+            "家族の支えにあっての成功だ。",
+            "家族の支えあっての成功だ。"
+          ],
+          "da": 3,
+          "gt": "Trước あっての là danh từ nối thẳng (支えあっての), sau là danh từ (成功). Không chen に, không dùng động từ 支える, không có dạng あってに."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-beku",
+      "nhom": "Nguyên nhân – mục đích",
+      "tieuDe": "〜べく",
+      "mau": "V-る + べく（する → すべく／するべく）",
+      "nghia": "để ~, nhằm ~ (mục đích; văn viết trang trọng)",
+      "giaiThich": "Nêu mục đích với ý \"với ý định làm ~ nên đã / đang làm…\". Là cách nói cứng của văn viết, tương đương 〜ために／〜ようと思って. Vế sau là hành động có ý chí của cùng chủ thể, thường đã hoặc đang thực hiện; không dùng mệnh lệnh, nhờ vả, rủ rê ở vế sau.",
+      "cachGhep": [
+        "V-る + べく: 医者になるべく ・ 会うべく",
+        "する → すべく（hoặc するべく）: 解決すべく ・ 実現するべく"
+      ],
+      "viDu": [
+        {
+          "c": "彼は医者になるべく、毎日遅くまで勉強している。",
+          "d": "かれは いしゃに なるべく、まいにち おそくまで べんきょうしている。",
+          "v": "Để trở thành bác sĩ, ngày nào anh ấy cũng học đến khuya."
+        },
+        {
+          "c": "問題を早期に解決すべく、対策チームが設けられた。",
+          "d": "もんだいを そうきに かいけつすべく、たいさくチームが もうけられた。",
+          "v": "Nhằm sớm giải quyết vấn đề, một nhóm đối sách đã được lập ra."
+        },
+        {
+          "c": "締め切りに間に合わせるべく、徹夜で作業を続けた。",
+          "d": "しめきりに まにあわせるべく、てつやで さぎょうを つづけた。",
+          "v": "Để kịp hạn chót, tôi đã thức trắng đêm làm tiếp."
+        },
+        {
+          "c": "恩師に会うべく、十年ぶりに故郷を訪れた。",
+          "d": "おんしに あうべく、じゅうねんぶりに こきょうを おとずれた。",
+          "v": "Để gặp lại thầy cũ, tôi đã về thăm quê sau mười năm."
+        }
+      ],
+      "luuY": [
+        "Vế sau không dùng mệnh lệnh, nhờ vả: 合格すべく、頑張ってください ✗ → 合格するために、頑張ってください.",
+        "Khác 〜ために: nghĩa như nhau nhưng べく chỉ dùng trong văn viết / lời nói trang trọng và chỉ ghép với động từ thể từ điển (không có Nのべく).",
+        "Khác 〜んがため（に）: んがため mang sắc thái quyết tâm cao, mục đích lớn lao hơn. Đừng nhầm 〜になるべく \"để trở thành\" với phó từ なるべく \"cố gắng hết mức\"."
+      ],
+      "soSanh": [
+        "ja-n4-tame-ni-mokuteki",
+        "ja-n1-n-ga-tame",
+        "ja-n1-beku-mo-nai",
+        "ja-n3-beki-da"
+      ],
+      "tuKhoa": [
+        "beku",
+        "subeku",
+        "để",
+        "nhằm",
+        "mục đích",
+        "văn viết"
+      ],
+      "quiz": [
+        {
+          "h": "真相を明らかに（　）、調査を進めている。",
+          "lc": [
+            "すべく",
+            "しべく",
+            "すべき",
+            "したべく"
+          ],
+          "da": 0,
+          "gt": "する ghép với べく thành すべく (hoặc するべく). しべく, したべく sai cách ghép; すべき là dạng \"nên làm\" và phải đứng trước danh từ hoặc だ, không nối được mệnh đề mục đích."
+        },
+        {
+          "h": "Câu nào dùng 〜べく KHÔNG tự nhiên?",
+          "lc": [
+            "試験に合格すべく、毎日図書館に通っている。",
+            "試験に合格すべく、頑張ってください。",
+            "優勝すべく、厳しい練習を重ねてきた。",
+            "夢を実現すべく、会社を辞めて留学した。"
+          ],
+          "da": 1,
+          "gt": "Vế sau của べく không dùng lời nhờ vả, mệnh lệnh như 頑張ってください. Các câu còn lại có vế sau là hành động có ý chí mà chính chủ thể đang / đã làm nên tự nhiên."
+        },
+        {
+          "h": "Nhận xét nào đúng về 〜べく?",
+          "lc": [
+            "Là cách nói thân mật, chỉ dùng với bạn bè",
+            "Ghép với danh từ bằng の",
+            "Là cách nói mục đích của văn viết trang trọng, ghép với V-る",
+            "Diễn tả sự cấm đoán"
+          ],
+          "da": 2,
+          "gt": "べく nêu mục đích, giọng văn viết cứng, ghép với động từ thể từ điển. Cấm đoán là べからず; べく không ghép với danh từ."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-n-ga-tame",
+      "nhom": "Nguyên nhân – mục đích",
+      "tieuDe": "〜んがため（に）／〜んがための",
+      "mau": "V-ない（bỏ ない）+ んがため（に）（する → せんがため） ・ 〜んがための + N",
+      "nghia": "để ~ bằng được, vì mục đích ~ (quyết tâm cao; văn viết cổ)",
+      "giaiThich": "ん ở đây là dạng cổ của む (ý chí), KHÔNG phải phủ định. Mẫu diễn tả mục đích mà chủ thể quyết đạt bằng được, thường là mục tiêu lớn, hệ trọng (sống còn, chiến thắng, giữ địa vị). Chỉ dùng trong văn viết, giọng cứng và cổ. Vế sau không dùng mệnh lệnh, nhờ vả.",
+      "cachGhep": [
+        "V-ない bỏ ない + んがため（に）: 勝つ → 勝たんがため ・ 生きる → 生きんがため",
+        "する → せんがため（に）: 実現せんがため",
+        "〜んがための + N: 守らんがための嘘"
+      ],
+      "viDu": [
+        {
+          "c": "彼は試合に勝たんがため、どんな手段も選ばなかった。",
+          "d": "かれは しあいに かたんがため、どんな しゅだんも えらばなかった。",
+          "v": "Để thắng trận bằng được, anh ta đã không từ thủ đoạn nào."
+        },
+        {
+          "c": "生きんがために、やむを得ず盗みを働いたという。",
+          "d": "いきんがために、やむを えず ぬすみを はたらいたと いう。",
+          "v": "Nghe nói vì để sống sót, anh ta bất đắc dĩ phải ăn trộm."
+        },
+        {
+          "c": "夢を実現せんがため、彼女は単身海外へ渡った。",
+          "d": "ゆめを じつげんせんがため、かのじょは たんしん かいがいへ わたった。",
+          "v": "Để thực hiện ước mơ, cô ấy đã một mình ra nước ngoài."
+        },
+        {
+          "c": "それは自分の地位を守らんがための嘘にすぎない。",
+          "d": "それは じぶんの ちいを まもらんがための うそに すぎない。",
+          "v": "Đó chẳng qua là lời nói dối nhằm giữ địa vị của bản thân."
+        }
+      ],
+      "luuY": [
+        "Người Việt hay hiểu nhầm ん là phủ định vì ghép từ gốc của thể ない. 勝たんがため = \"để thắng\", không phải \"để không thắng\".",
+        "Khác 〜べく: cả hai là mục đích văn viết, nhưng んがため mạnh hơn, hàm ý \"bằng mọi giá\"; không dùng cho việc thường ngày như đi mua đồ.",
+        "する thành せんがため (không phải しんがため)."
+      ],
+      "soSanh": [
+        "ja-n1-beku",
+        "ja-n4-tame-ni-mokuteki",
+        "ja-n1-n-bakari-ni"
+      ],
+      "tuKhoa": [
+        "n ga tame",
+        "ngatame",
+        "n ga tame ni",
+        "sen ga tame",
+        "để bằng được",
+        "mục đích",
+        "quyết tâm"
+      ],
+      "quiz": [
+        {
+          "h": "真実を世に伝え（　）、彼は記事を書き続けた。",
+          "lc": [
+            "ないんがため",
+            "るんがため",
+            "んがため",
+            "たんがため"
+          ],
+          "da": 2,
+          "gt": "Lấy gốc của thể ない (伝えない → 伝え) rồi thêm んがため: 伝えんがため. Không ghép với thể từ điển, thể ない nguyên dạng hay thể た."
+        },
+        {
+          "h": "「する」 ghép với mẫu này thành dạng nào?",
+          "lc": [
+            "さんがため",
+            "すんがため",
+            "しんがため",
+            "せんがため"
+          ],
+          "da": 3,
+          "gt": "する có dạng đặc biệt せんがため (từ gốc cổ せ). Ba dạng còn lại không tồn tại."
+        },
+        {
+          "h": "「勝たんがために練習する」 có nghĩa là gì?",
+          "lc": [
+            "Luyện tập để thắng bằng được",
+            "Luyện tập để không thắng",
+            "Dù thắng vẫn luyện tập",
+            "Vì không thắng nên luyện tập"
+          ],
+          "da": 0,
+          "gt": "ん ở đây là trợ động từ ý chí cổ, không phải phủ định, nên nghĩa là \"để thắng (bằng được)\". Mẫu này chỉ mục đích, không chỉ nguyên nhân hay nhượng bộ."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-majiki",
+      "nhom": "Cấm đoán – nghĩa vụ (văn cổ)",
+      "tieuDe": "〜まじき",
+      "mau": "V-る + まじき + N（thường gặp: N として／に + あるまじき + N）",
+      "nghia": "không được phép ~, không thể chấp nhận ở (người có cương vị đó)",
+      "giaiThich": "Dùng để phê phán: xét theo cương vị, nghề nghiệp, tư cách của một người thì hành vi đó là không được phép. Hầu như chỉ gặp trong cụm 〜として／〜に あるまじき + 行為・発言・態度 và 許すまじき. Văn viết cứng, cổ. Luôn đứng trước danh từ.",
+      "cachGhep": [
+        "N（cương vị）+ として／に + あるまじき + N: 医師としてあるまじき行為",
+        "許す + まじき + N: 許すまじき犯罪",
+        "する → すまじき（ít dùng）"
+      ],
+      "viDu": [
+        {
+          "c": "患者の秘密を漏らすなど、医師としてあるまじき行為だ。",
+          "d": "かんじゃの ひみつを もらすなど、いしとして あるまじき こういだ。",
+          "v": "Để lộ bí mật của bệnh nhân là hành vi không thể chấp nhận ở một bác sĩ."
+        },
+        {
+          "c": "それは教育者にあるまじき発言だと批判された。",
+          "d": "それは きょういくしゃに あるまじき はつげんだと ひはんされた。",
+          "v": "Phát ngôn đó bị chỉ trích là điều một nhà giáo không được phép nói."
+        },
+        {
+          "c": "弱い者をいじめるとは、人として許すまじきことだ。",
+          "d": "よわい ものを いじめるとは、ひととして ゆるすまじき ことだ。",
+          "v": "Bắt nạt kẻ yếu là điều không thể tha thứ khi đã là con người."
+        },
+        {
+          "c": "公務員にあるまじき不正が明らかになった。",
+          "d": "こうむいんに あるまじき ふせいが あきらかに なった。",
+          "v": "Một vụ sai phạm không thể chấp nhận ở công chức đã bị phanh phui."
+        }
+      ],
+      "luuY": [
+        "まじき luôn bổ nghĩa cho danh từ đứng sau; không đặt cuối câu (あるまじきだ ✗).",
+        "Khác 〜べきではない: べきではない là lời khuyên / phán đoán \"không nên\" dùng rộng rãi; 〜まじき là lời lên án gay gắt gắn với cương vị, và chỉ đi với vài động từ (ある, 許す).",
+        "Khác 〜べからざる: べからざる + N cũng là \"không được ~\" nhưng không gắn với cương vị (欠くべからざる = không thể thiếu)."
+      ],
+      "soSanh": [
+        "ja-n1-bekarazu",
+        "ja-n3-beki-da",
+        "ja-n1-taru"
+      ],
+      "tuKhoa": [
+        "majiki",
+        "aru majiki",
+        "arumajiki",
+        "yurusu majiki",
+        "không được phép",
+        "không thể chấp nhận"
+      ],
+      "quiz": [
+        {
+          "h": "うそをついて人をだますとは、教師に（　）行為だ。",
+          "lc": [
+            "あったまじき",
+            "あるまじな",
+            "あるまじき",
+            "ありまじき"
+          ],
+          "da": 2,
+          "gt": "まじき ghép với động từ thể từ điển: ある + まじき → あるまじき + danh từ. Không ghép với gốc ます, thể た, cũng không có dạng まじな."
+        },
+        {
+          "h": "Ngay sau 〜まじき phải là gì?",
+          "lc": [
+            "Trợ từ を",
+            "Động từ thể て",
+            "だ／です để kết thúc câu",
+            "Danh từ (行為, 発言, 態度…)"
+          ],
+          "da": 3,
+          "gt": "まじき là dạng bổ nghĩa danh từ nên luôn có danh từ theo sau; không kết câu trực tiếp bằng だ và không nối với động từ."
+        },
+        {
+          "h": "「政治家にあるまじき発言」 có nghĩa là gì?",
+          "lc": [
+            "Phát ngôn mà một chính trị gia không được phép có",
+            "Phát ngôn rất đúng kiểu chính trị gia",
+            "Phát ngôn chưa từng có chính trị gia nào nói",
+            "Phát ngôn mà chính trị gia nào cũng nói"
+          ],
+          "da": 0,
+          "gt": "N に あるまじき N = việc không được phép có ở người mang cương vị N, hàm ý lên án. Nó không có nghĩa \"đúng chất\" hay \"ai cũng nói\"."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-bekarazu",
+      "nhom": "Cấm đoán – nghĩa vụ (văn cổ)",
+      "tieuDe": "〜べからず／〜べからざる",
+      "mau": "V-る + べからず（cuối câu） ・ V-る + べからざる + N（する → すべからず）",
+      "nghia": "cấm ~, không được ~ ・ (N) không được phép ~, không thể ~",
+      "giaiThich": "べからず là dạng phủ định cổ của べし, dùng ở cuối câu để cấm đoán một cách cứng rắn trên biển báo, bảng nội quy, châm ngôn. べからざる là dạng đứng trước danh từ: \"N mà không được / không thể ~\" (欠くべからざる = không thể thiếu, 許すべからざる = không thể tha thứ). Không dùng trong hội thoại.",
+      "cachGhep": [
+        "V-る + べからず: 入るべからず ・ 立ち入るべからず",
+        "V-る + べからざる + N: 欠くべからざる存在 ・ 許すべからざる行為",
+        "する → すべからず／すべからざる（cũng có するべからず）"
+      ],
+      "viDu": [
+        {
+          "c": "芝生に入るべからず。",
+          "d": "しばふに はいるべからず。",
+          "v": "Cấm vào bãi cỏ."
+        },
+        {
+          "c": "「関係者以外立ち入るべからず」という札が掛かっている。",
+          "d": "「かんけいしゃ いがい たちいるべからず」と いう ふだが かかっている。",
+          "v": "Có treo tấm biển \"Không phận sự cấm vào\"."
+        },
+        {
+          "c": "彼はチームにとって欠くべからざる存在だ。",
+          "d": "かれは チームに とって かくべからざる そんざいだ。",
+          "v": "Anh ấy là người không thể thiếu đối với đội."
+        },
+        {
+          "c": "それは人として許すべからざる行為である。",
+          "d": "それは ひととして ゆるすべからざる こういで ある。",
+          "v": "Đó là hành vi không thể tha thứ khi đã là con người."
+        }
+      ],
+      "luuY": [
+        "Đây là chữ trên biển báo, văn bản; không dùng để nói trực tiếp với người khác. Nói thì dùng 〜てはいけない, 〜ないでください, hoặc thể cấm chỉ (入るな).",
+        "べからず kết thúc câu, べからざる phải có danh từ theo sau — đừng đổi chỗ (欠くべからず存在 ✗).",
+        "Khác 〜まじき: まじき lên án hành vi trái với cương vị (教師にあるまじき); べからざる chỉ nói \"không được / không thể ~\" nói chung."
+      ],
+      "soSanh": [
+        "ja-n4-meirei-kinshi",
+        "ja-n1-majiki",
+        "ja-n3-beki-da",
+        "ja-n5-te-wa-ikemasen"
+      ],
+      "tuKhoa": [
+        "bekarazu",
+        "bekarazaru",
+        "kaku bekarazaru",
+        "cấm",
+        "không được",
+        "biển báo"
+      ],
+      "quiz": [
+        {
+          "h": "ここにごみを捨てる（　）。",
+          "lc": [
+            "べからず",
+            "まじき",
+            "べく",
+            "べからざる"
+          ],
+          "da": 0,
+          "gt": "Kết thúc câu cấm đoán trên biển báo dùng べからず. べからざる và まじき phải có danh từ theo sau; べく chỉ mục đích và cần vế sau."
+        },
+        {
+          "h": "彼は、わが社にとって欠く（　）人材だ。",
+          "lc": [
+            "べからず",
+            "べからざる",
+            "べくもない",
+            "べからずの"
+          ],
+          "da": 1,
+          "gt": "Trước danh từ 人材 dùng dạng bổ nghĩa べからざる: 欠くべからざる人材 \"nhân tài không thể thiếu\". べからず chỉ đứng cuối câu, không thêm の; べくもない nghĩa là \"không thể nào (mong, biết…)\" và không dùng trong cụm này."
+        },
+        {
+          "h": "〜べからず thường xuất hiện ở đâu?",
+          "lc": [
+            "Tin nhắn hỏi thăm",
+            "Cuộc trò chuyện giữa bạn bè",
+            "Biển báo, bảng nội quy, châm ngôn",
+            "Lời mời lịch sự với khách"
+          ],
+          "da": 2,
+          "gt": "べからず là lối cấm đoán cổ, cứng, chỉ gặp trên biển báo, nội quy, câu châm ngôn; trong hội thoại không dùng."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-beku-mo-nai",
+      "nhom": "Cấm đoán – nghĩa vụ (văn cổ)",
+      "tieuDe": "〜べくもない",
+      "mau": "V-る + べくもない（する → すべくもない）",
+      "nghia": "không thể nào ~, chẳng có cách nào mà ~",
+      "giaiThich": "Diễn tả: xét hoàn cảnh thì việc đó hoàn toàn không thể, đến mong cũng không được. Chỉ đi với một số động từ như 望む, 知る, 比べる, 疑う, 及ぶ, 想像する. Văn viết cứng. Tương đương 〜はずがない／〜ようがない của cách nói thường.",
+      "cachGhep": [
+        "V-る + べくもない: 望むべくもない ・ 知るべくもない ・ 比べるべくもない",
+        "Quá khứ: 〜べくもなかった",
+        "する → すべくもない"
+      ],
+      "viDu": [
+        {
+          "c": "土地の高い都心では、庭付きの家など望むべくもない。",
+          "d": "とちの たかい としんでは、にわつきの いえなど のぞむべくも ない。",
+          "v": "Ở trung tâm thành phố đất đắt đỏ thì nhà có vườn là điều không thể nào mong được."
+        },
+        {
+          "c": "当時の私には、彼の本当の気持ちなど知るべくもなかった。",
+          "d": "とうじの わたしには、かれの ほんとうの きもちなど しるべくも なかった。",
+          "v": "Tôi lúc đó không có cách nào biết được cảm xúc thật của anh ấy."
+        },
+        {
+          "c": "彼の実力は、私などとは比べるべくもない。",
+          "d": "かれの じつりょくは、わたしなどとは くらべるべくも ない。",
+          "v": "Thực lực của anh ấy thì người như tôi không thể nào so được."
+        },
+        {
+          "c": "証拠がそろっている以上、彼の有罪は疑うべくもない。",
+          "d": "しょうこが そろっている いじょう、かれの ゆうざいは うたがうべくも ない。",
+          "v": "Một khi chứng cứ đã đầy đủ thì việc anh ta có tội là không thể nghi ngờ."
+        }
+      ],
+      "luuY": [
+        "Không ghép tuỳ ý với mọi động từ; hãy nhớ theo cụm: 望むべくもない, 知るべくもない, 比べるべくもない, 疑うべくもない.",
+        "Khác 〜べく: べく (không có もない) chỉ MỤC ĐÍCH \"để ~\"; べくもない là \"không thể nào ~\". Hai nghĩa không liên quan.",
+        "Khác 〜ようがない: ようがない là \"không có cách / phương tiện để làm\", dùng được trong hội thoại; べくもない là văn viết và nhấn \"hoàn toàn nằm ngoài khả năng\"."
+      ],
+      "soSanh": [
+        "ja-n2-you-ga-nai",
+        "ja-n2-uru-enai",
+        "ja-n1-beku",
+        "ja-n3-wake-ga-nai"
+      ],
+      "tuKhoa": [
+        "beku mo nai",
+        "bekumonai",
+        "nozomu beku mo nai",
+        "không thể nào",
+        "chẳng có cách nào"
+      ],
+      "quiz": [
+        {
+          "h": "この成績では、一流大学への合格など望む（　）。",
+          "lc": [
+            "ないべくも",
+            "べくにない",
+            "べくもない",
+            "べきもない"
+          ],
+          "da": 2,
+          "gt": "Mẫu đúng là V-る + べくもない: 望むべくもない \"không thể nào mong\". Ba dạng còn lại không tồn tại."
+        },
+        {
+          "h": "「彼の気持ちは知るべくもなかった」 có nghĩa là gì?",
+          "lc": [
+            "Không muốn biết cảm xúc của anh ấy",
+            "Không cần biết cảm xúc của anh ấy",
+            "Không được phép biết cảm xúc của anh ấy",
+            "Không có cách nào biết được cảm xúc của anh ấy"
+          ],
+          "da": 3,
+          "gt": "べくもない diễn tả sự không thể (không có cách nào), không phải sự cấm đoán (べからず), không cần thiết (までもない) hay ý muốn."
+        },
+        {
+          "h": "Nhận xét nào đúng về 〜べくもない?",
+          "lc": [
+            "Là cách nói cứng của văn viết, đi với ít động từ như 望む, 知る, 比べる",
+            "Là cách nói thân mật, ghép được với mọi động từ",
+            "Dùng trên biển báo để cấm đoán",
+            "Dùng để nêu mục đích của hành động"
+          ],
+          "da": 0,
+          "gt": "べくもない là văn viết và chỉ đi với một nhóm nhỏ động từ. Nêu mục đích là 〜べく; cấm đoán trên biển báo là 〜べからず."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-te-shikarubeki",
+      "nhom": "Cấm đoán – nghĩa vụ (văn cổ)",
+      "tieuDe": "〜てしかるべきだ",
+      "mau": "V-て + しかるべきだ",
+      "nghia": "đương nhiên phải ~, ~ mới là thoả đáng",
+      "giaiThich": "Người nói cho rằng xét theo lẽ phải, theo tình hình thì việc đó xảy ra / được làm mới là đúng. Thường hàm ý thực tế chưa được như vậy nên có sắc thái đòi hỏi, phê phán. Hay đi với dạng bị động và あって. Giọng trang trọng, dùng trong bài bình luận, phát biểu ý kiến.",
+      "cachGhep": [
+        "V-て + しかるべきだ: 謝罪してしかるべきだ",
+        "Bị động: V-られて + しかるべきだ: 評価されてしかるべきだ",
+        "N + が + あって + しかるべきだ: 説明があってしかるべきだ",
+        "Quá khứ (trách việc đã không xảy ra): 〜てしかるべきだった"
+      ],
+      "viDu": [
+        {
+          "c": "これだけの被害が出たのだから、会社は謝罪してしかるべきだ。",
+          "d": "これだけの ひがいが でたのだから、かいしゃは しゃざいして しかるべきだ。",
+          "v": "Thiệt hại đến mức này thì công ty đương nhiên phải xin lỗi."
+        },
+        {
+          "c": "彼の長年の功績は、もっと評価されてしかるべきだ。",
+          "d": "かれの ながねんの こうせきは、もっと ひょうかされて しかるべきだ。",
+          "v": "Công lao nhiều năm của ông ấy lẽ ra phải được đánh giá cao hơn."
+        },
+        {
+          "c": "重要な変更なのだから、事前に説明があってしかるべきだった。",
+          "d": "じゅうような へんこうなのだから、じぜんに せつめいが あって しかるべきだった。",
+          "v": "Vì là thay đổi quan trọng nên lẽ ra phải có giải thích từ trước."
+        },
+        {
+          "c": "税金の使い道は、国民に公開されてしかるべきである。",
+          "d": "ぜいきんの つかいみちは、こくみんに こうかいされて しかるべきで ある。",
+          "v": "Việc sử dụng tiền thuế đương nhiên phải được công khai với người dân."
+        }
+      ],
+      "luuY": [
+        "Ghép với thể て, không ghép với thể từ điển: 謝罪するしかるべきだ ✗.",
+        "Khác 〜べきだ: べきだ nêu thẳng nghĩa vụ \"nên / phải làm\"; 〜てしかるべきだ là lời nhận định \"việc đó xảy ra mới hợp lẽ\", khách quan và trang trọng hơn, hay dùng với bị động.",
+        "Khác 〜ずにはすまない: ずにはすまない nói \"không làm thì không xong chuyện\" (bị hoàn cảnh ép), còn てしかるべきだ nói về lẽ phải."
+      ],
+      "soSanh": [
+        "ja-n3-beki-da",
+        "ja-n1-zu-niwa-sumanai",
+        "ja-n2-to-iu-mono-da"
+      ],
+      "tuKhoa": [
+        "te shikarubeki",
+        "teshikarubeki",
+        "shikaru beki",
+        "đương nhiên phải",
+        "thoả đáng",
+        "lẽ ra phải"
+      ],
+      "quiz": [
+        {
+          "h": "まじめに努力した人は、きちんと報われ（　）。",
+          "lc": [
+            "るしかるべきだ",
+            "てしかるべきだ",
+            "ないしかるべきだ",
+            "たしかるべきだ"
+          ],
+          "da": 1,
+          "gt": "しかるべきだ ghép với thể て: 報われてしかるべきだ \"đương nhiên phải được đền đáp\". Không ghép với thể từ điển, thể た hay thể ない."
+        },
+        {
+          "h": "〜てしかるべきだ thường hàm ý gì?",
+          "lc": [
+            "Việc đó tuyệt đối bị cấm",
+            "Việc đó không cần thiết",
+            "Lẽ ra phải như vậy, nhưng thực tế chưa được như vậy",
+            "Người nói không kìm được cảm xúc"
+          ],
+          "da": 2,
+          "gt": "Mẫu này nêu điều \"mới là thoả đáng\", nên thường dùng khi thực tế chưa đạt, mang ý đòi hỏi hoặc phê phán. Nó không diễn tả cấm đoán, sự không cần thiết hay cảm xúc."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "予定を変えるなら、前もって連絡しかるべきだ。",
+            "予定を変えるなら、前もって連絡があるしかるべきだ。",
+            "予定を変えるなら、前もって連絡がありしかるべきだ。",
+            "予定を変えるなら、前もって連絡があってしかるべきだ。"
+          ],
+          "da": 3,
+          "gt": "Dạng đúng là thể て + しかるべきだ: 連絡があってしかるべきだ. Không dùng gốc ます (あり), thể từ điển (ある) hay nối thẳng danh từ."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-zu-niwa-okanai",
+      "nhom": "Tất yếu – bắt buộc",
+      "tieuDe": "〜ずにはおかない／〜ないではおかない",
+      "mau": "V-ない（bỏ ない）+ ずにはおかない（する → せずにはおかない） ・ V-ない + ではおかない",
+      "nghia": "tất sẽ khiến ~ (tự nhiên gây ra); nhất định phải ~ cho bằng được",
+      "giaiThich": "Có hai cách dùng. (1) Chủ ngữ là sự vật, sự việc: nó tự nhiên gây ra một phản ứng, cảm xúc ở người khác; động từ thường ở dạng sai khiến (感動させる, 考えさせる) hoặc là động từ tác động (招く). (2) Chủ ngữ là người: quyết tâm nhất định sẽ làm việc đó cho bằng được, không để yên. Văn viết, giọng mạnh.",
+      "cachGhep": [
+        "V-ない bỏ ない + ずにはおかない: 招かずにはおかない",
+        "する → せずにはおかない: 逮捕せずにはおかない",
+        "V sai khiến: 感動させずにはおかない",
+        "V-ない + ではおかない: 謝らせないではおかない"
+      ],
+      "viDu": [
+        {
+          "c": "この映画は、見る者を感動させずにはおかない。",
+          "d": "この えいがは、みる ものを かんどうさせずには おかない。",
+          "v": "Bộ phim này tất sẽ làm người xem xúc động."
+        },
+        {
+          "c": "彼の無責任な発言は、周囲の反発を招かずにはおかないだろう。",
+          "d": "かれの むせきにんな はつげんは、しゅういの はんぱつを まねかずには おかないだろう。",
+          "v": "Phát ngôn vô trách nhiệm của anh ta chắc chắn sẽ gây ra sự phản đối của những người xung quanh."
+        },
+        {
+          "c": "あんなひどいことを言われたのだから、謝らせないではおかない。",
+          "d": "あんな ひどい ことを いわれたのだから、あやまらせないでは おかない。",
+          "v": "Bị nói những lời quá đáng như thế, tôi nhất định phải bắt hắn xin lỗi."
+        },
+        {
+          "c": "警察は必ず犯人を逮捕せずにはおかないと断言した。",
+          "d": "けいさつは かならず はんにんを たいほせずには おかないと だんげんした。",
+          "v": "Cảnh sát khẳng định nhất định sẽ bắt bằng được thủ phạm."
+        }
+      ],
+      "luuY": [
+        "Khác 〜ずにはすまない: おかない = \"không để yên\", là tác động / ý chí hướng RA NGOÀI (gây ra cho người khác, hoặc quyết làm cho bằng được); すまない = \"không xong\", là việc mình BUỘC phải làm do hoàn cảnh, lẽ thường.",
+        "Khác 〜ずにはいられない: いられない là bản thân người nói không kìm được (泣かずにはいられない); おかない thì đối tượng chịu tác động là người khác.",
+        "する thành せずには (không phải しずには); động từ thường ở dạng sai khiến khi nói về cảm xúc của người khác."
+      ],
+      "soSanh": [
+        "ja-n1-zu-niwa-sumanai",
+        "ja-n2-zu-niwa-irarenai",
+        "ja-n2-zaru-wo-enai"
+      ],
+      "tuKhoa": [
+        "zu niwa okanai",
+        "zuniwaokanai",
+        "nai dewa okanai",
+        "sezu niwa okanai",
+        "tất sẽ khiến",
+        "nhất định phải",
+        "không để yên"
+      ],
+      "quiz": [
+        {
+          "h": "その写真は、人々に戦争の悲惨さを考えさせ（　）。",
+          "lc": [
+            "てはおかない",
+            "ずにはおく",
+            "ずにはおかない",
+            "ないにはおかない"
+          ],
+          "da": 2,
+          "gt": "Mẫu đúng: gốc thể ない + ずにはおかない (考えさせずにはおかない) = \"tất sẽ khiến người ta suy nghĩ\". Ba dạng còn lại không phải mẫu ngữ pháp này."
+        },
+        {
+          "h": "Nhận xét nào đúng khi so 〜ずにはおかない với 〜ずにはいられない?",
+          "lc": [
+            "おかない là cấm đoán, いられない là cho phép",
+            "Cả hai đều chỉ dùng cho cảm xúc của chính người nói",
+            "Hai mẫu thay thế cho nhau trong mọi câu",
+            "おかない: tác động lên người khác / quyết làm cho bằng được; いられない: bản thân không kìm được"
+          ],
+          "da": 3,
+          "gt": "ずにはおかない hướng ra ngoài: sự vật gây ra phản ứng ở người khác, hoặc người quyết làm bằng được. ずにはいられない là chính mình không nhịn được. Vì vậy chúng không thay thế cho nhau."
+        },
+        {
+          "h": "「する」 ghép với mẫu này thành dạng nào?",
+          "lc": [
+            "せずにはおかない",
+            "しずにはおかない",
+            "すずにはおかない",
+            "さずにはおかない"
+          ],
+          "da": 0,
+          "gt": "する + ず có dạng đặc biệt せず, nên là せずにはおかない. Các dạng khác không tồn tại."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-zu-niwa-sumanai",
+      "nhom": "Tất yếu – bắt buộc",
+      "tieuDe": "〜ずにはすまない／〜ないではすまない",
+      "mau": "V-ない（bỏ ない）+ ずにはすまない（する → せずにはすまない） ・ V-ない + ではすまない",
+      "nghia": "không ~ thì không xong; buộc phải ~ (xét theo lẽ thường, hoàn cảnh)",
+      "giaiThich": "Diễn tả: xét hoàn cảnh, lẽ thường xã hội hay trách nhiệm của bản thân thì không làm việc đó là không ổn, không thể cho qua. Thường là việc người ta không muốn làm (xin lỗi, đền bù, chịu trách nhiệm). Văn viết, giọng cứng.",
+      "cachGhep": [
+        "V-ない bỏ ない + ずにはすまない: 謝らずにはすまない",
+        "する → せずにはすまない: 弁償せずにはすまない",
+        "V-ない + ではすまない: 謝らないではすまない"
+      ],
+      "viDu": [
+        {
+          "c": "人の物を壊したのだから、弁償せずにはすまない。",
+          "d": "ひとの ものを こわしたのだから、べんしょうせずには すまない。",
+          "v": "Đã làm hỏng đồ của người ta thì không đền không xong."
+        },
+        {
+          "c": "これほどの不祥事では、社長も責任を取らずにはすまないだろう。",
+          "d": "これほどの ふしょうじでは、しゃちょうも せきにんを とらずには すまないだろう。",
+          "v": "Vụ bê bối lớn thế này thì e là giám đốc cũng không thể không chịu trách nhiệm."
+        },
+        {
+          "c": "約束を破ったのはこちらだから、謝らないではすまない。",
+          "d": "やくそくを やぶったのは こちらだから、あやまらないでは すまない。",
+          "v": "Bên thất hứa là mình nên không xin lỗi thì không xong."
+        },
+        {
+          "c": "検査の結果次第では、手術を受けずにはすまないかもしれない。",
+          "d": "けんさの けっか しだいでは、しゅじゅつを うけずには すまないかも しれない。",
+          "v": "Tuỳ kết quả xét nghiệm, có thể sẽ buộc phải phẫu thuật."
+        }
+      ],
+      "luuY": [
+        "Đừng nhầm với 〜ずにすむ (không có は, khẳng định): 謝らずにすんだ = \"đã KHỎI phải xin lỗi\" — nghĩa ngược hẳn.",
+        "Khác 〜ずにはおかない: おかない là tác động / quyết tâm hướng ra ngoài (\"không để yên\"); すまない là bản thân bị hoàn cảnh, lẽ thường buộc phải làm.",
+        "Khác 〜ざるを得ない: ざるを得ない là \"đành phải\" nói chung (không còn lựa chọn); ずにはすまない nhấn vào việc \"không làm thì không ổn với người khác / với xã hội\"."
+      ],
+      "soSanh": [
+        "ja-n1-zu-niwa-okanai",
+        "ja-n2-zaru-wo-enai",
+        "ja-n2-nai-wake-niwa-ikanai",
+        "ja-n5-nakereba-narimasen"
+      ],
+      "tuKhoa": [
+        "zu niwa sumanai",
+        "zuniwasumanai",
+        "nai dewa sumanai",
+        "sezu niwa sumanai",
+        "không xong",
+        "buộc phải"
+      ],
+      "quiz": [
+        {
+          "h": "大変な迷惑をかけたのだから、一言謝ら（　）。",
+          "lc": [
+            "ずにはすむ",
+            "ずにはすまない",
+            "ないにはすまない",
+            "なくはすまない"
+          ],
+          "da": 1,
+          "gt": "Mẫu đúng: gốc thể ない + ずにはすまない (謝らずにはすまない) = \"không xin lỗi thì không xong\". Các dạng còn lại sai cách ghép."
+        },
+        {
+          "h": "「お金を払わずにはすまない」 có nghĩa là gì?",
+          "lc": [
+            "Không kìm được nên trả tiền",
+            "Không trả tiền cũng xong",
+            "Không trả tiền thì không xong (buộc phải trả)",
+            "Nhất định bắt người khác trả tiền"
+          ],
+          "da": 2,
+          "gt": "ずにはすまない = không làm thì không ổn, tức là buộc phải làm. \"Không ~ cũng xong\" là 〜ずにすむ; \"không kìm được\" là 〜ずにはいられない; \"bắt bằng được\" gần với 〜ずにはおかない."
+        },
+        {
+          "h": "Câu nào có nghĩa \"buộc phải nhận lỗi\"?",
+          "lc": [
+            "非を認めずにすむ。",
+            "非を認めるまでもない。",
+            "非を認めるにはあたらない。",
+            "非を認めずにはすまない。"
+          ],
+          "da": 3,
+          "gt": "認めずにはすまない = không nhận thì không xong. 認めずにすむ = khỏi phải nhận; 認めるにはあたらない = không đáng phải nhận; 認めるまでもない = không cần đến mức phải nhận."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-wo-yoginaku-sareru",
+      "nhom": "Tất yếu – bắt buộc",
+      "tieuDe": "〜を余儀なくされる／〜を余儀なくさせる",
+      "mau": "N（danh từ chỉ hành động）+ を余儀なくされる ・ N + を余儀なくさせる",
+      "nghia": "buộc phải ~ (bị hoàn cảnh ép) ・ (hoàn cảnh) buộc ai phải ~",
+      "giaiThich": "余儀ない nghĩa là \"không còn cách nào khác\". 〜を余儀なくされる: chủ ngữ là người / tổ chức / kế hoạch CHỊU ảnh hưởng, bị hoàn cảnh ép phải làm điều không mong muốn. 〜を余儀なくさせる: chủ ngữ là HOÀN CẢNH, nguyên nhân, ép ai đó phải làm. Văn viết, hay gặp trong tin tức.",
+      "cachGhep": [
+        "Người / sự việc + は + N + を余儀なくされる: 大会は中止を余儀なくされた",
+        "Nguyên nhân + は +（người + に）+ N + を余儀なくさせる: 不況は多くの店に閉店を余儀なくさせた",
+        "N thường là: 中止, 変更, 延期, 辞任, 退職, 入院, 撤退, 避難"
+      ],
+      "viDu": [
+        {
+          "c": "台風の接近により、大会は中止を余儀なくされた。",
+          "d": "たいふうの せっきんに より、たいかいは ちゅうしを よぎなく された。",
+          "v": "Do bão đến gần, giải đấu buộc phải huỷ."
+        },
+        {
+          "c": "彼は病気のため、長期の入院を余儀なくされた。",
+          "d": "かれは びょうきの ため、ちょうきの にゅういんを よぎなく された。",
+          "v": "Vì bệnh, anh ấy buộc phải nằm viện dài ngày."
+        },
+        {
+          "c": "工場の閉鎖は、多くの従業員に転職を余儀なくさせた。",
+          "d": "こうじょうの へいさは、おおくの じゅうぎょういんに てんしょくを よぎなく させた。",
+          "v": "Việc đóng cửa nhà máy đã buộc nhiều công nhân phải đổi việc."
+        },
+        {
+          "c": "資金不足で、計画は大幅な変更を余儀なくされている。",
+          "d": "しきんぶそくで、けいかくは おおはばな へんこうを よぎなく されている。",
+          "v": "Do thiếu vốn, kế hoạch đang buộc phải thay đổi lớn."
+        }
+      ],
+      "luuY": [
+        "Trước を phải là DANH TỪ chỉ hành động (中止, 引っ越し), không phải động từ: 中止するを余儀なくされた ✗.",
+        "される hay させる tuỳ chủ ngữ: bên chịu thiệt → される; nguyên nhân gây ra → させる. Người Việt hay dùng lẫn vì tiếng Việt đều dịch \"buộc phải\".",
+        "Khác 〜ざるを得ない: ざるを得ない ghép với động từ và nói từ góc nhìn người làm (\"tôi đành phải\"); 〜を余儀なくされる ghép với danh từ, giọng tường thuật khách quan."
+      ],
+      "soSanh": [
+        "ja-n2-zaru-wo-enai",
+        "ja-n1-zu-niwa-sumanai",
+        "ja-n4-shieki-ukemi"
+      ],
+      "tuKhoa": [
+        "wo yoginaku sareru",
+        "yoginaku sareru",
+        "yoginaku saseru",
+        "yoginaku",
+        "buộc phải",
+        "bị ép",
+        "bất đắc dĩ"
+      ],
+      "quiz": [
+        {
+          "h": "大雪のため、列車は運休（　）。",
+          "lc": [
+            "を余儀なくなった",
+            "が余儀なくした",
+            "を余儀なくされた",
+            "に余儀なくされた"
+          ],
+          "da": 2,
+          "gt": "Danh từ hành động + を + 余儀なくされる: 運休を余儀なくされた \"buộc phải ngừng chạy\". Trợ từ là を; không có dạng 余儀なくした hay 余儀なくなった."
+        },
+        {
+          "h": "長引く不況は、多くの店に閉店を（　）。",
+          "lc": [
+            "余儀なくした",
+            "余儀なくなった",
+            "余儀なくされた",
+            "余儀なくさせた"
+          ],
+          "da": 3,
+          "gt": "Chủ ngữ 不況 là nguyên nhân ép các cửa hàng (店に) phải đóng cửa nên dùng 余儀なくさせた. 余儀なくされた dùng khi chủ ngữ là bên chịu ảnh hưởng; hai dạng còn lại không tồn tại."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "会社の倒産で、彼は引っ越しを余儀なくされた。",
+            "会社の倒産で、彼は引っ越すを余儀なくされた。",
+            "会社の倒産で、彼は引っ越しで余儀なくされた。",
+            "会社の倒産で、彼は引っ越してを余儀なくされた。"
+          ],
+          "da": 0,
+          "gt": "Trước を余儀なくされる là danh từ chỉ hành động (引っ越し). Không dùng động từ thể từ điển, thể て, và trợ từ phải là を."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-wo-kinjienai",
+      "nhom": "Tất yếu – bắt buộc",
+      "tieuDe": "〜を禁じ得ない",
+      "mau": "N（cảm xúc）+ を禁じ得ない",
+      "nghia": "không kìm được ~, không khỏi ~ (cảm xúc tự trào lên)",
+      "giaiThich": "Diễn tả: trước một sự việc, cảm xúc tự nhiên dâng lên mà người nói không nén lại được. Danh từ đứng trước là từ chỉ cảm xúc: 涙, 怒り, 驚き, 同情, 失望, 憤り, 笑い. Văn viết trang trọng. Chủ ngữ là ngôi thứ nhất; nói về người khác thì thêm ようだ, らしい…",
+      "cachGhep": [
+        "N cảm xúc + を禁じ得ない: 涙を禁じ得ない ・ 怒りを禁じ得ない",
+        "Quá khứ: 〜を禁じ得なかった",
+        "Dạng lịch sự: 〜を禁じ得ません"
+      ],
+      "viDu": [
+        {
+          "c": "被災地の映像を見て、涙を禁じ得なかった。",
+          "d": "ひさいちの えいぞうを みて、なみだを きんじえなかった。",
+          "v": "Xem những thước phim về vùng thiên tai, tôi đã không cầm được nước mắt."
+        },
+        {
+          "c": "子供を狙った卑劣な犯罪に、怒りを禁じ得ない。",
+          "d": "こどもを ねらった ひれつな はんざいに、いかりを きんじえない。",
+          "v": "Trước tội ác hèn hạ nhắm vào trẻ em, tôi không nén nổi cơn giận."
+        },
+        {
+          "c": "突然の辞任の知らせに、驚きを禁じ得なかった。",
+          "d": "とつぜんの じにんの しらせに、おどろきを きんじえなかった。",
+          "v": "Trước tin từ chức đột ngột, tôi không khỏi ngạc nhiên."
+        },
+        {
+          "c": "一人で三人の子を育てる彼女には、同情を禁じ得ない。",
+          "d": "ひとりで さんにんの こを そだてる かのじょには、どうじょうを きんじえない。",
+          "v": "Tôi không khỏi thương cảm cho cô ấy, người một mình nuôi ba đứa con."
+        }
+      ],
+      "luuY": [
+        "Trước を là DANH TỪ cảm xúc (怒り, 驚き), không phải động từ hay tính từ: 怒るを禁じ得ない ✗, 悲しいを禁じ得ない ✗.",
+        "Khác 〜ずにはいられない: ずにはいられない ghép với động từ (\"không thể không làm\"), dùng được trong hội thoại; を禁じ得ない ghép với danh từ cảm xúc, chỉ dùng trong văn viết trang trọng.",
+        "Khác 〜てやまない: てやまない là tình cảm KÉO DÀI liên tục (mong, cầu chúc); を禁じ得ない là cảm xúc bật lên trước một sự việc cụ thể."
+      ],
+      "soSanh": [
+        "ja-n2-zu-niwa-irarenai",
+        "ja-n1-te-yamanai",
+        "ja-n3-te-tamaranai",
+        "ja-n1-ni-taenai"
+      ],
+      "tuKhoa": [
+        "wo kinjienai",
+        "kinjienai",
+        "kinji enai",
+        "không kìm được",
+        "không khỏi",
+        "không nén nổi"
+      ],
+      "quiz": [
+        {
+          "h": "あまりに突然の知らせに、驚き（　）。",
+          "lc": [
+            "を禁じ得ない",
+            "で禁じ得ない",
+            "に禁じ得ない",
+            "を禁じ得る"
+          ],
+          "da": 0,
+          "gt": "Mẫu là danh từ cảm xúc + を + 禁じ得ない. Trợ từ phải là を, và luôn ở dạng phủ định 得ない (không nén nổi)."
+        },
+        {
+          "h": "Từ nào điền được vào 「（　）を禁じ得ない」?",
+          "lc": [
+            "天気",
+            "同情",
+            "宿題",
+            "散歩"
+          ],
+          "da": 1,
+          "gt": "Mẫu này chỉ đi với danh từ chỉ cảm xúc như 同情, 涙, 怒り, 驚き. 散歩, 宿題, 天気 không phải cảm xúc."
+        },
+        {
+          "h": "Nhận xét nào đúng về 〜を禁じ得ない?",
+          "lc": [
+            "Cách nói thân mật khi trò chuyện với bạn",
+            "Diễn tả việc bị hoàn cảnh ép phải làm",
+            "Văn viết trang trọng; cảm xúc tự trào lên, không nén được",
+            "Diễn tả việc bị pháp luật cấm"
+          ],
+          "da": 2,
+          "gt": "Dù có chữ 禁, mẫu này không nói về cấm đoán mà là \"không nén nổi cảm xúc\", dùng trong văn viết. Bị hoàn cảnh ép là 〜を余儀なくされる."
+        }
+      ]
+    }
+  ]
+}

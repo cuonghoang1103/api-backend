@@ -23,7 +23,7 @@ Danh sách điểm ngữ pháp theo chuẩn cấp là kiến thức chung; câu 
       "luuY": ["Trả lời từ chối không nói thẳng いいえ、だめです với người trên; dùng すみません、ちょっと…", "Lỗi hay gặp: chia sai thể て (書いて, không phải 書きて)."],
       "soSanh": ["ja-n5-te-wa-ikemasen"],      // id điểm dễ nhầm (phải tồn tại — kể cả ở tệp khác / cấp khác, cùng ngôn ngữ)
       "tuKhoa": ["te mo ii", "temoii", "xin phép", "cho phép", "được phép"],   // romaji / pinyin không dấu / tên gọi khác / tiếng Việt
-      "quiz": [                                // ĐÚNG 3 câu, rải vị trí đáp án
+      "quiz": [                                // ĐÚNG 3 câu; vị trí đáp án do MÁY xáo (xem dưới)
         { "h": "ここに 座って（　）いいですか。", "lc": ["も", "は", "が", "を"], "da": 0, "gt": "Mẫu xin phép là V-て + も + いいですか." }
       ] } ] }
 ```
@@ -42,3 +42,11 @@ Danh sách điểm ngữ pháp theo chuẩn cấp là kiến thức chung; câu 
   zh: Câu cơ bản · Câu hỏi · Phó từ · Trợ từ · Lượng từ · Giới từ · Bổ ngữ · Trợ từ động thái · So sánh · Câu đặc biệt (把 / 被 / 是…的) · Liên từ – câu phức…
   en: Các thì · Động từ to be · Danh từ – mạo từ · Đại từ · Tính từ – trạng từ · So sánh · Động từ khuyết thiếu · Câu hỏi · Giới từ ·
   Câu điều kiện · Bị động · Mệnh đề quan hệ · Câu tường thuật · Danh động từ – động từ nguyên mẫu · Liên từ – câu phức…
+
+## Quiz: soạn xong phải XÁO bằng máy
+
+Người / agent soạn luôn dồn đáp án về lựa chọn đầu ⇒ sau khi soạn chạy `npx tsx scripts/ctlanguage-xao-quiz-ngu-phap.mts [ja/n2-1 …]`
+(hạt giống cố định theo `id` + số câu; chạy lại không đổi gì). Vì thế câu hỏi / `gt` / lựa chọn ⛔ không được nhắc VỊ TRÍ ("phương án A",
+"câu thứ hai", "hai câu trên", "tất cả các câu trên") — script dừng nếu gặp. Bộ kiểm cả thư viện (`ctlanguage-kiem-ngu-phap.mts` không tham số)
+in bảng phân bố vị trí đáp án theo cấp và ĐỎ nếu vị trí nào < 15% (câu 4 lựa chọn); test `nguPhapThuan.test.ts` đỏ nếu có điểm chưa xáo.
+Cấp cao (N2, N1, HSK5, HSK6, C1): quiz đúng 4 lựa chọn, gần như điểm nào cũng có `soSanh`, `luuY` nêu ĐÍCH DANH khác biệt với mẫu dễ nhầm.

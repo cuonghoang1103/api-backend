@@ -1,0 +1,1505 @@
+{
+  "nn": "en",
+  "cap": "C1",
+  "diem": [
+    {
+      "id": "en-c1-modals-will-would-habits",
+      "nhom": "Động từ khuyết thiếu",
+      "tieuDe": "will / would chỉ thói quen, tính cách, sự khó chịu",
+      "mau": "S + will + V (thói quen, đặc tính hiện tại) · S + would + V (thói quen quá khứ) · S + WILL / WOULD + V (nhấn giọng: bực mình) · S + won't / wouldn't + V (không chịu)",
+      "nghia": "hay / cứ ~ (thói quen điển hình) · cứ nhất định ~ · không chịu ~",
+      "giaiThich": "Ngoài nghĩa tương lai, will còn tả hành vi điển hình, thói quen ở hiện tại ('She'll sit for hours…') và đặc tính của sự vật ('Oil will float on water'); would tả điều tương tự trong quá khứ. Khi will / would được NHẤN GIỌNG (không rút gọn thành 'll / 'd), câu mang ý bực bội, chê trách: 'He WILL keep interrupting'. 'He would say that' = đúng kiểu của anh ta mà. won't / wouldn't với người hay đồ vật nghĩa là 'không chịu': 'The car won't start'. Chủ yếu dùng khi nói và trong văn miêu tả.",
+      "cachGhep": [
+        "S + will ('ll) + V: thói quen, hành vi điển hình ở hiện tại",
+        "S + would ('d) + V: thói quen lặp lại trong quá khứ (không dùng với động từ trạng thái)",
+        "S + WILL / WOULD (nhấn giọng, không rút gọn) + (keep) + V: phê phán thói quen",
+        "S + won't / wouldn't + V: người / vật 'không chịu' làm gì"
+      ],
+      "viDu": [
+        {
+          "c": "She'll sit for hours staring out of the window.",
+          "v": "Bà ấy có thể ngồi hàng giờ nhìn ra ngoài cửa sổ."
+        },
+        {
+          "c": "He will keep interrupting me when I'm speaking.",
+          "v": "Anh ta cứ ngắt lời tôi lúc tôi đang nói."
+        },
+        {
+          "c": "Of course he blamed the referee — he would say that, wouldn't he?",
+          "v": "Dĩ nhiên anh ta đổ lỗi cho trọng tài — đúng kiểu anh ta mà, phải không?"
+        },
+        {
+          "c": "The car won't start, and yesterday the printer wouldn't work either.",
+          "v": "Xe không chịu nổ máy, mà hôm qua máy in cũng chẳng chịu chạy."
+        },
+        {
+          "c": "Oil will float on water.",
+          "v": "Dầu thì nổi trên mặt nước."
+        }
+      ],
+      "luuY": [
+        "Đừng dịch máy móc will = 'sẽ': 'He'll talk for hours about football' = anh ấy HAY nói hàng giờ về bóng đá (thói quen), không phải 'sẽ nói'.",
+        "Khi tỏ ý bực, will / would phải đọc đủ và nhấn giọng; viết rút gọn 'll thì mất sắc thái chê trách.",
+        "Khác 'used to' (en-b1-used-to-would): would chỉ hành động lặp lại, không dùng cho trạng thái — 'I used to live in Hoi An', không phải 'I would live in Hoi An'.",
+        "Khác 'be always + V-ing' (He's always interrupting): cùng ý phàn nàn, nhưng will nhấn vào sự cố chấp như một nét tính cách."
+      ],
+      "soSanh": [
+        "en-b1-used-to-would",
+        "en-b2-wish-would",
+        "en-c1-if-will-would",
+        "en-b1-be-get-used-to"
+      ],
+      "tuKhoa": [
+        "will thói quen",
+        "would thói quen",
+        "he would say that",
+        "won't start",
+        "thoi quen",
+        "tính cách",
+        "cứ nhất định",
+        "không chịu"
+      ],
+      "quiz": [
+        {
+          "h": "My laptop is useless today — it just ___ connect to the wifi.",
+          "lc": [
+            "isn't",
+            "doesn't use to",
+            "wasn't",
+            "won't"
+          ],
+          "da": 3,
+          "gt": "won't + V = (đồ vật) không chịu hoạt động, ở hiện tại. 'doesn't use to' không tồn tại với nghĩa này; 'wasn't' và 'isn't' không đi với động từ nguyên mẫu 'connect'."
+        },
+        {
+          "h": "Trong câu 'He WILL leave his dirty cups everywhere' (will nhấn giọng), người nói muốn diễn tả điều gì?",
+          "lc": [
+            "Sự bực mình về một thói quen của anh ta.",
+            "Một dự đoán về tương lai.",
+            "Một lời đề nghị lịch sự.",
+            "Một lời hứa thay cho anh ta."
+          ],
+          "da": 0,
+          "gt": "will nhấn giọng, không rút gọn = cứ nhất định làm, người nói thấy khó chịu. Câu nói về thói quen hiện tại chứ không phải dự đoán hay lời hứa về tương lai."
+        },
+        {
+          "h": "When I was a child, I ___ in a small village near Hoi An.",
+          "lc": [
+            "will live",
+            "used to live",
+            "would live",
+            "would be lived"
+          ],
+          "da": 1,
+          "gt": "live ở đây là trạng thái kéo dài trong quá khứ ⇒ used to. would chỉ dùng cho hành động lặp lại, không dùng cho trạng thái; will không nói về quá khứ."
+        }
+      ]
+    },
+    {
+      "id": "en-c1-modals-speculation-advanced",
+      "nhom": "Động từ khuyết thiếu",
+      "tieuDe": "Suy đoán nâng cao: may well, could well, might as well, is bound to",
+      "mau": "S + may / might / could + well + V · S + may / might + as well + V · S + be + bound / sure / certain + to + V",
+      "nghia": "rất có thể ~ · thôi thì ~ cũng được · chắc chắn sẽ ~",
+      "giaiThich": "Thêm well sau may / might / could làm khả năng cao lên: 'may well' = rất có thể (gần với probably). Nói về quá khứ: may / might / could well have + V3. 'may / might as well + V' KHÔNG phải suy đoán: nó nghĩa là 'thôi thì làm vậy cũng được', vì không có lựa chọn nào hay hơn. 'be bound to + V' = chắc chắn sẽ, không tránh được; 'be sure / certain to' cũng mang nghĩa đó. Tất cả dùng được cả khi nói lẫn viết; 'may well' hay gặp trong báo chí, bình luận.",
+      "cachGhep": [
+        "S + may / might / could + well + V: The plan may well fail.",
+        "S + may / might / could + well + have + V3 (suy đoán về quá khứ)",
+        "S + may / might + as well + V (đề xuất miễn cưỡng)",
+        "S + be + bound / sure / certain + to + V"
+      ],
+      "viDu": [
+        {
+          "c": "The new law may well lead to higher prices.",
+          "v": "Luật mới rất có thể sẽ khiến giá cả tăng lên."
+        },
+        {
+          "c": "You could well be right about that.",
+          "v": "Rất có thể bạn nói đúng về chuyện đó."
+        },
+        {
+          "c": "The shops are shut, so we might as well go home.",
+          "v": "Cửa hàng đóng cả rồi, thôi thì mình về nhà vậy."
+        },
+        {
+          "c": "With so little preparation, something is bound to go wrong.",
+          "v": "Chuẩn bị ít như thế thì thế nào cũng có chuyện trục trặc."
+        },
+        {
+          "c": "She may well have missed the train.",
+          "v": "Rất có thể cô ấy đã lỡ chuyến tàu."
+        }
+      ],
+      "luuY": [
+        "Đừng nhầm 'may well' (rất có thể) với 'may as well' (thôi thì… cũng được) — chỉ khác một chữ nhưng khác hẳn nghĩa.",
+        "'be bound to' ở đây là 'chắc chắn sẽ', không phải 'bị ràng buộc, bị bắt buộc'.",
+        "Khác 'must' suy đoán (en-b1-modals-deduction-present): must là kết luận từ bằng chứng trước mắt về hiện tại; be bound to thường nói về điều chắc chắn sẽ xảy ra ở tương lai.",
+        "Không dùng can để suy đoán một việc cụ thể trong câu khẳng định: 'It could / may well be true', không phải 'It can be true'."
+      ],
+      "soSanh": [
+        "en-b1-modals-deduction-present",
+        "en-b2-modal-perfect-deduction",
+        "en-b2-be-supposed-to",
+        "en-c1-future-perfect-assumption"
+      ],
+      "tuKhoa": [
+        "may well",
+        "could well",
+        "might as well",
+        "may as well",
+        "be bound to",
+        "suy đoán",
+        "suy doan",
+        "rất có thể",
+        "chắc chắn sẽ"
+      ],
+      "quiz": [
+        {
+          "h": "There's nothing on TV, so we ___ go to bed.",
+          "lc": [
+            "must as well",
+            "might as well",
+            "are bound",
+            "could well to"
+          ],
+          "da": 1,
+          "gt": "might as well + V = thôi thì làm vậy cũng được (không có gì hay hơn). 'are bound' thiếu to; 'could well to' thừa to; 'must as well' không tồn tại."
+        },
+        {
+          "h": "Interest rates ___ rise again before the end of the year.",
+          "lc": [
+            "are bound",
+            "well may to",
+            "may well",
+            "can well be"
+          ],
+          "da": 2,
+          "gt": "may well + V = rất có thể. 'well may to' sai trật tự và thừa to; 'can well be' không đi được với 'rise'; 'are bound' thiếu to."
+        },
+        {
+          "h": "'She's bound to find out sooner or later.' nghĩa là gì?",
+          "lc": [
+            "Cô ấy bị bắt buộc phải đi tìm hiểu.",
+            "Có lẽ cô ấy sẽ không bao giờ biết.",
+            "Cô ấy đã biết từ lâu rồi.",
+            "Chắc chắn sớm muộn gì cô ấy cũng sẽ biết."
+          ],
+          "da": 3,
+          "gt": "be bound to + V = chắc chắn sẽ xảy ra. Nó không mang nghĩa 'bị bắt buộc', và câu nói về tương lai chứ không phải việc đã xảy ra."
+        }
+      ]
+    },
+    {
+      "id": "en-c1-modals-criticism-past",
+      "nhom": "Động từ khuyết thiếu",
+      "tieuDe": "Trách móc về quá khứ: might have told me, could at least have…",
+      "mau": "S + might / could + have + V3 · S + could / might + at least + have + V3 · S + might / could + (at least) + V",
+      "nghia": "lẽ ra phải ~ chứ! · ít ra cũng phải ~ chứ",
+      "giaiThich": "might have / could have + V3 không chỉ dùng để suy đoán mà còn để TRÁCH: người kia đã không làm một việc mà lẽ ra họ có thể và nên làm. Thêm 'at least' để nhấn 'ít ra thì cũng…'. Với động từ nguyên mẫu (You might help!) là trách về việc hiện tại. Sắc thái bực bội, đôi khi mỉa mai, nhẹ hơn và gián tiếp hơn 'should have'. Chủ yếu dùng khi nói, có nhấn giọng.",
+      "cachGhep": [
+        "You + might / could + have + V3 (+ !): You might have told me!",
+        "S + could / might + at least + have + V3: He could at least have apologised.",
+        "S + might / could + (at least) + V: trách về việc đang / chưa làm ở hiện tại"
+      ],
+      "viDu": [
+        {
+          "c": "You might have told me you were coming!",
+          "v": "Lẽ ra bạn phải báo cho mình là bạn sẽ đến chứ!"
+        },
+        {
+          "c": "He could at least have apologised.",
+          "v": "Ít ra anh ta cũng phải xin lỗi một câu chứ."
+        },
+        {
+          "c": "You could have let me know you'd be late — I waited for an hour.",
+          "v": "Bạn phải báo cho mình là bạn đến muộn chứ — mình đợi cả tiếng đồng hồ."
+        },
+        {
+          "c": "You might at least offer to help with the washing-up.",
+          "v": "Ít ra bạn cũng nên ngỏ ý giúp rửa bát chứ."
+        }
+      ],
+      "luuY": [
+        "Cùng một dạng có hai nghĩa: 'He might have told her' có thể là suy đoán (có lẽ anh ấy đã nói) hoặc trách móc (lẽ ra anh ấy phải nói) — phân biệt nhờ ngữ cảnh và giọng điệu.",
+        "Chỉ might và could dùng để trách; may have / can have không có nghĩa này.",
+        "Khác 'should have' (en-b2-should-have): should have nói thẳng 'lẽ ra nên làm' (dùng được cả để tự trách: I should have studied); might / could have nghe bực bội, trách khéo người KHÁC hơn."
+      ],
+      "soSanh": [
+        "en-b2-should-have",
+        "en-b2-modal-perfect-deduction",
+        "en-b2-wish-past-perfect",
+        "en-c1-modals-speculation-advanced"
+      ],
+      "tuKhoa": [
+        "might have told me",
+        "could at least have",
+        "could have",
+        "trách móc",
+        "trach moc",
+        "lẽ ra phải",
+        "ít ra cũng"
+      ],
+      "quiz": [
+        {
+          "h": "You ___ warned me that the road was closed! I drove for an hour for nothing.",
+          "lc": [
+            "must have",
+            "will have",
+            "can have",
+            "might have"
+          ],
+          "da": 3,
+          "gt": "Người nói đang trách vì đã KHÔNG được báo trước ⇒ might have + V3. 'must have' / 'will have' là suy đoán rằng việc đó đã xảy ra, trái với ngữ cảnh; 'can have' không dùng trong câu khẳng định."
+        },
+        {
+          "h": "She could at least ___ to say she wasn't coming.",
+          "lc": [
+            "have called",
+            "called",
+            "to have called",
+            "had called"
+          ],
+          "da": 0,
+          "gt": "Sau động từ khuyết thiếu could là nguyên mẫu hoàn thành không to: have + V3 ⇒ could at least have called."
+        },
+        {
+          "h": "Câu 'You might have asked before borrowing my car' (giọng bực bội) cho biết điều gì?",
+          "lc": [
+            "Người nói cho phép người kia mượn xe lần sau.",
+            "Người kia đã không hỏi, và người nói đang trách.",
+            "Người nói đoán rằng có lẽ người kia đã hỏi.",
+            "Người kia đã hỏi rất lịch sự."
+          ],
+          "da": 1,
+          "gt": "might have + V3 với giọng trách = lẽ ra phải làm mà đã không làm. Ở ngữ cảnh này nó không phải suy đoán 'có lẽ đã hỏi', cũng không phải lời cho phép."
+        }
+      ]
+    },
+    {
+      "id": "en-c1-dare-need",
+      "nhom": "Động từ khuyết thiếu",
+      "tieuDe": "dare / need dùng như động từ khuyết thiếu",
+      "mau": "S + needn't / daren't + V · Need / Dare + S + V? · How dare + S + V! · I dare say… · (động từ thường) S + don't need to / don't dare (to) + V",
+      "nghia": "không cần phải ~ · không dám ~ · sao (anh) dám ~!",
+      "giaiThich": "need và dare có hai cách dùng. Như động từ THƯỜNG: thêm -s, dùng do / does / did, theo sau là to V (He doesn't need to go; She didn't dare to ask). Như động từ KHUYẾT THIẾU: không thêm -s, không dùng do, theo sau là V nguyên mẫu không to — chủ yếu trong câu phủ định, câu hỏi và sau từ mang nghĩa phủ định (hardly, only, no one): 'You needn't worry', 'Need I say more?', 'No one need know'. Cách dùng khuyết thiếu thiên về Anh–Anh và văn trang trọng; các cụm cố định 'How dare you…!' và 'I dare say' (tôi cho là) thì dùng rộng rãi.",
+      "cachGhep": [
+        "S + needn't + V: You needn't wait.",
+        "Need + S + V…? (trang trọng): Need I remind you…?",
+        "S + need + only / hardly + V · No one / Nobody + need + V",
+        "S + daren't / dare not + V · Dare + S + V…?",
+        "How dare + S + V…! · I dare say (that) + mệnh đề",
+        "Dạng động từ thường: S + don't / doesn't / didn't + need to / dare (to) + V"
+      ],
+      "viDu": [
+        {
+          "c": "You needn't come if you don't want to.",
+          "v": "Bạn không cần phải đến nếu không muốn."
+        },
+        {
+          "c": "Need I remind you that the deadline is tomorrow?",
+          "v": "Tôi có cần phải nhắc bạn rằng hạn chót là ngày mai không?"
+        },
+        {
+          "c": "I daren't tell her what happened.",
+          "v": "Tôi không dám kể cho cô ấy chuyện đã xảy ra."
+        },
+        {
+          "c": "How dare you speak to me like that!",
+          "v": "Sao anh dám nói với tôi như thế!"
+        },
+        {
+          "c": "No one need know about this.",
+          "v": "Không ai cần phải biết chuyện này cả."
+        }
+      ],
+      "luuY": [
+        "Đừng trộn hai cách: 'He needn't worry' ✓ hoặc 'He doesn't need to worry' ✓; nhưng 'He needn't to worry' ✗ và 'He needs not worry' ✗.",
+        "Trong câu khẳng định thông thường chỉ dùng dạng động từ thường: 'You need to leave now', không nói 'You need leave now'.",
+        "Khác 'don't have to' (en-b1-modals-obligation): needn't thường là người nói tự cho phép / miễn cho người nghe; don't have to nêu việc không bắt buộc do hoàn cảnh, quy định.",
+        "Về quá khứ, xem en-b2-neednt-have-vs-didnt-need-to (needn't have done ↔ didn't need to do)."
+      ],
+      "soSanh": [
+        "en-b1-modals-obligation",
+        "en-b2-neednt-have-vs-didnt-need-to",
+        "en-b2-should-have",
+        "en-c1-questions-advanced"
+      ],
+      "tuKhoa": [
+        "dare",
+        "need",
+        "needn't",
+        "daren't",
+        "how dare you",
+        "I dare say",
+        "need I",
+        "không dám",
+        "khong can",
+        "semi-modal"
+      ],
+      "quiz": [
+        {
+          "h": "How dare you ___ my letters!",
+          "lc": [
+            "opening",
+            "open",
+            "to open",
+            "opened"
+          ],
+          "da": 1,
+          "gt": "Trong 'How dare you…!', dare là động từ khuyết thiếu ⇒ theo sau là V nguyên mẫu không to: open."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "She needn't to worry about the cost.",
+            "She needs not worry about the cost.",
+            "She needn't worry about the cost.",
+            "She doesn't need worry about the cost."
+          ],
+          "da": 2,
+          "gt": "need dạng khuyết thiếu: needn't + V nguyên mẫu, không thêm -s, không có to. Dạng động từ thường phải là 'doesn't need TO worry'. Trộn hai cách đều sai."
+        },
+        {
+          "h": "___ I say more? The figures speak for themselves.",
+          "lc": [
+            "Needs",
+            "Do need",
+            "Am need",
+            "Need"
+          ],
+          "da": 3,
+          "gt": "Câu hỏi với need khuyết thiếu: Need + S + V…? — không thêm -s, không mượn do. (Dạng động từ thường sẽ là 'Do I need to say more?')"
+        }
+      ]
+    },
+    {
+      "id": "en-c1-hedging",
+      "nhom": "Động từ khuyết thiếu",
+      "tieuDe": "Hedging: tend to, seem / appear to, it would seem, arguably",
+      "mau": "S + tend to + V · S + seem / appear + to V · It seems / appears / would seem + that + mệnh đề · arguably / apparently / presumably + mệnh đề",
+      "nghia": "có xu hướng ~ · có vẻ như ~ · dường như ~ · có thể cho rằng ~",
+      "giaiThich": "Hedging (nói rào đón) là làm cho nhận định bớt tuyệt đối, để ngỏ khả năng có ngoại lệ — một yêu cầu quan trọng của văn học thuật và báo cáo. Công cụ chính: 'tend to' (có xu hướng), 'seem / appear to' (có vẻ), 'It would seem / appear that…' (dè dặt hơn 'It seems that'), các trạng từ 'arguably' (có cơ sở để cho rằng), 'apparently', 'presumably', và động từ như 'suggest', 'indicate' thay cho 'prove', 'show'. Kết hợp được với may / might / could. Văn phong học thuật, trang trọng; khi nói cũng dùng để tỏ ra thận trọng, lịch sự.",
+      "cachGhep": [
+        "S + tend(s) to + V / tend(s) not to + V",
+        "S + seem(s) / appear(s) + to V / to be V-ing / to have V3",
+        "It seems / appears / would seem / would appear + (that) + mệnh đề",
+        "S + be + arguably + so sánh nhất / N · Arguably, + mệnh đề",
+        "The data / results / findings + suggest / indicate + that + S + may / might + V"
+      ],
+      "viDu": [
+        {
+          "c": "Younger voters tend to be more concerned about climate change.",
+          "v": "Cử tri trẻ thường có xu hướng quan tâm hơn đến biến đổi khí hậu."
+        },
+        {
+          "c": "The results appear to support our hypothesis.",
+          "v": "Kết quả có vẻ ủng hộ giả thuyết của chúng tôi."
+        },
+        {
+          "c": "It would seem that the original estimate was too optimistic.",
+          "v": "Dường như con số ước tính ban đầu đã quá lạc quan."
+        },
+        {
+          "c": "This is arguably the most important discovery of the decade.",
+          "v": "Có thể cho rằng đây là phát hiện quan trọng nhất của thập kỷ."
+        },
+        {
+          "c": "These findings suggest that sleep may play a role in memory.",
+          "v": "Những phát hiện này gợi ý rằng giấc ngủ có thể đóng vai trò trong trí nhớ."
+        }
+      ],
+      "luuY": [
+        "Người Việt hay viết khẳng định tuyệt đối ('This proves that all students…'); trong bài luận học thuật nên rào đón khi chưa đủ bằng chứng: 'This suggests that many students…'.",
+        "'arguably' KHÔNG có nghĩa 'gây tranh cãi' hay 'đáng ngờ' — nó ỦNG HỘ nhận định: 'có thể lập luận (một cách thuyết phục) rằng'.",
+        "Cấu trúc: 'He seems to be tired' hoặc 'It seems that he is tired'; không viết 'He seems that he is tired'.",
+        "Khác 'may well / be bound to' (en-c1-modals-speculation-advanced): những cụm đó nêu mức độ chắc chắn của một dự đoán; hedging nhằm làm MỀM nhận định. Đừng rào quá tay ('It may possibly perhaps seem…')."
+      ],
+      "soSanh": [
+        "en-c1-modals-speculation-advanced",
+        "en-b2-passive-reporting",
+        "en-c1-nominalisation",
+        "en-b2-adverb-position"
+      ],
+      "tuKhoa": [
+        "hedging",
+        "tend to",
+        "seem to",
+        "appear to",
+        "it would seem",
+        "arguably",
+        "rào đón",
+        "rao don",
+        "nói giảm",
+        "văn học thuật"
+      ],
+      "quiz": [
+        {
+          "h": "It ___ seem that the committee has changed its mind.",
+          "lc": [
+            "is",
+            "does to",
+            "would",
+            "will be"
+          ],
+          "da": 2,
+          "gt": "It would seem that… là cách nói dè dặt của It seems that… Sau would là động từ nguyên mẫu 'seem'. 'will be', 'does to' và 'is' không ghép được với 'seem'."
+        },
+        {
+          "h": "Trong câu 'She is arguably the best player of her generation', từ 'arguably' có nghĩa gì?",
+          "lc": [
+            "Theo lời đồn chưa được kiểm chứng.",
+            "Chắc chắn tuyệt đối, không ai phản đối.",
+            "Điều đó gây tranh cãi và nhiều khả năng là sai.",
+            "Có cơ sở để cho rằng (điều đó đúng)."
+          ],
+          "da": 3,
+          "gt": "arguably = có thể lập luận rằng điều đó đúng: người viết ủng hộ nhận định nhưng không khẳng định tuyệt đối. Nó không hàm ý nhận định sai, cũng không phải tin đồn."
+        },
+        {
+          "h": "Prices ___ to rise sharply in the weeks before Tet.",
+          "lc": [
+            "tend",
+            "seem that",
+            "tendency",
+            "appear that"
+          ],
+          "da": 0,
+          "gt": "S + tend to + V = thường có xu hướng. 'tendency' là danh từ; 'seem that' và 'appear that' cần chủ ngữ giả It và không đi với 'to rise'."
+        }
+      ]
+    },
+    {
+      "id": "en-c1-future-perfect-assumption",
+      "nhom": "Động từ khuyết thiếu",
+      "tieuDe": "will have + V3 chỉ phỏng đoán: You'll have heard…",
+      "mau": "S + will / won't + have + V3 (phỏng đoán về việc đã xảy ra) · S + will + V / be + V-ing (phỏng đoán về hiện tại)",
+      "nghia": "chắc là (đã) ~ rồi · hẳn là ~",
+      "giaiThich": "will have + V3 không phải lúc nào cũng nói về tương lai. Nó còn dùng để nêu điều người nói TIN CHẮC là đã xảy ra tính đến lúc này, dựa trên hiểu biết thông thường: 'They'll have landed by now' = chắc họ hạ cánh rồi. Tương tự, will + V nêu phỏng đoán chắc chắn về hiện tại: 'That'll be the postman'. Trong văn viết trang trọng hay gặp 'As you will have noticed…', 'You will no doubt have heard…' như một cách lịch sự để giả định người đọc đã biết.",
+      "cachGhep": [
+        "S + will + have + V3 (+ by now / already): They'll have arrived by now.",
+        "S + won't + have + V3 (+ yet): He won't have finished yet.",
+        "As you will have + V3 (seen / noticed / gathered), + mệnh đề",
+        "That / It + will be + N (phỏng đoán về hiện tại) · S + will be + V-ing"
+      ],
+      "viDu": [
+        {
+          "c": "It's ten o'clock; they'll have landed by now.",
+          "v": "Mười giờ rồi; chắc họ đã hạ cánh rồi."
+        },
+        {
+          "c": "As you will have noticed, the office has been redecorated.",
+          "v": "Như quý vị hẳn đã nhận thấy, văn phòng vừa được trang trí lại."
+        },
+        {
+          "c": "Don't call him yet — he won't have finished work.",
+          "v": "Đừng gọi anh ấy vội — chắc anh ấy chưa xong việc đâu."
+        },
+        {
+          "c": "You will no doubt have read the report I sent last week.",
+          "v": "Hẳn anh / chị đã đọc bản báo cáo tôi gửi tuần trước."
+        },
+        {
+          "c": "\"There's someone at the door.\" \"That'll be the courier.\"",
+          "v": "\"Có ai ngoài cửa kìa.\" \"Chắc là người giao hàng đấy.\""
+        }
+      ],
+      "luuY": [
+        "Đừng dịch máy móc thành 'sẽ đã': 'You'll have heard the news' = chắc bạn đã nghe tin rồi (việc đã xảy ra), không phải việc ở tương lai.",
+        "Phân biệt với future perfect thật (en-b2-future-perfect) nhờ mốc thời gian: 'by next Friday' ⇒ tương lai; 'by now / already' hoặc ngữ cảnh hiện tại ⇒ phỏng đoán.",
+        "Khác 'must have + V3' (en-b2-modal-perfect-deduction): must have là suy luận từ bằng chứng cụ thể trước mắt (The ground is wet — it must have rained); will have dựa trên điều vốn được biết / kỳ vọng (lịch trình, thói quen)."
+      ],
+      "soSanh": [
+        "en-b2-future-perfect",
+        "en-b2-modal-perfect-deduction",
+        "en-c1-modals-speculation-advanced",
+        "en-b1-modals-deduction-present"
+      ],
+      "tuKhoa": [
+        "will have",
+        "you'll have heard",
+        "as you will have noticed",
+        "that'll be",
+        "phỏng đoán",
+        "phong doan",
+        "chắc là đã",
+        "hẳn là"
+      ],
+      "quiz": [
+        {
+          "h": "It's past midnight in Hanoi, so Lan ___ to bed by now.",
+          "lc": [
+            "is going to have",
+            "will have gone",
+            "would go",
+            "will go"
+          ],
+          "da": 1,
+          "gt": "Phỏng đoán về việc chắc đã xảy ra tính đến bây giờ (by now) ⇒ will have + V3. 'will go' nói về tương lai; 'would go' là thói quen quá khứ / giả định; 'is going to have' thiếu phân từ."
+        },
+        {
+          "h": "Trong câu 'As you will have seen from the figures, sales fell in March', cụm 'will have seen' nói về điều gì?",
+          "lc": [
+            "Việc người đọc sẽ hoàn thành trong tương lai.",
+            "Một yêu cầu người đọc phải xem số liệu.",
+            "Việc người viết cho rằng người đọc đã làm rồi.",
+            "Một thói quen của người đọc."
+          ],
+          "da": 2,
+          "gt": "will have + V3 ở đây là phỏng đoán lịch sự: chắc anh / chị đã thấy rồi. Không có mốc tương lai nào nên đây không phải future perfect thật, cũng không phải mệnh lệnh."
+        },
+        {
+          "h": "\"There's someone at the door.\" — \"That ___ the courier with my parcel.\"",
+          "lc": [
+            "has to",
+            "is being",
+            "will have",
+            "will be"
+          ],
+          "da": 3,
+          "gt": "will + be nêu phỏng đoán chắc chắn về hiện tại: That'll be… = chắc đó là… 'will have' và 'has to' thiếu động từ be; 'is being' không dùng để nhận diện người."
+        }
+      ]
+    },
+    {
+      "id": "en-c1-passive-advanced",
+      "nhom": "Bị động – nguyên mẫu – danh động từ",
+      "tieuDe": "Bị động nâng cao: is believed to have been…, there is thought to be…",
+      "mau": "S + be + believed / thought / alleged + to have been + V3 · There + be + thought / said / believed + to be + N · S + be + seen / heard / made + to V",
+      "nghia": "được cho là đã bị ~ · người ta cho rằng có ~ · bị thấy / bị bắt ~",
+      "giaiThich": "Mở rộng bị động tường thuật ở B2 (He is said to…). (1) Ghép với nguyên mẫu HOÀN THÀNH BỊ ĐỘNG: 'is believed to have been stolen' = được cho là ĐÃ BỊ đánh cắp. (2) Dùng There làm chủ ngữ: 'There are thought to be…' = người ta cho rằng có…; cũng có 'There is said to have been…' cho quá khứ. (3) Động từ tri giác và make khi chuyển sang bị động phải thêm to: 'They saw her leave' → 'She was seen to leave'; 'They made him wait' → 'He was made to wait'. Thuộc văn báo chí, pháp lý, học thuật; các động từ hay gặp: allege, believe, claim, estimate, report, rumour, understand.",
+      "cachGhep": [
+        "S + be + believed / reported / alleged… + to have been + V3 (bị động, xảy ra trước)",
+        "S + be + believed… + to be + V-ing (đang diễn ra) / to have been + V-ing",
+        "There + is / are + thought / said / believed / estimated + to be + N",
+        "There + is / are + said… + to have been + N (quá khứ)",
+        "S + be + seen / heard / made + to + V"
+      ],
+      "viDu": [
+        {
+          "c": "The painting is believed to have been stolen during the war.",
+          "v": "Bức tranh được cho là đã bị đánh cắp trong chiến tranh."
+        },
+        {
+          "c": "There are thought to be fewer than 4,000 tigers left in the wild.",
+          "v": "Người ta cho rằng chỉ còn chưa đến 4.000 con hổ ngoài tự nhiên."
+        },
+        {
+          "c": "The suspect is alleged to have been carrying a knife.",
+          "v": "Nghi phạm bị cáo buộc là lúc đó đang mang theo dao."
+        },
+        {
+          "c": "There is said to have been a temple on this site.",
+          "v": "Người ta nói rằng trước đây từng có một ngôi đền ở chỗ này."
+        },
+        {
+          "c": "She was seen to enter the building at around nine.",
+          "v": "Người ta thấy cô ấy vào toà nhà lúc khoảng chín giờ."
+        }
+      ],
+      "luuY": [
+        "Với There, động từ be chia theo danh từ đứng SAU 'to be': 'There ARE thought to be several reasons'; 'There IS thought to be a risk'.",
+        "Chủ động 'saw her enter' / 'made him wait' không có to, nhưng bị động bắt buộc có to: 'was seen to enter', 'was made to wait'. Riêng let không dùng bị động kiểu này — dùng 'be allowed to'.",
+        "Khác bị động tường thuật cơ bản (en-b2-passive-reporting: is said to be / to have left): ở đây nguyên mẫu tự nó cũng ở thể bị động hoặc tiếp diễn — phải xác định hai tầng: thời điểm (trước / cùng lúc) và chủ động / bị động."
+      ],
+      "soSanh": [
+        "en-b2-passive-reporting",
+        "en-b2-passive-gerund-infinitive",
+        "en-c1-infinitive-perfect-continuous",
+        "en-c1-it-there-advanced"
+      ],
+      "tuKhoa": [
+        "is believed to have been",
+        "there is thought to be",
+        "is alleged to",
+        "was seen to",
+        "was made to",
+        "bị động nâng cao",
+        "bi dong nang cao",
+        "được cho là"
+      ],
+      "quiz": [
+        {
+          "h": "The documents are believed ___ in the fire last year.",
+          "lc": [
+            "to destroying",
+            "to have destroyed",
+            "to have been destroyed",
+            "being destroyed"
+          ],
+          "da": 2,
+          "gt": "Tài liệu BỊ thiêu huỷ (bị động) và việc đó xảy ra trước (last year) ⇒ to have been + V3. 'to have destroyed' là chủ động; hai dạng còn lại không đi sau 'are believed'."
+        },
+        {
+          "h": "There ___ thought to be over two hundred species of bird on the island.",
+          "lc": [
+            "has",
+            "being",
+            "have been being",
+            "are"
+          ],
+          "da": 3,
+          "gt": "Chủ ngữ thật là 'over two hundred species' (số nhiều) đứng sau 'to be' ⇒ There are thought to be… 'has' và 'being' không tạo được thể bị động với 'thought'."
+        },
+        {
+          "h": "Chuyển sang bị động: 'They made him wait for two hours.' → He ___ for two hours.",
+          "lc": [
+            "was made to wait",
+            "was made wait",
+            "was made waiting",
+            "made to be waited"
+          ],
+          "da": 0,
+          "gt": "make + O + V (chủ động) → be made + TO V (bị động): bắt buộc thêm to. Không dùng V-ing, và chủ ngữ 'He' cần 'was made'."
+        }
+      ]
+    },
+    {
+      "id": "en-c1-infinitive-perfect-continuous",
+      "nhom": "Bị động – nguyên mẫu – danh động từ",
+      "tieuDe": "Nguyên mẫu hoàn thành / tiếp diễn: to have done, to be doing",
+      "mau": "to have + V3 (xảy ra trước) · to be + V-ing (đang diễn ra) · to have been + V-ing (kéo dài tới lúc đó) · to have been + V3 (bị động, xảy ra trước)",
+      "nghia": "(có vẻ / tự nhận / tiếc là…) đã ~ · đang ~ · đã ~ suốt",
+      "giaiThich": "Động từ nguyên mẫu cũng có 'thì' tương đối so với động từ chính. 'to do': cùng lúc hoặc sau đó. 'to have done': xảy ra TRƯỚC. 'to be doing': đang diễn ra cùng lúc. 'to have been doing': đã kéo dài tới thời điểm đó. Hay gặp sau seem, appear, happen, claim, pretend, be said / believed, would like / love / hate, be sorry / glad / lucky, và sau động từ khuyết thiếu (bỏ to). Dùng trong mọi văn phong; nắm vững giúp diễn đạt chính xác quan hệ thời gian mà không cần thêm mệnh đề.",
+      "cachGhep": [
+        "seem / appear / claim / pretend + to have + V3: She seems to have left.",
+        "seem / appear / pretend / happen + to be + V-ing: He pretended to be reading.",
+        "seem / appear + to have been + V-ing: They appear to have been waiting for hours.",
+        "be + sorry / glad / lucky + to have + V3: I'm sorry to have kept you waiting.",
+        "would like / love / hate + to have + V3 (việc đã không xảy ra)"
+      ],
+      "viDu": [
+        {
+          "c": "She seems to have forgotten our appointment.",
+          "v": "Có vẻ cô ấy đã quên cuộc hẹn của chúng tôi."
+        },
+        {
+          "c": "He pretended to be reading when the teacher walked in.",
+          "v": "Cậu ấy giả vờ đang đọc sách khi thầy giáo bước vào."
+        },
+        {
+          "c": "They appear to have been waiting for hours.",
+          "v": "Có vẻ họ đã đợi hàng giờ rồi."
+        },
+        {
+          "c": "I'm sorry to have kept you waiting.",
+          "v": "Tôi xin lỗi vì đã để anh / chị phải chờ."
+        },
+        {
+          "c": "I would like to have seen her face when she opened the letter.",
+          "v": "Giá mà tôi được thấy vẻ mặt cô ấy lúc mở lá thư."
+        }
+      ],
+      "luuY": [
+        "Người Việt hay chỉ dùng 'to V' cho mọi trường hợp: 'He seems to lose his keys' (hay làm mất) khác 'He seems to have lost his keys' (đã làm mất rồi).",
+        "Phủ định đặt not trước to: 'He claims not to have seen anything'.",
+        "'I would like to have seen it' và 'I would have liked to see it' cùng nghĩa: tiếc vì đã không được xem.",
+        "Khác danh động từ hoàn thành (en-c1-gerund-perfect-passive: having done): chọn to have done hay having done tuỳ động từ đứng trước — seem / claim + to have done; deny / admit + having done."
+      ],
+      "soSanh": [
+        "en-c1-gerund-perfect-passive",
+        "en-b2-passive-reporting",
+        "en-c1-passive-advanced",
+        "en-b2-modal-perfect-deduction"
+      ],
+      "tuKhoa": [
+        "to have done",
+        "to be doing",
+        "to have been doing",
+        "perfect infinitive",
+        "nguyên mẫu hoàn thành",
+        "nguyen mau hoan thanh",
+        "nguyên mẫu tiếp diễn",
+        "seem to have"
+      ],
+      "quiz": [
+        {
+          "h": "He seems ___ a lot of weight since I last saw him.",
+          "lc": [
+            "to be lost",
+            "losing",
+            "to lose",
+            "to have lost"
+          ],
+          "da": 3,
+          "gt": "Việc sụt cân xảy ra TRƯỚC lúc nói (since I last saw him) ⇒ to have + V3. 'to lose' là cùng lúc / thói quen; seem không đi với V-ing; 'to be lost' là bị động, sai nghĩa."
+        },
+        {
+          "h": "When I came in, the children pretended ___.",
+          "lc": [
+            "to be sleeping",
+            "sleeping",
+            "to sleeping",
+            "to have been slept"
+          ],
+          "da": 0,
+          "gt": "Hành động đang diễn ra cùng lúc với 'pretended' ⇒ to be + V-ing. sleep là nội động từ nên không có bị động; pretend không đi với V-ing."
+        },
+        {
+          "h": "I'm sorry ___ you last night — I didn't realise how late it was.",
+          "lc": [
+            "to have been disturbed",
+            "to have disturbed",
+            "to be disturbed",
+            "disturb"
+          ],
+          "da": 1,
+          "gt": "Xin lỗi về việc mình ĐÃ làm trước đó (last night), chủ động ⇒ to have + V3. Hai dạng bị động sai nghĩa (người nói là người gây phiền); 'disturb' thiếu to."
+        }
+      ]
+    },
+    {
+      "id": "en-c1-gerund-perfect-passive",
+      "nhom": "Bị động – nguyên mẫu – danh động từ",
+      "tieuDe": "Danh động từ hoàn thành / bị động / có chủ ngữ: having done, being done, his coming",
+      "mau": "having + V3 · being + V3 · having been + V3 · sở hữu / tân ngữ + V-ing (his coming / him coming)",
+      "nghia": "việc đã ~ · việc bị ~ · việc đã bị ~ · việc (ai đó) ~",
+      "giaiThich": "Danh động từ (V-ing) cũng có dạng hoàn thành và bị động. 'having + V3' nhấn rằng việc đó xảy ra TRƯỚC động từ chính (He denied having taken it). 'being + V3' là bị động (She hates being interrupted). 'having been + V3' vừa trước vừa bị động. Khi người thực hiện V-ing khác với chủ ngữ của câu, đặt chủ ngữ riêng trước V-ing: văn trang trọng dùng tính từ sở hữu / sở hữu cách (your taking, Lan's leaving); văn thường ngày dùng tân ngữ (you taking, Lan leaving).",
+      "cachGhep": [
+        "V / giới từ + having + V3: He admitted having lied.",
+        "V / giới từ + being + V3: I don't like being told what to do.",
+        "V / giới từ + having been + V3: She complained about having been ignored.",
+        "Phủ định: not + having / being…: He regretted not having applied.",
+        "V / giới từ + my / your / his / Lan's + V-ing (trang trọng) · + me / you / him / Lan + V-ing (thân mật)"
+      ],
+      "viDu": [
+        {
+          "c": "He denied having taken the money.",
+          "v": "Anh ta phủ nhận việc đã lấy số tiền đó."
+        },
+        {
+          "c": "She resents being treated like a child.",
+          "v": "Cô ấy bực vì bị đối xử như trẻ con."
+        },
+        {
+          "c": "He was angry at not having been invited.",
+          "v": "Anh ấy tức giận vì đã không được mời."
+        },
+        {
+          "c": "I appreciate your taking the time to reply.",
+          "v": "Tôi rất cảm kích việc anh / chị đã dành thời gian trả lời."
+        },
+        {
+          "c": "Do you mind me opening the window?",
+          "v": "Bạn có phiền nếu mình mở cửa sổ không?"
+        }
+      ],
+      "luuY": [
+        "Khi thứ tự thời gian đã rõ, V-ing thường cũng đủ: 'He denied taking the money' = 'He denied having taken the money'. Dạng having + V3 chỉ nhấn rõ hơn.",
+        "not đứng TRƯỚC having / being: 'not having been invited', không phải 'having not been invited' trong cách dùng thông thường.",
+        "Sau giới từ luôn là danh động từ, kể cả dạng bị động: 'without being asked', không phải 'without to be asked'.",
+        "Khác nguyên mẫu hoàn thành (en-c1-infinitive-perfect-continuous): deny / admit / regret / giới từ + having done; seem / claim / pretend + to have done."
+      ],
+      "soSanh": [
+        "en-b2-passive-gerund-infinitive",
+        "en-c1-infinitive-perfect-continuous",
+        "en-b2-reporting-verbs",
+        "en-b1-gerund-vs-infinitive"
+      ],
+      "tuKhoa": [
+        "having done",
+        "being done",
+        "having been done",
+        "his coming",
+        "perfect gerund",
+        "danh động từ hoàn thành",
+        "danh dong tu bi dong",
+        "sở hữu + V-ing"
+      ],
+      "quiz": [
+        {
+          "h": "Nobody enjoys ___ at in public.",
+          "lc": [
+            "to be laughed",
+            "having laughed",
+            "laughing",
+            "being laughed"
+          ],
+          "da": 3,
+          "gt": "Chủ ngữ là người BỊ cười ⇒ danh động từ bị động being + V3; và enjoy đi với V-ing chứ không đi với to V. 'laughing' / 'having laughed' là chủ động, sai nghĩa."
+        },
+        {
+          "h": "She apologised for ___ earlier.",
+          "lc": [
+            "not having replied",
+            "not to have replied",
+            "having not been replied",
+            "no replying"
+          ],
+          "da": 0,
+          "gt": "Sau giới từ for là danh động từ; việc không trả lời xảy ra trước ⇒ not + having + V3. Dạng bị động sai nghĩa; sau giới từ không dùng to V."
+        },
+        {
+          "h": "Trong thư trang trọng: 'We would appreciate ___ us as soon as possible.'",
+          "lc": [
+            "yours contacting",
+            "your contacting",
+            "you contact",
+            "you to contact"
+          ],
+          "da": 1,
+          "gt": "appreciate + (sở hữu) + V-ing; văn trang trọng dùng tính từ sở hữu 'your'. appreciate không đi với 'O + to V' hay 'O + V'; 'yours' là đại từ sở hữu, không đứng trước V-ing."
+        }
+      ]
+    },
+    {
+      "id": "en-c1-continuous-states-nuance",
+      "nhom": "Bị động – nguyên mẫu – danh động từ",
+      "tieuDe": "Động từ trạng thái ở thể tiếp diễn: being rude, I'm loving it, I was wondering",
+      "mau": "S + be + being + adj (hành vi tạm thời) · S + be + loving / enjoying… (thân mật) · I was wondering / hoping / thinking + if / whether… (lịch sự)",
+      "nghia": "đang cư xử ~ (tạm thời) · đang rất thích ~ · tôi đang tự hỏi liệu ~ (lịch sự)",
+      "giaiThich": "Động từ trạng thái thường không chia tiếp diễn, nhưng ở trình độ cao có những ngoại lệ có chủ đích. (1) 'be being + tính từ' tả cách CƯ XỬ tạm thời, có chủ ý: 'You're being rude' (lúc này bạn đang cư xử thô lỗ) khác 'You're rude' (bản tính). (2) love, like, enjoy ở tiếp diễn nhấn cảm xúc đang diễn ra trong một giai đoạn — chỉ dùng trong văn nói thân mật. (3) 'I was wondering / hoping / thinking…' làm lời đề nghị dè dặt, lịch sự hơn. (4) 'I've been meaning / wanting to…' = lâu nay vẫn định. Các động từ như know, belong, own, consist hầu như không bao giờ dùng tiếp diễn.",
+      "cachGhep": [
+        "S + am / is / are + being + adj chỉ hành vi (rude, silly, difficult, careful, unfair, kind)",
+        "S + be + loving / liking / enjoying + N (thân mật, giai đoạn tạm thời)",
+        "I was wondering + if / whether + S + could / would + V",
+        "I was hoping + (that) + S + might / could + V",
+        "S + have / has been + meaning / wanting + to V"
+      ],
+      "viDu": [
+        {
+          "c": "You're being very rude today — what's wrong?",
+          "v": "Hôm nay bạn cư xử thô lỗ quá — có chuyện gì vậy?"
+        },
+        {
+          "c": "I'm loving this new series; I've watched five episodes already.",
+          "v": "Mình đang mê bộ phim mới này lắm; xem năm tập rồi."
+        },
+        {
+          "c": "I was wondering if you could give me a hand.",
+          "v": "Không biết bạn có thể giúp mình một tay được không."
+        },
+        {
+          "c": "I've been meaning to call you for weeks.",
+          "v": "Mấy tuần nay mình vẫn định gọi cho bạn."
+        },
+        {
+          "c": "We were hoping you might join us for dinner.",
+          "v": "Chúng tôi mong là anh / chị có thể dùng bữa tối cùng chúng tôi."
+        }
+      ],
+      "luuY": [
+        "'be being' chỉ đi với tính từ chỉ HÀNH VI có thể kiểm soát; không dùng với trạng thái, cảm xúc hay đặc điểm: 'He's being tall' ✗, 'She's being ill' ✗.",
+        "'I'm loving it' là văn nói thân mật, quảng cáo; trong bài viết trang trọng dùng 'I love / I really enjoy'.",
+        "'I was wondering if…' dùng quá khứ tiếp diễn để tạo khoảng cách lịch sự — việc 'tự hỏi' vẫn là ngay lúc này. Đừng dịch thành 'lúc đó tôi đã tự hỏi'.",
+        "Khác hiện tại tiếp diễn thông thường (en-a1-present-continuous): ở đây là dùng có chủ ý với động từ vốn không chia tiếp diễn — đừng suy rộng ra cho know, belong, own."
+      ],
+      "soSanh": [
+        "en-a1-present-continuous",
+        "en-b1-indirect-questions",
+        "en-b1-present-perfect-continuous",
+        "en-c1-if-will-would"
+      ],
+      "tuKhoa": [
+        "being rude",
+        "I'm loving it",
+        "I was wondering",
+        "I've been meaning to",
+        "động từ trạng thái",
+        "dong tu trang thai",
+        "stative verbs",
+        "tiếp diễn lịch sự"
+      ],
+      "quiz": [
+        {
+          "h": "Ignore him — he ___ difficult because he didn't get his way.",
+          "lc": [
+            "is just been",
+            "is just being",
+            "does just being",
+            "just be"
+          ],
+          "da": 1,
+          "gt": "Hành vi tạm thời, có chủ ý ⇒ be + being + adj: he is just being difficult. Các dạng còn lại sai cách chia động từ be."
+        },
+        {
+          "h": "I ___ if I could ask you a quick favour.",
+          "lc": [
+            "was wondered",
+            "wondered that",
+            "was wondering",
+            "am wonder"
+          ],
+          "da": 2,
+          "gt": "Công thức đề nghị lịch sự: I was wondering if… 'am wonder' và 'was wondered' sai dạng; 'wondered that' không đi với 'if'."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "This book is belonging to my sister.",
+            "This book belonging to my sister.",
+            "This book is being belonged to my sister.",
+            "This book belongs to my sister."
+          ],
+          "da": 3,
+          "gt": "belong là động từ trạng thái thuần tuý (chỉ sự sở hữu), không dùng ở thể tiếp diễn và không có bị động ⇒ dùng hiện tại đơn. Câu chỉ có V-ing thì thiếu động từ chia."
+        }
+      ]
+    },
+    {
+      "id": "en-c1-it-there-advanced",
+      "nhom": "Bị động – nguyên mẫu – danh động từ",
+      "tieuDe": "It / There nâng cao: there seems to be, there being, find it + adj",
+      "mau": "There + seem / appear / tend / be likely / be bound + to be + N · There being + N, … · There + remain / exist / follow + N · S + find / make / consider + it + adj + to V / that…",
+      "nghia": "có vẻ như có ~ · vì (không) có ~ nên ~ · thấy việc ~ thật ~",
+      "giaiThich": "Chủ ngữ giả there và it kết hợp được với nhiều cấu trúc khác. (1) There + seem / appear / happen / tend + to be; there + be + likely / bound / sure / certain + to be: 'There seems to be a problem'. (2) 'There being + N' là mệnh đề phân từ chỉ lý do, rất trang trọng: 'There being no objections, …' = vì không có ý kiến phản đối. (3) Trong văn viết, there còn đi với exist, remain, follow, arise. (4) it làm TÂN NGỮ giả: find / make / consider / think + it + tính từ + to V / that-clause; và các cụm 'I take it that…', 'see to it that…', 'leave it to sb to…', 'owe it to sb to…'.",
+      "cachGhep": [
+        "There + seem(s) / appear(s) / tend(s) + to be + N",
+        "There + is / are + likely / bound / sure / certain + to be + N",
+        "There being + (no) + N, + mệnh đề chính (trang trọng)",
+        "There + remain / exist / follow / arise + N (văn viết)",
+        "S + find / make / consider / think + it + adj / N + to V / that + mệnh đề",
+        "I take it (that)… · see to it that… · leave it to + sb + to V"
+      ],
+      "viDu": [
+        {
+          "c": "There seems to be a misunderstanding.",
+          "v": "Có vẻ như đang có sự hiểu lầm."
+        },
+        {
+          "c": "There are bound to be delays over the holiday weekend.",
+          "v": "Thế nào cũng có chậm trễ trong dịp cuối tuần nghỉ lễ."
+        },
+        {
+          "c": "There being no further questions, the meeting was closed.",
+          "v": "Vì không còn câu hỏi nào nữa, cuộc họp đã kết thúc."
+        },
+        {
+          "c": "I find it hard to believe that nobody noticed.",
+          "v": "Tôi thấy khó mà tin được là không ai để ý."
+        },
+        {
+          "c": "The noise made it impossible to concentrate.",
+          "v": "Tiếng ồn khiến không thể nào tập trung được."
+        }
+      ],
+      "luuY": [
+        "Động từ chia theo danh từ đứng sau: 'There SEEM to be several problems' ↔ 'There SEEMS to be a problem'.",
+        "Người Việt hay bỏ 'it' tân ngữ giả: 'I find hard to believe' ✗ → 'I find IT hard to believe' ✓; 'The rain made impossible to go out' ✗ → 'made IT impossible'.",
+        "Khác 'It being…' (It being Sunday, the shops were closed): dùng It khi câu gốc là 'It was Sunday'; dùng There khi câu gốc là 'There was / were…'.",
+        "Phần It + be + adj + to V cơ bản xem en-b2-preparatory-it; ở đây là dạng mở rộng với there và các cụm cố định."
+      ],
+      "soSanh": [
+        "en-b2-preparatory-it",
+        "en-a1-there-is-are",
+        "en-c1-passive-advanced",
+        "en-c1-participle-clauses-advanced"
+      ],
+      "tuKhoa": [
+        "there seems to be",
+        "there being",
+        "find it hard to",
+        "make it impossible",
+        "there remain",
+        "I take it that",
+        "chủ ngữ giả",
+        "chu ngu gia",
+        "tân ngữ giả"
+      ],
+      "quiz": [
+        {
+          "h": "There ___ to be several mistakes in the report.",
+          "lc": [
+            "seems being",
+            "seeming",
+            "is seeming",
+            "seem"
+          ],
+          "da": 3,
+          "gt": "Danh từ thật 'several mistakes' là số nhiều ⇒ There seem to be… seem không dùng ở thể tiếp diễn và không đi với being ở cấu trúc này."
+        },
+        {
+          "h": "She found ___ difficult to adjust to the new schedule.",
+          "lc": [
+            "it",
+            "there",
+            "that",
+            "this"
+          ],
+          "da": 0,
+          "gt": "Cần tân ngữ giả it: find + it + adj + to V. there chỉ làm chủ ngữ giả; that / this không thay được cho cụm to V phía sau."
+        },
+        {
+          "h": "___ no evidence against him, the case was dropped.",
+          "lc": [
+            "Being there",
+            "There being",
+            "It being",
+            "There was"
+          ],
+          "da": 1,
+          "gt": "Câu gốc: 'There was no evidence' ⇒ rút thành mệnh đề phân từ 'There being no evidence'. 'It being' dùng khi câu gốc bắt đầu bằng It; 'There was…,' rồi nối tiếp bằng dấu phẩy là ghép hai câu sai cách."
+        }
+      ]
+    },
+    {
+      "id": "en-c1-participle-clauses-advanced",
+      "nhom": "Mệnh đề – rút gọn",
+      "tieuDe": "Mệnh đề phân từ nâng cao: Having finished…, With + N + V-ing, lỗi dangling",
+      "mau": "Having + V3, S + V · Not + V-ing / Not having + V3, … · With + N + V-ing / V3, … · N + V-ing / V3, mệnh đề chính (absolute)",
+      "nghia": "sau khi đã ~ · vì không ~ · trong khi / vì (cái gì đó) đang ~",
+      "giaiThich": "Nối tiếp mệnh đề phân từ ở B2. 'Having + V3' nhấn hành động đã HOÀN TẤT trước hành động chính; bị động: 'Having been + V3'. Phủ định đặt not ở đầu. 'With + danh từ + V-ing / V3' thêm bối cảnh hoặc lý do, trong đó danh từ là chủ ngữ riêng của phân từ: 'With prices rising…'. Cấu trúc tuyệt đối (absolute) cũng có chủ ngữ riêng: 'Weather permitting', 'All things considered'. Quy tắc cốt lõi: nếu mệnh đề phân từ KHÔNG có chủ ngữ riêng, chủ ngữ ngầm của nó phải trùng với chủ ngữ mệnh đề chính — sai là lỗi 'dangling participle'. Đây là văn viết; khi nói thường dùng mệnh đề đầy đủ.",
+      "cachGhep": [
+        "Having + V3, + S + V (hành động xong trước)",
+        "Having been + V3, + S + V (bị động, xong trước)",
+        "Not + V-ing / Not having (been) + V3, + S + V",
+        "With + N + V-ing (đang diễn ra) / V3 (đã xong, bị động), + mệnh đề chính",
+        "N + V-ing / V3, + mệnh đề chính: Weather permitting, … · All things considered, …"
+      ],
+      "viDu": [
+        {
+          "c": "Having finished the report, she switched off her laptop.",
+          "v": "Viết xong bản báo cáo, cô ấy tắt máy tính."
+        },
+        {
+          "c": "Not having been told about the change, we arrived an hour early.",
+          "v": "Vì không được báo về sự thay đổi, chúng tôi đến sớm một tiếng."
+        },
+        {
+          "c": "With prices rising so fast, many families are struggling.",
+          "v": "Giá cả tăng nhanh như vậy nên nhiều gia đình đang chật vật."
+        },
+        {
+          "c": "Weather permitting, the ceremony will be held outdoors.",
+          "v": "Nếu thời tiết cho phép, buổi lễ sẽ được tổ chức ngoài trời."
+        },
+        {
+          "c": "With the exams finished, the students finally relaxed.",
+          "v": "Thi cử xong xuôi, sinh viên cuối cùng cũng được thư giãn."
+        }
+      ],
+      "luuY": [
+        "Lỗi dangling: 'Walking down the street, the rain started' ✗ (mưa không đi bộ) → 'Walking down the street, I got caught in the rain' ✓.",
+        "Thứ tự phủ định: 'Not having seen the film, I can't comment', không phải 'Having not seen…' trong cách dùng thông thường.",
+        "Một số cụm cố định được chấp nhận dù chủ ngữ không trùng: Generally speaking, Judging by…, Considering…, Given….",
+        "Khác rút gọn có liên từ (en-c1-reduced-adverbial-clauses: When asked…, While waiting…): ở đó liên từ được giữ lại nên quan hệ nghĩa rõ hơn; mệnh đề phân từ thuần tuý để người đọc tự suy ra (thời gian, lý do, điều kiện)."
+      ],
+      "soSanh": [
+        "en-b2-participle-clauses",
+        "en-c1-reduced-adverbial-clauses",
+        "en-b2-reduced-relative",
+        "en-c1-it-there-advanced"
+      ],
+      "tuKhoa": [
+        "having finished",
+        "having done",
+        "with prices rising",
+        "weather permitting",
+        "dangling participle",
+        "mệnh đề phân từ",
+        "menh de phan tu",
+        "absolute clause"
+      ],
+      "quiz": [
+        {
+          "h": "___ the instructions twice, I still couldn't assemble the shelf.",
+          "lc": [
+            "Read",
+            "Having read",
+            "Having been read",
+            "To have read"
+          ],
+          "da": 1,
+          "gt": "Tôi (chủ ngữ) đã đọc xong trước ⇒ Having + V3, chủ động. 'Having been read' là bị động (tôi không bị đọc); 'Read' ở đầu câu sẽ là phân từ bị động; 'To have read' không tạo nghĩa nhượng bộ / thời gian ở đây."
+        },
+        {
+          "h": "Câu nào đúng (không mắc lỗi dangling)?",
+          "lc": [
+            "Having missed the last bus, the walk home took an hour.",
+            "Having missed the last bus, it was a long walk home.",
+            "Having missed the last bus, we had to walk home.",
+            "Having missed the last bus, a long walk home was necessary."
+          ],
+          "da": 2,
+          "gt": "Chủ ngữ ngầm của 'Having missed' phải là người lỡ xe và phải trùng với chủ ngữ mệnh đề chính: 'we'. Ở ba câu kia chủ ngữ chính là 'a long walk', 'it', 'the walk' — những thứ không thể lỡ xe buýt."
+        },
+        {
+          "h": "___ unemployment rising, the government is under pressure to act.",
+          "lc": [
+            "Because",
+            "While",
+            "Although",
+            "With"
+          ],
+          "da": 3,
+          "gt": "Chỉ With đi được với 'danh từ + V-ing' (không có động từ chia). Because / Although / While là liên từ, cần mệnh đề có động từ chia: 'Because unemployment IS rising'."
+        }
+      ]
+    },
+    {
+      "id": "en-c1-reduced-adverbial-clauses",
+      "nhom": "Mệnh đề – rút gọn",
+      "tieuDe": "Rút gọn mệnh đề trạng ngữ: When asked…, If in doubt…, While waiting…",
+      "mau": "Liên từ (when / while / if / unless / once / although / until / as if) + V-ing / V3 / adj / cụm giới từ",
+      "nghia": "khi được ~ · nếu (còn) ~ · trong lúc ~ · dù ~ · một khi đã ~",
+      "giaiThich": "Sau một số liên từ có thể lược 'chủ ngữ + be' khi chủ ngữ trùng với chủ ngữ mệnh đề chính (hoặc là chủ ngữ chung chung trong chỉ dẫn): 'When (he was) asked…', 'While (I was) waiting…', 'Although (she was) tired…', 'If (you are) in doubt…'. Dùng V-ing cho nghĩa chủ động, V3 cho nghĩa bị động. Rất phổ biến trong văn viết, hướng dẫn sử dụng, biển báo, báo chí vì gọn. Có nhiều cụm cố định: if necessary, if possible, if so, if any, unless otherwise stated, when in doubt, as if to + V.",
+      "cachGhep": [
+        "when / while / before / after / since + V-ing (chủ động): While waiting, …",
+        "when / if / unless / once / until / although + V3 (bị động): When asked, … · Once opened, …",
+        "although / though / if / when / while + adj: Although exhausted, …",
+        "if / when / while + cụm giới từ: If in doubt, … · While in Hanoi, …",
+        "Cụm cố định: if necessary · if possible · if so · unless otherwise stated · as if to + V"
+      ],
+      "viDu": [
+        {
+          "c": "When asked about the scandal, the minister refused to comment.",
+          "v": "Khi được hỏi về vụ bê bối, vị bộ trưởng từ chối bình luận."
+        },
+        {
+          "c": "If in doubt, consult your doctor.",
+          "v": "Nếu còn băn khoăn, hãy hỏi ý kiến bác sĩ."
+        },
+        {
+          "c": "While waiting for the bus, I read the whole newspaper.",
+          "v": "Trong lúc đợi xe buýt, tôi đã đọc hết tờ báo."
+        },
+        {
+          "c": "Once opened, the jar should be kept in the fridge.",
+          "v": "Một khi đã mở nắp, lọ này nên được bảo quản trong tủ lạnh."
+        },
+        {
+          "c": "Although exhausted, she insisted on finishing the race.",
+          "v": "Dù kiệt sức, cô ấy vẫn nhất quyết chạy hết cuộc đua."
+        }
+      ],
+      "luuY": [
+        "Chủ ngữ bị lược phải trùng với chủ ngữ mệnh đề chính: 'While walking home, my phone rang' ✗ (điện thoại không đi bộ) → 'While walking home, I heard my phone ring' ✓.",
+        "Chọn đúng V-ing / V3: 'When asked' (được hỏi — bị động) ↔ 'When asking' (khi hỏi — chủ động).",
+        "Không rút gọn kiểu này sau because / as / since chỉ lý do: 'Because tired, she left' ✗ → 'Being tired, she left' hoặc 'Because she was tired, …'.",
+        "Khác mệnh đề phân từ thuần tuý (en-c1-participle-clauses-advanced): ở đây liên từ được GIỮ lại nên quan hệ nghĩa (thời gian, điều kiện, nhượng bộ) rõ ràng."
+      ],
+      "soSanh": [
+        "en-c1-participle-clauses-advanced",
+        "en-b2-participle-clauses",
+        "en-b2-reduced-relative",
+        "en-b2-ellipsis-substitution"
+      ],
+      "tuKhoa": [
+        "when asked",
+        "if in doubt",
+        "while waiting",
+        "once opened",
+        "unless otherwise stated",
+        "if necessary",
+        "rút gọn mệnh đề trạng ngữ",
+        "rut gon menh de"
+      ],
+      "quiz": [
+        {
+          "h": "When ___ by reporters why he had resigned, he simply smiled.",
+          "lc": [
+            "been asking",
+            "asking",
+            "asked",
+            "to ask"
+          ],
+          "da": 2,
+          "gt": "Ông ấy ĐƯỢC phóng viên hỏi (có 'by reporters') ⇒ phân từ bị động: When (he was) asked. 'asking' là chủ động; 'to ask' và 'been asking' không đứng được sau when."
+        },
+        {
+          "h": "___, store in a cool, dry place and use within three days.",
+          "lc": [
+            "Once to open",
+            "Once open it",
+            "Once opening",
+            "Once opened"
+          ],
+          "da": 3,
+          "gt": "Sản phẩm BỊ mở ⇒ Once (it has been) opened. V-ing mang nghĩa chủ động (sản phẩm tự mở) nên sai; hai dạng còn lại sai cấu trúc."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "Although tired, she kept working.",
+            "While waited for the train, I called my mother.",
+            "Because tired, she went to bed early.",
+            "If be in doubt, ask a member of staff."
+          ],
+          "da": 0,
+          "gt": "Although + adj là dạng rút gọn hợp lệ. Sau because không rút gọn kiểu này; 'While waiting' mới đúng vì là nghĩa chủ động; 'If in doubt' không có 'be'."
+        }
+      ]
+    },
+    {
+      "id": "en-c1-relative-advanced",
+      "nhom": "Mệnh đề – rút gọn",
+      "tieuDe": "Mệnh đề quan hệ nâng cao: most of whom, whereby, the extent to which",
+      "mau": "…, từ chỉ lượng + of + whom / which + V · N + whereby + S + V · the extent / degree / way + giới từ + which + S + V · …, in which case / at which point / by which time + S + V",
+      "nghia": "mà phần lớn trong số đó ~ · theo đó / nhờ đó ~ · mức độ mà ~ · trong trường hợp đó ~",
+      "giaiThich": "Các cấu trúc quan hệ của văn viết trang trọng. (1) Từ chỉ lượng + of whom / of which (some, many, most, none, all, both, two, the majority…) nối thêm thông tin về một phần của nhóm vừa nhắc, luôn có dấu phẩy phía trước. (2) 'whereby' = by which / theo đó, đi sau danh từ như system, scheme, process, agreement, arrangement. (3) Giới từ + which đi với danh từ trừu tượng: the extent to which, the degree to which, the way in which, the speed at which. (4) 'in which case', 'at which point', 'by which time' — which bổ nghĩa cho danh từ theo sau và chỉ lại cả ý trước.",
+      "cachGhep": [
+        "N (người), + some / many / most / none / both / two… + of whom + V",
+        "N (vật), + some / most / none / all… + of which + V",
+        "a system / scheme / process / agreement + whereby + S + V",
+        "the extent / degree + to which · the way / manner + in which · the speed / rate + at which + S + V",
+        "mệnh đề, + in which case / at which point / by which time + S + V"
+      ],
+      "viDu": [
+        {
+          "c": "She has three brothers, two of whom live abroad.",
+          "v": "Cô ấy có ba anh em trai, hai người trong số đó sống ở nước ngoài."
+        },
+        {
+          "c": "He wrote a dozen novels, none of which sold well.",
+          "v": "Ông ấy viết cả chục cuốn tiểu thuyết, mà không cuốn nào bán chạy."
+        },
+        {
+          "c": "They introduced a scheme whereby employees can buy shares at a discount.",
+          "v": "Họ đưa ra một chương trình theo đó nhân viên có thể mua cổ phần với giá ưu đãi."
+        },
+        {
+          "c": "It is hard to measure the extent to which advertising influences children.",
+          "v": "Khó mà đo được quảng cáo ảnh hưởng đến trẻ em tới mức độ nào."
+        },
+        {
+          "c": "The flight may be delayed, in which case we'll call you.",
+          "v": "Chuyến bay có thể bị hoãn, trong trường hợp đó chúng tôi sẽ gọi cho bạn."
+        }
+      ],
+      "luuY": [
+        "Sau 'of' dùng whom (người) / which (vật), không dùng who / that / them: '…, most of whom work part-time'. Viết '…, most of them work part-time' là nối hai câu bằng dấu phẩy — sai trong văn viết (phải dùng dấu chấm / chấm phẩy, hoặc 'and most of them').",
+        "Giới từ đi theo danh từ: to an extent → the extent TO which; in a way → the way IN which; at a speed → the speed AT which.",
+        "'whereby' rất trang trọng; đừng nhầm với 'whereas' (trong khi đó — đối lập).",
+        "Khác mệnh đề quan hệ với giới từ ở B2 (en-b2-relative-preposition: the person to whom I spoke): ở đây có thêm từ chỉ lượng đứng trước 'of whom / of which', hoặc which đi kèm danh từ (in which case)."
+      ],
+      "soSanh": [
+        "en-b2-relative-preposition",
+        "en-b2-relative-which-clause",
+        "en-b1-relative-non-defining",
+        "en-b1-quantifiers"
+      ],
+      "tuKhoa": [
+        "most of whom",
+        "none of which",
+        "whereby",
+        "the extent to which",
+        "in which case",
+        "at which point",
+        "by which time",
+        "mệnh đề quan hệ nâng cao",
+        "menh de quan he"
+      ],
+      "quiz": [
+        {
+          "h": "The company employs 300 people, most of ___ work part-time.",
+          "lc": [
+            "them",
+            "whom",
+            "who",
+            "which"
+          ],
+          "da": 1,
+          "gt": "Sau giới từ of, chỉ người ⇒ whom. 'who' không đứng sau giới từ; 'which' chỉ vật; 'them' biến vế sau thành một câu độc lập nối bằng dấu phẩy — sai trong văn viết."
+        },
+        {
+          "h": "They proposed a system ___ staff could choose their own hours.",
+          "lc": [
+            "whereupon",
+            "which",
+            "whereby",
+            "whereas"
+          ],
+          "da": 2,
+          "gt": "whereby = by which / theo đó, đi sau 'a system'. 'whereas' chỉ sự đối lập; 'whereupon' = ngay sau đó; 'which' đứng một mình thì thiếu giới từ (phải là under / by which)."
+        },
+        {
+          "h": "Researchers disagree about the extent ___ diet affects mood.",
+          "lc": [
+            "of whom",
+            "in that",
+            "which",
+            "to which"
+          ],
+          "da": 3,
+          "gt": "Ta nói 'to a (certain) extent' ⇒ the extent TO which + mệnh đề. 'which' thiếu giới từ; 'in that' = ở chỗ là; 'of whom' chỉ người."
+        }
+      ]
+    },
+    {
+      "id": "en-c1-noun-clauses-subject",
+      "nhom": "Mệnh đề – rút gọn",
+      "tieuDe": "Mệnh đề danh từ làm chủ ngữ: That he lied…, Whether… or not, What…",
+      "mau": "That + S + V + V (số ít)… · Whether + S + V (or not) + V… · What / How / Why / Where / Who + S + V + V…",
+      "nghia": "việc (rằng) ~ thì ~ · việc ~ hay không thì ~ · điều / cách / lý do ~ thì ~",
+      "giaiThich": "Cả một mệnh đề có thể đứng ở vị trí chủ ngữ. 'That + mệnh đề' nêu một sự việc ('That he lied is beyond doubt'): rất trang trọng — trong văn trung tính người ta thường dùng 'The fact that…' hoặc đưa It lên đầu ('It is beyond doubt that he lied'). 'Whether + mệnh đề' nêu điều chưa rõ. 'What / How / Why / Where / Who + mệnh đề' nêu điều, cách, lý do, nơi, người. Bên trong mệnh đề danh từ luôn là trật tự câu kể (S + V), và động từ chính của câu thường chia SỐ ÍT.",
+      "cachGhep": [
+        "That + S + V + is / was / seems… + adj / N",
+        "The fact that + S + V + V… (trung tính hơn)",
+        "Whether + S + V (+ or not) + remains / depends on / is…",
+        "What / How / Why / Where / When / Who + S + V + V số ít…",
+        "Dạng với It (tự nhiên hơn khi nói): It + V… + that / whether / how + mệnh đề"
+      ],
+      "viDu": [
+        {
+          "c": "That he lied to the committee is beyond doubt.",
+          "v": "Việc ông ta nói dối uỷ ban là điều không còn nghi ngờ gì."
+        },
+        {
+          "c": "Whether the plan will work remains to be seen.",
+          "v": "Kế hoạch có hiệu quả hay không thì còn phải chờ xem."
+        },
+        {
+          "c": "What she said at the meeting surprised everyone.",
+          "v": "Điều cô ấy nói trong cuộc họp khiến mọi người ngạc nhiên."
+        },
+        {
+          "c": "How the thieves got in is still a mystery.",
+          "v": "Bọn trộm vào bằng cách nào vẫn còn là điều bí ẩn."
+        },
+        {
+          "c": "Whether or not we go depends on the weather.",
+          "v": "Chúng ta có đi hay không còn tuỳ vào thời tiết."
+        }
+      ],
+      "luuY": [
+        "Không được bỏ That khi mệnh đề đứng làm chủ ngữ: 'He lied is beyond doubt' ✗.",
+        "Ở vị trí chủ ngữ dùng Whether, không dùng If: 'Whether he comes is uncertain' ✓, 'If he comes is uncertain' ✗.",
+        "Trật tự câu kể bên trong: 'Why he left is unclear', không phải 'Why did he leave is unclear'; và không lặp lại chủ ngữ bằng it: 'What he said it was true' ✗.",
+        "Khác câu chẻ với What (en-b2-cleft-sentences: What I need is a rest): câu chẻ dùng What… is… để NHẤN một thành phần; còn ở đây mệnh đề chỉ đơn giản đóng vai chủ ngữ của một vị ngữ bất kỳ (surprised, remains, depends on…)."
+      ],
+      "soSanh": [
+        "en-b2-whether-if-noun-clauses",
+        "en-b1-indirect-questions",
+        "en-b2-preparatory-it",
+        "en-c1-cleft-advanced"
+      ],
+      "tuKhoa": [
+        "that clause",
+        "whether or not",
+        "mệnh đề danh từ",
+        "menh de danh tu",
+        "noun clause",
+        "chủ ngữ là mệnh đề",
+        "the fact that"
+      ],
+      "quiz": [
+        {
+          "h": "___ the minister knew about the deal is still unclear.",
+          "lc": [
+            "Either",
+            "If",
+            "Whether",
+            "Unless"
+          ],
+          "da": 2,
+          "gt": "Mệnh đề làm chủ ngữ nêu điều chưa rõ ⇒ Whether. If không mở đầu mệnh đề chủ ngữ; Either không phải liên từ mở mệnh đề danh từ; Unless mở mệnh đề điều kiện."
+        },
+        {
+          "h": "___ she has recovered so quickly is remarkable.",
+          "lc": [
+            "Which",
+            "If",
+            "What",
+            "That"
+          ],
+          "da": 3,
+          "gt": "Chủ ngữ là cả một sự việc trọn vẹn ⇒ That + mệnh đề. What / Which phải đóng một vai trong mệnh đề (ở đây mệnh đề đã đủ thành phần); If không mở đầu mệnh đề chủ ngữ."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "Why he resigned remains a mystery.",
+            "Why he resigned it remains a mystery.",
+            "Why did he resign remains a mystery.",
+            "Why he resigned remain a mystery."
+          ],
+          "da": 0,
+          "gt": "Trong mệnh đề danh từ dùng trật tự câu kể (he resigned), động từ chính chia số ít (remains) và không lặp chủ ngữ bằng 'it'."
+        }
+      ]
+    },
+    {
+      "id": "en-c1-nominalisation",
+      "nhom": "Mệnh đề – rút gọn",
+      "tieuDe": "Nominalisation (danh hoá) trong văn học thuật",
+      "mau": "Động từ / tính từ → danh từ: S + V + adv → the + adj + N + of / in + N · because + mệnh đề → N + lead to / result in + N",
+      "nghia": "diễn đạt hành động, tính chất bằng cụm danh từ thay cho động từ, tính từ",
+      "giaiThich": "Danh hoá là chuyển ý vốn diễn đạt bằng động từ hoặc tính từ sang DANH TỪ: 'prices rose sharply' → 'the sharp rise in prices'; 'the government failed to act' → 'the government's failure to act'. Khi đó trạng từ thành tính từ, chủ ngữ thành sở hữu cách hoặc cụm of / by, và hai mệnh đề có thể gộp thành một câu với động từ chỉ quan hệ như lead to, result in, cause, reflect. Kết quả là văn gọn, khách quan, giàu thông tin — đặc trưng của văn học thuật, báo cáo, báo chí chính luận. Trong hội thoại, lạm dụng danh hoá sẽ nặng nề và khó hiểu.",
+      "cachGhep": [
+        "V → N: decide → decision · fail → failure · grow → growth · discover → discovery",
+        "Adj → N: important → importance · able → ability · difficult → difficulty",
+        "S + V + adv → the + adj + N: prices rose sharply → the sharp rise in prices",
+        "S + V → S's + N + to V: the firm refused to pay → the firm's refusal to pay",
+        "Because + mệnh đề 1, mệnh đề 2 → Cụm danh từ 1 + led to / resulted in + cụm danh từ 2"
+      ],
+      "viDu": [
+        {
+          "c": "The rapid growth of online shopping has transformed the high street.",
+          "v": "Sự phát triển nhanh chóng của mua sắm trực tuyến đã làm thay đổi các phố mua sắm."
+        },
+        {
+          "c": "The government's failure to act led to widespread criticism.",
+          "v": "Việc chính phủ không hành động đã dẫn đến sự chỉ trích rộng khắp."
+        },
+        {
+          "c": "A reduction in class sizes would improve students' performance.",
+          "v": "Việc giảm sĩ số lớp sẽ cải thiện kết quả học tập của học sinh."
+        },
+        {
+          "c": "There has been a significant increase in the number of applications.",
+          "v": "Số lượng đơn đăng ký đã tăng đáng kể."
+        },
+        {
+          "c": "The discovery of penicillin revolutionised medicine.",
+          "v": "Việc phát hiện ra penicillin đã làm nên cuộc cách mạng trong y học."
+        }
+      ],
+      "luuY": [
+        "Người Việt hay thêm -ing để dịch 'sự / việc': 'the increasing of prices' ✗ → dùng danh từ có sẵn: 'the increase in prices'.",
+        "Mỗi danh từ có giới từ riêng: an increase / rise / fall IN, a reason FOR, demand FOR, an impact ON, a lack OF, a solution TO.",
+        "Trạng từ phải đổi thành tính từ: 'rose sharply' → 'a sharp rise', không phải 'a sharply rise'.",
+        "Khác mệnh đề danh từ làm chủ ngữ (en-c1-noun-clauses-subject: That prices rose sharply surprised everyone): cả hai đều trang trọng, nhưng danh hoá gọn hơn và không còn động từ chia thì."
+      ],
+      "soSanh": [
+        "en-c1-noun-clauses-subject",
+        "en-c1-hedging",
+        "en-c1-linkers-formal",
+        "en-b2-dependent-prepositions"
+      ],
+      "tuKhoa": [
+        "nominalisation",
+        "nominalization",
+        "danh hoá",
+        "danh hoa",
+        "danh từ hoá",
+        "văn học thuật",
+        "academic writing",
+        "the rise in"
+      ],
+      "quiz": [
+        {
+          "h": "Câu nào danh hoá đúng ý 'Because unemployment rose sharply, people protested.'?",
+          "lc": [
+            "The sharply rise of unemployment led to protests.",
+            "The sharp rise in unemployment led to protests.",
+            "The rising sharp in unemployment led protests.",
+            "Unemployment's sharply risen led to protests."
+          ],
+          "da": 1,
+          "gt": "rose sharply → the sharp rise (trạng từ thành tính từ, động từ thành danh từ), đi với giới từ in; quan hệ nhân quả diễn đạt bằng 'led to'. Các câu kia dùng trạng từ trước danh từ, sai dạng từ hoặc thiếu 'to'."
+        },
+        {
+          "h": "There has been a dramatic ___ in the use of electric cars.",
+          "lc": [
+            "increasing",
+            "increasingly",
+            "increase",
+            "increased"
+          ],
+          "da": 2,
+          "gt": "Sau 'a dramatic' cần danh từ: increase (+ in). Không dùng V-ing khi đã có danh từ sẵn; 'increased' và 'increasingly' không phải danh từ."
+        },
+        {
+          "h": "The committee's ___ to postpone the vote angered many members.",
+          "lc": [
+            "decisive",
+            "decided",
+            "decide",
+            "decision"
+          ],
+          "da": 3,
+          "gt": "Sau sở hữu cách (committee's) cần danh từ: decision + to V. 'decide' là động từ, 'decisive' là tính từ, 'decided' là quá khứ / phân từ."
+        }
+      ]
+    }
+  ]
+}

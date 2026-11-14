@@ -52,34 +52,34 @@
         {
           "h": "He is said ___ very rich.",
           "lc": [
-            "to be",
             "be",
             "that he is",
+            "to be",
             "being"
           ],
-          "da": 0,
+          "da": 2,
           "gt": "Chủ ngữ là người được nói tới ⇒ is said + to V."
         },
         {
           "h": "It ___ that the company is losing money.",
           "lc": [
-            "is said",
             "is saying",
+            "says",
             "said",
-            "says"
+            "is said"
           ],
-          "da": 0,
+          "da": 3,
           "gt": "Chủ ngữ giả It + bị động: It is said that…"
         },
         {
           "h": "She is believed ___ the country last week.",
           "lc": [
-            "leaving",
+            "to have left",
             "to leave",
-            "that left",
-            "to have left"
+            "leaving",
+            "that left"
           ],
-          "da": 3,
+          "da": 0,
           "gt": "Việc xảy ra trước thời điểm nói (last week) ⇒ to have + V3."
         }
       ]
@@ -134,34 +134,34 @@
         {
           "h": "I ___ a new laptop by my company.",
           "lc": [
-            "was given",
-            "was giving",
+            "have given",
             "gave",
-            "have given"
+            "was giving",
+            "was given"
           ],
-          "da": 0,
+          "da": 3,
           "gt": "Tôi là người nhận ⇒ bị động: was given + vật."
         },
         {
           "h": "A letter was sent ___ me yesterday.",
           "lc": [
-            "at",
-            "for",
             "to",
-            "with"
+            "for",
+            "with",
+            "at"
           ],
-          "da": 2,
+          "da": 0,
           "gt": "Vật làm chủ ngữ thì dùng to trước người nhận (send sth to sb)."
         },
         {
           "h": "Câu bị động nào đúng với 'They offered her a job'?",
           "lc": [
-            "She was offered a job.",
-            "She was offered to a job.",
             "A job offered to her.",
-            "She offered a job."
+            "She was offered a job.",
+            "She offered a job.",
+            "She was offered to a job."
           ],
-          "da": 0,
+          "da": 1,
           "gt": "Người làm chủ ngữ: be + V3 + vật, không thêm to."
         }
       ]
@@ -223,21 +223,21 @@
         {
           "h": "We need to get the roof ___ before winter.",
           "lc": [
-            "to fix",
-            "fix",
+            "fixing",
             "fixed",
-            "fixing"
+            "fix",
+            "to fix"
           ],
-          "da": 2,
+          "da": 1,
           "gt": "get + vật + V3 (mái nhà được sửa)."
         },
         {
           "h": "I'll have my assistant ___ you the file.",
           "lc": [
             "sent",
-            "sending",
+            "to send",
             "send",
-            "to send"
+            "sending"
           ],
           "da": 2,
           "gt": "have + người + V nguyên mẫu không to."
@@ -296,9 +296,9 @@
         {
           "h": "Never ___ such a beautiful sunset.",
           "lc": [
-            "I saw",
-            "I have seen",
             "did I saw",
+            "I have seen",
+            "I saw",
             "have I seen"
           ],
           "da": 3,
@@ -307,23 +307,23 @@
         {
           "h": "Not only ___ late, but he also forgot the tickets.",
           "lc": [
-            "he did",
             "was he",
+            "he was",
             "did he was",
-            "he was"
+            "he did"
           ],
-          "da": 1,
+          "da": 0,
           "gt": "Sau Not only ở đầu câu phải đảo: was + he."
         },
         {
           "h": "No sooner had we sat down ___ the phone rang.",
           "lc": [
-            "that",
             "then",
             "than",
+            "that",
             "when"
           ],
-          "da": 2,
+          "da": 1,
           "gt": "No sooner luôn đi với than."
         }
       ]
@@ -379,12 +379,12 @@
         {
           "h": "___ I known about the problem, I would have helped.",
           "lc": [
-            "If",
-            "Have",
             "Did",
-            "Had"
+            "Had",
+            "Have",
+            "If"
           ],
-          "da": 3,
+          "da": 1,
           "gt": "Đảo ngữ điều kiện loại 3: Had + S + V3."
         },
         {
@@ -401,12 +401,12 @@
         {
           "h": "___ I you, I would accept the offer.",
           "lc": [
-            "Should",
             "Had",
-            "Were",
-            "Did"
+            "Should",
+            "Did",
+            "Were"
           ],
-          "da": 2,
+          "da": 3,
           "gt": "Đảo ngữ điều kiện loại 2 với to be: Were + S…"
         }
       ]
@@ -461,9 +461,9 @@
         {
           "h": "___ was Lan who broke the window.",
           "lc": [
-            "What",
-            "That",
             "There",
+            "That",
+            "What",
             "It"
           ],
           "da": 3,
@@ -472,23 +472,23 @@
         {
           "h": "___ I need is a long vacation.",
           "lc": [
-            "Which",
             "What",
+            "Which",
             "It",
             "That"
           ],
-          "da": 1,
+          "da": 0,
           "gt": "Mẫu What + S + V + is… (điều mà tôi cần là…)."
         },
         {
           "h": "It was the noise ___ woke me up.",
           "lc": [
             "what",
-            "who",
             "that",
+            "who",
             "it"
           ],
-          "da": 2,
+          "da": 1,
           "gt": "Sau phần nhấn mạnh chỉ vật dùng that."
         }
       ]
@@ -542,31 +542,31 @@
         {
           "h": "I ___ like your new haircut! It looks great.",
           "lc": [
-            "do",
             "am",
+            "does",
             "have",
-            "does"
+            "do"
           ],
-          "da": 0,
+          "da": 3,
           "gt": "Nhấn mạnh ở hiện tại với chủ ngữ I: do + V."
         },
         {
           "h": "She ___ call you last night, but you didn't answer.",
           "lc": [
+            "did",
             "was",
-            "do",
             "does",
-            "did"
+            "do"
           ],
-          "da": 3,
+          "da": 0,
           "gt": "Nhấn mạnh việc trong quá khứ (last night): did + V."
         },
         {
           "h": "He does ___ a lot, even if he doesn't show it.",
           "lc": [
-            "cared",
-            "care",
             "cares",
+            "care",
+            "cared",
             "caring"
           ],
           "da": 1,
@@ -625,34 +625,34 @@
         {
           "h": "___ tired, she went straight to bed.",
           "lc": [
-            "Feel",
-            "Felt",
             "Feeling",
-            "To feeling"
+            "To feeling",
+            "Feel",
+            "Felt"
           ],
-          "da": 2,
+          "da": 0,
           "gt": "Cùng chủ ngữ, nghĩa chủ động (cô ấy cảm thấy) ⇒ V-ing."
         },
         {
           "h": "___ in 1990, the bridge is still in good condition.",
           "lc": [
+            "Building",
             "Built",
-            "Having building",
             "Build",
-            "Building"
+            "Having building"
           ],
-          "da": 0,
+          "da": 1,
           "gt": "Cây cầu được xây ⇒ nghĩa bị động ⇒ V3."
         },
         {
           "h": "___ finished his homework, he went out to play.",
           "lc": [
-            "Had",
-            "Being",
             "Have",
-            "Having"
+            "Had",
+            "Having",
+            "Being"
           ],
-          "da": 3,
+          "da": 2,
           "gt": "Việc xong trước việc chính ⇒ Having + V3."
         }
       ]
@@ -706,34 +706,34 @@
         {
           "h": "The man ___ next to me is my uncle.",
           "lc": [
-            "sitting",
             "sits",
+            "sitting",
             "is sitting",
             "who sitting"
           ],
-          "da": 0,
+          "da": 1,
           "gt": "Rút gọn 'who is sitting' (chủ động) thành V-ing."
         },
         {
           "h": "The books ___ in this shop are expensive.",
           "lc": [
-            "sold",
-            "selling",
+            "are sold",
             "sell",
-            "are sold"
+            "sold",
+            "selling"
           ],
-          "da": 0,
+          "da": 2,
           "gt": "Sách được bán ⇒ bị động ⇒ V3 (rút gọn 'which are sold')."
         },
         {
           "h": "Students ___ to join the club should sign up here.",
           "lc": [
+            "wanted",
             "who wanting",
             "are wanting",
-            "wanting",
-            "wanted"
+            "wanting"
           ],
-          "da": 2,
+          "da": 3,
           "gt": "Rút gọn 'who want' (chủ động) thành V-ing."
         }
       ]
@@ -788,34 +788,34 @@
         {
           "h": "The company for ___ she works is very large.",
           "lc": [
-            "which",
             "who",
+            "where",
             "that",
-            "where"
+            "which"
           ],
-          "da": 0,
+          "da": 3,
           "gt": "Sau giới từ, chỉ vật ⇒ which (không dùng that)."
         },
         {
           "h": "The person to ___ I spoke was very helpful.",
           "lc": [
-            "who",
             "whom",
-            "that",
-            "which"
+            "who",
+            "which",
+            "that"
           ],
-          "da": 1,
+          "da": 0,
           "gt": "Sau giới từ, chỉ người ⇒ whom."
         },
         {
           "h": "This is the house in ___ I grew up.",
           "lc": [
-            "that",
             "what",
             "which",
-            "where"
+            "where",
+            "that"
           ],
-          "da": 2,
+          "da": 1,
           "gt": "Giới từ + which; where đã bao hàm giới từ nên không đi sau in."
         }
       ]
@@ -868,32 +868,32 @@
         {
           "h": "___ you go, I'll follow you.",
           "lc": [
-            "Wherever",
-            "Whichever",
             "Whatever",
-            "Whoever"
+            "Whichever",
+            "Whoever",
+            "Wherever"
           ],
-          "da": 0,
+          "da": 3,
           "gt": "Nói về nơi chốn (go) ⇒ Wherever."
         },
         {
           "h": "___ happens, I'll be there for you.",
           "lc": [
-            "Wherever",
-            "Whoever",
             "Whatever",
-            "However"
+            "However",
+            "Whoever",
+            "Wherever"
           ],
-          "da": 2,
+          "da": 0,
           "gt": "Chủ ngữ chỉ sự việc của 'happens' ⇒ Whatever."
         },
         {
           "h": "___ told you that was lying.",
           "lc": [
-            "Whatever",
+            "Wherever",
             "Whoever",
             "Whenever",
-            "Wherever"
+            "Whatever"
           ],
           "da": 1,
           "gt": "Chủ ngữ chỉ người (người đã nói) ⇒ Whoever."
@@ -952,11 +952,11 @@
           "h": "He suggested ___ a taxi.",
           "lc": [
             "take to",
-            "to take",
             "taking",
+            "to take",
             "me to take"
           ],
-          "da": 2,
+          "da": 1,
           "gt": "suggest + V-ing (không dùng to V hay tân ngữ + to V)."
         },
         {
@@ -1034,19 +1034,19 @@
         {
           "h": "The doctor recommended that he ___ more rest.",
           "lc": [
-            "to get",
-            "gotten",
             "getting",
-            "get"
+            "to get",
+            "get",
+            "gotten"
           ],
-          "da": 3,
+          "da": 2,
           "gt": "Sau recommend that… dùng động từ nguyên mẫu không to."
         },
         {
           "h": "It is essential that everyone ___ on time.",
           "lc": [
-            "to be",
             "been",
+            "to be",
             "being",
             "be"
           ],
@@ -1056,12 +1056,12 @@
         {
           "h": "They demanded that the manager ___ immediately.",
           "lc": [
-            "to resign",
             "resign",
             "resigning",
+            "to resign",
             "resignation"
           ],
-          "da": 1,
+          "da": 0,
           "gt": "demand that + S + V nguyên mẫu không to."
         }
       ]
@@ -1113,23 +1113,23 @@
         {
           "h": "He didn't study at all. ___, he failed the exam.",
           "lc": [
-            "Nevertheless",
             "Therefore",
-            "Whereas",
-            "However"
+            "However",
+            "Nevertheless",
+            "Whereas"
           ],
-          "da": 1,
+          "da": 0,
           "gt": "Câu sau là kết quả của câu trước ⇒ Therefore."
         },
         {
           "h": "It was raining heavily. ___, they continued the match.",
           "lc": [
-            "Moreover",
             "Therefore",
+            "Nevertheless",
             "Whereas",
-            "Nevertheless"
+            "Moreover"
           ],
-          "da": 3,
+          "da": 1,
           "gt": "Ý sau trái với điều người ta chờ đợi ⇒ Nevertheless (dù vậy)."
         },
         {

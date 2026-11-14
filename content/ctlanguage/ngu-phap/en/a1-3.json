@@ -58,30 +58,30 @@
         {
           "h": "___ do you live? - In Da Nang.",
           "lc": [
-            "When",
             "Where",
-            "Who",
-            "What"
+            "What",
+            "When",
+            "Who"
           ],
-          "da": 1,
+          "da": 0,
           "gt": "Câu trả lời là một nơi chốn (In Da Nang) nên hỏi bằng Where."
         },
         {
           "h": "___ is that man? - He's my uncle.",
           "lc": [
-            "What",
-            "Where",
             "How",
-            "Who"
+            "Who",
+            "What",
+            "Where"
           ],
-          "da": 3,
+          "da": 1,
           "gt": "Câu trả lời cho biết người đó là ai nên hỏi bằng Who."
         },
         {
           "h": "Câu nào đúng?",
           "lc": [
-            "What time are you get up?",
             "You get up what time?",
+            "What time are you get up?",
             "What time do you get up?",
             "What time you get up?"
           ],
@@ -141,34 +141,34 @@
         {
           "h": "How ___ eggs do you want?",
           "lc": [
-            "much",
             "some",
             "any",
-            "many"
+            "many",
+            "much"
           ],
-          "da": 3,
+          "da": 2,
           "gt": "Eggs là danh từ đếm được số nhiều nên dùng How many."
         },
         {
           "h": "How ___ rice do you eat every day?",
           "lc": [
-            "many",
+            "often",
             "old",
-            "much",
-            "often"
+            "many",
+            "much"
           ],
-          "da": 2,
+          "da": 3,
           "gt": "Rice là danh từ không đếm được nên dùng How much."
         },
         {
           "h": "___ are these jeans? - They're 300,000 dong.",
           "lc": [
-            "How many",
             "How much",
             "What",
-            "How old"
+            "How old",
+            "How many"
           ],
-          "da": 1,
+          "da": 0,
           "gt": "Câu trả lời là giá tiền nên hỏi bằng How much."
         }
       ]
@@ -224,8 +224,8 @@
           "h": "She can ___ three languages.",
           "lc": [
             "speak",
-            "speaks",
             "to speak",
+            "speaks",
             "speaking"
           ],
           "da": 0,
@@ -234,23 +234,23 @@
         {
           "h": "___ you swim? - No, I can't.",
           "lc": [
-            "Does",
             "Are",
-            "Do",
-            "Can"
+            "Can",
+            "Does",
+            "Do"
           ],
-          "da": 3,
+          "da": 1,
           "gt": "Câu trả lời dùng can't nên câu hỏi bắt đầu bằng Can."
         },
         {
           "h": "Câu nào đúng?",
           "lc": [
-            "He cans drive a car.",
-            "He can drives a car.",
             "He can to drive a car.",
-            "He can drive a car."
+            "He cans drive a car.",
+            "He can drive a car.",
+            "He can drives a car."
           ],
-          "da": 3,
+          "da": 2,
           "gt": "Can không thêm s, theo sau là V nguyên mẫu không to."
         }
       ]
@@ -307,20 +307,20 @@
           "h": "I'd like ___ a pizza, please.",
           "lc": [
             "order",
-            "orders",
             "to order",
-            "ordering"
+            "ordering",
+            "orders"
           ],
-          "da": 2,
+          "da": 1,
           "gt": "Sau would like dùng to + V nguyên mẫu."
         },
         {
           "h": "___ you like a drink? - Yes, please.",
           "lc": [
+            "Are",
             "Can",
-            "Do",
             "Would",
-            "Are"
+            "Do"
           ],
           "da": 2,
           "gt": "Lời mời dùng Would you like…?; câu đáp Yes, please cho thấy đây là lời mời."
@@ -328,12 +328,12 @@
         {
           "h": "Câu nào là lời MỜI?",
           "lc": [
-            "Would you like some cake?",
-            "Do you like cake?",
+            "You like cake.",
             "Is this your cake?",
-            "You like cake."
+            "Do you like cake?",
+            "Would you like some cake?"
           ],
-          "da": 0,
+          "da": 3,
           "gt": "Would you like…? là lời mời; Do you like…? chỉ hỏi sở thích nói chung."
         }
       ]
@@ -391,9 +391,9 @@
           "h": "My father enjoys ___ football on TV.",
           "lc": [
             "to watching",
-            "watch",
+            "watches",
             "watching",
-            "watches"
+            "watch"
           ],
           "da": 2,
           "gt": "Sau enjoy động từ ở dạng V-ing: watching."
@@ -403,21 +403,21 @@
           "lc": [
             "is love",
             "like",
-            "loves",
-            "love"
+            "love",
+            "loves"
           ],
-          "da": 2,
+          "da": 3,
           "gt": "She là ngôi ba số ít nên động từ thêm s: loves."
         },
         {
           "h": "Câu nào đúng?",
           "lc": [
-            "I don't like runing.",
+            "I don't like running.",
             "I'm not like running.",
             "I don't like run.",
-            "I don't like running."
+            "I don't like runing."
           ],
-          "da": 3,
+          "da": 0,
           "gt": "Don't like + V-ing; run gấp đôi n thành running."
         }
       ]
@@ -472,21 +472,21 @@
         {
           "h": "Câu nào đúng?",
           "lc": [
-            "I have new a car.",
             "I have car a new.",
-            "I have a car new.",
-            "I have a new car."
+            "I have a new car.",
+            "I have new a car.",
+            "I have a car new."
           ],
-          "da": 3,
+          "da": 1,
           "gt": "Tính từ đứng giữa mạo từ và danh từ: a new car."
         },
         {
           "h": "They are ___.",
           "lc": [
-            "students good",
+            "a good students",
             "goods students",
             "good students",
-            "a good students"
+            "students good"
           ],
           "da": 2,
           "gt": "Tính từ đứng trước danh từ và không thêm s; danh từ số nhiều không dùng a."
@@ -494,12 +494,12 @@
         {
           "h": "She is wearing ___ dress.",
           "lc": [
-            "a dress long blue",
-            "a long blue",
             "a blue long",
-            "long a blue"
+            "a dress long blue",
+            "long a blue",
+            "a long blue"
           ],
-          "da": 1,
+          "da": 3,
           "gt": "Tính từ đứng trước danh từ; kích cỡ (long) đứng trước màu sắc (blue)."
         }
       ]
@@ -555,10 +555,10 @@
         {
           "h": "I can't buy this phone. It's ___ expensive.",
           "lc": [
-            "much",
+            "to",
             "too",
-            "very much",
-            "to"
+            "much",
+            "very much"
           ],
           "da": 1,
           "gt": "Đắt đến mức không mua được → dùng too (quá)."
@@ -566,23 +566,23 @@
         {
           "h": "Câu nào đúng?",
           "lc": [
-            "I like this film very much.",
-            "I very much this film.",
+            "I very like this film.",
             "I like very this film.",
-            "I very like this film."
+            "I like this film very much.",
+            "I very much this film."
           ],
-          "da": 0,
+          "da": 2,
           "gt": "Very không đứng trước động từ; với động từ dùng very much ở cuối câu."
         },
         {
           "h": "Your English is ___ good. Well done!",
           "lc": [
-            "very",
             "too",
             "very much",
-            "much too"
+            "much too",
+            "very"
           ],
-          "da": 0,
+          "da": 3,
           "gt": "Đây là lời khen nên dùng very; too mang nghĩa tiêu cực (quá mức)."
         }
       ]
@@ -639,21 +639,21 @@
         {
           "h": "We have English ___ Tuesday and Friday.",
           "lc": [
-            "on",
+            "at",
             "in",
             "to",
-            "at"
+            "on"
           ],
-          "da": 0,
+          "da": 3,
           "gt": "Trước thứ trong tuần dùng on."
         },
         {
           "h": "I get up ___ six o'clock.",
           "lc": [
             "at",
+            "on",
             "of",
-            "in",
-            "on"
+            "in"
           ],
           "da": 0,
           "gt": "Trước giờ cụ thể dùng at."
@@ -661,12 +661,12 @@
         {
           "h": "It's very hot here ___ summer.",
           "lc": [
-            "on",
             "at",
-            "to",
-            "in"
+            "in",
+            "on",
+            "to"
           ],
-          "da": 3,
+          "da": 1,
           "gt": "Trước mùa trong năm dùng in."
         }
       ]
@@ -722,12 +722,12 @@
         {
           "h": "My mother is ___ work now.",
           "lc": [
-            "at",
-            "under",
+            "in",
             "on",
-            "in"
+            "at",
+            "under"
           ],
-          "da": 0,
+          "da": 2,
           "gt": "Cụm cố định at work = ở chỗ làm."
         },
         {
@@ -745,9 +745,9 @@
           "h": "The school is ___ the park and the hospital.",
           "lc": [
             "between",
-            "in",
+            "next",
             "on",
-            "next"
+            "in"
           ],
           "da": 0,
           "gt": "Between A and B = ở giữa A và B; next phải có to."
@@ -806,21 +806,21 @@
         {
           "h": "December is the ___ month of the year.",
           "lc": [
+            "twelve",
             "twelfth",
             "twelfeth",
-            "twelveth",
-            "twelve"
+            "twelveth"
           ],
-          "da": 0,
+          "da": 1,
           "gt": "Số thứ tự của twelve là twelfth (đổi ve thành f rồi thêm th)."
         },
         {
           "h": "New Year's Day is ___ the first of January.",
           "lc": [
-            "in",
             "of",
+            "at",
             "on",
-            "at"
+            "in"
           ],
           "da": 2,
           "gt": "Trước một ngày cụ thể dùng on."
@@ -829,11 +829,11 @@
           "h": "Cách viết đúng của 3rd là:",
           "lc": [
             "thirth",
-            "third",
+            "threeth",
             "three",
-            "threeth"
+            "third"
           ],
-          "da": 1,
+          "da": 3,
           "gt": "Số thứ tự của three có dạng riêng: third."
         }
       ]
@@ -886,9 +886,9 @@
           "h": "I like fish, ___ I don't like meat.",
           "lc": [
             "but",
-            "and so",
             "because",
-            "or"
+            "or",
+            "and so"
           ],
           "da": 0,
           "gt": "Hai ý trái ngược nhau (thích – không thích) nên nối bằng but."
@@ -896,10 +896,10 @@
         {
           "h": "He is happy ___ today is his birthday.",
           "lc": [
-            "so",
+            "but",
             "because",
             "or",
-            "but"
+            "so"
           ],
           "da": 1,
           "gt": "Vế sau nêu lý do cho vế trước nên dùng because."
@@ -907,12 +907,12 @@
         {
           "h": "Is your teacher a man ___ a woman?",
           "lc": [
-            "and",
             "but",
-            "because",
-            "or"
+            "and",
+            "or",
+            "because"
           ],
-          "da": 3,
+          "da": 2,
           "gt": "Câu hỏi lựa chọn giữa hai khả năng dùng or."
         }
       ]

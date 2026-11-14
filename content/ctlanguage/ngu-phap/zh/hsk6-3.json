@@ -1,0 +1,1363 @@
+{
+  "nn": "zh",
+  "cap": "HSK6",
+  "diem": [
+    {
+      "id": "zh-hsk6-yidu",
+      "nhom": "Phó từ thời gian – phạm vi",
+      "tieuDe": "一度",
+      "mau": "S + (曾 / 曾经) + 一度 + V / Adj",
+      "nghia": "đã có một thời ~, từng có lúc ~ (nay không còn)",
+      "giaiThich": "一度 làm phó từ nói rằng một tình trạng hay hành động đã tồn tại trong MỘT GIAI ĐOẠN nào đó ở quá khứ rồi chấm dứt; ngầm hiểu là bây giờ không còn như vậy. Hay dùng trong văn viết, tin tức, thường đi sau 曾 / 曾经. Ngoài ra 一度 còn là cụm số lượng \"một lần\" trong các tổ hợp như 一年一度 (mỗi năm một lần).",
+      "cachGhep": [
+        "S + 一度 + V: 他一度想放弃学业",
+        "S + 曾(经) + 一度 + V / Adj: 公司曾一度濒临破产",
+        "S + 一度 + 十分 / 非常 + Adj: 两国关系一度十分紧张",
+        "Số lượng: 一年一度 + 的 + N: 一年一度的春节"
+      ],
+      "viDu": [
+        {
+          "c": "他一度想放弃学业。",
+          "d": "Tā yídù xiǎng fàngqì xuéyè.",
+          "v": "Đã có lúc anh ấy muốn bỏ học."
+        },
+        {
+          "c": "这家公司曾一度濒临破产。",
+          "d": "Zhè jiā gōngsī céng yídù bīnlín pòchǎn.",
+          "v": "Công ty này từng có thời đứng bên bờ phá sản."
+        },
+        {
+          "c": "由于大雪，机场一度关闭。",
+          "d": "Yóuyú dàxuě, jīchǎng yídù guānbì.",
+          "v": "Do tuyết lớn, sân bay đã có lúc phải đóng cửa."
+        },
+        {
+          "c": "两国关系一度十分紧张，如今已经恢复正常。",
+          "d": "Liǎng guó guānxi yídù shífēn jǐnzhāng, rújīn yǐjīng huīfù zhèngcháng.",
+          "v": "Quan hệ hai nước từng có thời rất căng thẳng, nay đã trở lại bình thường."
+        }
+      ],
+      "luuY": [
+        "Khác 曾经: 曾经 chỉ nói \"đã từng\" (một trải nghiệm, hay đi với 过, đếm được số lần: 曾经去过三次); 一度 nhấn \"kéo dài một giai đoạn rồi thôi\", không dùng để đếm số lần: 一度去过三次 ✗.",
+        "Khác 一时: 一时 = \"nhất thời, trong chốc lát\" (一时想不起来); 一度 là cả một giai đoạn trong quá khứ.",
+        "一度 không dùng cho việc hiện tại hay tương lai: 明年他一度想去 ✗."
+      ],
+      "soSanh": [
+        "zh-hsk5-cengjing",
+        "zh-hsk2-guo",
+        "zh-hsk3-guo-nang-cao",
+        "zh-hsk4-benlai-yuanlai"
+      ],
+      "tuKhoa": [
+        "yidu",
+        "yi du",
+        "một thời",
+        "từng có lúc",
+        "đã có thời",
+        "曾经"
+      ],
+      "quiz": [
+        {
+          "h": "受疫情影响，这家餐厅（　）停业，上个月才重新开门。",
+          "lc": [
+            "一度",
+            "势必",
+            "务必",
+            "一味"
+          ],
+          "da": 0,
+          "gt": "Tình trạng tồn tại trong một giai đoạn quá khứ rồi chấm dứt (nay đã mở lại) ⇒ 一度. 务必 là lời yêu cầu, 势必 là suy đoán tương lai, 一味 là \"một mực\" (chê)."
+        },
+        {
+          "h": "他一度很有名 ngầm cho biết điều gì?",
+          "lc": [
+            "Bây giờ anh ấy nổi tiếng hơn bao giờ hết.",
+            "Anh ấy từng nổi tiếng một thời, nay không còn như thế.",
+            "Anh ấy sắp nổi tiếng.",
+            "Anh ấy chưa bao giờ nổi tiếng."
+          ],
+          "da": 1,
+          "gt": "一度 chỉ một giai đoạn đã qua và hàm ý tình trạng ấy đã chấm dứt. Nó không nói về hiện tại, tương lai, cũng không phủ định."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "他一度去过北京三次。",
+            "请你一度来我家。",
+            "这部电影一度在全国引起轰动。",
+            "明天我一度去上海。"
+          ],
+          "da": 2,
+          "gt": "一度 kể một tình trạng trong quá khứ (từng gây chấn động). Nó không dùng cho tương lai, không dùng để đếm số lần (dùng 曾经…过), và không dùng trong lời mời."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-xianglai",
+      "nhom": "Phó từ thời gian – phạm vi",
+      "tieuDe": "向来 / 历来",
+      "mau": "S + 向来 / 历来 + (不) V / Adj",
+      "nghia": "xưa nay vẫn ~, từ trước đến giờ luôn ~",
+      "giaiThich": "Cả hai nói một tình hình giữ nguyên từ trước tới nay. 向来 dùng cho thói quen, tính cách, cách làm của một người hay một tập thể, dùng được cả khi nói lẫn khi viết, khẳng định hay phủ định đều được. 历来 nhìn theo chiều dài lịch sử, qua nhiều thời kỳ, thường nói về quốc gia, dân tộc, truyền thống, chính sách; là từ văn viết và còn làm định ngữ được (历来的传统).",
+      "cachGhep": [
+        "S + 向来 + (不) V: 他向来不喝酒",
+        "S + V + 向来 + Adj: 她做事向来认真",
+        "S (tập thể / vùng) + 历来 + V / 是 + N: 中国人历来重视家庭教育",
+        "历来 + 的 + N: 历来的传统"
+      ],
+      "viDu": [
+        {
+          "c": "他向来不喝酒。",
+          "d": "Tā xiànglái bù hējiǔ.",
+          "v": "Anh ấy xưa nay không uống rượu."
+        },
+        {
+          "c": "她做事向来认真，从不马虎。",
+          "d": "Tā zuòshì xiànglái rènzhēn, cóng bù mǎhu.",
+          "v": "Cô ấy làm việc trước giờ luôn nghiêm túc, chưa bao giờ qua loa."
+        },
+        {
+          "c": "中国人历来重视家庭教育。",
+          "d": "Zhōngguórén lìlái zhòngshì jiātíng jiàoyù.",
+          "v": "Người Trung Quốc từ xưa đến nay vẫn coi trọng giáo dục gia đình."
+        },
+        {
+          "c": "这个地区历来是重要的粮食产地。",
+          "d": "Zhège dìqū lìlái shì zhòngyào de liángshi chǎndì.",
+          "v": "Vùng này từ trước tới nay vẫn là nơi sản xuất lương thực quan trọng."
+        }
+      ],
+      "luuY": [
+        "Khác 一向: 向来 và 一向 nghĩa gần như nhau, thay nhau được khi nói về thói quen, tính cách. Khác 历来: 历来 gắn với lịch sử dài và việc lớn; nói về thói quen của một cá nhân thì không tự nhiên: 我历来不吃辣 ✗ → 我向来不吃辣 ✓.",
+        "Khác 从来: 从来 chủ yếu đi với phủ định (从来不 / 从来没…过); 向来 dùng tự nhiên cả trong câu khẳng định (他向来很准时).",
+        "Cả hai không dùng cho việc mới xảy ra một lần hay việc tương lai."
+      ],
+      "soSanh": [
+        "zh-hsk5-yixiang",
+        "zh-hsk4-conglai",
+        "zh-hsk5-shizhong",
+        "zh-hsk3-zongshi"
+      ],
+      "tuKhoa": [
+        "xianglai",
+        "xiang lai",
+        "lilai",
+        "li lai",
+        "xưa nay",
+        "từ trước đến nay",
+        "一向"
+      ],
+      "quiz": [
+        {
+          "h": "他这个人（　）说话算数，你可以相信他。",
+          "lc": [
+            "向来",
+            "随即",
+            "统统",
+            "顿时"
+          ],
+          "da": 0,
+          "gt": "Nói tính cách ổn định xưa nay của một người ⇒ 向来. 顿时 và 随即 chỉ thời điểm tức thì trong lời kể; 统统 tổng quát nhiều đối tượng đứng trước, không đi với chủ ngữ là một người."
+        },
+        {
+          "h": "Câu nào dùng 历来 hợp nhất?",
+          "lc": [
+            "历来请你帮我一下。",
+            "两国人民历来有着友好往来。",
+            "他昨天历来迟到了。",
+            "我历来不吃早饭。"
+          ],
+          "da": 1,
+          "gt": "历来 hợp với chủ thể lớn và chiều dài lịch sử (nhân dân hai nước). Thói quen cá nhân nên dùng 向来 / 一向; 历来 không dùng trong lời nhờ vả hay cho một việc xảy ra hôm qua."
+        },
+        {
+          "h": "向来 khác 从来 thế nào?",
+          "lc": [
+            "không khác gì",
+            "向来 là câu hỏi, 从来 là câu trả lời",
+            "向来 dùng tự nhiên trong câu khẳng định, 从来 chủ yếu đi với phủ định",
+            "向来 chỉ tương lai, 从来 chỉ quá khứ"
+          ],
+          "da": 2,
+          "gt": "他向来很准时 tự nhiên, còn 从来 thường gặp trong 从来不 / 从来没…过. Cả hai đều nói về \"từ trước tới nay\", không phải tương lai."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-dunshi",
+      "nhom": "Phó từ thời gian – phạm vi",
+      "tieuDe": "顿时",
+      "mau": "(Tác nhân)，S + 顿时 + V / Adj (+ 了 / 起来 / 下来)",
+      "nghia": "lập tức, bỗng chốc ~ (kể lại sự thay đổi tức thì)",
+      "giaiThich": "顿时 nói một trạng thái hay tình hình thay đổi ngay tức khắc do một việc vừa xảy ra trước đó. Chỉ dùng để KỂ lại việc đã xảy ra; không dùng trong câu cầu khiến hay nói về tương lai. Thiên về văn viết, văn miêu tả. Vị ngữ sau 顿时 thường là sự biến đổi trạng thái: 安静下来, 明白了, 紧张起来, 一片漆黑.",
+      "cachGhep": [
+        "Tác nhân，S + 顿时 + Adj + 了下来 / 起来: 会场顿时安静了下来",
+        "S + 顿时 + V + 了 + O: 我顿时明白了",
+        "一 + V，S + 顿时 + …: 灯一灭，屋里顿时一片漆黑"
+      ],
+      "viDu": [
+        {
+          "c": "听到这个消息，会场顿时安静了下来。",
+          "d": "Tīngdào zhège xiāoxi, huìchǎng dùnshí ānjìng le xiàlái.",
+          "v": "Nghe tin này, hội trường lập tức im lặng hẳn."
+        },
+        {
+          "c": "灯一灭，屋里顿时一片漆黑。",
+          "d": "Dēng yí miè, wū lǐ dùnshí yí piàn qīhēi.",
+          "v": "Đèn vừa tắt, trong nhà bỗng chốc tối đen."
+        },
+        {
+          "c": "他的话让我顿时明白了问题出在哪里。",
+          "d": "Tā de huà ràng wǒ dùnshí míngbai le wèntí chū zài nǎlǐ.",
+          "v": "Lời anh ấy khiến tôi lập tức hiểu ra vấn đề nằm ở đâu."
+        },
+        {
+          "c": "喝了一杯热茶，身上顿时暖和多了。",
+          "d": "Hē le yì bēi rè chá, shēnshang dùnshí nuǎnhuo duō le.",
+          "v": "Uống một chén trà nóng, người lập tức ấm hẳn lên."
+        }
+      ],
+      "luuY": [
+        "Khác 立刻 / 立即 / 马上: ba từ này dùng được cho cả quá khứ lẫn tương lai và trong mệnh lệnh (请立刻出发); 顿时 chỉ dùng kể việc đã xảy ra: 请你顿时出发 ✗, 明天我顿时去 ✗.",
+        "Khác 随即: 随即 nối một HÀNH ĐỘNG chủ động kế tiếp (随即赶往医院); 顿时 thiên về sự THAY ĐỔI trạng thái, không khí, cảm giác.",
+        "Khác 突然: 突然 nhấn sự bất ngờ, không cần tác nhân phía trước; 顿时 cần một việc xảy ra trước làm nguyên do."
+      ],
+      "soSanh": [
+        "zh-hsk5-liji",
+        "zh-hsk3-mashang",
+        "zh-hsk3-turan",
+        "zh-hsk6-suiji"
+      ],
+      "tuKhoa": [
+        "dunshi",
+        "dun shi",
+        "lập tức",
+        "bỗng chốc",
+        "tức thì",
+        "立刻"
+      ],
+      "quiz": [
+        {
+          "h": "老师一走进教室，同学们（　）安静了下来。",
+          "lc": [
+            "屡次",
+            "一度",
+            "顿时",
+            "向来"
+          ],
+          "da": 2,
+          "gt": "Trạng thái đổi ngay khi thầy bước vào ⇒ 顿时. 向来 = xưa nay, 一度 = từng có thời, 屡次 = nhiều lần — đều không diễn tả \"ngay tức khắc\"."
+        },
+        {
+          "h": "Câu nào SAI?",
+          "lc": [
+            "雨一停，天空顿时亮了起来。",
+            "听了这话，他的脸顿时红了。",
+            "看到妈妈，孩子顿时不哭了。",
+            "你到了以后请顿时给我打电话。"
+          ],
+          "da": 3,
+          "gt": "顿时 chỉ kể việc đã xảy ra, không dùng trong lời yêu cầu về tương lai — chỗ đó phải dùng 立刻 / 马上. Ba câu còn lại đều là lời kể nên đúng."
+        },
+        {
+          "h": "顿时 khác 立刻 ở điểm nào?",
+          "lc": [
+            "顿时 chỉ dùng kể việc đã xảy ra, 立刻 dùng được cả cho tương lai và mệnh lệnh",
+            "顿时 dùng được trong mệnh lệnh, 立刻 thì không",
+            "顿时 là khẩu ngữ, 立刻 chỉ có trong văn cổ",
+            "顿时 nghĩa là \"từ từ\""
+          ],
+          "da": 0,
+          "gt": "顿时 là phó từ của lời kể (quá khứ); 立刻 không bị giới hạn như vậy. Cả hai đều nghĩa \"ngay lập tức\", và 顿时 mới là từ thiên về văn viết."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-suiji",
+      "nhom": "Phó từ thời gian – phạm vi",
+      "tieuDe": "随即",
+      "mau": "(S) + V1…，随即 + V2…",
+      "nghia": "liền ngay sau đó ~, lập tức (tiếp theo) ~",
+      "giaiThich": "随即 nối hai hành động kế tiếp sát nhau: việc thứ nhất vừa xong thì việc thứ hai diễn ra ngay. Là từ văn viết, rất hay gặp trong tin tức, tường thuật, biên bản. Phía trước 随即 luôn phải có một hành động hay sự kiện làm mốc.",
+      "cachGhep": [
+        "S + V1，随即 + V2: 他接到电话，随即赶往医院",
+        "S + V1 + 后 + 随即 + V2: 接到报警后随即赶到了现场",
+        "一 + V1，S + 随即 + V2: 会议一结束，代表们随即离开了会场"
+      ],
+      "viDu": [
+        {
+          "c": "他接到电话，随即赶往医院。",
+          "d": "Tā jiēdào diànhuà, suíjí gǎnwǎng yīyuàn.",
+          "v": "Anh ấy nhận được điện thoại, liền vội đến bệnh viện."
+        },
+        {
+          "c": "警察接到报警后随即赶到了现场。",
+          "d": "Jǐngchá jiēdào bàojǐng hòu suíjí gǎndào le xiànchǎng.",
+          "v": "Sau khi nhận tin báo, cảnh sát lập tức có mặt tại hiện trường."
+        },
+        {
+          "c": "会议一结束，代表们随即离开了会场。",
+          "d": "Huìyì yì jiéshù, dàibiǎomen suíjí líkāi le huìchǎng.",
+          "v": "Cuộc họp vừa kết thúc, các đại biểu liền rời hội trường."
+        },
+        {
+          "c": "公司发表了声明，随即召开了记者招待会。",
+          "d": "Gōngsī fābiǎo le shēngmíng, suíjí zhàokāi le jìzhě zhāodàihuì.",
+          "v": "Công ty ra tuyên bố, ngay sau đó mở họp báo."
+        }
+      ],
+      "luuY": [
+        "Khác 立即 / 立刻: 立即 chỉ nói \"ngay\", không cần việc nào làm mốc phía trước và dùng được trong mệnh lệnh (请立即离开); 随即 nghĩa là \"ngay SAU việc vừa nêu\", chủ yếu dùng trong lời tường thuật.",
+        "Khác 顿时: 顿时 tả trạng thái đổi tức thì (顿时安静下来); 随即 nối một hành động tiếp theo.",
+        "Khác 随后: 随后 = \"sau đó\", khoảng cách thời gian không nhất thiết sát; 随即 nhấn sự liền kề. Khác 便 / 就: hai từ này cũng nối hành động kế tiếp nhưng không nhấn mạnh tốc độ."
+      ],
+      "soSanh": [
+        "zh-hsk5-liji",
+        "zh-hsk6-dunshi",
+        "zh-hsk3-mashang",
+        "zh-hsk6-bian"
+      ],
+      "tuKhoa": [
+        "suiji",
+        "sui ji",
+        "liền sau đó",
+        "ngay sau đó",
+        "lập tức tiếp theo",
+        "立即"
+      ],
+      "quiz": [
+        {
+          "h": "救护车到达后，医生（　）对伤者进行了检查。",
+          "lc": [
+            "向来",
+            "随即",
+            "一味",
+            "历来"
+          ],
+          "da": 1,
+          "gt": "Hành động nối ngay sau một việc mốc (xe cấp cứu tới) ⇒ 随即. 向来 / 历来 = xưa nay, 一味 = một mực — không chỉ thứ tự thời gian."
+        },
+        {
+          "h": "Điều kiện để dùng 随即 là gì?",
+          "lc": [
+            "Câu phải là câu hỏi.",
+            "Chủ ngữ phải là đồ vật.",
+            "Phía trước có một hành động / sự kiện làm mốc.",
+            "Việc phải chưa xảy ra."
+          ],
+          "da": 2,
+          "gt": "随即 = \"liền ngay sau đó\", nên cần việc thứ nhất đứng trước. Nó dùng trong câu trần thuật, với chủ ngữ là người hay tổ chức đều được, và thường kể việc đã xảy ra."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "这本书随即有意思。",
+            "随即我每天早上跑步。",
+            "他随即很高。",
+            "他签完字，随即把文件交给了秘书。"
+          ],
+          "da": 3,
+          "gt": "Ký xong (việc mốc) rồi đưa ngay tài liệu: đúng nghĩa 随即. Nó không dùng cho thói quen hằng ngày và không bổ nghĩa cho tính từ chỉ đặc điểm."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-yiwei",
+      "nhom": "Phó từ thời gian – phạm vi",
+      "tieuDe": "一味",
+      "mau": "S + 一味 + (地) + V (hai âm tiết)",
+      "nghia": "một mực, chỉ biết ~ (ý chê)",
+      "giaiThich": "一味 nói ai đó chỉ khăng khăng làm một việc, theo một hướng, mà không cân nhắc mặt khác — luôn mang ý phê phán. Thường đứng trước động từ hai âm tiết như 追求, 强调, 迁就, 模仿, 责怪, 依赖, có thể thêm 地. Hay dùng trong văn nghị luận, lời khuyên răn; thường đi với 不能, 不要, 如果.",
+      "cachGhep": [
+        "不能 / 不要 + 一味 + V + O: 不能一味追求速度",
+        "S + 一味 + V + O，…: 父母一味迁就孩子，…",
+        "S + 只是 + 一味地 + V: 他只是一味地责怪别人"
+      ],
+      "viDu": [
+        {
+          "c": "不能一味追求速度而忽视质量。",
+          "d": "Bù néng yíwèi zhuīqiú sùdù ér hūshì zhìliàng.",
+          "v": "Không thể chỉ một mực chạy theo tốc độ mà xem nhẹ chất lượng."
+        },
+        {
+          "c": "父母一味迁就孩子，对孩子的成长没有好处。",
+          "d": "Fùmǔ yíwèi qiānjiù háizi, duì háizi de chéngzhǎng méiyǒu hǎochu.",
+          "v": "Cha mẹ một mực chiều con thì không có lợi cho sự trưởng thành của con."
+        },
+        {
+          "c": "遇到问题，他只是一味地责怪别人。",
+          "d": "Yùdào wèntí, tā zhǐshì yíwèi de zéguài biéren.",
+          "v": "Gặp vấn đề, anh ta chỉ biết một mực trách người khác."
+        },
+        {
+          "c": "一味模仿别人，永远形成不了自己的风格。",
+          "d": "Yíwèi mófǎng biéren, yǒngyuǎn xíngchéng bu liǎo zìjǐ de fēnggé.",
+          "v": "Chỉ biết bắt chước người khác thì mãi mãi không tạo được phong cách riêng."
+        }
+      ],
+      "luuY": [
+        "Khác 一直: 一直 trung tính, chỉ sự liên tục về thời gian (他一直努力学习 — khen cũng được); 一味 luôn có ý chê \"chỉ biết thế mà không nghĩ tới cái khác\": 他一味努力学习 ✗ (trừ khi muốn chê).",
+        "Khác 总是: 总是 nói tần suất \"lúc nào cũng\"; 一味 nói thái độ cố chấp, phiến diện.",
+        "Động từ sau 一味 thường hai âm tiết và là hành vi có chủ ý; không dùng với trạng thái tự nhiên: 一味下雨 ✗."
+      ],
+      "soSanh": [
+        "zh-hsk3-yizhi",
+        "zh-hsk3-zongshi",
+        "zh-hsk5-shizhong",
+        "zh-hsk5-buduan"
+      ],
+      "tuKhoa": [
+        "yiwei",
+        "yi wei",
+        "một mực",
+        "chỉ biết",
+        "khăng khăng",
+        "phiến diện"
+      ],
+      "quiz": [
+        {
+          "h": "学习外语不能（　）背单词，还要多听多说。",
+          "lc": [
+            "随即",
+            "一度",
+            "一味",
+            "顿时"
+          ],
+          "da": 2,
+          "gt": "Phê phán cách học chỉ biết làm một việc ⇒ 一味. 顿时 và 随即 chỉ thời điểm tức thì, 一度 là \"từng có thời\" — đều không có nghĩa \"chỉ khăng khăng\"."
+        },
+        {
+          "h": "一味 mang sắc thái gì?",
+          "lc": [
+            "phỏng đoán chưa chắc chắn",
+            "khen ngợi sự kiên trì",
+            "trung tính, chỉ nói về thời gian",
+            "phê phán sự cố chấp, phiến diện"
+          ],
+          "da": 3,
+          "gt": "一味 luôn hàm ý chê: chỉ làm theo một hướng mà bỏ qua mặt khác. Khen sự bền bỉ dùng 始终 / 一直; nó cũng không phải từ phỏng đoán."
+        },
+        {
+          "h": "Câu nào dùng 一味 hợp lý?",
+          "lc": [
+            "一味强调困难，解决不了任何问题。",
+            "他一味高。",
+            "今天一味下雨。",
+            "祝你一味快乐。"
+          ],
+          "da": 0,
+          "gt": "一味 + động từ hành vi (强调) kèm ý chê. Nó không dùng với hiện tượng tự nhiên, tính từ chỉ đặc điểm hay trong lời chúc."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-luci",
+      "nhom": "Phó từ thời gian – phạm vi",
+      "tieuDe": "屡次 / 屡",
+      "mau": "S + 屡次 + V (hai âm tiết / cụm động từ) ｜ 屡 + V (một âm tiết, cụm bốn chữ)",
+      "nghia": "nhiều lần, hết lần này đến lần khác ~",
+      "giaiThich": "屡次 nói một việc đã xảy ra lặp lại nhiều lần, dùng trong văn viết và lời kể trang trọng; việc được kể là việc đã xảy ra. 屡 là dạng một chữ, đậm chất văn ngôn, thường đi với động từ một âm tiết và xuất hiện trong các cụm bốn chữ: 屡见不鲜 (thấy mãi thành quen), 屡教不改 (dạy mãi không sửa), 屡战屡败 (đánh trận nào thua trận ấy).",
+      "cachGhep": [
+        "S + 屡次 + V + O: 他屡次迟到",
+        "S + 屡次 + V，但 / 却…: 试验屡次失败，但他们从未放弃",
+        "屡 + V + 不 + V / Adj (cụm cố định): 屡教不改；屡见不鲜",
+        "屡 + V1 + 屡 + V2: 屡战屡败"
+      ],
+      "viDu": [
+        {
+          "c": "他屡次迟到，受到了老板的批评。",
+          "d": "Tā lǚcì chídào, shòudào le lǎobǎn de pīpíng.",
+          "v": "Anh ta nhiều lần đi muộn nên bị sếp phê bình."
+        },
+        {
+          "c": "这支球队屡次获得全国冠军。",
+          "d": "Zhè zhī qiúduì lǚcì huòdé quánguó guànjūn.",
+          "v": "Đội bóng này đã nhiều lần giành chức vô địch toàn quốc."
+        },
+        {
+          "c": "试验屡次失败，但他们从未放弃。",
+          "d": "Shìyàn lǚcì shībài, dàn tāmen cóng wèi fàngqì.",
+          "v": "Thí nghiệm thất bại hết lần này đến lần khác, nhưng họ chưa hề bỏ cuộc."
+        },
+        {
+          "c": "这种现象屡见不鲜。",
+          "d": "Zhè zhǒng xiànxiàng lǚjiànbùxiān.",
+          "v": "Hiện tượng này thấy mãi, chẳng còn gì lạ."
+        }
+      ],
+      "luuY": [
+        "Khác 再三: 再三 chủ yếu đi với hành vi nói năng, suy nghĩ có chủ ý (再三强调, 再三考虑) và còn đứng sau động từ được (考虑再三); 屡次 dùng cho mọi loại sự việc lặp lại, kể cả việc ngoài ý muốn (屡次失败), và chỉ đứng trước động từ.",
+        "Khác 常常 / 往往: hai từ này nói thói quen, quy luật chung; 屡次 đếm những lần cụ thể đã xảy ra, không dùng cho tương lai: 以后我屡次来看你 ✗.",
+        "屡 đọc lǚ (thanh 3, nguyên âm ü). 屡 không đi với động từ hai âm tiết thông thường trong khẩu ngữ; lúc đó dùng 屡次 hoặc 多次."
+      ],
+      "soSanh": [
+        "zh-hsk5-yizai-zaisan",
+        "zh-hsk4-wangwang",
+        "zh-hsk5-buduan",
+        "zh-hsk2-dong-luong"
+      ],
+      "tuKhoa": [
+        "lüci",
+        "luci",
+        "lü ci",
+        "lujianbuxian",
+        "nhiều lần",
+        "hết lần này đến lần khác",
+        "多次"
+      ],
+      "quiz": [
+        {
+          "h": "他（　）违反交通规则，最后被吊销了驾照。",
+          "lc": [
+            "一度",
+            "顿时",
+            "屡次",
+            "随即"
+          ],
+          "da": 2,
+          "gt": "Vi phạm lặp đi lặp lại nhiều lần dẫn tới bị thu bằng ⇒ 屡次. 顿时 / 随即 chỉ một thời điểm tức thì; 一度 là \"từng có thời\", không nói số lần."
+        },
+        {
+          "h": "Câu nào SAI?",
+          "lc": [
+            "他屡次打破世界纪录。",
+            "这样的事故屡见不鲜。",
+            "这个问题屡次出现。",
+            "以后我会屡次去看你。"
+          ],
+          "da": 3,
+          "gt": "屡次 kể những lần đã xảy ra, không dùng cho dự định tương lai (chỗ đó nói 经常 / 常常). Ba câu còn lại đều nói việc đã lặp lại nhiều lần nên đúng."
+        },
+        {
+          "h": "屡教不改 nghĩa là gì?",
+          "lc": [
+            "dạy bảo nhiều lần mà vẫn không sửa",
+            "không cần dạy cũng biết",
+            "chưa từng được dạy",
+            "dạy một lần là sửa ngay"
+          ],
+          "da": 0,
+          "gt": "屡 = nhiều lần; 屡教不改 = được nhắc nhở, dạy dỗ nhiều lần nhưng không chịu thay đổi. Các cách hiểu kia đều bỏ mất nghĩa \"nhiều lần\" hoặc \"không sửa\"."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-tongtong",
+      "nhom": "Phó từ thời gian – phạm vi",
+      "tieuDe": "统统",
+      "mau": "(把) + O (số nhiều) + 统统 + V ｜ O + S + 统统 + V",
+      "nghia": "tất tần tật, toàn bộ, hết thảy ~",
+      "giaiThich": "统统 (cũng viết 通通) tổng quát toàn bộ đối tượng đứng TRƯỚC nó, nhấn mạnh \"không sót một cái nào\". Là từ khẩu ngữ, giọng mạnh, hay dùng trong câu có 把, câu mệnh lệnh và với các động từ xử lý như 扔掉, 拿走, 忘了, 交给, 说出来.",
+      "cachGhep": [
+        "把 + O + 统统 + V: 把这些旧报纸统统扔掉",
+        "O + S + 统统 + V + 了: 生词我统统忘了",
+        "(O)，统统 + V (mệnh lệnh): 有什么要求，统统说出来"
+      ],
+      "viDu": [
+        {
+          "c": "把这些旧报纸统统扔掉吧。",
+          "d": "Bǎ zhèxiē jiù bàozhǐ tǒngtǒng rēngdiào ba.",
+          "v": "Vứt hết chỗ báo cũ này đi."
+        },
+        {
+          "c": "昨天学的生词我统统忘了。",
+          "d": "Zuótiān xué de shēngcí wǒ tǒngtǒng wàng le.",
+          "v": "Từ mới học hôm qua tôi quên sạch cả rồi."
+        },
+        {
+          "c": "你有什么要求，统统说出来。",
+          "d": "Nǐ yǒu shénme yāoqiú, tǒngtǒng shuō chūlái.",
+          "v": "Bạn có yêu cầu gì thì nói ra hết đi."
+        },
+        {
+          "c": "家里的事他统统交给了妻子。",
+          "d": "Jiā lǐ de shì tā tǒngtǒng jiāo gěi le qīzi.",
+          "v": "Mọi việc trong nhà anh ấy giao hết cho vợ."
+        }
+      ],
+      "luuY": [
+        "Khác 都: 都 trung tính, dùng trong mọi văn phong và mọi kiểu vị ngữ; 统统 là khẩu ngữ, nhấn \"sạch sành sanh\", chủ yếu đi với động từ hành động. Khác 皆 / 均: hai từ này là văn viết trang trọng.",
+        "Đối tượng được tổng quát phải đứng TRƯỚC 统统 (thường đưa lên bằng 把 hoặc làm chủ đề): 我统统忘了生词 nghe gượng → 生词我统统忘了 ✓.",
+        "Khác 全部: 全部 còn là danh từ / định ngữ (全部的钱, 花了全部); 统统 chỉ là phó từ: 统统的钱 ✗."
+      ],
+      "soSanh": [
+        "zh-hsk1-dou",
+        "zh-hsk6-jie-jun",
+        "zh-hsk6-fanshi",
+        "zh-hsk6-wubu"
+      ],
+      "tuKhoa": [
+        "tongtong",
+        "tong tong",
+        "tất tần tật",
+        "hết thảy",
+        "toàn bộ",
+        "通通"
+      ],
+      "quiz": [
+        {
+          "h": "搬家的时候，他把不用的东西（　）送给了邻居。",
+          "lc": [
+            "向来",
+            "统统",
+            "随即",
+            "一度"
+          ],
+          "da": 1,
+          "gt": "Tổng quát toàn bộ đồ không dùng đứng trước (sau 把) ⇒ 统统. 随即 = liền sau đó, 一度 = từng có thời, 向来 = xưa nay — không có nghĩa \"tất cả\"."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "这是统统的钱。",
+            "他统统很聪明一个人。",
+            "这些问题我们统统解决了。",
+            "统统他是学生。"
+          ],
+          "da": 2,
+          "gt": "统统 là phó từ đứng trước động từ, tổng quát đối tượng nêu phía trước (这些问题). Nó không làm định ngữ (dùng 全部的), không đứng trước chủ ngữ số ít, và không bổ nghĩa cho đặc điểm của một người."
+        },
+        {
+          "h": "So với 都, 统统 thế nào?",
+          "lc": [
+            "chỉ dùng trong câu hỏi",
+            "trang trọng, dùng trong văn bản pháp luật",
+            "nghĩa là \"một phần\"",
+            "khẩu ngữ, giọng mạnh, nhấn không sót cái nào"
+          ],
+          "da": 3,
+          "gt": "统统 = 都 nhưng mạnh và suồng sã hơn. Từ trang trọng tương ứng là 均 / 皆; 统统 dùng trong câu trần thuật, mệnh lệnh, và nghĩa là toàn bộ chứ không phải một phần."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-jie-jun",
+      "nhom": "Hư từ văn viết",
+      "tieuDe": "皆 / 均",
+      "mau": "S (số nhiều) + 皆 / 均 + V / Adj",
+      "nghia": "đều ~ (văn viết của 都)",
+      "giaiThich": "皆 và 均 là phó từ phạm vi nghĩa như 都, chỉ dùng trong văn viết. 皆 đậm chất văn ngôn, hay gặp trong thành ngữ và câu đúc kết: 人人皆知 (ai cũng biết), 比比皆是 (đâu đâu cũng có), 皆大欢喜 (ai nấy đều vui). 均 hay gặp trong văn bản hành chính, hợp đồng, thông báo, báo cáo số liệu. Cả hai tổng quát thành phần đứng trước, thường đi với động từ / tính từ một âm tiết hoặc các từ văn viết như 已, 为, 由, 可.",
+      "cachGhep": [
+        "S + 均 + 已 / 由 / 为 / 可 + V: 费用均由买方承担",
+        "S + 皆 + V (một âm tiết): 人人皆知",
+        "Thành ngữ: 比比皆是；皆大欢喜"
+      ],
+      "viDu": [
+        {
+          "c": "这是人人皆知的事实。",
+          "d": "Zhè shì rénrén jiē zhī de shìshí.",
+          "v": "Đây là sự thật mà ai ai cũng biết."
+        },
+        {
+          "c": "以上各项费用均由买方承担。",
+          "d": "Yǐshàng gè xiàng fèiyòng jūn yóu mǎifāng chéngdān.",
+          "v": "Các khoản phí nêu trên đều do bên mua chịu."
+        },
+        {
+          "c": "参加考试的学生均已到场。",
+          "d": "Cānjiā kǎoshì de xuésheng jūn yǐ dàochǎng.",
+          "v": "Các học sinh dự thi đều đã có mặt."
+        },
+        {
+          "c": "生活中，这样的例子比比皆是。",
+          "d": "Shēnghuó zhōng, zhèyàng de lìzi bǐbǐjiēshì.",
+          "v": "Trong cuộc sống, những ví dụ như vậy đâu đâu cũng có."
+        }
+      ],
+      "luuY": [
+        "Khác 都: 都 dùng được trong mọi văn phong; 皆 / 均 chỉ dùng trong văn viết — nói 我们均去吃饭吧 ✗ nghe rất kỳ. Ngoài ra 都 còn nghĩa \"đã… rồi\", \"ngay cả… cũng\" (都十二点了, 连他都知道), 皆 / 均 không có các nghĩa này.",
+        "Khác nhau: 皆 thiên về văn chương, thành ngữ; 均 thiên về văn bản công vụ, số liệu. Trong hợp đồng, thông báo nên dùng 均.",
+        "Khác 统统: 统统 là khẩu ngữ mạnh; đừng trộn với văn phong trang trọng."
+      ],
+      "soSanh": [
+        "zh-hsk1-dou",
+        "zh-hsk6-tongtong",
+        "zh-hsk6-fanshi",
+        "zh-hsk6-yi-cung"
+      ],
+      "tuKhoa": [
+        "jie",
+        "jun",
+        "renren jiezhi",
+        "bibijieshi",
+        "đều",
+        "văn viết của 都",
+        "phó từ phạm vi"
+      ],
+      "quiz": [
+        {
+          "h": "本店所有商品（　）可在七日内退换。",
+          "lc": [
+            "屡次",
+            "即便",
+            "亦然",
+            "均"
+          ],
+          "da": 3,
+          "gt": "Thông báo trang trọng \"mọi mặt hàng đều có thể đổi trả\" ⇒ 均 (= 都). 亦然 = \"cũng vậy\" đứng cuối câu, 即便 = \"cho dù\", 屡次 = \"nhiều lần\"."
+        },
+        {
+          "h": "皆 và 均 khác 都 ở điểm chính nào?",
+          "lc": [
+            "chỉ dùng trong văn viết, trang trọng",
+            "chỉ dùng trong câu hỏi",
+            "nghĩa trái ngược với 都",
+            "phải đứng trước chủ ngữ"
+          ],
+          "da": 0,
+          "gt": "Nghĩa \"đều\" như nhau, khác ở văn phong: 皆 / 均 là văn viết. Chúng vẫn đứng sau chủ ngữ, trước vị ngữ, và dùng trong câu trần thuật."
+        },
+        {
+          "h": "Câu nào hợp văn phong?",
+          "lc": [
+            "咱们均去看电影吧！",
+            "双方代表均已在合同上签字。",
+            "都十二点了，他皆没回来。",
+            "你均吃了什么？"
+          ],
+          "da": 1,
+          "gt": "Câu về việc ký hợp đồng là văn bản trang trọng nên dùng 均 rất hợp. Lời rủ đi xem phim và câu hỏi đời thường phải dùng 都; còn 皆 không thay được 还 trong \"vẫn chưa về\"."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-yi-cung",
+      "nhom": "Hư từ văn viết",
+      "tieuDe": "亦",
+      "mau": "S + 亦 + V / Adj",
+      "nghia": "cũng ~ (văn viết của 也)",
+      "giaiThich": "亦 là phó từ gốc văn ngôn, nghĩa như 也, nay chỉ dùng trong văn viết trang trọng: văn bản, bài nghiên cứu, thư từ kiểu cách. Thường đi với động từ, tính từ một âm tiết hoặc từ văn viết. Còn sống trong nhiều tổ hợp cố định: 亦然 (cũng vậy), 亦即 (cũng tức là), 亦…亦… (vừa… vừa…, như 亦师亦友), 人云亦云 (người ta nói sao mình nói vậy).",
+      "cachGhep": [
+        "S + 亦 + V: 亦需要机会",
+        "S + 亦 + 是 / 有 + N: 亦是我的朋友",
+        "反之亦然 (ngược lại cũng thế)",
+        "亦 + A + 亦 + B: 亦师亦友"
+      ],
+      "viDu": [
+        {
+          "c": "此方法简单，效果亦佳。",
+          "d": "Cǐ fāngfǎ jiǎndān, xiàoguǒ yì jiā.",
+          "v": "Phương pháp này đơn giản, hiệu quả cũng tốt."
+        },
+        {
+          "c": "成功需要努力，亦需要机会。",
+          "d": "Chénggōng xūyào nǔlì, yì xūyào jīhuì.",
+          "v": "Thành công cần nỗ lực, cũng cần cả cơ hội."
+        },
+        {
+          "c": "他是我的老师，亦是我的朋友。",
+          "d": "Tā shì wǒ de lǎoshī, yì shì wǒ de péngyou.",
+          "v": "Ông ấy là thầy tôi, cũng là bạn tôi."
+        },
+        {
+          "c": "这种观点不无道理，但亦有不足之处。",
+          "d": "Zhè zhǒng guāndiǎn bù wú dàolǐ, dàn yì yǒu bùzú zhī chù.",
+          "v": "Quan điểm này không phải không có lý, nhưng cũng có chỗ chưa đủ."
+        }
+      ],
+      "luuY": [
+        "Khác 也: nghĩa như nhau, 也 dùng mọi nơi; 亦 chỉ hợp văn viết trang trọng. Viết tin nhắn 我亦去 nghe như đùa.",
+        "亦 không thay 也 trong các mẫu khẩu ngữ như 连…也…, 一点儿也不…, 再…也… của lời nói thường ngày.",
+        "Đọc yì (thanh 4). Đừng nhầm chữ 亦 với 赤 (chì, đỏ) hay 变 (biàn)."
+      ],
+      "soSanh": [
+        "zh-hsk1-ye",
+        "zh-hsk6-jie-jun",
+        "zh-hsk6-bian",
+        "zh-hsk6-ji-tuc-la"
+      ],
+      "tuKhoa": [
+        "yi cung",
+        "yi ye",
+        "yiran",
+        "fanzhi yiran",
+        "yishi yiyou",
+        "cũng",
+        "văn viết của 也"
+      ],
+      "quiz": [
+        {
+          "h": "学习如此，工作（　）如此。",
+          "lc": [
+            "者",
+            "亦",
+            "即便",
+            "屡次"
+          ],
+          "da": 1,
+          "gt": "\"Học tập như vậy, công việc cũng như vậy\" — cần phó từ \"cũng\" của văn viết ⇒ 亦. 即便 = \"cho dù\" (mở vế nhượng bộ), 屡次 = \"nhiều lần\", 者 là hậu tố chỉ người — đều không mang nghĩa \"cũng\"."
+        },
+        {
+          "h": "亦 tương đương với từ nào trong tiếng hiện đại thường ngày?",
+          "lc": [
+            "都",
+            "的",
+            "也",
+            "就"
+          ],
+          "da": 2,
+          "gt": "亦 = 也 (cũng). 都 tương ứng với 皆 / 均, 就 tương ứng với 便 / 即, còn 的 tương ứng với 之."
+        },
+        {
+          "h": "反之亦然 nghĩa là gì?",
+          "lc": [
+            "ngược lại thì không đúng",
+            "không bao giờ ngược lại",
+            "chỉ đúng một chiều",
+            "ngược lại cũng như vậy"
+          ],
+          "da": 3,
+          "gt": "反之 = ngược lại, 亦然 = cũng thế ⇒ \"ngược lại cũng đúng như vậy\". Các cách hiểu kia đều phủ định mất nghĩa \"cũng\"."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-bian",
+      "nhom": "Hư từ văn viết",
+      "tieuDe": "便 (= 就)",
+      "mau": "(S) + V1…，便 + V2 ｜ 一…便… ｜ 如果 / 只要…，便… ｜ 这 / 那 + 便是 + N",
+      "nghia": "liền, thì ~ (văn viết của 就)",
+      "giaiThich": "便 làm phó từ có nghĩa và vị trí như 就: nối hai việc kế tiếp nhau (\"liền\"), nêu kết quả sau điều kiện (\"thì\"), hoặc nhấn mạnh trong 便是 (\"chính là\"). Khác biệt là văn phong: 便 dùng trong văn viết, văn kể chuyện, nghe trang nhã hơn 就. Ở đây 便 đọc biàn (không đọc pián như trong 便宜).",
+      "cachGhep": [
+        "S + V1 + 完 / 了，便 + V2: 他说完便离开了",
+        "一 + V1，S + 便 + V2: 天一亮，他们便出发了",
+        "只要 / 如果…，(S) + 便 + V: 只要坚持下去，便能看到希望",
+        "这 / 那 + 便是 + N: 这便是我想说的话"
+      ],
+      "viDu": [
+        {
+          "c": "他说完便离开了。",
+          "d": "Tā shuō wán biàn líkāi le.",
+          "v": "Anh ấy nói xong liền rời đi."
+        },
+        {
+          "c": "天一亮，他们便出发了。",
+          "d": "Tiān yí liàng, tāmen biàn chūfā le.",
+          "v": "Trời vừa sáng, họ liền lên đường."
+        },
+        {
+          "c": "只要坚持下去，便能看到希望。",
+          "d": "Zhǐyào jiānchí xiàqù, biàn néng kàndào xīwàng.",
+          "v": "Chỉ cần kiên trì tiếp thì sẽ thấy hy vọng."
+        },
+        {
+          "c": "如果没有其他问题，会议便到此结束。",
+          "d": "Rúguǒ méiyǒu qítā wèntí, huìyì biàn dào cǐ jiéshù.",
+          "v": "Nếu không còn vấn đề nào khác thì cuộc họp kết thúc tại đây."
+        },
+        {
+          "c": "这便是我想说的话。",
+          "d": "Zhè biàn shì wǒ xiǎng shuō de huà.",
+          "v": "Đây chính là điều tôi muốn nói."
+        }
+      ],
+      "luuY": [
+        "Khác 就: 就 dùng trong mọi văn phong và nhiều nghĩa hơn; 便 KHÔNG thay được 就 khi 就 nghĩa là \"chỉ\" (就他一个人没来 — 便他一个人 ✗) hay khi 就 là giới từ \"về, đối với\" (就这个问题 — 便这个问题 ✗).",
+        "便 đứng SAU chủ ngữ của vế sau, như 就: 天一亮，便他们出发 ✗ → 他们便出发 ✓.",
+        "Đừng nhầm phó từ 便 với 即便 (cho dù), 以便 (để tiện), 随便 (tuỳ tiện), 方便 (tiện lợi)."
+      ],
+      "soSanh": [
+        "zh-hsk2-jiu-cai",
+        "zh-hsk3-yi-jiu",
+        "zh-hsk3-cai-jiu",
+        "zh-hsk6-ji-tuc-la"
+      ],
+      "tuKhoa": [
+        "bian",
+        "bian jiu",
+        "bianshi",
+        "liền",
+        "thì",
+        "văn viết của 就"
+      ],
+      "quiz": [
+        {
+          "h": "他放下行李，（　）去厨房帮母亲做饭。",
+          "lc": [
+            "者",
+            "皆",
+            "亦然",
+            "便"
+          ],
+          "da": 3,
+          "gt": "Hai việc kế tiếp nhau \"đặt hành lý xuống liền vào bếp\" ⇒ 便 (= 就). 皆 = \"đều\", 亦然 = \"cũng vậy\" (đứng cuối câu), 者 là hậu tố chỉ người."
+        },
+        {
+          "h": "Trong câu nào KHÔNG thay 就 bằng 便 được?",
+          "lc": [
+            "教室里就他一个人。",
+            "天一黑，他就回家了。",
+            "他吃完饭就走了。",
+            "只要努力，就能成功。"
+          ],
+          "da": 0,
+          "gt": "就 trong 就他一个人 nghĩa là \"chỉ\" — nghĩa này 便 không có. Ba câu kia, 就 là \"liền / thì\" nên đổi sang 便 được (văn viết hơn)."
+        },
+        {
+          "h": "Chữ 便 trong 说完便走 đọc thế nào?",
+          "lc": [
+            "piàn",
+            "biàn",
+            "pián",
+            "biān"
+          ],
+          "da": 1,
+          "gt": "Phó từ 便 (= 就) đọc biàn. Âm pián là âm của chữ này trong 便宜 (rẻ); biān là 边, piàn là 片 / 骗."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-ji-tuc-la",
+      "nhom": "Hư từ văn viết",
+      "tieuDe": "即 (tức là / liền)",
+      "mau": "A，即 + B (tức là) ｜ V1 + 即 + V2 (liền) ｜ V + 即可 (là được)",
+      "nghia": "tức là, chính là；liền, ngay (văn viết)",
+      "giaiThich": "即 là hư từ gốc văn ngôn với hai nghĩa chính. (1) Như động từ phán đoán \"tức là, chính là\" (= 就是), dùng để giải thích hay gọi lại một khái niệm, thường đặt giữa hai dấu phẩy. (2) Phó từ \"liền, ngay\" (= 就 / 便), nối điều kiện hoặc hành động trước với kết quả ngay sau. Tổ hợp 即可 nghĩa là \"là được, là xong\". Chỉ dùng trong văn viết: văn bản, hướng dẫn, biển báo.",
+      "cachGhep": [
+        "A，即 + B，…: 春节，即农历新年，…",
+        "V + 即可: 签名即可",
+        "Điều kiện + 即 + V: 过期即作废",
+        "S + 即 + V (liền): 他即动身前往上海"
+      ],
+      "viDu": [
+        {
+          "c": "春节，即农历新年，是中国最重要的节日。",
+          "d": "Chūnjié, jí nónglì xīnnián, shì Zhōngguó zuì zhòngyào de jiérì.",
+          "v": "Xuân tiết, tức Tết âm lịch, là ngày lễ quan trọng nhất của Trung Quốc."
+        },
+        {
+          "c": "请在此处签名即可。",
+          "d": "Qǐng zài cǐ chù qiānmíng jí kě.",
+          "v": "Xin ký tên vào chỗ này là được."
+        },
+        {
+          "c": "此优惠券过期即作废。",
+          "d": "Cǐ yōuhuìquàn guòqī jí zuòfèi.",
+          "v": "Phiếu ưu đãi này quá hạn là mất hiệu lực."
+        },
+        {
+          "c": "收到通知后，他即动身前往上海。",
+          "d": "Shōudào tōngzhī hòu, tā jí dòngshēn qiánwǎng Shànghǎi.",
+          "v": "Nhận được thông báo, ông liền lên đường đi Thượng Hải."
+        }
+      ],
+      "luuY": [
+        "Khác 就是 / 也就是说: nghĩa \"tức là\" như nhau, nhưng 就是 dùng khi nói; 即 gọn và trang trọng, dùng khi viết.",
+        "Khác 便: 便 chỉ có nghĩa phó từ \"liền / thì\"; 即 còn có nghĩa \"tức là\" mà 便 không có: 春节，便农历新年 ✗.",
+        "Đừng nhầm với các từ ghép có 即: 即使 / 即便 (cho dù), 立即 (lập tức), 即将 (sắp). 即 đọc jí (thanh 2), không đọc jì."
+      ],
+      "soSanh": [
+        "zh-hsk6-bian",
+        "zh-hsk6-jibian",
+        "zh-hsk5-liji",
+        "zh-hsk2-jiu-cai"
+      ],
+      "tuKhoa": [
+        "ji tuc la",
+        "jike",
+        "ji ke",
+        "tức là",
+        "chính là",
+        "liền",
+        "là được"
+      ],
+      "quiz": [
+        {
+          "h": "维生素C，（　）抗坏血酸，对人体健康十分重要。",
+          "lc": [
+            "皆",
+            "亦然",
+            "便",
+            "即"
+          ],
+          "da": 3,
+          "gt": "Giải thích một khái niệm bằng tên gọi khác, đặt giữa hai dấu phẩy ⇒ 即 (tức là). 皆 = \"đều\"; 便 không có nghĩa \"tức là\"; 亦然 = \"cũng vậy\" và đứng cuối câu."
+        },
+        {
+          "h": "填好表格后交给工作人员即可。— 即可 nghĩa là gì?",
+          "lc": [
+            "là được, thế là xong",
+            "có lẽ được",
+            "lập tức phải làm",
+            "không được phép"
+          ],
+          "da": 0,
+          "gt": "即可 = 就可以: chỉ cần làm vậy là đủ. Nó không mang nghĩa bắt buộc gấp, cấm đoán hay phỏng đoán."
+        },
+        {
+          "h": "即 thuộc văn phong nào?",
+          "lc": [
+            "tiếng lóng trên mạng",
+            "văn viết: văn bản, hướng dẫn, biển báo",
+            "lời nói với trẻ nhỏ",
+            "khẩu ngữ thân mật"
+          ],
+          "da": 1,
+          "gt": "即 là hư từ gốc văn ngôn, dùng khi viết. Khi nói người ta dùng 就是 (tức là) hoặc 就 (liền)."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-qi-dai-tu",
+      "nhom": "Hư từ văn viết",
+      "tieuDe": "其",
+      "mau": "其 + N (của nó / của họ) ｜ V + 其 + V (để cho nó…) ｜ 其 + N (ấy, đó)",
+      "nghia": "của nó, của họ；nó, họ；ấy, đó (đại từ văn viết)",
+      "giaiThich": "其 là đại từ gốc văn ngôn, dùng rộng trong văn viết hiện đại. (1) Chỉ sở hữu của ngôi thứ ba, thay cho 他的 / 她的 / 它的 / 他们的, chỉ lại người hay vật vừa nhắc. (2) Đứng sau động từ làm kiêm ngữ, nghĩa \"nó, họ\": 任其发展, 使其成为…. (3) Nghĩa chỉ thị \"ấy, đó\" trong nhiều từ và cụm cố định: 其中 (trong đó), 其他 (khác), 其次 (thứ đến), 其余 (còn lại), 名副其实 (danh xứng với thực).",
+      "cachGhep": [
+        "N + 有 + 其 + Adj + 的 + N: 每个国家都有其独特的文化",
+        "因 + 其 + N + 而 + V: 因其美丽的花朵而闻名",
+        "任 / 使 / 让 + 其 + V: 任其自由发展",
+        "根据 + 其 + N: 根据其工作表现"
+      ],
+      "viDu": [
+        {
+          "c": "每个国家都有其独特的文化。",
+          "d": "Měi gè guójiā dōu yǒu qí dútè de wénhuà.",
+          "v": "Mỗi quốc gia đều có nền văn hoá độc đáo của mình."
+        },
+        {
+          "c": "这种植物因其美丽的花朵而闻名。",
+          "d": "Zhè zhǒng zhíwù yīn qí měilì de huāduǒ ér wénmíng.",
+          "v": "Loài cây này nổi tiếng nhờ những bông hoa đẹp của nó."
+        },
+        {
+          "c": "孩子有自己的兴趣，不如任其自由发展。",
+          "d": "Háizi yǒu zìjǐ de xìngqù, bùrú rèn qí zìyóu fāzhǎn.",
+          "v": "Trẻ có sở thích riêng, chi bằng để cho chúng tự do phát triển."
+        },
+        {
+          "c": "公司将根据其工作表现决定是否续签合同。",
+          "d": "Gōngsī jiāng gēnjù qí gōngzuò biǎoxiàn juédìng shìfǒu xùqiān hétong.",
+          "v": "Công ty sẽ căn cứ vào biểu hiện công việc của người đó để quyết định có ký tiếp hợp đồng hay không."
+        }
+      ],
+      "luuY": [
+        "Sau 其 KHÔNG thêm 的: 其的文化 ✗ → 其文化 ✓ (其 đã bao hàm nghĩa \"của\").",
+        "Khác 他 / 它: 其 không làm chủ ngữ độc lập của câu: 其很聪明 ✗ → 他很聪明 ✓. 其 chỉ đứng trước danh từ, hoặc sau động từ làm kiêm ngữ.",
+        "Khác 之: 之 làm tân ngữ đứng cuối (取而代之) hoặc trợ từ nối định ngữ (成功之路); 其 chủ yếu đứng trước danh từ chỉ sở hữu. Đừng lẫn 其他 (cái khác) với \"他 của nó\"."
+      ],
+      "soSanh": [
+        "zh-hsk4-zhi",
+        "zh-hsk1-de",
+        "zh-hsk6-zhe-nguoi",
+        "zh-hsk4-suo"
+      ],
+      "tuKhoa": [
+        "qi dai tu",
+        "qizhong",
+        "qita",
+        "qici",
+        "của nó",
+        "của họ",
+        "đại từ văn viết"
+      ],
+      "quiz": [
+        {
+          "h": "每种语言都有（　）自身的特点。",
+          "lc": [
+            "其",
+            "亦然",
+            "皆",
+            "者"
+          ],
+          "da": 0,
+          "gt": "Cần đại từ sở hữu chỉ lại \"mỗi ngôn ngữ\" ⇒ 其 (của nó). 者 là hậu tố chỉ người, 皆 = \"đều\" (đứng trước động từ), 亦然 = \"cũng vậy\"."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "其很喜欢音乐。",
+            "这家公司以其优质的服务闻名。",
+            "这家公司以其的服务闻名。",
+            "我认识其。"
+          ],
+          "da": 1,
+          "gt": "其 đứng ngay trước cụm danh từ, không thêm 的 sau nó. 其 cũng không làm chủ ngữ độc lập và không làm tân ngữ đứng cuối câu trong tiếng hiện đại."
+        },
+        {
+          "h": "其 trong 任其发展 có nghĩa gì?",
+          "lc": [
+            "\"của nó\" (sở hữu)",
+            "\"thứ nhất\"",
+            "\"nó, họ\" — đối tượng được để mặc cho phát triển",
+            "\"cái khác\""
+          ],
+          "da": 2,
+          "gt": "Sau động từ 任, 其 làm kiêm ngữ: \"để mặc NÓ phát triển\". Nghĩa sở hữu chỉ có khi 其 đứng trước danh từ; \"cái khác\" là 其他, \"thứ nhất\" không liên quan."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-zhe-nguoi",
+      "nhom": "Hư từ văn viết",
+      "tieuDe": "…者",
+      "mau": "V / Adj / cụm từ + 者 ｜ 前者 / 后者 / 二者 / 两者",
+      "nghia": "người ~, kẻ ~ (hậu tố văn viết)；cái (trước / sau)",
+      "giaiThich": "者 gắn sau động từ, tính từ hoặc một cụm từ để chỉ người (đôi khi là sự vật) có hành động, đặc điểm đó, tương đương \"…的人\" nhưng gọn và trang trọng. Nhiều từ đã thành danh từ cố định: 记者, 作者, 读者, 学者, 消费者, 志愿者, 爱好者, 强者, 弱者. 者 còn đi sau 前 / 后 / số từ để chỉ lại những thứ đã nhắc: 前者 (cái trước), 后者 (cái sau), 二者 / 两者 (cả hai). Trong thông báo, quy định, 者 gắn cả vào cụm dài: 违者, 符合条件者.",
+      "cachGhep": [
+        "V (hai âm tiết) + 者: 获胜者；消费者；志愿者",
+        "Adj + 者: 强者；弱者；老者",
+        "Cụm động từ + 者 (thông báo): 符合条件者；违者罚款",
+        "前者…，后者…: 前者重视理论，后者重视实践"
+      ],
+      "viDu": [
+        {
+          "c": "这次比赛的获胜者将得到一万元奖金。",
+          "d": "Zhè cì bǐsài de huòshèngzhě jiāng dédào yíwàn yuán jiǎngjīn.",
+          "v": "Người thắng cuộc thi lần này sẽ nhận được mười nghìn tệ tiền thưởng."
+        },
+        {
+          "c": "违者罚款五百元。",
+          "d": "Wéizhě fákuǎn wǔbǎi yuán.",
+          "v": "Người vi phạm bị phạt năm trăm tệ."
+        },
+        {
+          "c": "前者重视理论，后者重视实践。",
+          "d": "Qiánzhě zhòngshì lǐlùn, hòuzhě zhòngshì shíjiàn.",
+          "v": "Cái trước coi trọng lý thuyết, cái sau coi trọng thực hành."
+        },
+        {
+          "c": "符合条件者可以在网上报名。",
+          "d": "Fúhé tiáojiàn zhě kěyǐ zài wǎngshàng bàomíng.",
+          "v": "Người đủ điều kiện có thể đăng ký trên mạng."
+        }
+      ],
+      "luuY": [
+        "Khác …的人: nghĩa như nhau, nhưng …的人 là khẩu ngữ; …者 là văn viết. Không trộn hai cách: 获胜的者 ✗, 获胜者人 ✗.",
+        "者 không đứng một mình và không đứng trước danh từ: 者来了 ✗. Nó luôn bám vào thành phần đứng trước.",
+        "Khác 家 / 员: 家 chỉ người thành danh trong một lĩnh vực (科学家, 画家), 员 chỉ thành viên / nhân viên (服务员, 运动员); 者 chỉ chung \"người làm việc ấy\". Không tự ý đổi: 科学者 ✗, 记家 ✗."
+      ],
+      "soSanh": [
+        "zh-hsk2-de-thay-danh-tu",
+        "zh-hsk6-qi-dai-tu",
+        "zh-hsk4-suo",
+        "zh-hsk4-zhi"
+      ],
+      "tuKhoa": [
+        "zhe nguoi",
+        "qianzhe houzhe",
+        "qianzhe",
+        "houzhe",
+        "hậu tố chỉ người",
+        "người làm",
+        "kẻ"
+      ],
+      "quiz": [
+        {
+          "h": "报名（　）请于本周五前提交申请表。",
+          "lc": [
+            "即",
+            "者",
+            "其",
+            "便"
+          ],
+          "da": 1,
+          "gt": "Thông báo trang trọng: \"người đăng ký xin nộp đơn…\" ⇒ 报名者. 其 là đại từ \"của nó\", 即 = \"tức là / liền\", 便 = \"liền\" — không tạo được danh từ chỉ người."
+        },
+        {
+          "h": "前者 và 后者 dùng để làm gì?",
+          "lc": [
+            "chỉ quá khứ và tương lai",
+            "chỉ người già và người trẻ",
+            "chỉ lại lần lượt hai đối tượng vừa được nhắc tới",
+            "chỉ người đi trước và người đi sau trong hàng"
+          ],
+          "da": 2,
+          "gt": "前者 = cái / người được nhắc trước, 后者 = cái / người được nhắc sau trong đoạn văn. Chúng không nói về vị trí đứng, thời gian hay tuổi tác."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "这位获胜的者很年轻。",
+            "者都来了。",
+            "他是一位科学者。",
+            "志愿者们为老人提供了很多帮助。"
+          ],
+          "da": 3,
+          "gt": "志愿者 là danh từ đúng mẫu V + 者. 者 không đi sau 的, không đứng một mình, và \"nhà khoa học\" trong tiếng Trung là 科学家 chứ không phải 科学者."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-wei-suo",
+      "nhom": "Hư từ văn viết",
+      "tieuDe": "为…所… (bị động văn viết)",
+      "mau": "N1 (đối tượng chịu tác động) + 为 + N2 (tác nhân) + 所 + V",
+      "nghia": "bị / được N2 ~ (câu bị động văn viết)",
+      "giaiThich": "Đây là mẫu bị động kế thừa từ văn ngôn, dùng trong văn viết trang trọng. 为 (đọc wéi) dẫn ra tác nhân như 被, 所 đứng ngay trước động từ. Tác nhân N2 bắt buộc phải có. Động từ thường hai âm tiết và đứng trơ: phía sau không thêm tân ngữ, bổ ngữ. Nghĩa có thể tốt (为读者所喜爱) hoặc xấu (为假象所迷惑). Phủ định đặt trước 为: 不为…所…, 没有为…所….",
+      "cachGhep": [
+        "N1 + 为 + N2 + 所 + V: 作品为广大读者所喜爱",
+        "N1 + 不 / 没有 + 为 + N2 + 所 + V: 建议没有为公司所采纳",
+        "N1 + 早已 / 已 + 为 + N2 + 所 + V: 早已为大量实验所证明",
+        "Cụm cố định: 不为所动 (không hề lay chuyển)；为人所知 (được người ta biết đến)"
+      ],
+      "viDu": [
+        {
+          "c": "这位作家的作品为广大读者所喜爱。",
+          "d": "Zhè wèi zuòjiā de zuòpǐn wéi guǎngdà dúzhě suǒ xǐ'ài.",
+          "v": "Tác phẩm của nhà văn này được đông đảo độc giả yêu thích."
+        },
+        {
+          "c": "他的建议没有为公司所采纳。",
+          "d": "Tā de jiànyì méiyǒu wéi gōngsī suǒ cǎinà.",
+          "v": "Đề xuất của anh ấy không được công ty chấp nhận."
+        },
+        {
+          "c": "这个事实早已为大量实验所证明。",
+          "d": "Zhège shìshí zǎoyǐ wéi dàliàng shíyàn suǒ zhèngmíng.",
+          "v": "Sự thật này từ lâu đã được rất nhiều thí nghiệm chứng minh."
+        },
+        {
+          "c": "我们不能为表面现象所迷惑。",
+          "d": "Wǒmen bù néng wéi biǎomiàn xiànxiàng suǒ míhuò.",
+          "v": "Chúng ta không thể để hiện tượng bề ngoài đánh lừa."
+        }
+      ],
+      "luuY": [
+        "Khác 被: 被 dùng mọi văn phong, lược được tác nhân (钱包被偷了) và sau động từ thường có 了 / bổ ngữ; 为…所… là văn viết, PHẢI có tác nhân, động từ đứng trơ: 为读者所喜爱了很多 ✗.",
+        "为 ở đây đọc wéi (thanh 2), không đọc wèi như trong 为了 / 因为. Đừng hiểu thành \"vì\": 为读者所喜爱 không phải \"yêu thích vì độc giả\".",
+        "Trật tự cố định 为 + tác nhân + 所 + V; không đảo 所 lên trước tác nhân, không bỏ tác nhân trừ trong cụm cố định như 不为所动."
+      ],
+      "soSanh": [
+        "zh-hsk3-bei",
+        "zh-hsk3-jiao-rang-bi-dong",
+        "zh-hsk4-suo",
+        "zh-hsk4-you"
+      ],
+      "tuKhoa": [
+        "wei suo",
+        "weisuo",
+        "wei...suo",
+        "bị động văn viết",
+        "được",
+        "bị"
+      ],
+      "quiz": [
+        {
+          "h": "他的才华很快（　）大家所认可。",
+          "lc": [
+            "为",
+            "把",
+            "向",
+            "对"
+          ],
+          "da": 0,
+          "gt": "Mẫu bị động văn viết 为 + tác nhân + 所 + V: \"được mọi người công nhận\". 把 đưa tân ngữ lên trước trong câu chủ động; 对 và 向 là giới từ chỉ đối tượng / phương hướng, không hô ứng với 所 để tạo bị động."
+        },
+        {
+          "h": "Chữ 为 trong 为…所… đọc thế nào?",
+          "lc": [
+            "wèi",
+            "wéi",
+            "wěi",
+            "wēi"
+          ],
+          "da": 1,
+          "gt": "Trong mẫu bị động này 为 đọc wéi (thanh 2). wèi là âm của 为 trong 为了, 因为; hai âm còn lại không phải âm của chữ 为."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "这种观点已所多数学者为接受。",
+            "多数学者已为这种观点所接受了它。",
+            "这种观点已为多数学者所接受。",
+            "这种观点已为所接受多数学者。"
+          ],
+          "da": 2,
+          "gt": "Trật tự đúng: đối tượng + 为 + tác nhân + 所 + V, và sau động từ không thêm tân ngữ. Các câu kia đảo sai vị trí 为 / 所 hoặc thêm tân ngữ thừa."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-yousuo",
+      "nhom": "Hư từ văn viết",
+      "tieuDe": "有所 + V",
+      "mau": "S + 有所 + V (hai âm tiết) ｜ 对 + O + 有所 + V",
+      "nghia": "có (phần) ~, ~ ở mức độ nhất định",
+      "giaiThich": "有所 đứng trước một động từ hai âm tiết để nói rằng sự thay đổi hay hành động ấy có xảy ra ở một mức độ nào đó, không nhiều — cách nói dè dặt, khách quan của văn viết: báo cáo, tin tức, nhận xét. Động từ thường gặp: 提高, 改善, 增加, 下降, 好转, 变化, 了解, 准备, 发现, 不同. Động từ sau 有所 thường không mang tân ngữ; đối tượng nếu có thì đưa lên trước bằng 对.",
+      "cachGhep": [
+        "S + 有所 + V: 水平有所提高；房价有所下降",
+        "S + 有所 + 不同: 效果有所不同",
+        "S + 对 + O + 有所 + V: 对情况有所了解",
+        "S + 应该 / 必须 + 有所 + V: 应该有所准备"
+      ],
+      "viDu": [
+        {
+          "c": "经过一年的努力，他的汉语水平有所提高。",
+          "d": "Jīngguò yì nián de nǔlì, tā de Hànyǔ shuǐpíng yǒusuǒ tígāo.",
+          "v": "Sau một năm nỗ lực, trình độ tiếng Trung của anh ấy đã có tiến bộ."
+        },
+        {
+          "c": "最近几个月，房价有所下降。",
+          "d": "Zuìjìn jǐ gè yuè, fángjià yǒusuǒ xiàjiàng.",
+          "v": "Mấy tháng gần đây giá nhà đã giảm phần nào."
+        },
+        {
+          "c": "两种方法的效果有所不同。",
+          "d": "Liǎng zhǒng fāngfǎ de xiàoguǒ yǒusuǒ bùtóng.",
+          "v": "Hiệu quả của hai phương pháp có phần khác nhau."
+        },
+        {
+          "c": "对于可能出现的困难，我们应该有所准备。",
+          "d": "Duìyú kěnéng chūxiàn de kùnnan, wǒmen yīnggāi yǒusuǒ zhǔnbèi.",
+          "v": "Với những khó khăn có thể xuất hiện, chúng ta nên có sự chuẩn bị."
+        }
+      ],
+      "luuY": [
+        "Sau 有所 phải là từ HAI âm tiết: 有所高 ✗, 有所变 ✗ → 有所提高, 有所变化 ✓.",
+        "Khác 有点儿 / 有些: 有点儿 + tính từ, khẩu ngữ, thường là điều không vừa ý (有点儿贵); 有所 + động từ, văn viết, trung tính (tăng hay giảm đều được).",
+        "Động từ sau 有所 thường không kèm tân ngữ: 有所了解这个情况 ✗ → 对这个情况有所了解 ✓. Dạng phủ định tương ứng thường gặp là 没有什么 + N hoặc 无所 trong cụm cố định (无所谓, 无所作为)."
+      ],
+      "soSanh": [
+        "zh-hsk2-youdianr-yidianr",
+        "zh-hsk4-suo",
+        "zh-hsk4-shaowei",
+        "zh-hsk6-wei-suo"
+      ],
+      "tuKhoa": [
+        "yousuo",
+        "you suo",
+        "yousuo tigao",
+        "có phần",
+        "phần nào",
+        "ở mức độ nhất định"
+      ],
+      "quiz": [
+        {
+          "h": "采取新措施以后，空气质量（　）改善。",
+          "lc": [
+            "为所",
+            "有所",
+            "所有",
+            "其所"
+          ],
+          "da": 1,
+          "gt": "有所 + động từ hai âm tiết (改善): \"đã được cải thiện phần nào\". 所有 là định ngữ \"tất cả\" đứng trước danh từ, không đứng trước động từ; 为所 và 其所 không phải tổ hợp đứng trước động từ như vậy."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "价格有所变。",
+            "我有所了解这个问题。",
+            "我对这个问题有所了解。",
+            "他的成绩有所高。"
+          ],
+          "da": 2,
+          "gt": "Sau 有所 là động từ hai âm tiết và không kèm tân ngữ; đối tượng đưa lên trước bằng 对. 高 và 变 là từ một âm tiết nên không dùng được; tân ngữ 这个问题 cũng không đặt sau 了解 trong mẫu này."
+        },
+        {
+          "h": "有所 hợp với loại văn bản nào nhất?",
+          "lc": [
+            "câu chửi mắng",
+            "lời trò chuyện suồng sã",
+            "lời ru trẻ con",
+            "báo cáo, tin tức, nhận xét mang tính khách quan"
+          ],
+          "da": 3,
+          "gt": "有所 là cách nói dè dặt, trang trọng của văn viết (销量有所增加). Khẩu ngữ thường nói 提高了一些, 有点儿变化."
+        }
+      ]
+    }
+  ]
+}

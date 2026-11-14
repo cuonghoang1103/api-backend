@@ -52,9 +52,9 @@
         {
           "h": "My brother ___ a doctor.",
           "lc": [
-            "are",
-            "am",
             "be",
+            "am",
+            "are",
             "is"
           ],
           "da": 3,
@@ -64,8 +64,8 @@
           "h": "We ___ from Vietnam.",
           "lc": [
             "are",
-            "is",
             "am",
+            "is",
             "be"
           ],
           "da": 0,
@@ -74,9 +74,9 @@
         {
           "h": "Câu nào đúng?",
           "lc": [
-            "He hungry.",
-            "He is hungry.",
             "He hungry is.",
+            "He is hungry.",
+            "He hungry.",
             "He are hungry."
           ],
           "da": 1,
@@ -132,30 +132,30 @@
         {
           "h": "She ___ at school today. She is at home.",
           "lc": [
+            "aren't",
             "isn't",
-            "am not",
             "don't",
-            "aren't"
+            "am not"
           ],
-          "da": 0,
+          "da": 1,
           "gt": "She đi với is; phủ định là isn't."
         },
         {
           "h": "Câu nào đúng?",
           "lc": [
+            "I not am late.",
             "I don't late.",
             "I'm not late.",
-            "I not am late.",
             "I amn't late."
           ],
-          "da": 1,
+          "da": 2,
           "gt": "Phủ định của I am là I'm not; không có amn't, không dùng don't với tính từ."
         },
         {
           "h": "My friends ___ from Japan. They are from Korea.",
           "lc": [
-            "isn't",
             "am not",
+            "isn't",
             "doesn't",
             "aren't"
           ],
@@ -213,34 +213,34 @@
         {
           "h": "___ your parents teachers?",
           "lc": [
-            "Do",
             "Are",
-            "Is",
-            "Am"
+            "Do",
+            "Am",
+            "Is"
           ],
-          "da": 1,
+          "da": 0,
           "gt": "Your parents là số nhiều nên dùng Are."
         },
         {
           "h": "Is Tom your brother? - Yes, ___.",
           "lc": [
-            "he is",
             "it is",
-            "he does",
-            "he's"
+            "he is",
+            "he's",
+            "he does"
           ],
-          "da": 0,
+          "da": 1,
           "gt": "Trả lời ngắn khẳng định dùng dạng đầy đủ: Yes, he is."
         },
         {
           "h": "Câu nào đúng?",
           "lc": [
-            "Where does your school?",
             "Where your school is?",
             "Where your school?",
-            "Where is your school?"
+            "Where is your school?",
+            "Where does your school?"
           ],
-          "da": 3,
+          "da": 2,
           "gt": "Sau từ để hỏi là to be rồi mới đến chủ ngữ: Where is + your school?"
         }
       ]
@@ -295,34 +295,34 @@
         {
           "h": "___ two cats in the garden.",
           "lc": [
-            "It has",
-            "They are",
             "There are",
-            "There is"
+            "There is",
+            "They are",
+            "It has"
           ],
-          "da": 2,
+          "da": 0,
           "gt": "Two cats là số nhiều nên dùng There are để nói có."
         },
         {
           "h": "___ a bank near here?",
           "lc": [
-            "Has there",
-            "Are there",
             "Does there",
-            "Is there"
+            "Is there",
+            "Are there",
+            "Has there"
           ],
-          "da": 3,
+          "da": 1,
           "gt": "A bank là số ít nên câu hỏi là Is there…?"
         },
         {
           "h": "Câu nào đúng?",
           "lc": [
-            "There is a book on the table.",
-            "There are a book on the table.",
             "Have a book on the table.",
+            "There are a book on the table.",
+            "There is a book on the table.",
             "It has a book on the table."
           ],
-          "da": 0,
+          "da": 2,
           "gt": "Nói ở đâu có cái gì dùng There is + danh từ số ít, không dùng have."
         }
       ]
@@ -374,34 +374,34 @@
         {
           "h": "___ rainy today. Take an umbrella.",
           "lc": [
-            "It's",
             "Its",
-            "It",
-            "Is"
+            "It's",
+            "Is",
+            "It"
           ],
-          "da": 0,
+          "da": 1,
           "gt": "Nói thời tiết cần chủ ngữ giả it + is: It's rainy."
         },
         {
           "h": "What time is it? - ___ ten o'clock.",
           "lc": [
             "They're",
-            "There's",
             "Is",
-            "It's"
+            "It's",
+            "There's"
           ],
-          "da": 3,
+          "da": 2,
           "gt": "Nói giờ dùng It's + giờ."
         },
         {
           "h": "Câu nào đúng?",
           "lc": [
-            "The sky is cold today.",
-            "It's cold today.",
             "Today is cold very.",
-            "Is cold today."
+            "The sky is cold today.",
+            "Is cold today.",
+            "It's cold today."
           ],
-          "da": 1,
+          "da": 3,
           "gt": "Nói thời tiết dùng chủ ngữ giả it: It's cold today."
         }
       ]
@@ -457,32 +457,32 @@
         {
           "h": "My sister is ten. ___ is in Grade 5.",
           "lc": [
-            "They",
             "She",
             "It",
-            "He"
+            "He",
+            "They"
           ],
-          "da": 1,
+          "da": 0,
           "gt": "My sister là nữ, số ít nên thay bằng She."
         },
         {
           "h": "Nam and Hoa are my classmates. ___ are fifteen.",
           "lc": [
-            "We",
             "You",
+            "They",
             "He",
-            "They"
+            "We"
           ],
-          "da": 3,
+          "da": 1,
           "gt": "Nam and Hoa là hai người khác (không có người nói) nên dùng They."
         },
         {
           "h": "Look at this phone. ___ is new.",
           "lc": [
-            "She",
+            "They",
             "He",
             "It",
-            "They"
+            "She"
           ],
           "da": 2,
           "gt": "This phone là một đồ vật nên dùng It."
@@ -539,21 +539,21 @@
         {
           "h": "Where is Peter? I can't see ___.",
           "lc": [
+            "her",
             "him",
-            "he",
             "his",
-            "her"
+            "he"
           ],
-          "da": 0,
+          "da": 1,
           "gt": "Sau động từ see cần đại từ tân ngữ; Peter là nam nên dùng him."
         },
         {
           "h": "These books are heavy. Can you carry ___ for me?",
           "lc": [
             "their",
-            "they",
+            "it",
             "them",
-            "it"
+            "they"
           ],
           "da": 2,
           "gt": "These books là số nhiều và đứng sau động từ carry nên dùng them."
@@ -561,12 +561,12 @@
         {
           "h": "Our teacher is nice. She always helps ___.",
           "lc": [
+            "our",
             "we",
-            "us",
             "ours",
-            "our"
+            "us"
           ],
-          "da": 1,
+          "da": 3,
           "gt": "Sau động từ helps cần tân ngữ: us (dạng tân ngữ của we)."
         }
       ]
@@ -623,22 +623,22 @@
           "h": "Tom is in the kitchen with ___ sister.",
           "lc": [
             "him",
-            "he",
             "his",
-            "her"
+            "her",
+            "he"
           ],
-          "da": 2,
+          "da": 1,
           "gt": "Người sở hữu là Tom (nam) nên dùng his, dù sister là nữ."
         },
         {
           "h": "We are students. This is ___ classroom.",
           "lc": [
-            "our",
-            "us",
+            "their",
             "we",
-            "their"
+            "our",
+            "us"
           ],
-          "da": 0,
+          "da": 2,
           "gt": "Người sở hữu là we nên tính từ sở hữu là our."
         },
         {
@@ -701,12 +701,12 @@
         {
           "h": "Look at ___ birds in the sky!",
           "lc": [
-            "that",
             "those",
-            "it",
-            "this"
+            "that",
+            "this",
+            "it"
           ],
-          "da": 1,
+          "da": 0,
           "gt": "Birds là số nhiều và ở xa (trên trời) nên dùng those."
         },
         {
@@ -714,8 +714,8 @@
           "lc": [
             "These",
             "This",
-            "Those",
-            "They"
+            "They",
+            "Those"
           ],
           "da": 1,
           "gt": "Một cái túi ở gần người nói (here) nên dùng This."
@@ -723,10 +723,10 @@
         {
           "h": "___ apples in my hand are sweet.",
           "lc": [
-            "That",
+            "It",
             "This",
             "These",
-            "It"
+            "That"
           ],
           "da": 2,
           "gt": "Apples là số nhiều và ở gần (trong tay) nên dùng These."
@@ -784,34 +784,34 @@
         {
           "h": "My mother is ___ nurse.",
           "lc": [
-            "a",
+            "an",
             "(không cần mạo từ)",
             "the",
-            "an"
+            "a"
           ],
-          "da": 0,
+          "da": 3,
           "gt": "Nói nghề nghiệp dùng a / an; nurse bắt đầu bằng âm phụ âm nên dùng a."
         },
         {
           "h": "I need ___ umbrella.",
           "lc": [
-            "a",
-            "some",
+            "an",
             "two",
-            "an"
+            "some",
+            "a"
           ],
-          "da": 3,
+          "da": 0,
           "gt": "Umbrella bắt đầu bằng âm nguyên âm /ʌ/ và là số ít nên dùng an."
         },
         {
           "h": "The lesson is ___ hour long.",
           "lc": [
+            "a",
             "an",
             "some",
-            "a",
             "any"
           ],
-          "da": 0,
+          "da": 1,
           "gt": "Chữ h trong hour là âm câm, từ bắt đầu bằng âm nguyên âm nên dùng an."
         }
       ]
@@ -868,9 +868,9 @@
           "h": "I have a bike and a car. ___ bike is red.",
           "lc": [
             "An",
-            "A",
+            "Some",
             "The",
-            "Some"
+            "A"
           ],
           "da": 2,
           "gt": "Chiếc xe đạp đã được nhắc ở câu trước nên lần hai dùng The."
@@ -878,12 +878,12 @@
         {
           "h": "Câu nào đúng?",
           "lc": [
-            "I live in Vietnam.",
             "I live in the Vietnam.",
             "I live in an Vietnam.",
-            "I live in a Vietnam."
+            "I live in a Vietnam.",
+            "I live in Vietnam."
           ],
-          "da": 0,
+          "da": 3,
           "gt": "Tên nước Vietnam không dùng mạo từ."
         },
         {
@@ -950,34 +950,34 @@
         {
           "h": "There are five ___ in my family.",
           "lc": [
-            "peoples",
-            "persones",
             "people",
-            "person"
+            "person",
+            "persones",
+            "peoples"
           ],
-          "da": 2,
+          "da": 0,
           "gt": "Số nhiều của person (người) là people."
         },
         {
           "h": "She has two ___.",
           "lc": [
-            "babys",
             "babyes",
             "babies",
-            "baby"
+            "baby",
+            "babys"
           ],
-          "da": 2,
+          "da": 1,
           "gt": "Baby tận cùng phụ âm + y nên đổi y thành ies: babies."
         },
         {
           "h": "I brush my ___ twice a day.",
           "lc": [
-            "teeth",
             "teeths",
             "tooth",
+            "teeth",
             "tooths"
           ],
-          "da": 0,
+          "da": 2,
           "gt": "Số nhiều bất quy tắc của tooth là teeth."
         }
       ]
@@ -1032,21 +1032,21 @@
         {
           "h": "This is ___ bike. (xe đạp của Peter)",
           "lc": [
+            "Peters",
             "Peter's",
             "of Peter",
-            "Peters",
             "Peter"
           ],
-          "da": 0,
+          "da": 1,
           "gt": "Sở hữu của tên riêng số ít: thêm 's → Peter's bike."
         },
         {
           "h": "The ___ toys are on the floor. (đồ chơi của bọn trẻ)",
           "lc": [
+            "childrens",
             "children",
-            "childrens'",
             "children's",
-            "childrens"
+            "childrens'"
           ],
           "da": 2,
           "gt": "Children là số nhiều bất quy tắc, không tận cùng s nên thêm 's."
@@ -1054,12 +1054,12 @@
         {
           "h": "Trong câu nào 's là sở hữu cách?",
           "lc": [
-            "My mother's bag is red.",
+            "It's cold today.",
             "She's a nurse.",
             "My mother's at work.",
-            "It's cold today."
+            "My mother's bag is red."
           ],
-          "da": 0,
+          "da": 3,
           "gt": "My mother's bag = túi của mẹ tôi; ở ba câu còn lại 's là viết tắt của is."
         }
       ]

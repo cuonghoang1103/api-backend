@@ -31,13 +31,16 @@ test('khách (không token) gọi được mọi tuyến; lỗi tham số đúng
 
     const tq = await lay('/tong-quan');
     assert.equal(tq.ma, 200);
-    assert.ok(tq.than.data.tong >= 400);
+    assert.ok(tq.than.data.tong >= 1000);
+    const capJa = tq.than.data.ngonNgu.find((x: { nn: string }) => x.nn === 'ja').cap.map((c: { cap: string }) => c.cap);
+    assert.deepEqual(capJa, ['N5', 'N4', 'N3', 'N2', 'N1']);
     assert.deepEqual(tq.than.data.ngonNgu.map((x: { nn: string }) => x.nn), ['en', 'ja', 'zh']);
 
     for (const nn of ['en', 'ja', 'zh']) {
       const dm = await lay(`/danh-muc?nn=${nn}`);
       assert.equal(dm.ma, 200);
-      assert.ok(dm.than.data.cap.length >= 3);
+      assert.ok(dm.than.data.cap.length >= 5);
+      assert.ok(['N1', 'HSK6', 'C1'].includes(dm.than.data.cap.at(-1).cap), 'cấp cao nhất có trong danh mục (app dựng chip cấp từ đây)');
       const dau = dm.than.data.cap[0].nhom[0].diem[0];
       assert.deepEqual(Object.keys(dau).sort(), ['cap', 'id', 'mau', 'nghia', 'nhom', 'nn', 'tieuDe']);
       const ct = await lay(`/diem/${dau.id}`);

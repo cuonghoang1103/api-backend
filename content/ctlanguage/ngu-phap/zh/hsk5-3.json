@@ -1,0 +1,1236 @@
+{
+  "nn": "zh",
+  "cap": "HSK5",
+  "diem": [
+    {
+      "id": "zh-hsk5-bijing",
+      "nhom": "Phó từ ngữ khí",
+      "tieuDe": "毕竟",
+      "mau": "S + 毕竟 + 是 / V / Adj… | 毕竟 + mệnh đề",
+      "nghia": "dù sao thì, suy cho cùng, rốt cuộc vẫn là ~",
+      "giaiThich": "Phó từ nhấn mạnh một sự thật căn bản không thể bỏ qua, thường dùng làm lý do để giải thích, thông cảm hoặc đưa ra nhận định. Hay gặp trong khung A 毕竟是 A (A thì vẫn là A) và sau 虽然…但. Đứng trước hoặc sau chủ ngữ.",
+      "cachGhep": [
+        "S + 毕竟 + 是 + N: 他毕竟是个孩子",
+        "毕竟 + mệnh đề，kết luận: 毕竟是第一次，做得不好也正常",
+        "A + 毕竟 + 是 + A: 孩子毕竟是孩子"
+      ],
+      "viDu": [
+        {
+          "c": "他毕竟是个孩子，你别对他太严格了。",
+          "d": "Tā bìjìng shì gè háizi, nǐ bié duì tā tài yángé le.",
+          "v": "Dù sao nó cũng là trẻ con, bạn đừng nghiêm khắc với nó quá."
+        },
+        {
+          "c": "毕竟是第一次，做得不好也很正常。",
+          "d": "Bìjìng shì dì-yī cì, zuò de bù hǎo yě hěn zhèngcháng.",
+          "v": "Dù sao cũng là lần đầu, làm chưa tốt cũng là bình thường."
+        },
+        {
+          "c": "虽然他们吵过架，但毕竟是多年的朋友。",
+          "d": "Suīrán tāmen chǎo guo jià, dàn bìjìng shì duō nián de péngyou.",
+          "v": "Tuy họ từng cãi nhau, nhưng suy cho cùng vẫn là bạn bè nhiều năm."
+        },
+        {
+          "c": "孩子毕竟是孩子，玩一会儿就忘了不高兴的事。",
+          "d": "Háizi bìjìng shì háizi, wán yíhuìr jiù wàng le bù gāoxìng de shì.",
+          "v": "Trẻ con thì vẫn là trẻ con, chơi một lát là quên chuyện không vui."
+        }
+      ],
+      "luuY": [
+        "毕竟 KHÔNG dùng trong câu hỏi: 你毕竟去不去？ ✗ → 你到底去不去？ ✓.",
+        "Khác 到底 / 究竟: hai từ này vừa dùng truy hỏi trong câu hỏi, vừa có nghĩa \"rốt cuộc\" trong câu trần thuật; 毕竟 chỉ có nghĩa nhấn sự thật trong câu trần thuật.",
+        "Khác 反正: 反正 nhấn kết luận không đổi bất kể điều kiện; 毕竟 nêu sự thật căn bản làm căn cứ."
+      ],
+      "soSanh": [
+        "zh-hsk4-daodi-jiujing",
+        "zh-hsk5-fanzheng",
+        "zh-hsk5-dique"
+      ],
+      "tuKhoa": [
+        "bijing",
+        "bi jing",
+        "dù sao",
+        "suy cho cùng",
+        "rốt cuộc"
+      ],
+      "quiz": [
+        {
+          "h": "别生他的气了，他（　）还年轻，没什么经验。",
+          "lc": [
+            "何必",
+            "毕竟",
+            "简直",
+            "居然"
+          ],
+          "da": 1,
+          "gt": "Nêu sự thật căn bản (còn trẻ) làm lý do thông cảm → 毕竟. 居然 tỏ ngạc nhiên, 简直 là cường điệu, 何必 là phản vấn \"việc gì phải\"."
+        },
+        {
+          "h": "Câu nào SAI?",
+          "lc": [
+            "他毕竟是老师，懂得比我们多。",
+            "他毕竟学过两年，比我们强。",
+            "你毕竟去不去？",
+            "毕竟是冬天，还是很冷的。"
+          ],
+          "da": 2,
+          "gt": "毕竟 không dùng để truy hỏi trong câu hỏi; muốn hỏi \"rốt cuộc có đi không\" phải dùng 到底 / 究竟."
+        },
+        {
+          "h": "毕竟 dùng để làm gì?",
+          "lc": [
+            "truy hỏi cho ra câu trả lời",
+            "diễn tả hành động xảy ra ngay lập tức",
+            "nêu một giả thiết khó xảy ra",
+            "nhấn một sự thật căn bản làm lý do giải thích"
+          ],
+          "da": 3,
+          "gt": "毕竟 = \"dù sao thì, suy cho cùng\": đưa ra sự thật không thể phủ nhận để giải thích hay biện hộ."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-juran",
+      "nhom": "Phó từ ngữ khí",
+      "tieuDe": "居然",
+      "mau": "S + 居然 + V / Adj…",
+      "nghia": "vậy mà (lại), không ngờ lại ~",
+      "giaiThich": "Phó từ ngữ khí diễn tả sự ngạc nhiên: sự việc xảy ra ngoài dự đoán, trái với lẽ thường. Dùng cho cả việc tốt (không ngờ làm được) lẫn việc xấu (không ngờ lại như thế). Nghĩa giống 竟然; đứng sau chủ ngữ, trước vị ngữ.",
+      "cachGhep": [
+        "S + 居然 + V…: 他居然做错了",
+        "S + 居然 + 不 / 没 + V…: 你居然不告诉我",
+        "S + 居然 + 能 / 会 + V…: 她居然能用汉语开会了"
+      ],
+      "viDu": [
+        {
+          "c": "这么简单的题，他居然做错了。",
+          "d": "Zhème jiǎndān de tí, tā jūrán zuò cuò le.",
+          "v": "Bài dễ thế này mà anh ấy lại làm sai."
+        },
+        {
+          "c": "才学了半年，她居然能用汉语开会了。",
+          "d": "Cái xué le bàn nián, tā jūrán néng yòng Hànyǔ kāihuì le.",
+          "v": "Mới học nửa năm mà cô ấy đã có thể họp bằng tiếng Trung rồi."
+        },
+        {
+          "c": "我没想到他居然会拒绝。",
+          "d": "Wǒ méi xiǎngdào tā jūrán huì jùjué.",
+          "v": "Tôi không ngờ anh ấy lại từ chối."
+        },
+        {
+          "c": "这么重要的事，你居然不告诉我！",
+          "d": "Zhème zhòngyào de shì, nǐ jūrán bú gàosu wǒ!",
+          "v": "Việc quan trọng thế này mà bạn lại không nói với tôi!"
+        }
+      ],
+      "luuY": [
+        "居然 đứng trước động từ / tính từ vị ngữ, không đặt cuối câu như \"… thật không ngờ\" của tiếng Việt.",
+        "Khác 竟然: nghĩa như nhau, thay cho nhau được trong hầu hết các câu; 竟然 có dạng rút gọn 竟 (văn viết), còn 居然 không rút gọn.",
+        "Khác 果然: 果然 = đúng NHƯ dự đoán; 居然 = NGOÀI dự đoán. Khác 突然: 突然 chỉ nói việc xảy ra đột ngột về thời gian, không hàm ý \"không ngờ được\"."
+      ],
+      "soSanh": [
+        "zh-hsk4-jingran",
+        "zh-hsk4-guoran",
+        "zh-hsk3-turan",
+        "zh-hsk6-pianpian"
+      ],
+      "tuKhoa": [
+        "juran",
+        "ju ran",
+        "vậy mà",
+        "không ngờ",
+        "ngạc nhiên"
+      ],
+      "quiz": [
+        {
+          "h": "他平时学习不太努力，这次（　）考了第一名。",
+          "lc": [
+            "居然",
+            "毕竟",
+            "何必",
+            "果然"
+          ],
+          "da": 0,
+          "gt": "Bình thường không chăm mà lại đứng nhất là điều ngoài dự đoán → 居然. 果然 là \"quả nhiên, đúng như dự đoán\" nên trái nghĩa với ngữ cảnh; 毕竟 và 何必 không diễn tả ngạc nhiên."
+        },
+        {
+          "h": "居然 biểu thị điều gì?",
+          "lc": [
+            "sự việc đúng như đã đoán trước",
+            "sự việc ngoài dự đoán, gây ngạc nhiên",
+            "sự việc xảy ra dần dần",
+            "sự việc chắc chắn sẽ xảy ra"
+          ],
+          "da": 1,
+          "gt": "居然 (= 竟然) cho biết người nói bất ngờ vì việc xảy ra trái với suy nghĩ thông thường."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "他忘了居然自己的生日。",
+            "他忘了自己的生日居然。",
+            "他居然忘了自己的生日。",
+            "他把居然自己的生日忘了。"
+          ],
+          "da": 2,
+          "gt": "居然 là phó từ, đứng sau chủ ngữ và ngay trước động từ vị ngữ; không chen vào giữa động từ và tân ngữ, không đặt cuối câu."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-jianzhi",
+      "nhom": "Phó từ ngữ khí",
+      "tieuDe": "简直",
+      "mau": "S + 简直 + (是 / 像 / 跟…一样 / 太…了 / 不… / V 得…)",
+      "nghia": "quả thực là, đúng là, cứ như là ~ (cường điệu)",
+      "giaiThich": "Phó từ ngữ khí dùng để nói cường điệu: sự việc gần như đạt tới mức ấy hoặc giống hệt như thế, dù thực tế chưa hẳn. Thường đi với các cách nói chỉ mức độ cao hoặc so sánh: 太…了, …极了, 像…一样, 不敢相信. Mang tính khẩu ngữ, giàu cảm xúc.",
+      "cachGhep": [
+        "简直 + 太 + Adj + 了: 简直太美了",
+        "简直 + 像 / 跟…一样: 简直跟中国人一样",
+        "简直 + 不 / 没 + V: 简直不敢相信",
+        "Adj + 得 + 简直 + …: 热得简直像个火炉"
+      ],
+      "viDu": [
+        {
+          "c": "这里的风景简直太美了！",
+          "d": "Zhèlǐ de fēngjǐng jiǎnzhí tài měi le!",
+          "v": "Phong cảnh ở đây quả thực quá đẹp!"
+        },
+        {
+          "c": "他说的汉语简直跟中国人一样。",
+          "d": "Tā shuō de Hànyǔ jiǎnzhí gēn Zhōngguórén yíyàng.",
+          "v": "Tiếng Trung anh ấy nói cứ y như người Trung Quốc."
+        },
+        {
+          "c": "我简直不敢相信自己的眼睛。",
+          "d": "Wǒ jiǎnzhí bù gǎn xiāngxìn zìjǐ de yǎnjing.",
+          "v": "Tôi thật không dám tin vào mắt mình."
+        },
+        {
+          "c": "屋子里热得简直像个火炉。",
+          "d": "Wūzi lǐ rè de jiǎnzhí xiàng gè huǒlú.",
+          "v": "Trong nhà nóng cứ như cái lò lửa."
+        }
+      ],
+      "luuY": [
+        "简直 cần đi với cách nói mức độ cao hoặc so sánh: 今天简直冷 ✗ → 今天简直冷死了 / 简直太冷了 ✓.",
+        "Khác 几乎: 几乎 nói khách quan \"gần như, suýt\" (几乎忘了); 简直 là cường điệu chủ quan \"cứ như là\".",
+        "Khác 甚至: 甚至 nêu một trường hợp cực đoan để nhấn mạnh (\"thậm chí\"); 简直 không nêu trường hợp mà đánh giá mức độ."
+      ],
+      "soSanh": [
+        "zh-hsk3-jihu",
+        "zh-hsk4-shenzhi",
+        "zh-hsk4-chabuduo"
+      ],
+      "tuKhoa": [
+        "jianzhi",
+        "jian zhi",
+        "quả thực",
+        "đúng là",
+        "cường điệu"
+      ],
+      "quiz": [
+        {
+          "h": "这孩子画得太好了，（　）像个小画家。",
+          "lc": [
+            "未必",
+            "简直",
+            "何必",
+            "毕竟"
+          ],
+          "da": 1,
+          "gt": "Cường điệu \"cứ như một hoạ sĩ nhí\" → 简直 + 像. 毕竟 nêu sự thật căn bản, 未必 là \"chưa chắc\", 何必 là \"việc gì phải\"."
+        },
+        {
+          "h": "简直 mang sắc thái gì?",
+          "lc": [
+            "nói giảm nhẹ: chỉ hơi hơi như thế",
+            "truy hỏi tới cùng",
+            "nói cường điệu: gần như hoàn toàn là như thế",
+            "nêu nguyên nhân của sự việc"
+          ],
+          "da": 2,
+          "gt": "简直 nhấn mạnh theo lối khoa trương, hàm ý \"hoàn toàn là, cứ như là\"."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "今天冷简直死了。",
+            "今天简直冷。",
+            "简直今天冷吗？",
+            "今天简直冷死了。"
+          ],
+          "da": 3,
+          "gt": "简直 đứng trước vị ngữ và vị ngữ phải có thành phần chỉ mức độ cao (冷死了); một tính từ trơ trọi sau 简直 thì không được."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-nanguai",
+      "nhom": "Phó từ ngữ khí",
+      "tieuDe": "难怪 / 怪不得",
+      "mau": "难怪 / 怪不得 + điều vừa hiểu ra，(原来) + nguyên nhân | (原来) + nguyên nhân，难怪 / 怪不得 + …",
+      "nghia": "thảo nào, hèn chi ~",
+      "giaiThich": "Dùng khi vừa biết nguyên nhân nên không còn thấy lạ về một việc trước đó. Vế nêu nguyên nhân thường có 原来 và có thể đứng trước hoặc sau. 怪不得 khẩu ngữ hơn. Ngoài ra 难怪 còn nghĩa \"khó mà trách, cũng dễ hiểu\" và 怪不得 + người nghĩa là \"không thể trách ai đó\".",
+      "cachGhep": [
+        "难怪 / 怪不得 + mệnh đề，原来 + nguyên nhân",
+        "Nguyên nhân，难怪 / 怪不得 + mệnh đề: 下雪了，难怪这么冷",
+        "…也难怪: cũng khó trách; 怪不得 + người: 这怪不得他"
+      ],
+      "viDu": [
+        {
+          "c": "难怪他今天这么高兴，原来考上大学了。",
+          "d": "Nánguài tā jīntiān zhème gāoxìng, yuánlái kǎo shàng dàxué le.",
+          "v": "Thảo nào hôm nay anh ấy vui thế, hoá ra đã thi đỗ đại học."
+        },
+        {
+          "c": "原来你在中国住过五年，怪不得汉语这么好。",
+          "d": "Yuánlái nǐ zài Zhōngguó zhù guo wǔ nián, guàibude Hànyǔ zhème hǎo.",
+          "v": "Hoá ra bạn từng sống ở Trung Quốc năm năm, hèn chi tiếng Trung giỏi thế."
+        },
+        {
+          "c": "外面下雪了，难怪这么冷。",
+          "d": "Wàimiàn xià xuě le, nánguài zhème lěng.",
+          "v": "Ngoài trời có tuyết rơi, thảo nào lạnh thế."
+        },
+        {
+          "c": "他是第一次做，做错了也难怪。",
+          "d": "Tā shì dì-yī cì zuò, zuò cuò le yě nánguài.",
+          "v": "Anh ấy làm lần đầu, làm sai cũng khó trách."
+        }
+      ],
+      "luuY": [
+        "难怪 / 怪不得 đứng đầu vế nêu ĐIỀU TỪNG THẤY LẠ, còn 原来 đứng đầu vế nêu NGUYÊN NHÂN; đừng đặt ngược.",
+        "Khác 可见: 可见 đi từ sự việc đến một kết luận mới; 难怪 là hiểu ra lý do của điều đã thấy.",
+        "Khác 果然: 果然 = việc xảy ra đúng như đã đoán; 难怪 = trước đó không hiểu, giờ mới hiểu."
+      ],
+      "soSanh": [
+        "zh-hsk4-benlai-yuanlai",
+        "zh-hsk5-kejian",
+        "zh-hsk4-guoran"
+      ],
+      "tuKhoa": [
+        "nanguai",
+        "nan guai",
+        "guaibude",
+        "thảo nào",
+        "hèn chi",
+        "hoá ra"
+      ],
+      "quiz": [
+        {
+          "h": "他昨晚只睡了三个小时，（　）今天没精神。",
+          "lc": [
+            "何必",
+            "难怪",
+            "难道",
+            "居然"
+          ],
+          "da": 1,
+          "gt": "Biết nguyên nhân (chỉ ngủ ba tiếng) nên hiểu vì sao uể oải → 难怪. 难道 dùng trong câu hỏi phản vấn, 居然 tỏ ngạc nhiên, 何必 là \"việc gì phải\"."
+        },
+        {
+          "h": "怪不得 thường đi cặp với từ nào để nêu nguyên nhân vừa phát hiện?",
+          "lc": [
+            "否则",
+            "哪怕",
+            "原来",
+            "以便"
+          ],
+          "da": 2,
+          "gt": "原来 (hoá ra) dẫn ra nguyên nhân vừa biết: 怪不得…，原来…. 否则, 哪怕, 以便 không nêu nguyên nhân."
+        },
+        {
+          "h": "这件事怪不得他 nghĩa là gì?",
+          "lc": [
+            "việc này phải trách anh ấy",
+            "việc này anh ấy rất kỳ lạ",
+            "việc này thảo nào anh ấy biết",
+            "việc này không thể trách anh ấy"
+          ],
+          "da": 3,
+          "gt": "怪不得 + người = \"không thể trách\" (怪 là trách); đây là nghĩa động từ, khác nghĩa \"thảo nào\"."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-dique",
+      "nhom": "Phó từ ngữ khí",
+      "tieuDe": "的确",
+      "mau": "S + 的确 + V / Adj… | 的确，+ câu",
+      "nghia": "quả thật, đúng là ~",
+      "giaiThich": "Phó từ khẳng định rằng sự việc hoàn toàn đúng với thực tế, thường để xác nhận một nhận định đã nêu hoặc đã nghe. Đứng trước vị ngữ, hoặc đứng đầu câu (có dấu phẩy) để khẳng định cả câu. Dạng lặp 的的确确 nhấn mạnh hơn. Chữ 的 ở đây đọc dí.",
+      "cachGhep": [
+        "S + 的确 + Adj / V: 这个办法的确不错",
+        "S + 的确 + 不 / 没 + V: 我的确不知道",
+        "的确，+ câu: 的确，他说得很有道理"
+      ],
+      "viDu": [
+        {
+          "c": "这个办法的确不错。",
+          "d": "Zhège bànfǎ díquè búcuò.",
+          "v": "Cách này quả thật không tồi."
+        },
+        {
+          "c": "我的确不知道这件事。",
+          "d": "Wǒ díquè bù zhīdào zhè jiàn shì.",
+          "v": "Tôi thật sự không biết việc này."
+        },
+        {
+          "c": "的确，他说得很有道理。",
+          "d": "Díquè, tā shuō de hěn yǒu dàolǐ.",
+          "v": "Đúng vậy, anh ấy nói rất có lý."
+        },
+        {
+          "c": "他的确来过，不过很快就走了。",
+          "d": "Tā díquè lái guo, búguò hěn kuài jiù zǒu le.",
+          "v": "Anh ấy đúng là có đến, nhưng đi ngay sau đó."
+        }
+      ],
+      "luuY": [
+        "Phát âm: 的确 đọc díquè, không đọc de.",
+        "Khác 确实: 确实 vừa là phó từ (như 的确) vừa là tính từ (消息很确实 ✓); 的确 chỉ là phó từ nên 消息很的确 ✗.",
+        "Khác 其实: 其实 đính chính, nói ra sự thật KHÁC với điều người ta tưởng; 的确 XÁC NHẬN điều đã nói là đúng."
+      ],
+      "soSanh": [
+        "zh-hsk3-qishi",
+        "zh-hsk4-guoran",
+        "zh-hsk5-bijing",
+        "zh-hsk3-dangran"
+      ],
+      "tuKhoa": [
+        "dique",
+        "di que",
+        "queshi",
+        "quả thật",
+        "đúng là",
+        "xác nhận"
+      ],
+      "quiz": [
+        {
+          "h": "我错了，这件事（　）是我没做好。",
+          "lc": [
+            "以免",
+            "何必",
+            "的确",
+            "难道"
+          ],
+          "da": 2,
+          "gt": "Người nói tự xác nhận điều đó là thật → 的确. 难道 và 何必 dùng trong câu phản vấn, 以免 là liên từ \"để tránh\"."
+        },
+        {
+          "h": "Chữ 的 trong 的确 đọc thế nào?",
+          "lc": [
+            "dé",
+            "dì",
+            "de (thanh nhẹ)",
+            "dí"
+          ],
+          "da": 3,
+          "gt": "Trong 的确, 的 đọc thanh 2: díquè."
+        },
+        {
+          "h": "Câu nào SAI?",
+          "lc": [
+            "这个消息很的确。",
+            "这个消息很确实。",
+            "他的确很努力。",
+            "的确，今天比昨天冷。"
+          ],
+          "da": 0,
+          "gt": "的确 chỉ là phó từ nên không làm vị ngữ sau 很; chỉ 确实 mới dùng được như tính từ."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-genben",
+      "nhom": "Phó từ ngữ khí",
+      "tieuDe": "根本",
+      "mau": "S + 根本 + (就) + 不 / 没 + V… | 根本 + (的) + N | 从根本上 + V",
+      "nghia": "hoàn toàn (không), căn bản là (không) ~; căn bản, gốc rễ",
+      "giaiThich": "Làm phó từ, 根本 chủ yếu dùng trong câu phủ định để nhấn mạnh phủ định triệt để, từ đầu đến cuối: \"hoàn toàn không, vốn dĩ không\". Thường thêm 就 để tăng ngữ khí. Ngoài ra 根本 còn là danh từ (\"gốc rễ\") và tính từ (\"căn bản\"): 根本问题, 从根本上解决.",
+      "cachGhep": [
+        "S + 根本 + 不 + V / Adj: 根本不认识",
+        "S + 根本 + 没(有) + V: 根本没听",
+        "S + 根本 + 就 + 不 / 没…",
+        "Danh từ / tính từ: 问题的根本, 根本原因, 从根本上"
+      ],
+      "viDu": [
+        {
+          "c": "我根本不认识他。",
+          "d": "Wǒ gēnběn bú rènshi tā.",
+          "v": "Tôi hoàn toàn không quen anh ta."
+        },
+        {
+          "c": "他根本没听我说话。",
+          "d": "Tā gēnběn méi tīng wǒ shuōhuà.",
+          "v": "Anh ấy căn bản chẳng nghe tôi nói."
+        },
+        {
+          "c": "这件事我根本就不知道。",
+          "d": "Zhè jiàn shì wǒ gēnběn jiù bù zhīdào.",
+          "v": "Việc này tôi hoàn toàn không hề biết."
+        },
+        {
+          "c": "我们应该从根本上解决这个问题。",
+          "d": "Wǒmen yīnggāi cóng gēnběn shang jiějué zhège wèntí.",
+          "v": "Chúng ta nên giải quyết vấn đề này từ gốc rễ."
+        }
+      ],
+      "luuY": [
+        "Phó từ 根本 gần như luôn đi với 不 / 没 hoặc ý phủ định (根本听不懂); câu khẳng định thường kiểu 我根本喜欢他 ✗.",
+        "Khác 并 + 不 / 没: 并 bác lại một điều người ta tưởng, mức nhẹ hơn; 根本 phủ định triệt để.",
+        "Khác 从来 + 不 / 没: 从来 nói về THỜI GIAN (xưa nay chưa từng); 根本 nói về MỨC ĐỘ (tuyệt nhiên không)."
+      ],
+      "soSanh": [
+        "zh-hsk4-bing-bu",
+        "zh-hsk4-conglai",
+        "zh-hsk4-yi-ye-bu"
+      ],
+      "tuKhoa": [
+        "genben",
+        "gen ben",
+        "hoàn toàn không",
+        "căn bản",
+        "gốc rễ"
+      ],
+      "quiz": [
+        {
+          "h": "你说的话，他（　）没听进去。",
+          "lc": [
+            "以便",
+            "根本",
+            "何必",
+            "与其"
+          ],
+          "da": 1,
+          "gt": "Nhấn mạnh phủ định triệt để trước 没 → 根本. 何必 dùng trong câu phản vấn, 以便 và 与其 là liên từ nối hai vế."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "我不根本相信他的话。",
+            "我相信根本他的话。",
+            "我根本不相信他的话。",
+            "我根本相信他的话不。"
+          ],
+          "da": 2,
+          "gt": "Trật tự là 根本 + 不 / 没 + động từ; 根本 không đứng sau từ phủ định và không chen giữa động từ với tân ngữ."
+        },
+        {
+          "h": "Trong 从根本上解决问题, 根本 là gì?",
+          "lc": [
+            "phó từ nhấn mạnh phủ định",
+            "lượng từ",
+            "liên từ nêu nguyên nhân",
+            "danh từ, nghĩa \"gốc rễ, căn bản\""
+          ],
+          "da": 3,
+          "gt": "Đứng sau 从 và trước 上 nên 根本 là danh từ: \"từ gốc rễ\"."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-weibi",
+      "nhom": "Phó từ ngữ khí",
+      "tieuDe": "未必",
+      "mau": "S + 未必 + V / Adj… ",
+      "nghia": "chưa chắc, không hẳn ~",
+      "giaiThich": "Phó từ phủ định nhẹ nhàng một nhận định: không nhất định như thế. Nghĩa như 不一定 nhưng thiên văn viết, giọng uyển chuyển hơn. Hay dùng để phản bác khéo một ý kiến. 未必不 + V nghĩa là \"chưa chắc là không\", tức có thể có.",
+      "cachGhep": [
+        "S + 未必 + Adj: 贵的东西未必好",
+        "S + 未必 + V / 能 / 会 + V: 未必能解决",
+        "S + 未必 + 都 / 就 + …: 未必都是真的",
+        "未必 + 不 + V: 未必不知道 (có lẽ biết)"
+      ],
+      "viDu": [
+        {
+          "c": "贵的东西未必好。",
+          "d": "Guì de dōngxi wèibì hǎo.",
+          "v": "Đồ đắt chưa chắc đã tốt."
+        },
+        {
+          "c": "他说的话未必都是真的。",
+          "d": "Tā shuō de huà wèibì dōu shì zhēn de.",
+          "v": "Lời anh ta nói chưa chắc đều là thật."
+        },
+        {
+          "c": "你觉得容易，别人未必这么想。",
+          "d": "Nǐ juéde róngyì, biérén wèibì zhème xiǎng.",
+          "v": "Bạn thấy dễ, người khác chưa chắc nghĩ thế."
+        },
+        {
+          "c": "这样做未必能解决问题。",
+          "d": "Zhèyàng zuò wèibì néng jiějué wèntí.",
+          "v": "Làm thế này chưa chắc giải quyết được vấn đề."
+        }
+      ],
+      "luuY": [
+        "Đừng nhầm 未必 với 不必: 未必 = chưa chắc (phán đoán); 不必 = không cần (không cần thiết).",
+        "Khác 不一定: cùng nghĩa \"chưa chắc\", nhưng 不一定 khẩu ngữ hơn và còn nghĩa \"chưa xác định\" (什么时候去还不一定); 未必 không dùng theo nghĩa này.",
+        "Khác 恐怕: 恐怕 phỏng đoán điều không hay sẽ xảy ra; 未必 phủ định bớt một nhận định có sẵn."
+      ],
+      "soSanh": [
+        "zh-hsk4-kongpa",
+        "zh-hsk5-hebi",
+        "zh-hsk4-yexu",
+        "zh-hsk5-huoxu"
+      ],
+      "tuKhoa": [
+        "weibi",
+        "wei bi",
+        "bu yiding",
+        "chưa chắc",
+        "không hẳn"
+      ],
+      "quiz": [
+        {
+          "h": "有钱的人（　）幸福。",
+          "lc": [
+            "未必",
+            "特意",
+            "以免",
+            "何必"
+          ],
+          "da": 0,
+          "gt": "\"Người có tiền chưa chắc hạnh phúc\" → 未必 + tính từ. 何必 dùng trong câu phản vấn trước động từ, 以免 là liên từ, 特意 chỉ đi với hành động có chủ ý."
+        },
+        {
+          "h": "未必 gần nghĩa nhất với từ nào?",
+          "lc": [
+            "不必",
+            "不一定",
+            "一定不",
+            "必须"
+          ],
+          "da": 1,
+          "gt": "未必 = 不一定 (chưa chắc). 不必 là \"không cần\", 一定不 là \"chắc chắn không\", 必须 là \"bắt buộc\"."
+        },
+        {
+          "h": "他未必不知道 nghĩa là gì?",
+          "lc": [
+            "anh ấy không cần biết",
+            "anh ấy chắc chắn không biết",
+            "có lẽ anh ấy biết đấy",
+            "anh ấy chưa bao giờ biết"
+          ],
+          "da": 2,
+          "gt": "未必 + 不 là phủ định của phủ định: \"chưa chắc là không biết\" → có thể là biết."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-hebi",
+      "nhom": "Phó từ ngữ khí",
+      "tieuDe": "何必",
+      "mau": "(S) + (又) 何必 + V… (呢)？",
+      "nghia": "việc gì phải ~, cần gì phải ~ (phản vấn)",
+      "giaiThich": "Phó từ dùng trong câu hỏi phản vấn để nói rằng không cần thiết phải làm như vậy, nghĩa tương đương 不必 nhưng giọng khuyên can, trách nhẹ. Cuối câu thường có 呢. Có thể dùng riêng: 何必呢？ (việc gì phải thế?).",
+      "cachGhep": [
+        "S + 何必 + V… + 呢？: 你何必生气呢？",
+        "何必 + V…？ (lược chủ ngữ): 何必打车？",
+        "又何必…呢？ / 何必呢？"
+      ],
+      "viDu": [
+        {
+          "c": "都是小事，你何必生气呢？",
+          "d": "Dōu shì xiǎoshì, nǐ hébì shēngqì ne?",
+          "v": "Toàn chuyện nhỏ, bạn việc gì phải giận?"
+        },
+        {
+          "c": "离这儿很近，何必打车？",
+          "d": "Lí zhèr hěn jìn, hébì dǎchē?",
+          "v": "Cách đây gần lắm, cần gì phải bắt taxi?"
+        },
+        {
+          "c": "既然他不愿意，你又何必勉强他呢？",
+          "d": "Jìrán tā bú yuànyì, nǐ yòu hébì miǎnqiǎng tā ne?",
+          "v": "Anh ấy đã không muốn thì bạn việc gì phải ép anh ấy?"
+        },
+        {
+          "c": "家里有的东西，何必再买新的？",
+          "d": "Jiālǐ yǒu de dōngxi, hébì zài mǎi xīn de?",
+          "v": "Đồ trong nhà đã có, cần gì mua thêm cái mới?"
+        }
+      ],
+      "luuY": [
+        "Câu 何必 là câu phản vấn nên kết thúc bằng 呢 hoặc không có trợ từ; không dùng 吗: 何必生气吗？ ✗.",
+        "Khác 不必: 不必 là câu trần thuật \"không cần\" (你不必来); 何必 nói cùng ý đó bằng câu hỏi vặn, có cảm xúc hơn.",
+        "Khác 未必: 未必 = chưa chắc (phán đoán), không liên quan đến \"cần hay không cần\"."
+      ],
+      "soSanh": [
+        "zh-hsk5-weibi",
+        "zh-hsk4-nandao",
+        "zh-hsk6-hechang",
+        "zh-hsk6-qi-phan-van"
+      ],
+      "tuKhoa": [
+        "hebi",
+        "he bi",
+        "việc gì phải",
+        "cần gì phải",
+        "phản vấn"
+      ],
+      "quiz": [
+        {
+          "h": "坐地铁十分钟就到了，（　）开车去呢？",
+          "lc": [
+            "何必",
+            "居然",
+            "的确",
+            "未必"
+          ],
+          "da": 0,
+          "gt": "Câu phản vấn \"cần gì phải lái xe\", cuối câu có 呢 → 何必. 未必, 的确, 居然 không tạo câu phản vấn về sự cần thiết."
+        },
+        {
+          "h": "你何必道歉呢？ nghĩa là gì?",
+          "lc": [
+            "bạn nhất định phải xin lỗi",
+            "bạn không cần phải xin lỗi",
+            "bạn đã xin lỗi chưa?",
+            "tại sao bạn chưa xin lỗi?"
+          ],
+          "da": 1,
+          "gt": "何必 + V 呢？ là hỏi vặn, ý thật là \"không cần làm việc đó\"."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "这点儿小事，这么认真何必吗？",
+            "这点儿小事，何必的这么认真了。",
+            "这点儿小事，何必这么认真呢？",
+            "这点儿小事，何必这么认真吗？"
+          ],
+          "da": 2,
+          "gt": "何必 đứng trước vị ngữ và câu kết thúc bằng 呢 (hoặc không trợ từ); không dùng 吗, không đặt 何必 sau vị ngữ."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-nanmian",
+      "nhom": "Phó từ ngữ khí",
+      "tieuDe": "难免 / 不免",
+      "mau": "S + 难免 + (会 / 要) + V… | …是难免的 | S + 不免 + (有些 / 有点儿) + V / Adj",
+      "nghia": "khó tránh khỏi ~; không khỏi ~",
+      "giaiThich": "难免 là tính từ: theo lẽ thường thì khó mà tránh được; đứng trước động từ (hay kèm 会 / 要), hoặc làm vị ngữ trong khung 是难免的, hoặc làm định ngữ (难免的事). 不免 là phó từ: trong hoàn cảnh ấy tự nhiên nảy sinh một phản ứng, cảm xúc; chỉ đứng trước động từ / tính từ.",
+      "cachGhep": [
+        "S + 难免 + 会 / 要 + V: 难免会犯错误",
+        "V / sự việc + 是难免的: 紧张是难免的",
+        "S + 不免 + (有些 / 有点儿) + V / Adj: 不免有些想家"
+      ],
+      "viDu": [
+        {
+          "c": "刚开始工作，难免会犯错误。",
+          "d": "Gāng kāishǐ gōngzuò, nánmiǎn huì fàn cuòwù.",
+          "v": "Mới bắt đầu đi làm, khó tránh khỏi mắc sai lầm."
+        },
+        {
+          "c": "第一次上台，紧张是难免的。",
+          "d": "Dì-yī cì shàngtái, jǐnzhāng shì nánmiǎn de.",
+          "v": "Lần đầu lên sân khấu, hồi hộp là điều khó tránh."
+        },
+        {
+          "c": "朋友之间难免有误会。",
+          "d": "Péngyou zhījiān nánmiǎn yǒu wùhuì.",
+          "v": "Giữa bạn bè khó tránh khỏi có hiểu lầm."
+        },
+        {
+          "c": "一个人在国外过年，不免有些想家。",
+          "d": "Yí gè rén zài guówài guònián, bùmiǎn yǒuxiē xiǎng jiā.",
+          "v": "Một mình ăn Tết ở nước ngoài, không khỏi có chút nhớ nhà."
+        }
+      ],
+      "luuY": [
+        "Điều đi sau 难免 / 不免 thường là việc không mong muốn (sai sót, hiểu lầm, lo lắng).",
+        "Khác nhau giữa hai từ: 难免 là tính từ nên nói được …是难免的, 难免的事; 不免 chỉ là phó từ nên …是不免的 ✗.",
+        "Khác 未免: 未免 dùng để phê bình nhẹ \"có phần hơi… quá\" (你未免太小气了), không phải \"khó tránh\"."
+      ],
+      "soSanh": [
+        "zh-hsk6-weimian",
+        "zh-hsk6-bujin",
+        "zh-hsk6-buyoude"
+      ],
+      "tuKhoa": [
+        "nanmian",
+        "nan mian",
+        "bumian",
+        "khó tránh khỏi",
+        "không khỏi"
+      ],
+      "quiz": [
+        {
+          "h": "人（　）会遇到困难，重要的是不放弃。",
+          "lc": [
+            "特意",
+            "居然",
+            "难免",
+            "何必"
+          ],
+          "da": 2,
+          "gt": "\"Con người khó tránh khỏi gặp khó khăn\" — quy luật chung, đi với 会 → 难免. 何必 dùng trong câu phản vấn, 特意 là \"cất công\", 居然 tỏ ngạc nhiên."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "出现这样的问题难免的是。",
+            "出现这样的问题很何必的。",
+            "出现这样的问题是不免的。",
+            "出现这样的问题是难免的。"
+          ],
+          "da": 3,
+          "gt": "难免 là tính từ nên dùng được trong khung 是…的; 不免 chỉ là phó từ, 何必 chỉ dùng trong câu phản vấn."
+        },
+        {
+          "h": "难免 nghĩa là gì?",
+          "lc": [
+            "khó tránh khỏi",
+            "khó mà trách được",
+            "không cần thiết",
+            "rất khó khăn"
+          ],
+          "da": 0,
+          "gt": "难 (khó) + 免 (tránh) = khó tránh khỏi. \"Khó trách\" là 难怪, \"không cần\" là 不必."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-mingming",
+      "nhom": "Phó từ ngữ khí",
+      "tieuDe": "明明",
+      "mau": "S + 明明 + sự thật rõ ràng，(却 / 可是 / 还 / 怎么…) + điều trái ngược",
+      "nghia": "rõ ràng là ~ (vậy mà…)",
+      "giaiThich": "Phó từ nhấn mạnh một sự thật hiển nhiên, và gần như luôn kéo theo một vế trái ngược hoặc một câu hỏi vặn: sự thật rõ là thế mà lời nói, hành động, kết quả lại khác. Mang giọng trách móc, bất bình hoặc khó hiểu. Đứng trước hoặc sau chủ ngữ.",
+      "cachGhep": [
+        "S + 明明 + V…，却 / 可是 / 还 + …: 他明明很累，却说不累",
+        "S + 明明 + V…，câu hỏi vặn: 你明明知道，为什么不说？",
+        "明明 + 是 + mệnh đề，…: 明明是你错了，…"
+      ],
+      "viDu": [
+        {
+          "c": "你明明知道，为什么不告诉我？",
+          "d": "Nǐ míngmíng zhīdào, wèishénme bú gàosu wǒ?",
+          "v": "Rõ ràng bạn biết, sao không nói với tôi?"
+        },
+        {
+          "c": "我明明把钥匙放在桌子上了，怎么不见了？",
+          "d": "Wǒ míngmíng bǎ yàoshi fàng zài zhuōzi shang le, zěnme bú jiàn le?",
+          "v": "Rõ ràng tôi đã để chìa khoá trên bàn, sao lại không thấy nữa?"
+        },
+        {
+          "c": "他明明很累，却说自己不累。",
+          "d": "Tā míngmíng hěn lèi, què shuō zìjǐ bú lèi.",
+          "v": "Anh ấy rõ ràng rất mệt mà lại nói mình không mệt."
+        },
+        {
+          "c": "明明是你错了，你还不承认。",
+          "d": "Míngmíng shì nǐ cuò le, nǐ hái bù chéngrèn.",
+          "v": "Rõ ràng là bạn sai, vậy mà bạn còn không chịu nhận."
+        }
+      ],
+      "luuY": [
+        "Câu có 明明 mà thiếu vế trái ngược (hoặc ý trái ngược ngầm hiểu) thì nghe cụt: 他明明很累 cần nối tiếp bằng 却… / 可是….",
+        "Khác 显然 / 明显: hai từ này chỉ nhận xét khách quan \"rõ ràng\" (他显然很累), không cần vế trái ngược, không mang ý trách.",
+        "Khác 的确: 的确 xác nhận sự thật; 明明 đưa sự thật ra để đối lập với điều trái ngược."
+      ],
+      "soSanh": [
+        "zh-hsk4-que-raner",
+        "zh-hsk5-dique",
+        "zh-hsk3-qishi"
+      ],
+      "tuKhoa": [
+        "mingming",
+        "ming ming",
+        "rõ ràng là",
+        "rành rành",
+        "vậy mà"
+      ],
+      "quiz": [
+        {
+          "h": "你（　）看见我了，怎么不打招呼？",
+          "lc": [
+            "未必",
+            "何必",
+            "明明",
+            "难免"
+          ],
+          "da": 2,
+          "gt": "Sự thật hiển nhiên (đã thấy) + câu hỏi vặn → 明明. 未必 là \"chưa chắc\", 何必 là \"việc gì phải\", 难免 là \"khó tránh khỏi\"."
+        },
+        {
+          "h": "Sau vế có 明明 thường là gì?",
+          "lc": [
+            "một chuỗi liệt kê",
+            "một lời cảm ơn",
+            "một mục đích cần đạt",
+            "một vế trái ngược hoặc câu hỏi vặn"
+          ],
+          "da": 3,
+          "gt": "明明 nêu sự thật rõ ràng để làm nổi bật điều trái ngược theo sau (却…, 可是…, 怎么…？)."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "他明明答应了，现在却不来了。",
+            "他明明答应吗，现在却不来了。",
+            "他答应了明明，现在却不来了。",
+            "他何必明明答应了，现在不来了。"
+          ],
+          "da": 0,
+          "gt": "明明 đứng trước động từ vị ngữ, vế sau có 却 nêu điều trái ngược; không đặt 明明 sau động từ và không dùng 吗 trong vế này."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-sihu",
+      "nhom": "Phó từ ngữ khí",
+      "tieuDe": "似乎",
+      "mau": "S + 似乎 + V / Adj… | 似乎 + mệnh đề",
+      "nghia": "dường như, hình như ~",
+      "giaiThich": "Phó từ nêu một phán đoán, cảm nhận chưa chắc chắn của người nói. Nghĩa như 好像 (khi phỏng đoán) nhưng thiên văn viết, giọng dè dặt hơn. Đứng sau chủ ngữ hoặc đầu câu.",
+      "cachGhep": [
+        "S + 似乎 + Adj / V: 他似乎不太高兴",
+        "S + 似乎 + 要 / 已经 / 没有 + V…",
+        "似乎 + mệnh đề: 似乎没有人注意到"
+      ],
+      "viDu": [
+        {
+          "c": "他似乎不太高兴。",
+          "d": "Tā sìhū bú tài gāoxìng.",
+          "v": "Anh ấy dường như không vui lắm."
+        },
+        {
+          "c": "天似乎要下雨了。",
+          "d": "Tiān sìhū yào xià yǔ le.",
+          "v": "Trời hình như sắp mưa."
+        },
+        {
+          "c": "这个问题似乎没有那么简单。",
+          "d": "Zhège wèntí sìhū méiyǒu nàme jiǎndān.",
+          "v": "Vấn đề này dường như không đơn giản như thế."
+        },
+        {
+          "c": "似乎没有人注意到他已经离开了。",
+          "d": "Sìhū méiyǒu rén zhùyì dào tā yǐjīng líkāi le.",
+          "v": "Dường như không ai để ý rằng anh ấy đã rời đi."
+        }
+      ],
+      "luuY": [
+        "似乎 chỉ dùng để PHỎNG ĐOÁN, không dùng để ví von: 她的脸似乎一个苹果 ✗ → 她的脸好像 / 像一个苹果 ✓.",
+        "Khác 好像: 好像 khẩu ngữ, dùng được cả phỏng đoán lẫn so sánh ví von, hay đi với …一样 / …似的; 似乎 văn viết, chỉ phỏng đoán.",
+        "Khác 或许 / 也许: hai từ này nói về KHẢ NĂNG xảy ra (có lẽ); 似乎 nói về ẤN TƯỢNG, cảm giác trước một biểu hiện đang thấy."
+      ],
+      "soSanh": [
+        "zh-hsk3-xiang-yiyang",
+        "zh-hsk5-huoxu",
+        "zh-hsk5-shide",
+        "zh-hsk4-kongpa"
+      ],
+      "tuKhoa": [
+        "sihu",
+        "si hu",
+        "haoxiang",
+        "dường như",
+        "hình như"
+      ],
+      "quiz": [
+        {
+          "h": "他一句话也不说，（　）在想什么心事。",
+          "lc": [
+            "以免",
+            "似乎",
+            "与其",
+            "何必"
+          ],
+          "da": 1,
+          "gt": "Phỏng đoán từ biểu hiện bên ngoài → 似乎. 何必 dùng trong câu phản vấn, 以免 và 与其 là liên từ nối hai vế."
+        },
+        {
+          "h": "Câu nào SAI?",
+          "lc": [
+            "她的脸好像一个红苹果。",
+            "他似乎已经知道了。",
+            "她的脸似乎一个红苹果。",
+            "他好像已经知道了。"
+          ],
+          "da": 2,
+          "gt": "似乎 chỉ nêu phỏng đoán, không dùng để ví vật này như vật kia; so sánh ví von phải dùng 好像 / 像."
+        },
+        {
+          "h": "So với 好像, 似乎 có đặc điểm gì?",
+          "lc": [
+            "mang nghĩa chắc chắn hoàn toàn",
+            "khẩu ngữ hơn, chủ yếu dùng để ví von",
+            "chỉ dùng trong câu phủ định",
+            "thiên văn viết, chỉ dùng để phỏng đoán"
+          ],
+          "da": 3,
+          "gt": "似乎 trang trọng hơn 好像 và chỉ có nghĩa phỏng đoán \"dường như\"."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-huoxu",
+      "nhom": "Phó từ ngữ khí",
+      "tieuDe": "或许",
+      "mau": "或许 + S + V… | S + 或许 + (会 / 能) + V…",
+      "nghia": "có lẽ, biết đâu ~",
+      "giaiThich": "Phó từ nêu phỏng đoán không chắc chắn về khả năng xảy ra của sự việc. Nghĩa như 也许, thiên văn viết hơn một chút. Đứng trước hoặc sau chủ ngữ; hay đi với 会 / 能 / 已经.",
+      "cachGhep": [
+        "或许 + mệnh đề: 或许他已经到家了",
+        "S + 或许 + 会 / 能 + V: 明天或许会下雪",
+        "…，或许 + V…: 再问问别人，或许有人知道"
+      ],
+      "viDu": [
+        {
+          "c": "或许他已经到家了。",
+          "d": "Huòxǔ tā yǐjīng dào jiā le.",
+          "v": "Có lẽ anh ấy đã về đến nhà rồi."
+        },
+        {
+          "c": "你再问问别人，或许有人知道。",
+          "d": "Nǐ zài wènwen biérén, huòxǔ yǒu rén zhīdào.",
+          "v": "Bạn hỏi thêm người khác xem, biết đâu có người biết."
+        },
+        {
+          "c": "明天或许会下雪。",
+          "d": "Míngtiān huòxǔ huì xià xuě.",
+          "v": "Ngày mai có lẽ sẽ có tuyết."
+        },
+        {
+          "c": "换一种方法，或许能解决这个问题。",
+          "d": "Huàn yì zhǒng fāngfǎ, huòxǔ néng jiějué zhège wèntí.",
+          "v": "Đổi một cách khác, biết đâu giải quyết được vấn đề này."
+        }
+      ],
+      "luuY": [
+        "或许 chỉ là phó từ: không nói 很或许, 不或许, 有或许.",
+        "Khác 可能: 可能 còn là tính từ / danh từ nên nói được 很可能, 不可能, 有可能; 或许 và 也许 thì không.",
+        "Khác 也许: nghĩa như nhau, 也许 thông dụng trong khẩu ngữ, 或许 hơi văn viết. Khác 恐怕: 恐怕 phỏng đoán kèm lo ngại điều không hay."
+      ],
+      "soSanh": [
+        "zh-hsk4-yexu",
+        "zh-hsk2-keneng",
+        "zh-hsk4-kongpa",
+        "zh-hsk5-sihu"
+      ],
+      "tuKhoa": [
+        "huoxu",
+        "huo xu",
+        "yexu",
+        "có lẽ",
+        "biết đâu"
+      ],
+      "quiz": [
+        {
+          "h": "别着急，再等一会儿，他（　）马上就来了。",
+          "lc": [
+            "简直",
+            "或许",
+            "何必",
+            "以免"
+          ],
+          "da": 1,
+          "gt": "Phỏng đoán khả năng \"có lẽ sắp đến\" → 或许. 何必 dùng trong câu phản vấn, 以免 là liên từ \"để tránh\", 简直 là cường điệu mức độ."
+        },
+        {
+          "h": "Câu nào SAI?",
+          "lc": [
+            "这很可能。",
+            "或许你是对的。",
+            "这很或许。",
+            "他或许不来了。"
+          ],
+          "da": 2,
+          "gt": "或许 chỉ là phó từ nên không đứng sau 很 làm vị ngữ; chỉ 可能 mới dùng được như tính từ."
+        },
+        {
+          "h": "或许 gần nghĩa nhất với từ nào?",
+          "lc": [
+            "居然",
+            "必须",
+            "毕竟",
+            "也许"
+          ],
+          "da": 3,
+          "gt": "或许 = 也许 (có lẽ). 必须 là \"bắt buộc\", 居然 là \"không ngờ\", 毕竟 là \"dù sao thì\"."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-zongsuan",
+      "nhom": "Phó từ ngữ khí",
+      "tieuDe": "总算",
+      "mau": "S + 总算 + V + (了 / bổ ngữ kết quả)",
+      "nghia": "cuối cùng cũng ~; nhìn chung cũng coi như ~",
+      "giaiThich": "Phó từ, có hai nghĩa. (1) Sau một thời gian dài chờ đợi hoặc cố gắng, điều mong muốn cuối cùng cũng thành hiện thực; mang cảm giác nhẹ nhõm, thường có 了 hoặc bổ ngữ kết quả. (2) Tuy chưa lý tưởng nhưng nhìn chung cũng tạm chấp nhận được. Thiên về khẩu ngữ.",
+      "cachGhep": [
+        "S + 总算 + V + 了: 他总算来了",
+        "总算 + V + bổ ngữ kết quả + 了: 总算找到了",
+        "(虽然…)，但总算 + V / Adj…: 但总算及格了"
+      ],
+      "viDu": [
+        {
+          "c": "等了两个小时，他总算来了。",
+          "d": "Děng le liǎng gè xiǎoshí, tā zǒngsuàn lái le.",
+          "v": "Đợi hai tiếng đồng hồ, cuối cùng anh ấy cũng đến."
+        },
+        {
+          "c": "找了半天，总算找到了。",
+          "d": "Zhǎo le bàntiān, zǒngsuàn zhǎo dào le.",
+          "v": "Tìm mãi, cuối cùng cũng tìm thấy."
+        },
+        {
+          "c": "下了一个星期的雨，今天总算晴了。",
+          "d": "Xià le yí gè xīngqī de yǔ, jīntiān zǒngsuàn qíng le.",
+          "v": "Mưa cả một tuần, hôm nay cuối cùng trời cũng nắng."
+        },
+        {
+          "c": "虽然成绩不太高，但总算及格了。",
+          "d": "Suīrán chéngjì bú tài gāo, dàn zǒngsuàn jígé le.",
+          "v": "Tuy điểm không cao lắm nhưng dù sao cũng coi như qua được."
+        }
+      ],
+      "luuY": [
+        "总算 chỉ dùng cho việc ĐÃ thành hiện thực, không dùng cho tương lai: 明天他总算会来 ✗.",
+        "Khác 终于: 终于 trung tính, dùng được cả cho kết quả không mong muốn (他终于病倒了) và hợp với văn viết; 总算 mang ý \"may quá, rốt cuộc cũng được\" nên chỉ dùng với điều mong muốn.",
+        "Nghĩa (2) \"dù sao cũng tạm được\" chỉ 总算 có, 终于 không có."
+      ],
+      "soSanh": [
+        "zh-hsk3-zhongyu",
+        "zh-hsk4-daodi-jiujing"
+      ],
+      "tuKhoa": [
+        "zongsuan",
+        "zong suan",
+        "zhongyu",
+        "cuối cùng cũng",
+        "rốt cuộc cũng",
+        "coi như"
+      ],
+      "quiz": [
+        {
+          "h": "忙了一个月，这个项目（　）完成了。",
+          "lc": [
+            "与其",
+            "总算",
+            "以免",
+            "何必"
+          ],
+          "da": 1,
+          "gt": "Sau thời gian dài vất vả, điều mong muốn đã xong → 总算. 何必 dùng trong câu phản vấn, 以免 và 与其 là liên từ nối hai vế."
+        },
+        {
+          "h": "Trong câu 这次考得不算好，但总算没有不及格, 总算 nghĩa là gì?",
+          "lc": [
+            "hoàn toàn không",
+            "ngay lập tức",
+            "dù sao cũng coi như tạm được",
+            "chưa chắc"
+          ],
+          "da": 2,
+          "gt": "Ở đây 总算 mang nghĩa thứ hai: kết quả chưa đẹp nhưng nhìn chung vẫn chấp nhận được."
+        },
+        {
+          "h": "So với 终于, 总算 có đặc điểm gì?",
+          "lc": [
+            "trang trọng hơn, chỉ dùng trong văn bản",
+            "chỉ dùng cho kết quả xấu",
+            "chỉ dùng cho việc sẽ xảy ra trong tương lai",
+            "khẩu ngữ hơn, mang cảm giác nhẹ nhõm vì điều mong muốn đã đến"
+          ],
+          "da": 3,
+          "gt": "总算 gắn với điều người nói mong đợi và giọng nhẹ nhõm; 终于 trung tính hơn, dùng được cả với kết quả xấu."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-teyi",
+      "nhom": "Phó từ ngữ khí",
+      "tieuDe": "特意",
+      "mau": "S + 特意 + (为 / 给 + người) + V…",
+      "nghia": "đặc biệt (cất công), có ý ~ riêng vì ~",
+      "giaiThich": "Phó từ cho biết hành động được làm một cách có chủ ý, dành riêng cho một người hoặc một mục đích nào đó, thường thể hiện sự quan tâm, coi trọng. Chỉ đứng trước động từ. 特地 dùng tương tự.",
+      "cachGhep": [
+        "S + 特意 + V…: 特意早起了一个小时",
+        "S + 特意 + 为 / 给 + người + V: 特意为你准备的",
+        "S + 特意 + 从 + nơi chốn + 来 / 赶来 + V"
+      ],
+      "viDu": [
+        {
+          "c": "这是我特意为你准备的礼物。",
+          "d": "Zhè shì wǒ tèyì wèi nǐ zhǔnbèi de lǐwù.",
+          "v": "Đây là món quà tôi đặc biệt chuẩn bị cho bạn."
+        },
+        {
+          "c": "他特意从上海赶来参加我的婚礼。",
+          "d": "Tā tèyì cóng Shànghǎi gǎn lái cānjiā wǒ de hūnlǐ.",
+          "v": "Anh ấy cất công từ Thượng Hải đến dự đám cưới của tôi."
+        },
+        {
+          "c": "妈妈特意做了我最爱吃的菜。",
+          "d": "Māma tèyì zuò le wǒ zuì ài chī de cài.",
+          "v": "Mẹ đặc biệt làm món tôi thích ăn nhất."
+        },
+        {
+          "c": "我今天特意早起了一个小时。",
+          "d": "Wǒ jīntiān tèyì zǎo qǐ le yí gè xiǎoshí.",
+          "v": "Hôm nay tôi cố ý dậy sớm một tiếng."
+        }
+      ],
+      "luuY": [
+        "特意 không chỉ mức độ: 特意漂亮 ✗ → 特别漂亮 ✓. 特别 mới là \"đặc biệt, rất\".",
+        "Khác 故意: 故意 = cố tình làm điều biết là không nên (他故意迟到), thường mang nghĩa xấu; 特意 thường là thiện ý, cất công vì ai đó.",
+        "Khác 亲自: 亲自 nhấn TỰ MÌNH làm chứ không nhờ người khác; 特意 nhấn LÀM RIÊNG vì mục đích ấy."
+      ],
+      "soSanh": [
+        "zh-hsk3-tebie",
+        "zh-hsk5-qinzi",
+        "zh-hsk3-weile"
+      ],
+      "tuKhoa": [
+        "teyi",
+        "te yi",
+        "tedi",
+        "cất công",
+        "có ý riêng",
+        "đặc biệt vì"
+      ],
+      "quiz": [
+        {
+          "h": "听说你病了，我（　）来看看你。",
+          "lc": [
+            "难免",
+            "未必",
+            "何必",
+            "特意"
+          ],
+          "da": 3,
+          "gt": "Đến thăm riêng vì người bệnh → 特意 + động từ. 难免 là \"khó tránh khỏi\", 未必 là \"chưa chắc\", 何必 là phản vấn \"việc gì phải\"."
+        },
+        {
+          "h": "Từ nào thường mang nghĩa xấu \"cố tình làm điều không nên\"?",
+          "lc": [
+            "故意",
+            "特意",
+            "专门",
+            "特地"
+          ],
+          "da": 0,
+          "gt": "故意 là cố tình (thường tiêu cực); 特意, 特地, 专门 chỉ việc làm riêng cho một mục đích, thường là thiện ý."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "这件衣服特意很漂亮。",
+            "这件衣服是我特意给你买的。",
+            "我特意的衣服给你买。",
+            "这件衣服是我给你买特意的。"
+          ],
+          "da": 1,
+          "gt": "特意 là phó từ, đứng trước cụm động từ (给你买); không bổ nghĩa cho tính từ, không đặt sau động từ hay làm định ngữ cho danh từ."
+        }
+      ]
+    }
+  ]
+}

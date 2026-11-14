@@ -1,0 +1,1249 @@
+{
+  "nn": "en",
+  "cap": "C1",
+  "diem": [
+    {
+      "id": "en-c1-concession-advanced",
+      "nhom": "Liên từ – diễn ngôn",
+      "tieuDe": "Nhượng bộ nâng cao: albeit, notwithstanding, much as, however + adj, no matter",
+      "mau": "albeit + adj / adv / cụm từ · notwithstanding + N · much as + S + V · however + adj / adv + S + V · no matter + what / how / who… + S + V",
+      "nghia": "dù là ~ · bất chấp ~ · dù rất ~ · dù ~ đến đâu · bất kể ~",
+      "giaiThich": "Các cách nhượng bộ ở mức trang trọng hơn although / despite. 'albeit' (đọc /ɔːlˈbiːɪt/) = 'although it is / was', theo sau là tính từ, trạng từ hoặc cụm từ chứ thường không phải mệnh đề đầy đủ; văn viết trang trọng. 'notwithstanding + danh từ' = despite, rất trang trọng, hay gặp trong văn pháp lý; có thể đứng SAU danh từ (the weather notwithstanding). 'much as + mệnh đề' = dù rất (thích, muốn, tôn trọng…). 'however + tính từ / trạng từ + S + V' và 'no matter how / what / who… + S + V' = dù… đến đâu / bất kể…; 'no matter' dùng cả khi nói.",
+      "cachGhep": [
+        "mệnh đề, + albeit + adj / adv / cụm giới từ: …, albeit slowly.",
+        "Notwithstanding + N, + mệnh đề · N + notwithstanding, + mệnh đề",
+        "Much as + S + V (like / admire / want / sympathise…), + mệnh đề",
+        "However + adj / adv + S + V, + mệnh đề: However hard he tried, …",
+        "No matter + what / who / where / how (+ adj) + S + V (hiện tại), + mệnh đề"
+      ],
+      "viDu": [
+        {
+          "c": "The team won, albeit narrowly.",
+          "v": "Đội đã thắng, dù chỉ thắng sít sao."
+        },
+        {
+          "c": "Notwithstanding the bad weather, the event was a success.",
+          "v": "Bất chấp thời tiết xấu, sự kiện đã thành công."
+        },
+        {
+          "c": "Much as I enjoy my job, I need a break.",
+          "v": "Dù rất thích công việc của mình, tôi vẫn cần nghỉ ngơi."
+        },
+        {
+          "c": "However hard he tried, he couldn't solve the puzzle.",
+          "v": "Dù cố gắng đến đâu, anh ấy cũng không giải được câu đố."
+        },
+        {
+          "c": "No matter what she says, don't sign anything.",
+          "v": "Dù cô ta có nói gì đi nữa, đừng ký bất cứ thứ gì."
+        }
+      ],
+      "luuY": [
+        "'albeit' không thay được although trước một mệnh đề đầy đủ: 'albeit he was tired' ✗ → 'although he was tired' / 'albeit tired'.",
+        "Trật tự: 'However difficult the task is' (tính từ đứng ngay sau however), không phải 'However the task is difficult'. 'However,' có dấu phẩy là 'tuy nhiên' — một từ khác.",
+        "Sau no matter / however dùng hiện tại để nói về tương lai, không dùng will: 'No matter what happens', không phải 'what will happen'.",
+        "Khác 'Adj + as / though' (en-c1-adjective-as-though: Tired as she was): dạng đó nói về một thực tế cụ thể; 'however tired she was' nói mức độ BẤT KỲ. 'Much as' xuất hiện ở cả hai điểm vì nó thuộc cùng họ nhượng bộ trang trọng."
+      ],
+      "soSanh": [
+        "en-b1-although-despite",
+        "en-c1-adjective-as-though",
+        "en-b2-whatever-whoever",
+        "en-b2-even-if-even-though"
+      ],
+      "tuKhoa": [
+        "albeit",
+        "notwithstanding",
+        "much as",
+        "however hard",
+        "no matter what",
+        "no matter how",
+        "nhượng bộ nâng cao",
+        "nhuong bo",
+        "bất chấp",
+        "bất kể"
+      ],
+      "quiz": [
+        {
+          "h": "He accepted the offer, ___ reluctantly.",
+          "lc": [
+            "no matter",
+            "albeit",
+            "much as",
+            "despite"
+          ],
+          "da": 1,
+          "gt": "albeit + trạng từ = dù là (một cách miễn cưỡng). 'despite' cần danh từ / V-ing; 'much as' cần mệnh đề; 'no matter' cần từ hỏi + mệnh đề."
+        },
+        {
+          "h": "___ the task may seem, it can be done in a week.",
+          "lc": [
+            "No matter difficult",
+            "Much as difficult",
+            "However difficult",
+            "However difficulty"
+          ],
+          "da": 2,
+          "gt": "However + tính từ + S + V: However difficult the task may seem. 'difficulty' là danh từ; 'no matter' thiếu how; 'much as' không đi trực tiếp với tính từ."
+        },
+        {
+          "h": "___ the objections of local residents, the council approved the plan.",
+          "lc": [
+            "However",
+            "Much as",
+            "Albeit",
+            "Notwithstanding"
+          ],
+          "da": 3,
+          "gt": "Theo sau là cụm danh từ (the objections…) ⇒ giới từ Notwithstanding = bất chấp. 'Albeit' đi với tính từ / trạng từ; 'Much as' và 'However' cần mệnh đề hoặc tính từ + mệnh đề."
+        }
+      ]
+    },
+    {
+      "id": "en-c1-linkers-formal",
+      "nhom": "Liên từ – diễn ngôn",
+      "tieuDe": "Từ nối trang trọng: hence, thus, thereby, in that, insofar as",
+      "mau": "…; hence + N / mệnh đề · …; thus + mệnh đề / thus + V-ing · …, thereby + V-ing · … in that + S + V · … insofar as + S + V",
+      "nghia": "do đó ~ · vì vậy ~ · qua đó ~ · ở chỗ là ~ · trong chừng mực mà ~",
+      "giaiThich": "Nhóm từ nối của văn học thuật, pháp lý, báo cáo. 'hence' = vì thế, có thể đi thẳng với một cụm DANH TỪ không cần động từ (hence the delay). 'thus' = do vậy / bằng cách đó; đứng đầu mệnh đề hoặc trước V-ing chỉ kết quả. 'thereby + V-ing' = qua đó, nhờ vậy mà — nêu kết quả trực tiếp của hành động vừa nói. 'in that + mệnh đề' = ở chỗ là, vì — giải thích câu trước đúng ở khía cạnh nào. 'insofar as' (cũng viết 'in so far as') = trong chừng mực mà. Tất cả hiếm dùng trong hội thoại thường ngày.",
+      "cachGhep": [
+        "Mệnh đề; hence + cụm danh từ: …; hence the delay.",
+        "Mệnh đề. Hence / Thus, + mệnh đề · Mệnh đề; thus + mệnh đề",
+        "Mệnh đề, thus / thereby + V-ing (kết quả)",
+        "Mệnh đề + in that + S + V (giải thích ở khía cạnh nào)",
+        "Mệnh đề + insofar as + S + V (giới hạn phạm vi)"
+      ],
+      "viDu": [
+        {
+          "c": "The roads were flooded; hence the delay.",
+          "v": "Đường bị ngập; vì thế mới có sự chậm trễ này."
+        },
+        {
+          "c": "The company cut costs, thereby increasing its profits.",
+          "v": "Công ty cắt giảm chi phí, nhờ đó tăng được lợi nhuận."
+        },
+        {
+          "c": "The two cases differ in that one involved a minor.",
+          "v": "Hai vụ việc khác nhau ở chỗ một vụ có liên quan đến trẻ vị thành niên."
+        },
+        {
+          "c": "Demand fell sharply; thus, several factories were forced to close.",
+          "v": "Nhu cầu giảm mạnh; do vậy, một số nhà máy buộc phải đóng cửa."
+        },
+        {
+          "c": "The policy was successful insofar as it reduced waiting times.",
+          "v": "Chính sách này thành công trong chừng mực nó đã rút ngắn được thời gian chờ."
+        }
+      ],
+      "luuY": [
+        "hence / thus là TRẠNG TỪ, không phải liên từ: không nối hai mệnh đề chỉ bằng dấu phẩy. Dùng dấu chấm phẩy, dấu chấm hoặc 'and thus'.",
+        "'thereby' đi với V-ing, không đi với mệnh đề có chủ ngữ: '…, thereby reducing costs', không phải '…, thereby it reduced costs'.",
+        "'in that' (ở chỗ là) khác 'in which' (mệnh đề quan hệ, cần danh từ đứng trước): 'It is unusual in that it has no windows'.",
+        "Khác 'therefore' (en-b2-linking-words): cùng chỉ kết quả, nhưng hence / thus trang trọng hơn; riêng hence có thể đi với cụm danh từ không có động từ."
+      ],
+      "soSanh": [
+        "en-b2-linking-words",
+        "en-b1-because-because-of",
+        "en-c1-nominalisation",
+        "en-c1-participle-clauses-advanced"
+      ],
+      "tuKhoa": [
+        "hence",
+        "thus",
+        "thereby",
+        "in that",
+        "insofar as",
+        "in so far as",
+        "từ nối trang trọng",
+        "tu noi trang trong",
+        "do đó",
+        "qua đó"
+      ],
+      "quiz": [
+        {
+          "h": "The firm automated its warehouse, ___ reducing the need for manual labour.",
+          "lc": [
+            "thereby",
+            "whereas",
+            "insofar",
+            "in that"
+          ],
+          "da": 0,
+          "gt": "thereby + V-ing = qua đó (kết quả trực tiếp). 'in that' và 'whereas' cần mệnh đề có chủ ngữ và động từ chia; 'insofar' thiếu 'as' và cũng cần mệnh đề."
+        },
+        {
+          "h": "She had grown up in Lyon; ___ her fluent French.",
+          "lc": [
+            "thereby",
+            "hence",
+            "in that",
+            "insofar as"
+          ],
+          "da": 1,
+          "gt": "hence có thể đi thẳng với cụm danh từ (her fluent French) = vì thế mà có… 'thereby' cần V-ing; 'in that' và 'insofar as' cần mệnh đề."
+        },
+        {
+          "h": "The study is unusual ___ it followed the same families for forty years.",
+          "lc": [
+            "in which",
+            "thereby",
+            "in that",
+            "hence"
+          ],
+          "da": 2,
+          "gt": "in that + mệnh đề = ở chỗ là, giải thích nó 'unusual' ở điểm nào. 'in which' cần một danh từ đứng trước để bổ nghĩa; 'thereby' cần V-ing; 'hence' nêu kết quả chứ không giải thích."
+        }
+      ]
+    },
+    {
+      "id": "en-c1-discourse-markers-spoken",
+      "nhom": "Liên từ – diễn ngôn",
+      "tieuDe": "Discourse markers khi nói: mind you, as a matter of fact, I mean, anyway",
+      "mau": "Mind you, + mệnh đề · As a matter of fact, + mệnh đề · I mean, + mệnh đề · Anyway, + mệnh đề · By the way, + mệnh đề",
+      "nghia": "mà nói chứ ~ · thật ra thì ~ · ý tôi là ~ · dù sao thì ~ · à mà này ~",
+      "giaiThich": "Discourse markers là những cụm ngắn giúp người nói điều hướng câu chuyện; chúng không thêm thông tin mà cho biết câu sau quan hệ thế nào với câu trước. 'Mind you' (chủ yếu Anh–Anh) thêm một ý làm cân lại, làm nhẹ bớt điều vừa nói. 'As a matter of fact' / 'Actually' đưa thông tin đính chính hoặc bất ngờ. 'I mean' nói rõ lại hoặc tự sửa. 'Anyway' quay về ý chính, đổi đề tài hoặc kết thúc. 'By the way' / 'Incidentally' mở sang chuyện bên lề. Đây là VĂN NÓI và thư từ thân mật — không dùng trong bài luận học thuật.",
+      "cachGhep": [
+        "Câu 1. Mind you, + câu 2 (ý cân lại, nghĩ thêm)",
+        "As a matter of fact, / Actually, + thông tin trái với điều người nghe tưởng",
+        "Câu chưa rõ — I mean, + nói lại cho rõ / sửa lại",
+        "Anyway, / Anyhow, + quay lại ý chính hoặc kết thúc · As I was saying, …",
+        "By the way, / Incidentally, + chuyện bên lề"
+      ],
+      "viDu": [
+        {
+          "c": "The hotel was awful. Mind you, it was very cheap.",
+          "v": "Khách sạn đó tệ lắm. Mà nói chứ, nó cũng rẻ thật."
+        },
+        {
+          "c": "\"Have you ever been to Hoi An?\" \"As a matter of fact, I was born there.\"",
+          "v": "\"Bạn đã bao giờ đến Hội An chưa?\" \"Thật ra thì mình sinh ra ở đó.\""
+        },
+        {
+          "c": "She's really reliable — I mean, she's never missed a deadline.",
+          "v": "Cô ấy rất đáng tin cậy — ý mình là, cô ấy chưa từng trễ hạn lần nào."
+        },
+        {
+          "c": "Anyway, as I was saying, the meeting has been moved to Friday.",
+          "v": "Dù sao thì, như mình đang nói dở, cuộc họp đã dời sang thứ Sáu."
+        },
+        {
+          "c": "By the way, did you ever hear back from the landlord?",
+          "v": "À mà này, chủ nhà đã trả lời bạn chưa?"
+        }
+      ],
+      "luuY": [
+        "Đừng đưa các cụm này vào bài viết học thuật; ở đó dùng however, in fact, that is, incidentally….",
+        "'Mind you' không liên quan đến 'mind' = phiền / để ý; nó gần với 'tuy vậy, mà nghĩ lại thì'.",
+        "'anyway' (dù sao thì) viết liền, khác 'any way' (bất kỳ cách nào: in any way).",
+        "Khác trạng từ bình luận như Luckily, Apparently (en-b2-adverb-position): những từ đó nêu thái độ với NỘI DUNG câu; discourse markers điều khiển MẠCH hội thoại (đổi đề tài, sửa lời, quay lại ý cũ)."
+      ],
+      "soSanh": [
+        "en-b2-adverb-position",
+        "en-b2-linking-words",
+        "en-c1-linkers-formal",
+        "en-c1-questions-advanced"
+      ],
+      "tuKhoa": [
+        "mind you",
+        "as a matter of fact",
+        "I mean",
+        "anyway",
+        "by the way",
+        "incidentally",
+        "discourse markers",
+        "từ đệm khi nói",
+        "tu dem"
+      ],
+      "quiz": [
+        {
+          "h": "He's not very friendly. ___, he did help me move house last year.",
+          "lc": [
+            "Mind you",
+            "For instance",
+            "In other words",
+            "Hence"
+          ],
+          "da": 0,
+          "gt": "Mind you thêm một ý làm cân lại nhận xét vừa nêu (không thân thiện, nhưng có giúp). 'Hence' nêu kết quả, 'For instance' nêu ví dụ, 'In other words' diễn đạt lại — đều không hợp với ý trái chiều."
+        },
+        {
+          "h": "\"You've never met my brother, have you?\" — \"___, we went to school together.\"",
+          "lc": [
+            "As a fact of matter",
+            "As a matter of fact",
+            "By all means",
+            "In that"
+          ],
+          "da": 1,
+          "gt": "As a matter of fact = thật ra thì, dùng để đính chính điều người kia tưởng. Trật tự cụm này cố định; 'By all means' = cứ tự nhiên (cho phép); 'In that' = ở chỗ là."
+        },
+        {
+          "h": "Trong câu 'Anyway, where was I?', người nói dùng 'Anyway' để làm gì?",
+          "lc": [
+            "Nêu nguyên nhân của điều vừa nói.",
+            "Đưa ra một ví dụ minh hoạ.",
+            "Quay trở lại mạch chuyện chính sau khi lạc đề.",
+            "Tỏ ý không đồng tình với người nghe."
+          ],
+          "da": 2,
+          "gt": "Anyway báo hiệu quay lại ý chính (hoặc chuyển / kết thúc đề tài). Nó không giới thiệu ví dụ, nguyên nhân hay sự phản đối."
+        }
+      ]
+    },
+    {
+      "id": "en-c1-cohesion-reference",
+      "nhom": "Liên từ – diễn ngôn",
+      "tieuDe": "Liên kết văn bản: the former / the latter, such, respectively, this / that",
+      "mau": "the former… the latter… · such + (a / an) + N · A and B… X and Y respectively · this / these + danh từ tóm tắt · that of / those of + N",
+      "nghia": "cái trước… cái sau… · (những) ~ như vậy · lần lượt là ~ · ~ này · cái của ~",
+      "giaiThich": "Văn viết trang trọng tránh lặp từ bằng các phương tiện quy chiếu. 'the former' chỉ cái nhắc TRƯỚC, 'the latter' chỉ cái nhắc SAU trong HAI thứ vừa nêu. 'respectively' (lần lượt, theo đúng thứ tự) ghép hai danh sách song song. 'such + danh từ' = loại vừa nói tới (such a decision, such measures). 'this / these + danh từ tóm tắt' (this trend, this approach, these findings) gói cả ý câu trước lại để viết tiếp. 'that of / those of' thay cho danh từ đã nhắc trong phép so sánh. Tất cả thuộc văn viết học thuật, báo cáo.",
+      "cachGhep": [
+        "A and B…; the former + V…, (while) the latter + V…",
+        "A and B + V + X and Y + respectively (thứ tự tương ứng)",
+        "Such + a / an + N số ít · Such + N số nhiều / không đếm được",
+        "Câu 1. This / These + danh từ tóm tắt (trend, problem, approach, findings) + V…",
+        "N1 + be + so sánh + than + that of (số ít) / those of (số nhiều) + N2"
+      ],
+      "viDu": [
+        {
+          "c": "The company has offices in Hanoi and Da Nang; the former handles sales, while the latter focuses on research.",
+          "v": "Công ty có văn phòng ở Hà Nội và Đà Nẵng; văn phòng thứ nhất phụ trách bán hàng, còn văn phòng thứ hai tập trung vào nghiên cứu."
+        },
+        {
+          "c": "Lan and Minh scored 8 and 9 respectively.",
+          "v": "Lan và Minh lần lượt được 8 và 9 điểm."
+        },
+        {
+          "c": "Prices have doubled in five years. This trend is unlikely to continue.",
+          "v": "Giá đã tăng gấp đôi trong năm năm. Xu hướng này khó có thể tiếp diễn."
+        },
+        {
+          "c": "Such measures are rarely popular with voters.",
+          "v": "Những biện pháp như vậy hiếm khi được lòng cử tri."
+        },
+        {
+          "c": "The population of Hanoi is larger than that of Da Nang.",
+          "v": "Dân số Hà Nội lớn hơn dân số Đà Nẵng."
+        }
+      ],
+      "luuY": [
+        "'the former / the latter' chỉ dùng cho HAI đối tượng; từ ba trở lên dùng 'the first', 'the second', 'the last (of these)'.",
+        "'latter' (cái sau trong hai cái) khác 'later' (muộn hơn) — hai từ rất hay bị viết nhầm.",
+        "Trật tự: 'such a problem', không phải 'a such problem'.",
+        "Người Việt hay so sánh lệch: 'The population of Hanoi is larger than Da Nang' ✗ (so dân số với thành phố) → 'than that of Da Nang' ✓.",
+        "Khác 'so / do so / one' (en-b2-ellipsis-substitution): những từ đó thay cho động từ hoặc danh từ trong hội thoại thường ngày; nhóm này là công cụ liên kết của văn viết trang trọng."
+      ],
+      "soSanh": [
+        "en-b2-ellipsis-substitution",
+        "en-c1-so-such-advanced",
+        "en-a1-this-that",
+        "en-b1-so-such-that"
+      ],
+      "tuKhoa": [
+        "the former",
+        "the latter",
+        "respectively",
+        "such",
+        "that of",
+        "those of",
+        "liên kết văn bản",
+        "lien ket van ban",
+        "lần lượt",
+        "cohesion"
+      ],
+      "quiz": [
+        {
+          "h": "Tea and coffee are both popular here, but ___ is drunk mainly in the morning.",
+          "lc": [
+            "the latter",
+            "the later",
+            "the lately",
+            "latter one of"
+          ],
+          "da": 0,
+          "gt": "the latter = cái được nhắc sau trong hai cái (coffee). 'later' / 'lately' là từ chỉ thời gian (muộn hơn / gần đây); 'latter one of' sai cấu trúc."
+        },
+        {
+          "h": "The gold and silver medals went to Japan and Korea ___.",
+          "lc": [
+            "respectably",
+            "respectively",
+            "respective",
+            "respectfully"
+          ],
+          "da": 1,
+          "gt": "respectively = lần lượt theo thứ tự tương ứng (vàng – Nhật, bạc – Hàn). 'respectfully' = một cách kính trọng; 'respectably' = một cách đứng đắn; 'respective' là tính từ, phải đứng trước danh từ."
+        },
+        {
+          "h": "The climate of the north is quite different from ___ of the south.",
+          "lc": [
+            "it",
+            "those",
+            "that",
+            "this"
+          ],
+          "da": 2,
+          "gt": "that of thay cho danh từ số ít đã nhắc (the climate). 'those' dùng cho số nhiều; 'it' và 'this' không đi với cụm 'of + danh từ' theo cách này."
+        }
+      ]
+    },
+    {
+      "id": "en-c1-complex-prepositions",
+      "nhom": "Liên từ – diễn ngôn",
+      "tieuDe": "Giới từ phức: with regard to, in terms of, on behalf of, by means of",
+      "mau": "with regard to / in terms of / on behalf of / by means of / in accordance with / in view of + N / V-ing",
+      "nghia": "về việc ~ · xét về mặt ~ · thay mặt ~ · bằng (phương tiện) ~ · theo đúng ~ · xét thấy ~",
+      "giaiThich": "Giới từ phức là cụm hai, ba từ hoạt động như một giới từ đơn, theo sau là danh từ hoặc V-ing. Chúng làm rõ quan hệ hơn giới từ đơn và là đặc trưng của thư tín thương mại, văn bản hành chính, học thuật. Các cụm hay dùng: with regard to / as regards (về, liên quan đến), in terms of (xét về mặt), on behalf of (thay mặt, đại diện cho), by means of (bằng phương tiện), in accordance with (theo đúng quy định), in view of / in light of (xét thấy, vì), with the exception of (ngoại trừ), as opposed to (trái với), in favour of (ủng hộ), at the expense of (trả giá bằng).",
+      "cachGhep": [
+        "with regard to / as regards / with respect to + N: về vấn đề…",
+        "in terms of + N: xét về mặt…",
+        "on behalf of + N / on + my / our + behalf: thay mặt…",
+        "by means of + N: bằng (công cụ, phương pháp)…",
+        "in accordance with + N (quy định, luật) · in view of / in light of + N (hoàn cảnh)",
+        "with the exception of · as opposed to · in favour of · at the expense of + N / V-ing"
+      ],
+      "viDu": [
+        {
+          "c": "I am writing with regard to your advertisement in yesterday's paper.",
+          "v": "Tôi viết thư này liên quan đến mẩu quảng cáo của quý công ty trên báo hôm qua."
+        },
+        {
+          "c": "In terms of cost, the second option is far better.",
+          "v": "Xét về chi phí, phương án thứ hai tốt hơn hẳn."
+        },
+        {
+          "c": "On behalf of the whole team, I'd like to thank you for your support.",
+          "v": "Thay mặt cả nhóm, tôi xin cảm ơn sự ủng hộ của các bạn."
+        },
+        {
+          "c": "The goods are lifted onto the ship by means of a crane.",
+          "v": "Hàng hoá được đưa lên tàu bằng cần cẩu."
+        },
+        {
+          "c": "In view of the weather forecast, the match has been postponed.",
+          "v": "Xét theo dự báo thời tiết, trận đấu đã được hoãn lại."
+        }
+      ],
+      "luuY": [
+        "Sau giới từ phức là danh từ / V-ing, không phải mệnh đề: 'in view of the fact that it rained', không phải 'in view of it rained'.",
+        "'on behalf of' = thay mặt, đại diện (nói hoặc làm THAY cho ai); đừng nhầm với 'in favour of' (ủng hộ) hay 'for the sake of' (vì lợi ích của).",
+        "Dạng chuẩn là 'with regard to' (không có -s); có -s là ở 'as regards' và 'Best regards'.",
+        "Khác 'because of / due to' (en-b1-because-because-of): 'in view of / in light of' trang trọng hơn và nêu căn cứ để ra quyết định, không chỉ đơn thuần là nguyên nhân. Đừng lạm dụng 'in terms of' khi một giới từ đơn là đủ."
+      ],
+      "soSanh": [
+        "en-b2-dependent-prepositions",
+        "en-b1-because-because-of",
+        "en-c1-linkers-formal",
+        "en-c1-concession-advanced"
+      ],
+      "tuKhoa": [
+        "with regard to",
+        "in terms of",
+        "on behalf of",
+        "by means of",
+        "in accordance with",
+        "in view of",
+        "giới từ phức",
+        "gioi tu phuc",
+        "thay mặt",
+        "xét về mặt"
+      ],
+      "quiz": [
+        {
+          "h": "___ the board of directors, I would like to welcome our new partners.",
+          "lc": [
+            "On behalf of",
+            "By means of",
+            "As opposed to",
+            "In terms of"
+          ],
+          "da": 0,
+          "gt": "On behalf of = thay mặt (hội đồng quản trị) để phát biểu. 'By means of' = bằng phương tiện; 'In terms of' = xét về mặt; 'As opposed to' = trái với — đều sai nghĩa."
+        },
+        {
+          "h": "The garage door is opened ___ a remote control.",
+          "lc": [
+            "in view of",
+            "by means of",
+            "with regard to",
+            "on behalf of"
+          ],
+          "da": 1,
+          "gt": "by means of + công cụ = bằng (điều khiển từ xa). 'on behalf of' = thay mặt; 'with regard to' = về vấn đề; 'in view of' = xét thấy."
+        },
+        {
+          "h": "Trong câu 'In view of the recent complaints, we have changed our policy', cụm 'in view of' có nghĩa gì?",
+          "lc": [
+            "Thay mặt cho.",
+            "Nhằm mục đích.",
+            "Xét đến, vì (lấy đó làm căn cứ).",
+            "Mặc dù, bất chấp."
+          ],
+          "da": 2,
+          "gt": "in view of + N = xét thấy / vì có…, nêu căn cứ dẫn đến quyết định. Nó không mang nghĩa nhượng bộ (despite), đại diện (on behalf of) hay mục đích (with a view to)."
+        }
+      ]
+    },
+    {
+      "id": "en-c1-time-clauses-advanced",
+      "nhom": "Liên từ – diễn ngôn",
+      "tieuDe": "Mệnh đề thời gian nâng cao: the moment, once, on + V-ing, by the time",
+      "mau": "The moment / minute / instant + S + V, … · Once + S + V, … · On / Upon + V-ing, S + V · By the time + S + V, S + had V3 / will have V3",
+      "nghia": "ngay khi ~ · một khi ~ · vừa ~ thì · tính đến lúc ~ thì đã ~",
+      "giaiThich": "'the moment / the minute / the instant (that)' dùng như liên từ = as soon as, nhấn tính tức thì; trong Anh–Anh còn có 'immediately / directly + mệnh đề'. 'once' = một khi, ngay sau khi (việc đó xong thì việc kia mới xảy ra). 'on / upon + V-ing' = ngay khi làm gì — trang trọng, văn viết, hai hành động chung chủ ngữ. 'by the time + mệnh đề' = tính đến lúc…, mệnh đề chính thường ở thì HOÀN THÀNH: by the time + quá khứ đơn → past perfect; by the time + hiện tại đơn → future perfect. Trong mệnh đề thời gian không dùng will để chỉ tương lai.",
+      "cachGhep": [
+        "The moment / minute / instant (that) + S + V, + mệnh đề chính",
+        "Once + S + V (hiện tại đơn / hiện tại hoàn thành), + S + will / can…",
+        "On / Upon + V-ing, + S + V (trang trọng, cùng chủ ngữ)",
+        "By the time + S + V2, + S + had + V3",
+        "By the time + S + V (hiện tại), + S + will have + V3"
+      ],
+      "viDu": [
+        {
+          "c": "The moment I saw her, I knew something was wrong.",
+          "v": "Ngay khi nhìn thấy cô ấy, tôi biết có chuyện không ổn."
+        },
+        {
+          "c": "Once you've signed the contract, there's no going back.",
+          "v": "Một khi bạn đã ký hợp đồng thì không rút lại được nữa."
+        },
+        {
+          "c": "On arriving at the hotel, we were given a welcome drink.",
+          "v": "Vừa đến khách sạn, chúng tôi được mời một ly nước chào mừng."
+        },
+        {
+          "c": "By the time we got to the station, the train had already left.",
+          "v": "Lúc chúng tôi đến ga thì tàu đã đi mất rồi."
+        },
+        {
+          "c": "By the time you read this, I will have left the country.",
+          "v": "Lúc bạn đọc được những dòng này thì tôi đã rời khỏi đất nước rồi."
+        }
+      ],
+      "luuY": [
+        "Không dùng will sau the moment / once / by the time: 'I'll call you the moment he ARRIVES', không phải 'will arrive'.",
+        "Không thêm when / that thừa: 'The moment I saw her, I knew', không phải 'The moment when I saw her, then I knew'.",
+        "'On + V-ing' đòi hai hành động chung chủ ngữ: 'On opening the door, I saw…' ✓; 'On opening the door, the dog ran out' ✗.",
+        "Khác 'No sooner… than / Hardly… when' (en-c1-inversion-no-sooner-hardly): cùng nghĩa 'vừa… thì', nhưng nhóm đó có đảo ngữ, chỉ kể chuyện quá khứ và văn chương hơn; 'the moment' dùng được cả cho tương lai."
+      ],
+      "soSanh": [
+        "en-b1-future-time-clauses",
+        "en-c1-inversion-no-sooner-hardly",
+        "en-b2-future-perfect",
+        "en-c1-reduced-adverbial-clauses"
+      ],
+      "tuKhoa": [
+        "the moment",
+        "the minute",
+        "once",
+        "on arriving",
+        "upon",
+        "by the time",
+        "mệnh đề thời gian",
+        "menh de thoi gian",
+        "ngay khi",
+        "một khi"
+      ],
+      "quiz": [
+        {
+          "h": "By the time the ambulance arrived, the man ___ consciousness.",
+          "lc": [
+            "has regained",
+            "regains",
+            "will regain",
+            "had regained"
+          ],
+          "da": 3,
+          "gt": "By the time + quá khứ đơn (arrived) ⇒ mệnh đề chính ở past perfect: việc tỉnh lại xong TRƯỚC khi xe cứu thương đến. Hiện tại hoàn thành, hiện tại đơn và tương lai không hợp với mốc quá khứ."
+        },
+        {
+          "h": "I'll text you the moment the plane ___.",
+          "lc": [
+            "lands",
+            "will land",
+            "would land",
+            "landed"
+          ],
+          "da": 0,
+          "gt": "Sau 'the moment' (= as soon as) dùng hiện tại đơn để nói về tương lai: lands. Không dùng will / would trong mệnh đề thời gian; 'landed' không hợp với 'I'll text'."
+        },
+        {
+          "h": "___ hearing the news, she burst into tears.",
+          "lc": [
+            "The moment",
+            "On",
+            "By the time",
+            "Once that"
+          ],
+          "da": 1,
+          "gt": "On + V-ing = ngay khi (trang trọng). 'By the time' và 'The moment' cần mệnh đề có chủ ngữ và động từ chia; 'Once that' không tồn tại."
+        }
+      ]
+    },
+    {
+      "id": "en-c1-comparison-advanced",
+      "nhom": "So sánh – mức độ",
+      "tieuDe": "So sánh nâng cao: nowhere near as, not so much A as B, all the more",
+      "mau": "nowhere near / not nearly + as + adj + as · not so much + A + as + B · all the + so sánh hơn (+ because / for…) · every bit as + adj + as · none the + so sánh hơn",
+      "nghia": "còn lâu mới ~ bằng · không hẳn là A mà là B · lại càng ~ hơn · ~ chẳng kém gì",
+      "giaiThich": "Các cách tinh chỉnh phép so sánh. 'nowhere near as… as' (thân mật) và 'not nearly as… as' = kém xa; Anh–Anh còn có 'nothing like as… as'. 'every bit as… as' = bằng hệt, chẳng kém chút nào. 'not so much A as B' = không hẳn là A mà đúng hơn là B — sửa lại cách gọi tên sự việc; A và B phải cùng loại từ. 'all the + so sánh hơn' = lại càng… hơn (vì một lý do nêu kèm), hay gặp trong văn viết. 'none the + so sánh hơn' = chẳng… hơn chút nào (none the wiser, none the worse).",
+      "cachGhep": [
+        "S + be + nowhere near / not nearly + as + adj + as + N",
+        "S + be + every bit / just + as + adj + as + N",
+        "S + be + not so much + N / adj / cụm từ + as + N / adj / cụm từ",
+        "S + be + all the + so sánh hơn + because / for / since…",
+        "S + be + none the + wiser / worse / better (+ for…)"
+      ],
+      "viDu": [
+        {
+          "c": "The sequel is nowhere near as good as the original.",
+          "v": "Phần tiếp theo còn lâu mới hay bằng phần gốc."
+        },
+        {
+          "c": "He is not so much a manager as a mentor.",
+          "v": "Anh ấy không hẳn là một người quản lý mà đúng hơn là một người dìu dắt."
+        },
+        {
+          "c": "Her success is all the more impressive because she had no formal training.",
+          "v": "Thành công của cô ấy lại càng ấn tượng hơn vì cô chưa từng được đào tạo bài bản."
+        },
+        {
+          "c": "The second exam was every bit as hard as the first.",
+          "v": "Bài thi thứ hai khó chẳng kém gì bài thứ nhất."
+        },
+        {
+          "c": "I read the manual twice and was none the wiser.",
+          "v": "Tôi đọc sách hướng dẫn hai lần mà vẫn chẳng hiểu thêm được gì."
+        }
+      ],
+      "luuY": [
+        "Trong văn chuẩn, cặp cố định là 'not so much A AS B'; tránh viết 'not so much A but B'.",
+        "'all the more' cần một lý do đi kèm (because / for / since / given…), không đứng trơ trọi như 'more'.",
+        "'none the wiser' = vẫn không hiểu / không biết gì hơn — không phải 'không khôn ngoan'.",
+        "Khác 'much / far + so sánh hơn' và 'the… the…' (en-b1-comparatives-advanced): ở B1 chỉ tăng giảm mức độ chênh lệch; ở đây còn sửa lại bản chất phép so sánh (not so much… as) hoặc gắn nó với một lý do (all the more)."
+      ],
+      "soSanh": [
+        "en-b1-comparatives-advanced",
+        "en-c1-inversion-as-than",
+        "en-c1-so-such-advanced",
+        "en-b2-like-vs-as"
+      ],
+      "tuKhoa": [
+        "nowhere near as",
+        "not nearly as",
+        "not so much as",
+        "all the more",
+        "every bit as",
+        "none the wiser",
+        "so sánh nâng cao",
+        "so sanh nang cao"
+      ],
+      "quiz": [
+        {
+          "h": "The new stadium is ___ as big as the old one — it holds only half as many people.",
+          "lc": [
+            "none the",
+            "all the more",
+            "nowhere near",
+            "not so much"
+          ],
+          "da": 2,
+          "gt": "nowhere near as + adj + as = kém xa (chỉ chứa được một nửa). 'all the more' và 'none the' đi với so sánh hơn, không đi với 'as big as'; 'not so much' dùng trong mẫu 'not so much A as B'."
+        },
+        {
+          "h": "It was not so much what he said ___ the way he said it that upset her.",
+          "lc": [
+            "like",
+            "so",
+            "that",
+            "as"
+          ],
+          "da": 3,
+          "gt": "Cặp cố định: not so much A as B = không hẳn A mà là B. 'that', 'so' và 'like' không tạo được cặp với 'not so much'."
+        },
+        {
+          "h": "'I read the manual twice and was none the wiser.' nghĩa là gì?",
+          "lc": [
+            "Đọc hai lần mà vẫn chẳng hiểu gì hơn.",
+            "Đọc hai lần nên đã hiểu rõ mọi thứ.",
+            "Đọc xong thấy mình kém khôn ngoan đi.",
+            "Không ai khôn ngoan hơn tôi sau khi đọc."
+          ],
+          "da": 0,
+          "gt": "none the wiser = không hiểu / biết gì thêm so với trước. Cụm này nói về việc không thu được hiểu biết, không phải về sự khôn ngoan của con người."
+        }
+      ]
+    },
+    {
+      "id": "en-c1-so-such-advanced",
+      "nhom": "So sánh – mức độ",
+      "tieuDe": "so + adj + a / an + N, too + adj + a + N, such is…",
+      "mau": "so / too / as / how + adj + a / an + N số ít · Such + be + N + that + mệnh đề",
+      "nghia": "một ~ (quá / đến mức) ~ · ~ lớn đến nỗi ~",
+      "giaiThich": "Sau so, too, as, how, tính từ nhảy lên TRƯỚC mạo từ a / an: 'so difficult a task', 'too good an opportunity', 'as fine a player as…', 'How big a problem is it?'. Cấu trúc này chỉ dùng với danh từ đếm được số ít và mang tính trang trọng, văn viết (trừ 'How big a…?' và 'too good an opportunity to miss' vẫn gặp khi nói). 'Such + be + danh từ + that…' là cách đảo để nhấn mức độ: 'Such was the force of the storm that…' = sức gió mạnh đến nỗi…; văn chương, báo chí.",
+      "cachGhep": [
+        "so + adj + a / an + N số ít (+ that…): so difficult a task",
+        "too + adj + a / an + N số ít + to V: too good an opportunity to miss",
+        "as + adj + a / an + N + as: as talented a musician as her mother",
+        "How + adj + a / an + N + câu hỏi: How serious a problem is it?",
+        "Such + is / was + N + that + mệnh đề"
+      ],
+      "viDu": [
+        {
+          "c": "I had never seen so beautiful a sunset.",
+          "v": "Tôi chưa từng thấy cảnh hoàng hôn nào đẹp đến thế."
+        },
+        {
+          "c": "It was too good an opportunity to miss.",
+          "v": "Đó là một cơ hội quá tốt, không thể bỏ lỡ."
+        },
+        {
+          "c": "Such was the force of the explosion that windows shattered half a mile away.",
+          "v": "Sức công phá của vụ nổ lớn đến nỗi cửa kính cách đó nửa dặm cũng vỡ tan."
+        },
+        {
+          "c": "She is as talented a musician as her mother.",
+          "v": "Cô ấy là một nhạc sĩ tài năng chẳng kém gì mẹ mình."
+        },
+        {
+          "c": "How big a problem is it likely to be?",
+          "v": "Chuyện đó có thể sẽ là vấn đề lớn đến mức nào?"
+        }
+      ],
+      "luuY": [
+        "Chỉ dùng với danh từ đếm được SỐ ÍT. Với số nhiều / không đếm được phải dùng such: 'such beautiful flowers', không phải 'so beautiful flowers'.",
+        "Hai trật tự: 'so + adj + a + N' (so long a journey) ↔ 'such + a + adj + N' (such a long journey). Không trộn: 'such long a journey' ✗, 'so a long journey' ✗.",
+        "Khác 'so… that / such… that' cơ bản (en-b1-so-such-that) và đảo ngữ 'So tired was he that…' (en-b2-inversion-so-such): ở đây tính từ chen vào trước mạo từ trong cụm danh từ, và 'Such is / was…' dùng such như một đại từ chỉ mức độ.",
+        "Trong văn thường ngày, 'such a beautiful sunset' tự nhiên hơn 'so beautiful a sunset'."
+      ],
+      "soSanh": [
+        "en-b1-so-such-that",
+        "en-b2-inversion-so-such",
+        "en-b1-too-enough",
+        "en-c1-cohesion-reference"
+      ],
+      "tuKhoa": [
+        "so beautiful a",
+        "too good an opportunity",
+        "such was",
+        "such is",
+        "how big a",
+        "as good a",
+        "so such nâng cao",
+        "so such nang cao"
+      ],
+      "quiz": [
+        {
+          "h": "It was ___ to turn down.",
+          "lc": [
+            "too tempting offer",
+            "too an tempting offer",
+            "a too tempting offer",
+            "too tempting an offer"
+          ],
+          "da": 3,
+          "gt": "too + adj + a / an + N: tính từ đứng trước mạo từ ⇒ too tempting an offer. Đặt mạo từ trước too, bỏ mạo từ, hay đặt mạo từ trước tính từ đều sai trật tự."
+        },
+        {
+          "h": "___ was his anger that he could hardly speak.",
+          "lc": [
+            "Such",
+            "Too",
+            "As",
+            "So"
+          ],
+          "da": 0,
+          "gt": "Such + be + danh từ + that… = (cơn giận) lớn đến nỗi. 'So' ở đầu câu cần tính từ theo sau (So great was his anger); 'Too' và 'As' không mở đầu được cấu trúc này."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "I have rarely heard so a moving speech.",
+            "I have rarely heard so moving a speech.",
+            "I have rarely heard such moving a speech.",
+            "I have rarely heard so moving speeches."
+          ],
+          "da": 1,
+          "gt": "so + adj + a + N số ít: so moving a speech. Với such thì trật tự là 'such a moving speech'; và so + adj không đi với danh từ số nhiều (phải là 'such moving speeches')."
+        }
+      ]
+    },
+    {
+      "id": "en-c1-adverb-adjective-collocation",
+      "nhom": "So sánh – mức độ",
+      "tieuDe": "Trạng từ mức độ + tính từ: utterly, highly, deeply, bitterly",
+      "mau": "utterly / highly / deeply / bitterly / perfectly / fully / heavily / widely + adj / V3",
+      "nghia": "hoàn toàn / hết sức / sâu sắc / vô cùng ~ (theo từng cặp cố định)",
+      "giaiThich": "Ở trình độ cao, thay cho 'very' người ta dùng trạng từ mức độ hợp với từng tính từ — đó là kết hợp từ (collocation) theo thói quen, không tự do thay thế. 'utterly' thường đi với tính từ cực cấp, hay mang nghĩa tiêu cực (ridiculous, useless, exhausted). 'highly' đi với khả năng và đánh giá (likely, unlikely, successful, qualified, recommended, controversial). 'deeply' đi với cảm xúc, niềm tin (concerned, moved, offended, committed). 'bitterly' đi với thất vọng, tiếc nuối, đối đầu và cái lạnh (disappointed, opposed, divided, cold). Ngoài ra: perfectly clear / normal, fully aware, heavily dependent, widely known, painfully slow. Dùng được trong cả nói lẫn viết; rất quan trọng trong bài luận.",
+      "cachGhep": [
+        "utterly + ridiculous / useless / exhausted / devastated / wrong",
+        "highly + likely / unlikely / successful / qualified / recommended / controversial",
+        "deeply + concerned / moved / offended / committed / rooted",
+        "bitterly + disappointed / opposed / divided / cold",
+        "perfectly clear · fully aware · heavily dependent · widely known · painfully slow"
+      ],
+      "viDu": [
+        {
+          "c": "The idea is utterly ridiculous.",
+          "v": "Ý tưởng đó hoàn toàn lố bịch."
+        },
+        {
+          "c": "It is highly unlikely that the deal will go through.",
+          "v": "Rất khó có khả năng thương vụ đó sẽ thành công."
+        },
+        {
+          "c": "We are deeply concerned about the rise in youth unemployment.",
+          "v": "Chúng tôi hết sức quan ngại về tình trạng thất nghiệp gia tăng ở giới trẻ."
+        },
+        {
+          "c": "She was bitterly disappointed not to get the job.",
+          "v": "Cô ấy vô cùng thất vọng vì không được nhận công việc đó."
+        },
+        {
+          "c": "I am fully aware of the risks involved.",
+          "v": "Tôi hoàn toàn ý thức được những rủi ro liên quan."
+        }
+      ],
+      "luuY": [
+        "Người Việt hay dùng 'very' cho mọi tính từ, hoặc ghép theo nghĩa tiếng Việt ('deeply cold', 'bitterly unlikely') — phải học theo cặp.",
+        "'highly' (hết sức — nghĩa trừu tượng) khác 'high' (cao — nghĩa đen): 'highly respected' nhưng 'fly high'.",
+        "'bitterly cold' = lạnh buốt; bitterly ở đây không còn nghĩa 'cay đắng'.",
+        "Khác quy tắc tính từ phân cấp / không phân cấp (en-b2-gradable-adjectives: very ↔ absolutely): quy tắc đó cho biết LOẠI trạng từ dùng được; còn ở đây là thói quen kết hợp của từng cặp từ cụ thể."
+      ],
+      "soSanh": [
+        "en-b2-gradable-adjectives",
+        "en-c1-emphasis-expressions",
+        "en-b2-adverb-position",
+        "en-b2-dependent-prepositions"
+      ],
+      "tuKhoa": [
+        "utterly",
+        "highly",
+        "deeply",
+        "bitterly",
+        "fully aware",
+        "collocation",
+        "kết hợp từ",
+        "ket hop tu",
+        "trạng từ mức độ"
+      ],
+      "quiz": [
+        {
+          "h": "It is ___ unlikely that the two sides will reach an agreement.",
+          "lc": [
+            "heavily",
+            "widely",
+            "highly",
+            "bitterly"
+          ],
+          "da": 2,
+          "gt": "highly đi với tính từ chỉ khả năng: highly likely / unlikely. 'bitterly' đi với thất vọng / lạnh; 'widely' đi với known / used; 'heavily' đi với dependent / influenced."
+        },
+        {
+          "h": "Fans were ___ disappointed when the concert was cancelled.",
+          "lc": [
+            "widely",
+            "heavily",
+            "perfectly",
+            "bitterly"
+          ],
+          "da": 3,
+          "gt": "bitterly disappointed là cặp cố định (thất vọng tràn trề). 'widely', 'perfectly' và 'heavily' không kết hợp với disappointed."
+        },
+        {
+          "h": "Câu nào dùng kết hợp từ tự nhiên?",
+          "lc": [
+            "The instructions were perfectly clear.",
+            "The instructions were bitterly clear.",
+            "The instructions were deeply clear.",
+            "The instructions were heavily clear."
+          ],
+          "da": 0,
+          "gt": "perfectly clear là cặp quen thuộc (hoàn toàn rõ ràng). bitterly, deeply, heavily không đi với 'clear'."
+        }
+      ]
+    },
+    {
+      "id": "en-c1-questions-advanced",
+      "nhom": "Cấu trúc câu",
+      "tieuDe": "Câu hỏi nâng cao: câu hỏi phủ định, echo questions, question tags khó",
+      "mau": "Trợ động từ + n't + S + V? · S + V + từ hỏi? (echo) · mệnh đề, + tag (aren't I? / shall we? / will you? / did they?)",
+      "nghia": "chẳng phải ~ sao? · (anh) vừa làm GÌ cơ? · ~ phải không?",
+      "giaiThich": "Ba kiểu câu hỏi tinh tế của hội thoại. (1) Câu hỏi PHỦ ĐỊNH (Isn't it…? Haven't you…?) tỏ ngạc nhiên, chờ sự đồng tình, hoặc trách nhẹ; dạng không rút gọn 'Did you not…?' trang trọng hơn. Trả lời theo SỰ THẬT: việc đó đúng thì nói Yes, không đúng thì nói No. (2) ECHO question lặp lại câu vừa nghe để tỏ ngạc nhiên hoặc hỏi lại phần chưa nghe rõ, giữ trật tự câu kể: 'You did what?'. (3) Question tag khó: I am → aren't I?; Let's → shall we?; câu mệnh lệnh → will you?; chủ ngữ nobody / everyone → they; câu có never / hardly / nobody / little đã mang nghĩa phủ định → tag khẳng định.",
+      "cachGhep": [
+        "Isn't / Don't / Haven't / Didn't + S + …? (ngạc nhiên, chờ đồng tình)",
+        "Echo: S + V + what / who / where? · lặp lại cả câu với giọng lên: She's leaving?",
+        "I'm + …, aren't I?",
+        "Let's + V, shall we? · Câu mệnh lệnh, will you? / would you?",
+        "Nobody / No one / Everyone + V, + trợ động từ + they?",
+        "Câu có never / hardly / rarely / nothing / little, + tag khẳng định"
+      ],
+      "viDu": [
+        {
+          "c": "Isn't that the man we saw at the station yesterday?",
+          "v": "Chẳng phải kia là người đàn ông chúng ta thấy ở ga hôm qua sao?"
+        },
+        {
+          "c": "\"I've sold the car.\" \"You've done what?\"",
+          "v": "\"Anh bán xe rồi.\" \"Anh vừa làm gì cơ?\""
+        },
+        {
+          "c": "I'm late again, aren't I?",
+          "v": "Mình lại đến muộn nữa rồi, phải không?"
+        },
+        {
+          "c": "Nobody called while I was out, did they?",
+          "v": "Lúc mình ra ngoài không có ai gọi, phải không?"
+        },
+        {
+          "c": "\"Don't you like seafood?\" \"Yes, I do. I love it.\"",
+          "v": "\"Bạn không thích hải sản à?\" \"Có chứ. Mình rất thích.\""
+        }
+      ],
+      "luuY": [
+        "Lỗi kinh điển của người Việt: trả lời câu hỏi phủ định theo kiểu 'Vâng, tôi không…'. Tiếng Anh trả lời theo sự thật: 'Don't you smoke?' — 'No, I don't' (tôi không hút) / 'Yes, I do' (tôi có hút).",
+        "Không có 'amn't I?' trong tiếng Anh chuẩn: dùng 'aren't I?' (hoặc rất trang trọng: 'am I not?').",
+        "never, hardly, seldom, rarely, nobody, nothing, little, few làm câu mang nghĩa phủ định ⇒ tag khẳng định: 'He never complains, does he?'.",
+        "Phần cơ bản xem en-b1-question-tags. Khác câu hỏi gián tiếp (en-b1-indirect-questions): echo question cũng giữ trật tự câu kể nhưng là câu hỏi TRỰC TIẾP, dùng để tỏ ngạc nhiên hay hỏi lại, không phải để lịch sự."
+      ],
+      "soSanh": [
+        "en-b1-question-tags",
+        "en-b1-indirect-questions",
+        "en-b1-so-neither",
+        "en-c1-discourse-markers-spoken"
+      ],
+      "tuKhoa": [
+        "negative questions",
+        "echo questions",
+        "question tags",
+        "aren't I",
+        "shall we",
+        "câu hỏi phủ định",
+        "cau hoi duoi",
+        "câu hỏi đuôi",
+        "câu hỏi lặp lại"
+      ],
+      "quiz": [
+        {
+          "h": "I'm next in line, ___?",
+          "lc": [
+            "amn't I",
+            "am not I",
+            "aren't I",
+            "don't I"
+          ],
+          "da": 2,
+          "gt": "Tag của 'I am' trong tiếng Anh chuẩn là 'aren't I?'. 'amn't I' không dùng trong tiếng Anh chuẩn; 'am not I' sai trật tự (dạng trang trọng là 'am I not'); 'don't I' sai trợ động từ."
+        },
+        {
+          "h": "He hardly ever complains, ___?",
+          "lc": [
+            "doesn't he",
+            "hasn't he",
+            "is he",
+            "does he"
+          ],
+          "da": 3,
+          "gt": "'hardly ever' làm câu mang nghĩa phủ định ⇒ tag khẳng định; động từ thường ở hiện tại đơn ⇒ does he. 'doesn't he' là tag phủ định; 'is he' / 'hasn't he' sai trợ động từ."
+        },
+        {
+          "h": "Được hỏi 'Don't you eat meat?', một người CÓ ăn thịt sẽ trả lời thế nào?",
+          "lc": [
+            "Yes, I do.",
+            "No, I do.",
+            "Yes, I don't.",
+            "No, I eat."
+          ],
+          "da": 0,
+          "gt": "Tiếng Anh trả lời theo sự thật chứ không theo dạng câu hỏi: có ăn ⇒ 'Yes, I do'. Yes luôn đi với khẳng định, No luôn đi với phủ định; không ghép 'No, I do' hay 'Yes, I don't'."
+        }
+      ]
+    },
+    {
+      "id": "en-c1-verb-patterns-advanced",
+      "nhom": "Cấu trúc câu",
+      "tieuDe": "Mẫu động từ nâng cao: catch sb doing, have sb doing, can't help but",
+      "mau": "catch / find / leave / keep + O + V-ing · have + O + V-ing · won't have + O + V-ing · can't help + V-ing / can't help but + V",
+      "nghia": "bắt gặp ai đang ~ · khiến ai (cứ) ~ · không chấp nhận ai ~ · không thể không ~",
+      "giaiThich": "Một số mẫu động từ + tân ngữ + V-ing ngoài những mẫu cơ bản. 'catch + O + V-ing' = bắt gặp, bắt quả tang (thường là việc không nên làm). 'find / leave / keep + O + V-ing' = thấy / để / bắt ai, cái gì ở trạng thái đang làm gì. 'have + O + V-ing' = khiến ai (bắt đầu và cứ) làm gì: 'She had us laughing'. 'I won't have + O + V-ing' = tôi không chấp nhận, không cho phép. 'can't help + V-ing' = không thể không, không nhịn được; 'can't help but + V nguyên mẫu' cùng nghĩa, hơi trang trọng hơn. Dùng cả khi nói lẫn viết.",
+      "cachGhep": [
+        "catch + O + V-ing: catch sb stealing",
+        "find / leave / keep + O + V-ing: leave the engine running · keep sb waiting",
+        "have + O + V-ing (khiến ai làm gì trong một lúc): have everyone dancing",
+        "S + won't / wouldn't + have + O + V-ing (không chấp nhận)",
+        "can't / couldn't help + V-ing · can't / couldn't help but + V"
+      ],
+      "viDu": [
+        {
+          "c": "The guard caught two boys climbing over the fence.",
+          "v": "Người bảo vệ bắt gặp hai cậu bé đang trèo qua hàng rào."
+        },
+        {
+          "c": "She had us all laughing within minutes.",
+          "v": "Chỉ trong vài phút cô ấy đã khiến tất cả chúng tôi bật cười."
+        },
+        {
+          "c": "I won't have you talking to your mother like that.",
+          "v": "Bố không chấp nhận con ăn nói với mẹ như thế."
+        },
+        {
+          "c": "I couldn't help but notice that you looked upset.",
+          "v": "Tôi không thể không để ý thấy bạn có vẻ buồn."
+        },
+        {
+          "c": "Sorry to have kept you waiting.",
+          "v": "Xin lỗi vì đã để bạn phải chờ."
+        }
+      ],
+      "luuY": [
+        "'can't help' + V-ing HOẶC 'can't help but' + V nguyên mẫu; không nói 'can't help to laugh' hay 'can't help but laughing'.",
+        "'help' ở đây không có nghĩa 'giúp': 'I can't help thinking…' = tôi không thể không nghĩ rằng….",
+        "'catch sb doing' luôn là V-ing (bắt gặp lúc ĐANG làm): không nói 'caught him to cheat'.",
+        "Khác 'have sb do' và 'get sb to do' (en-b2-causative-get): 'have sb do sth' = nhờ / bảo ai làm một việc; 'have sb doing' = khiến ai ở trạng thái đang làm (kết quả kéo dài) hoặc, với won't, là không cho phép."
+      ],
+      "soSanh": [
+        "en-b2-causative-get",
+        "en-b2-perception-verbs",
+        "en-b1-make-let",
+        "en-b1-gerund-vs-infinitive"
+      ],
+      "tuKhoa": [
+        "catch sb doing",
+        "have sb doing",
+        "can't help but",
+        "can't help doing",
+        "keep sb waiting",
+        "won't have you",
+        "mẫu động từ",
+        "mau dong tu",
+        "bắt quả tang"
+      ],
+      "quiz": [
+        {
+          "h": "The teacher caught him ___ during the exam.",
+          "lc": [
+            "cheating",
+            "to cheat",
+            "cheated",
+            "to be cheating"
+          ],
+          "da": 0,
+          "gt": "catch + O + V-ing = bắt quả tang ai đang làm gì. Mẫu này không dùng to V, và 'cheated' sẽ thành nghĩa bị động (cậu ấy bị lừa)."
+        },
+        {
+          "h": "I couldn't help but ___ when I saw his new haircut.",
+          "lc": [
+            "to laugh",
+            "laugh",
+            "laughing",
+            "laughed"
+          ],
+          "da": 1,
+          "gt": "can't help but + V nguyên mẫu không to: laugh. (V-ing chỉ dùng khi không có 'but': couldn't help laughing.)"
+        },
+        {
+          "h": "'I won't have you coming home at this hour.' nghĩa là gì?",
+          "lc": [
+            "Tôi sẽ không bắt con phải về nhà vào giờ này.",
+            "Tôi sẽ không có mặt khi con về nhà.",
+            "Tôi không chấp nhận việc con về nhà vào giờ này.",
+            "Tôi chưa bao giờ thấy con về nhà giờ này."
+          ],
+          "da": 2,
+          "gt": "won't have + O + V-ing = không cho phép, không chấp nhận. Nó không mang nghĩa 'bắt buộc', cũng không nói về việc nhìn thấy hay có mặt."
+        }
+      ]
+    },
+    {
+      "id": "en-c1-agreement-advanced",
+      "nhom": "Cấu trúc câu",
+      "tieuDe": "Hoà hợp chủ – vị nâng cao: a number of / the number of, neither… nor",
+      "mau": "A number of + N số nhiều + V số nhiều · The number of + N số nhiều + V số ít · Neither A nor B + V (theo B) · A, together with B, + V (theo A)",
+      "nghia": "một số ~ (chia số nhiều) · số lượng ~ (chia số ít) · chia theo chủ ngữ gần / chủ ngữ chính",
+      "giaiThich": "Các trường hợp chia động từ dễ sai trong văn viết chuẩn. 'A number of + danh từ số nhiều' = nhiều, một số ⇒ động từ số NHIỀU; 'The number of + danh từ số nhiều' = con số, số lượng ⇒ động từ số ÍT. Với 'either… or / neither… nor', văn viết chuẩn chia theo chủ ngữ đứng GẦN động từ nhất. Các cụm chen vào như 'together with, along with, as well as, in addition to' không làm thay đổi số của chủ ngữ chính. Khoảng thời gian, số tiền, khoảng cách coi như một khối ⇒ số ít. 'One of + danh từ số nhiều' ⇒ động từ số ít. Danh từ tập hợp (team, staff, government): Anh–Mỹ thường chia số ít, Anh–Anh dùng được cả hai.",
+      "cachGhep": [
+        "A number of + N số nhiều + have / are / were…",
+        "The number of + N số nhiều + has / is / was…",
+        "Either / Neither + A + or / nor + B + V chia theo B",
+        "A, + together with / along with / as well as + B, + V chia theo A",
+        "Số tiền / thời gian / khoảng cách + V số ít: Ten kilometres is a long way.",
+        "One of + N số nhiều + V số ít"
+      ],
+      "viDu": [
+        {
+          "c": "A number of students have complained about the new timetable.",
+          "v": "Một số sinh viên đã phàn nàn về thời khoá biểu mới."
+        },
+        {
+          "c": "The number of students applying has fallen this year.",
+          "v": "Số sinh viên nộp đơn năm nay đã giảm."
+        },
+        {
+          "c": "Neither the manager nor his assistants were available.",
+          "v": "Cả người quản lý lẫn các trợ lý của ông ấy đều không có mặt."
+        },
+        {
+          "c": "The CEO, together with two directors, is attending the conference.",
+          "v": "Tổng giám đốc, cùng với hai giám đốc, sẽ dự hội nghị."
+        },
+        {
+          "c": "Five hundred dollars is too much for a pair of shoes.",
+          "v": "Năm trăm đô la là quá đắt cho một đôi giày."
+        }
+      ],
+      "luuY": [
+        "Tiếng Việt không chia động từ nên người học hay chia theo danh từ đứng gần nhất: 'The number of accidents HAVE risen' ✗ → 'HAS risen' (chủ ngữ chính là 'the number').",
+        "'together with / as well as' KHÔNG phải 'and': 'Lan and her brother ARE…' nhưng 'Lan, as well as her brother, IS…'.",
+        "'one of my friends LIVES…' — động từ theo 'one', không theo 'friends'.",
+        "Khác 'both… and / either… or / neither… nor' ở B1 (en-b1-both-either-neither): ở đó học nghĩa và cách ghép; ở đây là quy tắc chia động từ theo chủ ngữ gần trong văn viết chuẩn. Khi nói, người bản ngữ đôi khi chia lỏng hơn."
+      ],
+      "soSanh": [
+        "en-b1-both-either-neither",
+        "en-b1-quantifiers",
+        "en-b2-uncountable-advanced",
+        "en-c1-it-there-advanced"
+      ],
+      "tuKhoa": [
+        "a number of",
+        "the number of",
+        "neither nor",
+        "together with",
+        "as well as",
+        "hoà hợp chủ vị",
+        "hoa hop chu vi",
+        "subject verb agreement",
+        "chia động từ"
+      ],
+      "quiz": [
+        {
+          "h": "The number of road accidents ___ fallen since the new law was introduced.",
+          "lc": [
+            "were",
+            "has",
+            "are",
+            "have"
+          ],
+          "da": 1,
+          "gt": "Chủ ngữ chính là 'The number' (con số) ⇒ số ít: has fallen. 'have' là chia nhầm theo 'accidents'; 'are' / 'were' không tạo được hiện tại hoàn thành với 'fallen' theo nghĩa này."
+        },
+        {
+          "h": "A number of residents ___ signed the petition already.",
+          "lc": [
+            "is",
+            "was",
+            "have",
+            "has"
+          ],
+          "da": 2,
+          "gt": "A number of + danh từ số nhiều = nhiều / một số ⇒ động từ số nhiều: have signed. 'has' là số ít; 'is' / 'was' sẽ thành bị động, sai nghĩa."
+        },
+        {
+          "h": "Trong văn viết chuẩn: 'The minister, along with her advisers, ___ expected to arrive at noon.'",
+          "lc": [
+            "are",
+            "were",
+            "be",
+            "is"
+          ],
+          "da": 3,
+          "gt": "Cụm 'along with her advisers' chỉ là phần chen vào; chủ ngữ chính là 'The minister' (số ít) ⇒ is. Chia số nhiều là chia nhầm theo 'advisers'; 'be' không chia được ở đây."
+        }
+      ]
+    },
+    {
+      "id": "en-c1-articles-advanced",
+      "nhom": "Cấu trúc câu",
+      "tieuDe": "Mạo từ nâng cao: tên riêng, cơ quan, zero article (in hospital / at sea)",
+      "mau": "the + sông / biển / dãy núi / tên có of / tên số nhiều · Ø + nước / thành phố / núi đơn / hồ · Ø + school / prison / hospital / bed / sea (đúng chức năng) · a + Mr / Ms + tên",
+      "nghia": "khi nào tên riêng có the · khi nào danh từ chỉ nơi chốn không cần mạo từ",
+      "giaiThich": "Ba nhóm quy tắc. (1) TÊN RIÊNG: dùng the với sông, biển, đại dương, dãy núi, sa mạc, quần đảo, tên nước số nhiều hoặc có republic / kingdom / states (the Mekong, the Pacific, the Alps, the Philippines, the United Kingdom), và tên có 'of' (the University of Sydney). KHÔNG dùng mạo từ với phần lớn tên nước, thành phố, châu lục, núi đơn lẻ, hồ, đường phố (Vietnam, Mount Fuji, Lake Geneva, Oxford Street, Oxford University). (2) NƠI CHỐN DÙNG ĐÚNG CHỨC NĂNG: go to school / university / church / prison / bed, be in hospital (Anh–Anh), at sea, at work — không mạo từ; dùng the khi nói đến toà nhà, địa điểm cụ thể (went to the school to meet the teacher). (3) 'a / an + tên người' = một người nào đó tên là…; 'the + họ số nhiều' = cả gia đình (the Smiths).",
+      "cachGhep": [
+        "the + sông / biển / đại dương / dãy núi / sa mạc / quần đảo: the Mekong, the Alps",
+        "the + tên có of / tên nước số nhiều / có Kingdom, States, Republic",
+        "Ø + nước / thành phố / châu lục / núi đơn / hồ / đường phố: Mount Fuji, Lake Geneva",
+        "Ø + school / university / church / prison / bed / hospital (Anh–Anh) / sea / work khi dùng đúng chức năng",
+        "the + nơi chốn đó khi chỉ toà nhà / địa điểm cụ thể",
+        "a + Mr / Ms + tên (một ông / bà … nào đó) · the + họ số nhiều (cả gia đình)"
+      ],
+      "viDu": [
+        {
+          "c": "After the accident he spent three weeks in hospital.",
+          "v": "Sau vụ tai nạn, anh ấy nằm viện ba tuần."
+        },
+        {
+          "c": "I went to the hospital to visit my aunt.",
+          "v": "Tôi đến bệnh viện để thăm dì tôi."
+        },
+        {
+          "c": "They sailed down the Mekong and then across the Pacific.",
+          "v": "Họ đi thuyền xuôi dòng Mê Kông rồi vượt Thái Bình Dương."
+        },
+        {
+          "c": "The crew had been at sea for six months.",
+          "v": "Thuỷ thủ đoàn đã lênh đênh trên biển sáu tháng."
+        },
+        {
+          "c": "A Mr Tan phoned while you were out.",
+          "v": "Có một ông Tan nào đó gọi điện lúc anh ra ngoài."
+        }
+      ],
+      "luuY": [
+        "'in hospital' (đang là bệnh nhân) khác 'in / at the hospital' (có mặt ở toà nhà bệnh viện — đi thăm, đi làm). Anh–Mỹ thì nói 'in the hospital' cho cả bệnh nhân; với school, prison, church, bed cả hai giống nhau.",
+        "Tiếng Việt không có mạo từ nên dễ bỏ the trước tên sông, biển, dãy núi: 'the Red River', 'the Pacific', 'the Himalayas'.",
+        "'the University of Oxford' ↔ 'Oxford University': có 'of' thì có the; tên riêng đứng trước thì thường không.",
+        "Khác mạo từ nói chung chung (en-b2-articles-generic: the rich, the tiger) và quy tắc cơ bản (en-b1-articles): ở đây là thói quen cố định với tên riêng và danh từ chỉ cơ quan, cần nhớ theo nhóm."
+      ],
+      "soSanh": [
+        "en-b1-articles",
+        "en-b2-articles-generic",
+        "en-a1-the-co-ban",
+        "en-a1-a-an"
+      ],
+      "tuKhoa": [
+        "zero article",
+        "in hospital",
+        "at sea",
+        "the Mekong",
+        "mạo từ tên riêng",
+        "mao tu nang cao",
+        "không mạo từ",
+        "go to school",
+        "the với tên riêng"
+      ],
+      "quiz": [
+        {
+          "h": "The fishermen had been ___ for two weeks when the storm hit.",
+          "lc": [
+            "at sea",
+            "at the sea",
+            "in a sea",
+            "on sea"
+          ],
+          "da": 0,
+          "gt": "Cụm cố định không mạo từ: at sea = đang đi biển, lênh đênh trên biển. Thêm the / a hoặc đổi giới từ đều không còn là cụm này."
+        },
+        {
+          "h": "___ flows through ___ before reaching the sea.",
+          "lc": [
+            "The Mekong / the Vietnam",
+            "The Mekong / Vietnam",
+            "Mekong / the Vietnam",
+            "Mekong / Vietnam"
+          ],
+          "da": 1,
+          "gt": "Tên sông luôn có the (the Mekong); tên nước dạng số ít thông thường như Vietnam thì không có mạo từ."
+        },
+        {
+          "h": "Vì sao nói 'She went to THE school to speak to her son's teacher'?",
+          "lc": [
+            "Vì sau giới từ to luôn phải có the.",
+            "Vì danh từ đếm được số ít lúc nào cũng cần the.",
+            "Vì cô ấy đến toà nhà trường với tư cách khách, không phải để học.",
+            "Vì ngôi trường đó rất nổi tiếng."
+          ],
+          "da": 2,
+          "gt": "'go to school' (không mạo từ) = đi học, dùng đúng chức năng. Người mẹ đến địa điểm đó vì việc khác nên trường được coi là một toà nhà cụ thể ⇒ the school. Hai 'quy tắc' còn lại không tồn tại."
+        }
+      ]
+    }
+  ]
+}

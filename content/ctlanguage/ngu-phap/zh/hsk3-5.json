@@ -1,0 +1,356 @@
+{
+  "nn": "zh",
+  "cap": "HSK3",
+  "diem": [
+    {
+      "id": "zh-hsk3-dangran",
+      "nhom": "Phó từ",
+      "tieuDe": "当然",
+      "mau": "S + 当然 + V / trợ động từ · 当然，+ câu · 当然！",
+      "nghia": "đương nhiên, tất nhiên, dĩ nhiên",
+      "giaiThich": "当然 nói một việc là hợp lẽ, không có gì phải nghi ngờ. Nó đứng trước động từ hoặc trợ động từ (当然可以, 当然会), cũng có thể đứng đầu câu, có dấu phẩy theo sau. Khi trả lời, có thể chỉ nói 当然！ hoặc 当然 + động từ trong câu hỏi.",
+      "cachGhep": [
+        "S + 当然 + V / 会 / 可以 / 要 …: 我当然相信他, 当然可以",
+        "当然，+ câu: 当然，你也可以不同意",
+        "Trả lời ngắn: 当然！ / 当然来！",
+        "Phủ định: 当然 + 不 / 没 + V: 当然不知道"
+      ],
+      "viDu": [
+        {
+          "c": "你能帮我一下吗？——当然可以。",
+          "d": "Nǐ néng bāng wǒ yíxià ma? — Dāngrán kěyǐ.",
+          "v": "Bạn giúp tôi một chút được không? — Tất nhiên là được."
+        },
+        {
+          "c": "他是我最好的朋友，我当然相信他。",
+          "d": "Tā shì wǒ zuì hǎo de péngyou, wǒ dāngrán xiāngxìn tā.",
+          "v": "Anh ấy là bạn thân nhất của tôi, đương nhiên tôi tin anh ấy."
+        },
+        {
+          "c": "你这么努力，成绩当然会提高。",
+          "d": "Nǐ zhème nǔlì, chéngjì dāngrán huì tígāo.",
+          "v": "Bạn chăm chỉ thế này, thành tích tất nhiên sẽ tiến bộ."
+        },
+        {
+          "c": "当然，你也可以不同意。",
+          "d": "Dāngrán, nǐ yě kěyǐ bù tóngyì.",
+          "v": "Dĩ nhiên, bạn cũng có thể không đồng ý."
+        }
+      ],
+      "luuY": [
+        "当然 đứng trước động từ, không đặt cuối câu như 'tất nhiên rồi' của tiếng Việt: 我相信他当然 ✗ → 我当然相信他 ✓.",
+        "Phủ định đặt SAU 当然: 当然不去 ✓, 不当然去 ✗.",
+        "Khác 一定: 一定 là 'chắc chắn, nhất định' (lời hứa, quyết tâm, phán đoán: 我一定来); 当然 là 'lẽ dĩ nhiên là thế'. Khác 也许: 也许 là 'có lẽ', không chắc."
+      ],
+      "soSanh": [
+        "zh-hsk4-yexu"
+      ],
+      "tuKhoa": [
+        "dangran",
+        "dang ran",
+        "đương nhiên",
+        "tất nhiên",
+        "dĩ nhiên"
+      ],
+      "quiz": [
+        {
+          "h": "A：我可以用一下你的笔吗？ B：（　）可以。",
+          "lc": [
+            "根据",
+            "当然",
+            "特别",
+            "突然"
+          ],
+          "da": 1,
+          "gt": "Trả lời đồng ý một cách dứt khoát: 当然可以. 突然 là đột nhiên, 特别 là đặc biệt, 根据 là căn cứ vào, đều không hợp."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "我愿意去当然。",
+            "当然我的愿意去。",
+            "我当然愿意去。",
+            "我不当然愿意去。"
+          ],
+          "da": 2,
+          "gt": "当然 đứng sau chủ ngữ, trước động từ / trợ động từ (愿意)."
+        },
+        {
+          "h": "他当然不知道 nghĩa là gì?",
+          "lc": [
+            "anh ấy có lẽ biết",
+            "anh ấy đột nhiên không biết",
+            "anh ấy biết rất rõ",
+            "tất nhiên là anh ấy không biết"
+          ],
+          "da": 3,
+          "gt": "当然 + 不 + V: lẽ dĩ nhiên là không…"
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-turan",
+      "nhom": "Phó từ",
+      "tieuDe": "突然",
+      "mau": "S + 突然 + V · 突然，+ câu · S + 很 / 太 + 突然",
+      "nghia": "đột nhiên, bất ngờ, đột ngột",
+      "giaiThich": "突然 nói một việc xảy ra rất nhanh và không ai ngờ tới. Làm phó từ, nó đứng trước động từ hoặc đầu câu: 突然下雨了. Nó còn là tính từ nên có thể làm vị ngữ, nhận 很 / 太: 这件事太突然了.",
+      "cachGhep": [
+        "S + 突然 + V: 突然站起来, 突然哭了",
+        "突然 + câu: 突然有人叫我",
+        "Tính từ: 很突然, 太突然了, 突然的变化"
+      ],
+      "viDu": [
+        {
+          "c": "天突然下起雨来了。",
+          "d": "Tiān tūrán xià qǐ yǔ lái le.",
+          "v": "Trời đột nhiên đổ mưa."
+        },
+        {
+          "c": "我正在看书，突然有人叫我的名字。",
+          "d": "Wǒ zhèngzài kàn shū, tūrán yǒu rén jiào wǒ de míngzi.",
+          "v": "Tôi đang đọc sách thì bỗng có người gọi tên tôi."
+        },
+        {
+          "c": "这个变化太突然了。",
+          "d": "Zhège biànhuà tài tūrán le.",
+          "v": "Sự thay đổi này đột ngột quá."
+        },
+        {
+          "c": "他突然站起来，走出了教室。",
+          "d": "Tā tūrán zhàn qǐlái, zǒuchū le jiàoshì.",
+          "v": "Anh ấy đột nhiên đứng dậy, bước ra khỏi lớp học."
+        }
+      ],
+      "luuY": [
+        "突然 là tính từ nên nói được 很突然, 太突然了; từ gần nghĩa 忽然 chỉ là phó từ, chỉ đứng trước động từ: 很忽然 ✗.",
+        "Khác 马上: 马上 là 'ngay lập tức' (việc sắp làm: 我马上来); 突然 là 'bất ngờ' (việc xảy ra không báo trước).",
+        "Khác 偶然: 偶然 là 'tình cờ', không sắp đặt trước; 突然 là 'đột ngột', nhấn vào sự nhanh và bất ngờ."
+      ],
+      "soSanh": [
+        "zh-hsk3-mashang",
+        "zh-hsk5-ouran"
+      ],
+      "tuKhoa": [
+        "turan",
+        "tu ran",
+        "đột nhiên",
+        "bất ngờ",
+        "đột ngột",
+        "bỗng"
+      ],
+      "quiz": [
+        {
+          "h": "刚才天气还很好，（　）刮起大风来了。",
+          "lc": [
+            "突然",
+            "特别",
+            "当然",
+            "根据"
+          ],
+          "da": 0,
+          "gt": "Việc xảy ra nhanh, không ngờ tới → 突然. 当然 là tất nhiên, 根据 là căn cứ vào, 特别 là đặc biệt."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "他太突然了走得。",
+            "他走得太突然了。",
+            "他突然太走得了。",
+            "他走得突然太了。"
+          ],
+          "da": 1,
+          "gt": "突然 là tính từ, làm bổ ngữ sau 得 và nhận 太…了: 走得太突然了."
+        },
+        {
+          "h": "突然 nghĩa là gì?",
+          "lc": [
+            "đặc biệt hơn bình thường",
+            "thỉnh thoảng mới xảy ra",
+            "xảy ra nhanh, không ai ngờ tới",
+            "tất nhiên là thế"
+          ],
+          "da": 2,
+          "gt": "突然 = đột nhiên, bất ngờ."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-tebie",
+      "nhom": "Phó từ",
+      "tieuDe": "特别",
+      "mau": "S + 特别 + Adj / V · S + 很特别 · …，特别是 + N",
+      "nghia": "rất, đặc biệt (là); (tính từ) đặc biệt, khác thường",
+      "giaiThich": "特别 có ba cách dùng. (1) Phó từ mức độ, đứng trước tính từ hoặc động từ chỉ tâm lý: 特别冷, 特别喜欢 (rất, cực kỳ). (2) Tính từ 'đặc biệt, khác thường': 很特别, 特别的礼物. (3) 特别是 + danh từ: 'nhất là, đặc biệt là', nêu một thứ nổi bật trong những thứ vừa nói.",
+      "cachGhep": [
+        "特别 + Adj: 特别冷, 特别好吃",
+        "特别 + 喜欢 / 想 / 爱 + …: 特别喜欢游泳",
+        "Tính từ: 很特别, 特别的 + N",
+        "Câu chung，特别是 + N: 我喜欢水果，特别是西瓜"
+      ],
+      "viDu": [
+        {
+          "c": "今天特别冷，你多穿点儿衣服。",
+          "d": "Jīntiān tèbié lěng, nǐ duō chuān diǎnr yīfu.",
+          "v": "Hôm nay rất lạnh, bạn mặc thêm áo vào."
+        },
+        {
+          "c": "我特别喜欢吃妈妈做的菜。",
+          "d": "Wǒ tèbié xǐhuan chī māma zuò de cài.",
+          "v": "Tôi cực kỳ thích ăn món mẹ nấu."
+        },
+        {
+          "c": "她的名字很特别，我一下子就记住了。",
+          "d": "Tā de míngzi hěn tèbié, wǒ yíxiàzi jiù jìzhù le.",
+          "v": "Tên cô ấy rất đặc biệt, tôi nhớ ngay lập tức."
+        },
+        {
+          "c": "我喜欢运动，特别是游泳。",
+          "d": "Wǒ xǐhuan yùndòng, tèbié shì yóuyǒng.",
+          "v": "Tôi thích thể thao, nhất là bơi lội."
+        }
+      ],
+      "luuY": [
+        "Khi 特别 là phó từ mức độ thì không thêm 很: 很特别冷 ✗ → 特别冷 ✓. Khi là tính từ thì thêm được: 很特别 ✓.",
+        "Khác 非常: 非常 chỉ là phó từ (非常冷); không nói 很非常, cũng không dùng 非常是 để nêu ví dụ nổi bật.",
+        "特别是 đứng sau phần nói chung và trước một danh từ: 特别是我喜欢游泳 ✗ → 我喜欢运动，特别是游泳 ✓."
+      ],
+      "soSanh": [
+        "zh-hsk2-zhen-feichang-ting",
+        "zh-hsk4-youqi",
+        "zh-hsk5-xiangdang-jiqi-gewai"
+      ],
+      "tuKhoa": [
+        "tebie",
+        "te bie",
+        "tebie shi",
+        "đặc biệt",
+        "rất",
+        "nhất là"
+      ],
+      "quiz": [
+        {
+          "h": "这个地方的夏天（　）热。",
+          "lc": [
+            "根据",
+            "特别",
+            "一点儿",
+            "极了"
+          ],
+          "da": 1,
+          "gt": "Trước tính từ dùng phó từ mức độ 特别. 极了 và 一点儿 phải đứng SAU tính từ; 根据 là giới từ."
+        },
+        {
+          "h": "Trong câu nào 特别 là tính từ (đặc biệt, khác thường)?",
+          "lc": [
+            "今天特别忙。",
+            "我特别想家。",
+            "这件衣服的颜色很特别。",
+            "他跑得特别快。"
+          ],
+          "da": 2,
+          "gt": "Sau 很 và làm vị ngữ, 特别 là tính từ. Ở các câu còn lại nó đứng trước tính từ / động từ, là phó từ mức độ."
+        },
+        {
+          "h": "我喜欢吃水果，（　）西瓜。",
+          "lc": [
+            "特别地",
+            "很特别",
+            "特别的",
+            "特别是"
+          ],
+          "da": 3,
+          "gt": "Nêu một thứ nổi bật trong những thứ vừa nói: 特别是 + danh từ."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-genju",
+      "nhom": "Giới từ",
+      "tieuDe": "根据",
+      "mau": "根据 + N，S + V · S + 根据 + N + V · 有 / 没有 + 根据",
+      "nghia": "căn cứ vào ~, dựa theo ~; (danh từ) căn cứ, cơ sở",
+      "giaiThich": "Giới từ 根据 nêu cái được lấy làm cơ sở để làm việc gì hay rút ra kết luận: 根据老师的要求 (theo yêu cầu của thầy cô). Cụm 根据… đứng đầu câu hoặc sau chủ ngữ, luôn trước động từ. 根据 còn là danh từ: 有根据 (có căn cứ), 没有根据 (không có cơ sở).",
+      "cachGhep": [
+        "根据 + N，S + V: 根据老师的要求，我们…",
+        "S + 根据 + N + V: 请根据地图找…",
+        "Danh từ: 有 / 没有 + 根据: 你有什么根据？"
+      ],
+      "viDu": [
+        {
+          "c": "根据老师的要求，我们每天要写一百个汉字。",
+          "d": "Gēnjù lǎoshī de yāoqiú, wǒmen měi tiān yào xiě yìbǎi gè Hànzì.",
+          "v": "Theo yêu cầu của thầy cô, mỗi ngày chúng tôi phải viết một trăm chữ Hán."
+        },
+        {
+          "c": "请根据这张地图找到我们的学校。",
+          "d": "Qǐng gēnjù zhè zhāng dìtú zhǎodào wǒmen de xuéxiào.",
+          "v": "Hãy dựa theo tấm bản đồ này để tìm trường của chúng tôi."
+        },
+        {
+          "c": "根据我的了解，他不是这样的人。",
+          "d": "Gēnjù wǒ de liǎojiě, tā bú shì zhèyàng de rén.",
+          "v": "Theo những gì tôi biết, anh ấy không phải người như vậy."
+        },
+        {
+          "c": "你这样说有什么根据？",
+          "d": "Nǐ zhèyàng shuō yǒu shénme gēnjù?",
+          "v": "Bạn nói vậy thì có căn cứ gì?"
+        }
+      ],
+      "luuY": [
+        "Cụm 根据… đứng trước động từ, không đặt cuối câu: 我们写汉字根据老师的要求 ✗.",
+        "Sau 根据 là danh từ hoặc cụm danh từ (根据他的话), không phải một câu trọn vẹn: 根据他说 ✗ → 根据他说的话 ✓.",
+        "Khác 按照: 按照 là làm ĐÚNG THEO một quy định, trình tự có sẵn; 根据 là lấy làm cơ sở để quyết định hoặc kết luận. Khác 凭: 凭 nhấn cái mình có trong tay để làm được việc (凭学生证买票)."
+      ],
+      "soSanh": [
+        "zh-hsk4-anzhao",
+        "zh-hsk5-ping",
+        "zh-hsk6-yiju"
+      ],
+      "tuKhoa": [
+        "genju",
+        "gen ju",
+        "căn cứ",
+        "dựa theo",
+        "theo",
+        "cơ sở"
+      ],
+      "quiz": [
+        {
+          "h": "（　）同学们的要求，老师决定明天不考试。",
+          "lc": [
+            "突然",
+            "特别",
+            "当然",
+            "根据"
+          ],
+          "da": 3,
+          "gt": "Nêu cơ sở của quyết định → 根据 + cụm danh từ. Ba từ còn lại là phó từ, không dẫn được cụm danh từ làm căn cứ."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "根据他的成绩，老师让他参加比赛。",
+            "根据老师让他参加比赛他的成绩。",
+            "他的成绩根据，老师让他参加比赛。",
+            "老师让他参加比赛根据他的成绩。"
+          ],
+          "da": 0,
+          "gt": "根据 + cụm danh từ đứng đầu câu, trước vế chính."
+        },
+        {
+          "h": "Trong câu 你的话没有根据, 根据 là từ loại gì?",
+          "lc": [
+            "giới từ: căn cứ vào",
+            "danh từ: căn cứ, cơ sở",
+            "lượng từ",
+            "phó từ: tất nhiên"
+          ],
+          "da": 1,
+          "gt": "Sau 没有, 根据 là danh từ: 'lời bạn nói không có căn cứ'."
+        }
+      ]
+    }
+  ]
+}

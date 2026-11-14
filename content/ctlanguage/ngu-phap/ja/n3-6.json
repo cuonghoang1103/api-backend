@@ -1,0 +1,915 @@
+{
+  "nn": "ja",
+  "cap": "N3",
+  "diem": [
+    {
+      "id": "ja-n3-you-to-suru",
+      "nhom": "Động từ ghép",
+      "tieuDe": "〜(よ)うとする",
+      "mau": "V thể ý chí（〜よう／〜おう）+ とする",
+      "nghia": "cố gắng làm ~; định / sắp làm ~ (thì…); (phủ định) không chịu ~",
+      "giaiThich": "Có ba cách dùng chính. (1) Cố gắng, thử làm một việc (thường là việc khó, có khi không thành): 思い出そうとした. (2) 〜(よ)うとしたとき／ところ: đúng lúc sắp làm thì có việc khác xảy ra. (3) 〜(よ)うとしない: người khác không có ý định, không chịu làm. Không dùng 〜(よ)うとしない để nói về chính mình.",
+      "cachGhep": [
+        "V thể ý chí + とする: 開けようとする ・ 運ぼうとする",
+        "V thể ý chí + としたとき、〜: 出かけようとしたとき",
+        "V thể ý chí + としない (người khác): 食べようとしない"
+      ],
+      "viDu": [
+        {
+          "c": "弟は一人で重い箱を運ぼうとしている。",
+          "d": "おとうとは ひとりで おもい はこを はこぼうと している。",
+          "v": "Em trai tôi đang cố một mình bê chiếc hộp nặng."
+        },
+        {
+          "c": "出かけようとしたとき、電話が鳴った。",
+          "d": "でかけようと した とき、でんわが なった。",
+          "v": "Đúng lúc tôi định ra ngoài thì điện thoại reo."
+        },
+        {
+          "c": "名前を思い出そうとしたが、思い出せなかった。",
+          "d": "なまえを おもいだそうと したが、おもいだせなかった。",
+          "v": "Tôi đã cố nhớ lại cái tên nhưng không nhớ ra."
+        },
+        {
+          "c": "息子は野菜を食べようとしない。",
+          "d": "むすこは やさいを たべようと しない。",
+          "v": "Con trai tôi không chịu ăn rau."
+        }
+      ],
+      "luuY": [
+        "Phải dùng thể ý chí, không dùng thể từ điển: 開けるとする ✗ → 開けようとする.",
+        "Khác 〜(よ)うと思う: と思う chỉ là ý định trong đầu (\"tôi định…\"); とする là đã bắt tay vào làm hoặc ngay sát lúc làm.",
+        "Khác 〜ようにする: ようにする (V-る + ようにする) là cố gắng duy trì một thói quen (\"cố gắng để ý làm\"), không phải thử làm một lần."
+      ],
+      "soSanh": [
+        "ja-n4-you-to-omou",
+        "ja-n4-ikou-kei",
+        "ja-n4-you-ni-suru",
+        "ja-n4-te-miru"
+      ],
+      "tuKhoa": [
+        "you to suru",
+        "youtosuru",
+        "ou to suru",
+        "you to shinai",
+        "cố gắng",
+        "định làm",
+        "sắp làm",
+        "không chịu"
+      ],
+      "quiz": [
+        {
+          "h": "ドアを（　）としたが、かぎがかかっていた。",
+          "lc": [
+            "開けて",
+            "開けた",
+            "開けよう",
+            "開ける"
+          ],
+          "da": 2,
+          "gt": "Mẫu \"cố / định làm\" dùng thể ý chí + とする: 開けようとした. Thể từ điển, thể て, thể た không ghép với とする theo nghĩa này."
+        },
+        {
+          "h": "彼は自分の間違いを認めようと（　）。",
+          "lc": [
+            "いない",
+            "ならない",
+            "ない",
+            "しない"
+          ],
+          "da": 3,
+          "gt": "〜(よ)うとしない = \"không chịu, không có ý định làm\": 認めようとしない. Sau 〜ようと phải là động từ する (ở dạng phủ định), không phải なる, いる hay ない đứng một mình."
+        },
+        {
+          "h": "Câu nào có nghĩa \"Đúng lúc tôi định ra ngoài thì trời mưa\"?",
+          "lc": [
+            "出かけようとしたとき、雨が降ってきた。",
+            "出かけてみたとき、雨が降ってきた。",
+            "出かけるようにしたとき、雨が降ってきた。",
+            "出かけたいとき、雨が降ってきた。"
+          ],
+          "da": 0,
+          "gt": "〜(よ)うとしたとき = \"đúng lúc sắp làm\". ようにする là cố gắng duy trì thói quen; てみる là làm thử; たいとき là \"khi muốn\" — đều không diễn tả thời điểm ngay trước hành động."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-you-ni-iu",
+      "nhom": "Truyền đạt – trích dẫn",
+      "tieuDe": "〜ように言う／頼む／注意する",
+      "mau": "V-る／V-ない + ように + 言う／頼む／伝える／注意する",
+      "nghia": "bảo / nhờ / nhắc (ai) hãy ~ hoặc đừng ~ (tường thuật gián tiếp)",
+      "giaiThich": "Dùng để thuật lại gián tiếp một mệnh lệnh, yêu cầu, lời nhờ hay lời nhắc. Nội dung yêu cầu đổi về V-る (hãy làm) hoặc V-ない (đừng làm) rồi thêm ように. Người nhận yêu cầu đi với に. Hay dùng dạng bị động 〜ように言われた \"bị / được bảo là hãy…\".",
+      "cachGhep": [
+        "人 + に + V-る + ように + 言う: 早く寝るように言う",
+        "人 + に + V-ない + ように + 言う／注意する: 忘れないように言う",
+        "Nhờ vả: V-て + くれる + ように + 頼む: 来てくれるように頼む",
+        "Bị động: 〜ように言われる／注意される"
+      ],
+      "viDu": [
+        {
+          "c": "先生は学生に、宿題を忘れないように言った。",
+          "d": "せんせいは がくせいに、しゅくだいを わすれないように いった。",
+          "v": "Thầy giáo bảo học sinh đừng quên bài tập."
+        },
+        {
+          "c": "医者に、お酒をやめるように言われた。",
+          "d": "いしゃに、おさけを やめるように いわれた。",
+          "v": "Tôi bị bác sĩ bảo phải bỏ rượu."
+        },
+        {
+          "c": "友達に、駅まで迎えに来てくれるように頼んだ。",
+          "d": "ともだちに、えきまで むかえに きて くれるように たのんだ。",
+          "v": "Tôi đã nhờ bạn ra ga đón."
+        },
+        {
+          "c": "田中さんに、会議室に来るように伝えてください。",
+          "d": "たなかさんに、かいぎしつに くるように つたえて ください。",
+          "v": "Xin hãy nhắn anh Tanaka đến phòng họp."
+        }
+      ],
+      "luuY": [
+        "Trước ように là thể từ điển hoặc thể ない, không dùng thể て／thể mệnh lệnh: 寝てように ✗, 寝ろように ✗.",
+        "Khác 〜と言う: 「早く寝なさい」と言った là trích nguyên văn; 早く寝るように言った là thuật lại nội dung yêu cầu. と言う thuật lại mọi loại câu, còn ように言う chỉ dùng cho mệnh lệnh / yêu cầu.",
+        "Khác 〜ように (mục đích): 忘れないようにメモする = \"ghi lại để khỏi quên\" — sau ように là hành động của chính mình, không phải động từ nói năng."
+      ],
+      "soSanh": [
+        "ja-n4-you-ni-mokuteki",
+        "ja-n4-to-itte-imashita",
+        "ja-n5-to-iimasu",
+        "ja-n4-meirei-kinshi"
+      ],
+      "tuKhoa": [
+        "you ni iu",
+        "youniiu",
+        "you ni tanomu",
+        "you ni chuui suru",
+        "you ni iwareta",
+        "bảo",
+        "nhờ",
+        "nhắc",
+        "tường thuật gián tiếp"
+      ],
+      "quiz": [
+        {
+          "h": "母は私に、早く（　）ように言った。",
+          "lc": [
+            "寝ろ",
+            "寝る",
+            "寝た",
+            "寝て"
+          ],
+          "da": 1,
+          "gt": "Trước ように言う là thể từ điển (hoặc thể ない): 寝るように言った. Thể て, thể た, thể mệnh lệnh không đứng trước ように."
+        },
+        {
+          "h": "先生は「静かにしてください」と言いました。→ 先生に（　）言われました。",
+          "lc": [
+            "静かにしたように",
+            "静かにするようと",
+            "静かにするように",
+            "静かにしてように"
+          ],
+          "da": 2,
+          "gt": "Yêu cầu 〜てください đổi thành V-る + ように: 静かにするように言われた. Không dùng thể た, thể て, và sau よう là に chứ không phải と."
+        },
+        {
+          "h": "「医者にたばこをやめるように言われた」 — ai sẽ phải bỏ thuốc lá?",
+          "lc": [
+            "Bác sĩ",
+            "Một người thứ ba",
+            "Không ai cả",
+            "Tôi (người nói)"
+          ],
+          "da": 3,
+          "gt": "医者に〜ように言われた là bị động: tôi là người bị bác sĩ bảo, nên người phải bỏ thuốc là tôi. Bác sĩ (đi với に) là người đưa ra lời yêu cầu."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-mono-da",
+      "nhom": "わけ・はず・べき・こと",
+      "tieuDe": "〜ものだ (bản chất, hồi tưởng, cảm thán)",
+      "mau": "V-る／V-ない／Aい／Aな + な + ものだ ・ V-た + ものだ",
+      "nghia": "vốn là ~, lẽ thường là ~ ・ ngày xưa thường ~ ・ thật là ~",
+      "giaiThich": "Có ba cách dùng. (1) Bản chất, lẽ thường: nói điều mà nhìn chung ai / cái gì cũng như thế, hoặc điều theo lẽ thường nên làm (phủ định: 〜ものではない \"không nên\"). (2) V-た + ものだ: bồi hồi nhớ lại việc ngày xưa thường làm, hay đi với よく, 昔は, 子供のころ. (3) Cảm thán: bày tỏ cảm xúc sâu sắc, ngạc nhiên trước một sự thật (hay đi với 本当に, ずいぶん). Văn nói thành 〜もんだ.",
+      "cachGhep": [
+        "Bản chất: V-る／V-ない／Aい／Aな + な + ものだ: 人は失敗するものだ",
+        "Lẽ thường không nên: V-る + ものではない: 人の悪口を言うものではない",
+        "Hồi tưởng: V-た + ものだ: よく泳いだものだ",
+        "Cảm thán: thể thường + ものだ: 早いものだ"
+      ],
+      "viDu": [
+        {
+          "c": "人はだれでも失敗するものだ。",
+          "d": "ひとは だれでも しっぱいする ものだ。",
+          "v": "Con người ai cũng có lúc thất bại."
+        },
+        {
+          "c": "子供のころ、よくこの川で泳いだものだ。",
+          "d": "こどもの ころ、よく この かわで およいだ ものだ。",
+          "v": "Hồi nhỏ tôi thường bơi ở con sông này."
+        },
+        {
+          "c": "時間がたつのは本当に早いものだ。",
+          "d": "じかんが たつのは ほんとうに はやい ものだ。",
+          "v": "Thời gian trôi nhanh thật."
+        },
+        {
+          "c": "お年寄りには席をゆずるものだ。",
+          "d": "おとしよりには せきを ゆずる ものだ。",
+          "v": "Lẽ thường là phải nhường ghế cho người già."
+        }
+      ],
+      "luuY": [
+        "Chủ ngữ ở cách dùng (1) là chung chung (人, 子供, 学生…), không phải một người cụ thể: 田中さんは失敗するものだ ✗.",
+        "Hồi tưởng phải dùng V-た + ものだ và là việc lặp lại nhiều lần; việc chỉ làm một lần không dùng (去年一度富士山に登ったものだ ✗).",
+        "Khác 〜ことだ: ことだ là lời khuyên dành cho một người cụ thể (\"em nên…\"); ものだ là lẽ thường áp dụng cho mọi người. Khác 〜べきだ: べきだ là phán đoán \"nên / phải\" của người nói, mạnh và trực tiếp hơn."
+      ],
+      "soSanh": [
+        "ja-n3-koto-da",
+        "ja-n3-beki-da",
+        "ja-n3-mono-mon",
+        "ja-n2-to-iu-mono-da"
+      ],
+      "tuKhoa": [
+        "mono da",
+        "monoda",
+        "mon da",
+        "ta mono da",
+        "mono dewa nai",
+        "bản chất",
+        "lẽ thường",
+        "hồi tưởng",
+        "cảm thán"
+      ],
+      "quiz": [
+        {
+          "h": "学生のころは、よく友達と朝まで（　）ものだ。",
+          "lc": [
+            "話した",
+            "話して",
+            "話そう",
+            "話す"
+          ],
+          "da": 0,
+          "gt": "Có 学生のころ và よく nên đây là hồi tưởng thói quen xưa: V-た + ものだ → 話したものだ. 話すものだ là nói lẽ thường ở hiện tại nên không hợp; thể て và thể ý chí không ghép với ものだ."
+        },
+        {
+          "h": "「赤ちゃんは泣くものだ」 có nghĩa là gì?",
+          "lc": [
+            "Hãy để em bé khóc",
+            "Em bé thì vốn hay khóc (đó là lẽ thường)",
+            "Em bé đang khóc",
+            "Ngày xưa em bé hay khóc"
+          ],
+          "da": 1,
+          "gt": "V-る + ものだ với chủ ngữ chung (赤ちゃん) nêu bản chất, lẽ thường. Nó không tả việc đang diễn ra, không phải hồi tưởng (cần V-た) và không phải mệnh lệnh."
+        },
+        {
+          "h": "Câu nào là hồi tưởng về việc ngày xưa thường làm?",
+          "lc": [
+            "年を取ると、体が弱くなるものだ。",
+            "月日がたつのは早いものだ。",
+            "昔はよく父と釣りに行ったものだ。",
+            "人の物を勝手に使うものではない。"
+          ],
+          "da": 2,
+          "gt": "Hồi tưởng dùng V-た + ものだ (行ったものだ) cùng 昔は, よく. Câu về tuổi già nêu lẽ thường; 〜ものではない là \"không nên\"; 早いものだ là cảm thán."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-muke-muki",
+      "nhom": "Trợ từ ghép (に〜 / を〜)",
+      "tieuDe": "〜向け／〜向き",
+      "mau": "N + 向け（に／の／だ） ・ N + 向き（に／の／だ）",
+      "nghia": "向け: dành cho ~ (làm ra nhằm vào đối tượng đó) ・ 向き: hợp với ~",
+      "giaiThich": "〜向け: sản phẩm, dịch vụ được làm ra với đối tượng nhắm tới là N (có chủ đích). 〜向き: tính chất của sự vật vừa hay phù hợp với N (không nhất thiết làm ra cho N). 向き còn chỉ phương hướng (南向きの部屋 = phòng hướng nam); phủ định \"không hợp\" là 〜向きではない／〜に不向きだ.",
+      "cachGhep": [
+        "N + 向けに + V: 子供向けに書かれた本",
+        "N + 向けの + N: 海外向けの製品",
+        "N + 向きだ／向きの + N: 子供向きだ ・ 初心者向きのコース",
+        "Hướng: 南向き ・ 東向き"
+      ],
+      "viDu": [
+        {
+          "c": "これは子供向けに書かれた本です。",
+          "d": "これは こどもむけに かかれた ほんです。",
+          "v": "Đây là cuốn sách được viết dành cho trẻ em."
+        },
+        {
+          "c": "この会社は海外向けの製品を作っている。",
+          "d": "この かいしゃは かいがいむけの せいひんを つくっている。",
+          "v": "Công ty này sản xuất sản phẩm dành cho thị trường nước ngoài."
+        },
+        {
+          "c": "この料理は辛くないので、子供向きだ。",
+          "d": "この りょうりは からくないので、こどもむきだ。",
+          "v": "Món này không cay nên hợp với trẻ em."
+        },
+        {
+          "c": "このアパートは一人暮らし向きです。",
+          "d": "この アパートは ひとりぐらしむきです。",
+          "v": "Căn hộ này hợp với người sống một mình."
+        }
+      ],
+      "luuY": [
+        "Gắn thẳng sau danh từ, không thêm trợ từ: 子供に向けの本 ✗ → 子供向けの本.",
+        "Khác nhau: 向け = \"nhắm tới\" (ý đồ của người làm ra); 向き = \"phù hợp\" (tính chất của vật). Người Việt hay lẫn vì đều dịch \"cho / dành cho\".",
+        "Khác 〜にとって: にとって nêu lập trường để đánh giá (\"đối với tôi thì khó\"), không nói về đối tượng nhắm tới hay sự phù hợp."
+      ],
+      "soSanh": [
+        "ja-n3-ni-totte",
+        "ja-n3-ni-taishite",
+        "ja-n4-tame-ni-mokuteki"
+      ],
+      "tuKhoa": [
+        "muke",
+        "muki",
+        "kodomo muke",
+        "kodomo muki",
+        "dành cho",
+        "hợp với",
+        "nhắm tới",
+        "hướng"
+      ],
+      "quiz": [
+        {
+          "h": "これは外国人（　）に作られた日本語の辞書だ。",
+          "lc": [
+            "向く",
+            "向こう",
+            "向け",
+            "向かい"
+          ],
+          "da": 2,
+          "gt": "N + 向けに + V: \"được làm ra dành cho người nước ngoài\". 向かい là \"phía đối diện\", 向こう là \"bên kia\", 向く là động từ \"quay về phía\" — không gắn sau danh từ theo nghĩa này."
+        },
+        {
+          "h": "「子供向け」 và 「子供向き」 khác nhau thế nào?",
+          "lc": [
+            "向け chỉ dùng cho người lớn, 向き chỉ dùng cho trẻ em",
+            "Hai từ hoàn toàn giống nhau trong mọi trường hợp",
+            "向け: hợp với trẻ em; 向き: cấm trẻ em",
+            "向け: làm ra nhằm cho trẻ em; 向き: hợp với trẻ em"
+          ],
+          "da": 3,
+          "gt": "向け nói ý đồ của người làm ra (nhắm tới đối tượng); 向き nói tính chất phù hợp với đối tượng. Vì vậy chúng không đồng nhất trong mọi trường hợp."
+        },
+        {
+          "h": "Cách ghép nào đúng?",
+          "lc": [
+            "初心者向けのコースを選んだ。",
+            "初心者向けなコースを選んだ。",
+            "初心者な向けのコースを選んだ。",
+            "初心者に向けのコースを選んだ。"
+          ],
+          "da": 0,
+          "gt": "向け gắn thẳng sau danh từ và bổ nghĩa danh từ bằng の: 初心者向けのコース. Không chen に／な, và không dùng な sau 向け."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-ue-de",
+      "nhom": "Thời điểm – trình tự",
+      "tieuDe": "〜上で (khi / để làm ~)",
+      "mau": "V-る + 上で ・ N + の + 上で",
+      "nghia": "khi ~, trong việc ~, để làm ~ (thì điều gì đó là cần / quan trọng)",
+      "giaiThich": "Nêu một việc, một quá trình rồi nói điều cần thiết, quan trọng, cần lưu ý hoặc khó khăn trong quá trình đó. Vế sau thường có 大切だ, 必要だ, 役に立つ, 注意する, 欠かせない, 困る. Hơi trang trọng. Lưu ý: V-た + 上で mang nghĩa khác — \"sau khi ~ rồi mới…\" — là mẫu của N2.",
+      "cachGhep": [
+        "V-る + 上で: 外国語を勉強する上で",
+        "N + の + 上で: 仕事の上で",
+        "Bổ nghĩa danh từ: V-る + 上での + N: 生活する上での注意"
+      ],
+      "viDu": [
+        {
+          "c": "外国語を勉強する上で、大切なことは何ですか。",
+          "d": "がいこくごを べんきょうする うえで、たいせつな ことは なんですか。",
+          "v": "Khi học ngoại ngữ, điều quan trọng là gì?"
+        },
+        {
+          "c": "日本で生活する上で、日本語は必要だ。",
+          "d": "にほんで せいかつする うえで、にほんごは ひつようだ。",
+          "v": "Để sinh sống ở Nhật, tiếng Nhật là cần thiết."
+        },
+        {
+          "c": "この経験は、将来仕事をする上で役に立つだろう。",
+          "d": "この けいけんは、しょうらい しごとを する うえで やくに たつだろう。",
+          "v": "Kinh nghiệm này chắc sẽ có ích khi đi làm sau này."
+        },
+        {
+          "c": "仕事の上で、困っていることはありませんか。",
+          "d": "しごとの うえで、こまっている ことは ありませんか。",
+          "v": "Trong công việc, anh chị có gặp khó khăn gì không?"
+        }
+      ],
+      "luuY": [
+        "Thể của động từ đổi nghĩa: V-る + 上で = \"khi / để làm ~\"; V-た + 上で = \"sau khi đã ~ rồi mới\" (相談した上で決めます). Đừng dùng lẫn.",
+        "Vế sau không phải hành động cụ thể xảy ra một lần mà là nhận xét về điều cần thiết, quan trọng: 勉強する上で、昨日本を買った ✗.",
+        "Khác 〜上に: 上に = \"hơn nữa, đã ~ lại còn ~\" (thêm thông tin); khác 〜のに (mục đích): のに dùng cho công dụng cụ thể trong đời thường (切るのに使う), còn 上で trang trọng hơn và nói về cả một quá trình."
+      ],
+      "soSanh": [
+        "ja-n2-ta-ue-de",
+        "ja-n2-ue-ni",
+        "ja-n2-jou-phuong-dien",
+        "ja-n4-no-ni-mokuteki"
+      ],
+      "tuKhoa": [
+        "ue de",
+        "uede",
+        "suru ue de",
+        "no ue de",
+        "khi làm",
+        "trong việc",
+        "để làm",
+        "quá trình"
+      ],
+      "quiz": [
+        {
+          "h": "車を運転する（　）、注意しなければならないことが多い。",
+          "lc": [
+            "くせに",
+            "とたんに",
+            "おかげで",
+            "上で"
+          ],
+          "da": 3,
+          "gt": "V-る + 上で = \"khi / trong việc lái xe\". くせに là \"mặc dù ~ thế mà\" (trách móc); とたんに đi sau V-た; おかげで là \"nhờ ~\" và cần kết quả tốt ở sau."
+        },
+        {
+          "h": "Câu nào 上で mang nghĩa \"sau khi ~ rồi mới\"?",
+          "lc": [
+            "家族と相談した上で、お返事します。",
+            "研究を進める上で、この本は欠かせない。",
+            "子供を育てる上で、いちばん大事なことは何だろう。",
+            "留学する上で、お金の準備は大切だ。"
+          ],
+          "da": 0,
+          "gt": "V-た + 上で (相談した上で) = \"sau khi bàn bạc rồi mới…\". Ba câu còn lại dùng V-る + 上で với nghĩa \"khi / trong việc ~\" và vế sau nêu điều quan trọng, cần thiết."
+        },
+        {
+          "h": "「留学する上で必要な書類」 có nghĩa là gì?",
+          "lc": [
+            "Giấy tờ đặt ở trên bàn du học",
+            "Giấy tờ cần thiết cho việc du học",
+            "Giấy tờ nhận được sau khi du học xong",
+            "Giấy tờ không cần cho việc du học"
+          ],
+          "da": 1,
+          "gt": "V-る + 上で = \"khi / để làm ~\", nên đây là giấy tờ cần cho việc du học. Nghĩa \"sau khi\" chỉ có ở V-た + 上で; 上 ở đây cũng không phải vị trí \"ở trên\"."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-hajimeru-owaru",
+      "nhom": "Động từ ghép",
+      "tieuDe": "〜始める／〜終わる",
+      "mau": "V-ます（bỏ ます）+ 始める ・ V-ます（bỏ ます）+ 終わる",
+      "nghia": "bắt đầu ~ ・ ~ xong",
+      "giaiThich": "〜始める: một hành động hay hiện tượng bắt đầu. 〜終わる: làm xong một việc có điểm kết thúc rõ ràng (đọc, viết, ăn, dùng…). Cả hai chia như động từ thường (降り始めた, 読み終わって). 〜終える cũng dùng được với nghĩa \"làm xong\", hơi trang trọng hơn.",
+      "cachGhep": [
+        "V gốc ます + 始める: 降り始める ・ 習い始める",
+        "V gốc ます + 終わる: 読み終わる ・ 食べ終わる",
+        "V gốc ます + 終える: 書き終える"
+      ],
+      "viDu": [
+        {
+          "c": "急に雨が降り始めた。",
+          "d": "きゅうに あめが ふりはじめた。",
+          "v": "Trời bỗng bắt đầu mưa."
+        },
+        {
+          "c": "先月から日本語を習い始めました。",
+          "d": "せんげつから にほんごを ならいはじめました。",
+          "v": "Tôi bắt đầu học tiếng Nhật từ tháng trước."
+        },
+        {
+          "c": "この本は昨日読み終わりました。",
+          "d": "この ほんは きのう よみおわりました。",
+          "v": "Cuốn sách này tôi đã đọc xong hôm qua."
+        },
+        {
+          "c": "食べ終わったら、お皿を台所に持ってきてください。",
+          "d": "たべおわったら、おさらを だいどころに もって きて ください。",
+          "v": "Ăn xong thì hãy mang đĩa vào bếp."
+        }
+      ],
+      "luuY": [
+        "Ghép với gốc ます, không phải thể て／thể từ điển: 降って始める ✗, 読む終わる ✗.",
+        "〜終わる không dùng cho hiện tượng tự nhiên hay việc không có ý chí: 雨が降り終わった ✗ → 雨がやんだ.",
+        "Khác 〜出す: 出す là bắt đầu ĐỘT NGỘT, bất ngờ (急に泣き出した) và không dùng với ý chí, lời rủ (食べ出しましょう ✗); 始める trung tính, dùng được với ý chí (食べ始めましょう)."
+      ],
+      "soSanh": [
+        "ja-n3-dasu",
+        "ja-n3-tsuzukeru",
+        "ja-n3-kiru",
+        "ja-n3-kake"
+      ],
+      "tuKhoa": [
+        "hajimeru",
+        "owaru",
+        "oeru",
+        "furi hajimeru",
+        "yomi owaru",
+        "bắt đầu",
+        "xong",
+        "động từ ghép"
+      ],
+      "quiz": [
+        {
+          "h": "桜の花が（　）始めた。",
+          "lc": [
+            "咲いて",
+            "咲く",
+            "咲いた",
+            "咲き"
+          ],
+          "da": 3,
+          "gt": "始める ghép với gốc thể ます: 咲き始めた. Thể từ điển, thể て, thể た không ghép được."
+        },
+        {
+          "h": "レポートを書き（　）、すぐ先生に出した。",
+          "lc": [
+            "終わって",
+            "終わりて",
+            "終わんで",
+            "終わるて"
+          ],
+          "da": 0,
+          "gt": "終わる là động từ nhóm 1 đuôi る nên thể て là 終わって: 書き終わって. Các dạng còn lại sai cách chia."
+        },
+        {
+          "h": "Câu nào KHÔNG tự nhiên?",
+          "lc": [
+            "薬を飲み始めた。",
+            "雨が降り終わった。",
+            "雨が降り始めた。",
+            "本を読み終わった。"
+          ],
+          "da": 1,
+          "gt": "〜終わる chỉ dùng cho việc có ý chí và có điểm kết thúc. Mưa là hiện tượng tự nhiên nên nói 雨がやんだ, không nói 降り終わった."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-tsuzukeru",
+      "nhom": "Động từ ghép",
+      "tieuDe": "〜続ける",
+      "mau": "V-ます（bỏ ます）+ 続ける",
+      "nghia": "tiếp tục ~, cứ ~ mãi",
+      "giaiThich": "Diễn tả một hành động hoặc thói quen được tiếp tục không ngừng trong một khoảng thời gian. Chia như động từ nhóm 2 (続けます, 続けて, 続けた). Riêng với 降る thường dùng tự động từ 続く: 雨が降り続く.",
+      "cachGhep": [
+        "V gốc ます + 続ける: 話し続ける ・ 走り続ける ・ 働き続ける",
+        "Ngoại lệ hay gặp: 降り続く (mưa, tuyết rơi mãi)"
+      ],
+      "viDu": [
+        {
+          "c": "彼は三時間も話し続けた。",
+          "d": "かれは さんじかんも はなしつづけた。",
+          "v": "Anh ấy đã nói liên tục suốt ba tiếng."
+        },
+        {
+          "c": "疲れたが、最後まで走り続けた。",
+          "d": "つかれたが、さいごまで はしりつづけた。",
+          "v": "Dù mệt nhưng tôi vẫn tiếp tục chạy đến cuối."
+        },
+        {
+          "c": "祖父は八十歳まで働き続けた。",
+          "d": "そふは はちじっさいまで はたらきつづけた。",
+          "v": "Ông tôi đã tiếp tục làm việc đến năm tám mươi tuổi."
+        },
+        {
+          "c": "一日中パソコンを使い続けると、目が疲れる。",
+          "d": "いちにちじゅう パソコンを つかいつづけると、めが つかれる。",
+          "v": "Dùng máy tính suốt cả ngày thì mắt sẽ mỏi."
+        },
+        {
+          "c": "朝から雨が降り続いている。",
+          "d": "あさから あめが ふりつづいている。",
+          "v": "Mưa rơi suốt từ sáng."
+        }
+      ],
+      "luuY": [
+        "Ghép với gốc ます: 歩く続ける ✗, 歩いて続ける ✗ → 歩き続ける.",
+        "Không dùng với động từ chỉ sự thay đổi tức thời (死ぬ, 結婚する, 始まる…): 死に続ける ✗.",
+        "Khác 〜っぱなし: っぱなし là để nguyên một trạng thái mà lẽ ra phải xử lý (つけっぱなし), mang ý chê; 続ける chỉ nói hành động được tiếp tục, trung tính. Khác 〜一方だ: 一方だ nói sự thay đổi cứ tiến theo một chiều (増える一方だ)."
+      ],
+      "soSanh": [
+        "ja-n3-hajimeru-owaru",
+        "ja-n3-ppanashi",
+        "ja-n3-ippou-da"
+      ],
+      "tuKhoa": [
+        "tsuzukeru",
+        "tsudzukeru",
+        "hanashi tsuzukeru",
+        "furi tsuzuku",
+        "tiếp tục",
+        "cứ mãi",
+        "động từ ghép"
+      ],
+      "quiz": [
+        {
+          "h": "子供は一時間も泣き（　）。",
+          "lc": [
+            "続きた",
+            "続けた",
+            "続いた",
+            "続けるた"
+          ],
+          "da": 1,
+          "gt": "Hành động của người tiếp diễn dùng V gốc ます + 続ける → 泣き続けた. 続く chỉ ghép trong vài từ như 降り続く; 続きた, 続けるた sai cách chia."
+        },
+        {
+          "h": "Cách ghép nào đúng?",
+          "lc": [
+            "駅まで歩く続けた。",
+            "駅まで歩いた続けた。",
+            "駅まで歩き続けた。",
+            "駅まで歩いて続けた。"
+          ],
+          "da": 2,
+          "gt": "続ける ghép với gốc thể ます: 歩き続けた. Không ghép với thể từ điển, thể て hay thể た."
+        },
+        {
+          "h": "「彼女を待ち続ける」 có nghĩa là gì?",
+          "lc": [
+            "Bắt đầu chờ cô ấy",
+            "Chờ cô ấy lại từ đầu",
+            "Chờ cô ấy xong rồi",
+            "Cứ tiếp tục chờ cô ấy"
+          ],
+          "da": 3,
+          "gt": "〜続ける = tiếp tục, cứ làm mãi. \"Bắt đầu\" là 〜始める, \"xong\" là 〜終わる, \"làm lại\" là 〜直す."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-naosu",
+      "nhom": "Động từ ghép",
+      "tieuDe": "〜直す",
+      "mau": "V-ます（bỏ ます）+ 直す",
+      "nghia": "làm ~ lại (cho đúng, cho tốt hơn)",
+      "giaiThich": "Diễn tả việc làm lại một lần nữa vì lần trước chưa tốt, chưa đúng hoặc chưa xong. Chỉ ghép với động từ có ý chí. Hay gặp: 書き直す, やり直す, 見直す, 考え直す, 作り直す, かけ直す, 読み直す, 言い直す. Chia như động từ nhóm 1 (直します, 直して).",
+      "cachGhep": [
+        "V gốc ます + 直す: 書き直す ・ やり直す ・ 考え直す",
+        "Danh từ hoá: 書き直し ・ やり直し ・ 見直し"
+      ],
+      "viDu": [
+        {
+          "c": "字が間違っていたので、書類を書き直した。",
+          "d": "じが まちがっていたので、しょるいを かきなおした。",
+          "v": "Vì viết sai chữ nên tôi đã viết lại giấy tờ."
+        },
+        {
+          "c": "今忙しいので、後で電話をかけ直します。",
+          "d": "いま いそがしいので、あとで でんわを かけなおします。",
+          "v": "Bây giờ tôi đang bận nên lát nữa sẽ gọi lại."
+        },
+        {
+          "c": "答えを出す前に、もう一度考え直してください。",
+          "d": "こたえを だす まえに、もういちど かんがえなおして ください。",
+          "v": "Trước khi đưa ra câu trả lời, hãy suy nghĩ lại một lần nữa."
+        },
+        {
+          "c": "失敗したら、最初からやり直せばいい。",
+          "d": "しっぱいしたら、さいしょから やりなおせば いい。",
+          "v": "Nếu thất bại thì làm lại từ đầu là được."
+        }
+      ],
+      "luuY": [
+        "Ghép với gốc ます: 書く直す ✗, 書いた直す ✗ → 書き直す.",
+        "直す là tha động từ; không dùng 直る trong mẫu này (書き直る ✗).",
+        "Khác もう一度〜する: もう一度読む chỉ là đọc thêm lần nữa; 読み直す hàm ý lần trước chưa ổn nên làm lại cho tốt. 見直す ngoài \"xem lại\" còn có nghĩa \"nhìn nhận lại (đánh giá cao hơn)\"."
+      ],
+      "soSanh": [
+        "ja-n3-hajimeru-owaru",
+        "ja-n3-tsuzukeru",
+        "ja-n3-kiru"
+      ],
+      "tuKhoa": [
+        "naosu",
+        "kaki naosu",
+        "yari naosu",
+        "kangae naosu",
+        "làm lại",
+        "viết lại",
+        "động từ ghép"
+      ],
+      "quiz": [
+        {
+          "h": "計算が合わないので、もう一度やり（　）。",
+          "lc": [
+            "直った",
+            "直すた",
+            "直りた",
+            "直した"
+          ],
+          "da": 3,
+          "gt": "Mẫu \"làm lại\" dùng tha động từ 直す → やり直した. 直る là tự động từ, không dùng trong mẫu này; 直りた, 直すた sai cách chia."
+        },
+        {
+          "h": "Cách ghép nào đúng?",
+          "lc": [
+            "レポートを書き直す。",
+            "レポートを書いた直す。",
+            "レポートを書く直す。",
+            "レポートを書き直る。"
+          ],
+          "da": 0,
+          "gt": "直す ghép với gốc thể ます: 書き直す. Không ghép với thể từ điển hay thể た, và không dùng 直る."
+        },
+        {
+          "h": "「考え直す」 có nghĩa là gì?",
+          "lc": [
+            "Cùng nhau suy nghĩ",
+            "Suy nghĩ lại",
+            "Suy nghĩ xong",
+            "Bắt đầu suy nghĩ"
+          ],
+          "da": 1,
+          "gt": "〜直す = làm lại. \"Bắt đầu\" là 〜始める, \"xong\" là 〜終わる, \"cùng nhau / lẫn nhau\" là 〜合う."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-au",
+      "nhom": "Động từ ghép",
+      "tieuDe": "〜合う",
+      "mau": "V-ます（bỏ ます）+ 合う",
+      "nghia": "~ lẫn nhau, cùng nhau ~",
+      "giaiThich": "Diễn tả hai hay nhiều người làm cùng một hành động hướng về nhau. Chủ ngữ là số nhiều (二人は, みんなで) hoặc có 〜と. Hay gặp: 話し合う, 助け合う, 知り合う, 教え合う, 分け合う, 見つめ合う, 励まし合う, 愛し合う. Chia như động từ nhóm 1 (合います, 合って). Danh từ hoá: 話し合い, 助け合い.",
+      "cachGhep": [
+        "V gốc ます + 合う: 話し合う ・ 助け合う ・ 知り合う",
+        "Người + と + V-合う: 友達と教え合う",
+        "Danh từ: 話し合い ・ 助け合い"
+      ],
+      "viDu": [
+        {
+          "c": "困ったときは、助け合いましょう。",
+          "d": "こまった ときは、たすけあいましょう。",
+          "v": "Khi gặp khó khăn, chúng ta hãy giúp đỡ lẫn nhau."
+        },
+        {
+          "c": "その問題について、家族で話し合った。",
+          "d": "その もんだいに ついて、かぞくで はなしあった。",
+          "v": "Cả nhà đã bàn bạc với nhau về vấn đề đó."
+        },
+        {
+          "c": "二人は大学で知り合った。",
+          "d": "ふたりは だいがくで しりあった。",
+          "v": "Hai người quen nhau ở đại học."
+        },
+        {
+          "c": "友達と分からないところを教え合っている。",
+          "d": "ともだちと わからない ところを おしえあっている。",
+          "v": "Tôi và bạn đang chỉ cho nhau những chỗ không hiểu."
+        }
+      ],
+      "luuY": [
+        "Ghép với gốc ます: 話す合う ✗, 話して合う ✗ → 話し合う.",
+        "Chủ ngữ phải từ hai người trở lên; một người không thể 助け合う.",
+        "Tiếng Việt nói \"nói chuyện với nhau\" nên dễ viết 一緒に話す; 話し合う mang nghĩa \"bàn bạc, trao đổi ý kiến\" chứ không chỉ là nói chuyện phiếm. Chú ý chữ 合う, không phải 会う (gặp)."
+      ],
+      "soSanh": [
+        "ja-n3-to-tomo-ni",
+        "ja-n5-to",
+        "ja-n3-komu"
+      ],
+      "tuKhoa": [
+        "hanashiau",
+        "hanashi au",
+        "tasuke au",
+        "shiri au",
+        "lẫn nhau",
+        "cùng nhau",
+        "động từ ghép"
+      ],
+      "quiz": [
+        {
+          "h": "二人は何も言わずに、長い間見つめ（　）いた。",
+          "lc": [
+            "合うて",
+            "合って",
+            "合んで",
+            "合いて"
+          ],
+          "da": 1,
+          "gt": "合う là động từ nhóm 1 đuôi う nên thể て là 合って: 見つめ合っていた. Các dạng còn lại sai cách chia."
+        },
+        {
+          "h": "「助け合う」 có nghĩa là gì?",
+          "lc": [
+            "Bắt đầu giúp",
+            "Giúp lại lần nữa",
+            "Giúp đỡ lẫn nhau",
+            "Giúp cho xong"
+          ],
+          "da": 2,
+          "gt": "〜合う = làm lẫn nhau. \"Lại lần nữa\" là 〜直す, \"bắt đầu\" là 〜始める, \"xong\" là 〜終わる."
+        },
+        {
+          "h": "Cách ghép nào đúng?",
+          "lc": [
+            "会議でみんなが意見を出して合った。",
+            "会議でみんなが意見を出す合った。",
+            "会議でみんなが意見を出した合った。",
+            "会議でみんなが意見を出し合った。"
+          ],
+          "da": 3,
+          "gt": "合う ghép với gốc thể ます: 出し合った. Không ghép với thể từ điển, thể て hay thể た."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-komu",
+      "nhom": "Động từ ghép",
+      "tieuDe": "〜込む",
+      "mau": "V-ます（bỏ ます）+ 込む",
+      "nghia": "~ vào trong; ~ thật kỹ / thật sâu / thật lâu",
+      "giaiThich": "Có hai nhóm nghĩa. (1) Di chuyển, đưa vào bên trong: 入り込む, 飛び込む, 書き込む, 持ち込む, 駆け込む, 吸い込む. (2) Làm một việc đến mức sâu, kỹ, hoặc ở trong trạng thái đó lâu: 考え込む, 話し込む, 思い込む, 信じ込む, 黙り込む, 寝込む. Chia như động từ nhóm 1 (込みます, 込んで). Nhiều từ đã thành từ vựng cố định.",
+      "cachGhep": [
+        "Vào trong: V gốc ます + 込む: 飛び込む ・ 書き込む ・ 持ち込む",
+        "Kỹ / sâu / lâu: V gốc ます + 込む: 考え込む ・ 思い込む ・ 話し込む"
+      ],
+      "viDu": [
+        {
+          "c": "子供たちはプールに飛び込んだ。",
+          "d": "こどもたちは プールに とびこんだ。",
+          "v": "Bọn trẻ nhảy ùm xuống hồ bơi."
+        },
+        {
+          "c": "この紙に名前と住所を書き込んでください。",
+          "d": "この かみに なまえと じゅうしょを かきこんで ください。",
+          "v": "Hãy điền tên và địa chỉ vào tờ giấy này."
+        },
+        {
+          "c": "彼は何か考え込んでいるようだ。",
+          "d": "かれは なにか かんがえこんでいる ようだ。",
+          "v": "Hình như anh ấy đang suy nghĩ rất lung điều gì đó."
+        },
+        {
+          "c": "私は彼が先生だと思い込んでいた。",
+          "d": "わたしは かれが せんせいだと おもいこんでいた。",
+          "v": "Tôi đã cứ đinh ninh anh ấy là giáo viên."
+        }
+      ],
+      "luuY": [
+        "Nơi được đưa vào đi với に: プールに飛び込む, 紙に書き込む.",
+        "Không tự ghép với động từ bất kỳ; học theo từng từ. Một số từ có nghĩa riêng: 申し込む (đăng ký), 落ち込む (suy sụp), 思い込む (đinh ninh — thường là hiểu sai).",
+        "Khác 〜出す: 出す là hướng RA ngoài hoặc bắt đầu đột ngột (飛び出す = lao ra); 込む là hướng VÀO trong (飛び込む = lao vào)."
+      ],
+      "soSanh": [
+        "ja-n3-dasu",
+        "ja-n3-kiru",
+        "ja-n3-au"
+      ],
+      "tuKhoa": [
+        "komu",
+        "tobi komu",
+        "kaki komu",
+        "omoi komu",
+        "kangae komu",
+        "vào trong",
+        "thật kỹ",
+        "động từ ghép"
+      ],
+      "quiz": [
+        {
+          "h": "電車のドアが閉まる前に、急いで駆け（　）。",
+          "lc": [
+            "込みた",
+            "込むた",
+            "込いた",
+            "込んだ"
+          ],
+          "da": 3,
+          "gt": "込む là động từ nhóm 1 đuôi む nên thể た là 込んだ: 駆け込んだ \"lao vào (tàu)\". Các dạng còn lại sai cách chia."
+        },
+        {
+          "h": "「思い込む」 có nghĩa là gì?",
+          "lc": [
+            "Tin chắc, đinh ninh (thường là hiểu sai)",
+            "Bắt đầu nghĩ",
+            "Cùng nhau nghĩ",
+            "Nghĩ lại lần nữa"
+          ],
+          "da": 0,
+          "gt": "思い込む = cứ tin chắc một điều (mà thực tế có thể không phải). \"Nghĩ lại\" là 考え直す; \"bắt đầu\" là 〜始める; \"cùng nhau\" là 〜合う."
+        },
+        {
+          "h": "Trong 「教室に食べ物を持ち込まないでください」, 込む thêm nghĩa gì?",
+          "lc": [
+            "Làm lại lần nữa",
+            "Đưa vào bên trong",
+            "Làm lẫn nhau",
+            "Tiếp tục làm"
+          ],
+          "da": 1,
+          "gt": "持ち込む = mang vào trong (lớp học). \"Làm lại\" là 〜直す, \"lẫn nhau\" là 〜合う, \"tiếp tục\" là 〜続ける."
+        }
+      ]
+    }
+  ]
+}

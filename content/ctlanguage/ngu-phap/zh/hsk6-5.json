@@ -1,0 +1,912 @@
+{
+  "nn": "zh",
+  "cap": "HSK6",
+  "diem": [
+    {
+      "id": "zh-hsk6-weidu",
+      "nhom": "Phó từ thời gian – phạm vi",
+      "tieuDe": "唯独",
+      "mau": "(别的 / 大家 + 都 …，) 唯独 + N / cụm giới từ + (不 / 没) + V",
+      "nghia": "chỉ riêng ~, duy chỉ có ~ (là ngoại lệ)",
+      "giaiThich": "Phó từ 唯独 tách một người hay một vật ra khỏi cả tập hợp và nói rằng riêng nó khác tất cả những cái còn lại. Vì vậy câu thường có hai vế đối nhau: vế trước nói cái chung (都, 什么都, 所有…), vế sau dùng 唯独 nêu ngoại lệ. Văn phong thiên về viết; khẩu ngữ hay nói 就 / 只有.",
+      "cachGhep": [
+        "… 都 …，唯独 + N + V: 大家都同意，唯独他反对",
+        "… 都 …，唯独 + 不 / 没 + V: 什么都吃，唯独不吃香菜",
+        "唯独 + 对 / 在 + N + …: 唯独对我很冷淡"
+      ],
+      "viDu": [
+        {
+          "c": "大家都同意了，唯独他一个人反对。",
+          "d": "Dàjiā dōu tóngyì le, wéidú tā yí gè rén fǎnduì.",
+          "v": "Mọi người đều đồng ý, chỉ riêng một mình anh ấy phản đối."
+        },
+        {
+          "c": "他什么都吃，唯独不吃香菜。",
+          "d": "Tā shénme dōu chī, wéidú bù chī xiāngcài.",
+          "v": "Anh ấy cái gì cũng ăn, duy chỉ không ăn rau mùi."
+        },
+        {
+          "c": "所有的灯都灭了，唯独书房的灯还亮着。",
+          "d": "Suǒyǒu de dēng dōu miè le, wéidú shūfáng de dēng hái liàngzhe.",
+          "v": "Tất cả đèn đều đã tắt, chỉ riêng đèn phòng sách vẫn sáng."
+        },
+        {
+          "c": "她对谁都很热情，唯独对我十分冷淡。",
+          "d": "Tā duì shéi dōu hěn rèqíng, wéidú duì wǒ shífēn lěngdàn.",
+          "v": "Cô ấy nhiệt tình với tất cả mọi người, chỉ riêng với tôi thì rất lạnh nhạt."
+        }
+      ],
+      "luuY": [
+        "Khác 只有: 只有 có thể chỉ nói số lượng ít (只有三个人) hoặc nêu điều kiện duy nhất (只有…才…); 唯独 luôn cần một tập hợp để đối chiếu và nêu NGOẠI LỆ của tập đó.",
+        "Khác 只 / 仅: 只, 仅 giới hạn phạm vi của hành động, không đòi hỏi vế đối chiếu; câu 我唯独吃了一个苹果 đứng một mình là không tự nhiên.",
+        "Khác 偏偏: 偏偏 nói sự việc trái với mong muốn, có giọng bực bội; 唯独 chỉ nêu ngoại lệ một cách khách quan.",
+        "唯 đọc wéi."
+      ],
+      "soSanh": [
+        "zh-hsk3-zhiyou-cai",
+        "zh-hsk4-guang-jin",
+        "zh-hsk6-pianpian",
+        "zh-hsk3-chule-yiwai"
+      ],
+      "tuKhoa": [
+        "weidu",
+        "wei du",
+        "chỉ riêng",
+        "duy chỉ",
+        "ngoại lệ"
+      ],
+      "quiz": [
+        {
+          "h": "全班同学都交了作业，（　）小李没交。",
+          "lc": [
+            "暂且",
+            "时而",
+            "越发",
+            "唯独"
+          ],
+          "da": 3,
+          "gt": "Cả lớp đều làm, riêng một người là ngoại lệ → 唯独. 暂且 là tạm thời, 时而 là lúc thì, 越发 là càng thêm."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "别的事我都记得，唯独这件事忘了。",
+            "别的事我都记得，这件事唯独了忘。",
+            "别的事唯独我都记得，这件事忘了。",
+            "唯独别的事我都记得，这件事忘了。"
+          ],
+          "da": 0,
+          "gt": "唯独 đứng trước thành phần là ngoại lệ (这件事), ở vế nêu điều khác với cái chung."
+        },
+        {
+          "h": "唯独 khác 只有…才… ở điểm nào?",
+          "lc": [
+            "唯独 chỉ dùng trong khẩu ngữ suồng sã",
+            "唯独 nêu ngoại lệ duy nhất trong một tập hợp; 只有…才… nêu điều kiện duy nhất để có kết quả",
+            "唯独 nêu điều kiện, 只有…才… nêu ngoại lệ",
+            "hai cách nói giống hệt nhau"
+          ],
+          "da": 1,
+          "gt": "唯独 = riêng cái này khác mọi cái còn lại; 只有…才… = phải có điều kiện này thì mới có kết quả kia."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-shier-shier",
+      "nhom": "Cấu trúc cố định",
+      "tieuDe": "时而…时而…",
+      "mau": "S + 时而 + V1 / Adj1，时而 + V2 / Adj2",
+      "nghia": "lúc thì ~ lúc thì ~, khi ~ khi ~",
+      "giaiThich": "Khung 时而 A 时而 B tả hai (hoặc nhiều) trạng thái, động tác thay nhau xuất hiện không theo quy luật trong một khoảng thời gian. Đây là cách nói văn viết, hay gặp trong văn miêu tả. 时而 dùng một mình nghĩa là 'đôi lúc, chốc chốc lại'.",
+      "cachGhep": [
+        "时而 + V1，时而 + V2: 时而微笑，时而皱眉",
+        "时而 + Adj1，时而 + Adj2: 时而高，时而低",
+        "Dùng đơn: 时而 + V: 窗外时而传来鸟叫声"
+      ],
+      "viDu": [
+        {
+          "c": "天气时而晴，时而阴，让人不知道该穿什么。",
+          "d": "Tiānqì shí'ér qíng, shí'ér yīn, ràng rén bù zhīdào gāi chuān shénme.",
+          "v": "Trời lúc nắng lúc âm u, khiến người ta không biết nên mặc gì."
+        },
+        {
+          "c": "她时而微笑，时而皱眉，好像在想什么心事。",
+          "d": "Tā shí'ér wēixiào, shí'ér zhòuméi, hǎoxiàng zài xiǎng shénme xīnshì.",
+          "v": "Cô ấy lúc thì mỉm cười, lúc lại cau mày, dường như đang nghĩ ngợi điều gì."
+        },
+        {
+          "c": "远处的歌声时而高，时而低。",
+          "d": "Yuǎnchù de gēshēng shí'ér gāo, shí'ér dī.",
+          "v": "Tiếng hát từ xa khi bổng khi trầm."
+        },
+        {
+          "c": "病人的情况时而好转，时而恶化，家人十分担心。",
+          "d": "Bìngrén de qíngkuàng shí'ér hǎozhuǎn, shí'ér èhuà, jiārén shífēn dānxīn.",
+          "v": "Tình trạng bệnh nhân lúc khá lên, lúc xấu đi, người nhà vô cùng lo lắng."
+        },
+        {
+          "c": "窗外时而传来几声鸟叫。",
+          "d": "Chuāngwài shí'ér chuánlái jǐ shēng niǎo jiào.",
+          "v": "Ngoài cửa sổ chốc chốc lại vọng vào vài tiếng chim."
+        }
+      ],
+      "luuY": [
+        "Khác 一会儿…一会儿…: cùng nghĩa nhưng là khẩu ngữ; 时而…时而… dùng trong văn viết, văn miêu tả.",
+        "Khác 一边…一边… và 又…又…: hai khung này nói hai việc, hai tính chất tồn tại CÙNG LÚC; 时而…时而… nói các trạng thái THAY NHAU, không đồng thời. 时而哭时而笑 ≠ 又哭又笑.",
+        "Hai vế nên cân xứng (cùng là động từ hoặc cùng là tính từ, số âm tiết gần bằng nhau)."
+      ],
+      "soSanh": [
+        "zh-hsk3-yibian-yibian",
+        "zh-hsk3-you-you",
+        "zh-hsk5-yimian"
+      ],
+      "tuKhoa": [
+        "shier shier",
+        "shi er",
+        "lúc thì lúc thì",
+        "khi thì",
+        "chốc chốc"
+      ],
+      "quiz": [
+        {
+          "h": "湖面上的小船时而向东，（　）向西。",
+          "lc": [
+            "暂且",
+            "颇",
+            "时而",
+            "唯独"
+          ],
+          "da": 2,
+          "gt": "Khung hô ứng 时而…时而…: lúc về đông, lúc về tây. 唯独, 暂且, 颇 không tạo cặp với 时而."
+        },
+        {
+          "h": "时而…时而… diễn tả điều gì?",
+          "lc": [
+            "phải chọn một trong hai",
+            "hai việc xảy ra cùng một lúc",
+            "việc này càng tăng thì việc kia càng tăng",
+            "các trạng thái thay nhau xuất hiện"
+          ],
+          "da": 3,
+          "gt": "时而 A 时而 B: lúc A lúc B, luân phiên chứ không đồng thời, cũng không phải lựa chọn."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "孩子时而哭，时而笑。",
+            "孩子哭时而，笑时而。",
+            "孩子时而哭时而。",
+            "时而孩子哭笑时而。"
+          ],
+          "da": 0,
+          "gt": "Mỗi 时而 đứng trước một động từ: 时而 + 哭，时而 + 笑."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-yu-yu",
+      "nhom": "Cấu trúc cố định",
+      "tieuDe": "愈…愈… / 愈加",
+      "mau": "S + 愈 + V / Adj + 愈 + Adj · S + 愈来愈 + Adj · S + 愈加 + Adj / V",
+      "nghia": "(văn viết) càng ~ càng ~; ngày càng ~, càng thêm ~",
+      "giaiThich": "愈 là dạng văn viết của 越. 愈 A 愈 B = 越 A 越 B (A tăng thì B tăng theo); 愈来愈 = 越来越 (mức độ tăng dần theo thời gian); 愈加 = 更加 / 越发 (so với trước thì hơn một bậc). Gặp trong sách báo, văn nghị luận, văn chương; nói chuyện hằng ngày vẫn dùng 越.",
+      "cachGhep": [
+        "愈 + V + 愈 + Adj: 雨愈下愈大",
+        "愈 + V1 + 愈 + V2: 愈想愈觉得不对",
+        "愈来愈 + Adj / động từ tâm lý: 愈来愈深",
+        "愈加 + Adj / V hai âm tiết: 愈加激烈, 愈加明显"
+      ],
+      "viDu": [
+        {
+          "c": "雨愈下愈大，我们只好找地方躲一躲。",
+          "d": "Yǔ yù xià yù dà, wǒmen zhǐhǎo zhǎo dìfang duǒ yi duǒ.",
+          "v": "Mưa càng lúc càng to, chúng tôi đành tìm chỗ trú tạm."
+        },
+        {
+          "c": "他愈想愈觉得这件事不对劲。",
+          "d": "Tā yù xiǎng yù juéde zhè jiàn shì bú duìjìn.",
+          "v": "Anh ấy càng nghĩ càng thấy chuyện này có gì đó không ổn."
+        },
+        {
+          "c": "随着年龄的增长，他对家乡的思念愈来愈深。",
+          "d": "Suízhe niánlíng de zēngzhǎng, tā duì jiāxiāng de sīniàn yùláiyù shēn.",
+          "v": "Tuổi càng cao, nỗi nhớ quê của ông càng sâu đậm."
+        },
+        {
+          "c": "竞争愈加激烈，企业必须不断创新。",
+          "d": "Jìngzhēng yùjiā jīliè, qǐyè bìxū búduàn chuàngxīn.",
+          "v": "Cạnh tranh ngày càng gay gắt, doanh nghiệp buộc phải không ngừng đổi mới."
+        }
+      ],
+      "luuY": [
+        "Cũng như 越…越…, sau 愈 thứ hai không thêm phó từ mức độ: 愈来愈很深 ✗.",
+        "Khác 越…越… / 越来越: nghĩa hoàn toàn như nhau, chỉ khác phong cách — 愈 là văn viết, trang trọng.",
+        "Khác 更加: 更加 so sánh được hai đối tượng khác nhau (他比我更加努力); 愈加, 越发 chỉ so một đối tượng với chính nó trước đó.",
+        "Chữ 愈 trong 痊愈 (khỏi bệnh) là động từ, không liên quan tới khung này."
+      ],
+      "soSanh": [
+        "zh-hsk3-yue-yue",
+        "zh-hsk3-yuelaiyue",
+        "zh-hsk6-yuefa",
+        "zh-hsk3-geng"
+      ],
+      "tuKhoa": [
+        "yu yu",
+        "yujia",
+        "yulaiyu",
+        "càng càng",
+        "ngày càng",
+        "văn viết"
+      ],
+      "quiz": [
+        {
+          "h": "事情愈闹（　）大，最后连校长都知道了。",
+          "lc": [
+            "愈",
+            "颇",
+            "时而",
+            "更"
+          ],
+          "da": 0,
+          "gt": "Khung hô ứng 愈…愈…: càng làm ầm lên càng to chuyện. 更, 颇, 时而 không tạo cặp với 愈."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "夜愈来愈很深了。",
+            "夜愈来愈深了。",
+            "夜来愈愈深了。",
+            "夜愈深来愈了。"
+          ],
+          "da": 1,
+          "gt": "愈来愈 + Adj, không chen 很 và không đảo trật tự của 愈来愈."
+        },
+        {
+          "h": "So với 越…越…, 愈…愈… khác ở điểm nào?",
+          "lc": [
+            "chỉ dùng trong câu phủ định",
+            "nghĩa ngược lại",
+            "nghĩa giống nhau nhưng là văn viết, trang trọng hơn",
+            "chỉ dùng khi nói chuyện thân mật"
+          ],
+          "da": 2,
+          "gt": "愈 là dạng văn viết của 越; nghĩa và cách ghép giống nhau."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-po",
+      "nhom": "Hư từ văn viết",
+      "tieuDe": "颇",
+      "mau": "S + 颇 + Adj / V · 颇为 + Adj hai âm tiết · 颇有 / 颇具 / 颇受 / 颇感 + N",
+      "nghia": "(văn viết) khá, rất, tương đối ~",
+      "giaiThich": "颇 (đọc pō) là phó từ mức độ của văn viết, nghĩa gần 很, 相当: mức độ khá cao. Nó hay đứng trước động từ một âm tiết tạo thành cụm quen dùng: 颇有道理, 颇受欢迎, 颇感意外, 颇具特色; trước tính từ hai âm tiết thường dùng 颇为 (颇为满意). Khi nói chuyện thường ngày dùng 很, 挺, 相当.",
+      "cachGhep": [
+        "颇 + 有 + N: 颇有道理, 颇有名气, 颇有研究",
+        "颇 + 受 / 感 / 具 + N: 颇受欢迎, 颇感意外, 颇具特色",
+        "颇为 + Adj hai âm tiết: 颇为满意, 颇为复杂",
+        "颇 + 不 + …: 颇不容易, 颇不以为然"
+      ],
+      "viDu": [
+        {
+          "c": "这部小说在年轻人中颇受欢迎。",
+          "d": "Zhè bù xiǎoshuō zài niánqīngrén zhōng pō shòu huānyíng.",
+          "v": "Cuốn tiểu thuyết này khá được giới trẻ ưa chuộng."
+        },
+        {
+          "c": "他的话颇有道理，值得我们考虑。",
+          "d": "Tā de huà pō yǒu dàolǐ, zhídé wǒmen kǎolǜ.",
+          "v": "Lời anh ấy nói khá có lý, đáng để chúng ta cân nhắc."
+        },
+        {
+          "c": "对这个结果，大家颇为满意。",
+          "d": "Duì zhège jiéguǒ, dàjiā pōwéi mǎnyì.",
+          "v": "Với kết quả này, mọi người khá hài lòng."
+        },
+        {
+          "c": "听了他的经历，我颇感意外。",
+          "d": "Tīng le tā de jīnglì, wǒ pō gǎn yìwài.",
+          "v": "Nghe những gì anh ấy đã trải qua, tôi khá bất ngờ."
+        }
+      ],
+      "luuY": [
+        "颇 là từ văn viết; dùng khi nói chuyện bình thường nghe rất kiểu cách. Khác 很 / 相当: mức độ gần như nhau, khác ở phong cách.",
+        "Phủ định đặt SAU 颇 (颇不容易), không nói 不颇.",
+        "颇为 đi với từ hai âm tiết; 为 ở đây đọc wéi: 颇为好 ✗ → 颇好 / 颇为出色 ✓."
+      ],
+      "soSanh": [
+        "zh-hsk5-xiangdang-jiqi-gewai",
+        "zh-hsk2-zhen-feichang-ting"
+      ],
+      "tuKhoa": [
+        "powei",
+        "po you",
+        "po shou huanying",
+        "颇为",
+        "khá",
+        "tương đối",
+        "văn viết"
+      ],
+      "quiz": [
+        {
+          "h": "这位画家在国内（　）有名气。",
+          "lc": [
+            "颇",
+            "时而",
+            "唯独",
+            "暂且"
+          ],
+          "da": 0,
+          "gt": "Phó từ mức độ văn viết trước 有 + N: 颇有名气 (khá có tiếng). 唯独, 暂且, 时而 không chỉ mức độ."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "他对这门艺术感兴趣颇。",
+            "他对这门艺术颇感兴趣。",
+            "他不颇对这门艺术感兴趣。",
+            "他对这门艺术颇了感兴趣。"
+          ],
+          "da": 1,
+          "gt": "颇 đứng ngay trước động từ / tính từ; không đặt cuối câu, không bị 不 phủ định trực tiếp, không mang 了."
+        },
+        {
+          "h": "颇 có đặc điểm gì?",
+          "lc": [
+            "là khẩu ngữ, nghĩa 'hơi hơi'",
+            "nghĩa là 'quá mức', luôn mang ý chê",
+            "là phó từ văn viết, mức độ khá cao, gần với 很 / 相当",
+            "chỉ dùng trong câu phủ định"
+          ],
+          "da": 2,
+          "gt": "颇 = khá, rất; thuộc văn viết và không giới hạn ở nghĩa xấu."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-zanqie",
+      "nhom": "Phó từ thời gian – phạm vi",
+      "tieuDe": "暂且",
+      "mau": "S + 暂且 + V · N + 暂且 + 不 + 说 / 谈 / 论",
+      "nghia": "tạm thời, tạm hãy, hẵng cứ ~ đã",
+      "giaiThich": "Phó từ 暂且 nói rằng trước mắt cứ tạm làm thế này đã, còn chuyện khác (hoặc cách giải quyết lâu dài) để sau tính. Hay gặp trong các cụm 暂且不说 / 不谈 / 不论 (tạm chưa bàn tới). Thiên về văn viết và cách nói trang trọng.",
+      "cachGhep": [
+        "暂且 + V: 暂且住几天, 暂且收下, 暂且放一放",
+        "N + 暂且 + 不说 / 不谈 / 不论，…: 这个问题暂且不谈",
+        "Vế sau thường nêu việc để về sau: …，以后再说 / 先…"
+      ],
+      "viDu": [
+        {
+          "c": "这个问题暂且不谈，我们先讨论下一个。",
+          "d": "Zhège wèntí zànqiě bù tán, wǒmen xiān tǎolùn xià yí gè.",
+          "v": "Vấn đề này tạm chưa bàn, chúng ta thảo luận vấn đề tiếp theo trước."
+        },
+        {
+          "c": "你暂且在我家住几天，找到房子再搬。",
+          "d": "Nǐ zànqiě zài wǒ jiā zhù jǐ tiān, zhǎodào fángzi zài bān.",
+          "v": "Bạn cứ tạm ở nhà tôi vài hôm, tìm được nhà rồi hãy chuyển."
+        },
+        {
+          "c": "结果怎么样暂且不论，至少我们努力过了。",
+          "d": "Jiéguǒ zěnmeyàng zànqiě búlùn, zhìshǎo wǒmen nǔlì guo le.",
+          "v": "Kết quả ra sao tạm chưa nói, ít nhất chúng ta đã cố gắng."
+        },
+        {
+          "c": "这笔钱你暂且收下，以后再说。",
+          "d": "Zhè bǐ qián nǐ zànqiě shōuxià, yǐhòu zài shuō.",
+          "v": "Khoản tiền này bạn cứ tạm nhận lấy, sau này hẵng hay."
+        }
+      ],
+      "luuY": [
+        "Khác 暂时: 暂时 vừa là phó từ vừa làm được định ngữ, chỉ nói 'trong một thời gian ngắn' một cách khách quan (暂时的困难, 暂时停止营业); 暂且 chỉ là phó từ và mang ý chủ động 'cứ tạm thế đã, sau sẽ tính': 暂且的困难 ✗.",
+        "Khác 姑且: 姑且 nhấn sự nhượng bộ, miễn cưỡng 'thôi thì cứ tạm (dù chưa thoả đáng)'; 暂且 nhấn tính tạm thời về thời gian.",
+        "暂 đọc zàn (thanh 4)."
+      ],
+      "soSanh": [
+        "zh-hsk6-guqie",
+        "zh-hsk3-xian-zai-ranhou"
+      ],
+      "tuKhoa": [
+        "zanqie",
+        "zan qie",
+        "zanqie bu shuo",
+        "tạm thời",
+        "tạm hãy",
+        "hẵng cứ"
+      ],
+      "quiz": [
+        {
+          "h": "谁对谁错（　）不说，先把病人送到医院要紧。",
+          "lc": [
+            "愈加",
+            "时而",
+            "颇",
+            "暂且"
+          ],
+          "da": 3,
+          "gt": "Tạm gác một chuyện lại để làm việc gấp trước: 暂且不说. 颇, 愈加 chỉ mức độ; 时而 là 'lúc thì'."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "我们暂且把这件事放一放。",
+            "我们把这件事放一放暂且。",
+            "我们暂且了把这件事放一放。",
+            "这是一个暂且的问题。"
+          ],
+          "da": 0,
+          "gt": "暂且 là phó từ, đứng trước vị ngữ (ở đây trước cụm 把); nó không làm định ngữ (暂且的 ✗), không mang 了 và không đứng cuối câu."
+        },
+        {
+          "h": "暂且 hàm ý gì?",
+          "lc": [
+            "việc xảy ra đột ngột",
+            "trước mắt cứ làm thế đã, chuyện sau sẽ tính tiếp",
+            "mãi mãi không thay đổi",
+            "việc lặp lại nhiều lần"
+          ],
+          "da": 1,
+          "gt": "暂且 = tạm thời làm vậy, ngầm hiểu về sau sẽ có cách khác."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-fandao",
+      "nhom": "Phó từ ngữ khí",
+      "tieuDe": "反倒",
+      "mau": "(不但不 / 没 …，) S + 反倒 + V / Adj",
+      "nghia": "trái lại, ngược lại còn ~, hoá ra lại ~",
+      "giaiThich": "Phó từ 反倒 nói kết quả thực tế ngược hẳn với điều mà theo lẽ thường hoặc theo dự tính phải xảy ra. Nghĩa và cách dùng như 反而, nhưng 反倒 mang màu khẩu ngữ hơn. Hay đi sau một vế có 不但不 / 不但没: 不但没好，反倒更重了.",
+      "cachGhep": [
+        "S + 反倒 + V / Adj: 他反倒怪我",
+        "不但不 / 不但没 + V1，反倒 + V2: 不但没好，反倒更重了",
+        "反倒 + 更 + Adj: 反倒更闷热了"
+      ],
+      "viDu": [
+        {
+          "c": "吃了药，他的病不但没好，反倒更重了。",
+          "d": "Chī le yào, tā de bìng búdàn méi hǎo, fǎndào gèng zhòng le.",
+          "v": "Uống thuốc rồi, bệnh của anh ấy chẳng những không khỏi mà trái lại còn nặng hơn."
+        },
+        {
+          "c": "我好心帮他，他反倒怪我多管闲事。",
+          "d": "Wǒ hǎoxīn bāng tā, tā fǎndào guài wǒ duō guǎn xiánshì.",
+          "v": "Tôi có lòng tốt giúp anh ấy, anh ấy lại quay ra trách tôi lo chuyện bao đồng."
+        },
+        {
+          "c": "雨停了以后，天气反倒更闷热了。",
+          "d": "Yǔ tíng le yǐhòu, tiānqì fǎndào gèng mēnrè le.",
+          "v": "Mưa tạnh rồi, trời ngược lại còn oi bức hơn."
+        },
+        {
+          "c": "平时很紧张的他，上了台反倒平静下来了。",
+          "d": "Píngshí hěn jǐnzhāng de tā, shàng le tái fǎndào píngjìng xiàlái le.",
+          "v": "Bình thường anh ấy rất hay căng thẳng, vậy mà lên sân khấu lại bình tĩnh hẳn."
+        }
+      ],
+      "luuY": [
+        "Khác 反而: nghĩa như nhau; 反而 dùng được cả khi nói lẫn khi viết, 反倒 thiên về khẩu ngữ.",
+        "Khác 倒: 倒 nhẹ hơn và còn nhiều nghĩa ngữ khí khác (nhượng bộ: 好倒是好…, giục: 你倒是说呀); 反倒 chỉ có nghĩa 'ngược lại với lẽ thường'.",
+        "Khác 却: 却 chỉ chuyển ý ('nhưng'); 反倒 đòi hỏi kết quả đi NGƯỢC chiều với điều lẽ ra phải có.",
+        "反倒 là phó từ, đứng sau chủ ngữ, trước vị ngữ; 倒 ở đây đọc dào."
+      ],
+      "soSanh": [
+        "zh-hsk5-faner",
+        "zh-hsk4-dao",
+        "zh-hsk4-que-raner",
+        "zh-hsk6-feidan-faner"
+      ],
+      "tuKhoa": [
+        "fandao",
+        "fan dao",
+        "trái lại",
+        "ngược lại",
+        "hoá ra lại"
+      ],
+      "quiz": [
+        {
+          "h": "大家都劝他休息，他不但不听，（　）工作得更晚了。",
+          "lc": [
+            "颇",
+            "唯独",
+            "反倒",
+            "暂且"
+          ],
+          "da": 2,
+          "gt": "Kết quả ngược với điều lẽ ra phải có, hô ứng với 不但不 → 反倒. 暂且 là tạm thời, 唯独 là chỉ riêng, 颇 là khá."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "批评了他以后，他更反倒不认真了。",
+            "批评了他以后，他反倒了更不认真。",
+            "批评了他以后，他更不认真了反倒。",
+            "批评了他以后，他反倒更不认真了。"
+          ],
+          "da": 3,
+          "gt": "反倒 đứng sau chủ ngữ và trước cả cụm vị ngữ 更不认真; không đặt cuối câu, không mang 了."
+        },
+        {
+          "h": "反倒 dùng trong trường hợp nào?",
+          "lc": [
+            "khi kết quả thực tế ngược với điều lẽ ra phải xảy ra",
+            "khi liệt kê các sự vật",
+            "khi hai việc tăng tiến cùng chiều",
+            "khi nêu nguyên nhân"
+          ],
+          "da": 0,
+          "gt": "反倒 = trái lại: kết quả đi ngược với dự tính hay lẽ thường."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-yuefa",
+      "nhom": "Phó từ ngữ khí",
+      "tieuDe": "越发",
+      "mau": "S + 越发 + Adj / động từ tâm lý (+ 了) · 越 (是) …，越发 …",
+      "nghia": "càng thêm ~, lại càng ~, ngày càng ~ (so với trước)",
+      "giaiThich": "Phó từ 越发 nói mức độ của cùng một người, một sự vật đã tăng thêm so với trước đó (theo thời gian hoặc do một điều kiện mới). Nghĩa gần 更加. Cũng có thể hô ứng với 越 (是) ở vế trước: 越是…，越发…. Dùng được cả khi nói và khi viết, hơi văn vẻ.",
+      "cachGhep": [
+        "S + 越发 + Adj + 了: 越发漂亮了, 越发凉了",
+        "S + 越发 + động từ tâm lý / cụm phủ định: 越发不安, 越发想家",
+        "越 (是) + …，越发 + …: 观众越是鼓掌，他越发紧张"
+      ],
+      "viDu": [
+        {
+          "c": "几年不见，她越发漂亮了。",
+          "d": "Jǐ nián bú jiàn, tā yuèfā piàoliang le.",
+          "v": "Mấy năm không gặp, cô ấy lại càng xinh đẹp hơn."
+        },
+        {
+          "c": "听了这番话，他心里越发不安。",
+          "d": "Tīng le zhè fān huà, tā xīnli yuèfā bù'ān.",
+          "v": "Nghe những lời này, trong lòng anh ấy càng thêm bất an."
+        },
+        {
+          "c": "过了中秋，天气越发凉了。",
+          "d": "Guò le Zhōngqiū, tiānqì yuèfā liáng le.",
+          "v": "Qua Trung thu, trời càng lúc càng mát."
+        },
+        {
+          "c": "观众越是鼓掌，他越发紧张。",
+          "d": "Guānzhòng yuè shì gǔzhǎng, tā yuèfā jǐnzhāng.",
+          "v": "Khán giả càng vỗ tay, anh ấy lại càng hồi hộp."
+        }
+      ],
+      "luuY": [
+        "Khác 更加: 更加 so sánh được HAI đối tượng khác nhau (他比我更加努力); 越发 chỉ so MỘT đối tượng với chính nó lúc trước: 他比我越发努力 ✗.",
+        "Khác 越来越: 越来越 tả cả quá trình tăng dần liên tục; 越发 nói mức hiện tại đã cao hơn một mốc trước đó, và có thể hô ứng với 越 (是) ở vế trước, còn 越来越 thì không.",
+        "Khác 愈加: nghĩa như nhau, 愈加 đậm chất văn viết hơn.",
+        "Sau 越发 không thêm 很 / 非常: 越发很漂亮 ✗."
+      ],
+      "soSanh": [
+        "zh-hsk3-yuelaiyue",
+        "zh-hsk3-geng",
+        "zh-hsk6-yu-yu",
+        "zh-hsk3-yue-yue"
+      ],
+      "tuKhoa": [
+        "yuefa",
+        "yue fa",
+        "càng thêm",
+        "lại càng",
+        "ngày càng"
+      ],
+      "quiz": [
+        {
+          "h": "换了新发型以后，她显得（　）年轻了。",
+          "lc": [
+            "唯独",
+            "暂且",
+            "时而",
+            "越发"
+          ],
+          "da": 3,
+          "gt": "Mức độ tăng thêm so với chính mình lúc trước → 越发. 唯独 là chỉ riêng, 暂且 là tạm thời, 时而 là lúc thì."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "入秋以后，夜越发长了。",
+            "入秋以后，夜长越发了。",
+            "越发入秋以后，夜长了。",
+            "哥哥比弟弟越发高。"
+          ],
+          "da": 0,
+          "gt": "越发 đứng trước tính từ và chỉ so một sự vật với chính nó trước đó; so sánh hai người bằng 比 thì dùng 更, không dùng 越发."
+        },
+        {
+          "h": "越发 khác 更加 ở điểm nào?",
+          "lc": [
+            "越发 mang nghĩa giảm đi",
+            "越发 chỉ so một đối tượng với chính nó trước đó; 更加 còn so được hai đối tượng khác nhau",
+            "越发 dùng để so hai đối tượng, 更加 thì không",
+            "越发 chỉ dùng trong câu hỏi"
+          ],
+          "da": 1,
+          "gt": "他比我更加努力 ✓ nhưng 他比我越发努力 ✗: 越发 không dùng trong câu so sánh hai đối tượng."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-dong-xi",
+      "nhom": "Cấu trúc cố định",
+      "tieuDe": "东…西…",
+      "mau": "东 + V1 + 西 + V2 · 东 + 一 + lượng từ + 西 + 一 + lượng từ",
+      "nghia": "(làm) lung tung chỗ này chỗ kia, cái này một tí cái kia một tí",
+      "giaiThich": "Khung 东…西… kẹp hai động từ giống nhau hoặc gần nghĩa (hoặc hai cụm số lượng) để tả hành động tản mạn khắp nơi, không có trật tự hay trọng tâm. 东, 西 ở đây không còn nghĩa hướng đông, hướng tây. Nhiều tổ hợp đã thành thành ngữ cố định: 东张西望, 东奔西跑, 东拉西扯, 东倒西歪. Thường mang sắc thái lộn xộn, hơi chê.",
+      "cachGhep": [
+        "东 + V + 西 + V (cùng một động từ): 东找西找, 东看看西看看",
+        "Thành ngữ cố định: 东张西望 (nhìn ngó lung tung), 东奔西跑 (chạy ngược chạy xuôi), 东拉西扯 (nói lan man), 东倒西歪 (nghiêng ngả)",
+        "东 + 一 + lượng từ + 西 + 一 + lượng từ: 东一句西一句, 东一本西一本"
+      ],
+      "viDu": [
+        {
+          "c": "上课的时候不要东张西望。",
+          "d": "Shàngkè de shíhou búyào dōng zhāng xī wàng.",
+          "v": "Trong giờ học đừng có nhìn ngó lung tung."
+        },
+        {
+          "c": "他东找西找，终于在沙发下面找到了钥匙。",
+          "d": "Tā dōng zhǎo xī zhǎo, zhōngyú zài shāfā xiàmiàn zhǎodào le yàoshi.",
+          "v": "Anh ấy tìm khắp chỗ này chỗ kia, cuối cùng thấy chìa khoá dưới ghế sofa."
+        },
+        {
+          "c": "为了给孩子治病，他们东奔西跑，借了不少钱。",
+          "d": "Wèile gěi háizi zhìbìng, tāmen dōng bēn xī pǎo, jiè le bù shǎo qián.",
+          "v": "Để chữa bệnh cho con, họ chạy ngược chạy xuôi, vay không ít tiền."
+        },
+        {
+          "c": "大家东一句西一句，讨论了半天也没有结果。",
+          "d": "Dàjiā dōng yí jù xī yí jù, tǎolùn le bàntiān yě méiyǒu jiéguǒ.",
+          "v": "Mọi người mỗi người một câu, bàn mãi cũng chẳng ra kết quả."
+        },
+        {
+          "c": "桌子上的书东一本西一本，乱极了。",
+          "d": "Zhuōzi shang de shū dōng yì běn xī yì běn, luàn jí le.",
+          "v": "Sách trên bàn mỗi nơi một quyển, bừa bộn vô cùng."
+        }
+      ],
+      "luuY": [
+        "Thứ tự luôn là 东 trước 西 sau; với thành ngữ cố định thì không đổi chữ, không đảo: 东望西张 ✗, 西张东望 ✗.",
+        "Khác V 来 V 去: V 来 V 去 nhấn một hành động lặp đi lặp lại nhiều lần (想来想去); 东…西… nhấn sự tản mạn nhiều nơi, nhiều hướng, thiếu trật tự.",
+        "Khác 时而…时而…: đó là các trạng thái thay nhau theo thời gian, văn viết, không có ý lộn xộn."
+      ],
+      "soSanh": [
+        "zh-hsk6-v-lai-v-qu",
+        "zh-hsk6-shier-shier"
+      ],
+      "tuKhoa": [
+        "dong xi",
+        "dongzhang xiwang",
+        "dong zhang xi wang",
+        "dongben xipao",
+        "lung tung",
+        "chỗ này chỗ kia",
+        "ngược xuôi"
+      ],
+      "quiz": [
+        {
+          "h": "他一进商店就东看看，（　）看看，什么都想买。",
+          "lc": [
+            "南",
+            "西",
+            "后",
+            "右"
+          ],
+          "da": 1,
+          "gt": "Khung cố định là 东…西…; không ghép 东 với 南, 右 hay 后."
+        },
+        {
+          "h": "东张西望 nghĩa là gì?",
+          "lc": [
+            "mong ngóng tin tức từ xa",
+            "đi từ đông sang tây",
+            "nhìn ngó lung tung khắp xung quanh",
+            "nhìn về hướng đông rồi hướng tây theo la bàn"
+          ],
+          "da": 2,
+          "gt": "Trong khung 东…西…, 东 và 西 chỉ 'chỗ này chỗ kia', không phải phương hướng thật."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "他说话东句西句一一，没有重点。",
+            "他说话东西一句一句，没有重点。",
+            "他说话一东句一西句，没有重点。",
+            "他说话东一句西一句，没有重点。"
+          ],
+          "da": 3,
+          "gt": "Mẫu 东 + 一 + lượng từ + 西 + 一 + lượng từ: 东一句西一句."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-wubu",
+      "nhom": "Hư từ văn viết",
+      "tieuDe": "无不 / 无一不",
+      "mau": "S (số nhiều / toàn thể) + 无不 + V / Adj · S + 无一不 + V",
+      "nghia": "(văn viết) không ai / không cái gì là không ~, tất cả đều ~",
+      "giaiThich": "无不 dùng hai lần phủ định (无 = không có, 不 = không) để khẳng định mạnh rằng mọi thành viên của một tập hợp đều như vậy, không có ngoại lệ — tức là 都 nói theo cách nhấn mạnh và trang trọng. 无一不 (không một ai / cái nào không) còn mạnh hơn. Chủ ngữ phải chỉ nhiều người, nhiều vật. Văn viết.",
+      "cachGhep": [
+        "S số nhiều + 无不 + V: 在场的人无不感到震惊",
+        "S số nhiều + 无不 + 为 + N + V: 无不为他感到惋惜",
+        "S số nhiều + 无一不 + V / 是 + N: 无一不是精品"
+      ],
+      "viDu": [
+        {
+          "c": "听到这个消息，在场的人无不感到震惊。",
+          "d": "Tīngdào zhège xiāoxi, zàichǎng de rén wúbù gǎndào zhènjīng.",
+          "v": "Nghe tin này, những người có mặt không ai là không sửng sốt."
+        },
+        {
+          "c": "看过这场演出的观众无不称赞。",
+          "d": "Kàn guo zhè chǎng yǎnchū de guānzhòng wúbù chēngzàn.",
+          "v": "Khán giả xem buổi diễn này không ai là không khen ngợi."
+        },
+        {
+          "c": "他的作品无一不是精品。",
+          "d": "Tā de zuòpǐn wú yī bú shì jīngpǐn.",
+          "v": "Tác phẩm của ông không có cái nào không phải là tinh phẩm."
+        },
+        {
+          "c": "凡是认识他的人，无不为他的去世感到惋惜。",
+          "d": "Fánshì rènshi tā de rén, wúbù wèi tā de qùshì gǎndào wǎnxī.",
+          "v": "Hễ ai quen biết ông đều thương tiếc trước sự ra đi của ông."
+        }
+      ],
+      "luuY": [
+        "无不 là KHẲNG ĐỊNH toàn bộ (= 都), đừng hiểu thành phủ định: 无不称赞 = ai cũng khen.",
+        "Chủ ngữ phải là số nhiều hoặc chỉ toàn thể; một cá nhân thì không dùng: 小王无不高兴 ✗.",
+        "Khác 都: 都 trung tính, dùng ở mọi phong cách; 无不 trang trọng và nhấn mạnh 'không sót một ai'. Đã dùng 无不 thì không thêm 都.",
+        "Khác 无非: 无非 nghĩa là 'chẳng qua chỉ là' (无非是想多赚点儿钱), không liên quan tới nghĩa 'tất cả đều'."
+      ],
+      "soSanh": [
+        "zh-hsk1-dou",
+        "zh-hsk6-jie-jun",
+        "zh-hsk6-wufei",
+        "zh-hsk6-fanshi"
+      ],
+      "tuKhoa": [
+        "wubu",
+        "wu bu",
+        "wu yi bu",
+        "không ai không",
+        "tất cả đều",
+        "phủ định kép"
+      ],
+      "quiz": [
+        {
+          "h": "参观过这座博物馆的人（　）留下了深刻的印象。",
+          "lc": [
+            "无不",
+            "时而",
+            "暂且",
+            "唯独"
+          ],
+          "da": 0,
+          "gt": "Mọi người đều như vậy, không có ngoại lệ → 无不. 唯独 nêu ngoại lệ duy nhất; 暂且, 时而 không nói về phạm vi."
+        },
+        {
+          "h": "同学们无不佩服他 nghĩa là gì?",
+          "lc": [
+            "không bạn học nào khâm phục anh ấy",
+            "tất cả các bạn học đều khâm phục anh ấy",
+            "chỉ một vài bạn khâm phục anh ấy",
+            "các bạn học chẳng qua chỉ khâm phục anh ấy"
+          ],
+          "da": 1,
+          "gt": "Phủ định kép 无不 = khẳng định toàn bộ: ai cũng…"
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "这里的孩子不无一喜欢他。",
+            "小王一个人无不喜欢他。",
+            "这里的孩子无一不喜欢他。",
+            "这里的孩子喜欢他无一不。"
+          ],
+          "da": 2,
+          "gt": "无一不 đứng trước động từ và chủ ngữ phải là số nhiều (这里的孩子); một cá nhân không dùng được, và trật tự 无一不 không đảo."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-bude",
+      "nhom": "Động từ hình thức – năng nguyện",
+      "tieuDe": "V + 不得 / 不得 + V",
+      "mau": "S + V / Adj + 不得 · (S) + 不得 + V",
+      "nghia": "V不得: không nên / không thể ~ (làm thì hỏng); 不得V: không được, cấm ~",
+      "giaiThich": "Hai cách dùng của 不得. (1) Đứng SAU động từ hoặc tính từ (đọc nhẹ: bu de): nói việc đó không thể, không nên làm vì sẽ có hậu quả xấu — 吃不得 (không ăn được vì có hại), 急不得 (không vội được), 马虎不得 (không thể qua loa). Khẩu ngữ. (2) Đứng TRƯỚC động từ (bùdé): 'không được phép', là giọng của quy định, thông báo, văn bản pháp luật — 不得入内, 不得吸烟.",
+      "cachGhep": [
+        "V + 不得 (làm thì có hại / không ổn): 吃不得, 去不得, 说不得, 碰不得",
+        "Adj + 不得: 急不得, 马虎不得, 大意不得",
+        "Từ cố định: 舍不得 (không nỡ), 怪不得 (thảo nào), 恨不得 (chỉ muốn… ngay), 顾不得 (không kịp lo tới)",
+        "不得 + V (cấm, văn bản): 不得入内, 不得使用手机, 不得迟到"
+      ],
+      "viDu": [
+        {
+          "c": "这种蘑菇有毒，吃不得。",
+          "d": "Zhè zhǒng mógu yǒu dú, chī bu de.",
+          "v": "Loại nấm này có độc, không ăn được đâu."
+        },
+        {
+          "c": "这件事急不得，得慢慢来。",
+          "d": "Zhè jiàn shì jí bu de, děi mànmàn lái.",
+          "v": "Việc này không vội được, phải từ từ."
+        },
+        {
+          "c": "安全问题一点儿也马虎不得。",
+          "d": "Ānquán wèntí yìdiǎnr yě mǎhu bu de.",
+          "v": "Vấn đề an toàn thì không thể qua loa dù chỉ một chút."
+        },
+        {
+          "c": "考试期间，考生不得使用手机。",
+          "d": "Kǎoshì qījiān, kǎoshēng bùdé shǐyòng shǒujī.",
+          "v": "Trong thời gian thi, thí sinh không được sử dụng điện thoại."
+        },
+        {
+          "c": "未经允许，不得入内。",
+          "d": "Wèi jīng yǔnxǔ, bùdé rù nèi.",
+          "v": "Chưa được phép, không được vào."
+        }
+      ],
+      "luuY": [
+        "Khác V + 不了: 吃不了 là không ăn nổi / ăn không hết (thiếu khả năng, điều kiện); 吃不得 là không nên ăn vì ăn vào thì có hại.",
+        "Khác 不得不 (bùdébù, buộc phải) và …得不得了 (cực kỳ): ba cấu trúc chỉ giống nhau ở mặt chữ. 不得不去 = buộc phải đi; 去不得 = không đi được đâu (đi thì hỏng); 不得入内 = cấm vào.",
+        "Khác 不要 / 别: dùng khi nói với nhau hằng ngày; 不得 + V là giọng quy định, chỉ hợp biển báo, nội quy, văn bản.",
+        "得 trong 不得 + V đọc dé; trong 得慢慢来 (phải từ từ) thì đọc děi."
+      ],
+      "soSanh": [
+        "zh-hsk3-kha-nang-liao",
+        "zh-hsk4-zhihao-budebu",
+        "zh-hsk5-de-budeliao",
+        "zh-hsk2-bie-buyao"
+      ],
+      "tuKhoa": [
+        "bude",
+        "chi bu de",
+        "bude runei",
+        "shebude",
+        "không được",
+        "cấm",
+        "không nên"
+      ],
+      "quiz": [
+        {
+          "h": "图书馆规定：阅览室内（　）大声说话。",
+          "lc": [
+            "不了",
+            "不得了",
+            "得不",
+            "不得"
+          ],
+          "da": 3,
+          "gt": "Nội quy cấm làm việc gì: 不得 + V. 不了 phải đứng sau động từ; 得不 không thành từ; 不得了 nghĩa là 'ghê gớm'."
+        },
+        {
+          "h": "这水喝不得 nghĩa là gì?",
+          "lc": [
+            "nước này không nên uống, uống vào có hại",
+            "nước này uống không hết",
+            "nước này không cần uống",
+            "nước này buộc phải uống"
+          ],
+          "da": 0,
+          "gt": "V + 不得: làm việc đó thì có hậu quả xấu nên không được làm. 'Uống không hết' là 喝不了."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "这种事得不开玩笑。",
+            "这种事开不得玩笑。",
+            "这种事开玩笑得不。",
+            "这种事不开得玩笑。"
+          ],
+          "da": 1,
+          "gt": "不得 chen ngay sau động từ 开: 开不得玩笑 = chuyện này không đùa được."
+        }
+      ]
+    }
+  ]
+}

@@ -6,7 +6,8 @@ import { strict as assert } from 'node:assert';
 import { test } from 'node:test';
 import { napNguPhap, _datKhoNguPhap, chiTiet, danhMuc, tim, tongQuan } from './nguPhap.js';
 import {
-  CAP_NGU_PHAP, NN_NGU_PHAP, chuanHoaTim, diemKhop, kanaKhop, kiemDiem, kiemTatCa, timNguPhap, type DiemNguPhap,
+  CAP_NGU_PHAP, NN_NGU_PHAP, SAN_VI_TRI_DAP_AN, bamChuoi, chuanHoaTim, diemKhop, kanaKhop, kiemDiem, kiemPhanBoDapAn, kiemTatCa, timNguPhap, xaoQuizDiem,
+  type DiemDaNap, type DiemNguPhap,
 } from './nguPhapThuan.js';
 
 const kho = napNguPhap();
@@ -34,7 +35,9 @@ test('nội dung thật: không điểm nào bị bỏ, không lỗi kiểm ché
   const tq = tongQuan();
   const so = Object.fromEntries(tq.ngonNgu.flatMap((n) => n.cap.map((c) => [c.cap, c.soDiem])));
   // Sàn theo bản giao việc (N5+N4 ~150, N3 phần lớn; HSK1–3 đủ, HSK4 phần lớn; A1–B1 đủ, B2 điểm chính).
-  const san: Record<string, number> = { N5: 70, N4: 70, N3: 60, HSK1: 35, HSK2: 45, HSK3: 50, HSK4: 35, A1: 30, A2: 35, B1: 40, B2: 25 };
+  const san: Record<string, number> = {
+    N5: 80, N4: 80, N3: 85, N2: 115, N1: 95, HSK1: 40, HSK2: 50, HSK3: 60, HSK4: 55, HSK5: 75, HSK6: 65, A1: 36, A2: 45, B1: 50, B2: 48, C1: 40,
+  };
   for (const [cap, n] of Object.entries(san)) assert.ok((so[cap] ?? 0) >= n, `${cap}: ${so[cap]} < ${n}`);
   assert.equal(tq.tong, kho.ds.length);
   for (const d of kho.ds) assert.deepEqual(kiemDiem(d, d.nn, d.cap), [], d.id);
@@ -124,4 +127,50 @@ test('bộ kiểm bắt lỗi: đáp án ngoài lựa chọn, pinyin thiếu d�
   const g = { ...mau(), soSanh: ['ja-n5-khong-co'], nn: 'ja' as const, cap: 'N5' };
   assert.ok(kiemTatCa([g]).some((l) => l.includes('không tồn tại')));
   assert.ok(kiemTatCa([g, g]).some((l) => l.includes('trùng')));
+});
+
+test('cấp cao (N2 / N1 / HSK5 / HSK6 / C1): có trong danh mục, soSanh dày, tìm ra đúng điểm', () => {
+  assert.deepEqual([...CAP_NGU_PHAP.ja], ['N5', 'N4', 'N3', 'N2', 'N1']);
+  assert.deepEqual([...CAP_NGU_PHAP.zh], ['HSK1', 'HSK2', 'HSK3', 'HSK4', 'HSK5', 'HSK6']);
+  assert.deepEqual([...CAP_NGU_PHAP.en], ['A1', 'A2', 'B1', 'B2', 'C1']);
+  for (const cap of ['N2', 'N1', 'HSK5', 'HSK6', 'C1']) {
+    const ds = kho.ds.filter((d) => d.cap === cap);
+    // Mẫu cấp cao dễ nhầm nhau ⇒ gần như điểm nào cũng phải có "so sánh với".
+    const co = ds.filter((d) => (d.soSanh ?? []).length > 0).length;
+    assert.ok(co / ds.length >= 0.95, `${cap}: chỉ ${co}/${ds.length} điểm có soSanh`);
+    for (const d of ds) assert.ok(d.quiz.every((q) => q.lc.length === 4), `${d.id}: quiz cấp cao phải 4 lựa chọn`);
+  }
+  const dau = (q: string, nn: string) => tim(q, nn).items.map((x) => x.id);
+  assert.equal(dau('ざるを得ない', 'ja')[0], 'ja-n2-zaru-wo-enai');
+  assert.equal(dau('や否や', 'ja')[0], 'ja-n1-ya-ina-ya');
+  assert.equal(dau('与其', 'zh')[0], 'zh-hsk5-yuqi-buru');
+  assert.ok(dau('为所', 'zh').includes('zh-hsk6-wei-suo'));
+  assert.ok(dau('no sooner', 'en').includes('en-c1-inversion-no-sooner-hardly'));
+  assert.equal(chiTiet('ja-n1-ya-ina-ya').tenCap, 'JLPT N1');
+});
+
+test('quiz: xáo bằng máy ổn định + phân bố vị trí đáp án mỗi cấp không lệch', () => {
+  // Nội dung trong repo ĐÃ xáo: xáo lại không đổi gì (ai soạn thêm mà quên chạy script thì test này đỏ).
+  for (const d of kho.ds) assert.deepEqual(xaoQuizDiem(d).quiz, d.quiz, `${d.id}: chưa chạy scripts/ctlanguage-xao-quiz-ngu-phap.mts`);
+  const pb = kiemPhanBoDapAn(kho.ds);
+  assert.deepEqual(pb.loi, []);
+  for (const cap of ['ja N2', 'ja N1', 'zh HSK5', 'zh HSK6', 'en C1']) {
+    const dem = pb.bang[cap]!; const tong = dem.reduce((a, b) => a + b, 0);
+    for (const n of dem) assert.ok(n / tong >= SAN_VI_TRI_DAP_AN, `${cap}: ${dem.join('/')}`);
+  }
+  // Xáo: giữ nguyên tập lựa chọn + đáp án đúng, 3 câu ở 3 vị trí khác nhau, không phụ thuộc thứ tự người soạn viết.
+  const d = mau();
+  d.quiz = d.quiz.map((q) => ({ ...q, lc: [...q.lc, 'を'].slice(0, 4).length === 4 ? [q.lc[q.da]!, ...q.lc.filter((_, j) => j !== q.da), 'zz'] : q.lc, da: 0 }));
+  const x = xaoQuizDiem(d);
+  x.quiz.forEach((q, i) => {
+    assert.equal(q.lc[q.da], d.quiz[i]!.lc[0]);
+    assert.deepEqual([...q.lc].sort(), [...d.quiz[i]!.lc].sort());
+  });
+  assert.equal(new Set(x.quiz.map((q) => q.da)).size, 3);
+  const dao = { ...d, quiz: d.quiz.map((q) => ({ ...q, lc: [...q.lc].reverse(), da: q.lc.length - 1 })) };
+  assert.deepEqual(xaoQuizDiem(dao).quiz, x.quiz);
+  assert.equal(bamChuoi('ja-n5-te-mo-ii'), bamChuoi('ja-n5-te-mo-ii'));
+  // Bộ kiểm phân bố bắt được cấp dồn đáp án về một vị trí.
+  const lech: DiemDaNap[] = Array.from({ length: 20 }, (_, i) => ({ ...d, id: `ja-n5-lech-${i}`, nn: 'ja' as const, cap: 'N5', quiz: d.quiz.map((q) => ({ ...q, da: 0 })) }));
+  assert.ok(kiemPhanBoDapAn(lech).loi.some((l) => l.includes('lựa chọn 4')));
 });

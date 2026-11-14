@@ -1,0 +1,1242 @@
+{
+  "nn": "zh",
+  "cap": "HSK5",
+  "diem": [
+    {
+      "id": "zh-hsk5-yuqi-buru",
+      "nhom": "Liên từ – câu phức",
+      "tieuDe": "与其…不如…",
+      "mau": "与其 + A，(还 / 倒) 不如 + B",
+      "nghia": "thà B còn hơn A; làm A thì chẳng bằng làm B",
+      "giaiThich": "Dùng khi cân nhắc hai cách làm rồi chọn cái sau: 与其 đi với phương án bị gạt bỏ (A), 不如 đi với phương án người nói cho là tốt hơn (B). Thường dùng để khuyên nhủ, đề nghị hoặc nêu quan điểm; dùng được cả trong khẩu ngữ lẫn văn viết. Thêm 还 / 倒 trước 不如 để nhấn ý lựa chọn.",
+      "cachGhep": [
+        "与其 + cụm động từ A，不如 + cụm động từ B: 与其在家等，不如去找他",
+        "Nhấn mạnh: 与其 A，还不如 / 倒不如 B",
+        "Chủ ngữ chung đứng trước 与其: 你与其…，不如…; hai vế cũng có thể có chủ ngữ riêng"
+      ],
+      "viDu": [
+        {
+          "c": "与其在家看电视，不如出去走走。",
+          "d": "Yǔqí zài jiā kàn diànshì, bùrú chūqù zǒuzou.",
+          "v": "Ở nhà xem ti vi thì chẳng bằng ra ngoài đi dạo."
+        },
+        {
+          "c": "与其等别人帮忙，还不如自己动手。",
+          "d": "Yǔqí děng biérén bāngmáng, hái bùrú zìjǐ dòngshǒu.",
+          "v": "Chờ người khác giúp thì thà tự mình bắt tay vào làm còn hơn."
+        },
+        {
+          "c": "与其买便宜的，不如买质量好的。",
+          "d": "Yǔqí mǎi piányi de, bùrú mǎi zhìliàng hǎo de.",
+          "v": "Mua đồ rẻ thì chẳng bằng mua đồ chất lượng tốt."
+        },
+        {
+          "c": "你与其抱怨环境，倒不如改变自己。",
+          "d": "Nǐ yǔqí bàoyuàn huánjìng, dào bùrú gǎibiàn zìjǐ.",
+          "v": "Bạn than phiền hoàn cảnh thì thà thay đổi bản thân còn hơn."
+        }
+      ],
+      "luuY": [
+        "Người Việt hay đảo hai vế: 与其 luôn đi với cái KHÔNG chọn, 不如 đi với cái ĐƯỢC chọn.",
+        "Khác 宁可…也不…: 宁可 đứng trước cái được chọn (thường là cái chịu thiệt), còn 与其 đứng trước cái bị bỏ. Hai mẫu ghép được với nhau: 与其求人，宁可自己多花点儿时间.",
+        "Khác A 不如 B (so sánh): mẫu so sánh chỉ nói A kém B; 与其…不如… là lựa chọn giữa hai hành động."
+      ],
+      "soSanh": [
+        "zh-hsk5-ningke-ye",
+        "zh-hsk5-buru-so-sanh",
+        "zh-hsk6-yuqishuo-burushuo",
+        "zh-hsk3-haishi-ba"
+      ],
+      "tuKhoa": [
+        "yuqi buru",
+        "yuqi",
+        "yuqiburu",
+        "thà còn hơn",
+        "chẳng bằng",
+        "lựa chọn"
+      ],
+      "quiz": [
+        {
+          "h": "（　）在这儿着急，不如马上给他打个电话。",
+          "lc": [
+            "哪怕",
+            "与其",
+            "除非",
+            "宁可"
+          ],
+          "da": 1,
+          "gt": "Vế sau có 不如 nên vế trước phải là 与其 (cái bị gạt bỏ). 宁可 đi với 也不 / 也要, không đi với 不如."
+        },
+        {
+          "h": "Trong câu 与其坐车，不如走路, người nói chọn cách nào?",
+          "lc": [
+            "cả hai cách",
+            "ngồi xe",
+            "đi bộ",
+            "không cách nào cả"
+          ],
+          "da": 2,
+          "gt": "不如 đứng trước phương án được chọn (走路); 与其 đứng trước phương án bị bỏ (坐车)."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "不如浪费时间，与其早点儿开始。",
+            "与其浪费时间，也早点儿开始。",
+            "与其浪费时间，否则早点儿开始。",
+            "与其浪费时间，不如早点儿开始。"
+          ],
+          "da": 3,
+          "gt": "Trật tự cố định là 与其 A，不如 B; 与其 không ghép với 也 hay 否则, cũng không đảo 不如 lên vế trước."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-ningke-ye",
+      "nhom": "Liên từ – câu phức",
+      "tieuDe": "宁可…也…",
+      "mau": "S + 宁可 + A，也不 + B / S + 宁可 + A，也要 + B",
+      "nghia": "thà A chứ nhất định không B; thà (chịu) A cũng phải B",
+      "giaiThich": "Người nói đã so sánh thiệt hơn và chấp nhận A, dù A cũng không dễ chịu gì. 宁可 A 也不 B: thà chịu A chứ không làm B. 宁可 A 也要 B: chấp nhận cái giá A để đạt bằng được B. Ngữ khí kiên quyết; 宁愿 và 宁肯 dùng tương tự.",
+      "cachGhep": [
+        "S + 宁可 + V…，也不 + V…: 宁可饿着，也不吃",
+        "S + 宁可 + V…，也要 + V…: 宁可少睡，也要做完",
+        "宁可 thường đứng sau chủ ngữ; 宁 đọc thanh 4 (nìng)"
+      ],
+      "viDu": [
+        {
+          "c": "我宁可走路去，也不坐他的车。",
+          "d": "Wǒ nìngkě zǒulù qù, yě bú zuò tā de chē.",
+          "v": "Tôi thà đi bộ chứ không ngồi xe của anh ta."
+        },
+        {
+          "c": "他宁可自己吃亏，也不愿意麻烦别人。",
+          "d": "Tā nìngkě zìjǐ chīkuī, yě bú yuànyì máfan biérén.",
+          "v": "Anh ấy thà mình chịu thiệt chứ không muốn làm phiền người khác."
+        },
+        {
+          "c": "妈妈宁可少睡一会儿，也要给孩子做早饭。",
+          "d": "Māma nìngkě shǎo shuì yíhuìr, yě yào gěi háizi zuò zǎofàn.",
+          "v": "Mẹ thà ngủ ít đi một chút cũng phải làm bữa sáng cho con."
+        },
+        {
+          "c": "我宁可多花点儿钱，也要买质量好的。",
+          "d": "Wǒ nìngkě duō huā diǎnr qián, yě yào mǎi zhìliàng hǎo de.",
+          "v": "Tôi thà tốn thêm ít tiền cũng phải mua đồ chất lượng tốt."
+        }
+      ],
+      "luuY": [
+        "Sau 宁可 là cái ĐƯỢC chọn; đừng nhầm với 与其 (đứng trước cái bị bỏ).",
+        "Phân biệt hai dạng: 也不 B là điều kiên quyết không làm, 也要 B là mục tiêu phải đạt.",
+        "Khác 与其…不如…: 与其…不如… chỉ là so sánh, khuyên nhủ nhẹ nhàng; 宁可 nhấn quyết tâm, chấp nhận thiệt thòi."
+      ],
+      "soSanh": [
+        "zh-hsk5-yuqi-buru",
+        "zh-hsk5-napa-ye",
+        "zh-hsk4-jishi-ye"
+      ],
+      "tuKhoa": [
+        "ningke",
+        "ning ke",
+        "ningyuan",
+        "thà",
+        "thà chứ không",
+        "thà cũng phải"
+      ],
+      "quiz": [
+        {
+          "h": "他（　）饿着，也不吃这种东西。",
+          "lc": [
+            "与其",
+            "宁可",
+            "万一",
+            "由于"
+          ],
+          "da": 1,
+          "gt": "Vế sau là 也不 nên vế trước dùng 宁可 (thà nhịn đói). 与其 phải đi với 不如; 万一 và 由于 không tạo nghĩa lựa chọn."
+        },
+        {
+          "h": "Trong mẫu 宁可 A，也不 B, người nói chọn cái nào?",
+          "lc": [
+            "chưa quyết định",
+            "chọn cả A lẫn B",
+            "chọn A dù A cũng thiệt, kiên quyết không B",
+            "chọn B, bỏ A"
+          ],
+          "da": 2,
+          "gt": "宁可 đứng trước cái được chấp nhận (A); 也不 đứng trước cái nhất định không làm (B)."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "我与其晚睡，也要把工作做完。",
+            "我宁可晚睡，不如把工作做完。",
+            "宁可我晚睡，就要把工作做完。",
+            "我宁可晚睡，也要把工作做完。"
+          ],
+          "da": 3,
+          "gt": "宁可 đi với 也要 / 也不 và đứng sau chủ ngữ; không ghép 宁可 với 不如 hay 就, cũng không ghép 与其 với 也要."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-napa-ye",
+      "nhom": "Liên từ – câu phức",
+      "tieuDe": "哪怕…也…",
+      "mau": "哪怕 + giả thiết (thường cực đoan)，S + 也 / 都 / 还 + …",
+      "nghia": "cho dù, dù cho ~ thì cũng ~",
+      "giaiThich": "Nêu một giả thiết nhượng bộ, thường là tình huống cực đoan hoặc mức tối thiểu, rồi khẳng định kết quả vẫn không đổi. Nghĩa như 即使 nhưng thiên về khẩu ngữ và ngữ khí mạnh hơn. Vế 哪怕 cũng có thể đặt sau để bổ sung.",
+      "cachGhep": [
+        "哪怕 + mệnh đề，S + 也 / 都 + …: 哪怕下雨，我也去",
+        "哪怕 + 再 + Adj，也…: 哪怕再忙，也…",
+        "Vế 哪怕 đặt sau: …，哪怕只坐十分钟"
+      ],
+      "viDu": [
+        {
+          "c": "哪怕明天下大雨，我也要去。",
+          "d": "Nǎpà míngtiān xià dàyǔ, wǒ yě yào qù.",
+          "v": "Dù ngày mai mưa to, tôi cũng phải đi."
+        },
+        {
+          "c": "哪怕只有一点儿希望，我们也不能放弃。",
+          "d": "Nǎpà zhǐyǒu yìdiǎnr xīwàng, wǒmen yě bù néng fàngqì.",
+          "v": "Dù chỉ có một chút hy vọng, chúng ta cũng không được bỏ cuộc."
+        },
+        {
+          "c": "你有空就来看看我，哪怕只坐十分钟。",
+          "d": "Nǐ yǒu kòng jiù lái kànkan wǒ, nǎpà zhǐ zuò shí fēnzhōng.",
+          "v": "Rảnh thì bạn ghé thăm tôi nhé, dù chỉ ngồi mười phút thôi."
+        },
+        {
+          "c": "哪怕再忙，他每天都给父母打电话。",
+          "d": "Nǎpà zài máng, tā měi tiān dōu gěi fùmǔ dǎ diànhuà.",
+          "v": "Dù bận đến mấy, ngày nào anh ấy cũng gọi điện cho bố mẹ."
+        }
+      ],
+      "luuY": [
+        "Vế sau cần 也 / 都 / 还; người Việt hay bỏ quên vì tiếng Việt chỉ nói \"dù… vẫn…\".",
+        "Khác 即使 / 即便: cùng nghĩa giả thiết nhượng bộ; 哪怕 khẩu ngữ, 即使 trung tính, 即便 thiên văn viết.",
+        "Khác 虽然 / 尽管: hai từ này nói về SỰ THẬT đã có (tuy… nhưng…), còn 哪怕 nói về GIẢ THIẾT."
+      ],
+      "soSanh": [
+        "zh-hsk4-jishi-ye",
+        "zh-hsk6-jibian",
+        "zh-hsk4-zai-ye",
+        "zh-hsk4-jinguan"
+      ],
+      "tuKhoa": [
+        "napa",
+        "na pa",
+        "napa ye",
+        "cho dù",
+        "dù cho",
+        "nhượng bộ giả thiết"
+      ],
+      "quiz": [
+        {
+          "h": "（　）失败一百次，我也要试下去。",
+          "lc": [
+            "既然",
+            "哪怕",
+            "由于",
+            "与其"
+          ],
+          "da": 1,
+          "gt": "Giả thiết cực đoan + 也 → 哪怕. 由于 nêu nguyên nhân, 既然 nêu sự thật đã có và đi với 就, 与其 phải có 不如."
+        },
+        {
+          "h": "哪怕 khác 尽管 ở điểm nào?",
+          "lc": [
+            "哪怕 chỉ dùng trong văn viết cổ",
+            "哪怕 nêu nguyên nhân, 尽管 nêu kết quả",
+            "哪怕 nêu giả thiết, 尽管 nêu sự thật đã xảy ra",
+            "hai từ giống hệt nhau, thay nhau được trong mọi câu"
+          ],
+          "da": 2,
+          "gt": "哪怕 (dù cho) là nhượng bộ giả thiết; 尽管 (mặc dù) thừa nhận một sự thật rồi mới chuyển ý."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "哪怕很累，他所以坚持跑步。",
+            "哪怕很累，否则他坚持跑步。",
+            "哪怕很累，他不如坚持跑步。",
+            "哪怕很累，他也坚持跑步。"
+          ],
+          "da": 3,
+          "gt": "哪怕 phối hợp với 也 / 都 / 还 ở vế sau; 所以, 不如, 否则 không đi với 哪怕."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-jiaru",
+      "nhom": "Liên từ – câu phức",
+      "tieuDe": "假如 / 假设",
+      "mau": "假如 + giả thiết (的话)，(S) + 就 / 那么 / 会 + …",
+      "nghia": "giả sử, nếu như ~",
+      "giaiThich": "假如 nêu giả thiết giống 如果 nhưng trang trọng hơn, hay gặp trong văn viết, diễn thuyết, và thường dùng cho giả thiết xa thực tế. 假设 nghĩa \"giả sử, giả định\", hay dùng khi lập luận, tính toán; 假设 còn là động từ và danh từ (这只是一个假设).",
+      "cachGhep": [
+        "假如 + mệnh đề (的话)，S + 就 / 会 + …: 假如明天不下雨，我们就去",
+        "假如 + mệnh đề，câu hỏi: 假如你是我，你会怎么做？",
+        "假设 + mệnh đề，…: 假设每人节约一度电，…"
+      ],
+      "viDu": [
+        {
+          "c": "假如明天不下雨，我们就去爬山。",
+          "d": "Jiǎrú míngtiān bú xià yǔ, wǒmen jiù qù páshān.",
+          "v": "Nếu ngày mai không mưa thì chúng ta đi leo núi."
+        },
+        {
+          "c": "假如你是我，你会怎么做？",
+          "d": "Jiǎrú nǐ shì wǒ, nǐ huì zěnme zuò?",
+          "v": "Giả sử bạn là tôi, bạn sẽ làm thế nào?"
+        },
+        {
+          "c": "假如时间可以倒流，我一定更努力学习。",
+          "d": "Jiǎrú shíjiān kěyǐ dàoliú, wǒ yídìng gèng nǔlì xuéxí.",
+          "v": "Giả sử thời gian có thể quay ngược lại, tôi nhất định sẽ học chăm hơn."
+        },
+        {
+          "c": "假设每人每天节约一度电，一年能节约多少？",
+          "d": "Jiǎshè měi rén měi tiān jiéyuē yí dù diàn, yì nián néng jiéyuē duōshao?",
+          "v": "Giả sử mỗi người mỗi ngày tiết kiệm một số điện thì một năm tiết kiệm được bao nhiêu?"
+        }
+      ],
+      "luuY": [
+        "Mức trang trọng tăng dần: 要是 (khẩu ngữ) → 如果 (trung tính) → 假如 (trang trọng hơn). Nói chuyện hằng ngày dùng 假如 nghe hơi cứng.",
+        "Vế sau vẫn nên có 就 / 那么 / 会 để nối kết quả, đừng bỏ trống như tiếng Việt.",
+        "Khác 万一: 万一 chỉ dùng cho khả năng rất nhỏ và thường là việc không mong muốn; 假如 dùng cho mọi loại giả thiết."
+      ],
+      "soSanh": [
+        "zh-hsk3-ruguo-jiu",
+        "zh-hsk4-yaoshi-jiu",
+        "zh-hsk5-wanyi",
+        "zh-hsk6-tangruo"
+      ],
+      "tuKhoa": [
+        "jiaru",
+        "jia ru",
+        "jiashe",
+        "giả sử",
+        "nếu như",
+        "giả thiết"
+      ],
+      "quiz": [
+        {
+          "h": "（　）我有一百万，我就去环游世界。",
+          "lc": [
+            "何况",
+            "由于",
+            "尽管",
+            "假如"
+          ],
+          "da": 3,
+          "gt": "Giả thiết + 就 → 假如. 尽管 và 由于 nói về sự thật (nhượng bộ, nguyên nhân) nên không đi với 就 kiểu giả định; 何况 là \"huống chi\"."
+        },
+        {
+          "h": "Trong các từ nêu giả thiết sau, từ nào khẩu ngữ nhất?",
+          "lc": [
+            "要是",
+            "假如",
+            "假设",
+            "倘若"
+          ],
+          "da": 0,
+          "gt": "要是 là từ của hội thoại hằng ngày; 假如 và 假设 trang trọng hơn, 倘若 là từ văn viết."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "你有问题假如，就来找我。",
+            "假如你有问题，就来找我。",
+            "假如你有问题，所以来找我。",
+            "假如你有问题，但是来找我。"
+          ],
+          "da": 1,
+          "gt": "假如 đứng đầu vế giả thiết và vế sau nối bằng 就; 但是 và 所以 không nối với vế giả thiết, 假如 cũng không đặt cuối vế."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-wanyi",
+      "nhom": "Liên từ – câu phức",
+      "tieuDe": "万一",
+      "mau": "万一 + việc ít khả năng xảy ra，(S) + 就 / 怎么办…",
+      "nghia": "lỡ như, nhỡ mà ~ (khả năng rất nhỏ)",
+      "giaiThich": "Nêu giả thiết mà người nói cho là khả năng xảy ra rất thấp, thường là việc không mong muốn, để tính trước cách đối phó. Dùng nhiều trong khẩu ngữ. 万一 còn là danh từ nghĩa \"điều bất trắc\": 以防万一 (đề phòng bất trắc).",
+      "cachGhep": [
+        "万一 + mệnh đề，S + 就 + …: 万一下雨，比赛就改期",
+        "万一 + mệnh đề，怎么办？ / 万一…呢？",
+        "Danh từ: 以防万一; 不怕一万，就怕万一",
+        "万一 đứng trước hoặc sau chủ ngữ đều được: 万一他不来 / 他万一不来"
+      ],
+      "viDu": [
+        {
+          "c": "万一下雨，比赛就改到下周。",
+          "d": "Wànyī xià yǔ, bǐsài jiù gǎi dào xià zhōu.",
+          "v": "Lỡ mà trời mưa thì trận đấu chuyển sang tuần sau."
+        },
+        {
+          "c": "带上伞吧，万一下雨呢？",
+          "d": "Dài shang sǎn ba, wànyī xià yǔ ne?",
+          "v": "Mang ô theo đi, nhỡ trời mưa thì sao?"
+        },
+        {
+          "c": "万一他不同意，我们怎么办？",
+          "d": "Wànyī tā bù tóngyì, wǒmen zěnme bàn?",
+          "v": "Lỡ như anh ấy không đồng ý thì chúng ta làm thế nào?"
+        },
+        {
+          "c": "多带点儿钱，以防万一。",
+          "d": "Duō dài diǎnr qián, yǐ fáng wànyī.",
+          "v": "Mang thêm ít tiền để đề phòng bất trắc."
+        }
+      ],
+      "luuY": [
+        "一 trong 万一 giữ thanh 1 (wànyī), không biến điệu.",
+        "Khác 如果 / 假如: hai từ này trung tính về khả năng; 万一 hàm ý \"chắc không xảy ra đâu nhưng cứ phòng\", và thường là việc xấu.",
+        "Khác 一旦: 一旦 nhấn \"một khi việc ấy xảy ra thì hệ quả tất theo\", không hàm ý khả năng nhỏ."
+      ],
+      "soSanh": [
+        "zh-hsk5-jiaru",
+        "zh-hsk5-yidan-jiu",
+        "zh-hsk3-ruguo-jiu",
+        "zh-hsk4-yaoshi-jiu"
+      ],
+      "tuKhoa": [
+        "wanyi",
+        "wan yi",
+        "lỡ như",
+        "nhỡ mà",
+        "bất trắc",
+        "yi fang wanyi"
+      ],
+      "quiz": [
+        {
+          "h": "你把电话号码留给我，（　）有事，我好联系你。",
+          "lc": [
+            "反而",
+            "毕竟",
+            "万一",
+            "从而"
+          ],
+          "da": 2,
+          "gt": "Phòng trước việc ít khả năng xảy ra → 万一. 反而, 毕竟, 从而 không nêu giả thiết."
+        },
+        {
+          "h": "万一 khác 如果 ở điểm nào?",
+          "lc": [
+            "万一 chỉ dùng cho việc chắc chắn xảy ra",
+            "万一 trang trọng hơn và chỉ dùng trong văn viết",
+            "万一 nêu nguyên nhân chứ không nêu giả thiết",
+            "万一 nêu khả năng rất nhỏ, thường là điều không mong muốn"
+          ],
+          "da": 3,
+          "gt": "万一 nghĩa đen là \"một phần vạn\": giả thiết khó xảy ra, hay là việc xấu cần đề phòng; 如果 thì trung tính."
+        },
+        {
+          "h": "以防万一 nghĩa là gì?",
+          "lc": [
+            "đề phòng bất trắc",
+            "chắc chắn một trăm phần trăm",
+            "không bao giờ xảy ra",
+            "một vạn lẻ một"
+          ],
+          "da": 0,
+          "gt": "Ở đây 万一 là danh từ \"điều bất trắc\"; 以防 là \"để phòng\"."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-yidan-jiu",
+      "nhom": "Liên từ – câu phức",
+      "tieuDe": "一旦…就…",
+      "mau": "(S) + 一旦 + điều kiện，(S) + 就 / 便 + hệ quả",
+      "nghia": "một khi ~ thì ~",
+      "giaiThich": "Nêu một thời điểm không xác định mà điều kiện xảy ra, và khi đó hệ quả lập tức hoặc tất yếu theo sau. Hệ quả thường quan trọng, khó đảo ngược. Dùng cho cả việc chưa xảy ra (giả định) lẫn việc đã xảy ra; văn phong hơi trang trọng.",
+      "cachGhep": [
+        "一旦 + mệnh đề，就 + …: 一旦发现问题，就马上解决",
+        "S + 一旦 + V，就 + …: 习惯一旦养成，就很难改",
+        "Vế sau có thể dùng 会 / 便 / 将 thay 就"
+      ],
+      "viDu": [
+        {
+          "c": "一旦发现问题，就要马上解决。",
+          "d": "Yídàn fāxiàn wèntí, jiù yào mǎshàng jiějué.",
+          "v": "Một khi phát hiện vấn đề thì phải giải quyết ngay."
+        },
+        {
+          "c": "习惯一旦养成，就很难改变。",
+          "d": "Xíguàn yídàn yǎngchéng, jiù hěn nán gǎibiàn.",
+          "v": "Thói quen một khi đã hình thành thì rất khó thay đổi."
+        },
+        {
+          "c": "一旦错过这次机会，你会后悔的。",
+          "d": "Yídàn cuòguò zhè cì jīhuì, nǐ huì hòuhuǐ de.",
+          "v": "Một khi bỏ lỡ cơ hội này, bạn sẽ hối hận đấy."
+        },
+        {
+          "c": "他一旦做了决定，就不会轻易改变。",
+          "d": "Tā yídàn zuò le juédìng, jiù bú huì qīngyì gǎibiàn.",
+          "v": "Anh ấy một khi đã quyết định thì sẽ không dễ dàng thay đổi."
+        }
+      ],
+      "luuY": [
+        "一 trước 旦 (thanh 4) đọc thanh 2: yídàn.",
+        "Khác 一…就…: 一…就… nói hai việc cụ thể nối tiếp nhau ngay (一下课就回家) hoặc thói quen; 一旦 nhấn giả định \"nếu có lúc\" và hệ quả hệ trọng.",
+        "Khác 万一: 万一 hàm ý khả năng rất nhỏ; 一旦 không nói gì về khả năng, chỉ nói hệ quả tất theo."
+      ],
+      "soSanh": [
+        "zh-hsk3-yi-jiu",
+        "zh-hsk5-wanyi",
+        "zh-hsk3-zhiyao-jiu",
+        "zh-hsk3-ruguo-jiu"
+      ],
+      "tuKhoa": [
+        "yidan",
+        "yi dan",
+        "yidan jiu",
+        "một khi",
+        "một khi thì"
+      ],
+      "quiz": [
+        {
+          "h": "这种病（　）发现，就必须马上治疗。",
+          "lc": [
+            "以及",
+            "反而",
+            "一旦",
+            "何况"
+          ],
+          "da": 2,
+          "gt": "\"Một khi phát hiện thì phải chữa ngay\" → 一旦…就…. 反而, 何况, 以及 không nêu điều kiện."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "就一旦下定决心，不要后悔。",
+            "下定决心一旦就，不要后悔。",
+            "一旦下定决心，所以不要后悔。",
+            "一旦下定决心，就不要后悔。"
+          ],
+          "da": 3,
+          "gt": "一旦 mở vế điều kiện, 就 đứng ở vế hệ quả; không dùng 所以 sau 一旦 và không đặt 就 trước 一旦."
+        },
+        {
+          "h": "一旦 diễn tả điều gì?",
+          "lc": [
+            "một khi điều kiện xảy ra thì hệ quả tất theo",
+            "sự việc lặp lại nhiều lần trong quá khứ",
+            "nguyên nhân của một kết quả đã có",
+            "sự ngạc nhiên ngoài dự đoán"
+          ],
+          "da": 0,
+          "gt": "一旦 = \"một khi\": chỉ lúc điều kiện thành hiện thực và hệ quả theo ngay, không nói về sự lặp lại, ngạc nhiên hay nguyên nhân."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-chufei",
+      "nhom": "Liên từ – câu phức",
+      "tieuDe": "除非…否则 / 才…",
+      "mau": "除非 + điều kiện duy nhất，否则 / 不然 + kết quả ngược | 除非 + điều kiện，(S) + 才 + …",
+      "nghia": "trừ khi ~, nếu không thì ~ / chỉ khi ~ mới ~",
+      "giaiThich": "除非 nêu điều kiện duy nhất. Với 才: chỉ khi có điều kiện ấy thì kết quả mới xảy ra (gần 只有…才…). Với 否则 / 不然: nếu không có điều kiện ấy thì sẽ ra kết quả ngược lại. Vế 除非 cũng có thể đặt sau để bổ sung ngoại lệ.",
+      "cachGhep": [
+        "除非 + mệnh đề，否则 / 不然 + S + 不 / 不会…: 除非你去请，否则他不会来",
+        "除非 + mệnh đề，S + 才 + …: 除非下大雨，比赛才会取消",
+        "Vế 除非 đặt sau: 我不会说，除非你同意"
+      ],
+      "viDu": [
+        {
+          "c": "除非你亲自去请，否则他不会来。",
+          "d": "Chúfēi nǐ qīnzì qù qǐng, fǒuzé tā bú huì lái.",
+          "v": "Trừ khi bạn đích thân đi mời, nếu không anh ấy sẽ không đến."
+        },
+        {
+          "c": "除非下大雨，比赛才会取消。",
+          "d": "Chúfēi xià dàyǔ, bǐsài cái huì qǔxiāo.",
+          "v": "Chỉ khi mưa to thì trận đấu mới bị huỷ."
+        },
+        {
+          "c": "除非有特别重要的事，不然他从不请假。",
+          "d": "Chúfēi yǒu tèbié zhòngyào de shì, bùrán tā cóng bù qǐngjià.",
+          "v": "Trừ khi có việc đặc biệt quan trọng, nếu không anh ấy chẳng bao giờ xin nghỉ."
+        },
+        {
+          "c": "我不会告诉别人，除非你同意。",
+          "d": "Wǒ bú huì gàosu biérén, chúfēi nǐ tóngyì.",
+          "v": "Tôi sẽ không nói với người khác, trừ khi bạn đồng ý."
+        }
+      ],
+      "luuY": [
+        "Không nói 除非…就…: vế sau dùng 才 (kết quả thuận) hoặc 否则 / 不然 (kết quả ngược).",
+        "Để ý chiều của vế sau: 除非你去，他才去 (bạn đi thì anh ấy mới đi) = 除非你去，否则他不去.",
+        "Khác 只有…才…: nghĩa gần nhau, nhưng 只有 không đi với 否则; 除非 nhấn tính ngoại lệ mạnh hơn."
+      ],
+      "soSanh": [
+        "zh-hsk3-zhiyou-cai",
+        "zh-hsk4-fouze-buran",
+        "zh-hsk3-zhiyao-jiu"
+      ],
+      "tuKhoa": [
+        "chufei",
+        "chu fei",
+        "chufei fouze",
+        "trừ khi",
+        "trừ phi",
+        "điều kiện duy nhất"
+      ],
+      "quiz": [
+        {
+          "h": "（　）你道歉，否则我不会原谅你。",
+          "lc": [
+            "除非",
+            "由于",
+            "只要",
+            "哪怕"
+          ],
+          "da": 0,
+          "gt": "Vế sau là 否则 + kết quả ngược → 除非. 只要 đi với 就, 哪怕 đi với 也, 由于 nêu nguyên nhân."
+        },
+        {
+          "h": "除非他来请我，我（　）去。",
+          "lc": [
+            "却",
+            "才",
+            "倒",
+            "而"
+          ],
+          "da": 1,
+          "gt": "除非 + điều kiện duy nhất, vế kết quả thuận dùng 才 (chỉ khi… mới…). 而, 却, 倒 mang ý chuyển ngoặt, không nối được với 除非."
+        },
+        {
+          "h": "除非 A，否则 B gần nghĩa nhất với cách nói nào?",
+          "lc": [
+            "A rồi sau đó B",
+            "vì A nên B",
+            "nếu không có A thì B",
+            "tuy A nhưng B"
+          ],
+          "da": 2,
+          "gt": "否则 = \"nếu không thì\": B là điều sẽ xảy ra khi điều kiện A không được đáp ứng."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-bushi-ershi",
+      "nhom": "Liên từ – câu phức",
+      "tieuDe": "不是…而是…",
+      "mau": "不是 + A，而是 + B",
+      "nghia": "không phải A mà là B",
+      "giaiThich": "Phủ định A để khẳng định B, dùng khi đính chính hoặc làm rõ điều thật sự muốn nói. A và B cùng loại: danh từ, cụm động từ, hoặc mệnh đề (kể cả nguyên nhân: 不是因为…，而是因为…). Dùng được trong cả khẩu ngữ lẫn văn viết.",
+      "cachGhep": [
+        "S + 不是 + N1，而是 + N2: 他不是老师，而是医生",
+        "S + 不是 + cụm động từ，而是 + cụm động từ: 不是不想去，而是没时间",
+        "不是因为 + A，而是因为 + B"
+      ],
+      "viDu": [
+        {
+          "c": "我不是不想去，而是没时间。",
+          "d": "Wǒ bú shì bù xiǎng qù, ér shì méi shíjiān.",
+          "v": "Tôi không phải không muốn đi, mà là không có thời gian."
+        },
+        {
+          "c": "他不是我哥哥，而是我的同学。",
+          "d": "Tā bú shì wǒ gēge, ér shì wǒ de tóngxué.",
+          "v": "Anh ấy không phải anh trai tôi mà là bạn học của tôi."
+        },
+        {
+          "c": "重要的不是结果，而是过程。",
+          "d": "Zhòngyào de bú shì jiéguǒ, ér shì guòchéng.",
+          "v": "Điều quan trọng không phải kết quả mà là quá trình."
+        },
+        {
+          "c": "这次失败不是因为运气不好，而是因为准备得不够。",
+          "d": "Zhè cì shībài bú shì yīnwèi yùnqi bù hǎo, ér shì yīnwèi zhǔnbèi de búgòu.",
+          "v": "Lần thất bại này không phải vì kém may mắn mà là vì chuẩn bị chưa đủ."
+        }
+      ],
+      "luuY": [
+        "Vế sau phải là 而是, không dùng 但是 / 可是: 不是我不想去，但是没时间 ✗.",
+        "Khác 不是…就是…: 不是 A 就是 B = \"không A thì B\" (một trong hai đúng); 不是 A 而是 B = bỏ A, lấy B. Nhầm 而 với 就 là đổi hẳn nghĩa.",
+        "Hai vế nên cân đối về loại từ (cùng danh từ hoặc cùng cụm động từ)."
+      ],
+      "soSanh": [
+        "zh-hsk5-bushi-jiushi",
+        "zh-hsk4-er",
+        "zh-hsk4-bing-bu"
+      ],
+      "tuKhoa": [
+        "bushi ershi",
+        "bu shi er shi",
+        "ershi",
+        "không phải mà là",
+        "đính chính"
+      ],
+      "quiz": [
+        {
+          "h": "我不是不喜欢这件衣服，（　）觉得太贵了。",
+          "lc": [
+            "而且",
+            "而是",
+            "何况",
+            "否则"
+          ],
+          "da": 1,
+          "gt": "Phủ định A, khẳng định B → 不是…而是…. 而且 là \"hơn nữa\", 否则 là \"nếu không\", 何况 là \"huống chi\" — đều không đi cặp với 不是."
+        },
+        {
+          "h": "不是 A，而是 B diễn tả điều gì?",
+          "lc": [
+            "cả A lẫn B đều đúng",
+            "A hoặc B, một trong hai",
+            "phủ định A, khẳng định B",
+            "A là nguyên nhân của B"
+          ],
+          "da": 2,
+          "gt": "而是 đưa ra điều đúng (B) thay cho điều bị phủ định (A)."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "这而是我的错，不是你的错。",
+            "这不是你的错，而且我的错。",
+            "这不是你的错，但而是我的错。",
+            "这不是你的错，而是我的错。"
+          ],
+          "da": 3,
+          "gt": "Trật tự là 不是 A，而是 B; 而且 không thay được 而是, 而是 không đứng ở vế trước và không ghép với 但."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-bushi-jiushi",
+      "nhom": "Liên từ – câu phức",
+      "tieuDe": "不是…就是…",
+      "mau": "不是 + A，就是 + B",
+      "nghia": "không A thì B; nếu không phải A thì là B",
+      "giaiThich": "Nêu hai khả năng và khẳng định chắc chắn một trong hai là đúng, không có khả năng thứ ba. Cũng dùng để tả một tình trạng lặp đi lặp lại chỉ quanh quẩn hai việc (thường kèm ý chê, than phiền). A và B cùng loại từ; thiên về khẩu ngữ.",
+      "cachGhep": [
+        "S + 不是 + V1，就是 + V2: 不是睡觉，就是玩游戏",
+        "不是 + N1，就是 + N2: 不是小王，就是小李",
+        "不是 + mệnh đề，就是 + mệnh đề: 不是刮风，就是下雨"
+      ],
+      "viDu": [
+        {
+          "c": "他周末不是睡觉，就是玩游戏。",
+          "d": "Tā zhōumò bú shì shuìjiào, jiù shì wán yóuxì.",
+          "v": "Cuối tuần anh ấy không ngủ thì lại chơi game."
+        },
+        {
+          "c": "这几天不是刮风，就是下雨。",
+          "d": "Zhè jǐ tiān bú shì guā fēng, jiù shì xià yǔ.",
+          "v": "Mấy hôm nay không gió thì mưa."
+        },
+        {
+          "c": "来的人不是小王，就是小李。",
+          "d": "Lái de rén bú shì Xiǎo Wáng, jiù shì Xiǎo Lǐ.",
+          "v": "Người đến nếu không phải Tiểu Vương thì là Tiểu Lý."
+        },
+        {
+          "c": "他每天不是加班，就是出差，很少在家。",
+          "d": "Tā měi tiān bú shì jiābān, jiù shì chūchāi, hěn shǎo zài jiā.",
+          "v": "Ngày nào anh ấy không tăng ca thì đi công tác, rất ít khi ở nhà."
+        }
+      ],
+      "luuY": [
+        "Đừng dịch 不是 ở đây thành \"không phải\" theo nghĩa phủ định hẳn: cả A và B đều là khả năng có thật.",
+        "Khác 不是…而是…: 而是 = bỏ A lấy B; 就是 = A hoặc B, một trong hai.",
+        "Khác 或者: 或者 chỉ liệt kê lựa chọn; 不是…就是… khẳng định chắc chắn nằm trong hai khả năng đó."
+      ],
+      "soSanh": [
+        "zh-hsk5-bushi-ershi",
+        "zh-hsk6-yaome-yaome",
+        "zh-hsk3-huozhe-haishi"
+      ],
+      "tuKhoa": [
+        "bushi jiushi",
+        "bu shi jiu shi",
+        "không thì",
+        "một trong hai",
+        "hoặc là"
+      ],
+      "quiz": [
+        {
+          "h": "他的手机（　）占线，就是关机，一直联系不上。",
+          "lc": [
+            "不是",
+            "与其",
+            "不但",
+            "除非"
+          ],
+          "da": 0,
+          "gt": "Hai khả năng luân phiên + 就是 → 不是…就是…. 不但 đi với 而且, 与其 đi với 不如, 除非 đi với 否则 / 才."
+        },
+        {
+          "h": "不是 A，就是 B nghĩa là gì?",
+          "lc": [
+            "không phải A mà là B",
+            "chắc chắn là một trong hai: A hoặc B",
+            "vừa A vừa B cùng lúc",
+            "không phải A cũng không phải B"
+          ],
+          "da": 1,
+          "gt": "就是 ở vế sau cho biết nếu không phải A thì hẳn là B — một trong hai khả năng chắc chắn đúng."
+        },
+        {
+          "h": "Câu nào mang nghĩa \"không phải A mà là B\"?",
+          "lc": [
+            "他不是老师，就是医生。",
+            "他是老师或者医生。",
+            "他不是老师，而是医生。",
+            "他要么是老师，要么是医生。"
+          ],
+          "da": 2,
+          "gt": "Chỉ 不是…而是… phủ định A để khẳng định B; 不是…就是…, 或者 và 要么…要么… đều nêu hai khả năng lựa chọn."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-yaobu",
+      "nhom": "Liên từ – câu phức",
+      "tieuDe": "要不 / 要不然",
+      "mau": "…，要不(然) + hậu quả | 要不(然) + đề nghị khác (吧)",
+      "nghia": "nếu không thì ~; hay là ~",
+      "giaiThich": "Liên từ khẩu ngữ, có hai nghĩa. (1) \"Nếu không thì\": nêu hậu quả khi không làm theo vế trước, giống 否则 / 不然. (2) \"Hay là\": đưa ra một phương án khác để đề nghị, thương lượng, thường có 吧 ở cuối. 要不 và 要不然 dùng như nhau.",
+      "cachGhep": [
+        "Vế 1，要不(然) + (就) + hậu quả: 快走吧，要不就迟到了",
+        "要不(然) + S + V + 吧: 要不我们明天再去吧",
+        "要不 đứng đầu vế sau, trước chủ ngữ"
+      ],
+      "viDu": [
+        {
+          "c": "快走吧，要不就赶不上火车了。",
+          "d": "Kuài zǒu ba, yàobù jiù gǎn bu shàng huǒchē le.",
+          "v": "Đi nhanh lên, nếu không thì lỡ tàu mất."
+        },
+        {
+          "c": "多穿点儿衣服，要不然会感冒的。",
+          "d": "Duō chuān diǎnr yīfu, yàobùrán huì gǎnmào de.",
+          "v": "Mặc thêm áo vào, không thì sẽ bị cảm đấy."
+        },
+        {
+          "c": "今天太晚了，要不我们明天再去吧。",
+          "d": "Jīntiān tài wǎn le, yàobù wǒmen míngtiān zài qù ba.",
+          "v": "Hôm nay muộn quá rồi, hay là mai chúng ta hãy đi nhé."
+        },
+        {
+          "c": "你一个人拿不了，要不我帮你吧？",
+          "d": "Nǐ yí gè rén ná bu liǎo, yàobù wǒ bāng nǐ ba?",
+          "v": "Một mình bạn không cầm hết được đâu, hay để tôi giúp nhé?"
+        }
+      ],
+      "luuY": [
+        "Khác 否则: 否则 trang trọng hơn và CHỈ có nghĩa \"nếu không thì\"; nghĩa đề nghị \"hay là\" chỉ 要不 / 要不然 mới có.",
+        "Khác 要不是 (nếu không phải vì…): 要不是 mở đầu một giả thiết trái thực tế, không phải từ nối hậu quả.",
+        "Khác 还是…吧: 还是…吧 là chọn sau khi cân nhắc; 要不…吧 là gợi ý thêm một phương án mới."
+      ],
+      "soSanh": [
+        "zh-hsk4-fouze-buran",
+        "zh-hsk6-yaome-yaome",
+        "zh-hsk3-haishi-ba",
+        "zh-hsk6-yaobushi"
+      ],
+      "tuKhoa": [
+        "yaobu",
+        "yao bu",
+        "yaoburan",
+        "nếu không thì",
+        "hay là",
+        "kẻo"
+      ],
+      "quiz": [
+        {
+          "h": "你得早点儿出发，（　）会迟到的。",
+          "lc": [
+            "要不然",
+            "要不是",
+            "何况",
+            "与其"
+          ],
+          "da": 0,
+          "gt": "Nêu hậu quả nếu không làm theo vế trước → 要不然. 要不是 mở giả thiết \"nếu không phải vì\", 与其 cần 不如, 何况 là \"huống chi\"."
+        },
+        {
+          "h": "Trong câu 外面下雨了，要不我们别去了吧, 要不 nghĩa là gì?",
+          "lc": [
+            "một khi",
+            "hay là (đề nghị phương án khác)",
+            "mặc dù",
+            "vì vậy"
+          ],
+          "da": 1,
+          "gt": "Có 吧 ở cuối và nội dung là một gợi ý → 要不 mang nghĩa \"hay là\"."
+        },
+        {
+          "h": "So với 否则, 要不 có đặc điểm gì?",
+          "lc": [
+            "chỉ đứng ở cuối câu",
+            "chỉ dùng trong câu hỏi có 吗",
+            "khẩu ngữ hơn và còn dùng để đề nghị \"hay là\"",
+            "trang trọng hơn, chỉ dùng trong văn bản hành chính"
+          ],
+          "da": 2,
+          "gt": "要不 là từ của hội thoại, có thêm nghĩa gợi ý phương án khác; 否则 thiên văn viết và chỉ nêu hậu quả."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-zhisuoyi-shi-yinwei",
+      "nhom": "Liên từ – câu phức",
+      "tieuDe": "之所以…是因为…",
+      "mau": "S + 之所以 + kết quả，是因为 / 是由于 + nguyên nhân",
+      "nghia": "sở dĩ ~ là vì ~",
+      "giaiThich": "Nêu kết quả trước rồi mới giải thích nguyên nhân, nhằm nhấn mạnh phần nguyên nhân. Thứ tự ngược với 因为…所以…. Thiên về văn viết và lối nói trang trọng, phân tích, giải thích.",
+      "cachGhep": [
+        "S + 之所以 + V / Adj…，是因为 + mệnh đề: 他之所以成功，是因为努力",
+        "Thay 是因为 bằng 是由于 (văn viết) hoặc 是为了 (nêu mục đích)",
+        "之所以 đứng SAU chủ ngữ của vế kết quả"
+      ],
+      "viDu": [
+        {
+          "c": "他之所以成功，是因为比别人更努力。",
+          "d": "Tā zhīsuǒyǐ chénggōng, shì yīnwèi bǐ biérén gèng nǔlì.",
+          "v": "Sở dĩ anh ấy thành công là vì chăm chỉ hơn người khác."
+        },
+        {
+          "c": "我之所以没告诉你，是因为怕你担心。",
+          "d": "Wǒ zhīsuǒyǐ méi gàosu nǐ, shì yīnwèi pà nǐ dānxīn.",
+          "v": "Sở dĩ tôi không nói với bạn là vì sợ bạn lo."
+        },
+        {
+          "c": "这家饭馆之所以受欢迎，是因为菜又好吃又便宜。",
+          "d": "Zhè jiā fànguǎn zhīsuǒyǐ shòu huānyíng, shì yīnwèi cài yòu hǎochī yòu piányi.",
+          "v": "Sở dĩ quán ăn này được ưa chuộng là vì món ăn vừa ngon vừa rẻ."
+        },
+        {
+          "c": "大家之所以反对这个计划，是因为风险太大。",
+          "d": "Dàjiā zhīsuǒyǐ fǎnduì zhège jìhuà, shì yīnwèi fēngxiǎn tài dà.",
+          "v": "Sở dĩ mọi người phản đối kế hoạch này là vì rủi ro quá lớn."
+        }
+      ],
+      "luuY": [
+        "Vị trí: 他之所以迟到… ✓; 之所以 thường không đứng trước chủ ngữ.",
+        "Không dùng 所以 ở vế sau: 之所以…，所以… ✗. Vế sau phải là 是因为 / 是由于.",
+        "Khác 因为…所以…: nguyên nhân trước, kết quả sau, trung tính; 之所以…是因为… đảo lại để nhấn nguyên nhân, trang trọng hơn."
+      ],
+      "soSanh": [
+        "zh-hsk2-yinwei-suoyi",
+        "zh-hsk5-youyu",
+        "zh-hsk4-yinci-yushi"
+      ],
+      "tuKhoa": [
+        "zhisuoyi",
+        "zhi suo yi",
+        "zhisuoyi shi yinwei",
+        "sở dĩ là vì",
+        "sở dĩ",
+        "nhấn mạnh nguyên nhân"
+      ],
+      "quiz": [
+        {
+          "h": "我之所以选择这个专业，（　）我从小就喜欢画画。",
+          "lc": [
+            "从而",
+            "因此",
+            "所以",
+            "是因为"
+          ],
+          "da": 3,
+          "gt": "之所以 nêu kết quả, vế sau giải thích nguyên nhân bằng 是因为. 所以, 因此, 从而 đều dẫn ra kết quả nên không dùng được ở đây."
+        },
+        {
+          "h": "Trong mẫu này, ngay sau 之所以 là phần gì?",
+          "lc": [
+            "kết quả",
+            "nguyên nhân",
+            "điều kiện",
+            "mục đích"
+          ],
+          "da": 0,
+          "gt": "之所以 + kết quả，是因为 + nguyên nhân — kết quả nêu trước, nguyên nhân nêu sau."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "他之所以迟到，但是路上堵车。",
+            "他之所以迟到，是因为路上堵车。",
+            "他因为迟到，之所以路上堵车。",
+            "他之所以迟到，所以路上堵车。"
+          ],
+          "da": 1,
+          "gt": "之所以 chỉ phối hợp với 是因为 / 是由于 ở vế sau; không đi với 所以 hay 但是, và không đứng ở vế nguyên nhân."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-youyu",
+      "nhom": "Liên từ – câu phức",
+      "tieuDe": "由于",
+      "mau": "由于 + nguyên nhân (N / mệnh đề)，(所以 / 因此 / 因而) + kết quả",
+      "nghia": "do, bởi vì ~ (trang trọng)",
+      "giaiThich": "Nêu nguyên nhân, nghĩa như 因为 nhưng trang trọng, dùng nhiều trong văn viết, thông báo, tin tức. Sau 由于 có thể là danh từ (由于天气原因) hoặc mệnh đề. Vế kết quả có thể dùng 所以, 因此 hoặc 因而.",
+      "cachGhep": [
+        "由于 + cụm danh từ，kết quả: 由于天气原因，航班取消了",
+        "由于 + mệnh đề，(因此 / 因而 / 所以) + kết quả",
+        "…是由于 + nguyên nhân (+ 造成的): 事故是由于…造成的"
+      ],
+      "viDu": [
+        {
+          "c": "由于天气原因，航班取消了。",
+          "d": "Yóuyú tiānqì yuányīn, hángbān qǔxiāo le.",
+          "v": "Do nguyên nhân thời tiết, chuyến bay đã bị huỷ."
+        },
+        {
+          "c": "由于时间关系，今天就讲到这儿。",
+          "d": "Yóuyú shíjiān guānxi, jīntiān jiù jiǎng dào zhèr.",
+          "v": "Do thời gian có hạn, hôm nay nói đến đây thôi."
+        },
+        {
+          "c": "由于他工作认真，因此很快得到了提升。",
+          "d": "Yóuyú tā gōngzuò rènzhēn, yīncǐ hěn kuài dédào le tíshēng.",
+          "v": "Do anh ấy làm việc nghiêm túc nên rất nhanh được thăng chức."
+        },
+        {
+          "c": "这次事故是由于司机太累造成的。",
+          "d": "Zhè cì shìgù shì yóuyú sījī tài lèi zàochéng de.",
+          "v": "Vụ tai nạn lần này là do tài xế quá mệt gây ra."
+        }
+      ],
+      "luuY": [
+        "Khác 因为 (1): 由于 là văn viết; nói chuyện thường ngày dùng 因为.",
+        "Khác 因为 (2): 由于 phối hợp được với 因此 / 因而, còn 因为 thường chỉ đi với 所以.",
+        "Khác 因为 (3): vế 因为 có thể đặt sau kết quả (我没去，因为太忙), vế 由于 thường đứng trước (trừ dạng 是由于…)."
+      ],
+      "soSanh": [
+        "zh-hsk2-yinwei-suoyi",
+        "zh-hsk4-yinci-yushi",
+        "zh-hsk5-yiner",
+        "zh-hsk5-zhisuoyi-shi-yinwei"
+      ],
+      "tuKhoa": [
+        "youyu",
+        "you yu",
+        "do bởi",
+        "bởi vì",
+        "nguyên nhân văn viết"
+      ],
+      "quiz": [
+        {
+          "h": "（　）大雾，高速公路暂时关闭。",
+          "lc": [
+            "何况",
+            "反而",
+            "以便",
+            "由于"
+          ],
+          "da": 3,
+          "gt": "Nêu nguyên nhân bằng một danh từ (大雾) trong câu thông báo → 由于. 以便 nêu mục đích, 何况 là \"huống chi\", 反而 là \"trái lại\"."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "由于身体不好，他提前退休了。",
+            "他提前退休了，由于所以身体不好。",
+            "身体不好由于，他提前退休了。",
+            "由于身体不好，但是他提前退休了。"
+          ],
+          "da": 0,
+          "gt": "由于 đứng đầu vế nguyên nhân, kết quả theo sau; không ghép 由于 với 但是, không đặt 由于 cuối vế hay dính liền với 所以."
+        },
+        {
+          "h": "So với 因为, 由于 có đặc điểm gì?",
+          "lc": [
+            "khẩu ngữ hơn, chỉ dùng khi nói chuyện thân mật",
+            "trang trọng hơn và có thể phối hợp với 因此 / 因而",
+            "bắt buộc đứng ở cuối câu",
+            "chỉ dùng để nêu mục đích"
+          ],
+          "da": 1,
+          "gt": "由于 là từ nêu nguyên nhân của văn viết, vế sau dùng được 因此 / 因而; nó không nêu mục đích và không đứng cuối câu."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-hekuang",
+      "nhom": "Liên từ – câu phức",
+      "tieuDe": "何况",
+      "mau": "(连) A + 都 / 也…，(更) 何况 + B (呢)？ | …，何况 + lý do bổ sung",
+      "nghia": "huống chi, huống hồ ~",
+      "giaiThich": "Có hai cách dùng. (1) Phản vấn so sánh: A còn như thế thì B càng khỏi phải nói; vế trước hay có 连…都 / 尚且, cuối câu hay có 呢. (2) Bổ sung thêm một lý do có sức nặng hơn (\"hơn nữa, huống hồ\"), lúc này gần với 况且 / 再说. Có thể thêm 更 / 又 phía trước.",
+      "cachGhep": [
+        "连 A 都…，何况 B (呢)？: 连老师都不会，何况我们呢？",
+        "…，更何况 + N / mệnh đề",
+        "Lý do 1，何况 + lý do 2: 他本来就不想去，何况还下着雨"
+      ],
+      "viDu": [
+        {
+          "c": "这个问题连老师都不会，何况我们呢？",
+          "d": "Zhège wèntí lián lǎoshī dōu bú huì, hékuàng wǒmen ne?",
+          "v": "Câu này đến thầy giáo còn không biết, huống chi chúng ta?"
+        },
+        {
+          "c": "平时这里都很堵，何况是节假日。",
+          "d": "Píngshí zhèlǐ dōu hěn dǔ, hékuàng shì jiéjiàrì.",
+          "v": "Ngày thường ở đây đã tắc lắm rồi, huống chi là ngày lễ."
+        },
+        {
+          "c": "这么贵的东西，大人都舍不得买，更何况孩子。",
+          "d": "Zhème guì de dōngxi, dàren dōu shěbude mǎi, gèng hékuàng háizi.",
+          "v": "Đồ đắt thế này người lớn còn tiếc không dám mua, huống hồ là trẻ con."
+        },
+        {
+          "c": "他本来就不想去，何况今天还下着雨。",
+          "d": "Tā běnlái jiù bù xiǎng qù, hékuàng jīntiān hái xià zhe yǔ.",
+          "v": "Anh ấy vốn đã không muốn đi, huống hồ hôm nay trời còn đang mưa."
+        }
+      ],
+      "luuY": [
+        "何况 đứng đầu vế SAU, không đứng ở vế đầu câu.",
+        "Khác 况且 / 再说: hai từ này chỉ bổ sung lý do, không dùng trong câu phản vấn kiểu \"A còn…, huống chi B\"; 何况 dùng được cả hai kiểu.",
+        "Câu phản vấn với 何况 kết thúc bằng 呢 (hoặc không có trợ từ), không dùng 吗."
+      ],
+      "soSanh": [
+        "zh-hsk6-kuangqie",
+        "zh-hsk6-shangqie-hekuang",
+        "zh-hsk4-lian-dou",
+        "zh-hsk5-zaishuo"
+      ],
+      "tuKhoa": [
+        "hekuang",
+        "he kuang",
+        "huống chi",
+        "huống hồ",
+        "geng hekuang"
+      ],
+      "quiz": [
+        {
+          "h": "大人都搬不动，（　）一个孩子呢？",
+          "lc": [
+            "从而",
+            "由于",
+            "反而",
+            "何况"
+          ],
+          "da": 3,
+          "gt": "A còn không làm được thì B càng không → 何况…呢？. 反而 là \"trái lại\", 从而 dẫn kết quả, 由于 nêu nguyên nhân."
+        },
+        {
+          "h": "何况 trong câu 连他都不知道，何况我呢？ diễn tả điều gì?",
+          "lc": [
+            "anh ấy còn không biết thì tôi càng không biết",
+            "anh ấy không biết nhưng tôi biết",
+            "nếu anh ấy không biết thì tôi sẽ hỏi",
+            "vì anh ấy không biết nên tôi phải biết"
+          ],
+          "da": 0,
+          "gt": "何况 = \"huống chi\": lấy trường hợp mạnh hơn (他) để suy ra trường hợp yếu hơn (我) càng như vậy."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "何况周末他都要工作，连平时呢？",
+            "连周末他都要工作，何况平时呢？",
+            "连周末他都要工作，否则平时呢？",
+            "连周末他都要工作，何况所以平时。"
+          ],
+          "da": 1,
+          "gt": "Trật tự là 连 A 都…，何况 B 呢？; 何况 không đứng ở vế đầu, không thay bằng 否则 và không ghép với 所以."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-faner",
+      "nhom": "Liên từ – câu phức",
+      "tieuDe": "反而",
+      "mau": "(不但不 / 不但没 + A)，S + 反而 + B",
+      "nghia": "trái lại, ngược lại còn ~",
+      "giaiThich": "Phó từ, cho biết kết quả thực tế trái ngược với điều lẽ ra phải xảy ra theo lẽ thường hoặc theo dự đoán. Hay phối hợp với 不但不 / 不但没(有) ở vế trước. Đứng sau chủ ngữ, trước vị ngữ của vế sau.",
+      "cachGhep": [
+        "Tình huống，S + 反而 + V / Adj: 吃了药，病反而更重了",
+        "S + 不但不 / 不但没 + V1，反而 + V2: 不但没停，反而越下越大",
+        "反而 + 更 / 越来越 + Adj"
+      ],
+      "viDu": [
+        {
+          "c": "吃了药，他的病反而更重了。",
+          "d": "Chī le yào, tā de bìng fǎn'ér gèng zhòng le.",
+          "v": "Uống thuốc rồi mà bệnh của anh ấy trái lại còn nặng hơn."
+        },
+        {
+          "c": "雨不但没停，反而越下越大。",
+          "d": "Yǔ búdàn méi tíng, fǎn'ér yuè xià yuè dà.",
+          "v": "Mưa chẳng những không tạnh mà ngược lại càng lúc càng to."
+        },
+        {
+          "c": "我帮了他，他不但不感谢我，反而生我的气。",
+          "d": "Wǒ bāng le tā, tā búdàn bù gǎnxiè wǒ, fǎn'ér shēng wǒ de qì.",
+          "v": "Tôi giúp anh ta, anh ta chẳng những không cảm ơn mà trái lại còn giận tôi."
+        },
+        {
+          "c": "休息了一天，我反而觉得更累了。",
+          "d": "Xiūxi le yì tiān, wǒ fǎn'ér juéde gèng lèi le.",
+          "v": "Nghỉ một ngày rồi, tôi lại thấy mệt hơn."
+        }
+      ],
+      "luuY": [
+        "反而 là phó từ nên đứng SAU chủ ngữ: 他反而生气了 ✓; đừng đặt như liên từ đầu câu kiểu 但是.",
+        "Khác 却 / 但是: hai từ này chỉ chuyển ý nói chung; 反而 đòi phải có một dự đoán hợp lẽ thường bị ĐẢO NGƯỢC (uống thuốc → lẽ ra đỡ, vậy mà nặng hơn).",
+        "Khác 相反: 相反 là \"ngược lại\" để đối chiếu hai sự việc, thường đứng riêng đầu câu (相反，…)."
+      ],
+      "soSanh": [
+        "zh-hsk4-que-raner",
+        "zh-hsk6-feidan-faner",
+        "zh-hsk6-fandao",
+        "zh-hsk4-dao"
+      ],
+      "tuKhoa": [
+        "faner",
+        "fan er",
+        "trái lại",
+        "ngược lại",
+        "budan bu faner"
+      ],
+      "quiz": [
+        {
+          "h": "喝了咖啡以后，我（　）更困了。",
+          "lc": [
+            "反而",
+            "以便",
+            "何况",
+            "从而"
+          ],
+          "da": 0,
+          "gt": "Uống cà phê lẽ ra tỉnh, thực tế lại buồn ngủ hơn → 反而. 从而 dẫn kết quả thuận, 何况 là \"huống chi\", 以便 nêu mục đích."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "反而他不但没生气，笑了。",
+            "他不但没生气，反而笑了。",
+            "他不但没生气，反而且笑了。",
+            "他反而不但没生气，笑了。"
+          ],
+          "da": 1,
+          "gt": "Mẫu là 不但没 A，反而 B: 反而 đứng ở vế sau, ngay trước động từ; không đưa lên vế trước và không ghép thành 反而且."
+        },
+        {
+          "h": "反而 thể hiện sắc thái gì?",
+          "lc": [
+            "kết quả đúng như đã dự đoán",
+            "bổ sung thêm một lý do",
+            "kết quả trái ngược với điều lẽ ra phải xảy ra",
+            "tổng kết lại các ý trước"
+          ],
+          "da": 2,
+          "gt": "反而 chỉ dùng khi thực tế đi ngược với lẽ thường hay dự đoán; nó không tổng kết, không bổ sung lý do."
+        }
+      ]
+    }
+  ]
+}

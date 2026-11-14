@@ -1,0 +1,1248 @@
+{
+  "nn": "ja",
+  "cap": "N1",
+  "diem": [
+    {
+      "id": "ja-n1-te-yamanai",
+      "nhom": "Cảm xúc – mức độ cực điểm",
+      "tieuDe": "〜てやまない",
+      "mau": "V-て + やまない（động từ chỉ tình cảm: 願う, 祈る, 期待する, 愛する, 尊敬する, 後悔する）",
+      "nghia": "luôn luôn ~, không ngừng ~ (tình cảm mạnh, kéo dài)",
+      "giaiThich": "やまない là phủ định của 止む \"ngừng\". Mẫu diễn tả một tình cảm, nguyện vọng mạnh mẽ kéo dài mãi không dứt của người nói. Chỉ đi với động từ chỉ tình cảm như 願う, 祈る, 期待する, 愛する, 尊敬する, 信じる, 後悔する. Trang trọng, hay dùng cuối bài phát biểu, thư chúc (dạng 〜てやみません).",
+      "cachGhep": [
+        "V-て + やまない: 願ってやまない ・ 祈ってやまない",
+        "Lịch sự: V-て + やみません",
+        "Bổ nghĩa danh từ: 愛してやまない + N"
+      ],
+      "viDu": [
+        {
+          "c": "皆様のご健康とご多幸を願ってやみません。",
+          "d": "みなさまの ごけんこうと ごたこうを ねがって やみません。",
+          "v": "Tôi luôn cầu mong quý vị mạnh khoẻ và nhiều hạnh phúc."
+        },
+        {
+          "c": "一日も早い復興を祈ってやまない。",
+          "d": "いちにちも はやい ふっこうを いのって やまない。",
+          "v": "Tôi không ngừng cầu mong vùng này được phục hồi sớm ngày nào hay ngày ấy."
+        },
+        {
+          "c": "彼女は、多くの読者が愛してやまない作家だ。",
+          "d": "かのじょは、おおくの どくしゃが あいして やまない さっかだ。",
+          "v": "Bà ấy là nhà văn được rất nhiều độc giả yêu mến mãi không thôi."
+        },
+        {
+          "c": "あの時もっと話を聞いてやればよかったと、後悔してやまない。",
+          "d": "あのとき もっと はなしを きいて やれば よかったと、こうかいして やまない。",
+          "v": "Tôi cứ hối hận mãi rằng giá lúc đó mình chịu nghe nó nói nhiều hơn."
+        }
+      ],
+      "luuY": [
+        "Không ghép với tính từ: うれしくてやまない ✗, 寂しくてやまない ✗ → dùng 〜てたまらない／〜てならない.",
+        "Không dùng với phản ứng cảm xúc nhất thời như 驚く, 怒る, びっくりする; chỉ dùng với tình cảm kéo dài (mong, yêu, kính trọng, hối hận).",
+        "Khác 〜てたまらない: てたまらない là cảm giác, ham muốn \"chịu không nổi\" (cả tính từ), dùng trong hội thoại; てやまない là tình cảm bền bỉ, trang trọng. Khác 〜を禁じ得ない: mẫu đó là cảm xúc bật lên trước một sự việc."
+      ],
+      "soSanh": [
+        "ja-n3-te-tamaranai",
+        "ja-n1-wo-kinjienai",
+        "ja-n2-zu-niwa-irarenai"
+      ],
+      "tuKhoa": [
+        "te yamanai",
+        "teyamanai",
+        "te yamimasen",
+        "không ngừng",
+        "luôn mong",
+        "cầu chúc"
+      ],
+      "quiz": [
+        {
+          "h": "世界の平和を願って（　）。",
+          "lc": [
+            "とまらない",
+            "やむ",
+            "やめない",
+            "やまない"
+          ],
+          "da": 3,
+          "gt": "Mẫu cố định là V-て + やまない (từ động từ 止む). やめない, とまらない không tạo thành mẫu này; やむ ở dạng khẳng định sẽ thành \"ngừng mong\"."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "ご成功を心から祈ってやみません。",
+            "今日は寒くてやまない。",
+            "大きな音にびっくりしてやまない。",
+            "合格できて、うれしくてやみません。"
+          ],
+          "da": 0,
+          "gt": "てやまない chỉ đi với động từ chỉ tình cảm kéo dài như 祈る. Nó không ghép với tính từ (うれしい, 寒い) và không dùng cho phản ứng nhất thời như びっくりする."
+        },
+        {
+          "h": "Nhận xét nào đúng khi so 〜てやまない với 〜てたまらない?",
+          "lc": [
+            "Cả hai đều ghép được với tính từ い",
+            "てやまない: động từ tình cảm, trang trọng; てたまらない: cảm giác \"chịu không nổi\", cả tính từ",
+            "てやまない là văn nói, てたまらない là văn viết cổ",
+            "Hai mẫu thay cho nhau trong mọi câu"
+          ],
+          "da": 1,
+          "gt": "てやまない giới hạn ở động từ như 願う, 愛する và mang giọng trang trọng; てたまらない diễn tả cảm giác, ham muốn mạnh (暑くてたまらない). Vì khác loại từ đi kèm nên không thay thế tự do."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-ni-taenai",
+      "nhom": "Cảm xúc – mức độ cực điểm",
+      "tieuDe": "〜に堪えない",
+      "mau": "V-る（見る・聞く・読む）+ に堪えない ・ N（感謝・喜び・後悔…）+ に堪えない",
+      "nghia": "(tệ đến mức) không thể chịu nổi khi ~ ・ vô cùng ~",
+      "giaiThich": "Có hai cách dùng. (1) 見る／聞く／読む + に堪えない: sự việc quá tệ, quá đau lòng nên không thể nhìn / nghe / đọc tiếp. (2) Danh từ chỉ cảm xúc (感謝, 喜び, 後悔, 同情; thường kèm の念) + に堪えない: cảm xúc mạnh đến mức không nén được, dùng trong lời chào, thư từ trang trọng. 堪えない đọc là たえない.",
+      "cachGhep": [
+        "V-る + に堪えない (chủ yếu 見る, 聞く, 読む): 見るに堪えない ・ 聞くに堪えない",
+        "N cảm xúc + に堪えない: 感謝に堪えない ・ 感謝の念に堪えません",
+        "Bổ nghĩa danh từ: 聞くに堪えない悪口"
+      ],
+      "viDu": [
+        {
+          "c": "事故現場は、見るに堪えないほど悲惨な状態だった。",
+          "d": "じこげんばは、みるに たえないほど ひさんな じょうたいだった。",
+          "v": "Hiện trường vụ tai nạn thảm khốc đến mức không nỡ nhìn."
+        },
+        {
+          "c": "彼の話は他人の悪口ばかりで、聞くに堪えない。",
+          "d": "かれの はなしは たにんの わるくちばかりで、きくに たえない。",
+          "v": "Chuyện anh ta nói toàn là nói xấu người khác, nghe không chịu nổi."
+        },
+        {
+          "c": "多大なご支援をいただき、感謝の念に堪えません。",
+          "d": "ただいな ごしえんを いただき、かんしゃの ねんに たえません。",
+          "v": "Được quý vị ủng hộ to lớn, tôi vô cùng biết ơn."
+        },
+        {
+          "c": "あの時止められなかったことを思うと、後悔の念に堪えない。",
+          "d": "あのとき とめられなかった ことを おもうと、こうかいの ねんに たえない。",
+          "v": "Nghĩ đến việc lúc đó đã không ngăn được, tôi vô cùng hối hận."
+        }
+      ],
+      "luuY": [
+        "Cách dùng (1) chỉ đi với vài động từ tri giác: 見る, 聞く, 読む. Không nói 食べるに堪えない.",
+        "Khác 〜に堪える: 鑑賞に堪える = \"đáng để thưởng thức\" (đánh giá tốt); 見るに堪えない = \"tệ đến không nhìn nổi\". Còn 感謝に堪えない (cách dùng 2) KHÔNG có dạng khẳng định 感謝に堪える.",
+        "Khác 〜を禁じ得ない: cùng là cảm xúc không nén được, nhưng を禁じ得ない đi với 涙, 怒り, 驚き, 同情; に堪えない đi với 感謝, 喜び, 後悔 và hay gặp trong lời cảm ơn trang trọng."
+      ],
+      "soSanh": [
+        "ja-n1-ni-taeru",
+        "ja-n1-ni-taru",
+        "ja-n1-wo-kinjienai",
+        "ja-n1-kagiri-da"
+      ],
+      "tuKhoa": [
+        "ni taenai",
+        "nitaenai",
+        "miru ni taenai",
+        "kiku ni taenai",
+        "không chịu nổi",
+        "vô cùng",
+        "không nỡ nhìn"
+      ],
+      "quiz": [
+        {
+          "h": "あまりにひどい演奏で、聞く（　）。",
+          "lc": [
+            "を禁じ得ない",
+            "に堪えない",
+            "にかたくない",
+            "に堪える"
+          ],
+          "da": 1,
+          "gt": "聞くに堪えない = tệ đến mức nghe không nổi. に堪える là \"đáng để nghe\" nên mâu thuẫn với \"quá tệ\"; にかたくない chỉ đi với 想像・察する; を禁じ得ない phải đi sau danh từ cảm xúc + を."
+        },
+        {
+          "h": "「ご協力をいただき、感謝の念に堪えません」 có nghĩa là gì?",
+          "lc": [
+            "Tôi không cần cảm ơn sự hợp tác của quý vị",
+            "Sự hợp tác của quý vị không đáng cảm ơn",
+            "Tôi vô cùng biết ơn sự hợp tác của quý vị",
+            "Tôi không chịu nổi sự hợp tác của quý vị"
+          ],
+          "da": 2,
+          "gt": "Danh từ cảm xúc + に堪えない = cảm xúc mạnh đến mức không nén được, tức \"vô cùng biết ơn\". Ở cách dùng này nó không mang nghĩa chê bai hay phủ định sự cần thiết."
+        },
+        {
+          "h": "Cách ghép nào đúng?",
+          "lc": [
+            "見たに堪えない光景だった。",
+            "見てに堪えない光景だった。",
+            "見に堪えない光景だった。",
+            "見るに堪えない光景だった。"
+          ],
+          "da": 3,
+          "gt": "Động từ ghép ở thể từ điển: 見る + に堪えない. Không dùng thể た, thể て hay gốc ます."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-ni-taeru",
+      "nhom": "Cảm xúc – mức độ cực điểm",
+      "tieuDe": "〜に堪える",
+      "mau": "V-る／N + に堪える（+ N）",
+      "nghia": "đáng để ~, đủ chất lượng để ~",
+      "giaiThich": "Diễn tả sự đánh giá: vật / tác phẩm có đủ giá trị, đủ chất lượng để người ta xem, đọc, thưởng thức, hay đủ sức chịu được sự phê bình, sử dụng. Thường đi với 鑑賞, 批判, 評価, 使用, 読む, 見る. Văn viết. Dạng phủ định 〜に堪えない (読むに堪えない) nghĩa là \"không đáng / không chịu nổi\".",
+      "cachGhep": [
+        "N + に堪える: 鑑賞に堪える ・ 批判に堪える ・ 使用に堪える",
+        "V-る + に堪える: 読むに堪える ・ 見るに堪える",
+        "Bổ nghĩa danh từ: 鑑賞に堪える作品"
+      ],
+      "viDu": [
+        {
+          "c": "この作品は、大人の鑑賞にも堪える絵本だ。",
+          "d": "この さくひんは、おとなの かんしょうにも たえる えほんだ。",
+          "v": "Tác phẩm này là cuốn truyện tranh mà người lớn thưởng thức cũng thấy đáng."
+        },
+        {
+          "c": "彼の論文は、専門家の厳しい批判に堪えるものだった。",
+          "d": "かれの ろんぶんは、せんもんかの きびしい ひはんに たえる ものだった。",
+          "v": "Luận văn của anh ấy đủ sức đứng vững trước sự phê bình khắt khe của giới chuyên môn."
+        },
+        {
+          "c": "素人の作品だが、十分読むに堪える小説になっている。",
+          "d": "しろうとの さくひんだが、じゅうぶん よむに たえる しょうせつに なっている。",
+          "v": "Tuy là tác phẩm của người không chuyên nhưng đã thành một cuốn tiểu thuyết hoàn toàn đáng đọc."
+        },
+        {
+          "c": "この機械は、長年の使用に堪えるように作られている。",
+          "d": "この きかいは、ながねんの しように たえるように つくられている。",
+          "v": "Chiếc máy này được chế tạo để chịu được việc sử dụng trong nhiều năm."
+        }
+      ],
+      "luuY": [
+        "Không dùng mẫu này cho cảm xúc: 感謝に堪える ✗. Cảm xúc chỉ có dạng phủ định 感謝に堪えない \"vô cùng biết ơn\".",
+        "Khác 〜に足る: に足る = \"có đủ tư cách, giá trị để (tin, kính trọng, hài lòng)\" — nói về sự XỨNG ĐÁNG (信頼するに足る人); に堪える = \"đủ chất lượng để chịu được việc bị xem / phê bình / dùng\" — nói về tác phẩm, đồ vật.",
+        "Nghĩa gốc \"chịu đựng\" (暑さに耐える) thường viết bằng chữ 耐える; mẫu ngữ pháp này quen viết 堪える."
+      ],
+      "soSanh": [
+        "ja-n1-ni-taenai",
+        "ja-n1-ni-taru"
+      ],
+      "tuKhoa": [
+        "ni taeru",
+        "nitaeru",
+        "kanshou ni taeru",
+        "đáng để",
+        "đủ chất lượng",
+        "chịu được"
+      ],
+      "quiz": [
+        {
+          "h": "子供向けの映画だが、大人が見る（　）内容だ。",
+          "lc": [
+            "を堪える",
+            "で堪える",
+            "に堪える",
+            "と堪える"
+          ],
+          "da": 2,
+          "gt": "Mẫu là V-る／N + に + 堪える: 見るに堪える \"đáng để xem\". Trợ từ phải là に."
+        },
+        {
+          "h": "「プロの鑑賞に堪える写真」 có nghĩa là gì?",
+          "lc": [
+            "Bức ảnh người chuyên nghiệp không cần xem",
+            "Bức ảnh do người chuyên nghiệp chụp",
+            "Bức ảnh mà người chuyên nghiệp không chịu nổi khi xem",
+            "Bức ảnh đủ giá trị để người chuyên nghiệp thưởng thức"
+          ],
+          "da": 3,
+          "gt": "鑑賞に堪える = đủ chất lượng để được thưởng thức, là lời đánh giá tốt. \"Không chịu nổi khi xem\" là dạng phủ định 見るに堪えない."
+        },
+        {
+          "h": "Câu nào dùng 〜に堪える đúng?",
+          "lc": [
+            "これは専門家の批判に堪える研究だ。",
+            "雨が降るに堪える。",
+            "ご協力いただき、感謝に堪える。",
+            "彼の苦労は想像に堪える。"
+          ],
+          "da": 0,
+          "gt": "に堪える đi với 批判, 鑑賞, 使用… để nói \"đủ sức chịu được, đáng để\". Cảm xúc chỉ có 感謝に堪えない; với 想像 phải dùng 想像にかたくない; 雨が降る không phải việc để đánh giá chất lượng."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-ni-taru",
+      "nhom": "Cảm xúc – mức độ cực điểm",
+      "tieuDe": "〜に足る／〜に足りない",
+      "mau": "V-る／N + に足る + N ・ V-る + に足りない（に足らない）",
+      "nghia": "đáng để ~, đủ để ~ ・ không đáng ~",
+      "giaiThich": "〜に足る: có đủ giá trị, tư cách, điều kiện để làm việc đó; thường bổ nghĩa cho danh từ đứng sau (信頼するに足る人物). Hay đi với 信頼する, 尊敬する, 信じる, 満足, 証明する, 語る. Dạng phủ định 〜に足りない／〜に足らない: \"không đáng để ~\" (取るに足りない = không đáng kể, 恐れるに足りない = không đáng sợ). Văn viết.",
+      "cachGhep": [
+        "V-る + に足る + N: 信頼するに足る人物 ・ 証明するに足る証拠",
+        "N + に足る + N: 満足に足る回答 ・ 尊敬に足る人",
+        "V-る + に足りない／に足らない: 取るに足りない ・ 恐れるに足りない"
+      ],
+      "viDu": [
+        {
+          "c": "彼は信頼するに足る人物だ。",
+          "d": "かれは しんらいするに たる じんぶつだ。",
+          "v": "Anh ấy là người đáng tin cậy."
+        },
+        {
+          "c": "会議では、満足に足る回答は得られなかった。",
+          "d": "かいぎでは、まんぞくに たる かいとうは えられなかった。",
+          "v": "Trong cuộc họp đã không nhận được câu trả lời đủ để hài lòng."
+        },
+        {
+          "c": "それを証明するに足る証拠はまだ見つかっていない。",
+          "d": "それを しょうめいするに たる しょうこは まだ みつかっていない。",
+          "v": "Vẫn chưa tìm được chứng cứ đủ để chứng minh điều đó."
+        },
+        {
+          "c": "そんなうわさは取るに足りないことだ。気にするな。",
+          "d": "そんな うわさは とるに たりない ことだ。きに するな。",
+          "v": "Tin đồn như thế là chuyện không đáng kể. Đừng bận tâm."
+        }
+      ],
+      "luuY": [
+        "Ghép với thể từ điển hoặc danh từ; không dùng thể た／て: 信頼したに足る ✗.",
+        "Khác 〜に堪える: に足る nói về sự XỨNG ĐÁNG, đủ điều kiện (đáng tin, đáng kính, đủ để chứng minh); に堪える nói tác phẩm / đồ vật đủ chất lượng để chịu được việc xem, phê bình, sử dụng.",
+        "Khác 〜に（は）あたらない: にはあたらない là \"không đến mức phải (ngạc nhiên, chê trách)\"; 〜に足りない là \"không có giá trị để ~\" (取るに足りない)."
+      ],
+      "soSanh": [
+        "ja-n1-ni-taeru",
+        "ja-n1-ni-taenai",
+        "ja-n1-niwa-ataranai"
+      ],
+      "tuKhoa": [
+        "ni taru",
+        "nitaru",
+        "ni tarinai",
+        "toru ni tarinai",
+        "đáng để",
+        "đủ để",
+        "không đáng kể"
+      ],
+      "quiz": [
+        {
+          "h": "彼女は、誰もが尊敬する（　）教師だ。",
+          "lc": [
+            "を足る",
+            "に足る",
+            "にかたくない",
+            "に足す"
+          ],
+          "da": 1,
+          "gt": "V-る + に足る + N: 尊敬するに足る教師 \"giáo viên đáng kính trọng\". Trợ từ phải là に; 足す là động từ \"cộng thêm\"; にかたくない chỉ đi với 想像・察する và không bổ nghĩa danh từ kiểu này."
+        },
+        {
+          "h": "「取るに足りない問題」 có nghĩa là gì?",
+          "lc": [
+            "Vấn đề chưa đủ dữ kiện",
+            "Vấn đề không thể giải quyết",
+            "Vấn đề không đáng kể",
+            "Vấn đề rất đáng quan tâm"
+          ],
+          "da": 2,
+          "gt": "取るに足りない là cụm cố định = \"không đáng để bận tâm, nhỏ nhặt\". Nó không nói về khả năng giải quyết hay thiếu dữ kiện."
+        },
+        {
+          "h": "Cách ghép nào đúng?",
+          "lc": [
+            "これは信じてに足る情報だ。",
+            "これは信じに足る情報だ。",
+            "これは信じたに足る情報だ。",
+            "これは信じるに足る情報だ。"
+          ],
+          "da": 3,
+          "gt": "Động từ ghép ở thể từ điển: 信じる + に足る. Không dùng thể た, thể て hay gốc ます."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-ni-katakunai",
+      "nhom": "Cảm xúc – mức độ cực điểm",
+      "tieuDe": "〜にかたくない",
+      "mau": "N／V-る + にかたくない（hầu như chỉ: 想像（する）, 察する, 理解（する）, 予想（する））",
+      "nghia": "không khó để ~, dễ dàng (hình dung / đoán / hiểu) được",
+      "giaiThich": "かたくない là phủ định của 難い \"khó\". Mẫu diễn tả: xét tình hình thì dù không tận mắt thấy cũng dễ dàng hình dung, suy đoán được. Chỉ đi với rất ít từ: 想像（する）, 察する, 理解（する）, 予想（する）. Văn viết cứng.",
+      "cachGhep": [
+        "N + にかたくない: 想像にかたくない ・ 理解にかたくない",
+        "V-る + にかたくない: 想像するにかたくない ・ 察するにかたくない",
+        "Thường có mệnh đề 〜か／〜ことは làm chủ đề phía trước"
+      ],
+      "viDu": [
+        {
+          "c": "一人で子供を育てた母の苦労は、想像にかたくない。",
+          "d": "ひとりで こどもを そだてた ははの くろうは、そうぞうに かたくない。",
+          "v": "Không khó để hình dung nỗi vất vả của mẹ, người đã một mình nuôi con."
+        },
+        {
+          "c": "試合に負けた選手たちの悔しさは、察するにかたくない。",
+          "d": "しあいに まけた せんしゅたちの くやしさは、さっするに かたくない。",
+          "v": "Dễ dàng đoán được nỗi cay đắng của các tuyển thủ thua trận."
+        },
+        {
+          "c": "このまま対策を取らなければどうなるかは、想像するにかたくない。",
+          "d": "このまま たいさくを とらなければ どう なるかは、そうぞうするに かたくない。",
+          "v": "Nếu cứ thế này mà không có đối sách thì sẽ ra sao, điều đó không khó hình dung."
+        },
+        {
+          "c": "彼がなぜ会社を辞めたのかは、理解にかたくない。",
+          "d": "かれが なぜ かいしゃを やめたのかは、りかいに かたくない。",
+          "v": "Vì sao anh ấy nghỉ việc ở công ty thì không khó hiểu."
+        }
+      ],
+      "luuY": [
+        "Hai lần phủ định (\"không\" + \"khó\") = dễ. Đừng dịch thành \"khó mà tưởng tượng\".",
+        "Không tự ghép với động từ khác: 信じるにかたくない ✗, 読むにかたくない ✗.",
+        "Khác 〜がたい: V-ます + がたい = \"khó mà ~\" (信じがたい, 想像しがたい) — nghĩa NGƯỢC lại. Khác 〜までもない: 言うまでもない là \"không cần phải (nói)\", không phải \"dễ hình dung\"."
+      ],
+      "soSanh": [
+        "ja-n2-gatai",
+        "ja-n1-made-mo-nai",
+        "ja-n1-ni-taenai"
+      ],
+      "tuKhoa": [
+        "ni katakunai",
+        "nikatakunai",
+        "souzou ni katakunai",
+        "không khó để",
+        "dễ hình dung",
+        "dễ đoán"
+      ],
+      "quiz": [
+        {
+          "h": "幼くして親を亡くした子の悲しみは、想像（　）。",
+          "lc": [
+            "にかたくない",
+            "にかたくある",
+            "をかたくない",
+            "でかたくない"
+          ],
+          "da": 0,
+          "gt": "Mẫu cố định là 想像 + に + かたくない. Trợ từ phải là に và luôn ở dạng phủ định かたくない."
+        },
+        {
+          "h": "Từ nào điền được vào 「（　）にかたくない」?",
+          "lc": [
+            "走る",
+            "察する",
+            "買う",
+            "食べる"
+          ],
+          "da": 1,
+          "gt": "Mẫu này chỉ đi với các từ chỉ sự hình dung, suy đoán: 想像する, 察する, 理解する. Động từ hành động như 食べる, 走る, 買う không dùng được."
+        },
+        {
+          "h": "「彼の苦労は想像にかたくない」 có nghĩa là gì?",
+          "lc": [
+            "Không được phép hình dung nỗi vất vả của anh ấy",
+            "Không cần hình dung nỗi vất vả của anh ấy",
+            "Dễ dàng hình dung được nỗi vất vả của anh ấy",
+            "Khó mà hình dung nỗi vất vả của anh ấy"
+          ],
+          "da": 2,
+          "gt": "かたくない = \"không khó\", nên cả cụm nghĩa là dễ hình dung. \"Khó mà hình dung\" là 想像しがたい, nghĩa ngược lại."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-kagiri-da",
+      "nhom": "Cảm xúc – mức độ cực điểm",
+      "tieuDe": "〜限りだ",
+      "mau": "Aい／Aな + な + 限りだ（tính từ chỉ cảm xúc）",
+      "nghia": "vô cùng ~, ~ hết mức (cảm xúc của người nói)",
+      "giaiThich": "Diễn tả cảm xúc của chính người nói đang ở mức cao nhất. Đi với tính từ chỉ cảm xúc: うれしい, 寂しい, 心細い, 心強い, うらやましい, 恥ずかしい, 残念な, 光栄な. Dùng được trong lời nói lịch sự (〜限りです) và văn viết.",
+      "cachGhep": [
+        "Aい + 限りだ: うれしい限りだ ・ 心細い限りだ",
+        "Aな + な + 限りだ: 残念な限りだ",
+        "Lịch sự: 〜限りです ／ 〜限りでございます"
+      ],
+      "viDu": [
+        {
+          "c": "皆さんにお祝いしていただき、うれしい限りです。",
+          "d": "みなさんに おいわいして いただき、うれしい かぎりです。",
+          "v": "Được mọi người chúc mừng, tôi vui vô cùng."
+        },
+        {
+          "c": "知り合いが一人もいない土地での生活は、心細い限りだ。",
+          "d": "しりあいが ひとりも いない とちでの せいかつは、こころぼそい かぎりだ。",
+          "v": "Sống ở nơi không có lấy một người quen thật cô đơn lo lắng hết sức."
+        },
+        {
+          "c": "あと一点で合格だったとは、残念な限りだ。",
+          "d": "あと いってんで ごうかくだったとは、ざんねんな かぎりだ。",
+          "v": "Chỉ thiếu một điểm nữa là đỗ, thật đáng tiếc vô cùng."
+        },
+        {
+          "c": "毎年海外旅行ができるなんて、うらやましい限りだ。",
+          "d": "まいとし かいがいりょこうが できるなんて、うらやましい かぎりだ。",
+          "v": "Năm nào cũng đi du lịch nước ngoài được thì thật đáng ghen tị hết sức."
+        }
+      ],
+      "luuY": [
+        "Chỉ dùng cho CẢM XÚC của người nói, không dùng cho tính chất khách quan của sự vật: このビルは高い限りだ ✗.",
+        "Khác 〜極まる／〜極まりない: 極まる ghép với gốc tính từ な gốc Hán (失礼, 危険) để ĐÁNH GIÁ sự việc, thường là chê; 限りだ ghép với tính từ cảm xúc để nói lòng mình.",
+        "Khác 〜の至り／〜の極み: hai mẫu đó ghép với DANH TỪ (光栄の至り, 痛恨の極み) và trang trọng hơn; khác 〜といったらない: khẩu ngữ hơn, hay dùng để kể lại."
+      ],
+      "soSanh": [
+        "ja-n1-kiwamaru",
+        "ja-n1-no-itari",
+        "ja-n1-no-kiwami",
+        "ja-n1-to-ittara-nai"
+      ],
+      "tuKhoa": [
+        "kagiri da",
+        "kagirida",
+        "ureshii kagiri",
+        "vô cùng",
+        "hết mức",
+        "cảm xúc"
+      ],
+      "quiz": [
+        {
+          "h": "頼りになる友人が近所に引っ越してきて、心強い（　）。",
+          "lc": [
+            "限りだ",
+            "の至りだ",
+            "極まる",
+            "の極みだ"
+          ],
+          "da": 0,
+          "gt": "Tính từ い chỉ cảm xúc nối thẳng với 限りだ: 心強い限りだ. の至り và の極み phải đi sau danh từ; 極まる ghép với gốc tính từ な gốc Hán (失礼極まる), không ghép sau 心強い."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "留学できるなんて、うらやましく限りだ。",
+            "留学できるなんて、うらやましい限りだ。",
+            "このビルは高い限りだ。",
+            "留学できるなんて、うらやましいの限りだ。"
+          ],
+          "da": 1,
+          "gt": "限りだ đi với tính từ cảm xúc ở dạng nguyên (うらやましい限りだ). Nó không dùng cho tính chất khách quan như 高い, và không chen の hay đổi thành 〜く."
+        },
+        {
+          "h": "〜限りだ diễn tả điều gì?",
+          "lc": [
+            "Lời phê phán hành vi của người khác",
+            "Một việc chỉ xảy ra một lần",
+            "Cảm xúc của chính người nói ở mức rất cao",
+            "Giới hạn thời gian của một việc"
+          ],
+          "da": 2,
+          "gt": "Trong mẫu này 限り không mang nghĩa \"giới hạn\" mà nhấn mức độ cao nhất của cảm xúc người nói (vui, buồn, tiếc, ghen tị…)."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-kiwamaru",
+      "nhom": "Cảm xúc – mức độ cực điểm",
+      "tieuDe": "〜極まる／〜極まりない",
+      "mau": "Aな（bỏ な）+ 極まる／極まりない ・ Aい／Aな + な + こと + 極まりない",
+      "nghia": "cực kỳ ~, ~ hết chỗ nói (đánh giá, thường là chê)",
+      "giaiThich": "Cả 極まる lẫn 極まりない đều nghĩa là \"ở mức tột cùng\" — 極まりない tuy có ない nhưng KHÔNG phải phủ định (nghĩa gốc: không có điểm tận cùng). Thường ghép với tính từ な gốc Hán mang nghĩa xấu: 失礼, 危険, 無責任, 不愉快, 非常識, 残念. Văn viết, giọng mạnh. Với tính từ い dùng dạng 〜こと極まりない.",
+      "cachGhep": [
+        "Aな bỏ な + 極まる／極まりない: 失礼極まりない ・ 危険極まる",
+        "Aな + な + こと + 極まりない: 退屈なこと極まりない",
+        "Aい + こと + 極まりない: 寂しいこと極まりない",
+        "Cụm cố định: 感極まる (xúc động tột độ)"
+      ],
+      "viDu": [
+        {
+          "c": "夜中に何度も電話をかけてくるとは、失礼極まりない。",
+          "d": "よなかに なんども でんわを かけて くるとは、しつれい きわまりない。",
+          "v": "Nửa đêm mà gọi điện đến mấy lần thì thật vô lễ hết chỗ nói."
+        },
+        {
+          "c": "酒を飲んで運転するなど、危険極まる行為だ。",
+          "d": "さけを のんで うんてんするなど、きけん きわまる こういだ。",
+          "v": "Uống rượu rồi lái xe là hành vi cực kỳ nguy hiểm."
+        },
+        {
+          "c": "その政治家の発言は、無責任極まりないものだった。",
+          "d": "その せいじかの はつげんは、むせきにん きわまりない ものだった。",
+          "v": "Phát ngôn của chính trị gia đó vô trách nhiệm đến tột cùng."
+        },
+        {
+          "c": "同じ説明を何度も聞かされて、退屈なこと極まりなかった。",
+          "d": "おなじ せつめいを なんども きかされて、たいくつな こと きわまりなかった。",
+          "v": "Bị bắt nghe đi nghe lại một lời giải thích, chán không để đâu cho hết."
+        }
+      ],
+      "luuY": [
+        "極まりない không có nghĩa \"không tột cùng\": 失礼極まる = 失礼極まりない = \"cực kỳ vô lễ\". Không có dạng 極まらない trong mẫu này.",
+        "Ghép với gốc tính từ な (bỏ な): 危険な極まる ✗. Tính từ い không nối thẳng (寂しい極まりない ✗), phải có こと.",
+        "Khác 〜限りだ: 限りだ nói cảm xúc của người nói (うれしい限りだ); 極まる／極まりない là lời ĐÁNH GIÁ sự việc, đa số tiêu cực. Khác 〜の極み: の極み ghép với danh từ, dùng được cả cho điều tốt (贅沢の極み, 感激の極み)."
+      ],
+      "soSanh": [
+        "ja-n1-kagiri-da",
+        "ja-n1-no-kiwami",
+        "ja-n1-no-itari",
+        "ja-n1-to-ittara-nai"
+      ],
+      "tuKhoa": [
+        "kiwamaru",
+        "kiwamarinai",
+        "kiwamari nai",
+        "koto kiwamarinai",
+        "cực kỳ",
+        "tột cùng",
+        "hết chỗ nói"
+      ],
+      "quiz": [
+        {
+          "h": "人の話を聞こうともしない彼の態度は、不愉快（　）。",
+          "lc": [
+            "限りだ",
+            "極まらない",
+            "極まりない",
+            "まみれだ"
+          ],
+          "da": 2,
+          "gt": "Gốc tính từ な + 極まりない: 不愉快極まりない \"cực kỳ khó chịu\". 限りだ cần な (不愉快な限りだ); dạng 極まらない không dùng trong mẫu này; まみれ đi sau danh từ chỉ chất bẩn."
+        },
+        {
+          "h": "「危険極まる」 và 「危険極まりない」 khác nhau thế nào?",
+          "lc": [
+            "極まる là văn nói, 極まりない là sai ngữ pháp",
+            "極まる là rất nguy hiểm, 極まりない là không nguy hiểm lắm",
+            "極まりない là phủ định của 極まる",
+            "Cùng nghĩa: cực kỳ nguy hiểm"
+          ],
+          "da": 3,
+          "gt": "極まりない nghĩa gốc là \"không có điểm tận cùng\", nên cũng diễn tả mức tột độ như 極まる; nó không phải dạng phủ định về nghĩa."
+        },
+        {
+          "h": "Cách ghép nào đúng với tính từ い?",
+          "lc": [
+            "一人暮らしは寂しいこと極まりない。",
+            "一人暮らしは寂しく極まりない。",
+            "一人暮らしは寂し極まる。",
+            "一人暮らしは寂しい極まりない。"
+          ],
+          "da": 0,
+          "gt": "Tính từ い phải qua こと: 寂しいこと極まりない. Không nối thẳng, không bỏ い, không đổi thành 〜く."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-no-itari",
+      "nhom": "Cảm xúc – mức độ cực điểm",
+      "tieuDe": "〜の至り",
+      "mau": "N + の至り（光栄, 感激, 恐縮, 赤面, 汗顔…）",
+      "nghia": "vô cùng ~, ~ hết mức (lời lẽ lễ nghi, rất trang trọng)",
+      "giaiThich": "Diễn tả cảm xúc ở mức cao nhất bằng lời lẽ lễ nghi, dùng trong diễn văn, lời cảm ơn, thư từ trang trọng. Chỉ ghép với một số danh từ: 光栄, 感激, 恐縮, 赤面, 汗顔. Ngoài ra có cụm cố định 若気の至り = \"sự nông nổi của tuổi trẻ\". Đọc là いたり.",
+      "cachGhep": [
+        "N + の至り + だ／です／でございます: 光栄の至りです",
+        "Cụm cố định: 若気の至り"
+      ],
+      "viDu": [
+        {
+          "c": "このような賞をいただき、光栄の至りです。",
+          "d": "このような しょうを いただき、こうえいの いたりです。",
+          "v": "Được nhận giải thưởng thế này, tôi vô cùng vinh dự."
+        },
+        {
+          "c": "先生から直接お言葉をいただけるとは、感激の至りです。",
+          "d": "せんせいから ちょくせつ おことばを いただけるとは、かんげきの いたりです。",
+          "v": "Được thầy trực tiếp nói đôi lời, tôi xúc động vô cùng."
+        },
+        {
+          "c": "わざわざお越しいただき、恐縮の至りでございます。",
+          "d": "わざわざ おこし いただき、きょうしゅくの いたりで ございます。",
+          "v": "Được quý vị cất công đến tận nơi, tôi thật vô cùng áy náy."
+        },
+        {
+          "c": "若気の至りで、あの頃は親に心配ばかりかけた。",
+          "d": "わかげの いたりで、あのころは おやに しんぱいばかり かけた。",
+          "v": "Vì nông nổi tuổi trẻ, hồi đó tôi toàn làm bố mẹ lo lắng."
+        }
+      ],
+      "luuY": [
+        "Không tự ghép với danh từ bất kỳ: うれしさの至り ✗, 悲しみの至り ✗. Hãy nhớ theo cụm: 光栄の至り, 感激の至り, 恐縮の至り.",
+        "Khác 〜の極み: の極み là \"đỉnh điểm của ~\", dùng cho cả điều tốt lẫn xấu (贅沢の極み, 痛恨の極み, 疲労の極み) và không bó trong lời lễ nghi; の至り chủ yếu là lời khiêm nhường, cảm tạ.",
+        "Khác 〜限りだ: 限りだ ghép với TÍNH TỪ (うれしい限りだ) và ít trang trọng hơn."
+      ],
+      "soSanh": [
+        "ja-n1-no-kiwami",
+        "ja-n1-kagiri-da",
+        "ja-n1-kiwamaru"
+      ],
+      "tuKhoa": [
+        "no itari",
+        "noitari",
+        "kouei no itari",
+        "wakage no itari",
+        "vô cùng",
+        "vinh dự",
+        "lễ nghi"
+      ],
+      "quiz": [
+        {
+          "h": "本日はお招きいただき、光栄（　）です。",
+          "lc": [
+            "至り",
+            "に至り",
+            "の至り",
+            "な至り"
+          ],
+          "da": 2,
+          "gt": "Mẫu là danh từ + の + 至り: 光栄の至りです. Không dùng な, không bỏ の, và に至り là mẫu khác (\"đi đến chỗ ~\")."
+        },
+        {
+          "h": "Từ nào thường đi với 「〜の至り」?",
+          "lc": [
+            "勉強",
+            "便利",
+            "天気",
+            "光栄"
+          ],
+          "da": 3,
+          "gt": "の至り chỉ đi với ít danh từ cảm xúc trang trọng như 光栄, 感激, 恐縮. 天気, 勉強, 便利 không dùng được."
+        },
+        {
+          "h": "〜の至り hợp với tình huống nào nhất?",
+          "lc": [
+            "Bài phát biểu cảm ơn khi nhận giải",
+            "Nói chuyện phiếm với bạn cùng lớp",
+            "Ghi chú mua đồ cho bản thân",
+            "Mắng trẻ con nghịch ngợm"
+          ],
+          "da": 0,
+          "gt": "の至り là lời lẽ lễ nghi rất trang trọng, dùng trong diễn văn, thư cảm tạ; không dùng trong trò chuyện thân mật."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-no-kiwami",
+      "nhom": "Cảm xúc – mức độ cực điểm",
+      "tieuDe": "〜の極み",
+      "mau": "N + の極み（贅沢, 痛恨, 疲労, 感激, 不幸, 遺憾…）",
+      "nghia": "đỉnh điểm của ~, ~ tột độ",
+      "giaiThich": "Diễn tả một trạng thái hay cảm xúc đã lên đến mức cao nhất, không thể hơn. Ghép với danh từ; dùng được cho cả điều tốt (感激, 贅沢) lẫn điều xấu (痛恨, 疲労, 不幸). Văn viết, giọng trang trọng. Đọc là きわみ.",
+      "cachGhep": [
+        "N + の極み + だ: 贅沢の極みだ ・ 痛恨の極みだ",
+        "N + の極み + に + 達する／ある: 疲労の極みに達する"
+      ],
+      "viDu": [
+        {
+          "c": "一流ホテルで一週間も過ごすなんて、贅沢の極みだ。",
+          "d": "いちりゅうホテルで いっしゅうかんも すごすなんて、ぜいたくの きわみだ。",
+          "v": "Ở khách sạn hạng nhất tới cả tuần thì đúng là xa xỉ tột bậc."
+        },
+        {
+          "c": "最後のミスで優勝を逃したのは、痛恨の極みだ。",
+          "d": "さいごの ミスで ゆうしょうを のがしたのは、つうこんの きわみだ。",
+          "v": "Để tuột chức vô địch vì lỗi cuối cùng là điều đau tiếc tột cùng."
+        },
+        {
+          "c": "徹夜が三日も続き、彼は疲労の極みに達していた。",
+          "d": "てつやが みっかも つづき、かれは ひろうの きわみに たっしていた。",
+          "v": "Thức trắng liền ba đêm, anh ấy đã mệt mỏi đến cực điểm."
+        },
+        {
+          "c": "憧れの選手と握手ができて、感激の極みです。",
+          "d": "あこがれの せんしゅと あくしゅが できて、かんげきの きわみです。",
+          "v": "Được bắt tay tuyển thủ mình ngưỡng mộ, tôi xúc động tột độ."
+        }
+      ],
+      "luuY": [
+        "Trước の極み là DANH TỪ: うれしいの極み ✗, 痛恨な極み ✗.",
+        "Khác 〜の至り: の至り chủ yếu là lời lễ nghi khiêm nhường (光栄の至り, 恐縮の至り); の極み miêu tả trạng thái lên tới đỉnh, cả tốt lẫn xấu, và có thể dùng như danh từ (極みに達する).",
+        "Khác 〜極まる／〜極まりない: 極まる ghép với gốc tính từ な (失礼極まる) và đa số là lời chê; の極み ghép với danh từ."
+      ],
+      "soSanh": [
+        "ja-n1-no-itari",
+        "ja-n1-kiwamaru",
+        "ja-n1-kagiri-da"
+      ],
+      "tuKhoa": [
+        "no kiwami",
+        "nokiwami",
+        "zeitaku no kiwami",
+        "đỉnh điểm",
+        "tột độ",
+        "tột cùng"
+      ],
+      "quiz": [
+        {
+          "h": "こんな高級な料理を毎日食べるとは、贅沢（　）だ。",
+          "lc": [
+            "に極み",
+            "極みの",
+            "な極み",
+            "の極み"
+          ],
+          "da": 3,
+          "gt": "Mẫu là danh từ + の + 極み: 贅沢の極みだ. Không dùng な hay に, và 極み phải đứng sau の."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "大事な試合で負けたのは、痛恨の極みだ。",
+            "大事な試合で負けたのは、痛恨極みない。",
+            "大事な試合で負けたのは、痛恨な極みだ。",
+            "大事な試合に勝って、うれしいの極みだ。"
+          ],
+          "da": 0,
+          "gt": "の極み ghép với danh từ bằng の (痛恨の極み). Tính từ うれしい không ghép được; không dùng な; và không có dạng 極みない."
+        },
+        {
+          "h": "「疲労の極みに達する」 có nghĩa là gì?",
+          "lc": [
+            "Hết mệt mỏi",
+            "Mệt mỏi đến cực điểm",
+            "Bắt đầu thấy mệt",
+            "Không mệt lắm"
+          ],
+          "da": 1,
+          "gt": "極み là \"điểm tận cùng\", nên 疲労の極み là mức mệt cao nhất, không phải hết mệt hay mới bắt đầu mệt."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-to-ittara-nai",
+      "nhom": "Cảm xúc – mức độ cực điểm",
+      "tieuDe": "〜といったらない／〜といったらありはしない",
+      "mau": "Aい／Aな（bỏ な）／N + といったらない ・ 〜といったらありはしない（ありゃしない）",
+      "nghia": "~ không tả nổi, ~ hết chỗ nói",
+      "giaiThich": "Nhấn mạnh mức độ cao đến mức không lời nào tả hết, kèm cảm xúc ngạc nhiên, thán phục hoặc bực bội của người nói. 〜といったらない dùng cho cả điều tốt lẫn xấu; 〜といったらありはしない (khẩu ngữ: ありゃしない) thường chỉ dùng cho điều xấu. Trong hội thoại còn rút thành 〜ったらない. Danh từ đứng trước hay là dạng 〜さ (美しさ, うれしさ).",
+      "cachGhep": [
+        "Aい + といったらない: 恥ずかしいといったらない",
+        "Aな bỏ な + といったらない: 退屈といったらない",
+        "N（〜さ）+ といったらない: 美しさといったらない",
+        "Điều xấu: 〜といったらありはしない／ありゃしない",
+        "Khẩu ngữ: 〜ったらない"
+      ],
+      "viDu": [
+        {
+          "c": "山頂から見た朝日の美しさといったらなかった。",
+          "d": "さんちょうから みた あさひの うつくしさと いったら なかった。",
+          "v": "Vẻ đẹp của mặt trời mọc nhìn từ đỉnh núi thì không lời nào tả nổi."
+        },
+        {
+          "c": "大勢の前で名前を間違えられて、恥ずかしいといったらなかった。",
+          "d": "おおぜいの まえで なまえを まちがえられて、はずかしいと いったら なかった。",
+          "v": "Bị đọc nhầm tên trước đám đông, xấu hổ không để đâu cho hết."
+        },
+        {
+          "c": "彼の部屋は、汚いといったらありはしない。",
+          "d": "かれの へやは、きたないと いったら ありは しない。",
+          "v": "Phòng của anh ta bẩn hết chỗ nói."
+        },
+        {
+          "c": "毎日同じ作業ばかりで、退屈といったらない。",
+          "d": "まいにち おなじ さぎょうばかりで、たいくつと いったら ない。",
+          "v": "Ngày nào cũng toàn một việc, chán không tả nổi."
+        }
+      ],
+      "luuY": [
+        "Dù kết thúc bằng ない, đây KHÔNG phải câu phủ định: 恥ずかしいといったらない = \"xấu hổ vô cùng\".",
+        "Tính từ な bỏ な rồi nối thẳng: 退屈といったらない (không viết 退屈なといったらない).",
+        "Khác 〜限りだ: 限りだ trang trọng hơn, chỉ nói cảm xúc của người nói; といったらない khẩu ngữ hơn, dùng được cả để tả sự vật (美しさといったらない). Khác 〜極まりない: 極まりない là văn viết, chủ yếu ghép với gốc tính từ な gốc Hán."
+      ],
+      "soSanh": [
+        "ja-n1-kagiri-da",
+        "ja-n1-kiwamaru",
+        "ja-n1-no-kiwami",
+        "ja-n1-to-kitara"
+      ],
+      "tuKhoa": [
+        "to ittara nai",
+        "toittaranai",
+        "to ittara arihashinai",
+        "ttara nai",
+        "aryashinai",
+        "không tả nổi",
+        "hết chỗ nói"
+      ],
+      "quiz": [
+        {
+          "h": "合格の知らせを聞いたときのうれしさ（　）。",
+          "lc": [
+            "といえばなかった",
+            "といったらなかった",
+            "というとなかった",
+            "といってもなかった"
+          ],
+          "da": 1,
+          "gt": "Mẫu cố định là 〜といったらない (quá khứ: といったらなかった). Các dạng といってもない, というとない, といえばない không tồn tại."
+        },
+        {
+          "h": "〜といったらありはしない thường dùng cho điều gì?",
+          "lc": [
+            "Mục đích của hành động",
+            "Lời cảm ơn trong diễn văn",
+            "Điều xấu, khiến người nói bực bội",
+            "Lời chúc mừng trang trọng"
+          ],
+          "da": 2,
+          "gt": "Dạng ありはしない／ありゃしない thường chỉ đi với đánh giá tiêu cực (汚い, うるさい, 腹が立つ). Với điều tốt người ta dùng 〜といったらない."
+        },
+        {
+          "h": "Cách ghép nào đúng với tính từ な?",
+          "lc": [
+            "この町は不便にといったらない。",
+            "この町は不便のといったらない。",
+            "この町は不便なといったらない。",
+            "この町は不便といったらない。"
+          ],
+          "da": 3,
+          "gt": "Tính từ な bỏ な rồi nối thẳng với といったらない: 不便といったらない. Không thêm な, に hay の."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-de-nakute-nan-darou",
+      "nhom": "Cảm xúc – mức độ cực điểm",
+      "tieuDe": "〜でなくてなんだろう",
+      "mau": "N + でなくてなんだろう（か）",
+      "nghia": "đây chẳng phải ~ thì là gì; chính là ~",
+      "giaiThich": "Câu hỏi tu từ để khẳng định mạnh mẽ, đầy cảm xúc rằng \"đây chính là ~\". Danh từ đứng trước thường là từ trừu tượng: 愛, 運命, 奇跡, 悲劇, 天才, 友情. Hay gặp trong tiểu thuyết, tuỳ bút, bài bình luận; thường đi sau một câu miêu tả sự việc rồi kết bằng これが〜でなくてなんだろう.",
+      "cachGhep": [
+        "N + でなくてなんだろう: 愛でなくてなんだろう",
+        "N + でなくてなんだろうか／なんであろう（か）"
+      ],
+      "viDu": [
+        {
+          "c": "自分の命を捨ててまで子供を守る。これが愛でなくてなんだろう。",
+          "d": "じぶんの いのちを すててまで こどもを まもる。これが あいで なくて なんだろう。",
+          "v": "Bỏ cả mạng sống của mình để bảo vệ con. Đó chẳng phải tình yêu thì là gì."
+        },
+        {
+          "c": "一度の出会いが二人の人生を変えた。これが運命でなくてなんだろうか。",
+          "d": "いちどの であいが ふたりの じんせいを かえた。これが うんめいで なくて なんだろうか。",
+          "v": "Một lần gặp gỡ đã thay đổi cuộc đời hai người. Đó chẳng phải định mệnh thì là gì."
+        },
+        {
+          "c": "罪のない市民が犠牲になる。これが悲劇でなくてなんだろう。",
+          "d": "つみの ない しみんが ぎせいに なる。これが ひげきで なくて なんだろう。",
+          "v": "Những người dân vô tội phải hy sinh. Đó chẳng phải bi kịch thì là gì."
+        },
+        {
+          "c": "十歳で大学に入学するとは、天才でなくてなんだろう。",
+          "d": "じっさいで だいがくに にゅうがくするとは、てんさいで なくて なんだろう。",
+          "v": "Mười tuổi đã vào đại học thì chẳng phải thiên tài là gì."
+        }
+      ],
+      "luuY": [
+        "Đây là khẳng định, không phải câu hỏi thật và không phải phủ định: 愛でなくてなんだろう = \"chính là tình yêu\".",
+        "Chỉ ghép với DANH TỪ: 美しいでなくてなんだろう ✗.",
+        "Khác 〜にほかならない: にほかならない khẳng định một cách lý trí \"không gì khác ngoài ~\" (dùng trong lập luận); でなくてなんだろう khẳng định bằng cảm xúc mạnh. Khác 〜ではないだろうか: đó là nêu ý kiến một cách dè dặt \"phải chăng là ~\"."
+      ],
+      "soSanh": [
+        "ja-n2-ni-hoka-naranai",
+        "ja-n2-dewa-nai-darou-ka",
+        "ja-n2-to-iu-mono-da"
+      ],
+      "tuKhoa": [
+        "de nakute nan darou",
+        "denakutenandarou",
+        "nan darou",
+        "chẳng phải thì là gì",
+        "chính là",
+        "câu hỏi tu từ"
+      ],
+      "quiz": [
+        {
+          "h": "困ったときに黙って助けてくれる。これが友情（　）。",
+          "lc": [
+            "でないとなんだろう",
+            "でなくてなんだろう",
+            "でなくてなんでもない",
+            "でなくてどうだろう"
+          ],
+          "da": 1,
+          "gt": "Mẫu cố định là N + でなくてなんだろう \"chẳng phải ~ thì là gì\". Ba dạng còn lại không phải cách nói có thật với nghĩa này."
+        },
+        {
+          "h": "「これが奇跡でなくてなんだろう」 có nghĩa là gì?",
+          "lc": [
+            "Kỳ tích là gì vậy?",
+            "Không biết đây có phải kỳ tích không",
+            "Đây chính là kỳ tích",
+            "Đây không phải kỳ tích"
+          ],
+          "da": 2,
+          "gt": "Đây là câu hỏi tu từ dùng để khẳng định mạnh: \"chẳng phải kỳ tích thì là gì\" = chính là kỳ tích. Nó không phủ định và cũng không phải câu hỏi thật."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "この景色は、美しいでなくてなんだろう。",
+            "全員が無事だったとは、奇跡なでなくてなんだろう。",
+            "彼は毎日、走るでなくてなんだろう。",
+            "全員が無事だったとは、奇跡でなくてなんだろう。"
+          ],
+          "da": 3,
+          "gt": "Trước でなくてなんだろう phải là danh từ (奇跡). Tính từ 美しい, động từ 走る không ghép được, và không thêm な."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-shimatsu-da",
+      "nhom": "Cảm xúc – mức độ cực điểm",
+      "tieuDe": "〜始末だ",
+      "mau": "V-る + 始末だ ・ この／その／あの + 始末だ",
+      "nghia": "rốt cuộc đến nỗi ~ (kết cục tồi tệ)",
+      "giaiThich": "Diễn tả: sự việc cứ xấu dần, và cuối cùng đi đến một kết cục tồi tệ. Người nói kể lại với giọng chê trách, ngán ngẩm. Phía trước thường có quá trình xấu và các từ như ついには, とうとう, 最後は, 〜まで. Cụm この始末だ = \"ra nông nỗi này\".",
+      "cachGhep": [
+        "V-る + 始末だ: 家まで手放す始末だ",
+        "この／その／あの + 始末だ: あれほど注意したのに、この始末だ",
+        "Quá khứ: 〜始末だった"
+      ],
+      "viDu": [
+        {
+          "c": "彼は借金を重ね、ついには家まで手放す始末だ。",
+          "d": "かれは しゃっきんを かさね、ついには いえまで てばなす しまつだ。",
+          "v": "Anh ta nợ chồng nợ, rốt cuộc đến nỗi phải bán cả nhà."
+        },
+        {
+          "c": "息子は勉強もせず遊んでばかりで、とうとう学校をやめると言い出す始末だ。",
+          "d": "むすこは べんきょうも せず あそんでばかりで、とうとう がっこうを やめると いいだす しまつだ。",
+          "v": "Thằng con chẳng học hành chỉ toàn chơi, cuối cùng còn đòi bỏ học."
+        },
+        {
+          "c": "新人に仕事を任せたら、客を怒らせて、私が謝りに行く始末だった。",
+          "d": "しんじんに しごとを まかせたら、きゃくを おこらせて、わたしが あやまりに いく しまつだった。",
+          "v": "Giao việc cho người mới thì nó làm khách nổi giận, rốt cuộc tôi phải đi xin lỗi."
+        },
+        {
+          "c": "あれほど注意したのに、この始末だ。",
+          "d": "あれほど ちゅういしたのに、この しまつだ。",
+          "v": "Đã nhắc nhở đến thế rồi mà vẫn ra nông nỗi này."
+        }
+      ],
+      "luuY": [
+        "Chỉ dùng cho kết cục XẤU: 努力して、ついに優勝する始末だ ✗.",
+        "Khác 〜あげく: あげく nối hai vế \"sau một hồi (vất vả, phân vân)… rốt cuộc…\" và đứng giữa câu (V-た + あげく); 始末だ đứng cuối câu, nêu thẳng kết cục tệ kèm giọng chê trách.",
+        "Khác 〜てしまう: てしまう chỉ nói tiếc nuối về một việc đã xảy ra; 始末だ nhấn rằng đó là điểm tệ nhất của cả một quá trình xấu."
+      ],
+      "soSanh": [
+        "ja-n2-ageku",
+        "ja-n2-sue-ni",
+        "ja-n4-te-shimau"
+      ],
+      "tuKhoa": [
+        "shimatsu da",
+        "shimatsuda",
+        "kono shimatsu",
+        "rốt cuộc",
+        "đến nỗi",
+        "kết cục xấu"
+      ],
+      "quiz": [
+        {
+          "h": "夫は毎晩酒を飲みすぎて、最後には道で寝てしまう（　）。",
+          "lc": [
+            "極みだ",
+            "限りだ",
+            "至りだ",
+            "始末だ"
+          ],
+          "da": 3,
+          "gt": "V-る + 始末だ nêu kết cục tồi tệ. 至り và 極み phải đi sau danh từ + の; 限りだ đi sau tính từ cảm xúc, không đi sau động từ."
+        },
+        {
+          "h": "Câu nào dùng 〜始末だ KHÔNG phù hợp?",
+          "lc": [
+            "毎日練習を重ね、ついに大会で優勝する始末だ。",
+            "食べすぎて、とうとう病院に運ばれる始末だ。",
+            "うそを重ねて、最後は誰にも信じてもらえなくなる始末だ。",
+            "遅刻を繰り返し、ついには会社を首になる始末だ。"
+          ],
+          "da": 0,
+          "gt": "始末だ chỉ dùng cho kết cục xấu. Vô địch sau khi chăm luyện tập là kết quả tốt nên không dùng được; ba câu còn lại đều là kết cục tệ."
+        },
+        {
+          "h": "Người nói dùng 〜始末だ với thái độ nào?",
+          "lc": [
+            "Chúc mừng",
+            "Chê trách, ngán ngẩm",
+            "Ngưỡng mộ, thán phục",
+            "Biết ơn, cảm kích"
+          ],
+          "da": 1,
+          "gt": "始末だ thuật lại một kết cục tồi tệ sau quá trình xấu dần, nên mang giọng chê trách, ngán ngẩm chứ không phải khen hay cảm ơn."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-nai-mono-demo-nai",
+      "nhom": "Phủ định – không cần thiết",
+      "tieuDe": "〜ないものでもない",
+      "mau": "V-ない + ものでもない",
+      "nghia": "không hẳn là không ~, cũng có thể ~ (tuỳ điều kiện)",
+      "giaiThich": "Phủ định hai lần để khẳng định một cách dè dặt: không phải hoàn toàn không làm / không thể, tuỳ điều kiện thì cũng có thể. Hay đi với động từ khả năng và các vế điều kiện như 〜ば, 〜によっては. Giọng hơi cứng, kiểu nói của người lớn tuổi hoặc văn viết. Nghĩa gần như 〜ないこともない.",
+      "cachGhep": [
+        "V-ない + ものでもない: 引き受けないものでもない",
+        "V khả năng-ない + ものでもない: 買えないものでもない",
+        "Cũng gặp: 〜ないでもない (nghĩa tương tự)"
+      ],
+      "viDu": [
+        {
+          "c": "条件によっては、引き受けないものでもない。",
+          "d": "じょうけんに よっては、ひきうけない ものでも ない。",
+          "v": "Tuỳ điều kiện, cũng không hẳn là tôi không nhận."
+        },
+        {
+          "c": "三人で力を合わせれば、今日中に終わらないものでもない。",
+          "d": "さんにんで ちからを あわせれば、きょうじゅうに おわらない ものでも ない。",
+          "v": "Nếu ba người hợp sức thì cũng không hẳn là không xong trong hôm nay."
+        },
+        {
+          "c": "彼の気持ちは、わからないものでもない。",
+          "d": "かれの きもちは、わからない ものでも ない。",
+          "v": "Tâm trạng của anh ấy thì tôi cũng không phải là không hiểu."
+        },
+        {
+          "c": "少し高いが、無理をすれば買えないものでもない。",
+          "d": "すこし たかいが、むりを すれば かえない ものでも ない。",
+          "v": "Hơi đắt, nhưng nếu cố thì cũng không hẳn là không mua được."
+        }
+      ],
+      "luuY": [
+        "Người Việt dễ đọc thành phủ định. Thực chất là KHẲNG ĐỊNH DÈ DẶT: 買えないものでもない ≈ \"cố thì mua được\".",
+        "Khác 〜ないことはない／〜ないこともない: nghĩa gần như nhau; ないものでもない cứng hơn, ít dùng trong hội thoại thường ngày.",
+        "Khác 〜ないものか: ないものか là mong ước \"liệu có cách nào ~ không\" (なんとかならないものか) — hoàn toàn khác nghĩa."
+      ],
+      "soSanh": [
+        "ja-n2-nai-koto-wa-nai",
+        "ja-n3-wake-dewa-nai",
+        "ja-n2-to-iu-wake-dewa-nai",
+        "ja-n2-nai-mono-ka"
+      ],
+      "tuKhoa": [
+        "nai mono demo nai",
+        "naimonodemonai",
+        "nai demo nai",
+        "không hẳn là không",
+        "cũng có thể",
+        "phủ định kép"
+      ],
+      "quiz": [
+        {
+          "h": "そこまで頼まれれば、手伝わ（　）。",
+          "lc": [
+            "ないものでもある",
+            "なくてものでもない",
+            "ないものでもない",
+            "ないのものでもない"
+          ],
+          "da": 2,
+          "gt": "Mẫu đúng là V-ない + ものでもない: 手伝わないものでもない \"cũng không hẳn là không giúp\". Ba dạng còn lại sai cách ghép."
+        },
+        {
+          "h": "「条件がよければ、行かないものでもない」 có nghĩa là gì?",
+          "lc": [
+            "Điều kiện tốt nên không cần đi",
+            "Điều kiện tốt nên bắt buộc phải đi",
+            "Dù điều kiện tốt cũng nhất định không đi",
+            "Nếu điều kiện tốt thì cũng có thể đi"
+          ],
+          "da": 3,
+          "gt": "Phủ định kép ないものでもない là khẳng định dè dặt: \"không hẳn là không đi\" = có thể đi. Nó không diễn tả từ chối dứt khoát, nghĩa vụ hay sự không cần thiết."
+        },
+        {
+          "h": "Câu nào gần nghĩa nhất với 「買えないものでもない」?",
+          "lc": [
+            "買えないこともない。",
+            "買わずにはすまない。",
+            "買うまでもない。",
+            "絶対に買えない。"
+          ],
+          "da": 0,
+          "gt": "〜ないものでもない ≈ 〜ないこともない: \"không hẳn là không mua được\". 絶対に買えない là phủ định hoàn toàn; 買わずにはすまない là \"buộc phải mua\"; 買うまでもない là \"không cần mua\"."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-made-da",
+      "nhom": "Phủ định – không cần thiết",
+      "tieuDe": "〜までだ／〜までのことだ",
+      "mau": "V-る + までだ／までのことだ ・ V-た + までだ／までのことだ",
+      "nghia": "(nếu vậy) thì chỉ việc ~ thôi ・ chỉ là ~ thôi (không có ý gì khác)",
+      "giaiThich": "Có hai cách dùng. (1) V-る + までだ: nếu cách này không được thì cứ làm cách kia, không có gì to tát — thể hiện quyết tâm, thái độ không nao núng của người nói; hay đi sau 〜なら／〜たら／〜ても. (2) V-た + までだ: giải thích rằng mình chỉ làm việc đó vì lý do đơn giản, không có ý gì khác; thường là lời thanh minh hoặc khiêm tốn.",
+      "cachGhep": [
+        "V-る + までだ／までのことだ: 歩いて帰るまでだ",
+        "V-た + までだ／までのことだ: 当然のことをしたまでです",
+        "Lịch sự: 〜までです ／ 〜までのことです"
+      ],
+      "viDu": [
+        {
+          "c": "終電に乗り遅れたら、歩いて帰るまでだ。",
+          "d": "しゅうでんに のりおくれたら、あるいて かえるまでだ。",
+          "v": "Nếu lỡ chuyến tàu cuối thì cứ đi bộ về thôi."
+        },
+        {
+          "c": "今回だめでも、もう一度挑戦するまでのことだ。",
+          "d": "こんかい だめでも、もういちど ちょうせんするまでの ことだ。",
+          "v": "Lần này có hỏng thì chỉ việc thử lại lần nữa thôi."
+        },
+        {
+          "c": "お礼には及びません。当然のことをしたまでです。",
+          "d": "おれいには およびません。とうぜんの ことを したまでです。",
+          "v": "Không cần cảm ơn đâu ạ. Tôi chỉ làm việc đương nhiên thôi."
+        },
+        {
+          "c": "近くまで来たので、寄ってみたまでのことです。",
+          "d": "ちかくまで きたので、よって みたまでの ことです。",
+          "v": "Vì đến gần đây nên tôi chỉ tiện ghé qua thôi."
+        }
+      ],
+      "luuY": [
+        "Thể của động từ quyết định nghĩa: V-る までだ = \"thì cứ ~ thôi\" (việc sẽ làm); V-た までだ = \"chỉ là đã ~ thôi\" (giải thích việc đã làm).",
+        "Khác 〜ばそれまでだ: ばそれまでだ = \"nếu ~ thì coi như HẾT, mọi thứ thành vô nghĩa\" (bi quan); V-る までだ = \"thì còn cách ~, cứ làm thôi\" (không nao núng).",
+        "Khác 〜までもない: までもない = \"không cần đến mức phải ~\"; khác 〜ほかない: ほかない là \"đành phải, không còn cách nào khác\" (bị động, miễn cưỡng), còn までだ là chủ động chọn."
+      ],
+      "soSanh": [
+        "ja-n1-ba-sore-made-da",
+        "ja-n1-made-mo-nai",
+        "ja-n2-hoka-nai",
+        "ja-n5-dake-shika"
+      ],
+      "tuKhoa": [
+        "made da",
+        "madeda",
+        "made no koto da",
+        "chỉ việc",
+        "chỉ là thôi",
+        "cùng lắm thì"
+      ],
+      "quiz": [
+        {
+          "h": "誰も手伝ってくれないなら、一人でやる（　）。",
+          "lc": [
+            "までだ",
+            "までもない",
+            "にはあたらない",
+            "にかたくない"
+          ],
+          "da": 0,
+          "gt": "V-る + までだ: \"nếu không ai giúp thì cứ làm một mình thôi\". までもない là \"không cần phải làm\"; にはあたらない là \"không đáng phải\"; にかたくない chỉ đi với 想像・察する — đều không hợp với ý quyết tâm ở đây."
+        },
+        {
+          "h": "「聞かれたから答えたまでだ」 có nghĩa là gì?",
+          "lc": [
+            "Vì được hỏi nên tôi sẽ trả lời bằng được",
+            "Tôi chỉ trả lời vì được hỏi thôi, không có ý gì khác",
+            "Dù được hỏi tôi cũng không cần trả lời",
+            "Tôi đã trả lời cho đến khi được hỏi"
+          ],
+          "da": 1,
+          "gt": "V-た + までだ dùng để thanh minh: việc mình làm chỉ đơn giản vì lý do đó. Nó không diễn tả quyết tâm, sự không cần thiết hay mốc thời gian \"cho đến khi\"."
+        },
+        {
+          "h": "Câu nào mang nghĩa \"chỉ là ~ thôi, không có ý gì khác\"?",
+          "lc": [
+            "死んでしまえばそれまでだ。",
+            "そんなことは言うまでもない。",
+            "念のために確認したまでです。",
+            "断られたら、あきらめるまでだ。"
+          ],
+          "da": 2,
+          "gt": "V-た + までです (確認したまでです) là lời giải thích \"chỉ là kiểm tra cho chắc thôi\". あきらめるまでだ là \"thì cứ bỏ cuộc thôi\"; 言うまでもない là \"không cần phải nói\"; それまでだ là \"thế là hết\"."
+        }
+      ]
+    }
+  ]
+}

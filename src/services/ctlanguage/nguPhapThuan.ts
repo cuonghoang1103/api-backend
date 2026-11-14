@@ -9,23 +9,28 @@ export type NnNguPhap = (typeof NN_NGU_PHAP)[number];
 
 /** Cấp theo ngôn ngữ, từ dễ đến khó (thứ tự hiển thị). */
 export const CAP_NGU_PHAP: Record<NnNguPhap, readonly string[]> = {
-  ja: ['N5', 'N4', 'N3'],
-  zh: ['HSK1', 'HSK2', 'HSK3', 'HSK4'],
-  en: ['A1', 'A2', 'B1', 'B2'],
+  ja: ['N5', 'N4', 'N3', 'N2', 'N1'],
+  zh: ['HSK1', 'HSK2', 'HSK3', 'HSK4', 'HSK5', 'HSK6'],
+  en: ['A1', 'A2', 'B1', 'B2', 'C1'],
 };
 
 export const TEN_CAP_NGU_PHAP: Record<string, { ten: string; moTa: string }> = {
   N5: { ten: 'JLPT N5', moTa: 'Câu cơ bản: trợ từ, thể ます, tính từ, thể て' },
   N4: { ten: 'JLPT N4', moTa: 'Thể thường, khả năng, bị động, sai khiến, điều kiện, kính ngữ cơ bản' },
   N3: { ten: 'JLPT N3', moTa: 'Mẫu câu trung cấp: suy đoán, nguyên nhân, nhượng bộ, văn viết' },
+  N2: { ten: 'JLPT N2', moTa: 'Mẫu câu trung – cao cấp: quan hệ, điều kiện, nhượng bộ, đánh giá, văn viết' },
+  N1: { ten: 'JLPT N1', moTa: 'Mẫu câu cao cấp: văn viết trang trọng, cổ ngữ, sắc thái nhấn mạnh' },
   HSK1: { ten: 'HSK 1', moTa: 'Câu chữ 是, 有, 吗, lượng từ, 的, 不 / 没' },
   HSK2: { ten: 'HSK 2', moTa: '了, 过, 着, so sánh 比, bổ ngữ cơ bản, 正在' },
   HSK3: { ten: 'HSK 3', moTa: '把, 被, bổ ngữ xu hướng / khả năng, liên từ cặp' },
   HSK4: { ten: 'HSK 4', moTa: 'Liên từ phức, nhấn mạnh, bổ ngữ nâng cao, văn viết' },
+  HSK5: { ten: 'HSK 5', moTa: 'Liên từ văn viết, phó từ ngữ khí, giới từ trang trọng, cấu trúc cố định' },
+  HSK6: { ten: 'HSK 6', moTa: 'Hư từ văn ngôn, liên từ phức cao cấp, cấu trúc thành ngữ hoá, văn chính luận' },
   A1: { ten: 'CEFR A1', moTa: 'to be, hiện tại đơn, mạo từ, số ít / số nhiều, there is / are' },
   A2: { ten: 'CEFR A2', moTa: 'Quá khứ đơn, tương lai, so sánh, động từ khuyết thiếu cơ bản' },
   B1: { ten: 'CEFR B1', moTa: 'Hiện tại hoàn thành, câu điều kiện, bị động, mệnh đề quan hệ, tường thuật' },
   B2: { ten: 'CEFR B2', moTa: 'Điều kiện loại 3 / hỗn hợp, đảo ngữ, wish, bị động nâng cao' },
+  C1: { ten: 'CEFR C1', moTa: 'Đảo ngữ – nhấn mạnh nâng cao, giả định, danh hoá, rút gọn, văn học thuật' },
 };
 
 export interface ViDuNguPhap {
@@ -193,6 +198,56 @@ export function kiemTatCa(ds: DiemDaNap[]): string[] {
   for (const [id, n] of dem) if (n > 1) loi.push(`${id}: id trùng ${n} lần`);
   for (const d of ds) for (const s of d.soSanh ?? []) if (!dem.has(s)) loi.push(`${d.id}: soSanh "${s}" không tồn tại`);
   return loi;
+}
+
+/** Băm FNV-1a 32 bit (hạt giống xáo lựa chọn — cố định theo id + số câu ⇒ chạy lại ra đúng thứ tự cũ). */
+export function bamChuoi(s: string): number {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193); }
+  return h >>> 0;
+}
+
+/**
+ * Hoán vị các lựa chọn của MỘT điểm sao cho vị trí đáp án rải đều: câu `i` nhận vị trí đáp án
+ * `(bam(id) + i) % soLuaChon` ⇒ 3 câu của một điểm luôn ở 3 vị trí khác nhau, và trên cả cấp mỗi vị trí ~đều.
+ * Các lựa chọn sai xếp theo băm `id#i#lựa chọn` (ổn định, không phụ thuộc thứ tự người soạn viết).
+ * Trả điểm MỚI (không sửa tại chỗ). Idempotent: xáo lần hai ra đúng kết quả lần một.
+ */
+export function xaoQuizDiem<T extends Pick<DiemNguPhap, 'id' | 'quiz'>>(d: T): T {
+  const goc = bamChuoi(d.id);
+  return {
+    ...d,
+    quiz: d.quiz.map((q, i) => {
+      const dung = q.lc[q.da]!;
+      const sai = q.lc.filter((_, j) => j !== q.da)
+        .map((x) => ({ x, k: bamChuoi(`${d.id}#${i}#${x}`) }))
+        .sort((a, b) => a.k - b.k || a.x.localeCompare(b.x)).map((o) => o.x);
+      const viTri = (goc + i) % q.lc.length;
+      const lc = [...sai.slice(0, viTri), dung, ...sai.slice(viTri)];
+      return { ...q, lc, da: viTri };
+    }),
+  };
+}
+
+/** Sàn tỉ lệ cho MỖI vị trí đáp án trong các câu 4 lựa chọn của một cấp (đoán theo vị trí không được lợi). */
+export const SAN_VI_TRI_DAP_AN = 0.15;
+
+/** Phân bố vị trí đáp án theo cấp (chỉ tính câu 4 lựa chọn) + lỗi nếu vị trí nào dưới sàn (cấp ≥ 40 câu mới xét). */
+export function kiemPhanBoDapAn(ds: DiemDaNap[]): { bang: Record<string, number[]>; loi: string[] } {
+  const bang: Record<string, number[]> = {};
+  for (const d of ds) for (const q of d.quiz ?? []) {
+    if (!Array.isArray(q?.lc) || q.lc.length !== 4 || !(q.da >= 0 && q.da < 4)) continue;
+    (bang[`${d.nn} ${d.cap}`] ??= [0, 0, 0, 0])[q.da]!++;
+  }
+  const loi: string[] = [];
+  for (const [cap, dem] of Object.entries(bang)) {
+    const tong = dem.reduce((a, b) => a + b, 0);
+    if (tong < 40) continue;
+    dem.forEach((n, i) => {
+      if (n / tong < SAN_VI_TRI_DAP_AN) loi.push(`${cap}: đáp án ở lựa chọn ${i + 1} chỉ ${n}/${tong} (${Math.round((n / tong) * 100)}%) — dưới ${SAN_VI_TRI_DAP_AN * 100}%; chạy scripts/ctlanguage-xao-quiz-ngu-phap.mts`);
+    });
+  }
+  return { bang, loi };
 }
 
 // ── Tìm kiếm ────────────────────────────────────────────────────────────────

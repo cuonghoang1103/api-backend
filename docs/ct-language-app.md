@@ -460,13 +460,14 @@ Câu hỏi cho user: Pro của CT Language có **dùng chung** với Pro web cuo
 
 Lấp khoảng trống LỚN của bảng khảo sát Hanzii/Mazii ("chưa có tra / thư viện ngữ pháp").
 
-**Nội dung TỰ SOẠN** — `content/ctlanguage/ngu-phap/<nn>/*.json`, **600 điểm** (khuôn: `_KHUON.md` cùng thư mục):
+**Nội dung TỰ SOẠN** — `content/ctlanguage/ngu-phap/<nn>/*.json`, **1.071 điểm** (khuôn: `_KHUON.md` cùng thư mục). Đợt 1 (15/11 sáng) 600
+điểm tới N3 / HSK4 / B2; đợt 2 (15/11) thêm 471 điểm: cấp cao N2 · N1 · HSK5 · HSK6 · C1, B2 cho đủ, và các điểm chuẩn còn thiếu ở cấp dưới.
 
-| Ngôn ngữ | Cấp · số điểm |
+| Ngôn ngữ | Cấp · số điểm (đợt 1 → nay) |
 |---|---|
-| Nhật (243) | N5 81 · N4 83 · N3 79 |
-| Trung (199) | HSK1 43 · HSK2 51 · HSK3 60 · HSK4 45 |
-| Anh (158) | A1 36 · A2 43 · B1 51 · B2 28 |
+| Nhật (243 → 477) | N5 81 → 84 · N4 83 · N3 79 → 89 · **N2 120** · **N1 101** |
+| Trung (199 → 364) | HSK1 43 · HSK2 51 · HSK3 60 → 64 · HSK4 45 → 56 · **HSK5 80** · **HSK6 70** |
+| Anh (158 → 230) | A1 36 → 38 · A2 43 → 47 · B1 51 · B2 28 → 50 · **C1 44** |
 
 Mỗi điểm: `id` · `nhom` · `tieuDe` · `mau` (cấu trúc) · `nghia` (một dòng) · `giaiThich` · `cachGhep` · 3–5 `viDu` (`c` câu gốc, `d` cách
 đọc — Nhật: kana, Trung: pinyin có dấu thanh, Anh: không có; `v` nghĩa Việt) · `luuY` (lỗi người Việt hay mắc) · `soSanh` (id điểm dễ
@@ -478,10 +479,36 @@ nhầm, kể cả khác cấp) · `tuKhoa` (romaji / pinyin không dấu / tên 
 - **Đã soát bằng máy ngoài bộ kiểm khuôn (15/11):** pinyin 795 ví dụ đối chiếu `pinyin-pro` (chỗ lệch đều là chữ đa âm / thanh nhẹ đúng:
   谁 shéi, 得 děi, 地 de, 还 huán, 教 jiāo…); cách đọc 844 ví dụ Nhật đối chiếu `kuromoji` (chỗ lệch đều do bộ tách từ: 日本 にほん,
   何 なん, 一人 ひとり, 開いて あいて…). Tiếng Anh + lời giải thích + quiz: người soạn tự soát, CHƯA có người bản ngữ / giáo viên duyệt.
-- **Còn thiếu (ghi để soạn tiếp):** N3 — 〜ようとする, 〜ように言う, 〜ものだ, 〜とおり, 〜向け/向き, 〜うえで, 〜ずに, động từ ghép 〜始める/続ける/直す/合う/込む;
-  N5 — 何か/だれか, 〜ごろ/ぐらい, tính từ làm trạng từ, phó từ tần suất; HSK3 — 当然, 突然, 特别, 根据; HSK4 — 也许, 偶尔, 倒, 正好, 差不多,
-  是否, 所, 以…为, 与, 拿…来说, 光/仅; A1 — Whose, cách nói giờ; A2 — for/since, bị động cơ bản, shall, had better; B2 — đảo ngữ so/such,
-  get-passive, ellipsis. HSK 5–6, N2–N1, C1 chưa làm.
+- **Cấp cao (đợt 2):** nhóm theo chức năng (N2 13 nhóm, N1 16 nhóm; HSK5–6: liên từ câu phức, phó từ ngữ khí, hư từ văn viết, giới từ trang
+  trọng, cấu trúc cố định; C1: đảo ngữ – nhấn mạnh, giả định, khuyết thiếu, rút gọn mệnh đề, diễn ngôn). Quiz đúng 4 lựa chọn; `soSanh` trung
+  bình 3,6 id/điểm; `luuY` nêu đích danh khác biệt với mẫu dễ nhầm ("Khác 〜X: …"). Danh sách điểm do người điều phối CHỐT trước (id, tiêu đề,
+  nhóm) rồi mới giao soạn ⇒ không trùng id, `soSanh` trỏ chéo giữa các tệp soạn song song.
+- **Quiz xáo bằng máy:** `npx tsx scripts/ctlanguage-xao-quiz-ngu-phap.mts [ja/n2-1 …]` — hạt giống cố định theo `id` + số câu
+  (`xaoQuizDiem` trong `nguPhapThuan.ts`: câu `i` nhận vị trí `(băm(id) + i) % số lựa chọn`, lựa chọn sai xếp theo băm), chạy lại không đổi gì;
+  dừng nếu lời giải / lựa chọn nhắc VỊ TRÍ ("câu thứ hai", "phương án A"…). Cả 1.071 điểm đã xáo lại bằng script này (15/11). Bộ kiểm không
+  tham số in bảng phân bố và ĐỎ nếu một vị trí < 15% (câu 4 lựa chọn, cấp ≥ 40 câu). Phân bố hiện tại (% ở lựa chọn 1/2/3/4): N2 26/24/24/25 ·
+  N1 24/24/24/27 · HSK5 20/28/25/26 · HSK6 25/24/27/24 · C1 23/25/26/26 · B2 28/28/22/23; cấp dưới 19–29%. (630 câu 3 lựa chọn của đợt 1 —
+  phần lớn N5 / N3 — cũng xáo cùng luật nhưng bộ kiểm chưa xét phân bố riêng cho chúng.)
+- **Đã soát đợt 2 (15/11):** pinyin 675 ví dụ mới đối chiếu `pinyin-pro` + 941 ví dụ Nhật mới đối chiếu `kuromoji` (cài tạm ngoài repo) — xem
+  TỪNG chỗ lệch: đều là công cụ sai (儿 hoá, đa âm 为 wéi / 倒 dào / 得 děi / 种 zhòng, biến điệu 不 / 一, thanh nhẹ; số Ả Rập, 一人 ひとり, 二人 ふたり,
+  日本 にほん, 堪える たえる, 得る うる, 何と なんと…), không phải lỗi nội dung. Mỗi ngôn ngữ có một lượt SOÁT ĐỘC LẬP bằng agent khác người soạn (đọc đủ
+  471 điểm, 1.413 câu quiz): sửa 8 chỗ (2 phương án nhiễu cũng điền được: `ja-n1-to-omoikiya`, `zh-hsk6-yousuo`; 6 lời giải thích quá tuyệt đối /
+  sai ví dụ: `zh-hsk5-chao`, `zh-hsk6-weimian`, `zh-hsk6-ai-v-bu-v`, `zh-hsk4-ouer`, `en-c1-conditionals-alternatives`, `en-b2-regret-mean-go-on`),
+  không tìm thấy đáp án quiz sai. Vẫn CHƯA có người bản ngữ / giáo viên duyệt.
+- **Rủi ro nội dung đã biết (chưa sửa, để người duyệt quyết):** một số luật "✗" theo sách chặt hơn thực tế dùng — `ja-n2-kara-iu-to` (✗ 私から言うと,
+  quiz 2 dựa vào luật này), `ja-n2-ni-shite-wa` / `wari-ni`, `ja-n2-bakari-da` ("hầu như chỉ hướng xấu", quiz 3), `ja-n1-niwa-ataranai`,
+  `ja-n1-taritomo` (chỉ 一 + trợ số từ), `ja-n1-to-ittara-nai`, `zh-hsk5-zuowei`, `zh-hsk5-yanzhe`, `zh-hsk5-yiner`, `zh-hsk6-guran` (纵然…但),
+  `zh-hsk6-bukui`, `zh-hsk6-fanshi`, `zh-hsk6-yousuo` (有所 + V + O), `en-b2-gradable-adjectives` ("very awful"), `en-c1-agreement-advanced`
+  ("along with … is" — đề ghi "văn viết chuẩn"). Điểm hơi DỄ so với cấp: `ja-n2-dake-muc-toi-da`, `ja-n2-nomi`, `ja-n2-nai-koto-wa-nai`,
+  `ja-n2-koto-wa-ga`, `ja-n2-wari-ni`, `ja-n2-ni-shite-wa` (nhiều sách xếp N3); `en-a2-had-better` (nhiều sách xếp B1); `zh-hsk4-suo` / `yi-wei` /
+  `yu` hơi sớm; vài từ vượt cấp trong ví dụ `hsk4-4` (面食, 蔬菜, 声调…). Trùng một phần có chủ ý (đã dẫn chéo): `en-b2-would-rather-past` ↔
+  `en-c1-unreal-past`, `en-b2-inversion-so-such` ↔ `en-c1-so-such-advanced`, 姑且 ↔ 暂且, 反倒 ↔ 非但…反而. Quiz N2 khoảng 1/3 dùng phương án nhiễu
+  sai hình thức (an toàn nhưng dễ hơn đề JLPT thật). Thanh nhẹ tiếng Trung ghi theo từ điển (任务 rènwu, 困难 kùnnan, 态度 tàidu…).
+- **Còn thiếu (ghi để soạn tiếp):** N2 — 〜にすぎない, 〜に関わる, 〜だの〜だの, 〜てでも, 〜ねばならない, 〜というか〜というか; N1 — 〜ぶる, 〜からある／からの,
+  〜というもの (khoảng thời gian), 〜にして, 〜ずとも, 〜かれ〜かれ, 〜を経て, 〜てはかなわない, 〜ならまだしも; HSK5 — 通常 / 表示·表达 và các cặp 词语辨析 thuần từ
+  vựng; HSK6 — 乃, 尚, 故, 极为, 大致, 不外乎, 继而, 非…不…; C1 — do so / do it / do that, historic present, so sánh would have liked to have + V3,
+  compound adjectives. Cấp dưới: đã đủ danh sách thiếu ghi ở đợt 1, TRỪ ba mục cố ý không soạn vì đã có điểm tương đương — N5 何か／だれか
+  (`ja-n4-gimonshi-ka-futei`), N3 〜とおり (`ja-n4-toori-ni`), N3 〜ずに (`ja-n4-zu-ni`). C2 chưa làm.
 
 **Máy chủ** — router riêng `src/routes/ctlanguage.nguPhap.routes.ts`, gắn `/api/v1/ctlanguage/ngu-phap` TRƯỚC `/ctlanguage`; mọi tuyến
 công khai (khách xem được), chỉ GET, **không CSDL / không migration / không env mới**:
@@ -495,7 +522,8 @@ công khai (khách xem được), chỉ GET, **không CSDL / không migration / 
 
 Dịch vụ `services/ctlanguage/nguPhap.ts` (nạp một lần từ đĩa), luật thuần + tìm kiếm `nguPhapThuan.ts`. Test:
 `npx tsx --test src/services/ctlanguage/nguPhapThuan.test.ts src/routes/ctlanguage.nguPhap.routes.test.ts` (chạy trên NỘI DUNG THẬT:
-sàn số điểm mỗi cấp, kiểm chéo, tìm "てもいい" / "了" / "present perfect" / "bi dong").
+sàn số điểm mỗi cấp, kiểm chéo, tìm "てもいい" / "了" / "present perfect" / "bi dong" / "ざるを得ない" / "与其" / "no sooner"; cấp cao có soSanh ≥ 95% điểm +
+quiz 4 lựa chọn; MỌI điểm đã xáo; phân bố vị trí đáp án).
 
 **App iOS** — `CTLanguageApp/Modules/NguPhap/` (`MoHinhNguPhapCTL` · `ThuVienNguPhapCTL` · `ChiTietNguPhapCTL`), test `NguPhapCTLTests`:
 - **Thư viện:** tiến độ "Đã học x/y" + nút Học tiếp, ô tìm (lọc ngay trên máy + máy chủ sau 250 ms), chip cấp, lọc Tất cả / Chưa học /

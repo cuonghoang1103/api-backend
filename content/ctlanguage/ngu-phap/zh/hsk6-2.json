@@ -1,0 +1,1348 @@
+{
+  "nn": "zh",
+  "cap": "HSK6",
+  "diem": [
+    {
+      "id": "zh-hsk6-pianpian",
+      "nhom": "Phó từ ngữ khí",
+      "tieuDe": "偏偏",
+      "mau": "S + 偏偏 + V ｜ 偏偏 + S + V",
+      "nghia": "cứ nhất định (làm ngược) ~；lại đúng lúc ~ (trái ý muốn)；chỉ riêng ~",
+      "giaiThich": "偏偏 có ba cách dùng, đều kèm sắc thái \"trái với mong muốn / lẽ thường\". (1) Cố ý làm ngược với yêu cầu hay hoàn cảnh, thường đi với 要 / 不. (2) Sự việc xảy ra đúng vào lúc người ta không muốn nhất, nghe có ý than phiền. (3) \"Chỉ riêng\" một người, một vật khác với tất cả, người nói không hài lòng. Dùng được cả khi nói lẫn khi viết; có thể đứng trước chủ ngữ.",
+      "cachGhep": [
+        "S + 偏偏 + 要 / 不 + V (cố tình): 我让他别去，他偏偏要去",
+        "(S) + 偏偏 + V / 偏偏 + 在这个时候 + V (xui, trái ý): 偏偏下起雨来了",
+        "偏偏 + S + V (chỉ riêng): 大家都到了，偏偏他一个人没来"
+      ],
+      "viDu": [
+        {
+          "c": "我让他别去，他偏偏要去。",
+          "d": "Wǒ ràng tā bié qù, tā piānpiān yào qù.",
+          "v": "Tôi bảo nó đừng đi, nó lại cứ nhất định đi."
+        },
+        {
+          "c": "我正要出门，偏偏下起雨来了。",
+          "d": "Wǒ zhèng yào chūmén, piānpiān xià qǐ yǔ lái le.",
+          "v": "Tôi vừa định ra khỏi nhà thì trời lại đổ mưa."
+        },
+        {
+          "c": "大家都到了，偏偏他一个人没来。",
+          "d": "Dàjiā dōu dào le, piānpiān tā yí gè rén méi lái.",
+          "v": "Mọi người đều đến cả rồi, chỉ riêng mình anh ta không đến."
+        },
+        {
+          "c": "明天有重要的考试，他偏偏在这个时候感冒了。",
+          "d": "Míngtiān yǒu zhòngyào de kǎoshì, tā piānpiān zài zhège shíhou gǎnmào le.",
+          "v": "Mai có kỳ thi quan trọng, thế mà anh ấy lại bị cảm đúng lúc này."
+        }
+      ],
+      "luuY": [
+        "Khác 竟然 / 居然: hai từ này chỉ nói \"không ngờ\" (ngạc nhiên, tốt xấu đều được); 偏偏 nói sự việc đi NGƯỢC với mong muốn hay yêu cầu, thường kèm bực bội — việc đáng mừng không dùng 偏偏.",
+        "Khác 恰巧 / 正好: 恰巧 là trùng hợp ngẫu nhiên, trung tính hoặc may mắn; 偏偏 là trùng hợp \"xui\", trái ý.",
+        "Khác 唯独: cùng nghĩa \"chỉ riêng\" nhưng 唯独 trung tính, văn viết; 偏偏 mang ý trách. Dạng một chữ 偏 chủ yếu dùng cho nghĩa cố tình (我偏不去)."
+      ],
+      "soSanh": [
+        "zh-hsk4-jingran",
+        "zh-hsk5-juran",
+        "zh-hsk6-qiaqiao",
+        "zh-hsk6-weidu"
+      ],
+      "tuKhoa": [
+        "pianpian",
+        "pian pian",
+        "cố tình",
+        "lại đúng lúc",
+        "chỉ riêng",
+        "trái ý muốn"
+      ],
+      "quiz": [
+        {
+          "h": "医生不让他喝酒，他（　）要喝。",
+          "lc": [
+            "不禁",
+            "偏偏",
+            "姑且",
+            "势必"
+          ],
+          "da": 1,
+          "gt": "Cố tình làm ngược lời dặn + 要 ⇒ 偏偏. 不禁 là \"bất giác\" (phản ứng tự phát), 势必 là suy đoán \"tất sẽ\", 姑且 là \"tạm cứ\" — đều không có nghĩa làm trái lời."
+        },
+        {
+          "h": "Câu nào dùng 偏偏 KHÔNG hợp?",
+          "lc": [
+            "越不想见他，偏偏越容易碰到他。",
+            "别人都同意，偏偏他反对。",
+            "我努力了一年，偏偏考上了理想的大学，真高兴。",
+            "我急着用电脑，它偏偏坏了。"
+          ],
+          "da": 2,
+          "gt": "偏偏 dùng cho điều trái mong muốn. Đỗ đúng trường mơ ước là điều đáng mừng, đúng như mong đợi, nên dùng 偏偏 là sai sắc thái (có thể dùng 终于)."
+        },
+        {
+          "h": "偏偏 khác 竟然 ở điểm nào?",
+          "lc": [
+            "竟然 là khẩu ngữ còn 偏偏 chỉ có trong văn cổ",
+            "偏偏 chỉ dùng trong câu hỏi",
+            "hai từ thay nhau trong mọi câu",
+            "偏偏 nhấn sự việc trái với mong muốn / yêu cầu, 竟然 chỉ nhấn sự bất ngờ"
+          ],
+          "da": 3,
+          "gt": "竟然 = \"không ngờ\", dùng cho cả điều tốt lẫn xấu; 偏偏 có thêm nghĩa \"ngược ý, cố tình, xui đúng lúc\". Vì vậy hai từ không thay nhau tuỳ ý, và 偏偏 dùng trong câu trần thuật bình thường."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-bufang",
+      "nhom": "Phó từ ngữ khí",
+      "tieuDe": "不妨",
+      "mau": "S + 不妨 + V (重叠 / V + 一下 / V + bổ ngữ) ｜ V +（也）不妨",
+      "nghia": "cứ thử ~ xem sao, ~ cũng chẳng hại gì (gợi ý nhẹ nhàng)",
+      "giaiThich": "不妨 nghĩa đen là \"không có gì trở ngại\", dùng để đưa ra một gợi ý mềm mỏng: làm như vậy thì không hại gì, có khi còn có lợi. Lịch sự và ít áp đặt hơn 应该 / 最好, hay gặp trong lời khuyên, bài viết hướng dẫn. Động từ phía sau thường ở dạng lặp, có 一下, 一… hoặc có thành phần khác đi kèm chứ ít khi là một động từ trơ trọi.",
+      "cachGhep": [
+        "S + 不妨 + V lặp: 你不妨试试",
+        "不妨 + 先 / 多 / 直 + V: 不妨直说；不妨多住几天",
+        "V +（也）不妨 (đặt cuối): 你说说也不妨"
+      ],
+      "viDu": [
+        {
+          "c": "你不妨试试这个办法。",
+          "d": "Nǐ bùfáng shìshi zhège bànfǎ.",
+          "v": "Bạn cứ thử cách này xem sao."
+        },
+        {
+          "c": "有什么意见，不妨直说。",
+          "d": "Yǒu shénme yìjiàn, bùfáng zhí shuō.",
+          "v": "Có ý kiến gì thì cứ nói thẳng, không sao cả."
+        },
+        {
+          "c": "既然来了，我们不妨多住几天。",
+          "d": "Jìrán lái le, wǒmen bùfáng duō zhù jǐ tiān.",
+          "v": "Đã đến rồi thì chúng ta ở thêm vài hôm cũng được."
+        },
+        {
+          "c": "遇到这种情况，不妨先冷静下来想一想。",
+          "d": "Yùdào zhè zhǒng qíngkuàng, bùfáng xiān lěngjìng xiàlái xiǎng yi xiǎng.",
+          "v": "Gặp tình huống thế này, hãy cứ bình tĩnh lại nghĩ một chút đã."
+        }
+      ],
+      "luuY": [
+        "Khác 最好 / 应该: 最好 và 应该 là lời khuyên mạnh, có ý \"nên / phải như thế\"; 不妨 chỉ gợi mở một khả năng, quyền quyết định để cho người nghe.",
+        "Khác 可以: 可以 là cho phép hoặc nói có khả năng; 不妨 hàm ý \"thử đi, không mất gì\". Khác 姑且: 姑且 là \"tạm cứ thế đã\" vì chưa có cách tốt hơn.",
+        "不妨 không phải câu phủ định. Đừng dịch \"不妨试试\" thành \"đừng thử\"."
+      ],
+      "soSanh": [
+        "zh-hsk3-haishi-ba",
+        "zh-hsk2-keyi",
+        "zh-hsk6-guqie",
+        "zh-hsk6-suoxing"
+      ],
+      "tuKhoa": [
+        "bufang",
+        "bu fang",
+        "cứ thử xem",
+        "không hại gì",
+        "gợi ý nhẹ nhàng",
+        "đề nghị"
+      ],
+      "quiz": [
+        {
+          "h": "如果你对这个专业感兴趣，（　）去听听他们的公开课。",
+          "lc": [
+            "不禁",
+            "何尝",
+            "不妨",
+            "未免"
+          ],
+          "da": 2,
+          "gt": "Lời gợi ý nhẹ nhàng \"cứ đi nghe thử\" ⇒ 不妨. 未免 dùng để chê \"hơi quá\", 不禁 là \"bất giác\", 何尝 dùng trong câu phản vấn."
+        },
+        {
+          "h": "你不妨问问他 có nghĩa gì?",
+          "lc": [
+            "Bạn không được phép hỏi anh ấy.",
+            "Bạn chắc chắn đã hỏi anh ấy.",
+            "Bạn đừng hỏi anh ấy.",
+            "Bạn cứ thử hỏi anh ấy xem."
+          ],
+          "da": 3,
+          "gt": "不妨 = \"không hại gì\" ⇒ lời gợi ý nên thử làm. Dù có chữ 不, nó không mang nghĩa cấm đoán hay phủ định, cũng không phải phỏng đoán."
+        },
+        {
+          "h": "Sắc thái của 不妨 so với 应该 thế nào?",
+          "lc": [
+            "nhẹ nhàng, để người nghe tự quyết",
+            "mạnh và bắt buộc hơn",
+            "mang ý trách móc",
+            "chỉ dùng khi ra lệnh cho cấp dưới"
+          ],
+          "da": 0,
+          "gt": "不妨 chỉ gợi ý rằng làm vậy thì không hại gì. 应该 mới là lời khuyên mang tính \"nên / phải\"; 不妨 không có ý trách hay ra lệnh."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-weimian",
+      "nhom": "Phó từ ngữ khí",
+      "tieuDe": "未免",
+      "mau": "S + 未免 + 太 / 过于 / 有点儿 / 有些 / 不太 + Adj (+ 了)",
+      "nghia": "kể ra thì hơi ~ quá, có phần ~ (chê nhẹ)",
+      "giaiThich": "未免 dùng khi người nói cho rằng một việc đã vượt quá mức hợp lý, và muốn tỏ ý không tán thành một cách uyển chuyển. Nó làm lời chê mềm đi: \"không thể không nói là…\". Gần như luôn đi với từ chỉ mức độ như 太, 过于, 有点儿, 有些, hoặc 不太 / 不够 + tính từ tốt. Dùng trong cả lời nói lịch sự lẫn văn viết.",
+      "cachGhep": [
+        "S + 未免 + 太 + Adj + 了: 未免太过分了",
+        "S + 未免 + 有些 / 有点儿 + Adj: 价格未免有些高",
+        "S + 未免 + 不太 / 不够 + Adj: 未免不太礼貌"
+      ],
+      "viDu": [
+        {
+          "c": "你这样说未免太过分了。",
+          "d": "Nǐ zhèyàng shuō wèimiǎn tài guòfèn le.",
+          "v": "Bạn nói như vậy kể ra thì hơi quá đáng rồi."
+        },
+        {
+          "c": "这个价格未免有些高。",
+          "d": "Zhège jiàgé wèimiǎn yǒuxiē gāo.",
+          "v": "Giá này có phần hơi cao."
+        },
+        {
+          "c": "第一次见面就问人家的收入，未免不太礼貌。",
+          "d": "Dì yī cì jiànmiàn jiù wèn rénjia de shōurù, wèimiǎn bú tài lǐmào.",
+          "v": "Mới gặp lần đầu đã hỏi thu nhập của người ta thì kể cũng không lịch sự lắm."
+        },
+        {
+          "c": "才学了三个月就想当翻译，未免太着急了。",
+          "d": "Cái xué le sān gè yuè jiù xiǎng dāng fānyì, wèimiǎn tài zháojí le.",
+          "v": "Mới học ba tháng đã muốn làm phiên dịch thì e hơi vội quá."
+        }
+      ],
+      "luuY": [
+        "Khác 难免 / 不免: 难免 và 不免 nói một việc KHÁCH QUAN khó tránh khỏi xảy ra (第一次上台，难免紧张); 未免 nêu ĐÁNH GIÁ chủ quan của người nói rằng việc đó quá mức, thường kèm 太 / 有些 (你未免太紧张了). Trong văn viết đôi khi 未免 cũng được dùng gần nghĩa 不免 (初次上台，未免有些紧张), nhưng cách dùng chính vẫn là chê nhẹ.",
+        "Khác 未必: 未必 = \"chưa chắc\" (phỏng đoán phủ định); 未免 = \"kể ra thì hơi quá\". Hai từ chỉ giống nhau chữ 未.",
+        "Sau 未免 thường phải có từ mức độ: 你未免过分 nghe cụt → 你未免太过分了 ✓. Điều được nhận xét là điều người nói không tán thành, không dùng để khen."
+      ],
+      "soSanh": [
+        "zh-hsk5-nanmian",
+        "zh-hsk5-weibi",
+        "zh-hsk2-youdianr-yidianr",
+        "zh-hsk1-tai-le"
+      ],
+      "tuKhoa": [
+        "weimian",
+        "wei mian",
+        "kể ra hơi quá",
+        "có phần",
+        "chê nhẹ",
+        "uyển chuyển"
+      ],
+      "quiz": [
+        {
+          "h": "为这么一点小事就发脾气，（　）太小气了。",
+          "lc": [
+            "莫非",
+            "未免",
+            "务必",
+            "何尝"
+          ],
+          "da": 1,
+          "gt": "Nhận xét \"hơi quá\" kèm 太…了 ⇒ 未免. 何尝 và 莫非 dùng trong câu hỏi tu từ / phỏng đoán, 务必 dùng trong lời yêu cầu \"nhất thiết phải\"."
+        },
+        {
+          "h": "Câu nào dùng 未免 đúng?",
+          "lc": [
+            "请你未免准时来。",
+            "他未免考上了大学，我们都很高兴。",
+            "让一个孩子走这么远的路，未免太辛苦了。",
+            "明天未免下雨。"
+          ],
+          "da": 2,
+          "gt": "未免 + 太 + Adj + 了 để nêu đánh giá \"hơi quá mức\". Nó không dùng để phỏng đoán thời tiết, không dùng cho chuyện đáng mừng, và không dùng trong lời yêu cầu."
+        },
+        {
+          "h": "未免 khác 难免 ở chỗ nào?",
+          "lc": [
+            "未免 nghĩa là \"chắc chắn không\", 难免 nghĩa là \"chắc chắn có\"",
+            "未免 là khẩu ngữ, 难免 chỉ dùng trong thơ",
+            "không khác gì, thay nhau được trong mọi câu",
+            "未免 là đánh giá chủ quan \"hơi quá\", 难免 nói việc khách quan khó tránh"
+          ],
+          "da": 3,
+          "gt": "未免 thể hiện thái độ không tán thành của người nói; 难免 chỉ nêu điều khó tránh theo lẽ thường. Vì vậy hai từ không thay nhau tuỳ ý, và nghĩa cũng không phải \"chắc chắn không / có\"."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-bujin",
+      "nhom": "Phó từ ngữ khí",
+      "tieuDe": "不禁",
+      "mau": "S + 不禁 + V (+ 起来 / 了 + O)",
+      "nghia": "bất giác, không kìm được mà ~",
+      "giaiThich": "不禁 đứng trước động từ để nói một phản ứng tình cảm hay hành động bật ra tự nhiên, không kìm nén được, do một tác nhân vừa nêu ở vế trước gây ra: cười, khóc, nhớ lại, thốt lên, thở dài… Là từ văn viết, hay gặp trong văn kể chuyện, miêu tả. Chữ 禁 ở đây đọc jīn (chịu đựng), không đọc jìn (cấm).",
+      "cachGhep": [
+        "Tác nhân，S + 不禁 + V + 了 + O: 我不禁想起了童年",
+        "S + 不禁 + V + 了起来 / 起来: 大家不禁笑了起来",
+        "S + 不禁 + 流下 / 发出 / 感到 + …: 不禁流下了眼泪"
+      ],
+      "viDu": [
+        {
+          "c": "看到这张老照片，我不禁想起了童年。",
+          "d": "Kàndào zhè zhāng lǎo zhàopiàn, wǒ bùjīn xiǎngqǐ le tóngnián.",
+          "v": "Nhìn tấm ảnh cũ này, tôi bất giác nhớ lại thời thơ ấu."
+        },
+        {
+          "c": "听了他的话，大家不禁笑了起来。",
+          "d": "Tīng le tā de huà, dàjiā bùjīn xiào le qǐlái.",
+          "v": "Nghe anh ấy nói, mọi người không nhịn được mà bật cười."
+        },
+        {
+          "c": "望着孩子远去的背影，母亲不禁流下了眼泪。",
+          "d": "Wàng zhe háizi yuǎn qù de bèiyǐng, mǔqīn bùjīn liúxià le yǎnlèi.",
+          "v": "Nhìn theo bóng lưng đứa con xa dần, người mẹ không kìm được nước mắt."
+        },
+        {
+          "c": "面对如此壮观的景色，游客们不禁发出一声惊叹。",
+          "d": "Miànduì rúcǐ zhuàngguān de jǐngsè, yóukèmen bùjīn fāchū yì shēng jīngtàn.",
+          "v": "Đứng trước cảnh sắc hùng vĩ đến vậy, du khách bất giác thốt lên kinh ngạc."
+        }
+      ],
+      "luuY": [
+        "Khác 不由得: nghĩa \"bất giác\" như nhau, nhưng 不由得 khẩu ngữ hơn và còn có cách dùng \"không thể không\" với một mệnh đề phía sau (不由得你不信); 不禁 chỉ đứng ngay trước động từ, thiên về văn viết.",
+        "Khác 忍不住: 忍不住 là cụm động từ của khẩu ngữ, tự làm vị ngữ được (我忍不住了); 不禁 là phó từ, sau nó bắt buộc phải có động từ: 我不禁了 ✗.",
+        "Đọc bùjīn, không đọc bùjìn. Đừng nhầm với 不仅 (bùjǐn, không chỉ)."
+      ],
+      "soSanh": [
+        "zh-hsk6-buyoude",
+        "zh-hsk4-bujin",
+        "zh-hsk4-zhihao-budebu"
+      ],
+      "tuKhoa": [
+        "bujin",
+        "bu jin",
+        "bất giác",
+        "không kìm được",
+        "không nhịn được",
+        "phản ứng tự nhiên"
+      ],
+      "quiz": [
+        {
+          "h": "想起去世的奶奶，她（　）哭了起来。",
+          "lc": [
+            "不妨",
+            "不禁",
+            "务必",
+            "无非"
+          ],
+          "da": 1,
+          "gt": "Phản ứng tình cảm bật ra do nhớ tới bà ⇒ 不禁 + 哭了起来. 务必 là \"nhất thiết phải\", 不妨 là gợi ý \"cứ thử\", 无非 là \"chẳng qua chỉ là\"."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "不禁他明天来北京。",
+            "我不禁了。",
+            "听到这个好消息，他不禁跳了起来。",
+            "请你不禁告诉我。"
+          ],
+          "da": 2,
+          "gt": "不禁 là phó từ đứng sau chủ ngữ, trước một động từ chỉ phản ứng tự phát. Nó không tự làm vị ngữ, không dùng trong câu cầu khiến, và không đứng trước chủ ngữ để nói việc đã định trước."
+        },
+        {
+          "h": "Chữ 禁 trong 不禁 đọc thế nào?",
+          "lc": [
+            "jìn",
+            "jín",
+            "jǐn",
+            "jīn"
+          ],
+          "da": 3,
+          "gt": "禁 nghĩa \"chịu đựng, kìm được\" đọc thanh 1: bùjīn. Đọc jìn là nghĩa \"cấm\" (禁止); jǐn là âm của 仅 trong 不仅."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-buyoude",
+      "nhom": "Phó từ ngữ khí",
+      "tieuDe": "不由得",
+      "mau": "S + 不由得 + V ｜ 不由得 + người + 不 + V",
+      "nghia": "bất giác ~；không thể không ~, khiến (ai) phải ~",
+      "giaiThich": "不由得 có hai cách dùng. (1) Phó từ, nghĩa như 不禁: phản ứng bật ra tự nhiên, không kìm được. (2) Mang tính động từ: \"không cho phép (ai) không…\", tức hoàn cảnh buộc người ta phải tin, phải phục; dạng thường gặp là 不由得 + người + 不 + V. Dùng được cả khi nói lẫn khi viết, khẩu ngữ hơn 不禁.",
+      "cachGhep": [
+        "Tác nhân，S + 不由得 + V + 起来 / 了…: 我不由得紧张起来",
+        "S + 不由得 + V + 了 + lượng từ + O: 她不由得叹了一口气",
+        "…，不由得 + 你 / 人 + 不 + V: 不由得你不信"
+      ],
+      "viDu": [
+        {
+          "c": "想到明天的面试，我不由得紧张起来。",
+          "d": "Xiǎngdào míngtiān de miànshì, wǒ bùyóude jǐnzhāng qǐlái.",
+          "v": "Nghĩ đến buổi phỏng vấn ngày mai, tôi bất giác thấy hồi hộp."
+        },
+        {
+          "c": "听到这个消息，她不由得叹了一口气。",
+          "d": "Tīngdào zhège xiāoxi, tā bùyóude tàn le yì kǒu qì.",
+          "v": "Nghe tin này, cô ấy bất giác thở dài một tiếng."
+        },
+        {
+          "c": "他说得那么有道理，不由得你不信。",
+          "d": "Tā shuō de nàme yǒu dàolǐ, bùyóude nǐ bú xìn.",
+          "v": "Anh ấy nói có lý đến thế, bạn không thể không tin."
+        },
+        {
+          "c": "走进这座古老的寺庙，人们不由得放轻了脚步。",
+          "d": "Zǒujìn zhè zuò gǔlǎo de sìmiào, rénmen bùyóude fàngqīng le jiǎobù.",
+          "v": "Bước vào ngôi chùa cổ này, người ta bất giác bước nhẹ chân hơn."
+        }
+      ],
+      "luuY": [
+        "Khác 不禁: ở nghĩa \"bất giác\" hai từ thay nhau được, 不禁 văn viết hơn. Nhưng mẫu 不由得 + người + 不 + V thì KHÔNG thay bằng 不禁: 不禁你不信 ✗.",
+        "Khác 不得不: 不得不 là \"đành phải\" vì hoàn cảnh ép, có ý thức và miễn cưỡng (我不得不同意); 不由得 là phản ứng tự phát, không qua cân nhắc.",
+        "Khác 忍不住: 忍不住 nhấn việc đã cố nhịn mà không được, và tự làm vị ngữ được; 不由得 phải có động từ theo sau."
+      ],
+      "soSanh": [
+        "zh-hsk6-bujin",
+        "zh-hsk4-zhihao-budebu",
+        "zh-hsk3-bo-ngu-kha-nang"
+      ],
+      "tuKhoa": [
+        "buyoude",
+        "bu you de",
+        "buyou",
+        "bất giác",
+        "không thể không",
+        "không kìm được"
+      ],
+      "quiz": [
+        {
+          "h": "证据这么清楚，（　）你不承认。",
+          "lc": [
+            "不由得",
+            "不禁",
+            "不妨",
+            "未免"
+          ],
+          "da": 0,
+          "gt": "Mẫu \"不由得 + người + 不 + V\" (không cho phép không…): chứng cứ rõ thế, không nhận không được. 不禁 chỉ đứng ngay trước động từ, không đứng trước 你; 未免 là chê nhẹ; 不妨 là gợi ý."
+        },
+        {
+          "h": "Câu nào dùng 不由得 theo nghĩa \"bất giác\"?",
+          "lc": [
+            "你不由得去看看医生吧。",
+            "看着窗外的雪，他不由得想起了家乡。",
+            "不由得明天会下雪。",
+            "他不由得是老师。"
+          ],
+          "da": 1,
+          "gt": "不由得 + động từ chỉ phản ứng tự phát (想起). Nó không dùng để dự báo, không dùng trong lời khuyên, và không đứng trước 是 để nêu thân phận."
+        },
+        {
+          "h": "不由得 khác 不得不 thế nào?",
+          "lc": [
+            "不由得 là văn cổ, 不得不 mới là tiếng hiện đại",
+            "hai từ hoàn toàn giống nhau",
+            "不由得 là phản ứng tự phát, 不得不 là đành phải làm vì bị hoàn cảnh ép",
+            "不由得 dùng để cấm, 不得不 dùng để cho phép"
+          ],
+          "da": 2,
+          "gt": "不由得紧张起来 = tự nhiên thấy hồi hộp; 不得不同意 = cân nhắc rồi đành đồng ý. Cả hai đều là tiếng hiện đại và không liên quan tới cấm / cho phép."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-qiaqiao",
+      "nhom": "Phó từ ngữ khí",
+      "tieuDe": "恰巧 / 恰好",
+      "mau": "S + 恰巧 / 恰好 + V / Adj / số lượng ｜ 恰巧 / 恰好 + S + V",
+      "nghia": "vừa khéo, vừa đúng lúc, tình cờ đúng ~",
+      "giaiThich": "Cả hai đều nói sự việc trùng khớp một cách vừa vặn. 恰巧 nhấn vào sự TÌNH CỜ về thời điểm, cơ hội (trùng hợp may hoặc không may đều được). 恰好 nhấn vào sự VỪA ĐÚNG, khớp hoàn toàn — dùng được cho cả thời gian, số lượng, điều kiện. Cả hai là phó từ, thiên về văn viết hơn 正好; có thể đứng trước chủ ngữ.",
+      "cachGhep": [
+        "S + 恰巧 + (不) V (trùng hợp): 他恰巧不在家",
+        "S + 恰好 + 够 / 是 + số lượng / N (vừa khớp): 这笔钱恰好够买一张机票",
+        "恰巧 / 恰好 + S + (也) + V: 恰巧他也在那儿"
+      ],
+      "viDu": [
+        {
+          "c": "我去找他的时候，他恰巧不在家。",
+          "d": "Wǒ qù zhǎo tā de shíhou, tā qiàqiǎo bú zài jiā.",
+          "v": "Lúc tôi đến tìm thì anh ấy lại tình cờ không có nhà."
+        },
+        {
+          "c": "我正想给你打电话，你恰巧就来了。",
+          "d": "Wǒ zhèng xiǎng gěi nǐ dǎ diànhuà, nǐ qiàqiǎo jiù lái le.",
+          "v": "Tôi đang định gọi điện cho bạn thì vừa khéo bạn đến."
+        },
+        {
+          "c": "这笔钱恰好够买一张回家的机票。",
+          "d": "Zhè bǐ qián qiàhǎo gòu mǎi yì zhāng huí jiā de jīpiào.",
+          "v": "Số tiền này vừa đủ mua một tấm vé máy bay về nhà."
+        },
+        {
+          "c": "他们两个人的生日恰好是同一天。",
+          "d": "Tāmen liǎng gè rén de shēngrì qiàhǎo shì tóng yì tiān.",
+          "v": "Sinh nhật của hai người họ vừa khéo trùng một ngày."
+        }
+      ],
+      "luuY": [
+        "Khác 正好: 正好 là khẩu ngữ và còn làm TÍNH TỪ vị ngữ (这双鞋大小正好); 恰巧 không làm vị ngữ kiểu đó: 大小恰巧 ✗.",
+        "Khác 偏偏: 偏偏 là trùng hợp trái ý, có ý bực (偏偏下雨了); 恰巧 chỉ thuật sự trùng hợp, không trách móc.",
+        "Khác 偶然: 偶然 nói việc xảy ra ngẫu nhiên, không theo quy luật (偶然遇见); 恰巧 nói hai việc trùng khớp với nhau về thời điểm."
+      ],
+      "soSanh": [
+        "zh-hsk4-zhenghao",
+        "zh-hsk6-pianpian",
+        "zh-hsk5-ouran",
+        "zh-hsk3-gang-gangcai"
+      ],
+      "tuKhoa": [
+        "qiaqiao",
+        "qia qiao",
+        "qiahao",
+        "qia hao",
+        "vừa khéo",
+        "vừa đúng lúc",
+        "tình cờ",
+        "trùng hợp"
+      ],
+      "quiz": [
+        {
+          "h": "我出门忘了带伞，（　）同事多带了一把，就借给了我。",
+          "lc": [
+            "恰巧",
+            "何尝",
+            "务必",
+            "未免"
+          ],
+          "da": 0,
+          "gt": "Sự trùng hợp may mắn (đồng nghiệp tình cờ mang thừa ô) ⇒ 恰巧. 务必 là lời yêu cầu, 何尝 dùng trong câu phản vấn, 未免 là lời chê nhẹ."
+        },
+        {
+          "h": "Câu nào SAI?",
+          "lc": [
+            "我到车站的时候，车恰好要开。",
+            "这件衣服的大小恰巧。",
+            "一百块钱恰好够用。",
+            "他要找的人恰巧是我的同学。"
+          ],
+          "da": 1,
+          "gt": "恰巧 là phó từ, phải đứng trước động từ / tính từ, không tự làm vị ngữ; muốn nói \"kích cỡ vừa vặn\" thì dùng 正好 (大小正好). Ba câu còn lại đều có vị ngữ đứng sau 恰好 / 恰巧 nên đúng."
+        },
+        {
+          "h": "恰巧 nhấn mạnh điều gì?",
+          "lc": [
+            "việc xảy ra trái ý, đáng bực",
+            "việc đã được sắp xếp trước",
+            "sự trùng hợp tình cờ về thời điểm, cơ hội",
+            "việc chắc chắn sẽ xảy ra"
+          ],
+          "da": 2,
+          "gt": "恰巧 = tình cờ đúng lúc. Trái ý là sắc thái của 偏偏; chắc chắn xảy ra là 势必 / 必然; còn việc sắp xếp trước thì ngược với nghĩa \"tình cờ\"."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-suoxing",
+      "nhom": "Phó từ ngữ khí",
+      "tieuDe": "索性",
+      "mau": "(既然 / 反正 + hoàn cảnh)，S + 索性 + V",
+      "nghia": "dứt khoát ~ luôn, thôi thì ~ hẳn cho xong",
+      "giaiThich": "索性 nói rằng trong hoàn cảnh đã như vậy (đã muộn, đã hỏng, không còn cách khác), người ta chọn cách làm triệt để, dứt khoát nhất, không lưỡng lự nữa. Vế trước thường nêu hoàn cảnh với 既然, 反正, 越…越…. Là phó từ, đứng sau chủ ngữ, trước động từ; hơi thiên về văn viết, khẩu ngữ hay dùng 干脆.",
+      "cachGhep": [
+        "既然…，S + 索性 + V: 既然已经晚了，我们索性明天再去吧",
+        "反正…，S + 索性 + V: 反正睡不着，她索性起来看书",
+        "V1 也 V 不 + bổ ngữ，S + 索性 + V2: 修也修不好，他索性买了一台新的"
+      ],
+      "viDu": [
+        {
+          "c": "既然已经晚了，我们索性明天再去吧。",
+          "d": "Jìrán yǐjīng wǎn le, wǒmen suǒxìng míngtiān zài qù ba.",
+          "v": "Đằng nào cũng muộn rồi, thôi thì mai chúng ta hãy đi."
+        },
+        {
+          "c": "雨越下越大，他索性把伞收了起来，在雨里走。",
+          "d": "Yǔ yuè xià yuè dà, tā suǒxìng bǎ sǎn shōu le qǐlái, zài yǔ lǐ zǒu.",
+          "v": "Mưa càng lúc càng to, anh ấy dứt khoát cụp ô lại, đi luôn trong mưa."
+        },
+        {
+          "c": "修了半天也修不好，他索性买了一台新的。",
+          "d": "Xiū le bàntiān yě xiū bu hǎo, tā suǒxìng mǎi le yì tái xīn de.",
+          "v": "Sửa mãi không được, anh ấy mua hẳn một cái mới cho xong."
+        },
+        {
+          "c": "反正睡不着，她索性起来看书。",
+          "d": "Fǎnzhèng shuì bu zháo, tā suǒxìng qǐlái kànshū.",
+          "v": "Đằng nào cũng không ngủ được, cô ấy dậy hẳn đọc sách."
+        }
+      ],
+      "luuY": [
+        "Khác 干脆: nghĩa phó từ như nhau, nhưng 干脆 còn là TÍNH TỪ \"thẳng thắn, dứt khoát\" (他说话很干脆); 索性 chỉ là phó từ: 他很索性 ✗.",
+        "Khác 只好 / 不得不: 只好 là \"đành phải\", bị động, miễn cưỡng; 索性 là chủ động chọn cách triệt để, có vẻ \"mặc kệ, làm tới luôn\".",
+        "索性 không dùng để mở đầu khi chưa có hoàn cảnh dẫn tới quyết định: câu thường cần vế trước nêu lý do."
+      ],
+      "soSanh": [
+        "zh-hsk5-fanzheng",
+        "zh-hsk4-zhihao-budebu",
+        "zh-hsk4-jiran-jiu",
+        "zh-hsk6-bufang"
+      ],
+      "tuKhoa": [
+        "suoxing",
+        "suo xing",
+        "dứt khoát",
+        "thôi thì",
+        "làm luôn cho xong",
+        "干脆"
+      ],
+      "quiz": [
+        {
+          "h": "公共汽车等了半个小时还不来，我们（　）走路去了。",
+          "lc": [
+            "尚且",
+            "莫非",
+            "索性",
+            "不禁"
+          ],
+          "da": 2,
+          "gt": "Chờ mãi xe không đến ⇒ quyết định dứt khoát đi bộ luôn: 索性. 不禁 là phản ứng bất giác, 莫非 là phỏng đoán nghi vấn, 尚且 dùng trong mẫu \"còn… huống chi\"."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "我索性不禁笑了。",
+            "他说话很索性。",
+            "索性吗你去？",
+            "既然大家都没意见，索性今天就把合同签了。"
+          ],
+          "da": 3,
+          "gt": "索性 + V sau một hoàn cảnh (既然…). Nó không làm tính từ vị ngữ (đó là 干脆), không tạo câu hỏi, và không ghép với 不禁 (một bên là quyết định chủ động, một bên là phản ứng tự phát)."
+        },
+        {
+          "h": "索性 khác 只好 ở sắc thái nào?",
+          "lc": [
+            "索性 là chủ động làm triệt để, 只好 là miễn cưỡng đành phải",
+            "索性 là lời xin phép",
+            "索性 chỉ dùng cho quá khứ xa",
+            "索性 là bị ép buộc, 只好 là tự nguyện"
+          ],
+          "da": 0,
+          "gt": "索性 thể hiện thái độ dứt khoát \"làm tới luôn\"; 只好 thể hiện sự bất đắc dĩ. Nó dùng được cho cả hiện tại, tương lai và không phải lời xin phép."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-guqie",
+      "nhom": "Phó từ ngữ khí",
+      "tieuDe": "姑且",
+      "mau": "(S) + 姑且 + V ｜ 姑且 + 不论 / 不谈 / 不说 + …",
+      "nghia": "tạm cứ ~ đã, hẵng cứ ~ (chưa phải cách tốt nhất)",
+      "giaiThich": "姑且 nói rằng trong lúc chưa có lựa chọn tốt hơn hoặc chưa đủ điều kiện, người ta tạm chấp nhận làm như vậy trước, mang ý nhượng bộ. Rất hay gặp trong các tổ hợp 姑且不论 / 不谈 / 不说 (tạm chưa bàn tới…) để gác một vấn đề sang bên. Là từ văn viết.",
+      "cachGhep": [
+        "S + 姑且 + V (lặp / + 一下): 姑且听一听；姑且试试",
+        "S + 姑且 + 不 + 谈 / 说 + O: 这个问题我们姑且不谈",
+        "姑且不论 + mệnh đề，…: 姑且不论结果如何，…"
+      ],
+      "viDu": [
+        {
+          "c": "这个问题我们姑且不谈，先说说下一个。",
+          "d": "Zhège wèntí wǒmen gūqiě bù tán, xiān shuōshuo xià yí gè.",
+          "v": "Vấn đề này chúng ta tạm chưa bàn, nói vấn đề tiếp theo trước đã."
+        },
+        {
+          "c": "他的话是真是假，姑且听一听吧。",
+          "d": "Tā de huà shì zhēn shì jiǎ, gūqiě tīng yi tīng ba.",
+          "v": "Lời anh ta thật hay giả, cứ tạm nghe xem đã."
+        },
+        {
+          "c": "没有更好的办法，姑且试试这个方案。",
+          "d": "Méiyǒu gèng hǎo de bànfǎ, gūqiě shìshi zhège fāng'àn.",
+          "v": "Chưa có cách nào hay hơn thì tạm thử phương án này vậy."
+        },
+        {
+          "c": "姑且不论结果如何，他的勇气就值得称赞。",
+          "d": "Gūqiě búlùn jiéguǒ rúhé, tā de yǒngqì jiù zhídé chēngzàn.",
+          "v": "Tạm chưa bàn kết quả ra sao, riêng lòng dũng cảm của anh ấy đã đáng khen."
+        }
+      ],
+      "luuY": [
+        "Khác 暂且: 暂且 chủ yếu nói về THỜI GIAN — tạm thời trong một lúc (暂且休息一下); 姑且 thêm ý NHƯỢNG BỘ — biết là chưa thoả đáng nhưng cứ tạm thế.",
+        "Khác 不妨: 不妨 tích cực gợi ý \"cứ thử, không hại gì\"; 姑且 có vẻ bất đắc dĩ, \"đành tạm vậy\".",
+        "Khác 尚且 và 况且: ba từ cùng có chữ 且 nhưng nghĩa khác hẳn — 尚且 = \"còn (huống chi)\", 况且 = \"hơn nữa\"."
+      ],
+      "soSanh": [
+        "zh-hsk6-zanqie",
+        "zh-hsk6-bufang",
+        "zh-hsk6-suoxing",
+        "zh-hsk6-kuangqie"
+      ],
+      "tuKhoa": [
+        "guqie",
+        "gu qie",
+        "guqie bulun",
+        "tạm cứ",
+        "hẵng cứ",
+        "tạm chưa bàn",
+        "nhượng bộ tạm thời"
+      ],
+      "quiz": [
+        {
+          "h": "（　）不论他的动机是什么，这种做法本身就是错误的。",
+          "lc": [
+            "不禁",
+            "势必",
+            "姑且",
+            "务必"
+          ],
+          "da": 2,
+          "gt": "Tổ hợp cố định 姑且不论… = \"tạm chưa bàn tới…\". 势必 là suy đoán tất yếu, 务必 là yêu cầu, 不禁 là phản ứng bất giác — không đi với 不论 theo nghĩa này."
+        },
+        {
+          "h": "姑且 hàm ý gì?",
+          "lc": [
+            "làm ngược lại yêu cầu",
+            "chắc chắn, không còn nghi ngờ gì",
+            "làm ngay lập tức",
+            "tạm chấp nhận làm vậy trước, dù chưa phải lý tưởng"
+          ],
+          "da": 3,
+          "gt": "姑且 = tạm thời, có ý nhượng bộ. \"Chắc chắn\" là 必然, \"làm ngược lại\" là 偏偏, \"ngay lập tức\" là 立刻."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "你的理由我姑且相信，但是下不为例。",
+            "他姑且很高。",
+            "我姑且不禁哭了。",
+            "姑且明天一定下雨。"
+          ],
+          "da": 0,
+          "gt": "姑且 + động từ có ý chí (tạm tin). Nó không bổ nghĩa cho tính từ trạng thái, không dùng để phỏng đoán, và không đi với phản ứng tự phát như 不禁哭了."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-shangqie-hekuang",
+      "nhom": "Phó từ ngữ khí",
+      "tieuDe": "尚且…何况…",
+      "mau": "A + 尚且 + V，何况 + B (+ 呢)？ ｜ A + 尚且 + V，B + 更 / 当然 + …",
+      "nghia": "(đến) A còn ~, huống chi B",
+      "giaiThich": "Lập luận theo lối \"lấy trường hợp rõ hơn để suy ra\": đến A — trường hợp tưởng như không thế — còn như vậy, thì B lại càng như vậy. 尚且 đứng sau chủ ngữ A, trước vị ngữ, nghĩa như 都 / 还 trong 连…都…; vế sau dùng 何况 (thường là câu hỏi tu từ, có thể thêm 呢), hoặc 更, 更不用说. Là cách nói văn viết, giọng lập luận.",
+      "cachGhep": [
+        "A + 尚且 + V，何况 + B + 呢？: 大人尚且搬不动，何况孩子呢？",
+        "A + 尚且 + (不) V，B + 更 + (不) V: 专家尚且不敢下结论，我们更不能…",
+        "Thời gian / hoàn cảnh A + 尚且 + V，何况 + hoàn cảnh B: 平时尚且忙不过来，何况现在是旺季"
+      ],
+      "viDu": [
+        {
+          "c": "大人尚且搬不动，何况孩子呢？",
+          "d": "Dàren shàngqiě bān bu dòng, hékuàng háizi ne?",
+          "v": "Người lớn còn không bê nổi, huống chi trẻ con?"
+        },
+        {
+          "c": "这个道理小学生尚且明白，何况你一个大学生？",
+          "d": "Zhège dàolǐ xiǎoxuéshēng shàngqiě míngbai, hékuàng nǐ yí gè dàxuéshēng?",
+          "v": "Lẽ này học sinh tiểu học còn hiểu, huống chi anh là một sinh viên đại học?"
+        },
+        {
+          "c": "专家尚且不敢下结论，我们更不能随便判断。",
+          "d": "Zhuānjiā shàngqiě bù gǎn xià jiélùn, wǒmen gèng bù néng suíbiàn pànduàn.",
+          "v": "Chuyên gia còn không dám kết luận, chúng ta càng không thể tuỳ tiện phán đoán."
+        },
+        {
+          "c": "平时尚且忙不过来，何况现在是旺季。",
+          "d": "Píngshí shàngqiě máng bu guòlái, hékuàng xiànzài shì wàngjì.",
+          "v": "Ngày thường còn làm không xuể, huống chi bây giờ là mùa cao điểm."
+        }
+      ],
+      "luuY": [
+        "Khác 连…都…: 连 A 都…，更别说 B là cách nói khẩu ngữ cùng lô-gích; 尚且…何况 là văn viết. Có thể kết hợp: 连大人尚且搬不动….",
+        "尚且 đứng SAU chủ ngữ: 尚且大人搬不动 ✗ → 大人尚且搬不动 ✓. Sau 何况 chỉ cần nêu B, không lặp lại vị ngữ: 何况孩子搬不动呢 ✗.",
+        "Khác 况且: 况且 thêm lý do (hơn nữa); 何况 ở đây là hỏi tu từ \"huống chi\". Thứ tự lập luận cũng phải đúng: A là trường hợp \"khó tin hơn\"."
+      ],
+      "soSanh": [
+        "zh-hsk5-hekuang",
+        "zh-hsk4-lian-dou",
+        "zh-hsk6-bieshuo",
+        "zh-hsk6-kuangqie"
+      ],
+      "tuKhoa": [
+        "shangqie",
+        "shang qie",
+        "shangqie hekuang",
+        "hekuang",
+        "còn huống chi",
+        "huống hồ",
+        "lập luận suy ra"
+      ],
+      "quiz": [
+        {
+          "h": "走路尚且需要一个小时，（　）你还带着这么多行李。",
+          "lc": [
+            "何尝",
+            "何必",
+            "莫非",
+            "何况"
+          ],
+          "da": 3,
+          "gt": "尚且 hô ứng với 何况: \"đi bộ còn mất một tiếng, huống chi bạn lại mang nhiều hành lý\". 何尝 = \"nào có / nào chẳng\", 何必 = \"cần gì phải\", 莫非 = \"chẳng lẽ\" — đều không tạo lập luận \"huống chi\"."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "老师尚且不懂，何况学生呢？",
+            "学生何况不懂，老师尚且呢？",
+            "老师尚且不懂，何况学生不懂呢？",
+            "尚且老师不懂，何况学生呢？"
+          ],
+          "da": 0,
+          "gt": "尚且 đứng sau chủ ngữ A (老师), và sau 何况 chỉ nêu B (学生) chứ không lặp lại vị ngữ. Vị trí của 尚且 và 何况 cũng không hoán đổi cho nhau được."
+        },
+        {
+          "h": "大人尚且害怕，何况孩子？— Ý của câu là gì?",
+          "lc": [
+            "Người lớn không sợ, chỉ trẻ con sợ.",
+            "Trẻ con lại càng sợ.",
+            "Trẻ con không sợ bằng người lớn.",
+            "Không biết trẻ con có sợ hay không."
+          ],
+          "da": 1,
+          "gt": "Lập luận: người lớn còn sợ ⇒ trẻ con đương nhiên càng sợ. Câu hỏi tu từ với 何况 không phải hỏi thật, và không phủ định việc người lớn sợ."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-shibi",
+      "nhom": "Phó từ ngữ khí",
+      "tieuDe": "势必",
+      "mau": "(Nguyên nhân / xu thế)，(S) + 势必 + V",
+      "nghia": "ắt sẽ ~, tất yếu dẫn đến ~ (suy đoán theo tình thế)",
+      "giaiThich": "势必 là phó từ, dựa vào tình thế hiện tại để phán đoán rằng một kết quả chắc chắn sẽ xảy ra. Thường dùng trong văn viết, bài phân tích, và kết quả được nêu phần nhiều là điều đáng lo. Sau 势必 là động từ hay cụm động từ (影响, 造成, 导致, 引起, 会…); không dùng cho việc đã xảy ra rồi và không nói về ý chí của người nói.",
+      "cachGhep": [
+        "如果…，S + 势必 + V: 如果不控制污染，环境势必越来越差",
+        "Nguyên nhân，势必 + 影响 / 造成 / 引起 + O: 价格上涨，势必影响成本",
+        "Chủ ngữ là một sự việc + 势必 + V: 长期熬夜势必损害健康"
+      ],
+      "viDu": [
+        {
+          "c": "如果不控制污染，环境势必越来越差。",
+          "d": "Rúguǒ bú kòngzhì wūrǎn, huánjìng shìbì yuèláiyuè chà.",
+          "v": "Nếu không kiểm soát ô nhiễm, môi trường ắt sẽ ngày càng tệ."
+        },
+        {
+          "c": "原材料价格上涨，势必影响产品的成本。",
+          "d": "Yuáncáiliào jiàgé shàngzhǎng, shìbì yǐngxiǎng chǎnpǐn de chéngběn.",
+          "v": "Giá nguyên liệu tăng tất sẽ ảnh hưởng đến giá thành sản phẩm."
+        },
+        {
+          "c": "长期熬夜势必损害健康。",
+          "d": "Chángqī áoyè shìbì sǔnhài jiànkāng.",
+          "v": "Thức khuya lâu dài chắc chắn sẽ làm tổn hại sức khoẻ."
+        },
+        {
+          "c": "这项改革势必引起广泛的讨论。",
+          "d": "Zhè xiàng gǎigé shìbì yǐnqǐ guǎngfàn de tǎolùn.",
+          "v": "Cuộc cải cách này ắt sẽ gây ra thảo luận rộng rãi."
+        }
+      ],
+      "luuY": [
+        "Khác 必然: 必然 vừa là tính từ (必然的结果, 必然性) vừa là phó từ, nói điều tất yếu theo quy luật; 势必 chỉ là phó từ, suy từ tình thế cụ thể: 势必的结果 ✗.",
+        "Khác 一定: 一定 là khẩu ngữ, còn diễn tả quyết tâm (我一定去); 势必 không dùng cho quyết tâm: 我势必去 ✗. Khác 务必: 务必 là lời YÊU CẦU \"nhất thiết phải\", không phải suy đoán.",
+        "Khác 必须: 必须 nêu sự bắt buộc phải làm; 势必 nêu điều sẽ xảy ra. Người Việt dễ lẫn vì đều dịch thoáng là \"tất phải\"."
+      ],
+      "soSanh": [
+        "zh-hsk6-wubi",
+        "zh-hsk3-bixu-xuyao",
+        "zh-hsk5-chizao",
+        "zh-hsk5-nanmian"
+      ],
+      "tuKhoa": [
+        "shibi",
+        "shi bi",
+        "ắt sẽ",
+        "tất sẽ",
+        "tất yếu",
+        "suy đoán chắc chắn",
+        "必然"
+      ],
+      "quiz": [
+        {
+          "h": "人口不断减少，（　）影响这个地区的经济发展。",
+          "lc": [
+            "势必",
+            "姑且",
+            "务必",
+            "不妨"
+          ],
+          "da": 0,
+          "gt": "Phán đoán một kết quả tất yếu từ xu thế (dân số giảm) ⇒ 势必. 务必 là lời yêu cầu ai đó phải làm, 不妨 là gợi ý, 姑且 là \"tạm cứ\"."
+        },
+        {
+          "h": "Câu nào SAI?",
+          "lc": [
+            "过度开发势必破坏生态。",
+            "明天请你势必来参加会议。",
+            "这样下去，公司势必破产。",
+            "两国关系恶化，势必影响贸易。"
+          ],
+          "da": 1,
+          "gt": "势必 là suy đoán về điều sẽ xảy ra, không dùng trong lời mời / yêu cầu — chỗ đó phải dùng 务必. Ba câu còn lại đều là phán đoán hậu quả nên đúng."
+        },
+        {
+          "h": "势必 và 必然 khác nhau ở điểm ngữ pháp nào?",
+          "lc": [
+            "势必 chỉ đứng cuối câu",
+            "势必 làm định ngữ được, 必然 thì không",
+            "必然 còn làm tính từ / định ngữ (必然的结果), 势必 chỉ làm phó từ",
+            "势必 chỉ dùng trong câu hỏi"
+          ],
+          "da": 2,
+          "gt": "必然 có thể nói 必然的趋势, 必然性; 势必 chỉ đứng trước động từ. Cả hai đều dùng trong câu trần thuật và đứng trước vị ngữ."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-wubi",
+      "nhom": "Phó từ ngữ khí",
+      "tieuDe": "务必",
+      "mau": "(请) + S + 务必 + V",
+      "nghia": "nhất thiết phải ~, thế nào cũng phải ~ (yêu cầu trang trọng)",
+      "giaiThich": "务必 dùng trong câu cầu khiến để nhấn mạnh rằng người nghe bắt buộc phải làm việc gì đó; hay gặp trong thông báo, thư từ công việc, lời dặn dò nghiêm túc, và thường đi với 请. Là phó từ, đứng trước động từ. Chủ yếu dùng cho yêu cầu khẳng định (phải làm); lời cấm \"đừng\" thì 千万 thông dụng hơn.",
+      "cachGhep": [
+        "请 + (S) + 务必 + V: 请各位务必准时参加",
+        "(Thời điểm) + 务必 + V + O: 出发前务必检查一下车辆",
+        "务必 + 在 + thời hạn + (之)前 + V: 务必在周五之前把报告交上来"
+      ],
+      "viDu": [
+        {
+          "c": "请务必在周五之前把报告交上来。",
+          "d": "Qǐng wùbì zài zhōuwǔ zhīqián bǎ bàogào jiāo shànglái.",
+          "v": "Xin nhất thiết nộp báo cáo trước thứ Sáu."
+        },
+        {
+          "c": "出发前务必检查一下车辆。",
+          "d": "Chūfā qián wùbì jiǎnchá yíxià chēliàng.",
+          "v": "Trước khi xuất phát nhất định phải kiểm tra xe."
+        },
+        {
+          "c": "明天的会议很重要，请各位务必准时参加。",
+          "d": "Míngtiān de huìyì hěn zhòngyào, qǐng gèwèi wùbì zhǔnshí cānjiā.",
+          "v": "Cuộc họp ngày mai rất quan trọng, mong các vị nhất thiết tham dự đúng giờ."
+        },
+        {
+          "c": "收到货物后，务必当面确认数量。",
+          "d": "Shōudào huòwù hòu, wùbì dāngmiàn quèrèn shùliàng.",
+          "v": "Sau khi nhận hàng, nhất thiết phải xác nhận số lượng ngay tại chỗ."
+        }
+      ],
+      "luuY": [
+        "Khác 千万: 千万 là lời dặn tha thiết của khẩu ngữ, rất hay đi với 别 / 不要 (千万别忘了); 务必 trang trọng, kiểu công việc, chủ yếu đi với yêu cầu khẳng định.",
+        "Khác 一定: 一定 trung tính, dùng được cho cả phỏng đoán (他一定在家) và quyết tâm của bản thân (我一定去); 务必 chỉ dùng để YÊU CẦU: 他务必在家 (theo nghĩa phỏng đoán) ✗.",
+        "Khác 必须: 必须 nêu sự cần thiết khách quan, dùng trong câu trần thuật bình thường (学生必须穿校服); khác 势必: 势必 là suy đoán \"ắt sẽ\", không phải yêu cầu."
+      ],
+      "soSanh": [
+        "zh-hsk4-qianwan",
+        "zh-hsk3-bixu-xuyao",
+        "zh-hsk6-shibi",
+        "zh-hsk1-qing"
+      ],
+      "tuKhoa": [
+        "wubi",
+        "wu bi",
+        "nhất thiết phải",
+        "thế nào cũng phải",
+        "yêu cầu trang trọng",
+        "dặn dò"
+      ],
+      "quiz": [
+        {
+          "h": "这份文件非常重要，请您（　）亲自交给王经理。",
+          "lc": [
+            "务必",
+            "未免",
+            "不禁",
+            "势必"
+          ],
+          "da": 0,
+          "gt": "Lời yêu cầu trang trọng có 请 ⇒ 务必 (nhất thiết phải). 势必 là suy đoán \"ắt sẽ\", 未免 là chê nhẹ, 不禁 là \"bất giác\" — không dùng trong câu cầu khiến."
+        },
+        {
+          "h": "务必 thường xuất hiện trong loại câu nào?",
+          "lc": [
+            "câu phỏng đoán về thời tiết",
+            "câu cầu khiến, lời yêu cầu / dặn dò",
+            "câu cảm thán khen ngợi",
+            "câu kể một việc đã xảy ra"
+          ],
+          "da": 1,
+          "gt": "务必 dùng để yêu cầu người khác nhất thiết làm gì. Phỏng đoán dùng 一定 / 势必, còn kể việc đã qua hay khen ngợi thì không cần lời yêu cầu."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "我务必很喜欢这本书。",
+            "天这么黑，务必要下雨了。",
+            "入场前请务必关闭手机。",
+            "昨天他务必来了。"
+          ],
+          "da": 2,
+          "gt": "请务必 + V là lời yêu cầu đúng mẫu. 务必 không dùng để kể việc đã xảy ra, không dùng để đoán thời tiết, và không bổ nghĩa cho trạng thái tình cảm."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-wufei",
+      "nhom": "Phó từ ngữ khí",
+      "tieuDe": "无非",
+      "mau": "S + 无非 + 是 + N / V… ｜ S + 无非 + V… (+ 罢了 / 而已)",
+      "nghia": "chẳng qua chỉ là ~, không ngoài ~",
+      "giaiThich": "无非 nói rằng sự việc không vượt ra ngoài một phạm vi nào đó — \"tóm lại cũng chỉ là…\". Thường làm nhẹ tầm quan trọng của vấn đề, đôi khi có ý coi thường. Hay đi với 是, và cuối câu có thể thêm 罢了 / 而已. Dùng trong cả lời nói lẫn văn viết.",
+      "cachGhep": [
+        "S + 无非 + 是 + 想 / 为了 + V: 无非是想引起注意",
+        "…的 + 无非 + 是 + N1 和 N2: 谈的无非是工作和孩子",
+        "S + 无非 + V… + 罢了 / 而已: 无非想多要一些钱罢了"
+      ],
+      "viDu": [
+        {
+          "c": "他这样做，无非是想引起大家的注意。",
+          "d": "Tā zhèyàng zuò, wúfēi shì xiǎng yǐnqǐ dàjiā de zhùyì.",
+          "v": "Anh ta làm thế chẳng qua là muốn mọi người chú ý."
+        },
+        {
+          "c": "我们每天谈的无非是工作和孩子。",
+          "d": "Wǒmen měi tiān tán de wúfēi shì gōngzuò hé háizi.",
+          "v": "Chuyện chúng tôi nói hằng ngày cũng chỉ quanh công việc và con cái."
+        },
+        {
+          "c": "成功的秘诀无非是坚持两个字。",
+          "d": "Chénggōng de mìjué wúfēi shì jiānchí liǎng gè zì.",
+          "v": "Bí quyết thành công chẳng qua chỉ là hai chữ kiên trì."
+        },
+        {
+          "c": "他说了半天，无非想多要一些钱罢了。",
+          "d": "Tā shuō le bàntiān, wúfēi xiǎng duō yào yìxiē qián bàle.",
+          "v": "Anh ta nói cả buổi, chẳng qua chỉ muốn đòi thêm ít tiền mà thôi."
+        }
+      ],
+      "luuY": [
+        "Khác 不过 / 只不过: 不过 làm nhỏ số lượng, mức độ, đứng được ngay trước con số (他不过十岁); 无非 nói về PHẠM VI nội dung \"không ngoài mấy thứ này\", không đứng trước con số kiểu đó: 他无非十岁 ✗.",
+        "Khác 只是: 只是 trung tính; 无非 có giọng \"biết thừa rồi, cũng chỉ có vậy\".",
+        "Đừng nhầm với 无不 (không ai / không gì là không…) và 莫非 (chẳng lẽ…?) — chữ gần giống, nghĩa khác hẳn."
+      ],
+      "soSanh": [
+        "zh-hsk4-buguo-keshi",
+        "zh-hsk4-guang-jin",
+        "zh-hsk6-wubu",
+        "zh-hsk6-mofei"
+      ],
+      "tuKhoa": [
+        "wufei",
+        "wu fei",
+        "chẳng qua chỉ là",
+        "không ngoài",
+        "chỉ là",
+        "不过"
+      ],
+      "quiz": [
+        {
+          "h": "他请你吃饭，（　）是想让你帮他一个忙。",
+          "lc": [
+            "尚且",
+            "务必",
+            "莫非",
+            "无非"
+          ],
+          "da": 3,
+          "gt": "Câu trần thuật nhận định \"chẳng qua là muốn nhờ giúp\" ⇒ 无非是. 莫非 mở câu hỏi phỏng đoán, 务必 là lời yêu cầu, 尚且 dùng trong lập luận \"còn… huống chi\"."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "大家反对的理由无非是费用太高。",
+            "无非他明天来吗？",
+            "他无非很高兴地跑了。",
+            "这个孩子无非五岁。"
+          ],
+          "da": 0,
+          "gt": "无非 + 是 + nội dung, khoanh phạm vi \"không ngoài…\". Nó không đứng trước con số như 不过, không tạo câu hỏi (đó là 莫非), và không làm trạng ngữ tả cách thức."
+        },
+        {
+          "h": "无非 mang sắc thái gì?",
+          "lc": [
+            "tỏ ý nghi ngờ, muốn hỏi",
+            "làm nhẹ đi: cũng chỉ thế thôi, không có gì hơn",
+            "tỏ ý cảm ơn",
+            "nhấn mạnh sự việc rất nghiêm trọng"
+          ],
+          "da": 1,
+          "gt": "无非 thu hẹp vấn đề về một phạm vi đơn giản, đôi khi hơi coi nhẹ. Nó không phóng đại mức nghiêm trọng, không dùng để hỏi và không liên quan lời cảm ơn."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-mofei",
+      "nhom": "Câu phản vấn",
+      "tieuDe": "莫非",
+      "mau": "莫非 + (S) + V…(吗 / 不成)？",
+      "nghia": "chẳng lẽ ~? hay là ~? (ngờ ngợ phỏng đoán)",
+      "giaiThich": "莫非 mở đầu một câu hỏi mang tính phỏng đoán: người nói thấy dấu hiệu lạ và ngờ rằng có lẽ là như vậy, nhưng chưa chắc. Cuối câu có thể có 吗 hoặc 不成. Thiên về văn viết, tiểu thuyết; trong khẩu ngữ thường dùng 难道 hoặc 是不是. 莫非 có thể đứng trước hoặc sau chủ ngữ.",
+      "cachGhep": [
+        "Dấu hiệu，莫非 + V…？: 他还没来，莫非出了什么事？",
+        "莫非 + S + V + 了？: 莫非他换号码了？",
+        "莫非 + … + 不成？: 莫非有人来过不成？"
+      ],
+      "viDu": [
+        {
+          "c": "他到现在还没来，莫非出了什么事？",
+          "d": "Tā dào xiànzài hái méi lái, mòfēi chū le shénme shì?",
+          "v": "Đến giờ anh ấy vẫn chưa tới, chẳng lẽ đã xảy ra chuyện gì?"
+        },
+        {
+          "c": "你今天这么高兴，莫非有什么好消息？",
+          "d": "Nǐ jīntiān zhème gāoxìng, mòfēi yǒu shénme hǎo xiāoxi?",
+          "v": "Hôm nay bạn vui thế, hay là có tin gì tốt?"
+        },
+        {
+          "c": "门怎么开着？莫非有人来过不成？",
+          "d": "Mén zěnme kāi zhe? Mòfēi yǒu rén lái guo bùchéng?",
+          "v": "Sao cửa lại mở? Chẳng lẽ có người đã đến?"
+        },
+        {
+          "c": "电话一直打不通，莫非他换号码了？",
+          "d": "Diànhuà yìzhí dǎ bu tōng, mòfēi tā huàn hàomǎ le?",
+          "v": "Gọi điện mãi không được, hay là anh ấy đổi số rồi?"
+        }
+      ],
+      "luuY": [
+        "Khác 难道: 难道 chủ yếu để PHẢN VẤN — người nói đã có sẵn câu trả lời và muốn bác lại (难道你不知道吗？ = bạn phải biết chứ); 莫非 chủ yếu để PHỎNG ĐOÁN thật — người nói ngờ là vậy và chưa chắc. 难道 cũng có thể dùng để phỏng đoán, nhưng 莫非 hiếm khi dùng để bác bỏ.",
+        "Khác 也许 / 恐怕: hai từ này phỏng đoán trong câu trần thuật; 莫非 đặt phỏng đoán thành câu hỏi.",
+        "Đừng nhầm 莫非 (chẳng lẽ) với 无非 (chẳng qua chỉ là) và 除非 (trừ phi)."
+      ],
+      "soSanh": [
+        "zh-hsk4-nandao",
+        "zh-hsk4-kongpa",
+        "zh-hsk6-wufei",
+        "zh-hsk2-ba-phong-doan"
+      ],
+      "tuKhoa": [
+        "mofei",
+        "mo fei",
+        "chẳng lẽ",
+        "hay là",
+        "phỏng đoán nghi vấn",
+        "难道"
+      ],
+      "quiz": [
+        {
+          "h": "屋里的灯还亮着，（　）他还没睡？",
+          "lc": [
+            "索性",
+            "无非",
+            "势必",
+            "莫非"
+          ],
+          "da": 3,
+          "gt": "Thấy dấu hiệu (đèn còn sáng) rồi ngờ ngợ đoán thành câu hỏi ⇒ 莫非. 无非 = \"chẳng qua chỉ là\" (câu trần thuật), 势必 = \"ắt sẽ\", 索性 = \"dứt khoát… luôn\"."
+        },
+        {
+          "h": "Câu có 莫非 thuộc loại câu nào?",
+          "lc": [
+            "câu hỏi mang tính phỏng đoán",
+            "câu so sánh",
+            "câu cầu khiến",
+            "câu bị động"
+          ],
+          "da": 0,
+          "gt": "莫非 nêu một điều người nói ngờ là đúng dưới dạng câu hỏi. Nó không dùng để ra lệnh, so sánh hay tạo câu bị động."
+        },
+        {
+          "h": "莫非 khác 难道 chủ yếu ở đâu?",
+          "lc": [
+            "莫非 chỉ đứng cuối câu",
+            "莫非 thiên về phỏng đoán thật, 难道 thiên về phản vấn để bác lại",
+            "莫非 là khẩu ngữ hơn",
+            "莫非 dùng trong câu trần thuật, không dùng để hỏi"
+          ],
+          "da": 1,
+          "gt": "难道…吗 thường hàm ý \"lẽ nào lại thế — không phải thế\"; 莫非 hàm ý \"có lẽ là thế chăng\". 莫非 văn viết hơn 难道 và luôn nằm trong câu hỏi, đứng ở đầu vế."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-hechang",
+      "nhom": "Câu phản vấn",
+      "tieuDe": "何尝",
+      "mau": "S + 何尝 + 不 + V…(呢)？(= khẳng định) ｜ S + 何尝 + V + 过…？(= phủ định)",
+      "nghia": "nào có ~ đâu / nào phải không ~ (hỏi tu từ, văn viết)",
+      "giaiThich": "何尝 dùng trong câu hỏi tu từ để nói điều ngược với hình thức của câu. 何尝 + 不 + V nghĩa là \"thật ra cũng rất V\" — đây là cách dùng phổ biến nhất, thường để giãi bày: mình cũng muốn / cũng biết như thế, nhưng có điều khó. 何尝 + V (hình thức khẳng định) nghĩa là \"chưa từng / đâu có V\". Giọng văn viết, uyển chuyển hơn 难道.",
+      "cachGhep": [
+        "S + 何尝 + 不 + 想 / 希望 / 知道 + …: 我何尝不想去",
+        "S + 何尝 + 不 + V…呢？: 父母何尝不希望孩子幸福呢？",
+        "S + 何尝 + V + 过 + O？(phủ định): 我何尝说过这样的话？"
+      ],
+      "viDu": [
+        {
+          "c": "我何尝不想去，只是实在没有时间。",
+          "d": "Wǒ hécháng bù xiǎng qù, zhǐshì shízài méiyǒu shíjiān.",
+          "v": "Tôi nào phải không muốn đi, chỉ là thật sự không có thời gian."
+        },
+        {
+          "c": "父母何尝不希望孩子过得幸福呢？",
+          "d": "Fùmǔ hécháng bù xīwàng háizi guò de xìngfú ne?",
+          "v": "Cha mẹ nào mà chẳng mong con sống hạnh phúc?"
+        },
+        {
+          "c": "我何尝说过这样的话？",
+          "d": "Wǒ hécháng shuō guo zhèyàng de huà?",
+          "v": "Tôi nào có nói những lời như thế bao giờ?"
+        },
+        {
+          "c": "他何尝不知道这样做有风险，可是已经没有别的选择了。",
+          "d": "Tā hécháng bù zhīdào zhèyàng zuò yǒu fēngxiǎn, kěshì yǐjīng méiyǒu bié de xuǎnzé le.",
+          "v": "Anh ấy nào phải không biết làm vậy có rủi ro, nhưng đã không còn lựa chọn nào khác."
+        }
+      ],
+      "luuY": [
+        "Nghĩa thật NGƯỢC với hình thức: 何尝不想 = rất muốn; 何尝想过 = chưa từng nghĩ. Người Việt hay hiểu 何尝不想 thành \"không muốn\".",
+        "Khác 何必: 何必 = \"cần gì phải\" (khuyên đừng làm: 何必生气); 何尝 = \"nào có / nào chẳng\" (đính chính, giãi bày). Khác 何况: \"huống chi\".",
+        "Khác 难道: 难道 phản vấn mạnh, giọng chất vấn, dùng khi nói; 何尝 nhẹ nhàng, văn viết, và không cần 吗 ở cuối."
+      ],
+      "soSanh": [
+        "zh-hsk5-hebi",
+        "zh-hsk4-nandao",
+        "zh-hsk5-hekuang",
+        "zh-hsk6-qi-phan-van"
+      ],
+      "tuKhoa": [
+        "hechang",
+        "he chang",
+        "hechang bu",
+        "nào có",
+        "nào chẳng",
+        "hỏi tu từ",
+        "phản vấn"
+      ],
+      "quiz": [
+        {
+          "h": "我何尝不想帮他？— Câu này có nghĩa gì?",
+          "lc": [
+            "Tôi không muốn giúp anh ấy.",
+            "Tôi không biết có nên giúp không.",
+            "Tôi chưa từng giúp anh ấy.",
+            "Thật ra tôi cũng rất muốn giúp anh ấy."
+          ],
+          "da": 3,
+          "gt": "何尝 + 不 + V là hỏi tu từ mang nghĩa khẳng định: \"nào phải tôi không muốn\" = rất muốn. Hiểu thành \"không muốn\" hay \"chưa từng\" là đọc ngược nghĩa."
+        },
+        {
+          "h": "你说我批评过他？我（　）批评过他？我一直在鼓励他。",
+          "lc": [
+            "何尝",
+            "务必",
+            "不妨",
+            "何况"
+          ],
+          "da": 0,
+          "gt": "Bác lại: \"tôi nào có phê bình cậu ấy bao giờ\" ⇒ 何尝 + V + 过 (nghĩa phủ định). 何况 = \"huống chi\", 不妨 = gợi ý \"cứ thử\", 务必 = \"nhất thiết phải\"."
+        },
+        {
+          "h": "何尝 khác 何必 thế nào?",
+          "lc": [
+            "hai từ đồng nghĩa hoàn toàn",
+            "何尝 = \"nào có / nào chẳng\" (đính chính), 何必 = \"cần gì phải\" (khuyên thôi)",
+            "何尝 dùng để hỏi nơi chốn, 何必 hỏi thời gian",
+            "何尝 = \"cần gì phải\", 何必 = \"nào có\""
+          ],
+          "da": 1,
+          "gt": "何尝 phủ định hay khẳng định ngược lại một nhận định; 何必 cho rằng việc gì đó không cần thiết. Cả hai đều là hỏi tu từ, không hỏi nơi chốn hay thời gian."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-qi-phan-van",
+      "nhom": "Câu phản vấn",
+      "tieuDe": "岂 / 岂不 / 岂能",
+      "mau": "岂 + 能 / 可 / 敢 / 有 + V…？(= không thể) ｜ 岂不 (+ 是) + …？(= chẳng phải… sao)",
+      "nghia": "há có thể ~? lẽ nào ~? (phản vấn, văn viết)",
+      "giaiThich": "岂 là phó từ gốc văn ngôn, dùng trong câu hỏi tu từ để tăng sức khẳng định hoặc phủ định. 岂 + 能 / 可 / 敢 / 有… (hình thức khẳng định) mang nghĩa phủ định mạnh: \"sao có thể\". 岂不 / 岂不是… (hình thức phủ định) mang nghĩa khẳng định: \"chẳng phải là… hay sao\". Ngày nay chủ yếu gặp trong văn viết và một số tổ hợp cố định: 岂有此理 (vô lý hết sức), 岂止 (đâu chỉ), 岂敢 (đâu dám).",
+      "cachGhep": [
+        "岂 + 能 / 可 + V？: 岂能随便决定？",
+        "岂不 (+ 是) + V / Adj？: 岂不是白白浪费时间？",
+        "Tổ hợp cố định: 岂有此理；岂止；岂敢"
+      ],
+      "viDu": [
+        {
+          "c": "这么重要的事，岂能随便决定？",
+          "d": "Zhème zhòngyào de shì, qǐ néng suíbiàn juédìng?",
+          "v": "Việc quan trọng thế này, sao có thể quyết định tuỳ tiện?"
+        },
+        {
+          "c": "你这样做，岂不是白白浪费时间？",
+          "d": "Nǐ zhèyàng zuò, qǐ bú shì báibái làngfèi shíjiān?",
+          "v": "Bạn làm vậy chẳng phải là phí thời gian vô ích sao?"
+        },
+        {
+          "c": "如果大家都不遵守规则，岂不乱了套？",
+          "d": "Rúguǒ dàjiā dōu bù zūnshǒu guīzé, qǐ bú luàn le tào?",
+          "v": "Nếu ai cũng không tuân thủ quy tắc thì chẳng phải loạn hết cả sao?"
+        },
+        {
+          "c": "这点小困难岂能难倒我们？",
+          "d": "Zhè diǎn xiǎo kùnnan qǐ néng nándǎo wǒmen?",
+          "v": "Chút khó khăn nhỏ này sao có thể làm khó được chúng ta?"
+        }
+      ],
+      "luuY": [
+        "Khác 难道: 难道 dùng được cả khi nói lẫn khi viết, đứng trước hoặc sau chủ ngữ, cuối câu hay có 吗; 岂 là văn viết, chỉ đứng ngay trước 能 / 可 / 不 / 有… và thường không cần 吗.",
+        "Nghĩa ngược hình thức: 岂能 = không thể; 岂不是 = chính là. Đừng dịch 岂不是浪费 thành \"không phải là lãng phí\".",
+        "Khác 何尝: 何尝 thiên về giãi bày nhẹ nhàng (我何尝不想); 岂 thiên về lập luận, chất vấn mạnh. 岂 không đứng một mình trước động từ thường trong tiếng hiện đại: 岂去？ ✗."
+      ],
+      "soSanh": [
+        "zh-hsk4-nandao",
+        "zh-hsk6-hechang",
+        "zh-hsk6-mofei",
+        "zh-hsk5-hebi"
+      ],
+      "tuKhoa": [
+        "qi neng",
+        "qineng",
+        "qi bu",
+        "qibu",
+        "qibushi",
+        "qiyoucili",
+        "há có thể",
+        "lẽ nào",
+        "phản vấn văn viết"
+      ],
+      "quiz": [
+        {
+          "h": "答应别人的事，（　）能说变就变？",
+          "lc": [
+            "务必",
+            "岂",
+            "姑且",
+            "尚且"
+          ],
+          "da": 1,
+          "gt": "Hỏi tu từ \"sao có thể nói đổi là đổi\" ⇒ 岂能. 务必 là lời yêu cầu, 尚且 cần vế 何况 đi sau, 姑且 là \"tạm cứ\" — không tạo được câu phản vấn."
+        },
+        {
+          "h": "这岂不是自找麻烦？— Ý người nói là gì?",
+          "lc": [
+            "Đừng tự chuốc phiền phức nữa.",
+            "Đây không phải là tự chuốc phiền phức.",
+            "Đây đúng là tự chuốc phiền phức.",
+            "Không rõ đây có phải tự chuốc phiền phức không."
+          ],
+          "da": 2,
+          "gt": "岂不是…？ là phản vấn mang nghĩa khẳng định: \"chẳng phải là… sao\" = đúng là như vậy. Nó không phải câu phủ định, không phải câu hỏi thật, cũng không phải lời cấm."
+        },
+        {
+          "h": "岂 thường gặp trong văn phong nào?",
+          "lc": [
+            "hướng dẫn nấu ăn",
+            "tin nhắn rủ đi chơi",
+            "lời nói thân mật với trẻ nhỏ",
+            "văn viết, lời lập luận trang trọng"
+          ],
+          "da": 3,
+          "gt": "岂 là hư từ gốc văn ngôn, nay dùng trong văn viết, lời lẽ trang trọng hoặc thành ngữ (岂有此理). Trong khẩu ngữ thường ngày người ta dùng 难道 / 怎么能."
+        }
+      ]
+    }
+  ]
+}

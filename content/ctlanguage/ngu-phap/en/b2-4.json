@@ -1,0 +1,1004 @@
+{
+  "nn": "en",
+  "cap": "B2",
+  "diem": [
+    {
+      "id": "en-b2-relative-which-clause",
+      "nhom": "Mệnh đề quan hệ – phân từ",
+      "tieuDe": "which thay cho cả mệnh đề: …, which surprised me",
+      "mau": "Mệnh đề + , which + V (số ít) …",
+      "nghia": "…, điều này / việc đó ~ (which chỉ cả mệnh đề đứng trước)",
+      "giaiThich": "Trong mệnh đề quan hệ không xác định, which có thể thay cho TOÀN BỘ sự việc vừa nêu ở mệnh đề trước chứ không chỉ một danh từ. Dùng để thêm lời bình luận hoặc nêu hệ quả của sự việc đó. Luôn có dấu phẩy trước which và động từ sau which chia số ít. Cách nói này dùng được cả khi nói lẫn khi viết.",
+      "cachGhep": [
+        "Mệnh đề, which + V số ít + …: He passed the exam, which surprised everyone.",
+        "Mệnh đề, which + is / was + tính từ / danh từ: They offered to help, which was very kind of them.",
+        "Mệnh đề, which means / meant (that) + hệ quả: The flight was cancelled, which meant we had to stay another night.",
+        "Mệnh đề, which + S + V (which làm tân ngữ): She didn't say goodbye, which I thought was rather rude."
+      ],
+      "viDu": [
+        {
+          "c": "He passed the exam, which surprised everyone.",
+          "v": "Cậu ấy đã thi đỗ, điều này khiến ai cũng ngạc nhiên."
+        },
+        {
+          "c": "She was late again, which made her boss angry.",
+          "v": "Cô ấy lại đi trễ, việc đó làm sếp cô nổi giận."
+        },
+        {
+          "c": "They offered to help us move, which was very kind of them.",
+          "v": "Họ ngỏ ý giúp chúng tôi chuyển nhà, thật là tử tế."
+        },
+        {
+          "c": "The flight was cancelled, which meant we had to stay another night.",
+          "v": "Chuyến bay bị huỷ, thế là chúng tôi phải ở lại thêm một đêm."
+        }
+      ],
+      "luuY": [
+        "Chỉ dùng which, không dùng what, that hay it: 'He passed the exam, what surprised everyone' là sai. Viết '…, it surprised everyone' cũng sai vì nối hai câu chỉ bằng dấu phẩy.",
+        "Bắt buộc có dấu phẩy, và động từ sau which chia số ít dù trước đó có danh từ số nhiều: 'He lost his keys, which was annoying'.",
+        "Khác which chỉ một danh từ (en-b1-relative-non-defining): 'I bought a new phone, which was expensive' (which = chiếc điện thoại) ↔ 'I bought a new phone, which annoyed my wife' (which = việc tôi mua điện thoại). Phải dựa vào nghĩa để biết which chỉ cái gì."
+      ],
+      "soSanh": [
+        "en-b1-relative-non-defining",
+        "en-b1-relative-defining",
+        "en-b2-relative-preposition",
+        "en-c1-relative-advanced"
+      ],
+      "tuKhoa": [
+        "which surprised me",
+        "which thay cho cả mệnh đề",
+        "which chỉ cả câu",
+        "sentential relative clause",
+        "comment clause which",
+        "điều này"
+      ],
+      "quiz": [
+        {
+          "h": "She didn't say goodbye, ___ I thought was rather rude.",
+          "lc": [
+            "it",
+            "that",
+            "which",
+            "what"
+          ],
+          "da": 2,
+          "gt": "Để bình luận về cả sự việc đứng trước, sau dấu phẩy chỉ dùng which. What không có vai trò đại từ quan hệ ở đây; that không dùng sau dấu phẩy trong mệnh đề không xác định; it không nối được hai mệnh đề."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "He arrived two hours late, which it annoyed us all.",
+            "He arrived two hours late, what annoyed us all.",
+            "He arrived two hours late, that annoyed us all.",
+            "He arrived two hours late, which annoyed us all."
+          ],
+          "da": 3,
+          "gt": "Which đứng sau dấu phẩy và tự nó làm chủ ngữ của annoyed. What và that không dùng được ở vị trí này; đã có which làm chủ ngữ thì không thêm it."
+        },
+        {
+          "h": "Trong câu 'Tom forgot my birthday, which really upset me', which chỉ điều gì?",
+          "lc": [
+            "Việc Tom quên sinh nhật của tôi",
+            "Bản thân người nói",
+            "Tom",
+            "Ngày sinh nhật của tôi"
+          ],
+          "da": 0,
+          "gt": "Điều làm người nói buồn là cả sự việc Tom quên sinh nhật, nên which thay cho toàn bộ mệnh đề đứng trước, không thay cho riêng danh từ birthday hay cho Tom."
+        }
+      ]
+    },
+    {
+      "id": "en-b2-perception-verbs",
+      "nhom": "Danh động từ – động từ nguyên mẫu",
+      "tieuDe": "see / hear / watch + object + V hay V-ing",
+      "mau": "see / hear / watch / feel / notice + tân ngữ + V (nguyên mẫu không to) · + tân ngữ + V-ing",
+      "nghia": "thấy / nghe ai làm gì (trọn vẹn) · thấy / nghe ai đang làm gì (dở dang)",
+      "giaiThich": "Sau động từ chỉ giác quan (see, hear, watch, feel, notice, listen to), tân ngữ đi với hai dạng. Nguyên mẫu không to: người nói chứng kiến TOÀN BỘ hành động từ đầu đến cuối. V-ing: người nói bắt gặp hành động khi nó ĐANG diễn ra, chỉ chứng kiến một phần. Không dùng to V ở câu chủ động; khi chuyển sang bị động thì nguyên mẫu phải có to.",
+      "cachGhep": [
+        "see / hear / watch / feel / notice + O + V (trọn hành động): I saw him cross the road.",
+        "see / hear / watch / feel / notice + O + V-ing (đang diễn ra): I saw him crossing the road.",
+        "can / could + see / hear / smell + O + V-ing: I can smell something burning.",
+        "Bị động: be seen / heard + to V hoặc + V-ing: He was seen to leave the building. · He was seen leaving the building."
+      ],
+      "viDu": [
+        {
+          "c": "I saw him cross the road and go into the bank.",
+          "v": "Tôi thấy anh ta băng qua đường rồi đi vào ngân hàng."
+        },
+        {
+          "c": "When I looked out of the window, I saw him crossing the road.",
+          "v": "Lúc nhìn ra cửa sổ, tôi thấy anh ta đang băng qua đường."
+        },
+        {
+          "c": "We heard someone shouting in the street.",
+          "v": "Chúng tôi nghe thấy ai đó đang la hét ngoài phố."
+        },
+        {
+          "c": "She felt something touch her shoulder.",
+          "v": "Cô ấy cảm thấy có gì đó chạm vào vai mình."
+        },
+        {
+          "c": "I can smell something burning in the kitchen.",
+          "v": "Tôi ngửi thấy có gì đang cháy trong bếp."
+        }
+      ],
+      "luuY": [
+        "Người Việt hay thêm to hoặc chia thì cho động từ thứ hai: 'I saw him to cross', 'I saw he crossed the road' (khi muốn nói tận mắt thấy) → 'I saw him cross / crossing the road'.",
+        "Tân ngữ là đại từ thì dùng dạng tân ngữ: 'I heard her sing', không phải 'I heard she sing'.",
+        "Khác make / let (en-b1-make-let): make / let chỉ đi với nguyên mẫu không to, không có lựa chọn V-ing. Khác 'I saw that he had left' (see + that = nhận ra, hiểu ra, không nhất thiết tận mắt chứng kiến hành động)."
+      ],
+      "soSanh": [
+        "en-b1-make-let",
+        "en-b1-verb-object-infinitive",
+        "en-b2-participle-clauses",
+        "en-c1-verb-patterns-advanced"
+      ],
+      "tuKhoa": [
+        "see sb do",
+        "see sb doing",
+        "hear someone singing",
+        "verbs of perception",
+        "động từ tri giác",
+        "dong tu tri giac",
+        "động từ giác quan"
+      ],
+      "quiz": [
+        {
+          "h": "I heard the door ___, and then there were footsteps on the stairs.",
+          "lc": [
+            "slam",
+            "to slamming",
+            "to slam",
+            "slams"
+          ],
+          "da": 0,
+          "gt": "Sau hear + tân ngữ, hành động ngắn và trọn vẹn dùng nguyên mẫu không to: heard the door slam. Câu chủ động không dùng to V, không chia thì cho động từ thứ hai (slams), và 'to slamming' không phải cách ghép nào cả."
+        },
+        {
+          "h": "As I walked past the room, I could hear them ___ about money.",
+          "lc": [
+            "argues",
+            "arguing",
+            "to argue",
+            "argued"
+          ],
+          "da": 1,
+          "gt": "Người nói chỉ nghe được một phần cuộc cãi nhau đang diễn ra ⇒ hear + tân ngữ + V-ing: arguing. To argue sai mẫu; argued / argues là động từ chia thì, không đứng sau tân ngữ them."
+        },
+        {
+          "h": "The man was seen ___ the bank at around noon.",
+          "lc": [
+            "entered",
+            "enters",
+            "to enter",
+            "enter"
+          ],
+          "da": 2,
+          "gt": "Ở dạng bị động (was seen), nguyên mẫu phải có to: was seen to enter. Nguyên mẫu không to chỉ dùng ở câu chủ động (saw him enter); entered / enters là động từ chia thì."
+        }
+      ]
+    },
+    {
+      "id": "en-b2-regret-mean-go-on",
+      "nhom": "Danh động từ – động từ nguyên mẫu",
+      "tieuDe": "regret / mean / go on / need + V-ing hay to V",
+      "mau": "regret / mean / go on / need + V-ing ↔ regret / mean / go on / need + to V (đổi nghĩa)",
+      "nghia": "bốn động từ đổi nghĩa tuỳ theo đi với V-ing hay to V",
+      "giaiThich": "Bốn động từ này đi được với cả V-ing và to V nhưng nghĩa khác nhau. regret + V-ing: hối tiếc việc đã làm; regret + to V: lấy làm tiếc khi phải báo tin xấu (trang trọng). mean + to V: có ý định; mean + V-ing: đồng nghĩa với việc, kéo theo. go on + V-ing: tiếp tục việc đang làm; go on + to V: chuyển sang làm việc tiếp theo. need + to V: (ai đó) cần làm; need + V-ing: (vật) cần được làm, mang nghĩa bị động.",
+      "cachGhep": [
+        "regret + V-ing (hối tiếc việc đã làm): I regret telling her my secret.",
+        "regret + to say / tell / inform / announce (tiếc phải báo tin, trang trọng): We regret to inform you that…",
+        "mean + to V (định): I didn't mean to hurt you. · mean + V-ing (kéo theo): It will mean working late.",
+        "go on + V-ing (tiếp tục): He went on talking. · go on + to V (làm tiếp việc khác): She went on to become a doctor.",
+        "need + to V (chủ động): I need to clean the windows. · need + V-ing (= need to be + V3): The windows need cleaning."
+      ],
+      "viDu": [
+        {
+          "c": "I regret telling her my secret.",
+          "v": "Tôi hối hận vì đã kể bí mật của mình cho cô ấy."
+        },
+        {
+          "c": "We regret to inform you that your application has been unsuccessful.",
+          "v": "Chúng tôi rất tiếc phải thông báo rằng hồ sơ của anh / chị không được chọn."
+        },
+        {
+          "c": "I'm sorry, I didn't mean to hurt your feelings.",
+          "v": "Xin lỗi, tôi không cố ý làm bạn tổn thương."
+        },
+        {
+          "c": "Taking the job would mean moving to another city.",
+          "v": "Nhận công việc đó đồng nghĩa với việc phải chuyển tới thành phố khác."
+        },
+        {
+          "c": "After a short break, she went on to talk about the budget.",
+          "v": "Sau một lúc giải lao, cô ấy chuyển sang nói về ngân sách."
+        }
+      ],
+      "luuY": [
+        "mean + V-ing thường có chủ ngữ là sự việc (it, this, cụm V-ing), còn mean + to V có chủ ngữ là người: 'I meant to call you' ↔ 'This means waiting another week'.",
+        "Với need + V-ing, chủ ngữ là vật chịu tác động: 'My shirt needs washing' (= needs to be washed). Không nói 'My shirt needs to wash' với nghĩa đó, cũng không nói 'needs being washed'.",
+        "Nhóm này cùng kiểu với stop / remember / forget / try (en-b1-gerund-vs-infinitive): V-ing thường nhìn về việc đã / đang xảy ra, to V nhìn về việc sắp làm. 'He went on talking about himself' (nói mãi một chuyện) ↔ 'He went on to talk about his family' (chuyển sang chuyện khác)."
+      ],
+      "soSanh": [
+        "en-b1-gerund-vs-infinitive",
+        "en-a2-to-inf-vs-ving",
+        "en-b2-passive-gerund-infinitive",
+        "en-c1-verb-patterns-advanced"
+      ],
+      "tuKhoa": [
+        "regret to inform",
+        "regret doing",
+        "mean to do",
+        "mean doing",
+        "go on to do",
+        "need doing",
+        "v-ing hay to v đổi nghĩa"
+      ],
+      "quiz": [
+        {
+          "h": "(Thông báo ở sân bay) We regret ___ passengers that flight VN215 has been cancelled.",
+          "lc": [
+            "to inform",
+            "inform",
+            "informed",
+            "informing"
+          ],
+          "da": 0,
+          "gt": "Lấy làm tiếc khi sắp báo một tin xấu ⇒ regret + to V: regret to inform. Regret informing nghĩa là hối hận vì trước đó đã báo; regret không đi với nguyên mẫu không to hay V2."
+        },
+        {
+          "h": "If you want that promotion, it will mean ___ longer hours.",
+          "lc": [
+            "worked",
+            "working",
+            "work",
+            "to work"
+          ],
+          "da": 1,
+          "gt": "Mean với nghĩa 'đồng nghĩa với việc, kéo theo' đi với V-ing: mean working. Mean + to V là 'có ý định' và cần chủ ngữ là người, không hợp với chủ ngữ it ở đây."
+        },
+        {
+          "h": "He started as a waiter and went on ___ the manager of the hotel.",
+          "lc": [
+            "became",
+            "becoming",
+            "to become",
+            "become"
+          ],
+          "da": 2,
+          "gt": "Làm xong việc này rồi chuyển sang một việc khác, một giai đoạn mới ⇒ go on + to V: went on to become. Went on becoming sẽ là 'tiếp tục trở thành' (vô nghĩa); go on không đi với nguyên mẫu không to hay V2."
+        }
+      ]
+    },
+    {
+      "id": "en-b2-preparatory-it",
+      "nhom": "Danh động từ – động từ nguyên mẫu",
+      "tieuDe": "It + be + adj + (for / of sb) + to V; find it hard to…",
+      "mau": "It + be + adj + (for / of + sb) + to V · S + find / make / think + it + adj + to V",
+      "nghia": "(ai) làm ~ thì thật là… · thấy việc ~ là…",
+      "giaiThich": "Khi chủ ngữ hoặc tân ngữ thật là một cụm to V hay một mệnh đề dài, tiếng Anh đặt it vào trước làm chủ ngữ / tân ngữ giả rồi đẩy phần dài ra cuối câu. Dùng for + người khi tính từ nhận xét về việc làm (easy, hard, important, necessary, impossible). Dùng of + người khi tính từ nhận xét về tính cách, cách cư xử của người đó (kind, nice, generous, silly, rude, careless, clever). Sau find, make, think, consider bắt buộc có it trước tính từ.",
+      "cachGhep": [
+        "It + be + adj + to V: It's easy to get lost in this city.",
+        "It + be + adj + for + sb + to V: It's important for children to get enough sleep.",
+        "It + be + adj + of + sb + to V: It was kind of you to help me.",
+        "It + be + adj / N + that + mệnh đề: It's a pity that you can't come.",
+        "S + find / make / think / consider + it + adj + to V: I find it hard to concentrate.",
+        "It's no use / It's (not) worth + V-ing: It's no use complaining."
+      ],
+      "viDu": [
+        {
+          "c": "It's important for children to get enough sleep.",
+          "v": "Trẻ em ngủ đủ giấc là điều quan trọng."
+        },
+        {
+          "c": "It was kind of you to help me with my luggage.",
+          "v": "Bạn thật tốt bụng khi đã giúp tôi xách hành lý."
+        },
+        {
+          "c": "I find it hard to concentrate when people are talking.",
+          "v": "Tôi thấy khó tập trung khi mọi người đang nói chuyện."
+        },
+        {
+          "c": "The noise made it impossible to sleep.",
+          "v": "Tiếng ồn khiến không tài nào ngủ được."
+        },
+        {
+          "c": "It's no use complaining. Nobody will listen.",
+          "v": "Phàn nàn cũng vô ích thôi. Chẳng ai nghe đâu."
+        }
+      ],
+      "luuY": [
+        "Lỗi thiếu it sau find / make: 'I find hard to concentrate', 'The noise made impossible to sleep' đều sai → phải có it: 'find it hard', 'made it impossible'.",
+        "Nhầm for và of: 'It was kind for you to help' là sai. Mẹo: nếu nói được 'You were kind' thì dùng of; nếu tính từ tả việc làm chứ không tả người ('It's difficult for me' — không phải 'I am difficult') thì dùng for.",
+        "Người Việt hay dịch 'Tôi rất khó để hiểu anh ấy' thành 'I'm very difficult to understand him' → 'It's very difficult for me to understand him'. Khác câu chẻ It is… that (en-b2-cleft-sentences): ở câu chẻ, it dùng để nhấn mạnh một thành phần, không phải chủ ngữ giả cho to V."
+      ],
+      "soSanh": [
+        "en-a1-it-chu-ngu-gia",
+        "en-b1-too-enough",
+        "en-b2-cleft-sentences",
+        "en-c1-it-there-advanced"
+      ],
+      "tuKhoa": [
+        "preparatory it",
+        "chủ ngữ giả it",
+        "chu ngu gia",
+        "it is kind of you",
+        "it is important for",
+        "find it hard to",
+        "tân ngữ giả"
+      ],
+      "quiz": [
+        {
+          "h": "It was very generous ___ you to pay for dinner.",
+          "lc": [
+            "to",
+            "with",
+            "for",
+            "of"
+          ],
+          "da": 3,
+          "gt": "Generous nhận xét về con người (You were generous) nên dùng of + người. For dùng khi tính từ nhận xét về việc làm (easy, important…); to và with không thuộc mẫu này."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "I find it difficult to wake up early.",
+            "I find difficult to wake up early.",
+            "I find it difficultly to wake up early.",
+            "I find it difficult wake up early."
+          ],
+          "da": 0,
+          "gt": "Sau find cần tân ngữ giả it + tính từ + to V: find it difficult to wake up. Bỏ it hoặc bỏ to đều sai, và sau it phải là tính từ (difficult) chứ không phải trạng từ."
+        },
+        {
+          "h": "It's essential ___ everyone to arrive on time.",
+          "lc": [
+            "to",
+            "for",
+            "of",
+            "that"
+          ],
+          "da": 1,
+          "gt": "Essential nhận xét về việc làm, không phải về tính cách ⇒ for + người + to V. Of chỉ dùng với tính từ tả người; sau that phải là một mệnh đề có động từ chia (không phải 'everyone to arrive')."
+        }
+      ]
+    },
+    {
+      "id": "en-b2-like-vs-as",
+      "nhom": "Tính từ – trạng từ – giới từ",
+      "tieuDe": "like vs as / as if",
+      "mau": "like + N / đại từ (giống như) · as + N (với tư cách là) · as + S + V (như, theo cách) · as if + S + V",
+      "nghia": "giống như ~ · với tư cách là, làm ~ · như (cách mà) ~",
+      "giaiThich": "like là giới từ, đứng trước danh từ / đại từ để so sánh: giống như, nhưng không phải là. as trước danh từ nói vai trò, chức năng THẬT: với tư cách là, dùng làm. as còn là liên từ, đứng trước mệnh đề với nghĩa 'như, theo cách mà'; trong văn nói thân mật, người bản ngữ hay dùng like trước mệnh đề, nhưng văn viết trang trọng nên dùng as. as if / as though + mệnh đề nghĩa là 'như thể'.",
+      "cachGhep": [
+        "like + N / đại từ / V-ing: She sings like a professional. · It's like walking on ice.",
+        "look / sound / feel / taste / smell + like + N: This feels like silk.",
+        "as + N (vai trò, chức năng thật): She works as a nurse. · We used the box as a table.",
+        "as + S + V (như, theo cách): Do as I say. · Leave everything as it is.",
+        "Cụm cố định với as: as usual, as always, as you know, as I said, the same as, such as",
+        "as if / as though + S + V: It looks as if it's going to snow."
+      ],
+      "viDu": [
+        {
+          "c": "She works as a nurse at the local hospital.",
+          "v": "Cô ấy làm y tá ở bệnh viện địa phương."
+        },
+        {
+          "c": "He's only fifteen, but he talks like an adult.",
+          "v": "Cậu ấy mới mười lăm tuổi mà nói chuyện như người lớn."
+        },
+        {
+          "c": "Please leave everything as it is.",
+          "v": "Làm ơn để nguyên mọi thứ như cũ."
+        },
+        {
+          "c": "As you know, the office will be closed on Monday.",
+          "v": "Như các bạn đã biết, văn phòng sẽ đóng cửa vào thứ Hai."
+        },
+        {
+          "c": "It looks as if it's going to snow.",
+          "v": "Trông có vẻ như trời sắp có tuyết."
+        }
+      ],
+      "luuY": [
+        "Đổi like / as là đổi nghĩa: 'He works as a teacher' (anh ấy là giáo viên thật) ↔ 'He talks like a teacher' (giống giáo viên, nhưng không phải).",
+        "Người Việt hay nói 'the same like' → đúng là 'the same as'; và 'like you know' trong văn viết → 'as you know'.",
+        "Khác as if / as though (en-b2-as-if): like / as so sánh với một người, vật hoặc cách làm có thật, còn as if đưa ra một hình dung ('He talks as if he owned the place'). Nêu ví dụ thì dùng such as hoặc like ('cities such as Hue and Hoi An'), không dùng as một mình."
+      ],
+      "soSanh": [
+        "en-b2-as-if",
+        "en-a2-as-as"
+      ],
+      "tuKhoa": [
+        "like vs as",
+        "work as",
+        "look like",
+        "the same as",
+        "giống như",
+        "với tư cách là",
+        "voi tu cach la"
+      ],
+      "quiz": [
+        {
+          "h": "My sister works ___ a tour guide in Hoi An. (Đó là nghề của chị ấy.)",
+          "lc": [
+            "as",
+            "as if",
+            "such as",
+            "like"
+          ],
+          "da": 0,
+          "gt": "Nói nghề nghiệp, vai trò thật ⇒ as + danh từ: works as a tour guide. Like chỉ là 'giống như' (không phải nghề thật); as if cần một mệnh đề; such as dùng để nêu ví dụ."
+        },
+        {
+          "h": "This fabric feels ___ silk, but it's actually polyester.",
+          "lc": [
+            "as",
+            "like",
+            "alike",
+            "such"
+          ],
+          "da": 1,
+          "gt": "So sánh 'giống như' trước danh từ sau feel ⇒ like: feels like silk. As + danh từ là 'với tư cách là'; such không đứng như vậy; alike chỉ đứng sau động từ và không có danh từ theo sau."
+        },
+        {
+          "h": "Your phone is exactly the same ___ mine.",
+          "lc": [
+            "like",
+            "with",
+            "as",
+            "than"
+          ],
+          "da": 2,
+          "gt": "Cụm cố định là the same as. 'The same like' và 'the same with' là lỗi dịch từ tiếng Việt; than chỉ dùng sau so sánh hơn."
+        }
+      ]
+    },
+    {
+      "id": "en-b2-gradable-adjectives",
+      "nhom": "Tính từ – trạng từ – giới từ",
+      "tieuDe": "Tính từ phân cấp / không phân cấp: very vs absolutely",
+      "mau": "very / extremely / fairly + adj phân cấp · absolutely / completely / totally + adj không phân cấp",
+      "nghia": "very cold nhưng absolutely freezing: trạng từ mức độ phải hợp loại tính từ",
+      "giaiThich": "Tính từ phân cấp (gradable: cold, tired, good, big) có nhiều mức độ nên đi với very, extremely, fairly, a bit, slightly. Tính từ không phân cấp gồm tính từ đã mang nghĩa 'cực kỳ' (freezing, exhausted, delicious, enormous, terrible, amazing) và tính từ tuyệt đối (impossible, perfect, dead, unique); chúng đi với absolutely, completely, totally, utterly chứ thường không đi với very. really dùng được với cả hai loại.",
+      "cachGhep": [
+        "very / extremely / rather / fairly / a bit / slightly + adj phân cấp: very cold, a bit tired, extremely good",
+        "absolutely / completely / totally / utterly + adj không phân cấp: absolutely freezing, completely impossible",
+        "really + cả hai loại: really good, really awful",
+        "Cặp thường gặp: cold → freezing · hot → boiling · tired → exhausted · big → enormous / huge · small → tiny · good → fantastic / excellent · bad → awful / terrible · tasty → delicious · hungry → starving · angry → furious"
+      ],
+      "viDu": [
+        {
+          "c": "It's very cold today, and it's absolutely freezing at night.",
+          "v": "Hôm nay trời rất lạnh, còn ban đêm thì lạnh cóng."
+        },
+        {
+          "c": "I was absolutely exhausted after the trip.",
+          "v": "Sau chuyến đi tôi hoàn toàn kiệt sức."
+        },
+        {
+          "c": "The view from the top was absolutely stunning.",
+          "v": "Cảnh nhìn từ trên đỉnh xuống đẹp đến ngỡ ngàng."
+        },
+        {
+          "c": "The first part of the test was fairly easy, but the last question was completely impossible.",
+          "v": "Phần đầu bài kiểm tra khá dễ, nhưng câu cuối thì hoàn toàn không thể làm nổi."
+        }
+      ],
+      "luuY": [
+        "Người Việt hay dùng very cho mọi tính từ: 'very freezing', 'very enormous', 'very delicious' nghe không tự nhiên → 'absolutely freezing', 'absolutely enormous', 'really / absolutely delicious'.",
+        "Ngược lại, absolutely không đi với tính từ phân cấp: 'absolutely cold', 'absolutely tired' → 'very cold', 'very tired'.",
+        "Khác too (en-a1-very-too): too là 'quá mức, đến nỗi không tốt', không phải bản mạnh hơn của very. quite đổi nghĩa theo loại tính từ: 'quite good' (khá tốt) nhưng 'quite impossible' (hoàn toàn không thể), nhất là trong tiếng Anh Anh."
+      ],
+      "soSanh": [
+        "en-a1-very-too",
+        "en-b1-comparatives-advanced",
+        "en-c1-adverb-adjective-collocation"
+      ],
+      "tuKhoa": [
+        "gradable adjectives",
+        "non-gradable",
+        "extreme adjectives",
+        "absolutely freezing",
+        "tính từ phân cấp",
+        "tinh tu phan cap",
+        "tính từ cực cấp"
+      ],
+      "quiz": [
+        {
+          "h": "Put your gloves on. It's ___ freezing outside.",
+          "lc": [
+            "very",
+            "fairly",
+            "slightly",
+            "absolutely"
+          ],
+          "da": 3,
+          "gt": "Freezing đã mang nghĩa 'cực kỳ lạnh' (không phân cấp) nên đi với absolutely. Very, fairly, slightly chỉ dùng với tính từ phân cấp như cold."
+        },
+        {
+          "h": "Trạng từ nào dùng được với CẢ tính từ phân cấp lẫn không phân cấp (___ good · ___ awful)?",
+          "lc": [
+            "really",
+            "absolutely",
+            "slightly",
+            "very"
+          ],
+          "da": 0,
+          "gt": "Really đi được với cả hai loại: really good, really awful. Very và slightly chỉ hợp với tính từ phân cấp (không nói very awful); absolutely chỉ hợp với tính từ không phân cấp (không nói absolutely good)."
+        },
+        {
+          "h": "Câu nào tự nhiên, đúng cách dùng?",
+          "lc": [
+            "The room was a bit enormous.",
+            "The room was absolutely enormous.",
+            "The room was very enormous.",
+            "The room was absolutely big."
+          ],
+          "da": 1,
+          "gt": "Enormous là tính từ không phân cấp ⇒ absolutely enormous. Very và a bit không đi với enormous; big là tính từ phân cấp nên không đi với absolutely."
+        }
+      ]
+    },
+    {
+      "id": "en-b2-adverb-position",
+      "nhom": "Tính từ – trạng từ – giới từ",
+      "tieuDe": "Vị trí trạng từ và trạng từ bình luận (Luckily, Apparently…)",
+      "mau": "Trạng từ bình luận, + câu · S + (trợ động từ) + trạng từ + V · S + V + O + trạng từ",
+      "nghia": "trạng từ đứng đầu, giữa hay cuối câu; Luckily / Apparently… bình luận cả câu",
+      "giaiThich": "Trạng từ có ba vị trí chính. ĐẦU câu: trạng từ bình luận (Luckily, Unfortunately, Apparently, Obviously, Frankly, Surprisingly) nêu thái độ của người nói về cả câu, thường có dấu phẩy theo sau. GIỮA câu (trước động từ chính, sau be, sau trợ động từ đầu tiên): trạng từ tần suất và mức độ chắc chắn như always, never, probably, definitely, và cả just, already, almost. CUỐI câu: trạng từ chỉ cách thức, nơi chốn, thời gian — thường theo đúng thứ tự đó.",
+      "cachGhep": [
+        "Bình luận đầu câu + dấu phẩy: Luckily, nobody was hurt. · Apparently, the meeting has been moved.",
+        "Giữa câu, trước động từ chính: She probably knows the answer.",
+        "Giữa câu, sau be / sau trợ động từ đầu tiên: He is always late. · I've probably left my keys at the office.",
+        "probably / definitely / certainly đứng TRƯỚC trợ động từ phủ định: They definitely won't finish on time.",
+        "Cuối câu: cách thức → nơi chốn → thời gian: She sang beautifully at the concert last night.",
+        "Không chen trạng từ vào giữa động từ và tân ngữ: She speaks English very well."
+      ],
+      "viDu": [
+        {
+          "c": "Luckily, nobody was hurt in the accident.",
+          "v": "May mắn là không ai bị thương trong vụ tai nạn."
+        },
+        {
+          "c": "Apparently, the meeting has been moved to Friday.",
+          "v": "Nghe nói cuộc họp đã được dời sang thứ Sáu."
+        },
+        {
+          "c": "She speaks English very well.",
+          "v": "Cô ấy nói tiếng Anh rất giỏi."
+        },
+        {
+          "c": "I've probably left my keys at the office.",
+          "v": "Chắc là tôi để quên chìa khoá ở văn phòng rồi."
+        },
+        {
+          "c": "They definitely won't finish on time.",
+          "v": "Chắc chắn họ sẽ không xong đúng hạn."
+        }
+      ],
+      "luuY": [
+        "Lỗi số một của người Việt: chen trạng từ vào giữa động từ và tân ngữ — 'I like very much coffee', 'She speaks very well English' → 'I like coffee very much', 'She speaks English very well'.",
+        "Apparently nghĩa là 'nghe nói, có vẻ như' (theo thông tin mình nghe được, chưa chắc), không phải 'rõ ràng là' — nghĩa đó là obviously / clearly.",
+        "Vị trí có thể đổi nghĩa: 'Frankly, I can't talk to her' (nói thật là tôi không nói chuyện với cô ấy được) ↔ 'I can't talk to her frankly' (tôi không thể nói chuyện thẳng thắn với cô ấy). Trạng từ tần suất cơ bản xem en-a1-trang-tu-tan-suat."
+      ],
+      "soSanh": [
+        "en-a1-trang-tu-tan-suat",
+        "en-a2-trang-tu-cach-thuc",
+        "en-a1-trat-tu-svo",
+        "en-c1-discourse-markers-spoken"
+      ],
+      "tuKhoa": [
+        "adverb position",
+        "comment adverbs",
+        "luckily",
+        "apparently",
+        "vị trí trạng từ",
+        "vi tri trang tu",
+        "trạng từ bình luận"
+      ],
+      "quiz": [
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "She plays the piano beautifully.",
+            "Beautifully she the piano plays.",
+            "She plays the beautifully piano.",
+            "She plays beautifully the piano."
+          ],
+          "da": 0,
+          "gt": "Trạng từ chỉ cách thức đứng sau tân ngữ: plays the piano beautifully. Không chen trạng từ vào giữa động từ và tân ngữ, cũng không đặt nó trước danh từ như một tính từ."
+        },
+        {
+          "h": "___, the last train had already left, so we had to take a taxi.",
+          "lc": [
+            "Unfortunate",
+            "Unfortunately",
+            "Unlucky",
+            "Misfortune"
+          ],
+          "da": 1,
+          "gt": "Bình luận về cả câu phải dùng trạng từ đứng đầu câu: Unfortunately. Unfortunate và unlucky là tính từ, misfortune là danh từ nên không đứng một mình ở vị trí này."
+        },
+        {
+          "h": "'Apparently, he has resigned.' Người nói muốn nói gì?",
+          "lc": [
+            "Chính mắt tôi thấy anh ấy nộp đơn nghỉ việc, chắc chắn 100%.",
+            "Thật may là anh ấy đã nghỉ việc.",
+            "Tôi nghe nói anh ấy đã nghỉ việc, nhưng tôi không chắc hoàn toàn.",
+            "Nói thật lòng thì anh ấy nên nghỉ việc."
+          ],
+          "da": 2,
+          "gt": "Apparently = theo những gì nghe được / có vẻ là, người nói không trực tiếp biết chắc. Nó không diễn tả sự chắc chắn tuyệt đối; 'thật may' là luckily, còn 'nói thật lòng' là frankly."
+        }
+      ]
+    },
+    {
+      "id": "en-b2-dependent-prepositions",
+      "nhom": "Tính từ – trạng từ – giới từ",
+      "tieuDe": "Giới từ đi kèm tính từ / động từ / danh từ",
+      "mau": "adj + giới từ · V + giới từ · N + giới từ (+ N / V-ing)",
+      "nghia": "mỗi tính từ, động từ, danh từ đòi một giới từ cố định",
+      "giaiThich": "Nhiều tính từ, động từ và danh từ luôn đi với một giới từ nhất định; giới từ này không suy ra được từ nghĩa hay từ tiếng Việt nên phải học thuộc theo cụm. Sau giới từ là danh từ, đại từ hoặc V-ing, không bao giờ là động từ nguyên mẫu. Ở trình độ B2, dùng đúng các cụm này là yếu tố quan trọng để câu văn chính xác.",
+      "cachGhep": [
+        "adj + giới từ: interested in · good / bad at · afraid / proud / aware / capable / tired of · keen on · responsible / famous for · similar / married to · different from · worried about",
+        "V + giới từ: depend / rely / insist / concentrate on · apologise for · succeed in · belong / listen to · consist / approve of · wait for · suffer from · complain about",
+        "N + giới từ: a reason for · a solution to · an increase / a rise in · a demand for · an effect on · a relationship with · a lack of · the difference between",
+        "Sau giới từ dùng V-ing: She's good at solving problems. · He apologised for being late."
+      ],
+      "viDu": [
+        {
+          "c": "She's very good at solving problems.",
+          "v": "Cô ấy rất giỏi giải quyết vấn đề."
+        },
+        {
+          "c": "Whether we go or not depends on the weather.",
+          "v": "Chúng ta có đi hay không còn tuỳ vào thời tiết."
+        },
+        {
+          "c": "He apologised for being late.",
+          "v": "Anh ấy đã xin lỗi vì đến muộn."
+        },
+        {
+          "c": "There has been a sharp increase in house prices.",
+          "v": "Giá nhà đã tăng mạnh."
+        },
+        {
+          "c": "She has been married to a doctor for ten years.",
+          "v": "Cô ấy lấy chồng bác sĩ được mười năm rồi."
+        }
+      ],
+      "luuY": [
+        "Lỗi do dịch từ tiếng Việt: 'married with' (kết hôn với) → married to; 'depend in / of' → depend on; 'good in' → good at; 'the reason of' → the reason for.",
+        "Một số động từ KHÔNG cần giới từ dù tiếng Việt có: discuss the problem (không 'discuss about'), marry someone (không 'marry with'), enter the room (không 'enter into the room'), contact someone (không 'contact with').",
+        "Khác phrasal verbs (en-b1-phrasal-verbs): ở đây giới từ không làm đổi nghĩa của động từ (depend on vẫn là 'phụ thuộc'), còn tiểu từ của phrasal verb tạo ra nghĩa mới (give up = từ bỏ)."
+      ],
+      "soSanh": [
+        "en-b1-phrasal-verbs",
+        "en-b2-phrasal-verbs-three-part",
+        "en-c1-complex-prepositions"
+      ],
+      "tuKhoa": [
+        "dependent prepositions",
+        "interested in",
+        "depend on",
+        "good at",
+        "giới từ đi kèm",
+        "gioi tu di kem",
+        "tính từ + giới từ",
+        "động từ + giới từ"
+      ],
+      "quiz": [
+        {
+          "h": "The success of the project depends ___ everyone's effort.",
+          "lc": [
+            "of",
+            "on",
+            "in",
+            "from"
+          ],
+          "da": 1,
+          "gt": "Depend luôn đi với on: depends on. Of, in, from là những giới từ người học hay điền theo thói quen dịch từ tiếng Việt, đều không đi với depend."
+        },
+        {
+          "h": "At his age, he isn't capable ___ such a long distance.",
+          "lc": [
+            "to run",
+            "of run",
+            "of running",
+            "for running"
+          ],
+          "da": 2,
+          "gt": "Capable đi với of, và sau giới từ là V-ing: capable of running. Capable không đi với to V (khác able to run), không đi với for, và sau of không dùng động từ nguyên mẫu."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "We discussed on the problem for an hour.",
+            "We discussed about the problem for an hour.",
+            "We discussed to the problem for an hour.",
+            "We discussed the problem for an hour."
+          ],
+          "da": 3,
+          "gt": "Discuss là ngoại động từ, đi thẳng với tân ngữ: discuss the problem. Thêm about, on hay to đều thừa (about chỉ đi với danh từ: a discussion about…)."
+        }
+      ]
+    },
+    {
+      "id": "en-b2-phrasal-verbs-three-part",
+      "nhom": "Tính từ – trạng từ – giới từ",
+      "tieuDe": "Phrasal verbs ba thành phần: look forward to, put up with…",
+      "mau": "V + tiểu từ + giới từ + tân ngữ (N / đại từ / V-ing)",
+      "nghia": "cụm động từ ba thành phần: mong chờ, chịu đựng, hết, nghĩ ra…",
+      "giaiThich": "Cụm động từ ba thành phần gồm động từ + trạng từ (tiểu từ) + giới từ, mang một nghĩa riêng không đoán được từ từng từ. Ba thành phần luôn đi liền nhau, không tách ra được, và tân ngữ — kể cả đại từ — luôn đứng SAU giới từ. Vì từ cuối là giới từ nên động từ theo sau phải ở dạng V-ing. Phần lớn thuộc văn phong trung tính hoặc thân mật.",
+      "cachGhep": [
+        "look forward to + N / V-ing: mong chờ · put up with: chịu đựng · run out of: hết, cạn",
+        "come up with: nghĩ ra · get on with: hoà thuận với; tiếp tục làm · catch up with / keep up with: đuổi kịp / theo kịp",
+        "look up to: kính trọng · look down on: coi thường · get away with: thoát tội, không bị phạt",
+        "cut down on: cắt giảm · make up for: bù đắp cho · get round to: thu xếp được thời gian để làm",
+        "Tân ngữ là đại từ vẫn đứng cuối: put up with it · look forward to it"
+      ],
+      "viDu": [
+        {
+          "c": "I'm looking forward to seeing you next week.",
+          "v": "Tôi rất mong được gặp bạn vào tuần tới."
+        },
+        {
+          "c": "I can't put up with this noise any longer.",
+          "v": "Tôi không chịu nổi tiếng ồn này thêm nữa."
+        },
+        {
+          "c": "We've run out of coffee. Can you buy some on your way home?",
+          "v": "Nhà hết cà phê rồi. Trên đường về bạn mua một ít được không?"
+        },
+        {
+          "c": "She came up with a brilliant idea for the campaign.",
+          "v": "Cô ấy đã nghĩ ra một ý tưởng tuyệt vời cho chiến dịch."
+        },
+        {
+          "c": "My doctor told me to cut down on sugar.",
+          "v": "Bác sĩ bảo tôi phải giảm ăn đường."
+        }
+      ],
+      "luuY": [
+        "To trong look forward to là giới từ, không phải to của nguyên mẫu: 'I look forward to hear from you' là sai → 'to hearing from you'. Tương tự: get round to doing, be used to doing.",
+        "Không tách ba thành phần, không đặt tân ngữ vào giữa: 'put up it with', 'run coffee out of' đều sai.",
+        "Khác phrasal verb hai thành phần tách được (en-b1-phrasal-verbs): 'turn it off' (đại từ đứng giữa) ↔ 'put up with it' (đại từ đứng cuối). Khi không có tân ngữ thì bỏ giới từ cuối: 'We've run out of milk' ↔ 'The milk has run out'."
+      ],
+      "soSanh": [
+        "en-a2-phrasal-verbs",
+        "en-b1-phrasal-verbs",
+        "en-b2-dependent-prepositions",
+        "en-b1-be-get-used-to"
+      ],
+      "tuKhoa": [
+        "look forward to",
+        "put up with",
+        "run out of",
+        "come up with",
+        "three-part phrasal verbs",
+        "cụm động từ ba thành phần",
+        "cum dong tu"
+      ],
+      "quiz": [
+        {
+          "h": "We're looking forward to ___ from you soon.",
+          "lc": [
+            "heard",
+            "hearing",
+            "be hearing",
+            "hear"
+          ],
+          "da": 1,
+          "gt": "To trong look forward to là giới từ nên theo sau là V-ing: hearing. Hear, heard, be hearing đều coi to như dấu hiệu của động từ nguyên mẫu nên sai."
+        },
+        {
+          "h": "My neighbours are so noisy. I can't put ___ them any more.",
+          "lc": [
+            "up",
+            "with up",
+            "up with",
+            "on with"
+          ],
+          "da": 2,
+          "gt": "Chịu đựng = put up with, ba thành phần theo đúng thứ tự này. Put up (thiếu with) mang nghĩa khác (dựng lên, cho ở nhờ); 'with up' sai thứ tự; 'put on with' không tồn tại."
+        },
+        {
+          "h": "'She came up with a solution' có nghĩa là:",
+          "lc": [
+            "Cô ấy phản đối một giải pháp.",
+            "Cô ấy trì hoãn một giải pháp.",
+            "Cô ấy theo kịp một giải pháp.",
+            "Cô ấy nghĩ ra một giải pháp."
+          ],
+          "da": 3,
+          "gt": "Come up with = nghĩ ra, đưa ra (ý tưởng, kế hoạch, giải pháp). Theo kịp là keep up with / catch up with; phản đối hay trì hoãn không phải nghĩa của cụm này."
+        }
+      ]
+    },
+    {
+      "id": "en-b2-uncountable-advanced",
+      "nhom": "Danh từ – mạo từ",
+      "tieuDe": "Danh từ không đếm được dễ sai: advice, information, furniture…",
+      "mau": "some / much / a lot of / a piece of + N không đếm được + V số ít",
+      "nghia": "advice, information, news… không có số nhiều, không đi với a / an",
+      "giaiThich": "Một số danh từ đếm được trong tiếng Việt ('một lời khuyên', 'hai thông tin') lại là danh từ KHÔNG đếm được trong tiếng Anh: advice, information, news, furniture, luggage / baggage, equipment, homework, knowledge, progress, research, evidence, traffic, weather, work, travel, accommodation. Chúng không thêm -s, không đi với a / an hay số đếm, và động từ chia số ít. Muốn đếm thì dùng a piece of, a bit of, an item of hoặc đổi sang một danh từ đếm được khác.",
+      "cachGhep": [
+        "some / any / much / a lot of / a little + N: some advice, much information, a lot of luggage",
+        "a piece of / a bit of + advice / information / news / furniture / equipment / evidence · an item of + furniture / luggage",
+        "Động từ số ít: The news is good. · The furniture was expensive.",
+        "Đổi sang danh từ đếm được: work → a job · travel → a trip / a journey · luggage → a suitcase / a bag · accommodation → a place to stay · advice → a tip / a suggestion"
+      ],
+      "viDu": [
+        {
+          "c": "Can you give me some advice about applying for this job?",
+          "v": "Bạn cho tôi vài lời khuyên về việc nộp đơn xin công việc này được không?"
+        },
+        {
+          "c": "The news is on at seven o'clock.",
+          "v": "Bản tin phát lúc bảy giờ."
+        },
+        {
+          "c": "We need to buy some new furniture for the living room.",
+          "v": "Chúng tôi cần mua ít đồ nội thất mới cho phòng khách."
+        },
+        {
+          "c": "She has made a lot of progress this year.",
+          "v": "Năm nay cô ấy đã tiến bộ rất nhiều."
+        },
+        {
+          "c": "That's an interesting piece of information.",
+          "v": "Đó là một thông tin thú vị."
+        }
+      ],
+      "luuY": [
+        "Lỗi kinh điển của người Việt: 'an advice', 'advices', 'informations', 'furnitures', 'equipments', 'homeworks', 'a news' → some advice / a piece of advice, information, furniture, equipment, homework, some news / a piece of news.",
+        "News có đuôi -s nhưng là danh từ không đếm được, động từ số ít: 'The news was shocking', không phải 'were'.",
+        "Dùng much / (a) little chứ không dùng many / (a) few (xem en-a2-much-many-a-lot-of): 'How much luggage…?', không phải 'How many luggages…?'. Phân biệt work (công việc nói chung, không đếm được) với a job (một việc làm, đếm được): 'I'm looking for a job / for work', không phải 'a work'."
+      ],
+      "soSanh": [
+        "en-a1-dem-duoc-khong-dem-duoc",
+        "en-a2-much-many-a-lot-of",
+        "en-a2-a-few-a-little",
+        "en-a1-some-any"
+      ],
+      "tuKhoa": [
+        "uncountable nouns",
+        "advice",
+        "information",
+        "furniture",
+        "a piece of advice",
+        "danh từ không đếm được",
+        "danh tu khong dem duoc"
+      ],
+      "quiz": [
+        {
+          "h": "My teacher gave me ___ before the interview.",
+          "lc": [
+            "many good advice",
+            "some good advices",
+            "a good advice",
+            "some good advice"
+          ],
+          "da": 3,
+          "gt": "Advice không đếm được: không đi với a, không thêm -s, không đi với many ⇒ some good advice."
+        },
+        {
+          "h": "The news about the accident ___ very upsetting.",
+          "lc": [
+            "was",
+            "have been",
+            "were",
+            "are"
+          ],
+          "da": 0,
+          "gt": "News là danh từ không đếm được dù có đuôi -s nên động từ chia số ít: was. Were, are, have been đều là dạng số nhiều."
+        },
+        {
+          "h": "He has just finished university and is looking for ___ in Da Nang.",
+          "lc": [
+            "works",
+            "a job",
+            "a work",
+            "an employment"
+          ],
+          "da": 1,
+          "gt": "Một việc làm = a job (đếm được). Work và employment là danh từ không đếm được nên không đi với a / an; works mang nghĩa khác (tác phẩm, công trình)."
+        }
+      ]
+    },
+    {
+      "id": "en-b2-articles-generic",
+      "nhom": "Danh từ – mạo từ",
+      "tieuDe": "Mạo từ nói chung chung: the + adj (the rich), the + N số ít",
+      "mau": "∅ + N số nhiều / không đếm được · the + N số ít · a / an + N số ít · the + adj + V số nhiều",
+      "nghia": "nói về cả một loài, một loại, một nhóm người nói chung",
+      "giaiThich": "Có nhiều cách nói chung chung về cả một lớp sự vật. Phổ biến nhất là danh từ số nhiều hoặc không đếm được KHÔNG có mạo từ (Dogs are loyal. Life is short). the + danh từ số ít dùng cho loài vật, phát minh, nhạc cụ, mang sắc thái trang trọng, khoa học (The tiger is endangered). a / an + danh từ số ít nghĩa là 'bất kỳ một… nào' (A doctor must be patient). the + tính từ chỉ cả một nhóm người (the rich, the poor, the elderly, the unemployed) và động từ chia số nhiều.",
+      "cachGhep": [
+        "∅ + N số nhiều / N không đếm được: Tigers are dangerous. · Music helps me relax.",
+        "the + N số ít (loài, phát minh, nhạc cụ): The smartphone has changed our lives. · She plays the violin.",
+        "a / an + N số ít (= bất kỳ cá thể nào): A teacher needs a lot of patience.",
+        "the + adj (nhóm người) + V số nhiều: the rich, the poor, the young, the elderly, the homeless, the unemployed",
+        "the + tính từ quốc tịch tận cùng -sh / -ch / -ese: the British, the French, the Japanese, the Vietnamese"
+      ],
+      "viDu": [
+        {
+          "c": "The rich are not always happy.",
+          "v": "Người giàu không phải lúc nào cũng hạnh phúc."
+        },
+        {
+          "c": "The smartphone has changed the way we communicate.",
+          "v": "Điện thoại thông minh đã thay đổi cách chúng ta giao tiếp."
+        },
+        {
+          "c": "Tigers are in danger of extinction.",
+          "v": "Loài hổ đang có nguy cơ tuyệt chủng."
+        },
+        {
+          "c": "The government should do more to help the unemployed.",
+          "v": "Chính phủ nên làm nhiều hơn để giúp đỡ những người thất nghiệp."
+        },
+        {
+          "c": "The Japanese are known for their politeness.",
+          "v": "Người Nhật nổi tiếng về sự lịch sự."
+        }
+      ],
+      "luuY": [
+        "the + tính từ luôn chỉ cả nhóm và đi với động từ số nhiều; không thêm -s, không dùng cho một người: 'The rich is…', 'the poors', 'a rich' đều sai → 'The rich are…', 'the poor', 'a rich person'.",
+        "Nói chung chung với danh từ số nhiều / không đếm được thì KHÔNG dùng the: 'The life is hard', 'I love the music' (nói âm nhạc nói chung) là sai → 'Life is hard', 'I love music'.",
+        "Khác the xác định (en-a2-mao-tu-the-zero): 'The dogs are barking' = những con chó cụ thể mà cả hai cùng biết; 'Dogs bark' = loài chó nói chung. a / an không dùng khi nói về cả loài như một tổng thể: 'The tiger is / Tigers are in danger of extinction', không phải 'A tiger is in danger of extinction'."
+      ],
+      "soSanh": [
+        "en-b1-articles",
+        "en-a2-mao-tu-the-zero",
+        "en-a1-the-co-ban",
+        "en-c1-articles-advanced"
+      ],
+      "tuKhoa": [
+        "the rich",
+        "the poor",
+        "the elderly",
+        "generic reference",
+        "mạo từ nói chung",
+        "mao tu noi chung",
+        "the + tính từ"
+      ],
+      "quiz": [
+        {
+          "h": "The elderly ___ more support from the community.",
+          "lc": [
+            "has needed",
+            "is needing",
+            "needs",
+            "need"
+          ],
+          "da": 3,
+          "gt": "The + tính từ chỉ cả một nhóm người (những người cao tuổi) nên động từ chia số nhiều: need. Needs, is needing, has needed đều là dạng số ít."
+        },
+        {
+          "h": "___ was invented in the nineteenth century.",
+          "lc": [
+            "The telephone",
+            "Telephones",
+            "A telephone",
+            "Telephone"
+          ],
+          "da": 0,
+          "gt": "Nói về một phát minh như cả một loại ⇒ the + danh từ số ít: The telephone. Danh từ đếm được số ít không đứng trống mạo từ; telephones không đi với was; a telephone chỉ một cái bất kỳ, không dùng cho cả loại phát minh."
+        },
+        {
+          "h": "Câu nào đúng khi nói chung chung về cuộc sống?",
+          "lc": [
+            "The life is full of surprises.",
+            "Life is full of surprises.",
+            "A life is full of surprises.",
+            "Lifes are full of surprises."
+          ],
+          "da": 1,
+          "gt": "Danh từ không đếm được dùng với nghĩa chung chung thì không có mạo từ: Life is… Thêm the là lỗi phổ biến của người Việt; a life chỉ một cuộc đời cụ thể; số nhiều của life là lives chứ không phải lifes."
+        }
+      ]
+    }
+  ]
+}

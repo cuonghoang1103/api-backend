@@ -1,0 +1,1319 @@
+{
+  "nn": "ja",
+  "cap": "N2",
+  "diem": [
+    {
+      "id": "ja-n2-wo-megutte",
+      "nhom": "Đối tượng – căn cứ",
+      "tieuDe": "〜をめぐって",
+      "mau": "N + をめぐって（をめぐり） / をめぐる + N",
+      "nghia": "xoay quanh ~ (vấn đề có nhiều ý kiến, tranh cãi)",
+      "giaiThich": "Nêu vấn đề trung tâm mà nhiều người, nhiều bên đang bàn cãi, tranh chấp, đồn đoán. Vế sau thường là 議論する, 争う, 対立する, もめる, うわさが流れる. Hay gặp trong tin tức, văn viết.",
+      "cachGhep": [
+        "Danh từ + をめぐって / をめぐり: 建設をめぐって",
+        "Trước danh từ: 〜をめぐる N / 〜をめぐっての N",
+        "Mệnh đề nghi vấn: 〜かどうか / 〜か + をめぐって"
+      ],
+      "viDu": [
+        {
+          "c": "新しい空港の建設をめぐって、住民の意見が対立している。",
+          "d": "あたらしい くうこうの けんせつを めぐって、じゅうみんの いけんが たいりつして いる。",
+          "v": "Xoay quanh việc xây sân bay mới, ý kiến người dân đang đối lập nhau."
+        },
+        {
+          "c": "父の遺産をめぐり、兄弟が争っている。",
+          "d": "ちちの いさんを めぐり、きょうだいが あらそって いる。",
+          "v": "Anh em đang tranh chấp nhau quanh khoản thừa kế của bố."
+        },
+        {
+          "c": "消費税の引き上げをめぐる議論が続いている。",
+          "d": "しょうひぜいの ひきあげを めぐる ぎろんが つづいて いる。",
+          "v": "Cuộc tranh luận xoay quanh việc tăng thuế tiêu dùng vẫn tiếp diễn."
+        },
+        {
+          "c": "その事件の原因をめぐって、さまざまなうわさが流れた。",
+          "d": "その じけんの げんいんを めぐって、さまざまな うわさが ながれた。",
+          "v": "Quanh nguyên nhân vụ việc đó đã lan ra đủ thứ tin đồn."
+        }
+      ],
+      "luuY": [
+        "Trợ từ là を, không phải に (✗ 問題にめぐって).",
+        "Khác 〜について／〜に関して: hai mẫu đó chỉ nêu đề tài, một người làm cũng được (日本文化について研究する); をめぐって cần nhiều người / nhiều ý kiến va chạm, nên ✗ 私は日本文化をめぐって研究している.",
+        "Vế sau không phải hành động đơn lẻ của một cá nhân mà là tranh luận, đối lập, đồn đoán."
+      ],
+      "soSanh": [
+        "ja-n3-ni-tsuite",
+        "ja-n3-ni-kanshite",
+        "ja-n3-ni-taishite"
+      ],
+      "tuKhoa": [
+        "wo megutte",
+        "womegutte",
+        "wo meguri",
+        "wo meguru",
+        "xoay quanh",
+        "tranh cãi"
+      ],
+      "quiz": [
+        {
+          "h": "憲法の改正（　）、国会で激しい議論が行われた。",
+          "lc": [
+            "をめぐって",
+            "にめぐって",
+            "がめぐって",
+            "をめぐる"
+          ],
+          "da": 0,
+          "gt": "N + をめぐって + (tranh luận). Trợ từ phải là を; dạng をめぐる chỉ đứng ngay trước danh từ, không đứng trước dấu phẩy."
+        },
+        {
+          "h": "これは土地の所有権（　）争いだ。",
+          "lc": [
+            "をめぐって",
+            "をめぐる",
+            "をめぐり",
+            "にめぐる"
+          ],
+          "da": 1,
+          "gt": "Đứng ngay trước danh từ 争い nên dùng dạng bổ nghĩa をめぐる. をめぐって / をめぐり bổ nghĩa cho động từ; にめぐる sai trợ từ."
+        },
+        {
+          "h": "Câu nào KHÔNG tự nhiên?",
+          "lc": [
+            "新しい法案をめぐり、与野党が対立している。",
+            "原発の再稼働をめぐって、賛否が分かれている。",
+            "私は大学で日本の歴史をめぐって勉強している。",
+            "遺産の分け方をめぐって、親族がもめている。"
+          ],
+          "da": 2,
+          "gt": "をめぐって cần nhiều bên bàn cãi, tranh chấp. Một người tự học về lịch sử thì dùng について."
+        }
+      ]
+    },
+    {
+      "id": "ja-n2-ni-kotaete",
+      "nhom": "Đối tượng – căn cứ",
+      "tieuDe": "〜にこたえて",
+      "mau": "N + にこたえて（にこたえ） / にこたえる + N",
+      "nghia": "đáp lại, đáp ứng ~ (kỳ vọng, yêu cầu, lời cổ vũ)",
+      "giaiThich": "Làm một việc để thoả mãn mong muốn, yêu cầu từ phía người khác. Danh từ đứng trước thường là 期待, 要望, 要求, 希望, 声援, リクエスト, アンコール, ニーズ. Chữ Hán: 応えて. Hơi trang trọng, hay gặp trong tin tức.",
+      "cachGhep": [
+        "Danh từ + にこたえて / にこたえ: 期待にこたえて",
+        "Trước danh từ: 〜にこたえる N: ニーズにこたえる商品"
+      ],
+      "viDu": [
+        {
+          "c": "選手たちは観客の声援にこたえて、最後まで全力で戦った。",
+          "d": "せんしゅたちは かんきゃくの せいえんに こたえて、さいごまで ぜんりょくで たたかった。",
+          "v": "Đáp lại lời cổ vũ của khán giả, các tuyển thủ đã chiến đấu hết mình tới phút cuối."
+        },
+        {
+          "c": "利用者の要望にこたえて、図書館の開館時間が延長された。",
+          "d": "りようしゃの ようぼうに こたえて、としょかんの かいかんじかんが えんちょうされた。",
+          "v": "Đáp ứng nguyện vọng của người dùng, giờ mở cửa thư viện đã được kéo dài."
+        },
+        {
+          "c": "彼は両親の期待にこたえ、医者になった。",
+          "d": "かれは りょうしんの きたいに こたえ、いしゃに なった。",
+          "v": "Anh ấy đã trở thành bác sĩ, đáp lại kỳ vọng của bố mẹ."
+        },
+        {
+          "c": "消費者のニーズにこたえる商品を開発したい。",
+          "d": "しょうひしゃの ニーズに こたえる しょうひんを かいはつしたい。",
+          "v": "Chúng tôi muốn phát triển sản phẩm đáp ứng nhu cầu người tiêu dùng."
+        }
+      ],
+      "luuY": [
+        "Trợ từ là に (✗ 期待をこたえて). Danh từ đứng trước phải là mong muốn / yêu cầu của người khác, không phải sự vật bất kỳ.",
+        "Khác 〜に応じて: に応じて là “điều chỉnh tương ứng theo ~” (thay đổi theo mức); にこたえて là “làm theo để thoả mãn mong muốn ~”.",
+        "Trái nghĩa: 期待に反して (trái với kỳ vọng)."
+      ],
+      "soSanh": [
+        "ja-n2-ni-oujite",
+        "ja-n2-ni-hanshite",
+        "ja-n2-ni-sotte"
+      ],
+      "tuKhoa": [
+        "ni kotaete",
+        "nikotaete",
+        "ni kotae",
+        "đáp lại",
+        "đáp ứng",
+        "kỳ vọng"
+      ],
+      "quiz": [
+        {
+          "h": "ファンのアンコール（　）、歌手はもう一曲歌った。",
+          "lc": [
+            "にこたえると",
+            "にこたえて",
+            "でこたえて",
+            "をこたえて"
+          ],
+          "da": 1,
+          "gt": "N + にこたえて = đáp lại ~. Trợ từ là に và dạng nối là こたえて / こたえ."
+        },
+        {
+          "h": "Danh từ nào hợp đứng trước 〜にこたえて?",
+          "lc": [
+            "年齢",
+            "値段",
+            "期待",
+            "天気"
+          ],
+          "da": 2,
+          "gt": "にこたえて đi với mong muốn, yêu cầu từ người khác (期待, 要望, 声援…). Thời tiết, tuổi tác, giá cả không phải thứ để “đáp lại”."
+        },
+        {
+          "h": "「社員の要求にこたえて、会社は給料を上げた」 nghĩa là gì?",
+          "lc": [
+            "Công ty tăng lương trái với yêu cầu của nhân viên",
+            "Công ty tăng lương bất kể nhân viên có yêu cầu hay không",
+            "Công ty trả lời câu hỏi của nhân viên về lương",
+            "Công ty tăng lương để đáp ứng yêu cầu của nhân viên"
+          ],
+          "da": 3,
+          "gt": "要求にこたえて = làm theo để thoả mãn yêu cầu; không phải “trả lời câu hỏi” và cũng không phải “trái với / bất kể”."
+        }
+      ]
+    },
+    {
+      "id": "ja-n2-ni-sotte",
+      "nhom": "Đối tượng – căn cứ",
+      "tieuDe": "〜に沿って",
+      "mau": "N + に沿って（に沿い） / に沿った + N",
+      "nghia": "dọc theo ~; theo đúng ~ (phương châm, kế hoạch, nguyện vọng)",
+      "giaiThich": "(1) Nghĩa gốc: men theo, dọc theo một vật dài (川, 道, 線路, 海岸). (2) Nghĩa mở rộng: làm đúng theo, không lệch khỏi một đường hướng đã định (方針, 計画, マニュアル, 希望, 期待, 目的).",
+      "cachGhep": [
+        "Danh từ + に沿って / に沿い: 川に沿って、方針に沿って",
+        "Trước danh từ: 〜に沿った N: 希望に沿ったプラン"
+      ],
+      "viDu": [
+        {
+          "c": "川に沿って桜の木が植えられている。",
+          "d": "かわに そって さくらの きが うえられて いる。",
+          "v": "Dọc theo bờ sông có trồng những cây anh đào."
+        },
+        {
+          "c": "会社の方針に沿って、新しい計画を立てた。",
+          "d": "かいしゃの ほうしんに そって、あたらしい けいかくを たてた。",
+          "v": "Chúng tôi lập kế hoạch mới theo đúng phương châm của công ty."
+        },
+        {
+          "c": "マニュアルに沿って作業を進めてください。",
+          "d": "マニュアルに そって さぎょうを すすめて ください。",
+          "v": "Hãy tiến hành công việc theo đúng sách hướng dẫn."
+        },
+        {
+          "c": "お客様のご希望に沿ったプランをご提案します。",
+          "d": "おきゃくさまの ごきぼうに そった プランを ごていあんします。",
+          "v": "Chúng tôi xin đề xuất gói phù hợp với nguyện vọng của quý khách."
+        }
+      ],
+      "luuY": [
+        "Trợ từ là に (✗ 川を沿って).",
+        "Khác 〜に基づいて: に基づいて lấy dữ liệu, luật, sự thật làm CĂN CỨ để phán đoán / hành động; に沿って là đi ĐÚNG THEO một đường hướng, trình tự đã có, không chệch ra ngoài.",
+        "Khác 〜にこたえて: 希望に沿って = làm cho khớp với nguyện vọng; 希望にこたえて = hành động đáp lại nguyện vọng đó."
+      ],
+      "soSanh": [
+        "ja-n2-ni-motozuite",
+        "ja-n2-ni-kotaete",
+        "ja-n1-ni-sokushite"
+      ],
+      "tuKhoa": [
+        "ni sotte",
+        "nisotte",
+        "ni sotta",
+        "dọc theo",
+        "theo đúng",
+        "men theo"
+      ],
+      "quiz": [
+        {
+          "h": "線路（　）歩いていくと、駅に出ます。",
+          "lc": [
+            "に沿う",
+            "で沿って",
+            "を沿って",
+            "に沿って"
+          ],
+          "da": 3,
+          "gt": "N + に沿って = dọc theo ~. Trợ từ là に; に沿う là dạng đứng trước danh từ nên không nối với 歩いて được."
+        },
+        {
+          "h": "それは目的（　）使い方ではない。",
+          "lc": [
+            "に沿った",
+            "に沿い",
+            "に沿って",
+            "を沿った"
+          ],
+          "da": 0,
+          "gt": "Đứng ngay trước danh từ 使い方 nên dùng に沿った. に沿って / に沿い bổ nghĩa cho động từ; を沿った sai trợ từ."
+        },
+        {
+          "h": "「計画に沿って進める」 nghĩa là gì?",
+          "lc": [
+            "Tiến hành trước khi có kế hoạch",
+            "Tiến hành đúng theo kế hoạch, không lệch ra ngoài",
+            "Tiến hành trái với kế hoạch",
+            "Vừa làm vừa bỏ hẳn kế hoạch"
+          ],
+          "da": 1,
+          "gt": "に沿って với 計画 / 方針 nghĩa là bám đúng theo đường hướng đã định."
+        }
+      ]
+    },
+    {
+      "id": "ja-n2-ni-motozuite",
+      "nhom": "Đối tượng – căn cứ",
+      "tieuDe": "〜に基づいて",
+      "mau": "N + に基づいて（に基づき） / に基づく N / に基づいた N",
+      "nghia": "dựa trên ~, căn cứ vào ~",
+      "giaiThich": "Lấy một thứ rõ ràng làm căn cứ rồi hành động, phán đoán đúng theo nó: dữ liệu, kết quả điều tra, luật, quy định, sự thật, kinh nghiệm. Văn phong trang trọng, hay dùng trong báo cáo, văn bản, tin tức.",
+      "cachGhep": [
+        "Danh từ + に基づいて / に基づき: 事実に基づいて",
+        "Trước danh từ: 〜に基づく N / 〜に基づいた N"
+      ],
+      "viDu": [
+        {
+          "c": "調査の結果に基づいて、対策を考える。",
+          "d": "ちょうさの けっかに もとづいて、たいさくを かんがえる。",
+          "v": "Dựa trên kết quả điều tra để nghĩ biện pháp đối phó."
+        },
+        {
+          "c": "この映画は事実に基づいて作られた。",
+          "d": "この えいがは じじつに もとづいて つくられた。",
+          "v": "Bộ phim này được làm dựa trên sự thật."
+        },
+        {
+          "c": "法律に基づき、厳しく処分する。",
+          "d": "ほうりつに もとづき、きびしく しょぶんする。",
+          "v": "Căn cứ theo pháp luật, sẽ xử lý nghiêm."
+        },
+        {
+          "c": "長年の経験に基づく判断は、たいてい正しい。",
+          "d": "ながねんの けいけんに もとづく はんだんは、たいてい ただしい。",
+          "v": "Phán đoán dựa trên kinh nghiệm nhiều năm thường là đúng."
+        }
+      ],
+      "luuY": [
+        "Trợ từ là に (✗ データを基づいて). Đọc là もとづいて.",
+        "Khác 〜をもとに（して）: をもとに lấy cái gì đó làm CHẤT LIỆU rồi tạo ra thứ mới, có thể thêm bớt, thay đổi; に基づいて là bám sát căn cứ, không rời khỏi nó (法律に基づいて ○ / 法律をもとに ✗ khi nói xử lý theo luật).",
+        "Khác 〜に沿って: に沿って là đi đúng theo đường hướng / trình tự có sẵn."
+      ],
+      "soSanh": [
+        "ja-n2-wo-moto-ni",
+        "ja-n2-ni-sotte",
+        "ja-n1-ni-sokushite",
+        "ja-n1-wo-fumaete"
+      ],
+      "tuKhoa": [
+        "ni motozuite",
+        "nimotozuite",
+        "ni motozuki",
+        "ni motozuku",
+        "dựa trên",
+        "căn cứ"
+      ],
+      "quiz": [
+        {
+          "h": "過去のデータ（　）、来年の売り上げを予測する。",
+          "lc": [
+            "を基づいて",
+            "が基づいて",
+            "に基づいて",
+            "に基づく"
+          ],
+          "da": 2,
+          "gt": "N + に基づいて. Trợ từ là に; に基づく chỉ đứng ngay trước danh từ nên không đứng trước dấu phẩy được."
+        },
+        {
+          "h": "それは科学的な根拠（　）説明ではない。",
+          "lc": [
+            "に基づき",
+            "を基づく",
+            "に基づいて",
+            "に基づいた"
+          ],
+          "da": 3,
+          "gt": "Ngay trước danh từ 説明 dùng に基づいた (hoặc に基づく). に基づいて / に基づき bổ nghĩa cho động từ; を基づく sai trợ từ."
+        },
+        {
+          "h": "〜に基づいて hợp nhất với loại danh từ nào?",
+          "lc": [
+            "Luật, dữ liệu, sự thật — thứ làm căn cứ cho phán đoán, hành động",
+            "Lời cổ vũ, tiếng vỗ tay — thứ để đáp lại",
+            "Thời tiết, mùa — thứ thay đổi tự nhiên",
+            "Con sông, con đường — thứ để đi men theo"
+          ],
+          "da": 0,
+          "gt": "に基づいて = lấy ~ làm căn cứ: đi với 法律, データ, 事実, 調査結果, 経験…"
+        }
+      ]
+    },
+    {
+      "id": "ja-n2-wo-moto-ni",
+      "nhom": "Đối tượng – căn cứ",
+      "tieuDe": "〜をもとに（して）",
+      "mau": "N + をもとに（して） / をもとにした + N",
+      "nghia": "lấy ~ làm cơ sở, chất liệu (để tạo ra ~)",
+      "giaiThich": "Lấy một thứ có sẵn (trải nghiệm, sự thật, dữ liệu, tác phẩm gốc) làm chất liệu, nền tảng để viết, làm, nghĩ ra một thứ mới. Vế sau thường là 書く, 作る, 考える, 判断する, 作成する.",
+      "cachGhep": [
+        "Danh từ + をもとに（して）: 体験をもとに",
+        "Trước danh từ: 〜をもとにした N: 昔話をもとにしたアニメ"
+      ],
+      "viDu": [
+        {
+          "c": "この小説は、作者の実際の体験をもとに書かれた。",
+          "d": "この しょうせつは、さくしゃの じっさいの たいけんを もとに かかれた。",
+          "v": "Cuốn tiểu thuyết này được viết dựa trên trải nghiệm thật của tác giả."
+        },
+        {
+          "c": "アンケートの結果をもとにして、新しいメニューを考えた。",
+          "d": "アンケートの けっかを もとに して、あたらしい メニューを かんがえた。",
+          "v": "Dựa vào kết quả khảo sát, chúng tôi đã nghĩ ra thực đơn mới."
+        },
+        {
+          "c": "昔話をもとにしたアニメが人気を集めている。",
+          "d": "むかしばなしを もとに した アニメが にんきを あつめて いる。",
+          "v": "Bộ hoạt hình dựa trên truyện cổ đang được yêu thích."
+        },
+        {
+          "c": "集めたデータをもとに、報告書を作成する。",
+          "d": "あつめた データを もとに、ほうこくしょを さくせいする。",
+          "v": "Soạn báo cáo dựa trên dữ liệu đã thu thập."
+        }
+      ],
+      "luuY": [
+        "Trợ từ là を…に: 〜をもとに (✗ 〜にもとに).",
+        "Không dùng cho nguyên liệu vật chất: ✗ ぶどうをもとにワインを造る ⇒ ぶどうからワインを造る.",
+        "Khác 〜に基づいて: に基づいて bám sát căn cứ (luật, quy định); をもとに là lấy làm chất liệu rồi sáng tạo, thay đổi thêm. Khác 〜のもとで: のもとで = “dưới (sự chỉ đạo, ảnh hưởng của) ~”."
+      ],
+      "soSanh": [
+        "ja-n2-ni-motozuite",
+        "ja-n2-no-moto-de",
+        "ja-n1-wo-fumaete"
+      ],
+      "tuKhoa": [
+        "wo moto ni",
+        "womotoni",
+        "wo moto ni shite",
+        "lấy làm cơ sở",
+        "dựa trên",
+        "chất liệu"
+      ],
+      "quiz": [
+        {
+          "h": "実際にあった話（　）、映画が作られた。",
+          "lc": [
+            "をもとに",
+            "をもとで",
+            "にもとに",
+            "がもとに"
+          ],
+          "da": 0,
+          "gt": "N + を + もと + に. Các tổ hợp trợ từ にもとに, をもとで, がもとに không đúng."
+        },
+        {
+          "h": "これは事実（　）ドラマです。",
+          "lc": [
+            "にもとづいて",
+            "をもとにした",
+            "をもとに",
+            "をもとにして"
+          ],
+          "da": 1,
+          "gt": "Ngay trước danh từ ドラマ phải dùng dạng bổ nghĩa をもとにした. Ba dạng còn lại bổ nghĩa cho động từ, không đứng trước danh từ được."
+        },
+        {
+          "h": "Câu nào KHÔNG tự nhiên?",
+          "lc": [
+            "この歌は、古い詩をもとに作られた。",
+            "みんなの意見をもとにして、計画を立て直した。",
+            "このワインは、ぶどうをもとに造られる。",
+            "実験の結果をもとに、論文を書いた。"
+          ],
+          "da": 2,
+          "gt": "をもとに dùng cho chất liệu về nội dung (ý tưởng, dữ liệu, tác phẩm). Nguyên liệu vật chất như nho làm rượu thì dùng から."
+        }
+      ]
+    },
+    {
+      "id": "ja-n2-no-moto-de",
+      "nhom": "Đối tượng – căn cứ",
+      "tieuDe": "〜のもとで／〜のもとに",
+      "mau": "N + のもとで / N + のもとに",
+      "nghia": "dưới (sự chỉ đạo, ảnh hưởng, điều kiện, danh nghĩa) ~",
+      "giaiThich": "のもとで: ở trong phạm vi chịu ảnh hưởng, che chở của một người hay một môi trường (指導, 監督, 両親, 先生, 環境) mà làm việc gì. のもとに: lấy một điều kiện, danh nghĩa, tiền đề làm nền (約束, 了解, 名目, 法, 合意) mà tiến hành. Văn phong trang trọng. Chữ Hán: 下.",
+      "cachGhep": [
+        "Danh từ + のもとで: 教授の指導のもとで",
+        "Danh từ + のもとに: 〜という約束のもとに、法のもとに"
+      ],
+      "viDu": [
+        {
+          "c": "田中教授のご指導のもとで、論文を書き上げた。",
+          "d": "たなかきょうじゅの ごしどうの もとで、ろんぶんを かきあげた。",
+          "v": "Dưới sự hướng dẫn của giáo sư Tanaka, tôi đã viết xong luận văn."
+        },
+        {
+          "c": "子どもたちは温かい両親のもとで、のびのびと育った。",
+          "d": "こどもたちは あたたかい りょうしんの もとで、のびのびと そだった。",
+          "v": "Bọn trẻ lớn lên thoải mái dưới sự chở che của bố mẹ ấm áp."
+        },
+        {
+          "c": "法のもとに、すべての国民は平等である。",
+          "d": "ほうの もとに、すべての こくみんは びょうどうで ある。",
+          "v": "Trước pháp luật, mọi công dân đều bình đẳng."
+        },
+        {
+          "c": "二年後に返すという約束のもとに、友人から金を借りた。",
+          "d": "にねんごに かえすと いう やくそくの もとに、ゆうじんから かねを かりた。",
+          "v": "Tôi vay tiền bạn với lời hứa hai năm sau sẽ trả."
+        }
+      ],
+      "luuY": [
+        "Phải có の: 先生のもとで (✗ 先生もとで).",
+        "Khác 〜をもとに: をもとに = lấy làm chất liệu để tạo ra cái mới; のもとで = ở dưới sự chỉ đạo / ảnh hưởng của ai, cái gì. Chỉ khác trợ từ nhưng nghĩa khác hẳn.",
+        "のもとで nghiêng về người, môi trường chi phối; のもとに nghiêng về điều kiện, danh nghĩa. Trong thực tế có lúc hai dạng dùng lẫn."
+      ],
+      "soSanh": [
+        "ja-n2-wo-moto-ni",
+        "ja-n2-ni-motozuite",
+        "ja-n3-ni-oite"
+      ],
+      "tuKhoa": [
+        "no moto de",
+        "nomotode",
+        "no moto ni",
+        "dưới sự",
+        "dưới sự hướng dẫn",
+        "danh nghĩa"
+      ],
+      "quiz": [
+        {
+          "h": "厳しい監督（　）、選手たちは毎日練習している。",
+          "lc": [
+            "をもとに",
+            "のもとを",
+            "にもとづく",
+            "のもとで"
+          ],
+          "da": 3,
+          "gt": "Dưới sự dẫn dắt của huấn luyện viên ⇒ N + のもとで. をもとに là “lấy làm chất liệu”, sai nghĩa; にもとづく chỉ đứng trước danh từ; のもとを không tồn tại."
+        },
+        {
+          "h": "「先生の指導のもとで研究する」 nghĩa là gì?",
+          "lc": [
+            "Nghiên cứu dưới sự hướng dẫn của thầy",
+            "Nghiên cứu thay cho thầy",
+            "Lấy lời thầy làm chất liệu để viết truyện",
+            "Nghiên cứu về cách hướng dẫn của thầy"
+          ],
+          "da": 0,
+          "gt": "N + のもとで = ở dưới sự chỉ đạo, ảnh hưởng của ~."
+        },
+        {
+          "h": "Cách ghép nào đúng?",
+          "lc": [
+            "両親もとで育つ",
+            "両親のもとで育つ",
+            "両親をもとで育つ",
+            "両親にもとで育つ"
+          ],
+          "da": 1,
+          "gt": "Danh từ + の + もとで. Thiếu の hoặc thay bằng に / を đều sai."
+        }
+      ]
+    },
+    {
+      "id": "ja-n2-ni-oujite",
+      "nhom": "Đối tượng – căn cứ",
+      "tieuDe": "〜に応じて",
+      "mau": "N + に応じて（に応じ） / に応じた + N",
+      "nghia": "tương ứng với ~, tuỳ theo ~ (mà điều chỉnh)",
+      "giaiThich": "Khi điều đứng trước thay đổi hoặc khác nhau thì việc đứng sau cũng được điều chỉnh cho phù hợp. Danh từ thường là mức độ, điều kiện có thể thay đổi: 収入, 年齢, 能力, 予算, 状況, 必要, 希望. Hơi trang trọng.",
+      "cachGhep": [
+        "Danh từ + に応じて / に応じ: 収入に応じて",
+        "Trước danh từ: 〜に応じた N: 体力に応じた運動"
+      ],
+      "viDu": [
+        {
+          "c": "収入に応じて、税金の額が決まる。",
+          "d": "しゅうにゅうに おうじて、ぜいきんの がくが きまる。",
+          "v": "Số tiền thuế được quyết định tương ứng với thu nhập."
+        },
+        {
+          "c": "お客様のご予算に応じて、料理をご用意いたします。",
+          "d": "おきゃくさまの ごよさんに おうじて、りょうりを ごよういいたします。",
+          "v": "Chúng tôi sẽ chuẩn bị món ăn tuỳ theo ngân sách của quý khách."
+        },
+        {
+          "c": "状況に応じて、柔軟に対応してください。",
+          "d": "じょうきょうに おうじて、じゅうなんに たいおうして ください。",
+          "v": "Hãy ứng phó linh hoạt tuỳ theo tình hình."
+        },
+        {
+          "c": "体力に応じた運動を続けることが大切だ。",
+          "d": "たいりょくに おうじた うんどうを つづける ことが たいせつだ。",
+          "v": "Điều quan trọng là duy trì vận động phù hợp với thể lực."
+        }
+      ],
+      "luuY": [
+        "Trợ từ là に (✗ 収入を応じて). Đọc là おうじて.",
+        "Khác 〜によって: によって chỉ nói “mỗi ~ mỗi khác”; に応じて nhấn sự điều chỉnh cho KHỚP với mức độ đó.",
+        "Khác 〜にこたえて: にこたえて = đáp lại mong muốn; khác 〜次第で: 次第で = kết quả do ~ quyết định, không có ý “điều chỉnh cho hợp”."
+      ],
+      "soSanh": [
+        "ja-n2-ni-kotaete",
+        "ja-n2-shidai-de",
+        "ja-n3-ni-yotte"
+      ],
+      "tuKhoa": [
+        "ni oujite",
+        "nioujite",
+        "ni ouji",
+        "ni oujita",
+        "tương ứng",
+        "tuỳ theo"
+      ],
+      "quiz": [
+        {
+          "h": "年齢や経験（　）、給料が変わる。",
+          "lc": [
+            "に応じて",
+            "に応じた",
+            "で応じて",
+            "を応じて"
+          ],
+          "da": 0,
+          "gt": "N + に応じて = tương ứng với ~. Trợ từ là に; に応じた chỉ đứng ngay trước danh từ."
+        },
+        {
+          "h": "これは学生のレベル（　）クラスです。",
+          "lc": [
+            "に応じて",
+            "に応じた",
+            "を応じる",
+            "に応じ"
+          ],
+          "da": 1,
+          "gt": "Ngay trước danh từ クラス dùng dạng bổ nghĩa に応じた. に応じて / に応じ bổ nghĩa cho động từ; を応じる sai trợ từ."
+        },
+        {
+          "h": "「必要に応じて休憩を取る」 nghĩa là gì?",
+          "lc": [
+            "Trả lời yêu cầu xin nghỉ của người khác",
+            "Nghỉ giải lao bất kể có cần hay không",
+            "Nghỉ giải lao khi cần, tuỳ theo nhu cầu",
+            "Tuyệt đối không được nghỉ giải lao"
+          ],
+          "da": 2,
+          "gt": "必要に応じて = tuỳ theo mức cần thiết mà làm cho phù hợp."
+        }
+      ]
+    },
+    {
+      "id": "ja-n2-shidai-de",
+      "nhom": "Đối tượng – căn cứ",
+      "tieuDe": "〜次第で／〜次第だ (tuỳ vào)",
+      "mau": "N + 次第で（は） / N + 次第だ",
+      "nghia": "tuỳ vào ~, do ~ quyết định",
+      "giaiThich": "Kết quả thay đổi thế nào là do yếu tố đứng trước quyết định. N + 次第だ đứng cuối câu; N + 次第で + kết quả thay đổi; N + 次第では nêu một khả năng trong số đó (“tuỳ ~ mà cũng có thể ~”).",
+      "cachGhep": [
+        "Danh từ + 次第だ: あなたの努力次第だ",
+        "Danh từ + 次第で + (thay đổi, quyết định): 考え方次第で変わる",
+        "Danh từ + 次第では + (một khả năng): 天気次第では中止になる"
+      ],
+      "viDu": [
+        {
+          "c": "合格できるかどうかは、あなたの努力次第だ。",
+          "d": "ごうかく できるか どうかは、あなたの どりょくしだいだ。",
+          "v": "Đỗ được hay không là tuỳ vào nỗ lực của bạn."
+        },
+        {
+          "c": "考え方次第で、人生は楽しくもつらくもなる。",
+          "d": "かんがえかたしだいで、じんせいは たのしくも つらくも なる。",
+          "v": "Tuỳ cách nghĩ mà cuộc đời có thể vui mà cũng có thể khổ."
+        },
+        {
+          "c": "明日の天気次第では、試合が中止になるかもしれない。",
+          "d": "あしたの てんきしだいでは、しあいが ちゅうしに なるかも しれない。",
+          "v": "Tuỳ thời tiết ngày mai, trận đấu có thể sẽ bị huỷ."
+        },
+        {
+          "c": "行くか行かないかは、あなた次第です。",
+          "d": "いくか いかないかは、あなたしだいです。",
+          "v": "Đi hay không là tuỳ bạn."
+        }
+      ],
+      "luuY": [
+        "Danh từ nối TRỰC TIẾP, không có の: 努力次第 (✗ 努力の次第).",
+        "Khác V-ます + 次第 (ngay sau khi ~): 分かり次第 = ngay khi biết; 結果次第 = tuỳ kết quả. Nhìn từ đứng trước là động từ hay danh từ để phân biệt.",
+        "Khác 〜に応じて: に応じて là điều chỉnh cho tương xứng; 次第で là “được quyết định bởi ~”. Khác 〜によって: nghĩa gần, 次第で nhấn yếu tố quyết định mạnh hơn."
+      ],
+      "soSanh": [
+        "ja-n2-shidai-ngay-khi",
+        "ja-n2-ni-oujite",
+        "ja-n3-ni-yotte",
+        "ja-n1-ikan-de"
+      ],
+      "tuKhoa": [
+        "shidai de",
+        "shidaide",
+        "shidai da",
+        "shidai dewa",
+        "tuỳ vào",
+        "phụ thuộc"
+      ],
+      "quiz": [
+        {
+          "h": "成功するかどうかは、本人のやる気（　）。",
+          "lc": [
+            "に次第だ",
+            "の次第だ",
+            "次第だ",
+            "次第する"
+          ],
+          "da": 2,
+          "gt": "Danh từ + 次第だ, nối trực tiếp không có の hay に; 次第する không tồn tại."
+        },
+        {
+          "h": "「結果次第では、計画を変更する」 nghĩa là gì?",
+          "lc": [
+            "Dù kết quả thế nào cũng thay đổi kế hoạch",
+            "Vì kết quả xấu nên đã thay đổi kế hoạch",
+            "Ngay khi có kết quả sẽ thay đổi kế hoạch",
+            "Tuỳ kết quả, có thể sẽ thay đổi kế hoạch"
+          ],
+          "da": 3,
+          "gt": "N + 次第では = tuỳ ~ mà có khả năng ~. “Ngay khi” là V-ます + 次第; “dù thế nào” là にかかわらず."
+        },
+        {
+          "h": "Câu nào dùng 次第 với nghĩa “tuỳ vào”?",
+          "lc": [
+            "値段は交渉次第で安くなる。",
+            "仕事が終わり次第、帰る。",
+            "詳細が分かり次第、連絡する。",
+            "空港に着き次第、電話する。"
+          ],
+          "da": 0,
+          "gt": "交渉次第で: danh từ + 次第で = tuỳ vào việc thương lượng. Ba câu còn lại là V-ます + 次第 = ngay sau khi ~."
+        }
+      ]
+    },
+    {
+      "id": "ja-n2-wo-towazu",
+      "nhom": "Phạm vi – không phụ thuộc",
+      "tieuDe": "〜を問わず",
+      "mau": "N + を問わず / は問わず",
+      "nghia": "không kể ~, bất kể ~",
+      "giaiThich": "Điều đứng trước không thành vấn đề, trường hợp nào cũng như nhau. Danh từ thường là từ bao hàm nhiều mức hoặc cặp đối lập: 年齢, 性別, 国籍, 経験, 季節, 男女, 昼夜, 内外, 有無. Văn phong trang trọng, hay gặp trong tuyển dụng, thông báo.",
+      "cachGhep": [
+        "Danh từ + を問わず: 年齢を問わず、昼夜を問わず",
+        "Danh từ + は問わず / は問いません: 経験は問いません"
+      ],
+      "viDu": [
+        {
+          "c": "この仕事は、年齢や経験を問わず、だれでも応募できる。",
+          "d": "この しごとは、ねんれいや けいけんを とわず、だれでも おうぼ できる。",
+          "v": "Công việc này ai cũng ứng tuyển được, không kể tuổi tác hay kinh nghiệm."
+        },
+        {
+          "c": "このコンビニは昼夜を問わず営業している。",
+          "d": "この コンビニは ちゅうやを とわず えいぎょうして いる。",
+          "v": "Cửa hàng tiện lợi này mở cửa bất kể ngày đêm."
+        },
+        {
+          "c": "国籍を問わず、優秀な人材を採用したい。",
+          "d": "こくせきを とわず、ゆうしゅうな じんざいを さいようしたい。",
+          "v": "Chúng tôi muốn tuyển người giỏi, không phân biệt quốc tịch."
+        },
+        {
+          "c": "京都は季節を問わず、多くの観光客でにぎわっている。",
+          "d": "きょうとは きせつを とわず、おおくの かんこうきゃくで にぎわって いる。",
+          "v": "Kyoto mùa nào cũng đông khách du lịch."
+        }
+      ],
+      "luuY": [
+        "Trợ từ là を (✗ 年齢に問わず). Danh từ phải là loại có nhiều khả năng / cặp đối lập, không dùng với một vật cụ thể (✗ 田中さんを問わず).",
+        "Khác 〜にかかわらず: nghĩa gần nhau; にかかわらず còn ghép được với cặp động từ (行く行かないにかかわらず), を問わず chủ yếu ghép với danh từ.",
+        "Khác 〜にもかかわらず: にもかかわらず = “mặc dù”, nghĩa khác hẳn."
+      ],
+      "soSanh": [
+        "ja-n2-ni-kakawarazu",
+        "ja-n2-ni-mo-kakawarazu",
+        "ja-n2-ni-kagirazu",
+        "ja-n1-ikan-ni-yorazu"
+      ],
+      "tuKhoa": [
+        "wo towazu",
+        "wotowazu",
+        "wa towazu",
+        "không kể",
+        "bất kể",
+        "không phân biệt"
+      ],
+      "quiz": [
+        {
+          "h": "このスポーツは男女（　）、だれでも楽しむことができる。",
+          "lc": [
+            "に問わず",
+            "を問わなくて",
+            "が問わず",
+            "を問わず"
+          ],
+          "da": 3,
+          "gt": "N + を問わず. Trợ từ là を và dạng cố định là 問わず."
+        },
+        {
+          "h": "Từ nào hợp đứng trước 〜を問わず?",
+          "lc": [
+            "性別",
+            "この本",
+            "田中さん",
+            "昨日"
+          ],
+          "da": 0,
+          "gt": "を問わず đi với danh từ bao hàm nhiều trường hợp (性別 = nam hay nữ). Một thời điểm, một người hay một vật cụ thể thì không dùng được."
+        },
+        {
+          "h": "「経験の有無を問わず」 nghĩa là gì?",
+          "lc": [
+            "Sẽ hỏi kỹ về kinh nghiệm",
+            "Có kinh nghiệm hay không đều được",
+            "Chỉ nhận người chưa có kinh nghiệm",
+            "Chỉ nhận người có kinh nghiệm"
+          ],
+          "da": 1,
+          "gt": "有無を問わず = không kể có hay không ⇒ trường hợp nào cũng được."
+        }
+      ]
+    },
+    {
+      "id": "ja-n2-ni-kakawarazu",
+      "nhom": "Phạm vi – không phụ thuộc",
+      "tieuDe": "〜にかかわらず／〜にかかわりなく",
+      "mau": "N / V-る + V-ない / 〜か〜か + にかかわらず",
+      "nghia": "bất kể ~, dù ~ hay không cũng ~",
+      "giaiThich": "Việc đứng sau không bị ảnh hưởng bởi điều đứng trước. Đứng trước là danh từ có nhiều mức (天候, 年齢, 金額の大小, 経験の有無) hoặc cặp khẳng định – phủ định, cặp đối lập. Hơi trang trọng.",
+      "cachGhep": [
+        "Danh từ + にかかわらず / にかかわりなく: 天候にかかわらず",
+        "V-る + V-ない + にかかわらず: 参加するしないにかかわらず",
+        "〜か〜か / 〜かどうか + にかかわらず: 好きか嫌いかにかかわらず"
+      ],
+      "viDu": [
+        {
+          "c": "参加するしないにかかわらず、必ず返事をください。",
+          "d": "さんかする しないに かかわらず、かならず へんじを ください。",
+          "v": "Dù tham gia hay không cũng xin nhất định trả lời."
+        },
+        {
+          "c": "試合は天候にかかわらず行われます。",
+          "d": "しあいは てんこうに かかわらず おこなわれます。",
+          "v": "Trận đấu sẽ diễn ra bất kể thời tiết."
+        },
+        {
+          "c": "経験の有無にかかわりなく、やる気のある人を募集します。",
+          "d": "けいけんの うむに かかわりなく、やるきの ある ひとを ぼしゅうします。",
+          "v": "Chúng tôi tuyển người có nhiệt huyết, bất kể có kinh nghiệm hay không."
+        },
+        {
+          "c": "好きか嫌いかにかかわらず、野菜は食べたほうがいい。",
+          "d": "すきか きらいかに かかわらず、やさいは たべた ほうが いい。",
+          "v": "Dù thích hay ghét thì cũng nên ăn rau."
+        }
+      ],
+      "luuY": [
+        "Khác 〜にもかかわらず: thêm も là thành “MẶC DÙ ~” (một sự thật đã xảy ra, kết quả trái dự đoán); không có も là “BẤT KỂ ~” (trường hợp nào cũng vậy). Đây là cặp dễ nhầm nhất.",
+        "Khác 〜を問わず: nghĩa gần; を問わず chủ yếu đi với danh từ, にかかわらず ghép được cả với cặp động từ / tính từ.",
+        "Với động từ phải là cặp khẳng định – phủ định hoặc hai từ đối lập (✗ 行くにかかわらず)."
+      ],
+      "soSanh": [
+        "ja-n2-ni-mo-kakawarazu",
+        "ja-n2-wo-towazu",
+        "ja-n2-ni-shiro-ni-shiro",
+        "ja-n1-ikan-ni-yorazu"
+      ],
+      "tuKhoa": [
+        "ni kakawarazu",
+        "nikakawarazu",
+        "ni kakawari naku",
+        "bất kể",
+        "dù hay không"
+      ],
+      "quiz": [
+        {
+          "h": "金額の大小（　）、寄付は大歓迎です。",
+          "lc": [
+            "にもかかわって",
+            "をかかわらず",
+            "にかかわらず",
+            "にかかわるなく"
+          ],
+          "da": 2,
+          "gt": "N + にかかわらず = bất kể ~. Trợ từ là に; dạng cố định là かかわらず hoặc かかわりなく."
+        },
+        {
+          "h": "Câu nào ghép đúng?",
+          "lc": [
+            "買うの買わないのをかかわらず、どうぞご覧ください。",
+            "買う買ったにかかわらず、どうぞご覧ください。",
+            "買って買わなくてにかかわらず、どうぞご覧ください。",
+            "買う買わないにかかわらず、どうぞご覧ください。"
+          ],
+          "da": 3,
+          "gt": "Với động từ: V-る + V-ない + にかかわらず (買う買わない). Cặp る / た, thể て hay trợ từ を đều sai."
+        },
+        {
+          "h": "〜にかかわらず và 〜にもかかわらず khác nhau thế nào?",
+          "lc": [
+            "にかかわらず = bất kể ~; にもかかわらず = mặc dù ~ (sự thật trái dự đoán)",
+            "にかかわらず chỉ dùng trong hội thoại thân mật",
+            "にかかわらず = mặc dù ~; にもかかわらず = bất kể ~",
+            "Hai mẫu hoàn toàn giống nhau, も chỉ để nhấn mạnh"
+          ],
+          "da": 0,
+          "gt": "Có も là nghịch tiếp “mặc dù”; không có も là “bất kể, không phụ thuộc”."
+        }
+      ]
+    },
+    {
+      "id": "ja-n2-ni-mo-kakawarazu",
+      "nhom": "Phạm vi – không phụ thuộc",
+      "tieuDe": "〜にもかかわらず",
+      "mau": "N / thể thường (Aな・N + である) + にもかかわらず",
+      "nghia": "mặc dù ~ (vậy mà ~)",
+      "giaiThich": "Nêu một sự thật rồi nói kết quả trái với điều thường được dự đoán từ sự thật đó; người nói ngạc nhiên, bất mãn hoặc khâm phục. Là văn viết, trang trọng hơn のに. Vế sau là sự việc có thật, không dùng ý chí, mệnh lệnh. Đứng đầu câu: それにもかかわらず.",
+      "cachGhep": [
+        "Danh từ + にもかかわらず: 悪天候にもかかわらず",
+        "V / Aい thể thường + にもかかわらず: 注意したにもかかわらず",
+        "Aな / N + である + にもかかわらず: 高齢であるにもかかわらず",
+        "Đầu câu: それにもかかわらず、…"
+      ],
+      "viDu": [
+        {
+          "c": "悪天候にもかかわらず、大勢の人が集まった。",
+          "d": "あくてんこうにも かかわらず、おおぜいの ひとが あつまった。",
+          "v": "Mặc dù thời tiết xấu, rất đông người vẫn tụ họp."
+        },
+        {
+          "c": "彼は熱があるにもかかわらず、会社へ行った。",
+          "d": "かれは ねつが あるにも かかわらず、かいしゃへ いった。",
+          "v": "Mặc dù bị sốt, anh ấy vẫn đến công ty."
+        },
+        {
+          "c": "何度も注意したにもかかわらず、彼はまた遅刻した。",
+          "d": "なんども ちゅういしたにも かかわらず、かれは また ちこくした。",
+          "v": "Mặc dù đã nhắc nhiều lần, anh ta lại đi muộn."
+        },
+        {
+          "c": "祖母は高齢であるにもかかわらず、毎朝一時間歩いている。",
+          "d": "そぼは こうれいで あるにも かかわらず、まいあさ いちじかん あるいて いる。",
+          "v": "Mặc dù tuổi đã cao, bà tôi sáng nào cũng đi bộ một tiếng."
+        }
+      ],
+      "luuY": [
+        "Vế sau không dùng mệnh lệnh, ý chí, rủ rê: ✗ 雨にもかかわらず、出かけなさい.",
+        "Khác 〜のに: nghĩa giống nhưng のに là khẩu ngữ, giàu cảm xúc; にもかかわらず cứng, dùng trong văn viết, phát biểu.",
+        "Khác 〜にかかわらず: không có も là “bất kể ~” — nghĩa khác hẳn. Khác 〜ものの: ものの nhẹ hơn, hay dùng khi thực tế không như mong đợi của chính người nói."
+      ],
+      "soSanh": [
+        "ja-n2-ni-kakawarazu",
+        "ja-n4-noni-gyakusetsu",
+        "ja-n2-monono",
+        "ja-n2-nagara-mo"
+      ],
+      "tuKhoa": [
+        "ni mo kakawarazu",
+        "nimokakawarazu",
+        "sore ni mo kakawarazu",
+        "mặc dù",
+        "bất chấp"
+      ],
+      "quiz": [
+        {
+          "h": "一生懸命努力した（　）、結果は良くなかった。",
+          "lc": [
+            "をもかかわらず",
+            "にもかかわらず",
+            "にかかわりなく",
+            "にもかかわって"
+          ],
+          "da": 1,
+          "gt": "Nghịch tiếp “mặc dù đã cố gắng” ⇒ にもかかわらず. にかかわりなく (bất kể) không ghép với một động từ thể た đơn lẻ; hai dạng còn lại không tồn tại."
+        },
+        {
+          "h": "彼は学生（　）にもかかわらず、会社を経営している。",
+          "lc": [
+            "な",
+            "の",
+            "である",
+            "だ"
+          ],
+          "da": 2,
+          "gt": "Danh từ nối bằng である (hoặc nối trực tiếp: 学生にもかかわらず). Không dùng だ, な, の trước にもかかわらず."
+        },
+        {
+          "h": "Câu nào dùng SAI?",
+          "lc": [
+            "大雨にもかかわらず、試合は行われた。",
+            "大雨にもかかわらず、多くの客が来た。",
+            "大雨にもかかわらず、彼は傘を持たずに出かけた。",
+            "大雨にもかかわらず、早く出かけなさい。"
+          ],
+          "da": 3,
+          "gt": "Vế sau của にもかかわらず là sự việc có thật, không dùng mệnh lệnh như 出かけなさい."
+        }
+      ]
+    },
+    {
+      "id": "ja-n2-wa-tomokaku",
+      "nhom": "Phạm vi – không phụ thuộc",
+      "tieuDe": "〜はともかく（として）",
+      "mau": "N + はともかく（として）",
+      "nghia": "~ thì khoan bàn, tạm gác ~ sang một bên",
+      "giaiThich": "Tạm chưa bàn tới điều đứng trước, vì điều đứng sau mới là cái người nói muốn nhấn. Dùng được cả trong hội thoại lẫn văn viết.",
+      "cachGhep": [
+        "Danh từ + はともかく（として）: 味はともかく",
+        "Mệnh đề nghi vấn + はともかく: 行くかどうかはともかく"
+      ],
+      "viDu": [
+        {
+          "c": "この店は、味はともかく、値段が安い。",
+          "d": "この みせは、あじは ともかく、ねだんが やすい。",
+          "v": "Quán này vị thì chưa bàn, được cái giá rẻ."
+        },
+        {
+          "c": "結果はともかくとして、最後まで頑張ったことを評価したい。",
+          "d": "けっかは ともかくと して、さいごまで がんばった ことを ひょうかしたい。",
+          "v": "Kết quả thì tạm gác lại, tôi muốn ghi nhận việc đã cố gắng tới cùng."
+        },
+        {
+          "c": "見た目はともかく、この料理は栄養がたっぷりだ。",
+          "d": "みためは ともかく、この りょうりは えいようが たっぷりだ。",
+          "v": "Hình thức thì khoan nói, món này rất giàu dinh dưỡng."
+        },
+        {
+          "c": "行くかどうかはともかく、申し込みだけはしておこう。",
+          "d": "いくか どうかは ともかく、もうしこみだけは して おこう。",
+          "v": "Đi hay không tính sau, cứ đăng ký trước đã."
+        }
+      ],
+      "luuY": [
+        "Trợ từ là は (✗ 味をともかく).",
+        "Khác 〜はもちろん／〜はもとより: はもちろん là “A đương nhiên rồi, B cũng thế” (CỘNG thêm); はともかく là “A để sang một bên, quan trọng là B” (GẠT ra).",
+        "Thường hàm ý điều đứng trước không được đánh giá cao lắm hoặc chưa cần xét lúc này."
+      ],
+      "soSanh": [
+        "ja-n2-wa-mochiron",
+        "ja-n2-nuki-ni-shite",
+        "ja-n1-nara-iza-shirazu"
+      ],
+      "tuKhoa": [
+        "wa tomokaku",
+        "watomokaku",
+        "tomokaku to shite",
+        "khoan bàn",
+        "tạm gác"
+      ],
+      "quiz": [
+        {
+          "h": "彼は性格（　）、仕事はよくできる。",
+          "lc": [
+            "はともかく",
+            "がともかくで",
+            "はともかくに",
+            "をともかく"
+          ],
+          "da": 0,
+          "gt": "N + はともかく（として）. Trợ từ là は; sau ともかく chỉ có thể thêm として."
+        },
+        {
+          "h": "「値段はともかく、デザインが気に入った」 nghĩa là gì?",
+          "lc": [
+            "Giá thì đương nhiên thích, kiểu dáng cũng thích",
+            "Giá thì khoan bàn, cái chính là tôi thích kiểu dáng",
+            "Vì giá rẻ nên tôi thích kiểu dáng",
+            "Tôi không thích cả giá lẫn kiểu dáng"
+          ],
+          "da": 1,
+          "gt": "はともかく = gác điều đó sang một bên để nói điều chính. “Đương nhiên… cũng” là nghĩa của はもちろん."
+        },
+        {
+          "h": "合格できるか（　）はともかく、挑戦してみたい。",
+          "lc": [
+            "どうと",
+            "どうに",
+            "どうか",
+            "どうで"
+          ],
+          "da": 2,
+          "gt": "Mệnh đề nghi vấn 〜かどうか + はともかく: “đỗ được hay không thì khoan bàn”."
+        }
+      ]
+    },
+    {
+      "id": "ja-n2-wa-mochiron",
+      "nhom": "Phạm vi – không phụ thuộc",
+      "tieuDe": "〜はもちろん／〜はもとより",
+      "mau": "N + はもちろん / はもとより、N + も（まで・さえ）",
+      "nghia": "~ thì đương nhiên rồi, (đến) ~ cũng ~",
+      "giaiThich": "Nêu điều hiển nhiên trước, rồi thêm vào điều khác cũng như vậy. Vế sau thường có も, まで, さえ. はもとより cùng nghĩa nhưng cứng hơn, là văn viết.",
+      "cachGhep": [
+        "Danh từ + はもちろん、N も: 英語はもちろん、中国語も",
+        "Danh từ + はもとより、N も / まで / さえ (văn viết)",
+        "Danh từ + trợ từ + はもちろん: 子どもにはもちろん、大人にも"
+      ],
+      "viDu": [
+        {
+          "c": "彼は英語はもちろん、中国語も話せる。",
+          "d": "かれは えいごは もちろん、ちゅうごくごも はなせる。",
+          "v": "Anh ấy tiếng Anh thì khỏi nói, tiếng Trung cũng nói được."
+        },
+        {
+          "c": "このアニメは、子どもはもちろん、大人にも人気がある。",
+          "d": "この アニメは、こどもは もちろん、おとなにも にんきが ある。",
+          "v": "Bộ hoạt hình này trẻ con thì đương nhiên, người lớn cũng thích."
+        },
+        {
+          "c": "地震のときは、電気はもとより、水道まで止まってしまった。",
+          "d": "じしんの ときは、でんきは もとより、すいどうまで とまって しまった。",
+          "v": "Lúc động đất, điện thì đã đành, đến cả nước máy cũng bị cắt."
+        },
+        {
+          "c": "健康のためには、食事はもとより、睡眠も大切である。",
+          "d": "けんこうの ためには、しょくじは もとより、すいみんも たいせつで ある。",
+          "v": "Để khoẻ mạnh, ăn uống thì đương nhiên, giấc ngủ cũng quan trọng."
+        }
+      ],
+      "luuY": [
+        "Vế sau cần も / まで / さえ để thể hiện ý “cũng”; thiếu thì câu cụt.",
+        "Khác 〜はともかく: はともかく gạt A sang bên để nói B; はもちろん khẳng định cả A lẫn B.",
+        "Khác 〜だけでなく／〜のみならず: nghĩa gần; はもちろん nhấn A là điều hiển nhiên ai cũng nghĩ tới."
+      ],
+      "soSanh": [
+        "ja-n2-wa-tomokaku",
+        "ja-n3-dake-de-naku",
+        "ja-n2-nominarazu",
+        "ja-n1-wa-oroka"
+      ],
+      "tuKhoa": [
+        "wa mochiron",
+        "wamochiron",
+        "wa motoyori",
+        "đương nhiên",
+        "khỏi nói",
+        "không những"
+      ],
+      "quiz": [
+        {
+          "h": "京都には国内（　）、海外からも多くの観光客が訪れる。",
+          "lc": [
+            "はもちろん",
+            "にもちろん",
+            "をもちろん",
+            "がもとより"
+          ],
+          "da": 0,
+          "gt": "N + はもちろん / はもとより、〜も. Trợ từ đứng trước もちろん / もとより là は."
+        },
+        {
+          "h": "この店は平日はもちろん、週末（　）混んでいる。",
+          "lc": [
+            "を",
+            "も",
+            "へ",
+            "で"
+          ],
+          "da": 1,
+          "gt": "Mẫu A はもちろん、B も: vế sau dùng も để nói “B cũng vậy”."
+        },
+        {
+          "h": "So với 〜はもちろん, 〜はもとより có đặc điểm gì?",
+          "lc": [
+            "Thân mật hơn, chỉ dùng với bạn bè",
+            "Chỉ dùng trong câu phủ định",
+            "Cùng nghĩa nhưng cứng hơn, hay dùng trong văn viết",
+            "Nghĩa ngược lại: gạt điều đó sang một bên"
+          ],
+          "da": 2,
+          "gt": "はもとより = はもちろん về nghĩa, khác ở văn phong trang trọng hơn."
+        }
+      ]
+    },
+    {
+      "id": "ja-n2-ni-kagirazu",
+      "nhom": "Phạm vi – không phụ thuộc",
+      "tieuDe": "〜に限らず",
+      "mau": "N + に限らず、N + も",
+      "nghia": "không chỉ riêng ~ (mà ~ cũng)",
+      "giaiThich": "Sự việc không giới hạn trong phạm vi vừa nêu mà còn đúng với phạm vi rộng hơn. Vế sau thường có も hoặc từ chỉ toàn thể (だれでも, どこも, いつも, 全体).",
+      "cachGhep": [
+        "Danh từ + に限らず、N も: 若者に限らず、お年寄りにも",
+        "Danh từ + に限らず + từ chỉ toàn thể: 東京に限らず、大都市はどこも"
+      ],
+      "viDu": [
+        {
+          "c": "この映画は、若者に限らず、お年寄りにも人気がある。",
+          "d": "この えいがは、わかものに かぎらず、おとしよりにも にんきが ある。",
+          "v": "Bộ phim này không chỉ giới trẻ mà người cao tuổi cũng thích."
+        },
+        {
+          "c": "日曜日に限らず、休みの日はいつも家族と過ごす。",
+          "d": "にちようびに かぎらず、やすみの ひは いつも かぞくと すごす。",
+          "v": "Không riêng Chủ nhật, ngày nghỉ nào tôi cũng ở bên gia đình."
+        },
+        {
+          "c": "東京に限らず、大都市はどこも家賃が高い。",
+          "d": "とうきょうに かぎらず、だいとしは どこも やちんが たかい。",
+          "v": "Không riêng Tokyo, thành phố lớn nào tiền thuê nhà cũng đắt."
+        },
+        {
+          "c": "最近は女性に限らず、男性も料理教室に通っている。",
+          "d": "さいきんは じょせいに かぎらず、だんせいも りょうりきょうしつに かよって いる。",
+          "v": "Gần đây không chỉ phụ nữ mà nam giới cũng đi học nấu ăn."
+        }
+      ],
+      "luuY": [
+        "Trợ từ là に (✗ 日本を限らず); dạng cố định là 限らず (✗ 限らなく).",
+        "Khác 〜に限って: に限って = “riêng ~ thì (lại)” (đúng lúc ấy thì xui / riêng người ấy thì không đời nào); khác 〜に限り = “chỉ riêng ~ mới” (quy định). Ba mẫu chỉ khác đuôi mà nghĩa khác hẳn.",
+        "Khác 〜だけでなく: だけでなく ghép với mọi từ loại; に限らず chỉ ghép với danh từ và hơi cứng hơn."
+      ],
+      "soSanh": [
+        "ja-n2-ni-kagitte",
+        "ja-n2-ni-kagiri",
+        "ja-n3-dake-de-naku",
+        "ja-n2-nominarazu"
+      ],
+      "tuKhoa": [
+        "ni kagirazu",
+        "nikagirazu",
+        "không chỉ riêng",
+        "không riêng gì"
+      ],
+      "quiz": [
+        {
+          "h": "子ども（　）、大人もこのゲームを楽しんでいる。",
+          "lc": [
+            "に限って",
+            "に限り",
+            "に限らず",
+            "を限らず"
+          ],
+          "da": 2,
+          "gt": "Vế sau có 大人も ⇒ “không chỉ trẻ con” = に限らず. に限って / に限り giới hạn “chỉ riêng trẻ con” nên mâu thuẫn với 大人も; を限らず sai trợ từ."
+        },
+        {
+          "h": "「夏に限らず」 nghĩa là gì?",
+          "lc": [
+            "Cứ đúng vào mùa hè thì lại",
+            "Ngoại trừ mùa hè",
+            "Chỉ riêng mùa hè",
+            "Không chỉ riêng mùa hè"
+          ],
+          "da": 3,
+          "gt": "に限らず = không giới hạn ở ~ ⇒ không chỉ riêng ~."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "この問題は日本に限らず、世界中で起きている。",
+            "この問題は日本を限らず、世界中で起きている。",
+            "この問題は日本で限らず、世界中で起きている。",
+            "この問題は日本に限らなく、世界中で起きている。"
+          ],
+          "da": 0,
+          "gt": "N + に + 限らず. Trợ từ を / で hay dạng 限らなく đều sai."
+        }
+      ]
+    },
+    {
+      "id": "ja-n2-ni-kagitte",
+      "nhom": "Phạm vi – không phụ thuộc",
+      "tieuDe": "〜に限って",
+      "mau": "N + に限って",
+      "nghia": "riêng ~ thì (lại); cứ đúng lúc ~ thì lại ~",
+      "giaiThich": "Hai cách dùng mang cảm xúc: (1) cứ đúng vào lúc / hôm đặc biệt đó thì chuyện không may lại xảy ra (bực, than); (2) riêng người đó thì không đời nào làm chuyện xấu (tin tưởng), vế sau là はずがない, ない. Ngoài ra còn nghĩa (3) “chỉ riêng ~” như に限り.",
+      "cachGhep": [
+        "(1) 〜とき / 〜日 + に限って + chuyện không may: 急いでいるときに限って",
+        "(2) Người + に限って + 〜はずがない / 〜ない: うちの子に限って",
+        "(3) Giới hạn đối tượng: 今日に限って (riêng hôm nay)"
+      ],
+      "viDu": [
+        {
+          "c": "急いでいるときに限って、バスがなかなか来ない。",
+          "d": "いそいで いる ときに かぎって、バスが なかなか こない。",
+          "v": "Cứ đúng lúc đang vội thì xe buýt mãi không tới."
+        },
+        {
+          "c": "傘を持っていない日に限って、雨が降る。",
+          "d": "かさを もって いない ひに かぎって、あめが ふる。",
+          "v": "Cứ đúng hôm không mang ô thì trời lại mưa."
+        },
+        {
+          "c": "うちの子に限って、そんな悪いことをするはずがない。",
+          "d": "うちの こに かぎって、そんな わるい ことを する はずが ない。",
+          "v": "Riêng con nhà tôi thì không đời nào làm chuyện xấu như thế."
+        },
+        {
+          "c": "あの人に限って、約束を破るようなことはないと思う。",
+          "d": "あの ひとに かぎって、やくそくを やぶるような ことは ないと おもう。",
+          "v": "Tôi nghĩ riêng người đó thì không có chuyện thất hứa."
+        }
+      ],
+      "luuY": [
+        "Ở cách dùng (2), vế sau phải là phủ định (〜はずがない, 〜ない): ✗ 彼に限って、うそをつくに違いない.",
+        "Khác 〜に限り: に限り là giới hạn khách quan trong thông báo, quy định (会員に限り割引); に限って mang cảm xúc bực bội hoặc tin tưởng của người nói.",
+        "Khác 〜に限らず: に限らず = “không chỉ riêng ~”, nghĩa ngược hướng."
+      ],
+      "soSanh": [
+        "ja-n2-ni-kagiri",
+        "ja-n2-ni-kagirazu",
+        "ja-n2-nai-kagiri"
+      ],
+      "tuKhoa": [
+        "ni kagitte",
+        "nikagitte",
+        "riêng thì",
+        "cứ đúng lúc",
+        "không đời nào"
+      ],
+      "quiz": [
+        {
+          "h": "忙しい日（　）、電話がたくさんかかってくる。",
+          "lc": [
+            "で限って",
+            "に限って",
+            "を限って",
+            "に限りで"
+          ],
+          "da": 1,
+          "gt": "N + に限って = cứ đúng ~ thì lại. Trợ từ là に và sau 限って không thêm gì."
+        },
+        {
+          "h": "彼に限って、うそを（　）。",
+          "lc": [
+            "つくに違いない",
+            "つきましょう",
+            "つくはずがない",
+            "つきなさい"
+          ],
+          "da": 2,
+          "gt": "Người + に限って thể hiện sự tin tưởng “riêng người ấy thì không đời nào” ⇒ vế sau phủ định: はずがない."
+        },
+        {
+          "h": "「試験の日に限って熱が出る」 nghĩa là gì?",
+          "lc": [
+            "Ngày thi thì chắc chắn không sốt",
+            "Chỉ bị sốt sau khi thi xong",
+            "Không chỉ ngày thi mà ngày nào cũng sốt",
+            "Cứ đúng ngày thi thì lại bị sốt (thật không may)"
+          ],
+          "da": 3,
+          "gt": "〜日に限って + chuyện không may: đúng vào hôm đặc biệt ấy thì chuyện xui lại xảy ra."
+        }
+      ]
+    }
+  ]
+}

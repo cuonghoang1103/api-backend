@@ -1,0 +1,298 @@
+{
+  "nn": "ja",
+  "cap": "N5",
+  "diem": [
+    {
+      "id": "ja-n5-goro-gurai",
+      "nhom": "Tồn tại – số đếm",
+      "tieuDe": "〜ごろ／〜ぐらい（くらい）",
+      "mau": "Thời điểm + ごろ ・ Số lượng / khoảng thời gian + ぐらい（くらい）",
+      "nghia": "khoảng (lúc) ~ ・ khoảng (chừng) ~",
+      "giaiThich": "Cả hai đều dịch là \"khoảng\" nhưng dùng khác nhau. ごろ đi sau THỜI ĐIỂM (mấy giờ, ngày, tháng): 7時ごろ = khoảng 7 giờ. ぐらい／くらい đi sau SỐ LƯỢNG hoặc KHOẢNG THỜI GIAN (bao lâu, bao nhiêu): 3時間ぐらい = khoảng 3 tiếng. Câu hỏi: 何時ごろ, いつごろ (khoảng khi nào), どのぐらい (khoảng bao lâu / bao nhiêu).",
+      "cachGhep": [
+        "Thời điểm + ごろ: 7時ごろ ・ 10日ごろ ・ いつごろ",
+        "Khoảng thời gian + ぐらい: 3時間ぐらい ・ 15分ぐらい ・ 1週間ぐらい",
+        "Số lượng + ぐらい: 20人ぐらい ・ 5つぐらい",
+        "ぐらい = くらい (nghĩa giống nhau)"
+      ],
+      "viDu": [
+        {
+          "c": "毎朝７時ごろおきます。",
+          "d": "まいあさ しちじごろ おきます。",
+          "v": "Mỗi sáng tôi dậy vào khoảng 7 giờ."
+        },
+        {
+          "c": "駅から学校まで歩いて15分ぐらいです。",
+          "d": "えきから がっこうまで あるいて じゅうごふんぐらいです。",
+          "v": "Từ ga đến trường đi bộ mất khoảng 15 phút."
+        },
+        {
+          "c": "きのうは３時間ぐらい日本語をべんきょうしました。",
+          "d": "きのうは さんじかんぐらい にほんごを べんきょうしました。",
+          "v": "Hôm qua tôi đã học tiếng Nhật khoảng 3 tiếng."
+        },
+        {
+          "c": "田中さんは何時ごろ来ますか。",
+          "d": "たなかさんは なんじごろ きますか。",
+          "v": "Anh Tanaka khoảng mấy giờ đến?"
+        },
+        {
+          "c": "パーティーに20人くらい来ました。",
+          "d": "パーティーに にじゅうにんくらい きました。",
+          "v": "Có khoảng 20 người đã đến bữa tiệc."
+        }
+      ],
+      "luuY": [
+        "Tiếng Việt chỉ có một chữ \"khoảng\" nên rất dễ dùng lẫn. Khoảng thời gian KHÔNG dùng ごろ: 3時間ごろ ✗ → 3時間ぐらい.",
+        "ごろ, ぐらい đứng SAU con số (ngược với tiếng Việt): \"khoảng 7 giờ\" → 7時ごろ.",
+        "Sau 〜ごろ có thể bỏ に: 7時ごろ（に）おきます đều đúng."
+      ],
+      "soSanh": [
+        "ja-n5-ikura-donokurai",
+        "ja-n5-ni-thoi-diem",
+        "ja-n5-tro-so-tu",
+        "ja-n5-kara-made"
+      ],
+      "tuKhoa": [
+        "goro",
+        "gurai",
+        "kurai",
+        "nanji goro",
+        "dono gurai",
+        "khoảng",
+        "chừng",
+        "khoảng lúc"
+      ],
+      "quiz": [
+        {
+          "h": "毎晩 11時（　）ねます。",
+          "lc": [
+            "と",
+            "ごろ",
+            "へ",
+            "を"
+          ],
+          "da": 1,
+          "gt": "Sau thời điểm (11時) dùng ごろ = \"khoảng lúc\". へ, を, と không đi sau giờ để chỉ thời gian đi ngủ."
+        },
+        {
+          "h": "うちから 会社まで 30分（　）かかります。",
+          "lc": [
+            "ごろ",
+            "へ",
+            "ぐらい",
+            "に"
+          ],
+          "da": 2,
+          "gt": "30分 là khoảng thời gian (bao lâu) nên dùng ぐらい. ごろ chỉ đi với thời điểm; trước かかります không dùng に hay へ sau lượng thời gian."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "りんごを ぐらい5つ 買いました。",
+            "りんごを 5ぐらいつ 買いました。",
+            "りんごを 5つごろ 買いました。",
+            "りんごを 5つぐらい 買いました。"
+          ],
+          "da": 3,
+          "gt": "ぐらい đứng ngay sau số lượng có trợ số từ: 5つぐらい. Không đặt trước con số, không chen vào giữa, và số lượng không dùng ごろ."
+        }
+      ]
+    },
+    {
+      "id": "ja-n5-tinh-tu-trang-tu",
+      "nhom": "Tính từ",
+      "tieuDe": "Tính từ làm trạng từ (〜く／〜に + động từ)",
+      "mau": "Aい（bỏ い）+ く + V ・ Aな + に + V（いい → よく）",
+      "nghia": "(làm gì) một cách ~",
+      "giaiThich": "Muốn dùng tính từ để nói CÁCH một hành động diễn ra (làm nhanh, viết to, nói nhỏ…), phải đổi tính từ sang dạng trạng từ rồi đặt trước động từ: tính từ đuôi い đổi い thành く (早い → 早く), tính từ đuôi な thêm に (しずか → しずかに). Riêng いい đổi thành よく.",
+      "cachGhep": [
+        "Aい: bỏ い + く: 早い → 早く ・ 大きい → 大きく",
+        "Aな: + に: しずか → しずかに ・ きれい → きれいに ・ 上手 → 上手に",
+        "Đặc biệt: いい → よく"
+      ],
+      "viDu": [
+        {
+          "c": "きのうは早くねました。",
+          "d": "きのうは はやく ねました。",
+          "v": "Hôm qua tôi đã đi ngủ sớm."
+        },
+        {
+          "c": "もう少し大きく書いてください。",
+          "d": "もう すこし おおきく かいて ください。",
+          "v": "Xin hãy viết to hơn một chút."
+        },
+        {
+          "c": "としょかんではしずかに話しましょう。",
+          "d": "としょかんでは しずかに はなしましょう。",
+          "v": "Ở thư viện chúng ta hãy nói chuyện khẽ thôi."
+        },
+        {
+          "c": "へやをきれいにそうじしました。",
+          "d": "へやを きれいに そうじしました。",
+          "v": "Tôi đã dọn phòng sạch sẽ."
+        },
+        {
+          "c": "山田さんは日本語を上手に話します。",
+          "d": "やまださんは にほんごを じょうずに はなします。",
+          "v": "Anh Yamada nói tiếng Nhật giỏi."
+        }
+      ],
+      "luuY": [
+        "Không để nguyên tính từ trước động từ như tiếng Việt: 早いねます ✗ → 早くねます; しずか話します ✗ → しずかに話します.",
+        "きれい, ゆうめい, きらい tuy kết thúc bằng い nhưng là tính từ đuôi な: きれいに (không phải きれく).",
+        "いい không thành いく: よく (よくわかります, よく見てください)."
+      ],
+      "soSanh": [
+        "ja-n5-tinh-tu-i",
+        "ja-n5-tinh-tu-na",
+        "ja-n5-ni-narimasu",
+        "ja-n5-kute-de"
+      ],
+      "tuKhoa": [
+        "hayaku",
+        "shizuka ni",
+        "kirei ni",
+        "yoku",
+        "trạng từ",
+        "phó từ",
+        "một cách",
+        "tính từ thành trạng từ"
+      ],
+      "quiz": [
+        {
+          "h": "名前を（　）書いてください。",
+          "lc": [
+            "きれいな",
+            "きれいに",
+            "きれく",
+            "きれいく"
+          ],
+          "da": 1,
+          "gt": "きれい là tính từ đuôi な nên dạng trạng từ là きれいに. きれく, きれいく là chia nhầm như tính từ đuôi い; きれいな dùng trước danh từ, không dùng trước động từ."
+        },
+        {
+          "h": "あしたは（　）おきます。",
+          "lc": [
+            "早に",
+            "早い",
+            "早く",
+            "早くて"
+          ],
+          "da": 2,
+          "gt": "Tính từ đuôi い đổi い thành く khi bổ nghĩa cho động từ: 早くおきます. Không để nguyên 早い, không thêm に; 早くて là dạng nối câu."
+        },
+        {
+          "h": "この本を（　）読んでください。",
+          "lc": [
+            "いく",
+            "いいに",
+            "いいく",
+            "よく"
+          ],
+          "da": 3,
+          "gt": "いい có dạng trạng từ đặc biệt là よく (\"kỹ, nhiều\"). いく, いいに, いいく đều không tồn tại với nghĩa này."
+        }
+      ]
+    },
+    {
+      "id": "ja-n5-pho-tu-tan-suat",
+      "nhom": "Phó từ – biến đổi",
+      "tieuDe": "Phó từ tần suất: いつも／よく／ときどき／あまり／ぜんぜん",
+      "mau": "いつも／よく／ときどき + V-ます ・ あまり／ぜんぜん + V-ません",
+      "nghia": "luôn luôn / thường / thỉnh thoảng ・ không ~ lắm / hoàn toàn không",
+      "giaiThich": "Các phó từ chỉ mức độ thường xuyên, xếp từ nhiều đến ít: いつも (luôn luôn) → よく (thường, hay) → ときどき (thỉnh thoảng) → あまり〜ません (không ~ mấy) → ぜんぜん〜ません (hoàn toàn không). あまり và ぜんぜん phải đi với câu PHỦ ĐỊNH. Phó từ thường đứng trước động từ hoặc ngay sau chủ đề.",
+      "cachGhep": [
+        "いつも／よく／ときどき + câu khẳng định: よく行きます",
+        "あまり + phủ định: あまり見ません",
+        "ぜんぜん + phủ định: ぜんぜん飲みません",
+        "Vị trí: 私は よく 本を 読みます ／ 私は 本を よく 読みます"
+      ],
+      "viDu": [
+        {
+          "c": "父はいつも６時におきます。",
+          "d": "ちちは いつも ろくじに おきます。",
+          "v": "Bố tôi luôn dậy lúc 6 giờ."
+        },
+        {
+          "c": "私はよくこのみせでパンを買います。",
+          "d": "わたしは よく この みせで パンを かいます。",
+          "v": "Tôi hay mua bánh mì ở cửa hàng này."
+        },
+        {
+          "c": "ときどき友だちとえいがを見ます。",
+          "d": "ときどき ともだちと えいがを みます。",
+          "v": "Thỉnh thoảng tôi xem phim với bạn."
+        },
+        {
+          "c": "私はあまりテレビを見ません。",
+          "d": "わたしは あまり テレビを みません。",
+          "v": "Tôi không xem tivi mấy."
+        },
+        {
+          "c": "あにはぜんぜんおさけを飲みません。",
+          "d": "あには ぜんぜん おさけを のみません。",
+          "v": "Anh trai tôi hoàn toàn không uống rượu."
+        }
+      ],
+      "luuY": [
+        "あまり, ぜんぜん đi với phủ định: あまり見ます ✗ → あまり見ません. Tiếng Việt \"không… lắm\" đã có \"không\", còn tiếng Nhật phải đổi động từ sang phủ định.",
+        "あまり〜ません là \"không ~ mấy\" (vẫn có một ít); ぜんぜん〜ません là \"hoàn toàn không\".",
+        "よく có hai nghĩa: \"thường, hay\" (よく行きます) và \"kỹ, rõ\" (よくわかります) — xem ngữ cảnh."
+      ],
+      "soSanh": [
+        "ja-n5-masu",
+        "ja-n5-mou-mada",
+        "ja-n5-dake-shika",
+        "ja-n5-tinh-tu-trang-tu"
+      ],
+      "tuKhoa": [
+        "itsumo",
+        "yoku",
+        "tokidoki",
+        "amari",
+        "zenzen",
+        "tần suất",
+        "luôn luôn",
+        "thỉnh thoảng",
+        "không mấy",
+        "hoàn toàn không"
+      ],
+      "quiz": [
+        {
+          "h": "私は あまり コーヒーを（　）。",
+          "lc": [
+            "飲みたいです",
+            "飲みましょう",
+            "飲みません",
+            "飲みます"
+          ],
+          "da": 2,
+          "gt": "あまり đi với câu phủ định: あまり飲みません \"không uống mấy\". Các dạng khẳng định 飲みます, 飲みましょう, 飲みたいです không dùng với あまり."
+        },
+        {
+          "h": "A: よく えいがを 見ますか。　B: いいえ、（　）見ません。",
+          "lc": [
+            "ときどき",
+            "とても",
+            "いつも",
+            "ぜんぜん"
+          ],
+          "da": 3,
+          "gt": "Câu trả lời phủ định 見ません đi với ぜんぜん \"hoàn toàn không\". いつも, ときどき dùng với câu khẳng định; とても đi với tính từ, không đi với 見ません."
+        },
+        {
+          "h": "Thứ tự nào đúng, từ thường xuyên nhất đến ít nhất?",
+          "lc": [
+            "いつも → よく → ときどき → あまり → ぜんぜん",
+            "ぜんぜん → あまり → ときどき → よく → いつも",
+            "よく → いつも → あまり → ときどき → ぜんぜん",
+            "いつも → ときどき → よく → ぜんぜん → あまり"
+          ],
+          "da": 0,
+          "gt": "いつも (luôn luôn) > よく (thường) > ときどき (thỉnh thoảng) > あまり〜ません (không mấy) > ぜんぜん〜ません (hoàn toàn không)."
+        }
+      ]
+    }
+  ]
+}

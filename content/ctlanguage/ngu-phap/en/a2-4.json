@@ -1,0 +1,352 @@
+{
+  "nn": "en",
+  "cap": "A2",
+  "diem": [
+    {
+      "id": "en-a2-for-since",
+      "nhom": "Các thì",
+      "tieuDe": "for / since (cơ bản)",
+      "mau": "S + have / has + V3 + for + khoảng thời gian · since + mốc thời gian",
+      "nghia": "được (bao lâu) rồi · từ (lúc nào) đến giờ",
+      "giaiThich": "Dùng với hiện tại hoàn thành để nói một việc bắt đầu trong quá khứ và vẫn còn đến bây giờ. for đi với một KHOẢNG thời gian (bao lâu): for two hours, for five years. since đi với một MỐC bắt đầu (từ khi nào): since Monday, since 2020. Câu hỏi tương ứng là How long…?",
+      "cachGhep": [
+        "for + khoảng thời gian: for ten minutes, for three days, for a week, for five years, for a long time",
+        "since + mốc thời gian: since 8 o'clock, since Monday, since last week, since May, since 2020",
+        "Câu hỏi: How long + have / has + S + V3? (How long have you lived here?)",
+        "Trả lời ngắn: For two years. · Since 2022."
+      ],
+      "viDu": [
+        {
+          "c": "I have lived here for five years.",
+          "v": "Tôi sống ở đây được năm năm rồi."
+        },
+        {
+          "c": "She has worked at this school since 2020.",
+          "v": "Cô ấy làm việc ở trường này từ năm 2020."
+        },
+        {
+          "c": "We have known each other for a long time.",
+          "v": "Chúng tôi quen nhau đã lâu rồi."
+        },
+        {
+          "c": "He has been sick since Monday.",
+          "v": "Anh ấy bị ốm từ thứ Hai."
+        },
+        {
+          "c": "How long have you had this phone? - For two months.",
+          "v": "Bạn dùng chiếc điện thoại này bao lâu rồi? - Được hai tháng."
+        }
+      ],
+      "luuY": [
+        "Lỗi người Việt hay mắc: dùng since với khoảng thời gian → sai: since five years. Đúng: for five years (khoảng) hoặc since 2020 (mốc).",
+        "Việc vẫn còn đến bây giờ thì không dùng hiện tại đơn → sai: I live here for five years. Đúng: I have lived here for five years.",
+        "So với quá khứ đơn: I lived in Hue for two years (đã xong, giờ không ở Huế nữa) ↔ I have lived in Hue for two years (bây giờ vẫn ở)."
+      ],
+      "soSanh": [
+        "en-b1-present-perfect-for-since",
+        "en-a2-present-perfect-vs-past-simple",
+        "en-a2-present-perfect-just-already-yet"
+      ],
+      "tuKhoa": [
+        "for since",
+        "for and since",
+        "how long",
+        "được bao lâu",
+        "từ khi",
+        "hien tai hoan thanh for since"
+      ],
+      "quiz": [
+        {
+          "h": "I have known her ___ ten years.",
+          "lc": [
+            "from",
+            "since",
+            "in",
+            "for"
+          ],
+          "da": 3,
+          "gt": "Ten years là một khoảng thời gian nên dùng for. Since phải đi với một mốc (since 2015); in và from không dùng để nói 'được bao lâu rồi' với hiện tại hoàn thành."
+        },
+        {
+          "h": "They have lived in Da Nang ___ 2019.",
+          "lc": [
+            "since",
+            "for",
+            "during",
+            "at"
+          ],
+          "da": 0,
+          "gt": "2019 là mốc bắt đầu nên dùng since. For phải đi với khoảng thời gian (for six years); at và during không dùng với nghĩa 'từ… đến giờ'."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "She has been a teacher since six years.",
+            "She has been a teacher for six years.",
+            "She is a teacher for six years ago.",
+            "She is a teacher since six years."
+          ],
+          "da": 1,
+          "gt": "Việc kéo dài đến bây giờ dùng hiện tại hoàn thành (has been), và six years là khoảng thời gian nên dùng for. Không dùng hiện tại đơn (is), không dùng since với khoảng thời gian, không ghép for với ago."
+        }
+      ]
+    },
+    {
+      "id": "en-a2-bi-dong-co-ban",
+      "nhom": "Các thì",
+      "tieuDe": "Bị động cơ bản: is made / was built",
+      "mau": "S + am / is / are + V3 (hiện tại) · S + was / were + V3 (quá khứ) (+ by + người làm)",
+      "nghia": "được / bị (làm gì)",
+      "giaiThich": "Dùng câu bị động khi muốn nói về vật hay người CHỊU tác động của hành động, và người làm không quan trọng hoặc không biết là ai. Động từ gồm to be + V3 (quá khứ phân từ): hiện tại dùng am / is / are, quá khứ dùng was / were. Nếu cần nói ai làm thì thêm by + người đó ở cuối.",
+      "cachGhep": [
+        "Hiện tại: am / is / are + V3 (This cheese is made in France.)",
+        "Quá khứ: was / were + V3 (The bridge was built in 1990.)",
+        "Phủ định: thêm not sau to be (This car isn't made in Vietnam.)",
+        "Câu hỏi: đưa to be lên đầu (Was this house built last year?)",
+        "Nói người làm: by + người (These photos were taken by my sister.)",
+        "V3: động từ có quy tắc thêm -ed (cleaned, used); bất quy tắc phải học thuộc (make → made, build → built, write → written, take → taken, speak → spoken)"
+      ],
+      "viDu": [
+        {
+          "c": "This cheese is made in France.",
+          "v": "Loại phô mai này được làm ở Pháp."
+        },
+        {
+          "c": "The bridge was built in 1990.",
+          "v": "Cây cầu được xây vào năm 1990."
+        },
+        {
+          "c": "English is spoken in many countries.",
+          "v": "Tiếng Anh được nói ở nhiều nước."
+        },
+        {
+          "c": "These photos were taken by my sister.",
+          "v": "Những bức ảnh này do chị tôi chụp."
+        }
+      ],
+      "luuY": [
+        "Lỗi người Việt hay mắc: quên to be hoặc không dùng V3 → sai: The bridge built in 1990. / The bridge was build in 1990. Đúng: The bridge was built in 1990.",
+        "Chọn is / are / was / were theo chủ ngữ và thời gian: The rooms are cleaned every day. · The room was cleaned yesterday.",
+        "Không phải lúc nào 'bị / được' trong tiếng Việt cũng là câu bị động: 'Tôi bị ốm' = I am sick (không nói I am sicked)."
+      ],
+      "soSanh": [
+        "en-b1-passive-simple",
+        "en-a2-past-simple-bat-quy-tac",
+        "en-b1-passive-other-tenses"
+      ],
+      "tuKhoa": [
+        "passive",
+        "is made",
+        "was built",
+        "câu bị động",
+        "cau bi dong",
+        "bị động cơ bản"
+      ],
+      "quiz": [
+        {
+          "h": "These cars ___ in Japan.",
+          "lc": [
+            "is made",
+            "are make",
+            "are made",
+            "make"
+          ],
+          "da": 2,
+          "gt": "Xe được sản xuất (bị động), chủ ngữ số nhiều nên dùng are + V3: are made. Is dùng cho số ít; make là chủ động (xe không tự làm ra gì); sau are phải là V3 made chứ không phải make."
+        },
+        {
+          "h": "My school ___ in 2005.",
+          "lc": [
+            "was build",
+            "were built",
+            "built",
+            "was built"
+          ],
+          "da": 3,
+          "gt": "Trường được xây trong quá khứ, chủ ngữ số ít nên dùng was + V3: was built. Was build sai vì chưa đổi sang V3; built thiếu to be; were dùng cho số nhiều."
+        },
+        {
+          "h": "This letter was written ___ my grandfather.",
+          "lc": [
+            "by",
+            "from",
+            "with",
+            "of"
+          ],
+          "da": 0,
+          "gt": "Trong câu bị động, người làm hành động đứng sau by: written by my grandfather. From, with, of không dùng để nói người thực hiện hành động."
+        }
+      ]
+    },
+    {
+      "id": "en-a2-shall",
+      "nhom": "Động từ khuyết thiếu",
+      "tieuDe": "Shall I …? / Shall we …?",
+      "mau": "Shall I + V …? (đề nghị giúp) · Shall we + V …? (rủ cùng làm)",
+      "nghia": "Để tôi … nhé? · Chúng ta … nhé?",
+      "giaiThich": "Shall I…? dùng để đề nghị làm giúp ai một việc. Shall we…? dùng để rủ, gợi ý cùng làm gì. Có thể thêm từ hỏi phía trước để hỏi ý kiến: What shall we do? Cách nói này lịch sự, phổ biến trong tiếng Anh Anh; người Mỹ thường nói Should I…? / Should we…?",
+      "cachGhep": [
+        "Shall I + V nguyên mẫu…? (Shall I open the window?) — trả lời: Yes, please. / No, thanks.",
+        "Shall we + V nguyên mẫu…? (Shall we go for a walk?) — trả lời: Yes, let's. / Good idea. / Sorry, I can't.",
+        "Từ hỏi + shall + I / we + V? (What shall we do? · Where shall we meet? · What time shall I come?)"
+      ],
+      "viDu": [
+        {
+          "c": "Shall I open the window? - Yes, please.",
+          "v": "Để tôi mở cửa sổ nhé? - Vâng, phiền bạn."
+        },
+        {
+          "c": "Shall we go to the cinema tonight?",
+          "v": "Tối nay chúng ta đi xem phim nhé?"
+        },
+        {
+          "c": "What shall we have for dinner?",
+          "v": "Bữa tối chúng ta ăn gì nhỉ?"
+        },
+        {
+          "c": "Shall I carry your bag for you?",
+          "v": "Để tôi xách túi giúp bạn nhé?"
+        }
+      ],
+      "luuY": [
+        "Lỗi người Việt hay mắc: dịch thẳng 'Tôi mở cửa nhé?' thành I open the door? Đúng: Shall I open the door?",
+        "Sau shall là động từ nguyên mẫu không to: Shall we go? (không nói Shall we to go? / Shall we going?)",
+        "Câu hỏi đề nghị với shall chỉ dùng với I và we. Khác Let's + V (en-a1-lets): Let's go! là lời rủ dạng câu kể, Shall we go? là câu hỏi nên nhẹ nhàng hơn. Nhờ người khác làm thì dùng Can you…? / Could you…?, không dùng shall."
+      ],
+      "soSanh": [
+        "en-a1-lets",
+        "en-a2-will",
+        "en-a2-should",
+        "en-a2-could"
+      ],
+      "tuKhoa": [
+        "shall",
+        "shall we",
+        "shall i",
+        "đề nghị",
+        "rủ cùng làm",
+        "loi de nghi"
+      ],
+      "quiz": [
+        {
+          "h": "It's hot in here. ___ I open the window?",
+          "lc": [
+            "Does",
+            "Shall",
+            "Am",
+            "Have"
+          ],
+          "da": 1,
+          "gt": "Đề nghị làm giúp một việc: Shall I + V…? Am và Have không đi với động từ nguyên mẫu open; Does không đi với chủ ngữ I."
+        },
+        {
+          "h": "Shall we ___ a taxi?",
+          "lc": [
+            "to take",
+            "took",
+            "take",
+            "taking"
+          ],
+          "da": 2,
+          "gt": "Sau shall là động từ nguyên mẫu không to: take. To take, taking, took đều sai dạng."
+        },
+        {
+          "h": "Shall we go for a walk? - ___",
+          "lc": [
+            "Yes, I do.",
+            "Yes, you are.",
+            "No, it isn't.",
+            "Yes, let's."
+          ],
+          "da": 3,
+          "gt": "Đồng ý với lời rủ Shall we…? thì nói Yes, let's. Các câu còn lại là câu trả lời cho câu hỏi với do hoặc to be, không hợp với lời rủ."
+        }
+      ]
+    },
+    {
+      "id": "en-a2-had-better",
+      "nhom": "Động từ khuyết thiếu",
+      "tieuDe": "had better / had better not",
+      "mau": "S + had better ('d better) + V · S + had better not + V",
+      "nghia": "nên / tốt hơn là (làm gì), không thì sẽ có chuyện",
+      "giaiThich": "Dùng had better để khuyên hoặc cảnh báo về một tình huống cụ thể ngay bây giờ hoặc sắp tới; thường hàm ý nếu không làm thì sẽ có hậu quả không hay. Dù có had nhưng câu nói về hiện tại hoặc tương lai, không phải quá khứ. Khi nói thường rút gọn thành 'd better. Sau had better là động từ nguyên mẫu không to.",
+      "cachGhep": [
+        "Khẳng định: S + had better / 'd better + V (You'd better take an umbrella.)",
+        "Phủ định: S + had better not + V (You'd better not be late.)",
+        "Dùng cho mọi ngôi, không đổi dạng: I'd better, you'd better, he'd better, we'd better, they'd better",
+        "Hay đi với or để nêu hậu quả: We'd better leave now or we'll miss the bus."
+      ],
+      "viDu": [
+        {
+          "c": "You'd better take an umbrella. It's going to rain.",
+          "v": "Bạn nên mang ô đi. Trời sắp mưa rồi."
+        },
+        {
+          "c": "We'd better leave now or we'll miss the bus.",
+          "v": "Chúng ta nên đi ngay, không thì sẽ lỡ xe buýt."
+        },
+        {
+          "c": "You'd better not be late tomorrow.",
+          "v": "Ngày mai bạn đừng có đi trễ đấy."
+        },
+        {
+          "c": "I'd better go to bed. I have an exam in the morning.",
+          "v": "Tôi nên đi ngủ thôi. Sáng mai tôi có bài thi."
+        }
+      ],
+      "luuY": [
+        "Lỗi người Việt hay mắc: thêm to hoặc đặt not sai chỗ → sai: You had better to go. / You hadn't better go. / You'd better don't go. Đúng: You'd better go. / You'd better not go.",
+        "'d trong you'd better là had, không phải would; và had ở đây không mang nghĩa quá khứ.",
+        "Khác should (en-a2-should): should là lời khuyên chung, nhẹ nhàng (You should eat more fruit); had better mạnh hơn, dùng cho một tình huống cụ thể và có ý cảnh báo (You'd better see a doctor today). Với người lớn tuổi hoặc cấp trên nên dùng should cho lịch sự."
+      ],
+      "soSanh": [
+        "en-a2-should",
+        "en-b1-modals-advice",
+        "en-a2-must"
+      ],
+      "tuKhoa": [
+        "had better",
+        "you'd better",
+        "had better not",
+        "tốt hơn là",
+        "nên làm",
+        "loi khuyen manh"
+      ],
+      "quiz": [
+        {
+          "h": "It's very cold outside. You ___ wear a coat.",
+          "lc": [
+            "had better to",
+            "better had",
+            "have better",
+            "had better"
+          ],
+          "da": 3,
+          "gt": "Mẫu đúng là had better + động từ nguyên mẫu không to: had better wear. Không thêm to, không đổi had thành have, không đảo thành better had."
+        },
+        {
+          "h": "You'd better ___ your phone in the car. Someone might take it.",
+          "lc": [
+            "not leave",
+            "no leave",
+            "don't leave",
+            "not to leave"
+          ],
+          "da": 0,
+          "gt": "Phủ định là had better not + V: You'd better not leave. Không dùng don't, không thêm to, và không dùng no trước động từ."
+        },
+        {
+          "h": "Trong câu 'You'd better hurry', 'd là viết tắt của:",
+          "lc": [
+            "should",
+            "had",
+            "would",
+            "did"
+          ],
+          "da": 1,
+          "gt": "You'd better = You had better. Trong mẫu này 'd luôn là had (would chỉ là 'd trong I'd like, I'd rather); did và should không viết tắt thành 'd ở đây."
+        }
+      ]
+    }
+  ]
+}

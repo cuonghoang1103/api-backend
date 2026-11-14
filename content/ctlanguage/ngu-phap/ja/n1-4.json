@@ -1,0 +1,1245 @@
+{
+  "nn": "ja",
+  "cap": "N1",
+  "diem": [
+    {
+      "id": "ja-n1-ta-tokoro-de",
+      "nhom": "Điều kiện – nhượng bộ",
+      "tieuDe": "〜たところで",
+      "mau": "V-た + ところで + (phủ định / mức độ thấp)",
+      "nghia": "dù có ~ đi nữa thì cũng (vô ích / chẳng đáng kể)",
+      "giaiThich": "Giả định một hành động rồi khẳng định rằng dù có làm thì cũng không đạt kết quả mong muốn, hoặc kết quả chẳng đáng là bao. Vế sau là phán đoán mang tính phủ định, tiêu cực của người nói (〜ない, 無駄だ, 〜だけだ, せいぜい〜だ); không dùng thì quá khứ, không dùng ý chí, mệnh lệnh, nhờ vả. Hay đi với いくら, どんなに, たとえ, 今さら.",
+      "cachGhep": [
+        "Động từ thể た + ところで + 〜ない: 急いだところで間に合わない",
+        "いくら / どんなに + V-た + ところで",
+        "Mức độ thấp: V-た + ところで + せいぜい / 〜くらいだ"
+      ],
+      "viDu": [
+        {
+          "c": "今から急いだところで、もう間に合わないだろう。",
+          "d": "いまから いそいだ ところで、もう まにあわないだろう。",
+          "v": "Giờ có vội đi nữa thì chắc cũng không kịp."
+        },
+        {
+          "c": "いくら話し合ったところで、結論は出ないと思う。",
+          "d": "いくら はなしあった ところで、けつろんは でないと おもう。",
+          "v": "Tôi nghĩ có bàn bao nhiêu cũng chẳng ra kết luận."
+        },
+        {
+          "c": "謝ったところで、彼女は許してくれないだろう。",
+          "d": "あやまった ところで、かのじょは ゆるしてくれないだろう。",
+          "v": "Có xin lỗi thì chắc cô ấy cũng không tha thứ."
+        },
+        {
+          "c": "遅れたところで、せいぜい5分ぐらいだ。",
+          "d": "おくれた ところで、せいぜい ごふんぐらいだ。",
+          "v": "Có trễ thì cùng lắm cũng chỉ khoảng 5 phút."
+        }
+      ],
+      "luuY": [
+        "Dù nói chuyện chưa xảy ra vẫn dùng thể た trước ところで; và vế sau không ở quá khứ: ✗ 急いだところで、間に合わなかった.",
+        "Khác 〜たところ (N3): V-た + ところ là \"sau khi làm thử thì (thấy kết quả)\" — việc đã xảy ra thật; 〜たところで là giả định \"dù có làm cũng vô ích\".",
+        "Khác 〜としても／〜ても (N3): hai mẫu đó là nhượng bộ trung tính, vế sau tự do (cả ý chí); 〜たところで luôn kéo theo đánh giá \"vô ích / chẳng bao nhiêu\". Khác 〜(よ)うが: vế sau của ようが thường là ý chí kiên định."
+      ],
+      "soSanh": [
+        "ja-n3-ta-tokoro",
+        "ja-n3-to-shitemo",
+        "ja-n3-tatoe-temo",
+        "ja-n1-ni-shita-tokoro-de"
+      ],
+      "tuKhoa": [
+        "ta tokoro de",
+        "tatokorode",
+        "たところで",
+        "dù có cũng vô ích",
+        "dù có đi nữa"
+      ],
+      "quiz": [
+        {
+          "h": "今さら後悔（　）ところで、どうにもならない。",
+          "lc": [
+            "しよう",
+            "する",
+            "して",
+            "した"
+          ],
+          "da": 3,
+          "gt": "Mẫu là V-た + ところで: 後悔したところで. Thể từ điển, thể て và thể ý chí không ghép với ところで trong nghĩa \"dù có ~ cũng vô ích\"."
+        },
+        {
+          "h": "Sau 「いくら説明したところで、…」 nội dung nào phù hợp?",
+          "lc": [
+            "分かってもらえないだろう",
+            "分かってください",
+            "分かってもらえた",
+            "分かってもらおう"
+          ],
+          "da": 0,
+          "gt": "Vế sau của たところで là phán đoán tiêu cực: chắc cũng không được hiểu cho. Lời nhờ (ください), thì quá khứ (もらえた) và ý chí (もらおう) đều không dùng được."
+        },
+        {
+          "h": "「薬を飲んだところで、治らない」 và 「薬を飲んだところ、治った」 khác nhau thế nào?",
+          "lc": [
+            "Cả hai đều kể việc đã xảy ra",
+            "ところで: giả định \"dù có uống cũng vô ích\"; ところ: kể kết quả sau khi đã uống thật",
+            "Cả hai đều là giả định",
+            "ところで: mệnh lệnh; ところ: lời khuyên"
+          ],
+          "da": 1,
+          "gt": "V-た + ところで là giả định kèm đánh giá vô ích; V-た + ところ thuật lại kết quả của việc đã làm thật. Hai mẫu khác nhau chỉ một chữ で nhưng nghĩa khác hẳn."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-you-ga",
+      "nhom": "Điều kiện – nhượng bộ",
+      "tieuDe": "〜(よ)うが／〜(よ)うと（も）",
+      "mau": "V thể ý chí + が / と（も）；Aい (bỏ い) + かろうが / かろうと；N・Aな + だろうが / であろうと",
+      "nghia": "dù có ~ đi nữa thì cũng (không ảnh hưởng)",
+      "giaiThich": "Giả định một tình huống (thường ở mức cực đoan) rồi khẳng định điều ở vế sau không vì thế mà thay đổi. Hay đi với từ để hỏi: 何を〜ようが, だれが〜ようと, どんなに〜ようとも, いくら〜かろうが. Vế sau là ý chí, quyết tâm, phán đoán dứt khoát (私には関係ない, 〜つもりだ, 自由だ). Là cách nói cứng, mạnh.",
+      "cachGhep": [
+        "Động từ thể ý chí + が / と / とも: 言われようが, 反対しようとも",
+        "Tính từ い: bỏ い + かろうが / かろうと: 高かろうが",
+        "Danh từ / tính từ な + だろうが / であろうと: 子どもだろうが, 不便であろうと"
+      ],
+      "viDu": [
+        {
+          "c": "周りに何と言われようが、私は自分の考えを変えない。",
+          "d": "まわりに なんと いわれようが、わたしは じぶんの かんがえを かえない。",
+          "v": "Dù xung quanh có nói gì, tôi cũng không đổi suy nghĩ của mình."
+        },
+        {
+          "c": "どんなに時間がかかろうと、最後までやり遂げるつもりだ。",
+          "d": "どんなに じかんが かかろうと、さいごまで やりとげる つもりだ。",
+          "v": "Dù tốn bao nhiêu thời gian, tôi vẫn định làm cho tới cùng."
+        },
+        {
+          "c": "いくら高かろうが、必要なものは買わなければならない。",
+          "d": "いくら たかかろうが、ひつような ものは かわなければ ならない。",
+          "v": "Dù đắt đến đâu thì thứ cần vẫn phải mua."
+        },
+        {
+          "c": "だれが反対しようとも、この計画は実行する。",
+          "d": "だれが はんたいしようとも、この けいかくは じっこうする。",
+          "v": "Dù ai phản đối, kế hoạch này vẫn sẽ được thực hiện."
+        }
+      ],
+      "luuY": [
+        "Thể ý chí ở đây KHÔNG mang nghĩa \"hãy cùng / định làm\": 降ろうが = dù có mưa.",
+        "Khác 〜たところで: たところで kết bằng \"vô ích, chẳng đáng kể\" và không đi với ý chí; 〜(よ)うが thường kết bằng ý chí kiên định hoặc \"không liên quan\".",
+        "Khác 〜ても／たとえ〜ても (N3): nghĩa nhượng bộ như nhau nhưng 〜(よ)うが cứng và mạnh hơn nhiều, dùng trong văn viết hoặc khi nói dứt khoát."
+      ],
+      "soSanh": [
+        "ja-n1-you-ga-mai-ga",
+        "ja-n1-de-are",
+        "ja-n1-ta-tokoro-de",
+        "ja-n3-tatoe-temo"
+      ],
+      "tuKhoa": [
+        "you ga",
+        "youga",
+        "you to",
+        "you tomo",
+        "ようが",
+        "ようと",
+        "dù có đi nữa",
+        "bất kể"
+      ],
+      "quiz": [
+        {
+          "h": "彼がどこで何を（　）、私には関係のないことだ。",
+          "lc": [
+            "してが",
+            "するが",
+            "したが",
+            "しようが"
+          ],
+          "da": 3,
+          "gt": "Mẫu nhượng bộ: thể ý chí + が ⇒ 何をしようが. するが／したが chỉ là \"làm nhưng / đã làm nhưng\" (không đi được với どこで何を theo nghĩa \"dù ~ gì\"), còn してが không tồn tại."
+        },
+        {
+          "h": "Dạng đúng của tính từ 寒い trong mẫu này là gì?",
+          "lc": [
+            "寒かろうが",
+            "寒だろうようが",
+            "寒くようが",
+            "寒いようが"
+          ],
+          "da": 0,
+          "gt": "Tính từ い: bỏ い thêm かろうが ⇒ 寒かろうが. 寒いようが, 寒くようが, 寒だろうようが đều sai cách ghép."
+        },
+        {
+          "h": "「人に笑われようと、私はこの夢をあきらめない」 — 笑われよう ở đây nghĩa là gì?",
+          "lc": [
+            "Hãy cùng bị cười nào",
+            "Dù có bị cười",
+            "Tôi định để người ta cười",
+            "Chắc sẽ bị cười"
+          ],
+          "da": 1,
+          "gt": "Trong mẫu 〜(よ)うと, thể ý chí chỉ giả định nhượng bộ: \"dù có bị cười\". Nó không mang nghĩa rủ rê, ý định hay suy đoán."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-you-ga-mai-ga",
+      "nhom": "Điều kiện – nhượng bộ",
+      "tieuDe": "〜(よ)うが〜まいが／〜(よ)うと〜まいと",
+      "mau": "V thể ý chí + が / と + V + まい + が / と",
+      "nghia": "dù có ~ hay không ~ thì cũng (như nhau)",
+      "giaiThich": "Nêu cả hai khả năng \"làm\" và \"không làm\" của CÙNG một động từ rồi khẳng định rằng đằng nào kết luận cũng không đổi. Vế sau là ý chí, phán đoán dứt khoát. Cách ghép まい: động từ nhóm 1 là V-る + まい; nhóm 2 là V-る + まい hoặc bỏ る + まい (食べるまい／食べまい); する → するまい／しまい; 来る → 来るまい／こまい.",
+      "cachGhep": [
+        "V thể ý chí + が + V + まい + が: 降ろうが降るまいが",
+        "V thể ý chí + と + V + まい + と: 信じようと信じまいと",
+        "する: しようがしまいが / しようとしまいと"
+      ],
+      "viDu": [
+        {
+          "c": "雨が降ろうが降るまいが、試合は行われる。",
+          "d": "あめが ふろうが ふるまいが、しあいは おこなわれる。",
+          "v": "Dù mưa hay không mưa, trận đấu vẫn diễn ra."
+        },
+        {
+          "c": "彼が来ようが来るまいが、私には関係ない。",
+          "d": "かれが こようが くるまいが、わたしには かんけい ない。",
+          "v": "Anh ta đến hay không đến cũng chẳng liên quan gì tới tôi."
+        },
+        {
+          "c": "信じようと信じまいと、これは本当の話だ。",
+          "d": "しんじようと しんじまいと、これは ほんとうの はなしだ。",
+          "v": "Tin hay không thì tuỳ, nhưng đây là chuyện có thật."
+        },
+        {
+          "c": "合格しようがしまいが、最後まで全力を尽くしたい。",
+          "d": "ごうかくしようが しまいが、さいごまで ぜんりょくを つくしたい。",
+          "v": "Dù đỗ hay không, tôi vẫn muốn dốc toàn lực đến cùng."
+        }
+      ],
+      "luuY": [
+        "Hai chỗ dùng CÙNG một động từ; đừng đổi sang động từ khác.",
+        "Dùng nhất quán が…が hoặc と…と, không trộn (✗ 降ろうが降るまいと).",
+        "Khác 〜であれ〜であれ: であれ〜であれ nêu hai DANH TỪ khác nhau (A hay B); 〜(よ)うが〜まいが nêu \"làm hay không làm\" của một động từ. Khác 〜にかかわらず (N2): nghĩa gần, nhưng にかかわらず trung tính, còn mẫu này mang giọng dứt khoát."
+      ],
+      "soSanh": [
+        "ja-n1-you-ga",
+        "ja-n1-de-are-de-are",
+        "ja-n2-mai",
+        "ja-n2-ni-kakawarazu"
+      ],
+      "tuKhoa": [
+        "you ga mai ga",
+        "yougamaiga",
+        "you to mai to",
+        "ようが〜まいが",
+        "dù có hay không"
+      ],
+      "quiz": [
+        {
+          "h": "君が賛成しようが（　）が、私は予定どおり出発する。",
+          "lc": [
+            "しない",
+            "しよう",
+            "しまい",
+            "せず"
+          ],
+          "da": 2,
+          "gt": "Mẫu: 〜しようが + しまい + が. しない, せず không ghép với が trong mẫu này; lặp lại しよう thì mất nghĩa \"hay không\"."
+        },
+        {
+          "h": "Cặp nào ghép đúng?",
+          "lc": [
+            "行こうと行くまいが",
+            "行くようが行くまいが",
+            "食べようが飲むまいが",
+            "行こうが行くまいが"
+          ],
+          "da": 3,
+          "gt": "Cùng một động từ và cùng trợ từ: 行こうが行くまいが. 食べよう／飲むまい dùng hai động từ khác nhau; 行こうと…まいが trộn と với が; 行くようが sai thể ý chí."
+        },
+        {
+          "h": "「売れようと売れまいと、自分の作りたいものを作る」 nghĩa là gì?",
+          "lc": [
+            "Bán chạy hay không cũng mặc, vẫn làm thứ mình muốn làm",
+            "Không làm gì cả vì sợ không bán được",
+            "Nếu bán chạy thì mới làm thứ mình muốn",
+            "Vì không bán chạy nên làm thứ mình muốn"
+          ],
+          "da": 0,
+          "gt": "〜(よ)うと〜まいと = dù có ~ hay không thì kết luận vẫn vậy. Câu này không nêu điều kiện \"nếu bán chạy\" hay nguyên nhân \"vì không bán chạy\"."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-de-are",
+      "nhom": "Điều kiện – nhượng bộ",
+      "tieuDe": "〜であれ／〜であろうと (cho dù là)",
+      "mau": "N / từ để hỏi + であれ / であろうと",
+      "nghia": "cho dù là ~ đi nữa thì cũng ~",
+      "giaiThich": "Nêu một trường hợp (thường là cực đoan hoặc bất kỳ) rồi khẳng định kết luận không đổi. Hay đi với たとえ, どんな, いかなる và từ để hỏi: 何であれ, だれであれ, どこであれ. Vế sau là phán đoán, chủ trương, ý chí của người nói. Là văn viết trang trọng.",
+      "cachGhep": [
+        "たとえ + danh từ + であれ / であろうと: たとえ社長であれ",
+        "Từ để hỏi + であれ: 理由が何であれ, 相手がだれであれ",
+        "どんな + danh từ + であれ / であろうと: どんな小さなことであろうと"
+      ],
+      "viDu": [
+        {
+          "c": "たとえ社長であれ、規則には従わなければならない。",
+          "d": "たとえ しゃちょうで あれ、きそくには したがわなければ ならない。",
+          "v": "Cho dù là giám đốc thì cũng phải tuân theo quy định."
+        },
+        {
+          "c": "理由が何であれ、暴力は許されない。",
+          "d": "りゆうが なんで あれ、ぼうりょくは ゆるされない。",
+          "v": "Dù lý do là gì, bạo lực cũng không thể chấp nhận."
+        },
+        {
+          "c": "どんな小さなことであろうと、報告してください。",
+          "d": "どんな ちいさな ことで あろうと、ほうこくしてください。",
+          "v": "Dù là chuyện nhỏ đến đâu cũng hãy báo cáo."
+        },
+        {
+          "c": "相手がだれであれ、彼は態度を変えない。",
+          "d": "あいてが だれで あれ、かれは たいどを かえない。",
+          "v": "Dù đối phương là ai, anh ấy cũng không thay đổi thái độ."
+        }
+      ],
+      "luuY": [
+        "Ghép thẳng sau danh từ, không thêm だ: ✗ 社長だであれ.",
+        "Khác 〜であれ〜であれ: dạng lặp nêu HAI ví dụ (A hay B); dạng đơn 〜であれ nêu MỘT trường hợp, thường kèm たとえ hoặc từ để hỏi.",
+        "Khác 〜といえども: といえども nhấn \"ngay cả người/vật đặc biệt như ~ cũng không ngoại lệ\"; 〜であれ nhấn \"bất kể là gì\". Khác 〜でも／〜にしても (N2): nghĩa gần, nhưng であれ cứng và trang trọng hơn."
+      ],
+      "soSanh": [
+        "ja-n1-de-are-de-are",
+        "ja-n1-to-iedomo",
+        "ja-n1-you-ga",
+        "ja-n2-ni-shitemo"
+      ],
+      "tuKhoa": [
+        "de are",
+        "deare",
+        "de arou to",
+        "であれ",
+        "であろうと",
+        "cho dù là",
+        "bất kể là"
+      ],
+      "quiz": [
+        {
+          "h": "たとえ相手が大統領（　）、私は言うべきことは言う。",
+          "lc": [
+            "だあれ",
+            "であれ",
+            "とあれ",
+            "にあれ"
+          ],
+          "da": 1,
+          "gt": "Danh từ + であれ: 大統領であれ (cho dù là tổng thống). にあれ, だあれ, とあれ đều không phải dạng đúng của mẫu này."
+        },
+        {
+          "h": "「目的が何であれ、うそをつくのはよくない」 nghĩa là gì?",
+          "lc": [
+            "Vì không có mục đích nên nói dối",
+            "Nếu có mục đích thì nói dối cũng tốt",
+            "Dù mục đích là gì thì nói dối cũng không tốt",
+            "Không biết mục đích là gì nên không nói dối"
+          ],
+          "da": 2,
+          "gt": "Từ để hỏi + であれ = \"dù là ~ gì đi nữa\". Câu không nêu nguyên nhân, không cho phép nói dối khi có mục đích."
+        },
+        {
+          "h": "Từ nào hay đi kèm với 「〜であれ」 (dạng đơn)?",
+          "lc": [
+            "さっそく",
+            "せっかく",
+            "まるで",
+            "たとえ"
+          ],
+          "da": 3,
+          "gt": "〜であれ nhượng bộ hay đi với たとえ, どんな, いかなる. せっかく (cất công), まるで (y như), さっそく (ngay lập tức) không hợp với nghĩa \"cho dù\"."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-tara-saigo",
+      "nhom": "Điều kiện – nhượng bộ",
+      "tieuDe": "〜たら最後／〜たが最後",
+      "mau": "V-たら + 最後 / V-た + が最後",
+      "nghia": "một khi đã ~ thì coi như xong (không cứu vãn được)",
+      "giaiThich": "Diễn tả một khi việc đó xảy ra thì chắc chắn dẫn tới một kết cục không thể đảo ngược, không dừng lại được, thường là kết cục xấu hoặc phiền toái. 〜たら最後 dùng trong hội thoại; 〜たが最後 cứng hơn, thiên về văn viết.",
+      "cachGhep": [
+        "Động từ thể たら + 最後: 話し始めたら最後",
+        "Động từ thể た + が最後: 失ったが最後"
+      ],
+      "viDu": [
+        {
+          "c": "彼は話し始めたら最後、何時間でもしゃべり続ける。",
+          "d": "かれは はなしはじめたら さいご、なんじかんでも しゃべりつづける。",
+          "v": "Anh ta mà đã mở miệng là nói liên tục mấy tiếng đồng hồ."
+        },
+        {
+          "c": "この秘密を知られたが最後、会社にはいられなくなる。",
+          "d": "この ひみつを しられたが さいご、かいしゃには いられなく なる。",
+          "v": "Một khi bí mật này bị lộ thì không thể ở lại công ty được nữa."
+        },
+        {
+          "c": "あの人にお金を貸したら最後、二度と返ってこない。",
+          "d": "あの ひとに おかねを かしたら さいご、にどと かえってこない。",
+          "v": "Đã cho người đó vay tiền là coi như không bao giờ lấy lại được."
+        },
+        {
+          "c": "信用は一度失ったが最後、取り戻すのは難しい。",
+          "d": "しんようは いちど うしなったが さいご、とりもどすのは むずかしい。",
+          "v": "Chữ tín một khi đã mất thì rất khó lấy lại."
+        }
+      ],
+      "luuY": [
+        "Chữ 最後 ở đây không có nghĩa \"lần cuối\" mà là \"thế là hết đường\".",
+        "Khác 〜(よ)うものなら (N2): ようものなら là \"lỡ mà ~ thì to chuyện\" (giả định việc hiếm, lời cảnh báo cường điệu); 〜たら最後 nhấn tính KHÔNG THỂ ĐẢO NGƯỢC sau khi việc xảy ra.",
+        "Khác 〜きり／〜たきり (N2): たきり là \"làm ~ xong rồi thôi luôn, không có việc tiếp theo\" (kể sự thật); 〜たら最後 là quy luật \"hễ ~ là thế nào cũng\"."
+      ],
+      "soSanh": [
+        "ja-n2-you-mono-nara",
+        "ja-n2-kiri",
+        "ja-n1-ba-sore-made-da"
+      ],
+      "tuKhoa": [
+        "tara saigo",
+        "tarasaigo",
+        "ta ga saigo",
+        "たら最後",
+        "たが最後",
+        "một khi đã",
+        "hết đường"
+      ],
+      "quiz": [
+        {
+          "h": "あの店のケーキは、一度食べ（　）、ほかの店のものは食べられなくなる。",
+          "lc": [
+            "て最後",
+            "たまで最後",
+            "るが最後に",
+            "たら最後"
+          ],
+          "da": 3,
+          "gt": "Mẫu là V-たら + 最後: 食べたら最後. たまで最後, るが最後に, て最後 đều sai cách ghép (chỉ có V-たら最後 và V-たが最後)."
+        },
+        {
+          "h": "「彼は怒ったが最後、だれの言うことも聞かない」 nghĩa là gì?",
+          "lc": [
+            "Anh ấy mà đã nổi giận thì không nghe ai nói nữa",
+            "Anh ấy là người giận sau cùng",
+            "Cuối cùng anh ấy đã hết giận",
+            "Anh ấy giận lần cuối rồi, từ nay nghe lời mọi người"
+          ],
+          "da": 0,
+          "gt": "V-たが最後 = một khi đã ~ thì không dừng/không cứu vãn được. 最後 ở đây không mang nghĩa \"lần cuối\" hay \"sau cùng\"."
+        },
+        {
+          "h": "Dạng nào cứng, thiên về văn viết hơn?",
+          "lc": [
+            "Cả hai đều là tiếng lóng",
+            "〜たが最後",
+            "Cả hai đều chỉ dùng với trẻ em",
+            "〜たら最後"
+          ],
+          "da": 1,
+          "gt": "〜たが最後 cứng hơn, thường gặp trong văn viết; 〜たら最後 dùng nhiều trong hội thoại. Cả hai đều là mẫu ngữ pháp chuẩn, không phải tiếng lóng hay lời nói riêng với trẻ em."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-nakushite",
+      "nhom": "Điều kiện – nhượng bộ",
+      "tieuDe": "〜なくして（は）",
+      "mau": "N + なくして（は）+ 〜ない",
+      "nghia": "không có ~ thì không thể ~",
+      "giaiThich": "Khẳng định rằng nếu thiếu điều nêu ra thì việc ở vế sau không thể thành. Danh từ đứng trước thường là điều đáng quý, cần có (努力, 協力, 愛, 理解, 信頼). Vế sau là phủ định. Là văn viết cứng, hay dùng trong khẩu hiệu, bài phát biểu.",
+      "cachGhep": [
+        "Danh từ + なくして + 〜ない: 努力なくして成功はない",
+        "Danh từ + なくしては + 〜ない (nhấn)"
+      ],
+      "viDu": [
+        {
+          "c": "努力なくして成功はあり得ない。",
+          "d": "どりょく なくして せいこうは ありえない。",
+          "v": "Không có nỗ lực thì không thể có thành công."
+        },
+        {
+          "c": "皆さんの協力なくしては、この計画は実現できなかった。",
+          "d": "みなさんの きょうりょく なくしては、この けいかくは じつげん できなかった。",
+          "v": "Nếu không có sự hợp tác của mọi người thì kế hoạch này đã không thể thành hiện thực."
+        },
+        {
+          "c": "愛なくして人は生きていけない。",
+          "d": "あい なくして ひとは いきていけない。",
+          "v": "Không có tình yêu thương, con người không thể sống nổi."
+        },
+        {
+          "c": "住民の理解なくして、工事を進めることはできない。",
+          "d": "じゅうみんの りかい なくして、こうじを すすめる ことは できない。",
+          "v": "Không có sự thông cảm của người dân thì không thể tiến hành thi công."
+        }
+      ],
+      "luuY": [
+        "Ghép thẳng với danh từ, không có が／を: ✗ 努力がなくして.",
+        "Khác 〜なしに（は）／〜なしでは: nghĩa điều kiện giống nhau, nhưng なくして cứng hơn và chỉ có nghĩa \"thiếu ~ thì không thể\"; 〜なしに còn có nghĩa \"không làm ~ mà (làm luôn)\" như 断りなしに.",
+        "Khác 〜ないことには (N2): ないことには ghép với động từ (やってみないことには分からない) và dùng cả trong hội thoại."
+      ],
+      "soSanh": [
+        "ja-n1-nashi-ni",
+        "ja-n2-nuki-ni-shite",
+        "ja-n2-nai-koto-niwa",
+        "ja-n1-atte-no"
+      ],
+      "tuKhoa": [
+        "nakushite",
+        "nakushite wa",
+        "なくして",
+        "không có thì không thể",
+        "thiếu thì không"
+      ],
+      "quiz": [
+        {
+          "h": "国民の信頼（　）、政治を行うことはできない。",
+          "lc": [
+            "がなくして",
+            "なくして",
+            "ないして",
+            "をなくて"
+          ],
+          "da": 1,
+          "gt": "Danh từ ghép thẳng: 信頼なくして. Thêm が (がなくして) không đúng mẫu; をなくて, ないして không tồn tại."
+        },
+        {
+          "h": "Sau 「〜なくしては」 vế câu thường ở dạng nào?",
+          "lc": [
+            "Rủ rê",
+            "Câu hỏi về giờ giấc",
+            "Phủ định (không thể ~)",
+            "Mệnh lệnh"
+          ],
+          "da": 2,
+          "gt": "なくしては đi với phủ định: 〜できない, 〜あり得ない. Mệnh lệnh, rủ rê hay câu hỏi giờ giấc không dùng với mẫu này."
+        },
+        {
+          "h": "Danh từ nào hợp nhất để đứng trước 「〜なくして成功はない」?",
+          "lc": [
+            "失敗の恐れ",
+            "机の上",
+            "昨日の雨",
+            "日々の努力"
+          ],
+          "da": 3,
+          "gt": "Trước なくして là điều cần có để việc thành: nỗ lực hằng ngày. Nỗi sợ thất bại, cơn mưa hôm qua, mặt bàn không phải điều kiện cần cho thành công."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-nashi-ni",
+      "nhom": "Điều kiện – nhượng bộ",
+      "tieuDe": "〜なしに（は）／〜なしでは",
+      "mau": "N + なしに（は）/ なしでは + 〜ない；N + なしに + V",
+      "nghia": "① không có ~ thì không thể ② không (làm) ~ mà cứ ~",
+      "giaiThich": "Có hai cách dùng. ① N + なしに（は）／なしでは + phủ định: thiếu ~ thì không thể làm được việc sau. ② N + なしに + động từ: làm một việc mà không làm trước điều lẽ ra phải làm (断りなしに, 予告なしに, 許可なしに, 連絡なしに). Dùng được cả trong văn nói lẫn văn viết.",
+      "cachGhep": [
+        "Điều kiện: danh từ + なしに（は）/ なしでは + 〜ない: 辞書なしでは読めない",
+        "Không làm trước ~: danh từ + なしに + động từ: 断りなしに入る",
+        "Động từ: V-る + こと + なしに（は）"
+      ],
+      "viDu": [
+        {
+          "c": "彼は断りなしに私の部屋に入ってきた。",
+          "d": "かれは ことわりなしに わたしの へやに はいってきた。",
+          "v": "Anh ta không xin phép mà cứ thế vào phòng tôi."
+        },
+        {
+          "c": "辞書なしでは、この本は読めない。",
+          "d": "じしょなしでは、この ほんは よめない。",
+          "v": "Không có từ điển thì không đọc nổi cuốn sách này."
+        },
+        {
+          "c": "許可なしに、この建物に入ることはできません。",
+          "d": "きょかなしに、この たてものに はいる ことは できません。",
+          "v": "Không có giấy phép thì không được vào toà nhà này."
+        },
+        {
+          "c": "この話は涙なしには聞けない。",
+          "d": "この はなしは なみだなしには きけない。",
+          "v": "Câu chuyện này không thể nghe mà không rơi nước mắt."
+        }
+      ],
+      "luuY": [
+        "Ghép thẳng với danh từ: 予告なしに (✗ 予告がなしに / ✗ 予告のなしに).",
+        "Khác 〜なくして（は）: なくして chỉ có nghĩa điều kiện và là văn viết cứng; 〜なしに còn nghĩa ② \"không báo/không xin mà làm\" — chỗ này KHÔNG thay bằng なくして được (✗ 断りなくして入ってきた).",
+        "Khác 〜ことなく (N2): ことなく ghép với động từ (休むことなく働く = làm không nghỉ); 〜なしに ghép với danh từ. Khác 〜ずに (N4): ずに ghép với động từ, trung tính."
+      ],
+      "soSanh": [
+        "ja-n1-nakushite",
+        "ja-n2-koto-naku",
+        "ja-n2-nuki-ni-shite",
+        "ja-n4-zu-ni"
+      ],
+      "tuKhoa": [
+        "nashi ni",
+        "nashini",
+        "nashi dewa",
+        "なしに",
+        "なしでは",
+        "không có thì không",
+        "không xin phép mà"
+      ],
+      "quiz": [
+        {
+          "h": "彼は何の連絡も（　）、突然会社を休んだ。",
+          "lc": [
+            "なしに",
+            "ないまでも",
+            "ないものを",
+            "なくして"
+          ],
+          "da": 0,
+          "gt": "\"Không liên lạc gì mà đột nhiên nghỉ\" — không làm điều lẽ ra phải làm ⇒ 連絡もなしに. なくして chỉ dùng cho điều kiện \"thiếu ~ thì không thể\"; ないまでも là \"dù không đến mức\"; ないものを không ghép sau danh từ."
+        },
+        {
+          "h": "Cách ghép nào đúng?",
+          "lc": [
+            "予告のなしに",
+            "予告なしに",
+            "予告しなしに",
+            "予告がなしに"
+          ],
+          "da": 1,
+          "gt": "Danh từ ghép thẳng với なしに: 予告なしに. Thêm が, の hoặc ghép qua thể liên dụng của động từ đều sai."
+        },
+        {
+          "h": "「今の私は、スマホなしでは生活できない」 nghĩa là gì?",
+          "lc": [
+            "Tôi sống mà không cần điện thoại",
+            "Tôi đã vứt điện thoại rồi",
+            "Không có điện thoại thì tôi không sống nổi",
+            "Tôi không dùng điện thoại nên vẫn sống tốt"
+          ],
+          "da": 2,
+          "gt": "N なしでは + phủ định = không có N thì không thể. Câu này nói điện thoại là thứ không thể thiếu, chứ không nói \"sống không cần điện thoại\"."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-ba-koso",
+      "nhom": "Điều kiện – nhượng bộ",
+      "tieuDe": "〜ばこそ",
+      "mau": "V-ば / Aい-ければ / Aな・N + であれば + こそ",
+      "nghia": "chính vì ~ nên mới ~ (nhấn lý do)",
+      "giaiThich": "Nhấn mạnh rằng không phải lý do nào khác mà CHÍNH lý do này mới dẫn tới điều ở vế sau. Thường dùng cho lý do tích cực (lòng tốt, tình thương, điều kiện thuận lợi) để giải thích một hành động dễ bị hiểu lầm, hoặc để bày tỏ biết ơn. Cuối câu hay có のだ. Hơi cổ, trang trọng.",
+      "cachGhep": [
+        "Động từ thể ば + こそ: 思えばこそ, あればこそ",
+        "Tính từ い: 〜ければ + こそ: かわいければこそ",
+        "Tính từ な / danh từ + であれば + こそ: 健康であればこそ"
+      ],
+      "viDu": [
+        {
+          "c": "あなたのことを思えばこそ、厳しく注意するのです。",
+          "d": "あなたの ことを おもえばこそ、きびしく ちゅういするのです。",
+          "v": "Chính vì nghĩ cho em nên tôi mới nhắc nhở nghiêm khắc."
+        },
+        {
+          "c": "健康であればこそ、仕事も遊びも楽しめる。",
+          "d": "けんこうで あればこそ、しごとも あそびも たのしめる。",
+          "v": "Chính nhờ có sức khoẻ mới tận hưởng được cả công việc lẫn vui chơi."
+        },
+        {
+          "c": "家族の支えがあればこそ、ここまで頑張ってこられた。",
+          "d": "かぞくの ささえが あればこそ、ここまで がんばってこられた。",
+          "v": "Chính nhờ có gia đình nâng đỡ mà tôi mới cố gắng được tới hôm nay."
+        },
+        {
+          "c": "子どもがかわいければこそ、親は叱るのだ。",
+          "d": "こどもが かわいければこそ、おやは しかるのだ。",
+          "v": "Chính vì thương con nên bố mẹ mới mắng."
+        }
+      ],
+      "luuY": [
+        "Tuy có hình thức điều kiện (ば) nhưng nghĩa là LÝ DO, không phải \"nếu\".",
+        "Không dùng cho lý do tiêu cực: ✗ 体が弱ければこそ、よく病気になる ⇒ 弱いから.",
+        "Khác 〜からこそ (N2): nghĩa nhấn lý do như nhau, からこそ dùng được với mọi lý do và trong hội thoại; 〜ばこそ cứng hơn và gần như chỉ dùng cho lý do tích cực. Khác 〜てこそ (N2): てこそ là \"phải làm ~ rồi mới ~\" (điều kiện cần)."
+      ],
+      "soSanh": [
+        "ja-n2-kara-koso",
+        "ja-n3-koso",
+        "ja-n2-te-koso",
+        "ja-n3-sae-ba"
+      ],
+      "tuKhoa": [
+        "ba koso",
+        "bakoso",
+        "ばこそ",
+        "chính vì",
+        "nhấn lý do"
+      ],
+      "quiz": [
+        {
+          "h": "君の将来を（　）こそ、あえて反対しているんだ。",
+          "lc": [
+            "考えると",
+            "考えて",
+            "考えたら",
+            "考えれば"
+          ],
+          "da": 3,
+          "gt": "Mẫu nhấn lý do là thể ば + こそ: 考えればこそ. と, たら không ghép với こそ trong mẫu này; 考えてこそ là mẫu khác (\"phải nghĩ rồi mới ~\"), không hợp với vế sau \"dám phản đối\"."
+        },
+        {
+          "h": "「〜ばこそ」 diễn tả quan hệ gì?",
+          "lc": [
+            "Nhấn mạnh lý do: chính vì ~",
+            "Điều kiện giả định: nếu ~ thì",
+            "Nhượng bộ: dù ~ cũng",
+            "Trình tự: sau khi ~"
+          ],
+          "da": 0,
+          "gt": "Dù có hình thức ば, mẫu này nhấn LÝ DO (\"chính vì ~ nên\"). Nó không phải câu điều kiện, nhượng bộ hay trình tự."
+        },
+        {
+          "h": "Câu nào dùng 「〜ばこそ」 tự nhiên?",
+          "lc": [
+            "不注意であればこそ、事故を起こした。",
+            "信頼していればこそ、大事な仕事を任せたのだ。",
+            "雨が降ればこそ、試合は中止になった。",
+            "安ければこそ、すぐ壊れた。"
+          ],
+          "da": 1,
+          "gt": "ばこそ dùng cho lý do tích cực: chính vì tin tưởng nên mới giao việc quan trọng. Mưa – huỷ trận, bất cẩn – tai nạn, rẻ – mau hỏng là lý do tiêu cực hoặc nhân quả đơn thuần, dùng から／ので."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-mono-wo",
+      "nhom": "Điều kiện – nhượng bộ",
+      "tieuDe": "〜ものを",
+      "mau": "thể thường (Aな + な) + ものを",
+      "nghia": "giá mà ~ thì đã… (vậy mà) — trách móc, tiếc nuối",
+      "giaiThich": "Bày tỏ sự bất mãn, tiếc nuối vì thực tế đã không diễn ra như điều lẽ ra nên có. Hay ở dạng 〜ば／〜たら…ものを: \"giá mà ~ thì đã ~, vậy mà\". Có thể đứng giữa câu (nối với thực tế trái ngược) hoặc cuối câu (bỏ lửng). Gần nghĩa với のに nhưng cứng hơn và cảm xúc trách móc mạnh hơn.",
+      "cachGhep": [
+        "〜ば / 〜たら + thể thường + ものを: 言ってくれれば手伝ったものを",
+        "Giữa câu: 〜ものを、(thực tế trái ngược)",
+        "Cố định: 〜ばいいものを (lẽ ra ~ là được, vậy mà)"
+      ],
+      "viDu": [
+        {
+          "c": "一言相談してくれれば、手伝ってあげたものを。",
+          "d": "ひとこと そうだんしてくれれば、てつだってあげた ものを。",
+          "v": "Giá mà anh hỏi tôi một tiếng thì tôi đã giúp rồi."
+        },
+        {
+          "c": "もっと早く病院に行けば助かったものを、彼は我慢しすぎた。",
+          "d": "もっと はやく びょういんに いけば たすかった ものを、かれは がまんしすぎた。",
+          "v": "Giá đi viện sớm hơn thì đã cứu được, vậy mà anh ấy lại cố chịu quá lâu."
+        },
+        {
+          "c": "黙っていればいいものを、彼は余計なことを言ってしまった。",
+          "d": "だまっていれば いい ものを、かれは よけいな ことを いってしまった。",
+          "v": "Lẽ ra cứ im lặng là được, vậy mà anh ta lại buột miệng nói điều thừa."
+        },
+        {
+          "c": "知らせてくれれば迎えに行ったものを、どうして連絡しなかったの。",
+          "d": "しらせてくれれば むかえに いった ものを、どうして れんらく しなかったの。",
+          "v": "Báo cho tôi thì tôi đã ra đón rồi, sao lại không liên lạc?"
+        }
+      ],
+      "luuY": [
+        "Chỉ dùng cho việc ĐÃ không xảy ra như mong muốn (trái thực tế), kèm cảm xúc trách/tiếc; không dùng cho nghịch tiếp trung tính.",
+        "Khác 〜のに (N4): のに dùng rộng cho mọi nghịch lý, trong hội thoại; 〜ものを cứng hơn, thiên về trách người khác đã không làm điều nên làm.",
+        "Khác 〜ものの (N2): ものの là \"tuy ~ nhưng\" trung tính, không có ý tiếc nuối. Khác 〜ばよかった (N3): ばよかった tự nói về mong muốn/hối tiếc, không kéo theo vế thực tế trái ngược."
+      ],
+      "soSanh": [
+        "ja-n4-noni-gyakusetsu",
+        "ja-n3-ba-yokatta",
+        "ja-n2-monono",
+        "ja-n2-mono-nara"
+      ],
+      "tuKhoa": [
+        "mono wo",
+        "monowo",
+        "ものを",
+        "giá mà",
+        "vậy mà",
+        "trách móc",
+        "tiếc nuối"
+      ],
+      "quiz": [
+        {
+          "h": "あと5分早く家を出れば間に合った（　）、寝坊してしまった。",
+          "lc": [
+            "ものの",
+            "ものなら",
+            "ものか",
+            "ものを"
+          ],
+          "da": 3,
+          "gt": "\"Giá ra khỏi nhà sớm 5 phút thì đã kịp, vậy mà lại ngủ quên\" — tiếc về điều trái thực tế ⇒ ものを. ものの là \"tuy ~ nhưng\" cho việc có thật (ở đây thực tế là KHÔNG kịp); ものなら là \"nếu mà có thể\"; ものか là phủ định mạnh \"làm gì có chuyện\"."
+        },
+        {
+          "h": "「〜ものを」 thể hiện cảm xúc gì?",
+          "lc": [
+            "Bất mãn, tiếc nuối vì thực tế không như lẽ ra nên có",
+            "Trung lập, chỉ nêu số liệu",
+            "Vui mừng vì việc đã thành",
+            "Biết ơn người nghe"
+          ],
+          "da": 0,
+          "gt": "ものを dùng để trách móc hoặc tiếc nuối về điều đã không xảy ra. Nó không diễn tả niềm vui, lòng biết ơn hay thông tin trung lập."
+        },
+        {
+          "h": "Câu nào dùng 「〜ものを」 đúng?",
+          "lc": [
+            "安いものを、たくさん買ってください。",
+            "言ってくれれば貸してあげたものを、なぜ黙っていたの。",
+            "彼は学生なものを、毎日大学に通っている。",
+            "明日は晴れるものを、出かけましょう。"
+          ],
+          "da": 1,
+          "gt": "\"Nói ra thì tôi đã cho mượn rồi, sao lại im lặng?\" — trách về điều đã không xảy ra, đúng mẫu. Rủ rê, mô tả trung tính (là sinh viên nên đi học) và lời nhờ mua hàng đều không mang nghĩa tiếc nuối trái thực tế."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-to-wa-ie",
+      "nhom": "Điều kiện – nhượng bộ",
+      "tieuDe": "〜とはいえ",
+      "mau": "thể thường (N / Aな có thể bỏ だ) + とはいえ；đầu câu: とはいえ、…",
+      "nghia": "tuy nói là ~ nhưng (thực tế vẫn) ~",
+      "giaiThich": "Thừa nhận điều ở vế trước là sự thật, nhưng nêu rằng thực tế khác với điều người ta thường suy ra từ đó. Vế sau thường là nhận định, đánh giá của người nói. Là văn viết, trang trọng hơn 〜といっても. Có thể đứng đầu câu như một liên từ.",
+      "cachGhep": [
+        "Danh từ / tính từ な（+ だ）+ とはいえ: 春とはいえ",
+        "Động từ / tính từ い thể thường + とはいえ: 慣れたとはいえ, 忙しいとはいえ",
+        "Đầu câu: …。とはいえ、…"
+      ],
+      "viDu": [
+        {
+          "c": "春とはいえ、朝晩はまだ冷える。",
+          "d": "はるとは いえ、あさばんは まだ ひえる。",
+          "v": "Tuy đã là mùa xuân nhưng sáng tối vẫn còn lạnh."
+        },
+        {
+          "c": "仕事に慣れたとはいえ、まだ分からないことが多い。",
+          "d": "しごとに なれたとは いえ、まだ わからない ことが おおい。",
+          "v": "Tuy đã quen việc nhưng vẫn còn nhiều điều tôi chưa hiểu."
+        },
+        {
+          "c": "いくら忙しいとはいえ、電話の一本くらいはできるはずだ。",
+          "d": "いくら いそがしいとは いえ、でんわの いっぽんくらいは できる はずだ。",
+          "v": "Dù bận đến đâu thì gọi một cuộc điện thoại chắc chắn vẫn làm được."
+        },
+        {
+          "c": "景気は回復しつつある。とはいえ、油断はできない。",
+          "d": "けいきは かいふくしつつ ある。とは いえ、ゆだんは できない。",
+          "v": "Kinh tế đang dần hồi phục. Tuy vậy vẫn không thể chủ quan."
+        }
+      ],
+      "luuY": [
+        "Vế trước là SỰ THẬT được thừa nhận, không phải giả định (khác 〜としても).",
+        "Khác 〜といえども: とはいえ = \"tuy A là thật, nhưng thực tế B\" (đính chính kỳ vọng); 〜といえども = \"ngay cả trường hợp đặc biệt như A cũng không ngoại lệ\", hay đi với nghĩa vụ, cấm đoán.",
+        "Khác 〜といっても (N3): nghĩa gần như nhau, といっても là khẩu ngữ; 〜とはいえ là văn viết. Khác 〜ものの (N2): ものの nối hai sự thật trái nhau, ít tính bình luận hơn."
+      ],
+      "soSanh": [
+        "ja-n1-to-iedomo",
+        "ja-n3-to-ittemo",
+        "ja-n2-monono",
+        "ja-n2-nagara-mo"
+      ],
+      "tuKhoa": [
+        "to wa ie",
+        "towaie",
+        "とはいえ",
+        "tuy nói là",
+        "tuy vậy",
+        "mặc dù"
+      ],
+      "quiz": [
+        {
+          "h": "退院した（　）、まだ無理はできない体だ。",
+          "lc": [
+            "とはいえ",
+            "とあって",
+            "とばかりに",
+            "ときたら"
+          ],
+          "da": 0,
+          "gt": "\"Tuy đã ra viện nhưng cơ thể vẫn chưa gắng sức được\" ⇒ とはいえ. とあって là \"vì là dịp ~\" (thuận chiều), ときたら dùng để chê trách chủ đề, とばかりに là \"như muốn nói rằng\"."
+        },
+        {
+          "h": "Cách ghép nào đúng với danh từ 子ども?",
+          "lc": [
+            "子どものとはいえ",
+            "子どもとはいえ",
+            "子どもにとはいえ",
+            "子どもなとはいえ"
+          ],
+          "da": 1,
+          "gt": "Danh từ ghép thẳng (hoặc thêm だ): 子どもとはいえ. Thêm の, に, な trước とはいえ đều sai."
+        },
+        {
+          "h": "「とはいえ」 đứng đầu câu có nghĩa gì?",
+          "lc": [
+            "Hơn nữa",
+            "Ví dụ như",
+            "Tuy vậy, dù nói thế",
+            "Vì vậy"
+          ],
+          "da": 2,
+          "gt": "Đầu câu, とはいえ là liên từ nghịch tiếp: \"tuy vậy\". Nó không mang nghĩa kết quả, bổ sung hay nêu ví dụ."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-to-iedomo",
+      "nhom": "Điều kiện – nhượng bộ",
+      "tieuDe": "〜といえども",
+      "mau": "N / thể thường + といえども",
+      "nghia": "dù là ~ (trường hợp đặc biệt) đi nữa cũng ~",
+      "giaiThich": "Nêu một người/vật/trường hợp đặc biệt, cực đoan mà tưởng sẽ là ngoại lệ, rồi khẳng định rằng ngay cả thế cũng không ngoại lệ. Vế sau thường là nghĩa vụ, cấm đoán, phán đoán dứt khoát. Là văn viết cứng. Hay đi với たとえ, いかに, いかなる; với số lượng tối thiểu (一日, 一円, 一人) + といえども + phủ định = \"dù chỉ một ~ cũng không\".",
+      "cachGhep": [
+        "Danh từ + といえども: 子どもといえども, 専門家といえども",
+        "Thể thường + といえども: 理由があるといえども",
+        "Số lượng tối thiểu + といえども + 〜ない: 一日といえども無駄にできない"
+      ],
+      "viDu": [
+        {
+          "c": "子どもといえども、うそをつくことは許されない。",
+          "d": "こどもと いえども、うそを つく ことは ゆるされない。",
+          "v": "Dù là trẻ con thì nói dối cũng không được phép."
+        },
+        {
+          "c": "専門家といえども、間違えることはある。",
+          "d": "せんもんかと いえども、まちがえる ことは ある。",
+          "v": "Dù là chuyên gia thì cũng có lúc nhầm."
+        },
+        {
+          "c": "試験が近いので、一日といえども無駄にはできない。",
+          "d": "しけんが ちかいので、いちにちと いえども むだには できない。",
+          "v": "Kỳ thi đã gần nên dù chỉ một ngày cũng không thể lãng phí."
+        },
+        {
+          "c": "いかなる理由があるといえども、約束を破ってはならない。",
+          "d": "いかなる りゆうが あると いえども、やくそくを やぶっては ならない。",
+          "v": "Dù có lý do gì đi nữa cũng không được thất hứa."
+        }
+      ],
+      "luuY": [
+        "Đối tượng đứng trước là trường hợp \"đáng lẽ được châm chước / đáng lẽ khác\": 子ども, 専門家, 親, 国王.",
+        "Khác 〜とはいえ: とはいえ thừa nhận sự thật rồi nêu thực tế khác kỳ vọng (春とはいえ寒い); 〜といえども nhấn \"không có ngoại lệ\" và cứng hơn.",
+        "Khác 〜であれ: であれ là \"bất kể là gì\"; 〜といえども là \"ngay cả trường hợp đặc biệt ấy\". Khác 〜たりとも: たりとも chỉ đi với số lượng tối thiểu (一円たりとも), còn といえども dùng rộng hơn."
+      ],
+      "soSanh": [
+        "ja-n1-to-wa-ie",
+        "ja-n1-de-are",
+        "ja-n1-taritomo",
+        "ja-n2-ni-shitemo"
+      ],
+      "tuKhoa": [
+        "to iedomo",
+        "toiedomo",
+        "といえども",
+        "dù là",
+        "ngay cả",
+        "không ngoại lệ"
+      ],
+      "quiz": [
+        {
+          "h": "国王（　）、法律に従わなければならない。",
+          "lc": [
+            "といえども",
+            "ときたら",
+            "とあって",
+            "とばかりに"
+          ],
+          "da": 0,
+          "gt": "\"Dù là quốc vương cũng phải tuân theo pháp luật\" — không có ngoại lệ ⇒ といえども. ときたら dùng để chê trách, とあって là \"vì là dịp ~\", とばかりに là \"như muốn nói rằng\"."
+        },
+        {
+          "h": "「一円といえども無駄には使えない」 nghĩa là gì?",
+          "lc": [
+            "Không có đồng yên nào để tiêu",
+            "Dù chỉ một yên cũng không được tiêu lãng phí",
+            "Một yên thì tiêu lãng phí cũng được",
+            "Chỉ được tiêu đúng một yên"
+          ],
+          "da": 1,
+          "gt": "Số lượng tối thiểu + といえども + phủ định = \"dù chỉ một ~ cũng không\". Câu không giới hạn việc tiêu đúng một yên, cũng không nói hết tiền."
+        },
+        {
+          "h": "「〜といえども」 thuộc văn phong nào?",
+          "lc": [
+            "Khẩu ngữ của trẻ em",
+            "Tiếng lóng của giới trẻ",
+            "Văn viết cứng, trang trọng",
+            "Chỉ dùng trong tin nhắn thân mật"
+          ],
+          "da": 2,
+          "gt": "といえども là cách nói cứng của văn viết (bài luận, diễn văn, văn bản). Trong hội thoại thân mật người ta dùng 〜でも, 〜といっても."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-to-omoikiya",
+      "nhom": "Điều kiện – nhượng bộ",
+      "tieuDe": "〜と思いきや",
+      "mau": "thể thường（+ か）+ と思いきや",
+      "nghia": "cứ tưởng là ~, ai dè ~",
+      "giaiThich": "Diễn tả người nói (hoặc mọi người) đã dự đoán một đằng nhưng thực tế lại ra kết quả trái ngược, gây bất ngờ. Vế sau là sự việc đã xảy ra thật. Mang giọng kể chuyện nhẹ nhàng, hơi cổ; dùng trong tuỳ bút, bài viết thường, không dùng trong văn bản trang trọng, luận văn.",
+      "cachGhep": [
+        "Thể thường + と思いきや: 晴れると思いきや",
+        "Thể thường + か + と思いきや: 難しいかと思いきや",
+        "Danh từ / tính từ な + だ / だろう + と思いきや: 怒るだろうと思いきや"
+      ],
+      "viDu": [
+        {
+          "c": "今日は晴れると思いきや、午後から大雨になった。",
+          "d": "きょうは はれると おもいきや、ごごから おおあめに なった。",
+          "v": "Cứ tưởng hôm nay nắng, ai dè từ chiều mưa to."
+        },
+        {
+          "c": "試験は難しいかと思いきや、意外に簡単だった。",
+          "d": "しけんは むずかしいかと おもいきや、いがいに かんたんだった。",
+          "v": "Tưởng đề thi khó, hoá ra lại dễ không ngờ."
+        },
+        {
+          "c": "彼は怒るだろうと思いきや、笑って許してくれた。",
+          "d": "かれは おこるだろうと おもいきや、わらって ゆるしてくれた。",
+          "v": "Cứ tưởng anh ấy sẽ nổi giận, ai dè lại cười mà bỏ qua."
+        },
+        {
+          "c": "やっと終わったと思いきや、新しい仕事を頼まれた。",
+          "d": "やっと おわったと おもいきや、あたらしい しごとを たのまれた。",
+          "v": "Tưởng cuối cùng đã xong, nào ngờ lại bị giao việc mới."
+        }
+      ],
+      "luuY": [
+        "Vế sau là việc ĐÃ xảy ra thật, trái với dự đoán; không dùng cho tương lai, ý chí, mệnh lệnh.",
+        "Khác 〜かと思うと／〜かと思ったら (N2): mẫu N2 chủ yếu là \"vừa mới ~ thì đã ~\" (hai việc nối nhau nhanh); 〜と思いきや là \"dự đoán sai\".",
+        "Khác 〜に反して (N2): 予想に反して là cách nói khách quan, dùng được trong văn trang trọng; 〜と思いきや mang giọng kể, không hợp với luận văn."
+      ],
+      "soSanh": [
+        "ja-n2-ka-to-omou-to",
+        "ja-n2-ni-hanshite",
+        "ja-n3-ta-tokoro"
+      ],
+      "tuKhoa": [
+        "to omoikiya",
+        "toomoikiya",
+        "と思いきや",
+        "cứ tưởng",
+        "ai dè",
+        "nào ngờ"
+      ],
+      "quiz": [
+        {
+          "h": "今年の夏は涼しい（　）、8月に入って急に暑くなった。",
+          "lc": [
+            "と思うから",
+            "と思いきや",
+            "と思って",
+            "と思うなら"
+          ],
+          "da": 1,
+          "gt": "\"Cứ tưởng hè năm nay mát, ai dè sang tháng 8 đột nhiên nóng\" ⇒ と思いきや. と思うから là nêu lý do, と思うなら là điều kiện, と思って là \"vì nghĩ rằng ~ nên (làm)\" — đều không diễn tả dự đoán bị thực tế đảo ngược."
+        },
+        {
+          "h": "Sau 「彼が勝つと思いきや、…」 nội dung nào phù hợp?",
+          "lc": [
+            "やはり勝った",
+            "ぜひ応援しましょう",
+            "最後に逆転されて負けてしまった",
+            "勝ってください"
+          ],
+          "da": 2,
+          "gt": "と思いきや dẫn tới kết quả thực tế TRÁI với dự đoán: cuối cùng bị lội ngược dòng và thua. \"Quả nhiên thắng\" là đúng dự đoán; lời rủ, lời nhờ không dùng được."
+        },
+        {
+          "h": "「〜と思いきや」 không hợp với loại văn bản nào?",
+          "lc": [
+            "Bài viết blog",
+            "Lời kể trong tiểu thuyết",
+            "Tuỳ bút, bài kể chuyện",
+            "Luận văn, văn bản trang trọng"
+          ],
+          "da": 3,
+          "gt": "と思いきや mang giọng kể nhẹ nhàng, hơi cổ, hợp với tuỳ bút, truyện, blog. Trong luận văn và văn bản trang trọng người ta dùng 予想に反して."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-nai-made-mo",
+      "nhom": "Điều kiện – nhượng bộ",
+      "tieuDe": "〜ないまでも",
+      "mau": "V-ない + までも",
+      "nghia": "dù không đến mức ~ thì (ít ra) cũng ~",
+      "giaiThich": "Nêu một mức cao/lý tưởng và thừa nhận là không đạt tới mức đó, nhưng nói rằng ít nhất cũng đạt (hoặc nên đạt) mức thấp hơn một chút ở vế sau. Vế sau hay có せめて, 少なくとも và dùng được ý chí, mong muốn, べきだ, てほしい.",
+      "cachGhep": [
+        "Động từ thể ない + までも: 毎日とは言わないまでも",
+        "Hay gặp: 〜とは言わないまでも / 〜とは言えないまでも"
+      ],
+      "viDu": [
+        {
+          "c": "毎日とは言わないまでも、週に一度は運動したほうがいい。",
+          "d": "まいにちとは いわないまでも、しゅうに いちどは うんどうした ほうが いい。",
+          "v": "Không nói là hằng ngày, nhưng ít ra mỗi tuần cũng nên vận động một lần."
+        },
+        {
+          "c": "完璧にはできないまでも、できる限りの努力はしたい。",
+          "d": "かんぺきには できないまでも、できる かぎりの どりょくは したい。",
+          "v": "Dù không làm được hoàn hảo, tôi vẫn muốn cố gắng hết mức có thể."
+        },
+        {
+          "c": "優勝はできないまでも、せめて入賞はしたい。",
+          "d": "ゆうしょうは できないまでも、せめて にゅうしょうは したい。",
+          "v": "Dù không vô địch được thì ít ra tôi cũng muốn đoạt giải."
+        },
+        {
+          "c": "見舞いに行けないまでも、電話ぐらいはするべきだ。",
+          "d": "みまいに いけないまでも、でんわぐらいは する べきだ。",
+          "v": "Dù không đi thăm bệnh được thì ít nhất cũng nên gọi điện."
+        }
+      ],
+      "luuY": [
+        "Thứ tự mức độ: vế trước CAO hơn, vế sau THẤP hơn. Người Việt hay đảo: ✗ 電話しないまでも、見舞いに行くべきだ.",
+        "Khác 〜までもない (N1): までもない là \"không cần phải ~\" (việc quá hiển nhiên); 〜ないまでも là \"không tới mức ~ nhưng ít ra\".",
+        "Khác 〜ないことはない (N2): ないことはない là \"không phải là không ~\" (khẳng định dè dặt), không nêu hai mức cao–thấp."
+      ],
+      "soSanh": [
+        "ja-n1-made-mo-nai",
+        "ja-n2-nai-koto-wa-nai"
+      ],
+      "tuKhoa": [
+        "nai made mo",
+        "naimademo",
+        "ないまでも",
+        "dù không đến mức",
+        "ít ra cũng"
+      ],
+      "quiz": [
+        {
+          "h": "プロにはなれ（　）、趣味として音楽を続けていきたい。",
+          "lc": [
+            "なくまでも",
+            "ないほども",
+            "ないまでも",
+            "ないまでで"
+          ],
+          "da": 2,
+          "gt": "Mẫu là V-ない + までも: なれないまでも (dù không thành dân chuyên được). ないまでで, なくまでも, ないほども đều không phải dạng đúng."
+        },
+        {
+          "h": "Câu nào sắp xếp mức độ đúng với 「〜ないまでも」?",
+          "lc": [
+            "一円も出さないまでも、全額払ってほしい。",
+            "電話もしないまでも、毎日会いに行くべきだ。",
+            "全部は無理だと言わないまでも、何もしないでほしい。",
+            "全額は払えないまでも、せめて半分は払ってほしい。"
+          ],
+          "da": 3,
+          "gt": "Vế trước là mức cao (trả toàn bộ), vế sau là mức thấp hơn (ít ra một nửa). Các câu còn lại đặt mức thấp trước, mức cao sau hoặc lô-gích mâu thuẫn."
+        },
+        {
+          "h": "Từ nào hay đi kèm ở vế sau của 「〜ないまでも」?",
+          "lc": [
+            "せめて",
+            "たとえ",
+            "いったい",
+            "まさか"
+          ],
+          "da": 0,
+          "gt": "Vế sau nêu mức tối thiểu nên hay có せめて, 少なくとも (ít ra). まさか (lẽ nào), たとえ (cho dù), いったい (rốt cuộc) không hợp."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-dewa-arumai-shi",
+      "nhom": "Điều kiện – nhượng bộ",
+      "tieuDe": "〜ではあるまいし／〜じゃあるまいし",
+      "mau": "N + では / じゃ + あるまいし；V thể thường + わけ / の + では / じゃ + あるまいし",
+      "nghia": "có phải là ~ đâu mà (nên…)",
+      "giaiThich": "Nêu một điều rõ ràng KHÔNG đúng với thực tế làm căn cứ, để từ đó trách nhẹ, khuyên bảo, ra lệnh hoặc nêu phán đoán: \"đâu phải ~, vậy nên…\". Là khẩu ngữ (じゃあるまいし thân mật hơn), không dùng trong văn bản trang trọng. Vế sau thường là lời khuyên, mệnh lệnh, trách móc, nhận định của người nói.",
+      "cachGhep": [
+        "Danh từ + では / じゃ + あるまいし: 子どもじゃあるまいし",
+        "Động từ thể thường + わけ + では / じゃ + あるまいし: 初めて会うわけじゃあるまいし",
+        "Động từ thể thường + の + では / じゃ + あるまいし: 旅行に行くのではあるまいし"
+      ],
+      "viDu": [
+        {
+          "c": "子どもじゃあるまいし、自分のことは自分でしなさい。",
+          "d": "こどもじゃ あるまいし、じぶんの ことは じぶんで しなさい。",
+          "v": "Có phải trẻ con đâu, việc của mình thì tự làm đi."
+        },
+        {
+          "c": "神様ではあるまいし、未来のことなど分かるはずがない。",
+          "d": "かみさまでは あるまいし、みらいの ことなど わかる はずが ない。",
+          "v": "Có phải thần thánh đâu mà biết được chuyện tương lai."
+        },
+        {
+          "c": "初めて会うわけじゃあるまいし、そんなに緊張しなくてもいいよ。",
+          "d": "はじめて あう わけじゃ あるまいし、そんなに きんちょうしなくても いいよ。",
+          "v": "Có phải lần đầu gặp đâu, không cần căng thẳng thế."
+        },
+        {
+          "c": "旅行に行くのではあるまいし、そんなに大きなかばんは要らないだろう。",
+          "d": "りょこうに いくのでは あるまいし、そんなに おおきな かばんは いらないだろう。",
+          "v": "Có phải đi du lịch đâu, chắc không cần cái túi to thế."
+        }
+      ],
+      "luuY": [
+        "Điều đứng trước là điều HIỂN NHIÊN không đúng (người nghe đâu phải trẻ con); không dùng cho điều chưa rõ đúng sai.",
+        "Động từ không ghép trực tiếp: phải qua わけ／の (✗ 行くではあるまいし).",
+        "Khác 〜ならいざしらず: ならいざしらず là \"nếu là A thì còn hiểu được, chứ (thực tế là B) thì…\" — nhắc tới cả hai đối tượng; 〜ではあるまいし chỉ nêu điều không đúng rồi đưa lời khuyên/trách. Khác 〜わけではない (N3): chỉ phủ định một phần, không kéo theo lời trách."
+      ],
+      "soSanh": [
+        "ja-n2-mai",
+        "ja-n1-nara-iza-shirazu",
+        "ja-n3-wake-dewa-nai"
+      ],
+      "tuKhoa": [
+        "dewa arumai shi",
+        "dewaarumaishi",
+        "ja arumai shi",
+        "ではあるまいし",
+        "じゃあるまいし",
+        "có phải đâu mà"
+      ],
+      "quiz": [
+        {
+          "h": "学生（　）、そんな幼稚な言い訳は通用しないよ。",
+          "lc": [
+            "ならでは",
+            "じゃあるまいし",
+            "ときたら",
+            "とあって"
+          ],
+          "da": 1,
+          "gt": "\"Có phải học sinh đâu mà lý do ấu trĩ ấy được chấp nhận\" ⇒ じゃあるまいし. ときたら dùng để chê trách một chủ đề gần gũi (không tạo nghĩa \"đâu phải\"), とあって là \"vì là dịp ~\", ならでは là lời khen nét đặc sắc."
+        },
+        {
+          "h": "Cách ghép nào đúng với động từ?",
+          "lc": [
+            "遠くへ行くではあるまいし",
+            "遠くへ行きではあるまいし",
+            "遠くへ行くわけではあるまいし",
+            "遠くへ行ってではあるまいし"
+          ],
+          "da": 2,
+          "gt": "Động từ phải qua わけ hoặc の: 行くわけではあるまいし. Ghép thẳng thể từ điển, thể て hay thể liên dụng với ではあるまいし đều sai."
+        },
+        {
+          "h": "「〜じゃあるまいし」 thường dùng trong trường hợp nào?",
+          "lc": [
+            "Thông báo chính thức của công ty",
+            "Văn bản hợp đồng",
+            "Luận văn khoa học",
+            "Hội thoại, khi trách nhẹ hoặc khuyên bảo"
+          ],
+          "da": 3,
+          "gt": "じゃあるまいし là khẩu ngữ, dùng khi nói chuyện để trách nhẹ, khuyên nhủ. Nó không hợp với hợp đồng, luận văn hay thông báo chính thức."
+        }
+      ]
+    }
+  ]
+}

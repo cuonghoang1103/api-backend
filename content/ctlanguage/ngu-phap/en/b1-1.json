@@ -54,33 +54,33 @@
           "h": "She ___ her homework, so she can go out now.",
           "lc": [
             "finishes",
+            "have finished",
             "has finished",
-            "is finishing",
-            "have finished"
+            "is finishing"
           ],
-          "da": 1,
+          "da": 2,
           "gt": "Việc đã xong và kết quả còn ở hiện tại; chủ ngữ she đi với has + V3."
         },
         {
           "h": "Have you ever ___ a horse?",
           "lc": [
-            "riding",
+            "ride",
             "rode",
-            "ridden",
-            "ride"
+            "riding",
+            "ridden"
           ],
-          "da": 2,
+          "da": 3,
           "gt": "Sau have phải là V3; V3 của ride là ridden (rode là V2)."
         },
         {
           "h": "Câu nào đúng?",
           "lc": [
-            "I has seen that movie twice.",
-            "I have seen that movie last night.",
             "I have seen that movie twice.",
-            "I have saw that movie twice."
+            "I have saw that movie twice.",
+            "I have seen that movie last night.",
+            "I has seen that movie twice."
           ],
-          "da": 2,
+          "da": 0,
           "gt": "Hiện tại hoàn thành không đi với 'last night'; saw là V2; I đi với have."
         }
       ]
@@ -137,33 +137,33 @@
           "h": "He has worked here ___ three years.",
           "lc": [
             "since",
+            "ago",
             "during",
-            "for",
-            "ago"
+            "for"
           ],
-          "da": 2,
+          "da": 3,
           "gt": "'three years' là một khoảng thời gian nên dùng for."
         },
         {
           "h": "We have lived here ___ 2019.",
           "lc": [
-            "for",
+            "since",
             "in",
-            "from",
-            "since"
+            "for",
+            "from"
           ],
-          "da": 3,
+          "da": 0,
           "gt": "2019 là mốc bắt đầu nên dùng since."
         },
         {
           "h": "Câu nào đúng?",
           "lc": [
-            "I live here since 2020.",
             "I have lived here for 2020.",
-            "I am living here since 2020.",
-            "I have lived here since 2020."
+            "I have lived here since 2020.",
+            "I live here since 2020.",
+            "I am living here since 2020."
           ],
-          "da": 3,
+          "da": 1,
           "gt": "Việc kéo dài từ 2020 tới nay dùng hiện tại hoàn thành + since + mốc thời gian."
         }
       ]
@@ -217,34 +217,34 @@
         {
           "h": "I ___ my wallet yesterday.",
           "lc": [
-            "lost",
-            "have lost",
             "lose",
+            "have lost",
+            "lost",
             "has lost"
           ],
-          "da": 0,
+          "da": 2,
           "gt": "'yesterday' là thời điểm quá khứ đã xác định nên dùng quá khứ đơn."
         },
         {
           "h": "She ___ in three different countries so far.",
           "lc": [
-            "has lived",
             "lived",
             "was living",
-            "lives"
+            "lives",
+            "has lived"
           ],
-          "da": 0,
+          "da": 3,
           "gt": "'so far' (tính tới giờ) đi với hiện tại hoàn thành."
         },
         {
           "h": "When ___ this phone?",
           "lc": [
+            "did you buy",
             "have you bought",
-            "do you bought",
             "has you bought",
-            "did you buy"
+            "do you bought"
           ],
-          "da": 3,
+          "da": 0,
           "gt": "Hỏi thời điểm với When thì dùng quá khứ đơn: did + S + V nguyên mẫu."
         }
       ]
@@ -297,34 +297,34 @@
         {
           "h": "She ___ since 6 a.m., so she's very tired.",
           "lc": [
-            "has been working",
+            "works",
             "is working",
-            "was working",
-            "works"
+            "has been working",
+            "was working"
           ],
-          "da": 0,
+          "da": 2,
           "gt": "Hành động kéo dài từ 6 giờ sáng tới giờ (since) dùng has been + V-ing."
         },
         {
           "h": "How long ___ English?",
           "lc": [
-            "have you been learning",
-            "do you learn",
+            "did you learning",
             "are you learning",
-            "did you learning"
+            "do you learn",
+            "have you been learning"
           ],
-          "da": 0,
+          "da": 3,
           "gt": "How long + việc kéo dài tới hiện tại ⇒ have you been + V-ing."
         },
         {
           "h": "Câu nào đúng?",
           "lc": [
-            "I am knowing him for years.",
+            "I have known him for years.",
             "I have been knowing him for years.",
-            "I know him since years.",
-            "I have known him for years."
+            "I am knowing him for years.",
+            "I know him since years."
           ],
-          "da": 3,
+          "da": 0,
           "gt": "know là động từ chỉ trạng thái nên không dùng tiếp diễn; dùng have known + for."
         }
       ]
@@ -378,19 +378,19 @@
           "h": "I ___ three emails this morning.",
           "lc": [
             "have been writing",
+            "write",
             "am writing",
-            "have written",
-            "write"
+            "have written"
           ],
-          "da": 2,
+          "da": 3,
           "gt": "Có số lượng đã hoàn thành (three emails) nên dùng dạng đơn have written."
         },
         {
           "h": "She ___ that book for two weeks, and she still hasn't finished it.",
           "lc": [
             "has been reading",
-            "reads",
             "is read",
+            "reads",
             "has read"
           ],
           "da": 0,
@@ -399,12 +399,12 @@
         {
           "h": "How many pages ___ so far?",
           "lc": [
+            "do you read",
             "have you read",
             "are you reading",
-            "have you been reading",
-            "do you read"
+            "have you been reading"
           ],
-          "da": 0,
+          "da": 1,
           "gt": "Hỏi số lượng (How many) tính tới giờ ⇒ hiện tại hoàn thành đơn."
         }
       ]
@@ -462,32 +462,32 @@
           "h": "When we arrived at the station, the train ___.",
           "lc": [
             "has already left",
-            "had already left",
+            "is already leaving",
             "already leaves",
-            "is already leaving"
+            "had already left"
           ],
-          "da": 1,
+          "da": 3,
           "gt": "Tàu chạy trước khi chúng tôi đến (đều ở quá khứ) ⇒ had + V3."
         },
         {
           "h": "She didn't want to see the movie because she ___ it before.",
           "lc": [
-            "has seen",
-            "sees",
             "had seen",
-            "was seeing"
+            "has seen",
+            "was seeing",
+            "sees"
           ],
-          "da": 2,
+          "da": 0,
           "gt": "Việc xem phim xảy ra trước một thời điểm quá khứ ⇒ had seen."
         },
         {
           "h": "Câu nào cho biết Nam ăn tối XONG TRƯỚC khi Lan đến?",
           "lc": [
             "When Lan arrived, Nam was having dinner.",
-            "When Lan arrived, Nam had had dinner.",
-            "When Lan arrived, Nam had dinner."
+            "When Lan arrived, Nam had dinner.",
+            "When Lan arrived, Nam had had dinner."
           ],
-          "da": 1,
+          "da": 2,
           "gt": "had had = had + V3 của have: việc ăn đã xong trước khi Lan đến. Hai câu kia là ăn sau hoặc đang ăn."
         }
       ]
@@ -540,12 +540,12 @@
         {
           "h": "I ___ TV when the phone rang.",
           "lc": [
-            "am watching",
             "had watched",
             "watch",
-            "was watching"
+            "was watching",
+            "am watching"
           ],
-          "da": 3,
+          "da": 2,
           "gt": "Hành động đang diễn ra thì bị cắt ngang ⇒ quá khứ tiếp diễn."
         },
         {
@@ -553,21 +553,21 @@
           "lc": [
             "takes off",
             "was taking off",
-            "took off",
-            "had taken off"
+            "had taken off",
+            "took off"
           ],
-          "da": 2,
+          "da": 3,
           "gt": "Chuỗi hành động nối tiếp nhau trong quá khứ đều dùng quá khứ đơn."
         },
         {
           "h": "When I got to the party, Tom wasn't there. He ___ home.",
           "lc": [
-            "goes",
+            "had gone",
             "has gone",
-            "is going",
-            "had gone"
+            "goes",
+            "is going"
           ],
-          "da": 3,
+          "da": 0,
           "gt": "Tom về trước khi tôi đến (mốc quá khứ) ⇒ quá khứ hoàn thành had gone."
         }
       ]
@@ -623,8 +623,8 @@
           "lc": [
             "used to",
             "was used to",
-            "would",
-            "use to"
+            "use to",
+            "would"
           ],
           "da": 0,
           "gt": "have (có) là trạng thái nên không dùng would; dạng khẳng định là used to."
@@ -632,23 +632,23 @@
         {
           "h": "Did you ___ play soccer after school?",
           "lc": [
+            "using to",
             "use to",
             "used to",
-            "would",
-            "using to"
+            "would"
           ],
-          "da": 0,
+          "da": 1,
           "gt": "Sau Did phải dùng dạng nguyên mẫu: use to."
         },
         {
           "h": "Câu nào SAI?",
           "lc": [
-            "We used to live in Hue.",
-            "He would be very shy as a child.",
             "She didn't use to like coffee.",
-            "Every summer we would visit my grandparents."
+            "Every summer we would visit my grandparents.",
+            "He would be very shy as a child.",
+            "We used to live in Hue."
           ],
-          "da": 1,
+          "da": 2,
           "gt": "be shy là trạng thái nên không dùng would chỉ thói quen; phải nói 'He used to be very shy'."
         }
       ]
@@ -701,12 +701,12 @@
         {
           "h": "She ___ live in Hanoi, but now she lives in Da Nang.",
           "lc": [
-            "used to",
-            "was used to",
             "gets used to",
-            "is used to"
+            "was used to",
+            "is used to",
+            "used to"
           ],
-          "da": 0,
+          "da": 3,
           "gt": "Trạng thái trong quá khứ nay đã đổi: used to + V nguyên mẫu."
         },
         {
@@ -723,12 +723,12 @@
         {
           "h": "It took me a month to ___ the cold weather.",
           "lc": [
-            "used to",
-            "be used",
+            "getting used to",
             "get used to",
-            "getting used to"
+            "used to",
+            "be used"
           ],
-          "da": 2,
+          "da": 1,
           "gt": "Sau 'to' dùng động từ nguyên mẫu: get used to + danh từ (dần quen với)."
         }
       ]
@@ -780,34 +780,34 @@
         {
           "h": "This time tomorrow, I ___ on the beach.",
           "lc": [
-            "am lie",
-            "will lying",
+            "will be lying",
             "lie",
-            "will be lying"
+            "am lie",
+            "will lying"
           ],
-          "da": 3,
+          "da": 0,
           "gt": "Hành động đang diễn ra tại một thời điểm tương lai: will be + V-ing."
         },
         {
           "h": "Don't call at 8. We ___ dinner then.",
           "lc": [
-            "will having",
             "had",
+            "will be having",
             "has",
-            "will be having"
+            "will having"
           ],
-          "da": 3,
+          "da": 1,
           "gt": "Lúc 8 giờ (tương lai) việc ăn tối đang diễn ra ⇒ will be having."
         },
         {
           "h": "Câu nào đúng?",
           "lc": [
-            "At 10 a.m. tomorrow she will be taking her exam.",
+            "At 10 a.m. tomorrow she will be take her exam.",
             "I will be knowing the answer tomorrow.",
-            "She will taking her exam tomorrow.",
-            "At 10 a.m. tomorrow she will be take her exam."
+            "At 10 a.m. tomorrow she will be taking her exam.",
+            "She will taking her exam tomorrow."
           ],
-          "da": 0,
+          "da": 2,
           "gt": "Cấu trúc đúng là will be + V-ing; know không dùng dạng tiếp diễn."
         }
       ]
@@ -862,8 +862,8 @@
         {
           "h": "Look at those black clouds! It ___ rain.",
           "lc": [
-            "is",
             "goes to",
+            "is",
             "is going to",
             "going"
           ],
@@ -873,20 +873,20 @@
         {
           "h": "A: The phone is ringing. B: OK, I ___ it.",
           "lc": [
+            "get",
             "am getting",
-            "'ll get",
             "am going to get",
-            "get"
+            "'ll get"
           ],
-          "da": 1,
+          "da": 3,
           "gt": "Quyết định ngay lúc nói dùng will ('ll)."
         },
         {
           "h": "Thì nào thường dùng cho lịch tàu xe, thời khoá biểu trong tương lai?",
           "lc": [
-            "Quá khứ đơn",
+            "Hiện tại hoàn thành",
             "Hiện tại đơn (The bus leaves at 8.)",
-            "Hiện tại hoàn thành"
+            "Quá khứ đơn"
           ],
           "da": 1,
           "gt": "Lịch trình cố định dùng hiện tại đơn dù nói về tương lai."
@@ -941,34 +941,34 @@
         {
           "h": "I'll call you when I ___ home.",
           "lc": [
+            "would get",
             "get",
             "will get",
-            "am going to get",
-            "would get"
+            "am going to get"
           ],
-          "da": 0,
+          "da": 1,
           "gt": "Sau when nói về tương lai dùng hiện tại đơn, không dùng will."
         },
         {
           "h": "We won't start until everyone ___ here.",
           "lc": [
             "be",
-            "would be",
             "will be",
-            "is"
+            "is",
+            "would be"
           ],
-          "da": 3,
+          "da": 2,
           "gt": "Sau until dùng hiện tại đơn: everyone is."
         },
         {
           "h": "As soon as she ___, we'll have dinner.",
           "lc": [
             "is going to arrive",
-            "arrives",
+            "will arrive",
             "arrived",
-            "will arrive"
+            "arrives"
           ],
-          "da": 1,
+          "da": 3,
           "gt": "Sau as soon as dùng hiện tại đơn (she arrives) dù nói về tương lai."
         }
       ]
@@ -1025,8 +1025,8 @@
         {
           "h": "If it ___ tomorrow, we'll stay home.",
           "lc": [
-            "will rain",
             "rained",
+            "will rain",
             "rains",
             "would rain"
           ],
@@ -1036,23 +1036,23 @@
         {
           "h": "You'll miss the bus unless you ___ now.",
           "lc": [
-            "leave",
-            "don't leave",
+            "won't leave",
             "will leave",
-            "won't leave"
+            "don't leave",
+            "leave"
           ],
-          "da": 0,
+          "da": 3,
           "gt": "unless = if not, nên động từ theo sau ở dạng khẳng định, hiện tại đơn."
         },
         {
           "h": "If you study hard, you ___ the exam.",
           "lc": [
-            "would passed",
-            "passed",
             "will pass",
-            "passing"
+            "passing",
+            "would passed",
+            "passed"
           ],
-          "da": 2,
+          "da": 0,
           "gt": "Mệnh đề chính của điều kiện loại 1 dùng will + V nguyên mẫu."
         }
       ]
@@ -1108,23 +1108,23 @@
         {
           "h": "What would you do if you ___ a ghost?",
           "lc": [
-            "will see",
             "would see",
             "see",
-            "saw"
+            "saw",
+            "will see"
           ],
-          "da": 3,
+          "da": 2,
           "gt": "Mệnh đề if của điều kiện loại 2 dùng quá khứ đơn (saw)."
         },
         {
           "h": "If I ___ a lot of money, I would travel the world.",
           "lc": [
-            "had",
-            "will have",
             "would have",
-            "have"
+            "have",
+            "will have",
+            "had"
           ],
-          "da": 0,
+          "da": 3,
           "gt": "Giả định trái với hiện tại: if + quá khứ đơn (had)."
         },
         {
@@ -1188,33 +1188,33 @@
         {
           "h": "I've got the tickets. If we ___ now, we'll get there on time.",
           "lc": [
-            "leave",
             "left",
-            "will leave",
-            "would leave"
+            "leave",
+            "would leave",
+            "will leave"
           ],
-          "da": 0,
+          "da": 1,
           "gt": "Mệnh đề chính dùng will ⇒ loại 1, mệnh đề if dùng hiện tại đơn."
         },
         {
           "h": "I don't have a car. If I ___ one, I'd drive you home.",
           "lc": [
+            "would have",
             "will have",
             "had",
-            "would have",
             "have"
           ],
-          "da": 1,
+          "da": 2,
           "gt": "Trái với thực tế (không có xe) và mệnh đề chính dùng would ⇒ if + quá khứ đơn."
         },
         {
           "h": "Câu nào cho thấy người nói nghĩ việc trúng giải là KHÓ xảy ra?",
           "lc": [
-            "If I won, I'd buy a house.",
+            "When I win, I'll buy a house.",
             "If I win, I'll buy a house.",
-            "When I win, I'll buy a house."
+            "If I won, I'd buy a house."
           ],
-          "da": 0,
+          "da": 2,
           "gt": "Loại 2 (won… would) dùng cho điều người nói coi là khó xảy ra."
         }
       ]
@@ -1269,34 +1269,34 @@
         {
           "h": "She wishes she ___ speak French.",
           "lc": [
-            "will",
             "could",
             "may",
-            "can"
+            "can",
+            "will"
           ],
-          "da": 1,
+          "da": 0,
           "gt": "Ước về khả năng ở hiện tại: wish + could + V."
         },
         {
           "h": "I wish I ___ taller.",
           "lc": [
+            "will be",
             "were",
             "be",
-            "will be",
             "am"
           ],
-          "da": 0,
+          "da": 1,
           "gt": "Sau wish, to be lùi về quá khứ: were."
         },
         {
           "h": "'I wish I had a car' cho biết điều gì?",
           "lc": [
-            "Hiện tại tôi không có xe và tiếc về điều đó.",
             "Trước đây tôi từng có xe.",
-            "Tôi sắp mua xe.",
-            "Tôi đang có xe."
+            "Tôi đang có xe.",
+            "Hiện tại tôi không có xe và tiếc về điều đó.",
+            "Tôi sắp mua xe."
           ],
-          "da": 0,
+          "da": 2,
           "gt": "wish + quá khứ đơn diễn tả điều trái với thực tế hiện tại."
         }
       ]
@@ -1350,33 +1350,33 @@
           "h": "I'd rather ___ at home tonight.",
           "lc": [
             "stayed",
+            "staying",
             "stay",
-            "to stay",
-            "staying"
+            "to stay"
           ],
-          "da": 1,
+          "da": 2,
           "gt": "would rather + động từ nguyên mẫu không to."
         },
         {
           "h": "I prefer tea ___ coffee.",
           "lc": [
-            "to",
             "than",
             "from",
-            "with"
+            "with",
+            "to"
           ],
-          "da": 0,
+          "da": 3,
           "gt": "Cấu trúc là prefer A to B."
         },
         {
           "h": "I'd rather you ___ in here.",
           "lc": [
-            "not smoke",
-            "don't smoke",
             "didn't smoke",
-            "won't smoke"
+            "won't smoke",
+            "don't smoke",
+            "not smoke"
           ],
-          "da": 2,
+          "da": 0,
           "gt": "would rather + chủ ngữ khác + quá khứ đơn (didn't smoke)."
         }
       ]
@@ -1426,8 +1426,8 @@
           "h": "It's time we ___ home.",
           "lc": [
             "will go",
-            "are going",
             "gone",
+            "are going",
             "went"
           ],
           "da": 3,
@@ -1448,11 +1448,11 @@
           "h": "It's high time you ___ a job.",
           "lc": [
             "to find",
+            "found",
             "will find",
-            "finding",
-            "found"
+            "finding"
           ],
-          "da": 3,
+          "da": 1,
           "gt": "It's high time + chủ ngữ + quá khứ đơn (found)."
         }
       ]

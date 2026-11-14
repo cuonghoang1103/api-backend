@@ -1,0 +1,1312 @@
+{
+  "nn": "ja",
+  "cap": "N1",
+  "diem": [
+    {
+      "id": "ja-n1-ga-hayai-ka",
+      "nhom": "Thời điểm – trình tự",
+      "tieuDe": "〜が早いか",
+      "mau": "V-る + が早いか",
+      "nghia": "vừa ~ xong là lập tức ~ (gần như cùng lúc)",
+      "giaiThich": "Diễn tả hành động sau xảy ra gần như đồng thời với hành động trước, nhanh đến mức không rõ cái nào trước. Là văn viết, dùng để thuật lại việc ĐÃ xảy ra trong thực tế, thường có sắc thái \"nhanh đến bất ngờ\". Vế sau không dùng ý chí, mệnh lệnh, phủ định hay việc chưa xảy ra. Hai vế có thể khác chủ ngữ.",
+      "cachGhep": [
+        "Động từ thể từ điển + が早いか: 鳴るが早いか",
+        "Cũng gặp V-た + が早いか (ít hơn): 聞いたが早いか"
+      ],
+      "viDu": [
+        {
+          "c": "ベルが鳴るが早いか、生徒たちは教室を飛び出した。",
+          "d": "ベルが なるが はやいか、せいとたちは きょうしつを とびだした。",
+          "v": "Chuông vừa reo là đám học sinh lao ngay ra khỏi lớp."
+        },
+        {
+          "c": "彼は席に着くが早いか、弁当を食べ始めた。",
+          "d": "かれは せきに つくが はやいか、べんとうを たべはじめた。",
+          "v": "Anh ấy vừa ngồi vào chỗ là bắt đầu ăn cơm hộp ngay."
+        },
+        {
+          "c": "店が開くが早いか、客がどっと押し寄せた。",
+          "d": "みせが あくが はやいか、きゃくが どっと おしよせた。",
+          "v": "Cửa hàng vừa mở là khách ùa vào."
+        },
+        {
+          "c": "子どもは母親の姿を見るが早いか、駆け寄っていった。",
+          "d": "こどもは ははおやの すがたを みるが はやいか、かけよっていった。",
+          "v": "Đứa bé vừa thấy bóng mẹ là chạy ào tới."
+        }
+      ],
+      "luuY": [
+        "Chỉ dùng kể việc đã xảy ra: ✗ 家に帰るが早いか、宿題をしなさい (mệnh lệnh) / ✗ 着くが早いか、電話するつもりだ (ý chí).",
+        "Khác 〜なり: 〜なり bắt buộc hai vế cùng chủ ngữ, còn 〜が早いか và 〜や否や thì khác chủ ngữ cũng được.",
+        "Khác 〜たとたん（に） (N3): たとたん dùng được cả trong hội thoại, ghép với V-た; が早いか là văn viết, ghép với V-る và nhấn tốc độ của hành động sau."
+      ],
+      "soSanh": [
+        "ja-n1-ya-ina-ya",
+        "ja-n1-nari",
+        "ja-n3-ta-totan",
+        "ja-n2-ka-nai-ka-no-uchi-ni"
+      ],
+      "tuKhoa": [
+        "ga hayai ka",
+        "gahayaika",
+        "が早いか",
+        "vừa mới",
+        "lập tức",
+        "ngay khi"
+      ],
+      "quiz": [
+        {
+          "h": "信号が青に（　）が早いか、車は一斉に走り出した。",
+          "lc": [
+            "変わり",
+            "変わろう",
+            "変わって",
+            "変わる"
+          ],
+          "da": 3,
+          "gt": "〜が早いか ghép với động từ thể từ điển: 変わるが早いか. Thể て, thể liên dụng (変わり) và thể ý chí (変わろう) không đứng trước が早いか."
+        },
+        {
+          "h": "Câu nào dùng 「〜が早いか」 đúng?",
+          "lc": [
+            "彼は電話を切るが早いか、部屋を出ていった。",
+            "家に帰るが早いか、すぐ宿題をしなさい。",
+            "駅に着くが早いか、電話しようと思う。",
+            "明日、仕事が終わるが早いか、飲みに行くつもりだ。"
+          ],
+          "da": 0,
+          "gt": "〜が早いか chỉ thuật lại việc đã xảy ra thật: \"vừa cúp máy là anh ấy ra khỏi phòng\". Các câu có mệnh lệnh (しなさい), ý chí (しようと思う) hay dự định tương lai (つもりだ) đều không dùng được với mẫu này."
+        },
+        {
+          "h": "「〜が早いか」 diễn tả điều gì?",
+          "lc": [
+            "Làm việc trước nhanh thì tốt hơn",
+            "Hai việc xảy ra gần như cùng lúc, việc sau đến rất nhanh",
+            "Không biết việc nào sớm hơn nên phải hỏi lại",
+            "Việc trước xảy ra sớm hơn dự định"
+          ],
+          "da": 1,
+          "gt": "が早いか nghĩa là vừa làm việc trước xong thì việc sau xảy ra ngay, gần như đồng thời. Nó không mang nghĩa \"sớm hơn dự định\" hay lời khuyên \"nên làm nhanh\"."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-ya-ina-ya",
+      "nhom": "Thời điểm – trình tự",
+      "tieuDe": "〜や否や／〜や",
+      "mau": "V-る + や否や / V-る + や",
+      "nghia": "vừa ~ thì ngay lập tức ~ (văn viết)",
+      "giaiThich": "Diễn tả ngay sau hành động trước (hoặc gần như cùng lúc) thì việc sau xảy ra, thường là việc xảy ra như một phản ứng trước việc đầu. Là văn viết trang trọng, hay gặp trong báo chí, tiểu thuyết; 〜や là dạng rút gọn, còn cứng hơn. Chỉ thuật lại việc đã xảy ra: vế sau không dùng ý chí, mệnh lệnh, phủ định.",
+      "cachGhep": [
+        "Động từ thể từ điển + や否や: 入るや否や",
+        "Động từ thể từ điển + や (rút gọn): 見るや、泣き出した"
+      ],
+      "viDu": [
+        {
+          "c": "社長が部屋に入るや否や、会議室は静まり返った。",
+          "d": "しゃちょうが へやに はいるや いなや、かいぎしつは しずまりかえった。",
+          "v": "Giám đốc vừa bước vào là phòng họp im phăng phắc."
+        },
+        {
+          "c": "そのニュースが伝わるや否や、株価が急落した。",
+          "d": "その ニュースが つたわるや いなや、かぶかが きゅうらくした。",
+          "v": "Tin đó vừa lan ra là giá cổ phiếu lao dốc."
+        },
+        {
+          "c": "彼女は私の顔を見るや、泣き出した。",
+          "d": "かのじょは わたしの かおを みるや、なきだした。",
+          "v": "Cô ấy vừa thấy mặt tôi là bật khóc."
+        },
+        {
+          "c": "新製品は発売されるや否や、売り切れとなった。",
+          "d": "しんせいひんは はつばいされるや いなや、うりきれと なった。",
+          "v": "Sản phẩm mới vừa mở bán đã hết hàng."
+        }
+      ],
+      "luuY": [
+        "Trước や否や là thể từ điển dù kể chuyện quá khứ: ✗ 入ったや否や. Người Việt hay chia nhầm sang thể た vì nghĩ \"việc đã xảy ra\".",
+        "Khác 〜なり: 〜や否や không đòi hai vế cùng chủ ngữ (社長が入る → 会議室は静まり返る), còn 〜なり thì bắt buộc cùng chủ ngữ.",
+        "Khác 〜たとたん（に） (N3): たとたん dùng cả trong văn nói; や否や chỉ dùng trong văn viết. Cả hai đều không dùng với ý chí, mệnh lệnh ở vế sau."
+      ],
+      "soSanh": [
+        "ja-n1-ga-hayai-ka",
+        "ja-n1-nari",
+        "ja-n3-ta-totan",
+        "ja-n2-ka-to-omou-to"
+      ],
+      "tuKhoa": [
+        "ya ina ya",
+        "yainaya",
+        "や否や",
+        "やいなや",
+        "vừa mới",
+        "ngay lập tức"
+      ],
+      "quiz": [
+        {
+          "h": "玄関のドアを開ける（　）、犬が飛びついてきた。",
+          "lc": [
+            "かたわら",
+            "や否や",
+            "否やに",
+            "ばかりか"
+          ],
+          "da": 1,
+          "gt": "Vừa mở cửa là chó nhảy xổ tới ⇒ 開けるや否や. かたわら là \"bên cạnh việc chính còn làm thêm\", ばかりか là \"không những\", còn 否やに không phải là một mẫu có thật."
+        },
+        {
+          "h": "Trước 「〜や否や」 động từ chia ở dạng nào?",
+          "lc": [
+            "Thể て",
+            "Thể ます bỏ ます",
+            "Thể từ điển (V-る)",
+            "Thể ý chí"
+          ],
+          "da": 2,
+          "gt": "や否や luôn đi sau động từ thể từ điển: 着くや否や, 聞くや否や — kể cả khi kể chuyện đã qua. Thể て, thể liên dụng và thể ý chí đều sai."
+        },
+        {
+          "h": "Câu nào dùng 「〜や否や」 đúng?",
+          "lc": [
+            "明日は起きるや否や、出発しよう。",
+            "家に帰ったや否や、雨が降り出した。",
+            "駅に着くや否や、電話してください。",
+            "彼は電車を降りるや否や、走り出した。"
+          ],
+          "da": 3,
+          "gt": "や否や thuật lại việc đã xảy ra: \"vừa xuống tàu là anh ấy chạy đi\". Không dùng với lời nhờ (してください), ý chí (出発しよう), và không ghép với thể た (帰ったや否や)."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-nari",
+      "nhom": "Thời điểm – trình tự",
+      "tieuDe": "〜なり (vừa ~ liền)",
+      "mau": "V-る + なり",
+      "nghia": "vừa ~ xong là (cùng người đó) liền ~",
+      "giaiThich": "Diễn tả ngay sau khi làm một việc, CHÍNH người đó làm tiếp một việc khác, thường là việc bất ngờ, khác thường đối với người quan sát. Hai vế bắt buộc cùng chủ ngữ, và chủ ngữ thường là ngôi thứ ba. Chỉ thuật lại việc đã xảy ra: vế sau không dùng ý chí, mệnh lệnh, phủ định. Hơi mang tính văn viết.",
+      "cachGhep": [
+        "Động từ thể từ điển + なり: 入るなり、怒鳴った"
+      ],
+      "viDu": [
+        {
+          "c": "彼は部屋に入るなり、大声で怒鳴った。",
+          "d": "かれは へやに はいるなり、おおごえで どなった。",
+          "v": "Anh ta vừa vào phòng là quát ầm lên."
+        },
+        {
+          "c": "子どもは母親の顔を見るなり、わっと泣き出した。",
+          "d": "こどもは ははおやの かおを みるなり、わっと なきだした。",
+          "v": "Đứa bé vừa thấy mặt mẹ là oà khóc."
+        },
+        {
+          "c": "課長は報告書を読むなり、顔色を変えた。",
+          "d": "かちょうは ほうこくしょを よむなり、かおいろを かえた。",
+          "v": "Trưởng phòng vừa đọc báo cáo là biến sắc mặt."
+        },
+        {
+          "c": "彼女は一口食べるなり、「まずい」と言って箸を置いた。",
+          "d": "かのじょは ひとくち たべるなり、「まずい」と いって はしを おいた。",
+          "v": "Cô ấy vừa ăn một miếng đã nói \"dở quá\" rồi đặt đũa xuống."
+        }
+      ],
+      "luuY": [
+        "Hai vế phải cùng chủ ngữ: ✗ 私が家に着くなり、雨が降り出した ⇒ dùng 着いたとたん / 着くや否や.",
+        "Khác 〜が早いか／〜や否や: hai mẫu đó cho phép khác chủ ngữ; 〜なり thì không, và thường nhấn vào hành động khác thường của chính người đó.",
+        "Đừng nhầm với 〜なり〜なり (A hay B gì đó) và 〜なりに (theo cách của ~) — khác nghĩa hoàn toàn."
+      ],
+      "soSanh": [
+        "ja-n1-ga-hayai-ka",
+        "ja-n1-ya-ina-ya",
+        "ja-n3-ta-totan",
+        "ja-n1-nari-nari"
+      ],
+      "tuKhoa": [
+        "nari",
+        "なり",
+        "vừa xong liền",
+        "cùng chủ ngữ",
+        "vừa mới"
+      ],
+      "quiz": [
+        {
+          "h": "彼は水を一口（　）なり、吐き出した。",
+          "lc": [
+            "飲んで",
+            "飲む",
+            "飲み",
+            "飲もう"
+          ],
+          "da": 1,
+          "gt": "〜なり ghép với động từ thể từ điển: 飲むなり. Thể て, thể liên dụng (飲み) và thể ý chí (飲もう) không đứng trước なり."
+        },
+        {
+          "h": "Câu nào dùng 「〜なり」 đúng?",
+          "lc": [
+            "私が家に着くなり、雨が降り出した。",
+            "家に帰るなり、手を洗いなさい。",
+            "父は帰ってくるなり、ソファーに倒れ込んだ。",
+            "家に着くなり、連絡するつもりだ。"
+          ],
+          "da": 2,
+          "gt": "〜なり cần hai vế cùng chủ ngữ và thuật lại việc đã xảy ra: bố vừa về là (bố) đổ vật xuống ghế. Câu \"tôi về tới – mưa rơi\" khác chủ ngữ; câu có mệnh lệnh (洗いなさい) và dự định (つもりだ) cũng không dùng được."
+        },
+        {
+          "h": "So với 「〜が早いか」「〜や否や」, điểm riêng của 「〜なり」 là gì?",
+          "lc": [
+            "Vế sau phải là mệnh lệnh",
+            "Chỉ dùng trong thư từ trang trọng",
+            "Ghép với động từ thể た",
+            "Hai vế phải cùng một chủ ngữ"
+          ],
+          "da": 3,
+          "gt": "〜なり đòi hành động trước và sau do cùng một người thực hiện. Nó không dùng với mệnh lệnh, không ghép với thể た trong nghĩa này, và không phải cách nói riêng của thư từ."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-soba-kara",
+      "nhom": "Thời điểm – trình tự",
+      "tieuDe": "〜そばから",
+      "mau": "V-る / V-た + そばから",
+      "nghia": "vừa ~ xong lại ~ ngay (cứ lặp đi lặp lại)",
+      "giaiThich": "Diễn tả việc vừa làm xong thì ngay lập tức có việc khác xảy ra làm mất công sức đó, và chuyện này LẶP ĐI LẶP LẠI như một thói quen hay tình trạng. Thường mang giọng than phiền, bất lực. Không dùng cho việc chỉ xảy ra một lần.",
+      "cachGhep": [
+        "Động từ thể từ điển + そばから: 片付けるそばから",
+        "Động từ thể た + そばから: 聞いたそばから"
+      ],
+      "viDu": [
+        {
+          "c": "年のせいか、人の名前を聞いたそばから忘れてしまう。",
+          "d": "としの せいか、ひとの なまえを きいた そばから わすれてしまう。",
+          "v": "Chắc do tuổi tác mà tên người ta tôi cứ vừa nghe xong là quên."
+        },
+        {
+          "c": "子どもは、片付けるそばからおもちゃを散らかす。",
+          "d": "こどもは、かたづける そばから おもちゃを ちらかす。",
+          "v": "Bọn trẻ cứ tôi vừa dọn xong là lại bày đồ chơi ra."
+        },
+        {
+          "c": "庭の草は、抜くそばから生えてくる。",
+          "d": "にわの くさは、ぬく そばから はえてくる。",
+          "v": "Cỏ trong vườn cứ vừa nhổ là lại mọc lên."
+        },
+        {
+          "c": "給料は、もらったそばから使ってしまうので、少しも貯まらない。",
+          "d": "きゅうりょうは、もらった そばから つかってしまうので、すこしも たまらない。",
+          "v": "Lương cứ vừa nhận là tiêu hết nên chẳng để dành được đồng nào."
+        }
+      ],
+      "luuY": [
+        "Không dùng cho việc xảy ra một lần: ✗ 昨日、駅に着いたそばから電車が出た ⇒ 着いたとたん.",
+        "Khác 〜が早いか／〜や否や／〜なり: ba mẫu đó tả MỘT lần xảy ra; 〜そばから tả việc lặp lại nhiều lần, có ý \"làm bao nhiêu cũng vô ích\".",
+        "Khác 〜たびに (N3): たびに chỉ nói \"mỗi lần\" trung tính; そばから nhấn việc sau đến NGAY và xoá mất kết quả của việc trước."
+      ],
+      "soSanh": [
+        "ja-n1-ga-hayai-ka",
+        "ja-n3-tabi-ni",
+        "ja-n3-ta-totan",
+        "ja-n1-nari"
+      ],
+      "tuKhoa": [
+        "soba kara",
+        "sobakara",
+        "そばから",
+        "vừa xong lại",
+        "lặp đi lặp lại"
+      ],
+      "quiz": [
+        {
+          "h": "単語を覚える（　）忘れていくので、なかなか上達しない。",
+          "lc": [
+            "そばから",
+            "そばとは",
+            "そばまで",
+            "そばでも"
+          ],
+          "da": 0,
+          "gt": "Vừa học thuộc là lại quên, lặp đi lặp lại ⇒ 覚えるそばから. Các dạng そばまで, そばでも, そばとは không tạo thành mẫu ngữ pháp nào."
+        },
+        {
+          "h": "Câu nào dùng 「〜そばから」 đúng?",
+          "lc": [
+            "昨日、駅に着いたそばから、電車が出てしまった。",
+            "掃除するそばから子どもが汚すので、きりがない。",
+            "雨そばから、試合は中止になった。",
+            "明日、給料をもらうそばから、貯金するつもりだ。"
+          ],
+          "da": 1,
+          "gt": "そばから tả việc lặp lại: cứ lau dọn xong là con lại làm bẩn. Việc chỉ xảy ra một lần hôm qua không dùng được; danh từ 雨 không ghép trực tiếp với そばから; dự định tương lai (つもりだ) cũng không hợp."
+        },
+        {
+          "h": "「〜そばから」 mang sắc thái nào?",
+          "lc": [
+            "Việc xảy ra đúng một lần, rất bất ngờ",
+            "Hai việc do hai người làm cùng lúc",
+            "Việc cứ lặp lại, làm xong lại bị xoá công ngay",
+            "Việc sau là mệnh lệnh cho người nghe"
+          ],
+          "da": 2,
+          "gt": "そばから nói về chuyện lặp đi lặp lại: vừa làm xong là kết quả bị mất ngay. Nó không tả việc xảy ra một lần và không đi với mệnh lệnh."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-te-kara-to-iu-mono",
+      "nhom": "Thời điểm – trình tự",
+      "tieuDe": "〜てからというもの",
+      "mau": "V-て + からというもの（は）",
+      "nghia": "kể từ sau khi ~ thì suốt (thay đổi hẳn và kéo dài)",
+      "giaiThich": "Diễn tả từ sau một sự việc làm mốc thì tình trạng thay đổi hẳn và trạng thái mới KÉO DÀI SUỐT đến nay. Mang cảm xúc của người nói (ngạc nhiên, thấm thía) về sự thay đổi đó. Là văn viết. Vế sau là trạng thái kéo dài, không phải việc xảy ra một lần.",
+      "cachGhep": [
+        "Động từ thể て + からというもの: 生まれてからというもの",
+        "Thêm は để nhấn: 〜てからというものは"
+      ],
+      "viDu": [
+        {
+          "c": "子どもが生まれてからというもの、生活が一変した。",
+          "d": "こどもが うまれてからというもの、せいかつが いっぺんした。",
+          "v": "Từ khi có con, cuộc sống thay đổi hoàn toàn."
+        },
+        {
+          "c": "日本に来てからというもの、家族のことを思わない日はない。",
+          "d": "にほんに きてからというもの、かぞくの ことを おもわない ひは ない。",
+          "v": "Từ khi sang Nhật, không ngày nào tôi không nghĩ về gia đình."
+        },
+        {
+          "c": "彼はたばこをやめてからというもの、食欲が出て太ってきた。",
+          "d": "かれは たばこを やめてからというもの、しょくよくが でて ふとってきた。",
+          "v": "Từ khi bỏ thuốc, anh ấy ăn ngon miệng hơn và béo lên."
+        },
+        {
+          "c": "あの本を読んでからというもの、人生に対する考え方が変わった。",
+          "d": "あの ほんを よんでからというもの、じんせいに たいする かんがえかたが かわった。",
+          "v": "Từ khi đọc cuốn sách ấy, cách nghĩ của tôi về cuộc đời đã đổi khác."
+        }
+      ],
+      "luuY": [
+        "Vế sau phải là trạng thái kéo dài: ✗ 家に帰ってからというもの、電話をかけた (việc một lần) ⇒ 帰ってから.",
+        "Khác 〜て以来 (N3): て以来 chỉ nêu mốc \"từ đó đến nay\" một cách trung tính; 〜てからというもの nhấn sự thay đổi lớn và có cảm xúc của người nói.",
+        "Không dùng cho mốc ở tương lai hay mốc quá gần hiện tại (vừa mới hôm qua)."
+      ],
+      "soSanh": [
+        "ja-n3-te-irai",
+        "ja-n3-te-hajimete",
+        "ja-n2-wo-kikkake-ni"
+      ],
+      "tuKhoa": [
+        "te kara to iu mono",
+        "tekaratoiumono",
+        "てからというもの",
+        "kể từ khi",
+        "từ sau khi"
+      ],
+      "quiz": [
+        {
+          "h": "スマホを（　）からというもの、本を読む時間が減った。",
+          "lc": [
+            "買った",
+            "買って",
+            "買い",
+            "買う"
+          ],
+          "da": 1,
+          "gt": "Mẫu là V-て + からというもの: 買ってからというもの. Thể từ điển, thể た và thể liên dụng (買い) không ghép trực tiếp với からというもの."
+        },
+        {
+          "h": "Câu nào dùng 「〜てからというもの」 đúng?",
+          "lc": [
+            "ドアを開けてからというもの、猫が入ってきた。",
+            "明日日本に着いてからというもの、連絡します。",
+            "一人暮らしを始めてからというもの、外食ばかりしている。",
+            "家に帰ってからというもの、友達に電話をかけた。"
+          ],
+          "da": 2,
+          "gt": "Mẫu này cần vế sau là trạng thái kéo dài suốt từ mốc đó: từ khi sống một mình thì toàn ăn ngoài. Gọi một cuộc điện thoại, con mèo chạy vào là việc xảy ra một lần; còn mốc ở tương lai (明日) cũng không dùng được."
+        },
+        {
+          "h": "So với 「〜て以来」, 「〜てからというもの」 khác ở điểm nào?",
+          "lc": [
+            "Chỉ ghép với danh từ",
+            "Vế sau phải là mệnh lệnh",
+            "Dùng cho việc sẽ xảy ra trong tương lai",
+            "Nhấn sự thay đổi lớn, có cảm xúc của người nói"
+          ],
+          "da": 3,
+          "gt": "Cả hai đều nói \"từ khi ~\", nhưng 〜てからというもの nhấn trạng thái thay đổi hẳn và kèm cảm xúc. Nó ghép với thể て của động từ, không dùng cho tương lai và không đi với mệnh lệnh."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-ni-atte",
+      "nhom": "Thời điểm – trình tự",
+      "tieuDe": "〜にあって",
+      "mau": "N + にあって（は／も）",
+      "nghia": "trong hoàn cảnh / thời kỳ / cương vị (đặc biệt) ~",
+      "giaiThich": "Nêu một hoàn cảnh, thời kỳ, lập trường đặc biệt rồi nói điều xảy ra trong hoàn cảnh ấy. Là văn viết cứng, dùng trong bài phát biểu, bài luận. 〜にあっては nhấn hoàn cảnh; 〜にあっても nghĩa là \"dù ở trong hoàn cảnh ~ vẫn\".",
+      "cachGhep": [
+        "Danh từ (hoàn cảnh, thời kỳ, cương vị) + にあって: 非常時にあって",
+        "Nhấn: N + にあっては",
+        "Nghịch: N + にあっても (dù ở trong ~)"
+      ],
+      "viDu": [
+        {
+          "c": "この非常時にあって、冷静に行動することが求められる。",
+          "d": "この ひじょうじに あって、れいせいに こうどうする ことが もとめられる。",
+          "v": "Trong lúc khẩn cấp thế này, cần hành động bình tĩnh."
+        },
+        {
+          "c": "彼は社長という立場にあって、常に社員の生活を考えていた。",
+          "d": "かれは しゃちょうという たちばに あって、つねに しゃいんの せいかつを かんがえていた。",
+          "v": "Ở cương vị giám đốc, ông ấy luôn nghĩ đến đời sống của nhân viên."
+        },
+        {
+          "c": "どんなに苦しい状況にあっても、彼女は笑顔を忘れなかった。",
+          "d": "どんなに くるしい じょうきょうに あっても、かのじょは えがおを わすれなかった。",
+          "v": "Dù ở trong hoàn cảnh khó khăn đến đâu, cô ấy cũng không quên nụ cười."
+        },
+        {
+          "c": "情報化社会にあっては、情報を選ぶ力が欠かせない。",
+          "d": "じょうほうかしゃかいに あっては、じょうほうを えらぶ ちからが かかせない。",
+          "v": "Trong xã hội thông tin, năng lực chọn lọc thông tin là không thể thiếu."
+        }
+      ],
+      "luuY": [
+        "Danh từ đứng trước phải là hoàn cảnh/thời kỳ/cương vị mang tính đặc biệt; không dùng cho địa điểm cụ thể thường ngày: ✗ 教室にあって勉強する ⇒ 教室で.",
+        "Khác 〜において (N3): において chỉ nơi chốn, lĩnh vực, thời điểm một cách trung tính; 〜にあって hàm ý \"chính vì / dù ở trong hoàn cảnh đặc biệt ấy\"."
+      ],
+      "soSanh": [
+        "ja-n3-ni-oite",
+        "ja-n2-ni-saishite",
+        "ja-n2-no-moto-de"
+      ],
+      "tuKhoa": [
+        "ni atte",
+        "niatte",
+        "にあって",
+        "trong hoàn cảnh",
+        "ở cương vị"
+      ],
+      "quiz": [
+        {
+          "h": "高齢化社会（　）、介護の問題は避けて通れない。",
+          "lc": [
+            "にひきかえ",
+            "にあって",
+            "をもって",
+            "がてら"
+          ],
+          "da": 1,
+          "gt": "\"Trong xã hội già hoá\" ⇒ 高齢化社会にあって. がてら là \"nhân tiện\", にひきかえ là \"trái với\", をもって là \"bằng / tính đến hết\" — đều không hợp nghĩa."
+        },
+        {
+          "h": "Từ loại nào đứng trước 「〜にあって」?",
+          "lc": [
+            "Động từ thể ý chí",
+            "Động từ thể て",
+            "Danh từ",
+            "Tính từ い bỏ い"
+          ],
+          "da": 2,
+          "gt": "にあって ghép trực tiếp sau danh từ chỉ hoàn cảnh, thời kỳ, cương vị: 不況下にあって, 母親という立場にあって. Động từ và tính từ không ghép trực tiếp."
+        },
+        {
+          "h": "「厳しい環境にあっても」 nghĩa là gì?",
+          "lc": [
+            "Trừ môi trường khắc nghiệt ra",
+            "Trước khi vào môi trường khắc nghiệt",
+            "Vì môi trường khắc nghiệt",
+            "Dù ở trong môi trường khắc nghiệt"
+          ],
+          "da": 3,
+          "gt": "〜にあっても là dạng nghịch tiếp: \"dù ở trong hoàn cảnh ~ vẫn\". Nó không nêu nguyên nhân, không mang nghĩa loại trừ hay thứ tự trước sau."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-wo-kawakiri-ni",
+      "nhom": "Khởi đầu – giới hạn",
+      "tieuDe": "〜を皮切りに（して）",
+      "mau": "N + を皮切りに（して） / を皮切りとして",
+      "nghia": "mở đầu bằng ~, rồi liên tiếp (lan rộng ra)",
+      "giaiThich": "Lấy một sự việc làm khởi đầu, sau đó các sự việc CÙNG LOẠI nối tiếp nhau diễn ra, phát triển mạnh lên hoặc lan rộng. Hay dùng trong tin tức về chuyến lưu diễn, mở chi nhánh, chuỗi sự kiện. Vế sau là chuỗi hành động/sự kiện nối tiếp, không phải việc chỉ xảy ra một lần.",
+      "cachGhep": [
+        "Danh từ + を皮切りに: 東京公演を皮切りに",
+        "Danh từ + を皮切りにして / を皮切りとして"
+      ],
+      "viDu": [
+        {
+          "c": "東京公演を皮切りに、全国10都市でコンサートが開かれる。",
+          "d": "とうきょうこうえんを かわきりに、ぜんこく じゅうとしで コンサートが ひらかれる。",
+          "v": "Mở đầu bằng buổi diễn ở Tokyo, hoà nhạc sẽ được tổ chức tại 10 thành phố trên cả nước."
+        },
+        {
+          "c": "彼の発言を皮切りにして、出席者から次々と意見が出た。",
+          "d": "かれの はつげんを かわきりに して、しゅっせきしゃから つぎつぎと いけんが でた。",
+          "v": "Bắt đầu từ phát biểu của anh ấy, những người dự họp lần lượt nêu ý kiến."
+        },
+        {
+          "c": "その店は大阪での出店を皮切りに、各地に支店を増やしていった。",
+          "d": "その みせは おおさかでの しゅってんを かわきりに、かくちに してんを ふやしていった。",
+          "v": "Khởi đầu bằng việc mở cửa hàng ở Osaka, hãng đó dần tăng chi nhánh ở khắp nơi."
+        },
+        {
+          "c": "来月の新商品発表を皮切りとして、大規模な宣伝活動が始まる。",
+          "d": "らいげつの しんしょうひん はっぴょうを かわきりと して、だいきぼな せんでんかつどうが はじまる。",
+          "v": "Mở màn bằng buổi ra mắt sản phẩm mới tháng sau, chiến dịch quảng bá quy mô lớn sẽ bắt đầu."
+        }
+      ],
+      "luuY": [
+        "Vế sau phải là chuỗi việc cùng loại nối tiếp nhau; không dùng cho hiện tượng tự nhiên hay việc một lần.",
+        "Khác 〜をきっかけに (N2): きっかけ là \"nhân dịp / cơ duyên\" dẫn tới một thay đổi (thường một lần); 〜を皮切りに là cái ĐẦU TIÊN của một chuỗi việc cùng loại.",
+        "Khác 〜をはじめ (N3): をはじめ nêu ví dụ tiêu biểu trong một nhóm, không nói về trình tự thời gian."
+      ],
+      "soSanh": [
+        "ja-n2-wo-kikkake-ni",
+        "ja-n3-wo-hajime",
+        "ja-n1-wo-kagiri-ni"
+      ],
+      "tuKhoa": [
+        "wo kawakiri ni",
+        "kawakiri",
+        "を皮切りに",
+        "mở đầu bằng",
+        "khởi đầu",
+        "mở màn"
+      ],
+      "quiz": [
+        {
+          "h": "その歌手は、ロンドン公演（　）、世界各地でコンサートを行う。",
+          "lc": [
+            "をよそに",
+            "を限りに",
+            "をおいて",
+            "を皮切りに"
+          ],
+          "da": 3,
+          "gt": "Buổi diễn London là mở đầu của chuỗi hoà nhạc ⇒ を皮切りに. を限りに là \"lấy ~ làm lần cuối\", をよそに là \"mặc kệ\", をおいて là \"ngoài ~ ra\" — đều trái nghĩa hoặc không hợp."
+        },
+        {
+          "h": "Sau 「〜を皮切りに」 thường là nội dung gì?",
+          "lc": [
+            "Các việc cùng loại nối tiếp nhau, lan rộng ra",
+            "Một việc chỉ xảy ra đúng một lần rồi hết",
+            "Lời xin lỗi của người nói",
+            "Lý do của việc phía trước"
+          ],
+          "da": 0,
+          "gt": "を皮切りに nêu việc đầu tiên, nên phía sau là chuỗi việc cùng loại tiếp diễn (次々と, 各地で, 〜ていく). Nó không dẫn tới việc một lần, lời xin lỗi hay lý do."
+        },
+        {
+          "h": "Câu nào dùng 「〜を皮切りに」 đúng?",
+          "lc": [
+            "今日を皮切りに、たばこをきっぱりやめます。",
+            "札幌店の開店を皮切りに、全国に次々と店を出した。",
+            "彼は走るを皮切りに、転んでしまった。",
+            "大雨を皮切りに、川の水があふれた。"
+          ],
+          "da": 1,
+          "gt": "Mở cửa hàng ở Sapporo là khởi đầu của chuỗi mở cửa hàng ⇒ đúng. \"Từ hôm nay bỏ thuốc\" phải dùng を限りに; mưa lớn – nước tràn là quan hệ nhân quả tự nhiên; và を皮切りに không ghép với động từ thể từ điển (走るを)."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-ni-itaru-made",
+      "nhom": "Khởi đầu – giới hạn",
+      "tieuDe": "〜に至るまで",
+      "mau": "N（+ から）+ N + に至るまで",
+      "nghia": "đến cả ~, cho tới tận ~ (phạm vi rộng bất ngờ)",
+      "giaiThich": "Nêu một phạm vi rất rộng, lan tới cả những thứ nhỏ nhặt hoặc xa xôi mà bình thường không ngờ tới. Thường đi với から để nêu điểm đầu: A から B に至るまで. Hơi mang tính văn viết; người nói có cảm giác \"tỉ mỉ / rộng đến mức ấy\".",
+      "cachGhep": [
+        "N1 + から + N2 + に至るまで: 社長から新入社員に至るまで",
+        "N + に至るまで: 細部に至るまで"
+      ],
+      "viDu": [
+        {
+          "c": "空港では、かばんの中身からポケットの中に至るまで細かく調べられた。",
+          "d": "くうこうでは、かばんの なかみから ポケットの なかに いたるまで こまかく しらべられた。",
+          "v": "Ở sân bay, tôi bị kiểm tra kỹ từ đồ trong túi xách cho đến cả trong túi quần áo."
+        },
+        {
+          "c": "彼女は、服から靴、髪飾りに至るまで、すべて黒でそろえている。",
+          "d": "かのじょは、ふくから くつ、かみかざりに いたるまで、すべて くろで そろえている。",
+          "v": "Cô ấy dùng toàn màu đen, từ quần áo, giày cho đến cả đồ cài tóc."
+        },
+        {
+          "c": "この学校は、髪型から靴下の色に至るまで校則で決められている。",
+          "d": "この がっこうは、かみがたから くつしたの いろに いたるまで こうそくで きめられている。",
+          "v": "Trường này quy định trong nội quy từ kiểu tóc cho đến cả màu tất."
+        },
+        {
+          "c": "社長から新入社員に至るまで、全員がその研修に参加した。",
+          "d": "しゃちょうから しんにゅうしゃいんに いたるまで、ぜんいんが その けんしゅうに さんかした。",
+          "v": "Từ giám đốc cho đến nhân viên mới, tất cả đều tham gia khoá tập huấn đó."
+        }
+      ],
+      "luuY": [
+        "Khác 〜まで thường: 〜に至るまで nhấn rằng phạm vi rộng/tỉ mỉ đến mức đáng ngạc nhiên, nên N2 thường là thứ ở \"tận cùng\" (rất nhỏ, rất xa, rất thấp).",
+        "Khác 〜から〜にかけて (N3): にかけて chỉ khoảng thời gian/không gian liên tục, ranh giới mơ hồ, không có ý ngạc nhiên.",
+        "Đừng nhầm với 〜に至っては (nêu ví dụ cực đoan nhất trong một loạt việc)."
+      ],
+      "soSanh": [
+        "ja-n3-kara-ni-kakete",
+        "ja-n3-wo-hajime",
+        "ja-n1-ni-itatte-wa",
+        "ja-n3-ni-watatte"
+      ],
+      "tuKhoa": [
+        "ni itaru made",
+        "niitarumade",
+        "に至るまで",
+        "cho đến cả",
+        "đến tận"
+      ],
+      "quiz": [
+        {
+          "h": "引っ越しのとき、家具から皿一枚（　）、全部業者が運んでくれた。",
+          "lc": [
+            "を皮切りに",
+            "に至っては",
+            "に至るまで",
+            "をおいて"
+          ],
+          "da": 2,
+          "gt": "Từ đồ nội thất cho đến cả từng chiếc đĩa ⇒ 〜から〜に至るまで. に至っては dùng để nêu một trường hợp cực đoan rồi bình luận riêng về nó; を皮切りに là \"mở đầu bằng\"; をおいて là \"ngoài ~ ra\"."
+        },
+        {
+          "h": "「〜に至るまで」 thường đi cặp với trợ từ nào để nêu điểm bắt đầu của phạm vi?",
+          "lc": [
+            "を",
+            "で",
+            "が",
+            "から"
+          ],
+          "da": 3,
+          "gt": "Dạng điển hình là A から B に至るまで (từ A cho đến tận B). Các trợ từ を, が, で không nêu điểm khởi đầu của phạm vi."
+        },
+        {
+          "h": "「頭のてっぺんから足の先に至るまで泥だらけだ」 nghĩa là gì?",
+          "lc": [
+            "Từ đầu đến tận mũi chân, chỗ nào cũng đầy bùn",
+            "Bùn bắt đầu dính từ đầu trước",
+            "Chỉ có đầu và chân bị dính bùn",
+            "Trừ đầu và chân ra thì đầy bùn"
+          ],
+          "da": 0,
+          "gt": "A から B に至るまで nêu toàn bộ phạm vi từ A tới tận B: khắp người từ đầu tới chân đều bùn. Nó không giới hạn ở hai điểm đầu–cuối và không mang nghĩa loại trừ."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-wo-kagiri-ni",
+      "nhom": "Khởi đầu – giới hạn",
+      "tieuDe": "〜を限りに",
+      "mau": "N (thời điểm) + を限りに",
+      "nghia": "lấy ~ làm lần / ngày cuối cùng, từ đó thôi hẳn",
+      "giaiThich": "Tuyên bố rằng một việc vẫn tiếp diễn từ trước sẽ chấm dứt, lấy thời điểm nêu ra làm mốc cuối cùng. Danh từ đứng trước thường là 今日, 本日, 今回, 今月, 今年, 今シーズン. Vế sau là việc kết thúc, từ bỏ, giải tán, rút lui. Ngoài ra có cụm cố định 声を限りに (gào hết sức).",
+      "cachGhep": [
+        "Danh từ chỉ thời điểm + を限りに: 今日を限りに",
+        "Cụm cố định: 声を限りに (hết cỡ giọng)"
+      ],
+      "viDu": [
+        {
+          "c": "今日を限りに、たばこをやめることにした。",
+          "d": "きょうを かぎりに、たばこを やめる ことに した。",
+          "v": "Tôi quyết định hôm nay là ngày cuối, từ nay bỏ thuốc lá."
+        },
+        {
+          "c": "彼は今シーズンを限りに、現役を引退する。",
+          "d": "かれは こんシーズンを かぎりに、げんえきを いんたいする。",
+          "v": "Hết mùa giải này anh ấy sẽ giải nghệ."
+        },
+        {
+          "c": "この店は今月末を限りに閉店いたします。",
+          "d": "この みせは こんげつまつを かぎりに へいてん いたします。",
+          "v": "Cửa hàng chúng tôi sẽ đóng cửa sau ngày cuối tháng này."
+        },
+        {
+          "c": "遭難者は声を限りに助けを求めた。",
+          "d": "そうなんしゃは こえを かぎりに たすけを もとめた。",
+          "v": "Người gặp nạn gào hết sức kêu cứu."
+        }
+      ],
+      "luuY": [
+        "Vế sau phải là việc chấm dứt điều đang tiếp diễn; không dùng cho việc bắt đầu: ✗ 今日を限りに日本語の勉強を始める.",
+        "Khác 〜をもって: をもって (本日をもって終了) là lời thông báo chính thức, dùng trong văn bản, nghi lễ; 〜を限りに dùng được cả cho quyết tâm cá nhân.",
+        "Khác 〜を皮切りに: を皮切りに là điểm BẮT ĐẦU của một chuỗi việc; 〜を限りに là điểm KẾT THÚC."
+      ],
+      "soSanh": [
+        "ja-n1-wo-motte",
+        "ja-n1-wo-kawakiri-ni",
+        "ja-n2-ni-kagiri",
+        "ja-n2-kagiri-wa"
+      ],
+      "tuKhoa": [
+        "wo kagiri ni",
+        "wokagirini",
+        "を限りに",
+        "lần cuối",
+        "từ nay thôi",
+        "kết thúc"
+      ],
+      "quiz": [
+        {
+          "h": "今回の大会（　）、彼女は選手生活を終える。",
+          "lc": [
+            "を踏まえて",
+            "をものともせず",
+            "を皮切りに",
+            "を限りに"
+          ],
+          "da": 3,
+          "gt": "Giải đấu này là lần cuối, sau đó kết thúc đời vận động viên ⇒ を限りに. を皮切りに là \"mở đầu bằng\" (trái nghĩa), をものともせず là \"bất chấp\", を踏まえて là \"dựa trên\"."
+        },
+        {
+          "h": "Sau 「今日を限りに」 nội dung nào phù hợp?",
+          "lc": [
+            "この会社を辞めます",
+            "新しい仕事を始めます",
+            "ずっと働いています",
+            "毎日練習しています"
+          ],
+          "da": 0,
+          "gt": "を限りに đi với việc chấm dứt: nghỉ việc ở công ty. Việc bắt đầu mới (始めます) hay trạng thái đang tiếp diễn (働いています, 練習しています) đều không hợp."
+        },
+        {
+          "h": "「声を限りに叫ぶ」 nghĩa là gì?",
+          "lc": [
+            "Chỉ gào nho nhỏ thôi",
+            "Gào hết sức, hết cỡ giọng",
+            "Không được phép gào",
+            "Hôm nay là lần cuối cùng gào"
+          ],
+          "da": 1,
+          "gt": "声を限りに là cụm cố định, nghĩa là \"dùng hết cỡ giọng\". Nó không mang nghĩa \"lần cuối\" như với danh từ thời điểm, cũng không có nghĩa hạn chế hay cấm đoán."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-wo-motte",
+      "nhom": "Khởi đầu – giới hạn",
+      "tieuDe": "〜をもって",
+      "mau": "N + をもって / をもちまして",
+      "nghia": "① bằng ~ (phương tiện, cách thức) ② tính đến hết ~ (mốc kết thúc)",
+      "giaiThich": "Có hai cách dùng, đều rất trang trọng. ① Nêu phương tiện, cách thức trừu tượng: 書面をもって, 誠意をもって, 身をもって. ② Nêu thời điểm mà một việc kết thúc hoặc thay đổi, dùng trong thông báo chính thức, nghi lễ: 本日をもって. をもちまして là dạng lịch sự hơn nữa, dùng khi phát biểu, chào hỏi.",
+      "cachGhep": [
+        "Phương tiện: N + をもって: 書面をもって通知する",
+        "Mốc thời gian: N (thời điểm) + をもって: 3月31日をもって",
+        "Rất lịch sự: N + をもちまして"
+      ],
+      "viDu": [
+        {
+          "c": "本日の営業は午後8時をもって終了いたします。",
+          "d": "ほんじつの えいぎょうは ごご はちじを もって しゅうりょう いたします。",
+          "v": "Hôm nay chúng tôi sẽ kết thúc giờ bán hàng vào lúc 8 giờ tối."
+        },
+        {
+          "c": "結果は書面をもってお知らせします。",
+          "d": "けっかは しょめんを もって おしらせします。",
+          "v": "Kết quả sẽ được thông báo bằng văn bản."
+        },
+        {
+          "c": "私は失敗の怖さを身をもって知った。",
+          "d": "わたしは しっぱいの こわさを みを もって しった。",
+          "v": "Tôi đã tự mình nếm trải để hiểu thất bại đáng sợ thế nào."
+        },
+        {
+          "c": "これをもちまして、本日の式を終わらせていただきます。",
+          "d": "これを もちまして、ほんじつの しきを おわらせていただきます。",
+          "v": "Đến đây, tôi xin phép kết thúc buổi lễ hôm nay."
+        }
+      ],
+      "luuY": [
+        "Không dùng cho dụng cụ cụ thể thường ngày: \"viết bằng bút bi\" là ボールペンで書く, không dùng をもって.",
+        "Khác 〜を限りに: 本日をもって là lời thông báo chính thức của tổ chức; 今日を限りに còn dùng cho quyết tâm cá nhân và nhấn \"đây là lần cuối\".",
+        "Khác 〜によって (N3): によって dùng rộng cho phương tiện, nguyên nhân; をもって cứng hơn, chủ yếu trong văn bản, lời phát biểu."
+      ],
+      "soSanh": [
+        "ja-n1-wo-kagiri-ni",
+        "ja-n3-ni-yotte",
+        "ja-n3-wo-tsuujite"
+      ],
+      "tuKhoa": [
+        "wo motte",
+        "womotte",
+        "をもって",
+        "をもちまして",
+        "bằng phương tiện",
+        "tính đến hết"
+      ],
+      "quiz": [
+        {
+          "h": "当店は3月31日（　）閉店いたします。",
+          "lc": [
+            "をよそに",
+            "をもって",
+            "をこめて",
+            "をめぐって"
+          ],
+          "da": 1,
+          "gt": "Thông báo chính thức về mốc kết thúc ⇒ 3月31日をもって. をめぐって là \"xoay quanh\", をこめて là \"gửi gắm (tình cảm)\", をよそに là \"mặc kệ\"."
+        },
+        {
+          "h": "Trong câu nào 「をもって」 chỉ mốc thời gian kết thúc?",
+          "lc": [
+            "身をもって経験した。",
+            "合否は文書をもって通知します。",
+            "今月末をもって退職いたします。",
+            "誠意をもって対応いたします。"
+          ],
+          "da": 2,
+          "gt": "今月末をもって退職 = nghỉ việc tính đến hết cuối tháng này (mốc kết thúc). Trong 誠意をもって, 文書をもって, 身をもって thì をもって chỉ cách thức, phương tiện."
+        },
+        {
+          "h": "「これをもちまして」 là gì?",
+          "lc": [
+            "Dạng phủ định của これをもって",
+            "Dạng thân mật của これをもって, dùng với bạn bè",
+            "Dạng quá khứ của これをもって",
+            "Dạng lịch sự hơn của これをもって, dùng khi phát biểu"
+          ],
+          "da": 3,
+          "gt": "をもちまして là dạng lịch sự (thể ます) của をもって, dùng trong lời chào, phát biểu kết thúc buổi lễ. Nó không phải dạng thân mật, phủ định hay quá khứ."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-to-itta-tokoro-da",
+      "nhom": "Khởi đầu – giới hạn",
+      "tieuDe": "〜といったところだ／〜というところだ",
+      "mau": "N / số lượng / V-る + といったところだ・というところだ",
+      "nghia": "cùng lắm cũng chỉ cỡ ~, đại khái ở mức ~",
+      "giaiThich": "Dùng khi người nói ước lượng rằng mức độ, số lượng không cao lắm: \"nhiều lắm cũng chỉ tầm ấy\". Hay đi với せいぜい, 多くても, 高くても, まあ. Số lượng đứng trước là con số mà người nói cho là ít/thấp. Trong hội thoại thân mật nói 〜ってところだ.",
+      "cachGhep": [
+        "Danh từ / số lượng + といったところだ: 年に2回といったところだ",
+        "Động từ thể từ điển + といったところだ: 散歩するといったところだ",
+        "Thân mật: 〜ってところだ"
+      ],
+      "viDu": [
+        {
+          "c": "帰省するのは、年に2回といったところだ。",
+          "d": "きせいするのは、ねんに にかいと いった ところだ。",
+          "v": "Tôi về quê thì nhiều lắm cũng chỉ hai lần một năm."
+        },
+        {
+          "c": "私の料理の腕は、まあ、人並みといったところです。",
+          "d": "わたしの りょうりの うでは、まあ、ひとなみと いった ところです。",
+          "v": "Tay nghề nấu ăn của tôi thì, ừm, cũng chỉ ở mức như mọi người thôi."
+        },
+        {
+          "c": "この仕事の時給は、高くても1500円というところだろう。",
+          "d": "この しごとの じきゅうは、たかくても せんごひゃくえんという ところだろう。",
+          "v": "Lương giờ của việc này cao lắm chắc cũng chỉ 1.500 yên."
+        },
+        {
+          "c": "休日は、家で本を読むか、近所を散歩するといったところだ。",
+          "d": "きゅうじつは、いえで ほんを よむか、きんじょを さんぽすると いった ところだ。",
+          "v": "Ngày nghỉ thì tôi đại khái chỉ ở nhà đọc sách hoặc đi dạo quanh nhà."
+        }
+      ],
+      "luuY": [
+        "Chỉ dùng với mức mà người nói thấy KHÔNG cao: ✗ 貯金は1億円といったところだ (nếu coi 100 triệu yên là nhiều).",
+        "Khác 〜ところだ (N4: sắp / đang / vừa làm): 〜といったところだ không nói về thời điểm của hành động mà về ước lượng mức độ.",
+        "Khác 〜くらいだ (N3): くらい chỉ nêu mức độ; 〜といったところだ thêm ý \"cùng lắm chỉ vậy, không hơn\"."
+      ],
+      "soSanh": [
+        "ja-n3-kurai-hodo",
+        "ja-n2-to-itta",
+        "ja-n4-tokoro"
+      ],
+      "tuKhoa": [
+        "to itta tokoro da",
+        "toittatokoroda",
+        "to iu tokoro da",
+        "といったところだ",
+        "cùng lắm",
+        "đại khái"
+      ],
+      "quiz": [
+        {
+          "h": "毎日の睡眠時間は、せいぜい5時間（　）。",
+          "lc": [
+            "といったところだ",
+            "といえども",
+            "というものだ",
+            "といったらない"
+          ],
+          "da": 0,
+          "gt": "Ước lượng mức không cao (せいぜい) ⇒ 5時間といったところだ. というものだ là \"đúng thật là ~\", といえども là \"dù là ~\" (không kết thúc câu), といったらない là \"~ không thể tả\"."
+        },
+        {
+          "h": "Từ nào hay đi kèm với 「〜といったところだ」?",
+          "lc": [
+            "ぜひ",
+            "せいぜい",
+            "かならず",
+            "まさか"
+          ],
+          "da": 1,
+          "gt": "Mẫu này ước lượng mức thấp nên hay đi với せいぜい (cùng lắm), 多くても, 高くても. ぜひ (nhất định – mong muốn), まさか (lẽ nào), かならず (chắc chắn) không hợp."
+        },
+        {
+          "h": "「参加者は30人といったところだ」 thể hiện thái độ gì của người nói?",
+          "lc": [
+            "Đã từng có 30 người nhưng nay đã về hết",
+            "30 người là con số nhiều đến ngạc nhiên",
+            "Số người tham gia cùng lắm chỉ khoảng 30, không nhiều",
+            "Đúng chính xác 30 người, đã đếm kỹ"
+          ],
+          "da": 2,
+          "gt": "といったところだ nêu con số ước chừng mà người nói cho là không nhiều. Nó không khẳng định con số chính xác, không tỏ ý ngạc nhiên vì nhiều, và không nói về việc đã kết thúc."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-katawara",
+      "nhom": "Đồng thời – kèm theo",
+      "tieuDe": "〜かたわら",
+      "mau": "N の / V-る + かたわら",
+      "nghia": "bên cạnh việc chính là ~, còn (song song) làm ~",
+      "giaiThich": "Diễn tả một người ngoài công việc, hoạt động CHÍNH còn duy trì song song một hoạt động khác. Hai việc kéo dài trong thời gian dài (nghề nghiệp, hoạt động xã hội, học tập), không phải hai động tác làm cùng một lúc. Là văn viết, hay dùng khi giới thiệu về một người.",
+      "cachGhep": [
+        "Động từ thể từ điển + かたわら: 会社に勤めるかたわら",
+        "Danh từ + の + かたわら: 研究のかたわら"
+      ],
+      "viDu": [
+        {
+          "c": "彼は会社に勤めるかたわら、小説を書いている。",
+          "d": "かれは かいしゃに つとめる かたわら、しょうせつを かいている。",
+          "v": "Anh ấy vừa làm công ty vừa viết tiểu thuyết."
+        },
+        {
+          "c": "母は家事のかたわら、近所の子どもに英語を教えている。",
+          "d": "ははは かじの かたわら、きんじょの こどもに えいごを おしえている。",
+          "v": "Ngoài việc nhà, mẹ tôi còn dạy tiếng Anh cho trẻ con hàng xóm."
+        },
+        {
+          "c": "田中教授は研究のかたわら、テレビの解説者としても活躍している。",
+          "d": "たなかきょうじゅは けんきゅうの かたわら、テレビの かいせつしゃと しても かつやくしている。",
+          "v": "Bên cạnh việc nghiên cứu, giáo sư Tanaka còn hoạt động với vai trò bình luận viên truyền hình."
+        },
+        {
+          "c": "彼女は子育てのかたわら、大学院で学んでいる。",
+          "d": "かのじょは こそだての かたわら、だいがくいんで まなんでいる。",
+          "v": "Cô ấy vừa nuôi con vừa học cao học."
+        }
+      ],
+      "luuY": [
+        "Khác 〜ながら (N4): ながら dùng cho hai động tác diễn ra cùng lúc (音楽を聞きながら走る); 〜かたわら dùng cho hai hoạt động dài hạn, việc trước かたわら là việc chính. ✗ テレビを見るかたわら、ご飯を食べた.",
+        "Khác 〜がてら／〜かたがた: hai mẫu đó là \"nhân MỘT lần làm A thì tiện làm B\"; 〜かたわら là duy trì song song lâu dài.",
+        "Danh từ phải có の: 仕事のかたわら (✗ 仕事かたわら)."
+      ],
+      "soSanh": [
+        "ja-n1-gatera",
+        "ja-n1-katagata",
+        "ja-n4-nagara",
+        "ja-n3-tsuideni"
+      ],
+      "tuKhoa": [
+        "katawara",
+        "かたわら",
+        "bên cạnh việc chính",
+        "song song",
+        "vừa làm vừa"
+      ],
+      "quiz": [
+        {
+          "h": "彼は歌手として活動する（　）、俳優としても活躍している。",
+          "lc": [
+            "かたがた",
+            "がてら",
+            "そばから",
+            "かたわら"
+          ],
+          "da": 3,
+          "gt": "Hoạt động chính là ca sĩ, song song còn làm diễn viên (dài hạn) và đứng sau động từ thể từ điển ⇒ かたわら. がてら không đi sau 活動する (thể từ điển), かたがた chỉ đi sau danh từ, そばから là \"vừa làm xong lại ~\"."
+        },
+        {
+          "h": "Cách ghép nào đúng?",
+          "lc": [
+            "仕事のかたわら",
+            "仕事かたわら",
+            "仕事してかたわら",
+            "仕事をかたわら"
+          ],
+          "da": 0,
+          "gt": "Với danh từ phải có の: 仕事のかたわら. Bỏ の, dùng thể て hay dùng を đều sai cách ghép."
+        },
+        {
+          "h": "Câu nào dùng 「〜かたわら」 phù hợp?",
+          "lc": [
+            "買い物に行くかたわら、手紙を出してきた。",
+            "彼は農業を営むかたわら、絵本の創作を続けている。",
+            "テレビを見るかたわら、ご飯を食べた。",
+            "歩くかたわら、電話で話した。"
+          ],
+          "da": 1,
+          "gt": "かたわら dùng cho hai hoạt động kéo dài song song: làm nông và sáng tác sách tranh. Hai động tác cùng lúc (xem tivi – ăn cơm, đi bộ – nói điện thoại) dùng ながら; nhân tiện đi mua đồ gửi thư thì dùng ついでに / がてら."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-gatera",
+      "nhom": "Đồng thời – kèm theo",
+      "tieuDe": "〜がてら",
+      "mau": "N / V-ます (bỏ ます) + がてら",
+      "nghia": "nhân tiện (đi) ~ thì làm luôn ~",
+      "giaiThich": "Diễn tả khi làm việc A thì tiện thể làm luôn việc B, tức một hành động mang hai mục đích. A thường là danh từ chỉ hoạt động (散歩, 買い物, 運動, 見物) và vế sau thường là động từ di chuyển như 行く, 歩く, 寄る. Dùng được trong hội thoại hằng ngày.",
+      "cachGhep": [
+        "Danh từ chỉ hoạt động + がてら: 散歩がてら",
+        "Động từ thể ます bỏ ます + がてら: 送りがてら"
+      ],
+      "viDu": [
+        {
+          "c": "散歩がてら、パンを買いに行ってきます。",
+          "d": "さんぽがてら、パンを かいに いってきます。",
+          "v": "Tiện đi dạo, tôi đi mua bánh mì luôn."
+        },
+        {
+          "c": "駅まで友人を送りがてら、本屋に寄った。",
+          "d": "えきまで ゆうじんを おくりがてら、ほんやに よった。",
+          "v": "Nhân tiện tiễn bạn ra ga, tôi ghé hiệu sách."
+        },
+        {
+          "c": "運動がてら、一駅分歩くことにしている。",
+          "d": "うんどうがてら、ひとえきぶん あるく ことに している。",
+          "v": "Tôi thường đi bộ quãng đường một ga, coi như tập thể dục luôn."
+        },
+        {
+          "c": "桜を見がてら、公園まで歩きませんか。",
+          "d": "さくらを みがてら、こうえんまで あるきませんか。",
+          "v": "Mình đi bộ ra công viên, tiện ngắm hoa anh đào luôn nhé?"
+        }
+      ],
+      "luuY": [
+        "Cách ghép: danh từ KHÔNG có の (✗ 散歩のがてら), động từ ở thể ます bỏ ます (✗ 送るがてら).",
+        "Khác 〜ついでに (N3): ついでに ghép N の / V-る / V-た và dùng rộng cho mọi việc tiện thể; 〜がてら thường đi với việc ra ngoài, di chuyển.",
+        "Khác 〜かたがた: かたがた trang trọng, dùng trong thư từ, thăm hỏi (お礼かたがた); 〜がてら dùng trong sinh hoạt thường ngày. Khác 〜かたわら: かたわら là duy trì song song dài hạn."
+      ],
+      "soSanh": [
+        "ja-n1-katagata",
+        "ja-n1-katawara",
+        "ja-n3-tsuideni",
+        "ja-n4-nagara"
+      ],
+      "tuKhoa": [
+        "gatera",
+        "がてら",
+        "nhân tiện",
+        "tiện thể",
+        "luôn tiện"
+      ],
+      "quiz": [
+        {
+          "h": "買い物（　）、新しくできた喫茶店をのぞいてみた。",
+          "lc": [
+            "のがてら",
+            "にがてら",
+            "のかたわら",
+            "がてら"
+          ],
+          "da": 3,
+          "gt": "Nhân tiện đi mua sắm thì ghé xem quán mới ⇒ 買い物がてら (danh từ ghép thẳng). のかたわら dùng cho hoạt động dài hạn song song; のがてら, にがてら sai cách ghép."
+        },
+        {
+          "h": "Cách ghép nào đúng với động từ 送る?",
+          "lc": [
+            "送りがてら",
+            "送ってがてら",
+            "送ったがてら",
+            "送るがてら"
+          ],
+          "da": 0,
+          "gt": "がてら đi sau thể ます bỏ ます: 送りがてら. Thể từ điển, thể て và thể た đều không ghép được với がてら."
+        },
+        {
+          "h": "「〜がてら」 khác 「〜かたがた」 chủ yếu ở điểm nào?",
+          "lc": [
+            "がてら chỉ đi sau tính từ, かたがた chỉ đi sau động từ",
+            "がてら dùng trong sinh hoạt thường ngày, かたがた trang trọng hơn, hay dùng trong thư từ và thăm hỏi",
+            "がてら dùng cho việc lặp lại nhiều năm, かたがた cho việc một lần",
+            "がてら nghĩa là \"thay vì\", かたがた nghĩa là \"nhân tiện\""
+          ],
+          "da": 1,
+          "gt": "Hai mẫu cùng nghĩa \"nhân tiện\", khác nhau ở văn phong: かたがた trang trọng (お礼かたがた伺う). Cả hai đều không đi sau tính từ, và がてら không mang nghĩa \"thay vì\" hay \"lặp lại nhiều năm\"."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-katagata",
+      "nhom": "Đồng thời – kèm theo",
+      "tieuDe": "〜かたがた",
+      "mau": "N + かたがた",
+      "nghia": "nhân tiện ~, đồng thời cũng là để ~ (trang trọng)",
+      "giaiThich": "Một hành động được thực hiện với hai mục đích; cách nói trang trọng, dùng trong thư từ, lời chào hỏi với người trên hoặc đối tác. Danh từ đứng trước thường là お礼, お見舞い, ご挨拶, ご報告, お詫び, お祝い; vế sau thường là động từ di chuyển, thăm hỏi như 伺う, 訪ねる, 参る.",
+      "cachGhep": [
+        "Danh từ chỉ hành động + かたがた: お礼かたがた, ご報告かたがた"
+      ],
+      "viDu": [
+        {
+          "c": "お礼かたがた、ご挨拶に伺いました。",
+          "d": "おれいかたがた、ごあいさつに うかがいました。",
+          "v": "Tôi đến để chào hỏi, đồng thời cũng xin được cảm ơn."
+        },
+        {
+          "c": "お見舞いかたがた、先生のお宅を訪ねた。",
+          "d": "おみまいかたがた、せんせいの おたくを たずねた。",
+          "v": "Tôi đến nhà thầy, vừa để thăm bệnh vừa để thăm hỏi."
+        },
+        {
+          "c": "ご報告かたがた、一度お目にかかりたいと存じます。",
+          "d": "ごほうこくかたがた、いちど おめに かかりたいと ぞんじます。",
+          "v": "Tôi mong được gặp ông một lần, nhân tiện để báo cáo luôn."
+        },
+        {
+          "c": "先日のお詫びかたがた、新しい資料をお届けに参りました。",
+          "d": "せんじつの おわびかたがた、あたらしい しりょうを おとどけに まいりました。",
+          "v": "Tôi đến để đưa tài liệu mới, đồng thời xin lỗi về chuyện hôm trước."
+        }
+      ],
+      "luuY": [
+        "Chỉ ghép với danh từ, không có の và không ghép với động từ: ✗ お礼のかたがた / ✗ 散歩しかたがた.",
+        "Khác 〜がてら: がてら dùng cho sinh hoạt thường ngày (散歩がてら買い物する) và ghép được với thể ます bỏ ます; 〜かたがた là lời lẽ trang trọng với danh từ như お礼, ご挨拶.",
+        "Khác 〜かたわら: かたわら là duy trì hai hoạt động song song lâu dài, không phải \"một lần đi, hai mục đích\"."
+      ],
+      "soSanh": [
+        "ja-n1-gatera",
+        "ja-n1-katawara",
+        "ja-n3-tsuideni"
+      ],
+      "tuKhoa": [
+        "katagata",
+        "かたがた",
+        "nhân tiện",
+        "đồng thời cũng để",
+        "trang trọng"
+      ],
+      "quiz": [
+        {
+          "h": "就職のご報告（　）、恩師のお宅に伺った。",
+          "lc": [
+            "しかたがた",
+            "かたがた",
+            "にかたがた",
+            "のかたがた"
+          ],
+          "da": 1,
+          "gt": "Danh từ ghép thẳng với かたがた: ご報告かたがた. Thêm の, に hoặc ghép qua động từ (しかたがた) đều sai."
+        },
+        {
+          "h": "Câu nào hợp văn phong của 「〜かたがた」 nhất?",
+          "lc": [
+            "ゲームかたがた、宿題をやっちゃった。",
+            "寝るかたがた、音楽を聞いた。",
+            "お祝いかたがた、新居に伺いたいと存じます。",
+            "腹が減ったかたがた、ラーメン食べに行こうぜ。"
+          ],
+          "da": 2,
+          "gt": "かたがた là cách nói trang trọng với danh từ như お祝い, お礼, đi cùng kính ngữ (伺いたいと存じます). Câu suồng sã (やっちゃった, 行こうぜ) không hợp văn phong, và かたがた không ghép với động từ hay mệnh đề (寝る, 腹が減った)."
+        },
+        {
+          "h": "「お見舞いかたがた伺う」 nghĩa là gì?",
+          "lc": [
+            "Sau khi thăm bệnh xong mới quay lại lần nữa",
+            "Vì bị bệnh nên không đến được",
+            "Thay vì thăm bệnh thì đến chơi",
+            "Đến thăm hỏi, đồng thời cũng là để thăm bệnh"
+          ],
+          "da": 3,
+          "gt": "N かたがた = một lần đi nhằm hai mục đích, trong đó có N. Nó không mang nghĩa thay thế, nguyên nhân hay trình tự trước sau."
+        }
+      ]
+    },
+    {
+      "id": "ja-n1-nagara-ni",
+      "nhom": "Đồng thời – kèm theo",
+      "tieuDe": "〜ながらに／〜ながらの",
+      "mau": "N / V-ます (bỏ ます) + ながらに（して） / ながらの + N",
+      "nghia": "vẫn giữ nguyên trạng thái ~; từ lúc ~ đã vậy",
+      "giaiThich": "Diễn tả một trạng thái được giữ nguyên không đổi trong khi việc khác diễn ra. Chủ yếu dùng trong các cụm gần như cố định: 涙ながらに (trong nước mắt), 生まれながらに (bẩm sinh), 昔ながらの (y như ngày xưa), いながらにして (ngồi nguyên một chỗ mà), いつもながら (vẫn như mọi khi). Không tự do ghép với mọi từ.",
+      "cachGhep": [
+        "Danh từ + ながらに / ながらの + N: 涙ながらに, 昔ながらの味",
+        "Động từ thể ます bỏ ます + ながらに（して）: 生まれながらに, いながらにして"
+      ],
+      "viDu": [
+        {
+          "c": "彼女は涙ながらに事故の様子を語った。",
+          "d": "かのじょは なみだながらに じこの ようすを かたった。",
+          "v": "Cô ấy kể lại vụ tai nạn trong nước mắt."
+        },
+        {
+          "c": "この町には昔ながらの街並みが残っている。",
+          "d": "この まちには むかしながらの まちなみが のこっている。",
+          "v": "Thị trấn này vẫn còn những dãy phố y như ngày xưa."
+        },
+        {
+          "c": "インターネットのおかげで、家にいながらにして世界中の情報が手に入る。",
+          "d": "インターネットの おかげで、いえに いながらに して せかいじゅうの じょうほうが てに はいる。",
+          "v": "Nhờ Internet, ngồi ở nhà mà vẫn có được thông tin khắp thế giới."
+        },
+        {
+          "c": "彼は生まれながらに音楽の才能に恵まれている。",
+          "d": "かれは うまれながらに おんがくの さいのうに めぐまれている。",
+          "v": "Anh ấy có năng khiếu âm nhạc bẩm sinh."
+        }
+      ],
+      "luuY": [
+        "Khác 〜ながら (N4: vừa ~ vừa ~): ながら nối hai hành động cùng lúc; 〜ながらに nói về trạng thái giữ nguyên, và chỉ đi với một số từ nhất định.",
+        "Khác 〜ながら（も） (N2: tuy ~ nhưng): mẫu N2 mang nghĩa nghịch tiếp; 〜ながらに／ながらの không có nghĩa \"nhưng\".",
+        "Nên học thuộc theo cụm: 涙ながらに, 生まれながらに／の, 昔ながらの, いながらにして, いつもながら."
+      ],
+      "soSanh": [
+        "ja-n4-nagara",
+        "ja-n2-nagara-mo",
+        "ja-n4-mama"
+      ],
+      "tuKhoa": [
+        "nagara ni",
+        "nagarani",
+        "nagara no",
+        "ながらに",
+        "giữ nguyên",
+        "bẩm sinh",
+        "y như xưa"
+      ],
+      "quiz": [
+        {
+          "h": "この店では、（　）ながらの製法で豆腐を作っている。",
+          "lc": [
+            "涙",
+            "昔",
+            "生まれ",
+            "い"
+          ],
+          "da": 1,
+          "gt": "\"Cách làm y như ngày xưa\" ⇒ 昔ながらの製法. 涙ながら là \"trong nước mắt\", 生まれながら là \"bẩm sinh\", いながら là \"ở nguyên chỗ\" — không hợp với 製法 (cách chế biến)."
+        },
+        {
+          "h": "「いながらにして」 nghĩa là gì?",
+          "lc": [
+            "Trong lúc vắng mặt",
+            "Vừa đi vừa làm",
+            "Ở nguyên một chỗ mà (vẫn làm được)",
+            "Tuy ở đó nhưng không biết"
+          ],
+          "da": 2,
+          "gt": "いながらにして = vẫn ở nguyên chỗ đó mà làm được việc (家にいながらにして買い物ができる). Nó không mang nghĩa nghịch tiếp, không nói về di chuyển hay vắng mặt."
+        },
+        {
+          "h": "「被害者は涙ながらに訴えた」 diễn tả điều gì?",
+          "lc": [
+            "Nạn nhân không khóc khi trình bày",
+            "Nạn nhân tuy khóc nhưng không trình bày gì",
+            "Nạn nhân trình bày xong rồi mới khóc",
+            "Nạn nhân vừa khóc vừa trình bày, giữ nguyên trạng thái rơi nước mắt"
+          ],
+          "da": 3,
+          "gt": "涙ながらに tả trạng thái rơi nước mắt được giữ nguyên trong lúc nói. Nó không có nghĩa nghịch tiếp \"tuy ~ nhưng\", cũng không chỉ trình tự trước sau."
+        }
+      ]
+    }
+  ]
+}

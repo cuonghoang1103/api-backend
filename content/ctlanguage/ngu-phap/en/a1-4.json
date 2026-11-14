@@ -1,0 +1,183 @@
+{
+  "nn": "en",
+  "cap": "A1",
+  "diem": [
+    {
+      "id": "en-a1-whose",
+      "nhom": "Câu hỏi",
+      "tieuDe": "Whose …?",
+      "mau": "Whose + danh từ + is / are + this / that / these / those? · Whose is this?",
+      "nghia": "của ai? (hỏi người sở hữu)",
+      "giaiThich": "Dùng Whose để hỏi một vật là của ai. Whose thường đứng ngay trước danh từ, rồi đến is hoặc are. Trả lời bằng tính từ sở hữu (It's my bag) hoặc sở hữu cách 's (It's Lan's).",
+      "cachGhep": [
+        "Whose + danh từ số ít + is + this / that? (Whose bag is this?)",
+        "Whose + danh từ số nhiều + are + these / those? (Whose shoes are these?)",
+        "Whose + is / are + this / these (+ danh từ)? (Whose is this pen?)",
+        "Trả lời: It's + my / your / his / her… + danh từ. · It's + tên + 's. · They're + tên + 's."
+      ],
+      "viDu": [
+        {
+          "c": "Whose bag is this? - It's Lan's.",
+          "v": "Cái túi này của ai? - Của Lan."
+        },
+        {
+          "c": "Whose shoes are these? - They're my brother's.",
+          "v": "Đôi giày này của ai? - Của anh trai tôi."
+        },
+        {
+          "c": "Whose car is that? - It's my father's car.",
+          "v": "Chiếc xe kia của ai? - Đó là xe của bố tôi."
+        },
+        {
+          "c": "Whose is this pen? - It's my pen.",
+          "v": "Cây bút này của ai? - Bút của tôi."
+        }
+      ],
+      "luuY": [
+        "Lỗi người Việt hay mắc: dùng Who thay Whose hoặc để từ hỏi ở cuối câu → sai: Who bag is this? / This bag is of who? Đúng: Whose bag is this?",
+        "Whose (của ai) và Who's (= Who is, là ai) đọc giống nhau nhưng viết và nghĩa khác nhau: Whose book is this? ↔ Who's that man?",
+        "Danh từ số nhiều thì dùng are và these / those: Whose keys are these? (không nói Whose keys is this?)"
+      ],
+      "soSanh": [
+        "en-a1-so-huu-cach",
+        "en-a1-tinh-tu-so-huu",
+        "en-a1-cau-hoi-wh"
+      ],
+      "tuKhoa": [
+        "whose",
+        "whose is this",
+        "của ai",
+        "cua ai",
+        "hỏi sở hữu"
+      ],
+      "quiz": [
+        {
+          "h": "___ book is this? - It's Mai's.",
+          "lc": [
+            "Who's",
+            "Where",
+            "Whose",
+            "Who"
+          ],
+          "da": 2,
+          "gt": "Câu trả lời cho biết quyển sách của ai (Mai's) nên hỏi bằng Whose. Who và Who's (= Who is) hỏi 'ai', không đứng trước danh từ book; Where hỏi nơi chốn."
+        },
+        {
+          "h": "Whose keys ___ these?",
+          "lc": [
+            "am",
+            "is",
+            "do",
+            "are"
+          ],
+          "da": 3,
+          "gt": "Keys là danh từ số nhiều và đi với these nên dùng are. Is dùng cho số ít, am chỉ đi với I, còn do không dùng trong câu hỏi với to be."
+        },
+        {
+          "h": "Whose phone is this? - ___",
+          "lc": [
+            "It's Nam's.",
+            "He's Nam.",
+            "It's Nam.",
+            "Yes, it is."
+          ],
+          "da": 0,
+          "gt": "Hỏi 'của ai' thì trả lời bằng sở hữu cách: It's Nam's (của Nam). 'It's Nam' và 'He's Nam' là nói đó là Nam; câu hỏi Whose không trả lời bằng Yes / No."
+        }
+      ]
+    },
+    {
+      "id": "en-a1-cach-noi-gio",
+      "nhom": "Số thứ tự – ngày tháng",
+      "tieuDe": "Cách nói giờ: What time is it?",
+      "mau": "What time is it? - It's + giờ. · It's + số phút + past / to + giờ.",
+      "nghia": "Mấy giờ rồi? - Bây giờ là … giờ …",
+      "giaiThich": "Hỏi giờ bằng What time is it? và trả lời bắt đầu bằng It's. Cách dễ nhất là đọc giờ rồi đến phút (seven fifteen). Cách thứ hai dùng past cho phút 1–30 (đã qua giờ) và to cho phút 31–59 (còn thiếu mấy phút nữa đến giờ sau). Nói việc gì xảy ra lúc mấy giờ thì dùng at.",
+      "cachGhep": [
+        "Giờ đúng: It's + giờ + o'clock. (It's seven o'clock. = 7:00)",
+        "Đọc giờ + phút: It's seven fifteen. (7:15) · It's nine forty. (9:40)",
+        "Phút 1–30: phút + past + giờ: ten past seven (7:10) · a quarter past seven (7:15) · half past seven (7:30)",
+        "Phút 31–59: phút còn thiếu + to + giờ sau: twenty to eight (7:40) · a quarter to eight (7:45)",
+        "Buổi sáng / chiều tối: 7 a.m. · 7 p.m.",
+        "Hỏi và nói việc xảy ra lúc mấy giờ: What time do you get up? - At six o'clock."
+      ],
+      "viDu": [
+        {
+          "c": "What time is it? - It's eight o'clock.",
+          "v": "Mấy giờ rồi? - Tám giờ rồi."
+        },
+        {
+          "c": "It's half past six.",
+          "v": "Bây giờ là sáu giờ rưỡi."
+        },
+        {
+          "c": "It's a quarter past ten.",
+          "v": "Bây giờ là mười giờ mười lăm."
+        },
+        {
+          "c": "It's ten to five.",
+          "v": "Bây giờ là năm giờ kém mười."
+        },
+        {
+          "c": "The class starts at seven thirty.",
+          "v": "Lớp học bắt đầu lúc bảy giờ ba mươi."
+        }
+      ],
+      "luuY": [
+        "Lỗi người Việt hay mắc: dịch thẳng 'Bây giờ là 7 giờ' → sai: Now is seven o'clock. Đúng: It's seven o'clock.",
+        "O'clock chỉ dùng với giờ đúng: seven o'clock (không nói seven thirty o'clock).",
+        "Với to, phải nói giờ SAU: 7:45 = a quarter to eight (tám giờ kém mười lăm), không phải a quarter to seven. Nói 'lúc mấy giờ' dùng at: at six o'clock (không dùng in hay on)."
+      ],
+      "soSanh": [
+        "en-a1-it-chu-ngu-gia",
+        "en-a1-gioi-tu-thoi-gian",
+        "en-a1-so-thu-tu-ngay-thang",
+        "en-a1-cau-hoi-wh"
+      ],
+      "tuKhoa": [
+        "what time is it",
+        "o'clock",
+        "half past",
+        "quarter to",
+        "cách nói giờ",
+        "cach noi gio",
+        "mấy giờ rồi"
+      ],
+      "quiz": [
+        {
+          "h": "7:30 đọc là:",
+          "lc": [
+            "half to seven",
+            "seven half",
+            "half past seven",
+            "half past eight"
+          ],
+          "da": 2,
+          "gt": "30 phút sau 7 giờ = half past seven. Không có cách nói half to hay seven half; half past eight là 8:30."
+        },
+        {
+          "h": "What time is it? - ___ nine o'clock.",
+          "lc": [
+            "He's",
+            "They're",
+            "There's",
+            "It's"
+          ],
+          "da": 3,
+          "gt": "Nói giờ luôn dùng chủ ngữ giả It: It's nine o'clock. They, There và He không dùng để nói giờ."
+        },
+        {
+          "h": "8:45 = It's a quarter ___ nine.",
+          "lc": [
+            "to",
+            "in",
+            "at",
+            "past"
+          ],
+          "da": 0,
+          "gt": "8:45 là còn thiếu 15 phút nữa đến 9 giờ nên dùng to: a quarter to nine. A quarter past nine là 9:15; at và in không dùng trong cách đọc giờ này."
+        }
+      ]
+    }
+  ]
+}

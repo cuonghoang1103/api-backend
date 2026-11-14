@@ -53,31 +53,31 @@
         {
           "h": "That isn't my coat. ___ is black.",
           "lc": [
-            "Mine",
-            "I",
+            "Me",
             "My",
-            "Me"
+            "I",
+            "Mine"
           ],
-          "da": 0,
+          "da": 3,
           "gt": "Đứng một mình thay cho my coat → đại từ sở hữu Mine."
         },
         {
           "h": "This is our classroom and that one is ___.",
           "lc": [
-            "their",
-            "them",
+            "theirs",
             "their's",
-            "theirs"
+            "their",
+            "them"
           ],
-          "da": 3,
+          "da": 0,
           "gt": "Không có danh từ theo sau nên dùng đại từ sở hữu theirs (không có dấu nháy)."
         },
         {
           "h": "Câu nào đúng?",
           "lc": [
-            "Is this bag your?",
-            "Is this bag yours?",
             "Is this yours bag?",
+            "Is this bag yours?",
+            "Is this bag your?",
             "Is this bag your's?"
           ],
           "da": 1,
@@ -138,34 +138,34 @@
         {
           "h": "I'm hungry. I want ___ to eat.",
           "lc": [
-            "everyone",
             "anything",
             "something",
+            "everyone",
             "nothing"
           ],
-          "da": 2,
+          "da": 1,
           "gt": "Câu khẳng định, nói về một vật không xác định → something."
         },
         {
           "h": "Everybody ___ tired after the trip yesterday.",
           "lc": [
+            "were",
             "be",
             "was",
-            "were",
             "are"
           ],
-          "da": 1,
+          "da": 2,
           "gt": "Everybody đi với động từ số ít; yesterday → was."
         },
         {
           "h": "Câu nào đúng?",
           "lc": [
-            "I didn't saw anybody.",
+            "I didn't see nobody.",
             "I not saw nobody.",
-            "I didn't see anybody.",
-            "I didn't see nobody."
+            "I didn't saw anybody.",
+            "I didn't see anybody."
           ],
-          "da": 2,
+          "da": 3,
           "gt": "Câu đã có didn't nên dùng anybody, không phủ định hai lần; sau didn't là V nguyên mẫu."
         }
       ]
@@ -218,20 +218,20 @@
         {
           "h": "My little sister can dress ___ now.",
           "lc": [
-            "hers",
-            "herself",
             "her",
-            "himself"
+            "hers",
+            "himself",
+            "herself"
           ],
-          "da": 1,
+          "da": 3,
           "gt": "Chủ ngữ my little sister (nữ) tự mặc cho chính mình → herself."
         },
         {
           "h": "The children enjoyed ___ at the zoo.",
           "lc": [
             "themselves",
-            "them",
             "themself",
+            "them",
             "theirselves"
           ],
           "da": 0,
@@ -240,10 +240,10 @@
         {
           "h": "I made this cake by ___.",
           "lc": [
-            "my",
+            "mine",
             "myself",
             "me",
-            "mine"
+            "my"
           ],
           "da": 1,
           "gt": "By + đại từ phản thân = tự mình, một mình: by myself."
@@ -300,34 +300,34 @@
         {
           "h": "I like the green apples, not the red ___.",
           "lc": [
-            "it",
             "one",
-            "ones",
-            "them"
+            "it",
+            "them",
+            "ones"
           ],
-          "da": 2,
+          "da": 3,
           "gt": "Thay cho apples (số nhiều) sau tính từ red → ones."
         },
         {
           "h": "This cup is dirty. Can I have a clean ___?",
           "lc": [
-            "ones",
             "one",
+            "ones",
             "cup one",
             "it"
           ],
-          "da": 1,
+          "da": 0,
           "gt": "Thay cho cup (số ít) sau tính từ clean → one."
         },
         {
           "h": "There are three bags here. ___ is yours?",
           "lc": [
-            "Which ones",
             "What one",
+            "Which one",
             "Who",
-            "Which one"
+            "Which ones"
           ],
-          "da": 3,
+          "da": 1,
           "gt": "Hỏi chọn một cái trong nhóm, động từ is số ít → Which one."
         }
       ]
@@ -385,34 +385,34 @@
         {
           "h": "I have two brothers. ___ of them are doctors.",
           "lc": [
-            "Both",
             "Either",
-            "Neither",
-            "All"
+            "All",
+            "Both",
+            "Neither"
           ],
-          "da": 0,
+          "da": 2,
           "gt": "Nói về hai người, động từ số nhiều are → Both of them."
         },
         {
           "h": "There are two keys, but ___ key opens this door. We can't go in.",
           "lc": [
+            "either",
             "both",
-            "neither",
             "all",
-            "either"
+            "neither"
           ],
-          "da": 1,
+          "da": 3,
           "gt": "Không vào được nên không chìa nào mở được; neither + danh từ số ít + động từ khẳng định."
         },
         {
           "h": "A: Monday or Tuesday? B: I'm free on both days, so ___ day is OK.",
           "lc": [
-            "none",
-            "neither",
             "either",
-            "both"
+            "both",
+            "neither",
+            "none"
           ],
-          "da": 2,
+          "da": 0,
           "gt": "Ngày nào trong hai ngày cũng được → either + danh từ số ít."
         }
       ]
@@ -470,34 +470,34 @@
         {
           "h": "A teacher is a person ___ works in a school.",
           "lc": [
-            "who",
-            "what",
             "which",
-            "where"
+            "who",
+            "where",
+            "what"
           ],
-          "da": 0,
+          "da": 1,
           "gt": "A person là người và đại từ làm chủ ngữ của works → who."
         },
         {
           "h": "I lost the pen ___ you gave me.",
           "lc": [
             "what",
-            "which",
             "who",
+            "which",
             "where"
           ],
-          "da": 1,
+          "da": 2,
           "gt": "The pen là vật → which (what không làm đại từ quan hệ sau danh từ)."
         },
         {
           "h": "Câu nào đúng?",
           "lc": [
-            "The girl who sits next to me is friendly.",
-            "The girl which sits next to me is friendly.",
+            "The girl who she sits next to me is friendly.",
             "The girl sits next to me is friendly.",
-            "The girl who she sits next to me is friendly."
+            "The girl which sits next to me is friendly.",
+            "The girl who sits next to me is friendly."
           ],
-          "da": 0,
+          "da": 3,
           "gt": "Người dùng who, không lặp she, và không được bỏ đại từ quan hệ khi nó làm chủ ngữ."
         }
       ]
@@ -556,19 +556,19 @@
           "h": "I hope ___ you again soon.",
           "lc": [
             "see",
-            "to see",
             "to seeing",
-            "seeing"
+            "seeing",
+            "to see"
           ],
-          "da": 1,
+          "da": 3,
           "gt": "Hope đi với to + V: hope to see."
         },
         {
           "h": "Do you mind ___ the door?",
           "lc": [
             "closing",
-            "close",
             "to close",
+            "close",
             "closed"
           ],
           "da": 0,
@@ -577,9 +577,9 @@
         {
           "h": "She is good at ___.",
           "lc": [
-            "sings",
-            "singing",
             "to sing",
+            "singing",
+            "sings",
             "sing"
           ],
           "da": 1,
@@ -638,34 +638,34 @@
         {
           "h": "I'm going to the supermarket ___ some milk.",
           "lc": [
-            "buy",
+            "to buy",
             "for to buy",
             "for buy",
-            "to buy"
+            "buy"
           ],
-          "da": 3,
+          "da": 0,
           "gt": "Nói mục đích dùng to + V nguyên mẫu: to buy."
         },
         {
           "h": "He is studying hard ___ the exam.",
           "lc": [
-            "to passing",
-            "for pass",
             "passes",
-            "to pass"
+            "to pass",
+            "to passing",
+            "for pass"
           ],
-          "da": 3,
+          "da": 1,
           "gt": "Mục đích của việc học chăm: to + V nguyên mẫu."
         },
         {
           "h": "We stopped at a café ___ a drink.",
           "lc": [
-            "for to",
-            "for",
+            "for having",
             "to",
-            "for having"
+            "for",
+            "for to"
           ],
-          "da": 1,
+          "da": 2,
           "gt": "A drink là danh từ nên dùng for + danh từ; to phải đi với động từ (to have a drink)."
         }
       ]
@@ -720,33 +720,33 @@
           "h": "If you mix red and yellow, you ___ orange.",
           "lc": [
             "will getting",
+            "got",
             "get",
-            "getting",
-            "got"
+            "getting"
           ],
-          "da": 1,
+          "da": 2,
           "gt": "Sự thật luôn đúng: cả hai vế dùng hiện tại đơn → get."
         },
         {
           "h": "Ice ___ if you heat it.",
           "lc": [
             "melted",
+            "is melt",
             "melt",
-            "melts",
-            "is melt"
+            "melts"
           ],
-          "da": 2,
+          "da": 3,
           "gt": "Quy luật tự nhiên, chủ ngữ ice (số ít) → hiện tại đơn melts."
         },
         {
           "h": "If my baby brother ___ hungry, he cries.",
           "lc": [
-            "will be",
             "is",
             "was",
+            "will be",
             "be"
           ],
-          "da": 1,
+          "da": 0,
           "gt": "Thói quen luôn xảy ra: vế if dùng hiện tại đơn → is."
         }
       ]
@@ -805,34 +805,34 @@
         {
           "h": "If I ___ time tomorrow, I'll call you.",
           "lc": [
-            "had",
             "have",
+            "will have",
             "having",
-            "will have"
+            "had"
           ],
-          "da": 1,
+          "da": 0,
           "gt": "Vế if dùng hiện tại đơn dù nói về tương lai: have."
         },
         {
           "h": "If you don't wear a coat, you ___ cold.",
           "lc": [
-            "were",
-            "are being",
             "be",
-            "will be"
+            "will be",
+            "are being",
+            "were"
           ],
-          "da": 3,
+          "da": 1,
           "gt": "Vế kết quả của điều kiện loại 1 dùng will + V."
         },
         {
           "h": "Câu nào đúng?",
           "lc": [
-            "If she come, I tell her.",
             "If she will come, I'll tell her.",
-            "If she comes, I told her.",
-            "If she comes, I'll tell her."
+            "If she come, I tell her.",
+            "If she comes, I'll tell her.",
+            "If she comes, I told her."
           ],
-          "da": 3,
+          "da": 2,
           "gt": "Vế if: hiện tại đơn (comes); vế kết quả: will + V."
         }
       ]
@@ -889,21 +889,21 @@
         {
           "h": "___ this beautiful picture? - My sister did.",
           "lc": [
-            "Who did paint",
             "Who does paint",
-            "Who did painted",
-            "Who painted"
+            "Who painted",
+            "Who did paint",
+            "Who did painted"
           ],
-          "da": 3,
+          "da": 1,
           "gt": "Hỏi về chủ ngữ (ai vẽ) nên không dùng did: Who painted…?"
         },
         {
           "h": "Who ___ at the party? - I saw Nam and Hoa.",
           "lc": [
-            "saw you",
+            "did see you",
             "you saw",
             "did you see",
-            "did see you"
+            "saw you"
           ],
           "da": 2,
           "gt": "Câu trả lời cho biết người được nhìn thấy (tân ngữ) nên cần did: Who did you see?"
@@ -911,12 +911,12 @@
         {
           "h": "What ___ yesterday? - There was an accident.",
           "lc": [
-            "did happened",
-            "happened",
             "was happen",
-            "did happen"
+            "did happen",
+            "did happened",
+            "happened"
           ],
-          "da": 1,
+          "da": 3,
           "gt": "What là chủ ngữ nên động từ chia thẳng quá khứ: What happened?"
         }
       ]
@@ -972,10 +972,10 @@
         {
           "h": "The cat jumped ___ the box and ran away.",
           "lc": [
-            "along",
-            "out of",
             "during",
-            "between"
+            "out of",
+            "between",
+            "along"
           ],
           "da": 1,
           "gt": "Nhảy ra khỏi hộp rồi chạy đi → out of."
@@ -984,22 +984,22 @@
           "h": "The bank is on the other side. Walk ___ the street.",
           "lc": [
             "between",
-            "out",
             "of",
-            "across"
+            "across",
+            "out"
           ],
-          "da": 3,
+          "da": 2,
           "gt": "Sang phía bên kia tức là băng ngang qua đường → across."
         },
         {
           "h": "Câu nào đúng?",
           "lc": [
-            "I went home at six.",
+            "I went in home at six.",
             "I went at home at six.",
             "I went to home at six.",
-            "I went in home at six."
+            "I went home at six."
           ],
-          "da": 0,
+          "da": 3,
           "gt": "Home sau động từ chuyển động không có giới từ: go home."
         }
       ]
@@ -1057,8 +1057,8 @@
         {
           "h": "It's dark in here. Please ___ the light.",
           "lc": [
-            "get up",
             "open",
+            "get up",
             "take off",
             "turn on"
           ],
@@ -1068,23 +1068,23 @@
         {
           "h": "Your shoes are dirty. Take ___ before you come in.",
           "lc": [
-            "it off",
             "them off",
             "them out",
-            "off them"
+            "off them",
+            "it off"
           ],
-          "da": 1,
+          "da": 0,
           "gt": "Tân ngữ là đại từ (shoes → them) phải đứng giữa: take them off."
         },
         {
           "h": "My grandmother ___ my little brother when my parents are at work.",
           "lc": [
             "looks for",
-            "looks at",
             "looks after",
-            "looks up"
+            "looks up",
+            "looks at"
           ],
-          "da": 2,
+          "da": 1,
           "gt": "Look after = chăm sóc, trông nom."
         }
       ]
@@ -1142,34 +1142,34 @@
         {
           "h": "It was very cold, ___ I wore a thick coat.",
           "lc": [
-            "so",
             "although",
+            "because",
             "but",
-            "because"
+            "so"
           ],
-          "da": 0,
+          "da": 3,
           "gt": "Vế sau là kết quả của vế trước (lạnh nên mặc áo dày) → so."
         },
         {
           "h": "___ she was ill, she went to work.",
           "lc": [
-            "Because",
             "Although",
-            "But",
-            "So"
+            "So",
+            "Because",
+            "But"
           ],
-          "da": 1,
+          "da": 0,
           "gt": "Hai ý trái với mong đợi (ốm mà vẫn đi làm) và liên từ đứng đầu câu → Although."
         },
         {
           "h": "Câu nào đúng?",
           "lc": [
-            "Because it rained, we stayed in.",
             "Because of it rained, we stayed in.",
+            "Because it rained, we stayed in.",
             "Although it rained, but we went out.",
             "Because it rained, so we stayed in."
           ],
-          "da": 0,
+          "da": 1,
           "gt": "Chỉ dùng một liên từ; because + mệnh đề, không kèm so."
         }
       ]
@@ -1227,18 +1227,18 @@
           "h": "I'll tell her the news when she ___ home.",
           "lc": [
             "will come",
-            "coming",
             "came",
-            "comes"
+            "comes",
+            "coming"
           ],
-          "da": 3,
+          "da": 2,
           "gt": "Nói về tương lai nhưng sau when dùng hiện tại đơn: comes."
         },
         {
           "h": "Turn off the lights ___ you leave the room.",
           "lc": [
-            "after that",
             "so",
+            "after that",
             "although",
             "before"
           ],
@@ -1248,12 +1248,12 @@
         {
           "h": "After ___ breakfast, he went to work.",
           "lc": [
-            "have",
             "having",
-            "he has",
-            "to have"
+            "to have",
+            "have",
+            "he has"
           ],
-          "da": 1,
+          "da": 0,
           "gt": "After + V-ing khi hai hành động cùng chủ ngữ: After having breakfast."
         }
       ]

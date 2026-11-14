@@ -1,0 +1,1349 @@
+{
+  "nn": "zh",
+  "cap": "HSK6",
+  "diem": [
+    {
+      "id": "zh-hsk6-benzhe",
+      "nhom": "Giới từ",
+      "tieuDe": "本着",
+      "mau": "(S) + 本着 + … 的 + 精神 / 原则 / 态度 / 宗旨 + V",
+      "nghia": "trên tinh thần ~, theo nguyên tắc ~",
+      "giaiThich": "本着 là giới từ nêu tinh thần, nguyên tắc, thái độ làm chỗ dựa cho hành động. Tân ngữ của nó là một số ít danh từ trừu tượng như 精神, 原则, 态度, 宗旨, 方针, 目的, phía trước thường có định ngữ dài. Dùng trong văn bản chính thức, ngoại giao, phát biểu trang trọng. Cụm 本着… đứng sau chủ ngữ hoặc đưa lên đầu câu.",
+      "cachGhep": [
+        "S + 本着 + … 的原则 + V: 双方本着平等互利的原则签订了合同",
+        "S + 本着 + … 的态度 + V: 本着对顾客负责的态度处理这件事",
+        "本着 + … 的精神，S + V: 本着节约的精神，公司取消了…"
+      ],
+      "viDu": [
+        {
+          "c": "双方本着平等互利的原则签订了合同。",
+          "d": "Shuāngfāng běnzhe píngděng hùlì de yuánzé qiāndìng le hétong.",
+          "v": "Hai bên đã ký hợp đồng trên nguyên tắc bình đẳng, cùng có lợi."
+        },
+        {
+          "c": "我们本着对顾客负责的态度处理这件事。",
+          "d": "Wǒmen běnzhe duì gùkè fùzé de tàidu chǔlǐ zhè jiàn shì.",
+          "v": "Chúng tôi xử lý việc này với thái độ có trách nhiệm với khách hàng."
+        },
+        {
+          "c": "本着节约的精神，公司取消了不必要的会议。",
+          "d": "Běnzhe jiéyuē de jīngshén, gōngsī qǔxiāo le bú bìyào de huìyì.",
+          "v": "Trên tinh thần tiết kiệm, công ty đã huỷ các cuộc họp không cần thiết."
+        },
+        {
+          "c": "两国本着互相尊重的精神解决了争端。",
+          "d": "Liǎng guó běnzhe hùxiāng zūnzhòng de jīngshén jiějué le zhēngduān.",
+          "v": "Hai nước đã giải quyết tranh chấp trên tinh thần tôn trọng lẫn nhau."
+        }
+      ],
+      "luuY": [
+        "Khác 根据 / 按照: 根据 và 按照 đi với thứ CỤ THỂ — quy định, kế hoạch, số liệu, lời ai nói (根据调查, 按照计划); 本着 chỉ đi với danh từ trừu tượng chỉ tinh thần, nguyên tắc: 本着计划 ✗, 本着天气预报 ✗.",
+        "Khác 依据 / 依照: hai từ này dẫn căn cứ pháp lý, văn bản; 本着 dẫn thái độ, tôn chỉ.",
+        "Sau 本着 thường phải có định ngữ + 的 + danh từ trung tâm; nói trơ 本着精神 nghe thiếu."
+      ],
+      "soSanh": [
+        "zh-hsk4-anzhao",
+        "zh-hsk3-genju",
+        "zh-hsk6-yiju",
+        "zh-hsk6-jiyu"
+      ],
+      "tuKhoa": [
+        "benzhe",
+        "ben zhe",
+        "trên tinh thần",
+        "theo nguyên tắc",
+        "với thái độ",
+        "giới từ trang trọng"
+      ],
+      "quiz": [
+        {
+          "h": "我们将（　）公平、公正的原则处理每一份申请。",
+          "lc": [
+            "难以",
+            "得以",
+            "鉴于",
+            "本着"
+          ],
+          "da": 3,
+          "gt": "Tân ngữ là 原则 (nguyên tắc) ⇒ 本着…的原则. 鉴于 = \"xét thấy\" (nêu tình hình để ra quyết định); 难以 và 得以 đứng trước động từ, không dẫn danh từ 原则."
+        },
+        {
+          "h": "Danh từ nào hợp làm tân ngữ của 本着?",
+          "lc": [
+            "精神、原则、态度",
+            "昨天的报纸",
+            "一张地图",
+            "天气预报"
+          ],
+          "da": 0,
+          "gt": "本着 chỉ đi với danh từ trừu tượng chỉ tinh thần, nguyên tắc, thái độ, tôn chỉ. Nguồn tin hay vật cụ thể (dự báo, báo, bản đồ) phải dùng 根据 / 按照."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "他本着去北京。",
+            "本着互相理解的态度，双方重新开始了谈判。",
+            "本着他说的话，明天会下雨。",
+            "我本着很喜欢这本书。"
+          ],
+          "da": 1,
+          "gt": "本着 + … 的态度 + hành động: đúng mẫu. Dẫn lời người khác dùng 根据 / 据; 本着 không phải phó từ đứng trước động từ hay tính từ."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-yiju",
+      "nhom": "Giới từ",
+      "tieuDe": "依据 / 依照",
+      "mau": "依据 / 依照 + N (法律 / 规定 / 事实 / 程序…) + V ｜ … 的 + 依据 (danh từ)",
+      "nghia": "căn cứ vào ~；chiếu theo ~ (trang trọng)",
+      "giaiThich": "依据 làm giới từ nghĩa \"căn cứ vào\" (sự thật, pháp luật, số liệu, lý thuyết) để rút ra kết luận hay hành động; nó còn là danh từ \"căn cứ, cơ sở\" (科学依据, 法律依据). 依照 nghĩa \"chiếu theo, làm đúng theo\" (pháp luật, quy định, thủ tục, chỉ thị), hay gặp trong văn bản pháp lý, hành chính; 依照 không làm danh từ. Cả hai trang trọng hơn 根据 và 按照.",
+      "cachGhep": [
+        "S + 依据 + N + V: 法院依据事实和法律作出了判决",
+        "N + 的 + 依据 / 没有 + 依据 (danh từ): 没有任何科学依据",
+        "S + 依照 + N (规定 / 程序) + V: 依照合同的规定支付赔偿"
+      ],
+      "viDu": [
+        {
+          "c": "法院依据事实和法律作出了判决。",
+          "d": "Fǎyuàn yījù shìshí hé fǎlǜ zuòchū le pànjué.",
+          "v": "Toà án đã ra phán quyết căn cứ vào sự thật và pháp luật."
+        },
+        {
+          "c": "这种说法没有任何科学依据。",
+          "d": "Zhè zhǒng shuōfǎ méiyǒu rènhé kēxué yījù.",
+          "v": "Cách nói này không có bất kỳ căn cứ khoa học nào."
+        },
+        {
+          "c": "公司将依照合同的规定支付赔偿。",
+          "d": "Gōngsī jiāng yīzhào hétong de guīdìng zhīfù péicháng.",
+          "v": "Công ty sẽ bồi thường chiếu theo quy định của hợp đồng."
+        },
+        {
+          "c": "一切手续都应依照法定程序办理。",
+          "d": "Yíqiè shǒuxù dōu yīng yīzhào fǎdìng chéngxù bànlǐ.",
+          "v": "Mọi thủ tục đều phải làm theo trình tự luật định."
+        }
+      ],
+      "luuY": [
+        "Khác 根据: 根据 thông dụng nhất, nói hay viết đều được (根据天气预报); 依据 trang trọng hơn, thiên về pháp lý, học thuật. Cả 根据 và 依据 đều làm danh từ được.",
+        "Khác 按照: 按照 là \"làm theo\" một chuẩn, một kế hoạch, dùng hằng ngày (按照老师说的做); 依照 chủ yếu dùng với pháp luật, điều lệ, thủ tục chính thức. 按照 và 依照 KHÔNG làm danh từ: 科学按照 ✗, 法律依照 ✗.",
+        "Khác nhau: 依据 trả lời \"dựa vào đâu mà kết luận\"; 依照 trả lời \"làm theo khuôn nào\". Kết luận, phán đoán ⇒ 依据; chấp hành, thực hiện ⇒ 依照."
+      ],
+      "soSanh": [
+        "zh-hsk3-genju",
+        "zh-hsk4-anzhao",
+        "zh-hsk6-benzhe",
+        "zh-hsk6-jiyu"
+      ],
+      "tuKhoa": [
+        "yiju",
+        "yi ju",
+        "yizhao",
+        "yi zhao",
+        "căn cứ vào",
+        "chiếu theo",
+        "根据",
+        "按照"
+      ],
+      "quiz": [
+        {
+          "h": "你这样说有什么（　）吗？",
+          "lc": [
+            "依照",
+            "按照",
+            "依据",
+            "本着"
+          ],
+          "da": 2,
+          "gt": "Sau 有什么 cần một DANH TỪ \"căn cứ\" ⇒ 依据. 依照, 按照 và 本着 chỉ là giới từ, không làm danh từ nên không đứng sau 有什么."
+        },
+        {
+          "h": "依照 thường đi với loại danh từ nào?",
+          "lc": [
+            "màu sắc",
+            "cảm xúc, tâm trạng",
+            "thời tiết",
+            "pháp luật, quy định, thủ tục"
+          ],
+          "da": 3,
+          "gt": "依照 = \"chiếu theo\" một chuẩn mực chính thức: 依照法律, 依照规定, 依照程序. Cảm xúc, thời tiết, màu sắc không phải thứ để \"chiếu theo\"."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "各部门应依照规定的程序办理。",
+            "我依照很高兴。",
+            "这个决定没有法律依照。",
+            "依据吧，我们走。"
+          ],
+          "da": 0,
+          "gt": "依照 + 规定的程序 + V là đúng mẫu giới từ. \"Căn cứ pháp lý\" phải là 法律依据 (danh từ); 依照 không đứng trước tính từ, và 依据 không dùng làm lời giục."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-jianyu",
+      "nhom": "Giới từ",
+      "tieuDe": "鉴于",
+      "mau": "鉴于 + N / mệnh đề，S + V (quyết định / kiến nghị)",
+      "nghia": "xét thấy ~, xét vì ~ (nêu tình hình để ra quyết định)",
+      "giaiThich": "鉴于 đứng đầu câu, nêu một tình hình đã biết mà người nói CÂN NHẮC, rồi vế sau đưa ra quyết định, kiến nghị hay cách xử lý tương ứng. Dùng trong văn bản chính thức, thông báo, phát biểu. Sau 鉴于 có thể là cụm danh từ hoặc cả một mệnh đề. Chủ ngữ của câu đứng ở vế sau; vế sau không dùng 所以.",
+      "cachGhep": [
+        "鉴于 + N，S + 决定 + V: 鉴于目前的情况，我们决定推迟会议",
+        "鉴于 + mệnh đề，S + V: 鉴于他多次违反规定，公司决定解除合同",
+        "鉴于 + N + Adj，S + 只 / 就 + V: 鉴于时间有限，我只讲三个问题"
+      ],
+      "viDu": [
+        {
+          "c": "鉴于目前的情况，我们决定推迟会议。",
+          "d": "Jiànyú mùqián de qíngkuàng, wǒmen juédìng tuīchí huìyì.",
+          "v": "Xét tình hình hiện nay, chúng tôi quyết định hoãn cuộc họp."
+        },
+        {
+          "c": "鉴于他多次违反规定，公司决定解除合同。",
+          "d": "Jiànyú tā duō cì wéifǎn guīdìng, gōngsī juédìng jiěchú hétong.",
+          "v": "Xét thấy anh ta nhiều lần vi phạm quy định, công ty quyết định chấm dứt hợp đồng."
+        },
+        {
+          "c": "鉴于时间有限，我只讲三个问题。",
+          "d": "Jiànyú shíjiān yǒuxiàn, wǒ zhǐ jiǎng sān gè wèntí.",
+          "v": "Vì thời gian có hạn, tôi chỉ nói ba vấn đề."
+        },
+        {
+          "c": "鉴于天气恶劣，学校宣布停课一天。",
+          "d": "Jiànyú tiānqì èliè, xuéxiào xuānbù tíngkè yì tiān.",
+          "v": "Xét thời tiết xấu, nhà trường thông báo nghỉ học một ngày."
+        }
+      ],
+      "luuY": [
+        "Khác 由于: 由于 nêu NGUYÊN NHÂN khách quan dẫn tới bất kỳ kết quả nào, kể cả kết quả tự nhiên, và đi được với 所以 / 因此 (由于下雨，路很滑); 鉴于 nêu điều được xem xét để đi tới một QUYẾT ĐỊNH có chủ ý: 鉴于下雨，路很滑 ✗.",
+        "Khác 基于: 基于 + danh từ chỉ cơ sở, lý do (基于安全考虑); 鉴于 nhận được cả mệnh đề (鉴于他多次迟到).",
+        "鉴于 đứng đầu câu, trước chủ ngữ; không đặt sau chủ ngữ như phó từ: 我们鉴于决定 ✗."
+      ],
+      "soSanh": [
+        "zh-hsk5-youyu",
+        "zh-hsk6-jiyu",
+        "zh-hsk2-yinwei-suoyi",
+        "zh-hsk3-genju"
+      ],
+      "tuKhoa": [
+        "jianyu",
+        "jian yu",
+        "xét thấy",
+        "xét vì",
+        "căn cứ tình hình",
+        "由于"
+      ],
+      "quiz": [
+        {
+          "h": "（　）报名人数不足，主办方决定取消本次讲座。",
+          "lc": [
+            "无从",
+            "鉴于",
+            "本着",
+            "足以"
+          ],
+          "da": 1,
+          "gt": "Nêu tình hình (số người đăng ký không đủ) rồi ra quyết định ⇒ 鉴于. 本着 cần danh từ 精神 / 原则; 足以 và 无从 đứng trước động từ chứ không mở đầu câu dẫn mệnh đề."
+        },
+        {
+          "h": "Vế sau của câu có 鉴于 thường là gì?",
+          "lc": [
+            "một lời chào",
+            "một câu hỏi về thời gian",
+            "một quyết định, kiến nghị hay cách xử lý",
+            "một hiện tượng tự nhiên"
+          ],
+          "da": 2,
+          "gt": "鉴于 = \"xét thấy…\", nên phía sau là hành động có cân nhắc của chủ thể. Kết quả tự nhiên dùng 由于 / 因为."
+        },
+        {
+          "h": "Câu nào dùng 鉴于 KHÔNG hợp?",
+          "lc": [
+            "鉴于情况紧急，我们立即采取了措施。",
+            "鉴于双方意见不一，会议决定下次再讨论。",
+            "鉴于他身体不好，领导安排他休息。",
+            "鉴于昨天下雨，所以地上很湿。"
+          ],
+          "da": 3,
+          "gt": "Đất ướt là kết quả tự nhiên, không phải quyết định, và 鉴于 cũng không đi với 所以 — câu đó phải dùng 因为 / 由于. Ba câu còn lại đều nêu tình hình rồi tới một quyết định nên đúng."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-jiyu",
+      "nhom": "Giới từ",
+      "tieuDe": "基于",
+      "mau": "基于 + N (考虑 / 原因 / 事实 / 数据…)，S + V ｜ 基于 + N + 的 + N",
+      "nghia": "dựa trên (cơ sở) ~, xuất phát từ ~",
+      "giaiThich": "基于 nêu cơ sở, điểm xuất phát của một kết luận, quyết định hay sản phẩm. Tân ngữ là danh từ như 考虑, 原因, 事实, 认识, 数据, 理论, 原则. Cụm 基于… có thể đứng đầu câu, đứng sau 是 (是基于…的), hoặc làm định ngữ (基于… 的 + N) — cách dùng rất phổ biến trong văn khoa học, kỹ thuật. Là từ văn viết.",
+      "cachGhep": [
+        "基于 + N，S + V: 基于以上原因，我们不得不取消活动",
+        "S + 是 + 基于 + N + V + 的: 结论是基于大量数据得出的",
+        "基于 + N + 的 + N: 基于真实故事的电影"
+      ],
+      "viDu": [
+        {
+          "c": "基于安全方面的考虑，学校禁止学生在湖里游泳。",
+          "d": "Jīyú ānquán fāngmiàn de kǎolǜ, xuéxiào jìnzhǐ xuésheng zài hú lǐ yóuyǒng.",
+          "v": "Xuất phát từ cân nhắc về an toàn, nhà trường cấm học sinh bơi trong hồ."
+        },
+        {
+          "c": "这个结论是基于大量调查数据得出的。",
+          "d": "Zhège jiélùn shì jīyú dàliàng diàochá shùjù déchū de.",
+          "v": "Kết luận này được rút ra dựa trên một lượng lớn số liệu điều tra."
+        },
+        {
+          "c": "基于以上原因，我们不得不取消这次活动。",
+          "d": "Jīyú yǐshàng yuányīn, wǒmen bùdébù qǔxiāo zhè cì huódòng.",
+          "v": "Vì những lý do trên, chúng tôi buộc phải huỷ hoạt động lần này."
+        },
+        {
+          "c": "这是一部基于真实故事的电影。",
+          "d": "Zhè shì yí bù jīyú zhēnshí gùshi de diànyǐng.",
+          "v": "Đây là một bộ phim dựa trên câu chuyện có thật."
+        }
+      ],
+      "luuY": [
+        "Khác 鉴于: 鉴于 dẫn một TÌNH HÌNH (danh từ hoặc cả mệnh đề) để ra quyết định; 基于 dẫn một DANH TỪ chỉ cơ sở, không trực tiếp dẫn mệnh đề: 基于他多次迟到 ✗ → 鉴于他多次迟到 ✓ / 基于这个原因 ✓.",
+        "Khác 根据: 根据 dẫn nguồn thông tin, quy định để nói hay làm theo (根据报道); 基于 nói nền tảng mà trên đó cái gì được xây dựng, và làm định ngữ rất tự nhiên (基于数据的分析).",
+        "Khác 由于: 由于 chỉ nguyên nhân và đi với mệnh đề; 基于 + danh từ."
+      ],
+      "soSanh": [
+        "zh-hsk6-jianyu",
+        "zh-hsk3-genju",
+        "zh-hsk6-yiju",
+        "zh-hsk5-youyu"
+      ],
+      "tuKhoa": [
+        "jiyu",
+        "ji yu",
+        "dựa trên",
+        "trên cơ sở",
+        "xuất phát từ",
+        "根据"
+      ],
+      "quiz": [
+        {
+          "h": "这款软件是（　）人工智能技术开发的。",
+          "lc": [
+            "鉴于",
+            "本着",
+            "基于",
+            "得以"
+          ],
+          "da": 2,
+          "gt": "\"Được phát triển dựa trên công nghệ…\" — nêu nền tảng ⇒ 基于. 鉴于 nêu tình hình để ra quyết định; 本着 cần danh từ 精神 / 原则; 得以 đứng trước động từ."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "我们基于去吧。",
+            "基于他昨天没来，我们很生气。",
+            "这本书基于很有意思。",
+            "基于成本方面的考虑，公司放弃了这个项目。"
+          ],
+          "da": 3,
+          "gt": "基于 + cụm danh từ (成本方面的考虑) + quyết định: đúng. 基于 không trực tiếp dẫn một mệnh đề như \"anh ấy hôm qua không đến\", và không phải phó từ đứng trước động từ / tính từ."
+        },
+        {
+          "h": "Trong 基于大数据的分析, cụm 基于大数据 làm thành phần gì?",
+          "lc": [
+            "định ngữ cho danh từ 分析",
+            "câu hỏi",
+            "bổ ngữ kết quả",
+            "chủ ngữ của câu"
+          ],
+          "da": 0,
+          "gt": "基于 + N + 的 + N: cả cụm 基于大数据 bổ nghĩa cho 分析 (\"phân tích dựa trên dữ liệu lớn\"). Nó không phải chủ ngữ hay bổ ngữ."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-jiu-eryan",
+      "nhom": "Giới từ",
+      "tieuDe": "就…而言",
+      "mau": "就 + N / cụm từ + 而言，…",
+      "nghia": "xét về ~, nói riêng về mặt ~ thì…",
+      "giaiThich": "Khoanh một phương diện hoặc một đối tượng để nhận xét: lời đánh giá ở vế sau chỉ đúng trong phạm vi ấy. Là cách nói văn viết của 就…来说. Cụm 就…而言 thường đứng đầu câu, sau nó có dấu phẩy. Hay gặp: 就目前而言 (xét ở hiện tại), 就我个人而言 (riêng cá nhân tôi), 就总体而言 (xét tổng thể).",
+      "cachGhep": [
+        "就 + N + 而言，S + V: 就质量而言，这个牌子最好",
+        "就 + 我个人 / 我们公司 + 而言，…: 就我个人而言，我更喜欢…",
+        "就 + 目前 / 总体 / 这一点 + 而言，…"
+      ],
+      "viDu": [
+        {
+          "c": "就质量而言，这个牌子的产品是最好的。",
+          "d": "Jiù zhìliàng ér yán, zhège páizi de chǎnpǐn shì zuì hǎo de.",
+          "v": "Xét về chất lượng, sản phẩm của nhãn hiệu này là tốt nhất."
+        },
+        {
+          "c": "就我个人而言，我更喜欢住在小城市。",
+          "d": "Jiù wǒ gèrén ér yán, wǒ gèng xǐhuan zhù zài xiǎo chéngshì.",
+          "v": "Riêng cá nhân tôi thì thích sống ở thành phố nhỏ hơn."
+        },
+        {
+          "c": "就目前的情况而言，按时完成任务不太可能。",
+          "d": "Jiù mùqián de qíngkuàng ér yán, ànshí wánchéng rènwu bú tài kěnéng.",
+          "v": "Xét tình hình hiện nay, hoàn thành nhiệm vụ đúng hạn là khó có thể."
+        },
+        {
+          "c": "就经济发展水平而言，两个地区的差距很大。",
+          "d": "Jiù jīngjì fāzhǎn shuǐpíng ér yán, liǎng gè dìqū de chājù hěn dà.",
+          "v": "Xét về trình độ phát triển kinh tế, chênh lệch giữa hai vùng rất lớn."
+        }
+      ],
+      "luuY": [
+        "Khác 对…来说: 对…来说 nêu LẬP TRƯỜNG của người hay vật chịu ảnh hưởng (对我来说很难 = với tôi thì khó); 就…而言 nêu PHƯƠNG DIỆN đem ra bàn (就价格而言 = xét về giá).",
+        "Khác 拿…来说: 拿…来说 đưa ra một VÍ DỤ minh hoạ cho điều vừa nói; 就…而言 giới hạn phạm vi nhận xét, không phải nêu ví dụ.",
+        "Đủ cả hai nửa 就 và 而言; không trộn với 来说 kiểu 就…而言来说 ✗. Trong lời nói thường ngày dùng 就…来说 / 从…来看 cho tự nhiên."
+      ],
+      "soSanh": [
+        "zh-hsk3-dui-laishuo",
+        "zh-hsk4-na-laishuo",
+        "zh-hsk4-zai-shang-xia-zhong",
+        "zh-hsk4-duiyu-zhiyu"
+      ],
+      "tuKhoa": [
+        "jiu eryan",
+        "jiu er yan",
+        "eryan",
+        "jiu laishuo",
+        "xét về",
+        "nói về mặt",
+        "riêng về"
+      ],
+      "quiz": [
+        {
+          "h": "（　）价格而言，这家店并不算贵。",
+          "lc": [
+            "把",
+            "让",
+            "被",
+            "就"
+          ],
+          "da": 3,
+          "gt": "Mẫu cố định 就…而言 = \"xét về…\". 把, 被, 让 là các từ của câu chữ 把, câu bị động, câu sai khiến — không ghép với 而言."
+        },
+        {
+          "h": "就…而言 dùng để làm gì?",
+          "lc": [
+            "khoanh phương diện / phạm vi để nhận xét",
+            "kể hai việc xảy ra liên tiếp",
+            "đưa ra mệnh lệnh",
+            "nêu nguyên nhân của sự việc"
+          ],
+          "da": 0,
+          "gt": "就 A 而言 = chỉ xét riêng A. Nêu nguyên nhân dùng 由于 / 因为; mệnh lệnh và trình tự thời gian không liên quan tới mẫu này."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "这里不贵就价格而言吗？",
+            "就价格而言，这里不贵。",
+            "就而言价格，这里不贵。",
+            "就价格而言来说，这里不贵。"
+          ],
+          "da": 1,
+          "gt": "Thành phần được xét đặt GIỮA 就 và 而言, cả cụm đứng đầu câu. Không đảo 而言 lên trước danh từ, không ghép thêm 来说, và cụm này không dùng làm đuôi câu hỏi."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-jiayi-yuyi",
+      "nhom": "Động từ hình thức – năng nguyện",
+      "tieuDe": "加以 / 予以 + V",
+      "mau": "(对 + O) + 加以 / 予以 + V (hai âm tiết)",
+      "nghia": "tiến hành ~ (加以)；dành cho, cho ~ (予以) — động từ hình thức",
+      "giaiThich": "加以 và 予以 là \"động từ hình thức\": bản thân không mang nghĩa cụ thể, chỉ làm cho câu trang trọng; nghĩa thật nằm ở động từ hai âm tiết phía sau. 加以 nói việc đem một cách xử lý áp lên đối tượng: 加以分析 / 研究 / 解决 / 说明 / 改进 / 控制. 予以 (= 给予) nói việc \"trao cho\" đối tượng một sự đối xử, thường từ tổ chức, cấp trên: 予以支持 / 表扬 / 奖励 / 批评 / 处理 / 考虑 / 批准. Đối tượng đứng TRƯỚC, thường dẫn bằng 对 / 对于. Chỉ dùng trong văn viết.",
+      "cachGhep": [
+        "对 + O，S + 必须 / 应该 + 加以 + V: 对这些问题必须认真加以研究",
+        "V1 + O + 要 + 及时 + 加以 + V2: 发现错误要及时加以改正",
+        "对 + O，S + 将 + 予以 + V: 对表现突出的员工将予以奖励"
+      ],
+      "viDu": [
+        {
+          "c": "对这些问题，我们必须认真加以研究。",
+          "d": "Duì zhèxiē wèntí, wǒmen bìxū rènzhēn jiāyǐ yánjiū.",
+          "v": "Đối với những vấn đề này, chúng ta phải nghiêm túc nghiên cứu."
+        },
+        {
+          "c": "发现错误要及时加以改正。",
+          "d": "Fāxiàn cuòwù yào jíshí jiāyǐ gǎizhèng.",
+          "v": "Phát hiện sai sót thì phải kịp thời sửa chữa."
+        },
+        {
+          "c": "对表现突出的员工，公司将予以奖励。",
+          "d": "Duì biǎoxiàn tūchū de yuángōng, gōngsī jiāng yǔyǐ jiǎnglì.",
+          "v": "Với nhân viên có thành tích nổi bật, công ty sẽ khen thưởng."
+        },
+        {
+          "c": "对于违反规定的行为，学校将予以严肃处理。",
+          "d": "Duìyú wéifǎn guīdìng de xíngwéi, xuéxiào jiāng yǔyǐ yánsù chǔlǐ.",
+          "v": "Đối với hành vi vi phạm quy định, nhà trường sẽ xử lý nghiêm."
+        }
+      ],
+      "luuY": [
+        "Sau 加以 / 予以 phải là động từ HAI âm tiết và không kèm tân ngữ: 加以改 ✗, 加以研究这个问题 ✗ → 对这个问题加以研究 ✓. Phó từ một âm tiết đứng trước thì rút thành 加: 多加注意, 严加管理.",
+        "Khác nhau: 加以 = \"tiến hành xử lý\" (hành động áp lên sự vật); 予以 = \"dành cho\" (sự đối xử trao cho người / việc). 予以表扬 ✓, 加以表扬 ít tự nhiên; 加以分析 ✓, 予以分析 ít dùng.",
+        "Khác 进行: 进行 chỉ một hoạt động chính thức kéo dài và mang được 了 / 过 (进行了讨论); 加以 không mang 了. 予以 đọc yǔyǐ; 给予 đọc jǐyǔ."
+      ],
+      "soSanh": [
+        "zh-hsk6-yousuo",
+        "zh-hsk6-deyi",
+        "zh-hsk4-duiyu-zhiyu",
+        "zh-hsk4-ba-nang-cao"
+      ],
+      "tuKhoa": [
+        "jiayi",
+        "jia yi",
+        "yuyi",
+        "yu yi",
+        "động từ hình thức",
+        "tiến hành",
+        "dành cho",
+        "给予"
+      ],
+      "quiz": [
+        {
+          "h": "对实验中出现的问题，我们要认真（　）分析。",
+          "lc": [
+            "加以",
+            "难以",
+            "足以",
+            "得以"
+          ],
+          "da": 0,
+          "gt": "Đối tượng đã đưa lên trước bằng 对, cần động từ hình thức \"tiến hành\" ⇒ 加以分析. 得以 = nhờ đó mà được, 难以 = khó mà, 足以 = đủ để — đều đổi nghĩa câu thành sai ý yêu cầu \"phải phân tích nghiêm túc\"."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "我们要加以解决这个问题。",
+            "对这个问题，我们要尽快加以解决。",
+            "加以我们这个问题解决。",
+            "我们要加以改。"
+          ],
+          "da": 1,
+          "gt": "Động từ sau 加以 phải hai âm tiết và không mang tân ngữ; đối tượng đưa lên trước bằng 对. 改 chỉ một âm tiết; đặt 这个问题 sau 解决 là sai mẫu; 加以 cũng không đứng đầu câu trước chủ ngữ."
+        },
+        {
+          "h": "予以 gần nghĩa với từ nào?",
+          "lc": [
+            "所以 (cho nên)",
+            "可以 (có thể)",
+            "给予 (dành cho, trao cho)",
+            "难以 (khó mà)"
+          ],
+          "da": 2,
+          "gt": "予 nghĩa là \"cho\", 予以 = 给予: 予以支持 = dành sự ủng hộ. Ba từ kia chỉ giống ở chữ 以, nghĩa hoàn toàn khác."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-deyi",
+      "nhom": "Động từ hình thức – năng nguyện",
+      "tieuDe": "得以",
+      "mau": "(Điều kiện)，S + (才 / 终于) + 得以 + V (hai âm tiết)",
+      "nghia": "(nhờ đó mà) được ~, có thể ~",
+      "giaiThich": "得以 nói rằng nhờ một điều kiện, một sự giúp đỡ hay một cơ hội nào đó mà việc mong muốn đã / sẽ thành hiện thực. Đứng trước động từ, thường là động từ hai âm tiết; chủ ngữ hay là sự vật chịu tác động (问题得以解决). Hay đi với 才, 终于, 从而. Là từ văn viết; không có dạng phủ định 不得以 và không đứng một mình để trả lời.",
+      "cachGhep": [
+        "在…下，S + 终于 + 得以 + V: 在大家的帮助下，问题终于得以解决",
+        "多亏 / 由于…，S + 才 + 得以 + V: 他的生命才得以保全",
+        "有了 / 通过…，S + 得以 + V: 工程得以顺利进行"
+      ],
+      "viDu": [
+        {
+          "c": "在大家的帮助下，问题终于得以解决。",
+          "d": "Zài dàjiā de bāngzhù xià, wèntí zhōngyú déyǐ jiějué.",
+          "v": "Nhờ mọi người giúp đỡ, vấn đề cuối cùng đã được giải quyết."
+        },
+        {
+          "c": "多亏及时抢救，他的生命才得以保全。",
+          "d": "Duōkuī jíshí qiǎngjiù, tā de shēngmìng cái déyǐ bǎoquán.",
+          "v": "May được cấp cứu kịp thời, tính mạng anh ấy mới giữ được."
+        },
+        {
+          "c": "有了这笔资金，工程得以顺利进行。",
+          "d": "Yǒu le zhè bǐ zījīn, gōngchéng déyǐ shùnlì jìnxíng.",
+          "v": "Có khoản vốn này, công trình mới có thể tiến hành thuận lợi."
+        },
+        {
+          "c": "通过这次交流，双方的误会得以消除。",
+          "d": "Tōngguò zhè cì jiāoliú, shuāngfāng de wùhuì déyǐ xiāochú.",
+          "v": "Qua lần trao đổi này, hiểu lầm giữa hai bên đã được xoá bỏ."
+        }
+      ],
+      "luuY": [
+        "Khác 可以 / 能: 可以 / 能 nói khả năng hay sự cho phép nói chung, có phủ định và câu hỏi (不能, 可以吗); 得以 chỉ nói việc THÀNH ĐƯỢC nhờ một điều kiện vừa nêu, không phủ định, không hỏi: 你得以来吗？ ✗.",
+        "Câu có 得以 cần nêu điều kiện phía trước (在…下, 由于, 通过, 多亏). Việc đạt được là điều mong muốn — hậu quả xấu không dùng 得以.",
+        "Khác 难以: 难以 = \"khó mà\" (ngược nghĩa); khác 足以: 足以 = \"đủ để\". Ba từ cùng dạng \"X以 + động từ\", đừng lẫn."
+      ],
+      "soSanh": [
+        "zh-hsk6-nanyi",
+        "zh-hsk6-zuyi",
+        "zh-hsk1-neng",
+        "zh-hsk2-keyi"
+      ],
+      "tuKhoa": [
+        "deyi",
+        "de yi",
+        "nhờ đó mà được",
+        "có thể",
+        "đạt được nhờ điều kiện"
+      ],
+      "quiz": [
+        {
+          "h": "由于政府的大力支持，这项计划才（　）实现。",
+          "lc": [
+            "得以",
+            "加以",
+            "无从",
+            "难以"
+          ],
+          "da": 0,
+          "gt": "Nhờ điều kiện (chính phủ ủng hộ) mà việc thành ⇒ 才得以实现. 难以 và 无从 mang nghĩa \"khó / không thể\" nên mâu thuẫn với vế trước; 加以 là \"tiến hành\", không đi với chủ ngữ 计划 theo nghĩa \"được thực hiện\"."
+        },
+        {
+          "h": "Câu nào SAI?",
+          "lc": [
+            "经过抢修，交通得以恢复。",
+            "你明天得以来吗？",
+            "有了大家的捐款，他才得以继续上学。",
+            "在老师的指导下，论文得以顺利完成。"
+          ],
+          "da": 1,
+          "gt": "得以 không dùng để hỏi khả năng hay xin phép thông thường — chỗ đó dùng 能 / 可以. Ba câu còn lại đều nêu điều kiện rồi nói việc thành được nên đúng."
+        },
+        {
+          "h": "得以 khác 可以 ở điểm nào?",
+          "lc": [
+            "得以 là khẩu ngữ, 可以 là văn viết",
+            "得以 chỉ đứng cuối câu",
+            "得以 nhấn việc thành được nhờ một điều kiện, không dùng phủ định hay để xin phép",
+            "得以 nghĩa là \"khó mà\""
+          ],
+          "da": 2,
+          "gt": "得以 là từ văn viết, luôn gắn với điều kiện nêu trước và đứng trước động từ. \"Khó mà\" là 难以; 可以 mới là từ dùng hằng ngày."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-nanyi",
+      "nhom": "Động từ hình thức – năng nguyện",
+      "tieuDe": "难以",
+      "mau": "S + 难以 + V (hai âm tiết) ｜ 令人 / 让人 + 难以 + V ｜ 难以 + V + 的 + N",
+      "nghia": "khó mà ~, khó có thể ~ (văn viết)",
+      "giaiThich": "难以 nghĩa như 很难 / 不容易 nhưng là từ văn viết, đứng trước động từ hai âm tiết hoặc cụm động từ: 难以相信, 难以想象, 难以接受, 难以理解, 难以避免, 难以实现, 难以形容. Hay gặp trong 令人难以… (khiến người ta khó mà…) và làm định ngữ (难以忘怀的回忆). Nó không tự làm vị ngữ.",
+      "cachGhep": [
+        "S + 难以 + V: 这个计划难以实现",
+        "令人 / 让人 + 难以 + V: 令人难以相信",
+        "难以 + 用 + N + V: 难以用语言形容",
+        "难以 + V + 的 + N: 难以忘怀的回忆"
+      ],
+      "viDu": [
+        {
+          "c": "这个消息令人难以相信。",
+          "d": "Zhège xiāoxi lìng rén nányǐ xiāngxìn.",
+          "v": "Tin này khiến người ta khó mà tin được."
+        },
+        {
+          "c": "他当时的心情难以用语言形容。",
+          "d": "Tā dāngshí de xīnqíng nányǐ yòng yǔyán xíngróng.",
+          "v": "Tâm trạng của anh ấy lúc đó khó có thể diễn tả bằng lời."
+        },
+        {
+          "c": "没有大家的支持，这个计划难以实现。",
+          "d": "Méiyǒu dàjiā de zhīchí, zhège jìhuà nányǐ shíxiàn.",
+          "v": "Không có sự ủng hộ của mọi người thì kế hoạch này khó mà thực hiện."
+        },
+        {
+          "c": "那次旅行给我留下了难以忘怀的回忆。",
+          "d": "Nà cì lǚxíng gěi wǒ liúxià le nányǐ wànghuái de huíyì.",
+          "v": "Chuyến đi ấy đã để lại cho tôi những kỷ niệm khó quên."
+        }
+      ],
+      "luuY": [
+        "Khác 很难: 很难 dùng khi nói, đi với mọi động từ kể cả một âm tiết (很难说, 很难买), và 难 còn tự làm vị ngữ (这道题很难); 难以 chỉ đứng trước động từ hai âm tiết: 难以说 ✗, 这道题难以 ✗.",
+        "Khác 难免: 难免 = \"khó tránh khỏi\" — việc dễ xảy ra (难免出错); 难以 = \"khó làm được\" — việc khó xảy ra. Nghĩa gần như ngược nhau.",
+        "Khác 无从 / 无法: 无法 và 无从 là \"không thể\" hẳn; 难以 là \"khó\", vẫn để ngỏ khả năng."
+      ],
+      "soSanh": [
+        "zh-hsk6-deyi",
+        "zh-hsk6-wucong",
+        "zh-hsk5-nanmian",
+        "zh-hsk6-zuyi"
+      ],
+      "tuKhoa": [
+        "nanyi",
+        "nan yi",
+        "khó mà",
+        "khó có thể",
+        "很难",
+        "văn viết"
+      ],
+      "quiz": [
+        {
+          "h": "他提出的条件太苛刻，我们（　）接受。",
+          "lc": [
+            "难以",
+            "足以",
+            "予以",
+            "得以"
+          ],
+          "da": 0,
+          "gt": "Điều kiện quá khắt khe ⇒ \"khó mà chấp nhận\": 难以接受. 得以 = nhờ đó mà được, 足以 = đủ để, 予以 = dành cho — đều trái với ý \"quá khắt khe\"."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "这道题难以。",
+            "这种痛苦是别人难以理解的。",
+            "这件事难以说。",
+            "我难以很高兴。"
+          ],
+          "da": 1,
+          "gt": "难以 + động từ hai âm tiết (理解). Nó không tự làm vị ngữ, không đi với động từ một âm tiết (nói 很难说), và không đứng trước tính từ có phó từ mức độ."
+        },
+        {
+          "h": "难以 khác 很难 thế nào?",
+          "lc": [
+            "难以 chỉ dùng trong câu hỏi",
+            "难以 là danh từ",
+            "难以 là văn viết, chỉ đứng trước động từ hai âm tiết; 很难 dùng khi nói và linh hoạt hơn",
+            "难以 nghĩa là \"rất dễ\""
+          ],
+          "da": 2,
+          "gt": "Nghĩa \"khó\" như nhau, khác ở văn phong và khả năng kết hợp. 难以 không có nghĩa \"dễ\", dùng trong câu trần thuật, và là từ đứng trước động từ chứ không phải danh từ."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-zuyi",
+      "nhom": "Động từ hình thức – năng nguyện",
+      "tieuDe": "足以",
+      "mau": "S + 足以 + V ｜ S + 不足以 + V",
+      "nghia": "đủ để ~ / chưa đủ để ~",
+      "giaiThich": "足以 nói mức độ, số lượng hay sức nặng của một thứ đã đạt tới ngưỡng cần để làm được việc gì: \"đủ để chứng minh, đủ để nuôi sống…\". Đứng trước động từ. Phủ định là 不足以 (chưa đủ để), rất hay dùng trong lập luận. Thiên về văn viết.",
+      "cachGhep": [
+        "S + 足以 + V + O: 这些证据足以证明他是清白的",
+        "S + 不足以 + V + O: 一次失败不足以说明问题",
+        "仅 / 光 + 凭 + N + 还不足以 + V: 仅凭热情还不足以做好这份工作"
+      ],
+      "viDu": [
+        {
+          "c": "这些证据足以证明他是清白的。",
+          "d": "Zhèxiē zhèngjù zúyǐ zhèngmíng tā shì qīngbái de.",
+          "v": "Những chứng cứ này đủ để chứng minh anh ấy trong sạch."
+        },
+        {
+          "c": "他的收入足以养活一家人。",
+          "d": "Tā de shōurù zúyǐ yǎnghuo yì jiā rén.",
+          "v": "Thu nhập của anh ấy đủ để nuôi sống cả nhà."
+        },
+        {
+          "c": "一次失败不足以说明问题。",
+          "d": "Yí cì shībài bù zúyǐ shuōmíng wèntí.",
+          "v": "Một lần thất bại chưa đủ để nói lên vấn đề."
+        },
+        {
+          "c": "仅凭热情还不足以做好这份工作。",
+          "d": "Jǐn píng rèqíng hái bù zúyǐ zuòhǎo zhè fèn gōngzuò.",
+          "v": "Chỉ dựa vào nhiệt tình thì chưa đủ để làm tốt công việc này."
+        }
+      ],
+      "luuY": [
+        "Khác 足够: 足够 là tính từ / động từ, đi với DANH TỪ hoặc tự làm vị ngữ (足够的时间, 钱足够了); 足以 chỉ đứng trước ĐỘNG TỪ: 足以的时间 ✗, 钱足以了 ✗.",
+        "Khác 够: 够 là khẩu ngữ (钱够买一张票); 足以 trang trọng và hay dùng cho điều trừu tượng (足以证明, 足以说明).",
+        "Phủ định là 不足以, không nói 足不以 ✗ hay 没足以 ✗."
+      ],
+      "soSanh": [
+        "zh-hsk6-deyi",
+        "zh-hsk6-nanyi",
+        "zh-hsk1-neng"
+      ],
+      "tuKhoa": [
+        "zuyi",
+        "zu yi",
+        "buzuyi",
+        "đủ để",
+        "chưa đủ để",
+        "足够"
+      ],
+      "quiz": [
+        {
+          "h": "这个例子（　）说明他的观点是错误的。",
+          "lc": [
+            "无从",
+            "加以",
+            "足以",
+            "予以"
+          ],
+          "da": 2,
+          "gt": "\"Ví dụ này đủ để cho thấy…\" ⇒ 足以说明. 予以 / 加以 là động từ hình thức cần đối tượng đưa lên trước và không mang tân ngữ phía sau; 无从 = \"không biết từ đâu mà\", trái nghĩa câu."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "我们有足以的时间。",
+            "他足不以完成任务。",
+            "钱足以了。",
+            "光有理论还不足以解决实际问题。"
+          ],
+          "da": 3,
+          "gt": "不足以 + động từ là dạng phủ định đúng. 足以 không làm định ngữ cho danh từ và không tự làm vị ngữ (hai chỗ đó dùng 足够); không có dạng 足不以."
+        },
+        {
+          "h": "Dạng phủ định của 足以 là gì?",
+          "lc": [
+            "不足以",
+            "足以不",
+            "没足以",
+            "足不以"
+          ],
+          "da": 0,
+          "gt": "\"Chưa đủ để\" = 不足以 + V. Ba dạng còn lại không tồn tại hoặc không mang nghĩa này."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-wucong",
+      "nhom": "Động từ hình thức – năng nguyện",
+      "tieuDe": "无从",
+      "mau": "S + 无从 + V (hai âm tiết: 下手 / 说起 / 得知 / 判断 / 查证…)",
+      "nghia": "không biết từ đâu mà ~, không có cách nào để ~",
+      "giaiThich": "无从 nói rằng không tìm ra đầu mối, căn cứ hay con đường để làm một việc, nên không thể làm. Đứng trước động từ hai âm tiết, thường là những việc cần điểm bắt đầu hoặc cần thông tin: 下手, 着手, 说起, 谈起, 得知, 知道, 判断, 查证, 选择. Là từ văn viết.",
+      "cachGhep": [
+        "S + (一时) + 无从 + 下手: 我一时无从下手",
+        "(O) + 已经 + 无从 + V: 当时的情况已经无从查证",
+        "S + 却 + 无从 + 说起: 有很多话，却无从说起"
+      ],
+      "viDu": [
+        {
+          "c": "事情太复杂，我一时无从下手。",
+          "d": "Shìqing tài fùzá, wǒ yìshí wúcóng xiàshǒu.",
+          "v": "Việc quá phức tạp, nhất thời tôi không biết bắt tay từ đâu."
+        },
+        {
+          "c": "没有任何记录，当时的情况已经无从查证。",
+          "d": "Méiyǒu rènhé jìlù, dāngshí de qíngkuàng yǐjīng wúcóng cházhèng.",
+          "v": "Không có ghi chép nào, tình hình lúc đó giờ không còn cách nào kiểm chứng."
+        },
+        {
+          "c": "他心里有很多话，却无从说起。",
+          "d": "Tā xīn lǐ yǒu hěn duō huà, què wúcóng shuōqǐ.",
+          "v": "Trong lòng anh ấy có rất nhiều điều muốn nói mà không biết bắt đầu từ đâu."
+        },
+        {
+          "c": "缺少可靠的数据，我们无从判断哪种方法更好。",
+          "d": "Quēshǎo kěkào de shùjù, wǒmen wúcóng pànduàn nǎ zhǒng fāngfǎ gèng hǎo.",
+          "v": "Thiếu số liệu đáng tin, chúng tôi không có cơ sở để phán đoán cách nào tốt hơn."
+        }
+      ],
+      "luuY": [
+        "Khác 无法: 无法 là \"không có cách, không thể\" nói chung, vì bất kỳ lý do gì (今天有事，无法参加会议); 无从 chỉ dùng khi thiếu ĐẦU MỐI / CĂN CỨ để bắt đầu: 今天有事，无从参加会议 ✗.",
+        "Khác 难以: 难以 là \"khó\", còn có thể; 无从 là hoàn toàn không có lối.",
+        "Sau 无从 là động từ hai âm tiết; không có dạng khẳng định 有从 ✗."
+      ],
+      "soSanh": [
+        "zh-hsk6-nanyi",
+        "zh-hsk6-deyi",
+        "zh-hsk3-kha-nang-liao",
+        "zh-hsk3-bo-ngu-kha-nang"
+      ],
+      "tuKhoa": [
+        "wucong",
+        "wu cong",
+        "wucong xiashou",
+        "không biết từ đâu",
+        "không có cách nào",
+        "无法"
+      ],
+      "quiz": [
+        {
+          "h": "面对这么多资料，他（　）下手。",
+          "lc": [
+            "无从",
+            "予以",
+            "得以",
+            "足以"
+          ],
+          "da": 0,
+          "gt": "Tổ hợp quen thuộc 无从下手 = \"không biết bắt tay từ đâu\". 足以 = đủ để, 得以 = nhờ đó mà được, 予以 = dành cho — đều không hợp với ý lúng túng trước đống tài liệu."
+        },
+        {
+          "h": "无从 nhấn mạnh lý do không làm được là gì?",
+          "lc": [
+            "đã làm xong rồi",
+            "thiếu đầu mối, căn cứ để bắt đầu",
+            "không muốn làm",
+            "không được phép"
+          ],
+          "da": 1,
+          "gt": "无从 = \"không có chỗ nào để từ đó mà…\". Không được phép là 不得 / 不许; không muốn là 不愿意."
+        },
+        {
+          "h": "Câu nào dùng 无从 hợp lý?",
+          "lc": [
+            "他无从很累。",
+            "我今天感冒了，无从上班。",
+            "这件事已经过去几十年，真相无从得知。",
+            "请你无从告诉我。"
+          ],
+          "da": 2,
+          "gt": "Chuyện đã qua hàng chục năm ⇒ không còn đầu mối để biết: 无从得知. Bị cảm không đi làm được thì dùng 不能 / 无法; 无从 không đứng trước tính từ và không dùng trong lời nhờ."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-bukui",
+      "nhom": "Động từ hình thức – năng nguyện",
+      "tieuDe": "不愧 (是 / 为)",
+      "mau": "S + (真 / 果然) + 不愧 + 是 / 为 + N",
+      "nghia": "quả không hổ danh là ~, thật xứng đáng là ~",
+      "giaiThich": "不愧 dùng để khen: biểu hiện thực tế của ai / cái gì hoàn toàn xứng với danh hiệu, thân phận nêu sau 是 / 为. Thường đứng sau một sự việc làm bằng chứng. 不愧是 dùng được cả khi nói lẫn khi viết; 不愧为 trang trọng, văn viết (为 đọc wéi). Hay đi kèm 真, 果然.",
+      "cachGhep": [
+        "S + 不愧 + 是 + N: 他不愧是一位经验丰富的老医生",
+        "S + 不愧 + 为 + N (văn viết): 杭州不愧为人间天堂",
+        "Bằng chứng，S + 真 + 不愧 + 是 + N: 你真不愧是数学系的学生"
+      ],
+      "viDu": [
+        {
+          "c": "他不愧是一位经验丰富的老医生。",
+          "d": "Tā búkuì shì yí wèi jīngyàn fēngfù de lǎo yīshēng.",
+          "v": "Ông ấy quả không hổ là một bác sĩ lâu năm giàu kinh nghiệm."
+        },
+        {
+          "c": "杭州不愧为人间天堂。",
+          "d": "Hángzhōu búkuì wéi rénjiān tiāntáng.",
+          "v": "Hàng Châu thật xứng danh thiên đường nơi trần thế."
+        },
+        {
+          "c": "这么难的题都能做出来，你真不愧是数学系的学生。",
+          "d": "Zhème nán de tí dōu néng zuò chūlái, nǐ zhēn búkuì shì shùxué xì de xuésheng.",
+          "v": "Bài khó thế mà cũng giải được, bạn đúng là không hổ danh sinh viên khoa Toán."
+        },
+        {
+          "c": "这部电影不愧是今年最受欢迎的作品。",
+          "d": "Zhè bù diànyǐng búkuì shì jīnnián zuì shòu huānyíng de zuòpǐn.",
+          "v": "Bộ phim này quả xứng đáng là tác phẩm được yêu thích nhất năm nay."
+        }
+      ],
+      "luuY": [
+        "Phải có 是 / 为 rồi mới tới danh từ: 他不愧老医生 ✗ → 他不愧是老医生 ✓.",
+        "Khác 果然: 果然 chỉ nói \"đúng như dự đoán\", tốt xấu đều được (果然下雨了); 不愧 luôn là lời KHEN và phải gắn với một danh hiệu, thân phận.",
+        "Khác 无愧: 无愧 = \"không hổ thẹn\" (问心无愧, 当之无愧), nói về lương tâm hay sự xứng đáng nói chung, không theo mẫu 是 + N. 不愧 không dùng để chê và hiếm khi dùng để tự khen."
+      ],
+      "soSanh": [
+        "zh-hsk4-guoran",
+        "zh-hsk5-dique",
+        "zh-hsk5-nanguai"
+      ],
+      "tuKhoa": [
+        "bukui",
+        "bu kui",
+        "bukui shi",
+        "không hổ danh",
+        "xứng đáng là",
+        "quả là"
+      ],
+      "quiz": [
+        {
+          "h": "这么短的时间就把问题解决了，他真（　）是公司最好的工程师。",
+          "lc": [
+            "不堪",
+            "无从",
+            "难以",
+            "不愧"
+          ],
+          "da": 3,
+          "gt": "Khen biểu hiện xứng với danh hiệu, sau có 是 + N ⇒ 不愧是. 不堪 = không chịu nổi, 无从 = không biết từ đâu, 难以 = khó mà — không đi với 是 để khen."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "她不愧是世界冠军，动作非常漂亮。",
+            "他不愧一位好老师。",
+            "不愧他明天来。",
+            "他不愧是小偷，偷了我的钱包。"
+          ],
+          "da": 0,
+          "gt": "不愧 + 是 + danh hiệu, dùng để khen. Thiếu 是 là sai mẫu; dùng cho \"kẻ trộm\" là sai sắc thái (không phải lời khen); 不愧 cũng không đứng trước một mệnh đề chỉ việc sắp xảy ra."
+        },
+        {
+          "h": "不愧 khác 果然 ở đâu?",
+          "lc": [
+            "不愧 là câu hỏi",
+            "不愧 luôn là lời khen gắn với một danh hiệu; 果然 chỉ nói \"đúng như dự đoán\"",
+            "不愧 dùng cho việc xấu, 果然 cho việc tốt",
+            "hai từ giống hệt nhau"
+          ],
+          "da": 1,
+          "gt": "果然下雨了 không khen ai cả; 不愧是冠军 thì khen. 不愧 không dùng cho việc xấu và không tạo câu hỏi."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-bukan",
+      "nhom": "Động từ hình thức – năng nguyện",
+      "tieuDe": "不堪",
+      "mau": "不堪 + V (hai âm tiết: 设想 / 忍受 / 回首…) ｜ Adj (tiêu cực, hai âm tiết) + 不堪",
+      "nghia": "không chịu nổi, không thể ~；~ hết mức (nghĩa xấu)",
+      "giaiThich": "不堪 có hai vị trí. Đứng TRƯỚC động từ, nghĩa \"không chịu nổi, không thể\": 不堪忍受 (không chịu đựng nổi), 不堪设想 (không dám nghĩ tới), 不堪回首 (không nỡ nhớ lại), 不堪一击 (không chịu nổi một đòn). Đứng SAU tính từ hai âm tiết mang nghĩa xấu, làm bổ ngữ chỉ mức độ rất cao: 疲惫不堪, 痛苦不堪, 狼狈不堪, 拥挤不堪, 破旧不堪, 混乱不堪. Là từ văn viết; chỉ dùng cho điều tiêu cực.",
+      "cachGhep": [
+        "S + 不堪 + V: 后果不堪设想；不堪忍受",
+        "S + Adj (xấu) + 不堪: 大家都疲惫不堪",
+        "Nơi chốn + Adj + 不堪: 景区里拥挤不堪"
+      ],
+      "viDu": [
+        {
+          "c": "连续加班一个月，大家都疲惫不堪。",
+          "d": "Liánxù jiābān yí gè yuè, dàjiā dōu píbèi bùkān.",
+          "v": "Tăng ca liên tục một tháng, ai nấy đều mệt rã rời."
+        },
+        {
+          "c": "如果当时没有人发现火情，后果不堪设想。",
+          "d": "Rúguǒ dāngshí méiyǒu rén fāxiàn huǒqíng, hòuguǒ bùkān shèxiǎng.",
+          "v": "Nếu lúc đó không ai phát hiện đám cháy thì hậu quả thật không dám nghĩ tới."
+        },
+        {
+          "c": "节日期间，景区里拥挤不堪。",
+          "d": "Jiérì qījiān, jǐngqū lǐ yōngjǐ bùkān.",
+          "v": "Trong dịp lễ, khu thắng cảnh đông nghẹt không chịu nổi."
+        },
+        {
+          "c": "他不堪忍受这样的压力，最终选择了辞职。",
+          "d": "Tā bùkān rěnshòu zhèyàng de yālì, zuìzhōng xuǎnzé le cízhí.",
+          "v": "Anh ấy không chịu nổi áp lực như vậy, cuối cùng đã chọn nghỉ việc."
+        }
+      ],
+      "luuY": [
+        "Chỉ đi với nghĩa XẤU: 高兴不堪 ✗, 漂亮不堪 ✗. Muốn nói mức độ cao của điều tốt thì dùng 极了 / 得不得了.",
+        "Khác 极了 / …得不得了: hai cách này là khẩu ngữ, đi với mọi tính từ; Adj + 不堪 là văn viết, chỉ đi với tính từ hai âm tiết tiêu cực, và phía trước không thêm 很: 很疲惫不堪 ✗.",
+        "Khác 受不了: 受不了 là khẩu ngữ, tự làm vị ngữ được (我受不了了); 不堪 phải đi kèm động từ hoặc tính từ."
+      ],
+      "soSanh": [
+        "zh-hsk3-jile",
+        "zh-hsk5-de-budeliao",
+        "zh-hsk3-kha-nang-liao",
+        "zh-hsk6-nanyi"
+      ],
+      "tuKhoa": [
+        "bukan",
+        "bu kan",
+        "pibei bukan",
+        "bukan shexiang",
+        "không chịu nổi",
+        "hết mức",
+        "rã rời"
+      ],
+      "quiz": [
+        {
+          "h": "走了一整天的山路，我们个个疲惫（　）。",
+          "lc": [
+            "不愧",
+            "足以",
+            "不堪",
+            "无从"
+          ],
+          "da": 2,
+          "gt": "Tính từ tiêu cực 疲惫 + bổ ngữ mức độ ⇒ 疲惫不堪. 不愧 cần 是 + N phía sau; 无从 và 足以 đứng TRƯỚC động từ, không đứng cuối câu sau tính từ."
+        },
+        {
+          "h": "Câu nào SAI?",
+          "lc": [
+            "他被这件事弄得狼狈不堪。",
+            "一旦发生事故，后果不堪设想。",
+            "这条街道破旧不堪。",
+            "听到这个好消息，她高兴不堪。"
+          ],
+          "da": 3,
+          "gt": "不堪 chỉ đi với điều tiêu cực; \"vui\" là nghĩa tốt nên phải nói 高兴极了 / 高兴得不得了. Ba câu còn lại đều dùng với nghĩa xấu nên đúng."
+        },
+        {
+          "h": "后果不堪设想 nghĩa là gì?",
+          "lc": [
+            "Hậu quả nghiêm trọng đến mức không dám nghĩ tới.",
+            "Không có hậu quả gì.",
+            "Hậu quả đã được nghĩ kỹ.",
+            "Hậu quả rất dễ đoán."
+          ],
+          "da": 0,
+          "gt": "不堪 + 设想 = \"không chịu nổi việc hình dung\" ⇒ hậu quả cực kỳ nghiêm trọng. Các cách hiểu kia bỏ mất nghĩa \"không chịu nổi\"."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-yehao-yehao",
+      "nhom": "Cấu trúc cố định",
+      "tieuDe": "…也好，…也好 / …也罢，…也罢",
+      "mau": "A + 也好，B + 也好，(S) + 都 / 反正 / 总之… ｜ A + 也罢，B + 也罢，…",
+      "nghia": "A cũng thế mà B cũng thế, (dù A hay B) thì đều ~",
+      "giaiThich": "Nêu hai (hay nhiều) khả năng rồi khẳng định kết quả, thái độ ở vế sau không vì thế mà thay đổi. 也好 / 也罢 đứng SAU từng khả năng; vế sau thường có 都, 反正, 总之. A và B có thể là danh từ, động từ, cả mệnh đề, và hay là cặp trái nghĩa (来 / 不来, 成功 / 失败). 也好 dùng nhiều trong khẩu ngữ; 也罢 thiên về văn viết, có thêm sắc thái buông xuôi, bất đắc dĩ.",
+      "cachGhep": [
+        "S + V + 也好，不 + V + 也好，S + 都…: 你来也好，不来也好，我们都会按时开始",
+        "N1 + 也好，N2 + 也好，S + 都…: 表扬也好，批评也好，他都不放在心上",
+        "A + 也罢，B + 也罢，…: 成功也罢，失败也罢，重要的是…"
+      ],
+      "viDu": [
+        {
+          "c": "你来也好，不来也好，我们都会按时开始。",
+          "d": "Nǐ lái yěhǎo, bù lái yěhǎo, wǒmen dōu huì ànshí kāishǐ.",
+          "v": "Bạn đến cũng được, không đến cũng được, chúng tôi đều sẽ bắt đầu đúng giờ."
+        },
+        {
+          "c": "表扬也好，批评也好，他都不放在心上。",
+          "d": "Biǎoyáng yěhǎo, pīpíng yěhǎo, tā dōu bú fàng zài xīnshang.",
+          "v": "Khen cũng vậy, chê cũng vậy, anh ấy đều chẳng để trong lòng."
+        },
+        {
+          "c": "成功也罢，失败也罢，重要的是我们努力过。",
+          "d": "Chénggōng yěbà, shībài yěbà, zhòngyào de shì wǒmen nǔlì guo.",
+          "v": "Thành công cũng thế, thất bại cũng thế, điều quan trọng là chúng ta đã cố gắng."
+        },
+        {
+          "c": "坐飞机也好，坐火车也好，反正今天必须赶到。",
+          "d": "Zuò fēijī yěhǎo, zuò huǒchē yěhǎo, fǎnzhèng jīntiān bìxū gǎndào.",
+          "v": "Đi máy bay cũng được, đi tàu cũng được, đằng nào hôm nay cũng phải tới nơi."
+        }
+      ],
+      "luuY": [
+        "Khác 无论 / 不管…还是…: 无论 / 不管 là liên từ đứng ĐẦU vế (无论你来还是不来，…); 也好 / 也罢 là trợ từ đứng SAU từng khả năng. Đặt nhầm vị trí là lỗi hay gặp: 也好你来，也好不来 ✗.",
+        "Khác 要么…要么…: 要么 buộc CHỌN một trong hai; 也好…也好 nói chọn cái nào cũng KHÔNG ảnh hưởng tới kết quả.",
+        "Phải lặp ở cả hai vế. 也好 một mình cuối câu lại là nghĩa khác: \"thế cũng tốt\" (这样也好); 也罢 một mình: \"thôi cũng được\" (不去也罢)."
+      ],
+      "soSanh": [
+        "zh-hsk4-wulun-buguan",
+        "zh-hsk6-yaome-yaome",
+        "zh-hsk5-fanzheng",
+        "zh-hsk3-huozhe-haishi"
+      ],
+      "tuKhoa": [
+        "yehao",
+        "ye hao",
+        "yeba",
+        "ye ba",
+        "yehao yehao",
+        "cũng được cũng được",
+        "dù hay",
+        "bất kể"
+      ],
+      "quiz": [
+        {
+          "h": "你同意（　），不同意也好，这件事我已经决定了。",
+          "lc": [
+            "即便",
+            "也是",
+            "也好",
+            "要么"
+          ],
+          "da": 2,
+          "gt": "Vế sau đã có 也好 ⇒ vế trước cũng 也好, và cả hai đứng sau từng khả năng. 也是 không tạo mẫu này; 要么 và 即便 là liên từ đứng ĐẦU vế, không đứng sau 你同意."
+        },
+        {
+          "h": "A 也好，B 也好，… cho biết điều gì?",
+          "lc": [
+            "Phải chọn đúng một trong A và B.",
+            "A tốt hơn B.",
+            "A là nguyên nhân của B.",
+            "Dù A hay B thì kết quả ở vế sau vẫn thế."
+          ],
+          "da": 3,
+          "gt": "Mẫu này nói kết quả không phụ thuộc vào A hay B. Buộc chọn một là 要么…要么…; mẫu này không nêu nhân quả, cũng không so sánh hơn kém."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "下雨也好，晴天也好，我都要去上班。",
+            "下雨也好，我都去晴天。",
+            "也好下雨，也好晴天，我都去。",
+            "下雨也好晴天，所以我去。"
+          ],
+          "da": 0,
+          "gt": "也好 đứng sau từng khả năng và lặp hai lần, vế sau có 都. Nó không đứng trước khả năng, không dùng một lần cho hai khả năng, và không đi với 所以."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-v-lai-v-qu",
+      "nhom": "Cấu trúc cố định",
+      "tieuDe": "V 来 V 去",
+      "mau": "V (một âm tiết) + 来 + V + 去 (，kết quả)",
+      "nghia": "~ đi ~ lại, ~ tới ~ lui (lặp nhiều lần)",
+      "giaiThich": "Cùng một động từ một âm tiết lặp lại với 来 và 去. Với động từ chuyển động, tả việc đi lại nhiều lượt trong một phạm vi: 走来走去, 跑来跑去, 飞来飞去. Với động từ khác, tả hành động lặp đi lặp lại nhiều lần, và câu thường nêu tiếp một kết quả — hay là \"rốt cuộc vẫn…\", \"mà vẫn không…\": 想来想去, 说来说去, 看来看去, 挑来挑去, 找来找去. Khẩu ngữ, dùng rất nhiều.",
+      "cachGhep": [
+        "S + 在 + nơi chốn + V 来 V 去: 孩子们在院子里跑来跑去",
+        "S + V 来 V 去，还是 / 最后 / 也 + …: 我想来想去，还是觉得…",
+        "说来说去，… (nói đi nói lại thì…)"
+      ],
+      "viDu": [
+        {
+          "c": "孩子们在院子里跑来跑去。",
+          "d": "Háizimen zài yuànzi lǐ pǎo lái pǎo qù.",
+          "v": "Bọn trẻ chạy tới chạy lui trong sân."
+        },
+        {
+          "c": "我想来想去，还是觉得不应该答应他。",
+          "d": "Wǒ xiǎng lái xiǎng qù, háishi juéde bù yīnggāi dāying tā.",
+          "v": "Tôi nghĩ đi nghĩ lại, vẫn thấy không nên nhận lời anh ta."
+        },
+        {
+          "c": "她在商店里挑来挑去，最后什么也没买。",
+          "d": "Tā zài shāngdiàn lǐ tiāo lái tiāo qù, zuìhòu shénme yě méi mǎi.",
+          "v": "Cô ấy chọn tới chọn lui trong cửa hàng, cuối cùng chẳng mua gì."
+        },
+        {
+          "c": "说来说去，问题还是出在管理上。",
+          "d": "Shuō lái shuō qù, wèntí háishi chū zài guǎnlǐ shàng.",
+          "v": "Nói đi nói lại thì vấn đề vẫn nằm ở khâu quản lý."
+        }
+      ],
+      "luuY": [
+        "Sau V 来 V 去 KHÔNG đặt tân ngữ: 我找来找去钥匙 ✗ → 钥匙我找来找去也没找到 ✓ (đưa tân ngữ lên trước).",
+        "Khác động từ lặp lại (看看, 想想): 看看 là làm thử, làm nhẹ nhàng trong chốc lát; 看来看去 là làm rất nhiều lần, thường có ý mất công mà chưa xong.",
+        "Động từ phải một âm tiết: 考虑来考虑去 nghe nặng — thường nói 想来想去. Đừng nhầm với 看来 (xem ra) và 说来话长 (chuyện dài lắm)."
+      ],
+      "soSanh": [
+        "zh-hsk2-dong-tu-lap",
+        "zh-hsk3-xu-huong-don",
+        "zh-hsk6-dong-xi",
+        "zh-hsk5-yizai-zaisan"
+      ],
+      "tuKhoa": [
+        "v lai v qu",
+        "xianglai xiangqu",
+        "zoulai zouqu",
+        "shuolai shuoqu",
+        "đi đi lại lại",
+        "nghĩ đi nghĩ lại",
+        "lặp lại nhiều lần"
+      ],
+      "quiz": [
+        {
+          "h": "他在房间里走来走（　），好像在想什么重要的事。",
+          "lc": [
+            "过",
+            "了",
+            "去",
+            "着"
+          ],
+          "da": 2,
+          "gt": "Mẫu cố định V 来 V 去: 走来走去 = đi đi lại lại. Các trợ từ động thái 了, 着, 过 không ghép với 走来走 để tạo nghĩa lặp lại."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "我找来找去我的手机。",
+            "我讨论来去这个问题。",
+            "我来找去找手机。",
+            "手机我找来找去，就是找不到。"
+          ],
+          "da": 3,
+          "gt": "Tân ngữ (手机) phải đưa lên trước, không đặt sau V 来 V 去. Mẫu cũng cần lặp lại cùng một động từ một âm tiết ở cả hai nửa, đúng thứ tự V 来 V 去."
+        },
+        {
+          "h": "想来想去 khác 想想 thế nào?",
+          "lc": [
+            "想来想去 là nghĩ rất nhiều lần, lâu; 想想 là nghĩ thử một chút",
+            "hai cách nói giống hệt nhau",
+            "想来想去 là nghĩ một lần rồi thôi",
+            "想想 là văn viết trang trọng"
+          ],
+          "da": 0,
+          "gt": "V 来 V 去 nhấn sự lặp lại nhiều lượt; động từ lặp lại (想想) chỉ hành động ngắn, nhẹ. Cả hai đều là khẩu ngữ."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk6-ai-v-bu-v",
+      "nhom": "Cấu trúc cố định",
+      "tieuDe": "爱 V 不 V",
+      "mau": "S + 爱 + V + 不 + V (V một âm tiết)",
+      "nghia": "thích ~ thì ~, không thì thôi (mặc kệ)",
+      "giaiThich": "Người nói tỏ ra không quan tâm đối phương có làm hay không: \"tuỳ, muốn thì làm, không thì thôi\". Giọng khó chịu, bất cần, nên là cách nói suồng sã của khẩu ngữ. Động từ là từ một âm tiết: 爱信不信, 爱去不去, 爱吃不吃, 爱听不听, 爱来不来. Riêng 爱理不理 (thêm 的) lại dùng để tả thái độ hờ hững, lạnh nhạt của ai đó.",
+      "cachGhep": [
+        "S + 爱 + V + 不 + V: 你爱信不信；他爱吃不吃",
+        "(Việc) + S + 爱 + V + 不 + V，…: 明天的活动你爱去不去",
+        "S + 爱理不理 + 的 (tả thái độ): 他却爱理不理的"
+      ],
+      "viDu": [
+        {
+          "c": "话我已经说完了，你爱信不信。",
+          "d": "Huà wǒ yǐjīng shuō wán le, nǐ ài xìn bú xìn.",
+          "v": "Điều cần nói tôi nói hết rồi, tin hay không tuỳ bạn."
+        },
+        {
+          "c": "饭做好了，他爱吃不吃。",
+          "d": "Fàn zuòhǎo le, tā ài chī bù chī.",
+          "v": "Cơm nấu xong rồi, nó thích ăn thì ăn, không thì thôi."
+        },
+        {
+          "c": "明天的活动你爱去不去，没人强迫你。",
+          "d": "Míngtiān de huódòng nǐ ài qù bú qù, méi rén qiǎngpò nǐ.",
+          "v": "Hoạt động ngày mai bạn đi hay không tuỳ, chẳng ai ép."
+        },
+        {
+          "c": "我跟他打招呼，他却爱理不理的。",
+          "d": "Wǒ gēn tā dǎ zhāohu, tā què ài lǐ bù lǐ de.",
+          "v": "Tôi chào anh ta, vậy mà anh ta cứ hờ hững chẳng buồn đáp."
+        }
+      ],
+      "luuY": [
+        "Đây KHÔNG phải câu hỏi chính phản: 你去不去？ là hỏi thật; 你爱去不去 là lời buông \"tuỳ bạn\", cuối câu không có dấu hỏi.",
+        "Giọng thiếu lịch sự — không dùng với người trên, khách hàng. Muốn nói \"tuỳ ý\" một cách trung tính thì dùng 随便 hoặc 想去就去.",
+        "Khác …也好，…也好: 去也好，不去也好 trung tính, chỉ nói kết quả không đổi; 爱去不去 kèm thái độ mặc kệ, bực bội. Chữ 爱 ở đây không có nghĩa \"yêu\"."
+      ],
+      "soSanh": [
+        "zh-hsk1-chinh-phan",
+        "zh-hsk6-yehao-yehao",
+        "zh-hsk3-nghi-van-lien-ung",
+        "zh-hsk1-xihuan"
+      ],
+      "tuKhoa": [
+        "ai v bu v",
+        "aixinbuxin",
+        "ai xin bu xin",
+        "ailibuli",
+        "tuỳ bạn",
+        "mặc kệ",
+        "thích thì làm"
+      ],
+      "quiz": [
+        {
+          "h": "我已经把情况都告诉你了，你（　）信不信。",
+          "lc": [
+            "被",
+            "爱",
+            "把",
+            "很"
+          ],
+          "da": 1,
+          "gt": "Mẫu 爱 + V + 不 + V: 爱信不信 = tin hay không tuỳ bạn. 很 không đứng trước cụm \"V 不 V\"; 把 và 被 cần tân ngữ / tác nhân phía sau, không tạo được nghĩa \"tuỳ\"."
+        },
+        {
+          "h": "你爱来不来 thể hiện thái độ gì của người nói?",
+          "lc": [
+            "cấm đối phương đến",
+            "tha thiết mời đối phương đến",
+            "mặc kệ, đến hay không cũng chẳng quan tâm",
+            "hỏi xem đối phương có đến không"
+          ],
+          "da": 2,
+          "gt": "爱 V 不 V là lời buông \"tuỳ\", có ý bất cần. Nó không phải lời mời, không phải câu hỏi thật, cũng không phải lời cấm."
+        },
+        {
+          "h": "Vì sao không nên nói 您爱吃不吃 với khách?",
+          "lc": [
+            "vì là văn viết quá trang trọng",
+            "vì nghĩa là \"bạn rất thích ăn\"",
+            "vì sai ngữ pháp",
+            "vì giọng bất cần, thiếu lịch sự"
+          ],
+          "da": 3,
+          "gt": "Câu đúng ngữ pháp nhưng mang thái độ \"ăn thì ăn, không thì thôi\", rất thất lễ với khách. Đây là khẩu ngữ suồng sã chứ không phải văn viết, và câu này không có nghĩa \"bạn rất thích ăn\"."
+        }
+      ]
+    }
+  ]
+}

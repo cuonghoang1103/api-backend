@@ -1,0 +1,1250 @@
+{
+  "nn": "zh",
+  "cap": "HSK5",
+  "diem": [
+    {
+      "id": "zh-hsk5-ping",
+      "nhom": "Giới từ",
+      "tieuDe": "凭",
+      "mau": "S + 凭 (+ 着) + N (năng lực / kinh nghiệm / giấy tờ) + V",
+      "nghia": "dựa vào, nhờ vào, căn cứ vào ~ (để làm được việc gì)",
+      "giaiThich": "Giới từ 凭 nêu cái mà người ta dựa vào để làm được một việc: năng lực, kinh nghiệm, cảm giác, hoặc giấy tờ chứng nhận (凭票入场: vào cửa bằng vé). Trước cụm danh từ dài có thể dùng 凭着. Câu hỏi 凭什么 mang giọng chất vấn: dựa vào đâu mà…, lấy tư cách gì mà…. Dùng được cả trong văn nói lẫn văn viết.",
+      "cachGhep": [
+        "凭 + N + V: 凭经验判断, 凭学生证买票",
+        "凭着 + cụm danh từ (thường dài) + V: 凭着多年的经验",
+        "Chất vấn: S + 凭什么 + V？: 你凭什么这么说？"
+      ],
+      "viDu": [
+        {
+          "c": "他凭自己的努力考上了大学。",
+          "d": "Tā píng zìjǐ de nǔlì kǎoshàng le dàxué.",
+          "v": "Anh ấy đỗ đại học nhờ nỗ lực của chính mình."
+        },
+        {
+          "c": "凭学生证可以买半价票。",
+          "d": "Píng xuéshēngzhèng kěyǐ mǎi bànjià piào.",
+          "v": "Dùng thẻ sinh viên có thể mua vé nửa giá."
+        },
+        {
+          "c": "你凭什么这么说？",
+          "d": "Nǐ píng shénme zhème shuō?",
+          "v": "Bạn dựa vào đâu mà nói như vậy?"
+        },
+        {
+          "c": "凭着多年的经验，她很快就发现了问题。",
+          "d": "Píngzhe duō nián de jīngyàn, tā hěn kuài jiù fāxiàn le wèntí.",
+          "v": "Nhờ kinh nghiệm nhiều năm, cô ấy phát hiện ra vấn đề rất nhanh."
+        }
+      ],
+      "luuY": [
+        "Khác 靠: 靠 còn dùng cho việc nương tựa vào người khác hay kiếm sống (靠父母, 靠打工生活); 凭 thiên về căn cứ, tư cách, năng lực, giấy tờ. 凭票入场 không đổi thành 靠票入场.",
+        "Khác 根据: 根据 nêu cơ sở để rút ra kết luận hay quyết định (根据调查结果); 凭 nêu cái mình có trong tay để làm được việc. Câu chất vấn chỉ nói 你凭什么…？",
+        "Cụm 凭… đứng trước động từ, không đặt cuối câu: 他考上了大学凭努力 ✗."
+      ],
+      "soSanh": [
+        "zh-hsk3-genju",
+        "zh-hsk4-anzhao",
+        "zh-hsk4-tongguo",
+        "zh-hsk6-yiju"
+      ],
+      "tuKhoa": [
+        "ping",
+        "pingzhe",
+        "ping shenme",
+        "dựa vào",
+        "nhờ vào",
+        "bằng"
+      ],
+      "quiz": [
+        {
+          "h": "（　）身份证才能进入考场。",
+          "lc": [
+            "自从",
+            "朝",
+            "凭",
+            "趁"
+          ],
+          "da": 2,
+          "gt": "Giấy tờ dùng làm căn cứ để được vào → 凭. 朝 chỉ hướng, 趁 là tranh thủ lúc, 自从 là kể từ khi nên đều không hợp."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "你凭不让我什么进去？",
+            "你什么凭不让我进去？",
+            "你不让我进去凭什么的？",
+            "你凭什么不让我进去？"
+          ],
+          "da": 3,
+          "gt": "Trật tự là S + 凭什么 + V: cụm 凭什么 đứng liền nhau và đứng trước động từ."
+        },
+        {
+          "h": "Trong câu 你凭什么批评我？, người nói muốn gì?",
+          "lc": [
+            "chất vấn: bạn lấy tư cách / lý do gì mà phê bình tôi",
+            "hỏi đi bằng phương tiện gì",
+            "hỏi thời điểm bị phê bình",
+            "khen người kia phê bình đúng"
+          ],
+          "da": 0,
+          "gt": "凭什么 là câu hỏi chất vấn, cho rằng đối phương không có căn cứ hay tư cách để làm việc đó."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-chao",
+      "nhom": "Giới từ",
+      "tieuDe": "朝",
+      "mau": "S + 朝 (+ 着) + phương hướng / người / vật + V",
+      "nghia": "về phía ~, hướng về ~",
+      "giaiThich": "朝 chỉ hướng mà động tác nhắm tới: 朝前走 (đi về phía trước), 朝我笑 (cười với tôi). 朝 còn làm động từ chỉ hướng tĩnh của nhà cửa, cửa sổ: 窗户朝南 (cửa sổ quay hướng nam). Dùng nhiều trong khẩu ngữ; có thể thêm 着 thành 朝着.",
+      "cachGhep": [
+        "朝 + từ chỉ hướng / nơi chốn + V: 朝前走, 朝门口跑",
+        "朝 + người + động tác cơ thể: 朝我挥手, 朝他点头, 朝我笑",
+        "Làm động từ chỉ hướng tĩnh: 窗户朝南, 大门朝东",
+        "朝着 + cụm từ hai âm tiết trở lên: 朝着妈妈跑, 朝着目标努力"
+      ],
+      "viDu": [
+        {
+          "c": "他朝我挥了挥手。",
+          "d": "Tā cháo wǒ huī le huī shǒu.",
+          "v": "Anh ấy vẫy tay về phía tôi."
+        },
+        {
+          "c": "你一直朝前走，就能看到地铁站。",
+          "d": "Nǐ yìzhí cháo qián zǒu, jiù néng kàndào dìtiě zhàn.",
+          "v": "Bạn cứ đi thẳng về phía trước là thấy ga tàu điện ngầm."
+        },
+        {
+          "c": "我家的窗户朝南，阳光很好。",
+          "d": "Wǒ jiā de chuānghu cháo nán, yángguāng hěn hǎo.",
+          "v": "Cửa sổ nhà tôi quay hướng nam, nắng rất đẹp."
+        },
+        {
+          "c": "孩子朝着妈妈跑了过去。",
+          "d": "Háizi cháozhe māma pǎo le guòqù.",
+          "v": "Đứa bé chạy về phía mẹ."
+        }
+      ],
+      "luuY": [
+        "Khác 向: 向 đi được với đối tượng trừu tượng (向他学习, 向老师请教) và đứng được sau động từ (走向, 飞向); 朝 thường chỉ dùng với động tác cụ thể (riêng 朝着 đi được với đích trừu tượng: 朝着目标努力) và không đứng sau động từ: 朝他学习 ✗, 走朝 ✗.",
+        "Khác 往: sau 往 phải là từ chỉ nơi chốn / phương hướng, không trực tiếp là người (往我走 ✗ → 朝我走来 ✓); 往 nhấn sự di chuyển nên không dùng cho hướng tĩnh: 窗户往南 ✗.",
+        "朝 ở đây đọc cháo; đọc zhāo là chữ khác nghĩa (buổi sáng: 朝阳)."
+      ],
+      "soSanh": [
+        "zh-hsk2-wang-xiang",
+        "zh-hsk3-xiang",
+        "zh-hsk2-dui"
+      ],
+      "tuKhoa": [
+        "chao",
+        "chaozhe",
+        "về phía",
+        "hướng về",
+        "quay hướng"
+      ],
+      "quiz": [
+        {
+          "h": "这套房子的客厅（　）南，冬天很暖和。",
+          "lc": [
+            "趁",
+            "朝",
+            "往",
+            "凭"
+          ],
+          "da": 1,
+          "gt": "Nói hướng tĩnh của căn phòng dùng động từ 朝. 往 chỉ hướng di chuyển, phải có động từ theo sau nên không làm vị ngữ ở đây."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "他朝了门口走。",
+            "火车开朝北京。",
+            "她朝我笑了笑。",
+            "我们应该朝他学习。"
+          ],
+          "da": 2,
+          "gt": "朝 + người + động tác cụ thể (笑) là đúng. Đối tượng trừu tượng như 学习 phải dùng 向; 朝 không đứng sau động từ (开朝 ✗) và giới từ 朝 không thêm 了."
+        },
+        {
+          "h": "Vì sao nói 向老师请教 mà không nói 朝老师请教?",
+          "lc": [
+            "vì 朝 chỉ đi với đồ vật, không đi với người",
+            "vì 朝 chỉ dùng trong văn viết",
+            "vì 朝 phải đứng cuối câu",
+            "vì 朝 chỉ dùng với động tác cụ thể hướng về ai đó, đối tượng trừu tượng dùng 向"
+          ],
+          "da": 3,
+          "gt": "朝 đi được với người (朝我笑) nhưng động từ phải là động tác cụ thể; thỉnh giáo, học tập là quan hệ trừu tượng nên dùng 向."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-chen",
+      "nhom": "Giới từ",
+      "tieuDe": "趁",
+      "mau": "趁 (+ 着) + N / Adj / mệnh đề + V",
+      "nghia": "nhân lúc ~, tranh thủ lúc ~",
+      "giaiThich": "趁 nêu một điều kiện hay thời cơ thuận lợi (và sẽ qua đi) mà người ta tận dụng để làm việc gì: 趁热吃 (ăn lúc còn nóng), 趁年轻 (nhân lúc còn trẻ), 趁他不在 (nhân lúc anh ấy vắng mặt). Vế sau là hành động chủ động của người tận dụng thời cơ. Dùng nhiều trong khẩu ngữ.",
+      "cachGhep": [
+        "趁 + Adj: 趁热, 趁早, 趁年轻",
+        "趁 + N: 趁这个机会, 趁假期",
+        "趁 + mệnh đề: 趁他不在, 趁天还没黑",
+        "趁着 + cụm từ hai âm tiết trở lên: 趁着年轻, 趁着天还没黑 (không nói 趁着热)"
+      ],
+      "viDu": [
+        {
+          "c": "菜刚做好，快趁热吃吧。",
+          "d": "Cài gāng zuòhǎo, kuài chèn rè chī ba.",
+          "v": "Món ăn vừa nấu xong, mau ăn lúc còn nóng đi."
+        },
+        {
+          "c": "趁年轻，应该多出去看看。",
+          "d": "Chèn niánqīng, yīnggāi duō chūqù kànkan.",
+          "v": "Nhân lúc còn trẻ, nên ra ngoài đi đây đi đó nhiều hơn."
+        },
+        {
+          "c": "我想趁这个机会向大家表示感谢。",
+          "d": "Wǒ xiǎng chèn zhège jīhuì xiàng dàjiā biǎoshì gǎnxiè.",
+          "v": "Tôi muốn nhân cơ hội này bày tỏ lời cảm ơn tới mọi người."
+        },
+        {
+          "c": "趁着天还没黑，我们赶快下山吧。",
+          "d": "Chènzhe tiān hái méi hēi, wǒmen gǎnkuài xià shān ba.",
+          "v": "Nhân lúc trời chưa tối, chúng ta mau xuống núi thôi."
+        }
+      ],
+      "luuY": [
+        "Khác 当…的时候: 当…的时候 chỉ nêu thời điểm; 趁 thêm ý tận dụng một điều kiện có lợi sắp mất đi. 当他不在的时候我看书 chỉ là kể; 趁他不在我看书 là tranh thủ.",
+        "Cụm 趁… đứng trước động từ chính: 吃吧趁热 ✗ → 趁热吃吧 ✓.",
+        "Người Việt hay dịch 'nhân tiện' thành 趁; 'nhân tiện, tiện thể' là 顺便, còn 趁 phải có một thời cơ cụ thể đi sau."
+      ],
+      "soSanh": [
+        "zh-hsk5-dang-shi",
+        "zh-hsk2-de-shihou"
+      ],
+      "tuKhoa": [
+        "chen",
+        "chenzhe",
+        "chen re",
+        "nhân lúc",
+        "tranh thủ",
+        "nhân cơ hội"
+      ],
+      "quiz": [
+        {
+          "h": "（　）老板不在，他偷偷地玩起了手机。",
+          "lc": [
+            "针对",
+            "凭",
+            "趁",
+            "朝"
+          ],
+          "da": 2,
+          "gt": "Lợi dụng lúc sếp vắng mặt để làm việc khác → 趁. 凭 là dựa vào, 朝 là về phía, 针对 là nhằm vào, đều không hợp nghĩa."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "咖啡要热趁喝。",
+            "咖啡要喝趁热。",
+            "咖啡趁要热喝。",
+            "咖啡要趁热喝。"
+          ],
+          "da": 3,
+          "gt": "趁 + Adj đứng liền nhau và đứng trước động từ chính: 趁热 + 喝."
+        },
+        {
+          "h": "趁年轻多学点儿东西 hàm ý gì?",
+          "lc": [
+            "tuổi trẻ là điều kiện thuận lợi sẽ qua đi, nên tranh thủ học",
+            "chỉ người trẻ mới được học",
+            "học nhiều thì sẽ trẻ lại",
+            "vì còn trẻ nên chưa cần học"
+          ],
+          "da": 0,
+          "gt": "趁 luôn mang ý tận dụng một điều kiện có lợi trước khi nó mất đi."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-zicong",
+      "nhom": "Giới từ",
+      "tieuDe": "自从",
+      "mau": "自从 + mốc thời gian / sự việc trong quá khứ (+ 以后 / 以来)，S + 就 / 一直 …",
+      "nghia": "kể từ khi ~, từ lúc ~ (mốc trong quá khứ)",
+      "giaiThich": "自从 nêu điểm bắt đầu là một thời điểm hay một sự việc ĐÃ xảy ra; vế sau nói tình hình thay đổi hoặc kéo dài từ mốc đó đến nay. Thường đi với 以后, 以来 ở cuối vế trước và 就, 一直 ở vế sau. Dùng được cả khi nói lẫn khi viết.",
+      "cachGhep": [
+        "自从 + sự việc + (以后 / 之后)，…: 自从上了大学以后，…",
+        "自从 + thời điểm quá khứ + 以来，…: 自从去年以来，…",
+        "Vế sau hay có 就 / 一直 / 再也没 …"
+      ],
+      "viDu": [
+        {
+          "c": "自从上了大学，他就很少回家了。",
+          "d": "Zìcóng shàng le dàxué, tā jiù hěn shǎo huí jiā le.",
+          "v": "Từ khi vào đại học, anh ấy ít về nhà hẳn."
+        },
+        {
+          "c": "自从认识她以后，我的生活发生了很大的变化。",
+          "d": "Zìcóng rènshi tā yǐhòu, wǒ de shēnghuó fāshēng le hěn dà de biànhuà.",
+          "v": "Từ khi quen cô ấy, cuộc sống của tôi thay đổi rất nhiều."
+        },
+        {
+          "c": "自从去年搬家以来，我们一直没见过面。",
+          "d": "Zìcóng qùnián bānjiā yǐlái, wǒmen yìzhí méi jiàn guo miàn.",
+          "v": "Kể từ khi chuyển nhà năm ngoái đến nay, chúng tôi chưa gặp lại nhau lần nào."
+        },
+        {
+          "c": "自从开始跑步，爷爷的身体越来越好。",
+          "d": "Zìcóng kāishǐ pǎobù, yéye de shēntǐ yuèláiyuè hǎo.",
+          "v": "Từ khi bắt đầu chạy bộ, sức khoẻ của ông ngày càng tốt."
+        }
+      ],
+      "luuY": [
+        "Khác 从: 从 dùng cho cả quá khứ, hiện tại, tương lai và cả nơi chốn (从明天开始, 从北京出发); 自从 chỉ dùng cho mốc thời gian trong quá khứ: 自从明天 ✗, 自从北京 ✗.",
+        "Sau 自从 là mốc bắt đầu, không phải khoảng thời gian: 自从三年 ✗ → 自从三年前 ✓.",
+        "Khác 至今: 至今 nhìn từ phía 'cho đến nay'; hai từ có thể đi cùng nhau: 自从毕业以后，我至今没见过他."
+      ],
+      "soSanh": [
+        "zh-hsk2-cong-dao",
+        "zh-hsk5-zhijin",
+        "zh-hsk2-yiqian-yihou"
+      ],
+      "tuKhoa": [
+        "zicong",
+        "zi cong",
+        "kể từ khi",
+        "từ khi",
+        "từ lúc"
+      ],
+      "quiz": [
+        {
+          "h": "（　）有了孩子以后，她就没有时间看电影了。",
+          "lc": [
+            "趁",
+            "凭",
+            "自从",
+            "朝"
+          ],
+          "da": 2,
+          "gt": "Mốc bắt đầu là một việc đã xảy ra, vế sau nói tình hình kéo dài từ đó → 自从."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "自从北京到上海要五个小时。",
+            "我们自从没联系过毕业。",
+            "自从明天起，我要每天锻炼。",
+            "自从毕业以后，我们就没联系过。"
+          ],
+          "da": 3,
+          "gt": "自从 chỉ đi với mốc thời gian trong quá khứ; mốc tương lai (明天) và nơi chốn (北京) phải dùng 从."
+        },
+        {
+          "h": "自从 khác 从 ở điểm nào?",
+          "lc": [
+            "自从 chỉ nêu mốc thời gian trong quá khứ, không dùng cho tương lai hay nơi chốn",
+            "自从 phải đứng cuối câu",
+            "自从 chỉ dùng cho tương lai",
+            "自从 chỉ dùng cho nơi chốn"
+          ],
+          "da": 0,
+          "gt": "从 dùng rộng (thời gian bất kỳ, nơi chốn); 自从 hẹp hơn: chỉ mốc thời gian đã qua."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-zhendui",
+      "nhom": "Giới từ",
+      "tieuDe": "针对",
+      "mau": "针对 + N (vấn đề / tình hình / đối tượng) + V",
+      "nghia": "nhằm vào ~, dành riêng cho ~, đối với (đích danh) ~",
+      "giaiThich": "针对 nêu đối tượng cụ thể mà hành động hay biện pháp nhắm tới: 针对这个问题 (nhằm vào vấn đề này). So với 对, nó nhấn mạnh tính có mục tiêu, 'đo ni đóng giày' cho đúng đối tượng đó. 针对 cũng làm động từ vị ngữ: 这不是针对你 (điều này không nhằm vào bạn). Hay gặp trong văn viết, tin tức, công việc.",
+      "cachGhep": [
+        "针对 + N，S + V: 针对这种情况，学校采取了措施",
+        "S + 是 + 针对 + N + V + 的: 这本书是针对初学者写的",
+        "Làm động từ: S + (不是) 针对 + người: 我不是针对你"
+      ],
+      "viDu": [
+        {
+          "c": "针对这个问题，公司开了一次会。",
+          "d": "Zhēnduì zhège wèntí, gōngsī kāi le yí cì huì.",
+          "v": "Để giải quyết riêng vấn đề này, công ty đã họp một buổi."
+        },
+        {
+          "c": "这本教材是针对外国留学生编写的。",
+          "d": "Zhè běn jiàocái shì zhēnduì wàiguó liúxuéshēng biānxiě de.",
+          "v": "Cuốn giáo trình này được biên soạn dành riêng cho lưu học sinh nước ngoài."
+        },
+        {
+          "c": "我的话不是针对你的，你别多想。",
+          "d": "Wǒ de huà bú shì zhēnduì nǐ de, nǐ bié duō xiǎng.",
+          "v": "Lời tôi nói không nhằm vào bạn đâu, bạn đừng nghĩ nhiều."
+        },
+        {
+          "c": "针对不同的顾客，他们提供不同的服务。",
+          "d": "Zhēnduì bù tóng de gùkè, tāmen tígōng bù tóng de fúwù.",
+          "v": "Với từng nhóm khách hàng khác nhau, họ cung cấp dịch vụ khác nhau."
+        }
+      ],
+      "luuY": [
+        "Khác 对 / 对于: 对 / 对于 chỉ nêu đối tượng nói chung (对这个问题很感兴趣); 针对 nhấn việc nhắm đích danh và thường kéo theo biện pháp, hành động cụ thể. 针对音乐很感兴趣 ✗.",
+        "针对 làm được động từ vị ngữ (他是在针对我), còn 对于 thì không.",
+        "Khác 关于: 关于 nêu chủ đề được nói tới (关于这件事), không có ý nhắm vào để xử lý."
+      ],
+      "soSanh": [
+        "zh-hsk4-duiyu-zhiyu",
+        "zh-hsk2-dui",
+        "zh-hsk3-guanyu"
+      ],
+      "tuKhoa": [
+        "zhendui",
+        "zhen dui",
+        "nhằm vào",
+        "dành riêng cho",
+        "đối với"
+      ],
+      "quiz": [
+        {
+          "h": "（　）大家提出的意见，学校做了一些改变。",
+          "lc": [
+            "趁",
+            "自从",
+            "朝",
+            "针对"
+          ],
+          "da": 3,
+          "gt": "Nhà trường đưa ra thay đổi nhằm đúng vào các ý kiến đó → 针对. 自从 nêu mốc thời gian, 趁 là tranh thủ, 朝 là hướng về."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "他这样说并不是针对你。",
+            "他针对很感兴趣音乐。",
+            "他这样说针对并不是你。",
+            "他这样说并不是对于你。"
+          ],
+          "da": 0,
+          "gt": "针对 làm được động từ vị ngữ sau 不是; 对于 không làm vị ngữ, và sở thích nói chung dùng 对…感兴趣 chứ không dùng 针对."
+        },
+        {
+          "h": "这个节目是针对老年人设计的 nghĩa là gì?",
+          "lc": [
+            "chương trình này phản đối người cao tuổi",
+            "chương trình này được thiết kế dành riêng cho người cao tuổi",
+            "chương trình này do người cao tuổi thiết kế",
+            "chương trình này nói về người cao tuổi"
+          ],
+          "da": 1,
+          "gt": "是针对 + đối tượng + V + 的: việc được làm nhắm đúng vào đối tượng đó, tức dành riêng cho họ."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-zuowei",
+      "nhom": "Giới từ",
+      "tieuDe": "作为",
+      "mau": "作为 + N (thân phận / tính chất)，S + … · S + 把 + A + 作为 + B",
+      "nghia": "với tư cách là ~, là ~ ; (động từ) coi là, lấy làm ~",
+      "giaiThich": "Làm giới từ, 作为 nêu thân phận, vai trò của người hay tính chất của sự vật, rồi câu sau nói điều gắn với thân phận ấy: 作为老师，他… (là giáo viên, anh ấy…). Làm động từ, 作为 nghĩa là 'coi là, lấy làm', thường trong khung 把 A 作为 B. Văn phong hơi trang trọng, dùng nhiều trong phát biểu và văn viết.",
+      "cachGhep": [
+        "作为 + thân phận，S + …: 作为学生，我们应该…",
+        "作为 + 一 + lượng từ + N，…: 作为一种语言，汉语…",
+        "Động từ: 把 + A + 作为 + B: 把这次失败作为教训"
+      ],
+      "viDu": [
+        {
+          "c": "作为老师，他对每个学生都很负责。",
+          "d": "Zuòwéi lǎoshī, tā duì měi gè xuésheng dōu hěn fùzé.",
+          "v": "Là giáo viên, anh ấy rất có trách nhiệm với từng học sinh."
+        },
+        {
+          "c": "作为一个成年人，你应该为自己的决定负责。",
+          "d": "Zuòwéi yí gè chéngniánrén, nǐ yīnggāi wèi zìjǐ de juédìng fùzé.",
+          "v": "Là một người trưởng thành, bạn nên chịu trách nhiệm về quyết định của mình."
+        },
+        {
+          "c": "作为一种交通工具，自行车既方便又环保。",
+          "d": "Zuòwéi yì zhǒng jiāotōng gōngjù, zìxíngchē jì fāngbiàn yòu huánbǎo.",
+          "v": "Là một phương tiện giao thông, xe đạp vừa tiện vừa thân thiện với môi trường."
+        },
+        {
+          "c": "他把跑步作为每天的休息方式。",
+          "d": "Tā bǎ pǎobù zuòwéi měi tiān de xiūxi fāngshì.",
+          "v": "Anh ấy lấy việc chạy bộ làm cách nghỉ ngơi mỗi ngày."
+        }
+      ],
+      "luuY": [
+        "Người mang thân phận sau 作为 phải chính là chủ ngữ của vế sau: 作为老师，学生都很喜欢他 ✗ (lệch chủ ngữ) → 作为老师，他很受学生喜欢 ✓.",
+        "Giới từ 作为 không thêm 了 / 着 / 过; 为 ở đây đọc wéi.",
+        "Khác 把…当作: 当作 là 'coi như' theo cảm nhận chủ quan, có thể không đúng thực tế (把他当作哥哥); 作为 nêu thân phận có thật hoặc cách sử dụng chính thức.",
+        "Khác 以…为…: khung văn viết cố định 'lấy A làm B' (以学习为主); 把 A 作为 B thì tự do hơn về từ đi sau."
+      ],
+      "soSanh": [
+        "zh-hsk5-ba-dangzuo",
+        "zh-hsk4-yi-wei"
+      ],
+      "tuKhoa": [
+        "zuowei",
+        "zuo wei",
+        "với tư cách",
+        "là",
+        "coi là",
+        "lấy làm"
+      ],
+      "quiz": [
+        {
+          "h": "（　）班长，他应该带头遵守纪律。",
+          "lc": [
+            "自从",
+            "趁着",
+            "朝着",
+            "作为"
+          ],
+          "da": 3,
+          "gt": "Nêu thân phận (lớp trưởng) rồi nói điều gắn với thân phận đó → 作为."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "作为父母，我们应该多听听孩子的想法。",
+            "我们应该作为多听听父母孩子的想法。",
+            "父母作为，我们应该多听听孩子的想法。",
+            "作为着父母，我们应该多听听孩子的想法。"
+          ],
+          "da": 0,
+          "gt": "作为 + thân phận đứng đầu câu, không thêm 着, và chủ ngữ vế sau (我们) chính là người mang thân phận ấy."
+        },
+        {
+          "h": "Trong câu 他把这次失败作为一次教训, 作为 nghĩa là gì?",
+          "lc": [
+            "làm việc",
+            "coi là, lấy làm",
+            "với tư cách là",
+            "bởi vì"
+          ],
+          "da": 1,
+          "gt": "Trong khung 把 A 作为 B, 作为 là động từ: coi A là B, lấy A làm B."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-dang-shi",
+      "nhom": "Giới từ",
+      "tieuDe": "当…时 / 当…的时候",
+      "mau": "当 + mệnh đề + 时 / 的时候，S + …",
+      "nghia": "khi ~, lúc ~, vào lúc ~",
+      "giaiThich": "当 đứng đầu một mệnh đề chỉ thời gian và phải có 时 hoặc 的时候 khép lại ở cuối, nêu thời điểm xảy ra sự việc ở vế sau. 当…时 gọn và thiên về văn viết; 当…的时候 dùng được cả khi nói. Thêm 每 thành 每当…时 nghĩa là 'mỗi khi'.",
+      "cachGhep": [
+        "当 + S + V + 的时候，…: 当我到家的时候，…",
+        "当 + S + V + 时，… (văn viết): 当他听到这个消息时，…",
+        "每当 + … + 时 / 的时候，S + 都 / 总 …: 每当下雨时，我都…"
+      ],
+      "viDu": [
+        {
+          "c": "当我到家的时候，天已经黑了。",
+          "d": "Dāng wǒ dào jiā de shíhou, tiān yǐjīng hēi le.",
+          "v": "Khi tôi về đến nhà thì trời đã tối."
+        },
+        {
+          "c": "当他听到这个消息时，激动得说不出话来。",
+          "d": "Dāng tā tīngdào zhège xiāoxi shí, jīdòng de shuō bu chū huà lái.",
+          "v": "Khi nghe tin này, anh ấy xúc động đến mức không nói nên lời."
+        },
+        {
+          "c": "当你遇到困难的时候，别忘了还有朋友。",
+          "d": "Dāng nǐ yùdào kùnnan de shíhou, bié wàng le hái yǒu péngyou.",
+          "v": "Khi bạn gặp khó khăn, đừng quên rằng vẫn còn có bạn bè."
+        },
+        {
+          "c": "每当下雨时，我都会想起家乡。",
+          "d": "Měi dāng xià yǔ shí, wǒ dōu huì xiǎngqǐ jiāxiāng.",
+          "v": "Mỗi khi trời mưa, tôi lại nhớ quê."
+        }
+      ],
+      "luuY": [
+        "Đã có 当 thì phải có 时 / 的时候 khép cuối mệnh đề: 当我到家，天已经黑了 ✗.",
+        "Khác …的时候 (không có 当): nghĩa như nhau; khẩu ngữ thường bỏ 当, thêm 当 thì trang trọng hơn và hay dùng khi mệnh đề dài, có chủ ngữ riêng.",
+        "Khác 趁: 趁 có ý tranh thủ điều kiện thuận lợi; 当…时 chỉ đơn thuần nêu thời điểm.",
+        "当 ở đây đọc dāng; trong 当作, 当成 thì đọc dàng."
+      ],
+      "soSanh": [
+        "zh-hsk2-de-shihou",
+        "zh-hsk5-chen",
+        "zh-hsk5-zicong"
+      ],
+      "tuKhoa": [
+        "dang shi",
+        "dang de shihou",
+        "mei dang",
+        "khi",
+        "lúc",
+        "mỗi khi"
+      ],
+      "quiz": [
+        {
+          "h": "（　）我第一次见到她的时候，她还是个学生。",
+          "lc": [
+            "趁",
+            "当",
+            "凭",
+            "朝"
+          ],
+          "da": 1,
+          "gt": "Khung chỉ thời điểm là 当…的时候. 趁 phải có ý tranh thủ thời cơ, 凭 và 朝 không nêu thời gian."
+        },
+        {
+          "h": "当飞机起飞（　），请关闭手机。",
+          "lc": [
+            "过",
+            "了",
+            "时",
+            "着"
+          ],
+          "da": 2,
+          "gt": "当 phải được khép lại bằng 时 hoặc 的时候; 了, 着, 过 không làm được việc đó."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "雨已经停了，当我醒来的。",
+            "当的时候我醒来，雨已经停了。",
+            "当我醒来着时，雨已经停了。",
+            "当我醒来的时候，雨已经停了。"
+          ],
+          "da": 3,
+          "gt": "Trật tự: 当 + mệnh đề (我醒来) + 的时候, rồi mới tới vế chính."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-jiang",
+      "nhom": "Giới từ",
+      "tieuDe": "将 (thay 把, văn viết)",
+      "mau": "S + 将 + O + V + thành phần khác",
+      "nghia": "(văn viết) đem ~, = 把: đưa tân ngữ lên trước động từ",
+      "giaiThich": "Trong văn viết, thông báo, bản hướng dẫn, công thức nấu ăn, giới từ 将 được dùng thay 把 với cùng cấu trúc và cùng nghĩa: nêu việc xử lý một đối tượng xác định. Khi nói chuyện hằng ngày vẫn dùng 把; dùng 将 nghe rất trang trọng. Cần phân biệt với phó từ 将 nghĩa là 'sẽ'.",
+      "cachGhep": [
+        "S + 将 + O + V + 在 / 到 / 给 / 成 + …: 将手机调成静音",
+        "S + 将 + O + V + 了 / bổ ngữ: 将文件发了出去",
+        "Phủ định, năng nguyện đứng trước 将: 请勿将…, 不要将…, 必须将…"
+      ],
+      "viDu": [
+        {
+          "c": "请将手机调成静音。",
+          "d": "Qǐng jiāng shǒujī tiáochéng jìngyīn.",
+          "v": "Xin chuyển điện thoại sang chế độ im lặng."
+        },
+        {
+          "c": "他将这封信交给了经理。",
+          "d": "Tā jiāng zhè fēng xìn jiāo gěi le jīnglǐ.",
+          "v": "Anh ấy đã trao bức thư này cho giám đốc."
+        },
+        {
+          "c": "将鸡蛋打入碗中，搅拌均匀。",
+          "d": "Jiāng jīdàn dǎrù wǎn zhōng, jiǎobàn jūnyún.",
+          "v": "Đập trứng vào bát, khuấy cho đều."
+        },
+        {
+          "c": "请勿将垃圾扔在地上。",
+          "d": "Qǐng wù jiāng lājī rēng zài dìshang.",
+          "v": "Xin đừng vứt rác xuống đất."
+        }
+      ],
+      "luuY": [
+        "Mọi yêu cầu của câu chữ 把 vẫn giữ nguyên: sau động từ phải có thành phần khác (了, bổ ngữ, 在 / 到 / 给…), không để động từ trơ trụi: 请将手机关 ✗ → 请将手机关上 ✓.",
+        "Khác 把: nghĩa và cấu trúc giống nhau, chỉ khác phong cách — 把 dùng trong mọi hoàn cảnh, 将 chỉ hợp văn viết, biển báo, hướng dẫn.",
+        "Đừng nhầm với phó từ 将 (sẽ): 会议将在明天举行. Sau 将 'sẽ' là động từ hoặc giới từ, không phải một tân ngữ bị xử lý."
+      ],
+      "soSanh": [
+        "zh-hsk3-ba-co-ban",
+        "zh-hsk4-ba-nang-cao",
+        "zh-hsk3-ba-zai-dao-gei-cheng"
+      ],
+      "tuKhoa": [
+        "jiang",
+        "jiang thay ba",
+        "将 把",
+        "câu chữ ba văn viết",
+        "đem"
+      ],
+      "quiz": [
+        {
+          "h": "使用前请（　）瓶子摇一摇。",
+          "lc": [
+            "被",
+            "将",
+            "凭",
+            "朝"
+          ],
+          "da": 1,
+          "gt": "Bản hướng dẫn, đưa tân ngữ 瓶子 lên trước động từ để nói cách xử lý nó → 将 (= 把). 被 là bị động, 朝 và 凭 không tạo được câu xử lý."
+        },
+        {
+          "h": "Trong câu nào 将 dùng như 把?",
+          "lc": [
+            "天气将越来越冷。",
+            "他将来想当医生。",
+            "请将护照交给工作人员。",
+            "比赛将在下周举行。"
+          ],
+          "da": 2,
+          "gt": "将 + 护照 (tân ngữ) + 交给…: đây là 将 thay 把. Ở các câu còn lại 将 nghĩa là 'sẽ' hoặc nằm trong từ 将来 (tương lai)."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "请将不要行李放在门口。",
+            "请将放行李在门口。",
+            "请行李将放在门口。",
+            "请不要将行李放在门口。"
+          ],
+          "da": 3,
+          "gt": "Từ phủ định 不要 đứng trước 将; trật tự là 将 + tân ngữ + động từ + 在 + nơi chốn."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-fei-buke",
+      "nhom": "Cấu trúc cố định",
+      "tieuDe": "非…不可",
+      "mau": "S + 非 (+ 要 / 得) + V + 不可",
+      "nghia": "nhất định phải ~, không ~ không được; thế nào cũng ~",
+      "giaiThich": "Hai lần phủ định (非 = không, 不可 = không được) tạo thành một khẳng định rất mạnh. Có ba nghĩa: (1) bắt buộc, không còn cách khác: 非去不可; (2) ý muốn, quyết tâm cứng rắn của ai đó: 他非要走不可; (3) suy đoán một việc chắc chắn sẽ xảy ra: 非迟到不可. Khẩu ngữ là chính; cuối câu còn có thể dùng 不行, 不成.",
+      "cachGhep": [
+        "非 + V + 不可: 非去不可, 非说不可",
+        "非 + N / đại từ + V + 不可: 非你去不可 (phải chính bạn đi mới được)",
+        "非要 / 非得 + V + 不可: 非要今天走不可, 非得亲自去不可",
+        "Suy đoán: (再…,) 非 + V + 不可: 非迟到不可, 非生病不可"
+      ],
+      "viDu": [
+        {
+          "c": "这件事非你去不可。",
+          "d": "Zhè jiàn shì fēi nǐ qù bùkě.",
+          "v": "Việc này nhất định phải bạn đi mới được."
+        },
+        {
+          "c": "他非要今天走不可，谁劝也没用。",
+          "d": "Tā fēi yào jīntiān zǒu bùkě, shéi quàn yě méi yòng.",
+          "v": "Anh ấy cứ nhất quyết phải đi hôm nay, ai khuyên cũng vô ích."
+        },
+        {
+          "c": "你再不快点儿，非迟到不可。",
+          "d": "Nǐ zài bú kuài diǎnr, fēi chídào bùkě.",
+          "v": "Bạn mà không nhanh lên thì thế nào cũng muộn."
+        },
+        {
+          "c": "要想学好汉语，非下苦功夫不可。",
+          "d": "Yào xiǎng xuéhǎo Hànyǔ, fēi xià kǔ gōngfu bùkě.",
+          "v": "Muốn học giỏi tiếng Trung thì không bỏ công khổ luyện không được."
+        }
+      ],
+      "luuY": [
+        "非…不可 là khẳng định mạnh, không phải phủ định: 非去不可 = nhất định phải đi. Người Việt hay hiểu ngược thành 'không được đi'.",
+        "Khác 必须: 必须 nêu yêu cầu một cách trung tính; 非…不可 mạnh hơn, mang thái độ chủ quan (kiên quyết, sốt ruột, cảnh báo).",
+        "Khác 不得不: 不得不 là bị hoàn cảnh ép, bất đắc dĩ phải làm; 非…不可 có thể là chính mình nhất quyết muốn làm.",
+        "Trong khẩu ngữ, khi đã có 非要 / 非得 thì 不可 có thể lược: 他非要去."
+      ],
+      "soSanh": [
+        "zh-hsk3-bixu-xuyao",
+        "zh-hsk4-zhihao-budebu"
+      ],
+      "tuKhoa": [
+        "fei buke",
+        "fei bu ke",
+        "feiyao",
+        "nhất định phải",
+        "không thể không",
+        "thế nào cũng"
+      ],
+      "quiz": [
+        {
+          "h": "这个病很严重，非住院（　）。",
+          "lc": [
+            "不可",
+            "不得",
+            "不了",
+            "不过"
+          ],
+          "da": 0,
+          "gt": "Khung cố định là 非 + V + 不可: không nằm viện không được. Ba từ còn lại không khép được khung với 非."
+        },
+        {
+          "h": "他非去不可 nghĩa là gì?",
+          "lc": [
+            "anh ấy không cần đi",
+            "anh ấy nhất định phải đi",
+            "anh ấy đi hay không cũng được",
+            "anh ấy không được đi"
+          ],
+          "da": 1,
+          "gt": "Phủ định kép 非…不可 cho nghĩa khẳng định mạnh: nhất định phải làm."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "今天的会很重要，你不可非参加。",
+            "今天的会很重要，你参加非不可。",
+            "今天的会很重要，你非参加不可。",
+            "今天的会很重要，你非不可参加。"
+          ],
+          "da": 2,
+          "gt": "Động từ nằm giữa khung: 非 + 参加 + 不可."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-zai-kanlai",
+      "nhom": "Cấu trúc cố định",
+      "tieuDe": "在…看来",
+      "mau": "在 + người + 看来，+ nhận định",
+      "nghia": "theo ~ thấy, trong mắt ~, theo quan điểm của ~",
+      "giaiThich": "Khung 在…看来 đứng đầu câu (hoặc sau chủ đề), nêu rõ nhận định phía sau là quan điểm, cách nhìn của ai. Giữa 在 và 看来 là từ chỉ người hoặc nhóm người. Dùng được khi nói và khi viết, lịch sự hơn việc khẳng định thẳng.",
+      "cachGhep": [
+        "在 + 我 / 他 / 你 + 看来，…: 在我看来，…",
+        "在 + danh từ chỉ người + 看来，…: 在父母看来, 在专家看来, 在很多人看来"
+      ],
+      "viDu": [
+        {
+          "c": "在我看来，这个计划还不够成熟。",
+          "d": "Zài wǒ kànlái, zhège jìhuà hái bú gòu chéngshú.",
+          "v": "Theo tôi thấy, kế hoạch này vẫn chưa đủ chín."
+        },
+        {
+          "c": "在父母看来，孩子永远是孩子。",
+          "d": "Zài fùmǔ kànlái, háizi yǒngyuǎn shì háizi.",
+          "v": "Trong mắt cha mẹ, con cái mãi mãi là trẻ con."
+        },
+        {
+          "c": "在很多人看来，这是一份理想的工作。",
+          "d": "Zài hěn duō rén kànlái, zhè shì yí fèn lǐxiǎng de gōngzuò.",
+          "v": "Theo cách nhìn của nhiều người, đây là một công việc lý tưởng."
+        },
+        {
+          "c": "在专家看来，这种现象并不奇怪。",
+          "d": "Zài zhuānjiā kànlái, zhè zhǒng xiànxiàng bìng bù qíguài.",
+          "v": "Theo các chuyên gia, hiện tượng này không có gì lạ."
+        }
+      ],
+      "luuY": [
+        "Khác 看来 đứng một mình: 看来他不来了 là suy đoán từ dấu hiệu ('xem ra'); 在…看来 là nêu quan điểm của một người cụ thể.",
+        "Khác 对…来说: 对我来说，这很难 nói việc đó tác động thế nào đến tôi; 在我看来，这很难 là nhận định của tôi về sự việc nói chung.",
+        "Đã có 在我看来 thì không thêm 我觉得 / 我认为 ngay sau (thừa): 在我看来，我觉得… ✗."
+      ],
+      "soSanh": [
+        "zh-hsk3-dui-laishuo",
+        "zh-hsk4-yiwei-renwei",
+        "zh-hsk4-na-laishuo"
+      ],
+      "tuKhoa": [
+        "zai kanlai",
+        "zai wo kanlai",
+        "theo tôi thấy",
+        "trong mắt",
+        "quan điểm"
+      ],
+      "quiz": [
+        {
+          "h": "（　）我看来，健康比钱重要得多。",
+          "lc": [
+            "对",
+            "在",
+            "被",
+            "把"
+          ],
+          "da": 1,
+          "gt": "Khung nêu quan điểm là 在…看来. 对 phải đi với 来说 (对我来说), không đi với 看来."
+        },
+        {
+          "h": "在老师（　），这次考试并不难。",
+          "lc": [
+            "看病",
+            "看见",
+            "看来",
+            "看完"
+          ],
+          "da": 2,
+          "gt": "Khung cố định 在 + người + 看来: theo thầy cô thấy."
+        },
+        {
+          "h": "Câu nào dùng để nêu quan điểm của một người?",
+          "lc": [
+            "他看起来很累。",
+            "看来他今天不会来了。",
+            "天看来要下雨了。",
+            "在他看来，这样做不公平。"
+          ],
+          "da": 3,
+          "gt": "在他看来 = theo anh ấy thấy. 看来 đứng một mình và 看起来 chỉ là suy đoán, nhận xét từ dấu hiệu bên ngoài."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-ba-dangzuo",
+      "nhom": "Cấu trúc cố định",
+      "tieuDe": "把…当作 / 看作 / 当成",
+      "mau": "S + 把 + A + 当作 / 当成 / 看作 + B",
+      "nghia": "coi A là B, xem A như B; (当成) nhầm A là B",
+      "giaiThich": "Khung 把 A 当作 / 当成 / 看作 B nói cách chủ ngữ nhìn nhận, đối xử với A: coi A như là B. 当成 còn dùng khi nhận nhầm: 把你当成你哥哥了 (tưởng bạn là anh bạn). 看作 thiên về quan niệm, đánh giá và hơi văn viết. Bị động: A 被当作 B.",
+      "cachGhep": [
+        "把 + A + 当作 + B: 把我当作朋友",
+        "把 + A + 当成 + B (coi như / nhầm là): 把这里当成自己的家, 把你当成你哥哥了",
+        "把 + A + 看作 + B (quan niệm): 把失败看作成功的开始",
+        "Bị động: A + 被 + 当作 / 看作 + B"
+      ],
+      "viDu": [
+        {
+          "c": "她把我当作最好的朋友。",
+          "d": "Tā bǎ wǒ dàngzuò zuì hǎo de péngyou.",
+          "v": "Cô ấy coi tôi là người bạn thân nhất."
+        },
+        {
+          "c": "我一直把这里当成自己的家。",
+          "d": "Wǒ yìzhí bǎ zhèlǐ dàngchéng zìjǐ de jiā.",
+          "v": "Tôi luôn coi nơi này như nhà của mình."
+        },
+        {
+          "c": "很多人把失败看作成功的开始。",
+          "d": "Hěn duō rén bǎ shībài kànzuò chénggōng de kāishǐ.",
+          "v": "Nhiều người xem thất bại là khởi đầu của thành công."
+        },
+        {
+          "c": "对不起，我把你当成你哥哥了。",
+          "d": "Duìbuqǐ, wǒ bǎ nǐ dàngchéng nǐ gēge le.",
+          "v": "Xin lỗi, tôi nhầm bạn là anh trai bạn."
+        },
+        {
+          "c": "别把我的话当作玩笑。",
+          "d": "Bié bǎ wǒ de huà dàngzuò wánxiào.",
+          "v": "Đừng coi lời tôi nói là chuyện đùa."
+        }
+      ],
+      "luuY": [
+        "当 trong 当作, 当成 đọc dàng (thanh 4), khác dāng trong 当老师, 当…的时候.",
+        "Từ phủ định và phó từ đứng trước 把: 别把…, 没把…, 一直把…; không nói 把我的话别当作玩笑.",
+        "Khác 作为: 把 A 作为 B là chính thức lấy A dùng làm B; 当作 / 当成 là coi như theo cảm nhận, có khi không đúng sự thật.",
+        "Khác 以为: 以为 + mệnh đề (我以为你是他哥哥) cũng là tưởng nhầm, nhưng không dùng khung 把; nhận nhầm người / vật thì 把 A 当成 B."
+      ],
+      "soSanh": [
+        "zh-hsk5-zuowei",
+        "zh-hsk4-yi-wei",
+        "zh-hsk3-ba-zai-dao-gei-cheng",
+        "zh-hsk4-yiwei-renwei"
+      ],
+      "tuKhoa": [
+        "ba dangzuo",
+        "dangzuo",
+        "dangcheng",
+        "kanzuo",
+        "coi là",
+        "xem như",
+        "nhầm là"
+      ],
+      "quiz": [
+        {
+          "h": "他（　）工作当作生活中最重要的事。",
+          "lc": [
+            "把",
+            "向",
+            "被",
+            "对"
+          ],
+          "da": 0,
+          "gt": "Khung là 把 + A + 当作 + B: coi công việc là điều quan trọng nhất."
+        },
+        {
+          "h": "当 trong 当作 đọc thế nào?",
+          "lc": [
+            "tāng",
+            "dàng",
+            "dǎng",
+            "dāng"
+          ],
+          "da": 1,
+          "gt": "Trong 当作, 当成 chữ 当 đọc thanh 4: dàng. Đọc dāng là ở 当老师, 当…的时候."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "老师当成我们把自己的孩子。",
+            "老师把我们自己的孩子当成。",
+            "老师把我们当成自己的孩子。",
+            "老师当成把我们自己的孩子。"
+          ],
+          "da": 2,
+          "gt": "Trật tự: 把 + A (我们) + 当成 + B (自己的孩子)."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-zai-buguo-le",
+      "nhom": "Cấu trúc cố định",
+      "tieuDe": "再…不过了",
+      "mau": "再 + Adj + 不过 (+ 了)",
+      "nghia": "không gì ~ hơn, ~ nhất rồi, cực kỳ ~",
+      "giaiThich": "Khung 再 + tính từ + 不过了 nói mức độ đã cao tới đỉnh, không thể hơn được nữa: 再好不过了 (không gì tốt hơn). Giọng khẳng định mạnh, hơi cường điệu, dùng nhiều trong khẩu ngữ để tán thành hoặc đánh giá.",
+      "cachGhep": [
+        "再 + Adj + 不过了: 再好不过了, 再简单不过了, 再合适不过了",
+        "Thường làm vị ngữ: 这个办法再好不过了",
+        "Trước tính từ không thêm phó từ mức độ nào khác"
+      ],
+      "viDu": [
+        {
+          "c": "你能来帮忙，那再好不过了。",
+          "d": "Nǐ néng lái bāngmáng, nà zài hǎo búguò le.",
+          "v": "Bạn đến giúp được thì còn gì tốt bằng."
+        },
+        {
+          "c": "这个道理再简单不过了。",
+          "d": "Zhège dàolǐ zài jiǎndān búguò le.",
+          "v": "Lẽ này thì đơn giản hết mức rồi."
+        },
+        {
+          "c": "对我来说，这个时间再合适不过了。",
+          "d": "Duì wǒ lái shuō, zhège shíjiān zài héshì búguò le.",
+          "v": "Với tôi, thời gian này không thể hợp hơn được nữa."
+        },
+        {
+          "c": "他们俩的关系，我再清楚不过了。",
+          "d": "Tāmen liǎ de guānxi, wǒ zài qīngchu búguò le.",
+          "v": "Quan hệ của hai người họ thì tôi rõ hơn ai hết."
+        }
+      ],
+      "luuY": [
+        "Không thêm 很 / 非常 trước tính từ: 再很好不过了 ✗.",
+        "Khác Adj + 极了: cùng nói mức độ rất cao, nhưng 再…不过了 có nghĩa 'không thể hơn', mạnh và cường điệu hơn.",
+        "Khác V + 不过 (说不过他 = nói không lại anh ấy) và khác liên từ 不过 (nhưng): ở đây 不过 nằm trong khung cố định với 再."
+      ],
+      "soSanh": [
+        "zh-hsk3-jile",
+        "zh-hsk2-zui",
+        "zh-hsk5-bu-guo-bo-ngu",
+        "zh-hsk4-buguo-keshi"
+      ],
+      "tuKhoa": [
+        "zai buguo le",
+        "zai hao buguo",
+        "không gì hơn",
+        "cực kỳ",
+        "nhất rồi"
+      ],
+      "quiz": [
+        {
+          "h": "周末去海边玩儿？那（　）好不过了！",
+          "lc": [
+            "还",
+            "又",
+            "才",
+            "再"
+          ],
+          "da": 3,
+          "gt": "Khung cố định là 再 + Adj + 不过了; 又, 还, 才 không tạo được khung này."
+        },
+        {
+          "h": "这样安排再合适（　）了。",
+          "lc": [
+            "不过",
+            "不可",
+            "不得",
+            "不了"
+          ],
+          "da": 0,
+          "gt": "Khung 再 + Adj + 不过了. 不可 đi với 非 (非…不可); 不得, 不了 là bổ ngữ sau động từ."
+        },
+        {
+          "h": "这个问题再简单不过了 nghĩa là gì?",
+          "lc": [
+            "vấn đề này không đơn giản lắm",
+            "vấn đề này cực kỳ đơn giản, không gì đơn giản hơn",
+            "vấn đề này phải làm lại mới đơn giản",
+            "vấn đề này đơn giản nhưng có điều…"
+          ],
+          "da": 1,
+          "gt": "再…不过了 nói mức độ cao nhất; 不过 ở đây không phải là 'nhưng' và 再 không phải là 'lại lần nữa'."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-shide",
+      "nhom": "Cấu trúc cố định",
+      "tieuDe": "…似的",
+      "mau": "(像 / 好像 / 跟) + N / V / mệnh đề + 似的",
+      "nghia": "như ~, giống như ~, như thể ~",
+      "giaiThich": "似的 (đọc shìde) là trợ từ đặt sau danh từ, động từ hoặc cả một mệnh đề để ví von hay nói về một ấn tượng: trông như, như thể. Thường hô ứng với 像, 好像 ở phía trước. Cụm …似的 có thể làm vị ngữ, trạng ngữ hoặc bổ ngữ sau 得. Khẩu ngữ dùng rất nhiều.",
+      "cachGhep": [
+        "像 + N + 似的: 像孩子似的, 像一阵风似的",
+        "好像 + mệnh đề + 似的: 好像没听见似的",
+        "V / Adj + 得 + 像 … 似的: 高兴得像个孩子似的",
+        "… 似的 + (地) + V: 像没事人似的走了"
+      ],
+      "viDu": [
+        {
+          "c": "她高兴得像个孩子似的。",
+          "d": "Tā gāoxìng de xiàng gè háizi shìde.",
+          "v": "Cô ấy vui như một đứa trẻ."
+        },
+        {
+          "c": "他好像没听见似的，继续往前走。",
+          "d": "Tā hǎoxiàng méi tīngjiàn shìde, jìxù wǎng qián zǒu.",
+          "v": "Anh ấy như thể không nghe thấy, cứ tiếp tục đi về phía trước."
+        },
+        {
+          "c": "他跑得飞快，像一阵风似的。",
+          "d": "Tā pǎo de fēikuài, xiàng yí zhèn fēng shìde.",
+          "v": "Anh ấy chạy nhanh như bay, tựa một cơn gió."
+        },
+        {
+          "c": "她看了我一眼，好像有话要说似的。",
+          "d": "Tā kàn le wǒ yì yǎn, hǎoxiàng yǒu huà yào shuō shìde.",
+          "v": "Cô ấy nhìn tôi một cái, dường như có điều muốn nói."
+        }
+      ],
+      "luuY": [
+        "似 trong 似的 đọc shì, không đọc sì như trong 似乎 (sìhū), 相似 (xiāngsì).",
+        "似的 luôn đứng SAU thành phần được đem ra ví: 似的孩子 ✗ → 像孩子似的 ✓.",
+        "Khác …一样: so sánh ngang bằng thật sự, có số đo dùng 一样 (他跟我一样高), không dùng 似的; …似的 thiên về ví von và ấn tượng chủ quan.",
+        "Khác 似乎: 似乎 là phó từ đứng TRƯỚC vị ngữ, nêu suy đoán (他似乎不高兴); 似的 đứng cuối cụm."
+      ],
+      "soSanh": [
+        "zh-hsk3-xiang-yiyang",
+        "zh-hsk5-sihu",
+        "zh-hsk3-gen-yiyang"
+      ],
+      "tuKhoa": [
+        "shide",
+        "xiang shide",
+        "haoxiang shide",
+        "như thể",
+        "giống như",
+        "tựa như"
+      ],
+      "quiz": [
+        {
+          "h": "他累得像三天没睡觉（　）。",
+          "lc": [
+            "似乎",
+            "好像",
+            "一定",
+            "似的"
+          ],
+          "da": 3,
+          "gt": "Cuối cụm ví von, hô ứng với 像 ở trước là 似的. 似乎, 好像, 一定 là phó từ, phải đứng trước vị ngữ."
+        },
+        {
+          "h": "似的 đọc thế nào?",
+          "lc": [
+            "shìde",
+            "sǐde",
+            "shíde",
+            "sìde"
+          ],
+          "da": 0,
+          "gt": "Trong 似的 chữ 似 đọc shì; chỉ trong 似乎, 相似 mới đọc sì."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "她的脸红得似的像苹果。",
+            "她的脸红得像苹果似的。",
+            "她的脸似的像苹果红。",
+            "似的她的脸红得像苹果。"
+          ],
+          "da": 1,
+          "gt": "似的 đứng sau vật đem ra ví: 像 + 苹果 + 似的, cả cụm làm bổ ngữ sau 得."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk5-de-budeliao",
+      "nhom": "Cấu trúc cố định",
+      "tieuDe": "…得不得了 / …得要命",
+      "mau": "Adj / động từ tâm lý + 得 + 不得了 / 要命",
+      "nghia": "~ vô cùng, ~ ghê gớm, ~ chết đi được",
+      "giaiThich": "Đây là bổ ngữ mức độ đứng sau 得, nói mức độ rất cao. 不得了 dùng cho cả điều tốt lẫn điều xấu (高兴得不得了, 急得不得了). 要命 thường đi với cảm giác khó chịu (热得要命, 疼得要命, 困得要命). Cả hai đều là khẩu ngữ, có giọng cường điệu.",
+      "cachGhep": [
+        "Adj + 得 + 不得了: 高兴得不得了, 贵得不得了",
+        "Động từ tâm lý + 得 + 不得了: 喜欢得不得了, 后悔得不得了",
+        "Adj + 得 + 要命: 热得要命, 累得要命, 疼得要命"
+      ],
+      "viDu": [
+        {
+          "c": "听到这个消息，她高兴得不得了。",
+          "d": "Tīngdào zhège xiāoxi, tā gāoxìng de bùdéliǎo.",
+          "v": "Nghe tin này, cô ấy vui không tả nổi."
+        },
+        {
+          "c": "今天热得要命，我一点儿也不想出门。",
+          "d": "Jīntiān rè de yàomìng, wǒ yìdiǎnr yě bù xiǎng chūmén.",
+          "v": "Hôm nay nóng chết đi được, tôi chẳng muốn ra khỏi nhà chút nào."
+        },
+        {
+          "c": "孩子还没回家，妈妈急得不得了。",
+          "d": "Háizi hái méi huí jiā, māma jí de bùdéliǎo.",
+          "v": "Con vẫn chưa về nhà, mẹ sốt ruột vô cùng."
+        },
+        {
+          "c": "我困得要命，先去睡了。",
+          "d": "Wǒ kùn de yàomìng, xiān qù shuì le.",
+          "v": "Tôi buồn ngủ díp cả mắt, đi ngủ trước đây."
+        }
+      ],
+      "luuY": [
+        "Trước tính từ không thêm 很 / 非常 nữa: 很热得要命 ✗ → 热得要命 ✓.",
+        "Không được thiếu 得, và viết 得 chứ không phải 的 / 地: 高兴的不得了 ✗.",
+        "Khác 不得了 đứng một mình: 不得了，着火了！ nghĩa là 'nguy rồi, gay rồi'.",
+        "Khác Adj + 极了: 极了 đứng thẳng sau tính từ, không có 得 (好极了); …得不得了 / 得要命 bắt buộc có 得."
+      ],
+      "soSanh": [
+        "zh-hsk3-jile",
+        "zh-hsk3-trang-thai-nang-cao",
+        "zh-hsk2-de-trang-thai",
+        "zh-hsk6-bude"
+      ],
+      "tuKhoa": [
+        "de budeliao",
+        "budeliao",
+        "de yaoming",
+        "yaoming",
+        "vô cùng",
+        "chết đi được",
+        "ghê gớm"
+      ],
+      "quiz": [
+        {
+          "h": "这几天我忙（　）不得了，连饭都没时间吃。",
+          "lc": [
+            "地",
+            "得",
+            "了",
+            "的"
+          ],
+          "da": 1,
+          "gt": "Bổ ngữ mức độ nối với tính từ bằng 得: 忙得不得了."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "我的牙要命得疼。",
+            "我的牙很疼得要命。",
+            "我的牙疼得要命。",
+            "我的牙疼要命得。"
+          ],
+          "da": 2,
+          "gt": "Trật tự: Adj + 得 + 要命, và trước tính từ không thêm 很."
+        },
+        {
+          "h": "高兴得不得了 nghĩa là gì?",
+          "lc": [
+            "chỉ hơi vui một chút",
+            "không thể vui được",
+            "không được phép vui",
+            "vui vô cùng"
+          ],
+          "da": 3,
+          "gt": "得不得了 là bổ ngữ chỉ mức độ rất cao; nó không mang nghĩa phủ định dù có chữ 不."
+        }
+      ]
+    }
+  ]
+}

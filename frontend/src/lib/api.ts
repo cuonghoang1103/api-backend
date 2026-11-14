@@ -4903,7 +4903,7 @@ export const hubApi = {
 export const hubFileApi = {
   // Get presigned R2 PUT URL for direct upload from browser
   presign: (data: { name: string; mimeType: string }) =>
-    api.post<{ data: { uploadUrl: string; key: string } }>('/hub/files/presign', data),
+    api.post<{ data: { uploadUrl: string; key: string; contentType?: string } }>('/hub/files/presign', data),
 
   // Register a file after successful upload
   create: (data: {

@@ -92,7 +92,7 @@ export default function HubUploadModal({ open, folders, onClose, onUploaded }: H
           name: entry.file.name,
           mimeType: entry.file.type || 'application/octet-stream',
         });
-        const { uploadUrl, key } = presignRes.data.data;
+        const { uploadUrl, key, contentType } = presignRes.data.data;
 
         setFiles((prev) =>
           prev.map((f) => (f.id === entry.id ? { ...f, progress: 30 } : f)),
@@ -102,7 +102,7 @@ export default function HubUploadModal({ open, folders, onClose, onUploaded }: H
         await fetch(uploadUrl, {
           method: 'PUT',
           body: entry.file,
-          headers: { 'Content-Type': entry.file.type || 'application/octet-stream' },
+          headers: { 'Content-Type': contentType || entry.file.type || 'application/octet-stream' },
         });
 
         setFiles((prev) =>

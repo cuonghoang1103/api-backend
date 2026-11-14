@@ -13,6 +13,7 @@ import {
 } from '../../config/r2.js';
 import { getStorageProvider } from '../../storage/StorageProvider.js';
 import { AppError, BadRequestError, ForbiddenError, NotFoundError } from '../../middleware/errorHandler.js';
+import { safePresignContentType } from '../../storage/uploadService.js';
 import { displayName, PUBLIC_USER } from './common.js';
 import type { CommentVisibility, IssueTypeKey, LinkType } from './constants.js';
 export { commentVisibilityFor } from './permissions.js';
@@ -919,7 +920,8 @@ export async function presignAttachment(userId: number, projectId: number, numbe
   if (count >= MAX_ATTACHMENTS_PER_ISSUE) throw new BadRequestError('This issue has too many attachments', 'WORK_LIMIT');
   const safeName = input.fileName.replace(/[^\w.\- ]+/g, '_').slice(-120) || 'file';
   const key = `${attachmentPrefix(projectId, id)}${crypto.randomUUID()}/${safeName}`;
-  const contentType = input.contentType || 'application/octet-stream';
+  // SECURITY (14/11/2026): HTML/SVG/JS… ⇒ octet-stream (client PUT theo `headers` trả về).
+  const contentType = safePresignContentType(input.contentType, input.fileName);
   const uploadUrl = await getSignedUploadUrl(key, contentType, 900);
   return { uploadUrl, key, headers: { 'Content-Type': contentType } };
 }

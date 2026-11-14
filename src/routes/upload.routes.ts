@@ -23,6 +23,7 @@ import {
   uploadImage,
   deleteByKey,
   assertSafeUploadType,
+  keyBelongsToUser,
   UploadError,
 } from '../storage/uploadService.js';
 import { extractVideoThumbnail, extractVideoThumbnailFromUrl } from '../services/video.service.js';
@@ -395,6 +396,12 @@ router.post('/upload/presign-r2/complete', authenticate, async (req, res: Respon
     if (!key || typeof key !== 'string' || !PRESIGN_KEY_RE.test(key) || key.includes('..')) {
       throw new AppError('Invalid object key', 400, 'INVALID_KEY');
     }
+    // SECURITY (14/11/2026): chỉ hoàn tất được key CỦA CHÍNH MÌNH. Trước đây ai cũng
+    // "complete" được key video của người khác ⇒ có hàng PendingUpload mang userId kẻ
+    // xấu ⇒ hết hạn thì cron xoá object ⇒ video nạn nhân biến mất.
+    if (!keyBelongsToUser(key, req.userId!)) {
+      throw new AppError('Object key does not belong to you', 403, 'KEY_NOT_OWNED');
+    }
 
     const head = await r2HeadObject(key);
     if (!head) {
@@ -402,6 +409,9 @@ router.post('/upload/presign-r2/complete', authenticate, async (req, res: Respon
     }
     if (head.size > config.maxFileSizeVideo) {
       // Guard against a client uploading more than it declared at presign.
+      // Xoá luôn object quá cỡ (key đã chắc là của người gọi) — trước 14/11 nó
+      // nằm lại vĩnh viễn vì chưa có hàng PendingUpload nào để cron dọn.
+      await deleteByKey(key).catch((e) => logger.warn('[upload] xoá object quá cỡ thất bại', { key, err: String(e) }));
       throw new AppError('Uploaded object exceeds the video size limit', 400, 'FILE_TOO_LARGE');
     }
 

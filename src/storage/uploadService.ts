@@ -328,6 +328,20 @@ const DANGEROUS_MIME = new Set([
 const DANGEROUS_EXT = /\.(html?|xhtml|svg|js|mjs|xml|php|phtml)$/i;
 
 /**
+ * Content-Type an toàn để KÝ cho URL tải thẳng (presigned PUT) của các luồng
+ * nhận MỌI loại tệp (Hub, đính kèm CT Work). Tệp "nội dung chủ động"
+ * (HTML/SVG/JS/XML…, theo kiểu khai HOẶC đuôi tên) bị hạ thành
+ * `application/octet-stream` ⇒ trình duyệt tải về chứ không chạy trên tên miền
+ * media. Không từ chối để người dùng vẫn đính kèm được báo cáo .html, sơ đồ .svg.
+ * (14/11/2026 — trước đó hai luồng này ký nguyên kiểu client khai, kể cả text/html.)
+ */
+export function safePresignContentType(mimetype: string, originalName: string): string {
+  const mime = (mimetype || '').toLowerCase().split(';')[0].trim();
+  if (!mime || DANGEROUS_MIME.has(mime) || DANGEROUS_EXT.test(originalName || '')) return 'application/octet-stream';
+  return mime;
+}
+
+/**
  * SECURITY: reject uploads that could be served as active content.
  * We validate BOTH the declared mimetype and the filename extension
  * (the client controls the mimetype, so the extension is a second

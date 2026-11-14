@@ -202,13 +202,17 @@ router.post('/scrape', async (req: Request, res: Response<ApiResponse>, next) =>
 router.post('/files/presign', async (req: Request, res: Response<ApiResponse>, next) => {
   try {
     const name = typeof req.body?.name === 'string' ? req.body.name : '';
-    const mimeType = typeof req.body?.mimeType === 'string' ? req.body.mimeType : 'application/octet-stream';
+    const mimeRaw = typeof req.body?.mimeType === 'string' ? req.body.mimeType : 'application/octet-stream';
     if (!name || name.length > 255) {
       throw new AppError('Ten file 1-255 ky tu', 400, 'INVALID_NAME');
     }
-    if (!mimeType) {
+    if (!mimeRaw) {
       throw new AppError('mimeType la bat buoc', 400, 'MISSING_MIME');
     }
+    // SECURITY (14/11/2026): HTML/SVG/JS… hạ thành octet-stream trước khi ký —
+    // key nằm chung bucket với tên miền media, ký nguyên `text/html` là stored XSS.
+    const { safePresignContentType } = await import('../storage/uploadService.js');
+    const mimeType = safePresignContentType(mimeRaw, name);
     // Generate a unique R2 key
     const ext = name.includes('.') ? '.' + name.split('.').pop() : '';
     const key = `hub-files/user${req.userId}/${Date.now()}-${Math.random().toString(36).slice(2, 10)}${ext}`;
@@ -233,7 +237,8 @@ router.post('/files/presign', async (req: Request, res: Response<ApiResponse>, n
       expiresIn: 600,
       signableHeaders: new Set(['content-type']),
     });
-    res.json({ success: true, data: { uploadUrl, key } });
+    // `contentType`: client PHẢI PUT đúng kiểu này (đã ký) — có thể khác kiểu khai.
+    res.json({ success: true, data: { uploadUrl, key, contentType: mimeType } });
   } catch (err) { next(err); }
 });
 

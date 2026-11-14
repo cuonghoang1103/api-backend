@@ -22,7 +22,7 @@ import { pingQuotaRedis } from './quota.service.js';
 import { prisma } from '../config/database.js';
 import { logger } from '../utils/logger.js';
 import { completedExpiryCutoff, COMPLETED_TASK_RETENTION_DAYS } from '../utils/dashboard.js';
-import { deleteByKey } from '../storage/uploadService.js';
+import { deleteByKey, keyBelongsToUser } from '../storage/uploadService.js';
 import { sendDueReminders } from './myLanguage.reminder.service.js';
 import { submitSitemapToIndexNow } from './indexnow.service.js';
 import { purgeExpiredProjectRequests } from './projectRequest.service.js';
@@ -435,6 +435,13 @@ export function startCronJobs(): void {
 
       for (const upload of expiredUploads) {
         try {
+          // Phòng thủ thêm (14/11/2026): chỉ xoá key thuộc đúng người tạo hàng chờ —
+          // không bao giờ để một hàng PENDING của người A xoá tệp của người B.
+          if (!keyBelongsToUser(upload.r2Key, upload.userId)) {
+            logger.warn('cron orphaned upload cleanup: bỏ qua key không thuộc người tạo', { id: upload.id, userId: upload.userId });
+            await prisma.pendingUpload.update({ where: { id: upload.id }, data: { status: 'EXPIRED' } });
+            continue;
+          }
           // Delete from R2
           await deleteByKey(upload.r2Key);
           // Mark as expired in DB

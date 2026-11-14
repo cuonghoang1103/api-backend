@@ -57,33 +57,33 @@
           "h": "A car is ___ than a bike.",
           "lc": [
             "fast",
+            "fastest",
             "more fast",
-            "faster",
-            "fastest"
+            "faster"
           ],
-          "da": 2,
+          "da": 3,
           "gt": "Fast là tính từ một âm tiết nên thêm er: faster than."
         },
         {
           "h": "This exercise is ___ than the last one.",
           "lc": [
-            "more difficult",
             "difficulter",
             "more difficulter",
-            "difficult"
+            "difficult",
+            "more difficult"
           ],
-          "da": 0,
+          "da": 3,
           "gt": "Difficult là tính từ dài nên dùng more + tính từ."
         },
         {
           "h": "My English is ___ than my French.",
           "lc": [
-            "gooder",
-            "more good",
             "more better",
-            "better"
+            "gooder",
+            "better",
+            "more good"
           ],
-          "da": 3,
+          "da": 2,
           "gt": "So sánh hơn bất quy tắc của good là better, không thêm more."
         }
       ]
@@ -140,34 +140,34 @@
         {
           "h": "This is ___ day of my life!",
           "lc": [
-            "the happiest",
-            "happiest",
+            "the happier",
             "the most happy",
-            "the happier"
+            "the happiest",
+            "happiest"
           ],
-          "da": 0,
+          "da": 2,
           "gt": "Happy → happiest và phải có the: the happiest."
         },
         {
           "h": "Ho Chi Minh City is the biggest city ___ Vietnam.",
           "lc": [
-            "of",
             "in",
-            "than",
-            "from"
+            "from",
+            "of",
+            "than"
           ],
-          "da": 1,
+          "da": 0,
           "gt": "Sau so sánh nhất, trước tên nơi chốn dùng in."
         },
         {
           "h": "That was ___ film I have ever seen. I hated it.",
           "lc": [
+            "the worst",
             "the baddest",
             "the most bad",
-            "the worse",
-            "the worst"
+            "the worse"
           ],
-          "da": 3,
+          "da": 0,
           "gt": "So sánh nhất bất quy tắc của bad là the worst."
         }
       ]
@@ -223,30 +223,30 @@
           "h": "Tom is 1.70 m. Peter is 1.70 m. Tom is ___ Peter.",
           "lc": [
             "taller than",
+            "the tallest",
             "as tall as",
-            "not as tall as",
-            "the tallest"
+            "not as tall as"
           ],
-          "da": 1,
+          "da": 2,
           "gt": "Hai người cao bằng nhau → as tall as."
         },
         {
           "h": "This bag isn't as ___ as that one.",
           "lc": [
-            "heavier",
             "more heavy",
             "heavy",
-            "heaviest"
+            "heaviest",
+            "heavier"
           ],
-          "da": 2,
+          "da": 1,
           "gt": "Giữa as… as là tính từ ở dạng gốc: heavy."
         },
         {
           "h": "“My car is not as fast as yours” có nghĩa là:",
           "lc": [
             "My car is slower than yours.",
-            "My car is faster than yours.",
             "The two cars are the same.",
+            "My car is faster than yours.",
             "Your car is slower than mine."
           ],
           "da": 0,
@@ -306,10 +306,10 @@
         {
           "h": "He speaks English very ___.",
           "lc": [
-            "good",
+            "nice",
             "goodly",
             "well",
-            "nice"
+            "good"
           ],
           "da": 2,
           "gt": "Bổ nghĩa cho động từ speaks cần trạng từ; trạng từ của good là well."
@@ -317,23 +317,23 @@
         {
           "h": "She is a ___ driver. She drives ___.",
           "lc": [
+            "carefully / carefully",
             "careful / carefully",
             "carefully / careful",
-            "careful / careful",
-            "carefully / carefully"
+            "careful / careful"
           ],
-          "da": 0,
+          "da": 1,
           "gt": "Trước danh từ driver dùng tính từ careful; sau động từ drives dùng trạng từ carefully."
         },
         {
           "h": "They ran ___ to catch the bus.",
           "lc": [
-            "fastly",
             "fast",
             "quick",
+            "fastly",
             "hardly"
           ],
-          "da": 1,
+          "da": 0,
           "gt": "Trạng từ của fast vẫn là fast; không có fastly."
         }
       ]
@@ -393,34 +393,34 @@
         {
           "h": "She is only 15. She isn't ___ to vote.",
           "lc": [
-            "enough old",
             "old enough",
-            "enough age",
-            "old too"
+            "old too",
+            "enough old",
+            "enough age"
           ],
-          "da": 1,
+          "da": 0,
           "gt": "Enough đứng SAU tính từ: old enough."
         },
         {
           "h": "I can't carry this box. It's ___ heavy.",
           "lc": [
-            "enough",
             "too much",
-            "too many",
-            "too"
+            "enough",
+            "too",
+            "too many"
           ],
-          "da": 3,
+          "da": 2,
           "gt": "Trước tính từ heavy dùng too (quá); too much / too many đi với danh từ."
         },
         {
           "h": "We have ___ to buy two tickets.",
           "lc": [
-            "enough money",
             "money enough",
-            "too money",
-            "enough of money"
+            "enough of money",
+            "enough money",
+            "too money"
           ],
-          "da": 0,
+          "da": 2,
           "gt": "Enough đứng TRƯỚC danh từ: enough money."
         }
       ]
@@ -477,32 +477,32 @@
         {
           "h": "There isn't ___ milk in the fridge.",
           "lc": [
-            "many",
             "a lot",
             "much",
+            "many",
             "a few"
           ],
-          "da": 2,
+          "da": 1,
           "gt": "Milk không đếm được, câu phủ định → much (a lot thiếu of)."
         },
         {
           "h": "How ___ languages can you speak?",
           "lc": [
-            "many",
+            "lot of",
             "much",
-            "a lot",
-            "lot of"
+            "many",
+            "a lot"
           ],
-          "da": 0,
+          "da": 2,
           "gt": "Languages là danh từ đếm được số nhiều → How many."
         },
         {
           "h": "My uncle has ___ money. He is very rich.",
           "lc": [
-            "many",
-            "a lot of",
             "a lot",
-            "a few"
+            "a lot of",
+            "a few",
+            "many"
           ],
           "da": 1,
           "gt": "Câu khẳng định với danh từ không đếm được: a lot of money (phải có of)."
@@ -560,11 +560,11 @@
           "h": "There are ___ apples on the table. Take one.",
           "lc": [
             "a little",
-            "much",
             "a few",
+            "much",
             "any"
           ],
-          "da": 2,
+          "da": 1,
           "gt": "Apples là danh từ đếm được số nhiều, câu khẳng định → a few."
         },
         {
@@ -581,12 +581,12 @@
         {
           "h": "Câu nào đúng?",
           "lc": [
-            "She bought a few books.",
-            "She bought a little books.",
             "She bought a few book.",
-            "She bought much books."
+            "She bought a little books.",
+            "She bought much books.",
+            "She bought a few books."
           ],
-          "da": 0,
+          "da": 3,
           "gt": "A few + danh từ đếm được số nhiều: a few books."
         }
       ]
@@ -641,34 +641,34 @@
         {
           "h": "___ are very clever animals.",
           "lc": [
+            "Dolphin",
             "The dolphin",
-            "Dolphins",
             "A dolphins",
-            "Dolphin"
+            "Dolphins"
           ],
-          "da": 1,
+          "da": 3,
           "gt": "Nói chung về cả loài dùng danh từ số nhiều không mạo từ: Dolphins."
         },
         {
           "h": "We usually have ___ at 7 p.m.",
           "lc": [
+            "dinner",
             "the dinner",
             "a dinner",
-            "dinners",
-            "dinner"
+            "dinners"
           ],
-          "da": 3,
+          "da": 0,
           "gt": "Tên bữa ăn nói chung không dùng mạo từ: have dinner."
         },
         {
           "h": "Can you play ___?",
           "lc": [
-            "the guitar",
-            "an guitar",
             "a guitars",
-            "guitars a"
+            "guitars a",
+            "an guitar",
+            "the guitar"
           ],
-          "da": 0,
+          "da": 3,
           "gt": "Chơi nhạc cụ dùng the: play the guitar."
         }
       ],
@@ -729,20 +729,20 @@
           "h": "You ___ smoke. It's bad for you.",
           "lc": [
             "should",
-            "shouldn't",
             "should to",
-            "don't should"
+            "don't should",
+            "shouldn't"
           ],
-          "da": 1,
+          "da": 3,
           "gt": "Hút thuốc có hại nên lời khuyên là không nên: shouldn't."
         },
         {
           "h": "He should ___ a doctor.",
           "lc": [
-            "sees",
             "to see",
+            "seeing",
             "see",
-            "seeing"
+            "sees"
           ],
           "da": 2,
           "gt": "Sau should là động từ nguyên mẫu không to: see."
@@ -750,12 +750,12 @@
         {
           "h": "It's cold outside. You ___ wear a coat.",
           "lc": [
-            "should",
             "shouldn't",
-            "should not to",
-            "shoulds"
+            "should",
+            "shoulds",
+            "should not to"
           ],
-          "da": 0,
+          "da": 1,
           "gt": "Trời lạnh nên lời khuyên là nên mặc áo khoác: should + V."
         }
       ]
@@ -814,34 +814,34 @@
         {
           "h": "You ___ touch that wire. It's dangerous!",
           "lc": [
-            "must",
-            "must to",
+            "don't must",
             "mustn't",
-            "don't must"
+            "must to",
+            "must"
           ],
-          "da": 2,
+          "da": 1,
           "gt": "Việc nguy hiểm, bị cấm → mustn't + V."
         },
         {
           "h": "All visitors ___ show their passports here.",
           "lc": [
+            "mustn't to",
             "must",
             "must to",
-            "musts",
-            "mustn't to"
+            "musts"
           ],
-          "da": 0,
+          "da": 1,
           "gt": "Quy định bắt buộc: must + V nguyên mẫu, không có to hay s."
         },
         {
           "h": "Yesterday I ___ get up at five.",
           "lc": [
-            "must",
             "had to",
+            "must",
             "musted",
             "must to"
           ],
-          "da": 1,
+          "da": 0,
           "gt": "Must không có dạng quá khứ; quá khứ dùng had to."
         }
       ]
@@ -898,34 +898,34 @@
         {
           "h": "My father ___ work on Saturdays.",
           "lc": [
-            "have to",
             "has to",
+            "have to",
             "has",
             "must to"
           ],
-          "da": 1,
+          "da": 0,
           "gt": "My father = he nên dùng has to + V."
         },
         {
           "h": "Tomorrow is Sunday. I ___ get up early.",
           "lc": [
+            "don't have to",
             "have to",
-            "has to",
             "doesn't have to",
-            "don't have to"
+            "has to"
           ],
-          "da": 3,
+          "da": 0,
           "gt": "Chủ nhật không bắt buộc dậy sớm; chủ ngữ I → don't have to."
         },
         {
           "h": "___ she have to wear glasses?",
           "lc": [
+            "Do",
             "Does",
             "Has",
-            "Is",
-            "Do"
+            "Is"
           ],
-          "da": 0,
+          "da": 1,
           "gt": "Câu hỏi của have to dùng trợ động từ; she → Does."
         }
       ]
@@ -980,34 +980,34 @@
         {
           "h": "The museum is free. You ___ pay.",
           "lc": [
+            "don't have to",
             "mustn't",
             "must",
-            "don't have to",
             "have to"
           ],
-          "da": 2,
+          "da": 0,
           "gt": "Miễn phí nên không cần trả tiền → don't have to."
         },
         {
           "h": "This is a secret. You ___ tell anyone.",
           "lc": [
+            "have to",
             "mustn't",
             "don't have to",
-            "have to",
             "doesn't have to"
           ],
-          "da": 0,
+          "da": 1,
           "gt": "Bí mật thì cấm nói ra → mustn't."
         },
         {
           "h": "“You don't have to wait for me” nghĩa là:",
           "lc": [
-            "Bạn bị cấm chờ tôi.",
-            "Bạn không cần chờ tôi.",
+            "Bạn nên chờ tôi.",
             "Bạn phải chờ tôi.",
-            "Bạn nên chờ tôi."
+            "Bạn bị cấm chờ tôi.",
+            "Bạn không cần chờ tôi."
           ],
-          "da": 1,
+          "da": 3,
           "gt": "Don't have to = không cần, không bắt buộc."
         }
       ]
@@ -1064,34 +1064,34 @@
         {
           "h": "When I was six, I ___ ride a bike.",
           "lc": [
-            "can",
             "could",
-            "could to",
-            "am able"
+            "am able",
+            "can",
+            "could to"
           ],
-          "da": 1,
+          "da": 0,
           "gt": "Khả năng trong quá khứ (when I was six) → could + V."
         },
         {
           "h": "___ you help me with this bag, please?",
           "lc": [
-            "Could",
-            "Did",
             "Were",
-            "Are"
+            "Did",
+            "Are",
+            "Could"
           ],
-          "da": 0,
+          "da": 3,
           "gt": "Lời nhờ lịch sự: Could you + V, please?"
         },
         {
           "h": "The test was very hard. I ___ answer the last question.",
           "lc": [
-            "could",
             "can't",
-            "couldn't to",
-            "couldn't"
+            "couldn't",
+            "could",
+            "couldn't to"
           ],
-          "da": 3,
+          "da": 1,
           "gt": "Quá khứ (was) và không làm được → couldn't + V."
         }
       ]
@@ -1148,21 +1148,21 @@
         {
           "h": "I'm not sure, but I ___ buy a new phone next month.",
           "lc": [
-            "must to",
             "might",
             "might to",
+            "must to",
             "am"
           ],
-          "da": 1,
+          "da": 0,
           "gt": "Chưa chắc chắn (I'm not sure) → might + V."
         },
         {
           "h": "He might ___ late. The traffic is bad.",
           "lc": [
+            "being",
             "is",
-            "to be",
             "be",
-            "being"
+            "to be"
           ],
           "da": 2,
           "gt": "Sau might là động từ nguyên mẫu không to: be."
@@ -1170,12 +1170,12 @@
         {
           "h": "Câu nào đúng?",
           "lc": [
+            "She may not to like it.",
             "She may not like it.",
-            "She mayn't likes it.",
             "She doesn't may like it.",
-            "She may not to like it."
+            "She mayn't likes it."
           ],
-          "da": 0,
+          "da": 1,
           "gt": "Phủ định: may not + V nguyên mẫu, không dùng do và không viết tắt."
         }
       ]

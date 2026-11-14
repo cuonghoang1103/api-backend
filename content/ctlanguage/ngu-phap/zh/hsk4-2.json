@@ -54,32 +54,32 @@
         {
           "h": "大家都觉得他很有钱，其实他（　）不富。",
           "lc": [
-            "并",
             "很",
             "也许",
+            "并",
             "稍微"
           ],
-          "da": 0,
+          "da": 2,
           "gt": "Bác lại điều mọi người tưởng → 并 + 不."
         },
         {
           "h": "并 + 不 dùng để làm gì?",
           "lc": [
+            "biến câu thành câu hỏi",
             "làm nhẹ câu phủ định",
-            "nhấn mạnh phủ định, bác lại điều người ta tưởng",
-            "biến câu thành câu hỏi"
+            "nhấn mạnh phủ định, bác lại điều người ta tưởng"
           ],
-          "da": 1,
+          "da": 2,
           "gt": "并 tăng sức nặng cho phủ định, ngầm đính chính một nhận định có sẵn."
         },
         {
           "h": "Câu nào đúng?",
           "lc": [
+            "我并不喜欢他。",
             "我并喜欢他。",
-            "我不并喜欢他。",
-            "我并不喜欢他。"
+            "我不并喜欢他。"
           ],
-          "da": 2,
+          "da": 0,
           "gt": "并 đứng ngay trước 不 / 没 và chỉ dùng trong câu phủ định."
         }
       ]
@@ -137,33 +137,33 @@
         {
           "h": "这么简单的问题，（　）小孩子都会回答。",
           "lc": [
-            "连",
             "把",
+            "对",
             "被",
-            "对"
+            "连"
           ],
-          "da": 0,
+          "da": 3,
           "gt": "Khung nhấn mạnh 连…都…: ngay cả trẻ con cũng trả lời được."
         },
         {
           "h": "他连早饭（　）没吃就去上班了。",
           "lc": [
-            "就",
             "也",
             "才",
-            "却"
+            "却",
+            "就"
           ],
-          "da": 1,
+          "da": 0,
           "gt": "连 hô ứng với 也 / 都."
         },
         {
           "h": "Câu nào đúng?",
           "lc": [
+            "他连我都不认识。",
             "他连都不认识我。",
-            "他都连我不认识。",
-            "他连我都不认识。"
+            "他都连我不认识。"
           ],
-          "da": 2,
+          "da": 0,
           "gt": "Trật tự: 连 + thành phần nhấn mạnh + 都 + động từ."
         }
       ]
@@ -222,12 +222,12 @@
         {
           "h": "这个电影我一点儿（　）不喜欢。",
           "lc": [
-            "也",
             "就",
             "才",
-            "还"
+            "还",
+            "也"
           ],
-          "da": 0,
+          "da": 3,
           "gt": "Phủ định hoàn toàn: 一点儿 + 也 / 都 + 不…"
         },
         {
@@ -243,11 +243,11 @@
         {
           "h": "一点儿也不贵 nghĩa là gì?",
           "lc": [
-            "hơi đắt",
             "không đắt lắm",
-            "không đắt chút nào"
+            "không đắt chút nào",
+            "hơi đắt"
           ],
-          "da": 2,
+          "da": 1,
           "gt": "一点儿也不 + Adj = hoàn toàn không…"
         }
       ]
@@ -302,8 +302,8 @@
           "lc": [
             "也",
             "就",
-            "才",
-            "并"
+            "并",
+            "才"
           ],
           "da": 0,
           "gt": "Khung 再…也…: dù lạnh đến mấy cũng…"
@@ -321,11 +321,11 @@
         {
           "h": "Trong khung 再…也…, 再 nghĩa là gì?",
           "lc": [
-            "lại lần nữa",
+            "(dù) đến mấy, hơn nữa",
             "sau đó",
-            "(dù) đến mấy, hơn nữa"
+            "lại lần nữa"
           ],
-          "da": 2,
+          "da": 0,
           "gt": "再 ở đây chỉ mức độ giả định cao hơn, không phải 'lại'."
         }
       ]
@@ -382,31 +382,31 @@
         {
           "h": "难道你不相信我吗？ — Ý thật của người nói là gì?",
           "lc": [
+            "Bạn đừng tin tôi.",
             "Bạn nên tin tôi chứ.",
-            "Tôi không biết bạn có tin tôi không.",
-            "Bạn đừng tin tôi."
+            "Tôi không biết bạn có tin tôi không."
           ],
-          "da": 0,
+          "da": 1,
           "gt": "Câu phản vấn mang hình thức phủ định nhấn mạnh ý khẳng định: bạn phải tin tôi."
         },
         {
           "h": "Câu có 难道 thường kết thúc bằng từ nào?",
           "lc": [
+            "吧",
             "呢",
-            "吗",
-            "吧"
+            "吗"
           ],
-          "da": 1,
+          "da": 2,
           "gt": "Khung quen thuộc là 难道…吗？"
         },
         {
           "h": "Câu nào đúng?",
           "lc": [
-            "你难道什么时候来？",
             "难道你去哪儿吗？",
-            "难道你没听见吗？"
+            "难道你没听见吗？",
+            "你难道什么时候来？"
           ],
-          "da": 2,
+          "da": 1,
           "gt": "难道 không đi với đại từ nghi vấn (什么时候, 哪儿)."
         }
       ]
@@ -463,31 +463,31 @@
         {
           "h": "到底 trong câu hỏi thể hiện điều gì?",
           "lc": [
+            "sự vui mừng bất ngờ",
             "truy hỏi để có câu trả lời dứt khoát",
-            "lời mời lịch sự",
-            "sự vui mừng bất ngờ"
+            "lời mời lịch sự"
           ],
-          "da": 0,
+          "da": 1,
           "gt": "到底 / 究竟 dùng để truy hỏi tới cùng."
         },
         {
           "h": "Câu nào SAI?",
           "lc": [
-            "你到底去不去？",
             "你到底去吗？",
-            "到底谁去？"
+            "到底谁去？",
+            "你到底去不去？"
           ],
-          "da": 1,
+          "da": 0,
           "gt": "到底 không dùng trong câu hỏi 吗."
         },
         {
           "h": "究竟 so với 到底 thì thế nào?",
           "lc": [
-            "nghĩa trái ngược",
             "khẩu ngữ hơn",
-            "cùng nghĩa, trang trọng hơn"
+            "cùng nghĩa, trang trọng hơn",
+            "nghĩa trái ngược"
           ],
-          "da": 2,
+          "da": 1,
           "gt": "Hai từ cùng nghĩa truy hỏi; 究竟 thiên về văn viết."
         }
       ]
@@ -542,8 +542,8 @@
           "h": "过马路时（　）要注意安全。",
           "lc": [
             "千万",
-            "恐怕",
             "竟然",
+            "恐怕",
             "果然"
           ],
           "da": 0,
@@ -552,18 +552,18 @@
         {
           "h": "千万 thường dùng trong loại câu nào?",
           "lc": [
-            "câu kể chuyện quá khứ",
             "câu dặn dò, cầu khiến",
+            "câu kể chuyện quá khứ",
             "câu so sánh"
           ],
-          "da": 1,
+          "da": 0,
           "gt": "千万 là phó từ ngữ khí của câu cầu khiến."
         },
         {
           "h": "Câu nào SAI?",
           "lc": [
-            "千万别迟到。",
             "你千万要记住。",
+            "千万别迟到。",
             "他昨天千万来了。"
           ],
           "da": 2,
@@ -620,20 +620,20 @@
         {
           "h": "路上堵车，我（　）要迟到了。",
           "lc": [
+            "果然",
             "恐怕",
             "千万",
-            "果然",
             "从来"
           ],
-          "da": 0,
+          "da": 1,
           "gt": "Suy đoán điều không mong muốn → 恐怕."
         },
         {
           "h": "恐怕 nghĩa là gì?",
           "lc": [
-            "chắc chắn",
+            "tuyệt đối đừng",
             "e rằng, có lẽ (điều không mong)",
-            "tuyệt đối đừng"
+            "chắc chắn"
           ],
           "da": 1,
           "gt": "恐怕 = e rằng; nêu suy đoán kèm lo ngại."
@@ -641,11 +641,11 @@
         {
           "h": "'Tôi sợ chó' nói thế nào?",
           "lc": [
-            "我恐怕狗。",
+            "我害怕狗。",
             "我千万狗。",
-            "我害怕狗。"
+            "我恐怕狗。"
           ],
-          "da": 2,
+          "da": 0,
           "gt": "恐怕 không phải động từ; 'sợ' là 害怕 / 怕."
         }
       ]
@@ -702,32 +702,32 @@
         {
           "h": "才学了半年，他的汉语（　）说得这么好！",
           "lc": [
-            "竟然",
             "千万",
             "恐怕",
-            "稍微"
+            "稍微",
+            "竟然"
           ],
-          "da": 0,
+          "da": 3,
           "gt": "Kết quả vượt ngoài dự đoán, gây ngạc nhiên → 竟然."
         },
         {
           "h": "竟然 đứng ở vị trí nào?",
           "lc": [
             "đầu câu, trước chủ ngữ",
-            "sau chủ ngữ, trước động từ",
-            "cuối câu"
+            "cuối câu",
+            "sau chủ ngữ, trước động từ"
           ],
-          "da": 1,
+          "da": 2,
           "gt": "竟然 là phó từ, đứng sau chủ ngữ và trước vị ngữ."
         },
         {
           "h": "竟然 diễn tả điều gì?",
           "lc": [
-            "đúng như dự đoán",
             "lời dặn dò",
-            "trái với dự đoán, bất ngờ"
+            "trái với dự đoán, bất ngờ",
+            "đúng như dự đoán"
           ],
-          "da": 2,
+          "da": 1,
           "gt": "竟然 = không ngờ; đúng như dự đoán là 果然."
         }
       ]
@@ -782,22 +782,22 @@
         {
           "h": "大家都觉得他能赢，比赛结束，他（　）赢了。",
           "lc": [
-            "果然",
-            "千万",
+            "从来",
             "稍微",
-            "从来"
+            "千万",
+            "果然"
           ],
-          "da": 0,
+          "da": 3,
           "gt": "Kết quả đúng như mọi người dự đoán → 果然."
         },
         {
           "h": "果然 nghĩa là gì?",
           "lc": [
             "không ngờ",
-            "quả nhiên, đúng như dự đoán",
-            "e rằng"
+            "e rằng",
+            "quả nhiên, đúng như dự đoán"
           ],
-          "da": 1,
+          "da": 2,
           "gt": "果然 = quả nhiên; 竟然 = không ngờ; 恐怕 = e rằng."
         },
         {
@@ -872,18 +872,18 @@
         {
           "h": "往往 khác 常常 ở điểm nào?",
           "lc": [
-            "往往 dùng cho tương lai",
             "往往 nêu quy luật trong một hoàn cảnh nhất định, không dùng cho mong muốn / tương lai",
-            "Hai từ thay nhau được trong mọi trường hợp"
+            "Hai từ thay nhau được trong mọi trường hợp",
+            "往往 dùng cho tương lai"
           ],
-          "da": 1,
+          "da": 0,
           "gt": "往往 là tổng kết quy luật từ kinh nghiệm đã có."
         },
         {
           "h": "Câu nào SAI?",
           "lc": [
-            "他常常迟到。",
             "下雨天往往堵车。",
+            "他常常迟到。",
             "明天我要往往锻炼。"
           ],
           "da": 2,
@@ -942,23 +942,23 @@
         {
           "h": "我找了半天，（　）手机在包里！",
           "lc": [
-            "原来",
             "本来",
+            "往往",
             "从来",
-            "往往"
+            "原来"
           ],
-          "da": 0,
+          "da": 3,
           "gt": "Vừa phát hiện ra sự thật → 'hoá ra' = 原来."
         },
         {
           "h": "这件事（　）就不是你的错。",
           "lc": [
             "果然",
+            "恐怕",
             "本来",
-            "竟然",
-            "恐怕"
+            "竟然"
           ],
-          "da": 1,
+          "da": 2,
           "gt": "'Vốn dĩ đã không phải lỗi của bạn': 本来就…"
         },
         {
@@ -1022,20 +1022,20 @@
         {
           "h": "我（　）没去过那个地方。",
           "lc": [
-            "从来",
-            "千万",
             "往往",
+            "千万",
+            "从来",
             "稍微"
           ],
-          "da": 0,
+          "da": 2,
           "gt": "'Chưa bao giờ đi': 从来 + 没 + V + 过."
         },
         {
           "h": "他从来没骗（　）我。",
           "lc": [
-            "了",
-            "过",
             "着",
+            "过",
+            "了",
             "得"
           ],
           "da": 1,
@@ -1044,8 +1044,8 @@
         {
           "h": "从来不抽烟 nói về điều gì?",
           "lc": [
-            "một lần cụ thể trong quá khứ",
             "dự định tương lai",
+            "một lần cụ thể trong quá khứ",
             "thói quen / nguyên tắc: xưa nay không"
           ],
           "da": 2,
@@ -1102,20 +1102,20 @@
         {
           "h": "请你说得（　）慢一点儿。",
           "lc": [
-            "稍微",
             "千万",
-            "竟然",
-            "从来"
+            "从来",
+            "稍微",
+            "竟然"
           ],
-          "da": 0,
+          "da": 2,
           "gt": "Yêu cầu lịch sự 'chậm hơn một chút': 稍微 + Adj + 一点儿."
         },
         {
           "h": "Câu nào đúng?",
           "lc": [
-            "这个菜稍微咸。",
+            "这个菜咸稍微。",
             "这个菜稍微有点儿咸。",
-            "这个菜咸稍微。"
+            "这个菜稍微咸。"
           ],
           "da": 1,
           "gt": "稍微 phải đi kèm từ chỉ lượng nhỏ như 有点儿 / 一点儿."
@@ -1124,10 +1124,10 @@
           "h": "稍微 thường phải đi kèm thành phần nào?",
           "lc": [
             "极了",
-            "得多",
-            "一点儿 / 一下 / 一些"
+            "一点儿 / 一下 / 一些",
+            "得多"
           ],
-          "da": 2,
+          "da": 1,
           "gt": "稍微 chỉ mức độ nhẹ nên đi với các từ chỉ lượng nhỏ."
         }
       ]
@@ -1181,32 +1181,32 @@
         {
           "h": "我喜欢运动，（　）是游泳。",
           "lc": [
-            "尤其",
             "稍微",
-            "恐怕",
-            "往往"
+            "尤其",
+            "往往",
+            "恐怕"
           ],
-          "da": 0,
+          "da": 1,
           "gt": "Nêu phần nổi bật trong phạm vi 运动: 尤其是."
         },
         {
           "h": "Trước danh từ thường dùng dạng nào?",
           "lc": [
+            "尤其地",
             "尤其的",
-            "尤其是",
-            "尤其地"
+            "尤其是"
           ],
-          "da": 1,
+          "da": 2,
           "gt": "Trước danh từ dùng 尤其是 + N."
         },
         {
           "h": "尤其 dùng để làm gì?",
           "lc": [
+            "nêu phần nổi bật nhất trong phạm vi vừa nói",
             "phủ định toàn bộ",
-            "nêu giả thiết",
-            "nêu phần nổi bật nhất trong phạm vi vừa nói"
+            "nêu giả thiết"
           ],
-          "da": 2,
+          "da": 0,
           "gt": "尤其 làm nổi bật một phần trong cái chung đã nêu."
         }
       ]
@@ -1261,9 +1261,9 @@
           "h": "电梯坏了，我们（　）爬楼梯。",
           "lc": [
             "只好",
+            "稍微",
             "从来",
-            "竟然",
-            "稍微"
+            "竟然"
           ],
           "da": 0,
           "gt": "Không còn cách nào khác nên đành làm → 只好."
@@ -1281,11 +1281,11 @@
         {
           "h": "只好 thể hiện điều gì?",
           "lc": [
+            "không còn cách khác nên đành làm",
             "lựa chọn tốt nhất, rất hài lòng",
-            "lời dặn dò tha thiết",
-            "không còn cách khác nên đành làm"
+            "lời dặn dò tha thiết"
           ],
-          "da": 2,
+          "da": 0,
           "gt": "只好 = đành phải, mang sắc thái bất đắc dĩ."
         }
       ]

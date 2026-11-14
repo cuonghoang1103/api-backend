@@ -53,30 +53,30 @@
         {
           "h": "English ___ in many countries.",
           "lc": [
+            "is spoken",
             "is speaking",
             "speaks",
-            "spoke",
-            "is spoken"
+            "spoke"
           ],
-          "da": 3,
+          "da": 0,
           "gt": "Tiếng Anh 'được nói' ⇒ bị động hiện tại đơn: is + V3."
         },
         {
           "h": "This bridge ___ in 1990.",
           "lc": [
-            "is built",
-            "was built",
             "built",
-            "has built"
+            "has built",
+            "was built",
+            "is built"
           ],
-          "da": 1,
+          "da": 2,
           "gt": "Cây cầu được xây vào một năm trong quá khứ ⇒ was + V3."
         },
         {
           "h": "The windows ___ every week.",
           "lc": [
-            "is cleaned",
             "clean",
+            "is cleaned",
             "are cleaned",
             "are cleaning"
           ],
@@ -137,8 +137,8 @@
           "h": "The report must ___ by Friday.",
           "lc": [
             "be finished",
-            "finished",
             "finish",
+            "finished",
             "be finishing"
           ],
           "da": 0,
@@ -147,23 +147,23 @@
         {
           "h": "The room ___ right now.",
           "lc": [
-            "cleans",
-            "is cleaning",
             "is being cleaned",
-            "has cleaned"
+            "cleans",
+            "has cleaned",
+            "is cleaning"
           ],
-          "da": 2,
+          "da": 0,
           "gt": "Đang được dọn lúc này ⇒ bị động hiện tại tiếp diễn: is being + V3."
         },
         {
           "h": "My bike ___. I can't find it anywhere.",
           "lc": [
-            "stole",
             "has stolen",
             "has been stolen",
+            "stole",
             "is stealing"
           ],
-          "da": 2,
+          "da": 1,
           "gt": "Xe bị lấy trộm, kết quả còn ở hiện tại ⇒ has been + V3."
         }
       ]
@@ -217,33 +217,33 @@
         {
           "h": "I ___ my hair cut yesterday.",
           "lc": [
-            "was",
-            "made",
+            "did",
             "had",
-            "did"
+            "made",
+            "was"
           ],
-          "da": 2,
+          "da": 1,
           "gt": "Nhờ người khác cắt tóc trong quá khứ: had + vật + V3."
         },
         {
           "h": "She is having her car ___.",
           "lc": [
-            "repaired",
-            "to repair",
             "repair",
-            "repairing"
+            "to repair",
+            "repairing",
+            "repaired"
           ],
-          "da": 0,
+          "da": 3,
           "gt": "Sau have + vật là V3 (repaired)."
         },
         {
           "h": "Câu nào nghĩa là 'thợ sửa máy tính cho tôi'?",
           "lc": [
-            "I had my computer fixed.",
             "I had fixed my computer.",
-            "I fixed my computer."
+            "I fixed my computer.",
+            "I had my computer fixed."
           ],
-          "da": 0,
+          "da": 2,
           "gt": "have + vật + V3 = nhờ người khác làm; hai câu kia là tự mình sửa."
         }
       ]
@@ -302,34 +302,34 @@
         {
           "h": "'I am tired.' → She said she ___ tired.",
           "lc": [
-            "was",
             "has been",
             "will be",
+            "was",
             "be"
           ],
-          "da": 0,
+          "da": 2,
           "gt": "Hiện tại đơn (am) lùi thành quá khứ đơn (was)."
         },
         {
           "h": "Câu nào đúng?",
           "lc": [
-            "He told that he was busy.",
             "He said that he busy.",
             "He said me that he was busy.",
-            "He said that he was busy."
+            "He said that he was busy.",
+            "He told that he was busy."
           ],
-          "da": 3,
+          "da": 2,
           "gt": "said không đi thẳng với tân ngữ chỉ người; told thì bắt buộc có người; câu 'he busy' thiếu động từ."
         },
         {
           "h": "'I will call you.' → He said he ___ call me.",
           "lc": [
-            "did",
-            "is",
+            "has",
             "would",
-            "has"
+            "is",
+            "did"
           ],
-          "da": 2,
+          "da": 1,
           "gt": "will lùi thành would trong câu tường thuật."
         }
       ]
@@ -384,34 +384,34 @@
         {
           "h": "'Where do you live?' → He asked me where ___.",
           "lc": [
-            "do I live",
-            "I did lived",
             "I lived",
+            "I did lived",
+            "do I live",
             "did I live"
           ],
-          "da": 2,
+          "da": 0,
           "gt": "Trật tự câu kể (S + V), bỏ do, lùi thì: where I lived."
         },
         {
           "h": "'Are you hungry?' → She asked ___ I was hungry.",
           "lc": [
-            "that",
-            "if",
             "what",
-            "do"
+            "that",
+            "do",
+            "if"
           ],
-          "da": 1,
+          "da": 3,
           "gt": "Thuật lại câu hỏi Yes/No dùng if hoặc whether."
         },
         {
           "h": "Câu nào đúng?",
           "lc": [
+            "She asked me what time is it.",
             "She asked me what time it was.",
             "She asked me what time was it.",
-            "She asked me what time is it.",
             "She asked me what time did it be."
           ],
-          "da": 0,
+          "da": 1,
           "gt": "Sau từ hỏi là chủ ngữ rồi mới tới động từ, và lùi thì: what time it was."
         }
       ]
@@ -468,34 +468,34 @@
         {
           "h": "'Don't touch it.' → She told me ___ it.",
           "lc": [
-            "not to touch",
+            "not touching",
             "didn't touch",
-            "don't touch",
-            "not touching"
+            "not to touch",
+            "don't touch"
           ],
-          "da": 0,
+          "da": 2,
           "gt": "Mệnh lệnh phủ định: told + người + not to + V."
         },
         {
           "h": "'Sit down.' → The teacher told us ___.",
           "lc": [
-            "to sit down",
             "sat down",
             "sit down",
+            "to sit down",
             "sitting down"
           ],
-          "da": 0,
+          "da": 2,
           "gt": "told + người + to V."
         },
         {
           "h": "'Could you open the window, please?' → He ___ me to open the window.",
           "lc": [
-            "spoke",
-            "asked",
             "said",
-            "talked"
+            "spoke",
+            "talked",
+            "asked"
           ],
-          "da": 1,
+          "da": 3,
           "gt": "Lời nhờ lịch sự thuật lại bằng asked + người + to V; said/spoke/talked không dùng mẫu này."
         }
       ]
@@ -551,34 +551,34 @@
         {
           "h": "He ___ that he would be late.",
           "lc": [
-            "told",
             "said",
-            "tell",
-            "telled"
+            "telled",
+            "told",
+            "tell"
           ],
-          "da": 1,
+          "da": 0,
           "gt": "Không có người nghe ngay sau động từ nên dùng said."
         },
         {
           "h": "She ___ me that she was busy.",
           "lc": [
-            "said",
-            "spoke",
             "talked",
-            "told"
+            "spoke",
+            "told",
+            "said"
           ],
-          "da": 3,
+          "da": 2,
           "gt": "Có tân ngữ chỉ người (me) đứng ngay sau nên dùng told."
         },
         {
           "h": "Can you ___ me the truth?",
           "lc": [
+            "tell",
             "speak",
             "say",
-            "talk",
-            "tell"
+            "talk"
           ],
-          "da": 3,
+          "da": 0,
           "gt": "Cụm cố định là tell (sb) the truth."
         }
       ]
@@ -634,34 +634,34 @@
         {
           "h": "The man ___ lives next door is a doctor.",
           "lc": [
-            "who",
             "where",
-            "whose",
-            "which"
+            "who",
+            "which",
+            "whose"
           ],
-          "da": 0,
+          "da": 1,
           "gt": "Danh từ chỉ người, đại từ quan hệ làm chủ ngữ ⇒ who."
         },
         {
           "h": "Câu nào đúng?",
           "lc": [
+            "The girl who sits next to me is Lan.",
             "The girl sits next to me is Lan.",
             "The girl which sits next to me is Lan.",
-            "The girl who she sits next to me is Lan.",
-            "The girl who sits next to me is Lan."
+            "The girl who she sits next to me is Lan."
           ],
-          "da": 3,
+          "da": 0,
           "gt": "Người dùng who, không lặp she, và không được bỏ who khi nó làm chủ ngữ."
         },
         {
           "h": "This is the book ___ I bought yesterday.",
           "lc": [
-            "which",
             "where",
+            "which",
             "who",
             "what"
           ],
-          "da": 0,
+          "da": 1,
           "gt": "Danh từ chỉ vật dùng which (hoặc that); what không đứng sau danh từ."
         }
       ]
@@ -716,10 +716,10 @@
         {
           "h": "Câu nào đúng?",
           "lc": [
+            "My brother, lives in Hue, is a teacher.",
             "My brother, that lives in Hue, is a teacher.",
-            "My brother who lives in Hue, is a teacher.",
             "My brother, who lives in Hue, is a teacher.",
-            "My brother, lives in Hue, is a teacher."
+            "My brother who lives in Hue, is a teacher."
           ],
           "da": 2,
           "gt": "Mệnh đề không xác định cần hai dấu phẩy, dùng who (không dùng that) và không bỏ được who."
@@ -727,23 +727,23 @@
         {
           "h": "My mother, ___ is 60, still works.",
           "lc": [
-            "who",
-            "which",
+            "that",
             "what",
-            "that"
+            "who",
+            "which"
           ],
-          "da": 0,
+          "da": 2,
           "gt": "Chỉ người, sau dấu phẩy ⇒ who; that không dùng trong mệnh đề không xác định."
         },
         {
           "h": "Hanoi, ___ is the capital of Vietnam, is very crowded.",
           "lc": [
-            "where",
             "that",
+            "which",
             "who",
-            "which"
+            "where"
           ],
-          "da": 3,
+          "da": 1,
           "gt": "Hà Nội là vật / nơi chốn làm chủ ngữ của 'is' ⇒ which; where không làm chủ ngữ được."
         }
       ]
@@ -798,34 +798,34 @@
         {
           "h": "I remember the day ___ we first met.",
           "lc": [
-            "when",
-            "where",
             "whose",
-            "who"
+            "when",
+            "who",
+            "where"
           ],
-          "da": 0,
+          "da": 1,
           "gt": "Danh từ chỉ thời gian (the day) + mệnh đề đầy đủ ⇒ when."
         },
         {
           "h": "That's the girl ___ father is a pilot.",
           "lc": [
             "who",
+            "who's",
             "which",
-            "whose",
-            "who's"
+            "whose"
           ],
-          "da": 2,
+          "da": 3,
           "gt": "Quan hệ sở hữu (bố của cô ấy) ⇒ whose + danh từ."
         },
         {
           "h": "This is the town ___ I was born.",
           "lc": [
-            "where",
             "which",
-            "when",
-            "that"
+            "where",
+            "that",
+            "when"
           ],
-          "da": 0,
+          "da": 1,
           "gt": "Nơi chốn + mệnh đề đầy đủ, không có giới từ in ⇒ where."
         }
       ]
@@ -888,23 +888,23 @@
         {
           "h": "The book ___ is on the table is mine.",
           "lc": [
-            "that",
             "(không cần từ nào)",
+            "who",
             "whose",
-            "who"
+            "that"
           ],
-          "da": 0,
+          "da": 3,
           "gt": "Đại từ quan hệ làm chủ ngữ của 'is' nên không bỏ được; vật dùng that."
         },
         {
           "h": "Trong câu nào CÓ THỂ bỏ đại từ quan hệ?",
           "lc": [
+            "My dad, who is 50, runs every day.",
             "The dog that bit me was black.",
             "The movie that we saw was great.",
-            "The man who lives here is my uncle.",
-            "My dad, who is 50, runs every day."
+            "The man who lives here is my uncle."
           ],
-          "da": 1,
+          "da": 2,
           "gt": "Chỉ ở 'that we saw', that là tân ngữ (sau nó là chủ ngữ we) nên bỏ được."
         }
       ]
@@ -960,34 +960,34 @@
         {
           "h": "She's been working all day. She ___ be tired.",
           "lc": [
-            "mustn't",
             "must",
-            "shouldn't",
-            "can't"
+            "mustn't",
+            "can't",
+            "shouldn't"
           ],
-          "da": 1,
+          "da": 0,
           "gt": "Có căn cứ rõ ràng nên suy đoán chắc chắn: must."
         },
         {
           "h": "He ___ be at home — I saw him at the airport an hour ago.",
           "lc": [
             "ought to",
-            "can't",
             "must",
+            "can't",
             "has to"
           ],
-          "da": 1,
+          "da": 2,
           "gt": "Có bằng chứng ngược lại nên tin là không thể: can't."
         },
         {
           "h": "I'm not sure where Lan is. She ___ be in the library.",
           "lc": [
-            "must",
-            "can't",
             "might",
-            "mustn't"
+            "can't",
+            "mustn't",
+            "must"
           ],
-          "da": 2,
+          "da": 0,
           "gt": "'I'm not sure' ⇒ chỉ là khả năng: might."
         }
       ]
@@ -1039,34 +1039,34 @@
         {
           "h": "I ___ swim when I was five.",
           "lc": [
+            "am able to",
             "manage to",
             "could",
-            "can",
-            "am able to"
+            "can"
           ],
-          "da": 1,
+          "da": 2,
           "gt": "Khả năng chung trong quá khứ dùng could."
         },
         {
           "h": "I'd like to ___ speak Japanese one day.",
           "lc": [
-            "be able to",
             "can",
-            "could",
-            "able to"
+            "be able to",
+            "able to",
+            "could"
           ],
-          "da": 0,
+          "da": 1,
           "gt": "Sau to cần động từ nguyên mẫu; can không có dạng nguyên mẫu nên dùng be able to."
         },
         {
           "h": "The fire spread quickly, but everyone ___ escape.",
           "lc": [
-            "was able",
             "can",
+            "managed to",
             "manage",
-            "managed to"
+            "was able"
           ],
-          "da": 3,
+          "da": 1,
           "gt": "Một lần cụ thể đã làm được việc khó trong quá khứ: managed to + V."
         }
       ]
@@ -1123,12 +1123,12 @@
         {
           "h": "Tomorrow is Sunday, so I ___ get up early.",
           "lc": [
+            "have to",
             "mustn't",
-            "don't have to",
             "must",
-            "have to"
+            "don't have to"
           ],
-          "da": 1,
+          "da": 3,
           "gt": "Ngày nghỉ nên không bắt buộc dậy sớm: don't have to (mustn't là cấm)."
         },
         {
@@ -1136,8 +1136,8 @@
           "lc": [
             "mustn't",
             "needn't",
-            "don't have to",
-            "don't need to"
+            "don't need to",
+            "don't have to"
           ],
           "da": 0,
           "gt": "Bị cấm (forbidden) ⇒ mustn't; ba lựa chọn còn lại nghĩa là 'không cần'."
@@ -1145,12 +1145,12 @@
         {
           "h": "I ___ work late yesterday.",
           "lc": [
+            "must",
             "had to",
-            "musted",
             "have to",
-            "must"
+            "musted"
           ],
-          "da": 0,
+          "da": 1,
           "gt": "'Phải' trong quá khứ dùng had to; must không có dạng quá khứ."
         }
       ]
@@ -1205,23 +1205,23 @@
         {
           "h": "You ought ___ see a doctor.",
           "lc": [
-            "for",
-            "of",
+            "to",
             "that",
-            "to"
+            "of",
+            "for"
           ],
-          "da": 3,
+          "da": 0,
           "gt": "ought luôn đi với to + V."
         },
         {
           "h": "You'd better ___ now, or you'll be late.",
           "lc": [
-            "to leave",
-            "leave",
             "left",
-            "leaving"
+            "leaving",
+            "to leave",
+            "leave"
           ],
-          "da": 1,
+          "da": 3,
           "gt": "had better + động từ nguyên mẫu không to."
         },
         {
@@ -1229,10 +1229,10 @@
           "lc": [
             "You'd better don't go.",
             "You'd better not to go.",
-            "You'd better not go.",
-            "You'd not better go."
+            "You'd not better go.",
+            "You'd better not go."
           ],
-          "da": 2,
+          "da": 3,
           "gt": "Phủ định: had better + not + V nguyên mẫu không to."
         }
       ]
@@ -1287,10 +1287,10 @@
         {
           "h": "You're a student, ___?",
           "lc": [
-            "isn't it",
+            "don't you",
             "aren't you",
             "are you",
-            "don't you"
+            "isn't it"
           ],
           "da": 1,
           "gt": "Câu khẳng định với are ⇒ đuôi phủ định aren't + you."
@@ -1298,10 +1298,10 @@
         {
           "h": "She doesn't like fish, ___?",
           "lc": [
-            "isn't she",
+            "doesn't she",
             "does she",
             "is she",
-            "doesn't she"
+            "isn't she"
           ],
           "da": 1,
           "gt": "Câu phủ định với doesn't ⇒ đuôi khẳng định does she."
@@ -1311,10 +1311,10 @@
           "lc": [
             "am I",
             "isn't it",
-            "aren't I",
-            "amn't I"
+            "amn't I",
+            "aren't I"
           ],
-          "da": 2,
+          "da": 3,
           "gt": "Đuôi của 'I am' là 'aren't I' (không có amn't)."
         }
       ]
@@ -1379,21 +1379,21 @@
         {
           "h": "Could you tell me where ___?",
           "lc": [
-            "is the station",
             "the station is",
+            "the station does",
             "does the station",
-            "the station does"
+            "is the station"
           ],
-          "da": 1,
+          "da": 0,
           "gt": "Sau từ hỏi là chủ ngữ rồi tới động từ: where the station is."
         },
         {
           "h": "I wonder ___ she is at home.",
           "lc": [
-            "what",
             "does",
+            "that",
             "if",
-            "that"
+            "what"
           ],
           "da": 2,
           "gt": "Câu hỏi Yes/No lồng vào dùng if (hoặc whether)."
@@ -1450,21 +1450,21 @@
         {
           "h": "A: I love pho. B: ___",
           "lc": [
-            "So am I.",
-            "Neither do I.",
+            "So I do.",
             "So do I.",
-            "So I do."
+            "So am I.",
+            "Neither do I."
           ],
-          "da": 2,
+          "da": 1,
           "gt": "Câu khẳng định với động từ thường ở hiện tại ⇒ So + do + I."
         },
         {
           "h": "A: I can't swim. B: ___",
           "lc": [
-            "Neither do I.",
+            "So can I.",
             "Neither can I.",
-            "So can't I.",
-            "So can I."
+            "Neither do I.",
+            "So can't I."
           ],
           "da": 1,
           "gt": "Câu phủ định với can ⇒ Neither + can + I."
@@ -1472,12 +1472,12 @@
         {
           "h": "A: I'm tired. B: ___",
           "lc": [
+            "So do I.",
             "So I am.",
-            "So am I.",
             "Neither am I.",
-            "So do I."
+            "So am I."
           ],
-          "da": 1,
+          "da": 3,
           "gt": "Câu khẳng định với am ⇒ So + am + I."
         }
       ]

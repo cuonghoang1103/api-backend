@@ -52,34 +52,34 @@
         {
           "h": "By next June, I ___ from college.",
           "lc": [
-            "graduated",
-            "have graduated",
             "will have graduated",
-            "am graduating"
+            "graduated",
+            "am graduating",
+            "have graduated"
           ],
-          "da": 2,
+          "da": 0,
           "gt": "Việc hoàn thành trước một mốc tương lai (by next June) ⇒ will have + V3."
         },
         {
           "h": "By the end of this year, she ___ here for ten years.",
           "lc": [
-            "will have been working",
             "is working",
             "works",
-            "has been working"
+            "has been working",
+            "will have been working"
           ],
-          "da": 0,
+          "da": 3,
           "gt": "Độ dài tính đến một mốc tương lai ⇒ will have been + V-ing."
         },
         {
           "h": "Call me at nine. I ___ dinner by then.",
           "lc": [
-            "finish",
+            "will have finished",
             "have finish",
-            "am finishing",
-            "will have finished"
+            "finish",
+            "am finishing"
           ],
-          "da": 3,
+          "da": 0,
           "gt": "'by then' (trước lúc đó, ở tương lai) ⇒ will have finished."
         }
       ]
@@ -131,33 +131,33 @@
         {
           "h": "Her eyes were red because she ___.",
           "lc": [
-            "is crying",
             "has been crying",
-            "cries",
-            "had been crying"
+            "is crying",
+            "had been crying",
+            "cries"
           ],
-          "da": 3,
+          "da": 2,
           "gt": "Hành động kéo dài trước một thời điểm quá khứ và để lại dấu vết ⇒ had been + V-ing."
         },
         {
           "h": "We ___ for two hours when the bus finally came.",
           "lc": [
-            "are waiting",
             "have been waiting",
-            "had been waiting",
-            "wait"
+            "are waiting",
+            "wait",
+            "had been waiting"
           ],
-          "da": 2,
+          "da": 3,
           "gt": "Việc chờ kéo dài tới một mốc quá khứ (the bus came) ⇒ had been waiting."
         },
         {
           "h": "Câu nào đúng?",
           "lc": [
-            "I had known him for years when he moved away.",
             "I had been knowing him for years when he moved away.",
-            "I have known him for years when he moved away."
+            "I have known him for years when he moved away.",
+            "I had known him for years when he moved away."
           ],
-          "da": 0,
+          "da": 2,
           "gt": "know là động từ chỉ trạng thái nên dùng quá khứ hoàn thành đơn; mốc quá khứ nên không dùng have known."
         }
       ]
@@ -207,9 +207,9 @@
         {
           "h": "I ___ call you last night, but I fell asleep.",
           "lc": [
-            "will",
-            "was going to",
             "have",
+            "was going to",
+            "will",
             "am going to"
           ],
           "da": 1,
@@ -219,22 +219,22 @@
           "h": "He promised he ___ help, but he never did.",
           "lc": [
             "is going to",
-            "has",
             "would",
+            "has",
             "will"
           ],
-          "da": 2,
+          "da": 1,
           "gt": "Sau promised (quá khứ), will lùi thành would."
         },
         {
           "h": "We ___ meet at six, but the meeting was canceled.",
           "lc": [
-            "were going to",
-            "have been",
             "are going to",
+            "have been",
+            "were going to",
             "will"
           ],
-          "da": 0,
+          "da": 2,
           "gt": "Kế hoạch trong quá khứ đã không diễn ra ⇒ were going to."
         }
       ]
@@ -291,9 +291,9 @@
           "h": "If I had studied harder, I ___ the exam last week.",
           "lc": [
             "would have passed",
-            "will pass",
             "had passed",
-            "would pass"
+            "would pass",
+            "will pass"
           ],
           "da": 0,
           "gt": "Kết quả không có thật trong quá khứ: would have + V3."
@@ -301,9 +301,9 @@
         {
           "h": "If she ___ the train, she would have arrived on time.",
           "lc": [
-            "has caught",
-            "had caught",
             "caught",
+            "had caught",
+            "has caught",
             "would have caught"
           ],
           "da": 1,
@@ -312,12 +312,12 @@
         {
           "h": "'If he had left earlier, he wouldn't have missed the flight.' Thực tế là gì?",
           "lc": [
-            "Anh ấy đi muộn và lỡ chuyến bay.",
             "Anh ấy không định bay.",
             "Anh ấy sẽ đi sớm.",
+            "Anh ấy đi muộn và lỡ chuyến bay.",
             "Anh ấy đi sớm và kịp chuyến bay."
           ],
-          "da": 0,
+          "da": 2,
           "gt": "Loại 3 nói điều trái với quá khứ: thực tế anh ấy không đi sớm nên đã lỡ chuyến bay."
         }
       ]
@@ -369,12 +369,12 @@
         {
           "h": "If I had taken that job, I ___ in Singapore now.",
           "lc": [
-            "will live",
-            "had lived",
             "would be living",
+            "had lived",
+            "will live",
             "am living"
           ],
-          "da": 2,
+          "da": 0,
           "gt": "Điều kiện ở quá khứ, kết quả ở hiện tại (now) ⇒ would + V."
         },
         {
@@ -382,8 +382,8 @@
           "lc": [
             "weren't",
             "am",
-            "wouldn't be",
-            "won't be"
+            "won't be",
+            "wouldn't be"
           ],
           "da": 0,
           "gt": "Tình trạng chung không có thật ⇒ quá khứ đơn giả định (weren't)."
@@ -391,12 +391,12 @@
         {
           "h": "If you had gone to bed earlier, you ___ so tired now.",
           "lc": [
-            "wouldn't be",
             "hadn't been",
-            "won't be",
-            "aren't"
+            "wouldn't be",
+            "aren't",
+            "won't be"
           ],
-          "da": 0,
+          "da": 1,
           "gt": "Kết quả trái với hiện tại (now) ⇒ wouldn't + V."
         }
       ]
@@ -454,8 +454,8 @@
           "lc": [
             "had studied",
             "have studied",
-            "studied",
-            "would study"
+            "would study",
+            "studied"
           ],
           "da": 0,
           "gt": "Tiếc về quá khứ: wish + had + V3."
@@ -463,23 +463,23 @@
         {
           "h": "She wishes she ___ him the truth yesterday.",
           "lc": [
+            "had told",
             "tells",
-            "would tell",
             "told",
-            "had told"
+            "would tell"
           ],
-          "da": 3,
+          "da": 0,
           "gt": "Có 'yesterday' ⇒ điều ước về quá khứ ⇒ had told."
         },
         {
           "h": "'I wish I hadn't eaten so much.' Thực tế là gì?",
           "lc": [
-            "Tôi đã ăn quá nhiều.",
             "Tôi không thích ăn.",
-            "Tôi sẽ ăn ít lại.",
-            "Tôi chưa ăn gì."
+            "Tôi đã ăn quá nhiều.",
+            "Tôi chưa ăn gì.",
+            "Tôi sẽ ăn ít lại."
           ],
-          "da": 0,
+          "da": 1,
           "gt": "wish + hadn't + V3: sự thật là đã làm việc đó và giờ thấy tiếc."
         }
       ]
@@ -534,33 +534,33 @@
           "h": "I wish you ___ making that noise.",
           "lc": [
             "stop",
-            "will stop",
             "would stop",
+            "will stop",
             "are stopping"
           ],
-          "da": 2,
+          "da": 1,
           "gt": "Muốn người khác thay đổi hành vi: wish + would + V."
         },
         {
           "h": "I wish it ___ raining. I want to go out.",
           "lc": [
+            "has stopped",
             "stops",
             "would stop",
-            "has stopped",
             "will stop"
           ],
-          "da": 1,
+          "da": 2,
           "gt": "Mong tình huống thay đổi: wish + it + would + V."
         },
         {
           "h": "Câu nào SAI?",
           "lc": [
             "I wish it would stop snowing.",
+            "I wish I would be taller.",
             "I wish they would be quiet.",
-            "I wish he would call me.",
-            "I wish I would be taller."
+            "I wish he would call me."
           ],
-          "da": 3,
+          "da": 1,
           "gt": "Không dùng wish + would khi chủ ngữ là chính mình và với trạng thái; phải nói 'I wish I were taller'."
         }
       ]
@@ -614,9 +614,9 @@
         {
           "h": "If only I ___ more time! I'm always so busy.",
           "lc": [
+            "will have",
             "would have",
             "have",
-            "will have",
             "had"
           ],
           "da": 3,
@@ -626,22 +626,22 @@
           "h": "If only I ___ to her advice last year.",
           "lc": [
             "listen",
-            "would listen",
+            "had listened",
             "listened",
-            "had listened"
+            "would listen"
           ],
-          "da": 3,
+          "da": 1,
           "gt": "Tiếc về quá khứ (last year): if only + had + V3."
         },
         {
           "h": "If only he ___ smoking! It's so annoying.",
           "lc": [
-            "would stop",
             "will stop",
-            "has stopped",
-            "stops"
+            "stops",
+            "would stop",
+            "has stopped"
           ],
-          "da": 0,
+          "da": 2,
           "gt": "Mong người khác thay đổi thói quen gây khó chịu: if only + would + V."
         }
       ]
@@ -695,34 +695,34 @@
         {
           "h": "You can borrow my bike ___ you bring it back tonight.",
           "lc": [
-            "as long as",
-            "although",
+            "unless",
             "despite",
-            "unless"
+            "although",
+            "as long as"
           ],
-          "da": 0,
+          "da": 3,
           "gt": "Nêu điều kiện bắt buộc: as long as (miễn là)."
         },
         {
           "h": "___ you won the lottery, what would you do?",
           "lc": [
-            "Although",
             "Despite",
+            "Supposing",
             "Unless",
-            "Supposing"
+            "Although"
           ],
-          "da": 3,
+          "da": 1,
           "gt": "Nêu một giả định rồi hỏi kết quả: Supposing."
         },
         {
           "h": "I'll go provided that he ___ me.",
           "lc": [
-            "will invite",
-            "would invite",
             "invites",
-            "inviting"
+            "inviting",
+            "would invite",
+            "will invite"
           ],
-          "da": 2,
+          "da": 0,
           "gt": "Sau provided that dùng hiện tại đơn như mệnh đề if loại 1."
         }
       ]
@@ -776,12 +776,12 @@
         {
           "h": "I wrote down her address in case I ___ it.",
           "lc": [
-            "would forget",
-            "forgetting",
             "forgot",
-            "will forget"
+            "will forget",
+            "would forget",
+            "forgetting"
           ],
-          "da": 2,
+          "da": 0,
           "gt": "Kể chuyện quá khứ: sau in case dùng quá khứ đơn."
         },
         {
@@ -797,12 +797,12 @@
         {
           "h": "Take some water in case you ___ thirsty.",
           "lc": [
-            "get",
             "would get",
+            "getting",
             "will get",
-            "getting"
+            "get"
           ],
-          "da": 0,
+          "da": 3,
           "gt": "Sau in case nói về tương lai dùng hiện tại đơn, không dùng will."
         }
       ]
@@ -854,8 +854,8 @@
           "lc": [
             "will know",
             "knew",
-            "has known",
-            "would know"
+            "would know",
+            "has known"
           ],
           "da": 1,
           "gt": "Điều không thật ở hiện tại: as if + quá khứ đơn."
@@ -864,22 +864,22 @@
           "h": "It looks ___ it's going to rain.",
           "lc": [
             "as like",
-            "as",
             "like if",
-            "as if"
+            "as if",
+            "as"
           ],
-          "da": 3,
+          "da": 2,
           "gt": "Cấu trúc đúng là look as if + mệnh đề."
         },
         {
           "h": "She looked as though she ___ a ghost.",
           "lc": [
-            "will see",
-            "had seen",
             "has seen",
-            "sees"
+            "will see",
+            "sees",
+            "had seen"
           ],
-          "da": 1,
+          "da": 3,
           "gt": "Việc không thật xảy ra trước một thời điểm quá khứ: as though + had + V3."
         }
       ]
@@ -936,30 +936,30 @@
           "lc": [
             "should rain",
             "can't have rained",
-            "must rain",
-            "must have rained"
+            "must have rained",
+            "must rain"
           ],
-          "da": 3,
+          "da": 2,
           "gt": "Có bằng chứng rõ ⇒ suy đoán chắc chắn về quá khứ: must have + V3."
         },
         {
           "h": "She ___ the email — she's been offline all day.",
           "lc": [
             "must have seen",
-            "should see",
             "can't have seen",
+            "should see",
             "might see"
           ],
-          "da": 2,
+          "da": 1,
           "gt": "Bằng chứng cho thấy việc đó không thể đã xảy ra ⇒ can't have + V3."
         },
         {
           "h": "I can't find my keys. I ___ them at the office, but I'm not sure.",
           "lc": [
-            "must leave",
-            "might have left",
             "can't have left",
-            "should leave"
+            "might have left",
+            "should leave",
+            "must leave"
           ],
           "da": 1,
           "gt": "Không chắc chắn ⇒ might have + V3."
@@ -1017,12 +1017,12 @@
         {
           "h": "I'm so tired. I ___ to bed earlier last night.",
           "lc": [
-            "must have gone",
             "should have gone",
-            "needn't have gone",
-            "should go"
+            "should go",
+            "must have gone",
+            "needn't have gone"
           ],
-          "da": 1,
+          "da": 0,
           "gt": "Tiếc vì việc nên làm mà đã không làm: should have + V3."
         },
         {
@@ -1039,12 +1039,12 @@
         {
           "h": "You ___ me you'd be late. I waited for an hour.",
           "lc": [
+            "could have told",
             "must have told",
             "could tell",
-            "can't have told",
-            "could have told"
+            "can't have told"
           ],
-          "da": 3,
+          "da": 0,
           "gt": "Trách vì đã có thể làm mà không làm: could have + V3."
         }
       ]
@@ -1096,10 +1096,10 @@
         {
           "h": "Hurry up! The movie is ___ start.",
           "lc": [
+            "bound",
             "likely",
-            "supposed",
             "about to",
-            "bound"
+            "supposed"
           ],
           "da": 2,
           "gt": "Sắp xảy ra ngay: be about to + V; các lựa chọn khác thiếu to."
@@ -1107,23 +1107,23 @@
         {
           "h": "You ___ to wear a helmet when you ride a motorbike. It's the law.",
           "lc": [
-            "suppose",
             "are supposed",
             "are supposing",
+            "suppose",
             "supposed"
           ],
-          "da": 1,
+          "da": 0,
           "gt": "Điều phải làm theo quy định: be supposed to + V."
         },
         {
           "h": "'She is bound to win' nghĩa là gì?",
           "lc": [
             "Cô ấy sắp sửa thi đấu.",
-            "Cô ấy gần như chắc chắn sẽ thắng.",
             "Cô ấy được yêu cầu phải thắng.",
+            "Cô ấy gần như chắc chắn sẽ thắng.",
             "Cô ấy khó mà thắng."
           ],
-          "da": 1,
+          "da": 2,
           "gt": "be bound to + V diễn tả việc gần như chắc chắn xảy ra."
         }
       ]

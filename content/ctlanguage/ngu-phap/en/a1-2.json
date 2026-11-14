@@ -53,34 +53,34 @@
         {
           "h": "Từ nào là danh từ KHÔNG đếm được?",
           "lc": [
-            "apple",
-            "chair",
             "money",
-            "student"
+            "student",
+            "apple",
+            "chair"
           ],
-          "da": 2,
+          "da": 0,
           "gt": "Money không đếm được: không nói a money hay two moneys."
         },
         {
           "h": "I'd like ___ of tea, please.",
           "lc": [
-            "a cup",
             "a",
             "two",
-            "an"
+            "an",
+            "a cup"
           ],
-          "da": 0,
+          "da": 3,
           "gt": "Tea không đếm được, muốn đếm phải dùng đơn vị: a cup of tea."
         },
         {
           "h": "Câu nào đúng?",
           "lc": [
             "I have many homeworks.",
-            "I have a lot of homework.",
+            "I have two homeworks.",
             "I have a homework.",
-            "I have two homeworks."
+            "I have a lot of homework."
           ],
-          "da": 1,
+          "da": 3,
           "gt": "Homework không đếm được nên không thêm s, không dùng a hay số đếm."
         }
       ]
@@ -136,12 +136,12 @@
         {
           "h": "There isn't ___ sugar in my coffee.",
           "lc": [
-            "some",
             "a",
             "any",
-            "many"
+            "many",
+            "some"
           ],
-          "da": 2,
+          "da": 1,
           "gt": "Câu phủ định với danh từ không đếm được dùng any."
         },
         {
@@ -149,8 +149,8 @@
           "lc": [
             "any",
             "some",
-            "a",
-            "an"
+            "an",
+            "a"
           ],
           "da": 1,
           "gt": "Câu khẳng định với danh từ số nhiều dùng some."
@@ -220,33 +220,33 @@
           "h": "My brother ___ a new bike.",
           "lc": [
             "have",
-            "has",
             "is",
+            "has",
             "are"
           ],
-          "da": 1,
+          "da": 2,
           "gt": "My brother = he nên dùng has."
         },
         {
           "h": "___ you got any pets?",
           "lc": [
-            "Do",
-            "Are",
             "Does",
-            "Have"
+            "Do",
+            "Have",
+            "Are"
           ],
-          "da": 3,
+          "da": 2,
           "gt": "Câu hỏi của have got đảo have lên trước: Have you got…?"
         },
         {
           "h": "She ___ have a phone.",
           "lc": [
-            "doesn't",
-            "don't",
             "hasn't",
-            "isn't"
+            "don't",
+            "isn't",
+            "doesn't"
           ],
-          "da": 0,
+          "da": 3,
           "gt": "Phủ định của have (không có got) với she dùng doesn't + have."
         }
       ]
@@ -303,10 +303,10 @@
         {
           "h": "My sister ___ English at university.",
           "lc": [
-            "study",
+            "is study",
             "studys",
             "studies",
-            "is study"
+            "study"
           ],
           "da": 2,
           "gt": "My sister = she; study tận cùng phụ âm + y nên đổi thành studies."
@@ -314,20 +314,20 @@
         {
           "h": "They ___ football every Sunday.",
           "lc": [
-            "play",
             "plays",
+            "playes",
             "is play",
-            "playes"
+            "play"
           ],
-          "da": 0,
+          "da": 3,
           "gt": "They là số nhiều nên động từ giữ nguyên: play."
         },
         {
           "h": "He ___ TV after dinner.",
           "lc": [
+            "is watch",
             "watch",
             "watchs",
-            "is watch",
             "watches"
           ],
           "da": 3,
@@ -385,34 +385,34 @@
         {
           "h": "She ___ eat meat.",
           "lc": [
-            "don't",
-            "isn't",
+            "not",
             "doesn't",
-            "not"
+            "don't",
+            "isn't"
           ],
-          "da": 2,
+          "da": 1,
           "gt": "She là ngôi ba số ít nên phủ định dùng doesn't + V."
         },
         {
           "h": "My parents ___ speak English.",
           "lc": [
-            "don't",
             "doesn't",
+            "don't",
             "aren't",
             "not"
           ],
-          "da": 0,
+          "da": 1,
           "gt": "My parents = they nên dùng don't."
         },
         {
           "h": "Câu nào đúng?",
           "lc": [
             "He doesn't works here.",
+            "He not work here.",
             "He doesn't work here.",
-            "He don't work here.",
-            "He not work here."
+            "He don't work here."
           ],
-          "da": 1,
+          "da": 2,
           "gt": "He đi với doesn't và động từ sau đó giữ nguyên mẫu: work."
         }
       ]
@@ -468,34 +468,34 @@
         {
           "h": "___ your mother work in a hospital?",
           "lc": [
-            "Do",
-            "Is",
+            "Does",
             "Are",
-            "Does"
+            "Do",
+            "Is"
           ],
-          "da": 3,
+          "da": 0,
           "gt": "Your mother = she và work là động từ thường nên dùng Does."
         },
         {
           "h": "Do they live near here? - No, they ___.",
           "lc": [
-            "doesn't",
-            "don't",
             "aren't",
-            "not"
+            "doesn't",
+            "not",
+            "don't"
           ],
-          "da": 1,
+          "da": 3,
           "gt": "Trả lời ngắn lặp lại trợ động từ: No, they don't."
         },
         {
           "h": "Câu nào đúng?",
           "lc": [
-            "What does he do?",
             "What does he does?",
             "What he does?",
-            "What do he do?"
+            "What do he do?",
+            "What does he do?"
           ],
-          "da": 0,
+          "da": 3,
           "gt": "Từ để hỏi + does + he + V nguyên mẫu: What does he do?"
         }
       ]
@@ -550,32 +550,32 @@
           "lc": [
             "She late is always.",
             "She always is late.",
-            "She is late always.",
-            "She is always late."
+            "She is always late.",
+            "She is late always."
           ],
-          "da": 3,
+          "da": 2,
           "gt": "Trạng từ tần suất đứng SAU to be: is always."
         },
         {
           "h": "Câu nào đúng?",
           "lc": [
-            "I usually drink tea in the morning.",
-            "I drink usually tea in the morning.",
             "I drink tea usually in the morning.",
-            "Usually I tea drink in the morning."
+            "I drink usually tea in the morning.",
+            "Usually I tea drink in the morning.",
+            "I usually drink tea in the morning."
           ],
-          "da": 0,
+          "da": 3,
           "gt": "Trạng từ tần suất đứng TRƯỚC động từ thường: usually drink."
         },
         {
           "h": "Tom doesn't like fish. He ___ eats it.",
           "lc": [
-            "always",
             "never",
+            "always",
             "often",
             "usually"
           ],
-          "da": 1,
+          "da": 0,
           "gt": "Không thích cá nên không bao giờ ăn: never."
         }
       ]
@@ -631,23 +631,23 @@
         {
           "h": "Listen! The baby ___.",
           "lc": [
-            "cry",
             "is crying",
-            "crying",
-            "cries"
+            "cries",
+            "cry",
+            "crying"
           ],
-          "da": 1,
+          "da": 0,
           "gt": "Listen! báo hiệu việc đang diễn ra: is + crying."
         },
         {
           "h": "We ___ dinner now.",
           "lc": [
-            "are having",
-            "having",
+            "has",
             "are have",
-            "has"
+            "having",
+            "are having"
           ],
-          "da": 0,
+          "da": 3,
           "gt": "Now + chủ ngữ we: are + having (bỏ e thêm ing)."
         },
         {
@@ -714,8 +714,8 @@
         {
           "h": "We ___ very happy yesterday.",
           "lc": [
-            "was",
             "are",
+            "was",
             "were",
             "is"
           ],
@@ -726,8 +726,8 @@
           "h": "My father ___ a student in 1995.",
           "lc": [
             "was",
-            "were",
             "is",
+            "were",
             "be"
           ],
           "da": 0,
@@ -736,12 +736,12 @@
         {
           "h": "___ she at the party last night?",
           "lc": [
-            "Were",
             "Did",
             "Is",
-            "Was"
+            "Was",
+            "Were"
           ],
-          "da": 3,
+          "da": 2,
           "gt": "Câu hỏi to be quá khứ với she: Was she…?"
         }
       ]
@@ -796,34 +796,34 @@
         {
           "h": "Câu nào đúng?",
           "lc": [
-            "I very like ice cream.",
+            "Very I like ice cream.",
             "I like very much ice cream.",
-            "I like ice cream very much.",
-            "Very I like ice cream."
+            "I very like ice cream.",
+            "I like ice cream very much."
           ],
-          "da": 2,
+          "da": 3,
           "gt": "Tân ngữ đứng ngay sau động từ, very much đứng cuối câu."
         },
         {
           "h": "Câu nào đúng?",
           "lc": [
-            "She speaks English very well.",
-            "She speaks very well English.",
             "She very well speaks English.",
-            "She English speaks very well."
+            "She English speaks very well.",
+            "She speaks English very well.",
+            "She speaks very well English."
           ],
-          "da": 0,
+          "da": 2,
           "gt": "Động từ + tân ngữ đi liền nhau, trạng ngữ very well đứng sau."
         },
         {
           "h": "Sắp xếp đúng: (at six / home / goes / he)",
           "lc": [
-            "He goes at six home.",
             "He goes home at six.",
-            "He at six goes home.",
-            "Goes he home at six."
+            "Goes he home at six.",
+            "He goes at six home.",
+            "He at six goes home."
           ],
-          "da": 1,
+          "da": 0,
           "gt": "Nơi chốn (home) đứng trước thời gian (at six), cả hai sau động từ."
         }
       ]
@@ -878,32 +878,32 @@
         {
           "h": "___ late for school!",
           "lc": [
-            "Don't",
-            "Not be",
             "No be",
-            "Don't be"
+            "Don't",
+            "Don't be",
+            "Not be"
           ],
-          "da": 3,
+          "da": 2,
           "gt": "Late là tính từ nên mệnh lệnh phủ định là Don't be + tính từ."
         },
         {
           "h": "___ down, please.",
           "lc": [
+            "Sitting",
             "Sit",
-            "Sits",
             "To sit",
-            "Sitting"
+            "Sits"
           ],
-          "da": 0,
+          "da": 1,
           "gt": "Câu mệnh lệnh bắt đầu bằng động từ nguyên mẫu không to."
         },
         {
           "h": "Câu nào đúng?",
           "lc": [
             "Not open the window.",
-            "No open the window.",
+            "Doesn't open the window.",
             "Don't open the window.",
-            "Doesn't open the window."
+            "No open the window."
           ],
           "da": 2,
           "gt": "Mệnh lệnh phủ định luôn dùng Don't + V nguyên mẫu."
@@ -959,9 +959,9 @@
         {
           "h": "I'm hungry. Let's ___ something.",
           "lc": [
-            "to eat",
-            "eat",
             "eating",
+            "eat",
+            "to eat",
             "eats"
           ],
           "da": 1,
@@ -970,23 +970,23 @@
         {
           "h": "It's raining. ___ go out.",
           "lc": [
-            "Let's not",
-            "Let's don't",
             "Not let's",
-            "Let's no"
+            "Let's no",
+            "Let's don't",
+            "Let's not"
           ],
-          "da": 0,
+          "da": 3,
           "gt": "Phủ định của Let's là Let's not + V."
         },
         {
           "h": "Câu nào là lời rủ cùng làm?",
           "lc": [
-            "Play football.",
-            "Don't play football.",
             "Let's play football.",
-            "He plays football."
+            "He plays football.",
+            "Don't play football.",
+            "Play football."
           ],
-          "da": 2,
+          "da": 0,
           "gt": "Let's + V là lời rủ người nghe cùng làm với mình."
         }
       ]

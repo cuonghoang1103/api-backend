@@ -425,3 +425,17 @@ Mẫu một mục:
 - **Ảnh hưởng:** 3 câu trong bản nội dung từ 318d06e39 (lời giải khó hiểu, đáp án chấm vẫn đúng).
 - **Bài học:** dữ liệu sẽ bị máy đảo thứ tự thì lời văn không được tham chiếu thứ tự — và phép chặn phải nằm TRONG công cụ đảo, không dựa vào một lần quét tay.
 
+
+### 15/11/2026 — Object Storage Chương 7 (bài web 7.1–7.3) — số liệu chi phí và tính năng Cloudflare sai/bịa
+- **Triệu chứng:** bài 7.1 ghi "20 TB/tháng: S3 ~$1,842 vs R2 ~$306", "không egress thì hai bên trong 30%", "free tier S3 > R2"; bài 7.2 ghi dựng lại hằng tuần $30/hằng ngày $210, Instagram 8,4 triệu PUT, "srcset 3 biến thể ⇒ ×3 lượt GET"; bài 7.3 dạy "Billing → Notifications projected", "Cloudflare Analytics alarm cho R2", "R2 request log qua Logpush, giữ 30 ngày" + output forensic 4.217.880 bịa; quiz os-7-4 câu 3 trỏ Logpush.
+- **Nguyên nhân:** `content/courses/object-storage/s07-cost.mjs` (os-7-1/7-2/7-3) viết theo trí nhớ, không chạy phép tính, không đọc tài liệu: 20 TB thiếu giả định lưu trữ; tuần/ngày lấy sai cấp số ($0,63 × 4,33 = $2,73); cộng lượt dựng lại hai lần; srcset chỉ tải một ứng viên; R2 không có dataset Logpush, Data Access Logs giữ 7 ngày và bỏ mọi mã ≥ 400; budget alert là ngưỡng USD cả tài khoản, một email, không chặn dùng.
+- **Cách sửa:** đo lại bằng giá AWS Price List (09/11) + trang R2, MinIO đếm request, Chromium thật đếm request srcset, MinIO audit webhook + jq; sửa EN/VI + quiz câu 3 bằng `scratchpad/obj/w/w7-{1,2,3}.py`; commit content(object-storage) Chương 7.
+- **Ảnh hưởng:** người học bài 7.x trên prod (chưa deploy bản sửa) đọc số tiền sai 3–11 lần và tìm một tính năng Logpush/alarm R2 không tồn tại.
+- **Bài học:** con số tiền phải ra từ một phép tính chạy được (có ghi giả định), tính năng nhà cung cấp phải dẫn trang docs kèm ngày đọc — "trông hợp lý" không phải nguồn.
+
+### 15/11/2026 — Video bài giảng (công cụ demo `chay.py` khoá Object Storage) — `@dung` làm sập cả lượt chạy khi tiến trình nền đã tự thoát
+- **Triệu chứng:** `python3 scratchpad/obj/chay.py n7-3` dừng giữa khối `bao` với `PermissionError: [Errno 1] Operation not permitted`; các khối sau không chạy, PID mồ côi còn lại trong `~/.rtq-obj/nen-*.pid`.
+- **Nguyên nhân:** `~/Documents/video-bai-giang/scratchpad/obj/chay.py:94` gọi `os.killpg(pid)` cho tiến trình nền (lưu lượng 36 s) đã tự kết thúc; macOS trả EPERM (không phải ESRCH) cho nhóm tiến trình đã mất, mà mã chỉ bắt `ProcessLookupError`.
+- **Cách sửa:** bắt cả `(ProcessLookupError, PermissionError)` ở `@dung` (dòng 95) rồi chạy lại toàn bộ demo n7-3 (dựng → báo động → điều tra → vòng lặp).
+- **Ảnh hưởng:** chỉ phiên soạn bài (mất một lượt chạy demo); không đụng web/prod.
+- **Bài học:** dừng tiến trình theo PID phải chịu được trường hợp tiến trình đã tự kết thúc — trên macOS lỗi đó có thể là EPERM.

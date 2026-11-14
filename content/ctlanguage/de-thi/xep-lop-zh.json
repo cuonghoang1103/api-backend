@@ -1,0 +1,175 @@
+{
+  "id": "xep-lop-zh",
+  "nn": "zh",
+  "kyThi": "XEP-LOP",
+  "cap": "XEP-LOP",
+  "ten": "Xếp lớp tiếng Trung",
+  "moTa": "Bạn đang ở đâu? 24 câu, khoảng 15 phút, khó dần từ HSK 1 đến HSK 4 — làm xong app gợi ý nên bắt đầu học từ mức nào.",
+  "diemDat": 0,
+  "xepHang": false,
+  "xepLop": {
+    "nguong": 60,
+    "muc": [
+      { "cap": "HSK1", "nhan": "Mới bắt đầu", "loTrinh": "Bạn nên bắt đầu từ HSK 1: học pinyin và thanh điệu trước, rồi theo khoá HSK 1 từ bài đầu (chào hỏi, gia đình, số đếm). Mỗi ngày ôn 10 từ bằng thẻ và nghe các câu ngắn trong phần luyện nghe." },
+      { "cap": "HSK2", "nhan": "Sơ cấp", "loTrinh": "Bạn đã nắm nền HSK 1, nên học tiếp khoá HSK 2: so sánh với 比, trợ từ 过/了, từ vựng đi lại và mua sắm. Ôn từ bằng thẻ mỗi ngày, gọi CuongMini luyện nói câu ngắn, rồi thi thử HSK 2 khi học xong." },
+      { "cap": "HSK3", "nhan": "Tiền trung cấp", "loTrinh": "Bạn nên học ở mức HSK 3: câu chữ 把, 被, bổ ngữ kết quả và khoảng 600 từ thông dụng, tập đọc không cần pinyin. Luyện nghe hội thoại dài hơn, gọi CuongMini luyện nói theo chủ đề và thi thử HSK 3 để đo tiến bộ." },
+      { "cap": "HSK4", "nhan": "Trung cấp", "loTrinh": "Bạn đang ở ngưỡng HSK 4: nên học khoá HSK 4 với liên từ (即使, 既然, 尽管), từ gần nghĩa và đọc đoạn văn dài. Ôn 1.200 từ bằng thẻ, luyện nghe tốc độ thường và gọi CuongMini luyện trình bày ý kiến." }
+    ],
+    "vuot": { "cap": "HSK5", "nhan": "Trung cấp vững", "loTrinh": "Bạn đã vững HSK 4 và sẵn sàng lên HSK 5. Hãy học từ vựng HSK 5 bằng thẻ, đọc bài dài và nghe tin tức ngắn mỗi ngày, đồng thời gọi CuongMini luyện nói về các chủ đề xã hội, công việc." }
+  },
+  "phan": [
+    {
+      "id": "muc-1",
+      "ten": "Mức 1 · HSK 1",
+      "kyNang": "doc",
+      "phut": 4,
+      "diemToiDa": 6,
+      "nhom": [
+        {
+          "huongDan": "Mức HSK 1 — Chọn đáp án đúng (có kèm pinyin). Câu cuối có phần nghe: bấm nghe rồi trả lời.",
+          "cau": [
+            { "id": "1", "kieu": "chon", "de": "我想喝___。\n(Wǒ xiǎng hē ___.)", "luaChon": ["书 (shū)", "水 (shuǐ)", "椅子 (yǐzi)", "衣服 (yīfu)"], "dapAn": 1,
+              "giaiThich": "喝 (hē) = uống nên phải đi với đồ uống: 水 (shuǐ) = nước. 书 (shū) = sách — đọc gần giống 水 nên dễ nhầm; 椅子 = ghế, 衣服 = quần áo.",
+              "tu": ["喝", "水"] },
+            { "id": "2", "kieu": "chon", "de": "他是我的___，他在医院工作。\n(Tā shì wǒ de ___, tā zài yīyuàn gōngzuò.)", "luaChon": ["爸爸 (bàba)", "苹果 (píngguǒ)", "学校 (xuéxiào)", "电视 (diànshì)"], "dapAn": 0,
+              "giaiThich": "Câu nói 'Ông ấy là … của tôi, ông ấy làm việc ở bệnh viện' ⇒ chỗ trống phải là người: 爸爸 (bàba) = bố. 苹果 = táo, 学校 = trường học, 电视 = ti vi.",
+              "tu": ["爸爸", "医院", "工作"] },
+            { "id": "3", "kieu": "chon", "de": "你是中国人___？\n(Nǐ shì Zhōngguó rén ___?)", "luaChon": ["的 (de)", "了 (le)", "吗 (ma)"], "dapAn": 2,
+              "giaiThich": "Câu hỏi có/không: thêm 吗 (ma) vào cuối câu trần thuật — 你是中国人吗？= Bạn là người Trung Quốc phải không? 的 và 了 không tạo câu hỏi.",
+              "tu": ["吗", "中国"] },
+            { "id": "4", "kieu": "chon", "de": "我___有钱。\n(Wǒ ___ yǒu qián.)", "luaChon": ["不 (bù)", "没 (méi)", "吗 (ma)"], "dapAn": 1,
+              "giaiThich": "Phủ định của 有 (yǒu, có) luôn là 没有 (méiyǒu), không bao giờ nói 不有. 我没有钱 = Tôi không có tiền. 吗 chỉ đứng cuối câu hỏi.",
+              "tu": ["没", "有", "钱"] },
+            { "id": "5", "kieu": "chon", "de": "我家有三个人：爸爸、妈妈和我。我们都喜欢猫。\n(Wǒ jiā yǒu sān ge rén: bàba, māma hé wǒ. Wǒmen dōu xǐhuan māo.)\n\n他家有几个人？\n(Tā jiā yǒu jǐ ge rén?)", "luaChon": ["两个 (liǎng ge)", "四个 (sì ge)", "五个 (wǔ ge)", "三个 (sān ge)"], "dapAn": 3,
+              "giaiThich": "Đoạn văn: 我家有三个人 (Wǒ jiā yǒu sān ge rén) = Nhà tôi có ba người: bố, mẹ và tôi. 几 (jǐ) = mấy. Con mèo được nhắc tới nhưng không tính là người.",
+              "tu": ["家", "几", "个"] },
+            { "id": "6", "kieu": "chon",
+              "nghe": [
+                { "g": "zh-nam", "t": "你好，现在几点了？" },
+                { "g": "zh-nu", "t": "现在十点。" },
+                { "g": "zh-nu", "t": "现在几点？" }
+              ],
+              "de": "现在几点？\n(Xiànzài jǐ diǎn?)", "luaChon": ["十点 (shí diǎn)", "四点 (sì diǎn)", "七点 (qī diǎn)"], "dapAn": 0,
+              "giaiThich": "Lời nghe: 你好，现在几点了？— 现在十点。(Chào bạn, bây giờ mấy giờ rồi? — Bây giờ mười giờ.) Bẫy nghe: 十 (shí, mười) và 四 (sì, bốn) chỉ khác âm đầu sh/s và thanh điệu.",
+              "tu": ["现在", "点", "十"] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "muc-2",
+      "ten": "Mức 2 · HSK 2",
+      "kyNang": "doc",
+      "phut": 4,
+      "diemToiDa": 6,
+      "nhom": [
+        {
+          "huongDan": "Mức HSK 2 — Chọn đáp án đúng (có kèm pinyin). Câu cuối có phần nghe: bấm nghe rồi trả lời.",
+          "cau": [
+            { "id": "7", "kieu": "chon", "de": "这件衣服太___了，我不买。\n(Zhè jiàn yīfu tài ___ le, wǒ bù mǎi.)", "luaChon": ["快 (kuài)", "忙 (máng)", "贵 (guì)", "近 (jìn)"], "dapAn": 2,
+              "giaiThich": "Không mua vì quần áo quá 贵 (guì) = đắt. 快 = nhanh, 忙 = bận, 近 = gần đều không dùng để tả giá quần áo. Mẫu 太…了 = quá …",
+              "tu": ["贵", "件", "太…了"] },
+            { "id": "8", "kieu": "chon", "de": "他生病了，要去___看医生。\n(Tā shēngbìng le, yào qù ___ kàn yīshēng.)", "luaChon": ["机场 (jīchǎng)", "医院 (yīyuàn)", "公司 (gōngsī)", "教室 (jiàoshì)"], "dapAn": 1,
+              "giaiThich": "生病 (shēngbìng) = bị ốm, 看医生 = đi khám bác sĩ ⇒ đến 医院 (yīyuàn) = bệnh viện. 机场 = sân bay, 公司 = công ty, 教室 = phòng học.",
+              "tu": ["生病", "医院", "医生"] },
+            { "id": "9", "kieu": "chon", "de": "哥哥___我高。\n(Gēge ___ wǒ gāo.)", "luaChon": ["从 (cóng)", "离 (lí)", "对 (duì)", "比 (bǐ)"], "dapAn": 3,
+              "giaiThich": "Câu so sánh: A 比 (bǐ) B + tính từ — 哥哥比我高 = Anh trai cao hơn tôi. 从 = từ, 离 = cách (khoảng cách), 对 = đối với đều không dùng để so sánh.",
+              "tu": ["比", "高", "哥哥"] },
+            { "id": "10", "kieu": "chon", "de": "我去___北京，那儿很漂亮。\n(Wǒ qù ___ Běijīng, nàr hěn piàoliang.)", "luaChon": ["过 (guo)", "着 (zhe)", "得 (de)"], "dapAn": 0,
+              "giaiThich": "Động từ + 过 (guo) = đã từng (kinh nghiệm): 我去过北京 = Tôi từng đi Bắc Kinh. 着 chỉ trạng thái đang tiếp diễn, 得 đứng trước bổ ngữ mức độ nên không hợp.",
+              "tu": ["过", "漂亮"] },
+            { "id": "11", "kieu": "chon", "de": "小王每天坐公共汽车去上班，因为他家离公司很远。今天他起床晚了，所以坐出租车去。\n(Xiǎo Wáng měitiān zuò gōnggòng qìchē qù shàngbān, yīnwèi tā jiā lí gōngsī hěn yuǎn. Jīntiān tā qǐchuáng wǎn le, suǒyǐ zuò chūzūchē qù.)\n\n小王今天怎么去上班？\n(Xiǎo Wáng jīntiān zěnme qù shàngbān?)", "luaChon": ["坐公共汽车 (zuò gōnggòng qìchē)", "走路 (zǒulù)", "坐出租车 (zuò chūzūchē)"], "dapAn": 2,
+              "giaiThich": "今天他起床晚了，所以坐出租车去 = Hôm nay anh ấy dậy muộn nên đi taxi (出租车 chūzūchē). Bẫy: xe buýt (公共汽车) là thói quen 每天 (hằng ngày), còn câu hỏi hỏi 今天 (hôm nay).",
+              "tu": ["出租车", "公共汽车", "所以"] },
+            { "id": "12", "kieu": "chon",
+              "nghe": [
+                { "g": "zh-nu", "t": "明天是星期六，我们一起去看电影吧。" },
+                { "g": "zh-nam", "t": "明天我要去踢足球，星期天怎么样？" },
+                { "g": "zh-nu", "t": "好，星期天见。" },
+                { "g": "zh-nu", "t": "他们什么时候去看电影？" }
+              ],
+              "de": "他们什么时候去看电影？\n(Tāmen shénme shíhou qù kàn diànyǐng?)", "luaChon": ["星期六 (xīngqīliù)", "星期天 (xīngqītiān)", "今天 (jīntiān)"], "dapAn": 1,
+              "giaiThich": "Lời nghe: 明天是星期六，我们一起去看电影吧。— 明天我要去踢足球，星期天怎么样？— 好，星期天见。(Mai là thứ Bảy, mình cùng đi xem phim nhé. — Mai anh phải đi đá bóng, Chủ nhật được không? — Được, hẹn Chủ nhật.) Thứ Bảy là đề nghị đầu, bị đổi sang Chủ nhật.",
+              "tu": ["星期天", "一起", "踢足球"] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "muc-3",
+      "ten": "Mức 3 · HSK 3",
+      "kyNang": "doc",
+      "phut": 4,
+      "diemToiDa": 6,
+      "nhom": [
+        {
+          "huongDan": "Mức HSK 3 — Chọn đáp án đúng (không còn pinyin). Câu cuối có phần nghe: bấm nghe rồi trả lời.",
+          "cau": [
+            { "id": "13", "kieu": "chon", "de": "天气越来越冷，你要多穿点儿衣服，小心___。", "luaChon": ["感冒", "比赛", "锻炼", "习惯"], "dapAn": 0,
+              "giaiThich": "Trời càng ngày càng lạnh, mặc thêm áo kẻo 感冒 (gǎnmào) = bị cảm. 比赛 (bǐsài) = thi đấu, 锻炼 (duànliàn) = rèn luyện, 习惯 (xíguàn) = thói quen. 小心 + việc xấu = coi chừng …",
+              "tu": ["感冒", "小心", "越来越"] },
+            { "id": "14", "kieu": "chon", "de": "我对中国历史很感___。", "luaChon": ["关心", "热情", "兴趣", "了解"], "dapAn": 2,
+              "giaiThich": "Cụm cố định 对…感兴趣 (duì … gǎn xìngqù) = có hứng thú với … 关心 (quan tâm), 热情 (nhiệt tình), 了解 (hiểu rõ) không đi sau 感.",
+              "tu": ["感兴趣", "历史", "对"] },
+            { "id": "15", "kieu": "chon", "de": "请___门关上，外面风很大。", "luaChon": ["被", "把", "让", "向"], "dapAn": 1,
+              "giaiThich": "Câu chữ 把 (bǎ): 把 + tân ngữ + động từ + thành phần khác — 请把门关上 = Xin hãy đóng cửa lại. 被 (bèi) là câu bị động, 让 (ràng) cần người thực hiện, 向 (xiàng) chỉ hướng.",
+              "tu": ["把", "关", "被"] },
+            { "id": "16", "kieu": "chon", "de": "这个字我写了很多次，___写不好。", "luaChon": ["或者", "然后", "而且", "还是"], "dapAn": 3,
+              "giaiThich": "还是 (háishi) ở đây = vẫn (kết quả không đổi dù đã cố): viết rất nhiều lần mà vẫn viết không đẹp. 或者 = hoặc, 然后 = sau đó, 而且 = hơn nữa đều không diễn đạt ý 'vẫn'.",
+              "tu": ["还是", "而且", "或者"] },
+            { "id": "17", "kieu": "chon", "de": "小李刚搬到这个城市，周末他常常一个人去图书馆。上个月他参加了一次爬山比赛，认识了很多新朋友，现在周末比以前有意思多了。\n\n小李是怎么认识新朋友的？", "luaChon": ["在图书馆看书", "参加爬山比赛", "在公司工作", "去朋友家玩儿"], "dapAn": 1,
+              "giaiThich": "上个月他参加了一次爬山比赛，认识了很多新朋友 = Tháng trước anh ấy tham gia một cuộc thi leo núi và quen nhiều bạn mới. Thư viện (图书馆) là nơi anh ấy đi MỘT MÌNH (一个人) nên là bẫy.",
+              "tu": ["参加", "爬山", "认识"] },
+            { "id": "18", "kieu": "chon",
+              "nghe": [
+                { "g": "zh-nam", "t": "你怎么才来？电影已经开始十分钟了。" },
+                { "g": "zh-nu", "t": "对不起，我没坐上公共汽车，是走路来的。" },
+                { "g": "zh-nu", "t": "女的是怎么来的？" }
+              ],
+              "de": "女的是怎么来的？", "luaChon": ["坐公共汽车", "坐出租车", "走路"], "dapAn": 2,
+              "giaiThich": "Lời nghe: 你怎么才来？电影已经开始十分钟了。— 对不起，我没坐上公共汽车，是走路来的。(Sao giờ em mới đến? Phim bắt đầu mười phút rồi. — Xin lỗi, em không lên kịp xe buýt nên đi bộ đến.) Bẫy: 公共汽车 được nhắc nhưng đi với 没坐上 (không lên được).",
+              "tu": ["走路", "才", "是…的"] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "muc-4",
+      "ten": "Mức 4 · HSK 4",
+      "kyNang": "doc",
+      "phut": 4,
+      "diemToiDa": 6,
+      "nhom": [
+        {
+          "huongDan": "Mức HSK 4 — Chọn đáp án đúng. Câu cuối có phần nghe: bấm nghe rồi trả lời.",
+          "cau": [
+            { "id": "19", "kieu": "chon", "de": "这家饭馆的菜味道不错，价格也很___。", "luaChon": ["合格", "适应", "适合", "合适"], "dapAn": 3,
+              "giaiThich": "合适 (héshì) là tính từ = phù hợp, vừa phải: 价格很合适. 适合 (shìhé) là động từ, phải có tân ngữ (适合我); 适应 (shìyìng) = thích nghi; 合格 (hégé) = đạt tiêu chuẩn, không dùng cho giá cả.",
+              "tu": ["合适", "适合", "价格"] },
+            { "id": "20", "kieu": "chon", "de": "请你把这次旅行的计划___地介绍一下。", "luaChon": ["严格", "详细", "准时", "干燥"], "dapAn": 1,
+              "giaiThich": "详细地介绍 (xiángxì de jièshào) = giới thiệu một cách chi tiết. 严格 (yángé) = nghiêm khắc, 准时 (zhǔnshí) = đúng giờ, 干燥 (gānzào) = khô hanh đều không bổ nghĩa cho 介绍.",
+              "tu": ["详细", "计划", "介绍"] },
+            { "id": "21", "kieu": "chon", "de": "___明天下雨，我们也要去爬长城。", "luaChon": ["即使", "既然", "因此", "不过"], "dapAn": 0,
+              "giaiThich": "即使…也… (jíshǐ … yě …) = cho dù … cũng …: dù mai mưa vẫn đi leo Trường Thành. 既然 (đã … thì) đi với 就; 因此 (vì vậy) và 不过 (nhưng) không đứng đầu vế giả định.",
+              "tu": ["即使", "既然", "也"] },
+            { "id": "22", "kieu": "chon", "de": "他连早饭___没吃就去上班了。", "luaChon": ["才", "却", "都", "再"], "dapAn": 2,
+              "giaiThich": "Mẫu nhấn mạnh 连…都/也… (lián … dōu/yě …) = ngay cả … cũng …: ngay cả bữa sáng cũng chưa ăn đã đi làm. 才, 却, 再 không ghép với 连 trong mẫu này.",
+              "tu": ["连…都", "却"] },
+            { "id": "23", "kieu": "chon", "de": "很多人认为，只有赚很多钱才算成功。其实，成功的标准并不只有一个。能做自己喜欢的事情，并且让家人过得幸福，也是一种成功。\n\n这段话主要想告诉我们什么？", "luaChon": ["成功不只有一种标准", "赚钱是最重要的事", "家人比工作更重要", "做喜欢的事情很难"], "dapAn": 0,
+              "giaiThich": "Câu chủ đề: 其实，成功的标准并不只有一个 = Thật ra tiêu chuẩn của thành công không chỉ có một. 赚很多钱 là quan điểm của 很多人 mà tác giả phản bác bằng 其实; bài không so sánh gia đình với công việc.",
+              "tu": ["成功", "标准", "其实"] },
+            { "id": "24", "kieu": "chon",
+              "nghe": [
+                { "g": "zh-nu", "t": "这套房子周围环境不错，离地铁站也近，就是房租比我们计划的高了一些。" },
+                { "g": "zh-nam", "t": "交通方便最重要，贵一点儿没关系，我们就租这套吧。" },
+                { "g": "zh-nu", "t": "男的是什么意思？" }
+              ],
+              "de": "男的是什么意思？", "luaChon": ["房子太贵，不想租", "决定租这套房子", "想再看看别的房子"], "dapAn": 1,
+              "giaiThich": "Lời nghe: 这套房子周围环境不错，离地铁站也近，就是房租比我们计划的高了一些。— 交通方便最重要，贵一点儿没关系，我们就租这套吧。(Căn này môi trường xung quanh ổn, gần ga tàu điện, chỉ có tiền thuê cao hơn dự tính. — Giao thông tiện là quan trọng nhất, đắt một chút không sao, mình thuê căn này đi.) 贵一点儿没关系 cho thấy giá không phải trở ngại.",
+              "tu": ["租", "交通", "环境"] }
+          ]
+        }
+      ]
+    }
+  ]
+}

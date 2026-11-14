@@ -1019,6 +1019,7 @@ for route in \
     video-hoc/cua-toi \
     hoc-tap/tong-quan \
     ctlanguage/dich/luot \
+    ctlanguage/thi/danh-muc \
     xuong-3d/bo-phan \
     gifs \
     toc-do-mang/ping \

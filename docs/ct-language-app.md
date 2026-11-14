@@ -326,3 +326,42 @@ Câu hỏi cho user: Pro của CT Language có **dùng chung** với Pro web cuo
   DEBUG `CT_XEM_MAN`: `dich-trung-tam`, `dich-camera`, `dich-hoi-thoai`, `dich-tai-lieu`, `dich-sua-bai` (+ `CT_DICH_GIA=1` ⇒ bản dịch giả,
   vì bộ dịch Apple không chạy trên máy ảo). ⚠️ Chỉ kiểm được trên MÁY THẬT: Live Text, bộ dịch Apple, micro/nhận giọng, đọc to.
   Chưa làm: dịch viết tay trong màn Dịch (đã có ở tra từ), dịch giọng nói một người (dùng Hội thoại), đồng bộ lịch sử lên máy chủ.
+
+## 13. Đợt B — Thi thử chuẩn (14/11/2026)
+
+**Đề TỰ SOẠN, đúng cấu trúc** (không chép đề Hanban / JLPT / IDP–British Council; đề thật có hình ⇒ thay bằng mô tả chữ):
+`content/ctlanguage/de-thi/*.json` — 16 đề · 843 câu, mỗi câu có đáp án + giải thích tiếng Việt + từ/ngữ pháp then chốt (`tu`).
+
+| Kỳ thi | Đề | Câu/đề | Cấu trúc |
+|---|---|---|---|
+| HSK 1 | 2 | 40 | Nghe 20 · Đọc 20 · 32′ · đạt 120/200 |
+| HSK 2 | 2 | 60 | Nghe 35 · Đọc 25 · 47′ · đạt 120/200 |
+| HSK 3 | 2 | 80 | Nghe 40 · Đọc 30 · Viết 10 (5 sắp xếp câu + 5 điền chữ Hán) · 80′ · đạt 180/300 |
+| HSKK sơ cấp | 1 | 27 | Nhắc lại 15 · nghe–trả lời 10 · trả lời 2 · 20′ · đạt 60/100 |
+| JLPT N5 | 2 | 67 | 文字・語彙 21 · 文法・読解 22 · 聴解 24 · 90′ · đạt 80/180 |
+| JLPT N4 | 2 | 85 | 文字・語彙 28 · 文法・読解 29 · 聴解 28 · 115′ · đạt 90/180 |
+| IELTS Mini | 2 | 40 | Listening 20 · Reading 20 · 45′ · đạt 24/40 (4 đề IELTS web là mã TS của frontend, không dùng lại được ⇒ soạn mới) |
+| Xếp lớp "Bạn đang ở đâu?" | 3 (zh · ja · en) | 24 | 4 mức × 6 câu, ~15′; mức đầu tiên chưa đạt 60% ⇒ gợi ý bắt đầu ở mức đó + lộ trình |
+
+- **Khuôn + luật:** `content/ctlanguage/de-thi/_KHUON.md`, `src/services/ctlanguage/thiThuan.ts` (`kiemDe`, `chamDe`, `SO_CAU_CHUAN`).
+  Thêm/sửa đề ⇒ `npx tsx scripts/ctlanguage-kiem-de-thi.mts` (đủ số câu chuẩn, đúng một đáp án, đủ giải thích, giọng có thật) +
+  `npx tsx --test src/services/ctlanguage/thiThuan.test.ts`. Đề hỏng bị BỎ lúc nạp (ghi log), không làm sập phòng thi.
+- **Nghe:** kịch bản trong đề (`nghe: [{g, t}]`), đọc bằng TTS máy chủ `/ielts/doc` qua `GiongSachHoc` (đệm trên máy, `napTruoc` cả
+  phần khi mở + 5 câu kế khi lật câu); mỗi bài nghe giới hạn số lần (`ngheLan`, JLPT/IELTS = 1) và tự phát khi tới câu.
+- **Nói (HSKK):** ghi bằng `MayThuSH`; câu nhắc lại ⇒ máy chủ chấm phát âm `/ielts/ai/cham-phat-am` (đăng nhập + đồng ý AI),
+  không chấm được / câu trả lời tự do ⇒ tự chấm theo câu mẫu. Đề nói KHÔNG lên bảng xếp hạng.
+- **Máy chủ** `/api/v1/ctlanguage/thi` (`ctlanguage.thi.routes.ts` → `services/ctlanguage/thi.ts`, gắn TRƯỚC `/ctlanguage`):
+  `GET /danh-muc?nn=` · `GET /de/:id` · `GET /vinh-danh?nn=&cap=` (khách được) · `POST /de/:id/bat-dau` · `POST /luot/:id/nop`
+  · `GET /lich-su?nn=` (đăng nhập). Bảng `ctl_luot_thi` (migration `20261114200000_ctlanguage_thi_thu`).
+  Máy chủ CHẤM LẠI từ đề (không tin điểm app gửi), thời gian đo từ `batDauLuc`.
+- **Free / Pro** (quyền Pro do máy chủ phán): free 1 đề/cấp/tuần (thứ Hai 00:00 giờ VN; làm lại đúng đề đó thì được; xếp lớp
+  không tính) + phiếu điểm từng phần + đáp án; đề gửi cho free đã BỎ `giaiThich` (giữ 2 câu mẫu mỗi phần). Pro: không giới hạn +
+  giải thích chi tiết + biểu đồ tiến bộ / trung bình theo phần. Khách (chưa đăng nhập): cùng luật 1 đề/cấp/tuần, đếm trên máy.
+- **Vinh danh tuần:** 7 ngày gần nhất theo cấp, mỗi người một dòng tốt nhất (bằng điểm ⇒ nhanh hơn). Chỉ lần nộp ĐẦU của mỗi
+  đề được lên bảng (nộp xong là thấy đáp án), và phải ≥ 2 giây/câu.
+- **App** `Modules/ThiThu/`: `PhongThiCTL` (Luyện › Thi thử: xếp lớp · vinh danh · lịch sử · cấp → đề; thi nhanh từ vựng cũ ở cuối),
+  `LamBaiThiCTL` (tính giờ THEO PHẦN, hết giờ tự sang phần, không quay lại), `PhieuDiemThiCTL` (phiếu điểm, xem lại từng câu,
+  "Ôn lại từ sai" ⇒ tra từ điển khớp đúng chữ ⇒ `KhoSoTu`, lịch sử + biểu đồ), `MoHinhThiCTL` (`ChamThiCTL` chấm trên máy cho
+  khách — luật Y HỆT `chamDe`; test hai bên dùng chung đề mẫu `mau-de-1`). Máy ảo: `CT_XEM_MAN` chưa có nhánh thi; dùng
+  `CT_THI_THU=lam | lam-im | lam:<n> | phieu` sau khi mở một đề.
+- **Deploy:** `migrate deploy` (bảng mới) — không cần seed, không biến môi trường mới; đề đi theo `content/` trong ảnh.

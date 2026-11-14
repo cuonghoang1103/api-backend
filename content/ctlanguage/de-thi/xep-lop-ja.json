@@ -1,0 +1,174 @@
+{
+  "id": "xep-lop-ja",
+  "nn": "ja",
+  "kyThi": "XEP-LOP",
+  "cap": "XEP-LOP",
+  "ten": "Xếp lớp tiếng Nhật",
+  "moTa": "Bạn đang ở đâu? 24 câu, khoảng 15 phút, khó dần từ bảng chữ kana đến N3 — làm xong app gợi ý nên bắt đầu học từ mức nào.",
+  "diemDat": 0,
+  "xepHang": false,
+  "xepLop": {
+    "nguong": 60,
+    "muc": [
+      { "cap": "KANA", "nhan": "Mới bắt đầu", "loTrinh": "Bạn nên bắt đầu từ bảng chữ: học thuộc hiragana rồi katakana bằng bộ luyện chữ nền, kèm các câu chào hỏi cơ bản. Mỗi ngày luyện 10 chữ bằng thẻ và nghe đọc mẫu để quen âm trước khi vào khoá N5." },
+      { "cap": "N5", "nhan": "Sơ cấp", "loTrinh": "Bạn đã đọc được kana, nên vào khoá N5 theo lộ trình: trợ từ は・が・を・に・で, thể ます, tính từ và khoảng 800 từ cơ bản. Ôn từ bằng thẻ mỗi ngày, luyện nghe câu ngắn và thi thử JLPT N5 khi học xong." },
+      { "cap": "N4", "nhan": "Sơ cấp trên", "loTrinh": "Bạn nên học ở mức N4: thể て mở rộng, bị động, sai khiến, cho–nhận (あげる・くれる・もらう) và khoảng 300 chữ Hán. Luyện nghe hội thoại đời thường, gọi CuongMini luyện nói và thi thử JLPT N4 để đo tiến bộ." },
+      { "cap": "N3", "nhan": "Trung cấp", "loTrinh": "Bạn đang ở ngưỡng N3: nên học khoá N3 với các mẫu ngữ pháp trung cấp (わりに, しかない, ことになる), kính ngữ cơ bản và đọc đoạn văn dài hơn. Ôn từ vựng bằng thẻ, luyện nghe tốc độ tự nhiên và gọi CuongMini luyện hội thoại công việc." }
+    ],
+    "vuot": { "cap": "N2", "nhan": "Trung cấp trên", "loTrinh": "Bạn đã vững N3 và sẵn sàng lên N2. Hãy học từ vựng, chữ Hán N2 bằng thẻ, đọc bài báo ngắn và nghe tin tức mỗi ngày, đồng thời gọi CuongMini luyện nói với kính ngữ trong tình huống công việc." }
+  },
+  "phan": [
+    {
+      "id": "muc-1",
+      "ten": "Mức 1 · Nhập môn (kana + chào hỏi)",
+      "kyNang": "doc",
+      "phut": 4,
+      "diemToiDa": 6,
+      "nhom": [
+        {
+          "huongDan": "Mức Nhập môn — bảng chữ kana và câu chào hỏi. Chọn đáp án đúng. Câu cuối có phần nghe: bấm nghe rồi trả lời.",
+          "cau": [
+            { "id": "1", "kieu": "chon", "de": "Chữ hiragana nào đọc là “ki”?", "luaChon": ["さ", "き", "ち", "ぎ"], "dapAn": 1,
+              "giaiThich": "き đọc là ki. さ = sa và ち = chi có hình dáng gần giống nên dễ nhầm; ぎ có thêm hai chấm (dakuten) nên đọc là gi.",
+              "tu": ["き", "さ", "ち"] },
+            { "id": "2", "kieu": "chon", "de": "Từ katakana “コーヒー” nghĩa là gì?", "luaChon": ["cà phê", "bánh ngọt", "trà", "sữa"], "dapAn": 0,
+              "giaiThich": "コーヒー đọc là kōhī = cà phê (từ mượn coffee). Dấu ー kéo dài nguyên âm đứng trước. Bánh ngọt = ケーキ, trà = おちゃ, sữa = ミルク.",
+              "tu": ["コーヒー", "ケーキ"] },
+            { "id": "3", "kieu": "chon", "de": "Buổi sáng gặp thầy giáo, bạn chào thế nào?", "luaChon": ["こんばんは", "おやすみなさい", "おはようございます", "さようなら"], "dapAn": 2,
+              "giaiThich": "おはようございます (ohayō gozaimasu) = chào buổi sáng, dạng lịch sự dùng với thầy cô. こんばんは = chào buổi tối, おやすみなさい = chúc ngủ ngon, さようなら = tạm biệt.",
+              "tu": ["おはようございます", "こんばんは"] },
+            { "id": "4", "kieu": "chon", "de": "Được bạn tặng quà, bạn nói gì để cảm ơn?", "luaChon": ["ごめんなさい", "いただきます", "ごちそうさまでした", "ありがとうございます"], "dapAn": 3,
+              "giaiThich": "ありがとうございます (arigatō gozaimasu) = xin cảm ơn. ごめんなさい = xin lỗi, いただきます nói trước khi ăn, ごちそうさまでした nói sau khi ăn xong.",
+              "tu": ["ありがとうございます", "ごめんなさい"] },
+            { "id": "5", "kieu": "chon", "de": "わたしは たなか です。にほんじん です。\n\nたなかさんは どこの くにの ひと ですか。", "luaChon": ["ベトナム", "にほん", "ちゅうごく"], "dapAn": 1,
+              "giaiThich": "にほんじん です (nihonjin desu) = (tôi) là người Nhật ⇒ にほん (Nhật Bản). Tên nước + じん = người nước đó. ベトナム = Việt Nam, ちゅうごく = Trung Quốc.",
+              "tu": ["にほんじん", "くに"] },
+            { "id": "6", "kieu": "chon",
+              "nghe": [
+                { "g": "ja-nu", "t": "はじめまして。やまだです。よろしくおねがいします。" }
+              ],
+              "de": "Người nói đang làm gì?", "luaChon": ["Tự giới thiệu khi gặp lần đầu", "Chào tạm biệt ra về", "Xin lỗi vì đến muộn"], "dapAn": 0,
+              "giaiThich": "Lời nghe: はじめまして。やまだです。よろしくおねがいします。(Rất vui được gặp lần đầu. Tôi là Yamada. Mong được giúp đỡ.) はじめまして chỉ dùng khi gặp lần đầu — bộ ba câu tự giới thiệu kinh điển.",
+              "tu": ["はじめまして", "よろしくおねがいします"] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "muc-2",
+      "ten": "Mức 2 · N5",
+      "kyNang": "doc",
+      "phut": 4,
+      "diemToiDa": 6,
+      "nhom": [
+        {
+          "huongDan": "Mức N5 — Chọn đáp án đúng. Câu cuối có phần nghe: bấm nghe rồi trả lời.",
+          "cau": [
+            { "id": "7", "kieu": "chon", "de": "まいあさ コーヒーを ___。", "luaChon": ["たべます", "のみます", "よみます", "ききます"], "dapAn": 1,
+              "giaiThich": "コーヒーを のみます (nomimasu) = uống cà phê. たべます = ăn, よみます = đọc, ききます = nghe. まいあさ = mỗi sáng.",
+              "tu": ["のむ", "まいあさ"] },
+            { "id": "8", "kieu": "chon", "de": "きのうは とても ___ですから、うみで およぎました。", "luaChon": ["さむかった", "くらかった", "おもかった", "あつかった"], "dapAn": 3,
+              "giaiThich": "Đi bơi ở biển vì trời nóng: あつい → quá khứ あつかった (đã nóng). さむかった = đã lạnh, くらかった = đã tối, おもかった = đã nặng đều không hợp lý do đi bơi.",
+              "tu": ["あつい", "およぐ", "うみ"] },
+            { "id": "9", "kieu": "chon", "de": "わたしは バス___ がっこうへ いきます。", "luaChon": ["で", "に", "を", "が"], "dapAn": 0,
+              "giaiThich": "Trợ từ で chỉ phương tiện: バスで いきます = đi bằng xe buýt. に chỉ điểm đến / thời điểm, を chỉ tân ngữ, が chỉ chủ ngữ.",
+              "tu": ["で", "バス"] },
+            { "id": "10", "kieu": "chon", "de": "この へやは ___ ですね。", "luaChon": ["しずかな", "しずかに", "しずか", "しずかの"], "dapAn": 2,
+              "giaiThich": "Tính từ đuôi な đứng trước です thì bỏ な: しずかです (yên tĩnh). しずかな chỉ dùng trước danh từ (しずかな へや), しずかに là trạng từ; しずかの không tồn tại.",
+              "tu": ["しずか", "へや"] },
+            { "id": "11", "kieu": "chon", "de": "わたしは きのう ともだちと デパートへ いきました。わたしは くつを かいました。ともだちは なにも かいませんでした。\n\nともだちは なにを かいましたか。", "luaChon": ["くつを かいました", "かばんを かいました", "なにも かいませんでした"], "dapAn": 2,
+              "giaiThich": "ともだちは なにも かいませんでした = bạn tôi không mua gì cả (なにも + phủ định = không … gì). Bẫy: người mua giày (くつ) là わたし, không phải bạn.",
+              "tu": ["なにも", "かう", "くつ"] },
+            { "id": "12", "kieu": "chon",
+              "nghe": [
+                { "g": "ja-nam", "t": "すみません、このりんごはいくらですか。" },
+                { "g": "ja-nu", "t": "一つ百円です。三つで二百五十円です。" },
+                { "g": "ja-nam", "t": "じゃ、三つください。" },
+                { "g": "ja-nu", "t": "男の人はいくら払いますか。" }
+              ],
+              "de": "おとこの ひとは いくら はらいますか。", "luaChon": ["100えん", "250えん", "300えん"], "dapAn": 1,
+              "giaiThich": "Lời nghe: このりんごはいくらですか。— 一つ百円です。三つで二百五十円です。— じゃ、三つください。(Táo này bao nhiêu? — Một quả 100 yên, ba quả 250 yên. — Vậy cho tôi ba quả.) Mua ba quả nên trả 250 yên; bẫy là tự nhân 100 × 3 = 300.",
+              "tu": ["いくら", "みっつ", "円"] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "muc-3",
+      "ten": "Mức 3 · N4",
+      "kyNang": "doc",
+      "phut": 4,
+      "diemToiDa": 6,
+      "nhom": [
+        {
+          "huongDan": "Mức N4 — Chọn đáp án đúng. Câu cuối có phần nghe: bấm nghe rồi trả lời.",
+          "cau": [
+            { "id": "13", "kieu": "chon", "de": "旅行の 前に、ホテルの へやを ___ しました。", "luaChon": ["せつめい", "しょうかい", "よやく", "そうだん"], "dapAn": 2,
+              "giaiThich": "へやを よやくする (予約) = đặt phòng trước. せつめい (説明) = giải thích, しょうかい (紹介) = giới thiệu, そうだん (相談) = bàn bạc — đều là danh từ + する nhưng không đi với 'phòng khách sạn'.",
+              "tu": ["予約", "旅行", "説明"] },
+            { "id": "14", "kieu": "chon", "de": "この 道は 車が 多くて ___ですから、気を つけて ください。", "luaChon": ["あぶない", "うれしい", "やわらかい", "ねむい"], "dapAn": 0,
+              "giaiThich": "Đường nhiều xe nên あぶない (危ない) = nguy hiểm, vì thế mới dặn 気をつけて (hãy cẩn thận). うれしい = vui, やわらかい = mềm, ねむい = buồn ngủ.",
+              "tu": ["危ない", "気をつける"] },
+            { "id": "15", "kieu": "chon", "de": "先生に 作文を ___ いただきました。", "luaChon": ["直し", "直して", "直す", "直した"], "dapAn": 1,
+              "giaiThich": "Mẫu Vて + いただく = được (người trên) làm giúp: 直して いただきました = được thầy sửa bài văn cho. Phải dùng thể て; thể từ điển hay thể た không nối được với いただく.",
+              "tu": ["ていただく", "直す", "作文"] },
+            { "id": "16", "kieu": "chon", "de": "弟は 母に ___、泣いて います。", "luaChon": ["しかって", "しからせて", "しかる", "しかられて"], "dapAn": 3,
+              "giaiThich": "Bị động: 母に しかられる = bị mẹ mắng (しかる → しかられる). Em trai khóc vì BỊ mắng nên dùng しかられて. しかって là chủ động (em mắng), しからせて là sai khiến.",
+              "tu": ["しかる", "られる", "泣く"] },
+            { "id": "17", "kieu": "chon", "de": "来週の 土曜日に クラスの パーティーが あります。場所は 学校の 食堂です。飲み物は 学校が 用意しますから、みなさんは 食べ物を 一つ 持って きて ください。\n\nパーティーに 何を 持って いきますか。", "luaChon": ["飲み物", "食べ物", "お金", "何も 持って いかない"], "dapAn": 1,
+              "giaiThich": "みなさんは 食べ物を 一つ 持って きて ください = mọi người hãy mang một món ăn đến. Bẫy: đồ uống (飲み物) do nhà trường chuẩn bị (学校が 用意します) nên không cần mang.",
+              "tu": ["用意", "持ってくる", "食べ物"] },
+            { "id": "18", "kieu": "chon",
+              "nghe": [
+                { "g": "ja-nu", "t": "田中さん、明日の会議は三時からでしたよね。" },
+                { "g": "ja-nam", "t": "ええ、でも部長の都合で一時間遅くなりました。" },
+                { "g": "ja-nu", "t": "会議は何時に始まりますか。" }
+              ],
+              "de": "会議は 何時に 始まりますか。", "luaChon": ["2時", "3時", "4時"], "dapAn": 2,
+              "giaiThich": "Lời nghe: 明日の会議は三時からでしたよね。— ええ、でも部長の都合で一時間遅くなりました。(Cuộc họp mai từ 3 giờ nhỉ? — Vâng, nhưng vì trưởng phòng bận nên lùi lại một tiếng.) 3 giờ + 1 tiếng = 4 giờ; 遅くなる = muộn hơn (không phải sớm hơn).",
+              "tu": ["都合", "遅い", "会議"] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "muc-4",
+      "ten": "Mức 4 · N3",
+      "kyNang": "doc",
+      "phut": 4,
+      "diemToiDa": 6,
+      "nhom": [
+        {
+          "huongDan": "Mức N3 — Chọn đáp án đúng. Câu cuối có phần nghe: bấm nghe rồi trả lời.",
+          "cau": [
+            { "id": "19", "kieu": "chon", "de": "申し込みの ___は 今週の 金曜日までです。", "luaChon": ["締め切り", "受け取り", "売り切れ", "乗り換え"], "dapAn": 0,
+              "giaiThich": "締め切り (しめきり) = hạn chót: hạn đăng ký là đến thứ Sáu tuần này. 受け取り = việc nhận, 売り切れ = bán hết, 乗り換え = đổi tàu xe — đều là danh từ ghép nhưng không đi với 〜までです về thời hạn.",
+              "tu": ["締め切り", "申し込み"] },
+            { "id": "20", "kieu": "chon", "de": "彼は 約束を 必ず 守るので、みんなに ___されている。", "luaChon": ["心配", "信用", "反対", "注意"], "dapAn": 1,
+              "giaiThich": "Luôn giữ lời hứa nên được mọi người 信用 (しんよう) = tin tưởng. 心配される = bị lo lắng, 反対される = bị phản đối, 注意される = bị nhắc nhở — trái với ý tích cực của câu.",
+              "tu": ["信用", "約束", "守る"] },
+            { "id": "21", "kieu": "chon", "de": "彼は 日本に 10年も 住んでいる ___、日本語が あまり 話せない。", "luaChon": ["おかげで", "ために", "わりに", "うちに"], "dapAn": 2,
+              "giaiThich": "〜わりに = so với (mức đáng lẽ) thì …: sống ở Nhật tận 10 năm mà nói tiếng Nhật không giỏi mấy. おかげで (nhờ) và ために (vì) chỉ nguyên nhân thuận, うちに = trong lúc — đều không diễn đạt sự trái kỳ vọng.",
+              "tu": ["わりに", "おかげで", "うちに"] },
+            { "id": "22", "kieu": "chon", "de": "電車が 止まって しまったので、歩いて 帰る ___。", "luaChon": ["わけがなかった", "はずだった", "ことになっていた", "しかなかった"], "dapAn": 3,
+              "giaiThich": "V thể từ điển + しかない = chỉ còn cách …: tàu dừng nên chỉ còn cách đi bộ về. わけがない = không lẽ nào, はずだった = lẽ ra đã, ことになっていた = đã được quy định — không hợp với nguyên nhân 'tàu dừng'.",
+              "tu": ["しかない", "はず", "わけがない"] },
+            { "id": "23", "kieu": "chon", "de": "最近、紙の 本より 電子書籍を 読む 人が 増えている。持ち運びが 楽で、すぐに 買えるからだ。しかし、私は 紙の 本の ほうが 内容を よく 覚えられる 気が するので、今も 本屋に 通っている。\n\n筆者が 紙の 本を 読む 理由は 何ですか。", "luaChon": ["持ち運びが 楽だから", "すぐに 買えるから", "内容が 頭に 残りやすいと 感じるから", "電子書籍より 安いから"], "dapAn": 2,
+              "giaiThich": "私は 紙の 本の ほうが 内容を よく 覚えられる 気が する = tôi cảm thấy đọc sách giấy thì nhớ nội dung tốt hơn. 持ち運びが楽 và すぐに買える là ưu điểm của sách điện tử (電子書籍) — bẫy lấy lý do của phía kia; giá cả không được nhắc.",
+              "tu": ["気がする", "内容", "電子書籍"] },
+            { "id": "24", "kieu": "chon",
+              "nghe": [
+                { "g": "ja-nam", "t": "山田さん、この資料、今日中に仕上げてもらえないかな。" },
+                { "g": "ja-nu", "t": "今日中ですか。午後は会議が入っているので、明日の午前中でもよろしいでしょうか。" },
+                { "g": "ja-nam", "t": "うん、じゃあ明日の昼までにお願い。" },
+                { "g": "ja-nu", "t": "女の人はいつまでに資料を仕上げますか。" }
+              ],
+              "de": "女の人は いつまでに 資料を 仕上げますか。", "luaChon": ["今日中", "明日の 昼まで", "明日の 夕方まで"], "dapAn": 1,
+              "giaiThich": "Lời nghe: この資料、今日中に仕上げてもらえないかな。— 午後は会議が入っているので、明日の午前中でもよろしいでしょうか。— うん、じゃあ明日の昼までにお願い。(Tài liệu này xong trong hôm nay được không? — Chiều em có họp, sáng mai được không ạ? — Ừ, vậy trước trưa mai nhé.) 今日中 là yêu cầu ban đầu, đã được lùi sang trưa mai.",
+              "tu": ["仕上げる", "今日中", "資料"] }
+          ]
+        }
+      ]
+    }
+  ]
+}

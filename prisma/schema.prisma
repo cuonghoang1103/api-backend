@@ -514,6 +514,7 @@ model User {
   workTrashRestored        WorkTrashItem[]           @relation("WorkTrashRestoredBy")
   workDeleteRequests       WorkDeleteRequest[]       @relation("WorkDeleteRequestBy")
   workDeleteDecisions      WorkDeleteRequest[]       @relation("WorkDeleteRequestDecider")
+  ctlLuotThi               CtlLuotThi[]              @relation("CtlLuotThiNguoi")
   ctlBai                   CtlBai[]                  @relation("CtlBaiTacGia")
   ctlTraLoi                CtlTraLoi[]               @relation("CtlTraLoiTacGia")
   ctlThichBai              CtlThichBai[]             @relation("CtlThichBaiNguoi")
@@ -17950,6 +17951,39 @@ model CtlThongBao {
   @@index([userId, id], name: "idx_ctl_thong_bao_user")
   @@index([userId, daDoc], name: "idx_ctl_thong_bao_chua_doc")
   @@map("ctl_thong_bao")
+}
+
+/// CT Language — một LƯỢT THI THỬ (Đợt B, 14/11/2026). Đề nằm trong repo (`content/ctlanguage/de-thi/*.json`),
+/// máy chủ tự chấm lại (`services/ctlanguage/thi.ts`). Dòng tạo lúc BẮT ĐẦU (đếm lượt free: 1 đề/cấp/tuần),
+/// điền điểm lúc NỘP. `xepHang` = lượt này lên bảng Vinh danh tuần (chỉ lần nộp ĐẦU của mỗi đề, đề có chấm máy).
+model CtlLuotThi {
+  id        Int       @id @default(autoincrement())
+  userId    Int       @map("user_id")
+  /// en | ja | zh
+  nn        String    @db.VarChar(2)
+  deId      String    @map("de_id") @db.VarChar(40)
+  /// HSK | HSKK | JLPT | IELTS | XEP-LOP
+  kyThi     String    @map("ky_thi") @db.VarChar(12)
+  cap       String    @db.VarChar(16)
+  batDauLuc DateTime  @default(now()) @map("bat_dau_luc")
+  nopLuc    DateTime? @map("nop_luc")
+  diem      Int?
+  diemToiDa Int?      @map("diem_toi_da")
+  dung      Int?
+  tong      Int?
+  dat       Boolean?
+  /// Thời gian làm (giây) — máy chủ đo từ batDauLuc, không tin số app gửi.
+  giay      Int?
+  xepHang   Boolean   @default(false) @map("xep_hang")
+  /// { phan: [{id, ten, dung, tong, diem, diemToiDa}], traLoi: {cauId: …}, xepLop? }
+  chiTiet   Json?     @map("chi_tiet")
+
+  user User @relation("CtlLuotThiNguoi", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, nn, nopLuc], name: "idx_ctl_luot_thi_user")
+  @@index([userId, cap, batDauLuc], name: "idx_ctl_luot_thi_luot")
+  @@index([nn, cap, xepHang, nopLuc], name: "idx_ctl_luot_thi_bang")
+  @@map("ctl_luot_thi")
 }
 
 /// CT Language — app iOS học Anh · Nhật · Trung (docs/ct-language-app.md, 12/11/2026).

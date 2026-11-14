@@ -1,0 +1,174 @@
+{
+  "id": "xep-lop-en",
+  "nn": "en",
+  "kyThi": "XEP-LOP",
+  "cap": "XEP-LOP",
+  "ten": "Xếp lớp tiếng Anh",
+  "moTa": "Bạn đang ở đâu? 24 câu, khoảng 15 phút, khó dần từ A1 đến B2 — làm xong app gợi ý nên bắt đầu học từ mức nào.",
+  "diemDat": 0,
+  "xepHang": false,
+  "xepLop": {
+    "nguong": 60,
+    "muc": [
+      { "cap": "A1", "nhan": "Mới bắt đầu", "loTrinh": "Bạn nên bắt đầu từ nền tảng A1: học khoá theo lộ trình từ bài đầu tiên (chào hỏi, gia đình, số đếm, động từ to be). Mỗi ngày ôn 10 từ bằng thẻ và nghe các câu ngắn trong phần luyện nghe để quen âm." },
+      { "cap": "A2", "nhan": "Sơ cấp", "loTrinh": "Bạn đã có vốn cơ bản, nên học tiếp khoá A2: thì quá khứ đơn, so sánh, từ vựng đời sống — đây là nền để sau này vào lộ trình IELTS. Ôn từ bằng thẻ mỗi ngày và gọi CuongMini luyện nói những câu ngắn về bản thân." },
+      { "cap": "B1", "nhan": "Trung cấp", "loTrinh": "Bạn nên học ở mức B1 (tương đương IELTS khoảng 4.0–5.0): câu điều kiện, thì hoàn thành, cụm động từ. Luyện nghe hội thoại dài hơn, gọi CuongMini luyện nói theo chủ đề, và thử IELTS Mini để làm quen dạng đề." },
+      { "cap": "B2", "nhan": "Trung cấp trên", "loTrinh": "Bạn đang ở ngưỡng B2 (IELTS khoảng 5.5–6.5): nên vào lộ trình IELTS, tập trung đọc học thuật, cấu trúc nâng cao (đảo ngữ, quá khứ hoàn thành) và từ vựng theo chủ đề. Thi thử IELTS Mini mỗi tuần và luyện Speaking với CuongMini." }
+    ],
+    "vuot": { "cap": "C1", "nhan": "Nâng cao", "loTrinh": "Bạn đã vững B2 và sẵn sàng cho mức C1 (IELTS 7.0+). Hãy vào thẳng lộ trình IELTS nâng cao: luyện đề Reading, Listening có bấm giờ, mở rộng từ vựng học thuật bằng thẻ và gọi CuongMini luyện Speaking Part 2–3." }
+  },
+  "phan": [
+    {
+      "id": "muc-1",
+      "ten": "Mức 1 · A1",
+      "kyNang": "doc",
+      "phut": 4,
+      "diemToiDa": 6,
+      "nhom": [
+        {
+          "huongDan": "Mức A1 — Chọn đáp án đúng. Câu cuối có phần nghe: bấm nghe rồi trả lời.",
+          "cau": [
+            { "id": "1", "kieu": "chon", "de": "My mother's sister is my ___.", "luaChon": ["uncle", "cousin", "aunt", "grandmother"], "dapAn": 2,
+              "giaiThich": "Chị/em gái của mẹ là aunt (dì, bác gái). uncle = chú/bác trai, cousin = anh chị em họ, grandmother = bà.",
+              "tu": ["aunt", "uncle", "cousin"] },
+            { "id": "2", "kieu": "chon", "de": "We eat breakfast in the ___.", "luaChon": ["evening", "morning", "afternoon"], "dapAn": 1,
+              "giaiThich": "breakfast = bữa sáng nên ăn vào buổi sáng (in the morning). afternoon = buổi chiều, evening = buổi tối.",
+              "tu": ["breakfast", "morning"] },
+            { "id": "3", "kieu": "chon", "de": "She ___ a teacher.", "luaChon": ["is", "am", "are", "be"], "dapAn": 0,
+              "giaiThich": "Động từ to be: I am, you/we/they are, he/she/it is. Chủ ngữ She ⇒ is. Không dùng be nguyên mẫu làm động từ chính.",
+              "tu": ["be", "she"] },
+            { "id": "4", "kieu": "chon", "de": "There ___ two books on the table.", "luaChon": ["is", "has", "have", "are"], "dapAn": 3,
+              "giaiThich": "There is + danh từ số ít, There are + danh từ số nhiều. two books là số nhiều ⇒ are. Tiếng Anh không nói There have/has để chỉ 'có'.",
+              "tu": ["there is", "there are"] },
+            { "id": "5", "kieu": "chon", "de": "Tom gets up at seven. He goes to school by bus. After school, he plays football with his friends.\n\nHow does Tom go to school?", "luaChon": ["On foot", "By bus", "By bike"], "dapAn": 1,
+              "giaiThich": "Câu 2: 'He goes to school by bus.' by bus = bằng xe buýt. on foot = đi bộ, by bike = bằng xe đạp đều không có trong đoạn.",
+              "tu": ["by bus", "on foot"] },
+            { "id": "6", "kieu": "chon",
+              "nghe": [
+                { "g": "uk-nu", "t": "Excuse me, what time does the shop open?" },
+                { "g": "uk-nam", "t": "It opens at nine o'clock and closes at five." },
+                { "g": "us-nu", "t": "What time does the shop open?" }
+              ],
+              "de": "What time does the shop open?", "luaChon": ["At five o'clock", "At seven o'clock", "At nine o'clock"], "dapAn": 2,
+              "giaiThich": "Lời nghe: 'It opens at nine o'clock and closes at five.' (Cửa hàng mở lúc 9 giờ và đóng lúc 5 giờ.) Bẫy: five là giờ đóng cửa (closes), không phải giờ mở (opens).",
+              "tu": ["open", "close", "o'clock"] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "muc-2",
+      "ten": "Mức 2 · A2",
+      "kyNang": "doc",
+      "phut": 4,
+      "diemToiDa": 6,
+      "nhom": [
+        {
+          "huongDan": "Mức A2 — Chọn đáp án đúng. Câu cuối có phần nghe: bấm nghe rồi trả lời.",
+          "cau": [
+            { "id": "7", "kieu": "chon", "de": "It was raining, so I took an ___ with me.", "luaChon": ["envelope", "umbrella", "engine", "elevator"], "dapAn": 1,
+              "giaiThich": "Trời mưa thì mang umbrella (cái ô). envelope = phong bì, engine = động cơ, elevator = thang máy — đều bắt đầu bằng nguyên âm nên cùng đi với 'an', phải dựa vào nghĩa.",
+              "tu": ["umbrella", "rain"] },
+            { "id": "8", "kieu": "chon", "de": "The film was so ___ that I fell asleep.", "luaChon": ["exciting", "funny", "scary", "boring"], "dapAn": 3,
+              "giaiThich": "fell asleep = ngủ gật ⇒ phim chán (boring). exciting = hấp dẫn, funny = buồn cười, scary = đáng sợ thì khó mà ngủ được. Mẫu so + tính từ + that = quá … đến nỗi.",
+              "tu": ["boring", "fall asleep", "so … that"] },
+            { "id": "9", "kieu": "chon", "de": "I ___ to the cinema last Saturday.", "luaChon": ["went", "go", "have gone", "am going"], "dapAn": 0,
+              "giaiThich": "last Saturday là thời điểm xác định trong quá khứ ⇒ quá khứ đơn: go → went. Không dùng hiện tại hoàn thành (have gone) với mốc thời gian quá khứ cụ thể.",
+              "tu": ["go", "past simple"] },
+            { "id": "10", "kieu": "chon", "de": "This bag is ___ than that one.", "luaChon": ["more cheap", "cheapest", "cheaper", "cheap"], "dapAn": 2,
+              "giaiThich": "So sánh hơn của tính từ ngắn: thêm -er + than ⇒ cheaper than. Không nói more cheap; cheapest là so sánh nhất (đi với the).",
+              "tu": ["cheap", "than"] },
+            { "id": "11", "kieu": "chon", "de": "NOTICE: The swimming pool will be closed on Monday for cleaning. It will open again on Tuesday at 8 a.m. We are sorry for the trouble.\n\nWhy is the pool closed on Monday?", "luaChon": ["It is being cleaned.", "It is a public holiday.", "There are not enough staff."], "dapAn": 0,
+              "giaiThich": "Thông báo: 'closed on Monday for cleaning' = đóng cửa để dọn vệ sinh. Ngày lễ hay thiếu nhân viên không được nhắc tới.",
+              "tu": ["notice", "closed", "cleaning"] },
+            { "id": "12", "kieu": "chon",
+              "nghe": [
+                { "g": "uk-nu", "t": "Shall we meet at the station at six?" },
+                { "g": "uk-nam", "t": "I only finish work at six. Can we make it half past six, at the café instead?" },
+                { "g": "uk-nu", "t": "OK. Half past six at the café." },
+                { "g": "us-nu", "t": "Where will they meet?" }
+              ],
+              "de": "Where will they meet?", "luaChon": ["At the station", "At the man's office", "At the café"], "dapAn": 2,
+              "giaiThich": "Lời nghe: 'Shall we meet at the station at six?' — 'Can we make it half past six, at the café instead?' — 'OK. Half past six at the café.' (Hẹn 6 rưỡi ở quán cà phê.) Nhà ga là đề nghị ban đầu, bị đổi bằng 'instead'.",
+              "tu": ["instead", "half past", "meet"] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "muc-3",
+      "ten": "Mức 3 · B1",
+      "kyNang": "doc",
+      "phut": 4,
+      "diemToiDa": 6,
+      "nhom": [
+        {
+          "huongDan": "Mức B1 — Chọn đáp án đúng. Câu cuối có phần nghe: bấm nghe rồi trả lời.",
+          "cau": [
+            { "id": "13", "kieu": "chon", "de": "The manager was ill, so the company decided to ___ the meeting until next week.", "luaChon": ["predict", "prevent", "postpone", "pretend"], "dapAn": 2,
+              "giaiThich": "postpone something until … = hoãn việc gì đến … predict = dự đoán, prevent = ngăn chặn, pretend = giả vờ — giống mặt chữ (pre-/po-) nhưng không hợp nghĩa.",
+              "tu": ["postpone", "prevent", "predict"] },
+            { "id": "14", "kieu": "chon", "de": "I'm really looking ___ to seeing you again.", "luaChon": ["forward", "ahead", "up", "after"], "dapAn": 0,
+              "giaiThich": "look forward to + V-ing = mong chờ. look after = chăm sóc, look up = tra cứu, look ahead = nhìn về phía trước — không đi với 'to seeing'.",
+              "tu": ["look forward to"] },
+            { "id": "15", "kieu": "chon", "de": "If I ___ more time, I would learn to play the piano.", "luaChon": ["have", "had", "will have", "would have"], "dapAn": 1,
+              "giaiThich": "Câu điều kiện loại 2 (giả định trái hiện tại): If + quá khứ đơn, would + V. Mệnh đề chính có would learn ⇒ mệnh đề if dùng had. Không dùng would trong mệnh đề if.",
+              "tu": ["if", "would", "second conditional"] },
+            { "id": "16", "kieu": "chon", "de": "She has lived in this town ___ 2015.", "luaChon": ["for", "during", "from", "since"], "dapAn": 3,
+              "giaiThich": "Hiện tại hoàn thành + since + mốc thời gian (since 2015 = từ năm 2015). for đi với khoảng thời gian (for eight years); during và from không dùng trong mẫu này.",
+              "tu": ["since", "for", "present perfect"] },
+            { "id": "17", "kieu": "chon", "de": "Dear guests, breakfast is served from 7 to 10 a.m. in the dining room on the ground floor. If you need to leave earlier, please tell reception the evening before and we will prepare a packed breakfast for you.\n\nWhat should guests do if they have to leave before 7 a.m.?", "luaChon": ["Let reception know the night before", "Go to the dining room at six", "Order breakfast in their room", "Pay an extra charge"], "dapAn": 0,
+              "giaiThich": "'If you need to leave earlier, please tell reception the evening before.' tell reception the evening before = let reception know the night before. Ăn tại phòng hay trả thêm tiền không được nhắc.",
+              "tu": ["reception", "serve", "packed breakfast"] },
+            { "id": "18", "kieu": "chon",
+              "nghe": [
+                { "g": "uk-nam", "t": "I'm so sorry I'm late. The train was on time, but then I couldn't find my keys, and I had to go back home for them." },
+                { "g": "uk-nu", "t": "Don't worry. The meeting hasn't started yet." },
+                { "g": "us-nu", "t": "Why was the man late?" }
+              ],
+              "de": "Why was the man late?", "luaChon": ["His train was delayed.", "He had to return home for his keys.", "He went to the wrong building."], "dapAn": 1,
+              "giaiThich": "Lời nghe: 'The train was on time, but then I couldn't find my keys, and I had to go back home for them.' (Tàu đúng giờ, nhưng tôi không thấy chìa khoá nên phải quay về nhà lấy.) Bẫy: tàu được nhắc tới nhưng 'on time' = đúng giờ.",
+              "tu": ["on time", "delay", "go back"] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "muc-4",
+      "ten": "Mức 4 · B2",
+      "kyNang": "doc",
+      "phut": 4,
+      "diemToiDa": 6,
+      "nhom": [
+        {
+          "huongDan": "Mức B2 — Chọn đáp án đúng. Câu cuối có phần nghe: bấm nghe rồi trả lời.",
+          "cau": [
+            { "id": "19", "kieu": "chon", "de": "The new law is expected to have a significant ___ on small businesses.", "luaChon": ["affect", "outcome", "reaction", "impact"], "dapAn": 3,
+              "giaiThich": "have an impact on = có tác động tới. affect là động từ (không đứng sau 'a significant'); outcome và reaction không đi với giới từ on trong mẫu 'have a … on'.",
+              "tu": ["impact", "affect", "significant"] },
+            { "id": "20", "kieu": "chon", "de": "She was offered the job, but she turned it ___ because the salary was too low.", "luaChon": ["off", "down", "out", "away"], "dapAn": 1,
+              "giaiThich": "turn down an offer = từ chối lời mời. turn off = tắt, turn out = hoá ra là, turn away = quay đi / không cho vào — không hợp với 'the job'.",
+              "tu": ["turn down", "offer", "salary"] },
+            { "id": "21", "kieu": "chon", "de": "By the time we arrived at the theatre, the play ___.", "luaChon": ["has already started", "already starts", "had already started", "would already start"], "dapAn": 2,
+              "giaiThich": "By the time + quá khứ đơn, mệnh đề chính dùng quá khứ hoàn thành (had + V3) để chỉ việc xảy ra TRƯỚC: lúc chúng tôi đến thì vở kịch đã bắt đầu rồi. has started là hiện tại hoàn thành, không đi với mốc quá khứ.",
+              "tu": ["by the time", "past perfect"] },
+            { "id": "22", "kieu": "chon", "de": "Not only ___ the exam, but she also got the highest mark in the class.", "luaChon": ["did she pass", "she passed", "she did pass", "passed she"], "dapAn": 0,
+              "giaiThich": "Not only đứng đầu câu ⇒ đảo ngữ: trợ động từ + chủ ngữ + động từ nguyên mẫu (did she pass). 'passed she' sai vì tiếng Anh không đảo động từ thường lên trước chủ ngữ.",
+              "tu": ["not only … but also", "inversion"] },
+            { "id": "23", "kieu": "chon", "de": "Although remote working was introduced as a temporary measure, many firms have since made it permanent. Employers say the savings on office space outweigh the difficulty of supervising staff from a distance, while employees value the time no longer lost to commuting.\n\nAccording to the text, why are employers willing to keep remote working?", "luaChon": ["They find it easier to supervise their staff.", "They spend less money on offices.", "Their employees asked for higher pay.", "Commuting has become more expensive."], "dapAn": 1,
+              "giaiThich": "'the savings on office space outweigh the difficulty of supervising staff from a distance' — khoản tiết kiệm mặt bằng lớn hơn khó khăn quản lý. A ngược bài (quản lý từ xa là KHÓ); việc đi lại là lợi ích của nhân viên, không phải lý do của chủ.",
+              "tu": ["outweigh", "savings", "supervise"] },
+            { "id": "24", "kieu": "chon",
+              "nghe": [
+                { "g": "uk-nu", "t": "I was going to take the job in Manchester, but in the end I couldn't face moving again. If the salary had been a bit higher, I might have been tempted." },
+                { "g": "us-nu", "t": "What did the woman decide to do?" }
+              ],
+              "de": "What did the woman decide to do?", "luaChon": ["She did not take the job.", "She accepted the job for a higher salary.", "She is still thinking about the offer."], "dapAn": 0,
+              "giaiThich": "Lời nghe: 'I was going to take the job in Manchester, but in the end I couldn't face moving again. If the salary had been a bit higher, I might have been tempted.' (Tôi đã định nhận việc nhưng rốt cuộc không chịu nổi việc chuyển nhà lần nữa; giá lương cao hơn chút thì có lẽ tôi đã xiêu lòng.) was going to + but = dự định không thành; câu điều kiện loại 3 cho thấy lương KHÔNG cao hơn.",
+              "tu": ["was going to", "can't face", "tempted"] }
+          ]
+        }
+      ]
+    }
+  ]
+}

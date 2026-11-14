@@ -263,3 +263,10 @@ Mẫu một mục:
 - **Cách sửa:** `cn('… p-5', className)` (tailwind-merge bỏ `p-5` khi người gọi truyền padding); tsc frontend xanh.
 - **Ảnh hưởng:** trang admin dùng `Section` (phơi nhiễm, chưa hỏng).
 - **Bài học:** component nhận `className` để người gọi tuỳ biến phải gộp bằng `cn()`, không nối chuỗi.
+
+### 14/11/2026 — CT Language (thi thử) — lượt free "1 đề/cấp/tuần" đếm cả lượt của tuần SAU
+- **Triệu chứng:** test DB: người dùng free đã mở đề 1 tuần này + một lượt đề 2 có `batDauLuc` rơi vào tuần sau ⇒ danh mục báo đề 2 `duocThi = true` ngay trong tuần này (lẽ ra bị khoá).
+- **Nguyên nhân:** `src/services/ctlanguage/thi.ts` lọc `batDauLuc: { gte: dauTuanVn(bayGio) }` — chỉ có cận dưới, nên mọi lượt từ đầu tuần TRỞ ĐI (kể cả tương lai / đồng hồ lệch) đều tính là "đã thi tuần này".
+- **Cách sửa:** `trongTuan()` trả `{ gte: thứ Hai 00:00 VN, lt: thứ Hai kế }`, dùng ở cả `deDaThiTuanNay` lẫn `danhMuc`; `thi.db.test.ts` có ca "tuần sau có lượt mới".
+- **Ảnh hưởng:** chưa lên prod (bắt trong test trước khi commit).
+- **Bài học:** "trong tuần/ngày này" là một KHOẢNG hai đầu — viết luôn cả `gte` lẫn `lt`, và test bằng `bayGio` tiêm vào chứ không dựa `new Date()`.

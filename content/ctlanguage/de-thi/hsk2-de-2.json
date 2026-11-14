@@ -1,0 +1,1497 @@
+{
+  "id": "hsk2-de-2",
+  "nn": "zh",
+  "kyThi": "HSK",
+  "cap": "HSK2",
+  "ten": "HSK 2 · Đề 2",
+  "moTa": "Đề thi thử HSK 2 tự soạn, nội dung khác hẳn Đề 1: Nghe 35 câu · Đọc 25 câu · đạt 120/200.",
+  "diemDat": 120,
+  "xepHang": true,
+  "phan": [
+    {
+      "id": "nghe",
+      "ten": "Nghe 听力",
+      "kyNang": "nghe",
+      "phut": 25,
+      "diemToiDa": 100,
+      "nhom": [
+        {
+          "huongDan": "Phần 1 — Nghe một câu, xét mô tả hình bên dưới ĐÚNG hay SAI so với câu vừa nghe.",
+          "ngheLan": 2,
+          "cau": [
+            {
+              "id": "1",
+              "kieu": "chon",
+              "nghe": [
+                {
+                  "g": "zh-nu",
+                  "t": "她在洗衣服。"
+                }
+              ],
+              "de": "Hình: một người phụ nữ đang nấu cơm.",
+              "luaChon": [
+                "Đúng",
+                "Sai"
+              ],
+              "dapAn": 1,
+              "giaiThich": "Lời nghe: 她在洗衣服。(Tā zài xǐ yīfu.) = Cô ấy đang giặt quần áo. Hình là nấu cơm (做饭 zuò fàn) ⇒ Sai. 洗 (xǐ) = giặt, rửa.",
+              "tu": [
+                "洗",
+                "衣服"
+              ]
+            },
+            {
+              "id": "2",
+              "kieu": "chon",
+              "nghe": [
+                {
+                  "g": "zh-nam",
+                  "t": "爸爸正在看电视。"
+                }
+              ],
+              "de": "Hình: một người đàn ông đang ngồi xem tivi.",
+              "luaChon": [
+                "Đúng",
+                "Sai"
+              ],
+              "dapAn": 0,
+              "giaiThich": "Lời nghe: 爸爸正在看电视。(Bàba zhèngzài kàn diànshì.) = Bố đang xem tivi — khớp hình. 正在 = đang; 电视 = tivi.",
+              "tu": [
+                "正在",
+                "电视"
+              ]
+            },
+            {
+              "id": "3",
+              "kieu": "chon",
+              "nghe": [
+                {
+                  "g": "zh-nu",
+                  "t": "我们坐船去旅游。"
+                }
+              ],
+              "de": "Hình: mấy người đang ngồi trên thuyền.",
+              "luaChon": [
+                "Đúng",
+                "Sai"
+              ],
+              "dapAn": 0,
+              "giaiThich": "Lời nghe: 我们坐船去旅游。(Wǒmen zuò chuán qù lǚyóu.) = Chúng tôi đi du lịch bằng thuyền — khớp hình. 船 (chuán) = thuyền, tàu thuỷ; 旅游 (lǚyóu) = du lịch.",
+              "tu": [
+                "船",
+                "旅游"
+              ]
+            },
+            {
+              "id": "4",
+              "kieu": "chon",
+              "nghe": [
+                {
+                  "g": "zh-nam",
+                  "t": "我家的猫是黑色的。"
+                }
+              ],
+              "de": "Hình: một con mèo trắng.",
+              "luaChon": [
+                "Đúng",
+                "Sai"
+              ],
+              "dapAn": 1,
+              "giaiThich": "Lời nghe: 我家的猫是黑色的。(Wǒ jiā de māo shì hēisè de.) = Mèo nhà tôi màu đen. Hình là mèo trắng (白 bái) ⇒ Sai. 黑 (hēi) = đen.",
+              "tu": [
+                "黑",
+                "白"
+              ]
+            },
+            {
+              "id": "5",
+              "kieu": "chon",
+              "nghe": [
+                {
+                  "g": "zh-nu",
+                  "t": "我很喜欢吃鱼。"
+                }
+              ],
+              "de": "Hình: một đĩa cá.",
+              "luaChon": [
+                "Đúng",
+                "Sai"
+              ],
+              "dapAn": 0,
+              "giaiThich": "Lời nghe: 我很喜欢吃鱼。(Wǒ hěn xǐhuan chī yú.) = Tôi rất thích ăn cá — khớp hình. 鱼 (yú) = cá.",
+              "tu": [
+                "鱼"
+              ]
+            },
+            {
+              "id": "6",
+              "kieu": "chon",
+              "nghe": [
+                {
+                  "g": "zh-nam",
+                  "t": "今天是晴天。"
+                }
+              ],
+              "de": "Hình: bầu trời u ám, đầy mây đen.",
+              "luaChon": [
+                "Đúng",
+                "Sai"
+              ],
+              "dapAn": 1,
+              "giaiThich": "Lời nghe: 今天是晴天。(Jīntiān shì qíngtiān.) = Hôm nay trời nắng đẹp. Hình là trời âm u (阴天 yīntiān) ⇒ Sai. 晴 (qíng) = quang, nắng ↔ 阴 (yīn) = âm u.",
+              "tu": [
+                "晴",
+                "阴"
+              ]
+            },
+            {
+              "id": "7",
+              "kieu": "chon",
+              "nghe": [
+                {
+                  "g": "zh-nu",
+                  "t": "弟弟还在睡觉。"
+                }
+              ],
+              "de": "Hình: một cậu bé đang ngồi đọc sách.",
+              "luaChon": [
+                "Đúng",
+                "Sai"
+              ],
+              "dapAn": 1,
+              "giaiThich": "Lời nghe: 弟弟还在睡觉。(Dìdi hái zài shuìjiào.) = Em trai vẫn đang ngủ. Hình là đọc sách (看书) ⇒ Sai. 还 (hái) = vẫn còn.",
+              "tu": [
+                "还",
+                "睡觉"
+              ]
+            },
+            {
+              "id": "8",
+              "kieu": "chon",
+              "nghe": [
+                {
+                  "g": "zh-nam",
+                  "t": "她们一起跳舞。"
+                }
+              ],
+              "de": "Hình: hai cô gái đang nhảy múa cùng nhau.",
+              "luaChon": [
+                "Đúng",
+                "Sai"
+              ],
+              "dapAn": 0,
+              "giaiThich": "Lời nghe: 她们一起跳舞。(Tāmen yìqǐ tiàowǔ.) = Các cô ấy cùng nhau nhảy múa — khớp hình. 一起 (yìqǐ) = cùng nhau; 跳舞 = nhảy múa.",
+              "tu": [
+                "一起",
+                "跳舞"
+              ]
+            },
+            {
+              "id": "9",
+              "kieu": "chon",
+              "nghe": [
+                {
+                  "g": "zh-nu",
+                  "t": "这是我新买的自行车。"
+                }
+              ],
+              "de": "Hình: một chiếc ô tô mới.",
+              "luaChon": [
+                "Đúng",
+                "Sai"
+              ],
+              "dapAn": 1,
+              "giaiThich": "Lời nghe: 这是我新买的自行车。(Zhè shì wǒ xīn mǎi de zìxíngchē.) = Đây là chiếc xe đạp tôi mới mua. Hình là ô tô ⇒ Sai. 自行车 (zìxíngchē) = xe đạp; 新 = mới.",
+              "tu": [
+                "自行车",
+                "新"
+              ]
+            },
+            {
+              "id": "10",
+              "kieu": "chon",
+              "nghe": [
+                {
+                  "g": "zh-nam",
+                  "t": "医生在给孩子看病。"
+                }
+              ],
+              "de": "Hình: bác sĩ đang khám bệnh cho một em bé.",
+              "luaChon": [
+                "Đúng",
+                "Sai"
+              ],
+              "dapAn": 0,
+              "giaiThich": "Lời nghe: 医生在给孩子看病。(Yīshēng zài gěi háizi kànbìng.) = Bác sĩ đang khám bệnh cho đứa trẻ — khớp hình. 给…看病 = khám bệnh cho ai; 孩子 = trẻ con.",
+              "tu": [
+                "孩子",
+                "给"
+              ]
+            }
+          ]
+        },
+        {
+          "huongDan": "Phần 2 — Nghe một hội thoại ngắn, chọn mô tả hình khớp với nội dung hội thoại.",
+          "ngheLan": 2,
+          "cau": [
+            {
+              "id": "11",
+              "kieu": "chon",
+              "nghe": [
+                {
+                  "g": "zh-nu",
+                  "t": "你中午想吃什么？"
+                },
+                {
+                  "g": "zh-nam",
+                  "t": "我想吃米饭和羊肉。"
+                }
+              ],
+              "de": "Hình nào khớp với hội thoại?",
+              "luaChon": [
+                "Một bát mì",
+                "Một đĩa cá",
+                "Một quả dưa hấu",
+                "Cơm và thịt dê"
+              ],
+              "dapAn": 3,
+              "giaiThich": "Nữ: 你中午想吃什么？(Trưa nay anh muốn ăn gì?) — Nam: 我想吃米饭和羊肉。(Tôi muốn ăn cơm với thịt dê.) 羊肉 (yángròu) = thịt dê / cừu; 米饭 = cơm.",
+              "tu": [
+                "羊肉",
+                "米饭"
+              ]
+            },
+            {
+              "id": "12",
+              "kieu": "chon",
+              "nghe": [
+                {
+                  "g": "zh-nam",
+                  "t": "你的小狗在哪儿？"
+                },
+                {
+                  "g": "zh-nu",
+                  "t": "它在椅子下面睡觉呢。"
+                }
+              ],
+              "de": "Hình nào khớp với hội thoại?",
+              "luaChon": [
+                "Con chó nằm trên bàn",
+                "Con chó chạy ngoài sân",
+                "Con chó ngủ dưới ghế",
+                "Con mèo ngủ dưới ghế"
+              ],
+              "dapAn": 2,
+              "giaiThich": "Nam: 你的小狗在哪儿？(Chó con của chị đâu rồi?) — Nữ: 它在椅子下面睡觉呢。(Nó đang ngủ dưới ghế.) 它 (tā) = nó (chỉ con vật, đồ vật); 椅子下面 = dưới ghế. Bẫy: 狗 là chó, không phải mèo (猫).",
+              "tu": [
+                "它",
+                "椅子"
+              ]
+            },
+            {
+              "id": "13",
+              "kieu": "chon",
+              "nghe": [
+                {
+                  "g": "zh-nu",
+                  "t": "你上午去哪儿了？"
+                },
+                {
+                  "g": "zh-nam",
+                  "t": "我去游泳了，游了一个小时。"
+                }
+              ],
+              "de": "Hình nào khớp với hội thoại?",
+              "luaChon": [
+                "Một người đàn ông đang bơi",
+                "Một người đàn ông đang chạy bộ",
+                "Một người đàn ông đang đá bóng",
+                "Một người đàn ông đang xem phim"
+              ],
+              "dapAn": 0,
+              "giaiThich": "Nữ: 你上午去哪儿了？(Sáng nay anh đi đâu thế?) — Nam: 我去游泳了，游了一个小时。(Tôi đi bơi, bơi một tiếng.) 游泳 (yóuyǒng) = bơi; 小时 (xiǎoshí) = tiếng đồng hồ.",
+              "tu": [
+                "游泳",
+                "小时"
+              ]
+            },
+            {
+              "id": "14",
+              "kieu": "chon",
+              "nghe": [
+                {
+                  "g": "zh-nam",
+                  "t": "生日快乐！这是送给你的。"
+                },
+                {
+                  "g": "zh-nu",
+                  "t": "谢谢！这个杯子真漂亮。"
+                }
+              ],
+              "de": "Hình nào khớp với hội thoại?",
+              "luaChon": [
+                "Người đàn ông tặng cô gái một quyển sách",
+                "Người đàn ông tặng cô gái một cái cốc",
+                "Người đàn ông tặng cô gái một chiếc áo",
+                "Người đàn ông tặng cô gái một chiếc điện thoại"
+              ],
+              "dapAn": 1,
+              "giaiThich": "Nam: 生日快乐！这是送给你的。(Chúc mừng sinh nhật! Cái này tặng em.) — Nữ: 谢谢！这个杯子真漂亮。(Cảm ơn! Cái cốc này đẹp thật.) Món quà là 杯子 (bēizi) = cái cốc. 快乐 (kuàilè) = vui vẻ.",
+              "tu": [
+                "快乐",
+                "送",
+                "杯子"
+              ]
+            },
+            {
+              "id": "15",
+              "kieu": "chon",
+              "nghe": [
+                {
+                  "g": "zh-nu",
+                  "t": "你在做什么？"
+                },
+                {
+                  "g": "zh-nam",
+                  "t": "我在准备明天的考试，别说话。"
+                }
+              ],
+              "de": "Hình nào khớp với hội thoại?",
+              "luaChon": [
+                "Một chàng trai đang ngủ",
+                "Một chàng trai đang hát",
+                "Một chàng trai đang gọi điện thoại",
+                "Một chàng trai đang ngồi ôn bài"
+              ],
+              "dapAn": 3,
+              "giaiThich": "Nữ: 你在做什么？(Anh đang làm gì thế?) — Nam: 我在准备明天的考试，别说话。(Anh đang ôn cho bài thi ngày mai, đừng nói chuyện.) 准备考试 = chuẩn bị thi ⇒ đang ôn bài. 别 = đừng.",
+              "tu": [
+                "准备",
+                "考试",
+                "别"
+              ]
+            },
+            {
+              "id": "16",
+              "kieu": "chon",
+              "nghe": [
+                {
+                  "g": "zh-nam",
+                  "t": "你姐姐呢？"
+                },
+                {
+                  "g": "zh-nu",
+                  "t": "她在教室里给学生上课。"
+                }
+              ],
+              "de": "Hình nào khớp với hội thoại?",
+              "luaChon": [
+                "Một cô giáo đang dạy học trong lớp",
+                "Một nữ bác sĩ đang khám bệnh",
+                "Một cô phục vụ đang bưng món ăn",
+                "Một cô gái đang mua đồ ở cửa hàng"
+              ],
+              "dapAn": 0,
+              "giaiThich": "Nam: 你姐姐呢？(Chị gái bạn đâu?) — Nữ: 她在教室里给学生上课。(Chị ấy đang dạy học sinh trong lớp.) 教室 (jiàoshì) = phòng học; 给学生上课 = lên lớp dạy học sinh.",
+              "tu": [
+                "教室",
+                "课"
+              ]
+            },
+            {
+              "id": "17",
+              "kieu": "chon",
+              "nghe": [
+                {
+                  "g": "zh-nu",
+                  "t": "这些西瓜怎么卖？"
+                },
+                {
+                  "g": "zh-nam",
+                  "t": "两块钱一公斤，很好吃。"
+                }
+              ],
+              "de": "Hình nào khớp với hội thoại?",
+              "luaChon": [
+                "Một người đang bán táo",
+                "Một người đang bán trứng",
+                "Một người đang bán dưa hấu",
+                "Một người đang bán cá"
+              ],
+              "dapAn": 2,
+              "giaiThich": "Nữ: 这些西瓜怎么卖？(Dưa hấu này bán thế nào?) — Nam: 两块钱一公斤，很好吃。(Hai tệ một cân, ngon lắm.) 西瓜 (xīguā) = dưa hấu; 卖 (mài) = bán — khác thanh điệu với 买 (mǎi) = mua.",
+              "tu": [
+                "西瓜",
+                "卖",
+                "公斤"
+              ]
+            },
+            {
+              "id": "18",
+              "kieu": "chon",
+              "nghe": [
+                {
+                  "g": "zh-nam",
+                  "t": "你在找什么？"
+                },
+                {
+                  "g": "zh-nu",
+                  "t": "我的电影票，我找不到电影票了。"
+                }
+              ],
+              "de": "Hình nào khớp với hội thoại?",
+              "luaChon": [
+                "Một cô gái đang xem phim",
+                "Một cô gái đang lục tìm đồ trong túi",
+                "Một cô gái đang xếp hàng mua vé",
+                "Một cô gái đang ngủ"
+              ],
+              "dapAn": 1,
+              "giaiThich": "Nam: 你在找什么？(Em đang tìm gì thế?) — Nữ: 我的电影票，我找不到电影票了。(Vé xem phim của em, em không tìm thấy vé nữa.) 找 (zhǎo) = tìm ⇒ cô ấy đang tìm đồ; 票 (piào) = vé. Bẫy: nghe 电影票 dễ chọn \"xem phim\" hay \"mua vé\".",
+              "tu": [
+                "找",
+                "票"
+              ]
+            },
+            {
+              "id": "19",
+              "kieu": "chon",
+              "nghe": [
+                {
+                  "g": "zh-nu",
+                  "t": "你儿子在哪儿？"
+                },
+                {
+                  "g": "zh-nam",
+                  "t": "他在房间里玩电脑呢。"
+                }
+              ],
+              "de": "Hình nào khớp với hội thoại?",
+              "luaChon": [
+                "Một cậu bé ngồi chơi máy tính",
+                "Một cậu bé ngồi xem tivi",
+                "Một cậu bé đang đọc sách",
+                "Một cậu bé đang ngủ"
+              ],
+              "dapAn": 0,
+              "giaiThich": "Nữ: 你儿子在哪儿？(Con trai anh đâu?) — Nam: 他在房间里玩电脑呢。(Nó đang chơi máy tính trong phòng.) 玩 (wán) = chơi; 电脑 = máy tính (khác 电视 = tivi).",
+              "tu": [
+                "玩",
+                "房间"
+              ]
+            },
+            {
+              "id": "20",
+              "kieu": "chon",
+              "nghe": [
+                {
+                  "g": "zh-nam",
+                  "t": "这是你的孩子吗？"
+                },
+                {
+                  "g": "zh-nu",
+                  "t": "是的，她是我女儿，今年三岁了。"
+                }
+              ],
+              "de": "Hình nào khớp với hội thoại?",
+              "luaChon": [
+                "Hai vợ chồng đi dạo",
+                "Cô giáo và một học sinh lớn",
+                "Người mẹ và cô con gái nhỏ",
+                "Hai chị em gái bằng tuổi nhau"
+              ],
+              "dapAn": 2,
+              "giaiThich": "Nam: 这是你的孩子吗？(Đây là con chị à?) — Nữ: 是的，她是我女儿，今年三岁了。(Vâng, nó là con gái tôi, năm nay 3 tuổi.) 孩子 (háizi) = con, trẻ nhỏ; 女儿 = con gái.",
+              "tu": [
+                "孩子",
+                "女儿"
+              ]
+            }
+          ]
+        },
+        {
+          "huongDan": "Phần 3 — Nghe hội thoại hai lượt lời và một câu hỏi, chọn câu trả lời đúng.",
+          "ngheLan": 2,
+          "cau": [
+            {
+              "id": "21",
+              "kieu": "chon",
+              "nghe": [
+                {
+                  "g": "zh-nu",
+                  "t": "你们公司有多少人？"
+                },
+                {
+                  "g": "zh-nam",
+                  "t": "去年有五十个，今年已经有一百多个了。"
+                },
+                {
+                  "g": "zh-nu",
+                  "t": "今年公司有多少人？"
+                }
+              ],
+              "de": "今年公司有多少人？(Jīnnián gōngsī yǒu duōshao rén?)",
+              "luaChon": [
+                "五十个 (wǔshí ge)",
+                "五十多个 (wǔshí duō ge)",
+                "一百多个 (yìbǎi duō ge)"
+              ],
+              "dapAn": 2,
+              "giaiThich": "Nữ: 你们公司有多少人？(Công ty anh có bao nhiêu người?) — Nam: 去年有五十个，今年已经有一百多个了。(Năm ngoái có 50, năm nay đã hơn 100 rồi.) Hỏi NĂM NAY ⇒ 一百多个. Bẫy: 五十 là số của 去年 (năm ngoái).",
+              "tu": [
+                "去年",
+                "已经",
+                "百"
+              ]
+            },
+            {
+              "id": "22",
+              "kieu": "chon",
+              "nghe": [
+                {
+                  "g": "zh-nam",
+                  "t": "小李，你妈妈身体好吗？"
+                },
+                {
+                  "g": "zh-nu",
+                  "t": "很好，她每天早上都去运动。"
+                },
+                {
+                  "g": "zh-nu",
+                  "t": "小李的妈妈身体怎么样？"
+                }
+              ],
+              "de": "小李的妈妈身体怎么样？(Xiǎo Lǐ de māma shēntǐ zěnmeyàng?)",
+              "luaChon": [
+                "不太好 (bú tài hǎo)",
+                "很好 (hěn hǎo)",
+                "生病了 (shēngbìng le)"
+              ],
+              "dapAn": 1,
+              "giaiThich": "Nam: 小李，你妈妈身体好吗？(Tiểu Lý, mẹ em có khoẻ không?) — Nữ: 很好，她每天早上都去运动。(Rất khoẻ, sáng nào mẹ cũng đi tập thể dục.) 身体 (shēntǐ) = sức khoẻ; 运动 (yùndòng) = vận động, thể thao.",
+              "tu": [
+                "身体",
+                "运动"
+              ]
+            },
+            {
+              "id": "23",
+              "kieu": "chon",
+              "nghe": [
+                {
+                  "g": "zh-nu",
+                  "t": "这两件衣服，你觉得哪件好？"
+                },
+                {
+                  "g": "zh-nam",
+                  "t": "白色的比黑色的漂亮，买白的吧。"
+                },
+                {
+                  "g": "zh-nu",
+                  "t": "男的觉得哪件好？"
+                }
+              ],
+              "de": "男的觉得哪件好？(Nán de juéde nǎ jiàn hǎo?)",
+              "luaChon": [
+                "白色的 (báisè de)",
+                "黑色的 (hēisè de)",
+                "红色的 (hóngsè de)"
+              ],
+              "dapAn": 0,
+              "giaiThich": "Nữ: 这两件衣服，你觉得哪件好？(Hai chiếc áo này anh thấy chiếc nào đẹp?) — Nam: 白色的比黑色的漂亮，买白的吧。(Cái trắng đẹp hơn cái đen, mua cái trắng đi.) A 比 B 漂亮 = A đẹp hơn B ⇒ chọn cái trắng. 白 (bái) = trắng.",
+              "tu": [
+                "比",
+                "白",
+                "觉得"
+              ]
+            },
+            {
+              "id": "24",
+              "kieu": "chon",
+              "nghe": [
+                {
+                  "g": "zh-nam",
+                  "t": "已经七点了，你怎么还不回家？"
+                },
+                {
+                  "g": "zh-nu",
+                  "t": "今天事情太多了，我还没做完。"
+                },
+                {
+                  "g": "zh-nu",
+                  "t": "女的为什么还不回家？"
+                }
+              ],
+              "de": "女的为什么还不回家？(Nǚ de wèi shénme hái bù huí jiā?)",
+              "luaChon": [
+                "她在等人 (tā zài děng rén)",
+                "她不想回家 (tā bù xiǎng huí jiā)",
+                "她的事情没做完 (tā de shìqing méi zuò wán)"
+              ],
+              "dapAn": 2,
+              "giaiThich": "Nam: 已经七点了，你怎么还不回家？(7 giờ rồi, sao em vẫn chưa về?) — Nữ: 今天事情太多了，我还没做完。(Hôm nay nhiều việc quá, em vẫn chưa làm xong.) 事情 (shìqing) = sự việc, công việc; 做完 = làm xong.",
+              "tu": [
+                "事情",
+                "完",
+                "还"
+              ]
+            },
+            {
+              "id": "25",
+              "kieu": "chon",
+              "nghe": [
+                {
+                  "g": "zh-nu",
+                  "t": "你会做中国菜吗？"
+                },
+                {
+                  "g": "zh-nam",
+                  "t": "不会，但是我妻子做得非常好。"
+                },
+                {
+                  "g": "zh-nu",
+                  "t": "男的会做中国菜吗？"
+                }
+              ],
+              "de": "男的会做中国菜吗？(Nán de huì zuò Zhōngguó cài ma?)",
+              "luaChon": [
+                "不会 (bú huì)",
+                "会 (huì)",
+                "会一点儿 (huì yìdiǎnr)"
+              ],
+              "dapAn": 0,
+              "giaiThich": "Nữ: 你会做中国菜吗？(Anh biết nấu món Trung Quốc không?) — Nam: 不会，但是我妻子做得非常好。(Không biết, nhưng vợ tôi nấu cực ngon.) Người nam KHÔNG biết nấu; người nấu giỏi là 妻子 (qīzi) = vợ. 但是 = nhưng.",
+              "tu": [
+                "妻子",
+                "但是",
+                "会"
+              ]
+            },
+            {
+              "id": "26",
+              "kieu": "chon",
+              "nghe": [
+                {
+                  "g": "zh-nam",
+                  "t": "请问，去医院怎么走？"
+                },
+                {
+                  "g": "zh-nu",
+                  "t": "向前走，医院就在学校右边。"
+                },
+                {
+                  "g": "zh-nu",
+                  "t": "医院在哪儿？"
+                }
+              ],
+              "de": "医院在哪儿？(Yīyuàn zài nǎr?)",
+              "luaChon": [
+                "学校左边 (xuéxiào zuǒbian)",
+                "学校右边 (xuéxiào yòubian)",
+                "学校后面 (xuéxiào hòumiàn)"
+              ],
+              "dapAn": 1,
+              "giaiThich": "Nam: 请问，去医院怎么走？(Xin hỏi, tới bệnh viện đi thế nào?) — Nữ: 向前走，医院就在学校右边。(Đi thẳng, bệnh viện ở ngay bên phải trường học.) 右边 (yòubian) = bên phải ↔ 左边 (zuǒbian) = bên trái.",
+              "tu": [
+                "右边",
+                "左边",
+                "向"
+              ]
+            },
+            {
+              "id": "27",
+              "kieu": "chon",
+              "nghe": [
+                {
+                  "g": "zh-nu",
+                  "t": "你的汉语说得真好！学了多长时间了？"
+                },
+                {
+                  "g": "zh-nam",
+                  "t": "我学了两年了。"
+                },
+                {
+                  "g": "zh-nu",
+                  "t": "男的学了多长时间汉语？"
+                }
+              ],
+              "de": "男的学了多长时间汉语？(Nán de xué le duō cháng shíjiān Hànyǔ?)",
+              "luaChon": [
+                "两个月 (liǎng ge yuè)",
+                "一年 (yì nián)",
+                "两年 (liǎng nián)"
+              ],
+              "dapAn": 2,
+              "giaiThich": "Nữ: 你的汉语说得真好！学了多长时间了？(Tiếng Trung của anh giỏi thật! Học bao lâu rồi?) — Nam: 我学了两年了。(Tôi học hai năm rồi.) 多长时间 = bao lâu; 两年 = hai năm (年 không cần lượng từ 个, còn 月 thì cần: 两个月).",
+              "tu": [
+                "长",
+                "时间",
+                "两"
+              ]
+            },
+            {
+              "id": "28",
+              "kieu": "chon",
+              "nghe": [
+                {
+                  "g": "zh-nam",
+                  "t": "明天星期六，你想去哪儿玩儿？"
+                },
+                {
+                  "g": "zh-nu",
+                  "t": "我哪儿也不想去，就想在家睡觉。"
+                },
+                {
+                  "g": "zh-nu",
+                  "t": "女的明天想做什么？"
+                }
+              ],
+              "de": "女的明天想做什么？(Nǚ de míngtiān xiǎng zuò shénme?)",
+              "luaChon": [
+                "出去玩儿 (chūqù wánr)",
+                "在家睡觉 (zài jiā shuìjiào)",
+                "去上班 (qù shàngbān)"
+              ],
+              "dapAn": 1,
+              "giaiThich": "Nam: 明天星期六，你想去哪儿玩儿？(Mai thứ Bảy, em muốn đi đâu chơi?) — Nữ: 我哪儿也不想去，就想在家睡觉。(Em chẳng muốn đi đâu cả, chỉ muốn ở nhà ngủ.) 哪儿也不… = đâu cũng không…; 就 = chỉ.",
+              "tu": [
+                "就",
+                "也",
+                "玩"
+              ]
+            },
+            {
+              "id": "29",
+              "kieu": "chon",
+              "nghe": [
+                {
+                  "g": "zh-nu",
+                  "t": "我们几点开始上课？"
+                },
+                {
+                  "g": "zh-nam",
+                  "t": "八点开始，现在已经七点五十了，快走吧。"
+                },
+                {
+                  "g": "zh-nu",
+                  "t": "现在几点了？"
+                }
+              ],
+              "de": "现在几点了？(Xiànzài jǐ diǎn le?)",
+              "luaChon": [
+                "七点五十 (qī diǎn wǔshí)",
+                "八点 (bā diǎn)",
+                "八点十分 (bā diǎn shí fēn)"
+              ],
+              "dapAn": 0,
+              "giaiThich": "Nữ: 我们几点开始上课？(Mấy giờ mình bắt đầu học?) — Nam: 八点开始，现在已经七点五十了，快走吧。(8 giờ bắt đầu, giờ đã 7 giờ 50 rồi, đi nhanh thôi.) Hỏi BÂY GIỜ ⇒ 7:50. Bẫy: 八点 là giờ vào học. 开始 (kāishǐ) = bắt đầu.",
+              "tu": [
+                "开始",
+                "已经",
+                "快"
+              ]
+            },
+            {
+              "id": "30",
+              "kieu": "chon",
+              "nghe": [
+                {
+                  "g": "zh-nam",
+                  "t": "小红，这是你新买的电脑吗？"
+                },
+                {
+                  "g": "zh-nu",
+                  "t": "不是，是我姐姐的，我的那个太慢了。"
+                },
+                {
+                  "g": "zh-nu",
+                  "t": "小红的电脑怎么样？"
+                }
+              ],
+              "de": "小红的电脑怎么样？(Xiǎo Hóng de diànnǎo zěnmeyàng?)",
+              "luaChon": [
+                "很新 (hěn xīn)",
+                "太慢了 (tài màn le)",
+                "很贵 (hěn guì)"
+              ],
+              "dapAn": 1,
+              "giaiThich": "Nam: 小红，这是你新买的电脑吗？(Tiểu Hồng, đây là máy tính em mới mua à?) — Nữ: 不是，是我姐姐的，我的那个太慢了。(Không, của chị em đấy, cái của em chậm quá.) Máy của Tiểu Hồng: 太慢了 (quá chậm). Bẫy: 新 nói về cái máy của chị. 慢 (màn) = chậm.",
+              "tu": [
+                "慢",
+                "新",
+                "姐姐"
+              ]
+            }
+          ]
+        },
+        {
+          "huongDan": "Phần 4 — Nghe hội thoại dài hơn (4–5 lượt lời) và một câu hỏi, chọn câu trả lời đúng.",
+          "ngheLan": 2,
+          "cau": [
+            {
+              "id": "31",
+              "kieu": "chon",
+              "nghe": [
+                {
+                  "g": "zh-nam",
+                  "t": "喂，你到哪儿了？"
+                },
+                {
+                  "g": "zh-nu",
+                  "t": "我还在公共汽车上，路上车很多。"
+                },
+                {
+                  "g": "zh-nam",
+                  "t": "电影七点开始，你能到吗？"
+                },
+                {
+                  "g": "zh-nu",
+                  "t": "可能要晚十分钟，你等等我吧。"
+                },
+                {
+                  "g": "zh-nu",
+                  "t": "女的现在在哪儿？"
+                }
+              ],
+              "de": "女的现在在哪儿？(Nǚ de xiànzài zài nǎr?)",
+              "luaChon": [
+                "家里 (jiā li)",
+                "公共汽车上 (gōnggòng qìchē shang)",
+                "公司 (gōngsī)"
+              ],
+              "dapAn": 1,
+              "giaiThich": "Nam: 喂，你到哪儿了？(A lô, em tới đâu rồi?) — Nữ: 我还在公共汽车上，路上车很多。(Em vẫn đang trên xe buýt, đường đông xe lắm.) — Nam: 电影七点开始，你能到吗？(Phim 7 giờ chiếu, em tới kịp không?) — Nữ: 可能要晚十分钟，你等等我吧。(Chắc muộn 10 phút, anh chờ em nhé.) 路 (lù) = đường; 等 = chờ.",
+              "tu": [
+                "公共汽车",
+                "路",
+                "等"
+              ]
+            },
+            {
+              "id": "32",
+              "kieu": "chon",
+              "nghe": [
+                {
+                  "g": "zh-nu",
+                  "t": "你好，我想找一个房间。"
+                },
+                {
+                  "g": "zh-nam",
+                  "t": "您想住几天？"
+                },
+                {
+                  "g": "zh-nu",
+                  "t": "三天。多少钱一天？"
+                },
+                {
+                  "g": "zh-nam",
+                  "t": "两百块一天。"
+                },
+                {
+                  "g": "zh-nu",
+                  "t": "女的想住几天？"
+                }
+              ],
+              "de": "女的想住几天？(Nǚ de xiǎng zhù jǐ tiān?)",
+              "luaChon": [
+                "一天 (yì tiān)",
+                "两天 (liǎng tiān)",
+                "三天 (sān tiān)"
+              ],
+              "dapAn": 2,
+              "giaiThich": "Nữ: 我想找一个房间。(Tôi muốn tìm một phòng.) — Nam: 您想住几天？(Chị muốn ở mấy ngày?) — Nữ: 三天。多少钱一天？(Ba ngày. Bao nhiêu tiền một ngày?) — Nam: 两百块一天。(200 tệ một ngày.) Ở 三天; bẫy: 两 trong 两百 và 一天 trong câu hỏi giá. 您 (nín) = ngài / anh chị (kính trọng).",
+              "tu": [
+                "房间",
+                "住",
+                "您"
+              ]
+            },
+            {
+              "id": "33",
+              "kieu": "chon",
+              "nghe": [
+                {
+                  "g": "zh-nam",
+                  "t": "昨天给你打电话，你怎么不在家？"
+                },
+                {
+                  "g": "zh-nu",
+                  "t": "我和同学去唱歌了。"
+                },
+                {
+                  "g": "zh-nam",
+                  "t": "唱得高兴吗？"
+                },
+                {
+                  "g": "zh-nu",
+                  "t": "很高兴，我们唱了三个小时。"
+                },
+                {
+                  "g": "zh-nu",
+                  "t": "女的昨天去做什么了？"
+                }
+              ],
+              "de": "女的昨天去做什么了？(Nǚ de zuótiān qù zuò shénme le?)",
+              "luaChon": [
+                "唱歌 (chànggē)",
+                "跳舞 (tiàowǔ)",
+                "看电影 (kàn diànyǐng)"
+              ],
+              "dapAn": 0,
+              "giaiThich": "Nam: 昨天给你打电话，你怎么不在家？(Hôm qua gọi cho em, sao em không ở nhà?) — Nữ: 我和同学去唱歌了。(Em đi hát với bạn học.) — Nam: 唱得高兴吗？(Hát vui không?) — Nữ: 很高兴，我们唱了三个小时。(Vui lắm, bọn em hát ba tiếng.) 唱歌 (chànggē) = hát.",
+              "tu": [
+                "唱歌",
+                "小时"
+              ]
+            },
+            {
+              "id": "34",
+              "kieu": "chon",
+              "nghe": [
+                {
+                  "g": "zh-nu",
+                  "t": "王先生，这是您的药。"
+                },
+                {
+                  "g": "zh-nam",
+                  "t": "一天吃几次？"
+                },
+                {
+                  "g": "zh-nu",
+                  "t": "一天吃两次，早上和晚上吃。"
+                },
+                {
+                  "g": "zh-nam",
+                  "t": "好的，谢谢医生。"
+                },
+                {
+                  "g": "zh-nu",
+                  "t": "药一天吃几次？"
+                }
+              ],
+              "de": "药一天吃几次？(Yào yì tiān chī jǐ cì?)",
+              "luaChon": [
+                "一次 (yí cì)",
+                "两次 (liǎng cì)",
+                "三次 (sān cì)"
+              ],
+              "dapAn": 1,
+              "giaiThich": "Nữ: 王先生，这是您的药。(Anh Vương, đây là thuốc của anh.) — Nam: 一天吃几次？(Một ngày uống mấy lần?) — Nữ: 一天吃两次，早上和晚上吃。(Ngày hai lần, uống sáng và tối.) 次 (cì) = lần; 药 (yào) = thuốc; 早上 / 晚上 = buổi sáng / buổi tối.",
+              "tu": [
+                "次",
+                "药",
+                "晚上"
+              ]
+            },
+            {
+              "id": "35",
+              "kieu": "chon",
+              "nghe": [
+                {
+                  "g": "zh-nam",
+                  "t": "妈妈，我的足球呢？"
+                },
+                {
+                  "g": "zh-nu",
+                  "t": "在你房间的门后面。"
+                },
+                {
+                  "g": "zh-nam",
+                  "t": "没有，我找过了。"
+                },
+                {
+                  "g": "zh-nu",
+                  "t": "那可能在你爸爸的车里，你去看看。"
+                },
+                {
+                  "g": "zh-nam",
+                  "t": "找到了，谢谢妈妈！"
+                },
+                {
+                  "g": "zh-nu",
+                  "t": "足球在哪儿？"
+                }
+              ],
+              "de": "足球在哪儿？(Zúqiú zài nǎr?)",
+              "luaChon": [
+                "房间里 (fángjiān li)",
+                "门后面 (mén hòumiàn)",
+                "爸爸的车里 (bàba de chē li)"
+              ],
+              "dapAn": 2,
+              "giaiThich": "Con: 我的足球呢？(Quả bóng của con đâu?) — Mẹ: 在你房间的门后面。(Sau cánh cửa phòng con.) — Con: 没有，我找过了。(Không có, con tìm rồi.) — Mẹ: 那可能在你爸爸的车里，你去看看。(Thế chắc ở trong xe của bố, con ra xem.) — Con: 找到了！(Tìm thấy rồi!) ⇒ bóng ở trong xe bố. Bẫy: 门后面 đã bị phủ nhận. 门 (mén) = cửa; 找到 = tìm thấy.",
+              "tu": [
+                "门",
+                "找",
+                "可能"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "doc",
+      "ten": "Đọc 阅读",
+      "kyNang": "doc",
+      "phut": 22,
+      "diemToiDa": 100,
+      "nhom": [
+        {
+          "huongDan": "Phần 1 — Đọc câu, chọn mô tả hình khớp với nội dung câu.",
+          "cau": [
+            {
+              "id": "36",
+              "kieu": "chon",
+              "de": "她正在洗水果。(Tā zhèngzài xǐ shuǐguǒ.)",
+              "luaChon": [
+                "Cô gái đang ăn hoa quả",
+                "Cô gái đang rửa hoa quả",
+                "Cô gái đang mua hoa quả",
+                "Cô gái đang giặt quần áo"
+              ],
+              "dapAn": 1,
+              "giaiThich": "Câu nghĩa là \"Cô ấy đang rửa hoa quả\". 洗 (xǐ) = rửa / giặt; 水果 (shuǐguǒ) = hoa quả. Bẫy: 洗 cũng dùng cho quần áo (洗衣服) nhưng ở đây tân ngữ là 水果.",
+              "tu": [
+                "洗",
+                "水果"
+              ]
+            },
+            {
+              "id": "37",
+              "kieu": "chon",
+              "de": "火车站里人很多。(Huǒchēzhàn li rén hěn duō.)",
+              "luaChon": [
+                "Sân bay vắng người",
+                "Lớp học đông học sinh",
+                "Cửa hàng đông khách",
+                "Nhà ga tàu hoả đông người"
+              ],
+              "dapAn": 3,
+              "giaiThich": "Câu nghĩa là \"Trong ga tàu hoả rất đông người\". 火车站 (huǒchēzhàn) = ga tàu hoả; 人很多 = đông người.",
+              "tu": [
+                "火车站",
+                "多"
+              ]
+            },
+            {
+              "id": "38",
+              "kieu": "chon",
+              "de": "他送给妻子一件新衣服。(Tā sòng gěi qīzi yí jiàn xīn yīfu.)",
+              "luaChon": [
+                "Người chồng tặng vợ một chiếc áo mới",
+                "Người vợ tặng chồng một chiếc đồng hồ",
+                "Người đàn ông tự mua áo cho mình",
+                "Hai vợ chồng đang ăn cơm"
+              ],
+              "dapAn": 0,
+              "giaiThich": "Câu nghĩa là \"Anh ấy tặng vợ một chiếc áo mới\". 送给 + người + vật = tặng ai cái gì; 妻子 (qīzi) = vợ; 件 = lượng từ của áo quần.",
+              "tu": [
+                "妻子",
+                "送",
+                "件"
+              ]
+            },
+            {
+              "id": "39",
+              "kieu": "chon",
+              "de": "老师在回答学生的问题。(Lǎoshī zài huídá xuésheng de wèntí.)",
+              "luaChon": [
+                "Học sinh đang làm bài thi",
+                "Cô giáo ngồi một mình đọc báo",
+                "Cô giáo đang trả lời câu hỏi của học sinh",
+                "Học sinh đang chơi ngoài sân"
+              ],
+              "dapAn": 2,
+              "giaiThich": "Câu nghĩa là \"Cô giáo đang trả lời câu hỏi của học sinh\". 回答 (huídá) = trả lời; 问题 (wèntí) = câu hỏi, vấn đề.",
+              "tu": [
+                "回答",
+                "问题"
+              ]
+            },
+            {
+              "id": "40",
+              "kieu": "chon",
+              "de": "小猫在门旁边玩儿。(Xiǎo māo zài mén pángbiān wánr.)",
+              "luaChon": [
+                "Mèo con ngủ trên ghế",
+                "Chó con chơi cạnh cửa",
+                "Mèo con đang uống sữa",
+                "Mèo con chơi cạnh cửa"
+              ],
+              "dapAn": 3,
+              "giaiThich": "Câu nghĩa là \"Mèo con chơi bên cạnh cửa\". 猫 = mèo (không phải 狗 = chó); 门旁边 (mén pángbiān) = cạnh cửa; 玩儿 = chơi.",
+              "tu": [
+                "门",
+                "旁边",
+                "玩"
+              ]
+            }
+          ]
+        },
+        {
+          "huongDan": "Phần 2 — Chọn từ thích hợp điền vào chỗ trống ___.",
+          "cau": [
+            {
+              "id": "41",
+              "kieu": "chon",
+              "de": "我弟弟___我高，大家都觉得他是哥哥。(Wǒ dìdi ___ wǒ gāo, dàjiā dōu juéde tā shì gēge.)",
+              "luaChon": [
+                "和 (hé)",
+                "给 (gěi)",
+                "比 (bǐ)",
+                "对 (duì)"
+              ],
+              "dapAn": 2,
+              "giaiThich": "So sánh hơn: A 比 B + tính từ ⇒ 我弟弟比我高 = em trai cao hơn tôi (nên ai cũng tưởng nó là anh). 和 phải đi với 一样 (\"和我一样高\") mới thành câu so sánh bằng. 大家 (dàjiā) = mọi người.",
+              "tu": [
+                "比",
+                "大家",
+                "高"
+              ]
+            },
+            {
+              "id": "42",
+              "kieu": "chon",
+              "de": "请你___说话，孩子正在睡觉呢。(Qǐng nǐ ___ shuōhuà, háizi zhèngzài shuìjiào ne.)",
+              "luaChon": [
+                "别 (bié)",
+                "也 (yě)",
+                "很 (hěn)",
+                "最 (zuì)"
+              ],
+              "dapAn": 0,
+              "giaiThich": "Con đang ngủ ⇒ nhờ người khác ĐỪNG nói chuyện: 别 + động từ = đừng làm gì. 也 (cũng) trái ý câu; 很 và 最 chỉ mức độ, không đứng trước 说话 trong câu cầu khiến.",
+              "tu": [
+                "别",
+                "说话",
+                "正在"
+              ]
+            },
+            {
+              "id": "43",
+              "kieu": "chon",
+              "de": "这个问题我不___，你去问老师吧。(Zhège wèntí wǒ bù ___, nǐ qù wèn lǎoshī ba.)",
+              "luaChon": [
+                "找 (zhǎo)",
+                "等 (děng)",
+                "送 (sòng)",
+                "懂 (dǒng)"
+              ],
+              "dapAn": 3,
+              "giaiThich": "\"Vấn đề này tôi không hiểu, bạn đi hỏi thầy đi\" ⇒ 懂 (dǒng) = hiểu. 找 (tìm), 等 (chờ), 送 (tặng / tiễn) không khớp nghĩa với việc bảo đi hỏi thầy giáo.",
+              "tu": [
+                "懂",
+                "问题",
+                "问"
+              ]
+            },
+            {
+              "id": "44",
+              "kieu": "chon",
+              "de": "他今天很___，没有时间和我们一起吃饭。(Tā jīntiān hěn ___, méiyǒu shíjiān hé wǒmen yìqǐ chī fàn.)",
+              "luaChon": [
+                "高 (gāo)",
+                "忙 (máng)",
+                "近 (jìn)",
+                "新 (xīn)"
+              ],
+              "dapAn": 1,
+              "giaiThich": "Vế sau \"không có thời gian ăn cơm cùng chúng tôi\" ⇒ vế trước là 很忙 = rất bận. 忙 (máng) = bận; 高 (cao), 近 (gần), 新 (mới) không giải thích được việc thiếu thời gian.",
+              "tu": [
+                "忙",
+                "时间",
+                "一起"
+              ]
+            },
+            {
+              "id": "45",
+              "kieu": "chon",
+              "de": "请问，您贵___？(Qǐngwèn, nín guì ___?)",
+              "luaChon": [
+                "叫 (jiào)",
+                "是 (shì)",
+                "姓 (xìng)",
+                "问 (wèn)"
+              ],
+              "dapAn": 2,
+              "giaiThich": "您贵姓？(Nín guì xìng?) là câu cố định, lịch sự để hỏi HỌ của người đối diện = \"Xin hỏi quý danh?\". 姓 (xìng) = họ. Bẫy: 叫 dùng trong \"你叫什么名字？\", không đi sau 贵.",
+              "tu": [
+                "姓",
+                "您",
+                "贵"
+              ]
+            }
+          ]
+        },
+        {
+          "huongDan": "Phần 3 — Đọc câu, xét nhận định sau dấu ★ ĐÚNG hay SAI.",
+          "cau": [
+            {
+              "id": "46",
+              "kieu": "chon",
+              "de": "我丈夫喜欢喝咖啡，我喜欢喝茶，我们的儿子最喜欢喝牛奶。(Wǒ zhàngfu xǐhuan hē kāfēi, wǒ xǐhuan hē chá, wǒmen de érzi zuì xǐhuan hē niúnǎi.)\n★ 儿子最喜欢喝茶。(Érzi zuì xǐhuan hē chá.)",
+              "luaChon": [
+                "Đúng",
+                "Sai"
+              ],
+              "dapAn": 1,
+              "giaiThich": "Đoạn văn: chồng thích cà phê, \"tôi\" thích trà, con trai 最喜欢喝牛奶 = thích uống sữa nhất ⇒ nhận định \"con trai thích trà nhất\" Sai. Bẫy: 茶 là sở thích của người mẹ. 最 (zuì) = nhất.",
+              "tu": [
+                "最",
+                "牛奶",
+                "丈夫"
+              ]
+            },
+            {
+              "id": "47",
+              "kieu": "chon",
+              "de": "小李家离公司很远，他每天早上六点就起床，坐一个小时的公共汽车去上班。(Xiǎo Lǐ jiā lí gōngsī hěn yuǎn, tā měi tiān zǎoshang liù diǎn jiù qǐchuáng, zuò yí ge xiǎoshí de gōnggòng qìchē qù shàngbān.)\n★ 小李每天起床起得很早。(Xiǎo Lǐ měi tiān qǐchuáng qǐ de hěn zǎo.)",
+              "luaChon": [
+                "Đúng",
+                "Sai"
+              ],
+              "dapAn": 0,
+              "giaiThich": "Đoạn văn: nhà xa công ty, 六点就起床 = mới 6 giờ đã dậy (就 nhấn ý sớm) ⇒ \"dậy rất sớm\" Đúng. 起床 (qǐchuáng) = thức dậy; 小时 = tiếng đồng hồ.",
+              "tu": [
+                "起床",
+                "就",
+                "小时"
+              ]
+            },
+            {
+              "id": "48",
+              "kieu": "chon",
+              "de": "我是去年来北京的，在这儿认识了很多中国朋友，他们都很喜欢帮助我。(Wǒ shì qùnián lái Běijīng de, zài zhèr rènshi le hěn duō Zhōngguó péngyou, tāmen dōu hěn xǐhuan bāngzhù wǒ.)\n★ 他在北京有很多中国朋友。(Tā zài Běijīng yǒu hěn duō Zhōngguó péngyou.)",
+              "luaChon": [
+                "Đúng",
+                "Sai"
+              ],
+              "dapAn": 0,
+              "giaiThich": "Đoạn văn: \"Tôi tới Bắc Kinh năm ngoái, ở đây đã quen rất nhiều bạn Trung Quốc, họ đều thích giúp đỡ tôi\" ⇒ Đúng. 去年 (qùnián) = năm ngoái; 帮助 (bāngzhù) = giúp đỡ.",
+              "tu": [
+                "去年",
+                "帮助",
+                "认识"
+              ]
+            },
+            {
+              "id": "49",
+              "kieu": "chon",
+              "de": "这个手机是我上个月买的，三千多块钱，我觉得很贵，但是我非常喜欢它的颜色。(Zhège shǒujī shì wǒ shàng ge yuè mǎi de, sānqiān duō kuài qián, wǒ juéde hěn guì, dànshì wǒ fēicháng xǐhuan tā de yánsè.)\n★ 他觉得这个手机很便宜。(Tā juéde zhège shǒujī hěn piányi.)",
+              "luaChon": [
+                "Đúng",
+                "Sai"
+              ],
+              "dapAn": 1,
+              "giaiThich": "Đoạn văn: điện thoại hơn 3.000 tệ, 我觉得很贵 = tôi thấy rất đắt ⇒ nhận định \"rất rẻ\" Sai. 千 (qiān) = nghìn; 贵 ↔ 便宜; 颜色 (yánsè) = màu sắc.",
+              "tu": [
+                "千",
+                "贵",
+                "颜色"
+              ]
+            },
+            {
+              "id": "50",
+              "kieu": "chon",
+              "de": "女儿今天考试考得很好，我们准备晚上和她一起去饭店吃饭。(Nǚ'ér jīntiān kǎoshì kǎo de hěn hǎo, wǒmen zhǔnbèi wǎnshang hé tā yìqǐ qù fàndiàn chī fàn.)\n★ 他们今天晚上不在家吃饭。(Tāmen jīntiān wǎnshang bú zài jiā chī fàn.)",
+              "luaChon": [
+                "Đúng",
+                "Sai"
+              ],
+              "dapAn": 0,
+              "giaiThich": "Đoạn văn: con gái thi tốt, bố mẹ định tối nay cùng con 去饭店吃饭 = ra nhà hàng ăn ⇒ tối nay không ăn ở nhà: Đúng. 准备 (zhǔnbèi) = dự định, chuẩn bị; 饭店 = nhà hàng.",
+              "tu": [
+                "准备",
+                "饭店",
+                "晚上"
+              ]
+            }
+          ]
+        },
+        {
+          "huongDan": "Phần 4 — Đọc câu, chọn câu đáp lại / liên quan phù hợp nhất.",
+          "cau": [
+            {
+              "id": "51",
+              "kieu": "chon",
+              "de": "你怎么不穿那件新衣服？(Nǐ zěnme bù chuān nà jiàn xīn yīfu?)",
+              "luaChon": [
+                "我昨天没去学校。(Wǒ zuótiān méi qù xuéxiào.)",
+                "我不认识她。(Wǒ bú rènshi tā.)",
+                "那个商店很远。(Nàge shāngdiàn hěn yuǎn.)",
+                "今天太热了，明天再穿。(Jīntiān tài rè le, míngtiān zài chuān.)"
+              ],
+              "dapAn": 3,
+              "giaiThich": "Hỏi \"Sao bạn không mặc chiếc áo mới kia?\" ⇒ đáp lý do: \"Hôm nay nóng quá, mai hãy mặc\". 穿 (chuān) = mặc; 再 (zài) ở đây = rồi hãy, để sau.",
+              "tu": [
+                "穿",
+                "再",
+                "新"
+              ]
+            },
+            {
+              "id": "52",
+              "kieu": "chon",
+              "de": "我可以坐在这儿吗？(Wǒ kěyǐ zuò zài zhèr ma?)",
+              "luaChon": [
+                "我坐火车去。(Wǒ zuò huǒchē qù.)",
+                "可以，请坐。(Kěyǐ, qǐng zuò.)",
+                "我在这儿工作。(Wǒ zài zhèr gōngzuò.)",
+                "椅子是新的。(Yǐzi shì xīn de.)"
+              ],
+              "dapAn": 1,
+              "giaiThich": "Hỏi xin phép \"Tôi ngồi ở đây được không?\" ⇒ đáp \"Được, mời ngồi\". 可以 (kěyǐ) = có thể, được phép. Bẫy: 我坐火车去 cũng có chữ 坐 nhưng nghĩa là \"đi tàu hoả\".",
+              "tu": [
+                "可以",
+                "坐"
+              ]
+            },
+            {
+              "id": "53",
+              "kieu": "chon",
+              "de": "从这儿到火车站要多长时间？(Cóng zhèr dào huǒchēzhàn yào duō cháng shíjiān?)",
+              "luaChon": [
+                "坐出租车二十分钟就到。(Zuò chūzūchē èrshí fēnzhōng jiù dào.)",
+                "火车票很便宜。(Huǒchē piào hěn piányi.)",
+                "我明天去火车站。(Wǒ míngtiān qù huǒchēzhàn.)",
+                "火车站很大。(Huǒchēzhàn hěn dà.)"
+              ],
+              "dapAn": 0,
+              "giaiThich": "Hỏi 多长时间 (bao lâu) ⇒ phải đáp bằng khoảng thời gian: \"Đi taxi 20 phút là tới\". 从…到… = từ … đến …; 长 (cháng) = dài, lâu. Ba câu kia đều có 火车 nhưng không nói mất bao lâu.",
+              "tu": [
+                "从",
+                "长",
+                "时间"
+              ]
+            },
+            {
+              "id": "54",
+              "kieu": "chon",
+              "de": "你姐姐的孩子多大了？(Nǐ jiějie de háizi duō dà le?)",
+              "luaChon": [
+                "我姐姐很漂亮。(Wǒ jiějie hěn piàoliang.)",
+                "孩子在睡觉。(Háizi zài shuìjiào.)",
+                "已经五岁了。(Yǐjīng wǔ suì le.)",
+                "她有两个孩子。(Tā yǒu liǎng ge háizi.)"
+              ],
+              "dapAn": 2,
+              "giaiThich": "Hỏi 多大了 (bao nhiêu tuổi rồi) ⇒ đáp bằng tuổi: \"Đã 5 tuổi rồi\". Bẫy: \"Chị ấy có hai đứa con\" trả lời cho câu hỏi SỐ con chứ không phải tuổi. 孩子 (háizi) = con, trẻ nhỏ.",
+              "tu": [
+                "孩子",
+                "已经"
+              ]
+            },
+            {
+              "id": "55",
+              "kieu": "chon",
+              "de": "我来介绍一下，这是我的朋友小高。(Wǒ lái jièshào yíxià, zhè shì wǒ de péngyou Xiǎo Gāo.)",
+              "luaChon": [
+                "我比他高。(Wǒ bǐ tā gāo.)",
+                "你好，认识你很高兴。(Nǐ hǎo, rènshi nǐ hěn gāoxìng.)",
+                "他不在家。(Tā bú zài jiā.)",
+                "我没有时间。(Wǒ méiyǒu shíjiān.)"
+              ],
+              "dapAn": 1,
+              "giaiThich": "Khi được giới thiệu \"Đây là bạn tôi, Tiểu Cao\" ⇒ đáp lời chào làm quen: \"Chào bạn, rất vui được quen bạn\". 介绍 (jièshào) = giới thiệu; 一下 = một chút. Bẫy: 高 trong 我比他高 là \"cao\", còn 小高 là tên người.",
+              "tu": [
+                "介绍",
+                "一下",
+                "认识"
+              ]
+            },
+            {
+              "id": "56",
+              "kieu": "chon",
+              "de": "对不起，我来晚了。(Duìbuqǐ, wǒ lái wǎn le.)",
+              "luaChon": [
+                "不客气。(Bú kèqi.)",
+                "我也很累。(Wǒ yě hěn lèi.)",
+                "晚上见。(Wǎnshang jiàn.)",
+                "没关系，电影还没开始。(Méi guānxi, diànyǐng hái méi kāishǐ.)"
+              ],
+              "dapAn": 3,
+              "giaiThich": "Đáp lời xin lỗi 对不起 bằng 没关系 (méi guānxi) = không sao: \"Không sao, phim vẫn chưa bắt đầu\". Bẫy kinh điển: 不客气 dùng để đáp lời CẢM ƠN (谢谢), không đáp lời xin lỗi. 开始 = bắt đầu.",
+              "tu": [
+                "没关系",
+                "开始",
+                "还"
+              ]
+            },
+            {
+              "id": "57",
+              "kieu": "chon",
+              "de": "这个题你会做吗？(Zhège tí nǐ huì zuò ma?)",
+              "luaChon": [
+                "会，我来告诉你怎么做。(Huì, wǒ lái gàosu nǐ zěnme zuò.)",
+                "我会唱歌。(Wǒ huì chànggē.)",
+                "我做了米饭。(Wǒ zuò le mǐfàn.)",
+                "考试已经完了。(Kǎoshì yǐjīng wán le.)"
+              ],
+              "dapAn": 0,
+              "giaiThich": "Hỏi \"Bài này bạn biết làm không?\" ⇒ đáp \"Biết, để mình chỉ cho bạn cách làm\". 题 (tí) = câu hỏi, bài tập; 告诉 (gàosu) = nói cho biết. Các câu khác lặp chữ 会 / 做 nhưng nói chuyện khác.",
+              "tu": [
+                "题",
+                "告诉",
+                "会"
+              ]
+            },
+            {
+              "id": "58",
+              "kieu": "chon",
+              "de": "你喜欢什么颜色？(Nǐ xǐhuan shénme yánsè?)",
+              "luaChon": [
+                "我喜欢小狗。(Wǒ xǐhuan xiǎo gǒu.)",
+                "这件很贵。(Zhè jiàn hěn guì.)",
+                "我最喜欢白色。(Wǒ zuì xǐhuan báisè.)",
+                "颜色很多。(Yánsè hěn duō.)"
+              ],
+              "dapAn": 2,
+              "giaiThich": "Hỏi \"Bạn thích màu gì?\" ⇒ đáp tên một màu: \"Mình thích nhất màu trắng\". 颜色 (yánsè) = màu sắc; 白色 (báisè) = màu trắng; 最 = nhất.",
+              "tu": [
+                "颜色",
+                "白",
+                "最"
+              ]
+            },
+            {
+              "id": "59",
+              "kieu": "chon",
+              "de": "明天我们一起去打篮球，好吗？(Míngtiān wǒmen yìqǐ qù dǎ lánqiú, hǎo ma?)",
+              "luaChon": [
+                "我昨天很忙。(Wǒ zuótiān hěn máng.)",
+                "好，下午三点怎么样？(Hǎo, xiàwǔ sān diǎn zěnmeyàng?)",
+                "篮球是他的。(Lánqiú shì tā de.)",
+                "他跑得很快。(Tā pǎo de hěn kuài.)"
+              ],
+              "dapAn": 1,
+              "giaiThich": "Lời rủ \"Mai mình cùng đi chơi bóng rổ nhé?\" ⇒ nhận lời và hẹn giờ: \"Được, 3 giờ chiều thế nào?\". Bẫy: 我昨天很忙 nói về HÔM QUA, không trả lời lời rủ cho ngày mai. 打篮球 = chơi bóng rổ.",
+              "tu": [
+                "打篮球",
+                "一起"
+              ]
+            },
+            {
+              "id": "60",
+              "kieu": "chon",
+              "de": "你在这家公司工作多长时间了？(Nǐ zài zhè jiā gōngsī gōngzuò duō cháng shíjiān le?)",
+              "luaChon": [
+                "公司在机场旁边。(Gōngsī zài jīchǎng pángbiān.)",
+                "我坐公共汽车上班。(Wǒ zuò gōnggòng qìchē shàngbān.)",
+                "已经十年了。(Yǐjīng shí nián le.)",
+                "我很喜欢这个工作。(Wǒ hěn xǐhuan zhège gōngzuò.)"
+              ],
+              "dapAn": 2,
+              "giaiThich": "Hỏi \"Bạn làm ở công ty này bao lâu rồi?\" (多长时间) ⇒ đáp bằng khoảng thời gian: \"Đã 10 năm rồi\". 公司 (gōngsī) = công ty; 已经…了 = đã … rồi.",
+              "tu": [
+                "公司",
+                "已经",
+                "时间"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

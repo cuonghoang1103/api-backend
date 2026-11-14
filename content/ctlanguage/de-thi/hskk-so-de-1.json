@@ -1,0 +1,531 @@
+{
+  "id": "hskk-so-de-1",
+  "nn": "zh",
+  "kyThi": "HSKK",
+  "cap": "HSKK-SO",
+  "ten": "HSKK Sơ cấp · Đề 1",
+  "moTa": "Đề thi nói HSKK sơ cấp tự soạn: nhắc lại 15 câu · nghe rồi trả lời 10 câu · trả lời 2 câu dài · đạt 60/100.",
+  "diemDat": 60,
+  "xepHang": false,
+  "phan": [
+    {
+      "id": "noi",
+      "ten": "Nói 口试",
+      "kyNang": "noi",
+      "phut": 20,
+      "diemToiDa": 100,
+      "nhom": [
+        {
+          "huongDan": "Phần 1 — Nghe một câu rồi nhắc lại đúng nguyên văn. Mỗi câu nghe 1 lần, nói rõ từng chữ và đúng thanh điệu.",
+          "ngheLan": 1,
+          "cau": [
+            {
+              "id": "1",
+              "kieu": "noi",
+              "noiKieu": "nhacLai",
+              "nghe": [
+                {
+                  "g": "zh-nu",
+                  "t": "今天天气很好。"
+                }
+              ],
+              "de": "Nghe rồi nhắc lại nguyên câu.",
+              "mau": "今天天气很好。",
+              "giaiThich": "Nghĩa: Hôm nay thời tiết rất đẹp. Pinyin: Jīntiān tiānqì hěn hǎo. Mẹo: 很好 là hai thanh 3 liền nhau ⇒ 很 đọc thành thanh 2 (hén hǎo); 气 thanh 4 phải rơi dứt khoát.",
+              "tu": [
+                "天气",
+                "很"
+              ]
+            },
+            {
+              "id": "2",
+              "kieu": "noi",
+              "noiKieu": "nhacLai",
+              "nghe": [
+                {
+                  "g": "zh-nam",
+                  "t": "我们一起去吃饭吧。"
+                }
+              ],
+              "de": "Nghe rồi nhắc lại nguyên câu.",
+              "mau": "我们一起去吃饭吧。",
+              "giaiThich": "Nghĩa: Chúng mình cùng đi ăn cơm nhé. Pinyin: Wǒmen yìqǐ qù chī fàn ba. Mẹo: 一 trước thanh 3 đọc thành yì; 吃 (chī) là âm uốn lưỡi, đừng đọc thành \"chi\" như tiếng Việt; 吧 đọc nhẹ.",
+              "tu": [
+                "一起",
+                "吧"
+              ]
+            },
+            {
+              "id": "3",
+              "kieu": "noi",
+              "noiKieu": "nhacLai",
+              "nghe": [
+                {
+                  "g": "zh-nu",
+                  "t": "她的衣服很漂亮。"
+                }
+              ],
+              "de": "Nghe rồi nhắc lại nguyên câu.",
+              "mau": "她的衣服很漂亮。",
+              "giaiThich": "Nghĩa: Quần áo của cô ấy rất đẹp. Pinyin: Tā de yīfu hěn piàoliang. Mẹo: 的, 服, 亮 đều đọc nhẹ; 漂 (piào) thanh 4, bật hơi âm p.",
+              "tu": [
+                "衣服",
+                "漂亮"
+              ]
+            },
+            {
+              "id": "4",
+              "kieu": "noi",
+              "noiKieu": "nhacLai",
+              "nghe": [
+                {
+                  "g": "zh-nam",
+                  "t": "我每天六点起床。"
+                }
+              ],
+              "de": "Nghe rồi nhắc lại nguyên câu.",
+              "mau": "我每天六点起床。",
+              "giaiThich": "Nghĩa: Ngày nào tôi cũng dậy lúc 6 giờ. Pinyin: Wǒ měi tiān liù diǎn qǐ chuáng. Mẹo: 我每 là hai thanh 3 liền nhau ⇒ 我 đọc lên như thanh 2; 起床: q bật hơi, 床 (chuáng) uốn lưỡi, thanh 2.",
+              "tu": [
+                "每天",
+                "起床"
+              ]
+            },
+            {
+              "id": "5",
+              "kieu": "noi",
+              "noiKieu": "nhacLai",
+              "nghe": [
+                {
+                  "g": "zh-nu",
+                  "t": "这个苹果多少钱？"
+                }
+              ],
+              "de": "Nghe rồi nhắc lại nguyên câu.",
+              "mau": "这个苹果多少钱？",
+              "giaiThich": "Nghĩa: Quả táo này bao nhiêu tiền? Pinyin: Zhège píngguǒ duōshao qián? Mẹo: 这 (zhè) uốn lưỡi; 钱 (qián) thanh 2 đi lên — người Việt hay đọc ngang thành \"chiên\".",
+              "tu": [
+                "苹果",
+                "多少",
+                "钱"
+              ]
+            },
+            {
+              "id": "6",
+              "kieu": "noi",
+              "noiKieu": "nhacLai",
+              "nghe": [
+                {
+                  "g": "zh-nam",
+                  "t": "他哥哥是医生。"
+                }
+              ],
+              "de": "Nghe rồi nhắc lại nguyên câu.",
+              "mau": "他哥哥是医生。",
+              "giaiThich": "Nghĩa: Anh trai của cậu ấy là bác sĩ. Pinyin: Tā gēge shì yīshēng. Mẹo: 哥哥 chữ thứ hai đọc nhẹ; 是 (shì) và 生 (shēng) đều uốn lưỡi, khác âm \"s\" thẳng lưỡi.",
+              "tu": [
+                "哥哥",
+                "医生"
+              ]
+            },
+            {
+              "id": "7",
+              "kieu": "noi",
+              "noiKieu": "nhacLai",
+              "nghe": [
+                {
+                  "g": "zh-nu",
+                  "t": "我想喝一杯热茶。"
+                }
+              ],
+              "de": "Nghe rồi nhắc lại nguyên câu.",
+              "mau": "我想喝一杯热茶。",
+              "giaiThich": "Nghĩa: Tôi muốn uống một cốc trà nóng. Pinyin: Wǒ xiǎng hē yì bēi rè chá. Mẹo: 我想 hai thanh 3 ⇒ đọc wó xiǎng; 热 (rè) âm r uốn lưỡi, không đọc thành \"dưa\" hay \"lưa\".",
+              "tu": [
+                "喝",
+                "杯",
+                "热"
+              ]
+            },
+            {
+              "id": "8",
+              "kieu": "noi",
+              "noiKieu": "nhacLai",
+              "nghe": [
+                {
+                  "g": "zh-nam",
+                  "t": "明天我要去北京。"
+                }
+              ],
+              "de": "Nghe rồi nhắc lại nguyên câu.",
+              "mau": "明天我要去北京。",
+              "giaiThich": "Nghĩa: Ngày mai tôi sẽ đi Bắc Kinh. Pinyin: Míngtiān wǒ yào qù Běijīng. Mẹo: 要去 là hai thanh 4 liền nhau — cả hai đều phải rơi mạnh; 去 (qù) tròn môi âm ü.",
+              "tu": [
+                "明天",
+                "要"
+              ]
+            },
+            {
+              "id": "9",
+              "kieu": "noi",
+              "noiKieu": "nhacLai",
+              "nghe": [
+                {
+                  "g": "zh-nu",
+                  "t": "妈妈正在做饭呢。"
+                }
+              ],
+              "de": "Nghe rồi nhắc lại nguyên câu.",
+              "mau": "妈妈正在做饭呢。",
+              "giaiThich": "Nghĩa: Mẹ đang nấu cơm. Pinyin: Māma zhèngzài zuò fàn ne. Mẹo: 正在做饭 có bốn thanh 4 liên tiếp, đừng để giọng xuống dần thành ngang; phân biệt zh (uốn lưỡi) trong 正 với z (thẳng lưỡi) trong 在, 做.",
+              "tu": [
+                "正在",
+                "做"
+              ]
+            },
+            {
+              "id": "10",
+              "kieu": "noi",
+              "noiKieu": "nhacLai",
+              "nghe": [
+                {
+                  "g": "zh-nam",
+                  "t": "你的汉语说得很好。"
+                }
+              ],
+              "de": "Nghe rồi nhắc lại nguyên câu.",
+              "mau": "你的汉语说得很好。",
+              "giaiThich": "Nghĩa: Bạn nói tiếng Trung rất giỏi. Pinyin: Nǐ de Hànyǔ shuō de hěn hǎo. Mẹo: 得 sau động từ đọc nhẹ \"de\"; 语 (yǔ) là âm ü tròn môi; 很好 đọc hén hǎo.",
+              "tu": [
+                "汉语",
+                "说",
+                "得"
+              ]
+            },
+            {
+              "id": "11",
+              "kieu": "noi",
+              "noiKieu": "nhacLai",
+              "nghe": [
+                {
+                  "g": "zh-nu",
+                  "t": "我家离学校不太远。"
+                }
+              ],
+              "de": "Nghe rồi nhắc lại nguyên câu.",
+              "mau": "我家离学校不太远。",
+              "giaiThich": "Nghĩa: Nhà tôi cách trường không xa lắm. Pinyin: Wǒ jiā lí xuéxiào bú tài yuǎn. Mẹo: 不 trước thanh 4 (太) đổi thành thanh 2: bú tài; 远 (yuǎn) thanh 3 xuống thấp rồi mới lên.",
+              "tu": [
+                "离",
+                "远",
+                "学校"
+              ]
+            },
+            {
+              "id": "12",
+              "kieu": "noi",
+              "noiKieu": "nhacLai",
+              "nghe": [
+                {
+                  "g": "zh-nam",
+                  "t": "昨天晚上我看了电影。"
+                }
+              ],
+              "de": "Nghe rồi nhắc lại nguyên câu.",
+              "mau": "昨天晚上我看了电影。",
+              "giaiThich": "Nghĩa: Tối qua tôi đã xem phim. Pinyin: Zuótiān wǎnshang wǒ kànle diànyǐng. Mẹo: 晚上 chữ 上 đọc nhẹ; 了 đọc nhẹ \"le\", đừng nhấn thành \"lơ\" dài; 影 (yǐng) thanh 3 ở cuối câu đọc đủ.",
+              "tu": [
+                "昨天",
+                "晚上",
+                "电影"
+              ]
+            },
+            {
+              "id": "13",
+              "kieu": "noi",
+              "noiKieu": "nhacLai",
+              "nghe": [
+                {
+                  "g": "zh-nu",
+                  "t": "请问，火车站怎么走？"
+                }
+              ],
+              "de": "Nghe rồi nhắc lại nguyên câu.",
+              "mau": "请问，火车站怎么走？",
+              "giaiThich": "Nghĩa: Xin hỏi, ga tàu hoả đi thế nào? Pinyin: Qǐngwèn, huǒchēzhàn zěnme zǒu? Mẹo: 车 (chē) và 站 (zhàn) uốn lưỡi, còn 怎 (zěn) và 走 (zǒu) thẳng lưỡi — hai nhóm âm này người Việt hay đọc lẫn.",
+              "tu": [
+                "请问",
+                "火车站",
+                "走"
+              ]
+            },
+            {
+              "id": "14",
+              "kieu": "noi",
+              "noiKieu": "nhacLai",
+              "nghe": [
+                {
+                  "g": "zh-nam",
+                  "t": "外面下雨了，别出去了。"
+                }
+              ],
+              "de": "Nghe rồi nhắc lại nguyên câu.",
+              "mau": "外面下雨了，别出去了。",
+              "giaiThich": "Nghĩa: Bên ngoài mưa rồi, đừng ra ngoài nữa. Pinyin: Wàimiàn xià yǔ le, bié chūqù le. Mẹo: 别 (bié) thanh 2; 出 (chū) uốn lưỡi bật hơi; nghỉ một nhịp ngắn ở dấu phẩy.",
+              "tu": [
+                "外面",
+                "下雨",
+                "别"
+              ]
+            },
+            {
+              "id": "15",
+              "kieu": "noi",
+              "noiKieu": "nhacLai",
+              "nghe": [
+                {
+                  "g": "zh-nu",
+                  "t": "因为太忙，所以我没去。"
+                }
+              ],
+              "de": "Nghe rồi nhắc lại nguyên câu.",
+              "mau": "因为太忙，所以我没去。",
+              "giaiThich": "Nghĩa: Vì bận quá nên tôi đã không đi. Pinyin: Yīnwèi tài máng, suǒyǐ wǒ méi qù. Mẹo: 所以我 là ba thanh 3 liền nhau ⇒ đọc suó yí wǒ; 忙 (máng) thanh 2 đi lên.",
+              "tu": [
+                "因为",
+                "所以",
+                "忙"
+              ]
+            }
+          ]
+        },
+        {
+          "huongDan": "Phần 2 — Nghe câu hỏi rồi trả lời ngay bằng một câu ngắn, đủ ý. Câu mẫu chỉ để tham khảo — hãy trả lời theo thông tin thật của bạn.",
+          "ngheLan": 1,
+          "cau": [
+            {
+              "id": "16",
+              "kieu": "noi",
+              "noiKieu": "traLoi",
+              "nghe": [
+                {
+                  "g": "zh-nam",
+                  "t": "你叫什么名字？"
+                }
+              ],
+              "de": "Nghe câu hỏi rồi trả lời ngắn gọn.",
+              "mau": "我叫王明。",
+              "giaiThich": "Hỏi: Bạn tên là gì? Mẫu: Wǒ jiào Wáng Míng. = Tôi tên là Vương Minh. Mẹo: thay bằng tên của bạn; 叫 (jiào) thanh 4 rơi dứt khoát, đừng đọc ngang.",
+              "tu": [
+                "叫",
+                "名字"
+              ]
+            },
+            {
+              "id": "17",
+              "kieu": "noi",
+              "noiKieu": "traLoi",
+              "nghe": [
+                {
+                  "g": "zh-nu",
+                  "t": "你是哪国人？"
+                }
+              ],
+              "de": "Nghe câu hỏi rồi trả lời ngắn gọn.",
+              "mau": "我是越南人。",
+              "giaiThich": "Hỏi: Bạn là người nước nào? Mẫu: Wǒ shì Yuènán rén. = Tôi là người Việt Nam. Mẹo: 越 (yuè) thanh 4, 南 (nán) thanh 2; 人 (rén) âm r uốn lưỡi, không đọc thành \"dấn\".",
+              "tu": [
+                "哪",
+                "越南",
+                "人"
+              ]
+            },
+            {
+              "id": "18",
+              "kieu": "noi",
+              "noiKieu": "traLoi",
+              "nghe": [
+                {
+                  "g": "zh-nam",
+                  "t": "你家有几口人？"
+                }
+              ],
+              "de": "Nghe câu hỏi rồi trả lời ngắn gọn.",
+              "mau": "我家有四口人。",
+              "giaiThich": "Hỏi: Nhà bạn có mấy người? Mẫu: Wǒ jiā yǒu sì kǒu rén. = Nhà tôi có bốn người. Mẹo: 口 là lượng từ đếm người trong gia đình; 四 (sì) thẳng lưỡi thanh 4, đừng lẫn với 十 (shí) uốn lưỡi thanh 2.",
+              "tu": [
+                "口",
+                "几",
+                "家"
+              ]
+            },
+            {
+              "id": "19",
+              "kieu": "noi",
+              "noiKieu": "traLoi",
+              "nghe": [
+                {
+                  "g": "zh-nu",
+                  "t": "你今年多大了？"
+                }
+              ],
+              "de": "Nghe câu hỏi rồi trả lời ngắn gọn.",
+              "mau": "我今年二十岁了。",
+              "giaiThich": "Hỏi: Năm nay bạn bao nhiêu tuổi? Mẫu: Wǒ jīnnián èrshí suì le. = Năm nay tôi 20 tuổi. Mẹo: 二 (èr) cong lưỡi lên; 岁 (suì) thanh 4; nhớ có 了 cuối câu cho tự nhiên.",
+              "tu": [
+                "多大",
+                "岁",
+                "今年"
+              ]
+            },
+            {
+              "id": "20",
+              "kieu": "noi",
+              "noiKieu": "traLoi",
+              "nghe": [
+                {
+                  "g": "zh-nam",
+                  "t": "今天星期几？"
+                }
+              ],
+              "de": "Nghe câu hỏi rồi trả lời ngắn gọn.",
+              "mau": "今天星期六。",
+              "giaiThich": "Hỏi: Hôm nay thứ mấy? Mẫu: Jīntiān xīngqīliù. = Hôm nay thứ Bảy. Mẹo: 星期 hai thanh 1 giữ cao và đều; 六 (liù) thanh 4. Thứ = 星期 + số (thứ Hai là 一).",
+              "tu": [
+                "星期",
+                "几"
+              ]
+            },
+            {
+              "id": "21",
+              "kieu": "noi",
+              "noiKieu": "traLoi",
+              "nghe": [
+                {
+                  "g": "zh-nu",
+                  "t": "你喜欢吃什么水果？"
+                }
+              ],
+              "de": "Nghe câu hỏi rồi trả lời ngắn gọn.",
+              "mau": "我喜欢吃西瓜。",
+              "giaiThich": "Hỏi: Bạn thích ăn hoa quả gì? Mẫu: Wǒ xǐhuan chī xīguā. = Tôi thích ăn dưa hấu. Mẹo: 西 (xī) âm x thẳng lưỡi, khác 吃 (chī) uốn lưỡi; 水果 hai thanh 3 ⇒ đọc shuí guǒ.",
+              "tu": [
+                "喜欢",
+                "水果",
+                "西瓜"
+              ]
+            },
+            {
+              "id": "22",
+              "kieu": "noi",
+              "noiKieu": "traLoi",
+              "nghe": [
+                {
+                  "g": "zh-nam",
+                  "t": "你每天几点睡觉？"
+                }
+              ],
+              "de": "Nghe câu hỏi rồi trả lời ngắn gọn.",
+              "mau": "我每天十一点睡觉。",
+              "giaiThich": "Hỏi: Mỗi ngày bạn đi ngủ lúc mấy giờ? Mẫu: Wǒ měi tiān shíyī diǎn shuìjiào. = Tôi đi ngủ lúc 11 giờ mỗi ngày. Mẹo: 睡觉 hai thanh 4 liền nhau; 睡 (shuì) uốn lưỡi; giờ đứng TRƯỚC động từ.",
+              "tu": [
+                "每天",
+                "点",
+                "睡觉"
+              ]
+            },
+            {
+              "id": "23",
+              "kieu": "noi",
+              "noiKieu": "traLoi",
+              "nghe": [
+                {
+                  "g": "zh-nu",
+                  "t": "你会游泳吗？"
+                }
+              ],
+              "de": "Nghe câu hỏi rồi trả lời ngắn gọn.",
+              "mau": "我会游泳。",
+              "giaiThich": "Hỏi: Bạn có biết bơi không? Mẫu: Wǒ huì yóuyǒng. = Tôi biết bơi (chưa biết thì nói 我不会游泳 Wǒ bú huì yóuyǒng). Mẹo: 游 (yóu) thanh 2, 泳 (yǒng) thanh 3; 不 trước 会 đổi thành bú.",
+              "tu": [
+                "会",
+                "游泳"
+              ]
+            },
+            {
+              "id": "24",
+              "kieu": "noi",
+              "noiKieu": "traLoi",
+              "nghe": [
+                {
+                  "g": "zh-nam",
+                  "t": "你怎么去学校？"
+                }
+              ],
+              "de": "Nghe câu hỏi rồi trả lời ngắn gọn.",
+              "mau": "我坐公共汽车去学校。",
+              "giaiThich": "Hỏi: Bạn đến trường bằng gì? Mẫu: Wǒ zuò gōnggòng qìchē qù xuéxiào. = Tôi đi xe buýt đến trường. Mẹo: 坐 + phương tiện + 去 + nơi đến; 汽车 (qìchē): q bật hơi, ch uốn lưỡi; đi xe đạp/xe máy thì dùng 骑 (qí).",
+              "tu": [
+                "怎么",
+                "坐",
+                "公共汽车"
+              ]
+            },
+            {
+              "id": "25",
+              "kieu": "noi",
+              "noiKieu": "traLoi",
+              "nghe": [
+                {
+                  "g": "zh-nu",
+                  "t": "你为什么学习汉语？"
+                }
+              ],
+              "de": "Nghe câu hỏi rồi trả lời ngắn gọn.",
+              "mau": "因为我想去中国旅游。",
+              "giaiThich": "Hỏi: Vì sao bạn học tiếng Trung? Mẫu: Yīnwèi wǒ xiǎng qù Zhōngguó lǚyóu. = Vì tôi muốn đi du lịch Trung Quốc. Mẹo: hỏi 为什么 thì mở đầu bằng 因为; 旅 (lǚ) là âm ü tròn môi, không phải \"lu\".",
+              "tu": [
+                "为什么",
+                "因为",
+                "旅游"
+              ]
+            }
+          ]
+        },
+        {
+          "huongDan": "Phần 3 — Đọc đề bài, chuẩn bị rồi nói thành một đoạn ngắn 4–6 câu (khoảng 1 phút rưỡi mỗi câu). Nói chậm, rõ, câu đơn giản mà đúng.",
+          "cau": [
+            {
+              "id": "26",
+              "kieu": "noi",
+              "noiKieu": "traLoi",
+              "diem": 5,
+              "de": "请介绍一下你的家人。 Qǐng jièshào yíxià nǐ de jiārén. — Hãy giới thiệu về những người trong gia đình bạn.",
+              "mau": "我家有四口人：爸爸、妈妈、姐姐和我。爸爸是医生，妈妈是老师。姐姐在公司工作，我是学生。我们常常一起吃晚饭。我很爱我的家。",
+              "giaiThich": "Bài mẫu: Wǒ jiā yǒu sì kǒu rén: bàba, māma, jiějie hé wǒ. Bàba shì yīshēng, māma shì lǎoshī. Jiějie zài gōngsī gōngzuò, wǒ shì xuésheng. Wǒmen chángcháng yìqǐ chī wǎnfàn. Wǒ hěn ài wǒ de jiā. = Nhà tôi có bốn người: bố, mẹ, chị gái và tôi. Bố là bác sĩ, mẹ là giáo viên. Chị làm ở công ty, tôi là học sinh. Chúng tôi thường ăn tối cùng nhau. Tôi rất yêu gia đình mình. Mẹo: đi theo khung \"mấy người → từng người làm gì → cả nhà hay làm gì → cảm nghĩ\"; 姐姐 đọc jiějie (chữ sau nhẹ), 常常 (cháng) uốn lưỡi thanh 2.",
+              "tu": [
+                "家人",
+                "介绍",
+                "口"
+              ]
+            },
+            {
+              "id": "27",
+              "kieu": "noi",
+              "noiKieu": "traLoi",
+              "diem": 5,
+              "de": "请说说你的一天。 Qǐng shuōshuo nǐ de yì tiān. — Hãy kể về một ngày của bạn.",
+              "mau": "我每天早上六点半起床。七点吃早饭，七点半坐公共汽车去学校。上午我有汉语课，中午在学校吃饭。下午我常常和朋友打篮球。晚上我看一会儿电视，十一点睡觉。",
+              "giaiThich": "Bài mẫu: Wǒ měi tiān zǎoshang liù diǎn bàn qǐ chuáng. Qī diǎn chī zǎofàn, qī diǎn bàn zuò gōnggòng qìchē qù xuéxiào. Shàngwǔ wǒ yǒu Hànyǔ kè, zhōngwǔ zài xuéxiào chī fàn. Xiàwǔ wǒ chángcháng hé péngyou dǎ lánqiú. Wǎnshang wǒ kàn yíhuìr diànshì, shíyī diǎn shuìjiào. = Mỗi sáng tôi dậy lúc 6 rưỡi. 7 giờ ăn sáng, 7 rưỡi đi xe buýt đến trường. Buổi sáng tôi có tiết tiếng Trung, buổi trưa ăn ở trường. Buổi chiều tôi thường chơi bóng rổ với bạn. Buổi tối tôi xem tivi một lúc, 11 giờ đi ngủ. Mẹo: kể theo trình tự 早上 → 上午 → 中午 → 下午 → 晚上, thời gian luôn đứng trước động từ; 七 (qī) bật hơi thanh 1, đừng lẫn với 起 (qǐ) thanh 3.",
+              "tu": [
+                "起床",
+                "上午",
+                "晚上"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

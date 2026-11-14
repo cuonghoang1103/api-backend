@@ -18,6 +18,13 @@ Mẫu một mục:
 
 ---
 
+### 14/11/2026 — Web khoá học — ~1.700 video bài giảng bị YouTube che, người học "không thấy video"
+- **Triệu chứng:** mở bài học chỉ thấy video YouTube tuyển chọn; video bài giảng của kênh (đã lên R2, đã gắn) nằm ở tab phụ — chủ kênh vào web tưởng chưa có video.
+- **Nguyên nhân:** `scripts/course-video-seed.mjs:132` chọn track mặc định theo thứ tự entry → `map.defaultVideoTrack` → có `vi` thì VI. 27 tệp `content/course-videos/*.mjs` đặt `defaultVideoTrack: 'YT'` ở cấp khoá (từ thời chỉ có YouTube) nên thắng luôn video bài giảng.
+- **Cách sửa:** thứ tự mới: entry → có `vi.url` thì VI → map → YT. Có hiệu lực ở lượt seed video của deploy kế tiếp.
+- **Ảnh hưởng:** 27 khoá (Software Requirements 139, React 132, DSA 114, Software Testing 111, DBI 102, Git 102, Node.js 94, PostgreSQL 86, Auth 77, TypeScript 76…) từ khi gắn video tới deploy sửa.
+- **Bài học:** "đã gắn" ≠ "người học thấy". Nghiệm thu phải mở trang thật như người học (track nào phát đầu), không chỉ kiểm map/DB có URL.
+
 ### 14/11/2026 — Video bài giảng — Giọng đọc phát âm tục ("-địt") trong 71 tập
 - **Triệu chứng:** các từ như audit, succeeded, added, embedded, exceeded được đọc thành "o-địt", "xắc-xi-địt", "át-địt"… — TTS đọc đúng âm tục; 64 tập đã render (API Design, Git, Node/SDN302, Auth, Docker, Networking, PRO192…).
 - **Nguyên nhân:** bảng luật đọc (`src/khung/*/doc.ts`, luật `W()` trong `kichban.ts`) phiên âm đuôi "-ded/-dit" bằng chữ "địt"; nhiều agent chép lại của nhau (117 tệp). Bộ kiểm chỉ bắt chữ Anh sót/đánh vần, không bắt từ tục trong lời đọc.

@@ -127,9 +127,12 @@ for (const file of files) {
     };
     if (!Object.keys(data).length) continue;
 
-    // Which track opens the lesson: the entry's own choice, else the map's,
-    // else the instructor's own recording when present, else the YT lecture.
-    const def = String(entry.defaultVideoTrack || map.defaultVideoTrack || (entry.vi?.url ? 'VI' : 'YT')).toUpperCase();
+    // Which track opens the lesson: the entry's own choice, else the instructor's
+    // own recording when present, else the map's default, else the YT lecture.
+    // 14/11/2026: video bài giảng của kênh (vi) THẮNG `map.defaultVideoTrack: 'YT'`
+    // — trước đây map đặt 'YT' (từ thời chỉ có video YouTube tuyển chọn) che mất
+    // ~1.700 video bài giảng ở 27 khoá: người học mở bài chỉ thấy YouTube.
+    const def = String(entry.defaultVideoTrack || (entry.vi?.url ? 'VI' : map.defaultVideoTrack) || 'YT').toUpperCase();
     data.defaultVideoTrack = ['VI', 'EN', 'YT'].includes(def) ? def : 'YT';
 
     // The legacy single-video columns follow the default track, so course

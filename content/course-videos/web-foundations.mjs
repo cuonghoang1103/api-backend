@@ -130,7 +130,7 @@ export default {
     'wf-13-1-why-test': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/web-foundations/13-testing/13-01-vi-sao-test-1f07fe94.mp4' }, defaultVideoTrack: 'VI'},
     'wf-13-2-unit-tests': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/web-foundations/13-testing/13-02-unit-test-e395cf39.mp4' }, defaultVideoTrack: 'VI'},
     'wf-13-4-mocking-ci': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/web-foundations/13-testing/13-04-mocking-ci-66a9f7a0.mp4' }, defaultVideoTrack: 'VI'},
-    'wf-14-1-build': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/web-foundations/14-ship/14-01-ban-dung-production-78736083.mp4' }, defaultVideoTrack: 'VI' },
-    'wf-14-4-performance': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/web-foundations/14-ship/14-04-do-hieu-nang-3a2cfb5f.mp4' }, defaultVideoTrack: 'VI' },
+    'wf-14-1-build': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/web-foundations/14-ship/14-01-ban-dung-production-78736083.mp4' }, defaultVideoTrack: 'VI'},
+    'wf-14-4-performance': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/web-foundations/14-ship/14-04-do-hieu-nang-3a2cfb5f.mp4' }, defaultVideoTrack: 'VI'},
   },
 };

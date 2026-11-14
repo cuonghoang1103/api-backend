@@ -158,6 +158,6 @@ export default {
     'git-18-4-sua-nham-tren-main': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/18-tai-nan-nhom/18-04-sua-nham-tren-main-685d61e8.mp4' }, defaultVideoTrack: 'VI'},
     'git-18-5-tu-merge-khong-review': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/18-tai-nan-nhom/18-05-tu-merge-khong-review-13e10b03.mp4' }, defaultVideoTrack: 'VI'},
     'git-18-6-hoan-tac-merge': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/18-tai-nan-nhom/18-06-hoan-tac-merge-9e3e3e00.mp4' }, defaultVideoTrack: 'VI'},
-    'git-18-7-buoi-cuu-ho-nhom': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/18-tai-nan-nhom/18-07-buoi-cuu-ho-nhom-ae7a0a02.mp4' }, defaultVideoTrack: 'VI' },
+    'git-18-7-buoi-cuu-ho-nhom': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/18-tai-nan-nhom/18-07-buoi-cuu-ho-nhom-ae7a0a02.mp4' }, defaultVideoTrack: 'VI'},
   },
 };

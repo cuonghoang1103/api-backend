@@ -146,5 +146,7 @@ export default {
     'swr302-18r-3-ch18-barriers-success': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-requirements/17-tai-dung-yeu-cau/18-reuse-3a-tron-491ec0c0.mp4' }, defaultVideoTrack: 'VI'},
     'swr302-final-exam-pe': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-requirements/27-luyen-thi-thuc-hanh-pe/27-00-thi-pe-tong-quan-a7a795a5.mp4' }, defaultVideoTrack: 'VI'},
     'swr302-final-exam-fe': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-requirements/29-chua-tron-de-fe/29-00-thi-fe-tong-quan-783b9012.mp4' }, defaultVideoTrack: 'VI'},
+    'swr302-fe1-sp26-chua-tron-de': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-requirements/29-chua-tron-de-fe/29-08-fe1-sp26-phan-4-6b825923.mp4' }, defaultVideoTrack: 'VI'},
+    'swr302-fe2-sp26-chua-tron-de': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/software-requirements/29-chua-tron-de-fe/29-12-fe2-sp26-phan-4-bf605320.mp4' }, defaultVideoTrack: 'VI'},
   },
 };

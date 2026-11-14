@@ -39,21 +39,21 @@ export default {
     /* ── Chương 2 — Khoá, TTL và hết hạn ── */
     'rd-2-1-dat-ten-khoa': { yt: 'Q_ie-hl3GzM', credit: 'Dilruba Köse — Redis Crash Course 🚀 🚀' }, // Redis Crash Course
     'rd-2-2-het-han': { yt: 'Z_NpHS1sw-U', credit: 'Eric Tech — Master Redis EXPIRE and TTL Secrets' },      // Master Redis EXPIRE and TTL Secrets
-    'rd-2-3-scan-unlink': { yt: 'JX9Zxk3Evy8', credit: 'LevelUp With Suhail — Access and Delete Keys in Redis | CLI + Java (Ep 04)' },  // 04 Redis Keys Explained: Access & Delete Using CLI and Java (Best Practices)
+    'rd-2-3-scan-unlink': { yt: 'JX9Zxk3Evy8', credit: 'LevelUp With Suhail — Access and Delete Keys in Redis | CLI + Java (Ep 04)', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/redis/02-khoa-ttl-het-han/02-03-scan-unlink-1d508de8.mp4' }, defaultVideoTrack: 'VI'},  // 04 Redis Keys Explained: Access & Delete Using CLI and Java (Best Practices)
     'rd-2-4-thong-bao': { yt: 'enc0b3jpBRA', credit: 'Amazon Web Services — How do I implement Redis keyspace notifications in ElastiCache?', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/redis/02-khoa-ttl-het-han/02-04-thong-bao-4814b0a0.mp4' }, defaultVideoTrack: 'VI'},    // How do I implement Redis keyspace notifications in ElastiCache?
     'rd-2-5-db-lenh-khoa': { yt: 'I0esXDazvIM', credit: 'Very Academy — Redis | Managing Expiration with EXPIRE, TTL, and Lifetimes', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/redis/02-khoa-ttl-het-han/02-05-db-lenh-khoa-c6c740ed.mp4' }, defaultVideoTrack: 'VI'}, // Redis | Managing Expiration with EXPIRE, TTL, and Lifetimes
 
     /* ── Chương 3 — Chuỗi, bộ đếm, bitmap, HyperLogLog ── */
-    'rd-3-1-chuoi': { yt: 'Z1ep4LaDbDc', credit: 'Hustle With Aditya — Redis Tutorial for Beginners - 5 | Redis Data Types' },            // Redis Tutorial for Beginners - 5 | Redis Data Types
+    'rd-3-1-chuoi': { yt: 'Z1ep4LaDbDc', credit: 'Hustle With Aditya — Redis Tutorial for Beginners - 5 | Redis Data Types', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/redis/03-chuoi-bo-dem-bitmap-hll/03-01-chuoi-58b39d23.mp4' }, defaultVideoTrack: 'VI'},            // Redis Tutorial for Beginners - 5 | Redis Data Types
     'rd-3-2-bo-dem': { yt: 'oMPrWwH3oFg', credit: 'Very Academy — Redis | Using Strings as Counters: INCR, DECR' },           // Redis | Using Strings as Counters: INCR, DECR
     'rd-3-3-bitmap': { yt: 'H604RKPS9SM', credit: 'Eric Tech — Learn Redis Data Structures w/ Redis Cloud | STRING, LIST, HASHES, SETS, SORTED SETS and MORE' },           // Learn Redis Data Structures w/ Redis Cloud | STRING, LIST, HASHES, SETS, SORTED SETS and MORE
     'rd-3-4-hyperloglog': { yt: 'MunL8nnwscQ', credit: 'Redis — Redis HyperLogLog Explained' },      // Redis HyperLogLog Explained
-    'rd-3-5-gioi-han-tan-suat': { yt: 'YV4ePyW3DO8', credit: 'Redis — Rate limiting with Redis: An essential guide' },// Rate limiting with Redis: An essential guide
+    'rd-3-5-gioi-han-tan-suat': { yt: 'YV4ePyW3DO8', credit: 'Redis — Rate limiting with Redis: An essential guide', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/redis/03-chuoi-bo-dem-bitmap-hll/03-05-gioi-han-tan-suat-db93a54d.mp4' }, defaultVideoTrack: 'VI'},// Rate limiting with Redis: An essential guide
 
     /* ── Chương 4 — List, Set và Sorted Set ── */
     'rd-4-1-list': { yt: 'FCtPVO_E1aQ', credit: 'Redis — Redis Data Structures' },          // Redis Data Structures
     'rd-4-2-set': { yt: 'jgpVdJB2sKQ', credit: 'Web Dev Simplified — Redis Crash Course' },           // Redis Crash Course
-    'rd-4-3-zset': { yt: 'MUKlxdBQZ7g', credit: 'Redis — Redis Sorted Sets Explained' },          // Redis Sorted Sets Explained
+    'rd-4-3-zset': { yt: 'MUKlxdBQZ7g', credit: 'Redis — Redis Sorted Sets Explained', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/redis/04-list-set-sorted-set/04-03-zset-550d5665.mp4' }, defaultVideoTrack: 'VI'},          // Redis Sorted Sets Explained
     'rd-4-4-zset-thuc-te': { yt: '9yEPu8oSrhI', credit: 'SystemDR - Scalable System Design  — Designing Real-Time Leaderboards: Redis Sorted Sets and Architecture Patterns' },  // Designing Real-Time Leaderboards: Redis Sorted Sets and Architecture Patterns
     'rd-4-5-chon-cau-truc': { yt: '0_1x8NnQDPg', credit: 'The Theory Of Code — Redis Sorted Set Data Type -  Redis An In memory NoSQL Database' }, // Redis Sorted Set Data Type - Redis An In memory NoSQL Database
 

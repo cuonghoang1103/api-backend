@@ -21,7 +21,7 @@ export default {
     'dk-0-6-bat-dau-khi-khong-co': { yt: 'zFa9_K8BS8I', credit: "TechWorld with Nana — Learn Docker in 2026 - Complete Roadmap Beginner to Pro", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/00-intro/00-02-bat-dau-khi-khong-co-4af94ed7.mp4' }, defaultVideoTrack: 'VI'},
     'dk-0-0-slides': { yt: 'xfBbLg6-4xY', credit: "Việt Nguyễn AI — Tất tần tật về Docker trong 10 phút" },
     'dk-0-1-van-de': { yt: 'ZZ10b63xnQc', credit: "KodeKloud — Docker Explained for Absolute Beginners [2026]", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/00-intro/00-04-van-de-952a9b4a.mp4' }, defaultVideoTrack: 'VI'},
-    'dk-0-2-cai-dat': { yt: 'Ic48-WLhtHg', credit: "Hỏi Dân IT — #2 GETTING STARTED VỚI DOCKER DESKTOP -  CHUẨN BỊ MÔI TRƯỜNG CHO DOCKER |Docker Siêu Dễ Cho Beginner" },
+    'dk-0-2-cai-dat': { yt: 'Ic48-WLhtHg', credit: "Hỏi Dân IT — #2 GETTING STARTED VỚI DOCKER DESKTOP -  CHUẨN BỊ MÔI TRƯỜNG CHO DOCKER |Docker Siêu Dễ Cho Beginner", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/00-intro/00-05-cai-dat-d859476c.mp4' }, defaultVideoTrack: 'VI'},
     'dk-0-3-nam-phut': { yt: 'krHjeCT8g3s', credit: "Hỏi Dân IT — #3 HELLO WORLD VỚI DOCKER - CHẠY ỨNG DỤNG ĐẦU TIÊN BẰNG DOCKER | Docker Siêu Dễ Cho Beginners", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/00-intro/00-06-nam-phut-c773c026.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 1 — Container & image: mô hình tư duy ── */
@@ -42,31 +42,31 @@ export default {
 
     /* ── Chương 3 — Image & registry ── */
     'dk-3-0-slides': { yt: 'F1aMrAqUjQk', credit: "Elton Stoneman — DIAMOL 04: Sharing images with Docker Hub and other registries" },
-    'dk-3-1-ten-anh': { yt: 'CvSFl4jI8Hg', credit: "Docker — Container Images Deep Dive (DockerCon 2023)" },
-    'dk-3-2-tag-digest': { yt: 'AiAU7wnPCrQ', credit: "anthonywritescode — docker pull by sha256 digest (advanced) anthony explains #537" },
-    'dk-3-3-registry': { yt: 'TGLfQZ9qRaI', credit: "package main — Self-Hosting a Container Registry" },
-    'dk-3-4-da-kien-truc': { yt: 'jtc28pCkN0k', credit: "Nick Janetakis — Build Multi-CPU Architecture Docker Images with Buildx" },
-    'dk-3-5-don-dia': { yt: '3Q0cVWR7RU4', credit: "TroubleChute Linux — Docker Quietly Eats Drives | Docker Prune & Cleanup Guide" },
+    'dk-3-1-ten-anh': { yt: 'CvSFl4jI8Hg', credit: "Docker — Container Images Deep Dive (DockerCon 2023)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/03-anh-registry/03-02-ten-anh-2bcf08a1.mp4' }, defaultVideoTrack: 'VI'},
+    'dk-3-2-tag-digest': { yt: 'AiAU7wnPCrQ', credit: "anthonywritescode — docker pull by sha256 digest (advanced) anthony explains #537", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/03-anh-registry/03-03-tag-digest-28a813ea.mp4' }, defaultVideoTrack: 'VI'},
+    'dk-3-3-registry': { yt: 'TGLfQZ9qRaI', credit: "package main — Self-Hosting a Container Registry", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/03-anh-registry/03-04-registry-345bf090.mp4' }, defaultVideoTrack: 'VI'},
+    'dk-3-4-da-kien-truc': { yt: 'jtc28pCkN0k', credit: "Nick Janetakis — Build Multi-CPU Architecture Docker Images with Buildx", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/03-anh-registry/03-05-da-kien-truc-5bcba61c.mp4' }, defaultVideoTrack: 'VI'},
+    'dk-3-5-don-dia': { yt: '3Q0cVWR7RU4', credit: "TroubleChute Linux — Docker Quietly Eats Drives | Docker Prune & Cleanup Guide", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/03-anh-registry/03-06-don-dia-7f6ad025.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 4 — Dockerfile, từ cơ bản tới trôi chảy ── */
     'dk-4-0-slides': { yt: 'saSJa9YVroA', credit: "Docker — Dockerfile: From Start to Optimized (DockerCon 2023)" },
-    'dk-4-1-dockerfile-dau-tien': { yt: 'SnSH8Ht3MIc', credit: "Techno Tim — Build YOUR OWN Dockerfile, Image, and Container - Docker Tutorial" },
-    'dk-4-2-cac-chi-thi': { yt: '1ymi24PeF3M', credit: "Cloud Champ — Dockerfile creation Tutorial - Dockerfile Instructions Explained with example!" },
-    'dk-4-3-cmd-entrypoint': { yt: 'U1P7bqVM7xM', credit: "Manuel Castellin — Docker ENTRYPOINT vs CMD With Examples - Docker Development Tips & Tricks" },
-    'dk-4-4-arg-env': { yt: 'MaoGm1rO_Qc', credit: "Mohamad Lawand — Understanding Docker Args vs Env [Weekly Tech Tips]" },
-    'dk-4-5-cong-thuc': { yt: 'W8yZUCzy4SI', credit: "KodeKloud — Docker Init Explained: Your Shortcut to Effortless Containerization" },
+    'dk-4-1-dockerfile-dau-tien': { yt: 'SnSH8Ht3MIc', credit: "Techno Tim — Build YOUR OWN Dockerfile, Image, and Container - Docker Tutorial", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/04-dockerfile/04-02-dockerfile-dau-tien-5d2ee647.mp4' }, defaultVideoTrack: 'VI'},
+    'dk-4-2-cac-chi-thi': { yt: '1ymi24PeF3M', credit: "Cloud Champ — Dockerfile creation Tutorial - Dockerfile Instructions Explained with example!", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/04-dockerfile/04-03-cac-chi-thi-52c004a3.mp4' }, defaultVideoTrack: 'VI'},
+    'dk-4-3-cmd-entrypoint': { yt: 'U1P7bqVM7xM', credit: "Manuel Castellin — Docker ENTRYPOINT vs CMD With Examples - Docker Development Tips & Tricks", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/04-dockerfile/04-04-cmd-entrypoint-d1dbfec6.mp4' }, defaultVideoTrack: 'VI'},
+    'dk-4-4-arg-env': { yt: 'MaoGm1rO_Qc', credit: "Mohamad Lawand — Understanding Docker Args vs Env [Weekly Tech Tips]", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/04-dockerfile/04-05-arg-env-31622f22.mp4' }, defaultVideoTrack: 'VI'},
+    'dk-4-5-cong-thuc': { yt: 'W8yZUCzy4SI', credit: "KodeKloud — Docker Init Explained: Your Shortcut to Effortless Containerization", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/04-dockerfile/04-06-cong-thuc-088cceec.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 5 — Tầng ảnh, cache & dựng nhanh ── */
     'dk-5-0-slides': { yt: 'kkpQ_UZn2uo', credit: "Docker — Supercharged Docker Build with BuildKit" },
     'dk-5-1-cache-quyet-dinh': { yt: 'dSpOBSRJFwg', credit: "Amigoscode — Docker Tutorial - Improve Docker builds with Caching and Layers" },
-    'dk-5-2-thu-tu': { yt: 'oZ9nyCWERYc', credit: "kubucation — Proper DOCKER CACHING: Speed up your build with this optimized Dockerfile" },
+    'dk-5-2-thu-tu': { yt: 'oZ9nyCWERYc', credit: "kubucation — Proper DOCKER CACHING: Speed up your build with this optimized Dockerfile", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/05-cache/05-03-thu-tu-2fdb057b.mp4' }, defaultVideoTrack: 'VI'},
     'dk-5-3-cache-mount': { yt: '8fILYOtoesQ', credit: "Nilesh Gule — Supercharge Docker builds using Cache Mount" },
     'dk-5-4-cache-ci': { yt: '77j6JFBTmTc', credit: "anthonywritescode — docker: fast CI rebuilds with --cache-from (intermediate) anthony explains #448" },
     'dk-5-5-chan-doan-dung-cham': { yt: '3B89b_gXAPU', credit: "Ardan Labs — Docker BuildKit Tutorial: Why do we need a new Docker Builder?" },
 
     /* ── Chương 6 — Ảnh nhỏ và an toàn ── */
     'dk-6-0-slides': { yt: '8vXoMqWgbQQ', credit: "TechWorld with Nana — Top 8 Docker Best Practices for using Docker in Production" },
-    'dk-6-1-multi-stage': { yt: 'V0kTEk7YA70', credit: "Raghav Dua — Docker Multistage builds explained in 8 minutes" },
+    'dk-6-1-multi-stage': { yt: 'V0kTEk7YA70', credit: "Raghav Dua — Docker Multistage builds explained in 8 minutes", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/06-anh-nho-an-toan/06-02-multi-stage-47873f12.mp4' }, defaultVideoTrack: 'VI'},
     'dk-6-2-chon-anh-nen': { yt: '82ZCJw9poxM', credit: "DevOps & AI Toolkit — Containers Are Not VMs! Which Base Container (Docker) Images Should We Use?" },
     'dk-6-3-cat-kich-thuoc': { yt: 't779DVjCKCs', credit: "Better Stack — Docker Image BEST Practices - From 1.2GB to 10MB" },
     'dk-6-4-chay-an-toan': { yt: 'CQLtT_qeB40', credit: "HackerSploit — How To Secure & Harden Docker Containers" },

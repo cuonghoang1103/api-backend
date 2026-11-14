@@ -75,8 +75,8 @@ export default {
     'lnx-6-0-slides': { yt: 'VIUoHnFwEH4', credit: "anthonywritescode — bash quoting is really not that difficult!  (beginner - intermediate) anthony explains #426" },
     'lnx-6-1-bien-thay-the-lenh': { yt: 'yTijxqjZhRo', credit: 'nixcasts — Bash variable expansion' },   // Bash variable expansion
     'lnx-6-2-dau-nhay': { yt: 'MYWvVgIL_Ys', credit: 'tutoriaLinux — Bash Scripting 3 -- Variables and Quoting' },             // Bash Scripting 3 -- Variables and Quoting
-    'lnx-6-3-khai-trien-tham-so': { yt: 'S4D9KaW3ERw', credit: 'Protesilaos — BASH Parameter Expansion' },   // BASH Parameter Expansion
-    'lnx-6-4-ma-thoat-dieu-kien': { yt: 'teh6glwKslo', credit: 'PythonPythonME — 🖥️ Mastering Conditional Statements in Bash: if-else & case Explained 🚀' },   // Mastering Conditional Statements in Bash: if-else & case Explained
+    'lnx-6-3-khai-trien-tham-so': { yt: 'S4D9KaW3ERw', credit: 'Protesilaos — BASH Parameter Expansion', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/linux-bash/06-bien-dau-nhay-khai-trien/06-04-khai-trien-tham-so-9e9bf532.mp4' }, defaultVideoTrack: 'VI'},   // BASH Parameter Expansion
+    'lnx-6-4-ma-thoat-dieu-kien': { yt: 'teh6glwKslo', credit: 'PythonPythonME — 🖥️ Mastering Conditional Statements in Bash: if-else & case Explained 🚀', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/linux-bash/06-bien-dau-nhay-khai-trien/06-05-ma-thoat-dieu-kien-c3a6e243.mp4' }, defaultVideoTrack: 'VI'},   // Mastering Conditional Statements in Bash: if-else & case Explained
     'lnx-6-5-vong-lap-ham': { yt: 'sCmqBkz1yYY', credit: 'quidsup — Bash Tutorial 4: Loops - For While Until' },         // Bash Tutorial 4: Loops - For While Until
 
     /* ── Chương 7 — Viết script cho production ── */

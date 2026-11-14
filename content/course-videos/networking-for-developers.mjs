@@ -18,5 +18,7 @@ export default {
     'netdev-2-3-nat': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/networking-for-developers/02-dia-chi-ip-dinh-tuyen-nat/02-03-nat-dai-ip-rieng-docker-9e65e974.mp4' }, defaultVideoTrack: 'VI'},
     'netdev-2-4-ipv6': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/networking-for-developers/02-dia-chi-ip-dinh-tuyen-nat/02-04-ipv6-cho-lap-trinh-vien-4cce5cee.mp4' }, defaultVideoTrack: 'VI'},
     'netdev-2-6-lab-duong-vao-labflow': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/networking-for-developers/02-dia-chi-ip-dinh-tuyen-nat/02-06-lab-2-duong-vao-labflow-49264368.mp4' }, defaultVideoTrack: 'VI'},
+    'netdev-3-4-anycast-geodns': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/networking-for-developers/03-dns-toi-tan-goc/03-04-anycast-geodns-d4004fa6.mp4' }, defaultVideoTrack: 'VI' },
+    'netdev-3-6-lab-dns-labflow': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/networking-for-developers/03-dns-toi-tan-goc/03-06-lab-3-dns-labflow-2c5c66be.mp4' }, defaultVideoTrack: 'VI' },
   },
 };

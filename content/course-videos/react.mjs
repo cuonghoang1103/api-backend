@@ -18,32 +18,32 @@ export default {
   defaultVideoTrack: 'YT',
   lessons: {
     /* ── Mục 0 — Vì sao React ── */
-    'rx-0-8-bat-dau-tai-day': { yt: '8pDqJVdNa44', credit: "CultRepo — How A Small Team of Developers Created React at Facebook | React.js: The Documentary" },
-    'rx-0-9-bat-dau-khi-khong-co': { yt: 'WJ2PQe-pQJw', credit: "Academind — jQuery vs Vue, React and Angular" },
+    'rx-0-8-bat-dau-tai-day': { yt: '8pDqJVdNa44', credit: "CultRepo — How A Small Team of Developers Created React at Facebook | React.js: The Documentary", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/00-vi-sao-react/00-01-bat-dau-tai-day-react-la-gi-a3451ab3.mp4' }, defaultVideoTrack: 'VI'},
+    'rx-0-9-bat-dau-khi-khong-co': { yt: 'WJ2PQe-pQJw', credit: "Academind — jQuery vs Vue, React and Angular", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/00-vi-sao-react/00-02-bat-dau-tai-day-khong-cau-truc-a119dbb3.mp4' }, defaultVideoTrack: 'VI'},
     'rx-0-0-slides': { yt: 'Tn6-PIqc4UM', credit: "Fireship — React in 100 Seconds" },
-    'rx-0-1-cai-dat': { yt: 'RbZyQWOEmD0', credit: "dcode — How To Setup Your First React + TypeScript Project With Vite" },
-    'rx-0-2-jsx': { yt: '6sg98ju4O-w', credit: "Codevolution — React 19 Tutorial - 6 - JSX" },
-    'rx-0-3-js-cho-react': { yt: 'm55PTVUrlnA', credit: "PedroTech — All The JavaScript You Need To Know For React" },
+    'rx-0-1-cai-dat': { yt: 'RbZyQWOEmD0', credit: "dcode — How To Setup Your First React + TypeScript Project With Vite", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/00-vi-sao-react/00-04-cai-dat-vite-typescript-4d032dac.mp4' }, defaultVideoTrack: 'VI'},
+    'rx-0-2-jsx': { yt: '6sg98ju4O-w', credit: "Codevolution — React 19 Tutorial - 6 - JSX", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/00-vi-sao-react/00-05-jsx-giai-thich-cho-ro-d3c0aa8d.mp4' }, defaultVideoTrack: 'VI'},
+    'rx-0-3-js-cho-react': { yt: 'm55PTVUrlnA', credit: "PedroTech — All The JavaScript You Need To Know For React", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/00-vi-sao-react/00-06-javascript-cho-react-11759ba9.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 1 — Component và props ── */
     'rx-1-0-slides': { yt: 'zFdDdPMyIAo', credit: "Codevolution — React 19 Tutorial - 4 - Components" },
-    'rx-1-1-component': { yt: 'XUwzASyHr4Q', credit: "Web Dev Simplified — This One Line Of Code Catches React Bugs For You" },
+    'rx-1-1-component': { yt: 'XUwzASyHr4Q', credit: "Web Dev Simplified — This One Line Of Code Catches React Bugs For You", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/01-component-va-props/01-02-component-la-ham-afc26ff5.mp4' }, defaultVideoTrack: 'VI'},
     'rx-1-2-props': { yt: 'KpA6oEaCHtk', credit: "Codevolution — React TypeScript Tutorial - 3 - Typing Props" },
-    'rx-1-3-danh-sach': { yt: 'fGxKOmCuH5w', credit: "Cosden Solutions — React Keys and Lists - Complete Tutorial!" },
+    'rx-1-3-danh-sach': { yt: 'fGxKOmCuH5w', credit: "Cosden Solutions — React Keys and Lists - Complete Tutorial!", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/01-component-va-props/01-04-danh-sach-va-key-1eadd8f7.mp4' }, defaultVideoTrack: 'VI'},
     'rx-1-4-chia-nho': { yt: 'YJPSR9dEQV8', credit: "codeSTACKr — 5 Steps to THINK in React and Easily Create a ReactJS App From Scratch! (Bonus: Tailwind CSS)" },
 
     /* ── Chương 2 — State và sự kiện ── */
     'rx-2-0-slides': { yt: 'O6P86uwfdR0', credit: "Web Dev Simplified — Learn useState In 15 Minutes - React Hooks Explained" },
-    'rx-2-1-use-state': { yt: 'hjNExKVUHSw', credit: "Codevolution — React 19 Tutorial - 21 - State as a Snapshot" },
-    'rx-2-2-su-kien': { yt: 'peewECGtPCI', credit: "Codevolution — React 19 Tutorial - 15 - Event Handling" },
+    'rx-2-1-use-state': { yt: 'hjNExKVUHSw', credit: "Codevolution — React 19 Tutorial - 21 - State as a Snapshot", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/02-state-va-su-kien/02-02-use-state-a8c21b6f.mp4' }, defaultVideoTrack: 'VI'},
+    'rx-2-2-su-kien': { yt: 'peewECGtPCI', credit: "Codevolution — React 19 Tutorial - 15 - Event Handling", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/02-state-va-su-kien/02-03-su-kien-b4102126.mp4' }, defaultVideoTrack: 'VI'},
     'rx-2-3-object-array': { yt: 'MCIfZlQlmSc', credit: "Codevolution — React 19 Tutorial - 24 - useState with Objects" },
-    'rx-2-4-dat-state': { yt: 'YpjvL5SvVhM', credit: "Codevolution — React 19 Tutorial - 26 - Sharing State Between Components" },
-    'rx-2-5-man-hinh-bac-si': { yt: 'ZoayCCDHFiI', credit: "Dave Gray — Search Filter in React JS with Search Bar in React Example" },
+    'rx-2-4-dat-state': { yt: 'YpjvL5SvVhM', credit: "Codevolution — React 19 Tutorial - 26 - Sharing State Between Components", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/02-state-va-su-kien/02-05-dat-state-f1e23e22.mp4' }, defaultVideoTrack: 'VI'},
+    'rx-2-5-man-hinh-bac-si': { yt: 'ZoayCCDHFiI', credit: "Dave Gray — Search Filter in React JS with Search Bar in React Example", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/02-state-va-su-kien/02-06-man-hinh-bac-si-446cd3a5.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 3 — Form ── */
     'rx-3-0-slides': { yt: '_QpTQrxzY8A', credit: "Cosden Solutions — The Correct Way to Use Form Data in React" },
-    'rx-3-1-controlled': { yt: 'tIdNeoHniEY', credit: "Lama Dev — BEST Ways to Handle and Validate React Forms without a Library" },
-    'rx-3-2-react-hook-form': { yt: 'cc_xmawJ8Kg', credit: "Cosden Solutions — React Hook Form - Complete Tutorial (with Zod)" },
+    'rx-3-1-controlled': { yt: 'tIdNeoHniEY', credit: "Lama Dev — BEST Ways to Handle and Validate React Forms without a Library", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/03-form/03-02-controlled-bd4a545e.mp4' }, defaultVideoTrack: 'VI'},
+    'rx-3-2-react-hook-form': { yt: 'cc_xmawJ8Kg', credit: "Cosden Solutions — React Hook Form - Complete Tutorial (with Zod)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/03-form/03-03-react-hook-form-eab97e65.mp4' }, defaultVideoTrack: 'VI'},
     'rx-3-3-loi': { yt: 'u6PQ5xZAv7Q', credit: "ByteGrad — React Hook Form (+ Zod) - Complete Tutorial" },
 
     /* ── Chương 4 — Effect ── */

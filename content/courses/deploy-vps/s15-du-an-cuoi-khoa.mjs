@@ -392,7 +392,7 @@ ssh -i khoa -o UserKnownHostsFile=./known_hosts -p 19152 root@127.0.0.1 \\
 <div class="link-card"><span class="lc-ico">🔧</span><span class="lc-body"><span class="lc-title">sshd(8)</span><span class="lc-sub">man7.org/linux/man-pages/man8/sshd.8.html — <code>-t</code>, <code>-T</code>, and reloading on SIGHUP.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Certbot User Guide</span><span class="lc-sub">eff-certbot.readthedocs.io/en/stable/using.html — <code>certonly</code>, <code>--webroot</code>, hooks, renewal.</span></span></div>
 <div class="link-card"><span class="lc-ico">🔧</span><span class="lc-body"><span class="lc-title">Pebble</span><span class="lc-sub">github.com/letsencrypt/pebble — the test ACME server used instead of Let's Encrypt.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash — Chapter 16: the capstone server</span><span class="lc-sub">/courses/linux-bash/learn${REF} — system users, an idempotent bootstrap, systemd units and timers, logrotate.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash — 16.1 Building the capstone server</span><span class="lc-sub">/courses/linux-bash/learn?lessonSlug=lnx-16-1-dung-may${REF.replace('?', '&')} — system users, an idempotent bootstrap, systemd units and timers, logrotate.</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 15 · Bài 15.1</span>
@@ -734,7 +734,7 @@ ssh -i khoa -o UserKnownHostsFile=./known_hosts -p 19152 root@127.0.0.1 \\
 <div class="link-card"><span class="lc-ico">🔧</span><span class="lc-body"><span class="lc-title">sshd(8)</span><span class="lc-sub">man7.org/linux/man-pages/man8/sshd.8.html — <code>-t</code>, <code>-T</code>, và nạp lại khi nhận SIGHUP.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Hướng dẫn dùng Certbot</span><span class="lc-sub">eff-certbot.readthedocs.io/en/stable/using.html — <code>certonly</code>, <code>--webroot</code>, hook, gia hạn.</span></span></div>
 <div class="link-card"><span class="lc-ico">🔧</span><span class="lc-body"><span class="lc-title">Pebble</span><span class="lc-sub">github.com/letsencrypt/pebble — máy chủ ACME thử dùng thay cho Let's Encrypt.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash — Chương 16: máy chủ dự án cuối khoá</span><span class="lc-sub">/courses/linux-bash/learn${REF} — người dùng hệ thống, bootstrap chạy lại được, unit và timer systemd, logrotate.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash — 16.1 Dựng máy chủ dự án cuối khoá</span><span class="lc-sub">/courses/linux-bash/learn?lessonSlug=lnx-16-1-dung-may${REF.replace('?', '&')} — người dùng hệ thống, bootstrap chạy lại được, unit và timer systemd, logrotate.</span></span></div>
 </div>
 `,
     },
@@ -1141,7 +1141,7 @@ dem.sh 25</code></pre>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">docker container run</span><span class="lc-sub">docs.docker.com/reference/cli/docker/container/run/ — <code>--init</code>, <code>--restart</code>, <code>--memory</code>, publishing on an address.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">PostgreSQL — Client connection defaults</span><span class="lc-sub">postgresql.org/docs/16/runtime-config-client.html — <code>lock_timeout</code>.</span></span></div>
 <div class="link-card"><span class="lc-ico">🔧</span><span class="lc-body"><span class="lc-title">timeout(1)</span><span class="lc-sub">man7.org/linux/man-pages/man1/timeout.1.html — the coreutils version; BusyBox's behaves differently as PID 1.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Docker course — images, registries, Compose</span><span class="lc-sub">/courses/docker/learn${REF} — Dockerfiles, tags and pushing, the basis of stages 1–3.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Docker — 3.3 Registries: tag and push</span><span class="lc-sub">/courses/docker/learn?lessonSlug=dk-3-3-registry${REF.replace('?', '&')} — Dockerfiles, tags and pushing, the basis of stages 1–3.</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 15 · Bài 15.2</span>
@@ -1538,7 +1538,7 @@ dem.sh 25</code></pre>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">docker container run</span><span class="lc-sub">docs.docker.com/reference/cli/docker/container/run/ — <code>--init</code>, <code>--restart</code>, <code>--memory</code>, publish lên một địa chỉ.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">PostgreSQL — Mặc định cho kết nối client</span><span class="lc-sub">postgresql.org/docs/16/runtime-config-client.html — <code>lock_timeout</code>.</span></span></div>
 <div class="link-card"><span class="lc-ico">🔧</span><span class="lc-body"><span class="lc-title">timeout(1)</span><span class="lc-sub">man7.org/linux/man-pages/man1/timeout.1.html — bản của coreutils; bản BusyBox hành xử khác khi là PID 1.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Khoá Docker — ảnh, registry, Compose</span><span class="lc-sub">/courses/docker/learn${REF} — Dockerfile, tag và đẩy ảnh, nền của chặng 1–3.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Docker — 3.3 Registry: tag và đẩy ảnh</span><span class="lc-sub">/courses/docker/learn?lessonSlug=dk-3-3-registry${REF.replace('?', '&')} — Dockerfile, tag và đẩy ảnh, nền của chặng 1–3.</span></span></div>
 </div>
 `,
     },
@@ -1850,7 +1850,7 @@ HOOK=http://dv15-hook:8080/canh canh.sh</code></pre>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Docker Official Image — postgres</span><span class="lc-sub">github.com/docker-library/docs/blob/master/postgres/README.md — the temporary server that "listens only on the Unix socket".</span></span></div>
 <div class="link-card"><span class="lc-ico">🔧</span><span class="lc-body"><span class="lc-title">sshd(8) — AUTHORIZED_KEYS FILE FORMAT</span><span class="lc-sub">man7.org/linux/man-pages/man8/sshd.8.html — <code>command=</code>, <code>restrict</code>, <code>from=</code>.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Google SRE Workbook — Being On-Call</span><span class="lc-sub">sre.google/workbook/on-call/ — alerts that people can act on, and alert fatigue.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash — Lesson 16.3: backups, timers, monitoring</span><span class="lc-sub">/courses/linux-bash/learn${REF} — the systemd timer at 02:15 Vietnam time that schedules <code>sao-luu.sh</code>.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash — Lesson 16.3: backups, timers, monitoring</span><span class="lc-sub">/courses/linux-bash/learn?lessonSlug=lnx-16-3-tu-dong-hoa-giam-sat${REF.replace('?', '&')} — the systemd timer at 02:15 Vietnam time that schedules <code>sao-luu.sh</code>.</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 15 · Bài 15.3</span>
@@ -2152,7 +2152,7 @@ HOOK=http://dv15-hook:8080/canh canh.sh</code></pre>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Ảnh chính thức Docker — postgres</span><span class="lc-sub">github.com/docker-library/docs/blob/master/postgres/README.md — máy chủ tạm "chỉ nghe trên Unix socket".</span></span></div>
 <div class="link-card"><span class="lc-ico">🔧</span><span class="lc-body"><span class="lc-title">sshd(8) — định dạng tệp AUTHORIZED_KEYS</span><span class="lc-sub">man7.org/linux/man-pages/man8/sshd.8.html — <code>command=</code>, <code>restrict</code>, <code>from=</code>.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Google SRE Workbook — Being On-Call</span><span class="lc-sub">sre.google/workbook/on-call/ — cảnh báo người nhận làm được gì đó, và chứng mệt cảnh báo.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash — Bài 16.3: sao lưu, timer, giám sát</span><span class="lc-sub">/courses/linux-bash/learn${REF} — timer systemd lúc 02:15 giờ Việt Nam để hẹn giờ <code>sao-luu.sh</code>.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash — Bài 16.3: sao lưu, timer, giám sát</span><span class="lc-sub">/courses/linux-bash/learn?lessonSlug=lnx-16-3-tu-dong-hoa-giam-sat${REF.replace('?', '&')} — timer systemd lúc 02:15 giờ Việt Nam để hẹn giờ <code>sao-luu.sh</code>.</span></span></div>
 </div>
 `,
     },
@@ -2469,7 +2469,7 @@ Phong: flock -n + ma thoat 3; moi lan deploy bao trong nhom chat</code></pre>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">PostgreSQL — Explicit locking</span><span class="lc-sub">postgresql.org/docs/16/explicit-locking.html — which statements take which locks, and the queue behind ACCESS EXCLUSIVE.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">PostgreSQL — System information functions</span><span class="lc-sub">postgresql.org/docs/16/functions-info.html — <code>pg_blocking_pids()</code>.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Google SRE Book — Postmortem culture</span><span class="lc-sub">sre.google/sre-book/postmortem-culture/ — blameless write-ups that change something.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash — Lesson 16.4: eight first-week incidents on the server</span><span class="lc-sub">/courses/linux-bash/learn${REF} — the operating-system side: disk, memory, ports, permissions, timers, CRLF.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash — Lesson 16.4: eight first-week incidents on the server</span><span class="lc-sub">/courses/linux-bash/learn?lessonSlug=lnx-16-4-su-co-tuan-dau${REF.replace('?', '&')} — the operating-system side: disk, memory, ports, permissions, timers, CRLF.</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 15 · Bài 15.4</span>
@@ -2776,7 +2776,7 @@ Phong: flock -n + ma thoat 3; moi lan deploy bao trong nhom chat</code></pre>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">PostgreSQL — Khoá tường minh</span><span class="lc-sub">postgresql.org/docs/16/explicit-locking.html — lệnh nào lấy khoá nào, và hàng đợi sau ACCESS EXCLUSIVE.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">PostgreSQL — Hàm thông tin hệ thống</span><span class="lc-sub">postgresql.org/docs/16/functions-info.html — <code>pg_blocking_pids()</code>.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Google SRE Book — Postmortem culture</span><span class="lc-sub">sre.google/sre-book/postmortem-culture/ — bản rút kinh nghiệm không đổ lỗi và phải đổi được điều gì đó.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash — Bài 16.4: tám sự cố tuần đầu trên máy chủ</span><span class="lc-sub">/courses/linux-bash/learn${REF} — phía hệ điều hành: đĩa, bộ nhớ, cổng, quyền, timer, CRLF.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash — Bài 16.4: tám sự cố tuần đầu trên máy chủ</span><span class="lc-sub">/courses/linux-bash/learn?lessonSlug=lnx-16-4-su-co-tuan-dau${REF.replace('?', '&')} — phía hệ điều hành: đĩa, bộ nhớ, cổng, quyền, timer, CRLF.</span></span></div>
 </div>
 `,
     },

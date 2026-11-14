@@ -1,3 +1,4 @@
+import G11_1 from './giang/sio-11-1.mjs';
 const REF = '?ref=%2Fcourses%2Fsocket-io%2Flearn&reflabel=Socket.IO';
 
 export default {
@@ -13,6 +14,7 @@ export default {
       type: 'VIDEO',
       description: 'Ba cột. Cột A: luôn đúng, không cần đo lại. Cột B: chỉ đúng khi bạn đo — con số của kho khác sẽ khác. Cột C: trực giác nói, nhưng đo cho ra sai.',
       content: `
+${G11_1}
 <div class="ml-en">
 <span class="eyebrow">Chapter 11 · Lesson 11.1</span>
 <h2>What survived measurement</h2>
@@ -27,7 +29,7 @@ export default {
 <div class="lz-layer"><span class="lz-lname">io.to(A).to(B) is a union</span><span class="lz-lnote">A OR B, each socket once — the same as <code>[A, B]</code>; there is no intersection operator. Lesson 3.1</span></div>
 <div class="lz-layer"><span class="lz-lname">The sid changes on reconnect</span><span class="lz-lnote">Track state by userId, not socket.id. Lessons 1.3 and 1.5</span></div>
 <div class="lz-layer"><span class="lz-lname">Redis adapter ≠ sticky sessions</span><span class="lz-lnote">A cluster needs BOTH. The adapter broadcasts across workers; stickiness routes polling back to the same worker. Lessons 2.3 and 5.1</span></div>
-<div class="lz-layer"><span class="lz-lname">WebRTC media does NOT travel over socket.io</span><span class="lz-lnote">Socket.io carries only signalling (2 KB, 5-20 packets). The media goes peer-to-peer over RTP/UDP. Lesson 7.1</span></div>
+<div class="lz-layer"><span class="lz-lname">WebRTC media does NOT travel over socket.io</span><span class="lz-lnote">Socket.io carries only signalling (2 KB, 5-20 packets — measured in 7.1 for a video call: 28 frames, 30,622 B). The media goes peer-to-peer over RTP/UDP. Lesson 7.1</span></div>
 </div>
 
 <h3>Column B — ONLY TRUE ONCE MEASURED</h3>
@@ -41,7 +43,7 @@ export default {
 
 <h3>Column C — ALWAYS FALSE (intuition against measurement)</h3>
 <div class="lz-stack">
-<div class="lz-layer"><span class="lz-lname">INTUITION: &quot;the transport array decides the order things are tried&quot;</span><span class="lz-lnote">FALSE. The client always starts on polling regardless of the array's order. The array only declares what is ALLOWED. Lesson 0.2</span></div>
+<div class="lz-layer"><span class="lz-lname">INTUITION: &quot;the transport array decides the order things are tried&quot;</span><span class="lz-lnote">FALSE. The client always starts on polling regardless of the array's order. The array only declares what is ALLOWED. Lesson 0.2 <em>(Measured 14/11/2026: true only for the DEFAULT array. This repo&#39;s <code>[&#39;websocket&#39;, &#39;polling&#39;]</code> opens a WebSocket first, and engine.io-client 6.6 never tries the second transport unless <code>tryAllTransports: true</code> — lessons 10.2, 11.1. The intuition was right here.)</em></span></div>
 <div class="lz-layer"><span class="lz-lname">INTUITION: &quot;polling is 133× heavier than WebSocket&quot;</span><span class="lz-lnote">AN OVER-SIMPLIFICATION. At the socket.io LAYER they are identical. The real overhead is in the HTTP headers per poll cycle, 2.7-133× depending on burstiness. Lesson 2.1 corrects lesson 0.2</span></div>
 <div class="lz-layer"><span class="lz-lname">INTUITION: &quot;socket.io delivers reliably because WebSocket's TCP guarantees it&quot;</span><span class="lz-lnote">FALSE. TCP guarantees delivery WITHIN a connection. If the connection breaks, in-flight packets are LOST. A reconnect does NOT replay. Lesson 6.1</span></div>
 <div class="lz-layer"><span class="lz-lname">INTUITION: &quot;a disconnect means the user is offline&quot;</span><span class="lz-lnote">FALSE. A user may have 3 tabs open — closing 1 does not put them offline. You need reference counting (a Set&lt;socketId&gt; per userId). Lesson 4.3</span></div>
@@ -75,6 +77,62 @@ export default {
 <div class="pitfall">
 <p><strong>Trap — quoting a Column B number without the condition that made it true.</strong> &quot;WebSocket is 40× lighter than polling&quot; was measured with a specific payload size, a specific header set, and a specific poll interval. Halve the poll interval or send a 4 KB message and the ratio moves by an order of magnitude. That is why this lesson has three columns rather than a list of facts: Column A survives any conditions, Column B survives only its own, and Column C is what happens when a Column B claim loses its footnote. The measurement this lesson admits getting wrong is the honest reminder — a number is only as portable as the sentence describing how it was taken.</p>
 </div>
+
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>From column A, list two socket.io rules you can apply to ANY project without re-measuring.</li>
+<li>Pick one column B number and write the exact conditions under which it holds — then name one change that would move it.</li>
+<li>Explain the column C estimation error from lesson 0.2 that 2.1 corrects, and why it is kept rather than deleted.</li>
+</ol>
+<p><strong>Done when:</strong> you can tell a portable rule (A) from a repo-specific measurement (B) and name one intuition that lost to data (C).</p></div>
+
+<h3>🔬 Measured: the three columns, re-run on 14/11/2026</h3>
+<p>Column A against socket.io 4.8.3 (one server with <code>connectionStateRecovery</code>, one without), then column B re-read on today&#39;s repo:</p>
+<div class="out">$ node song.mjs      # chạy lại các khẳng định của bài 11.1: socket.io 4.8.3 thật + kho hôm nay
+A engine.io sid ≠ socket.io id                         ⇒ lTJ0q2… ≠ j7c4zk… · ĐÚNG
+A "luôn bắt đầu bằng polling" — client mặc định        ⇒ transport mở đầu: polling
+C "luôn bắt đầu bằng polling" — client ['websocket','polling'] (kho) ⇒ transport mở đầu: websocket
+A io.to(A).to(B): socket ở cả A và B nhận mấy lần      ⇒ 1 lần
+A sid sau khi nối lại (mặc định)                       ⇒ ĐỔI · recovered=false
+A sid sau khi nối lại (connectionStateRecovery)        ⇒ GIỮ NGUYÊN · recovered=true
+A 5 tin phát lúc client đang rớt (mặc định)            ⇒ nhận 0/5
+A 5 tin phát lúc client đang rớt (connectionStateRecovery) ⇒ nhận 5/5
+B kho: pingInterval / pingTimeout                      ⇒ pingInterval: 25000 pingTimeout: 60000
+B kho: điểm cuối WebSocket gắn vào server HTTP         ⇒ 4 (bài 11.1 nói 3)
+B kho: device.gateway.ts                               ⇒ 1113 dòng (bài 11.1 nói 1.035)
+B kho: mọi tệp gateway (không tính test)               ⇒ 4000 dòng · 8 tệp</div>
+<div class="callout info"><p><strong>Column A needs its conditions written in.</strong> “Starts with polling” holds only for the default client. “The sid changes on reconnect” and “a reconnect does not replay” hold only <em>without</em> <code>connectionStateRecovery</code>: with it the sid was kept and 5/5 missed events arrived (the client must have received at least one event, and the break must be abrupt). Column B already drifted: 4 WebSocket endpoints (page: 3), <code>device.gateway.ts</code> 1,113 lines (page: 1,035), gateway code 4,000 lines in 8 files.</p></div>
+<p>How much the measurements corrected — this course&#39;s own run log, and the repo:</p>
+<div class="out">$ awk '/^## 5\\./,/^## 6\\./' KE-HOACH-SOCKET-IO.md | grep -cE "^- [0-9]+\\.[0-9]:"     # sổ chạy thật của khoá: bao nhiêu bài có chỗ bị đo sửa
+50
+$ awk '/^## 5\\./,/^## 6\\./' KE-HOACH-SOCKET-IO.md | grep -oE "\\bSAI\\b" | wc -l     # bao nhiêu khẳng định bị ghi thẳng là SAI
+      32</div>
+<div class="out">$ git log --since=2026-11-13 --format='%h %ad %s' --date=short -- src/socket src/index.ts frontend/src/store/messagingStore.ts | grep fix | cut -c1-110
+ce69e2c7f 2026-11-14 fix(shutdown): đóng cả hai kênh đồng soạn thảo Hocuspocus (ghi chú + Docs CT Work) khi tắ
+82084b1e2 2026-11-13 fix(realtime): không bao giờ gắn Redis adapter MUỘN (Redis tắt lúc khởi động ⇒ getRedis t
+3981e9a00 2026-11-13 fix(messenger): người bị chặn giữa phiên không còn nhận "đã offline" (lọc lại audience lú</div>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-bash"><span class="tok-comment"># lab c11: song.mjs — chạy lại các khẳng định của bài trên socket.io 4.8.3 thật (cổng 19990 bật connectionStateRecovery, 19991 mặc định) + đọc lại kho</span>
+node song.mjs
+<span class="tok-comment"># đọc lại số của kho (cột B) trên kho CỦA BẠN:</span>
+grep -oE 'ping(Interval|Timeout): [0-9]+' src/socket/*.ts ; wc -l src/socket/*.ts</code></pre>
+<h3>🔗 Go deeper in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-1-4-chi-phi-that" target="_blank" rel="noopener"><span class="lc-ico">🔭</span><span class="lc-body"><span class="lc-title">Observability · 1.4 — What one log line really costs, measured</span><span class="lc-sub">The same habit: a number with its measurement sentence</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-13-4-co-y-lam-hong" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking for Developers · 13.4 — Break it on purpose, then diagnose</span><span class="lc-sub">Practice that keeps column C honest</span></span></a>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Column A</span><span class="v">socket.io rules that hold in any repo.</span></div>
+  <div class="kv"><span class="k">Column B</span><span class="v">This repo's measurements — re-run them yourself.</span></div>
+  <div class="kv"><span class="k">Column C</span><span class="v">Intuitions that lost to measurement.</span></div>
+  <div class="kv"><span class="k">Measurement condition</span><span class="v">The payload, headers and interval a number was taken under.</span></div>
+  <div class="kv"><span class="k">Portable claim</span><span class="v">A column A rule that survives any conditions.</span></div>
+  <div class="kv"><span class="k">Kept error</span><span class="v">The 0.2 estimate corrected by 2.1, retained as a lesson.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Column A: eight socket.io rules that apply to any repo.</li><li>Column B: five measurements specific to this repo — re-run them yourself.</li><li>Column C: six intuitions that lost to measurement.</li><li>A measured number is only as portable as the sentence describing how it was taken.</li><li>The 0.2 estimation error, corrected in 2.1, is kept as a lesson in its own right.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO documentation</span><span class="lc-sub">socket.io/docs/v4 — nguồn chính cho cột A.</span></span></div>
 </div>
@@ -92,7 +150,7 @@ export default {
 <div class="lz-layer"><span class="lz-lname">io.to(A).to(B) là union</span><span class="lz-lnote">A HOẶC B, mỗi socket một lần — giống <code>[A, B]</code>; không có toán tử giao. Bài 3.1</span></div>
 <div class="lz-layer"><span class="lz-lname">Sid đổi ở reconnect</span><span class="lz-lnote">Track state theo userId, không socket.id. Bài 1.3 + 1.5</span></div>
 <div class="lz-layer"><span class="lz-lname">Redis adapter ≠ sticky sessions</span><span class="lz-lnote">Cluster cần CẢ HAI. Adapter broadcast cross-worker, sticky routes polling to same worker. Bài 2.3 + 5.1</span></div>
-<div class="lz-layer"><span class="lz-lname">WebRTC media KHÔNG qua socket.io</span><span class="lz-lnote">Socket.io chỉ signalling (2 KB, 5-20 packets). Media qua RTP/UDP P2P. Bài 7.1</span></div>
+<div class="lz-layer"><span class="lz-lname">WebRTC media KHÔNG qua socket.io</span><span class="lz-lnote">Socket.io chỉ signalling (2 KB, 5-20 packets — đo ở 7.1 cho cuộc gọi video: 28 khung, 30.622 B). Media qua RTP/UDP P2P. Bài 7.1</span></div>
 </div>
 
 <h3>Cột B — CHỈ ĐÚNG KHI ĐO</h3>
@@ -106,7 +164,7 @@ export default {
 
 <h3>Cột C — LUÔN SAI (trực giác vs đo lường)</h3>
 <div class="lz-stack">
-<div class="lz-layer"><span class="lz-lname">TRỰC GIÁC: &quot;transport array quyết thứ tự thử&quot;</span><span class="lz-lnote">SAI. Client luôn bắt đầu polling bất kể thứ tự array. Array chỉ khai báo cái được PHÉP. Bài 0.2</span></div>
+<div class="lz-layer"><span class="lz-lname">TRỰC GIÁC: &quot;transport array quyết thứ tự thử&quot;</span><span class="lz-lnote">SAI. Client luôn bắt đầu polling bất kể thứ tự array. Array chỉ khai báo cái được PHÉP. Bài 0.2 <em>(Đo 14/11/2026: chỉ đúng với mảng MẶC ĐỊNH. Kho đặt <code>[&#39;websocket&#39;, &#39;polling&#39;]</code> ⇒ mở WebSocket trước, và engine.io-client 6.6 không thử transport thứ hai nếu thiếu <code>tryAllTransports: true</code> — bài 10.2, 11.1. Ở kho này trực giác đúng.)</em></span></div>
 <div class="lz-layer"><span class="lz-lname">TRỰC GIÁC: &quot;polling nặng hơn WebSocket 133×&quot;</span><span class="lz-lnote">SAI OVER-SIMPLIFICATION. Ở TẦNG socket.io, giống nhau. Overhead thật ở HTTP header per poll cycle, 2.7-133× tuỳ burstiness. Bài 2.1 sửa lại 0.2</span></div>
 <div class="lz-layer"><span class="lz-lname">TRỰC GIÁC: &quot;socket.io reliable delivery vì WebSocket TCP bảo đảm&quot;</span><span class="lz-lnote">SAI. TCP bảo đảm TRONG connection. Nếu connection break, packet trong-flight MẤT. Reconnect KHÔNG replay. Bài 6.1</span></div>
 <div class="lz-layer"><span class="lz-lname">TRỰC GIÁC: &quot;disconnect nghĩa là user offline&quot;</span><span class="lz-lnote">SAI. User có thể mở 3 tab — đóng 1 tab không offline. Cần reference counting (Set&lt;socketId&gt; per userId). Bài 4.3</span></div>
@@ -140,6 +198,62 @@ export default {
 <div class="pitfall">
 <p><strong>Bẫy — trích một con số ở Cột B mà bỏ mất cái điều kiện đã làm nó đúng.</strong> &quot;WebSocket nhẹ hơn polling 40 lần&quot; là đo với một cỡ dữ liệu cụ thể, một bộ header cụ thể, và một chu kỳ hỏi cụ thể. Giảm chu kỳ hỏi đi một nửa hoặc gửi một thông điệp 4 KB là cái tỷ lệ đó dịch đi cả một bậc độ lớn. Đó là lý do bài này có ba cột chứ không phải một danh sách sự kiện: Cột A sống sót qua mọi điều kiện, Cột B chỉ sống sót qua điều kiện của chính nó, và Cột C là thứ xảy ra khi một khẳng định Cột B đánh mất cái chú thích của nó. Cái phép đo mà bài này thừa nhận là đã làm sai chính là lời nhắc thành thật — một con số chỉ mang đi được xa bằng đúng cái câu mô tả nó đã được đo ra sao.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Từ cột A, liệt kê hai quy luật socket.io bạn áp được cho BẤT KỲ project nào mà không cần đo lại.</li>
+<li>Chọn một con số cột B và viết đúng điều kiện nó đúng — rồi gọi tên một thay đổi sẽ làm nó dịch đi.</li>
+<li>Giải thích lỗi ước lượng cột C ở bài 0.2 mà 2.1 sửa, và vì sao nó được giữ lại thay vì xoá.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn phân biệt được một quy luật mang đi được (A) với một phép đo riêng của kho (B) và gọi tên một trực giác đã thua dữ liệu (C).</p></div>
+
+<h3>🔬 Đo thật: ba cột, chạy lại ngày 14/11/2026</h3>
+<p>Cột A trên socket.io 4.8.3 (một server bật <code>connectionStateRecovery</code>, một server mặc định), rồi cột B đọc lại trên kho hôm nay:</p>
+<div class="out">$ node song.mjs      # chạy lại các khẳng định của bài 11.1: socket.io 4.8.3 thật + kho hôm nay
+A engine.io sid ≠ socket.io id                         ⇒ lTJ0q2… ≠ j7c4zk… · ĐÚNG
+A "luôn bắt đầu bằng polling" — client mặc định        ⇒ transport mở đầu: polling
+C "luôn bắt đầu bằng polling" — client ['websocket','polling'] (kho) ⇒ transport mở đầu: websocket
+A io.to(A).to(B): socket ở cả A và B nhận mấy lần      ⇒ 1 lần
+A sid sau khi nối lại (mặc định)                       ⇒ ĐỔI · recovered=false
+A sid sau khi nối lại (connectionStateRecovery)        ⇒ GIỮ NGUYÊN · recovered=true
+A 5 tin phát lúc client đang rớt (mặc định)            ⇒ nhận 0/5
+A 5 tin phát lúc client đang rớt (connectionStateRecovery) ⇒ nhận 5/5
+B kho: pingInterval / pingTimeout                      ⇒ pingInterval: 25000 pingTimeout: 60000
+B kho: điểm cuối WebSocket gắn vào server HTTP         ⇒ 4 (bài 11.1 nói 3)
+B kho: device.gateway.ts                               ⇒ 1113 dòng (bài 11.1 nói 1.035)
+B kho: mọi tệp gateway (không tính test)               ⇒ 4000 dòng · 8 tệp</div>
+<div class="callout info"><p><strong>Cột A phải viết kèm điều kiện.</strong> “Bắt đầu bằng polling” chỉ đúng với client mặc định. “Sid đổi khi nối lại” và “nối lại không phát lại” chỉ đúng khi <em>không</em> bật <code>connectionStateRecovery</code>: bật lên thì sid giữ nguyên và nhận đủ 5/5 tin lúc vắng (client phải đã nhận ít nhất một tin, và mạng phải đứt đột ngột). Cột B đã trôi: 4 điểm cuối WebSocket (bài nói 3), <code>device.gateway.ts</code> 1.113 dòng (bài nói 1.035), mã gateway 4.000 dòng trong 8 tệp.</p></div>
+<p>Đo lường đã sửa bao nhiêu — sổ chạy thật của khoá, và kho:</p>
+<div class="out">$ awk '/^## 5\\./,/^## 6\\./' KE-HOACH-SOCKET-IO.md | grep -cE "^- [0-9]+\\.[0-9]:"     # sổ chạy thật của khoá: bao nhiêu bài có chỗ bị đo sửa
+50
+$ awk '/^## 5\\./,/^## 6\\./' KE-HOACH-SOCKET-IO.md | grep -oE "\\bSAI\\b" | wc -l     # bao nhiêu khẳng định bị ghi thẳng là SAI
+      32</div>
+<div class="out">$ git log --since=2026-11-13 --format='%h %ad %s' --date=short -- src/socket src/index.ts frontend/src/store/messagingStore.ts | grep fix | cut -c1-110
+ce69e2c7f 2026-11-14 fix(shutdown): đóng cả hai kênh đồng soạn thảo Hocuspocus (ghi chú + Docs CT Work) khi tắ
+82084b1e2 2026-11-13 fix(realtime): không bao giờ gắn Redis adapter MUỘN (Redis tắt lúc khởi động ⇒ getRedis t
+3981e9a00 2026-11-13 fix(messenger): người bị chặn giữa phiên không còn nhận "đã offline" (lọc lại audience lú</div>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-bash"><span class="tok-comment"># lab c11: song.mjs — chạy lại các khẳng định của bài trên socket.io 4.8.3 thật (cổng 19990 bật connectionStateRecovery, 19991 mặc định) + đọc lại kho</span>
+node song.mjs
+<span class="tok-comment"># đọc lại số của kho (cột B) trên kho CỦA BẠN:</span>
+grep -oE 'ping(Interval|Timeout): [0-9]+' src/socket/*.ts ; wc -l src/socket/*.ts</code></pre>
+<h3>🔗 Học sâu hơn ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-1-4-chi-phi-that" target="_blank" rel="noopener"><span class="lc-ico">🔭</span><span class="lc-body"><span class="lc-title">Observability · 1.4 — Một dòng log thật sự tốn bao nhiêu, đo thật</span><span class="lc-sub">Cùng thói quen: con số đi kèm câu mô tả cách đo</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-13-4-co-y-lam-hong" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking for Developers · 13.4 — Cố tình làm hỏng rồi chẩn đoán</span><span class="lc-sub">Cách luyện để cột C luôn trung thực</span></span></a>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Cột A</span><span class="v">Các quy luật socket.io đúng ở mọi kho.</span></div>
+  <div class="kv"><span class="k">Cột B</span><span class="v">Các phép đo của kho này — tự chạy lại.</span></div>
+  <div class="kv"><span class="k">Cột C</span><span class="v">Các trực giác đã thua đo lường.</span></div>
+  <div class="kv"><span class="k">Điều kiện đo</span><span class="v">Payload, header và chu kỳ mà một con số được đo dưới đó.</span></div>
+  <div class="kv"><span class="k">Khẳng định mang đi được</span><span class="v">Một quy luật cột A sống sót qua mọi điều kiện.</span></div>
+  <div class="kv"><span class="k">Lỗi được giữ</span><span class="v">Ước lượng ở 0.2 do 2.1 sửa, giữ lại làm bài học.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Cột A: tám quy luật socket.io áp cho mọi kho.</li><li>Cột B: năm phép đo riêng của kho này — tự chạy lại.</li><li>Cột C: sáu trực giác đã thua đo lường.</li><li>Một con số đo được chỉ mang đi xa bằng đúng câu mô tả nó được đo ra sao.</li><li>Lỗi ước lượng ở 0.2, được sửa ở 2.1, giữ lại làm một bài học riêng.</li></ul>
+
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Socket.IO documentation</span><span class="lc-sub">socket.io/docs/v4 — nguồn chính cho cột A.</span></span></div>
 </div>
@@ -193,11 +307,11 @@ export default {
             question: 'Config: <code>transports: [&quot;websocket&quot;, &quot;polling&quot;]</code>. Which transport does client try first?|||Config: <code>transports: [&quot;websocket&quot;, &quot;polling&quot;]</code>. Client thử transport nào trước?',
             options: [
               'Polling always — client starts polling, upgrades to WebSocket if allowed. Array declares what\'s PERMITTED, not order|||Polling luôn — client bắt đầu polling, upgrade WebSocket nếu cho phép. Array khai báo cái ĐƯỢC PHÉP, không thứ tự',
-              'WebSocket, listed first|||WebSocket, listed đầu',
+              'WebSocket — listed first. With engine.io-client 6.6 the client opens the first transport and, without <code>tryAllTransports: true</code>, never falls back to polling (measured, lessons 10.2 and 11.1)|||WebSocket — đứng đầu danh sách. Với engine.io-client 6.6, client mở transport đầu tiên và, không có <code>tryAllTransports: true</code>, không bao giờ lùi về polling (đo ở bài 10.2 và 11.1)',
               'Both concurrently|||Cả hai đồng thời',
               'Depends on network|||Phụ thuộc network',
             ],
-            correctIndex: 0,
+            correctIndex: 1,
             points: 1,
           },
           {
@@ -247,7 +361,7 @@ export default {
           {
             question: '4-worker cluster, no sticky sessions. What happens to polling clients?|||Cluster 4 worker, không sticky. Polling client bị gì?',
             options: [
-              '75% of follow-up requests hit workers that don\'t know the sid → HTTP 400 &quot;Session ID unknown&quot;. Fix: <code>hash $cookie_io</code> in nginx|||75% request tiếp theo hit worker không biết sid → HTTP 400 &quot;Session ID unknown&quot;. Fix: <code>hash $cookie_io</code> ở nginx',
+              '75% of follow-up requests hit workers that don\'t know the sid → HTTP 400 &quot;Session ID unknown&quot;. Fix: <code>ip_hash</code> (or sticky by sid, or WebSocket-only) — <code>hash $cookie_io</code> does not work, the handshake has no cookie yet (lesson 10.5)|||75% request tiếp theo hit worker không biết sid → HTTP 400 &quot;Session ID unknown&quot;. Sửa: <code>ip_hash</code> (hoặc sticky theo sid, hoặc chỉ WebSocket) — <code>hash $cookie_io</code> không chạy vì lúc bắt tay chưa có cookie (bài 10.5)',
               'Nothing — Redis adapter handles it|||Không gì — Redis adapter xử lý',
               'Nginx retries|||Nginx retry',
               'Clients auto-pick correct worker|||Client tự chọn đúng worker',
@@ -258,7 +372,7 @@ export default {
           {
             question: 'Naive <code>io.emit(&quot;presence:update&quot;)</code> during deploy reconnect storm at N=10.000. Cost?|||<code>io.emit(&quot;presence:update&quot;)</code> ngây thơ khi deploy reconnect storm ở N=10.000. Cost?',
             options: [
-              'O(N²) = 100M packets in seconds — server dead. Fix: <code>emitPresenceTo(audience)</code> to friends+peers only, ~333× reduction (audience ~30)|||O(N²) = 100M packets trong vài giây — server dead. Fix: <code>emitPresenceTo(audience)</code> chỉ đến friends+peers, giảm ~333× (audience ~30)',
+              'Quadratic: every reconnect broadcasts to everyone already back — N(N+1)/2 ≈ 50M packets at N=10,000 (lesson 4.1 measured 2,001,000 at N=2,000). Fix: <code>emitPresenceTo(audience)</code> to friends+peers only — cost falls to N × audience|||Bậc hai: mỗi lần nối lại phát cho mọi người đã nối — N(N+1)/2 ≈ 50 triệu gói ở N=10.000 (bài 4.1 đo 2.001.000 ở N=2.000). Sửa: <code>emitPresenceTo(audience)</code> chỉ tới bạn bè + người cùng hội thoại — chi phí còn N × audience',
               'O(N) = 10K packets — fine|||O(N) = 10K packets — OK',
               'O(1) — socket.io batches|||O(1) — socket.io batch',
               'Depends on Redis|||Phụ thuộc Redis',

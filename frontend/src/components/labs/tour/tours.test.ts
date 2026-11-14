@@ -190,6 +190,9 @@ const FINAL: Record<string, (s: Record<string, Record<string, unknown> | undefin
   'tunnel-port': (s) => s.tunnel?.preset === 'port' && s.tunnel?.place === 'home' && s.tunnel?.order === 'first' && s.tunnel?.port === 22 && s.tunnel?.atEnd === true,
   'tunnel-forward': (s) => s.tunnel?.preset === 'forward' && s.tunnel?.fwd === 'R0' && s.tunnel?.tone === 'ok' && s.tunnel?.atEnd === true,
   'tunnel-socks': (s) => s.tunnel?.preset === 'socks' && s.tunnel?.req === 'stranger' && s.tunnel?.atEnd === true,
+  'vpn-route': (s) => s.vpn?.preset === 'route' && s.vpn?.mode === 'full' && s.vpn?.ip === '198.18.0.30' && s.vpn?.atEnd === true,
+  'vpn-school': (s) => s.vpn?.preset === 'school' && s.vpn?.tun === 'ovpn' && s.vpn?.dns === 'vpn' && s.vpn?.leak === false && s.vpn?.atEnd === true,
+  'vpn-kill': (s) => s.vpn?.preset === 'kill' && s.vpn?.kill === 'wg' && s.vpn?.tone === 'ok' && s.vpn?.atEnd === true,
 };
 
 describe('tours — run on the real simulations', () => {

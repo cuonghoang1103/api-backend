@@ -91,6 +91,13 @@ services:
     hostname: phone
     networks: { hs: { ipv4_address: 192.168.137.50, mac_address: "6a:0b:3c:4d:5e:6f", interface_name: wlan0 } }
     command: ["bash", "-c", "ip route replace default via 192.168.137.1 && echo 'nameserver 10.20.2.1' > /etc/resolv.conf && exec sleep infinity"]
+  khach:
+    # 14.5: điện thoại của NGƯỜI LẠ vào ké điểm phát (không mật khẩu) của laptop Windows
+    <<: *lab
+    container_name: nft-khach
+    hostname: dt-nguoi-la
+    networks: { hs: { ipv4_address: 192.168.137.66, mac_address: "7a:1c:2d:3e:4f:60", interface_name: wlan0 } }
+    command: ["bash", "-c", "ip route replace default via 192.168.137.1 && echo 'nameserver 10.20.2.1' > /etc/resolv.conf && exec sleep infinity"]
   vps:
     <<: *sysd
     container_name: nft-vps

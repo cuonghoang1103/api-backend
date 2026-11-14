@@ -5,7 +5,8 @@
 # chọn cổng → -L CSDL → -R khoe demo → -D SOCKS (và SOCKS mở toang) → máy nhà sau CGNAT + đường hầm ngược + ProxyJump + autossh →
 # DPI soi "SSH-2.0" ⇒ SSH bọc TLS qua sslh 443 → bot dò mật khẩu + bẫy thứ tự drop-in. (14.4) WireGuard ở nhà (split → full) → ở
 # trường UDP bị bỏ → OpenVPN-TCP sau sslh 443 → rò DNS + vá → kill switch → VPN thấy hết → đo trễ/tốc độ (netem) → điện thoại QR.
-#   GIU_LAB=1 ⇒ giữ lab · CHI=143 | CHI=144 ⇒ chỉ chạy output của một bài (phần dựng ngầm vẫn chạy).
+#   (14.5) điện thoại sau điểm phát gặp luật TTL 14.2 → chuẩn hoá TTL → gỡ/trả NAT → conntrack → người lạ ké điểm phát mở.
+#   GIU_LAB=1 ⇒ giữ lab · CHI=143 | CHI=144 | CHI=145 ⇒ chỉ chạy output của một bài (phần dựng ngầm vẫn chạy).
 set -e
 cd "$(dirname "$0")/.."
 M=moi-truong; X() { ./chay.sh "$@"; }
@@ -110,6 +111,29 @@ X nft-rnha ch14/c144-netem2.sh
 X nft-lap ch14/c144-do-nha.sh c144-do-nha-mat
 E nft-rnha tc qdisc del dev wan root
 X nft-vps ch14/c144-dt.sh
+fi
+
+# ── 14.5 ──
+if [ -z "${CHI:-}" ] || [ "$CHI" = 145 ]; then
+X nft-win ch14/c145-nat.sh
+X nft-phone ch14/c145-dt.sh c145-dt-ttl
+docker exec -d nft-gw bash -c 'timeout 25 tcpdump -U -c 2 -i sv0 -n -w /tmp/ttl5.pcap "tcp[tcpflags] == tcp-syn and dst port 80"'; sleep 2
+X nft-win ch14/c145-ttl-win.sh
+X nft-phone ch14/c145-dt.sh c145-dt-ok
+sleep 1
+X nft-gw ch14/c145-ttl-gw.sh
+X nft-win ch14/c145-bo-nat.sh
+docker exec -d nft-gw bash -c 'timeout 12 tcpdump -U -i sv0 -n -w /tmp/nat.pcap "tcp dst port 80 and src 192.168.137.50"'; sleep 2
+X nft-phone ch14/c145-dt.sh c145-dt-khongnat
+sleep 1
+X nft-gw ch14/c145-gw-thay.sh
+X nft-win ch14/c145-them-nat.sh
+docker exec -d nft-phone bash -c 'for i in 1 2 3; do curl -s -o /dev/null http://198.18.0.10/; done; exec 3<>/dev/tcp/198.18.0.10/80; sleep 20' 
+sleep 1
+X nft-win ch14/c145-ct.sh
+X nft-khach ch14/c145-ke.sh
+X nft-win ch14/c145-ke-win.sh
+X nft-gw ch14/c145-ke-gw.sh
 fi
 
 [ -n "${GIU_LAB:-}" ] || docker compose -f $M/truong.yml -p nft down -v >/dev/null 2>&1

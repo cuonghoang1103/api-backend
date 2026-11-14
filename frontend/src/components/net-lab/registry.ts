@@ -131,4 +131,11 @@ export const NET_LABS: Record<string, LabDef> = {
     presets: ['port', 'forward', 'socks'],
     load: () => import('./TunnelSim'),
   },
+  vpn: {
+    en: 'VPNs for developers', vi: 'VPN cho lập trình viên', chapterEn: 'Real-life networks', chapterVi: 'Mạng thực chiến',
+    descEn: 'WireGuard from a laptop behind two NATs: split vs full tunnel (which IP the site sees, how wg-quick avoids a loop); at school all UDP is dropped so the handshake never completes — OpenVPN over TCP 443 behind sslh gets through, but the school DNS leaks every name until you use the VPN\'s DNS; and when the VPN dies, OpenVPN leaks with the school IP while a wg-quick full tunnel holds the packets (a kill switch). Real lab lines; the Tailscale/DERP path is illustrated, not measured.',
+    descVi: 'WireGuard từ một laptop sau hai lớp NAT: split và full tunnel (trang thấy IP nào, wg-quick tránh vòng lặp ra sao); ở trường mọi UDP bị bỏ nên bắt tay không bao giờ xong — OpenVPN qua TCP 443 sau sslh đi qua được, nhưng DNS trường làm lộ mọi tên tới khi dùng DNS của VPN; và khi VPN sập, OpenVPN để lộ IP trường còn full tunnel của wg-quick giữ gói lại (kill switch). Dòng thật từ lab; đường Tailscale/DERP chỉ minh hoạ, chưa đo.',
+    presets: ['route', 'school', 'kill'],
+    load: () => import('./VpnSim'),
+  },
 };

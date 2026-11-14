@@ -62,6 +62,7 @@ export const NET_SIMS = {
   wifi: ['register', 'private', 'clone'],
   block: ['web', 'hotspot', 'game'],
   tunnel: ['port', 'forward', 'socks'],
+  vpn: ['route', 'kill', 'school'],
 };
 export const NET_TOURS = {
   encap: ['encap-layers', 'encap-hop', 'encap-mtu', 'encap-start'],
@@ -81,6 +82,7 @@ export const NET_TOURS = {
   wifi: ['wifi-register', 'wifi-private', 'wifi-clone', 'wifi-start'],
   block: ['block-web', 'block-hotspot', 'block-game', 'block-start'],
   tunnel: ['tunnel-port', 'tunnel-forward', 'tunnel-socks', 'tunnel-start'],
+  vpn: ['vpn-route', 'vpn-kill', 'vpn-school', 'vpn-start'],
 };
 
 export const LAB_NS = {

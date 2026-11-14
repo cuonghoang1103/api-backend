@@ -385,4 +385,109 @@ export const NET14_TOURS: Tour[] = [
       answer: 0, why: ['With socks5 the client resolves; with socks5h (hostname) the proxy resolves.', 'Với socks5 máy khách phân giải; với socks5h (hostname) proxy phân giải.'],
     },
   },
+
+  // ───────────────────────── vpn (14.4) ─────────────────────────
+  {
+    id: 'vpn-route', ns: 'net-lab', sim: 'vpn', presets: ['route'],
+    title: ['Split or full tunnel: who does the site see?', 'Split hay full tunnel: trang web thấy ai?'],
+    summary: ['Follow one request from a laptop at home through WireGuard, first as a split tunnel, then as a full tunnel.', 'Theo một request từ laptop ở nhà qua WireGuard, lần đầu kiểu split tunnel, rồi full tunnel.'],
+    steps: [
+      {
+        target: 'vpn-topo', do: [{ a: 'vpn.preset', v: 'route' }, { a: 'vpn.mode', v: 'split' }, { a: 'player.reset' }],
+        title: ['A laptop behind two NATs', 'Laptop sau hai lớp NAT'],
+        body: ['The laptop sits behind the home router AND the ISP\'s CGNAT. A WireGuard tunnel to the VPS is already up — like a private pipe laid inside the shared water main.', 'Laptop ngồi sau router nhà VÀ CGNAT của nhà mạng. Đường hầm WireGuard tới VPS đã mở — như một ống nước riêng đặt trong đường ống chung.'],
+      },
+      {
+        target: 'controls',
+        title: ['Your turn: split tunnel', 'Đến lượt bạn: split tunnel'],
+        body: ['AllowedIPs = 10.66.0.0/24: only the VPN network goes in. Run to the end — which IP does the site see?', 'AllowedIPs = 10.66.0.0/24: chỉ mạng VPN đi vào hầm. Chạy tới cuối — trang thấy IP nào?'],
+        task: { text: ['Run the split tunnel to the end.', 'Chạy split tunnel tới cuối.'], until: (s) => s.vpn?.preset === 'route' && s.vpn?.mode === 'split' && s.vpn?.atEnd === true, solve: [{ a: 'player.end', delay: 500 }] },
+      },
+      {
+        target: 'vpn-sees',
+        title: ['The ISP\'s address', 'Địa chỉ của nhà mạng'],
+        body: ['198.18.0.40 — the ISP\'s shared address. Split tunnel changes nothing for normal browsing.', '198.18.0.40 — địa chỉ dùng chung của nhà mạng. Split tunnel không đổi gì với lướt web thường.'],
+      },
+      {
+        target: 'vpn-opts',
+        title: ['Your turn: full tunnel', 'Đến lượt bạn: full tunnel'],
+        body: ['Choose 0.0.0.0/0 and run again. Watch the first step: table 51820 and the fwmark rule.', 'Chọn 0.0.0.0/0 rồi chạy lại. Xem bước đầu: bảng 51820 và luật fwmark.'],
+        task: { text: ['Run the full tunnel to the end.', 'Chạy full tunnel tới cuối.'], until: (s) => s.vpn?.mode === 'full' && s.vpn?.ip === '198.18.0.30' && s.vpn?.atEnd === true, solve: [{ a: 'vpn.mode', v: 'full' }, { a: 'player.end', delay: 600 }] },
+      },
+      {
+        target: 'where',
+        title: ['Where in the computer?', 'Ở đâu trong máy?'],
+        body: ['wg0 is a kernel network card; the choice "which card" is the kernel\'s routing tables and policy rules.', 'wg0 là một card mạng của nhân; việc chọn "card nào" là bảng định tuyến và luật định tuyến của nhân.'],
+      },
+    ],
+    quiz: {
+      q: ['With AllowedIPs = 0.0.0.0/0, which IP does a website see?', 'Với AllowedIPs = 0.0.0.0/0, trang web thấy IP nào?'],
+      options: [['The VPN server\'s', 'Của máy chủ VPN'], ['The ISP\'s', 'Của nhà mạng'], ['The laptop\'s 192.168.1.20', 'Của laptop 192.168.1.20']],
+      answer: 0, why: ['Everything goes into the tunnel and leaves from the VPS (NAT).', 'Mọi thứ vào hầm và đi ra từ VPS (NAT).'],
+    },
+  },
+  {
+    id: 'vpn-school', ns: 'net-lab', sim: 'vpn', presets: ['school'],
+    title: ['At school: when UDP is dropped', 'Ở trường: khi UDP bị bỏ'],
+    summary: ['WireGuard fails on a UDP-dropping network; OpenVPN over 443 gets through — and leaks DNS until you fix it.', 'WireGuard hỏng ở mạng bỏ UDP; OpenVPN qua 443 đi được — và rò DNS tới khi bạn vá.'],
+    steps: [
+      {
+        target: 'vpn-topo', do: [{ a: 'vpn.preset', v: 'school' }, { a: 'vpn.tun', v: 'wg' }, { a: 'vpn.dns', v: 'school' }, { a: 'player.reset' }],
+        title: ['Same laptop, school Wi-Fi', 'Cùng laptop, Wi-Fi trường'],
+        body: ['The school drops all UDP (lesson 14.2). WireGuard speaks only UDP.', 'Trường bỏ mọi UDP (bài 14.2). WireGuard chỉ nói UDP.'],
+      },
+      {
+        target: 'controls',
+        title: ['Your turn: WireGuard', 'Đến lượt bạn: WireGuard'],
+        body: ['Run it: 0 bytes received, no handshake.', 'Chạy thử: nhận 0 byte, không bắt tay được.'],
+        task: { text: ['Run WireGuard to the end.', 'Chạy WireGuard tới cuối.'], until: (s) => s.vpn?.preset === 'school' && s.vpn?.tun === 'wg' && s.vpn?.tone === 'bad' && s.vpn?.atEnd === true, solve: [{ a: 'player.end', delay: 500 }] },
+      },
+      {
+        target: 'vpn-opts',
+        title: ['Your turn: OpenVPN over 443', 'Đến lượt bạn: OpenVPN qua 443'],
+        body: ['Choose OpenVPN TCP 443 (DNS left as the school\'s) and run it. Does anything leak?', 'Chọn OpenVPN TCP 443 (DNS vẫn là của trường) rồi chạy. Có gì bị lộ không?'],
+        task: { text: ['Run OpenVPN with the school DNS.', 'Chạy OpenVPN với DNS trường.'], until: (s) => s.vpn?.tun === 'ovpn' && s.vpn?.dns === 'school' && s.vpn?.leak === true && s.vpn?.atEnd === true, solve: [{ a: 'vpn.tun', v: 'ovpn' }, { a: 'player.end', delay: 600 }] },
+      },
+      {
+        target: 'vpn-opts',
+        title: ['Your turn: fix the leak', 'Đến lượt bạn: vá chỗ rò'],
+        body: ['Switch DNS to the VPN\'s and run again: the questions now travel inside the tunnel.', 'Đổi DNS sang của VPN rồi chạy lại: câu hỏi giờ đi trong hầm.'],
+        task: { text: ['Run OpenVPN with the VPN DNS.', 'Chạy OpenVPN với DNS của VPN.'], until: (s) => s.vpn?.tun === 'ovpn' && s.vpn?.dns === 'vpn' && s.vpn?.leak === false && s.vpn?.atEnd === true, solve: [{ a: 'vpn.dns', v: 'vpn' }, { a: 'player.end', delay: 600 }] },
+      },
+    ],
+    quiz: {
+      q: ['The OpenVPN tunnel is up but the school still logs the names you visit. Why?', 'Đường hầm OpenVPN đã mở mà trường vẫn ghi được các tên bạn vào. Vì sao?'],
+      options: [['DNS still goes to the school resolver, outside the tunnel', 'DNS vẫn tới máy phân giải của trường, ngoài hầm'], ['OpenVPN does not encrypt', 'OpenVPN không mã hoá'], ['SNI is visible inside the tunnel', 'SNI lộ ra trong hầm']],
+      answer: 0, why: ['The school resolver is on the local network — a more specific route than the tunnel.', 'Máy phân giải của trường nằm trên mạng tại chỗ — tuyến cụ thể hơn đường hầm.'],
+    },
+  },
+  {
+    id: 'vpn-kill', ns: 'net-lab', sim: 'vpn', presets: ['kill'],
+    title: ['When the VPN dies', 'Khi VPN sập'],
+    summary: ['Compare a VPN without a kill switch (it leaks with the school IP) and a wg-quick full tunnel (it holds the packets).', 'So VPN không có kill switch (lộ IP trường) với full tunnel của wg-quick (giữ gói lại).'],
+    steps: [
+      {
+        target: 'vpn-topo', do: [{ a: 'vpn.preset', v: 'kill' }, { a: 'vpn.kill', v: 'ovpn' }, { a: 'player.reset' }],
+        title: ['OpenVPN is up', 'OpenVPN đang chạy'],
+        body: ['Its two routes beat the default route. Now imagine the laptop sleeps or the process crashes.', 'Hai tuyến của nó thắng tuyến mặc định. Giờ hình dung laptop ngủ hay tiến trình sập.'],
+      },
+      {
+        target: 'controls',
+        title: ['Your turn: OpenVPN dies', 'Đến lượt bạn: OpenVPN chết'],
+        body: ['Run it to the end and read which IP the site sees.', 'Chạy tới cuối và đọc trang thấy IP nào.'],
+        task: { text: ['Run to the end.', 'Chạy tới cuối.'], until: (s) => s.vpn?.preset === 'kill' && s.vpn?.kill === 'ovpn' && s.vpn?.ip === '198.18.0.1' && s.vpn?.atEnd === true, solve: [{ a: 'player.end', delay: 500 }] },
+      },
+      {
+        target: 'vpn-opts',
+        title: ['Your turn: wg-quick full tunnel', 'Đến lượt bạn: full tunnel của wg-quick'],
+        body: ['Choose wg-quick and run: the path to the VPS is cut, but the routing rule still points into wg0.', 'Chọn wg-quick rồi chạy: đường tới VPS bị cắt, nhưng luật định tuyến vẫn trỏ vào wg0.'],
+        task: { text: ['Run wg-quick to the end.', 'Chạy wg-quick tới cuối.'], until: (s) => s.vpn?.kill === 'wg' && s.vpn?.tone === 'ok' && s.vpn?.atEnd === true, solve: [{ a: 'vpn.kill', v: 'wg' }, { a: 'player.end', delay: 600 }] },
+      },
+    ],
+    quiz: {
+      q: ['What does a kill switch do?', 'Kill switch làm gì?'],
+      options: [['Blocks all traffic while the VPN is down', 'Chặn mọi lưu lượng khi VPN sập'], ['Restarts the VPN faster', 'Bật lại VPN nhanh hơn'], ['Encrypts DNS', 'Mã hoá DNS']],
+      answer: 0, why: ['Without it, a dead VPN lets traffic leave with your normal IP.', 'Không có nó, VPN sập là lưu lượng đi ra bằng IP bình thường của bạn.'],
+    },
+  },
 ];

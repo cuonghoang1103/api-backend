@@ -11,6 +11,8 @@
 import G15_1 from './giang/nxj-15-1.mjs';
 import G15_2 from './giang/nxj-15-2.mjs';
 import G15_3 from './giang/nxj-15-3.mjs';
+import G15_4 from './giang/nxj-15-4.mjs';
+import G15_5 from './giang/nxj-15-5.mjs';
 export default {
   title: 'Chapter 15 — Authentication, middleware, and cookies|||Chương 15 — Xác thực, middleware và cookie',
   description: 'Nơi lưu token (httpOnly cookie, không localStorage), API cookies() của App Router, middleware chặn route trước khi tới trang, đọc người dùng trên server, và vòng đời token: hết hạn + refresh — kèm sự cố phiên-chết-sau-24h thật của cuongthai.com.',
@@ -910,6 +912,7 @@ curl -si localhost:3000/dashboard -H 'Cookie: token=abc' | grep -iE '^HTTP|^loca
       isFreePreview: false,
       description: 'Một hàm getCurrentUser() đọc cookie, xác minh token, trả về người dùng — dùng trong Server Component để render theo người dùng, và trong Server Action/Route Handler để phân quyền. Kiểm auth nằm ở SERVER.',
       content: `
+${G15_4}
 <div class="ml-en">
 <span class="eyebrow">Chapter 15 · Lesson 15.4</span>
 <h2>One helper to get the user, used everywhere on the server</h2>
@@ -925,7 +928,25 @@ export async function getCurrentUser() {
   if (!payload) return null;
   return db.user.findUnique({ where: { id: payload.sub } });
 }</code></pre>
+<div class="callout warn"><strong>Measured on Next.js 16.4.6: the snippet above has two real bugs.</strong> Pasted as-is, then with the imports, then with <code>await</code>, <code>tsc</code> reports:<div class="out">src/lib/current-user.ts(7,19): error TS2304: Cannot find name 'verifyJwt'.
+src/lib/current-user.ts(9,10): error TS2304: Cannot find name 'db'.
+src/lib/current-user.ts(11,52): error TS2339: Property 'sub' does not exist on type 'Promise&lt;JWTPayload | null&gt;'.
+src/lib/current-user.ts(11,40): error TS2322: Type 'string | undefined' is not assignable to type 'number'.</div>A real <code>verifyJwt</code> (jose) is async: without <code>await</code>, <code>payload</code> is a Promise — always truthy — so <code>if (!payload)</code> never stops anyone. And <code>sub</code> in a JWT is a string while the database id is a number. The version that type-checks and runs:<pre><code class="language-typescript"><span class="tok-comment">// lib/current-user.ts  (Next.js 16.4.6 — tsc 0 errors)</span>
+import 'server-only';
+import { cache } from 'react';
+import { cookies } from 'next/headers';
+import { verifyJwt } from '@/lib/auth';   <span class="tok-comment">  // async (jose)</span>
+import { db } from '@/lib/db';
 
+export async function readUser() {
+  const token = (await cookies()).get('token')?.value;
+  if (!token) return null;
+  const payload = await verifyJwt(token);  <span class="tok-comment">  // await: verify is async</span>
+  if (!payload) return null;
+  return db.user.findUnique({ where: { id: Number(payload.sub) } }); <span class="tok-comment">  // sub is a string</span>
+}
+
+export const getCurrentUser = cache(readUser); <span class="tok-comment">  // once per request</span></code></pre></div>
 <div class="kv-grid">
   <div class="kv"><span class="k">In a Server Component</span><span class="v">Render based on the user: show their name, or redirect to /login if <code>null</code>. The page itself enforces access.</span></div>
   <div class="kv"><span class="k">In a Server Action</span><span class="v">Authorise the mutation — the Chapter 12 pattern: <code>if (!user) throw</code>, then check ownership.</span></div>
@@ -941,12 +962,12 @@ export async function getCurrentUser() {
 
 <h3>Getting the current user where you need it</h3>
 <div class="lz-flow">
-  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Read the session on the server</b> — In a layout, a page, or a Server Action. One helper — &#96;getSession()&#96; — that reads the cookie and verifies it.</div></div>
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Read the session on the server</b> — In a layout, a page, or a Server Action. One helper — &#96;getCurrentUser()&#96; — that reads the cookie and verifies it.</div></div>
   <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Do not pass the user id as a prop to actions</b> — The action reads it itself. A prop is caller-controlled; a session read is not.</div></div>
-  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Fetch once per request, not per component</b> — React&#39;s &#96;cache()&#96; deduplicates the call across a render pass, so calling &#96;getSession()&#96; in five components is one verification.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Fetch once per request, not per component</b> — React&#39;s &#96;cache()&#96; deduplicates the call across a render pass, so calling &#96;getCurrentUser()&#96; in five components is one verification (measured below: 5 → 1).</div></div>
   <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Send the client only what it displays</b> — A name and an avatar, not the whole record. Everything crossing the boundary is visible to the user.</div></div>
 </div>
-<div class="pitfall"><p><strong>Trap — a user object built once at module level, shared between every request.</strong> &#96;const currentUser = await getUser()&#96; at the top of a module runs once when the server starts and then serves that same user to everybody — every visitor sees the first person&#39;s name, and in the worst case their data. It looks like a caching bug and it is a lifetime bug: module scope on a server is process-wide, not per-request. The same shape appears with a module-level Zustand store, a shared Axios instance carrying an auth header, or a &#96;let&#96; used as a cache. Anything per-user must be read inside the request, every time.</p></div>
+<div class="pitfall"><p><strong>Trap — a user object built once at module level, shared between every request.</strong> Written literally — &#96;const currentUser = await getUser()&#96; at the top of a module, reading &#96;cookies()&#96; — Next.js 16 refuses to build it (&#96;cookies&#96; was called outside a request scope). The version that ships is the lazy one: a module-level &#96;let currentUser&#96; filled on first use. It builds, type-checks, and serves the first visitor to everybody — measured below, Binh and a visitor with no cookie both got An&#39;s name, email and phone. It looks like a caching bug and it is a lifetime bug: module scope on a server is process-wide, not per-request. The same shape appears with a module-level Zustand store, a shared Axios instance carrying an auth header, or a &#96;let&#96; used as a cache. Anything per-user must be read inside the request, every time.</p></div>
 <a class="link-card dl" href="https://react.dev/reference/react/cache" target="_blank" rel="noopener">
   <span class="lc-ico">🧠</span>
   <span class="lc-body"><span class="lc-title">react.dev — cache()</span><span class="lc-sub">Deduplicating a server call within one render pass, without leaking across requests.</span></span>
@@ -965,6 +986,101 @@ export async function getCurrentUser() {
 </ol>
 <p><strong>Done when:</strong> you can read the current user on the server and protect a page with it.</p></div>
 
+<h3>🔬 Measured: one helper, cache(), a module-scope leak, a tampered form (Next.js 16.4.6 · next start · Chromium)</h3>
+<p>A protected page that calls <code>getCurrentUser()</code> and redirects when it is <code>null</code>:</p>
+<div class="out">$ curl -si localhost:3000/trang | grep -iE '^HTTP|^location'     # no cookie
+HTTP/1.1 307 Temporary Redirect
+location: /login?from=trang
+$ curl -s localhost:3000/trang -H "Cookie: token=$AN"
+Hello, An</div>
+<p><strong>cache(): five Server Components on one page, each asking for the user, one request:</strong></p>
+<div class="out"># plain helper
+{"verifyJwt":5,"db.user.findUnique":5}
+# through cache()
+{"verifyJwt":1,"db.user.findUnique":1}
+# three requests through cache(): An, Binh, An
+Feed for An
+Feed for Binh
+Feed for An
+{"verifyJwt":3,"db.user.findUnique":3}</div>
+<p>One verification per request, and each request sees its own user: <code>cache()</code> only shares a result inside one render, never across requests.</p>
+<p><strong>The module-scope leak — <code>let currentUser</code> filled on first use:</strong></p>
+<div class="out">$ curl -s localhost:3000/ho-so -H "Cookie: token=$AN"
+Profile · An
+an@lab.test · 0901 000 001
+$ curl -s localhost:3000/ho-so -H "Cookie: token=$BINH"
+Profile · An
+an@lab.test · 0901 000 001
+$ curl -s localhost:3000/ho-so      # no cookie
+Profile · An
+an@lab.test · 0901 000 001
+# the literal line, await at the top of the module:
+$ npm run build
+Error: Failed to collect configuration for /ho-so
+[cause]: Error: &#96;cookies&#96; was called outside a request scope.</div>
+<p><strong>Do not take the user id from the client — Binh edits the hidden inputs, then presses Delete:</strong></p>
+<div class="out">A (action trusts formData userId): userId=1 &amp; postId=1
+   list after: Binh's notes
+B (action calls getCurrentUser()): postId=1
+   list after: An's Q4 plan | Binh's notes
+[action A] deleted post 1 (owner 1) — userId from the form: 1
+[action B] refused post 1 (owner 1) — session user: 2</div>
+<p><strong>Send the client only what it shows — the whole row passed to a Client Component vs only the name:</strong></p>
+<div class="out">$ curl -s localhost:3000/ten/a -H "Cookie: token=$AN" | grep -oE 'passwordHash…|phone…|email…'
+email":"an@lab.test"
+passwordHash":"$$2b$10$lab.An.hash.not.real"
+phone":"0901 000 001"
+$ curl -s localhost:3000/ten/b -H "Cookie: token=$AN" | grep -cE 'passwordHash|phone|email'
+0</div>
+<div class="note-ct"><strong>In this course&#39;s repository</strong><div class="out">$ grep -rln "getCurrentUser\\|getSession()" src | wc -l | sed 's/^ */tệp có hàm getCurrentUser: /'
+tệp có hàm getCurrentUser: 0
+$ grep -rl "cookies()" src/app | sort
+src/app/courses/[slug]/learn/page.tsx
+src/app/exam/[examId]/page.tsx
+src/app/exam/attempt/[attemptId]/page.tsx
+src/app/phong-video/[lessonId]/page.tsx
+$ grep -n "cookieStore.get('backend_token')" -A5 'src/app/courses/[slug]/learn/page.tsx'
+28:  const token = cookieStore.get('backend_token')?.value;
+29-  if (!token) {
+30-    const callback = encodeURIComponent(&#96;/courses/\${params.slug}/learn&#96;);
+31-    redirect(&#96;/login?callbackUrl=\${callback}&#96;);
+32-  }
+33-  return (
+$ grep -rn "= cache(" src/app | sed 's/: Promise.*//'
+src/app/blog/[slug]/page.tsx:41:const getPost = cache(async (slug: string)
+src/app/blog/[slug]/page.tsx:80:const coBenTechTrends = cache(async (slug: string)
+src/app/voice/[slug]/page.tsx:39:const getPost = cache(async (slug: string)
+src/app/tech-trends/[slug]/page.tsx:40:const getArticle = cache(async (slug: string)
+src/app/exp-hub/[slug]/page.tsx:22:const getSnippet = cache(async (slug: string)
+src/app/games/[slug]/page.tsx:28:const getGame = cache(async (slug: string, cookie: string)
+$ grep -n "jwt.verify(token, config.jwtSecret)" src/middleware/auth.ts | head -1
+40:    const decoded = jwt.verify(token, config.jwtSecret) as JwtPayload;
+$ sed -n '/Re-verify account status/,/accountNonLocked: true/p' src/middleware/auth.ts
+    // Re-verify account status from DB on every authenticated request so that
+    // locking or disabling a user takes effect immediately across all devices —
+    // the JWT alone is not enough because it has a long TTL.
+    const dbUser = await prisma.user.findUnique({
+      where: { id: decoded.userId },
+      select: { enabled: true, accountNonLocked: true, kind: true },</div>The Next.js frontend has no <code>getCurrentUser</code>: its four server pages that call <code>cookies()</code> only check that <code>backend_token</code> exists — the optimistic gate of 15.3. The single helper lives in the backend: <code>authenticate</code> verifies the JWT and re-reads the account (three selected fields) on every API call, so a locked account stops at once. <code>cache()</code> appears six times, sharing a post between <code>generateMetadata</code> and the page.</div>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-bash"><span class="tok-comment"># lib/current-user.ts as above; five server components each await getCurrentUser()</span>
+npm run build &amp;&amp; npm start
+curl -s localhost:3000/nam -H "Cookie: token=$TOKEN" <span class="tok-comment">  # log each verify: 1 with cache(), 5 without</span>
+<span class="tok-comment"># move the user into a module-level let, then visit as two different people</span>
+<span class="tok-comment"># DevTools → Elements: edit a hidden userId input, press the action&amp;#39;s button</span></code></pre>
+<h3>🔗 Go deeper</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nextjs/learn?lessonSlug=nextjs-12-5-bao-mat-action" target="_blank" rel="noopener"><span class="lc-ico">▲</span><span class="lc-body"><span class="lc-title">Next.js · 12.5 — An action is a public endpoint</span><span class="lc-sub">Why the action reads the user itself</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nextjs/learn?lessonSlug=nextjs-9-4-props-serialize" target="_blank" rel="noopener"><span class="lc-ico">▲</span><span class="lc-body"><span class="lc-title">Next.js · 9.4 — Crossing the boundary: serializable props</span><span class="lc-sub">What a Client Component prop exposes</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-8-3-requireauth-phan-quyen" target="_blank" rel="noopener"><span class="lc-ico">🟢</span><span class="lc-body"><span class="lc-title">Node.js · 8.3 — requireAuth and authorisation</span><span class="lc-sub">The same helper as Express middleware</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-9-5-dat-phep-kiem-o-dau" target="_blank" rel="noopener"><span class="lc-ico">🔐</span><span class="lc-body"><span class="lc-title">Authentication · 9.5 — Where the check lives</span><span class="lc-sub">Making a forgotten check impossible</span></span></a>
+
+<h3>🌏 Not just theory: real life, what-ifs, attackers</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">🏠 Real life</span><span class="v">in a university computer lab you sign in to the portal and forget to sign out; the next person opens your profile. A module-level user is worse: no shared machine needed.</span></div>
+  <div class="kv"><span class="k">❓ What if…</span><span class="v">What if a cache in front of the page stores the profile by URL and ignores the cookie? The next visitor gets the previous visitor's page — the same leak.</span></div>
+  <div class="kv"><span class="k">🕵️ The attacker&#39;s angle</span><span class="v">The attacker changes a number in the form or the URL — a user id, a post id — to touch someone else's data. This bug has a name: IDOR.</span></div>
+  <div class="kv"><span class="k">🛡️ Detect &amp; prevent</span><span class="v">Detect it by logging whenever the session user differs from the data owner. Prevent it: the action reads the session itself and checks ownership every time.</span></div>
+</div>
 <h3>🗂 Key terms</h3>
 <div class="kv-grid">
   <div class="kv"><span class="k">getCurrentUser</span><span class="v">A server helper that resolves the user from the session cookie.</span></div>
@@ -1000,7 +1116,25 @@ export async function getCurrentUser() {
   if (!payload) return null;
   return db.user.findUnique({ where: { id: payload.sub } });
 }</code></pre>
+<div class="callout warn"><strong>Đo trên Next.js 16.4.6: đoạn mã trên có hai lỗi thật.</strong> Chép nguyên, rồi thêm import, rồi thêm <code>await</code>, <code>tsc</code> báo lần lượt:<div class="out">src/lib/current-user.ts(7,19): error TS2304: Cannot find name 'verifyJwt'.
+src/lib/current-user.ts(9,10): error TS2304: Cannot find name 'db'.
+src/lib/current-user.ts(11,52): error TS2339: Property 'sub' does not exist on type 'Promise&lt;JWTPayload | null&gt;'.
+src/lib/current-user.ts(11,40): error TS2322: Type 'string | undefined' is not assignable to type 'number'.</div><code>verifyJwt</code> thật (jose) chạy bất đồng bộ: thiếu <code>await</code> thì <code>payload</code> là một Promise — luôn truthy — nên <code>if (!payload)</code> không bao giờ chặn được ai. Và <code>sub</code> trong JWT là chuỗi, còn id trong cơ sở dữ liệu là số. Bản qua kiểm kiểu và chạy được:<pre><code class="language-typescript"><span class="tok-comment">// lib/current-user.ts  (Next.js 16.4.6 — tsc 0 errors)</span>
+import 'server-only';
+import { cache } from 'react';
+import { cookies } from 'next/headers';
+import { verifyJwt } from '@/lib/auth';   <span class="tok-comment">  // async (jose)</span>
+import { db } from '@/lib/db';
 
+export async function readUser() {
+  const token = (await cookies()).get('token')?.value;
+  if (!token) return null;
+  const payload = await verifyJwt(token);  <span class="tok-comment">  // await: verify is async</span>
+  if (!payload) return null;
+  return db.user.findUnique({ where: { id: Number(payload.sub) } }); <span class="tok-comment">  // sub is a string</span>
+}
+
+export const getCurrentUser = cache(readUser); <span class="tok-comment">  // once per request</span></code></pre></div>
 <div class="kv-grid">
   <div class="kv"><span class="k">Trong Server Component</span><span class="v">Render theo người dùng: hiện tên họ, hoặc redirect tới /login nếu <code>null</code>. Chính trang thực thi quyền truy cập.</span></div>
   <div class="kv"><span class="k">Trong Server Action</span><span class="v">Phân quyền cho mutation — mẫu Chương 12: <code>if (!user) throw</code>, rồi kiểm quyền sở hữu.</span></div>
@@ -1016,12 +1150,12 @@ export async function getCurrentUser() {
 
 <h3>Lấy người dùng hiện tại ở nơi bạn cần</h3>
 <div class="lz-flow">
-  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Đọc phiên đăng nhập ở máy chủ</b> — Trong một layout, một page, hoặc một Server Action. Một hàm phụ duy nhất — &#96;getSession()&#96; — đọc cookie rồi xác minh nó.</div></div>
+  <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Đọc phiên đăng nhập ở máy chủ</b> — Trong một layout, một page, hoặc một Server Action. Một hàm phụ duy nhất — &#96;getCurrentUser()&#96; — đọc cookie rồi xác minh nó.</div></div>
   <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Đừng truyền id người dùng làm prop cho action</b> — Action tự đọc lấy. Một prop thì do người gọi điều khiển; một lần đọc phiên thì không.</div></div>
-  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Lấy một lần mỗi request, đừng lấy mỗi component</b> — &#96;cache()&#96; của React khử trùng lặp lời gọi trong một lượt render, nên gọi &#96;getSession()&#96; ở năm component chỉ là một lần xác minh.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Lấy một lần mỗi request, đừng lấy mỗi component</b> — &#96;cache()&#96; của React khử trùng lặp lời gọi trong một lượt render, nên gọi &#96;getCurrentUser()&#96; ở năm component chỉ là một lần xác minh (đo bên dưới: 5 → 1).</div></div>
   <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Chỉ gửi cho client thứ nó hiển thị</b> — Một cái tên và một tấm ảnh đại diện, không phải cả bản ghi. Mọi thứ vượt qua ranh giới đều nhìn thấy được với người dùng.</div></div>
 </div>
-<div class="pitfall"><p><strong>Bẫy — một object người dùng dựng một lần ở cấp module, dùng chung giữa mọi request.</strong> &#96;const currentUser = await getUser()&#96; ở đầu một module sẽ chạy đúng một lần lúc máy chủ khởi động rồi phục vụ đúng người dùng đó cho tất cả — mọi khách đều thấy tên của người đầu tiên, và tệ nhất là thấy cả dữ liệu của họ. Nó trông như lỗi nhớ đệm mà thật ra là lỗi vòng đời: phạm vi module trên một máy chủ là phạm vi toàn tiến trình, không phải theo từng request. Cùng hình dạng ấy hiện ra với một store Zustand ở cấp module, một thực thể Axios dùng chung mang header xác thực, hay một &#96;let&#96; dùng làm bộ nhớ đệm. Mọi thứ riêng theo người dùng đều phải được đọc BÊN TRONG request, mọi lần.</p></div>
+<div class="pitfall"><p><strong>Bẫy — một object người dùng dựng một lần ở cấp module, dùng chung giữa mọi request.</strong> Viết đúng nguyên văn — &#96;const currentUser = await getUser()&#96; ở đầu module, có đọc &#96;cookies()&#96; — thì Next.js 16 không cho build (&#96;cookies&#96; bị gọi bên ngoài một request). Bản lọt ra sản phẩm là bản lười: một biến &#96;let currentUser&#96; cấp module, nạp ở lần dùng đầu. Nó build được, qua kiểm kiểu, và phục vụ người đầu tiên cho tất cả — đo bên dưới: Binh và một người không có cookie đều thấy tên, email, số điện thoại của An. Nó trông như lỗi nhớ đệm mà thật ra là lỗi vòng đời: phạm vi module trên một máy chủ là phạm vi toàn tiến trình, không phải theo từng request. Cùng hình dạng ấy hiện ra với một store Zustand ở cấp module, một thực thể Axios dùng chung mang header xác thực, hay một &#96;let&#96; dùng làm bộ nhớ đệm. Mọi thứ riêng theo người dùng đều phải được đọc BÊN TRONG request, mọi lần.</p></div>
 <a class="link-card dl" href="https://react.dev/reference/react/cache" target="_blank" rel="noopener">
   <span class="lc-ico">🧠</span>
   <span class="lc-body"><span class="lc-title">react.dev — cache()</span><span class="lc-sub">Khử trùng lặp một lời gọi máy chủ trong một lượt render, mà không rò rỉ qua các request.</span></span>
@@ -1040,6 +1174,101 @@ export async function getCurrentUser() {
 </ol>
 <p><strong>Đạt khi:</strong> bạn đọc được người dùng hiện tại trên server và bảo vệ một trang bằng nó.</p></div>
 
+<h3>🔬 Đo thật: một hàm, cache(), rò ở cấp module, form bị sửa (Next.js 16.4.6 · next start · Chromium)</h3>
+<p>Một trang được bảo vệ gọi <code>getCurrentUser()</code> và redirect khi nó là <code>null</code>:</p>
+<div class="out">$ curl -si localhost:3000/trang | grep -iE '^HTTP|^location'     # không cookie
+HTTP/1.1 307 Temporary Redirect
+location: /login?from=trang
+$ curl -s localhost:3000/trang -H "Cookie: token=$AN"
+Hello, An</div>
+<p><strong>cache(): năm Server Component trên một trang, cùng hỏi người dùng, một request:</strong></p>
+<div class="out"># hàm thường
+{"verifyJwt":5,"db.user.findUnique":5}
+# qua cache()
+{"verifyJwt":1,"db.user.findUnique":1}
+# ba request qua cache(): An, Binh, An
+Feed for An
+Feed for Binh
+Feed for An
+{"verifyJwt":3,"db.user.findUnique":3}</div>
+<p>Một lần xác minh mỗi request, và mỗi request thấy đúng người của mình: <code>cache()</code> chỉ dùng chung kết quả trong một lượt render, không bao giờ qua request khác.</p>
+<p><strong>Rò ở cấp module — <code>let currentUser</code> nạp ở lần dùng đầu:</strong></p>
+<div class="out">$ curl -s localhost:3000/ho-so -H "Cookie: token=$AN"
+Profile · An
+an@lab.test · 0901 000 001
+$ curl -s localhost:3000/ho-so -H "Cookie: token=$BINH"
+Profile · An
+an@lab.test · 0901 000 001
+$ curl -s localhost:3000/ho-so      # không cookie
+Profile · An
+an@lab.test · 0901 000 001
+# đúng dòng của bài, await ở đầu module:
+$ npm run build
+Error: Failed to collect configuration for /ho-so
+[cause]: Error: &#96;cookies&#96; was called outside a request scope.</div>
+<p><strong>Đừng lấy id người dùng từ phía trình duyệt — Binh sửa input ẩn rồi bấm Delete:</strong></p>
+<div class="out">A (action tin userId trong form): userId=1 &amp; postId=1
+   còn lại: Binh's notes
+B (action gọi getCurrentUser()): postId=1
+   còn lại: An's Q4 plan | Binh's notes
+[action A] deleted post 1 (owner 1) — userId from the form: 1
+[action B] refused post 1 (owner 1) — session user: 2</div>
+<p><strong>Chỉ gửi xuống thứ client hiển thị — truyền cả bản ghi cho Client Component vs chỉ cái tên:</strong></p>
+<div class="out">$ curl -s localhost:3000/ten/a -H "Cookie: token=$AN" | grep -oE 'passwordHash…|phone…|email…'
+email":"an@lab.test"
+passwordHash":"$$2b$10$lab.An.hash.not.real"
+phone":"0901 000 001"
+$ curl -s localhost:3000/ten/b -H "Cookie: token=$AN" | grep -cE 'passwordHash|phone|email'
+0</div>
+<div class="note-ct"><strong>Trong kho của chính khoá này</strong><div class="out">$ grep -rln "getCurrentUser\\|getSession()" src | wc -l | sed 's/^ */tệp có hàm getCurrentUser: /'
+tệp có hàm getCurrentUser: 0
+$ grep -rl "cookies()" src/app | sort
+src/app/courses/[slug]/learn/page.tsx
+src/app/exam/[examId]/page.tsx
+src/app/exam/attempt/[attemptId]/page.tsx
+src/app/phong-video/[lessonId]/page.tsx
+$ grep -n "cookieStore.get('backend_token')" -A5 'src/app/courses/[slug]/learn/page.tsx'
+28:  const token = cookieStore.get('backend_token')?.value;
+29-  if (!token) {
+30-    const callback = encodeURIComponent(&#96;/courses/\${params.slug}/learn&#96;);
+31-    redirect(&#96;/login?callbackUrl=\${callback}&#96;);
+32-  }
+33-  return (
+$ grep -rn "= cache(" src/app | sed 's/: Promise.*//'
+src/app/blog/[slug]/page.tsx:41:const getPost = cache(async (slug: string)
+src/app/blog/[slug]/page.tsx:80:const coBenTechTrends = cache(async (slug: string)
+src/app/voice/[slug]/page.tsx:39:const getPost = cache(async (slug: string)
+src/app/tech-trends/[slug]/page.tsx:40:const getArticle = cache(async (slug: string)
+src/app/exp-hub/[slug]/page.tsx:22:const getSnippet = cache(async (slug: string)
+src/app/games/[slug]/page.tsx:28:const getGame = cache(async (slug: string, cookie: string)
+$ grep -n "jwt.verify(token, config.jwtSecret)" src/middleware/auth.ts | head -1
+40:    const decoded = jwt.verify(token, config.jwtSecret) as JwtPayload;
+$ sed -n '/Re-verify account status/,/accountNonLocked: true/p' src/middleware/auth.ts
+    // Re-verify account status from DB on every authenticated request so that
+    // locking or disabling a user takes effect immediately across all devices —
+    // the JWT alone is not enough because it has a long TTL.
+    const dbUser = await prisma.user.findUnique({
+      where: { id: decoded.userId },
+      select: { enabled: true, accountNonLocked: true, kind: true },</div>Frontend Next.js không có <code>getCurrentUser</code>: bốn trang server gọi <code>cookies()</code> chỉ kiểm <code>backend_token</code> có tồn tại — đúng cổng lạc quan của 15.3. Hàm duy nhất nằm ở backend: <code>authenticate</code> kiểm JWT rồi đọc lại tài khoản (ba trường được select) ở mọi lời gọi API, nên tài khoản bị khoá dừng ngay. <code>cache()</code> xuất hiện sáu lần, dùng chung một bài viết giữa <code>generateMetadata</code> và trang.</div>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-bash"><span class="tok-comment"># lib/current-user.ts as above; five server components each await getCurrentUser()</span>
+npm run build &amp;&amp; npm start
+curl -s localhost:3000/nam -H "Cookie: token=$TOKEN" <span class="tok-comment">  # ghi log mỗi lần verify: 1 khi có cache(), 5 khi không</span>
+<span class="tok-comment"># chuyển người dùng vào một biến let cấp module, rồi vào bằng hai người khác nhau</span>
+<span class="tok-comment"># DevTools → Elements: sửa input ẩn userId, bấm nút của action</span></code></pre>
+<h3>🔗 Học sâu hơn</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nextjs/learn?lessonSlug=nextjs-12-5-bao-mat-action" target="_blank" rel="noopener"><span class="lc-ico">▲</span><span class="lc-body"><span class="lc-title">Next.js · 12.5 — Một action là endpoint công khai</span><span class="lc-sub">Vì sao action phải tự đọc người dùng</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nextjs/learn?lessonSlug=nextjs-9-4-props-serialize" target="_blank" rel="noopener"><span class="lc-ico">▲</span><span class="lc-body"><span class="lc-title">Next.js · 9.4 — Qua ranh giới: props phải serialize được</span><span class="lc-sub">Prop của Client Component lộ ra những gì</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-8-3-requireauth-phan-quyen" target="_blank" rel="noopener"><span class="lc-ico">🟢</span><span class="lc-body"><span class="lc-title">Node.js · 8.3 — requireAuth và phân quyền</span><span class="lc-sub">Cùng hàm đó, dạng middleware Express</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-9-5-dat-phep-kiem-o-dau" target="_blank" rel="noopener"><span class="lc-ico">🔐</span><span class="lc-body"><span class="lc-title">Authentication · 9.5 — Phép kiểm nằm ở đâu</span><span class="lc-sub">Làm sao để không thể quên phép kiểm</span></span></a>
+
+<h3>🌏 Không học suông: đời thật, giả định, kẻ xấu</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">🏠 Đời thật</span><span class="v">ở phòng lab của trường, bạn đăng nhập cổng thông tin rồi quên đăng xuất, người ngồi sau mở trang hồ sơ của bạn. Biến cấp module còn tệ hơn: không cần ngồi cùng máy.</span></div>
+  <div class="kv"><span class="k">❓ Nếu… thì sao</span><span class="v">Nếu một tầng cache phía trước lưu trang hồ sơ theo địa chỉ mà quên cookie thì sao? Người sau nhận đúng trang của người trước, cùng một kiểu rò.</span></div>
+  <div class="kv"><span class="k">🕵️ Góc kẻ xấu</span><span class="v">Kẻ xấu thì đổi con số trong form hay trên địa chỉ, như id người dùng hay id bài, để đụng vào dữ liệu của người khác. Lỗi này có tên riêng: IDOR.</span></div>
+  <div class="kv"><span class="k">🛡️ Nhận ra &amp; phòng</span><span class="v">Cách nhận ra: ghi nhật ký mỗi khi người trong phiên khác chủ dữ liệu. Cách phòng: action tự đọc phiên, rồi kiểm quyền sở hữu ở mọi lần.</span></div>
+</div>
 <h3>🗂 Thuật ngữ trong bài</h3>
 <div class="kv-grid">
   <div class="kv"><span class="k">getCurrentUser</span><span class="v">Một helper server giải ra người dùng từ cookie session.</span></div>
@@ -1070,6 +1299,7 @@ export async function getCurrentUser() {
       isFreePreview: false,
       description: 'Token hết hạn ngắn để giảm rủi ro, nhưng nếu không có cơ chế refresh thì phiên chết đột ngột giữa chừng. Sự cố thật cuongthai.com: JWT 24h nhưng cookie 7d, không có /auth/refresh → mọi call 401. Cách vá.',
       content: `
+${G15_5}
 <div class="ml-en">
 <span class="eyebrow">Chapter 15 · Lesson 15.5</span>
 <h2>A short-lived token is safer — until it expires with no way to renew</h2>
@@ -1094,7 +1324,7 @@ export async function getCurrentUser() {
 <div class="lz-flow">
   <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Short access token, long refresh token</b> — Minutes and days. The short one limits the damage of a leak; the long one keeps the user logged in.</div></div>
   <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Refresh on 401, once</b> — An interceptor catches the expiry, refreshes, and retries the original request. Once — a loop here logs everyone out.</div></div>
-  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Rotate the refresh token</b> — Issue a new one each time and invalidate the old. A replayed old token then signals theft, and you can revoke the family.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Rotate the refresh token — and refresh single-flight</b> — Issue a new one each time and invalidate the old. A replayed old token then signals theft, and you can revoke the family. But three 401s at once that each refresh with the same token look exactly like a replay: measured below, the family was revoked and the user logged out. Share one in-flight refresh between all concurrent 401s.</div></div>
   <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Store both httpOnly</b> — Neither belongs in &#96;localStorage&#96;, where any script on the page can read it.</div></div>
 </div>
 <div class="pitfall"><p><strong>Trap — a token that expires long before the cookie carrying it.</strong> A 24-hour JWT inside a 7-day cookie means that from day two the browser keeps sending a cookie that is present and worthless: the app looks logged in, every API call returns 401, and the user reports &quot;the site is broken&quot; rather than &quot;log me in again&quot;. This is not hypothetical — it is recorded in this repo&#39;s own history, together with the second half of the failure: there was no working refresh endpoint, so nothing could recover. Keep the two lifetimes in one place, implement refresh before extending either, and test by moving the clock forward rather than by waiting a day.</p></div>
@@ -1116,6 +1346,94 @@ export async function getCurrentUser() {
 </ol>
 <p><strong>Done when:</strong> you can diagnose a silent session-death bug and add a refresh-and-retry flow.</p></div>
 
+<h3>🔬 Measured: two clocks, a missing refresh route, and three 401s at once (Next.js 16.4.6 · next start · Chromium)</h3>
+<p>The incident in miniature — a 5-second access token inside a 7-day cookie:</p>
+<div class="out">$ curl -si -c jar -X POST localhost:3000/api/login2 -d '{"name":"An","exp":"5s"}'
+set-cookie: token=eyJ…; Path=/; Expires=Sat, 21 Nov 2026 05:37:33 GMT; Max-Age=604800; HttpOnly; SameSite=lax
+$ curl -s -b jar localhost:3000/api/me
+{"via":"cookie","user":{"id":1,"name":"An","role":"admin"}}
+$ sleep 6
+$ curl -si -b jar localhost:3000/api/me
+HTTP/1.1 401 Unauthorized
+{"error":"unauthorized"}
+$ grep -c token jar     # the cookie is still there
+1</div>
+<p><strong>Three API calls at once in Chromium, after the token expired, with four clients:</strong></p>
+<div style="overflow-x:auto"><table><thead><tr><th>Client</th><th>refresh calls</th><th>result</th><th>6 s later</th></tr></thead><tbody>
+<tr><td>no refresh</td><td>—</td><td>#1 200 · #2 200 · #3 200 (before expiry)</td><td>#1 401 · #2 401 · #3 401</td></tr>
+<tr><td>refresh → route that does not exist (the incident)</td><td>404, 404, 404</td><td>#1 401 · #2 401 · #3 401</td><td>—</td></tr>
+<tr><td>each 401 refreshes, rotation on</td><td>401, 401, 200</td><td>#1 200 · #2 401 · #3 401</td><td>#1 401 · #2 401 · #3 401</td></tr>
+<tr><td>single-flight, rotation on</td><td>200</td><td>#1 200 · #2 200 · #3 200</td><td>#1 200 · #2 200 · #3 200</td></tr>
+</tbody></table></div>
+<div class="out"># server log
+[auth/refresh] upstream POST /api/v1/auth/refresh → 404
+[auth/refresh] upstream POST /api/v1/auth/refresh → 404
+[auth/refresh] upstream POST /api/v1/auth/refresh → 404
+[refresh] 200 — new access token for An, refresh token rotated
+[refresh] 401 — reuse detected, family revoked
+[refresh] 401 — reuse detected, family revoked
+...
+[refresh] 200 — new access token for An, refresh token rotated
+[refresh] 200 — new access token for An, refresh token rotated</div>
+<p>Each 401 refreshing on its own sent refresh token #1 three times: the first rotated it, the other two were treated as a replay and revoked the family — no thief, just a race. Single-flight made one refresh and all three retries succeeded.</p>
+<p><strong>Rotation and reuse detection, by hand:</strong></p>
+<div class="out">$ curl -b jar -c jar -X POST localhost:3000/api/refresh      # #1
+{"ok":true}
+$ curl -b jar-copy -X POST localhost:3000/api/refresh       # a copy of #1
+{"error":"reuse detected, family revoked"}
+$ curl -b jar -X POST localhost:3000/api/refresh             # the owner, with #2
+{"error":"reuse detected, family revoked"}</div>
+<p>The interceptor, with both rules:</p>
+<pre><code class="language-typescript"><span class="tok-comment">// lib/api.ts — refresh once per request, and ONE refresh shared by every concurrent 401</span>
+let inFlight: Promise&lt;boolean&gt; | null = null;
+const refresh = () =&gt; axios.post('/api/refresh').then(() =&gt; true, () =&gt; false);
+
+api.interceptors.response.use(undefined, async (error) =&gt; {
+  const original = error.config;
+  if (error.response?.status !== 401 || !original || original._retried) throw error;
+  original._retried = true;                                      <span class="tok-comment">  // exactly once</span>
+  const ok = await (inFlight ??= refresh().finally(() =&gt; { inFlight = null; })); <span class="tok-comment">  // single-flight</span>
+  if (!ok) throw error;                                          <span class="tok-comment">  // refresh failed: go to login</span>
+  return api(original);                                          <span class="tok-comment">  // replay the original request</span>
+});</code></pre>
+<div class="note-ct"><strong>In this course&#39;s repository</strong><div class="out">$ grep -n 'JWT_EXPIRES_IN' .env.example
+33:JWT_EXPIRES_IN="24h"
+$ git log --format='%h %ad %s' --date=short --diff-filter=A -- frontend/src/app/api/auth/refresh/route.ts | tail -1
+7690cdc76 2026-06-09 fix: resolve critical bugs across all flows for 100% operation
+$ git show 4448f4d14 --format='%h %ad %s' --date=short --stat | grep -E '^4448|auth.routes|api.ts'
+4448f4d14 2026-07-02 fix(media+auth): stop blob: URLs hitting R2 (400) + silent session refresh
+ frontend/src/lib/api.ts      | 47 ++++++++++++++++++++++++++++++++++++--------
+ src/routes/auth.routes.ts    | 27 +++++++++++++++++++++++++
+$ grep -n "ignoreExpiration: true" src/services/auth.service.ts
+997:        ignoreExpiration: true,
+$ grep -n 'SESSION_TOO_OLD' src/services/auth.service.ts | head -1
+1007:      throw new AppError('Session too old — please sign in again', 401, 'SESSION_TOO_OLD');
+$ grep -n "original._retried = true" frontend/src/lib/api.ts
+221:      original._retried = true;
+$ grep -n "if (!dangLamMoi)" -A1 frontend/src/lib/hetPhien.ts
+67:  if (!dangLamMoi) {
+68-    dangLamMoi = fetch('/api/auth/refresh', { method: 'POST', credentials: 'include' })
+$ grep -n "maxAge: 60 \\* 60 \\* 24 \\* 30" frontend/src/app/api/auth/refresh/route.ts
+65:      maxAge: 60 * 60 * 24 * 30, // 30 ngày (08/11/2026), gia hạn trượt: lib/hetPhien.ts</div>The frontend proxy route was added on 2026-06-09; the backend route it calls arrived on 2026-07-02 together with the 401 interceptor — between those dates every refresh failed. Today the interceptor retries once (<code>_retried</code>) and shares one refresh (<code>dangLamMoi</code>, single-flight); the cookie lives 30 days and is renewed on visits. There is no separate refresh token: the backend re-signs the same JWT with <code>ignoreExpiration</code>, refusing tokens signed more than 30 days ago (<code>SESSION_TOO_OLD</code>). No rotation, therefore no reuse detection — a deliberate trade-off.</div>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-bash"><span class="tok-comment"># login sets a 5-second access token in a 7-day cookie</span>
+npm run build &amp;&amp; npm start
+curl -s -c jar -X POST localhost:3000/api/login2 -d '{"exp":"5s"}' -H 'content-type: application/json'
+sleep 6; curl -si -b jar localhost:3000/api/me | head -1    <span class="tok-comment">  # 401 with the cookie present</span>
+<span class="tok-comment"># in the browser: fire three calls with Promise.all, count POST /api/refresh in the Network tab</span></code></pre>
+<h3>🔗 Go deeper</h3>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-5-1-hai-token" target="_blank" rel="noopener"><span class="lc-ico">🔐</span><span class="lc-body"><span class="lc-title">Authentication · 5.1 — Two tokens</span><span class="lc-sub">Why one token cannot do both jobs</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-5-2-xoay-vong" target="_blank" rel="noopener"><span class="lc-ico">🔐</span><span class="lc-body"><span class="lc-title">Authentication · 5.2 — Rotation and reuse</span><span class="lc-sub">The replay that gives the thief away</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-5-5-cuoc-dua-refresh" target="_blank" rel="noopener"><span class="lc-ico">🔐</span><span class="lc-body"><span class="lc-title">Authentication · 5.5 — The refresh race</span><span class="lc-sub">The false positive measured above</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nextjs/learn?lessonSlug=nextjs-15-1-nen-tang-auth" target="_blank" rel="noopener"><span class="lc-ico">▲</span><span class="lc-body"><span class="lc-title">Next.js · 15.1 — Auth foundations</span><span class="lc-sub">Why a JWT is hard to revoke</span></span></a>
+
+<h3>🌏 Not just theory: real life, what-ifs, attackers</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">🏠 Real life</span><span class="v">a banking app signs you out after a few idle minutes; a social network keeps you in for a month. Two ways of setting the clocks.</span></div>
+  <div class="kv"><span class="k">❓ What if…</span><span class="v">What if a refresh token leaks — on an internet-café PC, or through a malicious browser extension? The thief can use it until it expires — unless it rotates.</span></div>
+  <div class="kv"><span class="k">🕵️ The attacker&#39;s angle</span><span class="v">Attackers read tokens with injected script if they live in localStorage, or make your browser send cookies from another site (CSRF).</span></div>
+  <div class="kv"><span class="k">🛡️ Detect &amp; prevent</span><span class="v">Prevent it: httpOnly tokens, sameSite, a refresh cookie scoped to one path, rotation with reuse detection, and a 'sign out everywhere' button.</span></div>
+</div>
 <h3>🗂 Key terms</h3>
 <div class="kv-grid">
   <div class="kv"><span class="k">Access token</span><span class="v">Short-lived token sent on each request.</span></div>
@@ -1160,7 +1478,7 @@ export async function getCurrentUser() {
 <div class="lz-flow">
   <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>Token truy cập ngắn, token làm mới dài</b> — Vài phút và vài ngày. Cái ngắn giới hạn thiệt hại khi rò rỉ; cái dài giữ cho người dùng ở lại trạng thái đăng nhập.</div></div>
   <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>Làm mới khi gặp 401, đúng một lần</b> — Một interceptor bắt lấy cú hết hạn, làm mới, rồi thử lại request gốc. Đúng một lần — một vòng lặp ở đây là đăng xuất tất cả mọi người.</div></div>
-  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Xoay vòng token làm mới</b> — Cấp một cái mới mỗi lần và vô hiệu hoá cái cũ. Một token cũ được phát lại khi đó là tín hiệu bị trộm, và bạn thu hồi được cả họ token đó.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>Xoay vòng token làm mới — và làm mới theo kiểu single-flight</b> — Cấp một cái mới mỗi lần và vô hiệu hoá cái cũ. Một token cũ được phát lại khi đó là tín hiệu bị trộm, và bạn thu hồi được cả họ token đó. Nhưng ba lỗi 401 cùng lúc, mỗi cái tự làm mới bằng cùng một token, trông y hệt một cú phát lại: đo bên dưới, cả họ token bị thu hồi và người dùng bị đăng xuất. Mọi 401 đồng thời phải dùng chung một lần làm mới đang chạy.</div></div>
   <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Lưu cả hai dạng httpOnly</b> — Chẳng cái nào thuộc về &#96;localStorage&#96;, nơi mọi script trên trang đều đọc được.</div></div>
 </div>
 <div class="pitfall"><p><strong>Bẫy — một token hết hạn sớm hơn nhiều so với cái cookie mang nó.</strong> Một JWT 24 giờ nằm trong một cookie 7 ngày nghĩa là từ ngày thứ hai trình duyệt cứ gửi đi một cái cookie có mặt mà vô giá trị: ứng dụng trông như đã đăng nhập, mọi lời gọi API trả 401, và người dùng báo &quot;trang hỏng rồi&quot; chứ không phải &quot;cho tôi đăng nhập lại&quot;. Đây không phải chuyện giả định — nó có trong lịch sử của chính kho này, cùng với nửa sau của cú hỏng: chẳng có endpoint làm mới nào chạy được, nên không gì khôi phục nổi. Hãy giữ hai tuổi thọ đó ở một chỗ, làm phần làm-mới trước khi kéo dài bất kỳ cái nào, và hãy thử bằng cách dịch đồng hồ tới trước chứ đừng ngồi chờ một ngày.</p></div>
@@ -1182,6 +1500,94 @@ export async function getCurrentUser() {
 </ol>
 <p><strong>Đạt khi:</strong> bạn chẩn được một bug session chết âm thầm và thêm một luồng refresh-rồi-thử-lại.</p></div>
 
+<h3>🔬 Đo thật: hai đồng hồ, route refresh không tồn tại, và ba 401 cùng lúc (Next.js 16.4.6 · next start · Chromium)</h3>
+<p>Sự cố thu nhỏ — access token 5 giây nằm trong cookie 7 ngày:</p>
+<div class="out">$ curl -si -c jar -X POST localhost:3000/api/login2 -d '{"name":"An","exp":"5s"}'
+set-cookie: token=eyJ…; Path=/; Expires=Sat, 21 Nov 2026 05:37:33 GMT; Max-Age=604800; HttpOnly; SameSite=lax
+$ curl -s -b jar localhost:3000/api/me
+{"via":"cookie","user":{"id":1,"name":"An","role":"admin"}}
+$ sleep 6
+$ curl -si -b jar localhost:3000/api/me
+HTTP/1.1 401 Unauthorized
+{"error":"unauthorized"}
+$ grep -c token jar     # cookie vẫn còn
+1</div>
+<p><strong>Ba lời gọi API cùng lúc trong Chromium, sau khi token hết hạn, với bốn kiểu client:</strong></p>
+<div style="overflow-x:auto"><table><thead><tr><th>Client</th><th>lần refresh</th><th>kết quả</th><th>6 giây sau</th></tr></thead><tbody>
+<tr><td>không refresh</td><td>—</td><td>#1 200 · #2 200 · #3 200 (trước khi hết hạn)</td><td>#1 401 · #2 401 · #3 401</td></tr>
+<tr><td>refresh → route không tồn tại (sự cố)</td><td>404, 404, 404</td><td>#1 401 · #2 401 · #3 401</td><td>—</td></tr>
+<tr><td>mỗi 401 tự refresh, có xoay vòng</td><td>401, 401, 200</td><td>#1 200 · #2 401 · #3 401</td><td>#1 401 · #2 401 · #3 401</td></tr>
+<tr><td>single-flight, có xoay vòng</td><td>200</td><td>#1 200 · #2 200 · #3 200</td><td>#1 200 · #2 200 · #3 200</td></tr>
+</tbody></table></div>
+<div class="out"># nhật ký server
+[auth/refresh] upstream POST /api/v1/auth/refresh → 404
+[auth/refresh] upstream POST /api/v1/auth/refresh → 404
+[auth/refresh] upstream POST /api/v1/auth/refresh → 404
+[refresh] 200 — new access token for An, refresh token rotated
+[refresh] 401 — reuse detected, family revoked
+[refresh] 401 — reuse detected, family revoked
+...
+[refresh] 200 — new access token for An, refresh token rotated
+[refresh] 200 — new access token for An, refresh token rotated</div>
+<p>Mỗi 401 tự refresh nên refresh token #1 bị gửi ba lần: lần đầu xoay vòng nó, hai lần sau bị coi là phát lại và thu hồi cả họ — không có kẻ trộm, chỉ là một cuộc đua. Single-flight chỉ refresh một lần và cả ba lượt thử lại đều thành công.</p>
+<p><strong>Xoay vòng và phát hiện dùng lại, làm tay:</strong></p>
+<div class="out">$ curl -b jar -c jar -X POST localhost:3000/api/refresh      # #1
+{"ok":true}
+$ curl -b jar-copy -X POST localhost:3000/api/refresh       # bản sao của #1
+{"error":"reuse detected, family revoked"}
+$ curl -b jar -X POST localhost:3000/api/refresh             # chủ thật, cầm #2
+{"error":"reuse detected, family revoked"}</div>
+<p>Interceptor, đủ cả hai luật:</p>
+<pre><code class="language-typescript"><span class="tok-comment">// lib/api.ts — refresh once per request, and ONE refresh shared by every concurrent 401</span>
+let inFlight: Promise&lt;boolean&gt; | null = null;
+const refresh = () =&gt; axios.post('/api/refresh').then(() =&gt; true, () =&gt; false);
+
+api.interceptors.response.use(undefined, async (error) =&gt; {
+  const original = error.config;
+  if (error.response?.status !== 401 || !original || original._retried) throw error;
+  original._retried = true;                                      <span class="tok-comment">  // exactly once</span>
+  const ok = await (inFlight ??= refresh().finally(() =&gt; { inFlight = null; })); <span class="tok-comment">  // single-flight</span>
+  if (!ok) throw error;                                          <span class="tok-comment">  // refresh failed: go to login</span>
+  return api(original);                                          <span class="tok-comment">  // replay the original request</span>
+});</code></pre>
+<div class="note-ct"><strong>Trong kho của chính khoá này</strong><div class="out">$ grep -n 'JWT_EXPIRES_IN' .env.example
+33:JWT_EXPIRES_IN="24h"
+$ git log --format='%h %ad %s' --date=short --diff-filter=A -- frontend/src/app/api/auth/refresh/route.ts | tail -1
+7690cdc76 2026-06-09 fix: resolve critical bugs across all flows for 100% operation
+$ git show 4448f4d14 --format='%h %ad %s' --date=short --stat | grep -E '^4448|auth.routes|api.ts'
+4448f4d14 2026-07-02 fix(media+auth): stop blob: URLs hitting R2 (400) + silent session refresh
+ frontend/src/lib/api.ts      | 47 ++++++++++++++++++++++++++++++++++++--------
+ src/routes/auth.routes.ts    | 27 +++++++++++++++++++++++++
+$ grep -n "ignoreExpiration: true" src/services/auth.service.ts
+997:        ignoreExpiration: true,
+$ grep -n 'SESSION_TOO_OLD' src/services/auth.service.ts | head -1
+1007:      throw new AppError('Session too old — please sign in again', 401, 'SESSION_TOO_OLD');
+$ grep -n "original._retried = true" frontend/src/lib/api.ts
+221:      original._retried = true;
+$ grep -n "if (!dangLamMoi)" -A1 frontend/src/lib/hetPhien.ts
+67:  if (!dangLamMoi) {
+68-    dangLamMoi = fetch('/api/auth/refresh', { method: 'POST', credentials: 'include' })
+$ grep -n "maxAge: 60 \\* 60 \\* 24 \\* 30" frontend/src/app/api/auth/refresh/route.ts
+65:      maxAge: 60 * 60 * 24 * 30, // 30 ngày (08/11/2026), gia hạn trượt: lib/hetPhien.ts</div>Route proxy phía frontend có từ 2026-06-09; route backend mà nó gọi tới 2026-07-02 mới có, cùng interceptor 401 — giữa hai mốc đó mọi lần refresh đều hỏng. Hiện nay interceptor thử lại một lần (<code>_retried</code>) và dùng chung một lần refresh (<code>dangLamMoi</code>, single-flight); cookie sống 30 ngày và được gia hạn khi người dùng ghé. Không có refresh token riêng: backend ký lại chính JWT đó với <code>ignoreExpiration</code>, từ chối token ký quá 30 ngày (<code>SESSION_TOO_OLD</code>). Không xoay vòng, nên không phát hiện dùng lại — một đánh đổi có chủ ý.</div>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-bash"><span class="tok-comment"># login sets a 5-second access token in a 7-day cookie</span>
+npm run build &amp;&amp; npm start
+curl -s -c jar -X POST localhost:3000/api/login2 -d '{"exp":"5s"}' -H 'content-type: application/json'
+sleep 6; curl -si -b jar localhost:3000/api/me | head -1    <span class="tok-comment">  # 401 dù cookie còn</span>
+<span class="tok-comment"># trong trình duyệt: bắn ba lời gọi bằng Promise.all, đếm POST /api/refresh trong tab Network</span></code></pre>
+<h3>🔗 Học sâu hơn</h3>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-5-1-hai-token" target="_blank" rel="noopener"><span class="lc-ico">🔐</span><span class="lc-body"><span class="lc-title">Authentication · 5.1 — Hai token</span><span class="lc-sub">Vì sao một token không làm nổi cả hai việc</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-5-2-xoay-vong" target="_blank" rel="noopener"><span class="lc-ico">🔐</span><span class="lc-body"><span class="lc-title">Authentication · 5.2 — Xoay vòng và cú tái dùng</span><span class="lc-sub">Cú phát lại tố giác kẻ cắp</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-5-5-cuoc-dua-refresh" target="_blank" rel="noopener"><span class="lc-ico">🔐</span><span class="lc-body"><span class="lc-title">Authentication · 5.5 — Cuộc đua refresh</span><span class="lc-sub">Cảnh báo giả đã đo ở trên</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nextjs/learn?lessonSlug=nextjs-15-1-nen-tang-auth" target="_blank" rel="noopener"><span class="lc-ico">▲</span><span class="lc-body"><span class="lc-title">Next.js · 15.1 — Nền tảng auth</span><span class="lc-sub">Vì sao JWT khó thu hồi</span></span></a>
+
+<h3>🌏 Không học suông: đời thật, giả định, kẻ xấu</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">🏠 Đời thật</span><span class="v">ứng dụng ngân hàng bắt đăng nhập lại sau vài phút không dùng, còn mạng xã hội giữ bạn đăng nhập cả tháng. Đó là hai cách cân đồng hồ.</span></div>
+  <div class="kv"><span class="k">❓ Nếu… thì sao</span><span class="v">Nếu refresh token bị lộ, chẳng hạn trên máy quán net hay qua một tiện ích trình duyệt độc, thì kẻ trộm dùng được cho tới khi hết hạn, trừ khi có xoay vòng.</span></div>
+  <div class="kv"><span class="k">🕵️ Góc kẻ xấu</span><span class="v">Kẻ xấu lấy token bằng script độc nếu token nằm trong localStorage, hoặc dụ trình duyệt của bạn gửi request kèm cookie từ một trang khác, gọi là CSRF.</span></div>
+  <div class="kv"><span class="k">🛡️ Nhận ra &amp; phòng</span><span class="v">Cách phòng: token httpOnly, sameSite, cookie refresh chỉ gửi tới đúng đường dẫn, xoay vòng kèm phát hiện dùng lại, và nút đăng xuất mọi thiết bị.</span></div>
+</div>
 <h3>🗂 Thuật ngữ trong bài</h3>
 <div class="kv-grid">
   <div class="kv"><span class="k">Access token</span><span class="v">Token sống ngắn gửi mỗi request.</span></div>

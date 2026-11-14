@@ -13,6 +13,7 @@
  *   3. CHẶN người — dùng lại `user_blocks`: chặn rồi thì HAI BÊN không thấy nhau ở MỌI chỗ (mọi tab, tìm kiếm, trả lời,
  *      trang người dùng, xếp hạng, thông báo); chặn cũng gỡ theo dõi hai chiều.
  *   4. Người viết bị khoá / vô hiệu ⇒ bài + trả lời ẩn theo (lọc `enabled` + `accountNonLocked` lúc đọc).
+ * 15/11/2026: ẢNH trong bài (≤ 4) + câu trả lời (≤ 2) — `congDongAnh.ts`; báo cáo được từng ảnh, xoá bài ⇒ xoá ảnh.
  */
 import { createHash } from 'node:crypto';
 import type { Prisma } from '@prisma/client';
@@ -23,6 +24,7 @@ import { isAdminRoles } from '../pro.service.js';
 import { dauNgayVn } from '../agent/anthropicChinhHang/hanMuc.js';
 import { kiemNn, type NnTuDien } from './tuDien.js';
 import { diemNoiBat, docLoai, huyHieu, LOAI_BAI, locThe, theCuaNn, timNhac, trich, type HuyHieu } from './congDongThuan.js';
+import { ANH_HIEN, ANH_TOI_DA_BAI, ANH_TOI_DA_TRA_LOI, docDsAnh, ganAnh, kiemAnh, xoaAnhCua } from './congDongAnh.js';
 
 export const NGUONG_TU_AN = 3;
 const DAI_TOI_DA = 2000;
@@ -121,7 +123,7 @@ export async function taoThongBao(t: { nhan: number; tu: number | null; loai: st
 
 const CHON_BAI = {
   id: true, nn: true, loai: true, tieuDe: true, noiDung: true, the: true, soTraLoi: true, soThich: true, soXem: true,
-  btvLuc: true, suaLuc: true, aiLuc: true, createdAt: true, user: { select: TAC_GIA },
+  btvLuc: true, suaLuc: true, aiLuc: true, createdAt: true, user: { select: TAC_GIA }, anh: ANH_HIEN,
 } as const;
 type DongBai = Prisma.CtlBaiGetPayload<{ select: typeof CHON_BAI }>;
 
@@ -234,7 +236,7 @@ export async function chiTietBai(id: number, xem: number | null, opt: { khoaXem?
       ...(chan.length ? { OR: [{ laAi: true }, { userId: { notIn: chan } }] } : {}),
     },
     orderBy: { id: 'asc' }, take: 200,
-    select: { id: true, noiDung: true, createdAt: true, soThich: true, laAi: true, hayNhatLuc: true, user: { select: TAC_GIA } },
+    select: { id: true, noiDung: true, createdAt: true, soThich: true, laAi: true, hayNhatLuc: true, user: { select: TAC_GIA }, anh: ANH_HIEN },
   });
   const [goi] = await dongGoi([b], xem, true);
   const [hh, thichTl, theoDoi, admin] = await Promise.all([
@@ -263,17 +265,22 @@ export async function chiTietBai(id: number, xem: number | null, opt: { khoaXem?
 
 // ─── Ghi bài ─────────────────────────────────────────────────────────────────────────────────────────────────────
 
-export async function dangBai(userId: number, nnGoc: string, than: { noiDung?: unknown; loai?: unknown; tieuDe?: unknown; the?: unknown }) {
+type ThanBai = { noiDung?: unknown; loai?: unknown; tieuDe?: unknown; the?: unknown; anh?: unknown };
+
+export async function dangBai(userId: number, nnGoc: string, than: ThanBai) {
   const nn: NnTuDien = kiemNn(nnGoc);
   const noiDung = kiemChu(than.noiDung);
   const tieuDe = kiemTieuDe(than.tieuDe);
   const the = kiemThe(nn, than.the);
+  const anh = docDsAnh(than.anh, ANH_TOI_DA_BAI) ?? [];
+  await kiemAnh(userId, anh, null);   // kiểm TRƯỚC khi tạo bài — ảnh sai thì không để lại bài thiếu ảnh
   const b = await prisma.ctlBai.create({ data: { nn, userId, loai: docLoai(than.loai), noiDung, tieuDe, the }, select: { id: true } });
+  if (anh.length) await ganAnh(userId, { baiId: b.id }, anh);
   return chiTietBai(b.id, userId);
 }
 
 /** Tác giả sửa bài của mình. Chỉ trường có gửi mới đổi; đi qua đủ bộ lọc như lúc đăng. */
-export async function suaBai(userId: number, id: number, than: { noiDung?: unknown; loai?: unknown; tieuDe?: unknown; the?: unknown }) {
+export async function suaBai(userId: number, id: number, than: ThanBai) {
   const b = await prisma.ctlBai.findFirst({ where: { id, userId, anLuc: null }, select: { nn: true } });
   if (!b) throw new NotFoundError('Không tìm thấy bài của bạn.');
   const data: Prisma.CtlBaiUpdateInput = { suaLuc: new Date() };
@@ -281,20 +288,26 @@ export async function suaBai(userId: number, id: number, than: { noiDung?: unkno
   if (than.tieuDe !== undefined) data.tieuDe = kiemTieuDe(than.tieuDe);
   if (than.the !== undefined) data.the = kiemThe(b.nn as NnTuDien, than.the);
   if (than.loai !== undefined) data.loai = docLoai(than.loai);
+  const anh = docDsAnh(than.anh, ANH_TOI_DA_BAI);
+  if (anh) await kiemAnh(userId, anh, { baiId: id });
   await prisma.ctlBai.update({ where: { id }, data });
+  if (anh) await ganAnh(userId, { baiId: id }, anh);
   return chiTietBai(id, userId);
 }
 
-export async function traLoi(userId: number, baiId: number, than: { noiDung?: unknown }) {
+export async function traLoi(userId: number, baiId: number, than: { noiDung?: unknown; anh?: unknown }) {
   const noiDung = kiemChu(than.noiDung);
+  const anh = docDsAnh(than.anh, ANH_TOI_DA_TRA_LOI) ?? [];
   const chan = await dsChan(userId);
   const b = await prisma.ctlBai.findFirst({ where: { id: baiId, anLuc: null, user: TAC_GIA_SONG }, select: { id: true, userId: true } });
   if (!b) throw new NotFoundError('Bài không còn.');
   if (chan.includes(b.userId)) throw new AppError('Bạn không trả lời được bài của người đã chặn/bị chặn.', 403, 'CTL_CD_CHAN');
+  await kiemAnh(userId, anh, null);
   const [tl] = await prisma.$transaction([
     prisma.ctlTraLoi.create({ data: { baiId, userId, noiDung }, select: { id: true } }),
     prisma.ctlBai.update({ where: { id: baiId }, data: { soTraLoi: { increment: 1 } } }),
   ]);
+  if (anh.length) await ganAnh(userId, { traLoiId: tl.id }, anh);
   await taoThongBao({ nhan: b.userId, tu: userId, loai: 'tra-loi', baiId, traLoiId: tl.id });
   // @nhắc tên: chỉ người có thật, còn hoạt động, không chặn nhau; tác giả bài đã có thông báo "trả lời" thì thôi.
   const nhac = timNhac(noiDung);
@@ -314,6 +327,7 @@ export async function xoaCuaToi(userId: number, loai: 'bai' | 'tra-loi', id: num
   if (loai === 'bai') {
     const r = await prisma.ctlBai.updateMany({ where: { id, userId, anLuc: null }, data: { anLuc: now, anBoi: userId } });
     if (!r.count) throw new NotFoundError('Không tìm thấy bài của bạn.');
+    await xoaAnhCua({ baiId: id });   // xoá bài ⇒ xoá ảnh (tệp R2 + dòng) — dòng bài giữ lại để đối chiếu báo cáo
   } else {
     const t = await prisma.ctlTraLoi.findFirst({ where: { id, userId, anLuc: null, laAi: false }, select: { baiId: true } });
     if (!t) throw new NotFoundError('Không tìm thấy câu trả lời của bạn.');
@@ -321,6 +335,7 @@ export async function xoaCuaToi(userId: number, loai: 'bai' | 'tra-loi', id: num
       prisma.ctlTraLoi.update({ where: { id }, data: { anLuc: now, anBoi: userId, hayNhatLuc: null } }),
       prisma.ctlBai.update({ where: { id: t.baiId }, data: { soTraLoi: { decrement: 1 } } }),
     ]);
+    await xoaAnhCua({ traLoiId: id });
   }
   return { daXoa: true };
 }
@@ -421,7 +436,7 @@ export async function btvChon(adminId: number, baiId: number, chon: boolean) {
  * Câu trả lời của Gấu báo cáo được — kể cả bởi chính người đã bấm "Nhờ Gấu" (userId của dòng đó là người bấm).
  */
 export async function baoCao(userId: number, than: { loai?: unknown; id?: unknown; lyDo?: unknown; chiTiet?: unknown }) {
-  const loai = than.loai === 'tra-loi' ? 'tra-loi' : than.loai === 'bai' ? 'bai' : than.loai === 'nguoi' ? 'nguoi' : null;
+  const loai = than.loai === 'tra-loi' ? 'tra-loi' : than.loai === 'bai' ? 'bai' : than.loai === 'nguoi' ? 'nguoi' : than.loai === 'anh' ? 'anh' : null;
   const id = Number(than.id);
   if (!loai || !Number.isInteger(id) || id <= 0) throw new BadRequestError('Thiếu nội dung cần báo cáo.', 'CTL_CD_BAO_CAO');
   const lyDo = (LY_DO as readonly string[]).includes(String(than.lyDo)) ? String(than.lyDo) : 'khac';
@@ -440,6 +455,8 @@ export async function baoCao(userId: number, than: { loai?: unknown; id?: unknow
     });
     return { daBao: true, trung: !row, daAn: false };
   }
+
+  if (loai === 'anh') return baoCaoAnh(userId, id, lyDo, chiTiet, baoAdmin);
 
   const m = loai === 'bai'
     ? await prisma.ctlBai.findUnique({ where: { id }, select: { userId: true, noiDung: true, nn: true, anLuc: true } })
@@ -472,6 +489,34 @@ export async function baoCao(userId: number, than: { loai?: unknown; id?: unknow
     daAn = true;
     if (loai === 'bai') await prisma.ctlBai.update({ where: { id }, data: { anLuc: new Date() } });
     else await prisma.ctlTraLoi.update({ where: { id }, data: { anLuc: new Date() } });
+  }
+  return { daBao: true, trung: false, daAn };
+}
+
+/** Báo cáo MỘT ảnh (Apple 1.2): như bài/trả lời — một người một lần, đủ ngưỡng ⇒ tự ẩn ảnh, admin "Gỡ nội dung" ⇒ xoá tệp. */
+async function baoCaoAnh(
+  userId: number, id: number, lyDo: string, chiTiet: string,
+  baoAdmin: (typeof import('../thongBaoAdmin.service.js'))['baoAdmin'],
+) {
+  const a = await prisma.ctlAnh.findUnique({
+    where: { id },
+    select: { userId: true, url: true, anLuc: true, baiId: true, bai: { select: { nn: true } }, traLoi: { select: { baiId: true, bai: { select: { nn: true } } } } },
+  });
+  if (!a || (!a.baiId && !a.traLoi)) throw new NotFoundError('Ảnh không còn.');
+  if (a.userId === userId) throw new BadRequestError('Bạn không báo cáo được ảnh của chính mình.', 'CTL_CD_BAO_CAO_MINH');
+  const nn = a.bai?.nn ?? a.traLoi?.bai.nn ?? '?';
+  const row = await baoAdmin({
+    loai: 'BAO_CAO', mucDo: 'can_xu_ly',
+    tieuDe: `Báo cáo cộng đồng CT Language (${nn}): ẢNH #${id} trong ${a.baiId ? `bài #${a.baiId}` : `trả lời ở bài #${a.traLoi!.baiId}`}`,
+    noiDung: [`Lý do: ${lyDo}`, chiTiet && `Chi tiết: ${chiTiet}`, `Người tải ảnh: user #${a.userId}`, `Ảnh: ${a.url}`].filter(Boolean).join('\n'),
+    userId, entityId: id, khoaChongTrung: `ctw-report:ctl_anh:${id}:${userId}`,
+  });
+  if (!row) return { daBao: true, trung: true };
+  const sau = await prisma.ctlAnh.update({ where: { id }, data: { soBaoCao: { increment: 1 } }, select: { soBaoCao: true, anLuc: true } });
+  let daAn = false;
+  if (!sau.anLuc && sau.soBaoCao >= NGUONG_TU_AN) {
+    daAn = true;
+    await prisma.ctlAnh.update({ where: { id }, data: { anLuc: new Date() } });
   }
   return { daBao: true, trung: false, daAn };
 }

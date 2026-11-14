@@ -517,6 +517,7 @@ model User {
   ctlLuotThi               CtlLuotThi[]              @relation("CtlLuotThiNguoi")
   ctlBai                   CtlBai[]                  @relation("CtlBaiTacGia")
   ctlTraLoi                CtlTraLoi[]               @relation("CtlTraLoiTacGia")
+  ctlAnh                   CtlAnh[]                  @relation("CtlAnhNguoiTai")
   ctlThichBai              CtlThichBai[]             @relation("CtlThichBaiNguoi")
   ctlThichTraLoi           CtlThichTraLoi[]          @relation("CtlThichTraLoiNguoi")
   ctlLuuBai                CtlLuuBai[]               @relation("CtlLuuBaiNguoi")
@@ -17833,6 +17834,8 @@ model CtlBai {
   luu      CtlLuuBai[]
   luotXem  CtlLuotXem[]
   thongBao CtlThongBao[]
+  /// Ảnh đính kèm (tối đa 4 — 15/11/2026).
+  anh      CtlAnh[]
 
   @@index([nn, id], name: "idx_ctl_bai_nn_id")
   @@index([userId], name: "idx_ctl_bai_user")
@@ -17858,6 +17861,8 @@ model CtlTraLoi {
   user     User             @relation("CtlTraLoiTacGia", fields: [userId], references: [id], onDelete: Cascade)
   thich    CtlThichTraLoi[]
   thongBao CtlThongBao[]
+  /// Ảnh đính kèm câu trả lời (tối đa 2 — 15/11/2026).
+  anh      CtlAnh[]
 
   @@index([baiId, id], name: "idx_ctl_tra_loi_bai")
   @@index([userId], name: "idx_ctl_tra_loi_user")
@@ -17865,6 +17870,36 @@ model CtlTraLoi {
 }
 
 /// CT Language cộng đồng (14/11/2026) — thích bài. Một người một lần (khoá chính đôi ⇒ bấm lại không đếm trùng).
+/// Ảnh trong bài / câu trả lời Cộng đồng CT Language (15/11/2026). Tải lên TRƯỚC (`POST /cong-dong/anh` ⇒ dòng chưa gắn),
+/// gắn khi đăng/sửa/trả lời (`anh: [id]`). Chưa gắn quá 24 giờ ⇒ dọn (R2 + dòng). Xoá bài/trả lời ⇒ xoá ảnh theo.
+/// Báo cáo riêng từng ảnh được (Apple 1.2) — đủ ngưỡng ⇒ `anLuc` (ẩn), admin gỡ ⇒ ẩn + xoá tệp R2.
+model CtlAnh {
+  id        Int       @id @default(autoincrement())
+  userId    Int       @map("user_id")
+  baiId     Int?      @map("bai_id")
+  traLoiId  Int?      @map("tra_loi_id")
+  /// Khoá trong kho (R2) — `ctlanguage/cong-dong/u<user>/<uuid>.jpg`.
+  khoa      String    @db.VarChar(200)
+  url       String    @db.Text
+  rong      Int
+  cao       Int
+  kichThuoc Int       @map("kich_thuoc")
+  thuTu     Int       @default(0) @map("thu_tu") @db.SmallInt
+  soBaoCao  Int       @default(0) @map("so_bao_cao")
+  anLuc     DateTime? @map("an_luc")
+  anBoi     Int?      @map("an_boi")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  user   User       @relation("CtlAnhNguoiTai", fields: [userId], references: [id], onDelete: Cascade)
+  bai    CtlBai?    @relation(fields: [baiId], references: [id], onDelete: Cascade)
+  traLoi CtlTraLoi? @relation(fields: [traLoiId], references: [id], onDelete: Cascade)
+
+  @@index([baiId], name: "idx_ctl_anh_bai")
+  @@index([traLoiId], name: "idx_ctl_anh_tra_loi")
+  @@index([userId, createdAt], name: "idx_ctl_anh_user")
+  @@map("ctl_anh")
+}
+
 model CtlThichBai {
   userId    Int      @map("user_id")
   baiId     Int      @map("bai_id")

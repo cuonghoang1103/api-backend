@@ -1022,6 +1022,7 @@ for route in \
     ctlanguage/thi/danh-muc \
     ctlanguage/kham-pha/su-kien/thuong \
     ctlanguage/bai-ai/luot \
+    ctlanguage/hoi-gau/luot \
     xuong-3d/bo-phan \
     gifs \
     toc-do-mang/ping \

@@ -18,6 +18,20 @@ Mẫu một mục:
 
 ---
 
+### 15/11/2026 — App CT Language — Bấm giữa nút Gấu nổi không ăn
+- **Triệu chứng:** máy ảo: chạm vào hình Gấu ở nút nổi (trợ lý theo màn; có thể cả nút "Đặt câu hỏi" ở Cộng đồng) không mở gì, chỉ chạm mép viền mới ăn.
+- **Nguyên nhân:** `LinhVat/GauPixel.swift` LUÔN gắn `.contentShape(Rectangle()).onTapGesture { if chamDuoc {…} }` — kể cả `chamDuoc = false` cử chỉ vẫn nằm đó và nuốt cú chạm của `Button` bọc ngoài.
+- **Cách sửa:** `.allowsHitTesting(false)` cho GauPixel nằm TRONG nút (`TroLyGauCTL.NutTroLyGau`, `CongDongCTL.nutGau`) — commit đợt ảnh + Gấu trợ lý 15/11.
+- **Ảnh hưởng:** nút mới (chưa phát hành); nút "Đặt câu hỏi" ở Cộng đồng bản TestFlight có thể dính cùng lỗi (chưa đo trên máy thật).
+- **Bài học:** view tự xử lý chạm đặt trong `Button` phải tắt hit-testing; kiểm nút bằng cú chạm GIỮA hình trên máy ảo, không chỉ "build xanh".
+
+### 15/11/2026 — App CT Language — Móc môi trường gắn ở mục lục không tới màn bài đã đẩy
+- **Triệu chứng:** gắn `.environment(\.troLyBaiSH)` lên `MucLucSachHocView` (HocCTL) để màn bài nổi nút trợ lý — mở bài trên máy ảo không thấy nút.
+- **Nguyên nhân:** bài đẩy bằng `NavigationLink { BaiSachHocView }` ở nhiều chỗ (mục lục, "bài tiếp", Luyện viết, Luyện thêm); đo thật thì giá trị môi trường gắn trên view mục lục (đích của một NavigationLink khác) không truyền xuống đích đã đẩy.
+- **Cách sửa:** đổi sang móc TĨNH `MocTroLySH.nut` (Shared/SachHoc/MucLucSachHocView.swift), CT Language gắn một lần ở `GocCTL` (`NutTroLyGau.ganVaoSachHoc()`); app CuongThai không gắn ⇒ không đổi gì.
+- **Ảnh hưởng:** chỉ trong lúc làm (chưa phát hành).
+- **Bài học:** móc từ app vào màn dùng chung qua NHIỀU lối điều hướng ⇒ dùng biến tĩnh/đối tượng chung, đừng trông vào environment truyền qua NavigationLink; nghiệm thu bằng cách mở màn thật.
+
 ### 14/11/2026 — Hạ tầng (CI) — backend `tsc --noEmit` hết bộ nhớ ngẫu nhiên
 - **Triệu chứng:** `npx tsc --noEmit` chết "Reached heap limit / allocation failure" sau ~58 s, không có lỗi kiểu nào; lượt khác cùng mã lại qua.
 - **Nguyên nhân:** backend 3.5k tệp cần ~4,1 GB heap — sát trần mặc định của Node (~4 GB). `Dockerfile.backend` đã đặt 6144 từ 22/10, nhưng `scripts/kiem-ci-truoc-push.sh` (bước kiểm của deploy-nha) và `ci-lint.yml` chạy không nới.

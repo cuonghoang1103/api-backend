@@ -21,13 +21,13 @@ export type LoaiMucTieu =
   | 'feed_post' | 'feed_comment' | 'chat_message' | 'issue_comment' | 'page_comment' | 'diagram_comment'
   | 'class_post' | 'class_comment' | 'dm_message' | 'dm_thread'
   // Cộng đồng app CT Language (src/services/ctlanguage/congDong.ts, 13/11/2026).
-  | 'ctl_bai' | 'ctl_tra_loi';
+  | 'ctl_bai' | 'ctl_tra_loi' | 'ctl_anh';
 
 export interface MucTieu { kind: LoaiMucTieu; id: number }
 
 const GO_DUOC: LoaiMucTieu[] = [
   'feed_post', 'feed_comment', 'chat_message', 'issue_comment', 'page_comment', 'diagram_comment', 'class_post', 'class_comment', 'dm_message',
-  'ctl_bai', 'ctl_tra_loi',
+  'ctl_bai', 'ctl_tra_loi', 'ctl_anh',
 ];
 
 /** Đọc mục tiêu từ khoá chống trùng của thông báo. Null = không phải báo cáo có mục tiêu. */
@@ -59,6 +59,7 @@ export async function tacGiaCua(t: MucTieu, nguoiBaoCao: number | null): Promise
     case 'dm_message': return (await prisma.message.findUnique({ where: { id }, select: { senderId: true } }))?.senderId ?? null;
     case 'ctl_bai': return (await prisma.ctlBai.findUnique({ where: { id }, select: { userId: true } }))?.userId ?? null;
     case 'ctl_tra_loi': return (await prisma.ctlTraLoi.findUnique({ where: { id }, select: { userId: true } }))?.userId ?? null;
+    case 'ctl_anh': return (await prisma.ctlAnh.findUnique({ where: { id }, select: { userId: true } }))?.userId ?? null;
     case 'dm_thread': {
       const th = await prisma.messageThread.findUnique({ where: { id }, select: { userId: true, adminUserId: true, userAId: true, userBId: true } });
       if (!th) return null;
@@ -91,7 +92,13 @@ export async function goNoiDung(t: MucTieu, adminId: number): Promise<boolean> {
     case 'class_post': return (await prisma.workClassPost.updateMany({ where: { id, deletedAt: null }, data: { deletedAt: now } })).count > 0;
     case 'class_comment': return (await prisma.workClassComment.updateMany({ where: { id, deletedAt: null }, data: { deletedAt: now } })).count > 0;
     // Bài tự ẩn vì đủ báo cáo (an_boi null) vẫn gỡ được — admin xác nhận ⇒ ghi người gỡ.
-    case 'ctl_bai': return (await prisma.ctlBai.updateMany({ where: { id, anBoi: null }, data: { anLuc: now, anBoi: adminId } })).count > 0;
+    case 'ctl_bai': {
+      const r = (await prisma.ctlBai.updateMany({ where: { id, anBoi: null }, data: { anLuc: now, anBoi: adminId } })).count > 0;
+      // Bài bị gỡ ⇒ xoá luôn ảnh của nó (URL R2 công khai — để lại thì ảnh vi phạm vẫn mở được bằng link cũ).
+      if (r) await (await import('./ctlanguage/congDongAnh.js')).xoaAnhCua({ baiId: id });
+      return r;
+    }
+    case 'ctl_anh': return (await import('./ctlanguage/congDongAnh.js')).goAnh(id, adminId);
     case 'ctl_tra_loi': return (await prisma.ctlTraLoi.updateMany({ where: { id, anBoi: null }, data: { anLuc: now, anBoi: adminId } })).count > 0;
     case 'dm_message': {
       // Đúng đường xoá tin của admin trong Messenger: ẩn với cả hai bên + phát sự kiện + gỡ tệp đính kèm.

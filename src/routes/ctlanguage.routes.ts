@@ -3,7 +3,7 @@
  *
  * Tiến độ IELTS dùng lại `/api/v1/ielts/*`; ở đây chỉ thứ app này cần mà web chưa có.
  */
-import { Router, type Request, type RequestHandler, type Response } from 'express';
+import express, { Router, type Request, type RequestHandler, type Response } from 'express';
 import rateLimit from 'express-rate-limit';
 import { RedisStore } from 'rate-limit-redis';
 import { getRedis } from '../config/redis.js';
@@ -21,6 +21,7 @@ import {
 } from '../services/ctlanguage/congDong.js';
 import { docThongBao, dsTheoDoi, dsThongBao, hoSoNguoi, soChuaDoc, theoDoi, xepHang } from '../services/ctlanguage/congDongNguoi.js';
 import { luotGau, nhoGauTraLoi } from '../services/ctlanguage/congDongGau.js';
+import { ANH_BYTE_TOI_DA, taiAnh } from '../services/ctlanguage/congDongAnh.js';
 import { chamBuoiGoi, chayLuotGoi, luotGoi } from '../services/ctlanguage/goiCuongMini.js';
 import { demCuocGoi, ghiLuotTra } from '../services/ctlanguage/khamPha.js';
 import { dsChoWeb, docNN } from '../services/ielts/troChuyen/chuDe.js';
@@ -259,7 +260,7 @@ router.post('/cong-dong/bai/:id/ai/tra-loi', gioiHanGhi, async (req: Request, re
 router.post('/cong-dong/bai/:id/tra-loi', gioiHanGhi, async (req: Request, res: Response<ApiResponse>, next) => {
   try { res.json({ success: true, data: await traLoi(req.userId!, idSo(req.params.id), req.body ?? {}) }); } catch (e) { next(e); }
 });
-/** Sửa bài của mình: `{ tieuDe?, noiDung?, loai?, the? }`. */
+/** Sửa bài của mình: `{ tieuDe?, noiDung?, loai?, the?, anh? }` (`anh` = danh sách id ĐẦY ĐỦ sau khi sửa; bỏ ra ⇒ xoá). */
 router.patch('/cong-dong/bai/:id', gioiHanGhi, async (req: Request, res: Response<ApiResponse>, next) => {
   try { res.json({ success: true, data: await suaBai(req.userId!, idSo(req.params.id), req.body ?? {}) }); } catch (e) { next(e); }
 });
@@ -275,7 +276,17 @@ router.delete('/cong-dong/bai/:id', async (req: Request, res: Response<ApiRespon
 router.delete('/cong-dong/tra-loi/:id', async (req: Request, res: Response<ApiResponse>, next) => {
   try { res.json({ success: true, data: await xoaCuaToi(req.userId!, 'tra-loi', idSo(req.params.id)) }); } catch (e) { next(e); }
 });
-/** Đăng bài: `{ noiDung, loai?, tieuDe?, the? }`. Khai CUỐI cùng (`:nn` nuốt mọi `/cong-dong/<chữ>`). */
+/** Tải lên/giờ/người: 60 ảnh (đăng 4 ảnh × vài bài + chọn lại vẫn thừa; chặn kịch bản dùng làm kho ảnh). */
+const gioiHanAnh = gioiHanNguoi('rl:ctl-cd-anh:', 60, 'Bạn tải ảnh hơi nhiều — nghỉ một lát rồi tải tiếp nhé.');
+const thanAnh = express.raw({ type: () => true, limit: ANH_BYTE_TOI_DA + 1024 });
+/**
+ * Tải MỘT ảnh (thân = byte ảnh JPEG/PNG/WebP, Content-Type image/*) ⇒ `{id, url, rong, cao}` CHƯA GẮN bài. Gửi `anh: [id]`
+ * khi đăng / sửa bài (≤ 4) hoặc trả lời (≤ 2). Không gắn trong 24 giờ ⇒ tự dọn. `congDongAnh.ts`.
+ */
+router.post('/cong-dong/anh', gioiHanAnh, thanAnh, async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await taiAnh(req.userId!, Buffer.isBuffer(req.body) ? req.body : Buffer.alloc(0)) }); } catch (e) { next(e); }
+});
+/** Đăng bài: `{ noiDung, loai?, tieuDe?, the?, anh? }`. Khai CUỐI cùng (`:nn` nuốt mọi `/cong-dong/<chữ>`). */
 router.post('/cong-dong/:nn', gioiHanGhi, async (req: Request, res: Response<ApiResponse>, next) => {
   try { res.json({ success: true, data: await dangBai(req.userId!, req.params.nn, req.body ?? {}) }); } catch (e) { next(e); }
 });

@@ -388,3 +388,41 @@ Câu hỏi cho user: Pro của CT Language có **dùng chung** với Pro web cuo
   · Test: `npx tsx --test src/services/ctlanguage/khamPhaThuan.test.ts src/services/ctlanguage/baiAiThuan.test.ts
     src/routes/ctlanguage.khamPha.routes.test.ts` + (CSDL) `src/services/ctlanguage/khamPhaBaiAi.db.test.ts`; iOS `KhamPhaBaiAiTests`.
     DEBUG `CT_XEM_MAN`: `kham-pha-duoi`, `kham-pha-duoi2`, `bai-ai`, `bai-ai-mau`, `bai-ai:<id>`, `su-kien`, `xep-hang-phut`, `chu-de:<mã>`, `ghep-cap`.
+- 15/11 (APP + BACKEND): **Ảnh trong bài Cộng đồng · Gấu trợ lý theo màn · lời linh vật theo bạn đồng hành** (CHƯA deploy).
+  Migration `20261115090000_ctlanguage_cong_dong_anh` (chỉ THÊM bảng `ctl_anh`, FK CASCADE về users / ctl_bai / ctl_tra_loi).
+  · **Ảnh Cộng đồng** (`src/services/ctlanguage/congDongAnh.ts`): `POST /api/v1/ctlanguage/cong-dong/anh` (thân = byte ảnh, `express.raw`
+    ≤ 10 MB, 60 ảnh/giờ/người) ⇒ sharp kiểm định dạng THẬT (JPEG/PNG/WebP; GIF/SVG từ chối), xoay EXIF, BỎ metadata (GPS), cạnh dài
+    ≤ 1600, JPEG q80 ⇒ kho chung (R2; test/dev `STORAGE_SANDBOX`) khoá `ctlanguage/cong-dong/u<user>/<uuid>.jpg` ⇒ dòng CHƯA GẮN
+    `{id, url, rong, cao}`. Đăng/sửa bài gửi `anh: [id]` (≤ 4, đúng thứ tự; sửa = danh sách ĐẦY ĐỦ, ảnh bỏ ra bị xoá), trả lời ≤ 2.
+    Chỉ gắn ảnh của chính mình, chưa gắn nơi khác — kiểm TRƯỚC khi tạo bài (ảnh sai ⇒ không để lại bài thiếu ảnh). Chưa gắn > 24 giờ ⇒
+    dọn (ngẫu nhiên 5% lượt tải); > 40 ảnh chờ gắn/24 giờ ⇒ 429. Bảng tin + chi tiết trả `anh` (ảnh ẩn không ra).
+    Apple 1.2: báo cáo TỪNG ảnh (`/cong-dong/bao-cao` `loai: "anh"`, khoá `ctw-report:ctl_anh:<id>:<người>` ⇒ nút "Gỡ nội dung" của admin
+    dùng được — `kiemDuyetAdmin` kind `ctl_anh`: ẩn + xoá tệp R2), đủ 3 người ⇒ tự ẩn. Ảnh đi theo bài: bài ẩn/chặn ⇒ ảnh không ra.
+    Xoá bài/trả lời ⇒ xoá ảnh (tệp + dòng); admin gỡ BÀI ⇒ xoá ảnh của bài. Chưa có bộ lọc ẢNH tự động (chỉ lọc chữ) — dựa báo cáo +
+    tự ẩn + admin 24 giờ. Xoá tài khoản ⇒ dòng ảnh xoá theo (CASCADE) nhưng tệp R2 còn (chưa có dọn) — việc sau.
+    App: `Modules/CongDong/AnhCD.swift` (PhotosPicker — không cần quyền thư viện; thu nhỏ trên máy ⇒ JPEG vì sharp không đọc HEIC; tải
+    nền ngay khi chọn; lưới 1/2/3/4 ảnh ở thẻ bài + chi tiết + trả lời; chạm ⇒ xem toàn màn, chụm/chạm hai lần phóng to; chạm giữ / ⋯ ⇒
+    "Báo cáo ảnh", ẩn ngay với người báo). Quy tắc cộng đồng thêm dòng ảnh.
+  · **Gấu trợ lý theo màn** (`src/services/ctlanguage/hoiGau.ts`, router riêng `ctlanguage.hoiGau.routes.ts` gắn TRƯỚC `/ctlanguage`):
+    `GET /hoi-gau/luot` · `POST /hoi-gau/ai/hoi` `{nn, banDongHanh?, nguCanh:{loai, tieuDe, noiDung}, lichSu?, cau}` ⇒ `{id, traLoi, luot}` ·
+    `POST /hoi-gau/bao-cao-ai` (4.7). `llmComplete` purpose `language_tutor`, 900 token. Free 8 · Pro 80 câu/ngày (RAM, trừ trước,
+    hoàn khi AI lỗi — như `suaBai.ts`), 10 câu/phút. Lọc `kiemNoiDung` câu hỏi + lượt cũ của người dùng + câu AI. Nhắc model nói bằng
+    tên + tính cách bạn đồng hành (`BAN_DONG_HANH`, khớp `LinhVatCTL`). Ngữ cảnh ≤ 3000 ký tự (app cắt + máy chủ cắt), coi là DỮ LIỆU.
+    Smoke-test deploy.sh thêm `ctlanguage/hoi-gau/luot` (401). Đo local 15/11: câu "Giải thích từ này" (学习) trả lời đúng, có pinyin.
+    App: `Modules/TroLyGau/TroLyGauCTL.swift` (+ `NguCanhGauCTL.swift` dựng ngữ cảnh). **Gắn vào một màn = một dòng:**
+    `.troLyGau(NguCanhGau(loai: .nguPhap, nn: nn, tieuDe: …, noiDung: "…chữ của màn…", goiY: [...]))` — `nil` ⇒ ẩn; `canhDuoi:` đẩy nút
+    lên khi màn có thanh dưới; màn có `.safeAreaInset(edge: .bottom)` thì gắn TRƯỚC nó. Loại: `.tu .chuHan .baiHoc .nguPhap .cauThi
+    .ketQuaThi .baiCD .khac` (mỗi loại có gợi ý một chạm mặc định). Đã gắn: trang từ, thẻ chữ Hán, bài học AI, bài khoá kiểu sách
+    (móc tĩnh `MocTroLySH` trong Shared/SachHoc, gắn ở GocCTL), chi tiết bài cộng đồng. CHƯA gắn (màn của phiên khác): ngữ pháp
+    (`.nguPhap`), câu thi + kết quả thi (`.cauThi` / `.ketQuaThi`). Khung chat: xin đồng ý chia sẻ AI trước (5.1.2(i) — mô tả trong
+    `DongYChiaSeAI` thêm dòng này), mỗi câu AI có Chép + Báo cáo, hết lượt ⇒ mời Pro, khách ⇒ mời đăng nhập.
+  · **Lời linh vật theo bạn đồng hành**: `LinhVatCTL.tenGoi` (Gấu · Mochi · Miu · Bảo Bảo · Thỏ Bông · Cáo Lửa · Kem), `xung(_:)` đổi
+    "Gấu" đứng riêng ⇒ tên bạn (giữ "Gấu trúc/tuyết/Mochi/CuongMini/AI"), 🐻 ⇒ emoji bạn; `caoGiong` (giọng máy mỗi bạn một cao độ),
+    `duoiNgan` (Miu "meo~"), `chaoRieng` (câu chào theo tính cách, ngày chẵn không việc gấp). Áp ở: lời chào + "gom sẵn 4 việc" tab Hôm
+    nay, bong bóng chạm/khen/động viên/combo, thông báo nhắc học (nói bằng tên bạn GỬI — trước đó phụ đề "🐱 Mèo Miu nhắn" mà thân "Gấu
+    đợi bạn"), màn làm quen, mã xác thực email, trạng thái chờ ("… đang soạn bài/xếp đề/đọc chữ"), Tôi › "… nói". GIỮ "Gấu" (thương
+    hiệu, người khác cũng thấy): "Nhờ Gấu trả lời" + thông báo "đã nhờ Gấu trả lời" + tác giả "CuongMini AI" (luôn vẽ Gấu), quy tắc
+    cộng đồng, giới thiệu app ở Tôi, tên widget "Lật thẻ cùng Gấu", tên trang phục "Gấu nguyên bản", văn bản pháp lý.
+  · Test: `npx tsx --test src/services/ctlanguage/hoiGau.test.ts src/services/ctlanguage/congDongAnh.test.ts` + (CSDL)
+    `STORAGE_SANDBOX=1 npx tsx --test src/services/ctlanguage/congDongAnh.db.test.ts`; iOS `TroLyGauTests`.
+  · Deploy: `migrate deploy` (bảng mới); không env mới.

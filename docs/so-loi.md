@@ -18,6 +18,13 @@ Mẫu một mục:
 
 ---
 
+### 15/11/2026 — Video bài giảng (công cụ demo chay.py) — tệp Markdown trong @file làm vỡ kịch bản demo (IndexError)
+- **Triệu chứng:** `python3 scratchpad/aic/chay.py n0-9` chết giữa chừng `IndexError: list index out of range` ở vòng tìm `@end`; khối demo trước đó đã chạy nhưng `demo/out/n0-9.json` KHÔNG được ghi (json chỉ ghi cuối hàm) ⇒ mất cả output khối đã chạy.
+- **Nguyên nhân:** `scratchpad/obj/chay.py` (và mọi bản chép: sio/obj/aic) tách khối bằng MỌI dòng bắt đầu `## ` TRƯỚC khi đọc `@file…@end` ⇒ tiêu đề `## Cài đặt` của README.md viết trong `@file` bị coi là khối mới, `@file` mất `@end`.
+- **Cách sửa:** bản `scratchpad/aic/chay.py` theo dõi trạng thái trong-@file khi tách khối (dòng `## ` trong thân tệp là nội dung) — thử lại bằng tệp có `## B` trong @file: in đúng. Bản obj/sio CHƯA sửa (chưa ai viết Markdown trong @file).
+- **Ảnh hưởng:** chỉ người soạn demo (khoá ai-coding, 15/11); không lọt lên web.
+- **Bài học:** bộ phân tích dòng có "khối lồng" (thân tệp) phải tách theo trạng thái, không theo tiền tố dòng; và ghi kết quả dần (mỗi khối) để một lỗi giữa chừng không xoá kết quả đã có.
+
 ### 15/11/2026 — App CT Language (thi thử) — Bài nghe chung của nhóm tắt khi lật sang câu kế, không nghe lại được
 - **Triệu chứng:** IELTS Mini Listening (một băng cho 10 câu, nghe MỘT lần): vừa bấm "Sau" sang câu 2 là băng tắt, nút nghe báo "Đã hết lượt nghe" ⇒ không cách nào nghe hết part trừ khi đứng yên ở câu 1.
 - **Nguyên nhân:** `LamBaiThiVM.den()` gọi `GiongSachHoc.chung.dung()` VÔ ĐIỀU KIỆN mỗi lần lật câu, kể cả khi câu mới dùng chung bài nghe của nhóm (`thi-g-…`) mà lượt nghe đã bị trừ.

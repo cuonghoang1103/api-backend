@@ -1,0 +1,24 @@
+# 14.3 · nft-win sau luật DPI: SSH ở 993, SSH ở 443 (sslh), web ở 443 — rồi SSH bọc trong TLS
+$ ssh vps true
+kex_exchange_identification: read: Connection reset by peer
+Connection reset by 198.18.0.30 port 993
+$ ssh -p 443 vps true
+kex_exchange_identification: read: Connection reset by peer
+Connection reset by 198.18.0.30 port 443
+$ curl -sS -m 5 --cacert /ca/ca.pem https://vps.example/
+web cua VPS qua cong 443 (sslh -> nginx)
+$ cat >> ~/.ssh/config <<'CFG'
+> Host vps-tls
+>   HostName ssh.vps.example
+>   User sv
+>   HostKeyAlias vps.example
+>   ProxyCommand openssl s_client -quiet -verify_return_error -CAfile /ca/ca.pem -connect vps.example:443 -servername %h
+> CFG
+$ ssh vps-tls 'echo "SSH boc trong TLS: vao duoc $(hostname)"'
+Connecting to 198.18.0.30
+depth=1 CN=Lab Root CA
+verify return:1
+depth=0 CN=vps.example
+verify return:1
+Warning: Permanently added 'vps.example' (ED25519) to the list of known hosts.
+SSH boc trong TLS: vao duoc vps

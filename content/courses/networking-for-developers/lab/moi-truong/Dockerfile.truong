@@ -1,6 +1,14 @@
 # net-lab-truong — ảnh net-lab + dnsmasq (DHCP + DNS của "Wi-Fi trường") + busybox (udhcpc = máy khách DHCP tí hon),
 # cho phòng lab Chương 14 "Wi-Fi trường trong một hộp" (truong.yml). Ảnh gốc net-lab giữ nguyên ⇒ output các chương khác không đổi.
 #   docker build -t net-lab -f Dockerfile .  &&  docker build -t net-lab-truong -f Dockerfile.truong .
+# Lớp thứ hai (14/11/2026, bài 14.3–14.6): OpenSSH (máy khách + máy chủ, ssh.socket của Ubuntu), systemd (máy "vps" chạy systemd thật
+# để thấy bẫy socket activation), autossh, sslh, redis (một "CSDL" chỉ nghe 127.0.0.1 cho ssh -L), WireGuard, OpenVPN, miniupnpd/upnpc.
+# Chỉ THÊM gói ⇒ output 14.1–14.2 không đổi. Các dịch vụ KHÔNG tự chạy: máy nào cần thì kịch bản bật.
 FROM net-lab
 RUN apt-get update && apt-get install -y --no-install-recommends dnsmasq-base busybox \
  && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends \
+      systemd systemd-sysv dbus openssh-server openssh-client autossh sslh redis-server redis-tools \
+      wireguard-tools openvpn qrencode miniupnpd miniupnpc \
+ && rm -rf /var/lib/apt/lists/* \
+ && systemctl disable redis-server sslh openvpn miniupnpd 2>/dev/null; true

@@ -61,6 +61,7 @@ export const NET_SIMS = {
   // Chương 14 — mạng thực chiến (14/11/2026): "Wi-Fi trường trong một hộp", số liệu frontend/src/components/net-lab/engine/capture14.ts
   wifi: ['register', 'private', 'clone'],
   block: ['web', 'hotspot', 'game'],
+  tunnel: ['port', 'forward', 'socks'],
 };
 export const NET_TOURS = {
   encap: ['encap-layers', 'encap-hop', 'encap-mtu', 'encap-start'],
@@ -79,6 +80,7 @@ export const NET_TOURS = {
   dnssec: ['dnssec-chain', 'dnssec-expired', 'dnssec-start'],
   wifi: ['wifi-register', 'wifi-private', 'wifi-clone', 'wifi-start'],
   block: ['block-web', 'block-hotspot', 'block-game', 'block-start'],
+  tunnel: ['tunnel-port', 'tunnel-forward', 'tunnel-socks', 'tunnel-start'],
 };
 
 export const LAB_NS = {

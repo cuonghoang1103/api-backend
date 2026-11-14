@@ -49,6 +49,8 @@ address=/www.msftconnecttest.com/198.18.0.10
 address=/test/198.18.0.10
 address=/vpn.test/198.18.0.20
 address=/portal.truong.test/10.20.1.1
+# 14.3: máy chủ thuê của sinh viên (vps.example — tên ví dụ RFC 2606, không phải VPS thật nào)
+address=/vps.example/198.18.0.30
 dhcp-leasefile=/run/truong/dnsmasq.leases
 log-dhcp
 log-queries

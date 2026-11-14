@@ -124,4 +124,11 @@ export const NET_LABS: Record<string, LabDef> = {
     presets: ['web', 'hotspot', 'game'],
     load: () => import('./BlockSim'),
   },
+  tunnel: {
+    en: 'SSH when port 22 is blocked', vi: 'SSH khi cổng 22 bị chặn', chapterEn: 'Real-life networks', chapterVi: 'Mạng thực chiến',
+    descEn: 'School Wi-Fi opens only 80/443/587/993: watch ssh read ~/.ssh/config top to bottom (first value wins) and pick 22 or 993 at school vs at home; pull the VPS\'s Redis home with -L, show a laptop demo with -R (refused on 127.0.0.1 until GatewayPorts), and browse through -D — the SNI block passes, socks5 leaks DNS, an open SOCKS lets a stranger out of your VPS. Every line is from the lab.',
+    descVi: 'Wi-Fi trường chỉ mở 80/443/587/993: xem ssh đọc ~/.ssh/config từ trên xuống (giá trị đầu tiên thắng) và chọn 22 hay 993 khi ở trường và ở nhà; kéo Redis của VPS về bằng -L, khoe demo trên laptop bằng -R (bị từ chối ở 127.0.0.1 tới khi bật GatewayPorts), và lướt web qua -D — qua được chặn SNI, socks5 rò DNS, SOCKS mở toang cho người lạ đi ra từ VPS của bạn. Mọi dòng đều từ lab.',
+    presets: ['port', 'forward', 'socks'],
+    load: () => import('./TunnelSim'),
+  },
 };

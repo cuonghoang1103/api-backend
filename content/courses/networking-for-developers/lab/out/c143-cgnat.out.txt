@@ -1,0 +1,5 @@
+# 14.3 · router nhà (nft-rnha): IP phía WAN do nhà mạng cấp — và IP mà Internet thật sự thấy
+$ ip -4 -br addr show wan
+wan@if6371       UP             100.64.0.2/24 
+$ curl -s http://news.test/
+Internet OK: news.test (ban den tu 198.18.0.40)

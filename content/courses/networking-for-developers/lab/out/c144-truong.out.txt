@@ -1,0 +1,13 @@
+# 14.4 · cùng laptop mang tới trường (nft-win; trường bỏ MỌI gói UDP) — WireGuard chạy trên UDP
+$ wg-quick up wg0 2>&1 | tail -1
+[#] iptables-restore -n
+$ ping -c 3 -W 1 10.66.0.1 | tail -2
+3 packets transmitted, 0 received, 100% packet loss, time 2073ms
+
+$ wg show wg0 | grep -E "endpoint|handshake|transfer"
+  endpoint: 198.18.0.30:51820
+  transfer: 0 B received, 148 B sent
+$ curl -sS -m 5 http://news.test/
+curl: (28) Connection timed out after 5002 milliseconds
+$ wg-quick down wg0 2>&1 | tail -1
+[#] iptables-restore -n

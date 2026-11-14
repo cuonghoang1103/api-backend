@@ -187,6 +187,9 @@ const FINAL: Record<string, (s: Record<string, Record<string, unknown> | undefin
   'block-web': (s) => s.block?.req === 'social' && s.block?.stop === 'sni' && s.block?.atEnd === true,
   'block-hotspot': (s) => s.block?.req === 'phone' && s.block?.stop === 'ttl' && s.block?.atEnd === true,
   'block-game': (s) => s.block?.req === 'ssh993' && s.block?.ok === true && s.block?.atEnd === true,
+  'tunnel-port': (s) => s.tunnel?.preset === 'port' && s.tunnel?.place === 'home' && s.tunnel?.order === 'first' && s.tunnel?.port === 22 && s.tunnel?.atEnd === true,
+  'tunnel-forward': (s) => s.tunnel?.preset === 'forward' && s.tunnel?.fwd === 'R0' && s.tunnel?.tone === 'ok' && s.tunnel?.atEnd === true,
+  'tunnel-socks': (s) => s.tunnel?.preset === 'socks' && s.tunnel?.req === 'stranger' && s.tunnel?.atEnd === true,
 };
 
 describe('tours — run on the real simulations', () => {

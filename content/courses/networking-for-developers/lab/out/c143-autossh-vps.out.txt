@@ -1,0 +1,10 @@
+# 14.3 · nft-vps: trong lúc đó VPS thấy gì — phiên CŨ vẫn giữ cổng 2222 nên các lần nối lại bị từ chối, tới khi VPS biết phiên cũ đã chết
+$ J() { journalctl -u ssh --no-pager -o short --since "-3min" | cut -c8-; }
+$ J | grep -E "Address already" | head -1
+15:40:18 vps sshd-session[590]: error: bind [127.0.0.1]:2222: Address already in use
+$ J | grep -c "Address already in use"
+6
+$ J | grep -E "Read error|Timeout"
+15:40:30 vps sshd-session[537]: Read error from remote host 198.18.0.40 port 37054: Connection reset by peer
+$ ss -4tlnp | grep 2222
+LISTEN 0      128        127.0.0.1:2222       0.0.0.0:*                                                         

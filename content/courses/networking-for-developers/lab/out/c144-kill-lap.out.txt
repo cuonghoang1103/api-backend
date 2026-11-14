@@ -1,0 +1,5 @@
+# 14.4 · nft-lap (full tunnel wg-quick): đường tới VPS bị chặn UDP — gói vẫn bị giữ trong wg0, KHÔNG lọt ra ngoài
+$ ip route get 198.18.0.10 | head -1
+198.18.0.10 dev wg0 table 51820 src 10.66.0.2 uid 0 
+$ curl -sS -m 5 http://198.18.0.10/
+curl: (28) Connection timed out after 5003 milliseconds

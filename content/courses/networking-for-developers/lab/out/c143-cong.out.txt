@@ -1,0 +1,12 @@
+# 14.3 · laptop ở trường (nft-win; trường chỉ mở TCP 80/443/587/993): cổng 22 và cổng 993 của CÙNG một VPS
+$ ssh -o ConnectTimeout=5 sv@vps.example hostname
+ssh: connect to host vps.example port 22: Connection timed out
+$ ssh -p 993 -o StrictHostKeyChecking=accept-new sv@vps.example hostname
+Warning: Permanently added '[vps.example]:993' (ED25519) to the list of known hosts.
+vps
+$ ssh -v -p 993 sv@vps.example true 2>&1 | grep -E "Connecting to|Connection established|Remote protocol|Server host key|Authenticated to"
+debug1: Connecting to vps.example [198.18.0.30] port 993.
+debug1: Connection established.
+debug1: Remote protocol version 2.0, remote software version OpenSSH_10.2p1 Ubuntu-2ubuntu3.8
+debug1: Server host key: ssh-ed25519 SHA256:/KkX67Iwp0utfks2VoPYn9b1LK8Xwj0geY3zC6Uqy5g
+Authenticated to vps.example ([198.18.0.30]:993) using "publickey".

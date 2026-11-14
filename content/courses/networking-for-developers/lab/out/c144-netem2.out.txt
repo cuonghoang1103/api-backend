@@ -1,0 +1,4 @@
+# 14.4 · router nhà: cùng đường đó nhưng Wi-Fi/4G chập chờn — mất 2% gói
+$ tc qdisc change dev wan root netem delay 20ms rate 50mbit loss 2%
+$ tc qdisc show dev wan
+qdisc netem 8003: root refcnt 11 limit 1000 delay 20ms loss 2% rate 50Mbit seed 10716198535445569860

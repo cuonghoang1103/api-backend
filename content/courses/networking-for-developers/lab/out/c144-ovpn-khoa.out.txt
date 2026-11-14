@@ -1,0 +1,5 @@
+# 14.4 · nft-win: kế hoạch B — OpenVPN chạy TCP. Khoá + chứng chỉ tự ký của laptop; máy chủ chỉ cần dấu vân tay của nó
+$ mkdir -p /etc/openvpn/lab; cd /etc/openvpn/lab
+$ openssl req -x509 -newkey ec -pkeyopt ec_paramgen_curve:prime256v1 -nodes -days 30 -subj /CN=laptop -keyout client.key -out client.crt 2>/dev/null
+$ openssl x509 -in client.crt -noout -fingerprint -sha256 | cut -d= -f2 | tee client.fp
+1F:88:41:45:52:AC:9E:9A:4F:6E:E7:E6:BF:24:53:F2:E7:D2:08:3A:A6:59:FB:E0:F9:AB:0E:C3:F1:B5:B4:79

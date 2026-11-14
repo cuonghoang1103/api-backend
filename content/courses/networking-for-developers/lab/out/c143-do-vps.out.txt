@@ -1,0 +1,19 @@
+# 14.3 · nft-vps: vì sao bot không có cửa — và cái bẫy thứ tự drop-in
+$ sshd -T | grep -E '^(passwordauthentication|kbdinteractiveauthentication|permitrootlogin) '
+permitrootlogin prohibit-password
+passwordauthentication no
+kbdinteractiveauthentication no
+$ ls /etc/ssh/sshd_config.d/
+01-no-password.conf
+10-gateway.conf
+50-cloud-init.conf
+$ journalctl -u ssh993 --no-pager -o cat | grep -E "authenticating user" | tail -3
+Connection closed by authenticating user root 198.18.0.1 port 57724 [preauth]
+Connection closed by authenticating user sv 198.18.0.1 port 57732 [preauth]
+# cùng nội dung, nhưng đặt tên 70- ⇒ 50-cloud-init.conf ("yes") được đọc trước và THẮNG
+$ mv /etc/ssh/sshd_config.d/01-no-password.conf /etc/ssh/sshd_config.d/70-no-password.conf
+$ sshd -T | grep -E '^passwordauthentication '
+passwordauthentication yes
+$ mv /etc/ssh/sshd_config.d/70-no-password.conf /etc/ssh/sshd_config.d/01-no-password.conf
+$ sshd -T | grep -E '^passwordauthentication '
+passwordauthentication no

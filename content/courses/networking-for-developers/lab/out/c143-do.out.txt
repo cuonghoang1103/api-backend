@@ -1,0 +1,6 @@
+# 14.3 · góc kẻ xấu — nft-ke dò mật khẩu VPS qua cổng 993 (như bot quét SSH khắp Internet)
+$ for u in root admin sv; do ssh -p 993 -o BatchMode=yes -o PubkeyAuthentication=no -o StrictHostKeyChecking=accept-new $u@vps.example true; done
+Warning: Permanently added '[vps.example]:993' (ED25519) to the list of known hosts.
+root@vps.example: Permission denied (publickey).
+admin@vps.example: Permission denied (publickey).
+sv@vps.example: Permission denied (publickey).

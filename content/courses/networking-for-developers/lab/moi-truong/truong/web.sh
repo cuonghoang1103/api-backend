@@ -5,7 +5,7 @@ ip route replace default via 198.18.0.1
 ip addr add 198.18.0.20/24 dev net0
 ip addr add 198.18.0.53/24 dev net0
 # "DNS công cộng" kiểu 1.1.1.1 của lab (198.18.0.53): trả lời ĐÚNG mọi tên, kể cả tên trường chặn — để thấy chặn bằng DNS là đổi DNS là qua
-dnsmasq --listen-address=198.18.0.53 --bind-interfaces --no-resolv --no-hosts --filter-AAAA --address=/test/198.18.0.10 --address=/vpn.test/198.18.0.20
+dnsmasq --listen-address=198.18.0.53 --bind-interfaces --no-resolv --no-hosts --filter-AAAA --address=/test/198.18.0.10 --address=/vpn.test/198.18.0.20 --address=/vps.example/198.18.0.30
 if [ ! -s /ca/ca.pem ]; then
   openssl req -x509 -newkey rsa:2048 -nodes -days 30 -subj "/CN=Lab Root CA" -keyout /ca/ca.key -out /ca/ca.pem 2>/dev/null
 fi

@@ -1,0 +1,28 @@
+# 14.4 · nft-win ở trường: OpenVPN qua TCP 443 — cổng trường phải mở cho web
+$ cd /etc/openvpn/lab
+$ cat > client.conf <<CFG
+> client
+> remote vps.example 443 tcp
+> dev tun
+> cert client.crt
+> key client.key
+> peer-fingerprint $(cat server.fp)
+> CFG
+$ openvpn --config client.conf --daemon --log /tmp/ovpn.log
+$ grep -oE "TCP connection established.*|Initialization Sequence Completed" /tmp/ovpn.log
+TCP connection established with [AF_INET]198.18.0.30:443
+Initialization Sequence Completed
+$ ip -br addr show tun0
+tun0             UNKNOWN        10.67.0.2/24 fe80::93e8:b9d5:da61:3cfd/64 
+$ ip route | head -3
+0.0.0.0/1 via 10.67.0.1 dev tun0 
+default via 10.20.2.1 dev sv 
+10.20.2.0/24 dev sv proto kernel scope link src 10.20.2.159 
+$ curl -s http://news.test/
+Internet OK: news.test (ban den tu 198.18.0.30)
+$ curl -sS -m 5 --cacert /ca/ca.pem https://social.test/
+Internet OK: social.test (ban den tu 198.18.0.30)
+$ cat /etc/resolv.conf
+nameserver 10.20.2.1
+$ dig +short phim.test; echo "(dig xong)"
+(dig xong)

@@ -1,0 +1,3 @@
+# 14.4 · nft-win: vá rò DNS — dùng DNS mà máy chủ VPN đẩy về (198.18.0.53), đi TRONG hầm
+echo "nameserver 198.18.0.53" > /etc/resolv.conf
+dig +short phim.test

@@ -1,0 +1,7 @@
+# 14.4 · nft-win: OpenVPN chết giữa chừng (không có kill switch) — các tuyến của nó bị gỡ, gói đi thẳng ra mạng trường
+$ pkill openvpn; sleep 1
+$ ip route | head -2
+default via 10.20.2.1 dev sv 
+10.20.2.0/24 dev sv proto kernel scope link src 10.20.2.159 
+$ curl -sS -m 5 http://198.18.0.10/
+Internet OK: 198.18.0.10 (ban den tu 198.18.0.1)

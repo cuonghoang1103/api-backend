@@ -1,0 +1,9 @@
+# 14.3 · cùng laptop, cùng ~/.ssh/config — nhưng đang ở nhà (nft-lap, mạng 192.168.1.x)
+$ ip -4 -br addr show eth0
+eth0@if6370      UP             192.168.1.20/24 
+$ ssh -G vps 2>/dev/null | grep -E '^(hostname|port) '
+hostname vps.example
+port 22
+$ ssh vps 'echo "vao duoc $(hostname) qua cong ${SSH_CONNECTION##* }"'
+Warning: Permanently added 'vps.example' (ED25519) to the list of known hosts.
+vao duoc vps qua cong 22

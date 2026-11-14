@@ -1,0 +1,5 @@
+# 14.3 · nft-vps: CSDL (redis) chỉ nghe 127.0.0.1 — không bao giờ mở ra Internet
+$ ss -4tlnp | grep 6379
+LISTEN 0      511        127.0.0.1:6379       0.0.0.0:*    users:(("redis-server",pid=111,fd=8))                
+$ redis-cli get diem:SE12345
+8.5 (du lieu tren VPS, chi nghe 127.0.0.1)

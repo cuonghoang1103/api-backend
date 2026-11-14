@@ -1,0 +1,10 @@
+# 14.3 · laptop (nft-win): tạo cặp khoá SSH — khoá RIÊNG ở lại máy, khoá CÔNG KHAI đem dán lên VPS (bảng điều khiển nhà cung cấp lúc tạo máy)
+$ ssh-keygen -t ed25519 -N "" -C "sv@laptop" -f ~/.ssh/id_ed25519 | head -2
+Generating public/private ed25519 key pair.
+Your identification has been saved in /root/.ssh/id_ed25519
+$ ls -l ~/.ssh/
+total 8
+-rw------- 1 root root 399 Nov 14 15:39 id_ed25519
+-rw-r--r-- 1 root root  91 Nov 14 15:39 id_ed25519.pub
+$ cut -c1-60 ~/.ssh/id_ed25519.pub
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAkUdxwNV7hY13zFNHgloQYL

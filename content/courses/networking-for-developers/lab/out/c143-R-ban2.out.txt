@@ -1,0 +1,3 @@
+# 14.3 · bạn ở nhà (nft-lap) mở bản demo qua VPS
+$ curl -sS -m 3 http://vps.example:8080/
+Do an nhom 3 - ban demo chay tren laptop o truong

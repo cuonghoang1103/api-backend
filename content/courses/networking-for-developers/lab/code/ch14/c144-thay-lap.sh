@@ -1,0 +1,3 @@
+# 14.4 · nft-lap (full tunnel): đăng nhập một trang HTTP, rồi một trang HTTPS — qua VPN
+curl -s -o /dev/null -d "user=SE12345&pass=fpt@2026" http://news.test/login
+curl -s -o /dev/null --cacert /ca/ca.pem -d "user=SE12345&pass=fpt@2026" https://news.test/login

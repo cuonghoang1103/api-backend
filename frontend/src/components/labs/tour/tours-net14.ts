@@ -247,4 +247,142 @@ export const NET14_TOURS: Tour[] = [
       answer: 0, why: ['The shop is HTTPS on TCP 443, which is open; the match uses UDP on its own ports.', 'Trang cửa hàng là HTTPS trên TCP 443, vốn được mở; trận đấu dùng UDP ở cổng riêng.'],
     },
   },
+
+  // ───────────────────────── tunnel (14.3) ─────────────────────────
+  {
+    id: 'tunnel-port', ns: 'net-lab', sim: 'tunnel', presets: ['port'],
+    title: ['22 or 993? Let the laptop decide', '22 hay 993? Để laptop tự quyết'],
+    summary: ['Reproduce the real mistake — a Match block that is true but comes too late — then fix it and take the same laptop home.', 'Tái hiện lỗi thật — khối Match đúng nhưng đến quá muộn — rồi sửa nó và mang cùng laptop về nhà.'],
+    steps: [
+      {
+        target: 'tun-topo', do: [{ a: 'tunnel.preset', v: 'port' }, { a: 'tunnel.place', v: 'school' }, { a: 'tunnel.order', v: 'last' }, { a: 'player.reset' }],
+        title: ['Laptop, school firewall, VPS', 'Laptop, tường lửa trường, VPS'],
+        body: ['The school opens only TCP 80/443/587/993. The VPS answers SSH on 22 (ssh.socket) and on 993 (a separate ssh993.service). Like a building whose main gate is locked at night while the mail door stays open.', 'Trường chỉ mở TCP 80/443/587/993. VPS trả lời SSH ở 22 (ssh.socket) và ở 993 (một ssh993.service riêng). Như toà nhà khoá cổng chính ban đêm còn cửa thư từ vẫn mở.'],
+      },
+      {
+        target: 'tun-config',
+        title: ['The config, as first written', 'Config, như lúc mới viết'],
+        body: ['A Match block says "if my address is 10.20.2.x, use Port 993". But it sits AFTER Host vps, which already says Port 22. ssh keeps the FIRST value it meets.', 'Khối Match nói "nếu địa chỉ của mình là 10.20.2.x thì dùng Port 993". Nhưng nó đứng SAU Host vps, vốn đã nói Port 22. ssh giữ giá trị ĐẦU TIÊN nó gặp.'],
+      },
+      {
+        target: 'controls',
+        title: ['Your turn: connect from school', 'Đến lượt bạn: nối từ trường'],
+        body: ['Run it to the end and read where the SYN dies.', 'Chạy tới cuối và đọc xem gói SYN chết ở đâu.'],
+        task: { text: ['Run the scenario to the end.', 'Chạy kịch bản tới cuối.'], until: (s) => s.tunnel?.preset === 'port' && s.tunnel?.order === 'last' && s.tunnel?.atEnd === true, solve: [{ a: 'player.end', delay: 500 }] },
+      },
+      {
+        target: 'tun-term',
+        title: ['The real timeout', 'Lần hết giờ thật'],
+        body: ['This line is the lab\'s real output: port 22 times out. Nothing tells you "blocked" — the packet just vanished at the firewall.', 'Dòng này là output thật của lab: cổng 22 hết giờ. Chẳng gì báo "bị chặn" — gói chỉ biến mất ở tường lửa.'],
+      },
+      {
+        target: 'tun-opts',
+        title: ['Your turn: move Match to the top', 'Đến lượt bạn: đưa Match lên đầu'],
+        body: ['Choose "first in the file" and run again.', 'Chọn "đầu tệp" rồi chạy lại.'],
+        task: { text: ['Put Match first and run to the end.', 'Đưa Match lên đầu và chạy tới cuối.'], until: (s) => s.tunnel?.order === 'first' && s.tunnel?.place === 'school' && s.tunnel?.port === 993 && s.tunnel?.atEnd === true, solve: [{ a: 'tunnel.order', v: 'first' }, { a: 'player.end', delay: 600 }] },
+      },
+      {
+        target: 'tun-opts',
+        title: ['Your turn: take the laptop home', 'Đến lượt bạn: mang laptop về nhà'],
+        body: ['Same file, at home (192.168.1.x). The Match test fails, so ssh uses 22 — nothing to type differently.', 'Cùng tệp, ở nhà (192.168.1.x). Phép thử của Match thất bại nên ssh dùng 22 — không phải gõ gì khác.'],
+        task: { text: ['Switch to "at home" and run to the end.', 'Chuyển sang "ở nhà" và chạy tới cuối.'], until: (s) => s.tunnel?.place === 'home' && s.tunnel?.order === 'first' && s.tunnel?.port === 22 && s.tunnel?.atEnd === true, solve: [{ a: 'tunnel.place', v: 'home' }, { a: 'player.end', delay: 600 }] },
+      },
+      {
+        target: 'where',
+        title: ['Where in the computer?', 'Ở đâu trong máy?'],
+        body: ['ssh is an ordinary process; it reads ~/.ssh/config every time it starts. On the VPS, port 22 belongs to PID 1 (systemd) until a connection arrives.', 'ssh là một tiến trình bình thường; nó đọc ~/.ssh/config mỗi lần chạy. Trên VPS, cổng 22 thuộc PID 1 (systemd) cho tới khi có kết nối.'],
+      },
+    ],
+    quiz: {
+      q: ['Match (Port 993) is at the END of ~/.ssh/config, after Host vps (Port 22). At school, ssh uses…', 'Match (Port 993) ở CUỐI ~/.ssh/config, sau Host vps (Port 22). Ở trường, ssh dùng…'],
+      options: [['22 — the first value wins', '22 — giá trị đầu tiên thắng'], ['993 — the last value wins', '993 — giá trị cuối thắng'], ['both, in turn', 'cả hai, lần lượt']],
+      answer: 0, why: ['For each option ssh keeps the first value obtained; Host vps set Port 22 earlier.', 'Với mỗi tuỳ chọn ssh giữ giá trị lấy được đầu tiên; Host vps đã đặt Port 22 trước.'],
+    },
+  },
+  {
+    id: 'tunnel-forward', ns: 'net-lab', sim: 'tunnel', presets: ['forward'],
+    title: ['-L pulls, -R pushes', '-L kéo về, -R đẩy ra'],
+    summary: ['Open the VPS\'s database on your laptop, then show the demo on your laptop to a friend — and see why the first -R is refused.', 'Mở CSDL của VPS trên laptop, rồi khoe bản demo trên laptop cho bạn — và thấy vì sao lần -R đầu bị từ chối.'],
+    steps: [
+      {
+        target: 'tun-topo', do: [{ a: 'tunnel.preset', v: 'forward' }, { a: 'tunnel.fwd', v: 'L' }, { a: 'player.reset' }],
+        title: ['A database that never faces the Internet', 'Một CSDL không bao giờ ra Internet'],
+        body: ['Redis on the VPS listens on 127.0.0.1 only — as it should. -L makes a door on your laptop that comes out INSIDE the VPS.', 'Redis trên VPS chỉ nghe 127.0.0.1 — đúng như nên thế. -L làm một cánh cửa trên laptop đi ra BÊN TRONG VPS.'],
+      },
+      {
+        target: 'controls',
+        title: ['Your turn: -L', 'Đến lượt bạn: -L'],
+        body: ['Step through: direct timeout, the tunnel, redis-cli to the laptop\'s own port, PONG.', 'Bấm qua từng bước: gọi thẳng hết giờ, đường hầm, redis-cli vào chính cổng của laptop, PONG.'],
+        task: { text: ['Run -L to the end.', 'Chạy -L tới cuối.'], until: (s) => s.tunnel?.preset === 'forward' && s.tunnel?.fwd === 'L' && s.tunnel?.tone === 'ok' && s.tunnel?.atEnd === true, solve: [{ a: 'player.end', delay: 500 }] },
+      },
+      {
+        target: 'tun-listen',
+        title: ['Who listens, who exits', 'Ai nghe, ai đi ra'],
+        body: ['-L: the laptop listens, the VPS opens the real connection. -R: the other way round.', '-L: laptop nghe, VPS mở kết nối thật. -R: ngược lại.'],
+      },
+      {
+        target: 'tun-opts',
+        title: ['Your turn: -R for your demo', 'Đến lượt bạn: -R cho bản demo'],
+        body: ['Choose -R 8080:localhost:3000 and run it. Will your friend at home see the demo?', 'Chọn -R 8080:localhost:3000 rồi chạy. Bạn ở nhà có xem được demo không?'],
+        task: { text: ['Run -R to the end.', 'Chạy -R tới cuối.'], until: (s) => s.tunnel?.fwd === 'R' && s.tunnel?.tone === 'bad' && s.tunnel?.atEnd === true, solve: [{ a: 'tunnel.fwd', v: 'R' }, { a: 'player.end', delay: 600 }] },
+      },
+      {
+        target: 'tun-opts',
+        title: ['Your turn: allow it on purpose', 'Đến lượt bạn: cho phép có chủ đích'],
+        body: ['The server must allow GatewayPorts; then -R 0.0.0.0:8080. Remember to close it after the demo.', 'Máy chủ phải cho GatewayPorts; rồi -R 0.0.0.0:8080. Nhớ đóng nó sau buổi demo.'],
+        task: { text: ['Run -R 0.0.0.0 to the end.', 'Chạy -R 0.0.0.0 tới cuối.'], until: (s) => s.tunnel?.fwd === 'R0' && s.tunnel?.tone === 'ok' && s.tunnel?.atEnd === true, solve: [{ a: 'tunnel.fwd', v: 'R0' }, { a: 'player.end', delay: 600 }] },
+      },
+    ],
+    quiz: {
+      q: ['Your friend gets "connection refused" on vps.example:8080 after your ssh -R 8080:localhost:3000. Why?', 'Bạn ở nhà bị "từ chối kết nối" ở vps.example:8080 sau lệnh ssh -R 8080:localhost:3000 của bạn. Vì sao?'],
+      options: [['The forward listens on the VPS\'s 127.0.0.1 only', 'Đường hầm chỉ nghe 127.0.0.1 của VPS'], ['The school blocks 8080', 'Trường chặn cổng 8080'], ['The demo is down', 'Bản demo đã tắt']],
+      answer: 0, why: ['Remote forwards bind to loopback unless the server allows GatewayPorts.', 'Đường hầm ngược nghe trên loopback trừ khi máy chủ cho GatewayPorts.'],
+    },
+  },
+  {
+    id: 'tunnel-socks', ns: 'net-lab', sim: 'tunnel', presets: ['socks'],
+    title: ['-D: a proxy through the VPS — and its leaks', '-D: proxy qua VPS — và những chỗ rò'],
+    summary: ['Pass the SNI block through SOCKS, catch a DNS leak (socks5 vs socks5h), and see a stranger use a SOCKS left open.', 'Qua chặn SNI bằng SOCKS, bắt một chỗ rò DNS (socks5 và socks5h), và thấy người lạ dùng SOCKS bị để mở.'],
+    steps: [
+      {
+        target: 'tun-topo', do: [{ a: 'tunnel.preset', v: 'socks' }, { a: 'tunnel.req', v: 'direct' }, { a: 'player.reset' }],
+        title: ['The SNI rule from 14.2 is still on', 'Luật SNI của 14.2 vẫn bật'],
+        body: ['social.test over HTTPS is reset at the school firewall: it reads the name in the ClientHello.', 'social.test qua HTTPS bị reset ở tường lửa trường: nó đọc tên trong ClientHello.'],
+      },
+      {
+        target: 'controls',
+        title: ['Your turn: direct', 'Đến lượt bạn: gọi thẳng'],
+        body: ['Run the direct request to the end.', 'Chạy request gọi thẳng tới cuối.'],
+        task: { text: ['Run it to the end.', 'Chạy tới cuối.'], until: (s) => s.tunnel?.preset === 'socks' && s.tunnel?.req === 'direct' && s.tunnel?.atEnd === true, solve: [{ a: 'player.end', delay: 500 }] },
+      },
+      {
+        target: 'tun-opts',
+        title: ['Your turn: through SOCKS (socks5h)', 'Đến lượt bạn: qua SOCKS (socks5h)'],
+        body: ['Now the same site through ssh -D 1080, with the name sent to the VPS.', 'Giờ cùng trang đó qua ssh -D 1080, gửi cái tên sang VPS.'],
+        task: { text: ['Run socks5h social.test to the end.', 'Chạy socks5h social.test tới cuối.'], until: (s) => s.tunnel?.req === 'socks5h' && s.tunnel?.tone === 'ok' && s.tunnel?.atEnd === true, solve: [{ a: 'tunnel.req', v: 'socks5h' }, { a: 'player.end', delay: 600 }] },
+      },
+      {
+        target: 'tun-opts',
+        title: ['Your turn: the leak', 'Đến lượt bạn: chỗ rò'],
+        body: ['Choose "socks5 phim.test": curl resolves the name on the laptop, through the school DNS.', 'Chọn "socks5 phim.test": curl phân giải tên trên laptop, qua DNS của trường.'],
+        task: { text: ['Run socks5 phim.test to the end.', 'Chạy socks5 phim.test tới cuối.'], until: (s) => s.tunnel?.req === 'socks5' && s.tunnel?.tone === 'bad' && s.tunnel?.atEnd === true, solve: [{ a: 'tunnel.req', v: 'socks5' }, { a: 'player.end', delay: 600 }] },
+      },
+      {
+        target: 'tun-sees',
+        title: ['What the school sees', 'Trường thấy gì'],
+        body: ['With the leak: a DNS question for phim.test. With socks5h: only flows to the VPS on 993.', 'Khi rò: một câu hỏi DNS cho phim.test. Với socks5h: chỉ có các luồng tới VPS ở 993.'],
+      },
+      {
+        target: 'tun-opts',
+        title: ['Your turn: the SOCKS left open', 'Đến lượt bạn: SOCKS bị để mở'],
+        body: ['Choose the stranger: -D 0.0.0.0:1081 by mistake, and someone on the same Wi-Fi uses it.', 'Chọn người lạ: lỡ mở -D 0.0.0.0:1081, và một người cùng Wi-Fi dùng nó.'],
+        task: { text: ['Run the stranger to the end.', 'Chạy kịch bản người lạ tới cuối.'], until: (s) => s.tunnel?.req === 'stranger' && s.tunnel?.atEnd === true, solve: [{ a: 'tunnel.req', v: 'stranger' }, { a: 'player.end', delay: 600 }] },
+      },
+    ],
+    quiz: {
+      q: ['curl --socks5 127.0.0.1:1080 http://phim.test/ fails at school while --socks5-hostname works. Why?', 'curl --socks5 127.0.0.1:1080 http://phim.test/ hỏng ở trường còn --socks5-hostname chạy. Vì sao?'],
+      options: [['socks5 resolves the name locally — the school DNS blocks it', 'socks5 phân giải tên tại chỗ — DNS trường chặn nó'], ['The proxy is down', 'Proxy đã tắt'], ['phim.test has no IP', 'phim.test không có IP']],
+      answer: 0, why: ['With socks5 the client resolves; with socks5h (hostname) the proxy resolves.', 'Với socks5 máy khách phân giải; với socks5h (hostname) proxy phân giải.'],
+    },
+  },
 ];

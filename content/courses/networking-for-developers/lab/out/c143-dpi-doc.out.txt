@@ -1,0 +1,5 @@
+# 14.3 · nft-gw: bộ đếm của luật DPI
+$ iptables -L CHAN -v -n | head -3
+Chain CHAN (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+    2   188 REJECT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            STRING match  "SSH-2.0" ALGO name bm reject-with tcp-reset

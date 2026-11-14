@@ -1,0 +1,15 @@
+# 14.3 · nft-nha: rớt mạng THẬT — router nhà mất Internet 45 giây (dung-output-ch14b.sh cắt ở nft-rnha 2 giây sau dòng date đầu tiên)
+$ date +%T; pgrep -a -x ssh | cut -c1-40
+15:39:28
+54 /usr/bin/ssh -N -o ServerAliveInterva
+$ sleep 100
+$ grep "exited" /tmp/autossh.log | head -1 | cut -d' ' -f2,4-
+15:40:08 ssh exited with error status 255; restarting ssh
+$ grep -c "restarting ssh" /tmp/autossh.log
+8
+$ tail -2 /tmp/autossh.log | cut -d' ' -f2,4-
+15:40:46 starting ssh (count 9)
+15:40:46 ssh child pid is 111
+$ date +%T; pgrep -a -x ssh | cut -c1-40
+15:41:08
+111 /usr/bin/ssh -N -o ServerAliveInterv

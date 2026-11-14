@@ -1,0 +1,17 @@
+# 14.4 · nft-vps: thêm điện thoại làm khách WireGuard — cấu hình thành MÃ QR, ứng dụng WireGuard trên điện thoại quét là xong
+cd /etc/wireguard; umask 077
+wg genkey > phone.key; wg pubkey < phone.key > phone.pub
+wg set wg0 peer $(cat phone.pub) allowed-ips 10.66.0.3/32
+cat > phone.conf <<CFG
+[Interface]
+Address = 10.66.0.3/32
+PrivateKey = $(cat phone.key)
+DNS = 198.18.0.53
+
+[Peer]
+PublicKey = $(cat server.pub)
+Endpoint = vps.example:51820
+AllowedIPs = 0.0.0.0/0
+CFG
+qrencode -t utf8 -m 1 < phone.conf
+wg show wg0 peers | wc -l

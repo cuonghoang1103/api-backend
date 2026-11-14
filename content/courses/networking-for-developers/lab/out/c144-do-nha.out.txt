@@ -1,0 +1,18 @@
+# 14.4 · đo ở nhà (router nhà giả lập đường mạng thật bằng tc netem) — đi thẳng, WireGuard (UDP), OpenVPN (TCP), mỗi kiểu 8 giây
+$ wg-quick down wg0 2>/dev/null
+$ ping -c 10 -q 198.18.0.30 | tail -1
+rtt min/avg/max/mdev = 20.448/24.701/29.847/3.098 ms
+$ iperf3 -c 198.18.0.30 -t 8 | grep receiver
+[  5]   0.00-8.40   sec  46.2 MBytes  46.2 Mbits/sec                  receiver
+$ wg-quick up wg0 2>/dev/null
+$ ping -c 10 -q 10.66.0.1 | tail -1
+rtt min/avg/max/mdev = 20.811/24.441/31.117/3.516 ms
+$ iperf3 -c 10.66.0.1 -t 8 | grep receiver
+[  5]   0.00-8.23   sec  44.5 MBytes  45.4 Mbits/sec                  receiver
+$ wg-quick down wg0 2>/dev/null
+$ cd /etc/openvpn/lab; openvpn --config client.conf --daemon --log /tmp/ovpn.log
+$ ping -c 10 -q 10.67.0.1 | tail -1
+rtt min/avg/max/mdev = 21.200/23.446/28.042/2.181 ms
+$ iperf3 -c 10.67.0.1 -t 8 | grep receiver
+[  5]   0.00-8.32   sec  43.2 MBytes  43.6 Mbits/sec                  receiver
+$ pkill openvpn

@@ -1,0 +1,5 @@
+# 14.3 · nft-win: mở lại đường hầm, lần này xin VPS nghe ở mọi địa chỉ (0.0.0.0)
+$ pkill -f "ssh -f -N -R 8080"
+$ ssh -f -N -R 0.0.0.0:8080:localhost:3000 vps
+$ ssh vps "ss -4tln | grep 8080"
+LISTEN 0      128          0.0.0.0:8080       0.0.0.0:*   

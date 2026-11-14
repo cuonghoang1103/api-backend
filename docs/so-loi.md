@@ -18,6 +18,13 @@ Mẫu một mục:
 
 ---
 
+### 14/11/2026 — Backend test (CT Language Dịch) — Test tuyến chạy xanh rồi TREO 3 phút, node:test báo "cancelled"
+- **Triệu chứng:** `npx tsx --test src/routes/ctlanguage.dich.routes.test.ts` — cả 3 phép kiểm ✔ nhưng tiến trình không thoát, tới `timeout` thì báo `cancelled 1` / "Promise resolution is still pending but the event loop has already resolved".
+- **Nguyên nhân:** router dùng `express-rate-limit` + `RedisStore`; `new RedisStore(...)` nạp script ngay lúc NẠP router ⇒ gọi `getRedis()` ⇒ mở kết nối Redis giữ vòng lặp sự kiện sống mãi (`src/routes/ctlanguage.dich.routes.ts`, hàm `gioiHan`).
+- **Cách sửa:** test gắn `after(() => setTimeout(() => process.exit(process.exitCode ?? 0), 200).unref())` — xong hết thì thoát hẳn, giữ mã thoát (commit Đợt D màn Dịch).
+- **Ảnh hưởng:** chỉ bộ test mới (chưa vào CI); không ảnh hưởng người dùng.
+- **Bài học:** test nào nạp router có `RedisStore` (hoặc thứ gì mở kết nối lúc nạp) phải tự đóng/thoát; "pass hết mà không thoát" là dấu hiệu handle mở, không phải test chậm.
+
 ### 14/11/2026 — Backend CT Language (cộng đồng) — "Người đã chặn" luôn trống: GET /cong-dong/chan bị `:nn` nuốt
 - **Triệu chứng:** app CT Language › Tôi › Người đã chặn không bao giờ hiện ai (đã chặn vẫn "Bạn chưa chặn ai"); máy chủ trả 400 `CTL_NN_SAI` "Ngôn ngữ không hỗ trợ".
 - **Nguyên nhân:** `src/routes/ctlanguage.routes.ts` khai `GET /cong-dong/:nn` (công khai) TRƯỚC `GET /cong-dong/chan` (sau `router.use(authenticate)`) ⇒ Express khớp "chan" vào `:nn` ⇒ `kiemNn('chan')` ném 400; app nuốt lỗi (`try?`) nên chỉ thấy danh sách rỗng.

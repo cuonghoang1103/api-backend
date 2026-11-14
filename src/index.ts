@@ -191,6 +191,8 @@ const myLanguageAdminRoutes = myLanguageModule.adminRouter;
 const ieltsRoutes = (await import(path.join(__dirname, 'routes', 'ielts.routes.js'))).default;
 // CT Language — tuyến riêng của app iOS học Anh·Nhật·Trung (docs/ct-language-app.md)
 const ctLanguageRoutes = (await import(path.join(__dirname, 'routes', 'ctlanguage.routes.js'))).default;
+// CT Language — Đợt D màn Dịch: AI sửa bài viết (gắn TRƯỚC /ctlanguage — router kia có `router.use(authenticate)` + `/:nn`)
+const ctLanguageDichRoutes = (await import(path.join(__dirname, 'routes', 'ctlanguage.dich.routes.js'))).default;
 const booksRoutes = (await import(path.join(__dirname, 'routes', 'books.routes.js'))).default;
 const doiKhangRoutes = (await import(path.join(__dirname, 'routes', 'doiKhang.routes.js'))).default;
 const flyingPencilRoutes = (await import(path.join(__dirname, 'routes', 'flyingPencil.routes.js'))).default;
@@ -706,6 +708,7 @@ app.use('/api/v1/landing', landingRoutes);
 app.use('/api/v1/admin/landing', landingAdminRoutes);
 app.use('/api/v1/finance', financeRoutes);
 app.use('/api/v1/ielts', ieltsRoutes);
+app.use('/api/v1/ctlanguage/dich', ctLanguageDichRoutes);
 app.use('/api/v1/ctlanguage', ctLanguageRoutes);
 // Thư viện sách — tiến độ đọc (05/10/2026). Nội dung sách là tệp tĩnh của web.
 app.use('/api/v1/books', booksRoutes);

@@ -273,3 +273,28 @@ Câu hỏi cho user: Pro của CT Language có **dùng chung** với Pro web cuo
   `cong-dong`, `cong-dong-bai:<id>`, `cong-dong-nguoi:<id>`, `cong-dong-xep-hang`, `cong-dong-thong-bao`, `cong-dong-viet`.
   ⚠️ Mục công bố AI (5.1.2(i)) đã liệt kê "câu hỏi" gửi AI — "Nhờ Gấu" gửi nội dung BÀI CỦA NGƯỜI KHÁC (đã công khai trong cộng đồng);
   nên thêm một dòng vào công bố ở lần cập nhật kế. Chưa làm: ảnh đính kèm, tab "Tin nhắn" kiểu Hanzii (không làm chỗ trống — 2.1).
+- 14/11 (APP + 1 router backend): **Đợt D — màn Dịch "đủ đường" kiểu Hanzii** (docs/ct-language-khao-sat-hanzii.md mục 3; CHƯA deploy).
+  Tab Từ điển › "Dịch" mở **Trung tâm Dịch** (`Modules/Dich/TrungTamDichCTL.swift`) — 5 lối + lịch sử:
+  · **Văn bản** (`DichVanBanCTL`, có sẵn) — thêm lưu lịch sử + 🔖 lưu cặp câu vào sổ tay (thẻ id ÂM, `LuuSoDichCTL`).
+  · **Camera · ảnh** (`DichCameraCTL`) — VisionKit `DataScannerViewController` (Live Text, chạm dòng để chọn / "Lấy cả khung");
+    máy không hỗ trợ (máy ảo, < A12) ⇒ chụp một tấm + Vision OCR; chọn ảnh thư viện. Dòng gốc ngoại ngữ tách từ bằng `NLTokenizer`
+    ⇒ chạm một từ mở trang từ điển (`TraNhanhTuCTL` tra máy chủ → gói ngoại tuyến → `ChiTietTuCTL`).
+  · **Hội thoại hai người** (`HoiThoaiCTL`) — chia đôi màn, nửa trên xoay 180° cho người đối diện (nhãn bằng ngôn ngữ của họ),
+    GIỮ nút để nói (`SFSpeechRecognizer` đúng ngôn ngữ từng bên, trên máy nếu máy hỗ trợ) ⇒ dịch ⇒ ĐỌC TO bằng giọng iPhone
+    (`DocMayDichCTL`, có giọng Việt — không dùng `DocToCTL` vì nó gọi máy chủ và không có giọng Việt). Lịch sử cuộc trò chuyện + chia sẻ.
+  · **Tài liệu** (`DichTaiLieuCTL`) — PDF (trang bản quét ⇒ vẽ ra ảnh rồi OCR), ảnh (≤ 10), .txt/.rtf/.md; ≤ 40 trang / 30.000 ký tự;
+    gộp dòng thành đoạn (`DoanVanCTL`), xem Song song / Bản dịch / Bản gốc, chép + chia sẻ song ngữ.
+  · **✍️ AI sửa bài** (`SuaBaiAICTL`) — **tuyến mới** `POST /api/v1/ctlanguage/dich/ai/sua-bai` {nn, chu ≤ 2.000, kieu tu-nhien|trang-trong|bai-thi}
+    ⇒ lỗi (gốc, sửa, giải thích Việt, mức nhe/vua/nang, loại, `viTri` UTF-16) + bản viết lại + nhận xét + trình độ (HSK 1–7-9 · N5–N1 ·
+    CEFR + band IELTS). `GET /dich/luot`, `POST /dich/bao-cao-ai` (báo cáo câu AI ⇒ hộp thư admin `BAO_CAO`, kèm bài + JSON AI giữ RAM 24 h).
+    Router RIÊNG `src/routes/ctlanguage.dich.routes.ts`, gắn TRƯỚC `/api/v1/ctlanguage` trong index.ts; service `src/services/ctlanguage/suaBai.ts`
+    (`llmComplete` purpose `language_tutor`, JSON đọc bằng `docJsonCham` rồi kiểm từng trường; lọc `kiemNoiDung`; free **3** · Pro **30**
+    lượt/ngày VN, đếm RAM, trừ trước — hoàn khi AI lỗi). App xin đồng ý AI (`DongYChiaSeAI.batBuoc`) trước khi gửi; cần đăng nhập.
+    Smoke-test deploy.sh thêm `ctlanguage/dich/luot` (401 = đã gắn).
+  · Lịch sử dịch chỉ trên máy (`KhoLichSuDichCTL`, `lich-su-dich-ctl.json`, ≤ 200 mục, gộp lượt trùng).
+  Văn bản/camera/hội thoại/tài liệu dịch TRÊN MÁY (Apple Translation iOS 18+; 17.x chỉ màn Văn bản dùng lớp phủ hệ thống) — chữ, ảnh,
+  tiếng nói không rời máy. Info.plist: chuỗi quyền máy ảnh / micro / nhận giọng nói nói thêm việc dịch. Không thêm quyền mới.
+  Test: `npx tsx --test src/services/ctlanguage/suaBai.test.ts src/routes/ctlanguage.dich.routes.test.ts`; iOS `DichDuDuongTests`.
+  DEBUG `CT_XEM_MAN`: `dich-trung-tam`, `dich-camera`, `dich-hoi-thoai`, `dich-tai-lieu`, `dich-sua-bai` (+ `CT_DICH_GIA=1` ⇒ bản dịch giả,
+  vì bộ dịch Apple không chạy trên máy ảo). ⚠️ Chỉ kiểm được trên MÁY THẬT: Live Text, bộ dịch Apple, micro/nhận giọng, đọc to.
+  Chưa làm: dịch viết tay trong màn Dịch (đã có ở tra từ), dịch giọng nói một người (dùng Hội thoại), đồng bộ lịch sử lên máy chủ.

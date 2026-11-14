@@ -1018,6 +1018,7 @@ for route in \
     video-hoc/thu-vien \
     video-hoc/cua-toi \
     hoc-tap/tong-quan \
+    ctlanguage/dich/luot \
     xuong-3d/bo-phan \
     gifs \
     toc-do-mang/ping \

@@ -1,0 +1,1110 @@
+{
+  "nn": "zh",
+  "cap": "HSK3",
+  "diem": [
+    {
+      "id": "zh-hsk3-ket-qua-dao-zai-gei",
+      "nhom": "Bổ ngữ",
+      "tieuDe": "Bổ ngữ kết quả 到 / 在 / 给",
+      "mau": "V + 到 / 在 / 给 + (tân ngữ / nơi chốn / người nhận)",
+      "nghia": "làm ~ được / tới (到), làm ~ ở (在), làm ~ cho (给)",
+      "giaiThich": "Đặt 到, 在, 给 ngay sau động từ để nói kết quả của hành động. 到 cho biết hành động đạt được mục đích hoặc kéo dài tới một điểm (找到, 学到第五课); 在 cho biết người hay vật nằm lại ở đâu sau hành động (写在本子上); 给 cho biết vật được chuyển tới ai (送给朋友).",
+      "cachGhep": [
+        "V + 到 + tân ngữ / thời điểm / nơi chốn: 买到票, 睡到十点, 走到学校",
+        "V + 在 + nơi chốn: 住在北京, 放在桌子上",
+        "V + 给 + người nhận: 送给他, 还给图书馆",
+        "Phủ định: 没(有) + V + 到 / 在 / 给"
+      ],
+      "viDu": [
+        {
+          "c": "我找到我的手机了。",
+          "d": "Wǒ zhǎodào wǒ de shǒujī le.",
+          "v": "Tôi tìm thấy điện thoại của mình rồi."
+        },
+        {
+          "c": "请把名字写在这儿。",
+          "d": "Qǐng bǎ míngzi xiě zài zhèr.",
+          "v": "Xin viết tên vào chỗ này."
+        },
+        {
+          "c": "这本书我已经还给图书馆了。",
+          "d": "Zhè běn shū wǒ yǐjīng huán gěi túshūguǎn le.",
+          "v": "Cuốn sách này tôi đã trả cho thư viện rồi."
+        },
+        {
+          "c": "你买到票了吗？——没买到。",
+          "d": "Nǐ mǎidào piào le ma? — Méi mǎidào.",
+          "v": "Bạn mua được vé chưa? — Chưa mua được."
+        }
+      ],
+      "luuY": [
+        "Người Việt hay bỏ bổ ngữ: 我找了手机 chỉ nói 'đã đi tìm', chưa chắc thấy; muốn nói 'tìm thấy' phải là 找到.",
+        "Phủ định dùng 没, không dùng 不: 没买到 (không nói 不买到).",
+        "还 trong 还给 đọc là huán (trả lại), không phải hái."
+      ],
+      "soSanh": [
+        "zh-hsk3-ket-qua-zhu-zou-kai-cheng"
+      ],
+      "tuKhoa": [
+        "dao",
+        "zai",
+        "gei",
+        "bổ ngữ kết quả",
+        "zhaodao",
+        "tìm thấy"
+      ],
+      "quiz": [
+        {
+          "h": "昨天我在公园看（　）王老师了。",
+          "lc": [
+            "到",
+            "在",
+            "给",
+            "成"
+          ],
+          "da": 0,
+          "gt": "看到 = nhìn thấy; 到 chỉ hành động đạt kết quả."
+        },
+        {
+          "h": "他住（　）学校旁边。",
+          "lc": [
+            "给",
+            "在",
+            "成",
+            "开"
+          ],
+          "da": 1,
+          "gt": "Sau 住 là nơi ở lại nên dùng 在: 住在学校旁边."
+        },
+        {
+          "h": "这是我送（　）你的礼物。",
+          "lc": [
+            "到",
+            "在",
+            "给",
+            "走"
+          ],
+          "da": 2,
+          "gt": "Người nhận đứng sau 给: 送给你 = tặng cho bạn."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-ket-qua-zhu-zou-kai-cheng",
+      "nhom": "Bổ ngữ",
+      "tieuDe": "Bổ ngữ kết quả 住 / 走 / 开 / 成",
+      "mau": "V + 住 / 走 / 开 / 成 + (tân ngữ)",
+      "nghia": "giữ chặt lại (住), rời đi (走), tách / mở ra (开), trở thành (成)",
+      "giaiThich": "Bốn bổ ngữ kết quả hay gặp ở HSK 3. 住 chỉ sự cố định, giữ lại được (记住, 站住); 走 chỉ người hay vật rời khỏi chỗ cũ (拿走, 借走); 开 chỉ sự tách rời hoặc mở ra (打开, 离开); 成 chỉ sự biến đổi thành cái khác hoặc làm nhầm thành cái khác (写成, 看成).",
+      "cachGhep": [
+        "V + 住: 记住, 拿住, 站住",
+        "V + 走: 拿走, 带走, 骑走, 借走",
+        "V + 开: 打开, 拿开, 走开",
+        "V + 成 + kết quả mới: 写成, 看成, 换成"
+      ],
+      "viDu": [
+        {
+          "c": "这些生词你都记住了吗？",
+          "d": "Zhèxiē shēngcí nǐ dōu jìzhù le ma?",
+          "v": "Những từ mới này bạn đã nhớ hết chưa?"
+        },
+        {
+          "c": "我的自行车被弟弟骑走了。",
+          "d": "Wǒ de zìxíngchē bèi dìdi qízǒu le.",
+          "v": "Xe đạp của tôi bị em trai đạp đi mất rồi."
+        },
+        {
+          "c": "请打开书，看第十页。",
+          "d": "Qǐng dǎkāi shū, kàn dì shí yè.",
+          "v": "Xin mở sách ra, xem trang 10."
+        },
+        {
+          "c": "他把「大」写成「太」了。",
+          "d": "Tā bǎ dà xiěchéng tài le.",
+          "v": "Anh ấy viết chữ 大 thành chữ 太 mất rồi."
+        }
+      ],
+      "luuY": [
+        "记 chỉ là 'ghi, nhớ' (quá trình); 记住 mới là 'nhớ được, thuộc rồi'. Câu hỏi 'nhớ chưa' phải dùng 记住了吗.",
+        "V + 成 luôn cần thành phần phía sau cho biết 'thành cái gì'."
+      ],
+      "soSanh": [
+        "zh-hsk3-ket-qua-dao-zai-gei"
+      ],
+      "tuKhoa": [
+        "zhu",
+        "zou",
+        "kai",
+        "cheng",
+        "jizhu",
+        "dakai",
+        "bổ ngữ kết quả"
+      ],
+      "quiz": [
+        {
+          "h": "请你站（　），别动。",
+          "lc": [
+            "走",
+            "开",
+            "住",
+            "成"
+          ],
+          "da": 2,
+          "gt": "站住 = đứng yên lại; 住 chỉ sự cố định."
+        },
+        {
+          "h": "那本词典被同学借（　）了，现在不在我这儿。",
+          "lc": [
+            "住",
+            "成",
+            "开",
+            "走"
+          ],
+          "da": 3,
+          "gt": "Vật rời khỏi chỗ người nói nên dùng 走: 借走 = mượn đi."
+        },
+        {
+          "h": "房间里太热了，请把窗户打（　）。",
+          "lc": [
+            "开",
+            "住",
+            "走",
+            "成"
+          ],
+          "da": 0,
+          "gt": "打开 = mở ra; 开 chỉ sự tách ra, mở ra."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-xu-huong-don",
+      "nhom": "Bổ ngữ",
+      "tieuDe": "Bổ ngữ xu hướng đơn 来 / 去",
+      "mau": "V + 来 / 去 · V + nơi chốn + 来 / 去",
+      "nghia": "làm ~ lại gần người nói (来) / ra xa người nói (去)",
+      "giaiThich": "Đặt 来 hoặc 去 sau động từ để chỉ hướng của hành động so với vị trí người nói: hướng về phía người nói dùng 来, rời xa người nói dùng 去. Các động từ hay đi kèm: 上, 下, 进, 出, 回, 过, 起, 带, 拿, 送.",
+      "cachGhep": [
+        "V + 来 / 去: 进来, 出去, 回来, 上去",
+        "Tân ngữ là nơi chốn: phải đứng giữa — V + nơi chốn + 来 / 去: 回家去, 进教室来",
+        "Tân ngữ là sự vật: đứng giữa hoặc đứng sau — 带一本书来 / 带来一本书"
+      ],
+      "viDu": [
+        {
+          "c": "外面很冷，你快进来吧。",
+          "d": "Wàimiàn hěn lěng, nǐ kuài jìnlái ba.",
+          "v": "Bên ngoài lạnh lắm, bạn mau vào đây đi."
+        },
+        {
+          "c": "他已经回家去了。",
+          "d": "Tā yǐjīng huí jiā qù le.",
+          "v": "Anh ấy đã về nhà rồi."
+        },
+        {
+          "c": "明天请带你的护照来。",
+          "d": "Míngtiān qǐng dài nǐ de hùzhào lái.",
+          "v": "Ngày mai xin mang hộ chiếu của bạn đến."
+        },
+        {
+          "c": "你什么时候上来？我在三楼等你。",
+          "d": "Nǐ shénme shíhou shànglái? Wǒ zài sān lóu děng nǐ.",
+          "v": "Khi nào bạn lên đây? Tôi đợi bạn ở tầng ba."
+        }
+      ],
+      "luuY": [
+        "Lỗi rất hay gặp: 他回去中国了 ✗. Tân ngữ chỉ nơi chốn phải chen giữa: 他回中国去了 ✓.",
+        "Chọn 来 hay 去 theo vị trí người nói chứ không theo nghĩa tiếng Việt 'đi / đến'."
+      ],
+      "soSanh": [
+        "zh-hsk3-xu-huong-kep"
+      ],
+      "tuKhoa": [
+        "lai",
+        "qu",
+        "jinlai",
+        "chuqu",
+        "bổ ngữ xu hướng",
+        "xu hướng đơn"
+      ],
+      "quiz": [
+        {
+          "h": "(Người nói đang ở trong phòng) 请（　）！",
+          "lc": [
+            "进去",
+            "进来",
+            "出去",
+            "下去"
+          ],
+          "da": 1,
+          "gt": "Hành động hướng về phía người nói (đang ở trong phòng) nên dùng 来: 进来."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "他回去中国了。",
+            "他中国回去了。",
+            "他回中国去了。"
+          ],
+          "da": 2,
+          "gt": "Tân ngữ nơi chốn (中国) phải đứng giữa động từ và 来 / 去."
+        },
+        {
+          "h": "我在楼下，你快（　）吧。",
+          "lc": [
+            "下来",
+            "下去",
+            "上来",
+            "上去"
+          ],
+          "da": 0,
+          "gt": "Người nói ở dưới lầu, người nghe đi xuống về phía người nói: 下来."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-xu-huong-kep",
+      "nhom": "Bổ ngữ",
+      "tieuDe": "Bổ ngữ xu hướng kép",
+      "mau": "V + 上 / 下 / 进 / 出 / 回 / 过 / 起 + 来 / 去",
+      "nghia": "làm ~ lên / xuống / vào / ra / về / qua + lại gần hay ra xa người nói",
+      "giaiThich": "Ghép một động từ chỉ hướng (上, 下, 进, 出, 回, 过, 起) với 来 / 去 rồi đặt sau động từ chính để tả rõ hướng chuyển động: 走出来 (đi ra, về phía người nói), 跑过去 (chạy sang bên kia). Dùng khi muốn nói cả cách chuyển động lẫn hướng.",
+      "cachGhep": [
+        "V + 上来 / 上去 / 下来 / 下去 / 进来 / 进去 / 出来 / 出去 / 回来 / 回去 / 过来 / 过去 / 起来",
+        "Tân ngữ nơi chốn chen trước 来 / 去: 走进教室来, 跑回家去",
+        "Tân ngữ sự vật: 拿出一本书来 / 拿出来一本书",
+        "起 chỉ ghép với 来 (起来), không có 起去"
+      ],
+      "viDu": [
+        {
+          "c": "他从教室里走出来了。",
+          "d": "Tā cóng jiàoshì li zǒu chūlái le.",
+          "v": "Anh ấy từ trong lớp học đi ra rồi."
+        },
+        {
+          "c": "小狗跑过去了。",
+          "d": "Xiǎo gǒu pǎo guòqù le.",
+          "v": "Con chó nhỏ chạy sang bên kia rồi."
+        },
+        {
+          "c": "老师走进教室来了。",
+          "d": "Lǎoshī zǒu jìn jiàoshì lái le.",
+          "v": "Thầy giáo đi vào lớp rồi."
+        },
+        {
+          "c": "请把椅子搬上来。",
+          "d": "Qǐng bǎ yǐzi bān shànglái.",
+          "v": "Xin chuyển cái ghế lên đây."
+        }
+      ],
+      "luuY": [
+        "Giống bổ ngữ xu hướng đơn: nơi chốn không được đặt sau 来 / 去 (他跑进去教室 ✗ → 他跑进教室去 ✓).",
+        "Tiếng Việt chỉ nói 'đi ra', tiếng Trung thường phải thêm 来 / 去 cho đủ hướng: 走出来 / 走出去."
+      ],
+      "soSanh": [
+        "zh-hsk3-xu-huong-don",
+        "zh-hsk3-qilai-mo-rong"
+      ],
+      "tuKhoa": [
+        "chulai",
+        "guoqu",
+        "shanglai",
+        "xiaqu",
+        "xu hướng kép",
+        "bổ ngữ xu hướng"
+      ],
+      "quiz": [
+        {
+          "h": "看见老师进来，学生们都站（　）了。",
+          "lc": [
+            "下去",
+            "出去",
+            "起来",
+            "进去"
+          ],
+          "da": 2,
+          "gt": "站起来 = đứng dậy; chuyển động từ thấp lên cao dùng 起来."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "他跑进去教室了。",
+            "他跑进教室去了。",
+            "他跑教室进去了。"
+          ],
+          "da": 1,
+          "gt": "Tân ngữ nơi chốn 教室 phải đứng trước 来 / 去."
+        },
+        {
+          "h": "(Người nói đứng dưới sân) 他从楼上走（　）了。",
+          "lc": [
+            "下来",
+            "下去",
+            "上去",
+            "进去"
+          ],
+          "da": 0,
+          "gt": "Đi xuống và lại gần người nói nên dùng 下来."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-qilai-mo-rong",
+      "nhom": "Bổ ngữ",
+      "tieuDe": "起来 (nghĩa mở rộng)",
+      "mau": "V / Adj + 起来 · V + 起 + O + 来",
+      "nghia": "bắt đầu ~ (và tiếp diễn); nhớ ra; trông / nghe có vẻ ~",
+      "giaiThich": "Ngoài nghĩa hướng lên (站起来), 起来 còn ba nghĩa mở rộng: (1) hành động hay trạng thái bắt đầu và tiếp diễn: 笑起来, 热起来; (2) nhớ lại điều đã biết: 想起来; (3) nêu nhận xét, đánh giá khi làm việc đó: 看起来, 听起来, 吃起来.",
+      "cachGhep": [
+        "Bắt đầu: V / Adj + 起来 — 哭起来, 忙起来",
+        "Có tân ngữ: V + 起 + O + 来 — 下起雨来, 唱起歌来",
+        "Nhớ ra: 想起来 / 想不起来",
+        "Đánh giá: 看 / 听 / 吃 / 用 + 起来 + nhận xét"
+      ],
+      "viDu": [
+        {
+          "c": "听了他的话，大家都笑起来了。",
+          "d": "Tīng le tā de huà, dàjiā dōu xiào qǐlái le.",
+          "v": "Nghe anh ấy nói xong, mọi người đều bật cười."
+        },
+        {
+          "c": "外面突然下起雨来了。",
+          "d": "Wàimiàn tūrán xià qǐ yǔ lái le.",
+          "v": "Bên ngoài trời bỗng đổ mưa."
+        },
+        {
+          "c": "我想起来了，他是小王的哥哥。",
+          "d": "Wǒ xiǎng qǐlái le, tā shì Xiǎo Wáng de gēge.",
+          "v": "Tôi nhớ ra rồi, anh ấy là anh trai của Tiểu Vương."
+        },
+        {
+          "c": "这件衣服看起来很贵。",
+          "d": "Zhè jiàn yīfu kàn qǐlái hěn guì.",
+          "v": "Bộ quần áo này trông có vẻ rất đắt."
+        }
+      ],
+      "luuY": [
+        "Có tân ngữ thì tân ngữ chen giữa 起 và 来: 唱起歌来 ✓, 唱歌起来 ✗, 唱起来歌 ✗.",
+        "想起来 là nhớ lại điều đã biết; 想出来 là nghĩ ra điều mới — hai cái rất dễ nhầm."
+      ],
+      "soSanh": [
+        "zh-hsk3-xiaqu-chulai",
+        "zh-hsk3-xu-huong-kep"
+      ],
+      "tuKhoa": [
+        "qilai",
+        "xiangqilai",
+        "kanqilai",
+        "bắt đầu",
+        "nhớ ra",
+        "trông có vẻ"
+      ],
+      "quiz": [
+        {
+          "h": "孩子找不到妈妈，哭（　）了。",
+          "lc": [
+            "下去",
+            "起来",
+            "出去",
+            "过来"
+          ],
+          "da": 1,
+          "gt": "哭起来 = bắt đầu khóc; 起来 chỉ hành động bắt đầu và tiếp diễn."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "他唱起来歌了。",
+            "他唱歌起来了。",
+            "他唱起歌来了。"
+          ],
+          "da": 2,
+          "gt": "Tân ngữ 歌 phải chen giữa 起 và 来."
+        },
+        {
+          "h": "你的名字我想不（　）了。",
+          "lc": [
+            "起来",
+            "下去",
+            "上去",
+            "进来"
+          ],
+          "da": 0,
+          "gt": "想不起来 = không nhớ ra được (điều đã từng biết)."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-xiaqu-chulai",
+      "nhom": "Bổ ngữ",
+      "tieuDe": "下去 / 出来 (nghĩa mở rộng)",
+      "mau": "V + 下去 · V + 出来",
+      "nghia": "tiếp tục làm ~ (下去); làm ra / nghĩ ra / nhận ra ~ (出来)",
+      "giaiThich": "V + 下去 chỉ hành động đang làm sẽ được tiếp tục: 说下去, 学下去. V + 出来 chỉ một kết quả từ không thành có (想出来, 写出来) hoặc nhận ra, phân biệt được nhờ nghe, nhìn (听出来, 看出来).",
+      "cachGhep": [
+        "V + 下去: 说下去, 做下去, 住下去",
+        "V + 出来 (+ O) hoặc V + 出 + O + 来: 想出来一个办法 / 想出一个办法来",
+        "Khả năng: 想得出来 / 想不出来, 听不出来"
+      ],
+      "viDu": [
+        {
+          "c": "请你说下去，我们都在听。",
+          "d": "Qǐng nǐ shuō xiàqù, wǒmen dōu zài tīng.",
+          "v": "Mời bạn nói tiếp, chúng tôi đều đang nghe."
+        },
+        {
+          "c": "虽然很难，但是我要学下去。",
+          "d": "Suīrán hěn nán, dànshì wǒ yào xué xiàqù.",
+          "v": "Tuy rất khó nhưng tôi sẽ học tiếp."
+        },
+        {
+          "c": "我想出来一个好办法。",
+          "d": "Wǒ xiǎng chūlái yí gè hǎo bànfǎ.",
+          "v": "Tôi nghĩ ra một cách hay."
+        },
+        {
+          "c": "我听出来了，这是小李的声音。",
+          "d": "Wǒ tīng chūlái le, zhè shì Xiǎo Lǐ de shēngyīn.",
+          "v": "Tôi nghe ra rồi, đây là giọng của Tiểu Lý."
+        }
+      ],
+      "luuY": [
+        "下去 ở đây không còn nghĩa 'đi xuống'; đừng dịch 说下去 là 'nói xuống'.",
+        "想出来 (nghĩ ra cái mới: cách làm, ý tưởng) khác 想起来 (nhớ ra cái đã biết: tên, số điện thoại)."
+      ],
+      "soSanh": [
+        "zh-hsk3-qilai-mo-rong"
+      ],
+      "tuKhoa": [
+        "xiaqu",
+        "chulai",
+        "xiangchulai",
+        "tiếp tục",
+        "nghĩ ra",
+        "nhận ra"
+      ],
+      "quiz": [
+        {
+          "h": "这个工作很有意思，我想一直做（　）。",
+          "lc": [
+            "出来",
+            "过来",
+            "下去",
+            "上来"
+          ],
+          "da": 2,
+          "gt": "做下去 = làm tiếp; 下去 chỉ sự tiếp tục."
+        },
+        {
+          "h": "这个问题的答案你想（　）了吗？",
+          "lc": [
+            "下去",
+            "出来",
+            "过去",
+            "回去"
+          ],
+          "da": 1,
+          "gt": "Đáp án là thứ phải nghĩ ra (từ không thành có) nên dùng 想出来."
+        },
+        {
+          "h": "Câu nào dùng 想出来 đúng?",
+          "lc": [
+            "他想出来一个新办法。",
+            "我想出来了，我们以前见过面。",
+            "他的电话号码我想出来了。"
+          ],
+          "da": 0,
+          "gt": "Cách làm mới là thứ nghĩ ra → 想出来. Hai câu kia là nhớ lại điều đã biết, phải dùng 想起来."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-bo-ngu-kha-nang",
+      "nhom": "Bổ ngữ",
+      "tieuDe": "Bổ ngữ khả năng V得… / V不…",
+      "mau": "V + 得 / 不 + bổ ngữ kết quả / xu hướng",
+      "nghia": "làm ~ được / không làm ~ được (có đạt kết quả hay không)",
+      "giaiThich": "Chen 得 hoặc 不 vào giữa động từ và bổ ngữ kết quả hay bổ ngữ xu hướng để nói có khả năng đạt được kết quả đó hay không: 听懂 → 听得懂 (nghe hiểu được) / 听不懂 (nghe không hiểu). Dùng nhiều nhất ở dạng phủ định, khi điều kiện khách quan không cho phép.",
+      "cachGhep": [
+        "Khẳng định: V + 得 + bổ ngữ — 看得见, 做得完, 回得来",
+        "Phủ định: V + 不 + bổ ngữ — 看不见, 买不到, 进不去",
+        "Câu hỏi: …吗？ hoặc chính phản V得C + V不C — 你听得懂听不懂？",
+        "Tân ngữ đứng sau cả cụm hoặc đưa lên đầu câu: 我听不懂他的话 / 他的话我听不懂"
+      ],
+      "viDu": [
+        {
+          "c": "老师说的话，你听得懂吗？",
+          "d": "Lǎoshī shuō de huà, nǐ tīng de dǒng ma?",
+          "v": "Lời thầy nói, bạn nghe có hiểu không?"
+        },
+        {
+          "c": "黑板上的字太小，我看不清楚。",
+          "d": "Hēibǎn shang de zì tài xiǎo, wǒ kàn bu qīngchu.",
+          "v": "Chữ trên bảng nhỏ quá, tôi nhìn không rõ."
+        },
+        {
+          "c": "今天的作业一个小时做得完。",
+          "d": "Jīntiān de zuòyè yí gè xiǎoshí zuò de wán.",
+          "v": "Bài tập hôm nay một tiếng là làm xong được."
+        },
+        {
+          "c": "这么晚了，买不到票了。",
+          "d": "Zhème wǎn le, mǎi bu dào piào le.",
+          "v": "Muộn thế này rồi, không mua được vé nữa đâu."
+        }
+      ],
+      "luuY": [
+        "Người Việt hay nói 我不能听懂; người Trung Quốc nói tự nhiên là 我听不懂.",
+        "Bổ ngữ khả năng không dùng trong câu chữ 把 và câu chữ 被: 我把作业做不完 ✗.",
+        "Đừng nhầm với bổ ngữ trạng thái: 写得好 (khả năng: viết tốt được) / 写得很好 (trạng thái: viết rất tốt); phủ định khác nhau: 写不好 / 写得不好."
+      ],
+      "soSanh": [
+        "zh-hsk3-kha-nang-liao",
+        "zh-hsk3-trang-thai-nang-cao"
+      ],
+      "tuKhoa": [
+        "bo ngu kha nang",
+        "tingdedong",
+        "kanbujian",
+        "maibudao",
+        "bổ ngữ khả năng",
+        "V de V bu"
+      ],
+      "quiz": [
+        {
+          "h": "他说得太快，我听（　）懂。",
+          "lc": [
+            "没",
+            "不",
+            "别",
+            "很"
+          ],
+          "da": 1,
+          "gt": "Phủ định khả năng: V + 不 + bổ ngữ → 听不懂."
+        },
+        {
+          "h": "门太小，这张桌子搬（　）。",
+          "lc": [
+            "不进去",
+            "没进去",
+            "进不去",
+            "不去进"
+          ],
+          "da": 0,
+          "gt": "不 chen giữa động từ 搬 và bổ ngữ xu hướng 进去: 搬不进去."
+        },
+        {
+          "h": "Câu hỏi chính phản nào đúng?",
+          "lc": [
+            "你看得不见吗？",
+            "你看见得不见？",
+            "你看得见看不见？"
+          ],
+          "da": 2,
+          "gt": "Dạng chính phản đặt khẳng định và phủ định liền nhau: 看得见 + 看不见."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-kha-nang-liao",
+      "nhom": "Bổ ngữ",
+      "tieuDe": "V得了 / V不了",
+      "mau": "V + 得了 (de liǎo) / 不了 (bu liǎo)",
+      "nghia": "làm ~ nổi / không làm ~ nổi; làm hết được / không hết được",
+      "giaiThich": "了 ở đây đọc là liǎo, làm bổ ngữ khả năng. V不了 có hai nghĩa: (1) điều kiện không cho phép thực hiện hành động: 去不了 (không đi được); (2) không làm hết được số lượng đó: 吃不了 (ăn không hết). V得了 là dạng khẳng định, thường gặp trong câu hỏi.",
+      "cachGhep": [
+        "V + 得了 / 不了 (+ O): 来得了, 来不了, 拿不了这么多东西",
+        "Cuối câu có thể thêm trợ từ 了 (le): 去不了了 (liǎo le)",
+        "Câu hỏi: V得了吗？ / V得了V不了？"
+      ],
+      "viDu": [
+        {
+          "c": "明天我有事，去不了了。",
+          "d": "Míngtiān wǒ yǒu shì, qù bu liǎo le.",
+          "v": "Ngày mai tôi có việc, không đi được rồi."
+        },
+        {
+          "c": "这么多菜，我们两个人吃不了。",
+          "d": "Zhème duō cài, wǒmen liǎng gè rén chī bu liǎo.",
+          "v": "Nhiều món thế này, hai người chúng ta ăn không hết."
+        },
+        {
+          "c": "你一个人拿得了这么多东西吗？",
+          "d": "Nǐ yí gè rén ná de liǎo zhème duō dōngxi ma?",
+          "v": "Một mình bạn cầm nổi nhiều đồ thế này không?"
+        },
+        {
+          "c": "我忘不了那一天。",
+          "d": "Wǒ wàng bu liǎo nà yì tiān.",
+          "v": "Tôi không thể quên được ngày hôm đó."
+        }
+      ],
+      "luuY": [
+        "了 trong 得了 / 不了 đọc liǎo, không đọc le. Trong 去不了了: chữ 了 đầu đọc liǎo, chữ sau đọc le.",
+        "去不了 (không đi được vì hoàn cảnh) khác 不去 (không đi vì không muốn / quyết định không đi)."
+      ],
+      "soSanh": [
+        "zh-hsk3-bo-ngu-kha-nang"
+      ],
+      "tuKhoa": [
+        "deliao",
+        "buliao",
+        "qubuliao",
+        "chibuliao",
+        "không nổi",
+        "bổ ngữ khả năng"
+      ],
+      "quiz": [
+        {
+          "h": "Trong 吃不了, chữ 了 đọc là gì?",
+          "lc": [
+            "le",
+            "liǎo",
+            "liào",
+            "lè"
+          ],
+          "da": 1,
+          "gt": "了 làm bổ ngữ khả năng đọc là liǎo."
+        },
+        {
+          "h": "他病了，今天来（　）了。",
+          "lc": [
+            "不了",
+            "没了",
+            "不得",
+            "得不"
+          ],
+          "da": 0,
+          "gt": "来不了 = không đến được (vì bị ốm); cuối câu thêm 了 chỉ thay đổi."
+        },
+        {
+          "h": "这个箱子不重，我一个人拿（　）。",
+          "lc": [
+            "不了",
+            "了得",
+            "得了",
+            "不得"
+          ],
+          "da": 2,
+          "gt": "Vali không nặng nên 'cầm nổi': dạng khẳng định là V + 得了."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-trang-thai-nang-cao",
+      "nhom": "Bổ ngữ",
+      "tieuDe": "Bổ ngữ trạng thái (nâng cao)",
+      "mau": "V / Adj + 得 + cụm từ / câu · V + O + V + 得 + …",
+      "nghia": "làm ~ (đến mức) thế nào; ~ đến nỗi …",
+      "giaiThich": "Sau 得 không chỉ là 很 + tính từ mà có thể là cả một cụm động từ hay một câu ngắn, tả mức độ hoặc hệ quả: 高兴得跳了起来 (vui đến mức nhảy lên). Khi động từ có tân ngữ, phải lặp lại động từ rồi mới thêm 得, hoặc đưa tân ngữ lên trước.",
+      "cachGhep": [
+        "V / Adj + 得 + cụm động từ / câu: 累得不想说话, 忙得没时间吃饭",
+        "Có tân ngữ: S + V + O + V + 得 + … — 她写汉字写得很好",
+        "Hoặc: S + O + V + 得 + … — 她汉字写得很好",
+        "Phủ định đặt sau 得: V + 得 + 不 + Adj — 跑得不快",
+        "Câu hỏi: V + 得 + 怎么样？ / V + 得 + Adj + 不 + Adj？"
+      ],
+      "viDu": [
+        {
+          "c": "他高兴得跳了起来。",
+          "d": "Tā gāoxìng de tiào le qǐlái.",
+          "v": "Anh ấy vui đến mức nhảy cẫng lên."
+        },
+        {
+          "c": "我累得不想说话。",
+          "d": "Wǒ lèi de bù xiǎng shuōhuà.",
+          "v": "Tôi mệt đến nỗi không muốn nói chuyện."
+        },
+        {
+          "c": "她写汉字写得又快又好。",
+          "d": "Tā xiě Hànzì xiě de yòu kuài yòu hǎo.",
+          "v": "Cô ấy viết chữ Hán vừa nhanh vừa đẹp."
+        },
+        {
+          "c": "你昨天睡得怎么样？",
+          "d": "Nǐ zuótiān shuì de zěnmeyàng?",
+          "v": "Hôm qua bạn ngủ thế nào?"
+        }
+      ],
+      "luuY": [
+        "Lỗi hay gặp: 他说汉语得很好 ✗. 得 phải đứng ngay sau động từ: 他说汉语说得很好 ✓.",
+        "Phủ định không đặt trước động từ: 他不跑得快 ✗ → 他跑得不快 ✓.",
+        "Chữ 得 này đọc de (thanh nhẹ), khác 得 děi (phải)."
+      ],
+      "soSanh": [
+        "zh-hsk3-bo-ngu-kha-nang"
+      ],
+      "tuKhoa": [
+        "de",
+        "bổ ngữ trạng thái",
+        "bổ ngữ mức độ",
+        "shuo de hen hao",
+        "đến nỗi"
+      ],
+      "quiz": [
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "他说汉语得很好。",
+            "他说汉语说得很好。",
+            "他说得汉语很好。"
+          ],
+          "da": 1,
+          "gt": "Có tân ngữ thì lặp lại động từ rồi mới thêm 得: 说汉语说得很好."
+        },
+        {
+          "h": "她忙（　）没有时间吃饭。",
+          "lc": [
+            "的",
+            "地",
+            "着",
+            "得"
+          ],
+          "da": 3,
+          "gt": "Sau tính từ / động từ, nối với phần tả mức độ – hệ quả phải dùng 得."
+        },
+        {
+          "h": "Dạng phủ định đúng của 他跑得很快 là:",
+          "lc": [
+            "他跑得不快。",
+            "他不跑得很快。",
+            "他没跑得快。"
+          ],
+          "da": 0,
+          "gt": "Phủ định bổ ngữ trạng thái đặt sau 得: 跑得不快."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-le-kep",
+      "nhom": "Trợ từ động thái",
+      "tieuDe": "V了…了 (hai chữ 了)",
+      "mau": "S + V + 了 + thời lượng / số lượng + (O) + 了",
+      "nghia": "đã ~ được (bao lâu / bao nhiêu) rồi và vẫn đang tiếp tục",
+      "giaiThich": "Khi câu có cả 了 sau động từ và 了 cuối câu, kèm thời lượng hay số lượng, câu cho biết hành động kéo dài tới lúc nói và còn có thể tiếp tục: 学了三年了 (học được ba năm rồi, vẫn đang học). Nếu chỉ có một 了 sau động từ, hành động thường đã kết thúc.",
+      "cachGhep": [
+        "V + 了 + thời lượng + (O) + 了: 学了三年汉语了",
+        "V + 了 + số lượng + (O) + 了: 喝了三杯水了",
+        "Động từ li hợp / có tân ngữ: có thể lặp động từ — 学汉语学了三年了",
+        "Câu hỏi: V + 了 + 多长时间 / 多少 / 几 + … + 了？"
+      ],
+      "viDu": [
+        {
+          "c": "我学了三年汉语了。",
+          "d": "Wǒ xué le sān nián Hànyǔ le.",
+          "v": "Tôi học tiếng Trung được ba năm rồi (vẫn đang học)."
+        },
+        {
+          "c": "他在北京住了两年。",
+          "d": "Tā zài Běijīng zhù le liǎng nián.",
+          "v": "Anh ấy đã sống ở Bắc Kinh hai năm (nay không còn ở đó)."
+        },
+        {
+          "c": "你等了多长时间了？",
+          "d": "Nǐ děng le duō cháng shíjiān le?",
+          "v": "Bạn đợi được bao lâu rồi?"
+        },
+        {
+          "c": "我已经喝了三杯水了。",
+          "d": "Wǒ yǐjīng hē le sān bēi shuǐ le.",
+          "v": "Tôi đã uống ba cốc nước rồi (có thể còn uống tiếp)."
+        }
+      ],
+      "luuY": [
+        "Thời lượng đứng sau động từ, trước tân ngữ: 学了三年汉语了 ✓, 三年学了汉语了 ✗.",
+        "Bỏ 了 cuối câu là đổi nghĩa: 住了两年 thường hiểu là chuyện đã qua; 住了两年了 là tới giờ vẫn ở."
+      ],
+      "soSanh": [
+        "zh-hsk3-guo-nang-cao"
+      ],
+      "tuKhoa": [
+        "le le",
+        "liang ge le",
+        "hai chữ le",
+        "thời lượng",
+        "được bao lâu rồi"
+      ],
+      "quiz": [
+        {
+          "h": "Câu nào có nghĩa 'đến giờ vẫn đang sống ở Thượng Hải'?",
+          "lc": [
+            "他在上海住了五年。",
+            "他在上海住过五年。",
+            "他在上海住了五年了。"
+          ],
+          "da": 2,
+          "gt": "Có thêm 了 cuối câu: hành động kéo dài tới hiện tại."
+        },
+        {
+          "h": "我们等了他半个小时（　），他还没来。",
+          "lc": [
+            "了",
+            "过",
+            "着",
+            "的"
+          ],
+          "da": 0,
+          "gt": "Tới lúc nói vẫn đang đợi nên dùng thêm 了 cuối vế câu."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "我两年学了汉语了。",
+            "我学了两年汉语了。",
+            "我学了汉语两年了。"
+          ],
+          "da": 1,
+          "gt": "Thời lượng đứng giữa V了 và tân ngữ: 学了 + 两年 + 汉语 + 了."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-guo-nang-cao",
+      "nhom": "Trợ từ động thái",
+      "tieuDe": "过 (nâng cao): số lần, 从来没…过",
+      "mau": "V + 过 + số lần + (O) · 从来 / 还 + 没 + V + 过",
+      "nghia": "đã từng ~ (mấy lần); chưa từng / chưa bao giờ ~",
+      "giaiThich": "过 chỉ trải nghiệm đã từng có. Ở HSK 3 cần ghép thêm số lần (去过两次) và các phó từ nhấn mạnh phủ định như 从来没…过 (chưa bao giờ), 还没…过 (vẫn chưa từng). Dùng khi kể kinh nghiệm chứ không kể một việc cụ thể vừa xảy ra.",
+      "cachGhep": [
+        "V + 过 + số lần + O: 去过两次北京",
+        "Tân ngữ là đại từ / tên người: V + 过 + O + số lần — 见过他一次",
+        "Phủ định: (从来 / 还) + 没(有) + V + 过 + O",
+        "Câu hỏi: V + 过 + O + 吗？ / V + 过 + O + 没有？"
+      ],
+      "viDu": [
+        {
+          "c": "我去过两次北京。",
+          "d": "Wǒ qù guo liǎng cì Běijīng.",
+          "v": "Tôi đã đi Bắc Kinh hai lần."
+        },
+        {
+          "c": "我从来没吃过这么辣的菜。",
+          "d": "Wǒ cónglái méi chī guo zhème là de cài.",
+          "v": "Tôi chưa bao giờ ăn món nào cay như thế này."
+        },
+        {
+          "c": "你以前见过他吗？——见过一次。",
+          "d": "Nǐ yǐqián jiàn guo tā ma? — Jiàn guo yí cì.",
+          "v": "Trước đây bạn từng gặp anh ấy chưa? — Gặp một lần rồi."
+        },
+        {
+          "c": "我找过他三次，他都不在。",
+          "d": "Wǒ zhǎo guo tā sān cì, tā dōu bú zài.",
+          "v": "Tôi đã tìm anh ấy ba lần, lần nào anh ấy cũng không có mặt."
+        }
+      ],
+      "luuY": [
+        "Phủ định của 过 dùng 没 và vẫn giữ 过: 没去过 ✓; 不去过 ✗; 没去过了 ✗.",
+        "Tân ngữ là đại từ thì số lần đứng sau: 见过他一次 ✓, 见过一次他 ✗.",
+        "过 phải đi liền sau động từ: 去过上海 ✓, 去上海过 ✗."
+      ],
+      "soSanh": [
+        "zh-hsk3-le-kep"
+      ],
+      "tuKhoa": [
+        "guo",
+        "conglai mei",
+        "đã từng",
+        "chưa từng",
+        "số lần"
+      ],
+      "quiz": [
+        {
+          "h": "我从来（　）看过这个电影。",
+          "lc": [
+            "不",
+            "别",
+            "没",
+            "不是"
+          ],
+          "da": 2,
+          "gt": "Phủ định trải nghiệm dùng 没 + V + 过."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "我见过一次他。",
+            "我见过他一次。",
+            "我一次见过他。"
+          ],
+          "da": 1,
+          "gt": "Tân ngữ là đại từ thì số lần đặt sau tân ngữ: 见过他一次."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "我没去过上海。",
+            "我没去上海过。",
+            "我没去过了上海。"
+          ],
+          "da": 0,
+          "gt": "过 đứng ngay sau động từ, và sau 过 không thêm 了."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-zhe-ton-tai",
+      "nhom": "Trợ từ động thái",
+      "tieuDe": "着 trong câu tồn tại",
+      "mau": "Nơi chốn + V + 着 + (số lượng) + N",
+      "nghia": "ở đâu đó đang có (treo / đặt / đứng…) cái gì",
+      "giaiThich": "Dùng để tả một nơi đang có người hay vật ở trạng thái nào: 墙上挂着一张地图 (trên tường treo một tấm bản đồ). Từ chỉ nơi chốn đứng đầu câu, sau đó là động từ + 着, cuối cùng mới là người hay vật tồn tại. Hay dùng khi miêu tả căn phòng, bức tranh, khung cảnh.",
+      "cachGhep": [
+        "Nơi chốn (N + 上 / 里 / 旁边…) + V + 着 + số lượng + N",
+        "Động từ thường dùng: 放, 挂, 写, 画, 坐, 站, 住, 停",
+        "Phủ định: Nơi chốn + 没(有) + V + 着 + N — 墙上没挂着画",
+        "Câu hỏi: Nơi chốn + V + 着 + 什么？"
+      ],
+      "viDu": [
+        {
+          "c": "墙上挂着一张地图。",
+          "d": "Qiáng shang guà zhe yì zhāng dìtú.",
+          "v": "Trên tường treo một tấm bản đồ."
+        },
+        {
+          "c": "桌子上放着两杯茶。",
+          "d": "Zhuōzi shang fàng zhe liǎng bēi chá.",
+          "v": "Trên bàn đặt hai cốc trà."
+        },
+        {
+          "c": "门口站着几个学生。",
+          "d": "Ménkǒu zhàn zhe jǐ gè xuésheng.",
+          "v": "Ở cửa có mấy học sinh đang đứng."
+        },
+        {
+          "c": "黑板上写着什么？",
+          "d": "Hēibǎn shang xiě zhe shénme?",
+          "v": "Trên bảng viết gì thế?"
+        }
+      ],
+      "luuY": [
+        "Đầu câu thường không thêm 在: 在墙上挂着一张地图 nghe không tự nhiên bằng 墙上挂着一张地图.",
+        "Danh từ cuối câu là vật chưa xác định (一张地图, 几个学生), không dùng 这 / 那: 墙上挂着那张地图 ✗.",
+        "Người Việt hay đặt chủ thể lên trước theo tiếng Việt: 一张地图挂着墙上 ✗."
+      ],
+      "soSanh": [
+        "zh-hsk3-v-zhe-v"
+      ],
+      "tuKhoa": [
+        "zhe",
+        "guazhe",
+        "fangzhe",
+        "câu tồn tại",
+        "câu tồn hiện"
+      ],
+      "quiz": [
+        {
+          "h": "桌子上放（　）一本词典。",
+          "lc": [
+            "着",
+            "过",
+            "得",
+            "地"
+          ],
+          "da": 0,
+          "gt": "Tả trạng thái đang tồn tại ở một nơi: V + 着."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "一张画挂着墙上。",
+            "墙上一张画挂着在。",
+            "墙上挂着一张画。"
+          ],
+          "da": 2,
+          "gt": "Trật tự: nơi chốn + V着 + số lượng + danh từ."
+        },
+        {
+          "h": "Trong câu tồn tại, danh từ đứng sau V着 thường là:",
+          "lc": [
+            "vật đã xác định (那本书)",
+            "vật chưa xác định (一本书)",
+            "đại từ (它)"
+          ],
+          "da": 1,
+          "gt": "Câu tồn tại giới thiệu vật mới, chưa xác định, thường kèm số lượng từ."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-v-zhe-v",
+      "nhom": "Trợ từ động thái",
+      "tieuDe": "V1着 + V2",
+      "mau": "S + V1 + 着 + (O1) + V2 + (O2)",
+      "nghia": "làm V2 trong tư thế / cách thức V1 (đứng nói, cười nói…)",
+      "giaiThich": "V1着 đứng trước một động từ khác để tả tư thế, trạng thái hay cách thức khi thực hiện hành động chính V2: 站着说 (đứng mà nói), 笑着说 (cười nói). Hành động chính là V2; V1着 chỉ làm nền.",
+      "cachGhep": [
+        "V1 + 着 + V2: 坐着听, 躺着看书, 走着去",
+        "V1 có tân ngữ: V1 + 着 + O1 + V2 — 拿着书走进来",
+        "Phủ định / cấm: 别 + V1 + 着 + V2 — 别躺着看书"
+      ],
+      "viDu": [
+        {
+          "c": "老师站着上课，我们坐着听。",
+          "d": "Lǎoshī zhàn zhe shàngkè, wǒmen zuò zhe tīng.",
+          "v": "Thầy giáo đứng giảng bài, chúng tôi ngồi nghe."
+        },
+        {
+          "c": "她笑着对我说没关系。",
+          "d": "Tā xiào zhe duì wǒ shuō méi guānxi.",
+          "v": "Cô ấy cười nói với tôi là không sao."
+        },
+        {
+          "c": "别躺着看书，对眼睛不好。",
+          "d": "Bié tǎng zhe kàn shū, duì yǎnjing bù hǎo.",
+          "v": "Đừng nằm đọc sách, không tốt cho mắt."
+        },
+        {
+          "c": "你是走着去还是坐车去？",
+          "d": "Nǐ shì zǒu zhe qù háishi zuò chē qù?",
+          "v": "Bạn đi bộ đến hay đi xe đến?"
+        }
+      ],
+      "luuY": [
+        "Tiếng Việt nói 'đứng nói' không cần hư từ; tiếng Trung phải có 着: 站着说 ✓, 站说 ✗.",
+        "Khác 一边…一边 (hai hành động ngang hàng): V1着V2 thì V1 chỉ là tư thế, cách thức."
+      ],
+      "soSanh": [
+        "zh-hsk3-zhe-ton-tai"
+      ],
+      "tuKhoa": [
+        "zhe",
+        "zhanzhe shuo",
+        "xiaozhe shuo",
+        "cách thức",
+        "tư thế"
+      ],
+      "quiz": [
+        {
+          "h": "弟弟喜欢躺（　）看电视。",
+          "lc": [
+            "了",
+            "过",
+            "着",
+            "得"
+          ],
+          "da": 2,
+          "gt": "Tả tư thế khi làm hành động chính: V1 + 着 + V2."
+        },
+        {
+          "h": "Trong câu 她笑着说, hành động chính là:",
+          "lc": [
+            "笑",
+            "说",
+            "cả hai ngang nhau"
+          ],
+          "da": 1,
+          "gt": "V2 (说) là hành động chính; 笑着 chỉ cách thức đi kèm."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "他站着说话。",
+            "他站说着话。",
+            "他说话站着了。"
+          ],
+          "da": 0,
+          "gt": "着 đứng ngay sau V1 (站), rồi mới tới V2: 站着说话."
+        }
+      ]
+    }
+  ]
+}

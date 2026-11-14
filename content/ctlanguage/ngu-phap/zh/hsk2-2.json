@@ -1,0 +1,1149 @@
+{
+  "nn": "zh",
+  "cap": "HSK2",
+  "diem": [
+    {
+      "id": "zh-hsk2-de-trang-thai",
+      "nhom": "Bổ ngữ",
+      "tieuDe": "Bổ ngữ trạng thái 得",
+      "mau": "S + V + 得 + (很 / 不…) + tính từ",
+      "nghia": "làm ~ (như) thế nào (đánh giá, miêu tả hành động)",
+      "giaiThich": "得 đặt ngay sau động từ, theo sau là phần nhận xét hành động đó được thực hiện ra sao: nhanh, chậm, tốt, sớm, muộn… Thường dùng cho việc đã / thường xảy ra. Nếu động từ có tân ngữ thì phải lặp lại động từ hoặc đưa tân ngữ lên trước.",
+      "cachGhep": [
+        "S + V + 得 + 很 + tính từ: 跑得很快",
+        "Có tân ngữ: S + V + O + V + 得 + … (说汉语说得很好)",
+        "Hoặc: S + (的) + O + V + 得 + … (他汉语说得很好)",
+        "Phủ định: V + 得 + 不 + tính từ (说得不好)",
+        "Câu hỏi: V + 得 + 怎么样？ / V + 得 + adj + 不 + adj？"
+      ],
+      "viDu": [
+        {
+          "c": "他跑得很快。",
+          "d": "Tā pǎo de hěn kuài.",
+          "v": "Anh ấy chạy rất nhanh."
+        },
+        {
+          "c": "你汉语说得很好。",
+          "d": "Nǐ Hànyǔ shuō de hěn hǎo.",
+          "v": "Bạn nói tiếng Trung rất tốt."
+        },
+        {
+          "c": "她唱歌唱得怎么样？",
+          "d": "Tā chàng gē chàng de zěnmeyàng?",
+          "v": "Cô ấy hát thế nào?"
+        },
+        {
+          "c": "我昨天睡得不好。",
+          "d": "Wǒ zuótiān shuì de bù hǎo.",
+          "v": "Hôm qua tôi ngủ không ngon."
+        }
+      ],
+      "luuY": [
+        "Lỗi rất hay gặp: 他说汉语得很好 — 得 phải dính ngay sau ĐỘNG TỪ, không đứng sau tân ngữ → 他说汉语说得很好 / 他汉语说得很好.",
+        "Phủ định đặt ở phần bổ ngữ: 说得不好; không nói 不说得好.",
+        "Phân biệt ba chữ đều đọc de: 的 (trước danh từ), 得 (sau động từ), 地 (trước động từ). 得 này đọc nhẹ, khác 得 (děi) \"phải\"."
+      ],
+      "soSanh": [
+        "zh-hsk2-dei",
+        "zh-hsk2-bo-ngu-ket-qua",
+        "zh-hsk3-de-de-de"
+      ],
+      "tuKhoa": [
+        "de",
+        "bổ ngữ trạng thái",
+        "bổ ngữ trình độ",
+        "shuo de hen hao",
+        "đắc"
+      ],
+      "quiz": [
+        {
+          "h": "她写汉字写___很漂亮。",
+          "lc": [
+            "的",
+            "得",
+            "了",
+            "着"
+          ],
+          "da": 1,
+          "gt": "Sau động từ, trước phần nhận xét dùng 得."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "他打篮球得很好。",
+            "他不打得好篮球。",
+            "他打篮球打得很好。",
+            "他打得篮球很好。"
+          ],
+          "da": 2,
+          "gt": "Có tân ngữ thì lặp lại động từ: V + O + V + 得 + nhận xét."
+        },
+        {
+          "h": "Phủ định của 「我起得很早」 là:",
+          "lc": [
+            "我起得不早。",
+            "我不起得早。",
+            "我没起得很早了。",
+            "我起不得早。"
+          ],
+          "da": 0,
+          "gt": "Phủ định đặt trong phần bổ ngữ: V + 得 + 不 + tính từ."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk2-bo-ngu-ket-qua",
+      "nhom": "Bổ ngữ",
+      "tieuDe": "Bổ ngữ kết quả (完 / 到 / 见 / 好 / 错 / 懂)",
+      "mau": "S + V + bổ ngữ kết quả (+ O)",
+      "nghia": "làm ~ xong / được / thấy / sai / hiểu (kết quả của hành động)",
+      "giaiThich": "Một động từ hoặc tính từ đặt ngay sau động từ chính để nói KẾT QUẢ của hành động: 完 (xong), 到 (đạt được, tới), 见 (cảm nhận được: nhìn thấy, nghe thấy), 好 (xong xuôi, ổn thoả), 错 (sai, nhầm), 懂 (hiểu). Phủ định dùng 没(有) vì kết quả chưa xảy ra.",
+      "cachGhep": [
+        "V + 完: 做完, 吃完, 看完",
+        "V + 到: 找到, 买到, 看到, 听到",
+        "V + 见: 看见, 听见",
+        "V + 好 / 错 / 懂: 准备好, 写错, 听懂",
+        "Phủ định: 没(有) + V + bổ ngữ · Hỏi: V + bổ ngữ + 了吗？ / …了没有？"
+      ],
+      "viDu": [
+        {
+          "c": "我做完今天的题了。",
+          "d": "Wǒ zuòwán jīntiān de tí le.",
+          "v": "Tôi làm xong bài hôm nay rồi."
+        },
+        {
+          "c": "你看见我的手机了吗？",
+          "d": "Nǐ kànjiàn wǒ de shǒujī le ma?",
+          "v": "Bạn có nhìn thấy điện thoại của tôi không?"
+        },
+        {
+          "c": "老师说的话我没听懂。",
+          "d": "Lǎoshī shuō de huà wǒ méi tīngdǒng.",
+          "v": "Lời thầy giáo nói tôi nghe không hiểu."
+        },
+        {
+          "c": "对不起，我写错了你的名字。",
+          "d": "Duìbuqǐ, wǒ xiěcuòle nǐ de míngzi.",
+          "v": "Xin lỗi, tôi viết sai tên của bạn rồi."
+        }
+      ],
+      "luuY": [
+        "Động từ + bổ ngữ dính liền nhau, tân ngữ và 了 đứng SAU cả cụm: 做完题了 (không nói 做题完了).",
+        "Phủ định dùng 没, không dùng 不: 没听懂, 没找到.",
+        "看 = nhìn (hành động); 看见 / 看到 = nhìn THẤY (có kết quả). Tương tự 找 (tìm) và 找到 (tìm thấy), 听 và 听见."
+      ],
+      "soSanh": [
+        "zh-hsk2-de-trang-thai",
+        "zh-hsk2-le-hoan-thanh",
+        "zh-hsk3-ket-qua-dao-zai-gei",
+        "zh-hsk3-bo-ngu-kha-nang"
+      ],
+      "tuKhoa": [
+        "bổ ngữ kết quả",
+        "wan",
+        "dao",
+        "jian",
+        "cuo",
+        "dong"
+      ],
+      "quiz": [
+        {
+          "h": "我找了很长时间，可是没找___。",
+          "lc": [
+            "完",
+            "错",
+            "到",
+            "懂"
+          ],
+          "da": 2,
+          "gt": "找到 = tìm thấy; phủ định 没找到 (tìm mà không thấy)."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "我看完那本书了。",
+            "我看那本书完了。",
+            "我不看完那本书了。",
+            "我完看那本书了。"
+          ],
+          "da": 0,
+          "gt": "Bổ ngữ kết quả dính ngay sau động từ, tân ngữ ở sau: 看完 + 那本书."
+        },
+        {
+          "h": "他说得太快，我没听___。",
+          "lc": [
+            "着",
+            "懂",
+            "过了",
+            "错的"
+          ],
+          "da": 1,
+          "gt": "Nghe mà không hiểu: 没听懂."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk2-thoi-luong",
+      "nhom": "Bổ ngữ",
+      "tieuDe": "Bổ ngữ thời lượng (学了两年)",
+      "mau": "S + V + (了) + khoảng thời gian (+ 的) + O",
+      "nghia": "làm ~ trong bao lâu",
+      "giaiThich": "Khoảng thời gian một hành động kéo dài (两年, 三天, 半个小时…) đặt SAU động từ, khác với thời điểm (đứng trước động từ). Nếu có tân ngữ: lặp lại động từ, hoặc đặt thời lượng giữa động từ và tân ngữ. Thêm 了 ở cuối câu nữa nghĩa là việc ấy vẫn đang tiếp tục.",
+      "cachGhep": [
+        "V + 了 + thời lượng: 等了半个小时",
+        "V + 了 + thời lượng + (的) + O: 学了两年(的)汉语",
+        "V + O + V + 了 + thời lượng: 学汉语学了两年",
+        "V + 了 + thời lượng + 了: đã … được (và còn tiếp tục)",
+        "Hỏi: V + 了 + 多长时间？"
+      ],
+      "viDu": [
+        {
+          "c": "我学了两年汉语。",
+          "d": "Wǒ xuéle liǎng nián Hànyǔ.",
+          "v": "Tôi đã học tiếng Trung hai năm."
+        },
+        {
+          "c": "他昨天睡了八个小时。",
+          "d": "Tā zuótiān shuìle bā gè xiǎoshí.",
+          "v": "Hôm qua anh ấy ngủ tám tiếng."
+        },
+        {
+          "c": "你等了多长时间？",
+          "d": "Nǐ děngle duō cháng shíjiān?",
+          "v": "Bạn đã đợi bao lâu?"
+        },
+        {
+          "c": "我在北京住了三年了。",
+          "d": "Wǒ zài Běijīng zhùle sān nián le.",
+          "v": "Tôi sống ở Bắc Kinh được ba năm rồi (vẫn đang sống)."
+        }
+      ],
+      "luuY": [
+        "Thời ĐIỂM đứng trước động từ (我八点睡觉); thời LƯỢNG đứng sau động từ (我睡了八个小时). Người Việt hay đặt nhầm: 我两年学了汉语 là sai.",
+        "学了两年 = đã học hai năm (có thể đã thôi); 学了两年了 = học được hai năm rồi và còn học tiếp.",
+        "Tân ngữ là đại từ chỉ người thì đứng trước thời lượng: 等了他半个小时. \"Hai tiếng\" là 两个小时."
+      ],
+      "soSanh": [
+        "zh-hsk2-dong-luong",
+        "zh-hsk2-le-hoan-thanh"
+      ],
+      "tuKhoa": [
+        "thoi luong",
+        "bổ ngữ thời lượng",
+        "duo chang shijian",
+        "bao lâu",
+        "xiaoshi"
+      ],
+      "quiz": [
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "我一个小时看了电视。",
+            "我看了一个小时电视。",
+            "我看了电视一个小时的。",
+            "我一个小时的看电视了。"
+          ],
+          "da": 1,
+          "gt": "Thời lượng đứng sau động từ, trước tân ngữ: V + 了 + thời lượng + O."
+        },
+        {
+          "h": "「我学了三年汉语了」 cho biết:",
+          "lc": [
+            "Tôi sẽ học ba năm.",
+            "Ba năm trước tôi đã học.",
+            "Tôi học được ba năm và vẫn đang học.",
+            "Tôi chưa từng học."
+          ],
+          "da": 2,
+          "gt": "Hai chữ 了 (sau động từ và cuối câu) = tính đến giờ đã … và vẫn tiếp tục."
+        },
+        {
+          "h": "你昨天晚上睡了___？ — 睡了七个小时。",
+          "lc": [
+            "多长时间",
+            "几点",
+            "什么时候",
+            "怎么样"
+          ],
+          "da": 0,
+          "gt": "Hỏi khoảng thời gian kéo dài dùng 多长时间; 几点 / 什么时候 hỏi thời điểm."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk2-dong-luong",
+      "nhom": "Bổ ngữ",
+      "tieuDe": "Bổ ngữ động lượng (次 / 遍)",
+      "mau": "S + V + (过 / 了) + số + 次 / 遍 (+ O)",
+      "nghia": "làm ~ mấy lần / mấy lượt",
+      "giaiThich": "Số lần thực hiện hành động đặt SAU động từ. 次 đếm số lần nói chung; 遍 nhấn mạnh làm trọn vẹn từ đầu đến cuối một lượt (đọc, nghe, xem, nói, viết lại). Tân ngữ là vật thường đứng sau số lần; tân ngữ là đại từ thì đứng trước số lần.",
+      "cachGhep": [
+        "V + 过 / 了 + số + 次 + O: 去过两次北京",
+        "Tân ngữ là nơi chốn có thể đứng trước: 去过北京两次",
+        "Tân ngữ là đại từ: V + đại từ + số + 次 (见过他一次)",
+        "V + 了 + số + 遍: 看了两遍",
+        "再 + V + 一遍 / 一次: làm lại một lần nữa"
+      ],
+      "viDu": [
+        {
+          "c": "我去过两次北京。",
+          "d": "Wǒ qùguo liǎng cì Běijīng.",
+          "v": "Tôi đã đi Bắc Kinh hai lần."
+        },
+        {
+          "c": "这个电影我看了三遍。",
+          "d": "Zhège diànyǐng wǒ kànle sān biàn.",
+          "v": "Bộ phim này tôi đã xem ba lượt."
+        },
+        {
+          "c": "请再说一遍。",
+          "d": "Qǐng zài shuō yí biàn.",
+          "v": "Xin hãy nói lại một lần nữa."
+        },
+        {
+          "c": "我只见过他一次。",
+          "d": "Wǒ zhǐ jiànguo tā yí cì.",
+          "v": "Tôi chỉ gặp anh ấy một lần."
+        }
+      ],
+      "luuY": [
+        "Số lần đứng SAU động từ: 去过两次, KHÔNG nói 两次去过 (tiếng Việt cũng nói \"đi hai lần\", nhưng dễ sai khi có 过 / 了).",
+        "\"Hai lần\" là 两次, không nói 二次.",
+        "遍 chỉ dùng khi hành động có quá trình trọn vẹn (看, 听, 读, 说, 写); \"đi một lần\" phải là 去一次."
+      ],
+      "soSanh": [
+        "zh-hsk2-thoi-luong",
+        "zh-hsk2-guo",
+        "zh-hsk2-zai-you"
+      ],
+      "tuKhoa": [
+        "dong luong",
+        "ci",
+        "bian",
+        "lần",
+        "lượt",
+        "mấy lần"
+      ],
+      "quiz": [
+        {
+          "h": "我没听懂，请你再说一___。",
+          "lc": [
+            "个",
+            "遍",
+            "本",
+            "岁"
+          ],
+          "da": 1,
+          "gt": "Nói lại trọn vẹn một lượt: 再说一遍."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "我两次去过中国。",
+            "我去两次过中国。",
+            "我过去两次中国。",
+            "我去过两次中国。"
+          ],
+          "da": 3,
+          "gt": "V + 过 + số lần + O: 去过两次中国."
+        },
+        {
+          "h": "他来过我家___。",
+          "lc": [
+            "三次",
+            "三遍的",
+            "三个",
+            "第三"
+          ],
+          "da": 0,
+          "gt": "Đếm số lần đến: 次. 遍 dùng cho việc đọc / nghe / xem trọn một lượt."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk2-dong-tu-lap",
+      "nhom": "Lặp lại động từ – tính từ",
+      "tieuDe": "Động từ lặp lại (看看 / 看一看)",
+      "mau": "V + V · V + 一 + V · AB + AB",
+      "nghia": "làm ~ một chút, thử ~ (nhẹ nhàng, thời gian ngắn)",
+      "giaiThich": "Lặp lại động từ để nói hành động diễn ra trong thời gian ngắn, làm thử, hoặc làm cho lời đề nghị nhẹ nhàng, thoải mái hơn. Động từ một âm tiết: AA hoặc A一A; động từ hai âm tiết: ABAB. Việc đã xảy ra: A了A.",
+      "cachGhep": [
+        "Một âm tiết: 看看, 听听, 想想, 试试",
+        "Chèn 一: 看一看, 想一想 (chỉ với động từ một âm tiết)",
+        "Hai âm tiết: ABAB — 休息休息, 介绍介绍, 准备准备",
+        "Đã xảy ra: V + 了 + V — 看了看, 想了想"
+      ],
+      "viDu": [
+        {
+          "c": "你看看这本书。",
+          "d": "Nǐ kànkan zhè běn shū.",
+          "v": "Bạn xem thử quyển sách này đi."
+        },
+        {
+          "c": "我想想再告诉你。",
+          "d": "Wǒ xiǎngxiang zài gàosu nǐ.",
+          "v": "Để tôi nghĩ một chút rồi nói với bạn."
+        },
+        {
+          "c": "你太累了，休息休息吧。",
+          "d": "Nǐ tài lèi le, xiūxi xiūxi ba.",
+          "v": "Bạn mệt quá rồi, nghỉ ngơi một chút đi."
+        },
+        {
+          "c": "他看了看我，没说话。",
+          "d": "Tā kànle kàn wǒ, méi shuōhuà.",
+          "v": "Anh ấy nhìn tôi một cái, không nói gì."
+        }
+      ],
+      "luuY": [
+        "Động từ hai âm tiết lặp theo kiểu ABAB (休息休息), KHÔNG phải AABB — đó là kiểu của tính từ.",
+        "Đã lặp động từ thì không thêm 一下 hay số lượng nữa: không nói 看看一下.",
+        "Không lặp động từ khi hành động đang diễn ra (正在看看 là sai) hay trong câu có bổ ngữ.",
+        "Âm tiết lặp lại thường đọc nhẹ: kànkan, xiǎngxiang."
+      ],
+      "soSanh": [
+        "zh-hsk2-yixia",
+        "zh-hsk2-tinh-tu-lap"
+      ],
+      "tuKhoa": [
+        "dong tu lap lai",
+        "kankan",
+        "kan yi kan",
+        "trùng điệp động từ",
+        "thử"
+      ],
+      "quiz": [
+        {
+          "h": "Dạng lặp lại đúng của 休息 là:",
+          "lc": [
+            "休休息息",
+            "休息休息",
+            "休一休息",
+            "休息一休息"
+          ],
+          "da": 1,
+          "gt": "Động từ hai âm tiết lặp theo kiểu ABAB."
+        },
+        {
+          "h": "这是我做的菜，你___。",
+          "lc": [
+            "吃吃一下",
+            "正在吃吃",
+            "吃一吃吗了",
+            "吃吃吧"
+          ],
+          "da": 3,
+          "gt": "Mời làm thử: V + V + 吧; không ghép thêm 一下 và không đi với 正在."
+        },
+        {
+          "h": "他想___，说：\"好吧。\"",
+          "lc": [
+            "了想",
+            "一下想",
+            "想了过",
+            "着想想"
+          ],
+          "da": 0,
+          "gt": "Việc đã xảy ra: V + 了 + V → 想了想."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk2-yixia",
+      "nhom": "Lặp lại động từ – tính từ",
+      "tieuDe": "V + 一下",
+      "mau": "S + V + 一下 (+ O)",
+      "nghia": "làm ~ một chút, một lát",
+      "giaiThich": "一下 đặt sau động từ để nói hành động diễn ra nhanh, ngắn, hoặc làm thử; cũng làm cho câu nhờ vả, đề nghị nghe nhẹ nhàng, lịch sự hơn. Nghĩa gần với lặp lại động từ.",
+      "cachGhep": [
+        "V + 一下: 等一下, 看一下, 试一下",
+        "V + 一下 + O: 介绍一下我的朋友",
+        "Tân ngữ là đại từ: V + đại từ + 一下 (等我一下)",
+        "Lời nhờ: 请 + V + 一下"
+      ],
+      "viDu": [
+        {
+          "c": "请等一下。",
+          "d": "Qǐng děng yíxià.",
+          "v": "Xin đợi một chút."
+        },
+        {
+          "c": "我来介绍一下，这是我的同学。",
+          "d": "Wǒ lái jièshào yíxià, zhè shì wǒ de tóngxué.",
+          "v": "Để tôi giới thiệu một chút, đây là bạn học của tôi."
+        },
+        {
+          "c": "这件衣服我可以试一下吗？",
+          "d": "Zhè jiàn yīfu wǒ kěyǐ shì yíxià ma?",
+          "v": "Tôi mặc thử cái áo này được không?"
+        },
+        {
+          "c": "你帮我看一下这个字。",
+          "d": "Nǐ bāng wǒ kàn yíxià zhège zì.",
+          "v": "Bạn xem giúp tôi chữ này một chút."
+        }
+      ],
+      "luuY": [
+        "一下 đứng SAU động từ: 等一下, không nói 一下等.",
+        "Chọn một trong hai: 看一下 hoặc 看看 — không nói 看看一下.",
+        "一下 (một lát, làm nhanh) khác 一点儿 (một ít — lượng đồ vật): 喝一下 (uống thử) ≠ 喝一点儿 (uống một ít)."
+      ],
+      "soSanh": [
+        "zh-hsk2-dong-tu-lap",
+        "zh-hsk2-youdianr-yidianr"
+      ],
+      "tuKhoa": [
+        "yixia",
+        "một chút",
+        "một lát",
+        "thử"
+      ],
+      "quiz": [
+        {
+          "h": "请你等我___，我去买一杯咖啡。",
+          "lc": [
+            "一点儿的",
+            "一下",
+            "一些个",
+            "一样"
+          ],
+          "da": 1,
+          "gt": "Làm trong thời gian ngắn: V + (đại từ) + 一下."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "我一下看你的书。",
+            "我看看一下你的书。",
+            "我看一下你的书。",
+            "我看你的一下书。"
+          ],
+          "da": 2,
+          "gt": "V + 一下 + O; không ghép với động từ lặp lại."
+        },
+        {
+          "h": "「我来介绍一下」 dùng khi nào?",
+          "lc": [
+            "Trước khi giới thiệu ai đó hoặc điều gì",
+            "Khi tạm biệt",
+            "Khi xin lỗi",
+            "Khi hỏi đường"
+          ],
+          "da": 0,
+          "gt": "介绍一下 = giới thiệu một chút — câu mở đầu lời giới thiệu."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk2-tinh-tu-lap",
+      "nhom": "Lặp lại động từ – tính từ",
+      "tieuDe": "Tính từ lặp lại (高高的 / 高高兴兴)",
+      "mau": "AA + 的 · AABB + 的 / 地",
+      "nghia": "rất ~ (miêu tả sinh động, có cảm xúc)",
+      "giaiThich": "Lặp lại tính từ để miêu tả sinh động hơn, mức độ khá cao và thường kèm thiện cảm. Một âm tiết: AA + 的; hai âm tiết: AABB. Dạng lặp cũng hay đứng trước động từ làm trạng ngữ (慢慢走, 好好学习).",
+      "cachGhep": [
+        "Một âm tiết: AA + 的 + danh từ / làm vị ngữ — 大大的眼睛, 高高的",
+        "Hai âm tiết: AABB — 高高兴兴, 漂漂亮亮, 干干净净",
+        "Làm trạng ngữ: AA + (地) + V — 慢慢走, 好好休息",
+        "Không thêm 很 / 非常 / 太 trước dạng lặp"
+      ],
+      "viDu": [
+        {
+          "c": "她的眼睛大大的。",
+          "d": "Tā de yǎnjing dàdà de.",
+          "v": "Mắt cô ấy to tròn."
+        },
+        {
+          "c": "孩子们高高兴兴地去学校了。",
+          "d": "Háizimen gāogāoxìngxìng de qù xuéxiào le.",
+          "v": "Lũ trẻ vui vẻ đi đến trường."
+        },
+        {
+          "c": "路上慢慢走。",
+          "d": "Lùshang mànmàn zǒu.",
+          "v": "Đi đường cứ từ từ nhé."
+        },
+        {
+          "c": "你生病了，要好好休息。",
+          "d": "Nǐ shēngbìng le, yào hǎohǎo xiūxi.",
+          "v": "Bạn ốm rồi, phải nghỉ ngơi cho tốt."
+        }
+      ],
+      "luuY": [
+        "Lỗi hay gặp: 很高高的, 非常漂漂亮亮 — dạng lặp đã mang nghĩa mức độ, không thêm phó từ mức độ.",
+        "Tính từ hai âm tiết lặp AABB (高高兴兴), động từ hai âm tiết lặp ABAB (休息休息) — đừng lẫn.",
+        "Dạng lặp làm vị ngữ / định ngữ cần 的 ở sau: 高高的 (không nói 他高高)."
+      ],
+      "soSanh": [
+        "zh-hsk2-dong-tu-lap"
+      ],
+      "tuKhoa": [
+        "tinh tu lap lai",
+        "trùng điệp tính từ",
+        "gaogao de",
+        "manman",
+        "haohao",
+        "aabb"
+      ],
+      "quiz": [
+        {
+          "h": "Dạng lặp lại đúng của tính từ 高兴 là:",
+          "lc": [
+            "高兴高兴兴",
+            "高高兴兴",
+            "高兴兴",
+            "高一高兴"
+          ],
+          "da": 1,
+          "gt": "Tính từ hai âm tiết lặp theo kiểu AABB."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "她的眼睛很大大的。",
+            "她的眼睛非常大大。",
+            "她的眼睛大大的。",
+            "她的眼睛大的大。"
+          ],
+          "da": 2,
+          "gt": "Dạng lặp không đi với 很 / 非常 và cần 的 ở sau."
+        },
+        {
+          "h": "请你___说，我没听懂。",
+          "lc": [
+            "慢慢",
+            "很慢慢",
+            "慢的慢",
+            "慢一下慢"
+          ],
+          "da": 0,
+          "gt": "Tính từ lặp lại làm trạng ngữ trước động từ: 慢慢说 (nói từ từ)."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk2-keyi",
+      "nhom": "Động từ năng nguyện",
+      "tieuDe": "可以",
+      "mau": "S + 可以 + V (+ O)",
+      "nghia": "có thể, được phép ~",
+      "giaiThich": "可以 đứng trước động từ, dùng nhiều nhất để xin phép và cho phép; cũng dùng để nói điều kiện cho phép làm một việc. Khi KHÔNG cho phép thì nói 不可以 hoặc 不能.",
+      "cachGhep": [
+        "Khẳng định: S + 可以 + V + O",
+        "Xin phép: 我可以 + V + 吗？ / 可以不可以…？ / 可不可以…？",
+        "Cấm, không cho phép: 不可以 / 不能 + V",
+        "Trả lời đồng ý: 可以。"
+      ],
+      "viDu": [
+        {
+          "c": "我可以坐这儿吗？",
+          "d": "Wǒ kěyǐ zuò zhèr ma?",
+          "v": "Tôi ngồi đây được không?"
+        },
+        {
+          "c": "你可以用我的电脑。",
+          "d": "Nǐ kěyǐ yòng wǒ de diànnǎo.",
+          "v": "Bạn có thể dùng máy tính của tôi."
+        },
+        {
+          "c": "这儿不可以打电话。",
+          "d": "Zhèr bù kěyǐ dǎ diànhuà.",
+          "v": "Ở đây không được gọi điện thoại."
+        },
+        {
+          "c": "你明天可以来吗？ — 可以。",
+          "d": "Nǐ míngtiān kěyǐ lái ma? — Kěyǐ.",
+          "v": "Ngày mai bạn đến được không? — Được."
+        }
+      ],
+      "luuY": [
+        "会 = biết làm nhờ học; 能 = có khả năng / điều kiện; 可以 = được phép. Xin phép dùng 可以 hoặc 能, không dùng 会.",
+        "Tiếng Việt nói \"ngồi đây ĐƯỢC không\" (chữ \"được\" ở sau); tiếng Trung đặt 可以 TRƯỚC động từ: 可以坐吗.",
+        "Muốn nói \"không thể (vì hoàn cảnh)\" thường dùng 不能 hơn là 不可以."
+      ],
+      "soSanh": [
+        "zh-hsk1-neng",
+        "zh-hsk1-hui",
+        "zh-hsk2-haoma"
+      ],
+      "tuKhoa": [
+        "keyi",
+        "có thể",
+        "được phép",
+        "xin phép",
+        "bu keyi"
+      ],
+      "quiz": [
+        {
+          "h": "老师，我___问一个问题吗？",
+          "lc": [
+            "可以",
+            "会不",
+            "应该的",
+            "要了"
+          ],
+          "da": 0,
+          "gt": "Xin phép làm gì: 我可以 + V + 吗？"
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "你用可以我的手机。",
+            "你可以用我的手机。",
+            "你用我的手机可以的吗。",
+            "可以你用我的手机吗了。"
+          ],
+          "da": 1,
+          "gt": "可以 đứng ngay trước động từ chính."
+        },
+        {
+          "h": "上课的时候___睡觉。 (không được phép)",
+          "lc": [
+            "不会",
+            "没有",
+            "不可以",
+            "不想"
+          ],
+          "da": 2,
+          "gt": "Không được phép: 不可以 / 不能. 不会 là \"không biết\", 不想 là \"không muốn\"."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk2-yao",
+      "nhom": "Động từ năng nguyện",
+      "tieuDe": "要 (muốn / phải, cần / sẽ)",
+      "mau": "S + 要 + V (+ O) · S + 要 + danh từ",
+      "nghia": "muốn ~ ; cần, phải ~ ; sẽ, định ~",
+      "giaiThich": "要 có ba nghĩa chính tuỳ ngữ cảnh: (1) muốn — ý muốn mạnh, đã quyết (mạnh hơn 想); (2) cần, phải làm; (3) sẽ, sắp làm theo kế hoạch. Là động từ thường, 要 + danh từ nghĩa là \"muốn lấy, cần\" (khi gọi món, mua hàng). Phủ định mỗi nghĩa một khác.",
+      "cachGhep": [
+        "Muốn: 要 + V → phủ định 不想 + V",
+        "Cần / phải: 要 + V → phủ định 不用 + V (không cần)",
+        "Sẽ: thời gian + 要 + V",
+        "要 + danh từ: 我要一杯茶",
+        "不要 + V = đừng (câu cấm đoán)"
+      ],
+      "viDu": [
+        {
+          "c": "我要学好汉语。",
+          "d": "Wǒ yào xuéhǎo Hànyǔ.",
+          "v": "Tôi muốn học tốt tiếng Trung."
+        },
+        {
+          "c": "我要一杯牛奶。",
+          "d": "Wǒ yào yì bēi niúnǎi.",
+          "v": "Tôi lấy một cốc sữa."
+        },
+        {
+          "c": "明天有考试，你要早点儿睡觉。",
+          "d": "Míngtiān yǒu kǎoshì, nǐ yào zǎo diǎnr shuìjiào.",
+          "v": "Ngày mai có bài thi, bạn phải ngủ sớm một chút."
+        },
+        {
+          "c": "下个月我要去北京旅游。",
+          "d": "Xià gè yuè wǒ yào qù Běijīng lǚyóu.",
+          "v": "Tháng sau tôi sẽ đi Bắc Kinh du lịch."
+        }
+      ],
+      "luuY": [
+        "\"Không muốn làm\" là 不想, KHÔNG phải 不要: 我不想去 (tôi không muốn đi). 不要去 thường bị hiểu là \"đừng đi\".",
+        "想 là mong muốn, còn cân nhắc; 要 là đã quyết, chắc chắn hơn.",
+        "要 đọc yào trong tất cả các nghĩa này."
+      ],
+      "soSanh": [
+        "zh-hsk1-xiang",
+        "zh-hsk2-yao-le",
+        "zh-hsk2-bie-buyao",
+        "zh-hsk2-dei"
+      ],
+      "tuKhoa": [
+        "yao",
+        "muốn",
+        "phải",
+        "cần",
+        "sẽ"
+      ],
+      "quiz": [
+        {
+          "h": "服务员，我___一杯咖啡。",
+          "lc": [
+            "会",
+            "要",
+            "得了",
+            "可能"
+          ],
+          "da": 1,
+          "gt": "Gọi món: 要 + số lượng + danh từ."
+        },
+        {
+          "h": "Phủ định tự nhiên của 「我要去商店」 (tôi muốn đi cửa hàng) là:",
+          "lc": [
+            "我不想去商店。",
+            "我没要去商店。",
+            "我要不去商店。",
+            "我不会去商店了吗。"
+          ],
+          "da": 0,
+          "gt": "要 nghĩa \"muốn\" phủ định bằng 不想; 不要 mang nghĩa \"đừng\"."
+        },
+        {
+          "h": "Trong câu 「你生病了，要多喝水」, 要 nghĩa là:",
+          "lc": [
+            "muốn",
+            "sắp",
+            "cần / nên",
+            "lấy"
+          ],
+          "da": 2,
+          "gt": "Lời khuyên với người ốm: 要 = cần, phải (uống nhiều nước)."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk2-keneng",
+      "nhom": "Động từ năng nguyện",
+      "tieuDe": "可能",
+      "mau": "S + 可能 + V / tính từ · 可能 + S + V",
+      "nghia": "có thể, có lẽ ~ (phỏng đoán)",
+      "giaiThich": "可能 nói lên sự phỏng đoán: một việc có khả năng xảy ra nhưng người nói không chắc. Đứng trước động từ / tính từ hoặc ở đầu câu; thường kết hợp với 会, 要, 不 ở sau.",
+      "cachGhep": [
+        "S + 可能 + V / tính từ",
+        "可能 + S + V (đầu câu)",
+        "可能 + 不 / 没 + V: có lẽ không",
+        "可能 + 会 + V: có lẽ sẽ",
+        "不可能: không thể nào"
+      ],
+      "viDu": [
+        {
+          "c": "他今天没来，可能生病了。",
+          "d": "Tā jīntiān méi lái, kěnéng shēngbìng le.",
+          "v": "Hôm nay anh ấy không đến, có lẽ bị ốm rồi."
+        },
+        {
+          "c": "明天可能下雨。",
+          "d": "Míngtiān kěnéng xià yǔ.",
+          "v": "Ngày mai có thể mưa."
+        },
+        {
+          "c": "她可能不知道这件事。",
+          "d": "Tā kěnéng bù zhīdào zhè jiàn shì.",
+          "v": "Có lẽ cô ấy không biết việc này."
+        },
+        {
+          "c": "他可能已经回家了。",
+          "d": "Tā kěnéng yǐjīng huí jiā le.",
+          "v": "Có lẽ anh ấy đã về nhà rồi."
+        }
+      ],
+      "luuY": [
+        "Tiếng Việt dùng \"có thể\" cho cả khả năng (能), sự cho phép (可以) lẫn phỏng đoán (可能). \"Ngày mai có thể mưa\" phải là 可能, không phải 可以 / 能.",
+        "可能不 = có lẽ không; 不可能 = không thể nào (khẳng định chắc) — nghĩa khác hẳn."
+      ],
+      "soSanh": [
+        "zh-hsk2-keyi",
+        "zh-hsk2-ba-phong-doan"
+      ],
+      "tuKhoa": [
+        "keneng",
+        "có lẽ",
+        "có thể",
+        "phỏng đoán",
+        "bu keneng"
+      ],
+      "quiz": [
+        {
+          "h": "天阴了，下午___下雨。",
+          "lc": [
+            "可以的",
+            "会说",
+            "可能",
+            "想了"
+          ],
+          "da": 2,
+          "gt": "Phỏng đoán thời tiết: 可能 + V."
+        },
+        {
+          "h": "「他可能不来」 nghĩa là:",
+          "lc": [
+            "Anh ấy không thể nào đến.",
+            "Có lẽ anh ấy không đến.",
+            "Anh ấy không được phép đến.",
+            "Anh ấy không muốn đến."
+          ],
+          "da": 1,
+          "gt": "可能不 + V = có lẽ không. (不可能 mới là \"không thể nào\".)"
+        },
+        {
+          "h": "Câu nào dùng \"có thể\" theo nghĩa PHỎNG ĐOÁN?",
+          "lc": [
+            "她可能在家。",
+            "我可以进来吗？",
+            "我会游泳。",
+            "你能帮我吗？"
+          ],
+          "da": 0,
+          "gt": "可能 = có lẽ; 可以 xin phép, 会 kỹ năng, 能 khả năng / nhờ vả."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk2-yinggai",
+      "nhom": "Động từ năng nguyện",
+      "tieuDe": "应该",
+      "mau": "S + 应该 + V (+ O)",
+      "nghia": "nên, cần phải ~ (theo lẽ thường, lời khuyên)",
+      "giaiThich": "应该 đứng trước động từ để nói việc gì là nên làm, đúng ra phải làm theo lẽ thường hoặc đạo lý; hay dùng để khuyên. Phủ định là 不应该 (không nên). Ngoài ra còn dùng để phỏng đoán có căn cứ: \"chắc là, lẽ ra\".",
+      "cachGhep": [
+        "S + 应该 + V + O",
+        "Phủ định: S + 不应该 + V",
+        "Câu hỏi: 应该…吗？ / 应不应该…？",
+        "Phỏng đoán: 他应该到了 (chắc là anh ấy đến rồi)"
+      ],
+      "viDu": [
+        {
+          "c": "你应该多运动。",
+          "d": "Nǐ yīnggāi duō yùndòng.",
+          "v": "Bạn nên vận động nhiều hơn."
+        },
+        {
+          "c": "学生应该好好学习。",
+          "d": "Xuésheng yīnggāi hǎohǎo xuéxí.",
+          "v": "Học sinh nên học hành chăm chỉ."
+        },
+        {
+          "c": "你不应该说这样的话。",
+          "d": "Nǐ bù yīnggāi shuō zhèyàng de huà.",
+          "v": "Bạn không nên nói những lời như vậy."
+        },
+        {
+          "c": "已经九点了，他应该到公司了。",
+          "d": "Yǐjīng jiǔ diǎn le, tā yīnggāi dào gōngsī le.",
+          "v": "Đã 9 giờ rồi, chắc là anh ấy đến công ty rồi."
+        }
+      ],
+      "luuY": [
+        "应该 là \"nên\" (lời khuyên, lẽ phải); 得 (děi) là \"phải\" (bắt buộc do hoàn cảnh) — mạnh hơn.",
+        "\"Nên làm NHIỀU hơn\": 多 đứng TRƯỚC động từ — 应该多运动, 多喝水 (không nói 运动多)."
+      ],
+      "soSanh": [
+        "zh-hsk2-dei",
+        "zh-hsk2-yao",
+        "zh-hsk3-yinggai"
+      ],
+      "tuKhoa": [
+        "yinggai",
+        "nên",
+        "cần phải",
+        "bu yinggai",
+        "lẽ ra"
+      ],
+      "quiz": [
+        {
+          "h": "你身体不好，___多休息。",
+          "lc": [
+            "没有",
+            "应该",
+            "可能的",
+            "过"
+          ],
+          "da": 1,
+          "gt": "Lời khuyên: 应该 + V."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "你应该喝水多。",
+            "你喝应该多水。",
+            "应该你多水喝。",
+            "你应该多喝水。"
+          ],
+          "da": 3,
+          "gt": "应该 trước động từ; 多 đứng ngay trước động từ: 多喝水."
+        },
+        {
+          "h": "\"Không nên\" là:",
+          "lc": [
+            "不应该",
+            "没应该",
+            "应该没",
+            "应不该"
+          ],
+          "da": 0,
+          "gt": "Phủ định của 应该 dùng 不 đặt phía trước: 不应该."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk2-dei",
+      "nhom": "Động từ năng nguyện",
+      "tieuDe": "得 (děi)",
+      "mau": "S + 得 + V (+ O)",
+      "nghia": "phải ~ (bắt buộc do hoàn cảnh; khẩu ngữ)",
+      "giaiThich": "得 đọc là děi, đứng TRƯỚC động từ, nghĩa là \"phải, cần phải\" làm gì do hoàn cảnh bắt buộc; dùng nhiều trong khẩu ngữ. Không có dạng phủ định 不得 theo nghĩa này — \"không cần phải\" nói là 不用.",
+      "cachGhep": [
+        "S + 得 (děi) + V + O",
+        "Phủ định: S + 不用 + V (không cần)",
+        "Có thời gian: S + thời gian + 得 + V"
+      ],
+      "viDu": [
+        {
+          "c": "太晚了，我得回家了。",
+          "d": "Tài wǎn le, wǒ děi huí jiā le.",
+          "v": "Muộn quá rồi, tôi phải về nhà thôi."
+        },
+        {
+          "c": "明天有考试，今天晚上我得好好准备。",
+          "d": "Míngtiān yǒu kǎoshì, jīntiān wǎnshang wǒ děi hǎohǎo zhǔnbèi.",
+          "v": "Ngày mai có bài thi, tối nay tôi phải chuẩn bị kỹ."
+        },
+        {
+          "c": "你生病了，得去医院看看。",
+          "d": "Nǐ shēngbìng le, děi qù yīyuàn kànkan.",
+          "v": "Bạn ốm rồi, phải đi bệnh viện khám xem."
+        },
+        {
+          "c": "明天是星期天，你不用早起。",
+          "d": "Míngtiān shì xīngqītiān, nǐ búyòng zǎo qǐ.",
+          "v": "Ngày mai là Chủ nhật, bạn không cần dậy sớm."
+        }
+      ],
+      "luuY": [
+        "Cùng một chữ 得 nhưng hai cách đọc: 得 (děi) + ĐỘNG TỪ = phải; ĐỘNG TỪ + 得 (de) = bổ ngữ (说得很好). Nhìn vị trí để đọc đúng.",
+        "Không nói 不得 để phủ định; dùng 不用 (không cần)."
+      ],
+      "soSanh": [
+        "zh-hsk2-de-trang-thai",
+        "zh-hsk2-yinggai",
+        "zh-hsk2-yao"
+      ],
+      "tuKhoa": [
+        "dei",
+        "phải",
+        "cần phải",
+        "buyong",
+        "bắt buộc"
+      ],
+      "quiz": [
+        {
+          "h": "Trong câu nào 得 đọc là děi?",
+          "lc": [
+            "他跑得很快。",
+            "我得去上班了。",
+            "她唱得很好。",
+            "你说得对。"
+          ],
+          "da": 1,
+          "gt": "得 đứng TRƯỚC động từ (去) = phải, đọc děi; ba câu kia 得 đứng sau động từ, đọc de."
+        },
+        {
+          "h": "已经十二点了，我___睡觉了。",
+          "lc": [
+            "过",
+            "着",
+            "得",
+            "的"
+          ],
+          "da": 2,
+          "gt": "Hoàn cảnh bắt buộc (đã 12 giờ): 得 + V = phải đi ngủ."
+        },
+        {
+          "h": "\"Bạn không cần đến\" là:",
+          "lc": [
+            "你不用来。",
+            "你不得来。",
+            "你没得来。",
+            "你来不得。"
+          ],
+          "da": 0,
+          "gt": "得 (děi) không phủ định bằng 不得; \"không cần\" là 不用."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk2-bie-buyao",
+      "nhom": "Động từ năng nguyện",
+      "tieuDe": "别 / 不要 (đừng)",
+      "mau": "别 / 不要 + V (+ O) (+ 了)",
+      "nghia": "đừng ~",
+      "giaiThich": "别 và 不要 đặt trước động từ để khuyên ngăn hoặc cấm ai làm gì. 别 thân mật, dùng nhiều trong khẩu ngữ; 不要 hơi trang trọng hơn. Thêm 了 ở cuối (别…了) là bảo dừng một việc ĐANG làm: \"đừng … nữa\".",
+      "cachGhep": [
+        "别 + V + O",
+        "不要 + V + O",
+        "别 / 不要 + V + 了: đừng … nữa",
+        "Lịch sự hơn: 请 + 不要 + V"
+      ],
+      "viDu": [
+        {
+          "c": "别说话！",
+          "d": "Bié shuōhuà!",
+          "v": "Đừng nói chuyện!"
+        },
+        {
+          "c": "上课的时候不要玩手机。",
+          "d": "Shàngkè de shíhou búyào wán shǒujī.",
+          "v": "Trong giờ học đừng nghịch điện thoại."
+        },
+        {
+          "c": "别看电视了，快去睡觉吧。",
+          "d": "Bié kàn diànshì le, kuài qù shuìjiào ba.",
+          "v": "Đừng xem ti vi nữa, mau đi ngủ đi."
+        },
+        {
+          "c": "请不要在这儿打电话。",
+          "d": "Qǐng búyào zài zhèr dǎ diànhuà.",
+          "v": "Xin đừng gọi điện thoại ở đây."
+        }
+      ],
+      "luuY": [
+        "别 đứng ngay trước động từ, câu thường không cần chủ ngữ: 别去 (không nói 去别).",
+        "不要 + V là \"đừng\", còn \"không muốn\" là 不想 — dễ nhầm vì 要 có nghĩa \"muốn\".",
+        "别 không dùng cùng 不 hay 没: không nói 别不去 ở trình độ này."
+      ],
+      "soSanh": [
+        "zh-hsk2-yao"
+      ],
+      "tuKhoa": [
+        "bie",
+        "buyao",
+        "đừng",
+        "cấm",
+        "bie le"
+      ],
+      "quiz": [
+        {
+          "h": "天气很冷，___穿这么少。",
+          "lc": [
+            "没",
+            "别",
+            "很",
+            "过"
+          ],
+          "da": 1,
+          "gt": "Khuyên ngăn: 别 + V."
+        },
+        {
+          "h": "「别说了」 nghĩa là:",
+          "lc": [
+            "Đừng nói nữa.",
+            "Chưa nói.",
+            "Không muốn nói.",
+            "Sắp nói rồi."
+          ],
+          "da": 0,
+          "gt": "别 + V + 了 = bảo dừng việc đang làm: đừng … nữa."
+        },
+        {
+          "h": "Câu nào là lời CẤM / khuyên ngăn?",
+          "lc": [
+            "我不想喝咖啡。",
+            "他没喝咖啡。",
+            "我不会喝咖啡了吗？",
+            "你不要喝咖啡。"
+          ],
+          "da": 3,
+          "gt": "不要 + V = đừng; 不想 là không muốn, 没 là đã không."
+        }
+      ]
+    }
+  ]
+}

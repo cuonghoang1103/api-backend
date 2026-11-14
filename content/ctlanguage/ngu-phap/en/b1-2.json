@@ -1,0 +1,1486 @@
+{
+  "nn": "en",
+  "cap": "B1",
+  "diem": [
+    {
+      "id": "en-b1-passive-simple",
+      "nhom": "Bị động",
+      "tieuDe": "Passive (hiện tại đơn / quá khứ đơn)",
+      "mau": "S + am/is/are + V3 (+ by…) · S + was/were + V3 (+ by…)",
+      "nghia": "được / bị ~ (không cần nói ai làm)",
+      "giaiThich": "Dùng câu bị động khi điều quan trọng là việc gì xảy ra với ai / cái gì, còn người làm thì không biết, không quan trọng hoặc ai cũng hiểu. Tân ngữ của câu chủ động lên làm chủ ngữ. Muốn nêu người làm thì thêm by + người.",
+      "cachGhep": [
+        "Hiện tại đơn: am/is/are + V3",
+        "Quá khứ đơn: was/were + V3",
+        "Phủ định: isn't / aren't / wasn't / weren't + V3",
+        "Câu hỏi: Is/Are/Was/Were + S + V3? · Where/When + be + S + V3?"
+      ],
+      "viDu": [
+        {
+          "c": "English is spoken in many countries.",
+          "v": "Tiếng Anh được nói ở nhiều nước."
+        },
+        {
+          "c": "This bridge was built in 1990.",
+          "v": "Cây cầu này được xây năm 1990."
+        },
+        {
+          "c": "The windows aren't cleaned every day.",
+          "v": "Cửa sổ không được lau mỗi ngày."
+        },
+        {
+          "c": "Where were these photos taken?",
+          "v": "Những bức ảnh này được chụp ở đâu?"
+        }
+      ],
+      "luuY": [
+        "Tiếng Việt hay nói 'Ngôi nhà này xây năm 1990' không cần 'được', nên người Việt dễ quên bị động: 'This house built in 1990' là sai, phải có was.",
+        "Động từ chính luôn ở dạng V3, kể cả ở hiện tại: 'is made', không nói 'is make'.",
+        "Chỉ thêm by khi người làm là thông tin đáng nói; 'by someone', 'by people' thì bỏ."
+      ],
+      "soSanh": [
+        "en-b1-passive-other-tenses",
+        "en-b1-have-something-done"
+      ],
+      "tuKhoa": [
+        "bị động",
+        "passive voice",
+        "be V3",
+        "câu bị động",
+        "cau bi dong"
+      ],
+      "quiz": [
+        {
+          "h": "English ___ in many countries.",
+          "lc": [
+            "is speaking",
+            "speaks",
+            "spoke",
+            "is spoken"
+          ],
+          "da": 3,
+          "gt": "Tiếng Anh 'được nói' ⇒ bị động hiện tại đơn: is + V3."
+        },
+        {
+          "h": "This bridge ___ in 1990.",
+          "lc": [
+            "is built",
+            "was built",
+            "built",
+            "has built"
+          ],
+          "da": 1,
+          "gt": "Cây cầu được xây vào một năm trong quá khứ ⇒ was + V3."
+        },
+        {
+          "h": "The windows ___ every week.",
+          "lc": [
+            "is cleaned",
+            "clean",
+            "are cleaned",
+            "are cleaning"
+          ],
+          "da": 2,
+          "gt": "Chủ ngữ số nhiều, việc lặp lại ở hiện tại ⇒ are + V3."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-passive-other-tenses",
+      "nhom": "Bị động",
+      "tieuDe": "Passive ở các thì khác và với modal",
+      "mau": "be (chia theo thì) + V3 · modal + be + V3",
+      "nghia": "đang được ~ / đã được ~ / sẽ được ~ / phải được ~",
+      "giaiThich": "Muốn đổi sang bị động ở thì nào thì chia động từ be ở thì đó rồi thêm V3. Với động từ khuyết thiếu (can, must, should, will…) dùng be + V3 ngay sau modal. Dùng trong cùng hoàn cảnh như bị động thường: nhấn vào việc, không nhấn người làm.",
+      "cachGhep": [
+        "Hiện tại tiếp diễn: am/is/are + being + V3",
+        "Quá khứ tiếp diễn: was/were + being + V3",
+        "Hiện tại hoàn thành: have/has + been + V3",
+        "Tương lai: will + be + V3 · be going to + be + V3",
+        "Modal: can / must / should / might + be + V3"
+      ],
+      "viDu": [
+        {
+          "c": "The room is being cleaned right now.",
+          "v": "Căn phòng đang được dọn ngay lúc này."
+        },
+        {
+          "c": "My bike has been stolen.",
+          "v": "Xe đạp của tôi bị lấy trộm mất rồi."
+        },
+        {
+          "c": "The results will be announced tomorrow.",
+          "v": "Kết quả sẽ được công bố vào ngày mai."
+        },
+        {
+          "c": "This report must be finished by Friday.",
+          "v": "Bản báo cáo này phải được hoàn thành trước thứ Sáu."
+        }
+      ],
+      "luuY": [
+        "Dễ thiếu being / been: 'The room is cleaning' và 'My bike has stolen' đều sai.",
+        "Sau modal luôn là be nguyên mẫu: 'must be done', không nói 'must is done' hay 'must done'."
+      ],
+      "soSanh": [
+        "en-b1-passive-simple",
+        "en-b2-passive-reporting"
+      ],
+      "tuKhoa": [
+        "bị động các thì",
+        "is being done",
+        "has been done",
+        "modal passive",
+        "must be done"
+      ],
+      "quiz": [
+        {
+          "h": "The report must ___ by Friday.",
+          "lc": [
+            "be finished",
+            "finished",
+            "finish",
+            "be finishing"
+          ],
+          "da": 0,
+          "gt": "Bị động với modal: must + be + V3."
+        },
+        {
+          "h": "The room ___ right now.",
+          "lc": [
+            "cleans",
+            "is cleaning",
+            "is being cleaned",
+            "has cleaned"
+          ],
+          "da": 2,
+          "gt": "Đang được dọn lúc này ⇒ bị động hiện tại tiếp diễn: is being + V3."
+        },
+        {
+          "h": "My bike ___. I can't find it anywhere.",
+          "lc": [
+            "stole",
+            "has stolen",
+            "has been stolen",
+            "is stealing"
+          ],
+          "da": 2,
+          "gt": "Xe bị lấy trộm, kết quả còn ở hiện tại ⇒ has been + V3."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-have-something-done",
+      "nhom": "Bị động",
+      "tieuDe": "have something done",
+      "mau": "S + have + tân ngữ (vật) + V3",
+      "nghia": "nhờ / thuê người khác làm ~ cho mình",
+      "giaiThich": "Dùng khi mình không tự làm mà sắp xếp cho người khác (thường là thợ, dịch vụ) làm giúp. have chia theo thì cần dùng, động từ chính luôn ở V3 và đứng SAU tân ngữ.",
+      "cachGhep": [
+        "have/has + vật + V3 (hiện tại) · had + vật + V3 (quá khứ)",
+        "am/is/are having + vật + V3 · will have + vật + V3",
+        "Câu hỏi / phủ định dùng trợ động từ: Did you have your hair cut? · I didn't have it repaired."
+      ],
+      "viDu": [
+        {
+          "c": "I had my hair cut yesterday.",
+          "v": "Hôm qua tôi đi cắt tóc."
+        },
+        {
+          "c": "She is having her car repaired.",
+          "v": "Cô ấy đang mang xe đi sửa."
+        },
+        {
+          "c": "We have the house cleaned once a week.",
+          "v": "Mỗi tuần một lần chúng tôi thuê người dọn nhà."
+        },
+        {
+          "c": "Where did you have your phone fixed?",
+          "v": "Bạn mang điện thoại đi sửa ở đâu vậy?"
+        }
+      ],
+      "luuY": [
+        "Tiếng Việt nói 'tôi cắt tóc', 'tôi sửa xe' dù người khác làm. 'I cut my hair' nghĩa là tự mình cắt.",
+        "Trật tự: 'I had my computer fixed' (thợ sửa) khác với 'I had fixed my computer' (quá khứ hoàn thành: tôi tự sửa xong trước đó)."
+      ],
+      "soSanh": [
+        "en-b1-passive-simple",
+        "en-b2-causative-get"
+      ],
+      "tuKhoa": [
+        "have something done",
+        "causative",
+        "nhờ làm",
+        "have my hair cut",
+        "thể nhờ bảo"
+      ],
+      "quiz": [
+        {
+          "h": "I ___ my hair cut yesterday.",
+          "lc": [
+            "was",
+            "made",
+            "had",
+            "did"
+          ],
+          "da": 2,
+          "gt": "Nhờ người khác cắt tóc trong quá khứ: had + vật + V3."
+        },
+        {
+          "h": "She is having her car ___.",
+          "lc": [
+            "repaired",
+            "to repair",
+            "repair",
+            "repairing"
+          ],
+          "da": 0,
+          "gt": "Sau have + vật là V3 (repaired)."
+        },
+        {
+          "h": "Câu nào nghĩa là 'thợ sửa máy tính cho tôi'?",
+          "lc": [
+            "I had my computer fixed.",
+            "I had fixed my computer.",
+            "I fixed my computer."
+          ],
+          "da": 0,
+          "gt": "have + vật + V3 = nhờ người khác làm; hai câu kia là tự mình sửa."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-reported-statements",
+      "nhom": "Câu tường thuật",
+      "tieuDe": "Reported speech (câu kể)",
+      "mau": "S + said (that) + S + V (lùi một thì)",
+      "nghia": "(ai đó) nói rằng ~",
+      "giaiThich": "Dùng để thuật lại lời người khác mà không trích nguyên văn. Khi động từ tường thuật ở quá khứ (said, told), động từ trong lời nói thường lùi một thì; đại từ và từ chỉ thời gian, nơi chốn đổi theo góc nhìn của người thuật lại.",
+      "cachGhep": [
+        "Hiện tại đơn → quá khứ đơn · hiện tại tiếp diễn → quá khứ tiếp diễn",
+        "Quá khứ đơn / hiện tại hoàn thành → quá khứ hoàn thành",
+        "will → would · can → could · may → might · must → had to",
+        "Đại từ: I → he/she, my → his/her…",
+        "Thời gian, nơi chốn: now → then · today → that day · yesterday → the day before · tomorrow → the next day · here → there"
+      ],
+      "viDu": [
+        {
+          "c": "She said that she was tired.",
+          "v": "Cô ấy nói rằng cô ấy mệt. (lời gốc: I am tired.)"
+        },
+        {
+          "c": "He said he would call me the next day.",
+          "v": "Anh ấy nói hôm sau sẽ gọi cho tôi. (lời gốc: I will call you tomorrow.)"
+        },
+        {
+          "c": "They told us they had already eaten.",
+          "v": "Họ bảo chúng tôi là họ đã ăn rồi. (lời gốc: We have already eaten.)"
+        },
+        {
+          "c": "Lan said she couldn't come to the party.",
+          "v": "Lan nói cô ấy không đến dự tiệc được. (lời gốc: I can't come.)"
+        }
+      ],
+      "luuY": [
+        "Tiếng Việt không đổi dạng động từ khi thuật lại, nên người Việt hay quên lùi thì: 'She said she is tired', 'He said he will call' — trong bài thi cần lùi thành was, would.",
+        "Nhớ đổi cả đại từ: 'I love my job' → He said he loved his job.",
+        "Nếu điều được nói vẫn luôn đúng thì có thể giữ thì hiện tại: 'He said the Earth goes around the Sun'."
+      ],
+      "soSanh": [
+        "en-b1-say-vs-tell",
+        "en-b1-reported-questions",
+        "en-b1-reported-commands",
+        "en-b2-reporting-verbs"
+      ],
+      "tuKhoa": [
+        "câu tường thuật",
+        "reported speech",
+        "câu gián tiếp",
+        "lùi thì",
+        "said that"
+      ],
+      "quiz": [
+        {
+          "h": "'I am tired.' → She said she ___ tired.",
+          "lc": [
+            "was",
+            "has been",
+            "will be",
+            "be"
+          ],
+          "da": 0,
+          "gt": "Hiện tại đơn (am) lùi thành quá khứ đơn (was)."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "He told that he was busy.",
+            "He said that he busy.",
+            "He said me that he was busy.",
+            "He said that he was busy."
+          ],
+          "da": 3,
+          "gt": "said không đi thẳng với tân ngữ chỉ người; told thì bắt buộc có người; câu 'he busy' thiếu động từ."
+        },
+        {
+          "h": "'I will call you.' → He said he ___ call me.",
+          "lc": [
+            "did",
+            "is",
+            "would",
+            "has"
+          ],
+          "da": 2,
+          "gt": "will lùi thành would trong câu tường thuật."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-reported-questions",
+      "nhom": "Câu tường thuật",
+      "tieuDe": "Reported questions",
+      "mau": "S + asked (+ O) + if/whether hoặc từ hỏi + S + V (lùi thì)",
+      "nghia": "(ai đó) hỏi (tôi) rằng ~",
+      "giaiThich": "Dùng để thuật lại một câu hỏi. Phần sau asked có trật tự của câu kể (chủ ngữ đứng trước động từ), không dùng do/does/did và không có dấu hỏi. Câu hỏi Yes/No dùng if hoặc whether; câu hỏi có từ hỏi thì giữ từ hỏi.",
+      "cachGhep": [
+        "Yes/No: asked (+ O) + if/whether + S + V",
+        "Wh-: asked (+ O) + what/where/when/why/how + S + V",
+        "Lùi thì và đổi đại từ như câu tường thuật thường",
+        "Bỏ trợ động từ do/does/did của câu hỏi gốc"
+      ],
+      "viDu": [
+        {
+          "c": "He asked me where I lived.",
+          "v": "Anh ấy hỏi tôi sống ở đâu. (lời gốc: Where do you live?)"
+        },
+        {
+          "c": "She asked if I was hungry.",
+          "v": "Cô ấy hỏi tôi có đói không. (lời gốc: Are you hungry?)"
+        },
+        {
+          "c": "They asked us what time the movie started.",
+          "v": "Họ hỏi chúng tôi mấy giờ phim bắt đầu."
+        },
+        {
+          "c": "I asked her whether she could help me.",
+          "v": "Tôi hỏi cô ấy liệu có thể giúp tôi không."
+        }
+      ],
+      "luuY": [
+        "Lỗi phổ biến nhất: giữ trật tự câu hỏi — 'He asked me where did I live', 'She asked what time was it' đều sai.",
+        "Không dùng that để thuật lại câu hỏi Yes/No: 'She asked that I was hungry' là sai, phải dùng if / whether."
+      ],
+      "soSanh": [
+        "en-b1-reported-statements",
+        "en-b1-indirect-questions"
+      ],
+      "tuKhoa": [
+        "câu hỏi tường thuật",
+        "asked if",
+        "asked whether",
+        "reported questions",
+        "câu hỏi gián tiếp"
+      ],
+      "quiz": [
+        {
+          "h": "'Where do you live?' → He asked me where ___.",
+          "lc": [
+            "do I live",
+            "I did lived",
+            "I lived",
+            "did I live"
+          ],
+          "da": 2,
+          "gt": "Trật tự câu kể (S + V), bỏ do, lùi thì: where I lived."
+        },
+        {
+          "h": "'Are you hungry?' → She asked ___ I was hungry.",
+          "lc": [
+            "that",
+            "if",
+            "what",
+            "do"
+          ],
+          "da": 1,
+          "gt": "Thuật lại câu hỏi Yes/No dùng if hoặc whether."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "She asked me what time it was.",
+            "She asked me what time was it.",
+            "She asked me what time is it.",
+            "She asked me what time did it be."
+          ],
+          "da": 0,
+          "gt": "Sau từ hỏi là chủ ngữ rồi mới tới động từ, và lùi thì: what time it was."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-reported-commands",
+      "nhom": "Câu tường thuật",
+      "tieuDe": "Reported commands / requests",
+      "mau": "S + told / asked + O + (not) to + V",
+      "nghia": "bảo / nhờ / yêu cầu ai (đừng) làm ~",
+      "giaiThich": "Dùng để thuật lại câu mệnh lệnh hoặc lời nhờ vả. Mệnh lệnh dùng told, lời nhờ lịch sự dùng asked; sau tân ngữ chỉ người là to + V. Phủ định đặt not trước to.",
+      "cachGhep": [
+        "Mệnh lệnh: told + người + to V",
+        "Lời nhờ: asked + người + to V",
+        "Phủ định: told / asked + người + not to V",
+        "Không lùi thì vì to V không chia thì"
+      ],
+      "viDu": [
+        {
+          "c": "The teacher told us to sit down.",
+          "v": "Giáo viên bảo chúng tôi ngồi xuống. (lời gốc: Sit down.)"
+        },
+        {
+          "c": "She told me not to touch it.",
+          "v": "Cô ấy bảo tôi đừng chạm vào nó. (lời gốc: Don't touch it.)"
+        },
+        {
+          "c": "He asked me to open the window.",
+          "v": "Anh ấy nhờ tôi mở cửa sổ. (lời gốc: Could you open the window, please?)"
+        },
+        {
+          "c": "My mom asked me not to come home late.",
+          "v": "Mẹ dặn tôi đừng về nhà muộn."
+        }
+      ],
+      "luuY": [
+        "Bắt buộc có tân ngữ chỉ người sau told: 'He told to sit down' là sai.",
+        "Vị trí not: 'told me not to go' (not đứng trước to); không nói 'told me don't go'.",
+        "Không dùng 'said me to…'; say không dùng trong mẫu này."
+      ],
+      "soSanh": [
+        "en-b1-reported-statements",
+        "en-b1-say-vs-tell",
+        "en-b1-verb-object-infinitive"
+      ],
+      "tuKhoa": [
+        "tell sb to do",
+        "ask sb to do",
+        "tường thuật mệnh lệnh",
+        "told me not to",
+        "câu mệnh lệnh gián tiếp"
+      ],
+      "quiz": [
+        {
+          "h": "'Don't touch it.' → She told me ___ it.",
+          "lc": [
+            "not to touch",
+            "didn't touch",
+            "don't touch",
+            "not touching"
+          ],
+          "da": 0,
+          "gt": "Mệnh lệnh phủ định: told + người + not to + V."
+        },
+        {
+          "h": "'Sit down.' → The teacher told us ___.",
+          "lc": [
+            "to sit down",
+            "sat down",
+            "sit down",
+            "sitting down"
+          ],
+          "da": 0,
+          "gt": "told + người + to V."
+        },
+        {
+          "h": "'Could you open the window, please?' → He ___ me to open the window.",
+          "lc": [
+            "spoke",
+            "asked",
+            "said",
+            "talked"
+          ],
+          "da": 1,
+          "gt": "Lời nhờ lịch sự thuật lại bằng asked + người + to V; said/spoke/talked không dùng mẫu này."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-say-vs-tell",
+      "nhom": "Câu tường thuật",
+      "tieuDe": "say vs tell",
+      "mau": "say (+ to sb) + (that)… · tell + sb + (that)…",
+      "nghia": "phân biệt 'nói (điều gì)' và 'nói với / bảo (ai)'",
+      "giaiThich": "say tập trung vào lời được nói ra và không đi thẳng với tân ngữ chỉ người (muốn có thì dùng say to sb). tell luôn cần người nghe đứng ngay sau. Một số cụm cố định chỉ dùng tell: tell the truth, tell a lie, tell a story, tell the time.",
+      "cachGhep": [
+        "say + (that) + mệnh đề: He said (that) he was late.",
+        "say + something + to + người",
+        "tell + người + (that) + mệnh đề",
+        "tell + người + to V · tell + người + about + N"
+      ],
+      "viDu": [
+        {
+          "c": "He said that he would be late.",
+          "v": "Anh ấy nói là anh ấy sẽ đến muộn."
+        },
+        {
+          "c": "She told me that she was busy.",
+          "v": "Cô ấy bảo tôi là cô ấy bận."
+        },
+        {
+          "c": "What did you say to him?",
+          "v": "Bạn đã nói gì với anh ấy?"
+        },
+        {
+          "c": "Can you tell me the truth?",
+          "v": "Bạn nói thật với tôi được không?"
+        }
+      ],
+      "luuY": [
+        "Lỗi hay gặp do dịch 'nói với tôi': 'He said me…' (sai) → 'He told me…' hoặc 'He said to me…'.",
+        "Ngược lại 'He told that…' thiếu người nghe, cũng sai.",
+        "speak / talk nói về hành động trò chuyện, không dùng để thuật lại nội dung: không nói 'He spoke that…'."
+      ],
+      "soSanh": [
+        "en-b1-reported-statements",
+        "en-b1-reported-commands"
+      ],
+      "tuKhoa": [
+        "say tell",
+        "nói bảo",
+        "said told",
+        "tell the truth",
+        "phân biệt say tell"
+      ],
+      "quiz": [
+        {
+          "h": "He ___ that he would be late.",
+          "lc": [
+            "told",
+            "said",
+            "tell",
+            "telled"
+          ],
+          "da": 1,
+          "gt": "Không có người nghe ngay sau động từ nên dùng said."
+        },
+        {
+          "h": "She ___ me that she was busy.",
+          "lc": [
+            "said",
+            "spoke",
+            "talked",
+            "told"
+          ],
+          "da": 3,
+          "gt": "Có tân ngữ chỉ người (me) đứng ngay sau nên dùng told."
+        },
+        {
+          "h": "Can you ___ me the truth?",
+          "lc": [
+            "speak",
+            "say",
+            "talk",
+            "tell"
+          ],
+          "da": 3,
+          "gt": "Cụm cố định là tell (sb) the truth."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-relative-defining",
+      "nhom": "Mệnh đề quan hệ",
+      "tieuDe": "Mệnh đề quan hệ xác định",
+      "mau": "N + who / which / that + mệnh đề",
+      "nghia": "người mà ~ / cái mà ~ (cho biết đang nói tới người, vật nào)",
+      "giaiThich": "Mệnh đề quan hệ xác định đứng ngay sau danh từ để cho biết đó là người nào, vật nào; bỏ đi thì câu không còn rõ nghĩa. Dùng who hoặc that cho người, which hoặc that cho vật, và không có dấu phẩy.",
+      "cachGhep": [
+        "Người: who / that",
+        "Vật, con vật: which / that",
+        "Đại từ quan hệ thay cho chủ ngữ hoặc tân ngữ của mệnh đề phụ, nên không lặp lại he/she/it/them"
+      ],
+      "viDu": [
+        {
+          "c": "The man who lives next door is a doctor.",
+          "v": "Người đàn ông sống ở nhà bên cạnh là bác sĩ."
+        },
+        {
+          "c": "This is the book which I bought yesterday.",
+          "v": "Đây là cuốn sách tôi mua hôm qua."
+        },
+        {
+          "c": "I don't like movies that have sad endings.",
+          "v": "Tôi không thích những bộ phim có kết thúc buồn."
+        },
+        {
+          "c": "Is she the teacher who taught you English?",
+          "v": "Cô ấy có phải là giáo viên đã dạy bạn tiếng Anh không?"
+        }
+      ],
+      "luuY": [
+        "Không lặp đại từ: 'The girl who she sits next to me' và 'the book which I bought it' đều sai.",
+        "Tiếng Việt có thể bỏ chữ 'mà', nhưng khi đại từ quan hệ làm chủ ngữ thì tiếng Anh không bỏ được: 'The man lives next door is a doctor' là sai.",
+        "Không dùng what thay cho which / that sau danh từ."
+      ],
+      "soSanh": [
+        "en-b1-relative-non-defining",
+        "en-b1-relative-omit-pronoun",
+        "en-b1-relative-whose-where-when"
+      ],
+      "tuKhoa": [
+        "mệnh đề quan hệ",
+        "who which that",
+        "defining relative clause",
+        "đại từ quan hệ",
+        "menh de quan he"
+      ],
+      "quiz": [
+        {
+          "h": "The man ___ lives next door is a doctor.",
+          "lc": [
+            "who",
+            "where",
+            "whose",
+            "which"
+          ],
+          "da": 0,
+          "gt": "Danh từ chỉ người, đại từ quan hệ làm chủ ngữ ⇒ who."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "The girl sits next to me is Lan.",
+            "The girl which sits next to me is Lan.",
+            "The girl who she sits next to me is Lan.",
+            "The girl who sits next to me is Lan."
+          ],
+          "da": 3,
+          "gt": "Người dùng who, không lặp she, và không được bỏ who khi nó làm chủ ngữ."
+        },
+        {
+          "h": "This is the book ___ I bought yesterday.",
+          "lc": [
+            "which",
+            "where",
+            "who",
+            "what"
+          ],
+          "da": 0,
+          "gt": "Danh từ chỉ vật dùng which (hoặc that); what không đứng sau danh từ."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-relative-non-defining",
+      "nhom": "Mệnh đề quan hệ",
+      "tieuDe": "Mệnh đề quan hệ không xác định",
+      "mau": "N, who / which + mệnh đề, …",
+      "nghia": "…, người mà / cái mà ~ (bổ sung thêm thông tin)",
+      "giaiThich": "Dùng để thêm thông tin phụ về một người hoặc vật đã xác định rõ (tên riêng, my mother, this house…). Bỏ mệnh đề đi câu vẫn đủ nghĩa. Mệnh đề được ngăn bằng dấu phẩy, không dùng that và không lược được đại từ quan hệ.",
+      "cachGhep": [
+        "Người: , who… ,",
+        "Vật: , which… ,",
+        "which còn có thể thay cho cả mệnh đề đứng trước: He passed the exam, which surprised everyone.",
+        "Không dùng that; không bỏ who / which"
+      ],
+      "viDu": [
+        {
+          "c": "My mother, who is sixty, still works every day.",
+          "v": "Mẹ tôi, năm nay sáu mươi tuổi, vẫn đi làm mỗi ngày."
+        },
+        {
+          "c": "Hanoi, which is the capital of Vietnam, is very crowded.",
+          "v": "Hà Nội, thủ đô của Việt Nam, rất đông đúc."
+        },
+        {
+          "c": "We stayed at the Sun Hotel, which a friend had recommended.",
+          "v": "Chúng tôi ở khách sạn Sun, nơi một người bạn đã giới thiệu."
+        },
+        {
+          "c": "He was late again, which made his boss angry.",
+          "v": "Anh ấy lại đi muộn, điều đó khiến sếp tức giận."
+        }
+      ],
+      "luuY": [
+        "Không dùng that sau dấu phẩy: 'My mother, that is sixty,…' là sai.",
+        "Có hay không có dấu phẩy làm đổi nghĩa: 'My brother who lives in Hue…' (tôi có nhiều anh em, đang nói người ở Huế) ↔ 'My brother, who lives in Hue,…' (tôi chỉ có một anh/em trai).",
+        "Nhớ đủ hai dấu phẩy khi mệnh đề nằm giữa câu."
+      ],
+      "soSanh": [
+        "en-b1-relative-defining",
+        "en-b2-relative-preposition"
+      ],
+      "tuKhoa": [
+        "mệnh đề quan hệ không xác định",
+        "non-defining",
+        "dấu phẩy who which",
+        "menh de quan he khong xac dinh"
+      ],
+      "quiz": [
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "My brother, that lives in Hue, is a teacher.",
+            "My brother who lives in Hue, is a teacher.",
+            "My brother, who lives in Hue, is a teacher.",
+            "My brother, lives in Hue, is a teacher."
+          ],
+          "da": 2,
+          "gt": "Mệnh đề không xác định cần hai dấu phẩy, dùng who (không dùng that) và không bỏ được who."
+        },
+        {
+          "h": "My mother, ___ is 60, still works.",
+          "lc": [
+            "who",
+            "which",
+            "what",
+            "that"
+          ],
+          "da": 0,
+          "gt": "Chỉ người, sau dấu phẩy ⇒ who; that không dùng trong mệnh đề không xác định."
+        },
+        {
+          "h": "Hanoi, ___ is the capital of Vietnam, is very crowded.",
+          "lc": [
+            "where",
+            "that",
+            "who",
+            "which"
+          ],
+          "da": 3,
+          "gt": "Hà Nội là vật / nơi chốn làm chủ ngữ của 'is' ⇒ which; where không làm chủ ngữ được."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-relative-whose-where-when",
+      "nhom": "Mệnh đề quan hệ",
+      "tieuDe": "whose / where / when trong mệnh đề quan hệ",
+      "mau": "N + whose + N · nơi chốn + where + S + V · thời gian + when + S + V",
+      "nghia": "(người) có ~ của họ… / nơi mà ~ / lúc mà ~",
+      "giaiThich": "whose chỉ sở hữu, thay cho his/her/their/its và luôn đi kèm một danh từ. where đứng sau danh từ chỉ nơi chốn, when đứng sau danh từ chỉ thời gian; sau chúng là một mệnh đề đầy đủ chủ ngữ và động từ.",
+      "cachGhep": [
+        "whose + danh từ: the girl whose father is a pilot",
+        "where = in/at which: the town where I was born",
+        "when = on/in which: the day when we met",
+        "Nếu nơi chốn là chủ ngữ hoặc tân ngữ của động từ thì dùng which / that: the city which I visited"
+      ],
+      "viDu": [
+        {
+          "c": "That's the girl whose father is a pilot.",
+          "v": "Đó là cô gái có bố là phi công."
+        },
+        {
+          "c": "This is the town where I was born.",
+          "v": "Đây là thị trấn nơi tôi sinh ra."
+        },
+        {
+          "c": "I still remember the day when we first met.",
+          "v": "Tôi vẫn nhớ ngày chúng tôi gặp nhau lần đầu."
+        },
+        {
+          "c": "Is there a shop near here where I can buy stamps?",
+          "v": "Gần đây có cửa hàng nào bán tem không?"
+        }
+      ],
+      "luuY": [
+        "Đừng nhầm whose (của người đó) với who's (= who is / who has).",
+        "Dùng where rồi thì không thêm giới từ hay there ở cuối: 'the town where I was born in' là sai.",
+        "'the hotel where we stayed' nhưng 'the hotel which we liked' — liked cần tân ngữ nên dùng which."
+      ],
+      "soSanh": [
+        "en-b1-relative-defining"
+      ],
+      "tuKhoa": [
+        "whose",
+        "where when quan hệ",
+        "trạng từ quan hệ",
+        "nơi mà lúc mà",
+        "relative adverbs"
+      ],
+      "quiz": [
+        {
+          "h": "I remember the day ___ we first met.",
+          "lc": [
+            "when",
+            "where",
+            "whose",
+            "who"
+          ],
+          "da": 0,
+          "gt": "Danh từ chỉ thời gian (the day) + mệnh đề đầy đủ ⇒ when."
+        },
+        {
+          "h": "That's the girl ___ father is a pilot.",
+          "lc": [
+            "who",
+            "which",
+            "whose",
+            "who's"
+          ],
+          "da": 2,
+          "gt": "Quan hệ sở hữu (bố của cô ấy) ⇒ whose + danh từ."
+        },
+        {
+          "h": "This is the town ___ I was born.",
+          "lc": [
+            "where",
+            "which",
+            "when",
+            "that"
+          ],
+          "da": 0,
+          "gt": "Nơi chốn + mệnh đề đầy đủ, không có giới từ in ⇒ where."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-relative-omit-pronoun",
+      "nhom": "Mệnh đề quan hệ",
+      "tieuDe": "Lược đại từ quan hệ",
+      "mau": "N + (who / which / that) + S + V",
+      "nghia": "bỏ who / which / that khi nó làm tân ngữ",
+      "giaiThich": "Trong mệnh đề quan hệ xác định, nếu đại từ quan hệ là tân ngữ (ngay sau nó là một chủ ngữ khác) thì có thể bỏ, và văn nói thường bỏ. Nếu đại từ quan hệ là chủ ngữ (ngay sau nó là động từ) thì không được bỏ.",
+      "cachGhep": [
+        "Bỏ được: the movie (that) we saw · the people (who) I met",
+        "Không bỏ được: the man who lives here (who là chủ ngữ)",
+        "Không bỏ trong mệnh đề không xác định (có dấu phẩy)",
+        "Giới từ chuyển xuống cuối: the girl (who) I was talking to"
+      ],
+      "viDu": [
+        {
+          "c": "The movie we saw last night was great.",
+          "v": "Bộ phim chúng tôi xem tối qua rất hay."
+        },
+        {
+          "c": "The people I met in Hue were very friendly.",
+          "v": "Những người tôi gặp ở Huế rất thân thiện."
+        },
+        {
+          "c": "Have you found the keys you lost?",
+          "v": "Bạn đã tìm thấy chùm chìa khoá bị mất chưa?"
+        },
+        {
+          "c": "That's the girl I was talking to.",
+          "v": "Đó là cô gái tôi vừa nói chuyện cùng."
+        }
+      ],
+      "luuY": [
+        "Mẹo: sau đại từ quan hệ là chủ ngữ (I, we, she…) ⇒ bỏ được; là động từ ⇒ phải giữ.",
+        "Bỏ đại từ quan hệ rồi vẫn không thêm đại từ tân ngữ: 'The people I met them' là sai."
+      ],
+      "soSanh": [
+        "en-b1-relative-defining"
+      ],
+      "tuKhoa": [
+        "lược đại từ quan hệ",
+        "bỏ who which that",
+        "contact clause",
+        "omit relative pronoun"
+      ],
+      "quiz": [
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "The people I met them were friendly.",
+            "The people met I were friendly.",
+            "The people I met were friendly."
+          ],
+          "da": 2,
+          "gt": "Có thể bỏ who/that khi nó làm tân ngữ, nhưng không thêm 'them'."
+        },
+        {
+          "h": "The book ___ is on the table is mine.",
+          "lc": [
+            "that",
+            "(không cần từ nào)",
+            "whose",
+            "who"
+          ],
+          "da": 0,
+          "gt": "Đại từ quan hệ làm chủ ngữ của 'is' nên không bỏ được; vật dùng that."
+        },
+        {
+          "h": "Trong câu nào CÓ THỂ bỏ đại từ quan hệ?",
+          "lc": [
+            "The dog that bit me was black.",
+            "The movie that we saw was great.",
+            "The man who lives here is my uncle.",
+            "My dad, who is 50, runs every day."
+          ],
+          "da": 1,
+          "gt": "Chỉ ở 'that we saw', that là tân ngữ (sau nó là chủ ngữ we) nên bỏ được."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-modals-deduction-present",
+      "nhom": "Động từ khuyết thiếu",
+      "tieuDe": "Suy đoán ở hiện tại: must / might / can't",
+      "mau": "S + must / might / may / could / can't + V",
+      "nghia": "chắc hẳn là ~ / có lẽ ~ / không thể nào ~",
+      "giaiThich": "Dùng khi suy luận về hiện tại dựa trên những gì mình thấy hoặc biết. must: gần như chắc chắn đúng. might / may / could: có khả năng. can't: gần như chắc chắn không đúng.",
+      "cachGhep": [
+        "must + V: chắc hẳn (tin là đúng)",
+        "might / may / could + V: có thể, có lẽ",
+        "can't + V: không thể nào (tin là sai)",
+        "Việc đang diễn ra: must / might / can't + be + V-ing"
+      ],
+      "viDu": [
+        {
+          "c": "She has been working all day. She must be tired.",
+          "v": "Cô ấy làm việc cả ngày rồi. Chắc hẳn cô ấy mệt lắm."
+        },
+        {
+          "c": "I'm not sure where Lan is. She might be in the library.",
+          "v": "Tôi không chắc Lan ở đâu. Có lẽ cô ấy đang ở thư viện."
+        },
+        {
+          "c": "That can't be Nam. He's in Japan this week.",
+          "v": "Đó không thể là Nam được. Tuần này cậu ấy ở Nhật."
+        },
+        {
+          "c": "They aren't answering. They may be sleeping.",
+          "v": "Họ không nghe máy. Có lẽ họ đang ngủ."
+        }
+      ],
+      "luuY": [
+        "Phủ định của must (suy đoán) là can't, không phải mustn't (mustn't = cấm).",
+        "Không dùng can để suy đoán khẳng định: 'She can be at home now' là sai, dùng might / could.",
+        "Người Việt hay dùng 'maybe + câu' cho mọi trường hợp; với mức chắc chắn cao nên dùng must / can't."
+      ],
+      "soSanh": [
+        "en-b1-modals-obligation",
+        "en-b2-modal-perfect-deduction"
+      ],
+      "tuKhoa": [
+        "suy đoán",
+        "must be",
+        "might be",
+        "can't be",
+        "modal deduction"
+      ],
+      "quiz": [
+        {
+          "h": "She's been working all day. She ___ be tired.",
+          "lc": [
+            "mustn't",
+            "must",
+            "shouldn't",
+            "can't"
+          ],
+          "da": 1,
+          "gt": "Có căn cứ rõ ràng nên suy đoán chắc chắn: must."
+        },
+        {
+          "h": "He ___ be at home — I saw him at the airport an hour ago.",
+          "lc": [
+            "ought to",
+            "can't",
+            "must",
+            "has to"
+          ],
+          "da": 1,
+          "gt": "Có bằng chứng ngược lại nên tin là không thể: can't."
+        },
+        {
+          "h": "I'm not sure where Lan is. She ___ be in the library.",
+          "lc": [
+            "must",
+            "can't",
+            "might",
+            "mustn't"
+          ],
+          "da": 2,
+          "gt": "'I'm not sure' ⇒ chỉ là khả năng: might."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-modals-ability",
+      "nhom": "Động từ khuyết thiếu",
+      "tieuDe": "Khả năng: can / could / be able to / managed to",
+      "mau": "can + V · could + V · be able to + V · managed to + V",
+      "nghia": "có thể ~, đã có thể ~, xoay xở làm được ~",
+      "giaiThich": "can nói khả năng hiện tại, could nói khả năng chung trong quá khứ. be able to dùng thay can ở những thì và dạng mà can không có (tương lai, hoàn thành, sau to hoặc sau modal khác). Với một lần cụ thể đã làm được trong quá khứ, nhất là việc khó, dùng was/were able to hoặc managed to.",
+      "cachGhep": [
+        "Hiện tại: can / can't + V",
+        "Khả năng chung trong quá khứ: could / couldn't + V",
+        "Một lần cụ thể làm được: was/were able to + V · managed to + V",
+        "Dạng khác: will be able to · have been able to · to be able to · might be able to"
+      ],
+      "viDu": [
+        {
+          "c": "I could swim when I was five.",
+          "v": "Tôi biết bơi từ lúc năm tuổi."
+        },
+        {
+          "c": "The fire spread quickly, but everyone managed to escape.",
+          "v": "Lửa lan nhanh nhưng mọi người đều thoát ra được."
+        },
+        {
+          "c": "I haven't been able to sleep well lately.",
+          "v": "Dạo này tôi không ngủ ngon được."
+        },
+        {
+          "c": "Will you be able to come tomorrow?",
+          "v": "Mai bạn có đến được không?"
+        }
+      ],
+      "luuY": [
+        "Không ghép hai modal: 'I will can', 'I might can' là sai → will be able to, might be able to.",
+        "Một lần thành công cụ thể không dùng could: 'I could pass the exam yesterday' → 'I managed to / was able to pass'. Riêng couldn't thì dùng được cho cả hai trường hợp.",
+        "managed to mang nghĩa đã làm được dù khó; đừng quên to."
+      ],
+      "tuKhoa": [
+        "can could",
+        "be able to",
+        "managed to",
+        "khả năng",
+        "có thể"
+      ],
+      "quiz": [
+        {
+          "h": "I ___ swim when I was five.",
+          "lc": [
+            "manage to",
+            "could",
+            "can",
+            "am able to"
+          ],
+          "da": 1,
+          "gt": "Khả năng chung trong quá khứ dùng could."
+        },
+        {
+          "h": "I'd like to ___ speak Japanese one day.",
+          "lc": [
+            "be able to",
+            "can",
+            "could",
+            "able to"
+          ],
+          "da": 0,
+          "gt": "Sau to cần động từ nguyên mẫu; can không có dạng nguyên mẫu nên dùng be able to."
+        },
+        {
+          "h": "The fire spread quickly, but everyone ___ escape.",
+          "lc": [
+            "was able",
+            "can",
+            "manage",
+            "managed to"
+          ],
+          "da": 3,
+          "gt": "Một lần cụ thể đã làm được việc khó trong quá khứ: managed to + V."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-modals-obligation",
+      "nhom": "Động từ khuyết thiếu",
+      "tieuDe": "Bắt buộc: must / have to / need to / needn't",
+      "mau": "must + V · have to + V · need to + V · mustn't + V · don't have to / needn't + V",
+      "nghia": "phải ~ / cần ~ / không được ~ / không cần ~",
+      "giaiThich": "must và have to đều là 'phải': must thường là ý của chính người nói, have to là do quy định hay hoàn cảnh bên ngoài. Ở phủ định hai từ khác hẳn nhau: mustn't là cấm, còn don't have to / needn't / don't need to là không bắt buộc, không cần.",
+      "cachGhep": [
+        "must + V (không chia, không có quá khứ)",
+        "have to / has to + V · quá khứ: had to · tương lai: will have to",
+        "Câu hỏi: Do/Does + S + have to + V?",
+        "Cấm: mustn't + V",
+        "Không cần: don't/doesn't have to + V · don't need to + V · needn't + V"
+      ],
+      "viDu": [
+        {
+          "c": "I must call my mother tonight.",
+          "v": "Tối nay tôi phải gọi cho mẹ."
+        },
+        {
+          "c": "Do you have to wear a uniform at school?",
+          "v": "Ở trường bạn có phải mặc đồng phục không?"
+        },
+        {
+          "c": "You mustn't use your phone during the exam.",
+          "v": "Bạn không được dùng điện thoại trong giờ thi."
+        },
+        {
+          "c": "Tomorrow is Sunday, so I don't have to get up early.",
+          "v": "Mai là Chủ nhật nên tôi không phải dậy sớm."
+        }
+      ],
+      "luuY": [
+        "Lỗi do dịch 'không phải': mustn't KHÔNG có nghĩa 'không cần'. 'You mustn't come' = cấm đến; 'You don't have to come' = không cần đến.",
+        "must không có quá khứ; 'phải' ở quá khứ dùng had to.",
+        "needn't + V (không to), nhưng don't need + to V."
+      ],
+      "soSanh": [
+        "en-b1-modals-advice",
+        "en-b1-modals-deduction-present"
+      ],
+      "tuKhoa": [
+        "must have to",
+        "mustn't don't have to",
+        "needn't",
+        "bắt buộc",
+        "phải không cần"
+      ],
+      "quiz": [
+        {
+          "h": "Tomorrow is Sunday, so I ___ get up early.",
+          "lc": [
+            "mustn't",
+            "don't have to",
+            "must",
+            "have to"
+          ],
+          "da": 1,
+          "gt": "Ngày nghỉ nên không bắt buộc dậy sớm: don't have to (mustn't là cấm)."
+        },
+        {
+          "h": "You ___ smoke here. It's forbidden.",
+          "lc": [
+            "mustn't",
+            "needn't",
+            "don't have to",
+            "don't need to"
+          ],
+          "da": 0,
+          "gt": "Bị cấm (forbidden) ⇒ mustn't; ba lựa chọn còn lại nghĩa là 'không cần'."
+        },
+        {
+          "h": "I ___ work late yesterday.",
+          "lc": [
+            "had to",
+            "musted",
+            "have to",
+            "must"
+          ],
+          "da": 0,
+          "gt": "'Phải' trong quá khứ dùng had to; must không có dạng quá khứ."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-modals-advice",
+      "nhom": "Động từ khuyết thiếu",
+      "tieuDe": "Lời khuyên: should / ought to / had better",
+      "mau": "should + V · ought to + V · had better + V",
+      "nghia": "nên ~ / tốt hơn là ~ (kẻo…)",
+      "giaiThich": "should và ought to dùng để khuyên hoặc nói điều nên làm; should phổ biến hơn. had better mạnh hơn, dùng cho một tình huống cụ thể và hàm ý nếu không làm thì sẽ có hậu quả xấu.",
+      "cachGhep": [
+        "should / shouldn't + V",
+        "ought to + V · phủ định: ought not to + V",
+        "had better ('d better) + V không to · phủ định: had better not + V",
+        "Hỏi xin lời khuyên: Should I…? · What should I do?"
+      ],
+      "viDu": [
+        {
+          "c": "You should see a doctor.",
+          "v": "Bạn nên đi khám bác sĩ."
+        },
+        {
+          "c": "You ought to apologize to her.",
+          "v": "Bạn nên xin lỗi cô ấy."
+        },
+        {
+          "c": "We'd better leave now, or we'll miss the train.",
+          "v": "Chúng ta nên đi ngay, không thì lỡ tàu mất."
+        },
+        {
+          "c": "You'd better not tell him about it.",
+          "v": "Tốt hơn là bạn đừng nói với anh ấy chuyện đó."
+        }
+      ],
+      "luuY": [
+        "had better nói về hiện tại / tương lai dù có 'had'; sau nó là V không to: 'You'd better to go' là sai.",
+        "Phủ định là 'had better not', không nói 'hadn't better' hay 'had better don't'.",
+        "had better có thể nghe như cảnh báo; khuyên chung chung hoặc với người trên nên dùng should."
+      ],
+      "soSanh": [
+        "en-b1-modals-obligation"
+      ],
+      "tuKhoa": [
+        "should",
+        "ought to",
+        "had better",
+        "lời khuyên",
+        "nên"
+      ],
+      "quiz": [
+        {
+          "h": "You ought ___ see a doctor.",
+          "lc": [
+            "for",
+            "of",
+            "that",
+            "to"
+          ],
+          "da": 3,
+          "gt": "ought luôn đi với to + V."
+        },
+        {
+          "h": "You'd better ___ now, or you'll be late.",
+          "lc": [
+            "to leave",
+            "leave",
+            "left",
+            "leaving"
+          ],
+          "da": 1,
+          "gt": "had better + động từ nguyên mẫu không to."
+        },
+        {
+          "h": "Dạng phủ định đúng của had better là câu nào?",
+          "lc": [
+            "You'd better don't go.",
+            "You'd better not to go.",
+            "You'd better not go.",
+            "You'd not better go."
+          ],
+          "da": 2,
+          "gt": "Phủ định: had better + not + V nguyên mẫu không to."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-question-tags",
+      "nhom": "Câu hỏi",
+      "tieuDe": "Question tags (câu hỏi đuôi)",
+      "mau": "Câu khẳng định, trợ động từ + n't + đại từ? · Câu phủ định, trợ động từ + đại từ?",
+      "nghia": "…, phải không? / …, đúng không?",
+      "giaiThich": "Thêm vào cuối câu để xác nhận thông tin hoặc mời người nghe đồng tình. Câu khẳng định đi với đuôi phủ định và ngược lại. Đuôi dùng lại trợ động từ của câu chính (không có thì dùng do/does/did) và một đại từ.",
+      "cachGhep": [
+        "to be / modal / have (hoàn thành): lặp lại chính từ đó — is → isn't it, can → can't you, has → hasn't she",
+        "Động từ thường: do / does / did — You like tea, don't you?",
+        "I am → aren't I?",
+        "Let's… → shall we? · Câu mệnh lệnh → will you?",
+        "Câu có never, nobody, hardly tính là phủ định ⇒ đuôi khẳng định"
+      ],
+      "viDu": [
+        {
+          "c": "You're a student, aren't you?",
+          "v": "Bạn là sinh viên, phải không?"
+        },
+        {
+          "c": "She doesn't like fish, does she?",
+          "v": "Cô ấy không thích cá, đúng không?"
+        },
+        {
+          "c": "They went to Hue last year, didn't they?",
+          "v": "Năm ngoái họ đi Huế, phải không?"
+        },
+        {
+          "c": "Let's have a break, shall we?",
+          "v": "Chúng ta nghỉ một lát nhé?"
+        }
+      ],
+      "luuY": [
+        "Tiếng Việt chỉ có một kiểu 'phải không / đúng không', nên người Việt hay dùng 'isn't it' hoặc 'right' cho mọi câu: 'You like tea, isn't it?' là sai.",
+        "Trả lời theo sự thật chứ không theo kiểu đồng ý với câu hỏi: 'You don't smoke, do you?' — không hút thì đáp 'No, I don't'."
+      ],
+      "soSanh": [
+        "en-b1-so-neither"
+      ],
+      "tuKhoa": [
+        "câu hỏi đuôi",
+        "question tags",
+        "phải không",
+        "isn't it",
+        "tag question"
+      ],
+      "quiz": [
+        {
+          "h": "You're a student, ___?",
+          "lc": [
+            "isn't it",
+            "aren't you",
+            "are you",
+            "don't you"
+          ],
+          "da": 1,
+          "gt": "Câu khẳng định với are ⇒ đuôi phủ định aren't + you."
+        },
+        {
+          "h": "She doesn't like fish, ___?",
+          "lc": [
+            "isn't she",
+            "does she",
+            "is she",
+            "doesn't she"
+          ],
+          "da": 1,
+          "gt": "Câu phủ định với doesn't ⇒ đuôi khẳng định does she."
+        },
+        {
+          "h": "I'm late, ___?",
+          "lc": [
+            "am I",
+            "isn't it",
+            "aren't I",
+            "amn't I"
+          ],
+          "da": 2,
+          "gt": "Đuôi của 'I am' là 'aren't I' (không có amn't)."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-indirect-questions",
+      "nhom": "Câu hỏi",
+      "tieuDe": "Indirect questions (câu hỏi gián tiếp)",
+      "mau": "Could you tell me / Do you know / I wonder + từ hỏi hoặc if + S + V",
+      "nghia": "Bạn có thể cho tôi biết ~ không? / Bạn có biết ~ không?",
+      "giaiThich": "Dùng để hỏi lịch sự hơn, nhất là với người lạ. Câu hỏi được lồng sau một cụm mở đầu, nên phần sau có trật tự câu kể: chủ ngữ trước động từ, không dùng do/does/did. Câu hỏi Yes/No dùng if hoặc whether. Thì giữ nguyên, không lùi.",
+      "cachGhep": [
+        "Could you tell me + where/when/how… + S + V?",
+        "Do you know + if/whether + S + V?",
+        "I wonder / I'd like to know + từ hỏi / if + S + V (kết thúc bằng dấu chấm)",
+        "Bỏ do/does/did và chia lại động từ: Where does he live? → …where he lives"
+      ],
+      "viDu": [
+        {
+          "c": "Could you tell me where the station is?",
+          "v": "Bạn có thể chỉ cho tôi nhà ga ở đâu không?"
+        },
+        {
+          "c": "Do you know what time the movie starts?",
+          "v": "Bạn có biết mấy giờ phim bắt đầu không?"
+        },
+        {
+          "c": "I wonder if she is at home.",
+          "v": "Tôi tự hỏi không biết cô ấy có ở nhà không."
+        },
+        {
+          "c": "Can you tell me how much this costs?",
+          "v": "Bạn cho tôi biết cái này giá bao nhiêu được không?"
+        }
+      ],
+      "luuY": [
+        "Lỗi phổ biến: giữ đảo ngữ của câu hỏi — 'Could you tell me where is the station?' và 'Do you know what time does it start?' đều sai.",
+        "Bỏ does thì nhớ thêm -s cho động từ: 'where he lives', không nói 'where he live'."
+      ],
+      "soSanh": [
+        "en-b1-reported-questions"
+      ],
+      "tuKhoa": [
+        "câu hỏi gián tiếp",
+        "could you tell me",
+        "do you know where",
+        "indirect questions",
+        "hỏi lịch sự"
+      ],
+      "quiz": [
+        {
+          "h": "Do you know what time ___?",
+          "lc": [
+            "the movie start",
+            "the movie starts",
+            "starts the movie",
+            "does the movie start"
+          ],
+          "da": 1,
+          "gt": "Trật tự câu kể: chủ ngữ + động từ chia (starts), không dùng does."
+        },
+        {
+          "h": "Could you tell me where ___?",
+          "lc": [
+            "is the station",
+            "the station is",
+            "does the station",
+            "the station does"
+          ],
+          "da": 1,
+          "gt": "Sau từ hỏi là chủ ngữ rồi tới động từ: where the station is."
+        },
+        {
+          "h": "I wonder ___ she is at home.",
+          "lc": [
+            "what",
+            "does",
+            "if",
+            "that"
+          ],
+          "da": 2,
+          "gt": "Câu hỏi Yes/No lồng vào dùng if (hoặc whether)."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-so-neither",
+      "nhom": "Câu hỏi",
+      "tieuDe": "So do I / Neither do I",
+      "mau": "So + trợ động từ + S · Neither / Nor + trợ động từ + S",
+      "nghia": "tôi cũng vậy / tôi cũng không",
+      "giaiThich": "Dùng để nói mình giống với điều người kia vừa nói mà không lặp lại cả câu. Đồng tình với câu khẳng định dùng So…, với câu phủ định dùng Neither… Trợ động từ lấy theo câu trước (be, have, can, will…; động từ thường thì dùng do/does/did) và đứng TRƯỚC chủ ngữ.",
+      "cachGhep": [
+        "Câu khẳng định → So + am/do/did/can/have + I",
+        "Câu phủ định → Neither + am/do/did/can/have + I (trợ động từ ở dạng khẳng định)",
+        "Cách khác: I do too. / I don't either.",
+        "Văn nói thân mật: Me too. / Me neither."
+      ],
+      "viDu": [
+        {
+          "c": "I love pho. — So do I.",
+          "v": "Tôi rất thích phở. — Tôi cũng vậy."
+        },
+        {
+          "c": "I can't swim. — Neither can I.",
+          "v": "Tôi không biết bơi. — Tôi cũng không."
+        },
+        {
+          "c": "I'm tired. — So am I.",
+          "v": "Tôi mệt quá. — Tôi cũng thế."
+        },
+        {
+          "c": "She went to bed early, and so did her sister.",
+          "v": "Cô ấy đi ngủ sớm, và chị gái cô ấy cũng vậy."
+        }
+      ],
+      "luuY": [
+        "Phải đảo trợ động từ lên trước chủ ngữ: 'So I do' không mang nghĩa 'tôi cũng vậy'.",
+        "Neither đã mang nghĩa phủ định nên trợ động từ ở dạng khẳng định: 'Neither can't I' là sai.",
+        "Người Việt hay đáp 'Me too' cho cả câu phủ định; với câu phủ định phải là 'Me neither' / 'Neither do I'."
+      ],
+      "soSanh": [
+        "en-b1-question-tags"
+      ],
+      "tuKhoa": [
+        "so do I",
+        "neither do I",
+        "tôi cũng vậy",
+        "me too",
+        "tôi cũng không"
+      ],
+      "quiz": [
+        {
+          "h": "A: I love pho. B: ___",
+          "lc": [
+            "So am I.",
+            "Neither do I.",
+            "So do I.",
+            "So I do."
+          ],
+          "da": 2,
+          "gt": "Câu khẳng định với động từ thường ở hiện tại ⇒ So + do + I."
+        },
+        {
+          "h": "A: I can't swim. B: ___",
+          "lc": [
+            "Neither do I.",
+            "Neither can I.",
+            "So can't I.",
+            "So can I."
+          ],
+          "da": 1,
+          "gt": "Câu phủ định với can ⇒ Neither + can + I."
+        },
+        {
+          "h": "A: I'm tired. B: ___",
+          "lc": [
+            "So I am.",
+            "So am I.",
+            "Neither am I.",
+            "So do I."
+          ],
+          "da": 1,
+          "gt": "Câu khẳng định với am ⇒ So + am + I."
+        }
+      ]
+    }
+  ]
+}

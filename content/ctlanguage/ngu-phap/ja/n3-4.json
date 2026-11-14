@@ -1,0 +1,1425 @@
+{
+  "nn": "ja",
+  "cap": "N3",
+  "diem": [
+    {
+      "id": "ja-n3-to-iu-koto-da",
+      "nhom": "Truyền đạt – trích dẫn",
+      "tieuDe": "〜ということだ／〜とのことだ",
+      "mau": "thể thường + ということだ / とのことだ",
+      "nghia": "nghe nói là ~, được biết là ~; nghĩa là ~",
+      "giaiThich": "Dùng để truyền lại thông tin nghe được từ người khác hoặc từ báo đài, giữ gần nguyên nội dung gốc; trang trọng hơn 〜そうだ. とのことだ hay dùng khi chuyển lời nhắn. Ngoài ra ということだ còn dùng để giải thích ý nghĩa: \"nghĩa là ~\".",
+      "cachGhep": [
+        "Thể thường + ということだ / ということです",
+        "Thể thường + とのことだ / とのことです (chuyển lời)",
+        "Giải thích nghĩa: 〜というのは、〜ということだ"
+      ],
+      "viDu": [
+        {
+          "c": "田中さんは来月結婚するということです。",
+          "d": "たなかさんは らいげつ けっこんするということです。",
+          "v": "Nghe nói tháng sau anh Tanaka kết hôn."
+        },
+        {
+          "c": "山田さんから電話があって、少し遅れるとのことです。",
+          "d": "やまださんから でんわが あって、すこし おくれるとのことです。",
+          "v": "Anh Yamada gọi điện, nhắn là sẽ đến muộn một chút."
+        },
+        {
+          "c": "「禁煙」というのは、たばこを吸ってはいけないということです。",
+          "d": "「きんえん」というのは、たばこを すっては いけないということです。",
+          "v": "\"Kin-en\" nghĩa là không được hút thuốc."
+        }
+      ],
+      "luuY": [
+        "Khác 〜そうだ: trước ということだ dùng được cả câu phỏng đoán (〜だろうということだ), còn そうだ thì không (✗ 〜だろうそうだ).",
+        "Đừng nhầm với V-る + ことだ (lời khuyên)."
+      ],
+      "soSanh": [
+        "ja-n3-ni-yoru-to",
+        "ja-n3-n-datte",
+        "ja-n3-koto-da"
+      ],
+      "tuKhoa": [
+        "to iu koto da",
+        "toiukotoda",
+        "to no koto da",
+        "nghe nói",
+        "nghĩa là"
+      ],
+      "quiz": [
+        {
+          "h": "部長から連絡があり、会議は中止だ（　）。",
+          "lc": [
+            "とのことです",
+            "ことです",
+            "のことです",
+            "ものです"
+          ],
+          "da": 0,
+          "gt": "Chuyển lại lời nhắn: thể thường + とのことです."
+        },
+        {
+          "h": "「立入禁止」というのは、入ってはいけない（　）。",
+          "lc": [
+            "ということにする",
+            "ということだ",
+            "というところだ"
+          ],
+          "da": 1,
+          "gt": "Giải thích ý nghĩa: 〜というのは、〜ということだ."
+        },
+        {
+          "h": "「〜とのことだ」 dùng khi nào?",
+          "lc": [
+            "Nêu ý kiến riêng của mình",
+            "Ra lệnh cho người nghe",
+            "Truyền lại lời người khác nói"
+          ],
+          "da": 2,
+          "gt": "とのことだ dùng để chuyển lời, truyền đạt thông tin nghe được."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-kke",
+      "nhom": "Truyền đạt – trích dẫn",
+      "tieuDe": "〜っけ",
+      "mau": "thể thường + っけ (N / Aな + だっけ・だったっけ; lịch sự: 〜でしたっけ・〜ましたっけ)",
+      "nghia": "~ ấy nhỉ?, ~ nhỉ? (cố nhớ lại điều đã quên)",
+      "giaiThich": "Dùng khi mình không nhớ rõ một điều và muốn hỏi lại người nghe, hoặc tự hỏi chính mình. Chỉ dùng trong hội thoại.",
+      "cachGhep": [
+        "Danh từ / tính từ đuôi な + だっけ / だったっけ",
+        "Động từ thể た + っけ",
+        "Tính từ đuôi い: 〜かったっけ",
+        "Lịch sự: 〜でしたっけ / 〜ましたっけ"
+      ],
+      "viDu": [
+        {
+          "c": "今日は何曜日だっけ。",
+          "d": "きょうは なんようびだっけ。",
+          "v": "Hôm nay thứ mấy ấy nhỉ?"
+        },
+        {
+          "c": "田中さんの誕生日は、いつでしたっけ。",
+          "d": "たなかさんの たんじょうびは、いつでしたっけ。",
+          "v": "Sinh nhật anh Tanaka là khi nào ấy nhỉ?"
+        },
+        {
+          "c": "あれ、かぎをどこに置いたっけ。",
+          "d": "あれ、かぎを どこに おいたっけ。",
+          "v": "Ơ, mình để chìa khoá ở đâu rồi nhỉ?"
+        },
+        {
+          "c": "明日の会議は三時からだったっけ。",
+          "d": "あしたの かいぎは さんじからだったっけ。",
+          "v": "Cuộc họp ngày mai là từ 3 giờ phải không nhỉ?"
+        }
+      ],
+      "luuY": [
+        "Danh từ phải có だ trước っけ (✗ 何曜日っけ). Dùng dạng quá khứ だったっけ cả khi nói chuyện hiện tại hay tương lai, vì đang \"lục lại trí nhớ\".",
+        "Không dùng trong văn viết trang trọng."
+      ],
+      "soSanh": [
+        "ja-n3-tte"
+      ],
+      "tuKhoa": [
+        "kke",
+        "dakke",
+        "deshitakke",
+        "nhỉ",
+        "hỏi lại điều đã quên"
+      ],
+      "quiz": [
+        {
+          "h": "あの人の名前、何（　）。",
+          "lc": [
+            "だっけ",
+            "っけ",
+            "なっけ",
+            "のっけ"
+          ],
+          "da": 0,
+          "gt": "Danh từ / từ để hỏi + だっけ."
+        },
+        {
+          "h": "「〜っけ」 dùng để làm gì?",
+          "lc": [
+            "Truyền đạt tin nghe được",
+            "Hỏi lại điều mình quên, chưa nhớ rõ",
+            "Ra lệnh"
+          ],
+          "da": 1,
+          "gt": "っけ dùng khi cố nhớ lại và hỏi xác nhận."
+        },
+        {
+          "h": "この本、もう（　）っけ。",
+          "lc": [
+            "読みます",
+            "読んで",
+            "読んだ"
+          ],
+          "da": 2,
+          "gt": "もう (đã) + động từ thể た + っけ: đã đọc rồi nhỉ?"
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-tte",
+      "nhom": "Truyền đạt – trích dẫn",
+      "tieuDe": "〜って",
+      "mau": "câu / từ + って (= と, というのは, そうだ trong văn nói)",
+      "nghia": "rằng ~ (trích dẫn); ~ ấy à, ~ thì (nêu chủ đề); nghe nói ~",
+      "giaiThich": "って là dạng nói thân mật thay cho nhiều cách nói: (1) と trích dẫn (〜って言う); (2) というのは / は nêu chủ đề để hỏi hay nhận xét; (3) đứng cuối câu để truyền lại điều nghe được.",
+      "cachGhep": [
+        "Trích dẫn: câu + って + 言う / 聞く / 書いてある",
+        "Chủ đề: danh từ + って、…",
+        "Nghe nói: thể thường + って (cuối câu)"
+      ],
+      "viDu": [
+        {
+          "c": "田中さんは、明日来ないって言っていました。",
+          "d": "たなかさんは、あした こないって いっていました。",
+          "v": "Anh Tanaka nói là mai không đến."
+        },
+        {
+          "c": "「コンビニ」って、何ですか。",
+          "d": "「コンビニ」って、なんですか。",
+          "v": "\"Konbini\" là gì vậy?"
+        },
+        {
+          "c": "山田さんって、どんな人ですか。",
+          "d": "やまださんって、どんな ひとですか。",
+          "v": "Anh Yamada ấy, là người thế nào vậy?"
+        },
+        {
+          "c": "明日は雨だって。",
+          "d": "あしたは あめだって。",
+          "v": "Nghe nói mai mưa đấy."
+        }
+      ],
+      "luuY": [
+        "Chỉ dùng khi nói hoặc nhắn tin thân mật; văn viết, bài thi viết dùng と, というのは, そうだ.",
+        "Sau ん thì って đôi khi thành て (なんて言ったの？)."
+      ],
+      "soSanh": [
+        "ja-n3-kke",
+        "ja-n3-n-datte",
+        "ja-n3-mono-mon"
+      ],
+      "tuKhoa": [
+        "tte",
+        "tte iu",
+        "trích dẫn",
+        "chủ đề",
+        "văn nói"
+      ],
+      "quiz": [
+        {
+          "h": "彼は「すぐ行く」（　）言った。",
+          "lc": [
+            "って",
+            "っけ",
+            "っぽい",
+            "こそ"
+          ],
+          "da": 0,
+          "gt": "って ở đây thay cho と trích dẫn."
+        },
+        {
+          "h": "Trong 「日本語って難しいね」, って tương đương với gì?",
+          "lc": [
+            "から",
+            "は（というのは）",
+            "まで"
+          ],
+          "da": 1,
+          "gt": "って nêu chủ đề, tương đương は / というのは."
+        },
+        {
+          "h": "「〜って」 thích hợp dùng ở đâu?",
+          "lc": [
+            "Bài luận",
+            "Thư xin việc",
+            "Nói chuyện với bạn bè"
+          ],
+          "da": 2,
+          "gt": "って là cách nói thân mật của văn nói."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-n-datte",
+      "nhom": "Truyền đạt – trích dẫn",
+      "tieuDe": "〜んだって",
+      "mau": "thể thường + んだって / んですって (N / Aな + なんだって)",
+      "nghia": "nghe nói là ~ đấy (thân mật)",
+      "giaiThich": "Dùng trong hội thoại thân mật để kể lại điều mình nghe được. Lên giọng ở cuối thì thành câu hỏi xác nhận: \"nghe nói ~ phải không?\". Dạng んですって lịch sự hơn, nữ giới hay dùng.",
+      "cachGhep": [
+        "Động từ / tính từ đuôi い thể thường + んだって",
+        "Danh từ / tính từ đuôi な + なんだって"
+      ],
+      "viDu": [
+        {
+          "c": "山田さん、来月結婚するんだって。",
+          "d": "やまださん、らいげつ けっこんするんだって。",
+          "v": "Nghe nói tháng sau anh Yamada cưới đấy."
+        },
+        {
+          "c": "あの店のケーキ、とてもおいしいんだって。",
+          "d": "あの みせの ケーキ、とても おいしいんだって。",
+          "v": "Nghe nói bánh ở tiệm đó ngon lắm."
+        },
+        {
+          "c": "田中さんは、今日休みなんだって。",
+          "d": "たなかさんは、きょう やすみなんだって。",
+          "v": "Nghe nói hôm nay anh Tanaka nghỉ."
+        }
+      ],
+      "luuY": [
+        "Nghĩa tương đương 〜そうだ (nghe nói) nhưng chỉ dùng với người thân quen.",
+        "Đừng nhầm với だって đứng đầu câu (= \"tại vì\", \"nhưng mà\")."
+      ],
+      "soSanh": [
+        "ja-n3-to-iu-koto-da",
+        "ja-n3-tte"
+      ],
+      "tuKhoa": [
+        "n datte",
+        "ndatte",
+        "n desu tte",
+        "nghe nói",
+        "thân mật"
+      ],
+      "quiz": [
+        {
+          "h": "聞いた？明日のテスト、なくなった（　）。",
+          "lc": [
+            "んだって",
+            "べきだ",
+            "ことだ",
+            "くせに"
+          ],
+          "da": 0,
+          "gt": "Kể lại tin nghe được trong hội thoại thân mật ⇒ んだって."
+        },
+        {
+          "h": "彼女は学生（　）んだって。",
+          "lc": [
+            "だ",
+            "な",
+            "の",
+            "で"
+          ],
+          "da": 1,
+          "gt": "Danh từ + な + んだって."
+        },
+        {
+          "h": "「〜んだって」 gần nghĩa với mẫu nào?",
+          "lc": [
+            "〜つもりだ",
+            "〜べきだ",
+            "〜そうだ (nghe nói)"
+          ],
+          "da": 2,
+          "gt": "んだって là cách nói thân mật của そうだ truyền đạt."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-to-iu-yori",
+      "nhom": "Truyền đạt – trích dẫn",
+      "tieuDe": "〜というより",
+      "mau": "thể thường / N + というより（も）",
+      "nghia": "nói là B thì đúng hơn là A",
+      "giaiThich": "Dùng khi thấy cách nói A chưa thật đúng, và đưa ra cách nói B phù hợp hơn. Có thể thêm むしろ trước B để nhấn mạnh.",
+      "cachGhep": [
+        "Danh từ / tính từ / động từ thể thường + というより（も）、（むしろ）…",
+        "Danh từ và tính từ đuôi な thường bỏ だ: 先生というより"
+      ],
+      "viDu": [
+        {
+          "c": "今日は涼しいというより、寒いです。",
+          "d": "きょうは すずしいというより、さむいです。",
+          "v": "Hôm nay nói là lạnh thì đúng hơn là mát."
+        },
+        {
+          "c": "彼は先生というより、友達のような人です。",
+          "d": "かれは せんせいというより、ともだちのような ひとです。",
+          "v": "Anh ấy giống một người bạn hơn là thầy giáo."
+        },
+        {
+          "c": "あの人は歌手というより、俳優として有名です。",
+          "d": "あの ひとは かしゅというより、はいゆうとして ゆうめいです。",
+          "v": "Người đó nổi tiếng với tư cách diễn viên hơn là ca sĩ."
+        }
+      ],
+      "luuY": [
+        "Thứ tự ngược với tiếng Việt: điều \"chưa đúng lắm\" đứng trước, điều \"đúng hơn\" đứng sau."
+      ],
+      "soSanh": [
+        "ja-n3-to-ieba",
+        "ja-n3-to-ittemo"
+      ],
+      "tuKhoa": [
+        "to iu yori",
+        "toiuyori",
+        "đúng hơn là",
+        "thay vì nói"
+      ],
+      "quiz": [
+        {
+          "h": "この料理は、辛い（　）、痛い。",
+          "lc": [
+            "というより",
+            "といっても",
+            "というと",
+            "として"
+          ],
+          "da": 0,
+          "gt": "\"Nói là đau thì đúng hơn là cay\" ⇒ というより."
+        },
+        {
+          "h": "Trong 「AというよりB」, người nói cho rằng điều gì?",
+          "lc": [
+            "A diễn tả đúng hơn B",
+            "B diễn tả đúng hơn A",
+            "A và B đều sai"
+          ],
+          "da": 1,
+          "gt": "Cách nói đứng sau というより mới là cách người nói cho là đúng hơn."
+        },
+        {
+          "h": "彼女はきれいというより、（　）。",
+          "lc": [
+            "とてもきれいだ",
+            "きれいになりたい",
+            "かわいい"
+          ],
+          "da": 2,
+          "gt": "Sau というより là một cách miêu tả khác phù hợp hơn: dễ thương."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-to-ieba",
+      "nhom": "Truyền đạt – trích dẫn",
+      "tieuDe": "〜というと／〜といえば",
+      "mau": "N + というと / といえば / といったら",
+      "nghia": "nói đến ~ thì (nghĩ ngay tới); nhắc đến ~ mới nhớ",
+      "giaiThich": "Dùng khi một từ được nêu ra làm mình liên tưởng ngay tới một điều tiêu biểu, hoặc nhân một từ vừa xuất hiện trong câu chuyện mà chuyển sang chuyện liên quan.",
+      "cachGhep": [
+        "Danh từ + というと / といえば / といったら",
+        "Nhân tiện chuyển đề tài: 〜といえば、…"
+      ],
+      "viDu": [
+        {
+          "c": "日本の花というと、桜を思い出します。",
+          "d": "にほんの はなというと、さくらを おもいだします。",
+          "v": "Nói đến hoa của Nhật là tôi nhớ tới hoa anh đào."
+        },
+        {
+          "c": "夏といえば、やっぱり海ですね。",
+          "d": "なつといえば、やっぱり うみですね。",
+          "v": "Nhắc đến mùa hè thì đúng là phải nói tới biển nhỉ."
+        },
+        {
+          "c": "「昨日、京都へ行きました。」「京都といえば、田中さんは京都の出身でしたね。」",
+          "d": "「きのう、きょうとへ いきました。」「きょうとといえば、たなかさんは きょうとの しゅっしんでしたね。」",
+          "v": "\"Hôm qua tôi đi Kyoto.\" \"Nhắc đến Kyoto mới nhớ, anh Tanaka quê ở Kyoto nhỉ.\""
+        }
+      ],
+      "luuY": [
+        "というと còn dùng để hỏi xác nhận lại: 「田中さんというと、あの背の高い人ですか」 (anh Tanaka mà bạn nói là người cao cao đó hả?)."
+      ],
+      "soSanh": [
+        "ja-n3-to-iu-yori",
+        "ja-n3-to-ittemo"
+      ],
+      "tuKhoa": [
+        "to iu to",
+        "to ieba",
+        "toieba",
+        "to ittara",
+        "nói đến",
+        "nhắc đến"
+      ],
+      "quiz": [
+        {
+          "h": "日本料理（　）、すしやてんぷらが有名だ。",
+          "lc": [
+            "といえば",
+            "というより",
+            "といっても",
+            "としても"
+          ],
+          "da": 0,
+          "gt": "Nhắc đến chủ đề rồi nêu thứ tiêu biểu ⇒ といえば."
+        },
+        {
+          "h": "「北海道というと」 nghĩa là gì?",
+          "lc": [
+            "Dù nói là Hokkaido",
+            "Nhắc đến Hokkaido thì",
+            "Thay vì Hokkaido"
+          ],
+          "da": 1,
+          "gt": "N + というと = nói đến N thì."
+        },
+        {
+          "h": "冬といえば、（　）。",
+          "lc": [
+            "夏です",
+            "行きなさい",
+            "スキーですね"
+          ],
+          "da": 2,
+          "gt": "Sau といえば là điều liên tưởng tiêu biểu: mùa đông thì trượt tuyết."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-to-ittemo",
+      "nhom": "Truyền đạt – trích dẫn",
+      "tieuDe": "〜といっても",
+      "mau": "thể thường / N + といっても",
+      "nghia": "nói là ~ nhưng thật ra (không đến mức như người ta nghĩ)",
+      "giaiThich": "Dùng để rào trước: thực tế khác, thường là ít hơn, nhẹ hơn so với hình dung khi nghe cách nói đó.",
+      "cachGhep": [
+        "Động từ / tính từ thể thường + といっても",
+        "Danh từ + (だ) + といっても"
+      ],
+      "viDu": [
+        {
+          "c": "料理ができるといっても、卵焼きぐらいです。",
+          "d": "りょうりが できるといっても、たまごやきぐらいです。",
+          "v": "Nói là biết nấu ăn nhưng cũng chỉ cỡ món trứng rán thôi."
+        },
+        {
+          "c": "庭があるといっても、とても小さいです。",
+          "d": "にわが あるといっても、とても ちいさいです。",
+          "v": "Nói là có vườn nhưng nhỏ lắm."
+        },
+        {
+          "c": "日本語を勉強したといっても、三か月だけです。",
+          "d": "にほんごを べんきょうしたといっても、さんかげつだけです。",
+          "v": "Nói là đã học tiếng Nhật nhưng chỉ có ba tháng thôi."
+        }
+      ],
+      "luuY": [
+        "Vế sau là phần đính chính làm giảm mức độ; không dùng để nêu điều ngược hẳn như のに."
+      ],
+      "soSanh": [
+        "ja-n3-to-iu-yori",
+        "ja-n3-to-ieba"
+      ],
+      "tuKhoa": [
+        "to ittemo",
+        "toittemo",
+        "nói là nhưng",
+        "tuy nói là"
+      ],
+      "quiz": [
+        {
+          "h": "社長（　）、社員は三人だけの小さい会社です。",
+          "lc": [
+            "といっても",
+            "といえば",
+            "というより",
+            "として"
+          ],
+          "da": 0,
+          "gt": "\"Gọi là giám đốc nhưng công ty chỉ có ba nhân viên\" ⇒ といっても."
+        },
+        {
+          "h": "「旅行に行ったといっても、近くの温泉だ」 nghĩa là gì?",
+          "lc": [
+            "Đã đi du lịch rất xa",
+            "Gọi là đi du lịch nhưng chỉ ra suối nước nóng gần nhà",
+            "Đã không đi du lịch"
+          ],
+          "da": 1,
+          "gt": "といっても đính chính rằng thực tế không lớn như hình dung."
+        },
+        {
+          "h": "ピアノがひけるといっても、（　）。",
+          "lc": [
+            "とても上手です",
+            "プロです",
+            "簡単な曲だけです"
+          ],
+          "da": 2,
+          "gt": "Vế sau làm giảm mức độ: chỉ đàn được bài đơn giản."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-kuse-ni",
+      "nhom": "Nhượng bộ – đối lập",
+      "tieuDe": "〜くせに",
+      "mau": "thể thường (Aな + な, N + の) + くせに",
+      "nghia": "mặc dù ~ vậy mà (chê trách, khó chịu)",
+      "giaiThich": "Diễn tả sự không tương xứng giữa hai vế, kèm thái độ chê trách, bực bội hoặc coi thường của người nói đối với người được nhắc tới. Dùng trong văn nói.",
+      "cachGhep": [
+        "Động từ / tính từ đuôi い thể thường + くせに",
+        "Tính từ đuôi な + な + くせに",
+        "Danh từ + の + くせに"
+      ],
+      "viDu": [
+        {
+          "c": "彼は知っているくせに、教えてくれません。",
+          "d": "かれは しっているくせに、おしえてくれません。",
+          "v": "Anh ta biết vậy mà không chịu chỉ cho tôi."
+        },
+        {
+          "c": "子どものくせに、大人のようなことを言う。",
+          "d": "こどもの くせに、おとなのような ことを いう。",
+          "v": "Là con nít mà ăn nói như người lớn."
+        },
+        {
+          "c": "弟は料理が下手なくせに、作りたがります。",
+          "d": "おとうとは りょうりが へたな くせに、つくりたがります。",
+          "v": "Em trai tôi nấu ăn dở mà cứ thích nấu."
+        }
+      ],
+      "luuY": [
+        "So với のに: くせに mạnh hơn, luôn có ý chê người; hai vế phải cùng chủ ngữ và chủ ngữ là người. のに thì trung tính hơn, dùng được cho sự vật và khi hai vế khác chủ ngữ (✗ 日曜日のくせに雨だ → 日曜日なのに).",
+        "Không dùng để nói về bản thân hay nói với người trên."
+      ],
+      "soSanh": [
+        "ja-n3-to-ittemo"
+      ],
+      "tuKhoa": [
+        "kuse ni",
+        "kuseni",
+        "vậy mà",
+        "chê trách",
+        "noni"
+      ],
+      "quiz": [
+        {
+          "h": "彼は何も知らない（　）、何でも知っているように話す。",
+          "lc": [
+            "くせに",
+            "おかげで",
+            "ために",
+            "ついでに"
+          ],
+          "da": 0,
+          "gt": "Chê trách sự không tương xứng ⇒ くせに."
+        },
+        {
+          "h": "学生（　）くせに、勉強しないで遊んでばかりいる。",
+          "lc": [
+            "な",
+            "の",
+            "だ",
+            "に"
+          ],
+          "da": 1,
+          "gt": "Danh từ + の + くせに."
+        },
+        {
+          "h": "Câu nào KHÔNG dùng くせに được?",
+          "lc": [
+            "兄は男のくせに、虫がこわい。",
+            "彼は暇なくせに、手伝ってくれない。",
+            "日曜日のくせに、雨が降っている。"
+          ],
+          "da": 2,
+          "gt": "くせに chỉ dùng để chê người, hai vế cùng chủ ngữ; với sự vật như \"chủ nhật\" phải dùng のに."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-to-shitemo",
+      "nhom": "Nhượng bộ – đối lập",
+      "tieuDe": "〜としても",
+      "mau": "thể thường + としても",
+      "nghia": "giả sử ~ đi nữa thì cũng",
+      "giaiThich": "Đặt ra một giả định (thường khó xảy ra hoặc trái thực tế) rồi nói kết quả vẫn không thay đổi. Mức giả định mạnh hơn 〜ても. Hay đi cùng たとえ, もし, 仮に.",
+      "cachGhep": [
+        "Động từ / tính từ đuôi い thể thường + としても",
+        "Danh từ / tính từ đuôi な + だ + としても"
+      ],
+      "viDu": [
+        {
+          "c": "今から走ったとしても、もう間に合わないでしょう。",
+          "d": "いまから はしったとしても、もう まにあわないでしょう。",
+          "v": "Giả sử bây giờ có chạy thì chắc cũng không kịp nữa."
+        },
+        {
+          "c": "たとえ失敗したとしても、もう一度やってみます。",
+          "d": "たとえ しっぱいしたとしても、もう いちど やってみます。",
+          "v": "Cho dù có thất bại, tôi vẫn sẽ thử lại lần nữa."
+        },
+        {
+          "c": "お金があるとしても、そんな高い物は買いません。",
+          "d": "おかねが あるとしても、そんな たかい ものは かいません。",
+          "v": "Giả sử có tiền đi nữa, tôi cũng không mua thứ đắt như vậy."
+        }
+      ],
+      "luuY": [
+        "Đừng nhầm với N + として (với tư cách là).",
+        "Vế sau là kết quả trái với điều thường suy ra từ giả định."
+      ],
+      "soSanh": [
+        "ja-n3-tatoe-temo",
+        "ja-n3-tatte",
+        "ja-n3-to-shite"
+      ],
+      "tuKhoa": [
+        "to shitemo",
+        "toshitemo",
+        "giả sử",
+        "cho dù"
+      ],
+      "quiz": [
+        {
+          "h": "タクシーで（　）としても、30分はかかる。",
+          "lc": [
+            "行った",
+            "行って",
+            "行こう",
+            "行き"
+          ],
+          "da": 0,
+          "gt": "としても đi sau thể thường; ở đây là thể た (cũng có thể là 行く)."
+        },
+        {
+          "h": "「行けるとしても、行かない」 nghĩa là gì?",
+          "lc": [
+            "Vì đi được nên sẽ đi",
+            "Giả sử có đi được thì cũng không đi",
+            "Vì không đi được nên không đi"
+          ],
+          "da": 1,
+          "gt": "としても = giả sử ~ đi nữa thì cũng."
+        },
+        {
+          "h": "彼が謝ったとしても、（　）。",
+          "lc": [
+            "すぐ許します",
+            "許しましょう",
+            "私は許さない"
+          ],
+          "da": 2,
+          "gt": "Vế sau trái với điều thường suy ra: dù xin lỗi cũng không tha."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-tatoe-temo",
+      "nhom": "Nhượng bộ – đối lập",
+      "tieuDe": "たとえ〜ても",
+      "mau": "たとえ + V-て / Aい → くて / N・Aな + で + も",
+      "nghia": "cho dù ~ đi nữa thì vẫn",
+      "giaiThich": "たとえ là phó từ đi cặp với 〜ても để nhấn mạnh ý nhượng bộ: dù điều kiện đó có xảy ra thì kết quả hay quyết tâm vẫn không đổi.",
+      "cachGhep": [
+        "たとえ + động từ thể て + も",
+        "たとえ + tính từ đuôi い → くて + も",
+        "たとえ + danh từ / tính từ đuôi な + でも"
+      ],
+      "viDu": [
+        {
+          "c": "たとえ雨が降っても、試合は行われます。",
+          "d": "たとえ あめが ふっても、しあいは おこなわれます。",
+          "v": "Cho dù trời mưa, trận đấu vẫn được tổ chức."
+        },
+        {
+          "c": "たとえ高くても、いい物を買いたいです。",
+          "d": "たとえ たかくても、いい ものを かいたいです。",
+          "v": "Cho dù đắt, tôi vẫn muốn mua đồ tốt."
+        },
+        {
+          "c": "たとえ両親に反対されても、留学するつもりです。",
+          "d": "たとえ りょうしんに はんたいされても、りゅうがくするつもりです。",
+          "v": "Cho dù bị bố mẹ phản đối, tôi vẫn định đi du học."
+        }
+      ],
+      "luuY": [
+        "たとえ đi với ても / でも / としても, không đi với たら hay ば (✗ たとえ雨が降ったら). Cặp của たら là もし.",
+        "Người Việt hay nhầm たとえ (cho dù) với たとえば (ví dụ)."
+      ],
+      "soSanh": [
+        "ja-n3-to-shitemo",
+        "ja-n3-tatte"
+      ],
+      "tuKhoa": [
+        "tatoe temo",
+        "tatoe",
+        "cho dù",
+        "dù cho"
+      ],
+      "quiz": [
+        {
+          "h": "（　）どんなに大変でも、最後までやります。",
+          "lc": [
+            "たとえ",
+            "たとえば",
+            "たぶん",
+            "まるで"
+          ],
+          "da": 0,
+          "gt": "たとえ đi cặp với でも / ても: cho dù."
+        },
+        {
+          "h": "たとえ負け（　）、最後までがんばろう。",
+          "lc": [
+            "たら",
+            "ても",
+            "れば",
+            "ると"
+          ],
+          "da": 1,
+          "gt": "たとえ luôn đi với 〜ても."
+        },
+        {
+          "h": "たとえ忙しくても、（　）。",
+          "lc": [
+            "行けません",
+            "休みます",
+            "毎日電話します"
+          ],
+          "da": 2,
+          "gt": "Vế sau nói điều vẫn làm bất chấp điều kiện: dù bận vẫn gọi điện."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-tatte",
+      "nhom": "Nhượng bộ – đối lập",
+      "tieuDe": "〜たって／〜だって",
+      "mau": "V-た → たって / Aい → くたって / N・Aな + だって",
+      "nghia": "dù ~ cũng (cách nói thân mật của 〜ても)",
+      "giaiThich": "Là dạng văn nói thân mật của 〜ても / 〜でも, nghĩa không đổi: dù điều kiện đó có xảy ra thì kết quả vẫn thế. Hay đi với いくら, どんなに.",
+      "cachGhep": [
+        "Động từ: thể た + って (行っても → 行ったって, 読んでも → 読んだって)",
+        "Tính từ đuôi い: 〜くても → 〜くたって",
+        "Danh từ / tính từ đuôi な: 〜でも → 〜だって"
+      ],
+      "viDu": [
+        {
+          "c": "今から行ったって、もう間に合わないよ。",
+          "d": "いまから いったって、もう まにあわないよ。",
+          "v": "Giờ có đi thì cũng không kịp nữa đâu."
+        },
+        {
+          "c": "高くたって、買うつもりです。",
+          "d": "たかくたって、かうつもりです。",
+          "v": "Dù đắt tôi cũng định mua."
+        },
+        {
+          "c": "どんなに泣いたって、だめなものはだめだ。",
+          "d": "どんなに ないたって、だめな ものは だめだ。",
+          "v": "Có khóc đến mấy thì không được vẫn là không được."
+        },
+        {
+          "c": "子どもだって、それぐらい分かります。",
+          "d": "こどもだって、それぐらい わかります。",
+          "v": "Ngay cả trẻ con cũng hiểu chừng đó."
+        }
+      ],
+      "luuY": [
+        "Động từ có thể て là 〜んで thì thành 〜んだって (飲んだって, 読んだって), không phải 〜んたって.",
+        "Chỉ dùng khi nói chuyện thân mật; trong bài viết dùng 〜ても."
+      ],
+      "soSanh": [
+        "ja-n3-tatoe-temo",
+        "ja-n3-to-shitemo",
+        "ja-n3-n-datte"
+      ],
+      "tuKhoa": [
+        "tatte",
+        "datte",
+        "kutatte",
+        "dù cũng",
+        "văn nói của temo"
+      ],
+      "quiz": [
+        {
+          "h": "いくら（　）、彼は聞いてくれない。",
+          "lc": [
+            "言ったって",
+            "言うって",
+            "言ってって",
+            "言えって"
+          ],
+          "da": 0,
+          "gt": "言っても → 言ったって (thể た + って)."
+        },
+        {
+          "h": "「安くたって買わない」 nghĩa giống câu nào?",
+          "lc": [
+            "安いから買わない",
+            "安くても買わない",
+            "安ければ買う"
+          ],
+          "da": 1,
+          "gt": "〜くたって là dạng thân mật của 〜くても."
+        },
+        {
+          "h": "「読んでも」 nói thân mật thành gì?",
+          "lc": [
+            "読んたって",
+            "読むだって",
+            "読んだって"
+          ],
+          "da": 2,
+          "gt": "読んでも → 読んだって (theo thể た: 読んだ)."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-ippou-de",
+      "nhom": "Nhượng bộ – đối lập",
+      "tieuDe": "〜一方（で）",
+      "mau": "thể thường (Aな + な / である, N + である) + 一方（で）",
+      "nghia": "mặt khác ~; trong khi ~ thì đồng thời",
+      "giaiThich": "Nêu hai mặt đối lập của một sự việc, hoặc đặt hai sự việc tương phản cạnh nhau. Cũng dùng khi một người làm song song hai việc. 一方 có thể đứng đầu câu như một liên từ.",
+      "cachGhep": [
+        "Thể thường + 一方（で）",
+        "Tính từ đuôi な + な + 一方（で）",
+        "Đầu câu: 〜。一方、〜"
+      ],
+      "viDu": [
+        {
+          "c": "彼は会社で働く一方で、夜は大学で勉強しています。",
+          "d": "かれは かいしゃで はたらく いっぽうで、よるは だいがくで べんきょうしています。",
+          "v": "Anh ấy vừa làm ở công ty, mặt khác buổi tối còn học đại học."
+        },
+        {
+          "c": "都会は便利な一方で、家賃が高いです。",
+          "d": "とかいは べんりな いっぽうで、やちんが たかいです。",
+          "v": "Thành phố tiện lợi nhưng mặt khác tiền thuê nhà lại đắt."
+        },
+        {
+          "c": "兄は静かだ。一方、弟はとてもにぎやかだ。",
+          "d": "あには しずかだ。いっぽう、おとうとは とても にぎやかだ。",
+          "v": "Anh trai thì trầm lặng. Trái lại, em trai rất ồn ào."
+        }
+      ],
+      "luuY": [
+        "Đừng nhầm với V-る + 一方だ (ngày càng ~, chỉ theo một chiều).",
+        "So với 反面: 一方で rộng hơn, so sánh được hai đối tượng khác nhau; 反面 chỉ nói hai mặt trái ngược của cùng một đối tượng."
+      ],
+      "soSanh": [
+        "ja-n3-hanmen",
+        "ja-n3-ippou-da"
+      ],
+      "tuKhoa": [
+        "ippou de",
+        "ippoude",
+        "ippou",
+        "mặt khác",
+        "trong khi"
+      ],
+      "quiz": [
+        {
+          "h": "姉は医者として働く（　）、二人の子どもを育てている。",
+          "lc": [
+            "一方で",
+            "一方だ",
+            "とたん",
+            "以来"
+          ],
+          "da": 0,
+          "gt": "Làm song song hai việc ⇒ 一方で."
+        },
+        {
+          "h": "日本は子どもの数が減っている。（　）、お年寄りは増えている。",
+          "lc": [
+            "たとえ",
+            "一方",
+            "ついでに",
+            "さえ"
+          ],
+          "da": 1,
+          "gt": "Đặt hai sự việc tương phản cạnh nhau, đứng đầu câu ⇒ 一方."
+        },
+        {
+          "h": "「この仕事は給料がいい一方で、休みが少ない」 nghĩa là gì?",
+          "lc": [
+            "Lương cao nên được nghỉ nhiều",
+            "Lương ngày càng cao",
+            "Lương cao nhưng mặt khác ít ngày nghỉ"
+          ],
+          "da": 2,
+          "gt": "一方で nêu hai mặt đối lập của cùng công việc."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-hanmen",
+      "nhom": "Nhượng bộ – đối lập",
+      "tieuDe": "〜反面",
+      "mau": "thể thường (Aな + な / である, N + である) + 反面",
+      "nghia": "mặt trái là ~, nhưng ngược lại",
+      "giaiThich": "Nói về MỘT đối tượng có hai mặt tính chất trái ngược nhau, thường một mặt tốt và một mặt xấu.",
+      "cachGhep": [
+        "Động từ / tính từ đuôi い thể thường + 反面",
+        "Tính từ đuôi な + な + 反面",
+        "Danh từ + である + 反面"
+      ],
+      "viDu": [
+        {
+          "c": "この薬はよく効く反面、眠くなることがあります。",
+          "d": "この くすりは よく きく はんめん、ねむくなることが あります。",
+          "v": "Thuốc này rất hiệu nghiệm, nhưng mặt trái là có khi gây buồn ngủ."
+        },
+        {
+          "c": "一人暮らしは自由な反面、寂しいときもあります。",
+          "d": "ひとりぐらしは じゆうな はんめん、さびしい ときも あります。",
+          "v": "Sống một mình thì tự do, nhưng ngược lại cũng có lúc cô đơn."
+        },
+        {
+          "c": "携帯電話は便利な反面、困ることも多いです。",
+          "d": "けいたいでんわは べんりな はんめん、こまることも おおいです。",
+          "v": "Điện thoại di động tiện lợi nhưng mặt trái cũng gây nhiều phiền toái."
+        }
+      ],
+      "luuY": [
+        "Hai vế phải nói về cùng một chủ thể. So sánh hai chủ thể khác nhau thì dùng 一方で hoặc に対して (✗ 兄は静かな反面、弟はにぎやかだ)."
+      ],
+      "soSanh": [
+        "ja-n3-ippou-de"
+      ],
+      "tuKhoa": [
+        "hanmen",
+        "mặt trái",
+        "ngược lại",
+        "hai mặt"
+      ],
+      "quiz": [
+        {
+          "h": "都会の生活は便利（　）反面、ストレスも多い。",
+          "lc": [
+            "な",
+            "の",
+            "だ",
+            "に"
+          ],
+          "da": 0,
+          "gt": "Tính từ đuôi な + な + 反面."
+        },
+        {
+          "h": "「反面」 đọc là gì?",
+          "lc": [
+            "はんづら",
+            "はんめん",
+            "たんめん"
+          ],
+          "da": 1,
+          "gt": "反面 đọc là はんめん."
+        },
+        {
+          "h": "この車は速い反面、（　）。",
+          "lc": [
+            "とても速い",
+            "かっこいい",
+            "ガソリンをたくさん使う"
+          ],
+          "da": 2,
+          "gt": "Sau 反面 là mặt trái ngược (điểm xấu) của cùng chiếc xe."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-sae",
+      "nhom": "Nhấn mạnh – mức độ",
+      "tieuDe": "〜さえ",
+      "mau": "N（+ trợ từ）+ さえ / N + でさえ",
+      "nghia": "ngay cả ~, đến cả ~ (cũng)",
+      "giaiThich": "Nêu một ví dụ cực đoan để ngầm nói những cái khác thì đương nhiên càng như vậy. Mạnh và hơi trang trọng hơn も. Thường dùng trong câu có sắc thái bất ngờ hoặc tiêu cực.",
+      "cachGhep": [
+        "Danh từ + さえ (thay cho が, を)",
+        "Danh từ + trợ từ + さえ: にさえ, とさえ, からさえ",
+        "Chủ ngữ là người: N + でさえ"
+      ],
+      "viDu": [
+        {
+          "c": "忙しくて、昼ご飯を食べる時間さえありません。",
+          "d": "いそがしくて、ひるごはんを たべる じかんさえ ありません。",
+          "v": "Bận đến mức ngay cả thời gian ăn trưa cũng không có."
+        },
+        {
+          "c": "そんなことは、子どもでさえ知っています。",
+          "d": "そんな ことは、こどもでさえ しっています。",
+          "v": "Chuyện đó thì ngay cả trẻ con cũng biết."
+        },
+        {
+          "c": "彼は自分の名前さえ書けません。",
+          "d": "かれは じぶんの なまえさえ かけません。",
+          "v": "Anh ấy đến tên mình cũng không viết được."
+        }
+      ],
+      "luuY": [
+        "さえ thay cho が và を, nhưng các trợ từ khác như に, で, と thì giữ lại (友達にさえ言わない).",
+        "Đừng nhầm với mẫu điều kiện 〜さえ〜ば (chỉ cần ~ là)."
+      ],
+      "soSanh": [
+        "ja-n3-sae-ba",
+        "ja-n3-koso"
+      ],
+      "tuKhoa": [
+        "sae",
+        "de sae",
+        "ngay cả",
+        "đến cả"
+      ],
+      "quiz": [
+        {
+          "h": "のどが痛くて、水（　）飲めない。",
+          "lc": [
+            "さえ",
+            "こそ",
+            "ばかり",
+            "ほど"
+          ],
+          "da": 0,
+          "gt": "\"Ngay cả nước cũng không uống được\" ⇒ さえ."
+        },
+        {
+          "h": "この問題は、先生（　）さえ分からない。",
+          "lc": [
+            "が",
+            "で",
+            "を",
+            "へ"
+          ],
+          "da": 1,
+          "gt": "Chủ ngữ chỉ người: N + でさえ (ngay cả thầy giáo)."
+        },
+        {
+          "h": "「ひらがなさえ読めない」 hàm ý gì?",
+          "lc": [
+            "Chỉ đọc được hiragana",
+            "Đọc được cả chữ Hán",
+            "Hiragana còn không đọc được, nói gì đến chữ Hán"
+          ],
+          "da": 2,
+          "gt": "さえ nêu ví dụ cực đoan, ngầm nói những thứ khó hơn thì càng không."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-sae-ba",
+      "nhom": "Nhấn mạnh – mức độ",
+      "tieuDe": "〜さえ〜ば",
+      "mau": "N + さえ + V-ば / V-ます + さえすれば / Aい → く・Aな → で + さえあれば",
+      "nghia": "chỉ cần ~ là (đủ)",
+      "giaiThich": "Nêu điều kiện duy nhất cần có; chỉ cần điều đó được thoả mãn thì mọi thứ khác không thành vấn đề.",
+      "cachGhep": [
+        "Danh từ + さえ + động từ thể ば: お金さえあれば",
+        "Động từ thể ます (bỏ ます) + さえすれば: 飲みさえすれば",
+        "Danh từ / tính từ đuôi な + さえ + なら / であれば"
+      ],
+      "viDu": [
+        {
+          "c": "お金さえあれば、何でも買えます。",
+          "d": "おかねさえ あれば、なんでも かえます。",
+          "v": "Chỉ cần có tiền là mua được mọi thứ."
+        },
+        {
+          "c": "この薬を飲みさえすれば、すぐによくなります。",
+          "d": "この くすりを のみさえすれば、すぐに よくなります。",
+          "v": "Chỉ cần uống thuốc này là sẽ khỏi ngay."
+        },
+        {
+          "c": "体さえ丈夫なら、どんな仕事でもできます。",
+          "d": "からださえ じょうぶなら、どんな しごとでも できます。",
+          "v": "Chỉ cần cơ thể khoẻ mạnh thì việc gì cũng làm được."
+        }
+      ],
+      "luuY": [
+        "Với động từ, さえ chen vào sau thể ます rồi thêm すれば (✗ 飲むさえすれば, ✗ 飲めばさえ).",
+        "Vế sau là kết quả chắc chắn đạt được hoặc điều mong ước; さえ ở đây không còn nghĩa \"ngay cả\"."
+      ],
+      "soSanh": [
+        "ja-n3-sae"
+      ],
+      "tuKhoa": [
+        "sae ba",
+        "saeba",
+        "sae sureba",
+        "chỉ cần",
+        "miễn là"
+      ],
+      "quiz": [
+        {
+          "h": "時間（　）あれば、旅行に行けるのに。",
+          "lc": [
+            "さえ",
+            "こそ",
+            "など",
+            "ほど"
+          ],
+          "da": 0,
+          "gt": "N + さえ + あれば: chỉ cần có thời gian."
+        },
+        {
+          "h": "あなた（　）いれば、私は幸せです。",
+          "lc": [
+            "なんか",
+            "さえ",
+            "くらい"
+          ],
+          "da": 1,
+          "gt": "\"Chỉ cần có bạn\" ⇒ あなたさえいれば."
+        },
+        {
+          "h": "練習し（　）すれば、だれでも上手になる。",
+          "lc": [
+            "こそ",
+            "ほど",
+            "さえ"
+          ],
+          "da": 2,
+          "gt": "V-ます + さえすれば: chỉ cần luyện tập."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-koso",
+      "nhom": "Nhấn mạnh – mức độ",
+      "tieuDe": "〜こそ",
+      "mau": "N + こそ / 〜から + こそ",
+      "nghia": "chính ~ (mới), nhất định ~",
+      "giaiThich": "Nhấn mạnh từ đứng trước: chính cái đó chứ không phải cái khác. 〜からこそ nhấn mạnh lý do: \"chính vì ~ nên mới\".",
+      "cachGhep": [
+        "Danh từ + こそ (thay cho は, が, を)",
+        "Thể thường + からこそ",
+        "Cố định: こちらこそ, 今度こそ, 今年こそ"
+      ],
+      "viDu": [
+        {
+          "c": "「よろしくお願いします。」「こちらこそ、よろしくお願いします。」",
+          "d": "「よろしく おねがいします。」「こちらこそ、よろしく おねがいします。」",
+          "v": "\"Mong được anh giúp đỡ.\" \"Chính tôi mới phải mong anh giúp đỡ.\""
+        },
+        {
+          "c": "今年こそ、N3に合格したいです。",
+          "d": "ことしこそ、エヌさんに ごうかく したいです。",
+          "v": "Nhất định năm nay tôi muốn đỗ N3."
+        },
+        {
+          "c": "あなたのことを心配しているからこそ、注意するのです。",
+          "d": "あなたの ことを しんぱいしているからこそ、ちゅういするのです。",
+          "v": "Chính vì lo cho bạn nên tôi mới nhắc nhở."
+        }
+      ],
+      "luuY": [
+        "こそ nhấn mạnh theo hướng tích cực, khẳng định; nêu ví dụ cực đoan (ngay cả) thì dùng さえ.",
+        "からこそ không dùng cho lý do đem lại kết quả xấu ngoài ý muốn (✗ 寝坊したからこそ遅刻した)."
+      ],
+      "soSanh": [
+        "ja-n3-sae"
+      ],
+      "tuKhoa": [
+        "koso",
+        "kara koso",
+        "kochira koso",
+        "chính",
+        "nhấn mạnh"
+      ],
+      "quiz": [
+        {
+          "h": "今度（　）、絶対に勝ちたい。",
+          "lc": [
+            "こそ",
+            "さえ",
+            "ほど",
+            "くらい"
+          ],
+          "da": 0,
+          "gt": "\"Nhất định lần này\" ⇒ 今度こそ."
+        },
+        {
+          "h": "「こちらこそ」 nghĩa là gì?",
+          "lc": [
+            "Bên này thì không",
+            "Chính tôi mới phải (nói vậy)",
+            "Mời đi lối này"
+          ],
+          "da": 1,
+          "gt": "こちらこそ đáp lại lời cảm ơn, lời chào: chính tôi mới phải nói thế."
+        },
+        {
+          "h": "好きだ（　）、毎日練習できるのです。",
+          "lc": [
+            "からさえ",
+            "からほど",
+            "からこそ"
+          ],
+          "da": 2,
+          "gt": "\"Chính vì thích\" ⇒ からこそ."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-nanka-nante",
+      "nhom": "Nhấn mạnh – mức độ",
+      "tieuDe": "〜など／〜なんか／〜なんて",
+      "mau": "N + など・なんか・なんて / thể thường + なんて",
+      "nghia": "~ chẳng hạn; cái thứ như ~ (coi nhẹ, khiêm tốn); chuyện ~ thì thật là (ngạc nhiên)",
+      "giaiThich": "Có ba ý: (1) nêu một ví dụ nhẹ nhàng; (2) coi nhẹ điều được nhắc tới, hoặc khiêm tốn khi nói về mình; (3) なんて đứng sau một câu để tỏ ý ngạc nhiên, không ngờ. など trang trọng nhất; なんか và なんて là văn nói.",
+      "cachGhep": [
+        "Danh từ + など / なんか / なんて",
+        "Thể thường + なんて + (信じられない, すごい, ひどい…)"
+      ],
+      "viDu": [
+        {
+          "c": "この色なんか、どうですか。",
+          "d": "この いろなんか、どうですか。",
+          "v": "Màu này chẳng hạn, anh thấy thế nào?"
+        },
+        {
+          "c": "私なんか、まだまだ下手です。",
+          "d": "わたしなんか、まだまだ へたです。",
+          "v": "Như tôi thì vẫn còn kém lắm."
+        },
+        {
+          "c": "納豆なんて、食べたくない。",
+          "d": "なっとうなんて、たべたくない。",
+          "v": "Cái món natto ấy thì tôi chẳng muốn ăn."
+        },
+        {
+          "c": "彼が試験に落ちるなんて、信じられません。",
+          "d": "かれが しけんに おちるなんて、しんじられません。",
+          "v": "Chuyện anh ấy thi trượt thì thật không thể tin được."
+        }
+      ],
+      "luuY": [
+        "Dùng なんか / なんて cho người khác hoặc đồ của người khác dễ thành coi thường (あなたなんか…), cần cẩn thận.",
+        "Sau cả một câu để tỏ ngạc nhiên thì dùng なんて, không dùng なんか (✗ 落ちるなんか信じられない)."
+      ],
+      "soSanh": [
+        "ja-n3-koso"
+      ],
+      "tuKhoa": [
+        "nado",
+        "nanka",
+        "nante",
+        "chẳng hạn",
+        "coi nhẹ",
+        "ngạc nhiên"
+      ],
+      "quiz": [
+        {
+          "h": "あんな人（　）、大嫌いだ。",
+          "lc": [
+            "なんか",
+            "ほど",
+            "について",
+            "として"
+          ],
+          "da": 0,
+          "gt": "Tỏ ý coi nhẹ, ghét bỏ đối tượng ⇒ なんか."
+        },
+        {
+          "h": "一人で外国へ行く（　）、すごいですね。",
+          "lc": [
+            "さえ",
+            "なんて",
+            "こそ"
+          ],
+          "da": 1,
+          "gt": "Sau cả câu để tỏ ý ngạc nhiên, thán phục ⇒ なんて."
+        },
+        {
+          "h": "「私なんか…」 có sắc thái gì?",
+          "lc": [
+            "Tự hào về bản thân",
+            "Ra lệnh cho người nghe",
+            "Khiêm tốn, hạ thấp bản thân"
+          ],
+          "da": 2,
+          "gt": "Dùng なんか cho chính mình là cách nói khiêm tốn."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-kurai-hodo",
+      "nhom": "Nhấn mạnh – mức độ",
+      "tieuDe": "〜くらい／〜ぐらい／〜ほど (mức độ)",
+      "mau": "thể thường + くらい・ぐらい・ほど / N + くらい・ぐらい・ほど",
+      "nghia": "đến mức ~, đến nỗi ~; ít nhất thì cũng ~ (くらい)",
+      "giaiThich": "Dùng một hình ảnh hay ví dụ để diễn tả mức độ cao của một trạng thái: \"A đến mức B\". ほど hơi cứng hơn くらい. Riêng くらい / ぐらい còn có nghĩa coi là mức tối thiểu, chuyện nhỏ: \"ít nhất thì cũng ~\", \"cỡ ~ thì\".",
+      "cachGhep": [
+        "Động từ thể từ điển / thể ない / 〜たい + くらい・ほど",
+        "Danh từ + くらい / ぐらい / ほど",
+        "Mức tối thiểu: N + くらい / ぐらい (không dùng ほど)"
+      ],
+      "viDu": [
+        {
+          "c": "今日は、死ぬほど疲れました。",
+          "d": "きょうは、しぬほど つかれました。",
+          "v": "Hôm nay tôi mệt muốn chết."
+        },
+        {
+          "c": "泣きたいくらい、うれしかったです。",
+          "d": "なきたいくらい、うれしかったです。",
+          "v": "Tôi vui đến mức muốn khóc."
+        },
+        {
+          "c": "昨日は、立っていられないほど強い風が吹きました。",
+          "d": "きのうは、たっていられないほど つよい かぜが ふきました。",
+          "v": "Hôm qua gió thổi mạnh đến mức không đứng vững được."
+        },
+        {
+          "c": "自分の部屋ぐらい、自分で掃除しなさい。",
+          "d": "じぶんの へやぐらい、じぶんで そうじしなさい。",
+          "v": "Ít nhất thì phòng của mình cũng phải tự dọn đi."
+        }
+      ],
+      "luuY": [
+        "Trật tự ngược tiếng Việt: phần \"đến mức…\" đứng TRƯỚC, trạng thái chính đứng sau (泣きたいくらいうれしい = vui đến mức muốn khóc).",
+        "Nghĩa \"ít nhất, cỡ như ~\" chỉ dùng くらい / ぐらい (✗ 自分の部屋ほど自分で掃除しなさい)."
+      ],
+      "soSanh": [
+        "ja-n3-hodo-wa-nai"
+      ],
+      "tuKhoa": [
+        "kurai",
+        "gurai",
+        "hodo",
+        "đến mức",
+        "đến nỗi",
+        "ít nhất"
+      ],
+      "quiz": [
+        {
+          "h": "おなかが痛くなる（　）、笑った。",
+          "lc": [
+            "ほど",
+            "こそ",
+            "さえ",
+            "なんか"
+          ],
+          "da": 0,
+          "gt": "\"Cười đến mức đau bụng\" ⇒ ほど (hoặc くらい)."
+        },
+        {
+          "h": "声が出ない（　）、驚いた。",
+          "lc": [
+            "こそ",
+            "くらい",
+            "さえ"
+          ],
+          "da": 1,
+          "gt": "\"Ngạc nhiên đến mức không thốt nên lời\" ⇒ くらい."
+        },
+        {
+          "h": "あいさつ（　）、ちゃんとしなさい。 (ít nhất thì cũng)",
+          "lc": [
+            "ほど",
+            "によって",
+            "ぐらい"
+          ],
+          "da": 2,
+          "gt": "Nghĩa \"ít nhất thì chuyện nhỏ như ~\" chỉ dùng くらい / ぐらい."
+        }
+      ]
+    }
+  ]
+}

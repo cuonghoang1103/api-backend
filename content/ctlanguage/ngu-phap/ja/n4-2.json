@@ -1,0 +1,1224 @@
+{
+  "nn": "ja",
+  "cap": "N4",
+  "diem": [
+    {
+      "id": "ja-n4-ikou-kei",
+      "nhom": "Ý chí – dự định",
+      "tieuDe": "Thể ý chí (意向形)",
+      "mau": "V-(よ)う",
+      "nghia": "(mình) làm ~ thôi / cùng làm ~ nào (thể thường của 〜ましょう)",
+      "giaiThich": "Thể ý chí là dạng thân mật của 〜ましょう, dùng để rủ rê, đề nghị với bạn bè, người thân, hoặc tự nhủ khi quyết định làm gì. Nó cũng là thành phần của mẫu 〜(よ)うと思います.",
+      "cachGhep": [
+        "Nhóm I: đuôi cột う → cột お + う: 行く → 行こう, 飲む → 飲もう, 買う → 買おう, 話す → 話そう, 待つ → 待とう",
+        "Nhóm II: bỏ る + よう: 食べる → 食べよう, 見る → 見よう",
+        "Nhóm III: する → しよう, 来る → 来よう（こよう）"
+      ],
+      "viDu": [
+        {
+          "c": "疲れたね。少し休もう。",
+          "d": "つかれたね。すこし やすもう。",
+          "v": "Mệt nhỉ. Nghỉ một chút thôi."
+        },
+        {
+          "c": "明日、いっしょに映画を見よう。",
+          "d": "あした、いっしょに えいがを みよう。",
+          "v": "Ngày mai cùng đi xem phim nhé."
+        },
+        {
+          "c": "何を食べようか。",
+          "d": "なにを たべようか。",
+          "v": "Mình ăn gì đây nhỉ?"
+        },
+        {
+          "c": "もう遅いから、帰ろう。",
+          "d": "もう おそいから、かえろう。",
+          "v": "Muộn rồi, về thôi."
+        }
+      ],
+      "luuY": [
+        "Chỉ dùng với người thân, người ngang hàng hoặc người dưới; với người trên dùng 〜ましょう.",
+        "Dễ chia sai: 帰る là nhóm I → 帰ろう (không phải 帰よう); 来る → こよう."
+      ],
+      "soSanh": [
+        "ja-n4-you-to-omou"
+      ],
+      "tuKhoa": [
+        "ikoukei",
+        "ikou kei",
+        "volitional",
+        "thể ý chí",
+        "you",
+        "ou"
+      ],
+      "quiz": [
+        {
+          "h": "「買う」の 意向形は どれですか。",
+          "lc": [
+            "買おう",
+            "買よう",
+            "買うよう",
+            "買えよう"
+          ],
+          "da": 0,
+          "gt": "Nhóm I: う → お + う = 買おう."
+        },
+        {
+          "h": "「来る」の 意向形は どれですか。",
+          "lc": [
+            "きよう",
+            "くよう",
+            "こよう",
+            "こう"
+          ],
+          "da": 2,
+          "gt": "来る là nhóm III, thể ý chí đọc là こよう."
+        },
+        {
+          "h": "時間が ないから、タクシーで（　）。",
+          "lc": [
+            "行くう",
+            "行きよう",
+            "行けう",
+            "行こう"
+          ],
+          "da": 3,
+          "gt": "行く là nhóm I: く → こ + う = 行こう."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-you-to-omou",
+      "nhom": "Ý chí – dự định",
+      "tieuDe": "〜(よ)うと思います",
+      "mau": "V-thể ý chí + と思います / と思っています",
+      "nghia": "tôi định (sẽ) làm ~",
+      "giaiThich": "Dùng để nói với người nghe ý định của mình. と思います dùng cho ý định vừa nảy ra hoặc nói chung; と思っています cho thấy ý định đã có từ trước và vẫn đang giữ, và cũng dùng được khi nói về ý định của người thứ ba.",
+      "cachGhep": [
+        "V-thể ý chí + と 思います",
+        "V-thể ý chí + と 思っています (đã định từ trước; dùng được cho người thứ ba)",
+        "Hỏi: V-thể ý chí + と 思っていますか"
+      ],
+      "viDu": [
+        {
+          "c": "週末は海へ行こうと思っています。",
+          "d": "しゅうまつは うみへ いこうと おもって います。",
+          "v": "Cuối tuần tôi đang định đi biển."
+        },
+        {
+          "c": "今日は早く寝ようと思います。",
+          "d": "きょうは はやく ねようと おもいます。",
+          "v": "Hôm nay tôi định ngủ sớm."
+        },
+        {
+          "c": "兄は来年会社をやめようと思っています。",
+          "d": "あには らいねん かいしゃを やめようと おもって います。",
+          "v": "Anh tôi đang định sang năm nghỉ việc ở công ty."
+        },
+        {
+          "c": "夏休みに国へ帰ろうと思っていますか。",
+          "d": "なつやすみに くにへ かえろうと おもって いますか。",
+          "v": "Nghỉ hè bạn có định về nước không?"
+        }
+      ],
+      "luuY": [
+        "Nói ý định của mình thì trước と思います phải là thể ý chí: 行こうと思います. Câu 行くと思います là phỏng đoán “tôi nghĩ là (ai đó) sẽ đi”.",
+        "Ý định của người thứ ba chỉ dùng と思っています, không dùng と思います."
+      ],
+      "soSanh": [
+        "ja-n4-tsumori",
+        "ja-n4-ikou-kei"
+      ],
+      "tuKhoa": [
+        "you to omou",
+        "youtoomou",
+        "ou to omoimasu",
+        "định làm",
+        "ý định"
+      ],
+      "quiz": [
+        {
+          "h": "来月から ジムに（　）と 思って います。",
+          "lc": [
+            "通おう",
+            "通うよう",
+            "通いよう",
+            "通って"
+          ],
+          "da": 0,
+          "gt": "通う là nhóm I: う → お + う = 通おう, rồi + と思っています."
+        },
+        {
+          "h": "田中さんは 来年 留学しようと（　）。",
+          "lc": [
+            "思います",
+            "思って います",
+            "思いましょう"
+          ],
+          "da": 1,
+          "gt": "Ý định của người thứ ba dùng と思っています."
+        },
+        {
+          "h": "今晩は 早く（　）と 思います。",
+          "lc": [
+            "帰よう",
+            "帰りよう",
+            "帰ろう",
+            "帰るう"
+          ],
+          "da": 2,
+          "gt": "帰る là nhóm I: る → ろ + う = 帰ろう."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-tsumori",
+      "nhom": "Ý chí – dự định",
+      "tieuDe": "〜つもりです",
+      "mau": "V-る / V-ない + つもりです",
+      "nghia": "dự định (chắc chắn) sẽ làm / sẽ không làm ~",
+      "giaiThich": "Diễn tả ý định đã được quyết từ trước, chắc chắn hơn 〜(よ)うと思っています. Không dùng cho quyết định vừa nảy ra ngay lúc nói.",
+      "cachGhep": [
+        "V-thể từ điển + つもりです",
+        "V-thể ない + つもりです (định không làm)",
+        "Hỏi: V-る + つもりですか"
+      ],
+      "viDu": [
+        {
+          "c": "来年、日本で働くつもりです。",
+          "d": "らいねん、にほんで はたらく つもりです。",
+          "v": "Sang năm tôi dự định làm việc ở Nhật."
+        },
+        {
+          "c": "今年は国へ帰らないつもりです。",
+          "d": "ことしは くにへ かえらない つもりです。",
+          "v": "Năm nay tôi định không về nước."
+        },
+        {
+          "c": "大学を出てから、何をするつもりですか。",
+          "d": "だいがくを でてから、なにを する つもりですか。",
+          "v": "Tốt nghiệp đại học xong bạn định làm gì?"
+        }
+      ],
+      "luuY": [
+        "Hỏi người trên 〜つもりですか nghe thiếu lịch sự; nên hỏi 〜ますか hoặc 〜予定ですか.",
+        "行かないつもりです = định không đi; 行くつもりはありません mạnh hơn (hoàn toàn không có ý định đi).",
+        "Trước つもり là thể từ điển hoặc thể ない, không phải thể ます hay thể ý chí."
+      ],
+      "soSanh": [
+        "ja-n4-you-to-omou",
+        "ja-n4-yotei"
+      ],
+      "tuKhoa": [
+        "tsumori",
+        "tsumori desu",
+        "dự định",
+        "định sẽ"
+      ],
+      "quiz": [
+        {
+          "h": "夏休みは アルバイトを（　）つもりです。",
+          "lc": [
+            "する",
+            "します",
+            "しよう",
+            "して"
+          ],
+          "da": 0,
+          "gt": "Trước つもりです là thể từ điển: する つもりです."
+        },
+        {
+          "h": "あしたは どこへも（　）つもりです。うちで 休みます。",
+          "lc": [
+            "行く",
+            "行かない",
+            "行こう"
+          ],
+          "da": 1,
+          "gt": "どこへも + phủ định, và câu sau nói ở nhà nghỉ → 行かない つもりです."
+        },
+        {
+          "h": "たばこは もう（　）つもりです。",
+          "lc": [
+            "吸わなく",
+            "吸いません",
+            "吸わないの",
+            "吸わない"
+          ],
+          "da": 3,
+          "gt": "Định không làm: thể ない + つもりです → 吸わない つもりです."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-yotei",
+      "nhom": "Ý chí – dự định",
+      "tieuDe": "〜予定です",
+      "mau": "V-る / N の + 予定です",
+      "nghia": "theo kế hoạch, theo lịch thì sẽ ~",
+      "giaiThich": "Dùng để nói về lịch trình, kế hoạch đã được sắp xếp, thường mang tính khách quan (lịch công ty, lịch trường, lịch chuyến bay). Không nhấn mạnh ý chí cá nhân như つもり.",
+      "cachGhep": [
+        "V-thể từ điển + 予定です",
+        "Danh từ + の + 予定です: 出張の予定です",
+        "Hỏi: いつ / 何時に + V-る + 予定ですか"
+      ],
+      "viDu": [
+        {
+          "c": "来週、大阪へ出張する予定です。",
+          "d": "らいしゅう、おおさかへ しゅっちょうする よていです。",
+          "v": "Theo kế hoạch tuần sau tôi đi công tác Osaka."
+        },
+        {
+          "c": "会議は三時からの予定です。",
+          "d": "かいぎは さんじからの よていです。",
+          "v": "Cuộc họp dự kiến từ 3 giờ."
+        },
+        {
+          "c": "飛行機は何時に着く予定ですか。",
+          "d": "ひこうきは なんじに つく よていですか。",
+          "v": "Máy bay dự kiến mấy giờ đến?"
+        }
+      ],
+      "luuY": [
+        "予定 là lịch đã định (khách quan); つもり là ý định riêng của người nói.",
+        "Danh từ cần の: 出張の予定です."
+      ],
+      "soSanh": [
+        "ja-n4-tsumori"
+      ],
+      "tuKhoa": [
+        "yotei",
+        "yotei desu",
+        "kế hoạch",
+        "dự kiến",
+        "lịch trình"
+      ],
+      "quiz": [
+        {
+          "h": "来月 国へ（　）予定です。",
+          "lc": [
+            "帰る",
+            "帰り",
+            "帰って",
+            "帰ろう"
+          ],
+          "da": 0,
+          "gt": "Trước 予定です là thể từ điển: 帰る 予定です."
+        },
+        {
+          "h": "あしたは 出張（　）予定です。",
+          "lc": [
+            "な",
+            "に",
+            "の",
+            "を"
+          ],
+          "da": 2,
+          "gt": "Danh từ nối với 予定 bằng の: 出張の 予定です."
+        },
+        {
+          "h": "Câu nào nói về lịch đã được sắp xếp?",
+          "lc": [
+            "あした 映画を 見たいです。",
+            "試験は 7月10日の 予定です。",
+            "日曜日は 寝ようかな。"
+          ],
+          "da": 1,
+          "gt": "〜の 予定です nói về lịch đã định; hai câu kia là mong muốn và tự nhủ."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-koto-ni-suru",
+      "nhom": "Ý chí – dự định",
+      "tieuDe": "〜ことにします",
+      "mau": "V-る / V-ない + ことにします",
+      "nghia": "(tự mình) quyết định sẽ làm / không làm ~",
+      "giaiThich": "Diễn tả quyết định do chính người nói đưa ra. ことにしました là đã quyết định xong. ことにしています là quy tắc tự đặt ra cho mình và đang duy trì.",
+      "cachGhep": [
+        "V-thể từ điển + ことに します / しました",
+        "V-thể ない + ことに します",
+        "Thói quen tự đặt ra: V-る / V-ない + ことに しています"
+      ],
+      "viDu": [
+        {
+          "c": "来月、引っ越すことにしました。",
+          "d": "らいげつ、ひっこす ことに しました。",
+          "v": "Tôi đã quyết định tháng sau chuyển nhà."
+        },
+        {
+          "c": "今日からお酒を飲まないことにします。",
+          "d": "きょうから おさけを のまない ことに します。",
+          "v": "Từ hôm nay tôi quyết định không uống rượu."
+        },
+        {
+          "c": "毎朝三十分歩くことにしています。",
+          "d": "まいあさ さんじっぷん あるく ことに して います。",
+          "v": "Tôi đặt lệ sáng nào cũng đi bộ 30 phút."
+        }
+      ],
+      "luuY": [
+        "ことにする = mình tự quyết; ことになる = được quyết định bởi người khác, hoàn cảnh.",
+        "ことにしています là thói quen do mình tự quyết; ようにしています là cố gắng làm (có lúc không làm được)."
+      ],
+      "soSanh": [
+        "ja-n4-koto-ni-naru",
+        "ja-n4-you-ni-suru",
+        "ja-n3-koto-ni-shite-iru"
+      ],
+      "tuKhoa": [
+        "koto ni suru",
+        "kotonisuru",
+        "quyết định",
+        "tự quyết"
+      ],
+      "quiz": [
+        {
+          "h": "体に 悪いので、たばこを（　）ことに しました。",
+          "lc": [
+            "やめる",
+            "やめて",
+            "やめた",
+            "やめよう"
+          ],
+          "da": 0,
+          "gt": "Trước ことにします là thể từ điển (hoặc thể ない): やめる ことに しました."
+        },
+        {
+          "h": "わたしは 夜 10時より 後は 何も（　）ことに して います。",
+          "lc": [
+            "食べる",
+            "食べない",
+            "食べなく",
+            "食べません"
+          ],
+          "da": 1,
+          "gt": "何も đi với phủ định, và trước こと là thể thường: 食べない ことに して います."
+        },
+        {
+          "h": "自分で よく 考えて、会社を やめる ことに（　）。",
+          "lc": [
+            "なりました",
+            "ありました",
+            "しました"
+          ],
+          "da": 2,
+          "gt": "Tự mình suy nghĩ rồi quyết định → ことに しました."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-koto-ni-naru",
+      "nhom": "Ý chí – dự định",
+      "tieuDe": "〜ことになります",
+      "mau": "V-る / V-ない + ことになります",
+      "nghia": "được quyết định là ~; thành ra sẽ ~",
+      "giaiThich": "Diễn tả một việc được quyết định không phải bởi ý chí riêng của người nói mà do công ty, nhà trường, hoàn cảnh. Người Nhật cũng dùng mẫu này để thông báo quyết định của mình một cách khiêm tốn. ことになっています diễn tả quy định, lệ đang có hiệu lực.",
+      "cachGhep": [
+        "V-thể từ điển / thể ない + ことに なりました",
+        "Quy định: V-る / V-ない + ことに なっています"
+      ],
+      "viDu": [
+        {
+          "c": "来月から大阪で働くことになりました。",
+          "d": "らいげつから おおさかで はたらく ことに なりました。",
+          "v": "Tôi được phân công làm việc ở Osaka từ tháng sau."
+        },
+        {
+          "c": "この部屋ではたばこを吸ってはいけないことになっています。",
+          "d": "この へやでは たばこを すっては いけない ことに なって います。",
+          "v": "Theo quy định, không được hút thuốc trong phòng này."
+        },
+        {
+          "c": "来週の会議はしないことになりました。",
+          "d": "らいしゅうの かいぎは しない ことに なりました。",
+          "v": "Đã quyết định là không họp tuần sau."
+        },
+        {
+          "c": "だれが発表することになりましたか。",
+          "d": "だれが はっぴょうする ことに なりましたか。",
+          "v": "Đã quyết định ai sẽ phát biểu rồi ạ?"
+        }
+      ],
+      "luuY": [
+        "Thông báo chuyện của mình (kết hôn, chuyển việc) người Nhật thường nói ことになりました cho khiêm tốn, dù tự mình quyết.",
+        "ことになっています = quy định đang có hiệu lực, không phải việc vừa mới quyết."
+      ],
+      "soSanh": [
+        "ja-n4-koto-ni-suru",
+        "ja-n4-you-ni-naru",
+        "ja-n3-koto-ni-natte-iru"
+      ],
+      "tuKhoa": [
+        "koto ni naru",
+        "kotoninaru",
+        "được quyết định",
+        "quy định"
+      ],
+      "quiz": [
+        {
+          "h": "会社の つごうで、来年 中国へ 行く ことに（　）。",
+          "lc": [
+            "なりました",
+            "ありました",
+            "みました"
+          ],
+          "da": 0,
+          "gt": "Do công ty quyết, không phải ý mình → ことに なりました."
+        },
+        {
+          "h": "この アパートでは、ペットを 飼っては いけない ことに（　）。",
+          "lc": [
+            "して おきます",
+            "なって います",
+            "して みます"
+          ],
+          "da": 1,
+          "gt": "Quy định đang có hiệu lực → ことに なって います."
+        },
+        {
+          "h": "「〜ことに なりました」の 意味に 近い ものは どれですか。",
+          "lc": [
+            "自分で 決めました",
+            "もう 終わりました",
+            "そう 決まりました"
+          ],
+          "da": 2,
+          "gt": "ことになりました = việc đã được quyết định như vậy (決まりました)."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-hou-ga-ii",
+      "nhom": "Lời khuyên – mệnh lệnh",
+      "tieuDe": "〜たほうがいいです／〜ないほうがいいです",
+      "mau": "V-た / V-ない + ほうがいいです",
+      "nghia": "nên làm ~ / không nên làm ~ (lời khuyên)",
+      "giaiThich": "Dùng để khuyên người nghe nên hay không nên làm một việc, với ngụ ý nếu không nghe theo thì có thể có chuyện không hay. Thêm よ hoặc と思います ở cuối để lời khuyên mềm hơn.",
+      "cachGhep": [
+        "V-thể た + ほうが いいです (nên)",
+        "V-thể ない + ほうが いいです (không nên)",
+        "Mềm hơn: 〜ほうが いいですよ / 〜ほうが いいと 思います"
+      ],
+      "viDu": [
+        {
+          "c": "熱があるなら、病院へ行ったほうがいいですよ。",
+          "d": "ねつが あるなら、びょういんへ いった ほうが いいですよ。",
+          "v": "Nếu bị sốt thì bạn nên đi bệnh viện đấy."
+        },
+        {
+          "c": "夜遅く一人で歩かないほうがいいです。",
+          "d": "よる おそく ひとりで あるかない ほうが いいです。",
+          "v": "Không nên đi bộ một mình vào đêm khuya."
+        },
+        {
+          "c": "先生に相談したほうがいいですか。",
+          "d": "せんせいに そうだんした ほうが いいですか。",
+          "v": "Tôi có nên hỏi ý kiến thầy/cô không?"
+        }
+      ],
+      "luuY": [
+        "Khuyên “nên” dùng thể た dù việc chưa xảy ra: 行ったほうがいい (lỗi hay gặp: 行くほうがいい).",
+        "Khuyên “không nên” dùng thể ない, không dùng なかった: 行かないほうがいい.",
+        "Dùng với người trên dễ thành áp đặt; khi đó nên nói nhẹ hơn, ví dụ 〜たらいかがですか."
+      ],
+      "soSanh": [
+        "ja-n4-tara-dou"
+      ],
+      "tuKhoa": [
+        "hou ga ii",
+        "ta hou ga ii",
+        "nai hou ga ii",
+        "nên",
+        "không nên",
+        "lời khuyên"
+      ],
+      "quiz": [
+        {
+          "h": "かぜの ときは、早く（　）ほうが いいです。",
+          "lc": [
+            "寝た",
+            "寝て",
+            "寝",
+            "寝よう"
+          ],
+          "da": 0,
+          "gt": "Khuyên nên làm: thể た + ほうが いいです."
+        },
+        {
+          "h": "体に 悪いですから、あまり（　）ほうが いいです。",
+          "lc": [
+            "飲んだ",
+            "飲まなかった",
+            "飲まない",
+            "飲みない"
+          ],
+          "da": 2,
+          "gt": "Khuyên không nên: thể ない + ほうが いいです → 飲まない."
+        },
+        {
+          "h": "あしたは 試験ですから、今晩は 早く（　）。",
+          "lc": [
+            "寝ない ほうが いいです",
+            "寝たいほうです",
+            "寝る ことが あります",
+            "寝た ほうが いいです"
+          ],
+          "da": 3,
+          "gt": "Mai thi nên khuyên “nên ngủ sớm” → 寝た ほうが いいです."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-tara-dou",
+      "nhom": "Lời khuyên – mệnh lệnh",
+      "tieuDe": "〜たらどうですか",
+      "mau": "V-たら + どうですか",
+      "nghia": "thử làm ~ xem sao? (gợi ý)",
+      "giaiThich": "Dùng để gợi ý nhẹ nhàng một cách giải quyết cho người đang phân vân hoặc gặp khó khăn. Nhẹ hơn 〜たほうがいい. Lịch sự hơn là 〜たらいかがですか; thân mật là 〜たらどう？ hoặc 〜たら？",
+      "cachGhep": [
+        "V-thể た + ら + どうですか",
+        "Lịch sự: V-たら + いかがですか",
+        "Thân mật: V-たら + どう？ / V-たら？"
+      ],
+      "viDu": [
+        {
+          "c": "疲れているなら、少し休んだらどうですか。",
+          "d": "つかれて いるなら、すこし やすんだら どうですか。",
+          "v": "Nếu mệt thì bạn nghỉ một chút xem sao?"
+        },
+        {
+          "c": "わからないことは先生に聞いたらどうですか。",
+          "d": "わからない ことは せんせいに きいたら どうですか。",
+          "v": "Chỗ không hiểu thì thử hỏi thầy/cô xem sao?"
+        },
+        {
+          "c": "もう一度電話してみたらどう？",
+          "d": "もう いちど でんわして みたら どう？",
+          "v": "Thử gọi điện lại lần nữa xem?"
+        }
+      ],
+      "luuY": [
+        "Là lời gợi ý cho người nghe, không dùng cho việc của bản thân.",
+        "Nói với giọng gắt có thể thành trách móc (“sao không … đi”); với người trên dùng 〜たらいかがですか."
+      ],
+      "soSanh": [
+        "ja-n4-hou-ga-ii"
+      ],
+      "tuKhoa": [
+        "tara dou desu ka",
+        "taradou",
+        "tara ikaga",
+        "gợi ý",
+        "thử xem sao"
+      ],
+      "quiz": [
+        {
+          "h": "道が わからないなら、交番で（　）どうですか。",
+          "lc": [
+            "聞いたら",
+            "聞くたら",
+            "聞いて",
+            "聞くと"
+          ],
+          "da": 0,
+          "gt": "Gợi ý: thể た + ら + どうですか → 聞いたら."
+        },
+        {
+          "h": "頭が 痛いんですか。薬を（　）どうですか。",
+          "lc": [
+            "飲むたら",
+            "飲んだら",
+            "飲みたら",
+            "飲んたら"
+          ],
+          "da": 1,
+          "gt": "飲む → thể た là 飲んだ → 飲んだら."
+        },
+        {
+          "h": "「〜たらどうですか」の もっと ていねいな 言い方は どれですか。",
+          "lc": [
+            "〜たら どう？",
+            "〜たら？",
+            "〜たら いかがですか"
+          ],
+          "da": 2,
+          "gt": "いかが là dạng lịch sự của どう; hai lựa chọn kia là cách nói thân mật."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-meirei-kinshi",
+      "nhom": "Lời khuyên – mệnh lệnh",
+      "tieuDe": "Thể mệnh lệnh／thể cấm chỉ (命令形・禁止形)",
+      "mau": "V-mệnh lệnh / V-る + な",
+      "nghia": "làm ~ đi! / cấm ~, đừng ~!",
+      "giaiThich": "Diễn tả mệnh lệnh và cấm đoán rất mạnh. Thường do nam giới nói với người dưới hoặc bạn thân, hoặc dùng khi khẩn cấp, cổ vũ thể thao, trên biển báo, khẩu hiệu. Khi thuật lại lời người khác (〜と言われました) hoặc giải thích nghĩa biển báo thì ai cũng dùng được.",
+      "cachGhep": [
+        "Mệnh lệnh nhóm I: đuôi cột う → cột え: 行く → 行け, 止まる → 止まれ, 急ぐ → 急げ",
+        "Mệnh lệnh nhóm II: bỏ る + ろ: 食べる → 食べろ, 見る → 見ろ",
+        "Mệnh lệnh nhóm III: する → しろ, 来る → 来い（こい）",
+        "Cấm chỉ: V-thể từ điển + な: 行くな, 入るな, するな"
+      ],
+      "viDu": [
+        {
+          "c": "危ない！止まれ！",
+          "d": "あぶない！とまれ！",
+          "v": "Nguy hiểm! Dừng lại!"
+        },
+        {
+          "c": "ここにごみを捨てるな。",
+          "d": "ここに ごみを すてるな。",
+          "v": "Cấm vứt rác ở đây."
+        },
+        {
+          "c": "もっと頑張れ！",
+          "d": "もっと がんばれ！",
+          "v": "Cố lên nữa đi!"
+        },
+        {
+          "c": "父に「早く帰って来い」と言われました。",
+          "d": "ちちに「はやく かえって こい」と いわれました。",
+          "v": "Tôi bị bố bảo “về sớm đi”."
+        }
+      ],
+      "luuY": [
+        "Rất mạnh, dễ thành thô lỗ; bình thường nhờ ai thì dùng 〜てください / 〜ないでください.",
+        "Đừng nhầm な cấm chỉ (行くな = cấm đi, ghép với thể từ điển) với な rút gọn của なさい (行きな = đi đi, ghép với thể ます bỏ ます).",
+        "くれる → くれ là ngoại lệ; わかる, できる, ある không có thể mệnh lệnh."
+      ],
+      "soSanh": [
+        "ja-n4-nasai"
+      ],
+      "tuKhoa": [
+        "meireikei",
+        "kinshikei",
+        "mệnh lệnh",
+        "cấm chỉ",
+        "na",
+        "ro"
+      ],
+      "quiz": [
+        {
+          "h": "「する」の 命令形は どれですか。",
+          "lc": [
+            "しろ",
+            "すれ",
+            "しれ",
+            "するろ"
+          ],
+          "da": 0,
+          "gt": "する là nhóm III, thể mệnh lệnh là しろ."
+        },
+        {
+          "h": "（看板）この 川で（　）。危ないです。",
+          "lc": [
+            "泳げな",
+            "泳ぐな",
+            "泳ぎな",
+            "泳がな"
+          ],
+          "da": 1,
+          "gt": "Cấm chỉ: thể từ điển + な → 泳ぐな."
+        },
+        {
+          "h": "「来る」の 命令形は どれですか。",
+          "lc": [
+            "くれ",
+            "きろ",
+            "これ",
+            "こい"
+          ],
+          "da": 3,
+          "gt": "来る là nhóm III, thể mệnh lệnh đọc là こい."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-nasai",
+      "nhom": "Lời khuyên – mệnh lệnh",
+      "tieuDe": "〜なさい",
+      "mau": "V-ます (bỏ ます) + なさい",
+      "nghia": "hãy làm ~ (cha mẹ, thầy cô ra lệnh nhẹ)",
+      "giaiThich": "Là mệnh lệnh nhẹ hơn thể mệnh lệnh, do người trên nói với người dưới: cha mẹ với con, thầy cô với học sinh. Cũng dùng trong câu lệnh của đề thi, bài tập.",
+      "cachGhep": [
+        "V-ます bỏ ます + なさい: 食べなさい, 書きなさい, しなさい, 来なさい（きなさい）",
+        "Thân mật hơn: V-ます bỏ ます + な: 食べな"
+      ],
+      "viDu": [
+        {
+          "c": "早く起きなさい。",
+          "d": "はやく おきなさい。",
+          "v": "Dậy nhanh lên nào."
+        },
+        {
+          "c": "野菜も食べなさい。",
+          "d": "やさいも たべなさい。",
+          "v": "Ăn cả rau nữa đi."
+        },
+        {
+          "c": "正しい答えを一つ選びなさい。",
+          "d": "ただしい こたえを ひとつ えらびなさい。",
+          "v": "Hãy chọn một đáp án đúng."
+        }
+      ],
+      "luuY": [
+        "Không dùng với người trên hoặc người ngang hàng không thân.",
+        "Không có dạng phủ định; muốn cấm thì dùng 〜てはいけません / 〜ないで."
+      ],
+      "soSanh": [
+        "ja-n4-meirei-kinshi"
+      ],
+      "tuKhoa": [
+        "nasai",
+        "mệnh lệnh nhẹ",
+        "hãy làm",
+        "tabenasai"
+      ],
+      "quiz": [
+        {
+          "h": "もう 11時ですよ。早く（　）なさい。",
+          "lc": [
+            "寝",
+            "寝る",
+            "寝て",
+            "寝ろ"
+          ],
+          "da": 0,
+          "gt": "Thể ます bỏ ます + なさい: 寝ます → 寝なさい."
+        },
+        {
+          "h": "「〜なさい」を 使うのは だれですか。",
+          "lc": [
+            "学生が 先生に",
+            "母が 子どもに",
+            "店員が 客に"
+          ],
+          "da": 1,
+          "gt": "〜なさい là mệnh lệnh của người trên với người dưới, như mẹ nói với con."
+        },
+        {
+          "h": "テレビを 消して、宿題を（　）。",
+          "lc": [
+            "するなさい",
+            "しろなさい",
+            "しなさい"
+          ],
+          "da": 2,
+          "gt": "します bỏ ます + なさい = しなさい."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-te-hoshii",
+      "nhom": "Lời khuyên – mệnh lệnh",
+      "tieuDe": "〜てほしいです",
+      "mau": "(人に) V-て + ほしいです / V-ないで + ほしいです",
+      "nghia": "muốn (ai đó) làm ~ / muốn ai đó đừng làm ~",
+      "giaiThich": "Diễn tả mong muốn người khác làm một việc gì đó. Người được mong đợi đi với に. Khác với 〜たい là mình muốn tự làm.",
+      "cachGhep": [
+        "人 + に + V-て + ほしいです",
+        "Muốn người khác không làm: V-ないで + ほしいです",
+        "Nhờ nhẹ nhàng: V-て + ほしいんですが"
+      ],
+      "viDu": [
+        {
+          "c": "母にもっと休んでほしいです。",
+          "d": "ははに もっと やすんで ほしいです。",
+          "v": "Tôi muốn mẹ nghỉ ngơi nhiều hơn."
+        },
+        {
+          "c": "ここに車を止めないでほしいです。",
+          "d": "ここに くるまを とめないで ほしいです。",
+          "v": "Tôi mong mọi người đừng đỗ xe ở đây."
+        },
+        {
+          "c": "すみません、この漢字の読み方を教えてほしいんですが。",
+          "d": "すみません、この かんじの よみかたを おしえて ほしいんですが。",
+          "v": "Xin lỗi, tôi muốn nhờ bạn chỉ cách đọc chữ Hán này."
+        },
+        {
+          "c": "だれに手伝ってほしいですか。",
+          "d": "だれに てつだって ほしいですか。",
+          "v": "Bạn muốn ai giúp?"
+        }
+      ],
+      "luuY": [
+        "〜たい: mình muốn làm; 〜てほしい: muốn người khác làm. “Tôi muốn bạn đến” = あなたに 来てほしいです (không nói あなたが 来たいです).",
+        "Nói thẳng với người trên dễ thất lễ; khi đó dùng 〜ていただけませんか."
+      ],
+      "tuKhoa": [
+        "te hoshii",
+        "tehoshii",
+        "naide hoshii",
+        "muốn ai đó làm"
+      ],
+      "quiz": [
+        {
+          "h": "わたしは 弟（　）部屋を 掃除して ほしいです。",
+          "lc": [
+            "に",
+            "を",
+            "で",
+            "へ"
+          ],
+          "da": 0,
+          "gt": "Người được mong làm việc đó đi với に: 弟に 〜て ほしい."
+        },
+        {
+          "h": "子どもに 野菜を たくさん（　）ほしいです。",
+          "lc": [
+            "食べ",
+            "食べたい",
+            "食べて",
+            "食べる"
+          ],
+          "da": 2,
+          "gt": "Mẫu là V-て + ほしいです: 食べて ほしいです."
+        },
+        {
+          "h": "Câu nào nghĩa là “Tôi muốn bạn đừng nói với ai”?",
+          "lc": [
+            "だれにも 言いたくないです。",
+            "だれにも 言って ほしいです。",
+            "だれにも 言わなくて ほしいです。",
+            "だれにも 言わないで ほしいです。"
+          ],
+          "da": 3,
+          "gt": "Muốn người khác không làm: V-ないで + ほしいです."
+        }
+      ],
+      "soSanh": [
+        "ja-n3-te-hoshii"
+      ]
+    },
+    {
+      "id": "ja-n4-ba",
+      "nhom": "Điều kiện",
+      "tieuDe": "〜ば（thể điều kiện）",
+      "mau": "V-ば / A-ければ / Na・N + なら、〜",
+      "nghia": "nếu ~ thì ~",
+      "giaiThich": "Nêu điều kiện cần có để việc ở vế sau thành lập. Vế sau thường là kết quả hoặc phán đoán. Khi vế trước là hành động có ý chí thì vế sau không nên là mệnh lệnh, rủ rê, ý chí; trường hợp đó dùng 〜たら.",
+      "cachGhep": [
+        "Nhóm I: đuôi cột う → cột え + ば: 行く → 行けば, 飲む → 飲めば, 買う → 買えば",
+        "Nhóm II: bỏ る + れば: 食べる → 食べれば; nhóm III: する → すれば, 来る → 来れば（くれば）",
+        "Tính từ đuôi い: bỏ い + ければ: 安い → 安ければ; いい → よければ",
+        "Phủ định: 〜ない → 〜なければ: 行かなければ, 安くなければ",
+        "Tính từ đuôi な / danh từ + なら: 暇なら, 雨なら"
+      ],
+      "viDu": [
+        {
+          "c": "春になれば、桜が咲きます。",
+          "d": "はるに なれば、さくらが さきます。",
+          "v": "Hễ sang xuân là hoa anh đào nở."
+        },
+        {
+          "c": "安ければ、買います。",
+          "d": "やすければ、かいます。",
+          "v": "Nếu rẻ thì tôi mua."
+        },
+        {
+          "c": "急がなければ、電車に間に合いませんよ。",
+          "d": "いそがなければ、でんしゃに まに あいませんよ。",
+          "v": "Nếu không nhanh lên thì sẽ không kịp tàu đâu."
+        },
+        {
+          "c": "どうすれば、日本語が上手になりますか。",
+          "d": "どう すれば、にほんごが じょうずに なりますか。",
+          "v": "Làm thế nào thì giỏi tiếng Nhật được ạ?"
+        }
+      ],
+      "luuY": [
+        "Tính từ đuôi い: 安ければ (không phải 安いば, 安けば); いい → よければ.",
+        "Vế trước là hành động có ý chí thì vế sau tránh mệnh lệnh, nhờ vả: nói 駅に着いたら、電話してください (không nói 着けば、電話してください).",
+        "と dùng cho kết quả tất yếu, máy móc, chỉ đường; ば nhấn vào điều kiện cần."
+      ],
+      "soSanh": [
+        "ja-n4-nara",
+        "ja-n4-ba-hodo"
+      ],
+      "tuKhoa": [
+        "ba",
+        "eba",
+        "kereba",
+        "thể điều kiện",
+        "nếu",
+        "joukenkei"
+      ],
+      "quiz": [
+        {
+          "h": "「読む」の 条件形（ば形）は どれですか。",
+          "lc": [
+            "読めば",
+            "読みば",
+            "読むば",
+            "読まば"
+          ],
+          "da": 0,
+          "gt": "Nhóm I: む → め + ば = 読めば."
+        },
+        {
+          "h": "天気が（　）、散歩に 行きます。",
+          "lc": [
+            "いければ",
+            "いいければ",
+            "よければ",
+            "よいば"
+          ],
+          "da": 2,
+          "gt": "いい chia từ よい: よ + ければ = よければ."
+        },
+        {
+          "h": "この ボタンを（　）、ドアが 開きます。",
+          "lc": [
+            "押すれば",
+            "押しれば",
+            "押さば",
+            "押せば"
+          ],
+          "da": 3,
+          "gt": "押す là nhóm I: す → せ + ば = 押せば."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-nara",
+      "nhom": "Điều kiện",
+      "tieuDe": "〜なら",
+      "mau": "N / thể thường + なら、〜",
+      "nghia": "nếu là ~ thì…; nếu (như bạn nói) ~ thì…",
+      "giaiThich": "Lấy điều người kia vừa nói hoặc một tình huống đã biết làm tiền đề, rồi đưa ra lời khuyên, ý kiến, đề nghị của mình. Cũng dùng để giới hạn chủ đề: “nếu là N thì…”.",
+      "cachGhep": [
+        "Danh từ + なら",
+        "Động từ / tính từ đuôi い thể thường + (の) なら: 行く(の)なら, 高いなら",
+        "Tính từ đuôi な bỏ な + なら: 暇なら"
+      ],
+      "viDu": [
+        {
+          "c": "京都へ行くなら、秋がいいですよ。",
+          "d": "きょうとへ いくなら、あきが いいですよ。",
+          "v": "Nếu đi Kyoto thì mùa thu là đẹp đấy."
+        },
+        {
+          "c": "カメラなら、あの店が安いです。",
+          "d": "カメラなら、あの みせが やすいです。",
+          "v": "Nếu là máy ảnh thì cửa hàng kia rẻ."
+        },
+        {
+          "c": "明日暇なら、いっしょに映画を見ませんか。",
+          "d": "あした ひまなら、いっしょに えいがを みませんか。",
+          "v": "Nếu mai rảnh thì cùng đi xem phim nhé?"
+        },
+        {
+          "c": "寒いなら、窓を閉めましょうか。",
+          "d": "さむいなら、まどを しめましょうか。",
+          "v": "Nếu lạnh thì để tôi đóng cửa sổ nhé?"
+        }
+      ],
+      "luuY": [
+        "Với なら, việc ở vế sau có thể xảy ra TRƯỚC việc ở vế trước: 日本へ行くなら、日本語を勉強したほうがいい (học trước khi đi). Với たら thì vế trước xong mới đến vế sau.",
+        "Danh từ và tính từ đuôi な không thêm だ: 学生なら (không nói 学生だなら)."
+      ],
+      "soSanh": [
+        "ja-n4-ba"
+      ],
+      "tuKhoa": [
+        "nara",
+        "no nara",
+        "nếu là",
+        "nếu vậy thì"
+      ],
+      "quiz": [
+        {
+          "h": "パソコンを 買う（　）、駅前の 店が いいですよ。",
+          "lc": [
+            "なら",
+            "ば",
+            "と",
+            "たら"
+          ],
+          "da": 0,
+          "gt": "Đưa lời khuyên dựa trên ý định của người nghe: thể từ điển + なら. 買うば, 買うたら sai cách ghép."
+        },
+        {
+          "h": "すしが 食べたいんですが。— すし（　）、いい 店を 知って いますよ。",
+          "lc": [
+            "だなら",
+            "なら",
+            "になら"
+          ],
+          "da": 1,
+          "gt": "Danh từ + なら, không thêm だ."
+        },
+        {
+          "h": "あした（　）なら、手伝って ください。",
+          "lc": [
+            "暇だ",
+            "暇な",
+            "暇"
+          ],
+          "da": 2,
+          "gt": "Tính từ đuôi な bỏ な rồi + なら: 暇なら."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-ba-hodo",
+      "nhom": "Điều kiện",
+      "tieuDe": "〜ば〜ほど",
+      "mau": "V-ば + V-る + ほど / A-ければ + A-い + ほど / Na-なら + Na-な + ほど",
+      "nghia": "càng ~ càng ~",
+      "giaiThich": "Diễn tả khi mức độ ở vế trước tăng lên thì vế sau cũng thay đổi tương ứng. Cùng một từ được lặp lại hai lần: lần đầu ở thể điều kiện, lần sau ở dạng bổ nghĩa cho ほど.",
+      "cachGhep": [
+        "V-ば + V-thể từ điển + ほど: 読めば読むほど",
+        "Tính từ đuôi い: 〜ければ + 〜い + ほど: 安ければ安いほど",
+        "Tính từ đuôi な: 〜なら + 〜な + ほど: 静かなら静かなほど"
+      ],
+      "viDu": [
+        {
+          "c": "日本語は勉強すればするほど、おもしろくなります。",
+          "d": "にほんごは べんきょう すれば する ほど、おもしろく なります。",
+          "v": "Tiếng Nhật càng học càng thấy thú vị."
+        },
+        {
+          "c": "駅に近ければ近いほど、家賃が高いです。",
+          "d": "えきに ちかければ ちかい ほど、やちんが たかいです。",
+          "v": "Càng gần ga thì tiền thuê nhà càng đắt."
+        },
+        {
+          "c": "使い方は簡単なら簡単なほどいいです。",
+          "d": "つかいかたは かんたんなら かんたんな ほど いいです。",
+          "v": "Cách dùng càng đơn giản càng tốt."
+        }
+      ],
+      "luuY": [
+        "Tiếng Việt “càng… càng…” chỉ nói động từ một lần ở vế đầu; tiếng Nhật phải lặp lại: 考えれば 考えるほど.",
+        "Động từ ghép với する: 勉強すればするほど (không cần lặp cả 勉強)."
+      ],
+      "soSanh": [
+        "ja-n4-ba"
+      ],
+      "tuKhoa": [
+        "ba hodo",
+        "bahodo",
+        "càng càng",
+        "hodo"
+      ],
+      "quiz": [
+        {
+          "h": "この 本は 読めば（　）ほど おもしろいです。",
+          "lc": [
+            "読む",
+            "読め",
+            "読んで",
+            "読んだ"
+          ],
+          "da": 0,
+          "gt": "Sau thể ば là thể từ điển của cùng động từ: 読めば 読むほど."
+        },
+        {
+          "h": "荷物は（　）軽いほど いいです。",
+          "lc": [
+            "軽いば",
+            "軽ければ",
+            "軽くば",
+            "軽けば"
+          ],
+          "da": 1,
+          "gt": "Tính từ đuôi い: bỏ い + ければ → 軽ければ 軽いほど."
+        },
+        {
+          "h": "練習（　）するほど、上手に なります。",
+          "lc": [
+            "しれば",
+            "するば",
+            "すれば"
+          ],
+          "da": 2,
+          "gt": "Thể ば của する là すれば: 練習すれば するほど."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-baai",
+      "nhom": "Điều kiện",
+      "tieuDe": "〜場合は",
+      "mau": "V-る / V-た / V-ない / A-い / Na-な / N の + 場合は、〜",
+      "nghia": "trong trường hợp ~ thì…",
+      "giaiThich": "Giả định một tình huống có thể xảy ra rồi nêu cách xử lý, chỉ dẫn. Mang sắc thái trang trọng, hay dùng trong hướng dẫn, quy định, thông báo.",
+      "cachGhep": [
+        "V-thể từ điển / thể た / thể ない + 場合は",
+        "Tính từ đuôi い + 場合は; tính từ đuôi な + な + 場合は",
+        "Danh từ + の + 場合は: 火事の場合は"
+      ],
+      "viDu": [
+        {
+          "c": "会議に遅れる場合は、連絡してください。",
+          "d": "かいぎに おくれる ばあいは、れんらくして ください。",
+          "v": "Trường hợp đến họp muộn thì hãy liên lạc."
+        },
+        {
+          "c": "領収書をなくした場合は、どうすればいいですか。",
+          "d": "りょうしゅうしょを なくした ばあいは、どう すれば いいですか。",
+          "v": "Trường hợp làm mất hoá đơn thì phải làm thế nào ạ?"
+        },
+        {
+          "c": "雨の場合は、試合を行いません。",
+          "d": "あめの ばあいは、しあいを おこないません。",
+          "v": "Trường hợp trời mưa sẽ không tổ chức trận đấu."
+        },
+        {
+          "c": "都合が悪い場合は、電話で知らせてください。",
+          "d": "つごうが わるい ばあいは、でんわで しらせて ください。",
+          "v": "Trường hợp không tiện thì hãy báo bằng điện thoại."
+        }
+      ],
+      "luuY": [
+        "Danh từ cần の, tính từ đuôi な cần な: 地震の場合, 必要な場合.",
+        "V-る場合 (việc có thể sắp xảy ra) – V-た場合 (giả sử việc đã xảy ra rồi).",
+        "Không dùng cho việc chắc chắn đến theo thời gian (không nói 春になった場合は)."
+      ],
+      "tuKhoa": [
+        "baai",
+        "baai wa",
+        "trường hợp",
+        "trong trường hợp"
+      ],
+      "quiz": [
+        {
+          "h": "火事（　）場合は、エレベーターを 使わないで ください。",
+          "lc": [
+            "の",
+            "な",
+            "に",
+            "が"
+          ],
+          "da": 0,
+          "gt": "Danh từ + の + 場合は."
+        },
+        {
+          "h": "パスポートを（　）場合は、すぐ 大使館に 連絡して ください。",
+          "lc": [
+            "なくして",
+            "なくした",
+            "なくし",
+            "なくそう"
+          ],
+          "da": 1,
+          "gt": "Giả sử việc đã xảy ra: thể た + 場合は."
+        },
+        {
+          "h": "手伝いが（　）場合は、言って ください。",
+          "lc": [
+            "必要",
+            "必要の",
+            "必要だ",
+            "必要な"
+          ],
+          "da": 3,
+          "gt": "Tính từ đuôi な + な + 場合は: 必要な 場合は."
+        }
+      ]
+    }
+  ]
+}

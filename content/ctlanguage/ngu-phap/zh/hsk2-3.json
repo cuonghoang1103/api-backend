@@ -1,0 +1,970 @@
+{
+  "nn": "zh",
+  "cap": "HSK2",
+  "diem": [
+    {
+      "id": "zh-hsk2-hai",
+      "nhom": "Phó từ",
+      "tieuDe": "还 (vẫn / còn)",
+      "mau": "S + 还 + V / tính từ · 还没…呢",
+      "nghia": "vẫn còn ~ ; còn (thêm) ~ ; vẫn chưa ~",
+      "giaiThich": "还 (hái) có ba cách dùng chính ở HSK 2: (1) \"vẫn\" — trạng thái, hành động chưa thay đổi; (2) \"còn … nữa\" — bổ sung thêm; (3) 还没(有)…(呢) — \"vẫn chưa\". Ngoài ra 还 + tính từ tốt (还可以, 还好) nghĩa là \"tạm được\".",
+      "cachGhep": [
+        "Vẫn: S + 还 + 在 / V…: 他还在睡觉",
+        "Còn thêm: S + V + A，还 + V + B",
+        "Vẫn chưa: S + 还没(有) + V + (O) + 呢",
+        "Tạm được: 还可以, 还好, 还不错"
+      ],
+      "viDu": [
+        {
+          "c": "八点了，他还在睡觉。",
+          "d": "Bā diǎn le, tā hái zài shuìjiào.",
+          "v": "8 giờ rồi mà anh ấy vẫn còn đang ngủ."
+        },
+        {
+          "c": "我买了水果，还买了牛奶。",
+          "d": "Wǒ mǎile shuǐguǒ, hái mǎile niúnǎi.",
+          "v": "Tôi đã mua hoa quả, còn mua cả sữa nữa."
+        },
+        {
+          "c": "我还没吃早饭呢。",
+          "d": "Wǒ hái méi chī zǎofàn ne.",
+          "v": "Tôi vẫn chưa ăn sáng."
+        },
+        {
+          "c": "你还有别的问题吗？",
+          "d": "Nǐ hái yǒu bié de wèntí ma?",
+          "v": "Bạn còn câu hỏi nào khác không?"
+        }
+      ],
+      "luuY": [
+        "还 là phó từ nên đứng sau chủ ngữ, trước động từ: 我还想喝 (không nói 还我想喝).",
+        "\"Vẫn chưa\" = 还没, không nói 还不 (还不 là \"vẫn không\").",
+        "Chữ 还 đọc hái khi là phó từ; đọc huán khi là động từ \"trả lại\"."
+      ],
+      "soSanh": [
+        "zh-hsk2-yijing",
+        "zh-hsk2-zai-you",
+        "zh-hsk2-bi-geng-hai"
+      ],
+      "tuKhoa": [
+        "hai",
+        "vẫn",
+        "còn",
+        "hai mei",
+        "vẫn chưa"
+      ],
+      "quiz": [
+        {
+          "h": "已经十点了，他___没起床呢。",
+          "lc": [
+            "再",
+            "还",
+            "就",
+            "都不"
+          ],
+          "da": 1,
+          "gt": "Vẫn chưa: 还没 + V + 呢."
+        },
+        {
+          "h": "我喜欢打篮球，___喜欢游泳。",
+          "lc": [
+            "还",
+            "才",
+            "过",
+            "着"
+          ],
+          "da": 0,
+          "gt": "Bổ sung thêm một ý cùng chủ ngữ: 还 + V."
+        },
+        {
+          "h": "「这个电影还可以」 nghĩa là:",
+          "lc": [
+            "Phim này rất hay.",
+            "Phim này vẫn chưa chiếu.",
+            "Phim này tạm được.",
+            "Phim này được phép xem."
+          ],
+          "da": 2,
+          "gt": "还可以 = tạm được, không tệ."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk2-yijing",
+      "nhom": "Phó từ",
+      "tieuDe": "已经…了",
+      "mau": "S + 已经 + V / tính từ / số lượng + 了",
+      "nghia": "đã ~ rồi",
+      "giaiThich": "已经 đứng trước động từ, tính từ hoặc cụm số lượng để nhấn mạnh việc đã xảy ra, đã đạt đến mức nào đó; cuối câu thường có 了. Trái nghĩa với 还没 (vẫn chưa).",
+      "cachGhep": [
+        "S + 已经 + V + (O) + 了",
+        "S + 已经 + tính từ + 了",
+        "S + 已经 + số lượng / thời gian + 了: 已经十点了, 已经三年了",
+        "Phủ định ý này: 还没(有) + V + 呢"
+      ],
+      "viDu": [
+        {
+          "c": "他已经回家了。",
+          "d": "Tā yǐjīng huí jiā le.",
+          "v": "Anh ấy đã về nhà rồi."
+        },
+        {
+          "c": "我已经吃过晚饭了。",
+          "d": "Wǒ yǐjīng chīguo wǎnfàn le.",
+          "v": "Tôi đã ăn tối rồi."
+        },
+        {
+          "c": "已经十二点了，快睡觉吧。",
+          "d": "Yǐjīng shí'èr diǎn le, kuài shuìjiào ba.",
+          "v": "Đã 12 giờ rồi, mau ngủ đi."
+        },
+        {
+          "c": "你已经到了吗？ — 还没呢。",
+          "d": "Nǐ yǐjīng dào le ma? — Hái méi ne.",
+          "v": "Bạn đã đến chưa? — Vẫn chưa."
+        }
+      ],
+      "luuY": [
+        "Hay quên 了 ở cuối: 他已经回家 nghe thiếu → 他已经回家了.",
+        "Không nói 已经没 để trả lời \"chưa\"; dùng 还没(呢).",
+        "Tiếng Việt \"đã\" đôi khi chỉ là quá khứ đơn; 已经 thì nhấn \"xong rồi / đến mức ấy rồi\", đừng thêm vào mọi câu quá khứ."
+      ],
+      "soSanh": [
+        "zh-hsk2-hai",
+        "zh-hsk2-le-thay-doi"
+      ],
+      "tuKhoa": [
+        "yijing",
+        "đã",
+        "rồi",
+        "yijing le"
+      ],
+      "quiz": [
+        {
+          "h": "火车已经开___。",
+          "lc": [
+            "吗",
+            "了",
+            "着",
+            "的"
+          ],
+          "da": 1,
+          "gt": "已经 thường đi với 了 ở cuối câu."
+        },
+        {
+          "h": "你做完了吗？ — ___，我还在做。",
+          "lc": [
+            "已经做完了",
+            "已经没",
+            "还没呢",
+            "已经还"
+          ],
+          "da": 2,
+          "gt": "Vế sau nói \"vẫn đang làm\" nên trả lời \"vẫn chưa\": 还没呢."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "他已经二十岁了。",
+            "已经他二十岁了。",
+            "他二十岁已经了。",
+            "他已经没二十岁了。"
+          ],
+          "da": 0,
+          "gt": "已经 đứng sau chủ ngữ, trước cụm số lượng; cuối câu có 了."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk2-jiu-cai",
+      "nhom": "Phó từ",
+      "tieuDe": "就 vs 才",
+      "mau": "S + thời gian + 就 + V + 了 · S + thời gian + 才 + V",
+      "nghia": "就: (sớm, nhanh) đã ~ ; 才: (muộn, chậm) mới ~",
+      "giaiThich": "Cả hai đứng sau từ chỉ thời gian / số lượng và trước động từ, thể hiện cảm nhận của người nói. 就: việc xảy ra SỚM, nhanh, dễ hơn dự kiến — cuối câu thường có 了. 才: việc xảy ra MUỘN, chậm, khó hơn dự kiến — cuối câu KHÔNG có 了.",
+      "cachGhep": [
+        "Thời gian + 就 + V + 了 (sớm): 六点就起床了",
+        "Thời gian + 才 + V (muộn): 十点才起床",
+        "Số lượng + 就 / 才: 一个小时就做完了 / 三个小时才做完",
+        "就 còn nghĩa \"liền, ngay\": 我现在就去"
+      ],
+      "viDu": [
+        {
+          "c": "他早上六点就起床了。",
+          "d": "Tā zǎoshang liù diǎn jiù qǐchuáng le.",
+          "v": "6 giờ sáng anh ấy đã dậy rồi."
+        },
+        {
+          "c": "我昨天晚上十二点才睡觉。",
+          "d": "Wǒ zuótiān wǎnshang shí'èr diǎn cái shuìjiào.",
+          "v": "Tối qua 12 giờ tôi mới đi ngủ."
+        },
+        {
+          "c": "电影八点开始，他七点半就到了。",
+          "d": "Diànyǐng bā diǎn kāishǐ, tā qī diǎn bàn jiù dào le.",
+          "v": "Phim 8 giờ bắt đầu, 7 rưỡi anh ấy đã đến rồi."
+        },
+        {
+          "c": "八点上课，你怎么八点十分才来？",
+          "d": "Bā diǎn shàngkè, nǐ zěnme bā diǎn shí fēn cái lái?",
+          "v": "8 giờ vào học, sao 8 giờ 10 bạn mới đến?"
+        }
+      ],
+      "luuY": [
+        "Câu có 才 không thêm 了 ở cuối: 他十点才来 (KHÔNG nói 他十点才来了).",
+        "Thời gian đứng TRƯỚC 就 / 才. Tiếng Việt \"mới\" trùng với 才, \"đã\" trùng với 就…了.",
+        "Cùng một giờ có thể dùng cả hai, tuỳ người nói thấy sớm hay muộn."
+      ],
+      "soSanh": [
+        "zh-hsk2-zai-you",
+        "zh-hsk2-yijing",
+        "zh-hsk3-cai-jiu"
+      ],
+      "tuKhoa": [
+        "jiu",
+        "cai",
+        "mới",
+        "đã",
+        "sớm muộn"
+      ],
+      "quiz": [
+        {
+          "h": "九点上班，他十点___来。",
+          "lc": [
+            "就",
+            "才",
+            "再",
+            "又"
+          ],
+          "da": 1,
+          "gt": "Đến muộn hơn giờ quy định → 才 (mới)."
+        },
+        {
+          "h": "我今天五点___起床了，太早了！",
+          "lc": [
+            "才",
+            "再",
+            "就",
+            "还没"
+          ],
+          "da": 2,
+          "gt": "Sớm hơn bình thường và cuối câu có 了 → 就."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "他昨天十二点才回家。",
+            "他昨天十二点才回家了。",
+            "他才昨天十二点回家了。",
+            "他昨天才十二点回家了吗。"
+          ],
+          "da": 0,
+          "gt": "才 đứng sau thời gian, trước động từ, và cuối câu không có 了."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk2-zai-you",
+      "nhom": "Phó từ",
+      "tieuDe": "再 vs 又",
+      "mau": "S + 再 + V (chưa xảy ra) · S + 又 + V + 了 (đã xảy ra)",
+      "nghia": "lại ~ : 再 cho lần sau (tương lai), 又 cho việc đã lặp lại",
+      "giaiThich": "Cả hai đều nói hành động lặp lại. 再 dùng khi lần lặp lại CHƯA xảy ra (đề nghị, dự định, tương lai). 又 dùng khi việc lặp lại ĐÃ xảy ra, thường kèm 了 và đôi khi có ý phàn nàn. 再 còn có nghĩa \"rồi mới\" (làm việc này xong rồi mới làm việc kia).",
+      "cachGhep": [
+        "再 + V (+ 一次 / 一遍): 再说一遍, 明天再来",
+        "又 + V + 了: 又来了, 又下雨了",
+        "Trình tự: 先…再… / V1 + 了 + 再 + V2",
+        "再见: hẹn gặp lại (chưa xảy ra)"
+      ],
+      "viDu": [
+        {
+          "c": "请再说一遍。",
+          "d": "Qǐng zài shuō yí biàn.",
+          "v": "Xin hãy nói lại một lần nữa."
+        },
+        {
+          "c": "他昨天来了，今天又来了。",
+          "d": "Tā zuótiān lái le, jīntiān yòu lái le.",
+          "v": "Hôm qua anh ấy đến, hôm nay lại đến nữa."
+        },
+        {
+          "c": "今天太晚了，我们明天再去吧。",
+          "d": "Jīntiān tài wǎn le, wǒmen míngtiān zài qù ba.",
+          "v": "Hôm nay muộn quá rồi, mai chúng ta hãy đi."
+        },
+        {
+          "c": "怎么又下雨了？",
+          "d": "Zěnme yòu xià yǔ le?",
+          "v": "Sao lại mưa nữa rồi?"
+        }
+      ],
+      "luuY": [
+        "Tiếng Việt chỉ có một chữ \"lại\" nên rất dễ nhầm: 我明天又来 (sai) → 我明天再来; 他昨天再来了 (sai) → 他昨天又来了.",
+        "再 không đi với 了 chỉ việc đã xảy ra.",
+        "Đừng nhầm 再 (zài — lại) với 在 (zài — ở, đang): cùng âm, khác chữ."
+      ],
+      "soSanh": [
+        "zh-hsk2-jiu-cai",
+        "zh-hsk2-hai",
+        "zh-hsk2-dong-luong"
+      ],
+      "tuKhoa": [
+        "zai",
+        "you",
+        "lại",
+        "lần nữa",
+        "lặp lại"
+      ],
+      "quiz": [
+        {
+          "h": "这个菜真好吃，我想___吃一点儿。",
+          "lc": [
+            "又",
+            "再",
+            "才",
+            "过"
+          ],
+          "da": 1,
+          "gt": "Việc lặp lại chưa xảy ra (muốn ăn thêm) → 再."
+        },
+        {
+          "h": "你昨天没来上课，今天怎么___没来？",
+          "lc": [
+            "再",
+            "还没",
+            "就要",
+            "又"
+          ],
+          "da": 3,
+          "gt": "Việc lặp lại đã xảy ra (hôm qua vắng, hôm nay lại vắng), có ý trách → 又."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "欢迎你明天再来。",
+            "欢迎你明天又来。",
+            "他上个星期再去了北京。",
+            "我明天又给你打电话吧。"
+          ],
+          "da": 0,
+          "gt": "Tương lai dùng 再; 又 chỉ dùng cho việc đã xảy ra."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk2-youdianr-yidianr",
+      "nhom": "Phó từ mức độ – cảm thán",
+      "tieuDe": "有点儿 vs 一点儿",
+      "mau": "有点儿 + tính từ · tính từ + 一点儿 · V + 一点儿 + danh từ",
+      "nghia": "hơi ~ (không hài lòng) / ~ (hơn) một chút; một ít",
+      "giaiThich": "Hai từ này vị trí và sắc thái khác nhau. 有点儿 đứng TRƯỚC tính từ / động từ tâm lý, nghĩa \"hơi …\", thường là điều không như ý (hơi đắt, hơi mệt). 一点儿 đứng SAU tính từ mang nghĩa so sánh \"… hơn một chút\", hoặc đứng trước danh từ nghĩa \"một ít\".",
+      "cachGhep": [
+        "有点儿 + tính từ (tiêu cực): 有点儿贵, 有点儿累, 有点儿冷",
+        "Tính từ + 一点儿 (so sánh / yêu cầu): 便宜一点儿, 快一点儿",
+        "V + 一点儿 + danh từ: 喝一点儿水",
+        "一点儿 + 也 / 都 + 不 / 没: không … chút nào"
+      ],
+      "viDu": [
+        {
+          "c": "今天有点儿冷。",
+          "d": "Jīntiān yǒudiǎnr lěng.",
+          "v": "Hôm nay hơi lạnh."
+        },
+        {
+          "c": "这件衣服有点儿贵，能便宜一点儿吗？",
+          "d": "Zhè jiàn yīfu yǒudiǎnr guì, néng piányi yìdiǎnr ma?",
+          "v": "Cái áo này hơi đắt, rẻ hơn một chút được không?"
+        },
+        {
+          "c": "请你说慢一点儿。",
+          "d": "Qǐng nǐ shuō màn yìdiǎnr.",
+          "v": "Xin bạn nói chậm một chút."
+        },
+        {
+          "c": "我有点儿累，想喝一点儿热水。",
+          "d": "Wǒ yǒudiǎnr lèi, xiǎng hē yìdiǎnr rè shuǐ.",
+          "v": "Tôi hơi mệt, muốn uống một chút nước nóng."
+        }
+      ],
+      "luuY": [
+        "Lỗi kinh điển: 一点儿贵, 一点儿累 → phải là 有点儿贵, 有点儿累 (一点儿 không đứng trước tính từ).",
+        "有点儿 thường không đi với ý tích cực: không nói 有点儿漂亮, 有点儿高兴.",
+        "\"Hơi đắt\" = 有点儿贵 (than phiền); \"đắt hơn một chút\" = 贵一点儿 (so sánh)."
+      ],
+      "soSanh": [
+        "zh-hsk1-xie-yidianr",
+        "zh-hsk2-yi-ye-bu",
+        "zh-hsk2-yixia"
+      ],
+      "tuKhoa": [
+        "youdianr",
+        "yidianr",
+        "hơi",
+        "một chút",
+        "you dian"
+      ],
+      "quiz": [
+        {
+          "h": "我今天___累，不想去跑步了。",
+          "lc": [
+            "一点儿",
+            "有点儿",
+            "一下",
+            "一些的"
+          ],
+          "da": 1,
+          "gt": "Trước tính từ, ý không như ý: 有点儿 + 累."
+        },
+        {
+          "h": "这个太大了，有小___的吗？",
+          "lc": [
+            "有点儿",
+            "一下",
+            "一点儿",
+            "有一点"
+          ],
+          "da": 2,
+          "gt": "Sau tính từ, nghĩa so sánh \"nhỏ hơn một chút\": 小一点儿."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "这个房间有点儿小。",
+            "这个房间一点儿小。",
+            "这个房间小有点儿。",
+            "这个房间有点儿很小。"
+          ],
+          "da": 0,
+          "gt": "有点儿 + tính từ (hơi nhỏ); 一点儿 không đứng trước tính từ."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk2-zhen-feichang-ting",
+      "nhom": "Phó từ mức độ – cảm thán",
+      "tieuDe": "真 / 非常 / 挺…的",
+      "mau": "真 + tính từ (+ 啊) · 非常 + tính từ · 挺 + tính từ + 的",
+      "nghia": "thật là ~ / vô cùng ~ / khá ~",
+      "giaiThich": "Ba phó từ mức độ đứng trước tính từ hoặc động từ tâm lý. 真 dùng để cảm thán trực tiếp (\"thật là…!\"). 非常 chỉ mức độ rất cao, cao hơn 很, dùng được trong mọi kiểu câu. 挺…的 là khẩu ngữ, nghĩa \"khá, cũng … đấy\", nhẹ hơn 很.",
+      "cachGhep": [
+        "真 + tính từ (+ 啊)！: 真漂亮！",
+        "非常 + tính từ / 喜欢…: 非常好, 非常喜欢",
+        "挺 + tính từ + 的: 挺好的, 挺远的",
+        "Phủ định: 不 + tính từ; không nói 不真…, 不挺…"
+      ],
+      "viDu": [
+        {
+          "c": "你的汉语真好！",
+          "d": "Nǐ de Hànyǔ zhēn hǎo!",
+          "v": "Tiếng Trung của bạn giỏi thật!"
+        },
+        {
+          "c": "我非常喜欢这个电影。",
+          "d": "Wǒ fēicháng xǐhuan zhège diànyǐng.",
+          "v": "Tôi vô cùng thích bộ phim này."
+        },
+        {
+          "c": "这个饭店的菜挺好吃的。",
+          "d": "Zhège fàndiàn de cài tǐng hǎochī de.",
+          "v": "Đồ ăn của nhà hàng này khá ngon."
+        },
+        {
+          "c": "今天非常热，别出去了。",
+          "d": "Jīntiān fēicháng rè, bié chūqù le.",
+          "v": "Hôm nay rất nóng, đừng ra ngoài nữa."
+        }
+      ],
+      "luuY": [
+        "真 + tính từ không dùng làm định ngữ: nói 很好的老师 / 非常好的老师, KHÔNG nói 真好的老师.",
+        "Trật tự ngược tiếng Việt: \"đẹp thật\" = 真漂亮 (真 đứng trước).",
+        "Các phó từ mức độ không dùng trong câu 比."
+      ],
+      "soSanh": [
+        "zh-hsk1-tinh-tu-hen",
+        "zh-hsk1-tai-le",
+        "zh-hsk2-duo-cam-than"
+      ],
+      "tuKhoa": [
+        "zhen",
+        "feichang",
+        "ting de",
+        "thật là",
+        "vô cùng",
+        "khá"
+      ],
+      "quiz": [
+        {
+          "h": "这个手机挺便宜___。",
+          "lc": [
+            "了吗",
+            "的",
+            "着",
+            "过"
+          ],
+          "da": 1,
+          "gt": "挺 + tính từ + 的 là một khung cố định."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "她是一个真好的老师。",
+            "她是真一个好老师的。",
+            "她是一个非常好的老师。",
+            "她是一个好非常的老师。"
+          ],
+          "da": 2,
+          "gt": "Làm định ngữ dùng 非常 / 很 + tính từ + 的; 真 + tính từ không làm định ngữ."
+        },
+        {
+          "h": "Trước cảnh đẹp, buột miệng khen, câu tự nhiên nhất:",
+          "lc": [
+            "真漂亮啊！",
+            "漂亮真！",
+            "挺漂亮了吗！",
+            "不真漂亮！"
+          ],
+          "da": 0,
+          "gt": "Cảm thán trực tiếp: 真 + tính từ (+ 啊)."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk2-duo-cam-than",
+      "nhom": "Phó từ mức độ – cảm thán",
+      "tieuDe": "多 + tính từ + 啊 (cảm thán)",
+      "mau": "(S +) 多 + tính từ + 啊！",
+      "nghia": "~ biết bao! ~ làm sao!",
+      "giaiThich": "多 đặt trước tính từ, cuối câu thêm 啊, tạo câu cảm thán bộc lộ cảm xúc mạnh: \"đẹp biết bao!\", \"hay làm sao!\". Dùng trong khẩu ngữ, giọng thân mật.",
+      "cachGhep": [
+        "多 + tính từ + 啊！",
+        "S + 多 + tính từ + 啊！",
+        "多 + 好 / 漂亮 / 高兴 / 有意思 + 啊！"
+      ],
+      "viDu": [
+        {
+          "c": "今天的天气多好啊！",
+          "d": "Jīntiān de tiānqì duō hǎo a!",
+          "v": "Thời tiết hôm nay đẹp biết bao!"
+        },
+        {
+          "c": "你看，这件衣服多漂亮啊！",
+          "d": "Nǐ kàn, zhè jiàn yīfu duō piàoliang a!",
+          "v": "Bạn xem, cái áo này đẹp làm sao!"
+        },
+        {
+          "c": "大家一起去旅游，多有意思啊！",
+          "d": "Dàjiā yìqǐ qù lǚyóu, duō yǒu yìsi a!",
+          "v": "Mọi người cùng đi du lịch thì thú vị biết bao!"
+        },
+        {
+          "c": "他的孩子多高啊！",
+          "d": "Tā de háizi duō gāo a!",
+          "v": "Con anh ấy cao quá!"
+        }
+      ],
+      "luuY": [
+        "Cùng là 多 + tính từ nhưng 多大？ (dấu hỏi) là câu HỎI mức độ, còn 多大啊！ là câu cảm thán — phân biệt bằng 啊 và ngữ điệu.",
+        "Không thêm 很 / 非常: không nói 多很好啊."
+      ],
+      "soSanh": [
+        "zh-hsk1-duo-tinh-tu",
+        "zh-hsk2-zhen-feichang-ting"
+      ],
+      "tuKhoa": [
+        "duo a",
+        "duo",
+        "biết bao",
+        "cảm thán",
+        "làm sao"
+      ],
+      "quiz": [
+        {
+          "h": "你看，那儿的雪___漂亮啊！",
+          "lc": [
+            "多",
+            "几",
+            "怎么样",
+            "什么"
+          ],
+          "da": 0,
+          "gt": "Câu cảm thán: 多 + tính từ + 啊."
+        },
+        {
+          "h": "Câu nào là câu CẢM THÁN?",
+          "lc": [
+            "你儿子多高？",
+            "你儿子多大了？",
+            "你儿子多高啊！",
+            "你儿子高不高？"
+          ],
+          "da": 2,
+          "gt": "Có 啊 và dấu chấm than → cảm thán; ba câu kia là câu hỏi."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "这个房间多很好啊！",
+            "这个房间多好啊！",
+            "这个房间好多啊吗！",
+            "这个房间啊多好！"
+          ],
+          "da": 1,
+          "gt": "多 + tính từ + 啊, không thêm 很."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk2-mei-dou",
+      "nhom": "Nhấn mạnh phạm vi",
+      "tieuDe": "每…都",
+      "mau": "每 + lượng từ + danh từ + 都 + V / tính từ",
+      "nghia": "mỗi ~ đều ; ~ nào cũng",
+      "giaiThich": "每 chỉ từng cá thể trong một tập hợp, không trừ cái nào; vị ngữ phía sau thường có 都 để hô ứng. Giữa 每 và danh từ cần lượng từ, trừ những từ tự nó là đơn vị như 天, 年.",
+      "cachGhep": [
+        "每 + lượng từ + danh từ + 都…: 每个人都…, 每本书都…",
+        "每天 / 每年 + 都… (không cần lượng từ)",
+        "每个星期 / 每个月 + 都…",
+        "每次…都…: lần nào cũng"
+      ],
+      "viDu": [
+        {
+          "c": "我每天都喝牛奶。",
+          "d": "Wǒ měi tiān dōu hē niúnǎi.",
+          "v": "Ngày nào tôi cũng uống sữa."
+        },
+        {
+          "c": "每个学生都有一本汉语书。",
+          "d": "Měi gè xuésheng dōu yǒu yì běn Hànyǔ shū.",
+          "v": "Mỗi học sinh đều có một quyển sách tiếng Trung."
+        },
+        {
+          "c": "他每个星期六都去游泳。",
+          "d": "Tā měi gè xīngqīliù dōu qù yóuyǒng.",
+          "v": "Thứ Bảy nào anh ấy cũng đi bơi."
+        },
+        {
+          "c": "你每天都运动吗？",
+          "d": "Nǐ měi tiān dōu yùndòng ma?",
+          "v": "Ngày nào bạn cũng vận động à?"
+        }
+      ],
+      "luuY": [
+        "Hay quên 都: 每个人知道 → nên nói 每个人都知道.",
+        "每天 không thêm 个 (không nói 每个天); nhưng 每个月, 每个星期 thì cần 个.",
+        "都 đứng sau cụm 每…, ngay trước động từ."
+      ],
+      "soSanh": [
+        "zh-hsk1-dou",
+        "zh-hsk2-yi-ye-bu"
+      ],
+      "tuKhoa": [
+        "mei dou",
+        "mei",
+        "mỗi",
+        "mei tian",
+        "ngày nào cũng"
+      ],
+      "quiz": [
+        {
+          "h": "我们学校___个老师都很好。",
+          "lc": [
+            "都",
+            "每",
+            "几",
+            "也"
+          ],
+          "da": 1,
+          "gt": "每 + lượng từ + danh từ + 都."
+        },
+        {
+          "h": "他每天早上___跑步。",
+          "lc": [
+            "过",
+            "着",
+            "的",
+            "都"
+          ],
+          "da": 3,
+          "gt": "每天… hô ứng với 都 trước động từ."
+        },
+        {
+          "h": "Cụm nào đúng?",
+          "lc": [
+            "每天",
+            "每个天",
+            "每天个",
+            "天每"
+          ],
+          "da": 0,
+          "gt": "天 tự là đơn vị nên không cần lượng từ 个."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk2-yi-ye-bu",
+      "nhom": "Nhấn mạnh phạm vi",
+      "tieuDe": "一…也 / 都 + 不 / 没",
+      "mau": "一 + lượng từ + (danh từ) + 也 / 都 + 不 / 没 + V",
+      "nghia": "một ~ cũng không ; không ~ chút nào",
+      "giaiThich": "Phủ định hoàn toàn bằng cách nêu số lượng nhỏ nhất (một) rồi phủ định: \"một cái cũng không\". Cụm 一 + lượng từ + danh từ đặt TRƯỚC 也 / 都. Với tính từ hoặc động từ tâm lý dùng 一点儿也不…: \"không … chút nào\".",
+      "cachGhep": [
+        "一 + lượng từ + danh từ + 也 / 都 + 没(有) + V: 一个人也没来",
+        "一 + lượng từ + danh từ + 也 / 都 + 不 + V: 一个字也不认识",
+        "一点儿 + 也 / 都 + 不 + tính từ / động từ: 一点儿也不累",
+        "一次也没 + V + 过: chưa một lần nào"
+      ],
+      "viDu": [
+        {
+          "c": "教室里一个人也没有。",
+          "d": "Jiàoshì li yí gè rén yě méiyǒu.",
+          "v": "Trong phòng học không có một ai."
+        },
+        {
+          "c": "这些汉字我一个也不认识。",
+          "d": "Zhèxiē Hànzì wǒ yí gè yě bú rènshi.",
+          "v": "Những chữ Hán này tôi không biết một chữ nào."
+        },
+        {
+          "c": "我一点儿也不累。",
+          "d": "Wǒ yìdiǎnr yě bú lèi.",
+          "v": "Tôi không mệt chút nào."
+        },
+        {
+          "c": "他今天一杯水都没喝。",
+          "d": "Tā jīntiān yì bēi shuǐ dōu méi hē.",
+          "v": "Hôm nay anh ấy không uống một cốc nước nào."
+        }
+      ],
+      "luuY": [
+        "Phần \"một …\" phải đứng TRƯỚC động từ: 一杯水都没喝, KHÔNG nói 没喝一杯水都.",
+        "Mẫu này chỉ dùng trong câu PHỦ ĐỊNH (phải có 不 / 没).",
+        "\"Không … chút nào\" với tính từ: 一点儿也不 + tính từ (không nói 有点儿也不)."
+      ],
+      "soSanh": [
+        "zh-hsk2-youdianr-yidianr",
+        "zh-hsk2-mei-dou",
+        "zh-hsk4-yi-ye-bu"
+      ],
+      "tuKhoa": [
+        "yi ye bu",
+        "yidianr ye bu",
+        "một cũng không",
+        "chút nào",
+        "phủ định hoàn toàn"
+      ],
+      "quiz": [
+        {
+          "h": "今天的题我一个___不会做。",
+          "lc": [
+            "也",
+            "很",
+            "才",
+            "再"
+          ],
+          "da": 0,
+          "gt": "一 + lượng từ + 也 / 都 + 不 + V."
+        },
+        {
+          "h": "\"Tôi không bận chút nào\" là:",
+          "lc": [
+            "我有点儿也不忙。",
+            "我一点儿也不忙。",
+            "我不忙一点儿也。",
+            "我也一点儿忙不。"
+          ],
+          "da": 1,
+          "gt": "Không … chút nào: 一点儿也不 + tính từ."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "我没买一本书也。",
+            "我也一本书没买都。",
+            "我一本书也没买。",
+            "一本书我没也买。"
+          ],
+          "da": 2,
+          "gt": "Cụm 一 + lượng từ + danh từ đứng trước 也, rồi mới đến 没 + V."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk2-di-thu-tu",
+      "nhom": "Số thứ tự – danh từ hoá",
+      "tieuDe": "第 + số (số thứ tự)",
+      "mau": "第 + số + lượng từ + danh từ",
+      "nghia": "thứ ~ (thứ nhất, thứ hai…)",
+      "giaiThich": "Thêm 第 trước số đếm để tạo số thứ tự. Sau số vẫn cần lượng từ rồi mới đến danh từ: 第一个人, 第二本书, 第三次. Một số từ như 天, 年, 课 đứng ngay sau số.",
+      "cachGhep": [
+        "第 + số + lượng từ + danh từ: 第一个问题, 第二本书",
+        "第 + số + 次: lần thứ … (第一次)",
+        "第 + số + 天 / 年 / 课: 第二天, 第三课",
+        "Thứ hai là 第二 (không dùng 两)"
+      ],
+      "viDu": [
+        {
+          "c": "这是我第一次来中国。",
+          "d": "Zhè shì wǒ dì-yī cì lái Zhōngguó.",
+          "v": "Đây là lần đầu tiên tôi đến Trung Quốc."
+        },
+        {
+          "c": "今天我们学习第五课。",
+          "d": "Jīntiān wǒmen xuéxí dì-wǔ kè.",
+          "v": "Hôm nay chúng ta học bài 5."
+        },
+        {
+          "c": "第二个问题你会吗？",
+          "d": "Dì-èr gè wèntí nǐ huì ma?",
+          "v": "Câu hỏi thứ hai bạn có biết làm không?"
+        },
+        {
+          "c": "他不是第一个到的。",
+          "d": "Tā bú shì dì-yī gè dào de.",
+          "v": "Anh ấy không phải là người đến đầu tiên."
+        }
+      ],
+      "luuY": [
+        "Thứ tự từ ngược tiếng Việt: \"lần thứ nhất\" = 第一次 (第 + số đứng TRƯỚC), \"bài 5\" = 第五课.",
+        "第二, không nói 第两.",
+        "Ngày tháng, thứ trong tuần, tầng nhà thường KHÔNG thêm 第: 二月, 星期三, 五号.",
+        "Trong 第一, chữ 一 đọc nguyên thanh 1: dì-yī."
+      ],
+      "soSanh": [
+        "zh-hsk1-er-liang",
+        "zh-hsk2-dong-luong"
+      ],
+      "tuKhoa": [
+        "di",
+        "thứ tự",
+        "số thứ tự",
+        "di yi",
+        "thứ nhất",
+        "lần đầu"
+      ],
+      "quiz": [
+        {
+          "h": "\"Lần thứ hai\" là:",
+          "lc": [
+            "两次第",
+            "第二次",
+            "第两次",
+            "二第次"
+          ],
+          "da": 1,
+          "gt": "第 + số + 次, và dùng 二 chứ không dùng 两."
+        },
+        {
+          "h": "这是我___看这个电影，以前看过两次。",
+          "lc": [
+            "三次第",
+            "第三个",
+            "第三次",
+            "三第次"
+          ],
+          "da": 2,
+          "gt": "Đã xem hai lần, đây là lần thứ ba: 第三次."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "我住在第二个房间。",
+            "我住在二第个房间。",
+            "我住在房间第二个的。",
+            "我住在第两个房间。"
+          ],
+          "da": 0,
+          "gt": "第 + số + lượng từ + danh từ: 第二个房间."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk2-de-thay-danh-tu",
+      "nhom": "Số thứ tự – danh từ hoá",
+      "tieuDe": "的 thay danh từ (红的, 我的)",
+      "mau": "Tính từ / đại từ / danh từ / động từ + 的",
+      "nghia": "cái (màu) ~ , cái của ~ (lược bỏ danh từ đã biết)",
+      "giaiThich": "Khi danh từ đã rõ nhờ ngữ cảnh, có thể bỏ danh từ và chỉ giữ phần bổ nghĩa + 的. Cụm \"…的\" khi đó dùng như một danh từ: 红的 (cái màu đỏ), 我的 (cái của tôi), 新的 (cái mới), 吃的 (đồ ăn).",
+      "cachGhep": [
+        "Đại từ / danh từ + 的: 我的, 老师的",
+        "Tính từ + 的: 红的, 大的, 新的, 便宜的",
+        "Động từ + 的: 吃的, 喝的, 我买的",
+        "Hỏi: 谁的？ / 哪个是你的？"
+      ],
+      "viDu": [
+        {
+          "c": "这个杯子是我的。",
+          "d": "Zhège bēizi shì wǒ de.",
+          "v": "Cái cốc này là của tôi."
+        },
+        {
+          "c": "我不喜欢红的，我要白的。",
+          "d": "Wǒ bù xǐhuan hóng de, wǒ yào bái de.",
+          "v": "Tôi không thích cái màu đỏ, tôi lấy cái màu trắng."
+        },
+        {
+          "c": "这件太大了，有小一点儿的吗？",
+          "d": "Zhè jiàn tài dà le, yǒu xiǎo yìdiǎnr de ma?",
+          "v": "Cái này to quá, có cái nhỏ hơn một chút không?"
+        },
+        {
+          "c": "这本书是谁的？",
+          "d": "Zhè běn shū shì shéi de?",
+          "v": "Quyển sách này là của ai?"
+        }
+      ],
+      "luuY": [
+        "Tiếng Việt nói \"cái màu đỏ\", \"cái của tôi\" — có chữ \"cái\" ở đầu; tiếng Trung không thêm 个 phía trước, chỉ cần …的.",
+        "Chỉ lược danh từ khi người nghe đã biết đang nói về vật gì.",
+        "Đừng nhầm với 是…的 nhấn mạnh thời gian / nơi chốn của hành động."
+      ],
+      "soSanh": [
+        "zh-hsk1-de",
+        "zh-hsk1-shi-de"
+      ],
+      "tuKhoa": [
+        "de",
+        "hong de",
+        "wo de",
+        "danh từ hoá",
+        "cái của",
+        "chữ đích"
+      ],
+      "quiz": [
+        {
+          "h": "这个手机不是我___，是我哥哥___。",
+          "lc": [
+            "了…了",
+            "的…的",
+            "着…着",
+            "吗…吗"
+          ],
+          "da": 1,
+          "gt": "Bỏ danh từ 手机 đã biết: 我的, 我哥哥的."
+        },
+        {
+          "h": "\"Tôi muốn cái rẻ\" (đang nói về điện thoại) là:",
+          "lc": [
+            "我要便宜。",
+            "我要个便宜。",
+            "我要的便宜。",
+            "我要便宜的。"
+          ],
+          "da": 3,
+          "gt": "Tính từ + 的 thay cho \"điện thoại rẻ\": 便宜的."
+        },
+        {
+          "h": "这两个苹果，大___给你，小___给我。",
+          "lc": [
+            "的…的",
+            "个…个",
+            "了…了",
+            "得…得"
+          ],
+          "da": 0,
+          "gt": "大的 / 小的 = quả to / quả nhỏ (lược 苹果)."
+        }
+      ]
+    }
+  ]
+}

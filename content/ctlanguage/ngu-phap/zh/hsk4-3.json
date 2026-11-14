@@ -1,0 +1,1235 @@
+{
+  "nn": "zh",
+  "cap": "HSK4",
+  "diem": [
+    {
+      "id": "zh-hsk4-anzhao",
+      "nhom": "Giới từ",
+      "tieuDe": "按照",
+      "mau": "按照 + N (quy định / yêu cầu / kế hoạch…) + V",
+      "nghia": "theo, chiếu theo, dựa theo ~",
+      "giaiThich": "按照 nêu tiêu chuẩn hoặc căn cứ có sẵn mà hành động phải tuân theo: quy định, yêu cầu, kế hoạch, thứ tự, cách làm. Cụm 按照… đứng trước động từ hoặc đứng đầu câu.",
+      "cachGhep": [
+        "S + 按照 + N + V…: 按照计划出发",
+        "按照 + N，S + V…: 按照规定，…",
+        "Danh từ thường gặp: 规定, 要求, 计划, 顺序, 方法, 习惯",
+        "Trước danh từ một âm tiết dùng 按: 按时, 按月"
+      ],
+      "viDu": [
+        {
+          "c": "请按照老师的要求完成作业。",
+          "d": "Qǐng ànzhào lǎoshī de yāoqiú wánchéng zuòyè.",
+          "v": "Xin hoàn thành bài tập theo yêu cầu của thầy giáo."
+        },
+        {
+          "c": "我们按照计划下个月出发。",
+          "d": "Wǒmen ànzhào jìhuà xià gè yuè chūfā.",
+          "v": "Chúng tôi xuất phát vào tháng sau theo kế hoạch."
+        },
+        {
+          "c": "按照规定，这里不能抽烟。",
+          "d": "Ànzhào guīdìng, zhèlǐ bù néng chōuyān.",
+          "v": "Theo quy định, ở đây không được hút thuốc."
+        },
+        {
+          "c": "你是按照说明书做的吗？",
+          "d": "Nǐ shì ànzhào shuōmíngshū zuò de ma?",
+          "v": "Bạn làm theo sách hướng dẫn phải không?"
+        }
+      ],
+      "luuY": [
+        "按照 là làm theo một chuẩn có sẵn; 根据 là dựa vào thông tin, sự thật để rút ra kết luận (根据天气预报，明天有雨).",
+        "Tiếng Việt 'theo' còn nghĩa 'đi theo ai': nghĩa đó là 跟, không phải 按照."
+      ],
+      "soSanh": [
+        "zh-hsk4-tongguo"
+      ],
+      "tuKhoa": [
+        "anzhao",
+        "an",
+        "theo",
+        "chiếu theo",
+        "genju"
+      ],
+      "quiz": [
+        {
+          "h": "（　）学校的规定，学生不能在教室里吃东西。",
+          "lc": [
+            "按照",
+            "通过",
+            "随着",
+            "由"
+          ],
+          "da": 0,
+          "gt": "Làm theo một quy định có sẵn → 按照."
+        },
+        {
+          "h": "按照 nghĩa là gì?",
+          "lc": [
+            "thông qua",
+            "theo, chiếu theo",
+            "cùng với"
+          ],
+          "da": 1,
+          "gt": "按照 = theo, chiếu theo (một chuẩn mực có sẵn)."
+        },
+        {
+          "h": "大家要按照顺序排队。 nghĩa là gì?",
+          "lc": [
+            "Mọi người xếp hàng tuỳ ý.",
+            "Mọi người xếp hàng vì thứ tự.",
+            "Mọi người phải xếp hàng theo thứ tự."
+          ],
+          "da": 2,
+          "gt": "按照顺序 = theo thứ tự."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk4-tongguo",
+      "nhom": "Giới từ",
+      "tieuDe": "通过",
+      "mau": "通过 + N / V，S + V… · S + 通过 + 了 + N",
+      "nghia": "thông qua, bằng cách ~; (động từ) đi qua, vượt qua, đỗ",
+      "giaiThich": "Là giới từ, 通过 nêu phương tiện, cách thức hoặc người trung gian giúp đạt được kết quả. Là động từ, 通过 nghĩa là đi qua một nơi, hoặc vượt qua kỳ thi, được thông qua.",
+      "cachGhep": [
+        "Giới từ: 通过 + N / V，S + V…: 通过努力，他…",
+        "S + 是 + 通过 + N + V + 的: 是通过朋友找到的",
+        "Động từ: S + 通过 + 了 + 考试 / 面试 / 检查",
+        "Khả năng: 通得过 / 通不过"
+      ],
+      "viDu": [
+        {
+          "c": "通过这次活动，我认识了很多朋友。",
+          "d": "Tōngguò zhè cì huódòng, wǒ rènshi le hěn duō péngyou.",
+          "v": "Thông qua hoạt động lần này, tôi quen được rất nhiều bạn."
+        },
+        {
+          "c": "我是通过朋友找到这份工作的。",
+          "d": "Wǒ shì tōngguò péngyou zhǎodào zhè fèn gōngzuò de.",
+          "v": "Tôi tìm được công việc này là nhờ qua bạn bè."
+        },
+        {
+          "c": "他通过了HSK四级考试。",
+          "d": "Tā tōngguò le HSK sì jí kǎoshì.",
+          "v": "Anh ấy đã thi đỗ HSK cấp 4."
+        },
+        {
+          "c": "通过努力，他终于实现了自己的理想。",
+          "d": "Tōngguò nǔlì, tā zhōngyú shíxiàn le zìjǐ de lǐxiǎng.",
+          "v": "Bằng sự nỗ lực, cuối cùng anh ấy đã thực hiện được lý tưởng của mình."
+        }
+      ],
+      "luuY": [
+        "Lỗi rất phổ biến: 通过这次旅行，使我长大了 ✗ — câu mất chủ ngữ. Sửa: 通过这次旅行，我长大了 hoặc 这次旅行使我长大了.",
+        "通过 (thông qua phương tiện) khác 经过 (trải qua một quá trình / đi ngang qua)."
+      ],
+      "soSanh": [
+        "zh-hsk4-anzhao",
+        "zh-hsk4-shi-rang-ling"
+      ],
+      "tuKhoa": [
+        "tongguo",
+        "thông qua",
+        "bằng cách",
+        "thi đỗ",
+        "jingguo"
+      ],
+      "quiz": [
+        {
+          "h": "（　）学习，我了解了很多中国文化。",
+          "lc": [
+            "通过",
+            "按照",
+            "由",
+            "对于"
+          ],
+          "da": 0,
+          "gt": "Nêu cách thức để đạt kết quả → 通过."
+        },
+        {
+          "h": "Trong câu 他通过了考试, 通过 là gì?",
+          "lc": [
+            "giới từ: thông qua",
+            "động từ: vượt qua, đỗ",
+            "liên từ"
+          ],
+          "da": 1,
+          "gt": "Có 了 phía sau và tân ngữ 考试 → động từ 'vượt qua'."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "通过这次旅行，使我长大了。",
+            "通过这次旅行，让我长大了。",
+            "通过这次旅行，我长大了。"
+          ],
+          "da": 2,
+          "gt": "Sau cụm 通过… phải có chủ ngữ; thêm 使 / 让 thì câu mất chủ ngữ."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk4-suizhe",
+      "nhom": "Giới từ",
+      "tieuDe": "随着",
+      "mau": "随着 + N + 的 + V (发展 / 变化 / 提高…)，S + V…",
+      "nghia": "cùng với (sự thay đổi của) ~, theo đà ~",
+      "giaiThich": "随着 nêu một sự thay đổi làm điều kiện, kéo theo một thay đổi khác ở vế sau. Vì vậy cả hai vế đều nói về sự biến đổi; vế sau hay có 越来越, 也, 逐渐 hoặc các từ như 变, 提高, 增加.",
+      "cachGhep": [
+        "随着 + N + 的 + 发展 / 变化 / 提高 / 增加 / 进步，S + …",
+        "随着 + câu ngắn chỉ sự thay đổi，S + …: 随着天气变冷，…",
+        "Cụm 随着… đứng đầu câu"
+      ],
+      "viDu": [
+        {
+          "c": "随着经济的发展，人们的生活越来越好。",
+          "d": "Suízhe jīngjì de fāzhǎn, rénmen de shēnghuó yuèláiyuè hǎo.",
+          "v": "Cùng với sự phát triển của kinh tế, cuộc sống của mọi người ngày càng tốt hơn."
+        },
+        {
+          "c": "随着年龄的增长，他越来越像他爸爸。",
+          "d": "Suízhe niánlíng de zēngzhǎng, tā yuèláiyuè xiàng tā bàba.",
+          "v": "Càng lớn tuổi, anh ấy càng giống bố."
+        },
+        {
+          "c": "随着科学技术的进步，我们的生活方便多了。",
+          "d": "Suízhe kēxué jìshù de jìnbù, wǒmen de shēnghuó fāngbiàn duō le.",
+          "v": "Cùng với sự tiến bộ của khoa học kỹ thuật, cuộc sống của chúng ta tiện lợi hơn nhiều."
+        },
+        {
+          "c": "随着天气变冷，感冒的人多了起来。",
+          "d": "Suízhe tiānqì biàn lěng, gǎnmào de rén duō le qǐlái.",
+          "v": "Trời trở lạnh, số người bị cảm cũng nhiều lên."
+        }
+      ],
+      "luuY": [
+        "Sau 随着 phải là một sự thay đổi, không phải trạng thái đứng yên: 随着经济，… ✗ → 随着经济的发展，… ✓.",
+        "Giống 通过, sau cụm 随着… vế chính phải có chủ ngữ."
+      ],
+      "tuKhoa": [
+        "suizhe",
+        "cùng với",
+        "theo đà",
+        "sự thay đổi"
+      ],
+      "quiz": [
+        {
+          "h": "（　）社会的发展，人们的想法也变了。",
+          "lc": [
+            "随着",
+            "按照",
+            "由",
+            "对于"
+          ],
+          "da": 0,
+          "gt": "Một thay đổi kéo theo thay đổi khác → 随着."
+        },
+        {
+          "h": "Vế sau của câu có 随着 thường chứa gì?",
+          "lc": [
+            "千万别",
+            "越来越… / từ chỉ sự thay đổi",
+            "难道…吗"
+          ],
+          "da": 1,
+          "gt": "随着 nối hai sự thay đổi nên vế sau hay có 越来越, 变, 提高…"
+        },
+        {
+          "h": "随着 nghĩa là gì?",
+          "lc": [
+            "theo quy định",
+            "do ai đó phụ trách",
+            "cùng với (sự thay đổi của)"
+          ],
+          "da": 2,
+          "gt": "随着 = cùng với, theo đà thay đổi của…"
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk4-you",
+      "nhom": "Giới từ",
+      "tieuDe": "由",
+      "mau": "(việc) + 由 + người / đơn vị + (来) + V",
+      "nghia": "do (ai) ~, (việc gì) do ai làm / phụ trách",
+      "giaiThich": "由 chỉ ra người hay đơn vị thực hiện, chịu trách nhiệm về một việc. Thường dùng trong lời phân công, thông báo, văn bản. Động từ hay gặp: 负责, 决定, 安排, 组织, 解决.",
+      "cachGhep": [
+        "Việc + 由 + người + (来) + V: 这件事由我负责",
+        "由 + 谁 + V？ để hỏi người phụ trách",
+        "Phủ định: 不 + 由 + người + V"
+      ],
+      "viDu": [
+        {
+          "c": "这件事由我来负责。",
+          "d": "Zhè jiàn shì yóu wǒ lái fùzé.",
+          "v": "Việc này do tôi phụ trách."
+        },
+        {
+          "c": "去不去由你自己决定。",
+          "d": "Qù bu qù yóu nǐ zìjǐ juédìng.",
+          "v": "Đi hay không do bạn tự quyết định."
+        },
+        {
+          "c": "明天的会议由王经理安排。",
+          "d": "Míngtiān de huìyì yóu Wáng jīnglǐ ānpái.",
+          "v": "Cuộc họp ngày mai do giám đốc Vương sắp xếp."
+        },
+        {
+          "c": "这次活动由谁组织？",
+          "d": "Zhè cì huódòng yóu shéi zǔzhī?",
+          "v": "Hoạt động lần này do ai tổ chức?"
+        }
+      ],
+      "luuY": [
+        "由 khác 被: 由 chỉ nêu người làm / phụ trách, giọng trung tính, sau động từ không cần thành phần khác; 被 nhấn vào việc chịu tác động và kết quả.",
+        "Trật tự: việc + 由 + người + V. Không nói 我由这件事负责 ✗."
+      ],
+      "tuKhoa": [
+        "you",
+        "do",
+        "phụ trách",
+        "you wo fuze"
+      ],
+      "quiz": [
+        {
+          "h": "这个问题（　）你来回答。",
+          "lc": [
+            "由",
+            "被",
+            "把",
+            "对于"
+          ],
+          "da": 0,
+          "gt": "Phân công người thực hiện: 由 + người + 来 + V."
+        },
+        {
+          "h": "Trong 由我负责, 由 nghĩa là gì?",
+          "lc": [
+            "từ (nơi chốn)",
+            "do (ai làm, chịu trách nhiệm)",
+            "vì (nguyên nhân)"
+          ],
+          "da": 1,
+          "gt": "由 nêu người thực hiện / chịu trách nhiệm."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "我由这件事负责。",
+            "这件事负责由我。",
+            "这件事由我负责。"
+          ],
+          "da": 2,
+          "gt": "Trật tự: việc + 由 + người + động từ."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk4-duiyu-zhiyu",
+      "nhom": "Giới từ",
+      "tieuDe": "对于 / 至于",
+      "mau": "对于 + N，S + V… · …，至于 + chủ đề khác，…",
+      "nghia": "对于: đối với ~; 至于: còn về ~, còn như ~",
+      "giaiThich": "对于 nêu đối tượng mà thái độ, ý kiến, cách xử lý hướng tới; thường đứng đầu câu. 至于 dùng khi đang nói một chuyện rồi chuyển sang một khía cạnh liên quan khác, đặt ở đầu vế sau.",
+      "cachGhep": [
+        "对于 + N，S + V…: 对于这个问题，…",
+        "对于 + N + 来说，…",
+        "Vế 1，至于 + N / câu hỏi gián tiếp，S + V…"
+      ],
+      "viDu": [
+        {
+          "c": "对于这个问题，大家的看法不同。",
+          "d": "Duìyú zhège wèntí, dàjiā de kànfǎ bù tóng.",
+          "v": "Đối với vấn đề này, ý kiến của mọi người khác nhau."
+        },
+        {
+          "c": "对于学外语的人来说，多听多说很重要。",
+          "d": "Duìyú xué wàiyǔ de rén lái shuō, duō tīng duō shuō hěn zhòngyào.",
+          "v": "Đối với người học ngoại ngữ, nghe nhiều nói nhiều rất quan trọng."
+        },
+        {
+          "c": "我只知道他去了上海，至于什么时候回来，我不清楚。",
+          "d": "Wǒ zhǐ zhīdào tā qù le Shànghǎi, zhìyú shénme shíhou huílái, wǒ bù qīngchu.",
+          "v": "Tôi chỉ biết anh ấy đã đi Thượng Hải, còn khi nào về thì tôi không rõ."
+        },
+        {
+          "c": "我们先决定去不去，至于怎么去，以后再说。",
+          "d": "Wǒmen xiān juédìng qù bu qù, zhìyú zěnme qù, yǐhòu zài shuō.",
+          "v": "Chúng ta quyết định đi hay không trước, còn đi bằng cách nào thì tính sau."
+        }
+      ],
+      "luuY": [
+        "对于 không dùng cho thái độ giữa người với người: 他对于我很热情 ✗ → 他对我很热情 ✓. Mọi chỗ dùng 对于 đều thay được bằng 对, nhưng không ngược lại.",
+        "至于 chỉ dùng khi đã có một chủ đề đi trước; không mở đầu cuộc nói chuyện bằng 至于."
+      ],
+      "tuKhoa": [
+        "duiyu",
+        "zhiyu",
+        "đối với",
+        "còn về",
+        "dui"
+      ],
+      "quiz": [
+        {
+          "h": "（　）这件事，你有什么看法？",
+          "lc": [
+            "对于",
+            "至于",
+            "由",
+            "随着"
+          ],
+          "da": 0,
+          "gt": "Nêu đối tượng của ý kiến → 对于."
+        },
+        {
+          "h": "我决定买这个手机，（　）颜色，我还没想好。",
+          "lc": [
+            "对于",
+            "至于",
+            "按照",
+            "通过"
+          ],
+          "da": 1,
+          "gt": "Chuyển sang một khía cạnh liên quan khác (màu sắc) → 至于."
+        },
+        {
+          "h": "Câu nào SAI?",
+          "lc": [
+            "他对我很热情。",
+            "对于这个计划，我没有意见。",
+            "他对于我很热情。"
+          ],
+          "da": 2,
+          "gt": "Thái độ giữa người với người chỉ dùng 对, không dùng 对于."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk4-zai-shang-xia-zhong",
+      "nhom": "Giới từ",
+      "tieuDe": "在…上 / 下 / 中 / 方面",
+      "mau": "在 + N + 上 / 中 / 方面 · 在 + N + 的 + V + 下",
+      "nghia": "về mặt ~ (上 / 方面); trong (quá trình) ~ (中); dưới (sự) ~ (下)",
+      "giaiThich": "Khung 在…+ phương vị từ không chỉ nơi chốn mà còn chỉ phạm vi, quá trình, điều kiện trừu tượng. 在…上 và 在…方面: xét về mặt nào. 在…中: trong phạm vi, trong quá trình. 在…下: dưới điều kiện, tác động nào (thường là 帮助, 支持, 影响, 情况).",
+      "cachGhep": [
+        "在 + N + 上: 在学习上, 在工作上, 在这个问题上",
+        "在 + N + 方面: 在教育方面, 在经济方面",
+        "在 + N / V + 中: 在生活中, 在比赛中, 在讨论中",
+        "在 + N + 的 + 帮助 / 支持 / 影响 + 下; 在…的情况下"
+      ],
+      "viDu": [
+        {
+          "c": "在学习上，他比我努力。",
+          "d": "Zài xuéxí shang, tā bǐ wǒ nǔlì.",
+          "v": "Về mặt học tập, anh ấy chăm hơn tôi."
+        },
+        {
+          "c": "在老师的帮助下，我的汉语进步很快。",
+          "d": "Zài lǎoshī de bāngzhù xià, wǒ de Hànyǔ jìnbù hěn kuài.",
+          "v": "Dưới sự giúp đỡ của thầy giáo, tiếng Trung của tôi tiến bộ rất nhanh."
+        },
+        {
+          "c": "在工作中，我们会遇到很多困难。",
+          "d": "Zài gōngzuò zhōng, wǒmen huì yùdào hěn duō kùnnan.",
+          "v": "Trong công việc, chúng ta sẽ gặp rất nhiều khó khăn."
+        },
+        {
+          "c": "在教育孩子方面，你有什么经验？",
+          "d": "Zài jiàoyù háizi fāngmiàn, nǐ yǒu shénme jīngyàn?",
+          "v": "Về mặt giáo dục con cái, bạn có kinh nghiệm gì?"
+        }
+      ],
+      "luuY": [
+        "Không bỏ phương vị từ phía sau: 在老师的帮助，我… ✗ → 在老师的帮助下 ✓.",
+        "'Dưới sự giúp đỡ' luôn là 下, không dùng 上 / 中: 在…的帮助中 ✗."
+      ],
+      "tuKhoa": [
+        "zai shang",
+        "zai xia",
+        "zai zhong",
+        "fangmian",
+        "về mặt",
+        "dưới sự"
+      ],
+      "quiz": [
+        {
+          "h": "在朋友的帮助（　），他找到了工作。",
+          "lc": [
+            "下",
+            "上",
+            "中",
+            "方面"
+          ],
+          "da": 0,
+          "gt": "Điều kiện / tác động (帮助) đi với 下: 在…的帮助下."
+        },
+        {
+          "h": "在这个过程（　），我学到了很多东西。",
+          "lc": [
+            "下",
+            "中",
+            "的话",
+            "来说"
+          ],
+          "da": 1,
+          "gt": "Trong một quá trình: 在…过程中."
+        },
+        {
+          "h": "在…方面 nghĩa là gì?",
+          "lc": [
+            "dưới sự…",
+            "trong lúc đang…",
+            "về mặt / phương diện…"
+          ],
+          "da": 2,
+          "gt": "方面 = phương diện, mặt."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk4-laideji-laibuji",
+      "nhom": "Bổ ngữ",
+      "tieuDe": "来得及 / 来不及",
+      "mau": "(S) + 来得及 / 来不及 + (V)",
+      "nghia": "kịp (làm) ~ / không kịp (làm) ~",
+      "giaiThich": "Hai cụm cố định ở dạng bổ ngữ khả năng, cho biết còn đủ thời gian để làm việc gì hay không. Có thể đứng một mình hoặc đứng trước động từ. Kể chuyện đã qua thì dùng 没来得及.",
+      "cachGhep": [
+        "S + 来得及 / 来不及 + V + O: 来不及吃饭",
+        "Đứng một mình: 还来得及 / 来不及了",
+        "Quá khứ: 没来得及 + V",
+        "Câu hỏi: 来得及吗？ / 来得及来不及？"
+      ],
+      "viDu": [
+        {
+          "c": "别着急，还来得及。",
+          "d": "Bié zháojí, hái láidejí.",
+          "v": "Đừng sốt ruột, vẫn còn kịp."
+        },
+        {
+          "c": "电影快开始了，我们来不及吃饭了。",
+          "d": "Diànyǐng kuài kāishǐ le, wǒmen láibují chīfàn le.",
+          "v": "Phim sắp bắt đầu rồi, chúng ta không kịp ăn cơm nữa."
+        },
+        {
+          "c": "现在出发还来得及吗？",
+          "d": "Xiànzài chūfā hái láidejí ma?",
+          "v": "Bây giờ xuất phát còn kịp không?"
+        },
+        {
+          "c": "我走得太急，没来得及跟他说再见。",
+          "d": "Wǒ zǒu de tài jí, méi láidejí gēn tā shuō zàijiàn.",
+          "v": "Tôi đi vội quá, chưa kịp nói lời tạm biệt với anh ấy."
+        }
+      ],
+      "luuY": [
+        "来不及 (không kịp thời gian) khác 来不了 (không đến được).",
+        "Động từ đứng SAU 来不及: 来不及吃饭 ✓, 吃饭来不及 chỉ dùng khi 吃饭 là chủ đề."
+      ],
+      "tuKhoa": [
+        "laideji",
+        "laibuji",
+        "kịp",
+        "không kịp"
+      ],
+      "quiz": [
+        {
+          "h": "还有十分钟火车就开了，（　）买吃的了。",
+          "lc": [
+            "来不及",
+            "来得及",
+            "来不了",
+            "来得了"
+          ],
+          "da": 0,
+          "gt": "Chỉ còn 10 phút → không kịp: 来不及."
+        },
+        {
+          "h": "来不及 nghĩa là gì?",
+          "lc": [
+            "không đến được",
+            "không kịp",
+            "không cần đến"
+          ],
+          "da": 1,
+          "gt": "来不及 = không kịp; 'không đến được' là 来不了."
+        },
+        {
+          "h": "时间还早，我们（　）喝杯咖啡。",
+          "lc": [
+            "来不及",
+            "来不了",
+            "来得及"
+          ],
+          "da": 2,
+          "gt": "Còn sớm → vẫn kịp: 来得及."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk4-de-qi-bu-qi",
+      "nhom": "Bổ ngữ",
+      "tieuDe": "V得起 / V不起",
+      "mau": "V + 得起 / 不起 + (O)",
+      "nghia": "đủ khả năng (tiền bạc) để ~ / không đủ khả năng ~",
+      "giaiThich": "起 làm bổ ngữ khả năng cho biết có đủ điều kiện, chủ yếu là tiền bạc, để thực hiện hành động hay không: 买得起 (mua nổi), 买不起 (không mua nổi). Ngoài ra có vài cụm cố định như 看不起 (coi thường), 对不起 (xin lỗi).",
+      "cachGhep": [
+        "V + 得起 + O: 买得起, 吃得起, 住得起, 付得起",
+        "V + 不起 + O: 买不起, 坐不起, 用不起",
+        "Cụm cố định: 看不起 (coi thường), 看得起 (coi trọng), 对不起"
+      ],
+      "viDu": [
+        {
+          "c": "这么贵的房子，我买不起。",
+          "d": "Zhème guì de fángzi, wǒ mǎi bu qǐ.",
+          "v": "Căn nhà đắt thế này, tôi không mua nổi."
+        },
+        {
+          "c": "这家饭店不贵，学生也吃得起。",
+          "d": "Zhè jiā fàndiàn bú guì, xuésheng yě chī de qǐ.",
+          "v": "Quán này không đắt, học sinh cũng ăn nổi."
+        },
+        {
+          "c": "你别看不起他，他其实很有能力。",
+          "d": "Nǐ bié kànbuqǐ tā, tā qíshí hěn yǒu nénglì.",
+          "v": "Bạn đừng coi thường anh ấy, thật ra anh ấy rất có năng lực."
+        },
+        {
+          "c": "一个月五千块的房租，你付得起吗？",
+          "d": "Yí gè yuè wǔqiān kuài de fángzū, nǐ fù de qǐ ma?",
+          "v": "Tiền thuê nhà năm nghìn tệ một tháng, bạn trả nổi không?"
+        }
+      ],
+      "luuY": [
+        "Phân biệt ba kiểu 'không mua được': 买不起 (không đủ tiền), 买不到 (hết hàng, không có để mua), 买不了 (không mua được vì lý do khác / mua không hết).",
+        "看不起 là 'coi thường', không phải 'nhìn không thấy' (看不见)."
+      ],
+      "soSanh": [
+        "zh-hsk4-laideji-laibuji"
+      ],
+      "tuKhoa": [
+        "de qi",
+        "bu qi",
+        "maibuqi",
+        "kanbuqi",
+        "không nổi",
+        "đủ tiền"
+      ],
+      "quiz": [
+        {
+          "h": "这辆车太贵了，我（　）。",
+          "lc": [
+            "买不起",
+            "买不到",
+            "买不完",
+            "买不见"
+          ],
+          "da": 0,
+          "gt": "Lý do là đắt (thiếu tiền) → 买不起."
+        },
+        {
+          "h": "看不起 nghĩa là gì?",
+          "lc": [
+            "nhìn không thấy",
+            "coi thường",
+            "không đủ tiền để xem"
+          ],
+          "da": 1,
+          "gt": "看不起 là cụm cố định, nghĩa 'coi thường'."
+        },
+        {
+          "h": "店里已经卖完了，所以我（　）。",
+          "lc": [
+            "买不起",
+            "买不完",
+            "买不到"
+          ],
+          "da": 2,
+          "gt": "Hết hàng, không có để mua → 买不到."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk4-xialai-mo-rong",
+      "nhom": "Bổ ngữ",
+      "tieuDe": "下来 (nghĩa mở rộng)",
+      "mau": "V / Adj + 下来",
+      "nghia": "~ lại (dừng, lắng xuống); ghi / giữ ~ lại; duy trì được tới nay",
+      "giaiThich": "Ngoài nghĩa hướng xuống, 下来 có ba nghĩa mở rộng: (1) chuyển từ động sang tĩnh, từ mạnh sang yếu: 停下来, 安静下来; (2) cố định, giữ lại để khỏi mất: 记下来, 写下来, 留下来; (3) hành động kéo dài từ trước tới hiện tại: 坚持下来.",
+      "cachGhep": [
+        "V + 下来 (dừng): 停下来, 慢下来",
+        "Adj + 下来 (lắng xuống): 安静下来, 暗下来, 冷静下来",
+        "V + 下来 (cố định): 记下来, 写下来, 画下来, 留下来",
+        "Có tân ngữ: 把 + O + V + 下来 / V + 下 + O + 来"
+      ],
+      "viDu": [
+        {
+          "c": "车慢慢地停了下来。",
+          "d": "Chē mànmàn de tíng le xiàlái.",
+          "v": "Chiếc xe từ từ dừng lại."
+        },
+        {
+          "c": "请把他的电话号码记下来。",
+          "d": "Qǐng bǎ tā de diànhuà hàomǎ jì xiàlái.",
+          "v": "Xin ghi lại số điện thoại của anh ấy."
+        },
+        {
+          "c": "教室里一下子安静下来了。",
+          "d": "Jiàoshì li yíxiàzi ānjìng xiàlái le.",
+          "v": "Trong lớp học bỗng chốc yên tĩnh hẳn lại."
+        },
+        {
+          "c": "这么难的工作，他坚持下来了。",
+          "d": "Zhème nán de gōngzuò, tā jiānchí xiàlái le.",
+          "v": "Công việc khó thế này mà anh ấy đã kiên trì được tới giờ."
+        }
+      ],
+      "luuY": [
+        "Adj + 下来 dùng cho thay đổi theo hướng giảm, lắng (安静, 暗, 慢, 冷静); thay đổi theo hướng tăng thì dùng 起来 (热闹起来, 亮起来).",
+        "坚持下来 nhìn về quãng đã qua tới hiện tại; 坚持下去 nhìn về phía tương lai (tiếp tục nữa)."
+      ],
+      "soSanh": [
+        "zh-hsk3-xiaqu-chulai",
+        "zh-hsk3-qilai-mo-rong"
+      ],
+      "tuKhoa": [
+        "xialai",
+        "tingxialai",
+        "jixialai",
+        "dừng lại",
+        "ghi lại",
+        "bổ ngữ xu hướng"
+      ],
+      "quiz": [
+        {
+          "h": "老师说的话很重要，你最好写（　）。",
+          "lc": [
+            "下来",
+            "下去",
+            "起来",
+            "出去"
+          ],
+          "da": 0,
+          "gt": "Ghi lại để giữ, khỏi quên → 写下来."
+        },
+        {
+          "h": "大家别说话了，请安静（　）。",
+          "lc": [
+            "起来",
+            "下来",
+            "出来",
+            "过去"
+          ],
+          "da": 1,
+          "gt": "Chuyển từ ồn sang yên (lắng xuống) → 安静下来."
+        },
+        {
+          "h": "Trong 坚持下来, 下来 chỉ điều gì?",
+          "lc": [
+            "sẽ tiếp tục trong tương lai",
+            "bắt đầu làm",
+            "đã duy trì từ trước cho tới hiện tại"
+          ],
+          "da": 2,
+          "gt": "下来 nhìn từ quá khứ tới hiện tại; tiếp tục về sau là 下去."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk4-shang-bo-ngu",
+      "nhom": "Bổ ngữ",
+      "tieuDe": "上 làm bổ ngữ kết quả (考上 / 爱上 / 关上)",
+      "mau": "V + 上 + (O)",
+      "nghia": "đạt được ~; bắt đầu ~ (và tiếp tục); khép / gắn ~ vào",
+      "giaiThich": "上 đứng sau động từ làm bổ ngữ kết quả có ba nghĩa thường gặp: (1) đạt tới mục tiêu khó: 考上大学, 当上经理; (2) bắt đầu một trạng thái và tiếp tục: 爱上, 喜欢上; (3) hai vật khép lại hoặc một vật gắn lên vật khác: 关上, 穿上, 戴上, 写上.",
+      "cachGhep": [
+        "Đạt mục tiêu: 考上 + trường, 当上 + chức vụ, 住上 + 新房",
+        "Bắt đầu và tiếp tục: 爱上, 喜欢上, 迷上 + O",
+        "Khép / gắn: 关上门, 闭上眼睛, 穿上衣服, 写上名字",
+        "Phủ định: 没 + V + 上; khả năng: V得上 / V不上"
+      ],
+      "viDu": [
+        {
+          "c": "他考上了北京大学。",
+          "d": "Tā kǎoshàng le Běijīng Dàxué.",
+          "v": "Anh ấy đã thi đỗ Đại học Bắc Kinh."
+        },
+        {
+          "c": "来中国以后，我爱上了中国菜。",
+          "d": "Lái Zhōngguó yǐhòu, wǒ àishàng le Zhōngguó cài.",
+          "v": "Sau khi đến Trung Quốc, tôi đã mê món ăn Trung Quốc."
+        },
+        {
+          "c": "外面冷，穿上大衣再出去。",
+          "d": "Wàimiàn lěng, chuānshàng dàyī zài chūqù.",
+          "v": "Bên ngoài lạnh, mặc áo khoác vào rồi hãy ra."
+        },
+        {
+          "c": "你关上窗户了吗？",
+          "d": "Nǐ guānshàng chuānghu le ma?",
+          "v": "Bạn đóng cửa sổ lại chưa?"
+        }
+      ],
+      "luuY": [
+        "考大学 chỉ là 'thi đại học'; 考上大学 mới là 'thi đỗ'. Tương tự 没考上 = thi trượt.",
+        "Đừng hiểu 上 ở đây là 'lên': 爱上 không phải 'yêu lên'."
+      ],
+      "soSanh": [
+        "zh-hsk4-xialai-mo-rong"
+      ],
+      "tuKhoa": [
+        "shang",
+        "kaoshang",
+        "aishang",
+        "guanshang",
+        "bổ ngữ kết quả"
+      ],
+      "quiz": [
+        {
+          "h": "请在这儿写（　）你的名字。",
+          "lc": [
+            "上",
+            "下去",
+            "起",
+            "开"
+          ],
+          "da": 0,
+          "gt": "Gắn chữ lên một bề mặt: 写上."
+        },
+        {
+          "h": "她喜欢（　）了这个城市，决定留下来。",
+          "lc": [
+            "开",
+            "上",
+            "走",
+            "完"
+          ],
+          "da": 1,
+          "gt": "Bắt đầu thích và tiếp tục thích: 喜欢上."
+        },
+        {
+          "h": "考上大学 nghĩa là gì?",
+          "lc": [
+            "đi thi đại học",
+            "thi trượt đại học",
+            "thi đỗ đại học"
+          ],
+          "da": 2,
+          "gt": "上 chỉ việc đạt được mục tiêu: 考上 = thi đỗ."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk4-shi-rang-ling",
+      "nhom": "Câu đặc biệt (把 / 使)",
+      "tieuDe": "使 / 让 / 令 (khiến cho)",
+      "mau": "A + 使 / 让 / 令 + người / vật + Adj / V",
+      "nghia": "khiến cho, làm cho ~",
+      "giaiThich": "Ba từ này tạo câu kiêm ngữ chỉ nguyên nhân – kết quả: A làm cho B có cảm xúc, trạng thái hoặc thay đổi nào đó. 让 dùng rộng nhất, cả khẩu ngữ lẫn văn viết; 使 và 令 thuộc văn viết; 令 hay xuất hiện trong cụm 令人 + cảm xúc.",
+      "cachGhep": [
+        "Sự việc + 让 / 使 + người + (很) + Adj / V tâm lý",
+        "Sự việc + 使 + người / vật + V (thay đổi): 使我明白了…",
+        "令人 + 感动 / 失望 / 满意 / 吃惊…",
+        "Phủ định đặt trước 使 / 让: 没让…, 不会使…"
+      ],
+      "viDu": [
+        {
+          "c": "这个消息让大家很高兴。",
+          "d": "Zhège xiāoxi ràng dàjiā hěn gāoxìng.",
+          "v": "Tin này khiến mọi người rất vui."
+        },
+        {
+          "c": "他的话使我明白了很多道理。",
+          "d": "Tā de huà shǐ wǒ míngbai le hěn duō dàolǐ.",
+          "v": "Lời của anh ấy khiến tôi hiểu ra nhiều điều."
+        },
+        {
+          "c": "比赛的结果令人失望。",
+          "d": "Bǐsài de jiéguǒ lìng rén shīwàng.",
+          "v": "Kết quả trận đấu khiến người ta thất vọng."
+        },
+        {
+          "c": "什么事让你这么生气？",
+          "d": "Shénme shì ràng nǐ zhème shēngqì?",
+          "v": "Chuyện gì khiến bạn giận đến thế?"
+        }
+      ],
+      "luuY": [
+        "使 và 令 không dùng để sai bảo: 老师使我回答问题 ✗ → 老师让 / 叫我回答问题 ✓.",
+        "Người Việt hay dịch 'làm tôi vui' thành 做我高兴 ✗; phải dùng 让 / 使: 让我很高兴."
+      ],
+      "soSanh": [
+        "zh-hsk4-ba-nang-cao",
+        "zh-hsk4-tongguo"
+      ],
+      "tuKhoa": [
+        "shi",
+        "rang",
+        "ling",
+        "khiến cho",
+        "làm cho",
+        "câu kiêm ngữ"
+      ],
+      "quiz": [
+        {
+          "h": "妈妈（　）我去买牛奶。",
+          "lc": [
+            "让",
+            "使",
+            "令",
+            "由于"
+          ],
+          "da": 0,
+          "gt": "Sai bảo ai làm việc gì chỉ dùng 让 / 叫, không dùng 使 / 令."
+        },
+        {
+          "h": "令人感动 nghĩa là gì?",
+          "lc": [
+            "ra lệnh cho người khác",
+            "khiến người ta cảm động",
+            "người cảm động ra lệnh"
+          ],
+          "da": 1,
+          "gt": "令人 + cảm xúc = khiến người ta…"
+        },
+        {
+          "h": "Câu nào SAI?",
+          "lc": [
+            "这件事让我很难过。",
+            "读书使人进步。",
+            "老师使我回答问题。"
+          ],
+          "da": 2,
+          "gt": "使 không dùng cho nghĩa sai bảo; phải nói 老师让我回答问题."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk4-ba-nang-cao",
+      "nhom": "Câu đặc biệt (把 / 使)",
+      "tieuDe": "Câu chữ 把 (nâng cao)",
+      "mau": "S + 把 + O + V + 得 + … · S + 把 + O + 当作 / 看成 + N · S + 把 + O + V + số lần",
+      "nghia": "làm O (đến mức) ~; coi O là ~; làm O (thêm) mấy lần",
+      "giaiThich": "Ở HSK 4, câu chữ 把 mở rộng thêm ba kiểu: (1) sau động từ là bổ ngữ trạng thái với 得, tả kết quả xử lý ra sao: 把房间打扫得很干净; (2) coi, xem ai / cái gì là gì: 把他当作朋友; (3) sau động từ là bổ ngữ động lượng: 把课文读一遍.",
+      "cachGhep": [
+        "把 + O + V + 得 + Adj / cụm từ: 把衣服洗得很干净",
+        "把 + O + 当作 / 看作 / 看成 / 叫作 + N",
+        "把 + O + V + 一下 / 一遍 / 两次",
+        "Vẫn giữ quy tắc: phủ định và động từ năng nguyện đứng trước 把"
+      ],
+      "viDu": [
+        {
+          "c": "她把房间打扫得干干净净。",
+          "d": "Tā bǎ fángjiān dǎsǎo de gāngānjìngjìng.",
+          "v": "Cô ấy dọn phòng sạch bong."
+        },
+        {
+          "c": "我一直把他当作最好的朋友。",
+          "d": "Wǒ yìzhí bǎ tā dàngzuò zuì hǎo de péngyou.",
+          "v": "Tôi luôn coi anh ấy là người bạn tốt nhất."
+        },
+        {
+          "c": "请把这个句子再读一遍。",
+          "d": "Qǐng bǎ zhège jùzi zài dú yí biàn.",
+          "v": "Xin đọc lại câu này một lần nữa."
+        },
+        {
+          "c": "你怎么把衣服弄得这么脏？",
+          "d": "Nǐ zěnme bǎ yīfu nòng de zhème zāng?",
+          "v": "Sao bạn làm quần áo bẩn thế này?"
+        }
+      ],
+      "luuY": [
+        "Bổ ngữ khả năng không dùng trong câu 把: 他把作业做不完 ✗ → 他做不完作业 ✓.",
+        "当 trong 当作 đọc dàng (thanh 4), khác 当 dāng trong 当然, 当时."
+      ],
+      "soSanh": [
+        "zh-hsk3-ba-co-ban",
+        "zh-hsk3-ba-zai-dao-gei-cheng",
+        "zh-hsk4-shi-rang-ling"
+      ],
+      "tuKhoa": [
+        "ba",
+        "ba dangzuo",
+        "ba de",
+        "câu chữ ba",
+        "coi là"
+      ],
+      "quiz": [
+        {
+          "h": "妈妈把菜做（　）很好吃。",
+          "lc": [
+            "得",
+            "的",
+            "地",
+            "着"
+          ],
+          "da": 0,
+          "gt": "Sau động từ, dẫn ra bổ ngữ trạng thái → 得."
+        },
+        {
+          "h": "我们都把她（　）自己的姐姐。",
+          "lc": [
+            "成为",
+            "当作",
+            "觉得",
+            "认为"
+          ],
+          "da": 1,
+          "gt": "Khung 把 + O + 当作 + N = coi O là…"
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "他把作业做不完。",
+            "他把得作业做很认真。",
+            "他把作业做得很认真。"
+          ],
+          "da": 2,
+          "gt": "把 + O + V + 得 + bổ ngữ trạng thái; câu 把 không dùng bổ ngữ khả năng (做不完)."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk4-yiwei-renwei",
+      "nhom": "Từ dễ nhầm – văn viết",
+      "tieuDe": "以为 và 认为",
+      "mau": "S + 以为 + câu (thực tế không phải vậy) · S + 认为 + câu (quan điểm)",
+      "nghia": "以为: tưởng là, cứ ngỡ; 认为: cho rằng, nhận định",
+      "giaiThich": "Cả hai đều dịch được là 'nghĩ rằng' nhưng khác hẳn về hàm ý. 认为 nêu quan điểm, nhận định có suy xét. 以为 nêu một phán đoán mà sau đó thực tế cho thấy là sai; phía sau thường có 原来, 其实, 没想到.",
+      "cachGhep": [
+        "S + 认为 + câu: 我认为这个计划很好",
+        "S + (还) 以为 + câu，原来 / 其实 / 没想到…",
+        "Phủ định: 不认为… ✓; 以为 hầu như không dùng ở dạng phủ định"
+      ],
+      "viDu": [
+        {
+          "c": "我以为今天是星期五，原来是星期四。",
+          "d": "Wǒ yǐwéi jīntiān shì xīngqīwǔ, yuánlái shì xīngqīsì.",
+          "v": "Tôi cứ tưởng hôm nay là thứ Sáu, hoá ra là thứ Năm."
+        },
+        {
+          "c": "我认为这个计划很好。",
+          "d": "Wǒ rènwéi zhège jìhuà hěn hǎo.",
+          "v": "Tôi cho rằng kế hoạch này rất tốt."
+        },
+        {
+          "c": "大家都以为他不会来了，没想到他来了。",
+          "d": "Dàjiā dōu yǐwéi tā bú huì lái le, méi xiǎngdào tā lái le.",
+          "v": "Mọi người đều tưởng anh ấy sẽ không đến nữa, không ngờ anh ấy lại đến."
+        },
+        {
+          "c": "你认为我们应该怎么做？",
+          "d": "Nǐ rènwéi wǒmen yīnggāi zěnme zuò?",
+          "v": "Bạn cho rằng chúng ta nên làm thế nào?"
+        }
+      ],
+      "luuY": [
+        "Nêu ý kiến của mình mà dùng 以为 thì người nghe hiểu là bạn đã nghĩ sai: 我以为这个计划很好 = tôi đã tưởng kế hoạch này tốt (nhưng không phải).",
+        "为 trong 以为 / 认为 đọc wéi (thanh 2), khác 为 wèi trong 为了, 因为."
+      ],
+      "tuKhoa": [
+        "yiwei",
+        "renwei",
+        "tưởng là",
+        "cho rằng",
+        "nghĩ rằng"
+      ],
+      "quiz": [
+        {
+          "h": "我（　）他是中国人，后来才知道他是韩国人。",
+          "lc": [
+            "以为",
+            "认为",
+            "按照",
+            "通过"
+          ],
+          "da": 0,
+          "gt": "Điều đã nghĩ hoá ra sai → 以为."
+        },
+        {
+          "h": "医生（　）每天运动对身体有好处。",
+          "lc": [
+            "以为",
+            "认为",
+            "由",
+            "随着"
+          ],
+          "da": 1,
+          "gt": "Đây là nhận định, quan điểm có căn cứ → 认为."
+        },
+        {
+          "h": "以为 hàm ý điều gì?",
+          "lc": [
+            "quan điểm đã suy xét kỹ",
+            "mệnh lệnh",
+            "điều đã nghĩ nhưng thực tế không đúng"
+          ],
+          "da": 2,
+          "gt": "以为 = tưởng (nhầm); nêu quan điểm thì dùng 认为."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk4-zhi",
+      "nhom": "Từ dễ nhầm – văn viết",
+      "tieuDe": "之 (…之一 / 之前 / 之间 / …分之…)",
+      "mau": "最 + Adj + 的 + N + 之一 · V / N + 之前 / 之后 · A 和 B + 之间 · X 分之 Y",
+      "nghia": "một trong những ~; trước / sau ~; giữa ~; Y phần X",
+      "giaiThich": "之 là trợ từ kết cấu của văn ngôn, tương đương 的, còn lại trong tiếng Trung hiện đại ở một số cụm cố định: …之一 (một trong những…), 之前 / 之后 (trước / sau), 之间 (giữa), 之中 (trong số), và cách đọc phân số X 分之 Y.",
+      "cachGhep": [
+        "(最 + Adj + 的) + N số nhiều + 之一: 最大的城市之一",
+        "V / N + 之前 / 之后: 睡觉之前, 毕业之后",
+        "A 和 B 之间 / N (số nhiều) + 之间: 朋友之间",
+        "Phân số: mẫu số + 分之 + tử số — 三分之二 = 2/3; 百分之十 = 10%"
+      ],
+      "viDu": [
+        {
+          "c": "北京是中国最大的城市之一。",
+          "d": "Běijīng shì Zhōngguó zuì dà de chéngshì zhī yī.",
+          "v": "Bắc Kinh là một trong những thành phố lớn nhất Trung Quốc."
+        },
+        {
+          "c": "睡觉之前不要喝咖啡。",
+          "d": "Shuìjiào zhīqián búyào hē kāfēi.",
+          "v": "Trước khi ngủ đừng uống cà phê."
+        },
+        {
+          "c": "朋友之间应该互相帮助。",
+          "d": "Péngyou zhījiān yīnggāi hùxiāng bāngzhù.",
+          "v": "Giữa bạn bè với nhau nên giúp đỡ lẫn nhau."
+        },
+        {
+          "c": "这里三分之二的学生是留学生吗？",
+          "d": "Zhèlǐ sān fēn zhī èr de xuésheng shì liúxuéshēng ma?",
+          "v": "Hai phần ba học sinh ở đây là lưu học sinh phải không?"
+        }
+      ],
+      "luuY": [
+        "Trật tự ngược tiếng Việt: 'một trong những thành phố lớn nhất' → 最大的城市之一 (之一 đứng CUỐI).",
+        "Phân số đọc mẫu số trước: 三分之二 là 2/3, không phải 3/2."
+      ],
+      "tuKhoa": [
+        "zhi",
+        "zhi yi",
+        "zhiqian",
+        "zhijian",
+        "fen zhi",
+        "một trong những",
+        "phân số"
+      ],
+      "quiz": [
+        {
+          "h": "他是我最好的朋友（　）。",
+          "lc": [
+            "之一",
+            "之前",
+            "之间",
+            "之后"
+          ],
+          "da": 0,
+          "gt": "'Một trong những người bạn tốt nhất': … 之一 đứng cuối."
+        },
+        {
+          "h": "四分之一 là bao nhiêu?",
+          "lc": [
+            "4/1",
+            "1/4",
+            "4,1"
+          ],
+          "da": 1,
+          "gt": "Mẫu số đọc trước: 四分之一 = một phần tư."
+        },
+        {
+          "h": "毕业（　），他去了上海工作。",
+          "lc": [
+            "之一",
+            "之间",
+            "之后"
+          ],
+          "da": 2,
+          "gt": "'Sau khi tốt nghiệp': 毕业之后."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk4-deng",
+      "nhom": "Từ dễ nhầm – văn viết",
+      "tieuDe": "等 / 等等 (liệt kê)",
+      "mau": "A、B、C + 等 + (N tổng quát) · A、B、C + 等等",
+      "nghia": "vân vân, v.v.; … và những (thứ) khác",
+      "giaiThich": "Đặt sau một chuỗi liệt kê để cho biết còn nữa chưa kể hết. Sau 等 thường có một danh từ tổng quát gọi tên cả nhóm (等城市, 等运动). 等等 thường kết thúc chuỗi liệt kê, phía sau không cần danh từ.",
+      "cachGhep": [
+        "A、B、C 等 + danh từ tổng quát: 北京、上海等城市",
+        "A、B、C 等等。(kết thúc câu)",
+        "Các mục liệt kê ngăn cách bằng dấu 、 (dấu ngắt liệt kê)"
+      ],
+      "viDu": [
+        {
+          "c": "我去过北京、上海、广州等城市。",
+          "d": "Wǒ qù guo Běijīng, Shànghǎi, Guǎngzhōu děng chéngshì.",
+          "v": "Tôi đã đến các thành phố như Bắc Kinh, Thượng Hải, Quảng Châu."
+        },
+        {
+          "c": "桌子上有书、笔、词典等等。",
+          "d": "Zhuōzi shang yǒu shū, bǐ, cídiǎn děngděng.",
+          "v": "Trên bàn có sách, bút, từ điển, vân vân."
+        },
+        {
+          "c": "他喜欢打篮球、游泳、跑步等运动。",
+          "d": "Tā xǐhuan dǎ lánqiú, yóuyǒng, pǎobù děng yùndòng.",
+          "v": "Anh ấy thích các môn thể thao như bóng rổ, bơi lội, chạy bộ."
+        },
+        {
+          "c": "超市里有没有牙膏、毛巾等日用品？",
+          "d": "Chāoshì li yǒu méiyǒu yágāo, máojīn děng rìyòngpǐn?",
+          "v": "Trong siêu thị có các đồ dùng hằng ngày như kem đánh răng, khăn mặt không?"
+        }
+      ],
+      "luuY": [
+        "等 ở đây không có nghĩa 'đợi'. Vị trí giúp phân biệt: đứng sau chuỗi danh từ liệt kê là 'vân vân'.",
+        "Tiếng Việt đặt từ tổng quát trước ('các thành phố như…'); tiếng Trung đặt sau 等: 北京、上海等城市."
+      ],
+      "tuKhoa": [
+        "deng",
+        "dengdeng",
+        "vân vân",
+        "liệt kê",
+        "v.v."
+      ],
+      "quiz": [
+        {
+          "h": "我们学了语法、生词、汉字（　）内容。",
+          "lc": [
+            "等",
+            "之一",
+            "由",
+            "而"
+          ],
+          "da": 0,
+          "gt": "Sau chuỗi liệt kê, trước danh từ tổng quát 内容 → 等."
+        },
+        {
+          "h": "Sau 等等 thường thế nào?",
+          "lc": [
+            "bắt buộc có danh từ tổng quát",
+            "không cần thêm danh từ, kết thúc phần liệt kê",
+            "bắt buộc có 吗"
+          ],
+          "da": 1,
+          "gt": "等等 khép lại chuỗi liệt kê; danh từ tổng quát thường đi sau 等 đơn."
+        },
+        {
+          "h": "Trong 苹果、香蕉等水果, 等 nghĩa là gì?",
+          "lc": [
+            "đợi",
+            "bằng nhau",
+            "vân vân (liệt kê chưa hết)"
+          ],
+          "da": 2,
+          "gt": "等 sau chuỗi liệt kê = vân vân."
+        }
+      ]
+    }
+  ]
+}

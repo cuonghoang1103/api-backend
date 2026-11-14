@@ -1,0 +1,1220 @@
+{
+  "nn": "en",
+  "cap": "B1",
+  "diem": [
+    {
+      "id": "en-b1-gerund-vs-infinitive",
+      "nhom": "Danh động từ – động từ nguyên mẫu",
+      "tieuDe": "V-ing hay to V: stop / remember / forget / try",
+      "mau": "stop / remember / forget / try + V-ing  ↔  + to V (đổi nghĩa)",
+      "nghia": "cùng một động từ, theo sau là V-ing hay to V thì nghĩa khác nhau",
+      "giaiThich": "Một số động từ đi được với cả V-ing và to V nhưng nghĩa thay đổi. Nhìn chung V-ing nói về việc đã hoặc đang xảy ra, còn to V nói về việc cần làm sau đó hoặc mục đích.",
+      "cachGhep": [
+        "stop + V-ing: thôi không làm nữa · stop + to V: dừng lại để làm việc khác",
+        "remember / forget + V-ing: nhớ / quên việc ĐÃ làm · remember / forget + to V: nhớ / quên việc CẦN làm",
+        "try + V-ing: thử làm xem sao · try + to V: cố gắng làm (việc khó)",
+        "regret + V-ing: hối hận vì đã làm · regret + to V: lấy làm tiếc phải (thông báo)"
+      ],
+      "viDu": [
+        {
+          "c": "He stopped smoking last year.",
+          "v": "Anh ấy bỏ thuốc lá từ năm ngoái."
+        },
+        {
+          "c": "We stopped to have a rest.",
+          "v": "Chúng tôi dừng lại để nghỉ một lát."
+        },
+        {
+          "c": "I remember locking the door, but now it's open.",
+          "v": "Tôi nhớ là đã khoá cửa, vậy mà giờ nó lại mở."
+        },
+        {
+          "c": "Don't forget to turn off the lights when you leave.",
+          "v": "Đừng quên tắt đèn khi bạn ra về."
+        }
+      ],
+      "luuY": [
+        "Tiếng Việt 'nhớ khoá cửa' dùng cho cả hai nghĩa; tiếng Anh phải tách: remember to lock (nhớ để khoá) ↔ remember locking (nhớ là đã khoá).",
+        "'I tried to open the window' (cố mở, có thể không được) ↔ 'I tried opening the window' (thử mở xem có mát hơn không)."
+      ],
+      "soSanh": [
+        "en-b1-verb-object-infinitive"
+      ],
+      "tuKhoa": [
+        "gerund infinitive",
+        "V-ing to V",
+        "stop remember try",
+        "danh động từ",
+        "đổi nghĩa"
+      ],
+      "quiz": [
+        {
+          "h": "I'm tired. Let's stop ___ a rest.",
+          "lc": [
+            "had",
+            "have",
+            "to have",
+            "having"
+          ],
+          "da": 2,
+          "gt": "Dừng lại ĐỂ nghỉ ⇒ stop + to V (stop having = thôi không nghỉ nữa)."
+        },
+        {
+          "h": "I remember ___ the door, but now it's open.",
+          "lc": [
+            "locking",
+            "locked",
+            "to lock",
+            "lock"
+          ],
+          "da": 0,
+          "gt": "Nhớ lại việc đã làm ⇒ remember + V-ing."
+        },
+        {
+          "h": "Don't forget ___ the lights when you leave.",
+          "lc": [
+            "turning off",
+            "turned off",
+            "to turn off",
+            "turn off"
+          ],
+          "da": 2,
+          "gt": "Việc cần làm (chưa làm) ⇒ forget + to V."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-verb-object-infinitive",
+      "nhom": "Danh động từ – động từ nguyên mẫu",
+      "tieuDe": "Verb + object + to-infinitive",
+      "mau": "S + want / ask / tell / advise / expect / allow + O + (not) to + V",
+      "nghia": "muốn / nhờ / bảo / khuyên / mong ai làm ~",
+      "giaiThich": "Dùng khi chủ ngữ muốn, yêu cầu hoặc khiến một người khác làm việc gì. Sau động từ là tân ngữ chỉ người rồi tới to + V. Phủ định đặt not trước to.",
+      "cachGhep": [
+        "want / would like / expect / need + người + to V",
+        "ask / tell / advise / remind / warn / encourage / invite + người + to V",
+        "allow / teach / help + người + to V (help có thể bỏ to)",
+        "Phủ định: V + người + not to V",
+        "Đại từ ở dạng tân ngữ: me, him, her, us, them"
+      ],
+      "viDu": [
+        {
+          "c": "My parents want me to become a doctor.",
+          "v": "Bố mẹ tôi muốn tôi trở thành bác sĩ."
+        },
+        {
+          "c": "The doctor advised him to drink more water.",
+          "v": "Bác sĩ khuyên anh ấy uống nhiều nước hơn."
+        },
+        {
+          "c": "Would you like me to help you?",
+          "v": "Bạn có muốn tôi giúp không?"
+        },
+        {
+          "c": "She reminded us not to be late.",
+          "v": "Cô ấy nhắc chúng tôi đừng đến muộn."
+        }
+      ],
+      "luuY": [
+        "Lỗi kinh điển do dịch 'muốn rằng': 'I want that you help me' là sai, phải là 'I want you to help me'.",
+        "Không thiếu to và không dùng đại từ chủ ngữ: 'I want he go' → 'I want him to go'.",
+        "suggest không dùng mẫu này: không nói 'He suggested me to go'."
+      ],
+      "soSanh": [
+        "en-b1-make-let",
+        "en-b1-gerund-vs-infinitive"
+      ],
+      "tuKhoa": [
+        "want sb to do",
+        "tell ask advise sb to",
+        "verb object infinitive",
+        "muốn ai làm gì"
+      ],
+      "quiz": [
+        {
+          "h": "My parents want ___ a doctor.",
+          "lc": [
+            "that I become",
+            "me to become",
+            "me become",
+            "I to become"
+          ],
+          "da": 1,
+          "gt": "want + tân ngữ (me) + to V."
+        },
+        {
+          "h": "The doctor advised me ___ more water.",
+          "lc": [
+            "to drink",
+            "that drink",
+            "drinking",
+            "drink"
+          ],
+          "da": 0,
+          "gt": "advise + người + to V."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "I want you help me.",
+            "I want you to help me.",
+            "I want to you help me.",
+            "I want that you help me."
+          ],
+          "da": 1,
+          "gt": "Cấu trúc đúng là want + người + to + V."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-make-let",
+      "nhom": "Danh động từ – động từ nguyên mẫu",
+      "tieuDe": "make / let + object + V",
+      "mau": "make + O + V · let + O + V · be made to + V · be allowed to + V",
+      "nghia": "bắt / khiến ai làm ~ · cho phép ai làm ~",
+      "giaiThich": "make + người + V nghĩa là bắt buộc hoặc khiến ai làm gì; let + người + V nghĩa là cho phép. Sau tân ngữ là động từ nguyên mẫu KHÔNG to. Ở bị động, make thành be made to + V, còn let được thay bằng be allowed to + V.",
+      "cachGhep": [
+        "make + người / vật + V (không to)",
+        "let + người / vật + V (không to)",
+        "Bị động: be made + to V",
+        "Bị động của let: be allowed + to V"
+      ],
+      "viDu": [
+        {
+          "c": "The movie made me cry.",
+          "v": "Bộ phim làm tôi khóc."
+        },
+        {
+          "c": "My parents let me stay out late on weekends.",
+          "v": "Cuối tuần bố mẹ cho tôi đi chơi về muộn."
+        },
+        {
+          "c": "Our teacher doesn't let us use phones in class.",
+          "v": "Giáo viên không cho chúng tôi dùng điện thoại trong lớp."
+        },
+        {
+          "c": "We were made to wait for two hours.",
+          "v": "Chúng tôi bị bắt phải chờ hai tiếng đồng hồ."
+        }
+      ],
+      "luuY": [
+        "Không thêm to: 'made me to cry', 'let me to go' đều sai.",
+        "So với allow / force thì có to: 'allow me to go', 'force me to go'.",
+        "Không nói 'I was let to go'; dùng 'I was allowed to go'."
+      ],
+      "soSanh": [
+        "en-b1-verb-object-infinitive"
+      ],
+      "tuKhoa": [
+        "make let",
+        "make sb do",
+        "let sb do",
+        "bắt cho phép",
+        "be allowed to"
+      ],
+      "quiz": [
+        {
+          "h": "My parents let me ___ out late.",
+          "lc": [
+            "stay",
+            "staying",
+            "to stay",
+            "stayed"
+          ],
+          "da": 0,
+          "gt": "let + tân ngữ + V nguyên mẫu không to."
+        },
+        {
+          "h": "The movie made me ___.",
+          "lc": [
+            "to cry",
+            "cry",
+            "crying",
+            "cried"
+          ],
+          "da": 1,
+          "gt": "make + tân ngữ + V nguyên mẫu không to."
+        },
+        {
+          "h": "We aren't ___ to use phones in class.",
+          "lc": [
+            "let",
+            "made",
+            "allowed",
+            "allow"
+          ],
+          "da": 2,
+          "gt": "Nghĩa 'không được phép' ở bị động dùng be allowed to; let không dùng ở bị động."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-phrasal-verbs",
+      "nhom": "Cụm động từ",
+      "tieuDe": "Phrasal verbs: tách được / không tách được",
+      "mau": "V + tiểu từ + O = V + O + tiểu từ (tách được) · V + giới từ + O (không tách)",
+      "nghia": "cụm động từ + vị trí của tân ngữ",
+      "giaiThich": "Phrasal verb là động từ ghép với một tiểu từ (up, off, on, out…) tạo nghĩa mới. Loại tách được cho tân ngữ đứng giữa hoặc sau; nếu tân ngữ là đại từ (it, them, him) thì bắt buộc đứng giữa. Loại không tách được thì tân ngữ luôn đứng sau.",
+      "cachGhep": [
+        "Tách được: turn on/off, take off, put on, pick up, give back, throw away, fill in",
+        "→ turn off the light = turn the light off · đại từ: turn it off",
+        "Không tách: look after, look for, get on/off (xe buýt), run into, deal with",
+        "Ba từ, không tách: look forward to, get along with, run out of",
+        "Không có tân ngữ: get up, sit down, grow up, break down"
+      ],
+      "viDu": [
+        {
+          "c": "Please turn off the lights before you leave.",
+          "v": "Vui lòng tắt đèn trước khi ra về."
+        },
+        {
+          "c": "Your shoes are dirty. Take them off, please.",
+          "v": "Giày bạn bẩn rồi. Cởi ra giúp nhé."
+        },
+        {
+          "c": "Could you look after my cat while I'm away?",
+          "v": "Bạn trông con mèo giúp tôi khi tôi đi vắng được không?"
+        },
+        {
+          "c": "I'm looking forward to seeing you again.",
+          "v": "Tôi rất mong được gặp lại bạn."
+        }
+      ],
+      "luuY": [
+        "Đại từ phải đứng giữa với loại tách được: 'take off them', 'pick up it' là sai.",
+        "Loại không tách thì không chen tân ngữ vào giữa: 'look my cat after' là sai.",
+        "look forward to + V-ing (to là giới từ): 'look forward to see you' là sai."
+      ],
+      "tuKhoa": [
+        "phrasal verbs",
+        "cụm động từ",
+        "tách được",
+        "turn off take off",
+        "look after"
+      ],
+      "quiz": [
+        {
+          "h": "Could you look ___ my cat while I'm away?",
+          "lc": [
+            "after",
+            "up",
+            "on",
+            "off"
+          ],
+          "da": 0,
+          "gt": "look after = trông nom, chăm sóc."
+        },
+        {
+          "h": "Your shoes are dirty. Please ___.",
+          "lc": [
+            "take off they",
+            "take off them",
+            "them take off",
+            "take them off"
+          ],
+          "da": 3,
+          "gt": "Tân ngữ là đại từ thì phải đứng giữa động từ và tiểu từ."
+        },
+        {
+          "h": "Câu nào SAI?",
+          "lc": [
+            "Turn off the light.",
+            "Turn the light off.",
+            "Turn it off.",
+            "Turn off it."
+          ],
+          "da": 3,
+          "gt": "Với cụm tách được, đại từ it không được đứng sau tiểu từ."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-although-despite",
+      "nhom": "Liên từ – câu phức",
+      "tieuDe": "although / though / even though / despite / in spite of",
+      "mau": "Although + S + V, S + V · Despite / In spite of + N / V-ing, S + V",
+      "nghia": "mặc dù ~ (nhưng) ~",
+      "giaiThich": "Dùng để nối hai ý trái ngược, ý sau gây bất ngờ so với ý trước. although / though / even though đi với một mệnh đề; even though nhấn mạnh hơn. despite / in spite of đi với danh từ hoặc V-ing.",
+      "cachGhep": [
+        "Although / Though / Even though + S + V, S + V",
+        "Despite / In spite of + danh từ / V-ing, S + V",
+        "Despite / In spite of + the fact that + S + V",
+        "though đứng cuối câu (văn nói) = tuy vậy"
+      ],
+      "viDu": [
+        {
+          "c": "Although it was raining, we went out.",
+          "v": "Mặc dù trời mưa, chúng tôi vẫn ra ngoài."
+        },
+        {
+          "c": "Even though he is rich, he isn't happy.",
+          "v": "Dù giàu có, anh ấy vẫn không hạnh phúc."
+        },
+        {
+          "c": "Despite the rain, we enjoyed the trip.",
+          "v": "Bất chấp trời mưa, chúng tôi vẫn có chuyến đi vui vẻ."
+        },
+        {
+          "c": "In spite of being tired, she finished the report.",
+          "v": "Dù mệt, cô ấy vẫn làm xong bản báo cáo."
+        }
+      ],
+      "luuY": [
+        "Tiếng Việt nói 'mặc dù… nhưng…', tiếng Anh chỉ dùng MỘT liên từ: 'Although it rained, but we went out' là sai.",
+        "Không có 'despite of': viết despite hoặc in spite of.",
+        "Sau despite không đi thẳng với mệnh đề: 'Despite he was tired' là sai."
+      ],
+      "soSanh": [
+        "en-b1-because-because-of",
+        "en-b2-linking-words"
+      ],
+      "tuKhoa": [
+        "although",
+        "despite",
+        "in spite of",
+        "mặc dù",
+        "even though"
+      ],
+      "quiz": [
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "Although he is rich, he isn't happy.",
+            "Despite he is rich, he isn't happy.",
+            "Although he is rich, but he isn't happy.",
+            "In spite he is rich, he isn't happy."
+          ],
+          "da": 0,
+          "gt": "although + mệnh đề và không dùng thêm but; despite / in spite of không đi thẳng với mệnh đề."
+        },
+        {
+          "h": "___ it was raining, we went out.",
+          "lc": [
+            "In spite",
+            "Although",
+            "Despite",
+            "But"
+          ],
+          "da": 1,
+          "gt": "Theo sau là mệnh đề (it was raining) nên dùng Although."
+        },
+        {
+          "h": "___ the rain, we went out.",
+          "lc": [
+            "Even though",
+            "Despite of",
+            "Although",
+            "Despite"
+          ],
+          "da": 3,
+          "gt": "Theo sau là danh từ (the rain) nên dùng Despite; không có 'despite of'."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-because-because-of",
+      "nhom": "Liên từ – câu phức",
+      "tieuDe": "because / because of / due to",
+      "mau": "because + S + V · because of / due to + N / V-ing",
+      "nghia": "bởi vì ~ / do ~",
+      "giaiThich": "Đều nêu nguyên nhân. because là liên từ, theo sau là một mệnh đề. because of và due to là giới từ, theo sau là danh từ, đại từ hoặc V-ing; due to trang trọng hơn, hay gặp trong thông báo.",
+      "cachGhep": [
+        "because + S + V",
+        "because of + danh từ / đại từ / V-ing",
+        "due to + danh từ (trang trọng)",
+        "Because… đứng đầu câu thì có dấu phẩy sau mệnh đề"
+      ],
+      "viDu": [
+        {
+          "c": "We stayed home because it was raining.",
+          "v": "Chúng tôi ở nhà vì trời mưa."
+        },
+        {
+          "c": "The match was canceled because of the bad weather.",
+          "v": "Trận đấu bị huỷ vì thời tiết xấu."
+        },
+        {
+          "c": "The flight was delayed due to heavy fog.",
+          "v": "Chuyến bay bị hoãn do sương mù dày đặc."
+        },
+        {
+          "c": "Because I was sick, I didn't go to school.",
+          "v": "Vì bị ốm nên tôi không đi học."
+        }
+      ],
+      "luuY": [
+        "Tiếng Việt nói 'vì… nên…', tiếng Anh chỉ dùng một trong hai: 'Because I was sick, so I stayed home' là sai.",
+        "Không dùng because of + mệnh đề: 'because of it was raining' là sai."
+      ],
+      "soSanh": [
+        "en-b1-although-despite",
+        "en-b1-so-that-in-order-to"
+      ],
+      "tuKhoa": [
+        "because",
+        "because of",
+        "due to",
+        "bởi vì",
+        "nguyên nhân"
+      ],
+      "quiz": [
+        {
+          "h": "We stayed home ___ it was raining.",
+          "lc": [
+            "because of",
+            "despite",
+            "due to",
+            "because"
+          ],
+          "da": 3,
+          "gt": "Theo sau là mệnh đề (it was raining) nên dùng because."
+        },
+        {
+          "h": "The match was canceled ___ the bad weather.",
+          "lc": [
+            "although",
+            "because of",
+            "so",
+            "because"
+          ],
+          "da": 1,
+          "gt": "Theo sau là cụm danh từ nên dùng because of."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "Because I was sick, so I stayed home.",
+            "Because of I was sick, I stayed home.",
+            "Because I was sick, I stayed home."
+          ],
+          "da": 2,
+          "gt": "Đã dùng because thì không thêm so; because of không đi với mệnh đề."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-so-that-in-order-to",
+      "nhom": "Liên từ – câu phức",
+      "tieuDe": "so that / in order to / to (mục đích)",
+      "mau": "to / in order to / so as to + V · so that + S + can / could / will / would + V",
+      "nghia": "để ~, để mà ~",
+      "giaiThich": "Dùng để nói mục đích của hành động. Khi hai vế cùng chủ ngữ, dùng to + V (thông dụng nhất) hoặc in order to / so as to (trang trọng hơn). Khi mục đích có chủ ngữ riêng, dùng so that + mệnh đề, thường kèm can / could / will / would.",
+      "cachGhep": [
+        "to + V · in order to + V · so as to + V",
+        "Phủ định: in order not to + V · so as not to + V",
+        "so that + S + can/will + V (hiện tại, tương lai)",
+        "so that + S + could/would + V (quá khứ)"
+      ],
+      "viDu": [
+        {
+          "c": "I got up early to catch the first bus.",
+          "v": "Tôi dậy sớm để bắt chuyến xe buýt đầu tiên."
+        },
+        {
+          "c": "She is saving money in order to study abroad.",
+          "v": "Cô ấy đang tiết kiệm tiền để đi du học."
+        },
+        {
+          "c": "He spoke slowly so that everyone could understand.",
+          "v": "Anh ấy nói chậm để mọi người đều hiểu được."
+        },
+        {
+          "c": "We left early so as not to be late.",
+          "v": "Chúng tôi đi sớm để khỏi bị muộn."
+        }
+      ],
+      "luuY": [
+        "Không dùng 'for + V' hay 'for to + V' để chỉ mục đích: 'I went there for buy food' là sai → 'to buy food'.",
+        "Mục đích phủ định không dùng 'not to' một mình: nói 'so as not to be late' hoặc 'in order not to be late'.",
+        "so that (mục đích) khác với so (kết quả): 'It was late, so we left'."
+      ],
+      "soSanh": [
+        "en-b1-because-because-of",
+        "en-b1-so-such-that"
+      ],
+      "tuKhoa": [
+        "so that",
+        "in order to",
+        "so as to",
+        "mục đích",
+        "để mà"
+      ],
+      "quiz": [
+        {
+          "h": "She spoke slowly so that everyone ___ understand.",
+          "lc": [
+            "to",
+            "for",
+            "could",
+            "in order"
+          ],
+          "da": 2,
+          "gt": "so that + chủ ngữ + could + V (mục đích trong quá khứ)."
+        },
+        {
+          "h": "I got up early ___ catch the first bus.",
+          "lc": [
+            "for",
+            "in order to",
+            "so that",
+            "because"
+          ],
+          "da": 1,
+          "gt": "Theo sau là động từ nguyên mẫu nên dùng in order to."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "I'm learning English for to get a better job.",
+            "I'm learning English to get a better job.",
+            "I'm learning English for get a better job."
+          ],
+          "da": 1,
+          "gt": "Mục đích dùng to + V, không dùng for + V."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-so-such-that",
+      "nhom": "Liên từ – câu phức",
+      "tieuDe": "so… that / such… that",
+      "mau": "so + adj/adv + that… · such + (a/an) + adj + N + that…",
+      "nghia": "(quá) ~ đến nỗi ~",
+      "giaiThich": "Dùng để nói mức độ cao tới mức dẫn đến một kết quả. so đi với tính từ hoặc trạng từ đứng một mình; such đi với cụm có danh từ. Với many, much, few, little thì dùng so.",
+      "cachGhep": [
+        "so + tính từ / trạng từ + that + S + V",
+        "such + a/an + tính từ + danh từ đếm được số ít + that…",
+        "such + tính từ + danh từ số nhiều / không đếm được + that…",
+        "so + many / much / few / little + danh từ + that…"
+      ],
+      "viDu": [
+        {
+          "c": "The soup was so hot that I couldn't eat it.",
+          "v": "Món súp nóng đến nỗi tôi không ăn được."
+        },
+        {
+          "c": "It was such a boring movie that I fell asleep.",
+          "v": "Bộ phim chán đến nỗi tôi ngủ gật."
+        },
+        {
+          "c": "They are such nice people that everyone likes them.",
+          "v": "Họ tốt bụng đến nỗi ai cũng quý."
+        },
+        {
+          "c": "There were so many people that we couldn't find a seat.",
+          "v": "Đông người đến nỗi chúng tôi không tìm được chỗ ngồi."
+        }
+      ],
+      "luuY": [
+        "Nhầm so / such: 'so a boring movie', 'such hot' (không có danh từ) đều sai.",
+        "Không dùng very / too thay cho so trong mẫu này: 'very hot that…' là sai.",
+        "Văn nói có thể bỏ that: 'I was so tired I went straight to bed'."
+      ],
+      "soSanh": [
+        "en-b1-too-enough",
+        "en-b1-so-that-in-order-to"
+      ],
+      "tuKhoa": [
+        "so that such that",
+        "đến nỗi",
+        "so such",
+        "quá đến nỗi"
+      ],
+      "quiz": [
+        {
+          "h": "The soup was ___ hot that I couldn't eat it.",
+          "lc": [
+            "so",
+            "enough",
+            "such",
+            "such a"
+          ],
+          "da": 0,
+          "gt": "Sau chỗ trống chỉ có tính từ (hot) nên dùng so."
+        },
+        {
+          "h": "It was ___ a boring movie that I fell asleep.",
+          "lc": [
+            "very",
+            "so",
+            "too",
+            "such"
+          ],
+          "da": 3,
+          "gt": "Cụm 'a boring movie' có danh từ nên dùng such."
+        },
+        {
+          "h": "They are ___ nice people that everyone likes them.",
+          "lc": [
+            "so",
+            "very",
+            "such a",
+            "such"
+          ],
+          "da": 3,
+          "gt": "Danh từ số nhiều (people) nên dùng such, không có a."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-both-either-neither",
+      "nhom": "Liên từ – câu phức",
+      "tieuDe": "both… and / either… or / neither… nor",
+      "mau": "both A and B · either A or B · neither A nor B",
+      "nghia": "cả A lẫn B · hoặc A hoặc B · không A cũng không B",
+      "giaiThich": "Ba cặp liên từ dùng để nối hai thành phần cùng loại. both… and gộp cả hai; either… or đưa ra hai lựa chọn; neither… nor phủ định cả hai, và vì đã mang nghĩa phủ định nên động từ ở dạng khẳng định.",
+      "cachGhep": [
+        "both A and B + động từ số nhiều",
+        "either A or B: động từ chia theo B (thành phần đứng gần)",
+        "neither A nor B: động từ khẳng định, chia theo B",
+        "A và B cùng loại từ: hai danh từ, hai tính từ, hai động từ…"
+      ],
+      "viDu": [
+        {
+          "c": "Both Nam and Lan are students.",
+          "v": "Cả Nam và Lan đều là sinh viên."
+        },
+        {
+          "c": "You can have either tea or coffee.",
+          "v": "Bạn có thể dùng trà hoặc cà phê."
+        },
+        {
+          "c": "Neither my father nor my mother speaks English.",
+          "v": "Cả bố lẫn mẹ tôi đều không nói tiếng Anh."
+        },
+        {
+          "c": "She is both smart and hard-working.",
+          "v": "Cô ấy vừa thông minh vừa chăm chỉ."
+        }
+      ],
+      "luuY": [
+        "Không phủ định hai lần: 'Neither Nam nor Lan doesn't come' là sai → 'Neither Nam nor Lan comes'.",
+        "Ghép đúng cặp: neither đi với nor, either đi với or.",
+        "Không dùng both trong câu phủ định kiểu 'Both of them don't like it' → 'Neither of them likes it'."
+      ],
+      "tuKhoa": [
+        "both and",
+        "either or",
+        "neither nor",
+        "cả hai",
+        "không cái nào"
+      ],
+      "quiz": [
+        {
+          "h": "Both Nam ___ Lan are students.",
+          "lc": [
+            "and",
+            "or",
+            "nor",
+            "but"
+          ],
+          "da": 0,
+          "gt": "both luôn đi với and."
+        },
+        {
+          "h": "You can have either tea ___ coffee.",
+          "lc": [
+            "but",
+            "nor",
+            "or",
+            "and"
+          ],
+          "da": 2,
+          "gt": "either đi với or (một trong hai)."
+        },
+        {
+          "h": "Neither my father ___ my mother speaks English.",
+          "lc": [
+            "and",
+            "or",
+            "either",
+            "nor"
+          ],
+          "da": 3,
+          "gt": "neither đi với nor."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-too-enough",
+      "nhom": "Tính từ – trạng từ",
+      "tieuDe": "too / enough + (for sb) + to V",
+      "mau": "too + adj/adv (+ for sb) + to V · adj/adv + enough (+ for sb) + to V · enough + N",
+      "nghia": "quá ~ nên không thể ~ · đủ ~ để ~",
+      "giaiThich": "too mang nghĩa 'quá mức cần thiết' nên thường dẫn đến kết quả không làm được. enough nghĩa là 'đủ'; nó đứng SAU tính từ, trạng từ nhưng TRƯỚC danh từ. Thêm for + người để nói đối với ai, và to V để nói kết quả.",
+      "cachGhep": [
+        "too + tính từ / trạng từ (+ for + người) + to V",
+        "tính từ / trạng từ + enough (+ for + người) + to V",
+        "enough + danh từ (+ to V)",
+        "too much + danh từ không đếm được · too many + danh từ số nhiều"
+      ],
+      "viDu": [
+        {
+          "c": "The box is too heavy for me to carry.",
+          "v": "Cái hộp nặng quá, tôi không mang nổi."
+        },
+        {
+          "c": "He isn't old enough to drive.",
+          "v": "Cậu ấy chưa đủ tuổi lái xe."
+        },
+        {
+          "c": "We don't have enough chairs for everyone.",
+          "v": "Chúng ta không có đủ ghế cho mọi người."
+        },
+        {
+          "c": "Is the room big enough for ten people?",
+          "v": "Căn phòng có đủ rộng cho mười người không?"
+        }
+      ],
+      "luuY": [
+        "Sai vị trí do dịch 'đủ lớn': 'enough old' → 'old enough'.",
+        "too không phải là very: 'The film was too good' nghe như chê. Muốn khen dùng very / really.",
+        "Không lặp tân ngữ: 'too heavy for me to carry it' là sai."
+      ],
+      "soSanh": [
+        "en-b1-so-such-that"
+      ],
+      "tuKhoa": [
+        "too enough",
+        "quá đủ",
+        "too to",
+        "enough to",
+        "old enough"
+      ],
+      "quiz": [
+        {
+          "h": "The box is ___ heavy for me to carry.",
+          "lc": [
+            "too",
+            "such",
+            "enough",
+            "very much"
+          ],
+          "da": 0,
+          "gt": "too + tính từ + for sb + to V = quá… nên không thể."
+        },
+        {
+          "h": "He isn't ___ to drive.",
+          "lc": [
+            "too old enough",
+            "old enough",
+            "enough old",
+            "enough of old"
+          ],
+          "da": 1,
+          "gt": "enough đứng sau tính từ: old enough."
+        },
+        {
+          "h": "We don't have ___ for everyone.",
+          "lc": [
+            "enough of chairs",
+            "too chairs",
+            "enough chairs",
+            "chairs enough"
+          ],
+          "da": 2,
+          "gt": "enough đứng trước danh từ: enough chairs."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-comparatives-advanced",
+      "nhom": "Tính từ – trạng từ",
+      "tieuDe": "So sánh nâng cao: much / far / a bit + so sánh hơn, the… the…",
+      "mau": "much / far / a lot / a bit / slightly + so sánh hơn · the + so sánh hơn…, the + so sánh hơn…",
+      "nghia": "hơn nhiều / hơn một chút · càng ~ càng ~ · ngày càng ~",
+      "giaiThich": "Để nói hơn kém bao nhiêu, đặt much, far, a lot (nhiều) hoặc a bit, a little, slightly (một chút) trước dạng so sánh hơn. 'The + so sánh hơn, the + so sánh hơn' diễn tả hai sự việc cùng thay đổi. Lặp 'so sánh hơn + and + so sánh hơn' diễn tả sự thay đổi liên tục.",
+      "cachGhep": [
+        "much / far / a lot + so sánh hơn + than",
+        "a bit / a little / slightly + so sánh hơn + than",
+        "The + so sánh hơn + S + V, the + so sánh hơn + S + V",
+        "Ngày càng: -er and -er · more and more + tính từ dài",
+        "not as + tính từ + as = kém hơn"
+      ],
+      "viDu": [
+        {
+          "c": "This phone is much more expensive than that one.",
+          "v": "Chiếc điện thoại này đắt hơn chiếc kia nhiều."
+        },
+        {
+          "c": "My brother is a bit taller than me.",
+          "v": "Anh trai tôi cao hơn tôi một chút."
+        },
+        {
+          "c": "The more you practice, the better you get.",
+          "v": "Càng luyện tập nhiều, bạn càng giỏi."
+        },
+        {
+          "c": "The weather is getting hotter and hotter.",
+          "v": "Thời tiết ngày càng nóng."
+        }
+      ],
+      "luuY": [
+        "Không dùng very trước so sánh hơn: 'very better', 'very more expensive' là sai → much better.",
+        "Không dùng hai dấu so sánh: 'more better', 'more easier' là sai.",
+        "Mẫu the… the… cần đủ hai chữ the: 'More you practice, better you get' là sai."
+      ],
+      "tuKhoa": [
+        "much better",
+        "far more",
+        "the more the more",
+        "càng càng",
+        "so sánh hơn nâng cao"
+      ],
+      "quiz": [
+        {
+          "h": "The more you practice, ___ you get.",
+          "lc": [
+            "the best",
+            "better",
+            "the better",
+            "more better"
+          ],
+          "da": 2,
+          "gt": "Mẫu the + so sánh hơn…, the + so sánh hơn…"
+        },
+        {
+          "h": "This phone is ___ more expensive than that one.",
+          "lc": [
+            "many",
+            "much",
+            "very",
+            "too"
+          ],
+          "da": 1,
+          "gt": "Nhấn mạnh so sánh hơn dùng much (hoặc far, a lot), không dùng very."
+        },
+        {
+          "h": "The weather is getting ___.",
+          "lc": [
+            "more hot and hot",
+            "hotter and hotter",
+            "the hotter",
+            "hot and hot"
+          ],
+          "da": 1,
+          "gt": "Ngày càng… = so sánh hơn + and + so sánh hơn."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-ed-ing-adjectives",
+      "nhom": "Tính từ – trạng từ",
+      "tieuDe": "Tính từ đuôi -ed / -ing",
+      "mau": "người + be + adj-ed (cảm thấy) · vật / việc + be + adj-ing (gây ra cảm giác)",
+      "nghia": "-ed: cảm thấy thế nào · -ing: có tính chất gây ra cảm giác đó",
+      "giaiThich": "Tính từ đuôi -ed tả cảm xúc của người (hoặc con vật) trước một điều gì đó. Tính từ đuôi -ing tả người, vật hoặc sự việc gây ra cảm xúc ấy. Các cặp hay gặp: bored / boring, interested / interesting, tired / tiring, excited / exciting, surprised / surprising, confused / confusing.",
+      "cachGhep": [
+        "S (người) + be / feel / get + adj-ed (+ giới từ): interested in, bored with, excited about, surprised at, tired of",
+        "S (vật, việc, người) + be + adj-ing",
+        "adj-ing / adj-ed + danh từ: a boring lesson, a bored student"
+      ],
+      "viDu": [
+        {
+          "c": "I'm interested in history.",
+          "v": "Tôi thích môn lịch sử."
+        },
+        {
+          "c": "The movie was really boring.",
+          "v": "Bộ phim thật sự rất chán."
+        },
+        {
+          "c": "We were surprised at the news.",
+          "v": "Chúng tôi ngạc nhiên trước tin đó."
+        },
+        {
+          "c": "Was the trip tiring?",
+          "v": "Chuyến đi có mệt không?"
+        }
+      ],
+      "luuY": [
+        "Lỗi rất phổ biến: 'I am boring' (tôi là người nhàm chán) trong khi muốn nói 'I am bored' (tôi đang chán).",
+        "'I'm very interesting in music' là sai → 'interested in'."
+      ],
+      "tuKhoa": [
+        "bored boring",
+        "interested interesting",
+        "tính từ ed ing",
+        "tính từ cảm xúc",
+        "phân từ làm tính từ"
+      ],
+      "quiz": [
+        {
+          "h": "I'm ___ in history.",
+          "lc": [
+            "interests",
+            "interest",
+            "interesting",
+            "interested"
+          ],
+          "da": 3,
+          "gt": "Chủ ngữ là người, nói về cảm nhận ⇒ interested (in)."
+        },
+        {
+          "h": "The movie was really ___.",
+          "lc": [
+            "boring",
+            "bored",
+            "bore",
+            "boredom"
+          ],
+          "da": 0,
+          "gt": "Bộ phim là thứ gây ra cảm giác chán ⇒ boring."
+        },
+        {
+          "h": "'I am boring' có nghĩa là gì?",
+          "lc": [
+            "Tôi đang bận.",
+            "Tôi là người nhàm chán.",
+            "Tôi bị làm phiền.",
+            "Tôi đang thấy chán."
+          ],
+          "da": 1,
+          "gt": "-ing tả tính chất gây ra cảm giác: tôi làm người khác chán. 'Tôi đang chán' là I am bored."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-adjective-order",
+      "nhom": "Tính từ – trạng từ",
+      "tieuDe": "Trật tự tính từ trước danh từ",
+      "mau": "ý kiến → kích thước → tuổi → hình dạng → màu sắc → nguồn gốc → chất liệu + N",
+      "nghia": "thứ tự sắp xếp khi có nhiều tính từ đứng trước danh từ",
+      "giaiThich": "Khi có từ hai tính từ trở lên đứng trước danh từ, chúng theo một thứ tự khá cố định: tính từ nêu ý kiến chủ quan đứng trước, tính từ nêu sự thật khách quan đứng sau, càng gắn với bản chất của vật càng đứng gần danh từ. Thực tế hiếm khi dùng quá ba tính từ.",
+      "cachGhep": [
+        "Ý kiến: beautiful, nice, lovely, horrible",
+        "Kích thước: big, small, long · Tuổi: old, new, young · Hình dạng: round, square",
+        "Màu sắc: red, black · Nguồn gốc: Japanese, Italian · Chất liệu: wooden, leather, plastic",
+        "Số lượng và từ hạn định đứng trước tất cả: two beautiful old houses"
+      ],
+      "viDu": [
+        {
+          "c": "She bought a beautiful small leather bag.",
+          "v": "Cô ấy mua một chiếc túi da nhỏ rất đẹp."
+        },
+        {
+          "c": "He drives a new red Japanese car.",
+          "v": "Anh ấy lái một chiếc xe Nhật màu đỏ mới."
+        },
+        {
+          "c": "They live in a big old wooden house.",
+          "v": "Họ sống trong một ngôi nhà gỗ cũ rộng lớn."
+        },
+        {
+          "c": "Have you seen my long black coat?",
+          "v": "Bạn có thấy cái áo khoác đen dài của tôi không?"
+        }
+      ],
+      "luuY": [
+        "Tiếng Việt đặt tính từ SAU danh từ và thứ tự ngược lại ('chiếc xe Nhật màu đỏ mới'), nên dịch từng chữ sẽ sai trật tự.",
+        "Giữa các tính từ khác loại thường không cần and hay dấu phẩy: 'a big old house'."
+      ],
+      "tuKhoa": [
+        "trật tự tính từ",
+        "adjective order",
+        "OSASCOMP",
+        "thứ tự tính từ"
+      ],
+      "quiz": [
+        {
+          "h": "She bought a ___ bag.",
+          "lc": [
+            "leather beautiful small",
+            "small leather beautiful",
+            "beautiful small leather",
+            "leather small beautiful"
+          ],
+          "da": 2,
+          "gt": "Ý kiến (beautiful) → kích thước (small) → chất liệu (leather)."
+        },
+        {
+          "h": "He drives a ___ car.",
+          "lc": [
+            "Japanese new red",
+            "new red Japanese",
+            "red Japanese new",
+            "red new Japanese"
+          ],
+          "da": 1,
+          "gt": "Tuổi (new) → màu sắc (red) → nguồn gốc (Japanese)."
+        },
+        {
+          "h": "They live in a ___ house.",
+          "lc": [
+            "old big wooden",
+            "wooden old big",
+            "big wooden old",
+            "big old wooden"
+          ],
+          "da": 3,
+          "gt": "Kích thước (big) → tuổi (old) → chất liệu (wooden)."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-quantifiers",
+      "nhom": "Danh từ – mạo từ",
+      "tieuDe": "all / most / some / none (of), each / every",
+      "mau": "all / most / some + N · all / most / some / none + of + the/my/these + N · each / every + N số ít",
+      "nghia": "tất cả / hầu hết / một số / không ai, không cái nào · mỗi, mọi",
+      "giaiThich": "Nói chung chung thì dùng thẳng từ chỉ lượng + danh từ (most people). Nói về một nhóm cụ thể thì dùng of + the / my / these… hoặc of + đại từ (most of my friends, some of them). each và every đi với danh từ số ít và động từ số ít; each nhìn vào từng cá thể, every nhìn cả nhóm.",
+      "cachGhep": [
+        "Chung chung: all / most / some / no + danh từ",
+        "Nhóm cụ thể: all / most / some / none + of + the/my/this/these + danh từ",
+        "Với đại từ: all / most / some / none + of + us / you / them",
+        "each / every + danh từ số ít + động từ số ít",
+        "each of + the/my + danh từ số nhiều (không nói 'every of')"
+      ],
+      "viDu": [
+        {
+          "c": "Most people like music.",
+          "v": "Hầu hết mọi người đều thích âm nhạc."
+        },
+        {
+          "c": "Most of my friends live in Hanoi.",
+          "v": "Hầu hết bạn bè tôi sống ở Hà Nội."
+        },
+        {
+          "c": "None of the shops were open.",
+          "v": "Không cửa hàng nào mở cửa cả."
+        },
+        {
+          "c": "Every student has to wear a uniform.",
+          "v": "Mọi học sinh đều phải mặc đồng phục."
+        }
+      ],
+      "luuY": [
+        "Lỗi phổ biến: 'most of people', 'some of students' — có of thì phải có the / my / these: 'most of the people' hoặc 'most people'.",
+        "'Every students have' là sai: every + danh từ số ít + động từ số ít.",
+        "none đã là phủ định: 'None of them didn't come' là sai."
+      ],
+      "soSanh": [
+        "en-b1-articles"
+      ],
+      "tuKhoa": [
+        "most of",
+        "all some none",
+        "each every",
+        "từ chỉ lượng",
+        "quantifiers"
+      ],
+      "quiz": [
+        {
+          "h": "___ student has a book.",
+          "lc": [
+            "Most",
+            "Both",
+            "Every",
+            "All"
+          ],
+          "da": 2,
+          "gt": "Danh từ số ít + động từ số ít (student has) ⇒ Every."
+        },
+        {
+          "h": "Most ___ my friends live in Hanoi.",
+          "lc": [
+            "from",
+            "in",
+            "(không cần từ nào)",
+            "of"
+          ],
+          "da": 3,
+          "gt": "Trước từ sở hữu my cần of: most of my friends."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "The most people like music.",
+            "Most people like music.",
+            "Most the people like music.",
+            "Most of people like music."
+          ],
+          "da": 1,
+          "gt": "Nói chung chung: most + danh từ, không có of và không có the."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-articles",
+      "nhom": "Danh từ – mạo từ",
+      "tieuDe": "Mạo từ nâng cao: a / an / the / không mạo từ",
+      "mau": "a/an (một cái bất kỳ, lần đầu nhắc) · the (đã xác định, duy nhất) · Ø (nói chung)",
+      "nghia": "khi nào dùng a/an, the, khi nào không dùng mạo từ",
+      "giaiThich": "a/an dùng khi nhắc lần đầu tới một người, vật chưa xác định, hoặc nói nghề nghiệp. the dùng khi người nghe biết đang nói tới cái nào: đã nhắc trước đó, chỉ có một, hoặc được xác định bởi phần đi sau. Không dùng mạo từ khi nói chung chung với danh từ số nhiều và danh từ không đếm được.",
+      "cachGhep": [
+        "a/an + danh từ đếm được số ít: a teacher, an hour, a university",
+        "the + vật duy nhất / đã xác định: the sun, the kitchen, the book you gave me",
+        "the + sông, biển, dãy núi, nước có tên dạng số nhiều hoặc có Kingdom/States: the Mekong, the Pacific, the Philippines, the United States",
+        "Ø + tên người, thành phố, hầu hết các nước, bữa ăn, môn học, ngôn ngữ: Vietnam, lunch, math, English",
+        "Ø + danh từ số nhiều / không đếm được khi nói chung: Dogs are friendly. · I like music."
+      ],
+      "viDu": [
+        {
+          "c": "I saw a dog and a cat. The dog was chasing the cat.",
+          "v": "Tôi thấy một con chó và một con mèo. Con chó đang đuổi con mèo."
+        },
+        {
+          "c": "My sister is a nurse.",
+          "v": "Chị tôi là y tá."
+        },
+        {
+          "c": "The Mekong River flows through several countries.",
+          "v": "Sông Mê Kông chảy qua nhiều nước."
+        },
+        {
+          "c": "Do you think money can buy happiness?",
+          "v": "Bạn có nghĩ tiền mua được hạnh phúc không?"
+        }
+      ],
+      "luuY": [
+        "Tiếng Việt không có mạo từ nên người Việt hay bỏ sót: 'My sister is nurse', 'I have car' đều sai.",
+        "Ngược lại, đừng thêm the khi nói chung: 'I like the music', 'The life is hard' (nếu không nói về một loại nhạc hay cuộc đời cụ thể) là sai.",
+        "a hay an tuỳ theo âm đầu chứ không theo chữ cái: an hour, a university."
+      ],
+      "soSanh": [
+        "en-b1-quantifiers"
+      ],
+      "tuKhoa": [
+        "mạo từ",
+        "a an the",
+        "articles",
+        "không mạo từ",
+        "zero article"
+      ],
+      "quiz": [
+        {
+          "h": "___ Mekong River flows through several countries.",
+          "lc": [
+            "A",
+            "(không cần mạo từ)",
+            "The",
+            "An"
+          ],
+          "da": 2,
+          "gt": "Tên sông luôn đi với the."
+        },
+        {
+          "h": "Câu nào đúng khi nói chung về loài chó?",
+          "lc": [
+            "Dogs are friendly animals.",
+            "The dogs are friendly animals.",
+            "Dog is friendly animal."
+          ],
+          "da": 0,
+          "gt": "Nói chung chung dùng danh từ số nhiều không mạo từ."
+        },
+        {
+          "h": "I saw a dog and a cat. ___ dog was chasing the cat.",
+          "lc": [
+            "A",
+            "(không cần mạo từ)",
+            "An",
+            "The"
+          ],
+          "da": 3,
+          "gt": "Con chó đã được nhắc ở câu trước nên lần sau dùng the."
+        }
+      ]
+    }
+  ]
+}

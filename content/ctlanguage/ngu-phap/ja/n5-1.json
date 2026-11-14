@@ -1,0 +1,1234 @@
+{
+  "nn": "ja",
+  "cap": "N5",
+  "diem": [
+    {
+      "id": "ja-n5-wa-desu",
+      "nhom": "Câu danh từ",
+      "tieuDe": "〜は〜です",
+      "mau": "N1 + は + N2 + です",
+      "nghia": "N1 là N2",
+      "giaiThich": "Mẫu câu cơ bản nhất để giới thiệu hoặc nêu nhận định “A là B”. は đánh dấu chủ đề của câu (điều đang được nói tới), です đứng cuối câu làm câu lịch sự. Dùng khi giới thiệu tên, nghề nghiệp, quốc tịch, đồ vật.",
+      "cachGhep": [
+        "Danh từ 1 + は + Danh từ 2 + です",
+        "Trợ từ は viết là は nhưng đọc là “wa”",
+        "です không đổi theo ngôi hay số ít / số nhiều"
+      ],
+      "viDu": [
+        {
+          "c": "わたしは学生です。",
+          "d": "わたしは がくせいです。",
+          "v": "Tôi là sinh viên."
+        },
+        {
+          "c": "山田さんは先生です。",
+          "d": "やまださんは せんせいです。",
+          "v": "Anh Yamada là giáo viên."
+        },
+        {
+          "c": "これは日本語の本です。",
+          "d": "これは にほんごの ほんです。",
+          "v": "Đây là sách tiếng Nhật."
+        }
+      ],
+      "luuY": [
+        "Tiếng Việt nói “Tôi là sinh viên”, người Việt hay quên です ở cuối hoặc đặt です vào giữa câu. です luôn đứng CUỐI câu.",
+        "Không thêm さん vào tên của chính mình: わたしは ランです, không nói ランさんです."
+      ],
+      "soSanh": [
+        "ja-n5-ja-arimasen",
+        "ja-n5-wa-vs-ga"
+      ],
+      "tuKhoa": [
+        "wa desu",
+        "ha desu",
+        "là",
+        "câu khẳng định danh từ",
+        "desu"
+      ],
+      "quiz": [
+        {
+          "h": "わたし（　）ベトナム人です。",
+          "lc": [
+            "は",
+            "を",
+            "に",
+            "で"
+          ],
+          "da": 0,
+          "gt": "Chủ đề của câu “A là B” được đánh dấu bằng trợ từ は."
+        },
+        {
+          "h": "Câu nào đúng với nghĩa “Anh Tanaka là nhân viên công ty”?",
+          "lc": [
+            "田中さんです かいしゃいんは。",
+            "田中さんは かいしゃいんです。",
+            "は 田中さん かいしゃいんです。"
+          ],
+          "da": 1,
+          "gt": "Trật tự đúng là N1 + は + N2 + です, です đứng cuối câu."
+        },
+        {
+          "h": "Trợ từ は trong 「わたしは 学生です」 đọc là gì?",
+          "lc": [
+            "ha",
+            "ba",
+            "wa"
+          ],
+          "da": 2,
+          "gt": "Khi làm trợ từ, chữ は được đọc là “wa”."
+        }
+      ]
+    },
+    {
+      "id": "ja-n5-ja-arimasen",
+      "nhom": "Câu danh từ",
+      "tieuDe": "〜じゃありません",
+      "mau": "N1 + は + N2 + じゃ（では）ありません",
+      "nghia": "N1 không phải là N2",
+      "giaiThich": "Dạng phủ định của です trong câu danh từ. じゃありません dùng trong hội thoại hằng ngày; ではありません trang trọng hơn, hay gặp trong văn viết và phát biểu. Dùng khi muốn phủ nhận một thông tin về danh từ.",
+      "cachGhep": [
+        "Danh từ + じゃありません (hội thoại)",
+        "Danh từ + ではありません (trang trọng; は đọc là “wa”)",
+        "Thân mật: Danh từ + じゃない"
+      ],
+      "viDu": [
+        {
+          "c": "わたしは先生じゃありません。",
+          "d": "わたしは せんせいじゃ ありません。",
+          "v": "Tôi không phải là giáo viên."
+        },
+        {
+          "c": "これは水ではありません。",
+          "d": "これは みずでは ありません。",
+          "v": "Cái này không phải là nước."
+        },
+        {
+          "c": "今日は日曜日じゃありません。",
+          "d": "きょうは にちようびじゃ ありません。",
+          "v": "Hôm nay không phải là chủ nhật."
+        }
+      ],
+      "luuY": [
+        "Không phủ định danh từ bằng ません: sai 学生ですません / 学生ません. ません chỉ dùng cho động từ.",
+        "Tính từ đuôi い KHÔNG dùng じゃありません (高いです → 高くないです)."
+      ],
+      "soSanh": [
+        "ja-n5-wa-desu",
+        "ja-n5-tinh-tu-i"
+      ],
+      "tuKhoa": [
+        "ja arimasen",
+        "dewa arimasen",
+        "janai",
+        "không phải là",
+        "phủ định danh từ"
+      ],
+      "quiz": [
+        {
+          "h": "わたしは 学生（　）ありません。",
+          "lc": [
+            "じゃ",
+            "が",
+            "を",
+            "に"
+          ],
+          "da": 0,
+          "gt": "Phủ định của câu danh từ là N + じゃありません."
+        },
+        {
+          "h": "Dạng trang trọng hơn của じゃありません là gì?",
+          "lc": [
+            "でありません",
+            "ではありません",
+            "じゃないます"
+          ],
+          "da": 1,
+          "gt": "じゃ là dạng rút gọn của では; dạng trang trọng là ではありません."
+        },
+        {
+          "h": "Phủ định của 「日本人です」 là:",
+          "lc": [
+            "日本人ですません",
+            "日本人ないです",
+            "日本人じゃありません"
+          ],
+          "da": 2,
+          "gt": "Câu danh từ phủ định bằng じゃありません, không dùng ません hay ない gắn thẳng vào です."
+        }
+      ]
+    },
+    {
+      "id": "ja-n5-ka",
+      "nhom": "Câu danh từ",
+      "tieuDe": "〜か (câu hỏi)",
+      "mau": "Câu + か",
+      "nghia": "trợ từ cuối câu tạo câu hỏi: … phải không? / … à?",
+      "giaiThich": "Thêm か vào cuối câu là thành câu hỏi, trật tự từ không đổi. Câu hỏi đúng/sai trả lời bằng はい (vâng) hoặc いいえ (không). Hai vế 〜か、〜か dùng để hỏi lựa chọn “A hay B”.",
+      "cachGhep": [
+        "Câu khẳng định + か (lên giọng ở cuối câu)",
+        "Trả lời: はい、そうです / いいえ、ちがいます / いいえ、〜じゃありません",
+        "Hỏi lựa chọn: N1 ですか、N2 ですか"
+      ],
+      "viDu": [
+        {
+          "c": "あなたは学生ですか。",
+          "d": "あなたは がくせいですか。",
+          "v": "Bạn là sinh viên phải không?"
+        },
+        {
+          "c": "これは山田さんの本ですか。",
+          "d": "これは やまださんの ほんですか。",
+          "v": "Đây là sách của anh Yamada à?"
+        },
+        {
+          "c": "それは水ですか、おちゃですか。",
+          "d": "それは みずですか、おちゃですか。",
+          "v": "Đó là nước hay là trà?"
+        }
+      ],
+      "luuY": [
+        "Câu hỏi lịch sự kết thúc bằng か và dấu 。, thường không cần dấu “?”.",
+        "Câu hỏi lựa chọn không trả lời bằng はい / いいえ mà nói thẳng đáp án: おちゃです."
+      ],
+      "tuKhoa": [
+        "ka",
+        "desu ka",
+        "câu hỏi",
+        "phải không",
+        "hay là"
+      ],
+      "quiz": [
+        {
+          "h": "Muốn biến 「これは 本です」 thành câu hỏi, thêm gì vào cuối câu?",
+          "lc": [
+            "か",
+            "も",
+            "の",
+            "と"
+          ],
+          "da": 0,
+          "gt": "Trợ từ か đặt cuối câu để tạo câu hỏi."
+        },
+        {
+          "h": "A: 田中さんは 先生ですか。 — Anh Tanaka KHÔNG phải giáo viên. Trả lời đúng là:",
+          "lc": [
+            "はい、先生です。",
+            "いいえ、先生じゃありません。",
+            "はい、先生じゃありません。"
+          ],
+          "da": 1,
+          "gt": "Phủ nhận thì dùng いいえ + câu phủ định."
+        },
+        {
+          "h": "A: これは コーヒーですか、おちゃですか。 B: （　）。",
+          "lc": [
+            "はい、そうです",
+            "いいえ、ちがいます",
+            "おちゃです"
+          ],
+          "da": 2,
+          "gt": "Câu hỏi lựa chọn A hay B thì trả lời thẳng một đáp án, không dùng はい / いいえ."
+        }
+      ]
+    },
+    {
+      "id": "ja-n5-mo",
+      "nhom": "Câu danh từ",
+      "tieuDe": "〜も",
+      "mau": "N + も",
+      "nghia": "cũng ~",
+      "giaiThich": "も thay cho は (hoặc が, を) khi điều nói về danh từ này giống với điều đã nêu trước đó. Dùng được cả trong câu khẳng định lẫn phủ định.",
+      "cachGhep": [
+        "N + も + … (も thay thế は / が / を)",
+        "Với trợ từ khác thì giữ trợ từ rồi thêm も: に + も → にも, で + も → でも",
+        "Phủ định: いいえ、N は 〜じゃありません (đổi lại thành は)"
+      ],
+      "viDu": [
+        {
+          "c": "ランさんは学生です。わたしも学生です。",
+          "d": "ランさんは がくせいです。わたしも がくせいです。",
+          "v": "Lan là sinh viên. Tôi cũng là sinh viên."
+        },
+        {
+          "c": "これも百円です。",
+          "d": "これも ひゃくえんです。",
+          "v": "Cái này cũng 100 yên."
+        },
+        {
+          "c": "あしたも会社へ行きません。",
+          "d": "あしたも かいしゃへ いきません。",
+          "v": "Ngày mai tôi cũng không đi làm."
+        }
+      ],
+      "luuY": [
+        "Tiếng Việt “cũng” đứng sau chủ ngữ và trước động từ; tiếng Nhật も dính ngay SAU danh từ nó nhấn mạnh.",
+        "Không nói はも hay もは: も đã thay cho は."
+      ],
+      "tuKhoa": [
+        "mo",
+        "cũng",
+        "tro tu mo",
+        "cũng là"
+      ],
+      "quiz": [
+        {
+          "h": "ランさんは 学生です。わたし（　）学生です。(Tôi cũng là sinh viên.)",
+          "lc": [
+            "も",
+            "を",
+            "に",
+            "の"
+          ],
+          "da": 0,
+          "gt": "“Cũng” được diễn đạt bằng trợ từ も đặt sau danh từ."
+        },
+        {
+          "h": "Câu nào đúng với nghĩa “Cái này cũng là sách”?",
+          "lc": [
+            "これはも 本です。",
+            "これも 本です。",
+            "これもは 本です。"
+          ],
+          "da": 1,
+          "gt": "も thay thế hẳn cho は, không đi chung với は."
+        },
+        {
+          "h": "Khi thêm も, những trợ từ nào bị thay thế (không giữ lại)?",
+          "lc": [
+            "に và で",
+            "と và から",
+            "は, が và を"
+          ],
+          "da": 2,
+          "gt": "も thay cho は / が / を; với に, で, と… thì giữ lại và thêm も phía sau (にも, でも)."
+        }
+      ]
+    },
+    {
+      "id": "ja-n5-no",
+      "nhom": "Câu danh từ",
+      "tieuDe": "〜の〜",
+      "mau": "N1 + の + N2",
+      "nghia": "N2 của N1; N2 thuộc về / nói về N1",
+      "giaiThich": "の nối hai danh từ, danh từ đứng trước bổ nghĩa cho danh từ đứng sau: sở hữu (sách của tôi), nội dung – loại (sách tiếng Nhật), nơi thuộc về (nhân viên của công ty). Khi danh từ sau đã rõ, có thể lược bỏ và chỉ nói N1 の.",
+      "cachGhep": [
+        "N1 (bổ nghĩa) + の + N2 (danh từ chính)",
+        "Lược danh từ chính: N1 + の + です (わたしのです = là của tôi)",
+        "Hỏi chủ sở hữu: だれの + N"
+      ],
+      "viDu": [
+        {
+          "c": "これはわたしの本です。",
+          "d": "これは わたしの ほんです。",
+          "v": "Đây là sách của tôi."
+        },
+        {
+          "c": "山田さんは日本語の先生です。",
+          "d": "やまださんは にほんごの せんせいです。",
+          "v": "Anh Yamada là giáo viên tiếng Nhật."
+        },
+        {
+          "c": "この車は父のです。",
+          "d": "この くるまは ちちのです。",
+          "v": "Chiếc xe này là của bố tôi."
+        },
+        {
+          "c": "それはだれのかばんですか。",
+          "d": "それは だれの かばんですか。",
+          "v": "Đó là cặp của ai vậy?"
+        }
+      ],
+      "luuY": [
+        "Trật tự NGƯỢC tiếng Việt: “sách của tôi” → わたしの本 (từ bổ nghĩa đứng trước). Người Việt hay nói ngược thành 本のわたし.",
+        "Không lược danh từ chỉ người: nói IMCの しゃいんです, không nói IMCのです để chỉ “là người của IMC”."
+      ],
+      "tuKhoa": [
+        "no",
+        "của",
+        "sở hữu",
+        "tro tu no",
+        "nối danh từ"
+      ],
+      "quiz": [
+        {
+          "h": "これは わたし（　）かばんです。",
+          "lc": [
+            "の",
+            "を",
+            "が",
+            "へ"
+          ],
+          "da": 0,
+          "gt": "Nối hai danh từ với nghĩa sở hữu dùng の."
+        },
+        {
+          "h": "“Giáo viên tiếng Nhật” nói thế nào?",
+          "lc": [
+            "先生の 日本語",
+            "日本語の 先生",
+            "日本語 先生の"
+          ],
+          "da": 1,
+          "gt": "Danh từ bổ nghĩa đứng trước: 日本語 + の + 先生. 先生の日本語 nghĩa là “tiếng Nhật của thầy giáo”."
+        },
+        {
+          "h": "この かさは 田中さん（　）です。(Cái ô này là của anh Tanaka.)",
+          "lc": [
+            "を",
+            "に",
+            "の"
+          ],
+          "da": 2,
+          "gt": "Danh từ かさ được lược bỏ sau の: 田中さんの（かさ）です."
+        }
+      ]
+    },
+    {
+      "id": "ja-n5-kore-sore-are",
+      "nhom": "Câu danh từ",
+      "tieuDe": "これ / それ / あれ / どれ",
+      "mau": "これ / それ / あれ + は + N + です",
+      "nghia": "cái này / cái đó / cái kia / cái nào",
+      "giaiThich": "Đại từ chỉ đồ vật, đứng một mình như một danh từ. これ chỉ vật ở gần người nói, それ chỉ vật ở gần người nghe, あれ chỉ vật ở xa cả hai. どれ dùng để hỏi “cái nào” khi có từ ba vật trở lên.",
+      "cachGhep": [
+        "これ / それ / あれ + は + N + です",
+        "Hỏi: これ / それ / あれ + は + 何ですか",
+        "どれ + が + … ですか (từ để hỏi làm chủ ngữ đi với が)"
+      ],
+      "viDu": [
+        {
+          "c": "これは何ですか。",
+          "d": "これは なんですか。",
+          "v": "Cái này là cái gì vậy?"
+        },
+        {
+          "c": "それはわたしのかさです。",
+          "d": "それは わたしの かさです。",
+          "v": "Cái đó là ô của tôi."
+        },
+        {
+          "c": "あれは学校です。",
+          "d": "あれは がっこうです。",
+          "v": "Kia là trường học."
+        },
+        {
+          "c": "山田さんのかばんはどれですか。",
+          "d": "やまださんの かばんは どれですか。",
+          "v": "Cặp của anh Yamada là cái nào?"
+        }
+      ],
+      "luuY": [
+        "Khi A hỏi これ (vật gần A), B trả lời bằng それ — vì vật đó gần người hỏi chứ không gần B.",
+        "これ / それ / あれ không đứng ngay trước danh từ: sai これ本; phải nói この本."
+      ],
+      "soSanh": [
+        "ja-n5-kono-sono-ano",
+        "ja-n5-koko-soko-asoko"
+      ],
+      "tuKhoa": [
+        "kore",
+        "sore",
+        "are",
+        "dore",
+        "cái này cái đó cái kia"
+      ],
+      "quiz": [
+        {
+          "h": "（　）は わたしの 本です。",
+          "lc": [
+            "これ",
+            "この",
+            "どの"
+          ],
+          "da": 0,
+          "gt": "Đứng một mình làm chủ đề phải là đại từ これ; この và どの bắt buộc có danh từ theo sau."
+        },
+        {
+          "h": "Vật ở gần NGƯỜI NGHE thì dùng từ nào?",
+          "lc": [
+            "これ",
+            "それ",
+            "あれ"
+          ],
+          "da": 1,
+          "gt": "それ chỉ vật gần người nghe; これ gần người nói; あれ xa cả hai."
+        },
+        {
+          "h": "Hỏi “cái nào?” (chọn trong ba vật trở lên) dùng:",
+          "lc": [
+            "なに",
+            "だれ",
+            "どれ"
+          ],
+          "da": 2,
+          "gt": "どれ là từ để hỏi của nhóm これ / それ / あれ."
+        }
+      ]
+    },
+    {
+      "id": "ja-n5-kono-sono-ano",
+      "nhom": "Câu danh từ",
+      "tieuDe": "この / その / あの / どの + N",
+      "mau": "この / その / あの + N",
+      "nghia": "N này / N đó / N kia / N nào",
+      "giaiThich": "Từ chỉ định luôn đứng TRƯỚC một danh từ để bổ nghĩa cho danh từ đó. Quy tắc khoảng cách giống これ / それ / あれ: この gần người nói, その gần người nghe, あの xa cả hai. どの + N hỏi “N nào”.",
+      "cachGhep": [
+        "この / その / あの + Danh từ + は + …",
+        "Hỏi: どの + Danh từ + ですか / どの + Danh từ + が + …",
+        "Chỉ người: この人 / その人 / あの人 (lịch sự hơn: あの方 — あのかた)"
+      ],
+      "viDu": [
+        {
+          "c": "この本はわたしのです。",
+          "d": "この ほんは わたしのです。",
+          "v": "Quyển sách này là của tôi."
+        },
+        {
+          "c": "その人はだれですか。",
+          "d": "その ひとは だれですか。",
+          "v": "Người đó là ai vậy?"
+        },
+        {
+          "c": "あの山は高いです。",
+          "d": "あの やまは たかいです。",
+          "v": "Ngọn núi kia cao."
+        }
+      ],
+      "luuY": [
+        "Trật tự ngược tiếng Việt: “sách này” → この本 (この đứng trước danh từ).",
+        "この không đứng một mình: sai このは 本です; đúng là これは 本です."
+      ],
+      "soSanh": [
+        "ja-n5-kore-sore-are"
+      ],
+      "tuKhoa": [
+        "kono",
+        "sono",
+        "ano",
+        "dono",
+        "này đó kia"
+      ],
+      "quiz": [
+        {
+          "h": "「あの 人」 chỉ người ở đâu?",
+          "lc": [
+            "Ở xa cả người nói lẫn người nghe",
+            "Ở gần người nói",
+            "Ở gần người nghe"
+          ],
+          "da": 0,
+          "gt": "あ〜 dùng cho người / vật ở xa cả hai bên."
+        },
+        {
+          "h": "（　）かばんは わたしのです。",
+          "lc": [
+            "これ",
+            "この",
+            "ここ"
+          ],
+          "da": 1,
+          "gt": "Đứng ngay trước danh từ かばん phải là この."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "このは 本です。",
+            "これ 本は 新しいです。",
+            "この 本は 新しいです。"
+          ],
+          "da": 2,
+          "gt": "この + danh từ; これ không đứng trực tiếp trước danh từ, この không đứng một mình."
+        }
+      ]
+    },
+    {
+      "id": "ja-n5-koko-soko-asoko",
+      "nhom": "Câu danh từ",
+      "tieuDe": "ここ / そこ / あそこ / どこ",
+      "mau": "ここ / そこ / あそこ + は + N + です ・ N + は + ここ / そこ / あそこ + です",
+      "nghia": "chỗ này / chỗ đó / chỗ kia / ở đâu",
+      "giaiThich": "Đại từ chỉ nơi chốn. ここ là chỗ người nói đang ở, そこ là chỗ người nghe đang ở, あそこ là chỗ xa cả hai. Mẫu N は 場所 です dùng để nói một người / vật / nơi nào đó ở đâu. こちら / そちら / あちら / どちら là cách nói lịch sự hơn.",
+      "cachGhep": [
+        "ここ / そこ / あそこ + は + nơi chốn + です",
+        "N + は + ここ / そこ / あそこ + です",
+        "Hỏi: N + は + どこですか (lịch sự: どちらですか)"
+      ],
+      "viDu": [
+        {
+          "c": "ここは学校です。",
+          "d": "ここは がっこうです。",
+          "v": "Đây là trường học."
+        },
+        {
+          "c": "トイレはあそこです。",
+          "d": "トイレは あそこです。",
+          "v": "Nhà vệ sinh ở đằng kia."
+        },
+        {
+          "c": "駅はどこですか。",
+          "d": "えきは どこですか。",
+          "v": "Nhà ga ở đâu ạ?"
+        }
+      ],
+      "luuY": [
+        "Chỉ nơi chốn dùng ここ, không dùng これ: sai これは 学校です khi muốn nói “chỗ này là trường học”.",
+        "どちら còn dùng để hỏi lịch sự về nước, công ty, trường: お国は どちらですか."
+      ],
+      "soSanh": [
+        "ja-n5-kore-sore-are"
+      ],
+      "tuKhoa": [
+        "koko",
+        "soko",
+        "asoko",
+        "doko",
+        "kochira",
+        "ở đâu"
+      ],
+      "quiz": [
+        {
+          "h": "A: トイレは（　）ですか。 B: あそこです。",
+          "lc": [
+            "どこ",
+            "だれ",
+            "いつ"
+          ],
+          "da": 0,
+          "gt": "B trả lời về nơi chốn (あそこ) nên câu hỏi dùng どこ."
+        },
+        {
+          "h": "Nơi NGƯỜI NGHE đang đứng gọi là:",
+          "lc": [
+            "ここ",
+            "そこ",
+            "あそこ"
+          ],
+          "da": 1,
+          "gt": "そこ là chỗ gần / thuộc về phía người nghe."
+        },
+        {
+          "h": "Cách nói lịch sự hơn của ここ là:",
+          "lc": [
+            "これ",
+            "この",
+            "こちら"
+          ],
+          "da": 2,
+          "gt": "こちら / そちら / あちら / どちら là dạng lịch sự của ここ / そこ / あそこ / どこ."
+        }
+      ]
+    },
+    {
+      "id": "ja-n5-nan-dare-doko-itsu",
+      "nhom": "Nghi vấn từ",
+      "tieuDe": "何 / だれ / どこ / いつ",
+      "mau": "何（なに・なん）/ だれ / どこ / いつ … か",
+      "nghia": "cái gì / ai / ở đâu / khi nào",
+      "giaiThich": "Bốn từ để hỏi cơ bản. Tiếng Nhật không đảo từ để hỏi lên đầu câu: đặt nó đúng vào vị trí của thông tin cần hỏi, giữ nguyên trợ từ, rồi thêm か cuối câu. Hỏi lịch sự về người dùng どなた thay cho だれ.",
+      "cachGhep": [
+        "何: đọc なん trước です, の, と, で và trước trợ số từ (何時, 何人); các trường hợp khác đọc なに (何を, 何が)",
+        "だれ + が / の / に / と …",
+        "どこ + で / へ / に …; いつ đứng một mình, KHÔNG thêm に"
+      ],
+      "viDu": [
+        {
+          "c": "これは何ですか。",
+          "d": "これは なんですか。",
+          "v": "Đây là cái gì?"
+        },
+        {
+          "c": "あの人はだれですか。",
+          "d": "あの ひとは だれですか。",
+          "v": "Người kia là ai?"
+        },
+        {
+          "c": "いつ日本へ行きますか。",
+          "d": "いつ にほんへ いきますか。",
+          "v": "Khi nào bạn đi Nhật?"
+        },
+        {
+          "c": "きのう何を食べましたか。",
+          "d": "きのう なにを たべましたか。",
+          "v": "Hôm qua bạn đã ăn gì?"
+        }
+      ],
+      "luuY": [
+        "Tiếng Việt nói “Bạn ăn gì?”, tiếng Nhật vẫn cần trợ từ sau từ để hỏi: 何を 食べますか (không bỏ を trong câu lịch sự).",
+        "Từ để hỏi làm chủ ngữ luôn đi với が, không đi với は: だれが 来ましたか."
+      ],
+      "soSanh": [
+        "ja-n5-wa-vs-ga"
+      ],
+      "tuKhoa": [
+        "nani",
+        "nan",
+        "dare",
+        "doko",
+        "itsu",
+        "từ để hỏi"
+      ],
+      "quiz": [
+        {
+          "h": "A: （　）日本へ 来ましたか。 B: 先月 来ました。",
+          "lc": [
+            "いつ",
+            "どこ",
+            "だれ"
+          ],
+          "da": 0,
+          "gt": "B trả lời về thời gian (tháng trước) nên từ để hỏi là いつ."
+        },
+        {
+          "h": "A: あの 人は（　）ですか。 B: 山田さんです。",
+          "lc": [
+            "なん",
+            "だれ",
+            "どこ"
+          ],
+          "da": 1,
+          "gt": "Hỏi về người dùng だれ."
+        },
+        {
+          "h": "「何ですか」 đọc đúng là:",
+          "lc": [
+            "なにですか",
+            "なにんですか",
+            "なんですか"
+          ],
+          "da": 2,
+          "gt": "Trước です, chữ 何 đọc là なん."
+        }
+      ]
+    },
+    {
+      "id": "ja-n5-dou-donna",
+      "nhom": "Nghi vấn từ",
+      "tieuDe": "どう / どんな",
+      "mau": "N + は + どうですか ・ どんな + N",
+      "nghia": "như thế nào / N như thế nào",
+      "giaiThich": "どう hỏi cảm nhận, ấn tượng hay tình trạng của một sự vật, đứng trước ですか. どんな luôn đi kèm một danh từ phía sau để hỏi tính chất, loại của danh từ đó. Câu trả lời thường dùng tính từ.",
+      "cachGhep": [
+        "N + は + どうですか (đã trải qua: どうでしたか)",
+        "N1 + は + どんな + N2 + ですか",
+        "Lịch sự hơn của どう: いかが (コーヒーは いかがですか)"
+      ],
+      "viDu": [
+        {
+          "c": "日本の食べ物はどうですか。",
+          "d": "にほんの たべものは どうですか。",
+          "v": "Đồ ăn Nhật thế nào?"
+        },
+        {
+          "c": "東京はどんなまちですか。",
+          "d": "とうきょうは どんな まちですか。",
+          "v": "Tokyo là thành phố như thế nào?"
+        },
+        {
+          "c": "きのうのテストはどうでしたか。",
+          "d": "きのうの テストは どうでしたか。",
+          "v": "Bài kiểm tra hôm qua thế nào?"
+        }
+      ],
+      "luuY": [
+        "どんな bắt buộc có danh từ theo sau: sai どんなですか; đúng どんな まちですか hoặc どうですか.",
+        "Trả lời どんな + N bằng tính từ + N: にぎやかな まちです."
+      ],
+      "tuKhoa": [
+        "dou",
+        "donna",
+        "ikaga",
+        "như thế nào",
+        "thế nào"
+      ],
+      "quiz": [
+        {
+          "h": "A: 日本語の べんきょうは（　）ですか。 B: おもしろいです。",
+          "lc": [
+            "どう",
+            "どんな",
+            "だれ"
+          ],
+          "da": 0,
+          "gt": "Đứng ngay trước ですか để hỏi cảm nhận là どう; どんな cần danh từ theo sau."
+        },
+        {
+          "h": "山田さんは（　）人ですか。",
+          "lc": [
+            "どう",
+            "どんな",
+            "どこ"
+          ],
+          "da": 1,
+          "gt": "Trước danh từ 人 để hỏi tính chất dùng どんな."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "どう 本ですか。",
+            "どんなですか、その 本は。",
+            "どんな 本ですか。"
+          ],
+          "da": 2,
+          "gt": "どんな + danh từ + ですか; どう không bổ nghĩa trực tiếp cho danh từ."
+        }
+      ]
+    },
+    {
+      "id": "ja-n5-ikura-donokurai",
+      "nhom": "Nghi vấn từ",
+      "tieuDe": "いくら / どのくらい",
+      "mau": "N + は + いくらですか ・ どのくらい + V",
+      "nghia": "bao nhiêu tiền / bao lâu, bao xa, bao nhiêu",
+      "giaiThich": "いくら dùng để hỏi giá tiền. どのくらい (hoặc どれくらい) hỏi lượng thời gian, khoảng cách hay mức độ, thường đi với かかります (mất, tốn). Khi hỏi số lượng đồ vật hoặc tuổi của trẻ nhỏ thì dùng いくつ.",
+      "cachGhep": [
+        "N + は + いくらですか",
+        "A から B まで + どのくらい + かかりますか",
+        "Trả lời: số + 円です / số + 時間・分 + かかります (thêm ぐらい = khoảng)"
+      ],
+      "viDu": [
+        {
+          "c": "このかばんはいくらですか。",
+          "d": "この かばんは いくらですか。",
+          "v": "Cái cặp này bao nhiêu tiền?"
+        },
+        {
+          "c": "うちから学校までどのくらいかかりますか。",
+          "d": "うちから がっこうまで どのくらい かかりますか。",
+          "v": "Từ nhà đến trường mất bao lâu?"
+        },
+        {
+          "c": "日本にどのくらいいますか。",
+          "d": "にほんに どのくらい いますか。",
+          "v": "Bạn ở Nhật bao lâu?"
+        }
+      ],
+      "luuY": [
+        "Đừng nhầm いくら (giá tiền) với いくつ (mấy cái, mấy tuổi).",
+        "Lượng thời gian không đi với に: 2時間 かかります, không nói 2時間に."
+      ],
+      "tuKhoa": [
+        "ikura",
+        "donokurai",
+        "dorekurai",
+        "ikutsu",
+        "bao nhiêu tiền",
+        "bao lâu"
+      ],
+      "quiz": [
+        {
+          "h": "A: この 本は（　）ですか。 B: 800円です。",
+          "lc": [
+            "いくら",
+            "いつ",
+            "どこ"
+          ],
+          "da": 0,
+          "gt": "B trả lời giá tiền nên câu hỏi dùng いくら."
+        },
+        {
+          "h": "A: うちから 駅まで（　）かかりますか。 B: 10分です。",
+          "lc": [
+            "だれ",
+            "どのくらい",
+            "どんな"
+          ],
+          "da": 1,
+          "gt": "Hỏi lượng thời gian cần thiết dùng どのくらい + かかりますか."
+        },
+        {
+          "h": "「いくつ」 dùng để hỏi gì?",
+          "lc": [
+            "Giá tiền",
+            "Thời gian đi lại",
+            "Số lượng đồ vật, số tuổi"
+          ],
+          "da": 2,
+          "gt": "いくつ hỏi “mấy cái / mấy tuổi”; giá tiền hỏi bằng いくら."
+        }
+      ]
+    },
+    {
+      "id": "ja-n5-doushite-naze",
+      "nhom": "Nghi vấn từ",
+      "tieuDe": "どうして / なぜ",
+      "mau": "どうして + … か。 — … からです。",
+      "nghia": "tại sao, vì sao",
+      "giaiThich": "Dùng để hỏi lý do. どうして dùng nhiều trong hội thoại; なぜ cứng hơn, hay gặp trong văn viết. Câu trả lời nêu lý do thường kết thúc bằng 〜から hoặc 〜からです.",
+      "cachGhep": [
+        "どうして / なぜ + câu + か",
+        "Trả lời: câu + から。 / thể thường + からです。",
+        "Hỏi lại ngắn gọn: どうしてですか。"
+      ],
+      "viDu": [
+        {
+          "c": "どうしてきのう休みましたか。",
+          "d": "どうして きのう やすみましたか。",
+          "v": "Tại sao hôm qua bạn nghỉ?"
+        },
+        {
+          "c": "あたまがいたかったからです。",
+          "d": "あたまが いたかったからです。",
+          "v": "Vì tôi bị đau đầu."
+        },
+        {
+          "c": "なぜ日本語をべんきょうしますか。",
+          "d": "なぜ にほんごを べんきょうしますか。",
+          "v": "Vì sao bạn học tiếng Nhật?"
+        }
+      ],
+      "luuY": [
+        "から đứng SAU lý do (cuối vế), ngược với “vì” trong tiếng Việt đứng đầu vế.",
+        "なんで cũng nghĩa là “tại sao” nhưng rất thân mật, tránh dùng với người trên."
+      ],
+      "soSanh": [
+        "ja-n5-kara-vi",
+        "ja-n5-n-desu"
+      ],
+      "tuKhoa": [
+        "doushite",
+        "naze",
+        "nande",
+        "tại sao",
+        "vì sao"
+      ],
+      "quiz": [
+        {
+          "h": "A: （　）会社を 休みましたか。 B: びょうきでしたから。",
+          "lc": [
+            "どうして",
+            "どんな",
+            "どれ"
+          ],
+          "da": 0,
+          "gt": "B nêu lý do (〜から) nên câu hỏi là どうして."
+        },
+        {
+          "h": "A: どうして 行きませんか。 B: 時間が ない（　）です。",
+          "lc": [
+            "まで",
+            "から",
+            "より"
+          ],
+          "da": 1,
+          "gt": "Trả lời lý do dùng 〜からです."
+        },
+        {
+          "h": "So với どうして, từ なぜ có sắc thái thế nào?",
+          "lc": [
+            "Thân mật, suồng sã hơn",
+            "Mang nghĩa khác hẳn",
+            "Cứng hơn, hay dùng trong văn viết"
+          ],
+          "da": 2,
+          "gt": "Hai từ cùng nghĩa “tại sao”; なぜ trang trọng / văn viết hơn."
+        }
+      ]
+    },
+    {
+      "id": "ja-n5-masu",
+      "nhom": "Động từ thể ます",
+      "tieuDe": "〜ます / 〜ません",
+      "mau": "V-ます ・ V-ません",
+      "nghia": "làm ~ / không làm ~ (hiện tại, thói quen, tương lai)",
+      "giaiThich": "Thể ます là dạng lịch sự của động từ, luôn đứng cuối câu. Nó diễn tả thói quen, sự thật ở hiện tại và cả việc sẽ làm trong tương lai — tiếng Nhật không có thì tương lai riêng. Phủ định đổi ます thành ません.",
+      "cachGhep": [
+        "Khẳng định: V-ます (行きます, 食べます, します)",
+        "Phủ định: V-ません (行きません, 食べません, しません)",
+        "Câu hỏi: V-ますか"
+      ],
+      "viDu": [
+        {
+          "c": "わたしは毎日6時におきます。",
+          "d": "わたしは まいにち ろくじに おきます。",
+          "v": "Hằng ngày tôi dậy lúc 6 giờ."
+        },
+        {
+          "c": "あした学校へ行きません。",
+          "d": "あした がっこうへ いきません。",
+          "v": "Ngày mai tôi không đi học."
+        },
+        {
+          "c": "おさけを飲みますか。",
+          "d": "おさけを のみますか。",
+          "v": "Bạn có uống rượu không?"
+        }
+      ],
+      "luuY": [
+        "Động từ luôn đứng CUỐI câu (S – O – V): “Tôi ăn cơm” → わたしは ごはんを 食べます.",
+        "Phân biệt hiện tại hay tương lai nhờ từ chỉ thời gian (毎日, あした), không nhờ đuôi động từ."
+      ],
+      "soSanh": [
+        "ja-n5-mashita"
+      ],
+      "tuKhoa": [
+        "masu",
+        "masen",
+        "thể masu",
+        "hiện tại",
+        "tương lai"
+      ],
+      "quiz": [
+        {
+          "h": "わたしは 毎日 本を（　）。",
+          "lc": [
+            "読みます",
+            "読むます",
+            "読みです"
+          ],
+          "da": 0,
+          "gt": "Thói quen hằng ngày dùng V-ます; 読むます và 読みです là dạng không tồn tại."
+        },
+        {
+          "h": "Phủ định của 「行きます」 là:",
+          "lc": [
+            "行きないです",
+            "行きません",
+            "行くません"
+          ],
+          "da": 1,
+          "gt": "Đổi ます thành ません: 行きません."
+        },
+        {
+          "h": "「あした 東京へ 行きます。」 nói về thời điểm nào?",
+          "lc": [
+            "Quá khứ",
+            "Đang diễn ra ngay lúc nói",
+            "Tương lai"
+          ],
+          "da": 2,
+          "gt": "Thể ます dùng cho cả tương lai; あした (ngày mai) cho biết đây là việc sẽ làm."
+        }
+      ]
+    },
+    {
+      "id": "ja-n5-mashita",
+      "nhom": "Động từ thể ます",
+      "tieuDe": "〜ました / 〜ませんでした",
+      "mau": "V-ました ・ V-ませんでした",
+      "nghia": "đã làm ~ / đã không làm ~",
+      "giaiThich": "Dạng quá khứ lịch sự của động từ, dùng cho việc đã xảy ra hoặc đã hoàn thành. Phủ định quá khứ là ませんでした. Thường đi với các từ chỉ quá khứ như きのう, 先週, けさ.",
+      "cachGhep": [
+        "Khẳng định quá khứ: V-ます → V-ました",
+        "Phủ định quá khứ: V-ません → V-ませんでした",
+        "Câu hỏi: V-ましたか"
+      ],
+      "viDu": [
+        {
+          "c": "きのうえいがを見ました。",
+          "d": "きのう えいがを みました。",
+          "v": "Hôm qua tôi đã xem phim."
+        },
+        {
+          "c": "けさ何も食べませんでした。",
+          "d": "けさ なにも たべませんでした。",
+          "v": "Sáng nay tôi đã không ăn gì cả."
+        },
+        {
+          "c": "先週どこへ行きましたか。",
+          "d": "せんしゅう どこへ いきましたか。",
+          "v": "Tuần trước bạn đã đi đâu?"
+        }
+      ],
+      "luuY": [
+        "Tiếng Việt không chia động từ nên người Việt hay quên đổi sang ました khi có きのう, 先週…",
+        "Phủ định quá khứ là ませんでした (thêm でした), không nói ましたません hay ませんました."
+      ],
+      "soSanh": [
+        "ja-n5-masu"
+      ],
+      "tuKhoa": [
+        "mashita",
+        "masen deshita",
+        "quá khứ",
+        "đã"
+      ],
+      "quiz": [
+        {
+          "h": "きのう 友だちに（　）。",
+          "lc": [
+            "会いました",
+            "会います",
+            "会いません"
+          ],
+          "da": 0,
+          "gt": "きのう (hôm qua) là quá khứ nên dùng 会いました."
+        },
+        {
+          "h": "Phủ định quá khứ của 「飲みます」 là:",
+          "lc": [
+            "飲みませんです",
+            "飲みませんでした",
+            "飲みましたません"
+          ],
+          "da": 1,
+          "gt": "ません + でした = ませんでした."
+        },
+        {
+          "h": "先週は べんきょう（　）。(Tuần trước tôi đã không học.)",
+          "lc": [
+            "しません",
+            "しないでした",
+            "しませんでした"
+          ],
+          "da": 2,
+          "gt": "Việc không làm trong quá khứ dùng V-ませんでした."
+        }
+      ]
+    },
+    {
+      "id": "ja-n5-masenka",
+      "nhom": "Động từ thể ます",
+      "tieuDe": "〜ませんか",
+      "mau": "V-ません + か",
+      "nghia": "cùng làm ~ nhé? / bạn có muốn ~ không? (lời mời)",
+      "giaiThich": "Dùng để mời, rủ người nghe cùng làm một việc một cách lịch sự. Hình thức là câu hỏi phủ định nhưng ý nghĩa là lời mời, chừa chỗ cho người nghe từ chối. Hay đi cùng いっしょに (cùng nhau).",
+      "cachGhep": [
+        "(いっしょに) + V-ません + か",
+        "Nhận lời: ええ、いいですね。 / ええ、V-ましょう。",
+        "Từ chối khéo: すみません、ちょっと…"
+      ],
+      "viDu": [
+        {
+          "c": "いっしょにひるごはんを食べませんか。",
+          "d": "いっしょに ひるごはんを たべませんか。",
+          "v": "Cùng ăn trưa với tôi nhé?"
+        },
+        {
+          "c": "あしたえいがを見ませんか。",
+          "d": "あした えいがを みませんか。",
+          "v": "Ngày mai đi xem phim không?"
+        },
+        {
+          "c": "日曜日、いっしょに山へ行きませんか。",
+          "d": "にちようび、いっしょに やまへ いきませんか。",
+          "v": "Chủ nhật cùng đi núi nhé?"
+        }
+      ],
+      "luuY": [
+        "Đừng hiểu là câu hỏi “bạn không ăn à?”. Trong ngữ cảnh rủ rê, 〜ませんか là lời mời.",
+        "Từ chối không nói thẳng いいえ、行きません (nghe cộc lốc); dùng すみません、ちょっと…"
+      ],
+      "soSanh": [
+        "ja-n5-mashou",
+        "ja-n5-mashouka"
+      ],
+      "tuKhoa": [
+        "masenka",
+        "masen ka",
+        "lời mời",
+        "rủ",
+        "mời"
+      ],
+      "quiz": [
+        {
+          "h": "いっしょに コーヒーを（　）。(Mời bạn cùng uống cà phê.)",
+          "lc": [
+            "飲みませんか",
+            "飲みましたか",
+            "飲みませんでした"
+          ],
+          "da": 0,
+          "gt": "Lời mời lịch sự dùng V-ませんか."
+        },
+        {
+          "h": "A: いっしょに 食べませんか。 Nhận lời tự nhiên nhất là:",
+          "lc": [
+            "いいえ、食べません。",
+            "ええ、いいですね。",
+            "はい、そうです。"
+          ],
+          "da": 1,
+          "gt": "Nhận lời mời thường nói ええ、いいですね."
+        },
+        {
+          "h": "Mẫu 「〜ませんか」 chủ yếu dùng để làm gì?",
+          "lc": [
+            "Hỏi về việc trong quá khứ",
+            "Cấm đoán",
+            "Mời, rủ người khác cùng làm"
+          ],
+          "da": 2,
+          "gt": "〜ませんか là cách mời / rủ lịch sự, tôn trọng ý muốn của người nghe."
+        }
+      ]
+    },
+    {
+      "id": "ja-n5-mashou",
+      "nhom": "Động từ thể ます",
+      "tieuDe": "〜ましょう",
+      "mau": "V-ます (bỏ ます) + ましょう",
+      "nghia": "chúng ta cùng ~ nào / ~ thôi",
+      "giaiThich": "Dùng để chủ động đề nghị cả nhóm cùng làm một việc, hoặc để hưởng ứng một lời mời. So với 〜ませんか thì 〜ましょう tích cực, quyết đoán hơn, thường dùng khi đã biết người nghe sẽ đồng ý.",
+      "cachGhep": [
+        "V-ます → V-ましょう (行きます → 行きましょう)",
+        "Hưởng ứng lời mời: ええ、V-ましょう。",
+        "Thân mật: thể ý chí (行こう, 食べよう)"
+      ],
+      "viDu": [
+        {
+          "c": "いっしょに行きましょう。",
+          "d": "いっしょに いきましょう。",
+          "v": "Chúng ta cùng đi nào."
+        },
+        {
+          "c": "少し休みましょう。",
+          "d": "すこし やすみましょう。",
+          "v": "Nghỉ một chút thôi."
+        },
+        {
+          "c": "そろそろかえりましょう。",
+          "d": "そろそろ かえりましょう。",
+          "v": "Sắp đến lúc rồi, chúng ta về thôi."
+        }
+      ],
+      "luuY": [
+        "Với người trên hoặc khi chưa biết ý đối phương, mời bằng 〜ませんか sẽ lịch sự hơn 〜ましょう.",
+        "Ghép vào gốc ます: sai 行くましょう, 行きますしょう."
+      ],
+      "soSanh": [
+        "ja-n5-masenka",
+        "ja-n5-mashouka"
+      ],
+      "tuKhoa": [
+        "mashou",
+        "mashō",
+        "cùng làm",
+        "rủ",
+        "nào thôi"
+      ],
+      "quiz": [
+        {
+          "h": "A: いっしょに 食べませんか。 B: ええ、（　）。",
+          "lc": [
+            "食べましょう",
+            "食べました",
+            "食べません"
+          ],
+          "da": 0,
+          "gt": "Hưởng ứng lời mời bằng ええ、V-ましょう."
+        },
+        {
+          "h": "「行きます」 chuyển sang dạng rủ “cùng đi nào” là:",
+          "lc": [
+            "行くましょう",
+            "行きましょう",
+            "行きますしょう"
+          ],
+          "da": 1,
+          "gt": "Bỏ ます rồi thêm ましょう: 行きましょう."
+        },
+        {
+          "h": "Khi mời người chưa rõ có muốn tham gia không, mẫu nào tôn trọng ý người nghe hơn?",
+          "lc": [
+            "〜ましょう",
+            "Hai mẫu hoàn toàn như nhau",
+            "〜ませんか"
+          ],
+          "da": 2,
+          "gt": "〜ませんか hỏi ý người nghe nên mềm mỏng hơn; 〜ましょう mang tính quyết định sẵn."
+        }
+      ]
+    }
+  ]
+}

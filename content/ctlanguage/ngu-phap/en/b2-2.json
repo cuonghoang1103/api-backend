@@ -1,0 +1,1149 @@
+{
+  "nn": "en",
+  "cap": "B2",
+  "diem": [
+    {
+      "id": "en-b2-passive-reporting",
+      "nhom": "Bị động",
+      "tieuDe": "Bị động với động từ tường thuật: It is said that… / He is said to…",
+      "mau": "It + is said / believed / thought + that + S + V · S + is said + to V / to have + V3",
+      "nghia": "người ta nói / cho rằng / tin rằng ~",
+      "giaiThich": "Dùng để đưa tin, nêu ý kiến chung mà không nói rõ ai nói, rất hay gặp trong báo chí và văn viết trang trọng. Có hai cách: dùng It làm chủ ngữ giả, hoặc đưa người / vật được nói tới lên làm chủ ngữ rồi dùng to V. Nếu việc được nói tới xảy ra trước thì dùng to have + V3.",
+      "cachGhep": [
+        "It + is/was + said / believed / thought / reported / known / expected + that + mệnh đề",
+        "S + is/are + said… + to V (cùng thời điểm với lời nói)",
+        "S + is/are + said… + to have + V3 (việc xảy ra trước đó)",
+        "S + is/are + said… + to be + V-ing (việc đang diễn ra)"
+      ],
+      "viDu": [
+        {
+          "c": "It is said that the company is losing money.",
+          "v": "Người ta nói rằng công ty đang thua lỗ."
+        },
+        {
+          "c": "He is said to be very rich.",
+          "v": "Người ta nói ông ấy rất giàu."
+        },
+        {
+          "c": "She is believed to have left the country last week.",
+          "v": "Người ta tin rằng cô ấy đã rời khỏi đất nước tuần trước."
+        },
+        {
+          "c": "The new bridge is expected to open next year.",
+          "v": "Cây cầu mới dự kiến sẽ thông xe vào năm sau."
+        }
+      ],
+      "luuY": [
+        "Người Việt hay dịch 'người ta nói rằng' thành 'People say that…' cho mọi trường hợp; trong văn viết trang trọng nên dùng mẫu bị động này.",
+        "Không trộn hai cách: 'He is said that he is rich' là sai.",
+        "Chọn to V hay to have V3 theo thời điểm của sự việc so với lúc nói: 'is said to live' (hiện đang sống) ↔ 'is said to have lived' (trước đây đã sống)."
+      ],
+      "soSanh": [
+        "en-b2-passive-two-objects"
+      ],
+      "tuKhoa": [
+        "it is said that",
+        "is said to",
+        "người ta nói rằng",
+        "bị động tường thuật",
+        "is believed to"
+      ],
+      "quiz": [
+        {
+          "h": "He is said ___ very rich.",
+          "lc": [
+            "being",
+            "that he is",
+            "be",
+            "to be"
+          ],
+          "da": 3,
+          "gt": "Chủ ngữ là người được nói tới ⇒ is said + to V."
+        },
+        {
+          "h": "It ___ that the company is losing money.",
+          "lc": [
+            "is saying",
+            "is said",
+            "said",
+            "says"
+          ],
+          "da": 1,
+          "gt": "Chủ ngữ giả It + bị động: It is said that…"
+        },
+        {
+          "h": "She is believed ___ the country last week.",
+          "lc": [
+            "that left",
+            "to leave",
+            "leaving",
+            "to have left"
+          ],
+          "da": 3,
+          "gt": "Việc xảy ra trước thời điểm nói (last week) ⇒ to have + V3."
+        }
+      ]
+    },
+    {
+      "id": "en-b2-passive-two-objects",
+      "nhom": "Bị động",
+      "tieuDe": "Bị động với động từ có hai tân ngữ",
+      "mau": "S (người) + be + V3 + vật · S (vật) + be + V3 + to/for + người",
+      "nghia": "(ai đó) được cho / tặng / gửi / mời ~",
+      "giaiThich": "Các động từ như give, send, offer, show, tell, teach, pay, lend có hai tân ngữ (người và vật) nên có hai cách đổi sang bị động. Cách lấy NGƯỜI làm chủ ngữ tự nhiên và thông dụng hơn. Nếu lấy vật làm chủ ngữ thì cần giới từ to (hoặc for với buy, make) trước người.",
+      "cachGhep": [
+        "Chủ động: They gave me a book.",
+        "Người làm chủ ngữ: I was given a book.",
+        "Vật làm chủ ngữ: A book was given to me.",
+        "Động từ thường gặp: give, send, offer, show, tell, teach, pay, promise, lend, award"
+      ],
+      "viDu": [
+        {
+          "c": "I was given a new laptop by my company.",
+          "v": "Tôi được công ty cấp cho một chiếc laptop mới."
+        },
+        {
+          "c": "She was offered a job in Singapore.",
+          "v": "Cô ấy được mời làm việc ở Singapore."
+        },
+        {
+          "c": "A letter was sent to me yesterday.",
+          "v": "Hôm qua có một lá thư được gửi cho tôi."
+        },
+        {
+          "c": "Have you been told the news?",
+          "v": "Bạn đã được báo tin chưa?"
+        }
+      ],
+      "luuY": [
+        "Tiếng Việt nói 'tôi được tặng một cuốn sách' rất tự nhiên — tiếng Anh cũng vậy: 'I was given a book'. Đừng ngại lấy người làm chủ ngữ.",
+        "Vật làm chủ ngữ thì không quên giới từ: 'A book was given me' nghe không tự nhiên → 'was given to me'.",
+        "Không thêm to khi người làm chủ ngữ: 'She was offered to a job' là sai."
+      ],
+      "soSanh": [
+        "en-b2-passive-reporting"
+      ],
+      "tuKhoa": [
+        "bị động hai tân ngữ",
+        "was given",
+        "was offered",
+        "was told",
+        "passive two objects"
+      ],
+      "quiz": [
+        {
+          "h": "I ___ a new laptop by my company.",
+          "lc": [
+            "was giving",
+            "gave",
+            "was given",
+            "have given"
+          ],
+          "da": 2,
+          "gt": "Tôi là người nhận ⇒ bị động: was given + vật."
+        },
+        {
+          "h": "A letter was sent ___ me yesterday.",
+          "lc": [
+            "with",
+            "for",
+            "to",
+            "at"
+          ],
+          "da": 2,
+          "gt": "Vật làm chủ ngữ thì dùng to trước người nhận (send sth to sb)."
+        },
+        {
+          "h": "Câu bị động nào đúng với 'They offered her a job'?",
+          "lc": [
+            "A job offered to her.",
+            "She was offered to a job.",
+            "She offered a job.",
+            "She was offered a job."
+          ],
+          "da": 3,
+          "gt": "Người làm chủ ngữ: be + V3 + vật, không thêm to."
+        }
+      ]
+    },
+    {
+      "id": "en-b2-causative-get",
+      "nhom": "Bị động",
+      "tieuDe": "Causative: have / get sth done, get sb to do, have sb do",
+      "mau": "have / get + vật + V3 · get + người + to V · have + người + V",
+      "nghia": "nhờ / thuê / thuyết phục / bảo ai làm ~",
+      "giaiThich": "Dùng khi mình khiến người khác làm việc gì cho mình. have / get + vật + V3 nhấn vào việc được làm (get thân mật hơn). get + người + to V hàm ý thuyết phục hoặc nhờ được ai đó. have + người + V (không to) là giao việc cho ai, thường với người có trách nhiệm làm.",
+      "cachGhep": [
+        "have / get + vật + V3: get the roof fixed",
+        "get + người + to V: get my brother to help",
+        "have + người + V nguyên mẫu không to: have my assistant send it",
+        "have / get + vật + V3 còn dùng cho việc không may: I had my bag stolen."
+      ],
+      "viDu": [
+        {
+          "c": "We need to get the roof fixed before winter.",
+          "v": "Chúng ta cần cho người sửa mái nhà trước mùa đông."
+        },
+        {
+          "c": "I got my brother to help me with my homework.",
+          "v": "Tôi nhờ được anh trai giúp làm bài tập."
+        },
+        {
+          "c": "I'll have my assistant send you the file.",
+          "v": "Tôi sẽ bảo trợ lý gửi tệp cho bạn."
+        },
+        {
+          "c": "She had her phone stolen on the bus.",
+          "v": "Cô ấy bị lấy trộm điện thoại trên xe buýt."
+        }
+      ],
+      "luuY": [
+        "Phân biệt dạng động từ: get + người + TO V, nhưng have + người + V không to. 'I had him to fix it' là sai.",
+        "Sau vật là V3 chứ không phải V nguyên mẫu: 'get my car repair' là sai → 'get my car repaired'."
+      ],
+      "tuKhoa": [
+        "causative",
+        "get sth done",
+        "get sb to do",
+        "have sb do",
+        "thể sai khiến"
+      ],
+      "quiz": [
+        {
+          "h": "I got my brother ___ me with my homework.",
+          "lc": [
+            "help",
+            "helping",
+            "helped",
+            "to help"
+          ],
+          "da": 3,
+          "gt": "get + người + to V."
+        },
+        {
+          "h": "We need to get the roof ___ before winter.",
+          "lc": [
+            "to fix",
+            "fixing",
+            "fixed",
+            "fix"
+          ],
+          "da": 2,
+          "gt": "get + vật + V3 (mái nhà được sửa)."
+        },
+        {
+          "h": "I'll have my assistant ___ you the file.",
+          "lc": [
+            "send",
+            "sent",
+            "sending",
+            "to send"
+          ],
+          "da": 0,
+          "gt": "have + người + V nguyên mẫu không to."
+        }
+      ]
+    },
+    {
+      "id": "en-b2-inversion-negative",
+      "nhom": "Đảo ngữ – nhấn mạnh",
+      "tieuDe": "Đảo ngữ với trạng từ phủ định",
+      "mau": "Never / Rarely / Not only / Hardly / No sooner / Only then + trợ động từ + S + V",
+      "nghia": "chưa bao giờ ~ / không những ~ mà còn ~ / vừa mới ~ thì ~",
+      "giaiThich": "Khi đưa một trạng từ hoặc cụm từ mang nghĩa phủ định, hạn chế lên đầu câu để nhấn mạnh, phải đảo trợ động từ lên trước chủ ngữ như trong câu hỏi. Cấu trúc này trang trọng, thường gặp trong văn viết và bài phát biểu.",
+      "cachGhep": [
+        "Never / Rarely / Seldom / Little + have/had/do/did + S + V",
+        "Not only + trợ động từ + S + V, but + S + also + V",
+        "Hardly / Scarcely + had + S + V3 + when + S + V2",
+        "No sooner + had + S + V3 + than + S + V2",
+        "Only then / Only when… / Not until… + trợ động từ + S + V (đảo ở mệnh đề chính)",
+        "Thì đơn không có trợ động từ ⇒ mượn do / does / did"
+      ],
+      "viDu": [
+        {
+          "c": "Never have I seen such a beautiful sunset.",
+          "v": "Chưa bao giờ tôi thấy cảnh hoàng hôn đẹp đến thế."
+        },
+        {
+          "c": "Not only was he late, but he also forgot the tickets.",
+          "v": "Anh ấy không những đến muộn mà còn quên cả vé."
+        },
+        {
+          "c": "Hardly had I closed my eyes when the alarm went off.",
+          "v": "Tôi vừa mới chợp mắt thì chuông báo thức reo."
+        },
+        {
+          "c": "No sooner had we sat down than the phone rang.",
+          "v": "Chúng tôi vừa ngồi xuống thì điện thoại reo."
+        }
+      ],
+      "luuY": [
+        "Quên đảo là lỗi thường gặp nhất: 'Never I have seen…', 'Not only he was late…' đều sai.",
+        "Ghép đúng cặp: Hardly / Scarcely… when; No sooner… than (không dùng 'No sooner… when').",
+        "Với thì đơn, mượn trợ động từ và đưa động từ chính về nguyên mẫu: 'Rarely does she eat meat', không nói 'Rarely does she eats'."
+      ],
+      "soSanh": [
+        "en-b2-inversion-conditionals"
+      ],
+      "tuKhoa": [
+        "đảo ngữ",
+        "never have I",
+        "not only but also",
+        "hardly when",
+        "no sooner than"
+      ],
+      "quiz": [
+        {
+          "h": "Never ___ such a beautiful sunset.",
+          "lc": [
+            "did I saw",
+            "I have seen",
+            "I saw",
+            "have I seen"
+          ],
+          "da": 3,
+          "gt": "Never đứng đầu câu ⇒ đảo trợ động từ: have + I + V3."
+        },
+        {
+          "h": "Not only ___ late, but he also forgot the tickets.",
+          "lc": [
+            "was he",
+            "he was",
+            "he did",
+            "did he was"
+          ],
+          "da": 0,
+          "gt": "Sau Not only ở đầu câu phải đảo: was + he."
+        },
+        {
+          "h": "No sooner had we sat down ___ the phone rang.",
+          "lc": [
+            "than",
+            "then",
+            "when",
+            "that"
+          ],
+          "da": 0,
+          "gt": "No sooner luôn đi với than."
+        }
+      ]
+    },
+    {
+      "id": "en-b2-inversion-conditionals",
+      "nhom": "Đảo ngữ – nhấn mạnh",
+      "tieuDe": "Đảo ngữ câu điều kiện: Had I… / Were I… / Should you…",
+      "mau": "Should + S + V… · Were + S (+ to V)… · Had + S + V3…",
+      "nghia": "nếu ~ (cách nói trang trọng, bỏ if)",
+      "giaiThich": "Trong văn phong trang trọng có thể bỏ if và đảo should, were hoặc had lên đầu mệnh đề điều kiện. Should… dùng cho điều kiện có thể xảy ra (loại 1), Were… cho điều kiện không thật ở hiện tại (loại 2), Had… cho điều kiện không thật trong quá khứ (loại 3). Mệnh đề chính giữ nguyên.",
+      "cachGhep": [
+        "Loại 1: Should + S + V nguyên mẫu, S + will + V / câu mệnh lệnh",
+        "Loại 2: Were + S + N/adj… · Were + S + to V, S + would + V",
+        "Loại 3: Had + S + V3, S + would have + V3",
+        "Phủ định không viết tắt: Had I not known… (không nói Hadn't I known…)"
+      ],
+      "viDu": [
+        {
+          "c": "Should you need any help, please call me.",
+          "v": "Nếu bạn cần giúp đỡ gì, xin cứ gọi cho tôi."
+        },
+        {
+          "c": "Were I you, I would accept the offer.",
+          "v": "Nếu tôi là bạn, tôi sẽ nhận lời đề nghị đó."
+        },
+        {
+          "c": "Had I known about the problem, I would have helped.",
+          "v": "Nếu tôi biết về vấn đề đó thì tôi đã giúp rồi."
+        },
+        {
+          "c": "Had it not rained, we would have gone to the beach.",
+          "v": "Nếu trời không mưa thì chúng tôi đã đi biển."
+        }
+      ],
+      "luuY": [
+        "Đã đảo thì không dùng if nữa: 'If had I known' là sai.",
+        "Chỉ đảo được với should, were, had; không đảo với do/did: 'Did I know…' không dùng làm câu điều kiện.",
+        "Dạng phủ định đặt not sau chủ ngữ: 'Had it not rained', 'Were I not so busy'."
+      ],
+      "soSanh": [
+        "en-b2-inversion-negative",
+        "en-b2-third-conditional"
+      ],
+      "tuKhoa": [
+        "had I known",
+        "were I you",
+        "should you need",
+        "đảo ngữ câu điều kiện",
+        "bỏ if"
+      ],
+      "quiz": [
+        {
+          "h": "___ I known about the problem, I would have helped.",
+          "lc": [
+            "Had",
+            "Did",
+            "If",
+            "Have"
+          ],
+          "da": 0,
+          "gt": "Đảo ngữ điều kiện loại 3: Had + S + V3."
+        },
+        {
+          "h": "___ you need any help, please call me.",
+          "lc": [
+            "Should",
+            "Had",
+            "Were",
+            "Would"
+          ],
+          "da": 0,
+          "gt": "Đảo ngữ điều kiện có thể xảy ra: Should + S + V nguyên mẫu."
+        },
+        {
+          "h": "___ I you, I would accept the offer.",
+          "lc": [
+            "Should",
+            "Did",
+            "Had",
+            "Were"
+          ],
+          "da": 3,
+          "gt": "Đảo ngữ điều kiện loại 2 với to be: Were + S…"
+        }
+      ]
+    },
+    {
+      "id": "en-b2-cleft-sentences",
+      "nhom": "Đảo ngữ – nhấn mạnh",
+      "tieuDe": "Cleft sentences: It is… that / What… is…",
+      "mau": "It + is/was + phần nhấn mạnh + that/who + … · What + S + V + is/was + …",
+      "nghia": "chính ~ là (người / cái / lúc) mà ~ · điều mà ~ là ~",
+      "giaiThich": "Câu chẻ tách một câu đơn thành hai phần để làm nổi bật một thành phần: chủ ngữ, tân ngữ, thời gian hay nơi chốn. Thường dùng để đính chính hoặc đối chiếu. Mẫu What… is… nhấn vào phần đứng sau is / was.",
+      "cachGhep": [
+        "It is/was + người + who/that + V…",
+        "It is/was + vật / thời gian / nơi chốn / lý do + that + …",
+        "What + S + V + is/was + danh từ / to V / mệnh đề",
+        "The thing (that)… is… · The reason (why)… is that… · All (that) I want is…"
+      ],
+      "viDu": [
+        {
+          "c": "It was Lan who broke the window, not me.",
+          "v": "Chính Lan làm vỡ cửa sổ chứ không phải tôi."
+        },
+        {
+          "c": "It was in 2019 that we first met.",
+          "v": "Chính vào năm 2019 chúng tôi gặp nhau lần đầu."
+        },
+        {
+          "c": "What I need is a long vacation.",
+          "v": "Điều tôi cần là một kỳ nghỉ dài."
+        },
+        {
+          "c": "What surprised me was his calm reaction.",
+          "v": "Điều làm tôi ngạc nhiên là phản ứng bình tĩnh của anh ấy."
+        }
+      ],
+      "luuY": [
+        "Sau phần nhấn mạnh dùng that (hoặc who cho người), không dùng what / which: 'It was the noise what woke me' là sai.",
+        "Động từ sau who/that chia theo phần được nhấn mạnh: 'It is my parents who pay the bills'.",
+        "Mệnh đề What… tính là số ít: 'What I need is…'."
+      ],
+      "soSanh": [
+        "en-b2-emphatic-do"
+      ],
+      "tuKhoa": [
+        "câu chẻ",
+        "cleft sentence",
+        "it is that",
+        "what I need is",
+        "nhấn mạnh"
+      ],
+      "quiz": [
+        {
+          "h": "___ was Lan who broke the window.",
+          "lc": [
+            "That",
+            "It",
+            "There",
+            "What"
+          ],
+          "da": 1,
+          "gt": "Câu chẻ nhấn vào người: It was + người + who…"
+        },
+        {
+          "h": "___ I need is a long vacation.",
+          "lc": [
+            "Which",
+            "That",
+            "It",
+            "What"
+          ],
+          "da": 3,
+          "gt": "Mẫu What + S + V + is… (điều mà tôi cần là…)."
+        },
+        {
+          "h": "It was the noise ___ woke me up.",
+          "lc": [
+            "who",
+            "it",
+            "that",
+            "what"
+          ],
+          "da": 2,
+          "gt": "Sau phần nhấn mạnh chỉ vật dùng that."
+        }
+      ]
+    },
+    {
+      "id": "en-b2-emphatic-do",
+      "nhom": "Đảo ngữ – nhấn mạnh",
+      "tieuDe": "Nhấn mạnh với do / does / did",
+      "mau": "S + do / does / did + V nguyên mẫu",
+      "nghia": "thật sự ~, đúng là có ~ (nhấn mạnh câu khẳng định)",
+      "giaiThich": "Thêm do / does / did trước động từ chính trong câu khẳng định để nhấn mạnh điều mình nói là thật, nhất là khi đáp lại sự nghi ngờ, đính chính hoặc đối lập với ý trước đó. Cũng dùng trong câu mệnh lệnh để mời, giục một cách lịch sự. Khi nói, trợ động từ được nhấn giọng.",
+      "cachGhep": [
+        "Hiện tại: I/you/we/they + do + V · he/she/it + does + V",
+        "Quá khứ: S + did + V",
+        "Mệnh lệnh: Do + V! (Do sit down.)",
+        "Động từ chính luôn ở dạng nguyên mẫu; không dùng với be và modal"
+      ],
+      "viDu": [
+        {
+          "c": "I do like your new haircut!",
+          "v": "Tôi thật sự thích kiểu tóc mới của bạn!"
+        },
+        {
+          "c": "She did call you last night, but you didn't answer.",
+          "v": "Tối qua cô ấy có gọi cho bạn thật mà, nhưng bạn không nghe máy."
+        },
+        {
+          "c": "He does care a lot, even if he doesn't show it.",
+          "v": "Anh ấy thật sự rất quan tâm, dù không thể hiện ra."
+        },
+        {
+          "c": "Do come in and have a seat.",
+          "v": "Xin mời vào và ngồi xuống ạ."
+        }
+      ],
+      "luuY": [
+        "Sau do / does / did là động từ nguyên mẫu: 'She does likes', 'I did went' đều sai.",
+        "Chỉ dùng khi thật sự cần nhấn mạnh; dùng tràn lan nghe rất gượng.",
+        "Không dùng với to be hoặc modal: không nói 'I do am happy'."
+      ],
+      "soSanh": [
+        "en-b2-cleft-sentences"
+      ],
+      "tuKhoa": [
+        "emphatic do",
+        "I do like",
+        "nhấn mạnh do does did",
+        "thật sự có"
+      ],
+      "quiz": [
+        {
+          "h": "I ___ like your new haircut! It looks great.",
+          "lc": [
+            "am",
+            "have",
+            "do",
+            "does"
+          ],
+          "da": 2,
+          "gt": "Nhấn mạnh ở hiện tại với chủ ngữ I: do + V."
+        },
+        {
+          "h": "She ___ call you last night, but you didn't answer.",
+          "lc": [
+            "was",
+            "did",
+            "does",
+            "do"
+          ],
+          "da": 1,
+          "gt": "Nhấn mạnh việc trong quá khứ (last night): did + V."
+        },
+        {
+          "h": "He does ___ a lot, even if he doesn't show it.",
+          "lc": [
+            "cared",
+            "caring",
+            "cares",
+            "care"
+          ],
+          "da": 3,
+          "gt": "Sau does là động từ nguyên mẫu."
+        }
+      ]
+    },
+    {
+      "id": "en-b2-participle-clauses",
+      "nhom": "Mệnh đề quan hệ – phân từ",
+      "tieuDe": "Participle clauses (mệnh đề phân từ)",
+      "mau": "V-ing… / V3… / Having + V3…, S + V",
+      "nghia": "rút gọn mệnh đề chỉ thời gian, nguyên nhân khi hai vế cùng chủ ngữ",
+      "giaiThich": "Khi hai mệnh đề có cùng chủ ngữ, có thể rút gọn mệnh đề phụ thành cụm phân từ cho gọn và trang trọng hơn. V-ing mang nghĩa chủ động, V3 mang nghĩa bị động, Having + V3 cho biết việc này xong trước việc ở mệnh đề chính.",
+      "cachGhep": [
+        "Chủ động, cùng lúc / nguyên nhân: V-ing…, S + V",
+        "Bị động: V3…, S + V",
+        "Xong trước: Having + V3…, S + V · bị động: Having been + V3…",
+        "Phủ định: Not + V-ing… / Not having + V3…",
+        "Giữ liên từ để rõ nghĩa: After leaving…, While waiting…, When asked…"
+      ],
+      "viDu": [
+        {
+          "c": "Feeling tired, she went straight to bed.",
+          "v": "Vì thấy mệt, cô ấy đi ngủ luôn."
+        },
+        {
+          "c": "Built in 1990, the bridge is still in good condition.",
+          "v": "Được xây từ năm 1990, cây cầu vẫn còn tốt."
+        },
+        {
+          "c": "Having finished his homework, he went out to play.",
+          "v": "Làm xong bài tập, cậu ấy ra ngoài chơi."
+        },
+        {
+          "c": "Not knowing what to say, I kept silent.",
+          "v": "Không biết nói gì, tôi im lặng."
+        }
+      ],
+      "luuY": [
+        "Chủ ngữ ngầm của cụm phân từ phải trùng với chủ ngữ mệnh đề chính. 'Walking home, the rain started' là sai (mưa không đi bộ) → 'Walking home, I got caught in the rain'.",
+        "Chọn V-ing hay V3 theo nghĩa chủ động hay bị động: 'Seeing the dog, he ran' ↔ 'Seen from above, the city looks small'.",
+        "Tiếng Việt hay lược chủ ngữ tự do hơn nên người Việt dễ mắc lỗi chủ ngữ lệch này."
+      ],
+      "soSanh": [
+        "en-b2-reduced-relative"
+      ],
+      "tuKhoa": [
+        "participle clause",
+        "mệnh đề phân từ",
+        "having done",
+        "rút gọn mệnh đề",
+        "V-ing đầu câu"
+      ],
+      "quiz": [
+        {
+          "h": "___ tired, she went straight to bed.",
+          "lc": [
+            "To feeling",
+            "Felt",
+            "Feeling",
+            "Feel"
+          ],
+          "da": 2,
+          "gt": "Cùng chủ ngữ, nghĩa chủ động (cô ấy cảm thấy) ⇒ V-ing."
+        },
+        {
+          "h": "___ in 1990, the bridge is still in good condition.",
+          "lc": [
+            "Building",
+            "Built",
+            "Build",
+            "Having building"
+          ],
+          "da": 1,
+          "gt": "Cây cầu được xây ⇒ nghĩa bị động ⇒ V3."
+        },
+        {
+          "h": "___ finished his homework, he went out to play.",
+          "lc": [
+            "Have",
+            "Had",
+            "Being",
+            "Having"
+          ],
+          "da": 3,
+          "gt": "Việc xong trước việc chính ⇒ Having + V3."
+        }
+      ]
+    },
+    {
+      "id": "en-b2-reduced-relative",
+      "nhom": "Mệnh đề quan hệ – phân từ",
+      "tieuDe": "Rút gọn mệnh đề quan hệ",
+      "mau": "N + V-ing (chủ động) · N + V3 (bị động)",
+      "nghia": "bỏ who / which / that + be, thay bằng V-ing hoặc V3",
+      "giaiThich": "Khi đại từ quan hệ làm chủ ngữ, có thể rút gọn mệnh đề quan hệ thành cụm phân từ đứng ngay sau danh từ. Nghĩa chủ động dùng V-ing (bất kể thì nào), nghĩa bị động dùng V3. Cách viết này gọn và rất phổ biến trong văn viết.",
+      "cachGhep": [
+        "who/which/that + V chủ động → V-ing: the man who is sitting → the man sitting",
+        "who/which/that + be + V3 → V3: the books which are sold → the books sold",
+        "Không rút gọn được khi đại từ quan hệ là tân ngữ: the book that I bought"
+      ],
+      "viDu": [
+        {
+          "c": "The man sitting next to me is my uncle.",
+          "v": "Người đàn ông ngồi cạnh tôi là chú tôi."
+        },
+        {
+          "c": "The books sold in this shop are expensive.",
+          "v": "Sách bán ở cửa hàng này đắt."
+        },
+        {
+          "c": "Students wanting to join the club should sign up here.",
+          "v": "Sinh viên muốn tham gia câu lạc bộ thì đăng ký ở đây."
+        },
+        {
+          "c": "Most of the people invited to the party didn't come.",
+          "v": "Phần lớn những người được mời dự tiệc đã không đến."
+        }
+      ],
+      "luuY": [
+        "Nhầm chủ động / bị động: 'the books selling in this shop' là sai (sách được bán) → 'sold'.",
+        "Rút gọn thì bỏ cả đại từ quan hệ lẫn be: 'the man who sitting' là sai.",
+        "Câu vẫn phải còn động từ chính: 'The man sitting next to me my uncle' thiếu is."
+      ],
+      "soSanh": [
+        "en-b2-participle-clauses",
+        "en-b2-relative-preposition"
+      ],
+      "tuKhoa": [
+        "rút gọn mệnh đề quan hệ",
+        "reduced relative clause",
+        "the man sitting",
+        "the books sold"
+      ],
+      "quiz": [
+        {
+          "h": "The man ___ next to me is my uncle.",
+          "lc": [
+            "is sitting",
+            "sitting",
+            "sits",
+            "who sitting"
+          ],
+          "da": 1,
+          "gt": "Rút gọn 'who is sitting' (chủ động) thành V-ing."
+        },
+        {
+          "h": "The books ___ in this shop are expensive.",
+          "lc": [
+            "selling",
+            "sell",
+            "sold",
+            "are sold"
+          ],
+          "da": 2,
+          "gt": "Sách được bán ⇒ bị động ⇒ V3 (rút gọn 'which are sold')."
+        },
+        {
+          "h": "Students ___ to join the club should sign up here.",
+          "lc": [
+            "are wanting",
+            "who wanting",
+            "wanted",
+            "wanting"
+          ],
+          "da": 3,
+          "gt": "Rút gọn 'who want' (chủ động) thành V-ing."
+        }
+      ]
+    },
+    {
+      "id": "en-b2-relative-preposition",
+      "nhom": "Mệnh đề quan hệ – phân từ",
+      "tieuDe": "Mệnh đề quan hệ với giới từ + which / whom",
+      "mau": "N + giới từ + which (vật) / whom (người) + S + V",
+      "nghia": "(cái / người) mà ~ với / cho / về / trong ~",
+      "giaiThich": "Trong văn phong trang trọng, giới từ của động từ trong mệnh đề quan hệ được đưa lên trước đại từ quan hệ. Khi đó chỉ dùng which cho vật và whom cho người, không dùng that hay who. Văn nói thường để giới từ ở cuối mệnh đề.",
+      "cachGhep": [
+        "Trang trọng: the company for which she works",
+        "Thông thường: the company (which/that) she works for",
+        "Người: the person to whom I spoke = the person (who) I spoke to",
+        "Chỉ lượng: , some / many / most / all / both of which / whom"
+      ],
+      "viDu": [
+        {
+          "c": "The company for which she works is very large.",
+          "v": "Công ty nơi cô ấy làm việc rất lớn."
+        },
+        {
+          "c": "The person to whom I spoke was very helpful.",
+          "v": "Người mà tôi nói chuyện cùng rất nhiệt tình."
+        },
+        {
+          "c": "This is the house in which I grew up.",
+          "v": "Đây là ngôi nhà nơi tôi lớn lên."
+        },
+        {
+          "c": "She has three brothers, two of whom live abroad.",
+          "v": "Cô ấy có ba anh em trai, hai người trong số đó sống ở nước ngoài."
+        }
+      ],
+      "luuY": [
+        "Sau giới từ không dùng that / who: 'the house in that I live', 'the person to who I spoke' đều sai.",
+        "Không lặp giới từ: 'the house in which I grew up in' là sai.",
+        "in which = where, on which = when; có where rồi thì không thêm in."
+      ],
+      "soSanh": [
+        "en-b2-reduced-relative"
+      ],
+      "tuKhoa": [
+        "in which",
+        "to whom",
+        "for which",
+        "giới từ + which",
+        "of whom"
+      ],
+      "quiz": [
+        {
+          "h": "The company for ___ she works is very large.",
+          "lc": [
+            "who",
+            "where",
+            "that",
+            "which"
+          ],
+          "da": 3,
+          "gt": "Sau giới từ, chỉ vật ⇒ which (không dùng that)."
+        },
+        {
+          "h": "The person to ___ I spoke was very helpful.",
+          "lc": [
+            "who",
+            "which",
+            "that",
+            "whom"
+          ],
+          "da": 3,
+          "gt": "Sau giới từ, chỉ người ⇒ whom."
+        },
+        {
+          "h": "This is the house in ___ I grew up.",
+          "lc": [
+            "that",
+            "which",
+            "what",
+            "where"
+          ],
+          "da": 1,
+          "gt": "Giới từ + which; where đã bao hàm giới từ nên không đi sau in."
+        }
+      ]
+    },
+    {
+      "id": "en-b2-whatever-whoever",
+      "nhom": "Mệnh đề quan hệ – phân từ",
+      "tieuDe": "whatever / whoever / wherever / whenever / however",
+      "mau": "wh-ever + S + V, S + V · S + V + wh-ever + S + V",
+      "nghia": "bất cứ cái gì / ai / nơi đâu / khi nào · dù ~ thế nào đi nữa",
+      "giaiThich": "Các từ có đuôi -ever mang nghĩa 'bất cứ… nào' hoặc 'dù… đi nữa': không quan trọng là cái gì, ai, ở đâu, khi nào. Chúng mở đầu một mệnh đề đóng vai trò chủ ngữ, tân ngữ hoặc trạng ngữ. however + tính từ / trạng từ nghĩa là 'dù… đến đâu'.",
+      "cachGhep": [
+        "whatever (bất cứ điều gì): Whatever happens, …",
+        "whoever (bất cứ ai): Whoever told you that…",
+        "wherever / whenever + S + V",
+        "however + adj/adv + S + V: However hard I try, …",
+        "Không dùng will sau các từ này khi nói về tương lai"
+      ],
+      "viDu": [
+        {
+          "c": "Whatever happens, I'll be there for you.",
+          "v": "Dù có chuyện gì xảy ra, tôi vẫn sẽ ở bên bạn."
+        },
+        {
+          "c": "Whoever told you that was lying.",
+          "v": "Bất cứ ai nói với bạn điều đó đều là nói dối."
+        },
+        {
+          "c": "Wherever you go, I'll follow you.",
+          "v": "Dù bạn đi đâu, tôi cũng sẽ theo."
+        },
+        {
+          "c": "However hard I try, I can't remember her name.",
+          "v": "Dù cố đến đâu, tôi cũng không nhớ nổi tên cô ấy."
+        }
+      ],
+      "luuY": [
+        "Dịch từng chữ 'dù… cũng…' dễ thành 'Although wherever you go, I also follow' — sai. Một từ wh-ever là đủ, không thêm although / also / but.",
+        "Trật tự với however: however + tính từ / trạng từ + S + V ('However tired you are'), không nói 'However you are tired'.",
+        "Không dùng will trong mệnh đề wh-ever: 'Whatever will happen, …' là sai."
+      ],
+      "tuKhoa": [
+        "whatever",
+        "whoever",
+        "wherever",
+        "however",
+        "bất cứ dù thế nào"
+      ],
+      "quiz": [
+        {
+          "h": "___ you go, I'll follow you.",
+          "lc": [
+            "Whoever",
+            "Whatever",
+            "Wherever",
+            "Whichever"
+          ],
+          "da": 2,
+          "gt": "Nói về nơi chốn (go) ⇒ Wherever."
+        },
+        {
+          "h": "___ happens, I'll be there for you.",
+          "lc": [
+            "However",
+            "Whatever",
+            "Wherever",
+            "Whoever"
+          ],
+          "da": 1,
+          "gt": "Chủ ngữ chỉ sự việc của 'happens' ⇒ Whatever."
+        },
+        {
+          "h": "___ told you that was lying.",
+          "lc": [
+            "Wherever",
+            "Whoever",
+            "Whatever",
+            "Whenever"
+          ],
+          "da": 1,
+          "gt": "Chủ ngữ chỉ người (người đã nói) ⇒ Whoever."
+        }
+      ]
+    },
+    {
+      "id": "en-b2-reporting-verbs",
+      "nhom": "Câu tường thuật",
+      "tieuDe": "Reporting verbs: suggest / admit / deny / advise / refuse…",
+      "mau": "V + to V · V + O + to V · V + V-ing · V + giới từ + V-ing",
+      "nghia": "thuật lại lời nói bằng động từ nêu rõ ý định (đề nghị, thừa nhận, từ chối…)",
+      "giaiThich": "Thay vì chỉ dùng said / told, ta dùng động từ tường thuật để tóm tắt ý của lời nói: gợi ý, hứa, từ chối, thừa nhận, xin lỗi… Mỗi động từ đòi hỏi một cấu trúc riêng phía sau, nên phải học theo nhóm.",
+      "cachGhep": [
+        "+ to V: agree, offer, promise, refuse, threaten",
+        "+ người + to V: advise, ask, encourage, invite, remind, warn, persuade",
+        "+ V-ing: suggest, admit, deny, recommend",
+        "+ giới từ + V-ing: apologize for, insist on, accuse sb of, blame sb for, congratulate sb on",
+        "suggest / admit / deny / promise + that + mệnh đề cũng dùng được"
+      ],
+      "viDu": [
+        {
+          "c": "He suggested taking a taxi.",
+          "v": "Anh ấy gợi ý đi taxi."
+        },
+        {
+          "c": "She refused to lend me the money.",
+          "v": "Cô ấy từ chối cho tôi vay tiền."
+        },
+        {
+          "c": "The boy denied breaking the window.",
+          "v": "Cậu bé chối không làm vỡ cửa sổ."
+        },
+        {
+          "c": "They apologized for being late.",
+          "v": "Họ xin lỗi vì đã đến muộn."
+        }
+      ],
+      "luuY": [
+        "Lỗi rất phổ biến: 'He suggested me to take a taxi', 'He suggested to take a taxi' → 'He suggested taking a taxi' hoặc 'He suggested (that) I take a taxi'.",
+        "Phủ định với V-ing: 'He admitted not knowing the answer'; với to V: 'He promised not to tell anyone'.",
+        "deny đã mang nghĩa phủ định: 'He denied not breaking it' lại thành nghĩa ngược."
+      ],
+      "soSanh": [
+        "en-b2-subjunctive"
+      ],
+      "tuKhoa": [
+        "reporting verbs",
+        "suggest doing",
+        "deny admit",
+        "refuse to",
+        "động từ tường thuật"
+      ],
+      "quiz": [
+        {
+          "h": "He suggested ___ a taxi.",
+          "lc": [
+            "me to take",
+            "take to",
+            "taking",
+            "to take"
+          ],
+          "da": 2,
+          "gt": "suggest + V-ing (không dùng to V hay tân ngữ + to V)."
+        },
+        {
+          "h": "She refused ___ me the money.",
+          "lc": [
+            "that lend",
+            "lending",
+            "to lend",
+            "lend"
+          ],
+          "da": 2,
+          "gt": "refuse (từ chối) đi với to V: refused to lend."
+        },
+        {
+          "h": "The boy denied ___ the window.",
+          "lc": [
+            "to break",
+            "that break",
+            "break",
+            "breaking"
+          ],
+          "da": 3,
+          "gt": "deny (chối) đi với V-ing: denied breaking."
+        }
+      ]
+    },
+    {
+      "id": "en-b2-subjunctive",
+      "nhom": "Câu tường thuật",
+      "tieuDe": "Subjunctive: suggest that sb do / It's essential that…",
+      "mau": "S + suggest / recommend / insist / demand + that + S + (should) + V nguyên mẫu · It is essential / important / vital + that + S + V nguyên mẫu",
+      "nghia": "đề nghị / yêu cầu rằng ai đó (nên, phải) ~ · điều thiết yếu là ~",
+      "giaiThich": "Sau các động từ và tính từ diễn tả đề nghị, yêu cầu, sự cần thiết, mệnh đề that dùng động từ nguyên mẫu không to cho mọi chủ ngữ, kể cả ngôi thứ ba số ít và khi động từ chính ở quá khứ. Đây là văn phong trang trọng; tiếng Anh-Anh thường thêm should trước động từ.",
+      "cachGhep": [
+        "suggest / recommend / propose / insist / demand / request + that + S + V nguyên mẫu",
+        "It is essential / important / vital / necessary + that + S + V nguyên mẫu",
+        "to be → be: It is essential that everyone be on time.",
+        "Phủ định: that + S + not + V nguyên mẫu",
+        "Có thể thêm should: that he should get more rest"
+      ],
+      "viDu": [
+        {
+          "c": "The doctor recommended that he get more rest.",
+          "v": "Bác sĩ khuyên anh ấy nên nghỉ ngơi nhiều hơn."
+        },
+        {
+          "c": "It is essential that everyone be on time.",
+          "v": "Điều thiết yếu là mọi người phải đúng giờ."
+        },
+        {
+          "c": "They demanded that the manager resign immediately.",
+          "v": "Họ yêu cầu người quản lý từ chức ngay lập tức."
+        },
+        {
+          "c": "I suggest that she not go alone.",
+          "v": "Tôi đề nghị cô ấy đừng đi một mình."
+        }
+      ],
+      "luuY": [
+        "Không thêm -s và không lùi thì trong văn trang trọng: 'recommended that he gets / got' nên viết là 'that he get'.",
+        "Không dùng tân ngữ + to V với suggest: 'I suggest him to go' là sai.",
+        "Phủ định không dùng don't / doesn't: 'that she not go', không viết 'that she doesn't go' trong văn trang trọng."
+      ],
+      "soSanh": [
+        "en-b2-reporting-verbs"
+      ],
+      "tuKhoa": [
+        "subjunctive",
+        "giả định thức",
+        "suggest that",
+        "it is essential that",
+        "thức giả định"
+      ],
+      "quiz": [
+        {
+          "h": "The doctor recommended that he ___ more rest.",
+          "lc": [
+            "gotten",
+            "getting",
+            "to get",
+            "get"
+          ],
+          "da": 3,
+          "gt": "Sau recommend that… dùng động từ nguyên mẫu không to."
+        },
+        {
+          "h": "It is essential that everyone ___ on time.",
+          "lc": [
+            "be",
+            "being",
+            "been",
+            "to be"
+          ],
+          "da": 0,
+          "gt": "Sau It is essential that… dùng nguyên mẫu: be."
+        },
+        {
+          "h": "They demanded that the manager ___ immediately.",
+          "lc": [
+            "resignation",
+            "to resign",
+            "resign",
+            "resigning"
+          ],
+          "da": 2,
+          "gt": "demand that + S + V nguyên mẫu không to."
+        }
+      ]
+    },
+    {
+      "id": "en-b2-linking-words",
+      "nhom": "Liên từ – câu phức",
+      "tieuDe": "Từ nối nâng cao: however / nevertheless / whereas / while / moreover / therefore",
+      "mau": "Câu 1. However / Nevertheless / Moreover / Therefore, câu 2. · Mệnh đề 1, whereas / while + mệnh đề 2.",
+      "nghia": "tuy nhiên · dù vậy · trong khi (đối lập) · hơn nữa · do đó",
+      "giaiThich": "however và nevertheless nêu ý trái ngược với câu trước (nevertheless mạnh hơn: dù vậy vẫn…). whereas và while đối chiếu hai sự việc khác nhau trong cùng một câu. moreover / furthermore bổ sung thêm ý cùng chiều. therefore / as a result nêu kết quả. Đây là các từ nối của văn viết trang trọng.",
+      "cachGhep": [
+        "however, nevertheless, moreover, therefore là trạng từ nối: đứng đầu câu mới (sau dấu chấm hoặc chấm phẩy) và theo sau là dấu phẩy",
+        "however có thể đứng giữa hoặc cuối câu, tách bằng dấu phẩy",
+        "whereas / while là liên từ: nối hai mệnh đề trong MỘT câu, trước nó có dấu phẩy",
+        "Tương đương thân mật: but, also, so"
+      ],
+      "viDu": [
+        {
+          "c": "The hotel was cheap. However, the rooms were very clean.",
+          "v": "Khách sạn rẻ. Tuy nhiên, phòng lại rất sạch."
+        },
+        {
+          "c": "It was raining heavily. Nevertheless, they continued the match.",
+          "v": "Trời mưa rất to. Dù vậy, họ vẫn tiếp tục trận đấu."
+        },
+        {
+          "c": "My sister loves seafood, whereas I can't stand it.",
+          "v": "Chị tôi mê hải sản, trong khi tôi thì không thể ăn nổi."
+        },
+        {
+          "c": "He didn't study at all. Therefore, he failed the exam.",
+          "v": "Anh ấy chẳng học gì cả. Do đó, anh ấy thi trượt."
+        }
+      ],
+      "luuY": [
+        "Không nối hai mệnh đề bằng dấu phẩy + however: 'It was late, however we went on' là sai. Dùng dấu chấm hoặc chấm phẩy trước however.",
+        "Không dùng kèm although: 'Although it rained, however we went out' là sai — cùng kiểu lỗi 'mặc dù… nhưng…'.",
+        "whereas / while không mở đầu một câu độc lập kiểu 'Whereas, I like tea.'"
+      ],
+      "tuKhoa": [
+        "however",
+        "nevertheless",
+        "whereas while",
+        "moreover therefore",
+        "từ nối"
+      ],
+      "quiz": [
+        {
+          "h": "He didn't study at all. ___, he failed the exam.",
+          "lc": [
+            "Nevertheless",
+            "However",
+            "Whereas",
+            "Therefore"
+          ],
+          "da": 3,
+          "gt": "Câu sau là kết quả của câu trước ⇒ Therefore."
+        },
+        {
+          "h": "It was raining heavily. ___, they continued the match.",
+          "lc": [
+            "Therefore",
+            "Whereas",
+            "Moreover",
+            "Nevertheless"
+          ],
+          "da": 3,
+          "gt": "Ý sau trái với điều người ta chờ đợi ⇒ Nevertheless (dù vậy)."
+        },
+        {
+          "h": "My sister loves seafood, ___ I can't stand it.",
+          "lc": [
+            "whereas",
+            "therefore",
+            "however",
+            "moreover"
+          ],
+          "da": 0,
+          "gt": "Đối chiếu hai mệnh đề trong một câu sau dấu phẩy ⇒ liên từ whereas; however không nối trực tiếp hai mệnh đề như vậy."
+        }
+      ]
+    }
+  ]
+}

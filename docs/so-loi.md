@@ -326,3 +326,17 @@ Mẫu một mục:
 - **Cách sửa:** `anh-sot.py` nạp khoá `doc-tay.json` và bỏ qua các chữ đó; bỏ qua tập chưa có thoigian.json (trước đây in ra traceback). 16 tập đạt được thả sang render.
 - **Ảnh hưởng:** chậm render vài tập + 1 lượt lồng tiếng lại thừa; không tập lỗi nào lên web.
 - **Bài học:** bộ soát phải dùng CÙNG từ điển với bước lồng tiếng; báo "sót" thì đối chiếu trường `nghe` trước khi sửa luật.
+
+### 15/11/2026 — CT Language (Thư viện ngữ pháp) — tra chữ Latin ngắn khớp bừa hàng loạt điểm ngữ pháp
+- **Triệu chứng:** test `diemKhop(d, 'i')` trả 50 thay vì 0 — gõ một chữ "i" / "le" ở ô tra là ra gần như mọi điểm ngữ pháp.
+- **Nguyên nhân:** `src/services/ctlanguage/nguPhapThuan.ts › diemKhop` — nhánh từ khoá dùng `x.includes(k) || k.includes(x)` không giới hạn độ dài: chuỗi Latin 1–2 ký tự nằm trong mọi từ khoá romaji/pinyin, và từ khoá ngắn ("le") nằm trong mọi câu tra dài ("table").
+- **Cách sửa:** Latin 1 ký tự ⇒ chỉ nhận khớp NGUYÊN; 2 ký tự ⇒ chỉ khớp ĐẦU tiêu đề / từ khoá; "nằm trong câu tra" chỉ tính khi chuỗi đủ dài (Latin ≥ 4, chữ Hán/kana ≥ 2). Thêm chế độ `chac=1` (≥ 45 điểm) cho ô tra tab Từ điển. Cùng commit với tính năng.
+- **Ảnh hưởng:** chưa phát hành (bắt trong test trước khi commit).
+- **Bài học:** tìm kiếm "chứa chuỗi" trên dữ liệu trộn chữ Latin với chữ Hán/kana phải có ngưỡng độ dài RIÊNG cho từng loại chữ — 1 chữ Hán đủ nghĩa, 1 chữ Latin thì không.
+
+### 15/11/2026 — CT Language (Thư viện ngữ pháp) — bộ kiểm nội dung báo nhầm câu dịch "không phải tiếng Việt"
+- **Triệu chứng:** agent soạn N5 phải đổi lời dịch 3 câu vì `ctlanguage-kiem-ngu-phap.mts` báo `viDu[i].v có vẻ không phải tiếng Việt có dấu` với câu chỉ có dấu huyền/sắc trên a/e/i/o/u/y ("Tôi là …" thì qua, "Bạn có thích trà không?" kiểu chỉ có à/á/ì/ò thì trượt).
+- **Nguyên nhân:** `nguPhapThuan.ts` — biểu thức `CHU_VIET_RIENG` liệt kê thiếu `àáãèéìíĩòóõùúũý` (chỉ có các nguyên âm mang mũ/móc + hỏi/nặng); lại dùng chung biểu thức đó để bắt "câu tiếng Anh lẫn tiếng Việt" nên nếu thêm đủ sẽ bắt nhầm café/naïve.
+- **Cách sửa:** thêm đủ nguyên âm có dấu vào `CHU_VIET_RIENG`; phép kiểm "câu Anh lẫn tiếng Việt" dùng biểu thức riêng chỉ gồm chữ chắc chắn là tiếng Việt (ă đ ơ ư + dấu hỏi/nặng/tổ hợp). Cùng commit với tính năng.
+- **Ảnh hưởng:** chỉ lúc soạn (3 câu dịch bị viết vòng, nghĩa vẫn đúng).
+- **Bài học:** bộ kiểm heuristics phải thử trên câu ĐÚNG tối giản trước khi giao cho người/agent soạn — báo nhầm làm người soạn sửa nội dung đúng thành nội dung gượng.

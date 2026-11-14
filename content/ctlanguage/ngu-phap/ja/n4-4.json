@@ -1,0 +1,1242 @@
+{
+  "nn": "ja",
+  "cap": "N4",
+  "diem": [
+    {
+      "id": "ja-n4-no-meishika",
+      "nhom": "Danh từ hoá – từ để hỏi",
+      "tieuDe": "〜のは／〜のが／〜のを",
+      "mau": "V-る + の + は / が / を 〜",
+      "nghia": "việc ~ thì… (biến động từ thành danh từ)",
+      "giaiThich": "の đứng sau thể thường biến cả cụm thành danh từ để làm chủ đề, chủ ngữ hoặc tân ngữ. 〜のは đi với tính từ đánh giá (楽しい, 難しい, 危ない); 〜のが đi với 好き, 嫌い, 上手, 下手, 速い, 遅い; 〜のを đi với 忘れる, 知っている, 見る. Ngoài ra còn dùng để nhấn mạnh: 〜のは N です.",
+      "cachGhep": [
+        "V-thể từ điển + のは + tính từ + です: 泳ぐのは楽しいです",
+        "V-thể từ điển + のが + 好き / 上手 / 速い… です",
+        "Thể thường + のを + 忘れました / 知っていますか",
+        "Nhấn mạnh: thể thường + のは + N + です (tính từ đuôi な / danh từ: 〜な + のは)"
+      ],
+      "viDu": [
+        {
+          "c": "一人で旅行するのは楽しいです。",
+          "d": "ひとりで りょこうするのは たのしいです。",
+          "v": "Đi du lịch một mình thì vui."
+        },
+        {
+          "c": "私は絵をかくのが好きです。",
+          "d": "わたしは えを かくのが すきです。",
+          "v": "Tôi thích vẽ tranh."
+        },
+        {
+          "c": "薬を飲むのを忘れました。",
+          "d": "くすりを のむのを わすれました。",
+          "v": "Tôi quên uống thuốc mất rồi."
+        },
+        {
+          "c": "田中さんが結婚したのを知っていますか。",
+          "d": "たなかさんが けっこんしたのを しって いますか。",
+          "v": "Bạn có biết chuyện anh Tanaka đã kết hôn không?"
+        }
+      ],
+      "luuY": [
+        "Động từ không nối thẳng với は, が, を: 泳ぐが好きです ✕ → 泳ぐのが好きです.",
+        "Với 見る, 聞く, 手伝う, 待つ (cảm nhận hoặc tác động trực tiếp) dùng の, không dùng こと: 鳥が飛ぶのを見ました."
+      ],
+      "tuKhoa": [
+        "no wa",
+        "no ga",
+        "no wo",
+        "danh từ hoá",
+        "nominalizer"
+      ],
+      "quiz": [
+        {
+          "h": "わたしは 音楽を 聞く（　）好きです。",
+          "lc": [
+            "のが",
+            "のを",
+            "のに",
+            "ので"
+          ],
+          "da": 0,
+          "gt": "好き đi với が, nên động từ danh từ hoá thành 聞くのが."
+        },
+        {
+          "h": "電気を 消す（　）忘れて、出かけて しまいました。",
+          "lc": [
+            "のが",
+            "のを",
+            "のに",
+            "ので"
+          ],
+          "da": 1,
+          "gt": "忘れる là tha động từ, đi với を: 消すのを 忘れて."
+        },
+        {
+          "h": "朝 早く（　）のは 大変です。",
+          "lc": [
+            "起き",
+            "起きて",
+            "起きる"
+          ],
+          "da": 2,
+          "gt": "Trước の là thể từ điển: 起きるのは."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-gimonshi-ka",
+      "nhom": "Danh từ hoá – từ để hỏi",
+      "tieuDe": "Từ để hỏi + 〜か（câu hỏi lồng）",
+      "mau": "Từ để hỏi + thể thường + か、〜",
+      "nghia": "(biết / hỏi / quên…) ai, cái gì, khi nào, ở đâu ~",
+      "giaiThich": "Dùng để đưa một câu hỏi có từ để hỏi vào trong một câu khác, làm thành phần của các động từ như 知っている, わかる, 教える, 忘れる, 聞く, 考える. Phần câu hỏi được chia ở thể thường.",
+      "cachGhep": [
+        "Từ để hỏi + động từ / tính từ đuôi い thể thường + か",
+        "Tính từ đuôi な / danh từ: bỏ だ + か: 何時か, 暇か",
+        "Trợ từ を, が sau か thường được lược bỏ"
+      ],
+      "viDu": [
+        {
+          "c": "会議が何時に始まるか、知っていますか。",
+          "d": "かいぎが なんじに はじまるか、しって いますか。",
+          "v": "Bạn có biết cuộc họp bắt đầu lúc mấy giờ không?"
+        },
+        {
+          "c": "どこにかぎを置いたか、忘れてしまいました。",
+          "d": "どこに かぎを おいたか、わすれて しまいました。",
+          "v": "Tôi quên mất đã để chìa khoá ở đâu."
+        },
+        {
+          "c": "お土産は何がいいか、考えています。",
+          "d": "おみやげは なにが いいか、かんがえて います。",
+          "v": "Tôi đang nghĩ xem quà nên là gì."
+        },
+        {
+          "c": "試験がいつか、まだわかりません。",
+          "d": "しけんが いつか、まだ わかりません。",
+          "v": "Tôi vẫn chưa biết bao giờ thi."
+        }
+      ],
+      "luuY": [
+        "Trong câu hỏi lồng dùng thể thường: 始まりますか 知っていますか ✕ → 始まるか 知っていますか.",
+        "Có từ để hỏi thì chỉ dùng か, không dùng かどうか."
+      ],
+      "soSanh": [
+        "ja-n4-ka-dou-ka",
+        "ja-n4-gimonshi-ka-futei"
+      ],
+      "tuKhoa": [
+        "ka",
+        "câu hỏi lồng",
+        "câu hỏi gián tiếp",
+        "embedded question"
+      ],
+      "quiz": [
+        {
+          "h": "田中さんが いつ（　）、教えて ください。",
+          "lc": [
+            "来るか",
+            "来ますかを",
+            "来るかどうか",
+            "来て"
+          ],
+          "da": 0,
+          "gt": "Có từ để hỏi いつ → thể thường + か: いつ 来るか."
+        },
+        {
+          "h": "これは だれの かばん（　）、わかりますか。",
+          "lc": [
+            "です",
+            "か",
+            "かどうか",
+            "だ"
+          ],
+          "da": 1,
+          "gt": "Danh từ bỏ だ + か; có từ để hỏi だれ nên không dùng かどうか."
+        },
+        {
+          "h": "プレゼントに 何を（　）、まだ 決めて いません。",
+          "lc": [
+            "あげます",
+            "あげて",
+            "あげるか"
+          ],
+          "da": 2,
+          "gt": "Câu hỏi lồng: từ để hỏi + thể thường + か → 何を あげるか."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-ka-dou-ka",
+      "nhom": "Danh từ hoá – từ để hỏi",
+      "tieuDe": "〜かどうか",
+      "mau": "Thể thường + かどうか、〜",
+      "nghia": "(không biết / kiểm tra / hỏi…) có ~ hay không",
+      "giaiThich": "Dùng để đưa một câu hỏi có/không (câu hỏi không có từ để hỏi) vào trong một câu khác. Thường đi với わかる, 知っている, 確かめる, 聞く, 心配だ.",
+      "cachGhep": [
+        "Động từ / tính từ đuôi い thể thường + かどうか",
+        "Tính từ đuôi な / danh từ: bỏ だ + かどうか: 暇かどうか, 本当かどうか"
+      ],
+      "viDu": [
+        {
+          "c": "明日雨が降るかどうか、わかりません。",
+          "d": "あした あめが ふるか どうか、わかりません。",
+          "v": "Tôi không biết mai trời có mưa hay không."
+        },
+        {
+          "c": "まちがいがないかどうか、もう一度確かめてください。",
+          "d": "まちがいが ないか どうか、もう いちど たしかめて ください。",
+          "v": "Hãy kiểm tra lại lần nữa xem có sai sót không."
+        },
+        {
+          "c": "その話が本当かどうか、知っていますか。",
+          "d": "その はなしが ほんとうか どうか、しって いますか。",
+          "v": "Bạn có biết chuyện đó có thật hay không không?"
+        }
+      ],
+      "luuY": [
+        "Có từ để hỏi thì chỉ dùng か: いつ来るか (không nói いつ来るかどうか).",
+        "Tiếng Việt “có… không” đặt quanh động từ; tiếng Nhật đặt かどうか sau thể thường: 行くかどうか.",
+        "Danh từ, tính từ đuôi な không có だ: 暇かどうか (không nói 暇だかどうか)."
+      ],
+      "soSanh": [
+        "ja-n4-gimonshi-ka"
+      ],
+      "tuKhoa": [
+        "ka dou ka",
+        "kadouka",
+        "có hay không",
+        "câu hỏi lồng"
+      ],
+      "quiz": [
+        {
+          "h": "山田さんが パーティーに（　）、聞いて みます。",
+          "lc": [
+            "来るかどうか",
+            "来ますかどうか",
+            "来るどうか",
+            "来てかどうか"
+          ],
+          "da": 0,
+          "gt": "Câu hỏi có/không lồng vào câu: thể thường + かどうか."
+        },
+        {
+          "h": "この 答えが（　）かどうか、先生に 聞きましょう。",
+          "lc": [
+            "正しく",
+            "正しい",
+            "正しいだ",
+            "正しくて"
+          ],
+          "da": 1,
+          "gt": "Tính từ đuôi い thể thường nối thẳng với かどうか: 正しいかどうか."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "だれが 来るか どうか、知りません。",
+            "あした 暇だか どうか、わかりません。",
+            "サイズが 合うか どうか、着て みます。"
+          ],
+          "da": 2,
+          "gt": "Câu 1 có từ để hỏi nên chỉ dùng か; câu 2 thừa だ. Câu 3 đúng."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-sa",
+      "nhom": "Danh từ hoá – từ để hỏi",
+      "tieuDe": "〜さ",
+      "mau": "Tính từ đuôi い (bỏ い) / đuôi な (bỏ な) + さ",
+      "nghia": "độ ~, sự ~ (danh từ chỉ mức độ)",
+      "giaiThich": "Biến tính từ thành danh từ chỉ mức độ, kích thước có thể đo hoặc so sánh được, như 長さ (độ dài), 高さ (độ cao), 重さ (trọng lượng).",
+      "cachGhep": [
+        "Tính từ đuôi い bỏ い + さ: 長い → 長さ, 高い → 高さ, 重い → 重さ",
+        "Tính từ đuôi な bỏ な + さ: 便利 → 便利さ, 大切 → 大切さ",
+        "いい → よさ"
+      ],
+      "viDu": [
+        {
+          "c": "この橋の長さは二キロです。",
+          "d": "この はしの ながさは にキロです。",
+          "v": "Chiều dài cây cầu này là 2 km."
+        },
+        {
+          "c": "荷物の重さを量ってください。",
+          "d": "にもつの おもさを はかって ください。",
+          "v": "Hãy cân trọng lượng hành lý."
+        },
+        {
+          "c": "富士山の高さはどのくらいですか。",
+          "d": "ふじさんの たかさは どのくらいですか。",
+          "v": "Núi Phú Sĩ cao bao nhiêu?"
+        },
+        {
+          "c": "病気になって、健康の大切さがわかりました。",
+          "d": "びょうきに なって、けんこうの たいせつさが わかりました。",
+          "v": "Bị ốm rồi tôi mới hiểu tầm quan trọng của sức khoẻ."
+        }
+      ],
+      "luuY": [
+        "Hỏi kích thước: danh từ + は どのくらいですか: 長さは どのくらいですか.",
+        "いい → よさ (không nói いさ)."
+      ],
+      "tuKhoa": [
+        "sa",
+        "danh từ hoá tính từ",
+        "độ dài",
+        "takasa",
+        "nagasa"
+      ],
+      "quiz": [
+        {
+          "h": "この 川の（　）は どのくらいですか。",
+          "lc": [
+            "深さ",
+            "深い",
+            "深く",
+            "深いさ"
+          ],
+          "da": 0,
+          "gt": "Cần danh từ chỉ mức độ: 深い bỏ い + さ = 深さ."
+        },
+        {
+          "h": "「重い」を 名詞に すると どれですか。",
+          "lc": [
+            "重いさ",
+            "重さ",
+            "重くさ"
+          ],
+          "da": 1,
+          "gt": "Bỏ い rồi thêm さ: 重さ."
+        },
+        {
+          "h": "この 店の（　）は、サービスです。",
+          "lc": [
+            "いいさ",
+            "いさ",
+            "よくさ",
+            "よさ"
+          ],
+          "da": 3,
+          "gt": "いい chia từ よい nên danh từ là よさ."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-gimonshi-demo",
+      "nhom": "Danh từ hoá – từ để hỏi",
+      "tieuDe": "Từ để hỏi + でも",
+      "mau": "何でも / だれでも / いつでも / どこでも / どれでも",
+      "nghia": "bất cứ ~ nào cũng (gì cũng, ai cũng, lúc nào cũng, đâu cũng)",
+      "giaiThich": "Từ để hỏi + でも diễn tả sự khẳng định toàn bộ, không có ngoại lệ. Dùng trong câu khẳng định; phủ định toàn bộ thì dùng từ để hỏi + も.",
+      "cachGhep": [
+        "何でも (cái gì cũng), だれでも (ai cũng), いつでも (lúc nào cũng), どこでも (ở đâu cũng), どれでも (cái nào cũng)",
+        "Có trợ từ: từ để hỏi + trợ từ + でも: だれとでも, どこへでも"
+      ],
+      "viDu": [
+        {
+          "c": "私は何でも食べられます。",
+          "d": "わたしは なんでも たべられます。",
+          "v": "Tôi ăn được mọi thứ."
+        },
+        {
+          "c": "わからないことがあったら、いつでも聞いてください。",
+          "d": "わからない ことが あったら、いつでも きいて ください。",
+          "v": "Nếu có gì không hiểu thì cứ hỏi tôi bất cứ lúc nào."
+        },
+        {
+          "c": "この図書館はだれでも利用できますか。",
+          "d": "この としょかんは だれでも りようできますか。",
+          "v": "Thư viện này ai cũng dùng được ạ?"
+        }
+      ],
+      "luuY": [
+        "Phủ định toàn bộ dùng từ để hỏi + も: 何も 食べません (không nói 何でも 食べません).",
+        "何でも đọc là なんでも."
+      ],
+      "soSanh": [
+        "ja-n4-gimonshi-ka-futei",
+        "ja-n4-demo-reiji"
+      ],
+      "tuKhoa": [
+        "nandemo",
+        "daredemo",
+        "itsudemo",
+        "dokodemo",
+        "bất cứ"
+      ],
+      "quiz": [
+        {
+          "h": "この カードは 日本中（　）使えます。",
+          "lc": [
+            "どこでも",
+            "どこか",
+            "どこが",
+            "どこを"
+          ],
+          "da": 0,
+          "gt": "“Ở đâu cũng dùng được” → どこでも."
+        },
+        {
+          "h": "きのうは 忙しくて、朝から（　）食べませんでした。",
+          "lc": [
+            "何でも",
+            "何か",
+            "何も"
+          ],
+          "da": 2,
+          "gt": "Phủ định toàn bộ: 何も + phủ định."
+        },
+        {
+          "h": "田中さんは 親切で、（　）仲よく なれます。",
+          "lc": [
+            "だれでもと",
+            "だれともで",
+            "だれとか",
+            "だれとでも"
+          ],
+          "da": 3,
+          "gt": "Trợ từ と đứng trước でも: だれとでも."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-gimonshi-ka-futei",
+      "nhom": "Danh từ hoá – từ để hỏi",
+      "tieuDe": "Từ để hỏi + か",
+      "mau": "何か / だれか / どこか / いつか",
+      "nghia": "cái gì đó, ai đó, đâu đó, lúc nào đó (không xác định)",
+      "giaiThich": "Dùng để chỉ sự vật, người, nơi chốn, thời điểm không xác định hoặc không cần nói rõ. Trợ từ が, を sau đó thường được lược bỏ; các trợ từ へ, に, と, で đứng sau か.",
+      "cachGhep": [
+        "何か, だれか, どこか, いつか",
+        "Trợ từ đứng sau: どこかへ, だれかに, だれかと",
+        "Bổ nghĩa: 何か + tính từ + もの: 何か冷たいもの"
+      ],
+      "viDu": [
+        {
+          "c": "何か飲みませんか。",
+          "d": "なにか のみませんか。",
+          "v": "Bạn uống gì đó không?"
+        },
+        {
+          "c": "部屋にだれかいますか。",
+          "d": "へやに だれか いますか。",
+          "v": "Trong phòng có ai không?"
+        },
+        {
+          "c": "夏休みにどこかへ行きたいです。",
+          "d": "なつやすみに どこかへ いきたいです。",
+          "v": "Nghỉ hè tôi muốn đi đâu đó."
+        },
+        {
+          "c": "いつか日本に住んでみたいです。",
+          "d": "いつか にほんに すんで みたいです。",
+          "v": "Một lúc nào đó tôi muốn thử sống ở Nhật."
+        }
+      ],
+      "luuY": [
+        "何か ありますか hỏi “có hay không”, nên trả lời はい / いいえ trước; 何が ありますか mới hỏi “có cái gì”.",
+        "Trả lời phủ định dùng 何も / だれも / どこ(へ)も + phủ định: いいえ、だれも いません."
+      ],
+      "soSanh": [
+        "ja-n4-gimonshi-demo",
+        "ja-n4-gimonshi-ka"
+      ],
+      "tuKhoa": [
+        "nanika",
+        "dareka",
+        "dokoka",
+        "itsuka",
+        "không xác định"
+      ],
+      "quiz": [
+        {
+          "h": "のどが かわきました。（　）冷たい ものが 飲みたいです。",
+          "lc": [
+            "何か",
+            "何も",
+            "何が",
+            "何を"
+          ],
+          "da": 0,
+          "gt": "“Thứ gì đó lạnh” → 何か 冷たい もの."
+        },
+        {
+          "h": "部屋に だれか いますか。— いいえ、（　）いません。",
+          "lc": [
+            "だれか",
+            "だれも",
+            "だれでも",
+            "だれが"
+          ],
+          "da": 1,
+          "gt": "Phủ định toàn bộ: だれも + いません."
+        },
+        {
+          "h": "日曜日に（　）へ 行きましたか。— はい、デパートへ 行きました。",
+          "lc": [
+            "どこ",
+            "どこも",
+            "どこか"
+          ],
+          "da": 2,
+          "gt": "Trả lời bằng はい nên câu hỏi là “có đi đâu đó không”: どこかへ."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-demo-reiji",
+      "nhom": "Danh từ hoá – từ để hỏi",
+      "tieuDe": "〜でも（nêu ví dụ）",
+      "mau": "N + でも + 〜ませんか / 〜ましょう",
+      "nghia": "~ hay gì đó (nêu một ví dụ nhẹ nhàng khi mời, đề nghị)",
+      "giaiThich": "Dùng để đưa ra một ví dụ tiêu biểu khi mời, gợi ý, mà không giới hạn vào đúng thứ đó, làm cho lời mời mềm mại hơn. でも thay vào vị trí của を, が.",
+      "cachGhep": [
+        "Danh từ + でも + V-ませんか / V-ましょうか / V-たらどうですか",
+        "でも thay cho を / が; trợ từ khác giữ lại: 公園にでも 行きましょう"
+      ],
+      "viDu": [
+        {
+          "c": "お茶でも飲みませんか。",
+          "d": "おちゃでも のみませんか。",
+          "v": "Mình uống trà hay gì đó nhé?"
+        },
+        {
+          "c": "暇だから、映画でも見ましょうか。",
+          "d": "ひまだから、えいがでも みましょうか。",
+          "v": "Rảnh nên mình xem phim hay gì đó nhé?"
+        },
+        {
+          "c": "疲れたでしょう。甘い物でも食べたらどうですか。",
+          "d": "つかれたでしょう。あまい ものでも たべたら どうですか。",
+          "v": "Chắc bạn mệt rồi. Ăn chút đồ ngọt hay gì đó xem sao?"
+        }
+      ],
+      "luuY": [
+        "Khác でも nghĩa “ngay cả” (子どもでも わかります) và でも đầu câu nghĩa “nhưng”.",
+        "Không dùng để kể việc đã xảy ra (きのう お茶でも 飲みました ✕)."
+      ],
+      "soSanh": [
+        "ja-n4-gimonshi-demo"
+      ],
+      "tuKhoa": [
+        "demo",
+        "ocha demo",
+        "hay gì đó",
+        "nêu ví dụ",
+        "gợi ý"
+      ],
+      "quiz": [
+        {
+          "h": "時間が ありますね。コーヒー（　）飲みませんか。",
+          "lc": [
+            "でも",
+            "しか",
+            "だけに",
+            "まで"
+          ],
+          "da": 0,
+          "gt": "Mời nhẹ nhàng, nêu một ví dụ: N + でも + 〜ませんか."
+        },
+        {
+          "h": "「お茶でも 飲みませんか」の「でも」と 同じ 使い方は どれですか。",
+          "lc": [
+            "この 問題は 子どもでも できます。",
+            "日曜日に テニスでも しませんか。",
+            "雨でも 行きます。"
+          ],
+          "da": 1,
+          "gt": "Câu 2 nêu ví dụ khi rủ rê; câu 1 là “ngay cả”, câu 3 là “dù”."
+        },
+        {
+          "h": "「散歩でも しましょう」は どんな 意味ですか。",
+          "lc": [
+            "Dù đi dạo cũng làm thôi.",
+            "Chỉ đi dạo thôi nhé.",
+            "Mình đi dạo hay làm gì đó nhé."
+          ],
+          "da": 2,
+          "gt": "でも ở đây nêu một ví dụ gợi ý, không giới hạn chỉ việc đi dạo."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-deshou",
+      "nhom": "Suy đoán – truyền đạt",
+      "tieuDe": "〜でしょう／〜だろう",
+      "mau": "Thể thường + でしょう / だろう (Na / N: bỏ だ)",
+      "nghia": "có lẽ ~, chắc là ~ (phỏng đoán)",
+      "giaiThich": "Diễn tả phỏng đoán của người nói về việc tương lai hoặc việc chưa chắc chắn, với độ tin tưởng khá cao; hay đi với たぶん, きっと. だろう là thể thường, thường dùng trong 〜だろうと思います. Khi lên giọng, でしょう↗ dùng để xác nhận “đúng không”.",
+      "cachGhep": [
+        "Động từ / tính từ đuôi い thể thường + でしょう",
+        "Tính từ đuôi な / danh từ bỏ だ + でしょう: 暇でしょう, 雨でしょう",
+        "Thể thường: 〜だろう; 〜だろうと 思います"
+      ],
+      "viDu": [
+        {
+          "c": "明日はたぶん雨が降るでしょう。",
+          "d": "あしたは たぶん あめが ふるでしょう。",
+          "v": "Ngày mai có lẽ trời sẽ mưa."
+        },
+        {
+          "c": "今日は日曜日だから、デパートはこんでいるだろうと思います。",
+          "d": "きょうは にちようびだから、デパートは こんで いるだろうと おもいます。",
+          "v": "Hôm nay Chủ nhật nên tôi nghĩ chắc trung tâm thương mại đông."
+        },
+        {
+          "c": "この問題は難しくないでしょう。",
+          "d": "この もんだいは むずかしくないでしょう。",
+          "v": "Bài này chắc không khó đâu."
+        },
+        {
+          "c": "田中さんは今日来るでしょうか。",
+          "d": "たなかさんは きょう くるでしょうか。",
+          "v": "Không biết hôm nay anh Tanaka có đến không nhỉ?"
+        }
+      ],
+      "luuY": [
+        "Không dùng でしょう cho hành động có ý chí của chính mình (私は 明日 行くでしょう ✕ → 行くつもりです / 行くと思います).",
+        "Danh từ, tính từ đuôi な không có だ: 休みでしょう (không nói 休みだでしょう).",
+        "だろう đứng một mình nghe cứng, nam tính; thường dùng 〜だろうと思います."
+      ],
+      "soSanh": [
+        "ja-n4-kamoshirenai",
+        "ja-n4-hazu"
+      ],
+      "tuKhoa": [
+        "deshou",
+        "darou",
+        "có lẽ",
+        "chắc là",
+        "phỏng đoán"
+      ],
+      "quiz": [
+        {
+          "h": "空が 暗いですね。もうすぐ 雨が（　）でしょう。",
+          "lc": [
+            "降る",
+            "降ります",
+            "降って",
+            "降り"
+          ],
+          "da": 0,
+          "gt": "Trước でしょう là thể thường: 降るでしょう."
+        },
+        {
+          "h": "あしたは たぶん いい 天気（　）でしょう。",
+          "lc": [
+            "だ",
+            "な",
+            "—（何も 入れない）",
+            "の"
+          ],
+          "da": 2,
+          "gt": "Danh từ nối thẳng với でしょう, không có だ: 天気でしょう."
+        },
+        {
+          "h": "Câu nào KHÔNG tự nhiên?",
+          "lc": [
+            "あしたは 寒いでしょう。",
+            "彼は たぶん 来ないでしょう。",
+            "試験は 難しいだろうと 思います。",
+            "わたしは 来年 日本へ 行くでしょう。"
+          ],
+          "da": 3,
+          "gt": "Không dùng でしょう để phỏng đoán về hành động có ý chí của chính mình."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-kamoshirenai",
+      "nhom": "Suy đoán – truyền đạt",
+      "tieuDe": "〜かもしれません",
+      "mau": "Thể thường + かもしれません (Na / N: bỏ だ)",
+      "nghia": "có thể ~, không chừng ~ (độ chắc thấp hơn でしょう)",
+      "giaiThich": "Diễn tả một việc có khả năng xảy ra nhưng người nói không chắc chắn. Hay đi với もしかしたら. Trong hội thoại thân mật nói 〜かもしれない hoặc 〜かも.",
+      "cachGhep": [
+        "Động từ / tính từ đuôi い thể thường + かもしれません",
+        "Tính từ đuôi な / danh từ bỏ だ + かもしれません: 暇かもしれません, 病気かもしれません",
+        "Thân mật: 〜かもしれない / 〜かも"
+      ],
+      "viDu": [
+        {
+          "c": "午後から雪になるかもしれません。",
+          "d": "ごごから ゆきに なるかも しれません。",
+          "v": "Từ chiều có thể trời sẽ có tuyết."
+        },
+        {
+          "c": "約束の時間に間に合わないかもしれません。",
+          "d": "やくそくの じかんに まに あわないかも しれません。",
+          "v": "Có thể tôi sẽ không kịp giờ hẹn."
+        },
+        {
+          "c": "もしかしたら、あの人は先生かもしれません。",
+          "d": "もしかしたら、あの ひとは せんせいかも しれません。",
+          "v": "Biết đâu người kia là giáo viên."
+        }
+      ],
+      "luuY": [
+        "Mức chắc chắn: 〜でしょう (khá chắc) cao hơn 〜かもしれません (có thể, không chắc).",
+        "Dùng được cho cả việc của mình: 私は 行けないかもしれません.",
+        "Danh từ, tính từ đuôi な không có だ: 病気かもしれません."
+      ],
+      "soSanh": [
+        "ja-n4-deshou",
+        "ja-n3-ni-chigainai"
+      ],
+      "tuKhoa": [
+        "kamoshirenai",
+        "kamo shiremasen",
+        "kamo",
+        "có thể",
+        "không chừng"
+      ],
+      "quiz": [
+        {
+          "h": "道が こんで いますから、少し（　）かもしれません。",
+          "lc": [
+            "遅れる",
+            "遅れます",
+            "遅れて",
+            "遅れよう"
+          ],
+          "da": 0,
+          "gt": "Trước かもしれません là thể thường: 遅れる."
+        },
+        {
+          "h": "あの 店は きょう 休み（　）かもしれません。",
+          "lc": [
+            "だ",
+            "—（何も 入れない）",
+            "な",
+            "の"
+          ],
+          "da": 1,
+          "gt": "Danh từ nối thẳng, không có だ: 休みかもしれません."
+        },
+        {
+          "h": "「かもしれません」と いっしょに よく 使う ことばは どれですか。",
+          "lc": [
+            "ぜったいに",
+            "かならず",
+            "もしかしたら"
+          ],
+          "da": 2,
+          "gt": "もしかしたら (biết đâu) hợp với phỏng đoán không chắc; hai từ kia chỉ sự chắc chắn."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-hazu",
+      "nhom": "Suy đoán – truyền đạt",
+      "tieuDe": "〜はずです",
+      "mau": "V-る / V-ない / A-い / Na-な / N の + はずです",
+      "nghia": "chắc chắn là ~, lẽ ra thì ~ (suy luận có căn cứ)",
+      "giaiThich": "Diễn tả người nói tin chắc một điều dựa trên căn cứ khách quan như lịch, lời hứa, hiểu biết sẵn có. Khác với でしょう là phỏng đoán chủ quan.",
+      "cachGhep": [
+        "Động từ / tính từ đuôi い thể thường + はずです",
+        "Tính từ đuôi な + な + はずです",
+        "Danh từ + の + はずです"
+      ],
+      "viDu": [
+        {
+          "c": "田中さんは今日来るはずです。昨日そう言っていました。",
+          "d": "たなかさんは きょう くる はずです。きのう そう いって いました。",
+          "v": "Anh Tanaka chắc chắn hôm nay sẽ đến. Hôm qua anh ấy nói vậy."
+        },
+        {
+          "c": "彼は十年日本に住んでいたから、日本語が上手なはずです。",
+          "d": "かれは じゅうねん にほんに すんで いたから、にほんごが じょうずな はずです。",
+          "v": "Anh ấy sống ở Nhật 10 năm nên chắc chắn giỏi tiếng Nhật."
+        },
+        {
+          "c": "今日は日曜日だから、銀行は休みのはずです。",
+          "d": "きょうは にちようびだから、ぎんこうは やすみの はずです。",
+          "v": "Hôm nay Chủ nhật nên ngân hàng hẳn là nghỉ."
+        },
+        {
+          "c": "荷物はもう着いているはずですが、まだですか。",
+          "d": "にもつは もう ついて いる はずですが、まだですか。",
+          "v": "Hành lý lẽ ra đã tới rồi, vẫn chưa à?"
+        }
+      ],
+      "luuY": [
+        "Không dùng cho dự định của chính mình (私は 来年 帰るはずです ✕ → 帰るつもりです).",
+        "Danh từ + の, tính từ đuôi な + な: 休みのはず, 元気なはず."
+      ],
+      "soSanh": [
+        "ja-n4-hazu-ga-nai",
+        "ja-n4-deshou",
+        "ja-n3-hazu-datta"
+      ],
+      "tuKhoa": [
+        "hazu",
+        "hazu desu",
+        "chắc chắn",
+        "lẽ ra",
+        "suy luận"
+      ],
+      "quiz": [
+        {
+          "h": "会議は 3時からですから、もうすぐ（　）はずです。",
+          "lc": [
+            "始まる",
+            "始まり",
+            "始まって",
+            "始まろう"
+          ],
+          "da": 0,
+          "gt": "Động từ thể từ điển + はずです."
+        },
+        {
+          "h": "山田さんは 元気（　）はずです。けさ 会いましたから。",
+          "lc": [
+            "だ",
+            "の",
+            "な",
+            "に"
+          ],
+          "da": 2,
+          "gt": "Tính từ đuôi な + な + はずです."
+        },
+        {
+          "h": "きょうは 祝日ですから、郵便局は 休み（　）はずです。",
+          "lc": [
+            "な",
+            "だ",
+            "で",
+            "の"
+          ],
+          "da": 3,
+          "gt": "Danh từ + の + はずです."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-hazu-ga-nai",
+      "nhom": "Suy đoán – truyền đạt",
+      "tieuDe": "〜はずがありません",
+      "mau": "Thể thường (Na-な / N の) + はずがありません / はずがない",
+      "nghia": "không thể nào ~, làm gì có chuyện ~",
+      "giaiThich": "Dùng để phủ định mạnh khả năng xảy ra của một việc, dựa trên căn cứ mà người nói có. Mạnh hơn nhiều so với 〜ないはずです (chắc là không).",
+      "cachGhep": [
+        "Động từ / tính từ đuôi い thể thường + はずが ありません",
+        "Tính từ đuôi な + な / danh từ + の + はずが ありません",
+        "Thân mật: 〜はずが ない"
+      ],
+      "viDu": [
+        {
+          "c": "あのまじめな田中さんが約束を忘れるはずがありません。",
+          "d": "あの まじめな たなかさんが やくそくを わすれる はずが ありません。",
+          "v": "Anh Tanaka nghiêm túc như thế không thể nào quên hẹn."
+        },
+        {
+          "c": "こんなに安いはずがない。",
+          "d": "こんなに やすい はずが ない。",
+          "v": "Không thể nào rẻ thế này được."
+        },
+        {
+          "c": "彼がそんなことを言うはずがありません。",
+          "d": "かれが そんな ことを いう はずが ありません。",
+          "v": "Anh ấy không thể nào nói điều như thế."
+        },
+        {
+          "c": "かぎをかけたから、ドアが開くはずがありません。",
+          "d": "かぎを かけたから、ドアが あく はずが ありません。",
+          "v": "Đã khoá rồi nên cửa không thể nào mở được."
+        }
+      ],
+      "luuY": [
+        "〜ないはずです (chắc là không ~) nhẹ hơn 〜はずがありません (tuyệt đối không thể).",
+        "Đây là phán đoán “không thể có chuyện đó”, khác với できません (không có năng lực làm)."
+      ],
+      "soSanh": [
+        "ja-n4-hazu"
+      ],
+      "tuKhoa": [
+        "hazu ga nai",
+        "hazu ga arimasen",
+        "không thể nào",
+        "làm gì có chuyện"
+      ],
+      "quiz": [
+        {
+          "h": "彼は きのう 入院したから、きょう 会社に 来る（　）。",
+          "lc": [
+            "はずが ありません",
+            "はずです",
+            "ところです",
+            "ばかりです"
+          ],
+          "da": 0,
+          "gt": "Vừa nhập viện hôm qua nên “không thể nào đến” → はずが ありません."
+        },
+        {
+          "h": "こんなに 難しい 問題が 子どもに（　）はずが ない。",
+          "lc": [
+            "でき",
+            "できる",
+            "できて",
+            "できよう"
+          ],
+          "da": 1,
+          "gt": "Trước はず là thể thường: できる はずが ない."
+        },
+        {
+          "h": "「来るはずがない」の 意味は どれですか。",
+          "lc": [
+            "たぶん 来る",
+            "来ても いい",
+            "ぜったい 来ないと 思う"
+          ],
+          "da": 2,
+          "gt": "はずがない = tin chắc là việc đó không thể xảy ra."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-sou-youtai",
+      "nhom": "Suy đoán – truyền đạt",
+      "tieuDe": "〜そうです（trông có vẻ）",
+      "mau": "V-ます (bỏ ます) / A-い (bỏ い) / Na + そうです",
+      "nghia": "trông có vẻ ~; sắp ~ đến nơi",
+      "giaiThich": "Diễn tả phán đoán trực tiếp từ điều nhìn thấy, cảm nhận ngay lúc đó. Với động từ: có dấu hiệu việc sắp xảy ra. Với tính từ: vẻ bề ngoài cho thấy như vậy, dù chưa kiểm chứng.",
+      "cachGhep": [
+        "V-ます bỏ ます + そうです: 降りそうです",
+        "Tính từ đuôi い bỏ い + そうです: おいしそうです; いい → よさそうです; ない → なさそうです",
+        "Tính từ đuôi な + そうです: 元気そうです",
+        "Bổ nghĩa: 〜そうな + N, 〜そうに + V; phủ định của tính từ: 〜くなさそうです"
+      ],
+      "viDu": [
+        {
+          "c": "空が暗いですね。雨が降りそうです。",
+          "d": "そらが くらいですね。あめが ふりそうです。",
+          "v": "Trời tối quá nhỉ. Có vẻ sắp mưa."
+        },
+        {
+          "c": "このケーキはおいしそうですね。",
+          "d": "この ケーキは おいしそうですね。",
+          "v": "Cái bánh này trông ngon nhỉ."
+        },
+        {
+          "c": "山田さんはうれしそうに笑っています。",
+          "d": "やまださんは うれしそうに わらって います。",
+          "v": "Chị Yamada đang cười trông có vẻ vui."
+        },
+        {
+          "c": "この映画はあまりおもしろくなさそうです。",
+          "d": "この えいがは あまり おもしろくなさそうです。",
+          "v": "Phim này trông có vẻ không hay lắm."
+        }
+      ],
+      "luuY": [
+        "Không dùng cho điều nhìn là biết ngay: thấy đẹp thì nói きれいですね, không nói きれいそうです.",
+        "いい → よさそう, ない → なさそう. かわいそう nghĩa là “đáng thương”, không phải “trông dễ thương”.",
+        "Phân biệt bằng cách ghép: 降りそうです (trông sắp mưa) – 降るそうです (nghe nói sẽ mưa)."
+      ],
+      "soSanh": [
+        "ja-n4-sou-denbun",
+        "ja-n4-you-mitai"
+      ],
+      "tuKhoa": [
+        "sou desu",
+        "sou",
+        "trông có vẻ",
+        "sắp",
+        "youtai"
+      ],
+      "quiz": [
+        {
+          "h": "荷物が たくさん 入って いて、この 箱は（　）そうです。",
+          "lc": [
+            "重",
+            "重く",
+            "重くて",
+            "重いだ"
+          ],
+          "da": 0,
+          "gt": "Tính từ đuôi い bỏ い + そうです: 重そうです."
+        },
+        {
+          "h": "ボタンが（　）そうですよ。つけましょうか。",
+          "lc": [
+            "取れて",
+            "取れ",
+            "取れよう"
+          ],
+          "da": 1,
+          "gt": "Động từ: thể ます bỏ ます + そうです → 取れそうです (sắp tuột)."
+        },
+        {
+          "h": "この 店は（　）そうですね。入って みましょう。",
+          "lc": [
+            "いさ",
+            "いく",
+            "よ",
+            "よさ"
+          ],
+          "da": 3,
+          "gt": "いい có dạng đặc biệt: よさそうです."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-sou-denbun",
+      "nhom": "Suy đoán – truyền đạt",
+      "tieuDe": "〜そうです（nghe nói）",
+      "mau": "Thể thường + そうです",
+      "nghia": "nghe nói là ~, theo ~ thì ~",
+      "giaiThich": "Dùng để truyền đạt lại nguyên thông tin đã nghe hoặc đọc được, không thêm ý kiến của mình. Nguồn tin được nêu bằng 〜によると hoặc 〜の話では.",
+      "cachGhep": [
+        "Động từ / tính từ đuôi い thể thường + そうです",
+        "Tính từ đuôi な / danh từ + だ + そうです: 元気だそうです, 雨だそうです",
+        "Nguồn tin: N + に よると、〜そうです"
+      ],
+      "viDu": [
+        {
+          "c": "天気予報によると、明日は雪が降るそうです。",
+          "d": "てんきよほうに よると、あしたは ゆきが ふるそうです。",
+          "v": "Theo dự báo thời tiết, nghe nói mai sẽ có tuyết."
+        },
+        {
+          "c": "あの店のラーメンはおいしいそうですよ。",
+          "d": "あの みせの ラーメンは おいしいそうですよ。",
+          "v": "Nghe nói mì ramen ở quán kia ngon đấy."
+        },
+        {
+          "c": "田中さんは来週の旅行に行かないそうです。",
+          "d": "たなかさんは らいしゅうの りょこうに いかないそうです。",
+          "v": "Nghe nói anh Tanaka không đi chuyến du lịch tuần sau."
+        },
+        {
+          "c": "山田さんのお父さんは医者だそうです。",
+          "d": "やまださんの おとうさんは いしゃだそうです。",
+          "v": "Nghe nói bố của anh Yamada là bác sĩ."
+        }
+      ],
+      "luuY": [
+        "そうです nghe nói không chia quá khứ, phủ định: thì và phủ định nằm ở phần đứng trước (降ったそうです, 降らないそうです; không nói 降るそうでした).",
+        "Danh từ, tính từ đuôi な phải có だ: 休みだそうです (không nói 休みそうです)."
+      ],
+      "soSanh": [
+        "ja-n4-sou-youtai",
+        "ja-n4-rashii",
+        "ja-n4-to-itte-imashita",
+        "ja-n3-ni-yoru-to"
+      ],
+      "tuKhoa": [
+        "sou desu",
+        "denbun",
+        "nghe nói",
+        "ni yoru to",
+        "truyền đạt"
+      ],
+      "quiz": [
+        {
+          "h": "ニュースに よると、きのう 大阪で 地震が（　）そうです。",
+          "lc": [
+            "あった",
+            "あって",
+            "あろう"
+          ],
+          "da": 0,
+          "gt": "Tin đã xảy ra hôm qua: thể thường quá khứ + そうです → あったそうです."
+        },
+        {
+          "h": "手紙に よると、兄は 元気（　）そうです。",
+          "lc": [
+            "な",
+            "だ",
+            "の",
+            "に"
+          ],
+          "da": 1,
+          "gt": "Nghe nói: tính từ đuôi な + だ + そうです."
+        },
+        {
+          "h": "「聞いた 話」を 伝えて いる 文は どれですか。",
+          "lc": [
+            "雨が 降りそうです。",
+            "この りんごは おいしそうです。",
+            "あしたは 雨が 降るそうです。"
+          ],
+          "da": 2,
+          "gt": "Thể thường + そうです là “nghe nói”; hai câu kia là “trông có vẻ”."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-you-mitai",
+      "nhom": "Suy đoán – truyền đạt",
+      "tieuDe": "〜ようです／〜みたいです",
+      "mau": "Thể thường (Na-な / N の) + ようです; thể thường (Na / N) + みたいです",
+      "nghia": "hình như ~, có vẻ như ~ (suy đoán từ cảm nhận của mình)",
+      "giaiThich": "Diễn tả suy đoán của người nói dựa trên điều chính mình nhìn thấy, nghe thấy, ngửi thấy, cảm thấy. Hay đi với どうも. みたいです là cách nói khẩu ngữ cùng nghĩa.",
+      "cachGhep": [
+        "Động từ / tính từ đuôi い thể thường + ようです / みたいです",
+        "Tính từ đuôi な + な + ようです; danh từ + の + ようです",
+        "Tính từ đuôi な / danh từ (không な, không の) + みたいです: 暇みたいです, 学生みたいです"
+      ],
+      "viDu": [
+        {
+          "c": "人が集まっています。事故があったようです。",
+          "d": "ひとが あつまって います。じこが あったようです。",
+          "v": "Người ta đang tụ tập. Hình như đã có tai nạn."
+        },
+        {
+          "c": "電気が消えています。田中さんは留守のようです。",
+          "d": "でんきが きえて います。たなかさんは るすのようです。",
+          "v": "Đèn tắt. Hình như anh Tanaka đi vắng."
+        },
+        {
+          "c": "のどが痛いです。かぜをひいたみたいです。",
+          "d": "のどが いたいです。かぜを ひいたみたいです。",
+          "v": "Tôi đau họng. Hình như bị cảm rồi."
+        },
+        {
+          "c": "あの人は日本人ではないようですね。",
+          "d": "あの ひとは にほんじんでは ないようですね。",
+          "v": "Người kia hình như không phải người Nhật nhỉ."
+        }
+      ],
+      "luuY": [
+        "Danh từ: 学生のようです nhưng 学生みたいです (không nói 学生のみたいです).",
+        "〜そうです (trông có vẻ) dựa vào vẻ ngoài tức thì; 〜ようです là suy luận từ các dấu hiệu: おいしそうです (nhìn thấy ngon) – おいしいようです (thấy mọi người ăn nhiều nên đoán là ngon).",
+        "みたい không dùng trong văn viết trang trọng."
+      ],
+      "soSanh": [
+        "ja-n4-sou-youtai",
+        "ja-n4-rashii"
+      ],
+      "tuKhoa": [
+        "you desu",
+        "mitai",
+        "mitai desu",
+        "hình như",
+        "có vẻ như"
+      ],
+      "quiz": [
+        {
+          "h": "となりの 部屋に だれか（　）ようです。声が 聞こえます。",
+          "lc": [
+            "いる",
+            "いり",
+            "いて",
+            "いよう"
+          ],
+          "da": 0,
+          "gt": "Động từ thể thường + ようです: いるようです."
+        },
+        {
+          "h": "あの 人は 学生（　）ようです。",
+          "lc": [
+            "だ",
+            "な",
+            "の",
+            "—（何も 入れない）"
+          ],
+          "da": 2,
+          "gt": "Danh từ + の + ようです."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "かれは 病気のみたいです。",
+            "かれは 病気なみたいです。",
+            "かれは 病気だみたいです。",
+            "かれは 病気みたいです。"
+          ],
+          "da": 3,
+          "gt": "Danh từ nối thẳng với みたいです, không có の, な, だ."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-rashii",
+      "nhom": "Suy đoán – truyền đạt",
+      "tieuDe": "〜らしい",
+      "mau": "Thể thường (Na / N: bỏ だ) + らしいです; N + らしい + N",
+      "nghia": "nghe đâu ~, hình như ~ (dựa trên tin nghe được); đúng chất ~",
+      "giaiThich": "Có hai cách dùng: (1) suy đoán dựa trên thông tin nghe được, đọc được từ bên ngoài, người nói không hoàn toàn chắc; (2) N らしい diễn tả sự vật mang đúng đặc trưng điển hình của N (春らしい, 学生らしい).",
+      "cachGhep": [
+        "Động từ / tính từ đuôi い thể thường + らしいです",
+        "Tính từ đuôi な / danh từ bỏ だ + らしいです: 暇らしい, 病気らしい",
+        "Danh từ + らしい (đúng chất): 学生らしい 服; chia như tính từ đuôi い: らしくない"
+      ],
+      "viDu": [
+        {
+          "c": "田中さんは会社をやめるらしいです。",
+          "d": "たなかさんは かいしゃを やめるらしいです。",
+          "v": "Nghe đâu anh Tanaka sắp nghỉ việc."
+        },
+        {
+          "c": "あの映画はあまりおもしろくないらしいですよ。",
+          "d": "あの えいがは あまり おもしろくないらしいですよ。",
+          "v": "Nghe đâu phim đó không hay lắm đâu."
+        },
+        {
+          "c": "今日は暖かくて、春らしい日ですね。",
+          "d": "きょうは あたたかくて、はるらしい ひですね。",
+          "v": "Hôm nay ấm áp, đúng là một ngày xuân nhỉ."
+        },
+        {
+          "c": "駅の近くに新しいスーパーができるらしいです。",
+          "d": "えきの ちかくに あたらしい スーパーが できるらしいです。",
+          "v": "Nghe đâu gần ga sắp có siêu thị mới."
+        }
+      ],
+      "luuY": [
+        "Danh từ, tính từ đuôi な không có だ, な, の: 休みらしい (không nói 休みだらしい, 休みのらしい).",
+        "子どもらしい (đúng là trẻ con — nói về chính đứa trẻ) khác 子どもみたい (giống trẻ con — nói về người không phải trẻ con).",
+        "ようです dựa trên cảm nhận trực tiếp của mình; らしい dựa trên điều nghe được."
+      ],
+      "soSanh": [
+        "ja-n4-sou-denbun",
+        "ja-n4-you-mitai",
+        "ja-n3-ppoi"
+      ],
+      "tuKhoa": [
+        "rashii",
+        "rashii desu",
+        "nghe đâu",
+        "đúng chất",
+        "hình như"
+      ],
+      "quiz": [
+        {
+          "h": "友達の 話では、あの 店は 来月（　）らしいです。",
+          "lc": [
+            "閉まる",
+            "閉まり",
+            "閉まって",
+            "閉まろう"
+          ],
+          "da": 0,
+          "gt": "Động từ thể thường + らしいです."
+        },
+        {
+          "h": "山田さんは 最近 とても（　）らしいです。",
+          "lc": [
+            "忙しいだ",
+            "忙しい",
+            "忙しく",
+            "忙しいな"
+          ],
+          "da": 1,
+          "gt": "Tính từ đuôi い thể thường nối thẳng: 忙しいらしいです."
+        },
+        {
+          "h": "きょうは 涼しくて、秋（　）天気ですね。",
+          "lc": [
+            "のらしい",
+            "だらしい",
+            "らしい"
+          ],
+          "da": 2,
+          "gt": "Danh từ + らしい (đúng chất mùa thu), không thêm の hay だ."
+        }
+      ]
+    }
+  ]
+}

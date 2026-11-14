@@ -1,0 +1,921 @@
+{
+  "nn": "en",
+  "cap": "A1",
+  "diem": [
+    {
+      "id": "en-a1-cau-hoi-wh",
+      "nhom": "Câu hỏi",
+      "tieuDe": "Câu hỏi Wh-: what, where, when, who, why, how",
+      "mau": "Từ để hỏi + to be / do / does / can + S (+ V)?",
+      "nghia": "cái gì, ở đâu, khi nào, ai, tại sao, như thế nào",
+      "giaiThich": "Dùng từ để hỏi khi cần thông tin cụ thể chứ không phải câu trả lời có / không. Từ để hỏi luôn đứng ĐẦU câu, sau nó là trợ động từ hoặc to be rồi mới đến chủ ngữ. Tiếng Việt để từ hỏi ở cuối câu (“Bạn sống ở đâu?”), tiếng Anh thì ngược lại.",
+      "cachGhep": [
+        "what: cái gì · where: ở đâu · when: khi nào · who: ai · why: tại sao · how: như thế nào, bằng cách nào",
+        "Với to be: Wh- + am / is / are + S? (Where is my phone?)",
+        "Với động từ thường: Wh- + do / does + S + V? (What do you eat for breakfast?)",
+        "Cụm hỏi thường gặp: What time…? · How old…? · What colour…? · How often…?",
+        "Trả lời why bằng because: Why are you late? - Because the bus was late."
+      ],
+      "viDu": [
+        {
+          "c": "What is your phone number?",
+          "v": "Số điện thoại của bạn là gì?"
+        },
+        {
+          "c": "Where do your parents live?",
+          "v": "Bố mẹ bạn sống ở đâu?"
+        },
+        {
+          "c": "When does the film start?",
+          "v": "Khi nào bộ phim bắt đầu?"
+        },
+        {
+          "c": "Why are you sad today?",
+          "v": "Sao hôm nay bạn buồn vậy?"
+        },
+        {
+          "c": "How do you go to work?",
+          "v": "Bạn đi làm bằng phương tiện gì?"
+        }
+      ],
+      "luuY": [
+        "Lỗi người Việt hay mắc: để từ hỏi ở cuối hoặc không đảo trợ động từ → sai: You live where? / Where you live? Đúng: Where do you live?",
+        "Đã có to be thì không thêm do: sai Where do you are from? Đúng: Where are you from?",
+        "Hỏi nghề nghiệp: What do you do? (không phải What are you do?); hỏi thăm sức khoẻ: How are you?"
+      ],
+      "soSanh": [
+        "en-a1-how-much-many",
+        "en-a1-to-be-cau-hoi"
+      ],
+      "tuKhoa": [
+        "what where when",
+        "who why how",
+        "từ để hỏi",
+        "wh questions",
+        "cau hoi wh"
+      ],
+      "quiz": [
+        {
+          "h": "___ do you live? - In Da Nang.",
+          "lc": [
+            "What",
+            "Who",
+            "Where",
+            "When"
+          ],
+          "da": 2,
+          "gt": "Câu trả lời là một nơi chốn (In Da Nang) nên hỏi bằng Where."
+        },
+        {
+          "h": "___ is that man? - He's my uncle.",
+          "lc": [
+            "Who",
+            "What",
+            "Where",
+            "How"
+          ],
+          "da": 0,
+          "gt": "Câu trả lời cho biết người đó là ai nên hỏi bằng Who."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "What time you get up?",
+            "What time do you get up?",
+            "What time are you get up?",
+            "You get up what time?"
+          ],
+          "da": 1,
+          "gt": "Get up là động từ thường nên cần trợ động từ do đứng trước chủ ngữ."
+        }
+      ]
+    },
+    {
+      "id": "en-a1-how-much-many",
+      "nhom": "Câu hỏi",
+      "tieuDe": "How much / How many",
+      "mau": "How many + danh từ số nhiều…? · How much + danh từ không đếm được…?",
+      "nghia": "bao nhiêu (hỏi số lượng, hỏi giá)",
+      "giaiThich": "Cả hai đều hỏi số lượng nhưng đi với loại danh từ khác nhau: how many cho danh từ đếm được (ở dạng số nhiều), how much cho danh từ không đếm được. How much còn dùng để hỏi giá tiền.",
+      "cachGhep": [
+        "How many + N số nhiều + do / does + S + V? (How many books do you have?)",
+        "How many + N số nhiều + are there…?",
+        "How much + N không đếm được + …? (How much water do you drink?)",
+        "Hỏi giá: How much is this shirt? / How much are these shoes?"
+      ],
+      "viDu": [
+        {
+          "c": "How many students are there in your class?",
+          "v": "Lớp bạn có bao nhiêu học sinh?"
+        },
+        {
+          "c": "How much milk do we need?",
+          "v": "Chúng ta cần bao nhiêu sữa?"
+        },
+        {
+          "c": "How much is this bag?",
+          "v": "Cái túi này bao nhiêu tiền?"
+        },
+        {
+          "c": "How many brothers and sisters do you have?",
+          "v": "Bạn có mấy anh chị em?"
+        }
+      ],
+      "luuY": [
+        "Lỗi hay mắc: để danh từ số ít sau how many → sai: How many book? Đúng: How many books?",
+        "Money là danh từ không đếm được: How much money…? (không nói How many money).",
+        "Danh từ đi liền ngay sau how much / how many, không để cuối câu: sai How many do you have books?"
+      ],
+      "soSanh": [
+        "en-a1-dem-duoc-khong-dem-duoc",
+        "en-a1-cau-hoi-wh"
+      ],
+      "tuKhoa": [
+        "how much",
+        "how many",
+        "bao nhiêu",
+        "hỏi giá",
+        "hoi so luong"
+      ],
+      "quiz": [
+        {
+          "h": "How ___ eggs do you want?",
+          "lc": [
+            "much",
+            "many",
+            "any",
+            "some"
+          ],
+          "da": 1,
+          "gt": "Eggs là danh từ đếm được số nhiều nên dùng How many."
+        },
+        {
+          "h": "How ___ rice do you eat every day?",
+          "lc": [
+            "many",
+            "old",
+            "often",
+            "much"
+          ],
+          "da": 3,
+          "gt": "Rice là danh từ không đếm được nên dùng How much."
+        },
+        {
+          "h": "___ are these jeans? - They're 300,000 dong.",
+          "lc": [
+            "How much",
+            "How many",
+            "How old",
+            "What"
+          ],
+          "da": 0,
+          "gt": "Câu trả lời là giá tiền nên hỏi bằng How much."
+        }
+      ]
+    },
+    {
+      "id": "en-a1-can",
+      "nhom": "Động từ khuyết thiếu",
+      "tieuDe": "can / can't (khả năng)",
+      "mau": "S + can / can't + V nguyên mẫu",
+      "nghia": "có thể, biết (làm gì) · không thể, không biết",
+      "giaiThich": "Dùng can để nói ai đó có khả năng hoặc biết làm một việc; can't (cannot) là phủ định. Can giống nhau cho mọi ngôi, không thêm -s, và sau nó là động từ nguyên mẫu không to. Can cũng dùng để xin phép hoặc nhờ một cách thân mật.",
+      "cachGhep": [
+        "Khẳng định: S + can + V (She can swim.)",
+        "Phủ định: S + can't / cannot + V",
+        "Câu hỏi: Can + S + V?  →  Yes, I can. / No, I can't.",
+        "Xin phép, nhờ: Can I open the window? / Can you help me?"
+      ],
+      "viDu": [
+        {
+          "c": "I can speak English and a little Japanese.",
+          "v": "Tôi nói được tiếng Anh và một chút tiếng Nhật."
+        },
+        {
+          "c": "My little brother can't ride a bike.",
+          "v": "Em trai tôi không biết đi xe đạp."
+        },
+        {
+          "c": "Can you play the piano? - Yes, I can.",
+          "v": "Bạn có biết chơi piano không? - Có."
+        },
+        {
+          "c": "Can I use your phone, please?",
+          "v": "Tôi dùng điện thoại của bạn được không?"
+        }
+      ],
+      "luuY": [
+        "Lỗi hay mắc: thêm to hoặc chia động từ sau can → sai: I can to swim / She can swims. Đúng: I can swim / She can swim.",
+        "Can không thêm -s với ngôi ba và không dùng do / does: sai He cans… / Do you can…? / I don't can…",
+        "Cannot viết liền một chữ."
+      ],
+      "soSanh": [
+        "en-a1-would-like"
+      ],
+      "tuKhoa": [
+        "can",
+        "can't",
+        "cannot",
+        "có thể",
+        "khả năng"
+      ],
+      "quiz": [
+        {
+          "h": "She can ___ three languages.",
+          "lc": [
+            "speaks",
+            "to speak",
+            "speak",
+            "speaking"
+          ],
+          "da": 2,
+          "gt": "Sau can là động từ nguyên mẫu không to: speak."
+        },
+        {
+          "h": "___ you swim? - No, I can't.",
+          "lc": [
+            "Can",
+            "Do",
+            "Are",
+            "Does"
+          ],
+          "da": 0,
+          "gt": "Câu trả lời dùng can't nên câu hỏi bắt đầu bằng Can."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "He cans drive a car.",
+            "He can drive a car.",
+            "He can to drive a car.",
+            "He can drives a car."
+          ],
+          "da": 1,
+          "gt": "Can không thêm s, theo sau là V nguyên mẫu không to."
+        }
+      ]
+    },
+    {
+      "id": "en-a1-would-like",
+      "nhom": "Động từ khuyết thiếu",
+      "tieuDe": "would like",
+      "mau": "S + would like ('d like) + danh từ / to + V",
+      "nghia": "muốn (lịch sự) · Would you like…? = bạn có muốn… không?",
+      "giaiThich": "Would like là cách nói lịch sự của want, dùng khi gọi món, mua hàng, nêu mong muốn hoặc mời ai đó. Sau would like là danh từ hoặc to + động từ nguyên mẫu. Would like nói về mong muốn lúc này, khác với like là sở thích nói chung.",
+      "cachGhep": [
+        "S + would like + danh từ: I'd like a coffee.",
+        "S + would like + to + V: I'd like to go home.",
+        "Mời: Would you like + danh từ / to + V?  →  Yes, please. / No, thank you.",
+        "Viết tắt: I'd, you'd, he'd, she'd, we'd, they'd"
+      ],
+      "viDu": [
+        {
+          "c": "I'd like a cup of tea, please.",
+          "v": "Cho tôi một tách trà."
+        },
+        {
+          "c": "Would you like some water?",
+          "v": "Bạn có muốn uống chút nước không?"
+        },
+        {
+          "c": "We would like to visit Hue next month.",
+          "v": "Tháng sau chúng tôi muốn đi thăm Huế."
+        },
+        {
+          "c": "What would you like to eat?",
+          "v": "Bạn muốn ăn gì?"
+        }
+      ],
+      "luuY": [
+        "Lỗi hay mắc: nhầm với like → Do you like some tea? (sai khi mời). Mời phải nói: Would you like some tea?",
+        "Sau would like dùng to + V, không dùng V-ing: sai I'd like going. Đúng: I'd like to go.",
+        "Trả lời lời mời: Yes, please / No, thank you (không trả lời Yes, I like)."
+      ],
+      "soSanh": [
+        "en-a1-like-ving",
+        "en-a1-can"
+      ],
+      "tuKhoa": [
+        "would like",
+        "i'd like",
+        "would you like",
+        "muốn lịch sự",
+        "lời mời"
+      ],
+      "quiz": [
+        {
+          "h": "I'd like ___ a pizza, please.",
+          "lc": [
+            "order",
+            "ordering",
+            "orders",
+            "to order"
+          ],
+          "da": 3,
+          "gt": "Sau would like dùng to + V nguyên mẫu."
+        },
+        {
+          "h": "___ you like a drink? - Yes, please.",
+          "lc": [
+            "Do",
+            "Would",
+            "Are",
+            "Can"
+          ],
+          "da": 1,
+          "gt": "Lời mời dùng Would you like…?; câu đáp Yes, please cho thấy đây là lời mời."
+        },
+        {
+          "h": "Câu nào là lời MỜI?",
+          "lc": [
+            "Would you like some cake?",
+            "Do you like cake?",
+            "You like cake.",
+            "Is this your cake?"
+          ],
+          "da": 0,
+          "gt": "Would you like…? là lời mời; Do you like…? chỉ hỏi sở thích nói chung."
+        }
+      ]
+    },
+    {
+      "id": "en-a1-like-ving",
+      "nhom": "Danh động từ – động từ nguyên mẫu",
+      "tieuDe": "like / love / hate + V-ing",
+      "mau": "S + like / love / enjoy / hate / don't like + V-ing",
+      "nghia": "thích / yêu thích / ghét (làm việc gì)",
+      "giaiThich": "Sau các động từ chỉ sở thích như like, love, enjoy, hate, don't mind, khi theo sau là một hoạt động thì động từ đó thường ở dạng V-ing. Cấu trúc này nói về sở thích nói chung, không phải việc muốn làm ngay lúc này.",
+      "cachGhep": [
+        "like / love / enjoy / hate + V-ing: I like swimming.",
+        "Phủ định: don't / doesn't like + V-ing",
+        "Câu hỏi: Do you like + V-ing? / What do you like doing?",
+        "Cũng đi được với danh từ: I love music."
+      ],
+      "viDu": [
+        {
+          "c": "I like listening to music in the evening.",
+          "v": "Tôi thích nghe nhạc vào buổi tối."
+        },
+        {
+          "c": "My sister loves cooking.",
+          "v": "Chị tôi rất thích nấu ăn."
+        },
+        {
+          "c": "He hates getting up early.",
+          "v": "Anh ấy ghét dậy sớm."
+        },
+        {
+          "c": "Do you like playing computer games?",
+          "v": "Bạn có thích chơi trò chơi điện tử không?"
+        }
+      ],
+      "luuY": [
+        "Lỗi hay mắc: dùng động từ nguyên mẫu trần sau like → sai: I like play football. Đúng: I like playing football.",
+        "Không thêm to be trước like: sai I am like swimming. Đúng: I like swimming.",
+        "Ngôi ba vẫn thêm -s cho like / love / hate: She likes reading.",
+        "Enjoy luôn đi với V-ing, không đi với to + V."
+      ],
+      "soSanh": [
+        "en-a1-would-like",
+        "en-a1-present-continuous"
+      ],
+      "tuKhoa": [
+        "like doing",
+        "love hate ving",
+        "thích làm gì",
+        "like + v-ing",
+        "so thich"
+      ],
+      "quiz": [
+        {
+          "h": "My father enjoys ___ football on TV.",
+          "lc": [
+            "watch",
+            "watches",
+            "watching",
+            "to watching"
+          ],
+          "da": 2,
+          "gt": "Sau enjoy động từ ở dạng V-ing: watching."
+        },
+        {
+          "h": "She ___ dancing.",
+          "lc": [
+            "like",
+            "loves",
+            "is love",
+            "love"
+          ],
+          "da": 1,
+          "gt": "She là ngôi ba số ít nên động từ thêm s: loves."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "I don't like running.",
+            "I don't like run.",
+            "I'm not like running.",
+            "I don't like runing."
+          ],
+          "da": 0,
+          "gt": "Don't like + V-ing; run gấp đôi n thành running."
+        }
+      ]
+    },
+    {
+      "id": "en-a1-vi-tri-tinh-tu",
+      "nhom": "Tính từ – trạng từ",
+      "tieuDe": "Vị trí của tính từ: tính từ + danh từ",
+      "mau": "(a / an / the) + tính từ + danh từ · S + to be + tính từ",
+      "nghia": "tính từ đứng TRƯỚC danh từ (a red car = một chiếc xe màu đỏ)",
+      "giaiThich": "Trong tiếng Anh, tính từ đứng trước danh từ mà nó miêu tả, ngược với tiếng Việt. Tính từ cũng có thể đứng sau to be để miêu tả chủ ngữ. Tính từ không đổi dạng theo số ít hay số nhiều.",
+      "cachGhep": [
+        "Tính từ + danh từ: a big house, an old man, new shoes",
+        "Sau to be: The house is big.",
+        "Tính từ KHÔNG thêm s: two big houses (không nói bigs houses)",
+        "Mạo từ a / an chọn theo âm đầu của tính từ: an interesting book"
+      ],
+      "viDu": [
+        {
+          "c": "She has a black cat.",
+          "v": "Cô ấy có một con mèo đen."
+        },
+        {
+          "c": "This is an interesting story.",
+          "v": "Đây là một câu chuyện thú vị."
+        },
+        {
+          "c": "They live in a small town.",
+          "v": "Họ sống ở một thị trấn nhỏ."
+        },
+        {
+          "c": "Those flowers are beautiful.",
+          "v": "Những bông hoa kia thật đẹp."
+        }
+      ],
+      "luuY": [
+        "Lỗi người Việt rất hay mắc: đặt tính từ sau danh từ như tiếng Việt → sai: a car red, a girl beautiful. Đúng: a red car, a beautiful girl.",
+        "Không thêm s vào tính từ khi danh từ số nhiều: sai bigs houses, olds men. Đúng: big houses, old men.",
+        "Sau to be chỉ có tính từ thì không cần a / an: The film is good (không nói The film is a good)."
+      ],
+      "soSanh": [
+        "en-a1-very-too"
+      ],
+      "tuKhoa": [
+        "adjective order",
+        "vị trí tính từ",
+        "tính từ trước danh từ",
+        "a red car",
+        "tinh tu"
+      ],
+      "quiz": [
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "I have a car new.",
+            "I have new a car.",
+            "I have a new car.",
+            "I have car a new."
+          ],
+          "da": 2,
+          "gt": "Tính từ đứng giữa mạo từ và danh từ: a new car."
+        },
+        {
+          "h": "They are ___.",
+          "lc": [
+            "good students",
+            "students good",
+            "goods students",
+            "a good students"
+          ],
+          "da": 0,
+          "gt": "Tính từ đứng trước danh từ và không thêm s; danh từ số nhiều không dùng a."
+        },
+        {
+          "h": "She is wearing ___ dress.",
+          "lc": [
+            "a blue long",
+            "a long blue",
+            "long a blue",
+            "a dress long blue"
+          ],
+          "da": 1,
+          "gt": "Tính từ đứng trước danh từ; kích cỡ (long) đứng trước màu sắc (blue)."
+        }
+      ]
+    },
+    {
+      "id": "en-a1-very-too",
+      "nhom": "Tính từ – trạng từ",
+      "tieuDe": "very / too (cơ bản)",
+      "mau": "very + tính từ / trạng từ · too + tính từ / trạng từ",
+      "nghia": "rất (very) · quá, đến mức không ổn (too)",
+      "giaiThich": "Very làm tính từ hoặc trạng từ mạnh lên, chỉ có nghĩa là “rất”. Too nghĩa là “quá mức cần thiết”, thường kéo theo một hệ quả không tốt hoặc không làm được việc gì. Cả hai đứng ngay trước tính từ hoặc trạng từ, không đứng trước động từ.",
+      "cachGhep": [
+        "very + tính từ: very big, very happy",
+        "too + tính từ: too small, too expensive",
+        "Với động từ dùng very much hoặc really: I like it very much. / I really like it.",
+        "Phủ định nhẹ: not very + tính từ (It's not very far.)"
+      ],
+      "viDu": [
+        {
+          "c": "This soup is very hot, but I can eat it.",
+          "v": "Bát súp này rất nóng, nhưng tôi vẫn ăn được."
+        },
+        {
+          "c": "This soup is too hot. I can't eat it.",
+          "v": "Bát súp này nóng quá. Tôi không ăn được."
+        },
+        {
+          "c": "These shoes are too small for me.",
+          "v": "Đôi giày này quá chật với tôi."
+        },
+        {
+          "c": "Thank you very much.",
+          "v": "Cảm ơn bạn rất nhiều."
+        }
+      ],
+      "luuY": [
+        "Lỗi kinh điển của người Việt: đặt very trước động từ → sai: I very like it / I very love you. Đúng: I like it very much / I really like it.",
+        "Too mang nghĩa tiêu cực, không dùng để khen: This cake is very good (không nói too good khi chỉ muốn khen).",
+        "Đừng nhầm too (quá) với to (đến) và two (số hai); too ở cuối câu còn có nghĩa “cũng”: Me too."
+      ],
+      "soSanh": [
+        "en-a1-trat-tu-svo",
+        "en-a1-vi-tri-tinh-tu"
+      ],
+      "tuKhoa": [
+        "very too",
+        "rất quá",
+        "very much",
+        "i very like",
+        "too + adjective"
+      ],
+      "quiz": [
+        {
+          "h": "I can't buy this phone. It's ___ expensive.",
+          "lc": [
+            "very much",
+            "too",
+            "to",
+            "much"
+          ],
+          "da": 1,
+          "gt": "Đắt đến mức không mua được → dùng too (quá)."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "I very like this film.",
+            "I like very this film.",
+            "I very much this film.",
+            "I like this film very much."
+          ],
+          "da": 3,
+          "gt": "Very không đứng trước động từ; với động từ dùng very much ở cuối câu."
+        },
+        {
+          "h": "Your English is ___ good. Well done!",
+          "lc": [
+            "very",
+            "too",
+            "very much",
+            "much too"
+          ],
+          "da": 0,
+          "gt": "Đây là lời khen nên dùng very; too mang nghĩa tiêu cực (quá mức)."
+        }
+      ]
+    },
+    {
+      "id": "en-a1-gioi-tu-thoi-gian",
+      "nhom": "Giới từ",
+      "tieuDe": "Giới từ thời gian: in / on / at",
+      "mau": "at + giờ · on + ngày · in + tháng / năm / mùa / buổi",
+      "nghia": "vào lúc, vào ngày, vào tháng / năm…",
+      "giaiThich": "Ba giới từ này đều dịch là “vào” nhưng dùng cho khoảng thời gian dài ngắn khác nhau. At cho một thời điểm cụ thể (giờ), on cho một ngày, in cho khoảng dài hơn như tháng, năm, mùa và các buổi trong ngày.",
+      "cachGhep": [
+        "at + giờ: at 7 o'clock, at noon, at midnight · ngoại lệ: at night, at the weekend (Anh–Anh)",
+        "on + thứ / ngày: on Monday, on 2 September, on my birthday, on Sunday morning",
+        "in + tháng / năm / mùa: in May, in 2025, in summer",
+        "in + buổi: in the morning, in the afternoon, in the evening",
+        "Không dùng giới từ trước this, last, next, every, today, tomorrow, yesterday"
+      ],
+      "viDu": [
+        {
+          "c": "The class starts at eight o'clock.",
+          "v": "Lớp học bắt đầu lúc tám giờ."
+        },
+        {
+          "c": "I don't work on Sundays.",
+          "v": "Tôi không làm việc vào Chủ nhật."
+        },
+        {
+          "c": "My birthday is in October.",
+          "v": "Sinh nhật tôi vào tháng Mười."
+        },
+        {
+          "c": "She usually studies in the evening.",
+          "v": "Cô ấy thường học vào buổi tối."
+        }
+      ],
+      "luuY": [
+        "Lỗi hay mắc: dùng in cho mọi trường hợp → sai: in Monday, in 7 o'clock. Đúng: on Monday, at 7 o'clock.",
+        "Buổi + thứ thì dùng on: on Monday morning (không nói in Monday morning); nhưng at night, không nói in the night.",
+        "Không thêm giới từ trước next / last / every: See you next week (không nói in next week)."
+      ],
+      "soSanh": [
+        "en-a1-gioi-tu-noi-chon",
+        "en-a1-so-thu-tu-ngay-thang"
+      ],
+      "tuKhoa": [
+        "in on at",
+        "giới từ thời gian",
+        "prepositions of time",
+        "at night",
+        "on monday"
+      ],
+      "quiz": [
+        {
+          "h": "We have English ___ Tuesday and Friday.",
+          "lc": [
+            "in",
+            "at",
+            "on",
+            "to"
+          ],
+          "da": 2,
+          "gt": "Trước thứ trong tuần dùng on."
+        },
+        {
+          "h": "I get up ___ six o'clock.",
+          "lc": [
+            "at",
+            "on",
+            "in",
+            "of"
+          ],
+          "da": 0,
+          "gt": "Trước giờ cụ thể dùng at."
+        },
+        {
+          "h": "It's very hot here ___ summer.",
+          "lc": [
+            "on",
+            "in",
+            "at",
+            "to"
+          ],
+          "da": 1,
+          "gt": "Trước mùa trong năm dùng in."
+        }
+      ]
+    },
+    {
+      "id": "en-a1-gioi-tu-noi-chon",
+      "nhom": "Giới từ",
+      "tieuDe": "Giới từ nơi chốn: in, on, at, under, next to, behind…",
+      "mau": "to be / V + in / on / at / under / next to / behind / in front of / between + nơi chốn",
+      "nghia": "ở trong, ở trên, tại, ở dưới, bên cạnh, đằng sau, đằng trước, ở giữa",
+      "giaiThich": "Giới từ nơi chốn cho biết vị trí của người hoặc vật. In là bên trong một không gian, on là trên bề mặt, at là tại một điểm hoặc một địa điểm cụ thể. Các giới từ khác chỉ vị trí tương đối so với vật khác.",
+      "cachGhep": [
+        "in: in the box, in the room, in Hanoi, in Vietnam",
+        "on: on the table, on the wall, on the floor, on the second floor",
+        "at: at home, at school, at work, at the bus stop, at the door",
+        "under (dưới) · next to (cạnh) · behind (sau) · in front of (trước) · between A and B (giữa) · near (gần) · opposite (đối diện)"
+      ],
+      "viDu": [
+        {
+          "c": "The keys are in my bag.",
+          "v": "Chìa khoá ở trong túi của tôi."
+        },
+        {
+          "c": "There is a picture on the wall.",
+          "v": "Có một bức tranh trên tường."
+        },
+        {
+          "c": "The cat is sleeping under the chair.",
+          "v": "Con mèo đang ngủ dưới ghế."
+        },
+        {
+          "c": "The bank is next to the post office.",
+          "v": "Ngân hàng ở cạnh bưu điện."
+        }
+      ],
+      "luuY": [
+        "Lỗi hay mắc: thiếu to be trước giới từ vì tiếng Việt nói “Sách ở trên bàn” → sai: The book on the table. Đúng: The book is on the table.",
+        "At home không có the: I'm at home (không nói at the home); thành phố, đất nước dùng in: in Hanoi (không nói at Hanoi).",
+        "In front of là đằng trước, đừng nhầm với opposite (đối diện, ở phía bên kia đường)."
+      ],
+      "soSanh": [
+        "en-a1-gioi-tu-thoi-gian",
+        "en-a1-there-is-are"
+      ],
+      "tuKhoa": [
+        "in on at",
+        "under next to behind",
+        "giới từ nơi chốn",
+        "prepositions of place",
+        "in front of"
+      ],
+      "quiz": [
+        {
+          "h": "My mother is ___ work now.",
+          "lc": [
+            "in",
+            "on",
+            "under",
+            "at"
+          ],
+          "da": 3,
+          "gt": "Cụm cố định at work = ở chỗ làm."
+        },
+        {
+          "h": "Your shoes are ___ the bed. Look down there!",
+          "lc": [
+            "on",
+            "under",
+            "between",
+            "at"
+          ],
+          "da": 1,
+          "gt": "Look down there gợi ý vị trí ở bên dưới giường: under."
+        },
+        {
+          "h": "The school is ___ the park and the hospital.",
+          "lc": [
+            "between",
+            "next",
+            "in",
+            "on"
+          ],
+          "da": 0,
+          "gt": "Between A and B = ở giữa A và B; next phải có to."
+        }
+      ]
+    },
+    {
+      "id": "en-a1-so-thu-tu-ngay-thang",
+      "nhom": "Số thứ tự – ngày tháng",
+      "tieuDe": "Số thứ tự và cách nói ngày tháng",
+      "mau": "first, second, third, fourth… · on + the + số thứ tự + of + tháng",
+      "nghia": "thứ nhất, thứ hai, thứ ba… · ngày … tháng …",
+      "giaiThich": "Số thứ tự dùng để nói vị trí, thứ hạng, tầng nhà và NGÀY trong tháng. Phần lớn số thứ tự tạo bằng cách thêm -th vào số đếm, riêng ba số đầu và một vài số khác có dạng riêng. Khi viết ngày có thể chỉ viết số, nhưng khi đọc phải đọc số thứ tự.",
+      "cachGhep": [
+        "1st first · 2nd second · 3rd third · 4th fourth · 5th fifth · 8th eighth · 9th ninth · 12th twelfth",
+        "20th twentieth · 21st twenty-first · 22nd twenty-second · 30th thirtieth · 31st thirty-first",
+        "Viết: 5 May / May 5 → đọc: the fifth of May / May (the) fifth",
+        "Giới từ: on + ngày (on 5 May) · in + tháng / năm (in May, in 2025)",
+        "Tên tháng và thứ luôn viết hoa: Monday, January"
+      ],
+      "viDu": [
+        {
+          "c": "My birthday is on the third of March.",
+          "v": "Sinh nhật tôi vào ngày mùng ba tháng Ba."
+        },
+        {
+          "c": "Today is the first day of school.",
+          "v": "Hôm nay là ngày đầu tiên đi học."
+        },
+        {
+          "c": "Our classroom is on the second floor.",
+          "v": "Lớp học của chúng tôi ở tầng hai."
+        },
+        {
+          "c": "What's the date today? - It's the twentieth of November.",
+          "v": "Hôm nay là ngày bao nhiêu? - Ngày hai mươi tháng Mười một."
+        }
+      ],
+      "luuY": [
+        "Lỗi hay mắc: đọc ngày bằng số đếm theo tiếng Việt (“ngày năm tháng năm”) → sai: on five May. Đúng: on the fifth of May.",
+        "Chính tả dễ sai: fifth (không phải fiveth), ninth (không có e), twelfth, twentieth.",
+        "Hỏi ngày: What's the date today?; hỏi thứ: What day is it today?",
+        "Không viết thường tên tháng, tên thứ: sai monday, january."
+      ],
+      "soSanh": [
+        "en-a1-gioi-tu-thoi-gian"
+      ],
+      "tuKhoa": [
+        "ordinal numbers",
+        "số thứ tự",
+        "ngày tháng",
+        "first second third",
+        "what's the date"
+      ],
+      "quiz": [
+        {
+          "h": "December is the ___ month of the year.",
+          "lc": [
+            "twelve",
+            "twelveth",
+            "twelfth",
+            "twelfeth"
+          ],
+          "da": 2,
+          "gt": "Số thứ tự của twelve là twelfth (đổi ve thành f rồi thêm th)."
+        },
+        {
+          "h": "New Year's Day is ___ the first of January.",
+          "lc": [
+            "in",
+            "on",
+            "at",
+            "of"
+          ],
+          "da": 1,
+          "gt": "Trước một ngày cụ thể dùng on."
+        },
+        {
+          "h": "Cách viết đúng của 3rd là:",
+          "lc": [
+            "third",
+            "three",
+            "threeth",
+            "thirth"
+          ],
+          "da": 0,
+          "gt": "Số thứ tự của three có dạng riêng: third."
+        }
+      ]
+    },
+    {
+      "id": "en-a1-and-but-or-because",
+      "nhom": "Liên từ – câu phức",
+      "tieuDe": "and / but / or / because",
+      "mau": "A + and / but / or + B · mệnh đề + because + mệnh đề",
+      "nghia": "và, nhưng, hoặc / hay, bởi vì",
+      "giaiThich": "Các liên từ này nối từ, cụm từ hoặc hai câu ngắn thành một câu dài hơn. And thêm thông tin, but nêu ý trái ngược, or đưa ra lựa chọn, because nêu lý do và trả lời cho câu hỏi Why.",
+      "cachGhep": [
+        "and (và): I have a dog and a cat.",
+        "but (nhưng): I like tea, but I don't like coffee.",
+        "or (hoặc, hay): Tea or coffee? · trong câu phủ định dùng or thay and: I don't like tea or coffee.",
+        "because (bởi vì) + chủ ngữ + động từ: I'm tired because I work a lot."
+      ],
+      "viDu": [
+        {
+          "c": "She speaks English and French.",
+          "v": "Cô ấy nói tiếng Anh và tiếng Pháp."
+        },
+        {
+          "c": "The room is small, but it is very clean.",
+          "v": "Căn phòng nhỏ nhưng rất sạch."
+        },
+        {
+          "c": "Do you want to walk or take the bus?",
+          "v": "Bạn muốn đi bộ hay đi xe buýt?"
+        },
+        {
+          "c": "I stay at home because it is raining.",
+          "v": "Tôi ở nhà vì trời đang mưa."
+        }
+      ],
+      "luuY": [
+        "Lỗi người Việt hay mắc: dùng cặp “vì… nên…” → sai: Because it is raining, so I stay at home. Tiếng Anh chỉ dùng MỘT trong hai: because hoặc so.",
+        "Tương tự không dùng although… but… cùng lúc (tuy… nhưng…).",
+        "Sau because phải là mệnh đề đủ chủ ngữ và động từ: because it is late (không nói because late)."
+      ],
+      "tuKhoa": [
+        "and but or",
+        "because",
+        "liên từ",
+        "vì nên",
+        "conjunctions"
+      ],
+      "quiz": [
+        {
+          "h": "I like fish, ___ I don't like meat.",
+          "lc": [
+            "because",
+            "or",
+            "and so",
+            "but"
+          ],
+          "da": 3,
+          "gt": "Hai ý trái ngược nhau (thích – không thích) nên nối bằng but."
+        },
+        {
+          "h": "He is happy ___ today is his birthday.",
+          "lc": [
+            "because",
+            "but",
+            "or",
+            "so"
+          ],
+          "da": 0,
+          "gt": "Vế sau nêu lý do cho vế trước nên dùng because."
+        },
+        {
+          "h": "Is your teacher a man ___ a woman?",
+          "lc": [
+            "and",
+            "or",
+            "but",
+            "because"
+          ],
+          "da": 1,
+          "gt": "Câu hỏi lựa chọn giữa hai khả năng dùng or."
+        }
+      ]
+    }
+  ]
+}

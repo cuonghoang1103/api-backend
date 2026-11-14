@@ -1,0 +1,1262 @@
+{
+  "nn": "en",
+  "cap": "A2",
+  "diem": [
+    {
+      "id": "en-a2-dai-tu-so-huu",
+      "nhom": "Đại từ",
+      "tieuDe": "Đại từ sở hữu: mine, yours, his, hers, ours, theirs",
+      "mau": "mine / yours / his / hers / ours / theirs (đứng một mình, không có danh từ theo sau)",
+      "nghia": "cái của tôi, của bạn, của anh ấy, của cô ấy, của chúng tôi, của họ",
+      "giaiThich": "Đại từ sở hữu thay cho cả cụm “tính từ sở hữu + danh từ” để khỏi lặp lại danh từ đã nhắc. Khác với my, your…, đại từ sở hữu đứng MỘT MÌNH, không có danh từ theo sau. Hỏi vật của ai dùng Whose.",
+      "cachGhep": [
+        "my → mine · your → yours · his → his · her → hers · our → ours · their → theirs",
+        "This is my book. = This book is mine.",
+        "Hỏi: Whose bag is this? - It's mine. / It's Lan's.",
+        "a friend of mine = một người bạn của tôi"
+      ],
+      "viDu": [
+        {
+          "c": "This pen is mine. Where is yours?",
+          "v": "Cây bút này là của tôi. Bút của bạn đâu?"
+        },
+        {
+          "c": "Their house is bigger than ours.",
+          "v": "Nhà của họ to hơn nhà chúng tôi."
+        },
+        {
+          "c": "Is this umbrella hers?",
+          "v": "Cái ô này có phải của cô ấy không?"
+        },
+        {
+          "c": "Whose keys are these? - They're his.",
+          "v": "Chìa khoá này của ai? - Của anh ấy."
+        }
+      ],
+      "luuY": [
+        "Lỗi hay mắc: thêm danh từ sau đại từ sở hữu → sai: This is mine book. Đúng: This is my book / This book is mine.",
+        "Không có dấu nháy: yours, hers, ours, theirs (không viết your's, her's).",
+        "Không dùng the trước đại từ sở hữu: sai the mine.",
+        "Phân biệt Whose (của ai) với Who's (= Who is)."
+      ],
+      "soSanh": [
+        "en-a2-one-ones"
+      ],
+      "tuKhoa": [
+        "mine yours hers",
+        "possessive pronouns",
+        "đại từ sở hữu",
+        "whose",
+        "ours theirs"
+      ],
+      "quiz": [
+        {
+          "h": "That isn't my coat. ___ is black.",
+          "lc": [
+            "My",
+            "Me",
+            "Mine",
+            "I"
+          ],
+          "da": 2,
+          "gt": "Đứng một mình thay cho my coat → đại từ sở hữu Mine."
+        },
+        {
+          "h": "This is our classroom and that one is ___.",
+          "lc": [
+            "theirs",
+            "their",
+            "them",
+            "their's"
+          ],
+          "da": 0,
+          "gt": "Không có danh từ theo sau nên dùng đại từ sở hữu theirs (không có dấu nháy)."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "Is this yours bag?",
+            "Is this bag yours?",
+            "Is this bag your?",
+            "Is this bag your's?"
+          ],
+          "da": 1,
+          "gt": "Yours đứng một mình ở cuối câu; trước danh từ phải dùng your."
+        }
+      ]
+    },
+    {
+      "id": "en-a2-dai-tu-bat-dinh",
+      "nhom": "Đại từ",
+      "tieuDe": "Đại từ bất định: something, anyone, nobody, everything…",
+      "mau": "some- / any- / no- / every- + thing / one / body / where",
+      "nghia": "cái gì đó, ai đó, không ai, mọi thứ, ở đâu đó…",
+      "giaiThich": "Dùng đại từ bất định khi nói về người, vật hay nơi chốn không xác định cụ thể. Quy tắc giống some / any: some- trong câu khẳng định, any- trong câu phủ định và câu hỏi, no- mang nghĩa phủ định sẵn, every- nghĩa là tất cả. Các từ này luôn đi với động từ số ít.",
+      "cachGhep": [
+        "Người: someone / somebody · anyone / anybody · no one / nobody · everyone / everybody",
+        "Vật: something · anything · nothing · everything",
+        "Nơi: somewhere · anywhere · nowhere · everywhere",
+        "Động từ số ít: Everyone is here. / Nobody knows.",
+        "Tính từ đứng SAU: something new, anything interesting",
+        "Lời mời, lời nhờ vẫn dùng some-: Would you like something to drink?"
+      ],
+      "viDu": [
+        {
+          "c": "There is someone at the door.",
+          "v": "Có ai đó ở ngoài cửa."
+        },
+        {
+          "c": "I didn't buy anything at the market.",
+          "v": "Tôi không mua gì ở chợ cả."
+        },
+        {
+          "c": "Nobody knows the answer.",
+          "v": "Không ai biết câu trả lời."
+        },
+        {
+          "c": "Is everything OK?",
+          "v": "Mọi thứ ổn cả chứ?"
+        }
+      ],
+      "luuY": [
+        "Lỗi rất hay mắc: phủ định hai lần → sai: I don't know nothing / Nobody doesn't come. Đúng: I don't know anything / I know nothing / Nobody comes.",
+        "Everyone, everybody, nobody đi với động từ số ít: Everyone likes her (không nói Everyone like).",
+        "Tính từ đứng sau đại từ bất định: something important (không nói important something).",
+        "Everyone viết liền (mọi người), khác every one (từng cái một)."
+      ],
+      "soSanh": [
+        "en-a2-both-either-neither"
+      ],
+      "tuKhoa": [
+        "something anything nothing",
+        "someone anyone nobody",
+        "đại từ bất định",
+        "indefinite pronouns",
+        "everything everywhere"
+      ],
+      "quiz": [
+        {
+          "h": "I'm hungry. I want ___ to eat.",
+          "lc": [
+            "anything",
+            "nothing",
+            "something",
+            "everyone"
+          ],
+          "da": 2,
+          "gt": "Câu khẳng định, nói về một vật không xác định → something."
+        },
+        {
+          "h": "Everybody ___ tired after the trip yesterday.",
+          "lc": [
+            "were",
+            "was",
+            "are",
+            "be"
+          ],
+          "da": 1,
+          "gt": "Everybody đi với động từ số ít; yesterday → was."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "I didn't see anybody.",
+            "I didn't see nobody.",
+            "I didn't saw anybody.",
+            "I not saw nobody."
+          ],
+          "da": 0,
+          "gt": "Câu đã có didn't nên dùng anybody, không phủ định hai lần; sau didn't là V nguyên mẫu."
+        }
+      ]
+    },
+    {
+      "id": "en-a2-dai-tu-phan-than",
+      "nhom": "Đại từ",
+      "tieuDe": "Đại từ phản thân (cơ bản): myself, yourself, himself…",
+      "mau": "S + V + myself / yourself / himself / herself / itself / ourselves / yourselves / themselves",
+      "nghia": "chính mình, tự mình",
+      "giaiThich": "Dùng đại từ phản thân khi chủ ngữ và tân ngữ là CÙNG một người hoặc vật: hành động quay lại chính người làm. Còn dùng để nhấn mạnh tự mình làm, hoặc với by để nói “một mình”.",
+      "cachGhep": [
+        "I → myself · you → yourself (số ít) / yourselves (số nhiều) · he → himself · she → herself",
+        "it → itself · we → ourselves · they → themselves",
+        "Thường gặp: enjoy yourself, hurt yourself, cut yourself, look at yourself, introduce yourself, help yourself",
+        "by + đại từ phản thân = một mình, tự làm: I live by myself."
+      ],
+      "viDu": [
+        {
+          "c": "Be careful! Don't cut yourself.",
+          "v": "Cẩn thận! Đừng để bị đứt tay."
+        },
+        {
+          "c": "She looked at herself in the mirror.",
+          "v": "Cô ấy nhìn mình trong gương."
+        },
+        {
+          "c": "We really enjoyed ourselves at the party.",
+          "v": "Chúng tôi đã rất vui ở bữa tiệc."
+        },
+        {
+          "c": "Did he paint the room by himself?",
+          "v": "Anh ấy tự sơn căn phòng một mình à?"
+        }
+      ],
+      "luuY": [
+        "Lỗi hay mắc: dùng đại từ tân ngữ thay đại từ phản thân → I hurt me (sai). Đúng: I hurt myself.",
+        "Sai chính tả thường gặp: hisself, theirselves. Đúng: himself, themselves.",
+        "Một số động từ tiếng Anh không cần đại từ phản thân dù tiếng Việt nói “tự”: get up, wash, dress, feel, relax (I feel tired, không nói I feel myself tired).",
+        "Số nhiều đổi self → selves: ourselves, yourselves, themselves."
+      ],
+      "tuKhoa": [
+        "myself yourself",
+        "reflexive pronouns",
+        "đại từ phản thân",
+        "by myself",
+        "chính mình"
+      ],
+      "quiz": [
+        {
+          "h": "My little sister can dress ___ now.",
+          "lc": [
+            "himself",
+            "her",
+            "herself",
+            "hers"
+          ],
+          "da": 2,
+          "gt": "Chủ ngữ my little sister (nữ) tự mặc cho chính mình → herself."
+        },
+        {
+          "h": "The children enjoyed ___ at the zoo.",
+          "lc": [
+            "themself",
+            "theirselves",
+            "them",
+            "themselves"
+          ],
+          "da": 3,
+          "gt": "The children = they → themselves (số nhiều đổi self thành selves)."
+        },
+        {
+          "h": "I made this cake by ___.",
+          "lc": [
+            "myself",
+            "me",
+            "mine",
+            "my"
+          ],
+          "da": 0,
+          "gt": "By + đại từ phản thân = tự mình, một mình: by myself."
+        }
+      ]
+    },
+    {
+      "id": "en-a2-one-ones",
+      "nhom": "Đại từ",
+      "tieuDe": "one / ones",
+      "mau": "(a / the / this / which) + tính từ + one (số ít) / ones (số nhiều)",
+      "nghia": "cái / chiếc … (thay cho danh từ vừa nhắc)",
+      "giaiThich": "Dùng one thay cho danh từ đếm được số ít và ones thay cho danh từ số nhiều đã được nhắc đến, để khỏi lặp lại. Thường đứng sau tính từ, sau this / that, the hoặc which.",
+      "cachGhep": [
+        "Số ít: a red one, the big one, this one, that one, which one?",
+        "Số nhiều: the red ones, the new ones, which ones?",
+        "these / those thường đứng một mình: I like these (không cần ones)",
+        "Không dùng one cho danh từ không đếm được: I prefer cold milk to hot milk."
+      ],
+      "viDu": [
+        {
+          "c": "I don't like this shirt. Can I see the blue one?",
+          "v": "Tôi không thích cái áo này. Cho tôi xem cái màu xanh được không?"
+        },
+        {
+          "c": "These shoes are too small. Do you have bigger ones?",
+          "v": "Đôi giày này chật quá. Bạn có đôi to hơn không?"
+        },
+        {
+          "c": "Which one do you want, this one or that one?",
+          "v": "Bạn muốn cái nào, cái này hay cái kia?"
+        },
+        {
+          "c": "My phone is old. I need a new one.",
+          "v": "Điện thoại của tôi cũ rồi. Tôi cần một cái mới."
+        }
+      ],
+      "luuY": [
+        "Lỗi hay mắc: bỏ one sau tính từ theo thói quen tiếng Việt (“cái màu xanh”) → sai: I want the blue. Đúng: I want the blue one.",
+        "Có tính từ thì giữ a: a new one; không có tính từ thì chỉ nói one: I need a pen. Do you have one? (không nói a one).",
+        "Số nhiều phải dùng ones: the black ones (không nói the black one khi nói về đôi giày)."
+      ],
+      "soSanh": [
+        "en-a2-dai-tu-so-huu"
+      ],
+      "tuKhoa": [
+        "one ones",
+        "the blue one",
+        "which one",
+        "thay danh từ",
+        "cái nào"
+      ],
+      "quiz": [
+        {
+          "h": "I like the green apples, not the red ___.",
+          "lc": [
+            "one",
+            "ones",
+            "it",
+            "them"
+          ],
+          "da": 1,
+          "gt": "Thay cho apples (số nhiều) sau tính từ red → ones."
+        },
+        {
+          "h": "This cup is dirty. Can I have a clean ___?",
+          "lc": [
+            "one",
+            "ones",
+            "it",
+            "cup one"
+          ],
+          "da": 0,
+          "gt": "Thay cho cup (số ít) sau tính từ clean → one."
+        },
+        {
+          "h": "There are three bags here. ___ is yours?",
+          "lc": [
+            "Which ones",
+            "What one",
+            "Which one",
+            "Who"
+          ],
+          "da": 2,
+          "gt": "Hỏi chọn một cái trong nhóm, động từ is số ít → Which one."
+        }
+      ]
+    },
+    {
+      "id": "en-a2-both-either-neither",
+      "nhom": "Đại từ",
+      "tieuDe": "both / either / neither (cơ bản)",
+      "mau": "both + N số nhiều · either / neither + N số ít · both / either / neither + of + the / my / them…",
+      "nghia": "cả hai · một trong hai (cái nào cũng được) · không cái nào trong hai",
+      "giaiThich": "Ba từ này chỉ dùng khi nói về HAI người hoặc hai vật. Both là cả hai, either là cái nào trong hai cũng được, neither là không cái nào cả (đã mang nghĩa phủ định). Chú ý danh từ và động từ đi sau mỗi từ.",
+      "cachGhep": [
+        "both + N số nhiều + động từ số nhiều: Both shirts are nice.",
+        "either + N số ít: You can take either bus.",
+        "neither + N số ít + động từ số ít khẳng định: Neither answer is correct.",
+        "both / either / neither + of + the / these / my… + N số nhiều; + of + us / you / them",
+        "both A and B · either A or B · neither A nor B"
+      ],
+      "viDu": [
+        {
+          "c": "Both my parents work in a hospital.",
+          "v": "Cả bố và mẹ tôi đều làm việc ở bệnh viện."
+        },
+        {
+          "c": "Tea or coffee? - Either is fine, thanks.",
+          "v": "Trà hay cà phê? - Cái nào cũng được, cảm ơn."
+        },
+        {
+          "c": "Neither restaurant is open on Mondays.",
+          "v": "Cả hai nhà hàng đều không mở cửa vào thứ Hai."
+        },
+        {
+          "c": "Both of them speak English very well.",
+          "v": "Cả hai người họ đều nói tiếng Anh rất giỏi."
+        }
+      ],
+      "luuY": [
+        "Lỗi hay mắc: dùng cho hơn hai đối tượng. Từ ba trở lên phải dùng all / any / none: all my friends (không nói both my three friends).",
+        "Neither đã là phủ định nên động từ ở dạng khẳng định: Neither of them came (không nói Neither of them didn't come).",
+        "Trong câu phủ định dùng either, không dùng both: I don't like either of them (không nói I don't like both of them khi ý là không thích cái nào).",
+        "Trước đại từ phải có of: both of us (không nói both us)."
+      ],
+      "soSanh": [
+        "en-a2-dai-tu-bat-dinh",
+        "en-b1-both-either-neither"
+      ],
+      "tuKhoa": [
+        "both either neither",
+        "cả hai",
+        "không cái nào",
+        "both and",
+        "neither nor"
+      ],
+      "quiz": [
+        {
+          "h": "I have two brothers. ___ of them are doctors.",
+          "lc": [
+            "Neither",
+            "Either",
+            "Both",
+            "All"
+          ],
+          "da": 2,
+          "gt": "Nói về hai người, động từ số nhiều are → Both of them."
+        },
+        {
+          "h": "There are two keys, but ___ key opens this door. We can't go in.",
+          "lc": [
+            "both",
+            "neither",
+            "either",
+            "all"
+          ],
+          "da": 1,
+          "gt": "Không vào được nên không chìa nào mở được; neither + danh từ số ít + động từ khẳng định."
+        },
+        {
+          "h": "A: Monday or Tuesday? B: I'm free on both days, so ___ day is OK.",
+          "lc": [
+            "either",
+            "neither",
+            "both",
+            "none"
+          ],
+          "da": 0,
+          "gt": "Ngày nào trong hai ngày cũng được → either + danh từ số ít."
+        }
+      ]
+    },
+    {
+      "id": "en-a2-menh-de-quan-he",
+      "nhom": "Mệnh đề quan hệ",
+      "tieuDe": "Mệnh đề quan hệ cơ bản: who / which / that",
+      "mau": "N (người) + who / that + V… · N (vật) + which / that + V…",
+      "nghia": "người mà…, cái mà… (nói rõ đang nhắc đến người / vật nào)",
+      "giaiThich": "Mệnh đề quan hệ đứng ngay sau danh từ để cho biết đó là người nào, vật nào. Who dùng cho người, which dùng cho vật, that dùng được cho cả hai trong loại mệnh đề xác định này. Đại từ quan hệ thay cho he / she / it / they nên không lặp lại các từ đó.",
+      "cachGhep": [
+        "Người: the man who / that lives next door",
+        "Vật: the book which / that is on the table",
+        "Ghép câu: I have a friend. She lives in Hue. → I have a friend who lives in Hue.",
+        "Động từ sau who / which / that chia theo danh từ đứng trước: the people who work here",
+        "Where cho nơi chốn: the shop where I buy bread"
+      ],
+      "viDu": [
+        {
+          "c": "The woman who lives next door is a nurse.",
+          "v": "Người phụ nữ sống ở nhà bên cạnh là y tá."
+        },
+        {
+          "c": "This is the phone that I bought last week.",
+          "v": "Đây là chiếc điện thoại tôi mua tuần trước."
+        },
+        {
+          "c": "I don't like films which have sad endings.",
+          "v": "Tôi không thích những bộ phim có kết thúc buồn."
+        },
+        {
+          "c": "Do you know the boy who is talking to Lan?",
+          "v": "Bạn có biết cậu bé đang nói chuyện với Lan không?"
+        }
+      ],
+      "luuY": [
+        "Lỗi rất hay mắc: lặp lại đại từ → sai: The man who he lives next door / the phone that I bought it. Đúng: The man who lives next door / the phone that I bought.",
+        "Không dùng which cho người hay who cho vật: sai the girl which / the book who.",
+        "Tiếng Việt thường bỏ chữ “mà”, nhưng khi đại từ quan hệ làm CHỦ NGỮ của mệnh đề thì tiếng Anh không bỏ được: sai The man lives next door is a doctor.",
+        "Không dùng what thay that: sai the thing what I want."
+      ],
+      "soSanh": [
+        "en-a2-cau-hoi-chu-ngu",
+        "en-b1-relative-defining"
+      ],
+      "tuKhoa": [
+        "who which that",
+        "relative clauses",
+        "mệnh đề quan hệ",
+        "đại từ quan hệ",
+        "nguoi ma cai ma"
+      ],
+      "quiz": [
+        {
+          "h": "A teacher is a person ___ works in a school.",
+          "lc": [
+            "which",
+            "who",
+            "what",
+            "where"
+          ],
+          "da": 1,
+          "gt": "A person là người và đại từ làm chủ ngữ của works → who."
+        },
+        {
+          "h": "I lost the pen ___ you gave me.",
+          "lc": [
+            "who",
+            "what",
+            "where",
+            "which"
+          ],
+          "da": 3,
+          "gt": "The pen là vật → which (what không làm đại từ quan hệ sau danh từ)."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "The girl who sits next to me is friendly.",
+            "The girl who she sits next to me is friendly.",
+            "The girl which sits next to me is friendly.",
+            "The girl sits next to me is friendly."
+          ],
+          "da": 0,
+          "gt": "Người dùng who, không lặp she, và không được bỏ đại từ quan hệ khi nó làm chủ ngữ."
+        }
+      ]
+    },
+    {
+      "id": "en-a2-to-inf-vs-ving",
+      "nhom": "Danh động từ – động từ nguyên mẫu",
+      "tieuDe": "Động từ + to-infinitive hay V-ing",
+      "mau": "want / need / decide / hope… + to + V · enjoy / finish / mind… + V-ing",
+      "nghia": "sau động từ này dùng to V, sau động từ kia dùng V-ing",
+      "giaiThich": "Khi hai động từ đi liền nhau, dạng của động từ thứ hai do động từ thứ nhất quyết định. Một nhóm đi với to + V, một nhóm đi với V-ing, và một số ít đi được với cả hai. Không có quy tắc chung nên cần học theo nhóm.",
+      "cachGhep": [
+        "+ to V: want, need, would like, decide, hope, plan, learn, promise, agree, forget, try",
+        "+ V-ing: enjoy, finish, mind, avoid, keep, stop (thôi không làm), practise",
+        "+ cả hai (nghĩa gần như nhau): like, love, hate, start, begin",
+        "Sau giới từ luôn là V-ing: good at swimming, interested in learning, thank you for helping",
+        "Phủ định: decide not to go"
+      ],
+      "viDu": [
+        {
+          "c": "I want to learn Korean next year.",
+          "v": "Năm sau tôi muốn học tiếng Hàn."
+        },
+        {
+          "c": "She enjoys cooking for her family.",
+          "v": "Cô ấy thích nấu ăn cho gia đình."
+        },
+        {
+          "c": "Have you finished doing your homework?",
+          "v": "Bạn làm xong bài tập chưa?"
+        },
+        {
+          "c": "We decided not to go out because of the rain.",
+          "v": "Chúng tôi quyết định không đi chơi vì trời mưa."
+        }
+      ],
+      "luuY": [
+        "Lỗi hay mắc: bỏ to vì tiếng Việt nói “muốn đi”, “cần mua” → sai: I want go / I need buy. Đúng: I want to go / I need to buy.",
+        "Enjoy, finish, mind không đi với to: sai I enjoy to read. Đúng: I enjoy reading.",
+        "Sau giới từ không dùng to V: sai I'm good at to draw. Đúng: I'm good at drawing.",
+        "Would like + to V nhưng like + V-ing (sở thích): I'd like to swim now / I like swimming."
+      ],
+      "soSanh": [
+        "en-a2-to-chi-muc-dich",
+        "en-b1-gerund-vs-infinitive"
+      ],
+      "tuKhoa": [
+        "to infinitive",
+        "gerund",
+        "want to",
+        "enjoy doing",
+        "to v hay ving"
+      ],
+      "quiz": [
+        {
+          "h": "I hope ___ you again soon.",
+          "lc": [
+            "see",
+            "seeing",
+            "to see",
+            "to seeing"
+          ],
+          "da": 2,
+          "gt": "Hope đi với to + V: hope to see."
+        },
+        {
+          "h": "Do you mind ___ the door?",
+          "lc": [
+            "closing",
+            "to close",
+            "close",
+            "closed"
+          ],
+          "da": 0,
+          "gt": "Mind đi với V-ing: mind closing."
+        },
+        {
+          "h": "She is good at ___.",
+          "lc": [
+            "sing",
+            "singing",
+            "to sing",
+            "sings"
+          ],
+          "da": 1,
+          "gt": "Sau giới từ at động từ ở dạng V-ing."
+        }
+      ]
+    },
+    {
+      "id": "en-a2-to-chi-muc-dich",
+      "nhom": "Danh động từ – động từ nguyên mẫu",
+      "tieuDe": "to + V chỉ mục đích (infinitive of purpose)",
+      "mau": "S + V … + to + V nguyên mẫu",
+      "nghia": "để (làm gì)",
+      "giaiThich": "Dùng to + động từ nguyên mẫu để nói MỤC ĐÍCH của một hành động, trả lời câu hỏi Why…?. Chủ ngữ của hai hành động là cùng một người. Khi sau đó là danh từ thì dùng for + danh từ.",
+      "cachGhep": [
+        "S + V + to + V: I went to the shop to buy some bread.",
+        "Trả lời Why: Why are you here? - To see the manager.",
+        "for + danh từ: I went to the shop for some bread.",
+        "Trang trọng hơn: in order to + V"
+      ],
+      "viDu": [
+        {
+          "c": "She went to the library to borrow some books.",
+          "v": "Cô ấy đến thư viện để mượn vài cuốn sách."
+        },
+        {
+          "c": "I'm saving money to buy a new laptop.",
+          "v": "Tôi đang tiết kiệm tiền để mua máy tính xách tay mới."
+        },
+        {
+          "c": "He gets up early to exercise.",
+          "v": "Anh ấy dậy sớm để tập thể dục."
+        },
+        {
+          "c": "Why did you call her? - To say sorry.",
+          "v": "Sao bạn gọi cho cô ấy? - Để xin lỗi."
+        }
+      ],
+      "luuY": [
+        "Lỗi rất hay mắc: dịch “để” thành for + V hoặc for to → sai: I went there for buy bread / for to buy bread / for buying bread. Đúng: I went there to buy bread.",
+        "Sau to là động từ nguyên mẫu, không chia: to buy (không nói to bought / to buying).",
+        "For đi với danh từ: I went out for lunch; to đi với động từ: I went out to have lunch."
+      ],
+      "soSanh": [
+        "en-a2-to-inf-vs-ving",
+        "en-a2-so-because-although"
+      ],
+      "tuKhoa": [
+        "infinitive of purpose",
+        "to + v",
+        "để làm gì",
+        "chỉ mục đích",
+        "in order to"
+      ],
+      "quiz": [
+        {
+          "h": "I'm going to the supermarket ___ some milk.",
+          "lc": [
+            "for buy",
+            "to buy",
+            "for to buy",
+            "buy"
+          ],
+          "da": 1,
+          "gt": "Nói mục đích dùng to + V nguyên mẫu: to buy."
+        },
+        {
+          "h": "He is studying hard ___ the exam.",
+          "lc": [
+            "to pass",
+            "for pass",
+            "to passing",
+            "passes"
+          ],
+          "da": 0,
+          "gt": "Mục đích của việc học chăm: to + V nguyên mẫu."
+        },
+        {
+          "h": "We stopped at a café ___ a drink.",
+          "lc": [
+            "to",
+            "for to",
+            "for having",
+            "for"
+          ],
+          "da": 3,
+          "gt": "A drink là danh từ nên dùng for + danh từ; to phải đi với động từ (to have a drink)."
+        }
+      ]
+    },
+    {
+      "id": "en-a2-zero-conditional",
+      "nhom": "Câu điều kiện",
+      "tieuDe": "Zero conditional (câu điều kiện loại 0)",
+      "mau": "If / When + S + V (hiện tại đơn), S + V (hiện tại đơn)",
+      "nghia": "nếu / hễ … thì … (điều luôn đúng)",
+      "giaiThich": "Dùng câu điều kiện loại 0 cho sự thật hiển nhiên, quy luật tự nhiên, thói quen: hễ điều kiện xảy ra thì kết quả LUÔN xảy ra. Cả hai vế đều dùng hiện tại đơn. Có thể thay if bằng when mà nghĩa gần như không đổi.",
+      "cachGhep": [
+        "If + hiện tại đơn, hiện tại đơn: If you heat ice, it melts.",
+        "Đổi thứ tự (không có dấu phẩy): Ice melts if you heat it.",
+        "Vế kết quả có thể là câu mệnh lệnh: If you feel sick, tell the teacher."
+      ],
+      "viDu": [
+        {
+          "c": "If you heat water to 100 degrees, it boils.",
+          "v": "Nếu đun nước đến 100 độ thì nước sôi."
+        },
+        {
+          "c": "Plants die if they don't get water.",
+          "v": "Cây sẽ chết nếu không được tưới nước."
+        },
+        {
+          "c": "If I drink coffee at night, I can't sleep.",
+          "v": "Hễ uống cà phê buổi tối là tôi không ngủ được."
+        },
+        {
+          "c": "If you need help, call me.",
+          "v": "Nếu cần giúp thì gọi cho tôi."
+        }
+      ],
+      "luuY": [
+        "Lỗi hay mắc: dùng will ở vế kết quả khi nói sự thật luôn đúng → If you heat ice, it will melt nghe như một lần cụ thể; quy luật chung dùng it melts.",
+        "Vẫn phải chia -s ngôi ba ở cả hai vế: If it rains, the road gets wet.",
+        "Không dùng cặp if… then… như “nếu… thì…” trong câu thường: bỏ then, chỉ cần dấu phẩy."
+      ],
+      "soSanh": [
+        "en-a2-first-conditional"
+      ],
+      "tuKhoa": [
+        "zero conditional",
+        "điều kiện loại 0",
+        "if + hiện tại đơn",
+        "sự thật hiển nhiên",
+        "cau dieu kien loai khong"
+      ],
+      "quiz": [
+        {
+          "h": "If you mix red and yellow, you ___ orange.",
+          "lc": [
+            "got",
+            "will getting",
+            "get",
+            "getting"
+          ],
+          "da": 2,
+          "gt": "Sự thật luôn đúng: cả hai vế dùng hiện tại đơn → get."
+        },
+        {
+          "h": "Ice ___ if you heat it.",
+          "lc": [
+            "melts",
+            "melt",
+            "melted",
+            "is melt"
+          ],
+          "da": 0,
+          "gt": "Quy luật tự nhiên, chủ ngữ ice (số ít) → hiện tại đơn melts."
+        },
+        {
+          "h": "If my baby brother ___ hungry, he cries.",
+          "lc": [
+            "will be",
+            "is",
+            "was",
+            "be"
+          ],
+          "da": 1,
+          "gt": "Thói quen luôn xảy ra: vế if dùng hiện tại đơn → is."
+        }
+      ]
+    },
+    {
+      "id": "en-a2-first-conditional",
+      "nhom": "Câu điều kiện",
+      "tieuDe": "First conditional (câu điều kiện loại 1)",
+      "mau": "If + S + V (hiện tại đơn), S + will / won't + V",
+      "nghia": "nếu … thì sẽ … (việc có thể xảy ra trong tương lai)",
+      "giaiThich": "Dùng câu điều kiện loại 1 cho một tình huống CÓ THỂ xảy ra ở tương lai và kết quả của nó. Vế if dùng hiện tại đơn dù nói về tương lai; vế kết quả dùng will. Unless nghĩa là “nếu… không”.",
+      "cachGhep": [
+        "If + hiện tại đơn, will + V: If it rains, we'll stay at home.",
+        "Đổi thứ tự (không có dấu phẩy): We'll stay at home if it rains.",
+        "Phủ định: If you don't hurry, you'll miss the bus.",
+        "Vế kết quả có thể dùng can / may / might hoặc câu mệnh lệnh",
+        "unless = if… not: Unless you hurry, you'll be late."
+      ],
+      "viDu": [
+        {
+          "c": "If it rains tomorrow, we'll stay at home.",
+          "v": "Nếu mai trời mưa, chúng tôi sẽ ở nhà."
+        },
+        {
+          "c": "You'll pass the exam if you study hard.",
+          "v": "Bạn sẽ thi đỗ nếu học chăm."
+        },
+        {
+          "c": "If she doesn't leave now, she'll miss the train.",
+          "v": "Nếu cô ấy không đi ngay thì sẽ lỡ tàu."
+        },
+        {
+          "c": "What will you do if you don't get the job?",
+          "v": "Bạn sẽ làm gì nếu không được nhận công việc đó?"
+        }
+      ],
+      "luuY": [
+        "Lỗi số một của người Việt: dùng will ở vế if vì tiếng Việt nói “nếu mai trời sẽ mưa” → sai: If it will rain tomorrow, … Đúng: If it rains tomorrow, …",
+        "Vế if vẫn chia -s ngôi ba: If he comes (không nói If he come).",
+        "Vế if đứng trước thì có dấu phẩy; đứng sau thì không."
+      ],
+      "soSanh": [
+        "en-a2-zero-conditional",
+        "en-a2-menh-de-thoi-gian",
+        "en-b1-first-conditional",
+        "en-b1-second-conditional"
+      ],
+      "tuKhoa": [
+        "first conditional",
+        "điều kiện loại 1",
+        "if will",
+        "unless",
+        "cau dieu kien loai mot"
+      ],
+      "quiz": [
+        {
+          "h": "If I ___ time tomorrow, I'll call you.",
+          "lc": [
+            "will have",
+            "have",
+            "had",
+            "having"
+          ],
+          "da": 1,
+          "gt": "Vế if dùng hiện tại đơn dù nói về tương lai: have."
+        },
+        {
+          "h": "If you don't wear a coat, you ___ cold.",
+          "lc": [
+            "are being",
+            "were",
+            "be",
+            "will be"
+          ],
+          "da": 3,
+          "gt": "Vế kết quả của điều kiện loại 1 dùng will + V."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "If she comes, I'll tell her.",
+            "If she will come, I'll tell her.",
+            "If she come, I tell her.",
+            "If she comes, I told her."
+          ],
+          "da": 0,
+          "gt": "Vế if: hiện tại đơn (comes); vế kết quả: will + V."
+        }
+      ]
+    },
+    {
+      "id": "en-a2-cau-hoi-chu-ngu",
+      "nhom": "Câu hỏi",
+      "tieuDe": "Câu hỏi chủ ngữ: Who called you?",
+      "mau": "Who / What + V (chia như câu kể) + …?",
+      "nghia": "ai (làm việc đó)? cái gì (xảy ra)? — hỏi về chủ ngữ",
+      "giaiThich": "Khi who hoặc what hỏi về CHỦ NGỮ của câu (người hay vật thực hiện hành động), không dùng trợ động từ do / does / did và không đảo trật tự; động từ chia như trong câu kể. Khi hỏi về tân ngữ thì vẫn dùng do / does / did như bình thường.",
+      "cachGhep": [
+        "Hỏi chủ ngữ: Who + V…? (Who lives here? / Who called you?)",
+        "Hỏi tân ngữ: Who + do / does / did + S + V? (Who did you call?)",
+        "What happened? / What makes you happy?",
+        "Which + N / How many + N làm chủ ngữ: Which bus goes to the airport? / How many people came?",
+        "Động từ thường chia số ít: Who wants coffee?"
+      ],
+      "viDu": [
+        {
+          "c": "Who called you last night?",
+          "v": "Tối qua ai đã gọi cho bạn?"
+        },
+        {
+          "c": "Who did you call last night?",
+          "v": "Tối qua bạn đã gọi cho ai?"
+        },
+        {
+          "c": "What happened to your leg?",
+          "v": "Chân bạn bị làm sao vậy?"
+        },
+        {
+          "c": "Who lives in that big house?",
+          "v": "Ai sống trong ngôi nhà to kia?"
+        }
+      ],
+      "luuY": [
+        "Lỗi hay mắc: thêm did / does khi hỏi chủ ngữ → sai: Who did call you? / What did happen? Đúng: Who called you? / What happened?",
+        "Phân biệt nghĩa: Who loves Lan? (ai yêu Lan) ≠ Who does Lan love? (Lan yêu ai).",
+        "Hiện tại đơn nhớ -s: Who knows the answer? (không nói Who know)."
+      ],
+      "soSanh": [
+        "en-a2-past-simple-phu-dinh-cau-hoi",
+        "en-a2-menh-de-quan-he"
+      ],
+      "tuKhoa": [
+        "subject questions",
+        "câu hỏi chủ ngữ",
+        "who called",
+        "what happened",
+        "who + v"
+      ],
+      "quiz": [
+        {
+          "h": "___ this beautiful picture? - My sister did.",
+          "lc": [
+            "Who did paint",
+            "Who painted",
+            "Who did painted",
+            "Who does paint"
+          ],
+          "da": 1,
+          "gt": "Hỏi về chủ ngữ (ai vẽ) nên không dùng did: Who painted…?"
+        },
+        {
+          "h": "Who ___ at the party? - I saw Nam and Hoa.",
+          "lc": [
+            "saw you",
+            "you saw",
+            "did you see",
+            "did see you"
+          ],
+          "da": 2,
+          "gt": "Câu trả lời cho biết người được nhìn thấy (tân ngữ) nên cần did: Who did you see?"
+        },
+        {
+          "h": "What ___ yesterday? - There was an accident.",
+          "lc": [
+            "happened",
+            "did happen",
+            "did happened",
+            "was happen"
+          ],
+          "da": 0,
+          "gt": "What là chủ ngữ nên động từ chia thẳng quá khứ: What happened?"
+        }
+      ]
+    },
+    {
+      "id": "en-a2-gioi-tu-chuyen-dong",
+      "nhom": "Giới từ – cụm động từ",
+      "tieuDe": "Giới từ chỉ chuyển động: to, into, out of, up, down, across, along, through…",
+      "mau": "động từ chuyển động (go / walk / run / drive…) + giới từ + nơi chốn",
+      "nghia": "đến, vào trong, ra khỏi, lên, xuống, băng qua, dọc theo, xuyên qua…",
+      "giaiThich": "Giới từ chỉ chuyển động cho biết HƯỚNG di chuyển và đi sau động từ chuyển động. Chúng khác giới từ nơi chốn (in, on, at) vốn chỉ vị trí đứng yên. Thường dùng khi chỉ đường và kể lại hành trình.",
+      "cachGhep": [
+        "to (đến) · from… to… (từ… đến…) · into (vào trong) · out of (ra khỏi)",
+        "up (lên) · down (xuống) · over (qua phía trên) · under (qua phía dưới)",
+        "across (băng ngang qua) · along (dọc theo) · through (xuyên qua) · past (đi ngang qua) · around (vòng quanh) · towards (về phía)",
+        "Phương tiện: get on / off (bus, train, plane, bike) · get into / out of (car, taxi)"
+      ],
+      "viDu": [
+        {
+          "c": "She walked into the room and sat down.",
+          "v": "Cô ấy bước vào phòng rồi ngồi xuống."
+        },
+        {
+          "c": "Go along this street and turn right at the bank.",
+          "v": "Đi dọc theo phố này rồi rẽ phải ở chỗ ngân hàng."
+        },
+        {
+          "c": "The children ran across the road.",
+          "v": "Bọn trẻ chạy băng qua đường."
+        },
+        {
+          "c": "We drove through a long tunnel.",
+          "v": "Chúng tôi lái xe xuyên qua một đường hầm dài."
+        }
+      ],
+      "luuY": [
+        "Lỗi hay mắc: thêm to trước home, here, there → sai: go to home / come to here. Đúng: go home / come here.",
+        "Arrive không đi với to: arrive at the station / arrive in Hanoi (không nói arrive to Hanoi).",
+        "In chỉ vị trí, into chỉ chuyển động vào trong: She is in the room ≠ She went into the room.",
+        "Across là băng ngang bề mặt (đường, sông); through là xuyên qua bên trong (rừng, đường hầm)."
+      ],
+      "soSanh": [
+        "en-a2-phrasal-verbs"
+      ],
+      "tuKhoa": [
+        "prepositions of movement",
+        "giới từ chuyển động",
+        "into out of",
+        "across along through",
+        "chỉ đường"
+      ],
+      "quiz": [
+        {
+          "h": "The cat jumped ___ the box and ran away.",
+          "lc": [
+            "out of",
+            "along",
+            "between",
+            "during"
+          ],
+          "da": 0,
+          "gt": "Nhảy ra khỏi hộp rồi chạy đi → out of."
+        },
+        {
+          "h": "The bank is on the other side. Walk ___ the street.",
+          "lc": [
+            "between",
+            "out",
+            "across",
+            "of"
+          ],
+          "da": 2,
+          "gt": "Sang phía bên kia tức là băng ngang qua đường → across."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "I went to home at six.",
+            "I went home at six.",
+            "I went at home at six.",
+            "I went in home at six."
+          ],
+          "da": 1,
+          "gt": "Home sau động từ chuyển động không có giới từ: go home."
+        }
+      ]
+    },
+    {
+      "id": "en-a2-phrasal-verbs",
+      "nhom": "Giới từ – cụm động từ",
+      "tieuDe": "Phrasal verbs cơ bản",
+      "mau": "động từ + tiểu từ (up / down / on / off / in / out…) (+ tân ngữ)",
+      "nghia": "cụm động từ: get up, turn on, look for, put on…",
+      "giaiThich": "Phrasal verb là động từ ghép với một tiểu từ nhỏ, tạo thành nghĩa mới, nhiều khi không đoán được từ từng thành phần. Chúng rất phổ biến trong tiếng Anh hằng ngày. Với nhiều cụm có tân ngữ, tân ngữ có thể đứng trước hoặc sau tiểu từ, nhưng nếu là đại từ thì phải đứng GIỮA.",
+      "cachGhep": [
+        "Không có tân ngữ: get up (thức dậy), wake up, sit down, stand up, come in, go out, come back, grow up, hurry up",
+        "Tách được: turn on / off (bật / tắt), put on (mặc vào), take off (cởi ra), pick up (nhặt, đón), give back (trả lại), fill in (điền), throw away (vứt đi)",
+        "Tân ngữ là danh từ: turn off the TV = turn the TV off",
+        "Tân ngữ là đại từ: turn it off (không nói turn off it)",
+        "Không tách được: look for (tìm), look after (chăm sóc), get on / off (lên / xuống xe), wait for"
+      ],
+      "viDu": [
+        {
+          "c": "I usually get up at six and go out at seven.",
+          "v": "Tôi thường dậy lúc sáu giờ và ra khỏi nhà lúc bảy giờ."
+        },
+        {
+          "c": "It's cold. Put your coat on.",
+          "v": "Trời lạnh đấy. Mặc áo khoác vào đi."
+        },
+        {
+          "c": "The TV is too loud. Can you turn it off?",
+          "v": "Ti vi to quá. Bạn tắt nó đi được không?"
+        },
+        {
+          "c": "I'm looking for my keys. Have you seen them?",
+          "v": "Tôi đang tìm chìa khoá. Bạn có thấy không?"
+        }
+      ],
+      "luuY": [
+        "Lỗi hay mắc: để đại từ sau tiểu từ → sai: turn off it / put on them. Đúng: turn it off / put them on.",
+        "Đừng dịch từng chữ: look for = tìm kiếm (không phải “nhìn cho”); look after = chăm sóc.",
+        "Dùng open / close cho cửa, sách; với đèn, ti vi, máy móc dùng turn on / turn off (không nói open the light).",
+        "Quá khứ chia ở động từ, không chia ở tiểu từ: got up, turned off."
+      ],
+      "soSanh": [
+        "en-a2-gioi-tu-chuyen-dong",
+        "en-b1-phrasal-verbs"
+      ],
+      "tuKhoa": [
+        "phrasal verbs",
+        "cụm động từ",
+        "get up",
+        "turn on turn off",
+        "look for"
+      ],
+      "quiz": [
+        {
+          "h": "It's dark in here. Please ___ the light.",
+          "lc": [
+            "open",
+            "turn on",
+            "take off",
+            "get up"
+          ],
+          "da": 1,
+          "gt": "Bật đèn dùng turn on; không dùng open cho đèn."
+        },
+        {
+          "h": "Your shoes are dirty. Take ___ before you come in.",
+          "lc": [
+            "off them",
+            "them out",
+            "it off",
+            "them off"
+          ],
+          "da": 3,
+          "gt": "Tân ngữ là đại từ (shoes → them) phải đứng giữa: take them off."
+        },
+        {
+          "h": "My grandmother ___ my little brother when my parents are at work.",
+          "lc": [
+            "looks after",
+            "looks for",
+            "looks at",
+            "looks up"
+          ],
+          "da": 0,
+          "gt": "Look after = chăm sóc, trông nom."
+        }
+      ]
+    },
+    {
+      "id": "en-a2-so-because-although",
+      "nhom": "Liên từ – câu phức",
+      "tieuDe": "so / because / although",
+      "mau": "kết quả + because + lý do · lý do, + so + kết quả · although + ý A, ý B (trái ngược)",
+      "nghia": "nên, vì vậy (so) · bởi vì (because) · mặc dù (although)",
+      "giaiThich": "Because đứng trước LÝ DO, so đứng trước KẾT QUẢ, although đứng trước một sự việc mà kết quả lại trái với mong đợi. Mỗi câu chỉ cần một liên từ để nối hai mệnh đề, khác với cặp “vì… nên…”, “tuy… nhưng…” của tiếng Việt.",
+      "cachGhep": [
+        "because + S + V: I stayed at home because I was sick.",
+        "…, so + S + V: I was sick, so I stayed at home. (có dấu phẩy trước so)",
+        "Although + S + V, S + V: Although it was raining, we went out.",
+        "because of + danh từ: because of the rain",
+        "but nối hai ý trái ngược ở giữa câu: It was raining, but we went out."
+      ],
+      "viDu": [
+        {
+          "c": "I was tired, so I went to bed early.",
+          "v": "Tôi mệt nên đi ngủ sớm."
+        },
+        {
+          "c": "We didn't go to the beach because the weather was bad.",
+          "v": "Chúng tôi không đi biển vì thời tiết xấu."
+        },
+        {
+          "c": "Although he is rich, he isn't happy.",
+          "v": "Mặc dù giàu, anh ấy không hạnh phúc."
+        },
+        {
+          "c": "She passed the exam although she didn't study much.",
+          "v": "Cô ấy thi đỗ dù không học nhiều."
+        }
+      ],
+      "luuY": [
+        "Lỗi kinh điển của người Việt: dùng cả cặp → sai: Because I was tired, so I went to bed / Although he is rich, but he isn't happy. Chỉ giữ MỘT liên từ.",
+        "Because + mệnh đề, because of + danh từ: because it rained / because of the rain (không nói because of it rained).",
+        "Đừng nhầm so (nên) với so + tính từ (rất): It's so hot."
+      ],
+      "soSanh": [
+        "en-a2-to-chi-muc-dich",
+        "en-a2-menh-de-thoi-gian",
+        "en-b1-although-despite"
+      ],
+      "tuKhoa": [
+        "so because although",
+        "vì nên",
+        "mặc dù",
+        "tuy nhưng",
+        "liên từ"
+      ],
+      "quiz": [
+        {
+          "h": "It was very cold, ___ I wore a thick coat.",
+          "lc": [
+            "because",
+            "although",
+            "so",
+            "but"
+          ],
+          "da": 2,
+          "gt": "Vế sau là kết quả của vế trước (lạnh nên mặc áo dày) → so."
+        },
+        {
+          "h": "___ she was ill, she went to work.",
+          "lc": [
+            "Although",
+            "Because",
+            "So",
+            "But"
+          ],
+          "da": 0,
+          "gt": "Hai ý trái với mong đợi (ốm mà vẫn đi làm) và liên từ đứng đầu câu → Although."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "Because it rained, so we stayed in.",
+            "Because it rained, we stayed in.",
+            "Although it rained, but we went out.",
+            "Because of it rained, we stayed in."
+          ],
+          "da": 1,
+          "gt": "Chỉ dùng một liên từ; because + mệnh đề, không kèm so."
+        }
+      ]
+    },
+    {
+      "id": "en-a2-menh-de-thoi-gian",
+      "nhom": "Liên từ – câu phức",
+      "tieuDe": "when / before / after + mệnh đề thời gian",
+      "mau": "When / Before / After + S + V, S + V",
+      "nghia": "khi … · trước khi … · sau khi …",
+      "giaiThich": "When, before, after nối hai mệnh đề để nói việc nào xảy ra lúc nào so với việc kia. Khi nói về TƯƠNG LAI, mệnh đề sau when / before / after dùng hiện tại đơn chứ không dùng will; will chỉ nằm ở mệnh đề chính.",
+      "cachGhep": [
+        "Quá khứ: When I got home, I had dinner.",
+        "Thói quen: I always brush my teeth before I go to bed.",
+        "Tương lai: I'll call you when I arrive. (không dùng will sau when)",
+        "before / after + V-ing khi cùng chủ ngữ: After finishing work, he went home.",
+        "Mệnh đề thời gian đứng trước thì có dấu phẩy"
+      ],
+      "viDu": [
+        {
+          "c": "When I was a child, I lived in the countryside.",
+          "v": "Khi còn nhỏ, tôi sống ở nông thôn."
+        },
+        {
+          "c": "Wash your hands before you eat.",
+          "v": "Hãy rửa tay trước khi ăn."
+        },
+        {
+          "c": "After we finished dinner, we watched a film.",
+          "v": "Sau khi ăn tối xong, chúng tôi xem một bộ phim."
+        },
+        {
+          "c": "I'll send you a message when I get to the airport.",
+          "v": "Tôi sẽ nhắn tin cho bạn khi đến sân bay."
+        }
+      ],
+      "luuY": [
+        "Lỗi rất hay mắc: dùng will sau when / before / after → sai: I'll call you when I will arrive. Đúng: I'll call you when I arrive.",
+        "Mệnh đề thời gian phải đủ chủ ngữ + động từ: before I go (không nói before go); hoặc dùng V-ing: before going.",
+        "When + quá khứ đơn cho việc đã xảy ra; đừng để hiện tại: sai When I am a child, I lived…"
+      ],
+      "soSanh": [
+        "en-a2-first-conditional",
+        "en-a2-so-because-although"
+      ],
+      "tuKhoa": [
+        "when before after",
+        "mệnh đề thời gian",
+        "time clauses",
+        "khi trước khi sau khi",
+        "when i arrive"
+      ],
+      "quiz": [
+        {
+          "h": "I'll tell her the news when she ___ home.",
+          "lc": [
+            "will come",
+            "came",
+            "coming",
+            "comes"
+          ],
+          "da": 3,
+          "gt": "Nói về tương lai nhưng sau when dùng hiện tại đơn: comes."
+        },
+        {
+          "h": "Turn off the lights ___ you leave the room.",
+          "lc": [
+            "before",
+            "after that",
+            "so",
+            "although"
+          ],
+          "da": 0,
+          "gt": "Tắt đèn rồi mới rời phòng → before."
+        },
+        {
+          "h": "After ___ breakfast, he went to work.",
+          "lc": [
+            "have",
+            "having",
+            "he has",
+            "to have"
+          ],
+          "da": 1,
+          "gt": "After + V-ing khi hai hành động cùng chủ ngữ: After having breakfast."
+        }
+      ]
+    }
+  ]
+}

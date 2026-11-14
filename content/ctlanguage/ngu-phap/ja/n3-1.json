@@ -1,0 +1,1103 @@
+{
+  "nn": "ja",
+  "cap": "N3",
+  "diem": [
+    {
+      "id": "ja-n3-uchi-ni",
+      "nhom": "Thời điểm – trình tự",
+      "tieuDe": "〜うちに",
+      "mau": "V-る / V-ている / V-ない / Aい / Aな + な / N + の + うちに",
+      "nghia": "trong lúc còn ~ (tranh thủ làm); trong khi đang ~ thì (tự nhiên thay đổi)",
+      "giaiThich": "Dùng khi muốn nói phải làm việc gì đó trước khi trạng thái hiện tại thay đổi, vì sau đó sẽ khó hoặc không làm được nữa. Nghĩa thứ hai: trong khi đang làm một việc thì có sự thay đổi xảy ra lúc nào không hay. Dạng 〜ないうちに mang nghĩa \"trước khi ~\".",
+      "cachGhep": [
+        "Động từ thể từ điển / thể ている / thể ない + うちに",
+        "Tính từ đuôi い + うちに: 若いうちに",
+        "Tính từ đuôi な + な + うちに: 元気なうちに",
+        "Danh từ + の + うちに: 学生のうちに"
+      ],
+      "viDu": [
+        {
+          "c": "熱いうちに食べてください。",
+          "d": "あついうちに たべてください。",
+          "v": "Hãy ăn lúc còn nóng."
+        },
+        {
+          "c": "日本にいるうちに、富士山に登りたいです。",
+          "d": "にほんに いるうちに、ふじさんに のぼりたいです。",
+          "v": "Tôi muốn leo núi Phú Sĩ trong lúc còn ở Nhật."
+        },
+        {
+          "c": "暗くならないうちに帰りましょう。",
+          "d": "くらく ならないうちに かえりましょう。",
+          "v": "Chúng ta về trước khi trời tối nhé."
+        },
+        {
+          "c": "本を読んでいるうちに、眠くなりました。",
+          "d": "ほんを よんでいるうちに、ねむくなりました。",
+          "v": "Trong lúc đang đọc sách thì tôi buồn ngủ lúc nào không hay."
+        }
+      ],
+      "luuY": [
+        "Khác 〜間に: うちに hàm ý \"qua thời điểm này thì không còn cơ hội\", còn 間に chỉ nêu khoảng thời gian một cách trung tính.",
+        "Không dùng thể た trước うちに (✗ 若かったうちに). \"Trước khi ~\" thì dùng V-ない + うちに."
+      ],
+      "soSanh": [
+        "ja-n3-saichuu-ni"
+      ],
+      "tuKhoa": [
+        "uchi ni",
+        "uchini",
+        "trong lúc còn",
+        "tranh thủ",
+        "nai uchi ni"
+      ],
+      "quiz": [
+        {
+          "h": "若い（　）、いろいろな国へ行きたい。",
+          "lc": [
+            "うちに",
+            "たびに",
+            "とたんに",
+            "ついでに"
+          ],
+          "da": 0,
+          "gt": "Tính từ đuôi い + うちに: tranh thủ lúc còn trẻ. Ba mẫu kia không ghép trực tiếp với tính từ."
+        },
+        {
+          "h": "雨が（　）うちに、洗濯物を入れましょう。",
+          "lc": [
+            "降った",
+            "降らない",
+            "降って",
+            "降ろう"
+          ],
+          "da": 1,
+          "gt": "\"Trước khi trời mưa\" = V-ない + うちに. うちに không đi với thể た, thể て hay thể ý chí."
+        },
+        {
+          "h": "「冷めないうちにどうぞ」 nghĩa là gì?",
+          "lc": [
+            "Mời dùng sau khi đã nguội",
+            "Đừng dùng khi còn nóng",
+            "Mời dùng trước khi nguội",
+            "Đợi nguội rồi hãy dùng"
+          ],
+          "da": 2,
+          "gt": "冷めないうちに = trong lúc chưa nguội, tức là trước khi nguội."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-saichuu-ni",
+      "nhom": "Thời điểm – trình tự",
+      "tieuDe": "〜最中に",
+      "mau": "V-ている + 最中に / N + の + 最中に",
+      "nghia": "đúng lúc đang ~ (thì có việc khác xen vào)",
+      "giaiThich": "Nhấn mạnh rằng một việc đang diễn ra ở giữa chừng, đúng lúc cao điểm, thì có việc bất ngờ xen vào. Cũng dùng 〜最中だ ở cuối câu để nói \"đang bận làm ~ dở tay\".",
+      "cachGhep": [
+        "Động từ thể ている + 最中に / 最中だ",
+        "Danh từ chỉ hành động + の + 最中に: 会議の最中に、食事の最中に"
+      ],
+      "viDu": [
+        {
+          "c": "会議の最中に、電話が鳴りました。",
+          "d": "かいぎの さいちゅうに、でんわが なりました。",
+          "v": "Đúng lúc đang họp thì điện thoại reo."
+        },
+        {
+          "c": "今、料理をしている最中だから、後で電話します。",
+          "d": "いま、りょうりを している さいちゅうだから、あとで でんわします。",
+          "v": "Bây giờ tôi đang nấu ăn dở tay nên lát nữa sẽ gọi lại."
+        },
+        {
+          "c": "試験の最中に、話してはいけません。",
+          "d": "しけんの さいちゅうに、はなしては いけません。",
+          "v": "Không được nói chuyện giữa lúc đang thi."
+        }
+      ],
+      "luuY": [
+        "Chỉ dùng với hành động kéo dài; không dùng với động từ trạng thái hay tức thời (✗ 日本にいる最中に, ✗ 駅に着いている最中に).",
+        "Mạnh hơn 〜ているとき: nhấn vào \"đang giữa chừng, không tiện bị làm phiền\"."
+      ],
+      "soSanh": [
+        "ja-n3-uchi-ni",
+        "ja-n3-tokoro-ni"
+      ],
+      "tuKhoa": [
+        "saichuu ni",
+        "saichuuni",
+        "sanaka",
+        "đúng lúc đang",
+        "giữa lúc"
+      ],
+      "quiz": [
+        {
+          "h": "食事（　）最中に、お客さんが来た。",
+          "lc": [
+            "を",
+            "の",
+            "に",
+            "で"
+          ],
+          "da": 1,
+          "gt": "Danh từ + の + 最中に."
+        },
+        {
+          "h": "今、考えて（　）最中です。",
+          "lc": [
+            "いる",
+            "ある",
+            "おく",
+            "しまう"
+          ],
+          "da": 0,
+          "gt": "Mẫu là V-ている + 最中: đang suy nghĩ dở."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "会議した最中に電話が鳴った。",
+            "会議する最中に電話が鳴った。",
+            "会議の最中に電話が鳴った。"
+          ],
+          "da": 2,
+          "gt": "Trước 最中に chỉ dùng V-ている hoặc N + の; không dùng thể た hay thể từ điển."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-ta-totan",
+      "nhom": "Thời điểm – trình tự",
+      "tieuDe": "〜たとたん（に）",
+      "mau": "V-た + とたん（に）",
+      "nghia": "vừa ~ xong thì ngay lập tức (xảy ra việc bất ngờ)",
+      "giaiThich": "Diễn tả ngay sau khi một hành động vừa kết thúc thì việc khác xảy ra tức thì, thường là điều người nói không ngờ tới. Vế sau là sự việc đã xảy ra thật, người nói chỉ quan sát thấy.",
+      "cachGhep": [
+        "Động từ thể た + とたん（に）",
+        "に có thể lược bỏ, nghĩa không đổi"
+      ],
+      "viDu": [
+        {
+          "c": "立ち上がったとたん、目の前が暗くなりました。",
+          "d": "たちあがったとたん、めのまえが くらくなりました。",
+          "v": "Vừa đứng dậy thì mắt tôi tối sầm lại."
+        },
+        {
+          "c": "窓を開けたとたんに、強い風が入ってきた。",
+          "d": "まどを あけたとたんに、つよい かぜが はいってきた。",
+          "v": "Vừa mở cửa sổ thì gió mạnh thổi ùa vào."
+        },
+        {
+          "c": "母の顔を見たとたん、涙が出ました。",
+          "d": "ははの かおを みたとたん、なみだが でました。",
+          "v": "Vừa nhìn thấy mặt mẹ là nước mắt tôi trào ra."
+        }
+      ],
+      "luuY": [
+        "Vế sau không dùng ý chí, mệnh lệnh, rủ rê (✗ 家に帰ったとたん、勉強します). Muốn nói \"ngay sau khi ~ tôi sẽ…\" thì dùng 〜たらすぐ.",
+        "Chỉ đi với thể た, kể cả khi dịch sang tiếng Việt là \"vừa…\"."
+      ],
+      "soSanh": [
+        "ja-n3-ta-tokoro"
+      ],
+      "tuKhoa": [
+        "ta totan",
+        "totan ni",
+        "totan",
+        "vừa mới thì",
+        "ngay lập tức"
+      ],
+      "quiz": [
+        {
+          "h": "ドアを（　）とたん、猫が外へ出て行った。",
+          "lc": [
+            "開ける",
+            "開けて",
+            "開けた",
+            "開けよう"
+          ],
+          "da": 2,
+          "gt": "とたん luôn đi sau động từ thể た."
+        },
+        {
+          "h": "Câu nào dùng とたん đúng?",
+          "lc": [
+            "家に着いたとたん、雨が降り出した。",
+            "家に着いたとたん、シャワーを浴びよう。",
+            "家に着いたとたん、電話してください。"
+          ],
+          "da": 0,
+          "gt": "Vế sau とたん phải là việc bất ngờ xảy ra, không phải ý chí (浴びよう) hay yêu cầu (電話してください)."
+        },
+        {
+          "h": "電気を消したとたん、（　）。",
+          "lc": [
+            "寝てください",
+            "子どもが泣き出した",
+            "寝るつもりだ",
+            "寝ましょう"
+          ],
+          "da": 1,
+          "gt": "Sau とたん là sự việc xảy ra ngoài ý muốn người nói; ba lựa chọn kia là yêu cầu, dự định, rủ rê."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-tokoro-ni",
+      "nhom": "Thời điểm – trình tự",
+      "tieuDe": "〜ところに／〜ところへ／〜ところを",
+      "mau": "V-る / V-ている / V-た + ところに・ところへ・ところを",
+      "nghia": "đúng vào lúc ~ thì (có người đến, có việc xảy ra / bị bắt gặp)",
+      "giaiThich": "ところに và ところへ dùng khi đúng vào một thời điểm, một tình huống nào đó thì có việc khác xảy đến (thường là ai đó tới, điện thoại gọi tới). ところを dùng khi đang ở trong tình huống đó thì bị nhìn thấy, bị bắt gặp hoặc được giúp đỡ.",
+      "cachGhep": [
+        "Động từ thể từ điển / ている / た + ところに・ところへ + 来る, 電話がかかる…",
+        "Động từ thể ている / た + ところを + 見る, 見られる, 見つかる, 助ける, 注意される…"
+      ],
+      "viDu": [
+        {
+          "c": "ちょうど出かけるところに、電話がかかってきました。",
+          "d": "ちょうど でかけるところに、でんわが かかってきました。",
+          "v": "Đúng lúc tôi sắp ra khỏi nhà thì có điện thoại gọi tới."
+        },
+        {
+          "c": "困っているところへ、先生が来てくれました。",
+          "d": "こまっているところへ、せんせいが きてくれました。",
+          "v": "Đúng lúc tôi đang gặp khó khăn thì thầy giáo tới."
+        },
+        {
+          "c": "授業中に寝ているところを、先生に見られました。",
+          "d": "じゅぎょうちゅうに ねているところを、せんせいに みられました。",
+          "v": "Tôi bị thầy bắt gặp đúng lúc đang ngủ trong giờ học."
+        }
+      ],
+      "luuY": [
+        "Chọn trợ từ theo động từ phía sau: việc \"đến\" (来る, かかってくる) dùng に/へ; việc \"tác động vào\" (見る, 見つける, 助ける, 捕まえる) dùng を.",
+        "Đừng nhầm với V-たところ (thử làm thì thấy…) và V-るところだった (suýt nữa thì…)."
+      ],
+      "soSanh": [
+        "ja-n3-saichuu-ni",
+        "ja-n3-ta-tokoro",
+        "ja-n3-tokoro-datta"
+      ],
+      "tuKhoa": [
+        "tokoro ni",
+        "tokoro e",
+        "tokoro wo",
+        "đúng lúc",
+        "bị bắt gặp"
+      ],
+      "quiz": [
+        {
+          "h": "お菓子を食べているところ（　）、母に見られた。",
+          "lc": [
+            "を",
+            "へ",
+            "が",
+            "と"
+          ],
+          "da": 0,
+          "gt": "Sau đó là 見られた (bị nhìn thấy) nên dùng ところを."
+        },
+        {
+          "h": "ちょうど家を出るところ（　）、友達が訪ねてきた。",
+          "lc": [
+            "を",
+            "に",
+            "と",
+            "も"
+          ],
+          "da": 1,
+          "gt": "Sau đó là việc có người đến (訪ねてきた) nên dùng ところに (hoặc ところへ)."
+        },
+        {
+          "h": "泥棒は、逃げるところを警官に（　）。",
+          "lc": [
+            "来ました",
+            "降りました",
+            "捕まりました"
+          ],
+          "da": 2,
+          "gt": "ところを đi với việc bị bắt gặp, bị bắt: 警官に捕まりました."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-te-hajimete",
+      "nhom": "Thời điểm – trình tự",
+      "tieuDe": "〜てはじめて",
+      "mau": "V-て + はじめて",
+      "nghia": "chỉ sau khi ~ rồi mới (hiểu ra, nhận ra)",
+      "giaiThich": "Diễn tả rằng phải trải qua một việc thì lần đầu tiên mới nhận ra, mới hiểu được điều gì đó; trước đó thì chưa biết. Vế sau thường là 分かる, 知る, 気がつく.",
+      "cachGhep": [
+        "Động từ thể て + はじめて + (分かる / 知る / 気がつく…)"
+      ],
+      "viDu": [
+        {
+          "c": "病気になってはじめて、健康の大切さが分かりました。",
+          "d": "びょうきに なってはじめて、けんこうの たいせつさが わかりました。",
+          "v": "Bị bệnh rồi tôi mới hiểu sức khoẻ quan trọng thế nào."
+        },
+        {
+          "c": "一人で暮らしてはじめて、親のありがたさを知りました。",
+          "d": "ひとりで くらしてはじめて、おやの ありがたさを しりました。",
+          "v": "Sống một mình rồi tôi mới biết ơn bố mẹ."
+        },
+        {
+          "c": "日本に来てはじめて、雪を見ました。",
+          "d": "にほんに きてはじめて、ゆきを みました。",
+          "v": "Sang Nhật rồi tôi mới lần đầu được thấy tuyết."
+        }
+      ],
+      "luuY": [
+        "Vế sau không dùng ý chí, yêu cầu (✗ 日本に来てはじめて、勉強してください).",
+        "Khác V-てから (chỉ nêu thứ tự trước sau): てはじめて nhấn mạnh \"nếu chưa trải qua thì không biết\"."
+      ],
+      "soSanh": [
+        "ja-n3-te-irai"
+      ],
+      "tuKhoa": [
+        "te hajimete",
+        "tehajimete",
+        "rồi mới",
+        "lần đầu tiên mới"
+      ],
+      "quiz": [
+        {
+          "h": "自分で（　）はじめて、お金の大切さが分かった。",
+          "lc": [
+            "働く",
+            "働いた",
+            "働いて",
+            "働き"
+          ],
+          "da": 2,
+          "gt": "Mẫu là V-て + はじめて."
+        },
+        {
+          "h": "「失ってはじめて分かる」 nghĩa là gì?",
+          "lc": [
+            "Mất đi rồi mới hiểu",
+            "Trước khi mất đã hiểu",
+            "Lần đầu tiên bị mất",
+            "Mất rồi cũng không hiểu"
+          ],
+          "da": 0,
+          "gt": "V-てはじめて = chỉ sau khi ~ mới (hiểu)."
+        },
+        {
+          "h": "外国に住んではじめて、（　）。",
+          "lc": [
+            "日本語を勉強しなさい",
+            "自分の国のよさに気がついた",
+            "帰りましょう"
+          ],
+          "da": 1,
+          "gt": "Vế sau là điều nhận ra được, không phải mệnh lệnh hay lời rủ."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-te-irai",
+      "nhom": "Thời điểm – trình tự",
+      "tieuDe": "〜て以来",
+      "mau": "V-て + 以来 / N + 以来",
+      "nghia": "kể từ khi ~ (suốt cho đến bây giờ)",
+      "giaiThich": "Diễn tả kể từ một thời điểm trong quá khứ, một trạng thái cứ tiếp diễn liên tục cho tới hiện tại. Hơi trang trọng hơn 〜てから.",
+      "cachGhep": [
+        "Động từ thể て + 以来",
+        "Danh từ chỉ sự kiện + 以来: 卒業以来、入学以来、結婚以来"
+      ],
+      "viDu": [
+        {
+          "c": "日本に来て以来、一度も国へ帰っていません。",
+          "d": "にほんに きていらい、いちども くにへ かえっていません。",
+          "v": "Từ khi sang Nhật đến giờ, tôi chưa về nước lần nào."
+        },
+        {
+          "c": "卒業以来、彼には会っていません。",
+          "d": "そつぎょういらい、かれには あっていません。",
+          "v": "Từ khi tốt nghiệp đến nay tôi chưa gặp lại anh ấy."
+        },
+        {
+          "c": "この会社に入って以来、毎日忙しいです。",
+          "d": "この かいしゃに はいっていらい、まいにち いそがしいです。",
+          "v": "Từ khi vào công ty này, ngày nào tôi cũng bận."
+        }
+      ],
+      "luuY": [
+        "Vế sau phải là trạng thái kéo dài đến nay; không dùng cho việc chỉ xảy ra một lần (✗ 日本に来て以来、一度京都へ行きました → 来てから).",
+        "Không dùng cho mốc quá gần hoặc cho tương lai (✗ 今朝起きて以来)."
+      ],
+      "soSanh": [
+        "ja-n3-te-hajimete"
+      ],
+      "tuKhoa": [
+        "te irai",
+        "irai",
+        "kể từ khi",
+        "từ đó đến nay"
+      ],
+      "quiz": [
+        {
+          "h": "去年けがを（　）以来、スポーツをしていない。",
+          "lc": [
+            "する",
+            "した",
+            "して",
+            "しよう"
+          ],
+          "da": 2,
+          "gt": "Động từ đứng trước 以来 ở thể て."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "結婚して以来、ずっとこの町に住んでいる。",
+            "結婚して以来、一度旅行に行った。",
+            "結婚して以来、明日引っ越す。"
+          ],
+          "da": 0,
+          "gt": "Vế sau て以来 là trạng thái tiếp diễn đến hiện tại (ずっと住んでいる), không phải việc một lần hay việc tương lai."
+        },
+        {
+          "h": "入学（　）、毎日図書館で勉強している。",
+          "lc": [
+            "の以来",
+            "以来",
+            "て以来",
+            "に以来"
+          ],
+          "da": 1,
+          "gt": "Danh từ chỉ sự kiện ghép thẳng với 以来: 入学以来."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-tabi-ni",
+      "nhom": "Thời điểm – trình tự",
+      "tieuDe": "〜たびに",
+      "mau": "V-る + たびに / N + の + たびに",
+      "nghia": "mỗi lần ~ là lại",
+      "giaiThich": "Diễn tả cứ mỗi lần làm việc A thì lần nào việc B cũng xảy ra, không có ngoại lệ. Thường dùng cho việc gợi cảm xúc hoặc đáng chú ý, không dùng cho sinh hoạt hiển nhiên hằng ngày.",
+      "cachGhep": [
+        "Động từ thể từ điển + たびに",
+        "Danh từ + の + たびに: 旅行のたびに、出張のたびに"
+      ],
+      "viDu": [
+        {
+          "c": "この歌を聞くたびに、学生時代を思い出します。",
+          "d": "この うたを きくたびに、がくせいじだいを おもいだします。",
+          "v": "Mỗi lần nghe bài hát này tôi lại nhớ thời sinh viên."
+        },
+        {
+          "c": "父は出張のたびに、お土産を買ってきてくれます。",
+          "d": "ちちは しゅっちょうの たびに、おみやげを かってきてくれます。",
+          "v": "Mỗi lần đi công tác, bố lại mua quà về cho tôi."
+        },
+        {
+          "c": "彼女は会うたびに、髪の色が違います。",
+          "d": "かのじょは あうたびに、かみの いろが ちがいます。",
+          "v": "Mỗi lần gặp, màu tóc cô ấy lại khác."
+        }
+      ],
+      "luuY": [
+        "Luôn dùng thể từ điển, kể cả khi nói chuyện quá khứ (✗ 会ったたびに).",
+        "Không dùng cho thói quen hiển nhiên (✗ 朝起きるたびに顔を洗う → 起きたら / 毎朝)."
+      ],
+      "soSanh": [
+        "ja-n3-tsuideni"
+      ],
+      "tuKhoa": [
+        "tabi ni",
+        "tabini",
+        "mỗi lần",
+        "cứ mỗi khi"
+      ],
+      "quiz": [
+        {
+          "h": "旅行（　）たびに、写真をたくさん撮る。",
+          "lc": [
+            "の",
+            "を",
+            "に",
+            "な"
+          ],
+          "da": 0,
+          "gt": "Danh từ + の + たびに."
+        },
+        {
+          "h": "この写真を（　）たびに、祖母を思い出す。",
+          "lc": [
+            "見た",
+            "見て",
+            "見ない",
+            "見る"
+          ],
+          "da": 3,
+          "gt": "Trước たびに là động từ thể từ điển."
+        },
+        {
+          "h": "「会うたびに」 gần nghĩa nhất với cách nói nào?",
+          "lc": [
+            "会ったあとで",
+            "会うといつも",
+            "会う前に"
+          ],
+          "da": 1,
+          "gt": "たびに = mỗi lần ~ thì lúc nào cũng, tức 会うといつも."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-tsuideni",
+      "nhom": "Thời điểm – trình tự",
+      "tieuDe": "〜ついでに",
+      "mau": "V-る / V-た + ついでに / N + の + ついでに",
+      "nghia": "nhân tiện ~ thì làm luôn ~",
+      "giaiThich": "Dùng khi nhân cơ hội làm việc chính A mà làm thêm luôn việc phụ B. Việc A là việc vốn định làm; việc B là việc tiện thể thêm vào.",
+      "cachGhep": [
+        "Động từ thể từ điển / thể た + ついでに",
+        "Danh từ chỉ hành động + の + ついでに: 買い物のついでに、散歩のついでに"
+      ],
+      "viDu": [
+        {
+          "c": "買い物のついでに、郵便局に寄りました。",
+          "d": "かいものの ついでに、ゆうびんきょくに よりました。",
+          "v": "Nhân tiện đi mua sắm, tôi ghé qua bưu điện."
+        },
+        {
+          "c": "駅まで行くついでに、この手紙を出してくれませんか。",
+          "d": "えきまで いくついでに、この てがみを だしてくれませんか。",
+          "v": "Nhân tiện đi ra ga, bạn gửi giúp tôi lá thư này được không?"
+        },
+        {
+          "c": "京都へ行ったついでに、古い友達に会ってきました。",
+          "d": "きょうとへ いったついでに、ふるい ともだちに あってきました。",
+          "v": "Nhân chuyến đi Kyoto, tôi đã gặp lại người bạn cũ."
+        }
+      ],
+      "luuY": [
+        "Hai hành động phải cùng một người làm và việc trước là việc chính.",
+        "Khi nhờ người trên, nói ついでに có thể bị coi là xem nhẹ việc mình nhờ, nên cân nhắc."
+      ],
+      "soSanh": [
+        "ja-n3-tabi-ni"
+      ],
+      "tuKhoa": [
+        "tsuide ni",
+        "tsuideni",
+        "nhân tiện",
+        "tiện thể"
+      ],
+      "quiz": [
+        {
+          "h": "散歩（　）ついでに、パンを買ってきた。",
+          "lc": [
+            "に",
+            "の",
+            "で",
+            "を"
+          ],
+          "da": 1,
+          "gt": "Danh từ + の + ついでに."
+        },
+        {
+          "h": "コンビニへ行く（　）、牛乳を買ってきて。",
+          "lc": [
+            "最中に",
+            "とたんに",
+            "ついでに",
+            "以来"
+          ],
+          "da": 2,
+          "gt": "Nhờ làm thêm một việc nhân tiện việc chính: ついでに. とたんに và 以来 không đi với thể từ điển, 最中に đi với V-ている."
+        },
+        {
+          "h": "Trong câu 「出張のついでに観光した」, việc chính là gì?",
+          "lc": [
+            "Đi công tác",
+            "Tham quan",
+            "Cả hai ngang nhau"
+          ],
+          "da": 0,
+          "gt": "Việc đứng trước ついでに là việc chính, việc sau là việc làm thêm."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-ta-tokoro",
+      "nhom": "Thời điểm – trình tự",
+      "tieuDe": "〜たところ",
+      "mau": "V-た + ところ、…",
+      "nghia": "sau khi (thử) làm ~ thì (biết được, có kết quả là)",
+      "giaiThich": "Dùng để thuật lại: làm việc A xong thì thu được kết quả hoặc phát hiện ra điều B. Giữa A và B không có quan hệ tất yếu, B là điều làm rồi mới biết. Trang trọng hơn 〜たら, hay dùng trong báo cáo, thư từ.",
+      "cachGhep": [
+        "Động từ thể た + ところ、+ câu chỉ kết quả ở thì quá khứ",
+        "Hay gặp: V-てみたところ (thử làm thì…)"
+      ],
+      "viDu": [
+        {
+          "c": "先生に聞いたところ、すぐに教えてくださいました。",
+          "d": "せんせいに きいたところ、すぐに おしえてくださいました。",
+          "v": "Tôi hỏi thầy thì thầy chỉ cho ngay."
+        },
+        {
+          "c": "新しい薬を飲んでみたところ、熱が下がりました。",
+          "d": "あたらしい くすりを のんでみたところ、ねつが さがりました。",
+          "v": "Tôi uống thử thuốc mới thì hạ sốt."
+        },
+        {
+          "c": "店に電話したところ、今日は休みだと言われました。",
+          "d": "みせに でんわしたところ、きょうは やすみだと いわれました。",
+          "v": "Tôi gọi điện tới cửa hàng thì được báo hôm nay nghỉ."
+        }
+      ],
+      "luuY": [
+        "Vế sau là việc đã xảy ra, không dùng ý chí hay yêu cầu.",
+        "Đừng nhầm với V-たところだ (vừa mới làm xong) đã học ở N4."
+      ],
+      "soSanh": [
+        "ja-n3-ta-totan",
+        "ja-n3-tokoro-ni",
+        "ja-n3-tokoro-datta"
+      ],
+      "tuKhoa": [
+        "ta tokoro",
+        "tatokoro",
+        "thử thì thấy",
+        "sau khi làm thì"
+      ],
+      "quiz": [
+        {
+          "h": "病院で（　）ところ、どこも悪くなかった。",
+          "lc": [
+            "調べてもらう",
+            "調べてもらった",
+            "調べてもらって",
+            "調べてもらい"
+          ],
+          "da": 1,
+          "gt": "Mẫu là V-た + ところ."
+        },
+        {
+          "h": "Vế sau của 「〜たところ、…」 thường là gì?",
+          "lc": [
+            "Kết quả hoặc điều phát hiện ra",
+            "Mệnh lệnh",
+            "Dự định trong tương lai"
+          ],
+          "da": 0,
+          "gt": "Mẫu này thuật lại kết quả thu được sau khi làm việc gì đó."
+        },
+        {
+          "h": "友達に相談したところ、（　）。",
+          "lc": [
+            "いい考えを教えてください",
+            "いい考えを教えてもらおう",
+            "いい考えを教えてくれた"
+          ],
+          "da": 2,
+          "gt": "Vế sau phải là việc đã xảy ra (教えてくれた), không phải yêu cầu hay ý chí."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-tokoro-datta",
+      "nhom": "Thời điểm – trình tự",
+      "tieuDe": "〜ところだった",
+      "mau": "V-る + ところだった",
+      "nghia": "suýt nữa thì ~ (nhưng thực tế đã không xảy ra)",
+      "giaiThich": "Diễn tả một việc (thường là việc xấu) chỉ chút nữa là xảy ra, nhưng may mà không xảy ra. Hay đi kèm もう少しで, 危なく, あと少しで.",
+      "cachGhep": [
+        "Động từ thể từ điển + ところだった / ところでした"
+      ],
+      "viDu": [
+        {
+          "c": "もう少しで電車に乗り遅れるところでした。",
+          "d": "もうすこしで でんしゃに のりおくれるところでした。",
+          "v": "Suýt chút nữa là tôi lỡ tàu."
+        },
+        {
+          "c": "危ない！車にぶつかるところだった。",
+          "d": "あぶない！くるまに ぶつかるところだった。",
+          "v": "Nguy hiểm quá! Suýt nữa thì đâm vào ô tô."
+        },
+        {
+          "c": "話に夢中で、降りる駅を忘れるところでした。",
+          "d": "はなしに むちゅうで、おりる えきを わすれるところでした。",
+          "v": "Mải nói chuyện, tôi suýt quên mất ga phải xuống."
+        }
+      ],
+      "luuY": [
+        "Việc được nói tới thực tế KHÔNG xảy ra. Người Việt hay nhầm với V-たところだ (vừa mới làm xong, việc đã xảy ra).",
+        "Động từ phải ở thể từ điển (✗ 落としたところだった với nghĩa \"suýt\")."
+      ],
+      "soSanh": [
+        "ja-n3-ta-tokoro",
+        "ja-n3-tokoro-ni"
+      ],
+      "tuKhoa": [
+        "tokoro datta",
+        "tokorodatta",
+        "suýt nữa",
+        "suýt thì",
+        "mou sukoshi de"
+      ],
+      "quiz": [
+        {
+          "h": "もう少しで財布を（　）ところだった。",
+          "lc": [
+            "落とした",
+            "落とす",
+            "落として",
+            "落とさない"
+          ],
+          "da": 1,
+          "gt": "\"Suýt nữa thì\" = V thể từ điển + ところだった."
+        },
+        {
+          "h": "「遅刻するところだった」 — thực tế thế nào?",
+          "lc": [
+            "Đã đi trễ",
+            "Sắp đi trễ trong tương lai",
+            "Suýt trễ nhưng đã không trễ"
+          ],
+          "da": 2,
+          "gt": "V-るところだった nói việc suýt xảy ra nhưng không xảy ra."
+        },
+        {
+          "h": "危なく階段から（　）。",
+          "lc": [
+            "落ちるところだった",
+            "落ちたところだ",
+            "落ちているところだ"
+          ],
+          "da": 0,
+          "gt": "危なく (suýt) đi với V-るところだった. 落ちたところだ = vừa mới ngã, 落ちているところだ = đang ngã."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-ni-yotte",
+      "nhom": "Trợ từ ghép (に〜 / を〜)",
+      "tieuDe": "〜によって／〜による",
+      "mau": "N + によって / N + により / N + による + N",
+      "nghia": "bởi ~ (bị động); bằng ~ (phương tiện); do ~ (nguyên nhân); tuỳ theo ~",
+      "giaiThich": "Mẫu này có bốn cách dùng chính: (1) nêu tác giả, người tạo ra trong câu bị động; (2) nêu phương tiện, cách thức; (3) nêu nguyên nhân; (4) \"tuỳ theo ~ mà khác nhau\". Thiên về văn viết, cách nói trang trọng. Khi bổ nghĩa cho danh từ thì dùng による + N.",
+      "cachGhep": [
+        "Danh từ + によって / により (trang trọng hơn)",
+        "Danh từ + による + danh từ: 地震による被害",
+        "Nghĩa \"tuỳ theo\": vế sau thường có 違う, 変わる, いろいろだ"
+      ],
+      "viDu": [
+        {
+          "c": "この寺は500年前に有名な人によって建てられました。",
+          "d": "この てらは ごひゃくねんまえに ゆうめいな ひとによって たてられました。",
+          "v": "Ngôi chùa này được một người nổi tiếng xây dựng cách đây 500 năm."
+        },
+        {
+          "c": "国によって、習慣が違います。",
+          "d": "くにによって、しゅうかんが ちがいます。",
+          "v": "Tuỳ theo từng nước mà phong tục khác nhau."
+        },
+        {
+          "c": "台風によって、多くの家が壊れました。",
+          "d": "たいふうによって、おおくの いえが こわれました。",
+          "v": "Do bão, nhiều ngôi nhà đã bị hỏng."
+        },
+        {
+          "c": "問題は話し合いによって解決しましょう。",
+          "d": "もんだいは はなしあいによって かいけつしましょう。",
+          "v": "Hãy giải quyết vấn đề bằng cách bàn bạc."
+        }
+      ],
+      "luuY": [
+        "Trong câu bị động nói về việc sáng tạo, xây dựng, phát minh (書く, 作る, 建てる, 発明する), tác giả dùng によって, không dùng に.",
+        "Phương tiện, dụng cụ đời thường thì dùng で (バスで行く, はしで食べる), không dùng によって."
+      ],
+      "soSanh": [
+        "ja-n3-ni-yoru-to"
+      ],
+      "tuKhoa": [
+        "ni yotte",
+        "niyotte",
+        "ni yoru",
+        "tuỳ theo",
+        "bởi",
+        "do"
+      ],
+      "quiz": [
+        {
+          "h": "この小説は、有名な作家（　）書かれた。",
+          "lc": [
+            "によって",
+            "について",
+            "にとって",
+            "に対して"
+          ],
+          "da": 0,
+          "gt": "Tác giả trong câu bị động về việc sáng tác dùng によって."
+        },
+        {
+          "h": "人（　）、考え方はいろいろだ。",
+          "lc": [
+            "について",
+            "によって",
+            "に比べて",
+            "として"
+          ],
+          "da": 1,
+          "gt": "\"Tuỳ từng người mà…\" = 人によって, vế sau có いろいろだ."
+        },
+        {
+          "h": "地震（　）被害は大きかった。",
+          "lc": [
+            "によって",
+            "により",
+            "による"
+          ],
+          "da": 2,
+          "gt": "Bổ nghĩa cho danh từ 被害 phải dùng による + N."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-ni-yoru-to",
+      "nhom": "Trợ từ ghép (に〜 / を〜)",
+      "tieuDe": "〜によると／〜によれば",
+      "mau": "N + によると / によれば + 〜そうだ・らしい・ということだ",
+      "nghia": "theo ~ (nguồn tin) thì nghe nói là",
+      "giaiThich": "Dùng để nêu nguồn của thông tin mình nghe hoặc đọc được: bản tin, báo, lời ai đó. Cuối câu phải có hình thức truyền đạt như 〜そうだ, 〜らしい, 〜ということだ.",
+      "cachGhep": [
+        "Danh từ chỉ nguồn tin + によると / によれば",
+        "Cuối câu: thể thường + そうだ / らしい / ということだ"
+      ],
+      "viDu": [
+        {
+          "c": "天気予報によると、明日は雪が降るそうです。",
+          "d": "てんきよほうによると、あしたは ゆきが ふるそうです。",
+          "v": "Theo dự báo thời tiết, nghe nói ngày mai có tuyết rơi."
+        },
+        {
+          "c": "友達の話によれば、あの店はとてもおいしいらしいです。",
+          "d": "ともだちの はなしによれば、あの みせは とても おいしいらしいです。",
+          "v": "Theo lời bạn tôi kể thì quán đó có vẻ rất ngon."
+        },
+        {
+          "c": "新聞によると、来月から電車代が上がるということです。",
+          "d": "しんぶんによると、らいげつから でんしゃだいが あがるということです。",
+          "v": "Theo báo đưa tin, từ tháng sau tiền tàu sẽ tăng."
+        }
+      ],
+      "luuY": [
+        "Người Việt hay quên hình thức truyền đạt ở cuối câu (✗ 天気予報によると、明日は雨が降ります).",
+        "Đừng nhầm với によって (do, bởi, tuỳ theo)."
+      ],
+      "soSanh": [
+        "ja-n3-ni-yotte",
+        "ja-n3-to-iu-koto-da"
+      ],
+      "tuKhoa": [
+        "ni yoru to",
+        "niyoruto",
+        "ni yoreba",
+        "theo như",
+        "nguồn tin"
+      ],
+      "quiz": [
+        {
+          "h": "ニュース（　）、昨日大きな事故があったそうだ。",
+          "lc": [
+            "によって",
+            "にとって",
+            "によると",
+            "について"
+          ],
+          "da": 2,
+          "gt": "Nêu nguồn tin + cuối câu có そうだ ⇒ によると."
+        },
+        {
+          "h": "天気予報によると、午後は（　）。",
+          "lc": [
+            "晴れるそうだ",
+            "晴れたい",
+            "晴れよう",
+            "晴れなさい"
+          ],
+          "da": 0,
+          "gt": "Sau によると, cuối câu dùng hình thức truyền đạt (thể thường + そうだ)."
+        },
+        {
+          "h": "「〜によれば」 có thể thay bằng cách nói nào?",
+          "lc": [
+            "〜によって",
+            "〜によると",
+            "〜にとって"
+          ],
+          "da": 1,
+          "gt": "によれば và によると cùng nghĩa: theo (nguồn tin) thì."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-ni-taishite",
+      "nhom": "Trợ từ ghép (に〜 / を〜)",
+      "tieuDe": "〜に対して",
+      "mau": "N + に対して / N + に対する + N / thể thường + のに対して",
+      "nghia": "đối với ~ (đối tượng của thái độ, hành động); trái với ~",
+      "giaiThich": "Nghĩa thứ nhất: chỉ đối tượng mà hành động, thái độ, cảm xúc hướng thẳng tới. Nghĩa thứ hai: so sánh hai sự việc trái ngược nhau, dùng dạng 〜のに対して.",
+      "cachGhep": [
+        "Danh từ + に対して / に対し (văn viết)",
+        "Danh từ + に対する + danh từ: 親に対する態度",
+        "Đối lập: thể thường (Aな + な, N + な) + のに対して"
+      ],
+      "viDu": [
+        {
+          "c": "お客様に対して、丁寧な言葉を使ってください。",
+          "d": "おきゃくさまにたいして、ていねいな ことばを つかってください。",
+          "v": "Đối với khách hàng, hãy dùng lời lẽ lịch sự."
+        },
+        {
+          "c": "彼は先生の意見に対して、反対しました。",
+          "d": "かれは せんせいの いけんにたいして、はんたいしました。",
+          "v": "Anh ấy đã phản đối ý kiến của thầy."
+        },
+        {
+          "c": "兄が静かなのに対して、弟はよく話します。",
+          "d": "あにが しずかなのにたいして、おとうとは よく はなします。",
+          "v": "Trái với người anh trầm tính, người em nói rất nhiều."
+        }
+      ],
+      "luuY": [
+        "に対して = hướng thái độ, hành động trực tiếp tới đối tượng (親切にする, 反対する, 失礼だ). Nội dung của việc nói, nghĩ, tìm hiểu thì dùng について (✗ 日本文化に対して調べる).",
+        "Đánh giá đứng từ lập trường của ai đó thì dùng にとって, không dùng に対して."
+      ],
+      "soSanh": [
+        "ja-n3-ni-tsuite",
+        "ja-n3-ni-totte"
+      ],
+      "tuKhoa": [
+        "ni taishite",
+        "nitaishite",
+        "ni taisuru",
+        "đối với",
+        "trái với"
+      ],
+      "quiz": [
+        {
+          "h": "目上の人（　）、そんな言い方は失礼だ。",
+          "lc": [
+            "について",
+            "に対して",
+            "によって",
+            "として"
+          ],
+          "da": 1,
+          "gt": "Thái độ (失礼) hướng tới đối tượng ⇒ に対して."
+        },
+        {
+          "h": "Câu nào dùng đúng?",
+          "lc": [
+            "日本の歴史に対して調べました。",
+            "この本は経済に対して書いてあります。",
+            "お年寄りに対して親切にしましょう。"
+          ],
+          "da": 2,
+          "gt": "親切にする là thái độ hướng tới đối tượng nên dùng に対して; 調べる, 書く về một chủ đề thì dùng について."
+        },
+        {
+          "h": "姉は背が高い（　）、妹は低い。",
+          "lc": [
+            "のに対して",
+            "について",
+            "によると"
+          ],
+          "da": 0,
+          "gt": "So sánh hai sự việc trái ngược: thể thường + のに対して."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-ni-tsuite",
+      "nhom": "Trợ từ ghép (に〜 / を〜)",
+      "tieuDe": "〜について",
+      "mau": "N + について / N + についての + N",
+      "nghia": "về ~ (nội dung của việc nói, nghĩ, viết, tìm hiểu)",
+      "giaiThich": "Nêu chủ đề, nội dung của các hoạt động như nói, nghe, viết, suy nghĩ, điều tra. Đây là cách nói thông dụng nhất cho nghĩa \"về ~\"; trang trọng hơn thì dùng に関して.",
+      "cachGhep": [
+        "Danh từ + について + 話す / 聞く / 書く / 考える / 調べる…",
+        "Danh từ + についての + danh từ: 日本についての本",
+        "Nhấn mạnh: については / についても"
+      ],
+      "viDu": [
+        {
+          "c": "日本の文化について調べています。",
+          "d": "にほんの ぶんかについて しらべています。",
+          "v": "Tôi đang tìm hiểu về văn hoá Nhật Bản."
+        },
+        {
+          "c": "この問題について、どう思いますか。",
+          "d": "この もんだいについて、どう おもいますか。",
+          "v": "Bạn nghĩ thế nào về vấn đề này?"
+        },
+        {
+          "c": "将来についての話を、家族としました。",
+          "d": "しょうらいについての はなしを、かぞくと しました。",
+          "v": "Tôi đã nói chuyện với gia đình về tương lai."
+        },
+        {
+          "c": "その事故については、何も知りません。",
+          "d": "その じこについては、なにも しりません。",
+          "v": "Về vụ tai nạn đó thì tôi không biết gì cả."
+        }
+      ],
+      "luuY": [
+        "Khi đứng ngay trước danh từ phải thêm の: についての N (✗ 日本について本).",
+        "Không dùng について cho đối tượng của thái độ (✗ 先生について失礼だ → 先生に対して)."
+      ],
+      "soSanh": [
+        "ja-n3-ni-taishite",
+        "ja-n3-ni-kanshite"
+      ],
+      "tuKhoa": [
+        "ni tsuite",
+        "nitsuite",
+        "về",
+        "liên quan đến"
+      ],
+      "quiz": [
+        {
+          "h": "来週、環境問題（　）発表します。",
+          "lc": [
+            "にとって",
+            "によって",
+            "について",
+            "に対して"
+          ],
+          "da": 2,
+          "gt": "Nội dung của bài phát biểu ⇒ について."
+        },
+        {
+          "h": "これは日本の祭り（　）本です。",
+          "lc": [
+            "について",
+            "についての",
+            "についてに"
+          ],
+          "da": 1,
+          "gt": "Bổ nghĩa cho danh từ 本 phải dùng についての."
+        },
+        {
+          "h": "「〜について」 thường đi với nhóm động từ nào?",
+          "lc": [
+            "話す・調べる・考える",
+            "行く・来る・帰る",
+            "開ける・閉める・消す"
+          ],
+          "da": 0,
+          "gt": "について nêu nội dung của việc nói, tìm hiểu, suy nghĩ."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1449 @@
+{
+  "nn": "ja",
+  "cap": "N4",
+  "diem": [
+    {
+      "id": "ja-n4-to-kaite-aru",
+      "nhom": "Suy đoán – truyền đạt",
+      "tieuDe": "〜と書いてあります／〜という意味です",
+      "mau": "「…」と 書いてあります / 〜と 読みます / 〜という 意味です",
+      "nghia": "có ghi là ~ / đọc là ~ / có nghĩa là ~",
+      "giaiThich": "Dùng khi giải thích nội dung chữ viết trên biển báo, giấy tờ, cách đọc một chữ, hoặc ý nghĩa của một từ, ký hiệu. Trước という意味です là thể thường; khi giải thích biển báo thường dùng thể mệnh lệnh hoặc cấm chỉ.",
+      "cachGhep": [
+        "Nội dung + と + 書いてあります",
+        "Chữ + は + cách đọc + と + 読みます",
+        "X は + thể thường / thể mệnh lệnh / thể cấm chỉ + という 意味です",
+        "Hỏi: 何と 書いてありますか / 何と 読みますか / どういう 意味ですか"
+      ],
+      "viDu": [
+        {
+          "c": "あそこに「禁煙」と書いてあります。",
+          "d": "あそこに「きんえん」と かいて あります。",
+          "v": "Ở đằng kia có ghi “Cấm hút thuốc”."
+        },
+        {
+          "c": "「禁煙」はたばこを吸うなという意味です。",
+          "d": "「きんえん」は たばこを すうなと いう いみです。",
+          "v": "“禁煙” có nghĩa là cấm hút thuốc."
+        },
+        {
+          "c": "この漢字は何と読みますか。",
+          "d": "この かんじは なんと よみますか。",
+          "v": "Chữ Hán này đọc là gì?"
+        },
+        {
+          "c": "このマークはどういう意味ですか。",
+          "d": "この マークは どういう いみですか。",
+          "v": "Ký hiệu này có nghĩa là gì?"
+        }
+      ],
+      "luuY": [
+        "Hỏi nội dung được ghi thì dùng と: 何と 書いてありますか.",
+        "Trước という意味です dùng thể thường, không dùng thể lịch sự: 使えないという意味です."
+      ],
+      "soSanh": [
+        "ja-n4-te-aru",
+        "ja-n4-meirei-kinshi"
+      ],
+      "tuKhoa": [
+        "to kaite arimasu",
+        "to iu imi",
+        "to yomimasu",
+        "có nghĩa là",
+        "có ghi là"
+      ],
+      "quiz": [
+        {
+          "h": "あの 紙に 何（　）書いて ありますか。",
+          "lc": [
+            "と",
+            "に",
+            "で",
+            "へ"
+          ],
+          "da": 0,
+          "gt": "Trích nội dung được ghi dùng と: 何と 書いて ありますか."
+        },
+        {
+          "h": "「立入禁止」は ここに（　）と いう 意味です。",
+          "lc": [
+            "入れ",
+            "入るな",
+            "入ります",
+            "入って"
+          ],
+          "da": 1,
+          "gt": "禁止 là cấm → thể cấm chỉ 入るな."
+        },
+        {
+          "h": "「使用中」は 今 使って いる（　）意味です。",
+          "lc": [
+            "のと",
+            "を いう",
+            "と いう"
+          ],
+          "da": 2,
+          "gt": "Mẫu giải thích nghĩa: thể thường + と いう 意味です."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-to-itte-imashita",
+      "nhom": "Suy đoán – truyền đạt",
+      "tieuDe": "〜と言っていました／〜と伝えていただけませんか",
+      "mau": "人 + は + thể thường + と 言っていました / 〜と 伝えていただけませんか",
+      "nghia": "(ai đó) đã nói là ~ / nhờ nhắn giúp là ~",
+      "giaiThich": "〜と言っていました dùng để truyền lại lời của người thứ ba cho người nghe (nhắn lại). 〜と言いました chỉ thuật lại sự việc ai đó đã nói. 〜と伝えていただけませんか là cách nhờ lịch sự để gửi lời nhắn cho người khác.",
+      "cachGhep": [
+        "人 + は + thể thường + と 言っていました",
+        "人 + に + thể thường + と 伝えていただけませんか / 伝えてください",
+        "Danh từ / tính từ đuôi な: 〜だ + と"
+      ],
+      "viDu": [
+        {
+          "c": "田中さんは明日休むと言っていました。",
+          "d": "たなかさんは あした やすむと いって いました。",
+          "v": "Anh Tanaka nói là ngày mai sẽ nghỉ."
+        },
+        {
+          "c": "山田さんに、会議は三時からだと伝えていただけませんか。",
+          "d": "やまださんに、かいぎは さんじからだと つたえて いただけませんか。",
+          "v": "Anh/chị nhắn giúp anh Yamada là cuộc họp bắt đầu từ 3 giờ được không ạ?"
+        },
+        {
+          "c": "先生は何と言っていましたか。",
+          "d": "せんせいは なんと いって いましたか。",
+          "v": "Thầy/cô đã nói gì?"
+        },
+        {
+          "c": "母は元気だと言っていました。",
+          "d": "ははは げんきだと いって いました。",
+          "v": "Mẹ tôi nói là mẹ khoẻ."
+        }
+      ],
+      "luuY": [
+        "Nội dung trước と dùng thể thường; danh từ, tính từ đuôi な cần だ: 休みだと 言っていました.",
+        "Truyền lời nhắn dùng と言っていました; と言いました chỉ kể lại rằng có nói.",
+        "Người nhận lời nhắn đi với に: 部長に 〜と 伝えてください."
+      ],
+      "soSanh": [
+        "ja-n4-sou-denbun",
+        "ja-n4-tte"
+      ],
+      "tuKhoa": [
+        "to itte imashita",
+        "to tsutaete",
+        "nhắn lại",
+        "lời nhắn",
+        "truyền đạt"
+      ],
+      "quiz": [
+        {
+          "h": "さっき 電話が ありました。田中さんは 少し 遅れると（　）。",
+          "lc": [
+            "言って いました",
+            "言って あります",
+            "言いませんか",
+            "言いたいです"
+          ],
+          "da": 0,
+          "gt": "Truyền lại lời người thứ ba: 〜と 言って いました."
+        },
+        {
+          "h": "すみませんが、山田さん（　）あした 行けないと 伝えて いただけませんか。",
+          "lc": [
+            "を",
+            "に",
+            "が",
+            "で"
+          ],
+          "da": 1,
+          "gt": "Người nhận lời nhắn đi với に."
+        },
+        {
+          "h": "リーさんは あしたは（　）と 言って いました。",
+          "lc": [
+            "暇",
+            "暇な",
+            "暇だ"
+          ],
+          "da": 2,
+          "gt": "Tính từ đuôi な ở thể thường cần だ trước と: 暇だと."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-tte",
+      "nhom": "Suy đoán – truyền đạt",
+      "tieuDe": "〜って",
+      "mau": "Thể thường + って / N + って",
+      "nghia": "nói là ~, nghe nói ~; ~ ấy à (khẩu ngữ của と / という / というのは)",
+      "giaiThich": "Là cách nói khẩu ngữ thân mật, có ba cách dùng chính: (1) thay cho と trích dẫn (〜って言っていた); (2) đặt cuối câu với nghĩa “nghe nói”; (3) N って thay cho N というのは / N は để nêu chủ đề khi hỏi nghĩa hoặc nhận xét.",
+      "cachGhep": [
+        "Trích dẫn: thể thường + って + 言う / 聞く",
+        "Nghe nói: thể thường + って (cuối câu)",
+        "Chủ đề: N + って + 何ですか / どんな 〜ですか"
+      ],
+      "viDu": [
+        {
+          "c": "田中さんは今日来ないって言っていたよ。",
+          "d": "たなかさんは きょう こないって いって いたよ。",
+          "v": "Anh Tanaka nói là hôm nay không đến đấy."
+        },
+        {
+          "c": "明日は雨だって。",
+          "d": "あしたは あめだって。",
+          "v": "Nghe nói mai mưa đấy."
+        },
+        {
+          "c": "「コンビニ」って何ですか。",
+          "d": "「コンビニ」って なんですか。",
+          "v": "“Konbini” là gì vậy?"
+        },
+        {
+          "c": "山田さんって、どんな人？",
+          "d": "やまださんって、どんな ひと？",
+          "v": "Anh Yamada ấy, là người thế nào?"
+        }
+      ],
+      "luuY": [
+        "Chỉ dùng trong hội thoại thân mật; văn viết, tình huống trang trọng dùng と / というのは / そうです.",
+        "Ở nghĩa “nghe nói”, danh từ và tính từ đuôi な cần だ: 休みだって."
+      ],
+      "soSanh": [
+        "ja-n4-to-itte-imashita",
+        "ja-n4-sou-denbun",
+        "ja-n3-tte"
+      ],
+      "tuKhoa": [
+        "tte",
+        "って",
+        "nghe nói",
+        "khẩu ngữ",
+        "to iu no wa"
+      ],
+      "quiz": [
+        {
+          "h": "「あした 行く」（　）言ったのに、来なかった。",
+          "lc": [
+            "って",
+            "っと",
+            "とて",
+            "ので"
+          ],
+          "da": 0,
+          "gt": "って là dạng khẩu ngữ của と trích dẫn."
+        },
+        {
+          "h": "「デパ地下」（　）何ですか。",
+          "lc": [
+            "とって",
+            "って",
+            "っで",
+            "のって"
+          ],
+          "da": 1,
+          "gt": "Nêu chủ đề để hỏi nghĩa: N + って + 何ですか."
+        },
+        {
+          "h": "「あしたは 休みだって。」の 意味に 近い ものは どれですか。",
+          "lc": [
+            "あしたは 休みましょう。",
+            "あしたは 休みたいです。",
+            "あしたは 休みだそうです。"
+          ],
+          "da": 2,
+          "gt": "って cuối câu = nghe nói, tương đương 〜そうです."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-kana-kashira",
+      "nhom": "Suy đoán – truyền đạt",
+      "tieuDe": "〜かな／〜かしら",
+      "mau": "Thể thường + かな / かしら (Na / N: bỏ だ)",
+      "nghia": "không biết ~ nhỉ, liệu ~ không ta (tự hỏi)",
+      "giaiThich": "Dùng khi tự hỏi, băn khoăn về điều gì đó; nói với người khác thì thành câu hỏi nhẹ nhàng, không đòi câu trả lời. かな ai cũng dùng; かしら chủ yếu do nữ giới dùng và ngày nay ít gặp hơn.",
+      "cachGhep": [
+        "Động từ / tính từ đuôi い thể thường + かな",
+        "Tính từ đuôi な / danh từ bỏ だ + かな: 大丈夫かな, 雨かな",
+        "Tự hỏi nên làm gì: V-(よ)う + かな: 行こうかな"
+      ],
+      "viDu": [
+        {
+          "c": "明日は晴れるかな。",
+          "d": "あしたは はれるかな。",
+          "v": "Không biết mai trời có nắng không nhỉ."
+        },
+        {
+          "c": "この服、私に似合うかしら。",
+          "d": "この ふく、わたしに にあうかしら。",
+          "v": "Bộ này không biết có hợp với mình không nhỉ."
+        },
+        {
+          "c": "今晩、何を食べようかな。",
+          "d": "こんばん、なにを たべようかな。",
+          "v": "Tối nay ăn gì đây ta."
+        },
+        {
+          "c": "田中さん、まだ来ないね。大丈夫かな。",
+          "d": "たなかさん、まだ こないね。だいじょうぶかな。",
+          "v": "Anh Tanaka vẫn chưa đến nhỉ. Không biết có sao không."
+        }
+      ],
+      "luuY": [
+        "Là lời thân mật; với người trên dùng 〜でしょうか.",
+        "Không có だ sau danh từ, tính từ đuôi な: 本当かな (không nói 本当だかな)."
+      ],
+      "soSanh": [
+        "ja-n4-deshou"
+      ],
+      "tuKhoa": [
+        "kana",
+        "kashira",
+        "không biết nhỉ",
+        "tự hỏi"
+      ],
+      "quiz": [
+        {
+          "h": "あの 人は だれ（　）。",
+          "lc": [
+            "かな",
+            "だかな",
+            "なかな",
+            "のかなだ"
+          ],
+          "da": 0,
+          "gt": "Danh từ / từ để hỏi nối thẳng với かな, không có だ."
+        },
+        {
+          "h": "「〜かな」の ていねいな 言い方は どれですか。",
+          "lc": [
+            "〜だよ",
+            "〜ですよ",
+            "〜でしょうか"
+          ],
+          "da": 2,
+          "gt": "Với người trên, tự hỏi / hỏi nhẹ dùng 〜でしょうか."
+        },
+        {
+          "h": "日曜日は どこへ（　）かな。",
+          "lc": [
+            "行って",
+            "行き",
+            "行きたく",
+            "行こう"
+          ],
+          "da": 3,
+          "gt": "Tự hỏi nên làm gì: thể ý chí + かな → 行こうかな."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-te-ageru",
+      "nhom": "Cho–nhận",
+      "tieuDe": "〜てあげます",
+      "mau": "(私は) 人 + に + V-て + あげます",
+      "nghia": "làm ~ cho (ai đó)",
+      "giaiThich": "Diễn tả người nói (hoặc người phía mình) làm một việc có lợi cho người khác. Vì mang sắc thái “ban ơn”, không nên nói trực tiếp 〜てあげます với người trên hay người lạ; khi đề nghị giúp thì dùng 〜ましょうか.",
+      "cachGhep": [
+        "人1 + は + 人2 + に + N + を + V-て + あげます",
+        "Tác động thẳng lên người / đồ của người đó: 人 + を 〜 / 人 + の + N + を 〜: 友達を 駅まで 送ってあげます"
+      ],
+      "viDu": [
+        {
+          "c": "私は友達に傘を貸してあげました。",
+          "d": "わたしは ともだちに かさを かして あげました。",
+          "v": "Tôi đã cho bạn mượn ô."
+        },
+        {
+          "c": "弟の宿題を見てあげます。",
+          "d": "おとうとの しゅくだいを みて あげます。",
+          "v": "Tôi xem bài tập giúp em trai."
+        },
+        {
+          "c": "おばあさんを駅まで送ってあげました。",
+          "d": "おばあさんを えきまで おくって あげました。",
+          "v": "Tôi đã tiễn bà cụ đến tận ga."
+        },
+        {
+          "c": "だれに本を読んであげますか。",
+          "d": "だれに ほんを よんで あげますか。",
+          "v": "Bạn đọc sách cho ai nghe?"
+        }
+      ],
+      "luuY": [
+        "Không dùng khi người nhận là mình: 友達は 私に 教えてあげました ✕ → 教えてくれました.",
+        "Nói với người trên 持ってあげます nghe như ban ơn; nên nói お持ちしましょうか / 持ちましょうか.",
+        "Tiếng Việt chỉ nói “cho”; tiếng Nhật phải chọn あげる / くれる / もらう theo hướng của việc giúp."
+      ],
+      "soSanh": [
+        "ja-n4-te-kureru",
+        "ja-n4-te-morau"
+      ],
+      "tuKhoa": [
+        "te ageru",
+        "teageru",
+        "te agemasu",
+        "làm cho",
+        "cho nhận"
+      ],
+      "quiz": [
+        {
+          "h": "妹は 英語が わかりません。わたしは 妹に 英語を 教えて（　）。",
+          "lc": [
+            "あげました",
+            "くれました",
+            "もらいました"
+          ],
+          "da": 0,
+          "gt": "Tôi làm cho người khác → 〜て あげました."
+        },
+        {
+          "h": "道が わからない 人が いたので、地図を かいて（　）。",
+          "lc": [
+            "くれました",
+            "あげました",
+            "もらいました"
+          ],
+          "da": 1,
+          "gt": "Người nói vẽ bản đồ giúp người khác → 〜て あげました."
+        },
+        {
+          "h": "先生の 荷物が 重そうです。何と 言いますか。",
+          "lc": [
+            "お持ちして あげます。",
+            "持って あげましょう。",
+            "お持ちしましょうか。"
+          ],
+          "da": 2,
+          "gt": "Với người trên không dùng 〜てあげる; đề nghị giúp bằng khiêm nhường ngữ お持ちしましょうか."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-te-morau",
+      "nhom": "Cho–nhận",
+      "tieuDe": "〜てもらいます",
+      "mau": "(私は) 人 + に + V-て + もらいます",
+      "nghia": "được (ai đó) làm ~ cho; nhờ (ai đó) làm ~",
+      "giaiThich": "Chủ ngữ là người nhận sự giúp đỡ (thường là tôi), người làm đi với に. Câu hàm ý biết ơn, và thường là việc do mình nhờ.",
+      "cachGhep": [
+        "私 + は + 人 + に + V-て + もらいます",
+        "Nhờ: V-て + もらえませんか / もらえますか"
+      ],
+      "viDu": [
+        {
+          "c": "私は田中さんに駅まで送ってもらいました。",
+          "d": "わたしは たなかさんに えきまで おくって もらいました。",
+          "v": "Tôi được anh Tanaka đưa ra tận ga."
+        },
+        {
+          "c": "友達に日本語の作文を直してもらいます。",
+          "d": "ともだちに にほんごの さくぶんを なおして もらいます。",
+          "v": "Tôi nhờ bạn sửa bài văn tiếng Nhật."
+        },
+        {
+          "c": "だれに写真を撮ってもらいましたか。",
+          "d": "だれに しゃしんを とって もらいましたか。",
+          "v": "Bạn nhờ ai chụp ảnh cho?"
+        },
+        {
+          "c": "すみません、ちょっと手伝ってもらえませんか。",
+          "d": "すみません、ちょっと てつだって もらえませんか。",
+          "v": "Xin lỗi, bạn giúp tôi một chút được không?"
+        }
+      ],
+      "luuY": [
+        "Chủ ngữ là người NHẬN; người làm đi với に: 私は 母に 作ってもらいました = 母が 作ってくれました.",
+        "Người Việt hay nói 母は 私に 作ってもらいました với ý “mẹ làm cho tôi” — sai hướng; câu đó nghĩa là mẹ được tôi làm cho."
+      ],
+      "soSanh": [
+        "ja-n4-te-kureru",
+        "ja-n4-te-ageru",
+        "ja-n4-juju-keigo"
+      ],
+      "tuKhoa": [
+        "te morau",
+        "temorau",
+        "te moraimasu",
+        "được làm cho",
+        "nhờ"
+      ],
+      "quiz": [
+        {
+          "h": "わたしは 山田さん（　）引っ越しを 手伝って もらいました。",
+          "lc": [
+            "に",
+            "が",
+            "を",
+            "へ"
+          ],
+          "da": 0,
+          "gt": "Người làm giúp trong mẫu 〜てもらう đi với に."
+        },
+        {
+          "h": "「友達が かさを 貸して くれました」と 同じ 意味の 文は どれですか。",
+          "lc": [
+            "わたしは 友達に かさを 貸して あげました。",
+            "友達は わたしに かさを 貸して もらいました。",
+            "わたしは 友達に かさを 貸して もらいました。"
+          ],
+          "da": 2,
+          "gt": "人が 〜てくれる = 私は 人に 〜てもらう."
+        },
+        {
+          "h": "漢字が 読めなかったので、先輩に（　）。",
+          "lc": [
+            "読んで あげました",
+            "読んで くれました",
+            "読んで やりました",
+            "読んで もらいました"
+          ],
+          "da": 3,
+          "gt": "Mình là người nhận, người làm đi với に → 〜て もらいました."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-te-kureru",
+      "nhom": "Cho–nhận",
+      "tieuDe": "〜てくれます",
+      "mau": "人 + が + (私に) V-て + くれます",
+      "nghia": "(ai đó) làm ~ cho tôi / cho người nhà tôi",
+      "giaiThich": "Chủ ngữ là người làm; người nhận là tôi hoặc người phía tôi (私に thường được lược bỏ). Câu hàm ý biết ơn, và việc đó do người kia tự nguyện làm. 〜てくれませんか là cách nhờ thân mật.",
+      "cachGhep": [
+        "人 + が / は + (私に) + V-て + くれます",
+        "Nhờ thân mật: V-て + くれませんか / くれない？"
+      ],
+      "viDu": [
+        {
+          "c": "友達が空港まで迎えに来てくれました。",
+          "d": "ともだちが くうこうまで むかえに きて くれました。",
+          "v": "Bạn tôi đã ra tận sân bay đón tôi."
+        },
+        {
+          "c": "母はいつも弁当を作ってくれます。",
+          "d": "ははは いつも べんとうを つくって くれます。",
+          "v": "Mẹ lúc nào cũng làm cơm hộp cho tôi."
+        },
+        {
+          "c": "だれが手伝ってくれましたか。",
+          "d": "だれが てつだって くれましたか。",
+          "v": "Ai đã giúp bạn?"
+        },
+        {
+          "c": "ちょっとその塩を取ってくれませんか。",
+          "d": "ちょっと その しおを とって くれませんか。",
+          "v": "Lấy giúp tôi lọ muối kia được không?"
+        }
+      ],
+      "luuY": [
+        "Người nhận phải là “tôi / phía tôi”; người làm là chủ ngữ, đi với が / は.",
+        "Thiếu くれる thì câu chỉ thuật sự việc: 友達が 来ました (bạn đến) – 友達が 来てくれました (bạn đến vì tôi, tôi biết ơn)."
+      ],
+      "soSanh": [
+        "ja-n4-te-morau",
+        "ja-n4-te-ageru",
+        "ja-n4-juju-keigo"
+      ],
+      "tuKhoa": [
+        "te kureru",
+        "tekureru",
+        "te kuremasu",
+        "làm cho tôi"
+      ],
+      "quiz": [
+        {
+          "h": "田中さん（　）わたしに 町を 案内して くれました。",
+          "lc": [
+            "が",
+            "に",
+            "を",
+            "で"
+          ],
+          "da": 0,
+          "gt": "Người làm trong mẫu 〜てくれる là chủ ngữ, đi với が."
+        },
+        {
+          "h": "友達が 病院まで いっしょに 行って（　）。うれしかったです。",
+          "lc": [
+            "あげました",
+            "くれました",
+            "やりました"
+          ],
+          "da": 1,
+          "gt": "Bạn làm cho tôi và tôi biết ơn → 〜て くれました."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "わたしは 姉が 服を 貸して あげました。",
+            "わたしは 姉に 服を 貸して くれました。",
+            "姉が わたしに 服を 貸して くれました。"
+          ],
+          "da": 2,
+          "gt": "くれる: người làm (姉) là chủ ngữ với が, người nhận là わたしに."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-juju-keigo",
+      "nhom": "Cho–nhận",
+      "tieuDe": "〜ていただきます／〜てくださいます／〜てやります",
+      "mau": "V-て + いただきます / くださいます / やります",
+      "nghia": "dạng kính ngữ của 〜てもらう / 〜てくれる; 〜てやる dùng với người dưới, con vật",
+      "giaiThich": "Khi người làm là người trên: 〜てもらう đổi thành 〜ていただく (khiêm nhường), 〜てくれる đổi thành 〜てくださる (tôn kính). Khi người nhận là em nhỏ, con cái, động vật, cây cối: 〜てあげる có thể đổi thành 〜てやる. Cho–nhận đồ vật cũng theo đúng cặp này.",
+      "cachGhep": [
+        "私 + は + người trên + に + V-て + いただきます",
+        "Người trên + が + (私に) V-て + くださいます (thể ます của くださる là くださいます)",
+        "私 + は + người dưới / con vật + に + V-て + やります",
+        "Cho–nhận đồ vật: N を いただきます / くださいます / やります"
+      ],
+      "viDu": [
+        {
+          "c": "私は先生に作文を直していただきました。",
+          "d": "わたしは せんせいに さくぶんを なおして いただきました。",
+          "v": "Tôi đã được thầy/cô sửa bài văn cho."
+        },
+        {
+          "c": "部長が駅まで送ってくださいました。",
+          "d": "ぶちょうが えきまで おくって くださいました。",
+          "v": "Trưởng phòng đã đưa tôi ra tận ga."
+        },
+        {
+          "c": "毎朝、犬を散歩に連れていってやります。",
+          "d": "まいあさ、いぬを さんぽに つれて いって やります。",
+          "v": "Sáng nào tôi cũng dắt chó đi dạo."
+        },
+        {
+          "c": "先生が辞書をくださいました。",
+          "d": "せんせいが じしょを くださいました。",
+          "v": "Thầy/cô đã cho tôi quyển từ điển."
+        }
+      ],
+      "luuY": [
+        "Trợ từ theo đúng cặp gốc: 先生に 〜ていただく (như もらう) – 先生が 〜てくださる (như くれる).",
+        "くださる → くださいます (không phải くださります).",
+        "やる dùng với người lớn nghe thô; ngày nay nhiều người dùng あげる cả với em nhỏ, thú cưng."
+      ],
+      "soSanh": [
+        "ja-n4-te-morau",
+        "ja-n4-te-kureru",
+        "ja-n4-te-ageru"
+      ],
+      "tuKhoa": [
+        "te itadaku",
+        "te kudasaru",
+        "te yaru",
+        "itadakimasu",
+        "kudasaimasu",
+        "kính ngữ cho nhận"
+      ],
+      "quiz": [
+        {
+          "h": "わたしは 社長（　）会社を 案内して いただきました。",
+          "lc": [
+            "に",
+            "が",
+            "を",
+            "で"
+          ],
+          "da": 0,
+          "gt": "〜ていただく theo trợ từ của もらう: người làm đi với に."
+        },
+        {
+          "h": "先生（　）この 本を 貸して くださいました。",
+          "lc": [
+            "に",
+            "が",
+            "を",
+            "へ"
+          ],
+          "da": 1,
+          "gt": "〜てくださる theo trợ từ của くれる: người làm là chủ ngữ với が."
+        },
+        {
+          "h": "毎日 花に 水を（　）。",
+          "lc": [
+            "くださいます",
+            "いただきます",
+            "やります"
+          ],
+          "da": 2,
+          "gt": "Cho cây cối, động vật dùng やります."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-ukemi",
+      "nhom": "Bị động – sai khiến",
+      "tieuDe": "Thể bị động (受身形)",
+      "mau": "人1 + は + 人2 + に + V-bị động",
+      "nghia": "bị / được (ai đó) ~",
+      "giaiThich": "Thể bị động nhìn sự việc từ phía người hoặc vật chịu tác động; người gây ra hành động đi với に. Cũng dùng khi không cần nêu người làm, như nói về sự kiện, công trình, tác phẩm (〜で開かれます, 〜に建てられました).",
+      "cachGhep": [
+        "Nhóm I: đuôi cột う → cột あ + れる: 書く → 書かれる, 言う → 言われる, しかる → しかられる, 読む → 読まれる",
+        "Nhóm II: bỏ る + られる: 食べる → 食べられる, ほめる → ほめられる",
+        "Nhóm III: する → される, 来る → 来られる（こられる）",
+        "Không nêu người làm: N + が / は + V-bị động; tác giả, người phát minh: 人 + によって"
+      ],
+      "viDu": [
+        {
+          "c": "私は先生にほめられました。",
+          "d": "わたしは せんせいに ほめられました。",
+          "v": "Tôi được thầy/cô khen."
+        },
+        {
+          "c": "弟は母にしかられました。",
+          "d": "おとうとは ははに しかられました。",
+          "v": "Em trai tôi bị mẹ mắng."
+        },
+        {
+          "c": "この寺は五百年前に建てられました。",
+          "d": "この てらは ごひゃくねんまえに たてられました。",
+          "v": "Ngôi chùa này được xây 500 năm trước."
+        },
+        {
+          "c": "会議はどこで開かれますか。",
+          "d": "かいぎは どこで ひらかれますか。",
+          "v": "Cuộc họp được tổ chức ở đâu?"
+        }
+      ],
+      "luuY": [
+        "Ở nhóm II và 来る, thể bị động trùng hình thức với thể khả năng (食べられる, 来られる); phân biệt nhờ trợ từ và ngữ cảnh.",
+        "Tiếng Việt phân biệt “bị” (xấu) và “được” (tốt); tiếng Nhật dùng chung một thể bị động. Việc người khác làm vì mình và mình biết ơn thì dùng 〜てもらう, không dùng bị động.",
+        "Đuôi う → われる: 言う → 言われる, 誘う → 誘われる."
+      ],
+      "soSanh": [
+        "ja-n4-ukemi-meiwaku",
+        "ja-n4-kanou-kei"
+      ],
+      "tuKhoa": [
+        "ukemi",
+        "ukemikei",
+        "rareru",
+        "bị động",
+        "passive"
+      ],
+      "quiz": [
+        {
+          "h": "「呼ぶ」の 受身形は どれですか。",
+          "lc": [
+            "呼ばれる",
+            "呼べる",
+            "呼ばせる",
+            "呼びられる"
+          ],
+          "da": 0,
+          "gt": "Nhóm I: ぶ → ば + れる = 呼ばれる. 呼べる là khả năng, 呼ばせる là sai khiến."
+        },
+        {
+          "h": "わたしは 部長（　）仕事を 頼まれました。",
+          "lc": [
+            "を",
+            "に",
+            "へ",
+            "で"
+          ],
+          "da": 1,
+          "gt": "Người gây ra hành động trong câu bị động đi với に."
+        },
+        {
+          "h": "この 歌は 多くの 人に（　）います。",
+          "lc": [
+            "歌って",
+            "歌わせて",
+            "歌われて"
+          ],
+          "da": 2,
+          "gt": "Bài hát là vật chịu tác động, người hát đi với に → bị động 歌われて います."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-ukemi-meiwaku",
+      "nhom": "Bị động – sai khiến",
+      "tieuDe": "Bị động gián tiếp（bị làm phiền）",
+      "mau": "私は + 人 + に + (N を) + V-bị động",
+      "nghia": "bị (ai đó) làm ~ (khiến mình thiệt hại, khó chịu)",
+      "giaiThich": "Có hai dạng: (1) đồ vật hoặc bộ phận cơ thể của mình bị tác động: chủ ngữ là người chủ, còn đồ vật vẫn giữ を; (2) dùng cả tự động từ để nói mình bị ảnh hưởng xấu bởi việc người khác hoặc thiên nhiên gây ra: 雨に降られる, 子どもに泣かれる.",
+      "cachGhep": [
+        "私 + は + 人 + に + đồ của mình + を + V-bị động",
+        "私 + は + 人 / 雨 + に + tự động từ thể bị động: 降られる, 泣かれる, 来られる"
+      ],
+      "viDu": [
+        {
+          "c": "電車の中で足を踏まれました。",
+          "d": "でんしゃの なかで あしを ふまれました。",
+          "v": "Tôi bị giẫm vào chân trên tàu."
+        },
+        {
+          "c": "私は弟にケーキを食べられました。",
+          "d": "わたしは おとうとに ケーキを たべられました。",
+          "v": "Tôi bị em trai ăn mất cái bánh."
+        },
+        {
+          "c": "帰る途中で雨に降られました。",
+          "d": "かえる とちゅうで あめに ふられました。",
+          "v": "Trên đường về tôi bị mắc mưa."
+        },
+        {
+          "c": "だれに財布を取られたんですか。",
+          "d": "だれに さいふを とられたんですか。",
+          "v": "Bạn bị ai lấy mất ví vậy?"
+        }
+      ],
+      "luuY": [
+        "Chủ ngữ là NGƯỜI bị ảnh hưởng, không phải đồ vật: 私の足が 踏まれました nghe không tự nhiên → 私は 足を 踏まれました.",
+        "Luôn mang nghĩa bị thiệt, khó chịu; việc tốt thì dùng 〜てもらう / 〜てくれる: 友達に 写真を 撮ってもらいました."
+      ],
+      "soSanh": [
+        "ja-n4-ukemi",
+        "ja-n4-te-morau"
+      ],
+      "tuKhoa": [
+        "meiwaku ukemi",
+        "kansetsu ukemi",
+        "bị động gián tiếp",
+        "bị làm phiền",
+        "ame ni furareru"
+      ],
+      "quiz": [
+        {
+          "h": "わたしは どろぼうに かばん（　）取られました。",
+          "lc": [
+            "を",
+            "が",
+            "に",
+            "は"
+          ],
+          "da": 0,
+          "gt": "Đồ vật của mình bị tác động vẫn giữ を: かばんを 取られました."
+        },
+        {
+          "h": "いちばん 自然な 文は どれですか。",
+          "lc": [
+            "わたしは 弟が カメラを 壊されました。",
+            "わたしは 弟に カメラを 壊されました。",
+            "わたしの カメラを 弟が 壊されました。"
+          ],
+          "da": 1,
+          "gt": "Người bị thiệt là chủ ngữ, người gây ra đi với に, đồ vật giữ を."
+        },
+        {
+          "h": "ゆうべ 遅くまで 友達に（　）、勉強が できませんでした。",
+          "lc": [
+            "来て くれて",
+            "来て もらって",
+            "来られて"
+          ],
+          "da": 2,
+          "gt": "Bị ảnh hưởng xấu (không học được) → bị động gián tiếp 来られて."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-shieki",
+      "nhom": "Bị động – sai khiến",
+      "tieuDe": "Thể sai khiến (使役形)",
+      "mau": "人1 + は + 人2 + を / に + V-sai khiến",
+      "nghia": "bắt (ai) làm ~; cho phép, để (ai) làm ~",
+      "giaiThich": "Diễn tả người trên bắt buộc hoặc cho phép người dưới làm một việc. Với tự động từ, người thực hiện đi với を; với tha động từ (đã có tân ngữ を), người thực hiện đi với に.",
+      "cachGhep": [
+        "Nhóm I: đuôi cột う → cột あ + せる: 行く → 行かせる, 読む → 読ませる, 買う → 買わせる",
+        "Nhóm II: bỏ る + させる: 食べる → 食べさせる",
+        "Nhóm III: する → させる, 来る → 来させる（こさせる）",
+        "Tự động từ: 人 + を + V-sai khiến; tha động từ: 人 + に + N + を + V-sai khiến"
+      ],
+      "viDu": [
+        {
+          "c": "母は弟を買い物に行かせました。",
+          "d": "ははは おとうとを かいものに いかせました。",
+          "v": "Mẹ bắt em trai đi mua đồ."
+        },
+        {
+          "c": "先生は学生に漢字を書かせます。",
+          "d": "せんせいは がくせいに かんじを かかせます。",
+          "v": "Thầy/cô cho học sinh viết chữ Hán."
+        },
+        {
+          "c": "私は子どもに好きなことをさせています。",
+          "d": "わたしは こどもに すきな ことを させて います。",
+          "v": "Tôi để con làm điều nó thích."
+        },
+        {
+          "c": "子どもにどんな本を読ませますか。",
+          "d": "こどもに どんな ほんを よませますか。",
+          "v": "Bạn cho con đọc sách gì?"
+        }
+      ],
+      "luuY": [
+        "Không dùng sai khiến với người trên (先生を 来させました ✕); nhờ người trên thì dùng 〜ていただきます.",
+        "Trợ từ: 子どもを 行かせる (tự động từ) – 子どもに 野菜を 食べさせる (tha động từ, tránh hai を).",
+        "Cùng một câu có thể là “bắt” hoặc “cho phép”, tuỳ ngữ cảnh."
+      ],
+      "soSanh": [
+        "ja-n4-shieki-ukemi",
+        "ja-n4-sasete-itadaku"
+      ],
+      "tuKhoa": [
+        "shieki",
+        "shiekikei",
+        "saseru",
+        "sai khiến",
+        "bắt làm",
+        "cho phép"
+      ],
+      "quiz": [
+        {
+          "h": "「飲む」の 使役形は どれですか。",
+          "lc": [
+            "飲ませる",
+            "飲まれる",
+            "飲める",
+            "飲みさせる"
+          ],
+          "da": 0,
+          "gt": "Nhóm I: む → ま + せる = 飲ませる."
+        },
+        {
+          "h": "部長は 山田さん（　）大阪へ 出張させました。",
+          "lc": [
+            "が",
+            "を",
+            "で",
+            "の"
+          ],
+          "da": 1,
+          "gt": "出張する là tự động từ nên người thực hiện đi với を."
+        },
+        {
+          "h": "母は 妹（　）部屋を 掃除させました。",
+          "lc": [
+            "を",
+            "が",
+            "に"
+          ],
+          "da": 2,
+          "gt": "Đã có tân ngữ 部屋を nên người thực hiện đi với に."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-sasete-itadaku",
+      "nhom": "Bị động – sai khiến",
+      "tieuDe": "〜(さ)せていただけませんか",
+      "mau": "V-sai khiến thể て + いただけませんか",
+      "nghia": "xin cho phép tôi được làm ~ (rất lịch sự)",
+      "giaiThich": "Dùng để xin phép người trên cho mình làm một việc gì đó; nghĩa đen là “anh/chị có thể cho tôi làm ~ được không”. Người thực hiện hành động là người nói.",
+      "cachGhep": [
+        "V-sai khiến thể て + いただけませんか: 休む → 休ませる → 休ませて いただけませんか",
+        "Nhẹ hơn: V-sai khiến thể て + ください / もらえませんか"
+      ],
+      "viDu": [
+        {
+          "c": "明日、休ませていただけませんか。",
+          "d": "あした、やすませて いただけませんか。",
+          "v": "Ngày mai cho phép tôi nghỉ được không ạ?"
+        },
+        {
+          "c": "すみませんが、ここに荷物を置かせていただけませんか。",
+          "d": "すみませんが、ここに にもつを おかせて いただけませんか。",
+          "v": "Xin lỗi, cho phép tôi để hành lý ở đây được không ạ?"
+        },
+        {
+          "c": "この仕事は私にやらせてください。",
+          "d": "この しごとは わたしに やらせて ください。",
+          "v": "Xin hãy để tôi làm việc này."
+        },
+        {
+          "c": "写真を撮らせていただけませんか。",
+          "d": "しゃしんを とらせて いただけませんか。",
+          "v": "Cho phép tôi chụp ảnh được không ạ?"
+        }
+      ],
+      "luuY": [
+        "Ai làm? 休ませていただけませんか = TÔI nghỉ; 休んでいただけませんか = xin ANH/CHỊ nghỉ. Người Việt rất hay lẫn hai câu này.",
+        "Chia sang thể sai khiến trước rồi mới sang thể て: 帰る → 帰らせる → 帰らせて."
+      ],
+      "soSanh": [
+        "ja-n4-shieki",
+        "ja-n4-n-desu-ga"
+      ],
+      "tuKhoa": [
+        "sasete itadakemasen ka",
+        "sasete kudasai",
+        "xin phép",
+        "cho phép tôi"
+      ],
+      "quiz": [
+        {
+          "h": "気分が 悪いので、早く（　）いただけませんか。",
+          "lc": [
+            "帰らせて",
+            "帰って",
+            "帰られて",
+            "帰れて"
+          ],
+          "da": 0,
+          "gt": "Người nói xin phép cho mình về → thể sai khiến + て: 帰らせて いただけませんか."
+        },
+        {
+          "h": "「写真を 撮らせて いただけませんか」— 写真を 撮るのは だれですか。",
+          "lc": [
+            "聞いて いる 人",
+            "話して いる 人",
+            "ほかの 人"
+          ],
+          "da": 1,
+          "gt": "〜させていただけませんか là xin phép cho chính người nói làm."
+        },
+        {
+          "h": "その 仕事は ぜひ わたしに（　）ください。",
+          "lc": [
+            "して",
+            "されて",
+            "させて"
+          ],
+          "da": 2,
+          "gt": "“Hãy để tôi làm” → sai khiến của する: させて ください."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-shieki-ukemi",
+      "nhom": "Bị động – sai khiến",
+      "tieuDe": "Thể sai khiến bị động (使役受身)",
+      "mau": "人1 + は + 人2 + に + V-sai khiến bị động",
+      "nghia": "bị (ai) bắt làm ~ (trái ý mình)",
+      "giaiThich": "Diễn tả việc phải làm một điều mình không muốn vì bị người khác ép. Chủ ngữ là người bị bắt, người bắt đi với に. Câu mang cảm giác khó chịu, miễn cưỡng.",
+      "cachGhep": [
+        "Nhóm I: thể ない bỏ ない + せられる, thường rút gọn thành される: 待つ → 待たせられる / 待たされる, 飲む → 飲まされる",
+        "Nhóm I đuôi す không rút gọn: 話す → 話させられる",
+        "Nhóm II: bỏ る + させられる: 食べる → 食べさせられる",
+        "Nhóm III: する → させられる, 来る → 来させられる（こさせられる）"
+      ],
+      "viDu": [
+        {
+          "c": "子どものとき、母に野菜を食べさせられました。",
+          "d": "こどもの とき、ははに やさいを たべさせられました。",
+          "v": "Hồi nhỏ tôi bị mẹ bắt ăn rau."
+        },
+        {
+          "c": "病院で一時間も待たされました。",
+          "d": "びょういんで いちじかんも またされました。",
+          "v": "Tôi bị bắt chờ ở bệnh viện tới một tiếng."
+        },
+        {
+          "c": "部長にお酒を飲まされました。",
+          "d": "ぶちょうに おさけを のまされました。",
+          "v": "Tôi bị trưởng phòng ép uống rượu."
+        },
+        {
+          "c": "学生のとき、先生に何をさせられましたか。",
+          "d": "がくせいの とき、せんせいに なにを させられましたか。",
+          "v": "Hồi đi học bạn bị thầy cô bắt làm gì?"
+        }
+      ],
+      "luuY": [
+        "Chủ ngữ là người BỊ bắt; người bắt đi với に.",
+        "Dạng rút gọn 〜される chỉ dùng cho nhóm I (trừ động từ đuôi す); nhóm II không rút gọn.",
+        "Đừng nhầm 待たされる (bị bắt chờ) với 待たれる (bị động thường)."
+      ],
+      "soSanh": [
+        "ja-n4-shieki",
+        "ja-n4-ukemi"
+      ],
+      "tuKhoa": [
+        "shieki ukemi",
+        "saserareru",
+        "sareru",
+        "bị bắt làm",
+        "sai khiến bị động"
+      ],
+      "quiz": [
+        {
+          "h": "「書く」の 使役受身は どれですか。",
+          "lc": [
+            "書かされる",
+            "書かれる",
+            "書かせる",
+            "書けられる"
+          ],
+          "da": 0,
+          "gt": "書く → 書かせられる, rút gọn thành 書かされる."
+        },
+        {
+          "h": "わたしは 母（　）毎日 ピアノを 練習させられました。",
+          "lc": [
+            "を",
+            "に",
+            "が",
+            "へ"
+          ],
+          "da": 1,
+          "gt": "Người ép buộc đi với に."
+        },
+        {
+          "h": "きのう 先輩に カラオケで 歌を（　）。歌いたくなかったのに。",
+          "lc": [
+            "歌わせました",
+            "歌われました",
+            "歌わされました"
+          ],
+          "da": 2,
+          "gt": "Bị ép hát dù không muốn → sai khiến bị động 歌わされました."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-sonkeigo",
+      "nhom": "Kính ngữ",
+      "tieuDe": "Tôn kính ngữ: お〜になります／〜(ら)れます",
+      "mau": "お + V-ます (bỏ ます) + になります / V-(ら)れます",
+      "nghia": "cách nói kính trọng về hành động của người trên",
+      "giaiThich": "Dùng khi nói về hành động của người trên, khách hàng, người không thân để nâng người đó lên. Có hai cách: お〜になります (mức kính trọng cao hơn) và động từ có hình thức giống thể bị động 〜(ら)れます (nhẹ hơn). Lời yêu cầu lịch sự là お〜ください.",
+      "cachGhep": [
+        "お + V-ます bỏ ます + に なります: 帰ります → お帰りになります, 待ちます → お待ちになります",
+        "V-(ら)れます (hình thức giống bị động): 読みます → 読まれます, 出かけます → 出かけられます, 来ます → 来られます",
+        "Yêu cầu: お + V-ます bỏ ます + ください: お待ちください; danh từ gốc Hán: ご + N + ください: ご連絡ください"
+      ],
+      "viDu": [
+        {
+          "c": "社長はもうお帰りになりました。",
+          "d": "しゃちょうは もう おかえりに なりました。",
+          "v": "Giám đốc đã về rồi ạ."
+        },
+        {
+          "c": "先生はこの本を読まれましたか。",
+          "d": "せんせいは この ほんを よまれましたか。",
+          "v": "Thầy/cô đã đọc cuốn sách này chưa ạ?"
+        },
+        {
+          "c": "こちらで少々お待ちください。",
+          "d": "こちらで しょうしょう おまちください。",
+          "v": "Xin vui lòng đợi ở đây một lát."
+        },
+        {
+          "c": "部長は何時に出かけられますか。",
+          "d": "ぶちょうは なんじに でかけられますか。",
+          "v": "Trưởng phòng ra ngoài lúc mấy giờ ạ?"
+        }
+      ],
+      "luuY": [
+        "Không dùng tôn kính ngữ cho hành động của mình hay của người nhà mình khi nói với người ngoài (私は お帰りになります ✕).",
+        "Động từ chỉ có một âm tiết trước ます (見ます, います, 来ます, します) không dùng お〜になります; dùng dạng đặc biệt (ご覧になります, いらっしゃいます, なさいます).",
+        "お〜になります (việc của người trên) khác お〜します (khiêm nhường, việc của mình)."
+      ],
+      "soSanh": [
+        "ja-n4-sonkeigo-tokubetsu",
+        "ja-n4-kenjougo",
+        "ja-n4-ukemi"
+      ],
+      "tuKhoa": [
+        "sonkeigo",
+        "o ni narimasu",
+        "tôn kính ngữ",
+        "kính ngữ",
+        "keigo"
+      ],
+      "quiz": [
+        {
+          "h": "社長は 何時ごろ（　）なりますか。",
+          "lc": [
+            "お戻りに",
+            "お戻りして",
+            "戻られに",
+            "お戻るに"
+          ],
+          "da": 0,
+          "gt": "お + thể ます bỏ ます + に なります: お戻りに なります."
+        },
+        {
+          "h": "どうぞ こちらに お（　）ください。",
+          "lc": [
+            "かけて",
+            "かけ",
+            "かける",
+            "かけに"
+          ],
+          "da": 1,
+          "gt": "Yêu cầu lịch sự: お + thể ます bỏ ます + ください → おかけください."
+        },
+        {
+          "h": "尊敬語の 使い方が 正しい 文は どれですか。",
+          "lc": [
+            "わたしは きのう 本を お読みに なりました。",
+            "わたしの 父は もう お帰りに なりました。",
+            "先生は もう お帰りに なりました。"
+          ],
+          "da": 2,
+          "gt": "Tôn kính ngữ chỉ dùng cho người trên, không dùng cho mình và người nhà mình."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-sonkeigo-tokubetsu",
+      "nhom": "Kính ngữ",
+      "tieuDe": "Tôn kính ngữ đặc biệt（いらっしゃいます…）",
+      "mau": "いらっしゃいます / 召し上がります / おっしゃいます / なさいます / ご覧になります / ご存じです",
+      "nghia": "động từ kính trọng riêng thay cho 行く, 来る, いる, 食べる, 言う, する, 見る…",
+      "giaiThich": "Một số động từ thông dụng có dạng tôn kính riêng, dùng để nói về hành động của người trên thay cho お〜になります. Các động từ いらっしゃる, おっしゃる, なさる, くださる có thể ます bất quy tắc (đuôi 〜います).",
+      "cachGhep": [
+        "行きます / 来ます / います → いらっしゃいます",
+        "食べます / 飲みます → 召し上がります",
+        "言います → おっしゃいます; します → なさいます",
+        "見ます → ご覧になります; くれます → くださいます; 知っています → ご存じです",
+        "Thể ます bất quy tắc: いらっしゃる → いらっしゃいます, おっしゃる → おっしゃいます, なさる → なさいます"
+      ],
+      "viDu": [
+        {
+          "c": "先生は今、研究室にいらっしゃいます。",
+          "d": "せんせいは いま、けんきゅうしつに いらっしゃいます。",
+          "v": "Thầy/cô hiện đang ở phòng nghiên cứu ạ."
+        },
+        {
+          "c": "どうぞたくさん召し上がってください。",
+          "d": "どうぞ たくさん めしあがって ください。",
+          "v": "Xin mời anh/chị dùng nhiều vào ạ."
+        },
+        {
+          "c": "社長は何とおっしゃいましたか。",
+          "d": "しゃちょうは なんと おっしゃいましたか。",
+          "v": "Giám đốc đã nói gì ạ?"
+        },
+        {
+          "c": "お客様はこの写真をご覧になりましたか。",
+          "d": "おきゃくさまは この しゃしんを ごらんに なりましたか。",
+          "v": "Quý khách đã xem bức ảnh này chưa ạ?"
+        }
+      ],
+      "luuY": [
+        "いらっしゃいます dùng chung cho 行く, 来る, いる — đoán nghĩa theo trợ từ và ngữ cảnh.",
+        "Thể ます là 〜います, không phải 〜ります: いらっしゃいます (không nói いらっしゃります).",
+        "Đừng lẫn với khiêm nhường ngữ: 召し上がります (người trên ăn) – いただきます (mình ăn)."
+      ],
+      "soSanh": [
+        "ja-n4-sonkeigo",
+        "ja-n4-kenjougo-tokubetsu"
+      ],
+      "tuKhoa": [
+        "irassharu",
+        "meshiagaru",
+        "ossharu",
+        "nasaru",
+        "goran ni naru",
+        "tôn kính ngữ đặc biệt"
+      ],
+      "quiz": [
+        {
+          "h": "「食べます」の 尊敬語は どれですか。",
+          "lc": [
+            "召し上がります",
+            "いただきます",
+            "お食べします",
+            "まいります"
+          ],
+          "da": 0,
+          "gt": "Tôn kính ngữ của 食べます là 召し上がります; いただきます là khiêm nhường ngữ."
+        },
+        {
+          "h": "先生は あした 学校に（　）か。",
+          "lc": [
+            "まいります",
+            "いらっしゃいます",
+            "おります",
+            "うかがいます"
+          ],
+          "da": 1,
+          "gt": "Hành động của thầy cô dùng tôn kính ngữ いらっしゃいます; ba từ kia là khiêm nhường ngữ."
+        },
+        {
+          "h": "「言います」の 尊敬語は どれですか。",
+          "lc": [
+            "申します",
+            "申し上げます",
+            "おっしゃいます"
+          ],
+          "da": 2,
+          "gt": "Tôn kính ngữ của 言います là おっしゃいます; 申します là khiêm nhường ngữ."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-kenjougo",
+      "nhom": "Kính ngữ",
+      "tieuDe": "Khiêm nhường ngữ: お〜します／ご〜します",
+      "mau": "お + V-ます (bỏ ます) + します / ご + danh từ gốc Hán + します",
+      "nghia": "cách nói hạ mình khi làm việc gì cho / hướng tới người trên",
+      "giaiThich": "Dùng khi nói về hành động của mình (hoặc phía mình) có liên quan tới người trên, nhằm hạ mình xuống để tỏ ý kính trọng. Rất hay dùng khi đề nghị giúp đỡ: お〜しましょうか.",
+      "cachGhep": [
+        "お + V-ます bỏ ます + します: 持ちます → お持ちします, 送ります → お送りします",
+        "ご + danh từ gốc Hán + します: 案内 → ご案内します, 連絡 → ご連絡します, 説明 → ご説明します",
+        "Đề nghị giúp: お + V + しましょうか"
+      ],
+      "viDu": [
+        {
+          "c": "重そうですね。お持ちしましょうか。",
+          "d": "おもそうですね。おもちしましょうか。",
+          "v": "Trông nặng quá. Để tôi xách giúp nhé?"
+        },
+        {
+          "c": "明日、こちらからご連絡します。",
+          "d": "あした、こちらから ごれんらくします。",
+          "v": "Ngày mai phía tôi sẽ liên lạc ạ."
+        },
+        {
+          "c": "駅まで車でお送りします。",
+          "d": "えきまで くるまで おおくりします。",
+          "v": "Tôi sẽ đưa anh/chị ra ga bằng ô tô."
+        },
+        {
+          "c": "会場までご案内しましょうか。",
+          "d": "かいじょうまで ごあんない しましょうか。",
+          "v": "Để tôi dẫn anh/chị tới hội trường nhé?"
+        }
+      ],
+      "luuY": [
+        "Chỉ dùng cho việc mình làm có hướng tới người kia; việc chỉ liên quan tới mình thì không dùng (私は 毎朝 お起きします ✕).",
+        "お〜します là việc CỦA MÌNH; お〜になります là việc của NGƯỜI TRÊN. Lẫn hai mẫu này là lỗi kính ngữ phổ biến nhất.",
+        "Động từ chỉ có một âm tiết trước ます (見ます, います) dùng dạng đặc biệt: 拝見します, おります."
+      ],
+      "soSanh": [
+        "ja-n4-sonkeigo",
+        "ja-n4-kenjougo-tokubetsu"
+      ],
+      "tuKhoa": [
+        "kenjougo",
+        "o shimasu",
+        "go shimasu",
+        "khiêm nhường ngữ",
+        "keigo"
+      ],
+      "quiz": [
+        {
+          "h": "先生、その 荷物は わたしが（　）。",
+          "lc": [
+            "お持ちします",
+            "お持ちに なります",
+            "持たれます",
+            "お持ちください"
+          ],
+          "da": 0,
+          "gt": "Việc của mình làm cho người trên → khiêm nhường ngữ お持ちします."
+        },
+        {
+          "h": "あとで こちらから（　）連絡します。",
+          "lc": [
+            "お",
+            "ご",
+            "おん"
+          ],
+          "da": 1,
+          "gt": "連絡 là danh từ gốc Hán nên dùng ご: ご連絡します."
+        },
+        {
+          "h": "謙譲語を 使って いる 文は どれですか。",
+          "lc": [
+            "社長が お話しに なります。",
+            "どうぞ お入りください。",
+            "わたしが ご説明します。"
+          ],
+          "da": 2,
+          "gt": "ご〜します nói về việc của mình là khiêm nhường ngữ; hai câu kia là tôn kính ngữ."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-kenjougo-tokubetsu",
+      "nhom": "Kính ngữ",
+      "tieuDe": "Khiêm nhường ngữ đặc biệt（参ります・申します…）",
+      "mau": "参ります / おります / いただきます / 申します / いたします / 拝見します / 伺います",
+      "nghia": "động từ hạ mình riêng thay cho 行く, 来る, いる, 食べる, 言う, する, 見る, 聞く…",
+      "giaiThich": "Một số động từ thông dụng có dạng khiêm nhường riêng, dùng khi nói về hành động của mình hoặc người phía mình trước người trên, khách hàng. Hay gặp trong tự giới thiệu, điện thoại, thư từ công việc.",
+      "cachGhep": [
+        "行きます / 来ます → 参ります; います → おります",
+        "食べます / 飲みます / もらいます → いただきます",
+        "言います → 申します; します → いたします",
+        "見ます → 拝見します; 聞きます / 訪ねます → 伺います; 知っています → 存じております",
+        "Lịch sự hoá: あります → ございます; です → でございます"
+      ],
+      "viDu": [
+        {
+          "c": "私はベトナムから参りました。",
+          "d": "わたしは ベトナムから まいりました。",
+          "v": "Tôi đến từ Việt Nam ạ."
+        },
+        {
+          "c": "ミンと申します。どうぞよろしくお願いいたします。",
+          "d": "ミンと もうします。どうぞ よろしく おねがい いたします。",
+          "v": "Tôi tên là Minh. Rất mong được giúp đỡ ạ."
+        },
+        {
+          "c": "明日三時に伺ってもよろしいですか。",
+          "d": "あした さんじに うかがっても よろしいですか。",
+          "v": "Ngày mai 3 giờ tôi đến thăm có được không ạ?"
+        },
+        {
+          "c": "父は今、家におりません。",
+          "d": "ちちは いま、いえに おりません。",
+          "v": "Bố tôi hiện không có nhà ạ."
+        }
+      ],
+      "luuY": [
+        "Không dùng khiêm nhường ngữ cho hành động của người trên (先生が 参りました ✕ → いらっしゃいました).",
+        "Người nhà mình cũng được hạ xuống khi nói với người ngoài: 父は おります.",
+        "いただきます vừa là “ăn, uống” vừa là “nhận” (khiêm nhường của もらう)."
+      ],
+      "soSanh": [
+        "ja-n4-sonkeigo-tokubetsu",
+        "ja-n4-kenjougo",
+        "ja-n4-juju-keigo"
+      ],
+      "tuKhoa": [
+        "mairu",
+        "mousu",
+        "oru",
+        "itasu",
+        "haiken",
+        "ukagau",
+        "khiêm nhường ngữ đặc biệt"
+      ],
+      "quiz": [
+        {
+          "h": "はじめまして。田中と（　）。",
+          "lc": [
+            "申します",
+            "おっしゃいます",
+            "いらっしゃいます",
+            "なさいます"
+          ],
+          "da": 0,
+          "gt": "Tự giới thiệu dùng khiêm nhường ngữ của 言います: 申します."
+        },
+        {
+          "h": "あした わたしが そちらへ（　）。",
+          "lc": [
+            "いらっしゃいます",
+            "参ります",
+            "おいでに なります"
+          ],
+          "da": 1,
+          "gt": "Hành động “đi” của mình → khiêm nhường ngữ 参ります."
+        },
+        {
+          "h": "「見ます」の 謙譲語は どれですか。",
+          "lc": [
+            "ご覧に なります",
+            "見られます",
+            "お見えに なります",
+            "拝見します"
+          ],
+          "da": 3,
+          "gt": "Khiêm nhường ngữ của 見ます là 拝見します; ご覧になります là tôn kính ngữ."
+        }
+      ]
+    }
+  ]
+}

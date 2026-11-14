@@ -1020,6 +1020,7 @@ for route in \
     hoc-tap/tong-quan \
     ctlanguage/dich/luot \
     ctlanguage/thi/danh-muc \
+    ctlanguage/ngu-phap/tong-quan \
     ctlanguage/kham-pha/su-kien/thuong \
     ctlanguage/bai-ai/luot \
     ctlanguage/hoi-gau/luot \

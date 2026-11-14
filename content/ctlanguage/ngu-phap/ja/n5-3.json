@@ -1,0 +1,1284 @@
+{
+  "nn": "ja",
+  "cap": "N5",
+  "diem": [
+    {
+      "id": "ja-n5-arimasu-imasu",
+      "nhom": "Tồn tại – số đếm",
+      "tieuDe": "あります / います",
+      "mau": "N + が + あります / います",
+      "nghia": "có ~ (đồ vật: あります; người, động vật: います)",
+      "giaiThich": "Hai động từ chỉ sự tồn tại hoặc sở hữu. あります dùng cho đồ vật, cây cối, sự việc (không tự chuyển động). います dùng cho người và động vật. Chủ thể tồn tại được đánh dấu bằng が.",
+      "cachGhep": [
+        "Đồ vật / cây cối / sự kiện + が + あります (phủ định: ありません)",
+        "Người / động vật + が + います (phủ định: いません)",
+        "Sở hữu: わたしは + N + が + あります / います"
+      ],
+      "viDu": [
+        {
+          "c": "あそこにぎんこうがあります。",
+          "d": "あそこに ぎんこうが あります。",
+          "v": "Ở đằng kia có ngân hàng."
+        },
+        {
+          "c": "にわにねこがいます。",
+          "d": "にわに ねこが います。",
+          "v": "Trong vườn có con mèo."
+        },
+        {
+          "c": "今日はお金がありません。",
+          "d": "きょうは おかねが ありません。",
+          "v": "Hôm nay tôi không có tiền."
+        },
+        {
+          "c": "きょうだいがいますか。",
+          "d": "きょうだいが いますか。",
+          "v": "Bạn có anh chị em không?"
+        }
+      ],
+      "luuY": [
+        "Tiếng Việt chỉ có một chữ “có”; tiếng Nhật phải chọn theo chủ thể. Cây cối là vật sống nhưng vẫn dùng あります.",
+        "Nói về cuộc hẹn, giờ học, sự kiện cũng dùng あります: あした テストが あります."
+      ],
+      "soSanh": [
+        "ja-n5-ni-ga-arimasu"
+      ],
+      "tuKhoa": [
+        "arimasu",
+        "imasu",
+        "aru iru",
+        "có",
+        "tồn tại"
+      ],
+      "quiz": [
+        {
+          "h": "にわに いぬが（　）。",
+          "lc": [
+            "います",
+            "あります",
+            "です"
+          ],
+          "da": 0,
+          "gt": "Chó là động vật nên dùng います."
+        },
+        {
+          "h": "へやに テレビが（　）。",
+          "lc": [
+            "います",
+            "あります",
+            "行きます"
+          ],
+          "da": 1,
+          "gt": "Tivi là đồ vật nên dùng あります."
+        },
+        {
+          "h": "こうえんに 大きい 木が（　）。",
+          "lc": [
+            "います",
+            "見ます",
+            "あります"
+          ],
+          "da": 2,
+          "gt": "Cây cối không tự di chuyển nên dùng あります."
+        }
+      ]
+    },
+    {
+      "id": "ja-n5-ni-ga-arimasu",
+      "nhom": "Tồn tại – số đếm",
+      "tieuDe": "〜に〜があります / います",
+      "mau": "Nơi chốn + に + N + が + あります / います ・ N + は + nơi chốn + に + あります / います",
+      "nghia": "ở (đâu) có ~ / ~ thì ở (đâu)",
+      "giaiThich": "Mẫu “nơi chốn に N が あります” dùng để giới thiệu ở một nơi có cái gì / có ai (N là thông tin mới). Khi N đã được biết và muốn nói nó ở đâu, đưa N lên làm chủ đề: “N は nơi chốn に あります”. Nơi tồn tại luôn đi với に.",
+      "cachGhep": [
+        "Nơi chốn + に + N + が + あります / います",
+        "N + は + nơi chốn + に + あります / います (= N は nơi chốn です)",
+        "Vị trí: N の + 上 / 下 / 中 / 前 / うしろ / となり / ちかく + に"
+      ],
+      "viDu": [
+        {
+          "c": "つくえの上に本があります。",
+          "d": "つくえの うえに ほんが あります。",
+          "v": "Trên bàn có quyển sách."
+        },
+        {
+          "c": "駅の前にぎんこうがあります。",
+          "d": "えきの まえに ぎんこうが あります。",
+          "v": "Trước ga có ngân hàng."
+        },
+        {
+          "c": "へやにだれもいません。",
+          "d": "へやに だれも いません。",
+          "v": "Trong phòng không có ai cả."
+        },
+        {
+          "c": "田中さんはとしょかんにいます。",
+          "d": "たなかさんは としょかんに います。",
+          "v": "Anh Tanaka đang ở thư viện."
+        }
+      ],
+      "luuY": [
+        "Nơi tồn tại dùng に, không dùng で: sai へやで ねこが います.",
+        "Trật tự vị trí ngược tiếng Việt: “trên bàn” → つくえの 上 (danh từ mốc đứng trước)."
+      ],
+      "soSanh": [
+        "ja-n5-arimasu-imasu",
+        "ja-n5-de-noi-chon"
+      ],
+      "tuKhoa": [
+        "ni ga arimasu",
+        "ni ga imasu",
+        "ở đâu có",
+        "vị trí",
+        "ue shita naka"
+      ],
+      "quiz": [
+        {
+          "h": "かばんの 中（　）本が あります。",
+          "lc": [
+            "に",
+            "で",
+            "を"
+          ],
+          "da": 0,
+          "gt": "Nơi tồn tại đi với に."
+        },
+        {
+          "h": "いすの 下に ねこ（　）います。",
+          "lc": [
+            "を",
+            "が",
+            "へ"
+          ],
+          "da": 1,
+          "gt": "Chủ thể tồn tại (thông tin mới) đi với が."
+        },
+        {
+          "h": "A: ぎんこうは どこに ありますか。 B: （　）。",
+          "lc": [
+            "駅の 前で あります",
+            "駅の 前を あります",
+            "駅の 前に あります"
+          ],
+          "da": 2,
+          "gt": "Nơi tồn tại + に + あります."
+        }
+      ]
+    },
+    {
+      "id": "ja-n5-tro-so-tu",
+      "nhom": "Tồn tại – số đếm",
+      "tieuDe": "Số đếm + trợ số từ",
+      "mau": "N + を / が + số lượng + V",
+      "nghia": "cách đếm đồ vật, người, vật mỏng, máy móc, vật dài…",
+      "giaiThich": "Khi đếm, tiếng Nhật gắn trợ số từ (từ chỉ đơn vị đếm) vào sau con số, tuỳ loại sự vật. Cụm số lượng thường đứng ngay TRƯỚC động từ và không kèm trợ từ. Đồ vật nói chung đếm bằng ひとつ, ふたつ… (đến とお).",
+      "cachGhep": [
+        "Đồ vật chung: ひとつ, ふたつ, みっつ, よっつ, いつつ, むっつ, ななつ, やっつ, ここのつ, とお — hỏi: いくつ",
+        "Người: ひとり, ふたり, さんにん, よにん… — hỏi: 何人 (なんにん)",
+        "Vật mỏng: 〜まい ・ máy móc, xe: 〜だい ・ vật dài: 〜本 (いっぽん, にほん, さんぼん) ・ sách vở: 〜さつ ・ số lần: 〜かい"
+      ],
+      "viDu": [
+        {
+          "c": "りんごを三つ買いました。",
+          "d": "りんごを みっつ かいました。",
+          "v": "Tôi đã mua ba quả táo."
+        },
+        {
+          "c": "きょうしつに学生が二人います。",
+          "d": "きょうしつに がくせいが ふたり います。",
+          "v": "Trong lớp có hai sinh viên."
+        },
+        {
+          "c": "きってを5まいください。",
+          "d": "きってを ごまい ください。",
+          "v": "Cho tôi năm con tem."
+        },
+        {
+          "c": "ビールを2本飲みました。",
+          "d": "ビールを にほん のみました。",
+          "v": "Tôi đã uống hai chai bia."
+        }
+      ],
+      "luuY": [
+        "Tiếng Việt nói “ba quả táo” (số + loại từ + danh từ); tiếng Nhật thường nói りんごを 三つ (danh từ + を + số lượng).",
+        "Sau số lượng không thêm を / が: sai りんごを 三つを 買いました.",
+        "Chú ý biến âm: いっぽん, さんぼん, ろっぽん; 一人 = ひとり, 二人 = ふたり."
+      ],
+      "tuKhoa": [
+        "josuushi",
+        "hitotsu futatsu",
+        "trợ số từ",
+        "lượng từ",
+        "đếm",
+        "mai dai hon"
+      ],
+      "quiz": [
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "りんごを 二つ 食べました。",
+            "りんごを 二つを 食べました。",
+            "二つ りんごを 食べました。"
+          ],
+          "da": 0,
+          "gt": "Số lượng đứng ngay trước động từ, không kèm trợ từ: N を + số lượng + V."
+        },
+        {
+          "h": "「一人」 đọc là:",
+          "lc": [
+            "いちにん",
+            "ひとり",
+            "いちじん"
+          ],
+          "da": 1,
+          "gt": "Một người = ひとり, hai người = ふたり; từ ba người mới đọc 〜にん."
+        },
+        {
+          "h": "Đếm vật mỏng, dẹt (tờ giấy, con tem, áo sơ mi) dùng trợ số từ nào?",
+          "lc": [
+            "〜本",
+            "〜だい",
+            "〜まい"
+          ],
+          "da": 2,
+          "gt": "〜まい dùng cho vật mỏng dẹt; 〜本 cho vật dài, 〜だい cho máy móc / xe cộ."
+        }
+      ]
+    },
+    {
+      "id": "ja-n5-tinh-tu-i",
+      "nhom": "Tính từ",
+      "tieuDe": "Tính từ đuôi い (hiện tại)",
+      "mau": "N + は + A-い + です ・ A-くないです",
+      "nghia": "N thì ~ / N không ~ (tính từ đuôi い)",
+      "giaiThich": "Tính từ đuôi い kết thúc bằng い (高い, おいしい, さむい). Khi làm vị ngữ, chỉ cần thêm です cho lịch sự. Phủ định đổi い thành くない rồi thêm です. Riêng いい (tốt) phủ định là よくないです.",
+      "cachGhep": [
+        "Khẳng định: A-い + です (高いです)",
+        "Phủ định: A-い → A-くないです (高くないです) — trang trọng hơn: A-くありません",
+        "Ngoại lệ: いいです → よくないです"
+      ],
+      "viDu": [
+        {
+          "c": "この本はおもしろいです。",
+          "d": "この ほんは おもしろいです。",
+          "v": "Quyển sách này hay."
+        },
+        {
+          "c": "今日はさむくないです。",
+          "d": "きょうは さむくないです。",
+          "v": "Hôm nay không lạnh."
+        },
+        {
+          "c": "そのかばんは高いですか。",
+          "d": "その かばんは たかいですか。",
+          "v": "Cái cặp đó có đắt không?"
+        },
+        {
+          "c": "このえいがはあまりよくないです。",
+          "d": "この えいがは あまり よくないです。",
+          "v": "Bộ phim này không hay lắm."
+        }
+      ],
+      "luuY": [
+        "Không phủ định tính từ đuôi い bằng じゃありません: sai 高いじゃありません.",
+        "Không cần động từ “là / thì”: この本は おもしろいです, không thêm gì giữa は và tính từ.",
+        "あまり + phủ định = “không … lắm”; とても + khẳng định = “rất”."
+      ],
+      "soSanh": [
+        "ja-n5-tinh-tu-na",
+        "ja-n5-tinh-tu-qua-khu"
+      ],
+      "tuKhoa": [
+        "i keiyoushi",
+        "tính từ đuôi i",
+        "kunai",
+        "yokunai",
+        "tính từ i"
+      ],
+      "quiz": [
+        {
+          "h": "Phủ định của 「高いです」 là:",
+          "lc": [
+            "高くないです",
+            "高いじゃありません",
+            "高いくないです"
+          ],
+          "da": 0,
+          "gt": "Tính từ đuôi い: bỏ い, thêm くないです."
+        },
+        {
+          "h": "Phủ định của 「いいです」 là:",
+          "lc": [
+            "いくないです",
+            "よくないです",
+            "いいくないです"
+          ],
+          "da": 1,
+          "gt": "いい chia theo dạng gốc よい: よくないです."
+        },
+        {
+          "h": "この りんごは（　）です。",
+          "lc": [
+            "おいしく",
+            "おいしいな",
+            "おいしい"
+          ],
+          "da": 2,
+          "gt": "Tính từ đuôi い làm vị ngữ giữ nguyên dạng + です."
+        }
+      ]
+    },
+    {
+      "id": "ja-n5-tinh-tu-na",
+      "nhom": "Tính từ",
+      "tieuDe": "Tính từ đuôi な (hiện tại)",
+      "mau": "N + は + A-な (bỏ な) + です ・ じゃありません",
+      "nghia": "N thì ~ / N không ~ (tính từ đuôi な)",
+      "giaiThich": "Tính từ đuôi な (しずか, きれい, ゆうめい, べんり, ひま…) khi làm vị ngữ thì chia giống danh từ: thêm です, phủ định là じゃありません. Chữ な chỉ xuất hiện khi tính từ đứng trước danh từ.",
+      "cachGhep": [
+        "Khẳng định: A (không có な) + です (しずかです)",
+        "Phủ định: A + じゃありません / ではありません",
+        "Một số từ tận cùng bằng い nhưng là đuôi な: きれい, ゆうめい, きらい"
+      ],
+      "viDu": [
+        {
+          "c": "このまちはしずかです。",
+          "d": "この まちは しずかです。",
+          "v": "Thành phố này yên tĩnh."
+        },
+        {
+          "c": "わたしのへやはきれいじゃありません。",
+          "d": "わたしの へやは きれいじゃ ありません。",
+          "v": "Phòng của tôi không sạch."
+        },
+        {
+          "c": "あしたはひまですか。",
+          "d": "あしたは ひまですか。",
+          "v": "Ngày mai bạn có rảnh không?"
+        },
+        {
+          "c": "あの人はとてもゆうめいです。",
+          "d": "あの ひとは とても ゆうめいです。",
+          "v": "Người kia rất nổi tiếng."
+        }
+      ],
+      "luuY": [
+        "Đừng chia きれい, ゆうめい, きらい như tính từ đuôi い: sai きれくないです; đúng きれいじゃありません.",
+        "Khi làm vị ngữ không có な: sai しずかなです."
+      ],
+      "soSanh": [
+        "ja-n5-tinh-tu-i",
+        "ja-n5-tinh-tu-bo-nghia"
+      ],
+      "tuKhoa": [
+        "na keiyoushi",
+        "tính từ đuôi na",
+        "kirei",
+        "shizuka",
+        "tính từ na"
+      ],
+      "quiz": [
+        {
+          "h": "Phủ định của 「しずかです」 là:",
+          "lc": [
+            "しずかじゃありません",
+            "しずかくないです",
+            "しずかないです"
+          ],
+          "da": 0,
+          "gt": "Tính từ đuôi な phủ định như danh từ: じゃありません."
+        },
+        {
+          "h": "Phủ định của 「きれいです」 là:",
+          "lc": [
+            "きれくないです",
+            "きれいじゃありません",
+            "きれいくないです"
+          ],
+          "da": 1,
+          "gt": "きれい là tính từ đuôi な dù tận cùng bằng い."
+        },
+        {
+          "h": "Từ nào là tính từ đuôi な?",
+          "lc": [
+            "おいしい",
+            "あたらしい",
+            "ゆうめい"
+          ],
+          "da": 2,
+          "gt": "ゆうめい (nổi tiếng) là tính từ đuôi な: ゆうめいな 人."
+        }
+      ]
+    },
+    {
+      "id": "ja-n5-tinh-tu-qua-khu",
+      "nhom": "Tính từ",
+      "tieuDe": "Tính từ ở quá khứ",
+      "mau": "A-かったです / A-くなかったです ・ A-な・N + でした / じゃありませんでした",
+      "nghia": "đã ~ / đã không ~ (tính từ, danh từ ở quá khứ)",
+      "giaiThich": "Khi nói về trạng thái, cảm nhận trong quá khứ, tính từ cũng phải chia. Tính từ đuôi い tự đổi đuôi (い → かった), còn です giữ nguyên. Tính từ đuôi な và danh từ thì đổi です thành でした.",
+      "cachGhep": [
+        "Đuôi い: A-い → A-かったです ・ phủ định: A-くなかったです",
+        "Đuôi な / danh từ: 〜でした ・ phủ định: 〜じゃありませんでした",
+        "いいです → よかったです / よくなかったです"
+      ],
+      "viDu": [
+        {
+          "c": "きのうはあつかったです。",
+          "d": "きのうは あつかったです。",
+          "v": "Hôm qua trời nóng."
+        },
+        {
+          "c": "テストはむずかしくなかったです。",
+          "d": "テストは むずかしくなかったです。",
+          "v": "Bài kiểm tra không khó."
+        },
+        {
+          "c": "先週はひまでした。",
+          "d": "せんしゅうは ひまでした。",
+          "v": "Tuần trước tôi rảnh."
+        },
+        {
+          "c": "きのうは休みじゃありませんでした。",
+          "d": "きのうは やすみじゃ ありませんでした。",
+          "v": "Hôm qua không phải ngày nghỉ."
+        }
+      ],
+      "luuY": [
+        "Lỗi kinh điển: tính từ đuôi い + でした (sai おいしいでした; đúng おいしかったです).",
+        "Tiếng Việt không chia tính từ theo thì nên rất dễ quên: “Hôm qua vui” → きのうは たのしかったです."
+      ],
+      "soSanh": [
+        "ja-n5-tinh-tu-i",
+        "ja-n5-tinh-tu-na"
+      ],
+      "tuKhoa": [
+        "katta",
+        "kunakatta",
+        "deshita",
+        "quá khứ tính từ",
+        "yokatta"
+      ],
+      "quiz": [
+        {
+          "h": "「おいしいです」 chuyển sang quá khứ là:",
+          "lc": [
+            "おいしかったです",
+            "おいしいでした",
+            "おいしでした"
+          ],
+          "da": 0,
+          "gt": "Tính từ đuôi い: い → かった + です."
+        },
+        {
+          "h": "「ひまです」 chuyển sang quá khứ là:",
+          "lc": [
+            "ひまかったです",
+            "ひまでした",
+            "ひまいでした"
+          ],
+          "da": 1,
+          "gt": "Tính từ đuôi な chia như danh từ: です → でした."
+        },
+        {
+          "h": "「いいです」 chuyển sang quá khứ là:",
+          "lc": [
+            "いかったです",
+            "いいでした",
+            "よかったです"
+          ],
+          "da": 2,
+          "gt": "いい chia theo よい: よかったです."
+        }
+      ]
+    },
+    {
+      "id": "ja-n5-tinh-tu-bo-nghia",
+      "nhom": "Tính từ",
+      "tieuDe": "Tính từ bổ nghĩa danh từ",
+      "mau": "A-い + N ・ A-な + N",
+      "nghia": "N (như thế nào): tính từ đứng trước danh từ",
+      "giaiThich": "Tính từ luôn đứng TRƯỚC danh từ mà nó bổ nghĩa. Tính từ đuôi い giữ nguyên dạng rồi ghép thẳng vào danh từ; tính từ đuôi な phải thêm な ở giữa. Không dùng の để nối tính từ với danh từ.",
+      "cachGhep": [
+        "A-い + N: 新しい 車, 大きい かばん",
+        "A-な + な + N: しずかな へや, ゆうめいな 人",
+        "Hỏi: どんな + N"
+      ],
+      "viDu": [
+        {
+          "c": "新しい車を買いました。",
+          "d": "あたらしい くるまを かいました。",
+          "v": "Tôi đã mua xe mới."
+        },
+        {
+          "c": "東京はにぎやかなまちです。",
+          "d": "とうきょうは にぎやかな まちです。",
+          "v": "Tokyo là một thành phố nhộn nhịp."
+        },
+        {
+          "c": "もう少し大きいかばんはありますか。",
+          "d": "もう すこし おおきい かばんは ありますか。",
+          "v": "Có cái cặp nào to hơn một chút không?"
+        }
+      ],
+      "luuY": [
+        "Trật tự ngược tiếng Việt: “xe mới” → 新しい 車.",
+        "Không chèn の sau tính từ: sai 新しいの 車, きれいの 花.",
+        "Đừng quên な với tính từ đuôi な: きれいな 花 (không nói きれい 花)."
+      ],
+      "soSanh": [
+        "ja-n5-tinh-tu-na",
+        "ja-n5-menh-de-bo-nghia"
+      ],
+      "tuKhoa": [
+        "tính từ + danh từ",
+        "bổ nghĩa danh từ",
+        "na + N",
+        "donna"
+      ],
+      "quiz": [
+        {
+          "h": "きれい（　）花ですね。",
+          "lc": [
+            "な",
+            "の",
+            "い"
+          ],
+          "da": 0,
+          "gt": "Tính từ đuôi な + な + danh từ."
+        },
+        {
+          "h": "“Ngọn núi cao” nói thế nào?",
+          "lc": [
+            "高いな 山",
+            "高い 山",
+            "高いの 山"
+          ],
+          "da": 1,
+          "gt": "Tính từ đuôi い ghép thẳng vào danh từ, không thêm な hay の."
+        },
+        {
+          "h": "“Người nổi tiếng” nói thế nào?",
+          "lc": [
+            "ゆうめい 人",
+            "ゆうめいの 人",
+            "ゆうめいな 人"
+          ],
+          "da": 2,
+          "gt": "ゆうめい là tính từ đuôi な nên cần な trước danh từ."
+        }
+      ]
+    },
+    {
+      "id": "ja-n5-kute-de",
+      "nhom": "Tính từ",
+      "tieuDe": "〜くて / 〜で (nối tính từ)",
+      "mau": "A-い → A-くて、… ・ A-な / N + で、…",
+      "nghia": "vừa ~ vừa ~; ~ và ~ (nối tính từ, danh từ)",
+      "giaiThich": "Dùng để nối hai (hay nhiều) tính từ hoặc danh từ trong một câu. Các ý được nối phải cùng chiều đánh giá (cùng tốt hoặc cùng xấu). Thì và mức lịch sự của cả câu do từ cuối cùng quyết định.",
+      "cachGhep": [
+        "Tính từ đuôi い: bỏ い + くて (安い → 安くて) — いい → よくて",
+        "Tính từ đuôi な: + で (しずか → しずかで)",
+        "Danh từ: + で (学生で、…)"
+      ],
+      "viDu": [
+        {
+          "c": "このへやはひろくて、あかるいです。",
+          "d": "この へやは ひろくて、あかるいです。",
+          "v": "Căn phòng này vừa rộng vừa sáng."
+        },
+        {
+          "c": "田中さんはしんせつで、おもしろいです。",
+          "d": "たなかさんは しんせつで、おもしろいです。",
+          "v": "Anh Tanaka tốt bụng và thú vị."
+        },
+        {
+          "c": "この店は安くて、おいしいです。",
+          "d": "この みせは やすくて、おいしいです。",
+          "v": "Quán này rẻ mà ngon."
+        },
+        {
+          "c": "ランさんはベトナム人で、学生です。",
+          "d": "ランさんは ベトナムじんで、がくせいです。",
+          "v": "Lan là người Việt Nam và là sinh viên."
+        }
+      ],
+      "luuY": [
+        "Không dùng と để nối tính từ: sai 安いと おいしいです.",
+        "Hai ý trái chiều (ngon nhưng đắt) thì dùng が, không dùng くて: おいしいですが、高いです."
+      ],
+      "soSanh": [
+        "ja-n5-to",
+        "ja-n5-ga-nhung",
+        "ja-n5-te-te"
+      ],
+      "tuKhoa": [
+        "kute",
+        "de",
+        "nối tính từ",
+        "vừa vừa",
+        "yokute"
+      ],
+      "quiz": [
+        {
+          "h": "この かばんは 大き（　）、かるいです。",
+          "lc": [
+            "くて",
+            "いで",
+            "で"
+          ],
+          "da": 0,
+          "gt": "Tính từ đuôi い nối bằng くて: 大きくて."
+        },
+        {
+          "h": "この まちは しずか（　）、きれいです。",
+          "lc": [
+            "くて",
+            "で",
+            "と"
+          ],
+          "da": 1,
+          "gt": "Tính từ đuôi な nối bằng で."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "安いで おいしいです。",
+            "安いと おいしいです。",
+            "安くて おいしいです。"
+          ],
+          "da": 2,
+          "gt": "Tính từ đuôi い nối bằng 〜くて; と chỉ nối danh từ."
+        }
+      ]
+    },
+    {
+      "id": "ja-n5-ga-suki",
+      "nhom": "Sở thích – năng lực (〜が)",
+      "tieuDe": "〜が好き / きらい / 上手 / 下手です",
+      "mau": "N + が + 好き / きらい / 上手 / 下手 + です",
+      "nghia": "thích / ghét / giỏi / kém ~",
+      "giaiThich": "Trong tiếng Nhật, “thích, ghét, giỏi, kém” là tính từ đuôi な chứ không phải động từ. Vì vậy thứ được thích (được giỏi) đi với が, không đi với を. Người có cảm xúc hay năng lực đó là chủ đề, đi với は.",
+      "cachGhep": [
+        "(Người + は) + N + が + 好きです / きらいです",
+        "(Người + は) + N + が + 上手です (じょうず) / 下手です (へた)",
+        "Phủ định: 〜が 好きじゃありません ・ mức độ: とても / あまり + phủ định"
+      ],
+      "viDu": [
+        {
+          "c": "わたしはねこが好きです。",
+          "d": "わたしは ねこが すきです。",
+          "v": "Tôi thích mèo."
+        },
+        {
+          "c": "田中さんはうたが上手です。",
+          "d": "たなかさんは うたが じょうずです。",
+          "v": "Anh Tanaka hát giỏi."
+        },
+        {
+          "c": "やさいがあまり好きじゃありません。",
+          "d": "やさいが あまり すきじゃ ありません。",
+          "v": "Tôi không thích rau lắm."
+        },
+        {
+          "c": "どんなスポーツが好きですか。",
+          "d": "どんな スポーツが すきですか。",
+          "v": "Bạn thích môn thể thao nào?"
+        }
+      ],
+      "luuY": [
+        "Tiếng Việt “thích mèo” là động từ + tân ngữ nên người Việt hay nói ねこを 好きです. Phải dùng が.",
+        "Không dùng 上手 để nói về chính mình (nghe tự khen); khi được khen thường đáp いいえ、まだまだです."
+      ],
+      "soSanh": [
+        "ja-n5-ga-wakarimasu",
+        "ja-n5-ga-hoshii",
+        "ja-n5-wa-vs-ga"
+      ],
+      "tuKhoa": [
+        "ga suki",
+        "suki",
+        "kirai",
+        "jouzu",
+        "heta",
+        "thích"
+      ],
+      "quiz": [
+        {
+          "h": "わたしは おんがく（　）好きです。",
+          "lc": [
+            "が",
+            "を",
+            "に"
+          ],
+          "da": 0,
+          "gt": "好き là tính từ, đối tượng được thích đi với が."
+        },
+        {
+          "h": "Phủ định của 「好きです」 là:",
+          "lc": [
+            "好きくないです",
+            "好きじゃありません",
+            "好かないです"
+          ],
+          "da": 1,
+          "gt": "好き là tính từ đuôi な → じゃありません."
+        },
+        {
+          "h": "山田さんは え（　）上手です。",
+          "lc": [
+            "を",
+            "で",
+            "が"
+          ],
+          "da": 2,
+          "gt": "Lĩnh vực giỏi / kém đi với が: 〜が 上手です."
+        }
+      ]
+    },
+    {
+      "id": "ja-n5-ga-wakarimasu",
+      "nhom": "Sở thích – năng lực (〜が)",
+      "tieuDe": "〜がわかります",
+      "mau": "N + が + わかります",
+      "nghia": "hiểu / biết ~",
+      "giaiThich": "Động từ わかります (hiểu, biết) chỉ trạng thái nên đối tượng được hiểu đi với が, không đi với を. Thường đi kèm phó từ chỉ mức độ: よく (rõ), だいたい (đại khái), 少し (một chút), あまり / ぜんぜん + phủ định.",
+      "cachGhep": [
+        "N + が + わかります / わかりません",
+        "Mức độ: よく / だいたい / 少し + わかります",
+        "あまり / ぜんぜん + わかりません"
+      ],
+      "viDu": [
+        {
+          "c": "日本語が少しわかります。",
+          "d": "にほんごが すこし わかります。",
+          "v": "Tôi hiểu một chút tiếng Nhật."
+        },
+        {
+          "c": "かんじがぜんぜんわかりません。",
+          "d": "かんじが ぜんぜん わかりません。",
+          "v": "Tôi hoàn toàn không biết chữ Hán."
+        },
+        {
+          "c": "えいごがわかりますか。",
+          "d": "えいごが わかりますか。",
+          "v": "Bạn có hiểu tiếng Anh không?"
+        }
+      ],
+      "luuY": [
+        "Dịch từng chữ “hiểu tiếng Nhật” thành 日本語を わかります là lỗi thường gặp; chuẩn là が.",
+        "ぜんぜん và あまり ở trình độ này luôn đi với phủ định."
+      ],
+      "soSanh": [
+        "ja-n5-ga-suki"
+      ],
+      "tuKhoa": [
+        "ga wakarimasu",
+        "wakaru",
+        "hiểu",
+        "zenzen",
+        "amari"
+      ],
+      "quiz": [
+        {
+          "h": "わたしは かんじ（　）わかります。",
+          "lc": [
+            "が",
+            "に",
+            "で"
+          ],
+          "da": 0,
+          "gt": "Đối tượng của わかります đi với が."
+        },
+        {
+          "h": "「ぜんぜん」 đi với dạng nào của động từ?",
+          "lc": [
+            "Khẳng định",
+            "Phủ định",
+            "Dạng mời 〜ませんか"
+          ],
+          "da": 1,
+          "gt": "ぜんぜん + phủ định = hoàn toàn không: ぜんぜん わかりません."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "えいごを ぜんぜん わかります。",
+            "えいごが ぜんぜん わかります。",
+            "えいごが ぜんぜん わかりません。"
+          ],
+          "da": 2,
+          "gt": "が + わかります, và ぜんぜん đòi hỏi động từ phủ định."
+        }
+      ]
+    },
+    {
+      "id": "ja-n5-ga-hoshii",
+      "nhom": "Sở thích – năng lực (〜が)",
+      "tieuDe": "〜がほしいです",
+      "mau": "N + が + ほしいです",
+      "nghia": "muốn có ~ (đồ vật, người, thời gian)",
+      "giaiThich": "Diễn tả mong muốn CÓ một thứ gì đó của người nói, hoặc hỏi mong muốn của người nghe. ほしい là tính từ đuôi い nên thứ muốn có đi với が và chia như tính từ đuôi い. Muốn LÀM gì thì dùng V-たい.",
+      "cachGhep": [
+        "N + が + ほしいです",
+        "Phủ định: N + は + ほしくないです",
+        "Hỏi: 何が ほしいですか"
+      ],
+      "viDu": [
+        {
+          "c": "新しいパソコンがほしいです。",
+          "d": "あたらしい パソコンが ほしいです。",
+          "v": "Tôi muốn có máy tính mới."
+        },
+        {
+          "c": "今何がいちばんほしいですか。",
+          "d": "いま なにが いちばん ほしいですか。",
+          "v": "Bây giờ bạn muốn có gì nhất?"
+        },
+        {
+          "c": "車はほしくないです。",
+          "d": "くるまは ほしくないです。",
+          "v": "Tôi không muốn có ô tô."
+        }
+      ],
+      "luuY": [
+        "ほしい đi với DANH TỪ; với động từ phải dùng たい: sai 買いほしいです → 買いたいです.",
+        "Không dùng ほしいです để nói thẳng mong muốn của người thứ ba, và tránh hỏi người trên ほしいですか."
+      ],
+      "soSanh": [
+        "ja-n5-tai",
+        "ja-n5-ga-suki",
+        "ja-n4-garu"
+      ],
+      "tuKhoa": [
+        "ga hoshii",
+        "hoshii",
+        "muốn có",
+        "hoshikunai"
+      ],
+      "quiz": [
+        {
+          "h": "わたしは 時間（　）ほしいです。",
+          "lc": [
+            "が",
+            "に",
+            "へ"
+          ],
+          "da": 0,
+          "gt": "Thứ muốn có đi với が: 〜が ほしいです."
+        },
+        {
+          "h": "Phủ định của 「ほしいです」 là:",
+          "lc": [
+            "ほしいじゃありません",
+            "ほしくないです",
+            "ほしないです"
+          ],
+          "da": 1,
+          "gt": "ほしい là tính từ đuôi い: い → くない."
+        },
+        {
+          "h": "“Tôi muốn mua giày” nói thế nào?",
+          "lc": [
+            "くつを 買いほしいです。",
+            "くつが 買うほしいです。",
+            "くつを 買いたいです。"
+          ],
+          "da": 2,
+          "gt": "Muốn LÀM một việc dùng V-たいです; ほしい chỉ đi với danh từ."
+        }
+      ]
+    },
+    {
+      "id": "ja-n5-yori",
+      "nhom": "Mức độ – so sánh",
+      "tieuDe": "〜は〜より",
+      "mau": "N1 + は + N2 + より + tính từ + です",
+      "nghia": "N1 ~ hơn N2",
+      "giaiThich": "Mẫu so sánh hơn. N1 là thứ được đem ra nhận xét, N2 đứng trước より là mốc so sánh. Tính từ giữ nguyên dạng, không có hình thức “hơn” riêng như tiếng Anh.",
+      "cachGhep": [
+        "N1 + は + N2 + より + tính từ + です",
+        "Nhấn mức độ: N2 + より + ずっと (hơn hẳn) / 少し (hơn một chút) + tính từ",
+        "より đứng SAU mốc so sánh"
+      ],
+      "viDu": [
+        {
+          "c": "今日はきのうよりあついです。",
+          "d": "きょうは きのうより あついです。",
+          "v": "Hôm nay nóng hơn hôm qua."
+        },
+        {
+          "c": "このかばんはあのかばんより安いです。",
+          "d": "この かばんは あの かばんより やすいです。",
+          "v": "Cái cặp này rẻ hơn cái cặp kia."
+        },
+        {
+          "c": "電車はバスよりはやいです。",
+          "d": "でんしゃは バスより はやいです。",
+          "v": "Tàu điện nhanh hơn xe buýt."
+        }
+      ],
+      "luuY": [
+        "Trật tự khác tiếng Việt: “A nhanh hơn B” → A は B より はやいです (mốc B + より đứng TRƯỚC tính từ).",
+        "Dễ hiểu ngược: thứ đứng trước より là thứ KÉM hơn."
+      ],
+      "soSanh": [
+        "ja-n5-hou-ga",
+        "ja-n5-ichiban"
+      ],
+      "tuKhoa": [
+        "yori",
+        "so sánh hơn",
+        "hơn",
+        "yori zutto"
+      ],
+      "quiz": [
+        {
+          "h": "「東京は ハノイより 大きいです」 — thành phố nào lớn hơn?",
+          "lc": [
+            "東京",
+            "ハノイ",
+            "Hai thành phố bằng nhau"
+          ],
+          "da": 0,
+          "gt": "Chủ đề (東京) là thứ hơn; danh từ trước より (ハノイ) là mốc so sánh."
+        },
+        {
+          "h": "日本は ベトナム（　）さむいです。",
+          "lc": [
+            "から",
+            "より",
+            "まで"
+          ],
+          "da": 1,
+          "gt": "So sánh hơn dùng より sau mốc so sánh."
+        },
+        {
+          "h": "Câu nào có nghĩa “Ô tô đắt hơn xe đạp”?",
+          "lc": [
+            "じてんしゃは 車より 高いです。",
+            "車は じてんしゃが 高いです。",
+            "車は じてんしゃより 高いです。"
+          ],
+          "da": 2,
+          "gt": "Thứ đắt hơn (車) làm chủ đề, mốc so sánh (じてんしゃ) đứng trước より."
+        }
+      ]
+    },
+    {
+      "id": "ja-n5-hou-ga",
+      "nhom": "Mức độ – so sánh",
+      "tieuDe": "〜と〜とどちらが / 〜のほうが",
+      "mau": "N1 + と + N2 + と + どちらが + tính từ + ですか ・ N + の ほうが + tính từ + です",
+      "nghia": "N1 và N2, bên nào ~ hơn? / bên N ~ hơn",
+      "giaiThich": "Dùng khi so sánh HAI đối tượng. Câu hỏi luôn dùng どちら (bên nào) dù là người, vật hay nơi chốn. Câu trả lời chọn một bên bằng 〜のほうが; nếu như nhau thì nói どちらも.",
+      "cachGhep": [
+        "Hỏi: N1 + と + N2 + と + どちらが + tính từ + ですか",
+        "Trả lời: N + の ほうが + tính từ + です (có thể thêm N2 + より)",
+        "Cả hai như nhau: どちらも + tính từ + です"
+      ],
+      "viDu": [
+        {
+          "c": "コーヒーとこうちゃとどちらが好きですか。",
+          "d": "コーヒーと こうちゃと どちらが すきですか。",
+          "v": "Cà phê và trà đen, bạn thích bên nào hơn?"
+        },
+        {
+          "c": "コーヒーのほうが好きです。",
+          "d": "コーヒーの ほうが すきです。",
+          "v": "Tôi thích cà phê hơn."
+        },
+        {
+          "c": "バスより電車のほうがはやいです。",
+          "d": "バスより でんしゃの ほうが はやいです。",
+          "v": "So với xe buýt thì tàu điện nhanh hơn."
+        },
+        {
+          "c": "どちらも好きです。",
+          "d": "どちらも すきです。",
+          "v": "Bên nào tôi cũng thích."
+        }
+      ],
+      "luuY": [
+        "So sánh hai thứ không dùng どれ / だれ / 何 mà luôn dùng どちら.",
+        "Sau ほう là が, không phải は: コーヒーの ほうが 好きです."
+      ],
+      "soSanh": [
+        "ja-n5-yori",
+        "ja-n5-ichiban"
+      ],
+      "tuKhoa": [
+        "dochira",
+        "hou ga",
+        "no hou ga",
+        "so sánh hai",
+        "dochira mo"
+      ],
+      "quiz": [
+        {
+          "h": "いぬと ねこと（　）が 好きですか。",
+          "lc": [
+            "どちら",
+            "どれ",
+            "何"
+          ],
+          "da": 0,
+          "gt": "So sánh hai đối tượng dùng どちら."
+        },
+        {
+          "h": "ねこ（　）ほうが 好きです。",
+          "lc": [
+            "が",
+            "の",
+            "より"
+          ],
+          "da": 1,
+          "gt": "Danh từ + の + ほうが."
+        },
+        {
+          "h": "Khi thích cả hai như nhau, trả lời thế nào?",
+          "lc": [
+            "どちらが 好きです。",
+            "どちらを 好きです。",
+            "どちらも 好きです。"
+          ],
+          "da": 2,
+          "gt": "どちらも = cả hai đều."
+        }
+      ]
+    },
+    {
+      "id": "ja-n5-ichiban",
+      "nhom": "Mức độ – so sánh",
+      "tieuDe": "〜で〜がいちばん",
+      "mau": "N (phạm vi) + で + 何 / どこ / だれ / いつ + が + いちばん + tính từ + ですか",
+      "nghia": "trong ~, cái gì / ai / đâu ~ nhất",
+      "giaiThich": "Mẫu so sánh nhất, dùng khi so sánh từ ba đối tượng trở lên. Phạm vi so sánh đi với で (hoặc 〜の中で), いちばん (nhất) đứng ngay trước tính từ. Từ để hỏi chọn theo loại đối tượng.",
+      "cachGhep": [
+        "Hỏi: phạm vi + (の中) で + 何 / どこ / だれ / いつ + が + いちばん + tính từ + ですか",
+        "Trả lời: N + が + いちばん + tính từ + です",
+        "いちばん đứng trước tính từ"
+      ],
+      "viDu": [
+        {
+          "c": "スポーツで何がいちばん好きですか。",
+          "d": "スポーツで なにが いちばん すきですか。",
+          "v": "Trong các môn thể thao, bạn thích môn nào nhất?"
+        },
+        {
+          "c": "一年で8月がいちばんあついです。",
+          "d": "いちねんで はちがつが いちばん あついです。",
+          "v": "Trong một năm, tháng 8 là nóng nhất."
+        },
+        {
+          "c": "クラスでだれがいちばんせが高いですか。",
+          "d": "クラスで だれが いちばん せが たかいですか。",
+          "v": "Trong lớp ai cao nhất?"
+        }
+      ],
+      "luuY": [
+        "Phạm vi so sánh dùng で, không dùng に hay より.",
+        "Tiếng Việt “thích nhất” → いちばん 好きです (いちばん đứng TRƯỚC, không đứng sau tính từ)."
+      ],
+      "soSanh": [
+        "ja-n5-yori",
+        "ja-n5-hou-ga"
+      ],
+      "tuKhoa": [
+        "ichiban",
+        "so sánh nhất",
+        "nhất",
+        "no naka de"
+      ],
+      "quiz": [
+        {
+          "h": "日本で ふじさん（　）いちばん 高いです。",
+          "lc": [
+            "が",
+            "を",
+            "に"
+          ],
+          "da": 0,
+          "gt": "Đối tượng đứng nhất đi với が."
+        },
+        {
+          "h": "くだもの（　）りんごが いちばん 好きです。",
+          "lc": [
+            "より",
+            "で",
+            "へ"
+          ],
+          "da": 1,
+          "gt": "Phạm vi so sánh nhất đi với で."
+        },
+        {
+          "h": "かぞくで（　）が いちばん わかいですか。",
+          "lc": [
+            "どこ",
+            "いつ",
+            "だれ"
+          ],
+          "da": 2,
+          "gt": "Hỏi về người trong gia đình nên dùng だれ."
+        }
+      ]
+    },
+    {
+      "id": "ja-n5-ni-narimasu",
+      "nhom": "Phó từ – biến đổi",
+      "tieuDe": "〜くなります / 〜になります",
+      "mau": "A-い → A-く + なります ・ A-な / N + に + なります",
+      "nghia": "trở nên ~, trở thành ~",
+      "giaiThich": "Diễn tả sự thay đổi trạng thái: từ không lạnh thành lạnh, từ chưa giỏi thành giỏi, từ học sinh thành sinh viên. Cách ghép khác nhau tuỳ loại từ đứng trước なります.",
+      "cachGhep": [
+        "Tính từ đuôi い: bỏ い + く + なります (さむい → さむく なります) — いい → よく なります",
+        "Tính từ đuôi な: + に + なります (きれいに なります)",
+        "Danh từ: + に + なります (先生に なります)"
+      ],
+      "viDu": [
+        {
+          "c": "12月になって、さむくなりました。",
+          "d": "じゅうにがつに なって、さむく なりました。",
+          "v": "Sang tháng 12, trời đã trở lạnh."
+        },
+        {
+          "c": "日本語が上手になりました。",
+          "d": "にほんごが じょうずに なりました。",
+          "v": "Tiếng Nhật của tôi đã giỏi lên."
+        },
+        {
+          "c": "来年大学生になります。",
+          "d": "らいねん だいがくせいに なります。",
+          "v": "Sang năm tôi sẽ trở thành sinh viên đại học."
+        },
+        {
+          "c": "そうじをして、へやがきれいになりました。",
+          "d": "そうじを して、へやが きれいに なりました。",
+          "v": "Dọn dẹp xong, căn phòng đã sạch sẽ."
+        }
+      ],
+      "luuY": [
+        "Đừng dùng に cho tính từ đuôi い: sai さむいに なります / さむくに なります.",
+        "Sự thay đổi đã xảy ra rồi thì dùng なりました, dù tiếng Việt chỉ nói “trời lạnh rồi”."
+      ],
+      "tuKhoa": [
+        "ni narimasu",
+        "ku narimasu",
+        "naru",
+        "trở nên",
+        "trở thành"
+      ],
+      "quiz": [
+        {
+          "h": "あつ（　）なりました。",
+          "lc": [
+            "く",
+            "に",
+            "い"
+          ],
+          "da": 0,
+          "gt": "Tính từ đuôi い: bỏ い + く + なります → あつく なりました."
+        },
+        {
+          "h": "へやが きれい（　）なりました。",
+          "lc": [
+            "く",
+            "に",
+            "で"
+          ],
+          "da": 1,
+          "gt": "きれい là tính từ đuôi な nên dùng に + なります."
+        },
+        {
+          "h": "わたしは 先生（　）なりたいです。",
+          "lc": [
+            "く",
+            "を",
+            "に"
+          ],
+          "da": 2,
+          "gt": "Danh từ + に + なります: 先生に なりたいです."
+        }
+      ]
+    },
+    {
+      "id": "ja-n5-mou-mada",
+      "nhom": "Phó từ – biến đổi",
+      "tieuDe": "もう / まだ",
+      "mau": "もう + V-ました ・ まだ + (phủ định / です)",
+      "nghia": "もう: đã … rồi ・ まだ: vẫn chưa, vẫn còn",
+      "giaiThich": "もう đi với V-ました để nói việc đã hoàn thành rồi. まだ nghĩa là “chưa” khi đi với phủ định (câu trả lời ngắn: いいえ、まだです), và nghĩa là “vẫn còn” khi đi với khẳng định.",
+      "cachGhep": [
+        "Hỏi: もう + V-ましたか",
+        "Trả lời: はい、もう + V-ました。 / いいえ、まだです。",
+        "まだ + khẳng định = vẫn còn (まだ 時間が あります)"
+      ],
+      "viDu": [
+        {
+          "c": "もうひるごはんを食べましたか。",
+          "d": "もう ひるごはんを たべましたか。",
+          "v": "Bạn đã ăn trưa chưa?"
+        },
+        {
+          "c": "はい、もう食べました。",
+          "d": "はい、もう たべました。",
+          "v": "Vâng, tôi ăn rồi."
+        },
+        {
+          "c": "いいえ、まだです。",
+          "d": "いいえ、まだです。",
+          "v": "Chưa, tôi vẫn chưa ăn."
+        },
+        {
+          "c": "まだ時間があります。",
+          "d": "まだ じかんが あります。",
+          "v": "Vẫn còn thời gian."
+        }
+      ],
+      "luuY": [
+        "Trả lời “chưa” KHÔNG nói いいえ、食べませんでした (= đã không ăn, việc đã khép lại). Dùng いいえ、まだです.",
+        "もう + phủ định lại mang nghĩa “không … nữa” (もう 食べません = không ăn nữa)."
+      ],
+      "tuKhoa": [
+        "mou",
+        "mada",
+        "đã rồi",
+        "chưa",
+        "vẫn còn",
+        "mada desu"
+      ],
+      "quiz": [
+        {
+          "h": "A: もう レポートを 書きましたか。 B: いいえ、（　）です。",
+          "lc": [
+            "まだ",
+            "もう",
+            "あまり"
+          ],
+          "da": 0,
+          "gt": "Trả lời “chưa” là いいえ、まだです."
+        },
+        {
+          "h": "A: ひるごはんを 食べましたか。 B: はい、（　）食べました。",
+          "lc": [
+            "まだ",
+            "もう",
+            "ぜんぜん"
+          ],
+          "da": 1,
+          "gt": "Đã làm xong rồi: もう + V-ました."
+        },
+        {
+          "h": "「まだ 学生です」 nghĩa là:",
+          "lc": [
+            "Đã là sinh viên rồi",
+            "Không còn là sinh viên nữa",
+            "Vẫn còn là sinh viên"
+          ],
+          "da": 2,
+          "gt": "まだ + khẳng định = vẫn còn."
+        }
+      ]
+    }
+  ]
+}

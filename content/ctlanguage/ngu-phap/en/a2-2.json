@@ -1,0 +1,1184 @@
+{
+  "nn": "en",
+  "cap": "A2",
+  "diem": [
+    {
+      "id": "en-a2-so-sanh-hon",
+      "nhom": "So sánh",
+      "tieuDe": "So sánh hơn (comparative)",
+      "mau": "S + to be + adj-er / more + adj + than + …",
+      "nghia": "… hơn …",
+      "giaiThich": "Dùng so sánh hơn để so hai người, hai vật hoặc hai nhóm với nhau. Tính từ ngắn thêm -er, tính từ dài dùng more, và người hoặc vật được đem ra so đứng sau than.",
+      "cachGhep": [
+        "Một âm tiết: + er (tall → taller, cheap → cheaper); tận cùng e: + r (nice → nicer)",
+        "Một nguyên âm + một phụ âm: gấp đôi phụ âm (big → bigger, hot → hotter)",
+        "Hai âm tiết tận cùng y: đổi y → ier (happy → happier, easy → easier)",
+        "Từ hai âm tiết trở lên: more + tính từ (more expensive, more beautiful)",
+        "Bất quy tắc: good → better, bad → worse, far → farther / further",
+        "Nhấn mạnh: much / a lot + so sánh hơn (much bigger); hơn một chút: a bit / a little"
+      ],
+      "viDu": [
+        {
+          "c": "My brother is taller than me.",
+          "v": "Anh trai tôi cao hơn tôi."
+        },
+        {
+          "c": "This phone is more expensive than that one.",
+          "v": "Chiếc điện thoại này đắt hơn chiếc kia."
+        },
+        {
+          "c": "Is Hanoi bigger than Da Nang?",
+          "v": "Hà Nội có lớn hơn Đà Nẵng không?"
+        },
+        {
+          "c": "Today the weather is much better than yesterday.",
+          "v": "Hôm nay thời tiết đẹp hơn hôm qua nhiều."
+        }
+      ],
+      "luuY": [
+        "Lỗi hay mắc: dùng cả more và -er → sai: more taller, more better. Đúng: taller, better.",
+        "Dùng than, không dùng then hay that: taller than me.",
+        "Không dùng very trước so sánh hơn: sai very bigger. Đúng: much bigger.",
+        "Tiếng Việt “đẹp hơn” không cần đổi dạng tính từ, tiếng Anh thì bắt buộc: more beautiful (không nói beautiful than)."
+      ],
+      "soSanh": [
+        "en-a2-so-sanh-nhat",
+        "en-a2-as-as"
+      ],
+      "tuKhoa": [
+        "comparative",
+        "so sánh hơn",
+        "er than",
+        "more than",
+        "better worse"
+      ],
+      "quiz": [
+        {
+          "h": "A car is ___ than a bike.",
+          "lc": [
+            "fast",
+            "more fast",
+            "faster",
+            "fastest"
+          ],
+          "da": 2,
+          "gt": "Fast là tính từ một âm tiết nên thêm er: faster than."
+        },
+        {
+          "h": "This exercise is ___ than the last one.",
+          "lc": [
+            "more difficult",
+            "difficulter",
+            "more difficulter",
+            "difficult"
+          ],
+          "da": 0,
+          "gt": "Difficult là tính từ dài nên dùng more + tính từ."
+        },
+        {
+          "h": "My English is ___ than my French.",
+          "lc": [
+            "gooder",
+            "more good",
+            "more better",
+            "better"
+          ],
+          "da": 3,
+          "gt": "So sánh hơn bất quy tắc của good là better, không thêm more."
+        }
+      ]
+    },
+    {
+      "id": "en-a2-so-sanh-nhat",
+      "nhom": "So sánh",
+      "tieuDe": "So sánh nhất (superlative)",
+      "mau": "S + to be + the + adj-est / the most + adj (+ in / of …)",
+      "nghia": "… nhất (trong một nhóm)",
+      "giaiThich": "Dùng so sánh nhất khi so một người hoặc vật với cả nhóm từ ba trở lên và nó đứng đầu về tính chất đó. Luôn có the trước tính từ so sánh nhất. Phạm vi so sánh thường nêu bằng in (nơi chốn, nhóm) hoặc of (khoảng thời gian, số lượng).",
+      "cachGhep": [
+        "Tính từ ngắn: the + adj-est (the tallest, the biggest, the happiest)",
+        "Tính từ dài: the most + tính từ (the most expensive)",
+        "Bất quy tắc: good → the best, bad → the worst, far → the farthest / furthest",
+        "in + nơi / nhóm: the tallest in my class, the biggest city in Vietnam",
+        "of + thời gian / số lượng: the best day of my life, the youngest of the three"
+      ],
+      "viDu": [
+        {
+          "c": "Minh is the tallest student in our class.",
+          "v": "Minh là học sinh cao nhất lớp chúng tôi."
+        },
+        {
+          "c": "This is the most interesting book in the library.",
+          "v": "Đây là cuốn sách thú vị nhất trong thư viện."
+        },
+        {
+          "c": "What is the best restaurant in this town?",
+          "v": "Nhà hàng ngon nhất ở thị trấn này là nhà hàng nào?"
+        },
+        {
+          "c": "February is the shortest month of the year.",
+          "v": "Tháng Hai là tháng ngắn nhất trong năm."
+        }
+      ],
+      "luuY": [
+        "Lỗi hay mắc: quên the → sai: She is tallest in the class. Đúng: She is the tallest in the class.",
+        "Không dùng cả most và -est: sai the most biggest. Đúng: the biggest.",
+        "Sau so sánh nhất dùng in với nơi chốn / nhóm, không dùng of: the best in the world (không nói of the world).",
+        "So hai đối tượng thì dùng so sánh hơn, không dùng so sánh nhất."
+      ],
+      "soSanh": [
+        "en-a2-so-sanh-hon"
+      ],
+      "tuKhoa": [
+        "superlative",
+        "so sánh nhất",
+        "the most",
+        "est",
+        "the best the worst"
+      ],
+      "quiz": [
+        {
+          "h": "This is ___ day of my life!",
+          "lc": [
+            "the happiest",
+            "happiest",
+            "the most happy",
+            "the happier"
+          ],
+          "da": 0,
+          "gt": "Happy → happiest và phải có the: the happiest."
+        },
+        {
+          "h": "Ho Chi Minh City is the biggest city ___ Vietnam.",
+          "lc": [
+            "of",
+            "in",
+            "than",
+            "from"
+          ],
+          "da": 1,
+          "gt": "Sau so sánh nhất, trước tên nơi chốn dùng in."
+        },
+        {
+          "h": "That was ___ film I have ever seen. I hated it.",
+          "lc": [
+            "the baddest",
+            "the most bad",
+            "the worse",
+            "the worst"
+          ],
+          "da": 3,
+          "gt": "So sánh nhất bất quy tắc của bad là the worst."
+        }
+      ]
+    },
+    {
+      "id": "en-a2-as-as",
+      "nhom": "So sánh",
+      "tieuDe": "as … as / not as … as",
+      "mau": "S + to be + as + tính từ + as + … · S + to be + not as + tính từ + as + …",
+      "nghia": "bằng, như … · không … bằng",
+      "giaiThich": "Dùng as + tính từ + as để nói hai người hoặc vật ngang nhau về một tính chất. Dạng phủ định not as… as nghĩa là kém hơn. Tính từ ở giữa luôn giữ dạng gốc, không thêm -er hay more.",
+      "cachGhep": [
+        "Bằng nhau: as + tính từ gốc + as (as tall as)",
+        "Không bằng: not as + tính từ gốc + as (not as tall as = shorter than)",
+        "Với trạng từ: as + trạng từ + as (as fast as)",
+        "Sau as thứ hai: danh từ, đại từ tân ngữ hoặc mệnh đề (as tall as me / as I am)"
+      ],
+      "viDu": [
+        {
+          "c": "My sister is as tall as my mother.",
+          "v": "Chị tôi cao bằng mẹ tôi."
+        },
+        {
+          "c": "This hotel isn't as expensive as that one.",
+          "v": "Khách sạn này không đắt bằng khách sạn kia."
+        },
+        {
+          "c": "Is your new job as interesting as the old one?",
+          "v": "Công việc mới của bạn có thú vị như công việc cũ không?"
+        },
+        {
+          "c": "I can't run as fast as you.",
+          "v": "Tôi không chạy nhanh bằng bạn được."
+        }
+      ],
+      "luuY": [
+        "Lỗi hay mắc: dùng dạng so sánh hơn ở giữa → sai: as taller as, as more expensive as. Đúng: as tall as, as expensive as.",
+        "Đủ hai chữ as: sai He is tall as me. Không thay as thứ hai bằng than hay like: sai as tall than / as tall like.",
+        "Not as big as = smaller than: hai cách nói cùng nghĩa."
+      ],
+      "soSanh": [
+        "en-a2-so-sanh-hon"
+      ],
+      "tuKhoa": [
+        "as as",
+        "not as as",
+        "so sánh bằng",
+        "so sánh ngang bằng",
+        "bằng nhau"
+      ],
+      "quiz": [
+        {
+          "h": "Tom is 1.70 m. Peter is 1.70 m. Tom is ___ Peter.",
+          "lc": [
+            "taller than",
+            "as tall as",
+            "not as tall as",
+            "the tallest"
+          ],
+          "da": 1,
+          "gt": "Hai người cao bằng nhau → as tall as."
+        },
+        {
+          "h": "This bag isn't as ___ as that one.",
+          "lc": [
+            "heavier",
+            "more heavy",
+            "heavy",
+            "heaviest"
+          ],
+          "da": 2,
+          "gt": "Giữa as… as là tính từ ở dạng gốc: heavy."
+        },
+        {
+          "h": "“My car is not as fast as yours” có nghĩa là:",
+          "lc": [
+            "My car is slower than yours.",
+            "My car is faster than yours.",
+            "The two cars are the same.",
+            "Your car is slower than mine."
+          ],
+          "da": 0,
+          "gt": "Not as fast as = chậm hơn: xe tôi chậm hơn xe bạn."
+        }
+      ]
+    },
+    {
+      "id": "en-a2-trang-tu-cach-thuc",
+      "nhom": "Tính từ – trạng từ",
+      "tieuDe": "Trạng từ chỉ cách thức (-ly)",
+      "mau": "S + V (+ O) + trạng từ (tính từ + ly)",
+      "nghia": "một cách … (làm việc gì như thế nào)",
+      "giaiThich": "Trạng từ chỉ cách thức cho biết một hành động được thực hiện như thế nào và bổ nghĩa cho ĐỘNG TỪ. Tính từ thì bổ nghĩa cho danh từ hoặc đứng sau to be. Phần lớn trạng từ tạo bằng cách thêm -ly vào tính từ và đứng sau động từ hoặc sau tân ngữ.",
+      "cachGhep": [
+        "Tính từ + ly: slow → slowly, quick → quickly, careful → carefully",
+        "Tận cùng y: đổi y → ily (easy → easily, happy → happily)",
+        "Tận cùng le: đổi e → y (terrible → terribly, simple → simply)",
+        "Bất quy tắc: good → well; fast → fast; hard → hard; late → late; early → early",
+        "Vị trí: sau động từ hoặc sau tân ngữ (She sings beautifully. / He drives his car carefully.)"
+      ],
+      "viDu": [
+        {
+          "c": "Please speak slowly. I'm a beginner.",
+          "v": "Xin hãy nói chậm. Tôi mới bắt đầu học."
+        },
+        {
+          "c": "She plays the piano very well.",
+          "v": "Cô ấy chơi piano rất giỏi."
+        },
+        {
+          "c": "He didn't drive carefully last night.",
+          "v": "Tối qua anh ấy lái xe không cẩn thận."
+        },
+        {
+          "c": "My father works hard every day.",
+          "v": "Bố tôi ngày nào cũng làm việc chăm chỉ."
+        }
+      ],
+      "luuY": [
+        "Lỗi hay mắc: dùng tính từ thay trạng từ sau động từ → sai: She sings beautiful / He speaks English good. Đúng: She sings beautifully / He speaks English well.",
+        "Hard và hardly khác nghĩa: work hard = làm việc chăm chỉ; hardly = hầu như không. Tương tự late (muộn) khác lately (gần đây).",
+        "Không có dạng fastly; friendly, lovely là tính từ dù tận cùng ly.",
+        "Sau to be, look, feel, sound, taste dùng tính từ: She looks happy (không nói looks happily)."
+      ],
+      "soSanh": [
+        "en-a2-too-enough"
+      ],
+      "tuKhoa": [
+        "adverbs of manner",
+        "trạng từ cách thức",
+        "ly",
+        "good well",
+        "slowly carefully"
+      ],
+      "quiz": [
+        {
+          "h": "He speaks English very ___.",
+          "lc": [
+            "good",
+            "goodly",
+            "well",
+            "nice"
+          ],
+          "da": 2,
+          "gt": "Bổ nghĩa cho động từ speaks cần trạng từ; trạng từ của good là well."
+        },
+        {
+          "h": "She is a ___ driver. She drives ___.",
+          "lc": [
+            "careful / carefully",
+            "carefully / careful",
+            "careful / careful",
+            "carefully / carefully"
+          ],
+          "da": 0,
+          "gt": "Trước danh từ driver dùng tính từ careful; sau động từ drives dùng trạng từ carefully."
+        },
+        {
+          "h": "They ran ___ to catch the bus.",
+          "lc": [
+            "fastly",
+            "fast",
+            "quick",
+            "hardly"
+          ],
+          "da": 1,
+          "gt": "Trạng từ của fast vẫn là fast; không có fastly."
+        }
+      ]
+    },
+    {
+      "id": "en-a2-too-enough",
+      "nhom": "Tính từ – trạng từ",
+      "tieuDe": "too / enough",
+      "mau": "too + tính từ (+ to V) · tính từ + enough (+ to V) · enough + danh từ",
+      "nghia": "quá … (đến mức không thể) · đủ … (để)",
+      "giaiThich": "Too nghĩa là nhiều hơn mức cần thiết nên không làm được việc gì; enough nghĩa là vừa đủ. Vị trí hai từ khác nhau: too đứng TRƯỚC tính từ, enough đứng SAU tính từ nhưng đứng TRƯỚC danh từ.",
+      "cachGhep": [
+        "too + tính từ / trạng từ: too tired, too slowly",
+        "too + tính từ + to + V: too tired to walk (mệt quá không đi nổi)",
+        "tính từ / trạng từ + enough: old enough, fast enough",
+        "tính từ + enough + to + V: old enough to drive",
+        "enough + danh từ: enough money, enough time",
+        "too much + không đếm được · too many + số nhiều"
+      ],
+      "viDu": [
+        {
+          "c": "This coffee is too hot to drink.",
+          "v": "Cà phê này nóng quá, không uống được."
+        },
+        {
+          "c": "He isn't old enough to drive a car.",
+          "v": "Cậu ấy chưa đủ tuổi lái ô tô."
+        },
+        {
+          "c": "We don't have enough chairs for everyone.",
+          "v": "Chúng ta không có đủ ghế cho mọi người."
+        },
+        {
+          "c": "There are too many people on the bus.",
+          "v": "Trên xe buýt có quá nhiều người."
+        }
+      ],
+      "luuY": [
+        "Lỗi hay mắc: đặt enough trước tính từ theo trật tự tiếng Việt “đủ lớn” → sai: enough old, enough big. Đúng: old enough, big enough.",
+        "Too không có nghĩa là “rất”: It's too hot = nóng quá mức chịu được, khác It's very hot.",
+        "Sau too + tính từ dùng to + V, không dùng that hay for + V-ing: too tired to cook.",
+        "Too much đi với danh từ; trước tính từ chỉ dùng too: too expensive (không nói too much expensive)."
+      ],
+      "soSanh": [
+        "en-a2-trang-tu-cach-thuc",
+        "en-a2-much-many-a-lot-of",
+        "en-b1-too-enough"
+      ],
+      "tuKhoa": [
+        "too enough",
+        "quá đủ",
+        "old enough",
+        "too much too many",
+        "enough to"
+      ],
+      "quiz": [
+        {
+          "h": "She is only 15. She isn't ___ to vote.",
+          "lc": [
+            "enough old",
+            "old enough",
+            "enough age",
+            "old too"
+          ],
+          "da": 1,
+          "gt": "Enough đứng SAU tính từ: old enough."
+        },
+        {
+          "h": "I can't carry this box. It's ___ heavy.",
+          "lc": [
+            "enough",
+            "too much",
+            "too many",
+            "too"
+          ],
+          "da": 3,
+          "gt": "Trước tính từ heavy dùng too (quá); too much / too many đi với danh từ."
+        },
+        {
+          "h": "We have ___ to buy two tickets.",
+          "lc": [
+            "enough money",
+            "money enough",
+            "too money",
+            "enough of money"
+          ],
+          "da": 0,
+          "gt": "Enough đứng TRƯỚC danh từ: enough money."
+        }
+      ]
+    },
+    {
+      "id": "en-a2-much-many-a-lot-of",
+      "nhom": "Danh từ – mạo từ",
+      "tieuDe": "much / many / a lot of",
+      "mau": "many + N số nhiều · much + N không đếm được · a lot of + cả hai",
+      "nghia": "nhiều",
+      "giaiThich": "Cả ba đều nghĩa là “nhiều” nhưng dùng với loại danh từ và kiểu câu khác nhau. Many đi với danh từ đếm được số nhiều, much đi với danh từ không đếm được, và cả hai thường dùng trong câu phủ định và câu hỏi. A lot of (lots of) dùng được với cả hai loại, tự nhiên nhất trong câu khẳng định.",
+      "cachGhep": [
+        "many + N đếm được số nhiều: many friends, not many cars",
+        "much + N không đếm được: not much time, How much money?",
+        "a lot of / lots of + cả hai loại: a lot of friends, a lot of time",
+        "Không có danh từ theo sau: a lot (I read a lot.)",
+        "Phủ định: not much / not many = ít"
+      ],
+      "viDu": [
+        {
+          "c": "She has a lot of friends at school.",
+          "v": "Cô ấy có nhiều bạn ở trường."
+        },
+        {
+          "c": "We don't have much time. Hurry up!",
+          "v": "Chúng ta không có nhiều thời gian. Nhanh lên!"
+        },
+        {
+          "c": "Are there many tourists here in winter?",
+          "v": "Mùa đông ở đây có nhiều khách du lịch không?"
+        },
+        {
+          "c": "He drinks a lot of water every day.",
+          "v": "Ngày nào anh ấy cũng uống nhiều nước."
+        }
+      ],
+      "luuY": [
+        "Lỗi hay mắc: dùng much với danh từ đếm được hoặc many với danh từ không đếm được → sai: much books, many money. Đúng: many books, much money.",
+        "Trong câu khẳng định thông thường, much nghe không tự nhiên: nên nói I have a lot of homework (không nói I have much homework).",
+        "A lot of phải có of trước danh từ: a lot of people (không nói a lot people); và lots of, không phải lot of."
+      ],
+      "soSanh": [
+        "en-a2-a-few-a-little",
+        "en-a2-too-enough"
+      ],
+      "tuKhoa": [
+        "much many",
+        "a lot of",
+        "lots of",
+        "nhiều",
+        "lượng từ"
+      ],
+      "quiz": [
+        {
+          "h": "There isn't ___ milk in the fridge.",
+          "lc": [
+            "many",
+            "a lot",
+            "much",
+            "a few"
+          ],
+          "da": 2,
+          "gt": "Milk không đếm được, câu phủ định → much (a lot thiếu of)."
+        },
+        {
+          "h": "How ___ languages can you speak?",
+          "lc": [
+            "many",
+            "much",
+            "a lot",
+            "lot of"
+          ],
+          "da": 0,
+          "gt": "Languages là danh từ đếm được số nhiều → How many."
+        },
+        {
+          "h": "My uncle has ___ money. He is very rich.",
+          "lc": [
+            "many",
+            "a lot of",
+            "a lot",
+            "a few"
+          ],
+          "da": 1,
+          "gt": "Câu khẳng định với danh từ không đếm được: a lot of money (phải có of)."
+        }
+      ]
+    },
+    {
+      "id": "en-a2-a-few-a-little",
+      "nhom": "Danh từ – mạo từ",
+      "tieuDe": "a few / a little",
+      "mau": "a few + N số nhiều · a little + N không đếm được",
+      "nghia": "một vài (a few) · một ít, một chút (a little)",
+      "giaiThich": "A few và a little đều chỉ một lượng nhỏ nhưng vẫn có, mang nghĩa tích cực. A few đi với danh từ đếm được số nhiều, a little đi với danh từ không đếm được. A little (a bit) còn đứng trước tính từ với nghĩa “hơi”.",
+      "cachGhep": [
+        "a few + N đếm được số nhiều: a few friends, a few days",
+        "a little + N không đếm được: a little water, a little money",
+        "a little / a bit + tính từ: a little tired",
+        "Không có a: few / little = rất ít, gần như không có (nghĩa tiêu cực, trang trọng hơn)"
+      ],
+      "viDu": [
+        {
+          "c": "I have a few questions for you.",
+          "v": "Tôi có vài câu hỏi cho bạn."
+        },
+        {
+          "c": "Can I have a little sugar in my tea?",
+          "v": "Cho tôi một ít đường vào trà được không?"
+        },
+        {
+          "c": "We stayed in Hoi An for a few days.",
+          "v": "Chúng tôi ở Hội An vài ngày."
+        },
+        {
+          "c": "I speak a little Chinese.",
+          "v": "Tôi nói được một chút tiếng Trung."
+        }
+      ],
+      "luuY": [
+        "Lỗi hay mắc: dùng a little với danh từ đếm được → sai: a little friends, a little days. Đúng: a few friends, a few days.",
+        "Sau a few danh từ phải ở số nhiều: a few minutes (không nói a few minute).",
+        "Có a hay không khác nghĩa: I have a few friends (có vài người bạn) ≠ I have few friends (hầu như không có bạn)."
+      ],
+      "soSanh": [
+        "en-a2-much-many-a-lot-of"
+      ],
+      "tuKhoa": [
+        "a few",
+        "a little",
+        "một vài",
+        "một ít",
+        "few little"
+      ],
+      "quiz": [
+        {
+          "h": "There are ___ apples on the table. Take one.",
+          "lc": [
+            "a little",
+            "much",
+            "a few",
+            "any"
+          ],
+          "da": 2,
+          "gt": "Apples là danh từ đếm được số nhiều, câu khẳng định → a few."
+        },
+        {
+          "h": "I need ___ time to think.",
+          "lc": [
+            "a few",
+            "a little",
+            "many",
+            "a"
+          ],
+          "da": 1,
+          "gt": "Time (thời gian) không đếm được → a little."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "She bought a few books.",
+            "She bought a little books.",
+            "She bought a few book.",
+            "She bought much books."
+          ],
+          "da": 0,
+          "gt": "A few + danh từ đếm được số nhiều: a few books."
+        }
+      ]
+    },
+    {
+      "id": "en-a2-mao-tu-the-zero",
+      "nhom": "Danh từ – mạo từ",
+      "tieuDe": "Mạo từ: the và không dùng mạo từ (zero article)",
+      "mau": "the + N xác định · Ø + N số nhiều / không đếm được (nói chung)",
+      "nghia": "khi nào dùng the, khi nào không dùng mạo từ",
+      "giaiThich": "Khi nói về sự vật NÓI CHUNG (cả loại), danh từ số nhiều và danh từ không đếm được không có mạo từ. Dùng the khi nói đến cái cụ thể mà người nghe xác định được. Một số nhóm danh từ có quy ước riêng về việc có hay không có the.",
+      "cachGhep": [
+        "Nói chung, không mạo từ: Dogs are friendly. / I love music. / Life is short.",
+        "Cụ thể, dùng the: The dogs next door are noisy. / The music at the party was great.",
+        "Không the: bữa ăn (have breakfast), môn học, ngôn ngữ, môn thể thao, thứ, tháng, hầu hết tên nước, thành phố",
+        "Không the trong cụm: go to school / work / bed, at home, by bus, by car",
+        "Có the: the + so sánh nhất, the + số thứ tự, nhạc cụ (play the guitar), the sun, the sea, the internet",
+        "Tên nước có the: the USA, the UK, the Philippines; sông, biển, dãy núi: the Mekong, the Pacific"
+      ],
+      "viDu": [
+        {
+          "c": "I like coffee, but the coffee in this café is too strong.",
+          "v": "Tôi thích cà phê, nhưng cà phê ở quán này quá đậm."
+        },
+        {
+          "c": "Children usually go to school by bus.",
+          "v": "Trẻ em thường đi học bằng xe buýt."
+        },
+        {
+          "c": "She plays the violin and speaks French.",
+          "v": "Cô ấy chơi vĩ cầm và nói tiếng Pháp."
+        },
+        {
+          "c": "My uncle lives in the USA, near the sea.",
+          "v": "Chú tôi sống ở Mỹ, gần biển."
+        }
+      ],
+      "luuY": [
+        "Lỗi người Việt hay mắc theo hai hướng: bỏ mạo từ khi cần (I am in kitchen) và thêm the khi nói chung chung (I love the music, The life is hard).",
+        "Go to school (đi học) không có the; go to the school nghĩa là đến ngôi trường đó vì việc khác.",
+        "By + phương tiện không có mạo từ: by bus, by train (không nói by the bus).",
+        "Nhạc cụ có the, môn thể thao thì không: play the piano nhưng play football."
+      ],
+      "tuKhoa": [
+        "zero article",
+        "the",
+        "không dùng mạo từ",
+        "mạo từ nâng cao",
+        "khi nao dung the"
+      ],
+      "quiz": [
+        {
+          "h": "___ are very clever animals.",
+          "lc": [
+            "The dolphin",
+            "Dolphins",
+            "A dolphins",
+            "Dolphin"
+          ],
+          "da": 1,
+          "gt": "Nói chung về cả loài dùng danh từ số nhiều không mạo từ: Dolphins."
+        },
+        {
+          "h": "We usually have ___ at 7 p.m.",
+          "lc": [
+            "the dinner",
+            "a dinner",
+            "dinners",
+            "dinner"
+          ],
+          "da": 3,
+          "gt": "Tên bữa ăn nói chung không dùng mạo từ: have dinner."
+        },
+        {
+          "h": "Can you play ___?",
+          "lc": [
+            "the guitar",
+            "an guitar",
+            "a guitars",
+            "guitars a"
+          ],
+          "da": 0,
+          "gt": "Chơi nhạc cụ dùng the: play the guitar."
+        }
+      ],
+      "soSanh": [
+        "en-b1-articles"
+      ]
+    },
+    {
+      "id": "en-a2-should",
+      "nhom": "Động từ khuyết thiếu",
+      "tieuDe": "should / shouldn't",
+      "mau": "S + should / shouldn't + V nguyên mẫu",
+      "nghia": "nên / không nên (làm gì) — lời khuyên",
+      "giaiThich": "Dùng should để khuyên hoặc nói điều mình cho là đúng, là tốt; shouldn't để khuyên đừng làm. Should nhẹ hơn must: đó là lời khuyên chứ không phải bắt buộc. Thường đi sau I think / I don't think.",
+      "cachGhep": [
+        "Khẳng định: S + should + V (You should rest.)",
+        "Phủ định: S + should not (shouldn't) + V",
+        "Câu hỏi: Should + S + V? / What should I do?",
+        "I think you should… / I don't think you should… (không nói I think you shouldn't)"
+      ],
+      "viDu": [
+        {
+          "c": "You look tired. You should go to bed early.",
+          "v": "Trông bạn mệt đấy. Bạn nên đi ngủ sớm."
+        },
+        {
+          "c": "Children shouldn't eat too many sweets.",
+          "v": "Trẻ em không nên ăn quá nhiều kẹo."
+        },
+        {
+          "c": "Should I call her now?",
+          "v": "Tôi có nên gọi cho cô ấy bây giờ không?"
+        },
+        {
+          "c": "I think we should take a taxi.",
+          "v": "Tôi nghĩ chúng ta nên đi taxi."
+        }
+      ],
+      "luuY": [
+        "Lỗi hay mắc: thêm to sau should → sai: You should to study. Đúng: You should study.",
+        "Should không thêm -s và không dùng do / does: sai He shoulds / Do I should…? / You don't should.",
+        "Chữ l trong should là âm câm: đọc /ʃʊd/."
+      ],
+      "soSanh": [
+        "en-a2-must",
+        "en-a2-have-to",
+        "en-b1-modals-advice"
+      ],
+      "tuKhoa": [
+        "should",
+        "shouldn't",
+        "nên",
+        "lời khuyên",
+        "should not"
+      ],
+      "quiz": [
+        {
+          "h": "You ___ smoke. It's bad for you.",
+          "lc": [
+            "should",
+            "shouldn't",
+            "should to",
+            "don't should"
+          ],
+          "da": 1,
+          "gt": "Hút thuốc có hại nên lời khuyên là không nên: shouldn't."
+        },
+        {
+          "h": "He should ___ a doctor.",
+          "lc": [
+            "sees",
+            "to see",
+            "see",
+            "seeing"
+          ],
+          "da": 2,
+          "gt": "Sau should là động từ nguyên mẫu không to: see."
+        },
+        {
+          "h": "It's cold outside. You ___ wear a coat.",
+          "lc": [
+            "should",
+            "shouldn't",
+            "should not to",
+            "shoulds"
+          ],
+          "da": 0,
+          "gt": "Trời lạnh nên lời khuyên là nên mặc áo khoác: should + V."
+        }
+      ]
+    },
+    {
+      "id": "en-a2-must",
+      "nhom": "Động từ khuyết thiếu",
+      "tieuDe": "must / mustn't",
+      "mau": "S + must / mustn't + V nguyên mẫu",
+      "nghia": "phải (bắt buộc) · không được phép, cấm (làm gì)",
+      "giaiThich": "Must diễn tả sự bắt buộc mạnh, thường do người nói thấy cần thiết hoặc do luật lệ, nội quy. Mustn't nghĩa là CẤM, không được làm. Must chỉ có dạng hiện tại; nói về quá khứ phải dùng had to.",
+      "cachGhep": [
+        "Khẳng định: S + must + V (You must wear a helmet.)",
+        "Cấm: S + must not (mustn't) + V",
+        "Một dạng cho mọi ngôi, không thêm s, không có to",
+        "Quá khứ: had to + V; tương lai: will have to + V"
+      ],
+      "viDu": [
+        {
+          "c": "You must wear a helmet when you ride a motorbike.",
+          "v": "Bạn phải đội mũ bảo hiểm khi đi xe máy."
+        },
+        {
+          "c": "Students mustn't use their phones in the exam.",
+          "v": "Học sinh không được dùng điện thoại trong giờ thi."
+        },
+        {
+          "c": "I must finish this report today.",
+          "v": "Hôm nay tôi phải làm xong bản báo cáo này."
+        },
+        {
+          "c": "You mustn't park here.",
+          "v": "Bạn không được đỗ xe ở đây."
+        }
+      ],
+      "luuY": [
+        "Lỗi hay mắc: thêm to sau must → sai: I must to go. Đúng: I must go.",
+        "Mustn't là CẤM, không phải “không cần”. “Không cần phải” là don't have to.",
+        "Không có dạng quá khứ musted: Yesterday I had to work late.",
+        "Chữ t đầu trong mustn't không đọc: /ˈmʌsnt/."
+      ],
+      "soSanh": [
+        "en-a2-have-to",
+        "en-a2-mustnt-vs-dont-have-to",
+        "en-a2-should",
+        "en-b1-modals-obligation"
+      ],
+      "tuKhoa": [
+        "must",
+        "mustn't",
+        "phải",
+        "cấm",
+        "bắt buộc"
+      ],
+      "quiz": [
+        {
+          "h": "You ___ touch that wire. It's dangerous!",
+          "lc": [
+            "must",
+            "must to",
+            "mustn't",
+            "don't must"
+          ],
+          "da": 2,
+          "gt": "Việc nguy hiểm, bị cấm → mustn't + V."
+        },
+        {
+          "h": "All visitors ___ show their passports here.",
+          "lc": [
+            "must",
+            "must to",
+            "musts",
+            "mustn't to"
+          ],
+          "da": 0,
+          "gt": "Quy định bắt buộc: must + V nguyên mẫu, không có to hay s."
+        },
+        {
+          "h": "Yesterday I ___ get up at five.",
+          "lc": [
+            "must",
+            "had to",
+            "musted",
+            "must to"
+          ],
+          "da": 1,
+          "gt": "Must không có dạng quá khứ; quá khứ dùng had to."
+        }
+      ]
+    },
+    {
+      "id": "en-a2-have-to",
+      "nhom": "Động từ khuyết thiếu",
+      "tieuDe": "have to / don't have to",
+      "mau": "S + have to / has to + V · S + don't / doesn't have to + V",
+      "nghia": "phải (làm gì) · không cần phải (làm gì)",
+      "giaiThich": "Have to diễn tả việc bắt buộc, thường do hoàn cảnh, quy định hay người khác đặt ra. Don't have to nghĩa là không bắt buộc: làm cũng được, không làm cũng được. Have to chia như động từ thường nên dùng được ở mọi thì.",
+      "cachGhep": [
+        "I / You / We / They + have to + V · He / She / It + has to + V",
+        "Phủ định: don't / doesn't have to + V (không cần phải)",
+        "Câu hỏi: Do / Does + S + have to + V?",
+        "Quá khứ: had to / didn't have to · Tương lai: will have to"
+      ],
+      "viDu": [
+        {
+          "c": "I have to get up early on weekdays.",
+          "v": "Các ngày trong tuần tôi phải dậy sớm."
+        },
+        {
+          "c": "She has to wear a uniform at work.",
+          "v": "Cô ấy phải mặc đồng phục khi đi làm."
+        },
+        {
+          "c": "You don't have to pay. It's free.",
+          "v": "Bạn không cần trả tiền. Nó miễn phí."
+        },
+        {
+          "c": "Do we have to bring our books tomorrow?",
+          "v": "Ngày mai chúng ta có phải mang sách không?"
+        }
+      ],
+      "luuY": [
+        "Lỗi hay mắc: quên has to với ngôi ba → sai: She have to work. Đúng: She has to work.",
+        "Phủ định và câu hỏi dùng do / does: sai She hasn't to go / Have you to go? Đúng: She doesn't have to go / Do you have to go?",
+        "Don't have to ≠ mustn't: không cần ≠ cấm.",
+        "Không bỏ to: I have to go (không nói I have go)."
+      ],
+      "soSanh": [
+        "en-a2-must",
+        "en-a2-mustnt-vs-dont-have-to"
+      ],
+      "tuKhoa": [
+        "have to",
+        "has to",
+        "don't have to",
+        "phải",
+        "không cần phải"
+      ],
+      "quiz": [
+        {
+          "h": "My father ___ work on Saturdays.",
+          "lc": [
+            "have to",
+            "has to",
+            "has",
+            "must to"
+          ],
+          "da": 1,
+          "gt": "My father = he nên dùng has to + V."
+        },
+        {
+          "h": "Tomorrow is Sunday. I ___ get up early.",
+          "lc": [
+            "have to",
+            "has to",
+            "doesn't have to",
+            "don't have to"
+          ],
+          "da": 3,
+          "gt": "Chủ nhật không bắt buộc dậy sớm; chủ ngữ I → don't have to."
+        },
+        {
+          "h": "___ she have to wear glasses?",
+          "lc": [
+            "Does",
+            "Has",
+            "Is",
+            "Do"
+          ],
+          "da": 0,
+          "gt": "Câu hỏi của have to dùng trợ động từ; she → Does."
+        }
+      ]
+    },
+    {
+      "id": "en-a2-mustnt-vs-dont-have-to",
+      "nhom": "Động từ khuyết thiếu",
+      "tieuDe": "mustn't vs don't have to",
+      "mau": "mustn't + V (cấm)  ↔  don't / doesn't have to + V (không cần)",
+      "nghia": "không được phép ↔ không cần phải",
+      "giaiThich": "Ở dạng khẳng định, must và have to gần nghĩa nhau. Nhưng ở dạng phủ định, hai cấu trúc khác hẳn nhau: mustn't là cấm, làm thì sai; don't have to là không bắt buộc, làm hay không tuỳ ý.",
+      "cachGhep": [
+        "mustn't + V = cấm, không được: You mustn't be late. (đến muộn là sai)",
+        "don't / doesn't have to + V = không cần: You don't have to come. (đến hay không cũng được)",
+        "Quá khứ của “không cần”: didn't have to + V"
+      ],
+      "viDu": [
+        {
+          "c": "You mustn't smoke in the hospital.",
+          "v": "Bạn không được hút thuốc trong bệnh viện."
+        },
+        {
+          "c": "You don't have to wear a tie, but you can if you want.",
+          "v": "Bạn không cần đeo cà vạt, nhưng muốn thì cứ đeo."
+        },
+        {
+          "c": "Children mustn't play near the road.",
+          "v": "Trẻ em không được chơi gần đường."
+        },
+        {
+          "c": "She doesn't have to cook tonight. We're eating out.",
+          "v": "Tối nay cô ấy không phải nấu ăn. Chúng tôi đi ăn ngoài."
+        }
+      ],
+      "luuY": [
+        "Lỗi người Việt hay mắc: dịch “không phải làm” thành mustn't. You mustn't do it = cấm bạn làm; “bạn không phải làm đâu” = You don't have to do it.",
+        "Mẹo: mustn't ≈ Don't do it!; don't have to ≈ It isn't necessary.",
+        "Với ngôi ba: he mustn't (không đổi) nhưng he doesn't have to."
+      ],
+      "soSanh": [
+        "en-a2-must",
+        "en-a2-have-to"
+      ],
+      "tuKhoa": [
+        "mustn't vs don't have to",
+        "cấm hay không cần",
+        "must not",
+        "don't need to",
+        "phân biệt must have to"
+      ],
+      "quiz": [
+        {
+          "h": "The museum is free. You ___ pay.",
+          "lc": [
+            "mustn't",
+            "must",
+            "don't have to",
+            "have to"
+          ],
+          "da": 2,
+          "gt": "Miễn phí nên không cần trả tiền → don't have to."
+        },
+        {
+          "h": "This is a secret. You ___ tell anyone.",
+          "lc": [
+            "mustn't",
+            "don't have to",
+            "have to",
+            "doesn't have to"
+          ],
+          "da": 0,
+          "gt": "Bí mật thì cấm nói ra → mustn't."
+        },
+        {
+          "h": "“You don't have to wait for me” nghĩa là:",
+          "lc": [
+            "Bạn bị cấm chờ tôi.",
+            "Bạn không cần chờ tôi.",
+            "Bạn phải chờ tôi.",
+            "Bạn nên chờ tôi."
+          ],
+          "da": 1,
+          "gt": "Don't have to = không cần, không bắt buộc."
+        }
+      ]
+    },
+    {
+      "id": "en-a2-could",
+      "nhom": "Động từ khuyết thiếu",
+      "tieuDe": "could (khả năng quá khứ, lời đề nghị lịch sự)",
+      "mau": "S + could / couldn't + V · Could + you / I + V?",
+      "nghia": "(hồi đó) có thể, biết làm · … được không ạ? (lịch sự)",
+      "giaiThich": "Could là quá khứ của can, dùng để nói khả năng nói chung trong quá khứ; couldn't là không thể. Could còn dùng trong câu hỏi để nhờ ai đó hoặc xin phép một cách lịch sự hơn can, lúc này nó nói về hiện tại chứ không phải quá khứ.",
+      "cachGhep": [
+        "Khả năng quá khứ: S + could + V (I could swim when I was five.)",
+        "Phủ định: could not (couldn't) + V",
+        "Nhờ lịch sự: Could you + V, please?",
+        "Xin phép lịch sự: Could I + V?  →  Yes, of course. / Sorry, …"
+      ],
+      "viDu": [
+        {
+          "c": "My grandmother could speak three languages when she was young.",
+          "v": "Hồi trẻ bà tôi nói được ba thứ tiếng."
+        },
+        {
+          "c": "I couldn't sleep last night because of the noise.",
+          "v": "Đêm qua tôi không ngủ được vì tiếng ồn."
+        },
+        {
+          "c": "Could you open the window, please?",
+          "v": "Bạn mở giúp cửa sổ được không?"
+        },
+        {
+          "c": "Could I ask you a question?",
+          "v": "Tôi hỏi bạn một câu được không ạ?"
+        }
+      ],
+      "luuY": [
+        "Lỗi hay mắc: dùng can cho quá khứ → sai: When I was young, I can run fast. Đúng: I could run fast.",
+        "Sau could là động từ nguyên mẫu: could swim (không nói could to swim / could swam).",
+        "Trả lời lời nhờ Could you…? không dùng could: Yes, of course / Sure (không nói Yes, I could).",
+        "Chữ l trong could là âm câm: /kʊd/."
+      ],
+      "soSanh": [
+        "en-a2-may-might",
+        "en-b1-modals-ability"
+      ],
+      "tuKhoa": [
+        "could",
+        "couldn't",
+        "could you",
+        "khả năng quá khứ",
+        "nhờ lịch sự"
+      ],
+      "quiz": [
+        {
+          "h": "When I was six, I ___ ride a bike.",
+          "lc": [
+            "can",
+            "could",
+            "could to",
+            "am able"
+          ],
+          "da": 1,
+          "gt": "Khả năng trong quá khứ (when I was six) → could + V."
+        },
+        {
+          "h": "___ you help me with this bag, please?",
+          "lc": [
+            "Could",
+            "Did",
+            "Were",
+            "Are"
+          ],
+          "da": 0,
+          "gt": "Lời nhờ lịch sự: Could you + V, please?"
+        },
+        {
+          "h": "The test was very hard. I ___ answer the last question.",
+          "lc": [
+            "could",
+            "can't",
+            "couldn't to",
+            "couldn't"
+          ],
+          "da": 3,
+          "gt": "Quá khứ (was) và không làm được → couldn't + V."
+        }
+      ]
+    },
+    {
+      "id": "en-a2-may-might",
+      "nhom": "Động từ khuyết thiếu",
+      "tieuDe": "may / might",
+      "mau": "S + may / might (+ not) + V nguyên mẫu",
+      "nghia": "có thể, có lẽ (chưa chắc chắn)",
+      "giaiThich": "Dùng may hoặc might khi nghĩ một việc có khả năng xảy ra ở hiện tại hoặc tương lai nhưng không chắc. Hai từ gần như thay nhau được ở cấp này; might hơi kém chắc chắn hơn. May I…? còn là cách xin phép trang trọng.",
+      "cachGhep": [
+        "S + may / might + V (It may rain. / She might come.)",
+        "Phủ định: may not / might not + V (không viết tắt mayn't)",
+        "Mức chắc chắn: will (chắc) > may / might (có thể) > won't (chắc không)",
+        "Xin phép trang trọng: May I come in?"
+      ],
+      "viDu": [
+        {
+          "c": "Take an umbrella. It might rain later.",
+          "v": "Mang ô đi. Lát nữa có thể mưa đấy."
+        },
+        {
+          "c": "I may go to the cinema tonight, but I'm not sure.",
+          "v": "Tối nay có thể tôi đi xem phim, nhưng chưa chắc."
+        },
+        {
+          "c": "She might not come to the party.",
+          "v": "Có thể cô ấy sẽ không đến bữa tiệc."
+        },
+        {
+          "c": "May I use your pen?",
+          "v": "Tôi mượn bút của bạn được không ạ?"
+        }
+      ],
+      "luuY": [
+        "Lỗi hay mắc: thêm to hoặc chia động từ → sai: It may to rain / She might comes. Đúng: It may rain / She might come.",
+        "Đừng nhầm may be (động từ: He may be at home) với maybe (trạng từ, đứng đầu câu: Maybe he is at home).",
+        "Không dùng might cùng will: sai It might will rain."
+      ],
+      "soSanh": [
+        "en-a2-could",
+        "en-a2-will",
+        "en-b1-modals-deduction-present"
+      ],
+      "tuKhoa": [
+        "may might",
+        "có thể",
+        "có lẽ",
+        "may i",
+        "might not"
+      ],
+      "quiz": [
+        {
+          "h": "I'm not sure, but I ___ buy a new phone next month.",
+          "lc": [
+            "must to",
+            "might",
+            "might to",
+            "am"
+          ],
+          "da": 1,
+          "gt": "Chưa chắc chắn (I'm not sure) → might + V."
+        },
+        {
+          "h": "He might ___ late. The traffic is bad.",
+          "lc": [
+            "is",
+            "to be",
+            "be",
+            "being"
+          ],
+          "da": 2,
+          "gt": "Sau might là động từ nguyên mẫu không to: be."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "She may not like it.",
+            "She mayn't likes it.",
+            "She doesn't may like it.",
+            "She may not to like it."
+          ],
+          "da": 0,
+          "gt": "Phủ định: may not + V nguyên mẫu, không dùng do và không viết tắt."
+        }
+      ]
+    }
+  ]
+}

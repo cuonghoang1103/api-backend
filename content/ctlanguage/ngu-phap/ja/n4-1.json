@@ -1,0 +1,1457 @@
+{
+  "nn": "ja",
+  "cap": "N4",
+  "diem": [
+    {
+      "id": "ja-n4-n-desu",
+      "nhom": "Thể thường – giải thích",
+      "tieuDe": "〜んです",
+      "mau": "Thể thường + んです",
+      "nghia": "giải thích lý do, hoàn cảnh; hỏi để xin lời giải thích",
+      "giaiThich": "Dùng khi người nói muốn giải thích lý do, hoàn cảnh của mình, hoặc khi nhìn thấy, nghe thấy điều gì đó và muốn người nghe giải thích thêm. Câu hỏi 〜んですか thể hiện sự quan tâm, tò mò chứ không chỉ hỏi thông tin. Trong văn viết và lời nói trang trọng dùng 〜のです.",
+      "cachGhep": [
+        "Động từ / tính từ đuôi い thể thường + んです: 行くんです, 行かないんです, 高いんです",
+        "Tính từ đuôi な / danh từ: bỏ だ, thêm な + んです: 暇なんです, 病気なんです",
+        "Câu hỏi: 〜んですか; hỏi lý do: どうして 〜んですか"
+      ],
+      "viDu": [
+        {
+          "c": "どうして遅れたんですか。",
+          "d": "どうして おくれたんですか。",
+          "v": "Tại sao bạn đến muộn vậy?"
+        },
+        {
+          "c": "バスが来なかったんです。",
+          "d": "バスが こなかったんです。",
+          "v": "Vì xe buýt không đến ạ."
+        },
+        {
+          "c": "明日は休みなんです。",
+          "d": "あしたは やすみなんです。",
+          "v": "Chả là ngày mai tôi được nghỉ."
+        },
+        {
+          "c": "いいかばんですね。どこで買ったんですか。",
+          "d": "いい かばんですね。どこで かったんですか。",
+          "v": "Cái túi đẹp nhỉ. Bạn mua ở đâu vậy?"
+        }
+      ],
+      "luuY": [
+        "Danh từ và tính từ đuôi な phải thêm な: 学生なんです (không nói 学生だんです, 学生んです).",
+        "Trước んです là thể thường, không phải thể ます: 行くんです (không nói 行きますんです).",
+        "Không dùng 〜んですか cho mọi câu hỏi; dùng dồn dập nghe như đang chất vấn."
+      ],
+      "soSanh": [
+        "ja-n4-n-desu-ga"
+      ],
+      "tuKhoa": [
+        "n desu",
+        "ndesu",
+        "no desu",
+        "nda",
+        "giải thích lý do"
+      ],
+      "quiz": [
+        {
+          "h": "きのうは どうして 休んだんですか。— 熱が（　）んです。",
+          "lc": [
+            "あった",
+            "ありました",
+            "あって",
+            "あり"
+          ],
+          "da": 0,
+          "gt": "Trước んです là thể thường: あった. ありました là thể lịch sự nên không ghép được."
+        },
+        {
+          "h": "あしたは 試験（　）んです。",
+          "lc": [
+            "だ",
+            "の",
+            "な",
+            "で"
+          ],
+          "da": 2,
+          "gt": "Danh từ ghép với んです bằng な: 試験なんです."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "この店は 静かだんです。",
+            "この店は 静かんです。",
+            "この店は 静かのんです。",
+            "この店は 静かなんです。"
+          ],
+          "da": 3,
+          "gt": "Tính từ đuôi な + な + んです: 静かなんです."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-n-desu-ga",
+      "nhom": "Thể thường – giải thích",
+      "tieuDe": "〜んですが、〜",
+      "mau": "Thể thường + んですが、〜ていただけませんか / 〜たらいいですか",
+      "nghia": "mở đầu câu chuyện trước khi nhờ vả, xin phép, hỏi ý kiến",
+      "giaiThich": "Dùng để nêu hoàn cảnh của mình làm lời dẫn, sau đó mới nhờ vả, xin lời khuyên hoặc xin phép. が ở đây không có nghĩa “nhưng” mà chỉ làm câu mềm đi. Vế sau thường là 〜ていただけませんか (nhờ lịch sự) hoặc từ để hỏi + 〜たらいいですか (xin chỉ dẫn); cũng có thể bỏ lửng.",
+      "cachGhep": [
+        "Thể thường + んですが、V-て + いただけませんか (nhờ lịch sự)",
+        "Thể thường + んですが、từ để hỏi + V-たら + いいですか (xin chỉ dẫn)",
+        "Tính từ đuôi な / danh từ + な + んですが"
+      ],
+      "viDu": [
+        {
+          "c": "日本語で手紙を書いたんですが、見ていただけませんか。",
+          "d": "にほんごで てがみを かいたんですが、みて いただけませんか。",
+          "v": "Tôi đã viết thư bằng tiếng Nhật, anh/chị xem giúp tôi được không ạ?"
+        },
+        {
+          "c": "駅へ行きたいんですが、どのバスに乗ったらいいですか。",
+          "d": "えきへ いきたいんですが、どの バスに のったら いいですか。",
+          "v": "Tôi muốn ra ga, tôi nên lên xe buýt nào ạ?"
+        },
+        {
+          "c": "すみません、ちょっと聞きたいことがあるんですが。",
+          "d": "すみません、ちょっと ききたい ことが あるんですが。",
+          "v": "Xin lỗi, tôi có chút chuyện muốn hỏi ạ."
+        }
+      ],
+      "luuY": [
+        "Đừng dịch が thành “nhưng”; đây chỉ là lời dẫn vào chuyện.",
+        "〜ていただけませんか lịch sự hơn 〜てください; dùng với người trên, người lạ.",
+        "Nhờ vả phải dùng thể khả năng いただけませんか, không nói いただきませんか."
+      ],
+      "soSanh": [
+        "ja-n4-n-desu",
+        "ja-n4-sasete-itadaku"
+      ],
+      "tuKhoa": [
+        "n desu ga",
+        "ndesuga",
+        "te itadakemasen ka",
+        "nhờ vả",
+        "lời dẫn"
+      ],
+      "quiz": [
+        {
+          "h": "使い方が わからない（　）、教えて いただけませんか。",
+          "lc": [
+            "んですが",
+            "んですか",
+            "からが",
+            "のでが"
+          ],
+          "da": 0,
+          "gt": "Lời dẫn trước khi nhờ vả là 〜んですが."
+        },
+        {
+          "h": "切符を 買いたいんですが、どこで（　）いいですか。",
+          "lc": [
+            "買って",
+            "買ったら",
+            "買うと",
+            "買い"
+          ],
+          "da": 1,
+          "gt": "Xin chỉ dẫn: từ để hỏi + V-たら + いいですか."
+        },
+        {
+          "h": "この漢字の 読み方を 教えて（　）。",
+          "lc": [
+            "いただきませんか",
+            "くださいませんですか",
+            "いただけませんか"
+          ],
+          "da": 2,
+          "gt": "Mẫu nhờ lịch sự là V-て + いただけませんか (thể khả năng của いただく)."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-kanou-kei",
+      "nhom": "Khả năng",
+      "tieuDe": "Thể khả năng (可能形)",
+      "mau": "N + が + V-khả năng",
+      "nghia": "có thể làm ~ (do có năng lực hoặc điều kiện cho phép)",
+      "giaiThich": "Thể khả năng diễn tả năng lực của một người hoặc việc có thể làm được trong một hoàn cảnh nào đó. Nghĩa giống V-る + ことができます nhưng ngắn hơn và dùng nhiều trong hội thoại. Động từ ở thể khả năng chia như động từ nhóm II, và tân ngữ を thường đổi thành が.",
+      "cachGhep": [
+        "Nhóm I: đuôi cột う → cột え + る: 書く → 書ける, 読む → 読める, 話す → 話せる, 買う → 買える",
+        "Nhóm II: bỏ る + られる: 食べる → 食べられる, 見る → 見られる",
+        "Nhóm III: する → できる, 来る → 来られる（こられる）",
+        "Trợ từ: 漢字を読む → 漢字が読める"
+      ],
+      "viDu": [
+        {
+          "c": "私は漢字が少し読めます。",
+          "d": "わたしは かんじが すこし よめます。",
+          "v": "Tôi đọc được một chút chữ Hán."
+        },
+        {
+          "c": "この店ではカードが使えません。",
+          "d": "この みせでは カードが つかえません。",
+          "v": "Ở cửa hàng này không dùng thẻ được."
+        },
+        {
+          "c": "一人で着物が着られますか。",
+          "d": "ひとりで きものが きられますか。",
+          "v": "Bạn có tự mặc kimono một mình được không?"
+        },
+        {
+          "c": "明日は何時に来られますか。",
+          "d": "あしたは なんじに こられますか。",
+          "v": "Ngày mai bạn đến được lúc mấy giờ?"
+        }
+      ],
+      "luuY": [
+        "わかる và できる tự nó đã mang nghĩa khả năng nên không chia thể khả năng (không nói わかれます).",
+        "Trong hội thoại người Nhật hay bỏ ら (食べれる, 見れる), nhưng trong bài thi dùng 食べられる, 見られる.",
+        "Chỉ を đổi thành が; các trợ từ khác giữ nguyên: 駅まで歩けます, 友達に会えます."
+      ],
+      "soSanh": [
+        "ja-n4-mieru-kikoeru",
+        "ja-n4-ukemi"
+      ],
+      "tuKhoa": [
+        "kanoukei",
+        "kanou kei",
+        "rareru",
+        "eru",
+        "thể khả năng",
+        "có thể"
+      ],
+      "quiz": [
+        {
+          "h": "「泳ぐ」の 可能形は どれですか。",
+          "lc": [
+            "泳げる",
+            "泳がれる",
+            "泳ぎれる",
+            "泳ごう"
+          ],
+          "da": 0,
+          "gt": "Nhóm I: ぐ → げ + る = 泳げる. 泳がれる là bị động, 泳ごう là thể ý chí."
+        },
+        {
+          "h": "田中さんは フランス語（　）話せます。",
+          "lc": [
+            "に",
+            "で",
+            "が",
+            "へ"
+          ],
+          "da": 2,
+          "gt": "Đối tượng của động từ khả năng đi với が: フランス語が 話せます."
+        },
+        {
+          "h": "「来る」の 可能形は どれですか。",
+          "lc": [
+            "来れられる",
+            "来える",
+            "きられる",
+            "こられる"
+          ],
+          "da": 3,
+          "gt": "来る là nhóm III, thể khả năng đọc là こられる."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-mieru-kikoeru",
+      "nhom": "Khả năng",
+      "tieuDe": "見えます／聞こえます",
+      "mau": "N + が + 見えます／聞こえます",
+      "nghia": "nhìn thấy / nghe thấy (tự nhiên lọt vào mắt, vào tai)",
+      "giaiThich": "見える và 聞こえる diễn tả hình ảnh, âm thanh tự nhiên lọt vào mắt, vào tai, không phụ thuộc ý muốn của người nói. Còn 見られる, 聞ける là “có điều kiện để xem, để nghe” khi mình chủ động muốn. Đối tượng nhìn thấy, nghe thấy đi với が.",
+      "cachGhep": [
+        "N + が + 見えます / 見えません",
+        "N + が + 聞こえます / 聞こえません",
+        "Nơi chốn + から + N + が + 見えます"
+      ],
+      "viDu": [
+        {
+          "c": "部屋の窓から海が見えます。",
+          "d": "へやの まどから うみが みえます。",
+          "v": "Từ cửa sổ phòng nhìn thấy biển."
+        },
+        {
+          "c": "電話の声がよく聞こえません。",
+          "d": "でんわの こえが よく きこえません。",
+          "v": "Tôi không nghe rõ tiếng trong điện thoại."
+        },
+        {
+          "c": "後ろの席から字が見えますか。",
+          "d": "うしろの せきから じが みえますか。",
+          "v": "Từ ghế phía sau có nhìn thấy chữ không?"
+        }
+      ],
+      "luuY": [
+        "Dùng が, không dùng を: 山が見えます (không nói 山を見えます).",
+        "Xem được, nghe được nhờ có điều kiện (có rạp chiếu, có đài phát) thì dùng 見られます / 聞けます: この映画館で古い映画が見られます."
+      ],
+      "soSanh": [
+        "ja-n4-kanou-kei"
+      ],
+      "tuKhoa": [
+        "mieru",
+        "kikoeru",
+        "miemasu",
+        "kikoemasu",
+        "nhìn thấy",
+        "nghe thấy"
+      ],
+      "quiz": [
+        {
+          "h": "天気が いい 日は、ここから 富士山（　）見えます。",
+          "lc": [
+            "を",
+            "が",
+            "に",
+            "で"
+          ],
+          "da": 1,
+          "gt": "Vật nhìn thấy đi với が: 富士山が 見えます."
+        },
+        {
+          "h": "となりの 部屋から ピアノの 音が（　）。",
+          "lc": [
+            "聞きます",
+            "聞かせます",
+            "聞こえます"
+          ],
+          "da": 2,
+          "gt": "Âm thanh tự lọt vào tai, không do chủ ý nghe → 聞こえます."
+        },
+        {
+          "h": "この 動物園では パンダが（　）。",
+          "lc": [
+            "見られます",
+            "見えられます",
+            "見せます"
+          ],
+          "da": 0,
+          "gt": "Đến đó thì có điều kiện để xem → thể khả năng 見られます. 見えられます không tồn tại."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-you-ni-naru",
+      "nhom": "Khả năng",
+      "tieuDe": "〜ようになります",
+      "mau": "V-thể từ điển (thường là thể khả năng) + ように + なります",
+      "nghia": "trở nên làm được ~; bắt đầu có thói quen ~",
+      "giaiThich": "Diễn tả sự thay đổi: từ chỗ không làm được thành làm được, hoặc từ chỗ không làm thành có thói quen làm. Thường đi với động từ khả năng, わかる, 見える. Thay đổi theo hướng “không còn ~ nữa” thì dùng V-なくなります.",
+      "cachGhep": [
+        "V-khả năng thể từ điển + ようになります: 泳げるようになります",
+        "V-thể từ điển + ようになります (thói quen mới): 毎朝走るようになりました",
+        "Không còn ~ nữa: V-thể ない bỏ い + くなります: 食べられなくなりました"
+      ],
+      "viDu": [
+        {
+          "c": "日本語の新聞が読めるようになりました。",
+          "d": "にほんごの しんぶんが よめるように なりました。",
+          "v": "Tôi đã đọc được báo tiếng Nhật rồi."
+        },
+        {
+          "c": "最近、朝ご飯を食べるようになりました。",
+          "d": "さいきん、あさごはんを たべるように なりました。",
+          "v": "Gần đây tôi đã bắt đầu ăn sáng."
+        },
+        {
+          "c": "年を取って、小さい字が読めなくなりました。",
+          "d": "としを とって、ちいさい じが よめなく なりました。",
+          "v": "Có tuổi rồi nên tôi không còn đọc được chữ nhỏ nữa."
+        },
+        {
+          "c": "自転車に乗れるようになりましたか。",
+          "d": "じてんしゃに のれるように なりましたか。",
+          "v": "Bạn đã đi được xe đạp chưa?"
+        }
+      ],
+      "luuY": [
+        "Không dùng với động từ tự nó đã chỉ sự thay đổi như 慣れる, 太る, やせる (nói 慣れました, không nói 慣れるようになりました).",
+        "Trả lời “chưa”: いいえ、まだ 乗れません (không nói まだ 乗れるようになりません)."
+      ],
+      "soSanh": [
+        "ja-n4-you-ni-suru",
+        "ja-n4-koto-ni-naru"
+      ],
+      "tuKhoa": [
+        "you ni naru",
+        "youninaru",
+        "ようになる",
+        "trở nên",
+        "thay đổi khả năng"
+      ],
+      "quiz": [
+        {
+          "h": "毎日 練習して、やっと 泳げる（　）なりました。",
+          "lc": [
+            "ように",
+            "ために",
+            "そうに",
+            "ことを"
+          ],
+          "da": 0,
+          "gt": "Thay đổi về khả năng: V-khả năng + ように + なります."
+        },
+        {
+          "h": "テレビが こわれて、（　）なりました。",
+          "lc": [
+            "見られないに",
+            "見られなく",
+            "見られない",
+            "見られなくて"
+          ],
+          "da": 1,
+          "gt": "“Không còn ~ nữa”: thể ない bỏ い + く + なります → 見られなく なりました."
+        },
+        {
+          "h": "日本に 来てから、納豆が（　）ように なりました。",
+          "lc": [
+            "食べて",
+            "食べられた",
+            "食べられる"
+          ],
+          "da": 2,
+          "gt": "Trước ようになります là thể từ điển của động từ khả năng: 食べられる."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-te-iru-shuukan",
+      "nhom": "Thể て mở rộng",
+      "tieuDe": "〜ています（thói quen）",
+      "mau": "V-て + います",
+      "nghia": "thường xuyên, đều đặn làm ~ (thói quen lặp lại)",
+      "giaiThich": "Ngoài nghĩa “đang làm”, V-ています còn diễn tả hành động được lặp đi lặp lại như một thói quen trong giai đoạn hiện nay, thường đi với 毎日, 毎朝, いつも. Thói quen trong quá khứ dùng V-ていました.",
+      "cachGhep": [
+        "毎日 / 毎朝 / いつも + V-て + います",
+        "Thói quen trong quá khứ: V-て + いました",
+        "Phủ định: V-て + いません"
+      ],
+      "viDu": [
+        {
+          "c": "毎朝、公園を走っています。",
+          "d": "まいあさ、こうえんを はしって います。",
+          "v": "Sáng nào tôi cũng chạy bộ ở công viên."
+        },
+        {
+          "c": "休みの日はいつも何をしていますか。",
+          "d": "やすみの ひは いつも なにを して いますか。",
+          "v": "Ngày nghỉ bạn thường làm gì?"
+        },
+        {
+          "c": "子どものとき、毎晩九時に寝ていました。",
+          "d": "こどもの とき、まいばん くじに ねて いました。",
+          "v": "Hồi nhỏ, tối nào tôi cũng đi ngủ lúc 9 giờ."
+        }
+      ],
+      "luuY": [
+        "Có trạng từ tần suất (毎日, いつも) thì hiểu là thói quen, không phải “đang làm ngay lúc này”.",
+        "V-ます cũng nói được thói quen (毎朝 走ります); V-ています nhấn việc đang duy trì đều đặn trong giai đoạn này."
+      ],
+      "tuKhoa": [
+        "te imasu",
+        "teiru",
+        "thói quen",
+        "lặp lại",
+        "shuukan"
+      ],
+      "quiz": [
+        {
+          "h": "わたしは 毎晩 寝る 前に 日記を（　）います。",
+          "lc": [
+            "書いて",
+            "書き",
+            "書く",
+            "書いた"
+          ],
+          "da": 0,
+          "gt": "Thói quen lặp lại: V-て + います → 書いて います."
+        },
+        {
+          "h": "学生の とき、毎日 図書館で 勉強して（　）。",
+          "lc": [
+            "います",
+            "いましょう",
+            "いました",
+            "いません"
+          ],
+          "da": 2,
+          "gt": "Thói quen trong quá khứ (学生の とき) dùng 〜て いました."
+        },
+        {
+          "h": "Câu nào nói về thói quen?",
+          "lc": [
+            "今、雨が 降って います。",
+            "毎週 土曜日は テニスを して います。",
+            "窓が 開いて います。"
+          ],
+          "da": 1,
+          "gt": "毎週 土曜日 cho thấy hành động lặp lại; hai câu kia là “đang diễn ra” và “trạng thái”."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-jidoushi-tadoushi",
+      "nhom": "Thể て mở rộng",
+      "tieuDe": "Tự động từ / tha động từ + 〜ています（trạng thái kết quả）",
+      "mau": "N + が + tự động từ thể て + います",
+      "nghia": "~ đang ở trạng thái (cửa đang mở, đèn đang tắt…)",
+      "giaiThich": "Tha động từ (N を V) nói ai đó tác động lên vật; tự động từ (N が V) nói sự việc tự xảy ra. Tự động từ thể て + います diễn tả trạng thái là kết quả còn lưu lại của một sự việc: người nói chỉ miêu tả điều mình thấy, không quan tâm ai gây ra.",
+      "cachGhep": [
+        "Cặp tha – tự: 開ける – 開く, 閉める – 閉まる, つける – つく, 消す – 消える, 壊す – 壊れる, 入れる – 入る, 止める – 止まる",
+        "Tha động từ: 人 + が + N + を + V: ドアを開けます",
+        "Tự động từ: N + が + V: ドアが開きます",
+        "Trạng thái kết quả: N + が + tự động từ thể て + います: ドアが開いています"
+      ],
+      "viDu": [
+        {
+          "c": "窓が開いていますから、閉めてください。",
+          "d": "まどが あいて いますから、しめて ください。",
+          "v": "Cửa sổ đang mở nên bạn đóng lại giúp nhé."
+        },
+        {
+          "c": "教室の電気が消えています。",
+          "d": "きょうしつの でんきが きえて います。",
+          "v": "Đèn phòng học đang tắt."
+        },
+        {
+          "c": "このパソコンは壊れていませんか。",
+          "d": "この パソコンは こわれて いませんか。",
+          "v": "Cái máy tính này không bị hỏng đấy chứ?"
+        },
+        {
+          "c": "かばんにかぎが入っています。",
+          "d": "かばんに かぎが はいって います。",
+          "v": "Trong cặp có chìa khoá."
+        }
+      ],
+      "luuY": [
+        "Tiếng Việt “mở cửa / cửa mở” dùng chung một từ, tiếng Nhật phải chọn đúng: ドアを開ける (ai đó mở) – ドアが開く (cửa mở ra).",
+        "Trợ từ: tha động từ đi với を, tự động từ đi với が.",
+        "開いています ở đây là “đang mở sẵn”, không phải “đang từ từ mở ra”."
+      ],
+      "soSanh": [
+        "ja-n4-te-aru"
+      ],
+      "tuKhoa": [
+        "jidoushi",
+        "tadoushi",
+        "tự động từ",
+        "tha động từ",
+        "aite imasu",
+        "trạng thái kết quả"
+      ],
+      "quiz": [
+        {
+          "h": "寒いですね。窓が（　）いますよ。",
+          "lc": [
+            "開いて",
+            "開けて",
+            "開いた",
+            "開け"
+          ],
+          "da": 0,
+          "gt": "窓が → tự động từ 開く → 開いて います (đang mở)."
+        },
+        {
+          "h": "部屋を 出る ときは、電気を（　）ください。",
+          "lc": [
+            "消えて",
+            "消して",
+            "ついて",
+            "消え"
+          ],
+          "da": 1,
+          "gt": "電気を → tha động từ 消す → 消して ください."
+        },
+        {
+          "h": "この 時計は（　）います。動きません。",
+          "lc": [
+            "止めて",
+            "止まり",
+            "止まって"
+          ],
+          "da": 2,
+          "gt": "Miêu tả trạng thái của đồng hồ: tự động từ 止まる → 止まって います."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-te-aru",
+      "nhom": "Thể て mở rộng",
+      "tieuDe": "〜てあります",
+      "mau": "N + が + tha động từ thể て + あります",
+      "nghia": "~ đã được (ai đó) làm sẵn và trạng thái đó vẫn còn",
+      "giaiThich": "Diễn tả trạng thái là kết quả của việc ai đó đã cố ý làm với một mục đích nào đó. Chỉ dùng với tha động từ, và đối tượng thường đi với が. Cũng dùng để nói một việc chuẩn bị đã làm xong.",
+      "cachGhep": [
+        "N + が + tha động từ thể て + あります: 壁に地図がはってあります",
+        "Nơi chốn + に + N + が + V-て + あります",
+        "Đã chuẩn bị xong: (もう) N + は + V-て + あります"
+      ],
+      "viDu": [
+        {
+          "c": "壁にカレンダーがかけてあります。",
+          "d": "かべに カレンダーが かけて あります。",
+          "v": "Trên tường có treo sẵn quyển lịch."
+        },
+        {
+          "c": "机の上にメモが置いてあります。",
+          "d": "つくえの うえに メモが おいて あります。",
+          "v": "Trên bàn có để sẵn tờ ghi chú."
+        },
+        {
+          "c": "ホテルはもう予約してありますか。",
+          "d": "ホテルは もう よやくして ありますか。",
+          "v": "Khách sạn đã đặt sẵn chưa?"
+        }
+      ],
+      "luuY": [
+        "Tha động từ + てあります (có người cố ý làm) khác tự động từ + ています (chỉ tả trạng thái): 窓が開けてあります (ai đó mở để đấy) – 窓が開いています (cửa đang mở).",
+        "Không dùng tự động từ với てあります (không nói 窓が開いてあります)."
+      ],
+      "soSanh": [
+        "ja-n4-jidoushi-tadoushi",
+        "ja-n4-te-oku"
+      ],
+      "tuKhoa": [
+        "te aru",
+        "tearu",
+        "te arimasu",
+        "làm sẵn",
+        "trạng thái có chủ ý"
+      ],
+      "quiz": [
+        {
+          "h": "黒板に 来週の 予定が（　）あります。",
+          "lc": [
+            "書いて",
+            "書かれ",
+            "書き",
+            "書く"
+          ],
+          "da": 0,
+          "gt": "Mẫu là tha động từ thể て + あります: 書いて あります."
+        },
+        {
+          "h": "テーブルの 上に 花（　）かざって あります。",
+          "lc": [
+            "に",
+            "が",
+            "で",
+            "へ"
+          ],
+          "da": 1,
+          "gt": "Đối tượng của 〜てあります đi với が: 花が かざって あります."
+        },
+        {
+          "h": "教室の 窓が（　）あります。先生が 開けたんです。",
+          "lc": [
+            "開いて",
+            "開いた",
+            "開き",
+            "開けて"
+          ],
+          "da": 3,
+          "gt": "〜てあります chỉ đi với tha động từ: 開ける → 開けて あります."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-te-oku",
+      "nhom": "Thể て mở rộng",
+      "tieuDe": "〜ておきます",
+      "mau": "V-て + おきます",
+      "nghia": "làm ~ trước để chuẩn bị; làm ~ cho xong; cứ để nguyên ~",
+      "giaiThich": "Có ba cách dùng: (1) làm sẵn một việc để chuẩn bị cho việc sau; (2) dọn dẹp, xử lý sau khi dùng xong để lần sau tiện; (3) giữ nguyên một trạng thái. Trong hội thoại thân mật ておく nói thành とく.",
+      "cachGhep": [
+        "V-て + おきます",
+        "Giữ nguyên: V-て + おいて ください / そのままに して おきます",
+        "Thân mật: 〜ておく → 〜とく (買っておく → 買っとく), 〜でおく → 〜どく (読んでおく → 読んどく)"
+      ],
+      "viDu": [
+        {
+          "c": "旅行の前に、切符を買っておきます。",
+          "d": "りょこうの まえに、きっぷを かって おきます。",
+          "v": "Trước chuyến du lịch tôi sẽ mua vé sẵn."
+        },
+        {
+          "c": "はさみを使ったら、元の所に戻しておいてください。",
+          "d": "はさみを つかったら、もとの ところに もどして おいて ください。",
+          "v": "Dùng kéo xong thì hãy để lại chỗ cũ nhé."
+        },
+        {
+          "c": "まだ使いますから、電気はつけておいてください。",
+          "d": "まだ つかいますから、でんきは つけて おいて ください。",
+          "v": "Tôi còn dùng nên cứ để đèn bật nhé."
+        },
+        {
+          "c": "会議の前に何をしておきましょうか。",
+          "d": "かいぎの まえに なにを して おきましょうか。",
+          "v": "Trước cuộc họp tôi nên làm sẵn những gì ạ?"
+        }
+      ],
+      "luuY": [
+        "ておきます nói về hành động chuẩn bị; てあります nói về trạng thái sau khi đã chuẩn bị: 買っておきます (sẽ mua sẵn) – 買ってあります (đã mua sẵn rồi).",
+        "Chỉ dùng với động từ có ý chí."
+      ],
+      "soSanh": [
+        "ja-n4-te-aru"
+      ],
+      "tuKhoa": [
+        "te oku",
+        "teoku",
+        "te okimasu",
+        "toku",
+        "làm sẵn",
+        "chuẩn bị trước"
+      ],
+      "quiz": [
+        {
+          "h": "あした 友達が 来るので、今晩 部屋を 掃除して（　）つもりです。",
+          "lc": [
+            "おく",
+            "ある",
+            "みえる"
+          ],
+          "da": 0,
+          "gt": "Làm trước để chuẩn bị cho việc bạn đến → 〜て おく."
+        },
+        {
+          "h": "その 窓は 開けて（　）ください。あとで わたしが 閉めます。",
+          "lc": [
+            "あって",
+            "おいて",
+            "みえて",
+            "なって"
+          ],
+          "da": 1,
+          "gt": "Giữ nguyên trạng thái: V-て + おいて ください."
+        },
+        {
+          "h": "「買っとく」は どれと 同じですか。",
+          "lc": [
+            "買っている",
+            "買ってある",
+            "買っておく"
+          ],
+          "da": 2,
+          "gt": "〜とく là dạng rút gọn khẩu ngữ của 〜ておく."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-te-shimau",
+      "nhom": "Thể て mở rộng",
+      "tieuDe": "〜てしまいます",
+      "mau": "V-て + しまいます",
+      "nghia": "làm xong hết ~; lỡ ~ mất rồi (tiếc nuối)",
+      "giaiThich": "Có hai nghĩa: (1) nhấn mạnh việc đã hoặc sẽ hoàn tất toàn bộ, hay đi với もう, 全部; (2) bày tỏ sự tiếc nuối, bối rối khi chuyện ngoài ý muốn xảy ra. Trong hội thoại てしまう nói thành ちゃう, でしまう thành じゃう.",
+      "cachGhep": [
+        "V-て + しまいました (đã xong hết / lỡ mất rồi)",
+        "V-て + しまいます (sẽ làm xong hẳn)",
+        "Thân mật: 〜てしまう → 〜ちゃう (忘れちゃった), 〜でしまう → 〜じゃう (飲んじゃった)"
+      ],
+      "viDu": [
+        {
+          "c": "宿題はもう全部やってしまいました。",
+          "d": "しゅくだいは もう ぜんぶ やって しまいました。",
+          "v": "Bài tập tôi đã làm xong hết cả rồi."
+        },
+        {
+          "c": "電車にかさを忘れてしまいました。",
+          "d": "でんしゃに かさを わすれて しまいました。",
+          "v": "Tôi lỡ để quên ô trên tàu mất rồi."
+        },
+        {
+          "c": "昼ご飯までにこの仕事をしてしまいます。",
+          "d": "ひるごはんまでに この しごとを して しまいます。",
+          "v": "Tôi sẽ làm xong hẳn việc này trước bữa trưa."
+        },
+        {
+          "c": "どこでさいふをなくしてしまったんですか。",
+          "d": "どこで さいふを なくして しまったんですか。",
+          "v": "Bạn làm mất ví ở đâu vậy?"
+        }
+      ],
+      "luuY": [
+        "Tiếng Việt “mất rồi” (quên mất, hỏng mất) rất gần với nghĩa tiếc nuối của てしまいました.",
+        "Nghĩa nào tuỳ ngữ cảnh: có もう, 全部 thường là “xong hết”; việc ngoài ý muốn thường là “lỡ”."
+      ],
+      "tuKhoa": [
+        "te shimau",
+        "teshimau",
+        "chau",
+        "jau",
+        "lỡ mất",
+        "làm xong hết"
+      ],
+      "quiz": [
+        {
+          "h": "パスポートを（　）しまいました。どう しましょう。",
+          "lc": [
+            "なくして",
+            "なくし",
+            "なくす",
+            "なくした"
+          ],
+          "da": 0,
+          "gt": "Mẫu là V-て + しまいました: なくして しまいました."
+        },
+        {
+          "h": "「食べてしまった」の 話し言葉は どれですか。",
+          "lc": [
+            "食べとった",
+            "食べちゃった",
+            "食べじゃった",
+            "食べてた"
+          ],
+          "da": 1,
+          "gt": "〜てしまった rút gọn thành 〜ちゃった; 〜じゃった chỉ dùng khi thể て là 〜で."
+        },
+        {
+          "h": "この 本は きのう 全部 読んで（　）。",
+          "lc": [
+            "おきません",
+            "ありません",
+            "しまいました"
+          ],
+          "da": 2,
+          "gt": "Nhấn mạnh đã đọc xong toàn bộ → 〜て しまいました."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-te-miru",
+      "nhom": "Thể て mở rộng",
+      "tieuDe": "〜てみます",
+      "mau": "V-て + みます",
+      "nghia": "thử làm ~ (để xem thế nào)",
+      "giaiThich": "Diễn tả việc làm thử để biết kết quả, cảm giác ra sao. みる ở đây viết bằng hiragana và chia như động từ nhóm II, nên có thể nói 〜てみたい, 〜てみてください, 〜てみてもいいですか.",
+      "cachGhep": [
+        "V-て + みます",
+        "Muốn thử: V-て + みたいです",
+        "Mời thử / xin phép thử: V-て + みてください / V-て + みてもいいですか"
+      ],
+      "viDu": [
+        {
+          "c": "新しいレストランに行ってみました。",
+          "d": "あたらしい レストランに いって みました。",
+          "v": "Tôi đã đi thử nhà hàng mới."
+        },
+        {
+          "c": "このくつをはいてみてもいいですか。",
+          "d": "この くつを はいて みても いいですか。",
+          "v": "Tôi đi thử đôi giày này được không?"
+        },
+        {
+          "c": "一度富士山に登ってみたいです。",
+          "d": "いちど ふじさんに のぼって みたいです。",
+          "v": "Tôi muốn thử leo núi Phú Sĩ một lần."
+        }
+      ],
+      "luuY": [
+        "Tiếng Việt “thử” đứng trước hoặc sau động từ (thử ăn / ăn thử); tiếng Nhật luôn là V-て + みる.",
+        "てみます là làm thật để xem kết quả, không phải “định làm mà chưa làm”."
+      ],
+      "tuKhoa": [
+        "te miru",
+        "temiru",
+        "te mimasu",
+        "thử làm",
+        "làm thử"
+      ],
+      "quiz": [
+        {
+          "h": "おいしいか どうか わかりませんから、（　）みます。",
+          "lc": [
+            "食べて",
+            "食べ",
+            "食べる",
+            "食べた"
+          ],
+          "da": 0,
+          "gt": "Làm thử: V-て + みます → 食べて みます."
+        },
+        {
+          "h": "この シャツを 着て（　）も いいですか。",
+          "lc": [
+            "みる",
+            "みた",
+            "みて",
+            "み"
+          ],
+          "da": 2,
+          "gt": "Xin phép thử: 〜て みても いいですか (みる chia sang thể て)."
+        },
+        {
+          "h": "Câu nào đúng với nghĩa “Tôi muốn thử sống ở Nhật”?",
+          "lc": [
+            "日本に 住みたくて みます。",
+            "日本に 住むを みたいです。",
+            "日本に 住んで みるたいです。",
+            "日本に 住んで みたいです。"
+          ],
+          "da": 3,
+          "gt": "V-て + みる, rồi みる chia sang みたい: 住んで みたいです."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-te-kuru-te-iku",
+      "nhom": "Thể て mở rộng",
+      "tieuDe": "〜てきます／〜ていきます",
+      "mau": "V-て + きます / V-て + いきます",
+      "nghia": "đi làm ~ rồi quay lại; ~ dần (đến nay) / ~ dần (từ nay về sau)",
+      "giaiThich": "てきます: (1) đi làm một việc rồi quay về chỗ cũ; (2) sự thay đổi tiếp diễn từ trước cho đến hiện tại, hoặc điều gì đó bắt đầu xuất hiện. ていきます: sự thay đổi, hành động tiếp diễn từ bây giờ về sau. Hướng được tính từ vị trí và thời điểm của người nói.",
+      "cachGhep": [
+        "Đi làm rồi về: V-て + きます: ちょっと 買ってきます",
+        "Thay đổi cho đến hiện tại: V-て + きました: 寒くなってきました",
+        "Thay đổi từ nay về sau: V-て + いきます: 増えていきます"
+      ],
+      "viDu": [
+        {
+          "c": "ちょっと飲み物を買ってきます。",
+          "d": "ちょっと のみものを かって きます。",
+          "v": "Tôi đi mua đồ uống một chút rồi về."
+        },
+        {
+          "c": "最近、だんだん暑くなってきました。",
+          "d": "さいきん、だんだん あつく なって きました。",
+          "v": "Gần đây trời đã nóng dần lên."
+        },
+        {
+          "c": "これからも日本語の勉強を続けていきます。",
+          "d": "これからも にほんごの べんきょうを つづけて いきます。",
+          "v": "Từ nay tôi vẫn sẽ tiếp tục học tiếng Nhật."
+        },
+        {
+          "c": "雨が降ってきましたね。",
+          "d": "あめが ふって きましたね。",
+          "v": "Trời bắt đầu mưa rồi nhỉ."
+        }
+      ],
+      "luuY": [
+        "行ってきます = đi rồi sẽ về; đừng nhầm với 行きます (chỉ đi).",
+        "Thay đổi nhìn từ quá khứ tới bây giờ dùng てきました; từ bây giờ tới tương lai dùng ていきます."
+      ],
+      "tuKhoa": [
+        "te kuru",
+        "te iku",
+        "tekuru",
+        "teiku",
+        "dần dần",
+        "đi rồi về"
+      ],
+      "quiz": [
+        {
+          "h": "ちょっと 郵便局へ 行って（　）。すぐ 戻ります。",
+          "lc": [
+            "きます",
+            "いきます",
+            "おきます",
+            "あります"
+          ],
+          "da": 0,
+          "gt": "Đi rồi quay lại ngay (すぐ 戻ります) → 行って きます."
+        },
+        {
+          "h": "空が 暗く なって（　）ね。雨が 降りそうです。",
+          "lc": [
+            "おきました",
+            "きました",
+            "ありました"
+          ],
+          "da": 1,
+          "gt": "Thay đổi diễn ra cho tới lúc nói → 〜て きました."
+        },
+        {
+          "h": "これからも 子どもの 数は 減って（　）でしょう。",
+          "lc": [
+            "ある",
+            "おく",
+            "いく"
+          ],
+          "da": 2,
+          "gt": "Thay đổi từ nay về sau (これからも) → 〜て いく."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-mada-te-inai",
+      "nhom": "Thể て mở rộng",
+      "tieuDe": "まだ〜ていません",
+      "mau": "まだ + V-て + いません",
+      "nghia": "vẫn chưa làm ~",
+      "giaiThich": "Diễn tả tại thời điểm nói, một việc dự định làm hoặc được mong đợi vẫn chưa xảy ra, chưa hoàn thành. Đây là câu trả lời phủ định cho câu hỏi もう〜ましたか.",
+      "cachGhep": [
+        "まだ + V-て + いません",
+        "Hỏi: もう + V-ました + か",
+        "Trả lời: はい、もう V-ました / いいえ、まだ V-て いません / いいえ、まだです"
+      ],
+      "viDu": [
+        {
+          "c": "レポートはまだ書いていません。",
+          "d": "レポートは まだ かいて いません。",
+          "v": "Báo cáo tôi vẫn chưa viết."
+        },
+        {
+          "c": "もう昼ご飯を食べましたか。— いいえ、まだ食べていません。",
+          "d": "もう ひるごはんを たべましたか。— いいえ、まだ たべて いません。",
+          "v": "Bạn ăn trưa chưa? — Chưa, tôi vẫn chưa ăn."
+        },
+        {
+          "c": "荷物はまだ着いていませんか。",
+          "d": "にもつは まだ ついて いませんか。",
+          "v": "Hành lý vẫn chưa tới à?"
+        }
+      ],
+      "luuY": [
+        "Người Việt hay trả lời いいえ、食べませんでした cho “chưa ăn”; câu đó nghĩa là “đã không ăn” (chuyện đã qua). “Chưa” phải là まだ 食べていません.",
+        "Trả lời ngắn: いいえ、まだです."
+      ],
+      "tuKhoa": [
+        "mada te imasen",
+        "madateinai",
+        "vẫn chưa",
+        "chưa làm",
+        "mou mashita ka"
+      ],
+      "quiz": [
+        {
+          "h": "もう 宿題を しましたか。— いいえ、まだ（　）。",
+          "lc": [
+            "して いません",
+            "しませんでした",
+            "しました",
+            "して いました"
+          ],
+          "da": 0,
+          "gt": "“Vẫn chưa làm” = まだ + V-て いません. しませんでした là “đã không làm”."
+        },
+        {
+          "h": "山田さんは（　）来て いませんから、少し 待ちましょう。",
+          "lc": [
+            "もう",
+            "まだ",
+            "とても"
+          ],
+          "da": 1,
+          "gt": "“Vẫn chưa đến nên chờ một chút” → まだ 来て いません."
+        },
+        {
+          "h": "この 映画を もう 見ましたか。— いいえ、（　）。",
+          "lc": [
+            "もうです",
+            "まだでした",
+            "まだです"
+          ],
+          "da": 2,
+          "gt": "Câu trả lời ngắn cho “chưa” là いいえ、まだです."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-te-naide",
+      "nhom": "Thể て mở rộng",
+      "tieuDe": "〜て／〜ないで（trạng thái kèm theo）",
+      "mau": "V1-て / V1-ないで + V2",
+      "nghia": "làm V2 trong trạng thái V1; không làm V1 mà làm V2",
+      "giaiThich": "V1-て V2 diễn tả làm V2 trong trạng thái V1 (đeo kính mà đọc, đứng mà ăn). V1-ないで V2 diễn tả làm V2 mà không làm V1, hoặc thay vì làm V1 thì làm V2. Chủ ngữ của hai động từ là một.",
+      "cachGhep": [
+        "V1-て + V2: かさを 持って 出かけます",
+        "V1-thể ない + で + V2: かさを 持たないで 出かけます",
+        "Thay vì: V1-ないで、V2: 出かけないで、家に います"
+      ],
+      "viDu": [
+        {
+          "c": "めがねをかけて本を読みます。",
+          "d": "めがねを かけて ほんを よみます。",
+          "v": "Tôi đeo kính đọc sách."
+        },
+        {
+          "c": "朝ご飯を食べないで学校へ行きました。",
+          "d": "あさごはんを たべないで がっこうへ いきました。",
+          "v": "Tôi đã đi học mà không ăn sáng."
+        },
+        {
+          "c": "日曜日はどこも行かないで、家でゆっくり休みます。",
+          "d": "にちようびは どこも いかないで、いえで ゆっくり やすみます。",
+          "v": "Chủ nhật tôi không đi đâu cả mà ở nhà nghỉ ngơi thong thả."
+        },
+        {
+          "c": "さとうを入れないでコーヒーを飲みますか。",
+          "d": "さとうを いれないで コーヒーを のみますか。",
+          "v": "Bạn uống cà phê không cho đường à?"
+        }
+      ],
+      "luuY": [
+        "〜ないで (không làm mà…) khác 〜なくて (vì không… nên…): 食べないで 行きました (đi mà không ăn) – 食べられなくて 困りました (khổ vì không ăn được).",
+        "Người Việt hay dùng ながら cho “đứng ăn, đeo kính đọc”; đó là trạng thái kèm theo nên dùng て: 立って 食べます."
+      ],
+      "soSanh": [
+        "ja-n4-nagara",
+        "ja-n4-zu-ni",
+        "ja-n4-te-genin"
+      ],
+      "tuKhoa": [
+        "naide",
+        "te",
+        "không làm mà",
+        "trạng thái kèm theo",
+        "thay vì"
+      ],
+      "quiz": [
+        {
+          "h": "きのうは 電気を（　）寝て しまいました。",
+          "lc": [
+            "消さないで",
+            "消さなくて",
+            "消さない",
+            "消しないで"
+          ],
+          "da": 0,
+          "gt": "Ngủ trong trạng thái không tắt đèn → V-ないで: 消さないで."
+        },
+        {
+          "h": "今日は バスに（　）、歩いて 帰ります。",
+          "lc": [
+            "乗らなくて",
+            "乗らないで",
+            "乗りないで",
+            "乗らないと"
+          ],
+          "da": 1,
+          "gt": "“Thay vì đi xe buýt thì đi bộ” → 乗らないで."
+        },
+        {
+          "h": "いつも ぼうしを（　）出かけます。",
+          "lc": [
+            "かぶり",
+            "かぶるで",
+            "かぶって"
+          ],
+          "da": 2,
+          "gt": "Trạng thái kèm theo dùng thể て: かぶって 出かけます."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-sugiru",
+      "nhom": "Mức độ – trạng thái",
+      "tieuDe": "〜すぎます",
+      "mau": "V-ます (bỏ ます) / tính từ (bỏ い, な) + すぎます",
+      "nghia": "quá ~ (vượt mức, thường là không tốt)",
+      "giaiThich": "Diễn tả hành động hay trạng thái vượt quá mức bình thường, thường hàm ý không tốt. すぎる chia như động từ nhóm II (食べすぎて, 飲みすぎないように). Dạng danh từ: 食べすぎ, 飲みすぎ.",
+      "cachGhep": [
+        "V-ます bỏ ます + すぎます: 食べすぎます, 飲みすぎます",
+        "Tính từ đuôi い bỏ い + すぎます: 高すぎます, 大きすぎます",
+        "Tính từ đuôi な bỏ な + すぎます: 静かすぎます, 簡単すぎます",
+        "いい → よすぎます"
+      ],
+      "viDu": [
+        {
+          "c": "昨日の晩、お酒を飲みすぎました。",
+          "d": "きのうの ばん、おさけを のみすぎました。",
+          "v": "Tối qua tôi đã uống quá nhiều rượu."
+        },
+        {
+          "c": "このかばんは高すぎて、買えません。",
+          "d": "この かばんは たかすぎて、かえません。",
+          "v": "Cái túi này đắt quá nên tôi không mua được."
+        },
+        {
+          "c": "この問題は簡単すぎませんか。",
+          "d": "この もんだいは かんたんすぎませんか。",
+          "v": "Bài này có dễ quá không?"
+        }
+      ],
+      "luuY": [
+        "Tiếng Việt “ngon quá, đẹp quá” là lời khen; すぎます thường mang nghĩa chê. Khen thì nói とても おいしいです.",
+        "Không thêm い hay な trước すぎます: 高すぎます (không nói 高いすぎます), 静かすぎます (không nói 静かなすぎます)."
+      ],
+      "tuKhoa": [
+        "sugiru",
+        "sugimasu",
+        "quá",
+        "quá mức",
+        "tabesugi"
+      ],
+      "quiz": [
+        {
+          "h": "ゆうべ（　）すぎて、おなかが 痛いです。",
+          "lc": [
+            "食べ",
+            "食べる",
+            "食べて",
+            "食べた"
+          ],
+          "da": 0,
+          "gt": "Động từ: thể ます bỏ ます + すぎます → 食べすぎて."
+        },
+        {
+          "h": "この 町は（　）すぎて、少し さびしいです。",
+          "lc": [
+            "静かな",
+            "静か",
+            "静かに",
+            "静かだ"
+          ],
+          "da": 1,
+          "gt": "Tính từ đuôi な bỏ な rồi ghép: 静かすぎて."
+        },
+        {
+          "h": "この 部屋は（　）すぎます。",
+          "lc": [
+            "せまいく",
+            "せまいの",
+            "せまくて",
+            "せま"
+          ],
+          "da": 3,
+          "gt": "Tính từ đuôi い bỏ い rồi ghép: せますぎます."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-yasui-nikui",
+      "nhom": "Mức độ – trạng thái",
+      "tieuDe": "〜やすい／〜にくい",
+      "mau": "V-ます (bỏ ます) + やすい / にくい",
+      "nghia": "dễ ~ / khó ~",
+      "giaiThich": "Diễn tả việc làm một việc gì đó dễ hay khó, hoặc tính chất dễ hay khó xảy ra của sự vật (dễ vỡ, khó hỏng). やすい và にくい chia như tính từ đuôi い.",
+      "cachGhep": [
+        "V-ます bỏ ます + やすいです: 使いやすい, わかりやすい",
+        "V-ます bỏ ます + にくいです: 歩きにくい, 読みにくい",
+        "Chia như tính từ đuôi い: 使いやすくて, 使いやすくない, 使いにくかった"
+      ],
+      "viDu": [
+        {
+          "c": "このペンはとても書きやすいです。",
+          "d": "この ペンは とても かきやすいです。",
+          "v": "Cây bút này rất dễ viết."
+        },
+        {
+          "c": "この薬は苦くて飲みにくいです。",
+          "d": "この くすりは にがくて のみにくいです。",
+          "v": "Thuốc này đắng nên khó uống."
+        },
+        {
+          "c": "先生の説明はわかりやすかったですか。",
+          "d": "せんせいの せつめいは わかりやすかったですか。",
+          "v": "Lời giải thích của thầy/cô có dễ hiểu không?"
+        },
+        {
+          "c": "このコップは割れにくいです。",
+          "d": "この コップは われにくいです。",
+          "v": "Cái cốc này khó vỡ."
+        }
+      ],
+      "luuY": [
+        "やすい ở đây không phải “rẻ” (安い).",
+        "Ghép với thể ます bỏ ます, không ghép với thể từ điển: 使いやすい (không nói 使うやすい)."
+      ],
+      "tuKhoa": [
+        "yasui",
+        "nikui",
+        "dễ làm",
+        "khó làm",
+        "tsukaiyasui"
+      ],
+      "quiz": [
+        {
+          "h": "この 本は 字が 大きくて（　）やすいです。",
+          "lc": [
+            "読み",
+            "読む",
+            "読んで",
+            "読め"
+          ],
+          "da": 0,
+          "gt": "Thể ます bỏ ます + やすい: 読みやすい."
+        },
+        {
+          "h": "「使いやすい」の 否定形は どれですか。",
+          "lc": [
+            "使いやすいくない",
+            "使いやすくない",
+            "使いやすじゃない"
+          ],
+          "da": 1,
+          "gt": "〜やすい chia như tính từ đuôi い: やすい → やすくない."
+        },
+        {
+          "h": "この くつは 重くて、歩き（　）です。",
+          "lc": [
+            "やすい",
+            "すぎ",
+            "にくい",
+            "たい"
+          ],
+          "da": 2,
+          "gt": "Giày nặng nên “khó đi” → 歩きにくい."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-garu",
+      "nhom": "Mức độ – trạng thái",
+      "tieuDe": "〜がる／〜たがる",
+      "mau": "Tính từ cảm xúc (bỏ い, な) + がる; V-ます (bỏ ます) + たがる",
+      "nghia": "(người thứ ba) tỏ ra ~, có vẻ muốn ~",
+      "giaiThich": "Tính từ chỉ cảm xúc, mong muốn (ほしい, 〜たい, こわい, さびしい…) chỉ dùng trực tiếp cho bản thân người nói. Khi nói về người thứ ba thì thêm がる, nghĩa là người đó biểu lộ cảm xúc ấy ra ngoài. Trạng thái hiện tại thường dùng 〜がっています, và đối tượng đi với を.",
+      "cachGhep": [
+        "Tính từ đuôi い bỏ い + がる: ほしい → ほしがる, こわい → こわがる",
+        "Tính từ đuôi な bỏ な + がる: いや → いやがる",
+        "V-ます bỏ ます + たがる: 行きたい → 行きたがる",
+        "Trợ từ: N が ほしい → N を ほしがる"
+      ],
+      "viDu": [
+        {
+          "c": "弟は新しいゲームをほしがっています。",
+          "d": "おとうとは あたらしい ゲームを ほしがって います。",
+          "v": "Em trai tôi đang muốn có trò chơi mới."
+        },
+        {
+          "c": "子どもは外で遊びたがっています。",
+          "d": "こどもは そとで あそびたがって います。",
+          "v": "Đứa bé đang muốn ra ngoài chơi."
+        },
+        {
+          "c": "妹は犬をこわがりません。",
+          "d": "いもうとは いぬを こわがりません。",
+          "v": "Em gái tôi không sợ chó."
+        }
+      ],
+      "luuY": [
+        "Không dùng がる cho bản thân (không nói 私は ほしがっています).",
+        "Không dùng cho người trên vì nghe thiếu lịch sự; khi đó nói 〜たいと おっしゃっています hoặc 〜たいそうです.",
+        "Trợ từ đổi が → を: 水を ほしがる."
+      ],
+      "tuKhoa": [
+        "garu",
+        "tagaru",
+        "hoshigaru",
+        "người thứ ba muốn",
+        "tỏ ra"
+      ],
+      "quiz": [
+        {
+          "h": "弟は 甘い ものを（　）います。",
+          "lc": [
+            "食べたがって",
+            "食べたくて",
+            "食べたいがって",
+            "食べがって"
+          ],
+          "da": 0,
+          "gt": "Mong muốn của người thứ ba: 食べたい bỏ い + がる → 食べたがって います."
+        },
+        {
+          "h": "子どもが おもちゃ（　）ほしがって います。",
+          "lc": [
+            "が",
+            "を",
+            "に",
+            "で"
+          ],
+          "da": 1,
+          "gt": "Với 〜がる, đối tượng đi với を: おもちゃを ほしがる."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "わたしは 車を ほしがって います。",
+            "わたしは 車を ほしいがります。",
+            "妹は 新しい 服を ほしがって います。"
+          ],
+          "da": 2,
+          "gt": "〜がる chỉ dùng cho người thứ ba, và ghép sau khi bỏ い: ほしがって います."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-ku-suru-ni-suru",
+      "nhom": "Mức độ – trạng thái",
+      "tieuDe": "〜くします／〜にします",
+      "mau": "Tính từ đuôi い → く / đuôi な → に / N + に + します",
+      "nghia": "làm cho ~ (trở nên); chọn ~",
+      "giaiThich": "します diễn tả ai đó chủ động làm thay đổi trạng thái của sự vật, đối lập với なります (tự thay đổi). N に します còn có nghĩa “chọn, quyết định lấy N” khi gọi món, chọn đồ.",
+      "cachGhep": [
+        "Tính từ đuôi い bỏ い + く + します: 短くします; いい → よくします",
+        "Tính từ đuôi な + に + します: きれいにします, 静かにします",
+        "Danh từ + に + します: 半分にします; コーヒーにします (chọn)"
+      ],
+      "viDu": [
+        {
+          "c": "テレビの音を小さくしてください。",
+          "d": "テレビの おとを ちいさく して ください。",
+          "v": "Hãy vặn nhỏ tiếng tivi lại."
+        },
+        {
+          "c": "部屋をきれいにしました。",
+          "d": "へやを きれいに しました。",
+          "v": "Tôi đã dọn phòng sạch sẽ."
+        },
+        {
+          "c": "飲み物は何にしますか。",
+          "d": "のみものは なにに しますか。",
+          "v": "Đồ uống bạn chọn gì?"
+        },
+        {
+          "c": "髪をあまり短くしないでください。",
+          "d": "かみを あまり みじかく しないで ください。",
+          "v": "Xin đừng cắt tóc ngắn quá."
+        }
+      ],
+      "luuY": [
+        "〜くします (ai đó làm thay đổi) khác 〜くなります (tự thay đổi): 部屋を 明るくします – 部屋が 明るくなります.",
+        "Tính từ đuôi な dùng に, không dùng く: 静かにします (không nói 静かくします)."
+      ],
+      "tuKhoa": [
+        "ku suru",
+        "ni suru",
+        "kusuru",
+        "nisuru",
+        "làm cho",
+        "chọn"
+      ],
+      "quiz": [
+        {
+          "h": "この ズボンは 長いですから、少し（　）して ください。",
+          "lc": [
+            "短く",
+            "短い",
+            "短いに",
+            "短くて"
+          ],
+          "da": 0,
+          "gt": "Tính từ đuôi い bỏ い + く + します: 短く して ください."
+        },
+        {
+          "h": "もう 夜ですから、（　）して ください。",
+          "lc": [
+            "静かく",
+            "静かな",
+            "静かに",
+            "静かで"
+          ],
+          "da": 2,
+          "gt": "Tính từ đuôi な + に + します: 静かに して ください."
+        },
+        {
+          "h": "（レストランで）わたしは カレー（　）します。",
+          "lc": [
+            "へ",
+            "で",
+            "が",
+            "に"
+          ],
+          "da": 3,
+          "gt": "Chọn món: N + に + します."
+        }
+      ]
+    }
+  ]
+}

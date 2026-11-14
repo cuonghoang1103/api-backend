@@ -1,0 +1,968 @@
+{
+  "nn": "zh",
+  "cap": "HSK2",
+  "diem": [
+    {
+      "id": "zh-hsk2-le-hoan-thanh",
+      "nhom": "Trợ từ động thái",
+      "tieuDe": "了 (hoàn thành, sau động từ)",
+      "mau": "S + V + 了 + (số lượng / định ngữ) + O",
+      "nghia": "đã làm xong ~ (hành động đã hoàn thành)",
+      "giaiThich": "了 đặt ngay sau động từ cho biết hành động đã hoàn thành, thực hiện xong. Tân ngữ phía sau thường có số lượng hoặc định ngữ (买了两本书). Nếu tân ngữ đứng trơ trọi thì câu nghe như chưa hết — cần thêm vế sau (吃了饭就去) hoặc 了 cuối câu. Phủ định: 没(有) + V, bỏ 了.",
+      "cachGhep": [
+        "V + 了 + số + lượng từ + O: 买了一件衣服",
+        "V + 了 + O + 就 / 再 + V2 (làm xong việc 1 rồi làm việc 2 — dùng được cả cho tương lai)",
+        "Phủ định: 没(有) + V + O",
+        "Câu hỏi: V + 了 + O + 吗？ / V + 了 + O + 没有？"
+      ],
+      "viDu": [
+        {
+          "c": "我昨天买了一件新衣服。",
+          "d": "Wǒ zuótiān mǎile yí jiàn xīn yīfu.",
+          "v": "Hôm qua tôi đã mua một cái áo mới."
+        },
+        {
+          "c": "他喝了两杯咖啡。",
+          "d": "Tā hēle liǎng bēi kāfēi.",
+          "v": "Anh ấy đã uống hai cốc cà phê."
+        },
+        {
+          "c": "我下了课就去找你。",
+          "d": "Wǒ xiàle kè jiù qù zhǎo nǐ.",
+          "v": "Tan học xong là tôi đi tìm bạn."
+        },
+        {
+          "c": "我没买那本书。",
+          "d": "Wǒ méi mǎi nà běn shū.",
+          "v": "Tôi đã không mua quyển sách đó."
+        }
+      ],
+      "luuY": [
+        "了 chỉ sự HOÀN THÀNH, không phải thì quá khứ: 明天我下了课就去 vẫn đúng dù là việc ngày mai.",
+        "Việc lặp lại theo thói quen trong quá khứ không dùng 了: 去年我每天都跑步 (không thêm 了).",
+        "Phủ định không giữ 了: 没买, KHÔNG nói 没买了."
+      ],
+      "soSanh": [
+        "zh-hsk2-le-thay-doi",
+        "zh-hsk2-guo",
+        "zh-hsk1-le"
+      ],
+      "tuKhoa": [
+        "le",
+        "hoàn thành",
+        "đã",
+        "trợ từ động thái le",
+        "liao"
+      ],
+      "quiz": [
+        {
+          "h": "昨天我看___一个电影。",
+          "lc": [
+            "着",
+            "了",
+            "过了的",
+            "在"
+          ],
+          "da": 1,
+          "gt": "Hành động đã hoàn thành, tân ngữ có số lượng: V + 了 + 一个电影."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "我没吃了早饭。",
+            "我不吃了早饭昨天。",
+            "我没吃早饭。",
+            "我吃没早饭了。"
+          ],
+          "da": 2,
+          "gt": "Phủ định hành động hoàn thành: 没 + V, bỏ 了."
+        },
+        {
+          "h": "明天我吃___早饭就去学校。",
+          "lc": [
+            "了",
+            "很",
+            "着",
+            "的"
+          ],
+          "da": 0,
+          "gt": "Làm xong việc 1 rồi làm việc 2: V + 了 + O + 就…, dùng được cả cho tương lai."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk2-le-thay-doi",
+      "nhom": "Trợ từ động thái",
+      "tieuDe": "了 (cuối câu: thay đổi, tình hình mới)",
+      "mau": "Câu + 了",
+      "nghia": "~ rồi (tình hình đã khác trước)",
+      "giaiThich": "了 đặt cuối câu báo hiệu một tình hình MỚI xuất hiện hoặc trạng thái đã thay đổi so với trước: trời mưa rồi, lớn rồi, không muốn nữa. Thường đi sau tính từ, danh từ chỉ thời gian / tuổi, hoặc sau 不 + động từ (\"không … nữa\").",
+      "cachGhep": [
+        "Tính từ + 了: 天冷了, 我饿了",
+        "Danh từ thời gian / tuổi + 了: 十点了, 他二十岁了",
+        "不 + V + 了: không … nữa (不去了, 不想吃了)",
+        "会 / 能 / 有 … + 了: bây giờ đã biết / có thể / có"
+      ],
+      "viDu": [
+        {
+          "c": "下雨了。",
+          "d": "Xià yǔ le.",
+          "v": "Mưa rồi."
+        },
+        {
+          "c": "天气冷了，多穿点儿衣服。",
+          "d": "Tiānqì lěng le, duō chuān diǎnr yīfu.",
+          "v": "Trời lạnh rồi, mặc thêm áo vào."
+        },
+        {
+          "c": "我不想去了。",
+          "d": "Wǒ bù xiǎng qù le.",
+          "v": "Tôi không muốn đi nữa."
+        },
+        {
+          "c": "我女儿会说话了。",
+          "d": "Wǒ nǚ'ér huì shuōhuà le.",
+          "v": "Con gái tôi biết nói rồi."
+        }
+      ],
+      "luuY": [
+        "不…了 nghĩa là \"không … NỮA\" (trước đây có, giờ thôi), khác với 没 + V (đã không làm).",
+        "Tính từ + 了 là \"trở nên\": 他高了 = anh ấy cao lên rồi, không phải \"anh ấy đã cao\".",
+        "Chỉ miêu tả chứ không có thay đổi thì không thêm 了: 今天很冷."
+      ],
+      "soSanh": [
+        "zh-hsk2-le-hoan-thanh",
+        "zh-hsk2-yao-le",
+        "zh-hsk3-le-kep"
+      ],
+      "tuKhoa": [
+        "le",
+        "rồi",
+        "thay đổi",
+        "trợ từ ngữ khí le",
+        "bu le",
+        "không nữa"
+      ],
+      "quiz": [
+        {
+          "h": "「我不喝咖啡了」 nghĩa là:",
+          "lc": [
+            "Tôi không uống cà phê nữa.",
+            "Tôi chưa uống cà phê.",
+            "Tôi đã uống cà phê rồi.",
+            "Tôi không biết uống cà phê."
+          ],
+          "da": 0,
+          "gt": "不 + V + 了 = không … nữa (thay đổi so với trước)."
+        },
+        {
+          "h": "已经十二点___，我们去吃饭吧。",
+          "lc": [
+            "的",
+            "过",
+            "了",
+            "着"
+          ],
+          "da": 2,
+          "gt": "Thời gian + 了 báo tình hình mới: đã 12 giờ rồi."
+        },
+        {
+          "h": "他以前不会游泳，现在会___。",
+          "lc": [
+            "吗",
+            "了",
+            "着",
+            "过"
+          ],
+          "da": 1,
+          "gt": "Trước không biết, giờ biết → thay đổi: 会了."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk2-guo",
+      "nhom": "Trợ từ động thái",
+      "tieuDe": "过 (kinh nghiệm)",
+      "mau": "S + V + 过 + O",
+      "nghia": "đã từng ~ (có trải nghiệm trong quá khứ)",
+      "giaiThich": "过 đặt ngay sau động từ để nói một việc ĐÃ TỪNG xảy ra ít nhất một lần, nhấn vào kinh nghiệm chứ không phải thời điểm. Phủ định là 没(有) + V + 过 — giữ nguyên 过. Hay đi với số lần: 去过一次.",
+      "cachGhep": [
+        "Khẳng định: S + V + 过 + O",
+        "Phủ định: S + 没(有) + V + 过 + O (chưa từng)",
+        "Câu hỏi: V + 过 + O + 吗？ / V + 过 + O + 没有？",
+        "Số lần: V + 过 + số + 次 + O"
+      ],
+      "viDu": [
+        {
+          "c": "我去过北京。",
+          "d": "Wǒ qùguo Běijīng.",
+          "v": "Tôi đã từng đi Bắc Kinh."
+        },
+        {
+          "c": "你吃过中国菜吗？",
+          "d": "Nǐ chīguo Zhōngguó cài ma?",
+          "v": "Bạn đã từng ăn món Trung Quốc chưa?"
+        },
+        {
+          "c": "我没看过这个电影。",
+          "d": "Wǒ méi kànguo zhège diànyǐng.",
+          "v": "Tôi chưa từng xem bộ phim này."
+        },
+        {
+          "c": "他学过一年汉语。",
+          "d": "Tā xuéguo yì nián Hànyǔ.",
+          "v": "Anh ấy đã từng học tiếng Trung một năm."
+        }
+      ],
+      "luuY": [
+        "Phủ định GIỮ 过: 没去过 (chưa từng đi); khác với 了 — 没去 (đã không đi).",
+        "过 đứng ngay sau động từ, trước tân ngữ: 去过北京, không nói 去北京过.",
+        "Tiếng Việt \"đã từng\" đứng trước động từ; 过 lại đứng SAU động từ. 过 ở đây đọc nhẹ (guo)."
+      ],
+      "soSanh": [
+        "zh-hsk2-le-hoan-thanh",
+        "zh-hsk2-dong-luong",
+        "zh-hsk3-guo-nang-cao"
+      ],
+      "tuKhoa": [
+        "guo",
+        "đã từng",
+        "kinh nghiệm",
+        "mei guo",
+        "chưa từng"
+      ],
+      "quiz": [
+        {
+          "h": "我没去___中国。",
+          "lc": [
+            "了",
+            "着",
+            "的",
+            "过"
+          ],
+          "da": 3,
+          "gt": "Chưa từng: 没 + V + 过. (没 không đi với 了.)"
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "我看这本书过。",
+            "我看过这本书。",
+            "我过看这本书。",
+            "我不看过这本书。"
+          ],
+          "da": 1,
+          "gt": "过 đứng ngay sau động từ; phủ định dùng 没 chứ không dùng 不."
+        },
+        {
+          "h": "你坐___飞机吗？ — 坐___，坐过两次。",
+          "lc": [
+            "过…过",
+            "着…着",
+            "在…在",
+            "的…的"
+          ],
+          "da": 0,
+          "gt": "Hỏi và trả lời về trải nghiệm đều dùng V + 过."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk2-zhe",
+      "nhom": "Trợ từ động thái",
+      "tieuDe": "着 (trạng thái tiếp diễn)",
+      "mau": "S + V + 着 (+ O) · V1 + 着 + V2",
+      "nghia": "đang (ở trạng thái) ~ ; vừa ~ vừa (làm trong tư thế ~)",
+      "giaiThich": "着 đặt sau động từ để nói một TRẠNG THÁI đang được duy trì: cửa đang mở, đang mặc áo gì, đang ngồi, đang cầm. Còn dùng trong mẫu V1 着 V2 để nói làm việc V2 trong tư thế / cách thức V1 (笑着说 = cười mà nói). Phủ định: 没 + V + 着.",
+      "cachGhep": [
+        "S + V + 着 + O: 穿着红衣服, 拿着一本书",
+        "Nơi chốn + V + 着 + vật: 桌子上放着一本书",
+        "V1 + 着 + V2: 笑着说, 坐着看书",
+        "Phủ định: 没 + V + 着 · Hỏi: V + 着 + … + 吗？"
+      ],
+      "viDu": [
+        {
+          "c": "门开着呢。",
+          "d": "Mén kāizhe ne.",
+          "v": "Cửa đang mở đấy."
+        },
+        {
+          "c": "她穿着一件红色的衣服。",
+          "d": "Tā chuānzhe yí jiàn hóngsè de yīfu.",
+          "v": "Cô ấy đang mặc một cái áo màu đỏ."
+        },
+        {
+          "c": "老师笑着说：\"很好！\"",
+          "d": "Lǎoshī xiàozhe shuō: \"Hěn hǎo!\"",
+          "v": "Thầy giáo cười nói: \"Rất tốt!\""
+        },
+        {
+          "c": "他手里拿着什么？",
+          "d": "Tā shǒu li názhe shénme?",
+          "v": "Trong tay anh ấy đang cầm gì thế?"
+        }
+      ],
+      "luuY": [
+        "着 tả TRẠNG THÁI kéo dài (đang mở, đang mặc trên người); 正在 tả HÀNH ĐỘNG đang diễn ra (đang mặc vào). 她穿着红衣服 khác 她正在穿衣服.",
+        "着 ở đây đọc nhẹ zhe (không đọc zháo, zhuó).",
+        "Không dùng 着 với động từ không kéo dài được như 来, 去, 到, 完."
+      ],
+      "soSanh": [
+        "zh-hsk2-zhengzai",
+        "zh-hsk3-zhe-ton-tai"
+      ],
+      "tuKhoa": [
+        "zhe",
+        "đang",
+        "trạng thái",
+        "trợ từ động thái zhe",
+        "duy trì"
+      ],
+      "quiz": [
+        {
+          "h": "教室的门开___，我们进去吧。",
+          "lc": [
+            "过",
+            "着",
+            "吗",
+            "得"
+          ],
+          "da": 1,
+          "gt": "Trạng thái đang duy trì (cửa đang mở): V + 着."
+        },
+        {
+          "h": "妈妈笑___对我说：\"生日快乐！\"",
+          "lc": [
+            "的",
+            "吗",
+            "着",
+            "在"
+          ],
+          "da": 2,
+          "gt": "V1 + 着 + V2: cười mà nói."
+        },
+        {
+          "h": "Câu nào tả TRẠNG THÁI (trên người đang có áo trắng)?",
+          "lc": [
+            "他穿着白衣服。",
+            "他正在穿白衣服。",
+            "他穿过白衣服。",
+            "他要穿白衣服。"
+          ],
+          "da": 0,
+          "gt": "V + 着 tả trạng thái duy trì; 正在穿 là đang thực hiện động tác mặc."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk2-zhengzai",
+      "nhom": "Tiếp diễn – sắp xảy ra",
+      "tieuDe": "正在 / 在…(呢)",
+      "mau": "S + 正在 / 在 / 正 + V + (O) + (呢)",
+      "nghia": "đang ~ (hành động đang diễn ra ngay lúc đó)",
+      "giaiThich": "Dùng 正在, 在 hoặc 正 trước động từ (cuối câu có thể thêm 呢) để nói hành động đang diễn ra tại một thời điểm — hiện tại, quá khứ hay tương lai đều được, miễn có mốc thời gian. 正在 nhấn \"đúng lúc đó đang…\". Phủ định dùng 没(在).",
+      "cachGhep": [
+        "S + 正在 + V + O (+ 呢)",
+        "S + 在 + V + O (+ 呢)",
+        "S + V + O + 呢",
+        "Mốc quá khứ: …的时候，S + 正在 + V",
+        "Phủ định: S + 没(在) + V"
+      ],
+      "viDu": [
+        {
+          "c": "他正在打篮球。",
+          "d": "Tā zhèngzài dǎ lánqiú.",
+          "v": "Anh ấy đang chơi bóng rổ."
+        },
+        {
+          "c": "我给他打电话的时候，他正在睡觉呢。",
+          "d": "Wǒ gěi tā dǎ diànhuà de shíhou, tā zhèngzài shuìjiào ne.",
+          "v": "Lúc tôi gọi điện cho anh ấy, anh ấy đang ngủ."
+        },
+        {
+          "c": "你在做什么？ — 我在准备考试。",
+          "d": "Nǐ zài zuò shénme? — Wǒ zài zhǔnbèi kǎoshì.",
+          "v": "Bạn đang làm gì? — Tôi đang chuẩn bị thi."
+        },
+        {
+          "c": "我没在看电视，我在学习呢。",
+          "d": "Wǒ méi zài kàn diànshì, wǒ zài xuéxí ne.",
+          "v": "Tôi không xem ti vi, tôi đang học."
+        }
+      ],
+      "luuY": [
+        "Không dùng 正在 cùng với 了 hoặc 过.",
+        "Phủ định dùng 没(在), không nói 不正在.",
+        "Động từ không kéo dài (来, 去, 到, 认识, 是, 有) không dùng với 正在."
+      ],
+      "soSanh": [
+        "zh-hsk2-zhe",
+        "zh-hsk1-ne-dang"
+      ],
+      "tuKhoa": [
+        "zhengzai",
+        "zai",
+        "zheng",
+        "đang",
+        "tiếp diễn"
+      ],
+      "quiz": [
+        {
+          "h": "别说话，孩子___睡觉呢。",
+          "lc": [
+            "过",
+            "正在",
+            "了",
+            "得"
+          ],
+          "da": 1,
+          "gt": "Hành động đang diễn ra: 正在 + V + 呢."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "他正在看了报纸。",
+            "他不正在看报纸。",
+            "他正在看过报纸。",
+            "他正在看报纸呢。"
+          ],
+          "da": 3,
+          "gt": "正在 không đi cùng 了 / 过, và phủ định dùng 没."
+        },
+        {
+          "h": "昨天晚上八点你在做什么？ — 我___。",
+          "lc": [
+            "正在洗衣服",
+            "洗过衣服了吗",
+            "要洗衣服了",
+            "洗衣服吧"
+          ],
+          "da": 0,
+          "gt": "Đang làm gì tại một thời điểm trong quá khứ vẫn dùng 正在 + V."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk2-yao-le",
+      "nhom": "Tiếp diễn – sắp xảy ra",
+      "tieuDe": "要…了 / 快要…了 / 就要…了",
+      "mau": "S + 要 / 快要 / 就要 / 快 + V / tính từ + 了",
+      "nghia": "sắp ~ rồi (việc sắp xảy ra)",
+      "giaiThich": "Dùng để báo một việc SẮP xảy ra. 要…了 và 快(要)…了 dùng chung chung; 就要…了 nhấn rằng việc đến rất nhanh và là dạng DUY NHẤT dùng được khi phía trước có từ chỉ thời gian cụ thể (明天, 下个月, 八点…).",
+      "cachGhep": [
+        "S + 要 + V + 了",
+        "S + 快要 / 快 + V + 了 (không đi với thời gian cụ thể)",
+        "Thời gian cụ thể + 就要 + V + 了",
+        "快 + danh từ thời gian / số + 了: 快十点了, 快一年了"
+      ],
+      "viDu": [
+        {
+          "c": "火车要开了。",
+          "d": "Huǒchē yào kāi le.",
+          "v": "Tàu hoả sắp chạy rồi."
+        },
+        {
+          "c": "快要下雨了，我们回家吧。",
+          "d": "Kuàiyào xià yǔ le, wǒmen huí jiā ba.",
+          "v": "Sắp mưa rồi, chúng ta về nhà thôi."
+        },
+        {
+          "c": "我们下个星期就要考试了。",
+          "d": "Wǒmen xià gè xīngqī jiùyào kǎoshì le.",
+          "v": "Tuần sau chúng tôi thi rồi."
+        },
+        {
+          "c": "新年快到了。",
+          "d": "Xīnnián kuài dào le.",
+          "v": "Năm mới sắp đến rồi."
+        }
+      ],
+      "luuY": [
+        "Có thời gian cụ thể thì KHÔNG dùng 快要: 明天快要考试了 là sai → 明天就要考试了.",
+        "Đừng quên 了 ở cuối: 火车要开 (thiếu 了) dễ bị hiểu là \"tàu muốn / sẽ chạy\".",
+        "Phủ định thường nói 还没…呢 (vẫn chưa)."
+      ],
+      "soSanh": [
+        "zh-hsk2-yao",
+        "zh-hsk2-le-thay-doi"
+      ],
+      "tuKhoa": [
+        "yao le",
+        "kuaiyao",
+        "jiuyao",
+        "kuai le",
+        "sắp",
+        "sắp rồi"
+      ],
+      "quiz": [
+        {
+          "h": "电影___开始___，我们快进去吧。",
+          "lc": [
+            "正在…过",
+            "要…了",
+            "没…了",
+            "是…的"
+          ],
+          "da": 1,
+          "gt": "Việc sắp xảy ra: 要 + V + 了."
+        },
+        {
+          "h": "我哥哥下个星期___去北京了。",
+          "lc": [
+            "快要",
+            "快",
+            "就要",
+            "正在"
+          ],
+          "da": 2,
+          "gt": "Có thời gian cụ thể (下个月) thì chỉ dùng được 就要…了."
+        },
+        {
+          "h": "Câu nào SAI?",
+          "lc": [
+            "明天快要考试了。",
+            "快要考试了。",
+            "明天就要考试了。",
+            "要考试了。"
+          ],
+          "da": 0,
+          "gt": "快要…了 không đi với từ chỉ thời gian cụ thể như 明天."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk2-bi",
+      "nhom": "So sánh",
+      "tieuDe": "比 (so sánh hơn)",
+      "mau": "A + 比 + B + tính từ (+ mức chênh)",
+      "nghia": "A ~ hơn B",
+      "giaiThich": "Câu chữ 比 so sánh hai đối tượng: A 比 B + tính từ = \"A … hơn B\". Sau tính từ có thể thêm mức chênh lệch: một con số cụ thể, 一点儿 (hơn một chút), 得多 / 多了 (hơn nhiều). Tuyệt đối không đặt 很, 非常, 太 trước tính từ.",
+      "cachGhep": [
+        "A + 比 + B + tính từ",
+        "A + 比 + B + tính từ + số lượng: 大三岁, 贵十块",
+        "A + 比 + B + tính từ + 一点儿 / 得多 / 多了",
+        "Phủ định thường dùng: A + 没有 + B + tính từ"
+      ],
+      "viDu": [
+        {
+          "c": "今天比昨天冷。",
+          "d": "Jīntiān bǐ zuótiān lěng.",
+          "v": "Hôm nay lạnh hơn hôm qua."
+        },
+        {
+          "c": "哥哥比我大三岁。",
+          "d": "Gēge bǐ wǒ dà sān suì.",
+          "v": "Anh trai lớn hơn tôi ba tuổi."
+        },
+        {
+          "c": "这件衣服比那件贵一点儿。",
+          "d": "Zhè jiàn yīfu bǐ nà jiàn guì yìdiǎnr.",
+          "v": "Cái áo này đắt hơn cái kia một chút."
+        },
+        {
+          "c": "坐飞机比坐火车快得多。",
+          "d": "Zuò fēijī bǐ zuò huǒchē kuài de duō.",
+          "v": "Đi máy bay nhanh hơn đi tàu hoả nhiều."
+        }
+      ],
+      "luuY": [
+        "Lỗi kinh điển: 他比我很高 / 他比我非常高 — SAI. Muốn nói \"hơn nhiều\" dùng 高得多 / 高多了.",
+        "Trật tự khác tiếng Việt: \"A cao hơn B\" → A 比 B 高 (tính từ ở CUỐI); không nói A 高比 B.",
+        "Mức chênh đứng SAU tính từ: 大三岁, không nói 三岁大."
+      ],
+      "soSanh": [
+        "zh-hsk2-bi-geng-hai",
+        "zh-hsk2-meiyou-so-sanh",
+        "zh-hsk2-gen-yiyang",
+        "zh-hsk3-bi-chenh-lech"
+      ],
+      "tuKhoa": [
+        "bi",
+        "so sánh hơn",
+        "hơn",
+        "câu chữ bi"
+      ],
+      "quiz": [
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "我比他很高。",
+            "我高比他。",
+            "我比他高。",
+            "我比他高很。"
+          ],
+          "da": 2,
+          "gt": "A + 比 + B + tính từ; không dùng 很 trong câu 比."
+        },
+        {
+          "h": "妹妹比我小___。",
+          "lc": [
+            "两岁",
+            "很",
+            "非常",
+            "两岁的"
+          ],
+          "da": 0,
+          "gt": "Mức chênh cụ thể đặt sau tính từ: 小两岁."
+        },
+        {
+          "h": "\"Táo rẻ hơn dưa hấu nhiều\" là:",
+          "lc": [
+            "苹果比西瓜很便宜。",
+            "苹果比西瓜便宜得多。",
+            "苹果比西瓜多便宜。",
+            "苹果便宜比西瓜多。"
+          ],
+          "da": 1,
+          "gt": "\"Hơn nhiều\": tính từ + 得多."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk2-bi-geng-hai",
+      "nhom": "So sánh",
+      "tieuDe": "比…更 / 还",
+      "mau": "A + 比 + B + 更 / 还 + tính từ",
+      "nghia": "A còn ~ hơn (cả) B",
+      "giaiThich": "Trong câu 比, trước tính từ chỉ được thêm 更 hoặc 还, với hàm ý: B đã … rồi, nhưng A còn … hơn nữa. 更 trung tính; 还 mang thêm sắc thái ngạc nhiên, nhấn mạnh.",
+      "cachGhep": [
+        "A + 比 + B + 更 + tính từ",
+        "A + 比 + B + 还 + tính từ",
+        "更 dùng riêng (không có 比): S + 更 + tính từ / động từ tâm lý (更喜欢)"
+      ],
+      "viDu": [
+        {
+          "c": "今天比昨天更冷。",
+          "d": "Jīntiān bǐ zuótiān gèng lěng.",
+          "v": "Hôm nay còn lạnh hơn hôm qua."
+        },
+        {
+          "c": "弟弟比哥哥还高。",
+          "d": "Dìdi bǐ gēge hái gāo.",
+          "v": "Em trai còn cao hơn cả anh trai."
+        },
+        {
+          "c": "我喜欢喝茶，更喜欢喝咖啡。",
+          "d": "Wǒ xǐhuan hē chá, gèng xǐhuan hē kāfēi.",
+          "v": "Tôi thích uống trà, càng thích uống cà phê hơn."
+        },
+        {
+          "c": "这个房间比那个更大吗？",
+          "d": "Zhège fángjiān bǐ nàge gèng dà ma?",
+          "v": "Căn phòng này còn to hơn căn kia à?"
+        }
+      ],
+      "luuY": [
+        "今天比昨天冷: chỉ so sánh, không nói hôm qua có lạnh không. 今天比昨天更冷: hôm qua ĐÃ lạnh, hôm nay lạnh hơn nữa.",
+        "Chỉ 更 / 还 được đứng trước tính từ trong câu 比; 很, 非常, 太 thì không.",
+        "Đã dùng 更 / 还 thì không thêm 一点儿 / 得多 phía sau."
+      ],
+      "soSanh": [
+        "zh-hsk2-bi",
+        "zh-hsk2-hai",
+        "zh-hsk2-zui"
+      ],
+      "tuKhoa": [
+        "bi geng",
+        "bi hai",
+        "geng",
+        "còn hơn",
+        "càng"
+      ],
+      "quiz": [
+        {
+          "h": "昨天很热，今天比昨天___热。",
+          "lc": [
+            "很",
+            "更",
+            "非常",
+            "太"
+          ],
+          "da": 1,
+          "gt": "Trong câu 比 chỉ dùng được 更 / 还 trước tính từ."
+        },
+        {
+          "h": "「他比我还忙」 hàm ý:",
+          "lc": [
+            "Tôi không bận, anh ấy bận.",
+            "Anh ấy bận như tôi.",
+            "Anh ấy không bận bằng tôi.",
+            "Tôi đã bận, anh ấy còn bận hơn."
+          ],
+          "da": 3,
+          "gt": "比…还 + tính từ: B đã có tính chất đó, A còn hơn."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "这本书比那本更好。",
+            "这本书比那本很好。",
+            "这本书更比那本好。",
+            "这本书比更那本好。"
+          ],
+          "da": 0,
+          "gt": "更 đứng ngay trước tính từ, sau B."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk2-meiyou-so-sanh",
+      "nhom": "So sánh",
+      "tieuDe": "没有…(那么 / 这么) (so sánh kém)",
+      "mau": "A + 没有 + B + (那么 / 这么) + tính từ",
+      "nghia": "A không ~ bằng B",
+      "giaiThich": "Đây là dạng phủ định thông dụng của câu 比: A 没有 B + tính từ = \"A không … bằng B\". Có thể thêm 那么 / 这么 trước tính từ để nhấn mức độ (\"không … đến thế\").",
+      "cachGhep": [
+        "A + 没有 + B + tính từ",
+        "A + 没有 + B + 那么 / 这么 + tính từ",
+        "Câu hỏi: A + 有 + B + (那么) + tính từ + 吗？"
+      ],
+      "viDu": [
+        {
+          "c": "我没有哥哥高。",
+          "d": "Wǒ méiyǒu gēge gāo.",
+          "v": "Tôi không cao bằng anh trai."
+        },
+        {
+          "c": "今天没有昨天那么冷。",
+          "d": "Jīntiān méiyǒu zuótiān nàme lěng.",
+          "v": "Hôm nay không lạnh bằng hôm qua."
+        },
+        {
+          "c": "坐火车没有坐飞机快。",
+          "d": "Zuò huǒchē méiyǒu zuò fēijī kuài.",
+          "v": "Đi tàu hoả không nhanh bằng đi máy bay."
+        },
+        {
+          "c": "你的汉语有他那么好吗？",
+          "d": "Nǐ de Hànyǔ yǒu tā nàme hǎo ma?",
+          "v": "Tiếng Trung của bạn có tốt bằng anh ấy không?"
+        }
+      ],
+      "luuY": [
+        "A 没有 B 高 = A thấp hơn B. Còn A 不比 B 高 chỉ có nghĩa \"A không cao hơn B\" (có thể bằng nhau) — hai câu không giống nhau.",
+        "Sau tính từ không thêm mức chênh: không nói 我没有他高三岁.",
+        "Tiếng Việt \"không cao BẰNG\": chữ \"bằng\" không dịch riêng — chỉ cần 没有 + B + tính từ."
+      ],
+      "soSanh": [
+        "zh-hsk2-bi",
+        "zh-hsk2-gen-yiyang"
+      ],
+      "tuKhoa": [
+        "meiyou",
+        "name",
+        "zheme",
+        "không bằng",
+        "so sánh kém"
+      ],
+      "quiz": [
+        {
+          "h": "妹妹___我高。 (Em gái không cao bằng tôi.)",
+          "lc": [
+            "没有",
+            "不有",
+            "比不",
+            "没比有"
+          ],
+          "da": 0,
+          "gt": "So sánh kém: A + 没有 + B + tính từ."
+        },
+        {
+          "h": "「今天没有昨天热」 nghĩa là:",
+          "lc": [
+            "Hôm nay nóng hơn hôm qua.",
+            "Hôm qua không nóng.",
+            "Hôm nay không nóng bằng hôm qua.",
+            "Hôm nay nóng như hôm qua."
+          ],
+          "da": 2,
+          "gt": "A 没有 B + tính từ = A không … bằng B."
+        },
+        {
+          "h": "这个房间没有那个房间___大。",
+          "lc": [
+            "很",
+            "那么",
+            "比",
+            "更"
+          ],
+          "da": 1,
+          "gt": "Trước tính từ trong mẫu này có thể thêm 那么 / 这么, không thêm 很 / 更."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk2-gen-yiyang",
+      "nhom": "So sánh",
+      "tieuDe": "跟 / 和…一样",
+      "mau": "A + 跟 / 和 + B + 一样 (+ tính từ)",
+      "nghia": "A giống B; A ~ như / bằng B",
+      "giaiThich": "Dùng để nói hai đối tượng giống nhau, hoặc bằng nhau về một tính chất. Phủ định là 不一样 (không giống) — 不 đặt trước 一样.",
+      "cachGhep": [
+        "A + 跟 / 和 + B + 一样 (giống nhau)",
+        "A + 跟 / 和 + B + 一样 + tính từ (… như nhau)",
+        "Phủ định: A + 跟 + B + 不一样",
+        "Câu hỏi: A + 跟 + B + 一样吗？"
+      ],
+      "viDu": [
+        {
+          "c": "我的手机跟你的一样。",
+          "d": "Wǒ de shǒujī gēn nǐ de yíyàng.",
+          "v": "Điện thoại của tôi giống của bạn."
+        },
+        {
+          "c": "弟弟跟我一样高。",
+          "d": "Dìdi gēn wǒ yíyàng gāo.",
+          "v": "Em trai cao bằng tôi."
+        },
+        {
+          "c": "这个字和那个字不一样。",
+          "d": "Zhège zì hé nàge zì bù yíyàng.",
+          "v": "Chữ này và chữ kia không giống nhau."
+        },
+        {
+          "c": "你的名字跟他的一样吗？",
+          "d": "Nǐ de míngzi gēn tā de yíyàng ma?",
+          "v": "Tên của bạn giống tên của anh ấy à?"
+        }
+      ],
+      "luuY": [
+        "\"Cao bằng tôi\" = 跟我一样高: 一样 đứng TRƯỚC tính từ. Không nói 高一样跟我.",
+        "Không thêm 很 trước tính từ sau 一样: 一样高, không nói 一样很高.",
+        "一 trong 一样 đọc yí (trước thanh 4); 不一样 đọc bù yíyàng."
+      ],
+      "soSanh": [
+        "zh-hsk2-bi",
+        "zh-hsk2-meiyou-so-sanh",
+        "zh-hsk1-he",
+        "zh-hsk3-gen-yiyang"
+      ],
+      "tuKhoa": [
+        "gen yiyang",
+        "he yiyang",
+        "yiyang",
+        "giống",
+        "bằng nhau",
+        "bu yiyang"
+      ],
+      "quiz": [
+        {
+          "h": "我的衣服___你的一样。",
+          "lc": [
+            "比",
+            "跟",
+            "没有",
+            "更"
+          ],
+          "da": 1,
+          "gt": "So sánh ngang bằng: A + 跟 + B + 一样."
+        },
+        {
+          "h": "\"Hôm nay nóng như hôm qua\" là:",
+          "lc": [
+            "今天跟昨天热一样。",
+            "今天比昨天一样热。",
+            "今天一样跟昨天热。",
+            "今天跟昨天一样热。"
+          ],
+          "da": 3,
+          "gt": "A + 跟 + B + 一样 + tính từ."
+        },
+        {
+          "h": "Phủ định của 「这两本书一样」 là:",
+          "lc": [
+            "这两本书不一样。",
+            "这两本书没一样了。",
+            "这两本书一不样。",
+            "这两本书不比一样。"
+          ],
+          "da": 0,
+          "gt": "Phủ định đặt 不 trước 一样: 不一样."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk2-zui",
+      "nhom": "So sánh",
+      "tieuDe": "最",
+      "mau": "最 + tính từ / động từ tâm lý",
+      "nghia": "~ nhất",
+      "giaiThich": "最 đặt trước tính từ hoặc động từ chỉ tâm lý (喜欢, 爱, 想…) để nói mức độ cao nhất trong một phạm vi. Phạm vi so sánh đặt trước: 我们班 / 我家 / 这些…里.",
+      "cachGhep": [
+        "最 + tính từ: 最大, 最好, 最便宜",
+        "最 + 喜欢 / 爱 / 想 + V / danh từ",
+        "Phạm vi + (里) + 谁 / 哪个 + 最 + tính từ？",
+        "最 + tính từ + 的 + danh từ: 最好的朋友"
+      ],
+      "viDu": [
+        {
+          "c": "我最喜欢吃西瓜。",
+          "d": "Wǒ zuì xǐhuan chī xīguā.",
+          "v": "Tôi thích ăn dưa hấu nhất."
+        },
+        {
+          "c": "我们家里爸爸最高。",
+          "d": "Wǒmen jiā li bàba zuì gāo.",
+          "v": "Trong nhà chúng tôi bố cao nhất."
+        },
+        {
+          "c": "这是最便宜的手机吗？",
+          "d": "Zhè shì zuì piányi de shǒujī ma?",
+          "v": "Đây là điện thoại rẻ nhất phải không?"
+        },
+        {
+          "c": "她是我最好的朋友。",
+          "d": "Tā shì wǒ zuì hǎo de péngyou.",
+          "v": "Cô ấy là người bạn thân nhất của tôi."
+        }
+      ],
+      "luuY": [
+        "Trật tự ngược tiếng Việt: \"cao nhất\" = 最高, \"thích nhất\" = 最喜欢 (最 đứng TRƯỚC). Không nói 高最, 喜欢最.",
+        "Không dùng 最 trong câu 比: không nói 他比我最高."
+      ],
+      "soSanh": [
+        "zh-hsk2-bi-geng-hai"
+      ],
+      "tuKhoa": [
+        "zui",
+        "nhất",
+        "so sánh nhất"
+      ],
+      "quiz": [
+        {
+          "h": "\"Tôi thích uống sữa nhất\" — chỗ đặt 最 đúng là:",
+          "lc": [
+            "我喜欢最喝牛奶。",
+            "我喜欢喝牛奶最。",
+            "我最喜欢喝牛奶。",
+            "最我喜欢喝牛奶。"
+          ],
+          "da": 2,
+          "gt": "最 đứng ngay trước động từ tâm lý 喜欢."
+        },
+        {
+          "h": "这三件衣服里，红色的___漂亮。",
+          "lc": [
+            "最",
+            "比",
+            "跟",
+            "没有"
+          ],
+          "da": 0,
+          "gt": "So sánh trong một nhóm (ba cái áo) → dùng 最 + tính từ."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "他比我最高。",
+            "他是我们学校最高的人。",
+            "他高最在学校。",
+            "他最比我高。"
+          ],
+          "da": 1,
+          "gt": "最 + tính từ + 的 + danh từ; 最 không dùng trong câu 比."
+        }
+      ]
+    }
+  ]
+}

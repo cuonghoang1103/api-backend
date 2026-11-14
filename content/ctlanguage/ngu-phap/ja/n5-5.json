@@ -1,0 +1,1465 @@
+{
+  "nn": "ja",
+  "cap": "N5",
+  "diem": [
+    {
+      "id": "ja-n5-koto-ga-dekimasu",
+      "nhom": "Thể từ điển / thể た",
+      "tieuDe": "〜ことができます",
+      "mau": "V-từ điển + ことが できます ・ N + が できます",
+      "nghia": "có thể ~, biết làm ~",
+      "giaiThich": "Diễn tả năng lực (biết làm gì) hoặc khả năng được phép / có điều kiện làm gì ở một nơi, một hoàn cảnh. こと biến động từ thành danh từ để đứng trước が できます. Với danh từ chỉ kỹ năng thì ghép thẳng N が できます.",
+      "cachGhep": [
+        "Động từ thể từ điển + ことが できます",
+        "Danh từ (ngoại ngữ, môn thể thao, うんてん, りょうり…) + が できます",
+        "Phủ định: 〜ことが できません"
+      ],
+      "viDu": [
+        {
+          "c": "わたしはかんじを読むことができます。",
+          "d": "わたしは かんじを よむ ことが できます。",
+          "v": "Tôi có thể đọc được chữ Hán."
+        },
+        {
+          "c": "ここでしゃしんをとることができますか。",
+          "d": "ここで しゃしんを とる ことが できますか。",
+          "v": "Ở đây có thể chụp ảnh được không?"
+        },
+        {
+          "c": "山田さんはピアノをひくことができません。",
+          "d": "やまださんは ピアノを ひく ことが できません。",
+          "v": "Anh Yamada không biết chơi piano."
+        },
+        {
+          "c": "ランさんは日本語ができます。",
+          "d": "ランさんは にほんごが できます。",
+          "v": "Lan biết tiếng Nhật."
+        }
+      ],
+      "luuY": [
+        "Trước こと phải là thể từ điển: sai 読みことが できます, 読んで ことが できます.",
+        "Tiếng Việt đặt “có thể” trước động từ; tiếng Nhật đặt できます ở CUỐI câu."
+      ],
+      "soSanh": [
+        "ja-n5-shumi-koto",
+        "ja-n5-the-tu-dien",
+        "ja-n4-kanou-kei"
+      ],
+      "tuKhoa": [
+        "koto ga dekimasu",
+        "dekiru",
+        "có thể",
+        "khả năng",
+        "biết làm"
+      ],
+      "quiz": [
+        {
+          "h": "わたしは 日本語を（　）ことが できます。",
+          "lc": [
+            "話す",
+            "話し",
+            "話して"
+          ],
+          "da": 0,
+          "gt": "Trước ことが できます là thể từ điển: 話す."
+        },
+        {
+          "h": "わたしは およぐ こと（　）できます。",
+          "lc": [
+            "へ",
+            "が",
+            "に"
+          ],
+          "da": 1,
+          "gt": "Mẫu cố định: V-từ điển + こと + が + できます."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "ピアノを ひきことが できます。",
+            "ピアノを ひいて ことが できます。",
+            "ピアノを ひく ことが できます。"
+          ],
+          "da": 2,
+          "gt": "Động từ đứng trước こと phải ở thể từ điển: ひく."
+        }
+      ]
+    },
+    {
+      "id": "ja-n5-shumi-koto",
+      "nhom": "Thể từ điển / thể た",
+      "tieuDe": "しゅみは〜ことです",
+      "mau": "わたしの しゅみは + V-từ điển + ことです",
+      "nghia": "sở thích của tôi là (làm) ~",
+      "giaiThich": "Dùng để nói về sở thích. Vì sau は cần một danh từ, động từ phải được danh từ hoá bằng cách thêm こと vào sau thể từ điển. Nếu sở thích là một danh từ sẵn có thì nói thẳng N です.",
+      "cachGhep": [
+        "しゅみは + động từ thể từ điển + こと + です",
+        "しゅみは + danh từ + です (しゅみは おんがくです)",
+        "Hỏi: しゅみは 何ですか (なんですか)"
+      ],
+      "viDu": [
+        {
+          "c": "わたしのしゅみはえいがを見ることです。",
+          "d": "わたしの しゅみは えいがを みる ことです。",
+          "v": "Sở thích của tôi là xem phim."
+        },
+        {
+          "c": "あねのしゅみはしゃしんをとることです。",
+          "d": "あねの しゅみは しゃしんを とる ことです。",
+          "v": "Sở thích của chị tôi là chụp ảnh."
+        },
+        {
+          "c": "しゅみは何ですか。",
+          "d": "しゅみは なんですか。",
+          "v": "Sở thích của bạn là gì?"
+        }
+      ],
+      "luuY": [
+        "Không nối thẳng động từ với です: sai しゅみは えいがを 見るです / 見ますです.",
+        "Tiếng Việt nói “sở thích là xem phim” không cần từ tương ứng với こと nên rất dễ bỏ sót."
+      ],
+      "soSanh": [
+        "ja-n5-koto-ga-dekimasu"
+      ],
+      "tuKhoa": [
+        "shumi",
+        "koto desu",
+        "sở thích",
+        "danh từ hoá",
+        "shumi wa koto desu"
+      ],
+      "quiz": [
+        {
+          "h": "わたしの しゅみは 本を（　）ことです。",
+          "lc": [
+            "読む",
+            "読み",
+            "読みます"
+          ],
+          "da": 0,
+          "gt": "Trước こと là thể từ điển: 読む."
+        },
+        {
+          "h": "しゅみは えを かく（　）です。",
+          "lc": [
+            "もの",
+            "こと",
+            "とき"
+          ],
+          "da": 1,
+          "gt": "Danh từ hoá động từ trong mẫu sở thích dùng こと: 〜ことです."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "しゅみは りょうりを 作るです。",
+            "しゅみは りょうりを 作りことです。",
+            "しゅみは りょうりを 作る ことです。"
+          ],
+          "da": 2,
+          "gt": "Thể từ điển + こと + です."
+        }
+      ]
+    },
+    {
+      "id": "ja-n5-mae-ni",
+      "nhom": "Thể từ điển / thể た",
+      "tieuDe": "〜まえに",
+      "mau": "V-từ điển / N + の / khoảng thời gian + まえに",
+      "nghia": "trước khi ~, trước ~",
+      "giaiThich": "Diễn tả hành động ở vế sau xảy ra TRƯỚC hành động hay sự việc ở vế trước まえに. Động từ trước まえに luôn ở thể từ điển, kể cả khi cả câu nói về quá khứ.",
+      "cachGhep": [
+        "Động từ thể từ điển + まえに (ねる まえに)",
+        "Danh từ + の + まえに (しょくじの まえに)",
+        "Khoảng thời gian + まえに (3年まえに = 3 năm trước) — không có の"
+      ],
+      "viDu": [
+        {
+          "c": "ねるまえに、本を読みます。",
+          "d": "ねる まえに、ほんを よみます。",
+          "v": "Trước khi ngủ, tôi đọc sách."
+        },
+        {
+          "c": "日本へ来るまえに、日本語をべんきょうしました。",
+          "d": "にほんへ くる まえに、にほんごを べんきょうしました。",
+          "v": "Trước khi đến Nhật, tôi đã học tiếng Nhật."
+        },
+        {
+          "c": "しょくじのまえに、手をあらいます。",
+          "d": "しょくじの まえに、てを あらいます。",
+          "v": "Trước bữa ăn, tôi rửa tay."
+        },
+        {
+          "c": "3年まえに日本へ来ました。",
+          "d": "さんねんまえに にほんへ きました。",
+          "v": "Tôi đã đến Nhật 3 năm trước."
+        }
+      ],
+      "luuY": [
+        "Không chia quá khứ trước まえに: sai 来た まえに; đúng 来る まえに dù câu ở quá khứ.",
+        "Sau danh từ cần の (しょくじの まえに), nhưng sau số lượng thời gian thì không (1時間まえに)."
+      ],
+      "soSanh": [
+        "ja-n5-te-kara",
+        "ja-n5-toki"
+      ],
+      "tuKhoa": [
+        "mae ni",
+        "maeni",
+        "trước khi",
+        "trước"
+      ],
+      "quiz": [
+        {
+          "h": "ごはんを（　）まえに、手を あらいます。",
+          "lc": [
+            "食べる",
+            "食べた",
+            "食べて"
+          ],
+          "da": 0,
+          "gt": "Trước まえに luôn là thể từ điển."
+        },
+        {
+          "h": "かいぎ（　）まえに、しりょうを 読みます。",
+          "lc": [
+            "に",
+            "の",
+            "を"
+          ],
+          "da": 1,
+          "gt": "Danh từ + の + まえに."
+        },
+        {
+          "h": "日本へ（　）まえに、かんじを べんきょうしました。",
+          "lc": [
+            "来た",
+            "来て",
+            "来る"
+          ],
+          "da": 2,
+          "gt": "Dù câu ở quá khứ, động từ trước まえに vẫn ở thể từ điển: 来る."
+        }
+      ]
+    },
+    {
+      "id": "ja-n5-the-ta",
+      "nhom": "Thể từ điển / thể た",
+      "tieuDe": "Thể た (cách chia)",
+      "mau": "V-て → V-た",
+      "nghia": "dạng quá khứ thông thường của động từ",
+      "giaiThich": "Thể た là dạng quá khứ ở thể thường (tương ứng với 〜ました). Cách chia giống hệt thể て, chỉ đổi て → た và で → だ. Dùng trong hội thoại thân mật và ghép các mẫu 〜たことがあります, 〜たり〜たりします, 〜たら.",
+      "cachGhep": [
+        "Lấy thể て rồi đổi て → た, で → だ",
+        "Nhóm I: 買って → 買った ・ 書いて → 書いた ・ 飲んで → 飲んだ ・ 話して → 話した ・ 行って → 行った",
+        "Nhóm II: 食べて → 食べた ・ 見て → 見た",
+        "Nhóm III: して → した ・ 来て → 来た (きた)"
+      ],
+      "viDu": [
+        {
+          "c": "きのうえいがを見た。",
+          "d": "きのう えいがを みた。",
+          "v": "Hôm qua tôi đã xem phim."
+        },
+        {
+          "c": "けさコーヒーを飲んだ。",
+          "d": "けさ コーヒーを のんだ。",
+          "v": "Sáng nay tôi đã uống cà phê."
+        },
+        {
+          "c": "先週東京へ行った。",
+          "d": "せんしゅう とうきょうへ いった。",
+          "v": "Tuần trước tôi đã đi Tokyo."
+        }
+      ],
+      "luuY": [
+        "Đã thuộc thể て thì không cần học lại: mọi lỗi của thể て (書きた, 飲みた) cũng là lỗi của thể た.",
+        "Phủ định quá khứ thể thường là 〜なかった (行かなかった), không phải 行かないた."
+      ],
+      "soSanh": [
+        "ja-n5-the-te",
+        "ja-n5-the-tu-dien",
+        "ja-n5-the-thuong"
+      ],
+      "tuKhoa": [
+        "ta kei",
+        "ta form",
+        "thể ta",
+        "quá khứ thể thường"
+      ],
+      "quiz": [
+        {
+          "h": "Thể た của 「飲みます」 là:",
+          "lc": [
+            "飲んだ",
+            "飲みた",
+            "飲った"
+          ],
+          "da": 0,
+          "gt": "飲んで → 飲んだ (で → だ)."
+        },
+        {
+          "h": "Thể た của 「書きます」 là:",
+          "lc": [
+            "書きた",
+            "書いた",
+            "書った"
+          ],
+          "da": 1,
+          "gt": "書きます → 書いて → 書いた (て → た)."
+        },
+        {
+          "h": "Thể た của 「行きます」 là:",
+          "lc": [
+            "行いた",
+            "行きた",
+            "行った"
+          ],
+          "da": 2,
+          "gt": "行って (ngoại lệ) → 行った."
+        }
+      ]
+    },
+    {
+      "id": "ja-n5-ta-koto-ga-arimasu",
+      "nhom": "Thể từ điển / thể た",
+      "tieuDe": "〜たことがあります",
+      "mau": "V-た + ことが あります",
+      "nghia": "đã từng ~",
+      "giaiThich": "Diễn tả kinh nghiệm: trong quá khứ đã từng làm một việc nào đó (ít nhất một lần). Không dùng để kể một việc cụ thể vừa xảy ra gần đây. Phủ định là 〜たことがありません (chưa từng).",
+      "cachGhep": [
+        "Động từ thể た + ことが あります",
+        "Phủ định: V-た + ことが ありません (thường đi với まだ / 一ども)",
+        "Hỏi: V-た + ことが ありますか"
+      ],
+      "viDu": [
+        {
+          "c": "日本へ行ったことがあります。",
+          "d": "にほんへ いった ことが あります。",
+          "v": "Tôi đã từng đi Nhật."
+        },
+        {
+          "c": "すしを食べたことがありますか。",
+          "d": "すしを たべた ことが ありますか。",
+          "v": "Bạn đã từng ăn sushi chưa?"
+        },
+        {
+          "c": "まだ一どもふじさんにのぼったことがありません。",
+          "d": "まだ いちども ふじさんに のぼった ことが ありません。",
+          "v": "Tôi chưa từng leo núi Phú Sĩ lần nào."
+        }
+      ],
+      "luuY": [
+        "Việc xảy ra tại một thời điểm cụ thể gần đây thì dùng 〜ました: きのう すしを 食べました (không nói きのう 食べた ことが あります).",
+        "Đừng nhầm với V-từ điển + ことが あります (thỉnh thoảng có làm)."
+      ],
+      "soSanh": [
+        "ja-n5-koto-ga-dekimasu",
+        "ja-n5-the-ta"
+      ],
+      "tuKhoa": [
+        "ta koto ga arimasu",
+        "ta koto ga aru",
+        "đã từng",
+        "kinh nghiệm",
+        "chưa từng"
+      ],
+      "quiz": [
+        {
+          "h": "わたしは 日本の えいがを（　）ことが あります。(Đã từng xem.)",
+          "lc": [
+            "見た",
+            "見ます",
+            "見て"
+          ],
+          "da": 0,
+          "gt": "Kinh nghiệm “đã từng” dùng thể た + ことが あります."
+        },
+        {
+          "h": "「ふじさんに のぼった ことが あります」 nghĩa là:",
+          "lc": [
+            "Tôi đang leo núi Phú Sĩ",
+            "Tôi đã từng leo núi Phú Sĩ",
+            "Tôi thường xuyên leo núi Phú Sĩ"
+          ],
+          "da": 1,
+          "gt": "V-た ことが あります diễn tả kinh nghiệm đã từng."
+        },
+        {
+          "h": "おきなわへ 行った こと（　）ありますか。",
+          "lc": [
+            "を",
+            "に",
+            "が"
+          ],
+          "da": 2,
+          "gt": "Mẫu cố định: V-た + こと + が + あります."
+        }
+      ]
+    },
+    {
+      "id": "ja-n5-tari-tari",
+      "nhom": "Thể từ điển / thể た",
+      "tieuDe": "〜たり〜たりします",
+      "mau": "V1-たり、V2-たり + します",
+      "nghia": "lúc thì ~ lúc thì ~; làm những việc như ~, ~",
+      "giaiThich": "Nêu vài hành động tiêu biểu trong số nhiều hành động, không theo thứ tự thời gian và ngầm hiểu còn việc khác nữa. Giống や khi liệt kê danh từ. Thì của câu thể hiện ở します cuối câu.",
+      "cachGhep": [
+        "Động từ thể た + り、động từ thể た + り + します",
+        "Quá khứ: 〜たり、〜たり しました",
+        "Muốn làm: 〜たり、〜たり したいです"
+      ],
+      "viDu": [
+        {
+          "c": "日曜日はそうじしたり、せんたくしたりします。",
+          "d": "にちようびは そうじしたり、せんたくしたり します。",
+          "v": "Chủ nhật tôi làm những việc như dọn dẹp, giặt giũ."
+        },
+        {
+          "c": "休みの日は本を読んだり、えいがを見たりします。",
+          "d": "やすみの ひは ほんを よんだり、えいがを みたり します。",
+          "v": "Ngày nghỉ tôi lúc thì đọc sách, lúc thì xem phim."
+        },
+        {
+          "c": "きのうは買いものしたり、友だちに会ったりしました。",
+          "d": "きのうは かいものしたり、ともだちに あったり しました。",
+          "v": "Hôm qua tôi đi mua sắm, gặp bạn bè, vân vân."
+        }
+      ],
+      "luuY": [
+        "Đừng quên します ở cuối: sai 本を 読んだり、えいがを 見たりです.",
+        "Kể đúng trình tự mọi việc đã làm thì dùng 〜て、〜て; たり chỉ nêu ví dụ, không theo thứ tự."
+      ],
+      "soSanh": [
+        "ja-n5-te-te",
+        "ja-n5-ya",
+        "ja-n5-the-ta"
+      ],
+      "tuKhoa": [
+        "tari tari",
+        "tari suru",
+        "lúc thì",
+        "liệt kê hành động",
+        "vân vân"
+      ],
+      "quiz": [
+        {
+          "h": "休みの 日は テレビを（　）、本を 読んだり します。",
+          "lc": [
+            "見たり",
+            "見るたり",
+            "見ますたり"
+          ],
+          "da": 0,
+          "gt": "たり ghép với thể た: 見た + り."
+        },
+        {
+          "h": "日曜日は 買いものしたり、えいがを 見たり（　）。",
+          "lc": [
+            "です",
+            "します",
+            "あります"
+          ],
+          "da": 1,
+          "gt": "Mẫu kết thúc bằng します."
+        },
+        {
+          "h": "「飲みます」 chia theo mẫu 〜たり là:",
+          "lc": [
+            "飲みたり",
+            "飲んたり",
+            "飲んだり"
+          ],
+          "da": 2,
+          "gt": "Thể た của 飲みます là 飲んだ → 飲んだり."
+        }
+      ]
+    },
+    {
+      "id": "ja-n5-the-thuong",
+      "nhom": "Thể thường",
+      "tieuDe": "Thể thường (plain form)",
+      "mau": "V / A / N ở dạng không có です・ます",
+      "nghia": "dạng “trống không” dùng khi nói thân mật và đứng trước nhiều mẫu câu",
+      "giaiThich": "Thể thường (ふつうけい) là dạng không dùng です / ます. Dùng khi nói chuyện với bạn bè, người nhà, khi viết nhật ký, báo, và bắt buộc trước nhiều mẫu như 〜と思います, 〜と言いました, 〜でしょう, 〜んです, mệnh đề bổ nghĩa danh từ.",
+      "cachGhep": [
+        "Động từ: 行く / 行かない / 行った / 行かなかった",
+        "Tính từ đuôi い: 高い / 高くない / 高かった / 高くなかった",
+        "Tính từ đuôi な: ひまだ / ひまじゃない / ひまだった / ひまじゃなかった",
+        "Danh từ: 雨だ / 雨じゃない / 雨だった / 雨じゃなかった",
+        "Câu hỏi thân mật bỏ か, lên giọng cuối câu: 行く？ — うん、行く。/ ううん、行かない。"
+      ],
+      "viDu": [
+        {
+          "c": "あした学校へ行く？",
+          "d": "あした がっこうへ いく？",
+          "v": "Mai cậu có đi học không?"
+        },
+        {
+          "c": "ううん、行かない。",
+          "d": "ううん、いかない。",
+          "v": "Không, tớ không đi."
+        },
+        {
+          "c": "きのうのテストはむずかしかった。",
+          "d": "きのうの テストは むずかしかった。",
+          "v": "Bài kiểm tra hôm qua khó."
+        },
+        {
+          "c": "今日は休みだ。",
+          "d": "きょうは やすみだ。",
+          "v": "Hôm nay là ngày nghỉ."
+        }
+      ],
+      "luuY": [
+        "Thể thường chỉ dùng với người thân, bạn bè ngang hàng; dùng với người trên là thất lễ.",
+        "Tính từ đuôi い KHÔNG thêm だ: sai 高いだ, さむかっただ.",
+        "Trong hội thoại thân mật, だ sau danh từ / tính từ đuôi な ở cuối câu thường được lược (今日は ひま。)."
+      ],
+      "soSanh": [
+        "ja-n5-the-tu-dien",
+        "ja-n5-the-nai",
+        "ja-n5-the-ta"
+      ],
+      "tuKhoa": [
+        "futsuukei",
+        "plain form",
+        "thể thường",
+        "thể ngắn",
+        "thân mật"
+      ],
+      "quiz": [
+        {
+          "h": "Thể thường của 「行きませんでした」 là:",
+          "lc": [
+            "行かなかった",
+            "行かないだった",
+            "行きなかった"
+          ],
+          "da": 0,
+          "gt": "Phủ định quá khứ thể thường: thể ない đổi ない → なかった."
+        },
+        {
+          "h": "Thể thường của 「雨です」 là:",
+          "lc": [
+            "雨い",
+            "雨だ",
+            "雨な"
+          ],
+          "da": 1,
+          "gt": "Danh từ + です → danh từ + だ."
+        },
+        {
+          "h": "Thể thường của 「さむかったです」 là:",
+          "lc": [
+            "さむいだった",
+            "さむかっただ",
+            "さむかった"
+          ],
+          "da": 2,
+          "gt": "Tính từ đuôi い chỉ cần bỏ です, không thêm だ."
+        }
+      ]
+    },
+    {
+      "id": "ja-n5-to-omoimasu",
+      "nhom": "Thể thường",
+      "tieuDe": "〜と思います",
+      "mau": "Thể thường + と + 思います",
+      "nghia": "tôi nghĩ là ~, tôi cho rằng ~",
+      "giaiThich": "Dùng để nêu ý kiến, phán đoán hoặc suy đoán của người nói một cách nhẹ nhàng, không khẳng định chắc chắn. Nội dung suy nghĩ đứng trước と và phải ở thể thường.",
+      "cachGhep": [
+        "Động từ / tính từ đuôi い thể thường + と 思います",
+        "Tính từ đuôi な / danh từ + だ + と 思います (べんりだと 思います)",
+        "Hỏi ý kiến: N に ついて どう 思いますか ・ Đồng ý: わたしも そう 思います"
+      ],
+      "viDu": [
+        {
+          "c": "あしたは雨がふるとおもいます。",
+          "d": "あしたは あめが ふると おもいます。",
+          "v": "Tôi nghĩ ngày mai trời sẽ mưa."
+        },
+        {
+          "c": "この本はおもしろいとおもいます。",
+          "d": "この ほんは おもしろいと おもいます。",
+          "v": "Tôi nghĩ quyển sách này hay."
+        },
+        {
+          "c": "田中さんは来ないとおもいます。",
+          "d": "たなかさんは こないと おもいます。",
+          "v": "Tôi nghĩ anh Tanaka sẽ không đến."
+        },
+        {
+          "c": "日本の電車はべんりだとおもいます。",
+          "d": "にほんの でんしゃは べんりだと おもいます。",
+          "v": "Tôi nghĩ tàu điện ở Nhật tiện lợi."
+        }
+      ],
+      "luuY": [
+        "Trước と là thể thường, không dùng です / ます: sai おもしろいですと 思います.",
+        "Quên だ sau tính từ đuôi な / danh từ là lỗi hay gặp: べんりと 思います → べんりだと 思います.",
+        "“Tôi không nghĩ là anh ấy đến” thường nói 来ないと 思います (phủ định nằm ở vế trước)."
+      ],
+      "soSanh": [
+        "ja-n5-to-iimasu",
+        "ja-n5-deshou",
+        "ja-n5-the-thuong"
+      ],
+      "tuKhoa": [
+        "to omoimasu",
+        "to omou",
+        "tôi nghĩ",
+        "ý kiến",
+        "suy đoán"
+      ],
+      "quiz": [
+        {
+          "h": "あの 人は 学生（　）と 思います。",
+          "lc": [
+            "だ",
+            "な",
+            "の"
+          ],
+          "da": 0,
+          "gt": "Danh từ + だ + と 思います."
+        },
+        {
+          "h": "あしたは 雨が（　）と 思います。",
+          "lc": [
+            "ふって",
+            "ふる",
+            "ふり"
+          ],
+          "da": 1,
+          "gt": "Trước と 思います là thể thường: ふる."
+        },
+        {
+          "h": "この えいがは（　）と 思います。",
+          "lc": [
+            "おもしろいだ",
+            "おもしろく",
+            "おもしろい"
+          ],
+          "da": 2,
+          "gt": "Tính từ đuôi い thể thường giữ nguyên, không thêm だ."
+        }
+      ]
+    },
+    {
+      "id": "ja-n5-to-iimasu",
+      "nhom": "Thể thường",
+      "tieuDe": "〜と言います",
+      "mau": "「Câu」 + と + 言います ・ Thể thường + と + 言いました",
+      "nghia": "nói rằng ~, nói là ~",
+      "giaiThich": "Dùng để thuật lại lời nói. Trích dẫn trực tiếp thì giữ nguyên lời nói trong 「 」; trích dẫn gián tiếp thì đưa nội dung về thể thường. Trong cả hai trường hợp, nội dung được nói đi với と.",
+      "cachGhep": [
+        "Trực tiếp: 「nguyên văn」 + と 言います",
+        "Gián tiếp: thể thường + と 言いました (tính từ đuôi な / danh từ + だ + と)",
+        "Hỏi cách gọi: これは 日本語で 何と 言いますか (なんと)"
+      ],
+      "viDu": [
+        {
+          "c": "日本人はごはんのまえに「いただきます」と言います。",
+          "d": "にほんじんは ごはんの まえに 「いただきます」と いいます。",
+          "v": "Người Nhật nói “itadakimasu” trước bữa ăn."
+        },
+        {
+          "c": "田中さんはあした来ないと言いました。",
+          "d": "たなかさんは あした こないと いいました。",
+          "v": "Anh Tanaka nói ngày mai anh ấy không đến."
+        },
+        {
+          "c": "これは日本語で何と言いますか。",
+          "d": "これは にほんごで なんと いいますか。",
+          "v": "Cái này tiếng Nhật gọi là gì?"
+        }
+      ],
+      "luuY": [
+        "Nội dung lời nói đi với と, không phải を: sai 「おはよう」を 言います.",
+        "Trích dẫn gián tiếp không dùng です / ます trước と."
+      ],
+      "soSanh": [
+        "ja-n5-to-omoimasu",
+        "ja-n5-the-thuong"
+      ],
+      "tuKhoa": [
+        "to iimasu",
+        "to iu",
+        "nói rằng",
+        "trích dẫn",
+        "nan to iimasu ka"
+      ],
+      "quiz": [
+        {
+          "h": "ねる まえに 「おやすみなさい」（　）言います。",
+          "lc": [
+            "と",
+            "を",
+            "に"
+          ],
+          "da": 0,
+          "gt": "Nội dung lời nói đi với と."
+        },
+        {
+          "h": "山田さんは あした ひま（　）と 言いました。",
+          "lc": [
+            "な",
+            "だ",
+            "の"
+          ],
+          "da": 1,
+          "gt": "Trích dẫn gián tiếp: tính từ đuôi な + だ + と 言いました."
+        },
+        {
+          "h": "「ありがとう」は ベトナム語で 何（　）言いますか。",
+          "lc": [
+            "が",
+            "で",
+            "と"
+          ],
+          "da": 2,
+          "gt": "Hỏi cách nói: 何と 言いますか."
+        }
+      ]
+    },
+    {
+      "id": "ja-n5-deshou",
+      "nhom": "Thể thường",
+      "tieuDe": "〜でしょう",
+      "mau": "Thể thường (tính từ đuôi な / N bỏ だ) + でしょう",
+      "nghia": "có lẽ ~, chắc là ~",
+      "giaiThich": "Dùng để suy đoán về tương lai hoặc về điều chưa chắc chắn, dựa trên thông tin người nói có; hay gặp trong dự báo thời tiết. Thường đi với たぶん (có lẽ). Khi lên giọng ở cuối, でしょう trở thành câu hỏi xác nhận (“đúng không?”).",
+      "cachGhep": [
+        "Động từ / tính từ đuôi い thể thường + でしょう (ふるでしょう, さむいでしょう)",
+        "Tính từ đuôi な / danh từ + でしょう — KHÔNG có だ (ひまでしょう, 雨でしょう)",
+        "Thể thường của でしょう: だろう"
+      ],
+      "viDu": [
+        {
+          "c": "あしたは雨がふるでしょう。",
+          "d": "あしたは あめが ふるでしょう。",
+          "v": "Ngày mai có lẽ trời sẽ mưa."
+        },
+        {
+          "c": "北のほうはさむいでしょう。",
+          "d": "きたの ほうは さむいでしょう。",
+          "v": "Vùng phía bắc chắc là lạnh."
+        },
+        {
+          "c": "田中さんはたぶん来ないでしょう。",
+          "d": "たなかさんは たぶん こないでしょう。",
+          "v": "Anh Tanaka có lẽ sẽ không đến."
+        },
+        {
+          "c": "あしたはいい天気でしょう。",
+          "d": "あしたは いい てんきでしょう。",
+          "v": "Ngày mai có lẽ trời đẹp."
+        }
+      ],
+      "luuY": [
+        "Không thêm だ trước でしょう: sai 雨だでしょう, ひまだでしょう.",
+        "Không dùng でしょう để đoán về hành động có chủ ý của chính mình (sai: わたしは 行くでしょう); khi đó nói 行くと 思います."
+      ],
+      "soSanh": [
+        "ja-n5-to-omoimasu",
+        "ja-n4-deshou"
+      ],
+      "tuKhoa": [
+        "deshou",
+        "deshō",
+        "darou",
+        "có lẽ",
+        "suy đoán",
+        "tabun"
+      ],
+      "quiz": [
+        {
+          "h": "あしたは（　）でしょう。",
+          "lc": [
+            "さむい",
+            "さむいだ",
+            "さむく"
+          ],
+          "da": 0,
+          "gt": "Tính từ đuôi い thể thường + でしょう, không thêm だ."
+        },
+        {
+          "h": "Phó từ nào thường đi cùng 〜でしょう để chỉ sự suy đoán?",
+          "lc": [
+            "ぜんぜん",
+            "たぶん",
+            "どうぞ"
+          ],
+          "da": 1,
+          "gt": "たぶん (có lẽ) thường đi với 〜でしょう."
+        },
+        {
+          "h": "Sau danh từ 雨, trước でしょう cần thêm gì? あしたは 雨（　）でしょう。",
+          "lc": [
+            "だ",
+            "な",
+            "(không thêm gì)"
+          ],
+          "da": 2,
+          "gt": "Danh từ ghép thẳng với でしょう: 雨でしょう."
+        }
+      ]
+    },
+    {
+      "id": "ja-n5-menh-de-bo-nghia",
+      "nhom": "Thể thường",
+      "tieuDe": "Mệnh đề bổ nghĩa danh từ",
+      "mau": "Mệnh đề thể thường + N",
+      "nghia": "N mà ~ (cả một mệnh đề đứng trước để bổ nghĩa cho danh từ)",
+      "giaiThich": "Trong tiếng Nhật, mọi thành phần bổ nghĩa — kể cả một câu dài — đều đứng TRƯỚC danh từ, không có từ nối kiểu “mà”. Động từ trong mệnh đề bổ nghĩa ở thể thường, và chủ ngữ của mệnh đề đó đi với が (không dùng は).",
+      "cachGhep": [
+        "Động từ thể thường + N: 買った 本 / 行く ところ / 読んでいる 人 / 食べない もの",
+        "Chủ ngữ trong mệnh đề: N + が (わたしが 作った ケーキ)",
+        "Tính từ đuôi い + N, tính từ đuôi な + な + N, danh từ + の + N"
+      ],
+      "viDu": [
+        {
+          "c": "これはわたしが買った本です。",
+          "d": "これは わたしが かった ほんです。",
+          "v": "Đây là quyển sách mà tôi đã mua."
+        },
+        {
+          "c": "あそこで本を読んでいる人は田中さんです。",
+          "d": "あそこで ほんを よんでいる ひとは たなかさんです。",
+          "v": "Người đang đọc sách ở đằng kia là anh Tanaka."
+        },
+        {
+          "c": "きのう見たえいがはおもしろかったです。",
+          "d": "きのう みた えいがは おもしろかったです。",
+          "v": "Bộ phim tôi xem hôm qua rất hay."
+        },
+        {
+          "c": "わたしがすんでいるまちはしずかです。",
+          "d": "わたしが すんでいる まちは しずかです。",
+          "v": "Thị trấn nơi tôi đang sống thì yên tĩnh."
+        }
+      ],
+      "luuY": [
+        "Trật tự ngược hẳn tiếng Việt: “quyển sách (mà) tôi đã mua” → わたしが 買った 本. Người Việt hay đặt mệnh đề ra sau danh từ.",
+        "Không dùng thể ます trước danh từ: sai 買いました 本.",
+        "Không chèn の giữa động từ và danh từ: sai 買ったの 本."
+      ],
+      "soSanh": [
+        "ja-n5-tinh-tu-bo-nghia",
+        "ja-n5-the-thuong"
+      ],
+      "tuKhoa": [
+        "mệnh đề quan hệ",
+        "bổ nghĩa danh từ",
+        "rentai shuushoku",
+        "định ngữ",
+        "relative clause"
+      ],
+      "quiz": [
+        {
+          "h": "これは 母（　）作った ケーキです。",
+          "lc": [
+            "が",
+            "へ",
+            "を"
+          ],
+          "da": 0,
+          "gt": "Chủ ngữ trong mệnh đề bổ nghĩa đi với が."
+        },
+        {
+          "h": "きのう（　）レストランは おいしかったです。",
+          "lc": [
+            "行きました",
+            "行った",
+            "行って"
+          ],
+          "da": 1,
+          "gt": "Trước danh từ dùng thể thường: 行った レストラン."
+        },
+        {
+          "h": "めがねを（　）人は 山田さんです。(Người đang đeo kính.)",
+          "lc": [
+            "かけて",
+            "かけ",
+            "かけている"
+          ],
+          "da": 2,
+          "gt": "Mệnh đề bổ nghĩa ở thể thường: かけている + 人."
+        }
+      ]
+    },
+    {
+      "id": "ja-n5-n-desu",
+      "nhom": "Thể thường",
+      "tieuDe": "〜んです",
+      "mau": "Thể thường + んです (tính từ đuôi な / N + な + んです)",
+      "nghia": "là vì ~, chuyện là ~ (giải thích, hỏi nguyên do)",
+      "giaiThich": "Dùng khi người nói muốn giải thích lý do, hoàn cảnh, hoặc khi thấy điều gì đó và muốn người nghe giải thích. Cũng dùng để mở đầu trước khi nhờ vả hay xin lời khuyên. Trong văn viết, んです thành のです.",
+      "cachGhep": [
+        "Động từ / tính từ đuôi い thể thường + んです (行くんです, いたいんです)",
+        "Tính từ đuôi な / danh từ: bỏ だ, thêm な + んです (ひまなんです, 休みなんです)",
+        "Hỏi: どうしたんですか / どうして 〜んですか ・ Mở lời: 〜んですが、…"
+      ],
+      "viDu": [
+        {
+          "c": "どうしたんですか。",
+          "d": "どうしたんですか。",
+          "v": "Bạn bị làm sao vậy?"
+        },
+        {
+          "c": "あたまがいたいんです。",
+          "d": "あたまが いたいんです。",
+          "v": "Là do tôi bị đau đầu."
+        },
+        {
+          "c": "どうしておくれたんですか。",
+          "d": "どうして おくれたんですか。",
+          "v": "Tại sao bạn lại đến muộn?"
+        },
+        {
+          "c": "今日は休みなんです。",
+          "d": "きょうは やすみなんです。",
+          "v": "Chuyện là hôm nay tôi được nghỉ."
+        }
+      ],
+      "luuY": [
+        "Danh từ và tính từ đuôi な phải có な: sai 休みんです, 休みだんです.",
+        "Đừng dùng んです cho mọi câu thông báo bình thường; lạm dụng sẽ nghe như đang thanh minh hoặc chất vấn."
+      ],
+      "soSanh": [
+        "ja-n5-kara-vi",
+        "ja-n5-doushite-naze",
+        "ja-n4-n-desu"
+      ],
+      "tuKhoa": [
+        "n desu",
+        "ndesu",
+        "no desu",
+        "giải thích",
+        "nan desu"
+      ],
+      "quiz": [
+        {
+          "h": "今日は ひま（　）んです。",
+          "lc": [
+            "な",
+            "だ",
+            "の"
+          ],
+          "da": 0,
+          "gt": "Tính từ đuôi な + な + んです."
+        },
+        {
+          "h": "A: どうしたんですか。 B: おなかが（　）んです。",
+          "lc": [
+            "いたく",
+            "いたい",
+            "いたいな"
+          ],
+          "da": 1,
+          "gt": "Tính từ đuôi い thể thường + んです: いたいんです."
+        },
+        {
+          "h": "バスが（　）んです。(Vì xe buýt đã không đến.)",
+          "lc": [
+            "来ません",
+            "来ないな",
+            "来なかった"
+          ],
+          "da": 2,
+          "gt": "Trước んです là thể thường: 来なかった + んです."
+        }
+      ]
+    },
+    {
+      "id": "ja-n5-kara-vi",
+      "nhom": "Liên từ – nối câu",
+      "tieuDe": "〜から (vì)",
+      "mau": "Câu 1 + から、Câu 2",
+      "nghia": "vì ~ nên ~",
+      "giaiThich": "から nối hai câu, đặt sau câu chỉ LÝ DO; câu sau là kết quả, quyết định, lời đề nghị hay yêu cầu. Câu trước から có thể ở thể lịch sự hoặc thể thường. Cũng dùng để trả lời câu hỏi どうして.",
+      "cachGhep": [
+        "Câu lịch sự (です / ます) + から、… (lịch sự)",
+        "Thể thường + から、… (danh từ / tính từ đuôi な + だ + から)",
+        "Trả lời lý do: 〜から。 / thể thường + からです。"
+      ],
+      "viDu": [
+        {
+          "c": "時間がありませんから、タクシーで行きます。",
+          "d": "じかんが ありませんから、タクシーで いきます。",
+          "v": "Vì không có thời gian nên tôi đi bằng taxi."
+        },
+        {
+          "c": "あついですから、まどをあけてください。",
+          "d": "あついですから、まどを あけて ください。",
+          "v": "Vì nóng nên hãy mở cửa sổ ra."
+        },
+        {
+          "c": "きのうは休みでしたから、どこへも行きませんでした。",
+          "d": "きのうは やすみでしたから、どこへも いきませんでした。",
+          "v": "Vì hôm qua là ngày nghỉ nên tôi không đi đâu cả."
+        }
+      ],
+      "luuY": [
+        "Vị trí ngược tiếng Việt: “vì” đứng đầu vế, còn から đứng CUỐI vế lý do. Sai: から 時間が ありません、…",
+        "Tiếng Việt “vì… nên…” có hai từ; tiếng Nhật chỉ cần một から, không thêm gì ở vế sau.",
+        "Phân biệt với N + から (từ): 9時から."
+      ],
+      "soSanh": [
+        "ja-n5-kara-made",
+        "ja-n5-ga-nhung",
+        "ja-n5-te-kara",
+        "ja-n5-n-desu"
+      ],
+      "tuKhoa": [
+        "kara",
+        "vì",
+        "lý do",
+        "bởi vì",
+        "kara desu"
+      ],
+      "quiz": [
+        {
+          "h": "おなかが いたいです（　）、びょういんへ 行きます。",
+          "lc": [
+            "から",
+            "まで",
+            "しか"
+          ],
+          "da": 0,
+          "gt": "Vế trước là lý do → から."
+        },
+        {
+          "h": "Trong câu 「A から、B」, vế A là gì?",
+          "lc": [
+            "Kết quả",
+            "Lý do",
+            "Mục đích"
+          ],
+          "da": 1,
+          "gt": "から đứng sau vế chỉ lý do; B là kết quả."
+        },
+        {
+          "h": "安かったです（　）、たくさん 買いました。",
+          "lc": [
+            "まで",
+            "より",
+            "から"
+          ],
+          "da": 2,
+          "gt": "Vì rẻ nên mua nhiều: lý do + から."
+        }
+      ]
+    },
+    {
+      "id": "ja-n5-ga-nhung",
+      "nhom": "Liên từ – nối câu",
+      "tieuDe": "〜が (nhưng)",
+      "mau": "Câu 1 + が、Câu 2",
+      "nghia": "~ nhưng ~",
+      "giaiThich": "が đặt cuối câu thứ nhất để nối hai câu có nội dung trái ngược, đối lập. Ngoài ra が còn dùng để mở đầu câu chuyện một cách mềm mỏng (すみませんが、…), khi đó không mang nghĩa đối lập.",
+      "cachGhep": [
+        "Câu 1 (です / ます) + が、câu 2 (です / ます)",
+        "Mở lời: すみませんが、… / しつれいですが、…",
+        "Hội thoại: けど / けれども thay cho が"
+      ],
+      "viDu": [
+        {
+          "c": "日本語はむずかしいですが、おもしろいです。",
+          "d": "にほんごは むずかしいですが、おもしろいです。",
+          "v": "Tiếng Nhật khó nhưng thú vị."
+        },
+        {
+          "c": "この店はおいしいですが、高いです。",
+          "d": "この みせは おいしいですが、たかいです。",
+          "v": "Quán này ngon nhưng đắt."
+        },
+        {
+          "c": "すみませんが、駅はどこですか。",
+          "d": "すみませんが、えきは どこですか。",
+          "v": "Xin lỗi, cho tôi hỏi nhà ga ở đâu ạ?"
+        }
+      ],
+      "luuY": [
+        "が dính vào CUỐI vế trước rồi mới đến dấu phẩy, khác với “nhưng” đứng đầu vế sau.",
+        "Hai ý cùng chiều (rẻ và ngon) thì dùng 〜くて / 〜で chứ không dùng が.",
+        "Đừng nhầm với が đánh dấu chủ ngữ (đứng sau danh từ)."
+      ],
+      "soSanh": [
+        "ja-n5-kara-vi",
+        "ja-n5-kute-de",
+        "ja-n5-wa-vs-ga"
+      ],
+      "tuKhoa": [
+        "ga",
+        "nhưng",
+        "kedo",
+        "đối lập",
+        "sumimasen ga"
+      ],
+      "quiz": [
+        {
+          "h": "この へやは きれいです（　）、せまいです。",
+          "lc": [
+            "が",
+            "から",
+            "と"
+          ],
+          "da": 0,
+          "gt": "Hai ý trái chiều (đẹp – chật) nối bằng が."
+        },
+        {
+          "h": "りょうりは おいしかったです（　）、高かったです。",
+          "lc": [
+            "から",
+            "が",
+            "より"
+          ],
+          "da": 1,
+          "gt": "Ngon nhưng đắt: quan hệ đối lập → が."
+        },
+        {
+          "h": "Trong 「すみませんが、…」, が có vai trò gì?",
+          "lc": [
+            "Chỉ lý do",
+            "Chỉ sự lựa chọn",
+            "Mở đầu lời nói cho mềm mỏng"
+          ],
+          "da": 2,
+          "gt": "が ở đây là lời rào đón trước khi hỏi / nhờ, không mang nghĩa đối lập."
+        }
+      ]
+    },
+    {
+      "id": "ja-n5-toki",
+      "nhom": "Liên từ – nối câu",
+      "tieuDe": "〜とき",
+      "mau": "V thể thường / A-い / A-な + な / N + の + とき、…",
+      "nghia": "khi ~, lúc ~",
+      "giaiThich": "とき là một danh từ nghĩa là “lúc, khi”, nối hai vế để nói thời điểm xảy ra hành động hay trạng thái ở vế sau. Vì là danh từ nên cách ghép giống hệt cách bổ nghĩa cho danh từ.",
+      "cachGhep": [
+        "Động từ thể thường + とき (わからない とき, 行く とき)",
+        "Tính từ đuôi い + とき (さむい とき) ・ tính từ đuôi な + な + とき (ひまな とき)",
+        "Danh từ + の + とき (子どもの とき)"
+      ],
+      "viDu": [
+        {
+          "c": "子どものとき、よく川であそびました。",
+          "d": "こどもの とき、よく かわで あそびました。",
+          "v": "Khi còn nhỏ, tôi hay chơi ở sông."
+        },
+        {
+          "c": "ひまなとき、えいがを見ます。",
+          "d": "ひまな とき、えいがを みます。",
+          "v": "Khi rảnh, tôi xem phim."
+        },
+        {
+          "c": "みちがわからないとき、けいさつに聞きます。",
+          "d": "みちが わからない とき、けいさつに ききます。",
+          "v": "Khi không biết đường, tôi hỏi cảnh sát."
+        },
+        {
+          "c": "しんぶんを読むとき、めがねをかけます。",
+          "d": "しんぶんを よむ とき、めがねを かけます。",
+          "v": "Khi đọc báo, tôi đeo kính."
+        }
+      ],
+      "luuY": [
+        "Quên の / な là lỗi hay gặp: sai 子ども とき, ひま とき.",
+        "Tiếng Việt “khi” đứng đầu vế; とき đứng CUỐI vế chỉ thời điểm.",
+        "Không dùng thể ます trước とき: sai 読みます とき."
+      ],
+      "soSanh": [
+        "ja-n5-mae-ni",
+        "ja-n5-to-he",
+        "ja-n5-tara"
+      ],
+      "tuKhoa": [
+        "toki",
+        "khi",
+        "lúc",
+        "no toki"
+      ],
+      "quiz": [
+        {
+          "h": "子ども（　）とき、うみの ちかくに すんでいました。",
+          "lc": [
+            "の",
+            "な",
+            "に"
+          ],
+          "da": 0,
+          "gt": "Danh từ + の + とき."
+        },
+        {
+          "h": "ひま（　）とき、あそびに 来て ください。",
+          "lc": [
+            "の",
+            "な",
+            "だ"
+          ],
+          "da": 1,
+          "gt": "Tính từ đuôi な + な + とき."
+        },
+        {
+          "h": "“Khi trời lạnh” nói thế nào?",
+          "lc": [
+            "さむいな とき",
+            "さむいの とき",
+            "さむい とき"
+          ],
+          "da": 2,
+          "gt": "Tính từ đuôi い ghép thẳng với とき."
+        }
+      ]
+    },
+    {
+      "id": "ja-n5-to-he",
+      "nhom": "Điều kiện",
+      "tieuDe": "〜と (hễ… thì)",
+      "mau": "V-từ điển + と、…",
+      "nghia": "hễ ~ thì ~, cứ ~ là ~",
+      "giaiThich": "Diễn tả quan hệ tất yếu: cứ việc ở vế trước xảy ra thì việc ở vế sau tự động, chắc chắn xảy ra. Dùng cho hiện tượng tự nhiên, cách vận hành máy móc, chỉ đường, thói quen. Vế sau không dùng câu thể hiện ý chí, lời mời hay yêu cầu.",
+      "cachGhep": [
+        "Động từ thể từ điển + と、… (phủ định: V-ない + と)",
+        "Vế sau: sự việc tất yếu, thường ở thì hiện tại",
+        "Không dùng: 〜と、〜たいです / 〜ましょう / 〜てください"
+      ],
+      "viDu": [
+        {
+          "c": "このボタンをおすと、おつりが出ます。",
+          "d": "この ボタンを おすと、おつりが でます。",
+          "v": "Hễ ấn nút này thì tiền thừa sẽ ra."
+        },
+        {
+          "c": "右へまがると、ぎんこうがあります。",
+          "d": "みぎへ まがると、ぎんこうが あります。",
+          "v": "Rẽ phải là sẽ thấy ngân hàng."
+        },
+        {
+          "c": "はるになると、花がさきます。",
+          "d": "はるに なると、はなが さきます。",
+          "v": "Cứ đến mùa xuân là hoa nở."
+        }
+      ],
+      "luuY": [
+        "Vế sau có ý muốn, rủ rê, nhờ vả thì dùng 〜たら: sai 日本へ 行くと、すしを 食べたいです.",
+        "Đừng nhầm với と nối danh từ (và) hay と trích dẫn (と言います)."
+      ],
+      "soSanh": [
+        "ja-n5-tara",
+        "ja-n5-toki",
+        "ja-n5-to",
+        "ja-n4-ba"
+      ],
+      "tuKhoa": [
+        "to",
+        "hễ thì",
+        "điều kiện tất yếu",
+        "cứ là",
+        "to joken"
+      ],
+      "quiz": [
+        {
+          "h": "まっすぐ（　）と、駅が あります。",
+          "lc": [
+            "行く",
+            "行った",
+            "行って"
+          ],
+          "da": 0,
+          "gt": "Trước と (điều kiện) là thể từ điển: 行く."
+        },
+        {
+          "h": "Vế sau của 「〜と、…」 KHÔNG dùng loại câu nào?",
+          "lc": [
+            "Hiện tượng tự nhiên",
+            "Ý muốn, lời mời, yêu cầu",
+            "Kết quả vận hành máy móc"
+          ],
+          "da": 1,
+          "gt": "〜と chỉ kết quả tất yếu nên vế sau không chứa ý chí của người nói."
+        },
+        {
+          "h": "おさけを 飲む（　）、かおが あかく なります。",
+          "lc": [
+            "まで",
+            "しか",
+            "と"
+          ],
+          "da": 2,
+          "gt": "Cứ uống rượu là mặt đỏ — kết quả tất yếu → と."
+        }
+      ]
+    },
+    {
+      "id": "ja-n5-tara",
+      "nhom": "Điều kiện",
+      "tieuDe": "〜たら",
+      "mau": "V-た + ら ・ A-かった + ら ・ A-な / N + だった + ら、…",
+      "nghia": "nếu ~ thì ~; sau khi ~ thì ~",
+      "giaiThich": "Có hai nghĩa. Một là giả định: NẾU điều ở vế trước xảy ra thì làm việc ở vế sau (thường đi với もし). Hai là điều chắc chắn sẽ xảy ra: SAU KHI việc ở vế trước xong thì làm việc ở vế sau. Vế sau dùng được ý muốn, lời mời, yêu cầu.",
+      "cachGhep": [
+        "Động từ thể た + ら (ふったら) ・ phủ định: V-なかったら",
+        "Tính từ đuôi い: A-かったら (安かったら) ・ phủ định: A-くなかったら",
+        "Tính từ đuôi な / danh từ: 〜だったら (ひまだったら, 雨だったら)"
+      ],
+      "viDu": [
+        {
+          "c": "雨がふったら、行きません。",
+          "d": "あめが ふったら、いきません。",
+          "v": "Nếu trời mưa thì tôi không đi."
+        },
+        {
+          "c": "安かったら、買います。",
+          "d": "やすかったら、かいます。",
+          "v": "Nếu rẻ thì tôi mua."
+        },
+        {
+          "c": "ひまだったら、あそびに来てください。",
+          "d": "ひまだったら、あそびに きて ください。",
+          "v": "Nếu rảnh thì hãy đến chơi nhé."
+        },
+        {
+          "c": "駅についたら、でんわしてください。",
+          "d": "えきに ついたら、でんわして ください。",
+          "v": "Khi nào đến ga thì hãy gọi điện cho tôi."
+        }
+      ],
+      "luuY": [
+        "Dù là chuyện tương lai, vế trước vẫn chia dạng た — đừng hiểu nhầm là quá khứ.",
+        "Tính từ đuôi い: 安かったら, không nói 安いたら; いい → よかったら."
+      ],
+      "soSanh": [
+        "ja-n5-to-he",
+        "ja-n5-temo",
+        "ja-n4-ba",
+        "ja-n4-nara"
+      ],
+      "tuKhoa": [
+        "tara",
+        "nếu",
+        "điều kiện",
+        "moshi",
+        "dattara"
+      ],
+      "quiz": [
+        {
+          "h": "お金が（　）、車を 買いたいです。",
+          "lc": [
+            "あったら",
+            "あるたら",
+            "ありたら"
+          ],
+          "da": 0,
+          "gt": "あります → あった + ら."
+        },
+        {
+          "h": "「高い」 chia theo mẫu 〜たら là:",
+          "lc": [
+            "高いたら",
+            "高かったら",
+            "高くたら"
+          ],
+          "da": 1,
+          "gt": "Tính từ đuôi い: い → かったら."
+        },
+        {
+          "h": "「ひま」 chia theo mẫu 〜たら là:",
+          "lc": [
+            "ひまたら",
+            "ひまかったら",
+            "ひまだったら"
+          ],
+          "da": 2,
+          "gt": "Tính từ đuôi な: + だったら."
+        }
+      ]
+    },
+    {
+      "id": "ja-n5-temo",
+      "nhom": "Điều kiện",
+      "tieuDe": "〜ても",
+      "mau": "V-て + も ・ A-くて + も ・ A-な / N + でも、…",
+      "nghia": "dù ~ cũng ~, cho dù ~ vẫn ~",
+      "giaiThich": "Diễn tả điều kiện ngược: dù việc ở vế trước xảy ra thì kết quả ở vế sau vẫn không thay đổi, trái với điều người ta thường nghĩ. Thường đi với いくら (dù bao nhiêu) hoặc どんなに.",
+      "cachGhep": [
+        "Động từ thể て + も (ふっても) ・ phủ định: V-なくても",
+        "Tính từ đuôi い: A-くても (高くても)",
+        "Tính từ đuôi な / danh từ: 〜でも (しずかでも, 日曜日でも)"
+      ],
+      "viDu": [
+        {
+          "c": "雨がふっても、行きます。",
+          "d": "あめが ふっても、いきます。",
+          "v": "Dù trời mưa tôi vẫn đi."
+        },
+        {
+          "c": "高くても、買います。",
+          "d": "たかくても、かいます。",
+          "v": "Dù đắt tôi cũng mua."
+        },
+        {
+          "c": "日曜日でも、はたらきます。",
+          "d": "にちようびでも、はたらきます。",
+          "v": "Dù là chủ nhật tôi vẫn làm việc."
+        },
+        {
+          "c": "いくらかんがえても、わかりません。",
+          "d": "いくら かんがえても、わかりません。",
+          "v": "Dù nghĩ bao nhiêu tôi cũng không hiểu."
+        }
+      ],
+      "luuY": [
+        "Ngược nghĩa với 〜たら: 雨が ふったら、行きません (nếu mưa thì không đi) ↔ 雨が ふっても、行きます (dù mưa vẫn đi).",
+        "Đừng nhầm với 〜てもいいです (được phép)."
+      ],
+      "soSanh": [
+        "ja-n5-tara",
+        "ja-n5-te-mo-ii",
+        "ja-n4-noni-gyakusetsu",
+        "ja-n3-tatoe-temo"
+      ],
+      "tuKhoa": [
+        "temo",
+        "te mo",
+        "demo",
+        "dù",
+        "cho dù",
+        "ikura temo"
+      ],
+      "quiz": [
+        {
+          "h": "雨が（　）、しあいを します。(Dù mưa vẫn thi đấu.)",
+          "lc": [
+            "ふっても",
+            "ふるても",
+            "ふりても"
+          ],
+          "da": 0,
+          "gt": "ふります → thể て ふって + も."
+        },
+        {
+          "h": "「安い」 chia theo mẫu 〜ても là:",
+          "lc": [
+            "安いても",
+            "安くても",
+            "安でも"
+          ],
+          "da": 1,
+          "gt": "Tính từ đuôi い: い → くても."
+        },
+        {
+          "h": "「しずか」 chia theo mẫu 〜ても là:",
+          "lc": [
+            "しずかくても",
+            "しずかても",
+            "しずかでも"
+          ],
+          "da": 2,
+          "gt": "Tính từ đuôi な: + でも."
+        }
+      ]
+    }
+  ]
+}

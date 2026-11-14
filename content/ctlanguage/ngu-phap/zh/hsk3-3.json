@@ -1,0 +1,1305 @@
+{
+  "nn": "zh",
+  "cap": "HSK3",
+  "diem": [
+    {
+      "id": "zh-hsk3-cai-jiu",
+      "nhom": "Phó từ",
+      "tieuDe": "才 và 就 (thời gian / số lượng)",
+      "mau": "thời gian / số lượng + 就 + V + 了 · thời gian / số lượng + 才 + V",
+      "nghia": "就: đã ~ (sớm, nhanh, ít); 才: mới ~ (muộn, chậm, nhiều)",
+      "giaiThich": "Hai phó từ thể hiện cảm nhận của người nói về thời gian hay số lượng. 就 cho rằng việc xảy ra sớm, nhanh, dễ dàng; 才 cho rằng việc xảy ra muộn, chậm, tốn nhiều công. Cùng một giờ có thể dùng cả hai tuỳ người nói thấy sớm hay muộn.",
+      "cachGhep": [
+        "Thời gian / số lượng + 就 + V + 了: 六点就起床了",
+        "Thời gian / số lượng + 才 + V (không có 了 cuối câu): 十二点才睡觉",
+        "才 và 就 đứng sau chủ ngữ và từ chỉ thời gian, ngay trước động từ"
+      ],
+      "viDu": [
+        {
+          "c": "他六点就起床了。",
+          "d": "Tā liù diǎn jiù qǐchuáng le.",
+          "v": "Sáu giờ anh ấy đã dậy rồi."
+        },
+        {
+          "c": "我十二点才睡觉。",
+          "d": "Wǒ shí'èr diǎn cái shuìjiào.",
+          "v": "Mười hai giờ tôi mới đi ngủ."
+        },
+        {
+          "c": "这本书我看了三遍才看懂。",
+          "d": "Zhè běn shū wǒ kàn le sān biàn cái kàndǒng.",
+          "v": "Cuốn sách này tôi đọc ba lần mới hiểu."
+        },
+        {
+          "c": "你怎么现在才来？",
+          "d": "Nǐ zěnme xiànzài cái lái?",
+          "v": "Sao bây giờ bạn mới đến?"
+        }
+      ],
+      "luuY": [
+        "Câu có 才 thường không thêm 了 cuối câu: 他十点才起床了 ✗ → 他十点才起床 ✓. Câu có 就 thì thường có 了.",
+        "Tiếng Việt 'mới' có hai nghĩa: 'mới đến lúc nãy' là 刚; 'mãi tới giờ mới' là 才."
+      ],
+      "soSanh": [
+        "zh-hsk3-gang-gangcai"
+      ],
+      "tuKhoa": [
+        "cai",
+        "jiu",
+        "mới",
+        "đã",
+        "sớm muộn"
+      ],
+      "quiz": [
+        {
+          "h": "电影八点开始，他八点半（　）来。",
+          "lc": [
+            "就",
+            "才",
+            "更",
+            "极"
+          ],
+          "da": 1,
+          "gt": "Đến sau giờ chiếu, người nói thấy muộn → 才."
+        },
+        {
+          "h": "坐飞机很快，两个小时（　）到了。",
+          "lc": [
+            "才",
+            "更",
+            "就",
+            "刚才"
+          ],
+          "da": 2,
+          "gt": "Người nói thấy nhanh (很快) và câu có 了 → 就."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "他十点才起床。",
+            "他十点才起床了。",
+            "他才十点起床了。"
+          ],
+          "da": 0,
+          "gt": "Câu có 才 (muộn) không thêm 了 cuối câu."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-gang-gangcai",
+      "nhom": "Phó từ",
+      "tieuDe": "刚 và 刚才",
+      "mau": "S + 刚 + V · 刚才 + S + V / S + 刚才 + V",
+      "nghia": "刚: vừa mới ~; 刚才: lúc nãy, vừa nãy",
+      "giaiThich": "刚 là phó từ, chỉ việc xảy ra chưa lâu theo cảm nhận của người nói (có thể là vài phút, cũng có thể là vài tháng). 刚才 là danh từ chỉ thời gian, nghĩa là 'cách đây ít phút'. Vì khác từ loại nên vị trí và cách dùng khác nhau.",
+      "cachGhep": [
+        "S + 刚 + V (+ thời lượng): 刚到家, 刚来三个月 — 刚 chỉ đứng sau chủ ngữ",
+        "刚才 đứng trước hoặc sau chủ ngữ: 刚才他来了 / 他刚才来了",
+        "刚才 đi được với phủ định: 刚才没看见; 刚 thì không",
+        "刚才 làm định ngữ được: 刚才的事"
+      ],
+      "viDu": [
+        {
+          "c": "我刚到家。",
+          "d": "Wǒ gāng dào jiā.",
+          "v": "Tôi vừa mới về đến nhà."
+        },
+        {
+          "c": "刚才谁来电话了？",
+          "d": "Gāngcái shéi lái diànhuà le?",
+          "v": "Lúc nãy ai gọi điện đến thế?"
+        },
+        {
+          "c": "他刚来中国三个月。",
+          "d": "Tā gāng lái Zhōngguó sān gè yuè.",
+          "v": "Anh ấy mới đến Trung Quốc ba tháng."
+        },
+        {
+          "c": "你刚才为什么不说话？",
+          "d": "Nǐ gāngcái wèi shénme bù shuōhuà?",
+          "v": "Lúc nãy tại sao bạn không nói gì?"
+        }
+      ],
+      "luuY": [
+        "Sau 刚 có thể có thời lượng (刚来三个月); sau 刚才 thì không: 刚才来三个月 ✗.",
+        "Câu có 刚 thường không thêm 了 cuối câu: 我刚到家 (ít nói 我刚到家了).",
+        "刚 không đứng trước chủ ngữ: 刚我到家 ✗."
+      ],
+      "soSanh": [
+        "zh-hsk3-cai-jiu"
+      ],
+      "tuKhoa": [
+        "gang",
+        "gangcai",
+        "vừa mới",
+        "lúc nãy",
+        "vừa nãy"
+      ],
+      "quiz": [
+        {
+          "h": "我（　）来北京一个星期，还不习惯。",
+          "lc": [
+            "刚才",
+            "刚",
+            "终于",
+            "一直"
+          ],
+          "da": 1,
+          "gt": "Sau có thời lượng (一个星期) và nghĩa 'mới đến' → 刚."
+        },
+        {
+          "h": "（　）你去哪儿了？我找了你半天。",
+          "lc": [
+            "刚才",
+            "刚",
+            "才",
+            "更"
+          ],
+          "da": 0,
+          "gt": "Đứng trước chủ ngữ và chỉ 'lúc nãy' chỉ có thể là danh từ thời gian 刚才."
+        },
+        {
+          "h": "Câu nào SAI?",
+          "lc": [
+            "我刚吃完饭。",
+            "我刚才没看见他。",
+            "我刚没看见他。"
+          ],
+          "da": 2,
+          "gt": "刚 không đi với phủ định; muốn nói 'lúc nãy không thấy' phải dùng 刚才."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-yizhi",
+      "nhom": "Phó từ",
+      "tieuDe": "一直",
+      "mau": "S + 一直 + V / Adj · 一直 + 往 / 向 + hướng + 走",
+      "nghia": "suốt, liên tục, vẫn luôn ~; (đi) thẳng",
+      "giaiThich": "一直 chỉ một hành động hay trạng thái kéo dài liên tục, không gián đoạn trong một khoảng thời gian. Khi chỉ đường, 一直 nghĩa là đi thẳng một mạch, không rẽ.",
+      "cachGhep": [
+        "S + 一直 + (在) + V: 一直在工作",
+        "Phủ định đặt sau 一直: 一直 + 没 / 不 + V — 一直没来",
+        "Chỉ đường: 一直 + 往 / 向 + 前 / 东… + 走"
+      ],
+      "viDu": [
+        {
+          "c": "他一直在这家公司工作。",
+          "d": "Tā yìzhí zài zhè jiā gōngsī gōngzuò.",
+          "v": "Anh ấy vẫn luôn làm việc ở công ty này."
+        },
+        {
+          "c": "昨天晚上一直下雨。",
+          "d": "Zuótiān wǎnshang yìzhí xià yǔ.",
+          "v": "Tối hôm qua mưa suốt."
+        },
+        {
+          "c": "一直往前走，就到银行了。",
+          "d": "Yìzhí wǎng qián zǒu, jiù dào yínháng le.",
+          "v": "Đi thẳng về phía trước là đến ngân hàng."
+        },
+        {
+          "c": "我一直没有时间去看他。",
+          "d": "Wǒ yìzhí méiyǒu shíjiān qù kàn tā.",
+          "v": "Tôi mãi vẫn chưa có thời gian đi thăm anh ấy."
+        }
+      ],
+      "luuY": [
+        "一直 là một mạch liên tục; việc lặp lại nhiều lần thì dùng 总是.",
+        "一 trong 一直 đọc yì (trước thanh 2)."
+      ],
+      "soSanh": [
+        "zh-hsk3-zongshi"
+      ],
+      "tuKhoa": [
+        "yizhi",
+        "suốt",
+        "liên tục",
+        "đi thẳng",
+        "vẫn luôn"
+      ],
+      "quiz": [
+        {
+          "h": "从早上到现在，他（　）在看书。",
+          "lc": [
+            "一直",
+            "一起",
+            "一共",
+            "一样"
+          ],
+          "da": 0,
+          "gt": "Hành động kéo dài liên tục từ sáng tới giờ → 一直."
+        },
+        {
+          "h": "一直往前走 nghĩa là gì?",
+          "lc": [
+            "cùng nhau đi về phía trước",
+            "đi thẳng về phía trước",
+            "vừa mới đi về phía trước"
+          ],
+          "da": 1,
+          "gt": "Khi chỉ đường, 一直 = đi thẳng một mạch."
+        },
+        {
+          "h": "'Suốt thời gian qua tôi không gặp được anh ấy' nói thế nào?",
+          "lc": [
+            "我没一直见到他。",
+            "我一直见没到他。",
+            "我一直没见到他。"
+          ],
+          "da": 2,
+          "gt": "Từ phủ định đặt sau 一直: 一直没 + V."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-zongshi",
+      "nhom": "Phó từ",
+      "tieuDe": "总是",
+      "mau": "S + 总是 + V / Adj",
+      "nghia": "luôn luôn, lúc nào cũng, lần nào cũng ~",
+      "giaiThich": "总是 chỉ một việc lặp đi lặp lại, lần nào cũng như vậy, thường là thói quen hay quy luật. Khẩu ngữ có thể rút gọn thành 总. Hay dùng khi nhận xét hoặc phàn nàn về thói quen của ai đó.",
+      "cachGhep": [
+        "S + 总是 + V + O: 总是迟到",
+        "S + 总是 + 很 + Adj: 总是很忙",
+        "Phủ định đặt sau: 总是 + 不 + V — 总是不吃早饭"
+      ],
+      "viDu": [
+        {
+          "c": "他总是第一个到教室。",
+          "d": "Tā zǒngshì dì yī gè dào jiàoshì.",
+          "v": "Anh ấy luôn là người đầu tiên đến lớp."
+        },
+        {
+          "c": "你为什么总是迟到？",
+          "d": "Nǐ wèi shénme zǒngshì chídào?",
+          "v": "Tại sao bạn lúc nào cũng đến muộn?"
+        },
+        {
+          "c": "她总是不吃早饭。",
+          "d": "Tā zǒngshì bù chī zǎofàn.",
+          "v": "Cô ấy lúc nào cũng không ăn sáng."
+        },
+        {
+          "c": "妈妈总是很忙。",
+          "d": "Māma zǒngshì hěn máng.",
+          "v": "Mẹ lúc nào cũng rất bận."
+        }
+      ],
+      "luuY": [
+        "总是 đứng sau chủ ngữ, trước động từ: 总是他迟到 ✗ (nếu ý là 'anh ấy luôn đến muộn') → 他总是迟到 ✓.",
+        "总是 (nhiều lần lặp lại) khác 一直 (một lần kéo dài liên tục): 雨一直下 ✓, 雨总是下 chỉ đúng khi nói 'ở đây hay mưa'."
+      ],
+      "soSanh": [
+        "zh-hsk3-yizhi"
+      ],
+      "tuKhoa": [
+        "zongshi",
+        "zong",
+        "luôn luôn",
+        "lúc nào cũng",
+        "thói quen"
+      ],
+      "quiz": [
+        {
+          "h": "他每次考试（　）考得很好。",
+          "lc": [
+            "总是",
+            "刚才",
+            "终于",
+            "马上"
+          ],
+          "da": 0,
+          "gt": "Có 每次 (mỗi lần) — việc lặp lại lần nào cũng vậy → 总是."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "总是他上课迟到。",
+            "他上课总是迟到。",
+            "他上课迟到总是。"
+          ],
+          "da": 1,
+          "gt": "总是 đứng sau chủ ngữ, trước động từ 迟到."
+        },
+        {
+          "h": "雨（　）下了三天，没有停。",
+          "lc": [
+            "总是",
+            "马上",
+            "一直",
+            "刚才"
+          ],
+          "da": 2,
+          "gt": "Mưa liên tục không ngừng trong ba ngày là một mạch kéo dài → 一直."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-zhongyu",
+      "nhom": "Phó từ",
+      "tieuDe": "终于",
+      "mau": "S + 终于 + V / Adj + 了",
+      "nghia": "cuối cùng (thì cũng) ~",
+      "giaiThich": "终于 cho biết sau một thời gian dài chờ đợi hoặc cố gắng, kết quả mong muốn cuối cùng đã xảy ra. Thường mang cảm giác nhẹ nhõm, vui mừng, và cuối câu hay có 了.",
+      "cachGhep": [
+        "S + 终于 + V + 了: 终于来了",
+        "S + 终于 + V + bổ ngữ kết quả + (O) + 了: 终于找到了",
+        "终于 đứng sau chủ ngữ, trước động từ"
+      ],
+      "viDu": [
+        {
+          "c": "我们终于到了。",
+          "d": "Wǒmen zhōngyú dào le.",
+          "v": "Cuối cùng chúng ta cũng đến nơi rồi."
+        },
+        {
+          "c": "等了一个小时，公共汽车终于来了。",
+          "d": "Děng le yí gè xiǎoshí, gōnggòng qìchē zhōngyú lái le.",
+          "v": "Đợi một tiếng đồng hồ, cuối cùng xe buýt cũng đến."
+        },
+        {
+          "c": "他终于明白了老师的意思。",
+          "d": "Tā zhōngyú míngbai le lǎoshī de yìsi.",
+          "v": "Cuối cùng anh ấy cũng hiểu ý của thầy giáo."
+        },
+        {
+          "c": "你终于来了！我们都在等你。",
+          "d": "Nǐ zhōngyú lái le! Wǒmen dōu zài děng nǐ.",
+          "v": "Cuối cùng bạn cũng đến rồi! Chúng tôi đều đang đợi bạn."
+        }
+      ],
+      "luuY": [
+        "终于 dùng cho việc đã thành hiện thực, không dùng cho việc chưa xảy ra hay câu mệnh lệnh.",
+        "'Cuối cùng' theo thứ tự (việc sau cùng trong một chuỗi) là 最后, không phải 终于: 最后，我们去喝咖啡."
+      ],
+      "tuKhoa": [
+        "zhongyu",
+        "cuối cùng",
+        "rốt cuộc cũng",
+        "zuihou"
+      ],
+      "quiz": [
+        {
+          "h": "找了半天，我（　）找到手机了。",
+          "lc": [
+            "终于",
+            "总是",
+            "刚才",
+            "更"
+          ],
+          "da": 0,
+          "gt": "Tìm rất lâu rồi mới thấy — kết quả mong đợi sau thời gian dài → 终于."
+        },
+        {
+          "h": "终于 dùng khi nào?",
+          "lc": [
+            "việc xảy ra rất sớm",
+            "việc xảy ra sau thời gian dài chờ đợi, cố gắng",
+            "việc lặp lại nhiều lần"
+          ],
+          "da": 1,
+          "gt": "终于 nhấn mạnh kết quả đến sau một quá trình dài."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "我们到了终于北京。",
+            "我们到北京终于。",
+            "我们终于到北京了。"
+          ],
+          "da": 2,
+          "gt": "终于 đứng sau chủ ngữ, trước động từ; cuối câu có 了."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-qishi",
+      "nhom": "Phó từ",
+      "tieuDe": "其实",
+      "mau": "…，其实 + câu · 其实 + S + V / S + 其实 + V",
+      "nghia": "thật ra, thực ra ~",
+      "giaiThich": "其实 dùng để nêu tình hình thực tế, thường trái với vẻ bề ngoài hoặc với điều vừa nói ở vế trước. Có thể đứng đầu vế câu hoặc sau chủ ngữ.",
+      "cachGhep": [
+        "Vế 1 (bề ngoài / lời nói)，其实 + vế 2 (sự thật)",
+        "其实 + S + V… / S + 其实 + V…"
+      ],
+      "viDu": [
+        {
+          "c": "这个菜看起来很辣，其实不辣。",
+          "d": "Zhège cài kàn qǐlái hěn là, qíshí bú là.",
+          "v": "Món này trông có vẻ rất cay, thật ra không cay."
+        },
+        {
+          "c": "其实我不太喜欢喝咖啡。",
+          "d": "Qíshí wǒ bú tài xǐhuan hē kāfēi.",
+          "v": "Thật ra tôi không thích uống cà phê lắm."
+        },
+        {
+          "c": "他说他不累，其实他很累。",
+          "d": "Tā shuō tā bú lèi, qíshí tā hěn lèi.",
+          "v": "Anh ấy nói anh ấy không mệt, thật ra anh ấy rất mệt."
+        },
+        {
+          "c": "你其实早就知道了，对吗？",
+          "d": "Nǐ qíshí zǎo jiù zhīdào le, duì ma?",
+          "v": "Thật ra bạn đã biết từ lâu rồi, đúng không?"
+        }
+      ],
+      "luuY": [
+        "其实 không đứng giữa động từ năng nguyện và động từ chính: 我不想其实去 ✗.",
+        "Đừng nhầm với 真的 (thật sự — nhấn mạnh mức độ thật): 我真的很累 khác 其实我很累."
+      ],
+      "tuKhoa": [
+        "qishi",
+        "thật ra",
+        "thực ra",
+        "sự thật là"
+      ],
+      "quiz": [
+        {
+          "h": "他看起来二十岁，（　）已经三十五了。",
+          "lc": [
+            "马上",
+            "其实",
+            "刚",
+            "更"
+          ],
+          "da": 1,
+          "gt": "Vế sau nêu sự thật trái với vẻ ngoài → 其实."
+        },
+        {
+          "h": "其实 nghĩa là gì?",
+          "lc": [
+            "cuối cùng",
+            "hầu như",
+            "thật ra"
+          ],
+          "da": 2,
+          "gt": "其实 = thật ra; 终于 = cuối cùng; 几乎 = hầu như."
+        },
+        {
+          "h": "Câu nào SAI?",
+          "lc": [
+            "我不想其实去。",
+            "我其实不想去。",
+            "其实我不想去。"
+          ],
+          "da": 0,
+          "gt": "其实 đứng đầu câu hoặc sau chủ ngữ, không chen giữa 想 và 去."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-jihu",
+      "nhom": "Phó từ",
+      "tieuDe": "几乎",
+      "mau": "S + 几乎 + 都 / 每… / 没(有)… / V",
+      "nghia": "hầu như, gần như ~; suýt nữa ~",
+      "giaiThich": "几乎 cho biết tình hình rất gần với toàn bộ hoặc với con số không, chỉ thiếu một chút. Thường đi với 都, 每, 所有, 没有. Trước một động từ đơn lẻ như 忘了, nó có nghĩa 'suýt nữa thì'.",
+      "cachGhep": [
+        "几乎 + 每 + lượng từ + (N) + 都 + V: 几乎每天都跑步",
+        "N + 几乎 + 都 + V: 这里的人我几乎都认识",
+        "几乎 + 没(有) + N / V: 几乎没有人",
+        "几乎 + V + 了: 几乎忘了 (suýt quên)"
+      ],
+      "viDu": [
+        {
+          "c": "他几乎每天都去跑步。",
+          "d": "Tā jīhū měi tiān dōu qù pǎobù.",
+          "v": "Hầu như ngày nào anh ấy cũng đi chạy bộ."
+        },
+        {
+          "c": "这里的人我几乎都认识。",
+          "d": "Zhèlǐ de rén wǒ jīhū dōu rènshi.",
+          "v": "Người ở đây tôi hầu như đều quen."
+        },
+        {
+          "c": "教室里几乎没有人。",
+          "d": "Jiàoshì li jīhū méiyǒu rén.",
+          "v": "Trong lớp học hầu như không có ai."
+        },
+        {
+          "c": "我几乎忘了今天是你的生日。",
+          "d": "Wǒ jīhū wàng le jīntiān shì nǐ de shēngrì.",
+          "v": "Tôi suýt quên hôm nay là sinh nhật bạn."
+        }
+      ],
+      "luuY": [
+        "几 trong 几乎 đọc jī (thanh 1), khác 几 jǐ (mấy).",
+        "几乎 đứng trước 都 / 每 / 没有, không đứng cuối câu: 我都认识几乎 ✗."
+      ],
+      "tuKhoa": [
+        "jihu",
+        "hầu như",
+        "gần như",
+        "suýt"
+      ],
+      "quiz": [
+        {
+          "h": "几乎 nghĩa là gì?",
+          "lc": [
+            "hầu như",
+            "thật ra",
+            "luôn luôn"
+          ],
+          "da": 0,
+          "gt": "几乎 = hầu như, gần như."
+        },
+        {
+          "h": "作业太多了，我（　）没有时间休息。",
+          "lc": [
+            "更",
+            "几乎",
+            "刚才",
+            "极了"
+          ],
+          "da": 1,
+          "gt": "'Hầu như không có thời gian' = 几乎没有时间."
+        },
+        {
+          "h": "我们班的同学（　）都去过北京，只有小王没去过。",
+          "lc": [
+            "马上",
+            "刚",
+            "几乎",
+            "才"
+          ],
+          "da": 2,
+          "gt": "Chỉ thiếu một người → gần như tất cả: 几乎都."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-mashang",
+      "nhom": "Phó từ",
+      "tieuDe": "马上",
+      "mau": "S + 马上 + (就) + V · 马上 + 就要 + V + 了",
+      "nghia": "ngay, lập tức, sắp ~ ngay",
+      "giaiThich": "马上 cho biết hành động xảy ra ngay lập tức hoặc trong thời gian rất ngắn nữa. Hay đi với 就, và với 就要…了 khi nói việc sắp xảy ra đến nơi.",
+      "cachGhep": [
+        "S + 马上 + (就) + V: 我马上来 / 我马上就来",
+        "S + 马上 + 就要 + V + 了: 电影马上就要开始了",
+        "马上 đứng sau chủ ngữ, trước 就 và động từ"
+      ],
+      "viDu": [
+        {
+          "c": "请等一下，我马上来。",
+          "d": "Qǐng děng yíxià, wǒ mǎshàng lái.",
+          "v": "Xin đợi một chút, tôi đến ngay."
+        },
+        {
+          "c": "电影马上就要开始了。",
+          "d": "Diànyǐng mǎshàng jiù yào kāishǐ le.",
+          "v": "Phim sắp bắt đầu ngay bây giờ rồi."
+        },
+        {
+          "c": "他下了课马上就回家了。",
+          "d": "Tā xià le kè mǎshàng jiù huí jiā le.",
+          "v": "Tan học xong là anh ấy về nhà ngay."
+        },
+        {
+          "c": "你能马上过来吗？",
+          "d": "Nǐ néng mǎshàng guòlái ma?",
+          "v": "Bạn có thể qua đây ngay được không?"
+        }
+      ],
+      "luuY": [
+        "马上 đứng trước 就 và động từ: 我马上就来 ✓, 我就马上来 nghe kém tự nhiên, 我来马上 ✗.",
+        "马上 nói về lúc sắp tới; 'lúc nãy' là 刚才."
+      ],
+      "tuKhoa": [
+        "mashang",
+        "ngay",
+        "lập tức",
+        "sắp"
+      ],
+      "quiz": [
+        {
+          "h": "别着急，饭（　）就好。",
+          "lc": [
+            "刚才",
+            "马上",
+            "几乎没",
+            "其实不"
+          ],
+          "da": 1,
+          "gt": "Cơm sắp xong ngay: 马上就好."
+        },
+        {
+          "h": "火车（　）就要开了，快上车吧！",
+          "lc": [
+            "马上",
+            "刚才",
+            "总是",
+            "终于"
+          ],
+          "da": 0,
+          "gt": "Việc sắp xảy ra đến nơi: 马上就要…了."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "我来马上。",
+            "马上我来就。",
+            "我马上就来。"
+          ],
+          "da": 2,
+          "gt": "Trật tự: chủ ngữ + 马上 + 就 + động từ."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-geng",
+      "nhom": "Mức độ – cảm thán",
+      "tieuDe": "更",
+      "mau": "(A + 比 + B) + 更 + Adj / V tâm lý",
+      "nghia": "càng ~, ~ hơn nữa",
+      "giaiThich": "更 cho biết mức độ cao hơn một bậc so với cái đã nêu, hàm ý cái được đem ra so cũng đã có tính chất đó rồi. Hay dùng trong câu chữ 比 hoặc khi so hai vế câu.",
+      "cachGhep": [
+        "A 比 B + 更 + Adj: 今天比昨天更冷",
+        "…，… 更 + Adj / V tâm lý: 那件更好看, 更喜欢咖啡",
+        "更 + Adj + 的 + (N): 更便宜的"
+      ],
+      "viDu": [
+        {
+          "c": "今天比昨天更冷。",
+          "d": "Jīntiān bǐ zuótiān gèng lěng.",
+          "v": "Hôm nay còn lạnh hơn hôm qua."
+        },
+        {
+          "c": "这件衣服很好看，那件更好看。",
+          "d": "Zhè jiàn yīfu hěn hǎokàn, nà jiàn gèng hǎokàn.",
+          "v": "Bộ này rất đẹp, bộ kia còn đẹp hơn."
+        },
+        {
+          "c": "我喜欢喝茶，更喜欢喝咖啡。",
+          "d": "Wǒ xǐhuan hē chá, gèng xǐhuan hē kāfēi.",
+          "v": "Tôi thích uống trà, càng thích uống cà phê hơn."
+        },
+        {
+          "c": "有没有更便宜的？",
+          "d": "Yǒu méiyǒu gèng piányi de?",
+          "v": "Có cái nào rẻ hơn nữa không?"
+        }
+      ],
+      "luuY": [
+        "更 và 很 không dùng cùng nhau: 更很便宜 ✗.",
+        "今天比昨天冷 chỉ nói hôm nay lạnh hơn; thêm 更 thì hàm ý hôm qua cũng đã lạnh.",
+        "更 là 'hơn nữa', không phải 'nhất' (最)."
+      ],
+      "tuKhoa": [
+        "geng",
+        "càng",
+        "hơn nữa",
+        "bi geng"
+      ],
+      "quiz": [
+        {
+          "h": "今天比昨天更冷 hàm ý điều gì?",
+          "lc": [
+            "Hôm qua cũng lạnh, hôm nay lạnh hơn",
+            "Hôm qua không lạnh",
+            "Hôm nay lạnh nhất trong năm"
+          ],
+          "da": 0,
+          "gt": "更 hàm ý đối tượng được so (昨天) cũng đã có tính chất đó."
+        },
+        {
+          "h": "他很高，他哥哥比他（　）高。",
+          "lc": [
+            "很",
+            "更",
+            "太",
+            "非常"
+          ],
+          "da": 1,
+          "gt": "Trong câu 比 không dùng 很 / 太 / 非常; muốn nói 'còn cao hơn' dùng 更."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "这个更很便宜。",
+            "这个便宜更。",
+            "这个更便宜。"
+          ],
+          "da": 2,
+          "gt": "更 đứng trước tính từ và không đi cùng 很."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-duome-a",
+      "nhom": "Mức độ – cảm thán",
+      "tieuDe": "多么…啊",
+      "mau": "S + 多么 + Adj / V tâm lý + 啊！",
+      "nghia": "~ biết bao! ~ làm sao!",
+      "giaiThich": "多么…啊 là câu cảm thán, bày tỏ cảm xúc mạnh trước mức độ cao của một tính chất. Trong khẩu ngữ thường rút gọn 多么 thành 多. Ở đây 多么 không dùng để hỏi.",
+      "cachGhep": [
+        "S + 多么 + Adj + 啊！: 多么漂亮啊！",
+        "S + 多么 + 想 / 希望 / 喜欢 + V + 啊！",
+        "Khẩu ngữ: S + 多 + Adj + 啊！"
+      ],
+      "viDu": [
+        {
+          "c": "这个地方多么漂亮啊！",
+          "d": "Zhège dìfang duōme piàoliang a!",
+          "v": "Nơi này đẹp biết bao!"
+        },
+        {
+          "c": "今天的天气多么好啊！",
+          "d": "Jīntiān de tiānqì duōme hǎo a!",
+          "v": "Thời tiết hôm nay đẹp làm sao!"
+        },
+        {
+          "c": "我多么想回家看看啊！",
+          "d": "Wǒ duōme xiǎng huí jiā kànkan a!",
+          "v": "Tôi muốn về thăm nhà biết bao!"
+        },
+        {
+          "c": "你看，她多么努力啊！",
+          "d": "Nǐ kàn, tā duōme nǔlì a!",
+          "v": "Bạn xem, cô ấy chăm chỉ biết bao!"
+        }
+      ],
+      "luuY": [
+        "Đã có 多么 thì không thêm 很 / 非常: 多么很冷啊 ✗.",
+        "多么 đứng trước tính từ (trật tự ngược với tiếng Việt 'đẹp biết bao'): 漂亮多么啊 ✗."
+      ],
+      "soSanh": [
+        "zh-hsk3-jile"
+      ],
+      "tuKhoa": [
+        "duome",
+        "duo a",
+        "cảm thán",
+        "biết bao",
+        "làm sao"
+      ],
+      "quiz": [
+        {
+          "h": "这个孩子（　）可爱啊！",
+          "lc": [
+            "多么",
+            "什么",
+            "几",
+            "多少"
+          ],
+          "da": 0,
+          "gt": "Câu cảm thán với tính từ: 多么 + Adj + 啊."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "今天多么很冷啊！",
+            "今天多么冷啊！",
+            "今天冷多么啊！"
+          ],
+          "da": 1,
+          "gt": "多么 đứng trước tính từ và không đi cùng 很."
+        },
+        {
+          "h": "Mẫu 多么…啊 dùng để làm gì?",
+          "lc": [
+            "hỏi mức độ",
+            "so sánh hai vật",
+            "cảm thán"
+          ],
+          "da": 2,
+          "gt": "Đây là câu cảm thán bày tỏ cảm xúc mạnh."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-jile",
+      "nhom": "Mức độ – cảm thán",
+      "tieuDe": "Adj + 极了",
+      "mau": "S + Adj / V tâm lý + 极了",
+      "nghia": "~ cực kỳ, ~ vô cùng",
+      "giaiThich": "极了 đặt SAU tính từ hoặc động từ tâm lý để chỉ mức độ cao nhất, mang sắc thái khẩu ngữ, nhiều cảm xúc: 好吃极了 (ngon cực kỳ). Dùng được cho cả điều tốt lẫn điều xấu.",
+      "cachGhep": [
+        "Adj + 极了: 好极了, 累极了, 漂亮极了",
+        "V tâm lý + 极了: 高兴极了, 喜欢极了",
+        "Không có dạng phủ định và không kèm phó từ mức độ khác"
+      ],
+      "viDu": [
+        {
+          "c": "这个菜好吃极了。",
+          "d": "Zhège cài hǎochī jí le.",
+          "v": "Món này ngon cực kỳ."
+        },
+        {
+          "c": "听到这个消息，他高兴极了。",
+          "d": "Tīngdào zhège xiāoxi, tā gāoxìng jí le.",
+          "v": "Nghe được tin này, anh ấy vui vô cùng."
+        },
+        {
+          "c": "今天我累极了，想早点儿睡觉。",
+          "d": "Jīntiān wǒ lèi jí le, xiǎng zǎo diǎnr shuìjiào.",
+          "v": "Hôm nay tôi mệt vô cùng, muốn đi ngủ sớm một chút."
+        },
+        {
+          "c": "那个地方漂亮极了，你去过吗？",
+          "d": "Nàge dìfang piàoliang jí le, nǐ qù guo ma?",
+          "v": "Nơi đó đẹp cực kỳ, bạn đã đến chưa?"
+        }
+      ],
+      "luuY": [
+        "极了 đứng sau tính từ, khác 很 / 非常 đứng trước: 极了好吃 ✗.",
+        "Không dùng chung với 很 / 非常: 很好吃极了 ✗.",
+        "Không dùng trong câu phủ định: 不好吃极了 ✗ → 难吃极了 ✓."
+      ],
+      "soSanh": [
+        "zh-hsk3-duome-a"
+      ],
+      "tuKhoa": [
+        "jile",
+        "ji le",
+        "cực kỳ",
+        "vô cùng",
+        "bổ ngữ mức độ"
+      ],
+      "quiz": [
+        {
+          "h": "今天热（　）。",
+          "lc": [
+            "极了",
+            "很",
+            "非常",
+            "更"
+          ],
+          "da": 0,
+          "gt": "Chỉ 极了 đứng sau tính từ; 很 / 非常 / 更 phải đứng trước."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "这个电影很好看极了。",
+            "这个电影极了好看。",
+            "这个电影好看极了。"
+          ],
+          "da": 2,
+          "gt": "Tính từ + 极了, không thêm 很."
+        },
+        {
+          "h": "极了 đứng ở đâu?",
+          "lc": [
+            "trước tính từ",
+            "sau tính từ",
+            "đầu câu"
+          ],
+          "da": 1,
+          "gt": "极了 là bổ ngữ mức độ nên đứng sau tính từ."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-guanyu",
+      "nhom": "Giới từ",
+      "tieuDe": "关于",
+      "mau": "关于 + N，S + V · 关于 + N + 的 + N",
+      "nghia": "về, liên quan đến ~",
+      "giaiThich": "关于 giới thiệu chủ đề hoặc phạm vi của sự việc. Khi làm trạng ngữ, cụm 关于… đứng ĐẦU câu, trước chủ ngữ. Khi bổ nghĩa cho danh từ thì thêm 的: 关于中国历史的书.",
+      "cachGhep": [
+        "Trạng ngữ: 关于 + N，S + V…",
+        "Định ngữ: 关于 + N + 的 + N — 关于考试的消息",
+        "Sau 是: 这本书是关于中国文化的"
+      ],
+      "viDu": [
+        {
+          "c": "关于这个问题，我们明天再说。",
+          "d": "Guānyú zhège wèntí, wǒmen míngtiān zài shuō.",
+          "v": "Về vấn đề này, ngày mai chúng ta nói tiếp."
+        },
+        {
+          "c": "我想买一本关于中国历史的书。",
+          "d": "Wǒ xiǎng mǎi yì běn guānyú Zhōngguó lìshǐ de shū.",
+          "v": "Tôi muốn mua một cuốn sách về lịch sử Trung Quốc."
+        },
+        {
+          "c": "关于这件事，你知道多少？",
+          "d": "Guānyú zhè jiàn shì, nǐ zhīdào duōshao?",
+          "v": "Về chuyện này, bạn biết được bao nhiêu?"
+        },
+        {
+          "c": "他没告诉我关于考试的消息。",
+          "d": "Tā méi gàosu wǒ guānyú kǎoshì de xiāoxi.",
+          "v": "Anh ấy không cho tôi biết tin tức về kỳ thi."
+        }
+      ],
+      "luuY": [
+        "Làm trạng ngữ thì 关于… không đứng sau chủ ngữ: 我们关于这个问题明天再说 ✗.",
+        "Người Việt hay dịch 'nói về…' thành 说关于… ✗; nói tự nhiên là 说一下这个问题 hoặc 关于这个问题，我说一下."
+      ],
+      "soSanh": [
+        "zh-hsk3-dui-laishuo"
+      ],
+      "tuKhoa": [
+        "guanyu",
+        "về",
+        "liên quan đến",
+        "chủ đề"
+      ],
+      "quiz": [
+        {
+          "h": "这是一个（　）动物的电影。",
+          "lc": [
+            "关于",
+            "为了",
+            "向",
+            "把"
+          ],
+          "da": 0,
+          "gt": "'Bộ phim về động vật': 关于 + N + 的 + N."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "我们关于这个问题明天再说。",
+            "关于这个问题，我们明天再说。",
+            "我们明天再关于这个问题说。"
+          ],
+          "da": 1,
+          "gt": "Cụm 关于… làm trạng ngữ phải đứng đầu câu, trước chủ ngữ."
+        },
+        {
+          "h": "我想看关于中国文化（　）书。",
+          "lc": [
+            "得",
+            "地",
+            "的",
+            "了"
+          ],
+          "da": 2,
+          "gt": "Cụm 关于… bổ nghĩa cho danh từ 书 nên cần 的."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-weile",
+      "nhom": "Giới từ",
+      "tieuDe": "为了",
+      "mau": "为了 + mục đích，S + V · S + V + 是为了 + mục đích",
+      "nghia": "để, vì (mục đích) ~",
+      "giaiThich": "为了 nêu mục đích của hành động. Vế nêu mục đích thường đứng trước, vế hành động đứng sau. Cũng có thể nói hành động trước rồi dùng 是为了 để giải thích mục đích.",
+      "cachGhep": [
+        "为了 + V / N (mục đích)，S + V…",
+        "S + V… + 是为了 + V / N",
+        "为 trong 为了 đọc wèi (thanh 4)"
+      ],
+      "viDu": [
+        {
+          "c": "为了学好汉语，他每天都听中文歌。",
+          "d": "Wèile xuéhǎo Hànyǔ, tā měi tiān dōu tīng Zhōngwén gē.",
+          "v": "Để học tốt tiếng Trung, ngày nào anh ấy cũng nghe nhạc Trung."
+        },
+        {
+          "c": "为了身体健康，你应该多运动。",
+          "d": "Wèile shēntǐ jiànkāng, nǐ yīnggāi duō yùndòng.",
+          "v": "Vì sức khoẻ, bạn nên vận động nhiều."
+        },
+        {
+          "c": "他这样做是为了帮助你。",
+          "d": "Tā zhèyàng zuò shì wèile bāngzhù nǐ.",
+          "v": "Anh ấy làm vậy là để giúp bạn."
+        },
+        {
+          "c": "你来中国是为了工作还是为了学习？",
+          "d": "Nǐ lái Zhōngguó shì wèile gōngzuò háishi wèile xuéxí?",
+          "v": "Bạn đến Trung Quốc là để làm việc hay để học?"
+        }
+      ],
+      "luuY": [
+        "为了 chỉ mục đích (việc muốn đạt tới), không chỉ nguyên nhân đã có. Nguyên nhân dùng 因为: 因为下雨，我没去 ✓; 为了下雨，我没去 ✗.",
+        "Tiếng Việt 'vì' dùng cho cả hai nghĩa nên người Việt rất hay nhầm 为了 với 因为."
+      ],
+      "tuKhoa": [
+        "weile",
+        "wei le",
+        "để",
+        "mục đích",
+        "yinwei"
+      ],
+      "quiz": [
+        {
+          "h": "（　）不迟到，我今天六点就起床了。",
+          "lc": [
+            "因为",
+            "为了",
+            "关于",
+            "虽然"
+          ],
+          "da": 1,
+          "gt": "'Để không đến muộn' là mục đích → 为了."
+        },
+        {
+          "h": "（　）下雨，我们没去公园。",
+          "lc": [
+            "为了",
+            "关于",
+            "因为",
+            "向"
+          ],
+          "da": 2,
+          "gt": "Trời mưa là nguyên nhân có thật, không phải mục đích → 因为."
+        },
+        {
+          "h": "为了 dùng để nêu điều gì?",
+          "lc": [
+            "mục đích",
+            "nguyên nhân đã xảy ra",
+            "nơi chốn"
+          ],
+          "da": 0,
+          "gt": "为了 đứng trước mục đích muốn đạt tới."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-xiang",
+      "nhom": "Giới từ",
+      "tieuDe": "向",
+      "mau": "S + 向 + phương hướng / người + V",
+      "nghia": "về phía ~; hướng tới (ai) mà ~",
+      "giaiThich": "向 chỉ phương hướng của động tác (向东走, 向前看) hoặc đối tượng mà hành động hướng tới (向他学习, 向朋友借钱). Cụm 向… đứng trước động từ.",
+      "cachGhep": [
+        "向 + phương hướng + V: 向前走, 向左看",
+        "向 + người + 学习 / 借 / 介绍 / 问好: 向他学习",
+        "Câu hỏi: 向 + 哪边 / 谁 + V？"
+      ],
+      "viDu": [
+        {
+          "c": "向东走五分钟就到了。",
+          "d": "Xiàng dōng zǒu wǔ fēnzhōng jiù dào le.",
+          "v": "Đi về phía đông năm phút là đến."
+        },
+        {
+          "c": "我们应该向他学习。",
+          "d": "Wǒmen yīnggāi xiàng tā xuéxí.",
+          "v": "Chúng ta nên học tập anh ấy."
+        },
+        {
+          "c": "他向我借了一百块钱。",
+          "d": "Tā xiàng wǒ jiè le yìbǎi kuài qián.",
+          "v": "Anh ấy mượn tôi một trăm tệ."
+        },
+        {
+          "c": "去火车站应该向哪边走？",
+          "d": "Qù huǒchēzhàn yīnggāi xiàng nǎ biān zǒu?",
+          "v": "Đi ga tàu hoả thì nên đi về phía nào?"
+        }
+      ],
+      "luuY": [
+        "'Học tập anh ấy' (noi gương) là 向他学习, không nói 学习他. 跟他学习 lại là 'học theo / học cùng anh ấy'.",
+        "Cụm 向… đứng trước động từ: 走向东 chỉ gặp trong văn viết; nói thường là 向东走."
+      ],
+      "tuKhoa": [
+        "xiang",
+        "về phía",
+        "hướng",
+        "xiang ta xuexi"
+      ],
+      "quiz": [
+        {
+          "h": "你（　）前看，那就是我们的学校。",
+          "lc": [
+            "向",
+            "关于",
+            "为了",
+            "把"
+          ],
+          "da": 0,
+          "gt": "Chỉ phương hướng của động tác: 向前看."
+        },
+        {
+          "h": "小王很努力，我们都应该（　）他学习。",
+          "lc": [
+            "为了",
+            "向",
+            "被",
+            "比"
+          ],
+          "da": 1,
+          "gt": "'Học tập ai đó' (noi gương) = 向 + người + 学习."
+        },
+        {
+          "h": "他（　）朋友借了一本词典。",
+          "lc": [
+            "把",
+            "关于",
+            "向",
+            "为了"
+          ],
+          "da": 2,
+          "gt": "Đối tượng để mượn đứng sau 向: 向朋友借."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-dui-ganxingqu",
+      "nhom": "Giới từ",
+      "tieuDe": "对…感兴趣",
+      "mau": "S + 对 + N + (很 / 不) 感兴趣",
+      "nghia": "có hứng thú với ~, quan tâm đến ~",
+      "giaiThich": "Để nói thích thú, quan tâm đến một lĩnh vực, tiếng Trung dùng khung 对…感兴趣: đối tượng đứng sau 对 và trước 感兴趣. Cũng có thể nói 对…有兴趣. Phủ định là 对…不感兴趣 / 没有兴趣.",
+      "cachGhep": [
+        "S + 对 + N / V + 很 + 感兴趣",
+        "Phủ định: S + 对 + N + 不感兴趣 / 没(有)兴趣",
+        "Câu hỏi: 对…感兴趣吗？ / 对什么感兴趣？",
+        "Dạng tương đương: 对…(很) 有兴趣"
+      ],
+      "viDu": [
+        {
+          "c": "我对中国文化很感兴趣。",
+          "d": "Wǒ duì Zhōngguó wénhuà hěn gǎn xìngqù.",
+          "v": "Tôi rất có hứng thú với văn hoá Trung Quốc."
+        },
+        {
+          "c": "他对音乐不感兴趣。",
+          "d": "Tā duì yīnyuè bù gǎn xìngqù.",
+          "v": "Anh ấy không hứng thú với âm nhạc."
+        },
+        {
+          "c": "你对什么感兴趣？",
+          "d": "Nǐ duì shénme gǎn xìngqù?",
+          "v": "Bạn có hứng thú với cái gì?"
+        },
+        {
+          "c": "弟弟对画画儿很有兴趣。",
+          "d": "Dìdi duì huà huàr hěn yǒu xìngqù.",
+          "v": "Em trai rất có hứng thú với việc vẽ tranh."
+        }
+      ],
+      "luuY": [
+        "Lỗi kinh điển: 我感兴趣中国文化 ✗ / 我很兴趣中国文化 ✗. Đối tượng phải đứng sau 对: 我对中国文化感兴趣 ✓.",
+        "兴趣 là danh từ, không làm vị ngữ một mình: 我很兴趣 ✗ → 我很感兴趣 / 我很有兴趣."
+      ],
+      "soSanh": [
+        "zh-hsk3-dui-laishuo"
+      ],
+      "tuKhoa": [
+        "dui ganxingqu",
+        "gan xingqu",
+        "you xingqu",
+        "hứng thú",
+        "quan tâm"
+      ],
+      "quiz": [
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "我感兴趣汉语。",
+            "我对汉语感兴趣。",
+            "我对汉语兴趣。"
+          ],
+          "da": 1,
+          "gt": "Khung đúng: 对 + đối tượng + 感兴趣."
+        },
+        {
+          "h": "你（　）什么运动感兴趣？",
+          "lc": [
+            "对",
+            "向",
+            "把",
+            "被"
+          ],
+          "da": 0,
+          "gt": "感兴趣 đi với giới từ 对."
+        },
+        {
+          "h": "Câu phủ định nào đúng?",
+          "lc": [
+            "他不感兴趣电影。",
+            "他对电影没感兴趣不。",
+            "他对电影不感兴趣。"
+          ],
+          "da": 2,
+          "gt": "Phủ định đặt trước 感兴趣, đối tượng vẫn đứng sau 对."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-dui-laishuo",
+      "nhom": "Giới từ",
+      "tieuDe": "对…来说",
+      "mau": "对 + người / nhóm người + 来说，…",
+      "nghia": "đối với ~ mà nói, với ~ thì…",
+      "giaiThich": "对…来说 nêu góc nhìn: nhận xét phía sau đúng khi xét từ vị trí của người hay nhóm người đó. Cụm này thường đứng đầu câu, cũng có thể đứng sau chủ ngữ.",
+      "cachGhep": [
+        "对 + người + 来说，S + V / Adj",
+        "S + 对 + người + 来说 + (很 / 不) + Adj",
+        "Câu hỏi: 对你来说，什么 / 哪个…？"
+      ],
+      "viDu": [
+        {
+          "c": "对我来说，汉字是最难的。",
+          "d": "Duì wǒ lái shuō, Hànzì shì zuì nán de.",
+          "v": "Đối với tôi, chữ Hán là khó nhất."
+        },
+        {
+          "c": "对学生来说，学习最重要。",
+          "d": "Duì xuésheng lái shuō, xuéxí zuì zhòngyào.",
+          "v": "Đối với học sinh, việc học là quan trọng nhất."
+        },
+        {
+          "c": "这个问题对他来说不难。",
+          "d": "Zhège wèntí duì tā lái shuō bù nán.",
+          "v": "Vấn đề này đối với anh ấy không khó."
+        },
+        {
+          "c": "对你来说，什么最重要？",
+          "d": "Duì nǐ lái shuō, shénme zuì zhòngyào?",
+          "v": "Đối với bạn, điều gì quan trọng nhất?"
+        }
+      ],
+      "luuY": [
+        "Khác 对 + người + Adj (thái độ đối xử): 他对我很好 = anh ấy tốt với tôi; 对我来说 = xét từ góc nhìn của tôi.",
+        "Không bỏ 来说 khi nêu góc nhìn: 对我，汉字很难 nghe thiếu tự nhiên."
+      ],
+      "soSanh": [
+        "zh-hsk3-dui-ganxingqu",
+        "zh-hsk3-guanyu"
+      ],
+      "tuKhoa": [
+        "dui laishuo",
+        "dui wo lai shuo",
+        "đối với",
+        "góc nhìn"
+      ],
+      "quiz": [
+        {
+          "h": "（　）我来说，这件衣服太贵了。",
+          "lc": [
+            "向",
+            "对",
+            "把",
+            "被"
+          ],
+          "da": 1,
+          "gt": "Khung nêu góc nhìn: 对 + người + 来说."
+        },
+        {
+          "h": "对老人（　），健康最重要。",
+          "lc": [
+            "来说",
+            "一样",
+            "极了",
+            "起来"
+          ],
+          "da": 0,
+          "gt": "对…来说 = đối với … mà nói."
+        },
+        {
+          "h": "这个工作对他来说很容易。 nghĩa là gì?",
+          "lc": [
+            "Anh ấy nói công việc này rất dễ.",
+            "Anh ấy đối xử tốt với công việc này.",
+            "Đối với anh ấy, công việc này rất dễ."
+          ],
+          "da": 2,
+          "gt": "对他来说 nêu góc nhìn của 'anh ấy', không phải lời anh ấy nói."
+        }
+      ]
+    }
+  ]
+}

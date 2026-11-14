@@ -1,0 +1,1461 @@
+{
+  "nn": "en",
+  "cap": "B1",
+  "diem": [
+    {
+      "id": "en-b1-present-perfect",
+      "nhom": "Các thì",
+      "tieuDe": "Present perfect (kinh nghiệm, kết quả)",
+      "mau": "S + have/has + V3 (past participle)",
+      "nghia": "đã (từng) làm ~; việc đã xảy ra và còn liên quan tới hiện tại",
+      "giaiThich": "Dùng khi nói về trải nghiệm trong đời tính tới bây giờ (không nói rõ lúc nào), hoặc một việc vừa xảy ra mà kết quả còn thấy ở hiện tại. Điều quan trọng là mối liên hệ với hiện tại, không phải thời điểm việc đó xảy ra. Hay đi với ever, never, already, yet, just.",
+      "cachGhep": [
+        "Khẳng định: I/you/we/they + have ('ve) + V3; he/she/it + has ('s) + V3",
+        "Phủ định: haven't / hasn't + V3",
+        "Câu hỏi: Have/Has + S + V3?",
+        "V3: động từ có quy tắc thêm -ed (visited); bất quy tắc phải học thuộc (go – went – gone, see – saw – seen)"
+      ],
+      "viDu": [
+        {
+          "c": "I have visited Da Nang twice.",
+          "v": "Tôi đã đến Đà Nẵng hai lần rồi."
+        },
+        {
+          "c": "She hasn't finished her homework yet.",
+          "v": "Cô ấy vẫn chưa làm xong bài tập."
+        },
+        {
+          "c": "Have you ever eaten sushi?",
+          "v": "Bạn đã bao giờ ăn sushi chưa?"
+        },
+        {
+          "c": "I've lost my keys, so I can't get in.",
+          "v": "Tôi làm mất chìa khoá rồi nên không vào nhà được."
+        }
+      ],
+      "luuY": [
+        "Tiếng Việt chỉ thêm 'đã / rồi / chưa' nên người Việt hay dùng quá khứ đơn hoặc quên have/has: 'I never seen it' là sai, phải là 'I have never seen it'.",
+        "Không dùng với thời điểm quá khứ đã xác định (yesterday, last week, in 2020).",
+        "have been to = đã từng đến (và đã về); have gone to = đã đi (và chưa về)."
+      ],
+      "soSanh": [
+        "en-b1-present-perfect-vs-past-simple",
+        "en-b1-present-perfect-for-since"
+      ],
+      "tuKhoa": [
+        "hiện tại hoàn thành",
+        "have V3",
+        "ever never",
+        "already yet just",
+        "thi hien tai hoan thanh"
+      ],
+      "quiz": [
+        {
+          "h": "She ___ her homework, so she can go out now.",
+          "lc": [
+            "is finishing",
+            "has finished",
+            "finishes",
+            "have finished"
+          ],
+          "da": 1,
+          "gt": "Việc đã xong và kết quả còn ở hiện tại; chủ ngữ she đi với has + V3."
+        },
+        {
+          "h": "Have you ever ___ a horse?",
+          "lc": [
+            "ridden",
+            "riding",
+            "rode",
+            "ride"
+          ],
+          "da": 0,
+          "gt": "Sau have phải là V3; V3 của ride là ridden (rode là V2)."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "I have saw that movie twice.",
+            "I has seen that movie twice.",
+            "I have seen that movie last night.",
+            "I have seen that movie twice."
+          ],
+          "da": 3,
+          "gt": "Hiện tại hoàn thành không đi với 'last night'; saw là V2; I đi với have."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-present-perfect-for-since",
+      "nhom": "Các thì",
+      "tieuDe": "Present perfect với for / since",
+      "mau": "S + have/has + V3 + for + khoảng thời gian / since + mốc thời gian",
+      "nghia": "đã ~ được (bao lâu) / từ (khi nào) và bây giờ vẫn còn",
+      "giaiThich": "Dùng cho trạng thái hoặc việc bắt đầu trong quá khứ và kéo dài tới hiện tại. for đi với một khoảng thời gian (for two years), since đi với thời điểm bắt đầu (since 2020, since I was a child). Câu hỏi tương ứng là How long…?",
+      "cachGhep": [
+        "for + khoảng thời gian: for ten minutes, for three years, for a long time",
+        "since + mốc: since Monday, since 2019, since last month",
+        "since + mệnh đề quá khứ đơn: since I left school",
+        "Hỏi: How long + have/has + S + V3?"
+      ],
+      "viDu": [
+        {
+          "c": "We have lived in this house for ten years.",
+          "v": "Chúng tôi sống ở ngôi nhà này được mười năm rồi."
+        },
+        {
+          "c": "He has worked here since 2021.",
+          "v": "Anh ấy làm việc ở đây từ năm 2021."
+        },
+        {
+          "c": "I haven't seen her since we left school.",
+          "v": "Tôi không gặp cô ấy từ khi chúng tôi ra trường."
+        },
+        {
+          "c": "How long have you known Minh?",
+          "v": "Bạn quen Minh được bao lâu rồi?"
+        }
+      ],
+      "luuY": [
+        "Lỗi rất hay gặp: dùng thì hiện tại theo tiếng Việt ('I live here since 2020', 'I am here for two years'). Việc kéo dài từ quá khứ tới nay phải dùng hiện tại hoàn thành.",
+        "Nhầm for / since: 'since three years' là sai, phải là 'for three years' hoặc 'since 2022'.",
+        "Không dùng 'from' thay cho since trong mẫu này."
+      ],
+      "soSanh": [
+        "en-b1-present-perfect",
+        "en-b1-present-perfect-continuous"
+      ],
+      "tuKhoa": [
+        "for since",
+        "how long",
+        "được bao lâu",
+        "từ khi",
+        "hien tai hoan thanh for since"
+      ],
+      "quiz": [
+        {
+          "h": "He has worked here ___ three years.",
+          "lc": [
+            "for",
+            "ago",
+            "during",
+            "since"
+          ],
+          "da": 0,
+          "gt": "'three years' là một khoảng thời gian nên dùng for."
+        },
+        {
+          "h": "We have lived here ___ 2019.",
+          "lc": [
+            "in",
+            "from",
+            "for",
+            "since"
+          ],
+          "da": 3,
+          "gt": "2019 là mốc bắt đầu nên dùng since."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "I am living here since 2020.",
+            "I live here since 2020.",
+            "I have lived here for 2020.",
+            "I have lived here since 2020."
+          ],
+          "da": 3,
+          "gt": "Việc kéo dài từ 2020 tới nay dùng hiện tại hoàn thành + since + mốc thời gian."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-present-perfect-vs-past-simple",
+      "nhom": "Các thì",
+      "tieuDe": "Present perfect vs past simple",
+      "mau": "have/has + V3 (liên quan hiện tại)  ↔  V2 (thời điểm quá khứ đã xác định)",
+      "nghia": "phân biệt 'đã làm' còn liên quan hiện tại và 'đã làm' vào lúc đã qua",
+      "giaiThich": "Quá khứ đơn dùng khi việc xảy ra ở một thời điểm đã kết thúc và được nói rõ hoặc ngầm hiểu (yesterday, in 2020, when I was a child). Hiện tại hoàn thành dùng khi không nói lúc nào, hoặc khoảng thời gian chưa kết thúc (today, this week, so far). Thường mở đầu bằng hiện tại hoàn thành để báo tin, rồi chuyển sang quá khứ đơn khi kể chi tiết.",
+      "cachGhep": [
+        "Quá khứ đơn + yesterday, last year, two days ago, in 2015, when…",
+        "Hiện tại hoàn thành + ever, never, already, yet, just, so far, this week, for/since",
+        "Hỏi thời điểm với When…? ⇒ luôn dùng quá khứ đơn"
+      ],
+      "viDu": [
+        {
+          "c": "I have been to Hue. I went there in 2022.",
+          "v": "Tôi đã từng đến Huế. Tôi đi năm 2022."
+        },
+        {
+          "c": "She has written two emails this morning.",
+          "v": "Sáng nay cô ấy đã viết hai email (bây giờ vẫn là buổi sáng)."
+        },
+        {
+          "c": "When did you buy this phone?",
+          "v": "Bạn mua chiếc điện thoại này khi nào?"
+        },
+        {
+          "c": "We didn't see him at the party last night.",
+          "v": "Tối qua chúng tôi không thấy anh ấy ở bữa tiệc."
+        }
+      ],
+      "luuY": [
+        "Có thời điểm quá khứ cụ thể ⇒ quá khứ đơn. 'I have met him yesterday' là sai.",
+        "Người đã mất hoặc giai đoạn đã kết thúc dùng quá khứ đơn: 'My grandfather lived in Hue for 40 years' (ông không còn sống ở đó nữa).",
+        "Tiếng Việt dùng chung chữ 'đã' cho cả hai nên phải tự hỏi: có nói rõ lúc nào không, khoảng thời gian đã hết chưa?"
+      ],
+      "soSanh": [
+        "en-b1-present-perfect",
+        "en-b1-past-perfect"
+      ],
+      "tuKhoa": [
+        "hiện tại hoàn thành và quá khứ đơn",
+        "past simple",
+        "have done vs did",
+        "phân biệt thì"
+      ],
+      "quiz": [
+        {
+          "h": "I ___ my wallet yesterday.",
+          "lc": [
+            "has lost",
+            "lost",
+            "lose",
+            "have lost"
+          ],
+          "da": 1,
+          "gt": "'yesterday' là thời điểm quá khứ đã xác định nên dùng quá khứ đơn."
+        },
+        {
+          "h": "She ___ in three different countries so far.",
+          "lc": [
+            "lived",
+            "has lived",
+            "was living",
+            "lives"
+          ],
+          "da": 1,
+          "gt": "'so far' (tính tới giờ) đi với hiện tại hoàn thành."
+        },
+        {
+          "h": "When ___ this phone?",
+          "lc": [
+            "did you buy",
+            "have you bought",
+            "do you bought",
+            "has you bought"
+          ],
+          "da": 0,
+          "gt": "Hỏi thời điểm với When thì dùng quá khứ đơn: did + S + V nguyên mẫu."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-present-perfect-continuous",
+      "nhom": "Các thì",
+      "tieuDe": "Present perfect continuous",
+      "mau": "S + have/has + been + V-ing",
+      "nghia": "đã và đang làm ~ suốt (từ trước tới giờ)",
+      "giaiThich": "Dùng cho hành động bắt đầu trong quá khứ và vẫn đang tiếp diễn, nhấn vào quá trình và độ dài thời gian (hay đi với for, since, all day, How long). Cũng dùng cho hành động vừa mới dừng mà dấu vết còn thấy rõ ở hiện tại.",
+      "cachGhep": [
+        "Khẳng định: have/has + been + V-ing",
+        "Phủ định: haven't / hasn't + been + V-ing",
+        "Câu hỏi: Have/Has + S + been + V-ing? · How long have you been + V-ing?"
+      ],
+      "viDu": [
+        {
+          "c": "I have been learning English for three years.",
+          "v": "Tôi học tiếng Anh được ba năm rồi (vẫn đang học)."
+        },
+        {
+          "c": "It has been raining since this morning.",
+          "v": "Trời mưa từ sáng tới giờ."
+        },
+        {
+          "c": "How long have you been waiting?",
+          "v": "Bạn chờ bao lâu rồi?"
+        },
+        {
+          "c": "Your hands are dirty. Have you been fixing the bike?",
+          "v": "Tay bạn bẩn thế. Bạn vừa sửa xe đạp à?"
+        }
+      ],
+      "luuY": [
+        "Động từ chỉ trạng thái (know, like, have = sở hữu, be, believe) không dùng dạng tiếp diễn: 'I have known him for years', không nói 'I have been knowing him'.",
+        "Người Việt hay nói 'I am learning English for three years' — có 'for / since' kéo tới hiện tại thì phải dùng have been + V-ing."
+      ],
+      "soSanh": [
+        "en-b1-present-perfect-simple-vs-continuous",
+        "en-b1-present-perfect-for-since"
+      ],
+      "tuKhoa": [
+        "hiện tại hoàn thành tiếp diễn",
+        "have been V-ing",
+        "have been doing",
+        "how long"
+      ],
+      "quiz": [
+        {
+          "h": "She ___ since 6 a.m., so she's very tired.",
+          "lc": [
+            "works",
+            "has been working",
+            "was working",
+            "is working"
+          ],
+          "da": 1,
+          "gt": "Hành động kéo dài từ 6 giờ sáng tới giờ (since) dùng has been + V-ing."
+        },
+        {
+          "h": "How long ___ English?",
+          "lc": [
+            "do you learn",
+            "are you learning",
+            "did you learning",
+            "have you been learning"
+          ],
+          "da": 3,
+          "gt": "How long + việc kéo dài tới hiện tại ⇒ have you been + V-ing."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "I know him since years.",
+            "I have known him for years.",
+            "I have been knowing him for years.",
+            "I am knowing him for years."
+          ],
+          "da": 1,
+          "gt": "know là động từ chỉ trạng thái nên không dùng tiếp diễn; dùng have known + for."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-present-perfect-simple-vs-continuous",
+      "nhom": "Các thì",
+      "tieuDe": "Present perfect simple vs continuous",
+      "mau": "have/has + V3 (kết quả, số lượng)  ↔  have/has been + V-ing (quá trình, độ dài)",
+      "nghia": "phân biệt 'đã làm xong / được bao nhiêu' và 'đã làm suốt bao lâu'",
+      "giaiThich": "Dạng đơn nhấn vào kết quả: việc đã xong, hoặc đã làm được bao nhiêu (how many, how much, mấy lần). Dạng tiếp diễn nhấn vào bản thân hoạt động và thời gian nó kéo dài (how long), việc có thể chưa xong. Với live, work, study kèm for/since, hai dạng gần như cùng nghĩa.",
+      "cachGhep": [
+        "Có số lượng / số lần (three emails, twice) ⇒ have/has + V3",
+        "Hỏi How long + hành động ⇒ thường dùng have/has been + V-ing",
+        "Động từ chỉ trạng thái (know, have, be, like) ⇒ chỉ dùng have/has + V3"
+      ],
+      "viDu": [
+        {
+          "c": "I have written three emails this morning.",
+          "v": "Sáng nay tôi đã viết được ba email."
+        },
+        {
+          "c": "I have been writing emails all morning.",
+          "v": "Tôi viết email suốt cả buổi sáng."
+        },
+        {
+          "c": "She has been reading that book for two weeks, but she hasn't finished it.",
+          "v": "Cô ấy đọc cuốn sách đó hai tuần rồi mà vẫn chưa xong."
+        },
+        {
+          "c": "How many pages have you read so far?",
+          "v": "Tới giờ bạn đọc được bao nhiêu trang rồi?"
+        }
+      ],
+      "luuY": [
+        "Không dùng dạng tiếp diễn khi nêu số lượng đã hoàn thành: 'I have been drinking three cups of coffee' là sai, phải là 'I have drunk three cups of coffee'.",
+        "'I've painted the room' = sơn xong rồi; 'I've been painting the room' = đang sơn dở hoặc vừa sơn (chưa chắc xong)."
+      ],
+      "soSanh": [
+        "en-b1-present-perfect",
+        "en-b1-present-perfect-continuous"
+      ],
+      "tuKhoa": [
+        "have done vs have been doing",
+        "hoàn thành đơn và tiếp diễn",
+        "how long how many",
+        "kết quả quá trình"
+      ],
+      "quiz": [
+        {
+          "h": "I ___ three emails this morning.",
+          "lc": [
+            "write",
+            "have written",
+            "have been writing",
+            "am writing"
+          ],
+          "da": 1,
+          "gt": "Có số lượng đã hoàn thành (three emails) nên dùng dạng đơn have written."
+        },
+        {
+          "h": "She ___ that book for two weeks, and she still hasn't finished it.",
+          "lc": [
+            "has read",
+            "reads",
+            "has been reading",
+            "is read"
+          ],
+          "da": 2,
+          "gt": "Việc kéo dài hai tuần và chưa xong: nhấn quá trình ⇒ has been reading."
+        },
+        {
+          "h": "How many pages ___ so far?",
+          "lc": [
+            "have you been reading",
+            "have you read",
+            "are you reading",
+            "do you read"
+          ],
+          "da": 1,
+          "gt": "Hỏi số lượng (How many) tính tới giờ ⇒ hiện tại hoàn thành đơn."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-past-perfect",
+      "nhom": "Các thì",
+      "tieuDe": "Past perfect",
+      "mau": "S + had + V3",
+      "nghia": "đã ~ (trước một thời điểm / một việc khác trong quá khứ)",
+      "giaiThich": "Dùng khi đang kể chuyện quá khứ và cần lùi về một việc xảy ra trước đó nữa. Việc xảy ra trước dùng had + V3, việc xảy ra sau dùng quá khứ đơn. Hay đi với already, just, never, by the time, before, after, when.",
+      "cachGhep": [
+        "Khẳng định: had ('d) + V3 cho mọi chủ ngữ",
+        "Phủ định: hadn't + V3",
+        "Câu hỏi: Had + S + V3?",
+        "By the time / When + quá khứ đơn, S + had + V3"
+      ],
+      "viDu": [
+        {
+          "c": "When we arrived at the station, the train had already left.",
+          "v": "Khi chúng tôi đến ga thì tàu đã chạy mất rồi."
+        },
+        {
+          "c": "She didn't come with us because she had seen the movie before.",
+          "v": "Cô ấy không đi cùng vì trước đó đã xem phim ấy rồi."
+        },
+        {
+          "c": "I had never flown before I went to Japan.",
+          "v": "Trước khi đi Nhật tôi chưa từng đi máy bay."
+        },
+        {
+          "c": "Had you finished dinner when he called?",
+          "v": "Lúc anh ấy gọi thì bạn đã ăn tối xong chưa?"
+        }
+      ],
+      "luuY": [
+        "Chỉ dùng khi cần làm rõ việc nào xảy ra trước. Kể các việc theo đúng thứ tự thì dùng quá khứ đơn: 'I got up, had breakfast and left'.",
+        "Người Việt hay dùng quá khứ đơn cho cả hai việc: 'When I arrived, the train left' lại có nghĩa là tôi đến rồi tàu mới chạy.",
+        "'d có thể là had hoặc would: 'd + V3 là had, 'd + V nguyên mẫu là would."
+      ],
+      "soSanh": [
+        "en-b1-narrative-tenses",
+        "en-b1-present-perfect-vs-past-simple",
+        "en-b2-past-perfect-continuous"
+      ],
+      "tuKhoa": [
+        "quá khứ hoàn thành",
+        "had V3",
+        "had done",
+        "by the time",
+        "qua khu hoan thanh"
+      ],
+      "quiz": [
+        {
+          "h": "When we arrived at the station, the train ___.",
+          "lc": [
+            "had already left",
+            "is already leaving",
+            "has already left",
+            "already leaves"
+          ],
+          "da": 0,
+          "gt": "Tàu chạy trước khi chúng tôi đến (đều ở quá khứ) ⇒ had + V3."
+        },
+        {
+          "h": "She didn't want to see the movie because she ___ it before.",
+          "lc": [
+            "was seeing",
+            "has seen",
+            "had seen",
+            "sees"
+          ],
+          "da": 2,
+          "gt": "Việc xem phim xảy ra trước một thời điểm quá khứ ⇒ had seen."
+        },
+        {
+          "h": "Câu nào cho biết Nam ăn tối XONG TRƯỚC khi Lan đến?",
+          "lc": [
+            "When Lan arrived, Nam had had dinner.",
+            "When Lan arrived, Nam had dinner.",
+            "When Lan arrived, Nam was having dinner."
+          ],
+          "da": 0,
+          "gt": "had had = had + V3 của have: việc ăn đã xong trước khi Lan đến. Hai câu kia là ăn sau hoặc đang ăn."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-narrative-tenses",
+      "nhom": "Các thì",
+      "tieuDe": "Narrative tenses (ba thì kể chuyện)",
+      "mau": "V2 (sự việc chính) · was/were + V-ing (bối cảnh) · had + V3 (việc xảy ra trước)",
+      "nghia": "phối hợp quá khứ đơn, quá khứ tiếp diễn, quá khứ hoàn thành khi kể chuyện",
+      "giaiThich": "Khi kể chuyện, quá khứ đơn dùng cho chuỗi sự việc chính nối tiếp nhau. Quá khứ tiếp diễn tả bối cảnh hoặc hành động đang diễn ra thì bị việc khác cắt ngang. Quá khứ hoàn thành dùng để lùi về việc đã xảy ra trước thời điểm đang kể.",
+      "cachGhep": [
+        "Chuỗi sự việc: V2, V2 and V2",
+        "Đang… thì…: S + was/were + V-ing + when + S + V2 · While + S + was/were + V-ing, S + V2",
+        "Việc xảy ra trước: S + V2 + because/after + S + had + V3"
+      ],
+      "viDu": [
+        {
+          "c": "I was watching TV when the phone rang.",
+          "v": "Tôi đang xem ti vi thì điện thoại reo."
+        },
+        {
+          "c": "He opened the door, took off his shoes and sat down.",
+          "v": "Anh ấy mở cửa, cởi giày rồi ngồi xuống."
+        },
+        {
+          "c": "When I got to the party, Tom had gone home.",
+          "v": "Khi tôi đến bữa tiệc thì Tom đã về nhà rồi."
+        },
+        {
+          "c": "It was raining, so we didn't go out.",
+          "v": "Trời đang mưa nên chúng tôi không ra ngoài."
+        }
+      ],
+      "luuY": [
+        "So sánh: 'When she came, we had dinner' (cô ấy đến rồi mới ăn) · 'we were having dinner' (đang ăn dở) · 'we had had dinner' (đã ăn xong).",
+        "Tiếng Việt chỉ thêm 'đang', 'rồi' nên người học hay dùng quá khứ đơn cho tất cả; hãy xác định việc nào là nền, việc nào xảy ra trước."
+      ],
+      "soSanh": [
+        "en-b1-past-perfect"
+      ],
+      "tuKhoa": [
+        "narrative tenses",
+        "thì kể chuyện",
+        "past continuous",
+        "quá khứ tiếp diễn",
+        "when while"
+      ],
+      "quiz": [
+        {
+          "h": "I ___ TV when the phone rang.",
+          "lc": [
+            "had watched",
+            "am watching",
+            "watch",
+            "was watching"
+          ],
+          "da": 3,
+          "gt": "Hành động đang diễn ra thì bị cắt ngang ⇒ quá khứ tiếp diễn."
+        },
+        {
+          "h": "He opened the door, ___ his shoes and sat down.",
+          "lc": [
+            "took off",
+            "takes off",
+            "was taking off",
+            "had taken off"
+          ],
+          "da": 0,
+          "gt": "Chuỗi hành động nối tiếp nhau trong quá khứ đều dùng quá khứ đơn."
+        },
+        {
+          "h": "When I got to the party, Tom wasn't there. He ___ home.",
+          "lc": [
+            "goes",
+            "has gone",
+            "had gone",
+            "is going"
+          ],
+          "da": 2,
+          "gt": "Tom về trước khi tôi đến (mốc quá khứ) ⇒ quá khứ hoàn thành had gone."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-used-to-would",
+      "nhom": "Các thì",
+      "tieuDe": "used to / would (thói quen trong quá khứ)",
+      "mau": "S + used to + V · S + would + V",
+      "nghia": "trước đây thường ~ / đã từng ~ (bây giờ không còn nữa)",
+      "giaiThich": "used to + V nói về thói quen hoặc trạng thái từng đúng trong quá khứ mà nay đã thay đổi. would + V cũng tả hành động lặp lại trong quá khứ (thường khi hồi tưởng), nhưng không dùng cho trạng thái (be, have, live, like, know).",
+      "cachGhep": [
+        "Khẳng định: used to + V nguyên mẫu",
+        "Phủ định: didn't use to + V · Câu hỏi: Did + S + use to + V?",
+        "would + V: chỉ cho hành động lặp lại, thường có mốc thời gian quá khứ đi kèm (every summer, when I was a child)"
+      ],
+      "viDu": [
+        {
+          "c": "I used to play soccer every day after school.",
+          "v": "Hồi trước ngày nào tan học tôi cũng đá bóng."
+        },
+        {
+          "c": "She didn't use to like coffee, but now she loves it.",
+          "v": "Trước đây cô ấy không thích cà phê, nhưng giờ thì rất thích."
+        },
+        {
+          "c": "Did you use to live in Hanoi?",
+          "v": "Trước đây bạn từng sống ở Hà Nội à?"
+        },
+        {
+          "c": "Every summer we would visit our grandparents in the countryside.",
+          "v": "Mỗi mùa hè chúng tôi thường về quê thăm ông bà."
+        }
+      ],
+      "luuY": [
+        "Sau did / didn't viết 'use to' (không có d): 'Did you use to…?'.",
+        "Không dùng would cho trạng thái: nói 'I used to have long hair', không nói 'I would have long hair'.",
+        "used to không có dạng hiện tại. Thói quen hiện tại dùng hiện tại đơn + usually: 'I usually get up at six'."
+      ],
+      "soSanh": [
+        "en-b1-be-get-used-to"
+      ],
+      "tuKhoa": [
+        "used to",
+        "would thói quen",
+        "đã từng",
+        "trước đây thường",
+        "didn't use to"
+      ],
+      "quiz": [
+        {
+          "h": "I ___ have long hair when I was a child.",
+          "lc": [
+            "used to",
+            "use to",
+            "was used to",
+            "would"
+          ],
+          "da": 0,
+          "gt": "have (có) là trạng thái nên không dùng would; dạng khẳng định là used to."
+        },
+        {
+          "h": "Did you ___ play soccer after school?",
+          "lc": [
+            "using to",
+            "use to",
+            "used to",
+            "would"
+          ],
+          "da": 1,
+          "gt": "Sau Did phải dùng dạng nguyên mẫu: use to."
+        },
+        {
+          "h": "Câu nào SAI?",
+          "lc": [
+            "We used to live in Hue.",
+            "She didn't use to like coffee.",
+            "He would be very shy as a child.",
+            "Every summer we would visit my grandparents."
+          ],
+          "da": 2,
+          "gt": "be shy là trạng thái nên không dùng would chỉ thói quen; phải nói 'He used to be very shy'."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-be-get-used-to",
+      "nhom": "Các thì",
+      "tieuDe": "be used to / get used to",
+      "mau": "S + be/get + used to + N / V-ing",
+      "nghia": "đã quen với ~ / dần quen với ~",
+      "giaiThich": "be used to + danh từ / V-ing nghĩa là đã quen, không còn thấy lạ hay khó. get used to nói về quá trình trở nên quen. Ở đây to là giới từ nên theo sau là danh từ hoặc V-ing, khác hẳn used to + V (thói quen trong quá khứ).",
+      "cachGhep": [
+        "be (am/is/are/was/were) + used to + N / V-ing",
+        "get (get/got/is getting/will get) + used to + N / V-ing",
+        "Phủ định: I'm not used to + V-ing · I can't get used to + N"
+      ],
+      "viDu": [
+        {
+          "c": "I'm used to getting up early.",
+          "v": "Tôi quen dậy sớm rồi."
+        },
+        {
+          "c": "She isn't used to the cold weather yet.",
+          "v": "Cô ấy vẫn chưa quen với thời tiết lạnh."
+        },
+        {
+          "c": "It took me a month to get used to my new job.",
+          "v": "Tôi mất một tháng mới quen với công việc mới."
+        },
+        {
+          "c": "Are you getting used to living alone?",
+          "v": "Bạn đang dần quen với việc sống một mình chứ?"
+        }
+      ],
+      "luuY": [
+        "Lỗi kinh điển: 'I'm used to get up early' — sau be/get used to phải là V-ing.",
+        "Phân biệt: 'I used to drive to work' (trước đây thường lái xe, giờ không) ↔ 'I'm used to driving to work' (đã quen với việc lái xe đi làm)."
+      ],
+      "soSanh": [
+        "en-b1-used-to-would"
+      ],
+      "tuKhoa": [
+        "be used to",
+        "get used to",
+        "quen với",
+        "used to V-ing",
+        "da quen"
+      ],
+      "quiz": [
+        {
+          "h": "She ___ live in Hanoi, but now she lives in Da Nang.",
+          "lc": [
+            "is used to",
+            "was used to",
+            "used to",
+            "gets used to"
+          ],
+          "da": 2,
+          "gt": "Trạng thái trong quá khứ nay đã đổi: used to + V nguyên mẫu."
+        },
+        {
+          "h": "I'm used to ___ up early.",
+          "lc": [
+            "got",
+            "get",
+            "getting",
+            "gets"
+          ],
+          "da": 2,
+          "gt": "Sau be used to (to là giới từ) dùng V-ing."
+        },
+        {
+          "h": "It took me a month to ___ the cold weather.",
+          "lc": [
+            "getting used to",
+            "get used to",
+            "be used",
+            "used to"
+          ],
+          "da": 1,
+          "gt": "Sau 'to' dùng động từ nguyên mẫu: get used to + danh từ (dần quen với)."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-future-continuous",
+      "nhom": "Các thì",
+      "tieuDe": "Future continuous",
+      "mau": "S + will be + V-ing",
+      "nghia": "sẽ đang làm ~ (vào một thời điểm trong tương lai)",
+      "giaiThich": "Dùng để nói một hành động sẽ đang diễn ra tại một thời điểm xác định trong tương lai (this time tomorrow, at 8 p.m. tonight). Cũng dùng để hỏi lịch sự về dự định của người khác.",
+      "cachGhep": [
+        "Khẳng định: will be + V-ing",
+        "Phủ định: won't be + V-ing",
+        "Câu hỏi: Will + S + be + V-ing?"
+      ],
+      "viDu": [
+        {
+          "c": "This time tomorrow, I will be lying on the beach.",
+          "v": "Giờ này ngày mai tôi sẽ đang nằm trên bãi biển."
+        },
+        {
+          "c": "Don't call at eight. We'll be having dinner then.",
+          "v": "Đừng gọi lúc tám giờ. Lúc đó chúng tôi đang ăn tối."
+        },
+        {
+          "c": "She won't be working next Monday.",
+          "v": "Thứ Hai tới cô ấy sẽ không làm việc."
+        },
+        {
+          "c": "Will you be using the car this evening?",
+          "v": "Tối nay bạn có dùng xe không?"
+        }
+      ],
+      "luuY": [
+        "Đừng quên be: 'I will working' là sai, phải là 'I will be working'.",
+        "Động từ chỉ trạng thái không dùng dạng này: 'I will know the answer tomorrow', không nói 'I will be knowing'."
+      ],
+      "soSanh": [
+        "en-b1-future-forms"
+      ],
+      "tuKhoa": [
+        "tương lai tiếp diễn",
+        "will be V-ing",
+        "will be doing",
+        "this time tomorrow"
+      ],
+      "quiz": [
+        {
+          "h": "This time tomorrow, I ___ on the beach.",
+          "lc": [
+            "will be lying",
+            "will lying",
+            "am lie",
+            "lie"
+          ],
+          "da": 0,
+          "gt": "Hành động đang diễn ra tại một thời điểm tương lai: will be + V-ing."
+        },
+        {
+          "h": "Don't call at 8. We ___ dinner then.",
+          "lc": [
+            "has",
+            "will having",
+            "will be having",
+            "had"
+          ],
+          "da": 2,
+          "gt": "Lúc 8 giờ (tương lai) việc ăn tối đang diễn ra ⇒ will be having."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "At 10 a.m. tomorrow she will be take her exam.",
+            "She will taking her exam tomorrow.",
+            "I will be knowing the answer tomorrow.",
+            "At 10 a.m. tomorrow she will be taking her exam."
+          ],
+          "da": 3,
+          "gt": "Cấu trúc đúng là will be + V-ing; know không dùng dạng tiếp diễn."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-future-forms",
+      "nhom": "Các thì",
+      "tieuDe": "Các cách nói tương lai (tổng hợp)",
+      "mau": "will + V · be going to + V · am/is/are + V-ing · V(s) (lịch trình)",
+      "nghia": "chọn will / going to / hiện tại tiếp diễn / hiện tại đơn khi nói tương lai",
+      "giaiThich": "will dùng cho quyết định ngay lúc nói, lời hứa, lời đề nghị và dự đoán theo ý kiến riêng. be going to dùng cho dự định đã có từ trước và dự đoán dựa trên dấu hiệu đang thấy. Hiện tại tiếp diễn dùng cho việc đã sắp xếp xong (có giờ, có hẹn). Hiện tại đơn dùng cho lịch tàu xe, thời khoá biểu.",
+      "cachGhep": [
+        "Quyết định tức thì / hứa / đề nghị: I'll + V",
+        "Dự định có sẵn / có dấu hiệu: am/is/are going to + V",
+        "Đã sắp xếp với người khác: am/is/are + V-ing + thời gian tương lai",
+        "Lịch cố định: The train leaves at… / The class starts at…"
+      ],
+      "viDu": [
+        {
+          "c": "The phone is ringing. — OK, I'll get it.",
+          "v": "Điện thoại đang reo kìa. — Được, để tôi nghe."
+        },
+        {
+          "c": "I'm going to study abroad next year.",
+          "v": "Năm sau tôi định đi du học."
+        },
+        {
+          "c": "We're meeting Lan at seven tonight.",
+          "v": "Bảy giờ tối nay chúng tôi hẹn gặp Lan."
+        },
+        {
+          "c": "The train leaves at 6:15 tomorrow morning.",
+          "v": "Tàu khởi hành lúc 6 giờ 15 sáng mai."
+        }
+      ],
+      "luuY": [
+        "Người Việt hay dùng will cho mọi chữ 'sẽ'. Kế hoạch đã quyết từ trước nên dùng going to hoặc hiện tại tiếp diễn: 'I'm going to visit my aunt this weekend'.",
+        "Không dùng will sau when / if / as soon as khi nói về tương lai."
+      ],
+      "soSanh": [
+        "en-b1-future-continuous",
+        "en-b1-future-time-clauses"
+      ],
+      "tuKhoa": [
+        "will going to",
+        "tương lai",
+        "future forms",
+        "hiện tại tiếp diễn chỉ tương lai",
+        "lịch trình"
+      ],
+      "quiz": [
+        {
+          "h": "Look at those black clouds! It ___ rain.",
+          "lc": [
+            "goes to",
+            "is going to",
+            "is",
+            "going"
+          ],
+          "da": 1,
+          "gt": "Dự đoán dựa trên dấu hiệu đang thấy: be going to + V."
+        },
+        {
+          "h": "A: The phone is ringing. B: OK, I ___ it.",
+          "lc": [
+            "'ll get",
+            "am getting",
+            "get",
+            "am going to get"
+          ],
+          "da": 0,
+          "gt": "Quyết định ngay lúc nói dùng will ('ll)."
+        },
+        {
+          "h": "Thì nào thường dùng cho lịch tàu xe, thời khoá biểu trong tương lai?",
+          "lc": [
+            "Hiện tại hoàn thành",
+            "Quá khứ đơn",
+            "Hiện tại đơn (The bus leaves at 8.)"
+          ],
+          "da": 2,
+          "gt": "Lịch trình cố định dùng hiện tại đơn dù nói về tương lai."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-future-time-clauses",
+      "nhom": "Các thì",
+      "tieuDe": "Mệnh đề thời gian chỉ tương lai",
+      "mau": "when / as soon as / until / before / after + hiện tại đơn, S + will + V",
+      "nghia": "khi / ngay khi / cho tới khi ~ (thì) sẽ ~",
+      "giaiThich": "Trong mệnh đề thời gian nói về tương lai, động từ chia ở hiện tại đơn (hoặc hiện tại hoàn thành để nhấn việc đã xong), không dùng will. will chỉ nằm ở mệnh đề chính.",
+      "cachGhep": [
+        "When / As soon as / After / Before + S + V(s), S + will + V",
+        "S + will + V + until + S + V(s)",
+        "Nhấn việc xong trước: after / when + S + have/has + V3"
+      ],
+      "viDu": [
+        {
+          "c": "I'll call you when I get home.",
+          "v": "Khi nào về đến nhà tôi sẽ gọi cho bạn."
+        },
+        {
+          "c": "As soon as she arrives, we'll have dinner.",
+          "v": "Ngay khi cô ấy đến, chúng ta sẽ ăn tối."
+        },
+        {
+          "c": "We won't start until everyone is here.",
+          "v": "Chúng ta sẽ chưa bắt đầu cho tới khi mọi người có mặt đủ."
+        },
+        {
+          "c": "I'll lend you the book after I've finished it.",
+          "v": "Tôi sẽ cho bạn mượn cuốn sách sau khi tôi đọc xong."
+        }
+      ],
+      "luuY": [
+        "Lỗi người Việt rất hay mắc vì dịch chữ 'sẽ': 'When I will get home, I will call you' là sai. Sau when / as soon as / until / before / after không dùng will.",
+        "Mệnh đề thời gian đứng trước thì có dấu phẩy; đứng sau thì không."
+      ],
+      "soSanh": [
+        "en-b1-first-conditional",
+        "en-b1-future-forms"
+      ],
+      "tuKhoa": [
+        "when as soon as until",
+        "mệnh đề thời gian",
+        "không dùng will sau when",
+        "time clauses"
+      ],
+      "quiz": [
+        {
+          "h": "I'll call you when I ___ home.",
+          "lc": [
+            "get",
+            "would get",
+            "am going to get",
+            "will get"
+          ],
+          "da": 0,
+          "gt": "Sau when nói về tương lai dùng hiện tại đơn, không dùng will."
+        },
+        {
+          "h": "We won't start until everyone ___ here.",
+          "lc": [
+            "would be",
+            "be",
+            "will be",
+            "is"
+          ],
+          "da": 3,
+          "gt": "Sau until dùng hiện tại đơn: everyone is."
+        },
+        {
+          "h": "As soon as she ___, we'll have dinner.",
+          "lc": [
+            "is going to arrive",
+            "will arrive",
+            "arrived",
+            "arrives"
+          ],
+          "da": 3,
+          "gt": "Sau as soon as dùng hiện tại đơn (she arrives) dù nói về tương lai."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-first-conditional",
+      "nhom": "Câu điều kiện – ước muốn",
+      "tieuDe": "First conditional + unless",
+      "mau": "If + S + V (hiện tại đơn), S + will + V · unless = if… not",
+      "nghia": "nếu ~ thì sẽ ~ (điều có thể xảy ra) · trừ khi ~",
+      "giaiThich": "Dùng cho tình huống có thật, có khả năng xảy ra ở hiện tại hoặc tương lai và kết quả của nó. Mệnh đề if dùng hiện tại đơn, mệnh đề chính dùng will (hoặc can, may, câu mệnh lệnh). unless nghĩa là 'trừ khi', tương đương if… not.",
+      "cachGhep": [
+        "If + S + V(s), S + will/won't + V",
+        "S + will + V + if + S + V(s) (không có dấu phẩy)",
+        "Unless + S + V khẳng định = If + S + don't/doesn't + V",
+        "Mệnh đề chính có thể dùng can / may / might / câu mệnh lệnh"
+      ],
+      "viDu": [
+        {
+          "c": "If it rains tomorrow, we'll stay home.",
+          "v": "Nếu mai trời mưa, chúng tôi sẽ ở nhà."
+        },
+        {
+          "c": "You won't pass the exam if you don't study.",
+          "v": "Bạn sẽ không thi đỗ nếu không học."
+        },
+        {
+          "c": "Unless you leave now, you'll miss the bus.",
+          "v": "Trừ khi bạn đi ngay bây giờ, không thì sẽ lỡ xe buýt."
+        },
+        {
+          "c": "What will you do if she says no?",
+          "v": "Bạn sẽ làm gì nếu cô ấy từ chối?"
+        }
+      ],
+      "luuY": [
+        "Không dùng will trong mệnh đề if: 'If it will rain…' là sai.",
+        "Sau unless động từ ở dạng khẳng định; 'unless you don't hurry' là phủ định hai lần, sai nghĩa.",
+        "Tiếng Việt 'nếu… thì…' không cần 'then' trong tiếng Anh."
+      ],
+      "soSanh": [
+        "en-b1-second-conditional",
+        "en-b1-first-vs-second-conditional",
+        "en-b1-future-time-clauses"
+      ],
+      "tuKhoa": [
+        "điều kiện loại 1",
+        "if will",
+        "unless",
+        "trừ khi",
+        "cau dieu kien loai 1"
+      ],
+      "quiz": [
+        {
+          "h": "If it ___ tomorrow, we'll stay home.",
+          "lc": [
+            "will rain",
+            "would rain",
+            "rains",
+            "rained"
+          ],
+          "da": 2,
+          "gt": "Mệnh đề if của điều kiện loại 1 dùng hiện tại đơn, không dùng will."
+        },
+        {
+          "h": "You'll miss the bus unless you ___ now.",
+          "lc": [
+            "don't leave",
+            "will leave",
+            "leave",
+            "won't leave"
+          ],
+          "da": 2,
+          "gt": "unless = if not, nên động từ theo sau ở dạng khẳng định, hiện tại đơn."
+        },
+        {
+          "h": "If you study hard, you ___ the exam.",
+          "lc": [
+            "passing",
+            "will pass",
+            "passed",
+            "would passed"
+          ],
+          "da": 1,
+          "gt": "Mệnh đề chính của điều kiện loại 1 dùng will + V nguyên mẫu."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-second-conditional",
+      "nhom": "Câu điều kiện – ước muốn",
+      "tieuDe": "Second conditional",
+      "mau": "If + S + V2 (quá khứ đơn), S + would + V",
+      "nghia": "nếu (giả sử) ~ thì sẽ ~ (không có thật ở hiện tại)",
+      "giaiThich": "Dùng cho tình huống tưởng tượng, trái với thực tế hiện tại hoặc rất khó xảy ra. Động từ ở mệnh đề if chia quá khứ đơn nhưng nghĩa là hiện tại/tương lai. 'If I were you, I would…' là cách đưa lời khuyên.",
+      "cachGhep": [
+        "If + S + V2, S + would/wouldn't + V",
+        "to be: thường dùng were cho mọi ngôi (If I were…, If he were…)",
+        "Mệnh đề chính có thể dùng could / might thay would"
+      ],
+      "viDu": [
+        {
+          "c": "If I had a lot of money, I would travel around the world.",
+          "v": "Nếu có nhiều tiền, tôi sẽ đi du lịch vòng quanh thế giới."
+        },
+        {
+          "c": "If I were you, I wouldn't buy that phone.",
+          "v": "Nếu tôi là bạn, tôi sẽ không mua chiếc điện thoại đó."
+        },
+        {
+          "c": "What would you do if you saw a ghost?",
+          "v": "Bạn sẽ làm gì nếu nhìn thấy ma?"
+        },
+        {
+          "c": "She could get a better job if she spoke English.",
+          "v": "Cô ấy có thể tìm được việc tốt hơn nếu nói được tiếng Anh."
+        }
+      ],
+      "luuY": [
+        "Không dùng would trong mệnh đề if: 'If I would have money…' là sai.",
+        "Động từ quá khứ ở đây không chỉ thời gian quá khứ; tiếng Việt không đổi dạng động từ nên người học hay quên lùi thì: 'If I have money, I would…' là sai."
+      ],
+      "soSanh": [
+        "en-b1-first-conditional",
+        "en-b1-first-vs-second-conditional",
+        "en-b1-wish-past-simple",
+        "en-b2-third-conditional"
+      ],
+      "tuKhoa": [
+        "điều kiện loại 2",
+        "if would",
+        "if I were you",
+        "giả định hiện tại",
+        "cau dieu kien loai 2"
+      ],
+      "quiz": [
+        {
+          "h": "What would you do if you ___ a ghost?",
+          "lc": [
+            "see",
+            "saw",
+            "would see",
+            "will see"
+          ],
+          "da": 1,
+          "gt": "Mệnh đề if của điều kiện loại 2 dùng quá khứ đơn (saw)."
+        },
+        {
+          "h": "If I ___ a lot of money, I would travel the world.",
+          "lc": [
+            "will have",
+            "had",
+            "would have",
+            "have"
+          ],
+          "da": 1,
+          "gt": "Giả định trái với hiện tại: if + quá khứ đơn (had)."
+        },
+        {
+          "h": "If I were you, I ___ that job.",
+          "lc": [
+            "would take",
+            "taking",
+            "will take",
+            "took"
+          ],
+          "da": 0,
+          "gt": "Mệnh đề chính của điều kiện loại 2: would + V nguyên mẫu."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-first-vs-second-conditional",
+      "nhom": "Câu điều kiện – ước muốn",
+      "tieuDe": "First vs second conditional",
+      "mau": "If + hiện tại đơn, will + V (có thể xảy ra)  ↔  If + quá khứ đơn, would + V (tưởng tượng)",
+      "nghia": "phân biệt 'nếu' có khả năng thật và 'nếu' giả định",
+      "giaiThich": "Cùng một sự việc có thể dùng loại 1 hoặc loại 2 tuỳ người nói nghĩ nó có khả năng xảy ra hay không. Loại 1: người nói coi là có thể xảy ra. Loại 2: người nói coi là không có thật hoặc khó xảy ra, hoặc muốn nói nhẹ nhàng, lịch sự hơn.",
+      "cachGhep": [
+        "Có khả năng thật: If + V(s), will + V",
+        "Giả định / khó xảy ra: If + V2, would + V",
+        "Không trộn: 'If I have time, I would…' và 'If I had time, I will…' đều sai"
+      ],
+      "viDu": [
+        {
+          "c": "If I have time tonight, I'll help you.",
+          "v": "Nếu tối nay có thời gian, tôi sẽ giúp bạn. (có thể có)"
+        },
+        {
+          "c": "If I had time, I would help you, but I'm too busy.",
+          "v": "Nếu có thời gian thì tôi đã giúp bạn, nhưng tôi bận quá."
+        },
+        {
+          "c": "If we leave now, we'll get there on time.",
+          "v": "Nếu đi ngay bây giờ, chúng ta sẽ đến đúng giờ."
+        },
+        {
+          "c": "I don't have a car. If I had one, I'd drive you home.",
+          "v": "Tôi không có xe. Nếu có, tôi sẽ lái xe đưa bạn về."
+        }
+      ],
+      "luuY": [
+        "Tiếng Việt chỉ có một chữ 'nếu' cho cả hai loại, nên phải tự xác định: việc này có thật / có khả năng không?",
+        "Hai mệnh đề phải cùng loại: hiện tại đơn đi với will, quá khứ đơn đi với would."
+      ],
+      "soSanh": [
+        "en-b1-first-conditional",
+        "en-b1-second-conditional"
+      ],
+      "tuKhoa": [
+        "điều kiện loại 1 và 2",
+        "if will would",
+        "phân biệt câu điều kiện",
+        "có thật giả định"
+      ],
+      "quiz": [
+        {
+          "h": "I've got the tickets. If we ___ now, we'll get there on time.",
+          "lc": [
+            "will leave",
+            "leave",
+            "would leave",
+            "left"
+          ],
+          "da": 1,
+          "gt": "Mệnh đề chính dùng will ⇒ loại 1, mệnh đề if dùng hiện tại đơn."
+        },
+        {
+          "h": "I don't have a car. If I ___ one, I'd drive you home.",
+          "lc": [
+            "had",
+            "have",
+            "would have",
+            "will have"
+          ],
+          "da": 0,
+          "gt": "Trái với thực tế (không có xe) và mệnh đề chính dùng would ⇒ if + quá khứ đơn."
+        },
+        {
+          "h": "Câu nào cho thấy người nói nghĩ việc trúng giải là KHÓ xảy ra?",
+          "lc": [
+            "When I win, I'll buy a house.",
+            "If I won, I'd buy a house.",
+            "If I win, I'll buy a house."
+          ],
+          "da": 1,
+          "gt": "Loại 2 (won… would) dùng cho điều người nói coi là khó xảy ra."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-wish-past-simple",
+      "nhom": "Câu điều kiện – ước muốn",
+      "tieuDe": "wish + past simple (ước ở hiện tại)",
+      "mau": "S + wish(es) + S + V2 / were / could + V",
+      "nghia": "ước gì (bây giờ) ~ — điều trái với thực tế hiện tại",
+      "giaiThich": "Dùng để nói mình tiếc về một điều ở hiện tại và mong nó khác đi. Động từ sau wish lùi về quá khứ đơn dù nghĩa là hiện tại. Với khả năng, dùng could.",
+      "cachGhep": [
+        "wish + S + V2: I wish I had more time.",
+        "to be: thường dùng were cho mọi ngôi: I wish I were taller.",
+        "Khả năng: wish + S + could + V",
+        "Phủ định: wish + S + didn't + V"
+      ],
+      "viDu": [
+        {
+          "c": "I wish I had a bigger room.",
+          "v": "Ước gì tôi có căn phòng rộng hơn."
+        },
+        {
+          "c": "She wishes she could speak French.",
+          "v": "Cô ấy ước mình nói được tiếng Pháp."
+        },
+        {
+          "c": "I wish it weren't so hot today.",
+          "v": "Ước gì hôm nay trời không nóng thế này."
+        },
+        {
+          "c": "Do you ever wish you lived in another country?",
+          "v": "Có bao giờ bạn ước mình sống ở một nước khác không?"
+        }
+      ],
+      "luuY": [
+        "Không dùng hiện tại sau wish: 'I wish I have…', 'I wish I can…' là sai.",
+        "wish cho điều không có thật; với điều có thể xảy ra trong tương lai dùng hope: 'I hope you pass the exam'."
+      ],
+      "soSanh": [
+        "en-b1-second-conditional",
+        "en-b2-wish-past-perfect"
+      ],
+      "tuKhoa": [
+        "wish",
+        "ước gì",
+        "câu ước hiện tại",
+        "I wish I were",
+        "cau uoc"
+      ],
+      "quiz": [
+        {
+          "h": "She wishes she ___ speak French.",
+          "lc": [
+            "could",
+            "may",
+            "can",
+            "will"
+          ],
+          "da": 0,
+          "gt": "Ước về khả năng ở hiện tại: wish + could + V."
+        },
+        {
+          "h": "I wish I ___ taller.",
+          "lc": [
+            "be",
+            "will be",
+            "were",
+            "am"
+          ],
+          "da": 2,
+          "gt": "Sau wish, to be lùi về quá khứ: were."
+        },
+        {
+          "h": "'I wish I had a car' cho biết điều gì?",
+          "lc": [
+            "Tôi đang có xe.",
+            "Hiện tại tôi không có xe và tiếc về điều đó.",
+            "Tôi sắp mua xe.",
+            "Trước đây tôi từng có xe."
+          ],
+          "da": 1,
+          "gt": "wish + quá khứ đơn diễn tả điều trái với thực tế hiện tại."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-would-rather-prefer",
+      "nhom": "Câu điều kiện – ước muốn",
+      "tieuDe": "would rather / prefer",
+      "mau": "would rather + V (than + V) · prefer + N/V-ing + to + N/V-ing · would prefer + to V",
+      "nghia": "thích ~ hơn, muốn ~ hơn",
+      "giaiThich": "prefer nói về sở thích nói chung; would rather và would prefer nói về điều mình muốn trong một tình huống cụ thể. Khi muốn người khác làm gì, dùng would rather + chủ ngữ + quá khứ đơn.",
+      "cachGhep": [
+        "would rather ('d rather) + V nguyên mẫu không to (+ than + V)",
+        "Phủ định: would rather not + V",
+        "prefer A to B (A, B là danh từ hoặc V-ing)",
+        "would prefer + to V (+ rather than + V)",
+        "would rather + S + V2: muốn người khác làm / đừng làm gì"
+      ],
+      "viDu": [
+        {
+          "c": "I'd rather stay home than go out tonight.",
+          "v": "Tối nay tôi thích ở nhà hơn là ra ngoài."
+        },
+        {
+          "c": "I prefer tea to coffee.",
+          "v": "Tôi thích trà hơn cà phê."
+        },
+        {
+          "c": "Would you prefer to sit by the window?",
+          "v": "Bạn có muốn ngồi cạnh cửa sổ hơn không?"
+        },
+        {
+          "c": "I'd rather you didn't tell anyone.",
+          "v": "Tôi mong bạn đừng nói với ai."
+        }
+      ],
+      "luuY": [
+        "Sau would rather không có to: 'I'd rather to stay' là sai.",
+        "prefer đi với to, không đi với than: 'I prefer tea than coffee' là sai.",
+        "'d rather là would rather, không phải had rather."
+      ],
+      "tuKhoa": [
+        "would rather",
+        "prefer",
+        "thích hơn",
+        "I'd rather",
+        "would prefer"
+      ],
+      "quiz": [
+        {
+          "h": "I'd rather ___ at home tonight.",
+          "lc": [
+            "stayed",
+            "to stay",
+            "staying",
+            "stay"
+          ],
+          "da": 3,
+          "gt": "would rather + động từ nguyên mẫu không to."
+        },
+        {
+          "h": "I prefer tea ___ coffee.",
+          "lc": [
+            "to",
+            "than",
+            "from",
+            "with"
+          ],
+          "da": 0,
+          "gt": "Cấu trúc là prefer A to B."
+        },
+        {
+          "h": "I'd rather you ___ in here.",
+          "lc": [
+            "won't smoke",
+            "not smoke",
+            "didn't smoke",
+            "don't smoke"
+          ],
+          "da": 2,
+          "gt": "would rather + chủ ngữ khác + quá khứ đơn (didn't smoke)."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-its-time",
+      "nhom": "Câu điều kiện – ước muốn",
+      "tieuDe": "It's time…",
+      "mau": "It's time (for sb) + to V · It's (high) time + S + V2",
+      "nghia": "đến lúc (ai đó) phải ~ rồi",
+      "giaiThich": "It's time + to V nói chung chung rằng đã đến lúc làm gì. It's time + chủ ngữ + quá khứ đơn hàm ý việc đó lẽ ra nên làm rồi, hơi trách nhẹ; động từ quá khứ ở đây mang nghĩa hiện tại. Thêm high để nhấn mạnh.",
+      "cachGhep": [
+        "It's time + to V",
+        "It's time + for + người + to V",
+        "It's (high) time + S + V2"
+      ],
+      "viDu": [
+        {
+          "c": "It's time to go to bed.",
+          "v": "Đến giờ đi ngủ rồi."
+        },
+        {
+          "c": "It's time for us to leave.",
+          "v": "Đến lúc chúng ta phải đi rồi."
+        },
+        {
+          "c": "It's time we went home.",
+          "v": "Đến lúc chúng ta về nhà rồi đấy."
+        },
+        {
+          "c": "It's high time you found a job.",
+          "v": "Đã đến lúc bạn phải tìm việc rồi đấy."
+        }
+      ],
+      "luuY": [
+        "Trong mẫu It's time + S + V2, động từ quá khứ không chỉ quá khứ — đừng dịch là 'đã'.",
+        "Không nói 'It's time to we go'; chọn một trong hai: 'It's time for us to go' hoặc 'It's time we went'."
+      ],
+      "tuKhoa": [
+        "it's time",
+        "it's high time",
+        "đến lúc",
+        "da den luc"
+      ],
+      "quiz": [
+        {
+          "h": "It's time we ___ home.",
+          "lc": [
+            "are going",
+            "will go",
+            "went",
+            "gone"
+          ],
+          "da": 2,
+          "gt": "It's time + chủ ngữ + quá khứ đơn (went)."
+        },
+        {
+          "h": "It's time ___ to bed.",
+          "lc": [
+            "going",
+            "to go",
+            "go",
+            "went"
+          ],
+          "da": 1,
+          "gt": "Không có chủ ngữ riêng thì dùng It's time + to V."
+        },
+        {
+          "h": "It's high time you ___ a job.",
+          "lc": [
+            "found",
+            "will find",
+            "to find",
+            "finding"
+          ],
+          "da": 0,
+          "gt": "It's high time + chủ ngữ + quá khứ đơn (found)."
+        }
+      ]
+    }
+  ]
+}

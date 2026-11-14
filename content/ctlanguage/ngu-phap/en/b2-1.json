@@ -1,0 +1,1132 @@
+{
+  "nn": "en",
+  "cap": "B2",
+  "diem": [
+    {
+      "id": "en-b2-future-perfect",
+      "nhom": "Các thì",
+      "tieuDe": "Future perfect / future perfect continuous",
+      "mau": "S + will have + V3 · S + will have been + V-ing",
+      "nghia": "(đến lúc đó) sẽ đã ~ xong · sẽ đã ~ được (bao lâu)",
+      "giaiThich": "Future perfect dùng khi đứng ở một mốc trong tương lai nhìn lại và thấy việc đã hoàn thành trước mốc đó. Dạng tiếp diễn nhấn vào độ dài của một việc tính đến mốc ấy. Thường đi với by + thời điểm, by the time + mệnh đề hiện tại đơn.",
+      "cachGhep": [
+        "will have + V3 · phủ định: won't have + V3",
+        "Câu hỏi: Will + S + have + V3?",
+        "will have been + V-ing + for + khoảng thời gian",
+        "by next year / by 2030 / by then / by the time + S + V (hiện tại đơn)"
+      ],
+      "viDu": [
+        {
+          "c": "By next June, I will have graduated from college.",
+          "v": "Đến tháng Sáu năm sau, tôi đã tốt nghiệp đại học rồi."
+        },
+        {
+          "c": "Call me at nine. I'll have finished dinner by then.",
+          "v": "Gọi tôi lúc chín giờ nhé. Lúc đó tôi ăn tối xong rồi."
+        },
+        {
+          "c": "By the end of this year, she will have been working here for ten years.",
+          "v": "Đến cuối năm nay, cô ấy sẽ làm ở đây tròn mười năm."
+        },
+        {
+          "c": "Will you have finished the report by Friday?",
+          "v": "Đến thứ Sáu bạn làm xong báo cáo chưa?"
+        }
+      ],
+      "luuY": [
+        "Sau by the time dùng hiện tại đơn, không dùng will: 'By the time you arrive, we will have eaten'.",
+        "Người Việt hay dùng will + V cho mọi câu có 'sẽ'; khi có 'by + mốc' và ý 'xong trước đó' thì cần will have + V3.",
+        "Động từ chỉ trạng thái không dùng dạng tiếp diễn: 'will have known', không nói 'will have been knowing'."
+      ],
+      "soSanh": [
+        "en-b2-past-perfect-continuous"
+      ],
+      "tuKhoa": [
+        "tương lai hoàn thành",
+        "will have done",
+        "will have been doing",
+        "by the time",
+        "tuong lai hoan thanh"
+      ],
+      "quiz": [
+        {
+          "h": "By next June, I ___ from college.",
+          "lc": [
+            "graduated",
+            "have graduated",
+            "will have graduated",
+            "am graduating"
+          ],
+          "da": 2,
+          "gt": "Việc hoàn thành trước một mốc tương lai (by next June) ⇒ will have + V3."
+        },
+        {
+          "h": "By the end of this year, she ___ here for ten years.",
+          "lc": [
+            "will have been working",
+            "is working",
+            "works",
+            "has been working"
+          ],
+          "da": 0,
+          "gt": "Độ dài tính đến một mốc tương lai ⇒ will have been + V-ing."
+        },
+        {
+          "h": "Call me at nine. I ___ dinner by then.",
+          "lc": [
+            "finish",
+            "have finish",
+            "am finishing",
+            "will have finished"
+          ],
+          "da": 3,
+          "gt": "'by then' (trước lúc đó, ở tương lai) ⇒ will have finished."
+        }
+      ]
+    },
+    {
+      "id": "en-b2-past-perfect-continuous",
+      "nhom": "Các thì",
+      "tieuDe": "Past perfect continuous",
+      "mau": "S + had been + V-ing",
+      "nghia": "đã làm ~ suốt (một thời gian) trước một thời điểm trong quá khứ",
+      "giaiThich": "Dùng để nói một hành động đã kéo dài một thời gian trước một mốc hoặc một sự việc khác trong quá khứ, nhấn vào quá trình và độ dài. Cũng dùng để giải thích nguyên nhân của một tình trạng trong quá khứ.",
+      "cachGhep": [
+        "had been + V-ing · phủ định: hadn't been + V-ing",
+        "Câu hỏi: Had + S + been + V-ing? · How long had you been + V-ing?",
+        "Thường đi với for, since, when, before, by the time"
+      ],
+      "viDu": [
+        {
+          "c": "We had been waiting for two hours when the bus finally came.",
+          "v": "Chúng tôi đã chờ suốt hai tiếng thì xe buýt mới đến."
+        },
+        {
+          "c": "Her eyes were red because she had been crying.",
+          "v": "Mắt cô ấy đỏ vì trước đó cô ấy đã khóc."
+        },
+        {
+          "c": "He hadn't been feeling well for weeks before he saw a doctor.",
+          "v": "Anh ấy thấy không khoẻ nhiều tuần liền rồi mới đi khám."
+        },
+        {
+          "c": "How long had you been learning English before you moved to Canada?",
+          "v": "Bạn đã học tiếng Anh bao lâu trước khi chuyển đến Canada?"
+        }
+      ],
+      "luuY": [
+        "Động từ chỉ trạng thái dùng quá khứ hoàn thành đơn: 'I had known him for years', không nói 'had been knowing'.",
+        "Có số lần / số lượng hoàn thành thì dùng dạng đơn: 'She had written three letters', không nói 'had been writing three letters'."
+      ],
+      "soSanh": [
+        "en-b2-future-perfect"
+      ],
+      "tuKhoa": [
+        "quá khứ hoàn thành tiếp diễn",
+        "had been V-ing",
+        "had been doing",
+        "qua khu hoan thanh tiep dien"
+      ],
+      "quiz": [
+        {
+          "h": "Her eyes were red because she ___.",
+          "lc": [
+            "is crying",
+            "has been crying",
+            "cries",
+            "had been crying"
+          ],
+          "da": 3,
+          "gt": "Hành động kéo dài trước một thời điểm quá khứ và để lại dấu vết ⇒ had been + V-ing."
+        },
+        {
+          "h": "We ___ for two hours when the bus finally came.",
+          "lc": [
+            "are waiting",
+            "have been waiting",
+            "had been waiting",
+            "wait"
+          ],
+          "da": 2,
+          "gt": "Việc chờ kéo dài tới một mốc quá khứ (the bus came) ⇒ had been waiting."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "I had known him for years when he moved away.",
+            "I had been knowing him for years when he moved away.",
+            "I have known him for years when he moved away."
+          ],
+          "da": 0,
+          "gt": "know là động từ chỉ trạng thái nên dùng quá khứ hoàn thành đơn; mốc quá khứ nên không dùng have known."
+        }
+      ]
+    },
+    {
+      "id": "en-b2-future-in-the-past",
+      "nhom": "Các thì",
+      "tieuDe": "Future in the past: was going to / would",
+      "mau": "S + was/were going to + V · S + would + V",
+      "nghia": "(lúc đó) đã định ~ / (lúc đó nghĩ rằng) sẽ ~",
+      "giaiThich": "Dùng khi đứng ở một thời điểm trong quá khứ và nói về việc lúc ấy còn ở tương lai. was/were going to thường là dự định đã không thành. would là dạng quá khứ của will, hay gặp sau said, thought, knew, promised.",
+      "cachGhep": [
+        "was/were going to + V (thường kèm but…: định làm mà không làm)",
+        "S + said / thought / knew / promised + (that) + S + would + V",
+        "was/were about to + V: lúc đó sắp sửa làm"
+      ],
+      "viDu": [
+        {
+          "c": "I was going to call you last night, but I fell asleep.",
+          "v": "Tối qua tôi định gọi cho bạn nhưng lại ngủ quên mất."
+        },
+        {
+          "c": "He promised he would help, but he never did.",
+          "v": "Anh ấy hứa sẽ giúp nhưng chẳng bao giờ làm."
+        },
+        {
+          "c": "We were going to meet at six, but the meeting was canceled.",
+          "v": "Chúng tôi định gặp nhau lúc sáu giờ nhưng cuộc họp bị huỷ."
+        },
+        {
+          "c": "I knew she wouldn't like the idea.",
+          "v": "Tôi đã biết là cô ấy sẽ không thích ý tưởng đó."
+        }
+      ],
+      "luuY": [
+        "Người Việt hay giữ will sau động từ quá khứ: 'He promised he will help' → 'would help'.",
+        "'I was going to…' thường hàm ý việc đã KHÔNG xảy ra; đừng dùng nó để kể việc đã làm."
+      ],
+      "tuKhoa": [
+        "was going to",
+        "would",
+        "tương lai trong quá khứ",
+        "đã định",
+        "future in the past"
+      ],
+      "quiz": [
+        {
+          "h": "I ___ call you last night, but I fell asleep.",
+          "lc": [
+            "will",
+            "was going to",
+            "have",
+            "am going to"
+          ],
+          "da": 1,
+          "gt": "Dự định trong quá khứ đã không thành ⇒ was going to + V."
+        },
+        {
+          "h": "He promised he ___ help, but he never did.",
+          "lc": [
+            "is going to",
+            "has",
+            "would",
+            "will"
+          ],
+          "da": 2,
+          "gt": "Sau promised (quá khứ), will lùi thành would."
+        },
+        {
+          "h": "We ___ meet at six, but the meeting was canceled.",
+          "lc": [
+            "were going to",
+            "have been",
+            "are going to",
+            "will"
+          ],
+          "da": 0,
+          "gt": "Kế hoạch trong quá khứ đã không diễn ra ⇒ were going to."
+        }
+      ]
+    },
+    {
+      "id": "en-b2-third-conditional",
+      "nhom": "Câu điều kiện – ước muốn",
+      "tieuDe": "Third conditional",
+      "mau": "If + S + had + V3, S + would have + V3",
+      "nghia": "giá mà (lúc đó) ~ thì đã ~ (trái với sự thật trong quá khứ)",
+      "giaiThich": "Dùng để tưởng tượng một quá khứ khác với điều đã thực sự xảy ra và kết quả của nó, thường để bày tỏ tiếc nuối hoặc phê bình. Cả điều kiện lẫn kết quả đều ở quá khứ và đều không có thật.",
+      "cachGhep": [
+        "If + S + had (not) + V3, S + would (not) have + V3",
+        "Mệnh đề chính có thể dùng could have / might have + V3",
+        "Viết tắt: I'd have = I would have; If I'd known = If I had known"
+      ],
+      "viDu": [
+        {
+          "c": "If I had studied harder, I would have passed the exam.",
+          "v": "Nếu tôi học chăm hơn thì đã thi đỗ rồi."
+        },
+        {
+          "c": "If she had caught the train, she would have arrived on time.",
+          "v": "Nếu cô ấy kịp chuyến tàu thì đã đến đúng giờ."
+        },
+        {
+          "c": "We wouldn't have gotten lost if we had taken a map.",
+          "v": "Nếu mang theo bản đồ thì chúng tôi đã không bị lạc."
+        },
+        {
+          "c": "What would you have done if you had been in my position?",
+          "v": "Nếu ở vào vị trí của tôi, bạn đã làm gì?"
+        }
+      ],
+      "luuY": [
+        "Không dùng would have trong mệnh đề if: 'If I would have known…' là sai → 'If I had known…'.",
+        "Tiếng Việt chỉ nói 'nếu… thì đã…' mà không đổi dạng động từ, nên người học hay dùng loại 2 cho việc trong quá khứ: 'If I studied harder, I would pass' không nói được ý tiếc nuối về quá khứ.",
+        "Câu loại 3 luôn ngụ ý điều ngược lại đã xảy ra."
+      ],
+      "soSanh": [
+        "en-b2-mixed-conditionals",
+        "en-b2-wish-past-perfect",
+        "en-b2-inversion-conditionals"
+      ],
+      "tuKhoa": [
+        "điều kiện loại 3",
+        "if had would have",
+        "third conditional",
+        "giá mà",
+        "cau dieu kien loai 3"
+      ],
+      "quiz": [
+        {
+          "h": "If I had studied harder, I ___ the exam last week.",
+          "lc": [
+            "would have passed",
+            "will pass",
+            "had passed",
+            "would pass"
+          ],
+          "da": 0,
+          "gt": "Kết quả không có thật trong quá khứ: would have + V3."
+        },
+        {
+          "h": "If she ___ the train, she would have arrived on time.",
+          "lc": [
+            "has caught",
+            "had caught",
+            "caught",
+            "would have caught"
+          ],
+          "da": 1,
+          "gt": "Mệnh đề if của loại 3 dùng quá khứ hoàn thành: had + V3."
+        },
+        {
+          "h": "'If he had left earlier, he wouldn't have missed the flight.' Thực tế là gì?",
+          "lc": [
+            "Anh ấy đi muộn và lỡ chuyến bay.",
+            "Anh ấy không định bay.",
+            "Anh ấy sẽ đi sớm.",
+            "Anh ấy đi sớm và kịp chuyến bay."
+          ],
+          "da": 0,
+          "gt": "Loại 3 nói điều trái với quá khứ: thực tế anh ấy không đi sớm nên đã lỡ chuyến bay."
+        }
+      ]
+    },
+    {
+      "id": "en-b2-mixed-conditionals",
+      "nhom": "Câu điều kiện – ước muốn",
+      "tieuDe": "Mixed conditionals",
+      "mau": "If + had + V3, would + V (quá khứ → hiện tại) · If + V2, would have + V3 (hiện tại → quá khứ)",
+      "nghia": "nếu (trước đây) ~ thì (bây giờ) đã ~ · nếu (vốn dĩ) ~ thì (lúc đó) đã ~",
+      "giaiThich": "Dùng khi điều kiện và kết quả ở hai thời điểm khác nhau. Kiểu phổ biến nhất: điều kiện trái với quá khứ, kết quả trái với hiện tại. Kiểu thứ hai: một tình trạng chung không có thật (hiện tại, lâu dài) dẫn tới kết quả khác trong quá khứ.",
+      "cachGhep": [
+        "Quá khứ → hiện tại: If + S + had + V3, S + would + V (thường có now)",
+        "Hiện tại → quá khứ: If + S + V2 / were, S + would have + V3",
+        "Chọn thì theo THỜI ĐIỂM của từng vế, không theo công thức loại 2 hay loại 3"
+      ],
+      "viDu": [
+        {
+          "c": "If I had taken that job, I would be living in Singapore now.",
+          "v": "Nếu hồi đó tôi nhận công việc ấy thì giờ tôi đang sống ở Singapore."
+        },
+        {
+          "c": "If you had gone to bed earlier, you wouldn't be so tired now.",
+          "v": "Nếu tối qua bạn đi ngủ sớm hơn thì giờ đã không mệt thế này."
+        },
+        {
+          "c": "If I weren't afraid of flying, I would have gone to Japan with you last year.",
+          "v": "Nếu tôi không sợ đi máy bay thì năm ngoái tôi đã đi Nhật cùng bạn."
+        },
+        {
+          "c": "If he spoke Chinese, he would have gotten the job.",
+          "v": "Nếu anh ấy biết tiếng Trung thì đã được nhận vào làm rồi."
+        }
+      ],
+      "luuY": [
+        "Dấu hiệu nhận ra: một vế có từ chỉ quá khứ (last year, yesterday), vế kia có now / today hoặc nói về đặc điểm lâu dài.",
+        "Không dùng would trong mệnh đề if dù ở kiểu nào."
+      ],
+      "soSanh": [
+        "en-b2-third-conditional"
+      ],
+      "tuKhoa": [
+        "điều kiện hỗn hợp",
+        "mixed conditional",
+        "if had would now",
+        "cau dieu kien hon hop"
+      ],
+      "quiz": [
+        {
+          "h": "If I had taken that job, I ___ in Singapore now.",
+          "lc": [
+            "will live",
+            "had lived",
+            "would be living",
+            "am living"
+          ],
+          "da": 2,
+          "gt": "Điều kiện ở quá khứ, kết quả ở hiện tại (now) ⇒ would + V."
+        },
+        {
+          "h": "If I ___ afraid of flying, I would have gone to Japan with you last year.",
+          "lc": [
+            "weren't",
+            "am",
+            "wouldn't be",
+            "won't be"
+          ],
+          "da": 0,
+          "gt": "Tình trạng chung không có thật ⇒ quá khứ đơn giả định (weren't)."
+        },
+        {
+          "h": "If you had gone to bed earlier, you ___ so tired now.",
+          "lc": [
+            "wouldn't be",
+            "hadn't been",
+            "won't be",
+            "aren't"
+          ],
+          "da": 0,
+          "gt": "Kết quả trái với hiện tại (now) ⇒ wouldn't + V."
+        }
+      ]
+    },
+    {
+      "id": "en-b2-wish-past-perfect",
+      "nhom": "Câu điều kiện – ước muốn",
+      "tieuDe": "wish + past perfect (tiếc về quá khứ)",
+      "mau": "S + wish(es) + S + had (not) + V3",
+      "nghia": "ước gì (lúc đó) đã ~ / đã không ~",
+      "giaiThich": "Dùng để bày tỏ sự hối tiếc về một việc đã xảy ra hoặc đã không xảy ra trong quá khứ. Động từ sau wish lùi về quá khứ hoàn thành; sự thật luôn ngược lại với điều ước.",
+      "cachGhep": [
+        "wish + S + had + V3 (tiếc vì đã không làm)",
+        "wish + S + hadn't + V3 (tiếc vì đã làm)",
+        "wish + S + could have + V3 (tiếc vì đã không thể)"
+      ],
+      "viDu": [
+        {
+          "c": "I wish I had studied harder when I was at school.",
+          "v": "Ước gì hồi đi học tôi đã học chăm hơn."
+        },
+        {
+          "c": "She wishes she hadn't told him the secret.",
+          "v": "Cô ấy ước mình đã không kể bí mật cho anh ta."
+        },
+        {
+          "c": "I wish I hadn't eaten so much.",
+          "v": "Giá mà tôi đừng ăn nhiều như thế."
+        },
+        {
+          "c": "Do you wish you had chosen a different major?",
+          "v": "Bạn có ước mình đã chọn một ngành học khác không?"
+        }
+      ],
+      "luuY": [
+        "Tiếc về quá khứ mà dùng quá khứ đơn là sai thì: 'I wish I studied harder last year' → 'had studied'.",
+        "Không dùng would have sau wish: 'I wish I would have known' không chuẩn → 'I wish I had known'."
+      ],
+      "soSanh": [
+        "en-b2-wish-would",
+        "en-b2-if-only",
+        "en-b2-should-have",
+        "en-b2-third-conditional"
+      ],
+      "tuKhoa": [
+        "wish had done",
+        "ước quá khứ",
+        "hối tiếc",
+        "wish past perfect",
+        "cau uoc qua khu"
+      ],
+      "quiz": [
+        {
+          "h": "I wish I ___ harder when I was at school.",
+          "lc": [
+            "had studied",
+            "have studied",
+            "studied",
+            "would study"
+          ],
+          "da": 0,
+          "gt": "Tiếc về quá khứ: wish + had + V3."
+        },
+        {
+          "h": "She wishes she ___ him the truth yesterday.",
+          "lc": [
+            "tells",
+            "would tell",
+            "told",
+            "had told"
+          ],
+          "da": 3,
+          "gt": "Có 'yesterday' ⇒ điều ước về quá khứ ⇒ had told."
+        },
+        {
+          "h": "'I wish I hadn't eaten so much.' Thực tế là gì?",
+          "lc": [
+            "Tôi đã ăn quá nhiều.",
+            "Tôi không thích ăn.",
+            "Tôi sẽ ăn ít lại.",
+            "Tôi chưa ăn gì."
+          ],
+          "da": 0,
+          "gt": "wish + hadn't + V3: sự thật là đã làm việc đó và giờ thấy tiếc."
+        }
+      ]
+    },
+    {
+      "id": "en-b2-wish-would",
+      "nhom": "Câu điều kiện – ước muốn",
+      "tieuDe": "wish + would",
+      "mau": "S + wish(es) + S (người/vật khác) + would (not) + V",
+      "nghia": "ước gì (ai đó / điều gì đó) chịu ~ / thôi ~",
+      "giaiThich": "Dùng khi mình khó chịu về hành vi của người khác hoặc một tình huống và muốn nó thay đổi; thường mang giọng phàn nàn. Chủ ngữ sau wish phải khác với người ước. Chỉ dùng cho hành động, không dùng cho trạng thái.",
+      "cachGhep": [
+        "wish + người / vật khác + would + V",
+        "wish + người / vật khác + wouldn't + V",
+        "Ước về chính mình hoặc về trạng thái ⇒ dùng wish + quá khứ đơn / could"
+      ],
+      "viDu": [
+        {
+          "c": "I wish you would stop making that noise.",
+          "v": "Ước gì bạn thôi làm ồn như thế."
+        },
+        {
+          "c": "I wish it would stop raining.",
+          "v": "Ước gì trời tạnh mưa."
+        },
+        {
+          "c": "She wishes her neighbors wouldn't play music so late.",
+          "v": "Cô ấy ước hàng xóm đừng mở nhạc khuya như thế."
+        },
+        {
+          "c": "Don't you wish he would listen for once?",
+          "v": "Bạn không mong anh ấy chịu lắng nghe dù chỉ một lần sao?"
+        }
+      ],
+      "luuY": [
+        "Không dùng 'I wish I would…': muốn ước về bản thân dùng 'I wish I could…' hoặc 'I wish I were…'.",
+        "Không dùng cho trạng thái: 'I wish I would be taller' là sai → 'I wish I were taller'.",
+        "Điều có thể thành hiện thực thì dùng hope: 'I hope it stops raining soon'."
+      ],
+      "soSanh": [
+        "en-b2-wish-past-perfect",
+        "en-b2-if-only"
+      ],
+      "tuKhoa": [
+        "wish would",
+        "phàn nàn",
+        "ước ai đó thay đổi",
+        "I wish you would"
+      ],
+      "quiz": [
+        {
+          "h": "I wish you ___ making that noise.",
+          "lc": [
+            "stop",
+            "will stop",
+            "would stop",
+            "are stopping"
+          ],
+          "da": 2,
+          "gt": "Muốn người khác thay đổi hành vi: wish + would + V."
+        },
+        {
+          "h": "I wish it ___ raining. I want to go out.",
+          "lc": [
+            "stops",
+            "would stop",
+            "has stopped",
+            "will stop"
+          ],
+          "da": 1,
+          "gt": "Mong tình huống thay đổi: wish + it + would + V."
+        },
+        {
+          "h": "Câu nào SAI?",
+          "lc": [
+            "I wish it would stop snowing.",
+            "I wish they would be quiet.",
+            "I wish he would call me.",
+            "I wish I would be taller."
+          ],
+          "da": 3,
+          "gt": "Không dùng wish + would khi chủ ngữ là chính mình và với trạng thái; phải nói 'I wish I were taller'."
+        }
+      ]
+    },
+    {
+      "id": "en-b2-if-only",
+      "nhom": "Câu điều kiện – ước muốn",
+      "tieuDe": "If only…",
+      "mau": "If only + S + V2 / had + V3 / would + V",
+      "nghia": "giá mà ~, ước gì ~ (mạnh hơn I wish)",
+      "giaiThich": "If only dùng giống I wish nhưng cảm xúc mạnh hơn, thường là câu cảm thán. Chia thì y như sau wish: quá khứ đơn cho hiện tại, quá khứ hoàn thành cho quá khứ, would cho điều muốn người khác thay đổi.",
+      "cachGhep": [
+        "Hiện tại: If only + S + V2 / were / could + V",
+        "Quá khứ: If only + S + had + V3",
+        "Muốn thay đổi: If only + S (người khác) + would + V",
+        "Có thể thêm mệnh đề kết quả: If only I had known, I would have helped."
+      ],
+      "viDu": [
+        {
+          "c": "If only I had more time!",
+          "v": "Giá mà tôi có nhiều thời gian hơn!"
+        },
+        {
+          "c": "If only I had listened to her advice.",
+          "v": "Giá mà tôi đã nghe lời khuyên của cô ấy."
+        },
+        {
+          "c": "If only he would stop smoking!",
+          "v": "Giá mà anh ấy chịu bỏ thuốc lá!"
+        },
+        {
+          "c": "If only we could see each other more often.",
+          "v": "Giá mà chúng ta có thể gặp nhau thường xuyên hơn."
+        }
+      ],
+      "luuY": [
+        "Đừng nhầm với 'only if' (chỉ khi): 'I'll go only if you come' là một điều kiện thật, không phải ước muốn.",
+        "Không dùng hiện tại sau if only: 'If only I have…' là sai."
+      ],
+      "soSanh": [
+        "en-b2-wish-past-perfect",
+        "en-b2-wish-would"
+      ],
+      "tuKhoa": [
+        "if only",
+        "giá mà",
+        "ước gì",
+        "only if"
+      ],
+      "quiz": [
+        {
+          "h": "If only I ___ more time! I'm always so busy.",
+          "lc": [
+            "would have",
+            "have",
+            "will have",
+            "had"
+          ],
+          "da": 3,
+          "gt": "Ước về hiện tại: if only + quá khứ đơn."
+        },
+        {
+          "h": "If only I ___ to her advice last year.",
+          "lc": [
+            "listen",
+            "would listen",
+            "listened",
+            "had listened"
+          ],
+          "da": 3,
+          "gt": "Tiếc về quá khứ (last year): if only + had + V3."
+        },
+        {
+          "h": "If only he ___ smoking! It's so annoying.",
+          "lc": [
+            "would stop",
+            "will stop",
+            "has stopped",
+            "stops"
+          ],
+          "da": 0,
+          "gt": "Mong người khác thay đổi thói quen gây khó chịu: if only + would + V."
+        }
+      ]
+    },
+    {
+      "id": "en-b2-provided-as-long-as",
+      "nhom": "Câu điều kiện – ước muốn",
+      "tieuDe": "provided (that) / as long as / supposing",
+      "mau": "provided (that) / providing / as long as / on condition that + S + V · Supposing + S + V, …?",
+      "nghia": "miễn là ~, với điều kiện là ~ · giả sử ~",
+      "giaiThich": "provided (that), providing, as long as, on condition that mạnh hơn if: chỉ khi điều kiện này được đáp ứng thì việc kia mới xảy ra. supposing / suppose dùng để nêu một giả định rồi hỏi kết quả. Cách chia thì giống mệnh đề if.",
+      "cachGhep": [
+        "S + will/can + V + provided (that) / as long as + S + V (hiện tại đơn)",
+        "Supposing / Suppose + S + V (hiện tại: có thể xảy ra) …?",
+        "Supposing + S + V2, what would…? (giả định không thật)",
+        "Không dùng will sau các từ này"
+      ],
+      "viDu": [
+        {
+          "c": "You can borrow my bike as long as you bring it back tonight.",
+          "v": "Bạn có thể mượn xe đạp của tôi, miễn là tối nay mang trả."
+        },
+        {
+          "c": "I'll go provided that he invites me.",
+          "v": "Tôi sẽ đi với điều kiện anh ấy mời tôi."
+        },
+        {
+          "c": "Supposing you won the lottery, what would you do?",
+          "v": "Giả sử bạn trúng xổ số, bạn sẽ làm gì?"
+        },
+        {
+          "c": "Children can come in providing they are with an adult.",
+          "v": "Trẻ em được vào miễn là đi cùng người lớn."
+        }
+      ],
+      "luuY": [
+        "Như sau if, không dùng will: 'provided that he will invite me' là sai.",
+        "as long as còn có nghĩa so sánh / thời gian ('as long as you like'); nhìn ngữ cảnh để phân biệt."
+      ],
+      "soSanh": [
+        "en-b2-in-case"
+      ],
+      "tuKhoa": [
+        "provided that",
+        "as long as",
+        "supposing",
+        "miễn là",
+        "với điều kiện"
+      ],
+      "quiz": [
+        {
+          "h": "You can borrow my bike ___ you bring it back tonight.",
+          "lc": [
+            "as long as",
+            "although",
+            "despite",
+            "unless"
+          ],
+          "da": 0,
+          "gt": "Nêu điều kiện bắt buộc: as long as (miễn là)."
+        },
+        {
+          "h": "___ you won the lottery, what would you do?",
+          "lc": [
+            "Although",
+            "Despite",
+            "Unless",
+            "Supposing"
+          ],
+          "da": 3,
+          "gt": "Nêu một giả định rồi hỏi kết quả: Supposing."
+        },
+        {
+          "h": "I'll go provided that he ___ me.",
+          "lc": [
+            "will invite",
+            "would invite",
+            "invites",
+            "inviting"
+          ],
+          "da": 2,
+          "gt": "Sau provided that dùng hiện tại đơn như mệnh đề if loại 1."
+        }
+      ]
+    },
+    {
+      "id": "en-b2-in-case",
+      "nhom": "Câu điều kiện – ước muốn",
+      "tieuDe": "in case vs if",
+      "mau": "S + V + in case + S + V (hiện tại đơn / quá khứ đơn)",
+      "nghia": "phòng khi ~, đề phòng trường hợp ~",
+      "giaiThich": "in case nói về việc làm TRƯỚC để phòng một điều có thể xảy ra. if nói về việc chỉ làm KHI điều đó thực sự xảy ra. Sau in case dùng hiện tại đơn cho tương lai, quá khứ đơn khi kể chuyện quá khứ.",
+      "cachGhep": [
+        "Hiện tại / tương lai: S + V / will + V + in case + S + V (hiện tại đơn)",
+        "Quá khứ: S + V2 + in case + S + V2",
+        "in case of + danh từ (trên biển báo): In case of fire, use the stairs.",
+        "just in case: để phòng hờ (đứng cuối câu)"
+      ],
+      "viDu": [
+        {
+          "c": "I'll take an umbrella in case it rains.",
+          "v": "Tôi sẽ mang ô theo phòng khi trời mưa."
+        },
+        {
+          "c": "Take some water in case you get thirsty.",
+          "v": "Mang theo ít nước phòng khi bạn khát."
+        },
+        {
+          "c": "I wrote down her address in case I forgot it.",
+          "v": "Tôi ghi lại địa chỉ của cô ấy phòng khi quên."
+        },
+        {
+          "c": "Let's leave early, just in case.",
+          "v": "Mình đi sớm đi, cho chắc ăn."
+        }
+      ],
+      "luuY": [
+        "'I'll buy some bread in case Tom comes' = mua sẵn bây giờ (dù chưa biết Tom có đến không). 'I'll buy some bread if Tom comes' = Tom đến rồi mới mua.",
+        "Không dùng will sau in case: 'in case it will rain' là sai."
+      ],
+      "soSanh": [
+        "en-b2-provided-as-long-as"
+      ],
+      "tuKhoa": [
+        "in case",
+        "phòng khi",
+        "just in case",
+        "in case of",
+        "đề phòng"
+      ],
+      "quiz": [
+        {
+          "h": "I wrote down her address in case I ___ it.",
+          "lc": [
+            "would forget",
+            "forgetting",
+            "forgot",
+            "will forget"
+          ],
+          "da": 2,
+          "gt": "Kể chuyện quá khứ: sau in case dùng quá khứ đơn."
+        },
+        {
+          "h": "Câu nào nghĩa là 'mang ô đi SẴN để phòng trời mưa'?",
+          "lc": [
+            "I'll take an umbrella unless it rains.",
+            "I'll take an umbrella in case it rains.",
+            "I'll take an umbrella if it rains."
+          ],
+          "da": 1,
+          "gt": "in case = làm trước để đề phòng; if = trời mưa rồi mới mang."
+        },
+        {
+          "h": "Take some water in case you ___ thirsty.",
+          "lc": [
+            "get",
+            "would get",
+            "will get",
+            "getting"
+          ],
+          "da": 0,
+          "gt": "Sau in case nói về tương lai dùng hiện tại đơn, không dùng will."
+        }
+      ]
+    },
+    {
+      "id": "en-b2-as-if",
+      "nhom": "Câu điều kiện – ước muốn",
+      "tieuDe": "as if / as though",
+      "mau": "S + V + as if / as though + S + V (thật) hoặc V2 / had + V3 (không thật)",
+      "nghia": "như thể là ~, cứ như là ~",
+      "giaiThich": "Dùng để nói một điều trông, nghe hoặc có vẻ như thế nào. Nếu điều đó có thể đúng, dùng thì bình thường. Nếu người nói biết nó không đúng, lùi thì: quá khứ đơn cho hiện tại không thật, quá khứ hoàn thành cho quá khứ không thật.",
+      "cachGhep": [
+        "look / sound / feel / seem + as if / as though + mệnh đề",
+        "Có thể đúng: It looks as if it's going to rain.",
+        "Không thật ở hiện tại: as if + S + V2 / were",
+        "Không thật ở quá khứ: as if + S + had + V3"
+      ],
+      "viDu": [
+        {
+          "c": "It looks as if it's going to rain.",
+          "v": "Trông có vẻ như trời sắp mưa."
+        },
+        {
+          "c": "He talks as if he knew everything.",
+          "v": "Anh ta nói cứ như thể cái gì cũng biết."
+        },
+        {
+          "c": "She looked as though she had seen a ghost.",
+          "v": "Trông cô ấy như thể vừa gặp ma."
+        },
+        {
+          "c": "Why do you treat me as if I were a child?",
+          "v": "Sao bạn đối xử với tôi như thể tôi là trẻ con vậy?"
+        }
+      ],
+      "luuY": [
+        "Không viết 'like if' hay 'as like'. Văn nói thân mật dùng like thay as if ('It looks like it's going to rain').",
+        "Lùi thì cho biết thái độ: 'He talks as if he knows' (có thể anh ấy biết thật) ↔ 'as if he knew' (tôi cho là không)."
+      ],
+      "tuKhoa": [
+        "as if",
+        "as though",
+        "như thể",
+        "cứ như là"
+      ],
+      "quiz": [
+        {
+          "h": "He talks as if he ___ everything, but he actually knows very little.",
+          "lc": [
+            "will know",
+            "knew",
+            "has known",
+            "would know"
+          ],
+          "da": 1,
+          "gt": "Điều không thật ở hiện tại: as if + quá khứ đơn."
+        },
+        {
+          "h": "It looks ___ it's going to rain.",
+          "lc": [
+            "as like",
+            "as",
+            "like if",
+            "as if"
+          ],
+          "da": 3,
+          "gt": "Cấu trúc đúng là look as if + mệnh đề."
+        },
+        {
+          "h": "She looked as though she ___ a ghost.",
+          "lc": [
+            "will see",
+            "had seen",
+            "has seen",
+            "sees"
+          ],
+          "da": 1,
+          "gt": "Việc không thật xảy ra trước một thời điểm quá khứ: as though + had + V3."
+        }
+      ]
+    },
+    {
+      "id": "en-b2-modal-perfect-deduction",
+      "nhom": "Động từ khuyết thiếu",
+      "tieuDe": "Suy đoán về quá khứ: must have / might have / can't have",
+      "mau": "S + must / might / may / could / can't + have + V3",
+      "nghia": "chắc hẳn đã ~ / có lẽ đã ~ / không thể nào đã ~",
+      "giaiThich": "Dùng để suy luận ở hiện tại về một việc trong quá khứ, dựa trên bằng chứng. must have: gần như chắc chắn đã xảy ra. might / may / could have: có khả năng. can't / couldn't have: gần như chắc chắn đã không xảy ra.",
+      "cachGhep": [
+        "must have + V3: chắc hẳn đã",
+        "might / may / could have + V3: có lẽ đã",
+        "can't / couldn't have + V3: không thể nào đã",
+        "Dạng tiếp diễn: must have been + V-ing"
+      ],
+      "viDu": [
+        {
+          "c": "The ground is wet. It must have rained last night.",
+          "v": "Mặt đất ướt. Chắc hẳn đêm qua trời mưa."
+        },
+        {
+          "c": "I can't find my keys. I might have left them at the office.",
+          "v": "Tôi không tìm thấy chìa khoá. Có lẽ tôi để quên ở cơ quan."
+        },
+        {
+          "c": "She can't have seen the email. She has been offline all day.",
+          "v": "Cô ấy không thể nào đã đọc email được. Cả ngày nay cô ấy không lên mạng."
+        },
+        {
+          "c": "Where could they have gone?",
+          "v": "Họ có thể đã đi đâu được nhỉ?"
+        }
+      ],
+      "luuY": [
+        "Sau modal luôn là have (không chia) + V3: 'must has gone', 'must had gone', 'must have went' đều sai.",
+        "Phủ định của must have (suy đoán) là can't have, không phải mustn't have.",
+        "Đừng nhầm với 'had to + V' (đã phải làm): 'He must have left' (chắc đã đi) ↔ 'He had to leave' (đã buộc phải đi)."
+      ],
+      "soSanh": [
+        "en-b2-should-have"
+      ],
+      "tuKhoa": [
+        "must have done",
+        "might have",
+        "can't have",
+        "suy đoán quá khứ",
+        "modal perfect"
+      ],
+      "quiz": [
+        {
+          "h": "The ground is wet. It ___ last night.",
+          "lc": [
+            "should rain",
+            "can't have rained",
+            "must rain",
+            "must have rained"
+          ],
+          "da": 3,
+          "gt": "Có bằng chứng rõ ⇒ suy đoán chắc chắn về quá khứ: must have + V3."
+        },
+        {
+          "h": "She ___ the email — she's been offline all day.",
+          "lc": [
+            "must have seen",
+            "should see",
+            "can't have seen",
+            "might see"
+          ],
+          "da": 2,
+          "gt": "Bằng chứng cho thấy việc đó không thể đã xảy ra ⇒ can't have + V3."
+        },
+        {
+          "h": "I can't find my keys. I ___ them at the office, but I'm not sure.",
+          "lc": [
+            "must leave",
+            "might have left",
+            "can't have left",
+            "should leave"
+          ],
+          "da": 1,
+          "gt": "Không chắc chắn ⇒ might have + V3."
+        }
+      ]
+    },
+    {
+      "id": "en-b2-should-have",
+      "nhom": "Động từ khuyết thiếu",
+      "tieuDe": "should have / could have / needn't have",
+      "mau": "S + should (not) / could / needn't + have + V3",
+      "nghia": "lẽ ra nên ~ / lẽ ra đã có thể ~ / lẽ ra không cần ~",
+      "giaiThich": "Dùng để nhìn lại quá khứ với thái độ tiếc nuối hoặc phê bình. should have: việc nên làm mà đã không làm. shouldn't have: việc đã làm mà lẽ ra không nên. could have: đã có khả năng, cơ hội nhưng không làm. needn't have: đã làm một việc hoá ra không cần thiết.",
+      "cachGhep": [
+        "should have + V3 · shouldn't have + V3",
+        "ought to have + V3 (như should have, trang trọng hơn)",
+        "could have + V3",
+        "needn't have + V3 (đã làm, nhưng thừa) ↔ didn't need to + V (không cần, thường là đã không làm)"
+      ],
+      "viDu": [
+        {
+          "c": "I should have gone to bed earlier last night.",
+          "v": "Lẽ ra tối qua tôi nên đi ngủ sớm hơn."
+        },
+        {
+          "c": "You shouldn't have shouted at her.",
+          "v": "Lẽ ra bạn không nên quát cô ấy."
+        },
+        {
+          "c": "You could have told me you'd be late. I waited for an hour.",
+          "v": "Lẽ ra bạn có thể báo tôi là bạn đến muộn. Tôi đã chờ cả tiếng đồng hồ."
+        },
+        {
+          "c": "You needn't have bought so much food. We already had plenty.",
+          "v": "Lẽ ra bạn không cần mua nhiều đồ ăn thế. Nhà mình có đủ rồi."
+        }
+      ],
+      "luuY": [
+        "Tiếng Việt 'lẽ ra nên' không có dạng riêng cho quá khứ, nên người học hay nói 'I should go to bed earlier last night' — phải là 'should have gone'.",
+        "Văn nói đọc 'should've'; đừng viết thành 'should of'.",
+        "'I didn't need to wait' (không cần chờ, nên không chờ) ↔ 'I needn't have waited' (đã chờ, hoá ra không cần)."
+      ],
+      "soSanh": [
+        "en-b2-modal-perfect-deduction",
+        "en-b2-wish-past-perfect"
+      ],
+      "tuKhoa": [
+        "should have done",
+        "could have",
+        "needn't have",
+        "lẽ ra nên",
+        "hối tiếc phê bình"
+      ],
+      "quiz": [
+        {
+          "h": "I'm so tired. I ___ to bed earlier last night.",
+          "lc": [
+            "must have gone",
+            "should have gone",
+            "needn't have gone",
+            "should go"
+          ],
+          "da": 1,
+          "gt": "Tiếc vì việc nên làm mà đã không làm: should have + V3."
+        },
+        {
+          "h": "You ___ so much food. We already had plenty.",
+          "lc": [
+            "couldn't buy",
+            "mustn't have bought",
+            "needn't have bought",
+            "can't buy"
+          ],
+          "da": 2,
+          "gt": "Đã làm một việc hoá ra không cần thiết: needn't have + V3."
+        },
+        {
+          "h": "You ___ me you'd be late. I waited for an hour.",
+          "lc": [
+            "must have told",
+            "could tell",
+            "can't have told",
+            "could have told"
+          ],
+          "da": 3,
+          "gt": "Trách vì đã có thể làm mà không làm: could have + V3."
+        }
+      ]
+    },
+    {
+      "id": "en-b2-be-supposed-to",
+      "nhom": "Động từ khuyết thiếu",
+      "tieuDe": "be supposed to / be about to / be likely to / be bound to",
+      "mau": "S + be + supposed / about / likely / bound + to + V",
+      "nghia": "lẽ ra phải, được cho là ~ · sắp sửa ~ · có khả năng ~ · chắc chắn sẽ ~",
+      "giaiThich": "be supposed to nói điều được mong đợi theo quy định, kế hoạch hoặc theo lời mọi người (và thực tế thường khác đi). be about to nói việc sắp xảy ra ngay. be likely to nói việc có khả năng cao xảy ra. be bound to nói việc gần như chắc chắn sẽ xảy ra.",
+      "cachGhep": [
+        "am/is/are supposed to + V · was/were supposed to + V (lẽ ra đã phải, nhưng không)",
+        "am/is/are about to + V (không đi kèm mốc thời gian như tomorrow)",
+        "am/is/are (un)likely to + V · It is likely that + S + will + V",
+        "am/is/are bound to + V"
+      ],
+      "viDu": [
+        {
+          "c": "You are supposed to wear a helmet when you ride a motorbike.",
+          "v": "Khi đi xe máy bạn phải đội mũ bảo hiểm (theo quy định)."
+        },
+        {
+          "c": "Hurry up! The movie is about to start.",
+          "v": "Nhanh lên! Phim sắp bắt đầu rồi."
+        },
+        {
+          "c": "Prices are likely to rise again next year.",
+          "v": "Sang năm giá cả có khả năng lại tăng."
+        },
+        {
+          "c": "She has trained so hard that she is bound to win.",
+          "v": "Cô ấy tập luyện chăm chỉ như vậy thì chắc chắn sẽ thắng."
+        }
+      ],
+      "luuY": [
+        "Luôn có be và đuôi -d: 'You suppose to wear a helmet' là sai → 'You are supposed to'.",
+        "'He was supposed to come at eight' thường hàm ý anh ấy đã không đến đúng như vậy.",
+        "likely là tính từ: nói 'He is likely to come', không nói 'He likely to come'."
+      ],
+      "tuKhoa": [
+        "be supposed to",
+        "be about to",
+        "be likely to",
+        "be bound to",
+        "sắp sửa chắc chắn sẽ"
+      ],
+      "quiz": [
+        {
+          "h": "Hurry up! The movie is ___ start.",
+          "lc": [
+            "likely",
+            "supposed",
+            "about to",
+            "bound"
+          ],
+          "da": 2,
+          "gt": "Sắp xảy ra ngay: be about to + V; các lựa chọn khác thiếu to."
+        },
+        {
+          "h": "You ___ to wear a helmet when you ride a motorbike. It's the law.",
+          "lc": [
+            "suppose",
+            "are supposed",
+            "are supposing",
+            "supposed"
+          ],
+          "da": 1,
+          "gt": "Điều phải làm theo quy định: be supposed to + V."
+        },
+        {
+          "h": "'She is bound to win' nghĩa là gì?",
+          "lc": [
+            "Cô ấy sắp sửa thi đấu.",
+            "Cô ấy gần như chắc chắn sẽ thắng.",
+            "Cô ấy được yêu cầu phải thắng.",
+            "Cô ấy khó mà thắng."
+          ],
+          "da": 1,
+          "gt": "be bound to + V diễn tả việc gần như chắc chắn xảy ra."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1426 @@
+{
+  "nn": "ja",
+  "cap": "N3",
+  "diem": [
+    {
+      "id": "ja-n3-hodo-wa-nai",
+      "nhom": "Nhấn mạnh – mức độ",
+      "tieuDe": "〜ほど〜はない",
+      "mau": "N + ほど / くらい + … + N + は + ない (người: いない)",
+      "nghia": "không có gì (ai) ~ bằng ~; ~ là nhất",
+      "giaiThich": "Cách nói so sánh nhất theo cảm nhận chủ quan của người nói: không có cái gì đạt mức như N. Dùng くらい thay cho ほど cũng được.",
+      "cachGhep": [
+        "Danh từ + ほど + tính từ + もの / こと / 所 + は + ない",
+        "Nói về người: N + ほど + … + 人 + は + いない"
+      ],
+      "viDu": [
+        {
+          "c": "健康ほど大切なものはありません。",
+          "d": "けんこうほど たいせつな ものは ありません。",
+          "v": "Không có gì quan trọng bằng sức khoẻ."
+        },
+        {
+          "c": "彼女ほど親切な人はいないと思います。",
+          "d": "かのじょほど しんせつな ひとは いないと おもいます。",
+          "v": "Tôi nghĩ không có ai tốt bụng bằng cô ấy."
+        },
+        {
+          "c": "試験の前の日ほど嫌な日はない。",
+          "d": "しけんの まえの ひほど いやな ひは ない。",
+          "v": "Không có ngày nào đáng ghét bằng ngày trước kỳ thi."
+        }
+      ],
+      "luuY": [
+        "Khác AはBほど〜ない (A không ~ bằng B): ở mẫu này N đứng trước ほど chính là cái đứng nhất.",
+        "Là ý kiến chủ quan, không dùng cho sự thật khách quan đo đếm được (dùng 一番)."
+      ],
+      "soSanh": [
+        "ja-n3-kurai-hodo"
+      ],
+      "tuKhoa": [
+        "hodo wa nai",
+        "hodo nai",
+        "kurai wa nai",
+        "không gì bằng",
+        "so sánh nhất"
+      ],
+      "quiz": [
+        {
+          "h": "母の料理（　）おいしいものはない。",
+          "lc": [
+            "ほど",
+            "さえ",
+            "こそ",
+            "なんか"
+          ],
+          "da": 0,
+          "gt": "N + ほど + … + ものはない: không gì ngon bằng."
+        },
+        {
+          "h": "「日本語ほど難しい言葉はない」 nghĩa là gì?",
+          "lc": [
+            "Tiếng Nhật không khó",
+            "Tiếng Nhật là khó nhất",
+            "Có thứ tiếng khó hơn tiếng Nhật"
+          ],
+          "da": 1,
+          "gt": "N + ほど〜はない = N là nhất."
+        },
+        {
+          "h": "田中さんほどまじめな人は（　）。",
+          "lc": [
+            "います",
+            "あります",
+            "いません"
+          ],
+          "da": 2,
+          "gt": "Nói về người thì dùng いない / いません."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-bakari",
+      "nhom": "Nhấn mạnh – mức độ",
+      "tieuDe": "〜ばかり (toàn là)",
+      "mau": "N + ばかり / V-て + ばかりいる",
+      "nghia": "toàn là ~, chỉ toàn ~, suốt ngày chỉ ~",
+      "giaiThich": "Diễn tả một thứ chiếm phần lớn, hoặc một hành động lặp đi lặp lại quá nhiều. Thường mang ý phàn nàn, chê trách của người nói.",
+      "cachGhep": [
+        "Danh từ + ばかり + động từ (thay cho が, を; có thể thành にばかり, とばかり)",
+        "Động từ thể て + ばかりいる"
+      ],
+      "viDu": [
+        {
+          "c": "弟はゲームばかりしています。",
+          "d": "おとうとは ゲームばかり しています。",
+          "v": "Em trai tôi suốt ngày chỉ chơi game."
+        },
+        {
+          "c": "肉ばかり食べないで、野菜も食べなさい。",
+          "d": "にくばかり たべないで、やさいも たべなさい。",
+          "v": "Đừng ăn toàn thịt, ăn cả rau nữa đi."
+        },
+        {
+          "c": "彼は文句を言ってばかりいます。",
+          "d": "かれは もんくを いってばかり います。",
+          "v": "Anh ta lúc nào cũng chỉ phàn nàn."
+        }
+      ],
+      "luuY": [
+        "Khác だけ: だけ là \"chỉ\" theo nghĩa giới hạn chính xác, trung tính; ばかり là \"toàn, quá nhiều\" và có ý chê.",
+        "Đừng nhầm với V-た + ばかり (vừa mới làm xong) đã học ở N4."
+      ],
+      "soSanh": [
+        "ja-n3-dake-de-naku"
+      ],
+      "tuKhoa": [
+        "bakari",
+        "te bakari iru",
+        "toàn là",
+        "chỉ toàn",
+        "suốt ngày"
+      ],
+      "quiz": [
+        {
+          "h": "息子は勉強しないで、遊んで（　）いる。",
+          "lc": [
+            "ばかり",
+            "さえ",
+            "こそ",
+            "ほど"
+          ],
+          "da": 0,
+          "gt": "V-て + ばかりいる: suốt ngày chỉ chơi."
+        },
+        {
+          "h": "甘い物（　）食べていると、体によくない。",
+          "lc": [
+            "ほど",
+            "ばかり",
+            "こそ"
+          ],
+          "da": 1,
+          "gt": "\"Ăn toàn đồ ngọt\" ⇒ N + ばかり."
+        },
+        {
+          "h": "Câu nào có ばかり mang nghĩa \"toàn là\"?",
+          "lc": [
+            "今、家に着いたばかりです。",
+            "日本に来たばかりで、何も分かりません。",
+            "うちの子はテレビばかり見ています。"
+          ],
+          "da": 2,
+          "gt": "N + ばかり = toàn là; V-た + ばかり ở hai câu đầu là \"vừa mới\"."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-dake-de-naku",
+      "nhom": "Nhấn mạnh – mức độ",
+      "tieuDe": "〜だけでなく／〜ばかりでなく",
+      "mau": "thể thường (Aな + な, N) + だけでなく・ばかりでなく + … も",
+      "nghia": "không chỉ ~ mà còn ~",
+      "giaiThich": "Nêu một điều rồi bổ sung thêm điều khác cùng chiều. ばかりでなく cứng hơn, hay dùng trong văn viết; trong hội thoại thường nói だけじゃなくて. Vế sau thường có も.",
+      "cachGhep": [
+        "Danh từ + だけでなく / ばかりでなく",
+        "Động từ / tính từ đuôi い thể thường + だけでなく",
+        "Tính từ đuôi な + な + だけでなく"
+      ],
+      "viDu": [
+        {
+          "c": "彼は英語だけでなく、フランス語も話せます。",
+          "d": "かれは えいごだけでなく、フランスごも はなせます。",
+          "v": "Anh ấy không chỉ nói được tiếng Anh mà cả tiếng Pháp."
+        },
+        {
+          "c": "この店は安いだけでなく、味もいいです。",
+          "d": "この みせは やすいだけでなく、あじも いいです。",
+          "v": "Quán này không chỉ rẻ mà vị cũng ngon."
+        },
+        {
+          "c": "彼女は歌が上手なばかりでなく、ダンスもできます。",
+          "d": "かのじょは うたが じょうずな ばかりでなく、ダンスも できます。",
+          "v": "Cô ấy không chỉ hát hay mà còn biết nhảy."
+        }
+      ],
+      "luuY": [
+        "Người Việt hay quên も ở vế sau; thiếu も câu nghe cụt.",
+        "Đừng nhầm ばかりでなく với V-て + ばかりいる (suốt ngày chỉ)."
+      ],
+      "soSanh": [
+        "ja-n3-bakari",
+        "ja-n3-ni-kuwaete"
+      ],
+      "tuKhoa": [
+        "dake de naku",
+        "dakedenaku",
+        "bakari de naku",
+        "không chỉ mà còn"
+      ],
+      "quiz": [
+        {
+          "h": "この本は子ども（　）、大人にも人気がある。",
+          "lc": [
+            "だけでなく",
+            "だけなく",
+            "だけにも",
+            "だけのに"
+          ],
+          "da": 0,
+          "gt": "Mẫu đúng là N + だけでなく、〜も."
+        },
+        {
+          "h": "彼は頭がいいだけでなく、スポーツ（　）できる。",
+          "lc": [
+            "を",
+            "も",
+            "で",
+            "に"
+          ],
+          "da": 1,
+          "gt": "Vế sau của だけでなく dùng も: cả thể thao cũng giỏi."
+        },
+        {
+          "h": "「ばかりでなく」 gần nghĩa với mẫu nào?",
+          "lc": [
+            "ばかりいる",
+            "たばかり",
+            "だけでなく"
+          ],
+          "da": 2,
+          "gt": "ばかりでなく = だけでなく: không chỉ ~."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-ppoi",
+      "nhom": "Trạng thái – khuynh hướng",
+      "tieuDe": "〜っぽい",
+      "mau": "N + っぽい / V-ます + っぽい / Aい (bỏ い) + っぽい",
+      "nghia": "trông có vẻ ~, hơi hướng ~; hay ~, dễ ~",
+      "giaiThich": "Gắn vào sau danh từ hoặc tính từ để nói \"có cảm giác giống ~, ngả về ~\"; gắn vào sau thể ます của một số động từ để nói \"hay ~, dễ ~\". Thường mang sắc thái hơi tiêu cực. Chia như tính từ đuôi い.",
+      "cachGhep": [
+        "Danh từ + っぽい: 子どもっぽい, 水っぽい",
+        "Tính từ đuôi い bỏ い + っぽい: 黒っぽい, 安っぽい",
+        "Động từ thể ます (bỏ ます) + っぽい: 忘れっぽい, 怒りっぽい"
+      ],
+      "viDu": [
+        {
+          "c": "彼女は子どもっぽいところがあります。",
+          "d": "かのじょは こどもっぽい ところが あります。",
+          "v": "Cô ấy có điểm hơi trẻ con."
+        },
+        {
+          "c": "年を取ると、忘れっぽくなります。",
+          "d": "としを とると、わすれっぽくなります。",
+          "v": "Có tuổi rồi thì hay quên."
+        },
+        {
+          "c": "黒っぽい服を着た男の人を見ました。",
+          "d": "くろっぽい ふくを きた おとこの ひとを みました。",
+          "v": "Tôi đã thấy một người đàn ông mặc đồ màu đen đen."
+        },
+        {
+          "c": "このスープは水っぽくて、おいしくないです。",
+          "d": "この スープは みずっぽくて、おいしくないです。",
+          "v": "Món súp này loãng như nước, không ngon."
+        }
+      ],
+      "luuY": [
+        "子どもっぽい là chê người lớn mà cư xử như con nít; còn 子どもらしい là khen đứa trẻ hồn nhiên đúng chất trẻ con.",
+        "Với động từ chỉ dùng được một số từ quen thuộc (忘れっぽい, 怒りっぽい, 飽きっぽい), không tự ghép tuỳ ý."
+      ],
+      "soSanh": [
+        "ja-n3-gachi",
+        "ja-n3-gimi"
+      ],
+      "tuKhoa": [
+        "ppoi",
+        "poi",
+        "kodomoppoi",
+        "có vẻ",
+        "hay quên"
+      ],
+      "quiz": [
+        {
+          "h": "父は怒り（　）性格で、すぐ大きな声を出す。",
+          "lc": [
+            "っぽい",
+            "らしい",
+            "だらけの",
+            "ばかり"
+          ],
+          "da": 0,
+          "gt": "V-ます + っぽい: hay nổi nóng (怒りっぽい)."
+        },
+        {
+          "h": "「大人なのに子どもっぽい」 có sắc thái gì?",
+          "lc": [
+            "Khen dễ thương như trẻ con",
+            "Chê người lớn mà như con nít",
+            "Miêu tả một đứa trẻ"
+          ],
+          "da": 1,
+          "gt": "子どもっぽい dùng để chê người không còn là trẻ con."
+        },
+        {
+          "h": "「白」 ghép với っぽい thành dạng nào?",
+          "lc": [
+            "白いっぽい",
+            "白くっぽい",
+            "白っぽい"
+          ],
+          "da": 2,
+          "gt": "Tính từ đuôi い bỏ い rồi thêm っぽい: 白っぽい."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-gachi",
+      "nhom": "Trạng thái – khuynh hướng",
+      "tieuDe": "〜がち",
+      "mau": "V-ます + がち / N + がち (だ / な / の)",
+      "nghia": "hay ~, thường có khuynh hướng ~ (điều không tốt)",
+      "giaiThich": "Diễn tả một việc không hay dễ xảy ra, xảy ra nhiều lần, thành khuynh hướng. Chia như tính từ đuôi な.",
+      "cachGhep": [
+        "Động từ thể ます (bỏ ます) + がちだ: 忘れがち, 遅れがち",
+        "Danh từ + がちだ: 病気がち, 留守がち",
+        "Bổ nghĩa danh từ: 〜がちな / 〜がちの + N"
+      ],
+      "viDu": [
+        {
+          "c": "冬はかぜをひきがちです。",
+          "d": "ふゆは かぜを ひきがちです。",
+          "v": "Mùa đông thì hay bị cảm."
+        },
+        {
+          "c": "彼は最近、学校を休みがちです。",
+          "d": "かれは さいきん、がっこうを やすみがちです。",
+          "v": "Dạo này cậu ấy hay nghỉ học."
+        },
+        {
+          "c": "一人暮らしは、野菜が不足しがちです。",
+          "d": "ひとりぐらしは、やさいが ふそくしがちです。",
+          "v": "Sống một mình thì thường hay thiếu rau."
+        },
+        {
+          "c": "子どものころ、私は病気がちでした。",
+          "d": "こどもの ころ、わたしは びょうきがちでした。",
+          "v": "Hồi nhỏ tôi hay ốm."
+        }
+      ],
+      "luuY": [
+        "がち nói về tần suất, khuynh hướng lặp lại; 気味 nói về cảm giác \"hơi hơi\" ở hiện tại. かぜをひきがち = hay bị cảm; かぜ気味 = đang hơi cảm.",
+        "Không dùng cho khuynh hướng tốt (✗ 合格しがち)."
+      ],
+      "soSanh": [
+        "ja-n3-gimi",
+        "ja-n3-ppoi"
+      ],
+      "tuKhoa": [
+        "gachi",
+        "gachi da",
+        "hay",
+        "khuynh hướng",
+        "thường"
+      ],
+      "quiz": [
+        {
+          "h": "雨の日は、バスが遅れ（　）だ。",
+          "lc": [
+            "がち",
+            "っぽい",
+            "だらけ",
+            "っぱなし"
+          ],
+          "da": 0,
+          "gt": "V-ます + がち: xe buýt hay trễ."
+        },
+        {
+          "h": "忙しいと、食事の時間が不規則に（　）がちだ。",
+          "lc": [
+            "なる",
+            "なり",
+            "なって",
+            "なった"
+          ],
+          "da": 1,
+          "gt": "がち đi sau thể ます bỏ ます: なりがち."
+        },
+        {
+          "h": "「病気がち」 nghĩa là gì?",
+          "lc": [
+            "Hiện đang bệnh nặng",
+            "Chưa bao giờ bị bệnh",
+            "Hay bị bệnh"
+          ],
+          "da": 2,
+          "gt": "N + がち = hay ở trong tình trạng đó."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-gimi",
+      "nhom": "Trạng thái – khuynh hướng",
+      "tieuDe": "〜気味",
+      "mau": "V-ます + 気味 / N + 気味 (だ / の)",
+      "nghia": "hơi ~, có vẻ hơi ~ (cảm giác nhẹ, thường không tốt)",
+      "giaiThich": "Diễn tả người nói cảm thấy có một chút khuynh hướng, dấu hiệu nào đó, mức độ nhẹ. Thường dùng cho tình trạng cơ thể, tinh thần, tình hình không tốt.",
+      "cachGhep": [
+        "Động từ thể ます (bỏ ます) + 気味だ: 太り気味, 疲れ気味",
+        "Danh từ + 気味だ: かぜ気味, 寝不足気味",
+        "Bổ nghĩa danh từ: 〜気味の + N"
+      ],
+      "viDu": [
+        {
+          "c": "今日はかぜ気味なので、早く帰ります。",
+          "d": "きょうは かぜぎみなので、はやく かえります。",
+          "v": "Hôm nay tôi hơi cảm nên sẽ về sớm."
+        },
+        {
+          "c": "最近、ちょっと太り気味です。",
+          "d": "さいきん、ちょっと ふとりぎみです。",
+          "v": "Dạo này tôi hơi mập lên."
+        },
+        {
+          "c": "仕事が多くて、疲れ気味です。",
+          "d": "しごとが おおくて、つかれぎみです。",
+          "v": "Nhiều việc quá nên tôi hơi mệt."
+        }
+      ],
+      "luuY": [
+        "気味 đọc là ぎみ khi ghép sau từ khác. Hay đi cùng ちょっと, 少し.",
+        "Khác がち (hay xảy ra nhiều lần): 気味 là cảm nhận về tình trạng lúc này."
+      ],
+      "soSanh": [
+        "ja-n3-gachi",
+        "ja-n3-ppoi"
+      ],
+      "tuKhoa": [
+        "gimi",
+        "kaze gimi",
+        "hơi",
+        "có vẻ hơi"
+      ],
+      "quiz": [
+        {
+          "h": "最近、運動不足で太り（　）だ。",
+          "lc": [
+            "気味",
+            "だらけ",
+            "っぱなし",
+            "ごと"
+          ],
+          "da": 0,
+          "gt": "V-ます + 気味: hơi mập lên."
+        },
+        {
+          "h": "「かぜ気味」 nghĩa là gì?",
+          "lc": [
+            "Bị cảm nặng",
+            "Hơi có triệu chứng cảm",
+            "Hay bị cảm"
+          ],
+          "da": 1,
+          "gt": "N + 気味 = hơi có dấu hiệu; \"hay bị cảm\" là かぜをひきがち."
+        },
+        {
+          "h": "「疲れ気味」 — 気味 đọc là gì?",
+          "lc": [
+            "きみ",
+            "けみ",
+            "ぎみ"
+          ],
+          "da": 2,
+          "gt": "Khi ghép sau từ khác, 気味 đọc là ぎみ."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-darake",
+      "nhom": "Trạng thái – khuynh hướng",
+      "tieuDe": "〜だらけ",
+      "mau": "N + だらけ (だ / の / で / になる)",
+      "nghia": "đầy ~, toàn là ~ (thứ không mong muốn)",
+      "giaiThich": "Diễn tả một vật, một nơi dính đầy hoặc có rất nhiều thứ gì đó mà người nói thấy bẩn, xấu, không mong muốn.",
+      "cachGhep": [
+        "Danh từ + だらけだ / だらけの + N / だらけになる",
+        "Hay gặp: 泥だらけ, 間違いだらけ, ごみだらけ, 傷だらけ, ほこりだらけ"
+      ],
+      "viDu": [
+        {
+          "c": "子どもたちは泥だらけになって遊んでいます。",
+          "d": "こどもたちは どろだらけに なって あそんでいます。",
+          "v": "Bọn trẻ đang chơi, người lấm đầy bùn."
+        },
+        {
+          "c": "この作文は間違いだらけです。",
+          "d": "この さくぶんは まちがいだらけです。",
+          "v": "Bài văn này đầy lỗi sai."
+        },
+        {
+          "c": "弟の部屋はごみだらけです。",
+          "d": "おとうとの へやは ごみだらけです。",
+          "v": "Phòng của em trai tôi toàn rác."
+        }
+      ],
+      "luuY": [
+        "Chỉ dùng cho thứ tiêu cực; thứ tốt đẹp thì dùng 〜でいっぱい (✗ 花だらけ → 花でいっぱい)."
+      ],
+      "soSanh": [
+        "ja-n3-bakari"
+      ],
+      "tuKhoa": [
+        "darake",
+        "doro darake",
+        "đầy",
+        "toàn là",
+        "lấm lem"
+      ],
+      "quiz": [
+        {
+          "h": "けんかをして、顔が傷（　）になった。",
+          "lc": [
+            "だらけ",
+            "がち",
+            "気味",
+            "っぽい"
+          ],
+          "da": 0,
+          "gt": "N + だらけ: mặt đầy vết thương."
+        },
+        {
+          "h": "Câu nào tự nhiên?",
+          "lc": [
+            "公園は花だらけできれいだ。",
+            "机の上はほこりだらけだ。",
+            "彼はいい友達だらけだ。"
+          ],
+          "da": 1,
+          "gt": "だらけ chỉ dùng cho thứ không mong muốn như bụi; hoa và bạn tốt là điều tích cực."
+        },
+        {
+          "h": "「間違いだらけ」 nghĩa là gì?",
+          "lc": [
+            "Không có lỗi nào",
+            "Có một lỗi",
+            "Đầy lỗi sai"
+          ],
+          "da": 2,
+          "gt": "N + だらけ = đầy, toàn là N."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-ppanashi",
+      "nhom": "Trạng thái – khuynh hướng",
+      "tieuDe": "〜っぱなし",
+      "mau": "V-ます + っぱなし (だ / の / で / にする)",
+      "nghia": "cứ để nguyên ~ (không làm việc lẽ ra phải làm tiếp); ~ suốt",
+      "giaiThich": "Nghĩa thứ nhất: làm một việc rồi để nguyên như vậy, không làm việc đáng lẽ phải làm sau đó (tắt, đóng, dọn) — có ý chê. Nghĩa thứ hai: một trạng thái kéo dài suốt, không nghỉ.",
+      "cachGhep": [
+        "Động từ thể ます (bỏ ます) + っぱなし: つけっぱなし, 開けっぱなし, 出しっぱなし",
+        "Kéo dài suốt: 立ちっぱなし, 座りっぱなし"
+      ],
+      "viDu": [
+        {
+          "c": "電気をつけっぱなしで、出かけてしまいました。",
+          "d": "でんきを つけっぱなしで、でかけてしまいました。",
+          "v": "Tôi lỡ ra ngoài mà vẫn để đèn bật."
+        },
+        {
+          "c": "窓を開けっぱなしにしないでください。",
+          "d": "まどを あけっぱなしに しないでください。",
+          "v": "Xin đừng để cửa sổ mở toang như vậy."
+        },
+        {
+          "c": "今日は一日中立ちっぱなしで、足が痛いです。",
+          "d": "きょうは いちにちじゅう たちっぱなしで、あしが いたいです。",
+          "v": "Hôm nay đứng suốt cả ngày nên chân tôi đau."
+        }
+      ],
+      "luuY": [
+        "So với 〜たまま: まま trung tính, chỉ nêu trạng thái giữ nguyên; っぱなし có ý chê là bỏ mặc, cẩu thả."
+      ],
+      "soSanh": [
+        "ja-n3-kake"
+      ],
+      "tuKhoa": [
+        "ppanashi",
+        "tsukeppanashi",
+        "để nguyên",
+        "bỏ mặc",
+        "suốt"
+      ],
+      "quiz": [
+        {
+          "h": "水を（　）っぱなしにしないで。",
+          "lc": [
+            "出し",
+            "出す",
+            "出して",
+            "出した"
+          ],
+          "da": 0,
+          "gt": "っぱなし đi sau thể ます bỏ ます: 出しっぱなし."
+        },
+        {
+          "h": "「テレビをつけっぱなしで寝た」 nghĩa là gì?",
+          "lc": [
+            "Tắt tivi rồi ngủ",
+            "Để tivi bật nguyên rồi ngủ",
+            "Vừa bật tivi thì ngủ"
+          ],
+          "da": 1,
+          "gt": "つけっぱなし = bật rồi để nguyên không tắt."
+        },
+        {
+          "h": "新幹線が込んでいて、東京まで立ち（　）だった。",
+          "lc": [
+            "だらけ",
+            "がち",
+            "っぱなし"
+          ],
+          "da": 2,
+          "gt": "\"Đứng suốt\" ⇒ 立ちっぱなし."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-ippou-da",
+      "nhom": "Trạng thái – khuynh hướng",
+      "tieuDe": "〜一方だ",
+      "mau": "V-る + 一方だ",
+      "nghia": "ngày càng ~, cứ ~ mãi (chỉ theo một chiều)",
+      "giaiThich": "Diễn tả tình hình cứ tiến triển theo một hướng duy nhất, không dừng lại; thường là hướng không tốt. Đi với động từ chỉ sự thay đổi.",
+      "cachGhep": [
+        "Động từ chỉ sự thay đổi, thể từ điển + 一方だ: 増える一方だ, 悪くなる一方だ"
+      ],
+      "viDu": [
+        {
+          "c": "物の値段は上がる一方です。",
+          "d": "ものの ねだんは あがる いっぽうです。",
+          "v": "Giá cả cứ ngày càng tăng."
+        },
+        {
+          "c": "この町の人口は減る一方だ。",
+          "d": "この まちの じんこうは へる いっぽうだ。",
+          "v": "Dân số thị trấn này cứ giảm mãi."
+        },
+        {
+          "c": "最近、仕事は忙しくなる一方です。",
+          "d": "さいきん、しごとは いそがしくなる いっぽうです。",
+          "v": "Dạo này công việc cứ ngày càng bận."
+        }
+      ],
+      "luuY": [
+        "Chỉ dùng với động từ biến đổi (増える, 減る, 上がる, 〜くなる); không dùng với hành động thông thường (✗ 食べる一方だ).",
+        "Đừng nhầm với 〜一方（で） nghĩa \"mặt khác\"."
+      ],
+      "soSanh": [
+        "ja-n3-ippou-de",
+        "ja-n3-ni-tsurete"
+      ],
+      "tuKhoa": [
+        "ippou da",
+        "ippouda",
+        "ngày càng",
+        "cứ mãi"
+      ],
+      "quiz": [
+        {
+          "h": "最近、父の病気は悪くなる（　）。",
+          "lc": [
+            "一方だ",
+            "反面だ",
+            "たびだ",
+            "最中だ"
+          ],
+          "da": 0,
+          "gt": "Tình trạng cứ xấu đi ⇒ V-る + 一方だ."
+        },
+        {
+          "h": "雨は強く（　）一方だ。",
+          "lc": [
+            "なった",
+            "なる",
+            "なって",
+            "なり"
+          ],
+          "da": 1,
+          "gt": "一方だ đi sau động từ thể từ điển."
+        },
+        {
+          "h": "「増える一方だ」 nghĩa là gì?",
+          "lc": [
+            "Lúc tăng lúc giảm",
+            "Mặt khác thì tăng",
+            "Cứ tăng mãi không ngừng"
+          ],
+          "da": 2,
+          "gt": "V-る + 一方だ = chỉ tiến theo một chiều."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-kake",
+      "nhom": "Động từ ghép",
+      "tieuDe": "〜かけ／〜かける",
+      "mau": "V-ます + かける / かけの + N / かけだ",
+      "nghia": "đang ~ dở, ~ giữa chừng; suýt ~, sắp ~",
+      "giaiThich": "Diễn tả hành động đã bắt đầu nhưng chưa xong, còn dang dở. Với động từ tức thời (死ぬ, 忘れる, 倒れる…) thì mang nghĩa \"suýt, sắp sửa\".",
+      "cachGhep": [
+        "Động từ thể ます (bỏ ます) + かける: 言いかける",
+        "Bổ nghĩa danh từ: 〜かけの + N: 読みかけの本",
+        "Cuối câu: 〜かけだ"
+      ],
+      "viDu": [
+        {
+          "c": "読みかけの本が、机の上に置いてあります。",
+          "d": "よみかけの ほんが、つくえの うえに おいてあります。",
+          "v": "Cuốn sách đang đọc dở để trên bàn."
+        },
+        {
+          "c": "彼は何か言いかけて、やめました。",
+          "d": "かれは なにか いいかけて、やめました。",
+          "v": "Anh ấy định nói gì đó nhưng mới mở lời thì thôi."
+        },
+        {
+          "c": "この手紙はまだ書きかけです。",
+          "d": "この てがみは まだ かきかけです。",
+          "v": "Lá thư này vẫn đang viết dở."
+        }
+      ],
+      "luuY": [
+        "Bổ nghĩa danh từ dùng かけの (✗ 読みかけ本, ✗ 読みかけな本).",
+        "Khác 〜っぱなし: かけ chỉ là chưa xong, không có ý chê bỏ mặc."
+      ],
+      "soSanh": [
+        "ja-n3-kiru",
+        "ja-n3-dasu",
+        "ja-n3-ppanashi"
+      ],
+      "tuKhoa": [
+        "kake",
+        "kakeru",
+        "kake no",
+        "dở",
+        "giữa chừng"
+      ],
+      "quiz": [
+        {
+          "h": "テーブルの上に、食べ（　）のパンがある。",
+          "lc": [
+            "かけ",
+            "がち",
+            "だし",
+            "こみ"
+          ],
+          "da": 0,
+          "gt": "V-ます + かけの + N: bánh mì ăn dở."
+        },
+        {
+          "h": "「飲みかけのコーヒー」 nghĩa là gì?",
+          "lc": [
+            "Cà phê đã uống hết",
+            "Cà phê đang uống dở",
+            "Cà phê chưa uống ngụm nào"
+          ],
+          "da": 1,
+          "gt": "V-ます + かけ = đã bắt đầu nhưng chưa xong."
+        },
+        {
+          "h": "彼女は何か（　）かけたが、何も言わなかった。",
+          "lc": [
+            "言う",
+            "言って",
+            "言い"
+          ],
+          "da": 2,
+          "gt": "かける đi sau thể ます bỏ ます: 言いかけた."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-kiru",
+      "nhom": "Động từ ghép",
+      "tieuDe": "〜きる／〜きれない",
+      "mau": "V-ます + きる / きれる / きれない",
+      "nghia": "làm ~ hết, ~ xong hoàn toàn; hết sức ~ / không ~ xuể",
+      "giaiThich": "きる diễn tả làm trọn vẹn đến cùng, hết sạch, hoặc trạng thái ở mức tột độ (疲れきる). Thể khả năng phủ định きれない nghĩa là nhiều quá, không thể làm hết.",
+      "cachGhep": [
+        "Động từ thể ます (bỏ ます) + きる: 読みきる, 使いきる",
+        "Không làm xuể: V-ます + きれない",
+        "Tột độ: 疲れきる, 困りきる"
+      ],
+      "viDu": [
+        {
+          "c": "この本は一日で読みきりました。",
+          "d": "この ほんは いちにちで よみきりました。",
+          "v": "Tôi đã đọc hết cuốn sách này trong một ngày."
+        },
+        {
+          "c": "料理が多すぎて、食べきれません。",
+          "d": "りょうりが おおすぎて、たべきれません。",
+          "v": "Đồ ăn nhiều quá, tôi ăn không hết."
+        },
+        {
+          "c": "彼は疲れきった顔をしています。",
+          "d": "かれは つかれきった かおを しています。",
+          "v": "Anh ấy có vẻ mặt mệt lả."
+        },
+        {
+          "c": "お金を全部使いきってしまいました。",
+          "d": "おかねを ぜんぶ つかいきってしまいました。",
+          "v": "Tôi lỡ tiêu sạch tiền rồi."
+        }
+      ],
+      "luuY": [
+        "食べきれない (nhiều quá ăn không hết) khác 食べられない (không ăn được, vì ghét hay không thể)."
+      ],
+      "soSanh": [
+        "ja-n3-kake",
+        "ja-n3-dasu"
+      ],
+      "tuKhoa": [
+        "kiru",
+        "kirenai",
+        "kireru",
+        "hết",
+        "không xuể",
+        "hoàn toàn"
+      ],
+      "quiz": [
+        {
+          "h": "星の数は多くて、数え（　）。",
+          "lc": [
+            "きれない",
+            "かけない",
+            "っぽい",
+            "がちだ"
+          ],
+          "da": 0,
+          "gt": "Nhiều quá không đếm xuể ⇒ V-ます + きれない."
+        },
+        {
+          "h": "「全部食べきった」 nghĩa là gì?",
+          "lc": [
+            "Đang ăn dở",
+            "Đã ăn hết sạch",
+            "Không ăn nổi"
+          ],
+          "da": 1,
+          "gt": "V-ます + きる = làm hết, làm trọn."
+        },
+        {
+          "h": "長い小説を最後まで（　）きった。",
+          "lc": [
+            "読む",
+            "読んで",
+            "読み"
+          ],
+          "da": 2,
+          "gt": "きる đi sau thể ます bỏ ます: 読みきった."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-dasu",
+      "nhom": "Động từ ghép",
+      "tieuDe": "〜出す",
+      "mau": "V-ます + 出す",
+      "nghia": "bắt đầu ~ (đột ngột); ~ ra ngoài",
+      "giaiThich": "Gắn sau thể ます để nói một hành động, hiện tượng bắt đầu một cách đột ngột, bất ngờ. Với một số động từ còn mang nghĩa đưa ra ngoài (取り出す, 飛び出す).",
+      "cachGhep": [
+        "Động từ thể ます (bỏ ます) + 出す: 降り出す, 泣き出す, 笑い出す, 走り出す"
+      ],
+      "viDu": [
+        {
+          "c": "急に雨が降り出しました。",
+          "d": "きゅうに あめが ふりだしました。",
+          "v": "Trời đột nhiên đổ mưa."
+        },
+        {
+          "c": "赤ちゃんが突然泣き出しました。",
+          "d": "あかちゃんが とつぜん なきだしました。",
+          "v": "Em bé đột nhiên bật khóc."
+        },
+        {
+          "c": "彼の話を聞いて、みんな笑い出した。",
+          "d": "かれの はなしを きいて、みんな わらいだした。",
+          "v": "Nghe anh ấy kể, mọi người bật cười."
+        }
+      ],
+      "luuY": [
+        "So với 〜始める: 始める trung tính, dùng được cho việc có chủ ý; 出す nhấn sự đột ngột nên không dùng với ý chí, yêu cầu, rủ rê (✗ 食べ出してください → 食べ始めてください)."
+      ],
+      "soSanh": [
+        "ja-n3-kake",
+        "ja-n3-kiru",
+        "ja-n3-ta-totan"
+      ],
+      "tuKhoa": [
+        "dasu",
+        "furidasu",
+        "nakidasu",
+        "bắt đầu đột ngột",
+        "bật"
+      ],
+      "quiz": [
+        {
+          "h": "電車が急に動き（　）。",
+          "lc": [
+            "出した",
+            "かけの",
+            "きれない",
+            "っぱなし"
+          ],
+          "da": 0,
+          "gt": "V-ます + 出す: đột nhiên bắt đầu chuyển động."
+        },
+        {
+          "h": "Câu nào tự nhiên?",
+          "lc": [
+            "どうぞ、食べ出してください。",
+            "空が暗くなって、雨が降り出した。",
+            "明日から勉強し出すつもりです。"
+          ],
+          "da": 1,
+          "gt": "出す diễn tả việc bắt đầu đột ngột, không dùng với lời mời hay dự định (dùng 始める)."
+        },
+        {
+          "h": "子どもが急に（　）出した。",
+          "lc": [
+            "走る",
+            "走って",
+            "走り"
+          ],
+          "da": 2,
+          "gt": "出す đi sau thể ます bỏ ます: 走り出した."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-te-hoshii",
+      "nhom": "Mong muốn – cảm xúc",
+      "tieuDe": "〜てほしい／〜てもらいたい",
+      "mau": "（人に）V-て + ほしい / V-ないで + ほしい / V-て + もらいたい",
+      "nghia": "muốn (ai đó) làm ~ / muốn (ai đó) đừng làm ~",
+      "giaiThich": "Diễn tả mong muốn của người nói rằng người khác làm (hoặc không làm) một việc gì đó. Người được mong đợi đi với に. Khi nói trực tiếp với người đó thì thành lời nhờ, nên thường thêm 〜んですが cho mềm.",
+      "cachGhep": [
+        "(người + に) + động từ thể て + ほしい",
+        "Phủ định: V-ないで + ほしい",
+        "Tương đương: V-て + もらいたい; với người trên: V-て + いただきたい"
+      ],
+      "viDu": [
+        {
+          "c": "母に早く元気になってほしいです。",
+          "d": "ははに はやく げんきに なってほしいです。",
+          "v": "Tôi mong mẹ sớm khoẻ lại."
+        },
+        {
+          "c": "この仕事を手伝ってほしいんですが。",
+          "d": "この しごとを てつだってほしいんですが。",
+          "v": "Tôi muốn nhờ anh giúp việc này."
+        },
+        {
+          "c": "ここでたばこを吸わないでほしいです。",
+          "d": "ここで たばこを すわないでほしいです。",
+          "v": "Tôi mong mọi người đừng hút thuốc ở đây."
+        },
+        {
+          "c": "先生にもう一度説明してもらいたいです。",
+          "d": "せんせいに もう いちど せつめいしてもらいたいです。",
+          "v": "Tôi muốn được thầy giải thích lại một lần nữa."
+        }
+      ],
+      "luuY": [
+        "Việc mình tự làm thì dùng V-たい; việc muốn người khác làm thì dùng V-てほしい. Người Việt hay nói nhầm 私は友達に来たい.",
+        "Mong muốn về hiện tượng tự nhiên thì dùng が: 早く春が来てほしい."
+      ],
+      "soSanh": [
+        "ja-n3-ba-yokatta"
+      ],
+      "tuKhoa": [
+        "te hoshii",
+        "tehoshii",
+        "te moraitai",
+        "naide hoshii",
+        "muốn ai làm"
+      ],
+      "quiz": [
+        {
+          "h": "私は弟（　）部屋を掃除してほしい。",
+          "lc": [
+            "に",
+            "を",
+            "で",
+            "へ"
+          ],
+          "da": 0,
+          "gt": "Người được mong làm việc đó đi với に."
+        },
+        {
+          "h": "Câu nào nghĩa là \"Tôi muốn bạn đến\"?",
+          "lc": [
+            "私は来たいです。",
+            "あなたに来てほしいです。",
+            "あなたは来たがります。"
+          ],
+          "da": 1,
+          "gt": "Muốn người khác làm ⇒ 人 + に + V-てほしい."
+        },
+        {
+          "h": "ここに車を（　）ほしい。 (mong đừng đỗ xe)",
+          "lc": [
+            "止めなくて",
+            "止めない",
+            "止めないで"
+          ],
+          "da": 2,
+          "gt": "Mong ai đừng làm: V-ないで + ほしい."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-te-tamaranai",
+      "nhom": "Mong muốn – cảm xúc",
+      "tieuDe": "〜てたまらない／〜てしょうがない／〜てならない",
+      "mau": "V-て / Aい → くて / Aな + で + たまらない・しょうがない・ならない",
+      "nghia": "~ không chịu nổi, ~ vô cùng, ~ hết sức",
+      "giaiThich": "Diễn tả cảm xúc, cảm giác, mong muốn của người nói mạnh đến mức không kìm nén được. たまらない và しょうがない (しかたがない) dùng nhiều trong hội thoại; ならない cứng hơn, dùng cho cảm xúc tự nhiên nảy sinh (心配, 残念, 気になる).",
+      "cachGhep": [
+        "Tính từ đuôi い → くて + たまらない",
+        "Tính từ đuôi な + で + たまらない",
+        "Động từ chỉ cảm xúc thể て + しょうがない / ならない; 〜たくて + たまらない"
+      ],
+      "viDu": [
+        {
+          "c": "頭が痛くてたまりません。",
+          "d": "あたまが いたくて たまりません。",
+          "v": "Tôi đau đầu không chịu nổi."
+        },
+        {
+          "c": "新しいゲームが欲しくてしょうがない。",
+          "d": "あたらしい ゲームが ほしくて しょうがない。",
+          "v": "Tôi muốn có trò chơi mới vô cùng."
+        },
+        {
+          "c": "国の家族のことが心配でなりません。",
+          "d": "くにの かぞくの ことが しんぱいで なりません。",
+          "v": "Tôi lo cho gia đình ở quê hết sức."
+        },
+        {
+          "c": "試験の結果が気になってしかたがない。",
+          "d": "しけんの けっかが きに なって しかたが ない。",
+          "v": "Tôi cứ bận tâm mãi về kết quả thi."
+        }
+      ],
+      "luuY": [
+        "Chỉ dùng với từ chỉ cảm xúc, cảm giác, mong muốn; không dùng với hành động (✗ 食べてたまらない → 食べたくてたまらない).",
+        "Chủ ngữ là người nói. Nói về người khác phải thêm ようだ, らしい, そうだ (彼は寂しくてたまらないようだ)."
+      ],
+      "soSanh": [
+        "ja-n3-te-hoshii"
+      ],
+      "tuKhoa": [
+        "te tamaranai",
+        "te shouganai",
+        "te shikata ga nai",
+        "te naranai",
+        "không chịu nổi",
+        "vô cùng"
+      ],
+      "quiz": [
+        {
+          "h": "暑（　）たまらない。エアコンをつけよう。",
+          "lc": [
+            "くて",
+            "いで",
+            "いて",
+            "く"
+          ],
+          "da": 0,
+          "gt": "Tính từ đuôi い → くて + たまらない."
+        },
+        {
+          "h": "母に（　）たまらない。",
+          "lc": [
+            "会いたい",
+            "会いたくて",
+            "会いたく",
+            "会って"
+          ],
+          "da": 1,
+          "gt": "Mong muốn mạnh: V-たくて + たまらない."
+        },
+        {
+          "h": "心配（　）ならない。",
+          "lc": [
+            "くて",
+            "て",
+            "で"
+          ],
+          "da": 2,
+          "gt": "心配 là tính từ đuôi な nên dùng で: 心配でならない."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-ba-yokatta",
+      "nhom": "Mong muốn – cảm xúc",
+      "tieuDe": "〜ばよかった",
+      "mau": "V-ば + よかった / V-なければ + よかった（+ のに）",
+      "nghia": "giá mà đã ~, lẽ ra nên ~ / giá mà đã không ~",
+      "giaiThich": "Diễn tả sự hối tiếc về việc đã không làm (hoặc đã lỡ làm) trong quá khứ. Thêm のに ở cuối khi nói về hành động của người khác, mang ý tiếc hoặc trách nhẹ.",
+      "cachGhep": [
+        "Động từ thể ば + よかった: giá mà đã làm",
+        "Động từ thể ない → なければ + よかった: giá mà đã không làm",
+        "Nói về người khác: 〜ばよかったのに"
+      ],
+      "viDu": [
+        {
+          "c": "もっと早く家を出ればよかった。",
+          "d": "もっと はやく いえを でれば よかった。",
+          "v": "Giá mà tôi ra khỏi nhà sớm hơn."
+        },
+        {
+          "c": "学生のとき、もっと勉強すればよかったです。",
+          "d": "がくせいの とき、もっと べんきょうすれば よかったです。",
+          "v": "Giá mà hồi sinh viên tôi học nhiều hơn."
+        },
+        {
+          "c": "あんなことを言わなければよかった。",
+          "d": "あんな ことを いわなければ よかった。",
+          "v": "Giá mà tôi đã không nói điều đó."
+        },
+        {
+          "c": "傘を持ってくればよかったのに。",
+          "d": "かさを もってくれば よかったのに。",
+          "v": "Lẽ ra bạn nên mang ô theo chứ."
+        }
+      ],
+      "luuY": [
+        "V-ばよかった nghĩa là thực tế ĐÃ KHÔNG làm; V-なければよかった nghĩa là thực tế ĐÃ làm. Người học hay hiểu ngược.",
+        "Không dùng cho việc hiện tại hay tương lai (lời khuyên thì dùng 〜ばいい / 〜たらいい)."
+      ],
+      "soSanh": [
+        "ja-n3-te-hoshii",
+        "ja-n3-hazu-datta"
+      ],
+      "tuKhoa": [
+        "ba yokatta",
+        "bayokatta",
+        "nakereba yokatta",
+        "giá mà",
+        "hối tiếc"
+      ],
+      "quiz": [
+        {
+          "h": "寒い！コートを（　）よかった。",
+          "lc": [
+            "着てくれば",
+            "着てくると",
+            "着てきて",
+            "着てくるなら"
+          ],
+          "da": 0,
+          "gt": "Hối tiếc vì đã không mặc: V-ば + よかった."
+        },
+        {
+          "h": "「食べなければよかった」 — thực tế thế nào?",
+          "lc": [
+            "Đã không ăn",
+            "Đã ăn và giờ hối hận",
+            "Sắp ăn"
+          ],
+          "da": 1,
+          "gt": "V-なければよかった = giá mà đã không làm, tức là đã làm rồi."
+        },
+        {
+          "h": "おなかが痛い。あんなにたくさん（　）よかった。",
+          "lc": [
+            "食べれば",
+            "食べると",
+            "食べなければ"
+          ],
+          "da": 2,
+          "gt": "Đau bụng vì ăn nhiều ⇒ hối tiếc vì đã ăn: 食べなければよかった."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-ni-chigainai",
+      "nhom": "Suy đoán – khả năng",
+      "tieuDe": "〜に違いない",
+      "mau": "thể thường (N, Aな không có だ) + に違いない",
+      "nghia": "chắc chắn là ~, nhất định là ~",
+      "giaiThich": "Người nói dựa vào căn cứ nào đó mà tin chắc điều mình suy đoán là đúng. Mức chắc chắn cao hơn だろう và かもしれない. Thiên về văn viết; trong hội thoại thường nói きっと〜と思う.",
+      "cachGhep": [
+        "Động từ / tính từ đuôi い thể thường + に違いない",
+        "Danh từ + に違いない (không có だ)",
+        "Tính từ đuôi な (bỏ だ) + に違いない"
+      ],
+      "viDu": [
+        {
+          "c": "電気が消えているから、彼はもう寝たに違いない。",
+          "d": "でんきが きえているから、かれは もう ねたに ちがいない。",
+          "v": "Đèn tắt rồi nên chắc chắn anh ấy đã ngủ."
+        },
+        {
+          "c": "あの人は日本人に違いありません。",
+          "d": "あの ひとは にほんじんに ちがいありません。",
+          "v": "Người kia chắc chắn là người Nhật."
+        },
+        {
+          "c": "こんなに人が並んでいるのだから、この店はおいしいに違いない。",
+          "d": "こんなに ひとが ならんでいるのだから、この みせは おいしいに ちがいない。",
+          "v": "Nhiều người xếp hàng thế này thì quán này nhất định ngon."
+        }
+      ],
+      "luuY": [
+        "Danh từ và tính từ đuôi な ghép thẳng, không có だ hay な (✗ 学生だに違いない, ✗ 元気なに違いない).",
+        "Là suy đoán chủ quan; không dùng cho việc của chính mình mà mình biết rõ."
+      ],
+      "soSanh": [
+        "ja-n3-osore-ga-aru",
+        "ja-n3-to-wa-kagiranai",
+        "ja-n3-wake-ga-nai"
+      ],
+      "tuKhoa": [
+        "ni chigainai",
+        "nichigainai",
+        "chắc chắn",
+        "nhất định"
+      ],
+      "quiz": [
+        {
+          "h": "彼は学生（　）違いない。",
+          "lc": [
+            "に",
+            "だに",
+            "なに",
+            "のに"
+          ],
+          "da": 0,
+          "gt": "Danh từ ghép thẳng với に違いない."
+        },
+        {
+          "h": "「雨が降るに違いない」 — mức độ chắc chắn thế nào?",
+          "lc": [
+            "Thấp (có lẽ)",
+            "Rất cao (chắc chắn)",
+            "Không biết"
+          ],
+          "da": 1,
+          "gt": "に違いない là suy đoán với mức tin chắc cao."
+        },
+        {
+          "h": "彼女は料理が（　）に違いない。",
+          "lc": [
+            "上手だ",
+            "上手な",
+            "上手"
+          ],
+          "da": 2,
+          "gt": "Tính từ đuôi な bỏ だ, không thêm な: 上手に違いない."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-osore-ga-aru",
+      "nhom": "Suy đoán – khả năng",
+      "tieuDe": "〜おそれがある",
+      "mau": "V-る + おそれがある / N + の + おそれがある",
+      "nghia": "e là ~, có nguy cơ ~",
+      "giaiThich": "Nói rằng có khả năng xảy ra một việc xấu. Cách nói trang trọng, hay gặp trong bản tin thời tiết, thông báo, cảnh báo.",
+      "cachGhep": [
+        "Động từ thể từ điển + おそれがある",
+        "Danh từ + の + おそれがある",
+        "Phủ định: おそれはない / おそれがない"
+      ],
+      "viDu": [
+        {
+          "c": "今夜、大雨が降るおそれがあります。",
+          "d": "こんや、おおあめが ふる おそれが あります。",
+          "v": "Đêm nay có nguy cơ mưa to."
+        },
+        {
+          "c": "この病気は、人にうつるおそれがある。",
+          "d": "この びょうきは、ひとに うつる おそれが ある。",
+          "v": "Bệnh này có nguy cơ lây sang người khác."
+        },
+        {
+          "c": "地震のあとは、津波のおそれがあります。",
+          "d": "じしんの あとは、つなみの おそれが あります。",
+          "v": "Sau động đất có nguy cơ sóng thần."
+        }
+      ],
+      "luuY": [
+        "Chỉ dùng cho việc xấu (✗ 合格するおそれがある). Khả năng trung tính thì dùng かもしれない, 可能性がある.",
+        "Ít dùng trong chuyện trò hằng ngày."
+      ],
+      "soSanh": [
+        "ja-n3-ni-chigainai",
+        "ja-n3-to-wa-kagiranai"
+      ],
+      "tuKhoa": [
+        "osore ga aru",
+        "osoregaaru",
+        "e là",
+        "nguy cơ"
+      ],
+      "quiz": [
+        {
+          "h": "台風で、電車が止まる（　）があります。",
+          "lc": [
+            "おそれ",
+            "つもり",
+            "わけ",
+            "くせ"
+          ],
+          "da": 0,
+          "gt": "Nguy cơ xảy ra việc xấu ⇒ おそれがある."
+        },
+        {
+          "h": "Câu nào tự nhiên?",
+          "lc": [
+            "明日は晴れるおそれがある。",
+            "この川は、大雨で水があふれるおそれがある。",
+            "試験に合格するおそれがある。"
+          ],
+          "da": 1,
+          "gt": "おそれがある chỉ dùng cho việc xấu; trời nắng và thi đỗ là việc tốt."
+        },
+        {
+          "h": "事故（　）おそれがある。",
+          "lc": [
+            "な",
+            "に",
+            "の"
+          ],
+          "da": 2,
+          "gt": "Danh từ + の + おそれがある."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-to-wa-kagiranai",
+      "nhom": "Suy đoán – khả năng",
+      "tieuDe": "〜とは限らない",
+      "mau": "thể thường + とは限らない",
+      "nghia": "chưa chắc là ~, không nhất thiết là ~",
+      "giaiThich": "Dùng để nói rằng một điều thường được cho là đúng vẫn có ngoại lệ. Hay đi cùng いつも, 必ず, みんな, 全部, だれでも.",
+      "cachGhep": [
+        "Thể thường + とは限らない",
+        "Danh từ / tính từ đuôi な + (だ) + とは限らない",
+        "Hay gặp: 必ずしも〜とは限らない"
+      ],
+      "viDu": [
+        {
+          "c": "高い物がいつもいいとは限りません。",
+          "d": "たかい ものが いつも いいとは かぎりません。",
+          "v": "Đồ đắt chưa chắc lúc nào cũng tốt."
+        },
+        {
+          "c": "日本人がみんな、漢字をよく知っているとは限らない。",
+          "d": "にほんじんが みんな、かんじを よく しっているとは かぎらない。",
+          "v": "Không phải người Nhật nào cũng biết rõ chữ Hán."
+        },
+        {
+          "c": "お金持ちが必ず幸せだとは限らない。",
+          "d": "おかねもちが かならず しあわせだとは かぎらない。",
+          "v": "Người giàu chưa chắc đã hạnh phúc."
+        }
+      ],
+      "luuY": [
+        "Gần nghĩa với わけではない; とは限らない nhấn vào \"có ngoại lệ\", わけではない đính chính điều người nghe dễ suy ra.",
+        "Đừng nhầm với 〜に限る (~ là nhất) và 〜に限らず (không chỉ ~)."
+      ],
+      "soSanh": [
+        "ja-n3-wake-dewa-nai",
+        "ja-n3-ni-chigainai"
+      ],
+      "tuKhoa": [
+        "to wa kagiranai",
+        "towakagiranai",
+        "chưa chắc",
+        "không nhất thiết",
+        "kanarazushimo"
+      ],
+      "quiz": [
+        {
+          "h": "先生も人間だから、言うことがいつも正しい（　）。",
+          "lc": [
+            "とは限らない",
+            "に違いない",
+            "おそれがある",
+            "ことになっている"
+          ],
+          "da": 0,
+          "gt": "Thầy cũng là người nên chưa chắc lúc nào cũng đúng ⇒ とは限らない."
+        },
+        {
+          "h": "「必ず勝つとは限らない」 nghĩa là gì?",
+          "lc": [
+            "Chắc chắn thắng",
+            "Chưa chắc sẽ thắng",
+            "Chắc chắn thua"
+          ],
+          "da": 1,
+          "gt": "とは限らない = không nhất thiết, có thể có ngoại lệ."
+        },
+        {
+          "h": "「とは限らない」 hay đi cùng những từ nào?",
+          "lc": [
+            "たぶん・おそらく",
+            "ぜひ・どうぞ",
+            "いつも・必ず・みんな"
+          ],
+          "da": 2,
+          "gt": "Mẫu này phủ định tính tuyệt đối nên hay đi với いつも, 必ず, みんな."
+        }
+      ]
+    }
+  ]
+}

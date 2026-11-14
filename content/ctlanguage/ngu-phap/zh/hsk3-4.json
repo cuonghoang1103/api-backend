@@ -1,0 +1,1405 @@
+{
+  "nn": "zh",
+  "cap": "HSK3",
+  "diem": [
+    {
+      "id": "zh-hsk3-yibian-yibian",
+      "nhom": "Liên từ – câu phức",
+      "tieuDe": "一边…一边…",
+      "mau": "S + 一边 + V1 + 一边 + V2",
+      "nghia": "vừa (làm) ~ vừa (làm) ~ — hai hành động cùng lúc",
+      "giaiThich": "一边…一边… nối hai hành động do cùng một người thực hiện đồng thời. Chỉ dùng với động từ chỉ hành động kéo dài được, không dùng với tính từ.",
+      "cachGhep": [
+        "S + 一边 + V1 (+ O1) + 一边 + V2 (+ O2)",
+        "一边 đứng sau chủ ngữ, trước mỗi động từ",
+        "Cấm đoán: 不要 / 别 + 一边… 一边…"
+      ],
+      "viDu": [
+        {
+          "c": "他一边吃饭一边看电视。",
+          "d": "Tā yìbiān chīfàn yìbiān kàn diànshì.",
+          "v": "Anh ấy vừa ăn cơm vừa xem ti vi."
+        },
+        {
+          "c": "我喜欢一边听音乐一边做作业。",
+          "d": "Wǒ xǐhuan yìbiān tīng yīnyuè yìbiān zuò zuòyè.",
+          "v": "Tôi thích vừa nghe nhạc vừa làm bài tập."
+        },
+        {
+          "c": "不要一边开车一边打电话。",
+          "d": "Búyào yìbiān kāichē yìbiān dǎ diànhuà.",
+          "v": "Đừng vừa lái xe vừa gọi điện thoại."
+        },
+        {
+          "c": "你是不是一边走路一边看手机？",
+          "d": "Nǐ shì bu shì yìbiān zǒulù yìbiān kàn shǒujī?",
+          "v": "Có phải bạn vừa đi bộ vừa xem điện thoại không?"
+        }
+      ],
+      "luuY": [
+        "Tiếng Việt 'vừa… vừa…' dùng cho cả hành động lẫn tính chất; tiếng Trung tách đôi: hành động dùng 一边…一边, tính chất dùng 又…又 (又高又瘦, không nói 一边高一边瘦).",
+        "一边 đứng sau chủ ngữ: 一边他写字一边听歌 ✗."
+      ],
+      "soSanh": [
+        "zh-hsk3-you-you"
+      ],
+      "tuKhoa": [
+        "yibian yibian",
+        "yibian",
+        "vừa vừa",
+        "đồng thời"
+      ],
+      "quiz": [
+        {
+          "h": "别（　）吃东西（　）说话。",
+          "lc": [
+            "一边…一边",
+            "越…越",
+            "因为…所以",
+            "虽然…但是"
+          ],
+          "da": 0,
+          "gt": "Hai hành động (ăn, nói) diễn ra cùng lúc → 一边…一边."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "一边他写字一边听歌。",
+            "他一边写字一边听歌。",
+            "他写字一边听歌一边。"
+          ],
+          "da": 1,
+          "gt": "一边 đứng sau chủ ngữ và trước mỗi động từ."
+        },
+        {
+          "h": "Câu nào SAI?",
+          "lc": [
+            "她一边走一边唱。",
+            "他一边喝茶一边看报纸。",
+            "这个房间一边大一边干净。"
+          ],
+          "da": 2,
+          "gt": "一边…一边 không nối tính từ; phải nói 又大又干净."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-you-you",
+      "nhom": "Liên từ – câu phức",
+      "tieuDe": "又…又…",
+      "mau": "S + 又 + Adj / V + 又 + Adj / V",
+      "nghia": "vừa ~ vừa ~ — hai tính chất / tình trạng cùng tồn tại",
+      "giaiThich": "又…又… cho biết một người hay vật có đồng thời hai tính chất, hoặc hai tình trạng cùng xảy ra. Hai vế phải cùng chiều: cùng tốt hoặc cùng xấu.",
+      "cachGhep": [
+        "又 + Adj1 + 又 + Adj2: 又好吃又便宜",
+        "又 + V1 + 又 + V2: 又刮风又下雨",
+        "Trước tính từ không thêm 很 / 非常"
+      ],
+      "viDu": [
+        {
+          "c": "这家饭店的菜又好吃又便宜。",
+          "d": "Zhè jiā fàndiàn de cài yòu hǎochī yòu piányi.",
+          "v": "Món ăn của quán này vừa ngon vừa rẻ."
+        },
+        {
+          "c": "她又聪明又努力。",
+          "d": "Tā yòu cōngming yòu nǔlì.",
+          "v": "Cô ấy vừa thông minh vừa chăm chỉ."
+        },
+        {
+          "c": "今天又刮风又下雨，我不想出去。",
+          "d": "Jīntiān yòu guā fēng yòu xià yǔ, wǒ bù xiǎng chūqù.",
+          "v": "Hôm nay vừa gió vừa mưa, tôi không muốn ra ngoài."
+        },
+        {
+          "c": "那儿的东西是不是又贵又不好？",
+          "d": "Nàr de dōngxi shì bu shì yòu guì yòu bù hǎo?",
+          "v": "Đồ ở đó có phải vừa đắt vừa không tốt không?"
+        }
+      ],
+      "luuY": [
+        "Không thêm 很: 又很漂亮又很聪明 ✗ → 又漂亮又聪明 ✓.",
+        "Hai vế phải cùng chiều; một tốt một xấu thì dùng 虽然…但是: 又便宜又不好 ✗."
+      ],
+      "soSanh": [
+        "zh-hsk3-yibian-yibian"
+      ],
+      "tuKhoa": [
+        "you you",
+        "vừa vừa",
+        "hai tính chất"
+      ],
+      "quiz": [
+        {
+          "h": "这个苹果（　）大（　）甜。",
+          "lc": [
+            "一边…一边",
+            "又…又",
+            "先…然后",
+            "因为…所以"
+          ],
+          "da": 1,
+          "gt": "Hai tính chất (to, ngọt) cùng tồn tại → 又…又."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "她又很漂亮又很聪明。",
+            "她漂亮又又聪明。",
+            "她又漂亮又聪明。"
+          ],
+          "da": 2,
+          "gt": "Mỗi 又 đứng trước một tính từ, không thêm 很."
+        },
+        {
+          "h": "'Vừa nhanh vừa tốt' nói thế nào?",
+          "lc": [
+            "又快又好",
+            "一边快一边好",
+            "先快再好"
+          ],
+          "da": 0,
+          "gt": "Tính chất dùng 又…又; 一边…一边 chỉ dùng cho hành động."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-xian-zai-ranhou",
+      "nhom": "Liên từ – câu phức",
+      "tieuDe": "先…再 / 然后…",
+      "mau": "S + 先 + V1，再 / 然后 + V2",
+      "nghia": "trước tiên ~, rồi / sau đó ~",
+      "giaiThich": "Dùng để sắp xếp thứ tự các việc: việc làm trước đặt sau 先, việc làm sau đặt sau 再 hoặc 然后. Có thể kéo dài chuỗi bằng 最后 (cuối cùng).",
+      "cachGhep": [
+        "S + 先 + V1，再 + V2 — 先 và 再 là phó từ, đứng sau chủ ngữ",
+        "S + 先 + V1，然后 + (S) + V2 — 然后 là liên từ, đứng đầu vế sau",
+        "Chuỗi dài: 先…，然后…，最后…"
+      ],
+      "viDu": [
+        {
+          "c": "我们先吃饭，再去看电影。",
+          "d": "Wǒmen xiān chīfàn, zài qù kàn diànyǐng.",
+          "v": "Chúng ta ăn cơm trước, rồi đi xem phim."
+        },
+        {
+          "c": "你先洗手，然后吃水果。",
+          "d": "Nǐ xiān xǐ shǒu, ránhòu chī shuǐguǒ.",
+          "v": "Con rửa tay trước, sau đó ăn hoa quả."
+        },
+        {
+          "c": "我先去银行，然后去超市，最后回家。",
+          "d": "Wǒ xiān qù yínháng, ránhòu qù chāoshì, zuìhòu huí jiā.",
+          "v": "Tôi đi ngân hàng trước, sau đó đi siêu thị, cuối cùng về nhà."
+        },
+        {
+          "c": "我们先做什么，再做什么？",
+          "d": "Wǒmen xiān zuò shénme, zài zuò shénme?",
+          "v": "Chúng ta làm gì trước, rồi làm gì sau?"
+        }
+      ],
+      "luuY": [
+        "Tiếng Việt nói 'ăn cơm trước'; tiếng Trung 先 phải đứng TRƯỚC động từ: 先吃饭 ✓, 吃饭先 ✗.",
+        "先 đứng sau chủ ngữ: 先我洗澡 ✗ → 我先洗澡 ✓.",
+        "然后 nối hai việc liền nhau trong một chuỗi; 以后 nghĩa là 'sau này / sau khi', không thay cho 然后 được."
+      ],
+      "soSanh": [
+        "zh-hsk3-yi-jiu"
+      ],
+      "tuKhoa": [
+        "xian zai",
+        "ranhou",
+        "trước tiên",
+        "sau đó",
+        "thứ tự"
+      ],
+      "quiz": [
+        {
+          "h": "你（　）做完作业，（　）玩儿游戏。",
+          "lc": [
+            "先…再",
+            "又…又",
+            "越…越",
+            "一边…一边"
+          ],
+          "da": 0,
+          "gt": "Hai việc theo thứ tự trước – sau: 先…再…"
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "先我洗澡，再睡觉。",
+            "我先洗澡，再睡觉。",
+            "我洗澡先，睡觉再。"
+          ],
+          "da": 1,
+          "gt": "先 và 再 là phó từ, đứng sau chủ ngữ và trước động từ."
+        },
+        {
+          "h": "我先去北京，（　）去上海。",
+          "lc": [
+            "以前",
+            "刚才",
+            "然后",
+            "一边"
+          ],
+          "da": 2,
+          "gt": "Việc tiếp theo trong chuỗi dùng 然后."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-yi-jiu",
+      "nhom": "Liên từ – câu phức",
+      "tieuDe": "一…就…",
+      "mau": "S + 一 + V1，(S2) + 就 + V2",
+      "nghia": "vừa ~ là ~ ngay; hễ ~ là ~",
+      "giaiThich": "一…就… có hai cách dùng: (1) việc thứ hai xảy ra ngay sau việc thứ nhất: 我一下课就回家; (2) quy luật, thói quen: cứ có việc thứ nhất là có việc thứ hai: 他一喝酒脸就红.",
+      "cachGhep": [
+        "Cùng chủ ngữ: S + 一 + V1 + 就 + V2",
+        "Khác chủ ngữ: S1 + 一 + V1，S2 + 就 + V2 — 就 đứng sau chủ ngữ thứ hai",
+        "一 đọc yí trước thanh 4, đọc yì trước thanh 1, 2, 3"
+      ],
+      "viDu": [
+        {
+          "c": "我一下课就回家。",
+          "d": "Wǒ yí xiàkè jiù huí jiā.",
+          "v": "Tôi vừa tan học là về nhà ngay."
+        },
+        {
+          "c": "他一喝酒脸就红。",
+          "d": "Tā yì hē jiǔ liǎn jiù hóng.",
+          "v": "Anh ấy hễ uống rượu là mặt đỏ."
+        },
+        {
+          "c": "老师一说，我就明白了。",
+          "d": "Lǎoshī yì shuō, wǒ jiù míngbai le.",
+          "v": "Thầy vừa nói là tôi hiểu ngay."
+        },
+        {
+          "c": "你怎么一到家就睡觉？",
+          "d": "Nǐ zěnme yí dào jiā jiù shuìjiào?",
+          "v": "Sao bạn vừa về đến nhà là ngủ luôn thế?"
+        }
+      ],
+      "luuY": [
+        "一 và 就 đều đứng sau chủ ngữ, sát trước động từ: 一他看书就想睡觉 ✗, 他一看书，就他想睡觉 ✗.",
+        "Không dịch 一 ở đây là 'một'."
+      ],
+      "soSanh": [
+        "zh-hsk3-xian-zai-ranhou"
+      ],
+      "tuKhoa": [
+        "yi jiu",
+        "vừa là",
+        "hễ là",
+        "cứ là"
+      ],
+      "quiz": [
+        {
+          "h": "我（　）到北京（　）给你打电话。",
+          "lc": [
+            "一…就",
+            "又…又",
+            "越…越",
+            "虽然…但是"
+          ],
+          "da": 0,
+          "gt": "Việc sau xảy ra ngay sau việc trước: 一…就…"
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "他一看书，就他想睡觉。",
+            "他一看书就想睡觉。",
+            "一他看书就想睡觉。"
+          ],
+          "da": 1,
+          "gt": "一 và 就 đứng sau chủ ngữ, trước động từ."
+        },
+        {
+          "h": "她一着急就说不出话。 nghĩa là gì?",
+          "lc": [
+            "Cô ấy vừa nói vừa sốt ruột.",
+            "Cô ấy sốt ruột vì không được nói.",
+            "Cô ấy hễ sốt ruột là không nói nên lời."
+          ],
+          "da": 2,
+          "gt": "一…就… ở đây nêu quy luật: cứ sốt ruột là không nói được."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-chule-yiwai",
+      "nhom": "Liên từ – câu phức",
+      "tieuDe": "除了…以外，…都 / 还 / 也",
+      "mau": "除了 + A + (以外)，… 都 + V · 除了 + A + (以外)，… 还 / 也 + V",
+      "nghia": "ngoại trừ A, tất cả đều ~; ngoài A ra, còn ~",
+      "giaiThich": "除了 có hai nghĩa ngược nhau tuỳ phó từ ở vế sau. Với 都: loại A ra, những cái còn lại đều như vậy. Với 还 / 也: A đã vậy, ngoài ra còn thêm cái khác. 以外 có thể lược bỏ.",
+      "cachGhep": [
+        "Loại trừ: 除了 A (以外)，B 都… — A không nằm trong số đó",
+        "Bổ sung: 除了 A (以外)，S 还 / 也… — A cũng được tính",
+        "Sau 除了 có thể là danh từ, đại từ, động từ hoặc cả câu ngắn"
+      ],
+      "viDu": [
+        {
+          "c": "除了小王以外，大家都来了。",
+          "d": "Chúle Xiǎo Wáng yǐwài, dàjiā dōu lái le.",
+          "v": "Ngoại trừ Tiểu Vương, mọi người đều đến rồi."
+        },
+        {
+          "c": "除了汉语以外，我还会说英语。",
+          "d": "Chúle Hànyǔ yǐwài, wǒ hái huì shuō Yīngyǔ.",
+          "v": "Ngoài tiếng Trung ra, tôi còn biết nói tiếng Anh."
+        },
+        {
+          "c": "除了星期天，他每天都工作。",
+          "d": "Chúle xīngqītiān, tā měi tiān dōu gōngzuò.",
+          "v": "Trừ chủ nhật, ngày nào anh ấy cũng làm việc."
+        },
+        {
+          "c": "除了北京，你还去过哪些地方？",
+          "d": "Chúle Běijīng, nǐ hái qù guo nǎxiē dìfang?",
+          "v": "Ngoài Bắc Kinh, bạn còn đi những nơi nào nữa?"
+        }
+      ],
+      "luuY": [
+        "Nghĩa của câu do 都 hay 还 / 也 quyết định: 除了他，我们都去了 (anh ấy không đi) ≠ 除了他，我们也去了 (anh ấy đi, chúng tôi cũng đi).",
+        "Vế sau không được thiếu 都 / 还 / 也: 除了汉语，我会说英语 nghe thiếu."
+      ],
+      "tuKhoa": [
+        "chule",
+        "chule yiwai",
+        "ngoài ra",
+        "ngoại trừ",
+        "trừ"
+      ],
+      "quiz": [
+        {
+          "h": "除了小李，大家都去了。 — Tiểu Lý có đi không?",
+          "lc": [
+            "Có đi",
+            "Không đi",
+            "Không biết được"
+          ],
+          "da": 1,
+          "gt": "除了…都: loại Tiểu Lý ra, những người còn lại đều đi."
+        },
+        {
+          "h": "除了游泳，我（　）喜欢打篮球。",
+          "lc": [
+            "都",
+            "才",
+            "还",
+            "把"
+          ],
+          "da": 2,
+          "gt": "Bổ sung thêm một sở thích nữa → 还."
+        },
+        {
+          "h": "除了咖啡以外，我还喝茶。 nghĩa là gì?",
+          "lc": [
+            "Tôi uống cà phê, và còn uống cả trà.",
+            "Tôi chỉ uống trà, không uống cà phê.",
+            "Tôi không uống cả hai."
+          ],
+          "da": 0,
+          "gt": "除了…还: cái đứng sau 除了 cũng được tính, rồi bổ sung thêm."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-ruguo-jiu",
+      "nhom": "Liên từ – câu phức",
+      "tieuDe": "如果…(的话)，就…",
+      "mau": "如果 + giả thiết + (的话)，(S) + 就 + kết quả",
+      "nghia": "nếu ~ thì ~",
+      "giaiThich": "如果 nêu một giả thiết, vế sau nêu kết quả hoặc việc sẽ làm nếu giả thiết đó thành sự thật. Cuối vế giả thiết có thể thêm 的话 (khẩu ngữ). Vế sau thường có 就.",
+      "cachGhep": [
+        "如果 + S + V…，S + 就 + V…",
+        "如果…的话，就… / …的话，就… (lược 如果)",
+        "就 đứng SAU chủ ngữ của vế sau"
+      ],
+      "viDu": [
+        {
+          "c": "如果明天下雨，我们就不去了。",
+          "d": "Rúguǒ míngtiān xià yǔ, wǒmen jiù bú qù le.",
+          "v": "Nếu ngày mai mưa thì chúng ta không đi nữa."
+        },
+        {
+          "c": "如果你有时间的话，就来我家玩儿吧。",
+          "d": "Rúguǒ nǐ yǒu shíjiān dehuà, jiù lái wǒ jiā wánr ba.",
+          "v": "Nếu bạn có thời gian thì đến nhà tôi chơi nhé."
+        },
+        {
+          "c": "如果不努力学习，就考不好。",
+          "d": "Rúguǒ bù nǔlì xuéxí, jiù kǎo bu hǎo.",
+          "v": "Nếu không chăm chỉ học thì sẽ thi không tốt."
+        },
+        {
+          "c": "如果你是我，你会怎么做？",
+          "d": "Rúguǒ nǐ shì wǒ, nǐ huì zěnme zuò?",
+          "v": "Nếu bạn là tôi, bạn sẽ làm thế nào?"
+        }
+      ],
+      "luuY": [
+        "Tiếng Việt 'thì' đứng trước chủ ngữ ('thì tôi đi'); tiếng Trung 就 đứng sau chủ ngữ: 如果他来，就我走 ✗ → 如果他来，我就走 ✓.",
+        "的话 đặt ở cuối vế giả thiết, không đặt ở vế kết quả."
+      ],
+      "soSanh": [
+        "zh-hsk3-zhiyao-jiu",
+        "zh-hsk4-yaoshi-jiu"
+      ],
+      "tuKhoa": [
+        "ruguo",
+        "ruguo jiu",
+        "dehua",
+        "nếu thì",
+        "giả thiết"
+      ],
+      "quiz": [
+        {
+          "h": "（　）你不舒服，就回家休息吧。",
+          "lc": [
+            "如果",
+            "虽然",
+            "除了",
+            "为了"
+          ],
+          "da": 0,
+          "gt": "Vế trước là giả thiết, vế sau có 就 → 如果…就…"
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "如果他来，就我走。",
+            "如果他来，我就走。",
+            "如果他来，我走就。"
+          ],
+          "da": 1,
+          "gt": "就 đứng sau chủ ngữ của vế sau, trước động từ."
+        },
+        {
+          "h": "你想去（　），我们就一起去。",
+          "lc": [
+            "以外",
+            "一样",
+            "的话",
+            "来说"
+          ],
+          "da": 2,
+          "gt": "的话 đặt cuối vế giả thiết: 你想去的话 = nếu bạn muốn đi."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-zhiyao-jiu",
+      "nhom": "Liên từ – câu phức",
+      "tieuDe": "只要…就…",
+      "mau": "只要 + điều kiện，(S) + 就 + kết quả",
+      "nghia": "chỉ cần ~ là / thì ~",
+      "giaiThich": "只要 nêu điều kiện đủ: chỉ cần có điều kiện đó là kết quả chắc chắn xảy ra, không đòi hỏi gì thêm. Giọng điệu thường tích cực, khích lệ.",
+      "cachGhep": [
+        "只要 + S + V…，(S) + 就 + V…",
+        "S + 只要 + V…，就 + V… (cùng chủ ngữ)",
+        "Vế sau hay có 一定 / 能 / 会 / 可以"
+      ],
+      "viDu": [
+        {
+          "c": "只要你努力，就一定能学好。",
+          "d": "Zhǐyào nǐ nǔlì, jiù yídìng néng xuéhǎo.",
+          "v": "Chỉ cần bạn cố gắng thì nhất định học tốt được."
+        },
+        {
+          "c": "只要不下雨，我们就去爬山。",
+          "d": "Zhǐyào bú xià yǔ, wǒmen jiù qù pá shān.",
+          "v": "Chỉ cần trời không mưa là chúng ta đi leo núi."
+        },
+        {
+          "c": "只要有时间，他就去图书馆看书。",
+          "d": "Zhǐyào yǒu shíjiān, tā jiù qù túshūguǎn kàn shū.",
+          "v": "Cứ có thời gian là anh ấy đến thư viện đọc sách."
+        },
+        {
+          "c": "是不是只要有钱就能买到？",
+          "d": "Shì bu shì zhǐyào yǒu qián jiù néng mǎidào?",
+          "v": "Có phải chỉ cần có tiền là mua được không?"
+        }
+      ],
+      "luuY": [
+        "只要 đi với 就; 只有 đi với 才 — không ghép chéo (只要…才 ✗).",
+        "只要 là điều kiện đủ (dễ đạt); 只有 là điều kiện duy nhất (khắt khe hơn)."
+      ],
+      "soSanh": [
+        "zh-hsk3-zhiyou-cai",
+        "zh-hsk3-ruguo-jiu"
+      ],
+      "tuKhoa": [
+        "zhiyao",
+        "zhiyao jiu",
+        "chỉ cần",
+        "điều kiện đủ"
+      ],
+      "quiz": [
+        {
+          "h": "只要你来，我（　）高兴。",
+          "lc": [
+            "才",
+            "就",
+            "还是",
+            "或者"
+          ],
+          "da": 1,
+          "gt": "只要 đi cặp với 就."
+        },
+        {
+          "h": "只要 nêu loại điều kiện nào?",
+          "lc": [
+            "Điều kiện đủ: có nó là được",
+            "Điều kiện duy nhất: không có nó thì không được",
+            "Sự nhượng bộ"
+          ],
+          "da": 0,
+          "gt": "只要 = chỉ cần; có điều kiện này là đủ để có kết quả."
+        },
+        {
+          "h": "（　）吃了这个药，病就会好。",
+          "lc": [
+            "只有",
+            "除了",
+            "只要",
+            "虽然"
+          ],
+          "da": 2,
+          "gt": "Vế sau dùng 就 và nghĩa là 'chỉ cần' → 只要."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-zhiyou-cai",
+      "nhom": "Liên từ – câu phức",
+      "tieuDe": "只有…才…",
+      "mau": "只有 + điều kiện，(S) + 才 + kết quả",
+      "nghia": "chỉ có ~ mới ~",
+      "giaiThich": "只有 nêu điều kiện duy nhất: phải có đúng điều kiện đó thì kết quả mới xảy ra, ngoài ra không có cách nào khác. Vế sau bắt buộc dùng 才.",
+      "cachGhep": [
+        "只有 + V / câu，(S) + 才 + (能 / 会) + V",
+        "只有 + N / đại từ + 才 + V: 只有他才知道",
+        "才 đứng sau chủ ngữ của vế sau"
+      ],
+      "viDu": [
+        {
+          "c": "只有多练习，才能说好汉语。",
+          "d": "Zhǐyǒu duō liànxí, cái néng shuōhǎo Hànyǔ.",
+          "v": "Chỉ có luyện tập nhiều mới nói tốt tiếng Trung được."
+        },
+        {
+          "c": "只有他才知道这件事。",
+          "d": "Zhǐyǒu tā cái zhīdào zhè jiàn shì.",
+          "v": "Chỉ có anh ấy mới biết chuyện này."
+        },
+        {
+          "c": "只有周末，我才有时间休息。",
+          "d": "Zhǐyǒu zhōumò, wǒ cái yǒu shíjiān xiūxi.",
+          "v": "Chỉ có cuối tuần tôi mới có thời gian nghỉ ngơi."
+        },
+        {
+          "c": "为什么只有你才能去？",
+          "d": "Wèi shénme zhǐyǒu nǐ cái néng qù?",
+          "v": "Tại sao chỉ có bạn mới được đi?"
+        }
+      ],
+      "luuY": [
+        "Vế sau dùng 才, không dùng 就: 只有你去，他就去 ✗ → 只有你去，他才去 ✓.",
+        "才 đứng sau chủ ngữ: 才他去 ✗."
+      ],
+      "soSanh": [
+        "zh-hsk3-zhiyao-jiu",
+        "zh-hsk3-cai-jiu"
+      ],
+      "tuKhoa": [
+        "zhiyou",
+        "zhiyou cai",
+        "chỉ có mới",
+        "điều kiện duy nhất"
+      ],
+      "quiz": [
+        {
+          "h": "只有努力学习，（　）能考上大学。",
+          "lc": [
+            "就",
+            "才",
+            "也",
+            "都"
+          ],
+          "da": 1,
+          "gt": "只有 đi cặp với 才."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "只有你去，他就去。",
+            "只有你去，才他去。",
+            "只有你去，他才去。"
+          ],
+          "da": 2,
+          "gt": "Vế sau dùng 才 và 才 đứng sau chủ ngữ 他."
+        },
+        {
+          "h": "只有坐飞机才能到。 nghĩa là gì?",
+          "lc": [
+            "Chỉ có đi máy bay mới đến được.",
+            "Chỉ cần đi máy bay là đến được, cách khác cũng được.",
+            "Đi máy bay cũng không đến được."
+          ],
+          "da": 0,
+          "gt": "只有…才 nêu điều kiện duy nhất: không đi máy bay thì không đến được."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-budan-erqie",
+      "nhom": "Liên từ – câu phức",
+      "tieuDe": "不但…而且…",
+      "mau": "S + 不但 + A，而且 + (还 / 也) + B",
+      "nghia": "không những ~ mà còn ~",
+      "giaiThich": "不但…而且… biểu thị quan hệ tăng tiến: vế sau bổ sung một ý cao hơn hoặc thêm vào ý ở vế trước. Vế sau có thể thay 而且 bằng 还 / 也, hoặc dùng cả hai.",
+      "cachGhep": [
+        "Cùng chủ ngữ: S + 不但 + …，而且 + (还 / 也) + … — 不但 đứng SAU chủ ngữ",
+        "Khác chủ ngữ: 不但 + S1 + …，而且 + S2 + 也 + … — 不但 đứng TRƯỚC chủ ngữ thứ nhất",
+        "不但 đọc búdàn (不 đổi thành thanh 2 trước thanh 4)"
+      ],
+      "viDu": [
+        {
+          "c": "她不但会说汉语，而且会说日语。",
+          "d": "Tā búdàn huì shuō Hànyǔ, érqiě huì shuō Rìyǔ.",
+          "v": "Cô ấy không những biết nói tiếng Trung mà còn biết nói tiếng Nhật."
+        },
+        {
+          "c": "这个手机不但便宜，而且很好用。",
+          "d": "Zhège shǒujī búdàn piányi, érqiě hěn hǎoyòng.",
+          "v": "Chiếc điện thoại này không những rẻ mà còn rất dễ dùng."
+        },
+        {
+          "c": "不但我喜欢他，而且大家都喜欢他。",
+          "d": "Búdàn wǒ xǐhuan tā, érqiě dàjiā dōu xǐhuan tā.",
+          "v": "Không chỉ tôi quý anh ấy mà mọi người đều quý anh ấy."
+        },
+        {
+          "c": "他不但没生气，还笑了。",
+          "d": "Tā búdàn méi shēngqì, hái xiào le.",
+          "v": "Anh ấy không những không giận mà còn cười."
+        }
+      ],
+      "luuY": [
+        "Vị trí của 不但 phụ thuộc số chủ ngữ: hai vế chung chủ ngữ thì 不但 sau chủ ngữ; hai chủ ngữ khác nhau thì 不但 trước chủ ngữ đầu.",
+        "而且 là liên từ, đứng đầu vế sau: 他而且也去过 ✗."
+      ],
+      "tuKhoa": [
+        "budan erqie",
+        "budan",
+        "erqie",
+        "không những mà còn",
+        "tăng tiến"
+      ],
+      "quiz": [
+        {
+          "h": "Hai vế khác chủ ngữ — câu nào đúng?",
+          "lc": [
+            "不但我去过，而且他也去过。",
+            "我不但去过，而且他也去过。",
+            "不但我去过，他而且也去过。"
+          ],
+          "da": 0,
+          "gt": "Khác chủ ngữ thì 不但 đứng trước chủ ngữ thứ nhất; 而且 đứng đầu vế sau."
+        },
+        {
+          "h": "他不但聪明，（　）很努力。",
+          "lc": [
+            "但是",
+            "而且",
+            "所以",
+            "或者"
+          ],
+          "da": 1,
+          "gt": "不但 đi cặp với 而且 để nêu ý tăng tiến."
+        },
+        {
+          "h": "不但…而且… biểu thị quan hệ gì?",
+          "lc": [
+            "tương phản",
+            "lựa chọn",
+            "tăng tiến"
+          ],
+          "da": 2,
+          "gt": "Vế sau bổ sung thêm, tiến lên một bậc so với vế trước."
+        }
+      ],
+      "soSanh": [
+        "zh-hsk4-bujin"
+      ]
+    },
+    {
+      "id": "zh-hsk3-huozhe-haishi",
+      "nhom": "Liên từ – câu phức",
+      "tieuDe": "或者 và 还是",
+      "mau": "A + 还是 + B？ (câu hỏi) · A + 或者 + B (câu trần thuật)",
+      "nghia": "还是: hay (hỏi lựa chọn); 或者: hoặc (kể, nêu khả năng)",
+      "giaiThich": "Cả hai đều nối các lựa chọn nhưng chia việc rõ ràng: 还是 dùng trong câu hỏi lựa chọn (kể cả câu hỏi lồng trong câu khác, sau 不知道, 想知道…); 或者 dùng trong câu trần thuật, nêu các khả năng đều được.",
+      "cachGhep": [
+        "Câu hỏi: (是) A 还是 B？ — cuối câu không thêm 吗",
+        "Câu hỏi lồng: 我不知道 + A 还是 B",
+        "Trần thuật: A 或者 B (+ 都可以)"
+      ],
+      "viDu": [
+        {
+          "c": "你喝茶还是喝咖啡？",
+          "d": "Nǐ hē chá háishi hē kāfēi?",
+          "v": "Bạn uống trà hay uống cà phê?"
+        },
+        {
+          "c": "周末我在家看书或者去公园。",
+          "d": "Zhōumò wǒ zài jiā kàn shū huòzhě qù gōngyuán.",
+          "v": "Cuối tuần tôi ở nhà đọc sách hoặc đi công viên."
+        },
+        {
+          "c": "他是老师还是学生？",
+          "d": "Tā shì lǎoshī háishi xuésheng?",
+          "v": "Anh ấy là giáo viên hay học sinh?"
+        },
+        {
+          "c": "我不知道他明天来还是后天来。",
+          "d": "Wǒ bù zhīdào tā míngtiān lái háishi hòutiān lái.",
+          "v": "Tôi không biết ngày mai hay ngày kia anh ấy đến."
+        }
+      ],
+      "luuY": [
+        "Tiếng Việt 'hay / hoặc' dùng lẫn được nên người Việt rất hay hỏi bằng 或者: 你喝茶或者咖啡？ ✗.",
+        "Câu hỏi với 还是 không thêm 吗: 你喝茶还是咖啡吗？ ✗."
+      ],
+      "soSanh": [
+        "zh-hsk3-haishi-ba"
+      ],
+      "tuKhoa": [
+        "huozhe",
+        "haishi",
+        "hay",
+        "hoặc",
+        "câu hỏi lựa chọn"
+      ],
+      "quiz": [
+        {
+          "h": "你想今天去（　）明天去？",
+          "lc": [
+            "还是",
+            "或者",
+            "而且",
+            "然后"
+          ],
+          "da": 0,
+          "gt": "Câu hỏi lựa chọn dùng 还是."
+        },
+        {
+          "h": "晚饭我们吃米饭（　）面条吧。",
+          "lc": [
+            "还是",
+            "或者",
+            "虽然",
+            "因为"
+          ],
+          "da": 1,
+          "gt": "Đây là câu đề nghị (trần thuật), nêu hai khả năng đều được → 或者."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "我不知道他是中国人或者日本人。",
+            "他是中国人还是日本人吗？",
+            "我不知道他是中国人还是日本人。"
+          ],
+          "da": 2,
+          "gt": "Câu hỏi lồng sau 不知道 vẫn dùng 还是; câu hỏi 还是 không thêm 吗."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-haishi-ba",
+      "nhom": "Liên từ – câu phức",
+      "tieuDe": "还是…吧",
+      "mau": "(S) + 还是 + V + 吧",
+      "nghia": "hay là ~ đi; tốt hơn là ~ thôi",
+      "giaiThich": "Sau khi so sánh, cân nhắc vài phương án, người nói dùng 还是…吧 để đưa ra phương án mình thấy hợp hơn, giọng nhẹ nhàng như lời đề nghị hoặc khuyên. 还是 ở đây là phó từ, không phải từ để hỏi.",
+      "cachGhep": [
+        "S + 还是 + V + O + 吧",
+        "Phủ định: S + 还是 + 不 / 别 + V + (了) + 吧",
+        "Thường có vế trước nêu lý do"
+      ],
+      "viDu": [
+        {
+          "c": "外面下雨了，我们还是坐出租车吧。",
+          "d": "Wàimiàn xià yǔ le, wǒmen háishi zuò chūzūchē ba.",
+          "v": "Bên ngoài mưa rồi, hay là chúng ta đi taxi đi."
+        },
+        {
+          "c": "太晚了，你还是明天再去吧。",
+          "d": "Tài wǎn le, nǐ háishi míngtiān zài qù ba.",
+          "v": "Muộn quá rồi, tốt hơn là mai bạn hãy đi."
+        },
+        {
+          "c": "我还是不去了吧，我有点儿累。",
+          "d": "Wǒ háishi bú qù le ba, wǒ yǒudiǎnr lèi.",
+          "v": "Hay là tôi không đi nữa vậy, tôi hơi mệt."
+        },
+        {
+          "c": "这件太贵了，还是买那件吧。",
+          "d": "Zhè jiàn tài guì le, háishi mǎi nà jiàn ba.",
+          "v": "Cái này đắt quá, hay là mua cái kia đi."
+        }
+      ],
+      "luuY": [
+        "还是 có ba nghĩa cần phân biệt theo ngữ cảnh: 'hay' (câu hỏi lựa chọn), 'vẫn' (他还是老样子), và 'tốt hơn là' (还是…吧).",
+        "还 trong 还是 đọc hái, không đọc huán."
+      ],
+      "soSanh": [
+        "zh-hsk3-huozhe-haishi"
+      ],
+      "tuKhoa": [
+        "haishi ba",
+        "haishi",
+        "hay là",
+        "tốt hơn là",
+        "đề nghị"
+      ],
+      "quiz": [
+        {
+          "h": "这儿人太多，我们（　）换一个地方吧。",
+          "lc": [
+            "或者",
+            "还是",
+            "而且",
+            "只有"
+          ],
+          "da": 1,
+          "gt": "Cân nhắc rồi đề nghị phương án hợp hơn: 还是…吧."
+        },
+        {
+          "h": "还是…吧 thể hiện điều gì?",
+          "lc": [
+            "Sau khi cân nhắc, chọn phương án thấy hợp hơn",
+            "Hỏi người nghe chọn một trong hai",
+            "Ra lệnh dứt khoát"
+          ],
+          "da": 0,
+          "gt": "Đây là lời đề nghị nhẹ nhàng sau khi so sánh các phương án."
+        },
+        {
+          "h": "Trong câu 你还是早点儿睡吧, 还是 nghĩa là gì?",
+          "lc": [
+            "vẫn còn",
+            "hay (câu hỏi lựa chọn)",
+            "tốt hơn là, nên"
+          ],
+          "da": 2,
+          "gt": "还是 + V + 吧 = tốt hơn là…, lời khuyên nhẹ nhàng."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-nghi-van-phiem-chi",
+      "nhom": "Đại từ nghi vấn",
+      "tieuDe": "什么都 / 谁也 / 哪儿都 (phiếm chỉ)",
+      "mau": "谁 / 什么 / 哪儿 / 怎么 + 都 / 也 + (不 / 没) + V",
+      "nghia": "ai cũng, cái gì cũng, ở đâu cũng ~ / không ai, không gì ~",
+      "giaiThich": "Đại từ nghi vấn đi với 都 / 也 không còn để hỏi mà chỉ toàn bộ, không trừ trường hợp nào: 什么都吃 (cái gì cũng ăn), 谁也不知道 (không ai biết). Câu khẳng định thường dùng 都; câu phủ định dùng được cả 都 và 也.",
+      "cachGhep": [
+        "Khẳng định: đại từ nghi vấn + 都 + V — 谁都喜欢他",
+        "Phủ định: đại từ nghi vấn + 都 / 也 + 不 / 没 + V — 什么也没买",
+        "Khi đại từ nghi vấn là tân ngữ, phải đưa lên TRƯỚC 都 / 也: 我什么都想吃",
+        "什么 + N + 都…: 什么水果都喜欢"
+      ],
+      "viDu": [
+        {
+          "c": "我什么都想吃。",
+          "d": "Wǒ shénme dōu xiǎng chī.",
+          "v": "Tôi cái gì cũng muốn ăn."
+        },
+        {
+          "c": "这件事谁也不知道。",
+          "d": "Zhè jiàn shì shéi yě bù zhīdào.",
+          "v": "Chuyện này không ai biết cả."
+        },
+        {
+          "c": "周末我哪儿都没去。",
+          "d": "Zhōumò wǒ nǎr dōu méi qù.",
+          "v": "Cuối tuần tôi chẳng đi đâu cả."
+        },
+        {
+          "c": "你怎么什么都不吃？",
+          "d": "Nǐ zěnme shénme dōu bù chī?",
+          "v": "Sao bạn không ăn gì cả vậy?"
+        }
+      ],
+      "luuY": [
+        "Người Việt hay đặt theo trật tự tiếng Việt 'tôi không muốn ăn gì cả': 我不想吃什么都 ✗ → 我什么都不想吃 ✓.",
+        "Không được thiếu 都 / 也: 我什么不想吃 ✗."
+      ],
+      "soSanh": [
+        "zh-hsk3-nghi-van-lien-ung"
+      ],
+      "tuKhoa": [
+        "shenme dou",
+        "shei ye",
+        "nar dou",
+        "phiếm chỉ",
+        "cái gì cũng",
+        "ai cũng"
+      ],
+      "quiz": [
+        {
+          "h": "他刚来这儿，（　）都不认识。",
+          "lc": [
+            "谁",
+            "怎么样",
+            "多少",
+            "为什么"
+          ],
+          "da": 0,
+          "gt": "'Không quen ai cả': 谁 + 都 + 不 + V."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "我不想吃什么都。",
+            "我什么都不想吃。",
+            "我都不想吃什么。"
+          ],
+          "da": 1,
+          "gt": "Đại từ nghi vấn làm tân ngữ phải đưa lên trước 都."
+        },
+        {
+          "h": "这种水果哪儿都有。 nghĩa là gì?",
+          "lc": [
+            "Loại quả này ở đâu có?",
+            "Loại quả này không ở đâu có.",
+            "Loại quả này ở đâu cũng có."
+          ],
+          "da": 2,
+          "gt": "哪儿 + 都 + V (khẳng định) = ở đâu cũng."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-nghi-van-lien-ung",
+      "nhom": "Đại từ nghi vấn",
+      "tieuDe": "想吃什么就吃什么 (đại từ nghi vấn hô ứng)",
+      "mau": "… đại từ nghi vấn …，(S) + 就 + … đại từ nghi vấn đó …",
+      "nghia": "muốn ~ gì thì ~ nấy; ai ~ thì người ấy ~; đâu ~ thì ~ đó",
+      "giaiThich": "Cùng một đại từ nghi vấn xuất hiện hai lần, nối bằng 就. Lần đầu nêu điều kiện bất kỳ, lần sau chỉ đúng người hay vật đó. Dùng khi để người nghe tuỳ ý lựa chọn, hoặc nêu quy tắc chung.",
+      "cachGhep": [
+        "(想) + V + 什么 + 就 + V + 什么: 想买什么就买什么",
+        "谁 + V1，谁 + 就 + V2: 谁先到谁就先吃",
+        "哪儿 + Adj / V，(S) + 就 + 去 + 哪儿",
+        "想 + 怎么 + V + 就 + 怎么 + V"
+      ],
+      "viDu": [
+        {
+          "c": "你想吃什么就吃什么。",
+          "d": "Nǐ xiǎng chī shénme jiù chī shénme.",
+          "v": "Bạn muốn ăn gì thì cứ ăn nấy."
+        },
+        {
+          "c": "谁先到谁就先吃。",
+          "d": "Shéi xiān dào shéi jiù xiān chī.",
+          "v": "Ai đến trước thì người ấy ăn trước."
+        },
+        {
+          "c": "哪儿好玩儿我们就去哪儿。",
+          "d": "Nǎr hǎowánr wǒmen jiù qù nǎr.",
+          "v": "Chỗ nào vui thì chúng ta đi chỗ đó."
+        },
+        {
+          "c": "你想怎么做就怎么做。",
+          "d": "Nǐ xiǎng zěnme zuò jiù zěnme zuò.",
+          "v": "Bạn muốn làm thế nào thì làm thế ấy."
+        }
+      ],
+      "luuY": [
+        "Hai vế phải dùng CÙNG một đại từ nghi vấn; đừng đổi vế sau thành 那个 / 那儿 như thói quen tiếng Việt ('gì… nấy', 'đâu… đó').",
+        "Đây không phải câu hỏi, cuối câu không dùng dấu hỏi hay 吗."
+      ],
+      "soSanh": [
+        "zh-hsk3-nghi-van-phiem-chi"
+      ],
+      "tuKhoa": [
+        "shenme jiu shenme",
+        "shei shei",
+        "hô ứng",
+        "gì nấy",
+        "tuỳ ý"
+      ],
+      "quiz": [
+        {
+          "h": "你喜欢什么就买（　）。",
+          "lc": [
+            "什么",
+            "怎么",
+            "哪儿",
+            "谁"
+          ],
+          "da": 0,
+          "gt": "Vế sau lặp lại đúng đại từ nghi vấn của vế trước: 什么…什么."
+        },
+        {
+          "h": "想吃什么就吃什么。 nghĩa là gì?",
+          "lc": [
+            "Bạn muốn ăn gì?",
+            "Muốn ăn gì thì ăn nấy.",
+            "Không muốn ăn gì cả."
+          ],
+          "da": 1,
+          "gt": "Hai đại từ nghi vấn hô ứng: bất kể là gì, muốn cái nào thì ăn cái đó."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "谁想去就谁去。",
+            "想去谁就去谁。",
+            "谁想去谁就去。"
+          ],
+          "da": 2,
+          "gt": "就 đứng sau chủ ngữ 谁 của vế sau: 谁…，谁就…"
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-so-xap-xi",
+      "nhom": "Số lượng – thời gian",
+      "tieuDe": "Số ước lượng: 左右 / 多 / 几",
+      "mau": "số + lượng từ + 左右 · số + 多 + lượng từ · 十几 / 几十 + lượng từ",
+      "nghia": "khoảng ~ (左右); hơn ~ (多); mười mấy, mấy chục (几)",
+      "giaiThich": "Ba cách nói con số không chính xác. 左右 đặt sau cụm số lượng, nghĩa là xấp xỉ, có thể hơn hoặc kém. 多 chỉ phần lẻ vượt quá con số đã nêu. 几 thay cho một số từ 1 đến 9 chưa rõ.",
+      "cachGhep": [
+        "Số + lượng từ + 左右: 三十岁左右, 八点左右",
+        "Số tròn chục trở lên + 多 + lượng từ: 二十多个, 一百多块",
+        "Số 1–9 + lượng từ + 多 (+ N): 三个多月, 五块多 (钱)",
+        "十几 + lượng từ (11–19), 几十 + lượng từ (vài chục), 几百 / 几千"
+      ],
+      "viDu": [
+        {
+          "c": "他今年三十岁左右。",
+          "d": "Tā jīnnián sānshí suì zuǒyòu.",
+          "v": "Năm nay anh ấy khoảng ba mươi tuổi."
+        },
+        {
+          "c": "我们班有二十多个学生。",
+          "d": "Wǒmen bān yǒu èrshí duō gè xuésheng.",
+          "v": "Lớp chúng tôi có hơn hai mươi học sinh."
+        },
+        {
+          "c": "我等了一个多小时。",
+          "d": "Wǒ děng le yí gè duō xiǎoshí.",
+          "v": "Tôi đã đợi hơn một tiếng đồng hồ."
+        },
+        {
+          "c": "这件衣服要几百块钱吧？",
+          "d": "Zhè jiàn yīfu yào jǐ bǎi kuài qián ba?",
+          "v": "Bộ quần áo này chắc phải mấy trăm tệ nhỉ?"
+        }
+      ],
+      "luuY": [
+        "Vị trí của 多 đổi theo con số: 二十多个 (20 mấy cái) nhưng 两个多月 (hơn hai tháng). Nói 三多个月 ✗.",
+        "Tiếng Việt nói 'khoảng 8 giờ' (từ ước lượng đứng trước); 左右 phải đứng SAU: 八点左右 ✓, 左右八点 ✗."
+      ],
+      "soSanh": [
+        "zh-hsk3-gio-ban-ke-cha"
+      ],
+      "tuKhoa": [
+        "zuoyou",
+        "duo",
+        "ji",
+        "khoảng",
+        "hơn",
+        "số ước lượng",
+        "số xấp xỉ"
+      ],
+      "quiz": [
+        {
+          "h": "十几个人 nghĩa là gì?",
+          "lc": [
+            "mười mấy người (11–19)",
+            "mấy chục người",
+            "chưa tới mười người"
+          ],
+          "da": 0,
+          "gt": "十几 = mười mấy; 几十 mới là mấy chục."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "我学了三多个月。",
+            "我学了三个多月。",
+            "我学了多三个月。"
+          ],
+          "da": 1,
+          "gt": "Số từ 1–9: số + lượng từ + 多 → 三个多月."
+        },
+        {
+          "h": "'Khoảng tám giờ' nói thế nào?",
+          "lc": [
+            "左右八点",
+            "八左右点",
+            "八点左右"
+          ],
+          "da": 2,
+          "gt": "左右 đứng sau cả cụm số + lượng từ."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-gio-ban-ke-cha",
+      "nhom": "Số lượng – thời gian",
+      "tieuDe": "Nói giờ: 半 / 刻 / 差",
+      "mau": "X 点半 · X 点一刻 / 三刻 · 差 Y 分 X 点",
+      "nghia": "~ giờ rưỡi; ~ giờ 15 / 45; ~ giờ kém ~ phút",
+      "giaiThich": "Ngoài cách đọc giờ + phút thông thường, tiếng Trung có ba cách nói gọn: 半 (30 phút), 刻 (15 phút: 一刻 = 15 phút, 三刻 = 45 phút) và 差 (kém). Với 差, số phút còn thiếu nói trước, giờ sắp tới nói sau.",
+      "cachGhep": [
+        "X 点半: 两点半 (2:30)",
+        "X 点一刻 (X:15), X 点三刻 (X:45)",
+        "差 + Y 分 + X 点: 差五分八点 (7:55); 差一刻九点 (8:45)",
+        "2 giờ nói 两点, không nói 二点"
+      ],
+      "viDu": [
+        {
+          "c": "现在两点半。",
+          "d": "Xiànzài liǎng diǎn bàn.",
+          "v": "Bây giờ là hai giờ rưỡi."
+        },
+        {
+          "c": "我们三点一刻见面。",
+          "d": "Wǒmen sān diǎn yí kè jiànmiàn.",
+          "v": "Chúng ta gặp nhau lúc ba giờ mười lăm."
+        },
+        {
+          "c": "现在差五分八点。",
+          "d": "Xiànzài chà wǔ fēn bā diǎn.",
+          "v": "Bây giờ là tám giờ kém năm."
+        },
+        {
+          "c": "你每天几点起床？——六点三刻。",
+          "d": "Nǐ měi tiān jǐ diǎn qǐchuáng? — Liù diǎn sān kè.",
+          "v": "Mỗi ngày bạn dậy lúc mấy giờ? — Sáu giờ bốn mươi lăm."
+        }
+      ],
+      "luuY": [
+        "Trật tự ngược tiếng Việt: 'tám giờ kém năm' → 差五分八点 (kém năm phút, tám giờ).",
+        "Không nói 两刻 cho 30 phút — dùng 半. 差 ở đây đọc chà.",
+        "Từ chỉ giờ đứng trước động từ: 我们三点一刻见面 ✓, 我们见面三点一刻 ✗."
+      ],
+      "soSanh": [
+        "zh-hsk3-so-xap-xi"
+      ],
+      "tuKhoa": [
+        "ban",
+        "ke",
+        "cha",
+        "nói giờ",
+        "giờ rưỡi",
+        "kém"
+      ],
+      "quiz": [
+        {
+          "h": "7:55 nói thế nào?",
+          "lc": [
+            "差五分八点",
+            "差五分七点",
+            "八点差五刻"
+          ],
+          "da": 0,
+          "gt": "Còn thiếu 5 phút nữa là 8 giờ: 差五分八点."
+        },
+        {
+          "h": "三点一刻 là mấy giờ?",
+          "lc": [
+            "3:10",
+            "3:15",
+            "3:30",
+            "3:45"
+          ],
+          "da": 1,
+          "gt": "一刻 = 15 phút nên 三点一刻 là 3:15; 3:45 là 三点三刻."
+        },
+        {
+          "h": "2:30 nói thế nào?",
+          "lc": [
+            "二点半",
+            "两点两刻",
+            "两点半"
+          ],
+          "da": 2,
+          "gt": "2 giờ là 两点; 30 phút là 半, không nói 两刻."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-lap-luong-tu",
+      "nhom": "Số lượng – thời gian",
+      "tieuDe": "Lặp lượng từ (个个 / 天天 / 件件)",
+      "mau": "(N) + lượng từ lặp lại (AA) + 都 + V / Adj",
+      "nghia": "mỗi ~ đều, ~ nào cũng",
+      "giaiThich": "Lượng từ một âm tiết (và vài danh từ như 人, 天, 年) lặp lại thành AA có nghĩa 'tất cả, không trừ cái nào', gần với 每 + lượng từ. Cụm này thường làm chủ ngữ hoặc trạng ngữ và hay đi với 都.",
+      "cachGhep": [
+        "N + lượng từ AA + 都 + …: 同学个个都很努力, 衣服件件都漂亮",
+        "天天 / 年年 / 人人 + (都) + V: 天天跑步, 人人都知道",
+        "Không làm tân ngữ: 我认识个个 ✗"
+      ],
+      "viDu": [
+        {
+          "c": "我们班的同学个个都很努力。",
+          "d": "Wǒmen bān de tóngxué gègè dōu hěn nǔlì.",
+          "v": "Các bạn lớp chúng tôi ai cũng rất chăm chỉ."
+        },
+        {
+          "c": "他天天都去跑步。",
+          "d": "Tā tiāntiān dōu qù pǎobù.",
+          "v": "Ngày nào anh ấy cũng đi chạy bộ."
+        },
+        {
+          "c": "这家店的衣服件件都很漂亮。",
+          "d": "Zhè jiā diàn de yīfu jiànjiàn dōu hěn piàoliang.",
+          "v": "Quần áo của cửa hàng này cái nào cũng rất đẹp."
+        },
+        {
+          "c": "你年年都回老家吗？",
+          "d": "Nǐ niánnián dōu huí lǎojiā ma?",
+          "v": "Năm nào bạn cũng về quê à?"
+        }
+      ],
+      "luuY": [
+        "Lượng từ lặp không đứng sau động từ làm tân ngữ; muốn nói 'tôi thích từng cái' thì dùng 每: 我喜欢每一件 hoặc 件件我都喜欢.",
+        "Đã lặp lượng từ thì không thêm 每: 每个个 ✗."
+      ],
+      "tuKhoa": [
+        "gege",
+        "tiantian",
+        "renren",
+        "lặp lượng từ",
+        "mỗi",
+        "nào cũng"
+      ],
+      "quiz": [
+        {
+          "h": "这些学生（　）都会说汉语。",
+          "lc": [
+            "个个",
+            "一个",
+            "每个个",
+            "个"
+          ],
+          "da": 0,
+          "gt": "Lượng từ lặp 个个 + 都 = ai cũng."
+        },
+        {
+          "h": "天天 nghĩa là gì?",
+          "lc": [
+            "hôm nay",
+            "ngày nào cũng",
+            "một ngày"
+          ],
+          "da": 1,
+          "gt": "天天 = mỗi ngày, ngày nào cũng."
+        },
+        {
+          "h": "Câu nào SAI?",
+          "lc": [
+            "他天天锻炼。",
+            "人人都喜欢她。",
+            "我认识个个。"
+          ],
+          "da": 2,
+          "gt": "Lượng từ lặp không làm tân ngữ đứng sau động từ."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-de-de-de",
+      "nhom": "Trợ từ kết cấu",
+      "tieuDe": "Phân biệt 的 / 地 / 得",
+      "mau": "định ngữ + 的 + N · trạng ngữ + 地 + V · V / Adj + 得 + bổ ngữ",
+      "nghia": "ba trợ từ cùng đọc 'de': 的 trước danh từ, 地 trước động từ, 得 sau động từ",
+      "giaiThich": "Ba chữ đều đọc de (thanh nhẹ) nhưng viết khác nhau tuỳ vị trí. 的 nối phần bổ nghĩa với danh từ đứng sau; 地 nối phần tả cách thức với động từ đứng sau; 得 đứng sau động từ hoặc tính từ để dẫn ra bổ ngữ đánh giá, mức độ, khả năng.",
+      "cachGhep": [
+        "Định ngữ + 的 + danh từ: 新买的手机, 妈妈做的菜",
+        "Tính từ / phó từ + 地 + động từ: 高兴地笑, 慢慢地说",
+        "Động từ / tính từ + 得 + bổ ngữ: 唱得很好, 听得懂, 累得不想动",
+        "Mẹo: nhìn từ ĐỨNG SAU — danh từ → 的; động từ → 地; nhìn từ ĐỨNG TRƯỚC là động từ → 得"
+      ],
+      "viDu": [
+        {
+          "c": "这是我新买的手机。",
+          "d": "Zhè shì wǒ xīn mǎi de shǒujī.",
+          "v": "Đây là chiếc điện thoại tôi mới mua."
+        },
+        {
+          "c": "他高兴地笑了。",
+          "d": "Tā gāoxìng de xiào le.",
+          "v": "Anh ấy cười vui vẻ."
+        },
+        {
+          "c": "她唱得很好听。",
+          "d": "Tā chàng de hěn hǎotīng.",
+          "v": "Cô ấy hát rất hay."
+        },
+        {
+          "c": "你慢慢地说，我听得懂。",
+          "d": "Nǐ mànmàn de shuō, wǒ tīng de dǒng.",
+          "v": "Bạn cứ nói từ từ, tôi nghe hiểu được."
+        }
+      ],
+      "luuY": [
+        "Khi làm trợ từ, 地 đọc de (khác dì trong 地方) và 得 đọc de (khác děi 'phải' và dé trong 得到).",
+        "Tiếng Việt không có hư từ tương ứng ('hát rất hay', 'cười vui vẻ') nên người Việt hay bỏ sót 得 / 地 hoặc viết tất cả thành 的."
+      ],
+      "tuKhoa": [
+        "de",
+        "de di de",
+        "的地得",
+        "trợ từ kết cấu",
+        "phân biệt de"
+      ],
+      "quiz": [
+        {
+          "h": "他认真（　）写作业。",
+          "lc": [
+            "的",
+            "地",
+            "得",
+            "了"
+          ],
+          "da": 1,
+          "gt": "认真 tả cách thức của động từ 写 đứng sau → 地."
+        },
+        {
+          "h": "你说（　）很对。",
+          "lc": [
+            "的",
+            "地",
+            "得",
+            "着"
+          ],
+          "da": 2,
+          "gt": "Sau động từ 说, dẫn ra bổ ngữ đánh giá 很对 → 得."
+        },
+        {
+          "h": "这是妈妈做（　）菜。",
+          "lc": [
+            "的",
+            "地",
+            "得",
+            "过"
+          ],
+          "da": 0,
+          "gt": "妈妈做 bổ nghĩa cho danh từ 菜 đứng sau → 的."
+        }
+      ]
+    }
+  ]
+}

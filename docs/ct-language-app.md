@@ -426,3 +426,55 @@ Câu hỏi cho user: Pro của CT Language có **dùng chung** với Pro web cuo
   · Test: `npx tsx --test src/services/ctlanguage/hoiGau.test.ts src/services/ctlanguage/congDongAnh.test.ts` + (CSDL)
     `STORAGE_SANDBOX=1 npx tsx --test src/services/ctlanguage/congDongAnh.db.test.ts`; iOS `TroLyGauTests`.
   · Deploy: `migrate deploy` (bảng mới); không env mới.
+
+## 14. Thư viện ngữ pháp (15/11/2026)
+
+Lấp khoảng trống LỚN của bảng khảo sát Hanzii/Mazii ("chưa có tra / thư viện ngữ pháp").
+
+**Nội dung TỰ SOẠN** — `content/ctlanguage/ngu-phap/<nn>/*.json`, **600 điểm** (khuôn: `_KHUON.md` cùng thư mục):
+
+| Ngôn ngữ | Cấp · số điểm |
+|---|---|
+| Nhật (243) | N5 81 · N4 83 · N3 79 |
+| Trung (199) | HSK1 43 · HSK2 51 · HSK3 60 · HSK4 45 |
+| Anh (158) | A1 36 · A2 43 · B1 51 · B2 28 |
+
+Mỗi điểm: `id` · `nhom` · `tieuDe` · `mau` (cấu trúc) · `nghia` (một dòng) · `giaiThich` · `cachGhep` · 3–5 `viDu` (`c` câu gốc, `d` cách
+đọc — Nhật: kana, Trung: pinyin có dấu thanh, Anh: không có; `v` nghĩa Việt) · `luuY` (lỗi người Việt hay mắc) · `soSanh` (id điểm dễ
+nhầm, kể cả khác cấp) · `tuKhoa` (romaji / pinyin không dấu / tên gọi tiếng Việt) · `quiz` đúng 3 câu có giải thích.
+
+- **Kiểm khuôn:** `npx tsx scripts/ctlanguage-kiem-ngu-phap.mts [ja/n5-1]` — trường bắt buộc, kana của `d` khớp câu gốc và không còn
+  chữ Hán, pinyin có dấu thanh (không số, không `v`), đáp án nằm trong lựa chọn, 3 câu quiz không cùng vị trí đáp án, id `soSanh` tồn tại.
+  Điểm hỏng bị máy chủ BỎ + ghi log lúc nạp (một điểm sai không làm sập thư viện).
+- **Đã soát bằng máy ngoài bộ kiểm khuôn (15/11):** pinyin 795 ví dụ đối chiếu `pinyin-pro` (chỗ lệch đều là chữ đa âm / thanh nhẹ đúng:
+  谁 shéi, 得 děi, 地 de, 还 huán, 教 jiāo…); cách đọc 844 ví dụ Nhật đối chiếu `kuromoji` (chỗ lệch đều do bộ tách từ: 日本 にほん,
+  何 なん, 一人 ひとり, 開いて あいて…). Tiếng Anh + lời giải thích + quiz: người soạn tự soát, CHƯA có người bản ngữ / giáo viên duyệt.
+- **Còn thiếu (ghi để soạn tiếp):** N3 — 〜ようとする, 〜ように言う, 〜ものだ, 〜とおり, 〜向け/向き, 〜うえで, 〜ずに, động từ ghép 〜始める/続ける/直す/合う/込む;
+  N5 — 何か/だれか, 〜ごろ/ぐらい, tính từ làm trạng từ, phó từ tần suất; HSK3 — 当然, 突然, 特别, 根据; HSK4 — 也许, 偶尔, 倒, 正好, 差不多,
+  是否, 所, 以…为, 与, 拿…来说, 光/仅; A1 — Whose, cách nói giờ; A2 — for/since, bị động cơ bản, shall, had better; B2 — đảo ngữ so/such,
+  get-passive, ellipsis. HSK 5–6, N2–N1, C1 chưa làm.
+
+**Máy chủ** — router riêng `src/routes/ctlanguage.nguPhap.routes.ts`, gắn `/api/v1/ctlanguage/ngu-phap` TRƯỚC `/ctlanguage`; mọi tuyến
+công khai (khách xem được), chỉ GET, **không CSDL / không migration / không env mới**:
+
+| Tuyến | Trả về |
+|---|---|
+| `GET /tong-quan` | số điểm theo ngôn ngữ / cấp (không tham số — có trong smoke-test `deploy.sh`) |
+| `GET /danh-muc?nn=ja` | cấp → nhóm → điểm tóm tắt (`id, nn, cap, nhom, tieuDe, mau, nghia`) |
+| `GET /tim?q=…&nn=ja[&chac=1][&toiDa=20]` | tra theo tiêu đề / từ khoá / mẫu / nghĩa / ví dụ; `chac=1` chỉ khớp tiêu đề–từ khoá–mẫu (ô tra tab Từ điển) |
+| `GET /diem/:id` | chi tiết + `soSanh` (tóm tắt, HAI chiều) + `truoc` / `sau` trong cùng cấp |
+
+Dịch vụ `services/ctlanguage/nguPhap.ts` (nạp một lần từ đĩa), luật thuần + tìm kiếm `nguPhapThuan.ts`. Test:
+`npx tsx --test src/services/ctlanguage/nguPhapThuan.test.ts src/routes/ctlanguage.nguPhap.routes.test.ts` (chạy trên NỘI DUNG THẬT:
+sàn số điểm mỗi cấp, kiểm chéo, tìm "てもいい" / "了" / "present perfect" / "bi dong").
+
+**App iOS** — `CTLanguageApp/Modules/NguPhap/` (`MoHinhNguPhapCTL` · `ThuVienNguPhapCTL` · `ChiTietNguPhapCTL`), test `NguPhapCTLTests`:
+- **Thư viện:** tiến độ "Đã học x/y" + nút Học tiếp, ô tìm (lọc ngay trên máy + máy chủ sau 250 ms), chip cấp, lọc Tất cả / Chưa học /
+  Đã học / Đã lưu, danh sách theo nhóm. Danh mục chép vào Caches ⇒ mở lại tức thì, xem được khi mất mạng.
+- **Chi tiết:** mẫu cấu trúc, ý nghĩa, cách ghép, ví dụ có 🔊 (chạm là đọc — `GiongSachHoc`, `napTruoc` cả loạt khi mở màn; nút ẩn/hiện
+  cách đọc), lưu ý, chip "So sánh với", quiz 3 câu chấm từng câu (đúng ≥ 2/3 ⇒ tự đánh dấu ĐÃ HỌC), đánh dấu tay, dấu trang lưu,
+  điểm trước / sau, nút Gấu trợ lý (`.troLyGau`, ngữ cảnh = mẫu + giải thích + ví dụ).
+- **Đã học / đã lưu / điểm quiz lưu TRÊN MÁY** (`KhoNguPhapMay`, UserDefaults) — chưa đồng bộ giữa các máy (cần bảng mới ⇒ để sau).
+- **Lối vào:** thẻ "Thư viện ngữ pháp" ở tab Học · mục "Ngữ pháp" (≤ 3 điểm khớp chắc) trên kết quả tra tab Từ điển + ô công cụ
+  "Ngữ pháp" ở tab Từ điển · DEBUG `CT_XEM_MAN=ngu-phap | ngu-phap:<id>`. Chưa có lối tắt ở tab Hôm nay.
+- Deploy: chỉ cần deploy backend (nội dung đi theo ảnh — `content/` đã được COPY); app cần bản TestFlight mới.

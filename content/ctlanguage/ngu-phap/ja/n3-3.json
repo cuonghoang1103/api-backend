@@ -1,0 +1,1168 @@
+{
+  "nn": "ja",
+  "cap": "N3",
+  "diem": [
+    {
+      "id": "ja-n3-okage-de",
+      "nhom": "Nguyên nhân – lý do",
+      "tieuDe": "〜おかげで",
+      "mau": "thể thường (Aな + な, N + の) + おかげで / おかげだ",
+      "nghia": "nhờ ~ mà (có kết quả tốt)",
+      "giaiThich": "Nêu nguyên nhân đem lại kết quả tốt, kèm cảm giác biết ơn. Cuối câu có thể dùng 〜おかげだ. Đôi khi dùng mỉa mai cho kết quả xấu, nhưng đó là cách nói đặc biệt.",
+      "cachGhep": [
+        "Động từ / tính từ đuôi い thể thường + おかげで",
+        "Tính từ đuôi な + な + おかげで",
+        "Danh từ + の + おかげで: 先生のおかげで"
+      ],
+      "viDu": [
+        {
+          "c": "先生のおかげで、試験に合格できました。",
+          "d": "せんせいの おかげで、しけんに ごうかく できました。",
+          "v": "Nhờ thầy mà em đã thi đỗ."
+        },
+        {
+          "c": "友達が手伝ってくれたおかげで、早く終わりました。",
+          "d": "ともだちが てつだってくれたおかげで、はやく おわりました。",
+          "v": "Nhờ bạn giúp mà tôi xong sớm."
+        },
+        {
+          "c": "毎日練習したおかげで、上手になりました。",
+          "d": "まいにち れんしゅうしたおかげで、じょうずに なりました。",
+          "v": "Nhờ luyện tập mỗi ngày mà tôi đã giỏi lên."
+        }
+      ],
+      "luuY": [
+        "Kết quả tốt dùng おかげで, kết quả xấu dùng せいで. Người Việt hay dùng ために cho cả hai nên mất sắc thái cảm ơn hoặc trách móc.",
+        "Vế sau là việc đã xảy ra, không dùng ý chí hay yêu cầu. おかげさまで = nhờ trời, nhờ mọi người (câu chào hỏi)."
+      ],
+      "soSanh": [
+        "ja-n3-sei-de",
+        "ja-n3-tame-ni-nguyen-nhan"
+      ],
+      "tuKhoa": [
+        "okage de",
+        "okagede",
+        "okage",
+        "nhờ",
+        "nhờ có"
+      ],
+      "quiz": [
+        {
+          "h": "薬を飲んだ（　）、熱が下がった。",
+          "lc": [
+            "おかげで",
+            "せいで",
+            "くせに",
+            "かわりに"
+          ],
+          "da": 0,
+          "gt": "Kết quả tốt (hạ sốt) nhờ uống thuốc ⇒ おかげで."
+        },
+        {
+          "h": "皆さん（　）おかげで、楽しい旅行になりました。",
+          "lc": [
+            "な",
+            "の",
+            "が",
+            "に"
+          ],
+          "da": 1,
+          "gt": "Danh từ + の + おかげで."
+        },
+        {
+          "h": "「〜おかげで」 thường dùng khi nào?",
+          "lc": [
+            "Kết quả xấu, muốn trách móc",
+            "Nêu mục đích của hành động",
+            "Kết quả tốt, muốn bày tỏ biết ơn"
+          ],
+          "da": 2,
+          "gt": "おかげで nêu nguyên nhân của kết quả tốt với ý biết ơn."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-sei-de",
+      "nhom": "Nguyên nhân – lý do",
+      "tieuDe": "〜せいで／〜せいか",
+      "mau": "thể thường (Aな + な, N + の) + せいで / せいだ / せいか",
+      "nghia": "tại ~ mà (kết quả xấu); có lẽ tại ~",
+      "giaiThich": "Nêu nguyên nhân gây ra kết quả xấu, thường kèm ý trách móc hoặc đổ lỗi. せいか nghĩa là \"không chắc nhưng có lẽ tại ~\"; với せいか kết quả không nhất thiết là xấu.",
+      "cachGhep": [
+        "Động từ / tính từ đuôi い thể thường + せいで",
+        "Tính từ đuôi な + な + せいで",
+        "Danh từ + の + せいで: 雨のせいで",
+        "Cuối câu: 〜のは〜せいだ"
+      ],
+      "viDu": [
+        {
+          "c": "雨のせいで、試合が中止になりました。",
+          "d": "あめの せいで、しあいが ちゅうしに なりました。",
+          "v": "Tại mưa mà trận đấu bị huỷ."
+        },
+        {
+          "c": "夜遅くまでゲームをしたせいで、朝起きられませんでした。",
+          "d": "よる おそくまで ゲームを したせいで、あさ おきられませんでした。",
+          "v": "Tại chơi game đến khuya nên sáng tôi không dậy nổi."
+        },
+        {
+          "c": "疲れているせいか、頭が痛いです。",
+          "d": "つかれているせいか、あたまが いたいです。",
+          "v": "Có lẽ tại mệt nên tôi bị đau đầu."
+        }
+      ],
+      "luuY": [
+        "Không dùng せいで cho kết quả tốt (✗ 先生のせいで合格した → おかげで).",
+        "Nói 〜さんのせいで là đổ lỗi thẳng cho người đó, cần cẩn thận khi dùng."
+      ],
+      "soSanh": [
+        "ja-n3-okage-de",
+        "ja-n3-tame-ni-nguyen-nhan"
+      ],
+      "tuKhoa": [
+        "sei de",
+        "seide",
+        "sei ka",
+        "tại",
+        "đổ lỗi"
+      ],
+      "quiz": [
+        {
+          "h": "電車が遅れた（　）、会議に間に合わなかった。",
+          "lc": [
+            "おかげで",
+            "せいで",
+            "ついでに",
+            "かわりに"
+          ],
+          "da": 1,
+          "gt": "Kết quả xấu (không kịp họp) ⇒ せいで."
+        },
+        {
+          "h": "年の（　）、最近よく物を忘れる。",
+          "lc": [
+            "せいか",
+            "くせに",
+            "たびに"
+          ],
+          "da": 0,
+          "gt": "\"Có lẽ tại tuổi tác\" ⇒ N + の + せいか."
+        },
+        {
+          "h": "「失敗したのは私のせいだ」 nghĩa là gì?",
+          "lc": [
+            "Nhờ tôi mà thành công",
+            "Tôi thất bại vì người khác",
+            "Thất bại là tại tôi"
+          ],
+          "da": 2,
+          "gt": "N + の + せいだ = là tại N."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-tame-ni-nguyen-nhan",
+      "nhom": "Nguyên nhân – lý do",
+      "tieuDe": "〜ため（に）— nguyên nhân",
+      "mau": "thể thường (Aな + な, N + の) + ため（に）",
+      "nghia": "vì ~, do ~ (nguyên nhân, trang trọng)",
+      "giaiThich": "Nêu nguyên nhân một cách khách quan, trang trọng; hay gặp trong thông báo, bản tin, văn viết. Khác với ために chỉ mục đích (N4): ở đây vế trước là sự việc đã hoặc đang xảy ra, không phải việc mình chủ động hướng tới.",
+      "cachGhep": [
+        "Động từ / tính từ đuôi い thể thường + ため（に）",
+        "Tính từ đuôi な + な + ため（に）",
+        "Danh từ + の + ため（に）: 大雪のため"
+      ],
+      "viDu": [
+        {
+          "c": "大雪のため、電車が止まっています。",
+          "d": "おおゆきの ため、でんしゃが とまっています。",
+          "v": "Do tuyết lớn, tàu điện đang ngừng chạy."
+        },
+        {
+          "c": "事故があったために、道が込んでいます。",
+          "d": "じこが あったために、みちが こんでいます。",
+          "v": "Vì có tai nạn nên đường đang đông."
+        },
+        {
+          "c": "熱が高かったため、昨日は会社を休みました。",
+          "d": "ねつが たかかったため、きのうは かいしゃを やすみました。",
+          "v": "Vì sốt cao nên hôm qua tôi đã nghỉ làm."
+        }
+      ],
+      "luuY": [
+        "Vế sau không dùng mệnh lệnh, nhờ vả, rủ rê (✗ 暑いため、窓を開けてください → 暑いので).",
+        "Phân biệt: động từ ý chí thể từ điển + ために = mục đích (日本で働くために勉強する); thể た, tính từ, động từ không ý chí + ために = nguyên nhân."
+      ],
+      "soSanh": [
+        "ja-n3-okage-de",
+        "ja-n3-sei-de",
+        "ja-n3-koto-kara"
+      ],
+      "tuKhoa": [
+        "tame ni",
+        "tameni",
+        "tame",
+        "do",
+        "nguyên nhân"
+      ],
+      "quiz": [
+        {
+          "h": "台風（　）ため、学校は休みになった。",
+          "lc": [
+            "の",
+            "な",
+            "に",
+            "で"
+          ],
+          "da": 0,
+          "gt": "Danh từ + の + ため."
+        },
+        {
+          "h": "Câu nào có ために chỉ NGUYÊN NHÂN?",
+          "lc": [
+            "日本で働くために、日本語を勉強している。",
+            "家を買うために、貯金している。",
+            "雪が降ったために、飛行機が飛ばなかった。"
+          ],
+          "da": 2,
+          "gt": "Hai câu đầu là mục đích (động từ ý chí thể từ điển); câu thứ ba nêu việc đã xảy ra làm nguyên nhân."
+        },
+        {
+          "h": "工事（　）、この道は通れません。",
+          "lc": [
+            "について",
+            "のため",
+            "として"
+          ],
+          "da": 1,
+          "gt": "\"Do thi công\" ⇒ N + の + ため."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-koto-kara",
+      "nhom": "Nguyên nhân – lý do",
+      "tieuDe": "〜ことから",
+      "mau": "thể thường (Aな + な / である, N + である) + ことから",
+      "nghia": "từ việc ~ mà (biết được, được gọi là)",
+      "giaiThich": "Nêu sự thật làm căn cứ để phán đoán, hoặc làm nguồn gốc của một cái tên, một nhận định. Văn viết; vế sau thường là 分かる, 考えられる, 呼ばれる, 言われる.",
+      "cachGhep": [
+        "Động từ / tính từ đuôi い thể thường + ことから",
+        "Tính từ đuôi な + な / である + ことから",
+        "Danh từ + である + ことから"
+      ],
+      "viDu": [
+        {
+          "c": "顔がよく似ていることから、二人は兄弟だと分かりました。",
+          "d": "かおが よく にていることから、ふたりは きょうだいだと わかりました。",
+          "v": "Từ việc khuôn mặt rất giống nhau, tôi biết hai người là anh em."
+        },
+        {
+          "c": "この町は、桜が多いことから、「桜の町」と呼ばれています。",
+          "d": "この まちは、さくらが おおいことから、「さくらの まち」と よばれています。",
+          "v": "Vì có nhiều hoa anh đào nên thị trấn này được gọi là \"thị trấn hoa anh đào\"."
+        },
+        {
+          "c": "道がぬれていることから、夜に雨が降ったことが分かります。",
+          "d": "みちが ぬれていることから、よるに あめが ふったことが わかります。",
+          "v": "Từ việc đường ướt, ta biết ban đêm đã có mưa."
+        }
+      ],
+      "luuY": [
+        "Không dùng cho lý do của hành động cá nhân (✗ 頭が痛いことから、休みます → 痛いので)."
+      ],
+      "soSanh": [
+        "ja-n3-tame-ni-nguyen-nhan"
+      ],
+      "tuKhoa": [
+        "koto kara",
+        "kotokara",
+        "từ việc",
+        "căn cứ",
+        "nguồn gốc tên gọi"
+      ],
+      "quiz": [
+        {
+          "h": "電気がついている（　）、彼は部屋にいると思われる。",
+          "lc": [
+            "ことから",
+            "ことまで",
+            "ことより",
+            "ことなら"
+          ],
+          "da": 0,
+          "gt": "Nêu căn cứ để phán đoán ⇒ ことから."
+        },
+        {
+          "h": "Vế sau của 「〜ことから」 thường là gì?",
+          "lc": [
+            "Lời mời, lời rủ",
+            "Phán đoán hoặc tên gọi (分かる, 呼ばれる)",
+            "Mệnh lệnh"
+          ],
+          "da": 1,
+          "gt": "ことから nêu căn cứ của phán đoán hoặc nguồn gốc tên gọi."
+        },
+        {
+          "h": "この魚は、色が赤いことから、（　）。",
+          "lc": [
+            "食べてください",
+            "買いましょう",
+            "「赤魚」と呼ばれている"
+          ],
+          "da": 2,
+          "gt": "Sau ことから là tên gọi hay nhận định, không phải yêu cầu hay lời rủ."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-mono-mon",
+      "nhom": "Nguyên nhân – lý do",
+      "tieuDe": "〜もの／〜もん",
+      "mau": "thể thường + もの / もん (cuối câu); hay đi với 〜んだ",
+      "nghia": "vì ~ mà (biện minh, thân mật)",
+      "giaiThich": "Đặt ở cuối câu để nêu lý do, thường là để biện minh hoặc nũng nịu. Rất thân mật, trẻ em và phụ nữ hay dùng; もん suồng sã hơn もの. Hay đi cùng だって ở đầu câu.",
+      "cachGhep": [
+        "Thể thường + もの / もん",
+        "Thường gặp: 〜んだもの / 〜んだもん (N, Aな + なんだもん)"
+      ],
+      "viDu": [
+        {
+          "c": "「どうして食べないの？」「だって、嫌いなんだもん。」",
+          "d": "「どうして たべないの？」「だって、きらいなんだもん。」",
+          "v": "\"Sao con không ăn?\" \"Tại con ghét mà.\""
+        },
+        {
+          "c": "今日は行けないよ。宿題が多いんだもの。",
+          "d": "きょうは いけないよ。しゅくだいが おおいんだもの。",
+          "v": "Hôm nay mình không đi được đâu. Tại bài tập nhiều mà."
+        },
+        {
+          "c": "一人で行くのは嫌だ。こわいもん。",
+          "d": "ひとりで いくのは いやだ。こわいもん。",
+          "v": "Mình không thích đi một mình đâu. Sợ lắm."
+        }
+      ],
+      "luuY": [
+        "Chỉ dùng với người thân, bạn bè; nói với người trên hoặc viết trong văn bản là thất lễ, nghe trẻ con.",
+        "Đừng nhầm với 〜ものだ (bản chất, hồi tưởng) là mẫu khác."
+      ],
+      "soSanh": [
+        "ja-n3-tte"
+      ],
+      "tuKhoa": [
+        "mono",
+        "mon",
+        "datte mon",
+        "biện minh",
+        "tại vì mà"
+      ],
+      "quiz": [
+        {
+          "h": "「どうして遅れたの？」「だって、バスが来なかったんだ（　）。」",
+          "lc": [
+            "もん",
+            "ほど",
+            "こそ",
+            "さえ"
+          ],
+          "da": 0,
+          "gt": "Biện minh lý do trong hội thoại thân mật: だって〜んだもん."
+        },
+        {
+          "h": "「〜もん」 dùng trong tình huống nào?",
+          "lc": [
+            "Trong báo cáo công việc",
+            "Khi nói thân mật để biện minh lý do",
+            "Khi viết thư cho thầy cô"
+          ],
+          "da": 1,
+          "gt": "もん là cách nói suồng sã để nêu lý do, biện minh."
+        },
+        {
+          "h": "Ai nói 「だって、知らなかったんだもん」 là tự nhiên?",
+          "lc": [
+            "Nhân viên nói với giám đốc",
+            "Phát thanh viên đọc bản tin",
+            "Đứa trẻ nói với mẹ"
+          ],
+          "da": 2,
+          "gt": "Đây là cách nói thân mật, nũng nịu, chỉ hợp với người thân."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-wake-da",
+      "nhom": "わけ・はず・べき・こと",
+      "tieuDe": "〜わけだ",
+      "mau": "thể thường (Aな + な, N + の / な) + わけだ",
+      "nghia": "thảo nào ~, hèn chi ~; nghĩa là ~, thành ra ~",
+      "giaiThich": "Dùng khi biết một sự thật rồi hiểu ra lý do của điều mình thấy (\"thảo nào\"), hoặc khi từ các dữ kiện rút ra kết luận tất yếu (\"nghĩa là, thành ra\"). Điều được nói trước わけだ là sự thật, không phải phỏng đoán.",
+      "cachGhep": [
+        "Động từ / tính từ đuôi い thể thường + わけだ",
+        "Tính từ đuôi な + な + わけだ",
+        "Danh từ + の / な + わけだ; cách nói nối: 〜というわけだ"
+      ],
+      "viDu": [
+        {
+          "c": "十年も日本に住んでいたんですか。日本語が上手なわけです。",
+          "d": "じゅうねんも にほんに すんでいたんですか。にほんごが じょうずな わけです。",
+          "v": "Anh sống ở Nhật những mười năm cơ à? Thảo nào tiếng Nhật giỏi thế."
+        },
+        {
+          "c": "窓が開いていますね。寒いわけだ。",
+          "d": "まどが あいていますね。さむいわけだ。",
+          "v": "Cửa sổ đang mở kìa. Hèn chi lạnh."
+        },
+        {
+          "c": "一日八時間、週五日働くから、一週間に四十時間働くわけです。",
+          "d": "いちにち はちじかん、しゅう いつか はたらくから、いっしゅうかんに よんじゅうじかん はたらくわけです。",
+          "v": "Mỗi ngày làm 8 tiếng, mỗi tuần 5 ngày, nghĩa là một tuần làm 40 tiếng."
+        }
+      ],
+      "luuY": [
+        "わけだ = kết luận đương nhiên từ sự thật đã rõ; はずだ = phỏng đoán điều mình chưa xác nhận. Thấy bạn giỏi tiếng Nhật rồi mới biết lý do thì dùng わけだ."
+      ],
+      "soSanh": [
+        "ja-n3-wake-dewa-nai",
+        "ja-n3-wake-ga-nai",
+        "ja-n3-hazu-datta"
+      ],
+      "tuKhoa": [
+        "wake da",
+        "wakeda",
+        "wake desu",
+        "thảo nào",
+        "hèn chi",
+        "nghĩa là"
+      ],
+      "quiz": [
+        {
+          "h": "「彼は子どものとき、アメリカに住んでいたそうです。」「ああ、それで英語が上手な（　）。」",
+          "lc": [
+            "わけだ",
+            "わけがない",
+            "わけにはいかない",
+            "わけではない"
+          ],
+          "da": 0,
+          "gt": "Biết lý do rồi thấy là đương nhiên (\"thảo nào\") ⇒ わけだ."
+        },
+        {
+          "h": "暑い（　）だ。エアコンが消えている。",
+          "lc": [
+            "くせ",
+            "わけ",
+            "ついで",
+            "たび"
+          ],
+          "da": 1,
+          "gt": "\"Hèn chi nóng\" ⇒ 暑いわけだ."
+        },
+        {
+          "h": "「〜わけだ」 diễn tả điều gì?",
+          "lc": [
+            "Phủ định hoàn toàn một khả năng",
+            "Không thể làm vì lý do đạo lý",
+            "Đã hiểu lý do, thấy kết quả là đương nhiên"
+          ],
+          "da": 2,
+          "gt": "わけだ = thảo nào, thành ra; hai ý kia là わけがない và わけにはいかない."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-wake-dewa-nai",
+      "nhom": "わけ・はず・べき・こと",
+      "tieuDe": "〜わけではない",
+      "mau": "thể thường (Aな + な, N + の / な) + わけではない",
+      "nghia": "không hẳn là ~, không phải là ~ đâu",
+      "giaiThich": "Phủ định một phần, hoặc đính chính điều người nghe dễ suy ra từ tình huống. Hay đi cùng いつも, みんな, 全部, 別に. Trong văn nói thân mật thành 〜わけじゃない.",
+      "cachGhep": [
+        "Thể thường + わけではない / わけじゃない",
+        "Tính từ đuôi な + な + わけではない",
+        "Hay gặp: 〜というわけではない"
+      ],
+      "viDu": [
+        {
+          "c": "肉が嫌いなわけではありませんが、あまり食べません。",
+          "d": "にくが きらいな わけではありませんが、あまり たべません。",
+          "v": "Không hẳn là tôi ghét thịt, nhưng tôi không ăn mấy."
+        },
+        {
+          "c": "日本人がみんな、すしが好きなわけではない。",
+          "d": "にほんじんが みんな、すしが すきな わけではない。",
+          "v": "Không phải người Nhật nào cũng thích sushi."
+        },
+        {
+          "c": "行きたくないわけではないが、今日は時間がない。",
+          "d": "いきたくない わけではないが、きょうは じかんが ない。",
+          "v": "Không phải là tôi không muốn đi, nhưng hôm nay không có thời gian."
+        }
+      ],
+      "luuY": [
+        "わけではない = phủ định một phần (\"không hẳn\"); わけがない = phủ định hoàn toàn (\"làm gì có chuyện\"). Hai mẫu này người học rất hay lẫn."
+      ],
+      "soSanh": [
+        "ja-n3-wake-da",
+        "ja-n3-wake-ga-nai",
+        "ja-n3-to-wa-kagiranai"
+      ],
+      "tuKhoa": [
+        "wake dewa nai",
+        "wake ja nai",
+        "wakedewanai",
+        "không hẳn là",
+        "phủ định một phần"
+      ],
+      "quiz": [
+        {
+          "h": "料理ができない（　）が、忙しくてあまり作らない。",
+          "lc": [
+            "わけではない",
+            "わけだ",
+            "わけがない",
+            "わけにはいかない"
+          ],
+          "da": 0,
+          "gt": "\"Không phải là không biết nấu, nhưng…\" ⇒ わけではない."
+        },
+        {
+          "h": "「高い物がいつもいいわけではない」 nghĩa là gì?",
+          "lc": [
+            "Đồ đắt lúc nào cũng tốt",
+            "Đồ đắt không phải lúc nào cũng tốt",
+            "Đồ đắt không bao giờ tốt"
+          ],
+          "da": 1,
+          "gt": "いつも〜わけではない = không phải lúc nào cũng ~."
+        },
+        {
+          "h": "嫌いな（　）ではないが、甘い物はあまり食べない。",
+          "lc": [
+            "たび",
+            "くせ",
+            "わけ"
+          ],
+          "da": 2,
+          "gt": "\"Không hẳn là ghét\" ⇒ 嫌いなわけではない."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-wake-ga-nai",
+      "nhom": "わけ・はず・べき・こと",
+      "tieuDe": "〜わけがない",
+      "mau": "thể thường (Aな + な, N + の / な) + わけがない",
+      "nghia": "không lý nào ~, làm gì có chuyện ~",
+      "giaiThich": "Người nói khẳng định mạnh rằng một việc hoàn toàn không thể xảy ra, dựa trên lý lẽ của mình. Nghĩa gần như はずがない. Trong văn nói thân mật thành 〜わけない.",
+      "cachGhep": [
+        "Thể thường + わけがない / わけはない",
+        "Tính từ đuôi な + な + わけがない"
+      ],
+      "viDu": [
+        {
+          "c": "こんなに難しい問題が、子どもに分かるわけがない。",
+          "d": "こんなに むずかしい もんだいが、こどもに わかるわけがない。",
+          "v": "Bài khó thế này thì trẻ con làm sao hiểu được."
+        },
+        {
+          "c": "あんなにまじめな彼が、うそをつくわけがありません。",
+          "d": "あんなに まじめな かれが、うそを つくわけが ありません。",
+          "v": "Người nghiêm túc như anh ấy không lý nào lại nói dối."
+        },
+        {
+          "c": "毎日遊んでいて、試験に合格できるわけがない。",
+          "d": "まいにち あそんでいて、しけんに ごうかく できるわけがない。",
+          "v": "Ngày nào cũng chơi thì làm gì có chuyện thi đỗ."
+        }
+      ],
+      "luuY": [
+        "Đừng nhầm với わけではない (không hẳn là). できるわけがない = tuyệt đối không làm được; できないわけではない = không phải là không làm được."
+      ],
+      "soSanh": [
+        "ja-n3-wake-dewa-nai",
+        "ja-n3-wake-niwa-ikanai"
+      ],
+      "tuKhoa": [
+        "wake ga nai",
+        "wakeganai",
+        "wake nai",
+        "không lý nào",
+        "làm gì có chuyện",
+        "hazu ga nai"
+      ],
+      "quiz": [
+        {
+          "h": "彼は今、入院している。パーティーに来られる（　）。",
+          "lc": [
+            "わけがない",
+            "わけだ",
+            "わけではない",
+            "べきだ"
+          ],
+          "da": 0,
+          "gt": "Đang nằm viện nên chắc chắn không thể đến ⇒ わけがない."
+        },
+        {
+          "h": "「できるわけがない」 nghĩa là gì?",
+          "lc": [
+            "Không hẳn là không làm được",
+            "Tuyệt đối không thể làm được",
+            "Thảo nào làm được"
+          ],
+          "da": 1,
+          "gt": "わけがない phủ định hoàn toàn khả năng."
+        },
+        {
+          "h": "「わけがない」 gần nghĩa nhất với mẫu nào?",
+          "lc": [
+            "べきではない",
+            "ことはない",
+            "はずがない"
+          ],
+          "da": 2,
+          "gt": "わけがない ≈ はずがない: không lý nào."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-wake-niwa-ikanai",
+      "nhom": "わけ・はず・べき・こと",
+      "tieuDe": "〜わけにはいかない",
+      "mau": "V-る + わけにはいかない / V-ない + わけにはいかない",
+      "nghia": "không thể ~ được (vì lẽ thường, trách nhiệm); không thể không ~",
+      "giaiThich": "Muốn làm hoặc có khả năng làm, nhưng xét về lẽ thường, trách nhiệm, quan hệ xã hội thì không thể làm. Với thể phủ định, V-ないわけにはいかない nghĩa là \"không làm thì không được\", tức buộc phải làm.",
+      "cachGhep": [
+        "Động từ thể từ điển + わけにはいかない: không thể làm",
+        "Động từ thể ない + わけにはいかない: buộc phải làm"
+      ],
+      "viDu": [
+        {
+          "c": "明日は大事な試験があるので、休むわけにはいきません。",
+          "d": "あしたは だいじな しけんが あるので、やすむわけには いきません。",
+          "v": "Ngày mai có kỳ thi quan trọng nên tôi không thể nghỉ được."
+        },
+        {
+          "c": "車で来たので、お酒を飲むわけにはいかない。",
+          "d": "くるまで きたので、おさけを のむわけには いかない。",
+          "v": "Tôi đi ô tô đến nên không thể uống rượu được."
+        },
+        {
+          "c": "約束したのだから、行かないわけにはいかない。",
+          "d": "やくそくしたのだから、いかないわけには いかない。",
+          "v": "Đã hứa rồi nên tôi không thể không đi."
+        }
+      ],
+      "luuY": [
+        "Không dùng khi không làm được vì thiếu năng lực hay điều kiện thể chất (✗ 足が痛くて、走るわけにはいかない → 走れない).",
+        "Chủ ngữ thường là người nói (ngôi thứ nhất)."
+      ],
+      "soSanh": [
+        "ja-n3-wake-ga-nai",
+        "ja-n3-beki-da"
+      ],
+      "tuKhoa": [
+        "wake ni wa ikanai",
+        "wakeniwaikanai",
+        "không thể",
+        "không thể không",
+        "buộc phải"
+      ],
+      "quiz": [
+        {
+          "h": "大切な会議があるから、熱があっても休む（　）。",
+          "lc": [
+            "わけにはいかない",
+            "ところだった",
+            "ことにしている"
+          ],
+          "da": 0,
+          "gt": "Vì trách nhiệm nên không thể nghỉ ⇒ わけにはいかない."
+        },
+        {
+          "h": "「行かないわけにはいかない」 nghĩa là gì?",
+          "lc": [
+            "Không được phép đi",
+            "Buộc phải đi",
+            "Không muốn đi nên không đi"
+          ],
+          "da": 1,
+          "gt": "V-ない + わけにはいかない = không thể không làm, tức buộc phải làm."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "足が痛くて、走るわけにはいかない。",
+            "漢字が読めないので、新聞を読むわけにはいかない。",
+            "みんなが待っているから、先に帰るわけにはいかない。"
+          ],
+          "da": 2,
+          "gt": "わけにはいかない dùng cho lý do thuộc về lẽ thường, trách nhiệm; không dùng cho việc thiếu năng lực (phải nói 走れない, 読めない)."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-hazu-datta",
+      "nhom": "わけ・はず・べき・こと",
+      "tieuDe": "〜はずだった",
+      "mau": "thể thường (Aな + な, N + の) + はずだった",
+      "nghia": "lẽ ra đã ~, đáng lẽ ~ (nhưng thực tế không như vậy)",
+      "giaiThich": "Diễn tả điều mình tin chắc hoặc đã được dự định sẽ xảy ra, nhưng thực tế lại khác. Mang cảm giác tiếc nuối hoặc ngạc nhiên; hay đi với が hoặc のに.",
+      "cachGhep": [
+        "Thể thường + はずだった / はずでした",
+        "Tính từ đuôi な + な + はずだった",
+        "Danh từ + の + はずだった"
+      ],
+      "viDu": [
+        {
+          "c": "彼も来るはずでしたが、急に病気になりました。",
+          "d": "かれも くるはずでしたが、きゅうに びょうきに なりました。",
+          "v": "Lẽ ra anh ấy cũng đến, nhưng đột nhiên bị bệnh."
+        },
+        {
+          "c": "荷物は昨日届くはずだったのに、まだ来ていません。",
+          "d": "にもつは きのう とどくはずだったのに、まだ きていません。",
+          "v": "Hàng lẽ ra hôm qua đã tới, vậy mà giờ vẫn chưa đến."
+        },
+        {
+          "c": "もっと簡単なはずだったが、やってみると難しかった。",
+          "d": "もっと かんたんな はずだったが、やってみると むずかしかった。",
+          "v": "Tưởng là phải dễ hơn, nhưng làm thử thì thấy khó."
+        }
+      ],
+      "luuY": [
+        "はずだった = thực tế trái với dự kiến. Khác V-たはずだ = \"chắc chắn là đã ~\" (người nói vẫn tin việc đó đã xảy ra)."
+      ],
+      "soSanh": [
+        "ja-n3-wake-da",
+        "ja-n3-tokoro-datta"
+      ],
+      "tuKhoa": [
+        "hazu datta",
+        "hazudatta",
+        "lẽ ra",
+        "đáng lẽ"
+      ],
+      "quiz": [
+        {
+          "h": "今日は晴れる（　）のに、雨が降ってきた。",
+          "lc": [
+            "はずだった",
+            "ところだった",
+            "ことだった",
+            "べきだった"
+          ],
+          "da": 0,
+          "gt": "Dự báo là nắng nhưng thực tế mưa ⇒ はずだった."
+        },
+        {
+          "h": "「10時に着くはずだった」 — thực tế thế nào?",
+          "lc": [
+            "Đã đến đúng 10 giờ",
+            "Đã không đến lúc 10 giờ như dự kiến",
+            "Sẽ đến lúc 10 giờ"
+          ],
+          "da": 1,
+          "gt": "はずだった nói điều dự kiến đã không thành hiện thực."
+        },
+        {
+          "h": "会議は3時に終わるはずだったが、（　）。",
+          "lc": [
+            "3時に終わった",
+            "早く終わりましょう",
+            "5時までかかった"
+          ],
+          "da": 2,
+          "gt": "Sau はずだったが là thực tế trái với dự kiến."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-beki-da",
+      "nhom": "わけ・はず・べき・こと",
+      "tieuDe": "〜べきだ／〜べきではない",
+      "mau": "V-る + べきだ / V-る + べきではない (する → すべき / するべき)",
+      "nghia": "nên ~, cần phải ~ (lẽ đương nhiên); không nên ~",
+      "giaiThich": "Người nói cho rằng làm việc đó là đúng, là bổn phận, lẽ đương nhiên. Dùng khi nêu ý kiến, khuyên bảo. Phủ định là べきではない. Dạng quá khứ べきだった diễn tả sự hối tiếc \"lẽ ra nên ~\".",
+      "cachGhep": [
+        "Động từ thể từ điển + べきだ / べきです",
+        "する → すべきだ hoặc するべきだ",
+        "Phủ định: V-る + べきではない",
+        "Hối tiếc: V-る + べきだった"
+      ],
+      "viDu": [
+        {
+          "c": "学生はもっと勉強するべきだ。",
+          "d": "がくせいは もっと べんきょうするべきだ。",
+          "v": "Học sinh nên học nhiều hơn."
+        },
+        {
+          "c": "約束は守るべきです。",
+          "d": "やくそくは まもるべきです。",
+          "v": "Lời hứa thì phải giữ."
+        },
+        {
+          "c": "人の悪口を言うべきではありません。",
+          "d": "ひとの わるぐちを いうべきでは ありません。",
+          "v": "Không nên nói xấu người khác."
+        },
+        {
+          "c": "困ったときは、だれかに相談すべきだ。",
+          "d": "こまったときは、だれかに そうだんすべきだ。",
+          "v": "Khi gặp khó khăn thì nên hỏi ý kiến ai đó."
+        }
+      ],
+      "luuY": [
+        "Phủ định là V-る + べきではない, không phải V-ない + べきだ (✗ 言わないべきだ).",
+        "Không dùng cho quy định, luật lệ (dùng なければならない). Nói thẳng べきだ với người trên nghe áp đặt; nên dùng 〜たほうがいい."
+      ],
+      "soSanh": [
+        "ja-n3-koto-da",
+        "ja-n3-wake-niwa-ikanai"
+      ],
+      "tuKhoa": [
+        "beki da",
+        "bekida",
+        "beki dewa nai",
+        "subeki",
+        "nên",
+        "không nên"
+      ],
+      "quiz": [
+        {
+          "h": "悪いことをしたら、すぐに（　）べきだ。",
+          "lc": [
+            "謝る",
+            "謝って",
+            "謝った",
+            "謝り"
+          ],
+          "da": 0,
+          "gt": "べきだ đi sau động từ thể từ điển."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "うそを言わないべきだ。",
+            "うそを言うべきではない。",
+            "うそを言ってべきではない。"
+          ],
+          "da": 1,
+          "gt": "Phủ định của べきだ là V-る + べきではない."
+        },
+        {
+          "h": "「する」 ghép với べき thành dạng nào?",
+          "lc": [
+            "しべき",
+            "してべき",
+            "すべき"
+          ],
+          "da": 2,
+          "gt": "する + べき = すべき (hoặc するべき)."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-koto-da",
+      "nhom": "わけ・はず・べき・こと",
+      "tieuDe": "〜ことだ (lời khuyên)",
+      "mau": "V-る + ことだ / V-ない + ことだ",
+      "nghia": "nên ~, tốt nhất là ~ / đừng ~ (lời khuyên)",
+      "giaiThich": "Dùng để khuyên rằng trong tình huống đó, làm (hoặc không làm) việc này là điều quan trọng nhất. Thường là người trên, người có kinh nghiệm nói với người dưới.",
+      "cachGhep": [
+        "Động từ thể từ điển + ことだ / ことです",
+        "Động từ thể ない + ことだ / ことです"
+      ],
+      "viDu": [
+        {
+          "c": "日本語が上手になりたければ、毎日話すことです。",
+          "d": "にほんごが じょうずに なりたければ、まいにち はなすことです。",
+          "v": "Muốn giỏi tiếng Nhật thì nên nói mỗi ngày."
+        },
+        {
+          "c": "かぜのときは、早く寝ることだ。",
+          "d": "かぜの ときは、はやく ねることだ。",
+          "v": "Khi bị cảm thì tốt nhất là đi ngủ sớm."
+        },
+        {
+          "c": "無理をしないことです。",
+          "d": "むりを しないことです。",
+          "v": "Đừng cố quá sức."
+        }
+      ],
+      "luuY": [
+        "Không dùng với người trên; không có dạng quá khứ hay nghi vấn với nghĩa này.",
+        "Đừng nhầm với 〜ということだ (nghe nói; nghĩa là) và 〜ことはない (không cần phải)."
+      ],
+      "soSanh": [
+        "ja-n3-beki-da",
+        "ja-n3-koto-wa-nai"
+      ],
+      "tuKhoa": [
+        "koto da",
+        "kotoda",
+        "koto desu",
+        "lời khuyên",
+        "nên"
+      ],
+      "quiz": [
+        {
+          "h": "やせたいなら、甘い物を食べ（　）ことだ。",
+          "lc": [
+            "ない",
+            "なくて",
+            "なかった",
+            "ないで"
+          ],
+          "da": 0,
+          "gt": "Khuyên đừng làm: V-ない + ことだ."
+        },
+        {
+          "h": "上手になりたいなら、毎日（　）ことだ。",
+          "lc": [
+            "練習した",
+            "練習する",
+            "練習して"
+          ],
+          "da": 1,
+          "gt": "Khuyên nên làm: V thể từ điển + ことだ."
+        },
+        {
+          "h": "Ai nói 「よく休むことですね」 là tự nhiên?",
+          "lc": [
+            "Học sinh nói với thầy hiệu trưởng",
+            "Nhân viên mới nói với giám đốc",
+            "Bác sĩ nói với bệnh nhân"
+          ],
+          "da": 2,
+          "gt": "〜ことだ là lời khuyên của người có chuyên môn hoặc người trên; không dùng với người trên mình."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-koto-wa-nai",
+      "nhom": "わけ・はず・べき・こと",
+      "tieuDe": "〜ことはない",
+      "mau": "V-る + ことはない",
+      "nghia": "không cần phải ~, việc gì phải ~",
+      "giaiThich": "Dùng để khuyên hoặc an ủi rằng không cần thiết phải làm việc đó. Hay đi cùng そんなに, わざわざ, 何も.",
+      "cachGhep": [
+        "Động từ thể từ điển + ことはない / こともない"
+      ],
+      "viDu": [
+        {
+          "c": "時間は十分あるから、急ぐことはありません。",
+          "d": "じかんは じゅうぶん あるから、いそぐことは ありません。",
+          "v": "Thời gian còn nhiều nên không cần phải vội."
+        },
+        {
+          "c": "小さい失敗だから、そんなに心配することはないよ。",
+          "d": "ちいさい しっぱいだから、そんなに しんぱいすることは ないよ。",
+          "v": "Chỉ là lỗi nhỏ thôi, không cần phải lo đến thế đâu."
+        },
+        {
+          "c": "電話で話せば分かるから、わざわざ行くことはない。",
+          "d": "でんわで はなせば わかるから、わざわざ いくことは ない。",
+          "v": "Nói qua điện thoại là hiểu rồi, không cần phải cất công đi."
+        }
+      ],
+      "luuY": [
+        "Động từ ở thể từ điển. Nếu là thể た thì thành mẫu kinh nghiệm: V-たことはない = chưa từng ~.",
+        "Thường nói về hành động của người nghe; ít khi nói về bản thân."
+      ],
+      "soSanh": [
+        "ja-n3-koto-da"
+      ],
+      "tuKhoa": [
+        "koto wa nai",
+        "kotowanai",
+        "không cần phải",
+        "việc gì phải"
+      ],
+      "quiz": [
+        {
+          "h": "君は悪くないんだから、謝る（　）。",
+          "lc": [
+            "ことはない",
+            "ことだ",
+            "べきだ",
+            "わけだ"
+          ],
+          "da": 0,
+          "gt": "Không có lỗi nên không cần xin lỗi ⇒ ことはない."
+        },
+        {
+          "h": "「泣くことはないよ」 nghĩa là gì?",
+          "lc": [
+            "Chưa từng khóc",
+            "Không cần phải khóc đâu",
+            "Không được phép khóc"
+          ],
+          "da": 1,
+          "gt": "V thể từ điển + ことはない = không cần phải."
+        },
+        {
+          "h": "Câu nào mang nghĩa \"không cần phải\"?",
+          "lc": [
+            "日本へ行ったことはない。",
+            "納豆を食べたことはない。",
+            "そんなに怒ることはない。"
+          ],
+          "da": 2,
+          "gt": "Chỉ V thể từ điển + ことはない mới là \"không cần phải\"; V-たことはない là \"chưa từng\"."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-koto-ni-natte-iru",
+      "nhom": "わけ・はず・べき・こと",
+      "tieuDe": "〜ことになっている",
+      "mau": "V-る / V-ない + ことになっている",
+      "nghia": "quy định là ~, theo lịch thì ~",
+      "giaiThich": "Diễn tả quy tắc, tập quán, lịch trình đã được định sẵn, không phải do người nói tự quyết. Dùng cho nội quy trường, công ty, luật lệ, hoặc cuộc hẹn đã sắp xếp.",
+      "cachGhep": [
+        "Động từ thể từ điển / thể ない + ことになっている",
+        "Hay gặp: V-てはいけないことになっている, V-てもいいことになっている"
+      ],
+      "viDu": [
+        {
+          "c": "この学校では、制服を着ることになっています。",
+          "d": "この がっこうでは、せいふくを きることに なっています。",
+          "v": "Ở trường này quy định phải mặc đồng phục."
+        },
+        {
+          "c": "教室では、物を食べてはいけないことになっています。",
+          "d": "きょうしつでは、ものを たべては いけないことに なっています。",
+          "v": "Theo quy định, không được ăn trong lớp học."
+        },
+        {
+          "c": "明日、三時に田中さんと会うことになっています。",
+          "d": "あした、さんじに たなかさんと あうことに なっています。",
+          "v": "Theo lịch, ngày mai 3 giờ tôi sẽ gặp anh Tanaka."
+        }
+      ],
+      "luuY": [
+        "ことになっている = quy định, lịch do bên ngoài hay do thoả thuận định ra; ことにしている = thói quen do chính mình quyết định."
+      ],
+      "soSanh": [
+        "ja-n3-koto-ni-shite-iru"
+      ],
+      "tuKhoa": [
+        "koto ni natte iru",
+        "kotoninatteiru",
+        "quy định",
+        "nội quy",
+        "theo lịch"
+      ],
+      "quiz": [
+        {
+          "h": "日本では、車は道の左側を走る（　）。",
+          "lc": [
+            "ことになっている",
+            "ことにしている",
+            "ことはない",
+            "ことだった"
+          ],
+          "da": 0,
+          "gt": "Luật giao thông là quy định chung ⇒ ことになっている."
+        },
+        {
+          "h": "「〜ことになっている」 diễn tả điều gì?",
+          "lc": [
+            "Thói quen do tự mình quyết định",
+            "Quy định hoặc lịch đã được định sẵn",
+            "Lời khuyên cho người khác"
+          ],
+          "da": 1,
+          "gt": "Đây là mẫu nói về quy tắc, lịch trình có sẵn."
+        },
+        {
+          "h": "規則で、ここでは写真を（　）ことになっている。",
+          "lc": [
+            "撮った",
+            "撮って",
+            "撮らない"
+          ],
+          "da": 2,
+          "gt": "Trước ことになっている là thể từ điển hoặc thể ない; ở đây là quy định không chụp ảnh."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-koto-ni-shite-iru",
+      "nhom": "わけ・はず・べき・こと",
+      "tieuDe": "〜ことにしている",
+      "mau": "V-る / V-ない + ことにしている",
+      "nghia": "tôi tự đặt lệ là ~, tôi luôn cố ~ (thói quen tự quyết)",
+      "giaiThich": "Diễn tả thói quen, nguyên tắc mà bản thân đã quyết định và đang duy trì. Khác với 〜ことにする (quyết định tại một thời điểm), mẫu này nói việc đã thành nếp.",
+      "cachGhep": [
+        "Động từ thể từ điển + ことにしている",
+        "Động từ thể ない + ことにしている"
+      ],
+      "viDu": [
+        {
+          "c": "健康のために、毎朝三十分歩くことにしています。",
+          "d": "けんこうの ために、まいあさ さんじゅっぷん あるくことに しています。",
+          "v": "Vì sức khoẻ, tôi tự đặt lệ mỗi sáng đi bộ 30 phút."
+        },
+        {
+          "c": "夜九時を過ぎたら、何も食べないことにしています。",
+          "d": "よる くじを すぎたら、なにも たべないことに しています。",
+          "v": "Tôi giữ nguyên tắc sau 9 giờ tối không ăn gì nữa."
+        },
+        {
+          "c": "日曜日は仕事をしないことにしている。",
+          "d": "にちようびは しごとを しないことに している。",
+          "v": "Tôi có lệ chủ nhật không làm việc."
+        }
+      ],
+      "luuY": [
+        "Không dùng cho thói quen vô thức hay việc hiển nhiên (✗ 毎晩寝ることにしている).",
+        "Người Việt hay lẫn với ことになっている (quy định do người khác đặt ra)."
+      ],
+      "soSanh": [
+        "ja-n3-koto-ni-natte-iru"
+      ],
+      "tuKhoa": [
+        "koto ni shite iru",
+        "kotonishiteiru",
+        "thói quen tự đặt",
+        "nguyên tắc riêng"
+      ],
+      "quiz": [
+        {
+          "h": "私は寝る前に、日記を書く（　）。",
+          "lc": [
+            "ことにしている",
+            "ことはない",
+            "わけがない",
+            "はずだった"
+          ],
+          "da": 0,
+          "gt": "Thói quen tự mình duy trì ⇒ ことにしている."
+        },
+        {
+          "h": "Mẫu nào nói \"thói quen do tự mình quyết định và duy trì\"?",
+          "lc": [
+            "ことになっている",
+            "ことにしている",
+            "ことだ"
+          ],
+          "da": 1,
+          "gt": "ことにしている = tự đặt lệ; ことになっている = quy định có sẵn."
+        },
+        {
+          "h": "体のために、お酒は（　）ことにしている。",
+          "lc": [
+            "飲んだ",
+            "飲もう",
+            "飲まない"
+          ],
+          "da": 2,
+          "gt": "Trước ことにしている là thể từ điển hoặc thể ない: không uống rượu."
+        }
+      ]
+    }
+  ]
+}

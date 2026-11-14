@@ -1,0 +1,1068 @@
+{
+  "nn": "en",
+  "cap": "A1",
+  "diem": [
+    {
+      "id": "en-a1-to-be-khang-dinh",
+      "nhom": "Động từ to be",
+      "tieuDe": "to be: am / is / are",
+      "mau": "S + am / is / are + danh từ / tính từ / nơi chốn",
+      "nghia": "là, thì, ở (hiện tại)",
+      "giaiThich": "Dùng to be để nói ai đó là ai, làm nghề gì, có tính chất gì, bao nhiêu tuổi hoặc đang ở đâu. Câu tiếng Anh luôn phải có động từ, nên khi sau chủ ngữ là danh từ, tính từ hay nơi chốn thì phải có am / is / are, dù tiếng Việt không nói chữ “thì, là”.",
+      "cachGhep": [
+        "I + am (viết tắt: I'm)",
+        "He / She / It / danh từ số ít + is (he's, she's, it's)",
+        "You / We / They / danh từ số nhiều + are (you're, we're, they're)"
+      ],
+      "viDu": [
+        {
+          "c": "I am a student.",
+          "v": "Tôi là học sinh."
+        },
+        {
+          "c": "She is very tired today.",
+          "v": "Hôm nay cô ấy rất mệt."
+        },
+        {
+          "c": "My parents are at home.",
+          "v": "Bố mẹ tôi đang ở nhà."
+        },
+        {
+          "c": "It's a small house.",
+          "v": "Đó là một ngôi nhà nhỏ."
+        }
+      ],
+      "luuY": [
+        "Lỗi người Việt hay mắc: bỏ to be trước tính từ vì tiếng Việt nói “Cô ấy mệt” → sai: She tired. Đúng: She is tired.",
+        "Nói tuổi dùng to be, không dùng have: I am twenty (years old), không nói I have twenty years.",
+        "Trong văn nói thường dùng dạng viết tắt: I'm, he's, they're."
+      ],
+      "soSanh": [
+        "en-a1-to-be-phu-dinh",
+        "en-a1-have-got"
+      ],
+      "tuKhoa": [
+        "am is are",
+        "to be",
+        "động từ to be",
+        "thì là ở",
+        "be hiện tại"
+      ],
+      "quiz": [
+        {
+          "h": "My brother ___ a doctor.",
+          "lc": [
+            "am",
+            "is",
+            "are",
+            "be"
+          ],
+          "da": 1,
+          "gt": "My brother = he (số ít, ngôi thứ ba) nên dùng is."
+        },
+        {
+          "h": "We ___ from Vietnam.",
+          "lc": [
+            "are",
+            "is",
+            "am",
+            "be"
+          ],
+          "da": 0,
+          "gt": "Chủ ngữ we đi với are."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "He hungry.",
+            "He are hungry.",
+            "He hungry is.",
+            "He is hungry."
+          ],
+          "da": 3,
+          "gt": "Trước tính từ hungry phải có to be, và he đi với is."
+        }
+      ]
+    },
+    {
+      "id": "en-a1-to-be-phu-dinh",
+      "nhom": "Động từ to be",
+      "tieuDe": "to be phủ định: am not / isn't / aren't",
+      "mau": "S + am / is / are + not + …",
+      "nghia": "không phải là, không (ở)…",
+      "giaiThich": "Muốn phủ định câu có to be, chỉ cần thêm not ngay sau am / is / are. Không dùng do / does trong câu có to be. Trong văn nói thường viết tắt: isn't, aren't; riêng am not chỉ viết tắt được thành I'm not.",
+      "cachGhep": [
+        "I am not = I'm not (không có dạng amn't)",
+        "He / She / It is not = isn't (hoặc he's not, she's not)",
+        "You / We / They are not = aren't (hoặc you're not, we're not)"
+      ],
+      "viDu": [
+        {
+          "c": "I'm not hungry.",
+          "v": "Tôi không đói."
+        },
+        {
+          "c": "This isn't my bag.",
+          "v": "Đây không phải là túi của tôi."
+        },
+        {
+          "c": "They aren't in the classroom.",
+          "v": "Họ không ở trong lớp học."
+        },
+        {
+          "c": "My sister is not a teacher.",
+          "v": "Chị tôi không phải là giáo viên."
+        }
+      ],
+      "luuY": [
+        "Lỗi hay mắc: dùng don't với to be → sai: I don't be tired / She doesn't happy. Đúng: I'm not tired / She isn't happy.",
+        "Not đứng SAU to be, không đứng trước: He is not here (không nói He not is here)."
+      ],
+      "soSanh": [
+        "en-a1-present-simple-phu-dinh"
+      ],
+      "tuKhoa": [
+        "isn't",
+        "aren't",
+        "am not",
+        "phủ định to be",
+        "khong phai la"
+      ],
+      "quiz": [
+        {
+          "h": "She ___ at school today. She is at home.",
+          "lc": [
+            "aren't",
+            "don't",
+            "isn't",
+            "am not"
+          ],
+          "da": 2,
+          "gt": "She đi với is; phủ định là isn't."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "I'm not late.",
+            "I amn't late.",
+            "I don't late.",
+            "I not am late."
+          ],
+          "da": 0,
+          "gt": "Phủ định của I am là I'm not; không có amn't, không dùng don't với tính từ."
+        },
+        {
+          "h": "My friends ___ from Japan. They are from Korea.",
+          "lc": [
+            "isn't",
+            "aren't",
+            "am not",
+            "doesn't"
+          ],
+          "da": 1,
+          "gt": "My friends = they (số nhiều) nên dùng aren't."
+        }
+      ]
+    },
+    {
+      "id": "en-a1-to-be-cau-hoi",
+      "nhom": "Động từ to be",
+      "tieuDe": "Câu hỏi với to be: Am / Is / Are …?",
+      "mau": "Am / Is / Are + S + …?  →  Yes, S + be. / No, S + be + not.",
+      "nghia": "… có phải không? (câu hỏi Yes/No với to be)",
+      "giaiThich": "Để hỏi với to be, đảo am / is / are lên trước chủ ngữ. Câu trả lời ngắn lặp lại to be chứ không lặp lại cả câu. Với từ để hỏi (what, where, how…) thì từ để hỏi đứng đầu, sau đó vẫn là to be rồi mới đến chủ ngữ.",
+      "cachGhep": [
+        "Is + he / she / it + …?  →  Yes, he is. / No, he isn't.",
+        "Are + you / we / they + …?  →  Yes, I am. / No, I'm not.",
+        "Từ để hỏi + am / is / are + S?  (Where are you from?)"
+      ],
+      "viDu": [
+        {
+          "c": "Are you a new student?",
+          "v": "Bạn là học sinh mới phải không?"
+        },
+        {
+          "c": "Is your mother at work? - No, she isn't.",
+          "v": "Mẹ bạn đang ở chỗ làm à? - Không."
+        },
+        {
+          "c": "Where is the bus stop?",
+          "v": "Trạm xe buýt ở đâu?"
+        },
+        {
+          "c": "How old are your children?",
+          "v": "Các con của bạn bao nhiêu tuổi?"
+        }
+      ],
+      "luuY": [
+        "Lỗi hay mắc: giữ nguyên trật tự câu kể → You are a student? Trong văn viết chuẩn phải đảo: Are you a student?",
+        "Câu trả lời ngắn khẳng định KHÔNG viết tắt: Yes, I am / Yes, she is (không nói Yes, I'm / Yes, she's).",
+        "Không dùng do / does để hỏi với to be: sai Do you are tired?"
+      ],
+      "soSanh": [
+        "en-a1-present-simple-cau-hoi"
+      ],
+      "tuKhoa": [
+        "is he",
+        "are you",
+        "câu hỏi to be",
+        "câu hỏi yes no",
+        "cau hoi to be"
+      ],
+      "quiz": [
+        {
+          "h": "___ your parents teachers?",
+          "lc": [
+            "Is",
+            "Do",
+            "Are",
+            "Am"
+          ],
+          "da": 2,
+          "gt": "Your parents là số nhiều nên dùng Are."
+        },
+        {
+          "h": "Is Tom your brother? - Yes, ___.",
+          "lc": [
+            "he's",
+            "he is",
+            "he does",
+            "it is"
+          ],
+          "da": 1,
+          "gt": "Trả lời ngắn khẳng định dùng dạng đầy đủ: Yes, he is."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "Where is your school?",
+            "Where your school is?",
+            "Where does your school?",
+            "Where your school?"
+          ],
+          "da": 0,
+          "gt": "Sau từ để hỏi là to be rồi mới đến chủ ngữ: Where is + your school?"
+        }
+      ]
+    },
+    {
+      "id": "en-a1-there-is-are",
+      "nhom": "Động từ to be",
+      "tieuDe": "There is / There are",
+      "mau": "There is + danh từ số ít / không đếm được · There are + danh từ số nhiều",
+      "nghia": "có … (nói về sự tồn tại ở một nơi)",
+      "giaiThich": "Dùng there is / there are để nói ở đâu đó CÓ cái gì hoặc có ai, thường khi nhắc đến lần đầu. Động từ chia theo danh từ đứng ngay sau: số ít hoặc không đếm được dùng is, số nhiều dùng are.",
+      "cachGhep": [
+        "Khẳng định: There is (There's) a / an + số ít · There are + số nhiều",
+        "Phủ định: There isn't a… · There aren't any…",
+        "Câu hỏi: Is there a…? / Are there any…?  →  Yes, there is. / No, there aren't."
+      ],
+      "viDu": [
+        {
+          "c": "There is a park near my house.",
+          "v": "Gần nhà tôi có một công viên."
+        },
+        {
+          "c": "There are thirty students in my class.",
+          "v": "Lớp tôi có ba mươi học sinh."
+        },
+        {
+          "c": "There isn't any milk in the fridge.",
+          "v": "Trong tủ lạnh không có sữa."
+        },
+        {
+          "c": "Are there any shops on this street?",
+          "v": "Trên phố này có cửa hàng nào không?"
+        }
+      ],
+      "luuY": [
+        "Lỗi người Việt rất hay mắc: dịch “có” thành have → sai: Have a park near my house. Nói ở đâu có cái gì phải dùng: There is a park near my house.",
+        "Chia theo danh từ phía sau: There are two books (không nói There is two books).",
+        "Đừng nhầm there are (có) với they are (họ là / chúng là)."
+      ],
+      "soSanh": [
+        "en-a1-have-got",
+        "en-a1-some-any"
+      ],
+      "tuKhoa": [
+        "there is",
+        "there are",
+        "có cái gì ở đâu",
+        "there's",
+        "is there"
+      ],
+      "quiz": [
+        {
+          "h": "___ two cats in the garden.",
+          "lc": [
+            "There is",
+            "They are",
+            "There are",
+            "It has"
+          ],
+          "da": 2,
+          "gt": "Two cats là số nhiều nên dùng There are để nói có."
+        },
+        {
+          "h": "___ a bank near here?",
+          "lc": [
+            "Is there",
+            "Are there",
+            "Has there",
+            "Does there"
+          ],
+          "da": 0,
+          "gt": "A bank là số ít nên câu hỏi là Is there…?"
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "Have a book on the table.",
+            "There is a book on the table.",
+            "There are a book on the table.",
+            "It has a book on the table."
+          ],
+          "da": 1,
+          "gt": "Nói ở đâu có cái gì dùng There is + danh từ số ít, không dùng have."
+        }
+      ]
+    },
+    {
+      "id": "en-a1-it-chu-ngu-gia",
+      "nhom": "Động từ to be",
+      "tieuDe": "It làm chủ ngữ giả (thời tiết, giờ, ngày, khoảng cách)",
+      "mau": "It + is + tính từ thời tiết / giờ / ngày / khoảng cách",
+      "nghia": "trời…, bây giờ là…, hôm nay là… (it không chỉ vật cụ thể)",
+      "giaiThich": "Câu tiếng Anh bắt buộc có chủ ngữ. Khi nói về thời tiết, giờ giấc, ngày tháng hay khoảng cách, không có chủ ngữ thật nên dùng it làm chủ ngữ giả. It ở đây không dịch là “nó”.",
+      "cachGhep": [
+        "Thời tiết: It's + hot / cold / sunny / rainy",
+        "Giờ, ngày: It's + five o'clock / Monday / the first of May",
+        "Khoảng cách: It's + two kilometers + from… to…",
+        "Câu hỏi: What time is it? / What day is it today? / Is it cold?"
+      ],
+      "viDu": [
+        {
+          "c": "It's very hot in Hanoi in June.",
+          "v": "Tháng Sáu ở Hà Nội rất nóng."
+        },
+        {
+          "c": "It's half past seven.",
+          "v": "Bây giờ là bảy rưỡi."
+        },
+        {
+          "c": "Is it Sunday today?",
+          "v": "Hôm nay là Chủ nhật phải không?"
+        },
+        {
+          "c": "It isn't far from here to the station.",
+          "v": "Từ đây đến nhà ga không xa."
+        }
+      ],
+      "luuY": [
+        "Lỗi hay mắc: bỏ chủ ngữ theo tiếng Việt (“Trời lạnh”, “Bây giờ 5 giờ”) → sai: Is cold. / Now is 5 o'clock. Đúng: It's cold. / It's 5 o'clock now.",
+        "Không dịch “trời” thành the sky khi nói thời tiết: It's hot, không nói The sky is hot.",
+        "Phân biệt it's (= it is) với its (của nó)."
+      ],
+      "tuKhoa": [
+        "it's cold",
+        "it is",
+        "chủ ngữ giả",
+        "thời tiết",
+        "what time is it"
+      ],
+      "quiz": [
+        {
+          "h": "___ rainy today. Take an umbrella.",
+          "lc": [
+            "Is",
+            "It",
+            "It's",
+            "Its"
+          ],
+          "da": 2,
+          "gt": "Nói thời tiết cần chủ ngữ giả it + is: It's rainy."
+        },
+        {
+          "h": "What time is it? - ___ ten o'clock.",
+          "lc": [
+            "Is",
+            "It's",
+            "They're",
+            "There's"
+          ],
+          "da": 1,
+          "gt": "Nói giờ dùng It's + giờ."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "Today is cold very.",
+            "Is cold today.",
+            "The sky is cold today.",
+            "It's cold today."
+          ],
+          "da": 3,
+          "gt": "Nói thời tiết dùng chủ ngữ giả it: It's cold today."
+        }
+      ]
+    },
+    {
+      "id": "en-a1-dai-tu-chu-ngu",
+      "nhom": "Đại từ",
+      "tieuDe": "Đại từ nhân xưng chủ ngữ: I, you, he, she, it, we, they",
+      "mau": "I / you / he / she / it / we / they + động từ",
+      "nghia": "tôi, bạn, anh ấy, cô ấy, nó, chúng tôi, họ (đứng làm chủ ngữ)",
+      "giaiThich": "Đại từ chủ ngữ đứng trước động từ, thay cho người hoặc vật đã biết để khỏi lặp lại danh từ. Tiếng Anh chỉ chia theo ngôi và giới tính, không chia theo tuổi tác hay vai vế như tiếng Việt: mọi cách xưng “tôi, em, con, cháu” đều là I.",
+      "cachGhep": [
+        "he: một người nam · she: một người nữ · it: một đồ vật, con vật, sự việc",
+        "we: chúng tôi / chúng ta · they: họ, chúng (người hoặc vật, số nhiều)",
+        "you: dùng cho cả một người và nhiều người",
+        "I luôn viết hoa, kể cả ở giữa câu"
+      ],
+      "viDu": [
+        {
+          "c": "This is Lan. She is my best friend.",
+          "v": "Đây là Lan. Cô ấy là bạn thân nhất của tôi."
+        },
+        {
+          "c": "My father is a driver. He works at night.",
+          "v": "Bố tôi là tài xế. Ông ấy làm việc ban đêm."
+        },
+        {
+          "c": "I have two dogs. They are very friendly.",
+          "v": "Tôi có hai con chó. Chúng rất thân thiện."
+        },
+        {
+          "c": "My friend and I like music. We play the guitar.",
+          "v": "Bạn tôi và tôi thích âm nhạc. Chúng tôi chơi đàn ghi-ta."
+        }
+      ],
+      "luuY": [
+        "Lỗi người Việt rất hay mắc: nhầm he / she khi nói nhanh, vì tiếng Việt “bạn ấy, người ấy” không phân giới tính. Nam → he, nữ → she.",
+        "Không lặp chủ ngữ hai lần: sai My mother she is a nurse. Đúng: My mother is a nurse.",
+        "Không được bỏ chủ ngữ: sai Is my friend. Đúng: He is my friend."
+      ],
+      "soSanh": [
+        "en-a1-dai-tu-tan-ngu",
+        "en-a1-tinh-tu-so-huu"
+      ],
+      "tuKhoa": [
+        "he she it",
+        "subject pronouns",
+        "đại từ nhân xưng",
+        "đại từ chủ ngữ",
+        "i you we they"
+      ],
+      "quiz": [
+        {
+          "h": "My sister is ten. ___ is in Grade 5.",
+          "lc": [
+            "He",
+            "It",
+            "They",
+            "She"
+          ],
+          "da": 3,
+          "gt": "My sister là nữ, số ít nên thay bằng She."
+        },
+        {
+          "h": "Nam and Hoa are my classmates. ___ are fifteen.",
+          "lc": [
+            "They",
+            "We",
+            "He",
+            "You"
+          ],
+          "da": 0,
+          "gt": "Nam and Hoa là hai người khác (không có người nói) nên dùng They."
+        },
+        {
+          "h": "Look at this phone. ___ is new.",
+          "lc": [
+            "He",
+            "It",
+            "She",
+            "They"
+          ],
+          "da": 1,
+          "gt": "This phone là một đồ vật nên dùng It."
+        }
+      ]
+    },
+    {
+      "id": "en-a1-dai-tu-tan-ngu",
+      "nhom": "Đại từ",
+      "tieuDe": "Đại từ tân ngữ: me, you, him, her, it, us, them",
+      "mau": "động từ / giới từ + me / you / him / her / it / us / them",
+      "nghia": "tôi, bạn, anh ấy, cô ấy, nó, chúng tôi, họ (đứng sau động từ, giới từ)",
+      "giaiThich": "Khi đại từ đứng SAU động từ hoặc sau giới từ (to, with, for, at…), phải dùng dạng tân ngữ chứ không dùng dạng chủ ngữ. Tiếng Việt dùng cùng một từ cho cả hai vị trí nên người học dễ quên đổi.",
+      "cachGhep": [
+        "I → me · you → you · he → him · she → her",
+        "it → it · we → us · they → them",
+        "Sau động từ: I know him. · Sau giới từ: Come with us."
+      ],
+      "viDu": [
+        {
+          "c": "This is my teacher. I like her a lot.",
+          "v": "Đây là cô giáo tôi. Tôi rất quý cô ấy."
+        },
+        {
+          "c": "Can you help me, please?",
+          "v": "Bạn giúp tôi được không?"
+        },
+        {
+          "c": "Those are my keys. Please give them to me.",
+          "v": "Đó là chìa khoá của tôi. Làm ơn đưa chúng cho tôi."
+        },
+        {
+          "c": "Do you want to play football with us?",
+          "v": "Bạn có muốn chơi bóng đá với chúng tôi không?"
+        }
+      ],
+      "luuY": [
+        "Lỗi hay mắc: dùng dạng chủ ngữ sau động từ / giới từ → sai: I love she / with they. Đúng: I love her / with them.",
+        "Her vừa là tân ngữ (I know her) vừa là tính từ sở hữu (her book); phân biệt bằng từ đứng sau.",
+        "Không bỏ tân ngữ it như tiếng Việt: “Tôi thích lắm” → I like it very much (không nói I like very much)."
+      ],
+      "soSanh": [
+        "en-a1-dai-tu-chu-ngu",
+        "en-a1-tinh-tu-so-huu"
+      ],
+      "tuKhoa": [
+        "me him her us them",
+        "object pronouns",
+        "đại từ tân ngữ",
+        "tan ngu",
+        "him her"
+      ],
+      "quiz": [
+        {
+          "h": "Where is Peter? I can't see ___.",
+          "lc": [
+            "he",
+            "him",
+            "his",
+            "her"
+          ],
+          "da": 1,
+          "gt": "Sau động từ see cần đại từ tân ngữ; Peter là nam nên dùng him."
+        },
+        {
+          "h": "These books are heavy. Can you carry ___ for me?",
+          "lc": [
+            "it",
+            "they",
+            "them",
+            "their"
+          ],
+          "da": 2,
+          "gt": "These books là số nhiều và đứng sau động từ carry nên dùng them."
+        },
+        {
+          "h": "Our teacher is nice. She always helps ___.",
+          "lc": [
+            "us",
+            "we",
+            "our",
+            "ours"
+          ],
+          "da": 0,
+          "gt": "Sau động từ helps cần tân ngữ: us (dạng tân ngữ của we)."
+        }
+      ]
+    },
+    {
+      "id": "en-a1-tinh-tu-so-huu",
+      "nhom": "Đại từ",
+      "tieuDe": "Tính từ sở hữu: my, your, his, her, its, our, their",
+      "mau": "my / your / his / her / its / our / their + danh từ",
+      "nghia": "của tôi, của bạn, của anh ấy, của cô ấy, của nó, của chúng tôi, của họ",
+      "giaiThich": "Tính từ sở hữu đứng TRƯỚC danh từ để nói vật hay người đó thuộc về ai. Chọn theo người sở hữu, không theo vật được sở hữu, và dạng của nó không đổi dù danh từ phía sau là số ít hay số nhiều.",
+      "cachGhep": [
+        "I → my · you → your · he → his · she → her",
+        "it → its · we → our · they → their",
+        "Tính từ sở hữu + danh từ: my book, my books (không thêm s vào my)",
+        "Không dùng cùng a / an / the: my friend (không nói the my friend)"
+      ],
+      "viDu": [
+        {
+          "c": "My name is Minh.",
+          "v": "Tên tôi là Minh."
+        },
+        {
+          "c": "Is this your phone?",
+          "v": "Đây có phải điện thoại của bạn không?"
+        },
+        {
+          "c": "Anna lives with her grandparents.",
+          "v": "Anna sống với ông bà của cô ấy."
+        },
+        {
+          "c": "They love their children very much.",
+          "v": "Họ rất yêu các con của mình."
+        }
+      ],
+      "luuY": [
+        "Lỗi hay mắc: đặt sở hữu sau danh từ theo trật tự tiếng Việt (“sách của tôi”) → sai: book my / book of me. Đúng: my book.",
+        "His / her chọn theo NGƯỜI SỞ HỮU: mẹ của anh ấy = his mother (không phải her mother).",
+        "Phân biệt its (của nó) với it's (= it is); their (của họ) với they're (= they are) và there."
+      ],
+      "soSanh": [
+        "en-a1-dai-tu-tan-ngu",
+        "en-a1-so-huu-cach"
+      ],
+      "tuKhoa": [
+        "my your his her",
+        "possessive adjectives",
+        "tính từ sở hữu",
+        "của tôi",
+        "its our their"
+      ],
+      "quiz": [
+        {
+          "h": "Tom is in the kitchen with ___ sister.",
+          "lc": [
+            "her",
+            "he",
+            "him",
+            "his"
+          ],
+          "da": 3,
+          "gt": "Người sở hữu là Tom (nam) nên dùng his, dù sister là nữ."
+        },
+        {
+          "h": "We are students. This is ___ classroom.",
+          "lc": [
+            "our",
+            "we",
+            "us",
+            "their"
+          ],
+          "da": 0,
+          "gt": "Người sở hữu là we nên tính từ sở hữu là our."
+        },
+        {
+          "h": "The dog is eating ___ food.",
+          "lc": [
+            "it's",
+            "it",
+            "its",
+            "their"
+          ],
+          "da": 2,
+          "gt": "Của nó (một con vật) là its, không có dấu nháy; it's = it is."
+        }
+      ]
+    },
+    {
+      "id": "en-a1-this-that",
+      "nhom": "Đại từ",
+      "tieuDe": "this / that / these / those",
+      "mau": "this / that + danh từ số ít · these / those + danh từ số nhiều",
+      "nghia": "này, kia (số ít) · những … này, những … kia (số nhiều)",
+      "giaiThich": "Dùng this / these cho người hoặc vật ở GẦN người nói, that / those cho người hoặc vật ở XA. This và that đi với số ít, these và those đi với số nhiều. Các từ này có thể đứng trước danh từ hoặc đứng một mình làm chủ ngữ.",
+      "cachGhep": [
+        "Gần: this + số ít (this pen) · these + số nhiều (these pens)",
+        "Xa: that + số ít (that car) · those + số nhiều (those cars)",
+        "Đứng một mình: This is… / That is (That's)… / These are… / Those are…",
+        "Câu hỏi: What is this? → It's a… · What are these? → They're…"
+      ],
+      "viDu": [
+        {
+          "c": "This is my friend, Hoa.",
+          "v": "Đây là bạn tôi, Hoa."
+        },
+        {
+          "c": "That house is very big.",
+          "v": "Ngôi nhà kia rất to."
+        },
+        {
+          "c": "These shoes are new.",
+          "v": "Đôi giày này là giày mới."
+        },
+        {
+          "c": "Are those your books over there?",
+          "v": "Những quyển sách ở đằng kia là của bạn à?"
+        }
+      ],
+      "luuY": [
+        "Lỗi hay mắc: dùng this / that với danh từ số nhiều → sai: this books, that people. Đúng: these books, those people.",
+        "Sau these / those, to be là are và danh từ phải ở số nhiều: These are my pens.",
+        "Trả lời câu hỏi với this / that dùng it; với these / those dùng they: What are those? - They're apples."
+      ],
+      "tuKhoa": [
+        "this that",
+        "these those",
+        "đại từ chỉ định",
+        "này kia",
+        "demonstratives"
+      ],
+      "quiz": [
+        {
+          "h": "Look at ___ birds in the sky!",
+          "lc": [
+            "this",
+            "that",
+            "those",
+            "it"
+          ],
+          "da": 2,
+          "gt": "Birds là số nhiều và ở xa (trên trời) nên dùng those."
+        },
+        {
+          "h": "___ is my bag here on my desk.",
+          "lc": [
+            "These",
+            "This",
+            "Those",
+            "They"
+          ],
+          "da": 1,
+          "gt": "Một cái túi ở gần người nói (here) nên dùng This."
+        },
+        {
+          "h": "___ apples in my hand are sweet.",
+          "lc": [
+            "These",
+            "This",
+            "That",
+            "It"
+          ],
+          "da": 0,
+          "gt": "Apples là số nhiều và ở gần (trong tay) nên dùng These."
+        }
+      ]
+    },
+    {
+      "id": "en-a1-a-an",
+      "nhom": "Danh từ – mạo từ",
+      "tieuDe": "Mạo từ a / an",
+      "mau": "a + âm phụ âm · an + âm nguyên âm (+ danh từ đếm được số ít)",
+      "nghia": "một (cái, con, người…) — nói chung chung, chưa xác định",
+      "giaiThich": "Dùng a / an trước danh từ đếm được số ít khi nhắc đến lần đầu, khi nói một cái bất kỳ, hoặc khi nói nghề nghiệp. Chọn a hay an dựa vào ÂM đầu tiên của từ đứng ngay sau chứ không dựa vào chữ cái.",
+      "cachGhep": [
+        "a + từ bắt đầu bằng âm phụ âm: a book, a car, a university (đọc /juː/)",
+        "an + từ bắt đầu bằng âm nguyên âm: an apple, an egg, an hour (h câm)",
+        "Có tính từ thì xét âm đầu của tính từ: an old man, a big orange",
+        "Không dùng a / an với danh từ số nhiều hoặc không đếm được"
+      ],
+      "viDu": [
+        {
+          "c": "I have a brother and a sister.",
+          "v": "Tôi có một anh trai và một chị gái."
+        },
+        {
+          "c": "She eats an apple every morning.",
+          "v": "Sáng nào cô ấy cũng ăn một quả táo."
+        },
+        {
+          "c": "My father is an engineer.",
+          "v": "Bố tôi là kỹ sư."
+        },
+        {
+          "c": "Is there a hotel near here?",
+          "v": "Gần đây có khách sạn nào không?"
+        }
+      ],
+      "luuY": [
+        "Lỗi người Việt rất hay mắc: bỏ mạo từ vì tiếng Việt không có → sai: I am student / She has cat. Đúng: I am a student / She has a cat.",
+        "Nói nghề nghiệp luôn cần a / an: He is a teacher.",
+        "Xét theo âm: an hour, an umbrella nhưng a uniform, a European country."
+      ],
+      "soSanh": [
+        "en-a1-the-co-ban",
+        "en-a1-some-any"
+      ],
+      "tuKhoa": [
+        "a an",
+        "mạo từ",
+        "mạo từ không xác định",
+        "indefinite article",
+        "mot cai"
+      ],
+      "quiz": [
+        {
+          "h": "My mother is ___ nurse.",
+          "lc": [
+            "an",
+            "a",
+            "the",
+            "(không cần mạo từ)"
+          ],
+          "da": 1,
+          "gt": "Nói nghề nghiệp dùng a / an; nurse bắt đầu bằng âm phụ âm nên dùng a."
+        },
+        {
+          "h": "I need ___ umbrella.",
+          "lc": [
+            "a",
+            "some",
+            "an",
+            "two"
+          ],
+          "da": 2,
+          "gt": "Umbrella bắt đầu bằng âm nguyên âm /ʌ/ và là số ít nên dùng an."
+        },
+        {
+          "h": "The lesson is ___ hour long.",
+          "lc": [
+            "an",
+            "a",
+            "any",
+            "some"
+          ],
+          "da": 0,
+          "gt": "Chữ h trong hour là âm câm, từ bắt đầu bằng âm nguyên âm nên dùng an."
+        }
+      ]
+    },
+    {
+      "id": "en-a1-the-co-ban",
+      "nhom": "Danh từ – mạo từ",
+      "tieuDe": "Mạo từ the (cơ bản)",
+      "mau": "the + danh từ (số ít, số nhiều hoặc không đếm được) đã xác định",
+      "nghia": "cái / người … ấy — cả người nói và người nghe đều biết là cái nào",
+      "giaiThich": "Dùng the khi người nghe biết rõ đang nói đến cái nào: vật đã được nhắc ở câu trước, vật duy nhất (the sun, the moon), hoặc vật rõ ràng trong hoàn cảnh (the door, the kitchen trong nhà mình). Lần đầu nhắc dùng a / an, lần sau dùng the.",
+      "cachGhep": [
+        "Nhắc lần hai: I have a dog. The dog is black.",
+        "Vật duy nhất: the sun, the sky, the world",
+        "Rõ trong hoàn cảnh: Open the window, please.",
+        "Không dùng the với tên người, hầu hết tên nước, tên thành phố, bữa ăn, môn thể thao: Vietnam, Hanoi, breakfast, football"
+      ],
+      "viDu": [
+        {
+          "c": "There is a cat in the garden. The cat is sleeping.",
+          "v": "Có một con mèo trong vườn. Con mèo ấy đang ngủ."
+        },
+        {
+          "c": "Please close the door.",
+          "v": "Làm ơn đóng cửa lại."
+        },
+        {
+          "c": "The sun is very hot today.",
+          "v": "Hôm nay mặt trời rất nóng."
+        },
+        {
+          "c": "Where are the children?",
+          "v": "Bọn trẻ đâu rồi?"
+        }
+      ],
+      "luuY": [
+        "Lỗi hay mắc: thêm the trước tên nước, thành phố, bữa ăn, môn thể thao → sai: the Vietnam, have the lunch, play the football.",
+        "Nói chung chung về cả loại thì không dùng the: I like cats (tôi thích mèo nói chung), không nói I like the cats.",
+        "Chơi nhạc cụ thường có the: play the piano, play the guitar."
+      ],
+      "soSanh": [
+        "en-a1-a-an",
+        "en-a2-mao-tu-the-zero"
+      ],
+      "tuKhoa": [
+        "the",
+        "mạo từ xác định",
+        "definite article",
+        "a vs the",
+        "mao tu the"
+      ],
+      "quiz": [
+        {
+          "h": "I have a bike and a car. ___ bike is red.",
+          "lc": [
+            "A",
+            "An",
+            "The",
+            "Some"
+          ],
+          "da": 2,
+          "gt": "Chiếc xe đạp đã được nhắc ở câu trước nên lần hai dùng The."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "I live in Vietnam.",
+            "I live in the Vietnam.",
+            "I live in a Vietnam.",
+            "I live in an Vietnam."
+          ],
+          "da": 0,
+          "gt": "Tên nước Vietnam không dùng mạo từ."
+        },
+        {
+          "h": "Look! ___ moon is very bright tonight.",
+          "lc": [
+            "A",
+            "The",
+            "An",
+            "This a"
+          ],
+          "da": 1,
+          "gt": "Mặt trăng là vật duy nhất nên dùng The."
+        }
+      ]
+    },
+    {
+      "id": "en-a1-danh-tu-so-nhieu",
+      "nhom": "Danh từ – mạo từ",
+      "tieuDe": "Danh từ số nhiều (-s, -es, bất quy tắc)",
+      "mau": "danh từ + s / es · dạng bất quy tắc (man → men)",
+      "nghia": "những…, các… (từ hai trở lên)",
+      "giaiThich": "Khi nói từ hai người hoặc vật trở lên, danh từ đếm được phải chuyển sang số nhiều, kể cả khi đã có số đếm hay từ chỉ số lượng phía trước. Phần lớn chỉ cần thêm -s; một số danh từ thêm -es, đổi y thành ies, hoặc có dạng riêng phải học thuộc.",
+      "cachGhep": [
+        "Thường: + s (book → books, car → cars)",
+        "Tận cùng s, ss, sh, ch, x: + es (bus → buses, watch → watches, box → boxes)",
+        "Phụ âm + y: đổi y → ies (city → cities, baby → babies); nguyên âm + y: + s (boy → boys)",
+        "Tận cùng f / fe: thường đổi → ves (knife → knives, wife → wives)",
+        "Bất quy tắc: man → men, woman → women, child → children, person → people, foot → feet, tooth → teeth, mouse → mice"
+      ],
+      "viDu": [
+        {
+          "c": "I have two brothers.",
+          "v": "Tôi có hai anh trai."
+        },
+        {
+          "c": "There are three boxes on the table.",
+          "v": "Có ba cái hộp trên bàn."
+        },
+        {
+          "c": "The children are playing in the park.",
+          "v": "Bọn trẻ đang chơi trong công viên."
+        },
+        {
+          "c": "Many people visit these cities every year.",
+          "v": "Mỗi năm có nhiều người đến thăm các thành phố này."
+        }
+      ],
+      "luuY": [
+        "Lỗi người Việt rất hay mắc: quên -s sau số đếm vì tiếng Việt không đổi dạng danh từ → sai: two book, many student. Đúng: two books, many students.",
+        "Dạng bất quy tắc không thêm s: children (không nói childrens), people (không nói peoples khi nghĩa là “người”).",
+        "People là số nhiều nên đi với are: People are friendly here."
+      ],
+      "soSanh": [
+        "en-a1-dem-duoc-khong-dem-duoc"
+      ],
+      "tuKhoa": [
+        "plural nouns",
+        "số nhiều",
+        "thêm s es",
+        "children people men",
+        "so nhieu"
+      ],
+      "quiz": [
+        {
+          "h": "There are five ___ in my family.",
+          "lc": [
+            "person",
+            "persones",
+            "peoples",
+            "people"
+          ],
+          "da": 3,
+          "gt": "Số nhiều của person (người) là people."
+        },
+        {
+          "h": "She has two ___.",
+          "lc": [
+            "babys",
+            "babies",
+            "baby",
+            "babyes"
+          ],
+          "da": 1,
+          "gt": "Baby tận cùng phụ âm + y nên đổi y thành ies: babies."
+        },
+        {
+          "h": "I brush my ___ twice a day.",
+          "lc": [
+            "teeth",
+            "tooths",
+            "tooth",
+            "teeths"
+          ],
+          "da": 0,
+          "gt": "Số nhiều bất quy tắc của tooth là teeth."
+        }
+      ]
+    },
+    {
+      "id": "en-a1-so-huu-cach",
+      "nhom": "Danh từ – mạo từ",
+      "tieuDe": "Sở hữu cách 's",
+      "mau": "người sở hữu + 's + vật / người được sở hữu",
+      "nghia": "… của (ai đó)",
+      "giaiThich": "Dùng 's sau tên người hoặc danh từ chỉ người, con vật để nói vật gì thuộc về họ hoặc quan hệ gia đình. Trật tự NGƯỢC với tiếng Việt: người sở hữu đứng trước, vật được sở hữu đứng sau.",
+      "cachGhep": [
+        "Danh từ số ít / tên riêng + 's: Lan's bag, my father's car",
+        "Danh từ số nhiều tận cùng s: chỉ thêm dấu nháy ': my parents' house",
+        "Số nhiều bất quy tắc: + 's: the children's room",
+        "Với đồ vật thường dùng of: the door of the house, the name of the street"
+      ],
+      "viDu": [
+        {
+          "c": "This is Mai's phone.",
+          "v": "Đây là điện thoại của Mai."
+        },
+        {
+          "c": "My brother's wife is a doctor.",
+          "v": "Vợ của anh trai tôi là bác sĩ."
+        },
+        {
+          "c": "Is that your teacher's car?",
+          "v": "Kia có phải xe của thầy giáo bạn không?"
+        },
+        {
+          "c": "My parents' room is next to mine.",
+          "v": "Phòng của bố mẹ tôi ở cạnh phòng tôi."
+        }
+      ],
+      "luuY": [
+        "Lỗi hay mắc: giữ trật tự tiếng Việt → sai: the phone Mai / the phone of Mai. Tự nhiên nhất: Mai's phone.",
+        "Đừng nhầm 's sở hữu với 's viết tắt của is: Tom's book (sách của Tom) khác Tom's tired (Tom is tired).",
+        "Không dùng the trước tên riêng có 's: Mai's phone (không nói the Mai's phone)."
+      ],
+      "soSanh": [
+        "en-a1-tinh-tu-so-huu"
+      ],
+      "tuKhoa": [
+        "'s",
+        "possessive s",
+        "sở hữu cách",
+        "của ai",
+        "so huu cach"
+      ],
+      "quiz": [
+        {
+          "h": "This is ___ bike. (xe đạp của Peter)",
+          "lc": [
+            "Peter",
+            "Peters",
+            "Peter's",
+            "of Peter"
+          ],
+          "da": 2,
+          "gt": "Sở hữu của tên riêng số ít: thêm 's → Peter's bike."
+        },
+        {
+          "h": "The ___ toys are on the floor. (đồ chơi của bọn trẻ)",
+          "lc": [
+            "childrens",
+            "children's",
+            "childrens'",
+            "children"
+          ],
+          "da": 1,
+          "gt": "Children là số nhiều bất quy tắc, không tận cùng s nên thêm 's."
+        },
+        {
+          "h": "Trong câu nào 's là sở hữu cách?",
+          "lc": [
+            "My mother's bag is red.",
+            "My mother's at work.",
+            "It's cold today.",
+            "She's a nurse."
+          ],
+          "da": 0,
+          "gt": "My mother's bag = túi của mẹ tôi; ở ba câu còn lại 's là viết tắt của is."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1036 @@
+{
+  "nn": "zh",
+  "cap": "HSK1",
+  "diem": [
+    {
+      "id": "zh-hsk1-hui",
+      "nhom": "Động từ năng nguyện – sở thích",
+      "tieuDe": "会 (biết làm)",
+      "mau": "S + 会 + V (+ O)",
+      "nghia": "biết ~ (kỹ năng có được nhờ học, luyện tập)",
+      "giaiThich": "会 đứng trước động từ để nói mình BIẾT làm một việc nhờ đã học hoặc luyện tập: nói ngoại ngữ, viết chữ, nấu ăn, lái xe, bơi. Phủ định là 不会. Có thể thêm 很 / 不太 phía trước để nói mức độ giỏi.",
+      "cachGhep": [
+        "Khẳng định: S + 会 + V + O",
+        "Phủ định: S + 不会 + V + O",
+        "Câu hỏi: …会…吗？ / 会不会…？",
+        "Trả lời ngắn: 会。/ 不会。"
+      ],
+      "viDu": [
+        {
+          "c": "我会说汉语。",
+          "d": "Wǒ huì shuō Hànyǔ.",
+          "v": "Tôi biết nói tiếng Trung."
+        },
+        {
+          "c": "他不会开车。",
+          "d": "Tā bú huì kāi chē.",
+          "v": "Anh ấy không biết lái xe."
+        },
+        {
+          "c": "你会做中国菜吗？",
+          "d": "Nǐ huì zuò Zhōngguó cài ma?",
+          "v": "Bạn có biết nấu món Trung Quốc không?"
+        },
+        {
+          "c": "我妈妈会写汉字。",
+          "d": "Wǒ māma huì xiě Hànzì.",
+          "v": "Mẹ tôi biết viết chữ Hán."
+        }
+      ],
+      "luuY": [
+        "\"Biết\" (kỹ năng) là 会; \"biết\" (một thông tin) là 知道; \"quen biết\" (người) là 认识 — tiếng Việt dùng chung một chữ \"biết\".",
+        "Phủ định dùng 不会 (bú huì), không dùng 没会.",
+        "Với ngôn ngữ có thể nói gọn: 我会汉语."
+      ],
+      "soSanh": [
+        "zh-hsk1-neng",
+        "zh-hsk2-keyi"
+      ],
+      "tuKhoa": [
+        "hui",
+        "biết",
+        "kỹ năng",
+        "bu hui",
+        "động từ năng nguyện"
+      ],
+      "quiz": [
+        {
+          "h": "我不___写这个汉字。",
+          "lc": [
+            "会",
+            "是",
+            "有",
+            "很"
+          ],
+          "da": 0,
+          "gt": "Biết viết (kỹ năng học được) → 会; phủ định 不会."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "我没会说汉语。",
+            "我会说汉语。",
+            "我说会汉语。",
+            "我会汉语说。"
+          ],
+          "da": 1,
+          "gt": "会 đứng trước động từ chính và phủ định bằng 不."
+        },
+        {
+          "h": "你会开车吗？ — ___，我没学。",
+          "lc": [
+            "会",
+            "不是",
+            "不会",
+            "没有的"
+          ],
+          "da": 2,
+          "gt": "Chưa học nên không biết → 不会."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk1-neng",
+      "nhom": "Động từ năng nguyện – sở thích",
+      "tieuDe": "能",
+      "mau": "S + 能 + V (+ O)",
+      "nghia": "có thể ~ (có khả năng, điều kiện cho phép)",
+      "giaiThich": "能 đứng trước động từ để nói có khả năng hoặc hoàn cảnh cho phép làm một việc (có thời gian, sức khoẻ, điều kiện). Cũng dùng trong câu hỏi để nhờ vả, xin phép: 能…吗？ Phủ định là 不能 (không thể, không được).",
+      "cachGhep": [
+        "Khẳng định: S + 能 + V + O",
+        "Phủ định: S + 不能 + V + O",
+        "Nhờ vả / xin phép: 你能…吗？ / 我能…吗？"
+      ],
+      "viDu": [
+        {
+          "c": "你明天能来吗？",
+          "d": "Nǐ míngtiān néng lái ma?",
+          "v": "Ngày mai bạn có thể đến không?"
+        },
+        {
+          "c": "我今天很忙，不能去。",
+          "d": "Wǒ jīntiān hěn máng, bù néng qù.",
+          "v": "Hôm nay tôi rất bận, không đi được."
+        },
+        {
+          "c": "我能坐这儿吗？",
+          "d": "Wǒ néng zuò zhèr ma?",
+          "v": "Tôi ngồi đây được không?"
+        },
+        {
+          "c": "他一分钟能写三十个汉字。",
+          "d": "Tā yì fēnzhōng néng xiě sānshí gè Hànzì.",
+          "v": "Một phút anh ấy viết được 30 chữ Hán."
+        }
+      ],
+      "luuY": [
+        "会 = biết cách làm (do học); 能 = làm được trong hoàn cảnh cụ thể. 我会开车，可是今天不能开 (tôi biết lái xe nhưng hôm nay không lái được).",
+        "Tiếng Việt nói \"đi được\", \"không đi được\" (chữ \"được\" đứng sau); tiếng Trung đặt 能 TRƯỚC động từ: 能去, 不能去."
+      ],
+      "soSanh": [
+        "zh-hsk1-hui",
+        "zh-hsk2-keyi"
+      ],
+      "tuKhoa": [
+        "neng",
+        "có thể",
+        "được",
+        "bu neng",
+        "khả năng"
+      ],
+      "quiz": [
+        {
+          "h": "我没有时间，不___去看电影。",
+          "lc": [
+            "是",
+            "能",
+            "有",
+            "很"
+          ],
+          "da": 1,
+          "gt": "Hoàn cảnh không cho phép (không có thời gian) → 不能."
+        },
+        {
+          "h": "Sắp xếp đúng: 你 / 来 / 能 / 明天 / 吗",
+          "lc": [
+            "你能明天来吗？",
+            "你来能明天吗？",
+            "你明天来能吗？",
+            "你明天能来吗？"
+          ],
+          "da": 3,
+          "gt": "Thời gian đứng trước 能, 能 đứng ngay trước động từ: 明天能来."
+        },
+        {
+          "h": "他学了汉语，现在___说汉语。 (biết nói, do học)",
+          "lc": [
+            "会",
+            "吗",
+            "很",
+            "的"
+          ],
+          "da": 0,
+          "gt": "Kỹ năng có được nhờ học → 会."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk1-xiang",
+      "nhom": "Động từ năng nguyện – sở thích",
+      "tieuDe": "想 (muốn)",
+      "mau": "S + 想 + V (+ O)",
+      "nghia": "muốn ~ (mong muốn, dự định)",
+      "giaiThich": "想 đứng trước động từ để nói mong muốn hoặc dự định làm một việc; ngữ khí nhẹ nhàng. Phủ định là 不想. Khi sau 想 là danh từ / đại từ chỉ người thì 想 có nghĩa \"nhớ\" (我想你 = tôi nhớ bạn).",
+      "cachGhep": [
+        "Khẳng định: S + 想 + V + O",
+        "Phủ định: S + 不想 + V + O",
+        "Câu hỏi: 你想…吗？ / 你想 + V + 什么？",
+        "想 + người: nhớ ai"
+      ],
+      "viDu": [
+        {
+          "c": "我想喝水。",
+          "d": "Wǒ xiǎng hē shuǐ.",
+          "v": "Tôi muốn uống nước."
+        },
+        {
+          "c": "你想吃什么？",
+          "d": "Nǐ xiǎng chī shénme?",
+          "v": "Bạn muốn ăn gì?"
+        },
+        {
+          "c": "我今天不想去商店。",
+          "d": "Wǒ jīntiān bù xiǎng qù shāngdiàn.",
+          "v": "Hôm nay tôi không muốn đi cửa hàng."
+        },
+        {
+          "c": "她想学习汉语。",
+          "d": "Tā xiǎng xuéxí Hànyǔ.",
+          "v": "Cô ấy muốn học tiếng Trung."
+        }
+      ],
+      "luuY": [
+        "Muốn một ĐỒ VẬT thì không dùng 想 trực tiếp: nói 我想买一个杯子 hoặc 我要一个杯子, không nói 我想一个杯子.",
+        "Phủ định \"không muốn\" là 不想, không dùng 没想 với nghĩa này."
+      ],
+      "soSanh": [
+        "zh-hsk2-yao",
+        "zh-hsk1-xihuan"
+      ],
+      "tuKhoa": [
+        "xiang",
+        "muốn",
+        "bu xiang",
+        "nhớ",
+        "dự định"
+      ],
+      "quiz": [
+        {
+          "h": "我___去北京学习。",
+          "lc": [
+            "很",
+            "的",
+            "想",
+            "吗"
+          ],
+          "da": 2,
+          "gt": "Mong muốn làm việc gì: 想 + động từ."
+        },
+        {
+          "h": "「我想你」 nghĩa là:",
+          "lc": [
+            "Tôi muốn bạn đi.",
+            "Tôi nhớ bạn.",
+            "Tôi nghĩ là bạn.",
+            "Tôi cũng như bạn."
+          ],
+          "da": 1,
+          "gt": "想 + người = nhớ ai."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "我想买一本书。",
+            "我想一本书买。",
+            "我买想一本书。",
+            "我想不买一本书吗。"
+          ],
+          "da": 0,
+          "gt": "想 đứng trước động từ chính: 想买."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk1-xihuan",
+      "nhom": "Động từ năng nguyện – sở thích",
+      "tieuDe": "喜欢 + động từ / danh từ",
+      "mau": "S + 喜欢 + V (+ O) / danh từ",
+      "nghia": "thích (làm) ~",
+      "giaiThich": "喜欢 nói sở thích. Sau 喜欢 có thể là danh từ (喜欢猫) hoặc một động từ / cụm động từ (喜欢看电影). Vì là động từ tâm lý nên có thể thêm 很, 不太 phía trước. Phủ định là 不喜欢.",
+      "cachGhep": [
+        "S + 喜欢 + danh từ",
+        "S + 喜欢 + V + O",
+        "Mức độ: 很喜欢 / 不太喜欢",
+        "Phủ định: 不喜欢 · Hỏi: 喜欢…吗？ / 喜不喜欢…？"
+      ],
+      "viDu": [
+        {
+          "c": "我喜欢喝茶。",
+          "d": "Wǒ xǐhuan hē chá.",
+          "v": "Tôi thích uống trà."
+        },
+        {
+          "c": "他很喜欢小狗。",
+          "d": "Tā hěn xǐhuan xiǎogǒu.",
+          "v": "Anh ấy rất thích chó con."
+        },
+        {
+          "c": "你喜欢看什么电影？",
+          "d": "Nǐ xǐhuan kàn shénme diànyǐng?",
+          "v": "Bạn thích xem phim gì?"
+        },
+        {
+          "c": "我不喜欢做饭。",
+          "d": "Wǒ bù xǐhuan zuò fàn.",
+          "v": "Tôi không thích nấu cơm."
+        }
+      ],
+      "luuY": [
+        "Với đồ ăn, đồ uống, phim, sách… người Trung thường nói rõ động từ: 喜欢喝茶, 喜欢看书 (tự nhiên hơn 喜欢茶, 喜欢书).",
+        "很 đứng TRƯỚC 喜欢: 很喜欢, không nói 喜欢很.",
+        "喜欢 là sở thích lâu dài; muốn làm ngay lúc này thì dùng 想."
+      ],
+      "soSanh": [
+        "zh-hsk1-xiang"
+      ],
+      "tuKhoa": [
+        "xihuan",
+        "thích",
+        "sở thích",
+        "bu xihuan"
+      ],
+      "quiz": [
+        {
+          "h": "我妹妹___看电视。",
+          "lc": [
+            "喜欢",
+            "是",
+            "的",
+            "吗"
+          ],
+          "da": 0,
+          "gt": "Sở thích làm việc gì: 喜欢 + động từ."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "我喜欢很猫。",
+            "我猫很喜欢的。",
+            "我很喜欢猫。",
+            "我喜欢猫很。"
+          ],
+          "da": 2,
+          "gt": "Phó từ mức độ 很 đứng trước 喜欢."
+        },
+        {
+          "h": "你喜欢喝咖啡吗？ — ___，我喜欢喝茶。",
+          "lc": [
+            "喜欢",
+            "不喜欢",
+            "没有",
+            "不是的吗"
+          ],
+          "da": 1,
+          "gt": "Vế sau nói thích trà, nên câu trả lời là không thích cà phê: 不喜欢."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk1-lien-dong",
+      "nhom": "Câu đặc biệt",
+      "tieuDe": "去 + nơi chốn + V (câu liên động)",
+      "mau": "S + 去 / 来 + (nơi chốn) + V + O",
+      "nghia": "đi / đến (đâu) để làm gì",
+      "giaiThich": "Câu liên động có hai động từ nối tiếp cùng một chủ ngữ; động từ sau là MỤC ĐÍCH của việc đi / đến. Trật tự cố định: đi (đâu) trước, làm gì sau. Cũng dùng để nói phương tiện: 坐 + phương tiện + 去 + nơi.",
+      "cachGhep": [
+        "S + 去 / 来 + nơi chốn + V + O",
+        "Bỏ nơi chốn: S + 去 + V + O (去买东西)",
+        "Phương tiện: S + 坐 + phương tiện + 去 / 来 + nơi",
+        "Phủ định: 不 / 没 đặt trước động từ THỨ NHẤT (不去…)"
+      ],
+      "viDu": [
+        {
+          "c": "我去商店买东西。",
+          "d": "Wǒ qù shāngdiàn mǎi dōngxi.",
+          "v": "Tôi đi cửa hàng mua đồ."
+        },
+        {
+          "c": "他来中国学习汉语。",
+          "d": "Tā lái Zhōngguó xuéxí Hànyǔ.",
+          "v": "Anh ấy đến Trung Quốc học tiếng Trung."
+        },
+        {
+          "c": "我们下午去看电影吧。",
+          "d": "Wǒmen xiàwǔ qù kàn diànyǐng ba.",
+          "v": "Buổi chiều chúng ta đi xem phim nhé."
+        },
+        {
+          "c": "我不去饭店吃饭。",
+          "d": "Wǒ bú qù fàndiàn chī fàn.",
+          "v": "Tôi không đi nhà hàng ăn cơm."
+        }
+      ],
+      "luuY": [
+        "Không đảo thứ tự: 我买东西去商店 là sai.",
+        "不 đứng trước 去 / 来, không đứng trước động từ thứ hai: 我不去看电影.",
+        "Không cần từ \"để\": không thêm gì giữa hai động từ."
+      ],
+      "soSanh": [
+        "zh-hsk1-zai-gioi-tu"
+      ],
+      "tuKhoa": [
+        "lien dong",
+        "qu",
+        "lai",
+        "đi làm gì",
+        "câu liên động"
+      ],
+      "quiz": [
+        {
+          "h": "Sắp xếp đúng: 我 / 学校 / 去 / 上课",
+          "lc": [
+            "我上课去学校。",
+            "我去学校上课。",
+            "去我学校上课。",
+            "我学校去上课。"
+          ],
+          "da": 1,
+          "gt": "Đi đâu trước, làm gì sau: 去学校 + 上课."
+        },
+        {
+          "h": "妈妈去医院___医生。",
+          "lc": [
+            "是",
+            "在",
+            "的",
+            "看"
+          ],
+          "da": 3,
+          "gt": "Sau 去 + nơi chốn là động từ chỉ mục đích: 看医生 (khám bác sĩ)."
+        },
+        {
+          "h": "Phủ định đúng của 「他去北京工作」 là:",
+          "lc": [
+            "他不去北京工作。",
+            "他去北京不工作的。",
+            "他去不北京工作。",
+            "他去北京工作不。"
+          ],
+          "da": 0,
+          "gt": "不 đặt trước động từ thứ nhất (去)."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk1-zai-gioi-tu",
+      "nhom": "Câu đặc biệt",
+      "tieuDe": "在 + nơi chốn + V",
+      "mau": "S + 在 + nơi chốn + V (+ O)",
+      "nghia": "làm gì Ở đâu (nơi chốn đứng trước động từ)",
+      "giaiThich": "在 làm giới từ, cùng với từ chỉ nơi chốn tạo thành trạng ngữ nói nơi diễn ra hành động. Cụm 在 + nơi chốn phải đứng TRƯỚC động từ — ngược với tiếng Việt (\"ăn cơm ở nhà\").",
+      "cachGhep": [
+        "S + 在 + nơi chốn + V + O",
+        "Có thời gian: S + thời gian + 在 + nơi + V",
+        "Phủ định: S + 不 + 在 + nơi + V",
+        "Hỏi: S + 在哪儿 + V？"
+      ],
+      "viDu": [
+        {
+          "c": "我在家吃饭。",
+          "d": "Wǒ zài jiā chī fàn.",
+          "v": "Tôi ăn cơm ở nhà."
+        },
+        {
+          "c": "她在医院工作。",
+          "d": "Tā zài yīyuàn gōngzuò.",
+          "v": "Cô ấy làm việc ở bệnh viện."
+        },
+        {
+          "c": "你在哪儿学习汉语？",
+          "d": "Nǐ zài nǎr xuéxí Hànyǔ?",
+          "v": "Bạn học tiếng Trung ở đâu?"
+        },
+        {
+          "c": "我不在学校吃饭。",
+          "d": "Wǒ bú zài xuéxiào chī fàn.",
+          "v": "Tôi không ăn cơm ở trường."
+        }
+      ],
+      "luuY": [
+        "Lỗi rất phổ biến của người Việt: 我吃饭在家, 我工作在医院 → phải đưa 在 + nơi lên trước động từ.",
+        "Riêng động từ 住 có thể nói 住在 + nơi: 我住在北京.",
+        "Thời gian đứng trước nơi chốn: 我明天在家看书."
+      ],
+      "soSanh": [
+        "zh-hsk1-zai-dong-tu",
+        "zh-hsk1-lien-dong",
+        "zh-hsk1-ne-dang"
+      ],
+      "tuKhoa": [
+        "zai",
+        "ở",
+        "giới từ",
+        "nơi chốn",
+        "trạng ngữ nơi chốn"
+      ],
+      "quiz": [
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "我看书在家。",
+            "我在家看书。",
+            "在家我看书在。",
+            "我看在家书。"
+          ],
+          "da": 1,
+          "gt": "在 + nơi chốn đứng trước động từ."
+        },
+        {
+          "h": "我爸爸___医院工作。",
+          "lc": [
+            "是",
+            "有",
+            "在",
+            "去在"
+          ],
+          "da": 2,
+          "gt": "Nơi diễn ra hành động: 在 + nơi + V."
+        },
+        {
+          "h": "你妈妈___工作？ — 她在学校工作。",
+          "lc": [
+            "在哪儿",
+            "是什么",
+            "有谁",
+            "几个"
+          ],
+          "da": 0,
+          "gt": "Câu trả lời nêu nơi làm việc nên hỏi bằng 在哪儿 + V."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk1-shi-de",
+      "nhom": "Câu đặc biệt",
+      "tieuDe": "是…的 (nhấn mạnh thời gian / nơi chốn / cách thức)",
+      "mau": "S + (是) + thời gian / nơi chốn / cách thức + V + 的",
+      "nghia": "nhấn mạnh việc ĐÃ xảy ra lúc nào, ở đâu, bằng cách nào",
+      "giaiThich": "Khi cả hai bên đều biết một việc đã xảy ra, và muốn hỏi / nói rõ nó xảy ra KHI NÀO, Ở ĐÂU, BẰNG CÁCH NÀO hoặc VỚI AI, dùng 是…的. Phần được nhấn mạnh đặt ngay sau 是, 的 đặt cuối câu. Câu khẳng định có thể bỏ 是, nhưng phủ định phải nói 不是…的.",
+      "cachGhep": [
+        "Thời gian: S + 是 + thời gian + V + 的",
+        "Nơi chốn: S + 是 + 在 + nơi + V + 的",
+        "Cách thức: S + 是 + 坐… / 怎么 + V + 的",
+        "Phủ định: S + 不是 + … + V + 的"
+      ],
+      "viDu": [
+        {
+          "c": "你是什么时候来的？",
+          "d": "Nǐ shì shénme shíhou lái de?",
+          "v": "Bạn đến từ khi nào?"
+        },
+        {
+          "c": "我是昨天来的。",
+          "d": "Wǒ shì zuótiān lái de.",
+          "v": "Tôi đến hôm qua."
+        },
+        {
+          "c": "这本书是在北京买的。",
+          "d": "Zhè běn shū shì zài Běijīng mǎi de.",
+          "v": "Quyển sách này mua ở Bắc Kinh."
+        },
+        {
+          "c": "我不是坐飞机来的。",
+          "d": "Wǒ bú shì zuò fēijī lái de.",
+          "v": "Tôi không phải đến bằng máy bay."
+        }
+      ],
+      "luuY": [
+        "Chỉ dùng cho việc ĐÃ xảy ra; việc tương lai không dùng 是…的.",
+        "Trong mẫu này không dùng 了: nói 我是昨天来的, KHÔNG nói 我是昨天来了的.",
+        "Đừng nhầm với 的 chỉ sở hữu: ở đây 的 đứng cuối câu, sau động từ."
+      ],
+      "soSanh": [
+        "zh-hsk1-le",
+        "zh-hsk1-de"
+      ],
+      "tuKhoa": [
+        "shi de",
+        "shi…de",
+        "nhấn mạnh",
+        "cấu trúc thị đích"
+      ],
+      "quiz": [
+        {
+          "h": "你是怎么来学校___？",
+          "lc": [
+            "了",
+            "吗",
+            "的",
+            "呢了"
+          ],
+          "da": 2,
+          "gt": "Nhấn mạnh cách thức của việc đã xảy ra: 是…的, 的 ở cuối câu."
+        },
+        {
+          "h": "我们___在学校认识的。",
+          "lc": [
+            "是",
+            "有",
+            "很",
+            "都没"
+          ],
+          "da": 0,
+          "gt": "Nhấn mạnh nơi chốn: 是 + 在 + nơi + V + 的."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "我不坐出租车来的。",
+            "我不是坐出租车来的。",
+            "我没是坐出租车来的。",
+            "我是不坐出租车来了的。"
+          ],
+          "da": 1,
+          "gt": "Phủ định của 是…的 là 不是…的, không bỏ 是 và không thêm 了."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk1-le",
+      "nhom": "Trợ từ",
+      "tieuDe": "了 (cơ bản: việc đã xảy ra / tình hình thay đổi)",
+      "mau": "S + V + (O) + 了 · V + 了 + số lượng + O",
+      "nghia": "đã ~ rồi; ~ rồi (có thay đổi)",
+      "giaiThich": "了 cho biết một việc đã xảy ra, đã hoàn thành, hoặc tình hình đã thay đổi so với trước. 了 có thể đứng cuối câu (他去商店了), hoặc ngay sau động từ khi tân ngữ có số lượng (买了一本书). Phủ định dùng 没(有) + động từ và bỏ 了.",
+      "cachGhep": [
+        "S + V + O + 了 (việc đã xảy ra)",
+        "S + V + 了 + số + lượng từ + O (đã làm bao nhiêu)",
+        "Tính từ / danh từ + 了 (thay đổi): 冷了, 八点了",
+        "Phủ định: S + 没(有) + V + O (KHÔNG có 了)",
+        "Câu hỏi: …了吗？ / …了没有？"
+      ],
+      "viDu": [
+        {
+          "c": "他去商店了。",
+          "d": "Tā qù shāngdiàn le.",
+          "v": "Anh ấy đi cửa hàng rồi."
+        },
+        {
+          "c": "我买了三个苹果。",
+          "d": "Wǒ mǎile sān gè píngguǒ.",
+          "v": "Tôi đã mua ba quả táo."
+        },
+        {
+          "c": "你吃饭了吗？",
+          "d": "Nǐ chī fàn le ma?",
+          "v": "Bạn ăn cơm chưa?"
+        },
+        {
+          "c": "昨天我没看电视。",
+          "d": "Zuótiān wǒ méi kàn diànshì.",
+          "v": "Hôm qua tôi không xem ti vi."
+        }
+      ],
+      "luuY": [
+        "了 không phải là \"thì quá khứ\": thói quen trong quá khứ hoặc câu có 是, 在, 喜欢… thường không dùng 了 (昨天很冷, không nói 昨天很冷了 nếu chỉ miêu tả).",
+        "Phủ định: 没 + V, bỏ 了 — KHÔNG nói 我没买了.",
+        "Không dùng 不 để phủ định việc đã qua kiểu này: 我昨天没去 (không nói 我昨天不去了)."
+      ],
+      "soSanh": [
+        "zh-hsk2-le-hoan-thanh",
+        "zh-hsk2-le-thay-doi",
+        "zh-hsk1-mei"
+      ],
+      "tuKhoa": [
+        "le",
+        "rồi",
+        "đã",
+        "trợ từ động thái",
+        "hoàn thành"
+      ],
+      "quiz": [
+        {
+          "h": "我昨天买___一本汉语书。",
+          "lc": [
+            "很",
+            "了",
+            "吗",
+            "不"
+          ],
+          "da": 1,
+          "gt": "Việc đã hoàn thành, tân ngữ có số lượng: V + 了 + 一本书."
+        },
+        {
+          "h": "Phủ định của 「他来了」 là:",
+          "lc": [
+            "他不来了。",
+            "他没来了。",
+            "他来没了。",
+            "他没来。"
+          ],
+          "da": 3,
+          "gt": "Phủ định việc đã xảy ra: 没 + V và bỏ 了."
+        },
+        {
+          "h": "你妈妈回家___吗？ — 回家了。",
+          "lc": [
+            "了",
+            "的",
+            "不",
+            "很"
+          ],
+          "da": 0,
+          "gt": "Hỏi một việc đã xảy ra chưa: …了吗？"
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk1-ne-dang",
+      "nhom": "Trợ từ",
+      "tieuDe": "(在)…呢 (đang)",
+      "mau": "S + 在 + V + (O) + 呢 · S + V + (O) + 呢",
+      "nghia": "đang ~ (hành động đang diễn ra)",
+      "giaiThich": "Để nói một hành động đang diễn ra, đặt 在 trước động từ, hoặc thêm 呢 ở cuối câu, hoặc dùng cả hai. Thường dùng để trả lời câu hỏi \"đang làm gì đấy?\". Phủ định dùng 没(在).",
+      "cachGhep": [
+        "S + 在 + V + O",
+        "S + V + O + 呢",
+        "S + 在 + V + O + 呢",
+        "Hỏi: 你在做什么呢？",
+        "Phủ định: S + 没(在) + V + O"
+      ],
+      "viDu": [
+        {
+          "c": "你在做什么呢？",
+          "d": "Nǐ zài zuò shénme ne?",
+          "v": "Bạn đang làm gì đấy?"
+        },
+        {
+          "c": "我在看书呢。",
+          "d": "Wǒ zài kàn shū ne.",
+          "v": "Tôi đang đọc sách."
+        },
+        {
+          "c": "妈妈在做饭。",
+          "d": "Māma zài zuò fàn.",
+          "v": "Mẹ đang nấu cơm."
+        },
+        {
+          "c": "他没在睡觉，他在打电话呢。",
+          "d": "Tā méi zài shuìjiào, tā zài dǎ diànhuà ne.",
+          "v": "Anh ấy không ngủ, anh ấy đang gọi điện thoại."
+        }
+      ],
+      "luuY": [
+        "在 \"đang\" đứng ngay trước ĐỘNG TỪ; 在 \"ở\" đứng trước NƠI CHỐN. 我在看书 (đang đọc) khác 我在家看书 (đọc ở nhà).",
+        "Không dùng 了 cùng với 在…呢.",
+        "Phủ định dùng 没, không dùng 不: 他没在看电视."
+      ],
+      "soSanh": [
+        "zh-hsk2-zhengzai",
+        "zh-hsk1-ne-hoi",
+        "zh-hsk1-zai-gioi-tu"
+      ],
+      "tuKhoa": [
+        "zai ne",
+        "ne",
+        "đang",
+        "tiếp diễn",
+        "zai"
+      ],
+      "quiz": [
+        {
+          "h": "你在做什么___？",
+          "lc": [
+            "吗",
+            "呢",
+            "的",
+            "了"
+          ],
+          "da": 1,
+          "gt": "Câu đã có 什么 nên không dùng 吗; hành động đang diễn ra dùng 呢 cuối câu."
+        },
+        {
+          "h": "爸爸___看电视呢。",
+          "lc": [
+            "在",
+            "是",
+            "有",
+            "了"
+          ],
+          "da": 0,
+          "gt": "Đang làm gì: 在 + động từ (+ 呢)."
+        },
+        {
+          "h": "Trong câu nào 在 có nghĩa là \"đang\"?",
+          "lc": [
+            "我在学校。",
+            "书在桌子上。",
+            "他在北京工作。",
+            "她在喝茶呢。"
+          ],
+          "da": 3,
+          "gt": "Sau 在 là động từ (喝茶) → \"đang\"; ba câu kia sau 在 là nơi chốn."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk1-ba-de-nghi",
+      "nhom": "Trợ từ",
+      "tieuDe": "吧 (đề nghị, rủ rê)",
+      "mau": "Câu + 吧",
+      "nghia": "… nhé / … đi (đề nghị, rủ, giục nhẹ nhàng)",
+      "giaiThich": "吧 đặt cuối câu để làm mềm lời đề nghị, lời rủ hoặc yêu cầu: \"chúng ta … nhé\", \"bạn … đi\". Cũng dùng khi đồng ý: 好吧 (thôi được).",
+      "cachGhep": [
+        "我们 + V + 吧 (rủ cùng làm)",
+        "你 + V + 吧 / V + 吧 (đề nghị, giục nhẹ)",
+        "Đồng ý: 好吧。"
+      ],
+      "viDu": [
+        {
+          "c": "我们去看电影吧。",
+          "d": "Wǒmen qù kàn diànyǐng ba.",
+          "v": "Chúng ta đi xem phim nhé."
+        },
+        {
+          "c": "你喝茶吧。",
+          "d": "Nǐ hē chá ba.",
+          "v": "Bạn uống trà đi."
+        },
+        {
+          "c": "我们坐出租车去吧。",
+          "d": "Wǒmen zuò chūzūchē qù ba.",
+          "v": "Chúng ta đi bằng taxi nhé."
+        },
+        {
+          "c": "好吧，明天见。",
+          "d": "Hǎo ba, míngtiān jiàn.",
+          "v": "Thôi được, mai gặp nhé."
+        }
+      ],
+      "luuY": [
+        "吧 không phải là câu hỏi có / không; muốn hỏi thật thì dùng 吗.",
+        "吧 đọc nhẹ (ba). Không dùng 吧 và 吗 cùng lúc."
+      ],
+      "soSanh": [
+        "zh-hsk2-ba-phong-doan",
+        "zh-hsk1-qing"
+      ],
+      "tuKhoa": [
+        "ba",
+        "nhé",
+        "đi",
+        "đề nghị",
+        "rủ"
+      ],
+      "quiz": [
+        {
+          "h": "今天太热了，我们在家看电视___。",
+          "lc": [
+            "吗",
+            "的",
+            "吧",
+            "呢吗"
+          ],
+          "da": 2,
+          "gt": "Rủ cùng làm một việc: …吧."
+        },
+        {
+          "h": "Câu nào là lời RỦ?",
+          "lc": [
+            "我们去商店吧。",
+            "你去商店吗？",
+            "你去哪儿？",
+            "他去商店了。"
+          ],
+          "da": 0,
+          "gt": "我们…吧 là lời rủ; các câu kia là câu hỏi hoặc câu kể."
+        },
+        {
+          "h": "A: 我们明天去吧。 B: ___，明天去。",
+          "lc": [
+            "不是",
+            "好吧",
+            "没有",
+            "是的吗"
+          ],
+          "da": 1,
+          "gt": "Đồng ý với lời đề nghị: 好吧."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk1-qing",
+      "nhom": "Cầu khiến – giao tiếp",
+      "tieuDe": "请",
+      "mau": "请 + V · 请 + người + V",
+      "nghia": "xin mời ~ / làm ơn ~ (yêu cầu lịch sự)",
+      "giaiThich": "请 đặt đầu câu, trước động từ, để mời hoặc yêu cầu người khác làm gì một cách lịch sự. 请问 dùng trước khi hỏi người lạ. 请 + người + động từ còn có nghĩa là \"mời ai (ăn, uống, đi…)\".",
+      "cachGhep": [
+        "请 + V: 请坐, 请进, 请喝茶",
+        "请问，+ câu hỏi",
+        "请 + người + V + O: mời ai làm gì"
+      ],
+      "viDu": [
+        {
+          "c": "请坐。",
+          "d": "Qǐng zuò.",
+          "v": "Mời ngồi."
+        },
+        {
+          "c": "请问，你叫什么名字？",
+          "d": "Qǐngwèn, nǐ jiào shénme míngzi?",
+          "v": "Xin hỏi, bạn tên là gì?"
+        },
+        {
+          "c": "请喝茶。",
+          "d": "Qǐng hē chá.",
+          "v": "Mời uống trà."
+        },
+        {
+          "c": "我想请你吃饭。",
+          "d": "Wǒ xiǎng qǐng nǐ chī fàn.",
+          "v": "Tôi muốn mời bạn ăn cơm."
+        }
+      ],
+      "luuY": [
+        "请 đứng TRƯỚC động từ; không đặt cuối câu như \"please\" (không nói 坐请).",
+        "请问 dùng để mở đầu câu hỏi, không dùng để nhờ làm việc gì."
+      ],
+      "soSanh": [
+        "zh-hsk1-ba-de-nghi",
+        "zh-hsk2-rang-jiao"
+      ],
+      "tuKhoa": [
+        "qing",
+        "mời",
+        "xin",
+        "làm ơn",
+        "qingwen"
+      ],
+      "quiz": [
+        {
+          "h": "___进！",
+          "lc": [
+            "吗",
+            "请",
+            "的",
+            "很"
+          ],
+          "da": 1,
+          "gt": "Mời vào: 请 + động từ → 请进."
+        },
+        {
+          "h": "___，医院在哪儿？",
+          "lc": [
+            "请坐",
+            "谢谢",
+            "请问",
+            "再见"
+          ],
+          "da": 2,
+          "gt": "Mở đầu câu hỏi lịch sự với người lạ: 请问."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "请喝水。",
+            "喝水请。",
+            "请水喝。",
+            "喝请水。"
+          ],
+          "da": 0,
+          "gt": "请 đứng trước động từ: 请 + 喝水."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk1-wei",
+      "nhom": "Cầu khiến – giao tiếp",
+      "tieuDe": "喂 (khi gọi điện thoại)",
+      "mau": "喂，…",
+      "nghia": "a lô (mở đầu cuộc điện thoại)",
+      "giaiThich": "喂 là thán từ dùng để mở đầu khi nghe hoặc gọi điện thoại, tương đương \"a lô\". Sau đó thường hỏi người cần gặp bằng …在吗？ hoặc tự giới thiệu 我是….",
+      "cachGhep": [
+        "喂，你好！",
+        "喂，+ 请问 + người + 在吗？",
+        "喂，我是 + tên"
+      ],
+      "viDu": [
+        {
+          "c": "喂，你好！",
+          "d": "Wéi, nǐ hǎo!",
+          "v": "A lô, xin chào!"
+        },
+        {
+          "c": "喂，请问王老师在吗？",
+          "d": "Wéi, qǐngwèn Wáng lǎoshī zài ma?",
+          "v": "A lô, xin hỏi thầy Vương có ở đó không?"
+        },
+        {
+          "c": "喂，我是小月，你在做什么呢？",
+          "d": "Wéi, wǒ shì Xiǎoyuè, nǐ zài zuò shénme ne?",
+          "v": "A lô, mình là Tiểu Nguyệt, bạn đang làm gì đấy?"
+        }
+      ],
+      "luuY": [
+        "Khi nghe điện thoại, 喂 thường đọc thanh 2 (wéi); trong từ điển chữ này ghi wèi.",
+        "Chỉ dùng trong điện thoại hoặc khi gọi ai đó từ xa; gọi người lạ trực tiếp bằng 喂 là kém lịch sự — nên dùng 请问 hoặc 你好.",
+        "Tự giới thiệu qua điện thoại nói 我是…, không nói 我叫是…."
+      ],
+      "soSanh": [
+        "zh-hsk1-qing"
+      ],
+      "tuKhoa": [
+        "wei",
+        "a lô",
+        "alo",
+        "điện thoại"
+      ],
+      "quiz": [
+        {
+          "h": "Nhấc máy điện thoại, câu mở đầu tự nhiên nhất là:",
+          "lc": [
+            "再见，你好！",
+            "喂，你好！",
+            "请坐，你好！",
+            "谢谢，你好！"
+          ],
+          "da": 1,
+          "gt": "喂 là từ mở đầu cuộc điện thoại."
+        },
+        {
+          "h": "喂，请问李医生___吗？",
+          "lc": [
+            "在",
+            "的",
+            "呢",
+            "什么"
+          ],
+          "da": 0,
+          "gt": "Hỏi người cần gặp có ở đó không: …在吗？"
+        },
+        {
+          "h": "Tự giới thiệu qua điện thoại:",
+          "lc": [
+            "喂，我叫是大明。",
+            "喂，我在大明。",
+            "喂，我有大明。",
+            "喂，我是大明。"
+          ],
+          "da": 3,
+          "gt": "Nói mình là ai: 我是 + tên."
+        }
+      ]
+    }
+  ]
+}

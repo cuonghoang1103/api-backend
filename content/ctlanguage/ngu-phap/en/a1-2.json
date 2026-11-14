@@ -1,0 +1,995 @@
+{
+  "nn": "en",
+  "cap": "A1",
+  "diem": [
+    {
+      "id": "en-a1-dem-duoc-khong-dem-duoc",
+      "nhom": "Danh từ – mạo từ",
+      "tieuDe": "Danh từ đếm được và không đếm được",
+      "mau": "a / an / số đếm + danh từ đếm được · some + danh từ không đếm được",
+      "nghia": "danh từ đếm được (a book, two books) và không đếm được (water, rice)",
+      "giaiThich": "Danh từ đếm được có dạng số ít và số nhiều, đi được với a / an và số đếm. Danh từ không đếm được (chất lỏng, chất liệu, khái niệm chung như water, rice, money, music) chỉ có một dạng, không thêm -s, không đi với a / an hay số đếm, và động từ chia số ít.",
+      "cachGhep": [
+        "Đếm được: an egg, two eggs, some eggs",
+        "Không đếm được: water, milk, rice, bread, money, time, music, homework, information → some water, some money",
+        "Muốn đếm thì dùng đơn vị: a glass of water, a cup of tea, two bottles of milk, a piece of bread",
+        "Không đếm được + động từ số ít: The milk is cold."
+      ],
+      "viDu": [
+        {
+          "c": "I eat rice and vegetables every day.",
+          "v": "Ngày nào tôi cũng ăn cơm và rau."
+        },
+        {
+          "c": "Can I have a glass of water, please?",
+          "v": "Cho tôi xin một cốc nước được không?"
+        },
+        {
+          "c": "There is some bread on the table.",
+          "v": "Có một ít bánh mì trên bàn."
+        },
+        {
+          "c": "We don't have much homework today.",
+          "v": "Hôm nay chúng tôi không có nhiều bài tập về nhà."
+        }
+      ],
+      "luuY": [
+        "Lỗi người Việt hay mắc: thêm -s hoặc a / an cho danh từ không đếm được → sai: a money, two breads, homeworks, informations. Đúng: some money, two pieces of bread, homework, information.",
+        "Một số từ đếm được trong tiếng Việt nhưng không đếm được trong tiếng Anh: advice, furniture, news, hair (tóc nói chung).",
+        "News có s nhưng là không đếm được: The news is good."
+      ],
+      "soSanh": [
+        "en-a1-danh-tu-so-nhieu",
+        "en-a1-how-much-many"
+      ],
+      "tuKhoa": [
+        "countable uncountable",
+        "đếm được",
+        "không đếm được",
+        "a glass of",
+        "danh tu khong dem duoc"
+      ],
+      "quiz": [
+        {
+          "h": "Từ nào là danh từ KHÔNG đếm được?",
+          "lc": [
+            "apple",
+            "chair",
+            "money",
+            "student"
+          ],
+          "da": 2,
+          "gt": "Money không đếm được: không nói a money hay two moneys."
+        },
+        {
+          "h": "I'd like ___ of tea, please.",
+          "lc": [
+            "a cup",
+            "a",
+            "two",
+            "an"
+          ],
+          "da": 0,
+          "gt": "Tea không đếm được, muốn đếm phải dùng đơn vị: a cup of tea."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "I have many homeworks.",
+            "I have a lot of homework.",
+            "I have a homework.",
+            "I have two homeworks."
+          ],
+          "da": 1,
+          "gt": "Homework không đếm được nên không thêm s, không dùng a hay số đếm."
+        }
+      ]
+    },
+    {
+      "id": "en-a1-some-any",
+      "nhom": "Danh từ – mạo từ",
+      "tieuDe": "some / any",
+      "mau": "some + N (câu khẳng định) · any + N (câu phủ định, câu hỏi)",
+      "nghia": "một vài, một ít (some) · … nào, chút … nào (any)",
+      "giaiThich": "Some và any đứng trước danh từ số nhiều hoặc danh từ không đếm được để nói một lượng không xác định. Some thường dùng trong câu khẳng định, any dùng trong câu phủ định và câu hỏi. Khi mời hoặc xin thứ gì, câu hỏi vẫn dùng some.",
+      "cachGhep": [
+        "Khẳng định: There are some eggs. / I have some money.",
+        "Phủ định: There aren't any eggs. / I don't have any money.",
+        "Câu hỏi: Are there any eggs? / Do you have any money?",
+        "Lời mời, lời xin: Would you like some tea? / Can I have some water?"
+      ],
+      "viDu": [
+        {
+          "c": "I need some new shoes.",
+          "v": "Tôi cần một đôi giày mới."
+        },
+        {
+          "c": "We don't have any milk.",
+          "v": "Chúng ta không còn chút sữa nào."
+        },
+        {
+          "c": "Do you have any brothers or sisters?",
+          "v": "Bạn có anh chị em nào không?"
+        },
+        {
+          "c": "Would you like some coffee?",
+          "v": "Bạn có muốn uống chút cà phê không?"
+        }
+      ],
+      "luuY": [
+        "Lỗi hay mắc: dùng some trong câu phủ định → sai: I don't have some money. Đúng: I don't have any money.",
+        "Với danh từ đếm được số ít dùng a / an, không dùng some: I have a pen (không nói some pen).",
+        "Sau some / any, danh từ đếm được phải ở số nhiều: some books, any questions."
+      ],
+      "soSanh": [
+        "en-a1-a-an",
+        "en-a1-there-is-are"
+      ],
+      "tuKhoa": [
+        "some any",
+        "một vài",
+        "một ít",
+        "lượng từ",
+        "some va any"
+      ],
+      "quiz": [
+        {
+          "h": "There isn't ___ sugar in my coffee.",
+          "lc": [
+            "some",
+            "a",
+            "any",
+            "many"
+          ],
+          "da": 2,
+          "gt": "Câu phủ định với danh từ không đếm được dùng any."
+        },
+        {
+          "h": "I have ___ friends in Da Nang.",
+          "lc": [
+            "any",
+            "some",
+            "a",
+            "an"
+          ],
+          "da": 1,
+          "gt": "Câu khẳng định với danh từ số nhiều dùng some."
+        },
+        {
+          "h": "I'd like ___ orange juice, please.",
+          "lc": [
+            "some",
+            "any",
+            "many",
+            "a"
+          ],
+          "da": 0,
+          "gt": "Câu khẳng định với danh từ không đếm được (juice) dùng some; any dùng cho phủ định và câu hỏi."
+        }
+      ]
+    },
+    {
+      "id": "en-a1-have-got",
+      "nhom": "Các thì",
+      "tieuDe": "have / have got",
+      "mau": "S + have / has (+ got) + danh từ",
+      "nghia": "có (sở hữu, quan hệ gia đình, đặc điểm, bệnh)",
+      "giaiThich": "Have và have got cùng nghĩa “có” khi nói về vật sở hữu, người thân, đặc điểm ngoại hình hay bệnh. Have got phổ biến trong tiếng Anh–Anh thân mật; have dùng được ở mọi nơi. Hai dạng tạo câu phủ định và câu hỏi khác nhau, không trộn lẫn.",
+      "cachGhep": [
+        "have: I / you / we / they have · he / she / it has",
+        "have – phủ định, câu hỏi dùng do / does: I don't have… / Does she have…?",
+        "have got: I've got · she's got – phủ định: haven't got / hasn't got – câu hỏi: Have you got…? / Has she got…?"
+      ],
+      "viDu": [
+        {
+          "c": "I have two sisters.",
+          "v": "Tôi có hai chị gái."
+        },
+        {
+          "c": "She has got long black hair.",
+          "v": "Cô ấy có mái tóc đen dài."
+        },
+        {
+          "c": "He doesn't have a car.",
+          "v": "Anh ấy không có ô tô."
+        },
+        {
+          "c": "Have you got a pen?",
+          "v": "Bạn có bút không?"
+        }
+      ],
+      "luuY": [
+        "Lỗi rất hay mắc: quên đổi have thành has với he / she / it → sai: She have a dog. Đúng: She has a dog.",
+        "Không trộn hai dạng: sai Do you have got…? / She doesn't has. Đúng: Do you have…? hoặc Have you got…?; She doesn't have.",
+        "“Có” chỉ sự tồn tại ở một nơi thì dùng there is / there are, không dùng have.",
+        "Nói tuổi không dùng have: I am 20."
+      ],
+      "soSanh": [
+        "en-a1-there-is-are",
+        "en-a1-to-be-khang-dinh"
+      ],
+      "tuKhoa": [
+        "have got",
+        "has got",
+        "have has",
+        "có sở hữu",
+        "i've got"
+      ],
+      "quiz": [
+        {
+          "h": "My brother ___ a new bike.",
+          "lc": [
+            "have",
+            "has",
+            "is",
+            "are"
+          ],
+          "da": 1,
+          "gt": "My brother = he nên dùng has."
+        },
+        {
+          "h": "___ you got any pets?",
+          "lc": [
+            "Do",
+            "Are",
+            "Does",
+            "Have"
+          ],
+          "da": 3,
+          "gt": "Câu hỏi của have got đảo have lên trước: Have you got…?"
+        },
+        {
+          "h": "She ___ have a phone.",
+          "lc": [
+            "doesn't",
+            "don't",
+            "hasn't",
+            "isn't"
+          ],
+          "da": 0,
+          "gt": "Phủ định của have (không có got) với she dùng doesn't + have."
+        }
+      ]
+    },
+    {
+      "id": "en-a1-present-simple",
+      "nhom": "Các thì",
+      "tieuDe": "Present simple: khẳng định (thêm -s / -es ngôi ba)",
+      "mau": "I / You / We / They + V · He / She / It + V-s / V-es",
+      "nghia": "thì hiện tại đơn: thói quen, sự thật, việc lặp lại",
+      "giaiThich": "Dùng hiện tại đơn cho thói quen, việc xảy ra thường xuyên, sự thật luôn đúng và lịch cố định. Với chủ ngữ ngôi thứ ba số ít (he, she, it, một người, một vật), động từ phải thêm -s hoặc -es; các ngôi khác giữ nguyên động từ.",
+      "cachGhep": [
+        "Thường: + s (work → works, play → plays, live → lives)",
+        "Tận cùng s, ss, sh, ch, x, o: + es (watch → watches, go → goes, do → does, wash → washes)",
+        "Phụ âm + y: đổi y → ies (study → studies, fly → flies); nguyên âm + y: + s (play → plays)",
+        "Bất quy tắc: have → has"
+      ],
+      "viDu": [
+        {
+          "c": "I get up at six every day.",
+          "v": "Ngày nào tôi cũng dậy lúc sáu giờ."
+        },
+        {
+          "c": "My father works in a bank.",
+          "v": "Bố tôi làm việc ở ngân hàng."
+        },
+        {
+          "c": "She goes to school by bus.",
+          "v": "Cô ấy đi học bằng xe buýt."
+        },
+        {
+          "c": "The sun rises in the east.",
+          "v": "Mặt trời mọc ở phía đông."
+        }
+      ],
+      "luuY": [
+        "Lỗi số một của người Việt: quên -s / -es ở ngôi ba số ít vì tiếng Việt không chia động từ → sai: He work here / My mother cook dinner. Đúng: He works here / My mother cooks dinner.",
+        "Không thêm to be trước động từ thường: sai I am go to school / She is like cats. Đúng: I go to school / She likes cats.",
+        "Chỉ thêm -s cho ngôi ba SỐ ÍT: They work (không nói They works)."
+      ],
+      "soSanh": [
+        "en-a1-present-continuous",
+        "en-a1-present-simple-phu-dinh",
+        "en-a2-hien-tai-don-vs-tiep-dien"
+      ],
+      "tuKhoa": [
+        "present simple",
+        "hiện tại đơn",
+        "thêm s es",
+        "ngôi thứ ba số ít",
+        "hien tai don"
+      ],
+      "quiz": [
+        {
+          "h": "My sister ___ English at university.",
+          "lc": [
+            "study",
+            "studys",
+            "studies",
+            "is study"
+          ],
+          "da": 2,
+          "gt": "My sister = she; study tận cùng phụ âm + y nên đổi thành studies."
+        },
+        {
+          "h": "They ___ football every Sunday.",
+          "lc": [
+            "play",
+            "plays",
+            "is play",
+            "playes"
+          ],
+          "da": 0,
+          "gt": "They là số nhiều nên động từ giữ nguyên: play."
+        },
+        {
+          "h": "He ___ TV after dinner.",
+          "lc": [
+            "watch",
+            "watchs",
+            "is watch",
+            "watches"
+          ],
+          "da": 3,
+          "gt": "He + động từ tận cùng ch → thêm es: watches."
+        }
+      ]
+    },
+    {
+      "id": "en-a1-present-simple-phu-dinh",
+      "nhom": "Các thì",
+      "tieuDe": "Present simple: phủ định (don't / doesn't)",
+      "mau": "S + don't / doesn't + V nguyên mẫu",
+      "nghia": "không (làm gì) — phủ định ở hiện tại đơn",
+      "giaiThich": "Để phủ định động từ thường ở hiện tại đơn, dùng trợ động từ do / does + not rồi đến động từ NGUYÊN MẪU. Does đã mang dấu hiệu ngôi ba nên động từ chính không thêm -s nữa.",
+      "cachGhep": [
+        "I / You / We / They + do not (don't) + V",
+        "He / She / It + does not (doesn't) + V (không thêm s)",
+        "Với to be thì không dùng do: She isn't tired."
+      ],
+      "viDu": [
+        {
+          "c": "I don't like coffee.",
+          "v": "Tôi không thích cà phê."
+        },
+        {
+          "c": "He doesn't live in Hanoi.",
+          "v": "Anh ấy không sống ở Hà Nội."
+        },
+        {
+          "c": "We don't work on Sundays.",
+          "v": "Chúng tôi không làm việc vào Chủ nhật."
+        },
+        {
+          "c": "My grandmother doesn't use a smartphone.",
+          "v": "Bà tôi không dùng điện thoại thông minh."
+        }
+      ],
+      "luuY": [
+        "Lỗi hay mắc: dùng not trực tiếp với động từ theo kiểu tiếng Việt “không thích” → sai: I not like / I no like coffee. Đúng: I don't like coffee.",
+        "Sau doesn't động từ về nguyên mẫu: sai She doesn't likes. Đúng: She doesn't like.",
+        "Ngôi ba số ít dùng doesn't, không dùng don't: sai He don't know."
+      ],
+      "soSanh": [
+        "en-a1-to-be-phu-dinh",
+        "en-a1-present-simple-cau-hoi"
+      ],
+      "tuKhoa": [
+        "don't doesn't",
+        "do not",
+        "phủ định hiện tại đơn",
+        "does not",
+        "khong lam"
+      ],
+      "quiz": [
+        {
+          "h": "She ___ eat meat.",
+          "lc": [
+            "don't",
+            "isn't",
+            "doesn't",
+            "not"
+          ],
+          "da": 2,
+          "gt": "She là ngôi ba số ít nên phủ định dùng doesn't + V."
+        },
+        {
+          "h": "My parents ___ speak English.",
+          "lc": [
+            "don't",
+            "doesn't",
+            "aren't",
+            "not"
+          ],
+          "da": 0,
+          "gt": "My parents = they nên dùng don't."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "He doesn't works here.",
+            "He doesn't work here.",
+            "He don't work here.",
+            "He not work here."
+          ],
+          "da": 1,
+          "gt": "He đi với doesn't và động từ sau đó giữ nguyên mẫu: work."
+        }
+      ]
+    },
+    {
+      "id": "en-a1-present-simple-cau-hoi",
+      "nhom": "Các thì",
+      "tieuDe": "Present simple: câu hỏi (Do / Does …?)",
+      "mau": "Do / Does + S + V nguyên mẫu?  →  Yes, S + do / does. / No, S + don't / doesn't.",
+      "nghia": "… có (làm gì) không? — câu hỏi ở hiện tại đơn",
+      "giaiThich": "Để hỏi với động từ thường ở hiện tại đơn, đặt Do hoặc Does trước chủ ngữ, động từ chính ở dạng nguyên mẫu. Câu hỏi có từ để hỏi thì từ để hỏi đứng trước do / does.",
+      "cachGhep": [
+        "Do + I / you / we / they + V?",
+        "Does + he / she / it + V? (động từ không thêm s)",
+        "Từ để hỏi + do / does + S + V? (Where do you live?)",
+        "Trả lời ngắn: Yes, I do. / No, she doesn't."
+      ],
+      "viDu": [
+        {
+          "c": "Do you like pop music?",
+          "v": "Bạn có thích nhạc pop không?"
+        },
+        {
+          "c": "Does your brother play tennis? - Yes, he does.",
+          "v": "Anh trai bạn có chơi quần vợt không? - Có."
+        },
+        {
+          "c": "What time do you start work?",
+          "v": "Mấy giờ bạn bắt đầu làm việc?"
+        },
+        {
+          "c": "Where does she live?",
+          "v": "Cô ấy sống ở đâu?"
+        }
+      ],
+      "luuY": [
+        "Lỗi hay mắc: bỏ trợ động từ → sai: You like music? / Where you live? Đúng: Do you like music? / Where do you live?",
+        "Sau does động từ không thêm s: sai Does she likes…? Đúng: Does she like…?",
+        "Không dùng to be thay do: sai Are you like music? Đúng: Do you like music?"
+      ],
+      "soSanh": [
+        "en-a1-to-be-cau-hoi",
+        "en-a1-cau-hoi-wh"
+      ],
+      "tuKhoa": [
+        "do you",
+        "does he",
+        "câu hỏi hiện tại đơn",
+        "do does",
+        "cau hoi do does"
+      ],
+      "quiz": [
+        {
+          "h": "___ your mother work in a hospital?",
+          "lc": [
+            "Do",
+            "Is",
+            "Are",
+            "Does"
+          ],
+          "da": 3,
+          "gt": "Your mother = she và work là động từ thường nên dùng Does."
+        },
+        {
+          "h": "Do they live near here? - No, they ___.",
+          "lc": [
+            "doesn't",
+            "don't",
+            "aren't",
+            "not"
+          ],
+          "da": 1,
+          "gt": "Trả lời ngắn lặp lại trợ động từ: No, they don't."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "What does he do?",
+            "What does he does?",
+            "What he does?",
+            "What do he do?"
+          ],
+          "da": 0,
+          "gt": "Từ để hỏi + does + he + V nguyên mẫu: What does he do?"
+        }
+      ]
+    },
+    {
+      "id": "en-a1-trang-tu-tan-suat",
+      "nhom": "Các thì",
+      "tieuDe": "Trạng từ tần suất: always, usually, often, sometimes, never",
+      "mau": "S + trạng từ tần suất + V · S + to be + trạng từ tần suất",
+      "nghia": "luôn luôn, thường xuyên, thường, thỉnh thoảng, không bao giờ",
+      "giaiThich": "Trạng từ tần suất cho biết một việc xảy ra thường xuyên đến mức nào, hay đi với thì hiện tại đơn. Vị trí của nó cố định: đứng TRƯỚC động từ thường nhưng đứng SAU to be.",
+      "cachGhep": [
+        "Mức độ giảm dần: always (100%) > usually > often > sometimes > hardly ever > never (0%)",
+        "Trước động từ thường: I usually walk to school.",
+        "Sau to be: She is always late.",
+        "Phủ định, câu hỏi: đứng sau don't / doesn't và sau chủ ngữ: I don't often cook. / Do you often cook?",
+        "Hỏi tần suất: How often do you…?"
+      ],
+      "viDu": [
+        {
+          "c": "I always have breakfast at home.",
+          "v": "Tôi luôn ăn sáng ở nhà."
+        },
+        {
+          "c": "He is never late for class.",
+          "v": "Anh ấy không bao giờ đi học muộn."
+        },
+        {
+          "c": "We sometimes go to the cinema on Saturdays.",
+          "v": "Thỉnh thoảng chúng tôi đi xem phim vào thứ Bảy."
+        },
+        {
+          "c": "How often do you visit your grandparents?",
+          "v": "Bạn thăm ông bà thường xuyên thế nào?"
+        }
+      ],
+      "luuY": [
+        "Lỗi hay mắc: đặt sai vị trí → sai: I go always to school by bus / She always is late. Đúng: I always go… / She is always late.",
+        "Never đã mang nghĩa phủ định nên không dùng thêm not: sai I don't never smoke. Đúng: I never smoke.",
+        "Có trạng từ tần suất vẫn phải chia -s ngôi ba: She usually gets up early."
+      ],
+      "tuKhoa": [
+        "always usually often",
+        "sometimes never",
+        "trạng từ tần suất",
+        "how often",
+        "adverbs of frequency"
+      ],
+      "quiz": [
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "She late is always.",
+            "She always is late.",
+            "She is late always.",
+            "She is always late."
+          ],
+          "da": 3,
+          "gt": "Trạng từ tần suất đứng SAU to be: is always."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "I usually drink tea in the morning.",
+            "I drink usually tea in the morning.",
+            "I drink tea usually in the morning.",
+            "Usually I tea drink in the morning."
+          ],
+          "da": 0,
+          "gt": "Trạng từ tần suất đứng TRƯỚC động từ thường: usually drink."
+        },
+        {
+          "h": "Tom doesn't like fish. He ___ eats it.",
+          "lc": [
+            "always",
+            "never",
+            "often",
+            "usually"
+          ],
+          "da": 1,
+          "gt": "Không thích cá nên không bao giờ ăn: never."
+        }
+      ]
+    },
+    {
+      "id": "en-a1-present-continuous",
+      "nhom": "Các thì",
+      "tieuDe": "Present continuous (cơ bản)",
+      "mau": "S + am / is / are + V-ing",
+      "nghia": "đang (làm gì) — việc đang diễn ra lúc nói",
+      "giaiThich": "Dùng hiện tại tiếp diễn cho việc đang xảy ra ngay lúc nói hoặc quanh thời điểm hiện tại, thường có now, at the moment, Look!, Listen!. Cấu trúc luôn gồm HAI phần: to be chia theo chủ ngữ và động từ thêm -ing.",
+      "cachGhep": [
+        "Thường: + ing (read → reading, play → playing)",
+        "Tận cùng e câm: bỏ e + ing (write → writing, come → coming)",
+        "Một nguyên âm + một phụ âm cuối (từ một âm tiết): gấp đôi phụ âm (run → running, sit → sitting, swim → swimming)",
+        "Phủ định: am not / isn't / aren't + V-ing · Câu hỏi: Am / Is / Are + S + V-ing?"
+      ],
+      "viDu": [
+        {
+          "c": "I am reading a book now.",
+          "v": "Bây giờ tôi đang đọc sách."
+        },
+        {
+          "c": "Look! It's raining.",
+          "v": "Nhìn kìa! Trời đang mưa."
+        },
+        {
+          "c": "They aren't watching TV at the moment.",
+          "v": "Lúc này họ không xem ti vi."
+        },
+        {
+          "c": "What are you doing?",
+          "v": "Bạn đang làm gì vậy?"
+        }
+      ],
+      "luuY": [
+        "Lỗi rất hay mắc: thiếu to be hoặc thiếu -ing → sai: I reading a book / I am read a book. Đúng: I am reading a book.",
+        "Thói quen hằng ngày dùng hiện tại đơn, không dùng tiếp diễn: I go to school every day (không nói I am going to school every day).",
+        "Từ “đang” trong tiếng Việt = to be + V-ing, không có từ riêng để dịch."
+      ],
+      "soSanh": [
+        "en-a1-present-simple",
+        "en-a2-hien-tai-don-vs-tiep-dien"
+      ],
+      "tuKhoa": [
+        "present continuous",
+        "hiện tại tiếp diễn",
+        "v-ing",
+        "đang làm",
+        "am is are ing"
+      ],
+      "quiz": [
+        {
+          "h": "Listen! The baby ___.",
+          "lc": [
+            "cry",
+            "is crying",
+            "crying",
+            "cries"
+          ],
+          "da": 1,
+          "gt": "Listen! báo hiệu việc đang diễn ra: is + crying."
+        },
+        {
+          "h": "We ___ dinner now.",
+          "lc": [
+            "are having",
+            "having",
+            "are have",
+            "has"
+          ],
+          "da": 0,
+          "gt": "Now + chủ ngữ we: are + having (bỏ e thêm ing)."
+        },
+        {
+          "h": "Dạng -ing đúng của swim là:",
+          "lc": [
+            "swiming",
+            "swimeing",
+            "swimming",
+            "swimmming"
+          ],
+          "da": 2,
+          "gt": "Swim có một nguyên âm + một phụ âm cuối nên gấp đôi m: swimming."
+        }
+      ]
+    },
+    {
+      "id": "en-a1-was-were",
+      "nhom": "Các thì",
+      "tieuDe": "to be ở quá khứ: was / were",
+      "mau": "I / He / She / It + was · You / We / They + were",
+      "nghia": "đã là, đã ở, (hồi đó) thì…",
+      "giaiThich": "Was và were là dạng quá khứ của am / is / are, dùng để nói ai đó hoặc cái gì đã như thế nào, ở đâu tại một thời điểm trong quá khứ (yesterday, last night, in 2020, … ago). Phủ định thêm not, câu hỏi đảo was / were lên trước chủ ngữ.",
+      "cachGhep": [
+        "am / is → was · are → were",
+        "Phủ định: was not (wasn't) · were not (weren't)",
+        "Câu hỏi: Was / Were + S + …?  →  Yes, I was. / No, they weren't.",
+        "Ngày sinh: I was born in 2005."
+      ],
+      "viDu": [
+        {
+          "c": "I was at home last night.",
+          "v": "Tối qua tôi ở nhà."
+        },
+        {
+          "c": "The weather was beautiful yesterday.",
+          "v": "Hôm qua thời tiết rất đẹp."
+        },
+        {
+          "c": "They weren't at school on Monday.",
+          "v": "Thứ Hai họ không có mặt ở trường."
+        },
+        {
+          "c": "Were you tired after the trip?",
+          "v": "Sau chuyến đi bạn có mệt không?"
+        }
+      ],
+      "luuY": [
+        "Lỗi người Việt hay mắc: không chia thì, dùng is / are cho quá khứ vì tiếng Việt chỉ thêm “hôm qua” → sai: Yesterday I am tired. Đúng: Yesterday I was tired.",
+        "You luôn đi với were, kể cả khi chỉ một người: You were late.",
+        "Không dùng did với was / were: sai Did you were at home? Đúng: Were you at home?",
+        "“Sinh ra” là was / were born, không nói I born in 2005."
+      ],
+      "soSanh": [
+        "en-a1-to-be-khang-dinh"
+      ],
+      "tuKhoa": [
+        "was were",
+        "to be quá khứ",
+        "wasn't weren't",
+        "was born",
+        "qua khu cua to be"
+      ],
+      "quiz": [
+        {
+          "h": "We ___ very happy yesterday.",
+          "lc": [
+            "was",
+            "are",
+            "were",
+            "is"
+          ],
+          "da": 2,
+          "gt": "Yesterday là quá khứ và chủ ngữ we đi với were."
+        },
+        {
+          "h": "My father ___ a student in 1995.",
+          "lc": [
+            "was",
+            "were",
+            "is",
+            "be"
+          ],
+          "da": 0,
+          "gt": "In 1995 là quá khứ; my father = he đi với was."
+        },
+        {
+          "h": "___ she at the party last night?",
+          "lc": [
+            "Were",
+            "Did",
+            "Is",
+            "Was"
+          ],
+          "da": 3,
+          "gt": "Câu hỏi to be quá khứ với she: Was she…?"
+        }
+      ]
+    },
+    {
+      "id": "en-a1-trat-tu-svo",
+      "nhom": "Cấu trúc câu",
+      "tieuDe": "Trật tự từ cơ bản: S + V + O",
+      "mau": "Chủ ngữ + động từ + tân ngữ (+ nơi chốn) (+ thời gian)",
+      "nghia": "thứ tự các thành phần trong câu kể",
+      "giaiThich": "Câu kể tiếng Anh có trật tự khá cố định: chủ ngữ, rồi động từ, rồi tân ngữ. Thông tin về nơi chốn thường đứng trước thời gian, và cả hai đứng cuối câu. Động từ và tân ngữ đi liền nhau, không chen trạng ngữ vào giữa.",
+      "cachGhep": [
+        "S + V + O: I like music.",
+        "S + V + O + nơi chốn + thời gian: I play football in the park every Sunday.",
+        "Thời gian có thể lên đầu câu: Every Sunday, I play football in the park.",
+        "Mỗi câu cần đủ chủ ngữ và động từ; không bỏ chủ ngữ như tiếng Việt"
+      ],
+      "viDu": [
+        {
+          "c": "My mother cooks dinner every evening.",
+          "v": "Tối nào mẹ tôi cũng nấu bữa tối."
+        },
+        {
+          "c": "We study English at school on Mondays.",
+          "v": "Chúng tôi học tiếng Anh ở trường vào các ngày thứ Hai."
+        },
+        {
+          "c": "I like this song very much.",
+          "v": "Tôi rất thích bài hát này."
+        },
+        {
+          "c": "He doesn't drink coffee in the evening.",
+          "v": "Anh ấy không uống cà phê vào buổi tối."
+        }
+      ],
+      "luuY": [
+        "Lỗi kinh điển của người Việt: dịch từng chữ “Tôi rất thích…” → I very like this song. Đúng: I like this song very much / I really like this song.",
+        "Không tách động từ và tân ngữ: sai I like very much this song / She speaks very well English. Đúng: She speaks English very well.",
+        "Nơi chốn đứng trước thời gian: I go to school at seven (không nói I go at seven to school)."
+      ],
+      "soSanh": [
+        "en-a1-very-too"
+      ],
+      "tuKhoa": [
+        "word order",
+        "trật tự từ",
+        "s v o",
+        "i very like",
+        "thu tu tu trong cau"
+      ],
+      "quiz": [
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "I very like ice cream.",
+            "I like very much ice cream.",
+            "I like ice cream very much.",
+            "Very I like ice cream."
+          ],
+          "da": 2,
+          "gt": "Tân ngữ đứng ngay sau động từ, very much đứng cuối câu."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "She speaks English very well.",
+            "She speaks very well English.",
+            "She very well speaks English.",
+            "She English speaks very well."
+          ],
+          "da": 0,
+          "gt": "Động từ + tân ngữ đi liền nhau, trạng ngữ very well đứng sau."
+        },
+        {
+          "h": "Sắp xếp đúng: (at six / home / goes / he)",
+          "lc": [
+            "He goes at six home.",
+            "He goes home at six.",
+            "He at six goes home.",
+            "Goes he home at six."
+          ],
+          "da": 1,
+          "gt": "Nơi chốn (home) đứng trước thời gian (at six), cả hai sau động từ."
+        }
+      ]
+    },
+    {
+      "id": "en-a1-menh-lenh",
+      "nhom": "Cấu trúc câu",
+      "tieuDe": "Câu mệnh lệnh",
+      "mau": "V nguyên mẫu + … · Don't + V nguyên mẫu + …",
+      "nghia": "hãy (làm gì) · đừng (làm gì)",
+      "giaiThich": "Dùng câu mệnh lệnh để ra lệnh, hướng dẫn, chỉ đường, đưa lời khuyên hoặc lời mời. Câu bắt đầu ngay bằng động từ nguyên mẫu, không có chủ ngữ. Thêm please để lịch sự hơn.",
+      "cachGhep": [
+        "Khẳng định: V nguyên mẫu (Open the door. / Sit down.)",
+        "Phủ định: Don't + V (Don't run. / Don't be late.)",
+        "Với tính từ dùng Be: Be quiet! / Be careful!",
+        "Lịch sự: Please + V… hoặc V…, please."
+      ],
+      "viDu": [
+        {
+          "c": "Open your books, please.",
+          "v": "Các em hãy mở sách ra."
+        },
+        {
+          "c": "Don't touch that! It's hot.",
+          "v": "Đừng chạm vào cái đó! Nó nóng đấy."
+        },
+        {
+          "c": "Turn left at the bank.",
+          "v": "Rẽ trái ở chỗ ngân hàng."
+        },
+        {
+          "c": "Be careful! The floor is wet.",
+          "v": "Cẩn thận! Sàn nhà ướt đấy."
+        }
+      ],
+      "luuY": [
+        "Lỗi hay mắc: phủ định bằng no / not → sai: No talk / Not run here. Đúng: Don't talk / Don't run here.",
+        "Động từ luôn ở nguyên mẫu, không thêm to, -s hay -ing: sai To open the door / Opens the door.",
+        "Với tính từ phải có be: Be quiet! / Don't be late (không nói Don't late)."
+      ],
+      "soSanh": [
+        "en-a1-lets"
+      ],
+      "tuKhoa": [
+        "imperative",
+        "câu mệnh lệnh",
+        "don't",
+        "hãy đừng",
+        "menh lenh"
+      ],
+      "quiz": [
+        {
+          "h": "___ late for school!",
+          "lc": [
+            "Don't",
+            "Not be",
+            "No be",
+            "Don't be"
+          ],
+          "da": 3,
+          "gt": "Late là tính từ nên mệnh lệnh phủ định là Don't be + tính từ."
+        },
+        {
+          "h": "___ down, please.",
+          "lc": [
+            "Sit",
+            "Sits",
+            "To sit",
+            "Sitting"
+          ],
+          "da": 0,
+          "gt": "Câu mệnh lệnh bắt đầu bằng động từ nguyên mẫu không to."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "Not open the window.",
+            "No open the window.",
+            "Don't open the window.",
+            "Doesn't open the window."
+          ],
+          "da": 2,
+          "gt": "Mệnh lệnh phủ định luôn dùng Don't + V nguyên mẫu."
+        }
+      ]
+    },
+    {
+      "id": "en-a1-lets",
+      "nhom": "Cấu trúc câu",
+      "tieuDe": "Let's + V",
+      "mau": "Let's + V nguyên mẫu · Let's not + V nguyên mẫu",
+      "nghia": "chúng ta hãy (cùng làm gì) nhé — lời rủ, đề xuất",
+      "giaiThich": "Let's (= let us) dùng để rủ người nghe cùng làm một việc với mình. Sau let's là động từ nguyên mẫu không to. Để đồng ý thường đáp OK, Good idea hoặc Yes, let's.",
+      "cachGhep": [
+        "Let's + V: Let's go. / Let's have lunch.",
+        "Phủ định: Let's not + V: Let's not stay here.",
+        "Trả lời: OK. / Good idea. / Sorry, I can't."
+      ],
+      "viDu": [
+        {
+          "c": "Let's go to the beach this weekend.",
+          "v": "Cuối tuần này chúng ta đi biển nhé."
+        },
+        {
+          "c": "It's late. Let's take a taxi.",
+          "v": "Muộn rồi. Chúng ta đi taxi đi."
+        },
+        {
+          "c": "Let's not watch this film. It's boring.",
+          "v": "Mình đừng xem phim này. Nó chán lắm."
+        },
+        {
+          "c": "Let's have a coffee after class.",
+          "v": "Sau giờ học mình đi uống cà phê nhé."
+        }
+      ],
+      "luuY": [
+        "Lỗi hay mắc: thêm to hoặc -ing sau let's → sai: Let's to go / Let's going. Đúng: Let's go.",
+        "Let's luôn bao gồm cả người nói; muốn bảo người khác làm thì dùng câu mệnh lệnh: Go home.",
+        "Viết có dấu nháy: Let's (lets không có nháy là động từ let chia ngôi ba)."
+      ],
+      "soSanh": [
+        "en-a1-menh-lenh"
+      ],
+      "tuKhoa": [
+        "let's",
+        "lets go",
+        "rủ rê",
+        "đề nghị cùng làm",
+        "let us"
+      ],
+      "quiz": [
+        {
+          "h": "I'm hungry. Let's ___ something.",
+          "lc": [
+            "to eat",
+            "eat",
+            "eating",
+            "eats"
+          ],
+          "da": 1,
+          "gt": "Sau Let's là động từ nguyên mẫu không to: eat."
+        },
+        {
+          "h": "It's raining. ___ go out.",
+          "lc": [
+            "Let's not",
+            "Let's don't",
+            "Not let's",
+            "Let's no"
+          ],
+          "da": 0,
+          "gt": "Phủ định của Let's là Let's not + V."
+        },
+        {
+          "h": "Câu nào là lời rủ cùng làm?",
+          "lc": [
+            "Play football.",
+            "Don't play football.",
+            "Let's play football.",
+            "He plays football."
+          ],
+          "da": 2,
+          "gt": "Let's + V là lời rủ người nghe cùng làm với mình."
+        }
+      ]
+    }
+  ]
+}

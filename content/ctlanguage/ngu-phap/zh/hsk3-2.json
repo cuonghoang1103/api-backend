@@ -1,0 +1,1172 @@
+{
+  "nn": "zh",
+  "cap": "HSK3",
+  "diem": [
+    {
+      "id": "zh-hsk3-ba-co-ban",
+      "nhom": "Câu đặc biệt (把 / 被)",
+      "tieuDe": "Câu chữ 把 (cơ bản)",
+      "mau": "S + 把 + O + V + thành phần khác",
+      "nghia": "đem / lấy O ra mà xử lý: làm gì đó với O và có kết quả",
+      "giaiThich": "Câu chữ 把 đưa tân ngữ lên trước động từ để nhấn mạnh chủ thể xử lý vật đó như thế nào và kết quả ra sao. Dùng khi tân ngữ là vật đã xác định và hành động làm vật đó thay đổi (xong, hết, sạch, đổi chỗ…). Sau động từ bắt buộc phải có thêm thành phần khác: 了, bổ ngữ, động từ lặp lại…",
+      "cachGhep": [
+        "S + 把 + O + V + 了 / bổ ngữ kết quả / bổ ngữ xu hướng: 把作业做完了, 把门关上",
+        "Phủ định, phó từ, động từ năng nguyện đứng TRƯỚC 把: 没把…, 别把…, 应该把…",
+        "Không dùng với động từ không 'xử lý' được vật: 是, 有, 在, 喜欢, 知道, 觉得, 来, 去"
+      ],
+      "viDu": [
+        {
+          "c": "我把作业做完了。",
+          "d": "Wǒ bǎ zuòyè zuòwán le.",
+          "v": "Tôi làm xong bài tập rồi."
+        },
+        {
+          "c": "请把门关上。",
+          "d": "Qǐng bǎ mén guānshàng.",
+          "v": "Xin đóng cửa lại."
+        },
+        {
+          "c": "他没把这件事告诉妈妈。",
+          "d": "Tā méi bǎ zhè jiàn shì gàosu māma.",
+          "v": "Anh ấy không nói chuyện này cho mẹ biết."
+        },
+        {
+          "c": "你把药吃了吗？",
+          "d": "Nǐ bǎ yào chī le ma?",
+          "v": "Bạn uống thuốc chưa?"
+        }
+      ],
+      "luuY": [
+        "Sau động từ không được để trống: 我把书看 ✗ → 我把书看完了 ✓.",
+        "Lỗi hay gặp của người Việt: đặt 没 / 不 sau 把 (我把手机没带来 ✗ → 我没把手机带来 ✓).",
+        "Tân ngữ của 把 phải xác định: 把那本书… ✓; 把一本书看完了 (một cuốn bất kỳ) ✗."
+      ],
+      "soSanh": [
+        "zh-hsk3-ba-zai-dao-gei-cheng",
+        "zh-hsk3-bei"
+      ],
+      "tuKhoa": [
+        "ba",
+        "ba zi ju",
+        "câu chữ ba",
+        "câu chữ bả",
+        "xử lý"
+      ],
+      "quiz": [
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "我把那本书看。",
+            "我把那本书看完了。",
+            "我看完把那本书了。"
+          ],
+          "da": 1,
+          "gt": "Sau động từ trong câu 把 phải có thành phần khác (完了), và 把 + O đứng trước động từ."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "我把手机没带来。",
+            "我把没手机带来。",
+            "我没把手机带来。"
+          ],
+          "da": 2,
+          "gt": "Từ phủ định 没 phải đứng trước 把."
+        },
+        {
+          "h": "你应该（　）房间打扫干净。",
+          "lc": [
+            "把",
+            "被",
+            "对",
+            "向"
+          ],
+          "da": 0,
+          "gt": "Chủ thể xử lý 房间 cho ra kết quả 干净 → câu chữ 把."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-ba-zai-dao-gei-cheng",
+      "nhom": "Câu đặc biệt (把 / 被)",
+      "tieuDe": "把…放在 / 送到 / 送给 / V成",
+      "mau": "S + 把 + O + V + 在 / 到 / 给 / 成 + nơi chốn / người / kết quả",
+      "nghia": "đặt O ở…, đưa O tới…, đưa O cho…, biến O thành…",
+      "giaiThich": "Khi sau động từ có 在, 到, 给, 成 kèm nơi chốn, người nhận hoặc kết quả mới, tân ngữ không còn chỗ đứng sau động từ nên bắt buộc phải dùng câu chữ 把. Đây là loại câu 把 dùng nhiều nhất trong đời sống: cất đồ, gửi đồ, đổi tiền, dịch…",
+      "cachGhep": [
+        "把 + O + V + 在 + nơi chốn: 把书放在桌子上",
+        "把 + O + V + 到 + nơi chốn: 把他送到机场",
+        "把 + O + V + 给 + người: 把信送给经理",
+        "把 + O + V + 成 + kết quả: 把钱换成人民币"
+      ],
+      "viDu": [
+        {
+          "c": "我把手机放在桌子上了。",
+          "d": "Wǒ bǎ shǒujī fàng zài zhuōzi shang le.",
+          "v": "Tôi để điện thoại trên bàn rồi."
+        },
+        {
+          "c": "请把这封信送给王经理。",
+          "d": "Qǐng bǎ zhè fēng xìn sòng gěi Wáng jīnglǐ.",
+          "v": "Xin đưa bức thư này cho giám đốc Vương."
+        },
+        {
+          "c": "他把我送到了机场。",
+          "d": "Tā bǎ wǒ sòngdào le jīchǎng.",
+          "v": "Anh ấy đã đưa tôi tới sân bay."
+        },
+        {
+          "c": "请把这些钱换成人民币。",
+          "d": "Qǐng bǎ zhèxiē qián huànchéng rénmínbì.",
+          "v": "Xin đổi chỗ tiền này sang nhân dân tệ."
+        }
+      ],
+      "luuY": [
+        "Dịch thẳng từ tiếng Việt 'tôi để sách trên bàn' thành 我放书在桌子上 ✗ là lỗi rất phổ biến; phải nói 我把书放在桌子上.",
+        "在 / 到 / 给 / 成 dính liền sau động từ, không chen 了 vào giữa: 放在了桌子上 ✓, 放了在桌子上 ✗."
+      ],
+      "soSanh": [
+        "zh-hsk3-ba-co-ban"
+      ],
+      "tuKhoa": [
+        "ba fang zai",
+        "ba song gei",
+        "ba huan cheng",
+        "câu chữ ba",
+        "đặt ở",
+        "đưa cho"
+      ],
+      "quiz": [
+        {
+          "h": "请把你的名字写（　）黑板上。",
+          "lc": [
+            "给",
+            "成",
+            "在",
+            "完"
+          ],
+          "da": 2,
+          "gt": "Sau là nơi chốn (黑板上) nên dùng 在: 写在黑板上."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "我放书在桌子上了。",
+            "我把书放在桌子上了。",
+            "我把书在桌子上放了。"
+          ],
+          "da": 1,
+          "gt": "Động từ + 在 + nơi chốn thì tân ngữ phải đưa lên trước bằng 把."
+        },
+        {
+          "h": "我把照片发（　）你了。",
+          "lc": [
+            "给",
+            "在",
+            "成",
+            "开"
+          ],
+          "da": 0,
+          "gt": "Người nhận đứng sau 给: 发给你."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-bei",
+      "nhom": "Câu đặc biệt (把 / 被)",
+      "tieuDe": "Câu chữ 被",
+      "mau": "Người / vật chịu tác động + 被 + (tác nhân) + V + thành phần khác",
+      "nghia": "bị / được (ai đó) làm ~",
+      "giaiThich": "Câu chữ 被 là câu bị động: chủ ngữ là người hay vật chịu tác động của hành động. Sau 被 có thể nêu hoặc lược bỏ tác nhân. Thường dùng cho việc không mong muốn (bị lấy mất, bị ăn hết), nhưng cũng dùng được cho việc trung tính. Sau động từ phải có thành phần khác như 了 hay bổ ngữ.",
+      "cachGhep": [
+        "O + 被 + tác nhân + V + 了 / bổ ngữ: 蛋糕被小狗吃了",
+        "Lược tác nhân: O + 被 + V + …: 自行车被借走了",
+        "Phủ định, phó từ, động từ năng nguyện đứng trước 被: 没被…, 已经被…, 会被…"
+      ],
+      "viDu": [
+        {
+          "c": "蛋糕被小狗吃了。",
+          "d": "Dàngāo bèi xiǎo gǒu chī le.",
+          "v": "Bánh ga tô bị con chó nhỏ ăn mất rồi."
+        },
+        {
+          "c": "我的自行车被借走了。",
+          "d": "Wǒ de zìxíngchē bèi jièzǒu le.",
+          "v": "Xe đạp của tôi bị mượn đi rồi."
+        },
+        {
+          "c": "我的伞没被拿走。",
+          "d": "Wǒ de sǎn méi bèi názǒu.",
+          "v": "Cái ô của tôi không bị lấy đi."
+        },
+        {
+          "c": "你的问题被解决了吗？",
+          "d": "Nǐ de wèntí bèi jiějué le ma?",
+          "v": "Vấn đề của bạn đã được giải quyết chưa?"
+        }
+      ],
+      "luuY": [
+        "Sau động từ không để trống: 鱼被猫吃 ✗ → 鱼被猫吃了 ✓.",
+        "没 đứng trước 被, không đứng trước động từ: 没被拿走 ✓, 被没拿走 ✗.",
+        "Tiếng Việt phân biệt 'bị' và 'được'; tiếng Trung đều dùng 被. Nhiều câu tiếng Việt có 'được' lại không cần 被: 作业做完了 (bài tập làm xong rồi)."
+      ],
+      "soSanh": [
+        "zh-hsk3-jiao-rang-bi-dong",
+        "zh-hsk3-ba-co-ban"
+      ],
+      "tuKhoa": [
+        "bei",
+        "bei zi ju",
+        "câu chữ bei",
+        "câu bị động",
+        "bị",
+        "được"
+      ],
+      "quiz": [
+        {
+          "h": "杯子（　）我打破了。",
+          "lc": [
+            "把",
+            "被",
+            "对",
+            "向"
+          ],
+          "da": 1,
+          "gt": "Chủ ngữ 杯子 là vật chịu tác động, 我 là tác nhân → câu chữ 被."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "我的书被没拿走。",
+            "我的书被拿走没。",
+            "我的书没被拿走。"
+          ],
+          "da": 2,
+          "gt": "Từ phủ định 没 đứng trước 被."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "鱼被猫吃了。",
+            "鱼被猫吃。",
+            "鱼猫被吃了。"
+          ],
+          "da": 0,
+          "gt": "Trật tự: vật chịu tác động + 被 + tác nhân + V + 了; sau động từ cần có thành phần khác."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-jiao-rang-bi-dong",
+      "nhom": "Câu đặc biệt (把 / 被)",
+      "tieuDe": "叫 / 让 (bị động)",
+      "mau": "O + 叫 / 让 + tác nhân + V + thành phần khác",
+      "nghia": "bị (ai đó) làm ~ — cách nói bị động trong khẩu ngữ",
+      "giaiThich": "Trong khẩu ngữ, 叫 và 让 có thể thay 被 để tạo câu bị động. Khác với 被, sau 叫 / 让 bắt buộc phải có tác nhân (ít nhất là 人), không lược bỏ được. Nghĩa và trật tự còn lại giống hệt câu chữ 被.",
+      "cachGhep": [
+        "O + 叫 / 让 + tác nhân + V + 了 / bổ ngữ: 词典叫同学借走了",
+        "Không biết tác nhân thì dùng 人: 自行车叫人骑走了",
+        "Phủ định: 没 + 叫 / 让 + tác nhân + V"
+      ],
+      "viDu": [
+        {
+          "c": "我的词典叫同学借走了。",
+          "d": "Wǒ de cídiǎn jiào tóngxué jièzǒu le.",
+          "v": "Từ điển của tôi bị bạn học mượn đi rồi."
+        },
+        {
+          "c": "蛋糕让弟弟吃完了。",
+          "d": "Dàngāo ràng dìdi chīwán le.",
+          "v": "Bánh ga tô bị em trai ăn hết rồi."
+        },
+        {
+          "c": "我的自行车叫人骑走了。",
+          "d": "Wǒ de zìxíngchē jiào rén qízǒu le.",
+          "v": "Xe đạp của tôi bị người ta đạp đi mất rồi."
+        },
+        {
+          "c": "你的手机是不是让孩子拿去玩了？",
+          "d": "Nǐ de shǒujī shì bu shì ràng háizi ná qù wán le?",
+          "v": "Điện thoại của bạn có phải bị đứa bé lấy đi chơi rồi không?"
+        }
+      ],
+      "luuY": [
+        "Sau 叫 / 让 không được bỏ tác nhân: 我的书叫借走了 ✗ → 我的书叫人借走了 ✓ (với 被 thì bỏ được: 被借走了).",
+        "叫 / 让 còn có nghĩa 'bảo, để cho' (老师让我回答); phải dựa vào ngữ cảnh: chủ ngữ là vật chịu tác động thì là bị động."
+      ],
+      "soSanh": [
+        "zh-hsk3-bei"
+      ],
+      "tuKhoa": [
+        "jiao",
+        "rang",
+        "bị động",
+        "khẩu ngữ",
+        "bei"
+      ],
+      "quiz": [
+        {
+          "h": "Câu nào SAI?",
+          "lc": [
+            "我的书被借走了。",
+            "我的书叫借走了。",
+            "我的书让他借走了。"
+          ],
+          "da": 1,
+          "gt": "Sau 叫 bị động bắt buộc có tác nhân; chỉ 被 mới lược được tác nhân."
+        },
+        {
+          "h": "叫 / 让 mang nghĩa bị động thường dùng ở đâu?",
+          "lc": [
+            "khẩu ngữ hằng ngày",
+            "văn bản trang trọng",
+            "chỉ trong câu hỏi"
+          ],
+          "da": 0,
+          "gt": "叫 / 让 bị động là cách nói của khẩu ngữ; văn viết dùng 被."
+        },
+        {
+          "h": "我的咖啡（　）他喝了。",
+          "lc": [
+            "把",
+            "对",
+            "让",
+            "向"
+          ],
+          "da": 2,
+          "gt": "咖啡 là vật chịu tác động, 他 là tác nhân → dùng 让 (= 被)."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-cau-ton-hien",
+      "nhom": "Câu đặc biệt (把 / 被)",
+      "tieuDe": "Câu tồn hiện (xuất hiện / biến mất)",
+      "mau": "Nơi chốn / thời gian + V + 了 / bổ ngữ + số lượng + N",
+      "nghia": "ở đâu đó / lúc nào đó xuất hiện (hoặc mất đi) người / vật gì",
+      "giaiThich": "Dùng để báo tin có người hay vật mới xuất hiện hoặc rời khỏi một nơi: 我们班来了一位新同学 (lớp tôi có một bạn mới đến). Nơi chốn hoặc thời gian đứng đầu câu, người hay vật xuất hiện đứng SAU động từ và là đối tượng chưa xác định.",
+      "cachGhep": [
+        "Nơi chốn + 来 / 走 / 搬走 / 开过来… + 了 + số lượng + N",
+        "Thời gian + V + 了 + số lượng + N: 昨天来了很多人",
+        "Động từ thường kèm 了 hoặc bổ ngữ xu hướng: 走出来, 开过来"
+      ],
+      "viDu": [
+        {
+          "c": "我们班来了一位新同学。",
+          "d": "Wǒmen bān lái le yí wèi xīn tóngxué.",
+          "v": "Lớp chúng tôi có một bạn học mới đến."
+        },
+        {
+          "c": "前面开过来一辆出租车。",
+          "d": "Qiánmiàn kāi guòlái yí liàng chūzūchē.",
+          "v": "Phía trước có một chiếc taxi chạy tới."
+        },
+        {
+          "c": "昨天家里来了几个客人。",
+          "d": "Zuótiān jiā li lái le jǐ gè kèrén.",
+          "v": "Hôm qua nhà tôi có mấy người khách đến."
+        },
+        {
+          "c": "楼上搬走了一家人。",
+          "d": "Lóu shàng bānzǒu le yì jiā rén.",
+          "v": "Tầng trên có một gia đình chuyển đi rồi."
+        }
+      ],
+      "luuY": [
+        "Người / vật xuất hiện đứng sau động từ và chưa xác định: 家里来了那个客人 ✗. Nếu đã xác định thì nói câu thường: 那个客人来了.",
+        "Đầu câu không cần 在 / 从: 我们班来了… (không nói 在我们班来了…)."
+      ],
+      "soSanh": [
+        "zh-hsk3-ba-co-ban"
+      ],
+      "tuKhoa": [
+        "cunxian ju",
+        "câu tồn hiện",
+        "xuất hiện",
+        "biến mất",
+        "lai le yi ge ren"
+      ],
+      "quiz": [
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "一位新老师来了我们学校。",
+            "我们学校来了一位新老师。",
+            "我们学校一位新老师来了在。"
+          ],
+          "da": 1,
+          "gt": "Câu tồn hiện: nơi chốn + V了 + số lượng + danh từ."
+        },
+        {
+          "h": "教室里走出（　）两个学生。",
+          "lc": [
+            "来",
+            "的",
+            "得",
+            "吗"
+          ],
+          "da": 0,
+          "gt": "Động từ trong câu tồn hiện thường kèm bổ ngữ xu hướng: 走出来 + số lượng + danh từ."
+        },
+        {
+          "h": "Câu nào SAI?",
+          "lc": [
+            "家里来了一个客人。",
+            "昨天来了很多人。",
+            "家里来了那个客人。"
+          ],
+          "da": 2,
+          "gt": "Danh từ sau động từ trong câu tồn hiện phải chưa xác định, không dùng 那个."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-bi-chenh-lech",
+      "nhom": "So sánh",
+      "tieuDe": "比 + mức chênh lệch",
+      "mau": "A + 比 + B + Adj + 一点儿 / 一些 / 得多 / 多了 / số lượng",
+      "nghia": "A ~ hơn B một chút / nhiều / (bao nhiêu)",
+      "giaiThich": "Muốn nói A hơn B bao nhiêu thì đặt phần chênh lệch SAU tính từ: hơn một chút dùng 一点儿 / 一些, hơn nhiều dùng 得多 / 多了, hơn một con số cụ thể thì nêu số lượng (大三岁, 贵二十块).",
+      "cachGhep": [
+        "Hơn ít: A 比 B + Adj + 一点儿 / 一些",
+        "Hơn nhiều: A 比 B + Adj + 得多 / 多了",
+        "Hơn cụ thể: A 比 B + Adj + số lượng — 比我大三岁",
+        "Hỏi: A 比 B + Adj + 多少？",
+        "Phủ định: A 没有 B (那么 / 这么) + Adj"
+      ],
+      "viDu": [
+        {
+          "c": "哥哥比我大三岁。",
+          "d": "Gēge bǐ wǒ dà sān suì.",
+          "v": "Anh trai lớn hơn tôi ba tuổi."
+        },
+        {
+          "c": "今天比昨天冷一点儿。",
+          "d": "Jīntiān bǐ zuótiān lěng yìdiǎnr.",
+          "v": "Hôm nay lạnh hơn hôm qua một chút."
+        },
+        {
+          "c": "坐地铁比坐公共汽车快得多。",
+          "d": "Zuò dìtiě bǐ zuò gōnggòng qìchē kuài de duō.",
+          "v": "Đi tàu điện ngầm nhanh hơn đi xe buýt nhiều."
+        },
+        {
+          "c": "这件比那件贵多少？",
+          "d": "Zhè jiàn bǐ nà jiàn guì duōshao?",
+          "v": "Cái này đắt hơn cái kia bao nhiêu?"
+        }
+      ],
+      "luuY": [
+        "Trong câu 比 không đặt 很 / 非常 / 太 trước tính từ: 他比我很高 ✗ → 他比我高得多 ✓.",
+        "'Hơn một chút' là Adj + 一点儿 (sau tính từ), không phải 有点儿 + Adj.",
+        "Phủ định thường dùng 没有: 我没有他高. Câu 我不比他高 mang nghĩa khác (không hơn, có thể bằng)."
+      ],
+      "soSanh": [
+        "zh-hsk3-gen-yiyang"
+      ],
+      "tuKhoa": [
+        "bi",
+        "de duo",
+        "yidianr",
+        "so sánh hơn",
+        "mức chênh lệch"
+      ],
+      "quiz": [
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "他比我很高。",
+            "他比我高得多。",
+            "他比我非常高。"
+          ],
+          "da": 1,
+          "gt": "Câu 比 không dùng 很 / 非常 trước tính từ; 'hơn nhiều' là Adj + 得多."
+        },
+        {
+          "h": "我比妹妹大（　）。",
+          "lc": [
+            "两岁",
+            "很",
+            "太",
+            "非常"
+          ],
+          "da": 0,
+          "gt": "Mức chênh cụ thể đặt sau tính từ: 大两岁."
+        },
+        {
+          "h": "这个房间比那个大（　）。",
+          "lc": [
+            "有点儿",
+            "比较",
+            "很",
+            "一点儿"
+          ],
+          "da": 3,
+          "gt": "Sau tính từ trong câu 比 dùng 一点儿; 有点儿 chỉ đứng trước tính từ."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-gen-yiyang",
+      "nhom": "So sánh",
+      "tieuDe": "A 跟 B 一样 (+ Adj)",
+      "mau": "A + 跟 / 和 + B + (不) 一样 + (Adj)",
+      "nghia": "A giống B; A ~ bằng B; A không giống B",
+      "giaiThich": "Dùng để nói hai đối tượng giống nhau hoặc ngang nhau về một mặt. Chỉ nói giống nhau thì dừng ở 一样; muốn nói bằng nhau về mặt nào thì thêm tính từ phía sau: 一样高 (cao bằng). Phủ định là 不一样.",
+      "cachGhep": [
+        "A 跟 / 和 B 一样: 我的手机跟你的一样",
+        "A 跟 / 和 B 一样 + Adj / V tâm lý: 跟哥哥一样高, 跟我一样喜欢",
+        "Phủ định: A 跟 B 不一样",
+        "Câu hỏi: A 跟 B 一样吗？ / 一样不一样？"
+      ],
+      "viDu": [
+        {
+          "c": "我的手机跟你的一样。",
+          "d": "Wǒ de shǒujī gēn nǐ de yíyàng.",
+          "v": "Điện thoại của tôi giống của bạn."
+        },
+        {
+          "c": "弟弟跟哥哥一样高。",
+          "d": "Dìdi gēn gēge yíyàng gāo.",
+          "v": "Em trai cao bằng anh trai."
+        },
+        {
+          "c": "南方的天气和北方不一样。",
+          "d": "Nánfāng de tiānqì hé běifāng bù yíyàng.",
+          "v": "Thời tiết miền Nam không giống miền Bắc."
+        },
+        {
+          "c": "你的爱好跟他一样吗？",
+          "d": "Nǐ de àihào gēn tā yíyàng ma?",
+          "v": "Sở thích của bạn có giống anh ấy không?"
+        }
+      ],
+      "luuY": [
+        "Tính từ đứng SAU 一样: 一样高 ✓, 高一样 ✗ (tiếng Việt nói 'cao bằng' nên dễ đặt ngược).",
+        "Phủ định dùng 不, không dùng 没: 不一样 ✓, 没一样 ✗.",
+        "Đã có 一样 thì không thêm 很: 跟他一样很高 ✗."
+      ],
+      "soSanh": [
+        "zh-hsk3-xiang-yiyang",
+        "zh-hsk3-bi-chenh-lech"
+      ],
+      "tuKhoa": [
+        "gen yiyang",
+        "he yiyang",
+        "bu yiyang",
+        "so sánh bằng",
+        "giống nhau"
+      ],
+      "quiz": [
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "他跟我一样高。",
+            "他一样高跟我。",
+            "他跟我高一样。"
+          ],
+          "da": 0,
+          "gt": "Trật tự: A + 跟 + B + 一样 + tính từ."
+        },
+        {
+          "h": "Dạng phủ định của 这两本书一样 là:",
+          "lc": [
+            "这两本书没一样。",
+            "这两本书不一样。",
+            "这两本书别一样。"
+          ],
+          "da": 1,
+          "gt": "一样 phủ định bằng 不: 不一样."
+        },
+        {
+          "h": "我的想法（　）你的一样。",
+          "lc": [
+            "比",
+            "对",
+            "跟",
+            "把"
+          ],
+          "da": 2,
+          "gt": "Mẫu so sánh ngang bằng: A 跟 B 一样."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-xiang-yiyang",
+      "nhom": "So sánh",
+      "tieuDe": "像…一样",
+      "mau": "A + 像 + B + 一样 + (Adj / V)",
+      "nghia": "A giống như B (ví von); A ~ như B",
+      "giaiThich": "像…一样 dùng để ví A với B vì có nét giống nhau, thường là so sánh có hình ảnh: 像马一样快 (nhanh như ngựa). Phủ định hay dùng 不像…那么 / 这么 + tính từ, nghĩa là 'không ~ như'.",
+      "cachGhep": [
+        "A 像 B 一样 + Adj / V: 像妈妈一样漂亮",
+        "Làm bổ ngữ trạng thái: V + 得 + 像 B 一样 + Adj — 跑得像马一样快",
+        "Phủ định: A 不像 B 那么 / 这么 + Adj"
+      ],
+      "viDu": [
+        {
+          "c": "她像妈妈一样漂亮。",
+          "d": "Tā xiàng māma yíyàng piàoliang.",
+          "v": "Cô ấy xinh đẹp như mẹ."
+        },
+        {
+          "c": "他跑得像马一样快。",
+          "d": "Tā pǎo de xiàng mǎ yíyàng kuài.",
+          "v": "Anh ấy chạy nhanh như ngựa."
+        },
+        {
+          "c": "这里的冬天不像北京那么冷。",
+          "d": "Zhèlǐ de dōngtiān bú xiàng Běijīng nàme lěng.",
+          "v": "Mùa đông ở đây không lạnh như Bắc Kinh."
+        },
+        {
+          "c": "你也像他一样喜欢运动吗？",
+          "d": "Nǐ yě xiàng tā yíyàng xǐhuan yùndòng ma?",
+          "v": "Bạn cũng thích thể thao như anh ấy à?"
+        }
+      ],
+      "luuY": [
+        "跟…一样 thiên về so sánh thực tế (bằng nhau); 像…一样 thiên về ví von, B thường là hình ảnh tiêu biểu.",
+        "Phủ định không nói 像…不一样; dùng 不像…那么 + Adj."
+      ],
+      "soSanh": [
+        "zh-hsk3-gen-yiyang"
+      ],
+      "tuKhoa": [
+        "xiang yiyang",
+        "bu xiang",
+        "giống như",
+        "ví von",
+        "như"
+      ],
+      "quiz": [
+        {
+          "h": "她的脸红得（　）苹果一样。",
+          "lc": [
+            "比",
+            "像",
+            "把",
+            "被"
+          ],
+          "da": 1,
+          "gt": "Ví von 'đỏ như quả táo': 像…一样."
+        },
+        {
+          "h": "我不（　）你那么忙。",
+          "lc": [
+            "像",
+            "比较",
+            "一样",
+            "把"
+          ],
+          "da": 0,
+          "gt": "Phủ định của mẫu ví von: 不像 + B + 那么 + Adj."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "他像一样他爸爸高。",
+            "他一样像他爸爸高。",
+            "他像他爸爸一样高。"
+          ],
+          "da": 2,
+          "gt": "Trật tự: A + 像 + B + 一样 + tính từ."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-yuelaiyue",
+      "nhom": "So sánh",
+      "tieuDe": "越来越",
+      "mau": "S + 越来越 + Adj / V tâm lý + (了)",
+      "nghia": "càng ngày càng ~",
+      "giaiThich": "越来越 cho biết mức độ tăng dần theo thời gian. Phía sau là tính từ hoặc động từ chỉ tâm lý, cảm xúc (喜欢, 想, 习惯, 了解). Cuối câu thường có 了 để chỉ sự thay đổi.",
+      "cachGhep": [
+        "S + 越来越 + Adj + 了: 天气越来越冷了",
+        "S + 越来越 + V tâm lý + O: 越来越喜欢汉语",
+        "Với bổ ngữ trạng thái: V + 得 + 越来越 + Adj — 说得越来越好"
+      ],
+      "viDu": [
+        {
+          "c": "天气越来越冷了。",
+          "d": "Tiānqì yuèláiyuè lěng le.",
+          "v": "Trời càng ngày càng lạnh."
+        },
+        {
+          "c": "我越来越喜欢学汉语了。",
+          "d": "Wǒ yuèláiyuè xǐhuan xué Hànyǔ le.",
+          "v": "Tôi càng ngày càng thích học tiếng Trung."
+        },
+        {
+          "c": "他的汉语说得越来越好。",
+          "d": "Tā de Hànyǔ shuō de yuèláiyuè hǎo.",
+          "v": "Tiếng Trung của anh ấy nói càng ngày càng tốt."
+        },
+        {
+          "c": "为什么东西越来越贵？",
+          "d": "Wèi shénme dōngxi yuèláiyuè guì?",
+          "v": "Tại sao đồ đạc càng ngày càng đắt?"
+        }
+      ],
+      "luuY": [
+        "Sau 越来越 không thêm phó từ mức độ: 越来越很冷 ✗, 越来越非常好 ✗.",
+        "Không đi thẳng với động từ hành động: 他越来越跑步 ✗ → 他跑得越来越快 ✓."
+      ],
+      "soSanh": [
+        "zh-hsk3-yue-yue"
+      ],
+      "tuKhoa": [
+        "yuelaiyue",
+        "yue lai yue",
+        "càng ngày càng",
+        "càng lúc càng"
+      ],
+      "quiz": [
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "天气越来越很热了。",
+            "天气越来越热了。",
+            "天气很越来越热了。"
+          ],
+          "da": 1,
+          "gt": "越来越 đã chỉ mức độ nên không thêm 很."
+        },
+        {
+          "h": "学汉语的人（　）多了。",
+          "lc": [
+            "越来越",
+            "一边",
+            "或者",
+            "比"
+          ],
+          "da": 0,
+          "gt": "Số người tăng dần theo thời gian: 越来越多."
+        },
+        {
+          "h": "Câu nào SAI?",
+          "lc": [
+            "我越来越喜欢这里。",
+            "她越来越漂亮。",
+            "他越来越跑步。"
+          ],
+          "da": 2,
+          "gt": "越来越 không đi thẳng với động từ hành động như 跑步."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-yue-yue",
+      "nhom": "So sánh",
+      "tieuDe": "越…越…",
+      "mau": "(S) + 越 + A + 越 + B",
+      "nghia": "càng A thì càng B",
+      "giaiThich": "越 A 越 B cho biết mức độ của B tăng theo sự tăng lên của A. A và B có thể chung một chủ ngữ (雨越下越大) hoặc mỗi vế một chủ ngữ (你越着急，他越慢).",
+      "cachGhep": [
+        "Cùng chủ ngữ: S + 越 + V + 越 + Adj — 越学越有意思",
+        "Khác chủ ngữ: S1 + 越 + …，S2 + 越 + …",
+        "越 đứng sau chủ ngữ, trước động từ / tính từ"
+      ],
+      "viDu": [
+        {
+          "c": "雨越下越大。",
+          "d": "Yǔ yuè xià yuè dà.",
+          "v": "Mưa càng lúc càng to."
+        },
+        {
+          "c": "汉语越学越有意思。",
+          "d": "Hànyǔ yuè xué yuè yǒu yìsi.",
+          "v": "Tiếng Trung càng học càng thú vị."
+        },
+        {
+          "c": "你越着急，越容易错。",
+          "d": "Nǐ yuè zháojí, yuè róngyì cuò.",
+          "v": "Bạn càng sốt ruột thì càng dễ sai."
+        },
+        {
+          "c": "是不是越贵的东西越好？",
+          "d": "Shì bu shì yuè guì de dōngxi yuè hǎo?",
+          "v": "Có phải đồ càng đắt thì càng tốt không?"
+        }
+      ],
+      "luuY": [
+        "Sau 越 thứ hai không thêm 很 / 非常: 越说越很快 ✗.",
+        "越 phải đứng sau chủ ngữ: 越他说越快 ✗ → 他越说越快 ✓.",
+        "着急 đọc là zháojí (着 đọc zháo, không phải zhe)."
+      ],
+      "soSanh": [
+        "zh-hsk3-yuelaiyue"
+      ],
+      "tuKhoa": [
+        "yue yue",
+        "yue…yue",
+        "càng càng",
+        "càng…càng"
+      ],
+      "quiz": [
+        {
+          "h": "这本书我（　）看（　）喜欢。",
+          "lc": [
+            "越…越",
+            "又…又",
+            "一边…一边",
+            "先…再"
+          ],
+          "da": 0,
+          "gt": "Mức độ thích tăng theo việc đọc: 越看越喜欢."
+        },
+        {
+          "h": "雨越下越大 nghĩa là gì?",
+          "lc": [
+            "Mưa lúc to lúc nhỏ",
+            "Mưa càng lúc càng to",
+            "Mưa to rồi tạnh"
+          ],
+          "da": 1,
+          "gt": "越 A 越 B = càng A càng B: càng mưa càng to."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "他越说越很快。",
+            "他说越越快。",
+            "他越说越快。"
+          ],
+          "da": 2,
+          "gt": "Mẫu 越 + V + 越 + Adj, không thêm 很."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-yinggai",
+      "nhom": "Động từ năng nguyện",
+      "tieuDe": "应该",
+      "mau": "S + (不) 应该 + V",
+      "nghia": "nên, cần phải ~; chắc là ~ (suy đoán)",
+      "giaiThich": "应该 có hai cách dùng: (1) nói điều nên làm theo lẽ thường, theo đạo lý hay lời khuyên: 你应该多喝水; (2) suy đoán có căn cứ rằng việc gì đó chắc là như vậy: 他应该到了. Phủ định là 不应该 (không nên).",
+      "cachGhep": [
+        "S + 应该 + V + O",
+        "Phủ định: S + 不应该 + V",
+        "Câu hỏi: 应该…吗？ / 应不应该…？ / 应该怎么…？",
+        "Suy đoán: S + 应该 + V / Adj + (了)"
+      ],
+      "viDu": [
+        {
+          "c": "你应该多喝水。",
+          "d": "Nǐ yīnggāi duō hē shuǐ.",
+          "v": "Bạn nên uống nhiều nước."
+        },
+        {
+          "c": "学生不应该迟到。",
+          "d": "Xuésheng bù yīnggāi chídào.",
+          "v": "Học sinh không nên đến muộn."
+        },
+        {
+          "c": "已经八点了，他应该到了。",
+          "d": "Yǐjīng bā diǎn le, tā yīnggāi dào le.",
+          "v": "Đã tám giờ rồi, chắc là anh ấy đến rồi."
+        },
+        {
+          "c": "我应该怎么办？",
+          "d": "Wǒ yīnggāi zěnme bàn?",
+          "v": "Tôi nên làm thế nào?"
+        }
+      ],
+      "luuY": [
+        "Phủ định dùng 不, không dùng 没: 不应该 ✓, 没应该 ✗.",
+        "应该 nhẹ hơn 必须: 应该 là 'nên', 必须 là 'bắt buộc phải'."
+      ],
+      "soSanh": [
+        "zh-hsk3-bixu-xuyao"
+      ],
+      "tuKhoa": [
+        "yinggai",
+        "nên",
+        "chắc là",
+        "động từ năng nguyện"
+      ],
+      "quiz": [
+        {
+          "h": "你感冒了，（　）早点儿休息。",
+          "lc": [
+            "应该",
+            "愿意",
+            "敢",
+            "比"
+          ],
+          "da": 0,
+          "gt": "Lời khuyên 'nên nghỉ sớm' dùng 应该."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "你没应该这样说。",
+            "你不应该这样说。",
+            "你应该没这样说。"
+          ],
+          "da": 1,
+          "gt": "应该 phủ định bằng 不: 不应该."
+        },
+        {
+          "h": "他六点出发的，现在应该到家了。— 应该 ở đây nghĩa là gì?",
+          "lc": [
+            "bắt buộc phải",
+            "dám",
+            "chắc là (suy đoán)"
+          ],
+          "da": 2,
+          "gt": "Đây là suy đoán có căn cứ (xuất phát từ 6 giờ) nên 应该 = chắc là."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-bixu-xuyao",
+      "nhom": "Động từ năng nguyện",
+      "tieuDe": "必须 / 需要",
+      "mau": "S + 必须 + V · S + 需要 + N / V",
+      "nghia": "nhất định phải ~ (必须); cần ~ (需要)",
+      "giaiThich": "必须 là phó từ, nói việc bắt buộc phải làm, không có lựa chọn khác; phía sau chỉ là động từ. 需要 nói về nhu cầu: cần một vật (需要帮助) hoặc cần làm một việc (需要休息), giọng nhẹ hơn 必须.",
+      "cachGhep": [
+        "S + 必须 + V: 必须八点以前到",
+        "Phủ định của 必须 (không cần phải): 不必 / 不用 + V — không nói 不必须",
+        "S + 需要 + N: 需要你的帮助",
+        "S + 需要 + V; phủ định: 不需要 + N / V"
+      ],
+      "viDu": [
+        {
+          "c": "明天你必须八点以前到。",
+          "d": "Míngtiān nǐ bìxū bā diǎn yǐqián dào.",
+          "v": "Ngày mai bạn nhất định phải đến trước tám giờ."
+        },
+        {
+          "c": "我需要你的帮助。",
+          "d": "Wǒ xūyào nǐ de bāngzhù.",
+          "v": "Tôi cần sự giúp đỡ của bạn."
+        },
+        {
+          "c": "你不必每天都来。",
+          "d": "Nǐ búbì měi tiān dōu lái.",
+          "v": "Bạn không cần phải ngày nào cũng đến."
+        },
+        {
+          "c": "做这个菜需要多长时间？",
+          "d": "Zuò zhège cài xūyào duō cháng shíjiān?",
+          "v": "Làm món này cần bao nhiêu thời gian?"
+        }
+      ],
+      "luuY": [
+        "必须 không đi với danh từ: 我必须一个手机 ✗ → 我需要一个手机 ✓.",
+        "Người Việt hay dịch 'không cần phải' thành 不必须 ✗; đúng là 不必 hoặc 不用."
+      ],
+      "soSanh": [
+        "zh-hsk3-yinggai"
+      ],
+      "tuKhoa": [
+        "bixu",
+        "xuyao",
+        "bubi",
+        "phải",
+        "cần",
+        "bắt buộc"
+      ],
+      "quiz": [
+        {
+          "h": "Muốn nói 'không cần phải đi', dùng câu nào?",
+          "lc": [
+            "不必须去",
+            "没必须去",
+            "不用去"
+          ],
+          "da": 2,
+          "gt": "Phủ định của 必须 là 不用 / 不必, không có 不必须."
+        },
+        {
+          "h": "我（　）一个新手机。",
+          "lc": [
+            "必须",
+            "需要",
+            "应该",
+            "愿意"
+          ],
+          "da": 1,
+          "gt": "Sau chỗ trống là danh từ; chỉ 需要 đi thẳng với danh từ."
+        },
+        {
+          "h": "上课的时候（　）关手机，这是学校的要求。",
+          "lc": [
+            "必须",
+            "敢",
+            "愿意",
+            "不必"
+          ],
+          "da": 0,
+          "gt": "Đây là yêu cầu bắt buộc của trường nên dùng 必须."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-yuanyi",
+      "nhom": "Động từ năng nguyện",
+      "tieuDe": "愿意",
+      "mau": "S + (不) 愿意 + V",
+      "nghia": "sẵn lòng, bằng lòng, muốn ~",
+      "giaiThich": "愿意 diễn tả việc tự nguyện, vui lòng làm một việc vì thấy hợp ý mình. Khác 想 (muốn, có ý định) ở chỗ 愿意 nhấn vào sự đồng ý, chấp nhận. Có thể thêm 很 / 非常 phía trước.",
+      "cachGhep": [
+        "S + 愿意 + V + O",
+        "Phủ định: S + 不愿意 + V",
+        "Câu hỏi: 愿意…吗？ / 愿意不愿意…？ / 愿不愿意…？",
+        "Nhấn mạnh: 很 / 非常 + 愿意 + V"
+      ],
+      "viDu": [
+        {
+          "c": "我愿意帮助你。",
+          "d": "Wǒ yuànyì bāngzhù nǐ.",
+          "v": "Tôi sẵn lòng giúp bạn."
+        },
+        {
+          "c": "他不愿意一个人去。",
+          "d": "Tā bú yuànyì yí gè rén qù.",
+          "v": "Anh ấy không muốn đi một mình."
+        },
+        {
+          "c": "你愿意跟我们一起去旅游吗？",
+          "d": "Nǐ yuànyì gēn wǒmen yìqǐ qù lǚyóu ma?",
+          "v": "Bạn có bằng lòng đi du lịch cùng chúng tôi không?"
+        },
+        {
+          "c": "她很愿意教我汉语。",
+          "d": "Tā hěn yuànyì jiāo wǒ Hànyǔ.",
+          "v": "Cô ấy rất sẵn lòng dạy tôi tiếng Trung."
+        }
+      ],
+      "luuY": [
+        "Phủ định dùng 不: 不愿意. Sau 愿意 không thêm 了: 我愿意了帮你 ✗.",
+        "教 làm động từ 'dạy' đọc jiāo (thanh 1); trong 教室, 教育 mới đọc jiào."
+      ],
+      "soSanh": [
+        "zh-hsk3-gan"
+      ],
+      "tuKhoa": [
+        "yuanyi",
+        "sẵn lòng",
+        "bằng lòng",
+        "tự nguyện"
+      ],
+      "quiz": [
+        {
+          "h": "他（　）愿意搬家，因为他喜欢这儿。",
+          "lc": [
+            "别",
+            "不",
+            "把",
+            "被"
+          ],
+          "da": 1,
+          "gt": "愿意 phủ định bằng 不: 不愿意."
+        },
+        {
+          "h": "你愿意不愿意参加比赛？ nghĩa là gì?",
+          "lc": [
+            "Bạn có được phép dự thi không?",
+            "Bạn có dám dự thi không?",
+            "Bạn có sẵn lòng dự thi không?"
+          ],
+          "da": 2,
+          "gt": "愿意 = sẵn lòng, bằng lòng; 愿意不愿意 là câu hỏi chính phản."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "我很愿意帮你。",
+            "我愿意很帮你。",
+            "我愿意了帮你。"
+          ],
+          "da": 0,
+          "gt": "Phó từ mức độ 很 đứng trước 愿意; sau 愿意 là động từ, không thêm 了."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk3-gan",
+      "nhom": "Động từ năng nguyện",
+      "tieuDe": "敢",
+      "mau": "S + (不 / 没) 敢 + V",
+      "nghia": "dám ~",
+      "giaiThich": "敢 diễn tả có đủ can đảm để làm một việc. Phủ định thường là 不敢 (không dám); khi kể một việc cụ thể trong quá khứ có thể dùng 没敢 (đã không dám).",
+      "cachGhep": [
+        "S + 敢 + V + O",
+        "Phủ định: 不敢 + V (nói chung) / 没敢 + V (một lần trong quá khứ)",
+        "Câu hỏi: 敢…吗？ / 敢不敢…？"
+      ],
+      "viDu": [
+        {
+          "c": "我不敢一个人晚上出去。",
+          "d": "Wǒ bù gǎn yí gè rén wǎnshang chūqù.",
+          "v": "Tôi không dám ra ngoài một mình buổi tối."
+        },
+        {
+          "c": "你敢吃这么辣的菜吗？",
+          "d": "Nǐ gǎn chī zhème là de cài ma?",
+          "v": "Bạn có dám ăn món cay thế này không?"
+        },
+        {
+          "c": "弟弟敢一个人坐飞机。",
+          "d": "Dìdi gǎn yí gè rén zuò fēijī.",
+          "v": "Em trai dám đi máy bay một mình."
+        },
+        {
+          "c": "我没敢告诉他这件事。",
+          "d": "Wǒ méi gǎn gàosu tā zhè jiàn shì.",
+          "v": "Tôi đã không dám nói chuyện này với anh ấy."
+        }
+      ],
+      "luuY": [
+        "敢 đứng trước động từ, không đứng trước danh từ: 我不敢狗 ✗ → 我怕狗 / 我不敢摸狗.",
+        "不敢 nói thói quen, tình trạng chung; 没敢 kể một lần cụ thể đã qua."
+      ],
+      "soSanh": [
+        "zh-hsk3-yuanyi"
+      ],
+      "tuKhoa": [
+        "gan",
+        "bu gan",
+        "dám",
+        "không dám"
+      ],
+      "quiz": [
+        {
+          "h": "'Tôi không dám hỏi thầy giáo' nói thế nào?",
+          "lc": [
+            "我不敢问老师。",
+            "我不想问老师。",
+            "我不用问老师。",
+            "我不能问老师。"
+          ],
+          "da": 0,
+          "gt": "'Dám' là 敢; 不想 = không muốn, 不用 = không cần, 不能 = không thể."
+        },
+        {
+          "h": "Câu hỏi chính phản nào đúng?",
+          "lc": [
+            "你敢吗不敢去？",
+            "你敢不敢去？",
+            "你敢去不敢吗？"
+          ],
+          "da": 1,
+          "gt": "Dạng chính phản: 敢不敢 + V."
+        },
+        {
+          "h": "那时候我很害怕，（　）说话。",
+          "lc": [
+            "别敢",
+            "敢不",
+            "没敢",
+            "不是敢"
+          ],
+          "da": 2,
+          "gt": "Kể một lần trong quá khứ 'đã không dám' dùng 没敢."
+        }
+      ]
+    }
+  ]
+}

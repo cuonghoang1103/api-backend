@@ -1,0 +1,1136 @@
+{
+  "nn": "zh",
+  "cap": "HSK1",
+  "diem": [
+    {
+      "id": "zh-hsk1-zhe-na",
+      "nhom": "Đại từ – danh từ",
+      "tieuDe": "这 / 那",
+      "mau": "这 / 那 + (số) + lượng từ + danh từ",
+      "nghia": "này, đây / kia, đó",
+      "giaiThich": "这 chỉ người / vật ở gần người nói, 那 chỉ người / vật ở xa. Có thể đứng một mình làm chủ ngữ trước 是 (这是…), hoặc đứng trước lượng từ + danh từ. Chỉ nơi chốn: 这儿 (ở đây), 那儿 (ở kia).",
+      "cachGhep": [
+        "这 / 那 + 是 + danh từ",
+        "这 / 那 + lượng từ + danh từ: 这个人, 那本书",
+        "Nơi chốn: 这儿 / 那儿",
+        "Số nhiều: 这些 / 那些"
+      ],
+      "viDu": [
+        {
+          "c": "这是我妈妈。",
+          "d": "Zhè shì wǒ māma.",
+          "v": "Đây là mẹ tôi."
+        },
+        {
+          "c": "那个人是谁？",
+          "d": "Nàge rén shì shéi?",
+          "v": "Người kia là ai?"
+        },
+        {
+          "c": "这本书很好。",
+          "d": "Zhè běn shū hěn hǎo.",
+          "v": "Quyển sách này rất hay."
+        },
+        {
+          "c": "那不是我的杯子。",
+          "d": "Nà bú shì wǒ de bēizi.",
+          "v": "Kia không phải là cốc của tôi."
+        }
+      ],
+      "luuY": [
+        "Trật tự ngược tiếng Việt: 这本书 = \"quyển sách này\" (这 đứng TRƯỚC). Không nói 书这本.",
+        "Giữa 这 / 那 và danh từ thường phải có lượng từ: 这个人, 那本书 (không nói 这人书).",
+        "那 (nà — kia) khác 哪 (nǎ — nào)."
+      ],
+      "soSanh": [
+        "zh-hsk1-na-nar",
+        "zh-hsk1-luong-tu"
+      ],
+      "tuKhoa": [
+        "zhe",
+        "na",
+        "này",
+        "kia",
+        "đây",
+        "đó"
+      ],
+      "quiz": [
+        {
+          "h": "___是我的老师，她姓李。",
+          "lc": [
+            "这",
+            "哪",
+            "谁",
+            "什么"
+          ],
+          "da": 0,
+          "gt": "Giới thiệu người ở gần: 这是…; 哪 / 谁 / 什么 là từ để hỏi."
+        },
+        {
+          "h": "\"Quyển sách kia\" là:",
+          "lc": [
+            "书那本",
+            "那本书",
+            "本那书",
+            "那书本"
+          ],
+          "da": 1,
+          "gt": "Trật tự: 那 + lượng từ + danh từ."
+        },
+        {
+          "h": "___个杯子是你的吗？",
+          "lc": [
+            "什么",
+            "谁",
+            "几",
+            "那"
+          ],
+          "da": 3,
+          "gt": "Câu đã có 吗 nên không dùng từ nghi vấn; 那个杯子 = cái cốc kia."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk1-de",
+      "nhom": "Đại từ – danh từ",
+      "tieuDe": "的 (sở hữu / định ngữ)",
+      "mau": "Định ngữ + 的 + danh từ",
+      "nghia": "của ~ ; nối phần bổ nghĩa với danh từ",
+      "giaiThich": "的 nối phần bổ nghĩa (định ngữ) với danh từ chính; định ngữ luôn đứng TRƯỚC danh từ. Dùng nhiều nhất để chỉ sở hữu: 我的书 (sách của tôi). Tính từ có 很 hoặc tính từ hai âm tiết bổ nghĩa cho danh từ cũng thêm 的.",
+      "cachGhep": [
+        "Đại từ / danh từ + 的 + danh từ: 我的书, 老师的电脑",
+        "Bỏ 的 khi nói người thân, nơi mình thuộc về: 我妈妈, 我家, 我们学校",
+        "很 + tính từ + 的 + danh từ: 很大的苹果, 漂亮的衣服",
+        "Tính từ một âm tiết thường không cần 的: 好人, 大杯子"
+      ],
+      "viDu": [
+        {
+          "c": "这是我的手机。",
+          "d": "Zhè shì wǒ de shǒujī.",
+          "v": "Đây là điện thoại của tôi."
+        },
+        {
+          "c": "那是老师的书吗？",
+          "d": "Nà shì lǎoshī de shū ma?",
+          "v": "Kia là sách của thầy giáo phải không?"
+        },
+        {
+          "c": "我爸爸是医生。",
+          "d": "Wǒ bàba shì yīshēng.",
+          "v": "Bố tôi là bác sĩ."
+        },
+        {
+          "c": "她有一个很漂亮的杯子。",
+          "d": "Tā yǒu yí gè hěn piàoliang de bēizi.",
+          "v": "Cô ấy có một cái cốc rất đẹp."
+        }
+      ],
+      "luuY": [
+        "Trật tự ngược tiếng Việt: \"sách của tôi\" = 我的书 (người sở hữu đứng trước). Không nói 书的我.",
+        "的 đọc nhẹ: de."
+      ],
+      "soSanh": [
+        "zh-hsk2-de-thay-danh-tu",
+        "zh-hsk1-shi-de",
+        "zh-hsk3-de-de-de"
+      ],
+      "tuKhoa": [
+        "de",
+        "của",
+        "định ngữ",
+        "sở hữu",
+        "trợ từ kết cấu"
+      ],
+      "quiz": [
+        {
+          "h": "\"Bạn của tôi\" là:",
+          "lc": [
+            "朋友的我",
+            "我朋友的",
+            "我的朋友",
+            "的我朋友"
+          ],
+          "da": 2,
+          "gt": "Người sở hữu + 的 + danh từ: 我的朋友."
+        },
+        {
+          "h": "这是王老师___电脑。",
+          "lc": [
+            "的",
+            "是",
+            "很",
+            "有"
+          ],
+          "da": 0,
+          "gt": "Nối người sở hữu (王老师) với vật (电脑) bằng 的."
+        },
+        {
+          "h": "Cụm nào tự nhiên nhất?",
+          "lc": [
+            "很大苹果的",
+            "很大的苹果",
+            "苹果很大的",
+            "的很大苹果"
+          ],
+          "da": 1,
+          "gt": "很 + tính từ làm định ngữ phải có 的 và đứng trước danh từ."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk1-phuong-vi",
+      "nhom": "Đại từ – danh từ",
+      "tieuDe": "Phương vị từ 里 / 上 / 下 / 前面 / 后面",
+      "mau": "Danh từ + 里 / 上 / 下 / 前面 / 后面",
+      "nghia": "trong / trên / dưới / phía trước / phía sau ~",
+      "giaiThich": "Từ chỉ vị trí đứng SAU danh từ (ngược với tiếng Việt): 桌子上 = trên bàn, 学校里 = trong trường. Danh từ thường (bàn, ghế, cốc…) muốn làm nơi chốn sau 在 hoặc trước 有 thì phải thêm phương vị từ.",
+      "cachGhep": [
+        "Danh từ + 上 / 里 / 下 (một âm tiết, dính liền): 桌子上, 家里, 椅子下",
+        "Danh từ + (的) + 前面 / 后面 / 上面 / 下面 / 里面: 学校前面, 我后面",
+        "S + 在 + danh từ + phương vị",
+        "Danh từ + phương vị + 有 + vật"
+      ],
+      "viDu": [
+        {
+          "c": "你的书在桌子上。",
+          "d": "Nǐ de shū zài zhuōzi shang.",
+          "v": "Sách của bạn ở trên bàn."
+        },
+        {
+          "c": "杯子里有茶。",
+          "d": "Bēizi li yǒu chá.",
+          "v": "Trong cốc có trà."
+        },
+        {
+          "c": "小猫在椅子下面。",
+          "d": "Xiǎomāo zài yǐzi xiàmiàn.",
+          "v": "Con mèo con ở dưới ghế."
+        },
+        {
+          "c": "商店在学校前面，医院在学校后面。",
+          "d": "Shāngdiàn zài xuéxiào qiánmiàn, yīyuàn zài xuéxiào hòumiàn.",
+          "v": "Cửa hàng ở phía trước trường, bệnh viện ở phía sau trường."
+        }
+      ],
+      "luuY": [
+        "Lỗi dịch từng chữ: \"trên bàn\" → 上桌子 là SAI; phải là 桌子上.",
+        "Tên nước, thành phố không thêm 里: 在北京, 在中国 (không nói 在北京里).",
+        "上, 里 đứng sau danh từ thường đọc nhẹ."
+      ],
+      "soSanh": [
+        "zh-hsk1-zai-dong-tu",
+        "zh-hsk1-you"
+      ],
+      "tuKhoa": [
+        "phuong vi",
+        "li",
+        "shang",
+        "xia",
+        "qianmian",
+        "houmian"
+      ],
+      "quiz": [
+        {
+          "h": "\"Trong phòng học\" là:",
+          "lc": [
+            "里教室",
+            "教室里",
+            "在里教室",
+            "教室的在里"
+          ],
+          "da": 1,
+          "gt": "Phương vị từ đứng sau danh từ: 教室里."
+        },
+        {
+          "h": "我的狗在桌子___。",
+          "lc": [
+            "下面",
+            "下的",
+            "是下",
+            "有下"
+          ],
+          "da": 0,
+          "gt": "Danh từ + 下面: 桌子下面 (dưới bàn)."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "我在北京里工作。",
+            "书在上桌子。",
+            "电脑在桌子上。",
+            "上桌子有电脑。"
+          ],
+          "da": 2,
+          "gt": "Danh từ + 上 đứng sau 在; tên thành phố không thêm 里."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk1-luong-tu",
+      "nhom": "Số đếm – lượng từ",
+      "tieuDe": "Lượng từ 个 / 本 / 口 / 岁…",
+      "mau": "Số / 这 / 那 / 几 + lượng từ + danh từ",
+      "nghia": "cái, quyển, người… (từ đứng giữa số và danh từ)",
+      "giaiThich": "Trong tiếng Trung, giữa số đếm (hoặc 这, 那, 几, 哪) và danh từ bắt buộc có lượng từ. 个 dùng rộng nhất (người, đồ vật nói chung); 本 cho sách vở; 口 cho số người trong gia đình; 杯 cho đồ uống theo cốc; 块 cho tiền; 岁 và 点 thì tự nó là đơn vị nên đứng ngay sau số.",
+      "cachGhep": [
+        "个: 一个人, 三个苹果, 两个学生",
+        "本: 一本书",
+        "口: 我家有四口人",
+        "杯: 一杯茶 · 块: 十块钱",
+        "岁, 点, 年, 天: số + đơn vị, không thêm 个 (五岁, 三点)"
+      ],
+      "viDu": [
+        {
+          "c": "我有三个中国朋友。",
+          "d": "Wǒ yǒu sān gè Zhōngguó péngyou.",
+          "v": "Tôi có ba người bạn Trung Quốc."
+        },
+        {
+          "c": "他买了两本书。",
+          "d": "Tā mǎile liǎng běn shū.",
+          "v": "Anh ấy đã mua hai quyển sách."
+        },
+        {
+          "c": "我家有五口人。",
+          "d": "Wǒ jiā yǒu wǔ kǒu rén.",
+          "v": "Nhà tôi có năm người."
+        },
+        {
+          "c": "我想喝一杯茶。",
+          "d": "Wǒ xiǎng hē yì bēi chá.",
+          "v": "Tôi muốn uống một cốc trà."
+        }
+      ],
+      "luuY": [
+        "Không bỏ lượng từ: nói 三个人, 一本书; KHÔNG nói 三人, 一书 (tiếng Việt đôi khi bỏ được \"cái / quyển\", tiếng Trung thì không).",
+        "口 chỉ dùng khi đếm thành viên trong gia đình; đếm người nói chung dùng 个.",
+        "个 đứng sau số thường đọc nhẹ."
+      ],
+      "soSanh": [
+        "zh-hsk1-er-liang",
+        "zh-hsk1-ji-duoshao"
+      ],
+      "tuKhoa": [
+        "luong tu",
+        "ge",
+        "ben",
+        "kou",
+        "bei",
+        "cái quyển"
+      ],
+      "quiz": [
+        {
+          "h": "桌子上有一___书。",
+          "lc": [
+            "杯",
+            "本",
+            "口",
+            "岁"
+          ],
+          "da": 1,
+          "gt": "Sách vở dùng lượng từ 本."
+        },
+        {
+          "h": "你家有几___人？",
+          "lc": [
+            "本",
+            "杯",
+            "岁",
+            "口"
+          ],
+          "da": 3,
+          "gt": "Đếm số người trong gia đình dùng 口."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "我有两个哥哥。",
+            "我有两哥哥。",
+            "我有哥哥两个的。",
+            "我两有个哥哥。"
+          ],
+          "da": 0,
+          "gt": "Số + lượng từ + danh từ: 两个哥哥."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk1-so-dem",
+      "nhom": "Số đếm – lượng từ",
+      "tieuDe": "Số đếm 1–99 và hàng trăm",
+      "mau": "hàng chục + 十 + hàng đơn vị",
+      "nghia": "cách đọc số: 十一, 二十, 三十五, 一百…",
+      "giaiThich": "Số từ 11 đến 99 ghép theo quy tắc: (hàng chục) + 十 + (hàng đơn vị). 10 là 十 (không nói 一十), 11 là 十一, 20 là 二十, 35 là 三十五. Hàng trăm dùng 百: 一百, 两百 / 二百. Số 0 ở giữa đọc 零.",
+      "cachGhep": [
+        "11–19: 十 + số (十二 = 12)",
+        "Chục tròn: số + 十 (四十 = 40)",
+        "Số lẻ: số + 十 + số (六十八 = 68)",
+        "Trăm: 一百, 三百五十; có số 0 ở giữa: 一百零五 (105)"
+      ],
+      "viDu": [
+        {
+          "c": "我们学校有二十五个老师。",
+          "d": "Wǒmen xuéxiào yǒu èrshíwǔ gè lǎoshī.",
+          "v": "Trường chúng tôi có 25 giáo viên."
+        },
+        {
+          "c": "我爸爸今年四十八岁。",
+          "d": "Wǒ bàba jīnnián sìshíbā suì.",
+          "v": "Bố tôi năm nay 48 tuổi."
+        },
+        {
+          "c": "这件衣服九十九块。",
+          "d": "Zhè jiàn yīfu jiǔshíjiǔ kuài.",
+          "v": "Cái áo này 99 tệ."
+        },
+        {
+          "c": "这本书一百块钱。",
+          "d": "Zhè běn shū yìbǎi kuài qián.",
+          "v": "Quyển sách này 100 tệ."
+        }
+      ],
+      "luuY": [
+        "10 nói 十, không nói 一十; nhưng 100 phải nói 一百 (không nói 百).",
+        "Số điện thoại, số phòng đọc từng chữ số, và số 1 thường đọc yāo.",
+        "一 trước 百 đọc yì: yìbǎi."
+      ],
+      "soSanh": [
+        "zh-hsk1-er-liang"
+      ],
+      "tuKhoa": [
+        "so dem",
+        "shi",
+        "bai",
+        "số",
+        "đếm",
+        "ling"
+      ],
+      "quiz": [
+        {
+          "h": "\"47\" là:",
+          "lc": [
+            "四七十",
+            "四十七",
+            "七十四",
+            "十四七"
+          ],
+          "da": 1,
+          "gt": "Hàng chục + 十 + hàng đơn vị: 四十七."
+        },
+        {
+          "h": "\"12\" là:",
+          "lc": [
+            "一十二",
+            "二十",
+            "十二",
+            "二十一"
+          ],
+          "da": 2,
+          "gt": "11–19: 十 + số; không thêm 一 phía trước."
+        },
+        {
+          "h": "\"105\" là:",
+          "lc": [
+            "一百零五",
+            "一百五",
+            "一百十五",
+            "百五"
+          ],
+          "da": 0,
+          "gt": "Có số 0 ở hàng chục thì đọc 零: 一百零五. (一百五 là 150.)"
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk1-er-liang",
+      "nhom": "Số đếm – lượng từ",
+      "tieuDe": "二 vs 两",
+      "mau": "两 + lượng từ · 二 trong số đếm / số thứ tự",
+      "nghia": "hai: 两 đi với lượng từ, 二 để đếm số và nói thứ tự",
+      "giaiThich": "Cả hai đều là \"hai\" nhưng không thay nhau được. Trước lượng từ (hai cái, hai quyển, hai giờ) dùng 两. Khi đếm số, đọc dãy số, nói số thứ tự, ngày tháng và trong các số 12, 20, 22… dùng 二.",
+      "cachGhep": [
+        "两 + lượng từ: 两个人, 两本书, 两点, 两天, 两年",
+        "二 trong số: 十二, 二十, 二十二",
+        "Thứ tự / ngày tháng: 第二, 二月, 二号, 星期二",
+        "Trước 百 dùng được cả hai: 二百 / 两百"
+      ],
+      "viDu": [
+        {
+          "c": "我有两个姐姐。",
+          "d": "Wǒ yǒu liǎng gè jiějie.",
+          "v": "Tôi có hai chị gái."
+        },
+        {
+          "c": "现在两点。",
+          "d": "Xiànzài liǎng diǎn.",
+          "v": "Bây giờ là 2 giờ."
+        },
+        {
+          "c": "今天二月十二号。",
+          "d": "Jīntiān èr yuè shí'èr hào.",
+          "v": "Hôm nay là ngày 12 tháng 2."
+        },
+        {
+          "c": "他二十二岁。",
+          "d": "Tā èrshí'èr suì.",
+          "v": "Anh ấy 22 tuổi."
+        }
+      ],
+      "luuY": [
+        "Lỗi kinh điển: 二个人, 二本书 → phải là 两个人, 两本书.",
+        "2 giờ là 两点 (không nói 二点), nhưng 12 giờ là 十二点.",
+        "Tháng 2 là 二月; \"hai tháng\" (khoảng thời gian) là 两个月."
+      ],
+      "soSanh": [
+        "zh-hsk1-luong-tu",
+        "zh-hsk1-so-dem"
+      ],
+      "tuKhoa": [
+        "er",
+        "liang",
+        "hai",
+        "số hai"
+      ],
+      "quiz": [
+        {
+          "h": "我买了___本书。",
+          "lc": [
+            "二",
+            "两",
+            "二十个",
+            "第二"
+          ],
+          "da": 1,
+          "gt": "Trước lượng từ 本 dùng 两."
+        },
+        {
+          "h": "今天星期___。",
+          "lc": [
+            "两",
+            "两个",
+            "二个",
+            "二"
+          ],
+          "da": 3,
+          "gt": "Thứ trong tuần là số thứ tự nên dùng 二: 星期二."
+        },
+        {
+          "h": "\"2 giờ\" là:",
+          "lc": [
+            "两点",
+            "二点",
+            "两个点",
+            "二个点"
+          ],
+          "da": 0,
+          "gt": "Nói giờ: 两点; không dùng 二点 và không thêm 个."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk1-xie-yidianr",
+      "nhom": "Số đếm – lượng từ",
+      "tieuDe": "些 / 一点儿",
+      "mau": "这些 / 那些 / 一些 + danh từ · 一点儿 + danh từ",
+      "nghia": "những, mấy, một số / một chút, một ít",
+      "giaiThich": "些 là lượng từ chỉ số lượng không xác định (số nhiều): 这些 (những … này), 那些 (những … kia), 一些 (một số, một vài). 一点儿 chỉ một lượng rất nhỏ, đứng trước danh từ: 一点儿水 (một chút nước).",
+      "cachGhep": [
+        "这些 / 那些 + danh từ",
+        "一些 + danh từ (một số, vài)",
+        "一点儿 + danh từ (một chút); sau động từ có thể bỏ 一: 喝点儿水",
+        "Hỏi: 哪些 (những … nào)"
+      ],
+      "viDu": [
+        {
+          "c": "这些书都是我的。",
+          "d": "Zhèxiē shū dōu shì wǒ de.",
+          "v": "Những quyển sách này đều là của tôi."
+        },
+        {
+          "c": "那些人是谁？",
+          "d": "Nàxiē rén shì shéi?",
+          "v": "Những người kia là ai?"
+        },
+        {
+          "c": "我想买一些水果。",
+          "d": "Wǒ xiǎng mǎi yìxiē shuǐguǒ.",
+          "v": "Tôi muốn mua một ít hoa quả."
+        },
+        {
+          "c": "我会说一点儿汉语。",
+          "d": "Wǒ huì shuō yìdiǎnr Hànyǔ.",
+          "v": "Tôi biết nói một chút tiếng Trung."
+        }
+      ],
+      "luuY": [
+        "Sau 些 không thêm lượng từ khác: 这些书 (không nói 这些本书).",
+        "些 không đi với số cụ thể: nói 三本书, không nói 三些书; chỉ có 一些.",
+        "一点儿 đứng TRƯỚC danh từ: 一点儿水, không nói 水一点儿."
+      ],
+      "soSanh": [
+        "zh-hsk2-youdianr-yidianr",
+        "zh-hsk1-zhe-na"
+      ],
+      "tuKhoa": [
+        "xie",
+        "yidianr",
+        "yixie",
+        "zhexie",
+        "một chút",
+        "những"
+      ],
+      "quiz": [
+        {
+          "h": "___苹果很好吃。",
+          "lc": [
+            "这个些",
+            "这些",
+            "这些个本",
+            "些这"
+          ],
+          "da": 1,
+          "gt": "Số nhiều của 这 là 这些 + danh từ, không thêm lượng từ khác."
+        },
+        {
+          "h": "我想喝___水。",
+          "lc": [
+            "一点儿",
+            "一个些",
+            "些一",
+            "很点儿"
+          ],
+          "da": 0,
+          "gt": "Một chút + danh từ: 一点儿水."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "我有三些朋友。",
+            "我有些三朋友。",
+            "我朋友一些有。",
+            "我有一些中国朋友。"
+          ],
+          "da": 3,
+          "gt": "些 chỉ đi với 一 / 这 / 那 / 哪, không đi với số cụ thể."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk1-ngay-thang",
+      "nhom": "Thời gian",
+      "tieuDe": "Ngày tháng năm, thứ",
+      "mau": "…年 + …月 + …号 (日) + 星期…",
+      "nghia": "cách nói năm – tháng – ngày – thứ (đơn vị lớn đứng trước)",
+      "giaiThich": "Tiếng Trung nói thời gian từ đơn vị LỚN đến NHỎ: năm → tháng → ngày → thứ, ngược với tiếng Việt. Năm đọc từng chữ số + 年; tháng là số + 月; ngày là số + 号 (khẩu ngữ) hoặc 日 (văn viết); thứ là 星期 + số (một đến sáu), Chủ nhật là 星期天 / 星期日.",
+      "cachGhep": [
+        "Năm: đọc từng số + 年 (二〇二六年)",
+        "Tháng: 一月 … 十二月",
+        "Ngày: số + 号 / 日",
+        "Thứ: 星期一 … 星期六, 星期天",
+        "Hỏi: 几月几号？ / 星期几？"
+      ],
+      "viDu": [
+        {
+          "c": "今天十一月十五号。",
+          "d": "Jīntiān shíyī yuè shíwǔ hào.",
+          "v": "Hôm nay là ngày 15 tháng 11."
+        },
+        {
+          "c": "明天星期几？",
+          "d": "Míngtiān xīngqī jǐ?",
+          "v": "Ngày mai là thứ mấy?"
+        },
+        {
+          "c": "我的生日是八月三号。",
+          "d": "Wǒ de shēngrì shì bā yuè sān hào.",
+          "v": "Sinh nhật của tôi là ngày 3 tháng 8."
+        },
+        {
+          "c": "昨天是二〇二六年一月一号，星期四。",
+          "d": "Zuótiān shì èr líng èr liù nián yī yuè yī hào, xīngqīsì.",
+          "v": "Hôm qua là thứ Năm, ngày 1 tháng 1 năm 2026."
+        }
+      ],
+      "luuY": [
+        "Người Việt hay nói ngược theo thói quen \"ngày … tháng …\": 五号三月 là sai, phải là 三月五号.",
+        "Thứ Hai là 星期一 (tuần bắt đầu đếm từ thứ Hai = 1), nên thứ Ba là 星期二 chứ không phải 星期三.",
+        "Trong ngày tháng, 一 đọc nguyên thanh 1: yī yuè yī hào."
+      ],
+      "soSanh": [
+        "zh-hsk1-danh-tu-vi-ngu",
+        "zh-hsk1-thoi-gian"
+      ],
+      "tuKhoa": [
+        "ngay thang",
+        "nian yue hao",
+        "xingqi",
+        "thứ",
+        "ri"
+      ],
+      "quiz": [
+        {
+          "h": "\"Ngày 20 tháng 6\" là:",
+          "lc": [
+            "二十号六月",
+            "六月二十号",
+            "六号二十月",
+            "二十六月号"
+          ],
+          "da": 1,
+          "gt": "Đơn vị lớn trước: tháng (六月) rồi mới đến ngày (二十号)."
+        },
+        {
+          "h": "\"Thứ Tư\" là:",
+          "lc": [
+            "星期四",
+            "星期五",
+            "星期三",
+            "星期二"
+          ],
+          "da": 2,
+          "gt": "Thứ Hai = 星期一, nên thứ Tư = 星期三."
+        },
+        {
+          "h": "今天几月几号？ — ___。",
+          "lc": [
+            "今天九月十号",
+            "今天星期六",
+            "现在九点",
+            "今天很冷"
+          ],
+          "da": 0,
+          "gt": "Hỏi tháng mấy ngày mấy thì trả lời bằng tháng + ngày."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk1-thoi-gian",
+      "nhom": "Thời gian",
+      "tieuDe": "Giờ phút và vị trí của trạng ngữ thời gian",
+      "mau": "S + thời gian + V (+ O) · Thời gian + S + V",
+      "nghia": "nói giờ; từ chỉ thời gian đứng TRƯỚC động từ",
+      "giaiThich": "Giờ nói bằng 点, phút bằng 分, rưỡi là 半. Từ chỉ thời điểm (hôm nay, 8 giờ, thứ Hai…) luôn đứng trước động từ: ngay sau chủ ngữ hoặc ở đầu câu — không bao giờ đứng cuối câu. Nhiều từ thời gian đi liền nhau thì xếp từ lớn đến nhỏ.",
+      "cachGhep": [
+        "Giờ: số + 点 (+ số + 分): 八点, 七点二十分, 九点半",
+        "S + thời gian + V + O: 我八点上课",
+        "Thời gian + S + V + O: 明天我去北京",
+        "Lớn → nhỏ: 明天 + 上午 + 十点"
+      ],
+      "viDu": [
+        {
+          "c": "我七点起床。",
+          "d": "Wǒ qī diǎn qǐchuáng.",
+          "v": "Tôi dậy lúc 7 giờ."
+        },
+        {
+          "c": "明天上午我去医院。",
+          "d": "Míngtiān shàngwǔ wǒ qù yīyuàn.",
+          "v": "Sáng mai tôi đi bệnh viện."
+        },
+        {
+          "c": "你几点睡觉？",
+          "d": "Nǐ jǐ diǎn shuìjiào?",
+          "v": "Bạn đi ngủ lúc mấy giờ?"
+        },
+        {
+          "c": "我们星期六下午三点半看电影。",
+          "d": "Wǒmen xīngqīliù xiàwǔ sān diǎn bàn kàn diànyǐng.",
+          "v": "Ba rưỡi chiều thứ Bảy chúng tôi xem phim."
+        }
+      ],
+      "luuY": [
+        "Lỗi người Việt mắc nhiều nhất: đặt thời gian cuối câu như tiếng Việt (\"tôi đi học lúc 8 giờ\") → 我上课八点 là SAI; phải nói 我八点上课.",
+        "Không cần giới từ trước thời gian: không nói 在八点 trong câu thông thường.",
+        "2 giờ là 两点."
+      ],
+      "soSanh": [
+        "zh-hsk1-dong-tu-svo",
+        "zh-hsk1-ngay-thang"
+      ],
+      "tuKhoa": [
+        "thoi gian",
+        "dian",
+        "fen",
+        "ban",
+        "mấy giờ",
+        "trạng ngữ thời gian"
+      ],
+      "quiz": [
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "我去学校八点。",
+            "我去八点学校。",
+            "我八点去学校。",
+            "八点去我学校。"
+          ],
+          "da": 2,
+          "gt": "Thời gian đứng trước động từ: S + thời gian + V + O."
+        },
+        {
+          "h": "\"7 giờ rưỡi\" là:",
+          "lc": [
+            "七点半",
+            "半七点",
+            "七半点",
+            "七分半"
+          ],
+          "da": 0,
+          "gt": "Rưỡi là 半 đặt sau giờ: 七点半 (số giờ + 点 + 半)."
+        },
+        {
+          "h": "Sắp xếp đúng: 我 / 明天下午 / 买东西 / 去",
+          "lc": [
+            "我去买东西明天下午。",
+            "我明天下午去买东西。",
+            "明天下午去我买东西。",
+            "我去明天下午买东西。"
+          ],
+          "da": 1,
+          "gt": "Trạng ngữ thời gian đứng sau chủ ngữ, trước động từ."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk1-ye",
+      "nhom": "Phó từ – liên từ",
+      "tieuDe": "也",
+      "mau": "S + 也 + động từ / tính từ",
+      "nghia": "cũng ~",
+      "giaiThich": "也 là phó từ, luôn đứng SAU chủ ngữ và TRƯỚC động từ / tính từ (trước cả 不, 很, 都). Dùng khi một sự việc giống với điều vừa nói trước đó.",
+      "cachGhep": [
+        "S + 也 + V + O",
+        "S + 也 + 很 + tính từ",
+        "S + 也 + 不 / 没 + V",
+        "Có cả 也 và 都: 也都 (也 đứng trước)"
+      ],
+      "viDu": [
+        {
+          "c": "我也是学生。",
+          "d": "Wǒ yě shì xuésheng.",
+          "v": "Tôi cũng là học sinh."
+        },
+        {
+          "c": "她也很忙。",
+          "d": "Tā yě hěn máng.",
+          "v": "Cô ấy cũng rất bận."
+        },
+        {
+          "c": "我也不喜欢喝咖啡。",
+          "d": "Wǒ yě bù xǐhuan hē kāfēi.",
+          "v": "Tôi cũng không thích uống cà phê."
+        },
+        {
+          "c": "你也去北京吗？",
+          "d": "Nǐ yě qù Běijīng ma?",
+          "v": "Bạn cũng đi Bắc Kinh à?"
+        }
+      ],
+      "luuY": [
+        "也 không đứng đầu hay cuối câu: 我也去 (không nói 也我去, 我去也).",
+        "Không trả lời cộc lốc 我也 kiểu \"me too\"; phải có động từ: 我也是 / 我也喜欢.",
+        "Thứ tự: 也 + 不 (也不去), không nói 不也去 trong câu thường."
+      ],
+      "soSanh": [
+        "zh-hsk1-dou"
+      ],
+      "tuKhoa": [
+        "ye",
+        "cũng",
+        "phó từ"
+      ],
+      "quiz": [
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "也我喜欢猫。",
+            "我喜欢也猫。",
+            "我喜欢猫也。",
+            "我也喜欢猫。"
+          ],
+          "da": 3,
+          "gt": "也 đứng sau chủ ngữ, trước động từ."
+        },
+        {
+          "h": "他是老师，我___是老师。",
+          "lc": [
+            "也",
+            "吗",
+            "的",
+            "和"
+          ],
+          "da": 0,
+          "gt": "Cùng nội dung với vế trước → dùng 也 trước 是."
+        },
+        {
+          "h": "Sắp xếp đúng: 我 / 不 / 也 / 去",
+          "lc": [
+            "我不也去。",
+            "我也不去。",
+            "也我不去。",
+            "我不去也。"
+          ],
+          "da": 1,
+          "gt": "也 đứng trước 不: 也不去."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk1-dou",
+      "nhom": "Phó từ – liên từ",
+      "tieuDe": "都",
+      "mau": "S (số nhiều) + 都 + động từ / tính từ",
+      "nghia": "đều ~ , tất cả đều",
+      "giaiThich": "都 tổng kết những người / vật đã nêu ở PHÍA TRƯỚC nó, đứng trước động từ / tính từ. Chủ ngữ thường là số nhiều (我们, 他们, 这些…). Vị trí của 不 làm đổi nghĩa: 都不 = tất cả đều không; 不都 = không phải tất cả.",
+      "cachGhep": [
+        "S + 都 + V + O",
+        "S + 也 + 都 + V (也 trước 都)",
+        "都 + 不 + V: tất cả đều không",
+        "不 + 都 + V: không phải tất cả"
+      ],
+      "viDu": [
+        {
+          "c": "我们都是学生。",
+          "d": "Wǒmen dōu shì xuésheng.",
+          "v": "Chúng tôi đều là học sinh."
+        },
+        {
+          "c": "他们都不喝茶。",
+          "d": "Tāmen dōu bù hē chá.",
+          "v": "Họ đều không uống trà."
+        },
+        {
+          "c": "这些菜都很好吃。",
+          "d": "Zhèxiē cài dōu hěn hǎochī.",
+          "v": "Những món này đều rất ngon."
+        },
+        {
+          "c": "我们不都是中国人。",
+          "d": "Wǒmen bù dōu shì Zhōngguó rén.",
+          "v": "Chúng tôi không phải tất cả đều là người Trung Quốc."
+        }
+      ],
+      "luuY": [
+        "Không đặt 都 trước chủ ngữ: nói 我们都去, KHÔNG nói 都我们去 (tiếng Việt nói \"tất cả chúng tôi\" nên dễ sai).",
+        "Những thứ được tổng kết phải đứng trước 都: 这些书我都喜欢.",
+        "都 ở đây đọc dōu (chữ này còn đọc dū trong 首都)."
+      ],
+      "soSanh": [
+        "zh-hsk1-ye",
+        "zh-hsk2-mei-dou"
+      ],
+      "tuKhoa": [
+        "dou",
+        "đều",
+        "tất cả",
+        "dou bu",
+        "bu dou"
+      ],
+      "quiz": [
+        {
+          "h": "我爸爸妈妈___是医生。",
+          "lc": [
+            "很",
+            "都",
+            "吗",
+            "和"
+          ],
+          "da": 1,
+          "gt": "Chủ ngữ gồm hai người → dùng 都 trước 是."
+        },
+        {
+          "h": "「他们都不是老师」 nghĩa là:",
+          "lc": [
+            "Họ đều không phải giáo viên.",
+            "Không phải tất cả họ là giáo viên.",
+            "Họ đều là giáo viên.",
+            "Họ cũng là giáo viên."
+          ],
+          "da": 0,
+          "gt": "都不 = tất cả đều không. (不都 mới là \"không phải tất cả\".)"
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "都我们喜欢他。",
+            "我们喜欢都他。",
+            "我们也都喜欢他。",
+            "我们都也喜欢他。"
+          ],
+          "da": 2,
+          "gt": "都 đứng sau chủ ngữ; khi có cả hai thì 也 trước 都."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk1-he",
+      "nhom": "Phó từ – liên từ",
+      "tieuDe": "和",
+      "mau": "Danh từ / đại từ + 和 + danh từ / đại từ",
+      "nghia": "và, với (nối danh từ, đại từ)",
+      "giaiThich": "和 nối hai danh từ hoặc đại từ ngang hàng: 我和你, 茶和咖啡. Ở trình độ cơ bản, 和 KHÔNG dùng để nối hai câu hay hai vế câu như \"và\" trong tiếng Việt. Ngoài ra 和 + người + (一起) + V nghĩa là \"cùng với ai làm gì\".",
+      "cachGhep": [
+        "A + 和 + B (danh từ, đại từ)",
+        "Nhiều thứ: A、B + 和 + C (和 đặt trước cái cuối)",
+        "S + 和 + người + (一起) + V: cùng ai làm gì"
+      ],
+      "viDu": [
+        {
+          "c": "我和他都是学生。",
+          "d": "Wǒ hé tā dōu shì xuésheng.",
+          "v": "Tôi và anh ấy đều là học sinh."
+        },
+        {
+          "c": "我喜欢喝茶和咖啡。",
+          "d": "Wǒ xǐhuan hē chá hé kāfēi.",
+          "v": "Tôi thích uống trà và cà phê."
+        },
+        {
+          "c": "爸爸、妈妈和我都在家。",
+          "d": "Bàba, māma hé wǒ dōu zài jiā.",
+          "v": "Bố, mẹ và tôi đều ở nhà."
+        },
+        {
+          "c": "我和朋友去看电影。",
+          "d": "Wǒ hé péngyou qù kàn diànyǐng.",
+          "v": "Tôi đi xem phim với bạn."
+        }
+      ],
+      "luuY": [
+        "Không dùng 和 nối hai câu: 我是学生，和他是老师 là SAI — chỉ cần dấu phẩy: 我是学生，他是老师.",
+        "Không dùng 和 nối hai tính từ làm vị ngữ ở trình độ này: không nói 她很漂亮和很高.",
+        "\"Đi với bạn\": 和朋友去 — cụm 和朋友 đứng TRƯỚC động từ, không nói 去和朋友."
+      ],
+      "soSanh": [
+        "zh-hsk2-gen-yiyang"
+      ],
+      "tuKhoa": [
+        "he",
+        "và",
+        "với",
+        "liên từ",
+        "cùng"
+      ],
+      "quiz": [
+        {
+          "h": "我有一个哥哥___一个妹妹。",
+          "lc": [
+            "也",
+            "都",
+            "和",
+            "很"
+          ],
+          "da": 2,
+          "gt": "Nối hai danh từ ngang hàng bằng 和."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "我喜欢猫和狗。",
+            "我喜欢猫，和他喜欢狗。",
+            "我去看电影和朋友。",
+            "她很高和很漂亮。"
+          ],
+          "da": 0,
+          "gt": "和 nối hai danh từ (猫, 狗); không nối hai vế câu, và cụm 和 + người đứng trước động từ."
+        },
+        {
+          "h": "Sắp xếp đúng: 我 / 妈妈 / 和 / 去商店",
+          "lc": [
+            "我去商店和妈妈。",
+            "我和妈妈去商店。",
+            "和我妈妈去商店。",
+            "我妈妈和去商店。"
+          ],
+          "da": 1,
+          "gt": "S + 和 + người + V: 我和妈妈去商店."
+        }
+      ]
+    },
+    {
+      "id": "zh-hsk1-tai-le",
+      "nhom": "Phó từ – liên từ",
+      "tieuDe": "太…了",
+      "mau": "太 + tính từ + 了",
+      "nghia": "~ quá! (khen hoặc chê vượt mức)",
+      "giaiThich": "太…了 diễn tả mức độ rất cao kèm cảm xúc của người nói: khen (太好了！) hoặc than phiền vì quá mức (太贵了). Dạng phủ định 不太 + tính từ nghĩa là \"không … lắm\" và không có 了.",
+      "cachGhep": [
+        "太 + tính từ + 了",
+        "Phủ định mềm: 不太 + tính từ / động từ tâm lý (không … lắm)",
+        "Không dùng cùng 很: không nói 很太好"
+      ],
+      "viDu": [
+        {
+          "c": "太好了！",
+          "d": "Tài hǎo le!",
+          "v": "Tốt quá!"
+        },
+        {
+          "c": "今天太热了。",
+          "d": "Jīntiān tài rè le.",
+          "v": "Hôm nay nóng quá."
+        },
+        {
+          "c": "这件衣服太贵了，我不买。",
+          "d": "Zhè jiàn yīfu tài guì le, wǒ bù mǎi.",
+          "v": "Cái áo này đắt quá, tôi không mua."
+        },
+        {
+          "c": "我不太喜欢看电视。",
+          "d": "Wǒ bú tài xǐhuan kàn diànshì.",
+          "v": "Tôi không thích xem ti vi lắm."
+        }
+      ],
+      "luuY": [
+        "Trật tự ngược tiếng Việt: \"đắt quá\" = 太贵了 (太 đứng TRƯỚC tính từ). Không nói 贵太了.",
+        "Câu khẳng định thường phải có 了 ở cuối; riêng 不太… thì không có 了."
+      ],
+      "soSanh": [
+        "zh-hsk1-tinh-tu-hen",
+        "zh-hsk2-zhen-feichang-ting"
+      ],
+      "tuKhoa": [
+        "tai le",
+        "tai",
+        "quá",
+        "bu tai",
+        "không lắm"
+      ],
+      "quiz": [
+        {
+          "h": "这个苹果___大___！",
+          "lc": [
+            "很…吗",
+            "太…了",
+            "不…的",
+            "是…了"
+          ],
+          "da": 1,
+          "gt": "Cảm thán mức độ cao: 太 + tính từ + 了."
+        },
+        {
+          "h": "「我不太忙」 nghĩa là:",
+          "lc": [
+            "Tôi bận quá.",
+            "Tôi không bận chút nào.",
+            "Tôi cũng bận.",
+            "Tôi không bận lắm."
+          ],
+          "da": 3,
+          "gt": "不太 + tính từ = không … lắm."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "今天太冷了。",
+            "今天冷太了。",
+            "今天很太冷。",
+            "今天太冷吗了。"
+          ],
+          "da": 0,
+          "gt": "太 đứng trước tính từ, 了 ở cuối câu; không dùng chung với 很."
+        }
+      ]
+    }
+  ]
+}

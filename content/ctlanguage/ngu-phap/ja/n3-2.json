@@ -1,0 +1,1075 @@
+{
+  "nn": "ja",
+  "cap": "N3",
+  "diem": [
+    {
+      "id": "ja-n3-ni-kanshite",
+      "nhom": "Trợ từ ghép (に〜 / を〜)",
+      "tieuDe": "〜に関して",
+      "mau": "N + に関して / N + に関する + N",
+      "nghia": "về ~, liên quan đến ~ (trang trọng)",
+      "giaiThich": "Nghĩa giống について nhưng trang trọng hơn, hay dùng trong công việc, thông báo, bài viết, bản tin. Khi bổ nghĩa cho danh từ dùng に関する + N.",
+      "cachGhep": [
+        "Danh từ + に関して（は / も）",
+        "Danh từ + に関する + danh từ: 健康に関する本"
+      ],
+      "viDu": [
+        {
+          "c": "この件に関して、ご質問はありますか。",
+          "d": "この けんにかんして、ごしつもんは ありますか。",
+          "v": "Về việc này, quý vị có câu hỏi nào không?"
+        },
+        {
+          "c": "事故の原因に関しては、今調べています。",
+          "d": "じこの げんいんにかんしては、いま しらべています。",
+          "v": "Về nguyên nhân vụ tai nạn, hiện chúng tôi đang điều tra."
+        },
+        {
+          "c": "健康に関する本をよく読みます。",
+          "d": "けんこうにかんする ほんを よく よみます。",
+          "v": "Tôi hay đọc sách liên quan đến sức khoẻ."
+        }
+      ],
+      "luuY": [
+        "Trong hội thoại thân mật, dùng について tự nhiên hơn; に関して nghe cứng.",
+        "Trước danh từ: に関する N hoặc に関しての N (✗ 健康に関して本)."
+      ],
+      "soSanh": [
+        "ja-n3-ni-tsuite"
+      ],
+      "tuKhoa": [
+        "ni kanshite",
+        "nikanshite",
+        "ni kansuru",
+        "liên quan đến",
+        "về"
+      ],
+      "quiz": [
+        {
+          "h": "これは留学（　）情報です。",
+          "lc": [
+            "に関して",
+            "に関する",
+            "に関し"
+          ],
+          "da": 1,
+          "gt": "Bổ nghĩa cho danh từ 情報 phải dùng に関する."
+        },
+        {
+          "h": "So với 「〜について」, 「〜に関して」 có sắc thái gì?",
+          "lc": [
+            "Trang trọng hơn, hay dùng trong công việc và văn viết",
+            "Thân mật hơn, dùng với bạn bè",
+            "Nghĩa hoàn toàn khác"
+          ],
+          "da": 0,
+          "gt": "Hai mẫu cùng nghĩa \"về ~\", に関して trang trọng hơn."
+        },
+        {
+          "h": "税金（　）、詳しく説明します。",
+          "lc": [
+            "にとって",
+            "によって",
+            "に関して"
+          ],
+          "da": 2,
+          "gt": "Nội dung của lời giải thích ⇒ に関して (= について)."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-ni-totte",
+      "nhom": "Trợ từ ghép (に〜 / を〜)",
+      "tieuDe": "〜にとって",
+      "mau": "N + にとって（は / も）+ câu đánh giá",
+      "nghia": "đối với ~ (đứng từ lập trường của ~ mà đánh giá)",
+      "giaiThich": "Dùng khi đứng từ lập trường của một người, một tổ chức để đưa ra nhận xét, đánh giá. Vế sau là tính từ hoặc câu đánh giá như 大切だ, 難しい, 必要だ, 〜ものだ.",
+      "cachGhep": [
+        "Danh từ (người, tổ chức) + にとって + câu đánh giá",
+        "Bổ nghĩa danh từ: N + にとっての + N"
+      ],
+      "viDu": [
+        {
+          "c": "私にとって、家族が一番大切です。",
+          "d": "わたしにとって、かぞくが いちばん たいせつです。",
+          "v": "Đối với tôi, gia đình là quan trọng nhất."
+        },
+        {
+          "c": "外国人にとって、漢字は難しいです。",
+          "d": "がいこくじんにとって、かんじは むずかしいです。",
+          "v": "Đối với người nước ngoài, chữ Hán thì khó."
+        },
+        {
+          "c": "これは子どもにとっては、難しすぎる問題です。",
+          "d": "これは こどもにとっては、むずかしすぎる もんだいです。",
+          "v": "Với trẻ con thì đây là bài quá khó."
+        }
+      ],
+      "luuY": [
+        "Vế sau không dùng động từ thể hiện thái độ như 賛成する, 反対する, 感謝する (những từ này đi với に対して).",
+        "Lỗi hay gặp: 私にとって、〜と思います. Muốn nói \"tôi nghĩ\" thì dùng 私は〜と思います."
+      ],
+      "soSanh": [
+        "ja-n3-ni-taishite",
+        "ja-n3-to-shite"
+      ],
+      "tuKhoa": [
+        "ni totte",
+        "nitotte",
+        "đối với",
+        "lập trường"
+      ],
+      "quiz": [
+        {
+          "h": "学生（　）、一番大切なのは勉強だ。",
+          "lc": [
+            "にとって",
+            "について",
+            "によって",
+            "に関して"
+          ],
+          "da": 0,
+          "gt": "Đánh giá (大切) đứng từ lập trường học sinh ⇒ にとって."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "私にとって、その意見に反対です。",
+            "私にとって、この町は第二のふるさとです。",
+            "私にとって、日本へ行きたいです。"
+          ],
+          "da": 1,
+          "gt": "Sau にとって là câu đánh giá, nhận định; không dùng 反対だ hay mong muốn 〜たい."
+        },
+        {
+          "h": "この辞書は、私（　）とても役に立つ。",
+          "lc": [
+            "に対して",
+            "について",
+            "として",
+            "にとって"
+          ],
+          "da": 3,
+          "gt": "Đánh giá \"có ích\" đứng từ phía tôi ⇒ にとって."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-to-shite",
+      "nhom": "Trợ từ ghép (に〜 / を〜)",
+      "tieuDe": "〜として",
+      "mau": "N + として（は / も）/ N + としての + N",
+      "nghia": "với tư cách là ~, với vai trò là ~, xem như là ~",
+      "giaiThich": "Chỉ tư cách, vai trò, danh nghĩa của người hay vật khi thực hiện hành động. Dùng được cả trong văn nói lẫn văn viết.",
+      "cachGhep": [
+        "Danh từ + として + động từ",
+        "Danh từ + としての + danh từ: 親としての責任",
+        "Danh từ + としては: xét với tư cách ~ thì"
+      ],
+      "viDu": [
+        {
+          "c": "彼は留学生として日本に来ました。",
+          "d": "かれは りゅうがくせいとして にほんに きました。",
+          "v": "Anh ấy đến Nhật với tư cách du học sinh."
+        },
+        {
+          "c": "京都は古い町として有名です。",
+          "d": "きょうとは ふるい まちとして ゆうめいです。",
+          "v": "Kyoto nổi tiếng là một thành phố cổ."
+        },
+        {
+          "c": "親としての責任を考えなければなりません。",
+          "d": "おやとしての せきにんを かんがえなければなりません。",
+          "v": "Phải nghĩ đến trách nhiệm với tư cách là cha mẹ."
+        }
+      ],
+      "luuY": [
+        "として = tư cách, vai trò khi làm việc gì; にとって = lập trường để đánh giá. So sánh: 医者として働く (làm việc với tư cách bác sĩ) và 医者にとって大切だ (quan trọng đối với bác sĩ)."
+      ],
+      "soSanh": [
+        "ja-n3-ni-totte",
+        "ja-n3-to-shitemo"
+      ],
+      "tuKhoa": [
+        "to shite",
+        "toshite",
+        "với tư cách",
+        "vai trò"
+      ],
+      "quiz": [
+        {
+          "h": "田中さんは医者（　）、この病院で働いている。",
+          "lc": [
+            "として",
+            "にとって",
+            "について",
+            "によって"
+          ],
+          "da": 0,
+          "gt": "Tư cách khi làm việc ⇒ として."
+        },
+        {
+          "h": "趣味（　）、絵をかいています。",
+          "lc": [
+            "にとって",
+            "として",
+            "に対して"
+          ],
+          "da": 1,
+          "gt": "\"Vẽ tranh như một sở thích\" ⇒ 趣味として."
+        },
+        {
+          "h": "「社会人としての責任」 nghĩa là gì?",
+          "lc": [
+            "Trách nhiệm đối với người đi làm",
+            "Trách nhiệm về người đi làm",
+            "Trách nhiệm với tư cách người đi làm"
+          ],
+          "da": 2,
+          "gt": "N + としての + N: với tư cách là ~."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-ni-kurabete",
+      "nhom": "Trợ từ ghép (に〜 / を〜)",
+      "tieuDe": "〜に比べて",
+      "mau": "N + に比べて / N + に比べると",
+      "nghia": "so với ~ thì",
+      "giaiThich": "Lấy một đối tượng làm mốc để so sánh. Nghĩa gần với 〜より nhưng hơi trang trọng hơn và hay dùng khi so sánh hai thời kỳ, hai nơi, hai nhóm.",
+      "cachGhep": [
+        "Danh từ + に比べて / に比べると / に比べ (văn viết)",
+        "Cả câu: thể thường + の + に比べて"
+      ],
+      "viDu": [
+        {
+          "c": "去年に比べて、今年の夏は暑いです。",
+          "d": "きょねんにくらべて、ことしの なつは あついです。",
+          "v": "So với năm ngoái, mùa hè năm nay nóng hơn."
+        },
+        {
+          "c": "東京に比べると、私の町は静かです。",
+          "d": "とうきょうにくらべると、わたしの まちは しずかです。",
+          "v": "So với Tokyo thì thị trấn của tôi yên tĩnh."
+        },
+        {
+          "c": "兄に比べて、弟はあまり勉強しません。",
+          "d": "あににくらべて、おとうとは あまり べんきょうしません。",
+          "v": "So với anh trai thì người em không học mấy."
+        }
+      ],
+      "luuY": [
+        "Trợ từ là に (✗ 去年を比べて). Tính từ giữ nguyên, không cần thêm từ nào mang nghĩa \"hơn\".",
+        "Văn nói thường ngày hay dùng 〜より; に比べて hợp với câu nhận xét, so sánh hai thời kỳ hay số liệu."
+      ],
+      "soSanh": [
+        "ja-n3-ni-kuwaete"
+      ],
+      "tuKhoa": [
+        "ni kurabete",
+        "nikurabete",
+        "so với",
+        "so sánh"
+      ],
+      "quiz": [
+        {
+          "h": "昔（　）、今は生活が便利になった。",
+          "lc": [
+            "にとって",
+            "について",
+            "に比べて",
+            "として"
+          ],
+          "da": 2,
+          "gt": "So sánh ngày xưa với bây giờ ⇒ に比べて."
+        },
+        {
+          "h": "「AはBに比べて高い」 nghĩa giống câu nào?",
+          "lc": [
+            "AはBより高い",
+            "BはAより高い",
+            "AとBは同じだ"
+          ],
+          "da": 0,
+          "gt": "B là mốc so sánh: A cao hơn B."
+        },
+        {
+          "h": "都会に比べると、田舎は（　）。",
+          "lc": [
+            "静かにしなさい",
+            "空気がきれいだ",
+            "行きましょう"
+          ],
+          "da": 1,
+          "gt": "Sau に比べると là câu nhận xét, so sánh, không phải mệnh lệnh hay lời rủ."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-ni-kuwaete",
+      "nhom": "Trợ từ ghép (に〜 / を〜)",
+      "tieuDe": "〜に加えて",
+      "mau": "N + に加えて",
+      "nghia": "thêm vào ~, ngoài ~ ra còn",
+      "giaiThich": "Dùng khi đã có một điều rồi lại có thêm điều khác cùng loại chồng lên. Hơi cứng, thiên về văn viết; vế sau thường có も.",
+      "cachGhep": [
+        "Danh từ + に加えて + … も",
+        "Cả câu: thể thường + こと / の + に加えて"
+      ],
+      "viDu": [
+        {
+          "c": "雨に加えて、風も強くなってきました。",
+          "d": "あめにくわえて、かぜも つよくなってきました。",
+          "v": "Đã mưa, gió lại còn mạnh lên nữa."
+        },
+        {
+          "c": "彼は英語に加えて、中国語も話せます。",
+          "d": "かれは えいごにくわえて、ちゅうごくごも はなせます。",
+          "v": "Ngoài tiếng Anh, anh ấy còn nói được tiếng Trung."
+        },
+        {
+          "c": "授業料に加えて、教科書代も必要です。",
+          "d": "じゅぎょうりょうにくわえて、きょうかしょだいも ひつようです。",
+          "v": "Ngoài học phí còn cần cả tiền sách giáo khoa."
+        }
+      ],
+      "luuY": [
+        "Hai điều được nêu phải cùng chiều (cùng tốt hoặc cùng xấu). Trong hội thoại, 〜だけでなく、〜も tự nhiên hơn."
+      ],
+      "soSanh": [
+        "ja-n3-ni-kurabete",
+        "ja-n3-dake-de-naku"
+      ],
+      "tuKhoa": [
+        "ni kuwaete",
+        "nikuwaete",
+        "thêm vào",
+        "ngoài ra còn"
+      ],
+      "quiz": [
+        {
+          "h": "今日は寒さ（　）、雪も降っている。",
+          "lc": [
+            "に加えて",
+            "に比べて",
+            "にとって",
+            "について"
+          ],
+          "da": 0,
+          "gt": "Đã lạnh lại thêm tuyết ⇒ に加えて."
+        },
+        {
+          "h": "「Aに加えてBも」 nghĩa là gì?",
+          "lc": [
+            "Thay cho A thì B",
+            "Ngoài A ra còn có cả B",
+            "Tuỳ theo A mà B"
+          ],
+          "da": 1,
+          "gt": "に加えて = cộng thêm vào."
+        },
+        {
+          "h": "給料が安いことに加えて、（　）。",
+          "lc": [
+            "仕事は楽だ",
+            "休みが多い",
+            "休みも少ない"
+          ],
+          "da": 2,
+          "gt": "Hai vế phải cùng chiều: lương thấp, lại thêm ít ngày nghỉ."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-kawari-ni",
+      "nhom": "Trợ từ ghép (に〜 / を〜)",
+      "tieuDe": "〜かわりに／〜にかわって",
+      "mau": "N + の + かわりに / V-る + かわりに / N + にかわって",
+      "nghia": "thay cho ~; thay mặt ~; đổi lại, bù lại ~",
+      "giaiThich": "かわりに có ba ý: (1) thay cho người, vật khác; (2) không làm việc A mà làm việc B; (3) đổi lại, bù lại. にかわって chỉ dùng với danh từ, nghĩa là thay mặt, thay thế cho ai, cái gì, và trang trọng hơn.",
+      "cachGhep": [
+        "Danh từ + の + かわりに",
+        "Động từ thể thường + かわりに",
+        "Danh từ + にかわって / にかわり (trang trọng)"
+      ],
+      "viDu": [
+        {
+          "c": "父のかわりに、私が会議に出ました。",
+          "d": "ちちの かわりに、わたしが かいぎに でました。",
+          "v": "Tôi đã dự họp thay cho bố."
+        },
+        {
+          "c": "社長にかわって、私がごあいさつします。",
+          "d": "しゃちょうにかわって、わたしが ごあいさつします。",
+          "v": "Tôi xin thay mặt giám đốc phát biểu chào mừng."
+        },
+        {
+          "c": "日本語を教えてもらうかわりに、英語を教えてあげます。",
+          "d": "にほんごを おしえてもらうかわりに、えいごを おしえてあげます。",
+          "v": "Đổi lại việc được dạy tiếng Nhật, tôi dạy tiếng Anh cho bạn ấy."
+        },
+        {
+          "c": "映画に行くかわりに、家でテレビを見ました。",
+          "d": "えいがに いくかわりに、いえで テレビを みました。",
+          "v": "Thay vì đi xem phim, tôi ở nhà xem tivi."
+        }
+      ],
+      "luuY": [
+        "Nghĩa \"đổi lại, bù lại\" chỉ có ở かわりに, không dùng にかわって.",
+        "Sau danh từ: N + の + かわりに nhưng N + に + かわって — đừng lẫn trợ từ."
+      ],
+      "tuKhoa": [
+        "kawari ni",
+        "kawarini",
+        "ni kawatte",
+        "thay cho",
+        "thay mặt",
+        "đổi lại"
+      ],
+      "quiz": [
+        {
+          "h": "病気の母（　）、姉が料理を作っている。",
+          "lc": [
+            "にかわって",
+            "のかわって",
+            "をかわりに",
+            "にかわりに"
+          ],
+          "da": 0,
+          "gt": "N + にかわって hoặc N + の + かわりに; ba lựa chọn kia sai trợ từ."
+        },
+        {
+          "h": "手伝ってもらう（　）、昼ご飯をごちそうします。",
+          "lc": [
+            "とたんに",
+            "かわりに",
+            "最中に",
+            "以来"
+          ],
+          "da": 1,
+          "gt": "\"Đổi lại việc được giúp\" ⇒ V-る + かわりに."
+        },
+        {
+          "h": "「コーヒーのかわりに紅茶を飲んだ」 — người nói đã uống gì?",
+          "lc": [
+            "Cà phê",
+            "Cả hai",
+            "Trà"
+          ],
+          "da": 2,
+          "gt": "N + の + かわりに = thay cho N; uống trà thay cho cà phê."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-wo-chuushin-ni",
+      "nhom": "Trợ từ ghép (に〜 / を〜)",
+      "tieuDe": "〜を中心に",
+      "mau": "N + を中心に（して）/ N + を中心とした + N",
+      "nghia": "lấy ~ làm trung tâm, xoay quanh ~, chủ yếu là ~",
+      "giaiThich": "Chỉ ra người, vật, nơi hay nội dung đóng vai trò trung tâm của một phạm vi hoặc một hoạt động.",
+      "cachGhep": [
+        "Danh từ + を中心に / を中心にして / を中心として",
+        "Bổ nghĩa danh từ: N + を中心とした + N / N + を中心にした + N"
+      ],
+      "viDu": [
+        {
+          "c": "駅を中心に、たくさんの店が並んでいます。",
+          "d": "えきを ちゅうしんに、たくさんの みせが ならんでいます。",
+          "v": "Rất nhiều cửa hàng nằm san sát quanh nhà ga."
+        },
+        {
+          "c": "このクラスは会話を中心に勉強します。",
+          "d": "この クラスは かいわを ちゅうしんに べんきょうします。",
+          "v": "Lớp này học chủ yếu là hội thoại."
+        },
+        {
+          "c": "地球は太陽を中心に回っています。",
+          "d": "ちきゅうは たいようを ちゅうしんに まわっています。",
+          "v": "Trái Đất quay quanh Mặt Trời."
+        }
+      ],
+      "luuY": [
+        "Trợ từ là を (✗ 駅に中心に, ✗ 駅の中心に với nghĩa này). 駅の中心に = ở chính giữa nhà ga, nghĩa khác."
+      ],
+      "soSanh": [
+        "ja-n3-wo-hajime"
+      ],
+      "tuKhoa": [
+        "wo chuushin ni",
+        "o chuushin ni",
+        "chuushin",
+        "trung tâm",
+        "xoay quanh"
+      ],
+      "quiz": [
+        {
+          "h": "この町は、工業（　）中心に発展した。",
+          "lc": [
+            "が",
+            "に",
+            "を",
+            "で"
+          ],
+          "da": 2,
+          "gt": "Mẫu là N + を + 中心に."
+        },
+        {
+          "h": "「駅を中心に店が多い」 nghĩa là gì?",
+          "lc": [
+            "Cửa hàng tập trung quanh nhà ga",
+            "Trong nhà ga không có cửa hàng",
+            "Cửa hàng ở xa nhà ga"
+          ],
+          "da": 0,
+          "gt": "を中心に = lấy nhà ga làm trung tâm."
+        },
+        {
+          "h": "来週の授業は、文法（　）進めます。",
+          "lc": [
+            "の中心を",
+            "を中心に",
+            "に中心で"
+          ],
+          "da": 1,
+          "gt": "N + を中心に + động từ."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-wo-hajime",
+      "nhom": "Trợ từ ghép (に〜 / を〜)",
+      "tieuDe": "〜をはじめ",
+      "mau": "N + をはじめ（として）、…",
+      "nghia": "tiêu biểu là ~, trước hết phải kể đến ~, rồi đến những cái khác",
+      "giaiThich": "Nêu một ví dụ tiêu biểu nhất trước, rồi nói rằng còn nhiều thứ khác cùng loại. Trang trọng, hay gặp trong bài giới thiệu, bài phát biểu.",
+      "cachGhep": [
+        "Danh từ + をはじめ / をはじめとして、…",
+        "Bổ nghĩa danh từ: N + をはじめとする + N"
+      ],
+      "viDu": [
+        {
+          "c": "日本には、東京をはじめ、大きな町がたくさんあります。",
+          "d": "にほんには、とうきょうを はじめ、おおきな まちが たくさん あります。",
+          "v": "Ở Nhật có nhiều thành phố lớn, tiêu biểu là Tokyo."
+        },
+        {
+          "c": "校長先生をはじめ、多くの先生が出席しました。",
+          "d": "こうちょうせんせいを はじめ、おおくの せんせいが しゅっせきしました。",
+          "v": "Thầy hiệu trưởng cùng nhiều thầy cô khác đã tham dự."
+        },
+        {
+          "c": "この店では、すしをはじめとして、いろいろな日本料理が食べられます。",
+          "d": "この みせでは、すしを はじめとして、いろいろな にほんりょうりが たべられます。",
+          "v": "Ở quán này ăn được nhiều món Nhật, trước hết phải kể đến sushi."
+        }
+      ],
+      "luuY": [
+        "Vế sau thường có từ chỉ số nhiều: いろいろな, 多くの, たくさん, みんな. Không dùng khi chỉ có một thứ."
+      ],
+      "soSanh": [
+        "ja-n3-wo-chuushin-ni"
+      ],
+      "tuKhoa": [
+        "wo hajime",
+        "o hajime",
+        "wo hajime to shite",
+        "tiêu biểu là",
+        "trước hết là"
+      ],
+      "quiz": [
+        {
+          "h": "京都には、金閣寺（　）、有名な寺が多い。",
+          "lc": [
+            "をはじめ",
+            "にはじめ",
+            "がはじめ",
+            "ではじめ"
+          ],
+          "da": 0,
+          "gt": "Mẫu là N + を + はじめ."
+        },
+        {
+          "h": "Trong 「AをはじめB」, A là gì?",
+          "lc": [
+            "Thứ duy nhất được nói tới",
+            "Ví dụ tiêu biểu của nhóm B",
+            "Thứ không thuộc nhóm B"
+          ],
+          "da": 1,
+          "gt": "A là đại diện tiêu biểu, sau đó mở rộng ra cả nhóm."
+        },
+        {
+          "h": "両親をはじめ、（　）。",
+          "lc": [
+            "だれにも会いませんでした",
+            "父だけが来てくれました",
+            "家族みんなが来てくれました"
+          ],
+          "da": 2,
+          "gt": "Vế sau phải nói về nhiều người cùng nhóm: cả gia đình."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-wo-tsuujite",
+      "nhom": "Trợ từ ghép (に〜 / を〜)",
+      "tieuDe": "〜を通じて／〜を通して",
+      "mau": "N + を通じて / N + を通して",
+      "nghia": "thông qua ~ (trung gian, phương tiện); suốt cả ~ (thời gian)",
+      "giaiThich": "Nghĩa thứ nhất: việc gì đó được thực hiện qua một người, một phương tiện, một trải nghiệm làm trung gian. Nghĩa thứ hai: trạng thái kéo dài suốt cả một khoảng thời gian. Hai dạng gần như thay cho nhau được.",
+      "cachGhep": [
+        "Danh từ + を通じて（つうじて）",
+        "Danh từ + を通して（とおして）",
+        "Thời gian: 一年を通じて, 一生を通して"
+      ],
+      "viDu": [
+        {
+          "c": "インターネットを通じて、世界中のニュースを知ることができます。",
+          "d": "インターネットを つうじて、せかいじゅうの ニュースを しることが できます。",
+          "v": "Thông qua Internet, ta có thể biết tin tức khắp thế giới."
+        },
+        {
+          "c": "友達を通して、彼と知り合いました。",
+          "d": "ともだちを とおして、かれと しりあいました。",
+          "v": "Tôi quen anh ấy qua một người bạn."
+        },
+        {
+          "c": "この島は一年を通じて暖かいです。",
+          "d": "この しまは いちねんを つうじて あたたかいです。",
+          "v": "Hòn đảo này ấm áp quanh năm."
+        }
+      ],
+      "luuY": [
+        "Cách đọc khác nhau: 通じて = つうじて, 通して = とおして.",
+        "Dụng cụ cụ thể thì dùng で (✗ ペンを通して書く)."
+      ],
+      "soSanh": [
+        "ja-n3-ni-yotte"
+      ],
+      "tuKhoa": [
+        "wo tsuujite",
+        "wo tooshite",
+        "o tsuujite",
+        "thông qua",
+        "suốt"
+      ],
+      "quiz": [
+        {
+          "h": "スポーツ（　）、たくさんの友達ができた。",
+          "lc": [
+            "を通じて",
+            "に通じて",
+            "が通して",
+            "で通して"
+          ],
+          "da": 0,
+          "gt": "Mẫu là N + を + 通じて / 通して."
+        },
+        {
+          "h": "ここは一年（　）観光客が多い。",
+          "lc": [
+            "にとって",
+            "を通して",
+            "について",
+            "として"
+          ],
+          "da": 1,
+          "gt": "\"Suốt cả năm\" ⇒ 一年を通して."
+        },
+        {
+          "h": "「通して」 đọc là gì?",
+          "lc": [
+            "つうして",
+            "とおじて",
+            "とおして"
+          ],
+          "da": 2,
+          "gt": "通して đọc là とおして; còn 通じて đọc là つうじて."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-ni-oite",
+      "nhom": "Phạm vi – thay đổi song song",
+      "tieuDe": "〜において",
+      "mau": "N + において / N + における + N",
+      "nghia": "ở ~, tại ~, trong (lĩnh vực, thời đại) ~ — văn viết",
+      "giaiThich": "Chỉ nơi chốn, thời điểm, lĩnh vực mà sự việc diễn ra. Nghĩa giống trợ từ で nhưng rất trang trọng, dùng trong thông báo, bài viết, bài phát biểu.",
+      "cachGhep": [
+        "Danh từ + において（は / も）",
+        "Danh từ + における + danh từ: 日本における教育"
+      ],
+      "viDu": [
+        {
+          "c": "会議は第一会議室において行われます。",
+          "d": "かいぎは だいいち かいぎしつにおいて おこなわれます。",
+          "v": "Cuộc họp sẽ được tổ chức tại phòng họp số 1."
+        },
+        {
+          "c": "現代社会において、インターネットは必要なものです。",
+          "d": "げんだいしゃかいにおいて、インターネットは ひつような ものです。",
+          "v": "Trong xã hội hiện đại, Internet là thứ cần thiết."
+        },
+        {
+          "c": "日本における外国人の数は、増えています。",
+          "d": "にほんにおける がいこくじんの かずは、ふえています。",
+          "v": "Số người nước ngoài ở Nhật đang tăng lên."
+        }
+      ],
+      "luuY": [
+        "Không dùng cho việc thường ngày (✗ 公園において遊ぶ → 公園で遊ぶ)."
+      ],
+      "soSanh": [
+        "ja-n3-ni-watatte"
+      ],
+      "tuKhoa": [
+        "ni oite",
+        "nioite",
+        "ni okeru",
+        "tại",
+        "trong lĩnh vực"
+      ],
+      "quiz": [
+        {
+          "h": "卒業式は体育館（　）行われます。",
+          "lc": [
+            "において",
+            "における",
+            "にとって",
+            "について"
+          ],
+          "da": 0,
+          "gt": "Nơi diễn ra sự kiện, đứng trước động từ ⇒ において."
+        },
+        {
+          "h": "Câu nào KHÔNG tự nhiên?",
+          "lc": [
+            "式は大ホールにおいて行われる。",
+            "毎朝、公園において犬と遊ぶ。",
+            "日本における教育について書く。"
+          ],
+          "da": 1,
+          "gt": "において là văn viết trang trọng, không dùng cho sinh hoạt thường ngày; ở đây phải nói 公園で."
+        },
+        {
+          "h": "「〜において」 gần nghĩa với trợ từ nào?",
+          "lc": [
+            "を",
+            "が",
+            "で"
+          ],
+          "da": 2,
+          "gt": "において là cách nói trang trọng của で (nơi chốn, phạm vi)."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-ni-watatte",
+      "nhom": "Phạm vi – thay đổi song song",
+      "tieuDe": "〜にわたって",
+      "mau": "N + にわたって / N + にわたる + N",
+      "nghia": "suốt ~, trải khắp ~ (khoảng thời gian, phạm vi lớn)",
+      "giaiThich": "Nhấn mạnh rằng sự việc trải dài suốt một khoảng thời gian dài hoặc khắp một phạm vi rộng. Dùng trong văn viết, bản tin.",
+      "cachGhep": [
+        "Danh từ chỉ thời gian, phạm vi, số lần + にわたって / にわたり",
+        "Bổ nghĩa danh từ: N + にわたる + N"
+      ],
+      "viDu": [
+        {
+          "c": "会議は三日間にわたって行われました。",
+          "d": "かいぎは みっかかんにわたって おこなわれました。",
+          "v": "Hội nghị đã diễn ra suốt ba ngày."
+        },
+        {
+          "c": "台風のため、広い地域にわたって雨が降りました。",
+          "d": "たいふうの ため、ひろい ちいきにわたって あめが ふりました。",
+          "v": "Do bão, mưa đã rơi trên một khu vực rộng."
+        },
+        {
+          "c": "彼は十年にわたる研究を本にまとめました。",
+          "d": "かれは じゅうねんにわたる けんきゅうを ほんに まとめました。",
+          "v": "Ông ấy đã tổng kết công trình nghiên cứu suốt mười năm thành sách."
+        }
+      ],
+      "luuY": [
+        "Mang cảm giác \"dài, rộng, quy mô lớn\"; không dùng cho khoảng ngắn thường ngày (✗ 五分にわたって待った)."
+      ],
+      "soSanh": [
+        "ja-n3-ni-oite",
+        "ja-n3-kara-ni-kakete"
+      ],
+      "tuKhoa": [
+        "ni watatte",
+        "niwatatte",
+        "ni wataru",
+        "suốt",
+        "trải khắp"
+      ],
+      "quiz": [
+        {
+          "h": "工事は二か月（　）続いた。",
+          "lc": [
+            "にわたって",
+            "において",
+            "にとって",
+            "に対して"
+          ],
+          "da": 0,
+          "gt": "Kéo dài suốt hai tháng ⇒ にわたって."
+        },
+        {
+          "h": "Trước 「にわたって」 thường là gì?",
+          "lc": [
+            "Tên người",
+            "Từ chỉ khoảng thời gian hoặc phạm vi",
+            "Động từ thể て"
+          ],
+          "da": 1,
+          "gt": "にわたって đi sau danh từ chỉ thời gian, phạm vi, số lần."
+        },
+        {
+          "h": "これは十年（　）研究の結果です。",
+          "lc": [
+            "にわたって",
+            "にわたり",
+            "にわたる"
+          ],
+          "da": 2,
+          "gt": "Bổ nghĩa cho danh từ 研究 ⇒ にわたる."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-kara-ni-kakete",
+      "nhom": "Phạm vi – thay đổi song song",
+      "tieuDe": "〜から〜にかけて",
+      "mau": "N1 + から + N2 + にかけて",
+      "nghia": "từ khoảng ~ đến khoảng ~ (phạm vi áng chừng)",
+      "giaiThich": "Chỉ một khoảng thời gian hoặc không gian mà điểm đầu và điểm cuối không rõ ràng, sự việc diễn ra liên tục hoặc rải rác trong khoảng đó. Hay gặp trong dự báo thời tiết.",
+      "cachGhep": [
+        "Danh từ (thời gian / nơi chốn) + から + danh từ + にかけて"
+      ],
+      "viDu": [
+        {
+          "c": "今夜から明日の朝にかけて、強い雨が降るでしょう。",
+          "d": "こんやから あしたの あさにかけて、つよい あめが ふるでしょう。",
+          "v": "Từ đêm nay đến sáng mai có lẽ sẽ mưa to."
+        },
+        {
+          "c": "六月から七月にかけて、日本は雨の日が多いです。",
+          "d": "ろくがつから しちがつにかけて、にほんは あめの ひが おおいです。",
+          "v": "Từ tháng 6 đến tháng 7, ở Nhật có nhiều ngày mưa."
+        },
+        {
+          "c": "東京から横浜にかけて、道が込んでいます。",
+          "d": "とうきょうから よこはまにかけて、みちが こんでいます。",
+          "v": "Đường đang đông suốt đoạn từ Tokyo đến Yokohama."
+        }
+      ],
+      "luuY": [
+        "Khác から〜まで: まで nêu điểm đầu và điểm cuối chính xác, にかけて chỉ nêu áng chừng (✗ 授業は9時から10時にかけてです)."
+      ],
+      "soSanh": [
+        "ja-n3-ni-watatte"
+      ],
+      "tuKhoa": [
+        "kara ni kakete",
+        "ni kakete",
+        "nikakete",
+        "từ đến",
+        "phạm vi áng chừng"
+      ],
+      "quiz": [
+        {
+          "h": "春から夏（　）、この花が咲きます。",
+          "lc": [
+            "にかけて",
+            "にとって",
+            "において",
+            "について"
+          ],
+          "da": 0,
+          "gt": "N1 から N2 にかけて: suốt khoảng từ xuân sang hè."
+        },
+        {
+          "h": "Câu nào tự nhiên?",
+          "lc": [
+            "試験は9時から11時にかけてです。",
+            "昨夜から今朝にかけて、雪が降りました。",
+            "この電車は東京から大阪にかけて行きます。"
+          ],
+          "da": 1,
+          "gt": "にかけて dùng cho phạm vi áng chừng mà sự việc kéo dài; giờ thi chính xác và điểm đến của tàu thì dùng まで."
+        },
+        {
+          "h": "「AからBにかけて」 khác 「AからBまで」 ở điểm nào?",
+          "lc": [
+            "Hoàn toàn giống nhau",
+            "にかけて chỉ dùng cho nơi chốn",
+            "にかけて chỉ phạm vi áng chừng, không rõ điểm đầu cuối"
+          ],
+          "da": 2,
+          "gt": "まで nêu ranh giới rõ ràng; にかけて chỉ khoảng chừng."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-to-tomo-ni",
+      "nhom": "Phạm vi – thay đổi song song",
+      "tieuDe": "〜とともに",
+      "mau": "N + とともに / V-る + とともに",
+      "nghia": "cùng với ~; cùng lúc với ~, càng ~ thì cũng",
+      "giaiThich": "Có ba ý: (1) cùng với ai đó (= といっしょに, văn viết); (2) hai việc xảy ra đồng thời; (3) một thay đổi kéo theo một thay đổi khác. Trang trọng, hay gặp trong văn viết.",
+      "cachGhep": [
+        "Danh từ (người) + とともに: cùng với",
+        "Động từ thể từ điển / danh từ chỉ sự thay đổi + とともに: cùng lúc, kéo theo"
+      ],
+      "viDu": [
+        {
+          "c": "家族とともに、日本で暮らしています。",
+          "d": "かぞくとともに、にほんで くらしています。",
+          "v": "Tôi đang sống ở Nhật cùng với gia đình."
+        },
+        {
+          "c": "年を取るとともに、体が弱くなります。",
+          "d": "としを とるとともに、からだが よわくなります。",
+          "v": "Càng có tuổi thì cơ thể càng yếu đi."
+        },
+        {
+          "c": "経済の発展とともに、人々の生活も変わりました。",
+          "d": "けいざいの はってんとともに、ひとびとの せいかつも かわりました。",
+          "v": "Cùng với sự phát triển kinh tế, đời sống người dân cũng thay đổi."
+        }
+      ],
+      "luuY": [
+        "Trong hội thoại thường ngày dùng 〜といっしょに thay cho nghĩa \"cùng với\".",
+        "Nghĩa \"thay đổi kéo theo\" gần với 〜につれて, nhưng とともに còn dùng được cho hai việc xảy ra cùng lúc."
+      ],
+      "soSanh": [
+        "ja-n3-ni-tsurete"
+      ],
+      "tuKhoa": [
+        "to tomo ni",
+        "totomoni",
+        "cùng với",
+        "đồng thời"
+      ],
+      "quiz": [
+        {
+          "h": "仲間（　）、最後までがんばりたい。",
+          "lc": [
+            "とともに",
+            "にともに",
+            "をともに",
+            "がともに"
+          ],
+          "da": 0,
+          "gt": "Mẫu là N + と + ともに."
+        },
+        {
+          "h": "「家族とともに」 gần nghĩa với cách nói nào?",
+          "lc": [
+            "家族のかわりに",
+            "家族といっしょに",
+            "家族について"
+          ],
+          "da": 1,
+          "gt": "N + とともに = cùng với N."
+        },
+        {
+          "h": "春が来るとともに、（　）。",
+          "lc": [
+            "花見に行きなさい",
+            "花見に行こう",
+            "だんだん暖かくなる"
+          ],
+          "da": 2,
+          "gt": "Vế sau là sự thay đổi diễn ra cùng lúc, không phải mệnh lệnh hay lời rủ."
+        }
+      ]
+    },
+    {
+      "id": "ja-n3-ni-tsurete",
+      "nhom": "Phạm vi – thay đổi song song",
+      "tieuDe": "〜につれて／〜にしたがって",
+      "mau": "V-る + につれて・にしたがって / N + につれて・にしたがって",
+      "nghia": "càng ~ thì càng ~ (thay đổi dần theo)",
+      "giaiThich": "Khi một việc thay đổi dần thì việc khác cũng thay đổi dần theo. Cả hai vế đều là sự biến đổi từ từ. にしたがって trang trọng hơn một chút và còn có nghĩa \"làm theo (chỉ dẫn, quy định)\".",
+      "cachGhep": [
+        "Động từ chỉ sự thay đổi, thể từ điển + につれて / にしたがって",
+        "Danh từ chỉ sự thay đổi + につれて / にしたがって: 発展につれて"
+      ],
+      "viDu": [
+        {
+          "c": "日本での生活が長くなるにつれて、日本語が上手になりました。",
+          "d": "にほんでの せいかつが ながくなるにつれて、にほんごが じょうずに なりました。",
+          "v": "Sống ở Nhật càng lâu, tiếng Nhật của tôi càng giỏi lên."
+        },
+        {
+          "c": "山を登るにつれて、気温が下がります。",
+          "d": "やまを のぼるにつれて、きおんが さがります。",
+          "v": "Càng leo lên cao, nhiệt độ càng giảm."
+        },
+        {
+          "c": "年を取るにしたがって、物を忘れやすくなります。",
+          "d": "としを とるにしたがって、ものを わすれやすくなります。",
+          "v": "Càng có tuổi càng dễ quên."
+        },
+        {
+          "c": "町の発展につれて、自然が少なくなりました。",
+          "d": "まちの はってんにつれて、しぜんが すくなくなりました。",
+          "v": "Thị trấn càng phát triển, thiên nhiên càng ít đi."
+        }
+      ],
+      "luuY": [
+        "Cả hai vế phải là thay đổi dần dần (なる, 増える, 上がる…); không dùng cho việc xảy ra một lần (✗ 駅に着くにつれて、電話します).",
+        "Vế sau của につれて không dùng ý chí, lời rủ (✗ 〜につれて、行きましょう)."
+      ],
+      "soSanh": [
+        "ja-n3-to-tomo-ni"
+      ],
+      "tuKhoa": [
+        "ni tsurete",
+        "nitsurete",
+        "ni shitagatte",
+        "càng càng",
+        "thay đổi theo"
+      ],
+      "quiz": [
+        {
+          "h": "時間がたつ（　）、悲しみは小さくなった。",
+          "lc": [
+            "につれて",
+            "について",
+            "にとって",
+            "に対して"
+          ],
+          "da": 0,
+          "gt": "Thời gian trôi dần, nỗi buồn vơi dần ⇒ につれて."
+        },
+        {
+          "h": "子どもが大きく（　）につれて、お金がかかる。",
+          "lc": [
+            "なった",
+            "なる",
+            "なって",
+            "なろう"
+          ],
+          "da": 1,
+          "gt": "Trước につれて là động từ thể từ điển."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "春になるにつれて、花見に行きます。",
+            "駅に着くにつれて、電話します。",
+            "試験が近づくにつれて、心配になってきた。"
+          ],
+          "da": 2,
+          "gt": "Cả hai vế phải là thay đổi dần dần: kỳ thi đến gần dần, lo lắng tăng dần."
+        }
+      ]
+    }
+  ]
+}

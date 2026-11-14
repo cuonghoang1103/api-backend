@@ -439,3 +439,10 @@ Mẫu một mục:
 - **Cách sửa:** bắt cả `(ProcessLookupError, PermissionError)` ở `@dung` (dòng 95) rồi chạy lại toàn bộ demo n7-3 (dựng → báo động → điều tra → vòng lặp).
 - **Ảnh hưởng:** chỉ phiên soạn bài (mất một lượt chạy demo); không đụng web/prod.
 - **Bài học:** dừng tiến trình theo PID phải chịu được trường hợp tiến trình đã tự kết thúc — trên macOS lỗi đó có thể là EPERM.
+
+### 15/11/2026 — Video bài giảng (điều phối máy thuê vast1) — 5 video render xong nằm kẹt 16 giờ, làn treo 14 giờ, 4 bộ render mồ côi ăn CPU
+- **Triệu chứng:** obs-6-5, rds-5-4, gha-3-1, gha-3-5, gha-4-3 có `video.mp4` đầy đủ trên vast1 từ trưa 14/11 nhưng không có dòng `ok`, khoá `render-khoa/<id>` còn giữ nên không ai làm lại; làn `vbg-render@t9` đứng ở `▶ gha-6-2` từ 14:44; sau khi "gỡ" 5 tập chậm khỏi vast1 vẫn còn 4 cây `remotion render` (osd-2-2, dkr-9-2, gha-10-4, net-8-1) chạy, cha là init.
+- **Nguyên nhân:** `~/vbg-dp/dieu-phoi-linux/render.sh:19` gọi `out=$(ssh "$H" … lam-bai.mts …)` không có giới hạn thời gian — kết nối tới máy thuê đứt kiểu treo thì làn chờ mãi, kết quả của máy thuê không bao giờ được kéo về; còn lúc gỡ tập chỉ giết `lam-bai.mts`, cây `remotion`/`chrome-headless-shell`/`ffmpeg` con mồ côi và chạy tiếp.
+- **Cách sửa:** bọc `timeout 7h ssh …` (cả bản Mac `~/Documents/video-bai-giang/dieu-phoi-linux/render.sh` vì cầu đồng bộ đẩy đè sang Linux; thay tệp nguyên khối để không phá làn đang chạy); kéo tay 5 video về + ghi `ok`; giết cả cây tiến trình theo `pgrep -P`; trả các tập LOI/khoá mồ côi về hàng; vast1 đã trả.
+- **Ảnh hưởng:** chỉ hệ thống làm video (5 video trễ ~16 giờ, máy thuê trả tiền cho CPU chạy việc vô ích); không đụng web/prod.
+- **Bài học:** mọi lệnh chờ máy từ xa phải có trần thời gian; "gỡ" một việc phải giết cả cây tiến trình và kiểm lại bằng `ps` — tiến trình mồ côi không báo lỗi, chỉ lặng lẽ ăn tài nguyên.

@@ -1,3 +1,8 @@
+import G02_1 from './giang/twc-02-1.mjs';
+import G02_2 from './giang/twc-02-2.mjs';
+import G02_3 from './giang/twc-02-3.mjs';
+import G02_4 from './giang/twc-02-4.mjs';
+import G02_5 from './giang/twc-02-5.mjs';
 const REF = '?ref=%2Fcourses%2Ftailwind-css%2Flearn&reflabel=Tailwind%20CSS';
 /**
  * Tailwind CSS — Chương 2: Biến thể, và cái chúng BIÊN DỊCH RA.
@@ -19,6 +24,7 @@ export default {
       type: 'VIDEO',
       description: 'Một lần dựng thật cho thấy `hover:`, `md:`, `group-hover:`, `peer-checked:` và `dark:` biên dịch ra NĂM hình dạng selector khác nhau — và bốn trong năm cái có hệ quả mà tên lớp không hề gợi ý.',
       content: `
+${G02_1}
 <div class="ml-en">
 <span class="eyebrow">Chapter 2 · Lesson 2.1</span>
 <h2>Five variant shapes, read from the output</h2>
@@ -27,27 +33,43 @@ export default {
 <h3>The measurement</h3>
 <p>Put one of each in a file and read what comes out. No documentation involved:</p>
 
-<pre><code class="language-html">&lt;!-- page.html --&gt;
+<pre><code class="language-html">&lt;!-- page.html · tw.config.js: darkMode: 'class' · a plain flex added to show the ORDER --&gt;
 &lt;div class="hover:bg-blue-500 md:flex group-hover:opacity-50
-            peer-checked:block dark:text-white"&gt;&lt;/div&gt;
+            peer-checked:block dark:text-white flex"&gt;&lt;/div&gt;
 </code></pre>
 
 <pre><code class="language-bash">$ npx tailwindcss -c tw.config.js -i in.css -o out.css
 $ cat out.css
 </code></pre>
 
-<div class="out">.hover\\:bg-blue-500:hover { background-color: rgb(59 130 246 / …) }
+<div class="out">.flex {
+  display: flex
+}
 
-.group:hover .group-hover\\:opacity-50 { opacity: 0.5 }
+.hover\\:bg-blue-500:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(59 130 246 / var(--tw-bg-opacity, 1))
+}
 
-.peer:checked ~ .peer-checked\\:block { display: block }
+.group:hover .group-hover\\:opacity-50 {
+  opacity: 0.5
+}
 
-.dark\\:text-white:is(.dark *) { color: rgb(255 255 255 / …) }
+.peer:checked ~ .peer-checked\\:block {
+  display: block
+}
+
+.dark\\:text-white:is(.dark *) {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity, 1))
+}
 
 @media (min-width: 768px) {
-  .md\\:flex { display: flex }
+  .md\\:flex {
+    display: flex
+  }
 }
-</div>
+# Tailwind 3.4.19, darkMode: 'class' — real output 14/11/2026</div>
 
 <p>Five prefixes, five different selector structures. Read each one carefully, because each carries a rule you cannot guess from the class name.</p>
 
@@ -101,11 +123,80 @@ $ cat out.css
 
 <div class="pitfall">
 <p><strong>Trap — assuming all variants raise specificity.</strong> Four of the five do; the breakpoint does not. That asymmetry is invisible from the syntax, and it means a hand-written CSS rule with specificity <code>0,2,0</code> will beat <code>md:flex</code> while losing to <code>hover:flex</code>. When a responsive class mysteriously does not apply and a hover class on the same element does, this asymmetry is the first thing to check.</p>
+<p><strong>Measured 14/11/2026 — the "losing to hover:flex" half needs a condition.</strong> In Chromium, <code>.card .title { display: block }</code> loaded <em>after</em> the Tailwind 3 CSS beats <strong>both</strong> <code>md:flex</code> and <code>hover:flex</code> (a 0,2,0 tie goes to the later rule). Only when the hand-written rule comes <em>earlier</em> — loaded first, or inside <code>@layer components</code> — does <code>hover:flex</code> win. A rule at the end of <code>globals.css</code> beats both.</p>
 </div>
 
 <div class="callout">
 <p><strong>One sentence.</strong> The uniform <code>prefix:</code> syntax hides five structurally different compilations — pseudo-class append, descendant selector, directional sibling combinator, <code>:is()</code> ancestor test, and media-query wrapper — and the last one is the odd member because it adds no specificity and wins only by being emitted later in the file.</p>
 </div>
+
+<h3>🔬 Measured: how often each shape appears, and the asymmetry in Chromium</h3>
+<p>Variants at the start of a class in this site's frontend (14/11/2026, Tailwind 3.4.19):</p>
+<div class="out">$ for v in hover focus disabled group-hover peer- dark sm md lg xl 2xl; do printf "%-12s %6d\\n" "$v:" "$(git grep -ohE "(^|[\\"' \\&#96;{])$v[a-z-]*:" -- 'src/*.tsx' | wc -l)"; done
+hover:         4729
+focus:         1395
+disabled:       838
+group-hover:    293
+peer-:            2
+dark:          1098
+sm:            2015
+md:             654
+lg:             645
+xl:              87
+2xl:              8</div>
+<p>Pseudo-class variants dominate; <code>peer-*</code> is almost never used — which is exactly why it surprises people when they reach for it. Then the asymmetry: two rows, <code>md:flex</code> and <code>hover:flex</code>, against a hand-written <code>.card .title { display: block }</code> (0,2,0), window 900px wide, second row hovered:</p>
+<div class="out">tay.css AFTER Tailwind 3   md:flex -&gt; block   hover:flex (hovered) -&gt; block
+tay.css BEFORE Tailwind 3  md:flex -&gt; block   hover:flex (hovered) -&gt; flex
+tay.css BEFORE Tailwind 4  md:flex -&gt; block   hover:flex (hovered) -&gt; block</div>
+<h3>🆕 In Tailwind 4</h3>
+<p>The same five shapes, compiled differently (Tailwind 4.3.5, selectors only):</p>
+<div class="out">@layer utilities {
+  .flex {
+  @media (hover: hover) {
+    :is(:where(.group):hover .group-hover\\:opacity-50) {
+  :is(:where(.peer):checked ~ .peer-checked\\:block) {
+  @media (hover: hover) {
+    .hover\\:bg-blue-500:hover {
+  @media (width &gt;= 48rem) {
+    .md\\:flex {
+  @media (prefers-color-scheme: dark) {
+    .dark\\:text-white {</div>
+<ul><li><code>hover:</code> is also wrapped in <code>@media (hover: hover)</code> — a tap on a phone no longer leaves the hover colour stuck.</li>
+<li><code>group-hover:</code> / <code>peer-*</code> become <code>:is(:where(.group):hover …)</code> — still a descendant space and a forward-only <code>~</code>, so lesson 2.2's failures are unchanged.</li>
+<li><code>md:</code> is <code>width &gt;= 48rem</code>; <code>dark:</code> defaults to <code>prefers-color-scheme</code>. For the class strategy declare <code>@custom-variant dark (&amp;:where(.dark, .dark *));</code> — and <code>:where()</code> adds <strong>zero</strong>, so it is 0,1,0, not 0,2,0:</li></ul>
+<div class="out">  .dark\\:text-white:where(.dark, .dark *) {
+    color: var(--color-white);
+  }
+}</div>
+<p>Everything sits inside <code>@layer utilities</code>, so a hand-written rule outside any layer beats every utility even when loaded first (third row above). Chapter 7 covers layers.</p>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-html">&lt;!-- Tailwind 3 (like this site): npm i -D tailwindcss@3 · in.css: @tailwind utilities; · window 900px wide --&gt;
+&lt;!-- tay.css: .card .title { display: block; } --&gt;
+&lt;link rel="stylesheet" href="out.css"&gt;&lt;link rel="stylesheet" href="tay.css"&gt;
+&lt;div class="card"&gt;&lt;h3 class="title md:flex gap-2"&gt;&lt;div&gt;A&lt;/div&gt;&lt;div&gt;B&lt;/div&gt;&lt;/h3&gt;&lt;/div&gt;
+&lt;div class="card"&gt;&lt;h3 class="title hover:flex gap-2"&gt;&lt;div&gt;A&lt;/div&gt;&lt;div&gt;B&lt;/div&gt;&lt;/h3&gt;&lt;/div&gt;
+&lt;!-- DevTools console: getComputedStyle(document.querySelector('.md\\\\:flex')).display  // "block" --&gt;
+&lt;!-- then swap the two &lt;link&gt; tags and hover the second row again --&gt;</code></pre>
+<h3>🔗 Go deeper in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-3-1-css-basics" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Web Foundations · 3.1 — What CSS is: selectors, cascade, inheritance</span><span class="lc-sub">How specificity is counted — every "which rule wins" in this lesson is that arithmetic</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nextjs/learn?lessonSlug=nextjs-13-2-tailwind-nen-tang" target="_blank" rel="noopener"><span class="lc-ico">▲</span><span class="lc-body"><span class="lc-title">Next.js · 13.2 — Tailwind basics: utilities, responsive, states</span><span class="lc-sub">hover:, md: and friends inside a real Next.js app</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/tailwind-css/learn?lessonSlug=tw-2-2-group-peer" target="_blank" rel="noopener"><span class="lc-ico">💨</span><span class="lc-body"><span class="lc-title">Tailwind CSS · 2.2 — group and peer</span><span class="lc-sub">Next lesson: the two shapes that fail silently</span></span></a>
+
+<h3>🌍 In real life, "what if…", and the attacker's view</h3>
+<ul><li><strong>Every day:</strong> a menu that changes colour on <code>hover:</code> with a mouse does nothing on a phone (Tailwind 4 even wraps it in <code>@media (hover: hover)</code>); a card layout that switches at <code>md:</code> when you rotate your phone.</li><li><strong>What if…</strong> a teammate adds <code>.card .title { display: block }</code> at the end of <code>globals.css</code>? Measured above: every <code>md:flex</code> <em>and</em> <code>hover:flex</code> on those titles stops working, with no error.</li><li><strong>The attacker's view:</strong> variants decide what a user <em>sees</em>, not what they can <em>do</em>. A button shown only on <code>hover:</code> or only at <code>md:</code> is still in the DOM and still clickable from DevTools — never use a variant to "protect" an action; check permissions on the server.</li><li><strong>Related:</strong> specificity arithmetic — Web Foundations 3.1; the cascade layers that change all of this in Tailwind 4 — Chapter 7.</li></ul>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Variant prefix</span><span class="v">The <code>word:</code> before a utility — uniform syntax, but five different compiled selectors.</span></div>
+  <div class="kv"><span class="k">Pseudo-class append</span><span class="v"><code>hover:</code>/<code>focus:</code>/<code>disabled:</code> append <code>:hover</code> etc.; specificity rises to <code>0,2,0</code>.</span></div>
+  <div class="kv"><span class="k">Descendant combinator</span><span class="v"><code>group-hover:</code> spans two elements; fails silently if an ancestor lacks <code>group</code>.</span></div>
+  <div class="kv"><span class="k">Directional sibling</span><span class="v"><code>peer-checked:</code> uses <code>~</code>, matching only siblings <em>after</em> the peer in the DOM.</span></div>
+  <div class="kv"><span class="k"><code>:is(.dark *)</code></span><span class="v">The <code>dark:</code> shape — a DOM-state ancestor test at specificity <code>0,2,0</code>.</span></div>
+  <div class="kv"><span class="k">Media-query wrapper</span><span class="v"><code>md:</code> wraps the rule in <code>@media</code>, adds no specificity, and wins only by source order.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>The uniform <code>prefix:</code> syntax hides five structurally different compilations — read them from the output, not the docs.</li><li>Four variants (pseudo-class, group, peer, dark) raise specificity; the breakpoint does not.</li><li><code>group-hover:</code> and <code>peer-*</code> fail silently: a missing <code>group</code> ancestor, or a peer placed after its target, simply never matches.</li><li><code>md:flex</code> beats <code>flex</code> only because the media-query block is emitted later at equal specificity.</li><li>The <code>dark:</code> <code>:is(.dark *)</code> shape is why one ancestor class can switch every dark utility app-wide (lesson 2.4).</li></ul>
 
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Tailwind docs — Hover, focus, and other states</span><span class="lc-sub">tailwindcss.com/docs/hover-focus-and-other-states — the full variant catalogue. Read it after this lesson, so each entry reads as "which of the five shapes is this".</span></span></div>
@@ -122,27 +213,43 @@ $ cat out.css
 <h3>Phép đo</h3>
 <p>Đặt mỗi loại một cái vào một file rồi ĐỌC cái chui ra. Không dính tới tài liệu nào:</p>
 
-<pre><code class="language-html">&lt;!-- page.html --&gt;
+<pre><code class="language-html">&lt;!-- page.html · tw.config.js: darkMode: 'class' · them mot lop flex tran de thay THU TU --&gt;
 &lt;div class="hover:bg-blue-500 md:flex group-hover:opacity-50
-            peer-checked:block dark:text-white"&gt;&lt;/div&gt;
+            peer-checked:block dark:text-white flex"&gt;&lt;/div&gt;
 </code></pre>
 
 <pre><code class="language-bash">$ npx tailwindcss -c tw.config.js -i in.css -o out.css
 $ cat out.css
 </code></pre>
 
-<div class="out">.hover\\:bg-blue-500:hover { background-color: rgb(59 130 246 / …) }
+<div class="out">.flex {
+  display: flex
+}
 
-.group:hover .group-hover\\:opacity-50 { opacity: 0.5 }
+.hover\\:bg-blue-500:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(59 130 246 / var(--tw-bg-opacity, 1))
+}
 
-.peer:checked ~ .peer-checked\\:block { display: block }
+.group:hover .group-hover\\:opacity-50 {
+  opacity: 0.5
+}
 
-.dark\\:text-white:is(.dark *) { color: rgb(255 255 255 / …) }
+.peer:checked ~ .peer-checked\\:block {
+  display: block
+}
+
+.dark\\:text-white:is(.dark *) {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity, 1))
+}
 
 @media (min-width: 768px) {
-  .md\\:flex { display: flex }
+  .md\\:flex {
+    display: flex
+  }
 }
-</div>
+# Tailwind 3.4.19, darkMode: 'class' — đầu ra thật 14/11/2026</div>
 
 <p>Năm tiền tố, năm cấu trúc selector khác nhau. Đọc từng cái cho kỹ, vì mỗi cái mang một LUẬT mà bạn không đoán ra được từ tên lớp.</p>
 
@@ -196,11 +303,80 @@ $ cat out.css
 
 <div class="pitfall">
 <p><strong>Bẫy — cho rằng mọi biến thể đều NÂNG độ đặc hiệu.</strong> Bốn trên năm cái có; điểm ngắt thì KHÔNG. Sự bất đối xứng ấy VÔ HÌNH từ cú pháp, và nó có nghĩa một quy tắc CSS viết tay với độ đặc hiệu <code>0,2,0</code> sẽ THẮNG <code>md:flex</code> trong khi THUA <code>hover:flex</code>. Khi một lớp responsive tự dưng không ăn mà một lớp hover trên cùng thẻ thì ăn, sự bất đối xứng này là thứ đầu tiên cần kiểm.</p>
+<p><strong>Đo lại 14/11/2026 — nửa câu "THUA hover:flex" cần một điều kiện.</strong> Trong Chromium, <code>.card .title { display: block }</code> nạp <em>SAU</em> CSS của Tailwind 3 thắng <strong>CẢ HAI</strong> <code>md:flex</code> lẫn <code>hover:flex</code> (hoà 0,2,0 thì cái sau thắng). Chỉ khi luật viết tay đứng <em>TRƯỚC</em> — nạp trước, hoặc nằm trong <code>@layer components</code> — thì <code>hover:flex</code> mới thắng. Một luật ở cuối <code>globals.css</code> thắng cả hai.</p>
 </div>
 
 <div class="callout">
 <p><strong>Một câu.</strong> Cú pháp <code>tiền_tố:</code> đồng nhất che giấu NĂM cú biên dịch khác nhau về cấu trúc — nối lớp giả, selector con cháu, tổ hợp anh em CÓ HƯỚNG, phép thử tổ tiên <code>:is()</code>, và vỏ bọc media query — và cái cuối là thành viên LẠ vì nó không thêm độ đặc hiệu nào và thắng CHỈ nhờ được phát sinh sau trong file.</p>
 </div>
+
+<h3>🔬 Đo thật: mỗi hình dạng xuất hiện bao nhiêu, và sự bất đối xứng trong Chromium</h3>
+<p>Biến thể đứng đầu lớp trong frontend của trang này (14/11/2026, Tailwind 3.4.19):</p>
+<div class="out">$ for v in hover focus disabled group-hover peer- dark sm md lg xl 2xl; do printf "%-12s %6d\\n" "$v:" "$(git grep -ohE "(^|[\\"' \\&#96;{])$v[a-z-]*:" -- 'src/*.tsx' | wc -l)"; done
+hover:         4729
+focus:         1395
+disabled:       838
+group-hover:    293
+peer-:            2
+dark:          1098
+sm:            2015
+md:             654
+lg:             645
+xl:              87
+2xl:              8</div>
+<p>Biến thể lớp giả áp đảo; <code>peer-*</code> gần như không dùng — chính vì thế nó làm người ta bất ngờ khi cần tới. Rồi sự bất đối xứng: hai hàng, <code>md:flex</code> và <code>hover:flex</code>, đấu với luật viết tay <code>.card .title { display: block }</code> (0,2,0), cửa sổ rộng 900px, chuột rê lên hàng hai:</p>
+<div class="out">tay.css AFTER Tailwind 3   md:flex -&gt; block   hover:flex (hovered) -&gt; block
+tay.css BEFORE Tailwind 3  md:flex -&gt; block   hover:flex (hovered) -&gt; flex
+tay.css BEFORE Tailwind 4  md:flex -&gt; block   hover:flex (hovered) -&gt; block</div>
+<h3>🆕 Ở Tailwind 4</h3>
+<p>Vẫn năm hình dạng đó, biên dịch khác (Tailwind 4.3.5, chỉ in selector):</p>
+<div class="out">@layer utilities {
+  .flex {
+  @media (hover: hover) {
+    :is(:where(.group):hover .group-hover\\:opacity-50) {
+  :is(:where(.peer):checked ~ .peer-checked\\:block) {
+  @media (hover: hover) {
+    .hover\\:bg-blue-500:hover {
+  @media (width &gt;= 48rem) {
+    .md\\:flex {
+  @media (prefers-color-scheme: dark) {
+    .dark\\:text-white {</div>
+<ul><li><code>hover:</code> còn được bọc trong <code>@media (hover: hover)</code> — chạm trên điện thoại không còn để màu hover bị kẹt.</li>
+<li><code>group-hover:</code> / <code>peer-*</code> thành <code>:is(:where(.group):hover …)</code> — vẫn khoảng trắng con cháu và <code>~</code> chỉ-tiến, nên các kiểu hỏng của bài 2.2 không đổi.</li>
+<li><code>md:</code> là <code>width &gt;= 48rem</code>; <code>dark:</code> mặc định theo <code>prefers-color-scheme</code>. Muốn kiểu class thì khai <code>@custom-variant dark (&amp;:where(.dark, .dark *));</code> — và <code>:where()</code> cộng <strong>KHÔNG</strong>, nên ra 0,1,0 chứ không phải 0,2,0:</li></ul>
+<div class="out">  .dark\\:text-white:where(.dark, .dark *) {
+    color: var(--color-white);
+  }
+}</div>
+<p>Mọi thứ nằm trong <code>@layer utilities</code>, nên một luật viết tay NGOÀI mọi layer thắng mọi tiện ích kể cả khi nạp trước (hàng thứ ba ở trên). Chương 7 nói kỹ về layer.</p>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-html">&lt;!-- Tailwind 3 (like this site): npm i -D tailwindcss@3 · in.css: @tailwind utilities; · window 900px wide --&gt;
+&lt;!-- tay.css: .card .title { display: block; } --&gt;
+&lt;link rel="stylesheet" href="out.css"&gt;&lt;link rel="stylesheet" href="tay.css"&gt;
+&lt;div class="card"&gt;&lt;h3 class="title md:flex gap-2"&gt;&lt;div&gt;A&lt;/div&gt;&lt;div&gt;B&lt;/div&gt;&lt;/h3&gt;&lt;/div&gt;
+&lt;div class="card"&gt;&lt;h3 class="title hover:flex gap-2"&gt;&lt;div&gt;A&lt;/div&gt;&lt;div&gt;B&lt;/div&gt;&lt;/h3&gt;&lt;/div&gt;
+&lt;!-- DevTools console: getComputedStyle(document.querySelector('.md\\\\:flex')).display  // "block" --&gt;
+&lt;!-- rồi đổi chỗ hai thẻ &lt;link&gt; và rê chuột lên hàng hai lần nữa --&gt;</code></pre>
+<h3>🔗 Học sâu hơn ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-3-1-css-basics" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Nền tảng Web · 3.1 — CSS là gì: bộ chọn, cascade, kế thừa</span><span class="lc-sub">Cách tính độ đặc hiệu — mọi câu "luật nào thắng" trong bài này là phép tính đó</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nextjs/learn?lessonSlug=nextjs-13-2-tailwind-nen-tang" target="_blank" rel="noopener"><span class="lc-ico">▲</span><span class="lc-body"><span class="lc-title">Next.js · 13.2 — Nền tảng Tailwind: utility, responsive, trạng thái</span><span class="lc-sub">hover:, md: và các biến thể khác trong một ứng dụng Next.js thật</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/tailwind-css/learn?lessonSlug=tw-2-2-group-peer" target="_blank" rel="noopener"><span class="lc-ico">💨</span><span class="lc-body"><span class="lc-title">Tailwind CSS · 2.2 — group và peer</span><span class="lc-sub">Bài sau: hai hình dạng hỏng âm thầm</span></span></a>
+
+<h3>🌍 Ngoài đời, "nếu… thì sao", và góc kẻ xấu</h3>
+<ul><li><strong>Ngoài đời:</strong> menu đổi màu khi <code>hover:</code> chạy với chuột, nhưng trên điện thoại thì không (Tailwind 4 còn bọc nó trong <code>@media (hover: hover)</code>); bố cục thẻ đổi ở <code>md:</code> khi bạn xoay ngang điện thoại.</li><li><strong>Nếu… thì sao:</strong> một bạn cùng nhóm thêm <code>.card .title { display: block }</code> vào cuối <code>globals.css</code>? Đo ở trên: mọi <code>md:flex</code> <em>VÀ</em> <code>hover:flex</code> trên các tiêu đề ấy ngừng chạy, không một lỗi nào.</li><li><strong>Góc kẻ xấu:</strong> biến thể quyết định người dùng <em>THẤY</em> gì, không quyết định họ <em>LÀM</em> được gì. Một nút chỉ hiện khi <code>hover:</code> hay từ <code>md:</code> vẫn nằm trong DOM và vẫn bấm được từ DevTools — đừng bao giờ dùng biến thể để "bảo vệ" một thao tác; kiểm quyền ở máy chủ.</li><li><strong>Liên quan:</strong> phép tính độ đặc hiệu — Nền tảng Web 3.1; layer làm thay đổi tất cả chuyện này ở Tailwind 4 — Chương 7.</li></ul>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Variant prefix</span><span class="v">Tiền tố biến thể — <code>từ:</code> trước một tiện ích; cú pháp đồng nhất nhưng năm selector biên dịch khác nhau.</span></div>
+  <div class="kv"><span class="k">Pseudo-class append</span><span class="v">Nối lớp giả — <code>hover:</code>/<code>focus:</code>/<code>disabled:</code> nối <code>:hover</code> v.v.; độ đặc hiệu lên <code>0,2,0</code>.</span></div>
+  <div class="kv"><span class="k">Descendant combinator</span><span class="v">Tổ hợp con cháu — <code>group-hover:</code> trải qua hai thẻ; hỏng âm thầm nếu tổ tiên thiếu <code>group</code>.</span></div>
+  <div class="kv"><span class="k">Directional sibling</span><span class="v">Anh em có hướng — <code>peer-checked:</code> dùng <code>~</code>, chỉ khớp anh em đứng <em>sau</em> peer trong DOM.</span></div>
+  <div class="kv"><span class="k"><code>:is(.dark *)</code></span><span class="v">Hình dạng <code>dark:</code> — phép thử tổ tiên theo trạng thái DOM, độ đặc hiệu <code>0,2,0</code>.</span></div>
+  <div class="kv"><span class="k">Media-query wrapper</span><span class="v">Vỏ bọc media query — <code>md:</code> bọc quy tắc trong <code>@media</code>, không thêm độ đặc hiệu, thắng chỉ nhờ thứ tự nguồn.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Cú pháp <code>tiền_tố:</code> đồng nhất che năm cú biên dịch khác nhau về cấu trúc — đọc từ đầu ra, không từ tài liệu.</li><li>Bốn biến thể (lớp giả, group, peer, dark) nâng độ đặc hiệu; điểm ngắt thì không.</li><li><code>group-hover:</code> và <code>peer-*</code> hỏng âm thầm: thiếu tổ tiên <code>group</code>, hoặc peer đặt sau mục tiêu, đơn giản là không khớp.</li><li><code>md:flex</code> thắng <code>flex</code> chỉ vì khối media query phát sinh sau khi độ đặc hiệu bằng nhau.</li><li>Hình dạng <code>dark:</code> <code>:is(.dark *)</code> là lý do một lớp tổ tiên bật mọi tiện ích dark trên toàn ứng dụng (bài 2.4).</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Tailwind docs — Hover, focus, and other states</span><span class="lc-sub">tailwindcss.com/docs/hover-focus-and-other-states — danh mục biến thể đầy đủ. Đọc nó SAU bài này, để mỗi mục đọc ra thành "cái này thuộc hình dạng nào trong năm".</span></span></div>
@@ -218,6 +394,7 @@ $ cat out.css
       type: 'VIDEO',
       description: 'Đo thật: CSS cho `group-hover:` được phát sinh HOÀN HẢO ngay cả khi KHÔNG có lớp `group` nào trong toàn bộ mã nguồn. Quy tắc tồn tại, hợp lệ, và không bao giờ khớp — đó chính xác là cơ chế của cú hỏng âm thầm.',
       content: `
+${G02_2}
 <div class="ml-en">
 <span class="eyebrow">Chapter 2 · Lesson 2.2</span>
 <h2>group and peer, and how they fail silently</h2>
@@ -230,13 +407,19 @@ $ cat out.css
 &lt;div class="group-hover:opacity-50 peer-checked:block"&gt;&lt;/div&gt;
 </code></pre>
 
-<div class="out">$ npx tailwindcss -c tw.config.js -i in.css -o out.css
-Done in 190ms.
-
+<div class="out">$ npx tailwindcss -c tw.config.js -i in.css -o out.css 2&gt;&amp;1 | tail -1
+Done in 92ms.
 $ cat out.css
-.group:hover .group-hover\\:opacity-50 { opacity: 0.5 }
-.peer:checked ~ .peer-checked\\:block { display: block }
-</div>
+.group:hover .group-hover\\:opacity-50 {
+  opacity: 0.5
+}
+
+.peer:checked ~ .peer-checked\\:block {
+  display: block
+}
+$ grep -oE 'class="[^"]*"' page.html | tr ' "' '\\n\\n' | grep -cxE 'group|peer'
+0
+# Tailwind 3.4.19 — real output 14/11/2026 (the last command counts group/peer classes in page.html: 0)</div>
 
 <p>The build succeeds. The CSS is emitted. The rules are syntactically perfect. And they can never match, because no element in the document has <code>group</code> or <code>peer</code>. There is no warning at build time, no console error at runtime, and the class attribute in the browser looks exactly right.</p>
 
@@ -279,9 +462,13 @@ $ cat out.css
             peer/x peer-checked/x:flex"&gt;&lt;/div&gt;
 </code></pre>
 
-<div class="out">.group\\/item:hover .group-hover\\/item\\:underline { text-decoration-line: underline }
-.peer\\/x:checked ~ .peer-checked\\/x\\:flex { display: flex }
-</div>
+<div class="out">.group\\/item:hover .group-hover\\/item\\:underline {
+  text-decoration-line: underline
+}
+
+.peer\\/x:checked ~ .peer-checked\\/x\\:flex {
+  display: flex
+}</div>
 
 <p>The <code>/item</code> suffix becomes part of both class names, so the selector only pairs a named group with variants carrying the same name. Use these the moment you have nesting; the ambiguous version produces a bug where hovering anywhere on a card lights up every row inside it, which reads as "hover is broken" rather than "my groups are ambiguous".</p>
 
@@ -306,6 +493,87 @@ $ cat out.css
 <p><strong>One sentence.</strong> <code>group-*</code> and <code>peer-*</code> compile to selectors spanning two elements — a descendant space and a forward-only <code>~</code> respectively — so they fail by emitting valid CSS that never matches, and the only way to diagnose them is to read the generated selector and ask which second element it is waiting for.</p>
 </div>
 
+<h3>🔬 Measured: three cards, a label, nested groups (Chromium, Tailwind 3.4.19)</h3>
+<p>Each icon has <code>group-hover:opacity-30</code>; each card is hovered in turn and the icon's opacity read with <code>getComputedStyle</code>:</p>
+<div class="out">card A  no group                  -&gt; icon opacity 1
+card B  group on the card (ancestor)  -&gt; icon opacity 0.3
+card C  group on the SAME element     -&gt; icon opacity 1</div>
+<p>Card C is the "group on the same element" trap: the rule asks the element to be its own ancestor. Then the forward-only <code>~</code>, with <code>peer-focus:text-blue-600</code> on the label:</p>
+<div class="out">label BEFORE input, input focused  -&gt; label rgb(100, 116, 139)  (slate-500, unchanged)
+label AFTER input (order-1), focused -&gt; label rgb(37, 99, 235)  (blue-600)</div>
+<p>And nested groups — hovering only the outer card's own text:</p>
+<div class="out">outer card hovered, inner bare group     -&gt; inner text: underline, rgb(220, 38, 38)
+outer card hovered, inner group/item      -&gt; inner text: none</div>
+<h3>🔬 Measured in this site's code (14/11/2026)</h3>
+<div class="out">$ git grep -l 'group-hover:' -- 'src/*.tsx' | wc -l
+     161
+$ for f in $(git grep -l 'group-hover:' -- 'src/*.tsx'); do grep -qE "(className=[\\"'{\\&#96;]|[\\"' \\&#96;])group[\\"' \\&#96;]" "$f" || echo "$f"; done | wc -l
+       2
+$ for f in $(git grep -l 'group-hover:' -- 'src/*.tsx'); do grep -qE "(className=[\\"'{\\&#96;]|[\\"' \\&#96;])group[\\"' \\&#96;]" "$f" || echo "$f"; done | head -4
+src/app/admin/user-codes/page.tsx
+src/components/doiKhang/MinhHoa.tsx
+$ git grep -n 'group-hover:opacity-100' -- src/app/admin/user-codes/page.tsx
+src/app/admin/user-codes/page.tsx:102:                      &lt;Check className="w-4 h-4 text-neon-violet opacity-0 group-hover:opacity-100" /&gt;
+$ git grep -c -wE 'group' -- src/app/admin/user-codes/page.tsx
+src/app/admin/user-codes/page.tsx:1
+$ git grep -n 'group-hover:' -- src/components/doiKhang/MinhHoa.tsx
+src/components/doiKhang/MinhHoa.tsx:11:const NHAC = 'transition-transform duration-500 ease-out group-hover:-translate-y-1.5 motion-reduce:transiti…
+$ git grep -n 'className="group relative' -- src/components/doiKhang/SanhDoiKhang.tsx
+src/components/doiKhang/SanhDoiKhang.tsx:55:      className="group relative flex flex-col overflow-hidden rounded-3xl border border-white/[0.08] bg…</div>
+<p>Two files use <code>group-hover:</code> with no <code>group</code> class in the same file. <code>MinhHoa.tsx</code> is an <strong>invisible coupling</strong> that works: the <code>group</code> lives in its parent, <code>SanhDoiKhang.tsx:55</code>. <code>admin/user-codes/page.tsx:102</code> is a <strong>real silent bug</strong>: a check icon with <code>opacity-0 group-hover:opacity-100</code> inside a <code>&lt;button&gt;</code> (line 95) that has no <code>group</code> — the only line in the file containing the word is line 102 itself, so the icon can never appear on hover. The fix is one word: add <code>group</code> to the button.</p>
+<div class="out">$ git grep -ohE 'className="[^"]*"' -- 'src/*.tsx' | tr ' "' '\\n\\n' | grep -cxE 'group|group/[a-z-]+'
+219
+$ git grep -ohE 'className="[^"]*"' -- 'src/*.tsx' | tr ' "' '\\n\\n' | grep -cx 'peer'
+2
+$ git grep -ohE 'peer-[a-z-]+:' -- 'src/*.tsx' | sort | uniq -c
+   2 peer-empty:</div>
+<p>Two <code>peer</code>s in the whole app, both used the right way round: a <code>div.peer</code> followed by a hidden paragraph with <code>peer-empty:block</code>.</p>
+<h3>🆕 In Tailwind 4</h3>
+<div class="out">@layer utilities {
+  @media (hover: hover) {
+    :is(:where(.group):hover .group-hover\\:opacity-50) {
+    :is(:where(.group\\/item):hover .group-hover\\/item\\:underline) {
+  :is(:where(.peer):checked ~ .peer-checked\\:block) {
+  @media (hover: hover) {
+    :where(:hover) .in-hover\\:underline {</div>
+<p>The same descendant space and forward-only <code>~</code>, now inside <code>:is(:where(.group)…)</code> and <code>@media (hover: hover)</code> — every failure in this lesson still applies. New: <code>in-hover:</code> needs no <code>group</code>:</p>
+<div class="out">    }
+    :where(:hover) .in-hover\\:underline {
+      text-decoration-line: underline;
+    }
+  }</div>
+<p><code>:where(:hover) .x</code> means <em>any</em> hovered ancestor — and <code>&lt;html&gt;</code>/<code>&lt;body&gt;</code> are hovered whenever the mouse is on the page. Measured: hovering an unrelated box still underlined the text (underline). Use it inside a region whose hover you mean, or keep a named group.</p>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-html">&lt;!-- Tailwind 3 or 4, any page. Hover each card and read the icon's opacity in DevTools --&gt;
+&lt;div class="rounded bg-slate-100 p-3"&gt;A · no group
+  &lt;span class="group-hover:opacity-30"&gt;icon&lt;/span&gt;&lt;/div&gt;          &lt;!-- stays 1 --&gt;
+&lt;div class="group rounded bg-slate-100 p-3"&gt;B · group on the ancestor
+  &lt;span class="group-hover:opacity-30"&gt;icon&lt;/span&gt;&lt;/div&gt;          &lt;!-- 0.3 --&gt;
+&lt;div class="rounded bg-slate-100 p-3"&gt;C · group on the SAME element
+  &lt;span class="group group-hover:opacity-30"&gt;icon&lt;/span&gt;&lt;/div&gt;    &lt;!-- stays 1 --&gt;
+&lt;!-- find the silent ones in your own project (bash): --&gt;
+&lt;!-- for f in $(git grep -l 'group-hover:' -- '*.tsx'); do grep -qwE 'group' "$f" || echo "$f"; done --&gt;</code></pre>
+<h3>🔗 Go deeper in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-3-1-css-basics" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Web Foundations · 3.1 — What CSS is: selectors, cascade, inheritance</span><span class="lc-sub">Descendant selectors and how the browser matches them</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-2-4-forms" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Web Foundations · 2.4 — Forms: how the web receives data</span><span class="lc-sub">Labels and inputs — the pair that peer-* styles</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/tailwind-css/learn?lessonSlug=tw-2-3-diem-ngat" target="_blank" rel="noopener"><span class="lc-ico">💨</span><span class="lc-body"><span class="lc-title">Tailwind CSS · 2.3 — Breakpoints win by POSITION</span><span class="lc-sub">Next lesson: the fifth shape, measured</span></span></a>
+
+<h3>🌍 In real life, "what if…", and the attacker's view</h3>
+<ul><li><strong>Every day:</strong> a dropdown that opens on <code>group-hover:</code> needs a tap target on phones (no hover there); floating labels on login forms (<code>peer-focus:</code>) and "show password" toggles (<code>peer-checked:</code>).</li><li><strong>What if…</strong> someone copies <code>MinhHoa.tsx</code> into a page without its <code>group</code> parent? The lift-on-hover vanishes silently — nothing looks broken, so nobody reports it.</li><li><strong>The attacker's view:</strong> hiding is not protecting. An <code>opacity-0</code> or <code>hidden</code> admin control is still in the DOM; anyone can delete the class in DevTools and click. The real check must be on the server. And phishing pages copy floating labels pixel for pixel — polish proves nothing, read the address bar.</li><li><strong>Related:</strong> forms, labels and inputs — Web Foundations 2.4.</li></ul>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Silent failure</span><span class="v">Valid CSS is emitted but never matches — no build warning, no runtime error, the class looks applied.</span></div>
+  <div class="kv"><span class="k"><code>group</code></span><span class="v">Descendant pairing (<code>.group:hover .group-hover\\:x</code>) — needs <code>group</code> on an ancestor.</span></div>
+  <div class="kv"><span class="k"><code>peer</code></span><span class="v">Sibling pairing with <code>~</code> — needs <code>peer</code> on a preceding sibling, same parent.</span></div>
+  <div class="kv"><span class="k">Forward-only <code>~</code></span><span class="v">The subsequent-sibling combinator matches later siblings only; CSS cannot select a previous sibling.</span></div>
+  <div class="kv"><span class="k">Named groups</span><span class="v"><code>group/item</code> + <code>group-hover/item:</code> disambiguate nested groups so hover does not bleed across levels.</span></div>
+  <div class="kv"><span class="k">Invisible coupling</span><span class="v">A component using <code>group-hover:</code> secretly depends on a <code>group</code> ancestor it does not declare.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li><code>group-*</code> and <code>peer-*</code> span two elements, so they fail by emitting correct CSS that never matches.</li><li>Diagnose by reading the generated selector: a space or a <code>~</code> means it is waiting for a second element you must supply.</li><li><code>~</code> points forward only — floating labels put the input before the label for exactly this reason.</li><li>Nested unnamed groups bleed; add <code>/name</code> suffixes to both the group and its variants.</li><li>A component needing <code>group</code> from its parent is coupled — carry the <code>group</code> on its own root or document it.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Tailwind docs — Styling based on parent and sibling state</span><span class="lc-sub">tailwindcss.com/docs/hover-focus-and-other-states#styling-based-on-parent-state — the official <code>group</code> and <code>peer</code> documentation, including the named-group syntax.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">MDN — Subsequent-sibling combinator</span><span class="lc-sub">developer.mozilla.org/en-US/docs/Web/CSS/Subsequent-sibling_combinator — the forward-only rule, and the note that CSS has no previous-sibling combinator at all.</span></span></div>
@@ -325,13 +593,19 @@ $ cat out.css
 &lt;div class="group-hover:opacity-50 peer-checked:block"&gt;&lt;/div&gt;
 </code></pre>
 
-<div class="out">$ npx tailwindcss -c tw.config.js -i in.css -o out.css
-Done in 190ms.
-
+<div class="out">$ npx tailwindcss -c tw.config.js -i in.css -o out.css 2&gt;&amp;1 | tail -1
+Done in 92ms.
 $ cat out.css
-.group:hover .group-hover\\:opacity-50 { opacity: 0.5 }
-.peer:checked ~ .peer-checked\\:block { display: block }
-</div>
+.group:hover .group-hover\\:opacity-50 {
+  opacity: 0.5
+}
+
+.peer:checked ~ .peer-checked\\:block {
+  display: block
+}
+$ grep -oE 'class="[^"]*"' page.html | tr ' "' '\\n\\n' | grep -cxE 'group|peer'
+0
+# Tailwind 3.4.19 — real output 14/11/2026 (the last command counts group/peer classes in page.html: 0)</div>
 
 <p>Cú dựng THÀNH CÔNG. CSS ĐƯỢC phát sinh. Các quy tắc hoàn hảo về cú pháp. Và chúng KHÔNG BAO GIỜ khớp được, vì không thẻ nào trong tài liệu có <code>group</code> hay <code>peer</code>. Không có cảnh báo lúc dựng, không có lỗi console lúc chạy, và thuộc tính lớp trong trình duyệt trông ĐÚNG y.</p>
 
@@ -374,9 +648,13 @@ $ cat out.css
             peer/x peer-checked/x:flex"&gt;&lt;/div&gt;
 </code></pre>
 
-<div class="out">.group\\/item:hover .group-hover\\/item\\:underline { text-decoration-line: underline }
-.peer\\/x:checked ~ .peer-checked\\/x\\:flex { display: flex }
-</div>
+<div class="out">.group\\/item:hover .group-hover\\/item\\:underline {
+  text-decoration-line: underline
+}
+
+.peer\\/x:checked ~ .peer-checked\\/x\\:flex {
+  display: flex
+}</div>
 
 <p>Hậu tố <code>/item</code> trở thành một phần của CẢ HAI tên lớp, nên selector chỉ ghép một nhóm có tên với các biến thể mang CÙNG tên. Hãy dùng chúng NGAY khi bạn có lồng nhau; bản nhập nhằng đẻ ra một con bọ mà rê chuột bất cứ đâu trên một thẻ đều làm sáng mọi hàng bên trong nó, đọc ra thành "hover bị hỏng" chứ không phải "nhóm của tôi nhập nhằng".</p>
 
@@ -401,6 +679,87 @@ $ cat out.css
 <p><strong>Một câu.</strong> <code>group-*</code> và <code>peer-*</code> biên dịch ra các selector TRẢI QUA hai thẻ — một khoảng trắng con cháu và một dấu <code>~</code> chỉ-tiến — nên chúng hỏng bằng cách phát sinh CSS hợp lệ mà không bao giờ khớp, và cách duy nhất chẩn đoán là ĐỌC selector được phát sinh và hỏi nó đang chờ thẻ thứ hai NÀO.</p>
 </div>
 
+<h3>🔬 Đo thật: ba tấm thẻ, một cái nhãn, group lồng nhau (Chromium, Tailwind 3.4.19)</h3>
+<p>Mỗi icon mang <code>group-hover:opacity-30</code>; lần lượt rê chuột lên từng tấm thẻ rồi đọc opacity của icon bằng <code>getComputedStyle</code>:</p>
+<div class="out">card A  không group                  -&gt; icon opacity 1
+card B  group ở tấm thẻ (tổ tiên)      -&gt; icon opacity 0.3
+card C  group CÙNG thẻ với icon        -&gt; icon opacity 1</div>
+<p>Tấm C là cái bẫy "group CÙNG thẻ": luật đòi thẻ phải là tổ tiên của chính nó. Rồi tới dấu <code>~</code> chỉ-tiến, với <code>peer-focus:text-blue-600</code> trên nhãn:</p>
+<div class="out">label BEFORE input, input focused  -&gt; label rgb(100, 116, 139)  (slate-500, unchanged)
+label AFTER input (order-1), focused -&gt; label rgb(37, 99, 235)  (blue-600)</div>
+<p>Và group lồng nhau — chỉ rê chuột lên dòng chữ của thẻ NGOÀI:</p>
+<div class="out">outer card hovered, inner bare group     -&gt; inner text: underline, rgb(220, 38, 38)
+outer card hovered, inner group/item      -&gt; inner text: none</div>
+<h3>🔬 Đo trên mã của chính trang này (14/11/2026)</h3>
+<div class="out">$ git grep -l 'group-hover:' -- 'src/*.tsx' | wc -l
+     161
+$ for f in $(git grep -l 'group-hover:' -- 'src/*.tsx'); do grep -qE "(className=[\\"'{\\&#96;]|[\\"' \\&#96;])group[\\"' \\&#96;]" "$f" || echo "$f"; done | wc -l
+       2
+$ for f in $(git grep -l 'group-hover:' -- 'src/*.tsx'); do grep -qE "(className=[\\"'{\\&#96;]|[\\"' \\&#96;])group[\\"' \\&#96;]" "$f" || echo "$f"; done | head -4
+src/app/admin/user-codes/page.tsx
+src/components/doiKhang/MinhHoa.tsx
+$ git grep -n 'group-hover:opacity-100' -- src/app/admin/user-codes/page.tsx
+src/app/admin/user-codes/page.tsx:102:                      &lt;Check className="w-4 h-4 text-neon-violet opacity-0 group-hover:opacity-100" /&gt;
+$ git grep -c -wE 'group' -- src/app/admin/user-codes/page.tsx
+src/app/admin/user-codes/page.tsx:1
+$ git grep -n 'group-hover:' -- src/components/doiKhang/MinhHoa.tsx
+src/components/doiKhang/MinhHoa.tsx:11:const NHAC = 'transition-transform duration-500 ease-out group-hover:-translate-y-1.5 motion-reduce:transiti…
+$ git grep -n 'className="group relative' -- src/components/doiKhang/SanhDoiKhang.tsx
+src/components/doiKhang/SanhDoiKhang.tsx:55:      className="group relative flex flex-col overflow-hidden rounded-3xl border border-white/[0.08] bg…</div>
+<p>Hai tệp dùng <code>group-hover:</code> mà không có lớp <code>group</code> nào trong cùng tệp. <code>MinhHoa.tsx</code> là một <strong>ràng buộc vô hình</strong> vẫn chạy: <code>group</code> nằm ở component cha, <code>SanhDoiKhang.tsx:55</code>. <code>admin/user-codes/page.tsx:102</code> là một <strong>con bọ âm thầm THẬT</strong>: icon dấu tích mang <code>opacity-0 group-hover:opacity-100</code> nằm trong một <code>&lt;button&gt;</code> (dòng 95) không có <code>group</code> — dòng duy nhất trong tệp chứa chữ ấy là chính dòng 102, nên icon không bao giờ hiện khi rê chuột. Sửa bằng một từ: thêm <code>group</code> vào nút.</p>
+<div class="out">$ git grep -ohE 'className="[^"]*"' -- 'src/*.tsx' | tr ' "' '\\n\\n' | grep -cxE 'group|group/[a-z-]+'
+219
+$ git grep -ohE 'className="[^"]*"' -- 'src/*.tsx' | tr ' "' '\\n\\n' | grep -cx 'peer'
+2
+$ git grep -ohE 'peer-[a-z-]+:' -- 'src/*.tsx' | sort | uniq -c
+   2 peer-empty:</div>
+<p>Cả ứng dụng chỉ có hai <code>peer</code>, cả hai đúng chiều: một <code>div.peer</code> theo sau là đoạn chữ ẩn mang <code>peer-empty:block</code>.</p>
+<h3>🆕 Ở Tailwind 4</h3>
+<div class="out">@layer utilities {
+  @media (hover: hover) {
+    :is(:where(.group):hover .group-hover\\:opacity-50) {
+    :is(:where(.group\\/item):hover .group-hover\\/item\\:underline) {
+  :is(:where(.peer):checked ~ .peer-checked\\:block) {
+  @media (hover: hover) {
+    :where(:hover) .in-hover\\:underline {</div>
+<p>Vẫn khoảng trắng con cháu và <code>~</code> chỉ-tiến, giờ nằm trong <code>:is(:where(.group)…)</code> và <code>@media (hover: hover)</code> — mọi kiểu hỏng trong bài vẫn đúng. Mới: <code>in-hover:</code> không cần <code>group</code>:</p>
+<div class="out">    }
+    :where(:hover) .in-hover\\:underline {
+      text-decoration-line: underline;
+    }
+  }</div>
+<p><code>:where(:hover) .x</code> nghĩa là <em>BẤT KỲ</em> tổ tiên nào đang được rê — mà <code>&lt;html&gt;</code>/<code>&lt;body&gt;</code> luôn được rê khi chuột nằm trên trang. Đo thật: rê một hộp không liên quan, chữ vẫn gạch chân (underline). Dùng nó bên trong một vùng mà bạn thật sự muốn bắt hover, hoặc giữ group có tên.</p>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-html">&lt;!-- Tailwind 3 hoặc 4. Rê từng tấm thẻ rồi đọc opacity của icon trong DevTools --&gt;
+&lt;div class="rounded bg-slate-100 p-3"&gt;A · no group
+  &lt;span class="group-hover:opacity-30"&gt;icon&lt;/span&gt;&lt;/div&gt;          &lt;!-- stays 1 --&gt;
+&lt;div class="group rounded bg-slate-100 p-3"&gt;B · group on the ancestor
+  &lt;span class="group-hover:opacity-30"&gt;icon&lt;/span&gt;&lt;/div&gt;          &lt;!-- 0.3 --&gt;
+&lt;div class="rounded bg-slate-100 p-3"&gt;C · group on the SAME element
+  &lt;span class="group group-hover:opacity-30"&gt;icon&lt;/span&gt;&lt;/div&gt;    &lt;!-- stays 1 --&gt;
+&lt;!-- tìm các chỗ hỏng âm thầm trong dự án của bạn (bash): --&gt;
+&lt;!-- for f in $(git grep -l 'group-hover:' -- '*.tsx'); do grep -qwE 'group' "$f" || echo "$f"; done --&gt;</code></pre>
+<h3>🔗 Học sâu hơn ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-3-1-css-basics" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Nền tảng Web · 3.1 — CSS là gì: bộ chọn, cascade, kế thừa</span><span class="lc-sub">Selector con cháu và cách trình duyệt khớp</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-2-4-forms" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Nền tảng Web · 2.4 — Biểu mẫu: cách web nhận dữ liệu</span><span class="lc-sub">Nhãn và ô nhập — cặp mà peer-* tạo kiểu</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/tailwind-css/learn?lessonSlug=tw-2-3-diem-ngat" target="_blank" rel="noopener"><span class="lc-ico">💨</span><span class="lc-body"><span class="lc-title">Tailwind CSS · 2.3 — Điểm ngắt thắng nhờ VỊ TRÍ</span><span class="lc-sub">Bài sau: hình dạng thứ năm, đo thật</span></span></a>
+
+<h3>🌍 Ngoài đời, "nếu… thì sao", và góc kẻ xấu</h3>
+<ul><li><strong>Ngoài đời:</strong> menu thả xuống mở bằng <code>group-hover:</code> cần chỗ để chạm trên điện thoại (ở đó không có hover); nhãn nổi ở trang đăng nhập (<code>peer-focus:</code>) và nút "hiện mật khẩu" (<code>peer-checked:</code>).</li><li><strong>Nếu… thì sao:</strong> ai đó chép <code>MinhHoa.tsx</code> sang trang khác mà thiếu thẻ cha mang <code>group</code>? Hiệu ứng nhấc lên biến mất âm thầm — không gì trông hỏng, nên chẳng ai báo.</li><li><strong>Góc kẻ xấu:</strong> ẨN không phải BẢO VỆ. Một nút quản trị <code>opacity-0</code> hay <code>hidden</code> vẫn nằm trong DOM; ai cũng xoá được lớp trong DevTools rồi bấm. Kiểm quyền thật phải ở máy chủ. Còn trang lừa đảo chép nhãn nổi y từng pixel — đẹp không chứng minh gì, hãy đọc thanh địa chỉ.</li><li><strong>Liên quan:</strong> biểu mẫu, nhãn và ô nhập — Nền tảng Web 2.4.</li></ul>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Silent failure</span><span class="v">Hỏng âm thầm — CSS hợp lệ được phát sinh nhưng không bao giờ khớp; không cảnh báo, không lỗi, lớp trông đã áp.</span></div>
+  <div class="kv"><span class="k"><code>group</code></span><span class="v">Ghép con cháu (<code>.group:hover .group-hover\\:x</code>) — cần <code>group</code> trên một tổ tiên.</span></div>
+  <div class="kv"><span class="k"><code>peer</code></span><span class="v">Ghép anh em với <code>~</code> — cần <code>peer</code> trên anh em đứng trước, cùng cha.</span></div>
+  <div class="kv"><span class="k">Forward-only <code>~</code></span><span class="v"><code>~</code> chỉ tiến — tổ hợp anh em đứng sau chỉ khớp anh em sau; CSS không chọn được anh em trước.</span></div>
+  <div class="kv"><span class="k">Named groups</span><span class="v">Nhóm có tên — <code>group/item</code> + <code>group-hover/item:</code> gỡ nhập nhằng nhóm lồng nhau để hover không lan qua các cấp.</span></div>
+  <div class="kv"><span class="k">Invisible coupling</span><span class="v">Ràng buộc vô hình — thẻ dùng <code>group-hover:</code> ngầm phụ thuộc một tổ tiên <code>group</code> mà nó không khai.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li><code>group-*</code> và <code>peer-*</code> trải qua hai thẻ, nên hỏng bằng cách phát sinh CSS đúng mà không bao giờ khớp.</li><li>Chẩn đoán bằng cách đọc selector phát sinh: khoảng trắng hoặc <code>~</code> nghĩa là nó chờ một thẻ thứ hai bạn phải cấp.</li><li><code>~</code> chỉ trỏ về phía trước — nhãn nổi đặt ô nhập trước nhãn đúng vì lý do này.</li><li>Nhóm lồng không tên bị lan; thêm hậu tố <code>/name</code> vào cả group lẫn biến thể của nó.</li><li>Một thẻ cần <code>group</code> từ cha là bị ràng buộc — mang <code>group</code> trên gốc của chính nó hoặc ghi chú lại.</li></ul>
+
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Tailwind docs — Styling based on parent and sibling state</span><span class="lc-sub">tailwindcss.com/docs/hover-focus-and-other-states#styling-based-on-parent-state — tài liệu chính thức về <code>group</code> và <code>peer</code>, gồm cả cú pháp nhóm có tên.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">MDN — Subsequent-sibling combinator</span><span class="lc-sub">developer.mozilla.org/en-US/docs/Web/CSS/Subsequent-sibling_combinator — luật chỉ-tiến, và ghi chú rằng CSS KHÔNG hề có tổ hợp anh-em-trước.</span></span></div>
@@ -417,6 +776,7 @@ $ cat out.css
       type: 'VIDEO',
       description: 'Viết lộn xộn `2xl: sm: base xl: md: lg:` và Tailwind vẫn phát sinh theo thứ tự TĂNG DẦN nghiêm ngặt. Đó là lý do responsive chạy được — và cũng là lý do một quy tắc CSS viết tay 0,2,0 đánh bại được mọi lớp `md:` trong ứng dụng của bạn.',
       content: `
+${G02_3}
 <div class="ml-en">
 <span class="eyebrow">Chapter 2 · Lesson 2.3</span>
 <h2>Breakpoints win by position, not by specificity</h2>
@@ -486,15 +846,16 @@ $ grep -E '^\\.|^@media' out.css
 <p>The symptom is distinctive and confusing: the responsive class does nothing at any breakpoint, while <code>hover:</code> classes on the same element work fine — because those score <code>0,2,0</code> and tie-break on order instead of losing outright. Recognising that asymmetry saves an afternoon.</p>
 
 <h3>What this repository's responsive coverage looks like</h3>
-<pre><code class="language-bash">$ grep -rl -E '\\b(sm|md|lg|xl|2xl):' src --include="*.tsx" | wc -l
-$ find src -name "*.tsx" | wc -l
+<pre><code class="language-bash">$ git grep -lE '(^|[" &#96;{])(sm|md|lg|xl|2xl):' -- 'src/*.tsx' | wc -l
+$ git ls-files 'src/*.tsx' | wc -l
 </code></pre>
 
-<div class="out">372    # file co IT NHAT mot bien the diem ngat
-793    # tong so file .tsx
+<div class="out">671    # file co IT NHAT mot bien the diem ngat   (do 14/11/2026; luc soan bai: 372)
+1673   # tong so file .tsx                  (luc soan bai: 793)
 </div>
 
-<p>47% of components carry at least one breakpoint variant. And recall the distribution from Section 0: <code>sm:</code> 1,220 uses, <code>lg:</code> 376, <code>md:</code> 266, <code>xl:</code> 48, <code>2xl:</code> 1. The heavy skew to <code>sm:</code> says most responsive work here is the single jump from phone to everything-else, rather than a carefully tiered five-breakpoint system. That is typical and fine — and it means the <code>2xl:</code> single use is almost certainly an accident worth deleting.</p>
+<p>40% of <code>.tsx</code> files carry at least one breakpoint variant (47% when the lesson was written). Counted 14/11/2026 at the start of a class: <code>sm:</code> 2,014 uses, <code>md:</code> 654, <code>lg:</code> 645, <code>xl:</code> 83, <code>2xl:</code> 8 (the lesson measured 1,220 / 266 / 376 / 48 / 1). The heavy skew to <code>sm:</code> says most responsive work here is the single jump from phone to everything-else, rather than a carefully tiered five-breakpoint system. That is typical and fine — and it means the <code>2xl:</code> single use is almost certainly an accident worth deleting.</p>
+<p><strong>Corrected 14/11/2026:</strong> <code>2xl:</code> is no longer a single accident — there are eight distinct <code>2xl:</code> classes today (<code>2xl:grid-cols-4</code>, <code>2xl:w-[240px]</code>, <code>2xl:hidden</code>…), deliberate wide-screen layouts. Count before you delete.</p>
 
 <div class="pitfall">
 <p><strong>Trap — reading <code>md:</code> as "on medium screens".</strong> It means "at 768px <em>and above</em>", so it applies to medium, large, extra-large and beyond. Writing <code>md:hidden</code> to hide something on tablets also hides it on every desktop. To target a band you need both ends: <code>md:max-lg:hidden</code>. This single misreading accounts for a large share of "my responsive layout is wrong on desktop" bugs, and it is entirely a vocabulary problem — the name suggests a range, the behaviour is a threshold.</p>
@@ -511,6 +872,90 @@ $ find src -name "*.tsx" | wc -l
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Which is why mobile-first works</span><span class="lz-d">The unprefixed value applies everywhere and each larger breakpoint overrides it, because each is emitted later.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">And why <code>md:p-4 p-2</code> behaves identically to <code>p-2 md:p-4</code></span><span class="lz-d">The class attribute is a set, not a sequence. Nothing you do in the markup changes which rule wins.</span></div>
 </div>
+<h3>🔬 Measured: one page at six widths (Chromium, Tailwind 3.4.19)</h3>
+<div class="out">window  #h (2xl sm base xl md lg)  p-1 md:p-4 max-lg:p-6  p-1 md:max-lg:p-3  md:hidden
+ 500px                       4px                   24px                4px  block
+ 700px                       8px                   24px                4px  block
+ 800px                      16px                   16px               12px  none
+1100px                      24px                   16px                4px  none
+1300px                      32px                   16px                4px  none
+1600px                      40px                   16px                4px  none</div>
+<p>The shuffled box is right at every width — because of emit order, not class order. At 800px <code>max-lg:p-6</code> and <code>md:p-4</code> both match and <code>md:p-4</code> wins (16px); the two-sided band applies only between 768 and 1024 (12px); <code>md:hidden</code> is gone at 800px <em>and</em> at 1600px.</p>
+<p>In this site's code today:</p>
+<div class="out">$ git ls-files 'src/*.tsx' | wc -l
+    1673
+$ git grep -lE '(^|[" &#96;{])(sm|md|lg|xl|2xl):' -- 'src/*.tsx' | wc -l
+     671
+$ for v in sm md lg xl 2xl; do printf "%-4s %6d\\n" "$v:" "$(git grep -ohE "(^|[\\"' \\&#96;{])$v:" -- 'src/*.tsx' | wc -l)"; done
+sm:    2014
+md:     654
+lg:     645
+xl:      83
+2xl:      8
+$ git grep -ohE '(^|[" &#96;{])max-(sm|md|lg|xl|2xl):' -- 'src/*.tsx' | wc -l
+     170
+$ git grep -ohE '(^|[" &#96;{])(sm|md|lg|xl):max-(sm|md|lg|xl|2xl):' -- 'src/*.tsx' | wc -l
+       0
+$ git grep -ohE '(^|[" &#96;{])(sm|md|lg|xl|2xl):hidden' -- 'src/*.tsx' | sed -E 's/^[" &#96;{]//' | sort | uniq -c
+  17 lg:hidden
+  29 md:hidden
+  16 sm:hidden
+   4 xl:hidden
+$ git grep -ohE "2xl:[^ \\"'\\&#96;]+" -- 'src/*.tsx' | sort | uniq -c
+   2 2xl:!hidden
+   1 2xl:grid-cols-[minmax(0,1fr)_340px]
+   1 2xl:grid-cols-3
+   3 2xl:grid-cols-4
+   1 2xl:grid-cols-8
+   1 2xl:hidden
+   1 2xl:pr-20
+   1 2xl:w-[240px]</div>
+<h3>🆕 In Tailwind 4</h3>
+<div class="out">@layer utilities {
+  .p-1 {
+  @media (width &lt; 64rem) {
+    .max-lg\\:p-5 {
+  @media (width &lt; 48rem) {
+    .max-md\\:p-7 {
+  @media (width &gt;= 40rem) {
+    .sm\\:p-2 {
+  @media (width &gt;= 48rem) {
+    .md\\:p-4 {
+    @media (width &lt; 64rem) {
+      .md\\:max-lg\\:p-3 {
+  @media (width &gt;= 64rem) {
+    .lg\\:p-6 {
+  @media (width &gt;= 80rem) {
+    .xl\\:p-8 {
+  @media (width &gt;= 96rem) {
+    .\\32 xl\\:p-10 {</div>
+<p>Same mechanism: every <code>max-*</code> first (descending), then <code>min-*</code> ascending; a band like <code>md:max-lg:</code> becomes a <em>nested</em> <code>@media</code>. What changed: breakpoints are <strong>rem</strong> with range syntax — <code>(width &gt;= 48rem)</code> — so they equal 768px only while the root font is 16px, and they are theme variables (<code>--breakpoint-md</code> in <code>@theme</code>).</p>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-html">&lt;!-- Tailwind 3 or 4. Open DevTools, toggle the device toolbar, drag the width from 500 to 1600 --&gt;
+&lt;div id="h" class="2xl:p-10 sm:p-2 p-1 xl:p-8 md:p-4 lg:p-6 bg-cyan-100"&gt;written shuffled&lt;/div&gt;
+&lt;div id="m" class="p-1 md:p-4 max-lg:p-6 bg-amber-100"&gt;p-1 md:p-4 max-lg:p-6&lt;/div&gt;
+&lt;div id="n" class="md:hidden bg-rose-100"&gt;md:hidden&lt;/div&gt;
+&lt;!-- console: [innerWidth, getComputedStyle(h).paddingTop, getComputedStyle(m).paddingTop, getComputedStyle(n).display] --&gt;</code></pre>
+<h3>🔗 Go deeper in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-3-5-responsive" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Web Foundations · 3.5 — Responsive design: one page, every screen</span><span class="lc-sub">The same mobile-first min-width media queries, in plain CSS</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/tailwind-css/learn?lessonSlug=tw-2-4-che-do-toi" target="_blank" rel="noopener"><span class="lc-ico">💨</span><span class="lc-body"><span class="lc-title">Tailwind CSS · 2.4 — Dark mode</span><span class="lc-sub">Next lesson: the variant with the largest blast radius</span></span></a>
+
+<h3>🌍 In real life, "what if…", and the attacker's view</h3>
+<ul><li><strong>Every day:</strong> rotate your phone and you cross 640 or 768px — the layout jumps. A laptop at 125% Windows scaling has a narrower CSS width than its pixels and gets the tablet layout.</li><li><strong>What if…</strong> the user sets the browser font to 20px? Tailwind 4 breakpoints are rem: <code>md</code> = 48rem = 48 × 20 = 960px, so the desktop layout starts at 960px. Tailwind 3 px breakpoints do not move.</li><li><strong>The attacker's view (dark patterns):</strong> a fee line or the "cancel subscription" link inside <code>hidden md:block</code> simply does not exist on the phone where most people pay; scam pages do the reverse and show an "official" badge only at phone widths. Before paying, view the page at two widths; as a developer, never put required text behind a breakpoint.</li><li><strong>Related:</strong> mobile-first media queries in plain CSS — Web Foundations 3.5.</li></ul>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Source-order win</span><span class="v">Breakpoints add no specificity, so the later rule wins at equal specificity.</span></div>
+  <div class="kv"><span class="k">Ascending emit order</span><span class="v">Tailwind sorts <code>min-*</code> queries ascending so the largest matching breakpoint lands last and wins.</span></div>
+  <div class="kv"><span class="k">Mobile-first</span><span class="v">The unprefixed class is the smallest-screen case; each breakpoint overrides upward.</span></div>
+  <div class="kv"><span class="k"><code>max-*</code> variants</span><span class="v">Ceilings compiled as <code>not all and (min-width: X)</code>, emitted descending and before all <code>min-*</code>.</span></div>
+  <div class="kv"><span class="k">Two-sided band</span><span class="v"><code>md:max-lg:p-4</code> — the reliable way to target only one width band.</span></div>
+  <div class="kv"><span class="k">Zero-specificity vulnerability</span><span class="v">Any hand-written <code>0,2,0</code> rule beats <code>md:flex</code> at every screen size.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Breakpoint variants win purely by emit order, not specificity — the order you type in the class attribute is irrelevant.</li><li>Tailwind emits <code>min-*</code> ascending and <code>max-*</code> descending so the narrowest matching rule lands last.</li><li>Mobile-first is the direction the cascade runs, not advice: the base class is the narrowest layout.</li><li><code>md:</code> means "768px and above", a threshold not a range — target a band with <code>md:max-lg:</code>.</li><li>Because responsive classes score <code>0,1,0</code>, a hand-written <code>0,2,0</code> rule silently beats them everywhere.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Tailwind docs — Responsive design</span><span class="lc-sub">tailwindcss.com/docs/responsive-design — the mobile-first explanation, the <code>max-*</code> variants, and the two-sided <code>md:max-lg:</code> form for targeting a band.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">MDN — Using media queries</span><span class="lc-sub">developer.mozilla.org/en-US/docs/Web/CSS/CSS_media_queries/Using_media_queries — including the explicit statement that a media query does not affect specificity, which is the fact this whole lesson rests on.</span></span></div>
@@ -587,15 +1032,16 @@ $ grep -E '^\\.|^@media' out.css
 <p>Triệu chứng rất đặc trưng và gây rối: lớp responsive KHÔNG làm gì ở MỌI điểm ngắt, trong khi các lớp <code>hover:</code> trên CÙNG thẻ chạy tốt — vì chúng đạt <code>0,2,0</code> và phá hoà bằng thứ tự thay vì thua đứt. Nhận ra sự bất đối xứng ấy tiết kiệm cho bạn một buổi chiều.</p>
 
 <h3>Độ phủ responsive của kho này trông ra sao</h3>
-<pre><code class="language-bash">$ grep -rl -E '\\b(sm|md|lg|xl|2xl):' src --include="*.tsx" | wc -l
-$ find src -name "*.tsx" | wc -l
+<pre><code class="language-bash">$ git grep -lE '(^|[" &#96;{])(sm|md|lg|xl|2xl):' -- 'src/*.tsx' | wc -l
+$ git ls-files 'src/*.tsx' | wc -l
 </code></pre>
 
-<div class="out">372    # file co IT NHAT mot bien the diem ngat
-793    # tong so file .tsx
+<div class="out">671    # file co IT NHAT mot bien the diem ngat   (do 14/11/2026; luc soan bai: 372)
+1673   # tong so file .tsx                  (luc soan bai: 793)
 </div>
 
-<p>47% component mang ít nhất một biến thể điểm ngắt. Và nhớ lại phân bố từ Mục 0: <code>sm:</code> 1.220 lượt, <code>lg:</code> 376, <code>md:</code> 266, <code>xl:</code> 48, <code>2xl:</code> 1. Độ lệch nặng về <code>sm:</code> nói rằng phần lớn việc responsive ở đây là MỘT bước nhảy từ điện thoại sang mọi-thứ-còn-lại, chứ không phải một hệ năm-điểm-ngắt phân tầng cẩn thận. Điều đó điển hình và ổn — và nó có nghĩa một lượt <code>2xl:</code> duy nhất gần như chắc chắn là một tai nạn đáng xoá.</p>
+<p>40% tệp <code>.tsx</code> mang ít nhất một biến thể điểm ngắt (lúc soạn bài là 47%). Đếm 14/11/2026, đứng đầu lớp: <code>sm:</code> 2.014 lượt, <code>md:</code> 654, <code>lg:</code> 645, <code>xl:</code> 83, <code>2xl:</code> 8 (lúc soạn: 1.220 / 266 / 376 / 48 / 1). Độ lệch nặng về <code>sm:</code> nói rằng phần lớn việc responsive ở đây là MỘT bước nhảy từ điện thoại sang mọi-thứ-còn-lại, chứ không phải một hệ năm-điểm-ngắt phân tầng cẩn thận. Điều đó điển hình và ổn — và nó có nghĩa một lượt <code>2xl:</code> duy nhất gần như chắc chắn là một tai nạn đáng xoá.</p>
+<p><strong>Sửa 14/11/2026:</strong> <code>2xl:</code> không còn là một tai nạn lẻ — hôm nay có tám lớp <code>2xl:</code> khác nhau (<code>2xl:grid-cols-4</code>, <code>2xl:w-[240px]</code>, <code>2xl:hidden</code>…), là bố cục màn rất rộng CÓ CHỦ Ý. Đếm trước khi xoá.</p>
 
 <div class="pitfall">
 <p><strong>Bẫy — đọc <code>md:</code> thành "trên màn hình trung bình".</strong> Nó nghĩa là "ở 768px <em>TRỞ LÊN</em>", nên nó áp cho trung bình, lớn, siêu lớn và hơn nữa. Viết <code>md:hidden</code> để ẩn thứ gì đó trên máy tính bảng thì cũng ẩn nó trên MỌI desktop. Để nhắm một DẢI bạn cần cả hai đầu: <code>md:max-lg:hidden</code>. Chỉ riêng cú đọc nhầm này chiếm một phần lớn số bọ "bố cục responsive của tôi sai trên desktop", và nó hoàn toàn là một vấn đề TỪ VỰNG — cái tên gợi ý một khoảng, hành vi là một NGƯỠNG.</p>
@@ -612,6 +1058,90 @@ $ find src -name "*.tsx" | wc -l
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Đó là lý do lối ưu-tiên-điện-thoại chạy được</span><span class="lz-d">Giá trị không tiền tố áp ở mọi nơi và mỗi điểm ngắt lớn hơn đè lên nó, vì mỗi cái được sinh ra sau.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Và là lý do <code>md:p-4 p-2</code> hành xử y hệt <code>p-2 md:p-4</code></span><span class="lz-d">Thuộc tính class là một TẬP HỢP, không phải một trình tự. Chẳng có gì bạn làm trong markup đổi được luật nào thắng.</span></div>
 </div>
+<h3>🔬 Đo thật: một trang ở sáu bề ngang (Chromium, Tailwind 3.4.19)</h3>
+<div class="out">cua so  #h (2xl sm base xl md lg)  p-1 md:p-4 max-lg:p-6  p-1 md:max-lg:p-3  md:hidden
+ 500px                       4px                   24px                4px  block
+ 700px                       8px                   24px                4px  block
+ 800px                      16px                   16px               12px  none
+1100px                      24px                   16px                4px  none
+1300px                      32px                   16px                4px  none
+1600px                      40px                   16px                4px  none</div>
+<p>Hộp viết lộn xộn đúng ở mọi bề ngang — nhờ thứ tự SINH RA, không nhờ thứ tự viết. Ở 800px cả <code>max-lg:p-6</code> lẫn <code>md:p-4</code> đều khớp và <code>md:p-4</code> thắng (16px); dải hai đầu chỉ áp từ 768 tới 1024 (12px); <code>md:hidden</code> biến mất ở 800px <em>VÀ</em> ở 1600px.</p>
+<p>Trên mã của trang này hôm nay:</p>
+<div class="out">$ git ls-files 'src/*.tsx' | wc -l
+    1673
+$ git grep -lE '(^|[" &#96;{])(sm|md|lg|xl|2xl):' -- 'src/*.tsx' | wc -l
+     671
+$ for v in sm md lg xl 2xl; do printf "%-4s %6d\\n" "$v:" "$(git grep -ohE "(^|[\\"' \\&#96;{])$v:" -- 'src/*.tsx' | wc -l)"; done
+sm:    2014
+md:     654
+lg:     645
+xl:      83
+2xl:      8
+$ git grep -ohE '(^|[" &#96;{])max-(sm|md|lg|xl|2xl):' -- 'src/*.tsx' | wc -l
+     170
+$ git grep -ohE '(^|[" &#96;{])(sm|md|lg|xl):max-(sm|md|lg|xl|2xl):' -- 'src/*.tsx' | wc -l
+       0
+$ git grep -ohE '(^|[" &#96;{])(sm|md|lg|xl|2xl):hidden' -- 'src/*.tsx' | sed -E 's/^[" &#96;{]//' | sort | uniq -c
+  17 lg:hidden
+  29 md:hidden
+  16 sm:hidden
+   4 xl:hidden
+$ git grep -ohE "2xl:[^ \\"'\\&#96;]+" -- 'src/*.tsx' | sort | uniq -c
+   2 2xl:!hidden
+   1 2xl:grid-cols-[minmax(0,1fr)_340px]
+   1 2xl:grid-cols-3
+   3 2xl:grid-cols-4
+   1 2xl:grid-cols-8
+   1 2xl:hidden
+   1 2xl:pr-20
+   1 2xl:w-[240px]</div>
+<h3>🆕 Ở Tailwind 4</h3>
+<div class="out">@layer utilities {
+  .p-1 {
+  @media (width &lt; 64rem) {
+    .max-lg\\:p-5 {
+  @media (width &lt; 48rem) {
+    .max-md\\:p-7 {
+  @media (width &gt;= 40rem) {
+    .sm\\:p-2 {
+  @media (width &gt;= 48rem) {
+    .md\\:p-4 {
+    @media (width &lt; 64rem) {
+      .md\\:max-lg\\:p-3 {
+  @media (width &gt;= 64rem) {
+    .lg\\:p-6 {
+  @media (width &gt;= 80rem) {
+    .xl\\:p-8 {
+  @media (width &gt;= 96rem) {
+    .\\32 xl\\:p-10 {</div>
+<p>Cùng cơ chế: mọi <code>max-*</code> đứng trước (giảm dần), rồi <code>min-*</code> tăng dần; dải như <code>md:max-lg:</code> thành một <code>@media</code> <em>LỒNG</em>. Khác: điểm ngắt dùng <strong>rem</strong> và cú pháp khoảng — <code>(width &gt;= 48rem)</code> — nên chỉ bằng 768px khi cỡ chữ gốc là 16px, và chúng là biến theme (<code>--breakpoint-md</code> trong <code>@theme</code>).</p>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-html">&lt;!-- Tailwind 3 hoặc 4. Mở DevTools, bật thanh thiết bị, kéo bề ngang từ 500 tới 1600 --&gt;
+&lt;div id="h" class="2xl:p-10 sm:p-2 p-1 xl:p-8 md:p-4 lg:p-6 bg-cyan-100"&gt;written shuffled&lt;/div&gt;
+&lt;div id="m" class="p-1 md:p-4 max-lg:p-6 bg-amber-100"&gt;p-1 md:p-4 max-lg:p-6&lt;/div&gt;
+&lt;div id="n" class="md:hidden bg-rose-100"&gt;md:hidden&lt;/div&gt;
+&lt;!-- console: [innerWidth, getComputedStyle(h).paddingTop, getComputedStyle(m).paddingTop, getComputedStyle(n).display] --&gt;</code></pre>
+<h3>🔗 Học sâu hơn ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-3-5-responsive" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Nền tảng Web · 3.5 — Thiết kế responsive: một trang, mọi màn hình</span><span class="lc-sub">Cùng các media min-width viết mobile-first, bằng CSS thuần</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/tailwind-css/learn?lessonSlug=tw-2-4-che-do-toi" target="_blank" rel="noopener"><span class="lc-ico">💨</span><span class="lc-body"><span class="lc-title">Tailwind CSS · 2.4 — Chế độ tối</span><span class="lc-sub">Bài sau: biến thể có bán kính nổ lớn nhất</span></span></a>
+
+<h3>🌍 Ngoài đời, "nếu… thì sao", và góc kẻ xấu</h3>
+<ul><li><strong>Ngoài đời:</strong> xoay ngang điện thoại là vượt qua 640 hay 768px — bố cục nhảy. Laptop chỉnh tỉ lệ hiển thị 125% có bề ngang CSS hẹp hơn số điểm ảnh, và nhận bố cục máy tính bảng.</li><li><strong>Nếu… thì sao:</strong> người dùng đặt cỡ chữ trình duyệt 20px? Điểm ngắt Tailwind 4 là rem: <code>md</code> = 48rem = 48 × 20 = 960px, nên bố cục máy tính chỉ bắt đầu từ 960px. Điểm ngắt px của Tailwind 3 thì không dịch.</li><li><strong>Góc kẻ xấu (dark pattern):</strong> dòng phí hay liên kết "huỷ đăng ký" nằm trong <code>hidden md:block</code> đơn giản là KHÔNG CÓ trên điện thoại, nơi người ta trả tiền nhiều nhất; trang lừa thì làm ngược lại, chỉ hiện huy hiệu "chính thức" ở bề ngang điện thoại. Trước khi trả tiền, xem trang ở hai bề ngang; làm web thì đừng đặt chữ bắt buộc sau một điểm ngắt.</li><li><strong>Liên quan:</strong> media query mobile-first bằng CSS thuần — Nền tảng Web 3.5.</li></ul>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Source-order win</span><span class="v">Thắng nhờ thứ tự nguồn — điểm ngắt không thêm độ đặc hiệu, nên khi bằng độ đặc hiệu, quy tắc sau thắng.</span></div>
+  <div class="kv"><span class="k">Ascending emit order</span><span class="v">Phát sinh tăng dần — Tailwind xếp <code>min-*</code> tăng dần để điểm ngắt lớn nhất khớp rơi cuối và thắng.</span></div>
+  <div class="kv"><span class="k">Mobile-first</span><span class="v">Lớp không tiền tố là ca màn nhỏ nhất; mỗi điểm ngắt ghi đè lên trên.</span></div>
+  <div class="kv"><span class="k"><code>max-*</code> variants</span><span class="v">Biến thể trần — biên dịch thành <code>not all and (min-width: X)</code>, phát sinh giảm dần và trước mọi <code>min-*</code>.</span></div>
+  <div class="kv"><span class="k">Two-sided band</span><span class="v">Dải hai đầu — <code>md:max-lg:p-4</code>, cách đáng tin để nhắm đúng một dải bề ngang.</span></div>
+  <div class="kv"><span class="k">Zero-specificity vulnerability</span><span class="v">Lỗ hổng độ đặc hiệu 0 — bất kỳ quy tắc tay <code>0,2,0</code> nào cũng thắng <code>md:flex</code> ở mọi cỡ màn.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Biến thể điểm ngắt thắng thuần tuý nhờ thứ tự phát sinh, không nhờ độ đặc hiệu — thứ tự bạn gõ trong thuộc tính lớp là vô nghĩa.</li><li>Tailwind phát sinh <code>min-*</code> tăng dần và <code>max-*</code> giảm dần để quy tắc hẹp nhất khớp rơi cuối.</li><li>Mobile-first là chiều cascade chạy, không phải lời khuyên: lớp nền là bố cục hẹp nhất.</li><li><code>md:</code> nghĩa là "từ 768px trở lên", một ngưỡng chứ không phải một dải — nhắm dải bằng <code>md:max-lg:</code>.</li><li>Vì lớp responsive đạt <code>0,1,0</code>, một quy tắc tay <code>0,2,0</code> âm thầm đánh bại chúng ở mọi nơi.</li></ul>
+
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Tailwind docs — Responsive design</span><span class="lc-sub">tailwindcss.com/docs/responsive-design — lời giải thích mobile-first, các biến thể <code>max-*</code>, và dạng hai-đầu <code>md:max-lg:</code> để nhắm một dải.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">MDN — Using media queries</span><span class="lc-sub">developer.mozilla.org/en-US/docs/Web/CSS/CSS_media_queries/Using_media_queries — gồm cả lời khẳng định TƯỜNG MINH rằng media query KHÔNG ảnh hưởng độ đặc hiệu, chính là sự thật mà cả bài này dựa lên.</span></span></div>
@@ -628,6 +1158,7 @@ $ find src -name "*.tsx" | wc -l
       type: 'VIDEO',
       description: 'Sự cố 02/07/2026 của kho này: đặt lớp `dark` lên `<html>` cho theme toàn cục đã ÉP KÍCH HOẠT mọi tiện ích `dark:` trong cả ứng dụng, làm vỡ bộ chuyển ba-theme của vùng Notes. Ba cấu hình darkMode đo thật, và một cái dùng `:where()` nên KHÔNG có độ đặc hiệu.',
       content: `
+${G02_4}
 <div class="ml-en">
 <span class="eyebrow">Chapter 2 · Lesson 2.4</span>
 <h2>Dark mode, and the class name that broke a feature</h2>
@@ -704,15 +1235,15 @@ $ grep -rho 'dark:[^ "'"'"'&#96;]*' $(grep -rl 'dark:' src --include="*.tsx" | g
 $ grep -rho 'dark:[^ "'"'"'&#96;]*' $(grep -rl 'dark:' src --include="*.tsx" | grep -v '/notes/') | wc -l
 </code></pre>
 
-<div class="out">786    # tong so luot dung dark:
-722    # trong components/notes/  -> DUNG luat (91,9%)
- 64    # NGOAI notes/             -> TROI khoi luat (8,1%), trai 32 file
+<div class="out">1102   # tong so luot dung dark:                       (do 14/11/2026; luc soan bai: 786)
+ 915   # trong components/notes/  -> DUNG luat (83,0%)   (luc soan: 722, 91,9%)
+ 187   # NGOAI notes/             -> TROI khoi luat (17,0%), trai 56 file   (luc soan: 64, 32 file)
 </div>
 
-<p><strong>91.9% compliance.</strong> The rule largely held, and the 64 stragglers across 32 files are concentrated in features built after the rule was written — <code>exp-hub</code> (7 files), <code>language</code> (6), <code>tech-trends</code> (4), <code>cv</code> (3). None of them currently misbehave, because those <code>dark:</code> utilities simply never activate outside Notes. They are dead styles: harmless today, and a trap the moment someone puts <code>.dark</code> higher in the tree again.</p>
+<p><strong>83.0% compliance today (91.9% when the lesson was written).</strong> The rule still mostly holds, but the drift has <strong>grown</strong>: 187 stragglers across 56 files, concentrated in features built after the rule was written — <code>components/work</code> (8 files), <code>exp-hub</code> (7), <code>components/language</code> (5), <code>tech-trends</code> (4), <code>app/language</code> (4), <code>cv</code> (3). None of them currently misbehave, because those <code>dark:</code> utilities simply never activate outside Notes. They are dead styles: harmless today, and a trap the moment someone puts <code>.dark</code> higher in the tree again.</p>
 
 <div class="callout ok">
-<p><strong>This is why the measurement is worth running.</strong> A documented rule with 91.9% compliance looks like a success and is also a live liability — 64 utilities are silently doing nothing, which means whoever wrote them believed they were styling something. The dead ones should either be migrated to <code>html.theme-dark</code> CSS or deleted. Neither happens unless someone counts.</p>
+<p><strong>This is why the measurement is worth running.</strong> A documented rule with 83% compliance looks like a success and is also a live liability — 187 utilities are silently doing nothing, which means whoever wrote them believed they were styling something. The dead ones should either be migrated to <code>html.theme-dark</code> CSS or deleted. Neither happens unless someone counts.</p>
 </div>
 
 <div class="pitfall">
@@ -722,6 +1253,72 @@ $ grep -rho 'dark:[^ "'"'"'&#96;]*' $(grep -rl 'dark:' src --include="*.tsx" | g
 <div class="callout">
 <p><strong>One sentence.</strong> <code>dark:</code> compiles to an ancestor test with no scope limit, so a single class placed high in the DOM activates every such utility in the application at once — which is why the global theme here is named <code>theme-dark</code> and <code>.dark</code> is reserved, and why the three <code>darkMode</code> strategies differ in specificity (<code>:is()</code> scores, <code>:where()</code> does not) as well as in trigger.</p>
 </div>
+
+<h3>🔬 Measured: the three strategies, and what each one does in Chromium</h3>
+<div class="out"># darkMode: media
+@media (prefers-color-scheme: dark) {
+  .dark\\:text-white {
+  }
+}
+# darkMode: class
+.dark\\:text-white:is(.dark *) {
+}
+# darkMode: selector
+.dark\\:text-white:where(.theme-dark, .theme-dark *) {
+}
+# (Tailwind 3.4.19; the --tw-text-opacity lines are hidden)</div>
+<p>The specificity difference, measured on one page with a hand-written <code>.note</code> loaded after Tailwind:</p>
+<div class="out">&lt;html class="dark"&gt; + .note (0,1,0, loaded after Tailwind)
+darkMode: 'class'                -&gt; text rgb(255, 255, 255)   (white: dark:text-white 0,2,0 wins)
+darkMode: ['selector', '.dark']  -&gt; text rgb(220, 38, 38)    (red: 0,1,0 tie, .note is later)</div>
+<p>The incident, reproduced: a Notes wrapper in its <strong>brown</strong> theme, inside an app shell that puts a class on <code>&lt;html&gt;</code>:</p>
+<div class="out">&lt;html class="dark"&gt;        Notes box (theme BROWN) background -&gt; rgb(15, 23, 42)   (slate-900, DARK)
+&lt;html class="theme-dark"&gt;  Notes box (theme BROWN) background -&gt; rgb(254, 243, 199)  (amber-100, brown)</div>
+<p>And the trap — the broken character class, re-run on today's code next to the baseline:</p>
+<div class="out">$ git grep -oh 'dark:[^ "'"'"'&#96;]*' -- 'src/*.tsx' | wc -l
+    1102
+$ git grep -oh 'dark:[a-z0-9/\\[\\]#.-]*' -- 'src/*.tsx' | wc -l
+       0</div>
+<h3>🆕 In Tailwind 4</h3>
+<div class="out">$ npx @tailwindcss/cli -i mac-dinh.css -o o1.css 2&gt;&amp;1 | tail -1; grep -B1 -A2 'dark\\\\:text-white {' o1.css
+Done in 25ms
+  @media (prefers-color-scheme: dark) {
+    .dark\\:text-white {
+      color: var(--color-white);
+    }
+$ npx @tailwindcss/cli -i lop.css -o o2.css 2&gt;&amp;1 | tail -1; grep -A1 'dark\\\\:text-white:' o2.css
+Done in 24ms
+  .dark\\:text-white:where(.dark, .dark *) {
+    color: var(--color-white);</div>
+<p>The default is <code>prefers-color-scheme</code>; the class strategy is one <code>@custom-variant</code> line, compiled with <code>:where()</code> — <strong>0,1,0</strong>, the same as the <code>selector</code> strategy measured red above. A migration from <code>darkMode: 'class'</code> therefore removes one level of specificity from every <code>dark:</code> rule. You also choose the variant's name, so <code>@custom-variant notes-dark (…)</code> can make the namespace split explicit.</p>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-html">&lt;!-- Tailwind 3: tailwind.config.js { darkMode: 'class' } · then try ['selector', '.dark'] --&gt;
+&lt;html class="dark"&gt;
+  &lt;link rel="stylesheet" href="out.css"&gt;&lt;style&gt;.note { color: rgb(220 38 38); }&lt;/style&gt;
+  &lt;p class="note dark:text-white"&gt;which colour?&lt;/p&gt;
+  &lt;div data-notes-theme="brown"&gt;&lt;div class="bg-amber-100 dark:bg-slate-900"&gt;Notes in BROWN&lt;/div&gt;&lt;/div&gt;
+&lt;/html&gt;
+&lt;!-- then change &lt;html class="dark"&gt; to &lt;html class="theme-dark"&gt; and look again --&gt;</code></pre>
+<h3>🔗 Go deeper in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nextjs/learn?lessonSlug=nextjs-13-3-dark-mode" target="_blank" rel="noopener"><span class="lc-ico">▲</span><span class="lc-body"><span class="lc-title">Next.js · 13.3 — Dark mode: the dark: variant and a no-flash toggle</span><span class="lc-sub">Building the switch itself in a real app</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nextjs/learn?lessonSlug=nextjs-13-4-theme-css-variables" target="_blank" rel="noopener"><span class="lc-ico">▲</span><span class="lc-body"><span class="lc-title">Next.js · 13.4 — Theming with CSS variables (and the naming trap)</span><span class="lc-sub">The approach that needs no dark: variant at all</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/tailwind-css/learn?lessonSlug=tw-2-5-bien-the-tuy-y" target="_blank" rel="noopener"><span class="lc-ico">💨</span><span class="lc-body"><span class="lc-title">Tailwind CSS · 2.5 — Arbitrary variants</span><span class="lc-sub">Next lesson: the escape hatch and the modern variants</span></span></a>
+
+<h3>🌍 In real life, "what if…", and the attacker's view</h3>
+<ul><li><strong>Every day:</strong> your phone switches to dark mode at night (<code>prefers-color-scheme</code>); a site with half its <code>dark:</code> styles gives dark text on a dark background — readable at noon, invisible at 11pm.</li><li><strong>What if…</strong> someone puts <code>.dark</code> back on <code>&lt;html&gt;</code>? The 187 dead <code>dark:</code> uses in 56 files wake up at once — the 02/07 incident again, wider.</li><li><strong>The attacker's view:</strong> text hidden by one theme — white on a white card, black on black. Scam pages hide fees and terms this way, SEO spam hides keywords, and some pages hide instructions aimed at AI assistants that read them ("prompt injection"). Press Ctrl/⌘ + A: selection reveals hidden text; switch the theme and look again. As a developer, check contrast in both themes (Chapter 9).</li><li><strong>Related:</strong> a no-flash dark toggle — Next.js 13.3; theming with CSS variables — Next.js 13.4.</li></ul>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>darkMode: 'media'</code></span><span class="v">Follows the OS via <code>prefers-color-scheme</code>; no DOM state, so the UI cannot override it.</span></div>
+  <div class="kv"><span class="k"><code>darkMode: 'class'</code></span><span class="v">Compiles to <code>:is(.dark *)</code> — matches descendants of <code>.dark</code>, specificity <code>0,2,0</code>.</span></div>
+  <div class="kv"><span class="k"><code>['selector', '.x']</code></span><span class="v"><code>:where(.x, .x *)</code> — matches the element itself too, and adds <em>zero</em> specificity (<code>0,1,0</code>).</span></div>
+  <div class="kv"><span class="k">Blast radius</span><span class="v">One <code>.dark</code> ancestor high in the DOM activates every <code>dark:</code> utility below it.</span></div>
+  <div class="kv"><span class="k">Namespace separation</span><span class="v">The fix: name the global theme <code>theme-dark</code> and reserve <code>.dark</code> for the Notes wrapper.</span></div>
+  <div class="kv"><span class="k">Dead styles</span><span class="v">The 64 <code>dark:</code> utilities outside Notes never activate — harmless now, a trap if <code>.dark</code> moves up again.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>The three <code>darkMode</code> strategies differ in trigger and in specificity — <code>:is()</code> scores <code>0,2,0</code>, <code>:where()</code> scores nothing.</li><li><code>'class'</code> compiles to a scope-less ancestor test, so <code>.dark</code> on <code>&lt;html&gt;</code> activates every dark utility at once — the 2026-07-02 incident.</li><li>The fix was a naming fix: global theme is <code>theme-dark</code>, <code>.dark</code> is reserved for Notes — no config change.</li><li>A measurement showed 83.0% compliance (14/11/2026; 91.9% earlier), with 187 dead <code>dark:</code> utilities that should be migrated or deleted.</li><li>A measurement returning zero deserves more suspicion than a surprising number — keep a baseline.</li></ul>
 
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">CLAUDE.md — the 2026-07-02 theme incident</span><span class="lc-sub">the repository's own record: the <code>.dark</code>-on-<code>&lt;html&gt;</code> collision, and the rule that global theme styles use <code>html.theme-dark</code> or CSS variables rather than <code>dark:</code>.</span></span></div>
@@ -806,15 +1403,15 @@ $ grep -rho 'dark:[^ "'"'"'&#96;]*' $(grep -rl 'dark:' src --include="*.tsx" | g
 $ grep -rho 'dark:[^ "'"'"'&#96;]*' $(grep -rl 'dark:' src --include="*.tsx" | grep -v '/notes/') | wc -l
 </code></pre>
 
-<div class="out">786    # tong so luot dung dark:
-722    # trong components/notes/  -> DUNG luat (91,9%)
- 64    # NGOAI notes/             -> TROI khoi luat (8,1%), trai 32 file
+<div class="out">1102   # tong so luot dung dark:                       (do 14/11/2026; luc soan bai: 786)
+ 915   # trong components/notes/  -> DUNG luat (83,0%)   (luc soan: 722, 91,9%)
+ 187   # NGOAI notes/             -> TROI khoi luat (17,0%), trai 56 file   (luc soan: 64, 32 file)
 </div>
 
-<p><strong>91,9% tuân thủ.</strong> Cái luật phần lớn ĐÃ đứng, và 64 cái rớt lại trải 32 file thì tập trung ở các tính năng dựng SAU khi luật được viết — <code>exp-hub</code> (7 file), <code>language</code> (6), <code>tech-trends</code> (4), <code>cv</code> (3). Hiện tại KHÔNG cái nào hành xử sai, vì các tiện ích <code>dark:</code> ấy đơn giản là KHÔNG BAO GIỜ kích hoạt bên ngoài Notes. Chúng là kiểu dáng CHẾT: vô hại hôm nay, và là một cái bẫy ngay khoảnh khắc ai đó lại đặt <code>.dark</code> lên cao hơn trong cây.</p>
+<p><strong>Hôm nay 83,0% tuân thủ (lúc soạn bài 91,9%).</strong> Cái luật vẫn phần lớn đứng, nhưng phần trôi đã TĂNG: 187 cái rớt lại trải 56 tệp, tập trung ở các tính năng dựng SAU khi luật được viết — <code>components/work</code> (8 tệp), <code>exp-hub</code> (7), <code>components/language</code> (5), <code>tech-trends</code> (4), <code>app/language</code> (4), <code>cv</code> (3). Hiện tại KHÔNG cái nào hành xử sai, vì các tiện ích <code>dark:</code> ấy đơn giản là KHÔNG BAO GIỜ kích hoạt bên ngoài Notes. Chúng là kiểu dáng CHẾT: vô hại hôm nay, và là một cái bẫy ngay khoảnh khắc ai đó lại đặt <code>.dark</code> lên cao hơn trong cây.</p>
 
 <div class="callout ok">
-<p><strong>Đây là lý do phép đo đáng chạy.</strong> Một luật có tài liệu với 91,9% tuân thủ TRÔNG như một thành công và đồng thời là một khoản NỢ đang sống — 64 tiện ích đang âm thầm không làm gì, nghĩa là người viết chúng TIN rằng mình đang tạo kiểu cho cái gì đó. Những cái chết nên hoặc được chuyển sang CSS <code>html.theme-dark</code> hoặc bị XOÁ. Không cái nào xảy ra trừ khi có người ĐẾM.</p>
+<p><strong>Đây là lý do phép đo đáng chạy.</strong> Một luật có tài liệu với 83% tuân thủ TRÔNG như một thành công và đồng thời là một khoản NỢ đang sống — 187 tiện ích đang âm thầm không làm gì, nghĩa là người viết chúng TIN rằng mình đang tạo kiểu cho cái gì đó. Những cái chết nên hoặc được chuyển sang CSS <code>html.theme-dark</code> hoặc bị XOÁ. Không cái nào xảy ra trừ khi có người ĐẾM.</p>
 </div>
 
 <div class="pitfall">
@@ -824,6 +1421,72 @@ $ grep -rho 'dark:[^ "'"'"'&#96;]*' $(grep -rl 'dark:' src --include="*.tsx" | g
 <div class="callout">
 <p><strong>Một câu.</strong> <code>dark:</code> biên dịch thành một phép thử TỔ TIÊN KHÔNG có giới hạn phạm vi, nên một lớp duy nhất đặt cao trong DOM kích hoạt MỌI tiện ích loại đó trong ứng dụng cùng lúc — đó là lý do theme toàn cục ở đây tên là <code>theme-dark</code> và <code>.dark</code> được để dành, và là lý do ba chiến lược <code>darkMode</code> khác nhau cả về ĐỘ ĐẶC HIỆU (<code>:is()</code> có tính, <code>:where()</code> không) lẫn về cách kích hoạt.</p>
 </div>
+
+<h3>🔬 Đo thật: ba chiến lược, và mỗi cái làm gì trong Chromium</h3>
+<div class="out"># darkMode: media
+@media (prefers-color-scheme: dark) {
+  .dark\\:text-white {
+  }
+}
+# darkMode: class
+.dark\\:text-white:is(.dark *) {
+}
+# darkMode: selector
+.dark\\:text-white:where(.theme-dark, .theme-dark *) {
+}
+# (Tailwind 3.4.19; da an dong --tw-text-opacity)</div>
+<p>Khác biệt độ đặc hiệu, đo trên một trang có luật viết tay <code>.note</code> nạp SAU Tailwind:</p>
+<div class="out">&lt;html class="dark"&gt; + .note (0,1,0, nap SAU Tailwind)
+darkMode: 'class'                -&gt; text rgb(255, 255, 255)   (white: dark:text-white 0,2,0 wins)
+darkMode: ['selector', '.dark']  -&gt; text rgb(220, 38, 38)    (red: 0,1,0 tie, .note is later)</div>
+<p>Sự cố, tái hiện: một vùng Notes đang ở theme <strong>NÂU</strong>, nằm trong vỏ ứng dụng đặt một lớp lên <code>&lt;html&gt;</code>:</p>
+<div class="out">&lt;html class="dark"&gt;        Notes box (theme BROWN) background -&gt; rgb(15, 23, 42)   (slate-900, DARK)
+&lt;html class="theme-dark"&gt;  Notes box (theme BROWN) background -&gt; rgb(254, 243, 199)  (amber-100, brown)</div>
+<p>Và cái bẫy — lớp ký tự hỏng, chạy lại trên mã hôm nay, cạnh phép đếm mốc:</p>
+<div class="out">$ git grep -oh 'dark:[^ "'"'"'&#96;]*' -- 'src/*.tsx' | wc -l
+    1102
+$ git grep -oh 'dark:[a-z0-9/\\[\\]#.-]*' -- 'src/*.tsx' | wc -l
+       0</div>
+<h3>🆕 Ở Tailwind 4</h3>
+<div class="out">$ npx @tailwindcss/cli -i mac-dinh.css -o o1.css 2&gt;&amp;1 | tail -1; grep -B1 -A2 'dark\\\\:text-white {' o1.css
+Done in 25ms
+  @media (prefers-color-scheme: dark) {
+    .dark\\:text-white {
+      color: var(--color-white);
+    }
+$ npx @tailwindcss/cli -i lop.css -o o2.css 2&gt;&amp;1 | tail -1; grep -A1 'dark\\\\:text-white:' o2.css
+Done in 24ms
+  .dark\\:text-white:where(.dark, .dark *) {
+    color: var(--color-white);</div>
+<p>Mặc định là <code>prefers-color-scheme</code>; kiểu class là một dòng <code>@custom-variant</code>, biên dịch bằng <code>:where()</code> — <strong>0,1,0</strong>, giống chiến lược <code>selector</code> đo ra màu đỏ ở trên. Di trú từ <code>darkMode: 'class'</code> vì thế lấy đi một bậc độ đặc hiệu của MỌI luật <code>dark:</code>. Bạn cũng tự chọn tên biến thể, nên <code>@custom-variant notes-dark (…)</code> làm cú tách không gian tên hiện rõ ra.</p>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-html">&lt;!-- Tailwind 3: tailwind.config.js { darkMode: 'class' } · then try ['selector', '.dark'] --&gt;
+&lt;html class="dark"&gt;
+  &lt;link rel="stylesheet" href="out.css"&gt;&lt;style&gt;.note { color: rgb(220 38 38); }&lt;/style&gt;
+  &lt;p class="note dark:text-white"&gt;which colour?&lt;/p&gt;
+  &lt;div data-notes-theme="brown"&gt;&lt;div class="bg-amber-100 dark:bg-slate-900"&gt;Notes in BROWN&lt;/div&gt;&lt;/div&gt;
+&lt;/html&gt;
+&lt;!-- rồi đổi &lt;html class="dark"&gt; thành &lt;html class="theme-dark"&gt; và xem lại --&gt;</code></pre>
+<h3>🔗 Học sâu hơn ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nextjs/learn?lessonSlug=nextjs-13-3-dark-mode" target="_blank" rel="noopener"><span class="lc-ico">▲</span><span class="lc-body"><span class="lc-title">Next.js · 13.3 — Dark mode: biến dark: và bật/tắt không nháy</span><span class="lc-sub">Dựng chính cái công tắc trong một ứng dụng thật</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nextjs/learn?lessonSlug=nextjs-13-4-theme-css-variables" target="_blank" rel="noopener"><span class="lc-ico">▲</span><span class="lc-body"><span class="lc-title">Next.js · 13.4 — Theme bằng CSS variables (và bẫy đặt tên)</span><span class="lc-sub">Cách làm không cần biến thể dark: nào</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/tailwind-css/learn?lessonSlug=tw-2-5-bien-the-tuy-y" target="_blank" rel="noopener"><span class="lc-ico">💨</span><span class="lc-body"><span class="lc-title">Tailwind CSS · 2.5 — Biến thể tuỳ ý</span><span class="lc-sub">Bài sau: cửa thoát và các biến thể hiện đại</span></span></a>
+
+<h3>🌍 Ngoài đời, "nếu… thì sao", và góc kẻ xấu</h3>
+<ul><li><strong>Ngoài đời:</strong> điện thoại tự sang chế độ tối lúc đêm (<code>prefers-color-scheme</code>); trang chỉ làm nửa số kiểu <code>dark:</code> sẽ ra chữ tối trên nền tối — trưa đọc được, 11 giờ đêm thì không.</li><li><strong>Nếu… thì sao:</strong> ai đó lại đặt <code>.dark</code> lên <code>&lt;html&gt;</code>? 187 lượt <code>dark:</code> đang chết trong 56 tệp thức dậy cùng lúc — sự cố 02/07 lặp lại, rộng hơn.</li><li><strong>Góc kẻ xấu:</strong> chữ bị một theme giấu đi — trắng trên thẻ trắng, đen trên đen. Trang lừa giấu phí và điều khoản kiểu này, trang rác giấu từ khoá, có trang giấu cả lời dặn nhắm vào trợ lý AI đọc trang ("prompt injection"). Bấm Ctrl/⌘ + A: vùng chọn làm lộ chữ ẩn; đổi theme rồi xem lại. Làm web thì soát tương phản ở CẢ HAI theme (Chương 9).</li><li><strong>Liên quan:</strong> nút chuyển tối không nháy — Next.js 13.3; theme bằng biến CSS — Next.js 13.4.</li></ul>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>darkMode: 'media'</code></span><span class="v">Theo OS qua <code>prefers-color-scheme</code>; không có trạng thái DOM nên UI không ghi đè được.</span></div>
+  <div class="kv"><span class="k"><code>darkMode: 'class'</code></span><span class="v">Biên dịch thành <code>:is(.dark *)</code> — khớp con cháu của <code>.dark</code>, độ đặc hiệu <code>0,2,0</code>.</span></div>
+  <div class="kv"><span class="k"><code>['selector', '.x']</code></span><span class="v"><code>:where(.x, .x *)</code> — khớp cả chính thẻ đó, và thêm <em>0</em> độ đặc hiệu (<code>0,1,0</code>).</span></div>
+  <div class="kv"><span class="k">Blast radius</span><span class="v">Bán kính nổ — một tổ tiên <code>.dark</code> ở trên cao kích hoạt mọi tiện ích <code>dark:</code> bên dưới.</span></div>
+  <div class="kv"><span class="k">Namespace separation</span><span class="v">Tách không gian tên — bản vá: đặt tên theme toàn cục là <code>theme-dark</code> và để dành <code>.dark</code> cho vỏ Notes.</span></div>
+  <div class="kv"><span class="k">Dead styles</span><span class="v">Kiểu chết — 64 tiện ích <code>dark:</code> ngoài Notes không bao giờ kích hoạt; vô hại giờ, là bẫy nếu <code>.dark</code> leo lên lại.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Ba chiến lược <code>darkMode</code> khác nhau về cò bật và về độ đặc hiệu — <code>:is()</code> đạt <code>0,2,0</code>, <code>:where()</code> không đạt gì.</li><li><code>'class'</code> biên dịch thành phép thử tổ tiên không giới hạn phạm vi, nên <code>.dark</code> trên <code>&lt;html&gt;</code> bật mọi tiện ích dark cùng lúc — sự cố 02/07/2026.</li><li>Bản vá là vá TÊN: theme toàn cục là <code>theme-dark</code>, <code>.dark</code> để dành cho Notes — không đổi config.</li><li>Phép đo cho thấy tuân thủ 83,0% (14/11/2026; trước đó 91,9%), với 187 tiện ích <code>dark:</code> chết nên được chuyển hoặc xoá.</li><li>Một phép đo trả về 0 đáng nghi hơn một con số bất ngờ — giữ một mốc so sánh.</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">CLAUDE.md — sự cố theme 02/07/2026</span><span class="lc-sub">bản ghi của chính kho này: cú đụng độ <code>.dark</code>-trên-<code>&lt;html&gt;</code>, và luật rằng kiểu dáng theme toàn cục dùng <code>html.theme-dark</code> hoặc biến CSS chứ không dùng <code>dark:</code>.</span></span></div>
@@ -841,6 +1504,7 @@ $ grep -rho 'dark:[^ "'"'"'&#96;]*' $(grep -rl 'dark:' src --include="*.tsx" | g
       type: 'VIDEO',
       description: 'Cú pháp `[&>svg]:` cho bạn viết BẤT KỲ selector nào ngay trong tên lớp. Cộng với bốn biến thể hiện đại giải quyết những bài toán thật mà người ta vẫn viết JavaScript để làm: `data-[]`, `aria-`, `has-[]`, và `motion-reduce`.',
       content: `
+${G02_5}
 <div class="ml-en">
 <span class="eyebrow">Chapter 2 · Lesson 2.5</span>
 <h2>Arbitrary variants, and the ones worth knowing</h2>
@@ -919,6 +1583,92 @@ $ grep -rho 'dark:[^ "'"'"'&#96;]*' $(grep -rl 'dark:' src --include="*.tsx" | g
 <div class="callout">
 <p><strong>One sentence.</strong> Arbitrary variants make the class attribute selector-complete by letting <code>&amp;</code> stand for the element, and the modern named variants — <code>data-[]</code>, <code>aria-*</code>, <code>has-[]</code>, <code>motion-reduce</code> — each replace a chunk of JavaScript with a selector, with <code>aria-*</code> being the one that makes the convenient path and the accessible path the same path.</p>
 </div>
+
+<h3>🔬 Measured: the real output, and one accordion in Chromium (Tailwind 3.4.19)</h3>
+<div class="out">$ grep -E '^[.@]|^  \\.' out.css
+.has-\\[img\\]\\:p-0:has(img) {
+.aria-expanded\\:rotate-180[aria-expanded="true"] {
+.data-\\[state\\=open\\]\\:block[data-state="open"] {
+@supports (display:grid) {
+  .supports-\\[display\\:grid\\]\\:grid {
+@media (prefers-reduced-motion: reduce) {
+  .motion-reduce\\:transition-none {
+@media print {
+  .print\\:hidden {
+.\\[\\&amp;\\&gt;svg\\]\\:h-4&gt;svg {
+.\\[\\&amp;_p\\]\\:mt-2 p {</div>
+<div class="out">before click: aria-expanded=false  panel display=none
+after click : aria-expanded=true   panel display=block
+arrow 1  aria-expanded:rotate-180 (on the span)        transform: none
+arrow 2  group-aria-expanded:rotate-180 (+ group on button)  transform: matrix(-1, 0, 0, -1, 0, 0)
+card, text only    has-[img]:p-0  padding: 24px
+card with &lt;img&gt;    has-[img]:p-0  padding: 0px
+[&amp;&gt;svg]:h-4        svg height: 16px</div>
+<p><strong>Correction (measured 14/11/2026).</strong> "The arrow can only rotate if the ARIA attribute is set" is true — but the attribute is tested on the <em>same element</em> that carries the class (<code>.x[aria-expanded="true"]</code>). A chevron inside a button never turns with <code>aria-expanded:</code>; put <code>group</code> on the button and <code>group-aria-expanded:</code> on the chevron. The structural gain is unchanged: forget the attribute and the bug is loud.</p>
+<p>In this site's code (14/11/2026):</p>
+<div class="out">$ for v in 'data-\\[' 'aria-[a-z]+:' 'has-\\[' 'group-has' '\\[&amp;' 'motion-reduce:' 'motion-safe:' 'print:' 'supports-'; do printf "%-16s %5d\\n" "$v" "$(git grep -ohE "(^|[\\"' \\&#96;{])$v" -- 'src/*.tsx' | wc -l)"; done
+data-\\[             12
+aria-[a-z]+:         0
+has-\\[               0
+group-has            0
+\\[&amp;                274
+motion-reduce:      23
+motion-safe:         2
+print:              11
+supports-            0
+$ git grep -ohE "(^|[\\"' \\&#96;{])animate-[a-z-]+" -- 'src/*.tsx' | wc -l
+     876
+$ sed -n '/animation: {/,/},/p' tailwind.config.ts | grep -vE 'animation: [{]' | grep -oE "^ +['\\"]?[a-z0-9-]+['\\"]?:" | tr -d " '\\":" | tr '\\n' ' '
+fade-in slide-up slide-down float glow pulse-slow aurora-drift-slow aurora-drift-slower shimmer-sweep caret-blink scroll-cue-pulse reel-spin projector-pulse 
+$ git grep -ohE "(^|[\\"' \\&#96;{])motion-reduce:[a-z-]+" -- 'src/*.tsx' | sed -E 's/^[^m]//' | sort | uniq -c | sort -rn
+   9 motion-reduce:animate-none
+   8 motion-reduce:transition-none
+   3 motion-reduce:transform-none
+   2 motion-reduce:group-hover
+   1 motion-reduce:hover</div>
+<p><code>[&amp;…]</code> is used 274 times, <code>aria-*:</code> not at all, and 876 <code>animate-*</code> uses face only 23 <code>motion-reduce:</code> ones — 13 custom animations, most of them looping.</p>
+<h3>🆕 In Tailwind 4</h3>
+<div class="out">@layer utilities {
+  .has-\\[img\\]\\:p-0:has(:is(img)) {
+  .aria-expanded\\:rotate-180[aria-expanded="true"] {
+  .data-open\\:flex[data-open] {
+  .data-\\[state\\=open\\]\\:block[data-state="open"] {
+  @supports (display:grid) {
+    .supports-\\[display\\:grid\\]\\:grid {
+  @media (prefers-reduced-motion: reduce) {
+    .motion-reduce\\:transition-none {
+  @media print {
+    .print\\:hidden {
+  .\\[\\&amp;_p\\]\\:mt-2 p {
+  .\\[\\&amp;\\&gt;svg\\]\\:h-4 &gt; svg {</div>
+<p><code>has-[img]</code> becomes <code>:has(:is(img))</code>; the new shorthand <code>data-open:</code> means <code>[data-open]</code> (attribute present). The <code>&amp;</code>/<code>_</code> rules and the same-element <code>aria-*</code> test are unchanged.</p>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-html">&lt;!-- Tailwind 3 or 4. Click the button, then read both arrows' transform in DevTools --&gt;
+&lt;button aria-expanded="false" class="group flex items-center gap-3"
+  onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true')"&gt;
+  FAQ
+  &lt;span class="inline-block aria-expanded:rotate-180"&gt;▼&lt;/span&gt;        &lt;!-- never turns: tests the span --&gt;
+  &lt;span class="inline-block group-aria-expanded:rotate-180"&gt;▼&lt;/span&gt;  &lt;!-- turns: tests the button --&gt;
+&lt;/button&gt;</code></pre>
+<h3>🔗 Go deeper in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-8-4-a11y" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 8.4 — Accessible components: semantic HTML, keyboard, ARIA, axe</span><span class="lc-sub">Where the ARIA attributes that aria-* hooks into are set correctly</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/tailwind-css/learn?lessonSlug=tw-2-6-quiz" target="_blank" rel="noopener"><span class="lc-ico">💨</span><span class="lc-body"><span class="lc-title">Tailwind CSS · 2.6 — Chapter 2 quiz</span><span class="lc-sub">Check the five shapes before Chapter 3</span></span></a>
+
+<h3>🌍 In real life, "what if…", and the attacker's view</h3>
+<ul><li><strong>Every day:</strong> FAQ accordions on your phone (<code>data-state</code>), icons from a library sized with <code>[&amp;&gt;svg]:h-4</code>, the chat bubble that <code>print:hidden</code> removes when you print a receipt, the "reduce motion" switch in a classmate's phone settings.</li><li><strong>What if…</strong> the arrow trap ships? Sighted users see a dead arrow, while screen-reader users still hear "expanded" — the bug is loud, which is exactly the point of <code>aria-*</code>.</li><li><strong>The attacker's view (measured):</strong> if a class comes from user data — a profile "theme" field fed into <code>className</code> — someone types <code>fixed inset-0 z-50 opacity-0</code>, classes that already exist in the build, and an invisible layer covers the page. In Chromium, <code>document.elementFromPoint</code> at the centre of the "download" button returned <code>#bio</code> (opacity 0): the click lands on the attacker's link. Never put user input into <code>className</code>; map it through a fixed list (Chapter 4, lesson 10.5). The DevTools element picker reveals any invisible layer.</li><li><strong>Related:</strong> accessible components and ARIA — React 8.4.</li></ul>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Arbitrary variant</span><span class="v"><code>[&amp;&gt;svg]:h-4</code> — write any selector inline; <code>&amp;</code> is the element, <code>_</code> is a space.</span></div>
+  <div class="kv"><span class="k"><code>data-[]</code></span><span class="v"><code>data-[state=open]:block</code> — moves conditional class logic out of JS into the selector; headless libs set these.</span></div>
+  <div class="kv"><span class="k"><code>aria-*</code></span><span class="v"><code>aria-expanded:rotate-180</code> — drives the visual state from the accessibility state so they cannot drift.</span></div>
+  <div class="kv"><span class="k"><code>has-[]</code></span><span class="v"><code>:has(img)</code> — the parent selector CSS never had; style an element by what it contains.</span></div>
+  <div class="kv"><span class="k"><code>motion-reduce</code></span><span class="v"><code>@media (prefers-reduced-motion: reduce)</code> — disable looping/large-area animation for users who need it.</span></div>
+  <div class="kv"><span class="k"><code>print:</code> / <code>supports-[]</code></span><span class="v"><code>@media print</code> and <code>@supports</code> feature detection, inline in the class attribute.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Arbitrary variants make the class attribute selector-complete — <code>&amp;</code> is the element, <code>_</code> stands for a space.</li><li>The modern named variants each replace a chunk of JavaScript: <code>data-[]</code>, <code>aria-*</code>, <code>has-[]</code>, <code>motion-reduce</code>.</li><li>Prefer <code>aria-*</code> over <code>data-*</code> when a real ARIA attribute exists — it makes the convenient path the accessible one.</li><li><code>has-[]</code> (<code>:has()</code>) is powerful but newest — use it for enhancement, not load-bearing structure.</li><li>Do not reach for an unreadable arbitrary selector when you control the markup — put the class on the element directly.</li></ul>
 
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Tailwind docs — Using arbitrary variants</span><span class="lc-sub">tailwindcss.com/docs/hover-focus-and-other-states#using-arbitrary-variants — the <code>[&amp;…]</code> syntax, including the underscore-for-space rule.</span></span></div>
@@ -1005,6 +1755,92 @@ $ grep -rho 'dark:[^ "'"'"'&#96;]*' $(grep -rl 'dark:' src --include="*.tsx" | g
 <div class="callout">
 <p><strong>Một câu.</strong> Biến thể tuỳ ý làm thuộc tính lớp trở nên ĐẦY ĐỦ VỀ SELECTOR bằng cách cho <code>&amp;</code> đại diện cái thẻ, và các biến thể hiện đại có tên — <code>data-[]</code>, <code>aria-*</code>, <code>has-[]</code>, <code>motion-reduce</code> — mỗi cái thay một mảng JavaScript bằng một selector, với <code>aria-*</code> là cái làm cho đường TIỆN và đường TIẾP CẬN ĐƯỢC trở thành CÙNG MỘT đường.</p>
 </div>
+
+<h3>🔬 Đo thật: đầu ra thật, và một mục hỏi đáp trong Chromium (Tailwind 3.4.19)</h3>
+<div class="out">$ grep -E '^[.@]|^  \\.' out.css
+.has-\\[img\\]\\:p-0:has(img) {
+.aria-expanded\\:rotate-180[aria-expanded="true"] {
+.data-\\[state\\=open\\]\\:block[data-state="open"] {
+@supports (display:grid) {
+  .supports-\\[display\\:grid\\]\\:grid {
+@media (prefers-reduced-motion: reduce) {
+  .motion-reduce\\:transition-none {
+@media print {
+  .print\\:hidden {
+.\\[\\&amp;\\&gt;svg\\]\\:h-4&gt;svg {
+.\\[\\&amp;_p\\]\\:mt-2 p {</div>
+<div class="out">truoc khi bam: aria-expanded=false  panel display=none
+sau khi bam  : aria-expanded=true   panel display=block
+arrow 1  aria-expanded:rotate-180 (on the span)        transform: none
+arrow 2  group-aria-expanded:rotate-180 (+ group on button)  transform: matrix(-1, 0, 0, -1, 0, 0)
+card, text only    has-[img]:p-0  padding: 24px
+card with &lt;img&gt;    has-[img]:p-0  padding: 0px
+[&amp;&gt;svg]:h-4        svg height: 16px</div>
+<p><strong>Sửa (đo 14/11/2026).</strong> "Mũi tên CHỈ xoay được nếu thuộc tính ARIA được đặt đúng" là đúng — nhưng thuộc tính được hỏi trên <em>CHÍNH thẻ</em> mang lớp (<code>.x[aria-expanded="true"]</code>). Mũi tên nằm trong nút sẽ không bao giờ xoay với <code>aria-expanded:</code>; đặt <code>group</code> lên nút và <code>group-aria-expanded:</code> lên mũi tên. Cái lợi về cấu trúc vẫn nguyên: quên thuộc tính thì bọ hiện ra ỒN ÀO.</p>
+<p>Trên mã của trang này (14/11/2026):</p>
+<div class="out">$ for v in 'data-\\[' 'aria-[a-z]+:' 'has-\\[' 'group-has' '\\[&amp;' 'motion-reduce:' 'motion-safe:' 'print:' 'supports-'; do printf "%-16s %5d\\n" "$v" "$(git grep -ohE "(^|[\\"' \\&#96;{])$v" -- 'src/*.tsx' | wc -l)"; done
+data-\\[             12
+aria-[a-z]+:         0
+has-\\[               0
+group-has            0
+\\[&amp;                274
+motion-reduce:      23
+motion-safe:         2
+print:              11
+supports-            0
+$ git grep -ohE "(^|[\\"' \\&#96;{])animate-[a-z-]+" -- 'src/*.tsx' | wc -l
+     876
+$ sed -n '/animation: {/,/},/p' tailwind.config.ts | grep -vE 'animation: [{]' | grep -oE "^ +['\\"]?[a-z0-9-]+['\\"]?:" | tr -d " '\\":" | tr '\\n' ' '
+fade-in slide-up slide-down float glow pulse-slow aurora-drift-slow aurora-drift-slower shimmer-sweep caret-blink scroll-cue-pulse reel-spin projector-pulse 
+$ git grep -ohE "(^|[\\"' \\&#96;{])motion-reduce:[a-z-]+" -- 'src/*.tsx' | sed -E 's/^[^m]//' | sort | uniq -c | sort -rn
+   9 motion-reduce:animate-none
+   8 motion-reduce:transition-none
+   3 motion-reduce:transform-none
+   2 motion-reduce:group-hover
+   1 motion-reduce:hover</div>
+<p><code>[&amp;…]</code> dùng 274 lần, <code>aria-*:</code> chưa dùng lần nào, và 876 lượt <code>animate-*</code> chỉ có 23 lượt <code>motion-reduce:</code> đi kèm — 13 hoạt ảnh tuỳ biến, phần lớn lặp vô hạn.</p>
+<h3>🆕 Ở Tailwind 4</h3>
+<div class="out">@layer utilities {
+  .has-\\[img\\]\\:p-0:has(:is(img)) {
+  .aria-expanded\\:rotate-180[aria-expanded="true"] {
+  .data-open\\:flex[data-open] {
+  .data-\\[state\\=open\\]\\:block[data-state="open"] {
+  @supports (display:grid) {
+    .supports-\\[display\\:grid\\]\\:grid {
+  @media (prefers-reduced-motion: reduce) {
+    .motion-reduce\\:transition-none {
+  @media print {
+    .print\\:hidden {
+  .\\[\\&amp;_p\\]\\:mt-2 p {
+  .\\[\\&amp;\\&gt;svg\\]\\:h-4 &gt; svg {</div>
+<p><code>has-[img]</code> thành <code>:has(:is(img))</code>; cách viết tắt mới <code>data-open:</code> nghĩa là <code>[data-open]</code> (thuộc tính có mặt). Luật <code>&amp;</code>/<code>_</code> và phép thử <code>aria-*</code> trên chính thẻ không đổi.</p>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-html">&lt;!-- Tailwind 3 hoặc 4. Bấm nút rồi đọc transform của hai mũi tên trong DevTools --&gt;
+&lt;button aria-expanded="false" class="group flex items-center gap-3"
+  onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true')"&gt;
+  FAQ
+  &lt;span class="inline-block aria-expanded:rotate-180"&gt;▼&lt;/span&gt;        &lt;!-- never turns: tests the span --&gt;
+  &lt;span class="inline-block group-aria-expanded:rotate-180"&gt;▼&lt;/span&gt;  &lt;!-- turns: tests the button --&gt;
+&lt;/button&gt;</code></pre>
+<h3>🔗 Học sâu hơn ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-8-4-a11y" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 8.4 — Component dễ tiếp cận: HTML đúng nghĩa, bàn phím, ARIA</span><span class="lc-sub">Nơi thuộc tính ARIA mà aria-* móc vào được đặt đúng</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/tailwind-css/learn?lessonSlug=tw-2-6-quiz" target="_blank" rel="noopener"><span class="lc-ico">💨</span><span class="lc-body"><span class="lc-title">Tailwind CSS · 2.6 — Kiểm tra Chương 2</span><span class="lc-sub">Soát năm hình dạng trước khi sang Chương 3</span></span></a>
+
+<h3>🌍 Ngoài đời, "nếu… thì sao", và góc kẻ xấu</h3>
+<ul><li><strong>Ngoài đời:</strong> mục hỏi đáp trên điện thoại (<code>data-state</code>), icon từ thư viện chỉnh cỡ bằng <code>[&amp;&gt;svg]:h-4</code>, bong bóng chat bị <code>print:hidden</code> gỡ khi bạn in hoá đơn, công tắc "giảm chuyển động" trong cài đặt điện thoại của bạn cùng lớp.</li><li><strong>Nếu… thì sao:</strong> cái bẫy mũi tên lọt lên bản thật? Người nhìn thấy một mũi tên chết, còn người dùng trình đọc màn hình vẫn nghe "đã mở" — bọ hiện ra ỒN ÀO, đúng là cái lợi của <code>aria-*</code>.</li><li><strong>Góc kẻ xấu (đo thật):</strong> nếu lớp CSS lấy từ dữ liệu người dùng — ô "màu hồ sơ" đổ thẳng vào <code>className</code> — ai đó gõ <code>fixed inset-0 z-50 opacity-0</code>, toàn lớp có sẵn trong bản dựng, và một lớp vô hình phủ kín trang. Trong Chromium, <code>document.elementFromPoint</code> ở giữa nút "Tải bài giảng" trả về <code>#bio</code> (opacity 0): cú bấm rơi vào liên kết của kẻ xấu. Đừng bao giờ đưa chữ người dùng vào <code>className</code>; ánh xạ qua một danh sách cố định (Chương 4, bài 10.5). Công cụ chọn thẻ của DevTools làm lộ mọi lớp vô hình.</li><li><strong>Liên quan:</strong> component dễ tiếp cận và ARIA — React 8.4.</li></ul>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Arbitrary variant</span><span class="v">Biến thể tuỳ ý — <code>[&amp;&gt;svg]:h-4</code>, viết selector bất kỳ ngay dòng; <code>&amp;</code> là thẻ, <code>_</code> là khoảng trắng.</span></div>
+  <div class="kv"><span class="k"><code>data-[]</code></span><span class="v"><code>data-[state=open]:block</code> — chuyển logic lớp điều kiện khỏi JS vào selector; thư viện headless tự đặt các thuộc tính này.</span></div>
+  <div class="kv"><span class="k"><code>aria-*</code></span><span class="v"><code>aria-expanded:rotate-180</code> — lái trạng thái thị giác từ trạng thái tiếp cận để chúng không lệch nhau.</span></div>
+  <div class="kv"><span class="k"><code>has-[]</code></span><span class="v"><code>:has(img)</code> — selector cha mà CSS chưa từng có; tạo kiểu một thẻ theo thứ bên trong nó.</span></div>
+  <div class="kv"><span class="k"><code>motion-reduce</code></span><span class="v"><code>@media (prefers-reduced-motion: reduce)</code> — tắt animation lặp/diện lớn cho người cần.</span></div>
+  <div class="kv"><span class="k"><code>print:</code> / <code>supports-[]</code></span><span class="v"><code>@media print</code> và dò tính năng <code>@supports</code>, ngay trong thuộc tính lớp.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Biến thể tuỳ ý làm thuộc tính lớp đầy đủ về selector — <code>&amp;</code> là thẻ, <code>_</code> thay cho khoảng trắng.</li><li>Các biến thể hiện đại có tên mỗi cái thay một mảng JavaScript: <code>data-[]</code>, <code>aria-*</code>, <code>has-[]</code>, <code>motion-reduce</code>.</li><li>Ưu tiên <code>aria-*</code> hơn <code>data-*</code> khi có thuộc tính ARIA thật — nó biến đường tiện lợi thành đường tiếp cận.</li><li><code>has-[]</code> (<code>:has()</code>) mạnh nhưng mới nhất — dùng để tăng cường, không làm cấu trúc chịu lực.</li><li>Đừng với tới một selector tuỳ ý khó đọc khi bạn kiểm soát markup — đặt lớp thẳng lên thẻ.</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Tailwind docs — Using arbitrary variants</span><span class="lc-sub">tailwindcss.com/docs/hover-focus-and-other-states#using-arbitrary-variants — cú pháp <code>[&amp;…]</code>, gồm cả luật gạch-dưới-thay-khoảng-trắng.</span></span></div>

@@ -507,3 +507,53 @@ sàn số điểm mỗi cấp, kiểm chéo, tìm "てもいい" / "了" / "pres
 - **Lối vào:** thẻ "Thư viện ngữ pháp" ở tab Học · mục "Ngữ pháp" (≤ 3 điểm khớp chắc) trên kết quả tra tab Từ điển + ô công cụ
   "Ngữ pháp" ở tab Từ điển · DEBUG `CT_XEM_MAN=ngu-phap | ngu-phap:<id>`. Chưa có lối tắt ở tab Hôm nay.
 - Deploy: chỉ cần deploy backend (nội dung đi theo ảnh — `content/` đã được COPY); app cần bản TestFlight mới.
+
+## 15. Luyện phát âm chấm bằng AI + viết tay Trung/Nhật không cần mạng (15/11/2026, CHƯA deploy, CHƯA lên TestFlight)
+
+### 15a. 🎙 Luyện phát âm (Azure Pronunciation Assessment)
+
+**Máy chủ** — router riêng `src/routes/ctlanguage.phatAm.routes.ts`, gắn `/api/v1/ctlanguage/phat-am` TRƯỚC `/ctlanguage`, cần đăng nhập:
+
+| Tuyến | Việc |
+|---|---|
+| `GET /luot` | `{laPro, tran, conLai, batChua}` — `batChua` = máy chủ có `AZURE_SPEECH_KEY` (có trong smoke-test `deploy.sh`, khách ⇒ 401) |
+| `POST /ai/cham` | multipart `audio` (WAV PCM 16 kHz mono, ≤ 15 s, ≤ 600 KB) + `cau` (≤ 120 ký tự) + `nn` en/ja/zh + `giong?` us/uk + `doc?` (pinyin/kana) ⇒ `{ketQua, lyDo?, thongBao?, goiY[], luot}` |
+
+- Lõi chấm DÙNG LẠI `src/services/ielts/phatAm.service.ts` (`chamAzure` — tách ra từ `chamPhatAm` của web; đầu ra web GIỮ NGUYÊN, có test).
+  Thêm: điểm **ngữ điệu** (prosody, chỉ en-US; Azure từ chối ⇒ chấm lại không có nó), điểm **từng âm tiết** (`Syllables`), đọc được cả
+  JSON phẳng (REST) lẫn bọc `PronunciationAssessment`. en mặc định **en-US** (có tên âm IPA); `giong=uk` ⇒ en-GB (không tên âm).
+- **Thanh điệu tiếng Trung** (`phatAmThuan.ts › ganThanh`): Azure KHÔNG có ErrorType riêng cho thanh ⇒ thanh đúng của từng chữ lấy từ số thanh
+  Azure trả kèm âm tiết/âm (nếu có) hoặc từ pinyin app gửi (`doc`, tách âm tiết bằng regex — "dàngāo" ⇒ dàn+gāo); chữ < 60 điểm ⇒
+  `nghiNgoThanh` + gợi ý "CÓ THỂ sai thanh, chữ này là thanh N — mô tả bằng thanh tiếng Việt". Pinyin lệch số chữ ⇒ không gán (thà im).
+- **Gợi ý tiếng Việt = LUẬT TĨNH**, không gọi LLM (0 đồng, tức thì): âm IPA yếu ⇒ mẹo cho người Việt (θ ð ʃ ʒ r v z iː/ɪ æ ə…), nuốt âm
+  cuối, đọc thiếu/thừa, trôi chảy, ngữ điệu; Nhật: trường âm, っ, ん, ら行, つ, ふ; Trung: thanh + zh/ch/sh/r, ü, j/q/x.
+- **Lượt/ngày (giờ VN, RAM):** Free 10 · Pro 150. Chỉ trừ khi CHẤM ĐƯỢC; thiếu khoá / không nghe thấy / Azure lỗi / hết hạn mức tháng
+  ⇒ không trừ. Hết lượt ⇒ 429 `CTL_PHAT_AM_HET_LUOT`. Chống bấm dồn 15 lượt/phút (Redis, fail-open).
+- **Thiếu khoá Azure** ⇒ 200 `{ketQua:null, lyDo:'chua_co_khoa', thongBao:"Máy chủ chưa bật chấm phát âm…"}` — không lỗi, app báo rõ.
+- **Audio KHÔNG lưu**: multer `memoryStorage` riêng ⇒ RAM ⇒ Azure ⇒ bỏ.
+- Env: `AZURE_SPEECH_KEY` + `AZURE_SPEECH_REGION` (đã dùng cho đọc to — nay ghi vào `.env.example`). Prod phải có khoá thì mới chấm.
+- Test: `npx tsx --test src/services/ctlanguage/phatAm.test.ts` (11, fetch giả — không gọi Azure) +
+  `WORK_DB_TEST=1 npx tsx --test src/routes/ctlanguage.phatAm.routes.test.ts` (multipart thật, thiếu khoá, quá cỡ, không phải WAV).
+
+**App iOS** — `CTLanguageApp/Modules/PhatAm/` (`MoHinhPhatAmCTL` + `LuyenPhatAmCTL`), test `LuyenPhatAmTests`:
+- Lối vào: nút **"Luyện phát âm"** dưới đầu trang từ + nút 🎙 cạnh loa của **câu ví dụ** (`NutLuyenPhatAmCTL`, tự giữ sheet). Chưa gắn vào bài học.
+- Màn: câu mẫu (+ cách đọc, nghĩa) · Nghe mẫu (`DocToCTL`, giọng máy chủ) · micro to (WAV 16 kHz qua `MayThuSH`, im 1,2 s tự dừng, ≤ 15 s) ·
+  Nghe bản của bạn · vòng điểm tổng + thanh Chính xác / Trôi chảy / Đầy đủ (+ Ngữ điệu) · từng từ tô màu + từng âm IPA (en) / từng chữ +
+  pinyin + nhãn thanh khi nghi sai (zh) · "Máy nghe ra" · Gợi ý sửa · chọn giọng Mỹ/Anh (en).
+- Thứ tự xin phép: khách ⇒ mời đăng nhập (vẫn ghi âm tự nghe được) · đồng ý chia sẻ AI (`DongYChiaSeAI.xinPhep`, Azure đã có trong công bố v2)
+  TRƯỚC khi ghi · quyền micro lúc ghi (`MayThuSH`). Máy chủ chưa bật ⇒ vẫn ghi + nghe lại. Mất mạng ⇒ giữ bản ghi + nút "Chấm lại".
+  Hết lượt ⇒ nút Pro. DEBUG: `CT_XEM_MAN=phat-am[:câu]` + `CT_PHAT_AM_DIEN=1` (kết quả mẫu — máy ảo không nói vào micro được).
+- Không đổi `Info.plist` / `PrivacyInfo` (micro + AudioData + Azure đã khai từ trước).
+
+### 15b. ✍️ Viết tay Trung/Nhật NGAY TRÊN MÁY
+
+- Gói nét `CTLanguageApp/Resources/VietTay/vt-zh.bin` (9.574 chữ, 2,0 MB) + `vt-ja.bin` (7.184 kanji + kana, 1,3 MB) = **3,3 MB**, giấy phép
+  Arphic đi kèm (`GIAY-PHEP-NET-CHU.txt`). = TOÀN BỘ kho máy chủ (không cắt về HSK/JLPT: cắt thì tiết kiệm ~2 MB nhưng lệch máy chủ).
+  Sinh: `npx tsx scripts/ctlanguage/goi-net-viet-tay.mts --ra ~/Downloads/ios-app/CuongThaiApp` (cần CSDL có `ctl_chu_han.tan_suat`);
+  định dạng ghi ở đầu script (10 bit, hiệu zigzag varint, DEFLATE thô).
+- `NhanNetMayCTL.swift` (Modules/TuDien) = bản Swift của `xepHang` (`vietTay.ts`, nay tách `xepHang` thuần khỏi `nhanChu`). Màn viết tay:
+  nạp gói nền khi mở (~0,3–0,4 s bản Debug), gợi ý NGAY sau mỗi nét (bỏ chờ 250 ms), gói thiếu/hỏng ⇒ lùi máy chủ như cũ.
+- **Độ khớp** (164 mẫu sạch / méo / méo to / thiếu nét cuối, xuất từ dữ liệu test backend): Swift = TS trên gói **164/164 trùng cả 12 ứng
+  viên**; gói vs máy chủ thật: hạng 1 **164/164**, top-3 163/164, cả 12 ứng viên 156/164 (đuôi danh sách lệch do lượng tử).
+- **Hiệu năng** (máy ảo iPhone 17 Pro, bản Debug): TB 11,9 ms / chậm nhất 61 ms mỗi lượt gợi ý (260 lượt) — dưới 100 ms.
+- ⚠️ Đổi thuật toán `vietTay.ts` ⇒ sửa `NhanNetMayCTL.swift` + chạy lại script (sinh lại gói + `CTLanguageTests/Fixtures/viet-tay-mau.json`).

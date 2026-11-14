@@ -375,3 +375,17 @@ Mẫu một mục:
 - **Cách sửa:** đảo thứ tự lựa chọn theo hạt giống cố định (băm id + số câu), đảo lại câu cuối nếu cả 3 câu trùng vị trí; không câu nào tham chiếu vị trí (đã quét "phương án A", "cả hai"…) — 318d06e39.
 - **Ảnh hưởng:** chưa phát hành (bắt khi soát bàn giao).
 - **Bài học:** nội dung trắc nghiệm do người/AI soạn luôn lệch vị trí đáp án — xáo bằng máy sau khi soạn, đừng tin người soạn tự rải.
+
+### 15/11/2026 — CT Language (viết tay trên máy) — gói nét 8 bit cho ứng viên lệch máy chủ
+- **Triệu chứng:** bản đầu gói nét viết tay cho app (lượng tử 8 bit, toạ độ thô) ra chữ hạng 1 KHÁC máy chủ ở 4/164 mẫu so khớp (3/70 mẫu tiếng Nhật), dù cùng thuật toán.
+- **Nguyên nhân:** `scripts/ctlanguage/goi-net-viet-tay.mts` bản nháp làm tròn toạ độ về 1/255 — sai số ~0,002 mỗi điểm đủ đảo thứ hạng giữa các kanji gần giống nét (khoảng cách chênh nhau < 0,005), mà phá hoà tần suất chỉ ≤ 0,03.
+- **Cách sửa:** lượng tử 10 bit + ghi HIỆU giữa các điểm (zigzag varint) ⇒ 3,3 MB nén (8 bit thô là 3,9 MB), 164/164 trùng hạng 1, Swift trùng TỪNG ứng viên với bản TS chạy trên cùng gói (`NhanNetMayTests`) — commit backend + ios cùng đợt.
+- **Ảnh hưởng:** chưa phát hành (bắt bằng mẫu so khớp trước khi đóng gói).
+- **Bài học:** port thuật toán xếp hạng sang máy khách thì đo "trùng máy chủ" bằng MẪU THẬT ngay từ đầu, kể cả phần nén dữ liệu — lượng tử trông vô hại vẫn đảo hạng ở thế gần hoà; và ghi hiệu toạ độ nén tốt hơn hẳn hạ độ chính xác.
+
+### 15/11/2026 — App iOS — `xcodebuild` báo "command failed with exit code 0" khi nhiều phiên cùng dựng
+- **Triệu chứng:** dựng `CTLanguageApp` vào `DerivedData/CuongHoangIOS` ra hàng loạt `error: the following command failed with exit code 0 but produced no further output`, không chỉ ra tệp lỗi nào.
+- **Nguyên nhân:** hai–ba agent dựng song song cùng MỘT thư mục DerivedData ⇒ tranh nhau tệp trung gian / build database.
+- **Cách sửa:** agent dựng + chạy test vào `-derivedDataPath` RIÊNG trong thư mục tạm của mình (xong thì xoá); bản cài để soi vẫn lấy đúng sản phẩm vừa dựng (`ls -l` nhị phân trước khi cài — luật C1).
+- **Ảnh hưởng:** chỉ làm chậm phiên dựng; mã không lỗi.
+- **Bài học:** DerivedData dùng chung là tài nguyên chung như git index — phiên song song phải tách đường dẫn dựng, đừng đọc lỗi "exit code 0" như lỗi mã.

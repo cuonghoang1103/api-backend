@@ -72,7 +72,8 @@ export function khoangCach(nguoi: Net[], mau: Net[]): number {
 
 // ─── Kho mẫu (nạp lười một lần, ~1–2 s) ──────────────────────
 
-interface Mau { chu: string; net: Net[] }
+/** Một chữ mẫu: các nét ĐÃ chuẩn hoá theo khung bao + lấy mẫu N điểm. */
+export interface Mau { chu: string; net: Net[] }
 const kho: Partial<Record<'zh' | 'ja', Promise<Map<number, Mau[]>>>> = {};
 
 /** hanzi-writer: hệ 1024, gốc DƯỚI, y từ -124 tới 900 ⇒ lật y = 900 − y (cùng phép của app iOS NetChu.swift). */
@@ -120,7 +121,8 @@ async function napJa(): Promise<Map<number, Mau[]>> {
   return map;
 }
 
-function layKho(nn: 'zh' | 'ja') {
+/** Kho mẫu theo số nét (thứ tự trong mỗi nhóm = thứ tự nạp — gói nét của app iOS giữ đúng thứ tự này). */
+export function layKho(nn: 'zh' | 'ja') {
   if (!kho[nn]) kho[nn] = (nn === 'zh' ? napZh() : napJa()).catch((e) => { delete kho[nn]; throw e; });
   return kho[nn]!;
 }
@@ -139,7 +141,15 @@ export function kiemNet(than: unknown): Net[] {
 
 /** Các chữ giống nét vẽ nhất (tốt nhất trước). `tanSuat` (chữ → hạng, nhỏ = hay gặp) phá thế hoà. */
 export async function nhanChu(nn: 'zh' | 'ja', netGoc: Net[], soUngVien = 12, tanSuat?: (c: string) => number | undefined): Promise<string[]> {
-  const map = await layKho(nn);
+  return xepHang(await layKho(nn), netGoc, soUngVien, tanSuat);
+}
+
+/**
+ * Lõi xếp hạng (thuần) trên một kho mẫu bất kỳ — máy chủ dùng kho đầy đủ; `scripts/ctlanguage/goi-net-viet-tay.mts` chạy
+ * đúng hàm này trên kho ĐÃ LƯỢNG TỬ của gói app để sinh đáp án so khớp cho bản Swift (`NhanNetMayCTL.swift`).
+ * ⚠️ Đổi thuật toán ở đây ⇒ đổi cả bản Swift + chạy lại script (test Swift so từng ứng viên).
+ */
+export function xepHang(map: Map<number, Mau[]>, netGoc: Net[], soUngVien = 12, tanSuat?: (c: string) => number | undefined): string[] {
   const nguoi = chuanHoa(netGoc).map((n) => layMau(n));
   const n = nguoi.length;
   const ketQua: { chu: string; d: number }[] = [];

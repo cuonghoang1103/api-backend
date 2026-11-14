@@ -36,7 +36,7 @@ function demLuot(userId: number): boolean {
 }
 
 /** Độ dài (giây) của WAV PCM — đọc từ header, không tin lời trình duyệt. */
-function giayCuaWav(buf: Buffer): number | null {
+export function giayCuaWav(buf: Buffer): number | null {
   if (buf.length < 44 || buf.toString('ascii', 0, 4) !== 'RIFF' || buf.toString('ascii', 8, 12) !== 'WAVE') return null;
   const byteRate = buf.readUInt32LE(28);
   return byteRate > 0 ? (buf.length - 44) / byteRate : null;
@@ -49,21 +49,85 @@ export type KetQuaPhatAm = {
   tu: { tu: string; diem: number; loi: 'None' | 'Mispronunciation' | 'Omission' | 'Insertion' | string; am: { am: string; diem: number }[] }[];
 };
 
-export async function chamPhatAm(
-  userId: number,
-  input: {
-    audio: Buffer; cau: string; giong?: string;
-    /**
-     * 12/11/2026 — phòng thi Speaking: nói TỰ DO, không có câu mẫu. `tuDo` ⇒ chấm "unscripted" (ReferenceText
-     * rỗng, Azure chấm trên chính câu nó nghe ra); `cau` khi đó là bản phiên âm Whisper để lùi về chấm có mẫu
-     * nếu Azure từ chối unscripted. `toiDaGiay` nới trần 20 s (REST short-audio nhận tới 60 s).
-     */
-    tuDo?: boolean; toiDaGiay?: number;
-  },
-): Promise<{ ketQua: KetQuaPhatAm | null; lyDo?: 'chua_co_khoa' | 'het_luot_ngay' | 'het_luot_thang' | 'khong_nghe_thay' | 'loi_may_cham' }> {
+/**
+ * Bản ĐẦY ĐỦ hơn (15/11/2026, CT Language luyện phát âm): thêm điểm NGỮ ĐIỆU (prosody — chỉ en-US, `null` nếu Azure
+ * không trả), điểm từng ÂM TIẾT (`Syllables` — en-US có tên IPA; zh-CN mỗi chữ là một âm tiết) và tên âm/âm tiết GỐC
+ * Azure trả (zh-CN có thể kèm số thanh "xue2" — app đọc ra thanh điệu). `chamPhatAm` cũ dùng chung lõi này rồi bỏ bớt
+ * trường ⇒ đầu ra của web KHÔNG đổi.
+ */
+export type KetQuaPhatAmChiTiet = {
+  diem: { chinhXac: number; troiChay: number; dayDu: number; tong: number; ngonDieu: number | null };
+  ngheRa: string;
+  tu: {
+    tu: string; diem: number; loi: string;
+    am: { am: string; diem: number }[];
+    amTiet: { amTiet: string; diem: number }[];
+  }[];
+};
+
+export type LyDoPhatAm = 'chua_co_khoa' | 'het_luot_ngay' | 'het_luot_thang' | 'khong_nghe_thay' | 'loi_may_cham';
+export type NgonNguPhatAm = 'en-US' | 'en-GB' | 'ja-JP' | 'zh-CN';
+
+/** `giong` của web/app ⇒ mã ngôn ngữ Azure. 05/10/2026: khoá JP/CH chấm tiếng Nhật / tiếng Trung (Azure PA có ja-JP, zh-CN). */
+export function ngonNguPhatAm(giong?: string): NgonNguPhatAm {
+  return giong === 'us' ? 'en-US' : giong === 'ja' ? 'ja-JP' : giong === 'zh' ? 'zh-CN' : 'en-GB';
+}
+
+/** Có khoá Azure Speech chưa (thiếu ⇒ mọi lượt trả `chua_co_khoa`, không gọi đi đâu). */
+export const coKhoaPhatAm = () => Boolean(process.env.AZURE_SPEECH_KEY);
+
+const so = (x?: number) => Math.round(Number(x) || 0);
+type DiemPA = { AccuracyScore?: number; FluencyScore?: number; CompletenessScore?: number; PronScore?: number; ProsodyScore?: number; ErrorType?: string };
+type WAzure = DiemPA & {
+  Word: string; PronunciationAssessment?: DiemPA;
+  Syllables?: ({ Syllable?: string; Grapheme?: string; PronunciationAssessment?: DiemPA } & DiemPA)[];
+  Phonemes?: ({ Phoneme?: string; PronunciationAssessment?: DiemPA } & DiemPA)[];
+};
+type JAzure = {
+  RecognitionStatus?: string; DisplayText?: string;
+  NBest?: (DiemPA & { Display?: string; PronunciationAssessment?: DiemPA; Words?: WAzure[] })[];
+};
+
+/**
+ * Đọc JSON của Azure (REST "short audio", format=detailed). REST trả điểm PHẲNG ngay trên từ/âm (`AccuracyScore`); SDK
+ * và bản mới bọc trong `PronunciationAssessment` — đọc được cả hai. Không nhận ra câu nào ⇒ `null`.
+ */
+export function docKetQuaAzure(j: JAzure): KetQuaPhatAmChiTiet | null {
+  const b = j.NBest?.[0];
+  if (j.RecognitionStatus !== 'Success' || !b) return null;
+  const d = (x: DiemPA & { PronunciationAssessment?: DiemPA }) => ({ ...x, ...(x.PronunciationAssessment ?? {}) });
+  const bd = d(b);
+  return {
+    diem: {
+      chinhXac: so(bd.AccuracyScore), troiChay: so(bd.FluencyScore), dayDu: so(bd.CompletenessScore), tong: so(bd.PronScore),
+      ngonDieu: typeof bd.ProsodyScore === 'number' ? so(bd.ProsodyScore) : null,
+    },
+    ngheRa: j.DisplayText ?? b.Display ?? '',
+    tu: (b.Words ?? []).map((w) => {
+      const wd = d(w);
+      return {
+        tu: w.Word,
+        diem: so(wd.AccuracyScore),
+        loi: wd.ErrorType ?? 'None',
+        am: (w.Phonemes ?? []).map((p) => ({ am: p.Phoneme ?? '', diem: so(d(p).AccuracyScore) })),
+        amTiet: (w.Syllables ?? []).map((s) => ({ amTiet: s.Syllable ?? s.Grapheme ?? '', diem: so(d(s).AccuracyScore) })),
+      };
+    }),
+  };
+}
+
+/**
+ * Lõi chấm (không đếm lượt — người gọi tự đếm qua `demLuot`): kiểm WAV + độ dài, thiếu khoá ⇒ `chua_co_khoa`, gọi Azure,
+ * đọc kết quả đầy đủ. `ngonDieu` ⇒ xin thêm điểm ngữ điệu (chỉ en-US; Azure từ chối thì gọi lại không có nó).
+ */
+export async function chamAzure(
+  input: { audio: Buffer; cau: string; lang: NgonNguPhatAm; tuDo?: boolean; toiDaGiay?: number; ngonDieu?: boolean; toiDaKyTu?: number },
+  demLuot?: () => boolean,
+): Promise<{ ketQua: KetQuaPhatAmChiTiet | null; lyDo?: LyDoPhatAm }> {
   const cau = String(input.cau ?? '').trim();
+  const tranKyTu = input.toiDaKyTu ?? TOI_DA_KY_TU;
   if (!cau && !input.tuDo) throw new BadRequestError('Thiếu câu mẫu');
-  if (cau.length > (input.tuDo ? 2000 : TOI_DA_KY_TU)) throw new BadRequestError(`Câu mẫu tối đa ${TOI_DA_KY_TU} ký tự`);
+  if (cau.length > (input.tuDo ? 2000 : tranKyTu)) throw new BadRequestError(`Câu mẫu tối đa ${tranKyTu} ký tự`);
   const giay = giayCuaWav(input.audio);
   if (giay == null) throw new BadRequestError('Âm thanh phải là WAV PCM');
   const tran = Math.min(59, Math.max(1, input.toiDaGiay ?? TOI_DA_GIAY));
@@ -73,11 +137,10 @@ export async function chamPhatAm(
   const key = process.env.AZURE_SPEECH_KEY;
   const region = process.env.AZURE_SPEECH_REGION || 'eastasia';
   if (!key) return { ketQua: null, lyDo: 'chua_co_khoa' };
-  if (!demLuot(userId)) return { ketQua: null, lyDo: 'het_luot_ngay' };
+  if (demLuot && !demLuot()) return { ketQua: null, lyDo: 'het_luot_ngay' };
 
-  // 05/10/2026: khoá JP/CH chấm tiếng Nhật / tiếng Trung — Azure PA hỗ trợ ja-JP, zh-CN.
-  const lang = input.giong === 'us' ? 'en-US' : input.giong === 'ja' ? 'ja-JP' : input.giong === 'zh' ? 'zh-CN' : 'en-GB';
-  const goi = (referenceText: string) => fetch(
+  const lang = input.lang;
+  const goi = (referenceText: string, ngonDieu: boolean) => fetch(
     `https://${region}.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=${lang}&format=detailed`,
     {
       method: 'POST',
@@ -91,6 +154,7 @@ export async function chamPhatAm(
           Dimension: 'Comprehensive',
           EnableMiscue: !input.tuDo,
           ...(lang === 'en-US' ? { PhonemeAlphabet: 'IPA' } : {}),
+          ...(ngonDieu ? { EnableProsodyAssessment: true } : {}),
         })).toString('base64'),
         Accept: 'application/json',
       },
@@ -98,11 +162,14 @@ export async function chamPhatAm(
       body: new Uint8Array(input.audio),
     },
   );
+  const ngonDieu = Boolean(input.ngonDieu) && lang === 'en-US';
+  let res = await goi(input.tuDo ? '' : cau, ngonDieu);
+  // Xin ngữ điệu mà Azure từ chối (vùng/gói chưa hỗ trợ) ⇒ chấm lại không có nó, đừng mất cả lượt.
+  if (ngonDieu && res.status === 400) res = await goi(input.tuDo ? '' : cau, false);
   // Nói tự do: thử unscripted (ReferenceText rỗng) trước; Azure từ chối (4xx) thì lùi về chấm theo bản phiên âm.
-  let res = await goi(input.tuDo ? '' : cau);
   if (input.tuDo && cau && res.status >= 400 && res.status !== 429 && res.status !== 403) {
     console.warn('[ielts/phat-am] Azure unscripted', res.status, '— lùi về chấm theo bản phiên âm');
-    res = await goi(cau);
+    res = await goi(cau, false);
   }
   // F0 hết 5 giờ của tháng → 429 (hoặc 403 quota). Không phải lỗi của người học.
   if (res.status === 429 || res.status === 403) return { ketQua: null, lyDo: 'het_luot_thang' };
@@ -110,24 +177,33 @@ export async function chamPhatAm(
     console.warn('[ielts/phat-am] Azure', res.status, (await res.text().catch(() => '')).slice(0, 200));
     return { ketQua: null, lyDo: 'loi_may_cham' };
   }
-  type W = { Word: string; AccuracyScore?: number; ErrorType?: string; Phonemes?: { Phoneme?: string; AccuracyScore?: number }[] };
-  const j = (await res.json()) as {
-    RecognitionStatus?: string; DisplayText?: string;
-    NBest?: { AccuracyScore?: number; FluencyScore?: number; CompletenessScore?: number; PronScore?: number; Display?: string; Words?: W[] }[];
-  };
-  const b = j.NBest?.[0];
-  if (j.RecognitionStatus !== 'Success' || !b) return { ketQua: null, lyDo: 'khong_nghe_thay' };
-  const r = (x?: number) => Math.round(Number(x) || 0);
+  const kq = docKetQuaAzure((await res.json()) as JAzure);
+  return kq ? { ketQua: kq } : { ketQua: null, lyDo: 'khong_nghe_thay' };
+}
+
+export async function chamPhatAm(
+  userId: number,
+  input: {
+    audio: Buffer; cau: string; giong?: string;
+    /**
+     * 12/11/2026 — phòng thi Speaking: nói TỰ DO, không có câu mẫu. `tuDo` ⇒ chấm "unscripted" (ReferenceText
+     * rỗng, Azure chấm trên chính câu nó nghe ra); `cau` khi đó là bản phiên âm Whisper để lùi về chấm có mẫu
+     * nếu Azure từ chối unscripted. `toiDaGiay` nới trần 20 s (REST short-audio nhận tới 60 s).
+     */
+    tuDo?: boolean; toiDaGiay?: number;
+  },
+): Promise<{ ketQua: KetQuaPhatAm | null; lyDo?: LyDoPhatAm }> {
+  const r = await chamAzure(
+    { audio: input.audio, cau: input.cau, lang: ngonNguPhatAm(input.giong), tuDo: input.tuDo, toiDaGiay: input.toiDaGiay },
+    () => demLuot(userId),
+  );
+  if (!r.ketQua) return { ketQua: null, lyDo: r.lyDo };
+  const { chinhXac, troiChay, dayDu, tong } = r.ketQua.diem;
   return {
     ketQua: {
-      diem: { chinhXac: r(b.AccuracyScore), troiChay: r(b.FluencyScore), dayDu: r(b.CompletenessScore), tong: r(b.PronScore) },
-      ngheRa: j.DisplayText ?? b.Display ?? '',
-      tu: (b.Words ?? []).map((w) => ({
-        tu: w.Word,
-        diem: r(w.AccuracyScore),
-        loi: w.ErrorType ?? 'None',
-        am: (w.Phonemes ?? []).map((p) => ({ am: p.Phoneme ?? '', diem: r(p.AccuracyScore) })),
-      })),
+      diem: { chinhXac, troiChay, dayDu, tong },
+      ngheRa: r.ketQua.ngheRa,
+      tu: r.ketQua.tu.map(({ tu, diem, loi, am }) => ({ tu, diem, loi, am })),
     },
   };
 }

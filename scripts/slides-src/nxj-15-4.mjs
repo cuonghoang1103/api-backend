@@ -287,7 +287,7 @@ const DU_LIEU = {
  }
 };
 /*HET_DU_LIEU*/
-import { lamDeck, tsx, tn, br, box, two, steps, kw, c, cmp, icards, path, meter } from './_nxj-chung.mjs';
+import { lamDeck, tsx, tn, br, box, two, steps, kw, c, cmp, icards, path, meter, thucTe4 } from './_nxj-chung.mjs';
 
 export const deck = { key: 'nxj-15-4', code: 'NXJ 15.4', title: 'Reading the current user on the server', sub: 'Chapter 15 · Lesson 15.4' };
 const O = (k) => { const v = DU_LIEU[`n15-4:${k}`]; if (v === undefined) throw new Error('thiếu ' + k); return v; };
@@ -412,6 +412,8 @@ export const S = [
       box('Backend: the one helper', 'Every API call goes through <code>authenticate</code>: <code>jwt.verify</code>, then a database re-check that <code>select</code>s three fields — locked or disabled accounts stop at once.', 'xanh'),
       box('cache() in the repo', 'Used six times to share <code>getPost</code> between <code>generateMetadata</code> and the page — the same per-request dedup.', 'lam')), 'r56'),
     en: 'cuongthai.com: there is no getCurrentUser helper in the frontend; four server pages only check that the token cookie exists. The real helper lives in the backend: authenticate verifies the JWT and re-checks the account in the database on every call. cache is used six times to share a post between metadata and the page.' },
+  { t: "Not learning in a vacuum: real life, what if, the attacker", to: true, body: thucTe4({ doi: ["🏫", "A lab PC where you forgot to sign out", ["the next person opens your profile", "a module-level user leaks to EVERYONE, on any PC"]], neu: ["🗄️", "A cache stores pages by URL, ignoring the cookie?", ["the next visitor gets the previous visitor's page", "the same leak as <code>let currentUser</code>"]], xau: ["🔢", "Edit an id in the form or URL (IDOR)", ["userId=1, postId=1 ⇒ delete someone else's post", "measured: version A deleted An's post"]], phong: ["🛡️", "Read the session + check the owner", ["log when session user ≠ data owner", "<code>getCurrentUser()</code> in the action · <code>post.ownerId === user.id</code>"]] }),
+    en: "Real life: in a university computer lab you sign in to the portal and forget to sign out; the next person opens your profile. A module-level user is worse: no shared machine needed. What if a cache in front of the page stores the profile by URL and ignores the cookie? The next visitor gets the previous visitor's page — the same leak. The attacker changes a number in the form or the URL — a user id, a post id — to touch someone else's data. This bug has a name: IDOR. Detect it by logging whenever the session user differs from the data owner. Prevent it: the action reads the session itself and checks ownership every time." },
   { t: 'Key terms of this lesson', body: `<div style="display:flex;flex-wrap:wrap;gap:12px">${[
       kw('getCurrentUser()', 'cookie → verify → user'), kw('Verify', 'signature + expiry'), kw('redirect()', 'page enforces access'), kw('cache()', 'once per request'),
       kw('Module scope', 'whole server process'), kw('Request scope', 'one visitor'), kw('server-only', 'never bundled for the browser'), kw('Serialisation boundary', 'props to the client are visible'),

@@ -212,7 +212,7 @@ const DU_LIEU = {
  }
 };
 /*HET_DU_LIEU*/
-import { lamDeck, tsx, tn, br, box, two, steps, kw, c, cmp, icards, path, meter } from './_nxj-chung.mjs';
+import { lamDeck, tsx, tn, br, box, two, steps, kw, c, cmp, icards, path, meter, thucTe4 } from './_nxj-chung.mjs';
 
 export const deck = { key: 'nxj-16-4', code: 'NXJ 16.4', title: 'File uploads: from the browser to storage', sub: 'Chapter 16 · Lesson 16.4' };
 const O = (k) => { const v = DU_LIEU[`n16-4:${k}`]; if (v === undefined) throw new Error('thiếu ' + k); return v; };
@@ -307,6 +307,8 @@ export const S = [
     D(box('Through the server: multer in memory', '31 route files use multer, 40 times with <code>memoryStorage()</code> — each with a <code>fileSize</code> limit (5–30 MB). Fine for avatars, voice notes, documents.', 'lam'),
       box('Presigned for the big ones', '7 files call <code>getSignedUploadUrl</code>: the browser uploads straight to R2. The database keeps keys; a helper builds the CDN URL.', 'xanh')), ''),
     en: 'cuongthai.com uses both ways. Thirty-one route files use multer in memory, each with a size limit, fine for small files. Seven files call getSignedUploadUrl for direct uploads to R2. The database keeps keys, and the blob fix is in the repo since the second of July.' },
+  { t: "Not learning in a vacuum: real life, what if, the attacker", to: true, body: thucTe4({ doi: ["🎓", "The whole class submits at the deadline", ["new avatar · PDF and video assignments", "many large files at once"]], neu: ["💥", "100 videos of 40 MB through the server?", ["measured: +220 MB of memory per file", "deadline ⇒ out of RAM, process killed"]], xau: ["🏴‍☠️", "A presign route that skips auth", ["anyone can ask for an upload URL", "your bucket becomes free hosting"]], phong: ["🛡️", "Authenticate before signing", ["short expiry · server-chosen keys", "watch for unusual bucket growth"]] }),
+    en: "Real life: changing a profile picture, or the whole class submitting assignments to the school system minutes before the deadline. What if 100 students upload a 40 MB video through the server at once? At ~220 MB of memory per file, the server runs out of RAM at the deadline. Attackers look for presign routes that do not check the caller and turn your bucket into free hosting for their files. Detect unusual bucket growth and strange keys. Prevent it: authenticate before signing, short expiry, server-chosen keys." },
   { t: 'Key terms of this lesson', body: `<div style="display:flex;flex-wrap:wrap;gap:12px">${[
       kw('Object storage', 'S3 · R2 · MinIO'), kw('Object key', 'what the database keeps'), kw('FormData upload', 'through your server'), kw('bodySizeLimit', '1 MB for Server Actions'),
       kw('RSS', 'process memory'), kw('Presigned URL', 'signed, short-lived'), kw('SignatureDoesNotMatch', 'URL was edited'), kw('blob: / data: URL', 'local preview, never prefix'),

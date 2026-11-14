@@ -781,7 +781,7 @@ const DU_LIEU = {
  }
 };
 /*HET_DU_LIEU*/
-import { lamDeck, tsx, tn, br, box, two, steps, kw, c, cmp, icards, path, seq } from './_nxj-chung.mjs';
+import { lamDeck, tsx, tn, br, box, two, steps, kw, c, cmp, icards, path, seq, thucTe4 } from './_nxj-chung.mjs';
 
 export const deck = { key: 'nxj-15-5', code: 'NXJ 15.5', title: 'Token expiry and refresh (a real incident)', sub: 'Chapter 15 · Lesson 15.5' };
 const O = (k) => { const v = DU_LIEU[`n15-5:${k}`]; if (v === undefined) throw new Error('thiếu ' + k); return v; };
@@ -875,6 +875,8 @@ export const S = [
     D(box('What it does', 'One refresh in flight (<code>dangLamMoi</code>), retry once (<code>_retried</code>), cookie 30 days renewed on visits.', 'xanh'),
       box('What it does not do', 'There is no separate refresh token: the backend re-signs the same JWT with <code>ignoreExpiration</code>, capped at 30 days since <code>iat</code>. No rotation, so no reuse detection — a trade-off, not a bug.', 'lam')), 'r56'),
     en: 'cuongthai.com today: one refresh in flight, retry once, and a thirty-day cookie renewed on visits. There is no separate refresh token: the backend re-signs the same JWT ignoring expiry, capped at thirty days since it was issued. No rotation, so no reuse detection.' },
+  { t: "Not learning in a vacuum: real life, what if, the attacker", to: true, body: thucTe4({ doi: ["🏦", "A bank app vs a social network", ["bank: signed out after a few idle minutes", "social network: refresh keeps you in for a month"]], neu: ["💻", "A refresh token leaks (internet-café PC)?", ["the thief uses it until it expires", "with rotation: reuse is detected, the whole family revoked"]], xau: ["🕵️", "XSS reads tokens · CSRF borrows cookies", ["localStorage: any script can read it", "another site sends requests with your cookie"]], phong: ["🛡️", "httpOnly · sameSite · a narrow path", ["rotation + reuse detection (+ single-flight)", "a 'sign out of all devices' button"]] }),
+    en: "Real life: a banking app signs you out after a few idle minutes; a social network keeps you in for a month. Two ways of setting the clocks. What if a refresh token leaks — on an internet-café PC, or through a malicious browser extension? The thief can use it until it expires — unless it rotates. Attackers read tokens with injected script if they live in localStorage, or make your browser send cookies from another site (CSRF). Prevent it: httpOnly tokens, sameSite, a refresh cookie scoped to one path, rotation with reuse detection, and a 'sign out everywhere' button." },
   { t: 'Key terms of this lesson', body: `<div style="display:flex;flex-wrap:wrap;gap:12px">${[
       kw('Access token', 'minutes, every request'), kw('Refresh token', 'days, one path'), kw('401 Unauthorized', 'missing or expired'), kw('Interceptor', 'refresh once, retry'),
       kw('_retried', 'exactly once'), kw('Rotation', 'spend + reissue'), kw('Reuse detection', 'revoke the family'), kw('Single-flight', 'one shared refresh'),

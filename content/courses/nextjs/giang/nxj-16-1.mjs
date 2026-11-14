@@ -1,4 +1,4 @@
-/** Giảng theo slide — bài 16.1 Hai cách dựng một form (deck nxj-16-1, 12 slide). VI = lời giảng video nxj-16-1; EN = ghi chú `en` của deck. SINH bằng scratchpad/nxj/giang.mjs — sửa ở deck/kichban rồi sinh lại. */
+/** Giảng theo slide — bài 16.1 Hai cách dựng một form (deck nxj-16-1, 13 slide). VI = lời giảng video nxj-16-1; EN = ghi chú `en` của deck. SINH bằng scratchpad/nxj/giang.mjs — sửa ở deck/kichban rồi sinh lại. */
 import { walkNxj } from '../_slides.mjs';
 
 export default walkNxj('nxj-16-1', "Two ways to build a form", "Hai cách dựng một form", [
@@ -32,10 +32,13 @@ export default walkNxj('nxj-16-1', "Two ways to build a form", "Hai cách dựng
   [10, "cuongthai.com: 133 client forms, 0 Server Actions",
     "<p>cuongthai.com: about one hundred thirty client forms and no Server Action at all; every form calls the Express backend, which checks again. react-hook-form and Zod are installed and used by six forms, such as login and register.</p>",
     "<p>cuongthai.com: khoảng một trăm ba mươi tệp có onSubmit, và không có Server Action nào. Mọi form gọi backend Express, nơi kiểm lại tất cả. react-hook-form và Zod đã cài sẵn, dùng ở sáu tệp như đăng nhập, đăng ký. Bài sau ta học đúng thư viện đó.</p>"],
-  [11, "Key terms of this lesson",
+  [11, "Not learning in a vacuum: real life, what if, the attacker",
+    "<p>Real life: you fill a sign-up form on your phone in the dorm, the network flickers, and you press submit before the page has finished loading. What if that is a sign-in form built the client way? The password lands in the address bar, in a shared computer's history and in the campus network logs. An attacker needs no browser: DevTools or curl skips every check that runs in the browser. Prevent it: give client forms method=\"post\", and always check again on the server.</p>",
+    "<p>Đời thật: bạn điền form đăng ký trên điện thoại ở ký túc xá, mạng chập chờn, bấm gửi khi trang chưa tải xong. Nếu đó là form đăng nhập kiểu B thì sao? Mật khẩu lên thanh địa chỉ, nằm lại trong lịch sử máy dùng chung và nhật ký của mạng trường. Kẻ xấu không cần trình duyệt: mở DevTools hoặc gọi curl là bỏ qua mọi phép kiểm phía trình duyệt. Cách phòng: form client vẫn khai method bằng post, và luôn kiểm lại trên máy chủ.</p>"],
+  [12, "Key terms of this lesson",
     "<p>Key terms: Server Action form; FormData; client form; controlled input; progressive enhancement; the hydration gap; the native GET of a form with no handler; the server check; and the hybrid.</p>",
     "<p>Thuật ngữ: form Server Action, FormData, form client, input có kiểm soát, progressive enhancement, khe hydrate, GET mặc định, kiểm ở server, và kết hợp.</p>"],
-  [12, "Your turn — and what to keep",
+  [13, "Your turn — and what to keep",
     "<p>Your turn: build the same sign-up both ways; disable JavaScript and submit both; throttle the network and click before the page is interactive; then curl a bad body at the endpoint and check that the server refuses it.</p>",
     "<p>Tới lượt bạn: dựng cùng form đăng ký theo hai cách. Tắt JavaScript trong DevTools và gửi cả hai. Bật lại, giả lập mạng chậm, bấm trước khi trang tương tác được, rồi đọc thanh địa chỉ. Cuối cùng curl một body sai vào endpoint. Tóm lại: A chạy cả trước và không có JavaScript. B cần cẩn thận kẻo dữ liệu lên URL. Kiểm ở client là lịch sự, kiểm ở server là bảo vệ. Bạn mở Code Lab Next.js, module Server Actions và mẫu ghi dữ liệu để luyện. Bài sau: react-hook-form.</p>"],
 ]);

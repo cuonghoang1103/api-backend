@@ -1,4 +1,4 @@
-/** Giảng theo slide — bài 16.2 react-hook-form: form client nhanh (deck nxj-16-2, 12 slide). VI = lời giảng video nxj-16-2; EN = ghi chú `en` của deck. SINH bằng scratchpad/nxj/giang.mjs — sửa ở deck/kichban rồi sinh lại. */
+/** Giảng theo slide — bài 16.2 react-hook-form: form client nhanh (deck nxj-16-2, 13 slide). VI = lời giảng video nxj-16-2; EN = ghi chú `en` của deck. SINH bằng scratchpad/nxj/giang.mjs — sửa ở deck/kichban rồi sinh lại. */
 import { walkNxj } from '../_slides.mjs';
 
 export default walkNxj('nxj-16-2', "react-hook-form: fast client forms", "react-hook-form: form client nhanh", [
@@ -32,10 +32,13 @@ export default walkNxj('nxj-16-2', "react-hook-form: fast client forms", "react-
   [10, "cuongthai.com: react-hook-form + Zod in six forms",
     "<p>cuongthai.com: six files use react-hook-form, typed and with zodResolver, for login, register, passwords and the game editor; Controller appears once. The other client forms use plain useState, which is fine for small forms.</p>",
     "<p>cuongthai.com dùng react-hook-form ở sáu tệp: đăng nhập, đăng ký, các form mật khẩu, và form sửa trò chơi. Form có kiểu, kèm zodResolver, đúng mẫu của bài này và bài sau. Các form nhỏ khác vẫn dùng useState, như vậy là hợp lý.</p>"],
-  [11, "Key terms of this lesson",
+  [11, "Not learning in a vacuum: real life, what if, the attacker",
+    "<p>Real life: a 20-field enrolment form on an old phone — every keystroke lags. What if a field moved into a child component loses its register? The student thinks everything was submitted; the server receives less, and nobody is told. An attacker does not need your nice form: browser checks only stop honest users, a direct request goes straight through. Detect it by comparing submitted data with the fields on screen in a test. Prevent it: the server checks again with the same schema (next lesson).</p>",
+    "<p>Đời thật: form khai thông tin nhập học hai mươi ô, gõ trên một chiếc điện thoại cũ thì chữ hiện chậm, giật từng phím. Nếu một ô bị tách ra component con và rơi mất register thì sao? Sinh viên tưởng đã nộp đủ, máy chủ nhận thiếu, không ai báo gì. Kẻ xấu chẳng cần form đẹp: kiểm ở trình duyệt chỉ chặn người ngay thẳng, còn request gửi thẳng thì đi qua hết. Cách nhận ra: so dữ liệu submit với các ô trên màn hình trong bài test. Cách phòng: máy chủ kiểm lại bằng cùng một schema, bài sau.</p>"],
+  [12, "Key terms of this lesson",
     "<p>Key terms: controlled input; uncontrolled input; useForm of T; register; handleSubmit; formState errors; Controller; watch; and first-load JavaScript.</p>",
     "<p>Thuật ngữ: input kiểm soát, input không kiểm soát, useForm có kiểu, register, handleSubmit, formState errors, Controller, watch, và JavaScript lần tải đầu.</p>"],
-  [12, "Your turn — and what to keep",
+  [13, "Your turn — and what to keep",
     "<p>Your turn: build a twenty-field form both ways and count renders; fix the lesson's form with a type; move a field into a child and drop the spread; and compare first-load JavaScript of both pages.</p>",
     "<p>Tới lượt bạn: dựng form hai mươi ô theo hai cách và đếm render. Chép form của bài vào tệp tsx rồi sửa bằng kiểu. Tách một ô ra component con và làm rơi register, xem handleSubmit nhận gì. So JavaScript lần tải đầu của hai trang. Tóm lại: register chứ không phải thuộc tính name. Đặt kiểu cho form. Bớt render thì trả thêm byte. Máy chủ vẫn kiểm lại. Bạn mở Code Lab Next.js, module tương tác phía client để luyện. Bài sau: validation với Zod, một schema cho cả hai phía.</p>"],
 ]);

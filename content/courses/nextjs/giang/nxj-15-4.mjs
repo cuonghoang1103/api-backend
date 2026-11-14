@@ -1,4 +1,4 @@
-/** Giảng theo slide — bài 15.4 Đọc người dùng hiện tại trên server (deck nxj-15-4, 14 slide). VI = lời giảng video nxj-15-4; EN = ghi chú `en` của deck. SINH bằng scratchpad/nxj/giang.mjs — sửa ở deck/kichban rồi sinh lại. */
+/** Giảng theo slide — bài 15.4 Đọc người dùng hiện tại trên server (deck nxj-15-4, 15 slide). VI = lời giảng video nxj-15-4; EN = ghi chú `en` của deck. SINH bằng scratchpad/nxj/giang.mjs — sửa ở deck/kichban rồi sinh lại. */
 import { walkNxj } from '../_slides.mjs';
 
 export default walkNxj('nxj-15-4', "Reading the current user on the server", "Đọc người dùng hiện tại trên server", [
@@ -28,7 +28,7 @@ export default walkNxj('nxj-15-4', "Reading the current user on the server", "Đ
     "<p>Cái bẫy. Một biến ở cấp module, nạp người dùng một lần rồi dùng lại. Trông như tối ưu khéo. Nhưng trên server, cấp module là cả tiến trình, không phải một request. Người đầu tiên lấp đầy biến đó cho tất cả.</p>"],
   [9, "The lesson's exact line — and the same shape elsewhere",
     "<p>The lesson's exact line, await at the top of a module, does not even build: cookies was called outside a request scope. The dangerous version is the lazy one, which builds and leaks. The same bug hides in a module-level store, a shared Axios instance with a user header, or a let used as a cache.</p>",
-    "<p>Còn đúng dòng của bài, await ở đầu module, thì build dừng luôn: cookies bị gọi bên ngoài một request. Bản lười ở trên mới nguy hiểm, vì nó build được. Cùng một lỗi vòng đời còn đội lốt khác: store Zustand tạo ở cấp module, một Axios dùng chung mang header của một người, một biến let làm bộ nhớ đệm.</p>"],
+    "<p>Còn đúng dòng của bài, await ở đầu module, thì build dừng luôn: cookies bị gọi bên ngoài một request. Bản lười ở trên mới nguy hiểm, vì nó build được. Cùng lỗi vòng đời còn đội lốt khác: kho Zustand ở cấp module, Axios dùng chung mang header của một người, biến let làm bộ nhớ đệm.</p>"],
   [10, "Don't pass the user id to an action",
     "<p>Do not pass the user id to an action. Signed in as Binh, we edit the hidden inputs in DevTools. Version A trusts the user id from the form, and An's post is deleted. Version B reads the session itself: refused, both posts remain.</p>",
     "<p>Ô ẩn, prop, tham số: trình duyệt sửa được tất cả. Action phải tự đọc người dùng từ phiên.</p>"],
@@ -38,10 +38,13 @@ export default walkNxj('nxj-15-4', "Reading the current user on the server", "Đ
   [12, "cuongthai.com: who checks the user?",
     "<p>cuongthai.com: there is no getCurrentUser helper in the frontend; four server pages only check that the token cookie exists. The real helper lives in the backend: authenticate verifies the JWT and re-checks the account in the database on every call. cache is used six times to share a post between metadata and the page.</p>",
     "<p>Còn cuongthai.com? Phía Next.js không có hàm getCurrentUser. Bốn trang server chỉ kiểm có cookie hay không: cổng lạc quan. Hàm thật nằm ở backend: mọi lời gọi qua authenticate, kiểm JWT, rồi hỏi lại cơ sở dữ liệu xem tài khoản còn mở không. Và cache được dùng ở sáu chỗ.</p>"],
-  [13, "Key terms of this lesson",
+  [13, "Not learning in a vacuum: real life, what if, the attacker",
+    "<p>Real life: in a university computer lab you sign in to the portal and forget to sign out; the next person opens your profile. A module-level user is worse: no shared machine needed. What if a cache in front of the page stores the profile by URL and ignores the cookie? The next visitor gets the previous visitor's page — the same leak. The attacker changes a number in the form or the URL — a user id, a post id — to touch someone else's data. This bug has a name: IDOR. Detect it by logging whenever the session user differs from the data owner. Prevent it: the action reads the session itself and checks ownership every time.</p>",
+    "<p>Đời thật: ở phòng lab của trường, bạn đăng nhập cổng thông tin rồi quên đăng xuất, người ngồi sau mở trang hồ sơ của bạn. Biến cấp module còn tệ hơn: không cần ngồi cùng máy. Nếu một tầng cache phía trước lưu trang hồ sơ theo địa chỉ mà quên cookie thì sao? Người sau nhận đúng trang của người trước, cùng một kiểu rò. Kẻ xấu thì đổi con số trong form hay trên địa chỉ, như id người dùng hay id bài, để đụng vào dữ liệu của người khác. Lỗi này có tên riêng: IDOR. Cách nhận ra: ghi nhật ký mỗi khi người trong phiên khác chủ dữ liệu. Cách phòng: action tự đọc phiên, rồi kiểm quyền sở hữu ở mọi lần.</p>"],
+  [14, "Key terms of this lesson",
     "<p>Key terms: getCurrentUser; verify; redirect; cache, once per request; module scope, the whole server process; request scope, one visitor; server-only; the serialisation boundary; and the ownership check.</p>",
     "<p>Thuật ngữ: getCurrentUser, xác minh, redirect, cache, phạm vi module, phạm vi request, server-only, ranh giới serialize, và kiểm quyền sở hữu.</p>"],
-  [14, "Your turn — and what to keep",
+  [15, "Your turn — and what to keep",
     "<p>Your turn: write getCurrentUser wrapped in cache; protect a page and count verifications from five components; put the user in a module-level let and visit as two people; write a delete action that reads the session, then tamper with the form.</p>",
     "<p>Tới lượt bạn: viết getCurrentUser bọc trong cache. Chặn một trang bằng redirect, gọi từ năm component và đếm. Thử đặt người dùng vào biến cấp module, vào bằng hai người. Rồi viết action xoá tự đọc phiên, và thử sửa form. Tóm lại: xác minh chứ không chỉ đọc. Cache một lần mỗi request. Dữ liệu riêng từng người không bao giờ nằm ở cấp module. Bạn mở Code Lab Next.js, module xác thực và tích hợp cơ sở dữ liệu để luyện. Bài sau: token hết hạn, và refresh.</p>"],
 ]);

@@ -52,7 +52,7 @@ const DU_LIEU = {
  }
 };
 /*HET_DU_LIEU*/
-import { lamDeck, tsx, tn, br, box, two, steps, kw, c, cmp, icards, meter } from './_nxj-chung.mjs';
+import { lamDeck, tsx, tn, br, box, two, steps, kw, c, cmp, icards, meter, thucTe4 } from './_nxj-chung.mjs';
 
 export const deck = { key: 'nxj-16-2', code: 'NXJ 16.2', title: 'react-hook-form: fast client forms', sub: 'Chapter 16 · Lesson 16.2' };
 const O = (k) => { const v = DU_LIEU[`n16-2:${k}`]; if (v === undefined) throw new Error('thiếu ' + k); return v; };
@@ -161,6 +161,8 @@ export const S = [
     D(box('Login, register, passwords, games', 'Six files use <code>useForm</code>, typed (<code>useForm&lt;LoginFormValues&gt;</code>) with <code>zodResolver</code> — the pattern of this lesson and the next.', 'xanh'),
       box('The other ~127 client forms', 'Plain <code>useState</code> + <code>onSubmit</code>. Fine for small forms; the library earns its bytes on the big ones.', 'lam')), 'r56'),
     en: 'cuongthai.com: six files use react-hook-form, typed and with zodResolver, for login, register, passwords and the game editor; Controller appears once. The other client forms use plain useState, which is fine for small forms.' },
+  { t: "Not learning in a vacuum: real life, what if, the attacker", to: true, body: thucTe4({ doi: ["📱", "A 20-field enrolment form on an old phone", ["controlled: a render per keystroke ⇒ lag", "react-hook-form: 2 renders"]], neu: ["🕳️", "A field loses register when split out?", ["text on screen, missing from the data", "measured: <code>data = {\"body\":\"hello\"}</code>"]], xau: ["🛠️", "Send directly, skip the form", ["browser rules cannot stop it", "16.1: curl ⇒ only the server stops it"]], phong: ["🛡️", "Test submitted data + check on the server", ["compare data with the fields on screen", "16.3: the same schema on the server"]] }),
+    en: "Real life: a 20-field enrolment form on an old phone — every keystroke lags. What if a field moved into a child component loses its register? The student thinks everything was submitted; the server receives less, and nobody is told. An attacker does not need your nice form: browser checks only stop honest users, a direct request goes straight through. Detect it by comparing submitted data with the fields on screen in a test. Prevent it: the server checks again with the same schema (next lesson)." },
   { t: 'Key terms of this lesson', body: `<div style="display:flex;flex-wrap:wrap;gap:12px">${[
       kw('Controlled input', 'React owns the value'), kw('Uncontrolled input', 'the DOM owns the value'), kw('useForm&lt;T&gt;()', 'typed form'), kw('register()', 'ref + listeners'),
       kw('handleSubmit()', 'validate, then call'), kw('formState.errors', 'per-field messages'), kw('Controller', 'bridge for controlled widgets'), kw('watch()', 'brings re-renders back'),

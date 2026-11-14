@@ -1,4 +1,4 @@
-/** Giảng theo slide — bài 16.5 UX upload và phần bảo mật không được bỏ (deck nxj-16-5, 12 slide). VI = lời giảng video nxj-16-5; EN = ghi chú `en` của deck. SINH bằng scratchpad/nxj/giang.mjs — sửa ở deck/kichban rồi sinh lại. */
+/** Giảng theo slide — bài 16.5 UX upload và phần bảo mật không được bỏ (deck nxj-16-5, 13 slide). VI = lời giảng video nxj-16-5; EN = ghi chú `en` của deck. SINH bằng scratchpad/nxj/giang.mjs — sửa ở deck/kichban rồi sinh lại. */
 import { walkNxj } from '../_slides.mjs';
 
 export default walkNxj('nxj-16-5', "Upload UX, and the security you cannot skip", "UX upload và phần bảo mật không được bỏ", [
@@ -32,10 +32,13 @@ export default walkNxj('nxj-16-5', "Upload UX, and the security you cannot skip"
   [10, "Presigned uploads need the same four checks",
     "<p>Presigned uploads need the same four checks: authenticate before signing; sign the size; after the upload, read the first bytes from storage and delete what is not an image; and let the server pick the key. Our 16.4 presign route signed for anyone, a gap to fix in production.</p>",
     "<p>URL ký sẵn cũng cần đủ bốn phép: xác thực trước khi ký, ký cả kích thước, đọc byte đầu sau khi tải, và để máy chủ chọn khoá.</p>"],
-  [11, "Key terms of this lesson",
+  [11, "Not learning in a vacuum: real life, what if, the attacker",
+    "<p>Real life: uploading an ID photo to an app, a CV to a job site, a profile picture — you pass an upload endpoint every day. What if a site accepts SVG or HTML as an avatar? Whoever opens that 'image' may run someone else's script, on your domain. An attacker hosts a fake sign-in page in your storage and sends a link with your real domain for phishing — or overwrites other people's files. Prevent it: sniff the bytes, server-built keys, content type from the bytes. Detect it: scan the bucket for image extensions whose content is HTML.</p>",
+    "<p>Đời thật: tải ảnh căn cước lên một ứng dụng, nộp CV lên trang tuyển dụng, đổi ảnh đại diện. Ngày nào bạn cũng đi qua một endpoint tải lên. Nếu trang cho phép SVG hay HTML làm ảnh đại diện thì sao? Ai mở ảnh đó có thể chạy script của người khác, ngay trên tên miền của bạn. Kẻ xấu đặt một trang đăng nhập giả lên kho của bạn, rồi gửi đường dẫn mang tên miền thật để lừa đảo, hoặc đè tệp của người khác. Cách phòng: ngửi byte, khoá do máy chủ dựng, kiểu nội dung lấy từ byte. Cách nhận ra: soát kho tìm tệp có đuôi ảnh mà nội dung là HTML.</p>"],
+  [12, "Key terms of this lesson",
     "<p>Key terms: blob preview; upload onprogress; accept and size hints, UX not security; magic number; sniffing; the server-chosen key; path traversal; 413 and 415; and the original name kept only as a label.</p>",
     "<p>Thuật ngữ: xem trước blob, tiến trình tải lên, gợi ý accept, magic number, ngửi byte, khoá do máy chủ dựng, path traversal, lỗi 413 và 415, và nhãn.</p>"],
-  [12, "Your turn — and what to keep",
+  [13, "Your turn — and what to keep",
     "<p>Your turn: add a preview, progress and a disabled button; curl an HTML file labelled image jpeg; send a dot dot file name and build the key on the server instead; then sniff the first bytes and reject what is not an image.</p>",
     "<p>Tới lượt bạn: thêm xem trước, tiến trình và nút bị khoá. Dùng curl gửi một tệp HTML khai là ảnh vào endpoint của bạn. Gửi tên tệp có chấm chấm gạch chéo, rồi chuyển sang khoá do máy chủ dựng. Ngửi byte đầu, từ chối thứ không phải ảnh. Tóm lại: kiểm ở client là gợi ý. Bốn phép kiểm ở máy chủ: ai, to bao nhiêu, thật ra là gì, nằm ở đâu. Byte quan trọng hơn tên. Bạn mở Code Lab Next.js, module API route và phát triển full-stack để luyện. Hết Chương 16, chương sau: render và SEO.</p>"],
 ]);

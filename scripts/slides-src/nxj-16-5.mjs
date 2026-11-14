@@ -139,7 +139,7 @@ const DU_LIEU = {
  }
 };
 /*HET_DU_LIEU*/
-import { lamDeck, tsx, tn, br, box, two, steps, kw, c, cmp, icards } from './_nxj-chung.mjs';
+import { lamDeck, tsx, tn, br, box, two, steps, kw, c, cmp, icards, thucTe4 } from './_nxj-chung.mjs';
 
 export const deck = { key: 'nxj-16-5', code: 'NXJ 16.5', title: 'Upload UX, and the security you cannot skip', sub: 'Chapter 16 · Lesson 16.5' };
 const O = (k) => { const v = DU_LIEU[`n16-5:${k}`]; if (v === undefined) throw new Error('thiếu ' + k); return v; };
@@ -240,6 +240,8 @@ xhr.upload.onprogress = (e) =>
       `<b>Where</b>: the server picks the key, under the user's prefix (16.4: an edited key ⇒ ${c('SignatureDoesNotMatch')})`,
     ]) + box('16.4 had a gap', 'The lab\'s <code>/api/presign</code> signed for anyone, with any name. Fine for a demo; in production it is the first thing to fix.', 'do2'),
     en: 'Presigned uploads need the same four checks: authenticate before signing; sign the size; after the upload, read the first bytes from storage and delete what is not an image; and let the server pick the key. Our 16.4 presign route signed for anyone, a gap to fix in production.' },
+  { t: "Not learning in a vacuum: real life, what if, the attacker", to: true, body: thucTe4({ doi: ["🪪", "ID photo, CV, profile picture", ["you pass an upload endpoint every day", "loan apps · job sites · social networks"]], neu: ["🧨", "Allow SVG or HTML as an avatar?", ["whoever opens the 'image' runs a stranger's script", "on your own domain"]], xau: ["🎣", "A fake sign-in page in your storage", ["a link with your real domain ⇒ phishing", "or overwrite other people's files"]], phong: ["🛡️", "Sniff bytes · server-built keys", ["Content-Type from the bytes, not the name", "scan: image extension, HTML content"]] }),
+    en: "Real life: uploading an ID photo to an app, a CV to a job site, a profile picture — you pass an upload endpoint every day. What if a site accepts SVG or HTML as an avatar? Whoever opens that 'image' may run someone else's script, on your domain. An attacker hosts a fake sign-in page in your storage and sends a link with your real domain for phishing — or overwrites other people's files. Prevent it: sniff the bytes, server-built keys, content type from the bytes. Detect it: scan the bucket for image extensions whose content is HTML." },
   { t: 'Key terms of this lesson', body: `<div style="display:flex;flex-wrap:wrap;gap:12px">${[
       kw('blob: preview', 'instant, local'), kw('upload.onprogress', 'XHR only'), kw('accept / size hint', 'UX, not security'), kw('Magic number', 'the first bytes'),
       kw('Sniffing', 'type from content'), kw('Server-chosen key', 'user id + uuid'), kw('Path traversal', '../ in a name'), kw('413 / 415', 'too large / wrong type'),

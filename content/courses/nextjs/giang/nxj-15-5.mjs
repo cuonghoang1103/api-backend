@@ -1,4 +1,4 @@
-/** Giảng theo slide — bài 15.5 Hết hạn token và refresh (một sự cố thật) (deck nxj-15-5, 13 slide). VI = lời giảng video nxj-15-5; EN = ghi chú `en` của deck. SINH bằng scratchpad/nxj/giang.mjs — sửa ở deck/kichban rồi sinh lại. */
+/** Giảng theo slide — bài 15.5 Hết hạn token và refresh (một sự cố thật) (deck nxj-15-5, 14 slide). VI = lời giảng video nxj-15-5; EN = ghi chú `en` của deck. SINH bằng scratchpad/nxj/giang.mjs — sửa ở deck/kichban rồi sinh lại. */
 import { walkNxj } from '../_slides.mjs';
 
 export default walkNxj('nxj-15-5', "Token expiry and refresh (a real incident)", "Hết hạn token và refresh (một sự cố thật)", [
@@ -35,10 +35,13 @@ export default walkNxj('nxj-15-5', "Token expiry and refresh (a real incident)",
   [11, "cuongthai.com today",
     "<p>cuongthai.com today: one refresh in flight, retry once, and a thirty-day cookie renewed on visits. There is no separate refresh token: the backend re-signs the same JWT ignoring expiry, capped at thirty days since it was issued. No rotation, so no reuse detection.</p>",
     "<p>cuongthai.com hôm nay: một lần refresh duy nhất đang chạy, thử lại một lần, cookie ba mươi ngày gia hạn khi người dùng ghé. Không có refresh token riêng: backend ký lại chính JWT đó, bỏ qua hạn, nhưng chặn token đã quá ba mươi ngày. Không xoay vòng, nên không phát hiện dùng lại.</p>"],
-  [12, "Key terms of this lesson",
+  [12, "Not learning in a vacuum: real life, what if, the attacker",
+    "<p>Real life: a banking app signs you out after a few idle minutes; a social network keeps you in for a month. Two ways of setting the clocks. What if a refresh token leaks — on an internet-café PC, or through a malicious browser extension? The thief can use it until it expires — unless it rotates. Attackers read tokens with injected script if they live in localStorage, or make your browser send cookies from another site (CSRF). Prevent it: httpOnly tokens, sameSite, a refresh cookie scoped to one path, rotation with reuse detection, and a 'sign out everywhere' button.</p>",
+    "<p>Đời thật: ứng dụng ngân hàng bắt đăng nhập lại sau vài phút không dùng, còn mạng xã hội giữ bạn đăng nhập cả tháng. Đó là hai cách cân đồng hồ. Nếu refresh token bị lộ, trên máy quán net hay qua tiện ích trình duyệt độc, kẻ trộm dùng được tới khi hết hạn, trừ khi có xoay vòng. Kẻ xấu lấy token bằng script độc nếu token nằm trong localStorage, hoặc dụ trình duyệt của bạn gửi request kèm cookie từ một trang khác, gọi là CSRF. Cách phòng: token httpOnly, sameSite, cookie refresh chỉ gửi tới đúng đường dẫn, xoay vòng kèm phát hiện dùng lại, và nút đăng xuất mọi thiết bị.</p>"],
+  [13, "Key terms of this lesson",
     "<p>Key terms: access token; refresh token; 401 unauthorized; interceptor; the retried flag; rotation; reuse detection; single-flight; and silent session death.</p>",
     "<p>Thuật ngữ: access token, refresh token, lỗi 401, interceptor, cờ thử lại, xoay vòng, phát hiện dùng lại, single-flight, và phiên chết âm thầm.</p>"],
-  [13, "Your turn — and what to keep",
+  [14, "Your turn — and what to keep",
     "<p>Your turn: give the access token five seconds and watch calls turn 401; point the refresh at a missing route; add a refresh endpoint and an interceptor; then fire three calls at once, with and without single-flight.</p>",
     "<p>Tới lượt bạn: cho access token sống năm giây, xem API chuyển sang 401. Trỏ refresh vào route không tồn tại để tái hiện sự cố. Thêm endpoint refresh và interceptor. Rồi bắn ba lời gọi cùng lúc, có và không có single-flight. Tóm lại: hai đồng hồ, giữ chúng ở một chỗ. Refresh một lần, thử lại một lần. Xoay vòng thì phải single-flight. Và thử bằng cách vặn đồng hồ. Bạn mở Code Lab Next.js, module xác thực và tích hợp cơ sở dữ liệu để luyện. Bài sau mở Chương 16: hai cách dựng một form.</p>"],
 ]);

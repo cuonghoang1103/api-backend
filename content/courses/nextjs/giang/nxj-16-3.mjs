@@ -1,4 +1,4 @@
-/** Giảng theo slide — bài 16.3 Validation với Zod: một schema, cả hai phía (deck nxj-16-3, 12 slide). VI = lời giảng video nxj-16-3; EN = ghi chú `en` của deck. SINH bằng scratchpad/nxj/giang.mjs — sửa ở deck/kichban rồi sinh lại. */
+/** Giảng theo slide — bài 16.3 Validation với Zod: một schema, cả hai phía (deck nxj-16-3, 13 slide). VI = lời giảng video nxj-16-3; EN = ghi chú `en` của deck. SINH bằng scratchpad/nxj/giang.mjs — sửa ở deck/kichban rồi sinh lại. */
 import { walkNxj } from '../_slides.mjs';
 
 export default walkNxj('nxj-16-3', "Validation with Zod: one schema, both sides", "Validation với Zod: một schema, cả hai phía", [
@@ -32,10 +32,13 @@ export default walkNxj('nxj-16-3', "Validation with Zod: one schema, both sides"
   [10, "cuongthai.com: the same rule, written twice",
     "<p>cuongthai.com: the register password rule exists twice, a Zod schema in the frontend and express-validator in the backend. In sync today, but every change is two edits. The fix is a small shared package that both import.</p>",
     "<p>cuongthai.com: luật mật khẩu đăng ký có hai bản. Một schema Zod ở form, một bộ express-validator ở route của backend. Hôm nay hai bản khớp nhau, nhưng mỗi lần đổi luật là hai chỗ phải sửa. Cách gỡ là một gói nhỏ chứa schema, cả hai phía cùng import.</p>"],
-  [11, "Key terms of this lesson",
+  [11, "Not learning in a vacuum: real life, what if, the attacker",
+    "<p>Real life: the quantity box in a cart, the 'I agree' checkbox, a date of birth — all reach the server as strings. What if a 'send me promotions' checkbox uses z.coerce.boolean() and a client sends the string 'false'? Someone who opted out still gets email. An attacker adds keys you did not expect, like role: 'admin', hoping the server copies them into the database — mass assignment. Prevent it: z.object drops unknown keys; use parsed.data only; test empty fields and the string 'false'.</p>",
+    "<p>Đời thật: ô số lượng trong giỏ hàng, ô tích đồng ý điều khoản, ô ngày sinh. Tất cả tới máy chủ dưới dạng chuỗi. Nếu ô nhận thư quảng cáo dùng coerce boolean, và có client gửi chữ false thì sao? Người đã từ chối vẫn bị gửi thư. Kẻ xấu gửi kèm những khoá bạn không ngờ, như role bằng admin, mong máy chủ chép thẳng vào cơ sở dữ liệu. Lỗi này gọi là mass assignment. Cách phòng: z.object bỏ khoá lạ, chỉ dùng parsed.data, và thử cả ô trống, chữ false trong bài test.</p>"],
+  [12, "Key terms of this lesson",
     "<p>Key terms: schema; z infer, the output type; z input, the raw input type; zodResolver; safeParse; z flattenError; z coerce; z stringbool; and unknown keys, stripped by z object.</p>",
     "<p>Thuật ngữ: schema, z.infer, z.input, zodResolver, safeParse, z.flattenError, z.coerce, z.stringbool, và khoá lạ.</p>"],
-  [12, "Your turn — and what to keep",
+  [13, "Your turn — and what to keep",
     "<p>Your turn: one schema imported by the form and the action; call the action directly with bad data; add a number and a checkbox and try the coercions; and send an extra role field to see it dropped.</p>",
     "<p>Tới lượt bạn: một tệp schema, import vào form và action. Gọi thẳng action với dữ liệu sai, nhận lỗi từng trường. Thêm một ô số và một ô tích vào form, thử z.number, z.coerce và z.stringbool. Gửi thêm khoá role rồi in parsed.data. Tóm lại: một schema, hai lần import. Client là trải nghiệm, server là bảo vệ. FormData là chuỗi. Chỉ dùng parsed.data. Bạn mở Code Lab Next.js, module Server Actions và mẫu ghi dữ liệu để luyện. Bài sau: upload tệp từ trình duyệt tới storage.</p>"],
 ]);

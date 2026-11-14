@@ -568,7 +568,7 @@ const DU_LIEU = {
  }
 };
 /*HET_DU_LIEU*/
-import { lamDeck, tsx, tn, br, box, two, steps, kw, c, cmp, icards } from './_nxj-chung.mjs';
+import { lamDeck, tsx, tn, br, box, two, steps, kw, c, cmp, icards, thucTe4 } from './_nxj-chung.mjs';
 
 export const deck = { key: 'nxj-16-1', code: 'NXJ 16.1', title: 'Two ways to build a form', sub: 'Chapter 16 · Lesson 16.1' };
 const O = (k) => { const v = DU_LIEU[`n16-1:${k}`]; if (v === undefined) throw new Error('thiếu ' + k); return v; };
@@ -660,6 +660,8 @@ export const S = [
     D(box('All client forms', 'The Next.js app has no <code>\'use server\'</code> at all: every form is a client form that calls the Express backend — which checks everything again.', 'lam'),
       box('react-hook-form + Zod are installed', 'Used by six forms: login, register, password reset and change, and a game editor. The one <code>&lt;form action&gt;</code> found posts to GitHub, not to an action.', 'xanh')), 'r56'),
     en: 'cuongthai.com: about one hundred thirty client forms and no Server Action at all; every form calls the Express backend, which checks again. react-hook-form and Zod are installed and used by six forms, such as login and register.' },
+  { t: "Not learning in a vacuum: real life, what if, the attacker", to: true, body: thucTe4({ doi: ["📶", "Flaky dorm Wi-Fi", ["the page shows, its JavaScript has not arrived", "you press Submit right then"]], neu: ["🔑", "A client-style sign-in form, submitted early?", ["<code>?password=…</code> lands in the URL", "shared-PC history · campus network logs"]], xau: ["🛠️", "DevTools / curl skip the browser", ["send straight to the endpoint", "client-side checks stop nothing"]], phong: ["🛡️", "<code>method=\"post\"</code> + check on the server", ["client forms still declare method/action", "the real rules live on the server"]] }),
+    en: "Real life: you fill a sign-up form on your phone in the dorm, the network flickers, and you press submit before the page has finished loading. What if that is a sign-in form built the client way? The password lands in the address bar, in a shared computer's history and in the campus network logs. An attacker needs no browser: DevTools or curl skips every check that runs in the browser. Prevent it: give client forms method=\"post\", and always check again on the server." },
   { t: 'Key terms of this lesson', body: `<div style="display:flex;flex-wrap:wrap;gap:12px">${[
       kw('Server Action form', '&lt;form action={fn}&gt;'), kw('FormData', 'what the browser posts'), kw('Client form', 'onSubmit + fetch'), kw('Controlled input', 'value + onChange'),
       kw('Progressive enhancement', 'works before JS'), kw('Hydration gap', 'visible, not yet interactive'), kw('Native GET', 'a form with no handler'), kw('Server check', 'the one that protects you'),

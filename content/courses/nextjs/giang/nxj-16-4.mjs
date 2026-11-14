@@ -1,4 +1,4 @@
-/** Giảng theo slide — bài 16.4 Upload file: từ trình duyệt tới storage (deck nxj-16-4, 13 slide). VI = lời giảng video nxj-16-4; EN = ghi chú `en` của deck. SINH bằng scratchpad/nxj/giang.mjs — sửa ở deck/kichban rồi sinh lại. */
+/** Giảng theo slide — bài 16.4 Upload file: từ trình duyệt tới storage (deck nxj-16-4, 14 slide). VI = lời giảng video nxj-16-4; EN = ghi chú `en` của deck. SINH bằng scratchpad/nxj/giang.mjs — sửa ở deck/kichban rồi sinh lại. */
 import { walkNxj } from '../_slides.mjs';
 
 export default walkNxj('nxj-16-4', "File uploads: from the browser to storage", "Upload file: từ trình duyệt tới storage", [
@@ -35,10 +35,13 @@ export default walkNxj('nxj-16-4', "File uploads: from the browser to storage", 
   [11, "cuongthai.com: both ways, in one backend",
     "<p>cuongthai.com uses both ways. Thirty-one route files use multer in memory, each with a size limit, fine for small files. Seven files call getSignedUploadUrl for direct uploads to R2. The database keeps keys, and the blob fix is in the repo since the second of July.</p>",
     "<p>cuongthai.com dùng cả hai cách. Ba mươi mốt tệp route dùng multer giữ tệp trong bộ nhớ, mỗi chỗ có giới hạn kích thước. Bảy tệp gọi hàm ký URL tải lên, để trình duyệt gửi thẳng lên R2. Cơ sở dữ liệu chỉ giữ khoá.</p>"],
-  [12, "Key terms of this lesson",
+  [12, "Not learning in a vacuum: real life, what if, the attacker",
+    "<p>Real life: changing a profile picture, or the whole class submitting assignments to the school system minutes before the deadline. What if 100 students upload a 40 MB video through the server at once? At ~220 MB of memory per file, the server runs out of RAM at the deadline. Attackers look for presign routes that do not check the caller and turn your bucket into free hosting for their files. Detect unusual bucket growth and strange keys. Prevent it: authenticate before signing, short expiry, server-chosen keys.</p>",
+    "<p>Đời thật: đổi ảnh đại diện trên mạng xã hội, hay nộp bài tập lên hệ thống của trường sát giờ hạn, khi cả lớp cùng nộp một lúc. Nếu một trăm sinh viên cùng nộp video bốn mươi MB qua máy chủ thì sao? Mỗi tệp tốn hơn hai trăm MB bộ nhớ, máy chủ hết RAM ngay giờ chót. Kẻ xấu săn những route ký URL không kiểm người gọi, biến kho của bạn thành chỗ chứa tệp miễn phí để phát tán. Cách nhận ra: dung lượng kho tăng bất thường, nhiều khoá lạ. Cách phòng: xác thực trước khi ký, hạn ngắn, khoá do máy chủ chọn.</p>"],
+  [13, "Key terms of this lesson",
     "<p>Key terms: object storage; the object key; a FormData upload through your server; the Server Action body size limit; RSS, process memory; presigned URL; SignatureDoesNotMatch; blob and data URLs; and the CDN URL built from a key.</p>",
-    "<p>Thuật ngữ: object storage, khoá object, upload qua FormData, giới hạn thân request, bộ nhớ tiến trình, URL ký sẵn, chữ ký không khớp, địa chỉ blob và data, và địa chỉ CDN.</p>"],
-  [13, "Your turn — and what to keep",
+    "<p>Thuật ngữ: object storage, khoá object, upload qua FormData, giới hạn thân request, bộ nhớ tiến trình, URL ký sẵn, chữ ký không khớp, địa chỉ blob, và CDN.</p>"],
+  [14, "Your turn — and what to keep",
     "<p>Your turn: run a local MinIO and upload through a route handler while printing memory; send two megabytes to a Server Action; add a presign route and upload directly; then edit the key and wait past the expiry.</p>",
     "<p>Tới lượt bạn: chạy một MinIO trong máy, upload qua route handler và in bộ nhớ tiến trình. Gửi hai MB vào Server Action rồi đọc nhật ký. Thêm route ký URL, PUT một tệp lớn bằng curl. Sửa khoá trong URL, và chờ quá hạn, rồi đọc lỗi. Tóm lại: byte vào kho, khoá vào cơ sở dữ liệu. Tệp nhỏ đi qua được, tệp lớn đi thẳng. Không bao giờ ghép tiền tố vào blob hay data. Bạn mở Code Lab Next.js, module API route và phát triển full-stack để luyện. Bài sau: trải nghiệm upload và phần bảo mật không được bỏ.</p>"],
 ]);

@@ -162,3 +162,16 @@ export function gantt(rows, opts = {}) {
   });
   return s + '</svg>';
 }
+
+/** Slide "Không học suông" (luật 14/11/2026): 4 thẻ 2×2 — đời thật · nếu… thì sao · góc kẻ xấu · nhận ra & phòng.
+ *  o = { doi, neu, xau, phong }, mỗi thẻ [emoji, tiêu đề, [dòng…]]. Mỗi thẻ là .card ⇒ toạ độ card#0…3. */
+export function thucTe4(o) {
+  const KIEU = [['Real life', '#2563eb', '#eff6ff'], ['What if…', '#ea580c', '#fff7ed'], ['The attacker', '#dc2626', '#fef2f2'], ['Detect & prevent', '#16a34a', '#f0fdf4']];
+  return `<div style="display:grid;grid-template-columns:1fr 1fr;gap:18px">${[o.doi, o.neu, o.xau, o.phong].map(([e, h, ys], i) => {
+    const [nhan, m, nen] = KIEU[i];
+    return `<div class="card" style="background:${nen};border:3px solid ${m};border-radius:16px;padding:14px 20px">`
+      + `<div style="display:flex;justify-content:space-between;align-items:center"><span style="font:800 21px/1.2 Arial;color:${m};letter-spacing:.04em;text-transform:uppercase">${nhan}</span><span style="font-size:38px;line-height:1">${e}</span></div>`
+      + `<div style="font:800 25px/1.25 Arial;color:#0f172a;margin:6px 0 6px">${h}</div>`
+      + ys.map((y) => `<div style="font:500 21px/1.35 Arial;color:#334155;margin-top:3px">• ${y}</div>`).join('') + '</div>';
+  }).join('')}</div>`;
+}

@@ -283,7 +283,7 @@ const DU_LIEU = {
  }
 };
 /*HET_DU_LIEU*/
-import { lamDeck, tsx, tn, br, box, two, steps, kw, c, cmp, icards, path } from './_nxj-chung.mjs';
+import { lamDeck, tsx, tn, br, box, two, steps, kw, c, cmp, icards, path, thucTe4 } from './_nxj-chung.mjs';
 
 export const deck = { key: 'nxj-16-3', code: 'NXJ 16.3', title: 'Validation with Zod: one schema, both sides', sub: 'Chapter 16 · Lesson 16.3' };
 const O = (k) => { const v = DU_LIEU[`n16-3:${k}`]; if (v === undefined) throw new Error('thiếu ' + k); return v; };
@@ -371,6 +371,8 @@ export const S = [
     D(box('Two copies, in sync today', 'The register form says <code>min(12)</code> + an uppercase letter in a Zod schema; the Express route says <code>isLength({ min: 12 })</code> + <code>matches(/[A-Z]/)</code> with express-validator.', 'lam'),
       box('Why not one schema?', 'The frontend and the backend are separate apps. Sharing means a small package both import — until then, every rule change is two edits and a chance to drift.', 'do2')), ''),
     en: 'cuongthai.com: the register password rule exists twice, a Zod schema in the frontend and express-validator in the backend. In sync today, but every change is two edits. The fix is a small shared package that both import.' },
+  { t: "Not learning in a vacuum: real life, what if, the attacker", to: true, body: thucTe4({ doi: ["🛒", "Cart quantity, checkbox, date of birth", ["FormData sends everything as strings", "\"3\" ≠ 3 · \"on\" ≠ true"]], neu: ["📧", "A 'promotions' box with coerce.boolean?", ["client sends \"false\" ⇒ true", "someone who opted out still gets email"]], xau: ["👑", "Mass assignment: role=admin", ["extra keys that are not on the form", "hoping the server copies them into the DB"]], phong: ["🛡️", "Drop unknown keys · use parsed.data only", ["measured: role dropped from data", "test empty fields, \"false\", extra keys"]] }),
+    en: "Real life: the quantity box in a cart, the 'I agree' checkbox, a date of birth — all reach the server as strings. What if a 'send me promotions' checkbox uses z.coerce.boolean() and a client sends the string 'false'? Someone who opted out still gets email. An attacker adds keys you did not expect, like role: 'admin', hoping the server copies them into the database — mass assignment. Prevent it: z.object drops unknown keys; use parsed.data only; test empty fields and the string 'false'." },
   { t: 'Key terms of this lesson', body: `<div style="display:flex;flex-wrap:wrap;gap:12px">${[
       kw('Schema', 'a runtime description'), kw('z.infer', 'the output type'), kw('z.input', 'the raw input type'), kw('zodResolver', 'schema → form errors'),
       kw('safeParse', '{ success, data | error }'), kw('z.flattenError', 'per-field messages'), kw('z.coerce', 'string → number…'), kw('z.stringbool', '"on" → true'),

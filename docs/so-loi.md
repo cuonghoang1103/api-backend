@@ -305,3 +305,10 @@ Mẫu một mục:
 - **Cách sửa:** dữ liệu vào kho dùng chung (`KhoKhamPhaCTL`, `KhoSuKienCTL`), tải từ `.task(id: nn)` của `HomNayCTL` (và Cộng đồng cho thẻ sự kiện); khối chỉ đọc kho. Kiểm lại trên máy ảo trỏ backend local: đủ khối, có dữ liệu.
 - **Ảnh hưởng:** chưa phát hành (bắt khi tự soát ảnh chụp).
 - **Bài học:** đừng đặt `.task`/`.onAppear` lên view có thể rỗng; tải dữ liệu ở view cha luôn hiện, hoặc ở kho.
+
+### 14/11/2026 — Video — công cụ soát giọng báo nhầm "chữ Anh sót" (component/props/state…)
+- **Triệu chứng:** lượt kiểm 21:20 giữ lại 5 tập Next.js (nxj-0-2/0-3/0-4/0-9/1-1) vì `anh-sot.py` báo sót `component`, `props`, `state`, `render`, `hook`, `export`; 20:20 đã sửa luật đọc trong kichban nxj-0-9 rồi lồng tiếng lại (thừa).
+- **Nguyên nhân:** `~/agent-nha/anh-sot.py` quét trường `doc` của thoigian.json, nhưng `giong/phienAmBai.ts` áp `giong/doc-tay.json` (đã có các chữ đó) SAU bước tạo `doc`, ngay lúc lồng tiếng ⇒ `doc` còn chữ Anh mà giọng đọc vẫn đúng (trường `nghe` của Whisper khớp).
+- **Cách sửa:** `anh-sot.py` nạp khoá `doc-tay.json` và bỏ qua các chữ đó; bỏ qua tập chưa có thoigian.json (trước đây in ra traceback). 16 tập đạt được thả sang render.
+- **Ảnh hưởng:** chậm render vài tập + 1 lượt lồng tiếng lại thừa; không tập lỗi nào lên web.
+- **Bài học:** bộ soát phải dùng CÙNG từ điển với bước lồng tiếng; báo "sót" thì đối chiếu trường `nghe` trước khi sửa luật.

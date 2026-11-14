@@ -214,3 +214,10 @@ Mẫu một mục:
 - **Cách sửa:** `safePresignContentType()` (uploadService) hạ HTML/SVG/JS/XML (theo kiểu HOẶC đuôi) thành `application/octet-stream` trước khi ký — không từ chối, tệp vẫn tải về được; Hub trả `contentType` đã ký và HubUploadModal PUT đúng kiểu đó (CT Work vốn PUT theo `headers` trả về); complete kiểm `keyBelongsToUser` (403 `KEY_NOT_OWNED`) và xoá object quá cỡ; cron bỏ qua hàng chờ có key không thuộc người tạo. `tsc` xanh, test work portal/permissions 66/66.
 - **Ảnh hưởng:** mọi người dùng Hub / CT Work / đăng video; tệp nội dung chủ động tải lên TRƯỚC 14/11 vẫn nằm trên bucket với kiểu cũ — cần rà prefix `hub-files/` + đính kèm work theo Content-Type (việc tay).
 - **Bài học:** mọi đường tải lên (multer, URL ký sẵn, nhập từ URL) phải đi qua CÙNG một chốt kiểm kiểu tệp; comment "rejected on every upload path" không thay được grep các chỗ gọi. Mọi tuyến nhận "key" từ client phải kiểm chủ trước khi ghi hàng/xoá.
+
+### 14/11/2026 — Web (Tailwind) — cn() không gộp được bóng tuỳ biến: shadow-neon luôn thắng
+- **Triệu chứng:** `cn('shadow-neon', 'shadow-lg')` giữ cả hai lớp; bóng neon luôn thắng bất kể thứ tự ⇒ component nhận `className="shadow-lg"` để đè bóng mặc định không đè được (52 lượt shadow-neon/premium-card trong 43 tệp).
+- **Nguyên nhân:** `frontend/src/lib/utils.ts` dùng `twMerge` mặc định — tailwind-merge không đọc `tailwind.config.ts`, nên không biết `theme.extend.boxShadow` (neon, neon-lg, neon-cyan, premium-card(-hover), studio-card(-hover)) thuộc nhóm `shadow` (bắt khi soạn khoá Tailwind Ch3).
+- **Cách sửa:** `extendTailwindMerge({ extend: { classGroups: { shadow: [{ shadow: [...7 tên] }] } } })`; thử: `cn('shadow-neon','shadow-lg')` ⇒ `shadow-lg`, đảo thứ tự ⇒ `shadow-neon`; tsc frontend xanh.
+- **Ảnh hưởng:** mọi component nhận className qua `cn()` mà có bóng tuỳ biến.
+- **Bài học:** thêm khoá mới vào theme (boxShadow, fontSize, colors có tên trùng tiền tố) ⇒ khai luôn cho tailwind-merge. Khi nâng Tailwind 4 phải nâng tailwind-merge 3 cùng lúc (2.6 xoá nhầm `bg-red-500` khi gặp `bg-linear-to-r`).

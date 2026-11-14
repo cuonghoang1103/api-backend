@@ -1,6 +1,18 @@
 import DOMPurify from 'isomorphic-dompurify';
 import { clsx, type ClassValue } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+import { extendTailwindMerge } from 'tailwind-merge';
+
+// 14/11/2026: tailwind-merge không biết bóng tuỳ biến trong tailwind.config.ts
+// (theme.extend.boxShadow) ⇒ cn('shadow-neon', 'shadow-lg') giữ CẢ HAI lớp và
+// neon luôn thắng bất kể thứ tự. Khai báo để lớp sau đè lớp trước như mọi shadow-*.
+// Thêm bóng mới vào boxShadow thì thêm tên vào đây.
+const twMerge = extendTailwindMerge({
+  extend: {
+    classGroups: {
+      shadow: [{ shadow: ['neon', 'neon-lg', 'neon-cyan', 'premium-card', 'premium-card-hover', 'studio-card', 'studio-card-hover'] }],
+    },
+  },
+});
 
 export const cn = (...inputs: ClassValue[]): string => twMerge(clsx(inputs));
 

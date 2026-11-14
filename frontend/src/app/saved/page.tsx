@@ -99,8 +99,12 @@ export default function SavedPostsPage() {
   const deleteCollection = useMutation({
     mutationFn: (id: number) => socialApi.deleteCollectionV2(id),
     onMutate: async (id) => {
-      // Optimistic remove from local list.
-      const prev = collections;
+      // Optimistic remove from local list. Chụp NGUYÊN mục cache
+      // ({ collections, uncategorized, total }) để quay lui — trước 14/11
+      // chụp mảng `collections` rồi ghi mảng vào chỗ object ⇒ xoá lỗi là
+      // danh sách trống tới khi F5.
+      await qc.cancelQueries({ queryKey: [...socialKeys.all, 'collections'] });
+      const prev = qc.getQueryData([...socialKeys.all, 'collections']);
       qc.setQueryData([...socialKeys.all, 'collections'], (old: any) =>
         old ? { ...old, collections: old.collections.filter((c: any) => c.id !== id) } : old,
       );

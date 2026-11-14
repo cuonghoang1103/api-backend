@@ -176,28 +176,30 @@ export const useAuthStore = create<AuthState>()(
         // Persisting the token in localStorage is an XSS attack vector.
         isAuthenticated: state.isAuthenticated,
       }),
-      onRehydrateStorage: () => (state) => {
-        // Zustand persist has already restored `user` and `isAuthenticated`
-        // from localStorage into the store by the time this callback fires.
-        // All we need to do is flip the two flags that the initial
-        // `useState` defaults set to `false`/`true` (which is wrong for
-        // the rehydration path — on SSR/hydration the user is already
-        // known from the cookie, so `isLoading: false` is correct too).
-        try {
-          const hasUser = Boolean(state && (state as any).user != null);
-          useAuthStore.setState({
-            isHydrated: true,
-            isLoading: false,
-            // Force `isAuthenticated` from the persisted state so the
-            // dashboard hook sees the real userId immediately after
-            // rehydration (not the `'guest'` fallback that fires when
-            // `isAuthenticated` is still `false` on first render).
-            isAuthenticated: hasUser,
-          });
-        } catch {
-          useAuthStore.setState({ isHydrated: true, isLoading: false });
-        }
-      },
+      // 14/11/2026: KHÔNG lật cờ trong `onRehydrateStorage` nữa. Với
+      // localStorage (đồng bộ), persist nạp xong NGAY TRONG `create()` —
+      // lúc đó `useAuthStore` chưa được gán ⇒ `useAuthStore.setState` ném
+      // ReferenceError, nhánh catch ném lần nữa, lỗi bị nuốt trong promise
+      // của persist ⇒ `isHydrated` kẹt false, `isLoading` kẹt true (trang
+      // "Đang tải…" mãi; nhiều trang phải tự chế đồng hồ an toàn để né).
+      // Lật cờ ở `markHydrated()` bên dưới, sau khi `create()` đã trả về.
     }
   )
 );
+
+/** Lật cờ sau khi persist nạp xong `user` / `isAuthenticated` từ localStorage. */
+function markHydrated() {
+  const hasUser = useAuthStore.getState().user != null;
+  useAuthStore.setState({
+    isHydrated: true,
+    isLoading: false,
+    // Lấy `isAuthenticated` theo user đã nạp để hook dashboard thấy đúng
+    // userId ngay sau khi nạp (không rơi vào nhánh 'guest').
+    isAuthenticated: hasUser,
+  });
+}
+
+if (typeof window !== 'undefined') {
+  if (useAuthStore.persist.hasHydrated()) markHydrated();
+  else useAuthStore.persist.onFinishHydration(markHydrated);
+}

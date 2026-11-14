@@ -6,6 +6,7 @@
  * nhãn nhỏ viết hoa màu xanh; số liệu thẳng cột (tabular-nums); màu chỉ để báo trạng thái.
  */
 import type { ReactNode } from 'react';
+import { cn } from '@/lib/utils';
 import type { LucideIcon } from 'lucide-react';
 
 export function PageHeader({
@@ -51,7 +52,7 @@ export function Section({
   className?: string;
 }) {
   return (
-    <section className={`rounded-[20px] border border-white/[0.13] bg-[var(--a-card)] p-5 ${className}`}>
+    <section className={cn('rounded-[20px] border border-white/[0.13] bg-[var(--a-card)] p-5', className)}>
       <div className="mb-3 flex min-h-9 items-center justify-between gap-2">
         <h2 className="flex items-center gap-2.5 text-[17px] font-bold text-white">
           {Icon && (

@@ -221,3 +221,10 @@ Mẫu một mục:
 - **Cách sửa:** `extendTailwindMerge({ extend: { classGroups: { shadow: [{ shadow: [...7 tên] }] } } })`; thử: `cn('shadow-neon','shadow-lg')` ⇒ `shadow-lg`, đảo thứ tự ⇒ `shadow-neon`; tsc frontend xanh.
 - **Ảnh hưởng:** mọi component nhận className qua `cn()` mà có bóng tuỳ biến.
 - **Bài học:** thêm khoá mới vào theme (boxShadow, fontSize, colors có tên trùng tiền tố) ⇒ khai luôn cho tailwind-merge. Khi nâng Tailwind 4 phải nâng tailwind-merge 3 cùng lúc (2.6 xoá nhầm `bg-red-500` khi gặp `bg-linear-to-r`).
+
+### 14/11/2026 — Web (admin) — Section của trang admin không cho người gọi đè đệm
+- **Triệu chứng:** `<Section className="p-0">` (hay `p-2`…) vẫn ra 20px đệm — người gọi không đè được (bắt khi soạn khoá Tailwind 4.3; hôm nay người gọi chỉ truyền `mb-8` nên chưa ai thấy).
+- **Nguyên nhân:** `frontend/src/components/admin/ui.tsx:54` nối chuỗi `` `… p-5 ${className}` `` — hai lớp padding cùng có mặt, thắng theo thứ tự trong CSS chứ không theo thứ tự viết.
+- **Cách sửa:** `cn('… p-5', className)` (tailwind-merge bỏ `p-5` khi người gọi truyền padding); tsc frontend xanh.
+- **Ảnh hưởng:** trang admin dùng `Section` (phơi nhiễm, chưa hỏng).
+- **Bài học:** component nhận `className` để người gọi tuỳ biến phải gộp bằng `cn()`, không nối chuỗi.

@@ -541,7 +541,7 @@ $ grep -nE "Quiet: true|contentDisposition\\?: string|transformToByteArray|catch
 430:  } catch {
 $ grep -rln "GetObjectCommand" src | grep -v "\\.test\\." | wc -l | tr -d ' '
 11</div>
-<p>Note: <code>deleteObjects()</code> sends <code>Quiet: true</code> and does not read <code>res.Errors</code>, so a per-key failure (for example AccessDenied on one key) would pass silently; <code>objectExists()</code> returns <code>false</code> on any error, including wrong credentials.</p>
+<p>Note: <code>deleteObjects()</code> sends <code>Quiet: true</code>; until 14/11/2026 it did not read <code>res.Errors</code>, so a per-key failure (AccessDenied on one key — reproduced in 2.3) passed silently. Fixed the same day (commit 3974b33): it now logs the failed keys, and <code>objectExists()</code> logs errors other than 404.</p>
 <h3>🔁 Run it yourself</h3>
 <p>With the local MinIO from Start here (1/2) and the project from 1.1: create a bucket (<code>aws s3 mb s3://bon-lenh</code>), then write the scripts above (<code>put.mjs</code>, <code>get.mjs</code>, <code>head.mjs</code>, <code>xoa.mjs</code>, <code>loi.mjs</code>), each importing one shared <code>S3Client</code> with <code>forcePathStyle: true</code>.</p>
 <h3>🔗 Go deeper in other courses</h3>
@@ -733,7 +733,7 @@ $ grep -nE "Quiet: true|contentDisposition\\?: string|transformToByteArray|catch
 430:  } catch {
 $ grep -rln "GetObjectCommand" src | grep -v "\\.test\\." | wc -l | tr -d ' '
 11</div>
-<p>Lưu ý: <code>deleteObjects()</code> gửi <code>Quiet: true</code> và không đọc <code>res.Errors</code>, nên lỗi theo từng key (ví dụ AccessDenied ở một key) sẽ trôi qua im lặng; <code>objectExists()</code> trả <code>false</code> với mọi lỗi, kể cả sai khoá.</p>
+<p>Lưu ý: <code>deleteObjects()</code> gửi <code>Quiet: true</code>; trước 14/11/2026 nó không đọc <code>res.Errors</code>, nên lỗi theo từng key (AccessDenied ở một key — tái hiện ở bài 2.3) trôi qua im lặng. Đã sửa cùng ngày (commit 3974b33): nay ghi lại các key xoá hỏng, và <code>objectExists()</code> ghi lỗi khác 404.</p>
 <h3>🔁 Tự chạy lại</h3>
 <p>Với MinIO cục bộ ở bài Bắt đầu tại đây (1/2) và dự án ở bài 1.1: tạo bucket (<code>aws s3 mb s3://bon-lenh</code>), rồi viết các script ở trên (<code>put.mjs</code>, <code>get.mjs</code>, <code>head.mjs</code>, <code>xoa.mjs</code>, <code>loi.mjs</code>), mỗi cái import chung một <code>S3Client</code> với <code>forcePathStyle: true</code>.</p>
 <h3>🔗 Học sâu hơn ở khoá khác</h3>

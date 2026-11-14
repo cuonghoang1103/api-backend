@@ -340,3 +340,17 @@ Mẫu một mục:
 - **Cách sửa:** thêm đủ nguyên âm có dấu vào `CHU_VIET_RIENG`; phép kiểm "câu Anh lẫn tiếng Việt" dùng biểu thức riêng chỉ gồm chữ chắc chắn là tiếng Việt (ă đ ơ ư + dấu hỏi/nặng/tổ hợp). Cùng commit với tính năng.
 - **Ảnh hưởng:** chỉ lúc soạn (3 câu dịch bị viết vòng, nghĩa vẫn đúng).
 - **Bài học:** bộ kiểm heuristics phải thử trên câu ĐÚNG tối giản trước khi giao cho người/agent soạn — báo nhầm làm người soạn sửa nội dung đúng thành nội dung gượng.
+
+### 15/11/2026 — CT Language — giọng đọc Trung/Nhật/Anh "rất khó nghe và nghe sai"
+- **Triệu chứng:** user báo giọng đọc mặc định trong app (từ, chữ cái, bài đọc) khó nghe, đọc sai — nghe rõ là giọng máy.
+- **Nguyên nhân:** (1) `ielts.routes.ts › POST /ielts/doc` bắt đăng nhập ⇒ khách (app cho học không tài khoản) luôn đọc bằng giọng iPhone mặc định bản "Compact"; (2) `GiongSachHoc.swift › CHO_TOI_DA = 0.6` (đặt hôm 14/11 để "bấm là đọc") ngắn hơn thời gian Azure sinh + tải một từ (~0,7–1,3 s) ⇒ gần như MỌI lần bấm đầu rơi về giọng iPhone; (3) `CaiDatGiong.giongTuDong` lọc tiền tố "zh" nên giọng zh-HK Enhanced (Quảng Đông) có thể thắng zh-CN Compact; (4) giọng iPhone đọc kanji đứng một mình hay sai âm.
+- **Cách sửa:** `POST /ctlanguage/doc` (optionalAuth, trần sinh mới theo user hoặc IP — `ctlanguage.doc.routes.ts`, ea42a3fef) + app bật `GiongSachHoc.choPhepKhach`; chờ 1,6 s; tiếng Trung chỉ zh-CN; `ClipSH.docMay` = kana cho từ tiếng Nhật khi phải đọc bằng giọng máy; tải sẵn bớt (40/màn) đỡ ăn trần 400 câu mới/ngày (ios f5e71db).
+- **Ảnh hưởng:** mọi người dùng CT Language trên TestFlight bản 1–7, nặng nhất là khách chưa đăng nhập.
+- **Bài học:** "phản hồi ngay" bằng đường dự phòng kém chất lượng là đổi lỗi chậm lấy lỗi nghe tệ — ngưỡng chờ phải đo theo thời gian thật của đường chính; và tính năng mở cho khách thì mọi tài nguyên nó dùng (ở đây giọng máy chủ) cũng phải mở cho khách.
+
+### 15/11/2026 — CT Language (Thư viện ngữ pháp) — đáp án quiz dồn về các lựa chọn đầu
+- **Triệu chứng:** N3 / HSK3 / HSK4 gần như không có câu nào đáp án ở lựa chọn thứ 4 (N3: 2/237, HSK4: 1/135); A1–A2 lệch về lựa chọn 1–2 — đoán theo vị trí là đúng.
+- **Nguyên nhân:** 7 agent con soạn `content/ctlanguage/ngu-phap/**` theo thói quen đặt đáp án đúng lên đầu; `scripts/ctlanguage-kiem-ngu-phap.mts` chỉ chặn "3 câu cùng một vị trí", không kiểm phân bố.
+- **Cách sửa:** đảo thứ tự lựa chọn theo hạt giống cố định (băm id + số câu), đảo lại câu cuối nếu cả 3 câu trùng vị trí; không câu nào tham chiếu vị trí (đã quét "phương án A", "cả hai"…) — 318d06e39.
+- **Ảnh hưởng:** chưa phát hành (bắt khi soát bàn giao).
+- **Bài học:** nội dung trắc nghiệm do người/AI soạn luôn lệch vị trí đáp án — xáo bằng máy sau khi soạn, đừng tin người soạn tự rải.

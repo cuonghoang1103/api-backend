@@ -14,6 +14,13 @@ const config: Config = {
   // Use :is() to apply theme styles conditionally
   theme: {
     extend: {
+      // 14/11/2026: Tailwind 3 không có khe 4.5/5.5 (v4 mới có) ⇒ 16 chỗ
+      // w-4.5/h-4.5/w-5.5/h-5.5 trong 7 tệp không sinh luật nào, icon giữ
+      // cỡ mặc định 24px thay vì 18px/22px.
+      spacing: {
+        '4.5': '1.125rem',
+        '5.5': '1.375rem',
+      },
       colors: {
 
         // Màu theo kỹ năng. Giá trị thật nằm ở biến CSS trong globals.css và

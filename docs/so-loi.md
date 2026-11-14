@@ -179,3 +179,10 @@ Mẫu một mục:
 - **Cách sửa:** đọc `res.Errors` và `console.warn` số key hỏng + 5 key đầu (không ném — người gọi là việc dọn dẹp); `objectExists` ghi warn với lỗi khác 404 (vẫn trả false); dự phòng `getMediaUrl` = `https://media.cuongthai.com`. `tsc` xanh, `storageSandbox.test.ts` 5/5.
 - **Ảnh hưởng:** voInk, notes (xoá tệp), TTS / IELTS gia sư (kiểm tệp có sẵn) — trước đây lỗi quyền/khoá vô hình trong log.
 - **Bài học:** API "hàng loạt" của S3 báo thành công ở tầng HTTP và báo lỗi từng phần trong body — luôn đọc mảng lỗi. Hàm "trả false khi lỗi" phải phân biệt "không có" với "không hỏi được".
+
+### 14/11/2026 — Web (Tailwind) — icon cỡ `w-4.5`/`h-4.5`/`w-5.5` hiện to 24px
+- **Triệu chứng:** icon lucide ở trang creator/ideas, hoc-sql LabPanel, StatsSection, UploadTrackModal, SimulationStudio, ScriptVersionPanel hiện 24px thay vì 18px/22px (bắt khi soạn khoá Tailwind Ch1).
+- **Nguyên nhân:** `frontend/tailwind.config.ts` — Tailwind 3.4.19 không có khe spacing 4.5/5.5 (Tailwind 4 mới sinh tự động) ⇒ 16 lượt trong 7 tệp không sinh luật nào; `.w-4\.5{` trong CSS build = 0. `DigitalShopTermsGate.tsx:80` từng tự vá bằng `style={{ width: 18 }}`.
+- **Cách sửa:** thêm `theme.extend.spacing` `'4.5': '1.125rem'`, `'5.5': '1.375rem'`; build CLI kiểm `.w-4\.5{width:1.125rem}` có mặt.
+- **Ảnh hưởng:** 7 tệp nói trên (bố cục lệch nhẹ, icon to).
+- **Bài học:** lớp viết đúng cú pháp mà không có trong thang thì Tailwind im lặng bỏ qua — không lỗi build. Khi nghi lớp "không ăn", grep CSS build chứ đừng nhìn mã nguồn.

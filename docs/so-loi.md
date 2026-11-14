@@ -18,6 +18,13 @@ Mẫu một mục:
 
 ---
 
+### 14/11/2026 — App CT Language — Bấm loa / mở trang từ / màn thi treo hàng chục giây trên máy vừa cài
+- **Triệu chứng:** máy ảo mới (và có thể máy thật vừa cài): mở trang từ trắng >30 s; màn thi đứng hình khi tự phát bài nghe.
+- **Nguyên nhân:** `Shared/NgonNgu/CaiDatGiong.swift › giongTuDong` gọi `AVSpeechSynthesisVoice.speechVoices()` ĐỒNG BỘ trên luồng chính mỗi lần đọc; lần đầu dịch vụ TTS của iOS chưa thức ⇒ treo. Bản làm nóng mới (`GiongSachHoc.lamNongGiongMay`) còn gọi đúng hàm đó.
+- **Cách sửa:** `KhoGiongMay` nạp danh sách ở nền một lần (khởi động app gọi `napNen`), `giongTuDong` chưa có danh sách thì dùng ngay giọng mặc định của vùng, không chờ; màn chọn giọng (người dùng chủ động mở) mới nạp đồng bộ. Kèm: dấu `"` chưa escape trong chuỗi `PhapLyCTL.swift` (commit 56d37a0) làm hỏng build — đổi sang ngoặc “ ”.
+- **Ảnh hưởng:** mọi nút đọc to của CT Language + khoá kiểu sách app CuongThai, lần dùng đầu sau khi cài.
+- **Bài học:** API hệ thống "trả mảng" vẫn có thể là lời gọi liên tiến trình — không gọi trên luồng chính trong đường bấm; build lại SAU MỖI sửa chuỗi, kể cả sửa một câu chữ.
+
 ### 14/11/2026 — App CT Language (đọc to) — Mở trang từ treo trắng cả màn: `speechVoices()` chạy trên luồng chính
 - **Triệu chứng:** vừa cài app (máy ảo mới, iOS 27), mở một trang từ / màn có nút loa ⇒ màn trắng, app không phản hồi > 30 giây; không có yêu cầu nào tới máy chủ.
 - **Nguyên nhân:** `ios-app/…/Shared/SachHoc/GiongSachHoc.swift` `lamNongGiongMay()` (thêm 14/11 để "bấm là kêu") gọi `CaiDatGiong.giongTuDong` ⇒ `AVSpeechSynthesisVoice.speechVoices()` ngay trên luồng chính, trong `napTruoc` của `.task` màn. Hàm đó hỏi dịch vụ TTS của hệ thống ĐỒNG BỘ (`axUnsafeForcedSync` + semaphore); dịch vụ chưa dựng xong danh sách giọng thì luồng chính đứng chờ (mẫu `sample`: 850/850 mẫu nằm ở `semaphore_wait_trap`).

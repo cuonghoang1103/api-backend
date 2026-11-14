@@ -268,7 +268,17 @@ export async function deleteObjects(keys: string[]): Promise<void> {
         Quiet: true,
       },
     });
-    await client.send(cmd);
+    // 14/11/2026: DeleteObjects trả HTTP 200 kể cả khi MỘT SỐ key xoá hỏng
+    // (AccessDenied, InternalError…) — lỗi nằm trong `Errors` của body. Trước
+    // đây không đọc ⇒ xoá hỏng một phần trôi qua im lặng, tệp mồ côi nằm lại.
+    const res = await client.send(cmd);
+    const loi = res.Errors ?? [];
+    if (loi.length) {
+      console.warn(
+        `[r2] deleteObjects: ${loi.length}/${chunk.length} key xoá hỏng — ` +
+          loi.slice(0, 5).map((e) => `${e.Key} (${e.Code})`).join(', '),
+      );
+    }
   }
 }
 
@@ -288,7 +298,14 @@ export async function objectExists(key: string): Promise<boolean> {
       }),
     );
     return true;
-  } catch {
+  } catch (err: any) {
+    // 404 = không có tệp (bình thường). Lỗi khác (sai khoá 403, mạng…) vẫn
+    // trả false như cũ để người gọi không vỡ, nhưng ghi lại — trước 14/11
+    // sai khoá trông y hệt "chưa có tệp".
+    const ma = err?.$metadata?.httpStatusCode;
+    if (ma !== 404 && err?.name !== 'NotFound') {
+      console.warn(`[r2] objectExists(${key}): ${err?.name ?? 'lỗi'} ${ma ?? ''} — coi như không có tệp`);
+    }
     return false;
   }
 }

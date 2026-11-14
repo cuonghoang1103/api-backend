@@ -199,7 +199,10 @@ export const getMediaUrl = (
   trackId?: number | string,
 ): string => {
   const cdnBase =
-    process.env.NEXT_PUBLIC_R2_PUBLIC_URL || 'https://e8105049f41b90209104afb5911d84b2.r2.cloudflarestorage.com';
+    // Dự phòng = tên miền CDN công khai. KHÔNG dùng endpoint API
+    // `<account>.r2.cloudflarestorage.com`: nó đòi chữ ký (GET trần ⇒ 403),
+    // không qua CDN, và lộ account id trong gói JS (sửa 14/11/2026).
+    process.env.NEXT_PUBLIC_R2_PUBLIC_URL || 'https://media.cuongthai.com';
   const apiBase =
     process.env.NEXT_PUBLIC_API_URL || 'https://api.cuongthai.com';
 

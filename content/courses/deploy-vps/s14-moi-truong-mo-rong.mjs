@@ -305,7 +305,7 @@ staging</div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">The Twelve-Factor App — X. Dev/prod parity</span><span class="lc-sub">12factor.net/dev-prod-parity — the time, personnel and tools gaps.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Martin Fowler — Feature Toggles</span><span class="lc-sub">martinfowler.com/articles/feature-toggles.html — release, ops, experiment and permission toggles, and their cost.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">PostgreSQL — pg_dump</span><span class="lc-sub">postgresql.org/docs/current/app-pgdump.html — the custom format used here.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">GitHub Actions — pull_request events</span><span class="lc-sub">/courses/github-actions/learn${REF} — running the preview workflow for real.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">GitHub Actions — 1.2 What starts a run</span><span class="lc-sub">/courses/github-actions/learn?lessonSlug=ga-1-2-kich-hoat${REF.replace('?', '&')} — pull_request and its types (opened, synchronize, closed): what starts the preview workflow, and what tears it down.</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 14 · Bài 14.1</span>
@@ -561,7 +561,7 @@ staging</div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">The Twelve-Factor App — X. Dev/prod parity</span><span class="lc-sub">12factor.net/dev-prod-parity — ba khoảng cách: thời gian, con người, công cụ.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Martin Fowler — Feature Toggles</span><span class="lc-sub">martinfowler.com/articles/feature-toggles.html — cờ phát hành, vận hành, thí nghiệm, phân quyền, và cái giá của chúng.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">PostgreSQL — pg_dump</span><span class="lc-sub">postgresql.org/docs/current/app-pgdump.html — định dạng custom dùng ở đây.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">GitHub Actions — sự kiện pull_request</span><span class="lc-sub">/courses/github-actions/learn${REF} — chạy thật workflow preview.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">GitHub Actions — 1.2 Cái gì KHỞI ĐỘNG một lần chạy</span><span class="lc-sub">/courses/github-actions/learn?lessonSlug=ga-1-2-kich-hoat${REF.replace('?', '&')} — pull_request và các types (opened, synchronize, closed): thứ bật workflow preview, và thứ gỡ nó.</span></span></div>
 </div>
 `,
     },
@@ -907,9 +907,9 @@ $ ./rolling.sh v2
 
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">nginx — ngx_http_upstream_module</span><span class="lc-sub">nginx.org/en/docs/http/ngx_http_upstream_module.html — server parameters, zone, keepalive, balancing methods.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">HAProxy 2.8 — Configuration Manual</span><span class="lc-sub">docs.haproxy.org/2.8/configuration.html — httpchk, inter/fall/rise, redispatch, timeouts.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Nginx — reverse proxy and load balancing</span><span class="lc-sub">/courses/nginx/learn${REF} — the upstream syntax in depth.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Redis — sessions and caching</span><span class="lc-sub">/courses/redis/learn${REF} — where the sessions went.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Object storage — R2 and S3</span><span class="lc-sub">/courses/object-storage/learn${REF} — where the uploads go.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Nginx — 9.1 The upstream block and four ways to choose</span><span class="lc-sub">/courses/nginx/learn?lessonSlug=nginx-9-1-khoi-upstream${REF.replace('?', '&')} — the upstream syntax in depth: weights, backup, least_conn, ip_hash.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Redis — 2.2 How expiration really works</span><span class="lc-sub">/courses/redis/learn?lessonSlug=rd-2-2-het-han${REF.replace('?', '&')} — where the sessions went: sess:* keys with a TTL, and what happens when they expire.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Object storage — 0.1 Object storage vs a file system</span><span class="lc-sub">/courses/object-storage/learn?lessonSlug=os-0-1-vs-fs${REF.replace('?', '&')} — where the uploads go, and the three differences from /srv/uploads on one machine.</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 14 · Bài 14.2</span>
@@ -1245,9 +1245,9 @@ $ ./rolling.sh v2
 
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">nginx — ngx_http_upstream_module</span><span class="lc-sub">nginx.org/en/docs/http/ngx_http_upstream_module.html — tham số server, zone, keepalive, cách chia tải.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">HAProxy 2.8 — Configuration Manual</span><span class="lc-sub">docs.haproxy.org/2.8/configuration.html — httpchk, inter/fall/rise, redispatch, các mốc timeout.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Nginx — reverse proxy và cân bằng tải</span><span class="lc-sub">/courses/nginx/learn${REF} — cú pháp upstream chi tiết.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Redis — phiên đăng nhập và bộ đệm</span><span class="lc-sub">/courses/redis/learn${REF} — phiên đăng nhập đã đi đâu.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Object storage — R2 và S3</span><span class="lc-sub">/courses/object-storage/learn${REF} — ảnh tải lên đi đâu.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Nginx — 9.1 Khối upstream và bốn cách chọn máy</span><span class="lc-sub">/courses/nginx/learn?lessonSlug=nginx-9-1-khoi-upstream${REF.replace('?', '&')} — cú pháp upstream chi tiết: trọng số, backup, least_conn, ip_hash.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Redis — 2.2 Hết hạn thật sự hoạt động ra sao</span><span class="lc-sub">/courses/redis/learn?lessonSlug=rd-2-2-het-han${REF.replace('?', '&')} — phiên đăng nhập đã đi đâu: khoá sess:* có TTL, và chuyện gì xảy ra khi chúng hết hạn.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Object storage — 0.1 Object storage vs file system</span><span class="lc-sub">/courses/object-storage/learn?lessonSlug=os-0-1-vs-fs${REF.replace('?', '&')} — ảnh tải lên đi đâu, và ba khác biệt so với /srv/uploads trên một máy.</span></span></div>
 </div>
 `,
     },
@@ -1854,8 +1854,8 @@ $ which rsync
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">PostgreSQL — pg_dump</span><span class="lc-sub">postgresql.org/docs/current/app-pgdump.html — custom format, parallel restore.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">DigitalOcean — Bandwidth billing</span><span class="lc-sub">docs.digitalocean.com/platform/billing/bandwidth/ — $0.01/GiB overage, pooled per team.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Hetzner — Traffic</span><span class="lc-sub">docs.hetzner.com/robot/general/traffic/ — included traffic per location and the price per extra TB.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">PostgreSQL — replication</span><span class="lc-sub">/courses/postgresql/learn${REF} — streaming replicas for databases too big to dump during a freeze.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash — rsync, SSH, systemd timers</span><span class="lc-sub">/courses/linux-bash/learn${REF} — the tools this move is made of.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">PostgreSQL — 15.3 Streaming replication, built for real</span><span class="lc-sub">/courses/postgresql/learn?lessonSlug=postgresql-15-3-nhan-ban${REF.replace('?', '&')} — streaming replicas for databases too big to dump during a freeze, and promoting one at cut-over.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash — 9.4 Moving files: scp, rsync and the trailing slash</span><span class="lc-sub">/courses/linux-bash/learn?lessonSlug=lnx-9-4-scp-rsync${REF.replace('?', '&')} — the tool this move is made of (SSH is 9.3, cron and systemd timers 11.2).</span></span></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 14 · Bài 14.4</span>
@@ -2080,8 +2080,8 @@ $ which rsync
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">PostgreSQL — pg_dump</span><span class="lc-sub">postgresql.org/docs/current/app-pgdump.html — định dạng custom, restore song song.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">DigitalOcean — Tính tiền băng thông</span><span class="lc-sub">docs.digitalocean.com/platform/billing/bandwidth/ — vượt hạn mức $0,01/GiB, gộp chung cả nhóm.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Hetzner — Lưu lượng</span><span class="lc-sub">docs.hetzner.com/robot/general/traffic/ — lưu lượng có sẵn theo vị trí và giá mỗi TB vượt.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">PostgreSQL — bản sao (replication)</span><span class="lc-sub">/courses/postgresql/learn${REF} — replica streaming cho cơ sở dữ liệu quá lớn để dump trong lúc đóng băng.</span></span></div>
-<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash — rsync, SSH, bộ hẹn giờ systemd</span><span class="lc-sub">/courses/linux-bash/learn${REF} — những công cụ làm nên lần chuyển nhà này.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">PostgreSQL — 15.3 Nhân bản streaming, dựng thật</span><span class="lc-sub">/courses/postgresql/learn?lessonSlug=postgresql-15-3-nhan-ban${REF.replace('?', '&')} — replica streaming cho cơ sở dữ liệu quá lớn để dump trong lúc đóng băng, và promote nó lúc cắt chuyển.</span></span></div>
+<div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash — 9.4 Chuyển file: scp, rsync và dấu gạch chéo cuối</span><span class="lc-sub">/courses/linux-bash/learn?lessonSlug=lnx-9-4-scp-rsync${REF.replace('?', '&')} — công cụ làm nên lần chuyển nhà này (SSH ở 9.3, cron và timer systemd ở 11.2).</span></span></div>
 </div>
 `,
     },

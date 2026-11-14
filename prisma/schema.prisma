@@ -516,6 +516,13 @@ model User {
   workDeleteDecisions      WorkDeleteRequest[]       @relation("WorkDeleteRequestDecider")
   ctlBai                   CtlBai[]                  @relation("CtlBaiTacGia")
   ctlTraLoi                CtlTraLoi[]               @relation("CtlTraLoiTacGia")
+  ctlThichBai              CtlThichBai[]             @relation("CtlThichBaiNguoi")
+  ctlThichTraLoi           CtlThichTraLoi[]          @relation("CtlThichTraLoiNguoi")
+  ctlLuuBai                CtlLuuBai[]               @relation("CtlLuuBaiNguoi")
+  ctlDangTheoDoi           CtlTheoDoi[]              @relation("CtlTheoDoiNguoi")
+  ctlNguoiTheoDoi          CtlTheoDoi[]              @relation("CtlTheoDoiDuoc")
+  ctlThongBaoNhan          CtlThongBao[]             @relation("CtlThongBaoNhan")
+  ctlThongBaoGui           CtlThongBao[]             @relation("CtlThongBaoTu")
 
   @@index([email], name: "idx_users_email")
   @@map("users")
@@ -17781,18 +17788,36 @@ model CtlBai {
   /// en | ja | zh
   nn        String    @db.VarChar(2)
   userId    Int       @map("user_id")
-  /// hoi | thao-luan
+  /// hoi | thao-luan | chia-se | tim-ban
   loai      String    @default("hoi") @db.VarChar(12)
+  /// Tiêu đề tuỳ chọn (14/11/2026) — bài cũ null.
+  tieuDe    String?   @map("tieu_de") @db.VarChar(150)
   noiDung   String    @map("noi_dung") @db.Text
+  /// Thẻ chủ đề trong danh sách trắng theo ngôn ngữ (`congDongThe.ts`): ngu-phap, n5, hsk3, ielts…
+  the       String[]  @default([])
   soTraLoi  Int       @default(0) @map("so_tra_loi")
+  soThich   Int       @default(0) @map("so_thich")
+  /// Lượt xem — một người (hoặc một IP khách) một lần mỗi ngày (`ctl_luot_xem`).
+  soXem     Int       @default(0) @map("so_xem")
   soBaoCao  Int       @default(0) @map("so_bao_cao")
+  /// "BTV chọn" — admin đánh dấu (null = không).
+  btvLuc    DateTime? @map("btv_luc")
+  btvBoi    Int?      @map("btv_boi")
+  /// Tác giả sửa lần cuối.
+  suaLuc    DateTime? @map("sua_luc")
+  /// Đã nhờ Gấu (CuongMini AI) trả lời — mỗi bài tối đa MỘT lần (giành chỗ bằng updateMany where aiLuc null).
+  aiLuc     DateTime? @map("ai_luc")
   /// Ẩn (admin gỡ / đủ báo cáo / tác giả xoá) — dòng giữ lại để đối chiếu.
   anLuc     DateTime? @map("an_luc")
   anBoi     Int?      @map("an_boi")
   createdAt DateTime  @default(now()) @map("created_at")
 
-  user   User        @relation("CtlBaiTacGia", fields: [userId], references: [id], onDelete: Cascade)
-  traLoi CtlTraLoi[]
+  user     User          @relation("CtlBaiTacGia", fields: [userId], references: [id], onDelete: Cascade)
+  traLoi   CtlTraLoi[]
+  thich    CtlThichBai[]
+  luu      CtlLuuBai[]
+  luotXem  CtlLuotXem[]
+  thongBao CtlThongBao[]
 
   @@index([nn, id], name: "idx_ctl_bai_nn_id")
   @@index([userId], name: "idx_ctl_bai_user")
@@ -17800,21 +17825,123 @@ model CtlBai {
 }
 
 model CtlTraLoi {
-  id        Int       @id @default(autoincrement())
-  baiId     Int       @map("bai_id")
-  userId    Int       @map("user_id")
-  noiDung   String    @map("noi_dung") @db.Text
-  soBaoCao  Int       @default(0) @map("so_bao_cao")
-  anLuc     DateTime? @map("an_luc")
-  anBoi     Int?      @map("an_boi")
-  createdAt DateTime  @default(now()) @map("created_at")
+  id         Int       @id @default(autoincrement())
+  baiId      Int       @map("bai_id")
+  userId     Int       @map("user_id")
+  noiDung    String    @map("noi_dung") @db.Text
+  soThich    Int       @default(0) @map("so_thich")
+  /// Câu trả lời của 🐻 CuongMini AI — `userId` là NGƯỜI BẤM "Nhờ Gấu trả lời" (đếm lượt/ngày), không phải tác giả.
+  laAi       Boolean   @default(false) @map("la_ai")
+  /// Người hỏi chọn "Câu trả lời hay nhất" (mỗi bài tối đa một) — mốc này tính điểm xếp hạng theo tuần/tháng.
+  hayNhatLuc DateTime? @map("hay_nhat_luc")
+  soBaoCao   Int       @default(0) @map("so_bao_cao")
+  anLuc      DateTime? @map("an_luc")
+  anBoi      Int?      @map("an_boi")
+  createdAt  DateTime  @default(now()) @map("created_at")
 
-  bai  CtlBai @relation(fields: [baiId], references: [id], onDelete: Cascade)
-  user User   @relation("CtlTraLoiTacGia", fields: [userId], references: [id], onDelete: Cascade)
+  bai      CtlBai           @relation(fields: [baiId], references: [id], onDelete: Cascade)
+  user     User             @relation("CtlTraLoiTacGia", fields: [userId], references: [id], onDelete: Cascade)
+  thich    CtlThichTraLoi[]
+  thongBao CtlThongBao[]
 
   @@index([baiId, id], name: "idx_ctl_tra_loi_bai")
   @@index([userId], name: "idx_ctl_tra_loi_user")
   @@map("ctl_tra_loi")
+}
+
+/// CT Language cộng đồng (14/11/2026) — thích bài. Một người một lần (khoá chính đôi ⇒ bấm lại không đếm trùng).
+model CtlThichBai {
+  userId    Int      @map("user_id")
+  baiId     Int      @map("bai_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User   @relation("CtlThichBaiNguoi", fields: [userId], references: [id], onDelete: Cascade)
+  bai  CtlBai @relation(fields: [baiId], references: [id], onDelete: Cascade)
+
+  @@id([userId, baiId])
+  @@index([baiId], name: "idx_ctl_thich_bai_bai")
+  @@map("ctl_thich_bai")
+}
+
+/// Thích câu trả lời — tính điểm xếp hạng ("được thích") theo `createdAt`.
+model CtlThichTraLoi {
+  userId    Int      @map("user_id")
+  traLoiId  Int      @map("tra_loi_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user   User      @relation("CtlThichTraLoiNguoi", fields: [userId], references: [id], onDelete: Cascade)
+  traLoi CtlTraLoi @relation(fields: [traLoiId], references: [id], onDelete: Cascade)
+
+  @@id([userId, traLoiId])
+  @@index([traLoiId, createdAt], name: "idx_ctl_thich_tl")
+  @@map("ctl_thich_tra_loi")
+}
+
+/// Bài đã lưu (tab "Đã lưu").
+model CtlLuuBai {
+  userId    Int      @map("user_id")
+  baiId     Int      @map("bai_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User   @relation("CtlLuuBaiNguoi", fields: [userId], references: [id], onDelete: Cascade)
+  bai  CtlBai @relation(fields: [baiId], references: [id], onDelete: Cascade)
+
+  @@id([userId, baiId])
+  @@index([baiId], name: "idx_ctl_luu_bai_bai")
+  @@map("ctl_luu_bai")
+}
+
+/// Theo dõi người viết — RIÊNG của CT Language (không dùng `follows` của mạng xã hội web).
+model CtlTheoDoi {
+  /// Người bấm theo dõi
+  nguoiId   Int      @map("nguoi_id")
+  /// Người được theo dõi
+  duocId    Int      @map("duoc_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  nguoi User @relation("CtlTheoDoiNguoi", fields: [nguoiId], references: [id], onDelete: Cascade)
+  duoc  User @relation("CtlTheoDoiDuoc", fields: [duocId], references: [id], onDelete: Cascade)
+
+  @@id([nguoiId, duocId])
+  @@index([duocId], name: "idx_ctl_theo_doi_duoc")
+  @@map("ctl_theo_doi")
+}
+
+/// Lượt xem đã đếm: một (bài, người|IP khách băm, ngày VN) một dòng. Dòng > 3 ngày được dọn dần lúc ghi.
+model CtlLuotXem {
+  baiId Int      @map("bai_id")
+  /// "u:<userId>" hoặc "ip:<sha256 16 ký tự>"
+  nguoi String   @db.VarChar(40)
+  ngay  DateTime @db.Date
+
+  bai CtlBai @relation(fields: [baiId], references: [id], onDelete: Cascade)
+
+  @@id([baiId, nguoi, ngay])
+  @@index([ngay], name: "idx_ctl_luot_xem_ngay")
+  @@map("ctl_luot_xem")
+}
+
+/// Thông báo trong app (chuông): tra-loi · ai-tra-loi · nhac · thich-bai · thich-tra-loi · theo-doi · hay-nhat · btv-chon.
+model CtlThongBao {
+  id        Int      @id @default(autoincrement())
+  /// Người nhận
+  userId    Int      @map("user_id")
+  /// Người gây ra (null = hệ thống/BTV)
+  tuId      Int?     @map("tu_id")
+  loai      String   @db.VarChar(16)
+  baiId     Int?     @map("bai_id")
+  traLoiId  Int?     @map("tra_loi_id")
+  daDoc     Boolean  @default(false) @map("da_doc")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user   User       @relation("CtlThongBaoNhan", fields: [userId], references: [id], onDelete: Cascade)
+  tu     User?      @relation("CtlThongBaoTu", fields: [tuId], references: [id], onDelete: Cascade)
+  bai    CtlBai?    @relation(fields: [baiId], references: [id], onDelete: Cascade)
+  traLoi CtlTraLoi? @relation(fields: [traLoiId], references: [id], onDelete: Cascade)
+
+  @@index([userId, id], name: "idx_ctl_thong_bao_user")
+  @@index([userId, daDoc], name: "idx_ctl_thong_bao_chua_doc")
+  @@map("ctl_thong_bao")
 }
 
 /// CT Language — app iOS học Anh · Nhật · Trung (docs/ct-language-app.md, 12/11/2026).

@@ -54,7 +54,8 @@ phiếu điểm + bài ôn gợi ý, thống kê tiến bộ.
 **Game**: gõ pinyin/romaji nhanh, đấu PK với bạn, thử thách 60 giây, phần thưởng chuỗi ngày.
 
 **Cộng đồng**: hỏi đáp/thảo luận theo ngôn ngữ, bàn luận dưới đề thi, nhắn bạn học. ⚠️ Apple 1.2: bắt buộc báo cáo,
-chặn người, lọc nội dung, gỡ trong 24h — dùng lại hệ feed/messages của web nếu được.
+chặn người, lọc nội dung, gỡ trong 24h — dùng lại hệ feed/messages của web nếu được. Từ 14/11 là mạng xã hội học tập kiểu
+Hanzii (tab, thích, lưu, theo dõi, hay nhất, xếp hạng, thông báo, Nhờ Gấu) — xem nhật ký 14/11 "Cộng đồng kiểu mạng xã hội".
 
 **Giữ thói quen**: widget màn hình chính + màn khoá (từ hôm nay, chuỗi ngày), nhắc giờ học, streak, mục tiêu phút/ngày.
 
@@ -253,3 +254,22 @@ Câu hỏi cho user: Pro của CT Language có **dùng chung** với Pro web cuo
     → chọn ngôn ngữ + sổ → Lưu; app tra nghĩa khi active (`NhanChiaSeCTL.ap`, lỗi mạng giữ lại ≤3 lần rồi lưu thẻ tối thiểu).
     ⚠️ Lần archive đầu cần App ID mới có App Group — ký Automatic thường tự tạo; báo thiếu profile thì bật App Group cho bundle đó.
   · Test: `GauVaNhacTests`, `WidgetLatTheTests`, `HangDoiChiaSeTests`. DEBUG `CT_XEM_MAN`: `trang-phuc`, `on-tu`, `tro-choi-60`, `mung:<n>`.
+- 14/11 (APP + BACKEND): **Cộng đồng kiểu mạng xã hội học tập** (giống bố cục Hanzii; CHƯA deploy). Migration
+  `20261114150000_ctlanguage_cong_dong_mxh` (chỉ THÊM: cột `tieu_de`/`the`/`so_thich`/`so_xem`/`btv_*`/`sua_luc`/`ai_luc` ở `ctl_bai`;
+  `so_thich`/`la_ai`/`hay_nhat_luc` ở `ctl_tra_loi`; bảng `ctl_thich_bai`, `ctl_thich_tra_loi`, `ctl_luu_bai`, `ctl_theo_doi`, `ctl_luot_xem`,
+  `ctl_thong_bao`, FK CASCADE). Mã: `congDong.ts` (bảng tin `?tab=moi|noi-bat|btv|theo-doi|da-luu&q=&loai=&the=`, sửa bài, thích, lưu,
+  hay nhất, @nhắc, BTV, báo cáo bài/trả lời/NGƯỜI), `congDongNguoi.ts` (trang người dùng, theo dõi, xếp hạng 7/30 ngày, chuông),
+  `congDongGau.ts` (🐻 Nhờ Gấu: bài Hỏi, 1 lần/bài, free 2 · Pro 15 lượt/ngày, `llmComplete` purpose `language_tutor`), `congDongThuan.ts`
+  (điểm Nổi bật kiểu HN, huy hiệu Người mới/Hay giúp đỡ/Chuyên gia/Tích cực/Pro/BTV, thẻ theo ngôn ngữ — app chép ở `MoHinhCD.swift`).
+  Luật chặn áp ở MỌI tab, tìm kiếm, trang người dùng, xếp hạng, thông báo; chặn gỡ theo dõi hai chiều. Lượt xem: một người (khách: IP băm)
+  một lần/ngày VN. Câu AI: `userId` = người bấm, hiện tác giả id 0 "CuongMini AI", báo cáo được (kể cả người bấm), thông báo admin ghi
+  rõ "đừng khoá người bấm"; không cộng điểm xếp hạng. Admin "BTV chọn": `POST /cong-dong/admin/bai/:id/btv` (+ menu ⋯ trong app khi
+  `coTheChonBtv`). Sửa kèm: GET `/cong-dong/chan` bị `:nn` nuốt (sổ lỗi 14/11). App (`Modules/CongDong/`): thanh trên có xếp hạng · lọc ·
+  chuông (số chưa đọc), ô tìm kiếm, ô "Bạn đang thắc mắc điều gì?" + quy tắc, 5 tab, thẻ bài (avatar, huy hiệu, tiêu đề đậm, trích, thẻ,
+  ♡ 💬 👁, lưu — optimistic + rung + âm), Gấu nổi góc phải mở soạn bài, trang người dùng (báo cáo/chặn ngay trên trang), xếp hạng có
+  bục 1-2-3, thông báo (đọc hết). Máy chủ cũ (chưa deploy) ⇒ app vẫn giải mã được bảng tin cũ, tuyến mới 404 thì nút hoàn tác/hiện lỗi.
+  Test: `npx tsx --test src/services/ctlanguage/congDongThuan.test.ts src/routes/ctlanguage.congDong.routes.test.ts` + (CSDL local)
+  `src/services/ctlanguage/congDong.db.test.ts src/services/ctlanguage/congDongMxh.db.test.ts`; iOS `CongDongCDTests`. DEBUG `CT_XEM_MAN`:
+  `cong-dong`, `cong-dong-bai:<id>`, `cong-dong-nguoi:<id>`, `cong-dong-xep-hang`, `cong-dong-thong-bao`, `cong-dong-viet`.
+  ⚠️ Mục công bố AI (5.1.2(i)) đã liệt kê "câu hỏi" gửi AI — "Nhờ Gấu" gửi nội dung BÀI CỦA NGƯỜI KHÁC (đã công khai trong cộng đồng);
+  nên thêm một dòng vào công bố ở lần cập nhật kế. Chưa làm: ảnh đính kèm, tab "Tin nhắn" kiểu Hanzii (không làm chỗ trống — 2.1).

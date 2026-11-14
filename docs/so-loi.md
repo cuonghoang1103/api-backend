@@ -18,6 +18,13 @@ Mẫu một mục:
 
 ---
 
+### 14/11/2026 — Backend CT Language (cộng đồng) — "Người đã chặn" luôn trống: GET /cong-dong/chan bị `:nn` nuốt
+- **Triệu chứng:** app CT Language › Tôi › Người đã chặn không bao giờ hiện ai (đã chặn vẫn "Bạn chưa chặn ai"); máy chủ trả 400 `CTL_NN_SAI` "Ngôn ngữ không hỗ trợ".
+- **Nguyên nhân:** `src/routes/ctlanguage.routes.ts` khai `GET /cong-dong/:nn` (công khai) TRƯỚC `GET /cong-dong/chan` (sau `router.use(authenticate)`) ⇒ Express khớp "chan" vào `:nn` ⇒ `kiemNn('chan')` ném 400; app nuốt lỗi (`try?`) nên chỉ thấy danh sách rỗng.
+- **Cách sửa:** mọi GET `/cong-dong/<chữ cố định>` (chan, thong-bao, luot-gau, nguoi/…) dời lên TRÊN `/cong-dong/:nn`, gắn `authenticate` từng tuyến; test `src/routes/ctlanguage.congDong.routes.test.ts` đọc `router.stack` và đỏ nếu có tuyến `/cong-dong/<chữ>` cùng phương thức khai sau `:nn`. App: màn hiện lỗi thay vì "chưa chặn ai".
+- **Ảnh hưởng:** mọi người dùng app CT Language từ bước 6 (13/11, chưa lên App Store) — chặn VẪN có hiệu lực ở máy chủ, chỉ màn danh sách/bỏ chặn hỏng.
+- **Bài học:** tuyến tham số một đoạn (`/x/:p`) nuốt mọi tuyến chữ cố định cùng độ sâu khai sau nó — khai tuyến cố định trước, và có test thứ tự; app đừng `try?` rồi hiện "trống" cho một lỗi.
+
 ### 14/11/2026 — App CT Language (đọc to) — Chạm từ / chữ cái / bài đọc phải chờ 3–5 giây mới nghe
 - **Triệu chứng:** chạm loa ở từ điển, bảng chữ cái, thẻ ôn, bài học ⇒ im 3–5 s rồi mới đọc, người dùng tưởng hỏng.
 - **Nguyên nhân:** `ios-app/…/Shared/SachHoc/GiongSachHoc.swift` mỗi lần bấm làm HAI vòng mạng nối tiếp: `POST /ielts/doc` (máy chủ tổng hợp Azure + lưu R2 nếu chưa có) rồi AVPlayer tải mp3 từ CDN; chỉ nhớ URL trong RAM, không lưu tệp, không tải trước; giọng trong máy chỉ dùng khi lỗi.

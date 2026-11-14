@@ -8,14 +8,19 @@ import rateLimit from 'express-rate-limit';
 import { RedisStore } from 'rate-limit-redis';
 import { getRedis } from '../config/redis.js';
 import multer from 'multer';
-import { authenticate, optionalAuth } from '../middleware/auth.js';
+import { authenticate, optionalAuth, requireAdmin } from '../middleware/auth.js';
 import { BadRequestError } from '../middleware/errorHandler.js';
 import { logger } from '../utils/logger.js';
 import { isProEffective } from '../services/pro.service.js';
 import type { ApiResponse } from '../types/index.js';
 import { docHoSo, luuHoSo } from '../services/ctlanguage/hoSo.js';
 import { chiTiet, chuCuaNgay, chuHan, deTroChoi, goiOffline, theoBoThu, tra, vietTay } from '../services/ctlanguage/tuDien.js';
-import { baoCao, boChan, chan, chiTietBai, dangBai, dsBai, dsDaChan, traLoi, xoaCuaToi } from '../services/ctlanguage/congDong.js';
+import {
+  baoCao, boChan, btvChon, chan, chiTietBai, chonHayNhat, dangBai, danhMuc, dsBai, dsBaiCuaNguoi, dsDaChan, khoaXem, luuBai, suaBai,
+  thichBai, thichTraLoi, traLoi, xoaCuaToi,
+} from '../services/ctlanguage/congDong.js';
+import { docThongBao, dsTheoDoi, dsThongBao, hoSoNguoi, soChuaDoc, theoDoi, xepHang } from '../services/ctlanguage/congDongNguoi.js';
+import { luotGau, nhoGauTraLoi } from '../services/ctlanguage/congDongGau.js';
 import { chamBuoiGoi, chayLuotGoi, luotGoi } from '../services/ctlanguage/goiCuongMini.js';
 import { dsChoWeb, docNN } from '../services/ielts/troChuyen/chuDe.js';
 import type { SuKienTC } from '../services/ielts/troChuyen/troChuyenLuong.service.js';
@@ -99,14 +104,69 @@ router.get('/tu-dien/:nn/tro-choi', gioiHanTra, async (req: Request, res: Respon
   } catch (e) { next(e); }
 });
 
-// ─── CỘNG ĐỒNG — đọc công khai (khách xem được; có token thì ẩn bài của người đã chặn) ────────────────────────────
-router.get('/cong-dong/bai/:id', gioiHanTra, optionalAuth, async (req: Request, res: Response<ApiResponse>, next) => {
-  try { res.json({ success: true, data: await chiTietBai(idSo(req.params.id), req.userId ?? null) }); } catch (e) { next(e); }
+// ─── CỘNG ĐỒNG — đọc công khai (khách xem được; có token thì ẩn người đã chặn nhau) ──────────────────────────────
+// ⚠️ THỨ TỰ: mọi tuyến `/cong-dong/<chữ cố định>` (GET) phải khai TRƯỚC `/cong-dong/:nn` — không thì `:nn` nuốt mất
+// (13/11: GET /cong-dong/chan từng rơi vào `:nn` ⇒ 400 CTL_NN_SAI, màn "Người đã chặn" luôn trống). Tuyến cần đăng nhập
+// mà phải đứng trên `:nn` thì gắn `authenticate` riêng từng tuyến.
+router.get('/cong-dong/chan', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await dsDaChan(req.userId!) }); } catch (e) { next(e); }
 });
+router.get('/cong-dong/thong-bao', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const truoc = req.query.truoc ? idSo(String(req.query.truoc)) : undefined;
+    res.json({ success: true, data: await dsThongBao(req.userId!, truoc) });
+  } catch (e) { next(e); }
+});
+router.get('/cong-dong/thong-bao/chua-doc', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await soChuaDoc(req.userId!) }); } catch (e) { next(e); }
+});
+/** Lượt "Nhờ Gấu" còn lại hôm nay (không gửi gì tới AI — cố ý KHÔNG nằm dưới `/ai/`). */
+router.get('/cong-dong/luot-gau', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await luotGau(req.userId!) }); } catch (e) { next(e); }
+});
+/** Chi tiết bài + trả lời. Đếm lượt xem: một người (khách: một IP băm) một lần mỗi ngày. */
+router.get('/cong-dong/bai/:id', gioiHanTra, optionalAuth, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const xem = req.userId ?? null;
+    res.json({ success: true, data: await chiTietBai(idSo(req.params.id), xem, { khoaXem: khoaXem(xem, ipThat(req)) }) });
+  } catch (e) { next(e); }
+});
+router.get('/cong-dong/nguoi/:id', gioiHanTra, optionalAuth, async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await hoSoNguoi(idSo(req.params.id), req.userId ?? null) }); } catch (e) { next(e); }
+});
+router.get('/cong-dong/nguoi/:id/bai', gioiHanTra, optionalAuth, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const truoc = req.query.truoc ? idSo(String(req.query.truoc)) : undefined;
+    const nn = req.query.nn ? String(req.query.nn) : undefined;
+    res.json({ success: true, data: await dsBaiCuaNguoi(idSo(req.params.id), req.userId ?? null, truoc, nn) });
+  } catch (e) { next(e); }
+});
+/** `?chieu=nguoi-theo-doi` (mặc định) | `dang-theo-doi`. */
+router.get('/cong-dong/nguoi/:id/theo-doi', gioiHanTra, optionalAuth, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const chieu = req.query.chieu === 'dang-theo-doi' ? 'dang-theo-doi' : 'nguoi-theo-doi';
+    res.json({ success: true, data: await dsTheoDoi(idSo(req.params.id), req.userId ?? null, chieu) });
+  } catch (e) { next(e); }
+});
+/** Bảng xếp hạng người giúp đỡ: `?khoang=tuan|thang`. */
+router.get('/cong-dong/:nn/xep-hang', gioiHanTra, optionalAuth, async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await xepHang(req.params.nn, req.query.khoang, req.userId ?? null) }); } catch (e) { next(e); }
+});
+router.get('/cong-dong/:nn/danh-muc', gioiHanTra, (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.setHeader('Cache-Control', 'public, max-age=3600');
+    res.json({ success: true, data: danhMuc(req.params.nn) });
+  } catch (e) { next(e); }
+});
+/**
+ * Bảng tin. `?tab=moi|noi-bat|btv|theo-doi|da-luu` (vắng = moi — app cũ), `q`, `loai`, `the`, phân trang `truoc` (id)
+ * hoặc `tu` (vị trí, tab noi-bat). theo-doi / da-luu khi chưa đăng nhập ⇒ `{items: [], canDangNhap: true}`.
+ */
 router.get('/cong-dong/:nn', gioiHanTra, optionalAuth, async (req: Request, res: Response<ApiResponse>, next) => {
   try {
     const truoc = req.query.truoc ? idSo(String(req.query.truoc)) : undefined;
-    res.json({ success: true, data: await dsBai(req.params.nn, req.userId ?? null, truoc, Number(req.query.gioiHan ?? 20)) });
+    const { tab, q, loai, the, tu } = req.query;
+    res.json({ success: true, data: await dsBai(req.params.nn, req.userId ?? null, truoc, Number(req.query.gioiHan ?? 20), { tab, q, loai, the, tu }) });
   } catch (e) { next(e); }
 });
 
@@ -128,26 +188,27 @@ router.get('/tu-dien/:nn/goi-offline', async (req: Request, res: Response<ApiRes
   } catch (e) { next(e); }
 });
 
-/** 30 lần ghi (bài + trả lời + báo cáo) mỗi giờ mỗi người — chống spam. Redis chết ⇒ cho qua. */
-const gioiHanGhi: RequestHandler = (() => {
+/** Bộ giới hạn theo người (Redis; Redis chết ⇒ cho qua, không làm sập cộng đồng). */
+function gioiHanNguoi(tien: string, max: number, cau: string): RequestHandler {
   const l = rateLimit({
-    windowMs: 3_600_000, max: 30, standardHeaders: true, legacyHeaders: false,
-    store: new RedisStore({ sendCommand: (async (...a: string[]) => (await getRedis()).sendCommand(a)) as never, prefix: 'rl:ctl-congdong:' }),
+    windowMs: 3_600_000, max, standardHeaders: true, legacyHeaders: false,
+    store: new RedisStore({ sendCommand: (async (...a: string[]) => (await getRedis()).sendCommand(a)) as never, prefix: tien }),
     keyGenerator: (req) => `u:${req.userId}`,
-    message: { success: false, message: 'Bạn đăng hơi nhiều — nghỉ một lát rồi viết tiếp nhé.', code: 'RATE_LIMIT_EXCEEDED' },
+    message: { success: false, message: cau, code: 'RATE_LIMIT_EXCEEDED' },
   });
   return (req, res, next) => l(req, res, (err?: unknown) => {
     if (err) logger.warn('[ctl-congdong] rate-limit store lỗi — cho qua', { error: err instanceof Error ? err.message : String(err) });
     next();
   });
-})();
+}
+/** 30 lần ghi (bài + sửa + trả lời + báo cáo + nhờ Gấu) mỗi giờ mỗi người — chống spam. */
+const gioiHanGhi = gioiHanNguoi('rl:ctl-congdong:', 30, 'Bạn đăng hơi nhiều — nghỉ một lát rồi viết tiếp nhé.');
+/** Thích / lưu / theo dõi / đọc thông báo: 400 lần mỗi giờ (bấm qua bấm lại vẫn thoải mái, chặn kịch bản cày). */
+const gioiHanTuongTac = gioiHanNguoi('rl:ctl-cd-tt:', 400, 'Bạn bấm hơi nhanh — đợi một chút nhé.');
 
 // ─── CỘNG ĐỒNG — ghi (đăng nhập). Kiểm duyệt: src/services/ctlanguage/congDong.ts ────────────────────────────────
 router.post('/cong-dong/bao-cao', gioiHanGhi, async (req: Request, res: Response<ApiResponse>, next) => {
   try { res.json({ success: true, data: await baoCao(req.userId!, req.body ?? {}) }); } catch (e) { next(e); }
-});
-router.get('/cong-dong/chan', async (req: Request, res: Response<ApiResponse>, next) => {
-  try { res.json({ success: true, data: await dsDaChan(req.userId!) }); } catch (e) { next(e); }
 });
 router.post('/cong-dong/chan/:userId', async (req: Request, res: Response<ApiResponse>, next) => {
   try { res.json({ success: true, data: await chan(req.userId!, idSo(req.params.userId)) }); } catch (e) { next(e); }
@@ -155,8 +216,55 @@ router.post('/cong-dong/chan/:userId', async (req: Request, res: Response<ApiRes
 router.delete('/cong-dong/chan/:userId', async (req: Request, res: Response<ApiResponse>, next) => {
   try { res.json({ success: true, data: await boChan(req.userId!, idSo(req.params.userId)) }); } catch (e) { next(e); }
 });
+/** Đánh dấu đã đọc: thân `{ ids: [..] }`, vắng ids ⇒ tất cả. */
+router.post('/cong-dong/thong-bao/doc', gioiHanTuongTac, async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await docThongBao(req.userId!, req.body?.ids) }); } catch (e) { next(e); }
+});
+router.post('/cong-dong/theo-doi/:userId', gioiHanTuongTac, async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await theoDoi(req.userId!, idSo(req.params.userId), true) }); } catch (e) { next(e); }
+});
+router.delete('/cong-dong/theo-doi/:userId', gioiHanTuongTac, async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await theoDoi(req.userId!, idSo(req.params.userId), false) }); } catch (e) { next(e); }
+});
+/** Admin: "BTV chọn" — thân `{ chon: true|false }` (vắng = true). Gỡ nội dung vẫn ở hộp kiểm duyệt của admin. */
+router.post('/cong-dong/admin/bai/:id/btv', requireAdmin(), async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await btvChon(req.userId!, idSo(req.params.id), req.body?.chon !== false) }); } catch (e) { next(e); }
+});
+router.post('/cong-dong/bai/:id/thich', gioiHanTuongTac, async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await thichBai(req.userId!, idSo(req.params.id), true) }); } catch (e) { next(e); }
+});
+router.delete('/cong-dong/bai/:id/thich', gioiHanTuongTac, async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await thichBai(req.userId!, idSo(req.params.id), false) }); } catch (e) { next(e); }
+});
+router.post('/cong-dong/bai/:id/luu', gioiHanTuongTac, async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await luuBai(req.userId!, idSo(req.params.id), true) }); } catch (e) { next(e); }
+});
+router.delete('/cong-dong/bai/:id/luu', gioiHanTuongTac, async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await luuBai(req.userId!, idSo(req.params.id), false) }); } catch (e) { next(e); }
+});
+/** Người hỏi chọn câu trả lời hay nhất: thân `{ traLoiId }` (null ⇒ bỏ chọn). */
+router.post('/cong-dong/bai/:id/hay-nhat', gioiHanTuongTac, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const t = req.body?.traLoiId;
+    res.json({ success: true, data: await chonHayNhat(req.userId!, idSo(req.params.id), t === null || t === undefined ? null : idSo(String(t))) });
+  } catch (e) { next(e); }
+});
+/** 🐻 Nhờ Gấu trả lời (AI — đường có `/ai/`). Mỗi bài một lần; lượt/ngày free/Pro ở `congDongGau.ts`. */
+router.post('/cong-dong/bai/:id/ai/tra-loi', gioiHanGhi, async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await nhoGauTraLoi(req.userId!, idSo(req.params.id)) }); } catch (e) { next(e); }
+});
 router.post('/cong-dong/bai/:id/tra-loi', gioiHanGhi, async (req: Request, res: Response<ApiResponse>, next) => {
   try { res.json({ success: true, data: await traLoi(req.userId!, idSo(req.params.id), req.body ?? {}) }); } catch (e) { next(e); }
+});
+/** Sửa bài của mình: `{ tieuDe?, noiDung?, loai?, the? }`. */
+router.patch('/cong-dong/bai/:id', gioiHanGhi, async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await suaBai(req.userId!, idSo(req.params.id), req.body ?? {}) }); } catch (e) { next(e); }
+});
+router.post('/cong-dong/tra-loi/:id/thich', gioiHanTuongTac, async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await thichTraLoi(req.userId!, idSo(req.params.id), true) }); } catch (e) { next(e); }
+});
+router.delete('/cong-dong/tra-loi/:id/thich', gioiHanTuongTac, async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await thichTraLoi(req.userId!, idSo(req.params.id), false) }); } catch (e) { next(e); }
 });
 router.delete('/cong-dong/bai/:id', async (req: Request, res: Response<ApiResponse>, next) => {
   try { res.json({ success: true, data: await xoaCuaToi(req.userId!, 'bai', idSo(req.params.id)) }); } catch (e) { next(e); }
@@ -164,6 +272,7 @@ router.delete('/cong-dong/bai/:id', async (req: Request, res: Response<ApiRespon
 router.delete('/cong-dong/tra-loi/:id', async (req: Request, res: Response<ApiResponse>, next) => {
   try { res.json({ success: true, data: await xoaCuaToi(req.userId!, 'tra-loi', idSo(req.params.id)) }); } catch (e) { next(e); }
 });
+/** Đăng bài: `{ noiDung, loai?, tieuDe?, the? }`. Khai CUỐI cùng (`:nn` nuốt mọi `/cong-dong/<chữ>`). */
 router.post('/cong-dong/:nn', gioiHanGhi, async (req: Request, res: Response<ApiResponse>, next) => {
   try { res.json({ success: true, data: await dangBai(req.userId!, req.params.nn, req.body ?? {}) }); } catch (e) { next(e); }
 });

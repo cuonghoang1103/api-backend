@@ -1,0 +1,3 @@
+# 14.2 · nft-gw: chặn mọi DNS không đi qua DNS của trường (UDP/TCP 53 đi ra ngoài)
+iptables -A CHAN -p udp --dport 53 -j DROP
+iptables -A CHAN -p tcp --dport 53 -j DROP

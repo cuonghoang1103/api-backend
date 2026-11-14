@@ -1,0 +1,7 @@
+# 14.2 · nft-gw: tường lửa đọc thấy gì trong ClientHello (bắt trên card sv0), và bộ đếm của luật
+$ tshark -r /tmp/sni.pcap -Y "tls.handshake.type == 1" -T fields -e ip.src -e ip.dst -e tls.handshake.extensions_server_name 2>/dev/null
+10.20.2.159	198.18.0.10	news.test
+10.20.2.159	198.18.0.10	social.test
+$ iptables -L CHAN -v -n | grep -E "pkts|STRING"
+ pkts bytes target     prot opt in     out     source               destination         
+    1  1623 REJECT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:443 STRING match  "social.test" ALGO name bm reject-with tcp-reset

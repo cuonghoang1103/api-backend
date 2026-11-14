@@ -1,0 +1,11 @@
+# 14.1 · MacBook sang SSID TRUONG-SV — địa chỉ riêng vẫn BẬT ⇒ card sv mang MAC KHÁC lúc đăng ký
+$ bash /lab/k/moi-truong/truong/vao-ssid.sh sv
+udhcpc: broadcasting discover
+udhcpc: broadcasting select for 10.20.2.127, server 10.20.2.1
+udhcpc: lease of 10.20.2.127 obtained from 10.20.2.1, lease time 7200
+$ ip -br link show sv
+sv@if6195        UP             9a:7f:02:b8:41:6d <BROADCAST,MULTICAST,UP,LOWER_UP> 
+$ curl -sL -m 3 http://news.test/
+Thiet bi chua dang ky. MAC 9a:7f:02:b8:41:6d khong co trong danh sach. Vao SSID TRUONG-DANGKY de dang nhap.
+$ curl -sS -m 3 --cacert /ca/ca.pem https://news.test/
+curl: (28) Connection timed out after 3002 milliseconds

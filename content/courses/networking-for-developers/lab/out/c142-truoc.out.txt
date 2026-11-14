@@ -1,0 +1,15 @@
+# 14.2 · laptop Windows (nft-win, đã đăng nhập) TRƯỚC khi trường bật luật chặn nào
+$ dig +short phim.test social.test vpn.test
+198.18.0.10
+198.18.0.10
+198.18.0.20
+$ curl -s -m 3 http://phim.test/
+Internet OK: phim.test (ban den tu 198.18.0.1)
+$ curl -sS -m 3 --cacert /ca/ca.pem https://social.test/
+Internet OK: social.test (ban den tu 198.18.0.1)
+$ nc -w 3 198.18.0.10 22
+SSH-2.0-OpenSSH_lab
+$ echo ping | nc -u -w 2 game.test 27015
+game-server: pong
+$ echo hi | nc -u -w 2 vpn.test 51820
+vpn: handshake ok

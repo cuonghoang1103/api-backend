@@ -1,0 +1,8 @@
+# 14.1 · nạn nhân (nft-win) TRONG lúc nft-ke chạy arp-gia.py — vẫn có mạng, gửi một form đăng nhập qua HTTP rồi qua HTTPS
+$ ip neigh show dev sv
+10.20.2.144 lladdr e8:6a:64:90:12:34 DELAY 
+10.20.2.1 lladdr e8:6a:64:90:12:34 REACHABLE 
+$ curl -s -m 4 -d "user=SE12345&pass=matkhau123" http://news.test/
+Internet OK: news.test (ban den tu 198.18.0.1)
+$ curl -s -m 4 --cacert /ca/ca.pem -d "user=SE12345&pass=matkhau123" https://news.test/
+Internet OK: news.test (ban den tu 198.18.0.1)

@@ -1,0 +1,6 @@
+# 14.2 · nft-gw: trường bật CHẶN BẰNG DNS — phim.test trả "không tồn tại", cado.test trỏ về trang chặn của trường
+$ printf "address=/phim.test/\naddress=/cado.test/10.20.2.1\n" > /run/truong/dns/chan.conf
+$ cat /run/truong/dns/chan.conf
+address=/phim.test/
+address=/cado.test/10.20.2.1
+$ pkill dnsmasq; sleep 0.5; dnsmasq -C /run/truong/dnsmasq.conf

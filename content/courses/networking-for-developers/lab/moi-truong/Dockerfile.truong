@@ -1,0 +1,6 @@
+# net-lab-truong — ảnh net-lab + dnsmasq (DHCP + DNS của "Wi-Fi trường") + busybox (udhcpc = máy khách DHCP tí hon),
+# cho phòng lab Chương 14 "Wi-Fi trường trong một hộp" (truong.yml). Ảnh gốc net-lab giữ nguyên ⇒ output các chương khác không đổi.
+#   docker build -t net-lab -f Dockerfile .  &&  docker build -t net-lab-truong -f Dockerfile.truong .
+FROM net-lab
+RUN apt-get update && apt-get install -y --no-install-recommends dnsmasq-base busybox \
+ && rm -rf /var/lib/apt/lists/*

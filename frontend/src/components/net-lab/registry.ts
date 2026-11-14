@@ -109,4 +109,19 @@ export const NET_LABS: Record<string, LabDef> = {
     presets: ['chain', 'expired', 'private'],
     load: () => import('./DnssecSim'),
   },
+  // ── Chương 14: mạng thực chiến — "Wi-Fi trường trong một hộp" (truong.yml, 14/11/2026), số liệu engine/capture14.ts ──
+  wifi: {
+    en: 'School Wi-Fi: login page and MAC registration', vi: 'Wi-Fi trường: trang đăng nhập và đăng ký MAC', chapterEn: 'Real-life networks', chapterVi: 'Mạng thực chiến',
+    descEn: 'Join the registration SSID (real DHCP DORA, lease 7200 s), watch the captive-portal probe being redirected and HTTPS failing on the wrong certificate, log in and see the controller write account ↔ MAC; flip "Private Wi-Fi address" Off / Fixed / Rotating and see why SSID 2 blocks you; one account = one MAC, and two laptops on one MAC flipping the switch table (84 times in 5 s in the lab).',
+    descVi: 'Vào SSID đăng ký (DHCP DORA thật, lease 7200 giây), xem câu hỏi dò trang đăng nhập bị chuyển hướng và HTTPS hỏng vì sai chứng chỉ, đăng nhập rồi thấy bộ điều khiển ghi tài khoản ↔ MAC; gạt "Địa chỉ Wi-Fi riêng" Tắt / Cố định / Luân phiên để thấy vì sao SSID 2 chặn bạn; một tài khoản = một MAC, và hai laptop chung một MAC làm bảng của switch lật (84 lần trong 5 giây ở lab).',
+    presets: ['register', 'private', 'clone'],
+    load: () => import('./WifiSim'),
+  },
+  block: {
+    en: 'What the school network blocks', vi: 'Mạng trường chặn những gì', chapterEn: 'Real-life networks', chapterVi: 'Mạng thực chiến',
+    descEn: 'Five checkpoints — MAC, DNS, SNI, IP/port/UDP, TTL — each rule switched on and off: NXDOMAIN vs the other DNS, an instant TLS reset for one name while another on the same IP passes, timeouts vs UDP silence, SSH dead on 22 but alive on 993, and a phone behind a laptop hotspot caught by TTL 63 — every error is the real one from the lab.',
+    descVi: 'Năm trạm — MAC, DNS, SNI, IP/cổng/UDP, TTL — bật tắt từng luật: NXDOMAIN và DNS khác, một tên bị reset TLS ngay lập tức trong khi tên khác cùng IP vẫn qua, hết giờ và sự im lặng của UDP, SSH chết ở 22 mà sống ở 993, điện thoại sau điểm phát của laptop bị TTL 63 bắt — lỗi nào cũng là lỗi thật từ lab.',
+    presets: ['web', 'hotspot', 'game'],
+    load: () => import('./BlockSim'),
+  },
 };

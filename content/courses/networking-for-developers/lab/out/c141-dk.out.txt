@@ -1,0 +1,30 @@
+# 14.1 · MacBook (nft-mac) vào SSID TRUONG-DANGKY với "Địa chỉ Wi-Fi riêng: Cố định" (mỗi SSID một MAC riêng)
+$ cat /run/mac-phan-cung
+a4:83:e7:5c:21:0b
+$ ip -br link show dk; ip -br link show sv
+dk@if6194        DOWN           26:3a:91:c4:5e:10 <BROADCAST,MULTICAST> 
+sv@if6195        DOWN           9a:7f:02:b8:41:6d <BROADCAST,MULTICAST> 
+$ bash /lab/k/moi-truong/truong/vao-ssid.sh dk
+udhcpc: broadcasting discover
+udhcpc: broadcasting select for 10.20.1.177, server 10.20.1.1
+udhcpc: lease of 10.20.1.177 obtained from 10.20.1.1, lease time 7200
+$ ip -br addr show dk; ip route; cat /etc/resolv.conf
+dk@if6194        UP             10.20.1.177/24 
+default via 10.20.1.1 dev dk 
+10.20.1.0/24 dev dk proto kernel scope link src 10.20.1.177 
+nameserver 10.20.1.1
+$ curl -sI http://captive.apple.com/hotspot-detect.html | head -3
+HTTP/1.0 302 Found
+Server: TruongPortal/1.0 
+Date: Sat, 14 Nov 2026 07:21:23 GMT
+$ curl -s http://10.20.1.1/api
+{"captive": true, "user-portal-url": "http://portal.truong.test/"}
+$ curl -sS --cacert /ca/ca.pem https://captive.apple.com/
+curl: (60) SSL: no alternative certificate subject name matches target hostname 'captive.apple.com'
+More details here: https://curl.se/docs/sslcerts.html
+
+curl failed to verify the legitimacy of the server and therefore could not
+establish a secure connection to it. To learn more about this situation and
+how to fix it, please visit the webpage mentioned above.
+$ curl -s -d "user=SE12345&pass=fpt@2026" http://portal.truong.test/login
+OK SE12345: da ghi MAC 26:3a:91:c4:5e:10. Gio hay ket noi SSID TRUONG-SV.

@@ -1,0 +1,97 @@
+# "Wi-Fi trường trong một hộp" — phòng lab Chương 14 (Mạng thực chiến) của khoá Networking for Developers.
+#
+#   SSID "TRUONG-DANGKY" (không có Internet)   nft-dk 10.20.1.0/24 ─┐
+#   SSID "TRUONG-SV"     (có Internet)         nft-sv 10.20.2.0/24 ─┼─ [gw] = bộ điều khiển Wi-Fi + trang đăng nhập + tường lửa
+#                                                                    └─ nft-net 198.18.0.0/24 ("Internet") ── web .10 (+ .20 "vpn.test")
+#   mac (MacBook) · win (laptop Windows) · ke (máy thứ ba / kẻ xấu) cắm vào CẢ HAI "SSID" — mỗi SSID một card ảo (dk, sv) để
+#   mô phỏng đúng việc macOS/Windows dùng MỘT địa chỉ MAC riêng cho MỖI mạng Wi-Fi. "Vào SSID" = bật card đó + xin DHCP.
+#   win còn phát Wi-Fi (Mobile Hotspot) cho phone: nft-hs 192.168.137.0/24 (dải Windows dùng cho chia sẻ mạng), NAT ra card sv.
+#
+# Mọi địa chỉ "Internet" nằm trong 198.18.0.0/15 (RFC 2544, dải dành cho đo kiểm) ⇒ không đụng địa chỉ thật của ai. Tên miền
+# captive.apple.com / www.msftconnecttest.com CHỈ trỏ về máy web của lab qua DNS của gw (lab không ra Internet thật).
+# MAC "phần cứng" của laptop trong lab là địa chỉ toàn cục (bit tự quản = 0) bịa ra; MAC "riêng" (private) có bit tự quản = 1.
+#   docker build -t net-lab-truong -f Dockerfile.truong .
+#   docker compose -f truong.yml -p nft up -d          # dựng (≈5 s)
+#   docker exec -it nft-mac bash                        # vào MacBook
+#   docker compose -f truong.yml -p nft down -v         # dọn
+# Cổng Docker của mỗi mạng đặt ở .254 (không ai dùng); enable_ip_masquerade=false — chỉ có NAT của chính lab (gw, win).
+name: nft
+x-lab: &lab
+  image: net-lab-truong
+  init: true
+  cap_add: [NET_ADMIN, NET_RAW]
+  labels: { netlab: "1" }
+  volumes: ["../:/lab/k:ro", "ca:/ca"]
+services:
+  gw:
+    <<: *lab
+    container_name: nft-gw
+    hostname: gw
+    sysctls: { net.ipv4.ip_forward: "1" }
+    networks:
+      dk: { ipv4_address: 10.20.1.1, mac_address: "02:00:0a:14:01:01", interface_name: dk0 }
+      sv: { ipv4_address: 10.20.2.1, mac_address: "02:00:0a:14:02:01", interface_name: sv0 }
+      net: { ipv4_address: 198.18.0.1, mac_address: "02:00:c6:12:00:01", interface_name: net0 }
+    command: ["bash", "/lab/k/moi-truong/truong/gw.sh"]
+  web:
+    <<: *lab
+    container_name: nft-web
+    hostname: web
+    networks: { net: { ipv4_address: 198.18.0.10, mac_address: "02:00:c6:12:00:0a", interface_name: net0 } }
+    command: ["bash", "/lab/k/moi-truong/truong/web.sh"]
+  mac:
+    <<: *lab
+    container_name: nft-mac
+    hostname: macbook
+    networks:
+      dk: { ipv4_address: 10.20.1.11, mac_address: "26:3a:91:c4:5e:10", interface_name: dk }
+      sv: { ipv4_address: 10.20.2.11, mac_address: "9a:7f:02:b8:41:6d", interface_name: sv }
+    command: ["bash", "/lab/k/moi-truong/truong/laptop.sh", "a4:83:e7:5c:21:0b"]
+  win:
+    <<: *lab
+    container_name: nft-win
+    hostname: windows
+    sysctls: { net.ipv4.ip_forward: "1" }
+    networks:
+      dk: { ipv4_address: 10.20.1.12, mac_address: "5e:c1:20:7d:93:aa", interface_name: dk }
+      sv: { ipv4_address: 10.20.2.12, mac_address: "d2:44:6b:0e:18:f5", interface_name: sv }
+      hs: { ipv4_address: 192.168.137.1, mac_address: "02:00:c0:a8:89:01", interface_name: hs }
+    command: ["bash", "/lab/k/moi-truong/truong/laptop.sh", "8c:8d:28:4e:7a:12"]
+  ke:
+    <<: *lab
+    container_name: nft-ke
+    hostname: ke
+    networks:
+      dk: { ipv4_address: 10.20.1.13, mac_address: "4e:11:22:33:44:55", interface_name: dk }
+      sv: { ipv4_address: 10.20.2.13, mac_address: "4e:11:22:33:44:66", interface_name: sv }
+    sysctls: { net.ipv4.ip_forward: "1", net.ipv4.conf.all.send_redirects: "0", net.ipv4.conf.default.send_redirects: "0" }
+    command: ["bash", "/lab/k/moi-truong/truong/laptop.sh", "e8:6a:64:90:12:34"]
+  phone:
+    <<: *lab
+    container_name: nft-phone
+    hostname: phone
+    networks: { hs: { ipv4_address: 192.168.137.50, mac_address: "6a:0b:3c:4d:5e:6f", interface_name: wlan0 } }
+    command: ["bash", "-c", "ip route replace default via 192.168.137.1 && echo 'nameserver 10.20.2.1' > /etc/resolv.conf && exec sleep infinity"]
+volumes:
+  ca: { name: nft-ca, labels: { netlab: "1" } }
+networks:
+  dk:
+    name: nft-dk
+    labels: { netlab: "1" }
+    driver_opts: { com.docker.network.bridge.enable_ip_masquerade: "false", com.docker.network.bridge.name: nft-dk }
+    ipam: { config: [{ subnet: 10.20.1.0/24, gateway: 10.20.1.254 }] }
+  sv:
+    name: nft-sv
+    labels: { netlab: "1" }
+    driver_opts: { com.docker.network.bridge.enable_ip_masquerade: "false", com.docker.network.bridge.name: nft-sv }
+    ipam: { config: [{ subnet: 10.20.2.0/24, gateway: 10.20.2.254 }] }
+  net:
+    name: nft-net
+    labels: { netlab: "1" }
+    driver_opts: { com.docker.network.bridge.enable_ip_masquerade: "false", com.docker.network.bridge.name: nft-net }
+    ipam: { config: [{ subnet: 198.18.0.0/24, gateway: 198.18.0.254 }] }
+  hs:
+    name: nft-hs
+    labels: { netlab: "1" }
+    driver_opts: { com.docker.network.bridge.enable_ip_masquerade: "false", com.docker.network.bridge.name: nft-hs }
+    ipam: { config: [{ subnet: 192.168.137.0/24, gateway: 192.168.137.254 }] }

@@ -1,0 +1,15 @@
+# 14.2 · nft-win: thử lại từng thứ
+$ time nc -vz -w 3 vpn.test 443
+nc: connect to vpn.test (198.18.0.20) port 443 (tcp) timed out: Operation now in progress
+
+real	0m3.006s
+user	0m0.001s
+sys	0m0.000s
+$ nc -vz -w 3 198.18.0.10 22
+nc: connect to 198.18.0.10 port 22 (tcp) timed out: Operation now in progress
+$ nc -w 3 198.18.0.10 993
+SSH-2.0-OpenSSH_lab (port 993)
+$ echo ping | nc -u -w 2 game.test 27015; echo "exit=$?"
+exit=0
+$ curl -s -m 3 --cacert /ca/ca.pem https://game.test/
+Internet OK: game.test (ban den tu 198.18.0.1)

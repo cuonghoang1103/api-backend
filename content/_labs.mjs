@@ -58,6 +58,9 @@ export const NET_SIMS = {
   ttl: ['countdown', 'change', 'negative'],
   anycast: ['anycast', 'geodns', 'roundrobin'],
   dnssec: ['chain', 'expired', 'private'],
+  // Chương 14 — mạng thực chiến (14/11/2026): "Wi-Fi trường trong một hộp", số liệu frontend/src/components/net-lab/engine/capture14.ts
+  wifi: ['register', 'private', 'clone'],
+  block: ['web', 'hotspot', 'game'],
 };
 export const NET_TOURS = {
   encap: ['encap-layers', 'encap-hop', 'encap-mtu', 'encap-start'],
@@ -74,6 +77,8 @@ export const NET_TOURS = {
   ttl: ['ttl-change', 'ttl-negative', 'ttl-start'],
   anycast: ['anycast-withdraw', 'anycast-geodns', 'anycast-start'],
   dnssec: ['dnssec-chain', 'dnssec-expired', 'dnssec-start'],
+  wifi: ['wifi-register', 'wifi-private', 'wifi-clone', 'wifi-start'],
+  block: ['block-web', 'block-hotspot', 'block-game', 'block-start'],
 };
 
 export const LAB_NS = {

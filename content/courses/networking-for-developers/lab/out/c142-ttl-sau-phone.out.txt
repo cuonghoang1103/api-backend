@@ -1,0 +1,5 @@
+# 14.2 · sau luật TTL: điện thoại (qua hotspot) rồi chính laptop
+$ curl -sS -m 3 http://news.test/
+curl: (28) Resolving timed out after 3005 milliseconds
+$ ip -br addr show | grep -E "^(wlan0|sv)"
+wlan0@if6201     UP             192.168.137.50/24 

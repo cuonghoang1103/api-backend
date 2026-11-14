@@ -1,0 +1,3 @@
+# 14.1 · nạn nhân (nft-win) trước khi bị ARP giả mạo
+$ ip neigh show dev sv
+10.20.2.1 lladdr 02:00:0a:14:02:01 REACHABLE 

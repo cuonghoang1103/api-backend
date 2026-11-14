@@ -1,0 +1,10 @@
+# 14.2 · nft-gw (luật TTL đặt ở mangle PREROUTING — tới FORWARD thì nhân đã trừ TTL đi 1): hai gói SYN vừa đi qua card sv0 — CÙNG địa chỉ nguồn, khác TTL; và lớp 2 chỉ thấy MỘT MAC
+$ tshark -r /tmp/ttl.pcap -Y "tcp.flags.syn == 1 && tcp.flags.ack == 0" -T fields -e eth.src -e ip.src -e ip.ttl -e tcp.options.timestamp.tsval 2>/dev/null
+8c:8d:28:4e:7a:12	10.20.2.159	64	3862101593
+8c:8d:28:4e:7a:12	10.20.2.159	63	2547552046
+$ ip neigh show dev sv0 | grep -v FAILED
+10.20.2.159 lladdr 8c:8d:28:4e:7a:12 REACHABLE 
+10.20.2.114 lladdr a4:83:e7:5c:21:0b STALE 
+10.20.2.144 lladdr e8:6a:64:90:12:34 STALE 
+$ iptables -t mangle -A PREROUTING -i sv0 -m ttl --ttl-eq 63 -j DROP
+$ iptables -t mangle -A PREROUTING -i sv0 -m ttl --ttl-eq 127 -j DROP

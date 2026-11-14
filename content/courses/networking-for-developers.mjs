@@ -8,6 +8,8 @@
  * web-foundations Ch6 (HTTP nhập môn). Khoá này dạy CƠ CHẾ giao thức bên dưới — mỗi chỗ chạm có bài "Nếu đã học …".
  * Không trùng network-security (Nhóm A — tường lửa, VPN, Zero Trust, tấn công mạng): ở đây chỉ nhắc và trỏ sang.
  *
+ * TRẠNG THÁI 14/11/2026: thêm CHƯƠNG 14 "Mạng thực chiến" (s14-mang-thuc-chien.mjs, sau Ch13) — 14.1 Wi-Fi trường & MAC, 14.2 mạng trường
+ * chặn gì; lab "Wi-Fi trường trong một hộp" (lab/moi-truong/truong.yml), mô phỏng /net-lab wifi + block. Bài 14.3–14.7 đang soạn.
  * TRẠNG THÁI 01/11/2026 (tối): Chương 3 SOẠN TRỌN (lab DNS dns.yml: gốc/TLD/LabFlow/CDN, resolver kiểm DNSSEC, DNS công cộng anycast;
  * slide NFD/v1, 5 mô phỏng mới dns/zone/ttl/anycast/dnssec).
  * TRẠNG THÁI 01/11/2026: Chương 2 SOẠN TRỌN (lab "Internet trong một hộp" internet.yml, slide NFD/v1, 5 mô phỏng mới).
@@ -30,9 +32,10 @@ import s10 from './networking-for-developers/s10-lb.mjs';
 import s11 from './networking-for-developers/s11-tools.mjs';
 import s12 from './networking-for-developers/s12-phong-van.mjs';
 import s13 from './networking-for-developers/s13-capstone.mjs';
+import s14 from './networking-for-developers/s14-mang-thuc-chien.mjs';
 
 /** TRỌN 13 CHƯƠNG: Mục 0 + Chương 1 (31/10/2026), Chương 2 và Chương 3 (01/11/2026), Chương 4–13 (04/11/2026) đã soạn trọn ghi đè MỌI section khung — giữ nguyên title chương + slug bài cũ. */
-const ghiDe = (secs) => { secs[0] = s00; secs[1] = s01; secs[2] = s02; secs[3] = s03; secs[4] = s04; secs[5] = s05; secs[6] = s06; secs[7] = s07; secs[8] = s08; secs[9] = s09; secs[10] = s10; secs[11] = s11; secs[12] = s12; secs[13] = s13; return secs; };
+const ghiDe = (secs) => { secs[0] = s00; secs[1] = s01; secs[2] = s02; secs[3] = s03; secs[4] = s04; secs[5] = s05; secs[6] = s06; secs[7] = s07; secs[8] = s08; secs[9] = s09; secs[10] = s10; secs[11] = s11; secs[12] = s12; secs[13] = s13; secs.push(s14); return secs; };
 
 export default {
   category: { slug: 'cs-fundamentals', name: 'Nền tảng khoa học máy tính', icon: 'Cpu', sortOrder: 9 },

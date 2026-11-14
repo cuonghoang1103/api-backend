@@ -1,0 +1,10 @@
+# 14.2 · nft-win: cùng một IP, hai tên — một qua, một bị cắt
+$ dig +short news.test social.test
+198.18.0.10
+198.18.0.10
+$ curl -s -m 3 --cacert /ca/ca.pem https://news.test/
+Internet OK: news.test (ban den tu 198.18.0.1)
+$ curl -sS -m 3 --cacert /ca/ca.pem https://social.test/
+curl: (35) Recv failure: Connection reset by peer
+$ curl -s -m 3 http://social.test/
+Internet OK: social.test (ban den tu 198.18.0.1)

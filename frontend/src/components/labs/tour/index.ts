@@ -15,6 +15,7 @@ import { OS3_TOURS } from './tours-os3';
 import { NET_TOURS } from './tours-net';
 import { NET2_TOURS } from './tours-net2';
 import { NET3_TOURS } from './tours-net3';
+import { NET14_TOURS } from './tours-net14';
 import type { Tour, TourStep } from './types';
 
 /** mô phỏng không có ô giải thích cố định ⇒ tour làm quen bỏ bước "đọc ô giải thích" */
@@ -59,7 +60,7 @@ function startTour(ns: LabNs, sim: string): Tour {
 }
 
 const GENERIC: Tour[] = LAB_NAMESPACES.flatMap((ns) => Object.keys(LABS[ns].labs).map((sim) => startTour(ns, sim)));
-export const TOURS: Tour[] = [...CPU_TOURS, ...OS_TOURS, ...OS2_TOURS, ...OS3_TOURS, ...NET_TOURS, ...NET2_TOURS, ...NET3_TOURS, ...GENERIC];
+export const TOURS: Tour[] = [...CPU_TOURS, ...OS_TOURS, ...OS2_TOURS, ...OS3_TOURS, ...NET_TOURS, ...NET2_TOURS, ...NET3_TOURS, ...NET14_TOURS, ...GENERIC];
 export const TOUR_BY_ID: ReadonlyMap<string, Tour> = new Map(TOURS.map((t) => [t.id, t]));
 
 /** Mọi tour của một mô phỏng: tour viết tay trước, tour làm quen cuối. */

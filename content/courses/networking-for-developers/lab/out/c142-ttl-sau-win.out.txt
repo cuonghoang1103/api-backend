@@ -1,0 +1,5 @@
+# 14.2 · sau luật TTL: điện thoại (qua hotspot) rồi chính laptop
+$ curl -sS -m 3 http://news.test/
+Internet OK: news.test (ban den tu 198.18.0.1)
+$ ip -br addr show | grep -E "^(wlan0|sv)"
+sv@if6196        UP             10.20.2.159/24 

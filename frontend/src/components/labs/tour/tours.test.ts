@@ -181,6 +181,12 @@ const FINAL: Record<string, (s: Record<string, Record<string, unknown> | undefin
   'ipv6-happy': (s) => s.ipsix?.preset === 'happy' && s.ipsix?.broken === true && s.ipsix?.connected === true && s.ipsix?.family === '4' && s.ipsix?.atEnd === true,
   'bgp-path': (s) => s.bgp?.preset === 'announce' && s.bgp?.atEnd === true && s.bgp?.pickedNet === '198.18.0.0/24' && s.bgp?.pickedOrigin === 64511,
   'bgp-hijack': (s) => s.bgp?.preset === 'hijack' && s.bgp?.filter === true && s.bgp?.sawHijack === true && s.bgp?.nextHop === '192.0.2.3',
+  'wifi-register': (s) => s.wifi?.preset === 'register' && s.wifi?.regMac === '26:3a:91:c4:5e:10' && s.wifi?.atEnd === true,
+  'wifi-private': (s) => s.wifi?.preset === 'private' && s.wifi?.mode === 'off' && s.wifi?.macNet === 'ok' && s.wifi?.atEnd === true,
+  'wifi-clone': (s) => s.wifi?.preset === 'clone' && s.wifi?.flips === 84 && s.wifi?.winNet === 'reset' && s.wifi?.keNet === 'reset' && s.wifi?.atEnd === true,
+  'block-web': (s) => s.block?.req === 'social' && s.block?.stop === 'sni' && s.block?.atEnd === true,
+  'block-hotspot': (s) => s.block?.req === 'phone' && s.block?.stop === 'ttl' && s.block?.atEnd === true,
+  'block-game': (s) => s.block?.req === 'ssh993' && s.block?.ok === true && s.block?.atEnd === true,
 };
 
 describe('tours — run on the real simulations', () => {

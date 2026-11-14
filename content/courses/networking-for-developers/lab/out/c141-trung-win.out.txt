@@ -1,0 +1,9 @@
+# 14.1 · Windows (nft-win) tải tệp 50 MB, giới hạn 4 MB/s, CÙNG LÚC với máy chép MAC
+$ ip -br addr show sv
+sv@if6196        UP             10.20.2.159/24 
+$ curl -sS -o /dev/null --limit-rate 4M -m 15 -w "windows: HTTP %{http_code}, %{size_download} byte, %{time_total} s\n" http://news.test/big.bin
+curl: (56) Recv failure: Connection reset by peer
+windows: HTTP 200, 2285657 byte, 0.502732 s
+$ ping -q -c 50 -i 0.1 198.18.0.10 | tail -2
+50 packets transmitted, 50 received, 0% packet loss, time 5100ms
+rtt min/avg/max/mdev = 0.037/0.186/0.356/0.067 ms

@@ -1,0 +1,10 @@
+# 14.1 · góc kẻ xấu — nft-ke trả lại MAC của chính nó, đăng nhập tài khoản riêng (SE24680) như một sinh viên bình thường
+$ ip link set sv down; ip link set sv address $(cat /run/mac-phan-cung); ip link set dk address $(cat /run/mac-phan-cung)
+$ bash /lab/k/moi-truong/truong/vao-ssid.sh dk >/dev/null; curl -s -d "user=SE24680&pass=fpt@2026" http://portal.truong.test/login
+OK SE24680: da ghi MAC e8:6a:64:90:12:34. Gio hay ket noi SSID TRUONG-SV.
+$ bash /lab/k/moi-truong/truong/vao-ssid.sh sv
+udhcpc: broadcasting discover
+udhcpc: broadcasting select for 10.20.2.144, server 10.20.2.1
+udhcpc: lease of 10.20.2.144 obtained from 10.20.2.1, lease time 7200
+$ sysctl net.ipv4.ip_forward
+net.ipv4.ip_forward = 1

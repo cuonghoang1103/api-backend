@@ -1,0 +1,6 @@
+# 14.1 · nft-gw: sổ đăng ký và luật sau hai lần đăng nhập cùng một tài khoản
+$ cat /run/truong/dang-ky.tsv
+SE12345	8c:8d:28:4e:7a:12	14:21:28
+$ iptables -S DADK
+-N DADK
+-A DADK -m mac --mac-source 8c:8d:28:4e:7a:12 -j ACCEPT

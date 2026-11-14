@@ -1,0 +1,12 @@
+# 14.2 · nft-win sau khi bật chặn DNS
+$ dig phim.test | grep -E "status|ANSWER:"
+;; ->>HEADER<<- opcode: QUERY, status: NXDOMAIN, id: 52351
+;; flags: qr rd ra; QUERY: 1, ANSWER: 0, AUTHORITY: 0, ADDITIONAL: 1
+$ curl -sS -m 3 http://phim.test/
+curl: (6) Could not resolve host: phim.test
+$ curl -s -m 3 http://cado.test/
+Trang cado.test bi chan theo quy dinh cua truong.
+$ dig @198.18.0.53 +short phim.test
+198.18.0.10
+$ curl -s -m 3 --resolve phim.test:80:198.18.0.10 http://phim.test/
+Internet OK: phim.test (ban den tu 198.18.0.1)

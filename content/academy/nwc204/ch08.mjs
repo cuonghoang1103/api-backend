@@ -682,6 +682,7 @@ ip -6 addr show | grep -E 'tentative|dadfailed'</code></pre>
         'How can ARP enable communication on a network? <em>— câu này khớp đúng chương. Hãy trả lời bằng cuộc trao đổi hỏi-quảng-bá / đáp-unicast, bằng bộ đệm cùng các trạng thái của nó, và bằng việc máy trạm phân giải CỔNG RA chứ không phải máy đích ở xa khi đích nằm ngoài mạng.</em>'],
     ]),
     sauHon({ bai: 'netdev-1-3-ethernet-arp', so: '1.4', ten: ['Ethernet, MAC addresses and ARP', 'Ethernet, địa chỉ MAC và ARP'], them: ['ARP captured live, the stale-cache failover bug with real timings, and gratuitous ARP', 'ARP bắt trực tiếp, lỗi cache cũ khi chuyển dự phòng với thời gian đo thật, và gratuitous ARP'] }),
+    sauHon({ bai: 'netdev-14-1-wifi-truong-mac', so: '14.1', ten: ['School Wi-Fi in practice: login page, MAC registration, private Wi-Fi addresses', 'Wi-Fi trường thực chiến: trang đăng nhập, đăng ký MAC, địa chỉ Wi-Fi riêng'], them: ['MAC vs IP on a real campus Wi-Fi: the MAC in use vs the hardware MAC, private Wi-Fi addresses, two laptops on one MAC flipping the switch table, and ARP spoofing measured in a lab', 'MAC và IP trên Wi-Fi trường thật: MAC đang dùng và MAC phần cứng, địa chỉ Wi-Fi riêng, hai laptop chung một MAC làm bảng switch lật, và ARP giả mạo đo trong lab'] }),
   ].join('\n'),
 };
 

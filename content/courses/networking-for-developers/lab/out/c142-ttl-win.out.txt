@@ -1,0 +1,8 @@
+# 14.2 · laptop Windows bật "Mobile Hotspot" (card hs 192.168.137.1, NAT ra card sv)
+$ ip -br addr show hs; ip -br addr show sv
+hs@if6198        UP             192.168.137.1/24 
+sv@if6196        UP             10.20.2.159/24 
+$ iptables -t nat -S POSTROUTING | grep 192.168.137
+-A POSTROUTING -s 192.168.137.0/24 -o sv -j MASQUERADE
+$ curl -s -m 3 http://news.test/
+Internet OK: news.test (ban den tu 198.18.0.1)

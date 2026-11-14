@@ -1,0 +1,14 @@
+# 14.1 · laptop Windows (nft-win) cũng tắt địa chỉ ngẫu nhiên và đăng nhập CÙNG tài khoản SE12345
+$ for c in dk sv; do ip link set $c down; ip link set $c address $(cat /run/mac-phan-cung); done
+$ bash /lab/k/moi-truong/truong/vao-ssid.sh dk
+udhcpc: broadcasting discover
+udhcpc: broadcasting select for 10.20.1.159, server 10.20.1.1
+udhcpc: lease of 10.20.1.159 obtained from 10.20.1.1, lease time 7200
+$ curl -s -d "user=SE12345&pass=fpt@2026" http://portal.truong.test/login
+OK SE12345: da ghi MAC 8c:8d:28:4e:7a:12 (thay MAC cu a4:83:e7:5c:21:0b — may do mat mang). Gio hay ket noi SSID TRUONG-SV.
+$ bash /lab/k/moi-truong/truong/vao-ssid.sh sv
+udhcpc: broadcasting discover
+udhcpc: broadcasting select for 10.20.2.159, server 10.20.2.1
+udhcpc: lease of 10.20.2.159 obtained from 10.20.2.1, lease time 7200
+$ curl -s -m 3 http://news.test/
+Internet OK: news.test (ban den tu 198.18.0.1)

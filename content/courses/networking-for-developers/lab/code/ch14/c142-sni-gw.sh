@@ -1,0 +1,2 @@
+# 14.2 · nft-gw: chặn THEO TÊN TRONG TLS (SNI) — gói đi tới cổng 443 nào có chuỗi "social.test" ⇒ cắt bằng TCP RST
+iptables -A CHAN -p tcp --dport 443 -m string --string "social.test" --algo bm -j REJECT --reject-with tcp-reset

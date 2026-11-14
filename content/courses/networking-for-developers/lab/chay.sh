@@ -4,6 +4,7 @@
 #   <máy> = client | client2 | router | web | api   (container của compose.yml, phải đang chạy)
 #         = internet                                (container net-lab rời, mạng Docker mặc định ⇒ ra Internet thật)
 #         = nfi-<máy>  (laptop phone homegw mobile isp dc rogue server ns — "Internet trong một hộp" của Chương 2, internet.yml)
+#         = nft-<máy>  (gw web mac win ke phone — "Wi-Fi trường trong một hộp" của Chương 14, truong.yml)
 set -e
 cd "$(dirname "$0")"
 may="$1"; kb="$2"; ten="${3:-$(basename "$kb" .sh)}"
@@ -12,7 +13,7 @@ if [ "$may" = internet ]; then
   docker run --rm --label netlab=1 --hostname netlab --cap-add NET_ADMIN --cap-add NET_RAW \
     -v "$PWD":/lab/k:ro -w "/lab/k/code/$dir" net-lab bash -c "phien $f 2>&1" > "out/$ten.out.txt"
 else
-  c="nfd-$may"; case "$may" in nfi-*) c="$may" ;; esac
+  c="nfd-$may"; case "$may" in nfi-*|nft-*) c="$may" ;; esac
   docker exec -w "/lab/k/code/$dir" "$c" bash -c "phien $f 2>&1" > "out/$ten.out.txt"
 fi
 echo "✓ out/$ten.out.txt ($(wc -l < "out/$ten.out.txt") dòng)"

@@ -1,0 +1,19 @@
+# 14.1 · MacBook TẮT "Địa chỉ Wi-Fi riêng" cho CẢ HAI SSID (cả hai card dùng MAC phần cứng) rồi đăng ký lại một lần
+$ for c in dk sv; do ip link set $c down; ip link set $c address $(cat /run/mac-phan-cung); done
+$ ip -br link show dk; ip -br link show sv
+dk@if6194        DOWN           a4:83:e7:5c:21:0b <BROADCAST,MULTICAST> 
+sv@if6195        DOWN           a4:83:e7:5c:21:0b <BROADCAST,MULTICAST> 
+$ bash /lab/k/moi-truong/truong/vao-ssid.sh dk
+udhcpc: broadcasting discover
+udhcpc: broadcasting select for 10.20.1.114, server 10.20.1.1
+udhcpc: lease of 10.20.1.114 obtained from 10.20.1.1, lease time 7200
+$ curl -s -d "user=SE12345&pass=fpt@2026" http://portal.truong.test/login
+OK SE12345: da ghi MAC a4:83:e7:5c:21:0b (thay MAC cu 26:3a:91:c4:5e:10 — may do mat mang). Gio hay ket noi SSID TRUONG-SV.
+$ bash /lab/k/moi-truong/truong/vao-ssid.sh sv
+udhcpc: broadcasting discover
+udhcpc: broadcasting select for 10.20.2.114, server 10.20.2.1
+udhcpc: lease of 10.20.2.114 obtained from 10.20.2.1, lease time 7200
+$ curl -s -m 3 http://news.test/
+Internet OK: news.test (ban den tu 198.18.0.1)
+$ curl -sS -m 3 --cacert /ca/ca.pem https://news.test/
+Internet OK: news.test (ban den tu 198.18.0.1)

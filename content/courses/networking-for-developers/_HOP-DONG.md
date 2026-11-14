@@ -88,6 +88,20 @@ c33-that, khối c34-theo-doc, c34-rr, c34-rr-thu, c34-that, c35-chuoi, khối c
 c35-mot-ns, c35-that. Lời giải Lab 3: `code/ch03/lab3/chay-loi-giai.sh` (R4 sự cố A, R5 sự cố B). Dọn:
 `docker compose -f internet.yml -f dns.yml -p nfi down -v; docker rm -f nfi-ubuntu`.
 
+**"Wi-Fi trường trong một hộp" (Ch14 — Mạng thực chiến, 14/11/2026):** `moi-truong/truong.yml`, project `nft`, ảnh `net-lab-truong`
+(`Dockerfile.truong` = net-lab + dnsmasq + busybox udhcpc). Hai "SSID" nft-dk 10.20.1.0/24 (không Internet) và nft-sv 10.20.2.0/24; `nft-gw` = bộ điều khiển
+(`truong/gw.sh`: dnsmasq DHCP+DNS kèm option 114, `truong/portal.py` trang đăng nhập ghi "tài khoản ↔ MAC" (MỖI tài khoản MỘT MAC) và mở iptables theo MAC,
+chuỗi `CHAN` cho luật chặn của 14.2 — đặt TRƯỚC dòng ESTABLISHED để đọc được ClientHello); "Internet" nft-net 198.18.0.0/24 (RFC 2544): web .10 (nginx
+HTTP/HTTPS cho mọi tên *.test + captive.apple.com/msftconnecttest, UDP 27015 "game", SSH giả :22/:993), .20 vpn.test (UDP 51820), .53 DNS công cộng.
+Laptop mac/win/ke: MỖI SSID MỘT CARD (dk/sv) ⇒ một MAC riêng mỗi mạng như macOS; `truong/vao-ssid.sh dk|sv` = bật card + udhcpc. phone sau Mobile Hotspot
+của win (nft-hs 192.168.137.0/24, NAT ra card sv). Chạy lại: `bash code/dung-output-ch14.sh` (≈1,5 phút, `GIU_LAB=1` giữ lab). Lệnh trên CHÍNH máy Mac
+(c141-mac, c141-oui): `code/ch14/chay-mac.sh` (bash — Python bị macOS ẩn MAC thành 02:00:00:00:00:00) rồi `che-mac.py` che 3 byte cuối mọi MAC thật — GIỮ.
+Bẫy đã gặp: dnsmasq mặc định ping thử địa chỉ trước khi cấp (Discover đầu bị lờ) ⇒ `no-ping`; `address=/x/` chỉ ra NXDOMAIN khi tên đó không bị một
+`address=` cụ thể khác che ⇒ mọi tên lab dùng `address=/test/…`; luật TTL ở FORWARD thấy TTL đã bị trừ 1 ⇒ đặt ở `mangle PREROUTING`; socat
+UDP-RECVFROM + EXEC echo không trả lời ⇒ `truong/udp-tra-loi.py`; portal khởi động lại phải `docker exec -d` (nền của exec thường chết theo).
+ARP giả mạo (`truong/arp-gia.py`) CHỈ chạy trong mạng lab. Số liệu biến thiên giữa các lần chạy (byte tải, số lần lật fdb, ms) — bài đọc qua run(),
+mô phỏng trích nguyên văn ở `frontend/src/components/net-lab/engine/capture14.ts` (test capture14.test.ts đối chiếu từng dòng ⇒ chạy lại lab thì chạy test).
+
 ## 3. Mỗi bài (cả EN lẫn VI đầy đủ ý)
 
 `${G}` (walk slide) ở đầu → `<div class="ml-en">` eyebrow · h2 · lead (câu hỏi bài trả lời) · các h3 giảng + `run()` output thật

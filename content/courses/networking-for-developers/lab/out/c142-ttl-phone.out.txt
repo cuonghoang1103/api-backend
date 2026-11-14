@@ -1,0 +1,7 @@
+# 14.2 · điện thoại (nft-phone) bắt Wi-Fi do laptop phát
+$ ip -br addr show wlan0; ip route
+wlan0@if6201     UP             192.168.137.50/24 
+default via 192.168.137.1 dev wlan0 
+192.168.137.0/24 dev wlan0 proto kernel scope link src 192.168.137.50 
+$ curl -s -m 3 http://news.test/
+Internet OK: news.test (ban den tu 198.18.0.1)

@@ -1,0 +1,16 @@
+# 14.1 · bộ điều khiển (nft-gw): bốn gói DHCP vừa bắt trên card dk0, sổ "tài khoản ↔ MAC", luật tường lửa portal.py vừa thêm
+$ tshark -r /tmp/dora.pcap -T fields -e eth.src -e ip.dst -e _ws.col.Info 2>/dev/null
+26:3a:91:c4:5e:10	255.255.255.255	DHCP Discover - Transaction ID 0x4023c21b
+02:00:0a:14:01:01	10.20.1.177	DHCP Offer    - Transaction ID 0x4023c21b
+26:3a:91:c4:5e:10	255.255.255.255	DHCP Request  - Transaction ID 0x4023c21b
+02:00:0a:14:01:01	10.20.1.177	DHCP ACK      - Transaction ID 0x4023c21b
+$ cat /run/truong/dnsmasq.leases
+1794648083 26:3a:91:c4:5e:10 10.20.1.177 * 01:26:3a:91:c4:5e:10
+$ cat /run/truong/dang-ky.tsv
+SE12345	26:3a:91:c4:5e:10	14:21:23
+$ iptables -S DADK; iptables -t nat -S DADK_NAT
+-N DADK
+-A DADK -m mac --mac-source 26:3a:91:c4:5e:10 -j ACCEPT
+-N DADK_NAT
+-A DADK_NAT -m mac --mac-source 26:3a:91:c4:5e:10 -j RETURN
+-A DADK_NAT ! -d 10.20.2.1/32 -p tcp -m tcp --dport 80 -j DNAT --to-destination 10.20.2.1:8081

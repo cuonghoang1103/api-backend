@@ -273,6 +273,34 @@ Câu hỏi cho user: Pro của CT Language có **dùng chung** với Pro web cuo
   `cong-dong`, `cong-dong-bai:<id>`, `cong-dong-nguoi:<id>`, `cong-dong-xep-hang`, `cong-dong-thong-bao`, `cong-dong-viet`.
   ⚠️ Mục công bố AI (5.1.2(i)) đã liệt kê "câu hỏi" gửi AI — "Nhờ Gấu" gửi nội dung BÀI CỦA NGƯỜI KHÁC (đã công khai trong cộng đồng);
   nên thêm một dòng vào công bố ở lần cập nhật kế. Chưa làm: ảnh đính kèm, tab "Tin nhắn" kiểu Hanzii (không làm chỗ trống — 2.1).
+- 14/11 (APP + BACKEND): **Đợt A — trang từ "dày"** (đặc tả `docs/ct-language-khao-sat-hanzii.md` mục 3; CHƯA deploy). KHÔNG migration:
+  phần AI của mỗi (ngôn ngữ, chữ, cách đọc) sinh MỘT lần rồi lưu vĩnh viễn một tệp JSON trên R2
+  `ctlanguage/tu-mo-rong/<nn>/<băm 32 hex>.json` (`khoaMoRong`) + đệm RAM (có: 6 giờ · chưa có: 45 giây). Mã:
+  `src/services/ctlanguage/tuDienSauThuan.ts` (khoá băm, lời nhắc theo ngôn ngữ, `kiemMoRong` — kiểm + làm sạch JSON của model, hỏng
+  phần cốt lõi ⇒ `null` ⇒ không lưu), `tuDienSau.ts` (kho R2, chống trùng bằng lời hứa chung, sổ lượt Redis), tuyến RIÊNG
+  `src/routes/ctlanguage.tuDienSau.routes.ts` gắn ở `/api/v1/ctlanguage/tu-dien-sau` TRƯỚC router chung:
+  `GET /:nn/muc/:id` (công khai: dữ liệu THẬT + phần AI đã có, không bao giờ gọi model) · `POST /:nn/ai/muc/:id` (đăng nhập: chưa có
+  thì sinh) · `DELETE /:nn/muc/:id` (admin: xoá bản AI sau khi có báo sai ⇒ lượt sau sinh lại).
+  · Dữ liệu THẬT (không qua AI): từ ghép = từ thông dụng trong `ctl_tu` chứa từ đó (Anh: cụm bắt đầu/kết thúc bằng từ); cấp độ + chủ đề
+    = danh mục của kho soạn tay `lang_vocab_categories.level/.name` (máy dev trống, production có); bộ + số nét + "Một chữ · ba ngôn ngữ"
+    = `ctl_chu_han` (app tự dựng từ `chiTiet.chuHan`). Sau khi AI viết, máy chủ **làm giàu**: chip nào có trong từ điển ⇒ gắn `id` mục
+    thật + pinyin CHUẨN của từ điển + âm Hán Việt (từ ngoài từ điển: ghép âm chính từng chữ).
+  · AI lấp: nghĩa theo từ loại + giải thích đơn ngữ + 1–3 ví dụ (Trung: pinyin cả câu · Nhật: kana có dấu cách ⇒ máy chủ đổi romaji,
+    trợ từ は/へ cuối cụm đọc wa/e · Anh: không phiên âm câu, chip có IPA), cận/trái nghĩa, kết hợp từ, phân biệt GIỐNG/KHÁC, "AI giải
+    thích" (cách dùng · sắc thái · lỗi người Việt hay mắc · mẹo nhớ), lục thư + hình thái + mẹo nhớ từng chữ Hán, cấp độ ước lượng
+    (app hiện "≈" khi không có cấp của kho). Model: `llmComplete` purpose `language_tutor` (hôm nay = `gpt-6-sol`), JSON thuần,
+    ~0,9k token vào / ~1,4k ra, 25–30 giây, ước ≲ 0,5 cent/từ (đo 14/11: 健康 · 勉強 · take đều hợp lệ ngay lượt đầu).
+  · Chặn chi phí: lượt SINH MỚI/người/ngày (giờ VN) free `CTL_TU_SAU_LUOT_FREE`=10 · Pro `CTL_TU_SAU_LUOT_PRO`=80 (0 = tắt), trần cả
+    web `CTL_TU_SAU_TRAN_NGAY`=3000/ngày, 20 lượt/phút/người, cộng trần $/ngày của cổng LLM. Từ đã có trong kho KHÔNG tốn lượt; model
+    lỗi ⇒ trả lượt. Hai người tra cùng từ cùng lúc ⇒ model chạy một lần (một tiến trình; nhiều tiến trình thì lần ghi sau đè lần trước).
+  · App (`Modules/TuDien/MoHinhMoRongCTL.swift` + `MoRongTuCTL.swift`, gắn vào `ChiTietTuCTL`): phần cơ bản hiện ngay, khối mở rộng tải
+    sau với khung xương; tuyến 404 / mất mạng ⇒ khối tự ẩn. Đã đăng nhập + ĐÃ đồng ý chia sẻ AI + còn lượt ⇒ tự nhờ Gấu soạn; khách /
+    chưa đồng ý ⇒ thẻ "Nhờ Gấu soạn" (bấm mới hỏi đồng ý — 5.1.2(i), app này không gắn `APIClient.chotAI`). Chip bấm mở trang từ đó
+    (không có id ⇒ `MucTu` id âm, trang từ tự tra theo chữ). Chân khối: nhãn "AI soạn" + "Báo sai" (tuyến `/academy/advisor/report-answer`,
+    nguồn "CT Language · trang từ AI"). Đọc to: `NutLoaNho` + `DocToCTL.napTruoc` 4 câu ví dụ đầu.
+  · Test: `npx tsx --test src/services/ctlanguage/tuDienSau.test.ts` (12 phép: khoá băm, kiểm JSON 3 ngôn ngữ, chống trùng, lượt, trả
+    lượt khi model lỗi) · iOS `MoRongTuTests`. Chưa làm: video/tin tức có từ, HSK/TOCFL/JLPT từ BẢNG CHUẨN (hiện lấy kho soạn tay, thiếu
+    thì AI ước lượng), Gấu đọc to phần giải thích, khoá Redis chống trùng giữa nhiều tiến trình.
 - 14/11 (APP + 1 router backend): **Đợt D — màn Dịch "đủ đường" kiểu Hanzii** (docs/ct-language-khao-sat-hanzii.md mục 3; CHƯA deploy).
   Tab Từ điển › "Dịch" mở **Trung tâm Dịch** (`Modules/Dich/TrungTamDichCTL.swift`) — 5 lối + lịch sử:
   · **Văn bản** (`DichVanBanCTL`, có sẵn) — thêm lưu lịch sử + 🔖 lưu cặp câu vào sổ tay (thẻ id ÂM, `LuuSoDichCTL`).

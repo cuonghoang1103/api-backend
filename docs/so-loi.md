@@ -18,6 +18,13 @@ Mẫu một mục:
 
 ---
 
+### 14/11/2026 — App CT Language (đọc to) — Mở trang từ treo trắng cả màn: `speechVoices()` chạy trên luồng chính
+- **Triệu chứng:** vừa cài app (máy ảo mới, iOS 27), mở một trang từ / màn có nút loa ⇒ màn trắng, app không phản hồi > 30 giây; không có yêu cầu nào tới máy chủ.
+- **Nguyên nhân:** `ios-app/…/Shared/SachHoc/GiongSachHoc.swift` `lamNongGiongMay()` (thêm 14/11 để "bấm là kêu") gọi `CaiDatGiong.giongTuDong` ⇒ `AVSpeechSynthesisVoice.speechVoices()` ngay trên luồng chính, trong `napTruoc` của `.task` màn. Hàm đó hỏi dịch vụ TTS của hệ thống ĐỒNG BỘ (`axUnsafeForcedSync` + semaphore); dịch vụ chưa dựng xong danh sách giọng thì luồng chính đứng chờ (mẫu `sample`: 850/850 mẫu nằm ở `semaphore_wait_trap`).
+- **Cách sửa:** lần hỏi danh sách giọng ĐẦU TIÊN chạy ở `Task.detached`, xong mới về luồng chính chọn giọng + nói câu câm (`noiCauCam`). Commit ios-app cùng đợt "trang từ dày".
+- **Ảnh hưởng:** mọi màn gọi `DocToCTL.napTruoc` / `GiongSachHoc.napTruoc` (từ điển, bảng chữ, thẻ ôn, khoá kiểu sách) ở lần mở đầu sau khi cài — máy thật thường chỉ khựng vài trăm ms nên không ai thấy; máy ảo mới thì treo hẳn. Chưa lên App Store.
+- **Bài học:** API "lấy danh sách" của AVSpeech / Accessibility là IPC đồng bộ — không gọi trên luồng chính ở đường mở màn; nghiệm thu trên máy ảo MỚI TẠO (trạng thái "vừa cài"), không chỉ máy đã dùng lâu; màn trắng không lỗi ⇒ `sample <pid>` xem luồng chính trước khi đoán.
+
 ### 14/11/2026 — Backend test (CT Language Dịch) — Test tuyến chạy xanh rồi TREO 3 phút, node:test báo "cancelled"
 - **Triệu chứng:** `npx tsx --test src/routes/ctlanguage.dich.routes.test.ts` — cả 3 phép kiểm ✔ nhưng tiến trình không thoát, tới `timeout` thì báo `cancelled 1` / "Promise resolution is still pending but the event loop has already resolved".
 - **Nguyên nhân:** router dùng `express-rate-limit` + `RedisStore`; `new RedisStore(...)` nạp script ngay lúc NẠP router ⇒ gọi `getRedis()` ⇒ mở kết nối Redis giữ vòng lặp sự kiện sống mãi (`src/routes/ctlanguage.dich.routes.ts`, hàm `gioiHan`).

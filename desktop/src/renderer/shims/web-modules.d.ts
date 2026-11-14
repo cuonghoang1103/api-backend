@@ -344,6 +344,12 @@ declare module '@/app/courses/[slug]/learn/ExamReturnBanner' {
   const ExamReturnBanner: ComponentType;
   export default ExamReturnBanner;
 }
+// Góp ý & bổ sung cho khoá (14/11/2026) — /courses/:slug/gop-y.
+declare module '@/components/courses/gop-y/GopYKhoaClient' {
+  import type { ComponentType } from 'react';
+  const GopYKhoaClient: ComponentType;
+  export default GopYKhoaClient;
+}
 
 declare module '@/app/*/page' {
   import type { ComponentType } from 'react';

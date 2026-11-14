@@ -22,8 +22,12 @@ import { damBaoMfaAdmin } from '../services/mfa/adminMfa.js';
 import { kyHopLe, nhomSapRaMat, xepChuongTrinh } from '../config/chuongTrinhKhoaHoc.js';
 import { SAP_RA_MAT, chanSapRaMat, laSapRaMat } from '../services/khoaSapRaMat.js';
 import { demBaiDaSoan, laDangSoan, tinhBaoGom } from '../services/khoaDaSoan.js';
+import { courseSuggestionRouter } from './courseSuggestion.routes.js';
 
 const router = Router();
+
+// Góp ý & bổ sung cho khoá (14/11/2026) — `/api/v1/courses/:slug/suggestions…`, xem courseSuggestion.routes.ts.
+router.use('/:slug/suggestions', courseSuggestionRouter);
 
 // ─── Helper: gate paid course content on enrollment ────────────────
 //

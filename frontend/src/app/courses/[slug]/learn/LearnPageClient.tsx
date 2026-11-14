@@ -7,8 +7,9 @@ import Link from 'next/link';
 import {
   ChevronLeft, ChevronRight, CheckCircle, Circle, Lock, Menu, X,
   Download, BookOpen, Loader2, Play, ChevronDown, ChevronUp, ArrowLeft,
-  Code2, ExternalLink, FileText, Github, Award, Ticket, Eye
+  Code2, ExternalLink, FileText, Github, Award, Ticket, Eye, MessageSquarePlus
 } from 'lucide-react';
+import { CHU_GOP_Y } from '@/lib/gopYKhoa';
 import { coursesApi, certificatesApi } from '@/lib/api';
 import { CourseTutor } from '@/components/academy/CourseTutor';
 import { CourseRoadmapPanel } from '@/components/academy/CourseRoadmap';
@@ -1144,6 +1145,14 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
                   {currentLesson.description && (
                     <p className="text-text-secondary leading-relaxed">{pickLang(currentLesson.description, locale)}</p>
                   )}
+                  {/* Góp ý & bổ sung (14/11/2026): điền sẵn bài đang học — docs/gop-y-khoa-hoc.md. */}
+                  <Link
+                    href={`/courses/${slug}/gop-y?lessonId=${currentLesson.id}`}
+                    className="mt-2 inline-flex items-center gap-1.5 text-xs font-medium text-text-muted transition-colors hover:text-neon-violet"
+                  >
+                    <MessageSquarePlus className="w-3.5 h-3.5" aria-hidden />
+                    {CHU_GOP_Y[locale === 'en' ? 'en' : 'vi'].gopYChoBai}
+                  </Link>
                 </div>
                 <button
                   onClick={markComplete}

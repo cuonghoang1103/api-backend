@@ -3,7 +3,10 @@
  * ─────────────────────────────────────────────────────────────────────────
  * Mount: /api/v1/internal
  *
- * Chỉ có một việc: `canh` (services/cong-llm/) hỏi "người cầm key này đã tiêu
+ * (14/11/2026: thêm việc thứ hai — `course-suggestions` cho Claude điều phối đọc/đối chiếu/đăng góp ý khoá
+ * học, xem cuối file + docs/gop-y-khoa-hoc.md.)
+ *
+ * Việc đầu tiên: `canh` (services/cong-llm/) hỏi "người cầm key này đã tiêu
  * bao nhiêu USD ở AI Code trên APP DESKTOP trong cửa sổ hiện tại?", để cộng
  * với phần đã tiêu qua key terminal rồi quyết định có khoá key hay không.
  * Thiếu con số này thì hai đường dùng chung một gói lại có hai hạn mức tách
@@ -26,6 +29,11 @@ import { prisma } from '../config/database.js';
 import { logger } from '../utils/logger.js';
 import type { ApiResponse } from '../types/index.js';
 import { soGioViTien } from '../services/agent/viTien.js';
+import {
+  danhSach as dsGopYKhoa, ghiDoiChieu as ghiDoiChieuGopYKhoa, parse as parseGopYKhoa, schemaDoiChieu as schemaDoiChieuGopYKhoa,
+  schemaLoc as schemaLocGopYKhoa, schemaTao as schemaTaoGopYKhoa, tachTrangThai as tachTrangThaiGopYKhoa,
+  tao as taoGopYKhoa, timKhoa as timKhoaGopYKhoa,
+} from '../services/courseSuggestion.service.js';
 
 const router = Router();
 
@@ -126,6 +134,67 @@ router.post('/ai-code-usage', async (req: Request, res: Response<ApiResponse>, n
 /** Cho canh biết cửa sổ của web dài bao lâu, để hai bên dùng cùng một mốc. */
 router.get('/ai-code-window', (_req: Request, res: Response<ApiResponse>) => {
   res.json({ success: true, data: { soGio: soGioViTien() } });
+});
+
+// ─────────────────────────────────────────────────────────────────────────
+// Góp ý & bổ sung cho khoá học (14/11/2026) — đường MÁY cho Claude điều phối (scripts/gop-y/*.mjs,
+// docs/gop-y-khoa-hoc.md). Cùng cửa `x-internal-token` ở trên; không thêm biến env nào.
+// ─────────────────────────────────────────────────────────────────────────
+
+/**
+ * GET /api/v1/internal/course-suggestions?trangThai=MOI,DANG_DOI_CHIEU&courseSlug=&loai=&page=&limit=
+ * Mọi khoá (hoặc một khoá), kể cả AN. Mỗi mục kèm course {slug, title, courseCode, academyType} + lesson {id, slug, title}.
+ */
+router.get('/course-suggestions', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const q = parseGopYKhoa(schemaLocGopYKhoa, req.query);
+    const slug = typeof req.query.courseSlug === 'string' ? req.query.courseSlug : '';
+    const khoa = slug ? await timKhoaGopYKhoa(slug, false) : null;
+    const data = await dsGopYKhoa({
+      courseId: khoa?.id,
+      trangThai: tachTrangThaiGopYKhoa(q.trangThai),
+      loai: q.loai,
+      lessonId: q.lessonId,
+      page: q.page,
+      limit: q.limit,
+      sapXep: q.sapXep,
+      thayAn: true,
+    });
+    res.json({ success: true, data });
+  } catch (err) {
+    next(err);
+  }
+});
+
+/** PATCH /api/v1/internal/course-suggestions/:id — ghi kết quả đối chiếu. `nguoiDoiChieu` mặc định "Claude". */
+router.patch('/course-suggestions/:id', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const id = Number(req.params.id);
+    if (!Number.isInteger(id) || id <= 0) { res.status(400).json({ success: false, message: 'id không hợp lệ' }); return; }
+    const d = parseGopYKhoa(schemaDoiChieuGopYKhoa, req.body ?? {});
+    res.json({ success: true, data: await ghiDoiChieuGopYKhoa(id, d, 'Claude') });
+  } catch (err) {
+    next(err);
+  }
+});
+
+/**
+ * POST /api/v1/internal/course-suggestions — điều phối đăng góp ý dạng AI_AGENT.
+ * Body: { courseSlug, tenAi (bắt buộc), loai, noiDung, nguon?, lessonSlug?|lessonId? }. Không gắn người dùng (userId NULL).
+ * Vẫn chặn trùng nội dung trong cùng khoá (409 GOP_Y_KHOA_TRUNG kèm trungVoiId).
+ */
+router.post('/course-suggestions', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const b = (req.body ?? {}) as Record<string, unknown>;
+    const slug = typeof b.courseSlug === 'string' ? b.courseSlug : '';
+    if (!slug) { res.status(400).json({ success: false, message: 'Thiếu courseSlug' }); return; }
+    const khoa = await timKhoaGopYKhoa(slug, false);
+    const duLieu = parseGopYKhoa(schemaTaoGopYKhoa, { ...b, vaiTro: 'AI_AGENT', laAi: true });
+    const row = await taoGopYKhoa(khoa, duLieu, { userId: null, quaNoiBo: true });
+    res.status(201).json({ success: true, data: row });
+  } catch (err) {
+    next(err);
+  }
 });
 
 export default router;

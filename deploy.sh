@@ -1040,6 +1040,8 @@ for route in \
     xuong-remix/trang-thai \
     courses \
     courses/chuong-trinh \
+    courses/nodejs/suggestions \
+    admin/course-suggestions \
     hub/folders \
     snippets \
     video-categories \

@@ -324,7 +324,8 @@ describe('khopTuyenWeb', () => {
     // 09/11/2026: +6 — trang con Sách gốc (nghe, tai-lieu) dưới /language/:code/dekiru, /jp, /jp/tren-lop.
     // 12/11/2026: +2 IELTS Tập 2 (/language/:code/ielts/tap-2 và /ielts/tap-2).
     // 12/11/2026: +2 🔒 Tài liệu riêng IELTS (/language/:code/ielts/tai-lieu-rieng và /ielts/tai-lieu-rieng).
-    expect(thay.size).toBe(209);
+    // 14/11/2026: +1 Góp ý & bổ sung khoá học (/courses/:slug/gop-y).
+    expect(thay.size).toBe(210);
   });
 });
 

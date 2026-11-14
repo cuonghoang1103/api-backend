@@ -7,9 +7,10 @@ import {
   Star, Users, Clock, BookOpen, Play, Lock, CheckCircle,
   ChevronDown, ChevronRight, Loader2, Award, Globe, ArrowLeft, CreditCard,
   KeyRound, Layers3, CirclePlay as PlayCircle, Presentation, ListChecks, CodeXml as Code2, FileCode2, FileText,
-  ListTree, Hourglass,
+  ListTree, Hourglass, MessageSquarePlus,
 } from 'lucide-react';
-import { coursesApi, paymentApi } from '@/lib/api';
+import { coursesApi, paymentApi, courseSuggestionsApi } from '@/lib/api';
+import { CHU_GOP_Y } from '@/lib/gopYKhoa';
 import { COURSE_PAYMENT_ENABLED } from '@/lib/featureFlags';
 import { useAuthStore } from '@/store/authStore';
 import { useSession } from 'next-auth/react';
@@ -349,6 +350,13 @@ export default function CourseDetailPage() {
   const [reviewHover, setReviewHover] = useState(0);
   const [reviewContent, setReviewContent] = useState('');
   const [submittingReview, setSubmittingReview] = useState(false);
+  // Góp ý & bổ sung (14/11/2026): số góp ý hiện trên nút thứ ba của hero. Lỗi ⇒ nút vẫn hiện, chỉ không có số.
+  const [soGopY, setSoGopY] = useState<number | null>(null);
+  useEffect(() => {
+    let huy = false;
+    courseSuggestionsApi.count(slug).then((r) => { if (!huy) setSoGopY(r.data.data.tong); }).catch(() => {});
+    return () => { huy = true; };
+  }, [slug]);
 
   // ── Soft prerequisite gate. If this course assumes a foundation the learner
   // has not acknowledged yet, show the self-assessment modal once. Read
@@ -735,6 +743,16 @@ export default function CourseDetailPage() {
                   <ListTree className="h-5 w-5" aria-hidden />
                   {t.xemMucLuc}
                 </a>
+                <Link
+                  href={`/courses/${course.slug}/gop-y`}
+                  className="inline-flex min-h-[48px] items-center gap-2 rounded-xl border border-[var(--k-border-strong)] px-5 text-[15px] font-semibold text-[var(--k-ink)] transition-colors hover:border-[var(--k-accent-line)] hover:bg-[var(--k-accent-soft)]"
+                >
+                  <MessageSquarePlus className="h-5 w-5" aria-hidden />
+                  {CHU_GOP_Y[en ? 'en' : 'vi'].nut}
+                  {soGopY ? (
+                    <span className={`${s.so} rounded-full bg-[var(--k-accent-soft)] px-2 py-0.5 text-xs font-bold text-[var(--k-accent)]`}>{soGopY}</span>
+                  ) : null}
+                </Link>
               </div>
               {!sapRaMat && !vaoDuoc && accessType === 'FREE' && (
                 <p className="mt-2.5 text-xs text-[var(--k-ink-3)]">{isAuthenticated ? t.ghiChuMienPhi : t.ghiChuDangNhap}</p>

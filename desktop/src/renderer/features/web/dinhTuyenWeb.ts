@@ -194,6 +194,8 @@ const TUYEN_KHAC: readonly TuyenWeb[] = [
   { mau: '/courses', nap: () => import('./trangKhoaHocApp').then((m) => ({ default: m.KhoaHocDanhSach })) },
   { mau: '/courses/:slug', nap: () => import('./trangKhoaHocApp').then((m) => ({ default: m.KhoaHocChiTiet })) },
   { mau: '/courses/:slug/learn', nap: () => import('./trangKhoaHocApp').then((m) => ({ default: m.KhoaHocHoc })) },
+  /* Góp ý & bổ sung cho khoá (14/11/2026) — component client của web, không có trang máy chủ cần bắt chước. */
+  { mau: '/courses/:slug/gop-y', nap: () => import('@/components/courses/gop-y/GopYKhoaClient') },
 
   /* ── Tech Trends ──
      TĨNH TRƯỚC ĐỘNG. Sáu trang chuyên đề (`/news`, `/ielts`, `/hoc-sql`…) đều

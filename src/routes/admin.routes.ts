@@ -7,8 +7,12 @@ import { getMusicAccessMode, setMusicAccessMode, setUserMusicAccess, type MusicA
 import { getIO } from '../socket/messaging.socket.js';
 import { getSystemStats } from '../services/systemStats.service.js';
 import type { ApiResponse } from '../types/index.js';
+import { adminCourseSuggestionRouter } from './courseSuggestion.routes.js';
 
 const router = Router();
+
+// Góp ý & bổ sung cho khoá học (14/11/2026) — `/api/v1/admin/course-suggestions`, tự gắn requireAdmin().
+router.use('/course-suggestions', adminCourseSuggestionRouter);
 
 function slugify(value: string): string {
   return value

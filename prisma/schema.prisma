@@ -366,6 +366,9 @@ model User {
   // Sự cố & Lỗi — người học chia sẻ sự cố/lỗi gặp phải + cách khắc phục.
   codeLabIncidents        CodeLabIncident[]
   gopY                    UserFeedback[]           @relation("GopYNguoiGui")
+  // Góp ý & bổ sung cho khoá học (14/11/2026)
+  gopYKhoaHoc             CourseSuggestion[]       @relation("GopYKhoaHocNguoiGui")
+  phieuGopYKhoaHoc        CourseSuggestionVote[]   @relation("PhieuGopYKhoaHoc")
   codeLabIncidentComments CodeLabIncidentComment[]
 
   // ─── My Language — learning progress (per-user, SRS) ─────────
@@ -1142,9 +1145,9 @@ model Course {
   createdAt              DateTime  @default(now()) @map("created_at")
   updatedAt              DateTime  @updatedAt @map("updated_at")
 
-  category     CourseCategory?  @relation(fields: [categoryId], references: [id], onDelete: SetNull)
-  instructor   User?            @relation("CourseInstructor", fields: [instructorId], references: [id], onDelete: SetNull)
-  semester     Semester?        @relation(fields: [semesterId], references: [id], onDelete: SetNull)
+  category     CourseCategory?    @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  instructor   User?              @relation("CourseInstructor", fields: [instructorId], references: [id], onDelete: SetNull)
+  semester     Semester?          @relation(fields: [semesterId], references: [id], onDelete: SetNull)
   sections     CourseSection[]
   documents    CourseDocument[]
   enrollments  Enrollment[]
@@ -1154,6 +1157,8 @@ model Course {
   orders       CourseOrder[]
   courseCodes  CourseCode[]
   exams        Exam[]
+  // Góp ý & bổ sung cho khoá (14/11/2026) — docs/gop-y-khoa-hoc.md.
+  gopY         CourseSuggestion[]
 
   @@index([categoryId], name: "idx_courses_category")
   @@index([instructorId], name: "idx_courses_instructor")
@@ -1169,6 +1174,70 @@ model Course {
   @@index([categoryId, isPublished], name: "idx_courses_category_published")
   @@index([loTrinhKy], name: "idx_courses_lo_trinh_ky")
   @@map("courses")
+}
+
+/// Góp ý & bổ sung cho khoá học (14/11/2026) — trang /courses/<slug>/gop-y, xem docs/gop-y-khoa-hoc.md.
+///
+/// Ai cũng đọc được (kể cả AI bên ngoài, trừ trạng thái AN); đăng nhập mới gửi được. Người ĐỐI CHIẾU đầu tiên là
+/// Claude điều phối (scripts/gop-y/*, đi qua /api/v1/internal): kết luận "đã có trong bài nào", "đúng không",
+/// "có đáng bổ sung không" ⇒ ghi vào `ketQuaDoiChieu` + `bangChung`.
+///
+/// Các cột phân loại là VARCHAR (không phải enum Postgres) theo lệ của bảng `courses` (status/accessType/level):
+/// thêm một trạng thái mới chỉ là sửa mã, không phải một migration ALTER TYPE. Giá trị hợp lệ chốt ở
+/// `src/services/courseSuggestion.service.ts` (Zod).
+model CourseSuggestion {
+  id             Int       @id @default(autoincrement())
+  courseId       Int       @map("course_id")
+  lessonId       Int?      @map("lesson_id")
+  userId         Int?      @map("user_id")
+  /// HOC_VIEN | THAY_CO | CHUYEN_GIA | AI_AGENT (tự khai)
+  vaiTro         String    @default("HOC_VIEN") @map("vai_tro") @db.VarChar(20)
+  /// Tên model/agent khi vaiTro = AI_AGENT (bắt buộc khi đó)
+  tenAi          String?   @map("ten_ai") @db.VarChar(100)
+  /// THIEU_KIEN_THUC | SAI_SOT | LIEN_TUONG | NANG_CAP | KHAC
+  loai           String    @db.VarChar(24)
+  noiDung        String    @map("noi_dung") @db.Text
+  nguon          String?   @db.VarChar(1000)
+  /// MOI | DANG_DOI_CHIEU | DA_CO | NEN_BO_SUNG | DA_LEN_KE_HOACH | DA_BO_SUNG | KHONG_CHINH_XAC | TRUNG | AN
+  trangThai      String    @default("MOI") @map("trang_thai") @db.VarChar(24)
+  ketQuaDoiChieu String?   @map("ket_qua_doi_chieu") @db.Text
+  /// [{ lessonSlug, lessonId?, tieuDe, trichDoan }] — bài đã có kiến thức / bài nên chèn
+  bangChung      Json?     @map("bang_chung") @db.JsonB
+  nguoiDoiChieu  String?   @map("nguoi_doi_chieu") @db.VarChar(100)
+  doiChieuLuc    DateTime? @map("doi_chieu_luc")
+  /// Số phiếu "Tôi cũng thấy cần" — cache, cập nhật cùng giao dịch với bảng phiếu
+  soPhieu        Int       @default(0) @map("so_phieu")
+  /// sha256 của nội dung đã chuẩn hoá (thường hoá, gộp khoảng trắng) — chặn đăng trùng trong cùng khoá
+  vanTay         String    @map("van_tay") @db.VarChar(64)
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  course Course                 @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  lesson Lesson?                @relation(fields: [lessonId], references: [id], onDelete: SetNull)
+  user   User?                  @relation("GopYKhoaHocNguoiGui", fields: [userId], references: [id], onDelete: SetNull)
+  phieu  CourseSuggestionVote[]
+
+  @@index([courseId, trangThai, createdAt(sort: Desc)], map: "idx_course_suggestions_course_trang_thai")
+  @@index([trangThai, createdAt], map: "idx_course_suggestions_trang_thai")
+  @@index([courseId, vanTay], map: "idx_course_suggestions_van_tay")
+  @@index([lessonId], map: "idx_course_suggestions_lesson")
+  @@index([userId, createdAt], map: "idx_course_suggestions_user")
+  @@map("course_suggestions")
+}
+
+/// Phiếu "Tôi cũng thấy cần" — mỗi người một phiếu cho mỗi góp ý (bấm lần nữa là rút).
+model CourseSuggestionVote {
+  id           Int      @id @default(autoincrement())
+  suggestionId Int      @map("suggestion_id")
+  userId       Int      @map("user_id")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  suggestion CourseSuggestion @relation(fields: [suggestionId], references: [id], onDelete: Cascade)
+  user       User             @relation("PhieuGopYKhoaHoc", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([suggestionId, userId], map: "uk_course_suggestion_vote")
+  @@index([userId], map: "idx_course_suggestion_votes_user")
+  @@map("course_suggestion_votes")
 }
 
 model CourseSection {
@@ -1217,6 +1286,7 @@ model Lesson {
   phuDe          LessonTranscript?
   phuDeRieng     LessonOwnTranscript[]
   videoYeuThich  VideoYeuThich[]       @relation("VideoYeuThichBaiGiang")
+  gopY           CourseSuggestion[]
 
   @@index([sectionId], name: "idx_lessons_section")
   @@index([isPublished], name: "idx_lessons_published")

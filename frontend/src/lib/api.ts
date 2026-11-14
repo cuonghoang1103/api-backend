@@ -2,6 +2,7 @@ import axios, { type AxiosError, type AxiosInstance } from 'axios';
 import { lamMoiPhien, xuLyHetPhien } from '@/lib/hetPhien';
 import type { ApiResponse, AuthResponse, NoteFull, ChuongTrinhDaoTao } from '@/types';
 import type { ReactionType, ReactionBreakdown } from '@/types/social';
+import type { GopYKhoa, TrangGopYKhoa, GuiGopYKhoa, DoiChieuGopYKhoa } from '@/lib/gopYKhoa';
 
 const DEFAULT_UPLOAD_CATEGORY = 'images';
 
@@ -2170,6 +2171,25 @@ export const coursesApi = {
 
   activateCode: (courseId: number, code: string) =>
     api.post('/courses/activate-code', { courseId, code }),
+};
+
+// Góp ý & bổ sung cho khoá học (14/11/2026) — src/routes/courseSuggestion.routes.ts, docs/gop-y-khoa-hoc.md.
+export const courseSuggestionsApi = {
+  list: (slug: string, params?: { trangThai?: string; loai?: string; lessonId?: number; page?: number; limit?: number; sapXep?: 'moi' | 'phieu' }) =>
+    api.get<{ success: boolean; data: TrangGopYKhoa }>(`/courses/${encodeURIComponent(slug)}/suggestions`, { params }),
+  count: (slug: string) =>
+    api.get<{ success: boolean; data: { tong: number; theoTrangThai: Record<string, number> } }>(
+      `/courses/${encodeURIComponent(slug)}/suggestions/dem`,
+    ),
+  get: (slug: string, id: number) =>
+    api.get<{ success: boolean; data: GopYKhoa }>(`/courses/${encodeURIComponent(slug)}/suggestions/${id}`),
+  create: (slug: string, data: GuiGopYKhoa) =>
+    api.post<{ success: boolean; data: GopYKhoa }>(`/courses/${encodeURIComponent(slug)}/suggestions`, data),
+  vote: (slug: string, id: number) =>
+    api.post<{ success: boolean; data: { daBau: boolean; soPhieu: number } }>(`/courses/${encodeURIComponent(slug)}/suggestions/${id}/vote`),
+  // Admin — đổi trạng thái / ghi kết quả đối chiếu (requireAdmin + MFA step-up như mọi tuyến admin).
+  review: (id: number, data: DoiChieuGopYKhoa) =>
+    api.patch<{ success: boolean; data: GopYKhoa }>(`/admin/course-suggestions/${id}`, data),
 };
 
 // Admin Courses API

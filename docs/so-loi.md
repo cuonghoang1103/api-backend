@@ -18,6 +18,13 @@ Mẫu một mục:
 
 ---
 
+### 14/11/2026 — Video bài giảng — Giọng đọc phát âm tục ("-địt") trong 71 tập
+- **Triệu chứng:** các từ như audit, succeeded, added, embedded, exceeded được đọc thành "o-địt", "xắc-xi-địt", "át-địt"… — TTS đọc đúng âm tục; 64 tập đã render (API Design, Git, Node/SDN302, Auth, Docker, Networking, PRO192…).
+- **Nguyên nhân:** bảng luật đọc (`src/khung/*/doc.ts`, luật `W()` trong `kichban.ts`) phiên âm đuôi "-ded/-dit" bằng chữ "địt"; nhiều agent chép lại của nhau (117 tệp). Bộ kiểm chỉ bắt chữ Anh sót/đánh vần, không bắt từ tục trong lời đọc.
+- **Cách sửa:** đổi toàn bộ "địt" ⇒ "đìt" (âm trung tính) trên Mac + máy nhà; lồng tiếng lại 71 tập rồi render + đẩy lại; thêm phép grep "địt" vào lượt soát giọng hằng giờ.
+- **Ảnh hưởng:** người học nghe âm tục trong video trên web từ khi các tập đó lên tới khi bản mới thay.
+- **Bài học:** phiên âm phải soát cả nghĩa tiếng Việt của âm tiết sinh ra, không chỉ "đọc giống". Luật dùng chung bị chép sẽ nhân lỗi — kiểm bằng máy (danh sách âm cấm) chứ không dựa vào mắt.
+
 ### 14/11/2026 — App CT Language — Tab Hôm nay chào "Chào buổi sáng!" lúc nửa đêm
 - **Triệu chứng:** mở app lúc 00:21, đầu tab Hôm nay ghi "Chào buổi sáng!" — ngay cạnh lời Gấu mới "Khuya rồi…".
 - **Nguyên nhân:** `ios-app/CuongThaiApp/CTLanguageApp/Modules/HomNay/HomNayCTL.swift` `loiChao` chỉ xét `h < 11` ⇒ 0–4 giờ sáng rơi vào "buổi sáng".

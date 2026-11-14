@@ -115,6 +115,10 @@ export async function connectSocket(): Promise<Socket> {
     const s = io(url, {
       path: '/socket.io',
       transports: ['websocket', 'polling'],
+      // 14/11/2026: không có cờ này thì khi WebSocket hỏng (proxy/mạng trường/công ty bỏ header Upgrade) client
+      // KHÔNG BAO GIỜ lùi về polling — thử lại websocket mãi, realtime chết hẳn (đo ở khoá Socket.IO 10.2 bằng
+      // chính engine.io-client 6.6.5 của frontend: 3 lần/8 s "websocket error" 400). Cần socket.io-client ≥ 4.8.
+      tryAllTransports: true,
       withCredentials: true,
       auth: token ? { token } : undefined,
       reconnection: true,

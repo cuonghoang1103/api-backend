@@ -1,0 +1,2 @@
+# 14.6 · nhà mạng mở cổng cho khách (kiểu "đăng ký IP tĩnh / mở port" với tổng đài): DNAT ở lớp CGNAT
+$ iptables -t nat -A PREROUTING -i net0 -p tcp --dport 8080 -j DNAT --to-destination 100.64.0.2:8080

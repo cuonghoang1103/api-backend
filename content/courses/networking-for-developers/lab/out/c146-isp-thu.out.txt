@@ -1,0 +1,3 @@
+# 14.6 · nhà mạng (nft-isp), đứng ngay trong mạng 100.64.x: cổng mở ở router nhà CÓ chạy — chỉ là lớp NAT thứ hai không chuyển vào
+$ curl -sS -m 4 http://100.64.0.2:8080/
+NAS o nha: anh gia dinh, do an

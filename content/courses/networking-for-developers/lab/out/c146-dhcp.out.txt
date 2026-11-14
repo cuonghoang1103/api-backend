@@ -1,0 +1,7 @@
+# 14.6 · laptop ở ký túc xá (nft-lap): xin địa chỉ từ router nhà bằng DHCP (bỏ IP tĩnh Docker gán)
+$ ip addr flush dev eth0
+$ busybox udhcpc -i eth0 -n -q -t 4 -T 1 -s /lab/k/moi-truong/truong/dhcp.sh 2>&1 | grep -E "lease|select"
+udhcpc: broadcasting select for 192.168.1.148, server 192.168.1.1
+udhcpc: lease of 192.168.1.148 obtained from 192.168.1.1, lease time 43200
+$ ip -4 -br addr show eth0
+eth0@if149       UP             192.168.1.148/24 

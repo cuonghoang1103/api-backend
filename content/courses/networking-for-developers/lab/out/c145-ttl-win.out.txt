@@ -1,0 +1,7 @@
+# 14.5 · nft-win: chuẩn hoá TTL — đặt lại TTL = 64 cho mọi gói đi ra card trường (bộ đếm luật TTL 63 của trường ở 14.2 sẽ không tăng)
+$ iptables -t mangle -A POSTROUTING -o sv -j TTL --ttl-set 64
+$ iptables -t mangle -S POSTROUTING
+-P POSTROUTING ACCEPT
+-A POSTROUTING -o sv -j TTL --ttl-set 64
+$ curl -s http://198.18.0.10/
+Internet OK: 198.18.0.10 (ban den tu 198.18.0.1)

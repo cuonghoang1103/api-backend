@@ -6,7 +6,7 @@
 # DPI soi "SSH-2.0" ⇒ SSH bọc TLS qua sslh 443 → bot dò mật khẩu + bẫy thứ tự drop-in. (14.4) WireGuard ở nhà (split → full) → ở
 # trường UDP bị bỏ → OpenVPN-TCP sau sslh 443 → rò DNS + vá → kill switch → VPN thấy hết → đo trễ/tốc độ (netem) → điện thoại QR.
 #   (14.5) điện thoại sau điểm phát gặp luật TTL 14.2 → chuẩn hoá TTL → gỡ/trả NAT → conntrack → người lạ ké điểm phát mở.
-#   GIU_LAB=1 ⇒ giữ lab · CHI=143 | CHI=144 | CHI=145 ⇒ chỉ chạy output của một bài (phần dựng ngầm vẫn chạy).
+#   GIU_LAB=1 ⇒ giữ lab · CHI=143 | CHI=144 | CHI=145 | CHI=146 ⇒ chỉ chạy output của một bài (phần dựng ngầm vẫn chạy).
 set -e
 cd "$(dirname "$0")/.."
 M=moi-truong; X() { ./chay.sh "$@"; }
@@ -134,6 +134,23 @@ X nft-win ch14/c145-ct.sh
 X nft-khach ch14/c145-ke.sh
 X nft-win ch14/c145-ke-win.sh
 X nft-gw ch14/c145-ke-gw.sh
+fi
+
+# ── 14.6 ──
+if [ -z "${CHI:-}" ] || [ "$CHI" = 146 ]; then
+X nft-rnha ch14/c146-wan.sh
+X nft-lap ch14/c146-dhcp.sh
+X nft-rnha ch14/c146-giucho.sh
+X nft-lap ch14/c146-dhcp2.sh
+X nft-nha ch14/c146-nas.sh
+X nft-rnha ch14/c146-mo-cong.sh
+X nft-vps ch14/c146-thu-vao.sh
+X nft-isp ch14/c146-isp-thu.sh
+X nft-isp ch14/c146-isp-mo.sh
+X nft-vps ch14/c146-thu-vao.sh c146-thu-vao2
+X nft-lap ch14/c146-admin.sh
+X nft-rnha ch14/c146-upnp.sh
+X nft-nha ch14/c146-upnp-nha.sh
 fi
 
 [ -n "${GIU_LAB:-}" ] || docker compose -f $M/truong.yml -p nft down -v >/dev/null 2>&1

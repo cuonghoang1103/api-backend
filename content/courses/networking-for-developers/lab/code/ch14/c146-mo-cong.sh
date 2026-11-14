@@ -1,0 +1,3 @@
+# 14.6 · router nhà: MỞ CỔNG (port forwarding = DNAT) — cổng 8080 phía WAN ⇒ máy nhà 192.168.1.10:80
+iptables -t nat -A PREROUTING -i wan -p tcp --dport 8080 -j DNAT --to-destination 192.168.1.10:80
+iptables -t nat -S PREROUTING | grep 8080

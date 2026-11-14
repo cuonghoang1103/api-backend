@@ -11,6 +11,8 @@ mkdir -p /run/truong/dns /run/truong/portal
 iptables -P FORWARD DROP
 iptables -N CHAN                      # luật chặn của trường (bài 14.2)
 iptables -N DADK                      # MAC đã đăng ký (portal.py thêm/gỡ)
+iptables -A FORWARD -i sv0 ! -s 10.20.2.0/24 -j DROP   # chống giả nguồn (14.5): chỉ nhận địa chỉ nguồn thuộc dải của SSID — gói 192.168.137.x
+                                                      # (điểm phát KHÔNG NAT) bị bỏ, như bộ điều khiển thật (IP source guard / BCP 38)
 iptables -A FORWARD -i sv0 -j CHAN   # luật chặn xét MỌI gói (kể cả gói giữa kết nối — ClientHello của TLS nằm ở đó), TRƯỚC dòng ESTABLISHED
 iptables -A FORWARD -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 iptables -A FORWARD -i dk0 -j DROP    # mạng đăng ký: không bao giờ ra ngoài

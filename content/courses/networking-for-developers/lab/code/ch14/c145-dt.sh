@@ -1,0 +1,2 @@
+# 14.5 · điện thoại (nft-phone, 192.168.137.50) sau điểm phát của laptop
+curl -sS -m 5 http://198.18.0.10/

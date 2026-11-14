@@ -1,0 +1,4 @@
+# 14.6 · máy nhà (nft-nha): một dịch vụ muốn khoe ra Internet (kiểu NAS / camera / đồ án)
+$ mkdir -p /tmp/nas && echo "NAS o nha: anh gia dinh, do an" > /tmp/nas/index.html
+$ curl -s http://192.168.1.10/
+NAS o nha: anh gia dinh, do an

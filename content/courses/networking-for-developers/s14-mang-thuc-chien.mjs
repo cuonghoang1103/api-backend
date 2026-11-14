@@ -1,7 +1,7 @@
 /**
  * Networking for Developers — Chương 14 (MỚI 14/11/2026): Mạng thực chiến — Wi-Fi, mạng bị chặn, VPN & đường hầm.
  * Sinh ra từ câu hỏi thật của chủ kênh (Wi-Fi trường đăng ký theo MAC, mạng trường chặn web/hotspot/game). Lab: "Wi-Fi trường trong một
- * hộp" (lab/moi-truong/truong.yml, project nft) — bash lab/code/dung-output-ch14.sh. Đã soạn: 14.1, 14.2, 14.3, 14.4 (output 14.3+ do lab/code/dung-output-ch14b.sh). Dàn ý 14.3–14.7 (SSH khi cổng 22
+ * hộp" (lab/moi-truong/truong.yml, project nft) — bash lab/code/dung-output-ch14.sh. Đã soạn: 14.1–14.6 + Lab 14 + Quiz (output 14.3+ do lab/code/dung-output-ch14b.sh). Dàn ý 14.3–14.7 (SSH khi cổng 22
  * bị chặn, VPN, chia sẻ mạng & hotspot, LAN nhà/ký túc xá, lab + quiz chương) ở video-bai-giang/KE-HOACH-NETWORKING.md mục "Ch14".
  * Chương mới ⇒ title chương là neo của seeder từ nay: KHÔNG đổi title, KHÔNG đổi slug bài đầu (netdev-14-1-wifi-truong-mac).
  */
@@ -9,9 +9,13 @@ import b141 from './bai/140-wifi-truong.mjs';
 import b142 from './bai/141-mang-truong-chan.mjs';
 import b143 from './bai/142-ssh-cong-bi-chan.mjs';
 import b144 from './bai/143-vpn.mjs';
+import b145 from './bai/144-chia-se-mang.mjs';
+import b146 from './bai/145-lan-nha.mjs';
+import b147 from './bai/146-lab14.mjs';
+import b148 from './bai/147-quiz-ch14.mjs';
 
 export default {
   title: 'Chapter 14 — Networking in real life: Wi-Fi, blocked networks, VPNs and tunnels|||Chương 14 — Mạng thực chiến: Wi-Fi, mạng bị chặn, VPN & đường hầm',
   description: 'Mạng bạn gặp hằng ngày: Wi-Fi trường bắt đăng nhập và đăng ký theo MAC ("địa chỉ Wi-Fi riêng" làm MAC đổi), mạng chặn trang web/game/SSH bằng DNS, SNI, cổng, UDP, phát hiện chia sẻ mạng bằng TTL — mỗi cơ chế đo trên lab "Wi-Fi trường trong một hộp", kèm góc kẻ xấu (chép MAC, Wi-Fi giả, ARP giả mạo) và cách vẫn làm việc được trong mạng bị chặn.',
-  lessons: [b141, b142, b143, b144],
+  lessons: [b141, b142, b143, b144, b145, b146, b147, b148],
 };

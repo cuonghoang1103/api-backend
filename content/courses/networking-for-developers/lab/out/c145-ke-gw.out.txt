@@ -1,0 +1,8 @@
+# 14.5 · nft-gw: với trường, lưu lượng của người lạ mang IP + MAC của laptop — tức tài khoản SE12345 của BẠN
+$ cat /run/truong/dang-ky.tsv
+SE12345	8c:8d:28:4e:7a:12	17:24:09
+SE24680	e8:6a:64:90:12:34	17:24:09
+$ conntrack -L -p tcp --orig-src 10.20.2.159 --dport 80 2>/dev/null | grep -oE "src=[0-9.]+ dst=[0-9.]+ sport=[0-9]+ dport=80" | head -3
+src=10.20.2.159 dst=198.18.0.10 sport=56666 dport=80
+src=10.20.2.159 dst=198.18.0.10 sport=36524 dport=80
+src=10.20.2.159 dst=198.18.0.10 sport=42420 dport=80

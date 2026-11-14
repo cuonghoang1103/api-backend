@@ -102,6 +102,17 @@ UDP-RECVFROM + EXEC echo không trả lời ⇒ `truong/udp-tra-loi.py`; portal 
 ARP giả mạo (`truong/arp-gia.py`) CHỈ chạy trong mạng lab. Số liệu biến thiên giữa các lần chạy (byte tải, số lần lật fdb, ms) — bài đọc qua run(),
 mô phỏng trích nguyên văn ở `frontend/src/components/net-lab/engine/capture14.ts` (test capture14.test.ts đối chiếu từng dòng ⇒ chạy lại lab thì chạy test).
 
+**Mở rộng cho 14.3–14.7 (14/11/2026):** cùng `truong.yml` thêm `vps` 198.18.0.30 (`vps.example`, chạy SYSTEMD THẬT — anchor `x-sysd`: SYS_ADMIN,
+seccomp unconfined, cgroup host, tmpfs /run; `truong/vps.sh` dựng SAU khi systemd lên: user sv/tunnel, drop-in 50-cloud-init (yes) + 01-no-password,
+redis 127.0.0.1:6379, sslh :443 → ssh / openvpn 127.0.0.1:1194 / TLS SNI ssh.vps.example → socat 2443 → sshd / nginx 8443), mạng nhà sau CGNAT
+(`isp` 198.18.0.40 + 100.64.0.1 · `rnha` WAN 100.64.0.2, LAN 192.168.1.1, dnsmasq DHCP + trang quản trị `truong/rnha-admin.py` · `nha` .10 sshd ·
+`lap` .20), `khach` (điện thoại người lạ trên điểm phát hs .66). Ảnh `Dockerfile.truong` thêm openssh/systemd/autossh/sslh/redis/wireguard/openvpn/
+qrencode/miniupnpd. win/lap/vps có sysctl src_valid_mark + /dev/net/tun. `gw.sh` thêm luật chống giả nguồn (FORWARD -i sv0 ! -s 10.20.2.0/24 DROP) —
+Docker host tự định tuyến giữa các bridge nên thiếu luật này điện thoại KHÔNG NAT vẫn ra được (sai thực tế). Output: `bash code/dung-output-ch14b.sh`
+(`CHI=143|144|145|146`, ≈2–3 phút/bài; dựng NGẦM trạng thái cuối 14.2, KHÔNG ghi đè c141/c142). Bẫy đã gặp: autossh KHÔNG dựng lại khi ssh bị
+SIGTERM (thử rớt mạng thật ở rnha); wg-quick full tunnel in 1 dòng sysctl read-only (vô hại); curl 8.18 báo nhầm "Could not resolve proxy" với
+--socks5; miniupnpd dưới CGNAT từ chối ("Public IP address is required"). Mô phỏng: `tunnel` (capture143.ts) + `vpn` (capture144.ts), test tương ứng.
+
 ## 3. Mỗi bài (cả EN lẫn VI đầy đủ ý)
 
 `${G}` (walk slide) ở đầu → `<div class="ml-en">` eyebrow · h2 · lead (câu hỏi bài trả lời) · các h3 giảng + `run()` output thật

@@ -3,7 +3,7 @@
 ip route replace default via 100.64.0.1
 iptables -t nat -A POSTROUTING -o wan -j MASQUERADE
 echo 'nameserver 198.18.0.53' > /etc/resolv.conf
-# 14.6: DHCP + DNS cho LAN nhà (dnsmasq), trang quản trị (admin/admin — mặc định chưa đổi)
+# 14.6: DHCP + DNS cho LAN nhà (dnsmasq), trang quản trị (mật khẩu mặc định chưa đổi)
 mkdir -p /run/nha
 cat > /run/nha/dnsmasq.conf <<'CFG'
 interface=lan

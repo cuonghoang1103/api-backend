@@ -1,0 +1,7 @@
+# 14.5 · nft-win: ai đang dùng điểm phát của mình? (bảng hàng xóm của card hs)
+$ ip neigh show dev hs | grep -v FAILED
+192.168.137.50 lladdr 6a:0b:3c:4d:5e:6f REACHABLE 
+192.168.137.66 lladdr 7a:1c:2d:3e:4f:60 DELAY 
+$ conntrack -L --orig-src 192.168.137.66 2>/dev/null | grep -oE "src=[0-9.]+ dst=[0-9.]+ sport=[0-9]+ dport=[0-9]+" | head -2
+src=192.168.137.66 dst=198.18.0.10 sport=42420 dport=80
+src=198.18.0.10 dst=10.20.2.159 sport=80 dport=42420

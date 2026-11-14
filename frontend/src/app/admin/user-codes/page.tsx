@@ -92,7 +92,7 @@ export default function AdminUserCodesPage() {
                   ) : results.length === 0 ? (
                     <div className="px-4 py-3 text-sm text-text-muted">Không tìm thấy user.</div>
                   ) : results.map((u) => (
-                    <button key={u.id} onClick={() => { setSelected(u); setResults([]); }} className="w-full flex items-center gap-3 px-3 py-2 hover:bg-neon-violet/10 text-left">
+                    <button key={u.id} onClick={() => { setSelected(u); setResults([]); }} className="group w-full flex items-center gap-3 px-3 py-2 hover:bg-neon-violet/10 text-left">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <AnhDaiDien src={u.avatarUrl} ten={u.username} className="w-7 h-7" />
                       <div className="min-w-0 flex-1">

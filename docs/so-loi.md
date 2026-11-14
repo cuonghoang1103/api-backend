@@ -186,3 +186,10 @@ Mẫu một mục:
 - **Cách sửa:** thêm `theme.extend.spacing` `'4.5': '1.125rem'`, `'5.5': '1.375rem'`; build CLI kiểm `.w-4\.5{width:1.125rem}` có mặt.
 - **Ảnh hưởng:** 7 tệp nói trên (bố cục lệch nhẹ, icon to).
 - **Bài học:** lớp viết đúng cú pháp mà không có trong thang thì Tailwind im lặng bỏ qua — không lỗi build. Khi nghi lớp "không ăn", grep CSS build chứ đừng nhìn mã nguồn.
+
+### 14/11/2026 — Web (admin) — dấu tích ở /admin/user-codes không bao giờ hiện khi rê chuột
+- **Triệu chứng:** gõ tìm user ở /admin/user-codes, rê chuột lên dòng kết quả — icon dấu tích không hiện.
+- **Nguyên nhân:** `frontend/src/app/admin/user-codes/page.tsx:102` `<Check className="… opacity-0 group-hover:opacity-100">` nằm trong `<button>` dòng 95 không có lớp `group` (bắt khi soạn khoá Tailwind 2.5).
+- **Cách sửa:** thêm `group` vào className của nút dòng 95.
+- **Ảnh hưởng:** chỉ admin, thẩm mỹ/phản hồi khi chọn user.
+- **Bài học:** `group-*` cần tổ tiên có `group` — Tailwind không báo lỗi khi thiếu; grep `group-hover` rồi đối chiếu tổ tiên khi sửa giao diện.

@@ -8,6 +8,11 @@
  * [[feedback_authstore_ishydrated_unreliable]].
  */
 
+import G14_1 from './giang/nxj-14-1.mjs';
+import G14_2 from './giang/nxj-14-2.mjs';
+import G14_3 from './giang/nxj-14-3.mjs';
+import G14_4 from './giang/nxj-14-4.mjs';
+import G14_5 from './giang/nxj-14-5.mjs';
 export default {
   title: 'Chapter 14 — State management: client and server state|||Chương 14 — Quản lý state: state client và state server',
   description: 'Có hai loại state khác hẳn nhau: state UI phía client và state là bản sao dữ liệu server. Dùng sai công cụ là nguồn của vô số bug. Zustand cho client, TanStack Query cho server, Context cho state toàn app đổi chậm, và khi nào chỉ cần Server Component.',
@@ -22,6 +27,7 @@ export default {
       video: { url: 'https://youtu.be/-Y8brhQKvtA', durationSeconds: 0 },
       description: 'Trước khi chọn thư viện, phải phân biệt: state UI (bộ lọc đang chọn, modal mở) sống ở client; còn danh sách bài, hồ sơ người dùng chỉ là BẢN SAO của dữ liệu trên server. Trộn hai cái là gốc của nhiều bug.',
       content: `
+${G14_1}
 <div class="ml-en">
 <div class="callout ok"><strong>Already took the React course?</strong> The React part of this chapter is taught in depth in the <a href="/courses/react">React</a> course (Chapter 5 for Zustand, Chapter 6 for TanStack Query). What is specific to Next.js here: which state belongs on the server now that Server Components can fetch it, and how client caches meet server rendering.</div>
 <span class="eyebrow">Chapter 14 · Lesson 14.1</span>
@@ -37,6 +43,8 @@ export default {
 <pre><code class="language-javascript">'use client';
 const [posts, setPosts] = useState([]);
 useEffect(() =&gt; { fetch('/api/posts').then(r =&gt; r.json()).then(setPosts); }, []);</code></pre>
+<div class="callout warn"><strong>Measured: paste this into a <code>.tsx</code> file and it does not compile.</strong> <code>useState([])</code> gives TypeScript nothing to infer, so the state is <code>never[]</code> and every field you read is an error:<div class="out">src/app/sai/bai.tsx(8,43): error TS2339: Property 'id' does not exist on type 'never'.
+src/app/sai/bai.tsx(8,50): error TS2339: Property 'title' does not exist on type 'never'.</div>Give the state its shape — <code>useState&lt;Post[]&gt;([])</code> — and it compiles. The type was never the real problem, though: the component still owns a copy of server data.</div>
 <p>This treats a copy of server data as if it were local UI state. You now hand-manage loading, errors, caching, refetching, deduping, and staleness — and you rebuild that in every component that needs the data. It works for one screen and collapses across a real app. Server state deserves a tool that understands it <em>is</em> a cache of something remote.</p>
 
 <h3>The toolbox for this chapter</h3>
@@ -66,6 +74,66 @@ useEffect(() =&gt; { fetch('/api/posts').then(r =&gt; r.json()).then(setPosts); 
   <span class="lc-body"><span class="lc-title">nextjs.org — Data fetching</span><span class="lc-sub">The framework&#39;s own answer, which removes most of the need for a client cache.</span></span>
 </a>
 
+
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>List the state in one page and label each piece client state (UI) or server state (data from an API/DB).</li>
+<li>Pick one piece you are keeping in <code>useState</code> that is really server state and note the bug risk (staleness, duplication).</li>
+<li>Write the one-line rule: do not store server data in client state as if you own it.</li>
+</ol>
+<p><strong>Done when:</strong> you can classify state as client vs server and spot the mistake of mixing them.</p></div>
+
+<h3>🔬 Measured: two copies of the same list on one page (Next.js 16.4.6 · React 19.3.0 · next start · Chromium)</h3>
+<p>Page <code>/sai</code> has two client components — a counter and a list — and each fetches <code>/api/posts</code> in <code>useEffect</code> and keeps its own <code>useState</code> copy. After adding a post, the list updates its copy by hand. Page <code>/dung</code> is a Server Component that reads the source once and writes through a Server Action (Chapter 12).</p>
+<div class="out">open                     /sai: 3 posts · list 3 rows        /dung: 3 posts · list 3 rows
+add "Zustand"            /sai: 3 posts · list 4 rows        /dung: 4 posts · list 4 rows
+another tab adds a post  /sai: 3 posts · list 4 rows        /dung: 4 posts · list 4 rows
+F5                       /sai: 5 posts · list 5 rows        /dung: 5 posts · list 5 rows</div>
+<p>Requests from the browser while on <code>/sai</code> (two GETs per load), and the server&#39;s own count:</p>
+<div class="out">GET 200 · GET 200 · POST 201 · GET 200 · GET 200
+{"GET /api/posts":4,"POST /api/posts":2}</div>
+<p>The first HTML of each page (<code>curl</code>), with the build&#39;s route symbols <code>○ /sai</code> and <code>ƒ /dung</code>:</p>
+<div class="out">/sai   · &lt;li&gt; in HTML: 0 · counter: 0 bài
+/dung  · &lt;li&gt; in HTML: 3 · counter: 3 bài</div>
+<p>Two copies disagree after a write, and neither notices a write from another tab until a reload. One server read cannot disagree with itself.</p>
+<div class="note-ct"><strong>In this course&#39;s repository</strong><div class="out">$ grep -E '"(zustand|@tanstack/react-query|next|react)"' package.json
+    "@tanstack/react-query": "^5.101.0",
+    "next": "^14.2.15",
+    "react": "^18.3.1",
+    "zustand": "^4.5.5"
+$ grep -rlE "from 'zustand'" src | wc -l | sed 's/^ */files using zustand: /'; grep -rl "@tanstack/react-query" src | wc -l | sed 's/^ */files using @tanstack\\/react-query: /'
+files using zustand: 32
+files using @tanstack/react-query: 323
+$ grep -nE "products: MOCK_PRODUCTS|fetchProducts: async|name: 'shop-products-storage'|partialize" src/store/productStore.ts
+35:      products: MOCK_PRODUCTS,
+40:      fetchProducts: async () =&gt; {
+109:      name: 'shop-products-storage',
+111:      partialize: (state) =&gt; ({ products: state.products }),</div><code>productStore</code> keeps the product list — server data — in a Zustand store, starts from mock data and persists it to <code>localStorage</code>. That is the trap above in production code: every visitor carries their own copy until <code>fetchProducts</code> replaces it.</div>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-bash">npx create-next-app@latest lab --ts --app --src-dir
+<span class="tok-comment"># add app/api/posts/route.ts (GET + POST), then two client components that each fetch it into useState</span>
+npm run build &amp;&amp; npm start
+curl -s localhost:3000/sai | grep -o '&lt;li[ &gt;]' | wc -l   <span class="tok-comment">  # rows in the first HTML</span>
+<span class="tok-comment"># DevTools → Network → filter /api/posts: count the GETs, add a row, compare the counter with the list</span></code></pre>
+<h3>🔗 Go deeper</h3>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-6-1-fetch" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 6.1 — Fetching in an effect, and why it hurts</span><span class="lc-sub">The race, measured; AbortController</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-6-2-tanstack" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 6.2 — TanStack Query</span><span class="lc-sub">useQuery, query keys, staleTime/gcTime</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-5-3-zustand" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 5.3 — Zustand for app-wide state</span><span class="lc-sub">Store, selectors, useShallow, persist</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nextjs/learn?lessonSlug=nextjs-10-1-fetch-trong-server-component" target="_blank" rel="noopener"><span class="lc-ico">▲</span><span class="lc-body"><span class="lc-title">Next.js · 10.1 — Fetch at the source: async Server Components</span><span class="lc-sub">The default home for a page&#39;s initial data</span></span></a>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Client state</span><span class="v">UI-only state the client owns (open menus, form input, theme).</span></div>
+  <div class="kv"><span class="k">Server state</span><span class="v">Data that lives on the server; the client holds a cached copy.</span></div>
+  <div class="kv"><span class="k">Ownership</span><span class="v">The server owns server data; the client should not pretend to.</span></div>
+  <div class="kv"><span class="k">Staleness</span><span class="v">Server state copied into client state goes out of date.</span></div>
+  <div class="kv"><span class="k">Source of truth</span><span class="v">For server state, the server is the truth, not <code>useState</code>.</span></div>
+  <div class="kv"><span class="k">Mixing mistake</span><span class="v">Treating fetched data like local state causes sync bugs.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>There are two kinds of state: client state (UI) and server state (a cached copy of server data).</li><li>The server owns server data — do not hold it in <code>useState</code> as if you owned it.</li><li>Mixing the two causes staleness and duplication bugs.</li><li>Pick the right tool per kind: a client store for UI, a query library for server state.</li></ul>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://tanstack.com/query/latest/docs/framework/react/guides/does-this-replace-client-state" target="_blank" rel="noopener">
   <span class="lc-ico">🔀</span>
@@ -88,6 +156,8 @@ useEffect(() =&gt; { fetch('/api/posts').then(r =&gt; r.json()).then(setPosts); 
 <pre><code class="language-javascript">'use client';
 const [posts, setPosts] = useState([]);
 useEffect(() =&gt; { fetch('/api/posts').then(r =&gt; r.json()).then(setPosts); }, []);</code></pre>
+<div class="callout warn"><strong>Đo thật: dán đoạn này vào một tệp <code>.tsx</code> thì không biên dịch được.</strong> <code>useState([])</code> không cho TypeScript gì để suy ra, nên state có kiểu <code>never[]</code> và mọi trường bạn đọc đều là lỗi:<div class="out">src/app/sai/bai.tsx(8,43): error TS2339: Property 'id' does not exist on type 'never'.
+src/app/sai/bai.tsx(8,50): error TS2339: Property 'title' does not exist on type 'never'.</div>Khai hình dạng cho state — <code>useState&lt;Post[]&gt;([])</code> — là biên dịch được. Nhưng kiểu chưa bao giờ là vấn đề thật: component vẫn đang giữ một bản sao dữ liệu máy chủ.</div>
 <p>Cách này coi một bản sao dữ liệu server như thể là state UI cục bộ. Giờ bạn tự tay quản loading, lỗi, cache, refetch, dedupe, và độ cũ — và dựng lại tất cả ở mọi component cần dữ liệu. Nó chạy được cho một màn và sụp đổ khắp một app thật. State server xứng đáng một công cụ hiểu rằng nó <em>là</em> cache của một thứ ở xa.</p>
 
 <h3>Bộ công cụ của chương này</h3>
@@ -117,6 +187,66 @@ useEffect(() =&gt; { fetch('/api/posts').then(r =&gt; r.json()).then(setPosts); 
   <span class="lc-body"><span class="lc-title">nextjs.org — Lấy dữ liệu</span><span class="lc-sub">Câu trả lời của chính framework, thứ gỡ đi phần lớn nhu cầu về một bộ đệm phía client.</span></span>
 </a>
 
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Liệt kê state trong một trang và gán mỗi mẩu là state client (UI) hay state server (dữ liệu từ API/DB).</li>
+<li>Chọn một mẩu bạn đang giữ trong <code>useState</code> mà thật ra là state server và ghi rủi ro bug (dữ liệu cũ, trùng lặp).</li>
+<li>Viết luật một dòng: đừng lưu dữ liệu server vào state client như thể bạn sở hữu nó.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn phân loại được state client vs server và nhận ra lỗi trộn chúng.</p></div>
+
+<h3>🔬 Đo thật: hai bản sao của cùng một danh sách trên một trang (Next.js 16.4.6 · React 19.3.0 · next start · Chromium)</h3>
+<p>Trang <code>/sai</code> có hai client component — một ô đếm và một danh sách — mỗi cái tự fetch <code>/api/posts</code> trong <code>useEffect</code> và giữ bản sao <code>useState</code> riêng. Sau khi thêm bài, danh sách tự sửa tay bản của nó. Trang <code>/dung</code> là Server Component đọc nguồn một lần và ghi qua Server Action (Chương 12).</p>
+<div class="out">mở                       /sai: 3 bài · danh sách 3 dòng     /dung: 3 bài · danh sách 3 dòng
+thêm "Zustand"           /sai: 3 bài · danh sách 4 dòng     /dung: 4 bài · danh sách 4 dòng
+tab khác thêm bài        /sai: 3 bài · danh sách 4 dòng     /dung: 4 bài · danh sách 4 dòng
+F5                       /sai: 5 bài · danh sách 5 dòng     /dung: 5 bài · danh sách 5 dòng</div>
+<p>Request từ trình duyệt khi ở <code>/sai</code> (mỗi lần tải hai GET), và số máy chủ tự đếm:</p>
+<div class="out">GET 200 · GET 200 · POST 201 · GET 200 · GET 200
+{"GET /api/posts":4,"POST /api/posts":2}</div>
+<p>HTML đầu tiên của mỗi trang (<code>curl</code>), cùng ký hiệu route của bản build <code>○ /sai</code> và <code>ƒ /dung</code>:</p>
+<div class="out">/sai   · &lt;li&gt; trong HTML: 0 · ô đếm: 0 bài
+/dung  · &lt;li&gt; trong HTML: 3 · ô đếm: 3 bài</div>
+<p>Hai bản sao lệch nhau sau một lần ghi, và không bản nào biết tới lần ghi từ tab khác cho tới khi tải lại. Một lần đọc trên máy chủ thì không thể tự lệch với chính nó.</p>
+<div class="note-ct"><strong>Trong kho của chính khoá này</strong><div class="out">$ grep -E '"(zustand|@tanstack/react-query|next|react)"' package.json
+    "@tanstack/react-query": "^5.101.0",
+    "next": "^14.2.15",
+    "react": "^18.3.1",
+    "zustand": "^4.5.5"
+$ grep -rlE "from 'zustand'" src | wc -l | sed 's/^ */tệp dùng zustand: /'; grep -rl "@tanstack/react-query" src | wc -l | sed 's/^ */tệp dùng @tanstack\\/react-query: /'
+tệp dùng zustand: 32
+tệp dùng @tanstack/react-query: 323
+$ grep -nE "products: MOCK_PRODUCTS|fetchProducts: async|name: 'shop-products-storage'|partialize" src/store/productStore.ts
+35:      products: MOCK_PRODUCTS,
+40:      fetchProducts: async () =&gt; {
+109:      name: 'shop-products-storage',
+111:      partialize: (state) =&gt; ({ products: state.products }),</div><code>productStore</code> giữ danh sách sản phẩm — dữ liệu máy chủ — trong một store Zustand, bắt đầu từ dữ liệu giả và lưu vào <code>localStorage</code>. Đó chính là cái bẫy ở trên trong mã thật: mỗi người xem mang một bản sao riêng cho tới khi <code>fetchProducts</code> thay nó.</div>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-bash">npx create-next-app@latest lab --ts --app --src-dir
+<span class="tok-comment"># thêm app/api/posts/route.ts (GET + POST), rồi hai client component mỗi cái tự fetch vào useState</span>
+npm run build &amp;&amp; npm start
+curl -s localhost:3000/sai | grep -o '&lt;li[ &gt;]' | wc -l   <span class="tok-comment">  # số dòng trong HTML đầu</span>
+<span class="tok-comment"># DevTools → Network → lọc /api/posts: đếm số GET, thêm một dòng, so ô đếm với danh sách</span></code></pre>
+<h3>🔗 Học sâu hơn</h3>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-6-1-fetch" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 6.1 — Fetch trong effect, và vì sao đau đầu</span><span class="lc-sub">Cuộc đua đo thật; AbortController</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-6-2-tanstack" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 6.2 — TanStack Query</span><span class="lc-sub">useQuery, query key, staleTime/gcTime</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-5-3-zustand" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 5.3 — Zustand cho state toàn app</span><span class="lc-sub">Store, selector, useShallow, persist</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nextjs/learn?lessonSlug=nextjs-10-1-fetch-trong-server-component" target="_blank" rel="noopener"><span class="lc-ico">▲</span><span class="lc-body"><span class="lc-title">Next.js · 10.1 — Fetch ngay tại nguồn: Server Component bất đồng bộ</span><span class="lc-sub">Chỗ mặc định cho dữ liệu ban đầu của trang</span></span></a>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">State client</span><span class="v">State chỉ-UI mà client sở hữu (menu mở, input form, theme).</span></div>
+  <div class="kv"><span class="k">State server</span><span class="v">Dữ liệu sống trên server; client giữ một bản sao cache.</span></div>
+  <div class="kv"><span class="k">Quyền sở hữu</span><span class="v">Server sở hữu dữ liệu server; client không nên giả vờ sở hữu.</span></div>
+  <div class="kv"><span class="k">Dữ liệu cũ</span><span class="v">State server chép vào state client sẽ lỗi thời.</span></div>
+  <div class="kv"><span class="k">Nguồn sự thật</span><span class="v">Với state server, server là sự thật, không phải <code>useState</code>.</span></div>
+  <div class="kv"><span class="k">Lỗi trộn</span><span class="v">Coi dữ liệu fetch như state cục bộ gây bug đồng bộ.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Có hai loại state: state client (UI) và state server (một bản sao cache của dữ liệu server).</li><li>Server sở hữu dữ liệu server — đừng giữ nó trong <code>useState</code> như thể bạn sở hữu.</li><li>Trộn hai loại gây bug dữ liệu cũ và trùng lặp.</li><li>Chọn đúng công cụ theo loại: một store client cho UI, một thư viện query cho state server.</li></ul>
+
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://tanstack.com/query/latest/docs/framework/react/guides/does-this-replace-client-state" target="_blank" rel="noopener">
   <span class="lc-ico">🔀</span>
@@ -134,6 +264,7 @@ useEffect(() =&gt; { fetch('/api/posts').then(r =&gt; r.json()).then(setPosts); 
       isFreePreview: false,
       description: 'Zustand là store toàn cục nhẹ: tạo một store bằng create(), đọc bằng hook có selector để chỉ render lại khi phần mình cần đổi. Khi nào dùng thay Context, và bẫy persist + hydration.',
       content: `
+${G14_2}
 <div class="ml-en">
 <span class="eyebrow">Chapter 14 · Lesson 14.2</span>
 <h2>A tiny global store without the boilerplate</h2>
@@ -150,6 +281,25 @@ const useCart = create((set) =&gt; ({
 <span class="tok-comment">// in any component — no provider needed</span>
 const items = useCart((s) =&gt; s.items);   <span class="tok-comment">// selector: re-render only when items change</span>
 const add   = useCart((s) =&gt; s.add);</code></pre>
+<div class="callout warn"><strong>Measured: in a strict TypeScript project this store does not compile.</strong><div class="out">src/lib/cart-bai.ts(5,12): error TS7006: Parameter 'item' implicitly has an 'any' type.
+src/lib/cart-bai.ts(5,26): error TS7006: Parameter 's' implicitly has an 'any' type.</div>Give the store its type — note the <b>two</b> pairs of parentheses, the first takes the type:<pre><code class="language-typescript">import { create } from 'zustand';
+
+export type Item = { id: number; ten: string };
+type Cart = {
+  items: Item[];
+  note: string;
+  add: (item: Item) =&gt; void;
+  setNote: (note: string) =&gt; void;
+  clear: () =&gt; void;
+};
+
+export const useCart = create&lt;Cart&gt;()((set) =&gt; ({
+  items: [],
+  note: '',
+  add: (item) =&gt; set((s) =&gt; ({ items: [...s.items, item] })),
+  setNote: (note) =&gt; set({ note }),
+  clear: () =&gt; set({ items: [] }),
+}));</code></pre></div>
 
 <h3>Selectors are the performance trick</h3>
 <p>You subscribe to a <em>slice</em> via a selector, and the component re-renders only when that slice changes. A component reading <code>s.items</code> is untouched when some unrelated part of the store updates. This is the key difference from Context, where every consumer re-renders whenever the context value changes — the reason large, fast-changing state does not belong in Context.</p>
@@ -160,11 +310,11 @@ const add   = useCart((s) =&gt; s.add);</code></pre>
 </div>
 
 <div class="note-ct">
-<p><strong>This is exactly how cuongthai.com splits it.</strong> The site uses Context for the app-wide, low-frequency values — the auth/user context and the theme provider — and Zustand stores for feature state that changes often, precisely to avoid re-rendering half the tree on every update. It also <em>persists</em> some stores (e.g. an <code>auth-storage</code> store) to <code>localStorage</code> so a session survives reload.</p>
+<p><strong>This is exactly how cuongthai.com splits it.</strong> The site keeps the app-wide, slow-changing values in Context — <code>ThemeContext</code> and <code>LocaleContext</code> — and everything else client-side in Zustand stores (32 files), precisely to avoid re-rendering half the tree on every update. Even auth is a store: <code>useAuthStore</code>, used in 149 files, is <em>persisted</em> to <code>localStorage</code> as <code>auth-storage</code> so a session survives reload.</p>
 </div>
 
 <div class="pitfall">
-<p><strong>Persisted stores hydrate asynchronously — do not gate your whole UI on a single "hydrated" flag.</strong> A persisted Zustand store loads from <code>localStorage</code> after mount, and its hydration flag can, in some conditions, never flip true — a real cuongthai.com bug where a page sat forever on "Đang tải…". If you must know whether persisted state is ready, track a local <code>mounted</code> state and read the stored value directly as a fallback, rather than trusting one boolean to reveal the app. (Same lesson as the hydration boundary in Chapter 9.)</p>
+<p><strong>Do not gate your whole UI on a single "hydrated" flag.</strong> With a synchronous storage like <code>localStorage</code>, persist reads the saved state <em>inside</em> <code>create()</code>, at import — before any component mounts (measured below) — and the hook still renders the initial state during hydration, so the first paint matches the server. The flag is the fragile part: if <code>onRehydrateStorage</code> calls <code>useAuthStore.setState</code>, it runs while <code>create()</code> has not returned, the variable is not assigned yet, the <code>ReferenceError</code> is swallowed, and <code>isHydrated</code> never flips true — the real cuongthai.com bug where a page sat forever on "Đang tải…" (<code>authStore.ts:179-199</code>). Call an action on the <code>state</code> the callback receives instead. If you must know whether persisted state is ready, track a local <code>mounted</code> state and read the stored value directly as a fallback, rather than trusting one boolean to reveal the app. (Same lesson as the hydration boundary in Chapter 9.)</p>
 </div>
 
 <h3>A store, and what it is good for</h3>
@@ -183,6 +333,85 @@ const add   = useCart((s) =&gt; s.add);</code></pre>
   <span class="lc-ico">▲</span>
   <span class="lc-body"><span class="lc-title">Zustand with Next.js</span><span class="lc-sub">The App Router guide: per-request stores, and why a module-level store leaks on the server.</span></span>
 </a>
+
+
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Create a Zustand store with one value and an action, and read it in two unrelated components.</li>
+<li>Update the store from one component and confirm the other re-renders without any prop passing.</li>
+<li>Select a single slice with a selector and confirm components not using it do not re-render.</li>
+</ol>
+<p><strong>Done when:</strong> you can share client state across the tree with Zustand and select slices to limit re-renders.</p></div>
+
+<h3>🔬 Measured: selectors, two traps, the server, persist (Next.js 16.4.6 · zustand 5.1.0 and 4.5.7 · Chromium)</h3>
+<p><b>Selectors vs Context.</b> One page with three components — <code>DemMon</code> selects <code>s.items.length</code>, <code>GhiChu</code> selects <code>s.note</code>, <code>CaStore</code> destructures <code>useCart()</code> with no selector — and the same UI built on Context. Production build, Chromium: edit the note 3×, add an item 2×, count the <code>render …</code> console lines:</p>
+<div class="out">Zustand  · DemMon 3× · GhiChu 4× · CaStore 6× · 2 items · Note: xxxx
+Context  · DemMon 6× · GhiChu 6× · 2 items · Note: xxxx</div>
+<p><b>A selector that returns a new object</b> — <code>useCart((s) =&gt; ({ n: s.items.length, note: s.note }))</code> — in zustand 5, <code>next dev</code>; then the same selector wrapped in <code>useShallow</code>:</p>
+<div class="out">obj-dev · 2 errors · (page not rendered)
+   error · The result of getServerSnapshot should be cached to avoid an infinite loop
+   pageerror · Maximum update depth exceeded. This can happen when a component repeatedly calls setState inside componentWillUpdate or componentDidUpdate. React
+shallow-dev · 0 errors · 0 items · </div>
+<p><b>A module store on the server.</b> A client component writes the signed-in name into a module-level store <em>while rendering</em>; another reads it. <code>curl</code> as An (cookie <code>u=An</code>), then as a guest — <code>/ro</code> uses the module store, <code>/ro2</code> creates one store per request (<code>createStore</code> inside a component, handed down by Context). Identical with zustand 4.5.7:</p>
+<div class="out">/ro   An    → Hello guest  ·  getState(): An
+/ro   guest → Hello guest  ·  getState(): An
+/ro2  An    → Hello An
+/ro2  guest → Hello guest
+/ro   u=Binh → Hello guest  ·  getState(): Binh
+/ro   guest → Hello guest  ·  getState(): Binh</div>
+<p>The hook reads the initial state on the server, so it looks safe; <code>getState()</code> shows what is really in the store — the previous visitor&#39;s name. The per-request store:</p>
+<pre><code class="language-tsx">'use client';
+import { createContext, useContext, useState } from 'react';
+import { createStore, useStore, type StoreApi } from 'zustand';
+
+type U = { ten: string | null };
+const Ctx = createContext&lt;StoreApi&lt;U&gt; | null&gt;(null);
+
+export function UserStoreProvider({ ten, children }: { ten: string | null; children: React.ReactNode }) {
+  const [store] = useState(() =&gt; createStore&lt;U&gt;()(() =&gt; ({ ten })));
+  return &lt;Ctx.Provider value={store}&gt;{children}&lt;/Ctx.Provider&gt;;
+}
+export function useUser&lt;T&gt;(chon: (s: U) =&gt; T): T {
+  const store = useContext(Ctx);
+  if (!store) throw new Error('thiếu UserStoreProvider');
+  return useStore(store, chon);
+}
+export function Chao() {
+  const ten = useUser((s) =&gt; s.ten);
+  return &lt;p id="chao"&gt;Xin chào {ten ?? 'khách'}&lt;/p&gt;;
+}</code></pre>
+<p><b>persist.</b> <code>curl</code> of the first HTML, then Chromium with <code>localStorage.gio = { n: 3 }</code> and a reload:</p>
+<div class="out">server HTML /gio-luu: 0 items in the cart
+/gio-luu  · 3 items in the cart · 0 console errors
+/gio-luu (4.5.7)  · 3 items in the cart · 0 console errors</div>
+<p><b>Why the flag never flips</b> — the callback runs while <code>create()</code> is still executing:</p>
+<div class="out">$ node tdz3.mjs
+1 · start create()
+2 · onRehydrateStorage runs — create() has not returned yet
+   ReferenceError: Cannot access 'useAuthStore' before initialization
+3 · create() returned · isHydrated = false
+4 · fixed · isHydrated = true · user = {"id":1,"ten":"An"}</div>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-bash">npm i zustand
+<span class="tok-comment"># log in each component: console.log('render X') — then click and count in DevTools → Console (production build: npm run build &amp;&amp; npm start)</span>
+curl -s -H 'cookie: u=An' localhost:3000/ro &gt;/dev/null; curl -s localhost:3000/ro | grep -o 'getState(): [^&lt;]*'</code></pre>
+<h3>🔗 Go deeper</h3>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-5-3-zustand" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 5.3 — Zustand: store, selectors, useShallow, persist</span><span class="lc-sub">The same library, without a server</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-5-1-context" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 5.1 — Context without mass re-renders</span><span class="lc-sub">Providers, error hooks, measured renders</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nextjs/learn?lessonSlug=nextjs-9-2-use-client" target="_blank" rel="noopener"><span class="lc-ico">▲</span><span class="lc-body"><span class="lc-title">Next.js · 9.2 — 'use client'</span><span class="lc-sub">Client components still render on the server first</span></span></a>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Zustand</span><span class="v">A small client state store, used without a Provider.</span></div>
+  <div class="kv"><span class="k">Store</span><span class="v">A single place holding client state and actions.</span></div>
+  <div class="kv"><span class="k">Selector</span><span class="v"><code>useStore(s =&gt; s.slice)</code> to subscribe to part of the state.</span></div>
+  <div class="kv"><span class="k">No prop drilling</span><span class="v">Any component reads the store directly.</span></div>
+  <div class="kv"><span class="k">Action</span><span class="v">A function in the store that updates state.</span></div>
+  <div class="kv"><span class="k">Client-only</span><span class="v">For UI state, not a replacement for server data.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Zustand is a small client store you use without a Provider; any component reads it directly.</li><li>Use a selector (<code>useStore(s =&gt; s.slice)</code>) so only components using that slice re-render.</li><li>Actions in the store update state and notify subscribers.</li><li>Keep it for client/UI state — server data belongs in a query library.</li></ul>
 
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://zustand.docs.pmnd.rs/getting-started/introduction" target="_blank" rel="noopener">
@@ -208,6 +437,26 @@ const useCart = create((set) =&gt; ({
 const items = useCart((s) =&gt; s.items);   <span class="tok-comment">// selector: chỉ render lại khi items đổi</span>
 const add   = useCart((s) =&gt; s.add);</code></pre>
 
+<div class="callout warn"><strong>Đo thật: trong dự án TypeScript strict, store này không biên dịch được.</strong><div class="out">src/lib/cart-bai.ts(5,12): error TS7006: Parameter 'item' implicitly has an 'any' type.
+src/lib/cart-bai.ts(5,26): error TS7006: Parameter 's' implicitly has an 'any' type.</div>Khai kiểu cho store — chú ý <b>hai</b> cặp ngoặc, cặp đầu nhận kiểu:<pre><code class="language-typescript">import { create } from 'zustand';
+
+export type Item = { id: number; ten: string };
+type Cart = {
+  items: Item[];
+  note: string;
+  add: (item: Item) =&gt; void;
+  setNote: (note: string) =&gt; void;
+  clear: () =&gt; void;
+};
+
+export const useCart = create&lt;Cart&gt;()((set) =&gt; ({
+  items: [],
+  note: '',
+  add: (item) =&gt; set((s) =&gt; ({ items: [...s.items, item] })),
+  setNote: (note) =&gt; set({ note }),
+  clear: () =&gt; set({ items: [] }),
+}));</code></pre></div>
+
 <h3>Selector là mẹo hiệu năng</h3>
 <p>Bạn subscribe một <em>lát</em> qua một selector, và component chỉ render lại khi lát đó đổi. Một component đọc <code>s.items</code> không bị đụng khi một phần không liên quan của store cập nhật. Đây là khác biệt then chốt với Context, nơi mọi consumer render lại mỗi khi giá trị context đổi — lý do state lớn, đổi nhanh không thuộc về Context.</p>
 
@@ -217,11 +466,11 @@ const add   = useCart((s) =&gt; s.add);</code></pre>
 </div>
 
 <div class="note-ct">
-<p><strong>Đây đúng cách cuongthai.com chia.</strong> Site dùng Context cho các giá trị toàn app, tần suất thấp — context auth/người dùng và provider theme — và các store Zustand cho state tính năng đổi thường xuyên, chính xác để tránh render lại nửa cây ở mỗi cập nhật. Nó cũng <em>persist</em> vài store (ví dụ store <code>auth-storage</code>) vào <code>localStorage</code> để một phiên sống qua reload.</p>
+<p><strong>Đây đúng cách cuongthai.com chia.</strong> Site giữ các giá trị toàn app, đổi chậm trong Context — <code>ThemeContext</code> và <code>LocaleContext</code> — còn mọi state phía client khác nằm trong các store Zustand (32 tệp), chính để tránh render lại nửa cây ở mỗi cập nhật. Ngay cả đăng nhập cũng là store: <code>useAuthStore</code>, dùng ở 149 tệp, được <em>persist</em> vào <code>localStorage</code> dưới tên <code>auth-storage</code> để phiên sống qua reload.</p>
 </div>
 
 <div class="pitfall">
-<p><strong>Store persist hydrate bất đồng bộ — đừng chặn cả UI sau một cờ "hydrated" duy nhất.</strong> Một store Zustand persist tải từ <code>localStorage</code> sau khi mount, và cờ hydration của nó, trong vài điều kiện, có thể không bao giờ lật true — một bug thật của cuongthai.com khiến một trang ngồi mãi ở "Đang tải…". Nếu bạn phải biết state persist đã sẵn sàng chưa, hãy theo dõi một state <code>mounted</code> cục bộ và đọc thẳng giá trị đã lưu làm dự phòng, thay vì tin một boolean để hiện app. (Cùng bài học với ranh giới hydration ở Chương 9.)</p>
+<p><strong>Đừng chặn cả UI sau một cờ "hydrated" duy nhất.</strong> Với storage đồng bộ như <code>localStorage</code>, persist đọc state đã lưu <em>ngay bên trong</em> <code>create()</code>, lúc import — trước khi có component nào mount (đo ở dưới) — và hook vẫn render state ban đầu lúc hydrate, nên lần vẽ đầu khớp với máy chủ. Chỗ mong manh là cái cờ: nếu <code>onRehydrateStorage</code> gọi <code>useAuthStore.setState</code>, nó chạy khi <code>create()</code> chưa trả về, biến chưa được gán, <code>ReferenceError</code> bị nuốt im lặng, và <code>isHydrated</code> không bao giờ lật true — đúng bug thật của cuongthai.com khiến một trang ngồi mãi ở "Đang tải…" (<code>authStore.ts:179-199</code>). Hãy gọi một action trên chính <code>state</code> mà callback nhận được. Nếu bạn phải biết state persist đã sẵn sàng chưa, hãy theo dõi một state <code>mounted</code> cục bộ và đọc thẳng giá trị đã lưu làm dự phòng, thay vì tin một boolean để hiện app. (Cùng bài học với ranh giới hydration ở Chương 9.)</p>
 </div>
 
 <h3>Một store, và nó tốt cho việc gì</h3>
@@ -241,6 +490,85 @@ const add   = useCart((s) =&gt; s.add);</code></pre>
   <span class="lc-body"><span class="lc-title">Zustand với Next.js</span><span class="lc-sub">Hướng dẫn cho App Router: store theo từng request, và vì sao store ở cấp module rò rỉ trên máy chủ.</span></span>
 </a>
 
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Tạo một store Zustand với một giá trị và một action, và đọc nó trong hai component không liên quan.</li>
+<li>Cập nhật store từ một component và xác nhận cái kia render lại mà không truyền prop nào.</li>
+<li>Chọn một lát bằng một selector và xác nhận component không dùng nó thì không render lại.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn chia sẻ được state client qua cả cây bằng Zustand và chọn lát để giới hạn render lại.</p></div>
+
+<h3>🔬 Đo thật: selector, hai cái bẫy, máy chủ, persist (Next.js 16.4.6 · zustand 5.1.0 và 4.5.7 · Chromium)</h3>
+<p><b>Selector so với Context.</b> Một trang ba component — <code>DemMon</code> chọn <code>s.items.length</code>, <code>GhiChu</code> chọn <code>s.note</code>, <code>CaStore</code> lấy <code>useCart()</code> không selector — và cùng giao diện dựng bằng Context. Bản build thật, Chromium: sửa ghi chú 3 lần, thêm món 2 lần, đếm dòng console <code>render …</code>:</p>
+<div class="out">Zustand  · DemMon 3 lần · GhiChu 4 lần · CaStore 6 lần · 2 món · Ghi chú: xxxx
+Context  · DemMon 6 lần · GhiChu 6 lần · 2 món · Ghi chú: xxxx</div>
+<p><b>Selector trả về object mới</b> — <code>useCart((s) =&gt; ({ n: s.items.length, note: s.note }))</code> — ở zustand 5, <code>next dev</code>; rồi cùng selector bọc trong <code>useShallow</code>:</p>
+<div class="out">obj-dev · 2 dòng lỗi/cảnh báo · (không có #dem)
+   error · The result of getServerSnapshot should be cached to avoid an infinite loop
+   pageerror · Maximum update depth exceeded. This can happen when a component repeatedly calls setState inside componentWillUpdate or componentDidUpdate. React
+shallow-dev · 0 dòng lỗi/cảnh báo · 0 món · </div>
+<p><b>Store module trên máy chủ.</b> Một client component ghi tên người đăng nhập vào store cấp module <em>ngay lúc render</em>; component khác đọc nó. <code>curl</code> với tư cách An (cookie <code>u=An</code>), rồi với tư cách khách — <code>/ro</code> dùng store module, <code>/ro2</code> tạo một store cho mỗi request (<code>createStore</code> trong component, phát qua Context). Y hệt với zustand 4.5.7:</p>
+<div class="out">/ro   An    → Xin chào khách  ·  getState(): An
+/ro   khách → Xin chào khách  ·  getState(): An
+/ro2  An    → Xin chào An
+/ro2  khách → Xin chào khách
+/ro   u=Binh → Xin chào khách  ·  getState(): Binh
+/ro   khách → Xin chào khách  ·  getState(): Binh</div>
+<p>Hook đọc state ban đầu trên máy chủ nên trông như an toàn; <code>getState()</code> cho thấy thứ thật sự nằm trong store — tên của người xem trước. Store theo từng request:</p>
+<pre><code class="language-tsx">'use client';
+import { createContext, useContext, useState } from 'react';
+import { createStore, useStore, type StoreApi } from 'zustand';
+
+type U = { ten: string | null };
+const Ctx = createContext&lt;StoreApi&lt;U&gt; | null&gt;(null);
+
+export function UserStoreProvider({ ten, children }: { ten: string | null; children: React.ReactNode }) {
+  const [store] = useState(() =&gt; createStore&lt;U&gt;()(() =&gt; ({ ten })));
+  return &lt;Ctx.Provider value={store}&gt;{children}&lt;/Ctx.Provider&gt;;
+}
+export function useUser&lt;T&gt;(chon: (s: U) =&gt; T): T {
+  const store = useContext(Ctx);
+  if (!store) throw new Error('thiếu UserStoreProvider');
+  return useStore(store, chon);
+}
+export function Chao() {
+  const ten = useUser((s) =&gt; s.ten);
+  return &lt;p id="chao"&gt;Xin chào {ten ?? 'khách'}&lt;/p&gt;;
+}</code></pre>
+<p><b>persist.</b> <code>curl</code> HTML đầu tiên, rồi Chromium với <code>localStorage.gio = { n: 3 }</code> và tải lại:</p>
+<div class="out">HTML máy chủ /gio-luu: 0 món trong giỏ
+/gio-luu  · 3 món trong giỏ · 0 lỗi console
+/gio-luu (4.5.7)  · 3 món trong giỏ · 0 lỗi console</div>
+<p><b>Vì sao cờ không bao giờ bật</b> — callback chạy khi <code>create()</code> vẫn đang chạy:</p>
+<div class="out">$ node tdz3.mjs
+1 · bắt đầu create()
+2 · onRehydrateStorage chạy — create() vẫn chưa trả về
+   ReferenceError: Cannot access 'useAuthStore' before initialization
+3 · create() trả về · isHydrated = false
+4 · bản sửa · isHydrated = true · user = {"id":1,"ten":"An"}</div>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-bash">npm i zustand
+<span class="tok-comment"># in trong mỗi component: console.log('render X') — rồi bấm và đếm trong DevTools → Console (bản build thật: npm run build &amp;&amp; npm start)</span>
+curl -s -H 'cookie: u=An' localhost:3000/ro &gt;/dev/null; curl -s localhost:3000/ro | grep -o 'getState(): [^&lt;]*'</code></pre>
+<h3>🔗 Học sâu hơn</h3>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-5-3-zustand" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 5.3 — Zustand: store, selector, useShallow, persist</span><span class="lc-sub">Cùng thư viện, khi không có máy chủ</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-5-1-context" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 5.1 — Context mà không render lại ồ ạt</span><span class="lc-sub">Provider, hook báo lỗi, đo số lần render</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nextjs/learn?lessonSlug=nextjs-9-2-use-client" target="_blank" rel="noopener"><span class="lc-ico">▲</span><span class="lc-body"><span class="lc-title">Next.js · 9.2 — 'use client'</span><span class="lc-sub">Client component vẫn render trên máy chủ trước</span></span></a>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Zustand</span><span class="v">Một store state client nhỏ, dùng không cần Provider.</span></div>
+  <div class="kv"><span class="k">Store</span><span class="v">Một chỗ duy nhất giữ state client và action.</span></div>
+  <div class="kv"><span class="k">Selector</span><span class="v"><code>useStore(s =&gt; s.slice)</code> để đăng ký một phần state.</span></div>
+  <div class="kv"><span class="k">Không prop drilling</span><span class="v">Component bất kỳ đọc thẳng store.</span></div>
+  <div class="kv"><span class="k">Action</span><span class="v">Một hàm trong store cập nhật state.</span></div>
+  <div class="kv"><span class="k">Chỉ client</span><span class="v">Cho state UI, không thay thế dữ liệu server.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Zustand là một store client nhỏ dùng không cần Provider; component bất kỳ đọc thẳng nó.</li><li>Dùng một selector (<code>useStore(s =&gt; s.slice)</code>) để chỉ component dùng lát đó render lại.</li><li>Action trong store cập nhật state và báo cho các subscriber.</li><li>Giữ nó cho state client/UI — dữ liệu server thuộc về một thư viện query.</li></ul>
+
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://zustand.docs.pmnd.rs/getting-started/introduction" target="_blank" rel="noopener">
   <span class="lc-ico">🐻</span>
@@ -258,6 +586,7 @@ const add   = useCart((s) =&gt; s.add);</code></pre>
       isFreePreview: false,
       description: 'Khi dữ liệu server phải fetch Ở CLIENT (theo tương tác, cuộn vô hạn, cập nhật nền), useQuery lo cache, dedupe, loading/error, refetch khi focus. Nó thay cho đống useEffect+useState thủ công.',
       content: `
+${G14_3}
 <div class="ml-en">
 <span class="eyebrow">Chapter 14 · Lesson 14.3</span>
 <h2>The right tool for client-side server data</h2>
@@ -275,6 +604,19 @@ function Posts() {
   if (error) return &lt;p&gt;Failed to load&lt;/p&gt;;
   return &lt;List items={data} /&gt;;
 }</code></pre>
+<div class="callout warn"><strong>Measured: the snippet needs two things the lesson does not show.</strong> <code>Spinner</code> and <code>List</code> are not defined anywhere:<div class="out">src/app/q-bai/page.tsx(10,26): error TS2304: Cannot find name 'Spinner'.
+src/app/q-bai/page.tsx(12,11): error TS2304: Cannot find name 'List'.</div>Replace them with plain elements and <code>next build</code> stops while prerendering the page, because nothing above it provides a cache:<div class="out">Error occurred prerendering page "/q-bai". Read more: https://nextjs.org/docs/messages/prerender-error
+Error: No QueryClient set, use QueryClientProvider to set one</div>Add a provider in its own client file and wrap the layout with it. <code>useState</code> creates the client once per mount — never at module level, where on the server one client would be shared by every request (Lesson 14.2):<pre><code class="language-tsx">'use client';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { useState } from 'react';
+
+export function Providers({ children }: { children: React.ReactNode }) {
+  const [qc] = useState(() =&gt; new QueryClient());
+  return &lt;QueryClientProvider client={qc}&gt;{children}&lt;/QueryClientProvider&gt;;
+}</code></pre><pre><code class="language-tsx">import { Providers } from './Providers';
+export default function Layout({ children }: LayoutProps&lt;'/q'&gt;) {
+  return &lt;Providers&gt;{children}&lt;/Providers&gt;;
+}</code></pre></div>
 
 <div class="kv-grid">
   <div class="kv"><span class="k">queryKey</span><span class="v">A unique key for this data. It powers caching, deduping, and invalidation. Include variables in it: <code>['post', id]</code>.</span></div>
@@ -306,6 +648,72 @@ function Posts() {
   <span class="lc-body"><span class="lc-title">TanStack Query — SSR and Next.js</span><span class="lc-sub">Hydrating server-fetched data into the client cache, instead of fetching twice.</span></span>
 </a>
 
+
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Fetch a list with <code>useQuery</code> and render its <code>data</code>, <code>isLoading</code> and <code>error</code> states.</li>
+<li>Observe caching: navigate away and back and watch the data appear instantly from cache, then refetch in the background.</li>
+<li>Set a <code>staleTime</code> and confirm it controls how often a cached query refetches.</li>
+</ol>
+<p><strong>Done when:</strong> you can manage server state on the client with TanStack Query's cache and states.</p></div>
+
+<h3>🔬 Measured: dedupe, stale-while-revalidate, focus, the race, an unstable key (Next.js 16.4.6 · TanStack Query 5.107.1 · Chromium)</h3>
+<p><b>One key, one request.</b> The two components from Lesson 14.1, now both calling the same <code>useQuery</code> with key <code>['posts']</code> (<code>/q/hai</code>); and a Server Component that passes the first page down as <code>initialData</code> (<code>/q/dau</code>):</p>
+<div class="out">/q/hai  · &lt;li&gt; in HTML: 0 · Đang tải…
+/q/dau  · &lt;li&gt; in HTML: 3 · 
+/q/hai  · request /api/posts: 1 · 3 posts · 3 rows
+/q/dau  · request /api/posts: 0 · 3 rows</div>
+<p><b>Leave and come back.</b> Page A → page B → back to A, then hide and show the tab, then add a post from another tab and refocus. Left column <code>staleTime: 0</code> (the default), right column <code>staleTime: 60_000</code>:</p>
+<div class="out">open A                             3 posts · 3 rows                         3 posts · 3 rows
+back to A, 30 ms after the click   3 posts · refetching in background · 3 rows 3 posts · 3 rows
+back to A, 930 ms                  3 posts · 3 rows                         3 posts · 3 rows
+another tab adds a post, refocus   4 posts · 4 rows                         3 posts · 3 rows
+requests to /api/posts:  staleTime 0: 1 → 2 → 3 → 4  ·  staleTime 60 s: 1 → 1 → 1 → 1</div>
+<p><b>The race.</b> Post 1 answers in 1,500 ms, post 2 in 200 ms; click 1, then 2 straight away. The same selection rendered by a hand-written <code>useEffect</code> and by <code>useQuery({ queryKey: ['post', id] })</code>:</p>
+<div class="out">0.4 s  useEffect: Server Component · useQuery: …
+2.5 s  useEffect: Học Next.js · useQuery: Server Component</div>
+<p>The effect ends on post 1 while post 2 is selected — the slow answer arrived last and overwrote it. <b>An unstable key</b> — <code>['posts', Date.now()]</code> — open for three seconds:</p>
+<div class="out">request /api/posts in 3 s: 34 · pending · … posts</div>
+<div class="note-ct"><strong>cuongthai.com&#39;s defaults</strong><div class="out">$ sed -n '17,28p' src/lib/queryClient.ts
+  return new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: 5 * 60 * 1000,
+        gcTime: 30 * 60 * 1000,
+        retry: 2,
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: true,
+      },
+      mutations: { retry: 1 },
+    },
+  });
+$ sed -n '34,38p' src/lib/queryClient.ts
+  if (typeof window === 'undefined') return makeClient(); // server: per-request
+  if (!browserClient) browserClient = makeClient();
+  return browserClient;
+}</div>Five minutes of freshness and no refetch on focus: fewer requests, and a write made elsewhere shows up after five minutes or after an invalidation (Lesson 14.4). On the server it makes a fresh client per call, so nothing leaks between users.</div>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-bash">npm i @tanstack/react-query
+<span class="tok-comment"># two components with the same queryKey → DevTools → Network → filter /api/posts: one request</span>
+<span class="tok-comment"># navigate away and back with staleTime 0 and 60_000; count requests; read isFetching</span></code></pre>
+<h3>🔗 Go deeper</h3>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-6-2-tanstack" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 6.2 — TanStack Query: useQuery, query keys, staleTime/gcTime</span><span class="lc-sub">status vs fetchStatus, measured</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-6-1-fetch" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 6.1 — Fetching in an effect: the race, measured</span><span class="lc-sub">AbortController and why it hurts</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nextjs/learn?lessonSlug=nextjs-10-2-cache" target="_blank" rel="noopener"><span class="lc-ico">▲</span><span class="lc-body"><span class="lc-title">Next.js · 10.2 — Caching, plainly</span><span class="lc-sub">The server-side caches this one sits on top of</span></span></a>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">TanStack Query</span><span class="v">A library that caches and syncs server state on the client.</span></div>
+  <div class="kv"><span class="k">useQuery</span><span class="v">Fetch + cache a query, exposing data/isLoading/error.</span></div>
+  <div class="kv"><span class="k">Query key</span><span class="v">The unique id for a cached query.</span></div>
+  <div class="kv"><span class="k">staleTime</span><span class="v">How long cached data is considered fresh.</span></div>
+  <div class="kv"><span class="k">Background refetch</span><span class="v">Serve cache instantly, update behind the scenes.</span></div>
+  <div class="kv"><span class="k">When to use</span><span class="v">For client-fetched server data that Server Components do not cover.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>TanStack Query manages server state on the client: it caches by query key and exposes data/isLoading/error.</li><li>It serves cached data instantly and refetches in the background; <code>staleTime</code> tunes freshness.</li><li>It removes most hand-written fetch effects and their race/loading boilerplate.</li><li>Reach for it when you must fetch on the client beyond what Server Components do.</li></ul>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://tanstack.com/query/latest/docs/framework/react/quick-start" target="_blank" rel="noopener">
   <span class="lc-ico">📡</span>
@@ -330,6 +738,19 @@ function Posts() {
   if (error) return &lt;p&gt;Tải thất bại&lt;/p&gt;;
   return &lt;List items={data} /&gt;;
 }</code></pre>
+<div class="callout warn"><strong>Đo thật: đoạn mã cần hai thứ mà bài không cho thấy.</strong> <code>Spinner</code> và <code>List</code> không được định nghĩa ở đâu cả:<div class="out">src/app/q-bai/page.tsx(10,26): error TS2304: Cannot find name 'Spinner'.
+src/app/q-bai/page.tsx(12,11): error TS2304: Cannot find name 'List'.</div>Thay bằng thẻ thường thì <code>next build</code> dừng lúc dựng sẵn trang, vì phía trên không có gì cung cấp cache:<div class="out">Error occurred prerendering page "/q-bai". Read more: https://nextjs.org/docs/messages/prerender-error
+Error: No QueryClient set, use QueryClientProvider to set one</div>Thêm một provider trong tệp client riêng và bọc layout bằng nó. <code>useState</code> tạo client một lần cho mỗi lần mount — đừng đặt ở cấp module, nơi trên máy chủ một client sẽ dùng chung cho mọi request (Bài 14.2):<pre><code class="language-tsx">'use client';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { useState } from 'react';
+
+export function Providers({ children }: { children: React.ReactNode }) {
+  const [qc] = useState(() =&gt; new QueryClient());
+  return &lt;QueryClientProvider client={qc}&gt;{children}&lt;/QueryClientProvider&gt;;
+}</code></pre><pre><code class="language-tsx">import { Providers } from './Providers';
+export default function Layout({ children }: LayoutProps&lt;'/q'&gt;) {
+  return &lt;Providers&gt;{children}&lt;/Providers&gt;;
+}</code></pre></div>
 
 <div class="kv-grid">
   <div class="kv"><span class="k">queryKey</span><span class="v">Một khoá duy nhất cho dữ liệu này. Nó vận hành cache, dedupe, và vô hiệu hoá. Đưa biến vào nó: <code>['post', id]</code>.</span></div>
@@ -361,6 +782,72 @@ function Posts() {
   <span class="lc-body"><span class="lc-title">TanStack Query — SSR và Next.js</span><span class="lc-sub">Hydrate dữ liệu lấy ở máy chủ vào bộ đệm phía client, thay vì lấy hai lần.</span></span>
 </a>
 
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Fetch một danh sách bằng <code>useQuery</code> và render các trạng thái <code>data</code>, <code>isLoading</code> và <code>error</code> của nó.</li>
+<li>Quan sát cache: điều hướng đi rồi quay lại và xem dữ liệu hiện ngay từ cache, rồi refetch ở nền.</li>
+<li>Đặt một <code>staleTime</code> và xác nhận nó điều khiển tần suất refetch của một query đã cache.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn quản được state server trên client bằng cache và các trạng thái của TanStack Query.</p></div>
+
+<h3>🔬 Đo thật: gộp request, hiện cũ rồi tải lại, quay về tab, cuộc đua, key không ổn định (Next.js 16.4.6 · TanStack Query 5.107.1 · Chromium)</h3>
+<p><b>Một key, một request.</b> Hai component của Bài 14.1, giờ cùng gọi một <code>useQuery</code> với key <code>['posts']</code> (<code>/q/hai</code>); và một Server Component đưa trang đầu xuống làm <code>initialData</code> (<code>/q/dau</code>):</p>
+<div class="out">/q/hai  · &lt;li&gt; trong HTML: 0 · Đang tải…
+/q/dau  · &lt;li&gt; trong HTML: 3 · 
+/q/hai  · request /api/posts: 1 · 3 bài · 3 dòng
+/q/dau  · request /api/posts: 0 · 3 dòng</div>
+<p><b>Rời đi rồi quay lại.</b> Trang A → trang B → về A, rồi ẩn và hiện tab, rồi thêm bài từ một tab khác và quay lại. Cột trái <code>staleTime: 0</code> (mặc định), cột phải <code>staleTime: 60_000</code>:</p>
+<div class="out">mở A                               3 bài · 3 dòng                           3 bài · 3 dòng
+về A, 30 ms sau khi bấm            3 bài · đang tải lại nền · 3 dòng        3 bài · 3 dòng
+về A, 930 ms                       3 bài · 3 dòng                           3 bài · 3 dòng
+tab khác thêm bài, quay lại tab    4 bài · 4 dòng                           3 bài · 3 dòng
+request tới /api/posts:  staleTime 0: 1 → 2 → 3 → 4  ·  staleTime 60 s: 1 → 1 → 1 → 1</div>
+<p><b>Cuộc đua.</b> Bài 1 trả lời sau 1.500 ms, bài 2 sau 200 ms; bấm 1 rồi bấm 2 ngay. Cùng lựa chọn đó do một <code>useEffect</code> tự viết và do <code>useQuery({ queryKey: ['post', id] })</code> hiển thị:</p>
+<div class="out">0,4 s  useEffect: Server Component · useQuery: …
+2,5 s  useEffect: Học Next.js · useQuery: Server Component</div>
+<p>Effect kết thúc ở bài 1 trong khi đang chọn bài 2 — câu trả lời chậm đến sau cùng và ghi đè. <b>Key không ổn định</b> — <code>['posts', Date.now()]</code> — mở trong ba giây:</p>
+<div class="out">request /api/posts trong 3 s: 34 · pending · … bài</div>
+<div class="note-ct"><strong>Mặc định của cuongthai.com</strong><div class="out">$ sed -n '17,28p' src/lib/queryClient.ts
+  return new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: 5 * 60 * 1000,
+        gcTime: 30 * 60 * 1000,
+        retry: 2,
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: true,
+      },
+      mutations: { retry: 1 },
+    },
+  });
+$ sed -n '34,38p' src/lib/queryClient.ts
+  if (typeof window === 'undefined') return makeClient(); // server: per-request
+  if (!browserClient) browserClient = makeClient();
+  return browserClient;
+}</div>Năm phút còn tươi và không tải lại khi quay về tab: ít request hơn, đổi lại một lần ghi từ nơi khác chỉ hiện sau năm phút hoặc sau khi vô hiệu hoá (Bài 14.4). Trên máy chủ nó tạo client mới mỗi lần gọi, nên không rò giữa người dùng.</div>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-bash">npm i @tanstack/react-query
+<span class="tok-comment"># hai component cùng queryKey → DevTools → Network → lọc /api/posts: một request</span>
+<span class="tok-comment"># rời đi rồi quay lại với staleTime 0 và 60_000; đếm request; đọc isFetching</span></code></pre>
+<h3>🔗 Học sâu hơn</h3>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-6-2-tanstack" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 6.2 — TanStack Query: useQuery, query key, staleTime/gcTime</span><span class="lc-sub">status và fetchStatus, đo thật</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-6-1-fetch" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 6.1 — Fetch trong effect: cuộc đua, đo thật</span><span class="lc-sub">AbortController và vì sao đau đầu</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nextjs/learn?lessonSlug=nextjs-10-2-cache" target="_blank" rel="noopener"><span class="lc-ico">▲</span><span class="lc-body"><span class="lc-title">Next.js · 10.2 — Cache, nói thẳng</span><span class="lc-sub">Các tầng cache phía máy chủ nằm bên dưới</span></span></a>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">TanStack Query</span><span class="v">Thư viện cache và đồng bộ state server trên client.</span></div>
+  <div class="kv"><span class="k">useQuery</span><span class="v">Fetch + cache một query, lộ ra data/isLoading/error.</span></div>
+  <div class="kv"><span class="k">Query key</span><span class="v">Id duy nhất cho một query đã cache.</span></div>
+  <div class="kv"><span class="k">staleTime</span><span class="v">Dữ liệu cache được coi là mới trong bao lâu.</span></div>
+  <div class="kv"><span class="k">Refetch nền</span><span class="v">Phục vụ cache ngay, cập nhật phía sau.</span></div>
+  <div class="kv"><span class="k">Khi nào dùng</span><span class="v">Cho dữ liệu server fetch phía client mà Server Components không bao.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>TanStack Query quản state server trên client: cache theo query key và lộ ra data/isLoading/error.</li><li>Nó phục vụ dữ liệu cache ngay và refetch ở nền; <code>staleTime</code> chỉnh độ mới.</li><li>Nó bỏ hầu hết các effect fetch tự-viết cùng boilerplate đua/loading của chúng.</li><li>Dùng nó khi bạn buộc phải fetch trên client ngoài những gì Server Components làm.</li></ul>
+
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://tanstack.com/query/latest/docs/framework/react/quick-start" target="_blank" rel="noopener">
   <span class="lc-ico">📡</span>
@@ -378,6 +865,7 @@ function Posts() {
       isFreePreview: false,
       description: 'Đọc bằng useQuery, ghi bằng useMutation. Sau khi ghi thành công, vô hiệu hoá query liên quan (invalidateQueries) để nó tự fetch lại. Và optimistic update: cập nhật UI ngay, quay lui nếu lỗi.',
       content: `
+${G14_4}
 <div class="ml-en">
 <span class="eyebrow">Chapter 14 · Lesson 14.4</span>
 <h2>Writing on the client: useMutation, then invalidate</h2>
@@ -393,6 +881,27 @@ function useAddPost() {
     onSuccess: () =&gt; qc.invalidateQueries({ queryKey: ['posts'] }),  <span class="tok-comment">// refetch the list</span>
   });
 }</code></pre>
+<div class="callout warn"><strong>Measured: this hook compiles — and two things break when you use it.</strong> <code>post</code> has no type, so TanStack infers the mutation&#39;s variables as <code>void</code>; calling it with a post, as the lesson intends, is a type error:<div class="out">src/app/q-bai-m/Thu.tsx(3,58): error TS2345: Argument of type '{ title: string; }' is not assignable to parameter of type 'void'.</div>And <code>fetch</code> only rejects on a network failure. With the server answering <b>500</b>, a mutation whose function returns the response reports:<div class="out">1.200 ms  3 bài · mutation: success · Học Next.js, Server Component, Cache
+request   GET 200 · GET 200 · POST 500 · GET 200</div>— <code>onSuccess</code> runs for a write that failed. Type the variables and check <code>r.ok</code> (or use a client that rejects on non-2xx, as cuongthai.com does with axios):<pre><code class="language-tsx">'use client';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
+type NewPost = { title: string };
+
+export function useAddPost() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (post: NewPost) =&gt; {
+      const r = await fetch('/api/posts', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(post),
+      });
+      if (!r.ok) throw new Error(&#96;HTTP \${r.status}&#96;); <span class="tok-comment">  // fetch does not throw on 4xx/5xx</span>
+      return r.json();
+    },
+    onSuccess: () =&gt; qc.invalidateQueries({ queryKey: ['posts'] }),
+  });
+}</code></pre></div>
 <p>This mirrors the Server Action + <code>revalidatePath</code> cycle from Chapter 12 — write, then tell the cache to refresh — but for client-side query state. Same principle, different layer.</p>
 
 <h3>Optimistic updates: instant feedback</h3>
@@ -425,6 +934,103 @@ function useAddPost() {
   <span class="lc-body"><span class="lc-title">TanStack Query — Optimistic updates</span><span class="lc-sub">The snapshot-and-rollback pattern, with the code for both paths.</span></span>
 </a>
 
+
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Add a <code>useMutation</code> that creates an item, then invalidate the list query in its <code>onSuccess</code> so the UI refreshes.</li>
+<li>Implement an optimistic update: show the new item immediately, then roll back if the mutation fails.</li>
+<li>Explain why invalidation (not manual state editing) keeps the cache correct.</li>
+</ol>
+<p><strong>Done when:</strong> you can run a mutation, invalidate the right query, and do an optimistic update with rollback.</p></div>
+
+<h3>🔬 Measured: five ways to write the same post (Next.js 16.4.6 · TanStack Query 5.107.1 · Chromium · the API answers after 300 ms, "loi" ⇒ 500)</h3>
+<p>Each page shows the list (<code>useQuery(['posts'])</code>) and the mutation&#39;s <code>status</code>; the screen is read 50 ms and 1,200 ms after the click, then after F5.</p>
+<p><b>1 · No invalidation</b></p>
+<div class="out">before           3 posts · mutation: idle · Học Next.js, Server Component, Cache
+sau 50 ms        3 posts · mutation: pending · Học Next.js, Server Component, Cache
+sau 1.200 ms     3 posts · mutation: success · Học Next.js, Server Component, Cache
+sau F5           4 posts · mutation: idle · Học Next.js, Server Component, Cache, Zustand
+request  GET 200 · GET 200 · POST 201 · GET 200</div>
+<p><b>2 · onSuccess: invalidateQueries</b></p>
+<div class="out">before           3 posts · mutation: idle · Học Next.js, Server Component, Cache
+sau 50 ms        3 posts · mutation: pending · Học Next.js, Server Component, Cache
+sau 1.200 ms     4 posts · mutation: success · Học Next.js, Server Component, Cache, Zustand
+sau F5           4 posts · mutation: idle · Học Next.js, Server Component, Cache, Zustand
+request  GET 200 · GET 200 · POST 201 · GET 200 · GET 200</div>
+<p><b>4 · Optimistic, no rollback ("loi", the server rejects)</b></p>
+<div class="out">before           3 posts · mutation: idle · Học Next.js, Server Component, Cache
+sau 50 ms        4 posts · mutation: pending · Học Next.js, Server Component, Cache, loi
+sau 1.200 ms     4 posts · mutation: error · Học Next.js, Server Component, Cache, loi
+sau F5           3 posts · mutation: idle · Học Next.js, Server Component, Cache
+request  GET 200 · GET 200 · POST 500 · GET 200</div>
+<p><b>5 · Optimistic with rollback — the four steps</b></p>
+<pre><code class="language-tsx">export function useThemLacQuanQuayLui() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: gui,
+    onMutate: async (title) =&gt; {
+      await qc.cancelQueries({ queryKey: ['posts'] });               <span class="tok-comment">  // stop fetches in flight so they cannot overwrite the guess</span>
+      const truoc = qc.getQueryData&lt;Post[]&gt;(['posts']);              <span class="tok-comment">  // snapshot</span>
+      qc.setQueryData&lt;Post[]&gt;(['posts'], (cu = []) =&gt; [...cu, { id: -1, title }]);
+      return { truoc };
+    },
+    onError: (_loi, _title, ctx) =&gt; qc.setQueryData(['posts'], ctx?.truoc), <span class="tok-comment">  // restore the snapshot</span>
+    onSettled: () =&gt; qc.invalidateQueries({ queryKey: ['posts'] }),         <span class="tok-comment">  // then sync with the truth</span>
+  });
+}</code></pre>
+<div class="out">before           3 posts · mutation: idle · Học Next.js, Server Component, Cache
+sau 50 ms        4 posts · mutation: pending · Học Next.js, Server Component, Cache, loi
+sau 1.200 ms     3 posts · mutation: error · Học Next.js, Server Component, Cache
+sau F5           3 posts · mutation: idle · Học Next.js, Server Component, Cache
+request  GET 200 · GET 200 · POST 500 · GET 200 · GET 200</div>
+<p>The optimistic row appears at 50 ms either way. Without a rollback it is still on screen when the mutation has already failed; with one, the screen is back to the truth by 1.2 s. Cancelling first matters: a refetch that lands after your guess would overwrite it.</p>
+<div class="note-ct"><strong>cuongthai.com: a rollback with the wrong shape</strong><div class="out">$ for p in useMutation invalidateQueries setQueryData onMutate; do printf '%-18s %s tệp\\n' $p "$(grep -rl $p src | wc -l | tr -d ' ')"; done
+useMutation        194 tệp
+invalidateQueries  192 tệp
+setQueryData       62 tệp
+onMutate           10 tệp
+$ sed -n '63p;98,111p' src/app/saved/page.tsx
+  const collections = collectionsQuery.data?.collections ?? [];
+  // ── Delete collection ────────────────────────────────────────
+  const deleteCollection = useMutation({
+    mutationFn: (id: number) =&gt; socialApi.deleteCollectionV2(id),
+    onMutate: async (id) =&gt; {
+      // Optimistic remove from local list.
+      const prev = collections;
+      qc.setQueryData([...socialKeys.all, 'collections'], (old: any) =&gt;
+        old ? { ...old, collections: old.collections.filter((c: any) =&gt; c.id !== id) } : old,
+      );
+      return { prev };
+    },
+    onError: (_err, _vars, ctx) =&gt; {
+      if (ctx?.prev) qc.setQueryData([...socialKeys.all, 'collections'], ctx.prev as any);
+      toast.error('Xoá thất bại');</div><code>app/saved/page.tsx</code> snapshots <code>collections</code> — the <b>array</b> — but the cache entry is <code>{ collections: [...] }</code>. When the delete fails, the array is written where the object was and the page reads <code>data?.collections</code> as <code>undefined</code>. A replica of the same code, with a delete that fails:<div class="out">before           3 collections · mutation: idle · Học Next.js, Server Component, Cache
+sau 50 ms        0 collections · mutation: error · 
+sau 1.200 ms     0 collections · mutation: error · 
+sau F5           3 collections · mutation: idle · Học Next.js, Server Component, Cache
+request  GET 200 · GET 200 · DELETE 405 · GET 200</div>Snapshot the entry itself — <code>qc.getQueryData(key)</code> — and cancel queries first.</div>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-bash"><span class="tok-comment"># make your POST route answer 500 for one title, then:</span>
+<span class="tok-comment"># DevTools → Network: is the POST followed by a GET? (invalidation)</span>
+<span class="tok-comment"># show mutation.status on the page — does a 500 say success?</span></code></pre>
+<h3>🔗 Go deeper</h3>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-6-3-mutation" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 6.3 — Mutations and optimistic updates</span><span class="lc-sub">useMutation, invalidate, rollback on error</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-6-4-loi-api" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 6.4 — Loading, errors and empty states</span><span class="lc-sub">Retry, error boundaries, toasts</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nextjs/learn?lessonSlug=nextjs-12-3-revalidate-sau-ghi" target="_blank" rel="noopener"><span class="lc-ico">▲</span><span class="lc-body"><span class="lc-title">Next.js · 12.3 — After a write: revalidate the cache</span><span class="lc-sub">The same rule for Server Actions</span></span></a>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">useMutation</span><span class="v">Run a write and track its pending/error/success state.</span></div>
+  <div class="kv"><span class="k">Invalidate</span><span class="v">Mark a query stale so it refetches after a write.</span></div>
+  <div class="kv"><span class="k">Optimistic update</span><span class="v">Show the result before the server confirms, roll back on error.</span></div>
+  <div class="kv"><span class="k">onSuccess/onError</span><span class="v">Mutation callbacks to invalidate or roll back.</span></div>
+  <div class="kv"><span class="k">Cache coherence</span><span class="v">Keeping the cached list in sync with the server after writes.</span></div>
+  <div class="kv"><span class="k">Rollback</span><span class="v">Undo an optimistic change if the mutation fails.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li><code>useMutation</code> runs a write and exposes its pending/error/success states.</li><li>After a write, invalidate the affected query so the cached UI refetches and stays correct.</li><li>Optimistic updates show the change immediately and roll back if the server rejects it.</li><li>Prefer invalidation over manually editing the cache — it is simpler and harder to get wrong.</li></ul>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://tanstack.com/query/latest/docs/framework/react/guides/mutations" target="_blank" rel="noopener">
   <span class="lc-ico">✍️</span>
@@ -447,6 +1053,27 @@ function useAddPost() {
     onSuccess: () =&gt; qc.invalidateQueries({ queryKey: ['posts'] }),  <span class="tok-comment">// fetch lại danh sách</span>
   });
 }</code></pre>
+<div class="callout warn"><strong>Đo thật: hook này biên dịch được — và hai thứ hỏng khi bạn dùng nó.</strong> <code>post</code> không có kiểu, nên TanStack suy ra biến của mutation là <code>void</code>; gọi nó với một bài, đúng ý của bài, là lỗi kiểu:<div class="out">src/app/q-bai-m/Thu.tsx(3,58): error TS2345: Argument of type '{ title: string; }' is not assignable to parameter of type 'void'.</div>Và <code>fetch</code> chỉ reject khi lỗi mạng. Máy chủ trả <b>500</b>, một mutation trả thẳng response sẽ báo:<div class="out">1.200 ms  3 bài · mutation: success · Học Next.js, Server Component, Cache
+request   GET 200 · GET 200 · POST 500 · GET 200</div>— <code>onSuccess</code> chạy cho một lần ghi đã hỏng. Khai kiểu cho biến và kiểm <code>r.ok</code> (hoặc dùng thư viện từ chối mọi mã không phải 2xx, như cuongthai.com dùng axios):<pre><code class="language-tsx">'use client';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
+type NewPost = { title: string };
+
+export function useAddPost() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (post: NewPost) =&gt; {
+      const r = await fetch('/api/posts', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(post),
+      });
+      if (!r.ok) throw new Error(&#96;HTTP \${r.status}&#96;); <span class="tok-comment">  // fetch không ném lỗi với 4xx/5xx</span>
+      return r.json();
+    },
+    onSuccess: () =&gt; qc.invalidateQueries({ queryKey: ['posts'] }),
+  });
+}</code></pre></div>
 <p>Cái này phản chiếu vòng Server Action + <code>revalidatePath</code> ở Chương 12 — ghi, rồi bảo cache làm mới — nhưng cho state query phía client. Cùng nguyên lý, khác lớp.</p>
 
 <h3>Optimistic update: phản hồi tức thì</h3>
@@ -479,6 +1106,103 @@ function useAddPost() {
   <span class="lc-body"><span class="lc-title">TanStack Query — Cập nhật lạc quan</span><span class="lc-sub">Mẫu chụp-ảnh-rồi-quay-lui, kèm mã cho cả hai đường.</span></span>
 </a>
 
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Thêm một <code>useMutation</code> tạo một item, rồi vô hiệu query danh sách trong <code>onSuccess</code> để UI làm mới.</li>
+<li>Làm một optimistic update: hiện item mới ngay, rồi rollback nếu mutation thất bại.</li>
+<li>Giải thích vì sao vô hiệu (không phải tự sửa state) giữ cache đúng.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn chạy được một mutation, vô hiệu đúng query, và làm optimistic update có rollback.</p></div>
+
+<h3>🔬 Đo thật: năm cách ghi cùng một bài (Next.js 16.4.6 · TanStack Query 5.107.1 · Chromium · API trả sau 300 ms, "loi" ⇒ 500)</h3>
+<p>Mỗi trang hiện danh sách (<code>useQuery(['posts'])</code>) và <code>status</code> của mutation; đọc màn hình 50 ms và 1.200 ms sau khi bấm, rồi sau F5.</p>
+<p><b>1 · Không vô hiệu hoá</b></p>
+<div class="out">trước khi bấm    3 bài · mutation: idle · Học Next.js, Server Component, Cache
+sau 50 ms        3 bài · mutation: pending · Học Next.js, Server Component, Cache
+sau 1.200 ms     3 bài · mutation: success · Học Next.js, Server Component, Cache
+sau F5           4 bài · mutation: idle · Học Next.js, Server Component, Cache, Zustand
+request  GET 200 · GET 200 · POST 201 · GET 200</div>
+<p><b>2 · onSuccess: invalidateQueries</b></p>
+<div class="out">trước khi bấm    3 bài · mutation: idle · Học Next.js, Server Component, Cache
+sau 50 ms        3 bài · mutation: pending · Học Next.js, Server Component, Cache
+sau 1.200 ms     4 bài · mutation: success · Học Next.js, Server Component, Cache, Zustand
+sau F5           4 bài · mutation: idle · Học Next.js, Server Component, Cache, Zustand
+request  GET 200 · GET 200 · POST 201 · GET 200 · GET 200</div>
+<p><b>4 · Lạc quan, không quay lui ("loi", máy chủ từ chối)</b></p>
+<div class="out">trước khi bấm    3 bài · mutation: idle · Học Next.js, Server Component, Cache
+sau 50 ms        4 bài · mutation: pending · Học Next.js, Server Component, Cache, loi
+sau 1.200 ms     4 bài · mutation: error · Học Next.js, Server Component, Cache, loi
+sau F5           3 bài · mutation: idle · Học Next.js, Server Component, Cache
+request  GET 200 · GET 200 · POST 500 · GET 200</div>
+<p><b>5 · Lạc quan có quay lui — đủ bốn bước</b></p>
+<pre><code class="language-tsx">export function useThemLacQuanQuayLui() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: gui,
+    onMutate: async (title) =&gt; {
+      await qc.cancelQueries({ queryKey: ['posts'] });               <span class="tok-comment">  // dừng mọi lần tải đang bay, kẻo nó đè lên</span>
+      const truoc = qc.getQueryData&lt;Post[]&gt;(['posts']);              <span class="tok-comment">  // chụp lại</span>
+      qc.setQueryData&lt;Post[]&gt;(['posts'], (cu = []) =&gt; [...cu, { id: -1, title }]);
+      return { truoc };
+    },
+    onError: (_loi, _title, ctx) =&gt; qc.setQueryData(['posts'], ctx?.truoc), <span class="tok-comment">  // trả về đúng bản chụp</span>
+    onSettled: () =&gt; qc.invalidateQueries({ queryKey: ['posts'] }),         <span class="tok-comment">  // rồi đồng bộ với sự thật</span>
+  });
+}</code></pre>
+<div class="out">trước khi bấm    3 bài · mutation: idle · Học Next.js, Server Component, Cache
+sau 50 ms        4 bài · mutation: pending · Học Next.js, Server Component, Cache, loi
+sau 1.200 ms     3 bài · mutation: error · Học Next.js, Server Component, Cache
+sau F5           3 bài · mutation: idle · Học Next.js, Server Component, Cache
+request  GET 200 · GET 200 · POST 500 · GET 200 · GET 200</div>
+<p>Dòng lạc quan hiện ở 50 ms trong cả hai cách. Không quay lui thì nó vẫn nằm trên màn hình khi mutation đã thất bại; có quay lui thì tới 1,2 s màn hình đã về đúng sự thật. Huỷ trước là quan trọng: một lần tải về sau bản đoán của bạn sẽ đè lên nó.</p>
+<div class="note-ct"><strong>cuongthai.com: một lần quay lui sai hình</strong><div class="out">$ for p in useMutation invalidateQueries setQueryData onMutate; do printf '%-18s %s tệp\\n' $p "$(grep -rl $p src | wc -l | tr -d ' ')"; done
+useMutation        194 tệp
+invalidateQueries  192 tệp
+setQueryData       62 tệp
+onMutate           10 tệp
+$ sed -n '63p;98,111p' src/app/saved/page.tsx
+  const collections = collectionsQuery.data?.collections ?? [];
+  // ── Delete collection ────────────────────────────────────────
+  const deleteCollection = useMutation({
+    mutationFn: (id: number) =&gt; socialApi.deleteCollectionV2(id),
+    onMutate: async (id) =&gt; {
+      // Optimistic remove from local list.
+      const prev = collections;
+      qc.setQueryData([...socialKeys.all, 'collections'], (old: any) =&gt;
+        old ? { ...old, collections: old.collections.filter((c: any) =&gt; c.id !== id) } : old,
+      );
+      return { prev };
+    },
+    onError: (_err, _vars, ctx) =&gt; {
+      if (ctx?.prev) qc.setQueryData([...socialKeys.all, 'collections'], ctx.prev as any);
+      toast.error('Xoá thất bại');</div><code>app/saved/page.tsx</code> chụp lại <code>collections</code> — cái <b>mảng</b> — trong khi mục cache là <code>{ collections: [...] }</code>. Khi xoá thất bại, mảng bị ghi vào chỗ của object và trang đọc <code>data?.collections</code> ra <code>undefined</code>. Bản chép cùng mã, với một lần xoá thất bại:<div class="out">trước khi bấm    3 bộ sưu tập · mutation: idle · Học Next.js, Server Component, Cache
+sau 50 ms        0 bộ sưu tập · mutation: error · 
+sau 1.200 ms     0 bộ sưu tập · mutation: error · 
+sau F5           3 bộ sưu tập · mutation: idle · Học Next.js, Server Component, Cache
+request  GET 200 · GET 200 · DELETE 405 · GET 200</div>Hãy chụp nguyên mục cache — <code>qc.getQueryData(key)</code> — và huỷ các lần tải trước.</div>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-bash"><span class="tok-comment"># cho route POST trả 500 với một tiêu đề, rồi:</span>
+<span class="tok-comment"># DevTools → Network: sau POST có GET không? (vô hiệu hoá)</span>
+<span class="tok-comment"># hiện mutation.status lên trang — 500 có báo success không?</span></code></pre>
+<h3>🔗 Học sâu hơn</h3>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-6-3-mutation" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 6.3 — Mutation và cập nhật lạc quan</span><span class="lc-sub">useMutation, vô hiệu hoá, hoàn tác khi lỗi</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-6-4-loi-api" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 6.4 — Đang tải, lỗi và rỗng</span><span class="lc-sub">Thử lại, ranh giới lỗi, thông báo nổi</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nextjs/learn?lessonSlug=nextjs-12-3-revalidate-sau-ghi" target="_blank" rel="noopener"><span class="lc-ico">▲</span><span class="lc-body"><span class="lc-title">Next.js · 12.3 — Sau khi ghi: revalidate cache</span><span class="lc-sub">Cùng luật đó cho Server Action</span></span></a>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">useMutation</span><span class="v">Chạy một thao tác ghi và theo dõi trạng thái pending/error/success.</span></div>
+  <div class="kv"><span class="k">Invalidate (vô hiệu)</span><span class="v">Đánh dấu một query là cũ để refetch sau một lần ghi.</span></div>
+  <div class="kv"><span class="k">Optimistic update</span><span class="v">Hiện kết quả trước khi server xác nhận, rollback khi lỗi.</span></div>
+  <div class="kv"><span class="k">onSuccess/onError</span><span class="v">Callback của mutation để vô hiệu hoặc rollback.</span></div>
+  <div class="kv"><span class="k">Nhất quán cache</span><span class="v">Giữ danh sách cache đồng bộ với server sau các lần ghi.</span></div>
+  <div class="kv"><span class="k">Rollback</span><span class="v">Hoàn tác một thay đổi lạc quan nếu mutation thất bại.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li><code>useMutation</code> chạy một thao tác ghi và lộ ra trạng thái pending/error/success.</li><li>Sau một lần ghi, vô hiệu query bị ảnh hưởng để UI cache refetch và giữ đúng.</li><li>Optimistic update hiện thay đổi ngay và rollback nếu server từ chối.</li><li>Ưu tiên vô hiệu hơn tự sửa cache — đơn giản hơn và khó sai hơn.</li></ul>
+
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://tanstack.com/query/latest/docs/framework/react/guides/mutations" target="_blank" rel="noopener">
   <span class="lc-ico">✍️</span>
@@ -496,6 +1220,7 @@ function useAddPost() {
       isFreePreview: false,
       description: 'Một bảng quyết định: dữ liệu trang ban đầu → Server Component; server data theo tương tác → TanStack Query; UI toàn cục đổi nhanh → Zustand; giá trị app đổi chậm → Context; state chia sẻ được qua link → URL.',
       content: `
+${G14_5}
 <div class="ml-en">
 <span class="eyebrow">Chapter 14 · Lesson 14.5</span>
 <h2>A decision guide you can apply on every screen</h2>
@@ -517,7 +1242,7 @@ function useAddPost() {
 </div>
 
 <div class="note-ct">
-<p><strong>cuongthai.com in these terms:</strong> initial page content renders from Server Components; auth and theme are Context (app-wide, slow); fast-changing feature UI lives in Zustand stores (some persisted to survive reload); and shareable view state — which feed tab, which filter — belongs in the URL so a link reproduces the exact view. The same app uses four different tools, each matched to the kind of state it holds. That matching, not the choice of any one library, is the actual skill.</p>
+<p><strong>cuongthai.com in these terms:</strong> initial page content renders from Server Components; server data on the client goes through TanStack Query (323 files); theme and language are Context (two providers); auth and fast-changing feature UI live in Zustand stores (auth persisted as <code>auth-storage</code>). Two places break this lesson&#39;s own rules, and they are worth studying: the feed&#39;s posts — server data — sit in a Zustand store (<code>useSocialStore</code>), and the feed tab and filter are <code>useState</code> mirrored to the URL with <code>history.replaceState</code> (<code>feed/page.tsx:75-87</code>) — they survive a reload, but Back skips them and a shared link renders the default on the server first (measured below). The same app uses four different tools, each matched to the kind of state it holds. That matching, not the choice of any one library, is the actual skill.</p>
 </div>
 
 <h3>Choosing the smallest tool that fits</h3>
@@ -537,6 +1262,81 @@ function useAddPost() {
   <span class="lc-ico">🧭</span>
   <span class="lc-body"><span class="lc-title">nextjs.org — Linking and navigating</span><span class="lc-sub">Updating the URL without a full navigation, which is what makes this practical.</span></span>
 </a>
+
+
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>For one page, assign each piece of state to the right tool: local <code>useState</code>, a Zustand store, TanStack Query, or Server Components.</li>
+<li>Find any server data currently in a global client store and move it to a query (or the server).</li>
+<li>Write a one-line decision rule you can reuse on the next feature.</li>
+</ol>
+<p><strong>Done when:</strong> you can match each kind of state to the right tool and justify it.</p></div>
+
+<h3>🔬 Measured: local vs lifted, the URL three ways, useSearchParams (Next.js 16.4.6 · React 19.3.0 · Chromium)</h3>
+<p><b>Keep it local.</b> An input next to a list; type "hello" (5 keys) and count the list&#39;s renders — state lifted to the page vs kept inside the input:</p>
+<div class="out">/go/len     · render DanhSach: 6 (1 first + per key)
+/go/cuc-bo  · render DanhSach: 1 (1 first + per key)</div>
+<p><b>The same filter in three places.</b> Pick "cache", press F5, press Back (each page opened from another page first). Address bar, then screen:</p>
+<div class="out">               useState                   URL (Link)                 useState + replaceState
+pick "cache"   /loc/state                 /loc/url?loai=cache        /loc/thay?loai=cache    
+F5             /loc/state                 /loc/url?loai=cache        /loc/thay?loai=cache    
+Back           /loc/url?tu=truoc          /loc/url                   /loc/url?tu=truoc       
+
+               useState                   URL (Link)                 useState + replaceState
+pick "cache"   filter: cache · 2 posts    filter: cache · 2 posts    filter: cache · 2 posts 
+F5             filter: tat-ca · 5 posts   filter: cache · 2 posts    filter: cache · 2 posts 
+Back           filter: tat-ca · 5 posts   filter: tat-ca · 5 posts   filter: tat-ca · 5 posts</div>
+<p>The third column is the cuongthai.com feed pattern. Opening its link directly, as someone you shared it with would:</p>
+<div class="out">screen: /loc/thay?loai=cache · filter: cache · 2 posts
+1 console error
+   Minified React error #418; visit https://react.dev/errors/418?args[]=text&amp;args[]= for the full message or use the non-minified dev environment for full errors and addi
+server HTML: filter: tat-ca · 5 posts</div>
+<p><b>useSearchParams in a static page</b> with no Suspense boundary:</p>
+<div class="out">$ npm run build 2&gt;&amp;1 | grep -E 'Compiled|useSearchParams|suspense|Error occurred|Export encountered' | head -5
+⨯ useSearchParams() should be wrapped in a suspense boundary at page "/loc/sp". Read more: https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout
+Export encountered an error on /loc/sp/page: /loc/sp, exiting the build.</div>
+<p>Wrap the reading component in <code>&lt;Suspense&gt;</code>, or read <code>searchParams</code> in the Server Component page, which makes the route dynamic: <code>└ ƒ /loc/url</code></p>
+<div class="note-ct"><strong>cuongthai.com, counted</strong><div class="out">$ for p in "useState" "createContext" "from 'zustand'" "@tanstack/react-query" "useSearchParams"; do printf '%-24s %s files\\n' "$p" "$(grep -rl "$p" src | wc -l | tr -d ' ')"; done
+useState                 1139 files
+createContext            12 files
+from 'zustand'           32 files
+@tanstack/react-query    323 files
+useSearchParams          118 files
+$ sed -n '75,87p' src/app/feed/page.tsx
+  const [feedFilter, setFeedFilter] = useState&lt;FeedFilter&gt;(() =&gt;
+    typeof window !== 'undefined' ? parseFeedFilterFromUrl(window.location.search) : 'all',
+  );
+  const onFeedFilterChange = useCallback((next: FeedFilter) =&gt; {
+    setFeedFilter(next);
+    // Sync URL. &#96;all&#96; strips the param so the URL stays clean.
+    const url = new URL(window.location.href);
+    if (next === 'all') url.searchParams.delete(FEED_FILTER_URL_PARAM);
+    else url.searchParams.set(FEED_FILTER_URL_PARAM, next);
+    window.history.replaceState({}, '', url.toString());
+    // Reset feed pagination so the user sees a fresh list per tab.
+    useSocialStore.setState({ posts: [], cursor: null, hasNextPage: true });
+  }, []);</div></div>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-bash"><span class="tok-comment"># 1 · console.log in a sibling, lift an input&amp;#39;s state, type, count</span>
+<span class="tok-comment"># 2 · put a filter in ?loai=…: F5, Back, paste the link in a private window</span>
+npm run build <span class="tok-comment">  # useSearchParams without &lt;Suspense&gt; stops here</span></code></pre>
+<h3>🔗 Go deeper</h3>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-5-4-url-state" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 5.4 — The URL is state</span><span class="lc-sub">Filters that survive F5, shareable links, a working Back</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-5-5-du-an" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 5.5 — Build it: a shared store and filters in the URL</span><span class="lc-sub">Every tool of this chapter in one project</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nextjs/learn?lessonSlug=nextjs-14-1-hai-loai-state" target="_blank" rel="noopener"><span class="lc-ico">▲</span><span class="lc-body"><span class="lc-title">Next.js · 14.1 — Two kinds of state</span><span class="lc-sub">Where the truth lives decides the tool</span></span></a>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Local state</span><span class="v"><code>useState</code> for state used by one component.</span></div>
+  <div class="kv"><span class="k">Client store</span><span class="v">Zustand for shared UI state across the tree.</span></div>
+  <div class="kv"><span class="k">Query library</span><span class="v">TanStack Query for cached server data on the client.</span></div>
+  <div class="kv"><span class="k">Server Components</span><span class="v">Fetch initial data on the server with no client state.</span></div>
+  <div class="kv"><span class="k">Decision rule</span><span class="v">Match the tool to the kind and scope of the state.</span></div>
+  <div class="kv"><span class="k">Over-engineering</span><span class="v">Avoid a global store for state that is really local.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Match the tool to the state: local <code>useState</code>, Zustand for shared UI, TanStack Query for server data, Server Components for initial data.</li><li>Never park server data in a global client store — it goes stale.</li><li>Keep state as local as the use allows; reach for a global store only when truly shared.</li><li>A clear decision rule prevents both under- and over-engineering.</li></ul>
 
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://react.dev/learn/managing-state" target="_blank" rel="noopener">
@@ -566,7 +1366,7 @@ function useAddPost() {
 </div>
 
 <div class="note-ct">
-<p><strong>cuongthai.com theo các thuật ngữ này:</strong> nội dung trang ban đầu render từ Server Component; auth và theme là Context (toàn app, chậm); UI tính năng đổi nhanh nằm trong các store Zustand (vài cái persist để sống qua reload); và state hiển thị chia sẻ được — tab feed nào, bộ lọc nào — thuộc về URL để một link tái hiện đúng góc nhìn. Cùng một app dùng bốn công cụ khác nhau, mỗi cái khớp với loại state nó giữ. Chính sự khớp đó, không phải việc chọn một thư viện, mới là kỹ năng thật.</p>
+<p><strong>cuongthai.com theo các thuật ngữ này:</strong> nội dung trang ban đầu render từ Server Component; dữ liệu máy chủ phía client đi qua TanStack Query (323 tệp); theme và ngôn ngữ là Context (hai provider); đăng nhập và UI tính năng đổi nhanh nằm trong các store Zustand (đăng nhập persist dưới tên <code>auth-storage</code>). Có hai chỗ trái chính luật của bài này, đáng để học: bài đăng của feed — dữ liệu máy chủ — nằm trong một store Zustand (<code>useSocialStore</code>), còn tab và bộ lọc feed là <code>useState</code> đồng bộ lên URL bằng <code>history.replaceState</code> (<code>feed/page.tsx:75-87</code>) — sống qua tải lại, nhưng Back bỏ qua chúng và một link chia sẻ được máy chủ dựng ở giá trị mặc định trước (đo ở dưới). Cùng một app dùng bốn công cụ khác nhau, mỗi cái khớp với loại state nó giữ. Chính sự khớp đó, không phải việc chọn một thư viện, mới là kỹ năng thật.</p>
 </div>
 
 <h3>Chọn công cụ nhỏ nhất vừa vặn</h3>
@@ -586,6 +1386,81 @@ function useAddPost() {
   <span class="lc-ico">🧭</span>
   <span class="lc-body"><span class="lc-title">nextjs.org — Liên kết và điều hướng</span><span class="lc-sub">Cập nhật URL mà không chuyển trang toàn phần, thứ làm cách này khả thi.</span></span>
 </a>
+
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Với một trang, gán mỗi mẩu state cho đúng công cụ: <code>useState</code> cục bộ, một store Zustand, TanStack Query, hoặc Server Components.</li>
+<li>Tìm bất kỳ dữ liệu server nào đang nằm trong một store client toàn cục và chuyển nó sang một query (hoặc server).</li>
+<li>Viết một luật quyết định một dòng dùng lại được cho tính năng sau.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn khớp được mỗi loại state với đúng công cụ và biện minh nó.</p></div>
+
+<h3>🔬 Đo thật: cục bộ vs nâng lên, URL ba cách, useSearchParams (Next.js 16.4.6 · React 19.3.0 · Chromium)</h3>
+<p><b>Giữ cục bộ.</b> Một ô gõ cạnh một danh sách; gõ "hello" (5 phím) và đếm số lần danh sách render — state nâng lên trang so với giữ ngay trong ô gõ:</p>
+<div class="out">/go/len     · render DanhSach: 6 lần (1 lần đầu + theo phím)
+/go/cuc-bo  · render DanhSach: 1 lần (1 lần đầu + theo phím)</div>
+<p><b>Cùng một bộ lọc ở ba chỗ.</b> Chọn "cache", bấm F5, bấm Back (mỗi trang được mở từ một trang khác trước). Thanh địa chỉ, rồi màn hình:</p>
+<div class="out">               useState                   URL (Link)                 useState + replaceState
+chọn "cache"   /loc/state                 /loc/url?loai=cache        /loc/thay?loai=cache    
+F5             /loc/state                 /loc/url?loai=cache        /loc/thay?loai=cache    
+Back           /loc/url?tu=truoc          /loc/url                   /loc/url?tu=truoc       
+
+               useState                   URL (Link)                 useState + replaceState
+chọn "cache"   Bộ lọc: cache · 2 bài      Bộ lọc: cache · 2 bài      Bộ lọc: cache · 2 bài   
+F5             Bộ lọc: tat-ca · 5 bài     Bộ lọc: cache · 2 bài      Bộ lọc: cache · 2 bài   
+Back           Bộ lọc: tat-ca · 5 bài     Bộ lọc: tat-ca · 5 bài     Bộ lọc: tat-ca · 5 bài  </div>
+<p>Cột thứ ba là khuôn của feed cuongthai.com. Mở thẳng link của nó, như người được bạn gửi link:</p>
+<div class="out">màn hình: /loc/thay?loai=cache · Bộ lọc: cache · 2 bài
+1 lỗi console
+   Minified React error #418; visit https://react.dev/errors/418?args[]=text&amp;args[]= for the full message or use the non-minified dev environment for full errors and addi
+HTML máy chủ: Bộ lọc: tat-ca · 5 bài</div>
+<p><b>useSearchParams trong trang tĩnh</b> không có ranh giới Suspense:</p>
+<div class="out">$ npm run build 2&gt;&amp;1 | grep -E 'Compiled|useSearchParams|suspense|Error occurred|Export encountered' | head -5
+⨯ useSearchParams() should be wrapped in a suspense boundary at page "/loc/sp". Read more: https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout
+Export encountered an error on /loc/sp/page: /loc/sp, exiting the build.</div>
+<p>Bọc component đọc nó trong <code>&lt;Suspense&gt;</code>, hoặc đọc <code>searchParams</code> trong Server Component, khi đó route thành động: <code>└ ƒ /loc/url</code></p>
+<div class="note-ct"><strong>cuongthai.com, đếm thật</strong><div class="out">$ for p in "useState" "createContext" "from 'zustand'" "@tanstack/react-query" "useSearchParams"; do printf '%-24s %s tệp\\n' "$p" "$(grep -rl "$p" src | wc -l | tr -d ' ')"; done
+useState                 1139 tệp
+createContext            12 tệp
+from 'zustand'           32 tệp
+@tanstack/react-query    323 tệp
+useSearchParams          118 tệp
+$ sed -n '75,87p' src/app/feed/page.tsx
+  const [feedFilter, setFeedFilter] = useState&lt;FeedFilter&gt;(() =&gt;
+    typeof window !== 'undefined' ? parseFeedFilterFromUrl(window.location.search) : 'all',
+  );
+  const onFeedFilterChange = useCallback((next: FeedFilter) =&gt; {
+    setFeedFilter(next);
+    // Sync URL. &#96;all&#96; strips the param so the URL stays clean.
+    const url = new URL(window.location.href);
+    if (next === 'all') url.searchParams.delete(FEED_FILTER_URL_PARAM);
+    else url.searchParams.set(FEED_FILTER_URL_PARAM, next);
+    window.history.replaceState({}, '', url.toString());
+    // Reset feed pagination so the user sees a fresh list per tab.
+    useSocialStore.setState({ posts: [], cursor: null, hasNextPage: true });
+  }, []);</div></div>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-bash"><span class="tok-comment"># 1 · console.log trong component anh em, nâng state của ô gõ, gõ, đếm</span>
+<span class="tok-comment"># 2 · đưa bộ lọc vào ?loai=…: F5, Back, dán link vào cửa sổ ẩn danh</span>
+npm run build <span class="tok-comment">  # useSearchParams không &lt;Suspense&gt; dừng ở đây</span></code></pre>
+<h3>🔗 Học sâu hơn</h3>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-5-4-url-state" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 5.4 — URL là state</span><span class="lc-sub">Bộ lọc sống qua F5, link chia sẻ được, nút Back chạy đúng</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-5-5-du-an" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React · 5.5 — Tự dựng: store dùng chung và bộ lọc trên URL</span><span class="lc-sub">Mọi công cụ của chương trong một dự án</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nextjs/learn?lessonSlug=nextjs-14-1-hai-loai-state" target="_blank" rel="noopener"><span class="lc-ico">▲</span><span class="lc-body"><span class="lc-title">Next.js · 14.1 — Hai loại state</span><span class="lc-sub">Sự thật nằm ở đâu quyết định công cụ</span></span></a>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">State cục bộ</span><span class="v"><code>useState</code> cho state dùng bởi một component.</span></div>
+  <div class="kv"><span class="k">Store client</span><span class="v">Zustand cho state UI dùng chung qua cả cây.</span></div>
+  <div class="kv"><span class="k">Thư viện query</span><span class="v">TanStack Query cho dữ liệu server cache trên client.</span></div>
+  <div class="kv"><span class="k">Server Components</span><span class="v">Fetch dữ liệu khởi tạo trên server mà không có state client.</span></div>
+  <div class="kv"><span class="k">Luật quyết định</span><span class="v">Khớp công cụ với loại và phạm vi của state.</span></div>
+  <div class="kv"><span class="k">Over-engineering</span><span class="v">Tránh dùng store toàn cục cho state thật ra là cục bộ.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Khớp công cụ với state: <code>useState</code> cục bộ, Zustand cho UI dùng chung, TanStack Query cho dữ liệu server, Server Components cho dữ liệu khởi tạo.</li><li>Đừng bao giờ gửi dữ liệu server vào một store client toàn cục — nó sẽ cũ.</li><li>Giữ state cục bộ nhất mức dùng cho phép; chỉ dùng store toàn cục khi thật sự dùng chung.</li><li>Một luật quyết định rõ tránh cả thiếu lẫn thừa kỹ thuật.</li></ul>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://react.dev/learn/managing-state" target="_blank" rel="noopener">

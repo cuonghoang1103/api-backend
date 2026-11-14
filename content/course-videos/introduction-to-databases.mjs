@@ -133,7 +133,7 @@ export default {
     'dbi202-pe1-sp26-chua-tron-de': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/12-chua-tron-de-pe/01-pe1-sp26-tron-2f946095.mp4' }, defaultVideoTrack: 'VI'},
     'dbi202-pe2-sp26-chua-tron-de': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/12-chua-tron-de-pe/06-pe2-sp26-tron-1859019a.mp4' }, defaultVideoTrack: 'VI'},
     'dbi202-pe3-sp26-chua-tron-de': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/12-chua-tron-de-pe/11-pe3-sp26-tron-d773a196.mp4' }, defaultVideoTrack: 'VI'},
-    'dbi202-fe31-sp26-chua-tron-de': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/13-chua-tron-de-fe/01-fe31-sp26-tron-a6d200d5.mp4' }, defaultVideoTrack: 'VI'},
+    'dbi202-fe31-sp26-chua-tron-de': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/13-chua-tron-de-fe/04-fe31-sp26-phan-4-72c1f9cb.mp4' }, defaultVideoTrack: 'VI'},
     'dbi202-fe32-sp26-chua-tron-de': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/13-chua-tron-de-fe/05-fe32-sp26-tron-19cd8011.mp4' }, defaultVideoTrack: 'VI'},
     'dbi202-fe3-fa25-chua-tron-de': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/13-chua-tron-de-fe/09-fe3-fa25-tron-13286361.mp4' }, defaultVideoTrack: 'VI'},
     'dbi202-cau-noi-di-lam': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-09-cau-noi-di-lam-tron-5337426a.mp4' }, defaultVideoTrack: 'VI'},

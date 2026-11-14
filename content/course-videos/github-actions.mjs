@@ -43,17 +43,17 @@ export default {
 
     /* ── Chương 2 — Job, runner, và những cỗ máy ngồi chờ ── */
     'ga-2-0-slides': { yt: '4A1g8tyKPi4', credit: "Mickey Gousset — Introduction to GitHub Actions - Part 2 - Chaining Jobs Together In A Workflow" },
-    'ga-2-1-may-moi': { yt: 'zpDH_tfOOqc', credit: "Cloud With VarJosh — GitHub Actions Triggers & Runners Explained | Events, Contexts & Hosted Runners" },
-    'ga-2-2-needs': { yt: 'gkIXTCr1Iiw', credit: "Cloud With VarJosh — GitHub Actions Outputs Explained | Step, Job & Reusable Workflow Outputs" },
-    'ga-2-3-ba-nen-tang': { yt: 'B5XzHnO_guo', credit: "Cloud With VarJosh — GitHub Actions Matrix Strategy Explained | Multi-OS, Multi-Version Testing at Scale" },
-    'ga-2-4-buoc-ma-thoat': { yt: 'LySdfUf9AAw', credit: "Testing Mini Bytes — Part 6 - Steps in Github Actions 🔥 | Step Failure | Timeout for a Step | Github Actions Tutorial |" },
-    'ga-2-5-ma-tran': { yt: 'Pj23Yy6J3oA', credit: "Sumanshu Nankana — GitHub # 0011 # GitHub Actions - Strategy Matrix (Run Job on Multiple Versions) and Fail Fast" },
+    'ga-2-1-may-moi': { yt: 'zpDH_tfOOqc', credit: "Cloud With VarJosh — GitHub Actions Triggers & Runners Explained | Events, Contexts & Hosted Runners", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/02-job-runner/02-02-may-moi-22d38308.mp4' }, defaultVideoTrack: 'VI'},
+    'ga-2-2-needs': { yt: 'gkIXTCr1Iiw', credit: "Cloud With VarJosh — GitHub Actions Outputs Explained | Step, Job & Reusable Workflow Outputs", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/02-job-runner/02-03-needs-c7b7a50d.mp4' }, defaultVideoTrack: 'VI'},
+    'ga-2-3-ba-nen-tang': { yt: 'B5XzHnO_guo', credit: "Cloud With VarJosh — GitHub Actions Matrix Strategy Explained | Multi-OS, Multi-Version Testing at Scale", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/02-job-runner/02-04-ba-nen-tang-f3fdb8a9.mp4' }, defaultVideoTrack: 'VI'},
+    'ga-2-4-buoc-ma-thoat': { yt: 'LySdfUf9AAw', credit: "Testing Mini Bytes — Part 6 - Steps in Github Actions 🔥 | Step Failure | Timeout for a Step | Github Actions Tutorial |", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/02-job-runner/02-05-buoc-ma-thoat-6ac5b726.mp4' }, defaultVideoTrack: 'VI'},
+    'ga-2-5-ma-tran': { yt: 'Pj23Yy6J3oA', credit: "Sumanshu Nankana — GitHub # 0011 # GitHub Actions - Strategy Matrix (Run Job on Multiple Versions) and Fail Fast", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/02-job-runner/02-06-ma-tran-ab93e208.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 3 — Biểu thức, context, và lúc nào thứ gì tồn tại ── */
     'ga-3-0-slides': { yt: 'MdjyWei7ZKo', credit: "ExamPro — Expressions Follow Along: Advanced Expression Usage – GitHub Actions Course" },
     'ga-3-1-ranh-gioi': { yt: 'y8eJTk4lPks', credit: "Execute Automation — Part 5 - Understanding Context and Env variables with ${{ Expression }}" },
     'ga-3-2-context': { yt: 'zI7WVWe9bHM', credit: "Testing Mini Bytes — Part 4 | Contexts | Different Contexts in Github Actions | How to use Contexts in GIthub Actions |" },
-    'ga-3-3-ep-kieu': { yt: 'Br6vyKKCwr4', credit: "Infrasity — Github Action If-else Statement" },
+    'ga-3-3-ep-kieu': { yt: 'Br6vyKKCwr4', credit: "Infrasity — Github Action If-else Statement", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/03-bieu-thuc-context/03-04-ep-kieu-a01e4024.mp4' }, defaultVideoTrack: 'VI'},
     'ga-3-4-ham': { yt: 'r4Z_khNOEs4', credit: "DevOps Topics — Github Actions Tutorial | Status check functions" },
     'ga-3-5-dieu-kien': { yt: 'swS_7tMqHE0', credit: "Daminda Dinesh Imaduwa Gamage — GitHub Actions conditionals : how \"if\" works" },
 
@@ -62,15 +62,15 @@ export default {
     'ga-4-1-action-la-gi': { yt: 'JYOGmLzMbpM', credit: "Mickey Gousset — Introduction to GitHub Actions - Part 4 - The GitHub Marketplace" },
     'ga-4-2-ghim': { yt: '8uQLyErG4EE', credit: "bdougie — Ensure your GitHub Actions are pinned to a SHA" },
     'ga-4-3-checkout': { yt: 'nAK3mFRxfFA', credit: "DevOps Hint — How to use actions/checkout in GitHub Actions | GitHub - jobs : what is : use actions/checkout" },
-    'ga-4-4-setup': { yt: 'gRPIPiiTH-c', credit: "Swashbuckling with Code — CI #5 - Why use the setup-node action?" },
+    'ga-4-4-setup': { yt: 'gRPIPiiTH-c', credit: "Swashbuckling with Code — CI #5 - Why use the setup-node action?", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/04-action/04-05-setup-d25f9f1d.mp4' }, defaultVideoTrack: 'VI'},
     'ga-4-5-tu-viet': { yt: 'zQdEsIBbVjE', credit: "Mickey Gousset — Create Your First Custom GitHub Action" },
 
     /* ── Chương 5 — Cache và artifact, đo thật ── */
     'ga-5-0-slides': { yt: 'yaN-NyTbx2w', credit: "Testing Mini Bytes — Part 8 | Reduce workflow time | Caching Maven | Caching Docker Image Layers | Github Actions" },
-    'ga-5-1-cache-mua-gi': { yt: 'BDQivAobxKA', credit: "CoderDave — Caching Dependencies to SPEED UP Workflows in GitHub Actions" },
-    'ga-5-2-khoa-cache': { yt: 'lkn3FPRh5ps', credit: "Cameron McKenzie — Cache GitHub Actions Workflow Dependencies" },
-    'ga-5-3-cache-chet': { yt: '7PVUjRXUY0o', credit: "Mickey Gousset — Cache Management with GitHub actions" },
-    'ga-5-4-artifact': { yt: 'vlySg5UPIm4', credit: "Mickey Gousset — GitHub Actions - Upload Artifacts" },
+    'ga-5-1-cache-mua-gi': { yt: 'BDQivAobxKA', credit: "CoderDave — Caching Dependencies to SPEED UP Workflows in GitHub Actions", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/05-cache-artifact/05-02-cache-mua-gi-04231c4d.mp4' }, defaultVideoTrack: 'VI'},
+    'ga-5-2-khoa-cache': { yt: 'lkn3FPRh5ps', credit: "Cameron McKenzie — Cache GitHub Actions Workflow Dependencies", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/05-cache-artifact/05-03-khoa-cache-614cbc7c.mp4' }, defaultVideoTrack: 'VI'},
+    'ga-5-3-cache-chet': { yt: '7PVUjRXUY0o', credit: "Mickey Gousset — Cache Management with GitHub actions", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/05-cache-artifact/05-04-cache-chet-3b552d45.mp4' }, defaultVideoTrack: 'VI'},
+    'ga-5-4-artifact': { yt: 'vlySg5UPIm4', credit: "Mickey Gousset — GitHub Actions - Upload Artifacts", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/05-cache-artifact/05-05-artifact-9ecdfeaf.mp4' }, defaultVideoTrack: 'VI'},
     'ga-5-5-hoa-von': { yt: 'tw9e61Bct-E', credit: "Cloud With VarJosh — GitHub Actions Artifacts & Caching Explained | Share Files & Optimize Builds" },
 
     /* ── Chương 6 — Bí mật, quyền, và cái token ── */

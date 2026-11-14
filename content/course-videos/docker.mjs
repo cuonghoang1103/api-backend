@@ -67,8 +67,8 @@ export default {
     /* ── Chương 6 — Ảnh nhỏ và an toàn ── */
     'dk-6-0-slides': { yt: '8vXoMqWgbQQ', credit: "TechWorld with Nana — Top 8 Docker Best Practices for using Docker in Production" },
     'dk-6-1-multi-stage': { yt: 'V0kTEk7YA70', credit: "Raghav Dua — Docker Multistage builds explained in 8 minutes", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/06-anh-nho-an-toan/06-02-multi-stage-47873f12.mp4' }, defaultVideoTrack: 'VI'},
-    'dk-6-2-chon-anh-nen': { yt: '82ZCJw9poxM', credit: "DevOps & AI Toolkit — Containers Are Not VMs! Which Base Container (Docker) Images Should We Use?" },
-    'dk-6-3-cat-kich-thuoc': { yt: 't779DVjCKCs', credit: "Better Stack — Docker Image BEST Practices - From 1.2GB to 10MB" },
+    'dk-6-2-chon-anh-nen': { yt: '82ZCJw9poxM', credit: "DevOps & AI Toolkit — Containers Are Not VMs! Which Base Container (Docker) Images Should We Use?", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/06-anh-nho-an-toan/06-03-chon-anh-nen-5f9a43d8.mp4' }, defaultVideoTrack: 'VI'},
+    'dk-6-3-cat-kich-thuoc': { yt: 't779DVjCKCs', credit: "Better Stack — Docker Image BEST Practices - From 1.2GB to 10MB", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/06-anh-nho-an-toan/06-04-cat-kich-thuoc-42f5cd5f.mp4' }, defaultVideoTrack: 'VI'},
     'dk-6-4-chay-an-toan': { yt: 'CQLtT_qeB40', credit: "HackerSploit — How To Secure & Harden Docker Containers" },
     'dk-6-5-quet-chuoi-cung-ung': { yt: 'Kibk6qq7ZCs', credit: "Aqua Security Open Source — Generate SBOMs with Trivy & Scan SBOMs for vulnerabilities" },
 

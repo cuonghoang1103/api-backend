@@ -28,7 +28,7 @@ export default {
     /* ── Chương 1 — Component và props ── */
     'rx-1-0-slides': { yt: 'zFdDdPMyIAo', credit: "Codevolution — React 19 Tutorial - 4 - Components" },
     'rx-1-1-component': { yt: 'XUwzASyHr4Q', credit: "Web Dev Simplified — This One Line Of Code Catches React Bugs For You", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/01-component-va-props/01-02-component-la-ham-afc26ff5.mp4' }, defaultVideoTrack: 'VI'},
-    'rx-1-2-props': { yt: 'KpA6oEaCHtk', credit: "Codevolution — React TypeScript Tutorial - 3 - Typing Props" },
+    'rx-1-2-props': { yt: 'KpA6oEaCHtk', credit: "Codevolution — React TypeScript Tutorial - 3 - Typing Props", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/01-component-va-props/01-03-props-va-kieu-4d3afae8.mp4' }, defaultVideoTrack: 'VI'},
     'rx-1-3-danh-sach': { yt: 'fGxKOmCuH5w', credit: "Cosden Solutions — React Keys and Lists - Complete Tutorial!", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/01-component-va-props/01-04-danh-sach-va-key-1eadd8f7.mp4' }, defaultVideoTrack: 'VI'},
     'rx-1-4-chia-nho': { yt: 'YJPSR9dEQV8', credit: "codeSTACKr — 5 Steps to THINK in React and Easily Create a ReactJS App From Scratch! (Bonus: Tailwind CSS)" },
 
@@ -44,7 +44,7 @@ export default {
     'rx-3-0-slides': { yt: '_QpTQrxzY8A', credit: "Cosden Solutions — The Correct Way to Use Form Data in React" },
     'rx-3-1-controlled': { yt: 'tIdNeoHniEY', credit: "Lama Dev — BEST Ways to Handle and Validate React Forms without a Library", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/03-form/03-02-controlled-bd4a545e.mp4' }, defaultVideoTrack: 'VI'},
     'rx-3-2-react-hook-form': { yt: 'cc_xmawJ8Kg', credit: "Cosden Solutions — React Hook Form - Complete Tutorial (with Zod)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/03-form/03-03-react-hook-form-eab97e65.mp4' }, defaultVideoTrack: 'VI'},
-    'rx-3-3-loi': { yt: 'u6PQ5xZAv7Q', credit: "ByteGrad — React Hook Form (+ Zod) - Complete Tutorial" },
+    'rx-3-3-loi': { yt: 'u6PQ5xZAv7Q', credit: "ByteGrad — React Hook Form (+ Zod) - Complete Tutorial", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/03-form/03-04-loi-4b4f6a29.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 4 — Effect ── */
     'rx-4-0-slides': { yt: '-4XpG5_Lj_o', credit: "Cosden Solutions — Learn React Hooks: useEffect - Simply Explained!" },
@@ -123,5 +123,6 @@ export default {
     'rx-14-2-api-that': { yt: 'XAccGbtl3Z8', credit: "Alex Hyett — Idempotency - What it is and How to Implement it" },
     'rx-14-3-build-deploy': { yt: '9c4HLqk1ExA', credit: "Alexander Lichter — Vite Bundle Inspection made EASY" },
     'rx-14-4-phong-van': { yt: '3BN-YHcJfOY', credit: "CoderOne — The React Interview Questions You need to Know" },
+    'rx-3-4-tieng-viet': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/03-form/03-05-tieng-viet-f312feb5.mp4' }, defaultVideoTrack: 'VI' },
   },
 };

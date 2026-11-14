@@ -25,9 +25,9 @@ export default {
   defaultVideoTrack: 'YT',
   lessons: {
     /* ── Mục 0 — Bài toán, và một bản chạy được ── */
-    'nginx-0-1-bai-toan': { yt: 'JKxlsvZXG7c', credit: 'Fireship — NGINX Explained in 100 Seconds' },        // NGINX Explained in 100 Seconds
-    'nginx-0-2-cai-va-chay': { yt: '9t9Mp0BGnyI', credit: 'freeCodeCamp.org — NGINX Tutorial for Beginners' },     // NGINX Tutorial for Beginners
-    'nginx-0-3-cau-hinh-dau-tien': { yt: 'jjZ-0k10B-c', credit: 'Durgadas Kamath — Installation, Virtual Server , Location block basics | Nginx Tutorial #1' },// Installation, Virtual Server, Location block basics | Nginx Tutorial #1
+    'nginx-0-1-bai-toan': { yt: 'JKxlsvZXG7c', credit: 'Fireship — NGINX Explained in 100 Seconds', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nginx/00-bai-toan-va-ban-dung/00-03-bai-toan-21b3c780.mp4' }, defaultVideoTrack: 'VI'},        // NGINX Explained in 100 Seconds
+    'nginx-0-2-cai-va-chay': { yt: '9t9Mp0BGnyI', credit: 'freeCodeCamp.org — NGINX Tutorial for Beginners', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nginx/00-bai-toan-va-ban-dung/00-04-cai-va-chay-6521d6ef.mp4' }, defaultVideoTrack: 'VI'},     // NGINX Tutorial for Beginners
+    'nginx-0-3-cau-hinh-dau-tien': { yt: 'jjZ-0k10B-c', credit: 'Durgadas Kamath — Installation, Virtual Server , Location block basics | Nginx Tutorial #1', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nginx/00-bai-toan-va-ban-dung/00-05-cau-hinh-dau-tien-d37c16fe.mp4' }, defaultVideoTrack: 'VI'},// Installation, Virtual Server, Location block basics | Nginx Tutorial #1
 
     /* ── Chương 1 — Một request tìm tới khối server nào ── */
     'nginx-1-1-listen': { yt: 'LSSZNER0YOw', credit: 'Low Orbit Flux — NGINX Server Blocks - Virtual Hosts' },           // NGINX Server Blocks - Virtual Hosts
@@ -105,5 +105,7 @@ export default {
     'nginx-11-3-doc-cau-hinh-nguoi-khac-viet': { yt: 'A60X8Nq_w_w', credit: 'Liquid Web by Nexcess — How to Convert .htaccess Rules to NGINX Directives' },   // How to Convert .htaccess Rules to NGINX Directives
     'nginx-11-4-tu-ma-trang-thai-toi-nguyen-nhan': { yt: 'obRxID54H14', credit: 'Bobby Iliev — Fixing 502 Bad Gateway Nginx' },// Fixing 502 Bad Gateway Nginx
     'nginx-11-5-cau-hinh-production': { yt: 'YEdhuC2muOE', credit: 'NGINX — Performance-Tuning NGINX Open Source and NGINX Plus' },            // Performance-Tuning NGINX Open Source and NGINX Plus
+    'nginx-0-0-bat-dau-1': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nginx/00-bai-toan-va-ban-dung/00-01-bat-dau-tai-day-1-4c2e4aed.mp4' }, defaultVideoTrack: 'VI' },
+    'nginx-0-0-bat-dau-2': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nginx/00-bai-toan-va-ban-dung/00-02-bat-dau-tai-day-2-b38f837d.mp4' }, defaultVideoTrack: 'VI' },
   },
 };

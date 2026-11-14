@@ -1,3 +1,6 @@
+import G01_1 from './giang/obj-01-1.mjs';
+import G01_2 from './giang/obj-01-2.mjs';
+import G01_3 from './giang/obj-01-3.mjs';
 const REF = '?ref=%2Fcourses%2Fobject-storage%2Flearn&reflabel=Object%20Storage';
 export default {
   title: 'Chapter 1 — The S3 API|||Chương 1 — S3 API',
@@ -12,6 +15,7 @@ export default {
       type: 'VIDEO',
       description: 'AWS SDK v3 modular, tree-shakable. Khác v2 monolithic. Client tạo lazy để app boot được khi thiếu credentials.',
       content: `
+${G01_1}
 <div class="ml-en">
 <span class="eyebrow">Chapter 1 · Lesson 1.1</span>
 <h2>Client initialization: SDK v3</h2>
@@ -21,7 +25,7 @@ export default {
 <pre><code class="language-bash">$ npm install @aws-sdk/client-s3 @aws-sdk/s3-request-presigner
 </code></pre>
 
-<p>Two packages: <code>client-s3</code> for operations, <code>s3-request-presigner</code> for signed URLs. Together ~450 KB (v2 was ~40 MB monolithic).</p>
+<p>Two packages: <code>client-s3</code> for operations, <code>s3-request-presigner</code> for signed URLs. Measured (14/11/2026, 3.1071.0): installing both adds <strong>37 packages, ~20 MB</strong> in <code>node_modules</code>; a bundle that imports only <code>S3Client</code> + <code>PutObjectCommand</code> is <strong>609,581 B (169,996 B gzipped)</strong>. The old v2 <code>aws-sdk</code> is 98 MB unpacked and has reached <strong>end-of-support</strong>. (Earlier versions of this lesson said "~450 KB together" — no measurement gives that.)</p>
 
 <h3>This repo — the lazy-init pattern</h3>
 <pre><code class="language-ts">// src/config/r2.ts
@@ -62,24 +66,25 @@ export function getR2Client(): S3Client {
 </div>
 
 <h3>Config from env</h3>
-<pre><code class="language-ts">// src/config/env.ts
+<pre><code class="language-ts">// src/config/env.ts (simplified — the real file validates with zod; names are exact)
 r2: {
   bucketName:      process.env.R2_BUCKET_NAME,
   endpoint:        process.env.R2_ENDPOINT_URL,      // https://xxx.r2.cloudflarestorage.com
   accessKeyId:     process.env.R2_ACCESS_KEY_ID,
   secretAccessKey: process.env.R2_SECRET_ACCESS_KEY,
-  publicUrlBase:   process.env.R2_PUBLIC_URL_BASE,   // https://media.cuongthai.com
+  publicUrl:       process.env.R2_PUBLIC_URL,        // https://media.cuongthai.com (trailing slash stripped)
+  region:          process.env.R2_REGION,            // default 'auto'
 },
 </code></pre>
 
-<p>Four env vars: bucket name (which bucket), endpoint (R2 API host), access key + secret (auth), public URL base (CDN custom domain).</p>
+<p>Six env vars: bucket name (which bucket), endpoint (R2 API host), access key + secret (auth), public URL (CDN custom domain), region (default <code>auto</code>). The name is <code>R2_PUBLIC_URL</code> — earlier versions of this lesson wrote <code>R2_PUBLIC_URL_BASE</code>, which appears nowhere in the repo. If it is missing, <code>buildPublicUrl()</code> silently returns a relative path (<code>/images/…</code>), no error.</p>
 
 <div class="pitfall">
-<p><strong>Trap — using the <code>endpoint</code> as a public URL.</strong> <code>R2_ENDPOINT_URL</code> là <em>API</em> endpoint (<code>xxx.r2.cloudflarestorage.com</code>) — it is uncached and egress is expensive. The public URL must be a custom domain fronted by a CDN. These are two different things; store both separately.</p>
+<p><strong>Trap — using the <code>endpoint</code> as a public URL.</strong> <code>R2_ENDPOINT_URL</code> is the <em>API</em> endpoint (<code>xxx.r2.cloudflarestorage.com</code>) — it needs a signature (an unsigned GET returns 403 AccessDenied) and is not cached: every read is a billed operation that skips the CDN. The public URL must be a custom domain fronted by a CDN. These are two different things; store both separately.</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> SDK v3 modular install (client-s3 + s3-request-presigner, ~450 KB total); lazy init pattern lets app boot without R2 credentials; R2-specific config = <code>region: &#39;auto&#39;</code> + <code>forcePathStyle: false</code>; keep API endpoint (for upload) separate from public URL (for serving via CDN).</p>
+<p><strong>One sentence.</strong> SDK v3 modular install (client-s3 + s3-request-presigner: 37 packages; ~610 KB bundled, ~170 KB gzipped); lazy init pattern lets app boot without R2 credentials; R2-specific config = <code>region: &#39;auto&#39;</code> + <code>forcePathStyle: false</code>; keep API endpoint (for upload) separate from public URL (for serving via CDN).</p>
 </div>
 
 <h3>🧪 Practice (15–20 min)</h3>
@@ -91,9 +96,85 @@ r2: {
 </ol>
 <p><strong>Done when:</strong> the module imports with no credentials, the client builds on first use, and you can state why endpoint ≠ public URL.</p></div>
 
+<h3>🔬 Measured: install size and bundle size</h3>
+<p>Local MinIO (RELEASE.2026-11-12), SDK v3 3.1071.0, Node 22.23.3, esbuild 0.25.10 — nothing here touches a real R2 bucket.</p>
+<div class="out">$ npm i @aws-sdk/client-s3@3.1071.0 @aws-sdk/s3-request-presigner@3.1071.0 2&gt;&amp;1 | grep -E "added|packages"
+added 37 packages, and audited 38 packages in 5s
+$ du -sh node_modules | cut -f1; ls node_modules/@aws-sdk | wc -l | tr -d ' '; ls node_modules/@smithy | wc -l | tr -d ' '
+ 20M
+20
+9
+$ npm view @aws-sdk/client-s3@3.1071.0 dist.unpackedSize; npm view aws-sdk dist.unpackedSize; npm view aws-sdk deprecated 2&gt;/dev/null | head -1
+3427047
+98180517
+The AWS SDK for JavaScript (v2) has reached end-of-support, and no longer receives updates. Please migrate your code to use AWS SDK for JavaScript (v3). More info https://a.co/cUPnyil
+$ npx -y esbuild@0.25.10 goi.mjs --bundle --minify --platform=node --format=esm --outfile=goi.min.mjs --log-level=warning &amp;&amp; wc -c &lt; goi.min.mjs | tr -d ' ' &amp;&amp; gzip -c goi.min.mjs | wc -c | tr -d ' '
+609581
+169996</div>
+<h3>🔬 Measured: lazy init</h3>
+<div class="out">$ env -u OBJ_ENDPOINT node thu-luoi.mjs
+import xong sau 79 ms · đã dựng client: 0 lần
+gọi getClient(): Object storage is not configured. Set OBJ_ENDPOINT …
+$ node thu-luoi.mjs
+import xong sau 70 ms · đã dựng client: 0 lần
+gọi getClient(): OK · đã dựng 1 lần
+gọi thêm 2 lần: vẫn 1 lần dựng</div>
+<p>Importing builds nothing; a missing config fails clearly on the first call; three calls build one client.</p>
+<h3>🔬 Measured: region, URL style, checksum</h3>
+<div class="out">$ env -u AWS_DEFAULT_REGION -u AWS_REGION node vung.mjs
+region (không đặt): Error · Region is missing
+region auto: OK · 2 bucket
+region us-east-1: OK · 2 bucket</div>
+<div class="out">$ node kieu-url.mjs
+forcePathStyle true:  http://localhost:20200/kieu-url/a.txt
+  PUT thật: OK
+forcePathStyle false:  http://kieu-url.localhost:20200/a.txt
+  PUT thật: MalformedXML</div>
+<div class="out">$ node tong.mjs
+mặc định (WHEN_SUPPORTED): x-amz-checksum-crc32=AAAAAA== x-amz-sdk-checksum-algorithm=CRC32
+WHEN_REQUIRED: (không có tham số checksum)</div>
+<p>No region ⇒ the SDK refuses before sending. Local MinIO needs <code>forcePathStyle: true</code> (virtual-hosted puts the bucket in the host name ⇒ MalformedXML); real R2 uses <code>false</code>. With the SDK default, a presigned PUT URL carries the CRC32 of an <em>empty</em> body — the repo sets <code>requestChecksumCalculation: 'WHEN_REQUIRED'</code> (Chapter 4 measures why it matters).</p>
+<h3>🔬 Measured: API endpoint vs public URL</h3>
+<div class="out">$ curl -s -o /dev/null -w "%{http_code}\\n" http://localhost:20200/cong-thu/a.txt
+403
+$ curl -s http://localhost:20200/cong-thu/a.txt | grep -oE "&lt;Code&gt;[^&lt;]+&lt;/Code&gt;"
+&lt;Code&gt;AccessDenied&lt;/Code&gt;
+$ curl -s "$(aws s3 presign s3://cong-thu/a.txt --expires-in 60)"; echo
+xin chao
+$ cd ~/Downloads/api-backend &amp;&amp; grep -nE "^export function buildPublicUrl" -A5 src/config/r2.ts | grep -E "base|return"
+396-  const base = config.r2.publicUrl || '';
+399-  return &#96;\${base}/\${key.replace(/^\\/+/, '')}&#96;;</div>
+<h3>🔬 The repo's real client today</h3>
+<p>The code block above is the idea, simplified. The real <code>src/config/r2.ts</code> is 433 lines and has three branches (memory/dir sandbox, MinIO, real R2); it checks <code>config.r2.enabled</code> <em>before</em> returning the cached client, and region comes from <code>R2_REGION</code>:</p>
+<div class="out">$ cd ~/Downloads/api-backend &amp;&amp; wc -l src/config/r2.ts &amp;&amp; grep -nE "^\\s+(region|forcePathStyle|requestChecksumCalculation|responseChecksumValidation|requestHandler):" src/config/r2.ts
+     433 src/config/r2.ts
+50:      region: 'auto',
+53:      forcePathStyle: true,
+54:      requestChecksumCalculation: 'WHEN_REQUIRED',
+55:      responseChecksumValidation: 'WHEN_REQUIRED',
+56:      requestHandler: sandboxRequestHandler() as never,
+62:      region: config.r2.region, endpoint: config.r2.endpoint, forcePathStyle: true,
+71:    region: config.r2.region,
+82:    forcePathStyle: false,
+87:    requestChecksumCalculation: 'WHEN_REQUIRED',
+88:    responseChecksumValidation: 'WHEN_REQUIRED',
+$ cd ~/Downloads/api-backend &amp;&amp; grep -nE "^  R2_[A-Z_]+:" src/config/env.ts | sed -E 's/: z\\..*//' &amp;&amp; grep -c "R2_PUBLIC_URL_BASE" src/config/env.ts
+148:  R2_BUCKET_NAME
+149:  R2_PUBLIC_URL
+150:  R2_ENDPOINT_URL
+151:  R2_ACCESS_KEY_ID
+152:  R2_SECRET_ACCESS_KEY
+153:  R2_REGION
+0</div>
+<h3>🔁 Run it yourself</h3>
+<p>With the local MinIO from Start here (1/2): <code>npm init -y && npm pkg set type=module && npm i @aws-sdk/client-s3@3.1071.0 @aws-sdk/s3-request-presigner@3.1071.0</code>, export <code>OBJ_ENDPOINT=http://localhost:&lt;port&gt;</code> plus <code>AWS_ACCESS_KEY_ID</code>/<code>AWS_SECRET_ACCESS_KEY</code> of your MinIO, then write the small scripts shown above (<code>thu-luoi.mjs</code>, <code>kieu-url.mjs</code>…). Signing a URL makes no network call, so the checksum test works even with MinIO stopped.</p>
+<h3>🔗 Go deeper in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-1-5-module" target="_blank" rel="noopener"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Node.js · 1.5 — Modules: CommonJS and ES Modules</span><span class="lc-sub">Named imports — the reason a bundle can keep only the commands you use</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-4-1-cau-hinh-song-ngoai-tao-tac" target="_blank" rel="noopener"><span class="lc-ico">🚀</span><span class="lc-body"><span class="lc-title">Deploy to a VPS · 4.1 — Configuration lives outside the artifact</span><span class="lc-sub">Why endpoint, keys and public URL come from the environment, not the code</span></span></a>
+
 <h3>🗂 Key terms</h3>
 <div class="kv-grid">
-  <div class="kv"><span class="k">AWS SDK v3</span><span class="v">Modular S3 client; you install only the commands you use (~450 KB here).</span></div>
+  <div class="kv"><span class="k">AWS SDK v3</span><span class="v">Modular S3 client; you install only the commands you use (a bundle of S3Client + PutObject: ~610 KB, ~170 KB gzipped).</span></div>
   <div class="kv"><span class="k">S3Client</span><span class="v">The configured connection object that <code>.send()</code>s commands.</span></div>
   <div class="kv"><span class="k">Lazy init</span><span class="v">Build the client on first use so the app boots without credentials.</span></div>
   <div class="kv"><span class="k">region: 'auto'</span><span class="v">Required by the SDK, ignored by R2 (R2 has no regions).</span></div>
@@ -102,7 +183,7 @@ r2: {
 </div>
 
 <h3>📌 Summary</h3>
-<ul><li>SDK v3 is modular: install <code>client-s3</code> + <code>s3-request-presigner</code> (~450 KB), not a monolith.</li><li>Lazy init lets the app start without R2 credentials — the client is built on first call.</li><li>R2 config is <code>region: &#39;auto&#39;</code> + <code>forcePathStyle: false</code>; keep the API endpoint (upload) separate from the public CDN URL (serving).</li></ul>
+<ul><li>SDK v3 is modular: install <code>client-s3</code> + <code>s3-request-presigner</code> (37 packages, ~610 KB when bundled), not a monolith.</li><li>Lazy init lets the app start without R2 credentials — the client is built on first call.</li><li>R2 config is <code>region: &#39;auto&#39;</code> + <code>forcePathStyle: false</code>; keep the API endpoint (upload) separate from the public CDN URL (serving).</li></ul>
 
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">AWS SDK v3 — S3</span><span class="lc-sub">docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/s3 — official docs.</span></span></div>
@@ -117,7 +198,7 @@ r2: {
 <pre><code class="language-bash">$ npm install @aws-sdk/client-s3 @aws-sdk/s3-request-presigner
 </code></pre>
 
-<p>Hai package: <code>client-s3</code> cho operation, <code>s3-request-presigner</code> cho signed URL. Cả hai ~450 KB (v2 là ~40 MB monolithic).</p>
+<p>Hai package: <code>client-s3</code> cho operation, <code>s3-request-presigner</code> cho signed URL. Đo thật (14/11/2026, 3.1071.0): cài cả hai thêm <strong>37 gói, ~20 MB</strong> trong <code>node_modules</code>; gói chỉ import <code>S3Client</code> + <code>PutObjectCommand</code> nặng <strong>609.581 B (gzip 169.996 B)</strong>. Gói v2 <code>aws-sdk</code> cũ giải nén 98 MB và đã <strong>hết hỗ trợ</strong>. (Bản cũ của bài ghi "cả hai ~450 KB" — không phép đo nào ra số đó.)</p>
 
 <h3>Kho này — pattern lazy init</h3>
 <pre><code class="language-ts">// src/config/r2.ts
@@ -158,24 +239,25 @@ export function getR2Client(): S3Client {
 </div>
 
 <h3>Config từ env</h3>
-<pre><code class="language-ts">// src/config/env.ts
+<pre><code class="language-ts">// src/config/env.ts (simplified — the real file validates with zod; names are exact)
 r2: {
   bucketName:      process.env.R2_BUCKET_NAME,
   endpoint:        process.env.R2_ENDPOINT_URL,      // https://xxx.r2.cloudflarestorage.com
   accessKeyId:     process.env.R2_ACCESS_KEY_ID,
   secretAccessKey: process.env.R2_SECRET_ACCESS_KEY,
-  publicUrlBase:   process.env.R2_PUBLIC_URL_BASE,   // https://media.cuongthai.com
+  publicUrl:       process.env.R2_PUBLIC_URL,        // https://media.cuongthai.com (trailing slash stripped)
+  region:          process.env.R2_REGION,            // default 'auto'
 },
 </code></pre>
 
-<p>Bốn env var: bucket name (bucket nào), endpoint (R2 API host), access key + secret (auth), public URL base (CDN custom domain).</p>
+<p>Sáu env var: bucket name (bucket nào), endpoint (R2 API host), access key + secret (auth), public URL (CDN custom domain), region (mặc định <code>auto</code>). Tên đúng là <code>R2_PUBLIC_URL</code> — bản cũ của bài ghi <code>R2_PUBLIC_URL_BASE</code>, kho không có tên đó. Thiếu biến này thì <code>buildPublicUrl()</code> lặng lẽ trả về đường dẫn tương đối (<code>/images/…</code>), không báo lỗi.</p>
 
 <div class="pitfall">
-<p><strong>Bẫy — dùng <code>endpoint</code> làm public URL.</strong> <code>R2_ENDPOINT_URL</code> là <em>API</em> endpoint (<code>xxx.r2.cloudflarestorage.com</code>) — không cache, egress cost cao. Public URL phải là custom domain qua CDN. Đây là 2 khác nhau. Lưu cả hai riêng.</p>
+<p><strong>Bẫy — dùng <code>endpoint</code> làm public URL.</strong> <code>R2_ENDPOINT_URL</code> là <em>API</em> endpoint (<code>xxx.r2.cloudflarestorage.com</code>) — cần chữ ký (GET không ký ⇒ 403 AccessDenied) và không cache: mỗi lượt đọc là một operation tính tiền, không qua CDN. Public URL phải là custom domain qua CDN. Đây là 2 khác nhau. Lưu cả hai riêng.</p>
 </div>
 
 <div class="callout">
-<p><strong>Một câu.</strong> SDK v3 modular install (client-s3 + s3-request-presigner, ~450 KB total); pattern lazy init cho app boot mà không cần R2 credential; config R2-specific = <code>region: &#39;auto&#39;</code> + <code>forcePathStyle: false</code>; giữ API endpoint (cho upload) riêng public URL (cho serving qua CDN).</p>
+<p><strong>Một câu.</strong> SDK v3 modular install (client-s3 + s3-request-presigner: 37 packages; ~610 KB bundled, ~170 KB gzipped); pattern lazy init cho app boot mà không cần R2 credential; config R2-specific = <code>region: &#39;auto&#39;</code> + <code>forcePathStyle: false</code>; giữ API endpoint (cho upload) riêng public URL (cho serving qua CDN).</p>
 </div>
 
 <h3>🧪 Thực hành (15–20 phút)</h3>
@@ -187,9 +269,85 @@ r2: {
 </ol>
 <p><strong>Đạt khi:</strong> module import được khi không có credential, client dựng ở lần dùng đầu, và bạn nói được vì sao endpoint ≠ public URL.</p></div>
 
+<h3>🔬 Đo thật: dung lượng cài và dung lượng gói</h3>
+<p>MinIO cục bộ (RELEASE.2026-11-12), SDK v3 3.1071.0, Node 22.23.3, esbuild 0.25.10 — không lệnh nào chạm bucket R2 thật.</p>
+<div class="out">$ npm i @aws-sdk/client-s3@3.1071.0 @aws-sdk/s3-request-presigner@3.1071.0 2&gt;&amp;1 | grep -E "added|packages"
+added 37 packages, and audited 38 packages in 5s
+$ du -sh node_modules | cut -f1; ls node_modules/@aws-sdk | wc -l | tr -d ' '; ls node_modules/@smithy | wc -l | tr -d ' '
+ 20M
+20
+9
+$ npm view @aws-sdk/client-s3@3.1071.0 dist.unpackedSize; npm view aws-sdk dist.unpackedSize; npm view aws-sdk deprecated 2&gt;/dev/null | head -1
+3427047
+98180517
+The AWS SDK for JavaScript (v2) has reached end-of-support, and no longer receives updates. Please migrate your code to use AWS SDK for JavaScript (v3). More info https://a.co/cUPnyil
+$ npx -y esbuild@0.25.10 goi.mjs --bundle --minify --platform=node --format=esm --outfile=goi.min.mjs --log-level=warning &amp;&amp; wc -c &lt; goi.min.mjs | tr -d ' ' &amp;&amp; gzip -c goi.min.mjs | wc -c | tr -d ' '
+609581
+169996</div>
+<h3>🔬 Đo thật: lazy init</h3>
+<div class="out">$ env -u OBJ_ENDPOINT node thu-luoi.mjs
+import xong sau 79 ms · đã dựng client: 0 lần
+gọi getClient(): Object storage is not configured. Set OBJ_ENDPOINT …
+$ node thu-luoi.mjs
+import xong sau 70 ms · đã dựng client: 0 lần
+gọi getClient(): OK · đã dựng 1 lần
+gọi thêm 2 lần: vẫn 1 lần dựng</div>
+<p>Import không dựng gì; thiếu cấu hình thì báo lỗi rõ ở lần gọi đầu; ba lần gọi chỉ dựng một client.</p>
+<h3>🔬 Đo thật: region, kiểu URL, checksum</h3>
+<div class="out">$ env -u AWS_DEFAULT_REGION -u AWS_REGION node vung.mjs
+region (không đặt): Error · Region is missing
+region auto: OK · 2 bucket
+region us-east-1: OK · 2 bucket</div>
+<div class="out">$ node kieu-url.mjs
+forcePathStyle true:  http://localhost:20200/kieu-url/a.txt
+  PUT thật: OK
+forcePathStyle false:  http://kieu-url.localhost:20200/a.txt
+  PUT thật: MalformedXML</div>
+<div class="out">$ node tong.mjs
+mặc định (WHEN_SUPPORTED): x-amz-checksum-crc32=AAAAAA== x-amz-sdk-checksum-algorithm=CRC32
+WHEN_REQUIRED: (không có tham số checksum)</div>
+<p>Không có region ⇒ SDK từ chối trước khi gửi. MinIO cục bộ cần <code>forcePathStyle: true</code> (virtual-hosted đưa bucket lên tên máy ⇒ MalformedXML); R2 thật dùng <code>false</code>. Với mặc định của SDK, URL PUT ký sẵn mang CRC32 của thân <em>rỗng</em> — kho đặt <code>requestChecksumCalculation: 'WHEN_REQUIRED'</code> (Chương 4 đo vì sao điều này quan trọng).</p>
+<h3>🔬 Đo thật: API endpoint và URL công khai</h3>
+<div class="out">$ curl -s -o /dev/null -w "%{http_code}\\n" http://localhost:20200/cong-thu/a.txt
+403
+$ curl -s http://localhost:20200/cong-thu/a.txt | grep -oE "&lt;Code&gt;[^&lt;]+&lt;/Code&gt;"
+&lt;Code&gt;AccessDenied&lt;/Code&gt;
+$ curl -s "$(aws s3 presign s3://cong-thu/a.txt --expires-in 60)"; echo
+xin chao
+$ cd ~/Downloads/api-backend &amp;&amp; grep -nE "^export function buildPublicUrl" -A5 src/config/r2.ts | grep -E "base|return"
+396-  const base = config.r2.publicUrl || '';
+399-  return &#96;\${base}/\${key.replace(/^\\/+/, '')}&#96;;</div>
+<h3>🔬 Client thật của kho hôm nay</h3>
+<p>Khối mã ở trên là ý tưởng, đã rút gọn. <code>src/config/r2.ts</code> thật dài 433 dòng, có ba nhánh (sandbox memory/dir, MinIO, R2 thật); nó kiểm <code>config.r2.enabled</code> <em>trước</em> khi trả client trong cache, và region lấy từ <code>R2_REGION</code>:</p>
+<div class="out">$ cd ~/Downloads/api-backend &amp;&amp; wc -l src/config/r2.ts &amp;&amp; grep -nE "^\\s+(region|forcePathStyle|requestChecksumCalculation|responseChecksumValidation|requestHandler):" src/config/r2.ts
+     433 src/config/r2.ts
+50:      region: 'auto',
+53:      forcePathStyle: true,
+54:      requestChecksumCalculation: 'WHEN_REQUIRED',
+55:      responseChecksumValidation: 'WHEN_REQUIRED',
+56:      requestHandler: sandboxRequestHandler() as never,
+62:      region: config.r2.region, endpoint: config.r2.endpoint, forcePathStyle: true,
+71:    region: config.r2.region,
+82:    forcePathStyle: false,
+87:    requestChecksumCalculation: 'WHEN_REQUIRED',
+88:    responseChecksumValidation: 'WHEN_REQUIRED',
+$ cd ~/Downloads/api-backend &amp;&amp; grep -nE "^  R2_[A-Z_]+:" src/config/env.ts | sed -E 's/: z\\..*//' &amp;&amp; grep -c "R2_PUBLIC_URL_BASE" src/config/env.ts
+148:  R2_BUCKET_NAME
+149:  R2_PUBLIC_URL
+150:  R2_ENDPOINT_URL
+151:  R2_ACCESS_KEY_ID
+152:  R2_SECRET_ACCESS_KEY
+153:  R2_REGION
+0</div>
+<h3>🔁 Tự chạy lại</h3>
+<p>Với MinIO cục bộ ở bài Bắt đầu tại đây (1/2): <code>npm init -y && npm pkg set type=module && npm i @aws-sdk/client-s3@3.1071.0 @aws-sdk/s3-request-presigner@3.1071.0</code>, đặt <code>OBJ_ENDPOINT=http://localhost:&lt;cổng&gt;</code> cùng <code>AWS_ACCESS_KEY_ID</code>/<code>AWS_SECRET_ACCESS_KEY</code> của MinIO, rồi viết các script nhỏ ở trên (<code>thu-luoi.mjs</code>, <code>kieu-url.mjs</code>…). Ký URL không gọi mạng, nên phép thử checksum chạy được cả khi MinIO đang tắt.</p>
+<h3>🔗 Học sâu hơn ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-1-5-module" target="_blank" rel="noopener"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Node.js · 1.5 — Module: CommonJS và ES Modules</span><span class="lc-sub">Import có tên — lý do bản gói chỉ giữ lệnh bạn dùng</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-4-1-cau-hinh-song-ngoai-tao-tac" target="_blank" rel="noopener"><span class="lc-ico">🚀</span><span class="lc-body"><span class="lc-title">Deploy lên VPS · 4.1 — Cấu hình sống ngoài tạo tác</span><span class="lc-sub">Vì sao endpoint, khoá và URL công khai đến từ môi trường, không nằm trong mã</span></span></a>
+
 <h3>🗂 Thuật ngữ trong bài</h3>
 <div class="kv-grid">
-  <div class="kv"><span class="k">AWS SDK v3</span><span class="v">S3 client modular; chỉ cài command bạn dùng (~450 KB ở đây).</span></div>
+  <div class="kv"><span class="k">AWS SDK v3</span><span class="v">S3 client modular; chỉ cài command bạn dùng (gói S3Client + PutObject: ~610 KB, gzip ~170 KB).</span></div>
   <div class="kv"><span class="k">S3Client</span><span class="v">Object kết nối đã cấu hình, <code>.send()</code> các command.</span></div>
   <div class="kv"><span class="k">Lazy init</span><span class="v">Dựng client ở lần dùng đầu để app boot không cần credential.</span></div>
   <div class="kv"><span class="k">region: 'auto'</span><span class="v">SDK yêu cầu, R2 bỏ qua (R2 không có region).</span></div>
@@ -198,7 +356,7 @@ r2: {
 </div>
 
 <h3>📌 Tóm tắt</h3>
-<ul><li>SDK v3 modular: cài <code>client-s3</code> + <code>s3-request-presigner</code> (~450 KB), không phải một khối lớn.</li><li>Lazy init cho app khởi động không cần credential R2 — client dựng ở lần gọi đầu.</li><li>Config R2 là <code>region: &#39;auto&#39;</code> + <code>forcePathStyle: false</code>; giữ API endpoint (upload) riêng public CDN URL (serving).</li></ul>
+<ul><li>SDK v3 modular: cài <code>client-s3</code> + <code>s3-request-presigner</code> (37 gói, gói lại ~610 KB), không phải một khối lớn.</li><li>Lazy init cho app khởi động không cần credential R2 — client dựng ở lần gọi đầu.</li><li>Config R2 là <code>region: &#39;auto&#39;</code> + <code>forcePathStyle: false</code>; giữ API endpoint (upload) riêng public CDN URL (serving).</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">AWS SDK v3 — S3</span><span class="lc-sub">docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/s3 — docs chính thức.</span></span></div>
@@ -213,6 +371,7 @@ r2: {
       type: 'VIDEO',
       description: 'PutObject upload, GetObject download, HeadObject metadata only, DeleteObject remove. Kho này dùng cả bốn — code từ upload.service.ts.',
       content: `
+${G01_2}
 <div class="ml-en">
 <span class="eyebrow">Chapter 1 · Lesson 1.2</span>
 <h2>Four core operations: Put, Get, Head, Delete</h2>
@@ -242,7 +401,7 @@ export async function putObject(
 </code></pre>
 
 <div class="callout warn">
-<p><strong><code>ContentType</code> is mandatory.</strong> Without it, S3 defaults to <code>application/octet-stream</code> → the browser downloads the file instead of displaying it. <code>&lt;audio&gt;</code>/<code>&lt;video&gt;</code> tag REJECT sai type.</p>
+<p><strong><code>ContentType</code> is mandatory.</strong> Without it, S3 defaults to <code>application/octet-stream</code> → the browser downloads the file instead of displaying it. <code>&lt;audio&gt;</code>/<code>&lt;video&gt;</code> tags reject the wrong type. (Measured on MinIO: SDK v3 without <code>ContentType</code> ⇒ <code>application/octet-stream</code>; aws-cli ⇒ <code>binary/octet-stream</code>.) And a PUT replaces the <strong>whole</strong> object — data and metadata: PUT the same key again without <code>CacheControl</code> and the stored Cache-Control is gone.</p>
 </div>
 
 <h3>GetObject — download</h3>
@@ -253,12 +412,14 @@ const res = await client.send(new GetObjectCommand({
 }));
 
 // res.Body is a stream (Readable)
-const buffer = Buffer.concat(await res.Body.transformToWebStream().getReader().read());
-// hoac helper:
-const text = await res.Body.transformToString();
+// read the body ONCE — a second transform throws "The stream has already been transformed."
+const bytes = await res.Body.transformToByteArray();   // Uint8Array
+const buffer = Buffer.from(bytes);
+// or, for text: const text = await res.Body.transformToString('utf-8');
+// (earlier versions showed Buffer.concat(await …getReader().read()) — it throws TypeError: read() returns { value, done }, not an array)
 </code></pre>
 
-<p>This repo does NOT use <code>getObject</code> server-side — public files are served straight from the CDN. GetObject is only used for private files and for thumbnail generation.</p>
+<p>Public files are served straight from the CDN, so the repo never streams avatars or post images through Node. But it <strong>does</strong> call GetObject server-side: <code>GetObjectCommand</code> appears in 11 non-test files (music, exports, AI reading uploaded files, previews), through <code>getObjectText(key, 512 KB)</code> and <code>getObjectBytes(key, 4 MB)</code>, which check <code>ContentLength</code> against a cap before reading and return <code>null</code> on any error. (Earlier versions of this lesson said the repo does not use getObject.)</p>
 
 <h3>HeadObject — metadata only</h3>
 <pre><code class="language-ts">import { HeadObjectCommand } from '@aws-sdk/client-s3';
@@ -294,7 +455,7 @@ await client.send(new DeleteObjectsCommand({
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Trap — DeleteObjectsCommand does not error when the object does not exist.</strong> If you expect &quot;deleted 5 objects&quot; but only 2 existed, the response is still a success. Read the response.Deleted array to find out what actually happened.</p>
+<p><strong>Trap — DeleteObjectsCommand does not error when the object does not exist.</strong> If you expect &quot;deleted 5 objects&quot; but only 2 existed, the response is still a success — and <code>response.Deleted</code> does <strong>not</strong> tell you what existed: measured on MinIO, a key that never existed is listed in <code>Deleted</code> too, with <code>Errors</code> empty (and with <code>Quiet: true</code>, as the repo uses, <code>Deleted</code> is empty). Need the real count? HEAD first, or trust the keys your database stored. Read <code>response.Errors</code> for per-key failures. Max 1,000 keys per call: 1,001 ⇒ <code>MalformedXML</code> (400).</p>
 </div>
 
 <h3>Error handling</h3>
@@ -303,13 +464,14 @@ await client.send(new DeleteObjectsCommand({
 } catch (err) {
   if (err.name === 'NoSuchBucket') { ... }
   if (err.name === 'AccessDenied') { ... }
-  if (err.name === 'RequestTimeoutException') { ... retry ... }
+  if (err.name === 'SignatureDoesNotMatch' || err.name === 'InvalidAccessKeyId') { ... fix credentials ... }
+  if (err.code === 'ECONNREFUSED' || err.name === 'TimeoutError') { ... retry with backoff ... }
   // Log err.$metadata.httpStatusCode + err.name
 }
 </code></pre>
 
 <div class="callout">
-<p><strong>One sentence.</strong> Four core operations: PutObject (upload, with ContentType + CacheControl MANDATORY), GetObject (streams the body; this repo rarely uses it because of the CDN), HeadObject (metadata only, cheap), and DeleteObject/DeleteObjects (batches of up to 1000, silent on missing keys) — 90% of S3 code uses only these four.</p>
+<p><strong>One sentence.</strong> Four core operations: PutObject (upload, with ContentType + CacheControl MANDATORY), GetObject (streams the body, read once; the CDN serves public reads, the server reads private/small files), HeadObject (metadata only, cheap), and DeleteObject/DeleteObjects (batches of up to 1000, silent on missing keys — and Deleted lists them anyway) — 90% of S3 code uses only these four.</p>
 </div>
 
 <h3>🧪 Practice (15–20 min)</h3>
@@ -320,6 +482,71 @@ await client.send(new DeleteObjectsCommand({
 <li><code>DeleteObjects</code> a batch of 3 keys in one call and note the per-key result array; batches go up to 1000.</li>
 </ol>
 <p><strong>Done when:</strong> you have run all four, seen the no-ContentType browser difference, and confirmed delete is silent on a missing key.</p></div>
+
+<h3>🔬 Measured: PutObject, with and without headers, and a second PUT</h3>
+<p>Local MinIO (RELEASE.2026-11-12), SDK v3 3.1071.0, Node 22.23.3 — nothing here touches a real R2 bucket.</p>
+<div class="out">$ node put.mjs
+PUT co-type.svg ⇒ HTTP 200 · ETag "b1a2b128b82fdd9dee8b3233b250721c"
+  HEAD co-type.svg: image/svg+xml · public, max-age=31536000, immutable · 62 B · ETag "b1a2b128b82fdd9dee8b3233b250721c"
+PUT khong-type.svg (không ContentType) ⇒ HTTP 200
+  HEAD khong-type.svg: application/octet-stream · (không có Cache-Control) · 62 B · ETag "b1a2b128b82fdd9dee8b3233b250721c"
+PUT đè co-type.svg (thân mới, quên CacheControl):
+  HEAD co-type.svg: image/svg+xml · (không có Cache-Control) · 41 B · ETag "46661d6d65debc63884004fed6e37e5c"
+$ curl -s -D - -o /dev/null "$(aws s3 presign s3://bon-lenh/khong-type.svg)" | grep -iE "^content-(type|disposition)"
+Content-Type: application/octet-stream</div>
+<h3>🔬 Measured: reading a GetObject body</h3>
+<div class="out">$ node get.mjs
+Body: ChecksumStream · ContentType image/svg+xml · ContentLength 41
+transformToString(): &lt;svg xmlns="http://www.w3.org/2000/svg"/&gt;
+đọc lần hai: Error: The stream has already been transformed.
+transformToByteArray(): Uint8Array 41 byte ⇒ Buffer.from(...) dùng được
+mã cũ của bài web: TypeError: The "list" argument must be an instance of Array. Received an instance of Object</div>
+<h3>🔬 Measured: HeadObject vs GetObject, and missing keys</h3>
+<div class="out">$ node head.mjs
+HEAD to-5mb.bin: ContentLength 5242880 · byte thân đã nhận 0 · 6.8 ms
+GET  to-5mb.bin: ContentLength 5242880 · byte thân đã nhận 5242880 · 90.5 ms
+HeadObject key không có ⇒ err.name = NotFound · HTTP 404
+GetObject key không có ⇒ err.name = NoSuchKey · HTTP 404</div>
+<p>HEAD sent 0 body bytes for a 5 MB object. A missing key is <code>NotFound</code> for HEAD but <code>NoSuchKey</code> for GET — catch both names.</p>
+<h3>🔬 Measured: deletes</h3>
+<div class="out">$ node xoa.mjs
+DeleteObject key KHÔNG tồn tại ⇒ HTTP 204 (không lỗi)
+DeleteObjects [a.jpg, b.jpg, ma.jpg] ⇒ HTTP 200 · Deleted: a.jpg, b.jpg, ma.jpg · Errors: 0
+Quiet: true ⇒ HTTP 200 · Deleted: 0 mục · Errors: 0
+1.001 key một lượt ⇒ MalformedXML · HTTP 400
+1.000 key một lượt ⇒ HTTP 200 · Deleted 1000</div>
+<h3>🔬 Measured: the error names you will catch</h3>
+<div class="out">$ node loi.mjs
+bucket không tồn tại: err.name = NoSuchBucket · HTTP 404
+sai secret key: err.name = SignatureDoesNotMatch · HTTP 403
+sai access key: err.name = InvalidAccessKeyId · HTTP 403
+máy chủ tắt (cổng 20299): err.name = AggregateError · HTTP — · code ECONNREFUSED</div>
+<h3>🔬 The four operations in the repo</h3>
+<div class="out">$ grep -nE "^export async function (putObject|headObject|getObjectText|getObjectBytes|deleteObject|deleteObjects|objectExists)\\(" src/config/r2.ts
+110:export async function putObject(
+180:export async function headObject(
+201:export async function getObjectText(key: string, maxBytes = 512 * 1024): Promise&lt;string | null&gt; {
+217:export async function getObjectBytes(key: string, maxBytes = 4 * 1024 * 1024): Promise&lt;Buffer | null&gt; {
+237:export async function deleteObject(key: string): Promise&lt;void&gt; {
+252:export async function deleteObjects(keys: string[]): Promise&lt;void&gt; {
+280:export async function objectExists(key: string): Promise&lt;boolean&gt; {
+$ grep -nE "Quiet: true|contentDisposition\\?: string|transformToByteArray|catch \\{" src/config/r2.ts | head -8
+115:  contentDisposition?: string,
+192:  } catch {
+208:  } catch {
+223:    const bytes = await res.Body?.transformToByteArray();
+226:  } catch {
+268:        Quiet: true,
+291:  } catch {
+430:  } catch {
+$ grep -rln "GetObjectCommand" src | grep -v "\\.test\\." | wc -l | tr -d ' '
+11</div>
+<p>Note: <code>deleteObjects()</code> sends <code>Quiet: true</code> and does not read <code>res.Errors</code>, so a per-key failure (for example AccessDenied on one key) would pass silently; <code>objectExists()</code> returns <code>false</code> on any error, including wrong credentials.</p>
+<h3>🔁 Run it yourself</h3>
+<p>With the local MinIO from Start here (1/2) and the project from 1.1: create a bucket (<code>aws s3 mb s3://bon-lenh</code>), then write the scripts above (<code>put.mjs</code>, <code>get.mjs</code>, <code>head.mjs</code>, <code>xoa.mjs</code>, <code>loi.mjs</code>), each importing one shared <code>S3Client</code> with <code>forcePathStyle: true</code>.</p>
+<h3>🔗 Go deeper in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-3-3-stream" target="_blank" rel="noopener"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Node.js · 3.3 — Streams: an experiment with a 348 MB file</span><span class="lc-sub">Why a GetObject body is a stream you consume once</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-6-2-ma-trang-thai" target="_blank" rel="noopener"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Node.js · 6.2 — Status codes and response shapes</span><span class="lc-sub">What 204, 403 and 404 mean, and when a retry can help</span></span></a>
 
 <h3>🗂 Key terms</h3>
 <div class="kv-grid">
@@ -366,7 +593,7 @@ export async function putObject(
 </code></pre>
 
 <div class="callout warn">
-<p><strong><code>ContentType</code> là bắt buộc.</strong> Không có → S3 default <code>application/octet-stream</code> → browser download thay vì display. <code>&lt;audio&gt;</code>/<code>&lt;video&gt;</code> tag REJECT sai type.</p>
+<p><strong><code>ContentType</code> là bắt buộc.</strong> Không có → S3 default <code>application/octet-stream</code> → browser download thay vì display. Thẻ <code>&lt;audio&gt;</code>/<code>&lt;video&gt;</code> từ chối sai type. (Đo trên MinIO: SDK v3 không <code>ContentType</code> ⇒ <code>application/octet-stream</code>; aws-cli ⇒ <code>binary/octet-stream</code>.) Và PUT thay <strong>nguyên</strong> object — cả dữ liệu lẫn metadata: PUT lại cùng key mà không gửi <code>CacheControl</code> thì Cache-Control cũ mất.</p>
 </div>
 
 <h3>GetObject — download</h3>
@@ -377,12 +604,14 @@ const res = await client.send(new GetObjectCommand({
 }));
 
 // res.Body la stream (Readable)
-const buffer = Buffer.concat(await res.Body.transformToWebStream().getReader().read());
-// hoac helper:
-const text = await res.Body.transformToString();
+// read the body ONCE — a second transform throws "The stream has already been transformed."
+const bytes = await res.Body.transformToByteArray();   // Uint8Array
+const buffer = Buffer.from(bytes);
+// or, for text: const text = await res.Body.transformToString('utf-8');
+// (earlier versions showed Buffer.concat(await …getReader().read()) — it throws TypeError: read() returns { value, done }, not an array)
 </code></pre>
 
-<p>Kho này KHÔNG dùng <code>getObject</code> server-side — public files serve trực tiếp qua CDN. GetObject chỉ dùng cho private files hoặc thumbnail generation.</p>
+<p>Tệp công khai phục vụ thẳng qua CDN, nên kho không bao giờ đẩy avatar hay ảnh bài viết qua Node. Nhưng kho <strong>có</strong> gọi GetObject ở máy chủ: <code>GetObjectCommand</code> có trong 11 tệp không phải test (nhạc, xuất dữ liệu, AI đọc tệp tải lên, ảnh xem trước), qua <code>getObjectText(key, 512 KB)</code> và <code>getObjectBytes(key, 4 MB)</code> — kiểm <code>ContentLength</code> với mức trần trước khi đọc, lỗi gì cũng trả <code>null</code>. (Bản cũ của bài ghi kho không dùng getObject.)</p>
 
 <h3>HeadObject — chỉ metadata</h3>
 <pre><code class="language-ts">import { HeadObjectCommand } from '@aws-sdk/client-s3';
@@ -418,7 +647,7 @@ await client.send(new DeleteObjectsCommand({
 </code></pre>
 
 <div class="pitfall">
-<p><strong>Bẫy — DeleteObjectsCommand không error khi object không tồn tại.</strong> Nếu bạn expect &quot;deleted 5 objects&quot; nhưng chỉ 2 tồn tại, response vẫn ok. Check response.Deleted array để biết chính xác.</p>
+<p><strong>Bẫy — DeleteObjectsCommand không error khi object không tồn tại.</strong> Nếu bạn expect &quot;deleted 5 objects&quot; nhưng chỉ 2 tồn tại, response vẫn ok — và <code>response.Deleted</code> <strong>không</strong> cho biết cái gì đã tồn tại: đo trên MinIO, key chưa từng có vẫn nằm trong <code>Deleted</code>, <code>Errors</code> rỗng (bật <code>Quiet: true</code> như kho thì <code>Deleted</code> rỗng luôn). Cần con số thật? HEAD trước, hoặc tin các key database đã lưu. Đọc <code>response.Errors</code> để biết key nào lỗi. Tối đa 1.000 key một lượt: 1.001 ⇒ <code>MalformedXML</code> (400).</p>
 </div>
 
 <h3>Error handling</h3>
@@ -427,13 +656,14 @@ await client.send(new DeleteObjectsCommand({
 } catch (err) {
   if (err.name === 'NoSuchBucket') { ... }
   if (err.name === 'AccessDenied') { ... }
-  if (err.name === 'RequestTimeoutException') { ... retry ... }
+  if (err.name === 'SignatureDoesNotMatch' || err.name === 'InvalidAccessKeyId') { ... fix credentials ... }
+  if (err.code === 'ECONNREFUSED' || err.name === 'TimeoutError') { ... retry with backoff ... }
   // Log err.$metadata.httpStatusCode + err.name
 }
 </code></pre>
 
 <div class="callout">
-<p><strong>Một câu.</strong> Bốn core operation: PutObject (upload với ContentType + CacheControl BẮT BUỘC), GetObject (stream body, kho này ít dùng vì CDN), HeadObject (chỉ metadata, rẻ), DeleteObject/DeleteObjects (batch tới 1000, silent khi missing) — 90% code S3 chỉ dùng bốn cái này.</p>
+<p><strong>Một câu.</strong> Bốn core operation: PutObject (upload với ContentType + CacheControl BẮT BUỘC), GetObject (stream body, đọc một lần; CDN phục vụ đọc công khai, máy chủ đọc tệp riêng/nhỏ), HeadObject (chỉ metadata, rẻ), DeleteObject/DeleteObjects (batch tới 1000, silent khi missing — và Deleted vẫn liệt kê chúng) — 90% code S3 chỉ dùng bốn cái này.</p>
 </div>
 
 <h3>🧪 Thực hành (15–20 phút)</h3>
@@ -444,6 +674,71 @@ await client.send(new DeleteObjectsCommand({
 <li><code>DeleteObjects</code> một batch 3 key trong một lời gọi và xem mảng kết quả per-key; batch lên tới 1000.</li>
 </ol>
 <p><strong>Đạt khi:</strong> bạn đã chạy đủ bốn, thấy khác biệt browser khi thiếu ContentType, và xác nhận delete silent với key missing.</p></div>
+
+<h3>🔬 Đo thật: PutObject có và không có header, và PUT lần hai</h3>
+<p>MinIO cục bộ (RELEASE.2026-11-12), SDK v3 3.1071.0, Node 22.23.3 — không lệnh nào chạm bucket R2 thật.</p>
+<div class="out">$ node put.mjs
+PUT co-type.svg ⇒ HTTP 200 · ETag "b1a2b128b82fdd9dee8b3233b250721c"
+  HEAD co-type.svg: image/svg+xml · public, max-age=31536000, immutable · 62 B · ETag "b1a2b128b82fdd9dee8b3233b250721c"
+PUT khong-type.svg (không ContentType) ⇒ HTTP 200
+  HEAD khong-type.svg: application/octet-stream · (không có Cache-Control) · 62 B · ETag "b1a2b128b82fdd9dee8b3233b250721c"
+PUT đè co-type.svg (thân mới, quên CacheControl):
+  HEAD co-type.svg: image/svg+xml · (không có Cache-Control) · 41 B · ETag "46661d6d65debc63884004fed6e37e5c"
+$ curl -s -D - -o /dev/null "$(aws s3 presign s3://bon-lenh/khong-type.svg)" | grep -iE "^content-(type|disposition)"
+Content-Type: application/octet-stream</div>
+<h3>🔬 Đo thật: đọc thân GetObject</h3>
+<div class="out">$ node get.mjs
+Body: ChecksumStream · ContentType image/svg+xml · ContentLength 41
+transformToString(): &lt;svg xmlns="http://www.w3.org/2000/svg"/&gt;
+đọc lần hai: Error: The stream has already been transformed.
+transformToByteArray(): Uint8Array 41 byte ⇒ Buffer.from(...) dùng được
+mã cũ của bài web: TypeError: The "list" argument must be an instance of Array. Received an instance of Object</div>
+<h3>🔬 Đo thật: HeadObject so với GetObject, và key không tồn tại</h3>
+<div class="out">$ node head.mjs
+HEAD to-5mb.bin: ContentLength 5242880 · byte thân đã nhận 0 · 6.8 ms
+GET  to-5mb.bin: ContentLength 5242880 · byte thân đã nhận 5242880 · 90.5 ms
+HeadObject key không có ⇒ err.name = NotFound · HTTP 404
+GetObject key không có ⇒ err.name = NoSuchKey · HTTP 404</div>
+<p>HEAD gửi 0 byte thân cho object 5 MB. Key không có: HEAD báo <code>NotFound</code>, GET báo <code>NoSuchKey</code> — bắt cả hai tên.</p>
+<h3>🔬 Đo thật: xoá</h3>
+<div class="out">$ node xoa.mjs
+DeleteObject key KHÔNG tồn tại ⇒ HTTP 204 (không lỗi)
+DeleteObjects [a.jpg, b.jpg, ma.jpg] ⇒ HTTP 200 · Deleted: a.jpg, b.jpg, ma.jpg · Errors: 0
+Quiet: true ⇒ HTTP 200 · Deleted: 0 mục · Errors: 0
+1.001 key một lượt ⇒ MalformedXML · HTTP 400
+1.000 key một lượt ⇒ HTTP 200 · Deleted 1000</div>
+<h3>🔬 Đo thật: các tên lỗi bạn sẽ bắt</h3>
+<div class="out">$ node loi.mjs
+bucket không tồn tại: err.name = NoSuchBucket · HTTP 404
+sai secret key: err.name = SignatureDoesNotMatch · HTTP 403
+sai access key: err.name = InvalidAccessKeyId · HTTP 403
+máy chủ tắt (cổng 20299): err.name = AggregateError · HTTP — · code ECONNREFUSED</div>
+<h3>🔬 Bốn lệnh trong mã của kho</h3>
+<div class="out">$ grep -nE "^export async function (putObject|headObject|getObjectText|getObjectBytes|deleteObject|deleteObjects|objectExists)\\(" src/config/r2.ts
+110:export async function putObject(
+180:export async function headObject(
+201:export async function getObjectText(key: string, maxBytes = 512 * 1024): Promise&lt;string | null&gt; {
+217:export async function getObjectBytes(key: string, maxBytes = 4 * 1024 * 1024): Promise&lt;Buffer | null&gt; {
+237:export async function deleteObject(key: string): Promise&lt;void&gt; {
+252:export async function deleteObjects(keys: string[]): Promise&lt;void&gt; {
+280:export async function objectExists(key: string): Promise&lt;boolean&gt; {
+$ grep -nE "Quiet: true|contentDisposition\\?: string|transformToByteArray|catch \\{" src/config/r2.ts | head -8
+115:  contentDisposition?: string,
+192:  } catch {
+208:  } catch {
+223:    const bytes = await res.Body?.transformToByteArray();
+226:  } catch {
+268:        Quiet: true,
+291:  } catch {
+430:  } catch {
+$ grep -rln "GetObjectCommand" src | grep -v "\\.test\\." | wc -l | tr -d ' '
+11</div>
+<p>Lưu ý: <code>deleteObjects()</code> gửi <code>Quiet: true</code> và không đọc <code>res.Errors</code>, nên lỗi theo từng key (ví dụ AccessDenied ở một key) sẽ trôi qua im lặng; <code>objectExists()</code> trả <code>false</code> với mọi lỗi, kể cả sai khoá.</p>
+<h3>🔁 Tự chạy lại</h3>
+<p>Với MinIO cục bộ ở bài Bắt đầu tại đây (1/2) và dự án ở bài 1.1: tạo bucket (<code>aws s3 mb s3://bon-lenh</code>), rồi viết các script ở trên (<code>put.mjs</code>, <code>get.mjs</code>, <code>head.mjs</code>, <code>xoa.mjs</code>, <code>loi.mjs</code>), mỗi cái import chung một <code>S3Client</code> với <code>forcePathStyle: true</code>.</p>
+<h3>🔗 Học sâu hơn ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-3-3-stream" target="_blank" rel="noopener"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Node.js · 3.3 — Stream: thí nghiệm với file 348 MB</span><span class="lc-sub">Vì sao thân GetObject là stream chỉ đọc một lần</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-6-2-ma-trang-thai" target="_blank" rel="noopener"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Node.js · 6.2 — Mã trạng thái và hình dạng phản hồi</span><span class="lc-sub">204, 403, 404 nghĩa là gì, và khi nào thử lại có ích</span></span></a>
 
 <h3>🗂 Thuật ngữ trong bài</h3>
 <div class="kv-grid">
@@ -470,10 +765,11 @@ await client.send(new DeleteObjectsCommand({
       type: 'VIDEO',
       description: 'File >100 MB nên upload part-by-part (5MB-5GB per part). Resumable, parallel upload, tránh timeout. Ba lệnh: CreateMultipartUpload, UploadPart, CompleteMultipartUpload.',
       content: `
+${G01_3}
 <div class="ml-en">
 <span class="eyebrow">Chapter 1 · Lesson 1.3</span>
 <h2>Multipart upload for large files</h2>
-<p class="lead">Single PutObject caps around 5 GB. Even at 100 MB, network drops mid-upload = start over. Multipart splits into 5MB-5GB parts, uploads independently, and completes as one atomic object.</p>
+<p class="lead">Single PutObject caps around 5 GB. Even at 100 MB, network drops mid-upload = start over. Multipart splits into parts of 5 MB–5 GB (every part except the last must be ≥ 5 MB; at most 10,000 parts; the finished object can be up to 5 TB), uploads independently, and completes as one atomic object.</p>
 
 <h3>Three-step flow</h3>
 <div class="lz-flow">
@@ -491,7 +787,7 @@ async function multipartUpload(key: string, filePath: string, partSize: number =
     Bucket, Key: key, ContentType: 'video/mp4',
   }));
 
-  // 2. Upload parts (parallel)
+  // 2. Upload parts — this loop awaits each part: SEQUENTIAL. For real parallelism use Promise.all (measured below) or the Upload class
   const parts = [];
   const fileSize = await getFileSize(filePath);
   const partCount = Math.ceil(fileSize / partSize);
@@ -563,7 +859,7 @@ for (const u of uploads.Uploads ?? []) {
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> Multipart upload splits a file of 100 MB or more into parts of 10 MB-5 GB (max 10,000 parts), uploads them in parallel, and stitches them atomically with three commands; use the SDK <code>Upload</code> class rather than writing it yourself; abandoned uploads keep costing money — add a lifecycle rule that aborts them after 7 days.</p>
+<p><strong>One sentence.</strong> Multipart upload splits a file of 100 MB or more into parts of 5 MB–5 GB (10 MB+ in practice; max 10,000 parts), uploads them in parallel, and stitches them atomically with three commands; use the SDK <code>Upload</code> class rather than writing it yourself; abandoned uploads keep costing money — add a lifecycle rule that aborts them after 7 days.</p>
 </div>
 
 <h3>🧪 Practice (15–20 min)</h3>
@@ -575,10 +871,64 @@ for (const u of uploads.Uploads ?? []) {
 </ol>
 <p><strong>Done when:</strong> a large file uploaded via <code>Upload</code>, you have seen the <code>-N</code> ETag, and you have found an orphaned upload with <code>ListMultipartUploads</code>.</p></div>
 
+<h3>🔬 Measured: the three calls by hand (parts sent 3, 1, 2)</h3>
+<p>Local MinIO (RELEASE.2026-11-12), SDK v3 + <code>@aws-sdk/lib-storage</code> 3.1071.0, Node 22.23.3 — nothing here touches a real R2 bucket.</p>
+<div class="out">$ node ba-buoc.mjs
+1) Create ⇒ UploadId ODQ1OTAzNzAtM2EyMS00…
+2) UploadPart #3 (2 MB) ⇒ ETag "52b85f09b5f2d93f7ada64b0e9328258"
+2) UploadPart #1 (5 MB) ⇒ ETag "08b46181d7094b5ece88bb389c7499af"
+2) UploadPart #2 (5 MB) ⇒ ETag "d76f89e449720d99d4b92c79040f4882"
+   trước Complete: HEAD ⇒ NotFound · LIST thấy 0 object
+3) Complete ⇒ ETag "824b6959c5810442584b3a32d0cd0804-3" · 12582912 byte · video/mp4
+   tự tính MD5(MD5 các phần) + "-3" = "824b6959c5810442584b3a32d0cd0804-3" · MD5 cả tệp = f22b41aa94c5e34abe4e38f64705c2ea</div>
+<p>Before Complete the key does not exist (HEAD ⇒ NotFound, LIST ⇒ 0). The multipart ETag is the MD5 of the concatenated part MD5s plus <code>-3</code> — computed locally, it matches exactly; the MD5 of the whole file is different. Cut the same file into other part sizes and the ETag changes.</p>
+<h3>🔬 Measured: really parallel</h3>
+<div class="out">$ node song-song.mjs
+Promise.all 3 phần ⇒ Complete ETag "824b6959c5810442584b3a32d0cd0804-3" · 148 ms</div>
+<h3>🔬 Measured: the rules of a part, broken on purpose</h3>
+<div class="out">$ node luat.mjs
+Complete 2 phần 1 MB (phần đầu &lt; 5 MB): EntityTooSmall · HTTP 400
+UploadPart PartNumber 0: InvalidPart · HTTP 400
+UploadPart PartNumber 10000: OK
+UploadPart PartNumber 10001: InvalidArgument · HTTP 400
+Complete danh sách [2, 1] (sai thứ tự): InvalidPartOrder · HTTP 400
+UploadPart sau khi Abort: NoSuchUpload · HTTP 404</div>
+<p>Parts under 5 MB are accepted by UploadPart and rejected only at Complete (<code>EntityTooSmall</code>). Mind the ceiling: 10,000 parts × 5 MB ≈ 48.8 GB, so a 100 GB file needs parts of at least ~10.3 MB.</p>
+<h3>🔬 Measured: the Upload helper on 100 MB</h3>
+<div class="out">$ node lib.mjs
+PutObject 100 MB một lượt: 1.52 s · ETag "8fc9eb42756746c05ec92a14bafb54a0"
+  tiến độ: 10485760 / 104857600 · phần 1
+  tiến độ: 20971520 / 104857600 · phần 2
+Upload (10 MB × 4 song song): 1.82 s · 10 sự kiện tiến độ · cuối 104857600 byte · ETag "e03bbe14466924b9fcc07c754e04ff42-10"</div>
+<p>On localhost multipart is not faster than one PUT (1.82 s vs 1.52 s). Its value is elsewhere: a failed part is retried alone, memory stays bounded, and you get progress events.</p>
+<h3>🔬 Measured: an orphaned upload</h3>
+<div class="out">$ node bo-do.mjs; echo "exit $?"
+đã gửi 2 phần × 5 MB rồi process.exit(1) — không Complete, không Abort
+exit 1
+$ aws s3 ls s3://nhieu-phan/video/
+2026-11-14 12:02:32   12582912 bai-1.mp4
+$ aws s3api list-multipart-uploads --bucket nhieu-phan --query 'Uploads[].Key' --output text
+nho.bin	so.bin	video/sap-giua-chung.mp4
+$ aws s3api list-parts --bucket nhieu-phan --key video/sap-giua-chung.mp4 --upload-id "$(aws s3api list-multipart-uploads --bucket nhieu-phan --query 'Uploads[?Key==&#96;video/sap-giua-chung.mp4&#96;].UploadId' --output text)" --query 'Parts[].[PartNumber,Size]' --output text
+1	5242880
+2	5242880
+$ node don.mjs
+Abort nho.bin (bắt đầu 2026-11-14T05:02:33.198Z)
+Abort so.bin (bắt đầu 2026-11-14T05:02:33.278Z)
+Abort video/sap-giua-chung.mp4 (bắt đầu 2026-11-14T05:02:33.583Z)
+còn lại: 0 upload dở</div>
+<p>The normal listing shows only the finished file, yet three unfinished uploads hold parts — two of them left by Completes that <strong>failed</strong>: a failed Complete does not abort. On S3 and R2 those parts are billed until aborted.</p>
+<h3>🔁 Run it yourself</h3>
+<p>In the project from 1.1, <code>npm i @aws-sdk/lib-storage@3.1071.0</code>, create a bucket on your local MinIO, and write <code>ba-buoc.mjs</code>, <code>luat.mjs</code>, <code>bo-do.mjs</code> and <code>don.mjs</code> as above. Recompute the <code>-N</code> ETag with <code>node:crypto</code>: MD5 each part, concatenate the raw digests, MD5 again.</p>
+<p><strong>In this repo:</strong> no multipart call exists in <code>src/</code> today (the largest uploads, chat attachments, are capped at 25 MB and go in one PUT).</p>
+<h3>🔗 Go deeper in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-1-4-bat-dong-bo" target="_blank" rel="noopener"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Node.js · 1.4 — Async: callbacks, Promises, async/await</span><span class="lc-sub">Promise.all — what makes parts really go in parallel</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-3-3-stream" target="_blank" rel="noopener"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Node.js · 3.3 — Streams: an experiment with a 348 MB file</span><span class="lc-sub">Reading a big file chunk by chunk instead of loading it whole</span></span></a>
+
 <h3>🗂 Key terms</h3>
 <div class="kv-grid">
   <div class="kv"><span class="k">Multipart upload</span><span class="v">Split a large file into parts, upload in parallel, stitch atomically.</span></div>
-  <div class="kv"><span class="k">Part</span><span class="v">10 MB–5 GB chunk; up to 10,000 parts per object.</span></div>
+  <div class="kv"><span class="k">Part</span><span class="v">5 MB–5 GB chunk (all but the last ≥ 5 MB); up to 10,000 parts per object.</span></div>
   <div class="kv"><span class="k">Upload class</span><span class="v"><code>@aws-sdk/lib-storage</code> helper that manages parts and retries for you.</span></div>
   <div class="kv"><span class="k">CreateMultipartUpload / UploadPart / CompleteMultipartUpload</span><span class="v">The three commands the helper wraps.</span></div>
   <div class="kv"><span class="k">Orphaned upload</span><span class="v">An incomplete multipart upload still billed until aborted.</span></div>
@@ -586,7 +936,7 @@ for (const u of uploads.Uploads ?? []) {
 </div>
 
 <h3>📌 Summary</h3>
-<ul><li>Files ≥100 MB go up as multipart: parts of 10 MB–5 GB (max 10,000), uploaded in parallel and stitched atomically.</li><li>Use the SDK <code>Upload</code> class instead of hand-rolling the three commands.</li><li>Abandoned multipart uploads keep costing money — a lifecycle rule must abort them (7 days here).</li></ul>
+<ul><li>Files ≥100 MB go up as multipart: parts of 5 MB–5 GB, 10 MB+ recommended (max 10,000), uploaded in parallel and stitched atomically.</li><li>Use the SDK <code>Upload</code> class instead of hand-rolling the three commands.</li><li>Abandoned multipart uploads keep costing money — a lifecycle rule must abort them (7 days here).</li></ul>
 
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">AWS SDK — @aws-sdk/lib-storage</span><span class="lc-sub">github.com/aws/aws-sdk-js-v3/tree/main/lib/lib-storage — high-level Upload helper.</span></span></div>
@@ -594,7 +944,7 @@ for (const u of uploads.Uploads ?? []) {
 <div class="ml-vi">
 <span class="eyebrow">Chương 1 · Bài 1.3</span>
 <h2>Multipart upload cho file lớn</h2>
-<p class="lead">Single PutObject cap khoảng 5 GB. Kể cả ở 100 MB, network drop giữa chừng = start lại. Multipart chia thành 5MB-5GB part, upload độc lập, complete atomic thành one object.</p>
+<p class="lead">Single PutObject cap khoảng 5 GB. Kể cả ở 100 MB, network drop giữa chừng = start lại. Multipart chia thành part 5 MB–5 GB (mọi part trừ part cuối phải ≥ 5 MB; tối đa 10.000 part; object hoàn chỉnh tới 5 TB), upload độc lập, complete atomic thành one object.</p>
 
 <h3>Flow ba bước</h3>
 <div class="lz-flow">
@@ -612,7 +962,7 @@ async function multipartUpload(key: string, filePath: string, partSize: number =
     Bucket, Key: key, ContentType: 'video/mp4',
   }));
 
-  // 2. Upload parts (parallel)
+  // 2. Upload parts — this loop awaits each part: SEQUENTIAL. For real parallelism use Promise.all (measured below) or the Upload class
   const parts = [];
   const fileSize = await getFileSize(filePath);
   const partCount = Math.ceil(fileSize / partSize);
@@ -684,7 +1034,7 @@ for (const u of uploads.Uploads ?? []) {
 </div>
 
 <div class="callout">
-<p><strong>Một câu.</strong> Multipart upload chia file &gt;=100 MB thành part 10 MB-5 GB (max 10.000 part), upload parallel, stitch atomic với 3 command; dùng SDK <code>Upload</code> class thay tự viết; abandoned upload chiếm cost — add lifecycle rule abort sau 7 ngày.</p>
+<p><strong>Một câu.</strong> Multipart upload chia file &gt;=100 MB thành part 5 MB–5 GB (thực tế nên 10 MB trở lên; max 10.000 part), upload parallel, stitch atomic với 3 command; dùng SDK <code>Upload</code> class thay tự viết; abandoned upload chiếm cost — add lifecycle rule abort sau 7 ngày.</p>
 </div>
 
 <h3>🧪 Thực hành (15–20 phút)</h3>
@@ -696,10 +1046,64 @@ for (const u of uploads.Uploads ?? []) {
 </ol>
 <p><strong>Đạt khi:</strong> một file lớn upload qua <code>Upload</code>, bạn đã thấy ETag <code>-N</code>, và tìm được một upload mồ côi bằng <code>ListMultipartUploads</code>.</p></div>
 
+<h3>🔬 Đo thật: ba lệnh làm bằng tay (part gửi theo thứ tự 3, 1, 2)</h3>
+<p>MinIO cục bộ (RELEASE.2026-11-12), SDK v3 + <code>@aws-sdk/lib-storage</code> 3.1071.0, Node 22.23.3 — không lệnh nào chạm bucket R2 thật.</p>
+<div class="out">$ node ba-buoc.mjs
+1) Create ⇒ UploadId ODQ1OTAzNzAtM2EyMS00…
+2) UploadPart #3 (2 MB) ⇒ ETag "52b85f09b5f2d93f7ada64b0e9328258"
+2) UploadPart #1 (5 MB) ⇒ ETag "08b46181d7094b5ece88bb389c7499af"
+2) UploadPart #2 (5 MB) ⇒ ETag "d76f89e449720d99d4b92c79040f4882"
+   trước Complete: HEAD ⇒ NotFound · LIST thấy 0 object
+3) Complete ⇒ ETag "824b6959c5810442584b3a32d0cd0804-3" · 12582912 byte · video/mp4
+   tự tính MD5(MD5 các phần) + "-3" = "824b6959c5810442584b3a32d0cd0804-3" · MD5 cả tệp = f22b41aa94c5e34abe4e38f64705c2ea</div>
+<p>Trước Complete key chưa tồn tại (HEAD ⇒ NotFound, LIST ⇒ 0). ETag multipart là MD5 của chuỗi nối các MD5 từng part, thêm <code>-3</code> — tự tính trên máy khớp từng ký tự; MD5 cả tệp thì khác. Cắt cùng tệp theo cỡ part khác thì ETag khác.</p>
+<h3>🔬 Đo thật: song song thật</h3>
+<div class="out">$ node song-song.mjs
+Promise.all 3 phần ⇒ Complete ETag "824b6959c5810442584b3a32d0cd0804-3" · 148 ms</div>
+<h3>🔬 Đo thật: phá từng luật của part</h3>
+<div class="out">$ node luat.mjs
+Complete 2 phần 1 MB (phần đầu &lt; 5 MB): EntityTooSmall · HTTP 400
+UploadPart PartNumber 0: InvalidPart · HTTP 400
+UploadPart PartNumber 10000: OK
+UploadPart PartNumber 10001: InvalidArgument · HTTP 400
+Complete danh sách [2, 1] (sai thứ tự): InvalidPartOrder · HTTP 400
+UploadPart sau khi Abort: NoSuchUpload · HTTP 404</div>
+<p>Part dưới 5 MB vẫn được UploadPart nhận, chỉ bị từ chối lúc Complete (<code>EntityTooSmall</code>). Nhớ trần: 10.000 part × 5 MB ≈ 48,8 GB, nên tệp 100 GB cần part ít nhất ~10,3 MB.</p>
+<h3>🔬 Đo thật: bộ trợ giúp Upload với 100 MB</h3>
+<div class="out">$ node lib.mjs
+PutObject 100 MB một lượt: 1.52 s · ETag "8fc9eb42756746c05ec92a14bafb54a0"
+  tiến độ: 10485760 / 104857600 · phần 1
+  tiến độ: 20971520 / 104857600 · phần 2
+Upload (10 MB × 4 song song): 1.82 s · 10 sự kiện tiến độ · cuối 104857600 byte · ETag "e03bbe14466924b9fcc07c754e04ff42-10"</div>
+<p>Trên máy cục bộ multipart không nhanh hơn một PUT (1,82 s so với 1,52 s). Giá trị của nó ở chỗ khác: part lỗi thì thử lại riêng part đó, bộ nhớ không phình, và có sự kiện tiến độ.</p>
+<h3>🔬 Đo thật: một upload mồ côi</h3>
+<div class="out">$ node bo-do.mjs; echo "exit $?"
+đã gửi 2 phần × 5 MB rồi process.exit(1) — không Complete, không Abort
+exit 1
+$ aws s3 ls s3://nhieu-phan/video/
+2026-11-14 12:02:32   12582912 bai-1.mp4
+$ aws s3api list-multipart-uploads --bucket nhieu-phan --query 'Uploads[].Key' --output text
+nho.bin	so.bin	video/sap-giua-chung.mp4
+$ aws s3api list-parts --bucket nhieu-phan --key video/sap-giua-chung.mp4 --upload-id "$(aws s3api list-multipart-uploads --bucket nhieu-phan --query 'Uploads[?Key==&#96;video/sap-giua-chung.mp4&#96;].UploadId' --output text)" --query 'Parts[].[PartNumber,Size]' --output text
+1	5242880
+2	5242880
+$ node don.mjs
+Abort nho.bin (bắt đầu 2026-11-14T05:02:33.198Z)
+Abort so.bin (bắt đầu 2026-11-14T05:02:33.278Z)
+Abort video/sap-giua-chung.mp4 (bắt đầu 2026-11-14T05:02:33.583Z)
+còn lại: 0 upload dở</div>
+<p>Lệnh liệt kê thường chỉ thấy tệp đã xong, nhưng ba upload dở vẫn giữ part — hai cái do những lần Complete <strong>bị lỗi</strong> để lại: Complete lỗi không tự huỷ. Trên S3 và R2 các part đó bị tính tiền tới khi bị huỷ.</p>
+<h3>🔁 Tự chạy lại</h3>
+<p>Trong dự án ở bài 1.1, <code>npm i @aws-sdk/lib-storage@3.1071.0</code>, tạo bucket trên MinIO cục bộ, rồi viết <code>ba-buoc.mjs</code>, <code>luat.mjs</code>, <code>bo-do.mjs</code>, <code>don.mjs</code> như trên. Tự tính lại ETag <code>-N</code> bằng <code>node:crypto</code>: MD5 từng part, nối các digest thô, MD5 lần nữa.</p>
+<p><strong>Trong kho này:</strong> hôm nay <code>src/</code> chưa có lời gọi multipart nào (tệp lớn nhất là đính kèm chat, trần 25 MB, đi một PUT).</p>
+<h3>🔗 Học sâu hơn ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-1-4-bat-dong-bo" target="_blank" rel="noopener"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Node.js · 1.4 — Bất đồng bộ: callback, Promise, async/await</span><span class="lc-sub">Promise.all — thứ làm các part thật sự đi song song</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-3-3-stream" target="_blank" rel="noopener"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Node.js · 3.3 — Stream: thí nghiệm với file 348 MB</span><span class="lc-sub">Đọc tệp lớn từng khúc thay vì nạp cả vào bộ nhớ</span></span></a>
+
 <h3>🗂 Thuật ngữ trong bài</h3>
 <div class="kv-grid">
   <div class="kv"><span class="k">Multipart upload</span><span class="v">Chia file lớn thành part, upload parallel, stitch atomic.</span></div>
-  <div class="kv"><span class="k">Part</span><span class="v">Chunk 10 MB–5 GB; tối đa 10.000 part mỗi object.</span></div>
+  <div class="kv"><span class="k">Part</span><span class="v">Chunk 5 MB–5 GB (trừ part cuối, mọi part ≥ 5 MB); tối đa 10.000 part mỗi object.</span></div>
   <div class="kv"><span class="k">Upload class</span><span class="v">Helper <code>@aws-sdk/lib-storage</code> tự quản part và retry.</span></div>
   <div class="kv"><span class="k">CreateMultipartUpload / UploadPart / CompleteMultipartUpload</span><span class="v">Ba command mà helper bọc lại.</span></div>
   <div class="kv"><span class="k">Orphaned upload</span><span class="v">Multipart upload dở vẫn bị tính tiền tới khi abort.</span></div>
@@ -707,7 +1111,7 @@ for (const u of uploads.Uploads ?? []) {
 </div>
 
 <h3>📌 Tóm tắt</h3>
-<ul><li>File ≥100 MB đi multipart: part 10 MB–5 GB (max 10.000), upload parallel và stitch atomic.</li><li>Dùng SDK <code>Upload</code> class thay vì tự viết ba command.</li><li>Multipart upload bỏ dở vẫn tốn tiền — một lifecycle rule phải abort chúng (7 ngày ở đây).</li></ul>
+<ul><li>File ≥100 MB đi multipart: part 5 MB–5 GB, nên từ 10 MB (max 10.000), upload parallel và stitch atomic.</li><li>Dùng SDK <code>Upload</code> class thay vì tự viết ba command.</li><li>Multipart upload bỏ dở vẫn tốn tiền — một lifecycle rule phải abort chúng (7 ngày ở đây).</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">AWS SDK — @aws-sdk/lib-storage</span><span class="lc-sub">github.com/aws/aws-sdk-js-v3/tree/main/lib/lib-storage — high-level Upload helper.</span></span></div>
@@ -750,7 +1154,7 @@ for (const u of uploads.Uploads ?? []) {
           {
             question: 'DeleteObjectsCommand for 5 keys, only 2 exist. Response?|||DeleteObjectsCommand cho 5 key, chỉ 2 tồn tại. Response?',
             options: [
-              'Success — S3 silently ignores missing objects (like rm -f). Check response.Deleted array for actual count|||Success — S3 silently ignore object missing (như rm -f). Check response.Deleted array cho count chính xác',
+              'Success — missing keys are ignored like rm -f, and they are still listed in response.Deleted (Errors empty), so Deleted does not count what existed|||Success — key thiếu bị bỏ qua như rm -f, và vẫn được liệt kê trong response.Deleted (Errors rỗng), nên Deleted không đếm được cái đã tồn tại',
               'Error 404|||Error 404',
               'Partial error|||Partial error',
               'All 5 marked as errored|||Cả 5 marked errored',

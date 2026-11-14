@@ -9,6 +9,11 @@
  * [[feedback_nextjs_course_beginner_first]]. Không có output console để chạy.
  */
 
+import G20_1 from './giang/nxj-20-1.mjs';
+import G20_2 from './giang/nxj-20-2.mjs';
+import G20_3 from './giang/nxj-20-3.mjs';
+import G20_4 from './giang/nxj-20-4.mjs';
+import G20_5 from './giang/nxj-20-5.mjs';
 export default {
   title: 'Chapter 20 — Build and deploy to production|||Chương 20 — Build và deploy lên production',
   description: 'Đưa app từ máy bạn ra internet: next build tạo bản production, biến môi trường và bẫy NEXT_PUBLIC bake-lúc-build, đóng gói bằng Docker, deploy lên VPS, và cả một họ bug "build cũ/thiếu" cùng sự cố thật của cuongthai.com. Chương khép khoá.',
@@ -23,6 +28,7 @@ export default {
       video: { url: 'https://youtu.be/DCJiQBag6Fs', durationSeconds: 0 },
       description: 'Suốt khoá bạn chạy npm run dev. Nhưng dev không phải thứ đưa cho người dùng. "Deploy" là đưa app lên một máy chủ trên internet. Trước tiên, hiểu next build (đóng gói) khác next start (chạy bản đóng gói).',
       content: `
+${G20_1}
 <div class="ml-en">
 <span class="eyebrow">Chapter 20 · Lesson 20.1 · Course finale</span>
 <h2>From "runs on my machine" to "runs for the world"</h2>
@@ -49,8 +55,8 @@ export default {
 <h3>The three commands, and what each one is for</h3>
 <div class="lz-flow">
   <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>next dev</b> — Compiles on demand, hot-reloads, ships unminified code with development React. Never run this in production.</div></div>
-  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>next build</b> — Type-checks, lints, bundles, and pre-renders every static route. It prints the route table — the only authoritative answer about what is static.</div></div>
-  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>next start</b> — Serves what &#96;build&#96; produced. It does not compile anything, so it fails immediately if the build output is missing or stale.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>next build</b> — Type-checks, bundles, and pre-renders every static route (Next.js 16 no longer lints during the build — run ESLint yourself or in CI). It prints the route table — the only authoritative answer about what is static.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>next start</b> — Serves what &#96;build&#96; produced. It does not compile anything. With no build output it prints “✓ Ready”, then exits (measured below); with a <em>stale</em> build it does not fail at all — it quietly serves the old release.</div></div>
   <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>So the pair is the deploy</b> — Build, then start. A deploy that only restarts the process is running the previous build.</div></div>
 </div>
 <div class="pitfall"><p><strong>Trap — a deploy that restarts the container without rebuilding.</strong> The process comes back up, the health check passes, and it is serving the previous build — so your fix is not there, and the route you just added returns 404. It looks like the code did not push. This repo&#39;s own history has exactly this: a &#96;--no-build&#96; deploy left production running a stale &#96;dist/&#96; that never mounted a new route, and the symptom was diagnosed as a data problem for hours. The reliable check is an unauthenticated &#96;curl&#96; against a route only the new build has: 404 means stale build, 401 or 200 means it is live.</p></div>
@@ -62,6 +68,106 @@ export default {
   <span class="lc-ico">🚢</span>
   <span class="lc-body"><span class="lc-title">nextjs.org — Deploying</span><span class="lc-sub">The supported deployment shapes, and the build output each one needs.</span></span>
 </a>
+
+
+<h3>🔬 Measured: build, start, and the gap between them (Next.js 16.4.6 · Mac of the course)</h3>
+<p><strong>1 · next build</strong> — compile, TypeScript, static pages, the route table — and no lint step:</p>
+<div class="out">$ npm run build
+▲ Next.js 16.4.6 (Turbopack)
+  Creating an optimized production build ...
+✓ Compiled successfully in 9.0s
+  Running TypeScript ...
+  Finished TypeScript in 1436ms ...
+  Collecting page data using 9 workers ...
+✓ Generating static pages using 9 workers (11/11) in 162ms
+  Finalizing page optimization ...
+ƒ /gio
+○ /ver
+real 12.03
+$ du -sh .next | awk '{print ".next: " $1}'; ls .next | tr '\\n' ' '; echo
+.next: 33M
+app-path-routes-manifest.json build BUILD_ID build-manifest.json cache diagnostics export-marker.json fallback-build-manifest.json images-manifest.json next-minimal-server.js.nft.json next-server.js.nft.json package.json prerender-manifest.json required-server-files.js required-server-files.json routes-manifest.json server static trace trace-build turbopack types </div>
+<p><strong>2 · next start with no build</strong> — the log says Ready; the URL says nothing is there:</p>
+<div class="out">$ npx next start -p 3000   # no build yet
+- Network:       http://127.0.0.1:19341
+✓ Ready in 113ms
+
+✓ Running next.config.ts took 22ms
+Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+    at ignore-listed frames
+$ curl -s -o /dev/null -w '%{http_code}' localhost:3000/ver
+HTTP 000
+Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs</div>
+<p><strong>3 · Production runs the build, not the source</strong> — change the source to v2 and restart: still v1, until a real build:</p>
+<div class="out">$ curl -s http://127.0.0.1:19341/ver | grep -o 'Release v[0-9]' | head -1
+Release v1
+$ sed -i 's/Release v1/Release v2/' src/app/ver/page.tsx   # change the SOURCE, restart, no build
+source: Release v2
+$ curl -s localhost:3000/ver | grep -o 'Release v[0-9]'   # after restart
+Release v1
+$ npm run build &amp;&amp; npx next start   # after a real build
+Release v2</div>
+<p><strong>4 · A type error dev serves and build refuses</strong>:</p>
+<pre><code class="language-typescript">const total: number = 'one hundred';</code></pre>
+<div class="out">$ npm run dev   →   curl localhost:3000/sai
+next dev /sai → HTTP 200
+Total: one hundred
+$ npm run build
+✓ Compiled successfully in 569ms
+src/app/sai/page.tsx(3,9): error TS2322: Type 'string' is not assignable to type 'number'.
+Failed to type check.</div>
+<p><strong>5 · Dev is a different program</strong> — the same dynamic page:</p>
+<div class="out">$ for s in "next start" "next dev"; do curl -w '%{time_total}' …/gio (first, second); done
+next start /gio: 1st 46 ms · 2nd 7 ms
+next dev   /gio: 1st 2894 ms · 2nd 29 ms
+$ ps -o rss= -p &lt;pid&gt;   # memory of each server
+next start RSS 102 MB
+next dev   RSS 502 MB</div>
+<div class="note-ct"><strong>In this course&#39;s repository</strong><div class="out">$ grep -n "output: 'standalone'" frontend/next.config.js; grep -nE '^RUN npm run build|^CMD ' frontend/Dockerfile
+6:  output: 'standalone',
+140:RUN npm run build
+175:CMD ["node", "server.js"]
+$ grep -n 'Smoke-testing core API routes' deploy.sh deploy-nha.sh | head -3
+deploy.sh:1010:info "Smoke-testing core API routes are mounted..."
+$ grep -n '2026-07-02 | GIF picker dead' CLAUDE.md | cut -c1-160
+817:| 2026-07-02 | GIF picker dead + "chats disappearing" together, survived re-login. Root cause: prod ran a **stale &#96;dist/index.js&#96;** that never mounted &#96;/api</div>The image runs <code>npm run build</code> once (standalone output); the container runs <code>node server.js</code>. After the 02/07/2026 stale-build outage, the deploy script smoke-tests core routes and fails on any 404.</div>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-bash">rm -rf .next &amp;&amp; npx next start -p 3000      <span class="tok-comment">  # read the log, then curl</span>
+curl -s -o /dev/null -w "%{http_code}\\n" localhost:3000/
+npm run build &amp;&amp; npx next start -p 3000
+<span class="tok-comment"># edit a page, restart WITHOUT building, curl again — then build and compare</span></code></pre>
+<h3>🌏 Not learning in a vacuum: real life, what if, the attacker</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">🏠 Real life</span><span class="v">“I pushed the fix and it is not live” — the server restarted on the old <code>.next/</code>; nobody ran the build.</span></div>
+  <div class="kv"><span class="k">❓ What if…</span><span class="v">…you serve users with <code>next dev</code>? About 5× the memory, seconds on first visits, development React for everyone.</span></div>
+  <div class="kv"><span class="k">🕵️ The attacker</span><span class="v">A dev server on a public port leaks stack traces with file paths and source maps — a map of your code for free.</span></div>
+  <div class="kv"><span class="k">🛡️ Detect &amp; prevent</span><span class="v">Build locally before every deploy; run <code>next start</code> (or <code>node server.js</code>) in production; smoke-test URLs, not log lines.</span></div>
+</div>
+<h3>🔗 Go deeper</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nextjs/learn?lessonSlug=nextjs-17-2-tinh-vs-dong" target="_blank" rel="noopener"><span class="lc-ico">▲</span><span class="lc-body"><span class="lc-title">Next.js · 17.2 — Static vs dynamic</span><span class="lc-sub">Decided at build time</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-17-6-deploy-hong-quay-lui" target="_blank" rel="noopener"><span class="lc-ico">🟢</span><span class="lc-body"><span class="lc-title">Node.js · 17.6 — When a deploy lies</span><span class="lc-sub">Stale builds, smoke tests, rollback</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nextjs/learn?lessonSlug=nextjs-20-2-env-next-public" target="_blank" rel="noopener"><span class="lc-ico">▲</span><span class="lc-body"><span class="lc-title">Next.js · 20.2 — Env vars and NEXT_PUBLIC</span><span class="lc-sub">What else is frozen at build</span></span></a>
+
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Run <code>next build</code> and read the output: the route table and which routes are static vs dynamic.</li>
+<li>Run <code>next start</code> and confirm it serves the built output (production), unlike <code>dev</code>.</li>
+<li>Break something that only fails in build (a type error dev tolerated) and see the build catch it.</li>
+</ol>
+<p><strong>Done when:</strong> you can produce a production build and explain why it, not dev, is the source of truth.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">next build</span><span class="v">Produces the optimised production output and type-checks.</span></div>
+  <div class="kv"><span class="k">next start</span><span class="v">Serves the built output — this is production.</span></div>
+  <div class="kv"><span class="k">Route table</span><span class="v">The list of routes and their static/dynamic status in the build.</span></div>
+  <div class="kv"><span class="k">Static vs dynamic</span><span class="v">The build decides how each route is rendered.</span></div>
+  <div class="kv"><span class="k">Dev vs build</span><span class="v">Dev is lenient and slow; the build is the source of truth.</span></div>
+  <div class="kv"><span class="k">Standalone output</span><span class="v">A self-contained server bundle for deployment.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li><code>next build</code> produces the optimised, type-checked production output; <code>next start</code> serves it.</li><li>The build prints a route table showing which routes are static and which are dynamic.</li><li>Dev is lenient and slow — the build is the source of truth for what ships.</li><li>Reproduce any pre-deploy surprise with <code>build</code> + <code>start</code>, not dev.</li></ul>
 
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/deploying" target="_blank" rel="noopener">
@@ -96,8 +202,8 @@ export default {
 <h3>Ba lệnh, và mỗi lệnh dùng để làm gì</h3>
 <div class="lz-flow">
   <div class="lz-step"><div class="lz-si">1</div><div class="lz-sb"><b>next dev</b> — Biên dịch theo yêu cầu, nạp nóng, ship mã chưa nén với React bản phát triển. Đừng bao giờ chạy cái này trên production.</div></div>
-  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>next build</b> — Kiểm kiểu, lint, đóng gói, và dựng sẵn mọi route tĩnh. Nó in ra bảng route — câu trả lời có thẩm quyền duy nhất về việc cái gì là tĩnh.</div></div>
-  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>next start</b> — Phục vụ thứ mà &#96;build&#96; đã tạo ra. Nó không biên dịch gì cả, nên nó hỏng ngay nếu đầu ra của build bị thiếu hoặc đã cũ.</div></div>
+  <div class="lz-step"><div class="lz-si">2</div><div class="lz-sb"><b>next build</b> — Kiểm kiểu, đóng gói, và dựng sẵn mọi route tĩnh (Next.js 16 không còn chạy lint trong build — hãy tự chạy ESLint hoặc chạy trong CI). Nó in ra bảng route — câu trả lời có thẩm quyền duy nhất về việc cái gì là tĩnh.</div></div>
+  <div class="lz-step"><div class="lz-si">3</div><div class="lz-sb"><b>next start</b> — Phục vụ thứ mà &#96;build&#96; đã tạo ra. Nó không biên dịch gì cả. Không có đầu ra build thì nó in “✓ Ready” rồi mới thoát (đo bên dưới); còn với bản build <em>cũ</em> thì nó chẳng hỏng gì — nó lặng lẽ phục vụ bản phát hành cũ.</div></div>
   <div class="lz-step"><div class="lz-si">4</div><div class="lz-sb"><b>Nên cặp đôi đó chính là lần deploy</b> — Build, rồi start. Một lần deploy chỉ khởi động lại tiến trình là đang chạy bản build trước đó.</div></div>
 </div>
 <div class="pitfall"><p><strong>Bẫy — một lần deploy khởi động lại container mà không dựng lại.</strong> Tiến trình sống lại, phép kiểm sức khoẻ qua, và nó đang phục vụ bản build trước đó — nên bản sửa của bạn không có ở đó, và cái route bạn vừa thêm trả về 404. Nó trông như mã chưa được push. Lịch sử của chính kho này có đúng chuyện đó: một lần deploy &#96;--no-build&#96; để production chạy một thư mục &#96;dist/&#96; cũ chưa từng gắn route mới, và triệu chứng bị chẩn đoán nhầm thành vấn đề dữ liệu suốt mấy tiếng. Phép kiểm đáng tin là một lệnh &#96;curl&#96; không xác thực vào một route chỉ bản build mới có: 404 nghĩa là build cũ, 401 hay 200 nghĩa là nó đang sống.</p></div>
@@ -109,6 +215,106 @@ export default {
   <span class="lc-ico">🚢</span>
   <span class="lc-body"><span class="lc-title">nextjs.org — Triển khai</span><span class="lc-sub">Các hình thức triển khai được hỗ trợ, và mỗi cái cần đầu ra build nào.</span></span>
 </a>
+
+
+<h3>🔬 Đo thật: build, start, và khoảng hở giữa chúng (Next.js 16.4.6 · máy của khoá)</h3>
+<p><strong>1 · next build</strong> — biên dịch, TypeScript, dựng trang tĩnh, bảng route — và không có bước lint:</p>
+<div class="out">$ npm run build
+▲ Next.js 16.4.6 (Turbopack)
+  Creating an optimized production build ...
+✓ Compiled successfully in 9.0s
+  Running TypeScript ...
+  Finished TypeScript in 1436ms ...
+  Collecting page data using 9 workers ...
+✓ Generating static pages using 9 workers (11/11) in 162ms
+  Finalizing page optimization ...
+ƒ /gio
+○ /ver
+real 12.03
+$ du -sh .next | awk '{print ".next: " $1}'; ls .next | tr '\\n' ' '; echo
+.next: 33M
+app-path-routes-manifest.json build BUILD_ID build-manifest.json cache diagnostics export-marker.json fallback-build-manifest.json images-manifest.json next-minimal-server.js.nft.json next-server.js.nft.json package.json prerender-manifest.json required-server-files.js required-server-files.json routes-manifest.json server static trace trace-build turbopack types </div>
+<p><strong>2 · next start khi chưa build</strong> — log nói Ready; địa chỉ nói chẳng có gì ở đó:</p>
+<div class="out">$ npx next start -p 3000   # no build yet
+- Network:       http://127.0.0.1:19341
+✓ Ready in 113ms
+
+✓ Running next.config.ts took 22ms
+Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+    at ignore-listed frames
+$ curl -s -o /dev/null -w '%{http_code}' localhost:3000/ver
+HTTP 000
+Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs</div>
+<p><strong>3 · Production chạy bản build, không chạy mã nguồn</strong> — sửa nguồn thành v2 rồi khởi động lại: vẫn v1, cho tới khi build thật:</p>
+<div class="out">$ curl -s http://127.0.0.1:19341/ver | grep -o 'Release v[0-9]' | head -1
+Release v1
+$ sed -i 's/Release v1/Release v2/' src/app/ver/page.tsx   # change the SOURCE, restart, no build
+source: Release v2
+$ curl -s localhost:3000/ver | grep -o 'Release v[0-9]'   # after restart
+Release v1
+$ npm run build &amp;&amp; npx next start   # after a real build
+Release v2</div>
+<p><strong>4 · Lỗi kiểu mà dev phục vụ còn build từ chối</strong>:</p>
+<pre><code class="language-typescript">const total: number = 'one hundred';</code></pre>
+<div class="out">$ npm run dev   →   curl localhost:3000/sai
+next dev /sai → HTTP 200
+Total: one hundred
+$ npm run build
+✓ Compiled successfully in 569ms
+src/app/sai/page.tsx(3,9): error TS2322: Type 'string' is not assignable to type 'number'.
+Failed to type check.</div>
+<p><strong>5 · Dev là một chương trình khác</strong> — cùng một trang động:</p>
+<div class="out">$ for s in "next start" "next dev"; do curl -w '%{time_total}' …/gio (first, second); done
+next start /gio: 1st 46 ms · 2nd 7 ms
+next dev   /gio: 1st 2894 ms · 2nd 29 ms
+$ ps -o rss= -p &lt;pid&gt;   # memory of each server
+next start RSS 102 MB
+next dev   RSS 502 MB</div>
+<div class="note-ct"><strong>Trong kho của chính khoá này</strong><div class="out">$ grep -n "output: 'standalone'" frontend/next.config.js; grep -nE '^RUN npm run build|^CMD ' frontend/Dockerfile
+6:  output: 'standalone',
+140:RUN npm run build
+175:CMD ["node", "server.js"]
+$ grep -n 'Smoke-testing core API routes' deploy.sh deploy-nha.sh | head -3
+deploy.sh:1010:info "Smoke-testing core API routes are mounted..."
+$ grep -n '2026-07-02 | GIF picker dead' CLAUDE.md | cut -c1-160
+817:| 2026-07-02 | GIF picker dead + "chats disappearing" together, survived re-login. Root cause: prod ran a **stale &#96;dist/index.js&#96;** that never mounted &#96;/api</div>Ảnh chạy <code>npm run build</code> một lần (đầu ra standalone); container chạy <code>node server.js</code>. Sau sự cố build cũ 02/07/2026, script deploy smoke-test các tuyến chính và hỏng ngay khi gặp 404.</div>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-bash">rm -rf .next &amp;&amp; npx next start -p 3000      <span class="tok-comment">  # đọc log, rồi curl</span>
+curl -s -o /dev/null -w "%{http_code}\\n" localhost:3000/
+npm run build &amp;&amp; npx next start -p 3000
+<span class="tok-comment"># sửa một trang, khởi động lại KHÔNG build, curl lại — rồi build và so</span></code></pre>
+<h3>🌏 Không học suông: đời thật, giả định, kẻ xấu</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">🏠 Đời thật</span><span class="v">“Đẩy bản sửa rồi mà không thấy” — máy chủ khởi động lại trên <code>.next/</code> cũ; không ai chạy build.</span></div>
+  <div class="kv"><span class="k">❓ Nếu… thì sao</span><span class="v">…bạn phục vụ người dùng bằng <code>next dev</code>? Khoảng 5× bộ nhớ, lần mở đầu tính bằng giây, React bản dev cho mọi người.</span></div>
+  <div class="kv"><span class="k">🕵️ Góc kẻ xấu</span><span class="v">Một máy chủ dev trên cổng công khai để lộ dấu vết lỗi kèm đường dẫn tệp và source map — tấm bản đồ mã nguồn miễn phí.</span></div>
+  <div class="kv"><span class="k">🛡️ Nhận ra &amp; phòng</span><span class="v">Build ở máy trước mỗi lần deploy; production chạy <code>next start</code> (hoặc <code>node server.js</code>); smoke-test bằng địa chỉ, không bằng dòng log.</span></div>
+</div>
+<h3>🔗 Học sâu hơn</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nextjs/learn?lessonSlug=nextjs-17-2-tinh-vs-dong" target="_blank" rel="noopener"><span class="lc-ico">▲</span><span class="lc-body"><span class="lc-title">Next.js · 17.2 — Tĩnh vs động</span><span class="lc-sub">Được quyết lúc build</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-17-6-deploy-hong-quay-lui" target="_blank" rel="noopener"><span class="lc-ico">🟢</span><span class="lc-body"><span class="lc-title">Node.js · 17.6 — Khi deploy nói dối</span><span class="lc-sub">Build cũ, smoke test, quay lui</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nextjs/learn?lessonSlug=nextjs-20-2-env-next-public" target="_blank" rel="noopener"><span class="lc-ico">▲</span><span class="lc-body"><span class="lc-title">Next.js · 20.2 — Biến môi trường và NEXT_PUBLIC</span><span class="lc-sub">Thứ khác bị đóng băng lúc build</span></span></a>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Chạy <code>next build</code> và đọc output: bảng route và route nào tĩnh vs động.</li>
+<li>Chạy <code>next start</code> và xác nhận nó phục vụ bản đã build (production), khác <code>dev</code>.</li>
+<li>Làm hỏng một thứ chỉ lỗi lúc build (một lỗi kiểu mà dev bỏ qua) và thấy build bắt nó.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn tạo được một bản build production và giải thích vì sao nó, không phải dev, là nguồn sự thật.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">next build</span><span class="v">Tạo bản production tối ưu và kiểm kiểu.</span></div>
+  <div class="kv"><span class="k">next start</span><span class="v">Phục vụ bản đã build — đây là production.</span></div>
+  <div class="kv"><span class="k">Bảng route</span><span class="v">Danh sách route và trạng thái tĩnh/động của chúng trong build.</span></div>
+  <div class="kv"><span class="k">Tĩnh vs động</span><span class="v">Build quyết định mỗi route render thế nào.</span></div>
+  <div class="kv"><span class="k">Dev vs build</span><span class="v">Dev dễ tính và chậm; build là nguồn sự thật.</span></div>
+  <div class="kv"><span class="k">Output standalone</span><span class="v">Một bundle server tự-chứa để deploy.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li><code>next build</code> tạo bản production tối ưu, đã kiểm kiểu; <code>next start</code> phục vụ nó.</li><li>Build in ra một bảng route cho thấy route nào tĩnh và route nào động.</li><li>Dev dễ tính và chậm — build là nguồn sự thật cho cái được ship.</li><li>Tái hiện mọi bất ngờ trước-deploy bằng <code>build</code> + <code>start</code>, không phải dev.</li></ul>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/deploying" target="_blank" rel="noopener">
@@ -142,13 +348,14 @@ export default {
       isFreePreview: false,
       description: 'Biến môi trường (env) giữ cấu hình và bí mật ngoài code. Trong Next có hai loại rất khác: env server (bí mật, đọc lúc chạy) và NEXT_PUBLIC_ (công khai, NƯỚNG VÀO lúc build). Nhầm là lộ khoá hoặc "đổi mà không thấy đổi".',
       content: `
+${G20_2}
 <div class="ml-en">
 <span class="eyebrow">Chapter 20 · Lesson 20.2</span>
 <h2>Config and secrets live in environment variables — but there are two kinds</h2>
 <p class="lead">An <strong>environment variable</strong> (env var) is a setting kept outside your code — a database URL, an API key, a feature flag — so the same code can run in dev and production with different values, and secrets never sit in your source. In Next.js there are two very different kinds, and confusing them causes real bugs.</p>
 
 <div class="kv-grid">
-  <div class="kv"><span class="k">Server-only env (e.g. DATABASE_URL)</span><span class="v">Read at <em>runtime</em>, only on the server. The browser never sees it. This is where secrets belong — API keys, DB passwords.</span></div>
+  <div class="kv"><span class="k">Server-only env (e.g. DATABASE_URL)</span><span class="v">Read only on the server — at <em>runtime</em> on a dynamic page, but <em>once, at build time</em> on a static (○) page, where the value is frozen into the HTML (measured below). The browser never sees it. This is where secrets belong — API keys, DB passwords.</span></div>
   <div class="kv"><span class="k">NEXT_PUBLIC_* (e.g. NEXT_PUBLIC_SITE_URL)</span><span class="v">Prefixed with <code>NEXT_PUBLIC_</code>. These are <em>baked into the JavaScript bundle at build time</em> and shipped to the browser. Public by definition — anyone can read them in the client code.</span></div>
 </div>
 
@@ -183,6 +390,88 @@ export default {
   <span class="lc-body"><span class="lc-title">OWASP — Secrets management</span><span class="lc-sub">Where secrets belong, and what to do the moment one leaks.</span></span>
 </a>
 
+
+<h3>🔬 Measured: build with “Alpha”, start with “Beta” (Next.js 16.4.6 · Chromium)</h3>
+<p>Four pages read <code>SHOP_NAME</code> / <code>NEXT_PUBLIC_SHOP_NAME</code>: a dynamic Server Component, a static one, a Client Component, and a client button using <code>NEXT_PUBLIC_PAY_KEY</code> (a fake lab key). Build with Alpha:</p>
+<pre><code class="language-typescript">'use client';
+<span class="tok-comment">// app/env/khach/Hi.tsx — a Client Component reads one public and one server-only var</span>
+export default function Hi() {
+  return (
+    &lt;div&gt;
+      &lt;p id="pub"&gt;NEXT_PUBLIC_SHOP_NAME = {process.env.NEXT_PUBLIC_SHOP_NAME}&lt;/p&gt;
+      &lt;p id="srv"&gt;SHOP_NAME = {String(process.env.SHOP_NAME)}&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+<div class="out">$ SHOP_NAME=Alpha NEXT_PUBLIC_SHOP_NAME=Alpha NEXT_PUBLIC_PAY_KEY=pay_demo_K3Y_42 npm run build
+✓ Compiled successfully in 1715ms
+ƒ /env/dong
+○ /env/key
+○ /env/khach
+○ /env/tinh</div>
+<p>Start the <em>same build</em> with Beta:</p>
+<div class="out">$ SHOP_NAME=Beta NEXT_PUBLIC_SHOP_NAME=Beta npx next start   # same build, NEW values at start
+dynamic page · SHOP_NAME = Beta
+static page · SHOP_NAME = Alpha
+client page (HTML) · NEXT_PUBLIC_SHOP_NAME = Alpha
+client page (HTML) · SHOP_NAME = Alpha
+$ grep -rl … .next/static   # what ships to every browser?
+"Alpha" in .next/static: 2 file(s)
+"Beta" in .next/static: 0 file(s)
+"pay_demo_K3Y_42" in .next/static: 1 file(s)
+$ curl the page, find its JS chunks, grep them for the key
+anyone can download: /_next/static/chunks/3ztadq6kq3r9l.js</div>
+<p>Only the dynamic page says Beta. The static page froze the <em>server</em> variable at build. The Client Component&#39;s HTML says Alpha too — and in Chromium the same element says <code>undefined</code>, with <code>Minified React error #418</code> (hydration text mismatch): the browser has no server variables. And the public key is in a chunk any visitor can download.</p>
+<p>Rebuild with Beta:</p>
+<div class="out">$ SHOP_NAME=Beta NEXT_PUBLIC_SHOP_NAME=Beta npm run build &amp;&amp; npx next start   # REBUILD
+dynamic page · SHOP_NAME = Beta
+static page · SHOP_NAME = Beta
+client page (HTML) · NEXT_PUBLIC_SHOP_NAME = Beta</div>
+<div class="note-ct"><strong>In this course&#39;s repository</strong><div class="out">$ grep -rhoE "NEXT_PUBLIC_[A-Z_]+" frontend/src | sort -u | wc -l | sed 's/^ */biến NEXT_PUBLIC_ khác nhau trong frontend\\/src: /'
+biến NEXT_PUBLIC_ khác nhau trong frontend/src: 10
+$ grep -n "use client\\|NEXT_PUBLIC_REVALIDATE_SECRET" frontend/src/app/admin/shop/page.tsx | head -2; grep -n "REVALIDATE_SECRET ??" frontend/src/app/api/revalidate/route.ts | head -1
+1:'use client';
+21:const REVALIDATE_SECRET = process.env.NEXT_PUBLIC_REVALIDATE_SECRET ?? '';
+21:const REVALIDATE_SECRET = process.env.REVALIDATE_SECRET ?? '';
+$ echo "frontend/Dockerfile ARG NEXT_PUBLIC_GIPHY_API_KEY: $(grep -c 'NEXT_PUBLIC_GIPHY_API_KEY' frontend/Dockerfile) dòng · dùng trong frontend/src: $(grep -rl NEXT_PUBLIC_GIPHY frontend/src | wc -l | tr -d ' ') tệp"
+frontend/Dockerfile ARG NEXT_PUBLIC_GIPHY_API_KEY: 2 dòng · dùng trong frontend/src: 0 tệp</div>A <code>&#39;use client&#39;</code> admin page reads <code>NEXT_PUBLIC_REVALIDATE_SECRET</code>: if that variable is ever set at build, the secret ships inside that page&#39;s JavaScript. The Dockerfile also still passes <code>NEXT_PUBLIC_GIPHY_API_KEY</code>, which no source file uses since the GIF proxy.</div>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-bash">SHOP_NAME=Alpha NEXT_PUBLIC_SHOP_NAME=Alpha npm run build
+SHOP_NAME=Beta NEXT_PUBLIC_SHOP_NAME=Beta npx next start <span class="tok-comment">  # curl a ○ page and a ƒ page</span>
+grep -rl "&lt;your-secret&gt;" .next/static                   <span class="tok-comment">  # must print nothing</span></code></pre>
+<h3>🌏 Not learning in a vacuum: real life, what if, the attacker</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">🏠 Real life</span><span class="v">“I changed the env and restarted” — only dynamic pages notice; static pages and the JS keep the build&#39;s value.</span></div>
+  <div class="kv"><span class="k">❓ What if…</span><span class="v">…a public variable is missing at build? It becomes <code>undefined</code> in the JS — the GIPHY 403 of 02/07/2026.</span></div>
+  <div class="kv"><span class="k">🕵️ The attacker</span><span class="v">Bots download <code>/_next/static/**/*.js</code> and grep for keys and tokens. <code>NEXT_PUBLIC_</code> means published.</span></div>
+  <div class="kv"><span class="k">🛡️ Detect &amp; prevent</span><span class="v">Secrets server-only behind a proxy route; grep the build output before deploying; rotate any key that ever shipped.</span></div>
+</div>
+<h3>🔗 Go deeper</h3>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-4-4-arg-env" target="_blank" rel="noopener"><span class="lc-ico">🐳</span><span class="lc-body"><span class="lc-title">Docker · 4.4 — ARG and ENV</span><span class="lc-sub">Build time vs run time, in images</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nextjs/learn?lessonSlug=nextjs-9-4-props-serialize" target="_blank" rel="noopener"><span class="lc-ico">▲</span><span class="lc-body"><span class="lc-title">Next.js · 9.4 — Props across the boundary</span><span class="lc-sub">Pass the value, not the variable</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nextjs/learn?lessonSlug=nextjs-20-3-docker" target="_blank" rel="noopener"><span class="lc-ico">▲</span><span class="lc-body"><span class="lc-title">Next.js · 20.3 — Docker</span><span class="lc-sub">NEXT_PUBLIC_ as build arguments</span></span></a>
+
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Add a server-only env var and read it in a Server Component; confirm it is NOT in the browser bundle.</li>
+<li>Add a <code>NEXT_PUBLIC_</code> var, use it in a client component, and confirm it is baked into the bundle at build time.</li>
+<li>Change a <code>NEXT_PUBLIC_</code> value and prove it only takes effect after a rebuild, not a restart.</li>
+</ol>
+<p><strong>Done when:</strong> you can tell server env from NEXT_PUBLIC env and know NEXT_PUBLIC is baked at build time.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Server env</span><span class="v">Secrets read only on the server, never shipped to the client.</span></div>
+  <div class="kv"><span class="k">NEXT_PUBLIC_</span><span class="v">Prefix that exposes a var to the browser bundle.</span></div>
+  <div class="kv"><span class="k">Baked at build</span><span class="v"><code>NEXT_PUBLIC_</code> values are inlined at build time.</span></div>
+  <div class="kv"><span class="k">Rebuild, not restart</span><span class="v">Changing a public var needs a rebuild to take effect.</span></div>
+  <div class="kv"><span class="k">No secrets in client</span><span class="v">Never put secrets behind <code>NEXT_PUBLIC_</code>.</span></div>
+  <div class="kv"><span class="k">Backend proxy</span><span class="v">Keep third-party keys server-side behind a proxy route.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Only <code>NEXT_PUBLIC_</code> vars reach the browser — everything else stays server-side.</li><li><code>NEXT_PUBLIC_</code> values are baked into the bundle at build time, so changing one needs a rebuild, not a restart.</li><li>Never expose a secret via <code>NEXT_PUBLIC_</code>; keep third-party keys behind a backend proxy route.</li><li>This is a real cuongthai.com trap — a missing public key baked at build broke the GIF picker.</li></ul>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/configuring/environment-variables" target="_blank" rel="noopener">
   <span class="lc-ico">🔑</span>
@@ -196,7 +485,7 @@ export default {
 <p class="lead">Một <strong>biến môi trường</strong> (env var) là một thiết lập giữ ngoài code — một URL database, một khoá API, một cờ tính năng — để cùng một code chạy ở dev và production với giá trị khác nhau, và bí mật không bao giờ nằm trong nguồn. Trong Next.js có hai loại rất khác, và nhầm chúng gây bug thật.</p>
 
 <div class="kv-grid">
-  <div class="kv"><span class="k">Env chỉ-server (ví dụ DATABASE_URL)</span><span class="v">Đọc lúc <em>chạy</em>, chỉ trên server. Trình duyệt không bao giờ thấy nó. Đây là nơi bí mật thuộc về — khoá API, mật khẩu DB.</span></div>
+  <div class="kv"><span class="k">Env chỉ-server (ví dụ DATABASE_URL)</span><span class="v">Chỉ đọc trên server — lúc <em>chạy</em> ở trang động, nhưng <em>một lần, lúc build</em> ở trang tĩnh (○), giá trị bị chốt vào HTML (đo bên dưới). Trình duyệt không bao giờ thấy nó. Đây là nơi bí mật thuộc về — khoá API, mật khẩu DB.</span></div>
   <div class="kv"><span class="k">NEXT_PUBLIC_* (ví dụ NEXT_PUBLIC_SITE_URL)</span><span class="v">Có tiền tố <code>NEXT_PUBLIC_</code>. Chúng bị <em>nướng vào bundle JavaScript lúc build</em> và gửi xuống trình duyệt. Công khai theo định nghĩa — ai cũng đọc được trong code client.</span></div>
 </div>
 
@@ -231,6 +520,88 @@ export default {
   <span class="lc-body"><span class="lc-title">OWASP — Quản lý bí mật</span><span class="lc-sub">Bí mật thuộc về đâu, và phải làm gì ngay khi một cái bị rò.</span></span>
 </a>
 
+
+<h3>🔬 Đo thật: build với “Alpha”, chạy với “Beta” (Next.js 16.4.6 · Chromium)</h3>
+<p>Bốn trang đọc <code>SHOP_NAME</code> / <code>NEXT_PUBLIC_SHOP_NAME</code>: một Server Component động, một tĩnh, một Client Component, và một nút client dùng <code>NEXT_PUBLIC_PAY_KEY</code> (khoá giả của lab). Build với Alpha:</p>
+<pre><code class="language-typescript">'use client';
+<span class="tok-comment">// app/env/khach/Hi.tsx — a Client Component reads one public and one server-only var</span>
+export default function Hi() {
+  return (
+    &lt;div&gt;
+      &lt;p id="pub"&gt;NEXT_PUBLIC_SHOP_NAME = {process.env.NEXT_PUBLIC_SHOP_NAME}&lt;/p&gt;
+      &lt;p id="srv"&gt;SHOP_NAME = {String(process.env.SHOP_NAME)}&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+<div class="out">$ SHOP_NAME=Alpha NEXT_PUBLIC_SHOP_NAME=Alpha NEXT_PUBLIC_PAY_KEY=pay_demo_K3Y_42 npm run build
+✓ Compiled successfully in 1715ms
+ƒ /env/dong
+○ /env/key
+○ /env/khach
+○ /env/tinh</div>
+<p>Chạy <em>cùng bản build</em> với Beta:</p>
+<div class="out">$ SHOP_NAME=Beta NEXT_PUBLIC_SHOP_NAME=Beta npx next start   # same build, NEW values at start
+dynamic page · SHOP_NAME = Beta
+static page · SHOP_NAME = Alpha
+client page (HTML) · NEXT_PUBLIC_SHOP_NAME = Alpha
+client page (HTML) · SHOP_NAME = Alpha
+$ grep -rl … .next/static   # what ships to every browser?
+"Alpha" in .next/static: 2 file(s)
+"Beta" in .next/static: 0 file(s)
+"pay_demo_K3Y_42" in .next/static: 1 file(s)
+$ curl the page, find its JS chunks, grep them for the key
+anyone can download: /_next/static/chunks/3ztadq6kq3r9l.js</div>
+<p>Chỉ trang động nói Beta. Trang tĩnh đã chốt biến <em>server</em> lúc build. HTML của Client Component cũng nói Alpha — còn trong Chromium chính phần tử đó ra <code>undefined</code>, kèm <code>Minified React error #418</code> (lệch chữ khi hydrate): trình duyệt không có biến server nào. Và khoá công khai nằm trong một chunk mà người truy cập nào cũng tải được.</p>
+<p>Build lại với Beta:</p>
+<div class="out">$ SHOP_NAME=Beta NEXT_PUBLIC_SHOP_NAME=Beta npm run build &amp;&amp; npx next start   # REBUILD
+dynamic page · SHOP_NAME = Beta
+static page · SHOP_NAME = Beta
+client page (HTML) · NEXT_PUBLIC_SHOP_NAME = Beta</div>
+<div class="note-ct"><strong>Trong kho của chính khoá này</strong><div class="out">$ grep -rhoE "NEXT_PUBLIC_[A-Z_]+" frontend/src | sort -u | wc -l | sed 's/^ */biến NEXT_PUBLIC_ khác nhau trong frontend\\/src: /'
+biến NEXT_PUBLIC_ khác nhau trong frontend/src: 10
+$ grep -n "use client\\|NEXT_PUBLIC_REVALIDATE_SECRET" frontend/src/app/admin/shop/page.tsx | head -2; grep -n "REVALIDATE_SECRET ??" frontend/src/app/api/revalidate/route.ts | head -1
+1:'use client';
+21:const REVALIDATE_SECRET = process.env.NEXT_PUBLIC_REVALIDATE_SECRET ?? '';
+21:const REVALIDATE_SECRET = process.env.REVALIDATE_SECRET ?? '';
+$ echo "frontend/Dockerfile ARG NEXT_PUBLIC_GIPHY_API_KEY: $(grep -c 'NEXT_PUBLIC_GIPHY_API_KEY' frontend/Dockerfile) dòng · dùng trong frontend/src: $(grep -rl NEXT_PUBLIC_GIPHY frontend/src | wc -l | tr -d ' ') tệp"
+frontend/Dockerfile ARG NEXT_PUBLIC_GIPHY_API_KEY: 2 dòng · dùng trong frontend/src: 0 tệp</div>Một trang quản trị <code>&#39;use client&#39;</code> đọc <code>NEXT_PUBLIC_REVALIDATE_SECRET</code>: nếu biến đó từng được đặt lúc build, bí mật sẽ nằm trong JavaScript của trang đó. Dockerfile cũng vẫn truyền <code>NEXT_PUBLIC_GIPHY_API_KEY</code>, thứ không tệp nguồn nào dùng nữa từ khi có proxy GIF.</div>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-bash">SHOP_NAME=Alpha NEXT_PUBLIC_SHOP_NAME=Alpha npm run build
+SHOP_NAME=Beta NEXT_PUBLIC_SHOP_NAME=Beta npx next start <span class="tok-comment">  # curl một trang ○ và một trang ƒ</span>
+grep -rl "&lt;your-secret&gt;" .next/static                   <span class="tok-comment">  # phải không in gì</span></code></pre>
+<h3>🌏 Không học suông: đời thật, giả định, kẻ xấu</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">🏠 Đời thật</span><span class="v">“Đổi env rồi khởi động lại” — chỉ trang động thấy; trang tĩnh và JS giữ giá trị lúc build.</span></div>
+  <div class="kv"><span class="k">❓ Nếu… thì sao</span><span class="v">…một biến công khai thiếu lúc build? Nó thành <code>undefined</code> trong JS — sự cố GIPHY 403 ngày 02/07/2026.</span></div>
+  <div class="kv"><span class="k">🕵️ Góc kẻ xấu</span><span class="v">Bot tải <code>/_next/static/**/*.js</code> rồi grep tìm khoá và token. <code>NEXT_PUBLIC_</code> nghĩa là đã công bố.</span></div>
+  <div class="kv"><span class="k">🛡️ Nhận ra &amp; phòng</span><span class="v">Bí mật chỉ ở server sau một tuyến proxy; grep đầu ra build trước khi deploy; đổi ngay khoá nào từng bị gửi đi.</span></div>
+</div>
+<h3>🔗 Học sâu hơn</h3>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-4-4-arg-env" target="_blank" rel="noopener"><span class="lc-ico">🐳</span><span class="lc-body"><span class="lc-title">Docker · 4.4 — ARG và ENV</span><span class="lc-sub">Lúc dựng so với lúc chạy, trong ảnh</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nextjs/learn?lessonSlug=nextjs-9-4-props-serialize" target="_blank" rel="noopener"><span class="lc-ico">▲</span><span class="lc-body"><span class="lc-title">Next.js · 9.4 — Props qua ranh giới</span><span class="lc-sub">Truyền giá trị, không truyền biến</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nextjs/learn?lessonSlug=nextjs-20-3-docker" target="_blank" rel="noopener"><span class="lc-ico">▲</span><span class="lc-body"><span class="lc-title">Next.js · 20.3 — Docker</span><span class="lc-sub">NEXT_PUBLIC_ là tham số lúc dựng</span></span></a>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Thêm một env var chỉ-server và đọc nó trong một Server Component; xác nhận nó KHÔNG có trong bundle trình duyệt.</li>
+<li>Thêm một var <code>NEXT_PUBLIC_</code>, dùng nó trong một client component, và xác nhận nó được bake vào bundle lúc build.</li>
+<li>Đổi một giá trị <code>NEXT_PUBLIC_</code> và chứng minh nó chỉ có hiệu lực sau một lần build lại, không phải restart.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn phân biệt được env server với env NEXT_PUBLIC và biết NEXT_PUBLIC bị bake lúc build.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Env server</span><span class="v">Secret chỉ đọc trên server, không bao giờ gửi tới client.</span></div>
+  <div class="kv"><span class="k">NEXT_PUBLIC_</span><span class="v">Tiền tố lộ một var ra bundle trình duyệt.</span></div>
+  <div class="kv"><span class="k">Bake lúc build</span><span class="v">Giá trị <code>NEXT_PUBLIC_</code> được inline lúc build.</span></div>
+  <div class="kv"><span class="k">Build lại, không restart</span><span class="v">Đổi một var public cần build lại mới có hiệu lực.</span></div>
+  <div class="kv"><span class="k">Không secret ở client</span><span class="v">Đừng bao giờ đặt secret sau <code>NEXT_PUBLIC_</code>.</span></div>
+  <div class="kv"><span class="k">Proxy backend</span><span class="v">Giữ khoá bên thứ ba phía server sau một route proxy.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Chỉ var <code>NEXT_PUBLIC_</code> mới tới trình duyệt — mọi thứ khác ở lại phía server.</li><li>Giá trị <code>NEXT_PUBLIC_</code> bị bake vào bundle lúc build, nên đổi một cái cần build lại, không phải restart.</li><li>Đừng bao giờ lộ secret qua <code>NEXT_PUBLIC_</code>; giữ khoá bên thứ ba sau một route proxy backend.</li><li>Đây là một bẫy thật của cuongthai.com — một khoá public thiếu bị bake lúc build làm hỏng trình chọn GIF.</li></ul>
+
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/configuring/environment-variables" target="_blank" rel="noopener">
   <span class="lc-ico">🔑</span>
@@ -263,6 +634,7 @@ export default {
       isFreePreview: false,
       description: 'Một container gói app CÙNG mọi thứ nó cần (Node, thư viện, bản build) thành một hộp chạy giống hệt trên mọi máy — hết cảnh "máy tôi chạy được". Dockerfile là công thức; standalone output làm image gọn.',
       content: `
+${G20_3}
 <div class="ml-en">
 <span class="eyebrow">Chapter 20 · Lesson 20.3</span>
 <h2>Ship the app and its whole environment as one box</h2>
@@ -277,10 +649,13 @@ export default {
 FROM node:22-alpine
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci                 <span class="tok-comment"># install exact dependencies</span>
+<span class="tok-comment"># install exact dependencies</span>
+RUN npm ci
 COPY . .
-RUN npm run build          <span class="tok-comment"># next build → the production build</span>
-CMD ["npm", "start"]       <span class="tok-comment"># next start when the container runs</span></code></pre>
+<span class="tok-comment"># next build → the production build</span>
+RUN npm run build
+<span class="tok-comment"># next start when the container runs (a Dockerfile has no end-of-line comments)</span>
+CMD ["npm", "start"]</code></pre>
 
 <div class="kv-grid">
   <div class="kv"><span class="k">Image vs container</span><span class="v">The <em>image</em> is the built box (a template). A <em>container</em> is a running instance of that image. Build the image once, run many containers from it.</span></div>
@@ -309,6 +684,118 @@ CMD ["npm", "start"]       <span class="tok-comment"># next start when the conta
   <span class="lc-body"><span class="lc-title">Next.js — with-docker example</span><span class="lc-sub">The official multi-stage Dockerfile, kept current with each release.</span></span>
 </a>
 
+
+<div class="callout warn"><p><strong>Measured: the Dockerfile above, as it was first written with comments at the end of each line, builds — and the container never starts.</strong> Docker has no end-of-line comments: <code>CMD ["npm", "start"]   # …</code> is no longer valid JSON, so Docker falls back to the shell form and runs the whole line as a command. The comments are now on their own lines.</p>
+<div class="out">$ docker build -f Dockerfile.simple -t nxj-simple .
+built nxj-simple in 149 s
+$ docker ps -a --filter name=nxj-simple-c --format '{{.Names}}: {{.Status}}'; docker logs nxj-simple-c 2&gt;&amp;1 | tail -1; docker inspect -f 'CMD as Docker read it: {{json .Config.Cmd}}' nxj-simple
+nxj-simple-c: Exited (127) 6 seconds ago
+/bin/sh: [npm,: not found
+CMD as Docker read it: ["/bin/sh","-c","[\\"npm\\", \\"start\\"]       # next start when the container runs"]</div></div>
+<h3>🔬 Measured: two Dockerfiles, one forgotten argument, two libcs (Docker Desktop 29.8 · node:22-alpine · Next.js 16.4.6)</h3>
+<p><strong>1 · The fixed single-stage Dockerfile runs — and ships everything</strong>:</p>
+<div class="out">$ S=$(date +%s); docker build -q -f Dockerfile.simple -t nxj-simple . &gt;/dev/null 2&gt;&amp;1 &amp;&amp; echo "rebuilt nxj-simple in $(( $(date +%s) - S )) s"; docker inspect -f 'CMD as Docker read it: {{json .Config.Cmd}}' nxj-simple
+rebuilt nxj-simple in 58 s
+CMD as Docker read it: ["npm","start"]
+$ docker run -d --name nxj-simple-c -p 127.0.0.1:19344:3000 nxj-simple &gt;/dev/null; sleep 6; echo "19344 /ver: $(curl -s http://127.0.0.1:19344/ver | grep -o 'Release v[0-9]' | head -1)"; echo "nxj-simple-c: $(docker exec nxj-simple-c du -sh /app | cut -f1) in /app · $(docker exec nxj-simple-c sh -c 'ls node_modules | wc -l' | tr -d ' ') packages in node_modules"
+19344 /ver: Release v1
+nxj-simple-c: 851.6M in /app · 387 packages in node_modules
+$ docker images --format '{{.Repository}}  {{.Size}}' | grep -E '^nxj-(simple|std) ' | sort
+nxj-simple  1.84GB
+nxj-std  331MB</div>
+<p><strong>2 · Multi-stage + <code>output: &#39;standalone&#39;</code></strong>:</p>
+<pre><code class="language-bash"><span class="tok-comment"># Dockerfile — multi-stage + output: 'standalone'</span>
+FROM node:22-alpine AS deps
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+
+FROM node:22-alpine AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+ARG NEXT_PUBLIC_SHOP_NAME
+ENV NEXT_PUBLIC_SHOP_NAME=$NEXT_PUBLIC_SHOP_NAME
+RUN npm run build
+
+FROM node:22-alpine AS runner
+WORKDIR /app
+ENV NODE_ENV=production PORT=3000 HOSTNAME=0.0.0.0
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+USER node
+CMD ["node", "server.js"]</code></pre>
+<div class="out">$ docker build -t nxj-std --build-arg NEXT_PUBLIC_SHOP_NAME=Alpha .
+built nxj-std in 118 s
+$ docker build -t nxj-noarg .   # forgot the build arg
+built nxj-noarg in 10 s (layers cached)
+$ docker images --format '{{.Repository}}  {{.Size}}' | grep -E '^nxj-(simple|std|noarg) ' | sort
+nxj-noarg  331MB
+nxj-simple  1.84GB
+nxj-std  331MB
+$ for c in nxj-std-c; do echo "$c: $(docker exec $c du -sh /app | cut -f1) in /app · $(docker exec $c sh -c 'ls node_modules 2&gt;/dev/null | wc -l' | tr -d ' ') packages in node_modules"; done
+nxj-std-c: 67.8M in /app · 12 packages in node_modules</div>
+<p><strong>3 · NEXT_PUBLIC_ needs <code>--build-arg</code></strong> — port 19345 was built with <code>--build-arg NEXT_PUBLIC_SHOP_NAME=Alpha</code>; 19346 was built without it and started with <code>-e NEXT_PUBLIC_SHOP_NAME=Beta</code>:</p>
+<div class="out">$ curl localhost:3002/env/khach   # image built WITHOUT the arg, container started with -e NEXT_PUBLIC_SHOP_NAME=Beta
+19345: NEXT_PUBLIC_SHOP_NAME = Alpha
+19346: NEXT_PUBLIC_SHOP_NAME = </div>
+<p><strong>4 · alpine is musl, slim is glibc</strong>:</p>
+<div class="out">$ for i in node:22-alpine node:22-slim; do echo "$i: glibc $(docker run --rm $i node -p 'process.report.getReport().header.glibcVersionRuntime || "none (musl)"')"; done
+node:22-alpine: glibc none (musl)
+node:22-slim: glibc 2.36
+$ docker run --rm nxj-std sh -c 'ls node_modules/@next 2&gt;/dev/null; ls /app/node_modules/@next 2&gt;/dev/null' | head -3; docker run --rm nxj-simple sh -c 'ls node_modules/@next | grep swc'
+env
+env
+swc-linux-arm64-gnu
+swc-linux-arm64-musl</div>
+<div class="note-ct"><strong>In this course&#39;s repository</strong><div class="out">$ grep -n '^FROM' frontend/Dockerfile Dockerfile.backend | head -6
+frontend/Dockerfile:10:FROM node:22-slim AS deps
+frontend/Dockerfile:42:FROM node:22-slim AS builder
+frontend/Dockerfile:145:FROM node:22-slim AS runner
+Dockerfile.backend:7:FROM node:22-slim AS builder
+Dockerfile.backend:92:FROM node:22-slim AS runner
+$ grep -n 'build xanh không có' CLAUDE.md | cut -c1-140
+280:thêm chốt kiểm libc ↔ engine **trước khi đẩy**. Bài học: *build xanh không có</div>Both images use <code>node:22-slim</code> (glibc) in every stage. On 18/08/2026 an image built on alpine carried a Prisma engine for glibc: build, push and swap were green, then the backend restarted forever (API 502 for seven minutes). The deploy script now checks libc ↔ engine before pushing.</div>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-bash">docker build -t app --build-arg NEXT_PUBLIC_SITE=… .
+docker run -d --name app -p 3000:3000 app &amp;&amp; sleep 3
+docker ps -a --filter name=app    <span class="tok-comment">  # Up, or Exited?</span>
+docker logs app; curl -s -o /dev/null -w "%{http_code}\\n" localhost:3000/
+docker images app                 <span class="tok-comment">  # size</span></code></pre>
+<h3>🌏 Not learning in a vacuum: real life, what if, the attacker</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">🏠 Real life</span><span class="v">“It builds on CI” — and the container exits with 127, because nobody ran it before pushing.</span></div>
+  <div class="kv"><span class="k">❓ What if…</span><span class="v">…you <code>COPY . .</code> without a <code>.dockerignore</code>? Source, tests and <code>.env</code> files end up inside the image.</span></div>
+  <div class="kv"><span class="k">🕵️ The attacker</span><span class="v">An image is an archive: <code>docker history</code> shows build arguments of a single-stage build, and layers keep files you deleted in a later step.</span></div>
+  <div class="kv"><span class="k">🛡️ Detect &amp; prevent</span><span class="v"><code>.dockerignore</code>, multi-stage, <code>USER node</code>; run + curl before pushing; secrets injected at run time.</span></div>
+</div>
+<h3>🔗 Go deeper</h3>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-6-1-multi-stage" target="_blank" rel="noopener"><span class="lc-ico">🐳</span><span class="lc-body"><span class="lc-title">Docker · 6.1 — Multi-stage builds, done right</span><span class="lc-sub">The pattern in depth</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-17-1-anh-docker" target="_blank" rel="noopener"><span class="lc-ico">🟢</span><span class="lc-body"><span class="lc-title">Node.js · 17.1 — Docker image: 440MB to 58.8MB</span><span class="lc-sub">The same diet for a Node backend</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nextjs/learn?lessonSlug=nextjs-20-4-vps-stale-build" target="_blank" rel="noopener"><span class="lc-ico">▲</span><span class="lc-body"><span class="lc-title">Next.js · 20.4 — VPS and stale builds</span><span class="lc-sub">Shipping the image</span></span></a>
+
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Enable <code>output: 'standalone'</code> and build a multi-stage Dockerfile that copies the standalone server.</li>
+<li>Build the image locally and run it, confirming the app serves on the expected port.</li>
+<li>Note which env vars must be present at build vs at runtime (NEXT_PUBLIC at build, secrets at runtime).</li>
+</ol>
+<p><strong>Done when:</strong> you can containerise a Next.js app with a standalone multi-stage Docker build.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">output: standalone</span><span class="v">A self-contained server bundle ideal for Docker.</span></div>
+  <div class="kv"><span class="k">Multi-stage build</span><span class="v">Build in one stage, copy only what runs into a small final image.</span></div>
+  <div class="kv"><span class="k">Image</span><span class="v">The packaged app that runs the same anywhere.</span></div>
+  <div class="kv"><span class="k">Build vs runtime env</span><span class="v">NEXT_PUBLIC at build; secrets injected at runtime.</span></div>
+  <div class="kv"><span class="k">Layer caching</span><span class="v">Order Dockerfile steps so installs cache between builds.</span></div>
+  <div class="kv"><span class="k">Small final image</span><span class="v">Copy only the standalone output, not the whole repo.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Set <code>output: 'standalone'</code> and use a multi-stage Dockerfile that copies only the standalone server.</li><li>A built image runs the same anywhere — this is how cuongthai.com deploys.</li><li><code>NEXT_PUBLIC_</code> vars must be present at build; secrets are injected at runtime.</li><li>Order Dockerfile steps for layer caching and keep the final image small.</li></ul>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/deploying#docker-image" target="_blank" rel="noopener">
   <span class="lc-ico">🐳</span>
@@ -330,10 +817,13 @@ CMD ["npm", "start"]       <span class="tok-comment"># next start when the conta
 FROM node:22-alpine
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci                 <span class="tok-comment"># cài đúng dependency</span>
+<span class="tok-comment"># cài đúng dependency</span>
+RUN npm ci
 COPY . .
-RUN npm run build          <span class="tok-comment"># next build → bản build production</span>
-CMD ["npm", "start"]       <span class="tok-comment"># next start khi container chạy</span></code></pre>
+<span class="tok-comment"># next build → bản build production</span>
+RUN npm run build
+<span class="tok-comment"># next start khi container chạy (Dockerfile không có chú thích cuối dòng)</span>
+CMD ["npm", "start"]</code></pre>
 
 <div class="kv-grid">
   <div class="kv"><span class="k">Image vs container</span><span class="v"><em>Image</em> là cái hộp đã build (một khuôn). Một <em>container</em> là một bản đang chạy của image đó. Build image một lần, chạy nhiều container từ nó.</span></div>
@@ -362,6 +852,118 @@ CMD ["npm", "start"]       <span class="tok-comment"># next start khi container 
   <span class="lc-body"><span class="lc-title">Next.js — ví dụ with-docker</span><span class="lc-sub">Dockerfile nhiều tầng chính thức, được cập nhật theo từng bản phát hành.</span></span>
 </a>
 
+
+<div class="callout warn"><p><strong>Đo thật: Dockerfile ở trên, khi còn viết chú thích ở cuối mỗi dòng, build được — mà container không bao giờ khởi động.</strong> Dockerfile không có chú thích cuối dòng: <code>CMD ["npm", "start"]   # …</code> không còn là JSON hợp lệ, nên Docker lùi về dạng shell và chạy cả dòng như một lệnh. Giờ chú thích đã nằm trên dòng riêng.</p>
+<div class="out">$ docker build -f Dockerfile.simple -t nxj-simple .
+built nxj-simple in 149 s
+$ docker ps -a --filter name=nxj-simple-c --format '{{.Names}}: {{.Status}}'; docker logs nxj-simple-c 2&gt;&amp;1 | tail -1; docker inspect -f 'CMD as Docker read it: {{json .Config.Cmd}}' nxj-simple
+nxj-simple-c: Exited (127) 6 seconds ago
+/bin/sh: [npm,: not found
+CMD as Docker read it: ["/bin/sh","-c","[\\"npm\\", \\"start\\"]       # next start when the container runs"]</div></div>
+<h3>🔬 Đo thật: hai Dockerfile, một tham số quên, hai thư viện C (Docker Desktop 29.8 · node:22-alpine · Next.js 16.4.6)</h3>
+<p><strong>1 · Dockerfile một tầng đã sửa chạy được — và gửi đi mọi thứ</strong>:</p>
+<div class="out">$ S=$(date +%s); docker build -q -f Dockerfile.simple -t nxj-simple . &gt;/dev/null 2&gt;&amp;1 &amp;&amp; echo "rebuilt nxj-simple in $(( $(date +%s) - S )) s"; docker inspect -f 'CMD as Docker read it: {{json .Config.Cmd}}' nxj-simple
+rebuilt nxj-simple in 58 s
+CMD as Docker read it: ["npm","start"]
+$ docker run -d --name nxj-simple-c -p 127.0.0.1:19344:3000 nxj-simple &gt;/dev/null; sleep 6; echo "19344 /ver: $(curl -s http://127.0.0.1:19344/ver | grep -o 'Release v[0-9]' | head -1)"; echo "nxj-simple-c: $(docker exec nxj-simple-c du -sh /app | cut -f1) in /app · $(docker exec nxj-simple-c sh -c 'ls node_modules | wc -l' | tr -d ' ') packages in node_modules"
+19344 /ver: Release v1
+nxj-simple-c: 851.6M in /app · 387 packages in node_modules
+$ docker images --format '{{.Repository}}  {{.Size}}' | grep -E '^nxj-(simple|std) ' | sort
+nxj-simple  1.84GB
+nxj-std  331MB</div>
+<p><strong>2 · Nhiều tầng + <code>output: &#39;standalone&#39;</code></strong>:</p>
+<pre><code class="language-bash"><span class="tok-comment"># Dockerfile — multi-stage + output: 'standalone'</span>
+FROM node:22-alpine AS deps
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+
+FROM node:22-alpine AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+ARG NEXT_PUBLIC_SHOP_NAME
+ENV NEXT_PUBLIC_SHOP_NAME=$NEXT_PUBLIC_SHOP_NAME
+RUN npm run build
+
+FROM node:22-alpine AS runner
+WORKDIR /app
+ENV NODE_ENV=production PORT=3000 HOSTNAME=0.0.0.0
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+USER node
+CMD ["node", "server.js"]</code></pre>
+<div class="out">$ docker build -t nxj-std --build-arg NEXT_PUBLIC_SHOP_NAME=Alpha .
+built nxj-std in 118 s
+$ docker build -t nxj-noarg .   # forgot the build arg
+built nxj-noarg in 10 s (layers cached)
+$ docker images --format '{{.Repository}}  {{.Size}}' | grep -E '^nxj-(simple|std|noarg) ' | sort
+nxj-noarg  331MB
+nxj-simple  1.84GB
+nxj-std  331MB
+$ for c in nxj-std-c; do echo "$c: $(docker exec $c du -sh /app | cut -f1) in /app · $(docker exec $c sh -c 'ls node_modules 2&gt;/dev/null | wc -l' | tr -d ' ') packages in node_modules"; done
+nxj-std-c: 67.8M in /app · 12 packages in node_modules</div>
+<p><strong>3 · NEXT_PUBLIC_ cần <code>--build-arg</code></strong> — cổng 19345 build có <code>--build-arg NEXT_PUBLIC_SHOP_NAME=Alpha</code>; 19346 build thiếu nó và chạy với <code>-e NEXT_PUBLIC_SHOP_NAME=Beta</code>:</p>
+<div class="out">$ curl localhost:3002/env/khach   # image built WITHOUT the arg, container started with -e NEXT_PUBLIC_SHOP_NAME=Beta
+19345: NEXT_PUBLIC_SHOP_NAME = Alpha
+19346: NEXT_PUBLIC_SHOP_NAME = </div>
+<p><strong>4 · alpine là musl, slim là glibc</strong>:</p>
+<div class="out">$ for i in node:22-alpine node:22-slim; do echo "$i: glibc $(docker run --rm $i node -p 'process.report.getReport().header.glibcVersionRuntime || "none (musl)"')"; done
+node:22-alpine: glibc none (musl)
+node:22-slim: glibc 2.36
+$ docker run --rm nxj-std sh -c 'ls node_modules/@next 2&gt;/dev/null; ls /app/node_modules/@next 2&gt;/dev/null' | head -3; docker run --rm nxj-simple sh -c 'ls node_modules/@next | grep swc'
+env
+env
+swc-linux-arm64-gnu
+swc-linux-arm64-musl</div>
+<div class="note-ct"><strong>Trong kho của chính khoá này</strong><div class="out">$ grep -n '^FROM' frontend/Dockerfile Dockerfile.backend | head -6
+frontend/Dockerfile:10:FROM node:22-slim AS deps
+frontend/Dockerfile:42:FROM node:22-slim AS builder
+frontend/Dockerfile:145:FROM node:22-slim AS runner
+Dockerfile.backend:7:FROM node:22-slim AS builder
+Dockerfile.backend:92:FROM node:22-slim AS runner
+$ grep -n 'build xanh không có' CLAUDE.md | cut -c1-140
+280:thêm chốt kiểm libc ↔ engine **trước khi đẩy**. Bài học: *build xanh không có</div>Cả hai ảnh dùng <code>node:22-slim</code> (glibc) ở mọi tầng. Ngày 18/08/2026 một ảnh dựng trên alpine mang engine Prisma cho glibc: build, đẩy, tráo đều xanh, rồi backend khởi động lại vô tận (API 502 bảy phút). Script deploy giờ kiểm libc ↔ engine trước khi đẩy.</div>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-bash">docker build -t app --build-arg NEXT_PUBLIC_SITE=… .
+docker run -d --name app -p 3000:3000 app &amp;&amp; sleep 3
+docker ps -a --filter name=app    <span class="tok-comment">  # Up, hay Exited?</span>
+docker logs app; curl -s -o /dev/null -w "%{http_code}\\n" localhost:3000/
+docker images app                 <span class="tok-comment">  # kích thước</span></code></pre>
+<h3>🌏 Không học suông: đời thật, giả định, kẻ xấu</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">🏠 Đời thật</span><span class="v">“CI build xanh mà” — và container thoát mã 127, vì không ai chạy thử trước khi đẩy.</span></div>
+  <div class="kv"><span class="k">❓ Nếu… thì sao</span><span class="v">…bạn <code>COPY . .</code> mà không có <code>.dockerignore</code>? Mã nguồn, test và tệp <code>.env</code> nằm luôn trong ảnh.</span></div>
+  <div class="kv"><span class="k">🕵️ Góc kẻ xấu</span><span class="v">Ảnh là một kho lưu trữ: <code>docker history</code> lộ tham số build của ảnh một tầng, và các tầng giữ cả tệp bạn xoá ở bước sau.</span></div>
+  <div class="kv"><span class="k">🛡️ Nhận ra &amp; phòng</span><span class="v"><code>.dockerignore</code>, nhiều tầng, <code>USER node</code>; chạy + curl trước khi đẩy; bí mật đưa vào lúc chạy.</span></div>
+</div>
+<h3>🔗 Học sâu hơn</h3>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-6-1-multi-stage" target="_blank" rel="noopener"><span class="lc-ico">🐳</span><span class="lc-body"><span class="lc-title">Docker · 6.1 — Dựng nhiều tầng, cho tử tế</span><span class="lc-sub">Khuôn này, đi sâu</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-17-1-anh-docker" target="_blank" rel="noopener"><span class="lc-ico">🟢</span><span class="lc-body"><span class="lc-title">Node.js · 17.1 — Ảnh Docker: 440MB xuống 58,8MB</span><span class="lc-sub">Cùng cách giảm cân cho backend Node</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nextjs/learn?lessonSlug=nextjs-20-4-vps-stale-build" target="_blank" rel="noopener"><span class="lc-ico">▲</span><span class="lc-body"><span class="lc-title">Next.js · 20.4 — VPS và build cũ</span><span class="lc-sub">Đưa ảnh lên máy chủ</span></span></a>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Bật <code>output: 'standalone'</code> và dựng một Dockerfile đa-tầng chép server standalone.</li>
+<li>Build ảnh cục bộ và chạy nó, xác nhận app phục vụ ở cổng mong đợi.</li>
+<li>Để ý env var nào phải có lúc build vs lúc chạy (NEXT_PUBLIC lúc build, secret lúc chạy).</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đóng gói được một app Next.js bằng một Docker build đa-tầng standalone.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">output: standalone</span><span class="v">Một bundle server tự-chứa, lý tưởng cho Docker.</span></div>
+  <div class="kv"><span class="k">Build đa-tầng</span><span class="v">Build ở một tầng, chép chỉ cái chạy vào một ảnh cuối nhỏ.</span></div>
+  <div class="kv"><span class="k">Image (ảnh)</span><span class="v">App đã đóng gói chạy như nhau ở mọi nơi.</span></div>
+  <div class="kv"><span class="k">Env build vs runtime</span><span class="v">NEXT_PUBLIC lúc build; secret tiêm lúc chạy.</span></div>
+  <div class="kv"><span class="k">Cache tầng</span><span class="v">Sắp bước Dockerfile để cài đặt được cache giữa các lần build.</span></div>
+  <div class="kv"><span class="k">Ảnh cuối nhỏ</span><span class="v">Chép chỉ output standalone, không phải cả repo.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Đặt <code>output: 'standalone'</code> và dùng một Dockerfile đa-tầng chép chỉ server standalone.</li><li>Một ảnh đã build chạy như nhau ở mọi nơi — đây là cách cuongthai.com deploy.</li><li>Var <code>NEXT_PUBLIC_</code> phải có lúc build; secret tiêm lúc chạy.</li><li>Sắp các bước Dockerfile cho cache tầng và giữ ảnh cuối nhỏ.</li></ul>
+
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/deploying#docker-image" target="_blank" rel="noopener">
   <span class="lc-ico">🐳</span>
@@ -379,6 +981,7 @@ CMD ["npm", "start"]       <span class="tok-comment"># next start khi container 
       isFreePreview: false,
       description: 'VPS là một server bạn thuê. Deploy = build image mới rồi tráo container. Cả một họ bug khó chịu tới từ một bản build CŨ/THIẾU vẫn chạy: route 404, public/ chốt lúc start rồi 404, CDN cache cả 404. Cách phát hiện và tránh.',
       content: `
+${G20_4}
 <div class="ml-en">
 <span class="eyebrow">Chapter 20 · Lesson 20.4</span>
 <h2>A server you rent, and the bugs of shipping the wrong build</h2>
@@ -416,6 +1019,107 @@ CMD ["npm", "start"]       <span class="tok-comment"># next start khi container 
   <span class="lc-ico">🔖</span>
   <span class="lc-body"><span class="lc-title">docker image ls</span><span class="lc-sub">Finding the previous image by size and id, which is what makes a fast rollback possible.</span></span>
 </a>
+
+
+<h3>🔬 Measured: a stale build, a smoke test, a bind-mounted file, a cached 404 (Docker Desktop 29.8 as the “VPS” · cuongthai.com)</h3>
+<p><strong>1 · Commit a route, restart without building</strong>:</p>
+<div class="out">$ docker run -d --name prod -p 8080:3000 nxj-std   # "the VPS", running release v1
+/ver → 200
+/api/hello → 404
+$ git commit -am "add /api/hello" &amp;&amp; ./deploy --no-build   # copy files, restart the container, skip the build
+/ver → 200
+/api/hello → 404
+$ docker inspect -f 'image {{.Image}}' nxj-prod | cut -c1-25; echo "source has: $(ls src/app/api/hello/route.ts)"
+image sha256:6ff8e07407ee
+source has: src/app/api/hello/route.ts</div>
+<p><strong>2 · A smoke test that fails the deploy</strong>:</p>
+<pre><code class="language-bash"><span class="tok-comment">#!/bin/sh</span>
+<span class="tok-comment"># smoke.sh — after every deploy: these routes must NOT be 404</span>
+BASE=\${1:-http://127.0.0.1:8080}
+fail=0
+for r in / /ver /api/hello; do
+  code=$(curl -s -o /dev/null -w '%{http_code}' "$BASE$r")
+  echo "$r → $code"
+  [ "$code" = 404 ] &amp;&amp; fail=1
+done
+[ $fail = 0 ] &amp;&amp; echo "SMOKE OK" || { echo "SMOKE FAILED: stale or partial build"; exit 1; }</code></pre>
+<div class="out">$ sh smoke.sh http://localhost:8080
+/ → 200
+/ver → 200
+/api/hello → 404
+SMOKE FAILED: stale or partial build
+exit 1
+$ docker build -t nxj-std:v2 . &amp;&amp; docker rm -f prod &amp;&amp; docker run -d --name prod … nxj-std:v2   # a FULL deploy
+/ → 200
+/ver → 200
+/api/hello → 200
+SMOKE OK
+exit 0</div>
+<p><strong>3 · A bind-mounted single file, replaced with <code>mv</code> vs written in place</strong> — <code>mv</code> (and editors, rsync, <code>sed -i</code>) create a new inode; the container keeps the old one. On Docker Desktop it vanished; on a Linux VPS the container keeps reading the old content:</p>
+<div class="out">$ docker run -d --name nxj-bind -v "$PWD/site.conf:/etc/site.conf" alpine:3 sleep 600 &gt;/dev/null; echo "container reads: $(docker exec nxj-bind cat /etc/site.conf) · host inode $(stat -f %i site.conf)"
+container reads: release=v1 · host inode 158954408
+$ printf 'release=v2\\n' &gt; site.conf.new &amp;&amp; mv site.conf.new site.conf   # how editors and rsync save
+host: release=v2 · inode 158954412
+container reads: 
+cat: can't open '/etc/site.conf': No such file or directory
+$ printf 'release=v3\\n' &gt; site.conf   # write IN PLACE (same inode)
+host: release=v3 · inode 158954412
+container reads: release=v3</div>
+<p><strong>4 · A 404 marked “cache for a year”</strong> — cuongthai.com, asked twice for a chunk that does not exist, and the nginx rule behind it (<code>always</code> also applies to errors):</p>
+<div class="out">$ curl -sI https://cuongthai.com/_next/static/chunks/&lt;a file that does not exist yet&gt;.js   # twice
+request 1: HTTP/2 404  cache-control: public, max-age=31536000, immutable 
+request 2: HTTP/2 404  cache-control: public, max-age=31536000, immutable 
+$ grep -n 'location ^~ /_next/static/\\|immutable" always' nginx/nginx.conf
+215:        location ^~ /_next/static/ {
+228:            add_header Cache-Control "public, max-age=31536000, immutable" always;
+453:            add_header Cache-Control "public, max-age=31536000, immutable" always;
+510:            add_header Cache-Control "public, max-age=31536000, immutable" always;</div>
+<div class="note-ct"><strong>In this course&#39;s repository</strong><div class="out">$ sed -n '931,934p' deploy-nha.sh; grep -c "SMOKE_ROUTES\\|/api/v1/" deploy-nha.sh | sed 's/^/dòng nhắc route trong deploy-nha.sh: /'
+info "Smoke-test các route lõi..."
+# ⚠️ Đọc danh sách route từ &#96;deploy.sh&#96; CỦA ĐÚNG COMMIT ĐANG DEPLOY
+# (&#96;git show \${SHA}:deploy.sh&#96;), KHÔNG phải file trong cây làm việc.
+#
+dòng nhắc route trong deploy-nha.sh: 4
+$ grep -n "Ghi ĐÈ TẠI CHỖ" CLAUDE.md | cut -c1-120
+827:| 2026-08-25 | Bước 6c mới thêm báo &#96;KQ=OK&#96; — &#96;nginx -t&#96; xanh, &#96;reload&#96; xanh — nhưng **HTTP/2 vẫn tắt và mọi header </div>The deploy reads its smoke-test route list from the commit being deployed. The inode lesson came from nginx (25/08/2026): <code>nginx -t</code> and reload both OK while the container still read the old config.</div>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-bash">docker run -d --name prod -p 8080:3000 app:v1
+<span class="tok-comment"># add a route, then: docker restart prod  (no build)</span>
+sh smoke.sh http://localhost:8080; echo $?
+docker inspect -f "{{.Image}}" prod    <span class="tok-comment">  # which build is running?</span>
+curl -sI https://your-site/_next/static/chunks/missing.js | grep -i cache-control</code></pre>
+<h3>🌏 Not learning in a vacuum: real life, what if, the attacker</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">🏠 Real life</span><span class="v">“It is on main but not live” — and two broken features look like a database problem (02/07/2026).</span></div>
+  <div class="kv"><span class="k">❓ What if…</span><span class="v">…nobody smoke-tests? Users find the 404 first, and you debug the wrong layer for hours.</span></div>
+  <div class="kv"><span class="k">🕵️ The attacker</span><span class="v">Stale also means unpatched: your security fix is “deployed” while the old vulnerable build keeps answering.</span></div>
+  <div class="kv"><span class="k">🛡️ Detect &amp; prevent</span><span class="v">A smoke test that fails the deploy; compare the running image id / BUILD_ID after every swap; never cache errors as immutable.</span></div>
+</div>
+<h3>🔗 Go deeper</h3>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-7-3-bind-mount" target="_blank" rel="noopener"><span class="lc-ico">🐳</span><span class="lc-body"><span class="lc-title">Docker · 7.3 — Bind mounts and four traps</span><span class="lc-sub">The inode trap and others</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nginx/learn?lessonSlug=nginx-5-2-cai-gi-duoc-cache" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Nginx · 5.2 — What gets cached</span><span class="lc-sub">Headers on errors, and leaks</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-17-6-deploy-hong-quay-lui" target="_blank" rel="noopener"><span class="lc-ico">🟢</span><span class="lc-body"><span class="lc-title">Node.js · 17.6 — When a deploy lies</span><span class="lc-sub">Stale builds and rollback, backend side</span></span></a>
+
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Deploy an image, then change code and redeploy WITHOUT rebuilding; confirm the old behaviour persists (a stale build).</li>
+<li>Diagnose a route with an unauthenticated <code>curl</code>: 401/200 = mounted, 404 = stale/partial build.</li>
+<li>Do a full clean rebuild and re-check the route returns non-404.</li>
+</ol>
+<p><strong>Done when:</strong> you can recognise a stale-build deploy and diagnose route health with curl.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Stale build</span><span class="v">Running an old image because a deploy skipped the rebuild.</span></div>
+  <div class="kv"><span class="k">Partial deploy</span><span class="v">Only some files updated, leaving a broken mix.</span></div>
+  <div class="kv"><span class="k">curl diagnosis</span><span class="v">401/200 = route mounted; 404 = not mounted (stale build).</span></div>
+  <div class="kv"><span class="k">Full rebuild</span><span class="v">Rebuild from clean to guarantee the new code ships.</span></div>
+  <div class="kv"><span class="k">Smoke test</span><span class="v">Hit core routes after deploy; a 404 means a stale build.</span></div>
+  <div class="kv"><span class="k">Immutable image</span><span class="v">A fresh image per deploy avoids partial-update bugs.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>A stale build ships old behaviour because a deploy skipped the rebuild or updated only some files.</li><li>Diagnose route health with an unauthenticated <code>curl</code>: 401/200 = mounted, 404 = stale/partial build.</li><li>Fix it with a full clean rebuild, and smoke-test core routes after every deploy.</li><li>A fresh immutable image per deploy avoids this whole class of bug (as cuongthai.com learned).</li></ul>
 
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/deploying#self-hosting" target="_blank" rel="noopener">
@@ -462,6 +1166,107 @@ CMD ["npm", "start"]       <span class="tok-comment"># next start khi container 
   <span class="lc-body"><span class="lc-title">docker image ls</span><span class="lc-sub">Tìm lại ảnh trước đó theo kích thước và id, thứ làm cho việc quay lui nhanh trở nên khả thi.</span></span>
 </a>
 
+
+<h3>🔬 Đo thật: build cũ, smoke test, tệp gắn vào container, lỗi 404 bị cache (Docker Desktop 29.8 đóng vai “VPS” · cuongthai.com)</h3>
+<p><strong>1 · Commit một tuyến, khởi động lại không build</strong>:</p>
+<div class="out">$ docker run -d --name prod -p 8080:3000 nxj-std   # "the VPS", running release v1
+/ver → 200
+/api/hello → 404
+$ git commit -am "add /api/hello" &amp;&amp; ./deploy --no-build   # copy files, restart the container, skip the build
+/ver → 200
+/api/hello → 404
+$ docker inspect -f 'image {{.Image}}' nxj-prod | cut -c1-25; echo "source has: $(ls src/app/api/hello/route.ts)"
+image sha256:6ff8e07407ee
+source has: src/app/api/hello/route.ts</div>
+<p><strong>2 · Smoke test làm deploy thất bại</strong>:</p>
+<pre><code class="language-bash"><span class="tok-comment">#!/bin/sh</span>
+<span class="tok-comment"># smoke.sh — after every deploy: these routes must NOT be 404</span>
+BASE=\${1:-http://127.0.0.1:8080}
+fail=0
+for r in / /ver /api/hello; do
+  code=$(curl -s -o /dev/null -w '%{http_code}' "$BASE$r")
+  echo "$r → $code"
+  [ "$code" = 404 ] &amp;&amp; fail=1
+done
+[ $fail = 0 ] &amp;&amp; echo "SMOKE OK" || { echo "SMOKE FAILED: stale or partial build"; exit 1; }</code></pre>
+<div class="out">$ sh smoke.sh http://localhost:8080
+/ → 200
+/ver → 200
+/api/hello → 404
+SMOKE FAILED: stale or partial build
+exit 1
+$ docker build -t nxj-std:v2 . &amp;&amp; docker rm -f prod &amp;&amp; docker run -d --name prod … nxj-std:v2   # a FULL deploy
+/ → 200
+/ver → 200
+/api/hello → 200
+SMOKE OK
+exit 0</div>
+<p><strong>3 · Một tệp gắn vào container, thay bằng <code>mv</code> so với ghi tại chỗ</strong> — <code>mv</code> (và trình soạn thảo, rsync, <code>sed -i</code>) tạo inode mới; container giữ cái cũ. Trên Docker Desktop tệp biến mất; trên VPS Linux container lặng lẽ đọc nội dung cũ:</p>
+<div class="out">$ docker run -d --name nxj-bind -v "$PWD/site.conf:/etc/site.conf" alpine:3 sleep 600 &gt;/dev/null; echo "container reads: $(docker exec nxj-bind cat /etc/site.conf) · host inode $(stat -f %i site.conf)"
+container reads: release=v1 · host inode 158954408
+$ printf 'release=v2\\n' &gt; site.conf.new &amp;&amp; mv site.conf.new site.conf   # how editors and rsync save
+host: release=v2 · inode 158954412
+container reads: 
+cat: can't open '/etc/site.conf': No such file or directory
+$ printf 'release=v3\\n' &gt; site.conf   # write IN PLACE (same inode)
+host: release=v3 · inode 158954412
+container reads: release=v3</div>
+<p><strong>4 · Một lỗi 404 kèm “cache một năm”</strong> — cuongthai.com, hỏi hai lần một chunk không tồn tại, và quy tắc nginx phía sau (<code>always</code> áp cả cho lỗi):</p>
+<div class="out">$ curl -sI https://cuongthai.com/_next/static/chunks/&lt;a file that does not exist yet&gt;.js   # twice
+request 1: HTTP/2 404  cache-control: public, max-age=31536000, immutable 
+request 2: HTTP/2 404  cache-control: public, max-age=31536000, immutable 
+$ grep -n 'location ^~ /_next/static/\\|immutable" always' nginx/nginx.conf
+215:        location ^~ /_next/static/ {
+228:            add_header Cache-Control "public, max-age=31536000, immutable" always;
+453:            add_header Cache-Control "public, max-age=31536000, immutable" always;
+510:            add_header Cache-Control "public, max-age=31536000, immutable" always;</div>
+<div class="note-ct"><strong>Trong kho của chính khoá này</strong><div class="out">$ sed -n '931,934p' deploy-nha.sh; grep -c "SMOKE_ROUTES\\|/api/v1/" deploy-nha.sh | sed 's/^/dòng nhắc route trong deploy-nha.sh: /'
+info "Smoke-test các route lõi..."
+# ⚠️ Đọc danh sách route từ &#96;deploy.sh&#96; CỦA ĐÚNG COMMIT ĐANG DEPLOY
+# (&#96;git show \${SHA}:deploy.sh&#96;), KHÔNG phải file trong cây làm việc.
+#
+dòng nhắc route trong deploy-nha.sh: 4
+$ grep -n "Ghi ĐÈ TẠI CHỖ" CLAUDE.md | cut -c1-120
+827:| 2026-08-25 | Bước 6c mới thêm báo &#96;KQ=OK&#96; — &#96;nginx -t&#96; xanh, &#96;reload&#96; xanh — nhưng **HTTP/2 vẫn tắt và mọi header </div>Script deploy đọc danh sách tuyến smoke test từ đúng commit đang deploy. Bài học inode đến từ nginx (25/08/2026): <code>nginx -t</code> và reload đều OK trong khi container vẫn đọc cấu hình cũ.</div>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-bash">docker run -d --name prod -p 8080:3000 app:v1
+<span class="tok-comment"># thêm một tuyến, rồi: docker restart prod  (không build)</span>
+sh smoke.sh http://localhost:8080; echo $?
+docker inspect -f "{{.Image}}" prod    <span class="tok-comment">  # đang chạy bản build nào?</span>
+curl -sI https://your-site/_next/static/chunks/missing.js | grep -i cache-control</code></pre>
+<h3>🌏 Không học suông: đời thật, giả định, kẻ xấu</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">🏠 Đời thật</span><span class="v">“Lên main rồi mà chưa chạy” — và hai tính năng cùng hỏng trông như lỗi cơ sở dữ liệu (02/07/2026).</span></div>
+  <div class="kv"><span class="k">❓ Nếu… thì sao</span><span class="v">…không ai smoke test? Người dùng thấy 404 trước, và bạn gỡ lỗi nhầm tầng hàng giờ.</span></div>
+  <div class="kv"><span class="k">🕵️ Góc kẻ xấu</span><span class="v">Build cũ cũng là chưa vá: bản sửa bảo mật “đã deploy” trong khi bản cũ có lỗ hổng vẫn trả lời.</span></div>
+  <div class="kv"><span class="k">🛡️ Nhận ra &amp; phòng</span><span class="v">Smoke test làm deploy thất bại; so mã ảnh / BUILD_ID đang chạy sau mỗi lần tráo; đừng cache lỗi như tệp bất biến.</span></div>
+</div>
+<h3>🔗 Học sâu hơn</h3>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-7-3-bind-mount" target="_blank" rel="noopener"><span class="lc-ico">🐳</span><span class="lc-body"><span class="lc-title">Docker · 7.3 — Bind mount, và bốn cái bẫy</span><span class="lc-sub">Bẫy inode và những bẫy khác</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nginx/learn?lessonSlug=nginx-5-2-cai-gi-duoc-cache" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Nginx · 5.2 — Cái gì được cache</span><span class="lc-sub">Header trên lỗi, và rò rỉ</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-17-6-deploy-hong-quay-lui" target="_blank" rel="noopener"><span class="lc-ico">🟢</span><span class="lc-body"><span class="lc-title">Node.js · 17.6 — Khi deploy nói dối</span><span class="lc-sub">Build cũ và quay lui, phía máy chủ</span></span></a>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Deploy một ảnh, rồi đổi code và deploy lại mà KHÔNG build lại; xác nhận hành vi cũ vẫn còn (một build cũ).</li>
+<li>Chẩn một route bằng <code>curl</code> không xác thực: 401/200 = đã mount, 404 = build cũ/dở.</li>
+<li>Làm một build lại sạch hoàn toàn và kiểm lại route trả về khác-404.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn nhận ra được một deploy build-cũ và chẩn sức khoẻ route bằng curl.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Build cũ (stale)</span><span class="v">Chạy một ảnh cũ vì một deploy bỏ qua build lại.</span></div>
+  <div class="kv"><span class="k">Deploy dở (partial)</span><span class="v">Chỉ vài file cập nhật, để lại một mớ hỏng.</span></div>
+  <div class="kv"><span class="k">Chẩn bằng curl</span><span class="v">401/200 = route đã mount; 404 = chưa mount (build cũ).</span></div>
+  <div class="kv"><span class="k">Build lại đầy đủ</span><span class="v">Build lại từ sạch để đảm bảo code mới được ship.</span></div>
+  <div class="kv"><span class="k">Smoke test</span><span class="v">Gọi các route lõi sau deploy; một 404 nghĩa là build cũ.</span></div>
+  <div class="kv"><span class="k">Ảnh immutable</span><span class="v">Một ảnh mới mỗi deploy tránh bug cập nhật dở.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Một build cũ ship hành vi cũ vì một deploy bỏ qua build lại hoặc chỉ cập nhật vài file.</li><li>Chẩn sức khoẻ route bằng <code>curl</code> không xác thực: 401/200 = đã mount, 404 = build cũ/dở.</li><li>Sửa bằng một build lại sạch hoàn toàn, và smoke-test các route lõi sau mỗi deploy.</li><li>Một ảnh immutable mới mỗi deploy tránh cả họ bug này (như cuongthai.com đã học).</li></ul>
+
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/deploying#self-hosting" target="_blank" rel="noopener">
   <span class="lc-ico">🖧</span>
@@ -494,6 +1299,7 @@ CMD ["npm", "start"]       <span class="tok-comment"># next start khi container 
       isFreePreview: false,
       description: 'Deploy không chỉ là đẩy code: còn migration database, cách quay lui khi hỏng, và một quy trình chắc chắn. Kèm bài học lớn nhất của cuongthai: deploy đẩy MÃ NGUỒN chứ không đẩy DỮ LIỆU. Chương khép khoá.',
       content: `
+${G20_5}
 <div class="ml-en">
 <span class="eyebrow">Chapter 20 · Lesson 20.5 · Course finale</span>
 <h2>Shipping code is only part of shipping a change</h2>
@@ -507,7 +1313,7 @@ CMD ["npm", "start"]       <span class="tok-comment"># next start khi container 
 </div>
 
 <h3>Rollback: the way back</h3>
-<p>When a bad deploy reaches production, the clean recovery is to <code>git revert</code> the bad commit and deploy again — going forward to a known-good state, not hacking the server by hand. Never force-push over history to "undo" a deploy. And if that bad deploy ran a migration, discuss the data before reverting, per the rule above.</p>
+<p>When a bad deploy reaches production, the clean recovery is to <code>git revert</code> the bad commit and deploy again — going forward to a known-good state, not hacking the server by hand. To stop the bleeding <em>first</em>, swap back to the previous image you kept (measured below: 2.6 s, versus a ~2-minute rebuild), then revert so the source matches what runs. Never force-push over history to "undo" a deploy. And if that bad deploy ran a migration, discuss the data before reverting, per the rule above.</p>
 
 <h3>A safe, repeatable flow</h3>
 <div class="lz-flow">
@@ -539,6 +1345,102 @@ CMD ["npm", "start"]       <span class="tok-comment"># next start khi container 
   <span class="lc-body"><span class="lc-title">GitHub — About deployments</span><span class="lc-sub">Wiring the sequence into CI, so the checks cannot be skipped by hand.</span></span>
 </a>
 
+
+<h3>🔬 Measured: code vs data, a rollback after a migration, an image swap, a dirty tree (sqlite3 · Docker Desktop 29.8)</h3>
+<p><strong>1 · A deploy ships code, not data</strong>:</p>
+<div class="out">$ sqlite3 local.db "CREATE TABLE posts(id INTEGER PRIMARY KEY, title TEXT); INSERT INTO posts(title) VALUES ('Lesson 1'),('Lesson 2'),('Lesson 3');" &amp;&amp; echo "local.db posts: $(sqlite3 local.db 'SELECT count(*) FROM posts')"
+local.db posts: 3
+$ deploy = new image (code) — production keeps its OWN database
+prod.db posts after deploy: 0
+what the image carries: node_modules package.json public server.js </div>
+<p><strong>2 · Migrate, then roll the code back</strong> — v1 reads <code>users.name</code>; v2 ships with this migration:</p>
+<pre><code class="language-sql">-- migration shipped with v2
+ALTER TABLE users RENAME COLUMN name TO full_name;</code></pre>
+<div class="out">$ cd mig &amp;&amp; sqlite3 prod.db "CREATE TABLE users(id INTEGER PRIMARY KEY, name TEXT); INSERT INTO users(name) VALUES ('An'),('Binh');" &amp;&amp; sh app-v1.sh prod.db
+v1 sees: An
+v1 sees: Binh
+$ deploy v2: run the migration, then start app v2
+v2 sees: An
+v2 sees: Binh
+$ v2 has a bug → roll back the CODE to v1 (git revert / old image)
+Parse error in 2nd command line argument: no such column: name
+  SELECT 'v1 sees: ' || name FROM users ORDER BY id LIMIT 2;
+$ cd mig &amp;&amp; sqlite3 prod.db ".schema users"
+CREATE TABLE users(id INTEGER PRIMARY KEY, full_name TEXT);</div>
+<p>Reverting code does not revert the database: the rollback brought the outage back. Do renames as <em>expand → contract</em>: add the new column and keep the old one, deploy code that writes both, backfill, and only much later drop the old column — every step can be rolled back.</p>
+<p><strong>3 · Keep the previous image</strong>:</p>
+<div class="out">$ docker run -d --name nxj-prod -p 127.0.0.1:19347:3000 nxj-std:v2 &gt;/dev/null; sleep 4; echo "running v2: /api/hello → $(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:19347/api/hello)"
+running v2: /api/hello → 200
+$ rollback: the previous image is still here — swap back
+rolled back to the old image in 2.6 s · /api/hello → 404 · /ver → 200
+$ docker images --format '{{.Repository}}:{{.Tag}} {{.ID}} {{.CreatedSince}}' | grep '^nxj-std'
+nxj-std:v2 03a0ca7398cb 38 seconds ago
+nxj-std:latest 6ff8e07407ee 3 minutes ago</div>
+<p><strong>4 · Deploy a commit, not your working tree</strong>:</p>
+<div class="out">$ edit a file, do NOT commit, deploy
+ M src/app/ver/page.tsx
+$ echo "working tree:  $(grep -o 'Release v[0-9a-z-]*' src/app/ver/page.tsx)"; echo "committed HEAD: $(git show HEAD:src/app/ver/page.tsx | grep -o 'Release v[0-9a-z-]*')"
+working tree:  Release v1-hotfix
+committed HEAD: Release v1</div>
+<div class="note-ct"><strong>In this course&#39;s repository</strong><div class="out">$ grep -n '^info "' deploy-nha.sh | sed -E 's/^([0-9]+):info "/\\1: /; s/\\.\\.\\."$//' | head -16
+507: Kiểm máy nhà
+552: Gửi mã (commit \${SHA}) sang máy nhà
+577: Build backend + frontend SONG SONG ở máy nhà (đo trước: ~6 phút)
+633: Kiểm ảnh backend có chạy nổi không (libc ↔ engine Prisma)
+676: Đẩy ảnh lên GHCR
+708: Tráo container trên VPS (có khoá chống hai phiên cùng tráo)
+789: Nạp lại nginx ngay (tráo container có thể đã đổi IP upstream)
+807: Kiểm từ NGOÀI (qua nginx, đúng đường người dùng đi)
+827: Chạy migration
+866: Chạy seed nội dung (Step 3.5→3.17 từ deploy.sh)
+911: Chờ backend khoẻ
+931: Smoke-test các route lõi
+953:   \${SO_ROUTE} route"
+994: Kiểm nginx.conf trên VPS
+1161: Dọn ảnh deploy CŨ trên VPS (giữ \${SHA} + latest)
+1273: Kiểm lại: container có đang chạy đúng ảnh vừa tráo không
+$ grep -n "git revert &lt;bad_commit_sha&gt;\\|NEVER.*migrate reset" CLAUDE.md | cut -c1-110 | head -2
+50:- **NEVER** run &#96;npx prisma migrate reset&#96; — it wipes ALL data
+350:git revert &lt;bad_commit_sha&gt;</div>One script, with the checks inside it: build the exact commit, check libc ↔ engine, push, swap with a lock, reload nginx, check from outside, migrate, seed content, smoke-test, prune old images (keeping the previous one), and verify the running image.</div>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-bash">sqlite3 prod.db "CREATE TABLE users(id INTEGER PRIMARY KEY, name TEXT)"
+sqlite3 prod.db "ALTER TABLE users RENAME COLUMN name TO full_name"
+sqlite3 prod.db "SELECT name FROM users"      <span class="tok-comment">  # the old code, after the migration</span>
+docker tag app:latest app:prev &amp;&amp; docker build -t app:latest .
+docker rm -f prod &amp;&amp; docker run -d --name prod -p 8080:3000 app:prev <span class="tok-comment">  # time the swap back</span></code></pre>
+<h3>🌏 Not learning in a vacuum: real life, what if, the attacker</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">🏠 Real life</span><span class="v">“I deployed — where is my content?” Local seed data never ships; production stays empty until someone checks.</span></div>
+  <div class="kv"><span class="k">❓ What if…</span><span class="v">…you roll back right after a migration? Old code meets the new schema: the rollback <em>is</em> the outage.</span></div>
+  <div class="kv"><span class="k">🕵️ The attacker</span><span class="v">A dirty working tree is a supply-chain hole: whatever is on disk — a debug flag, another session&#39;s file — can ship.</span></div>
+  <div class="kv"><span class="k">🛡️ Detect &amp; prevent</span><span class="v">Deploy a SHA; migrate with expand → contract; smoke-test after the swap; keep the previous image and practise swapping back.</span></div>
+</div>
+<h3>🔗 Go deeper</h3>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-16-1-prisma-migration" target="_blank" rel="noopener"><span class="lc-ico">🐘</span><span class="lc-body"><span class="lc-title">PostgreSQL · 16.1 — Prisma and migrations</span><span class="lc-sub">Migrations from the database side</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-15-3-deploy-an-toan" target="_blank" rel="noopener"><span class="lc-ico">⚙️</span><span class="lc-body"><span class="lc-title">GitHub Actions · 15.3 — Safe deploys</span><span class="lc-sub">Environments, SSH, smoke tests</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-17-6-deploy-hong-quay-lui" target="_blank" rel="noopener"><span class="lc-ico">🟢</span><span class="lc-body"><span class="lc-title">Node.js · 17.6 — When a deploy lies</span><span class="lc-sub">Stale builds, smoke tests, rollback</span></span></a>
+
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Write a short pre-deploy checklist: type-check, build, run the smoke test, confirm env vars.</li>
+<li>Practise a rollback: redeploy the previous image/commit and confirm the site recovers.</li>
+<li>Note that reverting code does not revert a database migration — plan migrations separately.</li>
+</ol>
+<p><strong>Done when:</strong> you can follow a safe deploy flow and perform a rollback.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Pre-deploy checklist</span><span class="v">Type-check, build, smoke test, env check before shipping.</span></div>
+  <div class="kv"><span class="k">Smoke test</span><span class="v">Hit core routes post-deploy to catch a broken build.</span></div>
+  <div class="kv"><span class="k">Rollback</span><span class="v">Redeploy the previous good image/commit to recover fast.</span></div>
+  <div class="kv"><span class="k">Migration</span><span class="v">A database schema change — not undone by reverting code.</span></div>
+  <div class="kv"><span class="k">Forward-only migrations</span><span class="v">Plan DB changes so they are safe and reversible by plan.</span></div>
+  <div class="kv"><span class="k">Safe flow</span><span class="v">A repeatable order of steps that prevents outages.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Follow a repeatable pre-deploy checklist: type-check, build, smoke test, confirm env vars.</li><li>Smoke-test core routes after every deploy to catch a broken or stale build.</li><li>Keep a fast rollback: redeploy the previous good image/commit.</li><li>Reverting code does not revert a database migration — plan migrations separately and carefully.</li></ul>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/deploying/production-checklist" target="_blank" rel="noopener">
   <span class="lc-ico">🏁</span>
@@ -559,7 +1461,7 @@ CMD ["npm", "start"]       <span class="tok-comment"># next start khi container 
 </div>
 
 <h3>Rollback: đường quay lui</h3>
-<p>Khi một deploy xấu tới production, phục hồi gọn gàng là <code>git revert</code> commit xấu và deploy lại — đi tới một trạng thái tốt-đã-biết, không phải hack server bằng tay. Đừng bao giờ force-push đè lịch sử để "hoàn tác" một deploy. Và nếu deploy xấu đó đã chạy một migration, hãy bàn về dữ liệu trước khi revert, theo quy tắc trên.</p>
+<p>Khi một deploy xấu tới production, phục hồi gọn gàng là <code>git revert</code> commit xấu và deploy lại — đi tới một trạng thái tốt-đã-biết, không phải hack server bằng tay. Để cầm máu <em>trước</em>, hãy tráo về ảnh trước mà bạn đã giữ (đo bên dưới: 2.6 s, so với ~2 phút build lại), rồi mới revert để mã nguồn khớp với thứ đang chạy. Đừng bao giờ force-push đè lịch sử để "hoàn tác" một deploy. Và nếu deploy xấu đó đã chạy một migration, hãy bàn về dữ liệu trước khi revert, theo quy tắc trên.</p>
 
 <h3>Một quy trình an toàn, lặp lại được</h3>
 <div class="lz-flow">
@@ -590,6 +1492,102 @@ CMD ["npm", "start"]       <span class="tok-comment"># next start khi container 
   <span class="lc-ico">🤖</span>
   <span class="lc-body"><span class="lc-title">GitHub — Về deployment</span><span class="lc-sub">Đấu trình tự đó vào CI, để các phép kiểm không thể bị bỏ qua bằng tay.</span></span>
 </a>
+
+
+<h3>🔬 Đo thật: mã và dữ liệu, quay lui sau migration, tráo ảnh, cây làm việc bẩn (sqlite3 · Docker Desktop 29.8)</h3>
+<p><strong>1 · Deploy đẩy mã, không đẩy dữ liệu</strong>:</p>
+<div class="out">$ sqlite3 local.db "CREATE TABLE posts(id INTEGER PRIMARY KEY, title TEXT); INSERT INTO posts(title) VALUES ('Lesson 1'),('Lesson 2'),('Lesson 3');" &amp;&amp; echo "local.db posts: $(sqlite3 local.db 'SELECT count(*) FROM posts')"
+local.db posts: 3
+$ deploy = new image (code) — production keeps its OWN database
+prod.db posts after deploy: 0
+what the image carries: node_modules package.json public server.js </div>
+<p><strong>2 · Migrate, rồi quay lui mã</strong> — v1 đọc <code>users.name</code>; v2 đi kèm migration này:</p>
+<pre><code class="language-sql">-- migration shipped with v2
+ALTER TABLE users RENAME COLUMN name TO full_name;</code></pre>
+<div class="out">$ cd mig &amp;&amp; sqlite3 prod.db "CREATE TABLE users(id INTEGER PRIMARY KEY, name TEXT); INSERT INTO users(name) VALUES ('An'),('Binh');" &amp;&amp; sh app-v1.sh prod.db
+v1 sees: An
+v1 sees: Binh
+$ deploy v2: run the migration, then start app v2
+v2 sees: An
+v2 sees: Binh
+$ v2 has a bug → roll back the CODE to v1 (git revert / old image)
+Parse error in 2nd command line argument: no such column: name
+  SELECT 'v1 sees: ' || name FROM users ORDER BY id LIMIT 2;
+$ cd mig &amp;&amp; sqlite3 prod.db ".schema users"
+CREATE TABLE users(id INTEGER PRIMARY KEY, full_name TEXT);</div>
+<p>Quay lui mã không quay lui cơ sở dữ liệu: lần quay lui mang sự cố trở lại. Hãy đổi tên theo kiểu <em>mở rộng → thu hẹp</em>: thêm cột mới và giữ cột cũ, deploy mã ghi cả hai, chép dữ liệu sang, rất lâu sau mới xoá cột cũ — bước nào cũng quay lui được.</p>
+<p><strong>3 · Giữ ảnh trước</strong>:</p>
+<div class="out">$ docker run -d --name nxj-prod -p 127.0.0.1:19347:3000 nxj-std:v2 &gt;/dev/null; sleep 4; echo "running v2: /api/hello → $(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:19347/api/hello)"
+running v2: /api/hello → 200
+$ rollback: the previous image is still here — swap back
+rolled back to the old image in 2.6 s · /api/hello → 404 · /ver → 200
+$ docker images --format '{{.Repository}}:{{.Tag}} {{.ID}} {{.CreatedSince}}' | grep '^nxj-std'
+nxj-std:v2 03a0ca7398cb 38 seconds ago
+nxj-std:latest 6ff8e07407ee 3 minutes ago</div>
+<p><strong>4 · Deploy một commit, không deploy cây làm việc</strong>:</p>
+<div class="out">$ edit a file, do NOT commit, deploy
+ M src/app/ver/page.tsx
+$ echo "working tree:  $(grep -o 'Release v[0-9a-z-]*' src/app/ver/page.tsx)"; echo "committed HEAD: $(git show HEAD:src/app/ver/page.tsx | grep -o 'Release v[0-9a-z-]*')"
+working tree:  Release v1-hotfix
+committed HEAD: Release v1</div>
+<div class="note-ct"><strong>Trong kho của chính khoá này</strong><div class="out">$ grep -n '^info "' deploy-nha.sh | sed -E 's/^([0-9]+):info "/\\1: /; s/\\.\\.\\."$//' | head -16
+507: Kiểm máy nhà
+552: Gửi mã (commit \${SHA}) sang máy nhà
+577: Build backend + frontend SONG SONG ở máy nhà (đo trước: ~6 phút)
+633: Kiểm ảnh backend có chạy nổi không (libc ↔ engine Prisma)
+676: Đẩy ảnh lên GHCR
+708: Tráo container trên VPS (có khoá chống hai phiên cùng tráo)
+789: Nạp lại nginx ngay (tráo container có thể đã đổi IP upstream)
+807: Kiểm từ NGOÀI (qua nginx, đúng đường người dùng đi)
+827: Chạy migration
+866: Chạy seed nội dung (Step 3.5→3.17 từ deploy.sh)
+911: Chờ backend khoẻ
+931: Smoke-test các route lõi
+953:   \${SO_ROUTE} route"
+994: Kiểm nginx.conf trên VPS
+1161: Dọn ảnh deploy CŨ trên VPS (giữ \${SHA} + latest)
+1273: Kiểm lại: container có đang chạy đúng ảnh vừa tráo không
+$ grep -n "git revert &lt;bad_commit_sha&gt;\\|NEVER.*migrate reset" CLAUDE.md | cut -c1-110 | head -2
+50:- **NEVER** run &#96;npx prisma migrate reset&#96; — it wipes ALL data
+350:git revert &lt;bad_commit_sha&gt;</div>Một script, có sẵn các phép kiểm: build đúng commit, kiểm libc ↔ engine, đẩy, tráo có khoá, nạp lại nginx, kiểm từ bên ngoài, migrate, seed nội dung, smoke test, dọn ảnh cũ (giữ ảnh trước), và kiểm lại ảnh đang chạy.</div>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-bash">sqlite3 prod.db "CREATE TABLE users(id INTEGER PRIMARY KEY, name TEXT)"
+sqlite3 prod.db "ALTER TABLE users RENAME COLUMN name TO full_name"
+sqlite3 prod.db "SELECT name FROM users"      <span class="tok-comment">  # mã cũ, sau migration</span>
+docker tag app:latest app:prev &amp;&amp; docker build -t app:latest .
+docker rm -f prod &amp;&amp; docker run -d --name prod -p 8080:3000 app:prev <span class="tok-comment">  # bấm giờ lần tráo lại</span></code></pre>
+<h3>🌏 Không học suông: đời thật, giả định, kẻ xấu</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">🏠 Đời thật</span><span class="v">“Deploy rồi — nội dung đâu?” Dữ liệu seed ở máy không bao giờ được gửi đi; production trống cho tới khi có người kiểm.</span></div>
+  <div class="kv"><span class="k">❓ Nếu… thì sao</span><span class="v">…bạn quay lui ngay sau một migration? Mã cũ gặp hình dạng dữ liệu mới: chính lần quay lui <em>là</em> sự cố.</span></div>
+  <div class="kv"><span class="k">🕵️ Góc kẻ xấu</span><span class="v">Cây làm việc bẩn là lỗ hổng chuỗi cung ứng: thứ gì trên đĩa — một cờ debug, tệp của phiên khác — cũng có thể bị gửi đi.</span></div>
+  <div class="kv"><span class="k">🛡️ Nhận ra &amp; phòng</span><span class="v">Deploy một SHA; migrate theo mở rộng → thu hẹp; smoke test sau khi tráo; giữ ảnh trước và tập tráo lại.</span></div>
+</div>
+<h3>🔗 Học sâu hơn</h3>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-16-1-prisma-migration" target="_blank" rel="noopener"><span class="lc-ico">🐘</span><span class="lc-body"><span class="lc-title">PostgreSQL · 16.1 — Prisma và migration</span><span class="lc-sub">Migration nhìn từ phía cơ sở dữ liệu</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-15-3-deploy-an-toan" target="_blank" rel="noopener"><span class="lc-ico">⚙️</span><span class="lc-body"><span class="lc-title">GitHub Actions · 15.3 — Deploy an toàn</span><span class="lc-sub">Environment, SSH, smoke test</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-17-6-deploy-hong-quay-lui" target="_blank" rel="noopener"><span class="lc-ico">🟢</span><span class="lc-body"><span class="lc-title">Node.js · 17.6 — Khi deploy nói dối</span><span class="lc-sub">Build cũ, smoke test, quay lui</span></span></a>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Viết một checklist ngắn trước-deploy: kiểm kiểu, build, chạy smoke test, xác nhận env var.</li>
+<li>Tập một lần rollback: deploy lại ảnh/commit trước và xác nhận site phục hồi.</li>
+<li>Để ý revert code không revert một migration database — hãy lên kế hoạch migration riêng.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn theo được một luồng deploy an toàn và thực hiện được một rollback.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Checklist trước-deploy</span><span class="v">Kiểm kiểu, build, smoke test, kiểm env trước khi ship.</span></div>
+  <div class="kv"><span class="k">Smoke test</span><span class="v">Gọi các route lõi sau deploy để bắt một build hỏng.</span></div>
+  <div class="kv"><span class="k">Rollback</span><span class="v">Deploy lại ảnh/commit tốt trước đó để phục hồi nhanh.</span></div>
+  <div class="kv"><span class="k">Migration</span><span class="v">Một thay đổi schema database — không được hoàn tác bởi revert code.</span></div>
+  <div class="kv"><span class="k">Migration một chiều</span><span class="v">Lên kế hoạch thay đổi DB để an toàn và lùi được theo kế hoạch.</span></div>
+  <div class="kv"><span class="k">Luồng an toàn</span><span class="v">Một thứ tự bước lặp lại được, ngăn sự cố.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Theo một checklist trước-deploy lặp lại được: kiểm kiểu, build, smoke test, xác nhận env var.</li><li>Smoke-test các route lõi sau mỗi deploy để bắt một build hỏng hoặc cũ.</li><li>Giữ một rollback nhanh: deploy lại ảnh/commit tốt trước đó.</li><li>Revert code không revert một migration database — hãy lên kế hoạch migration riêng và cẩn thận.</li></ul>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://nextjs.org/docs/app/building-your-application/deploying/production-checklist" target="_blank" rel="noopener">

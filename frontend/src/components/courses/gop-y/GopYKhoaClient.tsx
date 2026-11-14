@@ -22,7 +22,7 @@ import { useAuthStore } from '@/store/authStore';
 import { useTranslation } from '@/context/LocaleContext';
 import { pickLang } from '@/lib/utils';
 import {
-  CHU_GOP_Y, LOAI, TONE_TRANG_THAI, TRANG_THAI, VAI_TRO, duongBaiGopY,
+  CHU_GOP_Y, LOAI, TONE_TRANG_THAI, TRANG_THAI, VAI_TRO, dinhDangMoc, duongBaiGopY,
   type BangChungGopY, type GopYKhoa, type LoaiGopY, type TrangThaiGopY, type VaiTroGopY,
 } from '@/lib/gopYKhoa';
 import s from '@/components/courses/chuong-trinh/chuongTrinh.module.css';
@@ -457,6 +457,30 @@ function TheGopY({
             <Link href={duongBai} className="min-w-0 truncate font-semibold text-[var(--k-accent)] hover:underline">{pickLang(g.lesson.title, en ? 'en' : 'vi')}</Link>
           ) : (
             <span className="truncate">{pickLang(g.lesson.title, en ? 'en' : 'vi')}</span>
+          )}
+        </p>
+      )}
+
+      {/* Ô góp ý nhanh trong trang học (14/11/2026): mốc video ⇒ mở đúng bài + tua tới đó (`?t=&track=`). */}
+      {(g.thoiDiemGiay != null || g.tuSai) && (
+        <p className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-[var(--k-ink-2)]">
+          {g.thoiDiemGiay != null && (
+            g.lesson ? (
+              <Link
+                href={`/courses/${slug}/learn?lessonId=${g.lesson.id}&t=${g.thoiDiemGiay}${g.nguonVideo ? `&track=${g.nguonVideo}` : ''}`}
+                className={`${s.so} inline-flex items-center gap-1 rounded-full bg-[var(--k-accent-soft)] px-2.5 py-0.5 font-semibold text-[var(--k-accent)] hover:underline`}
+              >
+                ⏱ {dinhDangMoc(g.thoiDiemGiay)}{g.nguonVideo ? ` · ${g.nguonVideo}` : ''}
+              </Link>
+            ) : (
+              <span className={`${s.so} font-semibold`}>⏱ {dinhDangMoc(g.thoiDiemGiay)}{g.nguonVideo ? ` · ${g.nguonVideo}` : ''}</span>
+            )
+          )}
+          {g.tuSai && (
+            <span className="break-words">
+              🔊 <q className="font-semibold text-[var(--k-ink)]">{g.tuSai}</q>
+              {g.nenDoc && <> → <q className="font-semibold text-[var(--k-green)]">{g.nenDoc}</q></>}
+            </span>
           )}
         </p>
       )}

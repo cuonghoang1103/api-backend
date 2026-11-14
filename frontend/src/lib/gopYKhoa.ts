@@ -5,7 +5,10 @@
  */
 
 export const VAI_TRO = ['HOC_VIEN', 'THAY_CO', 'CHUYEN_GIA', 'AI_AGENT'] as const;
-export const LOAI = ['THIEU_KIEN_THUC', 'SAI_SOT', 'LIEN_TUONG', 'NANG_CAP', 'KHAC'] as const;
+export const LOAI = ['THIEU_KIEN_THUC', 'SAI_SOT', 'LIEN_TUONG', 'NANG_CAP', 'KHAC', 'DOC_SAI', 'KHONG_HIEU'] as const;
+/** Loại hiện thành CHIP trong ô góp ý nhanh dưới video (trang học) — thứ tự = thứ tự chip. */
+export const LOAI_NHANH = ['DOC_SAI', 'KHONG_HIEU', 'THIEU_KIEN_THUC', 'KHAC'] as const;
+export type NguonVideoGopY = 'VI' | 'EN' | 'YT';
 export const TRANG_THAI = [
   'MOI', 'DANG_DOI_CHIEU', 'DA_CO', 'NEN_BO_SUNG', 'DA_LEN_KE_HOACH', 'DA_BO_SUNG', 'KHONG_CHINH_XAC', 'TRUNG', 'AN',
 ] as const;
@@ -28,6 +31,11 @@ export interface GopYKhoa {
   loai: LoaiGopY;
   noiDung: string;
   nguon: string | null;
+  /** Mốc video (giây từ đầu video) lúc góp ý — ô góp ý nhanh trong trang học. */
+  thoiDiemGiay: number | null;
+  nguonVideo: NguonVideoGopY | null;
+  tuSai: string | null;
+  nenDoc: string | null;
   trangThai: TrangThaiGopY;
   ketQuaDoiChieu: string | null;
   bangChung: BangChungGopY[] | null;
@@ -35,6 +43,8 @@ export interface GopYKhoa {
   doiChieuLuc: string | null;
   soPhieu: number;
   daBau: boolean;
+  /** Góp ý của chính người đang xem. */
+  cuaBan?: boolean;
   createdAt: string;
   updatedAt: string;
   course: { slug: string; title: string; courseCode: string | null; academyType: string };
@@ -59,6 +69,12 @@ export interface GuiGopYKhoa {
   noiDung: string;
   nguon?: string | null;
   lessonId?: number | null;
+  /** true = ô góp ý nhanh trong trang học (bắt buộc lessonId, nội dung được ngắn, trần 20/giờ). */
+  nhanh?: boolean;
+  thoiDiemGiay?: number | null;
+  nguonVideo?: NguonVideoGopY | null;
+  tuSai?: string | null;
+  nenDoc?: string | null;
 }
 
 export interface DoiChieuGopYKhoa {
@@ -141,6 +157,7 @@ export const CHU_GOP_Y = {
     } as Record<VaiTroGopY, string>,
     tenLoai: {
       THIEU_KIEN_THUC: 'Thiếu kiến thức', SAI_SOT: 'Sai sót', LIEN_TUONG: 'Liên tưởng hay', NANG_CAP: 'Nâng cấp', KHAC: 'Khác',
+      DOC_SAI: 'Đọc sai / vấp', KHONG_HIEU: 'Chưa hiểu',
     } as Record<LoaiGopY, string>,
     tenTrangThai: {
       MOI: 'Mới', DANG_DOI_CHIEU: 'Đang đối chiếu', DA_CO: 'Đã có trong bài', NEN_BO_SUNG: 'Nên bổ sung',
@@ -207,6 +224,7 @@ export const CHU_GOP_Y = {
     } as Record<VaiTroGopY, string>,
     tenLoai: {
       THIEU_KIEN_THUC: 'Missing knowledge', SAI_SOT: 'Mistake', LIEN_TUONG: 'Great connection', NANG_CAP: 'Upgrade', KHAC: 'Other',
+      DOC_SAI: 'Mispronounced / stumble', KHONG_HIEU: 'Not clear',
     } as Record<LoaiGopY, string>,
     tenTrangThai: {
       MOI: 'New', DANG_DOI_CHIEU: 'Under review', DA_CO: 'Already covered', NEN_BO_SUNG: 'Worth adding',
@@ -223,3 +241,105 @@ export function duongBaiGopY(courseSlug: string, b: { lessonId?: number | null; 
   if (slug) return `/courses/${courseSlug}/learn?lessonSlug=${encodeURIComponent(slug)}`;
   return null;
 }
+
+/** 754 ⇒ "12:34", 3723 ⇒ "1:02:03" (khớp `dinhDangMoc` ở backend). */
+export function dinhDangMoc(giay: number): string {
+  const t = Math.max(0, Math.floor(giay));
+  const h = Math.floor(t / 3600), m = Math.floor((t % 3600) / 60), x = t % 60;
+  return h ? `${h}:${String(m).padStart(2, '0')}:${String(x).padStart(2, '0')}` : `${m}:${String(x).padStart(2, '0')}`;
+}
+
+/** "12:34" / "1:02:03" / "754" ⇒ giây; sai dạng ⇒ null. Giây/phút phải < 60 khi có dấu ":". */
+export function docMoc(chu: string): number | null {
+  const s = chu.trim();
+  if (!s) return null;
+  if (/^\d+$/.test(s)) return Number(s) <= 86400 ? Number(s) : null;
+  const m = /^(?:(\d+):)?(\d{1,2}):(\d{1,2})$/.exec(s);
+  if (!m) return null;
+  const h = Number(m[1] ?? 0), p = Number(m[2]), g = Number(m[3]);
+  if (g >= 60 || (m[1] !== undefined && p >= 60)) return null;
+  const tong = h * 3600 + p * 60 + g;
+  return tong <= 86400 ? tong : null;
+}
+
+/** Chữ của ô góp ý nhanh dưới video (trang học). */
+export const CHU_GOP_Y_NHANH = {
+  vi: {
+    tieuDe: 'Góp ý nhanh cho bài này',
+    moTa: 'Thấy chỗ nào đọc sai, vấp, khó hiểu hay thiếu — bấm một nút, mốc video tự điền.',
+    chip: { DOC_SAI: '🔊 Đọc sai / vấp', KHONG_HIEU: '🤔 Chưa hiểu chỗ này', THIEU_KIEN_THUC: '➕ Cần bổ sung', KHAC: '🐞 Lỗi khác' } as Record<string, string>,
+    moc: 'Mốc video',
+    mocGoiY: 'mm:ss',
+    layLai: 'Lấy lại thời điểm hiện tại',
+    boMoc: 'Bỏ mốc',
+    khongDocDuocMoc: 'Video này không cho đọc mốc tự động — gõ tay mm:ss nhé.',
+    mocSai: 'Mốc phải dạng mm:ss (vd 3:12) hoặc số giây.',
+    tuSai: 'Từ/câu bị đọc sai',
+    tuSaiGoiY: 'vd: TypeScript',
+    nenDoc: 'Nên đọc là (tuỳ chọn)',
+    nenDocGoiY: 'vd: tai-xcríp',
+    noiDungGoiY: {
+      DOC_SAI: 'Ghi thêm nếu cần (tuỳ chọn)…',
+      KHONG_HIEU: 'Chỗ nào chưa hiểu? Hỏi cụ thể giúp mình bổ sung đúng chỗ…',
+      THIEU_KIEN_THUC: 'Cần bổ sung gì ở chỗ này?…',
+      KHAC: 'Lỗi gì? (hình, chữ trên slide, âm thanh, code…)',
+    } as Record<string, string>,
+    phimTat: 'Enter để gửi · Shift+Enter xuống dòng',
+    gui: 'Gửi',
+    dangGui: 'Đang gửi…',
+    huy: 'Đóng',
+    camOn: 'Đã ghi nhận — cảm ơn bạn! Góp ý sẽ được đối chiếu và sửa đúng chỗ.',
+    canDangNhap: 'Đăng nhập để góp ý',
+    danhSach: (n: number) => `Góp ý của bài này (${n})`,
+    rong: 'Chưa có góp ý nào cho bài này.',
+    cuaBan: 'của bạn',
+    tuaToi: (m: string) => `Tua tới ${m}`,
+    trackKhac: (t: string) => `Mốc của video ${t} — bấm để chuyển sang ${t} và tua`,
+    docSai: 'Đọc sai',
+    nenDocLa: 'nên đọc',
+    trangChung: 'Góp ý dài / có nguồn? Mở trang góp ý của khoá',
+    thuGon: 'Thu gọn',
+    moRong: 'Mở',
+    ketQua: 'Kết quả',
+    xemThem: (n: number) => `Xem thêm ${n} góp ý`,
+  },
+  en: {
+    tieuDe: 'Quick feedback on this lesson',
+    moTa: 'Mispronounced word, a stumble, something unclear or missing? Tap a button — the video time fills in itself.',
+    chip: { DOC_SAI: '🔊 Mispronounced', KHONG_HIEU: '🤔 Not clear here', THIEU_KIEN_THUC: '➕ Needs more', KHAC: '🐞 Other issue' } as Record<string, string>,
+    moc: 'Video time',
+    mocGoiY: 'mm:ss',
+    layLai: 'Use the current time',
+    boMoc: 'No time',
+    khongDocDuocMoc: 'This video does not expose its time — type mm:ss.',
+    mocSai: 'Time must be mm:ss (e.g. 3:12) or seconds.',
+    tuSai: 'Word/phrase read wrong',
+    tuSaiGoiY: 'e.g. TypeScript',
+    nenDoc: 'Should be read as (optional)',
+    nenDocGoiY: 'e.g. TYPE-script',
+    noiDungGoiY: {
+      DOC_SAI: 'Anything to add (optional)…',
+      KHONG_HIEU: 'What is unclear? Ask precisely so the right spot gets fixed…',
+      THIEU_KIEN_THUC: 'What should be added here?…',
+      KHAC: 'What is wrong? (picture, slide text, audio, code…)',
+    } as Record<string, string>,
+    phimTat: 'Enter to send · Shift+Enter for a new line',
+    gui: 'Send',
+    dangGui: 'Sending…',
+    huy: 'Close',
+    camOn: 'Recorded — thank you! It will be checked and fixed at that spot.',
+    canDangNhap: 'Sign in to give feedback',
+    danhSach: (n: number) => `Feedback on this lesson (${n})`,
+    rong: 'No feedback on this lesson yet.',
+    cuaBan: 'yours',
+    tuaToi: (m: string) => `Jump to ${m}`,
+    trackKhac: (t: string) => `Time on the ${t} video — click to switch to ${t} and jump`,
+    docSai: 'Read wrong',
+    nenDocLa: 'should be',
+    trangChung: 'Longer note or a source? Open the course feedback page',
+    thuGon: 'Collapse',
+    moRong: 'Open',
+    ketQua: 'Result',
+    xemThem: (n: number) => `Show ${n} more`,
+  },
+};

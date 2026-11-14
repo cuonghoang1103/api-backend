@@ -8,13 +8,13 @@
  *   node scripts/gop-y/dang.mjs --tep goi-y.json [--thu]
  *       tệp: mảng { courseSlug, loai, noiDung, lessonSlug?, nguon?, tenAi? }
  *
- * loai: THIEU_KIEN_THUC | SAI_SOT | LIEN_TUONG | NANG_CAP | KHAC
+ * loai: THIEU_KIEN_THUC | SAI_SOT | LIEN_TUONG | NANG_CAP | KHAC | DOC_SAI | KHONG_HIEU
  * Env: INTERNAL_API_TOKEN (hoặc ~/.config/cuongthai/internal-api-token), GOP_Y_API.
  */
 import { readFileSync } from 'node:fs';
 import { docCo, goiNoiBo } from './_chung.mjs';
 
-const LOAI = ['THIEU_KIEN_THUC', 'SAI_SOT', 'LIEN_TUONG', 'NANG_CAP', 'KHAC'];
+const LOAI = ['THIEU_KIEN_THUC', 'SAI_SOT', 'LIEN_TUONG', 'NANG_CAP', 'KHAC', 'DOC_SAI', 'KHONG_HIEU'];
 const co = docCo();
 const tenAiMacDinh = typeof co['ten-ai'] === 'string' ? co['ten-ai'] : 'Claude (điều phối)';
 

@@ -23,7 +23,10 @@ import { logger } from '../utils/logger.js';
 import { baoAdmin } from './thongBaoAdmin.service.js';
 
 export const VAI_TRO = ['HOC_VIEN', 'THAY_CO', 'CHUYEN_GIA', 'AI_AGENT'] as const;
-export const LOAI = ['THIEU_KIEN_THUC', 'SAI_SOT', 'LIEN_TUONG', 'NANG_CAP', 'KHAC'] as const;
+/** DOC_SAI (giọng đọc sai/vấp) + KHONG_HIEU (chưa hiểu chỗ này) — thêm 14/11/2026 cho ô góp ý nhanh trong trang học. */
+export const LOAI = ['THIEU_KIEN_THUC', 'SAI_SOT', 'LIEN_TUONG', 'NANG_CAP', 'KHAC', 'DOC_SAI', 'KHONG_HIEU'] as const;
+/** Track video của trang học (VI = giọng chủ kênh, EN = bản tiếng Anh, YT = video YouTube tuyển chọn). */
+export const NGUON_VIDEO = ['VI', 'EN', 'YT'] as const;
 export const TRANG_THAI = [
   'MOI', 'DANG_DOI_CHIEU', 'DA_CO', 'NEN_BO_SUNG', 'DA_LEN_KE_HOACH', 'DA_BO_SUNG', 'KHONG_CHINH_XAC', 'TRUNG', 'AN',
 ] as const;
@@ -33,6 +36,15 @@ export type TrangThaiGopYKhoa = (typeof TRANG_THAI)[number];
 
 /** Trần gửi của MỘT người: 5 góp ý / giờ (đếm trong CSDL ⇒ đúng cả khi chạy nhiều tiến trình). */
 export const TRAN_GOP_Y_MOI_GIO = 5;
+/**
+ * Trần của ô góp ý NHANH trong trang học: 20 / giờ / người (cùng bộ đếm với trần trên — đếm MỌI góp ý của người đó
+ * trong một giờ). Vì sao nới: một lượt xem video 15 phút có thể vấp 5–10 chỗ đọc sai/khó hiểu, mỗi chỗ một dòng ngắn
+ * gắn mốc — trần 5 sẽ chặn đúng người học chăm nhất. Không nới hơn: 20 câu/giờ đã là một câu mỗi 3 phút, và mỗi góp ý
+ * đều nằm trong bài có thật của khoá + bị chặn trùng (vân tay gồm bài + mốc), nên spam không rẻ.
+ */
+export const TRAN_GOP_Y_NHANH_MOI_GIO = 20;
+/** Mốc video tối đa: 24 giờ (giây). */
+export const MOC_TOI_DA_GIAY = 86400;
 
 const TEN_LOAI: Record<LoaiGopYKhoa, string> = {
   THIEU_KIEN_THUC: 'Thiếu kiến thức',
@@ -40,7 +52,16 @@ const TEN_LOAI: Record<LoaiGopYKhoa, string> = {
   LIEN_TUONG: 'Liên tưởng hay',
   NANG_CAP: 'Nâng cấp',
   KHAC: 'Khác',
+  DOC_SAI: 'Đọc sai / vấp',
+  KHONG_HIEU: 'Chưa hiểu',
 };
+
+/** 754 ⇒ "12:34", 3723 ⇒ "1:02:03". */
+export function dinhDangMoc(giay: number): string {
+  const t = Math.max(0, Math.floor(giay));
+  const h = Math.floor(t / 3600), m = Math.floor((t % 3600) / 60), x = t % 60;
+  return h ? `${h}:${String(m).padStart(2, '0')}:${String(x).padStart(2, '0')}` : `${m}:${String(x).padStart(2, '0')}`;
+}
 
 // ─────────────────────────── Zod ───────────────────────────
 
@@ -50,27 +71,73 @@ const urlHttp = z
   .max(1000)
   .refine((s) => /^https?:\/\/[^\s]+$/i.test(s), 'Link nguồn phải bắt đầu bằng http:// hoặc https://');
 
+/**
+ * `nhanh: true` = gửi từ ô góp ý nhanh trong trang học: BẮT BUỘC gắn bài; nội dung được ngắn (≥ 3 ký tự) hoặc bỏ trống
+ * khi đã có mốc video / từ đọc sai (máy chủ tự soạn một câu tóm tắt); trần 20/giờ thay vì 5.
+ * Trang góp ý chung (không `nhanh`) giữ luật cũ: nội dung 10–5000 ký tự.
+ */
 export const schemaTao = z
   .object({
     vaiTro: z.enum(VAI_TRO).default('HOC_VIEN'),
     laAi: z.boolean().optional(),
     tenAi: z.string().trim().max(100).optional().nullable(),
     loai: z.enum(LOAI),
-    noiDung: z.string().trim().min(10, 'Nội dung tối thiểu 10 ký tự').max(5000, 'Nội dung tối đa 5000 ký tự'),
+    noiDung: z.string().trim().max(5000, 'Nội dung tối đa 5000 ký tự').optional().nullable(),
     nguon: z.union([urlHttp, z.literal('')]).optional().nullable(),
     lessonId: z.coerce.number().int().positive().optional().nullable(),
     lessonSlug: z.string().trim().max(255).optional().nullable(),
+    nhanh: z.boolean().optional(),
+    thoiDiemGiay: z.coerce
+      .number()
+      .min(0, 'Mốc video không được âm')
+      .max(MOC_TOI_DA_GIAY, 'Mốc video tối đa 24 giờ')
+      .transform((n) => Math.floor(n))
+      .optional()
+      .nullable(),
+    nguonVideo: z.enum(NGUON_VIDEO).optional().nullable(),
+    tuSai: z.string().trim().max(300, 'Từ/câu đọc sai tối đa 300 ký tự').optional().nullable(),
+    nenDoc: z.string().trim().max(300, '"Nên đọc là" tối đa 300 ký tự').optional().nullable(),
+  })
+  .superRefine((v, ctx) => {
+    const nd = v.noiDung?.trim() ?? '';
+    if (!v.nhanh) {
+      if (nd.length < 10) ctx.addIssue({ code: 'custom', path: ['noiDung'], message: 'Nội dung tối thiểu 10 ký tự' });
+      return;
+    }
+    if (!v.lessonId && !v.lessonSlug?.trim()) {
+      ctx.addIssue({ code: 'custom', path: ['lessonId'], message: 'Góp ý nhanh phải gắn với một bài (lessonId)' });
+    }
+    if (nd.length > 2000) ctx.addIssue({ code: 'custom', path: ['noiDung'], message: 'Góp ý nhanh tối đa 2000 ký tự' });
+    const coDauMoc = v.thoiDiemGiay != null || !!v.tuSai?.trim();
+    if (nd.length < 3 && !coDauMoc) {
+      ctx.addIssue({ code: 'custom', path: ['noiDung'], message: 'Viết vài chữ, hoặc gắn mốc video / từ bị đọc sai' });
+    }
   })
   .transform((v) => {
     const laAi = v.laAi === true || v.vaiTro === 'AI_AGENT';
+    const tuSai = v.tuSai?.trim() || null;
+    const nenDoc = v.nenDoc?.trim() || null;
+    let noiDung = v.noiDung?.trim() ?? '';
+    if (!noiDung) {
+      // Ô nhanh bỏ trống nội dung ⇒ một câu tóm tắt đọc được ở mọi nơi (thông báo admin, trang chung, script).
+      const moc = v.thoiDiemGiay != null ? ` ở ${dinhDangMoc(v.thoiDiemGiay)}` : '';
+      noiDung = tuSai
+        ? `Đọc sai "${tuSai}"${nenDoc ? ` — nên đọc "${nenDoc}"` : ''}${moc}`
+        : `${TEN_LOAI[v.loai]}${moc}`;
+    }
     return {
       vaiTro: (laAi ? 'AI_AGENT' : v.vaiTro) as VaiTro,
       tenAi: laAi ? (v.tenAi?.trim() || null) : null,
       loai: v.loai,
-      noiDung: v.noiDung,
+      noiDung,
       nguon: v.nguon ? v.nguon : null,
       lessonId: v.lessonId ?? null,
       lessonSlug: v.lessonSlug?.trim() || null,
+      nhanh: v.nhanh === true,
+      thoiDiemGiay: v.thoiDiemGiay ?? null,
+      nguonVideo: v.nguonVideo ?? null,
+      tuSai,
+      nenDoc,
     };
   })
   .refine((v) => v.vaiTro !== 'AI_AGENT' || !!v.tenAi, {
@@ -201,6 +268,10 @@ const CHON = {
   loai: true,
   noiDung: true,
   nguon: true,
+  thoiDiemGiay: true,
+  nguonVideo: true,
+  tuSai: true,
+  nenDoc: true,
   trangThai: true,
   ketQuaDoiChieu: true,
   bangChung: true,
@@ -216,8 +287,11 @@ const CHON = {
 
 type HangGopY = Prisma.CourseSuggestionGetPayload<{ select: typeof CHON }>;
 
-/** Hình dạng trả ra ngoài — KHÔNG email; tên người gửi = displayName → fullName → username. */
-export function chuanHoa(r: HangGopY, daBau = false) {
+/**
+ * Hình dạng trả ra ngoài — KHÔNG email; tên người gửi = displayName → fullName → username.
+ * `cuaBan` = góp ý của chính người đang xem (ô góp ý nhanh đánh dấu "của bạn").
+ */
+export function chuanHoa(r: HangGopY, daBau = false, viewerId: number | null = null) {
   return {
     id: r.id,
     vaiTro: r.vaiTro,
@@ -225,6 +299,10 @@ export function chuanHoa(r: HangGopY, daBau = false) {
     loai: r.loai,
     noiDung: r.noiDung,
     nguon: r.nguon,
+    thoiDiemGiay: r.thoiDiemGiay,
+    nguonVideo: r.nguonVideo,
+    tuSai: r.tuSai,
+    nenDoc: r.nenDoc,
     trangThai: r.trangThai,
     ketQuaDoiChieu: r.ketQuaDoiChieu,
     bangChung: (Array.isArray(r.bangChung) ? r.bangChung : null) as BangChung[] | null,
@@ -232,6 +310,7 @@ export function chuanHoa(r: HangGopY, daBau = false) {
     doiChieuLuc: r.doiChieuLuc,
     soPhieu: r.soPhieu,
     daBau,
+    cuaBan: viewerId != null && r.user?.id === viewerId,
     createdAt: r.createdAt,
     updatedAt: r.updatedAt,
     course: { slug: r.course.slug, title: r.course.title, courseCode: r.course.courseCode, academyType: r.course.academyType },
@@ -292,7 +371,7 @@ export async function danhSach(loc: LocDanhSach) {
   }
 
   return {
-    items: hang.map((h) => chuanHoa(h, daBau.has(h.id))),
+    items: hang.map((h) => chuanHoa(h, daBau.has(h.id), loc.viewerId ?? null)),
     total: tong,
     page: loc.page,
     limit: loc.limit,
@@ -338,16 +417,26 @@ export async function tao(khoa: KhoaGon, duLieu: DuLieuTao, nguon: NguonTao) {
     const daGui = await prisma.courseSuggestion.count({
       where: { userId: nguon.userId, createdAt: { gte: motGioTruoc } },
     });
-    if (daGui >= TRAN_GOP_Y_MOI_GIO) {
+    const tran = duLieu.nhanh ? TRAN_GOP_Y_NHANH_MOI_GIO : TRAN_GOP_Y_MOI_GIO;
+    if (daGui >= tran) {
       throw new AppError(
-        `Bạn đã gửi ${TRAN_GOP_Y_MOI_GIO} góp ý trong một giờ qua — nghỉ chút rồi gửi tiếp nhé.`,
+        duLieu.nhanh
+          ? `Bạn đã gửi ${tran} góp ý trong một giờ qua — nghỉ chút rồi gửi tiếp nhé.`
+          : `Bạn đã gửi ${tran} góp ý trong một giờ qua — nghỉ chút rồi gửi tiếp nhé (góp ý nhanh ngay dưới video trong bài vẫn gửi được tới ${TRAN_GOP_Y_NHANH_MOI_GIO}/giờ).`,
         429,
         'GOP_Y_KHOA_RATE_LIMIT',
       );
     }
   }
 
-  const vt = vanTay(duLieu.noiDung);
+  // Vân tay: góp ý có mốc / từ đọc sai ⇒ gồm cả bài + mốc + từ, để "chỗ này khó hiểu" ở 2 chỗ khác nhau không bị coi là
+  // trùng. Góp ý thường giữ đúng vân tay cũ (chỉ nội dung) ⇒ dữ liệu đã có vẫn chặn trùng như trước.
+  const coDinhVi = duLieu.thoiDiemGiay != null || !!duLieu.tuSai;
+  const vt = vanTay(
+    coDinhVi
+      ? `${duLieu.noiDung}\n#bai:${lessonId ?? ''}#t:${duLieu.thoiDiemGiay ?? ''}#v:${duLieu.nguonVideo ?? ''}#tu:${duLieu.tuSai ?? ''}`
+      : duLieu.noiDung,
+  );
   const trung = await prisma.courseSuggestion.findFirst({
     where: { courseId: khoa.id, vanTay: vt },
     select: { id: true, trangThai: true },
@@ -371,6 +460,10 @@ export async function tao(khoa: KhoaGon, duLieu: DuLieuTao, nguon: NguonTao) {
       loai: duLieu.loai,
       noiDung: duLieu.noiDung,
       nguon: duLieu.nguon,
+      thoiDiemGiay: duLieu.thoiDiemGiay,
+      nguonVideo: duLieu.nguonVideo,
+      tuSai: duLieu.tuSai,
+      nenDoc: duLieu.nenDoc,
       vanTay: vt,
     },
     select: CHON,
@@ -382,15 +475,17 @@ export async function tao(khoa: KhoaGon, duLieu: DuLieuTao, nguon: NguonTao) {
     tieuDe: `Góp ý khoá ${khoa.courseCode || khoa.slug} · ${TEN_LOAI[duLieu.loai]}${
       duLieu.vaiTro === 'AI_AGENT' ? ` · 🤖 ${duLieu.tenAi}` : ''
     }`.slice(0, 190),
-    noiDung: `${tieuDeVi(khoa.title)}${row.lesson ? ` › ${tieuDeVi(row.lesson.title)}` : ''}\n${duLieu.noiDung.slice(0, 400)}`,
+    noiDung: `${tieuDeVi(khoa.title)}${row.lesson ? ` › ${tieuDeVi(row.lesson.title)}` : ''}${
+      duLieu.thoiDiemGiay != null ? ` · ⏱ ${dinhDangMoc(duLieu.thoiDiemGiay)}${duLieu.nguonVideo ? ` (${duLieu.nguonVideo})` : ''}` : ''
+    }\n${duLieu.noiDung.slice(0, 400)}`,
     duongDan: `/courses/${khoa.slug}/gop-y?id=${row.id}`,
-    mucDo: duLieu.loai === 'SAI_SOT' ? 'can_xu_ly' : 'thuong',
+    mucDo: duLieu.loai === 'SAI_SOT' || duLieu.loai === 'DOC_SAI' ? 'can_xu_ly' : 'thuong',
     userId: nguon.userId,
     entityId: row.id,
     khoaChongTrung: `GOP_Y_KHOA:${row.id}`,
   }).catch((err: unknown) => logger.warn('[gop-y-khoa] báo admin hỏng (góp ý vẫn đã lưu)', { id: row.id, error: String(err) }));
 
-  return chuanHoa(row);
+  return chuanHoa(row, false, nguon.userId);
 }
 
 /** Bật/tắt phiếu "Tôi cũng thấy cần". Không bầu cho góp ý ẩn; tự bầu cho mình vẫn được (không có hại). */

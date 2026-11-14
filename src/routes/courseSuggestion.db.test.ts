@@ -2,7 +2,8 @@
  * Góp ý & bổ sung cho khoá học (14/11/2026) trên CSDL thật — HTTP thật qua đúng các router được mount ở prod.
  *   WORK_DB_TEST=1 npx tsx --test src/routes/courseSuggestion.db.test.ts
  *
- * Phủ: tạo (Zod, AI phải có tenAi, bài phải thuộc khoá, chặn trùng, trần 5/giờ) · lọc (trạng thái/loại/bài, AN ẩn với
+ * Phủ: tạo (Zod, AI phải có tenAi, bài phải thuộc khoá, chặn trùng, trần 5/giờ) · ô góp ý NHANH trong trang học
+ * (bắt buộc bài, mốc video + track + từ đọc sai, tự soạn nội dung, vân tay theo mốc, trần 20/giờ, cuaBan) · lọc (trạng thái/loại/bài, AN ẩn với
  * người thường) · vote bật/tắt · admin PATCH (người thường 403) · đường internal (token sai ⇒ 404, liệt kê, ghi đối
  * chiếu, đăng AI_AGENT).
  */
@@ -32,9 +33,13 @@ describe('Góp ý & bổ sung khoá học (HTTP + DB thật)', { skip: !RUN }, (
   const slug = `${tag}-khoa`;
   let baiId = 0;
   let baiKhacKhoaId = 0;
+  // Khoá riêng cho ô góp ý nhanh — để các phép đếm của khoá chính bên dưới không đổi.
+  const slugNhanh = `${tag}-nhanh`;
+  let khoaNhanhId = 0;
+  let baiNhanhId = 0;
   const userIds: number[] = [];
   type U = { id: number; token: string };
-  let hv: U, hv2: U, admin: U, spam: U;
+  let hv: U, hv2: U, admin: U, spam: U, nhanh: U;
 
   async function mkUser(name: string, laAdmin = false): Promise<U> {
     const username = `${tag}_${name}`;
@@ -97,20 +102,30 @@ describe('Góp ý & bổ sung khoá học (HTTP + DB thật)', { skip: !RUN }, (
     });
     khoaKhacId = k2.id;
     baiKhacKhoaId = k2.sections[0].lessons[0].id;
+    const k3 = await prisma.course.create({
+      data: {
+        slug: slugNhanh, title: 'Nhanh', status: 'PUBLISHED', isPublished: true,
+        sections: { create: [{ title: 'N', lessons: { create: [{ title: 'Bài có video', slug: `${tag}-n-1` }] } }] },
+      },
+      include: { sections: { include: { lessons: true } } },
+    });
+    khoaNhanhId = k3.id;
+    baiNhanhId = k3.sections[0].lessons[0].id;
 
     hv = await mkUser('hv');
     hv2 = await mkUser('hv2');
     spam = await mkUser('spam');
+    nhanh = await mkUser('nhanh');
     admin = await mkUser('ad', true);
   });
 
   after(async () => {
     server?.close();
     if (prisma) {
-      const ids = (await prisma.courseSuggestion.findMany({ where: { courseId: { in: [courseId, khoaKhacId] } }, select: { id: true } }))
+      const ids = (await prisma.courseSuggestion.findMany({ where: { courseId: { in: [courseId, khoaKhacId, khoaNhanhId] } }, select: { id: true } }))
         .map((r: { id: number }) => r.id);
       await prisma.adminNotification.deleteMany({ where: { khoaChongTrung: { in: ids.map((i: number) => `GOP_Y_KHOA:${i}`) } } }).catch(() => {});
-      await prisma.course.deleteMany({ where: { id: { in: [courseId, khoaKhacId] } } }).catch(() => {}); // CASCADE góp ý + phiếu
+      await prisma.course.deleteMany({ where: { id: { in: [courseId, khoaKhacId, khoaNhanhId] } } }).catch(() => {}); // CASCADE góp ý + phiếu
       await prisma.userRole.deleteMany({ where: { userId: { in: userIds } } }).catch(() => {});
       await prisma.user.deleteMany({ where: { id: { in: userIds } } }).catch(() => {});
       await prisma.$disconnect();
@@ -163,6 +178,83 @@ describe('Góp ý & bổ sung khoá học (HTTP + DB thật)', { skip: !RUN }, (
     }
     const r6 = await call(spam, 'POST', `/courses/${slug}/suggestions`, { loai: 'KHAC', noiDung: 'Góp ý số sáu vượt trần giờ' });
     assert.equal(r6.status, 429);
+  });
+
+  let nhanhId = 0;
+
+  it('góp ý NHANH: thiếu bài ⇒ 400; mốc âm / > 24h / track lạ ⇒ 400; trống mà không mốc ⇒ 400', async () => {
+    const duong = `/courses/${slugNhanh}/suggestions`;
+    const thieuBai = await call(nhanh, 'POST', duong, { nhanh: true, loai: 'KHONG_HIEU', noiDung: 'Chỗ này khó hiểu quá', thoiDiemGiay: 30 });
+    assert.equal(thieuBai.status, 400);
+    assert.match(thieuBai.body.message, /lessonId/);
+    const coBai = { nhanh: true, lessonId: baiNhanhId };
+    assert.equal((await call(nhanh, 'POST', duong, { ...coBai, loai: 'KHONG_HIEU', noiDung: 'abc', thoiDiemGiay: -1 })).status, 400);
+    assert.equal((await call(nhanh, 'POST', duong, { ...coBai, loai: 'KHONG_HIEU', noiDung: 'abc', thoiDiemGiay: 86401 })).status, 400);
+    assert.equal((await call(nhanh, 'POST', duong, { ...coBai, loai: 'KHONG_HIEU', noiDung: 'abc', nguonVideo: 'XX' })).status, 400);
+    assert.equal((await call(nhanh, 'POST', duong, { ...coBai, loai: 'KHONG_HIEU', noiDung: '' })).status, 400);
+    // Trang chung (không `nhanh`) vẫn giữ luật cũ: ≥ 10 ký tự.
+    assert.equal((await call(nhanh, 'POST', duong, { loai: 'KHONG_HIEU', noiDung: 'ngắn quá', lessonId: baiNhanhId })).status, 400);
+  });
+
+  it('góp ý NHANH "Đọc sai": lưu mốc (làm tròn xuống) + track + từ sai/nên đọc; nội dung trống ⇒ máy chủ tự soạn; cuaBan', async () => {
+    const r = await call(nhanh, 'POST', `/courses/${slugNhanh}/suggestions`, {
+      nhanh: true, lessonId: baiNhanhId, loai: 'DOC_SAI', thoiDiemGiay: 192.7, nguonVideo: 'VI', tuSai: 'TypeScript', nenDoc: 'tai-xcríp',
+    });
+    assert.equal(r.status, 201, JSON.stringify(r.body));
+    nhanhId = r.body.data.id;
+    assert.equal(r.body.data.loai, 'DOC_SAI');
+    assert.equal(r.body.data.thoiDiemGiay, 192);
+    assert.equal(r.body.data.nguonVideo, 'VI');
+    assert.equal(r.body.data.tuSai, 'TypeScript');
+    assert.equal(r.body.data.nenDoc, 'tai-xcríp');
+    assert.equal(r.body.data.noiDung, 'Đọc sai "TypeScript" — nên đọc "tai-xcríp" ở 3:12');
+    assert.equal(r.body.data.cuaBan, true);
+
+    // Cùng câu ngắn ở mốc KHÁC ⇒ không phải trùng; đúng cùng mốc + cùng câu ⇒ 409.
+    const a = await call(nhanh, 'POST', `/courses/${slugNhanh}/suggestions`, { nhanh: true, lessonId: baiNhanhId, loai: 'KHONG_HIEU', noiDung: 'Chưa hiểu', thoiDiemGiay: 40, nguonVideo: 'VI' });
+    assert.equal(a.status, 201, JSON.stringify(a.body));
+    const b = await call(nhanh, 'POST', `/courses/${slugNhanh}/suggestions`, { nhanh: true, lessonId: baiNhanhId, loai: 'KHONG_HIEU', noiDung: 'Chưa hiểu', thoiDiemGiay: 95, nguonVideo: 'VI' });
+    assert.equal(b.status, 201, JSON.stringify(b.body));
+    const c = await call(nhanh, 'POST', `/courses/${slugNhanh}/suggestions`, { nhanh: true, lessonId: baiNhanhId, loai: 'KHONG_HIEU', noiDung: 'chưa hiểu!', thoiDiemGiay: 95, nguonVideo: 'VI' });
+    assert.equal(c.status, 409);
+
+    // Đọc lại ở mọi đường: công khai (cuaBan theo người xem), một góp ý, internal.
+    const cuaToi = await call(nhanh, 'GET', `/courses/${slugNhanh}/suggestions?lessonId=${baiNhanhId}&loai=DOC_SAI`);
+    assert.equal(cuaToi.body.data.items[0].thoiDiemGiay, 192);
+    assert.equal(cuaToi.body.data.items[0].cuaBan, true);
+    const nguoiKhac = await call(hv2, 'GET', `/courses/${slugNhanh}/suggestions?lessonId=${baiNhanhId}&loai=DOC_SAI`);
+    assert.equal(nguoiKhac.body.data.items[0].cuaBan, false);
+    const khach = await call(null, 'GET', `/courses/${slugNhanh}/suggestions/${nhanhId}`);
+    assert.equal(khach.body.data.tuSai, 'TypeScript');
+    assert.equal(khach.body.data.cuaBan, false);
+    const nb = await noiBo('GET', `/course-suggestions?courseSlug=${slugNhanh}&loai=DOC_SAI`);
+    assert.equal(nb.body.data.items[0].nenDoc, 'tai-xcríp');
+    assert.equal(nb.body.data.items[0].nguonVideo, 'VI');
+    const ad = await call(admin, 'GET', `/admin/course-suggestions?courseSlug=${slugNhanh}&loai=DOC_SAI`);
+    assert.equal(ad.body.data.items[0].thoiDiemGiay, 192);
+
+    // Thông báo admin mang mốc video, mức "cần xử lý".
+    await new Promise((res) => setTimeout(res, 200));
+    const tb = await prisma.adminNotification.findFirst({ where: { khoaChongTrung: `GOP_Y_KHOA:${nhanhId}` } });
+    assert.ok(tb);
+    assert.match(tb.noiDung, /⏱ 3:12 \(VI\)/);
+  });
+
+  it('trần: góp ý nhanh 20/giờ/người, trang chung 5/giờ — cùng MỘT bộ đếm (đã có 3 góp ý nhanh)', async () => {
+    const duong = `/courses/${slugNhanh}/suggestions`;
+    for (let i = 0; i < 2; i++) {
+      const r = await call(nhanh, 'POST', duong, { loai: 'KHAC', noiDung: `Góp ý dài ở trang chung số ${i}, đủ mười ký tự` });
+      assert.equal(r.status, 201, JSON.stringify(r.body));
+    }
+    const chung6 = await call(nhanh, 'POST', duong, { loai: 'KHAC', noiDung: 'Góp ý dài thứ sáu trong giờ — phải bị chặn' });
+    assert.equal(chung6.status, 429);
+    assert.match(chung6.body.message, /20\/giờ/);
+    for (let i = 0; i < 15; i++) {
+      const r = await call(nhanh, 'POST', duong, { nhanh: true, lessonId: baiNhanhId, loai: 'KHONG_HIEU', noiDung: 'Chưa hiểu', thoiDiemGiay: 200 + i });
+      assert.equal(r.status, 201, `lượt ${i}: ${JSON.stringify(r.body)}`);
+    }
+    const r21 = await call(nhanh, 'POST', duong, { nhanh: true, lessonId: baiNhanhId, loai: 'KHONG_HIEU', noiDung: 'Chưa hiểu', thoiDiemGiay: 999 });
+    assert.equal(r21.status, 429);
   });
 
   it('vote bật/tắt, cập nhật soPhieu và daBau theo người xem', async () => {

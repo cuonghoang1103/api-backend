@@ -7,9 +7,9 @@ import Link from 'next/link';
 import {
   ChevronLeft, ChevronRight, CheckCircle, Circle, Lock, Menu, X,
   Download, BookOpen, Loader2, Play, ChevronDown, ChevronUp, ArrowLeft,
-  Code2, ExternalLink, FileText, Github, Award, Ticket, Eye, MessageSquarePlus
+  Code2, ExternalLink, FileText, Github, Award, Ticket, Eye
 } from 'lucide-react';
-import { CHU_GOP_Y } from '@/lib/gopYKhoa';
+import GopYNhanhBai from '@/components/courses/gop-y/GopYNhanhBai';
 import { coursesApi, certificatesApi } from '@/lib/api';
 import { CourseTutor } from '@/components/academy/CourseTutor';
 import { CourseRoadmapPanel } from '@/components/academy/CourseRoadmap';
@@ -173,6 +173,29 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
   // lesson's own default.
   const [videoTrack, setVideoTrack] = useState<VideoTrackKey | null>(null);
   const trackPrefRef = useRef<VideoTrackKey | null>(null);
+
+  // ── Góp ý nhanh (14/11/2026, docs/gop-y-khoa-hoc.md): bộ điều khiển của player ĐANG hiện ──
+  // Player (<video> DIRECT hoặc YouTube IFrame API) tự đăng ký khi sẵn sàng; ô góp ý đọc mốc hiện tại qua đây và
+  // bấm mốc trong danh sách thì tua qua đây. Tua lúc player chưa sẵn sàng (đổi track, `?t=` trên URL) ⇒ xếp hàng ở
+  // tuaChoRef, player đăng ký xong là tua ngay.
+  const playerRef = useRef<BoDieuKhienVideo | null>(null);
+  const tuaChoRef = useRef<number | null>(null);
+  const khungVideoRef = useRef<HTMLDivElement | null>(null);
+  const dangKyPlayer = useCallback((h: BoDieuKhienVideo) => {
+    playerRef.current = h;
+    if (tuaChoRef.current != null) {
+      const g = tuaChoRef.current;
+      tuaChoRef.current = null;
+      h.tua(g);
+    }
+    return () => { if (playerRef.current === h) playerRef.current = null; };
+  }, []);
+  const layGiayVideo = useCallback(() => playerRef.current?.layGiay() ?? null, []);
+  const { isAuthenticated: isBackendAuth } = useAuthStore();
+  const { status: sessionStatus } = useSession();
+  const [daMount, setDaMount] = useState(false);
+  useEffect(() => setDaMount(true), []);
+  const daDangNhap = daMount && (isBackendAuth || sessionStatus === 'authenticated');
   // Khung chứa nội dung bài — dùng để tô màu code + gắn nút Sao chép.
   const khungNoiDungRef = useRef<HTMLDivElement | null>(null);
   // Chạy lại mỗi khi đổi bài hoặc đổi ngôn ngữ hiển thị (nội dung được thay).
@@ -337,6 +360,13 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
           || theoTienTo
           || allLessons[0];
         if (target) {
+          // `?t=<giây>&track=VI|EN|YT` (link mốc từ trang góp ý) ⇒ mở bài rồi tua tới đó, đúng track.
+          const tQ = Number(qs?.get('t'));
+          if (requestedLessonId && target.id === requestedLessonId && Number.isFinite(tQ) && tQ > 0) {
+            tuaChoRef.current = tQ;
+            const trQ = qs?.get('track');
+            if (trQ === 'VI' || trQ === 'EN' || trQ === 'YT') trackPrefRef.current = trQ;
+          }
           setCurrentLesson(target);
           // Mục chứa bài đang mở phải bung ra, nếu không người quay về từ
           // /simulation thấy đúng bài ở khung chính nhưng thanh bên thì đóng
@@ -566,6 +596,18 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
     // <video> element leaves the old buffer and the old duration behind.
     setVideoKey(k => k + 1);
     setVideoCompleted(false);
+  };
+
+  /** Bấm mốc trong danh sách góp ý ⇒ tua video; mốc của track khác ⇒ chuyển track rồi tua (player mới tua khi sẵn sàng). */
+  const tuaToiMoc = (giay: number, track: VideoTrackKey | null) => {
+    khungVideoRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    if (track && track !== activeTrack && videoTracks.some(t => t.track === track)) {
+      tuaChoRef.current = giay;
+      chooseTrack(track);
+      return;
+    }
+    if (playerRef.current) playerRef.current.tua(giay);
+    else toast.info(locale === 'en' ? 'This video cannot be seeked automatically — drag to the time yourself.' : 'Video này không cho tua tự động — kéo tới mốc đó giúp mình nhé.');
   };
 
   const toggleSection = (id: number) => {
@@ -1019,7 +1061,7 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
                     )}
                   </div>
 
-                  <div className="aspect-video bg-black rounded-2xl overflow-hidden">
+                  <div ref={khungVideoRef} className="aspect-video bg-black rounded-2xl overflow-hidden scroll-mt-20">
                     {(() => {
                       const platform = activeVideo?.platform || 'EMBED';
                       const url = activeVideo?.url || '';
@@ -1040,6 +1082,7 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
                             key={frameKey}
                             src={url}
                             startAt={resumeAt}
+                            dangKy={dangKyPlayer}
                             onProgressTick={savePosition}
                             onDuration={(secs) => { if (lessonDuration(currentLesson) === 0) reportDuration(currentLesson.id, secs); }}
                             onEnded={() => {
@@ -1067,6 +1110,7 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
                             key={frameKey}
                             videoId={videoId}
                             title={currentLesson.title}
+                            dangKy={dangKyPlayer}
                             onDuration={(secs) => { if (lessonDuration(currentLesson) === 0) reportDuration(currentLesson.id, secs); }}
                             onEnded={() => {
                               if (!isCompleted(currentLesson.id)) markComplete();
@@ -1133,6 +1177,18 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
                     duongDanVe={`/courses/${slug}/learn?lessonId=${currentLesson.id}`}
                     track={activeTrack}
                   />
+
+                  {/* Góp ý nhanh NGAY dưới video (14/11/2026): chip loại + mốc video tự điền + danh sách góp ý của bài. */}
+                  <GopYNhanhBai
+                    courseSlug={slug}
+                    lessonId={currentLesson.id}
+                    locale={locale}
+                    daDangNhap={daDangNhap}
+                    coVideo={Boolean(activeVideo?.url)}
+                    track={activeTrack}
+                    layGiay={layGiayVideo}
+                    tuaToi={tuaToiMoc}
+                  />
                 </div>
               )}
 
@@ -1145,14 +1201,6 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
                   {currentLesson.description && (
                     <p className="text-text-secondary leading-relaxed">{pickLang(currentLesson.description, locale)}</p>
                   )}
-                  {/* Góp ý & bổ sung (14/11/2026): điền sẵn bài đang học — docs/gop-y-khoa-hoc.md. */}
-                  <Link
-                    href={`/courses/${slug}/gop-y?lessonId=${currentLesson.id}`}
-                    className="mt-2 inline-flex items-center gap-1.5 text-xs font-medium text-text-muted transition-colors hover:text-neon-violet"
-                  >
-                    <MessageSquarePlus className="w-3.5 h-3.5" aria-hidden />
-                    {CHU_GOP_Y[locale === 'en' ? 'en' : 'vi'].gopYChoBai}
-                  </Link>
                 </div>
                 <button
                   onClick={markComplete}
@@ -1326,6 +1374,22 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
                 </div>
               )}
 
+              {/* Bài KHÔNG có video: ô góp ý nhanh ở đáy bài (bài có video thì nó nằm ngay dưới video, ở trên). */}
+              {videoTracks.length === 0 && (
+                <div className="mb-8">
+                  <GopYNhanhBai
+                    courseSlug={slug}
+                    lessonId={currentLesson.id}
+                    locale={locale}
+                    daDangNhap={daDangNhap}
+                    coVideo={false}
+                    track={null}
+                    layGiay={layGiayVideo}
+                    tuaToi={tuaToiMoc}
+                  />
+                </div>
+              )}
+
               {/* Navigation */}
               <div className="flex items-center justify-between pt-6 border-t border-darkborder/30">
                 {prevLesson ? (
@@ -1362,6 +1426,9 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
   );
 }
 
+/** Bộ điều khiển player cho ô góp ý nhanh: đọc mốc hiện tại (giây, null = không đọc được) + tua tới mốc. */
+type BoDieuKhienVideo = { layGiay: () => number | null; tua: (giay: number) => void };
+
 // ─── YouTube player (IFrame API) ───────────────────────────────────────────
 // Renders a lesson's YouTube video via the IFrame API instead of a bare
 // <iframe> so we can (1) read the real duration on ready → fill in the
@@ -1371,11 +1438,14 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
 function LessonYouTubePlayer({
   videoId,
   title,
+  dangKy,
   onDuration,
   onEnded,
 }: {
   videoId: string;
   title: string;
+  /** Góp ý nhanh: đăng ký đọc mốc / tua khi player sẵn sàng (trả về hàm huỷ đăng ký). */
+  dangKy?: (h: BoDieuKhienVideo) => () => void;
   onDuration?: (seconds: number) => void;
   onEnded?: () => void;
 }) {
@@ -1383,8 +1453,10 @@ function LessonYouTubePlayer({
   const playerRef = useRef<{ destroy?: () => void } | null>(null);
   const onDurationRef = useRef(onDuration);
   const onEndedRef = useRef(onEnded);
+  const dangKyRef = useRef(dangKy);
   onDurationRef.current = onDuration;
   onEndedRef.current = onEnded;
+  dangKyRef.current = dangKy;
 
   useEffect(() => {
     const wrapper = wrapperRef.current;
@@ -1397,6 +1469,7 @@ function LessonYouTubePlayer({
     target.className = 'w-full h-full';
     wrapper.appendChild(target);
 
+    let huyDangKy: (() => void) | null = null;
     loadYouTubeAPI().then(() => {
       if (cancelled || !window.YT?.Player) return;
       playerRef.current = new window.YT.Player(elId, {
@@ -1404,8 +1477,16 @@ function LessonYouTubePlayer({
         playerVars: { rel: 0, modestbranding: 1, playsinline: 1 },
         events: {
           onReady: (e: unknown) => {
-            const d = (e as { target?: { getDuration?: () => number } })?.target?.getDuration?.();
+            const p = (e as { target?: { getDuration?: () => number; getCurrentTime?: () => number; seekTo?: (s: number, allowSeekAhead: boolean) => void; playVideo?: () => void } })?.target;
+            const d = p?.getDuration?.();
             if (d && d > 0) onDurationRef.current?.(d);
+            // IFrame API cho đọc mốc (getCurrentTime) + tua (seekTo) ⇒ góp ý nhanh tự điền mốc cả ở track YT.
+            if (p && !cancelled && dangKyRef.current) {
+              huyDangKy = dangKyRef.current({
+                layGiay: () => { const t = p.getCurrentTime?.(); return typeof t === 'number' && Number.isFinite(t) ? t : null; },
+                tua: (giay) => { try { p.seekTo?.(giay, true); p.playVideo?.(); } catch { /* player đã huỷ */ } },
+              });
+            }
           },
           onStateChange: (e: unknown) => {
             if ((e as { data?: number })?.data === window.YT.PlayerState.ENDED) onEndedRef.current?.();
@@ -1416,6 +1497,7 @@ function LessonYouTubePlayer({
 
     return () => {
       cancelled = true;
+      huyDangKy?.();
       try { playerRef.current?.destroy?.(); } catch { /* ignore */ }
       try { wrapper.innerHTML = ''; } catch { /* ignore */ }
     };
@@ -1435,12 +1517,15 @@ function CourseVideoPlayer({
   src,
   onEnded,
   startAt = 0,
+  dangKy,
   onProgressTick,
   onDuration,
 }: {
   src: string;
   onEnded?: () => void;
   startAt?: number;
+  /** Góp ý nhanh: đăng ký đọc mốc / tua (trả về hàm huỷ đăng ký). */
+  dangKy?: (h: BoDieuKhienVideo) => () => void;
   onProgressTick?: (seconds: number, force?: boolean) => void;
   onDuration?: (seconds: number) => void;
 }) {
@@ -1449,6 +1534,28 @@ function CourseVideoPlayer({
   const didSeekRef = useRef(false);
   const onProgressRef = useRef(onProgressTick);
   onProgressRef.current = onProgressTick;
+
+  // Góp ý nhanh: mốc = currentTime của chính <video> này; tua trước khi có metadata ⇒ chờ loadedmetadata (và chặn
+  // bước "tiếp tục từ chỗ đã xem" ghi đè mốc vừa tua).
+  useEffect(() => {
+    if (!dangKy) return;
+    return dangKy({
+      layGiay: () => { const v = videoRef.current; return v && Number.isFinite(v.currentTime) ? v.currentTime : null; },
+      tua: (giay) => {
+        const v = videoRef.current;
+        if (!v) return;
+        didSeekRef.current = true;
+        const lam = () => {
+          const t = Number.isFinite(v.duration) && v.duration > 0 ? Math.min(giay, Math.max(0, v.duration - 0.5)) : giay;
+          v.currentTime = t;
+          setCurrentTime(t);
+          v.play().catch(() => {});
+        };
+        if (v.readyState >= 1) lam();
+        else v.addEventListener('loadedmetadata', lam, { once: true });
+      },
+    });
+  }, [dangKy]);
 
   // On unmount (lesson change / navigate away) flush the final position
   // so resume is accurate even if the 12s throttle hadn't fired yet.

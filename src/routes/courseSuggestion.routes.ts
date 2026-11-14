@@ -6,7 +6,9 @@
  *   GET   /api/v1/courses/:slug/suggestions             công khai (ẩn AN; admin thấy hết), lọc trangThai/loai/lessonId, phân trang
  *   GET   /api/v1/courses/:slug/suggestions/dem         số góp ý theo trạng thái (nút ở hero + bộ lọc)
  *   GET   /api/v1/courses/:slug/suggestions/:id         một góp ý (link sâu ?id= từ thông báo admin)
- *   POST  /api/v1/courses/:slug/suggestions             cần đăng nhập — trần 5 góp ý/giờ/người, chặn nội dung trùng
+ *   POST  /api/v1/courses/:slug/suggestions             cần đăng nhập — trần 5 góp ý/giờ/người, chặn nội dung trùng;
+ *                                                       `nhanh: true` (ô góp ý nhanh trong trang học: bắt buộc bài, mốc
+ *                                                       video thoiDiemGiay/nguonVideo, tuSai/nenDoc) ⇒ trần 20/giờ/người
  *   POST  /api/v1/courses/:slug/suggestions/:id/vote    cần đăng nhập — bật/tắt "Tôi cũng thấy cần"
  *
  *   GET   /api/v1/admin/course-suggestions?trangThai=MOI   mọi khoá
@@ -26,10 +28,11 @@ import {
 export const courseSuggestionRouter = Router({ mergeParams: true });
 export const adminCourseSuggestionRouter = Router();
 
-// Lưới thô theo IP (chống bot trước khi chạm CSDL); trần 5/giờ/NGƯỜI đếm trong service.
+// Lưới thô theo IP (chống bot trước khi chạm CSDL); trần 5/giờ/NGƯỜI (20 với ô góp ý nhanh) đếm trong service.
+// 60 chứ không 30 (14/11/2026): ô góp ý nhanh cho một người tới 20/giờ, và cả lớp ngồi chung một IP trường (NAT).
 const tranGuiIp = rateLimit({
   windowMs: 60 * 60 * 1000,
-  limit: 30,
+  limit: 60,
   standardHeaders: true,
   legacyHeaders: false,
   message: { success: false, message: 'Gửi hơi nhiều từ cùng một mạng — thử lại sau ít phút.', code: 'GOP_Y_KHOA_RATE_LIMIT' },
@@ -88,7 +91,7 @@ courseSuggestionRouter.get('/:id', optionalAuth, async (req: Request, res: Respo
     if (r.courseId !== khoa.id || (r.trangThai === 'AN' && !admin)) {
       throw new AppError('Không tìm thấy góp ý', 404, 'SUGGESTION_NOT_FOUND');
     }
-    res.json({ success: true, data: chuanHoa(r) });
+    res.json({ success: true, data: chuanHoa(r, false, req.userId ?? null) });
   } catch (e) {
     next(e);
   }

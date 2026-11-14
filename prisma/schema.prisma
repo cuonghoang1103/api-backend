@@ -1201,10 +1201,18 @@ model CourseSuggestion {
   vaiTro         String    @default("HOC_VIEN") @map("vai_tro") @db.VarChar(20)
   /// Tên model/agent khi vaiTro = AI_AGENT (bắt buộc khi đó)
   tenAi          String?   @map("ten_ai") @db.VarChar(100)
-  /// THIEU_KIEN_THUC | SAI_SOT | LIEN_TUONG | NANG_CAP | KHAC
+  /// THIEU_KIEN_THUC | SAI_SOT | LIEN_TUONG | NANG_CAP | KHAC | DOC_SAI | KHONG_HIEU (2 loại cuối: ô góp ý nhanh trong trang học)
   loai           String    @db.VarChar(24)
   noiDung        String    @map("noi_dung") @db.Text
   nguon          String?   @db.VarChar(1000)
+  /// Ô góp ý nhanh trong trang học (14/11/2026): mốc video lúc góp ý, giây tính từ ĐẦU video (0–86400) — null = không gắn mốc
+  thoiDiemGiay   Int?      @map("thoi_diem_giay")
+  /// Track video đang xem lúc góp ý: VI | EN | YT (null = không có video / góp ý ở trang chung)
+  nguonVideo     String?   @map("nguon_video") @db.VarChar(4)
+  /// Loại DOC_SAI: từ/câu giọng đọc bị sai/vấp (tuỳ chọn)
+  tuSai          String?   @map("tu_sai") @db.Text
+  /// Loại DOC_SAI: nên đọc là (tuỳ chọn)
+  nenDoc         String?   @map("nen_doc") @db.Text
   /// MOI | DANG_DOI_CHIEU | DA_CO | NEN_BO_SUNG | DA_LEN_KE_HOACH | DA_BO_SUNG | KHONG_CHINH_XAC | TRUNG | AN
   trangThai      String    @default("MOI") @map("trang_thai") @db.VarChar(24)
   ketQuaDoiChieu String?   @map("ket_qua_doi_chieu") @db.Text

@@ -1,13 +1,15 @@
 import type { Metadata } from 'next';
-import { headers } from 'next/headers';
 import { getServerApiBaseUrl } from '@/lib/server-api';
 import { pickLang } from '@/lib/utils';
+import type { Course } from '@/types';
 import CoursePageClient from './CoursePageClient';
 import { OG_SITE, ogImageOr } from '@/lib/og/pickImage'; // UX-D
 
-// SEO / social-share metadata rendered SERVER-side; the interactive course
-// page stays client-side and fetches its own data as before. `force-dynamic`
-// keeps generateMetadata out of the build (backend isn't up during build).
+// SEO / social-share metadata AND the first paint of the course page are rendered SERVER-side (14/11/2026): before,
+// the page shipped only a spinner (`loading = true` until JS fetched the course) ⇒ Googlebot / link previews / AI
+// readers saw no <h1>, no description, no table of contents. The client still refetches with the viewer's session
+// for the per-user parts (enrolled, progress, "continue" button). `force-dynamic` keeps this out of the build
+// (backend isn't up during build).
 export const dynamic = 'force-dynamic';
 
 const CACHE_TTL_SECONDS = 300;
@@ -16,12 +18,22 @@ interface PageProps {
   params: { slug: string };
 }
 
-async function getCourse(slug: string) {
+/**
+ * PUBLIC view of the course — deliberately WITHOUT the viewer's cookie: the result is cached (revalidate) and handed
+ * to the client as `initialCourse`, so it must never carry one person's enrolment/progress/admin flags. `?gon=1` is the
+ * same lean landing-page payload the client asks for (no lesson `content`, plus `baoGom`), so the numbers in the server
+ * HTML match what the client renders after its own fetch. generateMetadata and the page call this with identical
+ * arguments ⇒ Next dedupes them into one backend request.
+ */
+// Course & loose extras: generateMetadata also probes legacy field names (name/summary/coverImage…).
+type KhoaCongKhai = Course & Record<string, any>; // eslint-disable-line @typescript-eslint/no-explicit-any
+
+async function getCourse(slug: string): Promise<KhoaCongKhai | null> {
   try {
     const res = await fetch(
-      `${getServerApiBaseUrl()}/api/v1/courses/${encodeURIComponent(slug)}`,
+      `${getServerApiBaseUrl()}/api/v1/courses/${encodeURIComponent(slug)}?gon=1`,
       {
-        headers: { cookie: headers().get('cookie') ?? '', accept: 'application/json' },
+        headers: { accept: 'application/json' },
         next: { revalidate: CACHE_TTL_SECONDS },
       },
     );
@@ -77,9 +89,24 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
+/** Máy chủ trả "Vietnamese"/"English"; schema.org ưu tiên mã BCP 47. */
+const MA_NGON_NGU: Record<string, string> = { Vietnamese: 'vi', English: 'en', Japanese: 'ja', Chinese: 'zh', Korean: 'ko' };
+
+/** "PT2H15M" — schema.org Duration (ISO 8601). Dưới 1 phút ⇒ không khai. */
+function isoThoiLuong(giay: number): string | undefined {
+  if (!giay || giay < 60) return undefined;
+  const h = Math.floor(giay / 3600);
+  const m = Math.round((giay % 3600) / 60);
+  return `PT${h ? `${h}H` : ''}${m ? `${m}M` : ''}`;
+}
+
 export default async function CourseDetailPage({ params }: PageProps) {
   const course = await getCourse(params.slug);
 
+  const url = `https://cuongthai.com/courses/${params.slug}`;
+  const giayVideo: number = course?.baoGom?.giayVideo ?? course?.totalDurationSeconds ?? 0;
+  // Cùng luật với CoursePageClient: accessType là nguồn chuẩn, isFree chỉ là dự phòng.
+  const mienPhi = (course?.accessType || (course?.isFree ? 'FREE' : 'PAID')) === 'FREE';
   const jsonLd = course
     ? {
         '@context': 'https://schema.org',
@@ -87,12 +114,31 @@ export default async function CourseDetailPage({ params }: PageProps) {
         name: pickLang(course.title || course.name, 'en'),
         description: toText(pickLang(course.shortDescription || course.summary || course.description, 'en')),
         image: course.thumbnailUrl || course.thumbnail || course.coverImage || course.image || undefined,
-        url: `https://cuongthai.com/courses/${params.slug}`,
+        url,
+        ...(course.courseCode ? { courseCode: course.courseCode } : {}),
+        ...(course.language ? { inLanguage: MA_NGON_NGU[course.language] ?? course.language } : {}),
         provider: {
           '@type': 'Organization',
           name: 'CuongThai',
           sameAs: 'https://cuongthai.com',
         },
+        ...(mienPhi
+          ? { isAccessibleForFree: true, offers: { '@type': 'Offer', category: 'Free', price: 0, priceCurrency: 'VND' } }
+          : {}),
+        hasCourseInstance: {
+          '@type': 'CourseInstance',
+          courseMode: 'Online',
+          ...(isoThoiLuong(giayVideo) ? { courseWorkload: isoThoiLuong(giayVideo) } : {}),
+        },
+        // Mục lục (tên chương) — cùng dữ liệu đang hiện trong HTML; cắt 50 chương cho gọn.
+        ...((course.sections?.length ?? 0) > 0
+          ? {
+              syllabusSections: (course.sections ?? []).slice(0, 50).map((sec) => ({
+                '@type': 'Syllabus',
+                name: pickLang(sec.title, 'en'),
+              })),
+            }
+          : {}),
       }
     : null;
 
@@ -104,7 +150,8 @@ export default async function CourseDetailPage({ params }: PageProps) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
         />
       )}
-      <CoursePageClient />
+      {/* initialCourse = bản CÔNG KHAI ⇒ hero + mục lục có ngay trong HTML server; lỗi/404 ⇒ null ⇒ client tự tải như cũ. */}
+      <CoursePageClient initialCourse={course} />
     </>
   );
 }

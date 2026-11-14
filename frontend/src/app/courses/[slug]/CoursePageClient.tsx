@@ -321,7 +321,13 @@ function OldCourseAccessOptions({
   );
 }
 
-export default function CourseDetailPage() {
+/**
+ * `initialCourse` (14/11/2026) = bản CÔNG KHAI của khoá do `page.tsx` tải phía server (không cookie) ⇒ hero, mô tả,
+ * mục lục nằm sẵn trong HTML cho máy tìm kiếm / xem trước link. Lần render đầu ở client dùng ĐÚNG dữ liệu đó (không
+ * lệch hydrate); sau mount trang vẫn tải lại bằng phiên người xem để lấy phần theo người (đã ghi danh, tiến độ, nút
+ * học tiếp, quyền admin). null (máy chủ lỗi / 404 / khoá nháp chỉ admin thấy) ⇒ y như cũ: spinner rồi client tải.
+ */
+export default function CourseDetailPage({ initialCourse = null }: { initialCourse?: Course | null }) {
   const params = useParams();
   const router = useRouter();
   const slug = params.slug as string;
@@ -336,15 +342,21 @@ export default function CourseDetailPage() {
   const en = locale === 'en';
   const t = CHU_KHOA[en ? 'en' : 'vi'];
   const c = CHU[en ? 'en' : 'vi'];
-  const [course, setCourse] = useState<Course | null>(null);
+  const [course, setCourse] = useState<Course | null>(initialCourse);
   const [reviews, setReviews] = useState<CourseReview[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!initialCourse);
   const [enrolling, setEnrolling] = useState(false);
   const [buying, setBuying] = useState(false);
   const [activatingCode, setActivatingCode] = useState(false);
   const [accessCode, setAccessCode] = useState('');
   const [codeError, setCodeError] = useState('');
-  const [expandedSections, setExpandedSections] = useState<Set<number>>(new Set());
+  // Chương đầu mở sẵn — cả ở HTML server (bài của chương 1 có trong trang) lẫn sau khi client tự tải.
+  const [expandedSections, setExpandedSections] = useState<Set<number>>(
+    () => new Set(initialCourse?.sections?.[0]?.id ? [initialCourse.sections[0].id] : []),
+  );
+  // Lượt tải ĐẦU TIÊN khi đã có initialCourse: tải lặng (không spinner, không gập lại chương người dùng vừa mở,
+  // lỗi thì giữ bản công khai). Đổi slug trong cùng instance ⇒ hành vi cũ.
+  const dungBanServerRef = useRef(Boolean(initialCourse));
   // Review form (enrolled learners only).
   const [reviewRating, setReviewRating] = useState(0);
   const [reviewHover, setReviewHover] = useState(0);
@@ -390,8 +402,10 @@ export default function CourseDetailPage() {
   }
 
   useEffect(() => {
+    const taiLang = dungBanServerRef.current;
+    dungBanServerRef.current = false;
     const fetch = async () => {
-      setLoading(true);
+      if (!taiLang) setLoading(true);
       try {
         const res = await coursesApi.getBySlug(slug, true);
         setCourse(res.data.data);
@@ -413,13 +427,14 @@ export default function CourseDetailPage() {
         }
         // Auto-expand first section
         const data = res.data.data;
-        if (data?.sections?.[0]?.id) {
+        if (!taiLang && data?.sections?.[0]?.id) {
           setExpandedSections(new Set([data.sections[0].id]));
         }
       } catch (err: any) {
         // eslint-disable-next-line no-console
         console.error('[course-detail] Fetch error', err?.response?.status, err?.message);
-        toast.error(en ? 'Course not found' : 'Không tìm thấy khoá học');
+        // Đang hiện bản công khai từ server ⇒ giữ nguyên, không báo "không tìm thấy" sai.
+        if (!taiLang) toast.error(en ? 'Course not found' : 'Không tìm thấy khoá học');
       } finally {
         setLoading(false);
       }

@@ -18,6 +18,13 @@ Mẫu một mục:
 
 ---
 
+### 14/11/2026 — Web (SEO) — Trang khoá học /courses/[slug] trả HTML không có nội dung khoá
+- **Triệu chứng:** `curl -s https://cuongthai.com/courses/nextjs -A Googlebot | grep -c '<h1'` ⇒ 0. Máy tìm kiếm / bot xem trước link / AI đọc trang chỉ thấy spinner: không tên khoá trong thân trang, không mô tả, không mục lục (chỉ có `<title>`/og/JSON-LD trong `<head>`). Áp cho MỌI khoá Courses + Academy.
+- **Nguyên nhân:** `frontend/src/app/courses/[slug]/page.tsx` ĐÃ tải khoá phía server (cho `generateMetadata` + JSON-LD) nhưng vứt đi, trả `<CoursePageClient />` không props; `CoursePageClient.tsx` khởi đầu `loading = true` và vẽ spinner cho tới khi JS tự gọi `GET /courses/:slug?gon=1` — `<h1>` chỉ có sau khi JS chạy.
+- **Cách sửa:** `page.tsx` tải bản CÔNG KHAI (`?gon=1`, KHÔNG gửi cookie ⇒ cache `revalidate 300` không mang cờ ghi danh/tiến độ của ai) và truyền `initialCourse` xuống; client khởi tạo `course`/`loading`/chương đầu mở từ đó (render đầu trùng HTML server ⇒ không lệch hydrate), rồi tải lại LẶNG bằng phiên người xem cho phần theo người; server lỗi/404 ⇒ `initialCourse = null` ⇒ y như cũ. JSON-LD `Course` thêm `courseCode`, `inLanguage` (mã BCP 47), `offers`/`isAccessibleForFree` (theo `accessType`), `hasCourseInstance` (Online + thời lượng), `syllabusSections`.
+- **Ảnh hưởng:** SEO + xem trước link của toàn bộ trang khoá từ khi trang chuyển sang client (chưa rõ ngày). Người dùng thật không thấy lỗi (chỉ một nhịp spinner).
+- **Bài học:** "có `generateMetadata`" ≠ "trang có nội dung cho bot" — kiểm bằng `curl … | grep -c '<h1'`, không bằng mắt trên trình duyệt (JS đã chạy). Dữ liệu SSR dùng chung cache phải là bản ẩn danh; phần theo người chỉ đọc sau mount.
+
 ### 14/11/2026 — Web (CSS) — Huy hiệu ngôn ngữ ở /repos và vòng ở /creator mất màu
 - **Triệu chứng:** trang /repos: huy hiệu Shell mất cả 3 màu, Swift/C++/C# mất màu nền, JavaScript mất màu chữ; /creator thiếu vòng `ring-cyan-500/30`.
 - **Nguyên nhân:** `frontend/tailwind.config.ts` chỉ quét `src/pages|components|app` — lớp Tailwind khai trong `src/lib/repos.ts`, `src/lib/studio-meta.ts` không bao giờ được sinh ra CSS (8 lớp vắng khỏi CSS prod).

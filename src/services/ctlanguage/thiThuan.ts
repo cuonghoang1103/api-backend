@@ -19,7 +19,7 @@ export type NnThi = (typeof NN_THI)[number];
 export const GIONG_THI = ['uk-nu', 'uk-nam', 'us-nu', 'us-nam', 'au-nu', 'au-nam', 'ja-nu', 'ja-nam', 'ja2-nu', 'ja2-nam', 'zh-nu', 'zh-nam'] as const;
 const GIONG_THEO_NN: Record<NnThi, RegExp> = { en: /^(uk|us|au)-/, ja: /^ja2?-/, zh: /^zh-/ };
 
-export const KIEU_CAU = ['chon', 'sapXep', 'dien', 'noi'] as const;
+export const KIEU_CAU = ['chon', 'sapXep', 'dien', 'noi', 'viet'] as const;
 export type KieuCau = (typeof KIEU_CAU)[number];
 export const KY_NANG = ['nghe', 'doc', 'viet', 'noi', 'tu-vung', 'ngu-phap'] as const;
 export type KyNang = (typeof KY_NANG)[number];
@@ -33,14 +33,20 @@ export interface CauThi {
   nghe?: CauNghe[];
   /** Chữ hiện trên màn (đề bài). Câu nghe thuần có thể bỏ trống. */
   de?: string;
-  /** chon: 2–4 lựa chọn. */
+  /** chon: 2–10 lựa chọn (đề cũ 2–4; hộp chữ cái A–J của IELTS / HSK 4 dùng tới 10). */
   luaChon?: string[];
   /** chon: chỉ số (0-based) · sapXep/dien: danh sách đáp án chấp nhận. */
   dapAn?: number | string[];
   /** sapXep: các mảnh (đã xáo sẵn). */
   manh?: string[];
-  /** noi: câu để nhắc lại / câu trả lời mẫu. */
+  /** noi: câu để nhắc lại / câu trả lời mẫu · viet: bài mẫu. */
   mau?: string;
+  /** viet (bài viết tự do, AI chấm — IELTS Writing): 1 = Task 1 (mô tả số liệu), 2 = Task 2 (bài luận). */
+  vietTask?: 1 | 2;
+  /** viet: số từ tối thiểu (IELTS Task 1 = 150, Task 2 = 250). */
+  vietToiThieu?: number;
+  /** viet: số liệu / hình của đề ở dạng CHỮ — hiện cho người làm (app không vẽ biểu đồ) và gửi kèm cho AI chấm. */
+  moTaHinh?: string;
   /** noi: nhacLai (nghe rồi nhắc lại — máy chấm phát âm) | traLoi (trả lời câu hỏi — tự chấm theo mẫu). */
   noiKieu?: 'nhacLai' | 'traLoi';
   /** Giải thích tiếng Việt: vì sao đúng, bẫy ở đâu, từ/ngữ pháp liên quan. */
@@ -59,8 +65,24 @@ export interface NhomCau {
   nghe?: CauNghe[];
   /** Số lần được nghe (mặc định 2; JLPT nghe 1 lần). */
   ngheLan?: number;
+  /** Hình vẽ đơn giản (bản đồ / sơ đồ IELTS) — cùng khuôn `Hinh` của phòng thi web (`thi-may/de/types.ts`). */
+  hinh?: HinhThi;
   cau: CauThi[];
 }
+
+/** Nét vẽ của hình (bản đồ, sơ đồ) — app vẽ bằng Canvas. `o` = ô số câu, `chu` = chữ cái trên bản đồ. */
+export type NetHinh =
+  | { t: 'rect'; x: number; y: number; w: number; h: number; nhan?: string; nen?: string; bo?: number }
+  | { t: 'circle'; x: number; y: number; r: number; nen?: string; nhan?: string }
+  | { t: 'line'; d: [number, number][]; mui?: boolean; dut?: boolean; day?: number; mau?: string }
+  | { t: 'path'; d: string; nen?: string; mau?: string; day?: number }
+  | { t: 'text'; x: number; y: number; s: string; co?: number; dam?: boolean; giua?: boolean; nghieng?: boolean }
+  | { t: 'o'; n: number; x: number; y: number }
+  | { t: 'chu'; k: string; x: number; y: number };
+export interface HinhThi { w: number; h: number; ve: NetHinh[]; chuThich?: string }
+
+/** Bảng quy đổi số câu đúng ⇒ band (IELTS Listening / Reading): [[số câu đúng tối thiểu, band], …] giảm dần. */
+export type BangBand = Array<[number, number]>;
 
 export interface PhanThi {
   id: string;
@@ -69,6 +91,8 @@ export interface PhanThi {
   phut: number;
   diemToiDa: number;
   nhom: NhomCau[];
+  /** Chỉ IELTS Listening / Reading: quy đổi số câu đúng ⇒ band để phiếu điểm ghi "≈ band 6.5". */
+  band?: BangBand;
 }
 
 export interface MucXepLop { cap: string; nhan: string; loTrinh: string }
@@ -105,6 +129,12 @@ export const SO_CAU_CHUAN: Record<string, Record<string, number>> = {
   N5: { 'tu-vung': 21, 'ngu-phap': 22, nghe: 24 },
   N4: { 'tu-vung': 28, 'ngu-phap': 29, nghe: 28 },
   'IELTS-MINI': { nghe: 20, doc: 20 },
+  // 15/11/2026: HSK 4 (听力 10+15+20 · 阅读 10+10+20 · 书写 10+5), JLPT N3 (文字・語彙 8+6+11+5+5 · 文法 13+5+5 + 読解 4+6+4+2 ·
+  // 聴解 6+6+3+4+9), IELTS đủ đề (Listening 4 part × 10 · Reading 3 passage, 40 câu) + IELTS Writing (Task 1 + Task 2).
+  HSK4: { nghe: 45, doc: 40, viet: 15 },
+  N3: { 'tu-vung': 35, 'ngu-phap': 39, nghe: 28 },
+  IELTS: { nghe: 40, doc: 40 },
+  'IELTS-VIET': { viet: 2 },
 };
 
 /** Thứ tự + tên hiển thị các cấp theo ngôn ngữ (danh mục phòng thi). */
@@ -113,14 +143,18 @@ export const CAP_THEO_NN: Record<NnThi, Array<{ kyThi: string; cap: string; ten:
     { kyThi: 'HSK', cap: 'HSK1', ten: 'HSK 1', moTa: 'Nghe 20 câu · Đọc 20 câu · 40 phút · đạt 120/200' },
     { kyThi: 'HSK', cap: 'HSK2', ten: 'HSK 2', moTa: 'Nghe 35 câu · Đọc 25 câu · 55 phút · đạt 120/200' },
     { kyThi: 'HSK', cap: 'HSK3', ten: 'HSK 3', moTa: 'Nghe 40 · Đọc 30 · Viết 10 · 90 phút · đạt 180/300' },
+    { kyThi: 'HSK', cap: 'HSK4', ten: 'HSK 4', moTa: 'Nghe 45 · Đọc 40 · Viết 15 · 105 phút · đạt 180/300' },
     { kyThi: 'HSKK', cap: 'HSKK-SO', ten: 'HSKK Sơ cấp', moTa: 'Nói: nhắc lại 15 · nghe-trả lời 10 · trả lời 2 · đạt 60/100' },
   ],
   ja: [
     { kyThi: 'JLPT', cap: 'N5', ten: 'JLPT N5', moTa: '文字・語彙 21 · 文法・読解 22 · 聴解 24 · 90 phút · đạt 80/180' },
     { kyThi: 'JLPT', cap: 'N4', ten: 'JLPT N4', moTa: '文字・語彙 28 · 文法・読解 29 · 聴解 28 · 115 phút · đạt 90/180' },
+    { kyThi: 'JLPT', cap: 'N3', ten: 'JLPT N3', moTa: '文字・語彙 35 · 文法・読解 39 · 聴解 28 · 140 phút · đạt 95/180' },
   ],
   en: [
     { kyThi: 'IELTS', cap: 'IELTS-MINI', ten: 'IELTS Mini', moTa: 'Listening 20 câu · Reading 20 câu · 45 phút · đạt 24/40' },
+    { kyThi: 'IELTS', cap: 'IELTS', ten: 'IELTS Academic · Nghe + Đọc', moTa: 'Listening 40 câu · Reading 40 câu · 90 phút · phiếu điểm quy ra band' },
+    { kyThi: 'IELTS', cap: 'IELTS-VIET', ten: 'IELTS Academic · Writing', moTa: 'Task 1 (150 từ) + Task 2 (250 từ) · 60 phút · AI chấm band theo 4 tiêu chí' },
   ],
 };
 
@@ -194,6 +228,7 @@ export function kiemDe(de: DeThi): string[] {
     if (!(KY_NANG as readonly string[]).includes(p.kyNang)) loi.push(`${op}: kyNang không hợp lệ`);
     if (!(p.phut > 0 && p.phut <= 120)) loi.push(`${op}: phut phải 1–120`);
     if (!(p.diemToiDa > 0)) loi.push(`${op}: diemToiDa phải > 0`);
+    if (p.band !== undefined && !(Array.isArray(p.band) && p.band.length && p.band.every((b, i) => Array.isArray(b) && b.length === 2 && b[1] >= 0 && b[1] <= 9 && (i === 0 || b[0] < p.band![i - 1]![0])))) loi.push(`${op}: band phải là [[số câu đúng, band], …] giảm dần`);
     tongDiem += p.diemToiDa || 0;
     if (!Array.isArray(p.nhom) || !p.nhom.length) { loi.push(`${op}: không có nhóm câu`); continue; }
     for (const [gi, g] of p.nhom.entries()) {
@@ -201,6 +236,7 @@ export function kiemDe(de: DeThi): string[] {
       if (!coChu(g.huongDan, 8)) loi.push(`${og}: thiếu huongDan (tiếng Việt, ≥ 8 ký tự)`);
       if (g.nghe !== undefined) kiemNghe(g.nghe, de.nn, og, loi);
       if (g.ngheLan !== undefined && !(g.ngheLan >= 1 && g.ngheLan <= 3)) loi.push(`${og}: ngheLan 1–3`);
+      if (g.hinh !== undefined && !(g.hinh && g.hinh.w > 0 && g.hinh.h > 0 && Array.isArray(g.hinh.ve) && g.hinh.ve.length)) loi.push(`${og}: hinh phải có w, h và ve`);
       if (!Array.isArray(g.cau) || !g.cau.length) { loi.push(`${og}: không có câu`); continue; }
       for (const c of g.cau) {
         const oc = `${o0}/câu ${c?.id}`;
@@ -215,7 +251,7 @@ export function kiemDe(de: DeThi): string[] {
         if (c.tu !== undefined && (!Array.isArray(c.tu) || c.tu.some((t) => !coChu(t)))) loi.push(`${oc}: tu phải là mảng chữ`);
         if (c.kieu === 'chon') {
           const lc = c.luaChon;
-          if (!Array.isArray(lc) || lc.length < 2 || lc.length > 4 || lc.some((x) => !coChu(x))) loi.push(`${oc}: luaChon phải có 2–4 lựa chọn không trống`);
+          if (!Array.isArray(lc) || lc.length < 2 || lc.length > 10 || lc.some((x) => !coChu(x))) loi.push(`${oc}: luaChon phải có 2–10 lựa chọn không trống`);
           else {
             if (new Set(lc.map((x) => x.trim())).size !== lc.length) loi.push(`${oc}: có lựa chọn trùng nhau ⇒ không còn đúng MỘT đáp án`);
             if (typeof c.dapAn !== 'number' || !Number.isInteger(c.dapAn) || c.dapAn < 0 || c.dapAn >= lc.length) loi.push(`${oc}: dapAn phải là chỉ số 0…${lc.length - 1}`);
@@ -235,6 +271,12 @@ export function kiemDe(de: DeThi): string[] {
           if (!coChu(c.mau)) loi.push(`${oc}: thiếu mau (câu nhắc lại / câu trả lời mẫu)`);
           if (c.noiKieu !== 'nhacLai' && c.noiKieu !== 'traLoi') loi.push(`${oc}: noiKieu phải là nhacLai|traLoi`);
           if (c.noiKieu === 'nhacLai' && !c.nghe) loi.push(`${oc}: câu nhắc lại phải có nghe`);
+        } else if (c.kieu === 'viet') {
+          if (!coChu(c.de, 20)) loi.push(`${oc}: bài viết phải có đề bài (≥ 20 ký tự)`);
+          if (!coChu(c.mau, 40)) loi.push(`${oc}: bài viết phải có bài mẫu (mau)`);
+          if (c.vietTask !== undefined && c.vietTask !== 1 && c.vietTask !== 2) loi.push(`${oc}: vietTask phải là 1|2`);
+          if (c.vietToiThieu !== undefined && !(c.vietToiThieu >= 10 && c.vietToiThieu <= 600)) loi.push(`${oc}: vietToiThieu 10–600`);
+          if (de.xepHang) loi.push(`${oc}: đề có bài viết tự do (AI chấm / tự chấm) không lên bảng xếp hạng`);
         }
       }
     }
@@ -246,7 +288,6 @@ export function kiemDe(de: DeThi): string[] {
     for (const k of Object.keys(demKy)) if (!(k in chuan)) loi.push(`${o0}: cấp ${de.cap} không có phần "${k}"`);
   }
   if (de.diemDat > tongDiem) loi.push(`${o0}: diemDat ${de.diemDat} lớn hơn tổng điểm ${tongDiem}`);
-
   if (de.kyThi === 'XEP-LOP') {
     const x = de.xepLop;
     if (!x || !(x.nguong > 0 && x.nguong <= 100) || !Array.isArray(x.muc) || x.muc.length !== de.phan.length || !x.vuot) loi.push(`${o0}: xepLop phải có nguong, vuot và muc đúng bằng số phần`);
@@ -256,16 +297,25 @@ export function kiemDe(de: DeThi): string[] {
   return loi;
 }
 
+/**
+ * Cấp của đề phải có trong danh mục phòng thi: `vinhDanh` từ chối cấp lạ ⇒ nộp bài xong mới vỡ, và đề không hiện ở phòng thi.
+ * Tách khỏi `kiemDe` (đề mẫu của test dùng cấp giả) — kho đề (`napDe`) + script kiểm gọi cả hai.
+ */
+export function kiemCap(de: DeThi): string[] {
+  if (de.kyThi === 'XEP-LOP' || !(NN_THI as readonly string[]).includes(de.nn)) return [];
+  return CAP_THEO_NN[de.nn].some((c) => c.cap === de.cap && c.kyThi === de.kyThi) ? [] : [`${de.id}: cấp "${de.cap}" (${de.kyThi}) chưa khai trong CAP_THEO_NN.${de.nn}`];
+}
+
 // ─── Chấm ────────────────────────────────────────────────────
 
-/** Câu trả lời: chon ⇒ số; sapXep/dien ⇒ chữ; noi ⇒ số 0…1 (mức đạt do máy chấm phát âm / người học tự chấm). */
+/** Câu trả lời: chon ⇒ số; sapXep/dien ⇒ chữ; noi/viet ⇒ số 0…1 (mức đạt do máy chấm phát âm · AI chấm bài viết · tự chấm). */
 export type TraLoi = Record<string, number | string | null | undefined>;
 
 /** Mức đạt của MỘT câu: 0…1. */
 export function chamCau(c: CauThi, tl: number | string | null | undefined): number {
   if (tl === null || tl === undefined || tl === '') return 0;
   if (c.kieu === 'chon') return typeof tl === 'number' && tl === c.dapAn ? 1 : 0;
-  if (c.kieu === 'noi') {
+  if (c.kieu === 'noi' || c.kieu === 'viet') {
     const v = typeof tl === 'number' ? tl : Number(tl);
     return Number.isFinite(v) ? Math.min(1, Math.max(0, v)) : 0;
   }

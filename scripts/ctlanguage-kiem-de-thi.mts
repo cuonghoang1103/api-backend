@@ -7,7 +7,7 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
-import { kiemDe, tatCaCau, type DeThi } from '../src/services/ctlanguage/thiThuan.js';
+import { kiemCap, kiemDe, tatCaCau, type DeThi } from '../src/services/ctlanguage/thiThuan.js';
 
 const thuMuc = path.join(process.cwd(), 'content', 'ctlanguage', 'de-thi');
 const chi = process.argv.slice(2);
@@ -18,7 +18,7 @@ for (const f of tep) {
   let de: DeThi;
   try { de = JSON.parse(fs.readFileSync(path.join(thuMuc, f), 'utf8')); }
   catch (e) { console.error(`✗ ${f}: JSON hỏng — ${(e as Error).message}`); hong++; continue; }
-  const loi = kiemDe(de);
+  const loi = [...kiemDe(de), ...kiemCap(de)];
   if (de.id !== f.replace(/\.json$/, '')) loi.push(`id "${de.id}" khác tên tệp`);
   const n = tatCaCau(de).length;
   tongCau += n;

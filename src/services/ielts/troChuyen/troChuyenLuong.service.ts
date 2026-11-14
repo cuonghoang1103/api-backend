@@ -157,6 +157,12 @@ export interface VaoLuot {
   lichSu?: unknown;
   /** Mở lại buổi đã lưu ⇒ câu mở là "quay lại rồi, nói tiếp câu lúc nãy" (không chào lại từ đầu). */
   tiepTuc?: unknown;
+  /**
+   * Lời đã ĐỊNH SẴN cho lượt này (thi nói với giám khảo AI — `ctlanguage/thiNoi.ts`, 15/11/2026): máy vẫn nghe người học
+   * (sự kiện `nghe`, chữ dài tới 3000 ký tự cho bài nói 2 phút) nhưng KHÔNG gọi model — đọc đúng câu này rồi xong.
+   * ⚠️ Chỉ máy chủ được đặt (từ kịch bản đề); tuyến nào nhận thân yêu cầu của app phải tự xoá trường này trước.
+   */
+  loiSan?: string;
 }
 
 /** Câu ngoại ngữ CuongMini hỏi gần nhất trong lịch sử (để nói tiếp đúng chỗ). */
@@ -206,9 +212,10 @@ export async function chayLuot(userId: number, v: VaoLuot, gui: (e: SuKienTC) =>
 
   if (!demLuot(userId)) { gui({ type: 'loi', lyDo: 'het_luot_ngay', message: 'Hôm nay bạn đã trò chuyện hết số lượt — mai mình nói tiếp nhé.' }); return; }
 
+  const loiSan = typeof v.loiSan === 'string' && v.loiSan.trim() ? v.loiSan.trim().slice(0, 1200) : '';
   if (!v.audio?.length) {
     const q = v.tiepTuc ? cauHoiGanNhat(sachLichSu(v.lichSu, 10)) : '';
-    const noi = q ? `Chào mừng bạn quay lại! Mình nói tiếp nhé. [en]${q}[/en]` : cauMoDau(chuDe);
+    const noi = loiSan || (q ? `Chào mừng bạn quay lại! Mình nói tiếp nhé. [en]${q}[/en]` : cauMoDau(chuDe));
     hang.them(noi);
     await hang.doi();
     moc.ttsDau = hang.dauLuc;
@@ -227,9 +234,17 @@ export async function chayLuot(userId: number, v: VaoLuot, gui: (e: SuKienTC) =>
   const nghe = (await pt.stt(v.audio, `noi.${duoi}`, mime, cauHoiCuoi.slice(0, 200), nn).catch((e) => {
     logger.warn('[tro-chuyen] Whisper lỗi', { error: (e as Error).message });
     return '';
-  })).trim().slice(0, 600);
+  })).trim().slice(0, loiSan ? 3000 : 600);
   moc.stt = Date.now() - t0;
   gui({ type: 'nghe', text: nghe, ms: moc.stt });
+  if (loiSan) {
+    // Giám khảo theo kịch bản: không nghe ra chữ cũng đi tiếp (phòng thi không hỏi lại) — app tự quyết có cho nói lại không.
+    if (signal?.aborted) return;
+    hang.them(loiSan);
+    await hang.doi();
+    gui({ type: 'xong', noi: loiSan, nghe, meta: { sua: null, tu: [], dich: '', cam: 'hoi' }, moc: { ...moc, ttsDau: hang.dauLuc, xong: Date.now() - t0 }, duong: 'mo-dau' });
+    return;
+  }
   if (!nghe) {
     const noi = 'Mình chưa nghe rõ bạn nói gì. Bạn lại gần micro rồi nói lại nhé.';
     hang.them(noi);
@@ -390,6 +405,32 @@ export function docKetQuaCham(raw: string, nn: NgonNguTC): KetQuaCham | null {
   };
 }
 
+/**
+ * MỘT lời gọi chấm (không chảy chữ) theo đúng đường của `chamBuoi`: cổng chính hãng (bật + có khoá + chưa chạm trần ngày)
+ * ⇒ hỏng thì lùi `llmComplete`. Trả '' khi cả hai hỏng. Dùng lại cho chấm thi nói HSKK (`ctlanguage/thiNoi.ts`).
+ */
+export async function goiChamNoi(userId: number, system: string, user: string): Promise<string> {
+  const cd = await caiDatTroChuyen();
+  const [coKey, daChi] = await Promise.all([coKeyKhaDung('language_tutor'), daChiHomNay(userId)]);
+  const { duong } = chonDuong({ bat: cd.bat, coKey, daDungNgayUsd: daChi, tranNgayUsd: cd.tranNgayUsd });
+  let raw = '';
+  if (duong === 'chinh-hang') {
+    try {
+      raw = (await goiVanBanChinhHang({
+        system, messages: [{ role: 'user', content: user }], model: modelTroChuyen(), hang: 'free', maxTokens: 1500,
+        userId, viec: 'language_tutor', nhanh: { effort: 'medium' }, signal: AbortSignal.timeout(40_000),
+      })).text;
+    } catch (e) { logger.warn('[tro-chuyen] chấm: cổng chính hãng lỗi — lùi', { error: (e as Error).message }); }
+  }
+  if (!raw) {
+    raw = (await llmComplete({
+      step: 'generation', purpose: 'language_tutor', feature: 'language', userId, maxTokens: 2500, maxRetries: 1, timeoutMs: 45_000,
+      system, messages: [{ role: 'user', content: user }],
+    }).catch(() => ({ text: '' }))).text ?? '';
+  }
+  return raw;
+}
+
 export async function chamBuoi(userId: number, b: { ngonNgu?: unknown; chuDeId?: unknown; tenBai?: unknown; luot?: unknown }): Promise<KetQuaCham | { lyDo: string }> {
   const nn = docNN(b.ngonNgu);
   const chuDe = timChuDe(nn, b.chuDeId, String(b.tenBai ?? ''));
@@ -403,23 +444,6 @@ export async function chamBuoi(userId: number, b: { ngonNgu?: unknown; chuDeId?:
     'Trả về DUY NHẤT một JSON: {"tieuChi":[{"ma":"FC|LR|GRA|PR hoặc troi_chay|tu_vung|ngu_phap|phat_am","ten":"tên tiếng Việt","diem":số,"nhanXet":"1 câu tiếng Việt cụ thể, trích ví dụ"}],"nhanXet":"2 câu tổng quát tiếng Việt","goiY":["3 việc cụ thể để lên điểm"]}',
   ].join('\n');
   const user = luot.map((t) => `${t.ai ? 'Giám khảo' : 'Người học'}: ${t.text.replace(/\[\/?en\]/gi, '')}`).join('\n');
-  const cd = await caiDatTroChuyen();
-  const [coKey, daChi] = await Promise.all([coKeyKhaDung('language_tutor'), daChiHomNay(userId)]);
-  const { duong } = chonDuong({ bat: cd.bat, coKey, daDungNgayUsd: daChi, tranNgayUsd: cd.tranNgayUsd });
-  let raw = '';
-  if (duong === 'chinh-hang') {
-    try {
-      raw = (await goiVanBanChinhHang({
-        system, messages: [{ role: 'user', content: user }], model: modelTroChuyen(), hang: 'free', maxTokens: 1500,
-        userId, viec: 'language_tutor', nhanh: { effort: 'medium' }, signal: AbortSignal.timeout(40_000),
-      })).text;
-    } catch (e) { logger.warn('[tro-chuyen] chấm buổi: Heshin lỗi — lùi', { error: (e as Error).message }); }
-  }
-  if (!raw) {
-    raw = (await llmComplete({
-      step: 'generation', purpose: 'language_tutor', feature: 'language', userId, maxTokens: 2500, maxRetries: 1, timeoutMs: 45_000,
-      system, messages: [{ role: 'user', content: user }],
-    }).catch(() => ({ text: '' }))).text ?? '';
-  }
+  const raw = await goiChamNoi(userId, system, user);
   return docKetQuaCham(raw, nn) ?? { lyDo: 'loi_ai' };
 }

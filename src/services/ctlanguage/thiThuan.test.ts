@@ -148,8 +148,8 @@ test('MỌI đề trong repo hợp lệ; đủ đề theo từng cấp; mỗi ng
   for (const d of de) {
     const cau = tatCaCau(d).map((x) => x.cau).filter((c) => c.kieu === 'chon' && (c.luaChon?.length ?? 0) >= 3);
     if (cau.length < 12) continue;
-    const dem = [0, 0, 0, 0];
-    for (const c of cau) dem[c.dapAn as number]++;
+    const dem = new Array<number>(10).fill(0); // từ 15/11/2026 một câu có thể tới 10 lựa chọn
+    for (const c of cau) dem[c.dapAn as number]!++;
     assert.ok(Math.max(...dem) / cau.length <= 0.5, `${d.id}: đáp án dồn một vị trí ${dem}`);
   }
   const tt = tomTatDe(de.find((d) => d.id === 'hsk3-de-1')!);

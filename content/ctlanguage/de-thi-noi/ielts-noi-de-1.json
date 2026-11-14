@@ -1,0 +1,170 @@
+{
+ "id": "ielts-noi-de-1",
+ "nn": "en",
+ "kyThi": "IELTS",
+ "cap": "IELTS-NOI",
+ "ten": "IELTS Speaking · Đề 1",
+ "moTa": "Giám khảo AI hỏi đủ Part 1–2–3 (band 3.5–4.5). Part 1: daily routine · family · Part 2: a place you like to go to in your free time · Part 3: places to relax, public places in cities",
+ "phut": 12,
+ "diemDat": 60,
+ "diemToiDa": 90,
+ "nguon": "noi-de1",
+ "phan": [
+  {
+   "id": "p1",
+   "ten": "Part 1 · Introduction & interview",
+   "moTa": "Câu hỏi ngắn về bản thân, 4–5 phút",
+   "giayToiDa": 300
+  },
+  {
+   "id": "p2",
+   "ten": "Part 2 · Long turn",
+   "moTa": "Thẻ đề: 1 phút chuẩn bị, nói 1–2 phút",
+   "giayToiDa": 0
+  },
+  {
+   "id": "p3",
+   "ten": "Part 3 · Discussion",
+   "moTa": "Thảo luận sâu hơn về chủ đề Part 2, 4–5 phút",
+   "giayToiDa": 300
+  }
+ ],
+ "buoc": [
+  {
+   "phan": "p1",
+   "kieu": "hoi",
+   "khongCham": true,
+   "giayNoi": 15,
+   "loi": "Good afternoon. My name is CuongMini, and I will be your examiner today. Can you tell me your full name, please?"
+  },
+  {
+   "phan": "p1",
+   "kieu": "hoi",
+   "loi": "Thank you. Now, in this first part, I'd like to ask you some questions about yourself. Let's talk about daily routine. What time do you usually get up in the morning?",
+   "hoi": "What time do you usually get up in the morning?",
+   "giayNoi": 40
+  },
+  {
+   "phan": "p1",
+   "kieu": "hoi",
+   "loi": "What do you usually do in the evening?",
+   "hoi": "What do you usually do in the evening?",
+   "giayNoi": 40
+  },
+  {
+   "phan": "p1",
+   "kieu": "hoi",
+   "loi": "Is your routine at the weekend different from your routine on weekdays?",
+   "hoi": "Is your routine at the weekend different from your routine on weekdays?",
+   "giayNoi": 40
+  },
+  {
+   "phan": "p1",
+   "kieu": "hoi",
+   "loi": "Now let's talk about family. How many people are there in your family?",
+   "hoi": "How many people are there in your family?",
+   "giayNoi": 40
+  },
+  {
+   "phan": "p1",
+   "kieu": "hoi",
+   "loi": "Who are you closest to in your family? Why?",
+   "hoi": "Who are you closest to in your family? Why?",
+   "giayNoi": 40
+  },
+  {
+   "phan": "p1",
+   "kieu": "hoi",
+   "loi": "What do you like doing together with your family?",
+   "hoi": "What do you like doing together with your family?",
+   "giayNoi": 40
+  },
+  {
+   "phan": "p2",
+   "kieu": "the",
+   "giayChuanBi": 60,
+   "giayNoi": 0,
+   "the": {
+    "de": "Describe a place you like to go to in your free time.",
+    "goiY": [
+     "where this place is",
+     "how often you go there",
+     "what you do there",
+     "and explain why you like this place."
+    ]
+   },
+   "loi": "Thank you. Now I'm going to give you a topic, and I'd like you to talk about it for one to two minutes. Before you talk, you'll have one minute to think about what you're going to say. You can make some notes if you wish. Here is your topic. Describe a place you like to go to in your free time."
+  },
+  {
+   "phan": "p2",
+   "kieu": "noiDai",
+   "giayNoi": 120,
+   "hoi": "Describe a place you like to go to in your free time. You should say: — where this place is — how often you go there — what you do there and explain why you like this place.",
+   "the": {
+    "de": "Describe a place you like to go to in your free time.",
+    "goiY": [
+     "where this place is",
+     "how often you go there",
+     "what you do there",
+     "and explain why you like this place."
+    ]
+   },
+   "loi": "All right? Remember, you have one to two minutes for this, so don't worry if I stop you. I'll tell you when the time is up. Can you start speaking now, please?"
+  },
+  {
+   "phan": "p2",
+   "kieu": "hoi",
+   "loi": "Thank you. Do your friends like this place too?",
+   "hoi": "Do your friends like this place too?",
+   "giayNoi": 30
+  },
+  {
+   "phan": "p2",
+   "kieu": "hoi",
+   "loi": "Would you like to go there more often?",
+   "hoi": "Would you like to go there more often?",
+   "giayNoi": 30
+  },
+  {
+   "phan": "p3",
+   "kieu": "hoi",
+   "loi": "We've been talking about the topic on your card, and I'd like to discuss with you one or two more general questions related to this. Let's consider first of all places where people relax. Where do people in your country usually go to relax?",
+   "hoi": "Where do people in your country usually go to relax?",
+   "giayNoi": 60
+  },
+  {
+   "phan": "p3",
+   "kieu": "hoi",
+   "loi": "Do you think it is important for a city to have parks and other public places? Why?",
+   "hoi": "Do you think it is important for a city to have parks and other public places? Why?",
+   "giayNoi": 60
+  },
+  {
+   "phan": "p3",
+   "kieu": "hoi",
+   "loi": "Do young people and older people like to go to the same kinds of places?",
+   "hoi": "Do young people and older people like to go to the same kinds of places?",
+   "giayNoi": 60
+  },
+  {
+   "phan": "p3",
+   "kieu": "hoi",
+   "loi": "Let's move on to free-time places, past and future. Are the places where people spend their free time today different from the places people went to in the past?",
+   "hoi": "Are the places where people spend their free time today different from the places people went to in the past?",
+   "giayNoi": 60
+  },
+  {
+   "phan": "p3",
+   "kieu": "hoi",
+   "loi": "If your city had the money to build one new public place, what do you think it should build?",
+   "hoi": "If your city had the money to build one new public place, what do you think it should build?",
+   "giayNoi": 60
+  },
+  {
+   "phan": "p3",
+   "kieu": "ket",
+   "giayNoi": 0,
+   "loi": "Thank you very much. That is the end of the speaking test."
+  }
+ ]
+}

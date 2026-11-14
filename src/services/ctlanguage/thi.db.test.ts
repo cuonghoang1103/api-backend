@@ -55,7 +55,7 @@ after(async () => {
 
 t('danh mục: khách xem được; đủ cấp + bài xếp lớp', async () => {
   const dm = await thi.danhMuc('zh', null, T0);
-  assert.deepEqual(dm.cap.map((c) => c.cap), ['HSK1', 'HSK2', 'HSK3', 'HSKK-SO']);
+  assert.deepEqual(dm.cap.map((c) => c.cap), ['HSK1', 'HSK2', 'HSK3', 'HSK4', 'HSKK-SO']);
   assert.equal(dm.laPro, false);
   assert.equal(dm.xepLop?.id, 'xep-lop-zh');
   assert.ok(dm.cap[0].de.length >= 2 && dm.cap[0].de.every((d) => d.duocThi && d.soCau === 40));
@@ -145,4 +145,41 @@ t('xếp lớp: lưu gợi ý cấp, không lên bảng; lịch sử trả đủ
   assert.deepEqual(ls.items.map((x) => x.deId), ['xep-lop-zh', 'hsk1-de-1', 'hsk1-de-1']);
   assert.equal(ls.items[0].xepLop !== null, true);
   assert.equal((ls.items[2].phan as unknown[]).length, 2);
+});
+
+t('thi nói giám khảo AI: danh mục, mở lượt (free 1 đề/cấp/tuần, đếm RIÊNG với thi viết), lời theo kịch bản, chặn lượt lạ', async () => {
+  const noi = await import('./thiNoi.js');
+  const dm = await noi.danhMucNoi('en', null, T0);
+  assert.deepEqual(dm.items.map((d) => d.id), ['ielts-noi-de-1', 'ielts-noi-de-2', 'ielts-noi-de-3', 'ielts-noi-de-4', 'ielts-noi-de-5']);
+  assert.ok(dm.items.every((d) => d.cap === 'IELTS-NOI' && d.duocThi && d.phan.length === 3));
+  const zh = await noi.danhMucNoi('zh', free, T0);
+  const hskk = zh.items.find((d) => d.kyThi === 'HSKK')!;
+  assert.equal(hskk.soCau, 27);
+
+  // free đã thi viết HSKK? Chưa — nhưng dù có, lượt thi NÓI không ăn lượt thi VIẾT cùng cấp và ngược lại.
+  const l = await noi.batDauNoi(free, hskk.id, sau(100));
+  await thi.batDau(free, 'hskk-so-de-1', sau(101));
+  const l1 = await noi.batDauNoi(free, 'ielts-noi-de-1', sau(102));
+  await assert.rejects(noi.batDauNoi(free, 'ielts-noi-de-2', sau(103)), (e: { code?: string }) => e.code === 'CTL_THI_HET_LUOT');
+  await noi.batDauNoi(free, 'ielts-noi-de-1', sau(104));
+  await noi.batDauNoi(pro, 'ielts-noi-de-1', sau(100));
+  await noi.batDauNoi(pro, 'ielts-noi-de-2', sau(101));
+  const dm2 = await noi.danhMucNoi('en', free, sau(105));
+  assert.deepEqual(dm2.items.map((d) => d.duocThi), [true, false, false, false, false]);
+
+  // Lời giám khảo: đúng câu của kịch bản; người khác / bước lạ / lượt quá hạn bị từ chối.
+  const de = noi.deNoiCho('ielts-noi-de-1');
+  assert.deepEqual(await noi.loiGiamKhao(free, l1.luotId, 0, sau(103)), { loi: de.buoc[0].loi, nn: 'en' });
+  assert.equal((await noi.loiGiamKhao(free, l.luotId, 2, sau(103))).nn, 'zh');
+  await assert.rejects(noi.loiGiamKhao(pro, l1.luotId, 0, sau(103)), (e: { statusCode?: number }) => e.statusCode === 404);
+  await assert.rejects(noi.loiGiamKhao(free, l1.luotId, 999, sau(103)), /Bước thi/);
+  await assert.rejects(noi.loiGiamKhao(free, l1.luotId, 0, sau(102 + 91)), /quá hạn/);
+
+  // Chấm: chưa nói câu nào ⇒ không gọi AI, không ghi điểm. Lịch sử thi dùng tên đề nói.
+  assert.deepEqual(await noi.chamThiNoi(free, l1.luotId, { banGhi: [{ buoc: 1, text: '', giay: 3 }] }, sau(110)), { ketQua: null, lyDo: 'it_luot' });
+  assert.equal((await prisma.ctlLuotThi.findUniqueOrThrow({ where: { id: l1.luotId } })).nopLuc, null);
+  await prisma.ctlLuotThi.update({ where: { id: l1.luotId }, data: { nopLuc: sau(111), diem: 65, diemToiDa: 90, dat: true, chiTiet: { noi: { thang: 'band', tong: 6.5 } } } });
+  const ls = await thi.lichSu(free, 'en');
+  assert.deepEqual(ls.items.map((x) => [x.tenDe, x.diem, x.diemToiDa]), [['IELTS Speaking · Đề 1', 65, 90]]);
+  assert.deepEqual(await noi.chamThiNoi(free, l1.luotId, { banGhi: [] }, sau(112)), { ketQua: { thang: 'band', tong: 6.5 } });
 });

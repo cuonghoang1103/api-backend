@@ -1,0 +1,1882 @@
+{
+ "id": "ielts-de-5",
+ "nn": "en",
+ "kyThi": "IELTS",
+ "cap": "IELTS",
+ "ten": "IELTS Academic · Đề 5",
+ "moTa": "Listening + Reading đủ 80 câu, band 6.0–7.5. Nghe: Paddle club form · Market hall tour & map… Đọc: Mangroves…",
+ "diemDat": 46,
+ "xepHang": true,
+ "phan": [
+  {
+   "id": "nghe",
+   "ten": "Listening",
+   "kyNang": "nghe",
+   "phut": 30,
+   "diemToiDa": 40,
+   "band": [
+    [
+     39,
+     9
+    ],
+    [
+     37,
+     8.5
+    ],
+    [
+     35,
+     8
+    ],
+    [
+     32,
+     7.5
+    ],
+    [
+     30,
+     7
+    ],
+    [
+     26,
+     6.5
+    ],
+    [
+     23,
+     6
+    ],
+    [
+     18,
+     5.5
+    ],
+    [
+     16,
+     5
+    ],
+    [
+     13,
+     4.5
+    ],
+    [
+     10,
+     4
+    ],
+    [
+     8,
+     3.5
+    ],
+    [
+     6,
+     3
+    ],
+    [
+     4,
+     2.5
+    ],
+    [
+     0,
+     2
+    ]
+   ],
+   "nhom": [
+    {
+     "huongDan": "Part 1 — Câu 1–10. Một cô gái gọi điện đăng ký làm hội viên câu lạc bộ chèo thuyền kayak. Cả part là MỘT bài nghe liền, chỉ nghe MỘT lần — bấm nghe rồi lướt qua các câu của part trong lúc nghe.",
+     "doan": "RIVERSIDE PADDLE CLUB — MEMBERSHIP FORM\nCâu 1–10. Complete the form below. Write ONE WORD AND/OR A NUMBER for each answer.\nFirst name: Sophie\nSurname: (1) ______\nAddress: 18 (2) ______ Road\nMobile number: (3) ______\nPrevious experience: kayaked a few times on (4) ______\nGroup: improvers\nSession: (5) ______ evenings\nType of membership: (6) ______\nCost: £(7) ______ per term\nBring: a change of clothes and a (8) ______\nFirst meeting place: by the old (9) ______\nHealth: mild (10) ______ — carries an inhaler",
+     "nghe": [
+      {
+       "g": "uk-nu",
+       "t": "Part 1. You will hear a telephone conversation between a woman who wants to join a kayaking club and the club secretary. First, you have some time to look at questions 1 to 10."
+      },
+      {
+       "g": "uk-nam",
+       "t": "Good morning, Riverside Paddle Club, Mark speaking. How can I help?"
+      },
+      {
+       "g": "uk-nu",
+       "t": "Oh, hello. I saw your poster in the library, and I'd like to join the club, if that's possible."
+      },
+      {
+       "g": "uk-nam",
+       "t": "Of course. I can take your details now and you can start next week. Could I have your name, please?"
+      },
+      {
+       "g": "uk-nu",
+       "t": "Yes, it's Sophie Farrant. That's F, A, double R, A, N, T."
+      },
+      {
+       "g": "uk-nam",
+       "t": "F, A, R, R, A, N, T. Thank you. And your address?"
+      },
+      {
+       "g": "uk-nu",
+       "t": "I live at 18 Harbour Road. Harbour is spelt the British way, with O, U, R."
+      },
+      {
+       "g": "uk-nam",
+       "t": "Harbour Road, got it. And a contact number?"
+      },
+      {
+       "g": "uk-nu",
+       "t": "My mobile is 07945 812 663."
+      },
+      {
+       "g": "uk-nam",
+       "t": "So that's 07945 812 663. Lovely. Now, have you done any kayaking before?"
+      },
+      {
+       "g": "uk-nu",
+       "t": "A little. I've never had proper lessons, but I tried it a few times on holiday in Croatia last summer."
+      },
+      {
+       "g": "uk-nam",
+       "t": "That's a good start. We'll put you in the improvers' group, then. Which session would suit you best? We run beginners and improvers on Wednesday and Thursday evenings."
+      },
+      {
+       "g": "uk-nu",
+       "t": "Wednesday would be ideal… oh, actually, no — I've just remembered I have a seminar on Wednesday evenings this term. Thursday, please."
+      },
+      {
+       "g": "uk-nam",
+       "t": "Thursday it is. Now, there are different types of membership. A standard adult membership is sixty pounds a term."
+      },
+      {
+       "g": "uk-nu",
+       "t": "Is there a discount for students? I'm at the university."
+      },
+      {
+       "g": "uk-nam",
+       "t": "Yes, there is. If you show your student card at your first session, the student membership is forty-five pounds a term instead of sixty."
+      },
+      {
+       "g": "uk-nu",
+       "t": "Great, I'll take the student membership, then. Do I need to bring anything? A wetsuit?"
+      },
+      {
+       "g": "uk-nam",
+       "t": "No, we provide wetsuits, helmets and buoyancy aids. You just need to bring a change of clothes and a towel, because you will almost certainly get wet."
+      },
+      {
+       "g": "uk-nu",
+       "t": "Right. And where should I go on the first evening? Is it at the boathouse?"
+      },
+      {
+       "g": "uk-nam",
+       "t": "The boathouse is being repaired at the moment, so for the next few weeks we're meeting by the old footbridge, just past the car park. You can't miss it."
+      },
+      {
+       "g": "uk-nu",
+       "t": "The footbridge. OK. Oh, and should I mention any health conditions?"
+      },
+      {
+       "g": "uk-nam",
+       "t": "Yes, please. It helps our instructors."
+      },
+      {
+       "g": "uk-nu",
+       "t": "I have mild asthma. It doesn't usually cause problems, but I always carry an inhaler."
+      },
+      {
+       "g": "uk-nam",
+       "t": "Thanks, I'll make a note of the asthma. Bring the inhaler in a waterproof bag and give it to the instructor before you go on the water. We look forward to seeing you on Thursday."
+      }
+     ],
+     "ngheLan": 1,
+     "cau": [
+      {
+       "id": "L1",
+       "kieu": "dien",
+       "dapAn": [
+        "Farrant"
+       ],
+       "de": "Complete the form below. Write ONE WORD AND/OR A NUMBER for each answer.\nRiverside Paddle Club — Membership Form — Surname: ___",
+       "giaiThich": "Tên được ĐÁNH VẦN: F-A-double R-A-N-T ⇒ Farrant. \"double R\" = hai chữ R liền nhau — lỗi chính tả ở đây là mất điểm."
+      },
+      {
+       "id": "L2",
+       "kieu": "dien",
+       "dapAn": [
+        "Harbour",
+        "Harbor"
+       ],
+       "de": "Complete the form below. Write ONE WORD AND/OR A NUMBER for each answer.\nRiverside Paddle Club — Membership Form — Address: 18 ___ Road",
+       "giaiThich": "Harbour (Anh-Anh; viết \"Harbor\" kiểu Mỹ vẫn được chấm đúng ở đề thật)."
+      },
+      {
+       "id": "L3",
+       "kieu": "dien",
+       "dapAn": [
+        "07945 812 663",
+        "07945812663",
+        "07945 812663"
+       ],
+       "de": "Complete the form below. Write ONE WORD AND/OR A NUMBER for each answer.\nRiverside Paddle Club — Membership Form — Mobile number: ___",
+       "giaiThich": "Số điện thoại đọc theo nhóm: 07945 812 663. Số tính là \"một số\", không tính vào giới hạn từ."
+      },
+      {
+       "id": "L4",
+       "kieu": "dien",
+       "dapAn": [
+        "holiday",
+        "holidays"
+       ],
+       "de": "Complete the form below. Write ONE WORD AND/OR A NUMBER for each answer.\nRiverside Paddle Club — Membership Form — Previous experience: kayaked a few times on ___",
+       "giaiThich": "\"I tried it a few times on holiday in Croatia\" ⇒ holiday. \"Croatia\" sai vì form hỏi \"on ___\"."
+      },
+      {
+       "id": "L5",
+       "kieu": "dien",
+       "dapAn": [
+        "Thursday"
+       ],
+       "de": "Complete the form below. Write ONE WORD AND/OR A NUMBER for each answer.\nRiverside Paddle Club — Membership Form — Session: ___ evenings",
+       "giaiThich": "Bẫy ĐỔI Ý: nói Wednesday trước rồi sửa \"actually, no… Thursday, please\" ⇒ Thursday."
+      },
+      {
+       "id": "L6",
+       "kieu": "dien",
+       "dapAn": [
+        "student"
+       ],
+       "de": "Complete the form below. Write ONE WORD AND/OR A NUMBER for each answer.\nRiverside Paddle Club — Membership Form — Type of membership: ___",
+       "giaiThich": "\"I'll take the student membership\" ⇒ student."
+      },
+      {
+       "id": "L7",
+       "kieu": "dien",
+       "dapAn": [
+        "45",
+        "forty-five",
+        "forty five"
+       ],
+       "de": "Complete the form below. Write ONE WORD AND/OR A NUMBER for each answer.\nRiverside Paddle Club — Membership Form — Cost: £___ per term",
+       "giaiThich": "Giá thường £60 là bẫy; giá sinh viên \"forty-five pounds\" ⇒ 45."
+      },
+      {
+       "id": "L8",
+       "kieu": "dien",
+       "dapAn": [
+        "towel"
+       ],
+       "de": "Complete the form below. Write ONE WORD AND/OR A NUMBER for each answer.\nRiverside Paddle Club — Membership Form — Bring: a change of clothes and a ___",
+       "giaiThich": "\"a change of clothes and a towel\" ⇒ towel. Wetsuit được CLB cho mượn — bẫy."
+      },
+      {
+       "id": "L9",
+       "kieu": "dien",
+       "dapAn": [
+        "footbridge"
+       ],
+       "de": "Complete the form below. Write ONE WORD AND/OR A NUMBER for each answer.\nRiverside Paddle Club — Membership Form — First meeting place: by the old ___",
+       "giaiThich": "Boathouse đang sửa (bẫy) ⇒ gặp \"by the old footbridge\" ⇒ footbridge (một từ)."
+      },
+      {
+       "id": "L10",
+       "kieu": "dien",
+       "dapAn": [
+        "asthma"
+       ],
+       "de": "Complete the form below. Write ONE WORD AND/OR A NUMBER for each answer.\nRiverside Paddle Club — Membership Form — Health: mild ___ — carries an inhaler",
+       "giaiThich": "\"I have mild asthma\" ⇒ asthma (chú ý chính tả a-s-t-h-m-a)."
+      }
+     ]
+    },
+    {
+     "huongDan": "Part 2 — Câu 11–20. Hướng dẫn viên giới thiệu một khu chợ cổ vừa cải tạo: lịch sử, mục đích cải tạo, giờ mở cửa, rồi chỉ đường trên sơ đồ. Cả part là MỘT bài nghe liền, chỉ nghe MỘT lần — bấm nghe rồi lướt qua các câu của part trong lúc nghe.",
+     "nghe": [
+      {
+       "g": "uk-nu",
+       "t": "Part 2. You will hear a guide talking to a group of visitors at a newly renovated market hall. First, you have some time to look at questions 11 to 14."
+      },
+      {
+       "g": "uk-nam",
+       "t": "Good afternoon, everyone, and welcome to Kingsford Market Hall. My name's James, and I'll be showing you around today."
+      },
+      {
+       "g": "uk-nam",
+       "t": "Let me start with a little history. Because of the great iron and glass roof, a lot of visitors assume that this building was once a railway station. In fact, it was built in the 1880s as a wool exchange, where farmers and merchants met to agree prices. It only became a fish market much later, in the 1930s, and it closed altogether about twenty years ago."
+      },
+      {
+       "g": "uk-nam",
+       "t": "When the council decided to renovate the hall, there was a lot of discussion about what it should be used for. Some people wanted a museum to attract tourists. But in the end the main aim was to give small local businesses an affordable place to trade, and that's why most of the stalls are rented by independent makers and food producers from the area. Restoring the roof was certainly expensive, but it was part of the job rather than the reason for it."
+      },
+      {
+       "g": "uk-nam",
+       "t": "A quick word about opening times. The hall is open every day from eight in the morning, and that hasn't changed. What is new is that on Fridays we now stay open until ten at night, with live music in the evenings."
+      },
+      {
+       "g": "uk-nam",
+       "t": "One piece of advice: our guided tours of the roof walkway are very popular and limited to twelve people, so I'd strongly recommend booking them online before you come. Almost all stalls take cards these days, so there's no need to bring cash, and the car park is usually full by ten, so the bus is a better option."
+      },
+      {
+       "g": "uk-nam",
+       "t": "Now, if you look at the plan of the ground floor, I'll show you where everything is. We're standing at the main entrance, at the bottom of the plan."
+      },
+      {
+       "g": "uk-nam",
+       "t": "Directly in front of you, before you reach the fountain, you'll see the information desk. That's the place to go if you need a map or you've lost something."
+      },
+      {
+       "g": "uk-nam",
+       "t": "The small room immediately on your left as you come in is the ticket office for the roof tours. And just to the right of the entrance is the gift shop, which sells work by local artists."
+      },
+      {
+       "g": "uk-nam",
+       "t": "If you walk straight past the fountain to the back wall, the café is right there in the middle, facing the entrance. It has the best view of the roof."
+      },
+      {
+       "g": "uk-nam",
+       "t": "Parents, please note that the children's play area is halfway along the left-hand wall, opposite the flower stalls, which are on the right-hand side."
+      },
+      {
+       "g": "uk-nam",
+       "t": "The exhibition room, which tells the story of the wool trade, is in the far left-hand corner, at the back of the hall."
+      },
+      {
+       "g": "uk-nam",
+       "t": "And finally, the toilets. They're at the back on the right, next to the stairs that lead up to the roof walkway — so not in the corner itself, but just beside the stairs."
+      },
+      {
+       "g": "uk-nam",
+       "t": "Right, if you'd like to follow me, we'll start with the exhibition room."
+      }
+     ],
+     "ngheLan": 1,
+     "hinh": {
+      "w": 560,
+      "h": 390,
+      "ve": [
+       {
+        "t": "rect",
+        "x": 40,
+        "y": 30,
+        "w": 480,
+        "h": 310,
+        "nen": "#ffffff",
+        "bo": 2
+       },
+       {
+        "t": "rect",
+        "x": 230,
+        "y": 140,
+        "w": 100,
+        "h": 80,
+        "nen": "#e7f0f7",
+        "nhan": "Fountain"
+       },
+       {
+        "t": "rect",
+        "x": 440,
+        "y": 40,
+        "w": 70,
+        "h": 70,
+        "nen": "#efefef",
+        "nhan": "Stairs"
+       },
+       {
+        "t": "rect",
+        "x": 455,
+        "y": 140,
+        "w": 55,
+        "h": 110,
+        "nen": "#f3eee4",
+        "nhan": "Flowers"
+       },
+       {
+        "t": "rect",
+        "x": 250,
+        "y": 330,
+        "w": 60,
+        "h": 20,
+        "nen": "#ffffff",
+        "bo": 0
+       },
+       {
+        "t": "line",
+        "d": [
+         [
+          280,
+          375
+         ],
+         [
+          280,
+          345
+         ]
+        ],
+        "mui": true
+       },
+       {
+        "t": "text",
+        "x": 280,
+        "y": 388,
+        "s": "MAIN ENTRANCE",
+        "co": 12,
+        "dam": true,
+        "giua": true
+       },
+       {
+        "t": "chu",
+        "k": "A",
+        "x": 140,
+        "y": 300
+       },
+       {
+        "t": "chu",
+        "k": "B",
+        "x": 420,
+        "y": 300
+       },
+       {
+        "t": "chu",
+        "k": "C",
+        "x": 80,
+        "y": 190
+       },
+       {
+        "t": "chu",
+        "k": "D",
+        "x": 400,
+        "y": 190
+       },
+       {
+        "t": "chu",
+        "k": "E",
+        "x": 80,
+        "y": 70
+       },
+       {
+        "t": "chu",
+        "k": "F",
+        "x": 280,
+        "y": 70
+       },
+       {
+        "t": "chu",
+        "k": "G",
+        "x": 400,
+        "y": 75
+       },
+       {
+        "t": "chu",
+        "k": "H",
+        "x": 280,
+        "y": 270
+       }
+      ]
+     },
+     "cau": [
+      {
+       "id": "L11",
+       "kieu": "chon",
+       "de": "Choose the correct letter, A, B or C.\nThe building was originally built as",
+       "luaChon": [
+        "a railway station.",
+        "a fish market.",
+        "a wool exchange."
+       ],
+       "dapAn": 2,
+       "giaiThich": "Nhiều người TƯỞNG là ga tàu (A, bẫy) — \"In fact, it was built… as a wool exchange\" ⇒ C. Chợ cá là về sau."
+      },
+      {
+       "id": "L12",
+       "kieu": "chon",
+       "de": "Choose the correct letter, A, B or C.\nWhat was the main aim of the renovation?",
+       "luaChon": [
+        "to attract more tourists to the town",
+        "to provide space for local small businesses",
+        "to save the historic roof"
+       ],
+       "dapAn": 1,
+       "giaiThich": "\"the main aim was to give small local businesses an affordable place to trade\" ⇒ B. Sửa mái là \"part of the job rather than the reason\"."
+      },
+      {
+       "id": "L13",
+       "kieu": "chon",
+       "de": "Choose the correct letter, A, B or C.\nWhat has changed about the opening hours?",
+       "luaChon": [
+        "The hall now opens earlier in the morning.",
+        "The hall now closes later on one day a week.",
+        "The hall is now closed on one day a week."
+       ],
+       "dapAn": 1,
+       "giaiThich": "Giờ mở 8h \"hasn't changed\"; mới là thứ Sáu mở tới 10h tối ⇒ đóng cửa muộn hơn một ngày/tuần ⇒ B."
+      },
+      {
+       "id": "L14",
+       "kieu": "chon",
+       "de": "Choose the correct letter, A, B or C.\nThe guide advises visitors to",
+       "luaChon": [
+        "book roof tours in advance.",
+        "bring cash for the stalls.",
+        "arrive by car before ten."
+       ],
+       "dapAn": 0,
+       "giaiThich": "\"I'd strongly recommend booking them online before you come\" ⇒ A. Không cần tiền mặt; bãi xe đầy trước 10h nên đi xe buýt."
+      },
+      {
+       "id": "L15",
+       "kieu": "chon",
+       "de": "Label the plan below. Write the correct letter, A–H, next to Questions 15–20.\nKingsford Market Hall — ground floor — Café",
+       "luaChon": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H"
+       ],
+       "dapAn": 5,
+       "giaiThich": "Đi thẳng qua đài phun nước tới tường sau, ở GIỮA, đối diện lối vào ⇒ F."
+      },
+      {
+       "id": "L16",
+       "kieu": "chon",
+       "de": "Label the plan below. Write the correct letter, A–H, next to Questions 15–20.\nKingsford Market Hall — ground floor — Information desk",
+       "luaChon": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H"
+       ],
+       "dapAn": 7,
+       "giaiThich": "\"Directly in front of you, before you reach the fountain\" ⇒ ngay trước đài phun nước ⇒ H."
+      },
+      {
+       "id": "L17",
+       "kieu": "chon",
+       "de": "Label the plan below. Write the correct letter, A–H, next to Questions 15–20.\nKingsford Market Hall — ground floor — Children's play area",
+       "luaChon": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H"
+       ],
+       "dapAn": 2,
+       "giaiThich": "\"halfway along the left-hand wall, opposite the flower stalls\" ⇒ giữa tường trái ⇒ C. (D cạnh quầy hoa là bẫy.)"
+      },
+      {
+       "id": "L18",
+       "kieu": "chon",
+       "de": "Label the plan below. Write the correct letter, A–H, next to Questions 15–20.\nKingsford Market Hall — ground floor — Exhibition room",
+       "luaChon": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H"
+       ],
+       "dapAn": 4,
+       "giaiThich": "\"in the far left-hand corner, at the back of the hall\" ⇒ góc trái phía sau ⇒ E."
+      },
+      {
+       "id": "L19",
+       "kieu": "chon",
+       "de": "Label the plan below. Write the correct letter, A–H, next to Questions 15–20.\nKingsford Market Hall — ground floor — Toilets",
+       "luaChon": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H"
+       ],
+       "dapAn": 6,
+       "giaiThich": "\"at the back on the right, next to the stairs… not in the corner itself, but just beside the stairs\" ⇒ G."
+      },
+      {
+       "id": "L20",
+       "kieu": "chon",
+       "de": "Label the plan below. Write the correct letter, A–H, next to Questions 15–20.\nKingsford Market Hall — ground floor — Gift shop",
+       "luaChon": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H"
+       ],
+       "dapAn": 1,
+       "giaiThich": "\"just to the right of the entrance is the gift shop\" ⇒ B. A (bên trái lối vào) là phòng vé — bẫy."
+      }
+     ]
+    },
+    {
+     "huongDan": "Part 3 — Câu 21–30. Hai sinh viên (Maya, Tom) gặp giảng viên (Dr Patel) bàn đề tài \"đảo nhiệt đô thị\": khó khăn khi đo, góp ý cho bài thuyết trình, đánh giá nguồn tài liệu, kế hoạch tiếp theo. Cả part là MỘT bài nghe liền, chỉ nghe MỘT lần — bấm nghe rồi lướt qua các câu của part trong lúc nghe.",
+     "doan": "NEXT STEPS\nCâu 28–30. Complete the flow-chart below. Write ONE WORD ONLY for each answer.\n→ Compare each sensor with a (28) ______ thermometer and correct the readings\n→ Repeat the measurements at (29) ______\n→ Present the findings to local residents at a (30) ______",
+     "nghe": [
+      {
+       "g": "uk-nu",
+       "t": "Part 3. You will hear two students, Maya and Tom, talking to their tutor about their project on urban heat. First, you have some time to look at questions 21 to 30."
+      },
+      {
+       "g": "uk-nu",
+       "t": "Come in, Maya, Tom. So, how is the urban heat project going?"
+      },
+      {
+       "g": "us-nu",
+       "t": "Pretty well, mostly. We put twenty temperature sensors around the city centre and the park for two weeks."
+      },
+      {
+       "g": "uk-nam",
+       "t": "Although it wasn't all smooth. We were really worried that some of the sensors would be stolen, but actually none of them were."
+      },
+      {
+       "g": "us-nu",
+       "t": "The bigger issue was that the cheap sensors we bought didn't always agree with each other. Two sensors placed side by side could be almost a degree apart."
+      },
+      {
+       "g": "uk-nam",
+       "t": "And we couldn't get permission to fix sensors on two of the office buildings we wanted, so there's a gap in the business district."
+      },
+      {
+       "g": "uk-nu",
+       "t": "Those are both common problems. Did the weather cooperate?"
+      },
+      {
+       "g": "us-nu",
+       "t": "It was a normal September, really — nothing unusual. And we finished on schedule."
+      },
+      {
+       "g": "uk-nu",
+       "t": "Good. Now, you're presenting this to the class in three weeks. I've read your draft. My main comment is that the literature review takes up almost half of your talk. You need to cut that down considerably so there's more time for your own results."
+      },
+      {
+       "g": "uk-nam",
+       "t": "That makes sense. We could also include the interviews we did with shop owners."
+      },
+      {
+       "g": "uk-nu",
+       "t": "I'd leave those out, to be honest — there were only four, and they distract from the data. What would really help is a map of the city showing where each sensor was and the temperatures it recorded. People understand heat islands much faster when they can see them."
+      },
+      {
+       "g": "us-nu",
+       "t": "OK, a map. We'll do that. Should we use more slides, then?"
+      },
+      {
+       "g": "uk-nu",
+       "t": "No — fewer, clearer slides are better. Now, what about your sources?"
+      },
+      {
+       "g": "uk-nam",
+       "t": "Well, there's the city council report on green spaces. It's very relevant, but the temperature figures are from 2015, so we need to find out whether there's a newer version before we use it."
+      },
+      {
+       "g": "uk-nu",
+       "t": "Yes, definitely check that first."
+      },
+      {
+       "g": "us-nu",
+       "t": "Then there's a newspaper article that claims the city centre is ten degrees hotter than the countryside. It's quite dramatic, but there's no explanation of how they measured it."
+      },
+      {
+       "g": "uk-nu",
+       "t": "If you can't tell how the figure was produced, it doesn't belong in an academic project."
+      },
+      {
+       "g": "uk-nam",
+       "t": "Agreed, we'll drop it. And the satellite images from the space agency are excellent — they match our own readings really well, so they're definitely going in."
+      },
+      {
+       "g": "uk-nu",
+       "t": "Good. So what are your next steps?"
+      },
+      {
+       "g": "us-nu",
+       "t": "First, we'll borrow a standard thermometer from the physics lab and compare each sensor against it, so we can correct the readings."
+      },
+      {
+       "g": "uk-nam",
+       "t": "Then we want to repeat the measurements, but this time at night, because that's when the difference between the centre and the park should be biggest."
+      },
+      {
+       "g": "uk-nu",
+       "t": "Very sensible. And after that?"
+      },
+      {
+       "g": "us-nu",
+       "t": "We'd like to share what we found with local residents. The community centre has offered us a room for a workshop next month."
+      },
+      {
+       "g": "uk-nu",
+       "t": "Excellent. A workshop is a great way to get feedback. Well done, both of you."
+      }
+     ],
+     "ngheLan": 1,
+     "cau": [
+      {
+       "id": "L21",
+       "kieu": "chon",
+       "de": "Choose TWO letters, A–E.\nWhich TWO problems did the students have when collecting data?\n(Câu 21 và 22 cùng một câu hỏi — ở câu này chọn đáp án đứng TRƯỚC theo bảng chữ cái.)",
+       "luaChon": [
+        "Some of the equipment was stolen.",
+        "Some readings were not consistent.",
+        "The weather was unusual for the season.",
+        "They were refused access to some locations.",
+        "They ran out of time."
+       ],
+       "dapAn": 1,
+       "giaiThich": "Hai khó khăn thật: cảm biến rẻ đo LỆCH nhau (B) và không được phép gắn lên toà văn phòng (D). Sợ bị trộm nhưng \"none of them were\" (A sai); thời tiết bình thường (C sai); xong đúng hạn (E sai)."
+      },
+      {
+       "id": "L22",
+       "kieu": "chon",
+       "de": "Choose TWO letters, A–E.\nWhich TWO problems did the students have when collecting data?\n(Câu 21 và 22 cùng một câu hỏi — ở câu này chọn đáp án đứng SAU theo bảng chữ cái.)",
+       "luaChon": [
+        "Some of the equipment was stolen.",
+        "Some readings were not consistent.",
+        "The weather was unusual for the season.",
+        "They were refused access to some locations.",
+        "They ran out of time."
+       ],
+       "dapAn": 3,
+       "giaiThich": "Như câu 21: B và D (thứ tự không quan trọng)."
+      },
+      {
+       "id": "L23",
+       "kieu": "chon",
+       "de": "Choose TWO letters, A–E.\nWhich TWO changes to the presentation does the tutor recommend?\n(Câu 23 và 24 cùng một câu hỏi — ở câu này chọn đáp án đứng TRƯỚC theo bảng chữ cái.)",
+       "luaChon": [
+        "reducing the literature review",
+        "adding a map of the results",
+        "including the interviews with shop owners",
+        "using a larger number of slides",
+        "presenting their sections separately"
+       ],
+       "dapAn": 0,
+       "giaiThich": "Giảng viên khuyên: rút gọn phần tổng quan tài liệu (A) và thêm bản đồ (B). Phỏng vấn chủ cửa hàng thì \"I'd leave those out\" (C sai); \"fewer, clearer slides\" (D sai)."
+      },
+      {
+       "id": "L24",
+       "kieu": "chon",
+       "de": "Choose TWO letters, A–E.\nWhich TWO changes to the presentation does the tutor recommend?\n(Câu 23 và 24 cùng một câu hỏi — ở câu này chọn đáp án đứng SAU theo bảng chữ cái.)",
+       "luaChon": [
+        "reducing the literature review",
+        "adding a map of the results",
+        "including the interviews with shop owners",
+        "using a larger number of slides",
+        "presenting their sections separately"
+       ],
+       "dapAn": 1,
+       "giaiThich": "Như câu 23: A và B. (Xem lại đoạn chứa đáp án trong bài.)"
+      },
+      {
+       "id": "L25",
+       "kieu": "chon",
+       "de": "What do the students decide about each source? Choose THREE answers from the box and write the correct letter, A–C, next to Questions 25–27.\nthe council report",
+       "luaChon": [
+        "A. use it in the project",
+        "B. not use it",
+        "C. check whether there is a newer version"
+       ],
+       "dapAn": 2,
+       "giaiThich": "Báo cáo hội đồng thành phố: số liệu từ 2015 ⇒ \"find out whether there's a newer version\" ⇒ C."
+      },
+      {
+       "id": "L26",
+       "kieu": "chon",
+       "de": "What do the students decide about each source? Choose THREE answers from the box and write the correct letter, A–C, next to Questions 25–27.\nthe newspaper article",
+       "luaChon": [
+        "A. use it in the project",
+        "B. not use it",
+        "C. check whether there is a newer version"
+       ],
+       "dapAn": 1,
+       "giaiThich": "Bài báo không nói cách đo ⇒ \"we'll drop it\" ⇒ B."
+      },
+      {
+       "id": "L27",
+       "kieu": "chon",
+       "de": "What do the students decide about each source? Choose THREE answers from the box and write the correct letter, A–C, next to Questions 25–27.\nthe satellite images",
+       "luaChon": [
+        "A. use it in the project",
+        "B. not use it",
+        "C. check whether there is a newer version"
+       ],
+       "dapAn": 0,
+       "giaiThich": "Ảnh vệ tinh \"definitely going in\" ⇒ A."
+      },
+      {
+       "id": "L28",
+       "kieu": "dien",
+       "dapAn": [
+        "standard"
+       ],
+       "de": "Complete the flow-chart below. Write ONE WORD ONLY for each answer.\nNext steps — Compare each sensor with a ___ thermometer and correct the readings",
+       "giaiThich": "\"borrow a standard thermometer from the physics lab\" ⇒ standard."
+      },
+      {
+       "id": "L29",
+       "kieu": "dien",
+       "dapAn": [
+        "night"
+       ],
+       "de": "Complete the flow-chart below. Write ONE WORD ONLY for each answer.\nNext steps — Repeat the measurements at ___",
+       "giaiThich": "\"repeat the measurements, but this time at night\" ⇒ night."
+      },
+      {
+       "id": "L30",
+       "kieu": "dien",
+       "dapAn": [
+        "workshop"
+       ],
+       "de": "Complete the flow-chart below. Write ONE WORD ONLY for each answer.\nNext steps — Present the findings to local residents at a ___",
+       "giaiThich": "\"a room for a workshop next month\" ⇒ workshop."
+      }
+     ]
+    },
+    {
+     "huongDan": "Part 4 — Câu 31–40. Bài giảng khoa học biển: rạn san hô khoẻ thì ồn ào, cá con nghe tiếng để tìm chỗ ở, thí nghiệm phát loa dưới nước ở Úc, và giới hạn của cách làm này. Cả part là MỘT bài nghe liền, chỉ nghe MỘT lần — bấm nghe rồi lướt qua các câu của part trong lúc nghe.",
+     "doan": "THE SOUNDS OF CORAL REEFS\nCâu 31–40. Complete the notes below. Write ONE WORD ONLY for each answer.\nSources of sound\n• constant crackle, mainly produced by snapping (31) ______\n• fish grunt, croak and make (32) ______, especially at dawn and dusk\nWhy sound matters\n• fish larvae listen to reefs when deciding where to (33) ______\n• degraded reefs are much (34) ______, so they attract fewer young fish\nExperiment in Australia\n• underwater (35) ______ placed on damaged patches of reef\n• recordings of healthy reef played every night\n• number of young fish arriving (36) ______\n• there were also more (37) ______\nLimitations\n• sound alone cannot bring back the (38) ______\n• fish may be attracted to places with no food or (39) ______\n• next step: long-term (40) ______",
+     "nghe": [
+      {
+       "g": "uk-nu",
+       "t": "Part 4. You will hear part of a lecture about the sounds made by coral reefs. First, you have some time to look at questions 31 to 40."
+      },
+      {
+       "g": "us-nu",
+       "t": "Good morning. Today I want to talk about something most people never think of when they imagine a coral reef: its sound."
+      },
+      {
+       "g": "us-nu",
+       "t": "If you have ever put your head underwater on a healthy reef, you will know that it is anything but silent. The background noise is a constant crackle, rather like fat sizzling in a frying pan. Most of that crackle comes from snapping shrimp, tiny animals that close a special claw so fast that it creates a bubble, and the bubble collapses with a loud snap."
+      },
+      {
+       "g": "us-nu",
+       "t": "On top of that, the fish themselves are surprisingly vocal. Different species grunt, croak and even produce whistles, especially at dawn and dusk."
+      },
+      {
+       "g": "us-nu",
+       "t": "Why does this matter? Well, most reef fish spend the first weeks of their lives as larvae drifting in the open ocean. When they are ready, they have to find a reef to live on, and there is good evidence that they listen for the sound of a healthy reef when they choose where to settle."
+      },
+      {
+       "g": "us-nu",
+       "t": "The problem is that damaged reefs sound very different. When coral dies, the animals that depend on it disappear, and a degraded reef becomes much quieter. That means it attracts fewer young fish, which in turn makes recovery even slower."
+      },
+      {
+       "g": "us-nu",
+       "t": "A team working on the Great Barrier Reef in Australia decided to test whether sound could break this cycle. They took recordings from healthy parts of the reef. Then they placed underwater speakers on patches of reef that had been badly damaged, and played the recordings back every night for several weeks."
+      },
+      {
+       "g": "us-nu",
+       "t": "The results were striking. Compared with similar patches where no sound was played, the number of young fish arriving roughly doubled. And it was not just more of the same fish — there were also more species, which matters, because different fish do different jobs, such as grazing on the seaweed that can smother coral."
+      },
+      {
+       "g": "us-nu",
+       "t": "However, I want to be clear about the limitations. Playing sound cannot, on its own, bring back the coral. If the water stays too warm, or pollution continues, the reef will not recover however many fish arrive."
+      },
+      {
+       "g": "us-nu",
+       "t": "There is also a risk. If we attract young fish to an area that offers them no food or shelter, we may be leading them into a trap, where they are easily eaten by predators."
+      },
+      {
+       "g": "us-nu",
+       "t": "So the next step for researchers is long-term monitoring, to find out whether the fish that arrive actually survive and help the reef to recover over several years. Only then will we know whether this technique deserves a place in reef conservation."
+      }
+     ],
+     "ngheLan": 1,
+     "cau": [
+      {
+       "id": "L31",
+       "kieu": "dien",
+       "dapAn": [
+        "shrimp",
+        "shrimps"
+       ],
+       "de": "Complete the notes below. Write ONE WORD ONLY for each answer.\nThe sounds of coral reefs — constant crackle, mainly produced by snapping ___",
+       "giaiThich": "\"Most of that crackle comes from snapping shrimp\" ⇒ shrimp."
+      },
+      {
+       "id": "L32",
+       "kieu": "dien",
+       "dapAn": [
+        "whistles"
+       ],
+       "de": "Complete the notes below. Write ONE WORD ONLY for each answer.\nThe sounds of coral reefs — fish grunt, croak and make ___, especially at dawn and dusk",
+       "giaiThich": "\"grunt, croak and even produce whistles\" ⇒ whistles (ghi chú \"make ___\" cần danh từ số nhiều)."
+      },
+      {
+       "id": "L33",
+       "kieu": "dien",
+       "dapAn": [
+        "settle"
+       ],
+       "de": "Complete the notes below. Write ONE WORD ONLY for each answer.\nThe sounds of coral reefs — fish larvae listen to reefs when deciding where to ___",
+       "giaiThich": "\"they listen for the sound of a healthy reef when they choose where to settle\" ⇒ settle."
+      },
+      {
+       "id": "L34",
+       "kieu": "dien",
+       "dapAn": [
+        "quieter"
+       ],
+       "de": "Complete the notes below. Write ONE WORD ONLY for each answer.\nThe sounds of coral reefs — degraded reefs are much ___, so they attract fewer young fish",
+       "giaiThich": "\"a degraded reef becomes much quieter\" ⇒ quieter (so sánh hơn, đúng chính tả -ier)."
+      },
+      {
+       "id": "L35",
+       "kieu": "dien",
+       "dapAn": [
+        "speakers",
+        "loudspeakers"
+       ],
+       "de": "Complete the notes below. Write ONE WORD ONLY for each answer.\nThe sounds of coral reefs — underwater ___ placed on damaged patches of reef",
+       "giaiThich": "\"they placed underwater speakers on patches of reef\" ⇒ speakers."
+      },
+      {
+       "id": "L36",
+       "kieu": "dien",
+       "dapAn": [
+        "doubled"
+       ],
+       "de": "Complete the notes below. Write ONE WORD ONLY for each answer.\nThe sounds of coral reefs — number of young fish arriving ___",
+       "giaiThich": "\"the number of young fish arriving roughly doubled\" ⇒ doubled."
+      },
+      {
+       "id": "L37",
+       "kieu": "dien",
+       "dapAn": [
+        "species"
+       ],
+       "de": "Complete the notes below. Write ONE WORD ONLY for each answer.\nThe sounds of coral reefs — there were also more ___",
+       "giaiThich": "\"there were also more species\" ⇒ species (không có -s riêng: species là cả số ít lẫn số nhiều)."
+      },
+      {
+       "id": "L38",
+       "kieu": "dien",
+       "dapAn": [
+        "coral"
+       ],
+       "de": "Complete the notes below. Write ONE WORD ONLY for each answer.\nThe sounds of coral reefs — sound alone cannot bring back the ___",
+       "giaiThich": "\"Playing sound cannot, on its own, bring back the coral\" ⇒ coral."
+      },
+      {
+       "id": "L39",
+       "kieu": "dien",
+       "dapAn": [
+        "shelter"
+       ],
+       "de": "Complete the notes below. Write ONE WORD ONLY for each answer.\nThe sounds of coral reefs — fish may be attracted to places with no food or ___",
+       "giaiThich": "\"an area that offers them no food or shelter\" ⇒ shelter."
+      },
+      {
+       "id": "L40",
+       "kieu": "dien",
+       "dapAn": [
+        "monitoring"
+       ],
+       "de": "Complete the notes below. Write ONE WORD ONLY for each answer.\nThe sounds of coral reefs — next step: long-term ___",
+       "giaiThich": "\"the next step for researchers is long-term monitoring\" ⇒ monitoring."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "doc",
+   "ten": "Academic Reading",
+   "kyNang": "doc",
+   "phut": 60,
+   "diemToiDa": 40,
+   "band": [
+    [
+     39,
+     9
+    ],
+    [
+     37,
+     8.5
+    ],
+    [
+     35,
+     8
+    ],
+    [
+     33,
+     7.5
+    ],
+    [
+     30,
+     7
+    ],
+    [
+     27,
+     6.5
+    ],
+    [
+     23,
+     6
+    ],
+    [
+     19,
+     5.5
+    ],
+    [
+     15,
+     5
+    ],
+    [
+     13,
+     4.5
+    ],
+    [
+     10,
+     4
+    ],
+    [
+     8,
+     3.5
+    ],
+    [
+     6,
+     3
+    ],
+    [
+     4,
+     2.5
+    ],
+    [
+     0,
+     2
+    ]
+   ],
+   "nhom": [
+    {
+     "huongDan": "Passage 1 — Câu 1–5. Complete the notes below. Choose ONE WORD ONLY from the passage for each answer.",
+     "doan": "READING PASSAGE 1\nGUARDIANS OF THE COAST\nHow mangrove forests survive where other trees cannot — and why they matter\n\nMangroves are trees and shrubs that grow in the intertidal zone of tropical and subtropical coastlines — the strip of muddy shore that is flooded by the sea twice a day and exposed again when the tide goes out. Around seventy species are recognised, and together they cover roughly 150,000 square kilometres, an area about half the size of Vietnam. Few woody plants can tolerate such conditions. The water that washes around their trunks contains a high level of salt, the soil is soft and unstable, and every few hours the roots are either drowned or left baking in the sun.\nSalt is the first problem. Most plants die quickly if their roots sit in seawater, because salt draws water out of their cells. Mangroves deal with it in several ways. Some species filter out more than ninety per cent of the salt at the surface of their roots, so that the water reaching the rest of the tree is almost fresh. Others allow salt into their tissues but then get rid of it through special glands in their leaves; on a dry afternoon, a careful observer can see tiny white crystals glittering on the leaf surface. Interestingly, mangroves do not actually need salt. In laboratory experiments they grow perfectly well in fresh water, but in rivers and lakes they lose out to faster-growing competitors, which is why they are found almost only on the coast.\nThe second problem is air. Beneath the surface lies waterlogged mud that contains almost no oxygen, so roots buried in it cannot breathe in the normal way. Here again the trees have found different solutions. The red mangrove supports itself on arching prop roots that grow out from the trunk and lower branches, holding the tree above the water like a table on many legs. Others, such as the grey mangrove, send up hundreds of vertical spikes known as pneumatophores, or breathing roots, which poke out of the mud like pencils. Their surfaces are covered with tiny pores that take in air at low tide and pass it down to the buried roots below.\nReproduction is equally unusual. In many mangrove species the seed begins to grow while it is still attached to the parent, developing into a long, spear-shaped seedling before it finally drops. Some seedlings fall straight into the mud and take root immediately. Others are carried away by the tide. Because they are designed to float, they can survive in the sea for up to a year before they reach a suitable shore — a strategy that explains how mangroves have spread across thousands of kilometres of ocean.\nFor people living on tropical coasts, mangrove forests are far more than a botanical curiosity. The dense tangle of roots slows the movement of water and traps fine sediment, gradually building up the land and protecting it from erosion. During storms, a wide belt of mangroves can reduce the height of waves considerably before they reach the shore. Studies carried out after major storms have found that villages sheltered behind healthy mangroves generally suffered less damage than unprotected ones, although scientists stress that no forest can stop the largest storm surges entirely. The roots also provide shelter for young fish, crabs and shrimp, and many coastal fisheries depend on them.\nMangroves are also remarkable stores of carbon. Their waterlogged soils decompose plant material very slowly, so carbon that would otherwise return to the atmosphere stays buried for centuries. Per hectare, mangrove forests can lock away several times as much carbon as tropical forests on dry land, much of it in the soil rather than in the trees themselves. When a mangrove forest is cleared, however, this stored carbon can be released surprisingly quickly.\nDespite their value, mangroves have been disappearing. Over the second half of the twentieth century, large areas were cleared for shrimp ponds, rice fields and coastal construction. In recent years the rate of loss has slowed, and many countries have begun to replant. Vietnam offers a well-known example: the Can Gio forest near Ho Chi Minh City, badly damaged during the war, was replanted from the late 1970s onwards and is now a UNESCO biosphere reserve. Replanting is not always simple, though. Many early replanting schemes failed because seedlings were pushed into mudflats where the tides were too deep or too frequent for them to survive. Ecologists now argue that the most successful projects begin not by planting trees, but by restoring the natural flow of water and letting seedlings arrive by themselves.\n\n────────\nMANGROVES\nCâu 1–5. Complete the notes below. Choose ONE WORD ONLY from the passage for each answer.\nLiving conditions\n• grow on muddy shores where the water has a high level of (1) ______\nAdaptations\n• some species remove salt through glands in their (2) ______\n• seeds start to grow while still attached to the (3) ______\n• seedlings can float in the sea for as long as a (4) ______\nValue to people\n• reduce the height of (5) ______ during storms",
+     "cau": [
+      {
+       "id": "R1",
+       "kieu": "dien",
+       "dapAn": [
+        "salt"
+       ],
+       "de": "Complete the notes below. Choose ONE WORD ONLY from the passage for each answer.\nMangroves — grow on muddy shores where the water has a high level of ___",
+       "giaiThich": "Bài: \"The water … contains a high level of salt\". Ghi chú hỏi đúng cụm \"high level of\" ⇒ chép salt. Đừng viết \"seawater\" — không khớp ngữ pháp \"a high level of ___\" và không phải chữ trong câu bằng chứng."
+      },
+      {
+       "id": "R2",
+       "kieu": "dien",
+       "dapAn": [
+        "leaves"
+       ],
+       "de": "Complete the notes below. Choose ONE WORD ONLY from the passage for each answer.\nMangroves — some species remove salt through glands in their ___",
+       "giaiThich": "Bài: \"get rid of it through special glands in their leaves\". \"remove salt\" = paraphrase của \"get rid of it\". Chỉ ONE WORD ⇒ leaves (không viết \"their leaves\")."
+      },
+      {
+       "id": "R3",
+       "kieu": "dien",
+       "dapAn": [
+        "parent"
+       ],
+       "de": "Complete the notes below. Choose ONE WORD ONLY from the passage for each answer.\nMangroves — seeds start to grow while still attached to the ___",
+       "giaiThich": "\"the seed begins to grow while it is still attached to the parent\" — chép parent. \"parent tree\" là 2 từ, vượt ONE WORD ONLY ⇒ sai."
+      },
+      {
+       "id": "R4",
+       "kieu": "dien",
+       "dapAn": [
+        "year"
+       ],
+       "de": "Complete the notes below. Choose ONE WORD ONLY from the passage for each answer.\nMangroves — seedlings can float in the sea for as long as a ___",
+       "giaiThich": "\"they can survive in the sea for up to a year\" — \"as long as a ___\" = \"for up to a ___\" ⇒ year."
+      },
+      {
+       "id": "R5",
+       "kieu": "dien",
+       "dapAn": [
+        "waves"
+       ],
+       "de": "Complete the notes below. Choose ONE WORD ONLY from the passage for each answer.\nMangroves — reduce the height of ___ during storms",
+       "giaiThich": "\"a wide belt of mangroves can reduce the height of waves considerably\" ⇒ waves. Bẫy: \"storm surges\" (2 từ, và câu đó nói rừng KHÔNG chặn được hết)."
+      }
+     ]
+    },
+    {
+     "huongDan": "Passage 1 — Câu 6–8. Label the diagram below. Choose NO MORE THAN TWO WORDS from the passage for each answer.",
+     "doan": "READING PASSAGE 1\nGUARDIANS OF THE COAST\nHow mangrove forests survive where other trees cannot — and why they matter\n\nMangroves are trees and shrubs that grow in the intertidal zone of tropical and subtropical coastlines — the strip of muddy shore that is flooded by the sea twice a day and exposed again when the tide goes out. Around seventy species are recognised, and together they cover roughly 150,000 square kilometres, an area about half the size of Vietnam. Few woody plants can tolerate such conditions. The water that washes around their trunks contains a high level of salt, the soil is soft and unstable, and every few hours the roots are either drowned or left baking in the sun.\nSalt is the first problem. Most plants die quickly if their roots sit in seawater, because salt draws water out of their cells. Mangroves deal with it in several ways. Some species filter out more than ninety per cent of the salt at the surface of their roots, so that the water reaching the rest of the tree is almost fresh. Others allow salt into their tissues but then get rid of it through special glands in their leaves; on a dry afternoon, a careful observer can see tiny white crystals glittering on the leaf surface. Interestingly, mangroves do not actually need salt. In laboratory experiments they grow perfectly well in fresh water, but in rivers and lakes they lose out to faster-growing competitors, which is why they are found almost only on the coast.\nThe second problem is air. Beneath the surface lies waterlogged mud that contains almost no oxygen, so roots buried in it cannot breathe in the normal way. Here again the trees have found different solutions. The red mangrove supports itself on arching prop roots that grow out from the trunk and lower branches, holding the tree above the water like a table on many legs. Others, such as the grey mangrove, send up hundreds of vertical spikes known as pneumatophores, or breathing roots, which poke out of the mud like pencils. Their surfaces are covered with tiny pores that take in air at low tide and pass it down to the buried roots below.\nReproduction is equally unusual. In many mangrove species the seed begins to grow while it is still attached to the parent, developing into a long, spear-shaped seedling before it finally drops. Some seedlings fall straight into the mud and take root immediately. Others are carried away by the tide. Because they are designed to float, they can survive in the sea for up to a year before they reach a suitable shore — a strategy that explains how mangroves have spread across thousands of kilometres of ocean.\nFor people living on tropical coasts, mangrove forests are far more than a botanical curiosity. The dense tangle of roots slows the movement of water and traps fine sediment, gradually building up the land and protecting it from erosion. During storms, a wide belt of mangroves can reduce the height of waves considerably before they reach the shore. Studies carried out after major storms have found that villages sheltered behind healthy mangroves generally suffered less damage than unprotected ones, although scientists stress that no forest can stop the largest storm surges entirely. The roots also provide shelter for young fish, crabs and shrimp, and many coastal fisheries depend on them.\nMangroves are also remarkable stores of carbon. Their waterlogged soils decompose plant material very slowly, so carbon that would otherwise return to the atmosphere stays buried for centuries. Per hectare, mangrove forests can lock away several times as much carbon as tropical forests on dry land, much of it in the soil rather than in the trees themselves. When a mangrove forest is cleared, however, this stored carbon can be released surprisingly quickly.\nDespite their value, mangroves have been disappearing. Over the second half of the twentieth century, large areas were cleared for shrimp ponds, rice fields and coastal construction. In recent years the rate of loss has slowed, and many countries have begun to replant. Vietnam offers a well-known example: the Can Gio forest near Ho Chi Minh City, badly damaged during the war, was replanted from the late 1970s onwards and is now a UNESCO biosphere reserve. Replanting is not always simple, though. Many early replanting schemes failed because seedlings were pushed into mudflats where the tides were too deep or too frequent for them to survive. Ecologists now argue that the most successful projects begin not by planting trees, but by restoring the natural flow of water and letting seedlings arrive by themselves.",
+     "hinh": {
+      "w": 560,
+      "h": 300,
+      "chuThich": "Sơ đồ rễ cây đước (tự vẽ, không theo tỷ lệ)",
+      "ve": [
+       {
+        "t": "rect",
+        "x": 0,
+        "y": 190,
+        "w": 560,
+        "h": 110,
+        "nen": "#d9c9a8",
+        "bo": 0
+       },
+       {
+        "t": "rect",
+        "x": 0,
+        "y": 150,
+        "w": 560,
+        "h": 40,
+        "nen": "#cfe3f2",
+        "bo": 0
+       },
+       {
+        "t": "text",
+        "x": 470,
+        "y": 172,
+        "s": "high tide",
+        "co": 12,
+        "nghieng": true
+       },
+       {
+        "t": "line",
+        "d": [
+         [
+          150,
+          40
+         ],
+         [
+          150,
+          160
+         ]
+        ],
+        "day": 10,
+        "mau": "#6b4f2a"
+       },
+       {
+        "t": "path",
+        "d": "M150 80 C 120 60, 80 60, 60 75 M150 70 C 180 50, 220 50, 240 70",
+        "mau": "#4f7a3a",
+        "day": 6
+       },
+       {
+        "t": "circle",
+        "x": 150,
+        "y": 45,
+        "r": 45,
+        "nen": "#7fb069"
+       },
+       {
+        "t": "path",
+        "d": "M150 120 C 120 130, 100 160, 90 200 M150 120 C 180 130, 200 160, 210 200 M150 140 C 135 160, 125 180, 120 200 M150 140 C 165 160, 175 180, 180 200",
+        "mau": "#6b4f2a",
+        "day": 4
+       },
+       {
+        "t": "line",
+        "d": [
+         [
+          205,
+          175
+         ],
+         [
+          290,
+          120
+         ]
+        ],
+        "mui": true,
+        "mau": "#333"
+       },
+       {
+        "t": "o",
+        "n": 6,
+        "x": 330,
+        "y": 110
+       },
+       {
+        "t": "line",
+        "d": [
+         [
+          400,
+          180
+         ],
+         [
+          400,
+          200
+         ],
+         [
+          380,
+          200
+         ]
+        ],
+        "mau": "#6b4f2a",
+        "day": 2
+       },
+       {
+        "t": "line",
+        "d": [
+         [
+          380,
+          205
+         ],
+         [
+          380,
+          172
+         ]
+        ],
+        "day": 3,
+        "mau": "#6b4f2a"
+       },
+       {
+        "t": "line",
+        "d": [
+         [
+          400,
+          205
+         ],
+         [
+          400,
+          168
+         ]
+        ],
+        "day": 3,
+        "mau": "#6b4f2a"
+       },
+       {
+        "t": "line",
+        "d": [
+         [
+          420,
+          205
+         ],
+         [
+          420,
+          174
+         ]
+        ],
+        "day": 3,
+        "mau": "#6b4f2a"
+       },
+       {
+        "t": "line",
+        "d": [
+         [
+          440,
+          205
+         ],
+         [
+          440,
+          170
+         ]
+        ],
+        "day": 3,
+        "mau": "#6b4f2a"
+       },
+       {
+        "t": "line",
+        "d": [
+         [
+          360,
+          230
+         ],
+         [
+          460,
+          230
+         ]
+        ],
+        "day": 3,
+        "mau": "#6b4f2a"
+       },
+       {
+        "t": "line",
+        "d": [
+         [
+          420,
+          168
+         ],
+         [
+          470,
+          100
+         ]
+        ],
+        "mui": true,
+        "mau": "#333"
+       },
+       {
+        "t": "o",
+        "n": 7,
+        "x": 500,
+        "y": 85
+       },
+       {
+        "t": "text",
+        "x": 470,
+        "y": 125,
+        "s": "take in air at low tide",
+        "co": 11,
+        "giua": true,
+        "nghieng": true
+       },
+       {
+        "t": "line",
+        "d": [
+         [
+          140,
+          220
+         ],
+         [
+          80,
+          262
+         ]
+        ],
+        "mui": true,
+        "mau": "#333"
+       },
+       {
+        "t": "text",
+        "x": 18,
+        "y": 284,
+        "s": "roots trap fine",
+        "co": 12
+       },
+       {
+        "t": "o",
+        "n": 8,
+        "x": 150,
+        "y": 278
+       },
+       {
+        "t": "text",
+        "x": 300,
+        "y": 270,
+        "s": "mud with almost no oxygen",
+        "co": 12,
+        "nghieng": true
+       }
+      ]
+     },
+     "cau": [
+      {
+       "id": "R6",
+       "kieu": "dien",
+       "de": "Label the diagram below. Choose NO MORE THAN TWO WORDS from the passage for each answer.\nHow mangrove roots cope with the shore — Ô số 6 trên hình: ___",
+       "dapAn": [
+        "prop roots"
+       ],
+       "giaiThich": "Rễ mọc từ thân và cành, vòng xuống nước như chân bàn = \"arching prop roots\" ⇒ prop roots (2 từ). Viết \"arching prop roots\" là 3 từ ⇒ vượt NO MORE THAN TWO WORDS ⇒ sai."
+      },
+      {
+       "id": "R7",
+       "kieu": "dien",
+       "de": "Label the diagram below. Choose NO MORE THAN TWO WORDS from the passage for each answer.\nHow mangrove roots cope with the shore — Ô số 7 trên hình: ___",
+       "dapAn": [
+        "breathing roots",
+        "pneumatophores"
+       ],
+       "giaiThich": "Rễ đâm thẳng lên khỏi bùn, hút khí lúc triều thấp = \"pneumatophores, or breathing roots\" ⇒ breathing roots hoặc pneumatophores đều đúng."
+      },
+      {
+       "id": "R8",
+       "kieu": "dien",
+       "de": "Label the diagram below. Choose NO MORE THAN TWO WORDS from the passage for each answer.\nHow mangrove roots cope with the shore — Ô số 8 trên hình: ___",
+       "dapAn": [
+        "sediment"
+       ],
+       "giaiThich": "Nhãn \"roots trap fine ___\" ⇒ bài: \"slows the movement of water and traps fine sediment\" ⇒ sediment. Chữ \"fine\" đã có sẵn trên hình — viết lại \"fine sediment\" vẫn trong 2 từ nhưng thừa chữ nhãn đã có; đáp án chuẩn là \"sediment\"."
+      }
+     ]
+    },
+    {
+     "huongDan": "Passage 1 — Câu 9–13. Do the following statements agree with the information given in Reading Passage 1? Choose TRUE if the statement agrees with the information FALSE if the statement contradicts the information NOT GIVEN if there is no information on this",
+     "doan": "READING PASSAGE 1\nGUARDIANS OF THE COAST\nHow mangrove forests survive where other trees cannot — and why they matter\n\nMangroves are trees and shrubs that grow in the intertidal zone of tropical and subtropical coastlines — the strip of muddy shore that is flooded by the sea twice a day and exposed again when the tide goes out. Around seventy species are recognised, and together they cover roughly 150,000 square kilometres, an area about half the size of Vietnam. Few woody plants can tolerate such conditions. The water that washes around their trunks contains a high level of salt, the soil is soft and unstable, and every few hours the roots are either drowned or left baking in the sun.\nSalt is the first problem. Most plants die quickly if their roots sit in seawater, because salt draws water out of their cells. Mangroves deal with it in several ways. Some species filter out more than ninety per cent of the salt at the surface of their roots, so that the water reaching the rest of the tree is almost fresh. Others allow salt into their tissues but then get rid of it through special glands in their leaves; on a dry afternoon, a careful observer can see tiny white crystals glittering on the leaf surface. Interestingly, mangroves do not actually need salt. In laboratory experiments they grow perfectly well in fresh water, but in rivers and lakes they lose out to faster-growing competitors, which is why they are found almost only on the coast.\nThe second problem is air. Beneath the surface lies waterlogged mud that contains almost no oxygen, so roots buried in it cannot breathe in the normal way. Here again the trees have found different solutions. The red mangrove supports itself on arching prop roots that grow out from the trunk and lower branches, holding the tree above the water like a table on many legs. Others, such as the grey mangrove, send up hundreds of vertical spikes known as pneumatophores, or breathing roots, which poke out of the mud like pencils. Their surfaces are covered with tiny pores that take in air at low tide and pass it down to the buried roots below.\nReproduction is equally unusual. In many mangrove species the seed begins to grow while it is still attached to the parent, developing into a long, spear-shaped seedling before it finally drops. Some seedlings fall straight into the mud and take root immediately. Others are carried away by the tide. Because they are designed to float, they can survive in the sea for up to a year before they reach a suitable shore — a strategy that explains how mangroves have spread across thousands of kilometres of ocean.\nFor people living on tropical coasts, mangrove forests are far more than a botanical curiosity. The dense tangle of roots slows the movement of water and traps fine sediment, gradually building up the land and protecting it from erosion. During storms, a wide belt of mangroves can reduce the height of waves considerably before they reach the shore. Studies carried out after major storms have found that villages sheltered behind healthy mangroves generally suffered less damage than unprotected ones, although scientists stress that no forest can stop the largest storm surges entirely. The roots also provide shelter for young fish, crabs and shrimp, and many coastal fisheries depend on them.\nMangroves are also remarkable stores of carbon. Their waterlogged soils decompose plant material very slowly, so carbon that would otherwise return to the atmosphere stays buried for centuries. Per hectare, mangrove forests can lock away several times as much carbon as tropical forests on dry land, much of it in the soil rather than in the trees themselves. When a mangrove forest is cleared, however, this stored carbon can be released surprisingly quickly.\nDespite their value, mangroves have been disappearing. Over the second half of the twentieth century, large areas were cleared for shrimp ponds, rice fields and coastal construction. In recent years the rate of loss has slowed, and many countries have begun to replant. Vietnam offers a well-known example: the Can Gio forest near Ho Chi Minh City, badly damaged during the war, was replanted from the late 1970s onwards and is now a UNESCO biosphere reserve. Replanting is not always simple, though. Many early replanting schemes failed because seedlings were pushed into mudflats where the tides were too deep or too frequent for them to survive. Ecologists now argue that the most successful projects begin not by planting trees, but by restoring the natural flow of water and letting seedlings arrive by themselves.",
+     "cau": [
+      {
+       "id": "R9",
+       "kieu": "chon",
+       "de": "Do the following statements agree with the information given in Reading Passage 1? Choose TRUE if the statement agrees with the information FALSE if the statement contradicts the information NOT GIVEN if there is no information on this\nMangroves are unable to grow unless they are in salt water.",
+       "luaChon": [
+        "TRUE",
+        "FALSE",
+        "NOT GIVEN"
+       ],
+       "dapAn": 1,
+       "giaiThich": "Bài nói ngược hẳn: \"mangroves do not actually need salt… they grow perfectly well in fresh water\" ⇒ FALSE. Chúng chỉ thua cây khác ở nước ngọt."
+      },
+      {
+       "id": "R10",
+       "kieu": "chon",
+       "de": "Do the following statements agree with the information given in Reading Passage 1? Choose TRUE if the statement agrees with the information FALSE if the statement contradicts the information NOT GIVEN if there is no information on this\nAn area of mangrove forest can hold more carbon than the same area of tropical forest on dry land.",
+       "luaChon": [
+        "TRUE",
+        "FALSE",
+        "NOT GIVEN"
+       ],
+       "dapAn": 0,
+       "giaiThich": "\"Per hectare, mangrove forests can lock away several times as much carbon as tropical forests on dry land\" — \"per hectare\" = \"the same area\" ⇒ TRUE."
+      },
+      {
+       "id": "R11",
+       "kieu": "chon",
+       "de": "Do the following statements agree with the information given in Reading Passage 1? Choose TRUE if the statement agrees with the information FALSE if the statement contradicts the information NOT GIVEN if there is no information on this\nA wide belt of mangroves can completely protect a village from the most powerful storm surges.",
+       "luaChon": [
+        "TRUE",
+        "FALSE",
+        "NOT GIVEN"
+       ],
+       "dapAn": 1,
+       "giaiThich": "Bài: \"no forest can stop the largest storm surges entirely\" — trái với \"completely protect… the most powerful\" ⇒ FALSE."
+      },
+      {
+       "id": "R12",
+       "kieu": "chon",
+       "de": "Do the following statements agree with the information given in Reading Passage 1? Choose TRUE if the statement agrees with the information FALSE if the statement contradicts the information NOT GIVEN if there is no information on this\nShrimp farming has been the single biggest cause of mangrove loss.",
+       "luaChon": [
+        "TRUE",
+        "FALSE",
+        "NOT GIVEN"
+       ],
+       "dapAn": 2,
+       "giaiThich": "Bài liệt kê \"shrimp ponds, rice fields and coastal construction\" nhưng KHÔNG nói cái nào lớn nhất ⇒ NOT GIVEN. Bẫy kinh điển: thấy từ \"shrimp\" là chọn TRUE."
+      },
+      {
+       "id": "R13",
+       "kieu": "chon",
+       "de": "Do the following statements agree with the information given in Reading Passage 1? Choose TRUE if the statement agrees with the information FALSE if the statement contradicts the information NOT GIVEN if there is no information on this\nSome replanting projects failed because seedlings were placed where the water conditions were unsuitable.",
+       "luaChon": [
+        "TRUE",
+        "FALSE",
+        "NOT GIVEN"
+       ],
+       "dapAn": 0,
+       "giaiThich": "\"failed because seedlings were pushed into mudflats where the tides were too deep or too frequent\" = \"water conditions were unsuitable\" ⇒ TRUE."
+      }
+     ]
+    },
+    {
+     "huongDan": "Passage 2 — Câu 14–19. Reading Passage 2 has six paragraphs, A–F. Choose the correct heading for each paragraph from the list of headings below. Choose the correct number, i–ix.",
+     "doan": "READING PASSAGE 2\nTHE BOX THAT CHANGED THE WORLD\nThe humble shipping container transformed trade — and created problems of its own\n\nA  For most of history, loading a ship was slow, expensive and dangerous work. Cargo travelled as \"break-bulk\": sacks of coffee, barrels of oil, crates of machinery and bundles of timber, each lifted on and off by teams of dockworkers. A single cargo ship might carry tens of thousands of separate items, and a large vessel could spend a week or more in port being unloaded and reloaded — in some cases nearly as long as it spent at sea. Theft was common, goods were frequently damaged, and the cost of handling cargo at the two ends of a journey often exceeded the cost of the voyage itself.\nB  The idea that eventually swept this system away came not from a shipping company but from a road haulier. Malcom McLean, who had built up a large trucking business in the United States, grew frustrated watching his drivers wait for hours while their loads were transferred to ships. His solution was simple: rather than unloading the goods, why not lift the whole trailer box onto the vessel? In 1956 a converted tanker called the Ideal X sailed from Newark to Houston carrying fifty-eight such boxes. According to most accounts, the cost of loading fell by more than ninety per cent compared with traditional methods.\nC  Yet a box on its own changed very little. Early containers came in many shapes and sizes, and each shipping line used its own design, which meant that a box from one company could not be carried by another company's ships or lifted by its cranes. The real breakthrough came in the late 1960s, when international committees agreed on a small number of standard dimensions, together with standard corner fittings that allowed any crane, truck or train wagon to lock onto any box. Capacity is still measured today in \"twenty-foot equivalent units\", or TEU, a direct legacy of those negotiations. The maritime historian Daniel Okafor argues that \"the container's success depended on committees as much as on engineers; without agreement on size, it would have remained a clever local trick.\"\nD  For the people who worked on the docks, the consequences were severe. A ship that once required hundreds of workers for a week could now be emptied by a few crane operators in a day. In port cities on both sides of the Atlantic, dock employment collapsed within a generation, and neighbourhoods that had depended on waterfront jobs for a century fell into decline. \"The machines arrived faster than any community could retrain,\" says Priya Raman, who studies labour history. \"Whole districts lost not only their income but their sense of purpose.\"\nE  Elsewhere, the effects were far more positive. As the cost of moving goods fell, it became practical for companies to make different parts of a product in different countries and assemble them somewhere else again. The logistics engineer Hiroshi Tanabe points out that containers allowed factories to keep very small stocks of components, because parts could be scheduled to arrive exactly when they were needed. The port economist Marta Lindqvist goes further, suggesting that cheaper freight was not the most important change at all. \"What manufacturers really valued,\" she says, \"was predictability. A container that arrives on the day it was promised is worth more than one that is cheap but late.\"\nF  Seventy years on, the container system faces new pressures. Ships have grown enormously — the largest now carry more than twenty thousand boxes — and only a handful of harbours in the world have water deep enough and cranes tall enough to serve them. Because global supply chains are so tightly linked, a problem in one place can spread rapidly. When a single giant vessel ran aground in the Suez Canal in March 2021, blocking it for six days, the knock-on hold-ups were felt by shipping companies and manufacturers across the globe for months afterwards. The box that made the world smaller has also made it more fragile.",
+     "cau": [
+      {
+       "id": "R14",
+       "kieu": "chon",
+       "de": "Reading Passage 2 has six paragraphs, A–F. Choose the correct heading for each paragraph from the list of headings below. Choose the correct number, i–ix.\nParagraph A",
+       "luaChon": [
+        "i. A failed government attempt to control shipping prices",
+        "ii. The slow and costly world of loading goods by hand",
+        "iii. An outsider's simple idea",
+        "iv. Agreeing on a common format",
+        "v. The human cost on the waterfront",
+        "vi. How cheaper transport reshaped manufacturing",
+        "vii. The environmental price of global shipping",
+        "viii. New risks for an old invention",
+        "ix. The rise of piracy on major trade routes"
+       ],
+       "dapAn": 1,
+       "giaiThich": "Đoạn A tả hàng \"break-bulk\" bốc từng món, chậm và tốn kém ⇒ ii."
+      },
+      {
+       "id": "R15",
+       "kieu": "chon",
+       "de": "Reading Passage 2 has six paragraphs, A–F. Choose the correct heading for each paragraph from the list of headings below. Choose the correct number, i–ix.\nParagraph B",
+       "luaChon": [
+        "i. A failed government attempt to control shipping prices",
+        "ii. The slow and costly world of loading goods by hand",
+        "iii. An outsider's simple idea",
+        "iv. Agreeing on a common format",
+        "v. The human cost on the waterfront",
+        "vi. How cheaper transport reshaped manufacturing",
+        "vii. The environmental price of global shipping",
+        "viii. New risks for an old invention",
+        "ix. The rise of piracy on major trade routes"
+       ],
+       "dapAn": 2,
+       "giaiThich": "Đoạn B: ý tưởng đến \"not from a shipping company but from a road haulier\" — người ngoài ngành ⇒ iii (An outsider's simple idea)."
+      },
+      {
+       "id": "R16",
+       "kieu": "chon",
+       "de": "Reading Passage 2 has six paragraphs, A–F. Choose the correct heading for each paragraph from the list of headings below. Choose the correct number, i–ix.\nParagraph C",
+       "luaChon": [
+        "i. A failed government attempt to control shipping prices",
+        "ii. The slow and costly world of loading goods by hand",
+        "iii. An outsider's simple idea",
+        "iv. Agreeing on a common format",
+        "v. The human cost on the waterfront",
+        "vi. How cheaper transport reshaped manufacturing",
+        "vii. The environmental price of global shipping",
+        "viii. New risks for an old invention",
+        "ix. The rise of piracy on major trade routes"
+       ],
+       "dapAn": 3,
+       "giaiThich": "Đoạn C: các uỷ ban quốc tế thống nhất kích thước chuẩn ⇒ iv (Agreeing on a common format). Không có chính phủ nào kiểm soát giá ⇒ loại i."
+      },
+      {
+       "id": "R17",
+       "kieu": "chon",
+       "de": "Reading Passage 2 has six paragraphs, A–F. Choose the correct heading for each paragraph from the list of headings below. Choose the correct number, i–ix.\nParagraph D",
+       "luaChon": [
+        "i. A failed government attempt to control shipping prices",
+        "ii. The slow and costly world of loading goods by hand",
+        "iii. An outsider's simple idea",
+        "iv. Agreeing on a common format",
+        "v. The human cost on the waterfront",
+        "vi. How cheaper transport reshaped manufacturing",
+        "vii. The environmental price of global shipping",
+        "viii. New risks for an old invention",
+        "ix. The rise of piracy on major trade routes"
+       ],
+       "dapAn": 4,
+       "giaiThich": "Đoạn D: công nhân bến cảng mất việc, khu phố suy tàn ⇒ v."
+      },
+      {
+       "id": "R18",
+       "kieu": "chon",
+       "de": "Reading Passage 2 has six paragraphs, A–F. Choose the correct heading for each paragraph from the list of headings below. Choose the correct number, i–ix.\nParagraph E",
+       "luaChon": [
+        "i. A failed government attempt to control shipping prices",
+        "ii. The slow and costly world of loading goods by hand",
+        "iii. An outsider's simple idea",
+        "iv. Agreeing on a common format",
+        "v. The human cost on the waterfront",
+        "vi. How cheaper transport reshaped manufacturing",
+        "vii. The environmental price of global shipping",
+        "viii. New risks for an old invention",
+        "ix. The rise of piracy on major trade routes"
+       ],
+       "dapAn": 5,
+       "giaiThich": "Đoạn E: chi phí vận chuyển giảm ⇒ sản xuất linh kiện ở nhiều nước ⇒ vi."
+      },
+      {
+       "id": "R19",
+       "kieu": "chon",
+       "de": "Reading Passage 2 has six paragraphs, A–F. Choose the correct heading for each paragraph from the list of headings below. Choose the correct number, i–ix.\nParagraph F",
+       "luaChon": [
+        "i. A failed government attempt to control shipping prices",
+        "ii. The slow and costly world of loading goods by hand",
+        "iii. An outsider's simple idea",
+        "iv. Agreeing on a common format",
+        "v. The human cost on the waterfront",
+        "vi. How cheaper transport reshaped manufacturing",
+        "vii. The environmental price of global shipping",
+        "viii. New risks for an old invention",
+        "ix. The rise of piracy on major trade routes"
+       ],
+       "dapAn": 7,
+       "giaiThich": "Đoạn F: tàu khổng lồ, chuỗi cung ứng mong manh — \"new pressures… more fragile\" ⇒ viii (New risks for an old invention)."
+      }
+     ]
+    },
+    {
+     "huongDan": "Passage 2 — Câu 20–23. Look at the following statements (Questions 20–23) and the list of people below. Match each statement with the correct person, A–D. NB You may use any letter more than once.",
+     "doan": "READING PASSAGE 2\nTHE BOX THAT CHANGED THE WORLD\nThe humble shipping container transformed trade — and created problems of its own\n\nA  For most of history, loading a ship was slow, expensive and dangerous work. Cargo travelled as \"break-bulk\": sacks of coffee, barrels of oil, crates of machinery and bundles of timber, each lifted on and off by teams of dockworkers. A single cargo ship might carry tens of thousands of separate items, and a large vessel could spend a week or more in port being unloaded and reloaded — in some cases nearly as long as it spent at sea. Theft was common, goods were frequently damaged, and the cost of handling cargo at the two ends of a journey often exceeded the cost of the voyage itself.\nB  The idea that eventually swept this system away came not from a shipping company but from a road haulier. Malcom McLean, who had built up a large trucking business in the United States, grew frustrated watching his drivers wait for hours while their loads were transferred to ships. His solution was simple: rather than unloading the goods, why not lift the whole trailer box onto the vessel? In 1956 a converted tanker called the Ideal X sailed from Newark to Houston carrying fifty-eight such boxes. According to most accounts, the cost of loading fell by more than ninety per cent compared with traditional methods.\nC  Yet a box on its own changed very little. Early containers came in many shapes and sizes, and each shipping line used its own design, which meant that a box from one company could not be carried by another company's ships or lifted by its cranes. The real breakthrough came in the late 1960s, when international committees agreed on a small number of standard dimensions, together with standard corner fittings that allowed any crane, truck or train wagon to lock onto any box. Capacity is still measured today in \"twenty-foot equivalent units\", or TEU, a direct legacy of those negotiations. The maritime historian Daniel Okafor argues that \"the container's success depended on committees as much as on engineers; without agreement on size, it would have remained a clever local trick.\"\nD  For the people who worked on the docks, the consequences were severe. A ship that once required hundreds of workers for a week could now be emptied by a few crane operators in a day. In port cities on both sides of the Atlantic, dock employment collapsed within a generation, and neighbourhoods that had depended on waterfront jobs for a century fell into decline. \"The machines arrived faster than any community could retrain,\" says Priya Raman, who studies labour history. \"Whole districts lost not only their income but their sense of purpose.\"\nE  Elsewhere, the effects were far more positive. As the cost of moving goods fell, it became practical for companies to make different parts of a product in different countries and assemble them somewhere else again. The logistics engineer Hiroshi Tanabe points out that containers allowed factories to keep very small stocks of components, because parts could be scheduled to arrive exactly when they were needed. The port economist Marta Lindqvist goes further, suggesting that cheaper freight was not the most important change at all. \"What manufacturers really valued,\" she says, \"was predictability. A container that arrives on the day it was promised is worth more than one that is cheap but late.\"\nF  Seventy years on, the container system faces new pressures. Ships have grown enormously — the largest now carry more than twenty thousand boxes — and only a handful of harbours in the world have water deep enough and cranes tall enough to serve them. Because global supply chains are so tightly linked, a problem in one place can spread rapidly. When a single giant vessel ran aground in the Suez Canal in March 2021, blocking it for six days, the knock-on hold-ups were felt by shipping companies and manufacturers across the globe for months afterwards. The box that made the world smaller has also made it more fragile.",
+     "cau": [
+      {
+       "id": "R20",
+       "kieu": "chon",
+       "de": "Look at the following statements (Questions 20–23) and the list of people below. Match each statement with the correct person, A–D. NB You may use any letter more than once.\nContainers made it possible for factories to rely on parts arriving at precisely the right time.",
+       "luaChon": [
+        "A. Marta Lindqvist",
+        "B. Daniel Okafor",
+        "C. Hiroshi Tanabe",
+        "D. Priya Raman"
+       ],
+       "dapAn": 2,
+       "giaiThich": "Tanabe: \"parts could be scheduled to arrive exactly when they were needed\" ⇒ C."
+      },
+      {
+       "id": "R21",
+       "kieu": "chon",
+       "de": "Look at the following statements (Questions 20–23) and the list of people below. Match each statement with the correct person, A–D. NB You may use any letter more than once.\nJob losses happened more quickly than local people could learn new skills.",
+       "luaChon": [
+        "A. Marta Lindqvist",
+        "B. Daniel Okafor",
+        "C. Hiroshi Tanabe",
+        "D. Priya Raman"
+       ],
+       "dapAn": 3,
+       "giaiThich": "Raman: \"The machines arrived faster than any community could retrain\" — retrain = learn new skills ⇒ D."
+      },
+      {
+       "id": "R22",
+       "kieu": "chon",
+       "de": "Look at the following statements (Questions 20–23) and the list of people below. Match each statement with the correct person, A–D. NB You may use any letter more than once.\nReliable delivery was more important to manufacturers than low transport costs.",
+       "luaChon": [
+        "A. Marta Lindqvist",
+        "B. Daniel Okafor",
+        "C. Hiroshi Tanabe",
+        "D. Priya Raman"
+       ],
+       "dapAn": 0,
+       "giaiThich": "Lindqvist: \"What manufacturers really valued was predictability…\" ⇒ A. Bẫy: Tanabe cũng nói về giao hàng đúng giờ nhưng KHÔNG so với chi phí."
+      },
+      {
+       "id": "R23",
+       "kieu": "chon",
+       "de": "Look at the following statements (Questions 20–23) and the list of people below. Match each statement with the correct person, A–D. NB You may use any letter more than once.\nInternational agreement was as important to the container's success as its design.",
+       "luaChon": [
+        "A. Marta Lindqvist",
+        "B. Daniel Okafor",
+        "C. Hiroshi Tanabe",
+        "D. Priya Raman"
+       ],
+       "dapAn": 1,
+       "giaiThich": "Okafor: \"depended on committees as much as on engineers\" ⇒ B."
+      }
+     ]
+    },
+    {
+     "huongDan": "Passage 2 — Câu 24–26. Complete the summary using the list of words, A–H, below.",
+     "doan": "READING PASSAGE 2\nTHE BOX THAT CHANGED THE WORLD\nThe humble shipping container transformed trade — and created problems of its own\n\nA  For most of history, loading a ship was slow, expensive and dangerous work. Cargo travelled as \"break-bulk\": sacks of coffee, barrels of oil, crates of machinery and bundles of timber, each lifted on and off by teams of dockworkers. A single cargo ship might carry tens of thousands of separate items, and a large vessel could spend a week or more in port being unloaded and reloaded — in some cases nearly as long as it spent at sea. Theft was common, goods were frequently damaged, and the cost of handling cargo at the two ends of a journey often exceeded the cost of the voyage itself.\nB  The idea that eventually swept this system away came not from a shipping company but from a road haulier. Malcom McLean, who had built up a large trucking business in the United States, grew frustrated watching his drivers wait for hours while their loads were transferred to ships. His solution was simple: rather than unloading the goods, why not lift the whole trailer box onto the vessel? In 1956 a converted tanker called the Ideal X sailed from Newark to Houston carrying fifty-eight such boxes. According to most accounts, the cost of loading fell by more than ninety per cent compared with traditional methods.\nC  Yet a box on its own changed very little. Early containers came in many shapes and sizes, and each shipping line used its own design, which meant that a box from one company could not be carried by another company's ships or lifted by its cranes. The real breakthrough came in the late 1960s, when international committees agreed on a small number of standard dimensions, together with standard corner fittings that allowed any crane, truck or train wagon to lock onto any box. Capacity is still measured today in \"twenty-foot equivalent units\", or TEU, a direct legacy of those negotiations. The maritime historian Daniel Okafor argues that \"the container's success depended on committees as much as on engineers; without agreement on size, it would have remained a clever local trick.\"\nD  For the people who worked on the docks, the consequences were severe. A ship that once required hundreds of workers for a week could now be emptied by a few crane operators in a day. In port cities on both sides of the Atlantic, dock employment collapsed within a generation, and neighbourhoods that had depended on waterfront jobs for a century fell into decline. \"The machines arrived faster than any community could retrain,\" says Priya Raman, who studies labour history. \"Whole districts lost not only their income but their sense of purpose.\"\nE  Elsewhere, the effects were far more positive. As the cost of moving goods fell, it became practical for companies to make different parts of a product in different countries and assemble them somewhere else again. The logistics engineer Hiroshi Tanabe points out that containers allowed factories to keep very small stocks of components, because parts could be scheduled to arrive exactly when they were needed. The port economist Marta Lindqvist goes further, suggesting that cheaper freight was not the most important change at all. \"What manufacturers really valued,\" she says, \"was predictability. A container that arrives on the day it was promised is worth more than one that is cheap but late.\"\nF  Seventy years on, the container system faces new pressures. Ships have grown enormously — the largest now carry more than twenty thousand boxes — and only a handful of harbours in the world have water deep enough and cranes tall enough to serve them. Because global supply chains are so tightly linked, a problem in one place can spread rapidly. When a single giant vessel ran aground in the Suez Canal in March 2021, blocking it for six days, the knock-on hold-ups were felt by shipping companies and manufacturers across the globe for months afterwards. The box that made the world smaller has also made it more fragile.\n\n────────\nCHALLENGES FACING THE CONTAINER SYSTEM TODAY\nCâu 24–26. Complete the summary using the list of words, A–H, below.\nContainer ships are now so large that relatively few (24) ______ are able to handle them. Because supply chains around the world are highly (25) ______, a problem at a single location can quickly have wider effects. In 2021, for example, one vessel blocked an important canal for less than a week, but it caused (26) ______ for businesses worldwide over a much longer period.",
+     "cau": [
+      {
+       "id": "R24",
+       "kieu": "chon",
+       "luaChon": [
+        "A. ports",
+        "B. factories",
+        "C. interconnected",
+        "D. delays",
+        "E. profits",
+        "F. flexible",
+        "G. crews",
+        "H. shortages"
+       ],
+       "dapAn": 0,
+       "de": "Complete the summary using the list of words, A–H, below.\nChallenges facing the container system today — Container ships are now so large that relatively few ___ are able to handle them. Because supply chains around the world are highly (25) …, a problem at a single location can quickly have wider effects. In 2021, for example, one vessel blocked an important canal for less than a week, but it caused (26) … for businesses worldwide over a much longer period.",
+       "giaiThich": "\"only a handful of harbours… can serve them\" — harbours = ports (A)."
+      },
+      {
+       "id": "R25",
+       "kieu": "chon",
+       "luaChon": [
+        "A. ports",
+        "B. factories",
+        "C. interconnected",
+        "D. delays",
+        "E. profits",
+        "F. flexible",
+        "G. crews",
+        "H. shortages"
+       ],
+       "dapAn": 2,
+       "de": "Complete the summary using the list of words, A–H, below.\nChallenges facing the container system today — Container ships are now so large that relatively few (24) … are able to handle them. Because supply chains around the world are highly ___, a problem at a single location can quickly have wider effects. In 2021, for example, one vessel blocked an important canal for less than a week, but it caused (26) … for businesses worldwide over a much longer period.",
+       "giaiThich": "\"supply chains are so tightly linked\" = highly interconnected (C). \"flexible\" trái nghĩa với ý mong manh."
+      },
+      {
+       "id": "R26",
+       "kieu": "chon",
+       "luaChon": [
+        "A. ports",
+        "B. factories",
+        "C. interconnected",
+        "D. delays",
+        "E. profits",
+        "F. flexible",
+        "G. crews",
+        "H. shortages"
+       ],
+       "dapAn": 3,
+       "de": "Complete the summary using the list of words, A–H, below.\nChallenges facing the container system today — Container ships are now so large that relatively few (24) … are able to handle them. Because supply chains around the world are highly (25) …, a problem at a single location can quickly have wider effects. In 2021, for example, one vessel blocked an important canal for less than a week, but it caused ___ for businesses worldwide over a much longer period.",
+       "giaiThich": "\"the knock-on hold-ups were felt… for months\" — hold-ups = delays (D). Bài không nhắc thiếu hàng ⇒ loại \"shortages\"."
+      }
+     ]
+    },
+    {
+     "huongDan": "Passage 3 — Câu 27–31. Do the following statements agree with the claims of the writer in Reading Passage 3? Choose YES if the statement agrees with the claims of the writer NO if the statement contradicts the claims of the writer NOT GIVEN if it is impossible to say what the writer thinks about this",
+     "doan": "READING PASSAGE 3\nTHE HIDDEN VALUE OF BOREDOM\nIs the feeling we try hardest to avoid actually good for us?\n\nFew experiences are as universally disliked as boredom. For centuries it has been treated as a minor moral failing — the problem of idle people who lacked the discipline to find something useful to do. Psychologists, for their part, largely ignored it, regarding it as too vague and too ordinary to deserve serious study. Over the past two decades, however, that attitude has changed, and researchers now see boredom as a distinct emotion with its own causes, consequences and, surprisingly, its own benefits. In my view, this shift is overdue: boredom is a far more useful feeling than its reputation suggests.\nMost researchers now agree that boredom is best understood as a signal. Just as hunger tells us that we need food, boredom tells us that what we are doing — or not doing — has stopped engaging our minds. It is uncomfortable precisely so that we will act on it. Like physical pain, its unpleasantness is the point: a signal that could easily be ignored would be of little use. Seen this way, boredom is not the opposite of motivation but one of its sources, pushing us to change our situation and look for something more meaningful.\nSome evidence suggests that boredom may even make us more creative. In one well-known British experiment, volunteers were first asked to copy telephone numbers from a directory for fifteen minutes, a task chosen because it was almost perfectly dull. They were then asked to think of as many uses as possible for a pair of plastic cups. Compared with a group who had gone straight to the creative task, the bored volunteers came up with more ideas. The researchers suggested that the dull task had encouraged mind-wandering, allowing the volunteers' thoughts to drift and make unexpected connections. The effect was modest, and not every later study has confirmed it, but it fits with the reports of many writers and scientists who say their best ideas arrive when they are doing nothing in particular.\nNot all boredom is harmless, though. Psychologists distinguish between situational boredom, which arises from a particular dull task and disappears when the task ends, and chronic boredom, a lasting tendency to find life unstimulating. It is the second kind that worries researchers. People who are easily bored are more likely to engage in risky behaviour such as gambling, and they report higher levels of anxiety and low mood. Whether boredom causes these problems or simply accompanies them is still debated, but the link is consistent enough to take seriously.\nMany of us, it seems, will go to great lengths to avoid even a few minutes of boredom. In a series of studies in the United States, participants were left alone in a plain room for up to fifteen minutes with nothing to do but think. In one version, they could press a button to give themselves a mild electric shock — one that most had earlier said they would pay money to avoid. A quarter of the women and two-thirds of the men chose to shock themselves at least once. The finding says less about pain than about how uncomfortable many of us are when left alone with our own thoughts.\nToday, of course, we rarely need to be. A smartphone offers an instant escape from any empty moment: a queue, a bus journey, the thirty seconds while a kettle boils. An entire industry of games, feeds and short videos has grown up around that need. Yet phones do not cure boredom; they merely postpone it, and the constant switching from one small distraction to the next often leaves people feeling flatter and more restless than before. We cannot know for certain whether we are more bored than our grandparents were, because nobody measured boredom in the past. What has clearly changed is how rarely we allow the feeling to run its course.\nWhat, then, should we do? It would be a mistake to try to remove every dull moment from children's lessons; learning to stay with a difficult or repetitive task is itself a skill that school should teach. For adults, the most practical advice is to treat boredom as information rather than as an emergency. When it appears, it is worth asking what it is telling us — that a task needs a new approach, perhaps, or that we need a break of a different kind. Some people find it helpful to set aside regular periods without screens, such as a walk with no headphones, so that the mind has space to wander. None of this will make boredom pleasant. But it may allow us to hear what it has been trying to say.",
+     "cau": [
+      {
+       "id": "R27",
+       "kieu": "chon",
+       "de": "Do the following statements agree with the claims of the writer in Reading Passage 3? Choose YES if the statement agrees with the claims of the writer NO if the statement contradicts the claims of the writer NOT GIVEN if it is impossible to say what the writer thinks about this\nBoredom is more valuable than most people believe.",
+       "luaChon": [
+        "YES",
+        "NO",
+        "NOT GIVEN"
+       ],
+       "dapAn": 0,
+       "giaiThich": "Người viết: \"boredom is a far more useful feeling than its reputation suggests\" ⇒ YES."
+      },
+      {
+       "id": "R28",
+       "kieu": "chon",
+       "de": "Do the following statements agree with the claims of the writer in Reading Passage 3? Choose YES if the statement agrees with the claims of the writer NO if the statement contradicts the claims of the writer NOT GIVEN if it is impossible to say what the writer thinks about this\nPeople today feel bored more often than people did in the past.",
+       "luaChon": [
+        "YES",
+        "NO",
+        "NOT GIVEN"
+       ],
+       "dapAn": 2,
+       "giaiThich": "Người viết nói \"We cannot know for certain whether we are more bored than our grandparents were\" — không đồng ý cũng không phản đối ⇒ NOT GIVEN."
+      },
+      {
+       "id": "R29",
+       "kieu": "chon",
+       "de": "Do the following statements agree with the claims of the writer in Reading Passage 3? Choose YES if the statement agrees with the claims of the writer NO if the statement contradicts the claims of the writer NOT GIVEN if it is impossible to say what the writer thinks about this\nUsing a smartphone is an effective way to end the feeling of boredom.",
+       "luaChon": [
+        "YES",
+        "NO",
+        "NOT GIVEN"
+       ],
+       "dapAn": 1,
+       "giaiThich": "\"phones do not cure boredom; they merely postpone it\" — trái với \"effective way to end\" ⇒ NO."
+      },
+      {
+       "id": "R30",
+       "kieu": "chon",
+       "de": "Do the following statements agree with the claims of the writer in Reading Passage 3? Choose YES if the statement agrees with the claims of the writer NO if the statement contradicts the claims of the writer NOT GIVEN if it is impossible to say what the writer thinks about this\nTeachers should aim to remove all repetitive tasks from lessons.",
+       "luaChon": [
+        "YES",
+        "NO",
+        "NOT GIVEN"
+       ],
+       "dapAn": 1,
+       "giaiThich": "\"It would be a mistake to try to remove every dull moment from children's lessons\" ⇒ NO."
+      },
+      {
+       "id": "R31",
+       "kieu": "chon",
+       "de": "Do the following statements agree with the claims of the writer in Reading Passage 3? Choose YES if the statement agrees with the claims of the writer NO if the statement contradicts the claims of the writer NOT GIVEN if it is impossible to say what the writer thinks about this\nThe electric-shock studies show that most people are poor at creative thinking.",
+       "luaChon": [
+        "YES",
+        "NO",
+        "NOT GIVEN"
+       ],
+       "dapAn": 2,
+       "giaiThich": "Người viết rút ra kết luận về việc ta khó chịu khi ở một mình với suy nghĩ — không nói gì về khả năng sáng tạo ⇒ NOT GIVEN."
+      }
+     ]
+    },
+    {
+     "huongDan": "Passage 3 — Câu 32–35. Choose the correct letter, A, B, C or D.",
+     "doan": "READING PASSAGE 3\nTHE HIDDEN VALUE OF BOREDOM\nIs the feeling we try hardest to avoid actually good for us?\n\nFew experiences are as universally disliked as boredom. For centuries it has been treated as a minor moral failing — the problem of idle people who lacked the discipline to find something useful to do. Psychologists, for their part, largely ignored it, regarding it as too vague and too ordinary to deserve serious study. Over the past two decades, however, that attitude has changed, and researchers now see boredom as a distinct emotion with its own causes, consequences and, surprisingly, its own benefits. In my view, this shift is overdue: boredom is a far more useful feeling than its reputation suggests.\nMost researchers now agree that boredom is best understood as a signal. Just as hunger tells us that we need food, boredom tells us that what we are doing — or not doing — has stopped engaging our minds. It is uncomfortable precisely so that we will act on it. Like physical pain, its unpleasantness is the point: a signal that could easily be ignored would be of little use. Seen this way, boredom is not the opposite of motivation but one of its sources, pushing us to change our situation and look for something more meaningful.\nSome evidence suggests that boredom may even make us more creative. In one well-known British experiment, volunteers were first asked to copy telephone numbers from a directory for fifteen minutes, a task chosen because it was almost perfectly dull. They were then asked to think of as many uses as possible for a pair of plastic cups. Compared with a group who had gone straight to the creative task, the bored volunteers came up with more ideas. The researchers suggested that the dull task had encouraged mind-wandering, allowing the volunteers' thoughts to drift and make unexpected connections. The effect was modest, and not every later study has confirmed it, but it fits with the reports of many writers and scientists who say their best ideas arrive when they are doing nothing in particular.\nNot all boredom is harmless, though. Psychologists distinguish between situational boredom, which arises from a particular dull task and disappears when the task ends, and chronic boredom, a lasting tendency to find life unstimulating. It is the second kind that worries researchers. People who are easily bored are more likely to engage in risky behaviour such as gambling, and they report higher levels of anxiety and low mood. Whether boredom causes these problems or simply accompanies them is still debated, but the link is consistent enough to take seriously.\nMany of us, it seems, will go to great lengths to avoid even a few minutes of boredom. In a series of studies in the United States, participants were left alone in a plain room for up to fifteen minutes with nothing to do but think. In one version, they could press a button to give themselves a mild electric shock — one that most had earlier said they would pay money to avoid. A quarter of the women and two-thirds of the men chose to shock themselves at least once. The finding says less about pain than about how uncomfortable many of us are when left alone with our own thoughts.\nToday, of course, we rarely need to be. A smartphone offers an instant escape from any empty moment: a queue, a bus journey, the thirty seconds while a kettle boils. An entire industry of games, feeds and short videos has grown up around that need. Yet phones do not cure boredom; they merely postpone it, and the constant switching from one small distraction to the next often leaves people feeling flatter and more restless than before. We cannot know for certain whether we are more bored than our grandparents were, because nobody measured boredom in the past. What has clearly changed is how rarely we allow the feeling to run its course.\nWhat, then, should we do? It would be a mistake to try to remove every dull moment from children's lessons; learning to stay with a difficult or repetitive task is itself a skill that school should teach. For adults, the most practical advice is to treat boredom as information rather than as an emergency. When it appears, it is worth asking what it is telling us — that a task needs a new approach, perhaps, or that we need a break of a different kind. Some people find it helpful to set aside regular periods without screens, such as a walk with no headphones, so that the mind has space to wander. None of this will make boredom pleasant. But it may allow us to hear what it has been trying to say.",
+     "cau": [
+      {
+       "id": "R32",
+       "kieu": "chon",
+       "de": "Choose the correct letter, A, B, C or D.\nAccording to the second paragraph, the main purpose of boredom is to",
+       "luaChon": [
+        "help the mind recover after a period of hard work.",
+        "encourage us to change an activity that no longer engages us.",
+        "reduce our motivation when a task is too difficult.",
+        "warn us that we are physically tired."
+       ],
+       "dapAn": 1,
+       "giaiThich": "\"boredom tells us that what we are doing… has stopped engaging our minds… pushing us to change our situation\" ⇒ B."
+      },
+      {
+       "id": "R33",
+       "kieu": "chon",
+       "de": "Choose the correct letter, A, B, C or D.\nIn the British experiment, volunteers who copied telephone numbers",
+       "luaChon": [
+        "found the creative task more boring than the other group did.",
+        "produced more ideas in the task that followed.",
+        "were unable to concentrate on the creative task.",
+        "took longer than expected to finish the directory task."
+       ],
+       "dapAn": 1,
+       "giaiThich": "\"the bored volunteers came up with more ideas\" ⇒ B."
+      },
+      {
+       "id": "R34",
+       "kieu": "chon",
+       "de": "Choose the correct letter, A, B, C or D.\nWhat does the writer say about chronic boredom?",
+       "luaChon": [
+        "It has been proven to cause anxiety and low mood.",
+        "It usually disappears when a dull task is over.",
+        "It is consistently associated with certain problems.",
+        "It is less common than situational boredom."
+       ],
+       "dapAn": 2,
+       "giaiThich": "\"Whether boredom causes these problems… is still debated, but the link is consistent\" ⇒ có liên hệ nhất quán (C), CHƯA chứng minh gây ra (loại A)."
+      },
+      {
+       "id": "R35",
+       "kieu": "chon",
+       "de": "Choose the correct letter, A, B, C or D.\nThe writer's attitude towards the industry of games, feeds and short videos is",
+       "luaChon": [
+        "enthusiastic, because it removes empty moments.",
+        "neutral, because its effects have not been measured.",
+        "sceptical, because it delays boredom rather than ending it.",
+        "angry, because it was designed to cause anxiety."
+       ],
+       "dapAn": 2,
+       "giaiThich": "\"phones do not cure boredom; they merely postpone it\" ⇒ hoài nghi C."
+      }
+     ]
+    },
+    {
+     "huongDan": "Passage 3 — Câu 36–37. Choose TWO letters, A–E.",
+     "doan": "READING PASSAGE 3\nTHE HIDDEN VALUE OF BOREDOM\nIs the feeling we try hardest to avoid actually good for us?\n\nFew experiences are as universally disliked as boredom. For centuries it has been treated as a minor moral failing — the problem of idle people who lacked the discipline to find something useful to do. Psychologists, for their part, largely ignored it, regarding it as too vague and too ordinary to deserve serious study. Over the past two decades, however, that attitude has changed, and researchers now see boredom as a distinct emotion with its own causes, consequences and, surprisingly, its own benefits. In my view, this shift is overdue: boredom is a far more useful feeling than its reputation suggests.\nMost researchers now agree that boredom is best understood as a signal. Just as hunger tells us that we need food, boredom tells us that what we are doing — or not doing — has stopped engaging our minds. It is uncomfortable precisely so that we will act on it. Like physical pain, its unpleasantness is the point: a signal that could easily be ignored would be of little use. Seen this way, boredom is not the opposite of motivation but one of its sources, pushing us to change our situation and look for something more meaningful.\nSome evidence suggests that boredom may even make us more creative. In one well-known British experiment, volunteers were first asked to copy telephone numbers from a directory for fifteen minutes, a task chosen because it was almost perfectly dull. They were then asked to think of as many uses as possible for a pair of plastic cups. Compared with a group who had gone straight to the creative task, the bored volunteers came up with more ideas. The researchers suggested that the dull task had encouraged mind-wandering, allowing the volunteers' thoughts to drift and make unexpected connections. The effect was modest, and not every later study has confirmed it, but it fits with the reports of many writers and scientists who say their best ideas arrive when they are doing nothing in particular.\nNot all boredom is harmless, though. Psychologists distinguish between situational boredom, which arises from a particular dull task and disappears when the task ends, and chronic boredom, a lasting tendency to find life unstimulating. It is the second kind that worries researchers. People who are easily bored are more likely to engage in risky behaviour such as gambling, and they report higher levels of anxiety and low mood. Whether boredom causes these problems or simply accompanies them is still debated, but the link is consistent enough to take seriously.\nMany of us, it seems, will go to great lengths to avoid even a few minutes of boredom. In a series of studies in the United States, participants were left alone in a plain room for up to fifteen minutes with nothing to do but think. In one version, they could press a button to give themselves a mild electric shock — one that most had earlier said they would pay money to avoid. A quarter of the women and two-thirds of the men chose to shock themselves at least once. The finding says less about pain than about how uncomfortable many of us are when left alone with our own thoughts.\nToday, of course, we rarely need to be. A smartphone offers an instant escape from any empty moment: a queue, a bus journey, the thirty seconds while a kettle boils. An entire industry of games, feeds and short videos has grown up around that need. Yet phones do not cure boredom; they merely postpone it, and the constant switching from one small distraction to the next often leaves people feeling flatter and more restless than before. We cannot know for certain whether we are more bored than our grandparents were, because nobody measured boredom in the past. What has clearly changed is how rarely we allow the feeling to run its course.\nWhat, then, should we do? It would be a mistake to try to remove every dull moment from children's lessons; learning to stay with a difficult or repetitive task is itself a skill that school should teach. For adults, the most practical advice is to treat boredom as information rather than as an emergency. When it appears, it is worth asking what it is telling us — that a task needs a new approach, perhaps, or that we need a break of a different kind. Some people find it helpful to set aside regular periods without screens, such as a walk with no headphones, so that the mind has space to wander. None of this will make boredom pleasant. But it may allow us to hear what it has been trying to say.",
+     "cau": [
+      {
+       "id": "R36",
+       "kieu": "chon",
+       "de": "Choose TWO letters, A–E.\nWhich TWO pieces of advice does the writer give for dealing with boredom?\n(Câu 36 và 37 cùng một câu hỏi — ở câu này chọn đáp án đứng TRƯỚC theo bảng chữ cái.)",
+       "luaChon": [
+        "Choose the most stimulating activity available.",
+        "Think about what the feeling might be indicating.",
+        "Avoid repetitive tasks wherever possible.",
+        "Spend some time regularly away from digital devices.",
+        "Keep a record of when boredom occurs."
+       ],
+       "dapAn": 1,
+       "giaiThich": "Hai lời khuyên: hỏi xem cảm giác chán \"đang nói gì\" (B) và dành thời gian đều đặn không màn hình (D). Thứ tự không quan trọng."
+      },
+      {
+       "id": "R37",
+       "kieu": "chon",
+       "de": "Choose TWO letters, A–E.\nWhich TWO pieces of advice does the writer give for dealing with boredom?\n(Câu 36 và 37 cùng một câu hỏi — ở câu này chọn đáp án đứng SAU theo bảng chữ cái.)",
+       "luaChon": [
+        "Choose the most stimulating activity available.",
+        "Think about what the feeling might be indicating.",
+        "Avoid repetitive tasks wherever possible.",
+        "Spend some time regularly away from digital devices.",
+        "Keep a record of when boredom occurs."
+       ],
+       "dapAn": 3,
+       "giaiThich": "Như câu 36: B và D. A ngược ý bài; C bị bác (\"a mistake to try to remove every dull moment\")."
+      }
+     ]
+    },
+    {
+     "huongDan": "Passage 3 — Câu 38–40. Complete the sentences below. Choose NO MORE THAN TWO WORDS from the passage for each answer.",
+     "doan": "READING PASSAGE 3\nTHE HIDDEN VALUE OF BOREDOM\nIs the feeling we try hardest to avoid actually good for us?\n\nFew experiences are as universally disliked as boredom. For centuries it has been treated as a minor moral failing — the problem of idle people who lacked the discipline to find something useful to do. Psychologists, for their part, largely ignored it, regarding it as too vague and too ordinary to deserve serious study. Over the past two decades, however, that attitude has changed, and researchers now see boredom as a distinct emotion with its own causes, consequences and, surprisingly, its own benefits. In my view, this shift is overdue: boredom is a far more useful feeling than its reputation suggests.\nMost researchers now agree that boredom is best understood as a signal. Just as hunger tells us that we need food, boredom tells us that what we are doing — or not doing — has stopped engaging our minds. It is uncomfortable precisely so that we will act on it. Like physical pain, its unpleasantness is the point: a signal that could easily be ignored would be of little use. Seen this way, boredom is not the opposite of motivation but one of its sources, pushing us to change our situation and look for something more meaningful.\nSome evidence suggests that boredom may even make us more creative. In one well-known British experiment, volunteers were first asked to copy telephone numbers from a directory for fifteen minutes, a task chosen because it was almost perfectly dull. They were then asked to think of as many uses as possible for a pair of plastic cups. Compared with a group who had gone straight to the creative task, the bored volunteers came up with more ideas. The researchers suggested that the dull task had encouraged mind-wandering, allowing the volunteers' thoughts to drift and make unexpected connections. The effect was modest, and not every later study has confirmed it, but it fits with the reports of many writers and scientists who say their best ideas arrive when they are doing nothing in particular.\nNot all boredom is harmless, though. Psychologists distinguish between situational boredom, which arises from a particular dull task and disappears when the task ends, and chronic boredom, a lasting tendency to find life unstimulating. It is the second kind that worries researchers. People who are easily bored are more likely to engage in risky behaviour such as gambling, and they report higher levels of anxiety and low mood. Whether boredom causes these problems or simply accompanies them is still debated, but the link is consistent enough to take seriously.\nMany of us, it seems, will go to great lengths to avoid even a few minutes of boredom. In a series of studies in the United States, participants were left alone in a plain room for up to fifteen minutes with nothing to do but think. In one version, they could press a button to give themselves a mild electric shock — one that most had earlier said they would pay money to avoid. A quarter of the women and two-thirds of the men chose to shock themselves at least once. The finding says less about pain than about how uncomfortable many of us are when left alone with our own thoughts.\nToday, of course, we rarely need to be. A smartphone offers an instant escape from any empty moment: a queue, a bus journey, the thirty seconds while a kettle boils. An entire industry of games, feeds and short videos has grown up around that need. Yet phones do not cure boredom; they merely postpone it, and the constant switching from one small distraction to the next often leaves people feeling flatter and more restless than before. We cannot know for certain whether we are more bored than our grandparents were, because nobody measured boredom in the past. What has clearly changed is how rarely we allow the feeling to run its course.\nWhat, then, should we do? It would be a mistake to try to remove every dull moment from children's lessons; learning to stay with a difficult or repetitive task is itself a skill that school should teach. For adults, the most practical advice is to treat boredom as information rather than as an emergency. When it appears, it is worth asking what it is telling us — that a task needs a new approach, perhaps, or that we need a break of a different kind. Some people find it helpful to set aside regular periods without screens, such as a walk with no headphones, so that the mind has space to wander. None of this will make boredom pleasant. But it may allow us to hear what it has been trying to say.\n\n────────\nCâu 38–40. Complete the sentences below. Choose NO MORE THAN TWO WORDS from the passage for each answer.\nThe writer compares boredom to (38) ______, since both are unpleasant so that people will respond to them.\nResearchers believe the dull copying task led to (39) ______, which helped the volunteers form new connections.\nPeople who are easily bored are more likely to take part in (40) ______, for example gambling.",
+     "cau": [
+      {
+       "id": "R38",
+       "kieu": "dien",
+       "dapAn": [
+        "physical pain",
+        "pain"
+       ],
+       "de": "Complete the sentences below. Choose NO MORE THAN TWO WORDS from the passage for each answer.\nThe writer compares boredom to ___, since both are unpleasant so that people will respond to them.",
+       "giaiThich": "\"Like physical pain, its unpleasantness is the point\" ⇒ physical pain (hoặc pain)."
+      },
+      {
+       "id": "R39",
+       "kieu": "dien",
+       "dapAn": [
+        "mind-wandering",
+        "mind wandering"
+       ],
+       "de": "Complete the sentences below. Choose NO MORE THAN TWO WORDS from the passage for each answer.\nResearchers believe the dull copying task led to ___, which helped the volunteers form new connections.",
+       "giaiThich": "\"the dull task had encouraged mind-wandering\" ⇒ mind-wandering (từ nối gạch tính 1 từ)."
+      },
+      {
+       "id": "R40",
+       "kieu": "dien",
+       "dapAn": [
+        "risky behaviour",
+        "risky behavior"
+       ],
+       "de": "Complete the sentences below. Choose NO MORE THAN TWO WORDS from the passage for each answer.\nPeople who are easily bored are more likely to take part in ___, for example gambling.",
+       "giaiThich": "\"more likely to engage in risky behaviour such as gambling\" ⇒ risky behaviour (viết kiểu Mỹ \"behavior\" cũng được chấp nhận)."
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

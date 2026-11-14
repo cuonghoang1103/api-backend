@@ -1,0 +1,1720 @@
+{
+ "id": "ielts-de-2",
+ "nn": "en",
+ "kyThi": "IELTS",
+ "cap": "IELTS",
+ "ten": "IELTS Academic · Đề 2",
+ "moTa": "Listening + Reading đủ 80 câu, band 4.5. Nghe: Booking a hotel room · Museum introduction & ground-floor plan… Đọc: The rise and fall of the plastic bag…",
+ "diemDat": 46,
+ "xepHang": true,
+ "phan": [
+  {
+   "id": "nghe",
+   "ten": "Listening",
+   "kyNang": "nghe",
+   "phut": 30,
+   "diemToiDa": 40,
+   "band": [
+    [
+     39,
+     9
+    ],
+    [
+     37,
+     8.5
+    ],
+    [
+     35,
+     8
+    ],
+    [
+     32,
+     7.5
+    ],
+    [
+     30,
+     7
+    ],
+    [
+     26,
+     6.5
+    ],
+    [
+     23,
+     6
+    ],
+    [
+     18,
+     5.5
+    ],
+    [
+     16,
+     5
+    ],
+    [
+     13,
+     4.5
+    ],
+    [
+     10,
+     4
+    ],
+    [
+     8,
+     3.5
+    ],
+    [
+     6,
+     3
+    ],
+    [
+     4,
+     2.5
+    ],
+    [
+     0,
+     2
+    ]
+   ],
+   "nhom": [
+    {
+     "huongDan": "Part 1 — Câu 1–10. Ông Daniel gọi điện đặt phòng đôi ở khách sạn Harbour View. Cả part là MỘT bài nghe liền, chỉ nghe MỘT lần — bấm nghe rồi lướt qua các câu của part trong lúc nghe.",
+     "doan": "HARBOUR VIEW HOTEL — BOOKING FORM\nCâu 1–5. Complete the form below. Write ONE WORD AND/OR A NUMBER for each answer.\nType of room: double\nGuest's name: Daniel (1) ______\nDate of arrival: (2) ______ July\nNumber of nights: (3) ______\nMobile phone: (4) ______\nReason for visit: a friend's (5) ______\n\nROOMS AND SERVICES\nCâu 6–10. Complete the table below. Write ONE WORD AND/OR A NUMBER for each answer.\nRoom / service: Standard double · Cost: £(6) ______ per night · Notes: at the back of the hotel; has a (7) ______ but no bath\nRoom / service: Sea-view double · Cost: £95 per night · Notes: on the top floor; has a small (8) ______\nRoom / service: Breakfast · Cost: £(9) ______ per adult · Notes: not included in the room price\nRoom / service: Car park · Cost: free for guests · Notes: behind the (10) ______",
+     "nghe": [
+      {
+       "g": "uk-nu",
+       "t": "Part 1. You will hear a man telephoning a hotel to book a room. First, you have some time to look at questions 1 to 10."
+      },
+      {
+       "g": "uk-nu",
+       "t": "Good morning, Harbour View Hotel. Emma speaking. How can I help you?"
+      },
+      {
+       "g": "uk-nam",
+       "t": "Hello. I'd like to book a double room for next month, please."
+      },
+      {
+       "g": "uk-nu",
+       "t": "Certainly. Can I take your name first?"
+      },
+      {
+       "g": "uk-nam",
+       "t": "Yes, it's Daniel Kessler."
+      },
+      {
+       "g": "uk-nu",
+       "t": "Is that Kessler with a C or with a K?"
+      },
+      {
+       "g": "uk-nam",
+       "t": "With a K. That's K, E, double S, L, E, R."
+      },
+      {
+       "g": "uk-nu",
+       "t": "K, E, double S, L, E, R. Thank you, Mr Kessler. And when would you like to arrive?"
+      },
+      {
+       "g": "uk-nam",
+       "t": "On Friday the fifteenth of July. Oh, wait a minute. Sorry, my wife has changed our plans. We're coming a day earlier now, so that's Thursday the fourteenth."
+      },
+      {
+       "g": "uk-nu",
+       "t": "The fourteenth of July. No problem. And how many nights will you stay?"
+      },
+      {
+       "g": "uk-nam",
+       "t": "Well, I wanted two nights at first, but we'd like to see a little of the town as well. So let's say three nights, please."
+      },
+      {
+       "g": "uk-nu",
+       "t": "Three nights. So you will leave on Sunday the seventeenth. Can I have a contact number?"
+      },
+      {
+       "g": "uk-nam",
+       "t": "Of course. My mobile number is 07911 426 380."
+      },
+      {
+       "g": "uk-nu",
+       "t": "07911 426 380. Lovely. Are you coming on business, Mr Kessler, or is it a holiday?"
+      },
+      {
+       "g": "uk-nam",
+       "t": "Neither, really. An old friend from university is getting married in your town, so we're coming for the wedding."
+      },
+      {
+       "g": "uk-nu",
+       "t": "Oh, how nice. A wedding. I'll make a note of that. Now, let me tell you about our rooms. We have two kinds of double room. The standard double is at the back of the hotel. Last year it was sixty-five pounds a night, but the price is now seventy pounds."
+      },
+      {
+       "g": "uk-nam",
+       "t": "Seventy pounds. OK. And what is the room like?"
+      },
+      {
+       "g": "uk-nu",
+       "t": "It's quite small, but it's very quiet. I should tell you that it doesn't have a bath. There is a shower, though."
+      },
+      {
+       "g": "uk-nam",
+       "t": "A shower is fine for us. What's the other kind of room?"
+      },
+      {
+       "g": "uk-nu",
+       "t": "That's the sea-view double. It's ninety-five pounds a night. Those rooms are on the top floor, and each one has a small balcony, so you can sit outside and look at the harbour."
+      },
+      {
+       "g": "uk-nam",
+       "t": "A balcony! My wife would love that. Let's take the sea-view room."
+      },
+      {
+       "g": "uk-nu",
+       "t": "Good choice. Now, breakfast is not included in the price. It costs eight pounds per person. For children under ten, it's five pounds."
+      },
+      {
+       "g": "uk-nam",
+       "t": "Eight pounds each. That's fine. We haven't got any children with us. One more thing. We're coming by car. Is there anywhere to park?"
+      },
+      {
+       "g": "uk-nu",
+       "t": "Yes, we have a free car park for guests. It isn't next to the hotel, though. A lot of people look for it beside the post office, but it's actually behind the bank, on the other side of the street."
+      },
+      {
+       "g": "uk-nam",
+       "t": "Behind the bank. I'll remember that. Thank you very much for your help."
+      },
+      {
+       "g": "uk-nu",
+       "t": "You're welcome, Mr Kessler. We look forward to seeing you in July."
+      }
+     ],
+     "ngheLan": 1,
+     "cau": [
+      {
+       "id": "L1",
+       "kieu": "dien",
+       "dapAn": [
+        "Kessler"
+       ],
+       "de": "Complete the form below. Write ONE WORD AND/OR A NUMBER for each answer.\nHarbour View Hotel — Booking Form — Guest's name: Daniel ___",
+       "giaiThich": "Lễ tân hỏi \"with a C or with a K?\" — Daniel: \"With a K. That's K, E, double S, L, E, R.\" ⇒ Kessler. \"double S\" = hai chữ S liền nhau (SS). Lễ tân đọc lại đúng từng chữ để bạn kiểm."
+      },
+      {
+       "id": "L2",
+       "kieu": "dien",
+       "dapAn": [
+        "14",
+        "14th",
+        "fourteenth"
+       ],
+       "de": "Complete the form below. Write ONE WORD AND/OR A NUMBER for each answer.\nHarbour View Hotel — Booking Form — Date of arrival: ___ July",
+       "giaiThich": "Daniel nói \"Friday the fifteenth\" rồi sửa ngay: \"We're coming a day earlier now, so that's Thursday the fourteenth.\" ⇒ 14. Bẫy đổi ý: con số nghe TRƯỚC (15) bị bỏ; \"Oh, wait a minute. Sorry…\" là tín hiệu sắp sửa lại. Ngày 17 là ngày RỜI đi."
+      },
+      {
+       "id": "L3",
+       "kieu": "dien",
+       "dapAn": [
+        "3",
+        "three"
+       ],
+       "de": "Complete the form below. Write ONE WORD AND/OR A NUMBER for each answer.\nHarbour View Hotel — Booking Form — Number of nights: ___",
+       "giaiThich": "\"I wanted two nights at first, but… So let's say three nights, please.\" ⇒ 3. \"at first… but\" báo ý đầu bị thay. Lễ tân xác nhận: \"Three nights.\""
+      },
+      {
+       "id": "L4",
+       "kieu": "dien",
+       "dapAn": [
+        "07911 426 380",
+        "07911426380"
+       ],
+       "de": "Complete the form below. Write ONE WORD AND/OR A NUMBER for each answer.\nHarbour View Hotel — Booking Form — Mobile phone: ___",
+       "giaiThich": "\"My mobile number is 07911 426 380.\" — lễ tân đọc lại y nguyên ⇒ 07911 426 380. Ghi đủ 11 chữ số; cả dãy tính là MỘT số nên hợp lệ với \"ONE WORD AND/OR A NUMBER\"."
+      },
+      {
+       "id": "L5",
+       "kieu": "dien",
+       "dapAn": [
+        "wedding"
+       ],
+       "de": "Complete the form below. Write ONE WORD AND/OR A NUMBER for each answer.\nHarbour View Hotel — Booking Form — Reason for visit: a friend's ___",
+       "giaiThich": "Lễ tân hỏi \"on business… or is it a holiday?\" — Daniel: \"Neither, really… so we're coming for the wedding.\" ⇒ wedding. \"Neither\" phủ định CẢ HAI phương án vừa nghe; đáp án đến sau đó. Chính tả: hai chữ d."
+      },
+      {
+       "id": "L6",
+       "kieu": "dien",
+       "de": "Complete the table below. Write ONE WORD AND/OR A NUMBER for each answer.\nRooms and services — Standard double — Cost: £___ per night",
+       "dapAn": [
+        "70",
+        "seventy"
+       ],
+       "giaiThich": "\"Last year it was sixty-five pounds a night, but the price is now seventy pounds.\" ⇒ 70. Bẫy giá cũ / giá mới (\"Last year… but… now\"). £95 là giá phòng nhìn ra biển — đã in sẵn trong bảng. Phân biệt seventy /ˈsevnti/ (70) với seventeen /ˌsevnˈtiːn/ (17)."
+      },
+      {
+       "id": "L7",
+       "kieu": "dien",
+       "de": "Complete the table below. Write ONE WORD AND/OR A NUMBER for each answer.\nRooms and services — Standard double — Notes: at the back of the hotel; has a ___ but no bath",
+       "dapAn": [
+        "shower"
+       ],
+       "giaiThich": "\"it doesn't have a bath. There is a shower, though.\" ⇒ shower. Bảng viết \"has a ___ but no bath\" — \"bath\" là thứ KHÔNG có và đã in sẵn. \"though\" ở cuối câu = \"tuy nhiên\"."
+      },
+      {
+       "id": "L8",
+       "kieu": "dien",
+       "de": "Complete the table below. Write ONE WORD AND/OR A NUMBER for each answer.\nRooms and services — Sea-view double — Notes: on the top floor; has a small ___",
+       "dapAn": [
+        "balcony"
+       ],
+       "giaiThich": "\"Those rooms are on the top floor, and each one has a small balcony\" ⇒ balcony (ban công). Daniel nhắc lại: \"A balcony!\". Chính tả: b-a-l-c-o-n-y."
+      },
+      {
+       "id": "L9",
+       "kieu": "dien",
+       "de": "Complete the table below. Write ONE WORD AND/OR A NUMBER for each answer.\nRooms and services — Breakfast — Cost: £___ per adult",
+       "dapAn": [
+        "8",
+        "eight"
+       ],
+       "giaiThich": "\"It costs eight pounds per person. For children under ten, it's five pounds.\" ⇒ 8. Bảng hỏi giá cho NGƯỜI LỚN (\"per adult\") — £5 là của trẻ em dưới 10 tuổi; \"ten\" là tuổi, không phải giá."
+      },
+      {
+       "id": "L10",
+       "kieu": "dien",
+       "de": "Complete the table below. Write ONE WORD AND/OR A NUMBER for each answer.\nRooms and services — Car park — Notes: behind the ___",
+       "dapAn": [
+        "bank"
+       ],
+       "giaiThich": "\"A lot of people look for it beside the post office, but it's actually behind the bank\" ⇒ bank. Bẫy: \"post office\" là nơi người ta TƯỞNG — \"but… actually\" báo đáp án thật. Daniel nhắc lại: \"Behind the bank.\""
+      }
+     ]
+    },
+    {
+     "huongDan": "Part 2 — Câu 11–20. Maria, hướng dẫn viên bảo tàng Castleford (giọng Mỹ), giới thiệu toà nhà, điều MỚI trong tháng này, điều KHÔNG được làm trong phòng trưng bày, nên bắt đầu từ đâu; rồi tả sơ đồ tầng trệt. Cả part là MỘT bài nghe liền, chỉ nghe MỘT lần — bấm nghe rồi lướt qua các câu của part trong lúc nghe.",
+     "nghe": [
+      {
+       "g": "uk-nu",
+       "t": "Part 2. You will hear a guide giving information to a group of visitors at the entrance of a museum. First, you have some time to look at questions 11 to 20."
+      },
+      {
+       "g": "us-nu",
+       "t": "Good morning, everyone, and welcome to Castleford Museum. My name is Maria. Before you go in, I'd like to give you some information about the museum and show you where everything is."
+      },
+      {
+       "g": "us-nu",
+       "t": "First, a little about the building. It is more than a hundred and fifty years old. Because of the tall clock tower, a lot of visitors think that it was once a railway station. In fact, it was built as a factory. Shoes and boots were made here until 1970, and the museum opened ten years later."
+      },
+      {
+       "g": "us-nu",
+       "t": "Now, some practical things. A ticket still costs six pounds, the same as last year, and guided tours are still only on Saturdays and Sundays. What is different this month is our opening hours. On Fridays, we now stay open until nine in the evening, so you can come after work."
+      },
+      {
+       "g": "us-nu",
+       "t": "Inside the galleries, please feel free to take photographs. We only ask you not to use a flash. You may also keep your bag with you if it is a small one. What we do not allow in the galleries is food or drink. If you are hungry or thirsty, please use the café."
+      },
+      {
+       "g": "us-nu",
+       "t": "Where should you begin? Well, most people go straight up to the top floor, because that is where the famous old cars are. Others wait for a tour. My advice is different. Before you do anything else, watch our short film. It is only ten minutes long, and it tells the story of the town. After that, everything else in the museum will make more sense."
+      },
+      {
+       "g": "us-nu",
+       "t": "Now let me show you where things are on the ground floor. Please look at the plan. We are standing outside the entrance on Museum Street. When you go in, the ticket desk is directly in front of you."
+      },
+      {
+       "g": "us-nu",
+       "t": "If you have a heavy coat or an umbrella, you can leave it in the cloakroom. That is the first room on your left, just inside the entrance. The gift shop is on the other side, immediately on your right as you go in. People usually visit it at the end, on their way out."
+      },
+      {
+       "g": "us-nu",
+       "t": "Now, walk past the ticket desk into the main hall. In the middle of the hall, you will see a big steam engine. The cinema room, where the film is shown, is on the left-hand side of the hall, next to the cloakroom. The room opposite the cinema room, on the right-hand side, is the toilets."
+      },
+      {
+       "g": "us-nu",
+       "t": "At the back of the hall, there are three more places. In the far left corner is the children's activity room, where young visitors can draw and build models. The café is in the opposite corner, on the far right. It has doors that open onto the garden, so in summer you can take your coffee outside."
+      },
+      {
+       "g": "us-nu",
+       "t": "And finally, to go up to the other floors, you can take the lift. It is in the middle of the back wall, between the children's activity room and the café. Thank you for listening, and enjoy your visit."
+      }
+     ],
+     "ngheLan": 1,
+     "hinh": {
+      "w": 560,
+      "h": 430,
+      "chuThich": "Plan of the ground floor (not to scale). You enter from Museum Street, at the bottom of the plan.",
+      "ve": [
+       {
+        "t": "rect",
+        "x": 70,
+        "y": 30,
+        "w": 420,
+        "h": 310,
+        "nen": "#f7f7f2",
+        "bo": 2
+       },
+       {
+        "t": "rect",
+        "x": 70,
+        "y": 250,
+        "w": 100,
+        "h": 90,
+        "nen": "#ffffff",
+        "bo": 1
+       },
+       {
+        "t": "rect",
+        "x": 70,
+        "y": 140,
+        "w": 100,
+        "h": 110,
+        "nen": "#ffffff",
+        "bo": 1
+       },
+       {
+        "t": "rect",
+        "x": 70,
+        "y": 30,
+        "w": 100,
+        "h": 110,
+        "nen": "#ffffff",
+        "bo": 1
+       },
+       {
+        "t": "rect",
+        "x": 390,
+        "y": 250,
+        "w": 100,
+        "h": 90,
+        "nen": "#ffffff",
+        "bo": 1
+       },
+       {
+        "t": "rect",
+        "x": 390,
+        "y": 140,
+        "w": 100,
+        "h": 110,
+        "nen": "#ffffff",
+        "bo": 1
+       },
+       {
+        "t": "rect",
+        "x": 390,
+        "y": 30,
+        "w": 100,
+        "h": 110,
+        "nen": "#ffffff",
+        "bo": 1
+       },
+       {
+        "t": "rect",
+        "x": 240,
+        "y": 30,
+        "w": 80,
+        "h": 50,
+        "nen": "#ffffff",
+        "bo": 1
+       },
+       {
+        "t": "rect",
+        "x": 235,
+        "y": 268,
+        "w": 90,
+        "h": 34,
+        "nen": "#dbe7f3",
+        "nhan": "Ticket desk"
+       },
+       {
+        "t": "rect",
+        "x": 225,
+        "y": 160,
+        "w": 110,
+        "h": 50,
+        "nen": "#e4ddd0",
+        "nhan": "Steam engine"
+       },
+       {
+        "t": "text",
+        "x": 280,
+        "y": 125,
+        "s": "MAIN HALL",
+        "co": 12,
+        "dam": true,
+        "giua": true
+       },
+       {
+        "t": "rect",
+        "x": 495,
+        "y": 30,
+        "w": 60,
+        "h": 110,
+        "nen": "#dcebd2",
+        "nhan": "Garden"
+       },
+       {
+        "t": "rect",
+        "x": 5,
+        "y": 250,
+        "w": 60,
+        "h": 90,
+        "nen": "#ffffff",
+        "bo": 1
+       },
+       {
+        "t": "rect",
+        "x": 250,
+        "y": 333,
+        "w": 60,
+        "h": 14,
+        "nen": "#f7f7f2",
+        "bo": 0
+       },
+       {
+        "t": "line",
+        "d": [
+         [
+          280,
+          388
+         ],
+         [
+          280,
+          348
+         ]
+        ],
+        "mui": true
+       },
+       {
+        "t": "text",
+        "x": 280,
+        "y": 326,
+        "s": "entrance",
+        "co": 11,
+        "giua": true,
+        "nghieng": true
+       },
+       {
+        "t": "rect",
+        "x": 0,
+        "y": 392,
+        "w": 560,
+        "h": 30,
+        "nen": "#e6e6e6",
+        "bo": 0
+       },
+       {
+        "t": "text",
+        "x": 280,
+        "y": 412,
+        "s": "MUSEUM STREET",
+        "co": 12,
+        "dam": true,
+        "giua": true
+       },
+       {
+        "t": "chu",
+        "k": "A",
+        "x": 120,
+        "y": 295
+       },
+       {
+        "t": "chu",
+        "k": "B",
+        "x": 120,
+        "y": 195
+       },
+       {
+        "t": "chu",
+        "k": "C",
+        "x": 120,
+        "y": 85
+       },
+       {
+        "t": "chu",
+        "k": "D",
+        "x": 440,
+        "y": 295
+       },
+       {
+        "t": "chu",
+        "k": "E",
+        "x": 440,
+        "y": 195
+       },
+       {
+        "t": "chu",
+        "k": "F",
+        "x": 440,
+        "y": 85
+       },
+       {
+        "t": "chu",
+        "k": "G",
+        "x": 280,
+        "y": 55
+       },
+       {
+        "t": "chu",
+        "k": "H",
+        "x": 35,
+        "y": 295
+       }
+      ]
+     },
+     "cau": [
+      {
+       "id": "L11",
+       "kieu": "chon",
+       "de": "Choose the correct letter, A, B or C.\nThe museum building was first used as",
+       "luaChon": [
+        "a railway station.",
+        "a factory.",
+        "a school."
+       ],
+       "dapAn": 1,
+       "giaiThich": "\"a lot of visitors think that it was once a railway station. In fact, it was built as a factory.\" ⇒ B. A là điều khách TƯỞNG (\"visitors think… In fact…\"); C không được nhắc."
+      },
+      {
+       "id": "L12",
+       "kieu": "chon",
+       "de": "Choose the correct letter, A, B or C.\nWhat is new at the museum this month?",
+       "luaChon": [
+        "It is open later on Fridays.",
+        "Tickets are cheaper.",
+        "There are guided tours every day."
+       ],
+       "dapAn": 0,
+       "giaiThich": "Vé \"still costs six pounds\" (không rẻ hơn ⇒ loại B); tour \"still only on Saturdays and Sundays\" (không phải hằng ngày ⇒ loại C). \"What is different this month is our opening hours. On Fridays, we now stay open until nine in the evening\" ⇒ A. Từ \"still\" = vẫn như cũ."
+      },
+      {
+       "id": "L13",
+       "kieu": "chon",
+       "de": "Choose the correct letter, A, B or C.\nIn the galleries, visitors are not allowed to",
+       "luaChon": [
+        "take photographs.",
+        "carry a small bag.",
+        "eat or drink."
+       ],
+       "dapAn": 2,
+       "giaiThich": "Chụp ảnh ĐƯỢC (\"please feel free to take photographs\" — chỉ không dùng flash); túi nhỏ ĐƯỢC mang. \"What we do not allow in the galleries is food or drink.\" ⇒ C. Bẫy: \"not to use a flash\" có chữ \"not\" nhưng lựa chọn A nói \"take photographs\" nói chung — việc đó vẫn được phép."
+      },
+      {
+       "id": "L14",
+       "kieu": "chon",
+       "de": "Choose the correct letter, A, B or C.\nWhat does the guide advise visitors to do first?",
+       "luaChon": [
+        "watch a film",
+        "go to the top floor",
+        "join a guided tour"
+       ],
+       "dapAn": 0,
+       "giaiThich": "\"most people go straight up to the top floor\" (B) và \"Others wait for a tour\" (C) là việc NGƯỜI KHÁC làm. \"My advice is different. Before you do anything else, watch our short film.\" ⇒ A. \"Before you do anything else\" = \"first\"."
+      },
+      {
+       "id": "L15",
+       "kieu": "chon",
+       "de": "Label the plan below. Write the correct letter, A–H, next to Questions 15–20.\nCastleford Museum — ground floor — Cloakroom",
+       "luaChon": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H"
+       ],
+       "dapAn": 0,
+       "giaiThich": "\"the cloakroom. That is the first room on your left, just inside the entrance.\" — đi vào từ phía dưới sơ đồ, phòng ĐẦU TIÊN bên TRÁI, sát cửa ⇒ A."
+      },
+      {
+       "id": "L16",
+       "kieu": "chon",
+       "de": "Label the plan below. Write the correct letter, A–H, next to Questions 15–20.\nCastleford Museum — ground floor — Gift shop",
+       "luaChon": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H"
+       ],
+       "dapAn": 3,
+       "giaiThich": "\"The gift shop is on the other side, immediately on your right as you go in.\" — đối diện phòng gửi đồ, bên PHẢI ngay cửa ⇒ D."
+      },
+      {
+       "id": "L17",
+       "kieu": "chon",
+       "de": "Label the plan below. Write the correct letter, A–H, next to Questions 15–20.\nCastleford Museum — ground floor — Cinema room",
+       "luaChon": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H"
+       ],
+       "dapAn": 1,
+       "giaiThich": "\"The cinema room… is on the left-hand side of the hall, next to the cloakroom.\" — bên trái, cạnh phòng gửi đồ (A) ⇒ B. Phòng đối diện bên phải (E) là nhà vệ sinh — không có trong câu hỏi."
+      },
+      {
+       "id": "L18",
+       "kieu": "chon",
+       "de": "Label the plan below. Write the correct letter, A–H, next to Questions 15–20.\nCastleford Museum — ground floor — Children's activity room",
+       "luaChon": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H"
+       ],
+       "dapAn": 2,
+       "giaiThich": "\"At the back of the hall… In the far left corner is the children's activity room\" — góc XA bên TRÁI (phía trong cùng) ⇒ C."
+      },
+      {
+       "id": "L19",
+       "kieu": "chon",
+       "de": "Label the plan below. Write the correct letter, A–H, next to Questions 15–20.\nCastleford Museum — ground floor — Café",
+       "luaChon": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H"
+       ],
+       "dapAn": 5,
+       "giaiThich": "\"The café is in the opposite corner, on the far right. It has doors that open onto the garden\" — góc xa bên PHẢI, cạnh khu vườn (đã ghi sẵn trên sơ đồ) ⇒ F."
+      },
+      {
+       "id": "L20",
+       "kieu": "chon",
+       "de": "Label the plan below. Write the correct letter, A–H, next to Questions 15–20.\nCastleford Museum — ground floor — Lift",
+       "luaChon": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H"
+       ],
+       "dapAn": 6,
+       "giaiThich": "\"It is in the middle of the back wall, between the children's activity room and the café.\" — giữa tường sau, giữa C và F ⇒ G. H (ngoài toà nhà) không được nhắc tới."
+      }
+     ]
+    },
+    {
+     "huongDan": "Part 3 — Câu 21–30. Lucy và Sam rà lại báo cáo đồ án nhóm (rác thải thức ăn ở căng-tin trường) cho Dr Patel. Cả part là MỘT bài nghe liền, chỉ nghe MỘT lần — bấm nghe rồi lướt qua các câu của part trong lúc nghe.",
+     "nghe": [
+      {
+       "g": "uk-nu",
+       "t": "Part 3. You will hear two students, Lucy and Sam, talking about the report for their group project on food waste. First, you have some time to look at questions 21 to 30."
+      },
+      {
+       "g": "us-nam",
+       "t": "Hi, Lucy. Shall we go through our project report for Dr Patel?"
+      },
+      {
+       "g": "uk-nu",
+       "t": "Yes, let's. We should start with the introduction. We have to explain why we chose food waste in the university canteen as our topic."
+      },
+      {
+       "g": "us-nam",
+       "t": "Right. Did Dr Patel suggest it? I can't remember."
+      },
+      {
+       "g": "uk-nu",
+       "t": "No, he let every group choose freely. And there was very little information about it online, actually. It was my idea, because I have a part-time job in the canteen. Every day I see how much food goes into the bin."
+      },
+      {
+       "g": "us-nam",
+       "t": "Of course. I'll write that down. Next, the questionnaire. How many students answered it in the end?"
+      },
+      {
+       "g": "uk-nu",
+       "t": "Well, we sent it to a hundred and twenty students. After the first week, only sixty had replied."
+      },
+      {
+       "g": "us-nam",
+       "t": "But then we sent a reminder, didn't we?"
+      },
+      {
+       "g": "uk-nu",
+       "t": "Yes, and the final number was eighty-five."
+      },
+      {
+       "g": "us-nam",
+       "t": "Eighty-five. That's enough for a small study. Now, the results. What was the most interesting thing?"
+      },
+      {
+       "g": "uk-nu",
+       "t": "For me, it was the reason why students leave food on their plates. I expected them to say that the food doesn't taste good."
+      },
+      {
+       "g": "us-nam",
+       "t": "Me too. And I thought they would complain about the prices."
+      },
+      {
+       "g": "uk-nu",
+       "t": "But only a few people said those things. Most students told us that the portions are too big. They simply can't finish their meals."
+      },
+      {
+       "g": "us-nam",
+       "t": "That was a real surprise. So what should the canteen do? We need to make a suggestion at the end of the report."
+      },
+      {
+       "g": "uk-nu",
+       "t": "Some students wanted lower prices, but that doesn't solve the problem of waste. And I don't think that changing the menu will help."
+      },
+      {
+       "g": "us-nam",
+       "t": "I agree. What about two sizes of meal, a small one and a large one? Then people can choose how much they want."
+      },
+      {
+       "g": "uk-nu",
+       "t": "Yes, let's suggest that. It's simple, and it's cheap for the canteen."
+      },
+      {
+       "g": "us-nam",
+       "t": "Good. And when do we have to hand in the report? Is it Monday the tenth?"
+      },
+      {
+       "g": "uk-nu",
+       "t": "No, Monday the tenth is the presentation. The report has to be in by Friday the fourteenth."
+      },
+      {
+       "g": "us-nam",
+       "t": "Oh, good, a few extra days. Can't we have until the twenty-first? Another group told me they had more time."
+      },
+      {
+       "g": "uk-nu",
+       "t": "Dr Patel only gives extra time to students who are ill. So it's the fourteenth for us."
+      },
+      {
+       "g": "us-nam",
+       "t": "OK. Now, Dr Patel also wants us to write about the problems we had at each stage of the project."
+      },
+      {
+       "g": "uk-nu",
+       "t": "Well, we had a problem right at the beginning, when we were choosing the topic. I wanted food waste, and you wanted to do something about sport."
+      },
+      {
+       "g": "us-nam",
+       "t": "Yes, and we just couldn't agree. In the end, we had to toss a coin!"
+      },
+      {
+       "g": "uk-nu",
+       "t": "And I won. Then we wrote the questionnaire. That didn't take long, and it didn't cost anything, because we put it online."
+      },
+      {
+       "g": "us-nam",
+       "t": "True, but our first questionnaire had thirty questions. When Dr Patel saw it, he said it was too long, and he told us to cut it to fifteen."
+      },
+      {
+       "g": "uk-nu",
+       "t": "Yes, we had to write it again. After that, we collected the answers. We planned to do that in one week."
+      },
+      {
+       "g": "us-nam",
+       "t": "And it took three weeks, because people were so slow to reply."
+      },
+      {
+       "g": "uk-nu",
+       "t": "Then I analysed the results. I finished that part on time, but the computer program was so complicated. I had never used it before, and I didn't know how to make a chart."
+      },
+      {
+       "g": "us-nam",
+       "t": "You should have asked me for help."
+      },
+      {
+       "g": "uk-nu",
+       "t": "I know, but I learned how to do it by myself in the end. And what about the slides for the presentation? You made those."
+      },
+      {
+       "g": "us-nam",
+       "t": "Don't remind me. My laptop broke on Sunday night, and half of the slides disappeared. I had to make them all over again."
+      },
+      {
+       "g": "uk-nu",
+       "t": "Poor you. Well, at least we have plenty to write about."
+      }
+     ],
+     "ngheLan": 1,
+     "cau": [
+      {
+       "id": "L21",
+       "kieu": "chon",
+       "de": "Choose the correct letter, A, B or C.\nWhy did the students choose food waste as their topic?",
+       "luaChon": [
+        "Their tutor suggested it.",
+        "There was a lot of information about it.",
+        "Lucy had seen the problem at work."
+       ],
+       "dapAn": 2,
+       "giaiThich": "Dr Patel KHÔNG gợi ý (\"he let every group choose freely\" ⇒ loại A); thông tin trên mạng RẤT ÍT (\"very little information\" ⇒ loại B). \"It was my idea, because I have a part-time job in the canteen. Every day I see how much food goes into the bin.\" ⇒ C."
+      },
+      {
+       "id": "L22",
+       "kieu": "chon",
+       "de": "Choose the correct letter, A, B or C.\nHow many students answered the questionnaire in the end?",
+       "luaChon": [
+        "60",
+        "85",
+        "120"
+       ],
+       "dapAn": 1,
+       "giaiThich": "Ba con số: 120 = số người ĐƯỢC GỬI; 60 = số trả lời sau tuần đầu; \"the final number was eighty-five\" ⇒ B (85). Câu hỏi có \"in the end\" = \"final\"."
+      },
+      {
+       "id": "L23",
+       "kieu": "chon",
+       "de": "Choose the correct letter, A, B or C.\nWhat is the main reason why students leave food on their plates?",
+       "luaChon": [
+        "They are given too much food.",
+        "They do not like the taste.",
+        "They think the food is too expensive."
+       ],
+       "dapAn": 0,
+       "giaiThich": "Lucy tưởng là do vị (B), Sam tưởng là do giá (C) — \"But only a few people said those things. Most students told us that the portions are too big.\" — \"given too much food\" = \"the portions are too big\" ⇒ A."
+      },
+      {
+       "id": "L24",
+       "kieu": "chon",
+       "de": "Choose the correct letter, A, B or C.\nWhat will Lucy and Sam suggest in their report?",
+       "luaChon": [
+        "lower prices",
+        "a different menu",
+        "meals in two sizes"
+       ],
+       "dapAn": 2,
+       "giaiThich": "Giảm giá \"doesn't solve the problem of waste\" (loại A); đổi thực đơn \"I don't think… will help\" (loại B). Sam: \"What about two sizes of meal…?\" — Lucy: \"Yes, let's suggest that.\" ⇒ C. Đáp án là phương án CẢ HAI đồng ý."
+      },
+      {
+       "id": "L25",
+       "kieu": "chon",
+       "de": "Choose the correct letter, A, B or C.\nWhen must the students hand in their report?",
+       "luaChon": [
+        "on Monday the 10th",
+        "on Friday the 14th",
+        "on Friday the 21st"
+       ],
+       "dapAn": 1,
+       "giaiThich": "\"Monday the tenth is the presentation. The report has to be in by Friday the fourteenth.\" ⇒ B. Ngày 10 là buổi THUYẾT TRÌNH; ngày 21 chỉ dành cho sinh viên bị ốm (\"So it's the fourteenth for us\")."
+      },
+      {
+       "id": "L26",
+       "kieu": "chon",
+       "de": "What problem did the students have at each stage of their project? Choose FIVE answers from the box and write the correct letter, A–G, next to Questions 26–30.\nchoosing the topic",
+       "luaChon": [
+        "A. It took longer than they had planned.",
+        "B. Their tutor asked them to change it.",
+        "C. It cost more than they expected.",
+        "D. The software was difficult to use.",
+        "E. They could not agree with each other.",
+        "F. Some of their work was lost.",
+        "G. They needed help from another student."
+       ],
+       "dapAn": 4,
+       "giaiThich": "Chọn đề tài: Lucy muốn rác thải thức ăn, Sam muốn thể thao — \"we just couldn't agree. In the end, we had to toss a coin!\" ⇒ E."
+      },
+      {
+       "id": "L27",
+       "kieu": "chon",
+       "de": "What problem did the students have at each stage of their project? Choose FIVE answers from the box and write the correct letter, A–G, next to Questions 26–30.\nwriting the questionnaire",
+       "luaChon": [
+        "A. It took longer than they had planned.",
+        "B. Their tutor asked them to change it.",
+        "C. It cost more than they expected.",
+        "D. The software was difficult to use.",
+        "E. They could not agree with each other.",
+        "F. Some of their work was lost.",
+        "G. They needed help from another student."
+       ],
+       "dapAn": 1,
+       "giaiThich": "Viết bảng hỏi: \"That didn't take long\" (loại A), \"it didn't cost anything\" (loại C). \"When Dr Patel saw it, he said it was too long, and he told us to cut it to fifteen.\" — thầy yêu cầu sửa ⇒ B. Bẫy: \"too long\" ở đây là bảng hỏi quá DÀI (30 câu), không phải mất nhiều thời gian."
+      },
+      {
+       "id": "L28",
+       "kieu": "chon",
+       "de": "What problem did the students have at each stage of their project? Choose FIVE answers from the box and write the correct letter, A–G, next to Questions 26–30.\ncollecting the answers",
+       "luaChon": [
+        "A. It took longer than they had planned.",
+        "B. Their tutor asked them to change it.",
+        "C. It cost more than they expected.",
+        "D. The software was difficult to use.",
+        "E. They could not agree with each other.",
+        "F. Some of their work was lost.",
+        "G. They needed help from another student."
+       ],
+       "dapAn": 0,
+       "giaiThich": "Thu câu trả lời: \"We planned to do that in one week.\" — \"And it took three weeks\" ⇒ lâu hơn kế hoạch ⇒ A."
+      },
+      {
+       "id": "L29",
+       "kieu": "chon",
+       "de": "What problem did the students have at each stage of their project? Choose FIVE answers from the box and write the correct letter, A–G, next to Questions 26–30.\nanalysing the results",
+       "luaChon": [
+        "A. It took longer than they had planned.",
+        "B. Their tutor asked them to change it.",
+        "C. It cost more than they expected.",
+        "D. The software was difficult to use.",
+        "E. They could not agree with each other.",
+        "F. Some of their work was lost.",
+        "G. They needed help from another student."
+       ],
+       "dapAn": 3,
+       "giaiThich": "Phân tích: \"I finished that part on time (loại A), but the computer program was so complicated.\" ⇒ phần mềm khó dùng ⇒ D. Bẫy G: Sam nói \"You should have asked me for help\" nhưng Lucy tự làm (\"by myself\") ⇒ không cần ai giúp."
+      },
+      {
+       "id": "L30",
+       "kieu": "chon",
+       "de": "What problem did the students have at each stage of their project? Choose FIVE answers from the box and write the correct letter, A–G, next to Questions 26–30.\npreparing the slides",
+       "luaChon": [
+        "A. It took longer than they had planned.",
+        "B. Their tutor asked them to change it.",
+        "C. It cost more than they expected.",
+        "D. The software was difficult to use.",
+        "E. They could not agree with each other.",
+        "F. Some of their work was lost.",
+        "G. They needed help from another student."
+       ],
+       "dapAn": 5,
+       "giaiThich": "Làm slide: \"My laptop broke on Sunday night, and half of the slides disappeared.\" — \"some of their work was lost\" = \"half of the slides disappeared\" ⇒ F."
+      }
+     ]
+    },
+    {
+     "huongDan": "Part 4 — Câu 31–40. Bài giảng nhập môn về ong mật: tổ chức của một đàn (ong chúa, ong đực, ong thợ), ong thợ chia việc theo tuổi thế nào, cách làm mật và vì sao ong quan trọng. Cả part là MỘT bài nghe liền, chỉ nghe MỘT lần — bấm nghe rồi lướt qua các câu của part trong lúc nghe.",
+     "doan": "THE HONEYBEE\nCâu 31–40. Complete the notes below. Write ONE WORD ONLY for each answer.\nThe colony\n• a summer colony may have 50,000 bees but only one (31) ______\n• her job: to lay all the (32) ______\n• male bees (drones) do no work and cannot (33) ______\nWorkers\n• every worker is (34) ______\n• a worker born in summer lives for about six (35) ______\n• a young worker's first job: to (36) ______ the hive\nMaking honey\n• nectar is about 80% (37) ______\n• nectar is put into small cells made of (38) ______\n• bees dry the nectar by moving their (39) ______ quickly\nWhy bees matter\n• without bees, there would be much less (40) ______ (e.g. apples)",
+     "nghe": [
+      {
+       "g": "uk-nu",
+       "t": "Part 4. You will hear part of a lecture about honeybees. First, you have some time to look at questions 31 to 40."
+      },
+      {
+       "g": "uk-nam",
+       "t": "Good afternoon. In this lecture, I am going to talk about an insect that all of you know, but that few people really understand: the honeybee. I will describe how a colony of bees is organised, how the workers share the jobs in the hive, and how bees make honey."
+      },
+      {
+       "g": "uk-nam",
+       "t": "Let's start with the colony. Honeybees live together in large groups. In the middle of summer, a single colony may contain fifty thousand bees. However, there is only one queen. She is larger than the other bees, and her job is to lay all the eggs. In early summer, she can lay up to two thousand of them every day."
+      },
+      {
+       "g": "uk-nam",
+       "t": "A colony also has some male bees, which are called drones. Drones have an easy life. They do no work in the hive, and they do not collect food. They cannot sting, either, so they cannot protect the colony."
+      },
+      {
+       "g": "uk-nam",
+       "t": "All the other bees are workers, and every worker is female. As the name suggests, the workers do everything. Their lives are short. A worker that is born in summer lives for only about six weeks. A worker born in autumn can live for several months, because she rests inside the hive during the winter."
+      },
+      {
+       "g": "uk-nam",
+       "t": "A worker's job changes as she gets older. A young worker stays inside. Her first job is to clean the hive. She also feeds the baby bees. When she is a little older, she helps to build new cells and to store the food that other workers bring back. Only after about three weeks does she begin to fly outside and look for food herself."
+      },
+      {
+       "g": "uk-nam",
+       "t": "So how is honey made? The workers visit flowers and collect a sweet liquid called nectar. They carry it back to the hive. But nectar is not yet honey. It is about eighty per cent water, so it is very thin. Back in the hive, the bees put the nectar into small cells made of wax. Then they move their wings very fast. This moves the air and dries the nectar. When it is thick enough, the bees close the cell, and the honey is ready. They will eat it during the winter."
+      },
+      {
+       "g": "uk-nam",
+       "t": "Finally, why are bees important to us? It is not only because of honey. When bees fly from flower to flower, they carry pollen from one plant to another. Many plants need this before they can produce food. Without bees, we would have much less fruit. Apples, for example, would be very hard to grow. That is why farmers are worried when their bees become ill. We will look at the reasons for that next week."
+      }
+     ],
+     "ngheLan": 1,
+     "cau": [
+      {
+       "id": "L31",
+       "kieu": "dien",
+       "dapAn": [
+        "queen"
+       ],
+       "de": "Complete the notes below. Write ONE WORD ONLY for each answer.\nThe honeybee — a summer colony may have 50,000 bees but only one ___",
+       "giaiThich": "\"a single colony may contain fifty thousand bees. However, there is only one queen.\" ⇒ queen (ong chúa). \"However\" báo ý đối lập: rất đông nhưng chỉ MỘT."
+      },
+      {
+       "id": "L32",
+       "kieu": "dien",
+       "dapAn": [
+        "eggs"
+       ],
+       "de": "Complete the notes below. Write ONE WORD ONLY for each answer.\nThe honeybee — her job: to lay all the ___",
+       "giaiThich": "\"her job is to lay all the eggs\" ⇒ eggs. Động từ \"lay\" (đẻ) gần như chỉ đi với \"eggs\" — đoán được loại từ trước khi nghe."
+      },
+      {
+       "id": "L33",
+       "kieu": "dien",
+       "dapAn": [
+        "sting"
+       ],
+       "de": "Complete the notes below. Write ONE WORD ONLY for each answer.\nThe honeybee — male bees (drones) do no work and cannot ___",
+       "giaiThich": "\"They do no work in the hive, and they do not collect food. They cannot sting, either\" ⇒ sting (đốt). Ghi chú đã có \"do no work and cannot ___\" nên cần ĐỘNG TỪ nguyên mẫu; \"collect\" không hợp vì thiếu tân ngữ."
+      },
+      {
+       "id": "L34",
+       "kieu": "dien",
+       "dapAn": [
+        "female"
+       ],
+       "de": "Complete the notes below. Write ONE WORD ONLY for each answer.\nThe honeybee — every worker is ___",
+       "giaiThich": "\"All the other bees are workers, and every worker is female.\" ⇒ female (cái). Bẫy: \"male\" vừa được nhắc ở đoạn trước cho ong đực (drones)."
+      },
+      {
+       "id": "L35",
+       "kieu": "dien",
+       "dapAn": [
+        "weeks"
+       ],
+       "de": "Complete the notes below. Write ONE WORD ONLY for each answer.\nThe honeybee — a worker born in summer lives for about six ___",
+       "giaiThich": "\"A worker that is born in summer lives for only about six weeks. A worker born in autumn can live for several months\" ⇒ weeks. Ghi chú hỏi ong sinh MÙA HÈ; \"months\" là của ong sinh mùa thu."
+      },
+      {
+       "id": "L36",
+       "kieu": "dien",
+       "dapAn": [
+        "clean"
+       ],
+       "de": "Complete the notes below. Write ONE WORD ONLY for each answer.\nThe honeybee — a young worker's first job: to ___ the hive",
+       "giaiThich": "\"A young worker stays inside. Her first job is to clean the hive. She also feeds the baby bees.\" ⇒ clean (dọn). Ghi chú \"first job: to ___ the hive\" cần ĐỘNG TỪ nguyên mẫu. Bẫy: \"feeds\" là việc làm THÊM (\"also\") và tân ngữ là \"the baby bees\", không phải \"the hive\"; \"build\" là việc của ong lớn hơn một chút và tân ngữ là \"new cells\"."
+      },
+      {
+       "id": "L37",
+       "kieu": "dien",
+       "dapAn": [
+        "water"
+       ],
+       "de": "Complete the notes below. Write ONE WORD ONLY for each answer.\nThe honeybee — nectar is about 80% ___",
+       "giaiThich": "\"It is about eighty per cent water, so it is very thin.\" ⇒ water. Hai đáp án liền nhau bắt đầu bằng âm /w/ (water → wax): nghe kỹ từ đứng ngay sau \"eighty per cent\"."
+      },
+      {
+       "id": "L38",
+       "kieu": "dien",
+       "dapAn": [
+        "wax"
+       ],
+       "de": "Complete the notes below. Write ONE WORD ONLY for each answer.\nThe honeybee — nectar is put into small cells made of ___",
+       "giaiThich": "\"Back in the hive, the bees put the nectar into small cells made of wax.\" ⇒ wax (sáp ong). Ghi chú đổi sang bị động \"nectar is put into small cells made of ___\". Bẫy: \"water\" vừa nghe ở câu trước là thành phần của mật hoa, không phải chất liệu ô tổ."
+      },
+      {
+       "id": "L39",
+       "kieu": "dien",
+       "dapAn": [
+        "wings"
+       ],
+       "de": "Complete the notes below. Write ONE WORD ONLY for each answer.\nThe honeybee — bees dry the nectar by moving their ___ quickly",
+       "giaiThich": "\"Then they move their wings very fast. This moves the air and dries the nectar.\" — \"quickly\" = \"very fast\" ⇒ wings (cánh)."
+      },
+      {
+       "id": "L40",
+       "kieu": "dien",
+       "dapAn": [
+        "fruit"
+       ],
+       "de": "Complete the notes below. Write ONE WORD ONLY for each answer.\nThe honeybee — without bees, there would be much less ___ (e.g. apples)",
+       "giaiThich": "\"Without bees, we would have much less fruit. Apples, for example, would be very hard to grow.\" ⇒ fruit. Ví dụ \"apples\" trong ghi chú khớp câu ngay sau. Bẫy: \"honey\" và \"food\" cũng được nhắc, nhưng câu \"Without bees, we would have much less…\" kết thúc bằng \"fruit\"."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "doc",
+   "ten": "Academic Reading",
+   "kyNang": "doc",
+   "phut": 60,
+   "diemToiDa": 40,
+   "band": [
+    [
+     39,
+     9
+    ],
+    [
+     37,
+     8.5
+    ],
+    [
+     35,
+     8
+    ],
+    [
+     33,
+     7.5
+    ],
+    [
+     30,
+     7
+    ],
+    [
+     27,
+     6.5
+    ],
+    [
+     23,
+     6
+    ],
+    [
+     19,
+     5.5
+    ],
+    [
+     15,
+     5
+    ],
+    [
+     13,
+     4.5
+    ],
+    [
+     10,
+     4
+    ],
+    [
+     8,
+     3.5
+    ],
+    [
+     6,
+     3
+    ],
+    [
+     4,
+     2.5
+    ],
+    [
+     0,
+     2
+    ]
+   ],
+   "nhom": [
+    {
+     "huongDan": "Passage 1 — Câu 1–6. Complete the notes below. Choose ONE WORD AND/OR A NUMBER from the passage for each answer.",
+     "doan": "READING PASSAGE 1\nTHE RISE AND FALL OF THE PLASTIC BAG\nIt was invented to help the planet. So what went wrong?\n\nGo into almost any shop in the world, and your shopping will probably be handed to you in a thin plastic bag. It weighs only a few grams, yet it can carry several kilos of food. It is also extremely cheap to produce. It is no surprise, then, that by some estimates people now use between 500 billion and one trillion plastic bags every year. What is surprising is that this everyday object is only about sixty years old.\nThe modern plastic bag was created in the early 1960s by a Swedish engineer, Sten Gustaf Thulin. He worked for a packaging company called Celloplast, in the town of Norrköping. Thulin found a way to fold and cut a flat tube of plastic so that it became a strong bag with handles, made from a single piece. The company patented his design in 1965. According to his son, Thulin believed that his invention would be good for the planet. At that time, shops gave their customers paper bags, and making paper meant cutting down trees. A plastic bag was light and strong, and it could be used again and again. Thulin himself always carried a folded bag in his pocket.\nFor some years, plastic bags were used mainly in Europe. Then, in 1982, two of the largest supermarket companies in the United States began to offer them instead of paper bags, because they cost less. Other shops quickly followed, and within a few years the plastic bag had replaced paper in many countries. Unfortunately, customers did not behave as Thulin had expected. Because the bags were given away free, people saw them as rubbish. A typical bag was used for only about twelve minutes – the time it takes to carry the shopping home – and was then thrown away.\nThe problems soon became clear. A plastic bag does not break down easily, and scientists think that it may stay in the environment for hundreds of years. Light bags are carried by the wind into trees, rivers and finally the sea. There, turtles sometimes eat them, because a bag floating in the water looks like a jellyfish, which is their natural food. On land, bags cause a different kind of damage. In Bangladesh, plastic bags blocked the drains of the cities, and this made the terrible floods of 1988 and 1998 even worse. In 2002, Bangladesh became the first country in the world to ban thin plastic bags.\nOther countries chose a different method. In March 2002, Ireland introduced a tax of 15 cents on every plastic bag. Shops had to charge customers for each bag, and the money was spent on environmental projects. The result was dramatic: within weeks, the number of bags used fell by about 90 per cent. Denmark had in fact taxed bags since 1993, but Ireland's success was the example that many governments decided to follow. Rwanda banned plastic bags completely in 2008, and Kenya did the same in 2017. England waited until 2015 before it introduced a charge of five pence.\nIs the answer, then, to go back to paper, or to use cotton bags? It is not so simple. Making a paper bag uses more energy and water than making a plastic one, and paper bags tear easily, so they are rarely used twice. A cotton bag is strong, but growing cotton needs a great deal of land and water. Studies suggest that a cotton bag must be used more than a hundred times before it is better for the environment than a plastic bag. Thick plastic \"bags for life\" are another choice, but they contain much more plastic than a thin bag, so they are only useful if shoppers really do bring them back to the shop every time.\nIn the end, the most important thing is not what a bag is made of, but how many times it is used. This is exactly what Sten Gustaf Thulin understood sixty years ago. His son has said that his father would find it very strange that people simply throw the bags away. Perhaps the plastic bag was never the real problem. The real problem is the habit of using something once and then forgetting about it.\n\n────────\nTHE PLASTIC BAG\nCâu 1–6. Complete the notes below. Choose ONE WORD AND/OR A NUMBER from the passage for each answer.\nInvention\n• created by a Swedish (1) ______ who worked for a packaging company\n• the design was patented in (2) ______\n• the inventor preferred plastic to paper because no (3) ______ had to be cut down\nSpread\n• 1982: two big American supermarket companies started to use plastic bags\n• the bags cost nothing, so customers thought of them as (4) ______\nProblems\n• in the sea: to a turtle, a floating bag looks like a (5) ______\n• on land: in Bangladesh, bags blocked the (6) ______ in cities and made floods worse",
+     "cau": [
+      {
+       "id": "R1",
+       "kieu": "dien",
+       "dapAn": [
+        "engineer"
+       ],
+       "de": "Complete the notes below. Choose ONE WORD AND/OR A NUMBER from the passage for each answer.\nThe plastic bag — created by a Swedish ___ who worked for a packaging company",
+       "giaiThich": "\"The modern plastic bag was created in the early 1960s by a Swedish engineer, Sten Gustaf Thulin. He worked for a packaging company called Celloplast\" ⇒ engineer. Ô trống đứng sau \"a Swedish\" nên cần DANH TỪ chỉ người. Bẫy: \"company\" cũng là danh từ gần đó nhưng ghi chú đã có sẵn \"who worked for a packaging company\"."
+      },
+      {
+       "id": "R2",
+       "kieu": "dien",
+       "dapAn": [
+        "1965"
+       ],
+       "de": "Complete the notes below. Choose ONE WORD AND/OR A NUMBER from the passage for each answer.\nThe plastic bag — the design was patented in ___",
+       "giaiThich": "\"The company patented his design in 1965.\" ⇒ 1965. Bẫy số: \"the early 1960s\" là lúc ông NGHĨ RA cách làm; 1982 là năm siêu thị Mỹ bắt đầu dùng; ghi chú hỏi năm ĐĂNG KÝ SÁNG CHẾ (\"patented\")."
+      },
+      {
+       "id": "R3",
+       "kieu": "dien",
+       "dapAn": [
+        "trees"
+       ],
+       "de": "Complete the notes below. Choose ONE WORD AND/OR A NUMBER from the passage for each answer.\nThe plastic bag — the inventor preferred plastic to paper because no ___ had to be cut down",
+       "giaiThich": "\"shops gave their customers paper bags, and making paper meant cutting down trees\" — ghi chú đổi sang bị động \"no ___ had to be cut down\" ⇒ trees (số nhiều như trong bài)."
+      },
+      {
+       "id": "R4",
+       "kieu": "dien",
+       "dapAn": [
+        "rubbish"
+       ],
+       "de": "Complete the notes below. Choose ONE WORD AND/OR A NUMBER from the passage for each answer.\nThe plastic bag — the bags cost nothing, so customers thought of them as ___",
+       "giaiThich": "\"Because the bags were given away free, people saw them as rubbish.\" — \"cost nothing\" = \"given away free\", \"thought of them as\" = \"saw them as\" ⇒ rubbish. Chính tả: hai chữ b."
+      },
+      {
+       "id": "R5",
+       "kieu": "dien",
+       "dapAn": [
+        "jellyfish"
+       ],
+       "de": "Complete the notes below. Choose ONE WORD AND/OR A NUMBER from the passage for each answer.\nThe plastic bag — in the sea: to a turtle, a floating bag looks like a ___",
+       "giaiThich": "\"turtles sometimes eat them, because a bag floating in the water looks like a jellyfish, which is their natural food\" ⇒ jellyfish (con sứa — viết liền một từ). Bẫy: \"food\" cũng đứng gần nhưng \"looks like a food\" sai ngữ pháp và sai ý."
+      },
+      {
+       "id": "R6",
+       "kieu": "dien",
+       "dapAn": [
+        "drains"
+       ],
+       "de": "Complete the notes below. Choose ONE WORD AND/OR A NUMBER from the passage for each answer.\nThe plastic bag — on land: in Bangladesh, bags blocked the ___ in cities and made floods worse",
+       "giaiThich": "\"In Bangladesh, plastic bags blocked the drains of the cities, and this made the terrible floods of 1988 and 1998 even worse.\" ⇒ drains (cống thoát nước). Bẫy: \"floods\" là HẬU QUẢ — đã in sẵn ở cuối dòng ghi chú; \"rivers\" thuộc câu nói về gió thổi túi đi, không phải Bangladesh."
+      }
+     ]
+    },
+    {
+     "huongDan": "Passage 1 — Câu 7–13. Do the following statements agree with the information given in Reading Passage 1? Choose TRUE if the statement agrees with the information FALSE if the statement contradicts the information NOT GIVEN if there is no information on this",
+     "doan": "READING PASSAGE 1\nTHE RISE AND FALL OF THE PLASTIC BAG\nIt was invented to help the planet. So what went wrong?\n\nGo into almost any shop in the world, and your shopping will probably be handed to you in a thin plastic bag. It weighs only a few grams, yet it can carry several kilos of food. It is also extremely cheap to produce. It is no surprise, then, that by some estimates people now use between 500 billion and one trillion plastic bags every year. What is surprising is that this everyday object is only about sixty years old.\nThe modern plastic bag was created in the early 1960s by a Swedish engineer, Sten Gustaf Thulin. He worked for a packaging company called Celloplast, in the town of Norrköping. Thulin found a way to fold and cut a flat tube of plastic so that it became a strong bag with handles, made from a single piece. The company patented his design in 1965. According to his son, Thulin believed that his invention would be good for the planet. At that time, shops gave their customers paper bags, and making paper meant cutting down trees. A plastic bag was light and strong, and it could be used again and again. Thulin himself always carried a folded bag in his pocket.\nFor some years, plastic bags were used mainly in Europe. Then, in 1982, two of the largest supermarket companies in the United States began to offer them instead of paper bags, because they cost less. Other shops quickly followed, and within a few years the plastic bag had replaced paper in many countries. Unfortunately, customers did not behave as Thulin had expected. Because the bags were given away free, people saw them as rubbish. A typical bag was used for only about twelve minutes – the time it takes to carry the shopping home – and was then thrown away.\nThe problems soon became clear. A plastic bag does not break down easily, and scientists think that it may stay in the environment for hundreds of years. Light bags are carried by the wind into trees, rivers and finally the sea. There, turtles sometimes eat them, because a bag floating in the water looks like a jellyfish, which is their natural food. On land, bags cause a different kind of damage. In Bangladesh, plastic bags blocked the drains of the cities, and this made the terrible floods of 1988 and 1998 even worse. In 2002, Bangladesh became the first country in the world to ban thin plastic bags.\nOther countries chose a different method. In March 2002, Ireland introduced a tax of 15 cents on every plastic bag. Shops had to charge customers for each bag, and the money was spent on environmental projects. The result was dramatic: within weeks, the number of bags used fell by about 90 per cent. Denmark had in fact taxed bags since 1993, but Ireland's success was the example that many governments decided to follow. Rwanda banned plastic bags completely in 2008, and Kenya did the same in 2017. England waited until 2015 before it introduced a charge of five pence.\nIs the answer, then, to go back to paper, or to use cotton bags? It is not so simple. Making a paper bag uses more energy and water than making a plastic one, and paper bags tear easily, so they are rarely used twice. A cotton bag is strong, but growing cotton needs a great deal of land and water. Studies suggest that a cotton bag must be used more than a hundred times before it is better for the environment than a plastic bag. Thick plastic \"bags for life\" are another choice, but they contain much more plastic than a thin bag, so they are only useful if shoppers really do bring them back to the shop every time.\nIn the end, the most important thing is not what a bag is made of, but how many times it is used. This is exactly what Sten Gustaf Thulin understood sixty years ago. His son has said that his father would find it very strange that people simply throw the bags away. Perhaps the plastic bag was never the real problem. The real problem is the habit of using something once and then forgetting about it.",
+     "cau": [
+      {
+       "id": "R7",
+       "kieu": "chon",
+       "de": "Do the following statements agree with the information given in Reading Passage 1? Choose TRUE if the statement agrees with the information FALSE if the statement contradicts the information NOT GIVEN if there is no information on this\nThulin expected people to use each plastic bag many times.",
+       "luaChon": [
+        "TRUE",
+        "FALSE",
+        "NOT GIVEN"
+       ],
+       "dapAn": 0,
+       "giaiThich": "Thulin tin rằng túi \"could be used again and again\", bản thân ông luôn mang sẵn một cái túi gấp trong túi áo; bài còn viết \"customers did not behave as Thulin had expected\" (khách KHÔNG làm như ông mong đợi — tức ông mong họ dùng lại). \"many times\" = \"again and again\" ⇒ TRUE."
+      },
+      {
+       "id": "R8",
+       "kieu": "chon",
+       "de": "Do the following statements agree with the information given in Reading Passage 1? Choose TRUE if the statement agrees with the information FALSE if the statement contradicts the information NOT GIVEN if there is no information on this\nCelloplast became a very rich company because of the plastic bag.",
+       "luaChon": [
+        "TRUE",
+        "FALSE",
+        "NOT GIVEN"
+       ],
+       "dapAn": 2,
+       "giaiThich": "Bài chỉ nói Celloplast là công ty bao bì ở Norrköping và công ty đăng ký sáng chế năm 1965. KHÔNG có thông tin nào về việc công ty giàu lên hay không ⇒ NOT GIVEN. Đừng suy \"phát minh nổi tiếng ⇒ chắc là giàu\": TFNG chỉ chấm theo điều bài VIẾT."
+      },
+      {
+       "id": "R9",
+       "kieu": "chon",
+       "de": "Do the following statements agree with the information given in Reading Passage 1? Choose TRUE if the statement agrees with the information FALSE if the statement contradicts the information NOT GIVEN if there is no information on this\nPlastic bags were more expensive for American supermarkets than paper bags.",
+       "luaChon": [
+        "TRUE",
+        "FALSE",
+        "NOT GIVEN"
+       ],
+       "dapAn": 1,
+       "giaiThich": "Hai chuỗi siêu thị Mỹ chuyển sang túi ni lông \"because they cost less\" — túi ni lông RẺ hơn túi giấy. Câu hỏi nói ĐẮT hơn ⇒ ngược hẳn ⇒ FALSE."
+      },
+      {
+       "id": "R10",
+       "kieu": "chon",
+       "de": "Do the following statements agree with the information given in Reading Passage 1? Choose TRUE if the statement agrees with the information FALSE if the statement contradicts the information NOT GIVEN if there is no information on this\nA typical plastic bag is used for less than a quarter of an hour.",
+       "luaChon": [
+        "TRUE",
+        "FALSE",
+        "NOT GIVEN"
+       ],
+       "dapAn": 0,
+       "giaiThich": "\"A typical bag was used for only about twelve minutes\" — 12 phút ÍT HƠN 15 phút (\"a quarter of an hour\" = một phần tư giờ) ⇒ TRUE. Dạng bẫy đổi cách nói con số: phải tự quy \"a quarter of an hour\" ra 15 phút."
+      },
+      {
+       "id": "R11",
+       "kieu": "chon",
+       "de": "Do the following statements agree with the information given in Reading Passage 1? Choose TRUE if the statement agrees with the information FALSE if the statement contradicts the information NOT GIVEN if there is no information on this\nBangladesh banned thin plastic bags before any other country did.",
+       "luaChon": [
+        "TRUE",
+        "FALSE",
+        "NOT GIVEN"
+       ],
+       "dapAn": 0,
+       "giaiThich": "\"In 2002, Bangladesh became the first country in the world to ban thin plastic bags.\" — \"before any other country did\" = \"the first country in the world\" ⇒ TRUE. (Đan Mạch đánh THUẾ từ 1993 — thuế không phải lệnh CẤM, nên không mâu thuẫn.)"
+      },
+      {
+       "id": "R12",
+       "kieu": "chon",
+       "de": "Do the following statements agree with the information given in Reading Passage 1? Choose TRUE if the statement agrees with the information FALSE if the statement contradicts the information NOT GIVEN if there is no information on this\nIn Ireland, the number of plastic bags used fell slowly after the tax was introduced.",
+       "luaChon": [
+        "TRUE",
+        "FALSE",
+        "NOT GIVEN"
+       ],
+       "dapAn": 1,
+       "giaiThich": "\"within weeks, the number of bags used fell by about 90 per cent\" — giảm RẤT NHANH (chỉ trong vài tuần). Câu hỏi nói \"fell slowly\" ⇒ trái ngược ⇒ FALSE. Phần \"the number… fell\" thì đúng, nhưng chỉ cần MỘT chi tiết sai (slowly) là cả câu FALSE."
+      },
+      {
+       "id": "R13",
+       "kieu": "chon",
+       "de": "Do the following statements agree with the information given in Reading Passage 1? Choose TRUE if the statement agrees with the information FALSE if the statement contradicts the information NOT GIVEN if there is no information on this\nMost shoppers in England were against the five-pence charge.",
+       "luaChon": [
+        "TRUE",
+        "FALSE",
+        "NOT GIVEN"
+       ],
+       "dapAn": 2,
+       "giaiThich": "Về nước Anh, bài chỉ có một câu: năm 2015 mới thu phí 5 penny. KHÔNG nói người mua hàng ủng hộ hay phản đối ⇒ NOT GIVEN. Đừng chọn FALSE: muốn FALSE thì bài phải nói điều ngược lại (ví dụ \"most shoppers supported the charge\")."
+      }
+     ]
+    },
+    {
+     "huongDan": "Passage 2 — Câu 14–19. Reading Passage 2 has six paragraphs, A–F. Choose the correct heading for each paragraph from the list of headings below. Choose the correct number, i–ix.",
+     "doan": "READING PASSAGE 2\nTHE DOCTOR WHO ASKED PEOPLE TO WASH THEIR HANDS\nIgnaz Semmelweis found a simple way to save lives – but he could not make other doctors listen\n\nA  Today, everybody knows that washing your hands is one of the simplest ways to stay healthy. Parents teach it to small children, and posters in hospitals remind doctors and nurses to do it before they touch a patient. Yet less than two hundred years ago, most doctors did not wash their hands at all. They often went from one patient to the next in the same dirty coat. The man who first showed that clean hands could save lives was a Hungarian doctor, Ignaz Semmelweis – and for most of his life, almost nobody believed him.\nB  Semmelweis was born in 1818 in Buda, which is now part of Budapest. In 1846, he began work as an assistant at the Vienna General Hospital, one of the largest hospitals in Europe. The hospital had two clinics where women could give birth. In the First Clinic, the women were looked after by doctors and medical students. In the Second Clinic, the work was done by midwives – women who are trained to help mothers during a birth. Semmelweis soon noticed something very strange. In the First Clinic, about ten per cent of the mothers died from a fever a few days after their babies were born. In the Second Clinic, the figure was under four per cent. The difference was well known in the city, and some women begged on their knees to be sent to the midwives instead of the doctors.\nC  Semmelweis wanted to find the reason. He compared everything in the two clinics: the food, the air, the number of patients, even the position in which the women gave birth. Nothing explained the difference. He even asked the priest of the hospital to stop ringing his bell when he walked through the First Clinic, because he thought that the sound might frighten the women. Then, in 1847, his friend and colleague Jakob Kolletschka died. Kolletschka had been examining a dead body with his students when one of them accidentally cut him with a knife. He quickly developed a fever, and his illness was just like the illness of the mothers. Semmelweis suddenly understood. The doctors and students of the First Clinic often examined dead bodies in the morning and then went straight to the women in the clinic. Something from the bodies was being carried on their hands. The midwives never did this kind of work, so their patients were safer.\nD  In May 1847, Semmelweis introduced a new rule. Before entering the clinic, every doctor and student had to wash his hands in a bowl of water mixed with a strong chemical called chlorinated lime. He chose it because it removed the smell of the dead bodies better than soap did. Later, he ordered that the instruments used in the clinic should be washed in the same way. The results came immediately. In April, before the rule, 18 per cent of the mothers in the First Clinic had died. In June, the figure was about two per cent, and in July it was just over one per cent.\nE  We might expect that Semmelweis became famous at once. In fact, the opposite happened. Many doctors were angry. They were educated gentlemen, and they did not like the idea that their own hands were killing patients. Besides, nobody at that time knew about germs, so Semmelweis could not explain exactly why his method worked. He did not make things easier for himself, either. He was slow to publish his results – his book did not appear until 1861 – and he wrote rude letters to doctors who disagreed with him, calling them murderers. In 1850, he left Vienna and returned to Hungary. Later, his health became worse, and in 1865 he was taken to a hospital for the mentally ill. He died there two weeks later, at the age of 47.\nF  In the 1860s, the French scientist Louis Pasteur showed that tiny living things, called germs, cause many diseases. In Britain, a surgeon called Joseph Lister then used this idea to make operations much safer. At last, doctors could understand why Semmelweis had been right, and hand washing slowly became normal in hospitals. Today, Semmelweis is known as the \"saviour of mothers\", and a university in Budapest carries his name. Every year on 5 May, the World Health Organization holds a special day to remind health workers to clean their hands. In many hospitals, there is now a bottle of hand gel beside every bed. It is a simple message, but, as the story of Semmelweis shows, simple messages are not always easy to accept.",
+     "cau": [
+      {
+       "id": "R14",
+       "kieu": "chon",
+       "de": "Reading Passage 2 has six paragraphs, A–F. Choose the correct heading for each paragraph from the list of headings below. Choose the correct number, i–ix.\nParagraph A",
+       "luaChon": [
+        "i. A simple rule and a sudden improvement",
+        "ii. The dangers of modern hospitals",
+        "iii. Two clinics with very different results",
+        "iv. Recognition that came too late",
+        "v. A habit that was once unknown in medicine",
+        "vi. How Semmelweis trained the midwives",
+        "vii. A death that provided the answer",
+        "viii. An idea that other doctors refused to accept",
+        "ix. The high cost of keeping hospitals clean"
+       ],
+       "dapAn": 4,
+       "giaiThich": "Đoạn A: ngày nay ai cũng biết rửa tay, nhưng \"less than two hundred years ago, most doctors did not wash their hands at all\" ⇒ thói quen này TỪNG không tồn tại trong ngành y ⇒ v. Bẫy: ii (\"modern hospitals\") — đoạn có nhắc bệnh viện ngày nay nhưng không nói gì về NGUY HIỂM của chúng."
+      },
+      {
+       "id": "R15",
+       "kieu": "chon",
+       "de": "Reading Passage 2 has six paragraphs, A–F. Choose the correct heading for each paragraph from the list of headings below. Choose the correct number, i–ix.\nParagraph B",
+       "luaChon": [
+        "i. A simple rule and a sudden improvement",
+        "ii. The dangers of modern hospitals",
+        "iii. Two clinics with very different results",
+        "iv. Recognition that came too late",
+        "v. A habit that was once unknown in medicine",
+        "vi. How Semmelweis trained the midwives",
+        "vii. A death that provided the answer",
+        "viii. An idea that other doctors refused to accept",
+        "ix. The high cost of keeping hospitals clean"
+       ],
+       "dapAn": 2,
+       "giaiThich": "Đoạn B tả hai khoa sản: Khoa Một (bác sĩ, sinh viên) khoảng 10% sản phụ chết, Khoa Hai (bà đỡ) dưới 4% ⇒ hai khoa, kết quả rất khác nhau ⇒ iii. Bẫy: vi (\"trained the midwives\") — bài nói bà đỡ là người \"are trained\", nhưng không hề nói Semmelweis đào tạo họ."
+      },
+      {
+       "id": "R16",
+       "kieu": "chon",
+       "de": "Reading Passage 2 has six paragraphs, A–F. Choose the correct heading for each paragraph from the list of headings below. Choose the correct number, i–ix.\nParagraph C",
+       "luaChon": [
+        "i. A simple rule and a sudden improvement",
+        "ii. The dangers of modern hospitals",
+        "iii. Two clinics with very different results",
+        "iv. Recognition that came too late",
+        "v. A habit that was once unknown in medicine",
+        "vi. How Semmelweis trained the midwives",
+        "vii. A death that provided the answer",
+        "viii. An idea that other doctors refused to accept",
+        "ix. The high cost of keeping hospitals clean"
+       ],
+       "dapAn": 6,
+       "giaiThich": "Đoạn C: Semmelweis so sánh mọi thứ mà không ra (\"Nothing explained the difference\"), rồi cái chết của bạn ông, Kolletschka, khiến ông hiểu ra (\"Semmelweis suddenly understood\") ⇒ một cái chết đem lại câu trả lời ⇒ vii."
+      },
+      {
+       "id": "R17",
+       "kieu": "chon",
+       "de": "Reading Passage 2 has six paragraphs, A–F. Choose the correct heading for each paragraph from the list of headings below. Choose the correct number, i–ix.\nParagraph D",
+       "luaChon": [
+        "i. A simple rule and a sudden improvement",
+        "ii. The dangers of modern hospitals",
+        "iii. Two clinics with very different results",
+        "iv. Recognition that came too late",
+        "v. A habit that was once unknown in medicine",
+        "vi. How Semmelweis trained the midwives",
+        "vii. A death that provided the answer",
+        "viii. An idea that other doctors refused to accept",
+        "ix. The high cost of keeping hospitals clean"
+       ],
+       "dapAn": 0,
+       "giaiThich": "Đoạn D: \"Semmelweis introduced a new rule\" (rửa tay bằng nước pha chlorinated lime) và \"The results came immediately\" — 18% xuống khoảng 2% rồi 1% ⇒ quy định đơn giản + cải thiện tức thì ⇒ i. Bẫy: ix (\"high cost\") — đoạn không nói gì về chi phí."
+      },
+      {
+       "id": "R18",
+       "kieu": "chon",
+       "de": "Reading Passage 2 has six paragraphs, A–F. Choose the correct heading for each paragraph from the list of headings below. Choose the correct number, i–ix.\nParagraph E",
+       "luaChon": [
+        "i. A simple rule and a sudden improvement",
+        "ii. The dangers of modern hospitals",
+        "iii. Two clinics with very different results",
+        "iv. Recognition that came too late",
+        "v. A habit that was once unknown in medicine",
+        "vi. How Semmelweis trained the midwives",
+        "vii. A death that provided the answer",
+        "viii. An idea that other doctors refused to accept",
+        "ix. The high cost of keeping hospitals clean"
+       ],
+       "dapAn": 7,
+       "giaiThich": "Đoạn E: \"the opposite happened. Many doctors were angry…\" — các bác sĩ khác không chấp nhận, ông rời Vienna rồi mất ⇒ viii. Bẫy: iv (\"Recognition that came too late\") nghe cũng buồn như đoạn này, nhưng đoạn E chưa hề nói đến sự CÔNG NHẬN — phần đó nằm ở đoạn F."
+      },
+      {
+       "id": "R19",
+       "kieu": "chon",
+       "de": "Reading Passage 2 has six paragraphs, A–F. Choose the correct heading for each paragraph from the list of headings below. Choose the correct number, i–ix.\nParagraph F",
+       "luaChon": [
+        "i. A simple rule and a sudden improvement",
+        "ii. The dangers of modern hospitals",
+        "iii. Two clinics with very different results",
+        "iv. Recognition that came too late",
+        "v. A habit that was once unknown in medicine",
+        "vi. How Semmelweis trained the midwives",
+        "vii. A death that provided the answer",
+        "viii. An idea that other doctors refused to accept",
+        "ix. The high cost of keeping hospitals clean"
+       ],
+       "dapAn": 3,
+       "giaiThich": "Đoạn F: sau công trình của Pasteur và Lister, \"At last, doctors could understand why Semmelweis had been right\"; ngày nay ông được gọi là \"saviour of mothers\" — nhưng lúc đó ông đã mất ⇒ sự công nhận đến quá muộn ⇒ iv."
+      }
+     ]
+    },
+    {
+     "huongDan": "Passage 2 — Câu 20–23. Choose the correct letter, A, B, C or D.",
+     "doan": "READING PASSAGE 2\nTHE DOCTOR WHO ASKED PEOPLE TO WASH THEIR HANDS\nIgnaz Semmelweis found a simple way to save lives – but he could not make other doctors listen\n\nA  Today, everybody knows that washing your hands is one of the simplest ways to stay healthy. Parents teach it to small children, and posters in hospitals remind doctors and nurses to do it before they touch a patient. Yet less than two hundred years ago, most doctors did not wash their hands at all. They often went from one patient to the next in the same dirty coat. The man who first showed that clean hands could save lives was a Hungarian doctor, Ignaz Semmelweis – and for most of his life, almost nobody believed him.\nB  Semmelweis was born in 1818 in Buda, which is now part of Budapest. In 1846, he began work as an assistant at the Vienna General Hospital, one of the largest hospitals in Europe. The hospital had two clinics where women could give birth. In the First Clinic, the women were looked after by doctors and medical students. In the Second Clinic, the work was done by midwives – women who are trained to help mothers during a birth. Semmelweis soon noticed something very strange. In the First Clinic, about ten per cent of the mothers died from a fever a few days after their babies were born. In the Second Clinic, the figure was under four per cent. The difference was well known in the city, and some women begged on their knees to be sent to the midwives instead of the doctors.\nC  Semmelweis wanted to find the reason. He compared everything in the two clinics: the food, the air, the number of patients, even the position in which the women gave birth. Nothing explained the difference. He even asked the priest of the hospital to stop ringing his bell when he walked through the First Clinic, because he thought that the sound might frighten the women. Then, in 1847, his friend and colleague Jakob Kolletschka died. Kolletschka had been examining a dead body with his students when one of them accidentally cut him with a knife. He quickly developed a fever, and his illness was just like the illness of the mothers. Semmelweis suddenly understood. The doctors and students of the First Clinic often examined dead bodies in the morning and then went straight to the women in the clinic. Something from the bodies was being carried on their hands. The midwives never did this kind of work, so their patients were safer.\nD  In May 1847, Semmelweis introduced a new rule. Before entering the clinic, every doctor and student had to wash his hands in a bowl of water mixed with a strong chemical called chlorinated lime. He chose it because it removed the smell of the dead bodies better than soap did. Later, he ordered that the instruments used in the clinic should be washed in the same way. The results came immediately. In April, before the rule, 18 per cent of the mothers in the First Clinic had died. In June, the figure was about two per cent, and in July it was just over one per cent.\nE  We might expect that Semmelweis became famous at once. In fact, the opposite happened. Many doctors were angry. They were educated gentlemen, and they did not like the idea that their own hands were killing patients. Besides, nobody at that time knew about germs, so Semmelweis could not explain exactly why his method worked. He did not make things easier for himself, either. He was slow to publish his results – his book did not appear until 1861 – and he wrote rude letters to doctors who disagreed with him, calling them murderers. In 1850, he left Vienna and returned to Hungary. Later, his health became worse, and in 1865 he was taken to a hospital for the mentally ill. He died there two weeks later, at the age of 47.\nF  In the 1860s, the French scientist Louis Pasteur showed that tiny living things, called germs, cause many diseases. In Britain, a surgeon called Joseph Lister then used this idea to make operations much safer. At last, doctors could understand why Semmelweis had been right, and hand washing slowly became normal in hospitals. Today, Semmelweis is known as the \"saviour of mothers\", and a university in Budapest carries his name. Every year on 5 May, the World Health Organization holds a special day to remind health workers to clean their hands. In many hospitals, there is now a bottle of hand gel beside every bed. It is a simple message, but, as the story of Semmelweis shows, simple messages are not always easy to accept.",
+     "cau": [
+      {
+       "id": "R20",
+       "kieu": "chon",
+       "de": "Choose the correct letter, A, B, C or D.\nWhat did Semmelweis notice soon after he began working at the hospital?",
+       "luaChon": [
+        "The First Clinic had far more patients than the Second Clinic.",
+        "The medical students were badly trained.",
+        "Mothers were more likely to die in the clinic run by doctors.",
+        "Most women preferred to give birth at home."
+       ],
+       "dapAn": 2,
+       "giaiThich": "\"Semmelweis soon noticed something very strange. In the First Clinic (do bác sĩ và sinh viên phụ trách), about ten per cent of the mothers died… In the Second Clinic, the figure was under four per cent.\" ⇒ sản phụ dễ chết hơn ở khoa của BÁC SĨ ⇒ C. A: bài không so số bệnh nhân hai khoa ở đoạn này; B, D: không được nhắc."
+      },
+      {
+       "id": "R21",
+       "kieu": "chon",
+       "de": "Choose the correct letter, A, B, C or D.\nWhy were the patients in the Second Clinic safer?",
+       "luaChon": [
+        "The midwives did not examine dead bodies.",
+        "The midwives washed their hands regularly.",
+        "The food and the air were better there.",
+        "There were fewer patients there."
+       ],
+       "dapAn": 0,
+       "giaiThich": "\"The midwives never did this kind of work, so their patients were safer.\" — \"this kind of work\" = khám nghiệm tử thi (\"examined dead bodies\") ⇒ A. Bẫy B: nghe rất hợp lý (bài nói về rửa tay!) nhưng bài KHÔNG nói bà đỡ rửa tay; C và D là những thứ Semmelweis đã so sánh và \"Nothing explained the difference\"."
+      },
+      {
+       "id": "R22",
+       "kieu": "chon",
+       "de": "Choose the correct letter, A, B, C or D.\nWhy did Semmelweis choose chlorinated lime?",
+       "luaChon": [
+        "It was cheaper than soap.",
+        "The midwives were already using it.",
+        "Other doctors had recommended it.",
+        "It was better than soap at getting rid of a smell."
+       ],
+       "dapAn": 3,
+       "giaiThich": "\"He chose it because it removed the smell of the dead bodies better than soap did.\" — \"getting rid of a smell\" = \"removed the smell\" ⇒ D. A (rẻ hơn) không được nhắc; \"soap\" xuất hiện ở cả A và D nên phải đọc kỹ điều được SO SÁNH."
+      },
+      {
+       "id": "R23",
+       "kieu": "chon",
+       "de": "Choose the correct letter, A, B, C or D.\nAccording to the writer, one reason why other doctors did not accept the idea was that Semmelweis",
+       "luaChon": [
+        "refused to write a book about it.",
+        "was unable to say exactly why it worked.",
+        "could not show any clear results.",
+        "left Vienna before he had tested it."
+       ],
+       "dapAn": 1,
+       "giaiThich": "\"nobody at that time knew about germs, so Semmelweis could not explain exactly why his method worked\" ⇒ B. A sai: ông CHẬM xuất bản chứ không từ chối (sách ra năm 1861). C sai: kết quả rất rõ (18% → khoảng 1%). D sai: ông áp dụng quy định năm 1847, đến 1850 mới rời Vienna."
+      }
+     ]
+    },
+    {
+     "huongDan": "Passage 2 — Câu 24–26. Complete the summary below. Choose ONE WORD ONLY from the passage for each answer.",
+     "doan": "READING PASSAGE 2\nTHE DOCTOR WHO ASKED PEOPLE TO WASH THEIR HANDS\nIgnaz Semmelweis found a simple way to save lives – but he could not make other doctors listen\n\nA  Today, everybody knows that washing your hands is one of the simplest ways to stay healthy. Parents teach it to small children, and posters in hospitals remind doctors and nurses to do it before they touch a patient. Yet less than two hundred years ago, most doctors did not wash their hands at all. They often went from one patient to the next in the same dirty coat. The man who first showed that clean hands could save lives was a Hungarian doctor, Ignaz Semmelweis – and for most of his life, almost nobody believed him.\nB  Semmelweis was born in 1818 in Buda, which is now part of Budapest. In 1846, he began work as an assistant at the Vienna General Hospital, one of the largest hospitals in Europe. The hospital had two clinics where women could give birth. In the First Clinic, the women were looked after by doctors and medical students. In the Second Clinic, the work was done by midwives – women who are trained to help mothers during a birth. Semmelweis soon noticed something very strange. In the First Clinic, about ten per cent of the mothers died from a fever a few days after their babies were born. In the Second Clinic, the figure was under four per cent. The difference was well known in the city, and some women begged on their knees to be sent to the midwives instead of the doctors.\nC  Semmelweis wanted to find the reason. He compared everything in the two clinics: the food, the air, the number of patients, even the position in which the women gave birth. Nothing explained the difference. He even asked the priest of the hospital to stop ringing his bell when he walked through the First Clinic, because he thought that the sound might frighten the women. Then, in 1847, his friend and colleague Jakob Kolletschka died. Kolletschka had been examining a dead body with his students when one of them accidentally cut him with a knife. He quickly developed a fever, and his illness was just like the illness of the mothers. Semmelweis suddenly understood. The doctors and students of the First Clinic often examined dead bodies in the morning and then went straight to the women in the clinic. Something from the bodies was being carried on their hands. The midwives never did this kind of work, so their patients were safer.\nD  In May 1847, Semmelweis introduced a new rule. Before entering the clinic, every doctor and student had to wash his hands in a bowl of water mixed with a strong chemical called chlorinated lime. He chose it because it removed the smell of the dead bodies better than soap did. Later, he ordered that the instruments used in the clinic should be washed in the same way. The results came immediately. In April, before the rule, 18 per cent of the mothers in the First Clinic had died. In June, the figure was about two per cent, and in July it was just over one per cent.\nE  We might expect that Semmelweis became famous at once. In fact, the opposite happened. Many doctors were angry. They were educated gentlemen, and they did not like the idea that their own hands were killing patients. Besides, nobody at that time knew about germs, so Semmelweis could not explain exactly why his method worked. He did not make things easier for himself, either. He was slow to publish his results – his book did not appear until 1861 – and he wrote rude letters to doctors who disagreed with him, calling them murderers. In 1850, he left Vienna and returned to Hungary. Later, his health became worse, and in 1865 he was taken to a hospital for the mentally ill. He died there two weeks later, at the age of 47.\nF  In the 1860s, the French scientist Louis Pasteur showed that tiny living things, called germs, cause many diseases. In Britain, a surgeon called Joseph Lister then used this idea to make operations much safer. At last, doctors could understand why Semmelweis had been right, and hand washing slowly became normal in hospitals. Today, Semmelweis is known as the \"saviour of mothers\", and a university in Budapest carries his name. Every year on 5 May, the World Health Organization holds a special day to remind health workers to clean their hands. In many hospitals, there is now a bottle of hand gel beside every bed. It is a simple message, but, as the story of Semmelweis shows, simple messages are not always easy to accept.\n\n────────\nAFTER SEMMELWEIS\nCâu 24–26. Complete the summary below. Choose ONE WORD ONLY from the passage for each answer.\nIn the 1860s, Louis Pasteur proved that many diseases are caused by (24) ______. Joseph Lister, a British (25) ______, used this discovery to make operations less dangerous. Doctors finally understood that Semmelweis had been right. He is now called the \"saviour of (26) ______\", and a university in Budapest is named after him.",
+     "cau": [
+      {
+       "id": "R24",
+       "kieu": "dien",
+       "dapAn": [
+        "germs"
+       ],
+       "de": "Complete the summary below. Choose ONE WORD ONLY from the passage for each answer.\nAfter Semmelweis — In the 1860s, Louis Pasteur proved that many diseases are caused by ___. Joseph Lister, a British (25) …, used this discovery to make operations less dangerous. Doctors finally understood that Semmelweis had been right. He is now called the \"saviour of (26) …\", and a university in Budapest is named after him.",
+       "giaiThich": "\"Louis Pasteur showed that tiny living things, called germs, cause many diseases.\" — tóm tắt đổi sang bị động \"many diseases are caused by ___\" ⇒ germs (vi trùng). ONE WORD ONLY nên không viết \"living things\"."
+      },
+      {
+       "id": "R25",
+       "kieu": "dien",
+       "dapAn": [
+        "surgeon"
+       ],
+       "de": "Complete the summary below. Choose ONE WORD ONLY from the passage for each answer.\nAfter Semmelweis — In the 1860s, Louis Pasteur proved that many diseases are caused by (24) …. Joseph Lister, a British ___, used this discovery to make operations less dangerous. Doctors finally understood that Semmelweis had been right. He is now called the \"saviour of (26) …\", and a university in Budapest is named after him.",
+       "giaiThich": "\"In Britain, a surgeon called Joseph Lister then used this idea to make operations much safer.\" — \"a British ___\" cần danh từ chỉ nghề ⇒ surgeon (bác sĩ phẫu thuật). Bẫy: \"scientist\" là nghề của Pasteur (người Pháp)."
+      },
+      {
+       "id": "R26",
+       "kieu": "dien",
+       "dapAn": [
+        "mothers"
+       ],
+       "de": "Complete the summary below. Choose ONE WORD ONLY from the passage for each answer.\nAfter Semmelweis — In the 1860s, Louis Pasteur proved that many diseases are caused by (24) …. Joseph Lister, a British (25) …, used this discovery to make operations less dangerous. Doctors finally understood that Semmelweis had been right. He is now called the \"saviour of ___\", and a university in Budapest is named after him.",
+       "giaiThich": "\"Today, Semmelweis is known as the \"saviour of mothers\"\" ⇒ mothers (số nhiều như trong bài)."
+      }
+     ]
+    },
+    {
+     "huongDan": "Passage 3 — Câu 27–30. Answer the questions below. Choose NO MORE THAN TWO WORDS from the passage for each answer.",
+     "doan": "READING PASSAGE 3\nSHARING THE BICYCLE\nHow a failed experiment in Amsterdam became part of city transport all over the world\n\nIn many cities around the world, you can now pick up a bicycle on one street, ride it across town and leave it on another. You do not own the bicycle; you simply borrow it for a short time. Bike-sharing schemes like this exist today in about 3,000 cities. They seem like a very modern idea, but the first one was tried sixty years ago – and it was a complete failure.\nIn the summer of 1965, a group of young people in Amsterdam, who called themselves the Provos, were angry about the growing number of cars in their city. One of them, Luud Schimmelpennink, suggested a simple plan. The group painted some bicycles white and left them in the streets for anyone to use, free of charge. The \"White Bicycle Plan\" did not last long. The bicycles had no locks, and a city law said that bicycles in the street had to be locked, so the police soon took them away.\nThirty years later, the city of Copenhagen tried again, with a cleverer system. In 1995, it put specially designed bicycles in stands around the city centre. To take one, a user had to put a coin into a lock on the bicycle, in the same way as with a supermarket trolley. When the bicycle was returned to any stand, the coin came back. The bikes were heavy and had solid rubber tyres which could not go flat, and their unusual shape made them easy to recognise. The cost of the scheme was covered by advertisements on the bicycles. However, the coin was worth much less than a bicycle, and nobody knew who was using each bicycle. Many simply disappeared.\nThe real change came with technology. In 1998, the French city of Rennes introduced a scheme in which users opened the lock with an electronic card. For the first time, the operator knew exactly who had taken each bicycle and when. People who did not bring a bicycle back could be asked to pay for it. In 2005, the city of Lyon used the same idea on a much larger scale, and two years later Paris followed with the most famous scheme of all, Vélib'. It opened in July 2007 with about 7,000 bicycles at 750 stations, and the first thirty minutes of every journey were free for members. In its first year, people made about 20 million trips. There was bad news too: at least 3,000 bikes were stolen in that year, and many more were damaged.\nAfter Paris, cities everywhere wanted a scheme of their own. But stations full of locked bicycles are expensive to build. They also take away space for parking cars, which is not always popular with local shopkeepers. And they have another weakness. In the morning, thousands of people ride into the city centre, so the stations there fill up while stations in the suburbs become empty. In the evening, the opposite can happen. The operators therefore have to pay workers to move bicycles around the city in lorries all day.\nAround 2015, companies in China offered a solution: bicycles without stations. Each bike had its own lock, which a user opened with a mobile phone. At the end of the journey, the bicycle could be left almost anywhere. A ride cost very little, and there was no station to look for. The idea spread extremely fast. By 2017, more than 70 companies had put about 16 million of these bikes onto the streets of Chinese cities, and Beijing alone had over two million. It was far more than people needed. Pavements were blocked by carelessly parked bicycles, and when several companies went out of business, millions of unwanted bikes ended up in enormous piles outside the cities.\nSince then, cities have learned to control bike sharing more carefully. Many now limit the number of bicycles and mark special parking areas. The newest schemes offer electric bicycles, which make hills and long distances easier, although they cost more to rent. In hilly cities, they have attracted riders who would never have used an ordinary bike. Researchers who have studied bike sharing say that we should be realistic about it. Most trips on shared bikes replace journeys on foot or by public transport, not journeys by car, so the effect on traffic is small. On the other hand, users get more exercise, and a shared bicycle is often the fastest way to travel the last kilometre between a railway station and the office. Sixty years after the white bicycles of Amsterdam, the idea of Schimmelpennink and his friends has finally found its place.\n\n────────\nCâu 27–30. Answer the questions below. Choose NO MORE THAN TWO WORDS from the passage for each answer.\nWhat colour were the bicycles in the Amsterdam plan? (27) ______\nWho took the white bicycles away from the streets of Amsterdam? (28) ______\nWhat did users in Copenhagen have to put into the lock in order to take a bicycle? (29) ______\nIn which French city were electronic cards first used to open the locks? (30) ______",
+     "cau": [
+      {
+       "id": "R27",
+       "kieu": "dien",
+       "dapAn": [
+        "white"
+       ],
+       "de": "Answer the questions below. Choose NO MORE THAN TWO WORDS from the passage for each answer.\nWhat colour were the bicycles in the Amsterdam plan? ___",
+       "giaiThich": "\"The group painted some bicycles white\" (và tên kế hoạch là \"White Bicycle Plan\") ⇒ white."
+      },
+      {
+       "id": "R28",
+       "kieu": "dien",
+       "dapAn": [
+        "the police",
+        "police"
+       ],
+       "de": "Answer the questions below. Choose NO MORE THAN TWO WORDS from the passage for each answer.\nWho took the white bicycles away from the streets of Amsterdam? ___",
+       "giaiThich": "\"a city law said that bicycles in the street had to be locked, so the police soon took them away\" — \"took… away from the streets\" = \"took them away\" ⇒ (the) police. Bẫy: \"the Provos\" là nhóm ĐẶT xe ra đường, không phải người dọn đi; \"a city law\" là LÝ DO, không phải người làm."
+      },
+      {
+       "id": "R29",
+       "kieu": "dien",
+       "dapAn": [
+        "a coin",
+        "coin"
+       ],
+       "de": "Answer the questions below. Choose NO MORE THAN TWO WORDS from the passage for each answer.\nWhat did users in Copenhagen have to put into the lock in order to take a bicycle? ___",
+       "giaiThich": "\"To take one, a user had to put a coin into a lock on the bicycle\" ⇒ (a) coin (đồng xu). Bẫy: \"electronic card\" là của Rennes năm 1998; \"mobile phone\" là của Trung Quốc."
+      },
+      {
+       "id": "R30",
+       "kieu": "dien",
+       "dapAn": [
+        "Rennes"
+       ],
+       "de": "Answer the questions below. Choose NO MORE THAN TWO WORDS from the passage for each answer.\nIn which French city were electronic cards first used to open the locks? ___",
+       "giaiThich": "\"In 1998, the French city of Rennes introduced a scheme in which users opened the lock with an electronic card. For the first time…\" ⇒ Rennes. Bẫy: Lyon (2005) và Paris (2007) cũng là thành phố Pháp nhưng chỉ làm LẠI ý tưởng đó ở quy mô lớn hơn; câu hỏi có chữ \"first\"."
+      }
+     ]
+    },
+    {
+     "huongDan": "Passage 3 — Câu 31–35. Look at the following statements (Questions 31–35) and the list of bike-sharing schemes below. Match each statement with the correct scheme, A–D. NB You may use any letter more than once.",
+     "doan": "READING PASSAGE 3\nSHARING THE BICYCLE\nHow a failed experiment in Amsterdam became part of city transport all over the world\n\nIn many cities around the world, you can now pick up a bicycle on one street, ride it across town and leave it on another. You do not own the bicycle; you simply borrow it for a short time. Bike-sharing schemes like this exist today in about 3,000 cities. They seem like a very modern idea, but the first one was tried sixty years ago – and it was a complete failure.\nIn the summer of 1965, a group of young people in Amsterdam, who called themselves the Provos, were angry about the growing number of cars in their city. One of them, Luud Schimmelpennink, suggested a simple plan. The group painted some bicycles white and left them in the streets for anyone to use, free of charge. The \"White Bicycle Plan\" did not last long. The bicycles had no locks, and a city law said that bicycles in the street had to be locked, so the police soon took them away.\nThirty years later, the city of Copenhagen tried again, with a cleverer system. In 1995, it put specially designed bicycles in stands around the city centre. To take one, a user had to put a coin into a lock on the bicycle, in the same way as with a supermarket trolley. When the bicycle was returned to any stand, the coin came back. The bikes were heavy and had solid rubber tyres which could not go flat, and their unusual shape made them easy to recognise. The cost of the scheme was covered by advertisements on the bicycles. However, the coin was worth much less than a bicycle, and nobody knew who was using each bicycle. Many simply disappeared.\nThe real change came with technology. In 1998, the French city of Rennes introduced a scheme in which users opened the lock with an electronic card. For the first time, the operator knew exactly who had taken each bicycle and when. People who did not bring a bicycle back could be asked to pay for it. In 2005, the city of Lyon used the same idea on a much larger scale, and two years later Paris followed with the most famous scheme of all, Vélib'. It opened in July 2007 with about 7,000 bicycles at 750 stations, and the first thirty minutes of every journey were free for members. In its first year, people made about 20 million trips. There was bad news too: at least 3,000 bikes were stolen in that year, and many more were damaged.\nAfter Paris, cities everywhere wanted a scheme of their own. But stations full of locked bicycles are expensive to build. They also take away space for parking cars, which is not always popular with local shopkeepers. And they have another weakness. In the morning, thousands of people ride into the city centre, so the stations there fill up while stations in the suburbs become empty. In the evening, the opposite can happen. The operators therefore have to pay workers to move bicycles around the city in lorries all day.\nAround 2015, companies in China offered a solution: bicycles without stations. Each bike had its own lock, which a user opened with a mobile phone. At the end of the journey, the bicycle could be left almost anywhere. A ride cost very little, and there was no station to look for. The idea spread extremely fast. By 2017, more than 70 companies had put about 16 million of these bikes onto the streets of Chinese cities, and Beijing alone had over two million. It was far more than people needed. Pavements were blocked by carelessly parked bicycles, and when several companies went out of business, millions of unwanted bikes ended up in enormous piles outside the cities.\nSince then, cities have learned to control bike sharing more carefully. Many now limit the number of bicycles and mark special parking areas. The newest schemes offer electric bicycles, which make hills and long distances easier, although they cost more to rent. In hilly cities, they have attracted riders who would never have used an ordinary bike. Researchers who have studied bike sharing say that we should be realistic about it. Most trips on shared bikes replace journeys on foot or by public transport, not journeys by car, so the effect on traffic is small. On the other hand, users get more exercise, and a shared bicycle is often the fastest way to travel the last kilometre between a railway station and the office. Sixty years after the white bicycles of Amsterdam, the idea of Schimmelpennink and his friends has finally found its place.",
+     "cau": [
+      {
+       "id": "R31",
+       "kieu": "chon",
+       "de": "Look at the following statements (Questions 31–35) and the list of bike-sharing schemes below. Match each statement with the correct scheme, A–D. NB You may use any letter more than once.\nUsers unlocked the bicycles with a mobile phone.",
+       "luaChon": [
+        "A. the scheme in Amsterdam (1965)",
+        "B. the scheme in Copenhagen (1995)",
+        "C. the scheme in Paris (2007)",
+        "D. the schemes in Chinese cities (from about 2015)"
+       ],
+       "dapAn": 3,
+       "giaiThich": "Trung Quốc: \"Each bike had its own lock, which a user opened with a mobile phone.\" ⇒ D. Ba nơi kia: Amsterdam xe không có khoá, Copenhagen dùng đồng xu, Paris dùng thẻ điện tử (ý tưởng của Rennes)."
+      },
+      {
+       "id": "R32",
+       "kieu": "chon",
+       "de": "Look at the following statements (Questions 31–35) and the list of bike-sharing schemes below. Match each statement with the correct scheme, A–D. NB You may use any letter more than once.\nThe bicycles had tyres that could not lose their air.",
+       "luaChon": [
+        "A. the scheme in Amsterdam (1965)",
+        "B. the scheme in Copenhagen (1995)",
+        "C. the scheme in Paris (2007)",
+        "D. the schemes in Chinese cities (from about 2015)"
+       ],
+       "dapAn": 1,
+       "giaiThich": "Copenhagen: \"The bikes were heavy and had solid rubber tyres which could not go flat\" — \"could not lose their air\" = \"could not go flat\" (lốp đặc, không xẹp) ⇒ B."
+      },
+      {
+       "id": "R33",
+       "kieu": "chon",
+       "de": "Look at the following statements (Questions 31–35) and the list of bike-sharing schemes below. Match each statement with the correct scheme, A–D. NB You may use any letter more than once.\nThe scheme was started by people who were unhappy about the number of cars.",
+       "luaChon": [
+        "A. the scheme in Amsterdam (1965)",
+        "B. the scheme in Copenhagen (1995)",
+        "C. the scheme in Paris (2007)",
+        "D. the schemes in Chinese cities (from about 2015)"
+       ],
+       "dapAn": 0,
+       "giaiThich": "Amsterdam: nhóm Provos \"were angry about the growing number of cars in their city\" rồi mới bày ra kế hoạch xe trắng — \"unhappy about\" = \"angry about\" ⇒ A. Ba chương trình kia: bài không nói ai lập ra chúng vì muốn bớt ô tô (đoạn cuối chỉ nói xe đạp chia sẻ hiện nay ít thay được chuyến đi bằng ô tô)."
+      },
+      {
+       "id": "R34",
+       "kieu": "chon",
+       "de": "Look at the following statements (Questions 31–35) and the list of bike-sharing schemes below. Match each statement with the correct scheme, A–D. NB You may use any letter more than once.\nMembers paid nothing for the first half hour of a trip.",
+       "luaChon": [
+        "A. the scheme in Amsterdam (1965)",
+        "B. the scheme in Copenhagen (1995)",
+        "C. the scheme in Paris (2007)",
+        "D. the schemes in Chinese cities (from about 2015)"
+       ],
+       "dapAn": 2,
+       "giaiThich": "Paris (Vélib'): \"the first thirty minutes of every journey were free for members\" — \"half hour\" = \"thirty minutes\", \"paid nothing\" = \"free\" ⇒ C. Bẫy: xe ở Amsterdam cũng \"free of charge\", nhưng ở đó không có \"members\" và không có giới hạn nửa giờ đầu."
+      },
+      {
+       "id": "R35",
+       "kieu": "chon",
+       "de": "Look at the following statements (Questions 31–35) and the list of bike-sharing schemes below. Match each statement with the correct scheme, A–D. NB You may use any letter more than once.\nThere were many more bicycles than users needed.",
+       "luaChon": [
+        "A. the scheme in Amsterdam (1965)",
+        "B. the scheme in Copenhagen (1995)",
+        "C. the scheme in Paris (2007)",
+        "D. the schemes in Chinese cities (from about 2015)"
+       ],
+       "dapAn": 3,
+       "giaiThich": "Trung Quốc: 16 triệu xe — \"It was far more than people needed.\" ⇒ D (dùng D lần thứ hai; đề đã báo \"You may use any letter more than once\")."
+      }
+     ]
+    },
+    {
+     "huongDan": "Passage 3 — Câu 36–40. Complete the sentences below. Choose ONE WORD ONLY from the passage for each answer.",
+     "doan": "READING PASSAGE 3\nSHARING THE BICYCLE\nHow a failed experiment in Amsterdam became part of city transport all over the world\n\nIn many cities around the world, you can now pick up a bicycle on one street, ride it across town and leave it on another. You do not own the bicycle; you simply borrow it for a short time. Bike-sharing schemes like this exist today in about 3,000 cities. They seem like a very modern idea, but the first one was tried sixty years ago – and it was a complete failure.\nIn the summer of 1965, a group of young people in Amsterdam, who called themselves the Provos, were angry about the growing number of cars in their city. One of them, Luud Schimmelpennink, suggested a simple plan. The group painted some bicycles white and left them in the streets for anyone to use, free of charge. The \"White Bicycle Plan\" did not last long. The bicycles had no locks, and a city law said that bicycles in the street had to be locked, so the police soon took them away.\nThirty years later, the city of Copenhagen tried again, with a cleverer system. In 1995, it put specially designed bicycles in stands around the city centre. To take one, a user had to put a coin into a lock on the bicycle, in the same way as with a supermarket trolley. When the bicycle was returned to any stand, the coin came back. The bikes were heavy and had solid rubber tyres which could not go flat, and their unusual shape made them easy to recognise. The cost of the scheme was covered by advertisements on the bicycles. However, the coin was worth much less than a bicycle, and nobody knew who was using each bicycle. Many simply disappeared.\nThe real change came with technology. In 1998, the French city of Rennes introduced a scheme in which users opened the lock with an electronic card. For the first time, the operator knew exactly who had taken each bicycle and when. People who did not bring a bicycle back could be asked to pay for it. In 2005, the city of Lyon used the same idea on a much larger scale, and two years later Paris followed with the most famous scheme of all, Vélib'. It opened in July 2007 with about 7,000 bicycles at 750 stations, and the first thirty minutes of every journey were free for members. In its first year, people made about 20 million trips. There was bad news too: at least 3,000 bikes were stolen in that year, and many more were damaged.\nAfter Paris, cities everywhere wanted a scheme of their own. But stations full of locked bicycles are expensive to build. They also take away space for parking cars, which is not always popular with local shopkeepers. And they have another weakness. In the morning, thousands of people ride into the city centre, so the stations there fill up while stations in the suburbs become empty. In the evening, the opposite can happen. The operators therefore have to pay workers to move bicycles around the city in lorries all day.\nAround 2015, companies in China offered a solution: bicycles without stations. Each bike had its own lock, which a user opened with a mobile phone. At the end of the journey, the bicycle could be left almost anywhere. A ride cost very little, and there was no station to look for. The idea spread extremely fast. By 2017, more than 70 companies had put about 16 million of these bikes onto the streets of Chinese cities, and Beijing alone had over two million. It was far more than people needed. Pavements were blocked by carelessly parked bicycles, and when several companies went out of business, millions of unwanted bikes ended up in enormous piles outside the cities.\nSince then, cities have learned to control bike sharing more carefully. Many now limit the number of bicycles and mark special parking areas. The newest schemes offer electric bicycles, which make hills and long distances easier, although they cost more to rent. In hilly cities, they have attracted riders who would never have used an ordinary bike. Researchers who have studied bike sharing say that we should be realistic about it. Most trips on shared bikes replace journeys on foot or by public transport, not journeys by car, so the effect on traffic is small. On the other hand, users get more exercise, and a shared bicycle is often the fastest way to travel the last kilometre between a railway station and the office. Sixty years after the white bicycles of Amsterdam, the idea of Schimmelpennink and his friends has finally found its place.\n\n────────\nCâu 36–40. Complete the sentences below. Choose ONE WORD ONLY from the passage for each answer.\nOperators of schemes with stations use (36) ______ to carry bicycles from one part of the city to another.\nIn Chinese cities, bicycles that were parked without care blocked the (37) ______.\nMillions of bicycles that nobody wanted were left in huge (38) ______ outside the cities.\nThe most recent schemes have (39) ______ bicycles, which are more expensive to rent.\nAccording to researchers, bike sharing has only a small effect on (40) ______.",
+     "cau": [
+      {
+       "id": "R36",
+       "kieu": "dien",
+       "dapAn": [
+        "lorries"
+       ],
+       "de": "Complete the sentences below. Choose ONE WORD ONLY from the passage for each answer.\nOperators of schemes with stations use ___ to carry bicycles from one part of the city to another.",
+       "giaiThich": "\"The operators therefore have to pay workers to move bicycles around the city in lorries all day.\" — \"carry… from one part of the city to another\" = \"move bicycles around the city\" ⇒ lorries (xe tải; số nhiều của \"lorry\"). Bẫy: \"workers\" là NGƯỜI làm việc đó — câu hỏi \"use ___ to carry\" cần phương tiện."
+      },
+      {
+       "id": "R37",
+       "kieu": "dien",
+       "dapAn": [
+        "pavements",
+        "pavement"
+       ],
+       "de": "Complete the sentences below. Choose ONE WORD ONLY from the passage for each answer.\nIn Chinese cities, bicycles that were parked without care blocked the ___.",
+       "giaiThich": "\"Pavements were blocked by carelessly parked bicycles\" — câu hỏi đổi bị động thành chủ động và \"carelessly parked\" thành \"parked without care\" ⇒ pavements (vỉa hè)."
+      },
+      {
+       "id": "R38",
+       "kieu": "dien",
+       "dapAn": [
+        "piles"
+       ],
+       "de": "Complete the sentences below. Choose ONE WORD ONLY from the passage for each answer.\nMillions of bicycles that nobody wanted were left in huge ___ outside the cities.",
+       "giaiThich": "\"millions of unwanted bikes ended up in enormous piles outside the cities\" — \"that nobody wanted\" = \"unwanted\", \"huge\" = \"enormous\" ⇒ piles (đống)."
+      },
+      {
+       "id": "R39",
+       "kieu": "dien",
+       "dapAn": [
+        "electric"
+       ],
+       "de": "Complete the sentences below. Choose ONE WORD ONLY from the passage for each answer.\nThe most recent schemes have ___ bicycles, which are more expensive to rent.",
+       "giaiThich": "\"The newest schemes offer electric bicycles… although they cost more to rent.\" — \"most recent\" = \"newest\", \"more expensive to rent\" = \"cost more to rent\" ⇒ electric. Ô trống đứng trước danh từ \"bicycles\" nên cần TÍNH TỪ."
+      },
+      {
+       "id": "R40",
+       "kieu": "dien",
+       "dapAn": [
+        "traffic"
+       ],
+       "de": "Complete the sentences below. Choose ONE WORD ONLY from the passage for each answer.\nAccording to researchers, bike sharing has only a small effect on ___.",
+       "giaiThich": "\"Most trips on shared bikes replace journeys on foot or by public transport, not journeys by car, so the effect on traffic is small.\" ⇒ traffic. Bẫy: \"exercise\" ở câu sau là LỢI ÍCH (users get more exercise), không phải thứ bị \"ảnh hưởng nhỏ\"."
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

@@ -12,7 +12,7 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
-import { chuanHoaDapAn, kiemDe, type CauNghe, type CauThi, type DeThi, type NhomCau, type PhanThi } from '../src/services/ctlanguage/thiThuan.js';
+import { chuanHoaDapAn, kiemCap, kiemDe, type CauNghe, type CauThi, type DeThi, type NhomCau, type PhanThi } from '../src/services/ctlanguage/thiThuan.js';
 
 const thuMuc = path.join(process.cwd(), 'content', 'ctlanguage', 'de-thi');
 const doiSo = process.argv.slice(2);
@@ -223,7 +223,7 @@ for (const f of tep) {
 const xet = tatCa.filter((d) => !chi.length || chi.includes(d.id));
 let soCau = 0;
 for (const de of xet) {
-  for (const l of kiemDe(de)) bao(de.id, '-', 'loi', 'khuon', l);
+  for (const l of [...kiemDe(de), ...kiemCap(de)]) bao(de.id, '-', 'loi', 'khuon', l);
   kiemPhanBo(de);
   for (const p of de.phan) for (const g of p.nhom) for (const c of g.cau) { soCau++; kiemCau(de, p, g, c); }
 }

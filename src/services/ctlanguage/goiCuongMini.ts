@@ -13,6 +13,7 @@ import { AppError } from '../../middleware/errorHandler.js';
 import { isProEffective } from '../pro.service.js';
 import { dauNgayVn } from '../agent/anthropicChinhHang/hanMuc.js';
 import { chamBuoi, chayLuot, type SuKienTC, type VaoLuot } from '../ielts/troChuyen/troChuyenLuong.service.js';
+import { loiGiamKhao } from './thiNoi.js';
 
 export const LUOT_FREE_NGAY = 10;
 const dem = new Map<string, number>();
@@ -27,14 +28,31 @@ export async function luotGoi(userId: number) {
 type SuKienGoi = SuKienTC | { type: 'luot'; conLai: number | null; laPro: boolean };
 
 /** Phụ thuộc ra ngoài — test thay bằng bản giả (không gọi AI, không đọc CSDL). */
-export interface PhuThuocGoi { laPro: (userId: number) => Promise<boolean>; chay: typeof chayLuot }
-const THAT: PhuThuocGoi = { laPro: isProEffective, chay: chayLuot };
+export interface PhuThuocGoi {
+  laPro: (userId: number) => Promise<boolean>;
+  chay: typeof chayLuot;
+  /** Thi nói: lời giám khảo của bước `buoc` (kiểm lượt thi đang mở của đúng người). Ném lỗi nếu không hợp lệ. */
+  loiThi?: typeof loiGiamKhao;
+}
+const THAT: PhuThuocGoi = { laPro: isProEffective, chay: chayLuot, loiThi: loiGiamKhao };
 
 /**
  * Một lượt. Lượt free bị trừ TRƯỚC khi chạy (chặn hai yêu cầu song song lách trần), rồi HOÀN lại nếu lượt đó không
  * thành câu trả lời của AI: máy không nghe ra chữ (`nghe` rỗng — ồn, nói quá nhỏ) hoặc AI lỗi (`loi`).
  */
-export async function chayLuotGoi(userId: number, v: VaoLuot & { nn?: unknown }, gui: (e: SuKienGoi) => void, signal?: AbortSignal, pt: PhuThuocGoi = THAT) {
+export async function chayLuotGoi(userId: number, vTho: VaoLuot & { nn?: unknown; luotThi?: unknown; buoc?: unknown }, gui: (e: SuKienGoi) => void, signal?: AbortSignal, pt: PhuThuocGoi = THAT) {
+  // `loiSan` chỉ máy chủ được đặt — xoá thứ app (có thể) gửi lên: không thì ai cũng mượn được máy đọc của web.
+  const { loiSan: _bo, ...v } = vTho;
+  // THI NÓI với giám khảo AI (15/11/2026): app gửi `luotThi` (lượt đã mở ở /thi/noi/de/:id/bat-dau) + `buoc` (bước kế của
+  // kịch bản). Không gọi model ⇒ KHÔNG tính vào 10 lượt nói miễn phí/ngày (giới hạn của thi nói là 1 đề/cấp/tuần, đếm lúc mở lượt).
+  if (v.luotThi !== undefined) {
+    let loi: { loi: string; nn: string };
+    try { loi = await (pt.loiThi ?? loiGiamKhao)(userId, v.luotThi, v.buoc); }
+    catch (e) { gui({ type: 'loi', lyDo: 'thi_noi', message: (e as Error).message.slice(0, 200) }); return; }
+    gui({ type: 'luot', laPro: await pt.laPro(userId), conLai: null });
+    await pt.chay(userId, { ...v, ngonNgu: loi.nn, lichSu: Array.isArray(v.lichSu) ? v.lichSu.slice(-2) : [], tiepTuc: false, loiSan: `[en]${loi.loi}[/en]` }, gui, signal);
+    return;
+  }
   const laPro = await pt.laPro(userId);
   const coNoi = !!v.audio?.length;
   const k = khoa(userId);

@@ -1,0 +1,170 @@
+{
+ "id": "ielts-noi-de-2",
+ "nn": "en",
+ "kyThi": "IELTS",
+ "cap": "IELTS-NOI",
+ "ten": "IELTS Speaking · Đề 2",
+ "moTa": "Giám khảo AI hỏi đủ Part 1–2–3 (band 4.5). Part 1: hobbies · weather · Part 2: an object you own that is important to you · Part 3: possessions, keeping and buying things",
+ "phut": 12,
+ "diemDat": 60,
+ "diemToiDa": 90,
+ "nguon": "noi-de2",
+ "phan": [
+  {
+   "id": "p1",
+   "ten": "Part 1 · Introduction & interview",
+   "moTa": "Câu hỏi ngắn về bản thân, 4–5 phút",
+   "giayToiDa": 300
+  },
+  {
+   "id": "p2",
+   "ten": "Part 2 · Long turn",
+   "moTa": "Thẻ đề: 1 phút chuẩn bị, nói 1–2 phút",
+   "giayToiDa": 0
+  },
+  {
+   "id": "p3",
+   "ten": "Part 3 · Discussion",
+   "moTa": "Thảo luận sâu hơn về chủ đề Part 2, 4–5 phút",
+   "giayToiDa": 300
+  }
+ ],
+ "buoc": [
+  {
+   "phan": "p1",
+   "kieu": "hoi",
+   "khongCham": true,
+   "giayNoi": 15,
+   "loi": "Good afternoon. My name is CuongMini, and I will be your examiner today. Can you tell me your full name, please?"
+  },
+  {
+   "phan": "p1",
+   "kieu": "hoi",
+   "loi": "Thank you. Now, in this first part, I'd like to ask you some questions about yourself. Let's talk about hobbies. What do you like doing in your free time?",
+   "hoi": "What do you like doing in your free time?",
+   "giayNoi": 40
+  },
+  {
+   "phan": "p1",
+   "kieu": "hoi",
+   "loi": "Did you have the same hobbies when you were a child?",
+   "hoi": "Did you have the same hobbies when you were a child?",
+   "giayNoi": 40
+  },
+  {
+   "phan": "p1",
+   "kieu": "hoi",
+   "loi": "Is there a new hobby that you would like to try in the future?",
+   "hoi": "Is there a new hobby that you would like to try in the future?",
+   "giayNoi": 40
+  },
+  {
+   "phan": "p1",
+   "kieu": "hoi",
+   "loi": "Now let's talk about weather. What is the weather usually like in your hometown?",
+   "hoi": "What is the weather usually like in your hometown?",
+   "giayNoi": 40
+  },
+  {
+   "phan": "p1",
+   "kieu": "hoi",
+   "loi": "What kind of weather do you like best? Why?",
+   "hoi": "What kind of weather do you like best? Why?",
+   "giayNoi": 40
+  },
+  {
+   "phan": "p1",
+   "kieu": "hoi",
+   "loi": "Does the weather ever change your plans?",
+   "hoi": "Does the weather ever change your plans?",
+   "giayNoi": 40
+  },
+  {
+   "phan": "p2",
+   "kieu": "the",
+   "giayChuanBi": 60,
+   "giayNoi": 0,
+   "the": {
+    "de": "Describe an object you own that is important to you.",
+    "goiY": [
+     "what it is",
+     "how you got it",
+     "what you use it for",
+     "and explain why it is important to you."
+    ]
+   },
+   "loi": "Thank you. Now I'm going to give you a topic, and I'd like you to talk about it for one to two minutes. Before you talk, you'll have one minute to think about what you're going to say. You can make some notes if you wish. Here is your topic. Describe an object you own that is important to you."
+  },
+  {
+   "phan": "p2",
+   "kieu": "noiDai",
+   "giayNoi": 120,
+   "hoi": "Describe an object you own that is important to you. You should say: — what it is — how you got it — what you use it for and explain why it is important to you.",
+   "the": {
+    "de": "Describe an object you own that is important to you.",
+    "goiY": [
+     "what it is",
+     "how you got it",
+     "what you use it for",
+     "and explain why it is important to you."
+    ]
+   },
+   "loi": "All right? Remember, you have one to two minutes for this, so don't worry if I stop you. I'll tell you when the time is up. Can you start speaking now, please?"
+  },
+  {
+   "phan": "p2",
+   "kieu": "hoi",
+   "loi": "Thank you. Would you ever sell this object or give it away?",
+   "hoi": "Would you ever sell this object or give it away?",
+   "giayNoi": 30
+  },
+  {
+   "phan": "p2",
+   "kieu": "hoi",
+   "loi": "Do your friends have something similar?",
+   "hoi": "Do your friends have something similar?",
+   "giayNoi": 30
+  },
+  {
+   "phan": "p3",
+   "kieu": "hoi",
+   "loi": "We've been talking about the topic on your card, and I'd like to discuss with you one or two more general questions related to this. Let's consider first of all possessions. What kinds of things do people in your country like to buy for themselves?",
+   "hoi": "What kinds of things do people in your country like to buy for themselves?",
+   "giayNoi": 60
+  },
+  {
+   "phan": "p3",
+   "kieu": "hoi",
+   "loi": "Why do some people keep old things that they no longer use?",
+   "hoi": "Why do some people keep old things that they no longer use?",
+   "giayNoi": 60
+  },
+  {
+   "phan": "p3",
+   "kieu": "hoi",
+   "loi": "Do young people and older people care about the same kinds of possessions?",
+   "hoi": "Do young people and older people care about the same kinds of possessions?",
+   "giayNoi": 60
+  },
+  {
+   "phan": "p3",
+   "kieu": "hoi",
+   "loi": "Let's move on to owning things, past and future. Do people today own more things than people did in the past?",
+   "hoi": "Do people today own more things than people did in the past?",
+   "giayNoi": 60
+  },
+  {
+   "phan": "p3",
+   "kieu": "hoi",
+   "loi": "If people could only keep ten things, do you think they would be happier?",
+   "hoi": "If people could only keep ten things, do you think they would be happier?",
+   "giayNoi": 60
+  },
+  {
+   "phan": "p3",
+   "kieu": "ket",
+   "giayNoi": 0,
+   "loi": "Thank you very much. That is the end of the speaking test."
+  }
+ ]
+}

@@ -1,0 +1,1648 @@
+{
+ "id": "ielts-de-4",
+ "nn": "en",
+ "kyThi": "IELTS",
+ "cap": "IELTS",
+ "ten": "IELTS Academic · Đề 4",
+ "moTa": "Listening + Reading đủ 80 câu, bậc thang band 4.0–8.0. Nghe: Pottery course enquiry · City farm induction & map… Đọc: A short history of the pencil…",
+ "diemDat": 46,
+ "xepHang": true,
+ "phan": [
+  {
+   "id": "nghe",
+   "ten": "Listening",
+   "kyNang": "nghe",
+   "phut": 30,
+   "diemToiDa": 40,
+   "band": [
+    [
+     39,
+     9
+    ],
+    [
+     37,
+     8.5
+    ],
+    [
+     35,
+     8
+    ],
+    [
+     32,
+     7.5
+    ],
+    [
+     30,
+     7
+    ],
+    [
+     26,
+     6.5
+    ],
+    [
+     23,
+     6
+    ],
+    [
+     18,
+     5.5
+    ],
+    [
+     16,
+     5
+    ],
+    [
+     13,
+     4.5
+    ],
+    [
+     10,
+     4
+    ],
+    [
+     8,
+     3.5
+    ],
+    [
+     6,
+     3
+    ],
+    [
+     4,
+     2.5
+    ],
+    [
+     0,
+     2
+    ]
+   ],
+   "nhom": [
+    {
+     "huongDan": "Part 1 — Câu 1–10. Daniel gọi điện hỏi về khoá gốm cho người mới. Cả part là MỘT bài nghe liền, chỉ nghe MỘT lần — bấm nghe rồi lướt qua các câu của part trong lúc nghe.",
+     "doan": "HILLSIDE ARTS CENTRE — COURSE ENQUIRY\nCâu 1–6. Complete the form below. Write ONE WORD AND/OR A NUMBER for each answer.\nCourse: Pottery for Beginners\nName: Daniel (1) ______\nPhone: (2) ______\nSession chosen: Saturday (3) ______\nFirst class: (4) ______ March\nPrice (early booking): £(5) ______\nShould wear: an old (6) ______\n\nCâu 7–10. Complete the sentences below. Write NO MORE THAN TWO WORDS AND/OR A NUMBER for each answer.\nStudents can keep a maximum of (7) ______ finished pieces.\nThe centre is opposite the (8) ______.\nDaniel is advised not to travel to the centre by (9) ______.\nEmma will email Daniel a (10) ______.",
+     "nghe": [
+      {
+       "g": "uk-nu",
+       "t": "Part 1. You will hear a man telephoning an arts centre to ask about a pottery course. First, you have some time to look at questions 1 to 10."
+      },
+      {
+       "g": "uk-nu",
+       "t": "Good morning, Hillside Arts Centre. Emma speaking."
+      },
+      {
+       "g": "us-nam",
+       "t": "Hi, good morning. I'm calling about the pottery course for beginners. I saw it on your website and I'd like to find out a bit more."
+      },
+      {
+       "g": "uk-nu",
+       "t": "Of course. Can I take a few details first, so I can send you the information? What's your name?"
+      },
+      {
+       "g": "us-nam",
+       "t": "It's Daniel Whitlock."
+      },
+      {
+       "g": "uk-nu",
+       "t": "Could you spell your surname for me?"
+      },
+      {
+       "g": "us-nam",
+       "t": "Sure. W, H, I, T, L, O, C, K."
+      },
+      {
+       "g": "uk-nu",
+       "t": "W, H, I, T, L, O, C, K. Thank you. And a phone number, in case we need to contact you?"
+      },
+      {
+       "g": "us-nam",
+       "t": "My mobile is 0117 496 0213."
+      },
+      {
+       "g": "uk-nu",
+       "t": "0117 496 0213. Great. Now, the beginners' course runs on Saturdays, and there are two sessions — one in the morning, from ten to twelve, and one in the afternoon, from two to four."
+      },
+      {
+       "g": "us-nam",
+       "t": "The afternoon would be easier for me, to be honest."
+      },
+      {
+       "g": "uk-nu",
+       "t": "Ah, I'm afraid the afternoon class is already full. We only take eight people in each group, and that one filled up last week. There are still three places in the morning session, though."
+      },
+      {
+       "g": "us-nam",
+       "t": "OK — the morning, then. Ten o'clock is fine."
+      },
+      {
+       "g": "uk-nu",
+       "t": "Lovely. The course lasts eight weeks, and the first class is on the fourteenth of March. Not the seventh — we had to move it back a week because the studio is being repainted."
+      },
+      {
+       "g": "us-nam",
+       "t": "The fourteenth of March. Got it. And how much does it cost?"
+      },
+      {
+       "g": "uk-nu",
+       "t": "The full price is ninety-five pounds for the eight weeks. But if you book and pay before the end of this month, you get the early-booking price, which is eighty pounds."
+      },
+      {
+       "g": "us-nam",
+       "t": "Eighty pounds if I pay before the end of the month. That's good. Does that include the clay, or do I have to buy materials separately?"
+      },
+      {
+       "g": "uk-nu",
+       "t": "Everything is included — the clay, the glazes and the use of the kiln. The tools are provided too."
+      },
+      {
+       "g": "us-nam",
+       "t": "Do I need to buy an apron?"
+      },
+      {
+       "g": "uk-nu",
+       "t": "No, we lend aprons. But I'd wear an old shirt, because clay gets everywhere and it doesn't always wash out."
+      },
+      {
+       "g": "us-nam",
+       "t": "An old shirt — good tip. And what happens to the things I make?"
+      },
+      {
+       "g": "uk-nu",
+       "t": "You can keep up to three finished pieces. Anything beyond that we ask people to leave, simply because we don't have room to fire and store it all."
+      },
+      {
+       "g": "us-nam",
+       "t": "Three. That's fair. One more thing — where exactly are you? I've only been to Hillside once."
+      },
+      {
+       "g": "uk-nu",
+       "t": "We're on Mill Lane. A lot of people think we're next to the station, but actually we're opposite the public library, about five minutes' walk from the station."
+      },
+      {
+       "g": "us-nam",
+       "t": "Opposite the library. Is there anywhere to park?"
+      },
+      {
+       "g": "uk-nu",
+       "t": "There's no parking at the centre, I'm afraid, so I'd advise against coming by car. The bus stops right outside, and there's a bike rack by the entrance."
+      },
+      {
+       "g": "us-nam",
+       "t": "I'll probably cycle, then. So what do I do next?"
+      },
+      {
+       "g": "uk-nu",
+       "t": "I'll email you a booking form this afternoon. Fill it in, send it back with the payment, and you're all set."
+      },
+      {
+       "g": "us-nam",
+       "t": "Perfect. Thanks very much, Emma."
+      },
+      {
+       "g": "uk-nu",
+       "t": "You're welcome. See you in March, Daniel."
+      }
+     ],
+     "ngheLan": 1,
+     "cau": [
+      {
+       "id": "L1",
+       "kieu": "dien",
+       "dapAn": [
+        "Whitlock"
+       ],
+       "de": "Complete the form below. Write ONE WORD AND/OR A NUMBER for each answer.\nHillside Arts Centre — Course Enquiry — Name: Daniel ___",
+       "giaiThich": "Họ được ĐÁNH VẦN: W-H-I-T-L-O-C-K ⇒ Whitlock. Nghe đánh vần hai lần (Daniel đọc, Emma nhắc lại) — sai một chữ là mất điểm."
+      },
+      {
+       "id": "L2",
+       "kieu": "dien",
+       "dapAn": [
+        "0117 496 0213",
+        "01174960213",
+        "0117 4960213"
+       ],
+       "de": "Complete the form below. Write ONE WORD AND/OR A NUMBER for each answer.\nHillside Arts Centre — Course Enquiry — Phone: ___",
+       "giaiThich": "Số điện thoại đọc theo nhóm: 0117 496 0213. Cả dãy số tính là MỘT số."
+      },
+      {
+       "id": "L3",
+       "kieu": "dien",
+       "dapAn": [
+        "morning"
+       ],
+       "de": "Complete the form below. Write ONE WORD AND/OR A NUMBER for each answer.\nHillside Arts Centre — Course Enquiry — Session chosen: Saturday ___",
+       "giaiThich": "Bẫy: Daniel muốn lớp chiều, nhưng \"the afternoon class is already full\" ⇒ anh chọn \"the morning, then\" ⇒ morning."
+      },
+      {
+       "id": "L4",
+       "kieu": "dien",
+       "dapAn": [
+        "14",
+        "14th",
+        "fourteenth"
+       ],
+       "de": "Complete the form below. Write ONE WORD AND/OR A NUMBER for each answer.\nHillside Arts Centre — Course Enquiry — First class: ___ March",
+       "giaiThich": "Bẫy DỜI NGÀY: \"the fourteenth of March. Not the seventh — we had to move it back a week\" ⇒ 14. Đừng viết 7."
+      },
+      {
+       "id": "L5",
+       "kieu": "dien",
+       "dapAn": [
+        "80",
+        "eighty"
+       ],
+       "de": "Complete the form below. Write ONE WORD AND/OR A NUMBER for each answer.\nHillside Arts Centre — Course Enquiry — Price (early booking): £___",
+       "giaiThich": "Giá đủ 95 là bẫy; form hỏi giá ĐĂNG KÝ SỚM: \"the early-booking price, which is eighty pounds\" ⇒ 80."
+      },
+      {
+       "id": "L6",
+       "kieu": "dien",
+       "dapAn": [
+        "shirt"
+       ],
+       "de": "Complete the form below. Write ONE WORD AND/OR A NUMBER for each answer.\nHillside Arts Centre — Course Enquiry — Should wear: an old ___",
+       "giaiThich": "Tạp dề (apron) được cho mượn — bẫy. Emma khuyên \"I'd wear an old shirt\" ⇒ shirt."
+      },
+      {
+       "id": "L7",
+       "kieu": "dien",
+       "dapAn": [
+        "3",
+        "three"
+       ],
+       "de": "Complete the sentences below. Write NO MORE THAN TWO WORDS AND/OR A NUMBER for each answer.\nStudents can keep a maximum of ___ finished pieces.",
+       "giaiThich": "\"You can keep up to three finished pieces\" — \"a maximum of\" = \"up to\" ⇒ 3 (hoặc \"three\")."
+      },
+      {
+       "id": "L8",
+       "kieu": "dien",
+       "dapAn": [
+        "library",
+        "public library"
+       ],
+       "de": "Complete the sentences below. Write NO MORE THAN TWO WORDS AND/OR A NUMBER for each answer.\nThe centre is opposite the ___.",
+       "giaiThich": "Bẫy: nhiều người tưởng cạnh ga, \"but actually we're opposite the public library\" ⇒ library (hoặc \"public library\", vẫn trong 2 từ)."
+      },
+      {
+       "id": "L9",
+       "kieu": "dien",
+       "dapAn": [
+        "car"
+       ],
+       "de": "Complete the sentences below. Write NO MORE THAN TWO WORDS AND/OR A NUMBER for each answer.\nDaniel is advised not to travel to the centre by ___.",
+       "giaiThich": "\"I'd advise against coming by car\" — \"advised not to\" = \"advise against\" ⇒ car."
+      },
+      {
+       "id": "L10",
+       "kieu": "dien",
+       "dapAn": [
+        "booking form",
+        "form"
+       ],
+       "de": "Complete the sentences below. Write NO MORE THAN TWO WORDS AND/OR A NUMBER for each answer.\nEmma will email Daniel a ___.",
+       "giaiThich": "\"I'll email you a booking form this afternoon\" ⇒ booking form (2 từ, đúng giới hạn; viết \"form\" cũng được chấp nhận)."
+      }
+     ]
+    },
+    {
+     "huongDan": "Part 2 — Câu 11–20. Điều phối viên tình nguyện giới thiệu nông trại trong thành phố: ai lập ra, mục đích, quy định, tin mới — rồi chỉ vị trí trên sơ đồ. Cả part là MỘT bài nghe liền, chỉ nghe MỘT lần — bấm nghe rồi lướt qua các câu của part trong lúc nghe.",
+     "nghe": [
+      {
+       "g": "uk-nu",
+       "t": "Part 2. You will hear the volunteer coordinator of a city farm talking to a group of new volunteers. First, you have some time to look at questions 11 to 14."
+      },
+      {
+       "g": "uk-nam",
+       "t": "Hello everyone, and welcome to Greenacre City Farm. My name's Tom and I'm the volunteer coordinator. Before we go outside, let me tell you a bit about the farm and how things work here."
+      },
+      {
+       "g": "uk-nam",
+       "t": "People often assume the farm was set up by the council, because the council owns the land. In fact, it was started in 1986 by a group of parents from the local primary school, who wanted somewhere their children could see real animals. The council didn't get involved until much later, and the homelessness charity that uses our kitchen only arrived a couple of years ago."
+      },
+      {
+       "g": "uk-nam",
+       "t": "What are we for today? Well, we do sell eggs and vegetables at the gate, but that brings in very little money, and we're not here to breed rare animals, although we do have two rare breeds of pig. The heart of what we do is education: we want every child in this part of the city to understand where their food comes from, and about nine thousand schoolchildren visit us each year."
+      },
+      {
+       "g": "uk-nam",
+       "t": "A few rules for volunteers. We're flexible about hours — some people come for a couple of hours a week, others for a whole day; it's up to you. We lend out boots and waterproofs, so there's no need to buy any. But one thing isn't optional: before you work with any of the animals, you have to attend a two-hour training session, which we run on the first Tuesday of every month. That's for your safety and theirs."
+      },
+      {
+       "g": "uk-nam",
+       "t": "And some news. We've had a café for several years now, and the second entrance on Park Road has been open since last spring. What's new this year is that from June to August we'll be staying open until eight in the evening, so we'll need volunteers for those extra hours too."
+      },
+      {
+       "g": "uk-nam",
+       "t": "Right — now have a look at the plan of the farm. We're standing at the main gate, at the bottom of the plan."
+      },
+      {
+       "g": "uk-nam",
+       "t": "As you come through the gate, the first building on your right is the volunteers' room. That's where you sign in, leave your bag and make a cup of tea."
+      },
+      {
+       "g": "uk-nam",
+       "t": "Directly opposite it, on the left of the gate, is the tool store. Everything you need is in there — just remember to sign tools out and back in."
+      },
+      {
+       "g": "uk-nam",
+       "t": "Now follow the main path up through the farm. Halfway along, on your left, between the path and the orchard, you'll find the vegetable garden. That's where most new volunteers start."
+      },
+      {
+       "g": "uk-nam",
+       "t": "On the other side of the path, on your right, just before you reach the goat field, there's the pond. Please keep children on the path there — the edge is muddy."
+      },
+      {
+       "g": "uk-nam",
+       "t": "The chickens used to live next to the barn, but we moved them last year. Their house is now in the far corner on the left, behind the orchard, where there's more shade."
+      },
+      {
+       "g": "uk-nam",
+       "t": "At the top of the path is the barn, our biggest building. The café is in the wing attached to the right-hand side of the barn — not the small hut in the top right corner; that's where we store the animal feed."
+      },
+      {
+       "g": "uk-nam",
+       "t": "One last thing: on the left of the path, just before the barn, are the beehives. Please don't go near them unless you're with the beekeeper."
+      },
+      {
+       "g": "uk-nam",
+       "t": "OK, grab a pair of boots and let's go and meet the goats."
+      }
+     ],
+     "ngheLan": 1,
+     "hinh": {
+      "w": 560,
+      "h": 420,
+      "ve": [
+       {
+        "t": "rect",
+        "x": 40,
+        "y": 30,
+        "w": 480,
+        "h": 340,
+        "nen": "#f7f7f2",
+        "bo": 2
+       },
+       {
+        "t": "rect",
+        "x": 262,
+        "y": 100,
+        "w": 36,
+        "h": 270,
+        "nen": "#e4ddd0",
+        "bo": 0
+       },
+       {
+        "t": "text",
+        "x": 280,
+        "y": 300,
+        "s": "main path",
+        "co": 11,
+        "giua": true,
+        "nghieng": true
+       },
+       {
+        "t": "rect",
+        "x": 220,
+        "y": 40,
+        "w": 120,
+        "h": 60,
+        "nen": "#e9dfc9",
+        "nhan": "Barn"
+       },
+       {
+        "t": "rect",
+        "x": 60,
+        "y": 120,
+        "w": 120,
+        "h": 90,
+        "nen": "#dcebd2",
+        "nhan": "Orchard"
+       },
+       {
+        "t": "rect",
+        "x": 400,
+        "y": 110,
+        "w": 110,
+        "h": 110,
+        "nen": "#e3efd8",
+        "nhan": "Goat field"
+       },
+       {
+        "t": "rect",
+        "x": 250,
+        "y": 360,
+        "w": 60,
+        "h": 12,
+        "nen": "#f7f7f2",
+        "bo": 0
+       },
+       {
+        "t": "line",
+        "d": [
+         [
+          280,
+          405
+         ],
+         [
+          280,
+          375
+         ]
+        ],
+        "mui": true
+       },
+       {
+        "t": "text",
+        "x": 280,
+        "y": 418,
+        "s": "MAIN GATE",
+        "co": 12,
+        "dam": true,
+        "giua": true
+       },
+       {
+        "t": "chu",
+        "k": "A",
+        "x": 120,
+        "y": 330
+       },
+       {
+        "t": "chu",
+        "k": "B",
+        "x": 440,
+        "y": 330
+       },
+       {
+        "t": "chu",
+        "k": "C",
+        "x": 222,
+        "y": 185
+       },
+       {
+        "t": "chu",
+        "k": "D",
+        "x": 350,
+        "y": 255
+       },
+       {
+        "t": "chu",
+        "k": "E",
+        "x": 75,
+        "y": 65
+       },
+       {
+        "t": "chu",
+        "k": "F",
+        "x": 485,
+        "y": 60
+       },
+       {
+        "t": "chu",
+        "k": "G",
+        "x": 375,
+        "y": 70
+       },
+       {
+        "t": "chu",
+        "k": "H",
+        "x": 215,
+        "y": 110
+       }
+      ]
+     },
+     "cau": [
+      {
+       "id": "L11",
+       "kieu": "chon",
+       "de": "Choose the correct letter, A, B or C.\nThe farm was started by",
+       "luaChon": [
+        "the city council.",
+        "a group of parents.",
+        "a charity for homeless people."
+       ],
+       "dapAn": 1,
+       "giaiThich": "\"People often assume the farm was set up by the council… In fact, it was started in 1986 by a group of parents\" ⇒ B. Hội đồng thành phố (A) là bẫy \"assume\"; tổ chức từ thiện (C) đến sau này."
+      },
+      {
+       "id": "L12",
+       "kieu": "chon",
+       "de": "Choose the correct letter, A, B or C.\nWhat is the main purpose of the farm today?",
+       "luaChon": [
+        "to sell food produced on the farm",
+        "to breed rare animals",
+        "to teach children about food"
+       ],
+       "dapAn": 2,
+       "giaiThich": "Bán trứng rau \"brings in very little money\" (loại A); \"we're not here to breed rare animals\" (loại B); \"The heart of what we do is education: we want every child… to understand where their food comes from\" ⇒ C."
+      },
+      {
+       "id": "L13",
+       "kieu": "chon",
+       "de": "Choose the correct letter, A, B or C.\nBefore working with the animals, volunteers must",
+       "luaChon": [
+        "agree to work one full day a week.",
+        "buy their own boots.",
+        "attend a training session."
+       ],
+       "dapAn": 2,
+       "giaiThich": "Giờ giấc linh hoạt (loại A); ủng được cho mượn (loại B); \"before you work with any of the animals, you have to attend a two-hour training session\" ⇒ C."
+      },
+      {
+       "id": "L14",
+       "kieu": "chon",
+       "de": "Choose the correct letter, A, B or C.\nWhat is new at the farm this year?",
+       "luaChon": [
+        "a café",
+        "longer opening hours in summer",
+        "a second entrance"
+       ],
+       "dapAn": 1,
+       "giaiThich": "Quán cà phê đã có \"for several years\" (loại A); lối vào thứ hai mở \"since last spring\" (loại C); \"What's new this year is that from June to August we'll be staying open until eight in the evening\" ⇒ B."
+      },
+      {
+       "id": "L15",
+       "kieu": "chon",
+       "de": "Label the plan below. Write the correct letter, A–H, next to Questions 15–20.\nGreenacre City Farm — plan — Volunteers' room",
+       "luaChon": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H"
+       ],
+       "dapAn": 1,
+       "giaiThich": "\"As you come through the gate, the first building on your right is the volunteers' room\" ⇒ bên phải cổng ⇒ B."
+      },
+      {
+       "id": "L16",
+       "kieu": "chon",
+       "de": "Label the plan below. Write the correct letter, A–H, next to Questions 15–20.\nGreenacre City Farm — plan — Tool store",
+       "luaChon": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H"
+       ],
+       "dapAn": 0,
+       "giaiThich": "\"Directly opposite it, on the left of the gate, is the tool store\" ⇒ bên trái cổng ⇒ A."
+      },
+      {
+       "id": "L17",
+       "kieu": "chon",
+       "de": "Label the plan below. Write the correct letter, A–H, next to Questions 15–20.\nGreenacre City Farm — plan — Vegetable garden",
+       "luaChon": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H"
+       ],
+       "dapAn": 2,
+       "giaiThich": "\"Halfway along, on your left, between the path and the orchard, you'll find the vegetable garden\" ⇒ giữa đường chính và vườn cây ⇒ C. (H cũng bên trái đường nhưng ở sát chuồng — đó là tổ ong.)"
+      },
+      {
+       "id": "L18",
+       "kieu": "chon",
+       "de": "Label the plan below. Write the correct letter, A–H, next to Questions 15–20.\nGreenacre City Farm — plan — Pond",
+       "luaChon": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H"
+       ],
+       "dapAn": 3,
+       "giaiThich": "\"On the other side of the path, on your right, just before you reach the goat field, there's the pond\" ⇒ bên phải, ngay trước bãi dê ⇒ D."
+      },
+      {
+       "id": "L19",
+       "kieu": "chon",
+       "de": "Label the plan below. Write the correct letter, A–H, next to Questions 15–20.\nGreenacre City Farm — plan — Chicken house",
+       "luaChon": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H"
+       ],
+       "dapAn": 4,
+       "giaiThich": "Bẫy \"used to live next to the barn\" — nay chuyển: \"in the far corner on the left, behind the orchard\" ⇒ góc trên bên trái ⇒ E."
+      },
+      {
+       "id": "L20",
+       "kieu": "chon",
+       "de": "Label the plan below. Write the correct letter, A–H, next to Questions 15–20.\nGreenacre City Farm — plan — Café",
+       "luaChon": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H"
+       ],
+       "dapAn": 6,
+       "giaiThich": "\"The café is in the wing attached to the right-hand side of the barn — not the small hut in the top right corner\" ⇒ G (F là kho thức ăn gia súc — bẫy)."
+      }
+     ]
+    },
+    {
+     "huongDan": "Part 3 — Câu 21–30. Lena và Ravi quan sát hành vi khách tham quan bảo tàng và gặp Dr Alvarez để nhận góp ý. Cả part là MỘT bài nghe liền, chỉ nghe MỘT lần — bấm nghe rồi lướt qua các câu của part trong lúc nghe.",
+     "doan": "PLAN FOR COMPLETING THE PROJECT\nCâu 27–30. Complete the flow-chart below. Write ONE WORD ONLY for each answer.\n→ Rewrite the recording (27) ______ so that it fits on one page\n→ Collect data on a (28) ______ morning\n→ Enter the results into a (29) ______\n→ Send Dr Alvarez a draft of the (30) ______ by the 20th",
+     "nghe": [
+      {
+       "g": "uk-nu",
+       "t": "Part 3. You will hear two students, Lena and Ravi, discussing their research project with their tutor, Dr Alvarez. First, you have some time to look at questions 21 to 30."
+      },
+      {
+       "g": "us-nu",
+       "t": "So, Lena, Ravi — you've done your first two days of observation at the city museum. How did it go?"
+      },
+      {
+       "g": "uk-nu",
+       "t": "Mixed, I'd say. The staff were really helpful — they let us stand wherever we wanted. But we had a problem we hadn't expected: visitors kept noticing us. One man actually came over and asked what we were writing down."
+      },
+      {
+       "g": "uk-nam",
+       "t": "And once people know they're being watched, they behave differently. A couple of them stood in front of a painting for ages, I think just to look serious."
+      },
+      {
+       "g": "us-nu",
+       "t": "That's a classic problem with observation. What else?"
+      },
+      {
+       "g": "uk-nam",
+       "t": "Our recording sheet. We designed it with twelve columns — time of arrival, time leaving, number in the group, whether they read the label, and so on. It was far too complicated. By the time I'd filled in one row, the person had moved on to the next room."
+      },
+      {
+       "g": "uk-nu",
+       "t": "We were worried the museum might close early on the Sunday, because of a private event, but in the end it stayed open as normal. And there was no shortage of visitors — on the Saturday there were so many that we lost track of the people we were following."
+      },
+      {
+       "g": "us-nu",
+       "t": "OK. So let's think about improvements. Ravi, you said timing was difficult?"
+      },
+      {
+       "g": "uk-nam",
+       "t": "Yes. I was using my watch and writing times down by hand. I'd like to use a timer app on my phone instead — you just tap when someone arrives and tap again when they leave, and it records everything."
+      },
+      {
+       "g": "us-nu",
+       "t": "Good. Lena?"
+      },
+      {
+       "g": "uk-nu",
+       "t": "I think we should add a short questionnaire — just three questions, handed out at the exit. Otherwise we only know what people did, not why they did it."
+      },
+      {
+       "g": "us-nu",
+       "t": "That's sensible, as long as it's genuinely short. I'd add two things myself. First, you've only observed at weekends. You need to go back at different times of the week, because weekday visitors — retired people, school groups — behave quite differently."
+      },
+      {
+       "g": "uk-nam",
+       "t": "That's true. We'd assumed Saturday was typical."
+      },
+      {
+       "g": "us-nu",
+       "t": "And second, there's a published study from a museum in Melbourne that measured exactly what you're measuring. Compare your results with theirs — it'll give you something to discuss in your conclusion."
+      },
+      {
+       "g": "uk-nu",
+       "t": "We'll find it. So, what's the plan from here?"
+      },
+      {
+       "g": "uk-nam",
+       "t": "First, we rewrite the recording sheet so it fits on one page, with no more than five columns."
+      },
+      {
+       "g": "uk-nu",
+       "t": "Then we go back and collect data on a weekday morning, when it's quiet, so we can actually follow people."
+      },
+      {
+       "g": "us-nu",
+       "t": "And enter everything into a spreadsheet as you go, not at the end. You'll thank yourselves later."
+      },
+      {
+       "g": "uk-nam",
+       "t": "Right. And then we produce the draft. We're presenting a poster rather than a talk, so we'll send you a draft of the poster by the twentieth."
+      },
+      {
+       "g": "us-nu",
+       "t": "Perfect. Any questions? No? Then I'll see you both in two weeks."
+      }
+     ],
+     "ngheLan": 1,
+     "cau": [
+      {
+       "id": "L21",
+       "kieu": "chon",
+       "de": "Choose TWO letters, A–E.\nWhich TWO problems did Lena and Ravi have when collecting data?\n(Câu 21 và 22 cùng một câu hỏi — ở câu này chọn đáp án đứng TRƯỚC theo bảng chữ cái.)",
+       "luaChon": [
+        "Visitors noticed that they were being observed.",
+        "The museum closed early on one day.",
+        "Their recording sheet was too complicated.",
+        "There were too few visitors.",
+        "The museum staff were unhelpful."
+       ],
+       "dapAn": 0,
+       "giaiThich": "Hai vấn đề THẬT: khách nhận ra mình bị quan sát (A: \"visitors kept noticing us\") và phiếu ghi quá phức tạp (C: \"It was far too complicated\"). Bảo tàng KHÔNG đóng sớm (\"in the end it stayed open as normal\" — loại B); khách rất đông, không thiếu (loại D); nhân viên \"really helpful\" (loại E)."
+      },
+      {
+       "id": "L22",
+       "kieu": "chon",
+       "de": "Choose TWO letters, A–E.\nWhich TWO problems did Lena and Ravi have when collecting data?\n(Câu 21 và 22 cùng một câu hỏi — ở câu này chọn đáp án đứng SAU theo bảng chữ cái.)",
+       "luaChon": [
+        "Visitors noticed that they were being observed.",
+        "The museum closed early on one day.",
+        "Their recording sheet was too complicated.",
+        "There were too few visitors.",
+        "The museum staff were unhelpful."
+       ],
+       "dapAn": 2,
+       "giaiThich": "Như câu 21: A và C (thứ tự không quan trọng)."
+      },
+      {
+       "id": "L23",
+       "kieu": "chon",
+       "de": "Who suggests each of the following improvements to the project? Write the correct letter, A, B or C, next to Questions 23–26. NB You may use any letter more than once.\nusing a timer app",
+       "luaChon": [
+        "A. Lena",
+        "B. Ravi",
+        "C. Dr Alvarez"
+       ],
+       "dapAn": 1,
+       "giaiThich": "Dr Alvarez hỏi \"Ravi, you said timing was difficult?\" rồi Ravi: \"I'd like to use a timer app on my phone instead\" ⇒ B (Ravi)."
+      },
+      {
+       "id": "L24",
+       "kieu": "chon",
+       "de": "Who suggests each of the following improvements to the project? Write the correct letter, A, B or C, next to Questions 23–26. NB You may use any letter more than once.\nadding a short questionnaire",
+       "luaChon": [
+        "A. Lena",
+        "B. Ravi",
+        "C. Dr Alvarez"
+       ],
+       "dapAn": 0,
+       "giaiThich": "Dr Alvarez gọi \"Lena?\" rồi Lena: \"I think we should add a short questionnaire\" ⇒ A (Lena)."
+      },
+      {
+       "id": "L25",
+       "kieu": "chon",
+       "de": "Who suggests each of the following improvements to the project? Write the correct letter, A, B or C, next to Questions 23–26. NB You may use any letter more than once.\nobserving at different times of the week",
+       "luaChon": [
+        "A. Lena",
+        "B. Ravi",
+        "C. Dr Alvarez"
+       ],
+       "dapAn": 2,
+       "giaiThich": "\"I'd add two things myself. First… You need to go back at different times of the week\" — lời Dr Alvarez ⇒ C."
+      },
+      {
+       "id": "L26",
+       "kieu": "chon",
+       "de": "Who suggests each of the following improvements to the project? Write the correct letter, A, B or C, next to Questions 23–26. NB You may use any letter more than once.\ncomparing the results with a published study",
+       "luaChon": [
+        "A. Lena",
+        "B. Ravi",
+        "C. Dr Alvarez"
+       ],
+       "dapAn": 2,
+       "giaiThich": "\"And second, there's a published study from a museum in Melbourne… Compare your results with theirs\" — vẫn là Dr Alvarez ⇒ C (dùng C hai lần là hợp lệ: \"NB You may use any letter more than once\")."
+      },
+      {
+       "id": "L27",
+       "kieu": "dien",
+       "dapAn": [
+        "sheet"
+       ],
+       "de": "Complete the flow-chart below. Write ONE WORD ONLY for each answer.\nPlan for completing the project — Rewrite the recording ___ so that it fits on one page",
+       "giaiThich": "\"we rewrite the recording sheet so it fits on one page\" ⇒ sheet."
+      },
+      {
+       "id": "L28",
+       "kieu": "dien",
+       "dapAn": [
+        "weekday"
+       ],
+       "de": "Complete the flow-chart below. Write ONE WORD ONLY for each answer.\nPlan for completing the project — Collect data on a ___ morning",
+       "giaiThich": "\"collect data on a weekday morning, when it's quiet\" ⇒ weekday (một từ, không tách \"week day\")."
+      },
+      {
+       "id": "L29",
+       "kieu": "dien",
+       "dapAn": [
+        "spreadsheet"
+       ],
+       "de": "Complete the flow-chart below. Write ONE WORD ONLY for each answer.\nPlan for completing the project — Enter the results into a ___",
+       "giaiThich": "\"enter everything into a spreadsheet as you go\" ⇒ spreadsheet."
+      },
+      {
+       "id": "L30",
+       "kieu": "dien",
+       "dapAn": [
+        "poster"
+       ],
+       "de": "Complete the flow-chart below. Write ONE WORD ONLY for each answer.\nPlan for completing the project — Send Dr Alvarez a draft of the ___ by the 20th",
+       "giaiThich": "\"We're presenting a poster rather than a talk, so we'll send you a draft of the poster\" ⇒ poster (talk là bẫy)."
+      }
+     ]
+    },
+    {
+     "huongDan": "Part 4 — Câu 31–40. Bài giảng khoa học vật liệu: vì sao bê tông La Mã bền hai nghìn năm (tro núi lửa, nước biển, \"lime clasts\", trộn nóng, tự hàn vết nứt) và so sánh với bê tông hiện đại. Cả part là MỘT bài nghe liền, chỉ nghe MỘT lần — bấm nghe rồi lướt qua các câu của part trong lúc nghe.",
+     "doan": "ROMAN CONCRETE\nCâu 31–35. Complete the notes below. Write ONE WORD ONLY for each answer.\nEvidence of durability\n• Roman harbour walls: still in good condition after about 2,000 years\n• the Pantheon: has the largest unreinforced concrete (31) ______ in the world\n• modern concrete: often starts to crack after only a few (32) ______\nIngredients\n• lime + volcanic (33) ______ from near Naples (\"pozzolana\")\n• in harbours, seawater reacts with the mixture and makes it (34) ______\nA recent discovery\n• small white lumps (\"lime (35) ______\") were once thought to show careless mixing\n\nMODERN CONCRETE COMPARED WITH ROMAN CONCRETE\nCâu 36–40. Complete the table below. Write NO MORE THAN TWO WORDS AND/OR A NUMBER for each answer.\n: Binding agent · Modern concrete: (36) ______ · Roman concrete: lime + volcanic ash\n: Preparation · Modern concrete: mixture prepared at (37) ______ temperature · Roman concrete: quicklime (not slaked); \"hot mixing\"\n: When a crack appears · Modern concrete: water reaches the (38) ______ inside, which rusts and expands · Roman concrete: lime dissolves, then hardens again as (39) ______ — crack is sealed\n: Expected lifetime · Modern concrete: about (40) ______ years · Roman concrete: thousands of years",
+     "nghe": [
+      {
+       "g": "uk-nu",
+       "t": "Part 4. You will hear part of a lecture about Roman concrete. First, you have some time to look at questions 31 to 40."
+      },
+      {
+       "g": "us-nam",
+       "t": "Good afternoon. Last week we looked at steel. Today I want to turn to a material that is far older and, in one respect, far more impressive: Roman concrete."
+      },
+      {
+       "g": "us-nam",
+       "t": "Consider the evidence. Along the coast of Italy there are harbour walls, built by Roman engineers, whose concrete has survived roughly two thousand years of pounding by the sea — and in many places it is in better condition today than when it was poured. In Rome itself stands the Pantheon, completed in the second century, whose roof is still the largest dome in the world made of unreinforced concrete. Modern concrete, by contrast, typically begins to crack within a few decades, and a structure exposed to seawater may need major repair long before its designers intended."
+      },
+      {
+       "g": "us-nam",
+       "t": "So what did the Romans know that we have forgotten? The first part of the answer has been understood for a long time. Roman builders mixed lime with volcanic ash from the region around Naples — a material we still call pozzolana, after the town of Pozzuoli. When the ash reacts with lime and water, it forms a dense mineral network that binds the mixture together. In harbour structures something even more remarkable happens: seawater seeps into the concrete, reacts with the ash, and grows new crystals inside it, so the material actually becomes stronger over time rather than weaker."
+      },
+      {
+       "g": "us-nam",
+       "t": "But the ash alone does not explain everything, and here we come to a discovery made only a few years ago. If you look closely at a piece of Roman concrete, you will see small white lumps scattered through it, each a few millimetres across. These are fragments of lime, and they are known as lime clasts. For generations, scholars assumed they were simply a sign of poor mixing — evidence that Roman workers had been careless. A team of materials scientists decided to test that assumption, and they found that the clasts had a very specific internal structure, one that could only have formed at high temperature. That led them to a new reading of the Roman recipe."
+      },
+      {
+       "g": "us-nam",
+       "t": "Let me lay out the comparison, because it matters. In modern concrete, the binding agent is Portland cement, which is made by heating limestone and clay in a kiln and grinding the result into powder, and the whole mixture is prepared at room temperature. For a long time, scholars assumed that the Romans worked in a similar way, using lime that had already been slaked — that is, combined with water — before it went into the mix. The new evidence suggests they did something different. They added their lime as quicklime, which had not been slaked, and the reaction with water generated intense heat as the concrete was mixed. The researchers call this hot mixing. The heat speeds up the chemistry, and it leaves those lime clasts behind — not as a mistake, but as a built-in feature."
+      },
+      {
+       "g": "us-nam",
+       "t": "Why does that matter? Because of what happens when the concrete cracks, and all concrete cracks eventually. In a modern structure, a small crack grows, water gets in, and eventually it reaches the steel reinforcement inside, which rusts, expands and splits the concrete from within. In the Roman material, when a crack runs through one of those lime clasts, water dissolves the lime, carries it along the crack, and there it reacts and hardens again as calcium carbonate — effectively sealing the crack before it can spread. The concrete heals itself."
+      },
+      {
+       "g": "us-nam",
+       "t": "The researchers tested this directly. They made two batches of concrete, one using the Roman hot-mixing method and one using a conventional process, cracked both, and ran water through them. Within two weeks, the Roman-style samples had sealed completely. The conventional ones never did."
+      },
+      {
+       "g": "us-nam",
+       "t": "Now, I want to be careful about the lesson here. Nobody is suggesting we return to building with Roman recipes; modern concrete is stronger under load and can be poured far faster. A typical modern structure is designed to last around fifty years, and for many purposes that is perfectly acceptable. But concrete production is responsible for a large share of global carbon emissions, and a material that repairs its own cracks could last far longer and need far less replacement. Several companies are now trying to produce self-healing concrete based on the Roman approach. Whether it can be made at scale, and at a price the industry will pay, is the question we will take up next week."
+      }
+     ],
+     "ngheLan": 1,
+     "cau": [
+      {
+       "id": "L31",
+       "kieu": "dien",
+       "dapAn": [
+        "dome"
+       ],
+       "de": "Complete the notes below. Write ONE WORD ONLY for each answer.\nRoman concrete — the Pantheon: has the largest unreinforced concrete ___ in the world",
+       "giaiThich": "\"whose roof is still the largest dome in the world made of unreinforced concrete\" ⇒ dome."
+      },
+      {
+       "id": "L32",
+       "kieu": "dien",
+       "dapAn": [
+        "decades"
+       ],
+       "de": "Complete the notes below. Write ONE WORD ONLY for each answer.\nRoman concrete — modern concrete: often starts to crack after only a few ___",
+       "giaiThich": "\"Modern concrete… typically begins to crack within a few decades\" ⇒ decades (số nhiều, sau \"a few\")."
+      },
+      {
+       "id": "L33",
+       "kieu": "dien",
+       "dapAn": [
+        "ash"
+       ],
+       "de": "Complete the notes below. Write ONE WORD ONLY for each answer.\nRoman concrete — lime + volcanic ___ from near Naples (\"pozzolana\")",
+       "giaiThich": "\"Roman builders mixed lime with volcanic ash from the region around Naples\" ⇒ ash."
+      },
+      {
+       "id": "L34",
+       "kieu": "dien",
+       "dapAn": [
+        "stronger"
+       ],
+       "de": "Complete the notes below. Write ONE WORD ONLY for each answer.\nRoman concrete — in harbours, seawater reacts with the mixture and makes it ___",
+       "giaiThich": "\"so the material actually becomes stronger over time rather than weaker\" ⇒ stronger (so sánh hơn; \"weaker\" là bẫy ở cuối câu)."
+      },
+      {
+       "id": "L35",
+       "kieu": "dien",
+       "dapAn": [
+        "clasts"
+       ],
+       "de": "Complete the notes below. Write ONE WORD ONLY for each answer.\nRoman concrete — small white lumps (\"lime ___\") were once thought to show careless mixing",
+       "giaiThich": "\"These are fragments of lime, and they are known as lime clasts\" ⇒ clasts (từ chuyên môn, chép đúng chính tả c-l-a-s-t-s)."
+      },
+      {
+       "id": "L36",
+       "kieu": "dien",
+       "de": "Complete the table below. Write NO MORE THAN TWO WORDS AND/OR A NUMBER for each answer.\nModern concrete compared with Roman concrete — Binding agent — Modern concrete: ___",
+       "dapAn": [
+        "Portland cement",
+        "cement"
+       ],
+       "giaiThich": "\"In modern concrete, the binding agent is Portland cement\" ⇒ Portland cement (2 từ). Cột La Mã là \"lime + volcanic ash\" đã cho sẵn."
+      },
+      {
+       "id": "L37",
+       "kieu": "dien",
+       "de": "Complete the table below. Write NO MORE THAN TWO WORDS AND/OR A NUMBER for each answer.\nModern concrete compared with Roman concrete — Preparation — Modern concrete: mixture prepared at ___ temperature",
+       "dapAn": [
+        "room"
+       ],
+       "giaiThich": "\"the whole mixture is prepared at room temperature\" ⇒ room. Phía La Mã là \"hot mixing\" — đối lập."
+      },
+      {
+       "id": "L38",
+       "kieu": "dien",
+       "de": "Complete the table below. Write NO MORE THAN TWO WORDS AND/OR A NUMBER for each answer.\nModern concrete compared with Roman concrete — When a crack appears — Modern concrete: water reaches the ___ inside, which rusts and expands",
+       "dapAn": [
+        "steel",
+        "steel reinforcement"
+       ],
+       "giaiThich": "\"eventually it reaches the steel reinforcement inside, which rusts, expands and splits the concrete\" ⇒ steel (hoặc \"steel reinforcement\", vẫn trong 2 từ)."
+      },
+      {
+       "id": "L39",
+       "kieu": "dien",
+       "de": "Complete the table below. Write NO MORE THAN TWO WORDS AND/OR A NUMBER for each answer.\nModern concrete compared with Roman concrete — When a crack appears — Roman concrete: lime dissolves, then hardens again as ___ — crack is sealed",
+       "dapAn": [
+        "calcium carbonate"
+       ],
+       "giaiThich": "\"there it reacts and hardens again as calcium carbonate — effectively sealing the crack\" ⇒ calcium carbonate (2 từ, đúng giới hạn)."
+      },
+      {
+       "id": "L40",
+       "kieu": "dien",
+       "de": "Complete the table below. Write NO MORE THAN TWO WORDS AND/OR A NUMBER for each answer.\nModern concrete compared with Roman concrete — Expected lifetime — Modern concrete: about ___ years",
+       "dapAn": [
+        "50",
+        "fifty"
+       ],
+       "giaiThich": "\"A typical modern structure is designed to last around fifty years\" ⇒ 50. Bẫy: \"two thousand\" là tuổi của bê tông La Mã; \"two weeks\" là thời gian mẫu tự hàn."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "doc",
+   "ten": "Academic Reading",
+   "kyNang": "doc",
+   "phut": 60,
+   "diemToiDa": 40,
+   "band": [
+    [
+     39,
+     9
+    ],
+    [
+     37,
+     8.5
+    ],
+    [
+     35,
+     8
+    ],
+    [
+     33,
+     7.5
+    ],
+    [
+     30,
+     7
+    ],
+    [
+     27,
+     6.5
+    ],
+    [
+     23,
+     6
+    ],
+    [
+     19,
+     5.5
+    ],
+    [
+     15,
+     5
+    ],
+    [
+     13,
+     4.5
+    ],
+    [
+     10,
+     4
+    ],
+    [
+     8,
+     3.5
+    ],
+    [
+     6,
+     3
+    ],
+    [
+     4,
+     2.5
+    ],
+    [
+     0,
+     2
+    ]
+   ],
+   "nhom": [
+    {
+     "huongDan": "Passage 1 — Câu 1–5. Complete the sentences below. Choose NO MORE THAN TWO WORDS from the passage for each answer.",
+     "doan": "READING PASSAGE 1\nA SHORT HISTORY OF THE PENCIL\nHow a lump of black rock found under a fallen tree became the most common writing tool on Earth\n\nFew objects are as familiar, or as little noticed, as the pencil. It costs almost nothing, needs no power and works upside down, under water and in freezing cold, which is why astronauts, divers and mountaineers still carry one. Yet the pencil in your drawer is the product of more than four centuries of trial, error and competition between nations.\nThe story begins in the north of England in the 1560s. According to local tradition, a violent storm uprooted trees on a hillside near the village of Borrowdale, and underneath them farmers found a deposit of a soft, black mineral. They quickly discovered that it left a dark mark on anything it touched and began using it to label their sheep. The material was graphite, although at the time people believed it was a form of lead, which is why we still speak of pencil \"lead\" today. The Borrowdale deposit was unusually pure, and for about two hundred years it was the only large source of solid graphite in the world. It became so valuable that the mine was guarded, and smuggling graphite out of the area was made a serious crime.\nEarly pencils were simply sticks of graphite wrapped in string or sheepskin to keep the user's fingers clean. Later, craftsmen in Italy and Germany learned to cut the mineral into thin strips and glue them between two pieces of wood — the basic design we recognise today. However, pure graphite was expensive and increasingly scarce, and attempts to mix the powder with glue or wax produced pencils that were either too soft or too crumbly to be useful.\nThe breakthrough came in France in 1795. Cut off from English supplies by war, the government asked an engineer and painter named Nicolas-Jacques Conté to find a substitute. Conté mixed powdered graphite with fine clay, pressed the mixture into rods and baked them in a kiln. His method had two great advantages. It used far less graphite, so poorer-quality deposits could be used, and by varying the amount of clay he could control how hard or soft the pencil was. More clay produced a harder, lighter line; more graphite a softer, darker one. The grading system still printed on pencils — from 9H, the hardest, to 9B, the softest, with HB in the middle — is a direct descendant of Conté's experiments.\nTwo later additions completed the modern pencil. In 1858 an American stationer, Hymen Lipman, was granted a patent for a pencil with a small rubber eraser fixed into one end. The idea proved enormously popular, although the patent was later cancelled by a court, which ruled that joining two existing products did not count as a new invention. The second addition was colour. In 1889 an Austrian firm displayed a luxury pencil painted bright yellow at the Paris World Fair. At the time the finest graphite came from China, where yellow was associated with royalty, and the company chose the colour to suggest quality. Rival manufacturers copied it, and in the United States yellow remains the standard colour for a pencil more than a century later.\nDespite the arrival of the ballpoint pen in the 1940s and the computer keyboard a few decades later, the pencil has not disappeared. Around fourteen billion are still produced every year, most of them from cedar wood, which is soft enough to sharpen easily but strong enough not to split. Teachers value pencils because mistakes can be removed; artists and architects value the range of tones a single pencil can produce; and examination boards in many countries still insist on them, because the machines that mark answer sheets read graphite more reliably than ink. For an object that began as a way of marking sheep, it has had a remarkable career.\n\n────────\nCâu 1–5. Complete the sentences below. Choose NO MORE THAN TWO WORDS from the passage for each answer.\nFarmers near Borrowdale first used graphite to mark their (1) ______.\nIn the sixteenth century, people thought graphite was a kind of (2) ______.\nTaking graphite out of the Borrowdale area illegally became a (3) ______.\nThe first pencils were covered in string or (4) ______ to protect the user's hands.\nConté's pencils needed much less (5) ______ than earlier ones.",
+     "cau": [
+      {
+       "id": "R1",
+       "kieu": "dien",
+       "dapAn": [
+        "sheep"
+       ],
+       "de": "Complete the sentences below. Choose NO MORE THAN TWO WORDS from the passage for each answer.\nFarmers near Borrowdale first used graphite to mark their ___.",
+       "giaiThich": "Bài: \"began using it to label their sheep\". \"mark\" = paraphrase của \"label\" ⇒ sheep. Đây là câu band 4: từ khoá gần như nguyên văn, chỉ đổi một động từ."
+      },
+      {
+       "id": "R2",
+       "kieu": "dien",
+       "dapAn": [
+        "lead"
+       ],
+       "de": "Complete the sentences below. Choose NO MORE THAN TWO WORDS from the passage for each answer.\nIn the sixteenth century, people thought graphite was a kind of ___.",
+       "giaiThich": "\"people believed it was a form of lead\" — \"a kind of\" = \"a form of\", \"thought\" = \"believed\" ⇒ lead. Bẫy: \"graphite\" là chất thật, nhưng câu hỏi hỏi người ta TƯỞNG là gì."
+      },
+      {
+       "id": "R3",
+       "kieu": "dien",
+       "dapAn": [
+        "serious crime",
+        "crime"
+       ],
+       "de": "Complete the sentences below. Choose NO MORE THAN TWO WORDS from the passage for each answer.\nTaking graphite out of the Borrowdale area illegally became a ___.",
+       "giaiThich": "\"smuggling graphite out of the area was made a serious crime\" — \"taking… illegally\" = \"smuggling\" ⇒ serious crime (2 từ, đúng giới hạn). Viết \"crime\" cũng được chấp nhận vì khớp ngữ pháp \"became a ___\"."
+      },
+      {
+       "id": "R4",
+       "kieu": "dien",
+       "dapAn": [
+        "sheepskin"
+       ],
+       "de": "Complete the sentences below. Choose NO MORE THAN TWO WORDS from the passage for each answer.\nThe first pencils were covered in string or ___ to protect the user's hands.",
+       "giaiThich": "\"wrapped in string or sheepskin to keep the user's fingers clean\" — \"covered in\" = \"wrapped in\", \"protect the user's hands\" = \"keep… fingers clean\" ⇒ sheepskin (một từ, không tách \"sheep skin\")."
+      },
+      {
+       "id": "R5",
+       "kieu": "dien",
+       "dapAn": [
+        "graphite"
+       ],
+       "de": "Complete the sentences below. Choose NO MORE THAN TWO WORDS from the passage for each answer.\nConté's pencils needed much less ___ than earlier ones.",
+       "giaiThich": "\"It used far less graphite, so poorer-quality deposits could be used\" — \"much less\" = \"far less\" ⇒ graphite. Đừng điền \"clay\": Conté dùng NHIỀU đất sét hơn, không phải ít hơn."
+      }
+     ]
+    },
+    {
+     "huongDan": "Passage 1 — Câu 6–9. Complete the table below. Choose ONE WORD AND/OR A NUMBER from the passage for each answer.",
+     "doan": "READING PASSAGE 1\nA SHORT HISTORY OF THE PENCIL\nHow a lump of black rock found under a fallen tree became the most common writing tool on Earth\n\nFew objects are as familiar, or as little noticed, as the pencil. It costs almost nothing, needs no power and works upside down, under water and in freezing cold, which is why astronauts, divers and mountaineers still carry one. Yet the pencil in your drawer is the product of more than four centuries of trial, error and competition between nations.\nThe story begins in the north of England in the 1560s. According to local tradition, a violent storm uprooted trees on a hillside near the village of Borrowdale, and underneath them farmers found a deposit of a soft, black mineral. They quickly discovered that it left a dark mark on anything it touched and began using it to label their sheep. The material was graphite, although at the time people believed it was a form of lead, which is why we still speak of pencil \"lead\" today. The Borrowdale deposit was unusually pure, and for about two hundred years it was the only large source of solid graphite in the world. It became so valuable that the mine was guarded, and smuggling graphite out of the area was made a serious crime.\nEarly pencils were simply sticks of graphite wrapped in string or sheepskin to keep the user's fingers clean. Later, craftsmen in Italy and Germany learned to cut the mineral into thin strips and glue them between two pieces of wood — the basic design we recognise today. However, pure graphite was expensive and increasingly scarce, and attempts to mix the powder with glue or wax produced pencils that were either too soft or too crumbly to be useful.\nThe breakthrough came in France in 1795. Cut off from English supplies by war, the government asked an engineer and painter named Nicolas-Jacques Conté to find a substitute. Conté mixed powdered graphite with fine clay, pressed the mixture into rods and baked them in a kiln. His method had two great advantages. It used far less graphite, so poorer-quality deposits could be used, and by varying the amount of clay he could control how hard or soft the pencil was. More clay produced a harder, lighter line; more graphite a softer, darker one. The grading system still printed on pencils — from 9H, the hardest, to 9B, the softest, with HB in the middle — is a direct descendant of Conté's experiments.\nTwo later additions completed the modern pencil. In 1858 an American stationer, Hymen Lipman, was granted a patent for a pencil with a small rubber eraser fixed into one end. The idea proved enormously popular, although the patent was later cancelled by a court, which ruled that joining two existing products did not count as a new invention. The second addition was colour. In 1889 an Austrian firm displayed a luxury pencil painted bright yellow at the Paris World Fair. At the time the finest graphite came from China, where yellow was associated with royalty, and the company chose the colour to suggest quality. Rival manufacturers copied it, and in the United States yellow remains the standard colour for a pencil more than a century later.\nDespite the arrival of the ballpoint pen in the 1940s and the computer keyboard a few decades later, the pencil has not disappeared. Around fourteen billion are still produced every year, most of them from cedar wood, which is soft enough to sharpen easily but strong enough not to split. Teachers value pencils because mistakes can be removed; artists and architects value the range of tones a single pencil can produce; and examination boards in many countries still insist on them, because the machines that mark answer sheets read graphite more reliably than ink. For an object that began as a way of marking sheep, it has had a remarkable career.\n\n────────\nKEY DATES IN THE HISTORY OF THE PENCIL\nCâu 6–9. Complete the table below. Choose ONE WORD AND/OR A NUMBER from the passage for each answer.\nDate: 1560s · Who / where: farmers near Borrowdale · Development: graphite discovered under fallen (6) ______\nDate: 1795 · Who / where: Conté, in France · Development: graphite mixed with (7) ______ and baked\nDate: (8) ______ · Who / where: Hymen Lipman, USA · Development: patent for a pencil with an eraser\nDate: 1889 · Who / where: a firm from Austria · Development: a luxury pencil painted (9) ______, shown at the Paris World Fair",
+     "cau": [
+      {
+       "id": "R6",
+       "kieu": "dien",
+       "de": "Complete the table below. Choose ONE WORD AND/OR A NUMBER from the passage for each answer.\nKey dates in the history of the pencil — 1560s — Development: graphite discovered under fallen ___",
+       "dapAn": [
+        "trees"
+       ],
+       "giaiThich": "Bảng: \"graphite discovered under fallen ___\" ⇒ bài: \"a violent storm uprooted trees… underneath them farmers found\" ⇒ trees. \"uprooted\" = bị bật gốc = \"fallen\"."
+      },
+      {
+       "id": "R7",
+       "kieu": "dien",
+       "de": "Complete the table below. Choose ONE WORD AND/OR A NUMBER from the passage for each answer.\nKey dates in the history of the pencil — 1795 — Development: graphite mixed with ___ and baked",
+       "dapAn": [
+        "clay"
+       ],
+       "giaiThich": "\"Conté mixed powdered graphite with fine clay, pressed the mixture into rods and baked them\" ⇒ clay. \"fine clay\" là 2 từ — bảng chỉ cho ONE WORD ⇒ chỉ viết \"clay\"."
+      },
+      {
+       "id": "R8",
+       "kieu": "dien",
+       "de": "Complete the table below. Choose ONE WORD AND/OR A NUMBER from the passage for each answer.\nKey dates in the history of the pencil — Hymen Lipman, USA — Date: ___",
+       "dapAn": [
+        "1858"
+       ],
+       "giaiThich": "Hàng Hymen Lipman + bằng sáng chế bút chì có tẩy ⇒ \"In 1858 an American stationer, Hymen Lipman, was granted a patent\" ⇒ 1858. Bẫy: 1889 là năm bút chì màu vàng."
+      },
+      {
+       "id": "R9",
+       "kieu": "dien",
+       "de": "Complete the table below. Choose ONE WORD AND/OR A NUMBER from the passage for each answer.\nKey dates in the history of the pencil — 1889 — Development: a luxury pencil painted ___, shown at the Paris World Fair",
+       "dapAn": [
+        "yellow"
+       ],
+       "giaiThich": "\"an Austrian firm displayed a luxury pencil painted bright yellow at the Paris World Fair\" ⇒ yellow. \"bright yellow\" là 2 từ, vượt ONE WORD ⇒ chỉ \"yellow\". (\"luxury\" đã cho sẵn trong bảng — đừng điền lại.)"
+      }
+     ]
+    },
+    {
+     "huongDan": "Passage 1 — Câu 10–13. Do the following statements agree with the information given in Reading Passage 1? Choose TRUE if the statement agrees with the information FALSE if the statement contradicts the information NOT GIVEN if there is no information on this",
+     "doan": "READING PASSAGE 1\nA SHORT HISTORY OF THE PENCIL\nHow a lump of black rock found under a fallen tree became the most common writing tool on Earth\n\nFew objects are as familiar, or as little noticed, as the pencil. It costs almost nothing, needs no power and works upside down, under water and in freezing cold, which is why astronauts, divers and mountaineers still carry one. Yet the pencil in your drawer is the product of more than four centuries of trial, error and competition between nations.\nThe story begins in the north of England in the 1560s. According to local tradition, a violent storm uprooted trees on a hillside near the village of Borrowdale, and underneath them farmers found a deposit of a soft, black mineral. They quickly discovered that it left a dark mark on anything it touched and began using it to label their sheep. The material was graphite, although at the time people believed it was a form of lead, which is why we still speak of pencil \"lead\" today. The Borrowdale deposit was unusually pure, and for about two hundred years it was the only large source of solid graphite in the world. It became so valuable that the mine was guarded, and smuggling graphite out of the area was made a serious crime.\nEarly pencils were simply sticks of graphite wrapped in string or sheepskin to keep the user's fingers clean. Later, craftsmen in Italy and Germany learned to cut the mineral into thin strips and glue them between two pieces of wood — the basic design we recognise today. However, pure graphite was expensive and increasingly scarce, and attempts to mix the powder with glue or wax produced pencils that were either too soft or too crumbly to be useful.\nThe breakthrough came in France in 1795. Cut off from English supplies by war, the government asked an engineer and painter named Nicolas-Jacques Conté to find a substitute. Conté mixed powdered graphite with fine clay, pressed the mixture into rods and baked them in a kiln. His method had two great advantages. It used far less graphite, so poorer-quality deposits could be used, and by varying the amount of clay he could control how hard or soft the pencil was. More clay produced a harder, lighter line; more graphite a softer, darker one. The grading system still printed on pencils — from 9H, the hardest, to 9B, the softest, with HB in the middle — is a direct descendant of Conté's experiments.\nTwo later additions completed the modern pencil. In 1858 an American stationer, Hymen Lipman, was granted a patent for a pencil with a small rubber eraser fixed into one end. The idea proved enormously popular, although the patent was later cancelled by a court, which ruled that joining two existing products did not count as a new invention. The second addition was colour. In 1889 an Austrian firm displayed a luxury pencil painted bright yellow at the Paris World Fair. At the time the finest graphite came from China, where yellow was associated with royalty, and the company chose the colour to suggest quality. Rival manufacturers copied it, and in the United States yellow remains the standard colour for a pencil more than a century later.\nDespite the arrival of the ballpoint pen in the 1940s and the computer keyboard a few decades later, the pencil has not disappeared. Around fourteen billion are still produced every year, most of them from cedar wood, which is soft enough to sharpen easily but strong enough not to split. Teachers value pencils because mistakes can be removed; artists and architects value the range of tones a single pencil can produce; and examination boards in many countries still insist on them, because the machines that mark answer sheets read graphite more reliably than ink. For an object that began as a way of marking sheep, it has had a remarkable career.",
+     "cau": [
+      {
+       "id": "R10",
+       "kieu": "chon",
+       "de": "Do the following statements agree with the information given in Reading Passage 1? Choose TRUE if the statement agrees with the information FALSE if the statement contradicts the information NOT GIVEN if there is no information on this\nEarly attempts to mix graphite powder with glue produced good pencils.",
+       "luaChon": [
+        "TRUE",
+        "FALSE",
+        "NOT GIVEN"
+       ],
+       "dapAn": 1,
+       "giaiThich": "Bài nói ngược: trộn bột với keo hay sáp \"produced pencils that were either too soft or too crumbly to be useful\" ⇒ KHÔNG tốt ⇒ FALSE."
+      },
+      {
+       "id": "R11",
+       "kieu": "chon",
+       "de": "Do the following statements agree with the information given in Reading Passage 1? Choose TRUE if the statement agrees with the information FALSE if the statement contradicts the information NOT GIVEN if there is no information on this\nLipman's patent was eventually cancelled.",
+       "luaChon": [
+        "TRUE",
+        "FALSE",
+        "NOT GIVEN"
+       ],
+       "dapAn": 0,
+       "giaiThich": "\"the patent was later cancelled by a court\" — \"eventually\" = \"later\" ⇒ TRUE."
+      },
+      {
+       "id": "R12",
+       "kieu": "chon",
+       "de": "Do the following statements agree with the information given in Reading Passage 1? Choose TRUE if the statement agrees with the information FALSE if the statement contradicts the information NOT GIVEN if there is no information on this\nCedar is more expensive than other kinds of wood used for pencils.",
+       "luaChon": [
+        "TRUE",
+        "FALSE",
+        "NOT GIVEN"
+       ],
+       "dapAn": 2,
+       "giaiThich": "Bài chỉ nói gỗ tuyết tùng (cedar) có tính chất phù hợp: \"soft enough to sharpen easily but strong enough not to split\" — KHÔNG nói gì về GIÁ, cũng không so với loại gỗ nào khác ⇒ NOT GIVEN. Bẫy kinh điển: thấy \"cedar\" được nhắc là chọn TRUE/FALSE. (Phân biệt: nếu bài viết \"cedar is cheaper than other woods\" thì câu này mới là FALSE.)"
+      },
+      {
+       "id": "R13",
+       "kieu": "chon",
+       "de": "Do the following statements agree with the information given in Reading Passage 1? Choose TRUE if the statement agrees with the information FALSE if the statement contradicts the information NOT GIVEN if there is no information on this\nMarking machines read graphite more reliably than they read ink.",
+       "luaChon": [
+        "TRUE",
+        "FALSE",
+        "NOT GIVEN"
+       ],
+       "dapAn": 0,
+       "giaiThich": "\"the machines that mark answer sheets read graphite more reliably than ink\" ⇒ TRUE. Câu hỏi gần nguyên văn, chỉ đổi \"marking machines\" ↔ \"machines that mark answer sheets\"."
+      }
+     ]
+    },
+    {
+     "huongDan": "Passage 2 — Câu 14–19. Reading Passage 2 has six paragraphs, A–F. Choose the correct heading for each paragraph from the list of headings below. Choose the correct number, i–ix.",
+     "doan": "READING PASSAGE 2\nTHE RETURN OF THE NIGHT TRAIN\nWritten off as a relic twenty years ago, the European sleeper train is filling up again\n\nA  For much of the twentieth century, the sleeper train was the natural way to travel long distances across Europe. Passengers boarded in the evening, ate in the dining car, slept in a narrow bunk and woke the next morning in another country. By the 1990s, however, the network was shrinking fast. Budget airlines could carry a passenger from Berlin to Rome for the price of a restaurant meal, and new high-speed day trains made many overnight journeys unnecessary. A trip that had once taken a whole night could now be completed in four or five hours, with a meal and a film thrown in. Railway companies, which found the ageing sleeper carriages expensive to maintain and difficult to fill, withdrew one route after another. In 2016 Germany's national operator closed its entire night-train business, and many observers assumed that the sleeper had reached the end of the line.\nB  Yet within a few years the trend had reversed. The Austrian state railway, which had taken over several of the abandoned German routes, found that demand was far stronger than it had expected, and it began ordering new carriages. Its managers had expected the routes to lose money for years; instead, several were profitable within eighteen months. Private operators appeared in Sweden, the Netherlands and France, and by the early 2020s new or restored overnight services connected Vienna with Paris, Stockholm with Hamburg and Brussels with Berlin. Some routes sold out within hours of tickets going on sale. The night train, dismissed as a relic, had become fashionable.\nC  The most obvious explanation is concern about climate change. A passenger travelling by train is responsible for a small fraction of the carbon emissions of the same journey by air — according to several estimates, less than one tenth. In Sweden the word \"flygskam\", or flight shame, entered everyday use to describe the embarrassment some people feel about flying for short trips, and its counterpart \"tågskryt\", meaning train pride, followed close behind. Surveys in several countries show that younger travellers in particular are willing to spend more time, and sometimes more money, in exchange for a lower-carbon route.\nD  Environmental guilt alone, however, does not fill a train. Operators have also recognised that the sleeper competes not with a flight but with a flight plus a hotel. A traveller who leaves Paris at nine in the evening and arrives in Vienna at ten the next morning has saved the cost of a night's accommodation and lost no working time at all. For business travellers this calculation is attractive, and for tourists the journey itself becomes part of the holiday. Modern carriages reflect this shift: the newest designs offer private compartments with their own showers, individual sleeping pods for solo travellers, and breakfast delivered to the door. Some operators have gone further, offering cinema cars, bars with live music and family compartments that convert into playrooms during the evening. The aim is to make the hours on board feel like a hotel stay rather than a form of transport.\nE  Running an overnight service is nevertheless far harder than it looks. A sleeper carriage carries perhaps a third as many passengers as a day coach of the same length, and it earns money only once a day, whereas a high-speed train can make several return journeys. Track access charges, which operators pay to use the rails, are calculated per kilometre and fall heavily on long-distance routes. A night train from Vienna to Brussels, for example, covers more than a thousand kilometres, and the fee for every one of them must be recovered from a few hundred sleeping passengers. Perhaps the greatest obstacle is the border. Each country has its own signalling systems, safety rules and electrical standards, so a train crossing three frontiers may need three locomotives and three sets of paperwork. One operator estimated that gaining approval to run a new international route took longer than building the carriages for it.\nF  Governments have started to respond. The European Union has named rail travel a priority in its plans to cut transport emissions, and several national governments now offer direct subsidies to night-train operators or have promised to reduce access charges. Austria and France have each committed money to new rolling stock, and Sweden has paid an operator to run a service to Hamburg that would otherwise not exist. Progress on harmonising technical standards is slow but steady, and a new generation of locomotives able to run under several different electrical systems is removing one of the oldest barriers. Whether the sleeper can become more than a niche remains uncertain; it will never carry the numbers that budget airlines do. But for a growing minority of travellers, going to sleep in one city and waking up in another has once again become the most civilised way to cross a continent.",
+     "cau": [
+      {
+       "id": "R14",
+       "kieu": "chon",
+       "de": "Reading Passage 2 has six paragraphs, A–F. Choose the correct heading for each paragraph from the list of headings below. Choose the correct number, i–ix.\nParagraph A",
+       "luaChon": [
+        "i. The decline of a once-popular service",
+        "ii. An unexpected revival",
+        "iii. The practical difficulties of running trains through the night",
+        "iv. Travellers who want to reduce their impact on the planet",
+        "v. Official support for the sleeper",
+        "vi. The sleeper as an alternative to a flight and a hotel",
+        "vii. How airlines responded to the new competition",
+        "viii. A new type of carriage designed for business travellers only",
+        "ix. Passenger complaints about comfort on board"
+       ],
+       "dapAn": 0,
+       "giaiThich": "Đoạn A kể thời hoàng kim rồi \"the network was shrinking fast… withdrew one route after another… reached the end of the line\" ⇒ sự suy tàn của một dịch vụ từng phổ biến ⇒ i."
+      },
+      {
+       "id": "R15",
+       "kieu": "chon",
+       "de": "Reading Passage 2 has six paragraphs, A–F. Choose the correct heading for each paragraph from the list of headings below. Choose the correct number, i–ix.\nParagraph B",
+       "luaChon": [
+        "i. The decline of a once-popular service",
+        "ii. An unexpected revival",
+        "iii. The practical difficulties of running trains through the night",
+        "iv. Travellers who want to reduce their impact on the planet",
+        "v. Official support for the sleeper",
+        "vi. The sleeper as an alternative to a flight and a hotel",
+        "vii. How airlines responded to the new competition",
+        "viii. A new type of carriage designed for business travellers only",
+        "ix. Passenger complaints about comfort on board"
+       ],
+       "dapAn": 1,
+       "giaiThich": "Đoạn B: \"Yet within a few years the trend had reversed… demand was far stronger than it had expected\" ⇒ hồi sinh bất ngờ ⇒ ii."
+      },
+      {
+       "id": "R16",
+       "kieu": "chon",
+       "de": "Reading Passage 2 has six paragraphs, A–F. Choose the correct heading for each paragraph from the list of headings below. Choose the correct number, i–ix.\nParagraph C",
+       "luaChon": [
+        "i. The decline of a once-popular service",
+        "ii. An unexpected revival",
+        "iii. The practical difficulties of running trains through the night",
+        "iv. Travellers who want to reduce their impact on the planet",
+        "v. Official support for the sleeper",
+        "vi. The sleeper as an alternative to a flight and a hotel",
+        "vii. How airlines responded to the new competition",
+        "viii. A new type of carriage designed for business travellers only",
+        "ix. Passenger complaints about comfort on board"
+       ],
+       "dapAn": 3,
+       "giaiThich": "Đoạn C: lý do khí hậu, \"flight shame\", người trẻ chịu tốn thời gian/tiền để đi đường ít carbon ⇒ iv. Không có tiêu đề nào về hãng bay phản ứng (vii) — bài không nói."
+      },
+      {
+       "id": "R17",
+       "kieu": "chon",
+       "de": "Reading Passage 2 has six paragraphs, A–F. Choose the correct heading for each paragraph from the list of headings below. Choose the correct number, i–ix.\nParagraph D",
+       "luaChon": [
+        "i. The decline of a once-popular service",
+        "ii. An unexpected revival",
+        "iii. The practical difficulties of running trains through the night",
+        "iv. Travellers who want to reduce their impact on the planet",
+        "v. Official support for the sleeper",
+        "vi. The sleeper as an alternative to a flight and a hotel",
+        "vii. How airlines responded to the new competition",
+        "viii. A new type of carriage designed for business travellers only",
+        "ix. Passenger complaints about comfort on board"
+       ],
+       "dapAn": 5,
+       "giaiThich": "Đoạn D: \"the sleeper competes not with a flight but with a flight plus a hotel\" ⇒ vi. Bẫy viii: đoạn có nói thiết kế toa mới, nhưng cho cả khách du lịch lẫn người đi công tác, không phải \"business travellers only\"."
+      },
+      {
+       "id": "R18",
+       "kieu": "chon",
+       "de": "Reading Passage 2 has six paragraphs, A–F. Choose the correct heading for each paragraph from the list of headings below. Choose the correct number, i–ix.\nParagraph E",
+       "luaChon": [
+        "i. The decline of a once-popular service",
+        "ii. An unexpected revival",
+        "iii. The practical difficulties of running trains through the night",
+        "iv. Travellers who want to reduce their impact on the planet",
+        "v. Official support for the sleeper",
+        "vi. The sleeper as an alternative to a flight and a hotel",
+        "vii. How airlines responded to the new competition",
+        "viii. A new type of carriage designed for business travellers only",
+        "ix. Passenger complaints about comfort on board"
+       ],
+       "dapAn": 2,
+       "giaiThich": "Đoạn E: \"Running an overnight service is nevertheless far harder than it looks\" rồi liệt kê khó khăn (sức chứa, phí đường ray, biên giới) ⇒ iii."
+      },
+      {
+       "id": "R19",
+       "kieu": "chon",
+       "de": "Reading Passage 2 has six paragraphs, A–F. Choose the correct heading for each paragraph from the list of headings below. Choose the correct number, i–ix.\nParagraph F",
+       "luaChon": [
+        "i. The decline of a once-popular service",
+        "ii. An unexpected revival",
+        "iii. The practical difficulties of running trains through the night",
+        "iv. Travellers who want to reduce their impact on the planet",
+        "v. Official support for the sleeper",
+        "vi. The sleeper as an alternative to a flight and a hotel",
+        "vii. How airlines responded to the new competition",
+        "viii. A new type of carriage designed for business travellers only",
+        "ix. Passenger complaints about comfort on board"
+       ],
+       "dapAn": 4,
+       "giaiThich": "Đoạn F: \"Governments have started to respond… direct subsidies… reduce access charges\" ⇒ hỗ trợ của nhà nước ⇒ v."
+      }
+     ]
+    },
+    {
+     "huongDan": "Passage 2 — Câu 20–23. Reading Passage 2 has six paragraphs, A–F. Which paragraph contains the following information? Write the correct letter, A–F. NB You may use any letter more than once.",
+     "doan": "READING PASSAGE 2\nTHE RETURN OF THE NIGHT TRAIN\nWritten off as a relic twenty years ago, the European sleeper train is filling up again\n\nA  For much of the twentieth century, the sleeper train was the natural way to travel long distances across Europe. Passengers boarded in the evening, ate in the dining car, slept in a narrow bunk and woke the next morning in another country. By the 1990s, however, the network was shrinking fast. Budget airlines could carry a passenger from Berlin to Rome for the price of a restaurant meal, and new high-speed day trains made many overnight journeys unnecessary. A trip that had once taken a whole night could now be completed in four or five hours, with a meal and a film thrown in. Railway companies, which found the ageing sleeper carriages expensive to maintain and difficult to fill, withdrew one route after another. In 2016 Germany's national operator closed its entire night-train business, and many observers assumed that the sleeper had reached the end of the line.\nB  Yet within a few years the trend had reversed. The Austrian state railway, which had taken over several of the abandoned German routes, found that demand was far stronger than it had expected, and it began ordering new carriages. Its managers had expected the routes to lose money for years; instead, several were profitable within eighteen months. Private operators appeared in Sweden, the Netherlands and France, and by the early 2020s new or restored overnight services connected Vienna with Paris, Stockholm with Hamburg and Brussels with Berlin. Some routes sold out within hours of tickets going on sale. The night train, dismissed as a relic, had become fashionable.\nC  The most obvious explanation is concern about climate change. A passenger travelling by train is responsible for a small fraction of the carbon emissions of the same journey by air — according to several estimates, less than one tenth. In Sweden the word \"flygskam\", or flight shame, entered everyday use to describe the embarrassment some people feel about flying for short trips, and its counterpart \"tågskryt\", meaning train pride, followed close behind. Surveys in several countries show that younger travellers in particular are willing to spend more time, and sometimes more money, in exchange for a lower-carbon route.\nD  Environmental guilt alone, however, does not fill a train. Operators have also recognised that the sleeper competes not with a flight but with a flight plus a hotel. A traveller who leaves Paris at nine in the evening and arrives in Vienna at ten the next morning has saved the cost of a night's accommodation and lost no working time at all. For business travellers this calculation is attractive, and for tourists the journey itself becomes part of the holiday. Modern carriages reflect this shift: the newest designs offer private compartments with their own showers, individual sleeping pods for solo travellers, and breakfast delivered to the door. Some operators have gone further, offering cinema cars, bars with live music and family compartments that convert into playrooms during the evening. The aim is to make the hours on board feel like a hotel stay rather than a form of transport.\nE  Running an overnight service is nevertheless far harder than it looks. A sleeper carriage carries perhaps a third as many passengers as a day coach of the same length, and it earns money only once a day, whereas a high-speed train can make several return journeys. Track access charges, which operators pay to use the rails, are calculated per kilometre and fall heavily on long-distance routes. A night train from Vienna to Brussels, for example, covers more than a thousand kilometres, and the fee for every one of them must be recovered from a few hundred sleeping passengers. Perhaps the greatest obstacle is the border. Each country has its own signalling systems, safety rules and electrical standards, so a train crossing three frontiers may need three locomotives and three sets of paperwork. One operator estimated that gaining approval to run a new international route took longer than building the carriages for it.\nF  Governments have started to respond. The European Union has named rail travel a priority in its plans to cut transport emissions, and several national governments now offer direct subsidies to night-train operators or have promised to reduce access charges. Austria and France have each committed money to new rolling stock, and Sweden has paid an operator to run a service to Hamburg that would otherwise not exist. Progress on harmonising technical standards is slow but steady, and a new generation of locomotives able to run under several different electrical systems is removing one of the oldest barriers. Whether the sleeper can become more than a niche remains uncertain; it will never carry the numbers that budget airlines do. But for a growing minority of travellers, going to sleep in one city and waking up in another has once again become the most civilised way to cross a continent.",
+     "cau": [
+      {
+       "id": "R20",
+       "kieu": "chon",
+       "de": "Reading Passage 2 has six paragraphs, A–F. Which paragraph contains the following information? Write the correct letter, A–F. NB You may use any letter more than once.\na reference to a new word describing a feeling about air travel",
+       "luaChon": [
+        "A. Paragraph A",
+        "B. Paragraph B",
+        "C. Paragraph C",
+        "D. Paragraph D",
+        "E. Paragraph E",
+        "F. Paragraph F"
+       ],
+       "dapAn": 2,
+       "giaiThich": "Từ mới chỉ cảm giác về việc bay: \"flygskam, or flight shame… the embarrassment some people feel about flying\" ⇒ đoạn C."
+      },
+      {
+       "id": "R21",
+       "kieu": "chon",
+       "de": "Reading Passage 2 has six paragraphs, A–F. Which paragraph contains the following information? Write the correct letter, A–F. NB You may use any letter more than once.\nan example of how quickly tickets for some routes were sold",
+       "luaChon": [
+        "A. Paragraph A",
+        "B. Paragraph B",
+        "C. Paragraph C",
+        "D. Paragraph D",
+        "E. Paragraph E",
+        "F. Paragraph F"
+       ],
+       "dapAn": 1,
+       "giaiThich": "\"Some routes sold out within hours of tickets going on sale\" ⇒ đoạn B."
+      },
+      {
+       "id": "R22",
+       "kieu": "chon",
+       "de": "Reading Passage 2 has six paragraphs, A–F. Which paragraph contains the following information? Write the correct letter, A–F. NB You may use any letter more than once.\na comparison between the capacity of two kinds of railway carriage",
+       "luaChon": [
+        "A. Paragraph A",
+        "B. Paragraph B",
+        "C. Paragraph C",
+        "D. Paragraph D",
+        "E. Paragraph E",
+        "F. Paragraph F"
+       ],
+       "dapAn": 4,
+       "giaiThich": "So sánh sức chứa hai loại toa: \"A sleeper carriage carries perhaps a third as many passengers as a day coach of the same length\" ⇒ đoạn E."
+      },
+      {
+       "id": "R23",
+       "kieu": "chon",
+       "de": "Reading Passage 2 has six paragraphs, A–F. Which paragraph contains the following information? Write the correct letter, A–F. NB You may use any letter more than once.\na mention of technology that will help trains cross national borders",
+       "luaChon": [
+        "A. Paragraph A",
+        "B. Paragraph B",
+        "C. Paragraph C",
+        "D. Paragraph D",
+        "E. Paragraph E",
+        "F. Paragraph F"
+       ],
+       "dapAn": 5,
+       "giaiThich": "Công nghệ giúp vượt biên giới: \"a new generation of locomotives able to run under several different electrical systems is removing one of the oldest barriers\" ⇒ đoạn F. Đoạn E chỉ nêu VẤN ĐỀ biên giới, không nêu công nghệ giải quyết."
+      }
+     ]
+    },
+    {
+     "huongDan": "Passage 2 — Câu 24–26. Complete the summary below. Choose ONE WORD ONLY from the passage for each answer.",
+     "doan": "READING PASSAGE 2\nTHE RETURN OF THE NIGHT TRAIN\nWritten off as a relic twenty years ago, the European sleeper train is filling up again\n\nA  For much of the twentieth century, the sleeper train was the natural way to travel long distances across Europe. Passengers boarded in the evening, ate in the dining car, slept in a narrow bunk and woke the next morning in another country. By the 1990s, however, the network was shrinking fast. Budget airlines could carry a passenger from Berlin to Rome for the price of a restaurant meal, and new high-speed day trains made many overnight journeys unnecessary. A trip that had once taken a whole night could now be completed in four or five hours, with a meal and a film thrown in. Railway companies, which found the ageing sleeper carriages expensive to maintain and difficult to fill, withdrew one route after another. In 2016 Germany's national operator closed its entire night-train business, and many observers assumed that the sleeper had reached the end of the line.\nB  Yet within a few years the trend had reversed. The Austrian state railway, which had taken over several of the abandoned German routes, found that demand was far stronger than it had expected, and it began ordering new carriages. Its managers had expected the routes to lose money for years; instead, several were profitable within eighteen months. Private operators appeared in Sweden, the Netherlands and France, and by the early 2020s new or restored overnight services connected Vienna with Paris, Stockholm with Hamburg and Brussels with Berlin. Some routes sold out within hours of tickets going on sale. The night train, dismissed as a relic, had become fashionable.\nC  The most obvious explanation is concern about climate change. A passenger travelling by train is responsible for a small fraction of the carbon emissions of the same journey by air — according to several estimates, less than one tenth. In Sweden the word \"flygskam\", or flight shame, entered everyday use to describe the embarrassment some people feel about flying for short trips, and its counterpart \"tågskryt\", meaning train pride, followed close behind. Surveys in several countries show that younger travellers in particular are willing to spend more time, and sometimes more money, in exchange for a lower-carbon route.\nD  Environmental guilt alone, however, does not fill a train. Operators have also recognised that the sleeper competes not with a flight but with a flight plus a hotel. A traveller who leaves Paris at nine in the evening and arrives in Vienna at ten the next morning has saved the cost of a night's accommodation and lost no working time at all. For business travellers this calculation is attractive, and for tourists the journey itself becomes part of the holiday. Modern carriages reflect this shift: the newest designs offer private compartments with their own showers, individual sleeping pods for solo travellers, and breakfast delivered to the door. Some operators have gone further, offering cinema cars, bars with live music and family compartments that convert into playrooms during the evening. The aim is to make the hours on board feel like a hotel stay rather than a form of transport.\nE  Running an overnight service is nevertheless far harder than it looks. A sleeper carriage carries perhaps a third as many passengers as a day coach of the same length, and it earns money only once a day, whereas a high-speed train can make several return journeys. Track access charges, which operators pay to use the rails, are calculated per kilometre and fall heavily on long-distance routes. A night train from Vienna to Brussels, for example, covers more than a thousand kilometres, and the fee for every one of them must be recovered from a few hundred sleeping passengers. Perhaps the greatest obstacle is the border. Each country has its own signalling systems, safety rules and electrical standards, so a train crossing three frontiers may need three locomotives and three sets of paperwork. One operator estimated that gaining approval to run a new international route took longer than building the carriages for it.\nF  Governments have started to respond. The European Union has named rail travel a priority in its plans to cut transport emissions, and several national governments now offer direct subsidies to night-train operators or have promised to reduce access charges. Austria and France have each committed money to new rolling stock, and Sweden has paid an operator to run a service to Hamburg that would otherwise not exist. Progress on harmonising technical standards is slow but steady, and a new generation of locomotives able to run under several different electrical systems is removing one of the oldest barriers. Whether the sleeper can become more than a niche remains uncertain; it will never carry the numbers that budget airlines do. But for a growing minority of travellers, going to sleep in one city and waking up in another has once again become the most civilised way to cross a continent.\n\n────────\nWHY NIGHT TRAINS STRUGGLE TO MAKE MONEY\nCâu 24–26. Complete the summary below. Choose ONE WORD ONLY from the passage for each answer.\nA sleeper carriage carries far fewer passengers than a day coach and completes only one (24) ______ a day, while a high-speed train can make several. Operators must also pay charges for using the track, which are worked out per (25) ______, so long routes are expensive. Crossing borders is complicated because each country has different rules and standards, meaning that one train might require three (26) ______ and three sets of documents.",
+     "cau": [
+      {
+       "id": "R24",
+       "kieu": "dien",
+       "dapAn": [
+        "journey"
+       ],
+       "de": "Complete the summary below. Choose ONE WORD ONLY from the passage for each answer.\nWhy night trains struggle to make money — A sleeper carriage carries far fewer passengers than a day coach and completes only one ___ a day, while a high-speed train can make several. Operators must also pay charges for using the track, which are worked out per (25) …, so long routes are expensive. Crossing borders is complicated because each country has different rules and standards, meaning that one train might require three (26) … and three sets of documents.",
+       "giaiThich": "\"it earns money only once a day, whereas a high-speed train can make several return journeys\" ⇒ toa giường nằm chỉ hoàn thành một journey mỗi ngày. Chỗ trống đứng sau \"one\" ⇒ số ít \"journey\", không chép \"journeys\"."
+      },
+      {
+       "id": "R25",
+       "kieu": "dien",
+       "dapAn": [
+        "kilometre",
+        "kilometer"
+       ],
+       "de": "Complete the summary below. Choose ONE WORD ONLY from the passage for each answer.\nWhy night trains struggle to make money — A sleeper carriage carries far fewer passengers than a day coach and completes only one (24) … a day, while a high-speed train can make several. Operators must also pay charges for using the track, which are worked out per ___, so long routes are expensive. Crossing borders is complicated because each country has different rules and standards, meaning that one train might require three (26) … and three sets of documents.",
+       "giaiThich": "\"Track access charges… are calculated per kilometre\" — \"worked out\" = \"calculated\" ⇒ kilometre (chính tả Mỹ \"kilometer\" được chấp nhận)."
+      },
+      {
+       "id": "R26",
+       "kieu": "dien",
+       "dapAn": [
+        "locomotives"
+       ],
+       "de": "Complete the summary below. Choose ONE WORD ONLY from the passage for each answer.\nWhy night trains struggle to make money — A sleeper carriage carries far fewer passengers than a day coach and completes only one (24) … a day, while a high-speed train can make several. Operators must also pay charges for using the track, which are worked out per (25) …, so long routes are expensive. Crossing borders is complicated because each country has different rules and standards, meaning that one train might require three ___ and three sets of documents.",
+       "giaiThich": "\"a train crossing three frontiers may need three locomotives and three sets of paperwork\" — \"documents\" = \"paperwork\" ⇒ locomotives (số nhiều, đúng như bài)."
+      }
+     ]
+    },
+    {
+     "huongDan": "Passage 3 — Câu 27–32. Do the following statements agree with the claims of the writer in Reading Passage 3? Choose YES if the statement agrees with the claims of the writer NO if the statement contradicts the claims of the writer NOT GIVEN if it is impossible to say what the writer thinks about this",
+     "doan": "READING PASSAGE 3\nIS HANDWRITING WORTH SAVING?\nA writer weighs the evidence for keeping the pen in the classroom\n\nIn 2014, Finland announced that its schools would no longer be required to teach joined-up handwriting, and the news travelled around the world with the speed usually reserved for celebrity scandal. Some commentators mourned the death of a civilised skill; others welcomed the end of a pointless ritual. Both reactions, I think, missed the point. The question is not whether handwriting is beautiful or traditional — it is whether it still does anything that typing cannot. Having spent two years reading the research and watching classrooms, I have come to believe that it does, though not for the reasons its defenders usually give.\nThe sentimental case is the weakest. Letters written by hand are said to carry a warmth that an email lacks; signatures express personality; a nation that cannot read its own old documents has lost touch with its past. There is something in each of these claims, but none of them justifies the hundreds of hours that schools devote to the subject. People managed perfectly well to express affection before literacy was widespread, and the number of adults who read eighteenth-century manuscripts for pleasure has always been tiny. Nor is it obvious that children who learn joined-up writing become more thoughtful correspondents; the warmest letters I have ever received were typed. If nostalgia were the only argument, the keyboard would deserve to win.\nThe practical case is stronger, and it rests on how writing by hand affects the brain. When a child forms a letter with a pencil, several things happen at once: the hand follows a shape, the eye checks the result, and the mind holds the sound the letter represents. Brain-imaging studies of young children show that this combination activates reading networks far more strongly than pressing a key does, and children who learn letters by writing them tend to recognise them faster than those who learn by typing. The advantage appears to persist: in one classroom study, children who had practised letters by hand in their first year were still ahead in reading twelve months later. The movement, it seems, is not a detour on the way to literacy but part of the road.\nThe effect does not stop in early childhood. A series of experiments with university students compared those who took lecture notes by hand with those who typed. The typists recorded more words — in some cases almost twice as many — yet when tested a week later, the handwriters remembered the ideas better. The likely explanation is uncomfortable for anyone who prizes efficiency: because writing by hand is slow, students cannot copy everything, so they are forced to decide what matters and to rephrase it in their own words. The typists, able to keep up with the lecturer, became transcribers rather than thinkers. Slowness, in other words, was doing useful work.\nSceptics raise two objections, and they deserve answers. The first is that these findings reflect habit rather than anything fundamental: a generation that grows up typing may learn to summarise on a keyboard just as well. This is possible, but so far the evidence does not support it; later studies that trained students to take fewer, more selective typed notes found that most slipped back into transcribing within minutes. The second objection is about time. Every hour spent perfecting the shape of a lower-case g, the argument runs, is an hour not spent on reading, mathematics or learning to code. Here I have more sympathy. Much of what passes for handwriting instruction is in fact instruction in neatness, and neatness has little to do with learning. A child who can write quickly and read back what she has written has the skill; whether her letters slope at the correct angle is a matter for calligraphers.\nThis points to a sensible middle course. Schools should teach children to write by hand fluently and legibly, because the act of forming letters supports reading and because note-taking by hand supports thinking. They should stop, however, treating elegant joined-up script as a goal in itself, and they should stop penalising children whose writing is untidy but clear. Nor should the keyboard be treated as an enemy. For a child with a physical difficulty that makes writing painful, or for an adult drafting a long report, typing is simply the better tool, and pretending otherwise helps nobody. What matters is that children leave school able to do both, and able to choose between them with some sense of when each is appropriate.\nThere is a final reason to hesitate before abandoning the pen, and it is the one I find hardest to measure and most difficult to dismiss. A handwritten page is a record of a process. Crossings-out, arrows and notes in the margin show how a thought developed, in a way that a clean typed document, with every revision silently erased, cannot. Writers, scientists and designers often say that they think on paper and then record on screen. The novelist who drafts in a notebook and the engineer who sketches before opening a design program are describing the same instinct. Whether this is a genuine cognitive advantage or merely a habit of the current generation, I cannot say. But a society that stopped teaching handwriting would be running an experiment on its children whose results would not be known for decades. Finland, incidentally, did not abolish handwriting at all; it dropped the requirement to teach one particular joined-up style while keeping printed letters. The reports of the pen's death, it turned out, were greatly exaggerated.",
+     "cau": [
+      {
+       "id": "R27",
+       "kieu": "chon",
+       "de": "Do the following statements agree with the claims of the writer in Reading Passage 3? Choose YES if the statement agrees with the claims of the writer NO if the statement contradicts the claims of the writer NOT GIVEN if it is impossible to say what the writer thinks about this\nMost people who reacted to the Finnish decision understood the real issue.",
+       "luaChon": [
+        "YES",
+        "NO",
+        "NOT GIVEN"
+       ],
+       "dapAn": 1,
+       "giaiThich": "Người viết: \"Both reactions, I think, missed the point\" — cả hai phe đều KHÔNG hiểu vấn đề thật ⇒ NO."
+      },
+      {
+       "id": "R28",
+       "kieu": "chon",
+       "de": "Do the following statements agree with the claims of the writer in Reading Passage 3? Choose YES if the statement agrees with the claims of the writer NO if the statement contradicts the claims of the writer NOT GIVEN if it is impossible to say what the writer thinks about this\nThe emotional arguments for handwriting are the least convincing.",
+       "luaChon": [
+        "YES",
+        "NO",
+        "NOT GIVEN"
+       ],
+       "dapAn": 0,
+       "giaiThich": "\"The sentimental case is the weakest\" — \"emotional arguments\" = \"sentimental case\", \"least convincing\" = \"weakest\" ⇒ YES."
+      },
+      {
+       "id": "R29",
+       "kieu": "chon",
+       "de": "Do the following statements agree with the claims of the writer in Reading Passage 3? Choose YES if the statement agrees with the claims of the writer NO if the statement contradicts the claims of the writer NOT GIVEN if it is impossible to say what the writer thinks about this\nFewer official documents require a handwritten signature than in the past.",
+       "luaChon": [
+        "YES",
+        "NO",
+        "NOT GIVEN"
+       ],
+       "dapAn": 2,
+       "giaiThich": "Chữ ký chỉ xuất hiện MỘT lần, trong danh sách lý lẽ \"tình cảm\" mà người viết thuật lại: \"signatures express personality\". Bài không nói gì về việc giấy tờ chính thức ngày nay có còn cần chữ ký tay hay không ⇒ NOT GIVEN. Bẫy: thấy chữ \"signatures\" trong bài là chọn YES/NO."
+      },
+      {
+       "id": "R30",
+       "kieu": "chon",
+       "de": "Do the following statements agree with the claims of the writer in Reading Passage 3? Choose YES if the statement agrees with the claims of the writer NO if the statement contradicts the claims of the writer NOT GIVEN if it is impossible to say what the writer thinks about this\nStudents who type their notes usually record more than those who write by hand.",
+       "luaChon": [
+        "YES",
+        "NO",
+        "NOT GIVEN"
+       ],
+       "dapAn": 0,
+       "giaiThich": "\"The typists recorded more words — in some cases almost twice as many\" ⇒ YES."
+      },
+      {
+       "id": "R31",
+       "kieu": "chon",
+       "de": "Do the following statements agree with the claims of the writer in Reading Passage 3? Choose YES if the statement agrees with the claims of the writer NO if the statement contradicts the claims of the writer NOT GIVEN if it is impossible to say what the writer thinks about this\nHandwriting lessons should focus mainly on producing neat, attractive letters.",
+       "luaChon": [
+        "YES",
+        "NO",
+        "NOT GIVEN"
+       ],
+       "dapAn": 1,
+       "giaiThich": "Người viết phản đối: \"stop… treating elegant joined-up script as a goal in itself\" và \"neatness has little to do with learning\" ⇒ NO."
+      },
+      {
+       "id": "R32",
+       "kieu": "chon",
+       "de": "Do the following statements agree with the claims of the writer in Reading Passage 3? Choose YES if the statement agrees with the claims of the writer NO if the statement contradicts the claims of the writer NOT GIVEN if it is impossible to say what the writer thinks about this\nTyping is the more suitable option for some people.",
+       "luaChon": [
+        "YES",
+        "NO",
+        "NOT GIVEN"
+       ],
+       "dapAn": 0,
+       "giaiThich": "\"For a child with a physical difficulty… or for an adult drafting a long report, typing is simply the better tool\" ⇒ YES."
+      }
+     ]
+    },
+    {
+     "huongDan": "Passage 3 — Câu 33–34. Choose TWO letters, A–E.",
+     "doan": "READING PASSAGE 3\nIS HANDWRITING WORTH SAVING?\nA writer weighs the evidence for keeping the pen in the classroom\n\nIn 2014, Finland announced that its schools would no longer be required to teach joined-up handwriting, and the news travelled around the world with the speed usually reserved for celebrity scandal. Some commentators mourned the death of a civilised skill; others welcomed the end of a pointless ritual. Both reactions, I think, missed the point. The question is not whether handwriting is beautiful or traditional — it is whether it still does anything that typing cannot. Having spent two years reading the research and watching classrooms, I have come to believe that it does, though not for the reasons its defenders usually give.\nThe sentimental case is the weakest. Letters written by hand are said to carry a warmth that an email lacks; signatures express personality; a nation that cannot read its own old documents has lost touch with its past. There is something in each of these claims, but none of them justifies the hundreds of hours that schools devote to the subject. People managed perfectly well to express affection before literacy was widespread, and the number of adults who read eighteenth-century manuscripts for pleasure has always been tiny. Nor is it obvious that children who learn joined-up writing become more thoughtful correspondents; the warmest letters I have ever received were typed. If nostalgia were the only argument, the keyboard would deserve to win.\nThe practical case is stronger, and it rests on how writing by hand affects the brain. When a child forms a letter with a pencil, several things happen at once: the hand follows a shape, the eye checks the result, and the mind holds the sound the letter represents. Brain-imaging studies of young children show that this combination activates reading networks far more strongly than pressing a key does, and children who learn letters by writing them tend to recognise them faster than those who learn by typing. The advantage appears to persist: in one classroom study, children who had practised letters by hand in their first year were still ahead in reading twelve months later. The movement, it seems, is not a detour on the way to literacy but part of the road.\nThe effect does not stop in early childhood. A series of experiments with university students compared those who took lecture notes by hand with those who typed. The typists recorded more words — in some cases almost twice as many — yet when tested a week later, the handwriters remembered the ideas better. The likely explanation is uncomfortable for anyone who prizes efficiency: because writing by hand is slow, students cannot copy everything, so they are forced to decide what matters and to rephrase it in their own words. The typists, able to keep up with the lecturer, became transcribers rather than thinkers. Slowness, in other words, was doing useful work.\nSceptics raise two objections, and they deserve answers. The first is that these findings reflect habit rather than anything fundamental: a generation that grows up typing may learn to summarise on a keyboard just as well. This is possible, but so far the evidence does not support it; later studies that trained students to take fewer, more selective typed notes found that most slipped back into transcribing within minutes. The second objection is about time. Every hour spent perfecting the shape of a lower-case g, the argument runs, is an hour not spent on reading, mathematics or learning to code. Here I have more sympathy. Much of what passes for handwriting instruction is in fact instruction in neatness, and neatness has little to do with learning. A child who can write quickly and read back what she has written has the skill; whether her letters slope at the correct angle is a matter for calligraphers.\nThis points to a sensible middle course. Schools should teach children to write by hand fluently and legibly, because the act of forming letters supports reading and because note-taking by hand supports thinking. They should stop, however, treating elegant joined-up script as a goal in itself, and they should stop penalising children whose writing is untidy but clear. Nor should the keyboard be treated as an enemy. For a child with a physical difficulty that makes writing painful, or for an adult drafting a long report, typing is simply the better tool, and pretending otherwise helps nobody. What matters is that children leave school able to do both, and able to choose between them with some sense of when each is appropriate.\nThere is a final reason to hesitate before abandoning the pen, and it is the one I find hardest to measure and most difficult to dismiss. A handwritten page is a record of a process. Crossings-out, arrows and notes in the margin show how a thought developed, in a way that a clean typed document, with every revision silently erased, cannot. Writers, scientists and designers often say that they think on paper and then record on screen. The novelist who drafts in a notebook and the engineer who sketches before opening a design program are describing the same instinct. Whether this is a genuine cognitive advantage or merely a habit of the current generation, I cannot say. But a society that stopped teaching handwriting would be running an experiment on its children whose results would not be known for decades. Finland, incidentally, did not abolish handwriting at all; it dropped the requirement to teach one particular joined-up style while keeping printed letters. The reports of the pen's death, it turned out, were greatly exaggerated.",
+     "cau": [
+      {
+       "id": "R33",
+       "kieu": "chon",
+       "de": "Choose TWO letters, A–E.\nWhich TWO of the following does the writer say about the note-taking experiments?\n(Câu 33 và 34 cùng một câu hỏi — ở câu này chọn đáp án đứng TRƯỚC theo bảng chữ cái.)",
+       "luaChon": [
+        "The students who typed produced a greater quantity of notes.",
+        "The handwriters performed better in a test taken some days afterwards.",
+        "The handwriters were given more time to prepare.",
+        "The typists understood the lectures better at the time.",
+        "The experiments were carried out with schoolchildren."
+       ],
+       "dapAn": 0,
+       "giaiThich": "Hai điều bài nói về thí nghiệm: người gõ máy ghi NHIỀU chữ hơn (A: \"recorded more words\") và người viết tay nhớ tốt hơn khi kiểm tra một tuần sau (B: \"when tested a week later… remembered the ideas better\"). Thứ tự không quan trọng."
+      },
+      {
+       "id": "R34",
+       "kieu": "chon",
+       "de": "Choose TWO letters, A–E.\nWhich TWO of the following does the writer say about the note-taking experiments?\n(Câu 33 và 34 cùng một câu hỏi — ở câu này chọn đáp án đứng SAU theo bảng chữ cái.)",
+       "luaChon": [
+        "The students who typed produced a greater quantity of notes.",
+        "The handwriters performed better in a test taken some days afterwards.",
+        "The handwriters were given more time to prepare.",
+        "The typists understood the lectures better at the time.",
+        "The experiments were carried out with schoolchildren."
+       ],
+       "dapAn": 1,
+       "giaiThich": "Như câu 33: A và B. C sai (không nói ai được thêm thời gian); D sai (bài không nói người gõ hiểu bài hơn lúc đó); E sai (thí nghiệm với \"university students\", không phải học sinh)."
+      }
+     ]
+    },
+    {
+     "huongDan": "Passage 3 — Câu 35–37. Choose the correct letter, A, B, C or D.",
+     "doan": "READING PASSAGE 3\nIS HANDWRITING WORTH SAVING?\nA writer weighs the evidence for keeping the pen in the classroom\n\nIn 2014, Finland announced that its schools would no longer be required to teach joined-up handwriting, and the news travelled around the world with the speed usually reserved for celebrity scandal. Some commentators mourned the death of a civilised skill; others welcomed the end of a pointless ritual. Both reactions, I think, missed the point. The question is not whether handwriting is beautiful or traditional — it is whether it still does anything that typing cannot. Having spent two years reading the research and watching classrooms, I have come to believe that it does, though not for the reasons its defenders usually give.\nThe sentimental case is the weakest. Letters written by hand are said to carry a warmth that an email lacks; signatures express personality; a nation that cannot read its own old documents has lost touch with its past. There is something in each of these claims, but none of them justifies the hundreds of hours that schools devote to the subject. People managed perfectly well to express affection before literacy was widespread, and the number of adults who read eighteenth-century manuscripts for pleasure has always been tiny. Nor is it obvious that children who learn joined-up writing become more thoughtful correspondents; the warmest letters I have ever received were typed. If nostalgia were the only argument, the keyboard would deserve to win.\nThe practical case is stronger, and it rests on how writing by hand affects the brain. When a child forms a letter with a pencil, several things happen at once: the hand follows a shape, the eye checks the result, and the mind holds the sound the letter represents. Brain-imaging studies of young children show that this combination activates reading networks far more strongly than pressing a key does, and children who learn letters by writing them tend to recognise them faster than those who learn by typing. The advantage appears to persist: in one classroom study, children who had practised letters by hand in their first year were still ahead in reading twelve months later. The movement, it seems, is not a detour on the way to literacy but part of the road.\nThe effect does not stop in early childhood. A series of experiments with university students compared those who took lecture notes by hand with those who typed. The typists recorded more words — in some cases almost twice as many — yet when tested a week later, the handwriters remembered the ideas better. The likely explanation is uncomfortable for anyone who prizes efficiency: because writing by hand is slow, students cannot copy everything, so they are forced to decide what matters and to rephrase it in their own words. The typists, able to keep up with the lecturer, became transcribers rather than thinkers. Slowness, in other words, was doing useful work.\nSceptics raise two objections, and they deserve answers. The first is that these findings reflect habit rather than anything fundamental: a generation that grows up typing may learn to summarise on a keyboard just as well. This is possible, but so far the evidence does not support it; later studies that trained students to take fewer, more selective typed notes found that most slipped back into transcribing within minutes. The second objection is about time. Every hour spent perfecting the shape of a lower-case g, the argument runs, is an hour not spent on reading, mathematics or learning to code. Here I have more sympathy. Much of what passes for handwriting instruction is in fact instruction in neatness, and neatness has little to do with learning. A child who can write quickly and read back what she has written has the skill; whether her letters slope at the correct angle is a matter for calligraphers.\nThis points to a sensible middle course. Schools should teach children to write by hand fluently and legibly, because the act of forming letters supports reading and because note-taking by hand supports thinking. They should stop, however, treating elegant joined-up script as a goal in itself, and they should stop penalising children whose writing is untidy but clear. Nor should the keyboard be treated as an enemy. For a child with a physical difficulty that makes writing painful, or for an adult drafting a long report, typing is simply the better tool, and pretending otherwise helps nobody. What matters is that children leave school able to do both, and able to choose between them with some sense of when each is appropriate.\nThere is a final reason to hesitate before abandoning the pen, and it is the one I find hardest to measure and most difficult to dismiss. A handwritten page is a record of a process. Crossings-out, arrows and notes in the margin show how a thought developed, in a way that a clean typed document, with every revision silently erased, cannot. Writers, scientists and designers often say that they think on paper and then record on screen. The novelist who drafts in a notebook and the engineer who sketches before opening a design program are describing the same instinct. Whether this is a genuine cognitive advantage or merely a habit of the current generation, I cannot say. But a society that stopped teaching handwriting would be running an experiment on its children whose results would not be known for decades. Finland, incidentally, did not abolish handwriting at all; it dropped the requirement to teach one particular joined-up style while keeping printed letters. The reports of the pen's death, it turned out, were greatly exaggerated.",
+     "cau": [
+      {
+       "id": "R35",
+       "kieu": "chon",
+       "de": "Choose the correct letter, A, B, C or D.\nAccording to the writer, later studies that trained students to type selective notes showed that",
+       "luaChon": [
+        "most students soon returned to copying everything.",
+        "typing can be as effective as handwriting with practice.",
+        "students took fewer notes but remembered less.",
+        "the training was too short to have any effect."
+       ],
+       "dapAn": 0,
+       "giaiThich": "\"later studies that trained students to take fewer, more selective typed notes found that most slipped back into transcribing within minutes\" ⇒ phần lớn nhanh chóng quay lại chép hết ⇒ A."
+      },
+      {
+       "id": "R36",
+       "kieu": "chon",
+       "de": "Choose the correct letter, A, B, C or D.\nWhat is the writer's response to the argument about time?",
+       "luaChon": [
+        "The writer rejects it completely.",
+        "The writer partly accepts it.",
+        "The writer thinks it applies only to older students.",
+        "The writer says it is based on out-of-date research."
+       ],
+       "dapAn": 1,
+       "giaiThich": "Với luận điểm về thời gian, người viết nói \"Here I have more sympathy\" rồi thừa nhận phần lớn giờ dạy viết tay chỉ là dạy nét chữ gọn ⇒ chấp nhận MỘT PHẦN ⇒ B. Không bác bỏ hoàn toàn (A), không nói gì về tuổi (C) hay nghiên cứu cũ (D)."
+      },
+      {
+       "id": "R37",
+       "kieu": "chon",
+       "de": "Choose the correct letter, A, B, C or D.\nIn the final paragraph, the writer suggests that a handwritten page",
+       "luaChon": [
+        "is easier to read than a typed one.",
+        "shows the stages by which an idea was formed.",
+        "is always produced faster than a typed document.",
+        "should be kept as a historical record."
+       ],
+       "dapAn": 1,
+       "giaiThich": "\"A handwritten page is a record of a process. Crossings-out, arrows and notes in the margin show how a thought developed\" ⇒ cho thấy các bước hình thành ý ⇒ B."
+      }
+     ]
+    },
+    {
+     "huongDan": "Passage 3 — Câu 38–40. Complete each sentence with the correct ending, A–F, below.",
+     "doan": "READING PASSAGE 3\nIS HANDWRITING WORTH SAVING?\nA writer weighs the evidence for keeping the pen in the classroom\n\nIn 2014, Finland announced that its schools would no longer be required to teach joined-up handwriting, and the news travelled around the world with the speed usually reserved for celebrity scandal. Some commentators mourned the death of a civilised skill; others welcomed the end of a pointless ritual. Both reactions, I think, missed the point. The question is not whether handwriting is beautiful or traditional — it is whether it still does anything that typing cannot. Having spent two years reading the research and watching classrooms, I have come to believe that it does, though not for the reasons its defenders usually give.\nThe sentimental case is the weakest. Letters written by hand are said to carry a warmth that an email lacks; signatures express personality; a nation that cannot read its own old documents has lost touch with its past. There is something in each of these claims, but none of them justifies the hundreds of hours that schools devote to the subject. People managed perfectly well to express affection before literacy was widespread, and the number of adults who read eighteenth-century manuscripts for pleasure has always been tiny. Nor is it obvious that children who learn joined-up writing become more thoughtful correspondents; the warmest letters I have ever received were typed. If nostalgia were the only argument, the keyboard would deserve to win.\nThe practical case is stronger, and it rests on how writing by hand affects the brain. When a child forms a letter with a pencil, several things happen at once: the hand follows a shape, the eye checks the result, and the mind holds the sound the letter represents. Brain-imaging studies of young children show that this combination activates reading networks far more strongly than pressing a key does, and children who learn letters by writing them tend to recognise them faster than those who learn by typing. The advantage appears to persist: in one classroom study, children who had practised letters by hand in their first year were still ahead in reading twelve months later. The movement, it seems, is not a detour on the way to literacy but part of the road.\nThe effect does not stop in early childhood. A series of experiments with university students compared those who took lecture notes by hand with those who typed. The typists recorded more words — in some cases almost twice as many — yet when tested a week later, the handwriters remembered the ideas better. The likely explanation is uncomfortable for anyone who prizes efficiency: because writing by hand is slow, students cannot copy everything, so they are forced to decide what matters and to rephrase it in their own words. The typists, able to keep up with the lecturer, became transcribers rather than thinkers. Slowness, in other words, was doing useful work.\nSceptics raise two objections, and they deserve answers. The first is that these findings reflect habit rather than anything fundamental: a generation that grows up typing may learn to summarise on a keyboard just as well. This is possible, but so far the evidence does not support it; later studies that trained students to take fewer, more selective typed notes found that most slipped back into transcribing within minutes. The second objection is about time. Every hour spent perfecting the shape of a lower-case g, the argument runs, is an hour not spent on reading, mathematics or learning to code. Here I have more sympathy. Much of what passes for handwriting instruction is in fact instruction in neatness, and neatness has little to do with learning. A child who can write quickly and read back what she has written has the skill; whether her letters slope at the correct angle is a matter for calligraphers.\nThis points to a sensible middle course. Schools should teach children to write by hand fluently and legibly, because the act of forming letters supports reading and because note-taking by hand supports thinking. They should stop, however, treating elegant joined-up script as a goal in itself, and they should stop penalising children whose writing is untidy but clear. Nor should the keyboard be treated as an enemy. For a child with a physical difficulty that makes writing painful, or for an adult drafting a long report, typing is simply the better tool, and pretending otherwise helps nobody. What matters is that children leave school able to do both, and able to choose between them with some sense of when each is appropriate.\nThere is a final reason to hesitate before abandoning the pen, and it is the one I find hardest to measure and most difficult to dismiss. A handwritten page is a record of a process. Crossings-out, arrows and notes in the margin show how a thought developed, in a way that a clean typed document, with every revision silently erased, cannot. Writers, scientists and designers often say that they think on paper and then record on screen. The novelist who drafts in a notebook and the engineer who sketches before opening a design program are describing the same instinct. Whether this is a genuine cognitive advantage or merely a habit of the current generation, I cannot say. But a society that stopped teaching handwriting would be running an experiment on its children whose results would not be known for decades. Finland, incidentally, did not abolish handwriting at all; it dropped the requirement to teach one particular joined-up style while keeping printed letters. The reports of the pen's death, it turned out, were greatly exaggerated.",
+     "cau": [
+      {
+       "id": "R38",
+       "kieu": "chon",
+       "de": "Complete each sentence with the correct ending, A–F, below.\nBrain-imaging studies suggest that forming letters by hand",
+       "luaChon": [
+        "A. forces students to select and rephrase information.",
+        "B. makes children's writing neater over time.",
+        "C. plays a direct part in learning to read.",
+        "D. has been proven to improve examination results.",
+        "E. may simply be a habit of the present generation.",
+        "F. was the main reason Finland changed its policy."
+       ],
+       "dapAn": 2,
+       "giaiThich": "Nghiên cứu hình ảnh não: viết tay \"activates reading networks far more strongly… The movement… is not a detour on the way to literacy but part of the road\" ⇒ góp phần trực tiếp vào việc học đọc ⇒ C."
+      },
+      {
+       "id": "R39",
+       "kieu": "chon",
+       "de": "Complete each sentence with the correct ending, A–F, below.\nAccording to the writer, the slowness of handwriting",
+       "luaChon": [
+        "A. forces students to select and rephrase information.",
+        "B. makes children's writing neater over time.",
+        "C. plays a direct part in learning to read.",
+        "D. has been proven to improve examination results.",
+        "E. may simply be a habit of the present generation.",
+        "F. was the main reason Finland changed its policy."
+       ],
+       "dapAn": 0,
+       "giaiThich": "\"because writing by hand is slow, students cannot copy everything, so they are forced to decide what matters and to rephrase it in their own words\" ⇒ A."
+      },
+      {
+       "id": "R40",
+       "kieu": "chon",
+       "de": "Complete each sentence with the correct ending, A–F, below.\nThe writer admits that the value of thinking on paper",
+       "luaChon": [
+        "A. forces students to select and rephrase information.",
+        "B. makes children's writing neater over time.",
+        "C. plays a direct part in learning to read.",
+        "D. has been proven to improve examination results.",
+        "E. may simply be a habit of the present generation.",
+        "F. was the main reason Finland changed its policy."
+       ],
+       "dapAn": 4,
+       "giaiThich": "\"Whether this is a genuine cognitive advantage or merely a habit of the current generation, I cannot say\" ⇒ người viết THỪA NHẬN có thể chỉ là thói quen thế hệ hiện nay ⇒ E. D sai: không có bằng chứng về kết quả thi; F sai: Phần Lan đổi chính sách không vì lý do này."
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

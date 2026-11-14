@@ -1,0 +1,1619 @@
+{
+ "id": "ielts-de-1",
+ "nn": "en",
+ "kyThi": "IELTS",
+ "cap": "IELTS",
+ "ten": "IELTS Academic · Đề 1",
+ "moTa": "Listening + Reading đủ 80 câu, band 3.5–4.5. Nghe: Joining a public library · Changes to city bus services & new bus station plan… Đọc: The story of the traffic light…",
+ "diemDat": 46,
+ "xepHang": true,
+ "phan": [
+  {
+   "id": "nghe",
+   "ten": "Listening",
+   "kyNang": "nghe",
+   "phut": 30,
+   "diemToiDa": 40,
+   "band": [
+    [
+     39,
+     9
+    ],
+    [
+     37,
+     8.5
+    ],
+    [
+     35,
+     8
+    ],
+    [
+     32,
+     7.5
+    ],
+    [
+     30,
+     7
+    ],
+    [
+     26,
+     6.5
+    ],
+    [
+     23,
+     6
+    ],
+    [
+     18,
+     5.5
+    ],
+    [
+     16,
+     5
+    ],
+    [
+     13,
+     4.5
+    ],
+    [
+     10,
+     4
+    ],
+    [
+     8,
+     3.5
+    ],
+    [
+     6,
+     3
+    ],
+    [
+     4,
+     2.5
+    ],
+    [
+     0,
+     2
+    ]
+   ],
+   "nhom": [
+    {
+     "huongDan": "Part 1 — Câu 1–10. Sara mới chuyển đến và muốn làm thẻ thư viện. Cả part là MỘT bài nghe liền, chỉ nghe MỘT lần — bấm nghe rồi lướt qua các câu của part trong lúc nghe.",
+     "doan": "WESTBROOK LIBRARY — NEW MEMBER FORM\nCâu 1–6. Complete the form below. Write ONE WORD AND/OR A NUMBER for each answer.\nFirst name: Sara\nSurname: (1) ______\nAddress: 27 (2) ______ Street\nMobile phone: (3) ______\nJob: (4) ______\nProof of address shown: a phone (5) ______\nCost of a new card if the card is lost: £(6) ______\n\nUSING THE LIBRARY\nCâu 7–10. Complete the notes below. Write ONE WORD AND/OR A NUMBER for each answer.\n• adults can borrow (7) ______ books at one time\n• books can be kept for (8) ______ weeks\n• the library stays open until 8 p.m. on (9) ______\n• free (10) ______ class for members: Monday mornings, 10 a.m.",
+     "nghe": [
+      {
+       "g": "uk-nu",
+       "t": "Part 1. You will hear a woman talking to a librarian about joining a public library. First, you have some time to look at questions 1 to 10."
+      },
+      {
+       "g": "uk-nam",
+       "t": "Good afternoon. Welcome to Westbrook Library. How can I help you?"
+      },
+      {
+       "g": "uk-nu",
+       "t": "Hello. I've just moved to this area and I'd like to join the library. Can I do that today?"
+      },
+      {
+       "g": "uk-nam",
+       "t": "Of course. It only takes a few minutes. I just need to fill in a form with you. Can I have your name, please?"
+      },
+      {
+       "g": "uk-nu",
+       "t": "Yes, it's Sara Marlow."
+      },
+      {
+       "g": "uk-nam",
+       "t": "Could you spell your surname for me?"
+      },
+      {
+       "g": "uk-nu",
+       "t": "Sure. It's M, A, R, L, O, W."
+      },
+      {
+       "g": "uk-nam",
+       "t": "M, A, R, L, O, W. Thank you. And what's your address, Sara?"
+      },
+      {
+       "g": "uk-nu",
+       "t": "It's 27 Canal Street."
+      },
+      {
+       "g": "uk-nam",
+       "t": "Is that K, A, N…?"
+      },
+      {
+       "g": "uk-nu",
+       "t": "No, it starts with a C. C, A, N, A, L. Canal Street. It's near the station."
+      },
+      {
+       "g": "uk-nam",
+       "t": "Oh yes, I know it. 27 Canal Street. And can I have a phone number?"
+      },
+      {
+       "g": "uk-nu",
+       "t": "My mobile number is 07700 900 462."
+      },
+      {
+       "g": "uk-nam",
+       "t": "07700 900 462. Good. Now, are you a student? We have a special card for students."
+      },
+      {
+       "g": "uk-nu",
+       "t": "Not any more. I finished university last year. I'm a nurse now, at the city hospital."
+      },
+      {
+       "g": "uk-nam",
+       "t": "A nurse. Lovely. Now, I need to see something with your address on it. Have you got a letter from your bank, for example?"
+      },
+      {
+       "g": "uk-nu",
+       "t": "I haven't got a bank letter with me, I'm afraid. But I've got a phone bill here. Is that all right?"
+      },
+      {
+       "g": "uk-nam",
+       "t": "Yes, a phone bill is fine. Thank you. Now, joining the library is free. You only pay if you lose your card and need a new one. That used to be two pounds, but now it's three pounds."
+      },
+      {
+       "g": "uk-nu",
+       "t": "Three pounds. OK. I'll try not to lose it! How many books can I take home?"
+      },
+      {
+       "g": "uk-nam",
+       "t": "With an adult card, you can borrow eight books at one time. Children can only take four."
+      },
+      {
+       "g": "uk-nu",
+       "t": "Eight is plenty for me. And how long can I keep them?"
+      },
+      {
+       "g": "uk-nam",
+       "t": "You can keep books for three weeks. But be careful with films. DVDs are only for one week."
+      },
+      {
+       "g": "uk-nu",
+       "t": "Three weeks for books. Right. What time do you close? I usually finish work at six."
+      },
+      {
+       "g": "uk-nam",
+       "t": "On most days we close at half past five, I'm afraid. But on Thursday we stay open late, until eight in the evening."
+      },
+      {
+       "g": "uk-nu",
+       "t": "Oh, good. So Thursday is the best day for me. Are you open at the weekend?"
+      },
+      {
+       "g": "uk-nam",
+       "t": "We're open on Saturday morning, until one o'clock. We're closed on Sunday."
+      },
+      {
+       "g": "uk-nu",
+       "t": "OK. One last question. Do you have any classes here? My friend told me about a Spanish class."
+      },
+      {
+       "g": "uk-nam",
+       "t": "We did have a Spanish class, but it finished last month. At the moment, there is a free computer class for members. It's on Monday mornings at ten o'clock."
+      },
+      {
+       "g": "uk-nu",
+       "t": "A computer class. My mother would love that. I'll tell her about it."
+      },
+      {
+       "g": "uk-nam",
+       "t": "Please do. Right, here is your card, Sara. Welcome to Westbrook Library."
+      },
+      {
+       "g": "uk-nu",
+       "t": "Thank you very much."
+      }
+     ],
+     "ngheLan": 1,
+     "cau": [
+      {
+       "id": "L1",
+       "kieu": "dien",
+       "dapAn": [
+        "Marlow"
+       ],
+       "de": "Complete the form below. Write ONE WORD AND/OR A NUMBER for each answer.\nWestbrook Library — New Member Form — Surname: ___",
+       "giaiThich": "Sara đánh vần họ: \"M, A, R, L, O, W\", thủ thư nhắc lại đúng từng chữ ⇒ Marlow. Tên riêng phải đúng từng chữ cái; chú ý cặp dễ lẫn A /eɪ/ – R /ɑː/ và O – W."
+      },
+      {
+       "id": "L2",
+       "kieu": "dien",
+       "dapAn": [
+        "Canal"
+       ],
+       "de": "Complete the form below. Write ONE WORD AND/OR A NUMBER for each answer.\nWestbrook Library — New Member Form — Address: 27 ___ Street",
+       "giaiThich": "Thủ thư đoán \"K, A, N…?\" — Sara sửa: \"it starts with a C. C, A, N, A, L. Canal Street\" ⇒ Canal. Bẫy đánh vần kiểu thật: người hỏi nói SAI chữ đầu để bạn phải nghe phần sửa."
+      },
+      {
+       "id": "L3",
+       "kieu": "dien",
+       "dapAn": [
+        "07700 900 462",
+        "07700900462"
+       ],
+       "de": "Complete the form below. Write ONE WORD AND/OR A NUMBER for each answer.\nWestbrook Library — New Member Form — Mobile phone: ___",
+       "giaiThich": "\"My mobile number is 07700 900 462\" — thủ thư đọc lại y nguyên ⇒ 07700 900 462. Số 0 trong số điện thoại thường đọc là \"oh\"; ghi đủ 11 chữ số. Cả dãy tính là MỘT số nên hợp lệ với \"ONE WORD AND/OR A NUMBER\"."
+      },
+      {
+       "id": "L4",
+       "kieu": "dien",
+       "dapAn": [
+        "nurse"
+       ],
+       "de": "Complete the form below. Write ONE WORD AND/OR A NUMBER for each answer.\nWestbrook Library — New Member Form — Job: ___",
+       "giaiThich": "Thủ thư hỏi \"are you a student?\" — Sara: \"Not any more… I'm a nurse now\" ⇒ nurse. Bẫy: \"student\" được nhắc TRƯỚC nhưng bị phủ định (\"Not any more\")."
+      },
+      {
+       "id": "L5",
+       "kieu": "dien",
+       "dapAn": [
+        "bill"
+       ],
+       "de": "Complete the form below. Write ONE WORD AND/OR A NUMBER for each answer.\nWestbrook Library — New Member Form — Proof of address shown: a phone ___",
+       "giaiThich": "\"I haven't got a bank letter with me… But I've got a phone bill here.\" — thủ thư: \"a phone bill is fine\" ⇒ bill. Bẫy: \"letter\" (thư ngân hàng) là thứ Sara KHÔNG mang theo."
+      },
+      {
+       "id": "L6",
+       "kieu": "dien",
+       "dapAn": [
+        "3",
+        "three"
+       ],
+       "de": "Complete the form below. Write ONE WORD AND/OR A NUMBER for each answer.\nWestbrook Library — New Member Form — Cost of a new card if the card is lost: £___",
+       "giaiThich": "\"That used to be two pounds, but now it's three pounds.\" ⇒ 3. Bẫy giá cũ / giá mới: \"used to be\" = trước đây; đáp án là con số đi sau \"but now\". (Làm thẻ lần đầu thì miễn phí.)"
+      },
+      {
+       "id": "L7",
+       "kieu": "dien",
+       "dapAn": [
+        "8",
+        "eight"
+       ],
+       "de": "Complete the notes below. Write ONE WORD AND/OR A NUMBER for each answer.\nUsing the library — adults can borrow ___ books at one time",
+       "giaiThich": "\"With an adult card, you can borrow eight books at one time. Children can only take four.\" ⇒ 8. Ghi chú hỏi về NGƯỜI LỚN (\"adults\") — số 4 là của trẻ em."
+      },
+      {
+       "id": "L8",
+       "kieu": "dien",
+       "dapAn": [
+        "3",
+        "three"
+       ],
+       "de": "Complete the notes below. Write ONE WORD AND/OR A NUMBER for each answer.\nUsing the library — books can be kept for ___ weeks",
+       "giaiThich": "\"You can keep books for three weeks… DVDs are only for one week.\" ⇒ 3. Ghi chú hỏi về SÁCH — \"one week\" là của DVD."
+      },
+      {
+       "id": "L9",
+       "kieu": "dien",
+       "dapAn": [
+        "Thursday",
+        "Thursdays"
+       ],
+       "de": "Complete the notes below. Write ONE WORD AND/OR A NUMBER for each answer.\nUsing the library — the library stays open until 8 p.m. on ___",
+       "giaiThich": "\"on Thursday we stay open late, until eight in the evening\" ⇒ Thursday. Các ngày khác đóng cửa lúc 5:30; thứ Bảy chỉ mở đến 1 giờ; Chủ nhật đóng. Tên thứ viết hoa chữ đầu; chính tả: Th-u-r-s-day."
+      },
+      {
+       "id": "L10",
+       "kieu": "dien",
+       "dapAn": [
+        "computer"
+       ],
+       "de": "Complete the notes below. Write ONE WORD AND/OR A NUMBER for each answer.\nUsing the library — free ___ class for members: Monday mornings, 10 a.m.",
+       "giaiThich": "\"We did have a Spanish class, but it finished last month. At the moment, there is a free computer class for members.\" ⇒ computer. Bẫy: \"Spanish\" là lớp ĐÃ KẾT THÚC (\"did have… but it finished\")."
+      }
+     ]
+    },
+    {
+     "huongDan": "Part 2 — Câu 11–20. Karen Wells (công ty xe buýt Riverton) thông báo các thay đổi từ tháng Sáu rồi tả sơ đồ bến xe mới. Cả part là MỘT bài nghe liền, chỉ nghe MỘT lần — bấm nghe rồi lướt qua các câu của part trong lúc nghe.",
+     "nghe": [
+      {
+       "g": "uk-nu",
+       "t": "Part 2. You will hear a woman from a bus company talking to local people about changes to bus services and about a new bus station. First, you have some time to look at questions 11 to 20."
+      },
+      {
+       "g": "us-nu",
+       "t": "Good evening, everyone, and thank you for coming. My name is Karen Wells, and I work for Riverton City Buses. I'm here to tell you about some changes to our bus services. They all begin on Monday the third of June."
+      },
+      {
+       "g": "us-nu",
+       "t": "Let me start with the biggest change. As you may know, we are moving to a new bus station on Station Road. Some people think we are doing this to save money. That isn't true. The new building is actually costing us a lot. The real reason is that the old station on Market Street is too small. It was built for ten bus routes, and today we have eighteen."
+      },
+      {
+       "g": "us-nu",
+       "t": "Now, a few words about the number 7 bus, because many of you use it. It will still run every fifteen minutes, and the first bus will still leave at six in the morning. What is new is that the number 7 will stop at the City Hospital. Patients and visitors have asked for this for years."
+      },
+      {
+       "g": "us-nu",
+       "t": "Next, tickets. At the moment, a single ticket costs one pound eighty. From June, if you pay the driver, a single ticket will cost two pounds. But if you buy your ticket with our phone app, you will pay only one pound fifty. So the app is the cheapest way to travel."
+      },
+      {
+       "g": "us-nu",
+       "t": "There is good news for families, too. People over sixty-five already travel free every day, and that is not changing. Students will continue to pay half price. The new offer is for children. From June, children under twelve will travel free at weekends when they are with an adult."
+      },
+      {
+       "g": "us-nu",
+       "t": "Finally, timetables. The new timetable is on our website now. If you would like a paper copy, please don't go to the old bus station, because the office there has already closed. From next week, you can pick up a timetable at the public library. People often ask at the tourist office, but they don't have them."
+      },
+      {
+       "g": "us-nu",
+       "t": "Now, let me describe the new bus station, so that you can find your way around. Please look at the plan. You come in through the main entrance from Station Road. The information desk is straight in front of you, in the middle of the hall."
+      },
+      {
+       "g": "us-nu",
+       "t": "The ticket office is very easy to find. It's immediately on your right as you come in. On your left, opposite the ticket office, there will be a small newspaper shop, but that won't open until the autumn."
+      },
+      {
+       "g": "us-nu",
+       "t": "If you are hungry, walk past the information desk towards the bus stops. The café is in the far left corner of the hall, right next to the bus stops. In the other corner, on the far right, there is an office for our drivers. That is not open to the public."
+      },
+      {
+       "g": "us-nu",
+       "t": "The waiting room is on the right-hand side of the hall, about halfway between the entrance and the bus stops. It has seats for sixty people, and it is heated in winter. The toilets are directly opposite the waiting room, on the left-hand side of the hall."
+      },
+      {
+       "g": "us-nu",
+       "t": "One more thing. Many of you come by bike. The bicycle park is outside the building. When you stand on Station Road and look at the main entrance, it is on your left. Taxis wait on the other side, to the right of the entrance. Thank you for listening. Are there any questions?"
+      }
+     ],
+     "ngheLan": 1,
+     "hinh": {
+      "w": 560,
+      "h": 430,
+      "chuThich": "Plan of the new bus station (not to scale). You enter from Station Road, at the bottom of the plan.",
+      "ve": [
+       {
+        "t": "rect",
+        "x": 110,
+        "y": 30,
+        "w": 340,
+        "h": 300,
+        "nen": "#f7f7f2",
+        "bo": 2
+       },
+       {
+        "t": "rect",
+        "x": 120,
+        "y": 38,
+        "w": 320,
+        "h": 40,
+        "nen": "#e4ddd0",
+        "nhan": "BUS STOPS 1–8"
+       },
+       {
+        "t": "rect",
+        "x": 225,
+        "y": 185,
+        "w": 110,
+        "h": 44,
+        "nen": "#dbe7f3",
+        "nhan": "Information desk"
+       },
+       {
+        "t": "rect",
+        "x": 250,
+        "y": 322,
+        "w": 60,
+        "h": 14,
+        "nen": "#f7f7f2",
+        "bo": 0
+       },
+       {
+        "t": "line",
+        "d": [
+         [
+          280,
+          385
+         ],
+         [
+          280,
+          340
+         ]
+        ],
+        "mui": true
+       },
+       {
+        "t": "text",
+        "x": 280,
+        "y": 316,
+        "s": "main entrance",
+        "co": 11,
+        "giua": true,
+        "nghieng": true
+       },
+       {
+        "t": "rect",
+        "x": 20,
+        "y": 390,
+        "w": 520,
+        "h": 30,
+        "nen": "#e6e6e6",
+        "bo": 0
+       },
+       {
+        "t": "text",
+        "x": 280,
+        "y": 410,
+        "s": "STATION ROAD",
+        "co": 12,
+        "dam": true,
+        "giua": true
+       },
+       {
+        "t": "rect",
+        "x": 465,
+        "y": 290,
+        "w": 75,
+        "h": 40,
+        "nen": "#f3ead0",
+        "nhan": "Taxis"
+       },
+       {
+        "t": "chu",
+        "k": "A",
+        "x": 190,
+        "y": 295
+       },
+       {
+        "t": "chu",
+        "k": "B",
+        "x": 370,
+        "y": 295
+       },
+       {
+        "t": "chu",
+        "k": "C",
+        "x": 140,
+        "y": 205
+       },
+       {
+        "t": "chu",
+        "k": "D",
+        "x": 420,
+        "y": 205
+       },
+       {
+        "t": "chu",
+        "k": "E",
+        "x": 140,
+        "y": 105
+       },
+       {
+        "t": "chu",
+        "k": "F",
+        "x": 420,
+        "y": 105
+       },
+       {
+        "t": "chu",
+        "k": "G",
+        "x": 60,
+        "y": 310
+       }
+      ]
+     },
+     "cau": [
+      {
+       "id": "L11",
+       "kieu": "chon",
+       "de": "Choose the correct letter, A, B or C.\nWhy is the bus company moving to a new bus station?",
+       "luaChon": [
+        "to save money",
+        "because the old station is too small",
+        "because the old station is in bad condition"
+       ],
+       "dapAn": 1,
+       "giaiThich": "\"Some people think we are doing this to save money. That isn't true… The real reason is that the old station on Market Street is too small.\" ⇒ B. A bị bác thẳng (\"That isn't true\"); C (xuống cấp) không được nhắc. Cụm tín hiệu cần bắt: \"The real reason is…\"."
+      },
+      {
+       "id": "L12",
+       "kieu": "chon",
+       "de": "Choose the correct letter, A, B or C.\nWhat is new about the number 7 bus?",
+       "luaChon": [
+        "It will stop at the hospital.",
+        "It will run more often.",
+        "It will start earlier in the morning."
+       ],
+       "dapAn": 0,
+       "giaiThich": "\"It will still run every fifteen minutes, and the first bus will still leave at six… What is new is that the number 7 will stop at the City Hospital.\" ⇒ A. \"still\" = vẫn như cũ ⇒ loại B (tần suất) và C (giờ chuyến đầu)."
+      },
+      {
+       "id": "L13",
+       "kieu": "chon",
+       "de": "Choose the correct letter, A, B or C.\nFrom June, how much will a single ticket cost if passengers pay the driver?",
+       "luaChon": [
+        "£1.50",
+        "£1.80",
+        "£2.00"
+       ],
+       "dapAn": 2,
+       "giaiThich": "Ba mức giá: £1.80 là giá HIỆN TẠI; £2 là giá từ tháng Sáu nếu trả cho TÀI XẾ; £1.50 là giá mua qua ỨNG DỤNG. Câu hỏi hỏi \"pay the driver\" ⇒ C (£2.00)."
+      },
+      {
+       "id": "L14",
+       "kieu": "chon",
+       "de": "Choose the correct letter, A, B or C.\nWho will be able to travel free at weekends for the first time?",
+       "luaChon": [
+        "children under twelve",
+        "students",
+        "people over sixty-five"
+       ],
+       "dapAn": 0,
+       "giaiThich": "Người trên 65 \"already travel free… that is not changing\" (không phải lần đầu); sinh viên \"continue to pay half price\"; \"The new offer is for children… children under twelve will travel free at weekends\" ⇒ A. Từ khoá của câu hỏi là \"for the first time\"."
+      },
+      {
+       "id": "L15",
+       "kieu": "chon",
+       "de": "Choose the correct letter, A, B or C.\nFrom next week, where can people get a paper timetable?",
+       "luaChon": [
+        "at the old bus station",
+        "at the tourist office",
+        "at the public library"
+       ],
+       "dapAn": 2,
+       "giaiThich": "\"please don't go to the old bus station, because the office there has already closed. From next week, you can pick up a timetable at the public library. People often ask at the tourist office, but they don't have them.\" ⇒ C. A và B đều được nhắc rồi bị loại."
+      },
+      {
+       "id": "L16",
+       "kieu": "chon",
+       "de": "Label the plan below. Write the correct letter, A–G, next to Questions 16–20.\nRiverton Bus Station — plan — Ticket office",
+       "luaChon": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G"
+       ],
+       "dapAn": 1,
+       "giaiThich": "\"The ticket office… It's immediately on your right as you come in.\" — vào từ cổng chính (phía dưới sơ đồ), bên PHẢI ngay sau cửa ⇒ B. A (bên trái, đối diện) sẽ là quầy báo, mùa thu mới mở."
+      },
+      {
+       "id": "L17",
+       "kieu": "chon",
+       "de": "Label the plan below. Write the correct letter, A–G, next to Questions 16–20.\nRiverton Bus Station — plan — Café",
+       "luaChon": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G"
+       ],
+       "dapAn": 4,
+       "giaiThich": "\"walk past the information desk towards the bus stops. The café is in the far left corner of the hall, right next to the bus stops.\" — góc XA bên TRÁI, sát dãy điểm đỗ ⇒ E. Góc xa bên phải (F) là phòng của tài xế."
+      },
+      {
+       "id": "L18",
+       "kieu": "chon",
+       "de": "Label the plan below. Write the correct letter, A–G, next to Questions 16–20.\nRiverton Bus Station — plan — Waiting room",
+       "luaChon": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G"
+       ],
+       "dapAn": 3,
+       "giaiThich": "\"The waiting room is on the right-hand side of the hall, about halfway between the entrance and the bus stops.\" — bên phải, ở GIỮA chiều dài sảnh ⇒ D. (B cũng bên phải nhưng sát cửa — đó là quầy vé.)"
+      },
+      {
+       "id": "L19",
+       "kieu": "chon",
+       "de": "Label the plan below. Write the correct letter, A–G, next to Questions 16–20.\nRiverton Bus Station — plan — Toilets",
+       "luaChon": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G"
+       ],
+       "dapAn": 2,
+       "giaiThich": "\"The toilets are directly opposite the waiting room, on the left-hand side of the hall.\" — đối diện phòng chờ (D), bên trái ⇒ C."
+      },
+      {
+       "id": "L20",
+       "kieu": "chon",
+       "de": "Label the plan below. Write the correct letter, A–G, next to Questions 16–20.\nRiverton Bus Station — plan — Bicycle park",
+       "luaChon": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G"
+       ],
+       "dapAn": 6,
+       "giaiThich": "\"The bicycle park is outside the building. When you stand on Station Road and look at the main entrance, it is on your left.\" — NGOÀI toà nhà, bên trái cổng ⇒ G. Bên phải cổng là chỗ taxi (đã ghi sẵn trên sơ đồ)."
+      }
+     ]
+    },
+    {
+     "huongDan": "Part 3 — Câu 21–30. Maya và Ben chọn đề tài thuyết trình cho môn \"City Life\" của Dr Hall. Cả part là MỘT bài nghe liền, chỉ nghe MỘT lần — bấm nghe rồi lướt qua các câu của part trong lúc nghe.",
+     "doan": "PLAN FOR THE PRESENTATION ON VICTORIA PARK\nCâu 28–30. Complete the notes below. Write ONE WORD ONLY for each answer.\n• Start: a short (28) ______ of the park, with an old photo\n• Main part: why people visit the park — results shown in a (29) ______\n• End: one idea for improving the park — it needs more (30) ______",
+     "nghe": [
+      {
+       "g": "uk-nu",
+       "t": "Part 3. You will hear two students, Maya and Ben, choosing a topic for a presentation on their City Life course. First, you have some time to look at questions 21 to 30."
+      },
+      {
+       "g": "us-nam",
+       "t": "Hi, Maya. Have you got a minute? We need to choose a topic for our presentation for Dr Hall."
+      },
+      {
+       "g": "uk-nu",
+       "t": "Yes, good idea. The course is called City Life, so the topic has to be about a problem or a place in our city."
+      },
+      {
+       "g": "us-nam",
+       "t": "Right. How long does the presentation have to be? I thought it was fifteen minutes."
+      },
+      {
+       "g": "uk-nu",
+       "t": "No, fifteen minutes was last term. This time we only have ten minutes, and then the class can ask questions."
+      },
+      {
+       "g": "us-nam",
+       "t": "Ten minutes. OK, that isn't long. So, what about traffic? There is a lot of information about it online."
+      },
+      {
+       "g": "uk-nu",
+       "t": "That's true, and it isn't a difficult topic. But I talked to some people in our class yesterday, and four other pairs are already doing traffic. Dr Hall will be bored."
+      },
+      {
+       "g": "us-nam",
+       "t": "You're right. We need something different."
+      },
+      {
+       "g": "uk-nu",
+       "t": "What about recycling? I think it's really interesting."
+      },
+      {
+       "g": "us-nam",
+       "t": "It is interesting, but I did a big project on recycling at secondary school. I don't want to do the same thing again."
+      },
+      {
+       "g": "uk-nu",
+       "t": "Fair enough. Well, how about parks? We could talk about Victoria Park. Who uses it, and how can we make it better?"
+      },
+      {
+       "g": "us-nam",
+       "t": "I like that. Nobody else is doing parks. Let's go there together and look around. Are you free on Friday afternoon?"
+      },
+      {
+       "g": "uk-nu",
+       "t": "No, sorry. I have a class until five on Friday. What about Saturday morning?"
+      },
+      {
+       "g": "us-nam",
+       "t": "Saturday morning is fine. I can't do Sunday anyway, because I work in a café."
+      },
+      {
+       "g": "uk-nu",
+       "t": "Great. So, who is doing what? First, we need some photos of the park."
+      },
+      {
+       "g": "us-nam",
+       "t": "I'll take the photos. My phone has a really good camera."
+      },
+      {
+       "g": "uk-nu",
+       "t": "Good, because mine is terrible. We should also ask people some questions. Why do they come to the park? How often? We need a questionnaire."
+      },
+      {
+       "g": "us-nam",
+       "t": "I can write it if you like."
+      },
+      {
+       "g": "uk-nu",
+       "t": "Actually, I'd like to write the questionnaire. I made one for my psychology course last year, so I know how to do it."
+      },
+      {
+       "g": "us-nam",
+       "t": "OK, the questionnaire is yours. What about the slides?"
+      },
+      {
+       "g": "uk-nu",
+       "t": "Let's make the slides together. We can meet in the library on Monday."
+      },
+      {
+       "g": "us-nam",
+       "t": "Perfect. Now, let's plan the talk. How should we start?"
+      },
+      {
+       "g": "uk-nu",
+       "t": "I think we should begin with a short history of the park. It opened in 1890, you know. Just one minute, with an old photo."
+      },
+      {
+       "g": "us-nam",
+       "t": "Nice. Then the main part is our results. Why do people visit the park? Shall we put the numbers in a table?"
+      },
+      {
+       "g": "uk-nu",
+       "t": "A table is a bit boring, and it's hard to read from the back of the room. Let's use a chart. Everyone can understand a chart quickly."
+      },
+      {
+       "g": "us-nam",
+       "t": "OK, a chart. And at the end, we should give one idea for improving the park. I was going to say more lights, because it's dark in the evening."
+      },
+      {
+       "g": "uk-nu",
+       "t": "Lights are a good idea, but I think seats are more important. There are only six in the whole park, and old people have nowhere to sit."
+      },
+      {
+       "g": "us-nam",
+       "t": "That's a good point. Let's say the park needs more seats, then."
+      },
+      {
+       "g": "uk-nu",
+       "t": "Great. I'll write the plan tonight and send it to you."
+      }
+     ],
+     "ngheLan": 1,
+     "cau": [
+      {
+       "id": "L21",
+       "kieu": "chon",
+       "de": "Choose the correct letter, A, B or C.\nHow long must the presentation be this term?",
+       "luaChon": [
+        "five minutes",
+        "ten minutes",
+        "fifteen minutes"
+       ],
+       "dapAn": 1,
+       "giaiThich": "Ben: \"I thought it was fifteen minutes.\" — Maya: \"No, fifteen minutes was last term. This time we only have ten minutes\" ⇒ B. Bẫy \"last term / this time\": con số nghe trước là của kỳ trước."
+      },
+      {
+       "id": "L22",
+       "kieu": "chon",
+       "de": "Choose the correct letter, A, B or C.\nWhy do Maya and Ben decide not to talk about traffic?",
+       "luaChon": [
+        "It is too difficult.",
+        "There is not enough information.",
+        "Too many other students have chosen it."
+       ],
+       "dapAn": 2,
+       "giaiThich": "Maya: \"it isn't a difficult topic\" (loại A); Ben: \"There is a lot of information\" (loại B); \"four other pairs are already doing traffic. Dr Hall will be bored.\" ⇒ C."
+      },
+      {
+       "id": "L23",
+       "kieu": "chon",
+       "de": "Choose the correct letter, A, B or C.\nWhat does Ben say about recycling?",
+       "luaChon": [
+        "He has studied it before.",
+        "It is not interesting.",
+        "It is not connected with city life."
+       ],
+       "dapAn": 0,
+       "giaiThich": "Ben: \"It is interesting (loại B), but I did a big project on recycling at secondary school. I don't want to do the same thing again.\" — \"has studied it before\" = \"did a big project… at secondary school\" ⇒ A."
+      },
+      {
+       "id": "L24",
+       "kieu": "chon",
+       "de": "Choose the correct letter, A, B or C.\nWhen will Maya and Ben visit the park?",
+       "luaChon": [
+        "on Friday afternoon",
+        "on Saturday morning",
+        "on Sunday morning"
+       ],
+       "dapAn": 1,
+       "giaiThich": "Ben đề nghị chiều thứ Sáu — Maya bận (\"I have a class until five on Friday\") và đề nghị sáng thứ Bảy — Ben: \"Saturday morning is fine. I can't do Sunday anyway\" ⇒ B. Đáp án là phương án cả HAI cùng đồng ý, không phải phương án được nhắc đầu tiên."
+      },
+      {
+       "id": "L25",
+       "kieu": "chon",
+       "de": "Who will do each of the following tasks? Write the correct letter, A, B or C, next to Questions 25–27.\ntake photographs of the park",
+       "luaChon": [
+        "A. Maya",
+        "B. Ben",
+        "C. both Maya and Ben"
+       ],
+       "dapAn": 1,
+       "giaiThich": "Ben: \"I'll take the photos. My phone has a really good camera.\" — Maya: \"Good, because mine is terrible.\" ⇒ B (Ben)."
+      },
+      {
+       "id": "L26",
+       "kieu": "chon",
+       "de": "Who will do each of the following tasks? Write the correct letter, A, B or C, next to Questions 25–27.\nwrite the questionnaire",
+       "luaChon": [
+        "A. Maya",
+        "B. Ben",
+        "C. both Maya and Ben"
+       ],
+       "dapAn": 0,
+       "giaiThich": "Ben đề nghị \"I can write it if you like\" — nhưng Maya: \"Actually, I'd like to write the questionnaire. I made one… last year\" và Ben đồng ý \"the questionnaire is yours\" ⇒ A (Maya). Bẫy: người ĐỀ NGHỊ không phải người LÀM; \"Actually\" báo đổi hướng."
+      },
+      {
+       "id": "L27",
+       "kieu": "chon",
+       "de": "Who will do each of the following tasks? Write the correct letter, A, B or C, next to Questions 25–27.\nmake the slides",
+       "luaChon": [
+        "A. Maya",
+        "B. Ben",
+        "C. both Maya and Ben"
+       ],
+       "dapAn": 2,
+       "giaiThich": "Maya: \"Let's make the slides together. We can meet in the library on Monday.\" — \"together\" ⇒ C (cả hai)."
+      },
+      {
+       "id": "L28",
+       "kieu": "dien",
+       "dapAn": [
+        "history"
+       ],
+       "de": "Complete the notes below. Write ONE WORD ONLY for each answer.\nPlan for the presentation on Victoria Park — Start: a short ___ of the park, with an old photo",
+       "giaiThich": "\"I think we should begin with a short history of the park.\" — \"Start\" = \"begin with\" ⇒ history."
+      },
+      {
+       "id": "L29",
+       "kieu": "dien",
+       "dapAn": [
+        "chart"
+       ],
+       "de": "Complete the notes below. Write ONE WORD ONLY for each answer.\nPlan for the presentation on Victoria Park — Main part: why people visit the park — results shown in a ___",
+       "giaiThich": "Ben hỏi \"Shall we put the numbers in a table?\" — Maya: \"A table is a bit boring… Let's use a chart.\" — Ben: \"OK, a chart.\" ⇒ chart. Bẫy: \"table\" bị bác."
+      },
+      {
+       "id": "L30",
+       "kieu": "dien",
+       "dapAn": [
+        "seats"
+       ],
+       "de": "Complete the notes below. Write ONE WORD ONLY for each answer.\nPlan for the presentation on Victoria Park — End: one idea for improving the park — it needs more ___",
+       "giaiThich": "Ben định nói \"more lights\", Maya: \"I think seats are more important\", Ben đồng ý: \"Let's say the park needs more seats, then.\" ⇒ seats. Bẫy: \"lights\" được nêu trước rồi bị thay."
+      }
+     ]
+    },
+    {
+     "huongDan": "Part 4 — Câu 31–40. Bài giảng nhập môn về giấc ngủ: ngủ bao nhiêu là đủ, một chu kỳ ngủ, hai giai đoạn quan trọng, hậu quả của thiếu ngủ và 4 lời khuyên. Cả part là MỘT bài nghe liền, chỉ nghe MỘT lần — bấm nghe rồi lướt qua các câu của part trong lúc nghe.",
+     "doan": "SLEEP: THE BASICS\nCâu 31–36. Complete the notes below. Write ONE WORD AND/OR A NUMBER for each answer.\nHow much do we sleep?\n• an average person is asleep for about a (31) ______ of their life\n• adults need 7–9 hours a night; teenagers need up to (32) ______ hours\nThe sleep cycle\n• one cycle lasts about (33) ______ minutes\n• deep sleep: the body repairs its (34) ______\n• dream sleep (REM): the (35) ______ move quickly\n• in dream sleep, the brain stores new (36) ______\n\nTOO LITTLE SLEEP — AND HOW TO SLEEP BETTER\nCâu 37–40. Complete the summary below. Write ONE WORD ONLY for each answer.\nPeople who sleep too little cannot concentrate well. They also catch more (37) ______ than other people, and tired drivers cause many (38) ______ on the roads. To sleep better, people should go to bed at the same time every night and should not drink (39) ______ after lunch, because the caffeine in it stays in the body for hours. The bedroom should be dark, quiet and (40) ______.",
+     "nghe": [
+      {
+       "g": "uk-nu",
+       "t": "Part 4. You will hear part of a lecture about sleep. First, you have some time to look at questions 31 to 40."
+      },
+      {
+       "g": "uk-nam",
+       "t": "Good morning, everyone. In today's talk, I want to look at something that we all do every night, but that most of us know very little about: sleep."
+      },
+      {
+       "g": "uk-nam",
+       "t": "Let's begin with a simple fact. An average person spends about a third of their life asleep. So if you live to the age of ninety, you will sleep for about thirty years. That sounds like a waste of time. But, as we will see, it isn't."
+      },
+      {
+       "g": "uk-nam",
+       "t": "How much sleep do we need? For most adults, the answer is between seven and nine hours a night. Teenagers need more than adults, up to ten hours, because their bodies and brains are still growing. And a new baby may sleep for sixteen hours a day."
+      },
+      {
+       "g": "uk-nam",
+       "t": "Now, sleep is not the same all through the night. We sleep in cycles, and each cycle lasts about ninety minutes. In a normal night, you go through four or five of these cycles. Each cycle has several stages. I will describe the two most important ones."
+      },
+      {
+       "g": "uk-nam",
+       "t": "The first is deep sleep. In deep sleep, your breathing is slow, and it is very difficult to wake you. This is the time when the body repairs its muscles after the work of the day. That is why sports players need plenty of sleep."
+      },
+      {
+       "g": "uk-nam",
+       "t": "The second stage is dream sleep. Scientists call it REM sleep. In this stage, your body does not move, but your eyes move quickly under your eyelids. The brain is very busy. It goes through the information from the day, and it stores new memories. So, if you study in the evening and then sleep well, you will remember more the next day."
+      },
+      {
+       "g": "uk-nam",
+       "t": "What happens when we do not get enough sleep? First, it becomes hard to concentrate, and we make more mistakes at work or at school. Our health suffers, too. Studies show that people who sleep for less than six hours a night catch more colds than people who sleep well."
+      },
+      {
+       "g": "uk-nam",
+       "t": "And there is a serious danger on the roads. Tired drivers react slowly, and they cause thousands of accidents every year."
+      },
+      {
+       "g": "uk-nam",
+       "t": "So, how can we sleep better? Here is some simple advice. First, go to bed at the same time every night, even at weekends. Your body likes a routine."
+      },
+      {
+       "g": "uk-nam",
+       "t": "Second, be careful about what you drink. Do not drink coffee after lunch, because caffeine stays in the body for many hours. A cup of warm milk in the evening is fine."
+      },
+      {
+       "g": "uk-nam",
+       "t": "Third, think about your bedroom. It should be dark and quiet. Many people think that a warm bedroom helps you to sleep. In fact, the opposite is true. The room should be cool. About eighteen degrees is best."
+      },
+      {
+       "g": "uk-nam",
+       "t": "And finally, switch off your phone at least half an hour before bed. Next week, we will look at dreams, and at what they can tell us. Thank you."
+      }
+     ],
+     "ngheLan": 1,
+     "cau": [
+      {
+       "id": "L31",
+       "kieu": "dien",
+       "dapAn": [
+        "third"
+       ],
+       "de": "Complete the notes below. Write ONE WORD AND/OR A NUMBER for each answer.\nSleep: the basics — an average person is asleep for about a ___ of their life",
+       "giaiThich": "\"An average person spends about a third of their life asleep.\" ⇒ third (một phần ba). Bẫy số: \"thirty years\" và \"ninety\" ở câu sau là ví dụ minh hoạ, không điền vào \"a ___ of their life\"."
+      },
+      {
+       "id": "L32",
+       "kieu": "dien",
+       "dapAn": [
+        "10",
+        "ten"
+       ],
+       "de": "Complete the notes below. Write ONE WORD AND/OR A NUMBER for each answer.\nSleep: the basics — adults need 7–9 hours a night; teenagers need up to ___ hours",
+       "giaiThich": "\"Teenagers need more than adults, up to ten hours\" ⇒ 10. \"seven and nine\" là của người lớn (đã in sẵn trong ghi chú); \"sixteen\" là của trẻ sơ sinh."
+      },
+      {
+       "id": "L33",
+       "kieu": "dien",
+       "dapAn": [
+        "90",
+        "ninety"
+       ],
+       "de": "Complete the notes below. Write ONE WORD AND/OR A NUMBER for each answer.\nSleep: the basics — one cycle lasts about ___ minutes",
+       "giaiThich": "\"each cycle lasts about ninety minutes\" ⇒ 90. Phân biệt ninety /ˈnaɪnti/ (90) với nineteen /ˌnaɪnˈtiːn/ (19): số chục nhấn âm ĐẦU. \"four or five\" là số chu kỳ mỗi đêm."
+      },
+      {
+       "id": "L34",
+       "kieu": "dien",
+       "dapAn": [
+        "muscles"
+       ],
+       "de": "Complete the notes below. Write ONE WORD AND/OR A NUMBER for each answer.\nSleep: the basics — deep sleep: the body repairs its ___",
+       "giaiThich": "\"This is the time when the body repairs its muscles after the work of the day.\" ⇒ muscles (chính tả: m-u-s-c-l-e-s, chữ c câm)."
+      },
+      {
+       "id": "L35",
+       "kieu": "dien",
+       "dapAn": [
+        "eyes"
+       ],
+       "de": "Complete the notes below. Write ONE WORD AND/OR A NUMBER for each answer.\nSleep: the basics — dream sleep (REM): the ___ move quickly",
+       "giaiThich": "\"your body does not move, but your eyes move quickly under your eyelids\" ⇒ eyes. Bẫy: \"body\" KHÔNG cử động; \"eyelids\" (mí mắt) là nơi mắt chuyển động bên dưới."
+      },
+      {
+       "id": "L36",
+       "kieu": "dien",
+       "dapAn": [
+        "memories"
+       ],
+       "de": "Complete the notes below. Write ONE WORD AND/OR A NUMBER for each answer.\nSleep: the basics — in dream sleep, the brain stores new ___",
+       "giaiThich": "\"It goes through the information from the day, and it stores new memories.\" ⇒ memories (số nhiều: memory → memories). \"information\" là thứ não XEM LẠI, không phải thứ được \"stores new ___\"."
+      },
+      {
+       "id": "L37",
+       "kieu": "dien",
+       "dapAn": [
+        "colds"
+       ],
+       "de": "Complete the summary below. Write ONE WORD ONLY for each answer.\nToo little sleep — and how to sleep better — People who sleep too little cannot concentrate well. They also catch more ___ than other people, and tired drivers cause many (38) … on the roads. To sleep better, people should go to bed at the same time every night and should not drink (39) … after lunch, because the caffeine in it stays in the body for hours. The bedroom should be dark, quiet and (40) ….",
+       "giaiThich": "\"people who sleep for less than six hours a night catch more colds than people who sleep well\" ⇒ colds (bệnh cảm; \"catch a cold\"). Bẫy: \"mistakes\" đi với \"make more mistakes\", không đi với \"catch\"."
+      },
+      {
+       "id": "L38",
+       "kieu": "dien",
+       "dapAn": [
+        "accidents"
+       ],
+       "de": "Complete the summary below. Write ONE WORD ONLY for each answer.\nToo little sleep — and how to sleep better — People who sleep too little cannot concentrate well. They also catch more (37) … than other people, and tired drivers cause many ___ on the roads. To sleep better, people should go to bed at the same time every night and should not drink (39) … after lunch, because the caffeine in it stays in the body for hours. The bedroom should be dark, quiet and (40) ….",
+       "giaiThich": "\"Tired drivers react slowly, and they cause thousands of accidents every year.\" — \"many\" = \"thousands of\" ⇒ accidents."
+      },
+      {
+       "id": "L39",
+       "kieu": "dien",
+       "dapAn": [
+        "coffee"
+       ],
+       "de": "Complete the summary below. Write ONE WORD ONLY for each answer.\nToo little sleep — and how to sleep better — People who sleep too little cannot concentrate well. They also catch more (37) … than other people, and tired drivers cause many (38) … on the roads. To sleep better, people should go to bed at the same time every night and should not drink ___ after lunch, because the caffeine in it stays in the body for hours. The bedroom should be dark, quiet and (40) ….",
+       "giaiThich": "\"Do not drink coffee after lunch, because caffeine stays in the body for many hours. A cup of warm milk in the evening is fine.\" ⇒ coffee. \"milk\" là thứ ĐƯỢC uống. Tóm tắt đã có sẵn \"because the caffeine in it…\" nên ô trống chỉ có thể là ĐỒ UỐNG chứa caffeine — viết \"caffeine\" vào ô là sai (thành \"drink caffeine… because the caffeine in it\")."
+      },
+      {
+       "id": "L40",
+       "kieu": "dien",
+       "dapAn": [
+        "cool"
+       ],
+       "de": "Complete the summary below. Write ONE WORD ONLY for each answer.\nToo little sleep — and how to sleep better — People who sleep too little cannot concentrate well. They also catch more (37) … than other people, and tired drivers cause many (38) … on the roads. To sleep better, people should go to bed at the same time every night and should not drink (39) … after lunch, because the caffeine in it stays in the body for hours. The bedroom should be dark, quiet and ___.",
+       "giaiThich": "\"Many people think that a warm bedroom helps you to sleep. In fact, the opposite is true. The room should be cool.\" ⇒ cool. Bẫy: \"warm\" là điều NHIỀU NGƯỜI TƯỞNG — \"In fact, the opposite is true\" báo đáp án đảo ngược."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "doc",
+   "ten": "Academic Reading",
+   "kyNang": "doc",
+   "phut": 60,
+   "diemToiDa": 40,
+   "band": [
+    [
+     39,
+     9
+    ],
+    [
+     37,
+     8.5
+    ],
+    [
+     35,
+     8
+    ],
+    [
+     33,
+     7.5
+    ],
+    [
+     30,
+     7
+    ],
+    [
+     27,
+     6.5
+    ],
+    [
+     23,
+     6
+    ],
+    [
+     19,
+     5.5
+    ],
+    [
+     15,
+     5
+    ],
+    [
+     13,
+     4.5
+    ],
+    [
+     10,
+     4
+    ],
+    [
+     8,
+     3.5
+    ],
+    [
+     6,
+     3
+    ],
+    [
+     4,
+     2.5
+    ],
+    [
+     0,
+     2
+    ]
+   ],
+   "nhom": [
+    {
+     "huongDan": "Passage 1 — Câu 1–4. Complete the sentences below. Choose ONE WORD ONLY from the passage for each answer.",
+     "doan": "READING PASSAGE 1\nTHE STORY OF THE TRAFFIC LIGHT\nThe signal that controls our streets is older than the car\n\nEvery day, millions of drivers, cyclists and pedestrians stop and go because of three coloured lights. Traffic lights are so common that most of us hardly notice them. It may be surprising to learn, then, that the first traffic signal is more than 150 years old. In fact, it was built before the car was even invented.\nIn the 1860s, the streets of London were crowded with horses, carriages and people on foot, and accidents were common. A railway engineer called John Peake Knight had an idea. He suggested that the city should use a signal like the ones on the railways. In December 1868, his signal was put up outside the Houses of Parliament. During the day, it had long arms that moved up and down to tell traffic when to stop. At night, when the arms could not be seen, it showed red and green gas lamps instead. A police officer stood beside the signal and changed it by hand. Unfortunately, the experiment ended badly. Early in 1869, gas escaped from the signal and it exploded, and the police officer was badly hurt. The signal was soon taken away, and London did not try the idea again for many years.\nThe next steps were taken in the United States, where the number of cars was growing fast. In 1914, one of the first electric traffic signals was installed at a busy street corner in Cleveland, Ohio. It had only two colours, red and green. It also had a buzzer, which made a loud noise to warn drivers that the lights were about to change. However, two colours were not enough. Drivers could not see any warning before the light turned red, so many of them could not stop in time. In 1920, a police officer in Detroit named William Potts solved this problem by adding a third light, yellow, between the red and the green. The yellow light showed drivers that the red light was coming. His signal could also control traffic coming from four directions at the same time, and other cities soon copied it.\nThese early electric signals still needed a person to operate them. During the 1920s, engineers began to add timers, so that the lights changed automatically after a fixed number of seconds. This saved money, because cities no longer had to pay police officers to stand at every crossing. But timers had one weakness: people sometimes had to wait at a red light although the other road was completely empty. Later, engineers found an answer. They placed sensors under the surface of the road. These sensors can tell when a vehicle is waiting, so the lights change only when it is necessary.\nPeople on foot needed signals of their own. The first ones simply showed words such as \"WALK\" and \"DON'T WALK\". Later, many countries replaced the words with pictures: a red figure standing still and a green figure walking. Pictures are easier for children to understand, and also for visitors who cannot read the local language. The most famous figure comes from East Berlin. In 1961, a traffic psychologist called Karl Peglau designed a little man wearing a hat, known in German as the \"Ampelmann\". After Germany became one country again in 1990, the government planned to replace him with the standard figure used in the west. Many people protested, however, and the little man was saved. Today, his picture appears on T-shirts, bags and cups in souvenir shops all over Berlin.\nTraffic lights are still changing today. Many now have a countdown display, which shows how many seconds are left before the light changes. Some make a sound, so that blind people know when it is safe to cross. The old light bulbs have been replaced by LED lamps, which use much less electricity and last for many years. In some cities, the lights are connected to a central computer. Using cameras, the computer watches the traffic and changes the timing of the lights to keep vehicles moving. Engineers are even testing systems in which cars and traffic lights can send messages to each other. Whatever happens in the future, however, the three colours – red, yellow and green – will probably stay with us.\n\n────────\nCâu 1–4. Complete the sentences below. Choose ONE WORD ONLY from the passage for each answer.\nKnight took the idea for his street signal from the signals used on the (1) ______.\nAfter dark, the London signal showed red and green (2) ______ lamps.\nThe signal in Cleveland had a (3) ______ to tell drivers that the lights would soon change.\nThe signal designed by Potts could direct traffic from four (4) ______ at once.",
+     "cau": [
+      {
+       "id": "R1",
+       "kieu": "dien",
+       "dapAn": [
+        "railways",
+        "railway"
+       ],
+       "de": "Complete the sentences below. Choose ONE WORD ONLY from the passage for each answer.\nKnight took the idea for his street signal from the signals used on the ___.",
+       "giaiThich": "Bài: \"He suggested that the city should use a signal like the ones on the railways.\" Câu hỏi đổi \"use a signal like the ones on…\" thành \"took the idea… from the signals used on the…\" ⇒ railways. Bẫy: \"Parliament\" là NƠI ĐẶT tín hiệu, không phải nguồn ý tưởng; \"railway engineer\" là nghề của Knight — câu hỏi cần danh từ sau \"on the\"."
+      },
+      {
+       "id": "R2",
+       "kieu": "dien",
+       "dapAn": [
+        "gas"
+       ],
+       "de": "Complete the sentences below. Choose ONE WORD ONLY from the passage for each answer.\nAfter dark, the London signal showed red and green ___ lamps.",
+       "giaiThich": "\"At night… it showed red and green gas lamps instead.\" — \"After dark\" = \"At night\" ⇒ gas. Ô trống đứng giữa \"green\" và \"lamps\" nên cần một từ bổ nghĩa cho \"lamps\". Đừng điền \"long\" (đó là \"long arms\" — dùng BAN NGÀY)."
+      },
+      {
+       "id": "R3",
+       "kieu": "dien",
+       "dapAn": [
+        "buzzer"
+       ],
+       "de": "Complete the sentences below. Choose ONE WORD ONLY from the passage for each answer.\nThe signal in Cleveland had a ___ to tell drivers that the lights would soon change.",
+       "giaiThich": "\"It also had a buzzer, which made a loud noise to warn drivers that the lights were about to change.\" — \"tell drivers… would soon change\" = \"warn drivers… were about to change\" ⇒ buzzer (còi kêu). Chép đúng chính tả: hai chữ z."
+      },
+      {
+       "id": "R4",
+       "kieu": "dien",
+       "dapAn": [
+        "directions"
+       ],
+       "de": "Complete the sentences below. Choose ONE WORD ONLY from the passage for each answer.\nThe signal designed by Potts could direct traffic from four ___ at once.",
+       "giaiThich": "\"His signal could also control traffic coming from four directions at the same time\" — \"direct\" = \"control\", \"at once\" = \"at the same time\" ⇒ directions (số nhiều vì đứng sau \"four\"; viết \"direction\" là sai ngữ pháp ⇒ mất điểm)."
+      }
+     ]
+    },
+    {
+     "huongDan": "Passage 1 — Câu 5–9. Complete the table below. Choose ONE WORD AND/OR A NUMBER from the passage for each answer.",
+     "doan": "READING PASSAGE 1\nTHE STORY OF THE TRAFFIC LIGHT\nThe signal that controls our streets is older than the car\n\nEvery day, millions of drivers, cyclists and pedestrians stop and go because of three coloured lights. Traffic lights are so common that most of us hardly notice them. It may be surprising to learn, then, that the first traffic signal is more than 150 years old. In fact, it was built before the car was even invented.\nIn the 1860s, the streets of London were crowded with horses, carriages and people on foot, and accidents were common. A railway engineer called John Peake Knight had an idea. He suggested that the city should use a signal like the ones on the railways. In December 1868, his signal was put up outside the Houses of Parliament. During the day, it had long arms that moved up and down to tell traffic when to stop. At night, when the arms could not be seen, it showed red and green gas lamps instead. A police officer stood beside the signal and changed it by hand. Unfortunately, the experiment ended badly. Early in 1869, gas escaped from the signal and it exploded, and the police officer was badly hurt. The signal was soon taken away, and London did not try the idea again for many years.\nThe next steps were taken in the United States, where the number of cars was growing fast. In 1914, one of the first electric traffic signals was installed at a busy street corner in Cleveland, Ohio. It had only two colours, red and green. It also had a buzzer, which made a loud noise to warn drivers that the lights were about to change. However, two colours were not enough. Drivers could not see any warning before the light turned red, so many of them could not stop in time. In 1920, a police officer in Detroit named William Potts solved this problem by adding a third light, yellow, between the red and the green. The yellow light showed drivers that the red light was coming. His signal could also control traffic coming from four directions at the same time, and other cities soon copied it.\nThese early electric signals still needed a person to operate them. During the 1920s, engineers began to add timers, so that the lights changed automatically after a fixed number of seconds. This saved money, because cities no longer had to pay police officers to stand at every crossing. But timers had one weakness: people sometimes had to wait at a red light although the other road was completely empty. Later, engineers found an answer. They placed sensors under the surface of the road. These sensors can tell when a vehicle is waiting, so the lights change only when it is necessary.\nPeople on foot needed signals of their own. The first ones simply showed words such as \"WALK\" and \"DON'T WALK\". Later, many countries replaced the words with pictures: a red figure standing still and a green figure walking. Pictures are easier for children to understand, and also for visitors who cannot read the local language. The most famous figure comes from East Berlin. In 1961, a traffic psychologist called Karl Peglau designed a little man wearing a hat, known in German as the \"Ampelmann\". After Germany became one country again in 1990, the government planned to replace him with the standard figure used in the west. Many people protested, however, and the little man was saved. Today, his picture appears on T-shirts, bags and cups in souvenir shops all over Berlin.\nTraffic lights are still changing today. Many now have a countdown display, which shows how many seconds are left before the light changes. Some make a sound, so that blind people know when it is safe to cross. The old light bulbs have been replaced by LED lamps, which use much less electricity and last for many years. In some cities, the lights are connected to a central computer. Using cameras, the computer watches the traffic and changes the timing of the lights to keep vehicles moving. Engineers are even testing systems in which cars and traffic lights can send messages to each other. Whatever happens in the future, however, the three colours – red, yellow and green – will probably stay with us.\n\n────────\nLATER IMPROVEMENTS TO TRAFFIC SIGNALS\nCâu 5–9. Complete the table below. Choose ONE WORD AND/OR A NUMBER from the passage for each answer.\nImprovement: timers · When / where: 1920s · Details: lights changed after a fixed number of (5) ______; cities saved (6) ______ because fewer police officers were needed\nImprovement: sensors · When / where: later; under the road · Details: they know when a (7) ______ is waiting\nImprovement: the \"Ampelmann\" · When / where: East Berlin, (8) ______ · Details: a little man with a (9) ______; saved after protests",
+     "cau": [
+      {
+       "id": "R5",
+       "kieu": "dien",
+       "de": "Complete the table below. Choose ONE WORD AND/OR A NUMBER from the passage for each answer.\nLater improvements to traffic signals — timers — Details: lights changed after a fixed number of ___; cities saved (6) … because fewer police officers were needed",
+       "dapAn": [
+        "seconds"
+       ],
+       "giaiThich": "Bảng, hàng \"timers\": bài viết \"the lights changed automatically after a fixed number of seconds\" ⇒ seconds. Giữ nguyên số nhiều như trong bài."
+      },
+      {
+       "id": "R6",
+       "kieu": "dien",
+       "de": "Complete the table below. Choose ONE WORD AND/OR A NUMBER from the passage for each answer.\nLater improvements to traffic signals — timers — Details: lights changed after a fixed number of (5) …; cities saved ___ because fewer police officers were needed",
+       "dapAn": [
+        "money"
+       ],
+       "giaiThich": "\"This saved money, because cities no longer had to pay police officers to stand at every crossing.\" — \"fewer police officers were needed\" = \"no longer had to pay police officers\" ⇒ money. Bẫy: \"time\" nghe hợp lý nhưng bài KHÔNG nói tiết kiệm thời gian."
+      },
+      {
+       "id": "R7",
+       "kieu": "dien",
+       "de": "Complete the table below. Choose ONE WORD AND/OR A NUMBER from the passage for each answer.\nLater improvements to traffic signals — sensors — Details: they know when a ___ is waiting",
+       "dapAn": [
+        "vehicle"
+       ],
+       "giaiThich": "\"These sensors can tell when a vehicle is waiting\" — \"know\" = \"can tell\" ⇒ vehicle. Phải chép đúng từ trong bài: \"car\" không xuất hiện ở câu này nên không được chấp nhận (dạng completion bắt chép nguyên văn)."
+      },
+      {
+       "id": "R8",
+       "kieu": "dien",
+       "de": "Complete the table below. Choose ONE WORD AND/OR A NUMBER from the passage for each answer.\nLater improvements to traffic signals — the \"Ampelmann\" — When / where: East Berlin, ___",
+       "dapAn": [
+        "1961"
+       ],
+       "giaiThich": "\"In 1961, a traffic psychologist called Karl Peglau designed a little man\" ⇒ 1961. Bẫy: 1990 là năm nước Đức thống nhất và người ta ĐỊNH BỎ hình này — không phải năm nó ra đời."
+      },
+      {
+       "id": "R9",
+       "kieu": "dien",
+       "de": "Complete the table below. Choose ONE WORD AND/OR A NUMBER from the passage for each answer.\nLater improvements to traffic signals — the \"Ampelmann\" — Details: a little man with a ___; saved after protests",
+       "dapAn": [
+        "hat"
+       ],
+       "giaiThich": "\"a little man wearing a hat\" — bảng viết \"a little man with a ___\" (\"with\" = \"wearing\") ⇒ hat."
+      }
+     ]
+    },
+    {
+     "huongDan": "Passage 1 — Câu 10–13. Do the following statements agree with the information given in Reading Passage 1? Choose TRUE if the statement agrees with the information FALSE if the statement contradicts the information NOT GIVEN if there is no information on this",
+     "doan": "READING PASSAGE 1\nTHE STORY OF THE TRAFFIC LIGHT\nThe signal that controls our streets is older than the car\n\nEvery day, millions of drivers, cyclists and pedestrians stop and go because of three coloured lights. Traffic lights are so common that most of us hardly notice them. It may be surprising to learn, then, that the first traffic signal is more than 150 years old. In fact, it was built before the car was even invented.\nIn the 1860s, the streets of London were crowded with horses, carriages and people on foot, and accidents were common. A railway engineer called John Peake Knight had an idea. He suggested that the city should use a signal like the ones on the railways. In December 1868, his signal was put up outside the Houses of Parliament. During the day, it had long arms that moved up and down to tell traffic when to stop. At night, when the arms could not be seen, it showed red and green gas lamps instead. A police officer stood beside the signal and changed it by hand. Unfortunately, the experiment ended badly. Early in 1869, gas escaped from the signal and it exploded, and the police officer was badly hurt. The signal was soon taken away, and London did not try the idea again for many years.\nThe next steps were taken in the United States, where the number of cars was growing fast. In 1914, one of the first electric traffic signals was installed at a busy street corner in Cleveland, Ohio. It had only two colours, red and green. It also had a buzzer, which made a loud noise to warn drivers that the lights were about to change. However, two colours were not enough. Drivers could not see any warning before the light turned red, so many of them could not stop in time. In 1920, a police officer in Detroit named William Potts solved this problem by adding a third light, yellow, between the red and the green. The yellow light showed drivers that the red light was coming. His signal could also control traffic coming from four directions at the same time, and other cities soon copied it.\nThese early electric signals still needed a person to operate them. During the 1920s, engineers began to add timers, so that the lights changed automatically after a fixed number of seconds. This saved money, because cities no longer had to pay police officers to stand at every crossing. But timers had one weakness: people sometimes had to wait at a red light although the other road was completely empty. Later, engineers found an answer. They placed sensors under the surface of the road. These sensors can tell when a vehicle is waiting, so the lights change only when it is necessary.\nPeople on foot needed signals of their own. The first ones simply showed words such as \"WALK\" and \"DON'T WALK\". Later, many countries replaced the words with pictures: a red figure standing still and a green figure walking. Pictures are easier for children to understand, and also for visitors who cannot read the local language. The most famous figure comes from East Berlin. In 1961, a traffic psychologist called Karl Peglau designed a little man wearing a hat, known in German as the \"Ampelmann\". After Germany became one country again in 1990, the government planned to replace him with the standard figure used in the west. Many people protested, however, and the little man was saved. Today, his picture appears on T-shirts, bags and cups in souvenir shops all over Berlin.\nTraffic lights are still changing today. Many now have a countdown display, which shows how many seconds are left before the light changes. Some make a sound, so that blind people know when it is safe to cross. The old light bulbs have been replaced by LED lamps, which use much less electricity and last for many years. In some cities, the lights are connected to a central computer. Using cameras, the computer watches the traffic and changes the timing of the lights to keep vehicles moving. Engineers are even testing systems in which cars and traffic lights can send messages to each other. Whatever happens in the future, however, the three colours – red, yellow and green – will probably stay with us.",
+     "cau": [
+      {
+       "id": "R10",
+       "kieu": "chon",
+       "de": "Do the following statements agree with the information given in Reading Passage 1? Choose TRUE if the statement agrees with the information FALSE if the statement contradicts the information NOT GIVEN if there is no information on this\nCars were already common in London when the first traffic signal was built.",
+       "luaChon": [
+        "TRUE",
+        "FALSE",
+        "NOT GIVEN"
+       ],
+       "dapAn": 1,
+       "giaiThich": "Bài nói tín hiệu đầu tiên \"was built before the car was even invented\", và đường phố London lúc đó đầy \"horses, carriages and people on foot\". Câu hỏi nói ô tô ĐÃ phổ biến ⇒ trái ngược ⇒ FALSE."
+      },
+      {
+       "id": "R11",
+       "kieu": "chon",
+       "de": "Do the following statements agree with the information given in Reading Passage 1? Choose TRUE if the statement agrees with the information FALSE if the statement contradicts the information NOT GIVEN if there is no information on this\nJohn Peake Knight was well paid for designing the London signal.",
+       "luaChon": [
+        "TRUE",
+        "FALSE",
+        "NOT GIVEN"
+       ],
+       "dapAn": 2,
+       "giaiThich": "Bài chỉ nói Knight là kỹ sư đường sắt, \"had an idea\" và tín hiệu của ông được dựng năm 1868. KHÔNG có chữ nào về tiền công (được trả nhiều, ít hay không được trả) ⇒ NOT GIVEN. Đừng chọn FALSE: FALSE cần bài nói ngược lại (ví dụ \"he was not paid\")."
+      },
+      {
+       "id": "R12",
+       "kieu": "chon",
+       "de": "Do the following statements agree with the information given in Reading Passage 1? Choose TRUE if the statement agrees with the information FALSE if the statement contradicts the information NOT GIVEN if there is no information on this\nA yellow light was added to give drivers a warning before the red light.",
+       "luaChon": [
+        "TRUE",
+        "FALSE",
+        "NOT GIVEN"
+       ],
+       "dapAn": 0,
+       "giaiThich": "\"Drivers could not see any warning before the light turned red… William Potts solved this problem by adding a third light, yellow… The yellow light showed drivers that the red light was coming.\" — \"give drivers a warning before the red light\" = \"showed drivers that the red light was coming\" ⇒ TRUE. (Còi \"buzzer\" ở Cleveland là cảnh báo bằng TIẾNG; đèn vàng là cảnh báo NHÌN THẤY được.)"
+      },
+      {
+       "id": "R13",
+       "kieu": "chon",
+       "de": "Do the following statements agree with the information given in Reading Passage 1? Choose TRUE if the statement agrees with the information FALSE if the statement contradicts the information NOT GIVEN if there is no information on this\nLED lamps cost less to buy than the old light bulbs.",
+       "luaChon": [
+        "TRUE",
+        "FALSE",
+        "NOT GIVEN"
+       ],
+       "dapAn": 2,
+       "giaiThich": "Bài nói đèn LED \"use much less electricity and last for many years\" (tốn ít điện, bền) — KHÔNG nói GIÁ MUA rẻ hơn hay đắt hơn bóng cũ ⇒ NOT GIVEN. Bẫy kinh điển: \"ít tốn điện\" ≠ \"rẻ hơn khi mua\"; đừng tự suy luận thêm."
+      }
+     ]
+    },
+    {
+     "huongDan": "Passage 2 — Câu 14–19. Look at the following statements (Questions 14–19) and the list of people below. Match each statement with the correct person, A–D. NB You may use any letter more than once.",
+     "doan": "READING PASSAGE 2\nTURNING THE CLASSROOM UPSIDE DOWN\nIn a \"flipped\" classroom, students meet new ideas at home and practise them at school\n\nIn a traditional lesson, the teacher stands at the front of the room and explains a new topic. The students listen and take notes. Later, at home, they practise alone by doing homework. This pattern has hardly changed for more than a hundred years. In a \"flipped classroom\", however, the order is turned upside down. Students first meet new ideas at home, usually by watching a short video. Class time is then used for practice, with the teacher there to help.\nThe idea became widely known after 2007, when two teachers at a school in Colorado, in the United States, began to record their chemistry lessons. At first, the recordings were only for students who had been absent. But the teachers soon noticed something interesting: students who had been in class were watching the videos too, because they wanted to go over the lesson again. Since then, schools in many countries have tried the method.\nHow does a flipped lesson work? David Osei, who teaches maths at Brookside School in the north of England, describes his week. First, he records a video of about ten minutes and puts it on the school website. At home, his students watch the video. They can stop it or repeat any part, and they write down any questions they have. They then complete a short online quiz. Before the lesson, Mr Osei looks at the results of the quiz to see which points were difficult. In class, there is a short discussion of the students' questions. After that, the students solve problems in small groups, while the teacher walks around the room and helps anyone who is stuck. Finally, the students write a summary of what they have learned in their notebooks.\nMr Osei says the biggest change is in how he uses his time. \"I used to talk for forty minutes while thirty students sat in silence,\" he says. \"Now I speak to every student at least once in each lesson.\" He admits, however, that the method was hard work at the start. \"In the first year, I spent most of my weekends making videos,\" he says.\nThe students have noticed a difference too. Sofia Rossi, who is fifteen, likes being able to watch the difficult parts again. \"In a normal lesson, I was too shy to ask the teacher to repeat something,\" she explains. \"With a video, I can play it three times and nobody knows.\" But she adds that the system only works if everyone prepares. \"Some of my classmates don't watch the videos,\" she says, \"and then they can't join in the group work.\"\nThe head teacher of Brookside, Helen Marsh, supports the method but sees some problems. \"Not every family has a fast internet connection or a quiet place to study,\" she says. For this reason, the school now opens its computer room for an hour before lessons begin, so that students can watch the videos there. Mrs Marsh also points out that flipped lessons do not suit every subject. \"They work very well in maths and science,\" she says, \"but our art and sports teachers have not found them helpful.\"\nWhat do researchers think? Dr Laura Benton, from a university in Scotland, followed students at twelve schools for three years. She found that test results were a little better, on average, in flipped classes. The biggest improvement was among weaker students, perhaps because they received more help from the teacher. However, Dr Benton warns that the video is not the important part. \"If the teacher just hands out worksheets in class, nothing has really changed,\" she says. \"What matters most is what students do in the classroom.\" She also believes that the method is more suitable for teenagers than for young children, who often find it hard to work without an adult.\nAt Brookside, the experiment will continue. When the school asked parents for their opinion, most of them said they were happy with the new lessons, although some were worried at first about the extra time their children spent looking at screens. Next year, the school plans to use the method in history and geography as well. The flipped classroom is not magic, but it has given teachers like Mr Osei something valuable: time to teach each student.",
+     "cau": [
+      {
+       "id": "R14",
+       "kieu": "chon",
+       "de": "Look at the following statements (Questions 14–19) and the list of people below. Match each statement with the correct person, A–D. NB You may use any letter more than once.\nThe activities in class are more important than the videos.",
+       "luaChon": [
+        "A. David Osei",
+        "B. Helen Marsh",
+        "C. Laura Benton",
+        "D. Sofia Rossi"
+       ],
+       "dapAn": 2,
+       "giaiThich": "Dr Laura Benton: \"the video is not the important part… What matters most is what students do in the classroom.\" = hoạt động trên lớp quan trọng hơn video ⇒ C."
+      },
+      {
+       "id": "R15",
+       "kieu": "chon",
+       "de": "Look at the following statements (Questions 14–19) and the list of people below. Match each statement with the correct person, A–D. NB You may use any letter more than once.\nPreparing the materials took a lot of free time at the beginning.",
+       "luaChon": [
+        "A. David Osei",
+        "B. Helen Marsh",
+        "C. Laura Benton",
+        "D. Sofia Rossi"
+       ],
+       "dapAn": 0,
+       "giaiThich": "David Osei: \"In the first year, I spent most of my weekends making videos\" — \"preparing the materials\" = \"making videos\", \"free time\" = \"weekends\", \"at the beginning\" = \"in the first year\" ⇒ A."
+      },
+      {
+       "id": "R16",
+       "kieu": "chon",
+       "de": "Look at the following statements (Questions 14–19) and the list of people below. Match each statement with the correct person, A–D. NB You may use any letter more than once.\nAsking a teacher to explain something again can be embarrassing.",
+       "luaChon": [
+        "A. David Osei",
+        "B. Helen Marsh",
+        "C. Laura Benton",
+        "D. Sofia Rossi"
+       ],
+       "dapAn": 3,
+       "giaiThich": "Sofia Rossi: \"I was too shy to ask the teacher to repeat something\" — \"embarrassing\" ≈ \"too shy\", \"explain something again\" = \"repeat something\" ⇒ D."
+      },
+      {
+       "id": "R17",
+       "kieu": "chon",
+       "de": "Look at the following statements (Questions 14–19) and the list of people below. Match each statement with the correct person, A–D. NB You may use any letter more than once.\nFlipped lessons are more useful in some school subjects than in others.",
+       "luaChon": [
+        "A. David Osei",
+        "B. Helen Marsh",
+        "C. Laura Benton",
+        "D. Sofia Rossi"
+       ],
+       "dapAn": 1,
+       "giaiThich": "Helen Marsh: \"flipped lessons do not suit every subject. They work very well in maths and science… but our art and sports teachers have not found them helpful.\" ⇒ B. Bẫy: Dr Benton cũng nói phương pháp hợp với một NHÓM hơn nhóm khác — nhưng đó là theo TUỔI (teenagers / young children), không phải theo MÔN."
+      },
+      {
+       "id": "R18",
+       "kieu": "chon",
+       "de": "Look at the following statements (Questions 14–19) and the list of people below. Match each statement with the correct person, A–D. NB You may use any letter more than once.\nStudents who have not prepared at home cannot take part properly in class.",
+       "luaChon": [
+        "A. David Osei",
+        "B. Helen Marsh",
+        "C. Laura Benton",
+        "D. Sofia Rossi"
+       ],
+       "dapAn": 3,
+       "giaiThich": "Sofia Rossi: \"Some of my classmates don't watch the videos… and then they can't join in the group work.\" — \"have not prepared at home\" = \"don't watch the videos\", \"cannot take part\" = \"can't join in\" ⇒ D (dùng D lần thứ hai — đề đã báo \"may use any letter more than once\")."
+      },
+      {
+       "id": "R19",
+       "kieu": "chon",
+       "de": "Look at the following statements (Questions 14–19) and the list of people below. Match each statement with the correct person, A–D. NB You may use any letter more than once.\nSome families do not have the technology or the space that students need at home.",
+       "luaChon": [
+        "A. David Osei",
+        "B. Helen Marsh",
+        "C. Laura Benton",
+        "D. Sofia Rossi"
+       ],
+       "dapAn": 1,
+       "giaiThich": "Helen Marsh: \"Not every family has a fast internet connection or a quiet place to study\" — \"technology\" = \"internet connection\", \"space\" = \"a quiet place to study\" ⇒ B. Bẫy: Dr Benton nói trẻ nhỏ khó tự học khi không có người lớn — đó là chuyện tính tự giác, không phải thiếu thiết bị hay chỗ học."
+      }
+     ]
+    },
+    {
+     "huongDan": "Passage 2 — Câu 20–23. Complete the flow-chart below. Choose ONE WORD ONLY from the passage for each answer.",
+     "doan": "READING PASSAGE 2\nTURNING THE CLASSROOM UPSIDE DOWN\nIn a \"flipped\" classroom, students meet new ideas at home and practise them at school\n\nIn a traditional lesson, the teacher stands at the front of the room and explains a new topic. The students listen and take notes. Later, at home, they practise alone by doing homework. This pattern has hardly changed for more than a hundred years. In a \"flipped classroom\", however, the order is turned upside down. Students first meet new ideas at home, usually by watching a short video. Class time is then used for practice, with the teacher there to help.\nThe idea became widely known after 2007, when two teachers at a school in Colorado, in the United States, began to record their chemistry lessons. At first, the recordings were only for students who had been absent. But the teachers soon noticed something interesting: students who had been in class were watching the videos too, because they wanted to go over the lesson again. Since then, schools in many countries have tried the method.\nHow does a flipped lesson work? David Osei, who teaches maths at Brookside School in the north of England, describes his week. First, he records a video of about ten minutes and puts it on the school website. At home, his students watch the video. They can stop it or repeat any part, and they write down any questions they have. They then complete a short online quiz. Before the lesson, Mr Osei looks at the results of the quiz to see which points were difficult. In class, there is a short discussion of the students' questions. After that, the students solve problems in small groups, while the teacher walks around the room and helps anyone who is stuck. Finally, the students write a summary of what they have learned in their notebooks.\nMr Osei says the biggest change is in how he uses his time. \"I used to talk for forty minutes while thirty students sat in silence,\" he says. \"Now I speak to every student at least once in each lesson.\" He admits, however, that the method was hard work at the start. \"In the first year, I spent most of my weekends making videos,\" he says.\nThe students have noticed a difference too. Sofia Rossi, who is fifteen, likes being able to watch the difficult parts again. \"In a normal lesson, I was too shy to ask the teacher to repeat something,\" she explains. \"With a video, I can play it three times and nobody knows.\" But she adds that the system only works if everyone prepares. \"Some of my classmates don't watch the videos,\" she says, \"and then they can't join in the group work.\"\nThe head teacher of Brookside, Helen Marsh, supports the method but sees some problems. \"Not every family has a fast internet connection or a quiet place to study,\" she says. For this reason, the school now opens its computer room for an hour before lessons begin, so that students can watch the videos there. Mrs Marsh also points out that flipped lessons do not suit every subject. \"They work very well in maths and science,\" she says, \"but our art and sports teachers have not found them helpful.\"\nWhat do researchers think? Dr Laura Benton, from a university in Scotland, followed students at twelve schools for three years. She found that test results were a little better, on average, in flipped classes. The biggest improvement was among weaker students, perhaps because they received more help from the teacher. However, Dr Benton warns that the video is not the important part. \"If the teacher just hands out worksheets in class, nothing has really changed,\" she says. \"What matters most is what students do in the classroom.\" She also believes that the method is more suitable for teenagers than for young children, who often find it hard to work without an adult.\nAt Brookside, the experiment will continue. When the school asked parents for their opinion, most of them said they were happy with the new lessons, although some were worried at first about the extra time their children spent looking at screens. Next year, the school plans to use the method in history and geography as well. The flipped classroom is not magic, but it has given teachers like Mr Osei something valuable: time to teach each student.\n\n────────\nA FLIPPED MATHS LESSON AT BROOKSIDE SCHOOL\nCâu 20–23. Complete the flow-chart below. Choose ONE WORD ONLY from the passage for each answer.\n→ The teacher records a short video and puts it on the school (20) ______.\n→ At home, students watch the video and note down their (21) ______.\n→ Students do a short online (22) ______, and the teacher checks the results before the lesson.\n→ In class, there is a discussion. Then students solve problems in small (23) ______.\n→ The teacher helps anyone who is stuck. At the end, students write a summary.",
+     "cau": [
+      {
+       "id": "R20",
+       "kieu": "dien",
+       "dapAn": [
+        "website"
+       ],
+       "de": "Complete the flow-chart below. Choose ONE WORD ONLY from the passage for each answer.\nA flipped maths lesson at Brookside School — The teacher records a short video and puts it on the school ___.",
+       "giaiThich": "\"he records a video of about ten minutes and puts it on the school website\" ⇒ website."
+      },
+      {
+       "id": "R21",
+       "kieu": "dien",
+       "dapAn": [
+        "questions"
+       ],
+       "de": "Complete the flow-chart below. Choose ONE WORD ONLY from the passage for each answer.\nA flipped maths lesson at Brookside School — At home, students watch the video and note down their ___.",
+       "giaiThich": "\"they write down any questions they have\" — \"note down\" = \"write down\" ⇒ questions (số nhiều như trong bài)."
+      },
+      {
+       "id": "R22",
+       "kieu": "dien",
+       "dapAn": [
+        "quiz"
+       ],
+       "de": "Complete the flow-chart below. Choose ONE WORD ONLY from the passage for each answer.\nA flipped maths lesson at Brookside School — Students do a short online ___, and the teacher checks the results before the lesson.",
+       "giaiThich": "\"They then complete a short online quiz.\" — \"do\" = \"complete\" ⇒ quiz. Bước sau trong sơ đồ (\"the teacher checks the results\") khớp câu \"Mr Osei looks at the results of the quiz\" ⇒ chắc chắn đúng chỗ."
+      },
+      {
+       "id": "R23",
+       "kieu": "dien",
+       "dapAn": [
+        "groups"
+       ],
+       "de": "Complete the flow-chart below. Choose ONE WORD ONLY from the passage for each answer.\nA flipped maths lesson at Brookside School — In class, there is a discussion. Then students solve problems in small ___.",
+       "giaiThich": "\"the students solve problems in small groups\" ⇒ groups. Đừng điền \"notebooks\" — đó là chỗ viết tóm tắt ở bước cuối."
+      }
+     ]
+    },
+    {
+     "huongDan": "Passage 2 — Câu 24–26. Complete the sentences below. Choose ONE WORD ONLY from the passage for each answer.",
+     "doan": "READING PASSAGE 2\nTURNING THE CLASSROOM UPSIDE DOWN\nIn a \"flipped\" classroom, students meet new ideas at home and practise them at school\n\nIn a traditional lesson, the teacher stands at the front of the room and explains a new topic. The students listen and take notes. Later, at home, they practise alone by doing homework. This pattern has hardly changed for more than a hundred years. In a \"flipped classroom\", however, the order is turned upside down. Students first meet new ideas at home, usually by watching a short video. Class time is then used for practice, with the teacher there to help.\nThe idea became widely known after 2007, when two teachers at a school in Colorado, in the United States, began to record their chemistry lessons. At first, the recordings were only for students who had been absent. But the teachers soon noticed something interesting: students who had been in class were watching the videos too, because they wanted to go over the lesson again. Since then, schools in many countries have tried the method.\nHow does a flipped lesson work? David Osei, who teaches maths at Brookside School in the north of England, describes his week. First, he records a video of about ten minutes and puts it on the school website. At home, his students watch the video. They can stop it or repeat any part, and they write down any questions they have. They then complete a short online quiz. Before the lesson, Mr Osei looks at the results of the quiz to see which points were difficult. In class, there is a short discussion of the students' questions. After that, the students solve problems in small groups, while the teacher walks around the room and helps anyone who is stuck. Finally, the students write a summary of what they have learned in their notebooks.\nMr Osei says the biggest change is in how he uses his time. \"I used to talk for forty minutes while thirty students sat in silence,\" he says. \"Now I speak to every student at least once in each lesson.\" He admits, however, that the method was hard work at the start. \"In the first year, I spent most of my weekends making videos,\" he says.\nThe students have noticed a difference too. Sofia Rossi, who is fifteen, likes being able to watch the difficult parts again. \"In a normal lesson, I was too shy to ask the teacher to repeat something,\" she explains. \"With a video, I can play it three times and nobody knows.\" But she adds that the system only works if everyone prepares. \"Some of my classmates don't watch the videos,\" she says, \"and then they can't join in the group work.\"\nThe head teacher of Brookside, Helen Marsh, supports the method but sees some problems. \"Not every family has a fast internet connection or a quiet place to study,\" she says. For this reason, the school now opens its computer room for an hour before lessons begin, so that students can watch the videos there. Mrs Marsh also points out that flipped lessons do not suit every subject. \"They work very well in maths and science,\" she says, \"but our art and sports teachers have not found them helpful.\"\nWhat do researchers think? Dr Laura Benton, from a university in Scotland, followed students at twelve schools for three years. She found that test results were a little better, on average, in flipped classes. The biggest improvement was among weaker students, perhaps because they received more help from the teacher. However, Dr Benton warns that the video is not the important part. \"If the teacher just hands out worksheets in class, nothing has really changed,\" she says. \"What matters most is what students do in the classroom.\" She also believes that the method is more suitable for teenagers than for young children, who often find it hard to work without an adult.\nAt Brookside, the experiment will continue. When the school asked parents for their opinion, most of them said they were happy with the new lessons, although some were worried at first about the extra time their children spent looking at screens. Next year, the school plans to use the method in history and geography as well. The flipped classroom is not magic, but it has given teachers like Mr Osei something valuable: time to teach each student.\n\n────────\nCâu 24–26. Complete the sentences below. Choose ONE WORD ONLY from the passage for each answer.\nThe two teachers in Colorado made recordings of their (24) ______ lessons.\nIn Dr Benton's study, the students who improved most were the (25) ______ ones.\nNext year, Brookside will also use flipped lessons in history and (26) ______.",
+     "cau": [
+      {
+       "id": "R24",
+       "kieu": "dien",
+       "dapAn": [
+        "chemistry"
+       ],
+       "de": "Complete the sentences below. Choose ONE WORD ONLY from the passage for each answer.\nThe two teachers in Colorado made recordings of their ___ lessons.",
+       "giaiThich": "\"two teachers at a school in Colorado… began to record their chemistry lessons\" ⇒ chemistry. Bẫy: \"maths\" là môn của thầy Osei ở Anh, không phải của hai giáo viên ở Colorado."
+      },
+      {
+       "id": "R25",
+       "kieu": "dien",
+       "dapAn": [
+        "weaker"
+       ],
+       "de": "Complete the sentences below. Choose ONE WORD ONLY from the passage for each answer.\nIn Dr Benton's study, the students who improved most were the ___ ones.",
+       "giaiThich": "\"The biggest improvement was among weaker students\" — \"improved most\" = \"the biggest improvement\" ⇒ weaker. Chép đúng dạng so sánh \"weaker\" (không phải \"weak\")."
+      },
+      {
+       "id": "R26",
+       "kieu": "dien",
+       "dapAn": [
+        "geography"
+       ],
+       "de": "Complete the sentences below. Choose ONE WORD ONLY from the passage for each answer.\nNext year, Brookside will also use flipped lessons in history and ___.",
+       "giaiThich": "\"Next year, the school plans to use the method in history and geography as well.\" ⇒ geography. Bẫy: \"maths and science\" là các môn ĐANG dùng tốt; \"art and sports\" là các môn KHÔNG thấy hữu ích."
+      }
+     ]
+    },
+    {
+     "huongDan": "Passage 3 — Câu 27–32. Do the following statements agree with the information given in Reading Passage 3? Choose TRUE if the statement agrees with the information FALSE if the statement contradicts the information NOT GIVEN if there is no information on this",
+     "doan": "READING PASSAGE 3\nTHE BARCODE: LINES THAT CHANGED SHOPPING\nHow an idea drawn in the sand ended up on almost every product in the world\n\nLook at almost any product in a shop – a carton of milk, a book, a pair of shoes – and you will find a small square of black and white lines. A machine reads this barcode in less than a second, with a short \"beep\". We hear that sound so often that we no longer notice it. Yet the barcode took more than twenty-five years to travel from an idea to the supermarket.\nThe story begins in 1948 in Philadelphia, in the United States. A student called Bernard Silver happened to hear a conversation at his college. The president of a local supermarket company was asking a senior person at the college for help. His shops needed a way to record each product automatically when customers paid, because typing every price by hand was slow and caused mistakes. The college was not interested, but Silver was. He described the problem to his friend Norman Joseph Woodland, and the two young men decided to work on it together.\nWoodland found the answer in an unusual place. He had moved to Florida, and one day he was sitting on a beach, thinking about Morse code, the system of dots and dashes that he had learned as a boy. He pushed his fingers into the sand and pulled them towards him, drawing a set of lines. Suddenly he understood: thin and thick lines could carry information in the same way as dots and dashes. In 1952, they received a patent for their invention. It showed a set of straight lines, but it also showed a second design that was not made of lines at all. It was a set of circles, one inside another, like a target. The advantage of this shape was that a machine could read it from any direction.\nUnfortunately, the invention was ahead of its time. To read the code, a shop needed a small, strong light and a cheap computer, and neither existed in the early 1950s. The solution to the first problem was the laser, which was not invented until 1960. Woodland and Silver sold their patent for only 15,000 dollars, and Silver died in 1963 without ever seeing a barcode in a shop.\nIn the early 1970s, American supermarkets finally agreed that all their products should carry the same kind of code. The design they chose came from the computer company IBM, where Woodland now worked. It used straight lines instead of circles, because lines were easier to print clearly on packets. On 26 June 1974, in a supermarket in the town of Troy, Ohio, the new system was used for the first time. The first product to be scanned was a packet of chewing gum, which cost 67 cents. That packet of gum was later given to a museum in Washington.\nThe barcode did not become popular overnight. Scanners were expensive, so shops did not want to buy them until most products had codes. Food companies, on the other hand, did not want to print codes until most shops had scanners. For several years, the system spread very slowly. Some customers were unhappy too. When barcodes arrived, shops stopped putting a price label on every item, and shoppers complained that they could no longer check what they were paying. In the end, though, the advantages were clear. Queues moved faster, there were fewer mistakes, and for the first time managers knew exactly what they had sold and what they needed to order.\nIn 1994, a Japanese engineer called Masahiro Hara took the idea a step further. His company made parts for cars, and every box of parts in its factories carried a barcode. But an ordinary barcode can only hold about twenty letters or numbers. This was not enough information, so workers had to scan several codes on every box. Hara's answer was a square pattern of black and white dots that could hold thousands of characters. He called it the QR code – QR means \"quick response\". Three large squares in its corners tell the scanner where the code begins, so it can be read at high speed from any angle. Hara has said that the idea for the pattern came from the black and white stones of a board game that he played in his lunch breaks.\nHara's company decided that the QR code should be free to use, and it did not ask other companies for money. At first, the code was used mainly in factories. Everything changed when mobile phones with cameras appeared. Suddenly anyone could read a QR code, and the pattern began to appear on posters, tickets and bills. During 2020 and 2021, many restaurants even replaced their paper menus with a QR code on the table. More than fifty years after that first packet of chewing gum, black and white patterns are part of everyday life – and most of us never think about the people who invented them.",
+     "cau": [
+      {
+       "id": "R27",
+       "kieu": "chon",
+       "de": "Do the following statements agree with the information given in Reading Passage 3? Choose TRUE if the statement agrees with the information FALSE if the statement contradicts the information NOT GIVEN if there is no information on this\nBernard Silver found out about the supermarket company's problem by chance.",
+       "luaChon": [
+        "TRUE",
+        "FALSE",
+        "NOT GIVEN"
+       ],
+       "dapAn": 0,
+       "giaiThich": "\"Bernard Silver happened to hear a conversation at his college.\" — \"happened to hear\" = tình cờ nghe được = \"by chance\" ⇒ TRUE. Cụm \"happen to + V\" là chìa khoá của câu này."
+      },
+      {
+       "id": "R28",
+       "kieu": "chon",
+       "de": "Do the following statements agree with the information given in Reading Passage 3? Choose TRUE if the statement agrees with the information FALSE if the statement contradicts the information NOT GIVEN if there is no information on this\nWoodland had his idea while he was working in a laboratory.",
+       "luaChon": [
+        "TRUE",
+        "FALSE",
+        "NOT GIVEN"
+       ],
+       "dapAn": 1,
+       "giaiThich": "Bài: \"one day he was sitting on a beach, thinking about Morse code\" — ý tưởng đến khi ông ngồi trên BÃI BIỂN, không phải khi làm việc trong phòng thí nghiệm ⇒ FALSE."
+      },
+      {
+       "id": "R29",
+       "kieu": "chon",
+       "de": "Do the following statements agree with the information given in Reading Passage 3? Choose TRUE if the statement agrees with the information FALSE if the statement contradicts the information NOT GIVEN if there is no information on this\nThe round design in the patent could be read from any direction.",
+       "luaChon": [
+        "TRUE",
+        "FALSE",
+        "NOT GIVEN"
+       ],
+       "dapAn": 0,
+       "giaiThich": "Bằng sáng chế có một mẫu thứ hai là các vòng tròn lồng nhau (\"round design\" = \"a set of circles… like a target\"), và \"The advantage of this shape was that a machine could read it from any direction.\" ⇒ TRUE."
+      },
+      {
+       "id": "R30",
+       "kieu": "chon",
+       "de": "Do the following statements agree with the information given in Reading Passage 3? Choose TRUE if the statement agrees with the information FALSE if the statement contradicts the information NOT GIVEN if there is no information on this\nThe chewing gum was the cheapest thing that the customer in Troy bought.",
+       "luaChon": [
+        "TRUE",
+        "FALSE",
+        "NOT GIVEN"
+       ],
+       "dapAn": 2,
+       "giaiThich": "Bài chỉ nói gói kẹo cao su là món ĐẦU TIÊN được quét và giá 67 xu. Không có thông tin về các món khác người khách mua, nên không biết nó có phải món RẺ NHẤT không ⇒ NOT GIVEN. Bẫy: \"first\" (đầu tiên) ≠ \"cheapest\" (rẻ nhất)."
+      },
+      {
+       "id": "R31",
+       "kieu": "chon",
+       "de": "Do the following statements agree with the information given in Reading Passage 3? Choose TRUE if the statement agrees with the information FALSE if the statement contradicts the information NOT GIVEN if there is no information on this\nMost shops started using barcodes soon after 1974.",
+       "luaChon": [
+        "TRUE",
+        "FALSE",
+        "NOT GIVEN"
+       ],
+       "dapAn": 1,
+       "giaiThich": "\"The barcode did not become popular overnight… For several years, the system spread very slowly.\" — câu hỏi nói phần lớn cửa hàng dùng NGAY sau 1974 ⇒ trái ngược ⇒ FALSE."
+      },
+      {
+       "id": "R32",
+       "kieu": "chon",
+       "de": "Do the following statements agree with the information given in Reading Passage 3? Choose TRUE if the statement agrees with the information FALSE if the statement contradicts the information NOT GIVEN if there is no information on this\nSome shoppers complained when price labels were removed from products.",
+       "luaChon": [
+        "TRUE",
+        "FALSE",
+        "NOT GIVEN"
+       ],
+       "dapAn": 0,
+       "giaiThich": "\"shops stopped putting a price label on every item, and shoppers complained that they could no longer check what they were paying\" — \"price labels were removed\" = \"stopped putting a price label\" ⇒ TRUE."
+      }
+     ]
+    },
+    {
+     "huongDan": "Passage 3 — Câu 33–35. Answer the questions below. Choose NO MORE THAN TWO WORDS AND/OR A NUMBER from the passage for each answer.",
+     "doan": "READING PASSAGE 3\nTHE BARCODE: LINES THAT CHANGED SHOPPING\nHow an idea drawn in the sand ended up on almost every product in the world\n\nLook at almost any product in a shop – a carton of milk, a book, a pair of shoes – and you will find a small square of black and white lines. A machine reads this barcode in less than a second, with a short \"beep\". We hear that sound so often that we no longer notice it. Yet the barcode took more than twenty-five years to travel from an idea to the supermarket.\nThe story begins in 1948 in Philadelphia, in the United States. A student called Bernard Silver happened to hear a conversation at his college. The president of a local supermarket company was asking a senior person at the college for help. His shops needed a way to record each product automatically when customers paid, because typing every price by hand was slow and caused mistakes. The college was not interested, but Silver was. He described the problem to his friend Norman Joseph Woodland, and the two young men decided to work on it together.\nWoodland found the answer in an unusual place. He had moved to Florida, and one day he was sitting on a beach, thinking about Morse code, the system of dots and dashes that he had learned as a boy. He pushed his fingers into the sand and pulled them towards him, drawing a set of lines. Suddenly he understood: thin and thick lines could carry information in the same way as dots and dashes. In 1952, they received a patent for their invention. It showed a set of straight lines, but it also showed a second design that was not made of lines at all. It was a set of circles, one inside another, like a target. The advantage of this shape was that a machine could read it from any direction.\nUnfortunately, the invention was ahead of its time. To read the code, a shop needed a small, strong light and a cheap computer, and neither existed in the early 1950s. The solution to the first problem was the laser, which was not invented until 1960. Woodland and Silver sold their patent for only 15,000 dollars, and Silver died in 1963 without ever seeing a barcode in a shop.\nIn the early 1970s, American supermarkets finally agreed that all their products should carry the same kind of code. The design they chose came from the computer company IBM, where Woodland now worked. It used straight lines instead of circles, because lines were easier to print clearly on packets. On 26 June 1974, in a supermarket in the town of Troy, Ohio, the new system was used for the first time. The first product to be scanned was a packet of chewing gum, which cost 67 cents. That packet of gum was later given to a museum in Washington.\nThe barcode did not become popular overnight. Scanners were expensive, so shops did not want to buy them until most products had codes. Food companies, on the other hand, did not want to print codes until most shops had scanners. For several years, the system spread very slowly. Some customers were unhappy too. When barcodes arrived, shops stopped putting a price label on every item, and shoppers complained that they could no longer check what they were paying. In the end, though, the advantages were clear. Queues moved faster, there were fewer mistakes, and for the first time managers knew exactly what they had sold and what they needed to order.\nIn 1994, a Japanese engineer called Masahiro Hara took the idea a step further. His company made parts for cars, and every box of parts in its factories carried a barcode. But an ordinary barcode can only hold about twenty letters or numbers. This was not enough information, so workers had to scan several codes on every box. Hara's answer was a square pattern of black and white dots that could hold thousands of characters. He called it the QR code – QR means \"quick response\". Three large squares in its corners tell the scanner where the code begins, so it can be read at high speed from any angle. Hara has said that the idea for the pattern came from the black and white stones of a board game that he played in his lunch breaks.\nHara's company decided that the QR code should be free to use, and it did not ask other companies for money. At first, the code was used mainly in factories. Everything changed when mobile phones with cameras appeared. Suddenly anyone could read a QR code, and the pattern began to appear on posters, tickets and bills. During 2020 and 2021, many restaurants even replaced their paper menus with a QR code on the table. More than fifty years after that first packet of chewing gum, black and white patterns are part of everyday life – and most of us never think about the people who invented them.\n\n────────\nCâu 33–35. Answer the questions below. Choose NO MORE THAN TWO WORDS AND/OR A NUMBER from the passage for each answer.\nWhich system of dots and dashes was Woodland thinking about on the beach? (33) ______\nIn which year did Woodland and Silver receive a patent? (34) ______\nWhich invention of 1960 made it possible to read barcodes? (35) ______",
+     "cau": [
+      {
+       "id": "R33",
+       "kieu": "dien",
+       "dapAn": [
+        "Morse code",
+        "Morse"
+       ],
+       "de": "Answer the questions below. Choose NO MORE THAN TWO WORDS AND/OR A NUMBER from the passage for each answer.\nWhich system of dots and dashes was Woodland thinking about on the beach? ___",
+       "giaiThich": "\"thinking about Morse code, the system of dots and dashes that he had learned as a boy\" ⇒ Morse code (2 từ, đúng giới hạn)."
+      },
+      {
+       "id": "R34",
+       "kieu": "dien",
+       "dapAn": [
+        "1952"
+       ],
+       "de": "Answer the questions below. Choose NO MORE THAN TWO WORDS AND/OR A NUMBER from the passage for each answer.\nIn which year did Woodland and Silver receive a patent? ___",
+       "giaiThich": "\"In 1952, they received a patent for their invention.\" ⇒ 1952. Bẫy: 1948 là năm câu chuyện bắt đầu; 1963 là năm Silver mất; 1974 là lần quét đầu tiên."
+      },
+      {
+       "id": "R35",
+       "kieu": "dien",
+       "dapAn": [
+        "laser",
+        "the laser",
+        "lasers"
+       ],
+       "de": "Answer the questions below. Choose NO MORE THAN TWO WORDS AND/OR A NUMBER from the passage for each answer.\nWhich invention of 1960 made it possible to read barcodes? ___",
+       "giaiThich": "\"The solution to the first problem was the laser, which was not invented until 1960.\" ⇒ (the) laser. Bẫy: \"a cheap computer\" cũng là thứ còn thiếu, nhưng bài không gắn nó với năm 1960."
+      }
+     ]
+    },
+    {
+     "huongDan": "Passage 3 — Câu 36–40. Complete the summary using the list of words, A–I, below.",
+     "doan": "READING PASSAGE 3\nTHE BARCODE: LINES THAT CHANGED SHOPPING\nHow an idea drawn in the sand ended up on almost every product in the world\n\nLook at almost any product in a shop – a carton of milk, a book, a pair of shoes – and you will find a small square of black and white lines. A machine reads this barcode in less than a second, with a short \"beep\". We hear that sound so often that we no longer notice it. Yet the barcode took more than twenty-five years to travel from an idea to the supermarket.\nThe story begins in 1948 in Philadelphia, in the United States. A student called Bernard Silver happened to hear a conversation at his college. The president of a local supermarket company was asking a senior person at the college for help. His shops needed a way to record each product automatically when customers paid, because typing every price by hand was slow and caused mistakes. The college was not interested, but Silver was. He described the problem to his friend Norman Joseph Woodland, and the two young men decided to work on it together.\nWoodland found the answer in an unusual place. He had moved to Florida, and one day he was sitting on a beach, thinking about Morse code, the system of dots and dashes that he had learned as a boy. He pushed his fingers into the sand and pulled them towards him, drawing a set of lines. Suddenly he understood: thin and thick lines could carry information in the same way as dots and dashes. In 1952, they received a patent for their invention. It showed a set of straight lines, but it also showed a second design that was not made of lines at all. It was a set of circles, one inside another, like a target. The advantage of this shape was that a machine could read it from any direction.\nUnfortunately, the invention was ahead of its time. To read the code, a shop needed a small, strong light and a cheap computer, and neither existed in the early 1950s. The solution to the first problem was the laser, which was not invented until 1960. Woodland and Silver sold their patent for only 15,000 dollars, and Silver died in 1963 without ever seeing a barcode in a shop.\nIn the early 1970s, American supermarkets finally agreed that all their products should carry the same kind of code. The design they chose came from the computer company IBM, where Woodland now worked. It used straight lines instead of circles, because lines were easier to print clearly on packets. On 26 June 1974, in a supermarket in the town of Troy, Ohio, the new system was used for the first time. The first product to be scanned was a packet of chewing gum, which cost 67 cents. That packet of gum was later given to a museum in Washington.\nThe barcode did not become popular overnight. Scanners were expensive, so shops did not want to buy them until most products had codes. Food companies, on the other hand, did not want to print codes until most shops had scanners. For several years, the system spread very slowly. Some customers were unhappy too. When barcodes arrived, shops stopped putting a price label on every item, and shoppers complained that they could no longer check what they were paying. In the end, though, the advantages were clear. Queues moved faster, there were fewer mistakes, and for the first time managers knew exactly what they had sold and what they needed to order.\nIn 1994, a Japanese engineer called Masahiro Hara took the idea a step further. His company made parts for cars, and every box of parts in its factories carried a barcode. But an ordinary barcode can only hold about twenty letters or numbers. This was not enough information, so workers had to scan several codes on every box. Hara's answer was a square pattern of black and white dots that could hold thousands of characters. He called it the QR code – QR means \"quick response\". Three large squares in its corners tell the scanner where the code begins, so it can be read at high speed from any angle. Hara has said that the idea for the pattern came from the black and white stones of a board game that he played in his lunch breaks.\nHara's company decided that the QR code should be free to use, and it did not ask other companies for money. At first, the code was used mainly in factories. Everything changed when mobile phones with cameras appeared. Suddenly anyone could read a QR code, and the pattern began to appear on posters, tickets and bills. During 2020 and 2021, many restaurants even replaced their paper menus with a QR code on the table. More than fifty years after that first packet of chewing gum, black and white patterns are part of everyday life – and most of us never think about the people who invented them.\n\n────────\nTHE QR CODE\nCâu 36–40. Complete the summary using the list of words, A–I, below.\nThe QR code was invented in Japan in 1994 by an engineer whose company produced car (36) ______. Ordinary barcodes could not store enough (37) ______, so employees had to scan several of them. The new code has three large squares in its corners, and for this reason it can be read at great (38) ______ from any angle. The company decided that the code should be (39) ______ for everybody to use. In its early years, the code was found mostly in (40) ______, but camera phones later brought it to the general public.",
+     "cau": [
+      {
+       "id": "R36",
+       "kieu": "chon",
+       "luaChon": [
+        "A. colours",
+        "B. factories",
+        "C. free",
+        "D. information",
+        "E. money",
+        "F. parts",
+        "G. restaurants",
+        "H. shops",
+        "I. speed"
+       ],
+       "dapAn": 5,
+       "de": "Complete the summary using the list of words, A–I, below.\nThe QR code — The QR code was invented in Japan in 1994 by an engineer whose company produced car ___. Ordinary barcodes could not store enough (37) …, so employees had to scan several of them. The new code has three large squares in its corners, and for this reason it can be read at great (38) … from any angle. The company decided that the code should be (39) … for everybody to use. In its early years, the code was found mostly in (40) …, but camera phones later brought it to the general public.",
+       "giaiThich": "\"His company made parts for cars\" — tóm tắt đổi thành \"produced car ___\" ⇒ F (parts)."
+      },
+      {
+       "id": "R37",
+       "kieu": "chon",
+       "luaChon": [
+        "A. colours",
+        "B. factories",
+        "C. free",
+        "D. information",
+        "E. money",
+        "F. parts",
+        "G. restaurants",
+        "H. shops",
+        "I. speed"
+       ],
+       "dapAn": 3,
+       "de": "Complete the summary using the list of words, A–I, below.\nThe QR code — The QR code was invented in Japan in 1994 by an engineer whose company produced car (36) …. Ordinary barcodes could not store enough ___, so employees had to scan several of them. The new code has three large squares in its corners, and for this reason it can be read at great (38) … from any angle. The company decided that the code should be (39) … for everybody to use. In its early years, the code was found mostly in (40) …, but camera phones later brought it to the general public.",
+       "giaiThich": "\"an ordinary barcode can only hold about twenty letters or numbers. This was not enough information\" — \"store\" = \"hold\" ⇒ D (information). \"money\" (E) không liên quan: mã vạch chứa thông tin, không chứa tiền."
+      },
+      {
+       "id": "R38",
+       "kieu": "chon",
+       "luaChon": [
+        "A. colours",
+        "B. factories",
+        "C. free",
+        "D. information",
+        "E. money",
+        "F. parts",
+        "G. restaurants",
+        "H. shops",
+        "I. speed"
+       ],
+       "dapAn": 8,
+       "de": "Complete the summary using the list of words, A–I, below.\nThe QR code — The QR code was invented in Japan in 1994 by an engineer whose company produced car (36) …. Ordinary barcodes could not store enough (37) …, so employees had to scan several of them. The new code has three large squares in its corners, and for this reason it can be read at great ___ from any angle. The company decided that the code should be (39) … for everybody to use. In its early years, the code was found mostly in (40) …, but camera phones later brought it to the general public.",
+       "giaiThich": "\"so it can be read at high speed from any angle\" — \"at great ___\" = \"at high speed\" ⇒ I (speed)."
+      },
+      {
+       "id": "R39",
+       "kieu": "chon",
+       "luaChon": [
+        "A. colours",
+        "B. factories",
+        "C. free",
+        "D. information",
+        "E. money",
+        "F. parts",
+        "G. restaurants",
+        "H. shops",
+        "I. speed"
+       ],
+       "dapAn": 2,
+       "de": "Complete the summary using the list of words, A–I, below.\nThe QR code — The QR code was invented in Japan in 1994 by an engineer whose company produced car (36) …. Ordinary barcodes could not store enough (37) …, so employees had to scan several of them. The new code has three large squares in its corners, and for this reason it can be read at great (38) … from any angle. The company decided that the code should be ___ for everybody to use. In its early years, the code was found mostly in (40) …, but camera phones later brought it to the general public.",
+       "giaiThich": "\"Hara's company decided that the QR code should be free to use\" ⇒ C (free). Đây là ô duy nhất cần TÍNH TỪ (sau \"should be\") — trong hộp chỉ có \"free\" là tính từ."
+      },
+      {
+       "id": "R40",
+       "kieu": "chon",
+       "luaChon": [
+        "A. colours",
+        "B. factories",
+        "C. free",
+        "D. information",
+        "E. money",
+        "F. parts",
+        "G. restaurants",
+        "H. shops",
+        "I. speed"
+       ],
+       "dapAn": 1,
+       "de": "Complete the summary using the list of words, A–I, below.\nThe QR code — The QR code was invented in Japan in 1994 by an engineer whose company produced car (36) …. Ordinary barcodes could not store enough (37) …, so employees had to scan several of them. The new code has three large squares in its corners, and for this reason it can be read at great (38) … from any angle. The company decided that the code should be (39) … for everybody to use. In its early years, the code was found mostly in ___, but camera phones later brought it to the general public.",
+       "giaiThich": "\"At first, the code was used mainly in factories.\" — \"In its early years\" = \"At first\", \"mostly\" = \"mainly\" ⇒ B (factories). Bẫy: \"restaurants\" (G) chỉ dùng mã QR từ 2020–2021, tức là RẤT MUỘN; \"shops\" (H) gắn với mã vạch thường, không phải mã QR thời kỳ đầu."
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

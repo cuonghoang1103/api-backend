@@ -18,7 +18,7 @@ import { isProEffective } from '../pro.service.js';
 import { logger } from '../../utils/logger.js';
 import { TAC_GIA, TAC_GIA_SONG, tacGiaGon } from './congDong.js';
 import {
-  CAP_THEO_NN, NN_THI, chamDe, dauTuanVn, deChoApp, duocThi, kiemDe, tatCaCau, tomTatDe, xepVinhDanh,
+  CAP_THEO_NN, NN_THI, chamDe, dauTuanVn, deChoApp, duocThi, kiemCap, kiemDe, tatCaCau, tomTatDe, xepVinhDanh,
   type DeThi, type NnThi, type TraLoi,
 } from './thiThuan.js';
 
@@ -34,7 +34,7 @@ export function napDe(thuMuc = THU_MUC_DE): Map<string, DeThi> {
   for (const f of tep) {
     try {
       const de = JSON.parse(fs.readFileSync(path.join(thuMuc, f), 'utf8')) as DeThi;
-      const loi = kiemDe(de);
+      const loi = [...kiemDe(de), ...kiemCap(de)];
       if (loi.length || de.id !== f.replace(/\.json$/, '')) { logger.error('[ctl-thi] bỏ đề không hợp lệ', { tep: f, loi: loi.slice(0, 5) }); continue; }
       ra.set(de.id, de);
     } catch (e) {
@@ -68,7 +68,8 @@ function trongTuan(bayGio: Date) {
 
 async function deDaThiTuanNay(userId: number, cap: string, bayGio: Date): Promise<string[]> {
   const ds = await prisma.ctlLuotThi.findMany({
-    where: { userId, cap, kyThi: { not: 'XEP-LOP' }, batDauLuc: trongTuan(bayGio) },
+    // `deId in kho`: lượt THI NÓI với giám khảo AI (thiNoi.ts) dùng chung bảng + chung cấp (HSKK-SO) nhưng đếm lượt riêng.
+    where: { userId, cap, deId: { in: [...kho().keys()] }, kyThi: { not: 'XEP-LOP' }, batDauLuc: trongTuan(bayGio) },
     distinct: ['deId'], select: { deId: true },
   });
   return ds.map((d) => d.deId);
@@ -87,7 +88,7 @@ export async function danhMuc(nnRaw: unknown, userId: number | null, bayGio = ne
     : [];
   const dauTuan = dauTuanVn(bayGio);
   const tuanNay = userId
-    ? await prisma.ctlLuotThi.findMany({ where: { userId, nn, kyThi: { not: 'XEP-LOP' }, batDauLuc: trongTuan(bayGio) }, distinct: ['cap', 'deId'], select: { cap: true, deId: true } })
+    ? await prisma.ctlLuotThi.findMany({ where: { userId, nn, deId: { in: [...kho().keys()] }, kyThi: { not: 'XEP-LOP' }, batDauLuc: trongTuan(bayGio) }, distinct: ['cap', 'deId'], select: { cap: true, deId: true } })
     : [];
   const caoNhat = new Map<string, number>();
   const soLan = new Map<string, number>();
@@ -194,6 +195,7 @@ async function phieu(l: Luot, de: DeThi, userId: number, bayGio: Date) {
 /** Lịch sử các lượt ĐÃ NỘP (mới nhất trước) — biểu đồ tiến bộ ở app. */
 export async function lichSu(userId: number, nnRaw: unknown) {
   const nn = docNn(nnRaw);
+  const { tenDeNoi } = await import('./thiNoi.js');
   const ds = await prisma.ctlLuotThi.findMany({
     where: { userId, nn, nopLuc: { not: null } }, orderBy: { nopLuc: 'desc' }, take: 100,
     select: { id: true, deId: true, kyThi: true, cap: true, diem: true, diemToiDa: true, dung: true, tong: true, dat: true, giay: true, nopLuc: true, chiTiet: true },
@@ -202,9 +204,9 @@ export async function lichSu(userId: number, nnRaw: unknown) {
     items: ds.map((l) => {
       const ct = (l.chiTiet ?? {}) as { phan?: unknown; xepLop?: unknown };
       return {
-        luotId: l.id, deId: l.deId, tenDe: kho().get(l.deId)?.ten ?? l.deId, kyThi: l.kyThi, cap: l.cap,
+        luotId: l.id, deId: l.deId, tenDe: kho().get(l.deId)?.ten ?? tenDeNoi(l.deId) ?? l.deId, kyThi: l.kyThi, cap: l.cap,
         diem: l.diem ?? 0, diemToiDa: l.diemToiDa ?? 0, dung: l.dung ?? 0, tong: l.tong ?? 0, dat: l.dat ?? false,
-        giay: l.giay ?? 0, nopLuc: l.nopLuc, phan: ct.phan ?? [], xepLop: ct.xepLop ?? null,
+        giay: l.giay ?? 0, nopLuc: l.nopLuc, phan: Array.isArray(ct.phan) ? ct.phan : [], xepLop: ct.xepLop ?? null,
       };
     }),
   };

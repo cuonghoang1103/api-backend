@@ -21,7 +21,7 @@
             {
               "id": "1",
               "kieu": "chon",
-              "de": "来週、大阪へ【出発】します。",
+              "de": "来週、京都へ【出発】します。",
               "luaChon": [
                 "しゅつはつ",
                 "でっぱつ",
@@ -523,7 +523,7 @@
               "dapAn": 2,
               "giaiThich": "Trong mệnh đề bổ nghĩa cho danh từ (母が作ったケーキ = cái bánh mẹ làm), chủ ngữ đi với が (hoặc の), không dùng は.",
               "tu": [
-                "〜が〜た＋danh từ"
+                "が"
               ]
             },
             {
@@ -619,7 +619,7 @@
                 "へ"
               ],
               "dapAn": 1,
-              "giaiThich": "Câu sai khiến với tha động từ: người bị bắt làm đi với に → 弟に部屋をそうじさせました (bắt em trai dọn phòng).",
+              "giaiThich": "Câu sai khiến với tha động từ: người bị bắt làm đi với に → 弟にへやをそうじさせました (bắt em trai dọn phòng).",
               "tu": [
                 "〜に〜(さ)せる"
               ]
@@ -733,11 +733,11 @@
               "luaChon": [
                 "に",
                 "こと",
-                "大阪へ",
+                "京都へ",
                 "ひっこす"
               ],
               "dapAn": 1,
-              "giaiThich": "Câu hoàn chỉnh: 来月 大阪へ ひっこす こと に なりました (vì công việc của bố, tháng sau nhà tôi sẽ chuyển đến Osaka). ★ = こと. Mẫu 〜ことになる = được quyết định là.",
+              "giaiThich": "Câu hoàn chỉnh: 来月 京都へ ひっこす こと に なりました (vì công việc của bố, tháng sau nhà tôi sẽ chuyển đến Kyoto). ★ = こと. Mẫu 〜ことになる = được quyết định là.",
               "tu": [
                 "〜ことになる",
                 "ひっこす"
@@ -905,7 +905,7 @@
                 "ゆうびんきょくの人に電話する。"
               ],
               "dapAn": 0,
-              "giaiThich": "リーさん đã nhận hộ bưu kiện và viết: わたしは今夜八時まで部屋にいます (tối nay tôi ở phòng đến 8 giờ) → sang phòng リーさん trước 8 giờ tối. Mai リーさん đi làm thêm từ sáng.",
+              "giaiThich": "リーさん đã nhận hộ bưu kiện và viết: わたしは今夜八時までへやにいます (tối nay tôi ở phòng đến 8 giờ) → sang phòng リーさん trước 8 giờ tối. Mai リーさん đi làm thêm từ sáng.",
               "tu": [
                 "るす",
                 "うけ取る"
@@ -951,7 +951,7 @@
                 "コーヒーをまちがえて運んだから。"
               ],
               "dapAn": 1,
-              "giaiThich": "Ngay trước ①: わたしはお客さんの服に水をかけてしまいました (lỡ làm đổ nước lên áo khách). Khách không giận (おこりませんでした), cửa hàng trưởng cũng không mắng.",
+              "giaiThich": "Ngay trước ①: わたしはおきゃくさんの服に水をかけてしまいました (lỡ làm đổ nước lên áo khách). Khách không giận (おこりませんでした), cửa hàng trưởng cũng không mắng.",
               "tu": [
                 "はずかしい",
                 "〜てしまう"
@@ -968,7 +968,7 @@
                 "仕事のし方が書いてある新しいノート"
               ],
               "dapAn": 0,
-              "giaiThich": "Đoạn 3: cuốn vở cũ ghi 店長がわかいときにしたしっぱいと、次に気をつけること (những lỗi cửa hàng trưởng mắc hồi trẻ và điều cần chú ý lần sau).",
+              "giaiThich": "Đoạn 3: cuốn vở cũ ghi 店長がわかいときにしたしっぱいと、つぎに気をつけること (những lỗi cửa hàng trưởng mắc hồi trẻ và điều cần chú ý lần sau).",
               "tu": [
                 "しっぱい",
                 "気をつける"
@@ -985,7 +985,7 @@
                 "しっぱいが少なくなり、おきゃくさんに「ありがとう」と言われるようになったから。"
               ],
               "dapAn": 3,
-              "giaiThich": "Ngay trước ②: 今ではしっぱいが少なくなって、お客さんに「ありがとう」と言われることも多くなりました (giờ ít mắc lỗi, hay được khách cảm ơn). Cửa hàng trưởng chỉ cho xem vở chứ không tặng.",
+              "giaiThich": "Ngay trước ②: 今ではしっぱいが少なくなって、おきゃくさんに「ありがとう」と言われることも多くなりました (giờ ít mắc lỗi, hay được khách cảm ơn). Cửa hàng trưởng chỉ cho xem vở chứ không tặng.",
               "tu": [
                 "やめる",
                 "しっぱい"
@@ -1407,7 +1407,7 @@
                 "十時十五分のふつうの電車"
               ],
               "dapAn": 3,
-              "giaiThich": "Nhân viên ga: \"次のは急行ですから、みなと駅には止まりませんよ\" (chuyến tới là tàu nhanh, không dừng ở ga Minato) → \"十時十五分の電車に乗ってください。ふつうの電車ですから\" (đi chuyến 10:15, tàu thường). ",
+              "giaiThich": "Nhân viên ga: \"次のは急行ですから、みなと駅には止まりませんよ\" (chuyến tới là tàu nhanh, không dừng ở ga Minato) → \"十時十五分の電車に乗ってください。ふつうの電車ですから\" (đi chuyến 10:15, tàu thường).",
               "tu": [
                 "急行",
                 "止まる"
@@ -1852,7 +1852,7 @@
                   "t": "3。おじゃましました。"
                 }
               ],
-              "de": "Tình huống: bạn đến chơi nhà người quen, bây giờ đứng dậy ra về. Nên nói gì?",
+              "de": "Tình huống: bạn đến chơi nhà một người bạn, bây giờ đứng dậy ra về. Nên nói gì?",
               "luaChon": [
                 "1",
                 "2",

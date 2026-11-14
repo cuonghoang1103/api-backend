@@ -66,16 +66,16 @@
             { "id": "6", "kieu": "dien", "de": "Fee for local residents: £ ___", "dapAn": ["95", "ninety-five", "ninety five"],
               "giaiThich": "'The full price is one hundred and twenty pounds. But you live locally, so you pay the reduced fee, which is ninety-five pounds.' 120 là giá đầy đủ (bẫy); reduced fee = phí đã giảm.",
               "tu": ["fee", "reduced", "locally"] },
-            { "id": "7", "kieu": "dien", "de": "Fee includes: clay and ___", "dapAn": ["tools", "tool", "the tools"],
+            { "id": "7", "kieu": "dien", "de": "Fee includes: clay and ___", "dapAn": ["tools"],
               "giaiThich": "'It covers all the clay you use, and the tools as well.' cover = include (bao gồm) là cặp paraphrase; việc gửi sản phẩm về nhà mới phải trả thêm.",
               "tu": ["cover", "tool", "clay"] },
             { "id": "8", "kieu": "dien", "de": "Bring: an old ___", "dapAn": ["shirt"],
               "giaiThich": "'You don't need an apron, we lend you one. But … bring an old shirt.' apron (tạp dề) là bẫy vì trung tâm cho mượn; thứ phải tự mang là áo sơ mi cũ.",
               "tu": ["shirt", "apron", "lend"] },
-            { "id": "9", "kieu": "dien", "de": "Parking: behind the ___", "dapAn": ["library", "the library"],
+            { "id": "9", "kieu": "dien", "de": "Parking: behind the ___", "dapAn": ["library"],
               "giaiThich": "'The car park in front of the centre is for staff only … Students can park behind the library.' Bãi trước trung tâm chỉ dành cho nhân viên; behind = phía sau.",
               "tu": ["library", "behind", "staff"] },
-            { "id": "10", "kieu": "dien", "de": "First class: ___ October", "dapAn": ["9", "9th", "ninth", "the ninth", "the 9th"],
+            { "id": "10", "kieu": "dien", "de": "First class: ___ October", "dapAn": ["9", "9th", "ninth"],
               "giaiThich": "'We were planning to begin on the second of October, but the teacher is away that week. So the first class is on the ninth of October.' Ngày 2 là kế hoạch cũ đã bị đổi.",
               "tu": ["ninth", "plan"] }
           ]
@@ -96,7 +96,7 @@
             { "g": "au-nu", "t": "Before you leave, there's one thing I'd like you all to do. Don't worry about joining a tour today, there'll be tours all next week. Just go to the front desk and pick up the printed guide, because it has the floor plan and all the passwords you'll need. Thank you, and enjoy your time here." }
           ],
           "cau": [
-            { "id": "11", "kieu": "chon", "de": "On weekdays during term time, the library closes at", "luaChon": ["six in the evening.", "ten at night.", "no time, as it stays open all night."], "dapAn": 1,
+            { "id": "11", "kieu": "chon", "de": "On weekdays during term time, the library", "luaChon": ["closes at six in the evening.", "closes at ten at night.", "stays open all night."], "dapAn": 1,
               "giaiThich": "'open from eight in the morning until ten at night on weekdays.' Sáu giờ là giờ đóng cửa cuối tuần; mở 24 giờ chỉ đúng vào mùa thi tháng Năm — hai bẫy distractor điển hình.",
               "tu": ["weekday", "term time"] },
             { "id": "12", "kieu": "chon", "de": "A student who forgets their student card", "luaChon": ["can be let in by staff one time per term.", "has to pay for a replacement card.", "will not be allowed in under any circumstances."], "dapAn": 0,

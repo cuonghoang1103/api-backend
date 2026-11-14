@@ -469,7 +469,7 @@
               "giaiThich": "Lời nghe: 这双运动鞋是我在网上买的，才一百多块，比商店里便宜一半。 — \"Đôi giày thể thao này tôi mua trên mạng, chỉ hơn 100 tệ, rẻ bằng một nửa so với ở cửa hàng.\" 一半 (yíbàn) = một nửa, 比…便宜 ⇒ mua trên mạng rẻ hơn ⇒ Đúng.",
               "tu": [
                 "半",
-                "上网",
+                "便宜",
                 "双"
               ]
             },
@@ -1329,7 +1329,7 @@
               "tu": [
                 "旧",
                 "放",
-                "行李箱"
+                "鞋"
               ]
             },
             {
@@ -1491,7 +1491,7 @@
               "giaiThich": "\"Các quán ăn trên con phố này hầu như tôi đều đi qua rồi.\" 几乎…都… (jīhū… dōu…) = hầu như… đều. 突然 (đột nhiên), 马上 (ngay), 一边 (vừa) không đi với 都去过. 街 (jiē) = phố.",
               "tu": [
                 "几乎",
-                "街道"
+                "都"
               ]
             },
             {
@@ -1836,9 +1836,10 @@
                 "去超市"
               ],
               "dapAn": [
-                "妈妈让我去超市买鸡蛋。"
+                "妈妈让我去超市买鸡蛋。",
+                "让我妈妈去超市买鸡蛋。"
               ],
-              "giaiThich": "Câu kiêm ngữ với 让 (ràng, bảo): A + 让 + B + làm gì; rồi câu liên động \"đi đâu + làm gì\" ⇒ 妈妈让我去超市买鸡蛋 (Mẹ bảo tôi ra siêu thị mua trứng).",
+              "giaiThich": "Câu kiêm ngữ với 让 (ràng, bảo): A + 让 + B + làm gì; rồi câu liên động \"đi đâu + làm gì\" ⇒ 妈妈让我去超市买鸡蛋 (Mẹ bảo tôi ra siêu thị mua trứng). Ghép thành 让我妈妈去超市买鸡蛋 (Để mẹ tôi ra siêu thị mua trứng) cũng đúng ngữ pháp nên vẫn được chấm.",
               "tu": [
                 "让",
                 "超市"

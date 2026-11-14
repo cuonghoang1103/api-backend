@@ -319,7 +319,7 @@
               "giaiThich": "たずねる = hỏi (thăm): không biết đường nên hỏi ở đồn cảnh sát. ひろう = nhặt, かざる = trang trí, おこる = nổi giận.",
               "tu": [
                 "たずねる",
-                "交番"
+                "こうばん"
               ]
             },
             {
@@ -697,13 +697,13 @@
               "kieu": "chon",
               "de": "この店のケーキはおいしい(　　)、ねだんも安いです。",
               "luaChon": [
-                "のに",
+                "ので",
                 "か",
                 "まで",
                 "し"
               ],
               "dapAn": 3,
-              "giaiThich": "〜し、〜も = vừa… lại vừa…: liệt kê các điểm tốt (ngon, giá cũng rẻ). のに = vậy mà (trái ngược) nên không hợp.",
+              "giaiThich": "〜し、〜も = vừa… lại vừa…: liệt kê các điểm tốt (ngon, giá cũng rẻ). ので = vì (nguyên nhân) — món ngon không phải là lý do khiến giá rẻ nên không hợp.",
               "tu": [
                 "〜し"
               ]
@@ -883,7 +883,7 @@
                 "水曜日の午後三時まで待つ。"
               ],
               "dapAn": 1,
-              "giaiThich": "Thông báo viết: 飲む水がほしい人は、火曜日までに一階のじむしょに言ってください (báo văn phòng trước thứ Ba). Nước được phát (わたします), không phải mua.",
+              "giaiThich": "Thông báo viết: 飲む水がほしい人は、火曜日までに一かいのじむしょに言ってください (báo văn phòng trước thứ Ba). Nước được phát (わたします), không phải mua.",
               "tu": [
                 "〜までに",
                 "工事"
@@ -1000,7 +1000,7 @@
             {
               "id": "56",
               "kieu": "chon",
-              "de": "ヤンさんは20さいの会社員です。月曜日から金曜日は午後6時半まで仕事があり、土曜日はアルバイトをしています。1か月3,500円までで習いたいです。ヤンさんが入れる教室はどれですか。",
+              "de": "ヤンさんは20さいの会社員です。月曜日から金曜日は午前9時から午後6時半まで仕事があり、土曜日はアルバイトをしています。1か月3,500円までで習いたいです。ヤンさんが入れる教室はどれですか。",
               "luaChon": [
                 "A",
                 "B",

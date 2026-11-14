@@ -741,7 +741,7 @@
               "giaiThich": "Lời nghe: 我想请你周六晚上看电影，你有时间吗？ / 周六我要参加同学的生日会，周日可以吗？ / 女的周六晚上要做什么？ — \"Anh muốn mời em tối thứ Bảy xem phim, em rảnh không?\" – \"Thứ Bảy em phải dự sinh nhật bạn học, Chủ nhật được không?\" 参加 (cānjiā) = tham gia. Bẫy: xem phim là lời mời, chưa phải việc cô ấy làm tối thứ Bảy.",
               "tu": [
                 "参加",
-                "周末"
+                "同学"
               ]
             },
             {
@@ -1316,8 +1316,8 @@
               "giaiThich": "Hỏi cách đi \"Chúng ta ra sân bay bằng gì?\" ⇒ \"Hành lý nhiều quá, đi taxi thôi.\" 还是…吧 (háishi… ba) = thôi thì… vậy (đưa ra lựa chọn). 起飞 (qǐfēi) = cất cánh — nói giờ bay, không phải cách đi.",
               "tu": [
                 "还是",
-                "行李箱",
-                "起飞"
+                "起飞",
+                "出租车"
               ]
             },
             {
@@ -1878,9 +1878,10 @@
                 "高兴"
               ],
               "dapAn": [
-                "她高兴得跳了起来。"
+                "她高兴得跳了起来。",
+                "高兴得她跳了起来。"
               ],
-              "giaiThich": "Bổ ngữ trạng thái: tính từ + 得 + kết quả ⇒ 她高兴得跳了起来 (Cô ấy vui đến mức nhảy cẫng lên). 起来 (qǐlai) = bổ ngữ xu hướng \"lên\".",
+              "giaiThich": "Bổ ngữ trạng thái: tính từ + 得 + kết quả ⇒ 她高兴得跳了起来 (Cô ấy vui đến mức nhảy cẫng lên). 起来 (qǐlai) = bổ ngữ xu hướng \"lên\". Cách nói 高兴得她跳了起来 (chủ ngữ đặt sau 得) cũng đúng nên vẫn được chấm.",
               "tu": [
                 "得",
                 "起来"
@@ -1924,8 +1925,8 @@
               ],
               "giaiThich": "词 (cí) = từ: \"Nghĩa của từ này tôi không hiểu.\" Chữ 词 = bộ ngôn 讠 + 司. Đừng viết thành 字 (zì, chữ) — khác âm.",
               "tu": [
-                "词典",
-                "意思"
+                "意思",
+                "明白"
               ]
             },
             {
